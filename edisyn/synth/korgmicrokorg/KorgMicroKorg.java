@@ -23,7 +23,7 @@ import javax.sound.midi.*;
 */
 
 public class KorgMicroKorg extends Synth
-{
+    {
     public static final String[] BANKS = new String[] { "A", "B" };
     public static final String[] TIMBRE_ASSIGN_MODES = new String[] { "Mono", "Poly", "Unison" };
     // public static final String[] VOICE_MODES = new String[] { "Single (Timbre 1)", "Layer (Timbres 1 + 2)", "Vocoder" };
@@ -51,7 +51,7 @@ public class KorgMicroKorg extends Synth
     public SynthPanel[] panels = new SynthPanel[4];
         
     public KorgMicroKorg()
-    {
+        {
         JComponent soundPanel = new SynthPanel(this);
         VBox vbox = new VBox();
         HBox hbox = new HBox();
@@ -72,41 +72,41 @@ public class KorgMicroKorg extends Synth
 
         for(int timbre = 1; timbre < 4; timbre++)
             {
-                soundPanel = panels[timbre - 1] = new SynthPanel(this);
-                vbox = new VBox();
-                hbox = new HBox();
-                hbox.add(addTimbreGeneral(timbre, Style.COLOR_A()));
-                hbox.add(addPitch(timbre, Style.COLOR_A()));
-                hbox.addLast(addMixer(timbre, Style.COLOR_A()));
-                vbox.add(hbox);
-                hbox = new HBox();
-                hbox.add(addOsc1(timbre, Style.COLOR_A()));
-                hbox.addLast(addOsc2(timbre, Style.COLOR_A()));
-                vbox.add(hbox);
-                hbox = new HBox();
-                hbox.add(addFilter(timbre, Style.COLOR_B()));
-                hbox.addLast(addEnvelope(timbre, 1, Style.COLOR_B()));
-                vbox.add(hbox);
+            soundPanel = panels[timbre - 1] = new SynthPanel(this);
+            vbox = new VBox();
+            hbox = new HBox();
+            hbox.add(addTimbreGeneral(timbre, Style.COLOR_A()));
+            hbox.add(addPitch(timbre, Style.COLOR_A()));
+            hbox.addLast(addMixer(timbre, Style.COLOR_A()));
+            vbox.add(hbox);
+            hbox = new HBox();
+            hbox.add(addOsc1(timbre, Style.COLOR_A()));
+            hbox.addLast(addOsc2(timbre, Style.COLOR_A()));
+            vbox.add(hbox);
+            hbox = new HBox();
+            hbox.add(addFilter(timbre, Style.COLOR_B()));
+            hbox.addLast(addEnvelope(timbre, 1, Style.COLOR_B()));
+            vbox.add(hbox);
 
-                hbox = new HBox();
-                hbox.add(addAmplifier(timbre, Style.COLOR_B()));
-                hbox.addLast(addEnvelope(timbre, 2, Style.COLOR_B()));
-                vbox.add(hbox);
+            hbox = new HBox();
+            hbox.add(addAmplifier(timbre, Style.COLOR_B()));
+            hbox.addLast(addEnvelope(timbre, 2, Style.COLOR_B()));
+            vbox.add(hbox);
                         
-                hbox = new HBox();
-                hbox.add(addLFO(timbre, 1, Style.COLOR_C()));
-                hbox.addLast(addLFO(timbre, 2, Style.COLOR_C()));
-                vbox.add(hbox);
+            hbox = new HBox();
+            hbox.add(addLFO(timbre, 1, Style.COLOR_C()));
+            hbox.addLast(addLFO(timbre, 2, Style.COLOR_C()));
+            vbox.add(hbox);
                         
-                if (timbre != 3)
-                    {
-                        vbox.add(addPatch(timbre, Style.COLOR_C()));
-                    }
+            if (timbre != 3)
+                {
+                vbox.add(addPatch(timbre, Style.COLOR_C()));
+                }
                                 
-                soundPanel.add(vbox, BorderLayout.CENTER);
-                //            ((SynthPanel)soundPanel).makePasteable("timbre" + timbre);
-                ((SynthPanel)soundPanel).makePasteable("timbre");
-                addTab(timbre == 3 ? "Vocoder" : "Timbre " + timbre, soundPanel);
+            soundPanel.add(vbox, BorderLayout.CENTER);
+            //            ((SynthPanel)soundPanel).makePasteable("timbre" + timbre);
+            ((SynthPanel)soundPanel).makePasteable("timbre");
+            addTab(timbre == 3 ? "Vocoder" : "Timbre " + timbre, soundPanel);
             }
                         
         soundPanel = panels[3] = new SynthPanel(this);
@@ -132,15 +132,15 @@ public class KorgMicroKorg extends Synth
         model.setMin("voicemode", 0);
         model.setMax("voicemode", 1);
         
-    }
+        }
     
     public JFrame sprout()
-    {
+        {
         JFrame frame = super.sprout();
         transmitParameters.setSelected(false);
         transmitParameters.setEnabled(false);
         return frame;
-    }
+        }
     
     public String getDefaultResourceFileName() { return "KorgMicroKorg.init"; }
     public String getHTMLResourceFileName() { return "KorgMicroKorg.html"; }
@@ -148,7 +148,7 @@ public class KorgMicroKorg extends Synth
               
     /** Add the global patch category (name, id, number, etc.) */
     public JComponent addNameGlobal(Color color)
-    {
+        {
         Category globalCategory = new Category(this, getSynthName(), color);
                 
         JComponent comp;
@@ -163,15 +163,15 @@ public class KorgMicroKorg extends Synth
         
         comp = new StringComponent("Patch Name", this, "name", 12, "Name must be up to 12 ASCII characters.")
             {
-                public String replace(String val)
+            public String replace(String val)
                 {
-                    return revisePatchName(val);
+                return revisePatchName(val);
                 }
                                 
-                public void update(String key, Model model)
+            public void update(String key, Model model)
                 {
-                    super.update(key, model);
-                    updateTitle();
+                super.update(key, model);
+                updateTitle();
                 }
             };
         vbox.addBottom(comp);  // doesn't work right :-(
@@ -181,23 +181,23 @@ public class KorgMicroKorg extends Synth
 
         globalCategory.add(hbox, BorderLayout.WEST);
         return globalCategory;
-    }
+        }
         
     public String revisePatchName(String name)
-    {
+        {
         if (name == null) name = "";
         char[] chars = name.toCharArray();
         for(int i = 0; i < chars.length; i++)
             {
-                if (chars[i] < 32 || chars[i] > 127)
-                    chars[i] = ' ';
+            if (chars[i] < 32 || chars[i] > 127)
+                chars[i] = ' ';
             }
         return new String(chars);
-    }
+        }
 
  
     public JComponent addGeneral(boolean vocoder, Color color)
-    {
+        {
         Category category  = new Category(this, "General", color);
                         
         JComponent comp;
@@ -207,57 +207,57 @@ public class KorgMicroKorg extends Synth
         
         if (!vocoder)
             {
-                params = VOICE_MODES;
-                comp = new Chooser("Voice Mode", this, "voicemode", params)
+            params = VOICE_MODES;
+            comp = new Chooser("Voice Mode", this, "voicemode", params)
+                {
+                public void update(String key, Model model)
                     {
-                        public void update(String key, Model model)
-                        {
-                            super.update(key, model);
+                    super.update(key, model);
                                 
-                            if (getNumTabs() == 0)  // haven't been set up yet
-                                return;
+                    if (getNumTabs() == 0)  // haven't been set up yet
+                        return;
                                 
-                            removeTab("Timbre 1");
-                            removeTab("Timbre 2");
-                            removeTab("Vocoder");
-                            removeTab("Channels");
+                    removeTab("Timbre 1");
+                    removeTab("Timbre 2");
+                    removeTab("Vocoder");
+                    removeTab("Channels");
 
-                            switch (model.get(key, 0))
-                                {
-                                case 0:
-                                    insertTab("Timbre 1", panels[0], 1);
-                                    break;
-                                case 1:
-                                    insertTab("Timbre 1", panels[0], 1);
-                                    insertTab("Timbre 2", panels[1], 2);
-                                    break;
-                                default:
-                                    insertTab("Vocoder", panels[2], 1);
-                                    insertTab("Channels", panels[3], 2);
-                                    break;
-                                }
+                    switch (model.get(key, 0))
+                        {
+                        case 0:
+                            insertTab("Timbre 1", panels[0], 1);
+                            break;
+                        case 1:
+                            insertTab("Timbre 1", panels[0], 1);
+                            insertTab("Timbre 2", panels[1], 2);
+                            break;
+                        default:
+                            insertTab("Vocoder", panels[2], 1);
+                            insertTab("Channels", panels[3], 2);
+                            break;
                         }
-                    };
-                vbox.add(comp);
-                hbox.add(vbox);
+                    }
+                };
+            vbox.add(comp);
+            hbox.add(vbox);
             }
         
         // obviously this may need to be handled specially
         comp = new LabelledDial("Keyboard", this, "octave", color, -3, 3)
             {
-                public boolean isSymmetric() { return true; }
+            public boolean isSymmetric() { return true; }
             };
         ((LabelledDial)comp).addAdditionalLabel("Octave");
         hbox.add(comp);        
 
         category.add(hbox);
         return category;
-    }
+        }
                      
     public CheckBox[] arpeggiation = new CheckBox[8];
         
     public JComponent addArpeggiation(Color color)
-    {
+        {
         Category category  = new Category(this, "Arpeggiator", color);
                         
         JComponent comp;
@@ -282,7 +282,7 @@ public class KorgMicroKorg extends Synth
 
         if (!(this instanceof KorgMicroKorgVocoder))
             {
-                vbox.add(comp);
+            vbox.add(comp);
             }
         
         HBox hbox2 = new HBox();
@@ -296,20 +296,20 @@ public class KorgMicroKorg extends Synth
 
         for(int pattern = 0; pattern < 8; pattern++)
             {
-                final int p = pattern;
-                arpeggiation[pattern] = new CheckBox("", this, "arptriggerpattern" + pattern);
+            final int p = pattern;
+            arpeggiation[pattern] = new CheckBox("", this, "arptriggerpattern" + pattern);
             }
 
         comp = new LabelledDial("Trigger Length", this, "arptriggerlength", color, 0, 7, -1)
             {
-                public void update(String key, Model model)
+            public void update(String key, Model model)
                 {
-                    super.update(key, model);
-                    int len = model.get(key, 0);
-                    for(int i = 0; i < 8; i++)
-                        {
-                            arpeggiation[i].setEnabled(i <= len);
-                        }
+                super.update(key, model);
+                int len = model.get(key, 0);
+                for(int i = 0; i < 8; i++)
+                    {
+                    arpeggiation[i].setEnabled(i <= len);
+                    }
                 }
             };
         hbox.add(comp);        
@@ -321,7 +321,7 @@ public class KorgMicroKorg extends Synth
         hbox2 = new HBox();
         for(int pattern = 0; pattern < 8; pattern++)
             {
-                hbox2.add(arpeggiation[pattern]);
+            hbox2.add(arpeggiation[pattern]);
             }
         vbox.add(hbox2);
         hbox.add(vbox);
@@ -338,37 +338,37 @@ public class KorgMicroKorg extends Synth
         
         comp = new LabelledDial("Resolution", this, "arpresolution", color, 0, 5)
             {
-                public String map(int val)
+            public String map(int val)
                 {
-                    return ARPEGGIO_RESOLUTIONS[val];
+                return ARPEGGIO_RESOLUTIONS[val];
                 }
             };
         hbox.add(comp);        
 
         comp = new LabelledDial("Swing", this, "arpswing", color, -100, 100)
             {
-                public boolean isSymmetric() { return true; }
-                public String map(int val)
+            public boolean isSymmetric() { return true; }
+            public String map(int val)
                 {
-                    return "" + val + "%";
+                return "" + val + "%";
                 }
             };
         hbox.add(comp);  
 
         comp = new LabelledDial("Range", this, "arprange", color, 0, 3)
             {
-                public String map(int val)
+            public String map(int val)
                 {
-                    return "" + (val + 1) + " Oct";
+                return "" + (val + 1) + " Oct";
                 }
             };
         hbox.add(comp);        
         
         comp = new LabelledDial("Gate", this, "arpgate", color, 0, 100)
             {
-                public String map(int val)
+            public String map(int val)
                 {
-                    return "" + val + "%";
+                return "" + val + "%";
                 }
             };
         hbox.add(comp);        
@@ -377,13 +377,13 @@ public class KorgMicroKorg extends Synth
     
         category.add(all);
         return category;
-    }
+        }
         
         
         
         
     public JComponent addDelay(Color color)
-    {
+        {
         Category category  = new Category(this, "Delay FX", color);
                         
         JComponent comp;
@@ -401,9 +401,9 @@ public class KorgMicroKorg extends Synth
                 
         comp = new LabelledDial("Time Base", this, "delaytimebase", color, 0, 14)
             {
-                public String map(int val)
+            public String map(int val)
                 {
-                    return DELAY_TIME_BASES[val];
+                return DELAY_TIME_BASES[val];
                 }
             };
         hbox.add(comp);        
@@ -416,10 +416,10 @@ public class KorgMicroKorg extends Synth
 
         category.add(hbox);
         return category;
-    }
+        }
         
     public JComponent addMod(Color color)
-    {
+        {
         Category category  = new Category(this, "Mod FX", color);
                         
         JComponent comp;
@@ -440,11 +440,11 @@ public class KorgMicroKorg extends Synth
 
         category.add(hbox);
         return category;
-    }
+        }
 
 
     public JComponent addEQ(Color color)
-    {
+        {
         Category category  = new Category(this, "EQ", color);
                         
         JComponent comp;
@@ -454,9 +454,9 @@ public class KorgMicroKorg extends Synth
         
         comp = new LabelledDial("Low Freq", this, "eqlowfreq", color, 0, 29)
             {
-                public String map(int val)
+            public String map(int val)
                 {
-                    return MOD_LOW_FREQ[val];
+                return MOD_LOW_FREQ[val];
                 }
             };
         ((LabelledDial)comp).addAdditionalLabel("(Hz)");
@@ -467,9 +467,9 @@ public class KorgMicroKorg extends Synth
 
         comp = new LabelledDial("High Freq", this, "eqhifreq", color, 0, 29)
             {
-                public String map(int val)
+            public String map(int val)
                 {
-                    return MOD_HIGH_FREQ[val];
+                return MOD_HIGH_FREQ[val];
                 }
             };
         ((LabelledDial)comp).addAdditionalLabel("(KHz)");
@@ -480,11 +480,11 @@ public class KorgMicroKorg extends Synth
 
         category.add(hbox);
         return category;
-    }
+        }
 
 
     public JComponent addTimbreGeneral(int timbre, Color color)
-    {
+        {
         Category category  = new Category(this, "General", color);
         //        category.makePasteable("timbre" + timbre);
         category.makePasteable("timbre");
@@ -508,11 +508,11 @@ public class KorgMicroKorg extends Synth
 
         category.add(hbox);
         return category;
-    }
+        }
 
 
     public JComponent addPitch(int timbre, Color color)
-    {
+        {
         Category category  = new Category(this, "Pitch", color);
         //        category.makePasteable("timbre" + timbre);
         category.makePasteable("timbre");
@@ -541,11 +541,11 @@ public class KorgMicroKorg extends Synth
                 
         category.add(hbox);
         return category;
-    }
+        }
 
 
     public JComponent addOsc1(int timbre, Color color)
-    {
+        {
         Category category  = new Category(this, "Oscillator 1", color);
         //        category.makePasteable("timbre" + timbre);
         category.makePasteable("timbre");
@@ -568,20 +568,20 @@ public class KorgMicroKorg extends Synth
 
         comp = new LabelledDial("DWGS Wave", this, "timbre" + timbre + "osc1dwgswave", color, 0, 63)
             {
-                public String map(int val)
+            public String map(int val)
                 {
-                    return "" + (val + 1);
+                return "" + (val + 1);
                 }
             };
         hbox.add(comp);
                 
         category.add(hbox);
         return category;
-    }
+        }
 
 
     public JComponent addOsc2(int timbre, Color color)
-    {
+        {
         Category category  = new Category(this, (timbre == 3 ? "Audio In" : "Oscillator 2"), color);
         //        category.makePasteable("timbre" + timbre);
         category.makePasteable("timbre");
@@ -593,42 +593,42 @@ public class KorgMicroKorg extends Synth
         
         if (timbre == 3)
             {
-                comp = new CheckBox("HPF Gate", this, "timbre" + timbre + "osc2hpfgate");
-                vbox.add(comp);        
+            comp = new CheckBox("HPF Gate", this, "timbre" + timbre + "osc2hpfgate");
+            vbox.add(comp);        
 
-                comp = new LabelledDial("HPF Level", this, "timbre" + timbre + "osc2hpflevel", color, 0, 127);
-                hbox.add(comp);
+            comp = new LabelledDial("HPF Level", this, "timbre" + timbre + "osc2hpflevel", color, 0, 127);
+            hbox.add(comp);
 
-                comp = new LabelledDial("Gate Sense", this, "timbre" + timbre + "osc2gatesense", color, 0, 127);
-                hbox.add(comp);
+            comp = new LabelledDial("Gate Sense", this, "timbre" + timbre + "osc2gatesense", color, 0, 127);
+            hbox.add(comp);
 
-                comp = new LabelledDial("Threshold", this, "timbre" + timbre + "osc2threshold", color, 0, 127);
-                hbox.add(comp);
+            comp = new LabelledDial("Threshold", this, "timbre" + timbre + "osc2threshold", color, 0, 127);
+            hbox.add(comp);
             }
         else
             {
-                params = OSC2_WAVES;
-                comp = new Chooser("Wave", this, "timbre" + timbre + "osc2wave", params);
-                vbox.add(comp);
+            params = OSC2_WAVES;
+            comp = new Chooser("Wave", this, "timbre" + timbre + "osc2wave", params);
+            vbox.add(comp);
 
-                params = OSC2_MODS;
-                comp = new Chooser("Modulation", this, "timbre" + timbre + "osc2modselect", params);
-                vbox.add(comp);
-                hbox.add(vbox);
+            params = OSC2_MODS;
+            comp = new Chooser("Modulation", this, "timbre" + timbre + "osc2modselect", params);
+            vbox.add(comp);
+            hbox.add(vbox);
 
-                comp = new LabelledDial("Semitone", this, "timbre" + timbre + "osc2semitone", color, 64 - 24, 64 + 24, 64);
-                hbox.add(comp);
+            comp = new LabelledDial("Semitone", this, "timbre" + timbre + "osc2semitone", color, 64 - 24, 64 + 24, 64);
+            hbox.add(comp);
 
-                comp = new LabelledDial("Tune", this, "timbre" + timbre + "osc2tune", color, 64 - 63, 64 + 63, 64);
-                hbox.add(comp);
+            comp = new LabelledDial("Tune", this, "timbre" + timbre + "osc2tune", color, 64 - 63, 64 + 63, 64);
+            hbox.add(comp);
             }
                 
         category.add(hbox);
         return category;
-    }
+        }
 
     public JComponent addMixer(int timbre, Color color)
-    {
+        {
         Category category  = new Category(this, "Mixer", color);
         //        category.makePasteable("timbre" + timbre);
         category.makePasteable("timbre");
@@ -649,10 +649,10 @@ public class KorgMicroKorg extends Synth
                 
         category.add(hbox);
         return category;
-    }
+        }
 
     public JComponent addFilter(int timbre, Color color)
-    {
+        {
         Category category  = new Category(this, "Filter", color);
         //        category.makePasteable("timbre" + timbre);
         category.makePasteable("timbre");
@@ -664,70 +664,70 @@ public class KorgMicroKorg extends Synth
         
         if (timbre == 3)
             {
-                params = FILTER_MOD_SOURCES;
-                comp = new Chooser("Mod Source", this, "timbre" + timbre + "filtermodsource", params);
-                vbox.add(comp);
-                hbox.add(vbox);
+            params = FILTER_MOD_SOURCES;
+            comp = new Chooser("Mod Source", this, "timbre" + timbre + "filtermodsource", params);
+            vbox.add(comp);
+            hbox.add(vbox);
 
-                comp = new LabelledDial("Shift", this, "timbre" + timbre + "filtershift", color, 0, 4, 2)
+            comp = new LabelledDial("Shift", this, "timbre" + timbre + "filtershift", color, 0, 4, 2)
+                {
+                public boolean isSymmetric() { return true; }
+                };
+            hbox.add(comp);
+
+            comp = new LabelledDial("Cutoff", this, "timbre" + timbre + "filtercutoff", color, 64-63, 64+63, 64);
+            hbox.add(comp);
+
+            comp = new LabelledDial("Resonance", this, "timbre" + timbre + "filterresonance", color, 0, 127);
+            hbox.add(comp);
+
+            comp = new LabelledDial("Filter", this, "timbre" + timbre + "filterintensity", color, 64-63, 64+63, 64);
+            ((LabelledDial)comp).addAdditionalLabel("Intensity");
+            hbox.add(comp);
+
+            comp = new LabelledDial("EF Sense", this, "timbre" + timbre + "filterefsense", color, 0, 127)
+                {
+                public String map(int val)
                     {
-                        public boolean isSymmetric() { return true; }
-                    };
-                hbox.add(comp);
-
-                comp = new LabelledDial("Cutoff", this, "timbre" + timbre + "filtercutoff", color, 64-63, 64+63, 64);
-                hbox.add(comp);
-
-                comp = new LabelledDial("Resonance", this, "timbre" + timbre + "filterresonance", color, 0, 127);
-                hbox.add(comp);
-
-                comp = new LabelledDial("Filter", this, "timbre" + timbre + "filterintensity", color, 64-63, 64+63, 64);
-                ((LabelledDial)comp).addAdditionalLabel("Intensity");
-                hbox.add(comp);
-
-                comp = new LabelledDial("EF Sense", this, "timbre" + timbre + "filterefsense", color, 0, 127)
-                    {
-                        public String map(int val)
-                        {
-                            if (val == 127) return "Hold";
-                            else return "" + val;
-                        }
-                    };
-                hbox.add(comp);
+                    if (val == 127) return "Hold";
+                    else return "" + val;
+                    }
+                };
+            hbox.add(comp);
             }
         else
             {
-                params = FILTER_TYPES;
-                comp = new Chooser("Type", this, "timbre" + timbre + "filtertype", params);
-                vbox.add(comp);
+            params = FILTER_TYPES;
+            comp = new Chooser("Type", this, "timbre" + timbre + "filtertype", params);
+            vbox.add(comp);
 
-                comp = new CheckBox("EG Reset", this, "timbre" + timbre + "filtereg1reset");
-                vbox.add(comp);   
-                hbox.add(vbox);     
+            comp = new CheckBox("EG Reset", this, "timbre" + timbre + "filtereg1reset");
+            vbox.add(comp);   
+            hbox.add(vbox);     
 
-                comp = new LabelledDial("Cutoff", this, "timbre" + timbre + "filtercutoff", color, 0, 127);
-                hbox.add(comp);
+            comp = new LabelledDial("Cutoff", this, "timbre" + timbre + "filtercutoff", color, 0, 127);
+            hbox.add(comp);
 
-                comp = new LabelledDial("Resonance", this, "timbre" + timbre + "filterresonance", color, 0, 127);
-                hbox.add(comp);
+            comp = new LabelledDial("Resonance", this, "timbre" + timbre + "filterresonance", color, 0, 127);
+            hbox.add(comp);
 
-                comp = new LabelledDial("Filter EG", this, "timbre" + timbre + "filtereg1intensity", color, 64-63, 64+63, 64);
-                ((LabelledDial)comp).addAdditionalLabel("Intensity");
-                hbox.add(comp);
+            comp = new LabelledDial("Filter EG", this, "timbre" + timbre + "filtereg1intensity", color, 64-63, 64+63, 64);
+            ((LabelledDial)comp).addAdditionalLabel("Intensity");
+            hbox.add(comp);
 
-                comp = new LabelledDial("Keyboard", this, "timbre" + timbre + "filterkeyboardtrack", color, 64-63, 64+63, 64);
-                ((LabelledDial)comp).addAdditionalLabel("Tracking");
-                hbox.add(comp);
+            comp = new LabelledDial("Keyboard", this, "timbre" + timbre + "filterkeyboardtrack", color, 64-63, 64+63, 64);
+            ((LabelledDial)comp).addAdditionalLabel("Tracking");
+            hbox.add(comp);
             }
                                         
         category.add(hbox);
         return category;
-    }
+        }
 
 
 
     public JComponent addAmplifier(int timbre, Color color)
-    {
+        {
         Category category  = new Category(this, "Amplifier", color);
         //        category.makePasteable("timbre" + timbre);
         category.makePasteable("timbre");
@@ -749,26 +749,26 @@ public class KorgMicroKorg extends Synth
 
         if (timbre == 3)
             {
-                comp = new LabelledDial("Direct", this, "timbre" + timbre + "ampdirectlevel", color, 0, 127);
-                ((LabelledDial)comp).addAdditionalLabel("Level");
-                hbox.add(comp);
+            comp = new LabelledDial("Direct", this, "timbre" + timbre + "ampdirectlevel", color, 0, 127);
+            ((LabelledDial)comp).addAdditionalLabel("Level");
+            hbox.add(comp);
             }
         else
             {
-                comp = new LabelledDial("Panpot", this, "timbre" + timbre + "amppanpot", color, 0, 127)
+            comp = new LabelledDial("Panpot", this, "timbre" + timbre + "amppanpot", color, 0, 127)
+                {
+                public boolean isSymmetric() { return true; }
+                public String map(int val)
                     {
-                        public boolean isSymmetric() { return true; }
-                        public String map(int val)
-                        {
-                            if (val == 64)
-                                return "--";
-                            else if (val < 64)
-                                return "L" + (64 - val);
-                            else
-                                return "R" + (val - 64);
-                        }
-                    };
-                hbox.add(comp);
+                    if (val == 64)
+                        return "--";
+                    else if (val < 64)
+                        return "L" + (64 - val);
+                    else
+                        return "R" + (val - 64);
+                    }
+                };
+            hbox.add(comp);
             }
 
         comp = new LabelledDial("Keyboard", this, "timbre" + timbre + "ampkeyboardtrack", color, 64-63, 64+63, 64);
@@ -777,10 +777,10 @@ public class KorgMicroKorg extends Synth
                 
         category.add(hbox);
         return category;
-    }
+        }
 
     public JComponent addEnvelope(int timbre, int envelope, Color color)
-    {
+        {
         Category category  = new Category(this, (envelope == 1 ? "Filter Envelope" : "Amplifier Envelope"), color);
         //        category.makePasteable("timbre" + timbre + "env" + envelope);
         category.makePasteable("timbre" + timbre + "env");
@@ -792,11 +792,11 @@ public class KorgMicroKorg extends Synth
         
         if (timbre != 3 || envelope != 1)
             {
-                comp = new LabelledDial("Attack", this, "timbre" + timbre + "env" + envelope + "attack", color, 0, 127);
-                hbox.add(comp);
+            comp = new LabelledDial("Attack", this, "timbre" + timbre + "env" + envelope + "attack", color, 0, 127);
+            hbox.add(comp);
 
-                comp = new LabelledDial("Decay", this, "timbre" + timbre + "env" + envelope + "decay", color, 0, 127);
-                hbox.add(comp);
+            comp = new LabelledDial("Decay", this, "timbre" + timbre + "env" + envelope + "decay", color, 0, 127);
+            hbox.add(comp);
             }
 
         comp = new LabelledDial("Sustain", this, "timbre" + timbre + "env" + envelope + "sustain", color, 0, 127);
@@ -804,23 +804,23 @@ public class KorgMicroKorg extends Synth
 
         if (timbre != 3 || envelope != 1)
             {
-                comp = new LabelledDial("Release", this, "timbre" + timbre + "env" + envelope + "release", color, 0, 127);
-                hbox.add(comp);
+            comp = new LabelledDial("Release", this, "timbre" + timbre + "env" + envelope + "release", color, 0, 127);
+            hbox.add(comp);
 
-                comp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
-                                           new String[] { null, "timbre" + timbre + "env" + envelope + "attack", "timbre" + timbre + "env" + envelope + "decay", null,"timbre" + timbre + "env" + envelope + "release" },
-                                           new String[] { null, null, "timbre" + timbre + "env" + envelope + "sustain", "timbre" + timbre + "env" + envelope + "sustain", null },
-                                           new double[] { 0, 0.25/127.0, 0.25 / 127.0,  0.25, 0.25/127.0},
-                                           new double[] { 0, 1.0, 1.0 / 127.0, 1.0/127.0, 0 });
-                hbox.addLast(comp);
+            comp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
+                new String[] { null, "timbre" + timbre + "env" + envelope + "attack", "timbre" + timbre + "env" + envelope + "decay", null,"timbre" + timbre + "env" + envelope + "release" },
+                new String[] { null, null, "timbre" + timbre + "env" + envelope + "sustain", "timbre" + timbre + "env" + envelope + "sustain", null },
+                new double[] { 0, 0.25/127.0, 0.25 / 127.0,  0.25, 0.25/127.0},
+                new double[] { 0, 1.0, 1.0 / 127.0, 1.0/127.0, 0 });
+            hbox.addLast(comp);
             }
                 
         category.add(hbox);
         return category;
-    }
+        }
 
     public JComponent addLFO(int timbre, int lfo, Color color)
-    {
+        {
         Category category  = new Category(this, "LFO " + lfo, color);
         //        category.makePasteable("timbre" + timbre + "lfo" + lfo);
         category.makePasteable("timbre" + timbre + "lfo");
@@ -848,19 +848,19 @@ public class KorgMicroKorg extends Synth
 
         comp = new LabelledDial("Sync Note", this, "timbre" + timbre + "lfo" + lfo + "syncnote", color, 0, 14)
             {
-                public String map(int val)
+            public String map(int val)
                 {
-                    return LFO_SYNC_NOTES[val];
+                return LFO_SYNC_NOTES[val];
                 }
             };
         hbox.add(comp);
 
         category.add(hbox);
         return category;
-    }
+        }
         
     public JComponent addChannels(Color color)
-    {
+        {
         Category category  = new Category(this, "Vocoder Channels", color);
         category.makeDistributable("channel");
                         
@@ -871,35 +871,35 @@ public class KorgMicroKorg extends Synth
         
         for(int i = 1; i < 9; i++)
             {
-                comp = new LabelledDial("Level " + i, this, "channel" + i + "level", color, 0, 127);
-                hbox.add(comp);
+            comp = new LabelledDial("Level " + i, this, "channel" + i + "level", color, 0, 127);
+            hbox.add(comp);
             }
         vbox.add(hbox);
         hbox = new HBox();
         for(int i = 1; i < 9; i++)
             {
-                comp = new LabelledDial("Pan " + i, this, "channel" + i + "pan", color, 0, 127)
+            comp = new LabelledDial("Pan " + i, this, "channel" + i + "pan", color, 0, 127)
+                {
+                public boolean isSymmetric() { return true; }
+                public String map(int val)
                     {
-                        public boolean isSymmetric() { return true; }
-                        public String map(int val)
-                        {
-                            if (val == 64)
-                                return "--";
-                            else if (val < 64)
-                                return "L" + (64 - val);
-                            else
-                                return "R" + (val - 64);
-                        }
-                    };
-                hbox.add(comp);
+                    if (val == 64)
+                        return "--";
+                    else if (val < 64)
+                        return "L" + (64 - val);
+                    else
+                        return "R" + (val - 64);
+                    }
+                };
+            hbox.add(comp);
             }
         vbox.add(hbox);
         category.add(vbox);
         return category;
-    }
+        }
 
     public JComponent addHold(Color color)
-    {
+        {
         Category category  = new Category(this, "Vocoder Hold Levels", color);
         category.makeDistributable("channel");
                         
@@ -909,23 +909,23 @@ public class KorgMicroKorg extends Synth
         
         for(int i = 1; i < 17; i+=4)
             {
-                HBox hbox = new HBox();
-                for(int j = i; j < i + 4; j++)
-                    {
-                        comp = new NumberTextField("Hold " + j, this, 10, Style.ENVELOPE_COLOR(), "channel" + j + "hold");
-                        ((NumberTextField)comp).setMin(0);
-                        ((NumberTextField)comp).setMax(2147483392);
-                        hbox.add(comp);
-                    }
-                vbox.add(hbox);
+            HBox hbox = new HBox();
+            for(int j = i; j < i + 4; j++)
+                {
+                comp = new NumberTextField("Hold " + j, this, 10, Style.ENVELOPE_COLOR(), "channel" + j + "hold");
+                ((NumberTextField)comp).setMin(0);
+                ((NumberTextField)comp).setMax(2147483392);
+                hbox.add(comp);
+                }
+            vbox.add(hbox);
             }
                 
         category.add(vbox);
         return category;
-    }
+        }
 
     public JComponent addPatch(int timbre, Color color)
-    {
+        {
         Category category  = new Category(this, "Patches", color);
         //        category.makePasteable("timbre" + timbre);
         //        category.makeDistributable("timbre" + timbre);
@@ -938,27 +938,27 @@ public class KorgMicroKorg extends Synth
         
         for(int i = 1; i < 5; i++)
             {
-                VBox vbox = new VBox();
-                params = PATCH_SOURCES;
-                comp = new Chooser("Patch " + i + " Source", this, "timbre" + timbre + "patch" + i + "source", params);
-                vbox.add(comp);
+            VBox vbox = new VBox();
+            params = PATCH_SOURCES;
+            comp = new Chooser("Patch " + i + " Source", this, "timbre" + timbre + "patch" + i + "source", params);
+            vbox.add(comp);
 
-                params = PATCH_DESTINATIONS;
-                comp = new Chooser("Patch " + i + " Destination", this, "timbre" + timbre + "patch" + i + "destination", params);
-                vbox.add(comp);
-                hbox.add(vbox);
+            params = PATCH_DESTINATIONS;
+            comp = new Chooser("Patch " + i + " Destination", this, "timbre" + timbre + "patch" + i + "destination", params);
+            vbox.add(comp);
+            hbox.add(vbox);
 
-                comp = new LabelledDial("Patch " + i, this, "timbre" + timbre + "patch" + i + "intensity", color, 64-63, 64+63, 64);
-                ((LabelledDial)comp).addAdditionalLabel("Intensity");
-                hbox.add(comp);
+            comp = new LabelledDial("Patch " + i, this, "timbre" + timbre + "patch" + i + "intensity", color, 64-63, 64+63, 64);
+            ((LabelledDial)comp).addAdditionalLabel("Intensity");
+            hbox.add(comp);
                         
-                if (i < 4)
-                    hbox.add(Strut.makeHorizontalStrut(10));
+            if (i < 4)
+                hbox.add(Strut.makeHorizontalStrut(10));
             }
 
         category.add(hbox);
         return category;
-    }
+        }
 
 
 
@@ -972,7 +972,7 @@ public class KorgMicroKorg extends Synth
 
     // converts all but last byte (F7)
     static byte[] convertTo8Bit(byte[] data, int offset)
-    {
+        {
         // How big?
         int size = (data.length - offset - 1) / 8 * 7;
         if ((data.length - offset - 1) % 8 > 0)
@@ -982,19 +982,19 @@ public class KorgMicroKorg extends Synth
         int j = 0;
         for(int i = offset; i < data.length; i += 8)
             {
-                for(int x = 0; x < 7; x++)
-                    {
-                        if (j + x < newd.length)
-                            newd[j + x] = (byte)(data[i + x + 1] | (byte)(((data[i] >>> x) & 0x1) << 7));
-                    }
-                j += 7;
+            for(int x = 0; x < 7; x++)
+                {
+                if (j + x < newd.length)
+                    newd[j + x] = (byte)(data[i + x + 1] | (byte)(((data[i] >>> x) & 0x1) << 7));
+                }
+            j += 7;
             }
         return newd;
-    }
+        }
         
     // converts all bytes
     byte[] convertTo7Bit(byte[] data)
-    {
+        {
         // How big?
         int size = (data.length) / 7 * 8;
         if (data.length % 7 > 0)
@@ -1004,35 +1004,35 @@ public class KorgMicroKorg extends Synth
         int j = 0;
         for(int i = 0; i < data.length; i+=7)
             {
-                for(int x = 0; x < 7; x++)
+            for(int x = 0; x < 7; x++)
+                {
+                if (j + x + 1 < newd.length)
                     {
-                        if (j + x + 1 < newd.length)
-                            {
-                                newd[j + x + 1] = (byte)(data[i + x] & 127);
-                                // Note that I have do to & 1 because data[i + x] is promoted to an int
-                                // first, and then shifted, and that makes a BIG NUMBER which requires
-                                // me to mask out the 1.  I hope this isn't the case for other stuff (which
-                                // is typically 7-bit).
-                                newd[j] = (byte)(newd[j] | (((data[i + x] >>> 7) & 1) << x));
-                            }
+                    newd[j + x + 1] = (byte)(data[i + x] & 127);
+                    // Note that I have do to & 1 because data[i + x] is promoted to an int
+                    // first, and then shifted, and that makes a BIG NUMBER which requires
+                    // me to mask out the 1.  I hope this isn't the case for other stuff (which
+                    // is typically 7-bit).
+                    newd[j] = (byte)(newd[j] | (((data[i + x] >>> 7) & 1) << x));
                     }
-                j += 8;
+                }
+            j += 8;
             }
         return newd;
-    }
+        }
          
  
         
     
     public int parse(byte[] data, boolean fromFile)
-    {
+        {
         data = convertTo8Bit(data, 5);
 
         char[] namec = new char[12];
         String name;
         for(int i = 0; i < 12; i++)
             {
-                namec[i] = (char)data[i];
+            namec[i] = (char)data[i];
             }
         name = new String(namec);
         model.set("name", name);
@@ -1042,7 +1042,7 @@ public class KorgMicroKorg extends Synth
         model.set("arptriggerlength", data[14] & 7);
         for(int i = 0; i < 8; i++)
             {
-                model.set("arptriggerpattern" + i, (data[15] >>> i) & 1);
+            model.set("arptriggerpattern" + i, (data[15] >>> i) & 1);
             }
             
         int voicemode = (data[16] >>> 4) & 3;
@@ -1083,88 +1083,88 @@ public class KorgMicroKorg extends Synth
 
         revise();       
         return PARSE_SUCCEEDED;     
-    }
+        }
         
         
         
     protected void subparse(byte[] data)
-    {
+        {
         for(int i = 1; i <= 2; i++)
             {
-                int offset = 38 + 108 * (i - 1);
-                model.set("timbre" + i + "assignmode", (data[offset + 1] >>> 6) & 3);
-                model.set("timbre" + i + "ampeg2reset", (data[offset + 1] >>> 5) & 1);
-                model.set("timbre" + i + "filtereg1reset", (data[offset + 1] >>> 4) & 1);
-                model.set("timbre" + i + "triggermode", (data[offset + 1] >>> 3) & 1);
-                model.set("timbre" + i + "unisondetune", data[offset + 2]);
-                model.set("timbre" + i + "tune", data[offset + 3]);
-                model.set("timbre" + i + "bendrange", data[offset + 4]);
-                model.set("timbre" + i + "transpose", data[offset + 5]);
-                model.set("timbre" + i + "vibratoint", data[offset + 6]);
-                model.set("timbre" + i + "osc1wave", data[offset + 7]);
-                model.set("timbre" + i + "osc1ctrl1", data[offset + 8]);
-                model.set("timbre" + i + "osc1ctrl2", data[offset + 9]);
-                model.set("timbre" + i + "osc1dwgswave", data[offset + 10]);
-                model.set("timbre" + i + "osc2modselect", (data[offset + 12] >>> 4) & 3);
-                model.set("timbre" + i + "osc2wave", data[offset + 12] & 3);
-                model.set("timbre" + i + "osc2semitone", data[offset + 13]);
-                model.set("timbre" + i + "osc2tune", data[offset + 14]);
-                model.set("timbre" + i + "portamentotime", data[offset + 15] & 127);
-                model.set("timbre" + i + "osc1level", data[offset + 16]);
-                model.set("timbre" + i + "osc2level", data[offset + 17]);
-                model.set("timbre" + i + "noise", data[offset + 18]);
-                model.set("timbre" + i + "filtertype", data[offset + 19]);
-                model.set("timbre" + i + "filtercutoff", data[offset + 20]);
-                model.set("timbre" + i + "filterresonance", data[offset + 21]);
-                model.set("timbre" + i + "filtereg1intensity", data[offset + 22]);
-                model.set("timbre" + i + "filterkeyboardtrack", data[offset + 24]);
-                model.set("timbre" + i + "amplevel", data[offset + 25]);
-                model.set("timbre" + i + "amppanpot", data[offset + 26]);
-                model.set("timbre" + i + "ampdistortion", data[offset + 27] & 1);
-                model.set("timbre" + i + "ampkeyboardtrack", data[offset + 29]);
-                model.set("timbre" + i + "env1" + "attack", data[offset + 30]);
-                model.set("timbre" + i + "env1" + "decay", data[offset + 31]);
-                model.set("timbre" + i + "env1" + "sustain", data[offset + 32]);
-                model.set("timbre" + i + "env1" + "release", data[offset + 33]);
-                model.set("timbre" + i + "env2" + "attack", data[offset + 34]);
-                model.set("timbre" + i + "env2" + "decay", data[offset + 35]);
-                model.set("timbre" + i + "env2" + "sustain", data[offset + 36]);
-                model.set("timbre" + i + "env2" + "release", data[offset + 37]);
-                model.set("timbre" + i + "lfo1" + "keysync", (data[offset + 38] >>> 4) & 3);
-                model.set("timbre" + i + "lfo1" + "wave", (data[offset + 38]) & 3);
-                model.set("timbre" + i + "lfo1" + "frequency", data[offset + 39]);
-                model.set("timbre" + i + "lfo1" + "temposync", (data[offset + 40] >>> 7) & 1);
-                // documentation says this is bits 0...4 but this has to be wrong, since the values only go 0...14
-                model.set("timbre" + i + "lfo1" + "syncnote", (data[offset + 40]) & 15);
-                model.set("timbre" + i + "lfo2" + "keysync", (data[offset + 41] >>> 4) & 3);
-                model.set("timbre" + i + "lfo2" + "wave", (data[offset + 41]) & 3);
-                model.set("timbre" + i + "lfo2" + "frequency", data[offset + 42]);
-                model.set("timbre" + i + "lfo2" + "temposync", (data[offset + 43] >>> 7) & 1);
-                // documentation says this is bits 0...4 but this has to be wrong, since the values only go 0...14
-                model.set("timbre" + i + "lfo2" + "syncnote", (data[offset + 43]) & 15);
-                for(int j = 1; j <= 4; j++)
-                    {
-                        // documentation says this is bits 4...7 but this has to be wrong, since the values only go 0...7
-                        model.set("timbre" + i + "patch" + j + "destination", (data[offset + ((j-1) * 2) + 44] >>> 4) & 7);
-                        // documentation says this is bits 0...3 but this has to be wrong, since the values only go 0...7
-                        model.set("timbre" + i + "patch" + j + "source", (data[offset + ((j-1) * 2) + 44]) & 7);
-                        model.set("timbre" + i + "patch" + j + "intensity", data[offset + ((j-1) * 2) + 45]);
-                    }
+            int offset = 38 + 108 * (i - 1);
+            model.set("timbre" + i + "assignmode", (data[offset + 1] >>> 6) & 3);
+            model.set("timbre" + i + "ampeg2reset", (data[offset + 1] >>> 5) & 1);
+            model.set("timbre" + i + "filtereg1reset", (data[offset + 1] >>> 4) & 1);
+            model.set("timbre" + i + "triggermode", (data[offset + 1] >>> 3) & 1);
+            model.set("timbre" + i + "unisondetune", data[offset + 2]);
+            model.set("timbre" + i + "tune", data[offset + 3]);
+            model.set("timbre" + i + "bendrange", data[offset + 4]);
+            model.set("timbre" + i + "transpose", data[offset + 5]);
+            model.set("timbre" + i + "vibratoint", data[offset + 6]);
+            model.set("timbre" + i + "osc1wave", data[offset + 7]);
+            model.set("timbre" + i + "osc1ctrl1", data[offset + 8]);
+            model.set("timbre" + i + "osc1ctrl2", data[offset + 9]);
+            model.set("timbre" + i + "osc1dwgswave", data[offset + 10]);
+            model.set("timbre" + i + "osc2modselect", (data[offset + 12] >>> 4) & 3);
+            model.set("timbre" + i + "osc2wave", data[offset + 12] & 3);
+            model.set("timbre" + i + "osc2semitone", data[offset + 13]);
+            model.set("timbre" + i + "osc2tune", data[offset + 14]);
+            model.set("timbre" + i + "portamentotime", data[offset + 15] & 127);
+            model.set("timbre" + i + "osc1level", data[offset + 16]);
+            model.set("timbre" + i + "osc2level", data[offset + 17]);
+            model.set("timbre" + i + "noise", data[offset + 18]);
+            model.set("timbre" + i + "filtertype", data[offset + 19]);
+            model.set("timbre" + i + "filtercutoff", data[offset + 20]);
+            model.set("timbre" + i + "filterresonance", data[offset + 21]);
+            model.set("timbre" + i + "filtereg1intensity", data[offset + 22]);
+            model.set("timbre" + i + "filterkeyboardtrack", data[offset + 24]);
+            model.set("timbre" + i + "amplevel", data[offset + 25]);
+            model.set("timbre" + i + "amppanpot", data[offset + 26]);
+            model.set("timbre" + i + "ampdistortion", data[offset + 27] & 1);
+            model.set("timbre" + i + "ampkeyboardtrack", data[offset + 29]);
+            model.set("timbre" + i + "env1" + "attack", data[offset + 30]);
+            model.set("timbre" + i + "env1" + "decay", data[offset + 31]);
+            model.set("timbre" + i + "env1" + "sustain", data[offset + 32]);
+            model.set("timbre" + i + "env1" + "release", data[offset + 33]);
+            model.set("timbre" + i + "env2" + "attack", data[offset + 34]);
+            model.set("timbre" + i + "env2" + "decay", data[offset + 35]);
+            model.set("timbre" + i + "env2" + "sustain", data[offset + 36]);
+            model.set("timbre" + i + "env2" + "release", data[offset + 37]);
+            model.set("timbre" + i + "lfo1" + "keysync", (data[offset + 38] >>> 4) & 3);
+            model.set("timbre" + i + "lfo1" + "wave", (data[offset + 38]) & 3);
+            model.set("timbre" + i + "lfo1" + "frequency", data[offset + 39]);
+            model.set("timbre" + i + "lfo1" + "temposync", (data[offset + 40] >>> 7) & 1);
+            // documentation says this is bits 0...4 but this has to be wrong, since the values only go 0...14
+            model.set("timbre" + i + "lfo1" + "syncnote", (data[offset + 40]) & 15);
+            model.set("timbre" + i + "lfo2" + "keysync", (data[offset + 41] >>> 4) & 3);
+            model.set("timbre" + i + "lfo2" + "wave", (data[offset + 41]) & 3);
+            model.set("timbre" + i + "lfo2" + "frequency", data[offset + 42]);
+            model.set("timbre" + i + "lfo2" + "temposync", (data[offset + 43] >>> 7) & 1);
+            // documentation says this is bits 0...4 but this has to be wrong, since the values only go 0...14
+            model.set("timbre" + i + "lfo2" + "syncnote", (data[offset + 43]) & 15);
+            for(int j = 1; j <= 4; j++)
+                {
+                // documentation says this is bits 4...7 but this has to be wrong, since the values only go 0...7
+                model.set("timbre" + i + "patch" + j + "destination", (data[offset + ((j-1) * 2) + 44] >>> 4) & 7);
+                // documentation says this is bits 0...3 but this has to be wrong, since the values only go 0...7
+                model.set("timbre" + i + "patch" + j + "source", (data[offset + ((j-1) * 2) + 44]) & 7);
+                model.set("timbre" + i + "patch" + j + "intensity", data[offset + ((j-1) * 2) + 45]);
+                }
             }
-    }
+        }
         
         
     
     public Object[] emitAll(Model tempModel, boolean toWorkingMemory, boolean toFile)
-    {
+        {
         if (tempModel == null)
             tempModel = getModel();
             
         Object[] d = new Object[1];
         if (!toWorkingMemory && !toFile)
             {
-                // we also have to write it out with a transfer.
-                d = new Object[2];
+            // we also have to write it out with a transfer.
+            d = new Object[2];
             }
 
         byte[] data = new byte[254];
@@ -1177,7 +1177,7 @@ public class KorgMicroKorg extends Synth
         System.arraycopy(b, 0, namec, 0, b.length);
         for(int i = 0; i < 12; i++)
             {
-                data[i] = (byte)(namec[i] & 127);
+            data[i] = (byte)(namec[i] & 127);
             }
 
         // this will have to be set entirely custom.  :-(  Stupid Korg.  Really bad sysex.
@@ -1186,20 +1186,20 @@ public class KorgMicroKorg extends Synth
         data[14] = (byte)model.get("arptriggerlength");
         for(int i = 0; i < 8; i++)
             {
-                data[15] = (byte)( data[15] | (model.get("arptriggerpattern" + i) << i) );
+            data[15] = (byte)( data[15] | (model.get("arptriggerpattern" + i) << i) );
             }
         // set up voice mode
         if (this instanceof KorgMicroKorgVocoder)
             {
-                data[16] = (byte)(3 << 4);  // vocoder is voicemode "3"
+            data[16] = (byte)(3 << 4);  // vocoder is voicemode "3"
             }
         else if (model.get("voicemode", 0) == 0)
             {
-                data[16] = (byte)(0 << 4);
+            data[16] = (byte)(0 << 4);
             }
         else
             {
-                data[16] = (byte)(2 << 4);
+            data[16] = (byte)(2 << 4);
             }
 
         data[17] = 0;
@@ -1241,151 +1241,151 @@ public class KorgMicroKorg extends Synth
         
         if (!toWorkingMemory && !toFile)
             {
-                // The MicroKorg cannot write to a patch directly.  We have to emit to current memory, then save
-                // to a patch, so we'll tack some extra sysex on in that situation
+            // The MicroKorg cannot write to a patch directly.  We have to emit to current memory, then save
+            // to a patch, so we'll tack some extra sysex on in that situation
                     
-                byte BB = (byte) tempModel.get("bank");
-                byte NN = (byte) tempModel.get("number");
+            byte BB = (byte) tempModel.get("bank");
+            byte NN = (byte) tempModel.get("number");
         
-                data = new byte[] { (byte)0xF0, (byte)0x42, (byte)(48 + getChannelOut()), (byte)0x58, (byte)0x11, (byte)0,
-                                    (byte)(BB * 64 + NN), (byte)0xF7 };
-                d[1] = data;
+            data = new byte[] { (byte)0xF0, (byte)0x42, (byte)(48 + getChannelOut()), (byte)0x58, (byte)0x11, (byte)0,
+                (byte)(BB * 64 + NN), (byte)0xF7 };
+            d[1] = data;
             }
         return d;
-    }
+        }
         
     protected void subemit(byte[] data)
-    {
+        {
         for(int i = 1; i <= 2; i++)
             {
-                int offset = 38 + 108 * (i - 1);
-                data[offset + 0] = (byte)-1;
-                data[offset + 1] = (byte)((model.get("timbre" + i + "assignmode") << 6) |
-                                          (model.get("timbre" + i + "ampeg2reset") << 5) | 
-                                          (model.get("timbre" + i + "filtereg1reset") << 4) |
-                                          (model.get("timbre" + i + "triggermode") << 3));
-                data[offset + 2] = (byte)model.get("timbre" + i + "unisondetune");
-                data[offset + 3] = (byte)model.get("timbre" + i + "tune");
-                data[offset + 4] = (byte)model.get("timbre" + i + "bendrange");
-                data[offset + 5] = (byte)model.get("timbre" + i + "transpose");
-                data[offset + 6] = (byte)model.get("timbre" + i + "vibratoint");
-                data[offset + 7] = (byte)model.get("timbre" + i + "osc1wave");
-                data[offset + 8] = (byte)model.get("timbre" + i + "osc1ctrl1");
-                data[offset + 9] = (byte)model.get("timbre" + i + "osc1ctrl2");
-                data[offset + 10] = (byte)model.get("timbre" + i + "osc1dwgswave");
-                data[offset + 11] = 0;
-                data[offset + 12] = (byte)((model.get("timbre" + i + "osc2modselect") << 4) | 
-                                           ((byte)model.get("timbre" + i + "osc2wave")));
-                data[offset + 13] = (byte)model.get("timbre" + i + "osc2semitone");
-                data[offset + 14] = (byte)model.get("timbre" + i + "osc2tune");
-                data[offset + 15] = (byte)model.get("timbre" + i + "portamentotime");
-                data[offset + 16] = (byte)model.get("timbre" + i + "osc1level");
-                data[offset + 17] = (byte)model.get("timbre" + i + "osc2level");
-                data[offset + 18] = (byte)model.get("timbre" + i + "noise");
-                data[offset + 19] = (byte)model.get("timbre" + i + "filtertype");
-                data[offset + 20] = (byte)model.get("timbre" + i + "filtercutoff");
-                data[offset + 21] = (byte)model.get("timbre" + i + "filterresonance");
-                data[offset + 22] = (byte)model.get("timbre" + i + "filtereg1intensity");
-                data[offset + 23] = 64;
-                data[offset + 24] = (byte)model.get("timbre" + i + "filterkeyboardtrack");
-                data[offset + 25] = (byte)model.get("timbre" + i + "amplevel");
-                data[offset + 26] = (byte)model.get("timbre" + i + "amppanpot");
-                data[offset + 27] = (byte)model.get("timbre" + i + "ampdistortion");
-                data[offset + 28] = 64;
-                data[offset + 29] = (byte)model.get("timbre" + i + "ampkeyboardtrack");
-                data[offset + 30] = (byte)model.get("timbre" + i + "env1" + "attack");
-                data[offset + 31] = (byte)model.get("timbre" + i + "env1" + "decay");
-                data[offset + 32] = (byte)model.get("timbre" + i + "env1" + "sustain");
-                data[offset + 33] = (byte)model.get("timbre" + i + "env1" + "release");
-                data[offset + 34] = (byte)model.get("timbre" + i + "env2" + "attack");
-                data[offset + 35] = (byte)model.get("timbre" + i + "env2" + "decay");
-                data[offset + 36] = (byte)model.get("timbre" + i + "env2" + "sustain");
-                data[offset + 37] = (byte)model.get("timbre" + i + "env2" + "release");
-                data[offset + 38] = (byte)((model.get("timbre" + i + "lfo1" + "keysync") << 4 ) | 
-                                           (model.get("timbre" + i + "lfo1" + "wave")));
-                data[offset + 39] = (byte)model.get("timbre" + i + "lfo1" + "frequency");
-                data[offset + 40] = (byte)((model.get("timbre" + i + "lfo1" + "temposync") << 7) |
-                                           // documentation says this is bits 0...4 but this has to be wrong, since the values only go 0...14
-                                           model.get("timbre" + i + "lfo1" + "syncnote"));
-                data[offset + 41] = (byte)((model.get("timbre" + i + "lfo2" + "keysync") << 4 ) |
-                                           (model.get("timbre" + i + "lfo2" + "wave")));
-                data[offset + 42] = (byte)model.get("timbre" + i + "lfo2" + "frequency");
-                data[offset + 43] = (byte)((model.get("timbre" + i + "lfo2" + "temposync") << 7) |
-                                           // documentation says this is bits 0...4 but this has to be wrong, since the values only go 0...14
-                                           model.get("timbre" + i + "lfo2" + "syncnote"));
-                for(int j = 1; j <= 4; j++)
-                    {
-                        // documentation says this is bits 4...7 but this has to be wrong, since the values only go 0...7
-                        data[offset + ((j-1) * 2) + 44] = (byte)((model.get("timbre" + i + "patch" + j + "destination") << 4) |
-                                                                 // documentation says this is bits 0...3 but this has to be wrong, since the values only go 0...7
-                                                                 (model.get("timbre" + i + "patch" + j + "source")));
-                        data[offset + ((j-1) * 2) + 45] = (byte)model.get("timbre" + i + "patch" + j + "intensity");
-                    }
-                for(int j = 52; j < 108; j++)
-                    data[offset + j] = 0;
+            int offset = 38 + 108 * (i - 1);
+            data[offset + 0] = (byte)-1;
+            data[offset + 1] = (byte)((model.get("timbre" + i + "assignmode") << 6) |
+                (model.get("timbre" + i + "ampeg2reset") << 5) | 
+                (model.get("timbre" + i + "filtereg1reset") << 4) |
+                (model.get("timbre" + i + "triggermode") << 3));
+            data[offset + 2] = (byte)model.get("timbre" + i + "unisondetune");
+            data[offset + 3] = (byte)model.get("timbre" + i + "tune");
+            data[offset + 4] = (byte)model.get("timbre" + i + "bendrange");
+            data[offset + 5] = (byte)model.get("timbre" + i + "transpose");
+            data[offset + 6] = (byte)model.get("timbre" + i + "vibratoint");
+            data[offset + 7] = (byte)model.get("timbre" + i + "osc1wave");
+            data[offset + 8] = (byte)model.get("timbre" + i + "osc1ctrl1");
+            data[offset + 9] = (byte)model.get("timbre" + i + "osc1ctrl2");
+            data[offset + 10] = (byte)model.get("timbre" + i + "osc1dwgswave");
+            data[offset + 11] = 0;
+            data[offset + 12] = (byte)((model.get("timbre" + i + "osc2modselect") << 4) | 
+                ((byte)model.get("timbre" + i + "osc2wave")));
+            data[offset + 13] = (byte)model.get("timbre" + i + "osc2semitone");
+            data[offset + 14] = (byte)model.get("timbre" + i + "osc2tune");
+            data[offset + 15] = (byte)model.get("timbre" + i + "portamentotime");
+            data[offset + 16] = (byte)model.get("timbre" + i + "osc1level");
+            data[offset + 17] = (byte)model.get("timbre" + i + "osc2level");
+            data[offset + 18] = (byte)model.get("timbre" + i + "noise");
+            data[offset + 19] = (byte)model.get("timbre" + i + "filtertype");
+            data[offset + 20] = (byte)model.get("timbre" + i + "filtercutoff");
+            data[offset + 21] = (byte)model.get("timbre" + i + "filterresonance");
+            data[offset + 22] = (byte)model.get("timbre" + i + "filtereg1intensity");
+            data[offset + 23] = 64;
+            data[offset + 24] = (byte)model.get("timbre" + i + "filterkeyboardtrack");
+            data[offset + 25] = (byte)model.get("timbre" + i + "amplevel");
+            data[offset + 26] = (byte)model.get("timbre" + i + "amppanpot");
+            data[offset + 27] = (byte)model.get("timbre" + i + "ampdistortion");
+            data[offset + 28] = 64;
+            data[offset + 29] = (byte)model.get("timbre" + i + "ampkeyboardtrack");
+            data[offset + 30] = (byte)model.get("timbre" + i + "env1" + "attack");
+            data[offset + 31] = (byte)model.get("timbre" + i + "env1" + "decay");
+            data[offset + 32] = (byte)model.get("timbre" + i + "env1" + "sustain");
+            data[offset + 33] = (byte)model.get("timbre" + i + "env1" + "release");
+            data[offset + 34] = (byte)model.get("timbre" + i + "env2" + "attack");
+            data[offset + 35] = (byte)model.get("timbre" + i + "env2" + "decay");
+            data[offset + 36] = (byte)model.get("timbre" + i + "env2" + "sustain");
+            data[offset + 37] = (byte)model.get("timbre" + i + "env2" + "release");
+            data[offset + 38] = (byte)((model.get("timbre" + i + "lfo1" + "keysync") << 4 ) | 
+                (model.get("timbre" + i + "lfo1" + "wave")));
+            data[offset + 39] = (byte)model.get("timbre" + i + "lfo1" + "frequency");
+            data[offset + 40] = (byte)((model.get("timbre" + i + "lfo1" + "temposync") << 7) |
+                // documentation says this is bits 0...4 but this has to be wrong, since the values only go 0...14
+                model.get("timbre" + i + "lfo1" + "syncnote"));
+            data[offset + 41] = (byte)((model.get("timbre" + i + "lfo2" + "keysync") << 4 ) |
+                (model.get("timbre" + i + "lfo2" + "wave")));
+            data[offset + 42] = (byte)model.get("timbre" + i + "lfo2" + "frequency");
+            data[offset + 43] = (byte)((model.get("timbre" + i + "lfo2" + "temposync") << 7) |
+                // documentation says this is bits 0...4 but this has to be wrong, since the values only go 0...14
+                model.get("timbre" + i + "lfo2" + "syncnote"));
+            for(int j = 1; j <= 4; j++)
+                {
+                // documentation says this is bits 4...7 but this has to be wrong, since the values only go 0...7
+                data[offset + ((j-1) * 2) + 44] = (byte)((model.get("timbre" + i + "patch" + j + "destination") << 4) |
+                    // documentation says this is bits 0...3 but this has to be wrong, since the values only go 0...7
+                    (model.get("timbre" + i + "patch" + j + "source")));
+                data[offset + ((j-1) * 2) + 45] = (byte)model.get("timbre" + i + "patch" + j + "intensity");
+                }
+            for(int j = 52; j < 108; j++)
+                data[offset + j] = 0;
             }
-    }
+        }
 
         
     public void parseParameter(byte[] data)
-    {
+        {
         if (data.length == 6 &&                 // write error report
             data[0] == (byte)0xF0 &&
             data[1] == (byte)0x42 &&
             data[3] == (byte)0x58 &&
-            (data[4] == (byte)0x26 || 
-             data[4] == (byte)0x24 ||
-             data[4] == (byte)0x22))
+                (data[4] == (byte)0x26 || 
+                data[4] == (byte)0x24 ||
+                data[4] == (byte)0x22))
             {
-                String error = "Send or Write Failed";
-                showSimpleError("Write Failed", error);
+            String error = "Send or Write Failed";
+            showSimpleError("Write Failed", error);
             }
-    }
+        }
 
 
 
     public int getPauseAfterChangePatch() { return 200; }
 
     public void changePatch(Model tempModel)
-    {
+        {
         byte NN = (byte)tempModel.get("number");
         byte BB = (byte)tempModel.get("bank");
         try {
             // Number change is PC
             tryToSendMIDI(new ShortMessage(ShortMessage.PROGRAM_CHANGE, getChannelOut(), BB * 64 + NN, 0));
-        }
+            }
         catch (Exception e) { Synth.handleException(e); }
 
         // we assume that we successfully did it
         if (!isMerging())  // we're actually loading the patch, not merging with it
             {
-                setSendMIDI(false);
-                model.set("number", tempModel.get("number"));
-                model.set("bank", tempModel.get("bank"));
-                setSendMIDI(true);
+            setSendMIDI(false);
+            model.set("number", tempModel.get("number"));
+            model.set("bank", tempModel.get("bank"));
+            setSendMIDI(true);
             }
-    }
+        }
 
     public void performRequestDump(Model tempModel, boolean changePatch)
-    {
+        {
         if (tempModel == null)
             tempModel = getModel();
 
         // we always change the patch no matter what
         changePatch(tempModel);
         performRequestCurrentDump();
-    }
+        }
             
     public byte[] requestCurrentDump()
-    {
+        {
         return new byte[] { (byte)0xF0, 0x42, (byte)(48 + getChannelOut()), 0x58, 0x10, (byte)0xF7 };
-    }    
+        }    
     
     
     /////// OTHER ABSTRACT METHODS
     
     public boolean gatherPatchInfo(String title, Model change, boolean writing)
-    {
+        {
         JComboBox bank = new JComboBox(BANKS);
         bank.setEditable(false);
         bank.setMaximumRowCount(32);
@@ -1396,35 +1396,35 @@ public class KorgMicroKorg extends Synth
                 
         while(true)
             {
-                boolean result = showMultiOption(this, new String[] { "Bank", "Patch Number"}, 
-                                                 new JComponent[] { bank, number }, title, "Enter the Bank and Patch number.");
+            boolean result = showMultiOption(this, new String[] { "Bank", "Patch Number"}, 
+                new JComponent[] { bank, number }, title, "Enter the Bank and Patch number.");
                 
-                if (result == false) 
-                    return false;
+            if (result == false) 
+                return false;
                                 
-                int n;
-                try { n = Integer.parseInt(number.getText()); }
-                catch (NumberFormatException e)
-                    {
-                        showSimpleError(title, "The Patch Number must be an integer 11 ... 78, with no zero or nine digits\n(81...88 are reserved for Vocoder Patches)");
-                        continue;
-                    }
-                if (n < 11 || n > 78 || n % 10 == 0 || n % 10 == 9)
-                    {
-                        showSimpleError(title, "The Patch Number must be an integer 11 ... 78, with no zero or nine digits\n(81...88 are reserved for Vocoder Patches)");
-                        continue;
-                    }
+            int n;
+            try { n = Integer.parseInt(number.getText()); }
+            catch (NumberFormatException e)
+                {
+                showSimpleError(title, "The Patch Number must be an integer 11 ... 78, with no zero or nine digits\n(81...88 are reserved for Vocoder Patches)");
+                continue;
+                }
+            if (n < 11 || n > 78 || n % 10 == 0 || n % 10 == 9)
+                {
+                showSimpleError(title, "The Patch Number must be an integer 11 ... 78, with no zero or nine digits\n(81...88 are reserved for Vocoder Patches)");
+                continue;
+                }
                                 
-                change.set("bank", bank.getSelectedIndex());
-                change.set("number", (n / 10 - 1) * 8 + (n % 10 - 1));  // yuk, magic equation
+            change.set("bank", bank.getSelectedIndex());
+            change.set("number", (n / 10 - 1) * 8 + (n % 10 - 1));  // yuk, magic equation
                         
-                return true;
+            return true;
             }
-    }
+        }
         
 
     public void revise()
-    {
+        {
         // check the easy stuff -- out of range parameters
         super.revise();
 
@@ -1432,7 +1432,7 @@ public class KorgMicroKorg extends Synth
         String newnm = revisePatchName(nm);
         if (!nm.equals(newnm))
             model.set("name", newnm);
-    }
+        }
         
     public static String getSynthName() { return "Korg MicroKorg"; }
     
@@ -1440,28 +1440,28 @@ public class KorgMicroKorg extends Synth
     
 
     public Model getNextPatchLocation(Model model)
-    {
+        {
         int bank = model.get("bank");
         int number = model.get("number");
         
         number++;
         if (number >= 56)
             {
-                bank++;
-                number = 0;
-                if (bank >= 2)
-                    bank = 0;
+            bank++;
+            number = 0;
+            if (bank >= 2)
+                bank = 0;
             }
                 
         Model newModel = buildModel();
         newModel.set("bank", bank);
         newModel.set("number", number);
         return newModel;
-    }
+        }
 
 
     public String getPatchLocationName(Model model)
-    {
+        {
         // getPatchLocationName() is called from sprout() as a test to see if we should enable
         // batch downloading.  If we haven't yet created an .init file, then parameters won't exist
         // yet and this method will bomb badly.  So we return null in this case.
@@ -1471,16 +1471,16 @@ public class KorgMicroKorg extends Synth
         int number = model.get("number");
         int bank = model.get("bank");
         return (bank == 0 ? "A." : "B.") + (number / 8 + 1) + "" + (number % 8 + 1);
-    }
+        }
         
     public boolean testVerify(Synth synth2, 
-                              String key,
-                              Object obj1, Object obj2) 
-    {
+        String key,
+        Object obj1, Object obj2) 
+        {
         // we define timbre 3 (vocoder) even though we don't load it
         if (key.startsWith("timbre3")) return true;
         if (key.startsWith("channel")) return true;
         return false;
+        }
     }
-}
     

@@ -7,9 +7,9 @@ package edisyn.synth.casiocz;
 import edisyn.*;
 
 public class CasioCZRec extends Recognize
-{
-    public static boolean recognize(byte[] data)
     {
+    public static boolean recognize(byte[] data)
+        {
         // We need to recognize four formats
         
         // F0 44 00 00 7N 20 DD [BREAK] [256 bytes] F7
@@ -34,11 +34,11 @@ public class CasioCZRec extends Recognize
         
 
         return (
-                data[1] == 0x44 &&
-                data[2] == 0x00 &&
-                data[3] == 0x00 &&
-                (data[4] >= 0x70 && data[4] <= 0x7F) &&
-                (data[5] == 0x20 || data[5] == 0x21 || data[5] == 0x30));
-    }
+            data[1] == 0x44 &&
+            data[2] == 0x00 &&
+            data[3] == 0x00 &&
+            (data[4] >= 0x70 && data[4] <= 0x7F) &&
+            (data[5] == 0x20 || data[5] == 0x21 || data[5] == 0x30));
+        }
 
-}
+    }

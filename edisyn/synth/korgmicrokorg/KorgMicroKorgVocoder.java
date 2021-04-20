@@ -23,28 +23,28 @@ import javax.sound.midi.*;
 */
 
 public class KorgMicroKorgVocoder extends KorgMicroKorg
-{
-    public KorgMicroKorgVocoder()
     {
+    public KorgMicroKorgVocoder()
+        {
         super();
         model.set("number", 56);
         model.set("arptarget", 0); // set it to something
         removeTab("Timbre 1");
         removeTab("Timbre 2");
-    }
+        }
                 
     public static String getSynthName() { return "Korg MicroKorg [Vocoder]"; }
     public String getDefaultResourceFileName() { return "KorgMicroKorgVocoder.init"; }
     public String getHTMLResourceFileName() { return "KorgMicroKorgVocoder.html"; }
     
     public JComponent addGeneral(boolean vocoder, Color color)
-    {
+        {
         return super.addGeneral(true, color);
-    }
+        }
         
     /** Add the global patch category (name, id, number, etc.) */
     public JComponent addNameGlobal(Color color)
-    {
+        {
         Category globalCategory = new Category(this, getSynthName(), color);
                 
         JComponent comp;
@@ -59,15 +59,15 @@ public class KorgMicroKorgVocoder extends KorgMicroKorg
         
         comp = new StringComponent("Patch Name", this, "name", 12, "Name must be up to 12 ASCII characters.")
             {
-                public String replace(String val)
+            public String replace(String val)
                 {
-                    return revisePatchName(val);
+                return revisePatchName(val);
                 }
                                 
-                public void update(String key, Model model)
+            public void update(String key, Model model)
                 {
-                    super.update(key, model);
-                    updateTitle();
+                super.update(key, model);
+                updateTitle();
                 }
             };
         vbox.addBottom(comp);  // doesn't work right :-(
@@ -77,13 +77,13 @@ public class KorgMicroKorgVocoder extends KorgMicroKorg
 
         globalCategory.add(hbox, BorderLayout.WEST);
         return globalCategory;
-    }
+        }
 
 
     /////// OTHER ABSTRACT METHODS
     
     public boolean gatherPatchInfo(String title, Model change, boolean writing)
-    {
+        {
         JComboBox bank = new JComboBox(BANKS);
         bank.setEditable(false);
         bank.setMaximumRowCount(32);
@@ -94,55 +94,55 @@ public class KorgMicroKorgVocoder extends KorgMicroKorg
                 
         while(true)
             {
-                boolean result = showMultiOption(this, new String[] { "Bank", "Patch Number"}, 
-                                                 new JComponent[] { bank, number }, title, "Enter the Bank and Patch number.");
+            boolean result = showMultiOption(this, new String[] { "Bank", "Patch Number"}, 
+                new JComponent[] { bank, number }, title, "Enter the Bank and Patch number.");
                 
-                if (result == false) 
-                    return false;
+            if (result == false) 
+                return false;
                                 
-                int n;
-                try { n = Integer.parseInt(number.getText()); }
-                catch (NumberFormatException e)
-                    {
-                        showSimpleError(title, "The Patch Number must be an integer 81 ... 88, with no zero or nine digits\n(11...78 are reserved for Synthesizer Patches)");
-                        continue;
-                    }
-                if (n < 81 || n > 88 || n % 10 == 0 || n % 10 == 9)
-                    {
-                        showSimpleError(title, "The Patch Number must be an integer 81 ... 88, with no zero or nine digits\n(11...78 are reserved for Synthesizer Patches)");
-                        continue;
-                    }
+            int n;
+            try { n = Integer.parseInt(number.getText()); }
+            catch (NumberFormatException e)
+                {
+                showSimpleError(title, "The Patch Number must be an integer 81 ... 88, with no zero or nine digits\n(11...78 are reserved for Synthesizer Patches)");
+                continue;
+                }
+            if (n < 81 || n > 88 || n % 10 == 0 || n % 10 == 9)
+                {
+                showSimpleError(title, "The Patch Number must be an integer 81 ... 88, with no zero or nine digits\n(11...78 are reserved for Synthesizer Patches)");
+                continue;
+                }
                                 
-                change.set("bank", bank.getSelectedIndex());
-                change.set("number", (n / 10 - 1) * 8 + (n % 10 - 1));  // yuk, magic equation
+            change.set("bank", bank.getSelectedIndex());
+            change.set("number", (n / 10 - 1) * 8 + (n % 10 - 1));  // yuk, magic equation
                         
-                return true;
+            return true;
             }
-    }
+        }
      
     public Model getNextPatchLocation(Model model)
-    {
+        {
         int bank = model.get("bank");
         int number = model.get("number");
         
         number++;
         if (number >= 64)
             {
-                bank++;
-                number = 56;
-                if (bank >= 2)
-                    bank = 0;
+            bank++;
+            number = 56;
+            if (bank >= 2)
+                bank = 0;
             }
                 
         Model newModel = buildModel();
         newModel.set("bank", bank);
         newModel.set("number", number);
         return newModel;
-    }
+        }
 
 
     protected void subparse(byte[] data)
-    {
+        {
         int offset = 38;
         int i = 3;
         model.set("timbre" + i + "assignmode", (data[offset + 1] >>> 6) & 3);
@@ -194,55 +194,55 @@ public class KorgMicroKorgVocoder extends KorgMicroKorg
         model.set("timbre" + i + "lfo2" + "syncnote", (data[offset + 45]) & 15);
         for(int j = 1; j <= 8; j++)
             {
-                // the documentation is very unclear here.  It appears that it says that pairs of MIDI values
-                // should be exactly the same.
-                model.set("channel" + j + "level", data[offset + ((j-1) * 2) + 46]);
-                if (data[offset + ((j-1) * 2) + 46] != data[offset + ((j-1) * 2) + 47])
-                    System.err.println("Warning (KorgMicroKorg): Channel" + j + "level inconsistent in pair: " + data[offset + ((j-1) * 2) + 47]);
+            // the documentation is very unclear here.  It appears that it says that pairs of MIDI values
+            // should be exactly the same.
+            model.set("channel" + j + "level", data[offset + ((j-1) * 2) + 46]);
+            if (data[offset + ((j-1) * 2) + 46] != data[offset + ((j-1) * 2) + 47])
+                System.err.println("Warning (KorgMicroKorg): Channel" + j + "level inconsistent in pair: " + data[offset + ((j-1) * 2) + 47]);
             }
         for(int j = 1; j <= 8; j++)
             {
-                // the documentation is very unclear here.  It appears that it says that pairs of MIDI values
-                // should be exactly the same.
-                model.set("channel" + j + "pan", data[offset + ((j-1) * 2) + 62]);
-                if (data[offset + ((j-1) * 2) + 62] != data[offset + ((j-1) * 2) + 63])
-                    System.err.println("Warning (KorgMicroKorg): Channel" + j + "pan inconsistent in pair: " + data[offset + ((j-1) * 2) + 63]);
+            // the documentation is very unclear here.  It appears that it says that pairs of MIDI values
+            // should be exactly the same.
+            model.set("channel" + j + "pan", data[offset + ((j-1) * 2) + 62]);
+            if (data[offset + ((j-1) * 2) + 62] != data[offset + ((j-1) * 2) + 63])
+                System.err.println("Warning (KorgMicroKorg): Channel" + j + "pan inconsistent in pair: " + data[offset + ((j-1) * 2) + 63]);
             }
         for(int j = 1; j <= 16; j++)
             {
-                // the documentation is very unclear here.  It appears that it says that pairs of MIDI values
-                // should be exactly the same.
-                int a = data[offset + ((j-1) * 4) + 78];
-                if (a < 0) a += 256;
-                int b = data[offset + ((j-1) * 4) + 79];
-                if (b < 0) b += 256;
-                int c = data[offset + ((j-1) * 4) + 80];
-                if (c < 0) c += 256;
-                int d = data[offset + ((j-1) * 4) + 81];
-                if (d < 0) d += 256;
-                int val = (a << 24) | (b << 16) | (c << 8) | d;
-                if (val >= 0x7FFFFF00)
-                    {
-                        System.err.println("Warning (KorgMicroKorg): Too large value for hold number " + j + ": " + val);
-                        val = 0x7FFFFF00;
-                    }
-                if (val < 0) 
-                    {
-                        System.err.println("Warning (KorgMicroKorg): Hold number " + j + " is negative: " + val);
-                        val = 0;
-                    }
-                model.set("channel" + j + "hold", val);
+            // the documentation is very unclear here.  It appears that it says that pairs of MIDI values
+            // should be exactly the same.
+            int a = data[offset + ((j-1) * 4) + 78];
+            if (a < 0) a += 256;
+            int b = data[offset + ((j-1) * 4) + 79];
+            if (b < 0) b += 256;
+            int c = data[offset + ((j-1) * 4) + 80];
+            if (c < 0) c += 256;
+            int d = data[offset + ((j-1) * 4) + 81];
+            if (d < 0) d += 256;
+            int val = (a << 24) | (b << 16) | (c << 8) | d;
+            if (val >= 0x7FFFFF00)
+                {
+                System.err.println("Warning (KorgMicroKorg): Too large value for hold number " + j + ": " + val);
+                val = 0x7FFFFF00;
+                }
+            if (val < 0) 
+                {
+                System.err.println("Warning (KorgMicroKorg): Hold number " + j + " is negative: " + val);
+                val = 0;
+                }
+            model.set("channel" + j + "hold", val);
             }
-    }
+        }
             
     protected void subemit(byte[] data)
-    {
+        {
         int offset = 38;
         int i = 3;
         data[offset + 0] = (byte)-1;
         data[offset + 1] = (byte)((model.get("timbre" + i + "assignmode") << 6) |
-                                  (model.get("timbre" + i + "ampeg2reset") << 5) | 
-                                  (model.get("timbre" + i + "triggermode") << 3));
+            (model.get("timbre" + i + "ampeg2reset") << 5) | 
+            (model.get("timbre" + i + "triggermode") << 3));
         data[offset + 2] = (byte)model.get("timbre" + i + "unisondetune");
         data[offset + 3] = (byte)model.get("timbre" + i + "tune");
         data[offset + 4] = (byte)model.get("timbre" + i + "bendrange");
@@ -281,50 +281,50 @@ public class KorgMicroKorgVocoder extends KorgMicroKorg
         data[offset + 38] = (byte)model.get("timbre" + i + "env2" + "sustain");
         data[offset + 39] = (byte)model.get("timbre" + i + "env2" + "release");
         data[offset + 40] = (byte)((model.get("timbre" + i + "lfo1" + "keysync") << 4 ) | 
-                                   model.get("timbre" + i + "lfo1" + "wave"));
+            model.get("timbre" + i + "lfo1" + "wave"));
         data[offset + 41] = (byte)model.get("timbre" + i + "lfo1" + "frequency");
         data[offset + 42] = (byte)((model.get("timbre" + i + "lfo1" + "temposync") << 7) |
-                                   // documentation says this is bits 0...4 but this has to be wrong, since the values only go 0...14
-                                   model.get("timbre" + i + "lfo1" + "syncnote"));
+            // documentation says this is bits 0...4 but this has to be wrong, since the values only go 0...14
+            model.get("timbre" + i + "lfo1" + "syncnote"));
         data[offset + 43] = (byte)((model.get("timbre" + i + "lfo2" + "keysync") << 4 ) |
-                                   model.get("timbre" + i + "lfo2" + "wave"));
+            model.get("timbre" + i + "lfo2" + "wave"));
         data[offset + 44] = (byte)model.get("timbre" + i + "lfo2" + "frequency");
         data[offset + 45] = (byte)((model.get("timbre" + i + "lfo2" + "temposync") << 7) |
-                                   // documentation says this is bits 0...4 but this has to be wrong, since the values only go 0...14
-                                   model.get("timbre" + i + "lfo2" + "syncnote"));
+            // documentation says this is bits 0...4 but this has to be wrong, since the values only go 0...14
+            model.get("timbre" + i + "lfo2" + "syncnote"));
         for(int j = 1; j <= 8; j++)
             {
-                // the documentation is very unclear here.  It appears that it says that pairs of MIDI values
-                // should be exactly the same.
-                data[offset + ((j-1) * 2) + 47] = data[offset + ((j-1) * 2) + 46] = (byte)model.get("channel" + j + "level");
+            // the documentation is very unclear here.  It appears that it says that pairs of MIDI values
+            // should be exactly the same.
+            data[offset + ((j-1) * 2) + 47] = data[offset + ((j-1) * 2) + 46] = (byte)model.get("channel" + j + "level");
             }
         for(int j = 1; j <= 8; j++)
             {
-                // the documentation is very unclear here.  It appears that it says that pairs of MIDI values
-                // should be exactly the same.
-                data[offset + ((j-1) * 2) + 63] = data[offset + ((j-1) * 2) + 62] = (byte)model.get("channel" + j + "pan");
+            // the documentation is very unclear here.  It appears that it says that pairs of MIDI values
+            // should be exactly the same.
+            data[offset + ((j-1) * 2) + 63] = data[offset + ((j-1) * 2) + 62] = (byte)model.get("channel" + j + "pan");
             }
         for(int j = 1; j <= 16; j++)
             {
-                int val = model.get("channel" + j + "hold");
-                data[offset + ((j-1) * 4) + 78] =  (byte)((val >>> 24) & 0xFF);
-                data[offset + ((j-1) * 4) + 79] =  (byte)((val >>> 16) & 0xFF);
-                data[offset + ((j-1) * 4) + 80] =  (byte)((val >>> 8) & 0xFF);
-                data[offset + ((j-1) * 4) + 81] =  (byte)((val >>> 0) & 0xFF);
+            int val = model.get("channel" + j + "hold");
+            data[offset + ((j-1) * 4) + 78] =  (byte)((val >>> 24) & 0xFF);
+            data[offset + ((j-1) * 4) + 79] =  (byte)((val >>> 16) & 0xFF);
+            data[offset + ((j-1) * 4) + 80] =  (byte)((val >>> 8) & 0xFF);
+            data[offset + ((j-1) * 4) + 81] =  (byte)((val >>> 0) & 0xFF);
             }
-    }
+        }
 
     public boolean testVerify(Synth synth2, 
-                              String key,
-                              Object obj1, Object obj2) 
-    {
+        String key,
+        Object obj1, Object obj2) 
+        {
         // we define timbre 1 and 2 even though we don't load them
         if (key.startsWith("timbre1")) return true;
         if (key.startsWith("timbre2")) return true;
         // voicemode is unused
         if (key.equals("voicemode")) return true;
         return false;
-    }
+        }
 
-}
+    }
     

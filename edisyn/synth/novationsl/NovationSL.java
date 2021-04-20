@@ -25,7 +25,7 @@ import javax.sound.midi.*;
 */
 
 public class NovationSL extends Synth
-{
+    {
     
     /// Interesting fact: the unit doesn't have "default", but the editor does.
     /// If Encoder is 0-16K then the maximum position is the size minus 1 to accommodate two DV
@@ -102,7 +102,7 @@ public class NovationSL extends Synth
     JCheckBox compactCheck;
 
     public JFrame sprout()
-    {
+        {
         JFrame frame = super.sprout();
         blend.setEnabled(false);
         receiveCurrent.setEnabled(false);
@@ -110,7 +110,7 @@ public class NovationSL extends Synth
         //getAll.setEnabled(false);
         merge.setEnabled(false);
         return frame;
-    }         
+        }         
 
     // We're going to define "Send" as the SL "UPLOAD" command.  It only happens if the user requests it explicitly.
     public boolean getSendsParametersOnlyOnSendCurrentPatch() { return true; }
@@ -119,26 +119,26 @@ public class NovationSL extends Synth
     public static final String COMPACT_KEY = "Compact";
     
     public boolean isCompact()
-    {
+        {
         return compact;
-    }
+        }
         
     public void setCompact(boolean val)
-    {
+        {
         setLastX("" + val, COMPACT_KEY, getSynthName(), true);
         compact = val;
         updateTitle();
-    }
+        }
 
     String titleBarSynthName;
                 
     public String getTitleBarSynthName() 
-    { 
+        { 
         return titleBarSynthName;
-    }
+        }
 
     public NovationSL()
-    {
+        {
         String c = getLastX(COMPACT_KEY, getSynthName());
         compact = (c == null ? false : Boolean.parseBoolean(c));
         titleBarSynthName = "Novation ReMOTE SL" + (compact ? " (Compact)" : "");
@@ -190,117 +190,117 @@ public class NovationSL extends Synth
 
         if (isCompact())
             {
-                soundPanel = new SynthPanel(this);
-                vbox = new VBox();
-                hbox = new HBox();
-                hbox.add(addEncoder(1, "page2control1", index++, Style.COLOR_B()));
-                hbox.addLast(addEncoder(2, "page2control2", index++, Style.COLOR_B()));
-                vbox.add(hbox);
-                hbox = new HBox();
-                hbox.add(addEncoder(3, "page2control3", index++, Style.COLOR_A()));
-                hbox.addLast(addEncoder(4, "page2control4", index++, Style.COLOR_A()));
-                vbox.add(hbox);
-                hbox = new HBox();
-                hbox.add(addEncoder(5, "page2control5", index++, Style.COLOR_B()));
-                hbox.addLast(addEncoder(6, "page2control6", index++, Style.COLOR_B()));
-                vbox.add(hbox);
-                hbox = new HBox();
-                hbox.add(addEncoder(7, "page2control7", index++, Style.COLOR_A()));
-                hbox.addLast(addEncoder(8, "page2control8", index++, Style.COLOR_A()));
-                vbox.add(hbox);
-                soundPanel.add(vbox, BorderLayout.CENTER);
-                ((SynthPanel)soundPanel).makePasteable("page");
-                addTab("B", soundPanel);
+            soundPanel = new SynthPanel(this);
+            vbox = new VBox();
+            hbox = new HBox();
+            hbox.add(addEncoder(1, "page2control1", index++, Style.COLOR_B()));
+            hbox.addLast(addEncoder(2, "page2control2", index++, Style.COLOR_B()));
+            vbox.add(hbox);
+            hbox = new HBox();
+            hbox.add(addEncoder(3, "page2control3", index++, Style.COLOR_A()));
+            hbox.addLast(addEncoder(4, "page2control4", index++, Style.COLOR_A()));
+            vbox.add(hbox);
+            hbox = new HBox();
+            hbox.add(addEncoder(5, "page2control5", index++, Style.COLOR_B()));
+            hbox.addLast(addEncoder(6, "page2control6", index++, Style.COLOR_B()));
+            vbox.add(hbox);
+            hbox = new HBox();
+            hbox.add(addEncoder(7, "page2control7", index++, Style.COLOR_A()));
+            hbox.addLast(addEncoder(8, "page2control8", index++, Style.COLOR_A()));
+            vbox.add(hbox);
+            soundPanel.add(vbox, BorderLayout.CENTER);
+            ((SynthPanel)soundPanel).makePasteable("page");
+            addTab("B", soundPanel);
 
-                soundPanel = new SynthPanel(this);
-                vbox = new VBox();
-                hbox = new HBox();
-                hbox.add(addEncoder(1, "page3control1", index++, Style.COLOR_A()));
-                hbox.addLast(addEncoder(2, "page3control2", index++, Style.COLOR_A()));
-                vbox.add(hbox);
-                hbox = new HBox();
-                hbox.add(addEncoder(3, "page3control3", index++, Style.COLOR_B()));
-                hbox.addLast(addEncoder(4, "page3control4", index++, Style.COLOR_B()));
-                vbox.add(hbox);
-                hbox = new HBox();
-                hbox.add(addEncoder(5, "page3control5", index++, Style.COLOR_A()));
-                hbox.addLast(addEncoder(6, "page3control6", index++, Style.COLOR_A()));
-                vbox.add(hbox);
-                hbox = new HBox();
-                hbox.add(addEncoder(7, "page3control7", index++, Style.COLOR_B()));
-                hbox.addLast(addEncoder(8, "page3control8", index++, Style.COLOR_B()));
-                vbox.add(hbox);
-                soundPanel.add(vbox, BorderLayout.CENTER);
-                ((SynthPanel)soundPanel).makePasteable("page");
-                addTab("C", soundPanel);
+            soundPanel = new SynthPanel(this);
+            vbox = new VBox();
+            hbox = new HBox();
+            hbox.add(addEncoder(1, "page3control1", index++, Style.COLOR_A()));
+            hbox.addLast(addEncoder(2, "page3control2", index++, Style.COLOR_A()));
+            vbox.add(hbox);
+            hbox = new HBox();
+            hbox.add(addEncoder(3, "page3control3", index++, Style.COLOR_B()));
+            hbox.addLast(addEncoder(4, "page3control4", index++, Style.COLOR_B()));
+            vbox.add(hbox);
+            hbox = new HBox();
+            hbox.add(addEncoder(5, "page3control5", index++, Style.COLOR_A()));
+            hbox.addLast(addEncoder(6, "page3control6", index++, Style.COLOR_A()));
+            vbox.add(hbox);
+            hbox = new HBox();
+            hbox.add(addEncoder(7, "page3control7", index++, Style.COLOR_B()));
+            hbox.addLast(addEncoder(8, "page3control8", index++, Style.COLOR_B()));
+            vbox.add(hbox);
+            soundPanel.add(vbox, BorderLayout.CENTER);
+            ((SynthPanel)soundPanel).makePasteable("page");
+            addTab("C", soundPanel);
 
-                soundPanel = new SynthPanel(this);
-                vbox = new VBox();
-                hbox = new HBox();
-                hbox.add(addEncoder(1, "page11control1", ENCODERS_D_INDEX + 0, Style.COLOR_A()));
-                hbox.addLast(addEncoder(2, "page11control2", ENCODERS_D_INDEX + 1, Style.COLOR_A()));
-                vbox.add(hbox);
-                hbox = new HBox();
-                hbox.add(addEncoder(3, "page11control3", ENCODERS_D_INDEX + 2, Style.COLOR_B()));
-                hbox.addLast(addEncoder(4, "page11control4", ENCODERS_D_INDEX + 3, Style.COLOR_B()));
-                vbox.add(hbox);
-                hbox = new HBox();
-                hbox.add(addEncoder(5, "page11control5", ENCODERS_D_INDEX + 4, Style.COLOR_A()));
-                hbox.addLast(addEncoder(6, "page11control6", ENCODERS_D_INDEX + 5, Style.COLOR_A()));
-                vbox.add(hbox);
-                hbox = new HBox();
-                hbox.add(addEncoder(7, "page11control7", ENCODERS_D_INDEX + 6, Style.COLOR_B()));
-                hbox.addLast(addEncoder(8, "page11control8", ENCODERS_D_INDEX + 7, Style.COLOR_B()));
-                vbox.add(hbox);
-                soundPanel.add(vbox, BorderLayout.CENTER);
-                ((SynthPanel)soundPanel).makePasteable("page");
-                addTab("D", soundPanel);
+            soundPanel = new SynthPanel(this);
+            vbox = new VBox();
+            hbox = new HBox();
+            hbox.add(addEncoder(1, "page11control1", ENCODERS_D_INDEX + 0, Style.COLOR_A()));
+            hbox.addLast(addEncoder(2, "page11control2", ENCODERS_D_INDEX + 1, Style.COLOR_A()));
+            vbox.add(hbox);
+            hbox = new HBox();
+            hbox.add(addEncoder(3, "page11control3", ENCODERS_D_INDEX + 2, Style.COLOR_B()));
+            hbox.addLast(addEncoder(4, "page11control4", ENCODERS_D_INDEX + 3, Style.COLOR_B()));
+            vbox.add(hbox);
+            hbox = new HBox();
+            hbox.add(addEncoder(5, "page11control5", ENCODERS_D_INDEX + 4, Style.COLOR_A()));
+            hbox.addLast(addEncoder(6, "page11control6", ENCODERS_D_INDEX + 5, Style.COLOR_A()));
+            vbox.add(hbox);
+            hbox = new HBox();
+            hbox.add(addEncoder(7, "page11control7", ENCODERS_D_INDEX + 6, Style.COLOR_B()));
+            hbox.addLast(addEncoder(8, "page11control8", ENCODERS_D_INDEX + 7, Style.COLOR_B()));
+            vbox.add(hbox);
+            soundPanel.add(vbox, BorderLayout.CENTER);
+            ((SynthPanel)soundPanel).makePasteable("page");
+            addTab("D", soundPanel);
             }
         else
             {
-                soundPanel = new SynthPanel(this);
-                vbox = new VBox();
-                hbox = new HBox();
-                hbox.add(addPot(1, "page2control1", index++, Style.COLOR_B()));
-                hbox.addLast(addPot(2, "page2control2", index++, Style.COLOR_B()));
-                vbox.add(hbox);
-                hbox = new HBox();
-                hbox.add(addPot(3, "page2control3", index++, Style.COLOR_A()));
-                hbox.addLast(addPot(4, "page2control4", index++, Style.COLOR_A()));
-                vbox.add(hbox);
-                hbox = new HBox();
-                hbox.add(addPot(5, "page2control5", index++, Style.COLOR_B()));
-                hbox.addLast(addPot(6, "page2control6", index++, Style.COLOR_B()));
-                vbox.add(hbox);
-                hbox = new HBox();
-                hbox.add(addPot(7, "page2control7", index++, Style.COLOR_A()));
-                hbox.addLast(addPot(8, "page2control8", index++, Style.COLOR_A()));
-                vbox.add(hbox);
-                soundPanel.add(vbox, BorderLayout.CENTER);
-                ((SynthPanel)soundPanel).makePasteable("page");
-                addTab("Pots", soundPanel);
+            soundPanel = new SynthPanel(this);
+            vbox = new VBox();
+            hbox = new HBox();
+            hbox.add(addPot(1, "page2control1", index++, Style.COLOR_B()));
+            hbox.addLast(addPot(2, "page2control2", index++, Style.COLOR_B()));
+            vbox.add(hbox);
+            hbox = new HBox();
+            hbox.add(addPot(3, "page2control3", index++, Style.COLOR_A()));
+            hbox.addLast(addPot(4, "page2control4", index++, Style.COLOR_A()));
+            vbox.add(hbox);
+            hbox = new HBox();
+            hbox.add(addPot(5, "page2control5", index++, Style.COLOR_B()));
+            hbox.addLast(addPot(6, "page2control6", index++, Style.COLOR_B()));
+            vbox.add(hbox);
+            hbox = new HBox();
+            hbox.add(addPot(7, "page2control7", index++, Style.COLOR_A()));
+            hbox.addLast(addPot(8, "page2control8", index++, Style.COLOR_A()));
+            vbox.add(hbox);
+            soundPanel.add(vbox, BorderLayout.CENTER);
+            ((SynthPanel)soundPanel).makePasteable("page");
+            addTab("Pots", soundPanel);
 
-                soundPanel = new SynthPanel(this);
-                vbox = new VBox();
-                hbox = new HBox();
-                hbox.add(addPot(1, "page3control1", index++, Style.COLOR_A()));
-                hbox.addLast(addPot(2, "page3control2", index++, Style.COLOR_A()));
-                vbox.add(hbox);
-                hbox = new HBox();
-                hbox.add(addPot(3, "page3control3", index++, Style.COLOR_B()));
-                hbox.addLast(addPot(4, "page3control4", index++, Style.COLOR_B()));
-                vbox.add(hbox);
-                hbox = new HBox();
-                hbox.add(addPot(5, "page3control5", index++, Style.COLOR_A()));
-                hbox.addLast(addPot(6, "page3control6", index++, Style.COLOR_A()));
-                vbox.add(hbox);
-                hbox = new HBox();
-                hbox.add(addPot(7, "page3control7", index++, Style.COLOR_B()));
-                hbox.addLast(addPot(8, "page3control8", index++, Style.COLOR_B()));
-                vbox.add(hbox);
-                soundPanel.add(vbox, BorderLayout.CENTER);
-                ((SynthPanel)soundPanel).makePasteable("page");
-                addTab("Faders", soundPanel);
+            soundPanel = new SynthPanel(this);
+            vbox = new VBox();
+            hbox = new HBox();
+            hbox.add(addPot(1, "page3control1", index++, Style.COLOR_A()));
+            hbox.addLast(addPot(2, "page3control2", index++, Style.COLOR_A()));
+            vbox.add(hbox);
+            hbox = new HBox();
+            hbox.add(addPot(3, "page3control3", index++, Style.COLOR_B()));
+            hbox.addLast(addPot(4, "page3control4", index++, Style.COLOR_B()));
+            vbox.add(hbox);
+            hbox = new HBox();
+            hbox.add(addPot(5, "page3control5", index++, Style.COLOR_A()));
+            hbox.addLast(addPot(6, "page3control6", index++, Style.COLOR_A()));
+            vbox.add(hbox);
+            hbox = new HBox();
+            hbox.add(addPot(7, "page3control7", index++, Style.COLOR_B()));
+            hbox.addLast(addPot(8, "page3control8", index++, Style.COLOR_B()));
+            vbox.add(hbox);
+            soundPanel.add(vbox, BorderLayout.CENTER);
+            ((SynthPanel)soundPanel).makePasteable("page");
+            addTab("Faders", soundPanel);
             }
                 
         soundPanel = new SynthPanel(this);
@@ -464,82 +464,82 @@ public class NovationSL extends Synth
         vbox.add(hbox);
         if (!isCompact())
             {
-                vbox.add(addPot(7, "page10control7", CROSSFADER_INDEX, Style.COLOR_A()));                       /// CROSS-FADER
+            vbox.add(addPot(7, "page10control7", CROSSFADER_INDEX, Style.COLOR_A()));                       /// CROSS-FADER
             }
         soundPanel.add(vbox, BorderLayout.CENTER);
         ((SynthPanel)soundPanel).makePasteable("page");
         addTab("Transport", soundPanel);
         
         loadDefaults();        
-    }
+        }
        
                 
     public String getDefaultResourceFileName() { return "NovationSL.init"; }
     public String getHTMLResourceFileName() { return "NovationSL.html"; }
 
     public boolean gatherPatchInfo(String title, Model change, boolean writing)
-    {
+        {
         int num = model.get("number") + 1;
         JTextField number = new JTextField("" + num, 2);
 
         while(true)
             {
-                boolean result = showMultiOption(this, new String[] { "Patch Number"}, 
-                                                 new JComponent[] { number }, title, "Enter the Patch number");
+            boolean result = showMultiOption(this, new String[] { "Patch Number"}, 
+                new JComponent[] { number }, title, "Enter the Patch number");
                         
-                if (result == false) 
-                    return false;
+            if (result == false) 
+                return false;
                                                         
-                int n;
-                try { n = Integer.parseInt(number.getText()); }
-                catch (NumberFormatException e)
-                    {
-                        showSimpleError(title, "The Patch Number must be an integer 1...32");
-                        continue;
-                    }
-                if (n < 1 || n > 32)
-                    {
-                        showSimpleError(title, "The Patch Number must be an integer 1...32");
-                        continue;
-                    }
+            int n;
+            try { n = Integer.parseInt(number.getText()); }
+            catch (NumberFormatException e)
+                {
+                showSimpleError(title, "The Patch Number must be an integer 1...32");
+                continue;
+                }
+            if (n < 1 || n > 32)
+                {
+                showSimpleError(title, "The Patch Number must be an integer 1...32");
+                continue;
+                }
                                                         
-                change.set("number", n - 1);
-                return true;
+            change.set("number", n - 1);
+            return true;
             }
-    }
+        }
           
     public static String getSynthName() { return "Novation ReMOTE SL"; }
 
     public String revisePatchName(String name)
-    {
+        {
         name = super.revisePatchName(name);
         if (name == null) name = "";
         name = name + "                                  ";             // 34 spaces
         char[] chars = name.toCharArray();
         for(int i = 0; i < chars.length; i++)
             {
-                if (chars[i] < 32 || chars[i] > 127)
-                    chars[i] = ' ';
+            if (chars[i] < 32 || chars[i] > 127)
+                chars[i] = ' ';
             }
         return new String(chars).substring(0, 34);
-    }
+        }
                                         
     public String reviseManufacturer(String name)
-    {
+        {
         if (name == null) name = "";
         name = name + "             ";          // 13 spaces
         char[] chars = name.toCharArray();
         for(int i = 0; i < chars.length; i++)
             {
-                if (chars[i] < 32 || chars[i] > 127)
-                    chars[i] = ' ';
+            if (chars[i] < 32 || chars[i] > 127)
+                chars[i] = ' ';
             }
         return new String(chars).substring(0, 13);
-    }
+        }
                                         
     /** Add the global patch category (name, id, number, etc.) */
     public JComponent addNameGlobal(Color color)
-    {
+        {
         Category globalCategory = new Category(this, getSynthName(), color);
         //globalCategory.makeUnresettable();
                 
@@ -555,15 +555,15 @@ public class NovationSL extends Synth
                 
         comp = new StringComponent("Patch Name", this, "name", 34, "Name must be up to 34 ASCII characters.")
             {
-                public String replace(String val)
+            public String replace(String val)
                 {
-                    return revisePatchName(val);
+                return revisePatchName(val);
                 }
                                 
-                public void update(String key, Model model)
+            public void update(String key, Model model)
                 {
-                    super.update(key, model);
-                    updateTitle();
+                super.update(key, model);
+                updateTitle();
                 }
             };
         model.set("name", "Untitled");
@@ -571,15 +571,15 @@ public class NovationSL extends Synth
 
         comp = new StringComponent("Manufacturer", this, "manufacturer", 13, "Name must be up to 13 ASCII characters.")
             {
-                public String replace(String val)
+            public String replace(String val)
                 {
-                    return reviseManufacturer(val);
+                return reviseManufacturer(val);
                 }
                                 
-                public void update(String key, Model model)
+            public void update(String key, Model model)
                 {
-                    super.update(key, model);
-                    updateTitle();
+                super.update(key, model);
+                updateTitle();
                 }
             };
         model.set("manufacturer", "Unknown");
@@ -590,10 +590,10 @@ public class NovationSL extends Synth
         compactCheck.setSelected(isCompact());
         compactCheck.addActionListener(new ActionListener()
             {
-                public void actionPerformed(ActionEvent e)
+            public void actionPerformed(ActionEvent e)
                 {
-                    setCompact(compactCheck.isSelected());
-                    showSimpleMessage("Compact SL", "Changing to/from Compact SL will only affect future patch editors." );
+                setCompact(compactCheck.isSelected());
+                showSimpleMessage("Compact SL", "Changing to/from Compact SL will only affect future patch editors." );
                 }
             });
         compactCheck.setFont(Style.SMALL_FONT());
@@ -613,11 +613,11 @@ public class NovationSL extends Synth
                 
         globalCategory.add(hbox, BorderLayout.WEST);
         return globalCategory;
-    }
+        }
 
 
     public JComponent addGeneral(Color color)
-    {
+        {
         Category category = new Category(this, "General", color);
         
         JComponent comp;
@@ -649,16 +649,16 @@ public class NovationSL extends Synth
 
         comp = new LabelledDial("Octave", this, "octavesetting", color, 0, 9, 4)
             {
-                public double getStartAngle() { return 210; }
+            public double getStartAngle() { return 210; }
             };
         hbox.add(comp);
 
         category.add(hbox, BorderLayout.CENTER);
         return category;
-    }
+        }
 
     public JComponent addMIDIPorts(Color color)
-    {
+        {
         Category category = new Category(this, "MIDI Ports", color);
         
         JComponent comp;
@@ -680,11 +680,11 @@ public class NovationSL extends Synth
 
         category.add(hbox, BorderLayout.CENTER);
         return category;
-    }
+        }
 
 
     public JComponent addZone(int zone, Color color)
-    {
+        {
         Category category = new Category(this, "Keyboard Zone " + zone + " [Key]", color);
         category.makePasteable("zone" + zone);
 
@@ -717,18 +717,18 @@ public class NovationSL extends Synth
 
         comp = new LabelledDial("Min Note", this, "zone" + zone + "minnote", color, 0, 127)
             {
-                public String map(int value)
+            public String map(int value)
                 {
-                    return NOTES[value % 12] + (value / 12 - 2);                    /// FIXME: is this -2?                    
+                return NOTES[value % 12] + (value / 12 - 2);                    /// FIXME: is this -2?                    
                 }
             };
         hbox.add(comp);
 
         comp = new LabelledDial("Max Note", this, "zone" + zone + "maxnote", color, 0, 127)
             {
-                public String map(int value)
+            public String map(int value)
                 {
-                    return NOTES[value % 12] + (value / 12 - 2);                    /// FIXME: is this -2?                    
+                return NOTES[value % 12] + (value / 12 - 2);                    /// FIXME: is this -2?                    
                 }
             };
         hbox.add(comp);
@@ -738,7 +738,7 @@ public class NovationSL extends Synth
 
         category.add(hbox, BorderLayout.CENTER);
         return category;
-    }
+        }
                 
                 
                 
@@ -763,7 +763,7 @@ public class NovationSL extends Synth
 
 
     public JComponent addEncoder(int num, String prefix, final int index, Color color)
-    {
+        {
         Category category = new Category(this, "Encoder " + num, color);
         category.makePasteable(prefix.substring(0, prefix.length() - 1));
 
@@ -777,17 +777,17 @@ public class NovationSL extends Synth
 
         StringComponent name = new StringComponent("Name", this, prefix + "name", 8, "Name must be 8 characters long")
             {
-                public String replace(String val)
+            public String replace(String val)
                 {
-                    char[] chars = (val + "        ").toCharArray();
-                    char[] newchars = new char[12];
-                    for(int i = 0; i < newchars.length; i++)
-                        {
-                            if (chars[i] >= 32 && chars[i] < 127)
-                                newchars[i] = chars[i];
-                            else newchars[i] = 32; 
-                        }
-                    return new String(newchars);
+                char[] chars = (val + "        ").toCharArray();
+                char[] newchars = new char[12];
+                for(int i = 0; i < newchars.length; i++)
+                    {
+                    if (chars[i] >= 32 && chars[i] < 127)
+                        newchars[i] = chars[i];
+                    else newchars[i] = 32; 
+                    }
+                return new String(newchars);
                 }
             };
                 
@@ -820,32 +820,32 @@ public class NovationSL extends Synth
         final SysexBox sysexBox = new SysexBox(this, prefix, index, color);
         final Chooser display = new Chooser("Display Type", this, prefix + "display", ENCODER_DISPLAYS)
             {
-                public void update(String key, Model model)
+            public void update(String key, Model model)
                 {
-                    super.update(key, model);
-                    valbox.removeAll();
-                    int type = model.get(key);
-                    if (type == 2 || type == 3 || type == 4)  // REL1, REL2, APOT
-                        {
-                            // don't add anything to the valbox
-                            sysexBox.setShows16K(prefix, false);
-                        }
-                    else if (type == 5)     // 16 bit
-                        {
-                            valbox.add(lowvalbig);
-                            valbox.add(highvalbig);
-                            valbox.add(defaultvalbig);
-                            sysexBox.setShows16K(prefix, true);
-                        }
-                    else
-                        {
-                            valbox.add(lowval);
-                            valbox.add(highval);
-                            valbox.add(defaultval);
-                            sysexBox.setShows16K(prefix, false);
-                        }
-                    valbox.revalidate();
-                    valbox.repaint();
+                super.update(key, model);
+                valbox.removeAll();
+                int type = model.get(key);
+                if (type == 2 || type == 3 || type == 4)  // REL1, REL2, APOT
+                    {
+                    // don't add anything to the valbox
+                    sysexBox.setShows16K(prefix, false);
+                    }
+                else if (type == 5)     // 16 bit
+                    {
+                    valbox.add(lowvalbig);
+                    valbox.add(highvalbig);
+                    valbox.add(defaultvalbig);
+                    sysexBox.setShows16K(prefix, true);
+                    }
+                else
+                    {
+                    valbox.add(lowval);
+                    valbox.add(highval);
+                    valbox.add(defaultval);
+                    sysexBox.setShows16K(prefix, false);
+                    }
+                valbox.revalidate();
+                valbox.repaint();
                 }
             };
         final Chooser ports = new Chooser("Ports", this, prefix + "ports", CONTROL_PORTS);
@@ -858,11 +858,11 @@ public class NovationSL extends Synth
         //      };
         final LabelledDial channel = new LabelledDial("Channel", this, prefix + "channel", color, 0, 17)
             {
-                public String map(int val)
+            public String map(int val)
                 {
-                    if (val == 0) return "Comm";
-                    if (val == 1) return "Key";
-                    return "" + (val - 1);
+                if (val == 0) return "Comm";
+                if (val == 1) return "Key";
+                return "" + (val - 1);
                 }
             };
                 
@@ -897,46 +897,46 @@ public class NovationSL extends Synth
 
         Chooser type = new Chooser("Type", this, prefix + "type", ENCODER_TYPES)
             {
-                public void update(String key, Model model)
+            public void update(String key, Model model)
                 {
-                    super.update(key, model);
-                    outer.removeAll();
-                    int val = model.get(key);
-                    if (val == 0)                           // OFF
+                super.update(key, model);
+                outer.removeAll();
+                int val = model.get(key);
+                if (val == 0)                           // OFF
+                    {
+                    // nothing
+                    }
+                else if (val == 1 || val == 2 || val == 3)                      // CC, RPN, NRPN
+                    {
+                    HBox hbox2 = new HBox();
+                    hbox2.add(display);
+                    outer.add(hbox2);
+                    hbox2 = new HBox();
+                    hbox2.add(channel);
+                    if (val == 1)   // CC
                         {
-                            // nothing
+                        hbox2.add(paramlsb.setLabel("CC Number"));
                         }
-                    else if (val == 1 || val == 2 || val == 3)                      // CC, RPN, NRPN
+                    else
                         {
-                            HBox hbox2 = new HBox();
-                            hbox2.add(display);
-                            outer.add(hbox2);
-                            hbox2 = new HBox();
-                            hbox2.add(channel);
-                            if (val == 1)   // CC
-                                {
-                                    hbox2.add(paramlsb.setLabel("CC Number"));
-                                }
-                            else
-                                {
-                                    hbox2.add(paramlsb.setLabel(val == 2 ? "NRPN LSB" : "RPN LSB"));
-                                    hbox2.add(parammsb.setLabel(val == 2 ? "NRPN MSB" : "RPN MSB"));
-                                }
-                            hbox2.add(valbox);
-                            outer.add(hbox2);
+                        hbox2.add(paramlsb.setLabel(val == 2 ? "NRPN LSB" : "RPN LSB"));
+                        hbox2.add(parammsb.setLabel(val == 2 ? "NRPN MSB" : "RPN MSB"));
                         }
-                    else    // if (val == 4)                        // Sysex
-                        {
-                            HBox hbox2 = new HBox();
-                            hbox2.add(display);
-                            outer.add(hbox2);
-                            hbox2 = new HBox();
-                            hbox2.add(valbox);
-                            hbox2.add(sysexBox);
-                            outer.add(hbox2);
-                        }
-                    outer.revalidate();
-                    outer.repaint();
+                    hbox2.add(valbox);
+                    outer.add(hbox2);
+                    }
+                else    // if (val == 4)                        // Sysex
+                    {
+                    HBox hbox2 = new HBox();
+                    hbox2.add(display);
+                    outer.add(hbox2);
+                    hbox2 = new HBox();
+                    hbox2.add(valbox);
+                    hbox2.add(sysexBox);
+                    outer.add(hbox2);
+                    }
+                outer.revalidate();
+                outer.repaint();
                 } 
             };
 
@@ -953,19 +953,19 @@ public class NovationSL extends Synth
                 
         category.add(hbox, BorderLayout.CENTER);
         return category;
-    }
+        }
 
 
 
 
 
     public JComponent addPot(int num, String prefix, final int index, Color color)
-    {
+        {
         Category category = new Category(this, 
-                                         (index == EXPRESSION_INDEX ? "Expression" : 
-                                          (index == MODWHEEL_INDEX ? "Mod Wheel [Key]" : 
-                                           (index == CROSSFADER_INDEX ? "Cross-Fader [Zero]" :             // note not CROSSFADER_INDEX, because that value is misleading
-                                            (index < FADERS_INDEX ? "Pot " + num : "Fader " + num)))), color);        
+                (index == EXPRESSION_INDEX ? "Expression" : 
+                    (index == MODWHEEL_INDEX ? "Mod Wheel [Key]" : 
+                        (index == CROSSFADER_INDEX ? "Cross-Fader [Zero]" :             // note not CROSSFADER_INDEX, because that value is misleading
+                        (index < FADERS_INDEX ? "Pot " + num : "Fader " + num)))), color);        
         category.makePasteable(prefix.substring(0, prefix.length() - 1));
 
         JComponent comp;
@@ -977,17 +977,17 @@ public class NovationSL extends Synth
 
         StringComponent name = new StringComponent("Name", this, prefix + "name", 8, "Name must be 8 characters long")
             {
-                public String replace(String val)
+            public String replace(String val)
                 {
-                    char[] chars = (val + "        ").toCharArray();
-                    char[] newchars = new char[12];
-                    for(int i = 0; i < newchars.length; i++)
-                        {
-                            if (chars[i] >= 32 && chars[i] < 127)
-                                newchars[i] = chars[i];
-                            else newchars[i] = 32; 
-                        }
-                    return new String(newchars);
+                char[] chars = (val + "        ").toCharArray();
+                char[] newchars = new char[12];
+                for(int i = 0; i < newchars.length; i++)
+                    {
+                    if (chars[i] >= 32 && chars[i] < 127)
+                        newchars[i] = chars[i];
+                    else newchars[i] = 32; 
+                    }
+                return new String(newchars);
                 }
             };
                 
@@ -1026,11 +1026,11 @@ public class NovationSL extends Synth
         //      };
         final LabelledDial channel = new LabelledDial("Channel", this, prefix + "channel", color, 0, 17)
             {
-                public String map(int val)
+            public String map(int val)
                 {
-                    if (val == 0) return "Comm";
-                    if (val == 1) return "Key";
-                    return "" + (val - 1);
+                if (val == 0) return "Comm";
+                if (val == 1) return "Key";
+                return "" + (val - 1);
                 }
             };
                 
@@ -1065,50 +1065,50 @@ public class NovationSL extends Synth
 
         Chooser type = new Chooser("Type", this, prefix + "type", POT_TYPES)
             {
-                public void update(String key, Model model)
+            public void update(String key, Model model)
                 {
-                    super.update(key, model);
-                    outer.removeAll();
-                    int val = model.get(key);
-                    if (val == 0)                           // OFF
+                super.update(key, model);
+                outer.removeAll();
+                int val = model.get(key);
+                if (val == 0)                           // OFF
+                    {
+                    // nothing
+                    }
+                else if (val == 1 || val == 2 || val == 3)                      // CC, RPN, NRPN
+                    {
+                    HBox hbox2 = new HBox();
+                    hbox2.add(display);
+                    outer.add(hbox2);
+                    hbox2 = new HBox();
+                    hbox2.add(channel);
+                    if (val == 1)   // CC
                         {
-                            // nothing
+                        hbox2.add(paramlsb.setLabel("CC Number"));
                         }
-                    else if (val == 1 || val == 2 || val == 3)                      // CC, RPN, NRPN
+                    else
                         {
-                            HBox hbox2 = new HBox();
-                            hbox2.add(display);
-                            outer.add(hbox2);
-                            hbox2 = new HBox();
-                            hbox2.add(channel);
-                            if (val == 1)   // CC
-                                {
-                                    hbox2.add(paramlsb.setLabel("CC Number"));
-                                }
-                            else
-                                {
-                                    hbox2.add(paramlsb.setLabel(val == 2 ? "NRPN LSB" : "RPN LSB"));
-                                    hbox2.add(parammsb.setLabel(val == 2 ? "NRPN MSB" : "RPN MSB"));
-                                }
-                            hbox2.add(lowval);
-                            hbox2.add(highval);
-                            hbox2.add(defaultval);
-                            outer.add(hbox2);
+                        hbox2.add(paramlsb.setLabel(val == 2 ? "NRPN LSB" : "RPN LSB"));
+                        hbox2.add(parammsb.setLabel(val == 2 ? "NRPN MSB" : "RPN MSB"));
                         }
-                    else    // if (val == 4)                        // Sysex
-                        {
-                            HBox hbox2 = new HBox();
-                            hbox2.add(display);
-                            outer.add(hbox2);
-                            hbox2 = new HBox();
-                            hbox2.add(lowval);
-                            hbox2.add(highval);
-                            hbox2.add(defaultval);
-                            hbox2.add(sysexBox);                    // FIXME -- gotta specify 16 bit
-                            outer.add(hbox2);
-                        }
-                    outer.revalidate();
-                    outer.repaint();
+                    hbox2.add(lowval);
+                    hbox2.add(highval);
+                    hbox2.add(defaultval);
+                    outer.add(hbox2);
+                    }
+                else    // if (val == 4)                        // Sysex
+                    {
+                    HBox hbox2 = new HBox();
+                    hbox2.add(display);
+                    outer.add(hbox2);
+                    hbox2 = new HBox();
+                    hbox2.add(lowval);
+                    hbox2.add(highval);
+                    hbox2.add(defaultval);
+                    hbox2.add(sysexBox);                    // FIXME -- gotta specify 16 bit
+                    outer.add(hbox2);
+                    }
+                outer.revalidate();
+                outer.repaint();
                 } 
             };
 
@@ -1116,14 +1116,14 @@ public class NovationSL extends Synth
         vbox.add(name);
         if (index == EXPRESSION_INDEX || index == MODWHEEL_INDEX)
             {
-                vbox.add(type);
+            vbox.add(type);
             }
         else
             {
-                HBox inner = new HBox();
-                inner.add(type);
-                inner.add(potpickup);
-                vbox.add(inner);
+            HBox inner = new HBox();
+            inner.add(type);
+            inner.add(potpickup);
+            vbox.add(inner);
             }
         vbox.add(ports);
         hbox.add(vbox);
@@ -1132,7 +1132,7 @@ public class NovationSL extends Synth
                 
         category.add(hbox, BorderLayout.CENTER);
         return category;
-    }
+        }
 
 
 
@@ -1141,71 +1141,71 @@ public class NovationSL extends Synth
     /// depending on the button behavior (normal, momentary, toggle, or step).
 
     void updateChooserPressRelease(String prefix, Chooser press, Chooser release, HBox releaseBox)
-    {
+        {
         int buttontype = model.get(prefix + "realtimenotebuttontype");
         releaseBox.removeAll();
         if (buttontype == 0)    // Normal
             {
-                press.setLabel("Press");
+            press.setLabel("Press");
             }
         else if (buttontype == 1)       // Momentary
             {
-                press.setLabel("Press");
-                releaseBox.add(release);
-                release.setLabel("Release");
+            press.setLabel("Press");
+            releaseBox.add(release);
+            release.setLabel("Release");
             }
         else if (buttontype == 2)       // Toggle
             {
-                press.setLabel("Press 1");
-                releaseBox.add(release);
-                release.setLabel("Press 2");
+            press.setLabel("Press 1");
+            releaseBox.add(release);
+            release.setLabel("Press 2");
             }
         releaseBox.revalidate();
         releaseBox.repaint();
-    }
+        }
 
     void updatePressRelease(String prefix, LabelledDial press, LabelledDial release, LabelledDial step, HBox releaseBox, HBox stepBox)
-    {
+        {
         int buttontype = model.get(prefix + "buttontype");
         releaseBox.removeAll();
         stepBox.removeAll();
         if (buttontype == 0)    // Normal
             {
-                press.setLabel("Press");
+            press.setLabel("Press");
             }
         else if (buttontype == 1)       // Momentary
             {
-                press.setLabel("Press");
-                releaseBox.add(release);
-                release.setLabel("Release");
+            press.setLabel("Press");
+            releaseBox.add(release);
+            release.setLabel("Release");
             }
         else if (buttontype == 2)       // Toggle
             {
-                press.setLabel("Press 1");
-                releaseBox.add(release);
-                release.setLabel("Press 2");
+            press.setLabel("Press 1");
+            releaseBox.add(release);
+            release.setLabel("Press 2");
             }
         else if (buttontype == 3)       // Step
             {
-                press.setLabel("Low");
-                releaseBox.add(release);
-                release.setLabel("High");
-                stepBox.add(step);
+            press.setLabel("Low");
+            releaseBox.add(release);
+            release.setLabel("High");
+            stepBox.add(step);
             }
         releaseBox.revalidate();
         releaseBox.repaint();
-    }
+        }
                 
     public JComponent addButton(int num, String prefix, final int index, Color color)
-    {
+        {
         Category category = new Category(this, 
-                                         (index < DRUMPADS_INDEX ? "Button " + num :
-                                          (index == REWIND_INDEX ? "Rewind" :
-                                           (index == SUSTAIN_INDEX ? "Sustain Pedal" :
-                                            (index == FF_INDEX ? "Fast Foward" :
-                                             (index == STOP_INDEX ? "Stop" :
-                                              (index == PLAY_INDEX ? "Play" :
-                                               (index == RECORD_INDEX ? "Record" : "Loop"))))))), color);
+                (index < DRUMPADS_INDEX ? "Button " + num :
+                    (index == REWIND_INDEX ? "Rewind" :
+                        (index == SUSTAIN_INDEX ? "Sustain Pedal" :
+                            (index == FF_INDEX ? "Fast Foward" :
+                                (index == STOP_INDEX ? "Stop" :
+                                    (index == PLAY_INDEX ? "Play" :
+                                    (index == RECORD_INDEX ? "Record" : "Loop"))))))), color);
         category.makePasteable(prefix.substring(0, prefix.length() - 1));
 
         JComponent comp;
@@ -1217,43 +1217,43 @@ public class NovationSL extends Synth
 
         StringComponent name = new StringComponent("Name", this, prefix + "name", 8, "Name must be 8 characters long")
             {
-                public String replace(String val)
+            public String replace(String val)
                 {
-                    char[] chars = (val + "        ").toCharArray();
-                    char[] newchars = new char[8];
-                    for(int i = 0; i < newchars.length; i++)
-                        {
-                            if (chars[i] >= 32 && chars[i] < 127)
-                                newchars[i] = chars[i];
-                            else newchars[i] = 32; 
-                        }
-                    return new String(newchars);
+                char[] chars = (val + "        ").toCharArray();
+                char[] newchars = new char[8];
+                for(int i = 0; i < newchars.length; i++)
+                    {
+                    if (chars[i] >= 32 && chars[i] < 127)
+                        newchars[i] = chars[i];
+                    else newchars[i] = 32; 
+                    }
+                return new String(newchars);
                 }
             };
                 
         final LabelledDial lowval = new LabelledDial("Low", this, prefix + "lowval", color, 0, 127)
             {
-                public String map(int value)
+            public String map(int value)
                 {
-                    if (model.get(prefix + "type") == 6)                    // Note
-                        {
-                            return NOTES[value % 12] + (value / 12 - 2);                    /// FIXME: is this -2?                    
-                        }
-                    else
-                        {
-                            return "" + ((model.get(prefix + "display") != 1 ||
-                                          model.get(prefix + "type") > 4) ? value : value - 64); 
-                        }
+                if (model.get(prefix + "type") == 6)                    // Note
+                    {
+                    return NOTES[value % 12] + (value / 12 - 2);                    /// FIXME: is this -2?                    
+                    }
+                else
+                    {
+                    return "" + ((model.get(prefix + "display") != 1 ||
+                            model.get(prefix + "type") > 4) ? value : value - 64); 
+                    }
                 }
             };
         model.register(prefix + "display", lowval);
         
         final LabelledDial highval = new LabelledDial("High", this, prefix + "highval", color, 0, 127)
             { 
-                public String map(int value) 
+            public String map(int value) 
                 { 
-                    return "" + ((model.get(prefix + "display") != 1 ||
-                                  model.get(prefix + "type") > 4) ? value : value - 64); 
+                return "" + ((model.get(prefix + "display") != 1 ||
+                        model.get(prefix + "type") > 4) ? value : value - 64); 
                 } 
             };
         final HBox releaseBox = new HBox();
@@ -1280,9 +1280,9 @@ public class NovationSL extends Synth
         //final Chooser offsyncval = new Chooser("Off Sync Value", this, prefix + "drumoffsync", OFF_SYNC_VALUES);
         final LabelledDial stepsize = new LabelledDial("Step Size", this, prefix + "stepsize", color, 0, 63)
             {
-                public String map(int val)
+            public String map(int val)
                 {
-                    return "" + (val + 1);
+                return "" + (val + 1);
                 }
             };
         final Chooser bankmode = new Chooser("Bank Mode", this, prefix + "bankmode", BANK_CHANGE_MODES);
@@ -1295,27 +1295,27 @@ public class NovationSL extends Synth
         final SysexBox sysexBox = new SysexBox(this, prefix, index, color);
         final Chooser buttontype = new Chooser("Button Type", this, prefix + "buttontype", BUTTON_STATES)
             {
-                public void update(String key, Model model)
+            public void update(String key, Model model)
                 {
-                    super.update(key, model);
-                    updatePressRelease(prefix, lowval, highval, stepsize, releaseBox, stepBox);
+                super.update(key, model);
+                updatePressRelease(prefix, lowval, highval, stepsize, releaseBox, stepBox);
                 }
             };
         final Chooser realtimenotebuttontype = new Chooser("Button Type", this, prefix + "realtimenotebuttontype", REALTIME_BUTTON_STATES)
             {
-                public void update(String key, Model model)
+            public void update(String key, Model model)
                 {
-                    super.update(key, model);
-                    updateChooserPressRelease(prefix, realtime, realtimerelease, chooserReleaseBox);
+                super.update(key, model);
+                updateChooserPressRelease(prefix, realtime, realtimerelease, chooserReleaseBox);
                 }
             };
         final LabelledDial channel = new LabelledDial("Channel", this, prefix + "channel", color, 0, 17)
             {
-                public String map(int val)
+            public String map(int val)
                 {
-                    if (val == 0) return "Comm";
-                    if (val == 1) return "Key";
-                    return "" + (val - 1);
+                if (val == 0) return "Comm";
+                if (val == 1) return "Key";
+                return "" + (val - 1);
                 }
             };
                 
@@ -1378,115 +1378,115 @@ public class NovationSL extends Synth
 
         Chooser type = new Chooser("Type", this, prefix + "type", BUTTON_TYPES)
             {
-                public void update(String key, Model model)
+            public void update(String key, Model model)
                 {
-                    super.update(key, model);
-                    outer.removeAll();
-                    int val = model.get(key);
-                    if (val == 0)                           // OFF
+                super.update(key, model);
+                outer.removeAll();
+                int val = model.get(key);
+                if (val == 0)                           // OFF
+                    {
+                    // nothing
+                    }
+                else if (val == 1 || val == 2 || val == 3)                      // CC, RPN, NRPN
+                    {
+                    HBox hbox2 = new HBox();
+                    hbox2.add(display);
+                    hbox2.add(buttontype);
+                    outer.add(hbox2);
+                    hbox2 = new HBox();
+                    hbox2.add(channel);
+                    if (val == 1)   // CC
                         {
-                            // nothing
+                        hbox2.add(paramlsb.setLabel("CC Number"));
                         }
-                    else if (val == 1 || val == 2 || val == 3)                      // CC, RPN, NRPN
+                    else
                         {
-                            HBox hbox2 = new HBox();
-                            hbox2.add(display);
-                            hbox2.add(buttontype);
-                            outer.add(hbox2);
-                            hbox2 = new HBox();
-                            hbox2.add(channel);
-                            if (val == 1)   // CC
-                                {
-                                    hbox2.add(paramlsb.setLabel("CC Number"));
-                                }
-                            else
-                                {
-                                    hbox2.add(paramlsb.setLabel(val == 2 ? "NRPN LSB" : "RPN LSB"));
-                                    hbox2.add(parammsb.setLabel(val == 2 ? "NRPN MSB" : "RPN MSB"));
-                                }
-                            hbox2.add(lowval.setLabel("Press"));
-                            hbox2.add(releaseBox);
-                            //hbox2.add(highval.setLabel("Release"));
-                            //hbox2.add(defaultval.setLabel("Default"));
-                            hbox2.add(stepBox);
-                            //hbox2.add(stepsize);
-                            outer.add(hbox2);
+                        hbox2.add(paramlsb.setLabel(val == 2 ? "NRPN LSB" : "RPN LSB"));
+                        hbox2.add(parammsb.setLabel(val == 2 ? "NRPN MSB" : "RPN MSB"));
                         }
-                    else if (val == 4)      // Sysex
-                        {
-                            HBox hbox2 = new HBox();
-                            hbox2.add(display);
-                            hbox2.add(buttontype);
-                            outer.add(hbox2);
-                            hbox2 = new HBox();
-                            hbox2.add(lowval.setLabel("Press"));
-                            hbox2.add(releaseBox);
-                            //hbox2.add(highval.setLabel("Release"));
-                            //hbox2.add(defaultval.setLabel("Default"));
-                            hbox2.add(stepBox);
-                            //hbox2.add(stepsize);
-                            hbox2.add(sysexBox);                    // FIXME -- gotta specify 16 bit
-                            outer.add(hbox2);
-                        }
-                    else if (val == 5)      // MMC
-                        {
-                            HBox hbox2 = new HBox();
-                            hbox2.add(mmctype);
-                            outer.add(hbox2);
-                            hbox2 = new HBox();
-                            hbox2.add(mmcDevice);
-                            outer.add(hbox2);
-                        }
-                    else if (val == 6)                      // Note On/Off
-                        {
-                            HBox hbox2 = new HBox();
-                            hbox2.add(realtimenotebuttontype);
-                            outer.add(hbox2);
-                            hbox2 = new HBox();
-                            hbox2.add(lowval.setLabel("Note"));
-                            hbox2.add(highval.setLabel("Velocity"));
-                            outer.add(hbox2);
-                        }
-                    else if (val == 7)                      // Bank Select
-                        {
-                            HBox hbox2 = new HBox();
-                            hbox2.add(bankmode);
-                            outer.add(hbox2);
-                            hbox2 = new HBox();
-                            hbox2.add(paramlsb.setLabel("Bank LSB"));
-                            hbox2.add(parammsb.setLabel("Bank MSB"));
-                            outer.add(hbox2);
-                        }
-                    else if (val == 8)                      // PC
-                        {
-                            HBox hbox2 = new HBox();
-                            hbox2.add(pcmode);
-                            hbox2.add(buttontype);
-                            outer.add(hbox2);
-                            hbox2 = new HBox();
-                            hbox2.add(paramlsb.setLabel("Bank LSB"));
-                            hbox2.add(parammsb.setLabel("Bank MSB"));
-                            hbox2.add(lowval.setLabel("Press"));            // "PRESS 1" or "Press"
-                            hbox2.add(releaseBox);
-                            //hbox2.add(highval.setLabel("Release"));               // "PRESS 2" or "Release"
-                            outer.add(hbox2);
-                        }
-                    else if (val == 9)                                              /// Template
-                        {
-                            outer.add(Strut.makeStrut(throwaway));
-                            outer.add(template);
-                        }
-                    else // if (val == 10)                                  /// Real Time
-                        {
-                            outer.add(realtimenotebuttontype);
-                            outer.add(realtime);
-                            //outer.add(realtimerelease);
-                            outer.add(chooserReleaseBox);
-                        }
-                    updatePressRelease(prefix, lowval, highval, stepsize, releaseBox, stepBox);
-                    updateChooserPressRelease(prefix, realtime, realtimerelease, chooserReleaseBox);
-                    outer.revalidate();
-                    outer.repaint();
+                    hbox2.add(lowval.setLabel("Press"));
+                    hbox2.add(releaseBox);
+                    //hbox2.add(highval.setLabel("Release"));
+                    //hbox2.add(defaultval.setLabel("Default"));
+                    hbox2.add(stepBox);
+                    //hbox2.add(stepsize);
+                    outer.add(hbox2);
+                    }
+                else if (val == 4)      // Sysex
+                    {
+                    HBox hbox2 = new HBox();
+                    hbox2.add(display);
+                    hbox2.add(buttontype);
+                    outer.add(hbox2);
+                    hbox2 = new HBox();
+                    hbox2.add(lowval.setLabel("Press"));
+                    hbox2.add(releaseBox);
+                    //hbox2.add(highval.setLabel("Release"));
+                    //hbox2.add(defaultval.setLabel("Default"));
+                    hbox2.add(stepBox);
+                    //hbox2.add(stepsize);
+                    hbox2.add(sysexBox);                    // FIXME -- gotta specify 16 bit
+                    outer.add(hbox2);
+                    }
+                else if (val == 5)      // MMC
+                    {
+                    HBox hbox2 = new HBox();
+                    hbox2.add(mmctype);
+                    outer.add(hbox2);
+                    hbox2 = new HBox();
+                    hbox2.add(mmcDevice);
+                    outer.add(hbox2);
+                    }
+                else if (val == 6)                      // Note On/Off
+                    {
+                    HBox hbox2 = new HBox();
+                    hbox2.add(realtimenotebuttontype);
+                    outer.add(hbox2);
+                    hbox2 = new HBox();
+                    hbox2.add(lowval.setLabel("Note"));
+                    hbox2.add(highval.setLabel("Velocity"));
+                    outer.add(hbox2);
+                    }
+                else if (val == 7)                      // Bank Select
+                    {
+                    HBox hbox2 = new HBox();
+                    hbox2.add(bankmode);
+                    outer.add(hbox2);
+                    hbox2 = new HBox();
+                    hbox2.add(paramlsb.setLabel("Bank LSB"));
+                    hbox2.add(parammsb.setLabel("Bank MSB"));
+                    outer.add(hbox2);
+                    }
+                else if (val == 8)                      // PC
+                    {
+                    HBox hbox2 = new HBox();
+                    hbox2.add(pcmode);
+                    hbox2.add(buttontype);
+                    outer.add(hbox2);
+                    hbox2 = new HBox();
+                    hbox2.add(paramlsb.setLabel("Bank LSB"));
+                    hbox2.add(parammsb.setLabel("Bank MSB"));
+                    hbox2.add(lowval.setLabel("Press"));            // "PRESS 1" or "Press"
+                    hbox2.add(releaseBox);
+                    //hbox2.add(highval.setLabel("Release"));               // "PRESS 2" or "Release"
+                    outer.add(hbox2);
+                    }
+                else if (val == 9)                                              /// Template
+                    {
+                    outer.add(Strut.makeStrut(throwaway));
+                    outer.add(template);
+                    }
+                else // if (val == 10)                                  /// Real Time
+                    {
+                    outer.add(realtimenotebuttontype);
+                    outer.add(realtime);
+                    //outer.add(realtimerelease);
+                    outer.add(chooserReleaseBox);
+                    }
+                updatePressRelease(prefix, lowval, highval, stepsize, releaseBox, stepBox);
+                updateChooserPressRelease(prefix, realtime, realtimerelease, chooserReleaseBox);
+                outer.revalidate();
+                outer.repaint();
                 } 
             };
 
@@ -1500,13 +1500,13 @@ public class NovationSL extends Synth
                 
         category.add(hbox, BorderLayout.CENTER);
         return category;
-    }
+        }
 
                 
 
                 
     public JComponent addDrumPad(int num, String prefix, final int index, Color color)
-    {
+        {
         Category category = new Category(this, "Drum Pad " + num, color);
         category.makePasteable(prefix.substring(0, prefix.length() - 1));
 
@@ -1519,42 +1519,42 @@ public class NovationSL extends Synth
 
         StringComponent name = new StringComponent("Name", this, prefix + "name", 8, "Name must be 8 characters long")
             {
-                public String replace(String val)
+            public String replace(String val)
                 {
-                    char[] chars = (val + "        ").toCharArray();
-                    char[] newchars = new char[12];
-                    for(int i = 0; i < newchars.length; i++)
-                        {
-                            if (chars[i] >= 32 && chars[i] < 127)
-                                newchars[i] = chars[i];
-                            else newchars[i] = 32; 
-                        }
-                    return new String(newchars);
+                char[] chars = (val + "        ").toCharArray();
+                char[] newchars = new char[12];
+                for(int i = 0; i < newchars.length; i++)
+                    {
+                    if (chars[i] >= 32 && chars[i] < 127)
+                        newchars[i] = chars[i];
+                    else newchars[i] = 32; 
+                    }
+                return new String(newchars);
                 }
             };
                 
         final LabelledDial lowval = new LabelledDial("Low", this, prefix + "lowval", color, 0, 127)
             {
-                public String map(int value)
+            public String map(int value)
                 {
-                    if (model.get(prefix + "type") == 6)    // Note or Drum Note
-                        {
-                            return NOTES[value % 12] + (value / 12 - 2);                    /// FIXME: is this -2?                    
-                        }
-                    else
-                        {
-                            return "" + ((model.get(prefix + "display") != 1 ||
-                                          model.get(prefix + "type") > 4) ? value : value - 64); 
-                        }
+                if (model.get(prefix + "type") == 6)    // Note or Drum Note
+                    {
+                    return NOTES[value % 12] + (value / 12 - 2);                    /// FIXME: is this -2?                    
+                    }
+                else
+                    {
+                    return "" + ((model.get(prefix + "display") != 1 ||
+                            model.get(prefix + "type") > 4) ? value : value - 64); 
+                    }
                 }
             };
         model.register(prefix + "display", lowval);
         final LabelledDial highval = new LabelledDial("High", this, prefix + "highval", color, 0, 127)
             { 
-                public String map(int value) 
+            public String map(int value) 
                 { 
-                    return "" + ((model.get(prefix + "display") != 1 ||
-                                  model.get(prefix + "type") > 4) ? value : value - 64); 
+                return "" + ((model.get(prefix + "display") != 1 ||
+                        model.get(prefix + "type") > 4) ? value : value - 64); 
                 } 
             };
         model.register(prefix + "display", highval);
@@ -1588,18 +1588,18 @@ public class NovationSL extends Synth
         final SysexBox sysexBox = new SysexBox(this, prefix, index, color);
         LabelledDial stepsize = new LabelledDial("Step Size", this, prefix + "stepsize", color, 0, 63)
             {
-                public String map(int val)
+            public String map(int val)
                 {
-                    return "" + (val + 1);
+                return "" + (val + 1);
                 }
             };
         final LabelledDial channel = new LabelledDial("Channel", this, prefix + "channel", color, 0, 17)
             {
-                public String map(int val)
+            public String map(int val)
                 {
-                    if (val == 0) return "Comm";
-                    if (val == 1) return "Key";
-                    return "" + (val - 1);
+                if (val == 0) return "Comm";
+                if (val == 1) return "Key";
+                return "" + (val - 1);
                 }
             };
                 
@@ -1663,108 +1663,108 @@ public class NovationSL extends Synth
 
         Chooser type = new Chooser("Type", this, prefix + "type", DRUMPAD_TYPES)
             {
-                public void update(String key, Model model)
+            public void update(String key, Model model)
                 {
-                    super.update(key, model);
-                    outer.removeAll();
-                    int val = model.get(key);
-                    if (val == 0)                           // OFF
+                super.update(key, model);
+                outer.removeAll();
+                int val = model.get(key);
+                if (val == 0)                           // OFF
+                    {
+                    // nothing
+                    }
+                else if (val == 1 || val == 2 || val == 3)                      // CC, RPN, NRPN
+                    {
+                    HBox hbox2 = new HBox();
+                    hbox2.add(display);
+                    hbox2.add(buttontype);
+                    outer.add(hbox2);
+                    hbox2 = new HBox();
+                    hbox2.add(channel);
+                    if (val == 1)   // CC
                         {
-                            // nothing
+                        hbox2.add(paramlsb.setLabel("CC Number"));
                         }
-                    else if (val == 1 || val == 2 || val == 3)                      // CC, RPN, NRPN
+                    else
                         {
-                            HBox hbox2 = new HBox();
-                            hbox2.add(display);
-                            hbox2.add(buttontype);
-                            outer.add(hbox2);
-                            hbox2 = new HBox();
-                            hbox2.add(channel);
-                            if (val == 1)   // CC
-                                {
-                                    hbox2.add(paramlsb.setLabel("CC Number"));
-                                }
-                            else
-                                {
-                                    hbox2.add(paramlsb.setLabel(val == 2 ? "NRPN LSB" : "RPN LSB"));
-                                    hbox2.add(parammsb.setLabel(val == 2 ? "NRPN MSB" : "RPN MSB"));
-                                }
-                            hbox2.add(lowval.setLabel("Press"));
-                            hbox2.add(highval.setLabel("Release"));
-                            //hbox2.add(defaultval.setLabel("Default"));
-                            hbox2.add(stepsize);
-                            outer.add(hbox2);
+                        hbox2.add(paramlsb.setLabel(val == 2 ? "NRPN LSB" : "RPN LSB"));
+                        hbox2.add(parammsb.setLabel(val == 2 ? "NRPN MSB" : "RPN MSB"));
                         }
-                    else if (val == 4)      // Sysex
-                        {
-                            HBox hbox2 = new HBox();
-                            hbox2.add(display);
-                            hbox2.add(buttontype);
-                            outer.add(hbox2);
-                            hbox2 = new HBox();
-                            hbox2.add(lowval.setLabel("Press"));
-                            hbox2.add(highval.setLabel("Release"));
-                            //hbox2.add(defaultval.setLabel("Default"));
-                            hbox2.add(stepsize);
-                            hbox2.add(sysexBox);                    // FIXME -- gotta specify 16 bit
-                            outer.add(hbox2);
-                        }
-                    else if (val == 5)      // MMC
-                        {
-                            HBox hbox2 = new HBox();
-                            hbox2.add(mmctype);
-                            outer.add(hbox2);
-                            hbox2 = new HBox();
-                            hbox2.add(mmcDevice);
-                            outer.add(hbox2);
-                        }
-                    else if (val == 6)                      // Drum Note
-                        {
-                            HBox hbox2 = new HBox();
-                            hbox2.add(offsyncval);
-                            outer.add(hbox2);
-                            hbox2 = new HBox();
-                            hbox2.add(lowval.setLabel("Note"));
-                            hbox2.add(highval.setLabel("Velocity Curve"));
-                            hbox2.add(drumautooff);
-                            outer.add(hbox2);
-                        }
-                    else if (val == 7)                      // Bank Select
-                        {
-                            HBox hbox2 = new HBox();
-                            hbox2.add(bankmode);
-                            outer.add(hbox2);
-                            hbox2 = new HBox();
-                            hbox2.add(paramlsb.setLabel("Bank LSB"));
-                            hbox2.add(parammsb.setLabel("Bank MSB"));
-                            outer.add(hbox2);
-                        }
-                    else if (val == 8)                      // PC
-                        {
-                            HBox hbox2 = new HBox();
-                            hbox2.add(pcmode);
-                            hbox2.add(buttontype);
-                            outer.add(hbox2);
-                            hbox2 = new HBox();
-                            hbox2.add(paramlsb.setLabel("Bank LSB"));
-                            hbox2.add(parammsb.setLabel("Bank MSB"));
-                            hbox2.add(lowval.setLabel("Press"));                    // "PRESS 1" or "Press"
-                            hbox2.add(highval.setLabel("Release"));                 // "PRESS 2" or "Release"
-                            outer.add(hbox2);
-                        }
-                    else if (val == 9)                                              /// Template
-                        {
-                            outer.add(Strut.makeStrut(throwaway));
-                            outer.add(template);
-                        }
-                    else // if (val == 10)                                  /// Real Time
-                        {
-                            outer.add(realtimenotebuttontype);
-                            outer.add(realtime);
-                            outer.add(realtimerelease);
-                        }
-                    outer.revalidate();
-                    outer.repaint();
+                    hbox2.add(lowval.setLabel("Press"));
+                    hbox2.add(highval.setLabel("Release"));
+                    //hbox2.add(defaultval.setLabel("Default"));
+                    hbox2.add(stepsize);
+                    outer.add(hbox2);
+                    }
+                else if (val == 4)      // Sysex
+                    {
+                    HBox hbox2 = new HBox();
+                    hbox2.add(display);
+                    hbox2.add(buttontype);
+                    outer.add(hbox2);
+                    hbox2 = new HBox();
+                    hbox2.add(lowval.setLabel("Press"));
+                    hbox2.add(highval.setLabel("Release"));
+                    //hbox2.add(defaultval.setLabel("Default"));
+                    hbox2.add(stepsize);
+                    hbox2.add(sysexBox);                    // FIXME -- gotta specify 16 bit
+                    outer.add(hbox2);
+                    }
+                else if (val == 5)      // MMC
+                    {
+                    HBox hbox2 = new HBox();
+                    hbox2.add(mmctype);
+                    outer.add(hbox2);
+                    hbox2 = new HBox();
+                    hbox2.add(mmcDevice);
+                    outer.add(hbox2);
+                    }
+                else if (val == 6)                      // Drum Note
+                    {
+                    HBox hbox2 = new HBox();
+                    hbox2.add(offsyncval);
+                    outer.add(hbox2);
+                    hbox2 = new HBox();
+                    hbox2.add(lowval.setLabel("Note"));
+                    hbox2.add(highval.setLabel("Velocity Curve"));
+                    hbox2.add(drumautooff);
+                    outer.add(hbox2);
+                    }
+                else if (val == 7)                      // Bank Select
+                    {
+                    HBox hbox2 = new HBox();
+                    hbox2.add(bankmode);
+                    outer.add(hbox2);
+                    hbox2 = new HBox();
+                    hbox2.add(paramlsb.setLabel("Bank LSB"));
+                    hbox2.add(parammsb.setLabel("Bank MSB"));
+                    outer.add(hbox2);
+                    }
+                else if (val == 8)                      // PC
+                    {
+                    HBox hbox2 = new HBox();
+                    hbox2.add(pcmode);
+                    hbox2.add(buttontype);
+                    outer.add(hbox2);
+                    hbox2 = new HBox();
+                    hbox2.add(paramlsb.setLabel("Bank LSB"));
+                    hbox2.add(parammsb.setLabel("Bank MSB"));
+                    hbox2.add(lowval.setLabel("Press"));                    // "PRESS 1" or "Press"
+                    hbox2.add(highval.setLabel("Release"));                 // "PRESS 2" or "Release"
+                    outer.add(hbox2);
+                    }
+                else if (val == 9)                                              /// Template
+                    {
+                    outer.add(Strut.makeStrut(throwaway));
+                    outer.add(template);
+                    }
+                else // if (val == 10)                                  /// Real Time
+                    {
+                    outer.add(realtimenotebuttontype);
+                    outer.add(realtime);
+                    outer.add(realtimerelease);
+                    }
+                outer.revalidate();
+                outer.repaint();
                 } 
             };
 
@@ -1778,7 +1778,7 @@ public class NovationSL extends Synth
                 
         category.add(hbox, BorderLayout.CENTER);
         return category;
-    }
+        }
 
                 
 
@@ -1788,12 +1788,12 @@ public class NovationSL extends Synth
     //// as far as I am aware, but the others do.
 
     public JComponent addPitchBend(String prefix, final int index, Color color)
-    {
+        {
         Category category = new Category(this, 
-                                         (index == PITCHBEND_INDEX ? "Pitch Bend [Key]" :
-                                          (index == X1_INDEX ? "X1 [Key]" :       
-                                           (index == X2_INDEX ? "X2 [Key]" :       
-                                            (index == Y1_INDEX ? "Y1 [Key]"  : "Y2 [Key]")))), color);
+                (index == PITCHBEND_INDEX ? "Pitch Bend [Key]" :
+                    (index == X1_INDEX ? "X1 [Key]" :       
+                        (index == X2_INDEX ? "X2 [Key]" :       
+                        (index == Y1_INDEX ? "Y1 [Key]"  : "Y2 [Key]")))), color);
         category.makePasteable(prefix.substring(0, prefix.length() - 1));
 
         JComponent comp;
@@ -1805,17 +1805,17 @@ public class NovationSL extends Synth
 
         StringComponent name = new StringComponent("Name", this, prefix + "name", 8, "Name must be 8 characters long")
             {
-                public String replace(String val)
+            public String replace(String val)
                 {
-                    char[] chars = (val + "        ").toCharArray();
-                    char[] newchars = new char[12];
-                    for(int i = 0; i < newchars.length; i++)
-                        {
-                            if (chars[i] >= 32 && chars[i] < 127)
-                                newchars[i] = chars[i];
-                            else newchars[i] = 32; 
-                        }
-                    return new String(newchars);
+                char[] chars = (val + "        ").toCharArray();
+                char[] newchars = new char[12];
+                for(int i = 0; i < newchars.length; i++)
+                    {
+                    if (chars[i] >= 32 && chars[i] < 127)
+                        newchars[i] = chars[i];
+                    else newchars[i] = 32; 
+                    }
+                return new String(newchars);
                 }
             };
                 
@@ -1854,11 +1854,11 @@ public class NovationSL extends Synth
         //      };
         final LabelledDial channel = new LabelledDial("Channel", this, prefix + "channel", color, 0, 17)
             {
-                public String map(int val)
+            public String map(int val)
                 {
-                    if (val == 0) return "Comm";
-                    if (val == 1) return "Key";
-                    return "" + (val - 1);
+                if (val == 0) return "Comm";
+                if (val == 1) return "Key";
+                return "" + (val - 1);
                 }
             };
                 
@@ -1897,65 +1897,65 @@ public class NovationSL extends Synth
 
         Chooser type = new Chooser("Type", this, prefix + "type", PITCHBEND_TYPES)
             {
-                public void update(String key, Model model)
+            public void update(String key, Model model)
                 {
-                    super.update(key, model);
-                    outer.removeAll();
-                    int val = model.get(key);
-                    if (val == 0)                           // OFF
+                super.update(key, model);
+                outer.removeAll();
+                int val = model.get(key);
+                if (val == 0)                           // OFF
+                    {
+                    // nothing
+                    }
+                else if (val == 1 || val == 2 || val == 3)                      // CC, RPN, NRPN
+                    {
+                    HBox hbox2 = new HBox();
+                    hbox2.add(display);
+                    outer.add(hbox2);
+                    hbox2 = new HBox();
+                    hbox2.add(channel);
+                    if (val == 1)   // CC
                         {
-                            // nothing
+                        hbox2.add(paramlsb.setLabel("CC Number"));
                         }
-                    else if (val == 1 || val == 2 || val == 3)                      // CC, RPN, NRPN
+                    else
                         {
-                            HBox hbox2 = new HBox();
-                            hbox2.add(display);
-                            outer.add(hbox2);
-                            hbox2 = new HBox();
-                            hbox2.add(channel);
-                            if (val == 1)   // CC
-                                {
-                                    hbox2.add(paramlsb.setLabel("CC Number"));
-                                }
-                            else
-                                {
-                                    hbox2.add(paramlsb.setLabel(val == 2 ? "NRPN LSB" : "RPN LSB"));
-                                    hbox2.add(parammsb.setLabel(val == 2 ? "NRPN MSB" : "RPN MSB"));
-                                }
-                            hbox2.add(lowval);
-                            hbox2.add(highval);
-                            if (index != PITCHBEND_INDEX)
-                                hbox2.add(defaultval);
-                            outer.add(hbox2);
+                        hbox2.add(paramlsb.setLabel(val == 2 ? "NRPN LSB" : "RPN LSB"));
+                        hbox2.add(parammsb.setLabel(val == 2 ? "NRPN MSB" : "RPN MSB"));
                         }
-                    else if (val == 4)                      // Sysex
-                        {
-                            HBox hbox2 = new HBox();
-                            hbox2.add(display);
-                            outer.add(hbox2);
-                            hbox2 = new HBox();
-                            hbox2.add(lowval);
-                            hbox2.add(highval);
-                            if (index != PITCHBEND_INDEX)
-                                hbox2.add(defaultval);
-                            hbox2.add(sysexBox);                    // FIXME -- gotta specify 16 bit
-                            outer.add(hbox2);
-                        }
-                    else    // if (val == 4)                        // Pitch Bend
-                        {
-                            HBox hbox2 = new HBox();
-                            hbox2.add(display);
-                            outer.add(hbox2);
-                            hbox2 = new HBox();
-                            hbox2.add(channel);
-                            hbox2.add(lowval);
-                            hbox2.add(highval);
-                            if (index != PITCHBEND_INDEX)
-                                hbox2.add(defaultval);
-                            outer.add(hbox2);
-                        }
-                    outer.revalidate();
-                    outer.repaint();
+                    hbox2.add(lowval);
+                    hbox2.add(highval);
+                    if (index != PITCHBEND_INDEX)
+                        hbox2.add(defaultval);
+                    outer.add(hbox2);
+                    }
+                else if (val == 4)                      // Sysex
+                    {
+                    HBox hbox2 = new HBox();
+                    hbox2.add(display);
+                    outer.add(hbox2);
+                    hbox2 = new HBox();
+                    hbox2.add(lowval);
+                    hbox2.add(highval);
+                    if (index != PITCHBEND_INDEX)
+                        hbox2.add(defaultval);
+                    hbox2.add(sysexBox);                    // FIXME -- gotta specify 16 bit
+                    outer.add(hbox2);
+                    }
+                else    // if (val == 4)                        // Pitch Bend
+                    {
+                    HBox hbox2 = new HBox();
+                    hbox2.add(display);
+                    outer.add(hbox2);
+                    hbox2 = new HBox();
+                    hbox2.add(channel);
+                    hbox2.add(lowval);
+                    hbox2.add(highval);
+                    if (index != PITCHBEND_INDEX)
+                        hbox2.add(defaultval);
+                    outer.add(hbox2);
+                    }
+                outer.revalidate();
+                outer.repaint();
                 } 
             };
 
@@ -1968,29 +1968,29 @@ public class NovationSL extends Synth
                 
         category.add(hbox, BorderLayout.CENTER);
         return category;
-    }
+        }
 
 
 
 
 
     public Model getNextPatchLocation(Model model)
-    {
+        {
         int number = model.get("number");
         
         number++;
         if (number >= 32)
             {
-                number = 0;
+            number = 0;
             }
                 
         Model newModel = buildModel();
         newModel.set("number", number);
         return newModel;
-    }
+        }
 
     public String getPatchLocationName(Model model)
-    {
+        {
         // getPatchLocationName() is called from sprout() as a test to see if we should enable
         // batch downloading.  If we haven't yet created an .init file, then parameters won't exist
         // yet and this method will bomb badly.  So we return null in this case.
@@ -1998,7 +1998,7 @@ public class NovationSL extends Synth
         
         int number = model.get("number") + 1;
         return "" + (number > 9 ? "" : "0") + number;
-    }
+        }
         
         
 
@@ -2008,7 +2008,7 @@ public class NovationSL extends Synth
     // If there's both, use manufacturer(trimmed) + " " + name(trimmed)
     // If there's neither, use "Untitled"
     public String getPatchName(Model model) 
-    {
+        {
         String manufacturer = model.get("manufacturer", "").trim();
         String name = model.get("name", "").trim();
         String result = manufacturer + 
@@ -2016,7 +2016,7 @@ public class NovationSL extends Synth
             name;
         if (result.length() == 0) return "Untitled";
         else return result;
-    }
+        }
 
 
 
@@ -2042,14 +2042,14 @@ public class NovationSL extends Synth
 
 
     void emitName(String prefix, int index, int pos, byte[] data)
-    {
+        {
         String name = (model.get(prefix + "name", "") + "        ").substring(0, 8);
         char[] chars = name.toCharArray();
         for(int i = 0; i < 8; i++)
             {
-                data[pos + i] = (byte)chars[i];
+            data[pos + i] = (byte)chars[i];
             }
-    }
+        }
         
     static final byte[] TO_ENCODER_DISPLAY = new byte[] { 0x00, 0x01, 0x06, 0x07, 0x011, 0x09 };  // because 0-16k is last
     static final byte[] TO_CONTROL_PORTS = new byte[] { 0x00, 0x20, 0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48, 0x49, 0x4a, 0x4b, 0x50, 0x51, 0x52, 0x53, 0x40 };  // because OFF is last
@@ -2058,7 +2058,7 @@ public class NovationSL extends Synth
     static final byte[] TO_DOUBLE_DV_TYPES = new byte[] { 0, 4, 2, 3 };
 
     void emitEncoder(String prefix, int index, byte[] data)
-    {
+        {
         int pos = index * 41 + 0x1a3;
         int display = model.get(prefix + "display");
         emitName(prefix, index, pos, data);
@@ -2070,67 +2070,67 @@ public class NovationSL extends Synth
                 
         if (display == 5) // 16K
             {
-                int lowvalbig = model.get(prefix + "lowvalbig");
-                data[pos+9] = (byte)((lowvalbig >>> 7) & 127);
-                data[pos+10] = (byte)(lowvalbig & 127);
-                int highvalbig = model.get(prefix + "highvalbig");
-                highvalbig = (highvalbig < lowvalbig ? lowvalbig : highvalbig);
-                data[pos+11] = (byte)((highvalbig >>> 7) & 127);
-                data[pos+12] = (byte)(highvalbig & 127);
-                int defaultvalbig = model.get(prefix + "defaultvalbig");
-                defaultvalbig = (defaultvalbig < lowvalbig ? lowvalbig : (defaultvalbig > highvalbig ? highvalbig : defaultvalbig));
-                data[pos+20] = (byte)((defaultvalbig >>> 7) & 127);
-                data[pos+21] = (byte)(defaultvalbig & 127);
+            int lowvalbig = model.get(prefix + "lowvalbig");
+            data[pos+9] = (byte)((lowvalbig >>> 7) & 127);
+            data[pos+10] = (byte)(lowvalbig & 127);
+            int highvalbig = model.get(prefix + "highvalbig");
+            highvalbig = (highvalbig < lowvalbig ? lowvalbig : highvalbig);
+            data[pos+11] = (byte)((highvalbig >>> 7) & 127);
+            data[pos+12] = (byte)(highvalbig & 127);
+            int defaultvalbig = model.get(prefix + "defaultvalbig");
+            defaultvalbig = (defaultvalbig < lowvalbig ? lowvalbig : (defaultvalbig > highvalbig ? highvalbig : defaultvalbig));
+            data[pos+20] = (byte)((defaultvalbig >>> 7) & 127);
+            data[pos+21] = (byte)(defaultvalbig & 127);
             }
         else
             {
-                int lowval = model.get(prefix + "lowval");
-                data[pos+10] = (byte)(lowval & 127);
-                int highval = model.get(prefix + "highval");
-                highval = (highval < lowval ? lowval : highval);
-                data[pos+12] = (byte)(highval & 127);
-                //int defaultval = model.get(prefix + "defaultval");
-                int defaultval = model.get(prefix + "defaultval");
-                defaultval = (defaultval < lowval ? lowval : (defaultval > highval ? highval : defaultval));
-                data[pos+21] = (byte)(defaultval & 127);
+            int lowval = model.get(prefix + "lowval");
+            data[pos+10] = (byte)(lowval & 127);
+            int highval = model.get(prefix + "highval");
+            highval = (highval < lowval ? lowval : highval);
+            data[pos+12] = (byte)(highval & 127);
+            //int defaultval = model.get(prefix + "defaultval");
+            int defaultval = model.get(prefix + "defaultval");
+            defaultval = (defaultval < lowval ? lowval : (defaultval > highval ? highval : defaultval));
+            data[pos+21] = (byte)(defaultval & 127);
             }
         data[pos + 16] = (byte)model.get(prefix + "parammsb");
         data[pos + 17] = (byte)model.get(prefix + "paramlsb");
         boolean isRoland = false;
         if (display == 5)
             {
-                int dvtype = model.get(prefix + "sysexdoubledvtype");
-                data[pos + 26] = TO_DOUBLE_DV_TYPES[dvtype];
-                isRoland = (dvtype == 1);
+            int dvtype = model.get(prefix + "sysexdoubledvtype");
+            data[pos + 26] = TO_DOUBLE_DV_TYPES[dvtype];
+            isRoland = (dvtype == 1);
             }
         else
             {
-                int dvtype = model.get(prefix + "sysexsingledvtype");
-                data[pos + 26] = TO_SINGLE_DV_TYPES[dvtype];
-                isRoland = (dvtype == 1);
+            int dvtype = model.get(prefix + "sysexsingledvtype");
+            data[pos + 26] = TO_SINGLE_DV_TYPES[dvtype];
+            isRoland = (dvtype == 1);
             }
                         
         if (isRoland)
             {
-                data[pos + 27] = (byte)model.get(prefix + "rolandsysexlength");
-                data[pos + 28] = (byte)(data[pos + 27] - 1);    // roland position
+            data[pos + 27] = (byte)model.get(prefix + "rolandsysexlength");
+            data[pos + 28] = (byte)(data[pos + 27] - 1);    // roland position
             }
         else
             {
-                data[pos + 27] = (byte)model.get(prefix + "sysexlength");
-                data[pos + 28] = (byte)(model.get(prefix + "sysexdvpos") + 1);
+            data[pos + 27] = (byte)model.get(prefix + "sysexlength");
+            data[pos + 28] = (byte)(model.get(prefix + "sysexdvpos") + 1);
             }
 
         for(int i = 0; i < 12; i++)
             {
-                data[pos + 29 + i] = (byte)(model.get(prefix + "sysex" + i));
+            data[pos + 29 + i] = (byte)(model.get(prefix + "sysex" + i));
             }
-    }
+        }
 
     static final byte[] TO_POT_PICKUPS = new byte[] { 0x00, 0x20, 0x40, 0x60 };
     
     void emitPot(String prefix, int index, byte[] data)
-    {
+        {
         int pos = index * 41 + 0x1a3;
         emitName(prefix, index, pos, data);
         data[pos + 8] = (byte)model.get(prefix + "type");               // 0, 1, 2, 3, or 4
@@ -2161,26 +2161,26 @@ public class NovationSL extends Synth
                         
         if (isRoland)
             {
-                data[pos + 27] = (byte)model.get(prefix + "rolandsysexlength");
-                data[pos + 28] = (byte)(data[pos + 27] - 1);    // roland position
+            data[pos + 27] = (byte)model.get(prefix + "rolandsysexlength");
+            data[pos + 28] = (byte)(data[pos + 27] - 1);    // roland position
             }
         else
             {
-                data[pos + 27] = (byte)model.get(prefix + "sysexlength");
-                data[pos + 28] = (byte)(model.get(prefix + "sysexdvpos") + 1);
+            data[pos + 27] = (byte)model.get(prefix + "sysexlength");
+            data[pos + 28] = (byte)(model.get(prefix + "sysexdvpos") + 1);
             }
 
         for(int i = 0; i < 12; i++)
             {
-                data[pos + 29 + i] = (byte)(model.get(prefix + "sysex" + i));
+            data[pos + 29 + i] = (byte)(model.get(prefix + "sysex" + i));
             }
-    }
+        }
                 
     static final byte[] TO_PITCH_BEND_DISPLAY = new byte[] { 0x00, 0x01, 0x06, 0x07, 0x011 };
     static final byte[] TO_PITCH_BEND_TYPES = new byte[] { 0x00, 0x01, 0x02, 0x03, 0x04, 0x0A };
 
     void emitPitchBend(String prefix, int index, byte[] data)
-    {
+        {
         int pos = index * 41 + 0x1a3;
         emitName(prefix, index, pos, data);
         data[pos + 8] = TO_PITCH_BEND_TYPES[model.get(prefix + "type")];
@@ -2208,20 +2208,20 @@ public class NovationSL extends Synth
                         
         if (isRoland)
             {
-                data[pos + 27] = (byte)model.get(prefix + "rolandsysexlength");
-                data[pos + 28] = (byte)(data[pos + 27] - 1);    // roland position
+            data[pos + 27] = (byte)model.get(prefix + "rolandsysexlength");
+            data[pos + 28] = (byte)(data[pos + 27] - 1);    // roland position
             }
         else
             {
-                data[pos + 27] = (byte)model.get(prefix + "sysexlength");
-                data[pos + 28] = (byte)(model.get(prefix + "sysexdvpos") + 1);
+            data[pos + 27] = (byte)model.get(prefix + "sysexlength");
+            data[pos + 28] = (byte)(model.get(prefix + "sysexdvpos") + 1);
             }
 
         for(int i = 0; i < 12; i++)
             {
-                data[pos + 29 + i] = (byte)(model.get(prefix + "sysex" + i));
+            data[pos + 29 + i] = (byte)(model.get(prefix + "sysex" + i));
             }
-    }               
+        }               
                 
 
     static final byte[] TO_BUTTON_DISPLAYS = new byte[] { 0x00, 0x01, 0x03, 0x10 };
@@ -2232,7 +2232,7 @@ public class NovationSL extends Synth
     static final byte[] TO_BUTTON_REAL_TIME = new byte[] { 0x51, 0x52, 0x53, 0x54, 0x55 };
 
     void emitButton(String prefix, int index, byte[] data)
-    {
+        {
         int pos = index * 41 + 0x1a3;
         int type = model.get(prefix + "type");
         emitName(prefix, index, pos, data);
@@ -2243,77 +2243,77 @@ public class NovationSL extends Synth
                 
         if (type == 5)          // MMC
             {
-                data[pos + 19] = (byte)model.get(prefix + "mmcdevice");
+            data[pos + 19] = (byte)model.get(prefix + "mmcdevice");
             }
         else
             {
-                data[pos + 19] = TO_CONTROL_CHANNELS[model.get(prefix + "channel")];
+            data[pos + 19] = TO_CONTROL_CHANNELS[model.get(prefix + "channel")];
             }
                 
                 
         if (type == 5)          // MMC
             {
-                int lowval = model.get(prefix + "mmctype") + 1;
-                data[pos+10] = (byte)(lowval & 127);
+            int lowval = model.get(prefix + "mmctype") + 1;
+            data[pos+10] = (byte)(lowval & 127);
             }
         else if (type == 6)     // Note on/off, same as Realtime
             {
-                int lowval = model.get(prefix + "lowval");
-                data[pos+10] = (byte)(lowval & 127);
-                int highval = model.get(prefix + "highval");
-                data[pos+12] = (byte)(highval & 127);
+            int lowval = model.get(prefix + "lowval");
+            data[pos+10] = (byte)(lowval & 127);
+            int highval = model.get(prefix + "highval");
+            data[pos+12] = (byte)(highval & 127);
             }
         else if (type == 7)                     // Bank Select
             {
-                data[pos + 16] = (byte)model.get(prefix + "parammsb");
-                data[pos + 17] = (byte)model.get(prefix + "paramlsb");
+            data[pos + 16] = (byte)model.get(prefix + "parammsb");
+            data[pos + 17] = (byte)model.get(prefix + "paramlsb");
             }
         else if (type == 8)                     // PC
             {
-                int lowval = model.get(prefix + "lowval");
-                data[pos+10] = (byte)(lowval & 127);
-                int highval = model.get(prefix + "highval");
-                data[pos+12] = (byte)(highval & 127);
-                data[pos + 16] = (byte)model.get(prefix + "parammsb");
-                data[pos + 17] = (byte)model.get(prefix + "paramlsb");
+            int lowval = model.get(prefix + "lowval");
+            data[pos+10] = (byte)(lowval & 127);
+            int highval = model.get(prefix + "highval");
+            data[pos+12] = (byte)(highval & 127);
+            data[pos + 16] = (byte)model.get(prefix + "parammsb");
+            data[pos + 17] = (byte)model.get(prefix + "paramlsb");
             }
         else if (type == 9)     // Template
             {
-                int lowval = model.get(prefix + "template");
-                data[pos+10] = (byte)(lowval & 127);
+            int lowval = model.get(prefix + "template");
+            data[pos+10] = (byte)(lowval & 127);
             }
         else if (type == 10)    // Realtime
             {
-                data[pos+14] = TO_BUTTON_REAL_TIME[model.get(prefix + "realtime")];
+            data[pos+14] = TO_BUTTON_REAL_TIME[model.get(prefix + "realtime")];
             }
         else                                    // 0, 1, 2, 3, 4
             {
-                int lowval = model.get(prefix + "lowval");
-                data[pos+10] = (byte)(lowval & 127);
-                int highval = model.get(prefix + "highval");
-                highval = (highval < lowval ? lowval : highval);
-                data[pos+12] = (byte)(highval & 127);
-                //int defaultval = model.get(prefix + "defaultval");
-                int defaultval = model.get(prefix + "defaultval");
-                defaultval = (defaultval < lowval ? lowval : (defaultval > highval ? highval : defaultval));
-                data[pos+21] = (byte)(defaultval & 127);
+            int lowval = model.get(prefix + "lowval");
+            data[pos+10] = (byte)(lowval & 127);
+            int highval = model.get(prefix + "highval");
+            highval = (highval < lowval ? lowval : highval);
+            data[pos+12] = (byte)(highval & 127);
+            //int defaultval = model.get(prefix + "defaultval");
+            int defaultval = model.get(prefix + "defaultval");
+            defaultval = (defaultval < lowval ? lowval : (defaultval > highval ? highval : defaultval));
+            data[pos+21] = (byte)(defaultval & 127);
 
-                data[pos + 16] = (byte)model.get(prefix + "parammsb");
-                data[pos + 17] = (byte)model.get(prefix + "paramlsb");
+            data[pos + 16] = (byte)model.get(prefix + "parammsb");
+            data[pos + 17] = (byte)model.get(prefix + "paramlsb");
             }
                         
         if (type == 7)          // Bank Select
             {
-                data[pos + 13] = TO_BUTTON_BANK_CHANGE_MODES[model.get(prefix + "bankmode")];
+            data[pos + 13] = TO_BUTTON_BANK_CHANGE_MODES[model.get(prefix + "bankmode")];
             }
         else if (type == 8)             // PC
             {
-                data[pos + 13] = TO_BUTTON_PROGRAM_CHANGE_MODES[model.get(prefix + "pcbankmode")];
+            data[pos + 13] = TO_BUTTON_PROGRAM_CHANGE_MODES[model.get(prefix + "pcbankmode")];
             }
         else
             {
-                data[pos + 13] = TO_BUTTON_STANDARD_TYPES[model.get(prefix + "buttontype")];
-                data[pos + 22] = (byte)model.get(prefix + "stepsize");
+            data[pos + 13] = TO_BUTTON_STANDARD_TYPES[model.get(prefix + "buttontype")];
+            data[pos + 22] = (byte)model.get(prefix + "stepsize");
             }
 
                 
@@ -2323,20 +2323,20 @@ public class NovationSL extends Synth
                         
         if (isRoland)
             {
-                data[pos + 27] = (byte)model.get(prefix + "rolandsysexlength");
-                data[pos + 28] = (byte)(data[pos + 27] - 1);    // roland position
+            data[pos + 27] = (byte)model.get(prefix + "rolandsysexlength");
+            data[pos + 28] = (byte)(data[pos + 27] - 1);    // roland position
             }
         else
             {
-                data[pos + 27] = (byte)model.get(prefix + "sysexlength");
-                data[pos + 28] = (byte)(model.get(prefix + "sysexdvpos") + 1);
+            data[pos + 27] = (byte)model.get(prefix + "sysexlength");
+            data[pos + 28] = (byte)(model.get(prefix + "sysexdvpos") + 1);
             }
 
         for(int i = 0; i < 12; i++)
             {
-                data[pos + 29 + i] = (byte)(model.get(prefix + "sysex" + i));
+            data[pos + 29 + i] = (byte)(model.get(prefix + "sysex" + i));
             }
-    }               
+        }               
                 
         
 
@@ -2345,7 +2345,7 @@ public class NovationSL extends Synth
     static final byte[] TO_DRUM_PAD_TYPES = new byte[] { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x0B, 0x08, 0x09, 0x0C, 0x0D };
 
     void emitDrumPad(String prefix, int index, byte[] data)
-    {
+        {
         int pos = index * 41 + 0x1a3;
         int type = model.get(prefix + "type");
         emitName(prefix, index, pos, data);
@@ -2356,77 +2356,77 @@ public class NovationSL extends Synth
                 
         if (type == 5)          // MMC
             {
-                data[pos + 19] = (byte)model.get(prefix + "mmcdevice");
+            data[pos + 19] = (byte)model.get(prefix + "mmcdevice");
             }
         else
             {
-                data[pos + 19] = TO_CONTROL_CHANNELS[model.get(prefix + "channel")];
+            data[pos + 19] = TO_CONTROL_CHANNELS[model.get(prefix + "channel")];
             }
                 
                 
         if (type == 5)          // MMC
             {
-                int lowval = model.get(prefix + "mmctype") + 1;
-                data[pos+10] = (byte)(lowval & 127);
+            int lowval = model.get(prefix + "mmctype") + 1;
+            data[pos+10] = (byte)(lowval & 127);
             }
         else if (type == 6)             // Drum note
             {
-                int lowval = model.get(prefix + "lowval");
-                data[pos+10] = (byte)(lowval & 127);
-                int highval = model.get(prefix + "highval");
-                data[pos+12] = (byte)(highval & 127);
+            int lowval = model.get(prefix + "lowval");
+            data[pos+10] = (byte)(lowval & 127);
+            int highval = model.get(prefix + "highval");
+            data[pos+12] = (byte)(highval & 127);
             }
         else if (type == 7)                     // Bank Select
             {
-                data[pos + 16] = (byte)model.get(prefix + "parammsb");
-                data[pos + 17] = (byte)model.get(prefix + "paramlsb");
+            data[pos + 16] = (byte)model.get(prefix + "parammsb");
+            data[pos + 17] = (byte)model.get(prefix + "paramlsb");
             }
         else if (type == 8)                     // PC
             {
-                int lowval = model.get(prefix + "lowval");
-                data[pos+10] = (byte)(lowval & 127);
-                int highval = model.get(prefix + "highval");
-                data[pos+12] = (byte)(highval & 127);
-                data[pos + 16] = (byte)model.get(prefix + "parammsb");
-                data[pos + 17] = (byte)model.get(prefix + "paramlsb");
+            int lowval = model.get(prefix + "lowval");
+            data[pos+10] = (byte)(lowval & 127);
+            int highval = model.get(prefix + "highval");
+            data[pos+12] = (byte)(highval & 127);
+            data[pos + 16] = (byte)model.get(prefix + "parammsb");
+            data[pos + 17] = (byte)model.get(prefix + "paramlsb");
             }
         else if (type == 9)     // Template
             {
-                int lowval = model.get(prefix + "template");
-                data[pos+10] = (byte)(lowval & 127);
+            int lowval = model.get(prefix + "template");
+            data[pos+10] = (byte)(lowval & 127);
             }
         else if (type == 10)    // Realtime
             {
-                data[pos+14] = TO_BUTTON_REAL_TIME[model.get(prefix + "realtime")];
+            data[pos+14] = TO_BUTTON_REAL_TIME[model.get(prefix + "realtime")];
             }
         else                                    // 0, 1, 2, 3, 4
             {
-                int lowval = model.get(prefix + "lowval");
-                data[pos+10] = (byte)(lowval & 127);
-                int highval = model.get(prefix + "highval");
-                highval = (highval < lowval ? lowval : highval);
-                data[pos+12] = (byte)(highval & 127);
-                //int defaultval = model.get(prefix + "defaultval");
-                int defaultval = model.get(prefix + "defaultval");
-                defaultval = (defaultval < lowval ? lowval : (defaultval > highval ? highval : defaultval));
-                data[pos+21] = (byte)(defaultval & 127);
+            int lowval = model.get(prefix + "lowval");
+            data[pos+10] = (byte)(lowval & 127);
+            int highval = model.get(prefix + "highval");
+            highval = (highval < lowval ? lowval : highval);
+            data[pos+12] = (byte)(highval & 127);
+            //int defaultval = model.get(prefix + "defaultval");
+            int defaultval = model.get(prefix + "defaultval");
+            defaultval = (defaultval < lowval ? lowval : (defaultval > highval ? highval : defaultval));
+            data[pos+21] = (byte)(defaultval & 127);
 
-                data[pos + 16] = (byte)model.get(prefix + "parammsb");
-                data[pos + 17] = (byte)model.get(prefix + "paramlsb");
+            data[pos + 16] = (byte)model.get(prefix + "parammsb");
+            data[pos + 17] = (byte)model.get(prefix + "paramlsb");
             }
                         
         if (type == 7)          // Bank Select
             {
-                data[pos + 13] = TO_BUTTON_BANK_CHANGE_MODES[model.get(prefix + "bankmode")];
+            data[pos + 13] = TO_BUTTON_BANK_CHANGE_MODES[model.get(prefix + "bankmode")];
             }
         else if (type == 8)             // PC
             {
-                data[pos + 13] = TO_BUTTON_PROGRAM_CHANGE_MODES[model.get(prefix + "pcbankmode")];
+            data[pos + 13] = TO_BUTTON_PROGRAM_CHANGE_MODES[model.get(prefix + "pcbankmode")];
             }
         else
             {
-                data[pos + 13] = TO_BUTTON_STANDARD_TYPES[model.get(prefix + "buttontype")];
-                data[pos + 22] = (byte)model.get(prefix + "stepsize");
+            data[pos + 13] = TO_BUTTON_STANDARD_TYPES[model.get(prefix + "buttontype")];
+            data[pos + 22] = (byte)model.get(prefix + "stepsize");
             }
 
                 
@@ -2436,20 +2436,20 @@ public class NovationSL extends Synth
                         
         if (isRoland)
             {
-                data[pos + 27] = (byte)model.get(prefix + "rolandsysexlength");
-                data[pos + 28] = (byte)(data[pos + 27] - 1);    // roland position
+            data[pos + 27] = (byte)model.get(prefix + "rolandsysexlength");
+            data[pos + 28] = (byte)(data[pos + 27] - 1);    // roland position
             }
         else
             {
-                data[pos + 27] = (byte)model.get(prefix + "sysexlength");
-                data[pos + 28] = (byte)(model.get(prefix + "sysexdvpos") + 1);
+            data[pos + 27] = (byte)model.get(prefix + "sysexlength");
+            data[pos + 28] = (byte)(model.get(prefix + "sysexdvpos") + 1);
             }
 
         for(int i = 0; i < 12; i++)
             {
-                data[pos + 29 + i] = (byte)(model.get(prefix + "sysex" + i));
+            data[pos + 29 + i] = (byte)(model.get(prefix + "sysex" + i));
             }
-    }               
+        }               
 
     static final byte[] TO_COMMON_PORTS = new byte[] { 0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48, 0x49, 0x4a, 0x4b, 0x50, 0x51, 0x52, 0x53, 0x00  };
     static final byte[] TO_PROGRAM_PORTS = new byte[] { 0x00, 0x41, 0x42, 0x43, 0x44, 0x45, 0x46, 0x47, 0x48, 0x49, 0x4a, 0x4b, 0x40, };
@@ -2458,7 +2458,7 @@ public class NovationSL extends Synth
 
 
     void emitHeader(byte[] data)
-    {
+        {
         int pos = 13;           // 0x0D
                 
         // Name and manufacturer
@@ -2466,7 +2466,7 @@ public class NovationSL extends Synth
         char[] chars = name.toCharArray();
         for(int i = 0; i < 34; i++)
             {
-                data[pos + i] = (byte)chars[i];
+            data[pos + i] = (byte)chars[i];
             }
         pos += 34;
                 
@@ -2476,7 +2476,7 @@ public class NovationSL extends Synth
         chars = manufacturer.toCharArray();
         for(int i = 0; i < 13; i++)
             {
-                data[pos + i] = (byte)chars[i];
+            data[pos + i] = (byte)chars[i];
             }
         pos += 13;
         pos += 4;
@@ -2546,18 +2546,18 @@ public class NovationSL extends Synth
         data[pos++] = (byte)model.get("enablekeyboardzones");
         for(int i = 1; i <= 4; i++)     // note <=
             {
-                data[pos++] = (byte)model.get("zone" + i + "channel");
-                data[pos++] = TO_KEYBOARD_PORTS[model.get("zone" + i + "ports")];
-                data[pos++] = (byte)model.get("zone" + i + "veloffset");
-                data[pos++] = (byte)model.get("zone" + i + "minnote");
-                data[pos++] = (byte)model.get("zone" + i + "maxnote");
-                data[pos++] = (byte)model.get("zone" + i + "transpose");
-                data[pos++] = (byte)(model.get("zone" + i + "pitchbend") |
-                                     (model.get("zone" + i + "modwheel") << 1) |
-                                     (model.get("zone" + i + "aftertouch") << 2));
-                data[pos++] = 0x00;
-                data[pos++] = 0x00;
-                data[pos++] = 0x00;
+            data[pos++] = (byte)model.get("zone" + i + "channel");
+            data[pos++] = TO_KEYBOARD_PORTS[model.get("zone" + i + "ports")];
+            data[pos++] = (byte)model.get("zone" + i + "veloffset");
+            data[pos++] = (byte)model.get("zone" + i + "minnote");
+            data[pos++] = (byte)model.get("zone" + i + "maxnote");
+            data[pos++] = (byte)model.get("zone" + i + "transpose");
+            data[pos++] = (byte)(model.get("zone" + i + "pitchbend") |
+                (model.get("zone" + i + "modwheel") << 1) |
+                (model.get("zone" + i + "aftertouch") << 2));
+            data[pos++] = 0x00;
+            data[pos++] = 0x00;
+            data[pos++] = 0x00;
             }
                 
                 
@@ -2572,14 +2572,14 @@ public class NovationSL extends Synth
         // Drum Note Auto-Off
         for(int i = 0; i < 8; i++)
             {
-                pos++;  // skip zero
-                data[pos++] = (byte)model.get("page8control" + (i + 1) + "autooff");
+            pos++;  // skip zero
+            data[pos++] = (byte)model.get("page8control" + (i + 1) + "autooff");
             }
 
         // Drum Note Off Sync Value
         for(int i = 0; i < 8; i++)
             {
-                data[pos++] = (byte)model.get("page8control" + (i + 1) + "drumoffsync");
+            data[pos++] = (byte)model.get("page8control" + (i + 1) + "drumoffsync");
             }
 
         // Unknown Constants
@@ -2594,11 +2594,11 @@ public class NovationSL extends Synth
         data[pos++] = 0x40;
 
         // Following this are 231 zeros
-    }
+        }
 
 
     public byte[] emit(Model tempModel, boolean toWorkingMemory, boolean toFile)
-    {
+        {
         if (tempModel == null)
             tempModel = getModel();
                 
@@ -2613,29 +2613,29 @@ public class NovationSL extends Synth
         
         if (toWorkingMemory)                    // UPLOAD               -- maybe do RECEIVED?
             {
-                data[7] = (byte)0x00;
-                data[8] = (byte)0x00;
-                data[9] = (byte)0x11;
-                data[10] = (byte)0x02;
-                data[11] = (byte)0x00;
-                data[12] = (byte)0x01;
-                /*
-                  data[7] = (byte)0x00;
-                  data[8] = (byte)0x00;
-                  data[9] = (byte)0x0B;
-                  data[10] = (byte)0x0E;
-                  data[11] = (byte)0x00;
-                  data[12] = (byte)tempModel.get("number");
-                */
+            data[7] = (byte)0x00;
+            data[8] = (byte)0x00;
+            data[9] = (byte)0x11;
+            data[10] = (byte)0x02;
+            data[11] = (byte)0x00;
+            data[12] = (byte)0x01;
+            /*
+              data[7] = (byte)0x00;
+              data[8] = (byte)0x00;
+              data[9] = (byte)0x0B;
+              data[10] = (byte)0x0E;
+              data[11] = (byte)0x00;
+              data[12] = (byte)tempModel.get("number");
+            */
             }
         else                                                    // WRITE
             {
-                data[7] = (byte)0x01;
-                data[8] = (byte)0x00;
-                data[9] = (byte)0x09;
-                data[10] = (byte)0x06;
-                data[11] = (byte)0x00;
-                data[12] = (byte)tempModel.get("number");
+            data[7] = (byte)0x01;
+            data[8] = (byte)0x00;
+            data[9] = (byte)0x09;
+            data[10] = (byte)0x06;
+            data[11] = (byte)0x00;
+            data[12] = (byte)tempModel.get("number");
             }
         data[4109] = (byte)0x12;
         data[4110] = (byte)0x34;
@@ -2647,43 +2647,43 @@ public class NovationSL extends Synth
         // Encoders
         for(int i = 0; i < 8; i++)
             {
-                emitEncoder("page1control" + (i + 1), index++, data);
+            emitEncoder("page1control" + (i + 1), index++, data);
             }
         if (isCompact())
             {
-                // Encoders
-                for(int i = 0; i < 8; i++)
-                    {
-                        emitEncoder("page2control" + (i + 1), index++, data);
-                    }
-                // Encoders
-                for(int i = 0; i < 8; i++)
-                    {
-                        emitEncoder("page3control" + (i + 1), index++, data);
-                    }
+            // Encoders
+            for(int i = 0; i < 8; i++)
+                {
+                emitEncoder("page2control" + (i + 1), index++, data);
+                }
+            // Encoders
+            for(int i = 0; i < 8; i++)
+                {
+                emitEncoder("page3control" + (i + 1), index++, data);
+                }
             }
         else
             {
-                // Pots
-                for(int i = 0; i < 8; i++)
-                    {
-                        emitPot("page2control" + (i + 1), index++, data);
-                    }
-                // Faders
-                for(int i = 0; i < 8; i++)
-                    {
-                        emitPot("page3control" + (i + 1), index++, data);
-                    }
+            // Pots
+            for(int i = 0; i < 8; i++)
+                {
+                emitPot("page2control" + (i + 1), index++, data);
+                }
+            // Faders
+            for(int i = 0; i < 8; i++)
+                {
+                emitPot("page3control" + (i + 1), index++, data);
+                }
             }
         // Buttons
         for(int i = 0; i < 32; i++)
             {
-                emitButton("page" + ((i / 8) + 4) + "control" + ((i % 8) + 1), index++, data);
+            emitButton("page" + ((i / 8) + 4) + "control" + ((i % 8) + 1), index++, data);
             }
         // Drumpads
         for(int i = 0; i < 8; i++)
             {
-                emitDrumPad("page8control" + (i + 1), index++, data);
+            emitDrumPad("page8control" + (i + 1), index++, data);
             }
         // Expression
         emitPot("page9control1", index++, data);
@@ -2694,34 +2694,34 @@ public class NovationSL extends Synth
         // Pitchbend, X1, Y1, X2, Y2
         for(int i = 0; i < 5; i++)
             {
-                emitPitchBend("page9control" + (i + 4), index++, data);
+            emitPitchBend("page9control" + (i + 4), index++, data);
             }
         // Transport Buttons
         for(int i = 0; i < 6; i++)
             {
-                emitButton("page10control" + (i + 1), index++, data);
+            emitButton("page10control" + (i + 1), index++, data);
             }
         if (isCompact())
             {
-                // Encoders
-                for(int i = 0; i < 8; i++)
-                    {
-                        emitEncoder("page11control" + (i + 1), index++, data);
-                    }
+            // Encoders
+            for(int i = 0; i < 8; i++)
+                {
+                emitEncoder("page11control" + (i + 1), index++, data);
+                }
             }
         else
             {
-                // Skip 7 controls
-                index += 7;
-                // Cross-Fader
-                emitPot("page10control7", index++, data);
+            // Skip 7 controls
+            index += 7;
+            // Cross-Fader
+            emitPot("page10control7", index++, data);
             }
         // Skip 4 controls
         index += 4;
         // All Done
                 
         return data; 
-    }
+        }
                 
 
 
@@ -2740,30 +2740,30 @@ public class NovationSL extends Synth
 
 
     int at(int pos, byte[] stuff, byte val)
-    {
+        {
         for(int i = 0; i < stuff.length; i++)
             {
-                if (stuff[i] == val) return i;
+            if (stuff[i] == val) return i;
             }
         // This will happen a lot:
         System.err.println("NovationSL.at() WARNING: Invalid data " + val + " at byte position " + pos + " (" + (pos - 0x1a3)/41 + ", " + (pos - 0x1a3)%41 + ")");
         return 0;
-    }
+        }
 
                 
     void parseName(String prefix, int index, int pos, byte[] data)
-    {
+        {
         char[] chars = new char[8];
         for(int i = 0; i < 8; i++)
             {
-                chars[i] = (char)data[pos + i];
+            chars[i] = (char)data[pos + i];
             }
         model.set(prefix + "name", new String(chars));
-    }
+        }
                 
 
     void parseEncoder(String prefix, int index, byte[] data)
-    {
+        {
         int pos = index * 41 + 0x1a3;
         parseName(prefix, index, pos, data);
         model.set(prefix + "type", data[pos + 8]);
@@ -2775,15 +2775,15 @@ public class NovationSL extends Synth
                 
         if (display == 5) // 16K
             {
-                model.set(prefix + "lowvalbig", (data[pos+9] << 7) | data[pos+10]);
-                model.set(prefix + "highvalbig", (data[pos+11] << 7) | data[pos+12]);
-                model.set(prefix + "defaultvalbig", (data[pos+20] << 7) | data[pos+21]);
+            model.set(prefix + "lowvalbig", (data[pos+9] << 7) | data[pos+10]);
+            model.set(prefix + "highvalbig", (data[pos+11] << 7) | data[pos+12]);
+            model.set(prefix + "defaultvalbig", (data[pos+20] << 7) | data[pos+21]);
             }
         else
             {
-                model.set(prefix + "lowval", data[pos+10]);
-                model.set(prefix + "highval", data[pos+12]);
-                //model.set(prefix + "defaultval", data[pos+21]);
+            model.set(prefix + "lowval", data[pos+10]);
+            model.set(prefix + "highval", data[pos+12]);
+            //model.set(prefix + "defaultval", data[pos+21]);
             }
         model.set(prefix + "parammsb", data[pos + 16]);
         model.set(prefix + "paramlsb", data[pos + 17]);
@@ -2794,39 +2794,39 @@ public class NovationSL extends Synth
         boolean isRoland = false;
         if (display == 5)
             {
-                int dvtype = at(pos + 26, TO_DOUBLE_DV_TYPES, data[pos + 26]);          // The software always sets the type to 0 even with single DV
-                int dvpos = data[pos + 28];
-                model.set(prefix + "sysexdvpos", dvpos == 0 ? dvpos : dvpos - 1);
-                model.set(prefix + "sysexdoubledvtype", dvtype);  // handle both software and unit
-                isRoland = (dvtype == 1);
+            int dvtype = at(pos + 26, TO_DOUBLE_DV_TYPES, data[pos + 26]);          // The software always sets the type to 0 even with single DV
+            int dvpos = data[pos + 28];
+            model.set(prefix + "sysexdvpos", dvpos == 0 ? dvpos : dvpos - 1);
+            model.set(prefix + "sysexdoubledvtype", dvtype);  // handle both software and unit
+            isRoland = (dvtype == 1);
             }
         else
             {
-                int dvtype = at(pos + 26, TO_SINGLE_DV_TYPES, data[pos + 26]);          // The software always sets the type to 0 even with single DV
-                int dvpos = data[pos + 28];
-                model.set(prefix + "sysexdvpos", dvpos == 0 ? dvpos : dvpos - 1);
-                model.set(prefix + "sysexsingledvtype", dvtype);  // handle both software and unit
-                isRoland = (dvtype == 1);
+            int dvtype = at(pos + 26, TO_SINGLE_DV_TYPES, data[pos + 26]);          // The software always sets the type to 0 even with single DV
+            int dvpos = data[pos + 28];
+            model.set(prefix + "sysexdvpos", dvpos == 0 ? dvpos : dvpos - 1);
+            model.set(prefix + "sysexsingledvtype", dvtype);  // handle both software and unit
+            isRoland = (dvtype == 1);
             }
                         
         if (isRoland)
             {
-                model.set(prefix + "rolandsysexlength", data[pos + 27]);
+            model.set(prefix + "rolandsysexlength", data[pos + 27]);
             }
         else
             {
-                model.set(prefix + "sysexlength", data[pos + 27]);
+            model.set(prefix + "sysexlength", data[pos + 27]);
             }
 
         for(int i = 0; i < 12; i++)
             {
-                model.set(prefix + "sysex" + i, data[pos + 29 + i]);
+            model.set(prefix + "sysex" + i, data[pos + 29 + i]);
             }
-    }
+        }
 
     
     void parsePot(String prefix, int index, byte[] data)
-    {
+        {
         int pos = index * 41 + 0x1a3;
         parseName(prefix, index, pos, data);
 
@@ -2853,21 +2853,21 @@ public class NovationSL extends Synth
 
         if (isRoland)
             {
-                model.set(prefix + "rolandsysexlength", data[pos + 27]);
+            model.set(prefix + "rolandsysexlength", data[pos + 27]);
             }
         else
             {
-                model.set(prefix + "sysexlength", data[pos + 27]);
+            model.set(prefix + "sysexlength", data[pos + 27]);
             }
 
         for(int i = 0; i < 12; i++)
             {
-                model.set(prefix + "sysex" + i, data[pos + 29 + i]);
+            model.set(prefix + "sysex" + i, data[pos + 29 + i]);
             }
-    }
+        }
                 
     void parseButton(String prefix, int index, byte[] data)
-    {
+        {
         int pos = index * 41 + 0x1a3;
         parseName(prefix, index, pos, data);
 
@@ -2880,63 +2880,63 @@ public class NovationSL extends Synth
 
         if (type == 5)          // MMC
             {
-                model.set(prefix + "mmcdevice", data[pos + 19]);
+            model.set(prefix + "mmcdevice", data[pos + 19]);
             }
         else
             {
-                model.set(prefix + "channel", at(pos + 19, TO_CONTROL_CHANNELS, data[pos + 19]));
+            model.set(prefix + "channel", at(pos + 19, TO_CONTROL_CHANNELS, data[pos + 19]));
             }
                 
         if (type == 5)          // MMC
             {
-                model.set(prefix + "mmctype", data[pos+10] - 1);
+            model.set(prefix + "mmctype", data[pos+10] - 1);
             }
         else if (type == 6)     // Note on/off, same as Realtime
             {
-                model.set(prefix + "lowval", data[pos+10]);
-                model.set(prefix + "highval", data[pos+12]);
+            model.set(prefix + "lowval", data[pos+10]);
+            model.set(prefix + "highval", data[pos+12]);
             }
         else if (type == 7)                     // Bank Select
             {
-                model.set(prefix + "parammsb", data[pos+16]);
-                model.set(prefix + "paramlsb", data[pos+17]);
+            model.set(prefix + "parammsb", data[pos+16]);
+            model.set(prefix + "paramlsb", data[pos+17]);
             }
         else if (type == 8)                     // PC
             {
-                model.set(prefix + "lowval", data[pos+10]);
-                model.set(prefix + "highval", data[pos+12]);
-                model.set(prefix + "parammsb", data[pos+16]);
-                model.set(prefix + "paramlsb", data[pos+17]);
+            model.set(prefix + "lowval", data[pos+10]);
+            model.set(prefix + "highval", data[pos+12]);
+            model.set(prefix + "parammsb", data[pos+16]);
+            model.set(prefix + "paramlsb", data[pos+17]);
             }
         else if (type == 9)     // Template
             {
-                model.set(prefix + "template", data[pos+10]);
+            model.set(prefix + "template", data[pos+10]);
             }
         else if (type == 10)    // Realtime
             {
-                model.set(prefix + "realtime", at(pos+14, TO_BUTTON_REAL_TIME, data[pos+14]));
+            model.set(prefix + "realtime", at(pos+14, TO_BUTTON_REAL_TIME, data[pos+14]));
             }
         else                                    // 0, 1, 2, 3, 4
             {
-                model.set(prefix + "lowval", data[pos+10]);
-                model.set(prefix + "highval", data[pos+12]);
-                //model.set(prefix + "defaultval", data[pos+21]);
-                model.set(prefix + "parammsb", data[pos + 16]);
-                model.set(prefix + "paramlsb", data[pos + 17]);
+            model.set(prefix + "lowval", data[pos+10]);
+            model.set(prefix + "highval", data[pos+12]);
+            //model.set(prefix + "defaultval", data[pos+21]);
+            model.set(prefix + "parammsb", data[pos + 16]);
+            model.set(prefix + "paramlsb", data[pos + 17]);
             }
                         
         if (type == 7)          // Bank Select
             {
-                model.set(prefix + "bankmode", at(pos+13, TO_BUTTON_BANK_CHANGE_MODES, data[pos+13]));
+            model.set(prefix + "bankmode", at(pos+13, TO_BUTTON_BANK_CHANGE_MODES, data[pos+13]));
             }
         else if (type == 8)             // PC
             {
-                model.set(prefix + "pcbankmode", at(pos+13, TO_BUTTON_PROGRAM_CHANGE_MODES, data[pos+13]));
+            model.set(prefix + "pcbankmode", at(pos+13, TO_BUTTON_PROGRAM_CHANGE_MODES, data[pos+13]));
             }
         else
             {
-                model.set(prefix + "buttontype", at(pos+13, TO_BUTTON_STANDARD_TYPES, data[pos+13]));
-                model.set(prefix + "stepsize", data[pos + 22]);
+            model.set(prefix + "buttontype", at(pos+13, TO_BUTTON_STANDARD_TYPES, data[pos+13]));
+            model.set(prefix + "stepsize", data[pos + 22]);
             }
 
         int dvtype = at(pos + 26, TO_SINGLE_DV_TYPES, data[pos + 26]);          // The software always sets the type to 0 even with single DV
@@ -2947,22 +2947,22 @@ public class NovationSL extends Synth
 
         if (isRoland)
             {
-                model.set(prefix + "rolandsysexlength", data[pos + 27]);
+            model.set(prefix + "rolandsysexlength", data[pos + 27]);
             }
         else
             {
-                model.set(prefix + "sysexlength", data[pos + 27]);
+            model.set(prefix + "sysexlength", data[pos + 27]);
             }
 
         for(int i = 0; i < 12; i++)
             {
-                model.set(prefix + "sysex" + i, data[pos + 29 + i]);
+            model.set(prefix + "sysex" + i, data[pos + 29 + i]);
             }
-    }               
+        }               
                                                 
         
     void parseDrumPad(String prefix, int index, byte[] data)
-    {
+        {
         int pos = index * 41 + 0x1a3;
         parseName(prefix, index, pos, data);
 
@@ -2975,63 +2975,63 @@ public class NovationSL extends Synth
 
         if (type == 5)          // MMC
             {
-                model.set(prefix + "mmcdevice", data[pos + 19]);
+            model.set(prefix + "mmcdevice", data[pos + 19]);
             }
         else
             {
-                model.set(prefix + "channel", at(pos + 19, TO_CONTROL_CHANNELS, data[pos + 19]));
+            model.set(prefix + "channel", at(pos + 19, TO_CONTROL_CHANNELS, data[pos + 19]));
             }
                 
         if (type == 5)          // MMC
             {
-                model.set(prefix + "mmctype", data[pos+10] - 1);
+            model.set(prefix + "mmctype", data[pos+10] - 1);
             }
         else if (type == 6)     // Note on/off, same as Realtime
             {
-                model.set(prefix + "lowval", data[pos+10]);
-                model.set(prefix + "highval", data[pos+12]);
+            model.set(prefix + "lowval", data[pos+10]);
+            model.set(prefix + "highval", data[pos+12]);
             }
         else if (type == 7)                     // Bank Select
             {
-                model.set(prefix + "parammsb", data[pos+16]);
-                model.set(prefix + "paramlsb", data[pos+17]);
+            model.set(prefix + "parammsb", data[pos+16]);
+            model.set(prefix + "paramlsb", data[pos+17]);
             }
         else if (type == 8)                     // PC
             {
-                model.set(prefix + "lowval", data[pos+10]);
-                model.set(prefix + "highval", data[pos+12]);
-                model.set(prefix + "parammsb", data[pos+16]);
-                model.set(prefix + "paramlsb", data[pos+17]);
+            model.set(prefix + "lowval", data[pos+10]);
+            model.set(prefix + "highval", data[pos+12]);
+            model.set(prefix + "parammsb", data[pos+16]);
+            model.set(prefix + "paramlsb", data[pos+17]);
             }
         else if (type == 9)     // Template
             {
-                model.set(prefix + "template", data[pos+10]);
+            model.set(prefix + "template", data[pos+10]);
             }
         else if (type == 10)    // Realtime
             {
-                model.set(prefix + "realtime", at(pos+14, TO_BUTTON_REAL_TIME, data[pos+14]));
+            model.set(prefix + "realtime", at(pos+14, TO_BUTTON_REAL_TIME, data[pos+14]));
             }
         else                                    // 0, 1, 2, 3, 4
             {
-                model.set(prefix + "lowval", data[pos+10]);
-                model.set(prefix + "highval", data[pos+12]);
-                //model.set(prefix + "defaultval", data[pos+21]);
-                model.set(prefix + "parammsb", data[pos + 16]);
-                model.set(prefix + "paramlsb", data[pos + 17]);
+            model.set(prefix + "lowval", data[pos+10]);
+            model.set(prefix + "highval", data[pos+12]);
+            //model.set(prefix + "defaultval", data[pos+21]);
+            model.set(prefix + "parammsb", data[pos + 16]);
+            model.set(prefix + "paramlsb", data[pos + 17]);
             }
                         
         if (type == 7)          // Bank Select
             {
-                model.set(prefix + "bankmode", at(pos+13, TO_BUTTON_BANK_CHANGE_MODES, data[pos+13]));
+            model.set(prefix + "bankmode", at(pos+13, TO_BUTTON_BANK_CHANGE_MODES, data[pos+13]));
             }
         else if (type == 8)             // PC
             {
-                model.set(prefix + "pcbankmode", at(pos+13, TO_BUTTON_PROGRAM_CHANGE_MODES, data[pos+13]));
+            model.set(prefix + "pcbankmode", at(pos+13, TO_BUTTON_PROGRAM_CHANGE_MODES, data[pos+13]));
             }
         else
             {
-                model.set(prefix + "buttontype", at(pos+13, TO_BUTTON_STANDARD_TYPES, data[pos+13]));
-                model.set(prefix + "stepsize", data[pos + 22]);
+            model.set(prefix + "buttontype", at(pos+13, TO_BUTTON_STANDARD_TYPES, data[pos+13]));
+            model.set(prefix + "stepsize", data[pos + 22]);
             }
 
         int dvtype = at(pos + 26, TO_SINGLE_DV_TYPES, data[pos + 26]);          // The software always sets the type to 0 even with single DV
@@ -3042,23 +3042,23 @@ public class NovationSL extends Synth
 
         if (isRoland)
             {
-                model.set(prefix + "rolandsysexlength", data[pos + 27]);
+            model.set(prefix + "rolandsysexlength", data[pos + 27]);
             }
         else
             {
-                model.set(prefix + "sysexlength", data[pos + 27]);
+            model.set(prefix + "sysexlength", data[pos + 27]);
             }
 
         for(int i = 0; i < 12; i++)
             {
-                model.set(prefix + "sysex" + i, data[pos + 29 + i]);
+            model.set(prefix + "sysex" + i, data[pos + 29 + i]);
             }
-    }               
+        }               
         
         
         
     void parsePitchBend(String prefix, int index, byte[] data)
-    {
+        {
         int pos = index * 41 + 0x1a3;
         parseName(prefix, index, pos, data);
                 
@@ -3083,27 +3083,27 @@ public class NovationSL extends Synth
 
         if (isRoland)
             {
-                model.set(prefix + "rolandsysexlength", data[pos + 27]);
+            model.set(prefix + "rolandsysexlength", data[pos + 27]);
             }
         else
             {
-                model.set(prefix + "sysexlength", data[pos + 27]);
+            model.set(prefix + "sysexlength", data[pos + 27]);
             }
 
         for(int i = 0; i < 12; i++)
             {
-                model.set(prefix + "sysex" + i, data[pos + 29 + i]);
+            model.set(prefix + "sysex" + i, data[pos + 29 + i]);
             }
-    }               
+        }               
                                 
     void parseHeader(byte[] data)
-    {
+        {
         int pos = 13;           // 0x0D
 
         char[] chars = new char[34];
         for(int i = 0; i < 34; i++)
             {
-                chars[i] = (char)data[pos + i];
+            chars[i] = (char)data[pos + i];
             }
         model.set("name", new String(chars));
         pos += 34;
@@ -3113,7 +3113,7 @@ public class NovationSL extends Synth
         chars = new char[13];
         for(int i = 0; i < 13; i++)
             {
-                chars[i] = (char)data[pos + i];
+            chars[i] = (char)data[pos + i];
             }
         model.set("manufacturer", new String(chars));
         pos += 13;
@@ -3152,21 +3152,21 @@ public class NovationSL extends Synth
         model.set("enablekeyboardzones", data[pos++]);
         for(int i = 1; i <= 4; i++)     // note <=
             {
-                int channel = data[pos++];
-                if (channel > 15) channel = 0;          // this often happens
-                model.set("zone" + i + "channel", channel);
-                // ports will often have bad data
-                model.set("zone" + i + "ports", at(pos, TO_KEYBOARD_PORTS, data[pos++]));
-                model.set("zone" + i + "veloffset", data[pos++]);
-                model.set("zone" + i + "minnote", data[pos++]);
-                model.set("zone" + i + "maxnote", data[pos++]);
-                model.set("zone" + i + "transpose", data[pos++]);
-                val = data[pos++];
-                model.set("zone" + i + "pitchbend", val & 0x01);
-                model.set("zone" + i + "modwheel", (val >>> 1) & 0x01);
-                model.set("zone" + i + "aftertouch", (val >>> 2) & 0x01);
+            int channel = data[pos++];
+            if (channel > 15) channel = 0;          // this often happens
+            model.set("zone" + i + "channel", channel);
+            // ports will often have bad data
+            model.set("zone" + i + "ports", at(pos, TO_KEYBOARD_PORTS, data[pos++]));
+            model.set("zone" + i + "veloffset", data[pos++]);
+            model.set("zone" + i + "minnote", data[pos++]);
+            model.set("zone" + i + "maxnote", data[pos++]);
+            model.set("zone" + i + "transpose", data[pos++]);
+            val = data[pos++];
+            model.set("zone" + i + "pitchbend", val & 0x01);
+            model.set("zone" + i + "modwheel", (val >>> 1) & 0x01);
+            model.set("zone" + i + "aftertouch", (val >>> 2) & 0x01);
         
-                pos += 3;               
+            pos += 3;               
             }
                 
         // Touchpad Types
@@ -3178,26 +3178,26 @@ public class NovationSL extends Synth
         // Drum Note Auto-Off
         for(int i = 0; i < 8; i++)
             {
-                pos++;  // skip zero
-                model.set("page8control" + (i + 1) + "autooff", data[pos++]);
+            pos++;  // skip zero
+            model.set("page8control" + (i + 1) + "autooff", data[pos++]);
             }
 
         // Drum Note Off Sync Value
         for(int i = 0; i < 8; i++)
             {
-                model.set("page8control" + (i + 1) + "drumoffsync", data[pos++]);
+            model.set("page8control" + (i + 1) + "drumoffsync", data[pos++]);
             }
 
         pos += 9;
 
         // Following this are 231 zeros
-    }
+        }
 
 
 
 
     public int parse(byte[] data, boolean fromFile)
-    {
+        {
         // "Upload", no patch number
         if (data[7] == 0x00 && 
             data[8] == 0x00 && 
@@ -3206,11 +3206,11 @@ public class NovationSL extends Synth
             data[11] == 0x00 && 
             data[12] == 0x12) 
             {
-                model.set("number", 0);
+            model.set("number", 0);
             }
         else
             {
-                model.set("number", data[12]);
+            model.set("number", data[12]);
             }
         parseHeader(data);
 
@@ -3219,43 +3219,43 @@ public class NovationSL extends Synth
         // Encoders
         for(int i = 0; i < 8; i++)
             {
-                parseEncoder("page1control" + (i + 1), index++, data);
+            parseEncoder("page1control" + (i + 1), index++, data);
             }
         if (isCompact())
             {
-                // Encoders
-                for(int i = 0; i < 8; i++)
-                    {
-                        parseEncoder("page2control" + (i + 1), index++, data);
-                    }
-                // Encoders
-                for(int i = 0; i < 8; i++)
-                    {
-                        parseEncoder("page3control" + (i + 1), index++, data);
-                    }
+            // Encoders
+            for(int i = 0; i < 8; i++)
+                {
+                parseEncoder("page2control" + (i + 1), index++, data);
+                }
+            // Encoders
+            for(int i = 0; i < 8; i++)
+                {
+                parseEncoder("page3control" + (i + 1), index++, data);
+                }
             }
         else
             {
-                // Pots
-                for(int i = 0; i < 8; i++)
-                    {
-                        parsePot("page2control" + (i + 1), index++, data);
-                    }
-                // Faders
-                for(int i = 0; i < 8; i++)
-                    {
-                        parsePot("page3control" + (i + 1), index++, data);
-                    }
+            // Pots
+            for(int i = 0; i < 8; i++)
+                {
+                parsePot("page2control" + (i + 1), index++, data);
+                }
+            // Faders
+            for(int i = 0; i < 8; i++)
+                {
+                parsePot("page3control" + (i + 1), index++, data);
+                }
             }
         // Buttons
         for(int i = 0; i < 32; i++)
             {
-                parseButton("page" + ((i / 8) + 4) + "control" + ((i % 8) + 1), index++, data);
+            parseButton("page" + ((i / 8) + 4) + "control" + ((i % 8) + 1), index++, data);
             }
         // Drumpads
         for(int i = 0; i < 8; i++)
             {
-                parseDrumPad("page8control" + (i + 1), index++, data);
+            parseDrumPad("page8control" + (i + 1), index++, data);
             }
         // Expression
         parsePot("page9control1", index++, data);
@@ -3266,26 +3266,26 @@ public class NovationSL extends Synth
         // Pitchbend, X1, Y1, X2, Y2
         for(int i = 0; i < 5; i++)
             {
-                parsePitchBend("page9control" + (i + 4), index++, data);
+            parsePitchBend("page9control" + (i + 4), index++, data);
             }
         // Transport Buttons
         for(int i = 0; i < 6; i++)
             {
-                parseButton("page10control" + (i + 1), index++, data);
+            parseButton("page10control" + (i + 1), index++, data);
             }
         if (isCompact())
             {
-                // Encoders
-                for(int i = 0; i < 8; i++)
-                    {
-                        parseEncoder("page11control" + (i + 1), index++, data);
-                    }
+            // Encoders
+            for(int i = 0; i < 8; i++)
+                {
+                parseEncoder("page11control" + (i + 1), index++, data);
+                }
             }
         else        // Skip 7 controls
             {
-                index += 7;
-                // Cross-Fader
-                parsePot("page10control7", index++, data);
+            index += 7;
+            // Cross-Fader
+            parsePot("page10control7", index++, data);
             }
         // Skip 4 controls
         index += 4;
@@ -3293,20 +3293,20 @@ public class NovationSL extends Synth
                 
         revise();
         return PARSE_SUCCEEDED; 
-    }
+        }
 
 
     ///// We have to override this because you can't do a selective dump; you have
     ///// to request all 32 patches.
 
     public boolean setupBatchStartingAndEndingPatches(Model startPatch, Model endPatch)
-    {
+        {
         // Hard code to between 1 and 32, and warn user
         showSimpleMessage("Batch Download", "This will download all 32 patches.\nYou will have to initiate a bulk download from the SL (\"Dump ALL\")." );
         startPatch.set("number", 0);
         endPatch.set("number", 31);
         return true;
-    }
+        }
 
     ///// Novation's editor pauses for almost 750ms.  But my tests with the zero suggests
     ///// that it can tolerate almost no pause at all.  I'm using 200ms for the moment
@@ -3318,7 +3318,7 @@ public class NovationSL extends Synth
     //// in a consistent manner for all of the different controls.
 
     static class SysexBox extends HBox
-    {
+        {
         VBox typeBox = new VBox();
         HBox lengthBox = new HBox();
         Model model;
@@ -3329,7 +3329,7 @@ public class NovationSL extends Synth
         int index;
         
         public SysexBox(Synth synth, String prefix, int index, Color color)
-        {
+            {
             model = synth.getModel();
             this.index = index;
                 
@@ -3339,45 +3339,45 @@ public class NovationSL extends Synth
             final LabelledDial[] sysex = new LabelledDial[12];
             for(int i = 0; i < sysex.length; i++)
                 {
-                    final int _i = i;
-                    sysex[i] = new LabelledDial("Byte " + (i + 1), synth, prefix + "sysex" + i, color, 0, 127)
+                final int _i = i;
+                sysex[i] = new LabelledDial("Byte " + (i + 1), synth, prefix + "sysex" + i, color, 0, 127)
+                    {
+                    public void update(String key, final Model model)
                         {
-                            public void update(String key, final Model model)
-                            {
-                                super.update(key, model);
-                            }
+                        super.update(key, model);
+                        }
                         
-                            public String map(int val)
+                    public String map(int val)
+                        {
+                        if (model.get(prefix + "display") == 5)  // 16 K
                             {
-                                if (model.get(prefix + "display") == 5)  // 16 K
+                            int dv = model.get(prefix + "sysexdoubledvtype");
+                            if (dv != 0 && dv != 1)        // DV exists and is not roland
+                                {
+                                int pos = model.get(prefix + "sysexdvpos");
+                                if (pos == _i || pos == _i - 1) // I'm in the DV spot
                                     {
-                                        int dv = model.get(prefix + "sysexdoubledvtype");
-                                        if (dv != 0 && dv != 1)        // DV exists and is not roland
-                                            {
-                                                int pos = model.get(prefix + "sysexdvpos");
-                                                if (pos == _i || pos == _i - 1) // I'm in the DV spot
-                                                    {
-                                                        return "DV";
-                                                    }
-                                            }
+                                    return "DV";
                                     }
-                                else
-                                    {
-                                        int dv = model.get(prefix + "sysexsingledvtype");
-                                        if (dv != 0 && dv != 1)        // DV exists and is not roland
-                                            {
-                                                if (model.get(prefix + "sysexdvpos") == _i)     // I'm in the DV spot
-                                                    {
-                                                        return "DV";
-                                                    }
-                                            }
-                                    }
-                                        
-                                // at this point I'm definitely not the DV
-                                return StringUtility.toHex((byte)val);
+                                }
                             }
-                        };
-                    sysexBytes.add(sysex[i]);
+                        else
+                            {
+                            int dv = model.get(prefix + "sysexsingledvtype");
+                            if (dv != 0 && dv != 1)        // DV exists and is not roland
+                                {
+                                if (model.get(prefix + "sysexdvpos") == _i)     // I'm in the DV spot
+                                    {
+                                    return "DV";
+                                    }
+                                }
+                            }
+                                        
+                        // at this point I'm definitely not the DV
+                        return StringUtility.toHex((byte)val);
+                        }
+                    };
+                sysexBytes.add(sysex[i]);
                 }
         
 
@@ -3385,61 +3385,61 @@ public class NovationSL extends Synth
                 
             sysexlength = new LabelledDial("Sysex Length", synth, prefix + "sysexlength", color, 0, 12)
                 {
-                    public void update(String key, final Model model)
+                public void update(String key, final Model model)
                     {
-                        super.update(key, model);
-                        // only update if we're non-roland display type
-                        if (((model.get(prefix + "display") == 5) &&                                    // 16K
-                             (model.get(prefix + "sysexdoubledvtype") == 1)) ||             // 16K is Roland
+                    super.update(key, model);
+                    // only update if we're non-roland display type
+                    if (((model.get(prefix + "display") == 5) &&                                    // 16K
+                            (model.get(prefix + "sysexdoubledvtype") == 1)) ||             // 16K is Roland
                             ((model.get(prefix + "display") != 5) &&                                        // 128
-                             (model.get(prefix + "sysexsingledvtype") == 1)))                       // 128 is Roland
+                            (model.get(prefix + "sysexsingledvtype") == 1)))                       // 128 is Roland
+                        {
+                        // it's roland: do NOTHING
+                        }
+                    else
+                        {
+                        sysexBytes.removeAll();
+                        int val = model.get(key);
+                        for(int i = 0; i < val; i++)
                             {
-                                // it's roland: do NOTHING
+                            sysexBytes.add(sysex[i]);
                             }
-                        else
-                            {
-                                sysexBytes.removeAll();
-                                int val = model.get(key);
-                                for(int i = 0; i < val; i++)
-                                    {
-                                        sysexBytes.add(sysex[i]);
-                                    }
-                                sysexBytes.revalidate();
-                                sysexBytes.repaint();
-                            }
+                        sysexBytes.revalidate();
+                        sysexBytes.repaint();
+                        }
                     } 
                 };
                 
             rolandsysexlength = new LabelledDial("Sysex Length", synth, prefix + "rolandsysexlength", color, 9, 12)
                 {
-                    public void update(String key, final Model model)
+                public void update(String key, final Model model)
                     {
-                        super.update(key, model);
-                        // only update if we're roland display type
-                        if (((model.get(prefix + "display") == 5) &&                                    // 16K
-                             (model.get(prefix + "sysexdoubledvtype") == 1)) ||             // 16K is Roland
+                    super.update(key, model);
+                    // only update if we're roland display type
+                    if (((model.get(prefix + "display") == 5) &&                                    // 16K
+                            (model.get(prefix + "sysexdoubledvtype") == 1)) ||             // 16K is Roland
                             ((model.get(prefix + "display") != 5) &&                                        // 128
-                             (model.get(prefix + "sysexsingledvtype") == 1)))                       // 128 is Roland
+                            (model.get(prefix + "sysexsingledvtype") == 1)))                       // 128 is Roland
+                        {
+                        sysexBytes.removeAll();
+                        int val = model.get(key);
+                        for(int i = 0; i < val - 1; i++)                // roland sysex is weirdly one shorter than it should be
                             {
-                                sysexBytes.removeAll();
-                                int val = model.get(key);
-                                for(int i = 0; i < val - 1; i++)                // roland sysex is weirdly one shorter than it should be
-                                    {
-                                        sysexBytes.add(sysex[i]);
-                                    }
-                                sysexBytes.revalidate();
-                                sysexBytes.repaint();
-                            } 
+                            sysexBytes.add(sysex[i]);
+                            }
+                        sysexBytes.revalidate();
+                        sysexBytes.repaint();
+                        } 
                     }
                 };
         
             final HBox sysexdvposbox = new HBox();
             final LabelledDial sysexdvpos = new LabelledDial("Data Position", synth, prefix + "sysexdvpos", color, 0, 11, -1)
                 {
-                    public void update(String key, final Model model)
+                public void update(String key, final Model model)
                     {
-                        super.update(key, model);
-                        sysexBytes.repaint();
+                    super.update(key, model);
+                    sysexBytes.repaint();
                     }
                 };
                 
@@ -3448,73 +3448,73 @@ public class NovationSL extends Synth
                 
             sysexsingledvtype = new Chooser("Data Type", synth, prefix + "sysexsingledvtype", NovationSL.SINGLE_DV_TYPES)       
                 {
-                    public void update(String key, final Model model)
+                public void update(String key, final Model model)
                     {
-                        super.update(key, model);
-                        // only update if we're the right display type
-                        if (model.get(prefix + "display") != 5) // 16K
+                    super.update(key, model);
+                    // only update if we're the right display type
+                    if (model.get(prefix + "display") != 5) // 16K
+                        {
+                        lengthBox.remove(sysexlength);
+                        lengthBox.remove(rolandsysexlength);
+                        if (model.get(key) == 1)        // Roland [single]
                             {
-                                lengthBox.remove(sysexlength);
-                                lengthBox.remove(rolandsysexlength);
-                                if (model.get(key) == 1)        // Roland [single]
-                                    {
-                                        lengthBox.add(rolandsysexlength);
-                                        rolandsysexlength.update(prefix + "rolandsysexlength", model);          // so it changes the sysex byte length
-                                    }
-                                else
-                                    {
-                                        lengthBox.add(sysexlength);
-                                        sysexlength.update(prefix + "sysexlength", model);              // so it changes the sysex byte length
-                                    }
-                                        
-                                sysexdvposbox.remove(sysexdvpos);
-                                if (model.get(key) == 2)        // Single
-                                    {
-                                        sysexdvposbox.add(sysexdvpos);
-                                    }
-                                        
-                                sysexdvposbox.revalidate();
-                                sysexdvposbox.repaint();
-                                lengthBox.revalidate();
-                                lengthBox.repaint();
-                                sysexBytes.repaint();
+                            lengthBox.add(rolandsysexlength);
+                            rolandsysexlength.update(prefix + "rolandsysexlength", model);          // so it changes the sysex byte length
                             }
+                        else
+                            {
+                            lengthBox.add(sysexlength);
+                            sysexlength.update(prefix + "sysexlength", model);              // so it changes the sysex byte length
+                            }
+                                        
+                        sysexdvposbox.remove(sysexdvpos);
+                        if (model.get(key) == 2)        // Single
+                            {
+                            sysexdvposbox.add(sysexdvpos);
+                            }
+                                        
+                        sysexdvposbox.revalidate();
+                        sysexdvposbox.repaint();
+                        lengthBox.revalidate();
+                        lengthBox.repaint();
+                        sysexBytes.repaint();
+                        }
                     }
                 };
                 
             sysexdoubledvtype = new Chooser("Data Type", synth, prefix + "sysexdoubledvtype", NovationSL.DOUBLE_DV_TYPES)
                 {
-                    public void update(String key, Model model)
+                public void update(String key, Model model)
                     {
-                        super.update(key, model);
-                        // only update if we're the right display type
-                        if (model.get(prefix + "display") == 5) // 16K
+                    super.update(key, model);
+                    // only update if we're the right display type
+                    if (model.get(prefix + "display") == 5) // 16K
+                        {
+                        lengthBox.remove(sysexlength);
+                        lengthBox.remove(rolandsysexlength);
+                        if (model.get(key) == 1)        // Roland [double]
                             {
-                                lengthBox.remove(sysexlength);
-                                lengthBox.remove(rolandsysexlength);
-                                if (model.get(key) == 1)        // Roland [double]
-                                    {
-                                        lengthBox.add(rolandsysexlength);
-                                        rolandsysexlength.update(prefix + "rolandsysexlength", model);          // so it changes the sysex byte length
-                                    }
-                                else
-                                    {
-                                        lengthBox.add(sysexlength);
-                                        sysexlength.update(prefix + "sysexlength", model);              // so it changes the sysex byte length
-                                    }
+                            lengthBox.add(rolandsysexlength);
+                            rolandsysexlength.update(prefix + "rolandsysexlength", model);          // so it changes the sysex byte length
+                            }
+                        else
+                            {
+                            lengthBox.add(sysexlength);
+                            sysexlength.update(prefix + "sysexlength", model);              // so it changes the sysex byte length
+                            }
                                         
-                                sysexdvposbox.remove(sysexdvpos);
-                                if (model.get(key) == 2 || model.get(key) == 3) // LSB-MSB or MSB-LSB
-                                    {
-                                        sysexdvposbox.add(sysexdvpos);
-                                    }
+                        sysexdvposbox.remove(sysexdvpos);
+                        if (model.get(key) == 2 || model.get(key) == 3) // LSB-MSB or MSB-LSB
+                            {
+                            sysexdvposbox.add(sysexdvpos);
+                            }
                                         
-                                sysexdvposbox.revalidate();
-                                sysexdvposbox.repaint();
-                                lengthBox.revalidate();
-                                lengthBox.repaint();
-                                sysexBytes.repaint();
-                            } 
+                        sysexdvposbox.revalidate();
+                        sysexdvposbox.repaint();
+                        lengthBox.revalidate();
+                        lengthBox.repaint();
+                        sysexBytes.repaint();
+                        } 
                     }
                 };
     
@@ -3524,30 +3524,30 @@ public class NovationSL extends Synth
             add(lengthBox);
             add(sysexdvposbox);
             add(sysexBytes);
-        }
+            }
 
 
         public void setShows16K(String prefix, boolean val)
-        {
+            {
             if (val)
                 {
-                    typeBox.removeAll();
-                    typeBox.add(sysexdoubledvtype);
-                    typeBox.revalidate();
-                    typeBox.repaint();
-                    sysexdoubledvtype.update(prefix + "sysexdoubledvtype", model);
+                typeBox.removeAll();
+                typeBox.add(sysexdoubledvtype);
+                typeBox.revalidate();
+                typeBox.repaint();
+                sysexdoubledvtype.update(prefix + "sysexdoubledvtype", model);
                 }
             else
                 {
-                    typeBox.removeAll();
-                    typeBox.add(sysexsingledvtype);
-                    typeBox.revalidate();
-                    typeBox.repaint();
-                    sysexsingledvtype.update(prefix + "sysexsingledvtype", model);
+                typeBox.removeAll();
+                typeBox.add(sysexsingledvtype);
+                typeBox.revalidate();
+                typeBox.repaint();
+                sysexsingledvtype.update(prefix + "sysexsingledvtype", model);
                 }
+            }
         }
     }
-}
 
 
 

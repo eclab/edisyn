@@ -17,7 +17,7 @@ import java.io.*;
 import javax.sound.midi.*;
 
 public class YamahaDX7Curve extends JComponent implements Updatable
-{
+    {
     String breakpointkey;
     String leftkey;
     String rightkey;
@@ -30,14 +30,14 @@ public class YamahaDX7Curve extends JComponent implements Updatable
     int height = 84;
 
     public void setPreferredWidth(int width)
-    {
+        {
         this.width = width;
-    }
+        }
     
     public int getPreferredWidth()
-    {
+        {
         return this.width;
-    }
+        }
      
     public int getPreferredHeight() { return height; }
     public void setPreferredHeight(int height) { this.height = height; }
@@ -47,7 +47,7 @@ public class YamahaDX7Curve extends JComponent implements Updatable
     public Dimension getMaximumSize() { return new Dimension(100000, 100000); }
     
     public YamahaDX7Curve(Synth synth, String breakpointkey, String leftkey, String rightkey, String leftDepthKey, String rightDepthKey)
-    {
+        {
         this.breakpointkey = breakpointkey;
         this.leftkey = leftkey;
         this.rightkey = rightkey;
@@ -60,15 +60,15 @@ public class YamahaDX7Curve extends JComponent implements Updatable
         synth.getModel().register(rightkey, this);
         synth.getModel().register(leftDepthKey, this);
         synth.getModel().register(rightDepthKey, this);
-    }
+        }
     
     public void update(String key, Model model)
-    {
+        {
         repaint();
-    }
+        }
         
     public void paintComponent(Graphics g1)
-    {
+        {
         Graphics2D g = (Graphics2D) g1;
 
         super.paintComponent(g);
@@ -107,22 +107,22 @@ public class YamahaDX7Curve extends JComponent implements Updatable
         g.draw(path);
                 
         Ellipse2D.Double marker = new Ellipse2D.Double((rect.x + x - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0),
-                                                       (rect.y + rect.height / 2.0 - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0),
-                                                       Style.ENVELOPE_DISPLAY_MARKER_WIDTH(), Style.ENVELOPE_DISPLAY_MARKER_WIDTH());
+            (rect.y + rect.height / 2.0 - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0),
+            Style.ENVELOPE_DISPLAY_MARKER_WIDTH(), Style.ENVELOPE_DISPLAY_MARKER_WIDTH());
                 
         g.fill(marker);
 
         Ellipse2D.Double leftmarker = new Ellipse2D.Double((rect.x - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0),
-                                                           (rect.y + starty - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0),
-                                                           Style.ENVELOPE_DISPLAY_MARKER_WIDTH(), Style.ENVELOPE_DISPLAY_MARKER_WIDTH());
+            (rect.y + starty - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0),
+            Style.ENVELOPE_DISPLAY_MARKER_WIDTH(), Style.ENVELOPE_DISPLAY_MARKER_WIDTH());
                 
         g.fill(leftmarker);
 
         Ellipse2D.Double rightmarker = new Ellipse2D.Double((rect.x + rect.width - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0),
-                                                            (rect.y + endy - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0),
-                                                            Style.ENVELOPE_DISPLAY_MARKER_WIDTH(), Style.ENVELOPE_DISPLAY_MARKER_WIDTH());
+            (rect.y + endy - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0),
+            Style.ENVELOPE_DISPLAY_MARKER_WIDTH(), Style.ENVELOPE_DISPLAY_MARKER_WIDTH());
                 
         g.fill(rightmarker);
-    }
+        }
 
-}
+    }

@@ -24,7 +24,7 @@ import javax.sound.midi.*;
 */
 
 public class WaldorfMicrowaveXTMulti extends Synth
-{
+    {
     // NOTES:
     // Sound Arp?
     // "Alternating"?
@@ -44,18 +44,18 @@ public class WaldorfMicrowaveXTMulti extends Synth
     static final String[] MIDI_SEND = new String[] { "Global", "Specific" };
         
     public WaldorfMicrowaveXTMulti()
-    {
+        {
         for(int i = 0; i < allParameters.length; i++)
             {
-                allParametersToIndex.put(allParameters[i], Integer.valueOf(i));
+            allParametersToIndex.put(allParameters[i], Integer.valueOf(i));
             }
 
         for(int j = 1; j < 9; j++)
             {
-                for(int i = 0; i < allInstrumentParameters.length; i++)
-                    {
-                        allInstrumentParametersToIndex.put("inst" + j + allInstrumentParameters[i], Integer.valueOf(i));
-                    }
+            for(int i = 0; i < allInstrumentParameters.length; i++)
+                {
+                allInstrumentParametersToIndex.put("inst" + j + allInstrumentParameters[i], Integer.valueOf(i));
+                }
             }
         
         JComponent soundPanel = new SynthPanel(this);
@@ -65,7 +65,7 @@ public class WaldorfMicrowaveXTMulti extends Synth
 
         for(int i = 1; i < 3; i++)
             {
-                vbox.add(addInstrument(i, Style.COLOR_B()));
+            vbox.add(addInstrument(i, Style.COLOR_B()));
             }
                 
         soundPanel.add(vbox, BorderLayout.CENTER);
@@ -76,7 +76,7 @@ public class WaldorfMicrowaveXTMulti extends Synth
 
         for(int i = 3; i < 6; i++)
             {
-                vbox.add(addInstrument(i, Style.COLOR_B()));
+            vbox.add(addInstrument(i, Style.COLOR_B()));
             }
                 
         soundPanel.add(vbox, BorderLayout.CENTER);
@@ -87,7 +87,7 @@ public class WaldorfMicrowaveXTMulti extends Synth
 
         for(int i = 6; i < 9; i++)
             {
-                vbox.add(addInstrument(i, Style.COLOR_B()));
+            vbox.add(addInstrument(i, Style.COLOR_B()));
             }
                 
         soundPanel.add(vbox, BorderLayout.CENTER);
@@ -98,71 +98,71 @@ public class WaldorfMicrowaveXTMulti extends Synth
         model.set("number", 0);
                         
         loadDefaults();
-    }
+        }
     
     public JFrame sprout()
-    {
+        {
         JFrame frame = super.sprout();
         // multi-mode on the Microwave can't switch patches
         transmitTo.setEnabled(false);
         return frame;
-    }         
+        }         
 
     public void windowBecameFront() { updateMode(); }
     
     public void updateMode()
-    {
+        {
         boolean send = getSendMIDI();
         setSendMIDI(true);
         byte DEV = (byte)(getID());
         // we'll send a mode dump to change the mode to Single
         tryToSendSysex(new byte[] { (byte)0xF0, 0x3E, 0x0E, DEV, 0x17, 0x01, (byte)0xF7 });
         setSendMIDI(send);
-    }
+        }
                
     public void changePatch(Model tempModel)
-    {
+        {
         // Not possible in Multi Mode
-    }
+        }
 
     public String getDefaultResourceFileName() { return "WaldorfMicrowaveXTMulti.init"; }
     public String getHTMLResourceFileName() { return "WaldorfMicrowaveXTMulti.html"; }
 
     public boolean gatherPatchInfo(String title, Model change, boolean writing)
-    {
+        {
         JTextField number = new JTextField("" + (model.get("number") + 1), 3);
                 
         while(true)
             {
-                boolean result = showMultiOption(this, new String[] { "Patch Number" }, 
-                                                 new JComponent[] { number }, title, "Enter the Patch Number");
+            boolean result = showMultiOption(this, new String[] { "Patch Number" }, 
+                new JComponent[] { number }, title, "Enter the Patch Number");
                 
-                if (result == false) 
-                    return false;
+            if (result == false) 
+                return false;
                                 
-                int n;
-                try { n = Integer.parseInt(number.getText()); }
-                catch (NumberFormatException e)
-                    {
-                        showSimpleError(title, "The Patch Number must be an integer 1 ... 128");
-                        continue;
-                    }
-                if (n < 1 || n > 128)
-                    {
-                        showSimpleError(title, "The Patch Number must be an integer 1 ... 128");
-                        continue;
-                    }
+            int n;
+            try { n = Integer.parseInt(number.getText()); }
+            catch (NumberFormatException e)
+                {
+                showSimpleError(title, "The Patch Number must be an integer 1 ... 128");
+                continue;
+                }
+            if (n < 1 || n > 128)
+                {
+                showSimpleError(title, "The Patch Number must be an integer 1 ... 128");
+                continue;
+                }
                                 
-                change.set("number", n - 1);
+            change.set("number", n - 1);
                         
-                return true;
+            return true;
             }
-    }
+        }
 
 
     /** Add the global patch category (name, id, number, etc.) */
     public JComponent addNameGlobal(Color color)
-    {
+        {
         Category globalCategory = new Category(this, "Waldorf Microwave II/XT/XTk [Multi]", color);
         //globalCategory.makeUnresettable();
                 
@@ -179,27 +179,27 @@ public class WaldorfMicrowaveXTMulti extends Synth
         
         comp = new StringComponent("Patch Name", this, "name", 16, "Name must be up to 16 ASCII characters.")
             {
-                public String replace(String val)
+            public String replace(String val)
                 {
-                    return revisePatchName(val);
+                return revisePatchName(val);
                 }
                                 
-                public void update(String key, Model model)
+            public void update(String key, Model model)
                 {
-                    super.update(key, model);
-                    updateTitle();
+                super.update(key, model);
+                updateTitle();
                 }
             };
         hbox.add(comp);
                 
         globalCategory.add(hbox, BorderLayout.WEST);
         return globalCategory;
-    }
+        }
 
         
 
     public JComponent addMultiData(Color color)
-    {
+        {
         Category category = new Category(this, "General", color);
                 
         JComponent comp;
@@ -230,16 +230,16 @@ public class WaldorfMicrowaveXTMulti extends Synth
 
         comp = new LabelledDial("Arp Tempo", this, "arptempo", color, 1, 127)
             {
-                public String map(int val)
+            public String map(int val)
                 {
-                    if (val == 1)
-                        return "Extern";
-                    else
-                        {
-                            return "" + (50 + (val - 2) * 2);
-                        }
+                if (val == 1)
+                    return "Extern";
+                else
+                    {
+                    return "" + (50 + (val - 2) * 2);
+                    }
                 }
-                public int getDefaultValue() { return 37; } // 120 BPM
+            public int getDefaultValue() { return 37; } // 120 BPM
             };
         model.setMetricMin( "arptempo", 2);
         //((LabelledDial)comp).addAdditionalLabel("Tempo");
@@ -247,11 +247,11 @@ public class WaldorfMicrowaveXTMulti extends Synth
         
         category.add(hbox, BorderLayout.WEST);
         return category;
-    }
+        }
 
 
     public JComponent addInstrument(final int inst, Color color)
-    {
+        {
         Category category = new Category(this, "Instrument " + inst, color);
         //        category.makePasteable("inst" + inst);
         category.makePasteable("inst");
@@ -263,10 +263,10 @@ public class WaldorfMicrowaveXTMulti extends Synth
 
         comp = new LabelledDial("Bank", this, "inst" + inst + "bank", color, 0, 1)
             {
-                public String map(int val)
+            public String map(int val)
                 {
-                    String[] vals = BANKS;
-                    return vals[val];
+                String[] vals = BANKS;
+                return vals[val];
                 }
             };
         ((LabelledDial)comp).addAdditionalLabel(" ");
@@ -304,43 +304,43 @@ public class WaldorfMicrowaveXTMulti extends Synth
         HBox hbox2 = new HBox();
         comp = new PushButton("Show")
             {
-                public void perform()
+            public void perform()
                 {
-                    final WaldorfMicrowaveXT synth = new WaldorfMicrowaveXT();
-                    if (tuple != null)
-                        synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver(), synth.buildKey2Receiver());
-                    if (synth.tuple != null)
-                        {
-                            // This is a little tricky.  When the dump comes in from the synth,
-                            // Edisyn will only send it to the topmost panel.  So we first sprout
-                            // the panel and show it, and THEN send the dump request.  But this isn't
-                            // enough, because what setVisible(...) does is post an event on the
-                            // Swing Event Queue to build the window at a later time.  This later time
-                            // happens to be after the dump comes in, so it's ignored.  So what we
-                            // ALSO do is post the dump request to occur at the end of the Event Queue,
-                            // so by the time the dump request has been made, the window is shown and
-                            // frontmost.
+                final WaldorfMicrowaveXT synth = new WaldorfMicrowaveXT();
+                if (tuple != null)
+                    synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver(), synth.buildKey2Receiver());
+                if (synth.tuple != null)
+                    {
+                    // This is a little tricky.  When the dump comes in from the synth,
+                    // Edisyn will only send it to the topmost panel.  So we first sprout
+                    // the panel and show it, and THEN send the dump request.  But this isn't
+                    // enough, because what setVisible(...) does is post an event on the
+                    // Swing Event Queue to build the window at a later time.  This later time
+                    // happens to be after the dump comes in, so it's ignored.  So what we
+                    // ALSO do is post the dump request to occur at the end of the Event Queue,
+                    // so by the time the dump request has been made, the window is shown and
+                    // frontmost.
                                                 
-                            synth.sprout();
-                            JFrame frame = ((JFrame)(SwingUtilities.getRoot(synth)));
-                            frame.setVisible(true);                                 
+                    synth.sprout();
+                    JFrame frame = ((JFrame)(SwingUtilities.getRoot(synth)));
+                    frame.setVisible(true);                                 
 
-                            SwingUtilities.invokeLater(
-                                                       new Runnable()
-                                                       {
-                                                           public void run() 
-                                                           { 
-                                                               Model tempModel = buildModel();
-                                                               tempModel.set("bank", WaldorfMicrowaveXTMulti.this.model.get("inst" + inst + "bank"));
-                                                               tempModel.set("number", WaldorfMicrowaveXTMulti.this.model.get("inst" + inst + "number"));
-                                                               synth.tryToSendSysex(synth.requestDump(tempModel));
-                                                           }
-                                                       });
-                        }
-                    else
-                        {
-                            showSimpleError("Disconnected", "You can't show a patch when disconnected.");
-                        }
+                    SwingUtilities.invokeLater(
+                        new Runnable()
+                            {
+                            public void run() 
+                                { 
+                                Model tempModel = buildModel();
+                                tempModel.set("bank", WaldorfMicrowaveXTMulti.this.model.get("inst" + inst + "bank"));
+                                tempModel.set("number", WaldorfMicrowaveXTMulti.this.model.get("inst" + inst + "number"));
+                                synth.tryToSendSysex(synth.requestDump(tempModel));
+                                }
+                            });
+                    }
+                else
+                    {
+                    showSimpleError("Disconnected", "You can't show a patch when disconnected.");
+                    }
                 }
             };
         hbox2.addLast(comp);
@@ -381,11 +381,11 @@ public class WaldorfMicrowaveXTMulti extends Synth
 
         comp = new LabelledDial("Panning", this, "inst" + inst + "panning", color, 0, 127, 64)
             {
-                public String map(int val)
+            public String map(int val)
                 {
-                    if ((val - 64) < 0) return "L " + Math.abs(val - 64);
-                    else if ((val - 64) > 0) return "R " + (val - 64);
-                    else return "--";
+                if ((val - 64) < 0) return "L " + Math.abs(val - 64);
+                else if ((val - 64) > 0) return "R " + (val - 64);
+                else return "--";
                 }
             };
         hbox2.add(comp);
@@ -396,9 +396,9 @@ public class WaldorfMicrowaveXTMulti extends Synth
 
         comp = new LabelledDial("Highest", this, "inst" + inst + "hikey", color, 0, 127)
             {
-                public String map(int val)
+            public String map(int val)
                 {
-                    return KEYS[val % 12] + (val / 12 - 2);  // note integer division
+                return KEYS[val % 12] + (val / 12 - 2);  // note integer division
                 }
             };
         ((LabelledDial)comp).addAdditionalLabel("Key");
@@ -406,13 +406,13 @@ public class WaldorfMicrowaveXTMulti extends Synth
 
         comp = new LabelledDial("MIDI", this, "inst" + inst + "channel", color, 0, 17)
             {
-                public String map(int val)
+            public String map(int val)
                 {
-                    if (val == 0)
-                        return "Omni";
-                    else if (val == 1)
-                        return "Global";
-                    else return "" + (val - 1);
+                if (val == 0)
+                    return "Omni";
+                else if (val == 1)
+                    return "Global";
+                else return "" + (val - 1);
                 }
             };
         model.setMetricMin( "inst" + inst + "channel", 2);
@@ -424,9 +424,9 @@ public class WaldorfMicrowaveXTMulti extends Synth
                 
         comp = new LabelledDial("Arp", this, "inst" + inst + "arpclock", color, 0, 15)
             {
-                public String map(int val)
+            public String map(int val)
                 {
-                    return ARP_CLOCK[val];
+                return ARP_CLOCK[val];
                 }
             };
         ((LabelledDial)comp).addAdditionalLabel("Clock");
@@ -438,13 +438,13 @@ public class WaldorfMicrowaveXTMulti extends Synth
 
         comp = new LabelledDial("Arp", this, "inst" + inst + "arppattern", color, 0, 16)
             {
-                public String map(int val)
+            public String map(int val)
                 {
-                    if (val == 0)
-                        return "Off";
-                    else if (val == 1)
-                        return "User";
-                    else return "" + (val - 1);
+                if (val == 0)
+                    return "Off";
+                else if (val == 1)
+                    return "User";
+                else return "" + (val - 1);
                 }
             };
         model.setMetricMin( "inst" + inst + "arppattern", 2);
@@ -453,15 +453,15 @@ public class WaldorfMicrowaveXTMulti extends Synth
 
         comp = new LabelledDial("Arp", this, "inst" + inst + "arpnotesout", color, 0, 18)
             {
-                public String map(int val)
+            public String map(int val)
                 {
-                    if (val == 0)
-                        return "Off";
-                    else if (val == 17)
-                        return "Inst";
-                    else if (val == 18)
-                        return "Global";
-                    else return "" + (val);
+                if (val == 0)
+                    return "Off";
+                else if (val == 17)
+                    return "Inst";
+                else if (val == 18)
+                    return "Global";
+                else return "" + (val);
                 }
             };
         model.setMetricMax( "inst" + inst + "arpnotesout", 16);
@@ -475,9 +475,9 @@ public class WaldorfMicrowaveXTMulti extends Synth
 
         comp = new LabelledDial("Lowest", this, "inst" + inst + "lowkey", color, 0, 127)
             {
-                public String map(int val)
+            public String map(int val)
                 {
-                    return KEYS[val % 12] + (val / 12 - 2);  // note integer division
+                return KEYS[val % 12] + (val / 12 - 2);  // note integer division
                 }
             };
         ((LabelledDial)comp).addAdditionalLabel("Key");
@@ -489,43 +489,43 @@ public class WaldorfMicrowaveXTMulti extends Synth
 
         category.add(hbox, BorderLayout.WEST);
         return category;
-    }
+        }
 
 
     /** Map of parameter -> index in the allInstrumentParameters array. */
     HashMap allInstrumentParametersToIndex = new HashMap();
 
     final static String[] allInstrumentParameters = new String[]
-        {
-            "bank",
-            "number",
-            "channel",
-            "volume",
-            "transpose",
-            "detune",
-            "output",
-            "status",
-            "panning",
-            "panmod",
-            "-",
-            "-",
-            "lowvel",
-            "hivel",
-            "lowkey",
-            "hikey",
-            "arp",
-            "arpclock",
-            "arprange",
-            "arppattern",
-            "arpdirection",
-            "arporder",
-            "arpvel",
-            "arpreset",
-            "arpnotesout",
-            "-",
-            "midisend",
-            "-"
-        };
+    {
+    "bank",
+    "number",
+    "channel",
+    "volume",
+    "transpose",
+    "detune",
+    "output",
+    "status",
+    "panning",
+    "panmod",
+    "-",
+    "-",
+    "lowvel",
+    "hivel",
+    "lowkey",
+    "hikey",
+    "arp",
+    "arpclock",
+    "arprange",
+    "arppattern",
+    "arpdirection",
+    "arporder",
+    "arpvel",
+    "arpreset",
+    "arpnotesout",
+    "-",
+    "midisend",
+    "-"
+    };
 
 
 
@@ -540,347 +540,347 @@ public class WaldorfMicrowaveXTMulti extends Synth
     /// that Waldorf decided to do.  :-(
 
     final static String[] allParameters = new String[/*256*/] 
-        {
-            "volume",
-            "controlw",                   
-            "controlx",
-            "controly",
-            "controlz",
-            "arptempo",
-            "midisend",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",                   
-            "-",
-            "-",
-            "name",         // *
-            "name",         // *
-            "name",         // *
-            "name",         // *
-            "name",         // *
-            "name",         // *
-            "name",         // *
-            "name",         // *
-            "name",         // *
-            "name",         // *
-            "name",         // *
-            "name",         // *
-            "name",         // *
-            "name",         // *
-            "name",         // *
-            "name",         // *
+    {
+    "volume",
+    "controlw",                   
+    "controlx",
+    "controly",
+    "controlz",
+    "arptempo",
+    "midisend",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",                   
+    "-",
+    "-",
+    "name",         // *
+    "name",         // *
+    "name",         // *
+    "name",         // *
+    "name",         // *
+    "name",         // *
+    "name",         // *
+    "name",         // *
+    "name",         // *
+    "name",         // *
+    "name",         // *
+    "name",         // *
+    "name",         // *
+    "name",         // *
+    "name",         // *
+    "name",         // *
     
     
-            "inst1bank",
-            "inst1number",
-            "inst1channel",
-            "inst1volume",
-            "inst1transpose",
-            "inst1detune",
-            "inst1output",
-            "inst1status",
-            "inst1panning",
-            "inst1panmod",
-            "-",
-            "-",
-            "inst1lowvel",
-            "inst1hivel",
-            "inst1lowkey",
-            "inst1hikey",
-            "inst1arp",
-            "inst1arpclock",
-            "inst1arprange",
-            "inst1arppattern",
-            "inst1arpdirection",
-            "inst1arporder",
-            "inst1arpvel",
-            "inst1arpreset",
-            "inst1arpnotesout",
-            "-",
-            "inst1midisend",
-            "-",
+    "inst1bank",
+    "inst1number",
+    "inst1channel",
+    "inst1volume",
+    "inst1transpose",
+    "inst1detune",
+    "inst1output",
+    "inst1status",
+    "inst1panning",
+    "inst1panmod",
+    "-",
+    "-",
+    "inst1lowvel",
+    "inst1hivel",
+    "inst1lowkey",
+    "inst1hikey",
+    "inst1arp",
+    "inst1arpclock",
+    "inst1arprange",
+    "inst1arppattern",
+    "inst1arpdirection",
+    "inst1arporder",
+    "inst1arpvel",
+    "inst1arpreset",
+    "inst1arpnotesout",
+    "-",
+    "inst1midisend",
+    "-",
 
-            "inst2bank",
-            "inst2number",
-            "inst2channel",
-            "inst2volume",
-            "inst2transpose",
-            "inst2detune",
-            "inst2output",
-            "inst2status",
-            "inst2panning",
-            "inst2panmod",
-            "-",
-            "-",
-            "inst2lowvel",
-            "inst2hivel",
-            "inst2lowkey",
-            "inst2hikey",
-            "inst2arp",
-            "inst2arpclock",
-            "inst2arprange",
-            "inst2arppattern",
-            "inst2arpdirection",
-            "inst2arporder",
-            "inst2arpvel",
-            "inst2arpreset",
-            "inst2arpnotesout",
-            "-",
-            "inst2midisend",
-            "-",
-
-
-            "inst3bank",
-            "inst3number",
-            "inst3channel",
-            "inst3volume",
-            "inst3transpose",
-            "inst3detune",
-            "inst3output",
-            "inst3status",
-            "inst3panning",
-            "inst3panmod",
-            "-",
-            "-",
-            "inst3lowvel",
-            "inst3hivel",
-            "inst3lowkey",
-            "inst3hikey",
-            "inst3arp",
-            "inst3arpclock",
-            "inst3arprange",
-            "inst3arppattern",
-            "inst3arpdirection",
-            "inst3arporder",
-            "inst3arpvel",
-            "inst3arpreset",
-            "inst3arpnotesout",
-            "-",
-            "inst3midisend",
-            "-",
+    "inst2bank",
+    "inst2number",
+    "inst2channel",
+    "inst2volume",
+    "inst2transpose",
+    "inst2detune",
+    "inst2output",
+    "inst2status",
+    "inst2panning",
+    "inst2panmod",
+    "-",
+    "-",
+    "inst2lowvel",
+    "inst2hivel",
+    "inst2lowkey",
+    "inst2hikey",
+    "inst2arp",
+    "inst2arpclock",
+    "inst2arprange",
+    "inst2arppattern",
+    "inst2arpdirection",
+    "inst2arporder",
+    "inst2arpvel",
+    "inst2arpreset",
+    "inst2arpnotesout",
+    "-",
+    "inst2midisend",
+    "-",
 
 
-            "inst4bank",
-            "inst4number",
-            "inst4channel",
-            "inst4volume",
-            "inst4transpose",
-            "inst4detune",
-            "inst4output",
-            "inst4status",
-            "inst4panning",
-            "inst4panmod",
-            "-",
-            "-",
-            "inst4lowvel",
-            "inst4hivel",
-            "inst4lowkey",
-            "inst4hikey",
-            "inst4arp",
-            "inst4arpclock",
-            "inst4arprange",
-            "inst4arppattern",
-            "inst4arpdirection",
-            "inst4arporder",
-            "inst4arpvel",
-            "inst4arpreset",
-            "inst4arpnotesout",
-            "-",
-            "inst4midisend",
-            "-",
+    "inst3bank",
+    "inst3number",
+    "inst3channel",
+    "inst3volume",
+    "inst3transpose",
+    "inst3detune",
+    "inst3output",
+    "inst3status",
+    "inst3panning",
+    "inst3panmod",
+    "-",
+    "-",
+    "inst3lowvel",
+    "inst3hivel",
+    "inst3lowkey",
+    "inst3hikey",
+    "inst3arp",
+    "inst3arpclock",
+    "inst3arprange",
+    "inst3arppattern",
+    "inst3arpdirection",
+    "inst3arporder",
+    "inst3arpvel",
+    "inst3arpreset",
+    "inst3arpnotesout",
+    "-",
+    "inst3midisend",
+    "-",
 
 
-            "inst5bank",
-            "inst5number",
-            "inst5channel",
-            "inst5volume",
-            "inst5transpose",
-            "inst5detune",
-            "inst5output",
-            "inst5status",
-            "inst5panning",
-            "inst5panmod",
-            "-",
-            "-",
-            "inst5lowvel",
-            "inst5hivel",
-            "inst5lowkey",
-            "inst5hikey",
-            "inst5arp",
-            "inst5arpclock",
-            "inst5arprange",
-            "inst5arppattern",
-            "inst5arpdirection",
-            "inst5arporder",
-            "inst5arpvel",
-            "inst5arpreset",
-            "inst5arpnotesout",
-            "-",
-            "inst5midisend",
-            "-",
+    "inst4bank",
+    "inst4number",
+    "inst4channel",
+    "inst4volume",
+    "inst4transpose",
+    "inst4detune",
+    "inst4output",
+    "inst4status",
+    "inst4panning",
+    "inst4panmod",
+    "-",
+    "-",
+    "inst4lowvel",
+    "inst4hivel",
+    "inst4lowkey",
+    "inst4hikey",
+    "inst4arp",
+    "inst4arpclock",
+    "inst4arprange",
+    "inst4arppattern",
+    "inst4arpdirection",
+    "inst4arporder",
+    "inst4arpvel",
+    "inst4arpreset",
+    "inst4arpnotesout",
+    "-",
+    "inst4midisend",
+    "-",
 
 
-            "inst6bank",
-            "inst6number",
-            "inst6channel",
-            "inst6volume",
-            "inst6transpose",
-            "inst6detune",
-            "inst6output",
-            "inst6status",
-            "inst6panning",
-            "inst6panmod",
-            "-",
-            "-",
-            "inst6lowvel",
-            "inst6hivel",
-            "inst6lowkey",
-            "inst6hikey",
-            "inst6arp",
-            "inst6arpclock",
-            "inst6arprange",
-            "inst6arppattern",
-            "inst6arpdirection",
-            "inst6arporder",
-            "inst6arpvel",
-            "inst6arpreset",
-            "inst6arpnotesout",
-            "-",
-            "inst6midisend",
-            "-",
+    "inst5bank",
+    "inst5number",
+    "inst5channel",
+    "inst5volume",
+    "inst5transpose",
+    "inst5detune",
+    "inst5output",
+    "inst5status",
+    "inst5panning",
+    "inst5panmod",
+    "-",
+    "-",
+    "inst5lowvel",
+    "inst5hivel",
+    "inst5lowkey",
+    "inst5hikey",
+    "inst5arp",
+    "inst5arpclock",
+    "inst5arprange",
+    "inst5arppattern",
+    "inst5arpdirection",
+    "inst5arporder",
+    "inst5arpvel",
+    "inst5arpreset",
+    "inst5arpnotesout",
+    "-",
+    "inst5midisend",
+    "-",
 
 
-            "inst7bank",
-            "inst7number",
-            "inst7channel",
-            "inst7volume",
-            "inst7transpose",
-            "inst7detune",
-            "inst7output",
-            "inst7status",
-            "inst7panning",
-            "inst7panmod",
-            "-",
-            "-",
-            "inst7lowvel",
-            "inst7hivel",
-            "inst7lowkey",
-            "inst7hikey",
-            "inst7arp",
-            "inst7arpclock",
-            "inst7arprange",
-            "inst7arppattern",
-            "inst7arpdirection",
-            "inst7arporder",
-            "inst7arpvel",
-            "inst7arpreset",
-            "inst7arpnotesout",
-            "-",
-            "inst7midisend",
-            "-",
+    "inst6bank",
+    "inst6number",
+    "inst6channel",
+    "inst6volume",
+    "inst6transpose",
+    "inst6detune",
+    "inst6output",
+    "inst6status",
+    "inst6panning",
+    "inst6panmod",
+    "-",
+    "-",
+    "inst6lowvel",
+    "inst6hivel",
+    "inst6lowkey",
+    "inst6hikey",
+    "inst6arp",
+    "inst6arpclock",
+    "inst6arprange",
+    "inst6arppattern",
+    "inst6arpdirection",
+    "inst6arporder",
+    "inst6arpvel",
+    "inst6arpreset",
+    "inst6arpnotesout",
+    "-",
+    "inst6midisend",
+    "-",
 
 
-            "inst8bank",
-            "inst8number",
-            "inst8channel",
-            "inst8volume",
-            "inst8transpose",
-            "inst8detune",
-            "inst8output",
-            "inst8status",
-            "inst8panning",
-            "inst8panmod",
-            "-",
-            "-",
-            "inst8lowvel",
-            "inst8hivel",
-            "inst8lowkey",
-            "inst8hikey",
-            "inst8arp",
-            "inst8arpclock",
-            "inst8arprange",
-            "inst8arppattern",
-            "inst8arpdirection",
-            "inst8arporder",
-            "inst8arpvel",
-            "inst8arpreset",
-            "inst8arpnotesout",
-            "-",
-            "inst8midisend",
-            "-"
+    "inst7bank",
+    "inst7number",
+    "inst7channel",
+    "inst7volume",
+    "inst7transpose",
+    "inst7detune",
+    "inst7output",
+    "inst7status",
+    "inst7panning",
+    "inst7panmod",
+    "-",
+    "-",
+    "inst7lowvel",
+    "inst7hivel",
+    "inst7lowkey",
+    "inst7hikey",
+    "inst7arp",
+    "inst7arpclock",
+    "inst7arprange",
+    "inst7arppattern",
+    "inst7arpdirection",
+    "inst7arporder",
+    "inst7arpvel",
+    "inst7arpreset",
+    "inst7arpnotesout",
+    "-",
+    "inst7midisend",
+    "-",
 
-        };
+
+    "inst8bank",
+    "inst8number",
+    "inst8channel",
+    "inst8volume",
+    "inst8transpose",
+    "inst8detune",
+    "inst8output",
+    "inst8status",
+    "inst8panning",
+    "inst8panmod",
+    "-",
+    "-",
+    "inst8lowvel",
+    "inst8hivel",
+    "inst8lowkey",
+    "inst8hikey",
+    "inst8arp",
+    "inst8arpclock",
+    "inst8arprange",
+    "inst8arppattern",
+    "inst8arpdirection",
+    "inst8arporder",
+    "inst8arpvel",
+    "inst8arpreset",
+    "inst8arpnotesout",
+    "-",
+    "inst8midisend",
+    "-"
+
+    };
 
 
 
     public byte[] emit(String key)
-    {
+        {
         if (key.equals("number")) return new byte[0];  // this is not emittable
         byte DEV = (byte)(getID());
              
         if (key.equals("-"))
             {
-                return new byte[0];
+            return new byte[0];
             }   
         if (key.equals("name"))
             {
-                byte[] bytes = new byte[16 * 9];
-                String name = model.get(key, "Init            ") + "                ";            
-                for(int i = 0; i < 16; i++)
-                    {
-                        int index = i;
-                        byte PP = (byte)(index & 127);
-                        byte XX = (byte)(name.charAt(i));
-                        byte LL = 0x20;
-                        if (index > 32)
-                            {
-                                // In Section 2.23 of sysex document, the locations are listed as going 1...7.
-                                // It's actually 0...7
-                
-                                LL = (byte)((index - 32) / 28);  // hope that's right
-                            }
-                        
-                        // In Section 2.23 of sysex document, MULP is declared to be 0x20, but then in the
-                        // format example, it's written as 0x21.  It's actually 0x21.
-                
-                        byte[] b = new byte[] { (byte)0xF0, 0x3E, 0x0E, DEV, 0x21, LL, PP, XX, (byte)0xF7 };
-                        System.arraycopy(b, 0, bytes, i * 9, 9);
-                    }
-                return bytes;
-            }
-        else
-            {
-                int index = ((Integer)(allParametersToIndex.get(key))).intValue();
-
+            byte[] bytes = new byte[16 * 9];
+            String name = model.get(key, "Init            ") + "                ";            
+            for(int i = 0; i < 16; i++)
+                {
+                int index = i;
                 byte PP = (byte)(index & 127);
-                if (index >= 32)  // uh oh, it's an instrument parameter, handle it specially
-                    {
-                        PP = (byte)(((Integer)(allInstrumentParametersToIndex.get(key))).intValue() & 127);
-                    }
-                
-                byte XX = (byte)model.get(key);
+                byte XX = (byte)(name.charAt(i));
                 byte LL = 0x20;
-                if (index >= 32)
+                if (index > 32)
                     {
-                        LL = (byte)((index - 32) / 28);  // hope that's right
+                    // In Section 2.23 of sysex document, the locations are listed as going 1...7.
+                    // It's actually 0...7
+                
+                    LL = (byte)((index - 32) / 28);  // hope that's right
                     }
-
+                        
                 // In Section 2.23 of sysex document, MULP is declared to be 0x20, but then in the
                 // format example, it's written as 0x21.  It's actually 0x21.
                 
-                return new byte[] { (byte)0xF0, 0x3E, 0x0E, DEV, 0x21, LL, PP, XX, (byte)0xF7 };
+                byte[] b = new byte[] { (byte)0xF0, 0x3E, 0x0E, DEV, 0x21, LL, PP, XX, (byte)0xF7 };
+                System.arraycopy(b, 0, bytes, i * 9, 9);
+                }
+            return bytes;
             }
-    }
+        else
+            {
+            int index = ((Integer)(allParametersToIndex.get(key))).intValue();
+
+            byte PP = (byte)(index & 127);
+            if (index >= 32)  // uh oh, it's an instrument parameter, handle it specially
+                {
+                PP = (byte)(((Integer)(allInstrumentParametersToIndex.get(key))).intValue() & 127);
+                }
+                
+            byte XX = (byte)model.get(key);
+            byte LL = 0x20;
+            if (index >= 32)
+                {
+                LL = (byte)((index - 32) / 28);  // hope that's right
+                }
+
+            // In Section 2.23 of sysex document, MULP is declared to be 0x20, but then in the
+            // format example, it's written as 0x21.  It's actually 0x21.
+                
+            return new byte[] { (byte)0xF0, 0x3E, 0x0E, DEV, 0x21, LL, PP, XX, (byte)0xF7 };
+            }
+        }
     
     
     
     
     public byte[] emit(Model tempModel, boolean toWorkingMemory, boolean toFile)
-    {
+        {
         if (tempModel == null)
             tempModel = getModel();
             
@@ -895,20 +895,20 @@ public class WaldorfMicrowaveXTMulti extends Synth
         
         for(int i = 0; i < 256; i++)
             {
-                String key = allParameters[i];
+            String key = allParameters[i];
 
-                if (key.equals("-"))
-                    {
-                        bytes[i] = 0;
-                    }
-                else if (key.equals("name"))
-                    {
-                        bytes[i] = (byte)(name.charAt(i - 16));
-                    }
-                else
-                    {
-                        bytes[i] = (byte)(model.get(key));
-                    }
+            if (key.equals("-"))
+                {
+                bytes[i] = 0;
+                }
+            else if (key.equals("name"))
+                {
+                bytes[i] = (byte)(name.charAt(i - 16));
+                }
+            else
+                {
+                bytes[i] = (byte)(model.get(key));
+                }
             }
                         
         // In Section 2.22 of sysex document, MULD is declared to be 0x21, but then in the
@@ -929,12 +929,12 @@ public class WaldorfMicrowaveXTMulti extends Synth
         full[264] = (byte)0xF7;
 
         return full;
-    }
+        }
 
 
     /** Generate a Waldorf checksum of the data bytes */
     byte produceChecksum(byte bb, byte nn, byte[] bytes)
-    {
+        {
         //      From the sysex document:
         //
         //      "Sum of all databytes truncated to 7 bits.
@@ -963,11 +963,11 @@ public class WaldorfMicrowaveXTMulti extends Synth
         b = (byte)(b & (byte)127);
         
         return b;
-    }
+        }
 
 
     public byte[] requestDump(Model tempModel)
-    {
+        {
         // In Section 2.21 of sysex document, MULR is declared to be 0x11, but then in the
         // format example, it's written as 0x01.  It's actually 0x01.
                 
@@ -979,17 +979,17 @@ public class WaldorfMicrowaveXTMulti extends Synth
         byte NN = (byte)tempModel.get("number");
         //(BB + NN)&127 is checksum
         return new byte[] { (byte)0xF0, 0x3E, 0x0E, DEV, 0x01, BB, NN, (byte)((BB + NN)&127), (byte)0xF7 };
-    }
+        }
         
     public byte[] requestCurrentDump()
-    {
+        {
         // In Section 2.21 of sysex document, MULR is declared to be 0x11, but then in the
         // format example, it's written as 0x01.  It's actually 0x01.
                 
         byte DEV = (byte)(getID());
         //(0x75 + 0x00)&127 is checksum
         return new byte[] { (byte)0xF0, 0x3E, 0x0E, DEV, 0x01, 0x20, 0x00, (byte)((0x20 + 0x00)&127), (byte)0xF7 };
-    }
+        }
 
     public static final int EXPECTED_SYSEX_LENGTH = 265;
         
@@ -998,7 +998,7 @@ public class WaldorfMicrowaveXTMulti extends Synth
 
     public static final int MAXIMUM_NAME_LENGTH = 16;
     public String revisePatchName(String name)
-    {
+        {
         name = super.revisePatchName(name);  // trim first time
         if (name.length() > MAXIMUM_NAME_LENGTH)
             name = name.substring(0, MAXIMUM_NAME_LENGTH);
@@ -1006,20 +1006,20 @@ public class WaldorfMicrowaveXTMulti extends Synth
         StringBuffer nameb = new StringBuffer(name);                            
         for(int i = 0 ; i < nameb.length(); i++)
             {
-                char c = nameb.charAt(i);
-                if (c < 32 || c > 127)
-                    nameb.setCharAt(i, ' ');
+            char c = nameb.charAt(i);
+            if (c < 32 || c > 127)
+                nameb.setCharAt(i, ' ');
             }
         name = nameb.toString();
         return super.revisePatchName(name);  // trim again
-    }
+        }
 
         
         
 
     /** Verify that all the parameters are within valid values, and tweak them if not. */
     public void revise()
-    {
+        {
         // check the easy stuff -- out of range parameters
         super.revise();
 
@@ -1027,44 +1027,44 @@ public class WaldorfMicrowaveXTMulti extends Synth
         String newnm = revisePatchName(nm);
         if (!nm.equals(newnm))
             model.set("name", newnm);
-    }
+        }
         
 
 
 
 
     public void setParameterByIndex(int i, byte b)
-    {
+        {
         String key = allParameters[i];
         if (key.equals("-"))
             {
-                // do nothing
+            // do nothing
             }
         else if (i >= 16 && i < 32)  // name
             {
-                try 
-                    {
-                        String name = model.get("name", "Init            ") + "                ";;
-                        byte[] str = name.getBytes("US-ASCII");
-                        byte[] newstr = new byte[] { 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20 };
-                        System.arraycopy(str, 0, newstr, 0, 16);
-                        newstr[i - 16] = b;
-                        model.set("name", new String(newstr, "US-ASCII"));
-                    }
-                catch (UnsupportedEncodingException e)
-                    {
-                        Synth.handleException(e); 
-                    }
+            try 
+                {
+                String name = model.get("name", "Init            ") + "                ";;
+                byte[] str = name.getBytes("US-ASCII");
+                byte[] newstr = new byte[] { 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20 };
+                System.arraycopy(str, 0, newstr, 0, 16);
+                newstr[i - 16] = b;
+                model.set("name", new String(newstr, "US-ASCII"));
+                }
+            catch (UnsupportedEncodingException e)
+                {
+                Synth.handleException(e); 
+                }
             }
         else
             {
-                model.set(key, b);
+            model.set(key, b);
             }
-    }
+        }
 
         
     public void parseParameter(byte[] data)
-    {
+        {
         int index = -1;
         byte b = 0;
                 
@@ -1083,92 +1083,92 @@ public class WaldorfMicrowaveXTMulti extends Synth
             data[5] == 0x00 &&  // only Sound Mode Edit Bufer
             data.length == 9)
             {
-                int hi = (int)(data[6] & 127);
-                int lo = (int)(data[7] & 127);
+            int hi = (int)(data[6] & 127);
+            int lo = (int)(data[7] & 127);
              
-                index = (hi << 7) | (lo);
-                b = (byte)(data[8] & 127);
-                setParameterByIndex(index, b);
+            index = (hi << 7) | (lo);
+            b = (byte)(data[8] & 127);
+            setParameterByIndex(index, b);
             }
         else
             {
-                // we'll put CC here later
+            // we'll put CC here later
             }
         revise();
-    }
+        }
         
 
     public int parse(byte[] data, boolean fromFile)
-    {
+        {
         // In Section 2.22 of sysex document, MULD is declared to be 0x21, but then in the
         // format example, it's written as 0x11.  It's actually 0x11, though we don't check for it here.
                 
         boolean retval = true;
         if (data[5] < 8)  // or < 1 ? Anyway, otherwise it's probably just local patch data.  Too bad they do this. :-(
             {
-                model.set("number", data[6]);
+            model.set("number", data[6]);
             }
         else
             {
-                retval = false;
+            retval = false;
             }
 
         for(int i = 0; i < 255; i++)
             {
-                setParameterByIndex(i, data[i + 7]);
+            setParameterByIndex(i, data[i + 7]);
             }
         revise();  
         updateMode();
         return PARSE_SUCCEEDED;   
-    }
+        }
 
     public static String getSynthName() { return "Waldorf Microwave II/XT/XTk [Multi]"; }
     
     public String getPatchName(Model model) { return model.get("name", "Init Sound V1.1 "); }
 
     public byte getID() 
-    { 
+        { 
         try 
             { 
-                byte b = (byte)(Byte.parseByte(tuple.id));
-                if (b >= 0) return b;
+            byte b = (byte)(Byte.parseByte(tuple.id));
+            if (b >= 0) return b;
             }
         catch (NullPointerException e) { } // expected.  Happens when tuple's not built yet
         catch (NumberFormatException e) { Synth.handleException(e); }
         return 0;
-    }
+        }
         
     public String reviseID(String id)
-    {
+        {
         try 
             { 
-                byte b =(byte)(Byte.parseByte(id)); 
-                if (b >= 0) return "" + b;
+            byte b =(byte)(Byte.parseByte(id)); 
+            if (b >= 0) return "" + b;
             } 
         catch (NumberFormatException e) { }             // expected
         return "" + getID();
-    }
+        }
                 
 
     public Model getNextPatchLocation(Model model)
-    {
+        {
         int number = model.get("number");
         
         number++;
         if (number >= 128)
             {
-                number = 0;
+            number = 0;
             }
                 
         Model newModel = buildModel();
         newModel.set("number", number);
         return newModel;
-    }
+        }
 
     public int getBatchDownloadWaitTime() { return 1000; }
 
     public String getPatchLocationName(Model model)
-    {
+        {
         // getPatchLocationName() is called from sprout() as a test to see if we should enable
         // batch downloading.  If we haven't yet created an .init file, then parameters won't exist
         // yet and this method will bomb badly.  So we return null in this case.
@@ -1176,10 +1176,10 @@ public class WaldorfMicrowaveXTMulti extends Synth
         
         int number = model.get("number") + 1;
         return "M" + ( number > 99 ? "" : (number > 9 ? "0" : "00")) + number;
-    }
+        }
 
     public boolean getSendsParametersAfterNonMergeParse()
-    {
+        {
         return true;
+        }
     }
-}

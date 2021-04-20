@@ -40,7 +40,7 @@ import java.util.*;
 */
 
 public class Main
-{
+    {
     /** Argument type FLAG: bare arguments such as -n or --foo */
     public static final String FLAG =       "[flag]  ";
     /** Argument type INT: integer arguments such as -n 4 or --foo 32 */
@@ -70,77 +70,77 @@ public class Main
         will be incorrectly reported as not existing.
     */
     public boolean hasFlag(String arg)
-    {
+        {
         String val = (String)(arguments.get(arg));
         return (val != null && val.equals(arg));
-    }
+        }
                 
     /** 
         Returns the value of the given argument as an int.
         The argument must have a type of INT.
     */
     public int getInt(String arg, int _default)
-    {
+        {
         Integer i = (Integer)(arguments.get(arg));
         if (i == null) return _default;
         else return i;
-    }
+        }
 
     /** 
         Returns the value of the given argument as a double.
         The argument must have a type of DOUBLE.
     */
     public double getDouble(String arg, double _default)
-    {
+        {
         Double d = (Double)(arguments.get(arg));
         if (d == null) return _default;
         else return d;
-    }
+        }
 
     /** 
         Returns the value of the given argument as a String.
         The argument must have a type of STRING.
     */
     public String getString(String arg)
-    {
+        {
         return (String)(arguments.get(arg));
-    }
+        }
                 
     /** 
         Returns all unnamed arguments in order.
     */
     public ArrayList<String> getRest() 
-    { 
+        { 
         return rest; 
-    }
+        }
         
     /** 
         Prints command-line usage.  <b>preamble</b> the text printed at the beginning: typically it's an error message but can be null or empty.
         <b>quit</b> indicates whether we should System.exit(1) after printing out the usage. 
     */
     public void printCommandFormat(String preamble, boolean quit)
-    {
+        {
         if (preamble != null) System.err.println(preamble);
         System.err.println("\nUsage:  " + 
-                           (name == null ? "" : name) + 
-                           (commands.length == 0 ? "" : " [ARGUMENTS] " + 
-                            (restDescription == null ? "" : restDescription)));
+            (name == null ? "" : name) + 
+                (commands.length == 0 ? "" : " [ARGUMENTS] " + 
+                (restDescription == null ? "" : restDescription)));
         if (commands.length != 0)
             {
-                System.err.println("\nArguments:");
-                for(int j = 0; j < commands.length; j++)
-                    System.err.println("\t" + commands[j] + 
-                                       (FLAG.equals(types[j]) ? "\t         \t" : "\t" + types[j] + " \t") +
-                                       descriptions[j]);
+            System.err.println("\nArguments:");
+            for(int j = 0; j < commands.length; j++)
+                System.err.println("\t" + commands[j] + 
+                    (FLAG.equals(types[j]) ? "\t         \t" : "\t" + types[j] + " \t") +
+                    descriptions[j]);
             }
         if (helpFlag)
             {
-                System.err.println("\t-h\t         \tShows this usage text");
+            System.err.println("\t-h\t         \tShows this usage text");
             }
         if (postamble != null) System.err.println("\n" + postamble + "\n");
         if (quit) System.exit(1);
 
-    }
+        }
 
     /** 
         Parses a command line and builds the database with no named arguments or postamble.  "-h" is presumed to bring up the argument usage and quit. 
@@ -153,9 +153,9 @@ public class Main
     */              
 
     public Main(String name, String[] args, String restDescription)
-    {
+        {
         this(name, args, restDescription, new String[0], new String[0], new String[0], null, true);
-    }
+        }
                 
     /** 
         Parses a command line and builds the database with no named arguments.  "-h" is presumed to bring up the argument usage and quit. 
@@ -169,9 +169,9 @@ public class Main
     */              
 
     public Main(String name, String[] args, String restDescription, String postamble)
-    {
+        {
         this(name, args, restDescription, new String[0], new String[0], new String[0], postamble, true);
-    }
+        }
 
     /** 
         Parses a command line and builds the database with no postamble.  "-h" is presumed to bring up the argument usage and quit. 
@@ -188,9 +188,9 @@ public class Main
     */              
 
     public Main(String name, String[] args, String restDescription, String[] commands, String[] types, String[] descriptions)
-    {
+        {
         this(name, args, restDescription, commands, types, descriptions, null, true);
-    }
+        }
 
     /** 
         Parses a command line and builds the database.  You provide:
@@ -208,7 +208,7 @@ public class Main
     */              
                 
     public Main(String name, String[] args, String restDescription, String[] commands, String[] types, String[] descriptions, String postamble, boolean helpFlag)
-    {
+        {
         this.name = name;
         this.args = args;
         this.restDescription = restDescription;
@@ -224,54 +224,54 @@ public class Main
         // nearly my entire life I've not needed an outer jump. But here it's useful!
         argsfor: for(int i = 0; i < args.length; i++)
             {
-                if (helpFlag && args[i].equals("-h"))
-                    {
-                        printCommandFormat(null, true);
-                    }
+            if (helpFlag && args[i].equals("-h"))
+                {
+                printCommandFormat(null, true);
+                }
                         
-                for(int j = 0; j < commands.length; j++)
+            for(int j = 0; j < commands.length; j++)
+                {
+                if (args[i].equals(commands[j]))  // got it
                     {
-                        if (args[i].equals(commands[j]))  // got it
+                    if (this.arguments.containsKey(commands[j]))
+                        printCommandFormat("Duplicate argument " + args[i], true);
+                    else if (inRest)  // uh oh
+                        printCommandFormat("Invalid location for argument " + args[i], true);
+                    else
+                        {
+                        try
                             {
-                                if (this.arguments.containsKey(commands[j]))
-                                    printCommandFormat("Duplicate argument " + args[i], true);
-                                else if (inRest)  // uh oh
-                                    printCommandFormat("Invalid location for argument " + args[i], true);
-                                else
-                                    {
-                                        try
-                                            {
-                                                if (FLAG.equals(types[j]))
-                                                    this.arguments.put(args[i], args[i]);
-                                                else if (i == args.length - 1)          // notice this is AFTER checking for FLAG
-                                                    printCommandFormat("Missing value for argument " + args[i], true);
-                                                else if (INT.equals(types[j]))
-                                                    this.arguments.put(args[i], Integer.valueOf(args[++i]));
-                                                else if (DOUBLE.equals(types[j]))
-                                                    this.arguments.put(args[i], Double.valueOf(args[++i]));
-                                                else if (STRING.equals(types[j]))
-                                                    this.arguments.put(args[i], args[++i]);
-                                                else 
-                                                    throw new RuntimeException("Internal error, unknown type " + types[i]);
-                                            }
-                                        catch (NumberFormatException e)
-                                            {
-                                                printCommandFormat("Improper format for value of argument " + args[i - 1] + " (" + args[i] + ")", true);
-                                            }
-                                    }
-                                continue argsfor;
+                            if (FLAG.equals(types[j]))
+                                this.arguments.put(args[i], args[i]);
+                            else if (i == args.length - 1)          // notice this is AFTER checking for FLAG
+                                printCommandFormat("Missing value for argument " + args[i], true);
+                            else if (INT.equals(types[j]))
+                                this.arguments.put(args[i], Integer.valueOf(args[++i]));
+                            else if (DOUBLE.equals(types[j]))
+                                this.arguments.put(args[i], Double.valueOf(args[++i]));
+                            else if (STRING.equals(types[j]))
+                                this.arguments.put(args[i], args[++i]);
+                            else 
+                                throw new RuntimeException("Internal error, unknown type " + types[i]);
                             }
+                        catch (NumberFormatException e)
+                            {
+                            printCommandFormat("Improper format for value of argument " + args[i - 1] + " (" + args[i] + ")", true);
+                            }
+                        }
+                    continue argsfor;
                     }
-                if (i < args.length)    // this could happen if the above parsing incremented i
+                }
+            if (i < args.length)    // this could happen if the above parsing incremented i
+                {
+                if (args[i].startsWith("-")) // uh oh
                     {
-                        if (args[i].startsWith("-")) // uh oh
-                            {
-                                System.err.println("Warning, possible misplaced or invalid argument " + args[i]);
-                            }
-                        rest.add(args[i]);
-                        inRest = true;
+                    System.err.println("Warning, possible misplaced or invalid argument " + args[i]);
                     }
+                rest.add(args[i]);
+                inRest = true;
+                }
             }
+        }
     }
-}
         

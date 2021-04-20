@@ -7,17 +7,17 @@ package edisyn.synth.waldorfblofeld;
 import edisyn.*;
 
 public class WaldorfBlofeldMultiRec extends Recognize
-{
-    public static boolean recognize(byte[] data)
     {
+    public static boolean recognize(byte[] data)
+        {
         boolean v = (
-                     data.length == EXPECTED_SYSEX_LENGTH &&
-                     data[0] == (byte)0xF0 &&
-                     data[1] == (byte)0x3E &&
-                     data[2] == (byte)0x13 &&
-                     data[4] == (byte)0x11);
+            data.length == EXPECTED_SYSEX_LENGTH &&
+            data[0] == (byte)0xF0 &&
+            data[1] == (byte)0x3E &&
+            data[2] == (byte)0x13 &&
+            data[4] == (byte)0x11);
         return v;
-    }
+        }
         
     public static final int EXPECTED_SYSEX_LENGTH = 425;
-}
+    }

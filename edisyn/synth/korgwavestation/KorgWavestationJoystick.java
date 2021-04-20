@@ -17,13 +17,13 @@ import java.io.*;
 import javax.sound.midi.*;
 
 public class KorgWavestationJoystick extends Joystick implements Updatable
-{
+    {
     public String[] keysAC;
     public String[] keysBD;
         
         
     public KorgWavestationJoystick(Synth synth, String[] ac, String[] bd)
-    {
+        {
         super(synth);
         keysAC = ac;
         keysBD = bd;
@@ -31,29 +31,29 @@ public class KorgWavestationJoystick extends Joystick implements Updatable
             synth.getModel().register(keysAC[i], this);
         for(int i = 0; i < keysBD.length; i++)
             synth.getModel().register(keysBD[i], this);
-    }
+        }
         
     // The mouseDown and mouseUp code here enables us to only do undo()
     // ONCE.
     public void mouseDown()
-    {
+        {
         if (!realtime)
             {
-                synth.getUndo().push(synth.getModel());
-                synth.getUndo().setWillPush(false);
+            synth.getUndo().push(synth.getModel());
+            synth.getUndo().setWillPush(false);
             }
-    }
+        }
 
     public void mouseUp()
-    {
+        {
         if (!realtime)
             {
-                synth.getUndo().setWillPush(true);
+            synth.getUndo().setWillPush(true);
             }
-    }
+        }
 
     public void prepaint(Graphics2D g)
-    {
+        {
         super.prepaint(g);
         
         g.setColor(Style.DIAL_UNSET_COLOR());
@@ -65,33 +65,33 @@ public class KorgWavestationJoystick extends Joystick implements Updatable
 
         if (!realtime)
             {
-                for(int i = 0; i < xPositions.length - 1; i++)
-                    {
-                        double centerX = (xPositions[i] + 1) / 2 * (getWidth() - margin * 2) + margin;
-                        double centerY = (yPositions[i] + 1) / 2 * (getHeight() - margin * 2) + margin;
+            for(int i = 0; i < xPositions.length - 1; i++)
+                {
+                double centerX = (xPositions[i] + 1) / 2 * (getWidth() - margin * 2) + margin;
+                double centerY = (yPositions[i] + 1) / 2 * (getHeight() - margin * 2) + margin;
 
-                        double centerX2 = (xPositions[i + 1] + 1) / 2 * (getWidth() - margin * 2) + margin;
-                        double centerY2 = (yPositions[i + 1] + 1) / 2 * (getHeight() - margin * 2) + margin;
+                double centerX2 = (xPositions[i + 1] + 1) / 2 * (getWidth() - margin * 2) + margin;
+                double centerY2 = (yPositions[i + 1] + 1) / 2 * (getHeight() - margin * 2) + margin;
 
-                        g.setColor(colors[i]);
-                        g.draw(new Line2D.Double(centerX, centerY, (centerX + centerX2)/2.0, (centerY + centerY2)/2.0));
-                        g.setColor(colors[i + 1]);
-                        g.draw(new Line2D.Double(centerX2, centerY2, (centerX + centerX2)/2.0, (centerY + centerY2)/2.0));
-                    }
+                g.setColor(colors[i]);
+                g.draw(new Line2D.Double(centerX, centerY, (centerX + centerX2)/2.0, (centerY + centerY2)/2.0));
+                g.setColor(colors[i + 1]);
+                g.draw(new Line2D.Double(centerX2, centerY2, (centerX + centerX2)/2.0, (centerY + centerY2)/2.0));
+                }
             }
-    }
+        }
 
     public void revisePosition(MouseEvent e)
-    {
+        {
         super.revisePosition(e);
         double[] bounds = boundJoystick(xPos, yPos);
         xPositions[position] = bounds[0];
         yPositions[position] = bounds[1];
-    }
+        }
 
     boolean updating = false;
     public void updatePosition()
-    {
+        {
         super.updatePosition();
         
         int x = (int)Math.round((xPos + 1.0) * 128);
@@ -101,72 +101,72 @@ public class KorgWavestationJoystick extends Joystick implements Updatable
 
         if (realtime)
             {
-                synth.tryToSendMIDI(synth.concatenate(
-                                                      synth.buildCC(synth.getChannelOut(), 16, x / 2),
-                                                      synth.buildCC(synth.getChannelOut(), 17, y / 2)));
+            synth.tryToSendMIDI(synth.concatenate(
+                    synth.buildCC(synth.getChannelOut(), 16, x / 2),
+                    synth.buildCC(synth.getChannelOut(), 17, y / 2)));
             }
         else
             {
-                updating = true;
-                synth.getModel().set(keysAC[position], x);
-                synth.getModel().set(keysBD[position], y);
-                updating = false;
+            updating = true;
+            synth.getModel().set(keysAC[position], x);
+            synth.getModel().set(keysBD[position], y);
+            updating = false;
             }
-    }
+        }
     
     public double[] oldXPositions;
     public double[] oldYPositions;
     public Color[] oldColors;
     boolean realtime;
     public void setRealtime(boolean val)
-    {
+        {
         if (val)
             {
-                oldXPositions = xPositions;
-                oldYPositions = yPositions;
-                oldColors = colors;
-                setNumPositions(new Color[] { Color.ORANGE });
-                realtime = true;
+            oldXPositions = xPositions;
+            oldYPositions = yPositions;
+            oldColors = colors;
+            setNumPositions(new Color[] { Color.ORANGE });
+            realtime = true;
             }
         else
             {
-                setNumPositions(oldColors);
-                xPositions = oldXPositions;
-                yPositions = oldYPositions;
-                realtime = false;
+            setNumPositions(oldColors);
+            xPositions = oldXPositions;
+            yPositions = oldYPositions;
+            realtime = false;
             }
         repaint();
-    }
+        }
         
         
     public void updateAll()
-    {
+        {
         for(int i = 0; i < keysAC.length; i++)
             {
-                update(keysAC[i], synth.getModel());  // no need to update BD, it's automatic
+            update(keysAC[i], synth.getModel());  // no need to update BD, it's automatic
             }
-    }
+        }
                 
     public void update(String key, Model model)
-    {
+        {
         if (!updating)
             {
-                for(int i = 0; i < xPositions.length; i++)
+            for(int i = 0; i < xPositions.length; i++)
+                {
+                if (keysAC[i].equals(key) || keysBD[i].equals(key))
                     {
-                        if (keysAC[i].equals(key) || keysBD[i].equals(key))
-                            {
-                                xPositions[i] = model.get(keysAC[i]) / 127.0 - 1.0;
-                                yPositions[i] = 0.0 - (model.get(keysBD[i]) / 127.0 - 1.0);
-                                double[] d = boundJoystick(xPositions[i], yPositions[i]);
-                                xPositions[i] = d[0];
-                                yPositions[i] = d[1];
+                    xPositions[i] = model.get(keysAC[i]) / 127.0 - 1.0;
+                    yPositions[i] = 0.0 - (model.get(keysBD[i]) / 127.0 - 1.0);
+                    double[] d = boundJoystick(xPositions[i], yPositions[i]);
+                    xPositions[i] = d[0];
+                    yPositions[i] = d[1];
 
-                                repaint();
-                                return;
-                            }
+                    repaint();
+                    return;
                     }
+                }
             }
-    }
+        }
 
     // forces a square.  Stolen and modified from
     // https://stackoverflow.com/questions/3489641/forcing-a-jcomponent-to-be-square-when-being-resized
@@ -178,21 +178,21 @@ public class KorgWavestationJoystick extends Joystick implements Updatable
             if (currentWidth!=width && currentHeight!=height) {  
                 // both changed, set size to max
                 width = height = Math.min(width, height);
-            }
+                }
             else if (currentWidth==width) {
                 // height changed, make width the same
                 width = height;
-            }
+                }
             else // currentHeight==height
                 height = width;
-        }
+            }
         super.setBounds(x, y, width, height);
-    }
+        }
 
 
     // top right quadrant only
     double[] boundCanonical(double x, double y)
-    {
+        {
         // first deal with infinite slope
         if (x == 0 && y >= 0)
             return new double[] { x, Math.min(y, 1) };
@@ -207,37 +207,37 @@ public class KorgWavestationJoystick extends Joystick implements Updatable
             return new double[] { x2, y2 };
         else
             return new double[] { x, y };
-    }
+        }
 
     public double[] boundJoystick(double x, double y)
-    {
+        {
         double[] d = null;
         if (x >= 0)
             {
-                if (y >= 0)
-                    {
-                        d = boundCanonical(x, y);
-                    }
-                else 
-                    {
-                        d = boundCanonical(x, -y);
-                        d[1] = -d[1];
-                    }
+            if (y >= 0)
+                {
+                d = boundCanonical(x, y);
+                }
+            else 
+                {
+                d = boundCanonical(x, -y);
+                d[1] = -d[1];
+                }
             }
         else
             {
-                if (y >= 0)
-                    {
-                        d = boundCanonical(-x, y);
-                        d[0] = -d[0];
-                    }
-                else
-                    {
-                        d = boundCanonical(-x, -y);
-                        d[0] = -d[0];
-                        d[1] = -d[1];
-                    }
+            if (y >= 0)
+                {
+                d = boundCanonical(-x, y);
+                d[0] = -d[0];
+                }
+            else
+                {
+                d = boundCanonical(-x, -y);
+                d[0] = -d[0];
+                d[1] = -d[1];
+                }
             }
         return d;
+        }
     }
-}

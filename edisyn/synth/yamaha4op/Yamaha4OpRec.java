@@ -7,42 +7,42 @@ package edisyn.synth.yamaha4op;
 import edisyn.*;
 
 public class Yamaha4OpRec extends Recognize
-{
-    public static int getNextSysexPatchGroup(byte[][] sysex, int start)
     {
+    public static int getNextSysexPatchGroup(byte[][] sysex, int start)
+        {
         if (recognizeBank(sysex[start]))
             return start + 1;
                 
         for(int i = start; i < sysex.length; i++)
             {
-                int rec = recognizeBasic(sysex[i]);
-                // We're looking for VCED               
-                if (rec == RECOGNIZE_BASIC_VCED)        
-                    {
-                        return i + 1;  // all done
-                    }
-                else if (rec == RECOGNIZE_BASIC_NONE) // uh oh
-                    {
-                        return start;
-                    }
+            int rec = recognizeBasic(sysex[i]);
+            // We're looking for VCED               
+            if (rec == RECOGNIZE_BASIC_VCED)        
+                {
+                return i + 1;  // all done
+                }
+            else if (rec == RECOGNIZE_BASIC_NONE) // uh oh
+                {
+                return start;
+                }
             }
         // if we're here we never found VCED
         return start;
-    }
+        }
 
 
     public static boolean recognizeBank(byte[] data)
-    {
+        {
         // VMEM
         boolean b = (data.length == 4104 &&
-                     data[0] == (byte)0xF0 &&
-                     data[1] == (byte)0x43 &&
-                     // don't care about 2, it's the channel
-                     data[3] == (byte)0x04 &&
-                     data[4] == (byte)0x20 &&        // manual says 10 but this is wrong
-                     data[5] == (byte)0x00);
+            data[0] == (byte)0xF0 &&
+            data[1] == (byte)0x43 &&
+            // don't care about 2, it's the channel
+            data[3] == (byte)0x04 &&
+            data[4] == (byte)0x20 &&        // manual says 10 but this is wrong
+            data[5] == (byte)0x00);
         return b;
-    }
+        }
 
     // returns a guess as to the number of sysex commands this file is trying to load per patch.
     // Or if we don't recognize it, then 0
@@ -55,7 +55,7 @@ public class Yamaha4OpRec extends Recognize
     public static final int RECOGNIZE_BASIC_NONE = 0;
         
     static int recognizeBasic(byte[] data)
-    {
+        {
         // ACED3
         if (data.length >= 38 &&
             data[0] == (byte)0xF0 &&
@@ -151,10 +151,10 @@ public class Yamaha4OpRec extends Recognize
             return 1;                                   // VCED alone
 
         else return 0;
-    }
+        }
         
     public static boolean recognize(byte[] data)
-    {
+        {
         return (recognizeBasic(data) != RECOGNIZE_BASIC_NONE) || recognizeBank(data);
+        }
     }
-}

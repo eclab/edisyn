@@ -24,7 +24,7 @@ import edisyn.util.*;                                                           
 */
 
 public class KawaiK5 extends Synth
-{
+    {
     /// Various collections of parameter names for pop-up menus
         
     public static final String[] BANKS = { "SIA", "SIB", "SIC", "SID", "SEA", "SEB", "SEC", "SED" };
@@ -79,10 +79,10 @@ public class KawaiK5 extends Synth
     
     
     public KawaiK5()
-    {
+        {
         for(int i = 0; i < parameters.length; i++)
             {
-                parametersToIndex.put(parameters[i], Integer.valueOf(paramNumbers[i]));
+            parametersToIndex.put(parameters[i], Integer.valueOf(paramNumbers[i]));
             }
 
         /// SOUND PANEL
@@ -228,11 +228,11 @@ public class KawaiK5 extends Synth
         model.setStatus("constrainmodharmonics", model.STATUS_IMMUTABLE);
         
         loadDefaults();        
-    }
+        }
                 
                 
     public JFrame sprout()
-    {
+        {
         JFrame frame = super.sprout();
         // We can't request the current working memory (don't ask why)
         receiveCurrent.setEnabled(false);
@@ -242,13 +242,13 @@ public class KawaiK5 extends Synth
 
         addK5Menu();
         return frame;
-    }         
+        }         
 
     public String getDefaultResourceFileName() { return "KawaiK5.init"; }
     public String getHTMLResourceFileName() { return "KawaiK5.html"; }
 
     public boolean gatherPatchInfo(String title, Model change, boolean writing)
-    {
+        {
         JComboBox bank = new JComboBox(BANKS);
         bank.setSelectedIndex(model.get("bank"));
         
@@ -256,35 +256,35 @@ public class KawaiK5 extends Synth
 
         while(true)
             {
-                boolean result = showMultiOption(this, new String[] { "Bank", "Patch Number"}, 
-                                                 new JComponent[] { bank, number }, title, "Enter the Bank and Patch number");
+            boolean result = showMultiOption(this, new String[] { "Bank", "Patch Number"}, 
+                new JComponent[] { bank, number }, title, "Enter the Bank and Patch number");
                 
-                if (result == false) 
-                    return false;
+            if (result == false) 
+                return false;
                                 
-                int n;
-                try { n = Integer.parseInt(number.getText()); }
-                catch (NumberFormatException e)
-                    {
-                        showSimpleError(title, "The Patch Number must be an integer 1...12");
-                        continue;
-                    }
-                if (n < 1 || n > 12)
-                    {
-                        showSimpleError(title, "The Patch Number must be an integer 1...12");
-                        continue;
-                    }
+            int n;
+            try { n = Integer.parseInt(number.getText()); }
+            catch (NumberFormatException e)
+                {
+                showSimpleError(title, "The Patch Number must be an integer 1...12");
+                continue;
+                }
+            if (n < 1 || n > 12)
+                {
+                showSimpleError(title, "The Patch Number must be an integer 1...12");
+                continue;
+                }
                 
-                n--;
+            n--;
                                 
-                int i = bank.getSelectedIndex();
+            int i = bank.getSelectedIndex();
                         
-                change.set("bank", i);
-                change.set("number", n);
+            change.set("bank", i);
+            change.set("number", n);
                         
-                return true;
+            return true;
             }
-    }
+        }
         
     HBox[] harmonics = new HBox[2];
     JComponent[] harmonicsSources = new JComponent[4];
@@ -292,7 +292,7 @@ public class KawaiK5 extends Synth
         
     /** Add the global patch category (name, id, number, etc.) */
     public JComponent addNameGlobal(Color color)
-    {
+        {
         Category globalCategory = new Category(this, getSynthName(), color);
         //globalCategory.makeUnresettable();
                 
@@ -308,15 +308,15 @@ public class KawaiK5 extends Synth
         
         comp = new StringComponent("Patch Name", this, "name", MAXIMUM_NAME_LENGTH, "Name must be up to " + MAXIMUM_NAME_LENGTH + " ASCII characters.")
             {
-                public String replace(String val)
+            public String replace(String val)
                 {
-                    return revisePatchName(val);
+                return revisePatchName(val);
                 }
                                 
-                public void update(String key, Model model)
+            public void update(String key, Model model)
                 {
-                    super.update(key, model);
-                    updateTitle();
+                super.update(key, model);
+                updateTitle();
                 }
             };
         vbox.addBottom(comp);  // doesn't work right :-(
@@ -332,21 +332,21 @@ public class KawaiK5 extends Synth
         vbox = new VBox();
         comp = new CheckBox("Full Mode", this, "mode")
             {
-                public void update(String key, Model model)
+            public void update(String key, Model model)
                 {
-                    super.update(key, model);
-                    // only do this if they've already been established
-                    if (harmonics[0] != null)
-                        {
-                            harmonics[0].removeLast();
-                            harmonics[0].addLast(model.get(key, 0) == 1 ? harmonicsSources[0] : harmonicsSources[2]); 
-                            harmonics[0].revalidate();
-                            harmonics[0].repaint();
-                            harmonics[1].removeLast();
-                            harmonics[1].addLast(model.get(key, 0) == 1 ? harmonicsSources[1] : harmonicsSources[3]); 
-                            harmonics[1].revalidate();
-                            harmonics[1].repaint();
-                        }
+                super.update(key, model);
+                // only do this if they've already been established
+                if (harmonics[0] != null)
+                    {
+                    harmonics[0].removeLast();
+                    harmonics[0].addLast(model.get(key, 0) == 1 ? harmonicsSources[0] : harmonicsSources[2]); 
+                    harmonics[0].revalidate();
+                    harmonics[0].repaint();
+                    harmonics[1].removeLast();
+                    harmonics[1].addLast(model.get(key, 0) == 1 ? harmonicsSources[1] : harmonicsSources[3]); 
+                    harmonics[1].revalidate();
+                    harmonics[1].repaint();
+                    }
                 }
             };
         model.set("mode", 1);
@@ -370,10 +370,10 @@ public class KawaiK5 extends Synth
 
         globalCategory.add(hbox, BorderLayout.WEST);
         return globalCategory;
-    }
+        }
         
     public JComponent addBasic(int source, Color color)
-    {
+        {
         Category category = new Category(this, "Basic Edit", color);
         //        category.makePasteable("s" + source + "basic");
         category.makePasteable("s");
@@ -405,10 +405,10 @@ public class KawaiK5 extends Synth
 
         category.add(hbox, BorderLayout.CENTER);
         return category;
-    }
+        }
 
     public JComponent addKSCurve(int source, Color color)
-    {
+        {
         Category category = new Category(this, "Key Scaling Curve", color);
         //        category.makePasteable("s" + source + "ks");
         category.makePasteable("s");
@@ -419,9 +419,9 @@ public class KawaiK5 extends Synth
         
         comp = new LabelledDial("Breakpoint", this, "s" + source + "ks" + "breakpoint", color, 0, 127)
             {
-                public String map(int val)
+            public String map(int val)
                 {
-                    return KEYS[val % 12] + (val / 12 - 2);  // note integer division
+                return KEYS[val % 12] + (val / 12 - 2);  // note integer division
                 }
             };
         hbox.add(comp);
@@ -434,11 +434,11 @@ public class KawaiK5 extends Synth
 
         category.add(hbox, BorderLayout.CENTER);
         return category;
-    }
+        }
 
 
     public JComponent addPitch(int source, Color color)
-    {
+        {
         Category category = new Category(this, "Pitch (DFG)", color);
         //        category.makePasteable("s" + source + "dfg");
         category.makePasteable("s");
@@ -454,9 +454,9 @@ public class KawaiK5 extends Synth
 
         comp = new LabelledDial("Fixed Key", this, "s" + source + "dfg" + "fixno", color, 0, 127)
             {
-                public String map(int val)
+            public String map(int val)
                 {
-                    return KEYS[val % 12] + (val / 12 - 2);  // note integer division
+                return KEYS[val % 12] + (val / 12 - 2);  // note integer division
                 }
             };
         hbox.add(comp);
@@ -490,11 +490,11 @@ public class KawaiK5 extends Synth
 
         category.add(hbox, BorderLayout.CENTER);
         return category;
-    }
+        }
 
 
     public JComponent addPitchEnvelope(int source, Color color)
-    {
+        {
         Category category = new Category(this, "Pitch (DFG) Envelope", color);
         //        category.makePasteable("s" + source + "dfg");
         //        category.makeDistributable("s" + source + "dfg");
@@ -555,22 +555,22 @@ public class KawaiK5 extends Synth
         hbox.add(comp);
 
         comp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
-                                   new String[] { null,  
-                                                  "s" + source + "dfg" + "envrateseg1",
-                                                  "s" + source + "dfg" + "envrateseg2",
-                                                  "s" + source + "dfg" + "envrateseg3",
-                                                  "s" + source + "dfg" + "envrateseg4",
-                                                  "s" + source + "dfg" + "envrateseg5",
-                                                  "s" + source + "dfg" + "envrateseg6" },
-                                   new String[] { null,  
-                                                  "s" + source + "dfg" + "envlevelseg1",
-                                                  "s" + source + "dfg" + "envlevelseg2",
-                                                  "s" + source + "dfg" + "envlevelseg3",
-                                                  "s" + source + "dfg" + "envlevelseg4",
-                                                  "s" + source + "dfg" + "envlevelseg5",
-                                                  "s" + source + "dfg" + "envlevelseg6" },
-                                   new double[] { 0, .1666666666 / 31, .1666666666 / 31, .1666666666 / 31, .1666666666 / 31, .1666666666 / 31, .1666666666 / 31 },
-                                   new double[] { 0, 1.0 / 63, 1.0 / 63, 1.0 / 63, 1.0 / 63, 1.0 / 63, 1.0 / 63 });
+            new String[] { null,  
+                           "s" + source + "dfg" + "envrateseg1",
+                           "s" + source + "dfg" + "envrateseg2",
+                           "s" + source + "dfg" + "envrateseg3",
+                           "s" + source + "dfg" + "envrateseg4",
+                           "s" + source + "dfg" + "envrateseg5",
+                           "s" + source + "dfg" + "envrateseg6" },
+            new String[] { null,  
+                           "s" + source + "dfg" + "envlevelseg1",
+                           "s" + source + "dfg" + "envlevelseg2",
+                           "s" + source + "dfg" + "envlevelseg3",
+                           "s" + source + "dfg" + "envlevelseg4",
+                           "s" + source + "dfg" + "envlevelseg5",
+                           "s" + source + "dfg" + "envlevelseg6" },
+            new double[] { 0, .1666666666 / 31, .1666666666 / 31, .1666666666 / 31, .1666666666 / 31, .1666666666 / 31, .1666666666 / 31 },
+            new double[] { 0, 1.0 / 63, 1.0 / 63, 1.0 / 63, 1.0 / 63, 1.0 / 63, 1.0 / 63 });
                 
         ((EnvelopeDisplay)comp).setYOffset(0.5);        
         ((EnvelopeDisplay)comp).setAxis(0.5);   
@@ -578,11 +578,11 @@ public class KawaiK5 extends Synth
 
         category.add(hbox, BorderLayout.CENTER);
         return category;
-    }
+        }
 
 
     public JComponent addLFO( Color color)
-    {
+        {
         Category category = new Category(this, "LFO", color);
 
         JComponent comp;
@@ -606,13 +606,13 @@ public class KawaiK5 extends Synth
 
         category.add(hbox, BorderLayout.CENTER);
         return category;
-    }
+        }
 
 
     public LabelledDial[] dials = new LabelledDial[126];
 
     public JComponent addDHG(int source, Color color)
-    {
+        {
         Category category = new Category(this, "Harmonics (DHG)", color);
         //        category.makePasteable("s" + source + "dhg");
         //        category.makeDistributable("s" + source + "dhg");
@@ -628,46 +628,46 @@ public class KawaiK5 extends Synth
         
         for(int j = 0; j < 3; j++)
             {
-                hbox = new HBox();
-                for(int i = 0; i < 16; i++)
-                    {
-                        VBox vbox2 = new VBox();
+            hbox = new HBox();
+            for(int i = 0; i < 16; i++)
+                {
+                VBox vbox2 = new VBox();
                 
-                        //// IMPORTANT NOTE.  The K5m has TWO parameters for the envelope: (1) whether the envelope modulates the harmonic, and 
-                        //// (2) what envelope it is.  This is foolish, they should have just had one single parameter of five values,
-                        //// OFF, 1, 2, 3, or 4.  This matters because in order to save space in the harmonics window I have elected to do the
-                        //// non-foolish thing with the chooser below.  This impacts on emitting and parsing, because if you compress these
-                        //// two parameters into one, when the envelope is NOT modulating the harmonic, what envelope is doing the, erm,
-                        //// non-modulating?  We don't have that information any more.  So what I'm doing is as follows.  When we parse a patch,
-                        //// we'll read in the two parameters and compress them to a single stored parameter called, say, s2dhgharm16envselmodyn.
-                        //// Additionally we'll store the envelope parameter as s2dhgharm16envselmodyn-env.  When we need to emit the parameter
-                        //// or dump the patch, if the mod is ON, then we just write the chosen envelope.  But if the mod is OFF, then we write
-                        //// out the envelope in s2dhgharm16envselmodyn-env.  Note that while s2dhgharm16envselmodyn goes 0:OFF, 1:1, 2:2, 3:3, 4:4,
-                        //// the s2dhgharm16envselmodyn-env parameter goes 0:1, 1:2, 2:3, 3:4.
+                //// IMPORTANT NOTE.  The K5m has TWO parameters for the envelope: (1) whether the envelope modulates the harmonic, and 
+                //// (2) what envelope it is.  This is foolish, they should have just had one single parameter of five values,
+                //// OFF, 1, 2, 3, or 4.  This matters because in order to save space in the harmonics window I have elected to do the
+                //// non-foolish thing with the chooser below.  This impacts on emitting and parsing, because if you compress these
+                //// two parameters into one, when the envelope is NOT modulating the harmonic, what envelope is doing the, erm,
+                //// non-modulating?  We don't have that information any more.  So what I'm doing is as follows.  When we parse a patch,
+                //// we'll read in the two parameters and compress them to a single stored parameter called, say, s2dhgharm16envselmodyn.
+                //// Additionally we'll store the envelope parameter as s2dhgharm16envselmodyn-env.  When we need to emit the parameter
+                //// or dump the patch, if the mod is ON, then we just write the chosen envelope.  But if the mod is OFF, then we write
+                //// out the envelope in s2dhgharm16envselmodyn-env.  Note that while s2dhgharm16envselmodyn goes 0:OFF, 1:1, 2:2, 3:3, 4:4,
+                //// the s2dhgharm16envselmodyn-env parameter goes 0:1, 1:2, 2:3, 3:4.
 
-                        params = ENVELOPES;
-                        comp = new Chooser("" + (j * 16 + i + 1) + " Env", this, "s" + source + "dhg" + "harm" + (j * 16 + i + 1) + "envselmodyn", params);
-                        vbox2.add(comp);  
+                params = ENVELOPES;
+                comp = new Chooser("" + (j * 16 + i + 1) + " Env", this, "s" + source + "dhg" + "harm" + (j * 16 + i + 1) + "envselmodyn", params);
+                vbox2.add(comp);  
                 
-                        model.set("s" + source + "dhg" + "harm" + (j * 16 + i + 1) + "envselmodyn-env", 0);    // this will be our hidden env parameter (see emitting/parsing later)
-                        model.setStatus("s" + source + "dhg" + "harm" + (j * 16 + i + 1) + "envselmodyn-env", model.STATUS_IMMUTABLE);
+                model.set("s" + source + "dhg" + "harm" + (j * 16 + i + 1) + "envselmodyn-env", 0);    // this will be our hidden env parameter (see emitting/parsing later)
+                model.setStatus("s" + source + "dhg" + "harm" + (j * 16 + i + 1) + "envselmodyn-env", model.STATUS_IMMUTABLE);
                 
-                        comp = new LabelledDial("" + (j * 16 + i + 1) + " Level", this, "s" + source + "dhg" + "harm" + (j * 16 + i + 1) + "level", color, 0, 99);
-                        dials[(source - 1) * 63 + (j * 16 + i)] = (LabelledDial) comp;
-                        vbox2.add(comp);
-                        hbox.add(vbox2);
-                    }
-                vbox.add(hbox);
-                //if (j < 3)
-                vbox.add(Strut.makeVerticalStrut(20));
+                comp = new LabelledDial("" + (j * 16 + i + 1) + " Level", this, "s" + source + "dhg" + "harm" + (j * 16 + i + 1) + "level", color, 0, 99);
+                dials[(source - 1) * 63 + (j * 16 + i)] = (LabelledDial) comp;
+                vbox2.add(comp);
+                hbox.add(vbox2);
+                }
+            vbox.add(hbox);
+            //if (j < 3)
+            vbox.add(Strut.makeVerticalStrut(20));
             }
 
         category.add(vbox, BorderLayout.CENTER);
         return category;
-    }
+        }
 
     public JComponent addDHG2(int source, Color color)
-    {
+        {
         JComponent comp;
         String[] params;
         VBox vbox = new VBox();
@@ -675,58 +675,58 @@ public class KawaiK5 extends Synth
         
         for(int j = 0; j < 2; j++)
             {
-                hbox = new HBox();
-                for(int i = 0; i < 8; i++)
-                    {
-                        if (j == 1 && i == 7) continue;
+            hbox = new HBox();
+            for(int i = 0; i < 8; i++)
+                {
+                if (j == 1 && i == 7) continue;
                         
-                        VBox vbox2 = new VBox();
+                VBox vbox2 = new VBox();
                 
                 
-                        ///// See IMPORTANT NOTE above.
+                ///// See IMPORTANT NOTE above.
                 
-                        params = ENVELOPES;
-                        comp = new Chooser("" + (48 + j * 8 + i + 1) + " Env", this, "s" + source + "dhg" + "harm" + (48 + j * 8 + i + 1) + "envselmodyn", params);
-                        vbox2.add(comp);  
+                params = ENVELOPES;
+                comp = new Chooser("" + (48 + j * 8 + i + 1) + " Env", this, "s" + source + "dhg" + "harm" + (48 + j * 8 + i + 1) + "envselmodyn", params);
+                vbox2.add(comp);  
                 
-                        model.set("s" + source + "dhg" + "harm" + (48 + j * 8 + i + 1) + "envselmodyn-env", 0);    // this will be our hidden env parameter (see emitting/parsing later)
-                        model.setStatus("s" + source + "dhg" + "harm" + (48 + j * 8 + i + 1) + "envselmodyn-env", model.STATUS_IMMUTABLE);
+                model.set("s" + source + "dhg" + "harm" + (48 + j * 8 + i + 1) + "envselmodyn-env", 0);    // this will be our hidden env parameter (see emitting/parsing later)
+                model.setStatus("s" + source + "dhg" + "harm" + (48 + j * 8 + i + 1) + "envselmodyn-env", model.STATUS_IMMUTABLE);
                                 
-                        comp = new LabelledDial("" + (48 + j * 8 + i + 1) + " Level", this, "s" + source + "dhg" + "harm" + (48 + j * 8 + i + 1) + "level", color, 0, 99);
-                        dials[(source - 1) * 63 + (48 + j * 8 + i)] = (LabelledDial) comp;
-                        vbox2.add(comp);
-                        hbox.add(vbox2);
-                    }
-                vbox.add(hbox);
-                //if (j < 3)
-                vbox.add(Strut.makeVerticalStrut(20));
+                comp = new LabelledDial("" + (48 + j * 8 + i + 1) + " Level", this, "s" + source + "dhg" + "harm" + (48 + j * 8 + i + 1) + "level", color, 0, 99);
+                dials[(source - 1) * 63 + (48 + j * 8 + i)] = (LabelledDial) comp;
+                vbox2.add(comp);
+                hbox.add(vbox2);
+                }
+            vbox.add(hbox);
+            //if (j < 3)
+            vbox.add(Strut.makeVerticalStrut(20));
             }
 
         comp = new CheckBox("Mod", this, "s" + source + "dhg" + "modonoff", false);
         hbox.addLast(comp);
                 
         return vbox;
-    }
+        }
  
  
     int lastIndex = -1;
  
     void setHarmonic(int index, double val)
-    {
+        {
         if (index >= 0 && index < 63)
             {
-                model.set("s1dhgharm" + (index + 1) + "level", (int)(val * 99));
+            model.set("s1dhgharm" + (index + 1) + "level", (int)(val * 99));
             }
         else if (index > 63 && index < 127)
             {
-                model.set("s2dhgharm" + (index + 1 - 64) + "level", (int)(val * 99));
+            model.set("s2dhgharm" + (index + 1 - 64) + "level", (int)(val * 99));
             }
-    }
+        }
                 
     // source can be "0", meaning "both"
  
     public JComponent addDHGDisplay(final int source, Color color)
-    {
+        {
         final Category category = new Category(this, "Display", color);
 
         JComponent comp;
@@ -737,16 +737,16 @@ public class KawaiK5 extends Synth
         params = HARMONIC_CONSTRAINTS;
         comp = new Chooser("Constrain Harmonics: ", this, "constrainharmonics", params)
             {
-                public void update(String key, Model model) { super.update(key, model); category.repaint(); }
+            public void update(String key, Model model) { super.update(key, model); category.repaint(); }
 
-                public boolean isLabelToLeft() { return true; }
+            public boolean isLabelToLeft() { return true; }
             };
         hbox.add(comp);
 
         params = HARMONIC_MOD_CONSTRAINTS;
         comp = new Chooser("Constrain Env: ", this, "constrainmodharmonics", params)
             {
-                public boolean isLabelToLeft() { return true; }
+            public boolean isLabelToLeft() { return true; }
             };
         hbox.add(comp);
 
@@ -754,101 +754,101 @@ public class KawaiK5 extends Synth
         params = DISPLAY_PRESETS;
         comp = new PushButton("Presets", DISPLAY_PRESETS)
             {
-                public void perform(int i)
+            public void perform(int i)
                 {
-                    // we'll avoid individual updates because they're so slow.  Instead we'll
-                    // do a bulk update at the end
-                    boolean currentMIDI = getSendMIDI();
-                    setSendMIDI(false);
+                // we'll avoid individual updates because they're so slow.  Instead we'll
+                // do a bulk update at the end
+                boolean currentMIDI = getSendMIDI();
+                setSendMIDI(false);
 
-                    int start = 0;
-                    int end = 127;
-                    if (getModel().get("mode", 0) == 0)
-                        {
-                            if (source == 1)
-                                { start = 0; end = 63; }
-                            else
-                                { start = 64; end = 127; }
-                        }
+                int start = 0;
+                int end = 127;
+                if (getModel().get("mode", 0) == 0)
+                    {
+                    if (source == 1)
+                        { start = 0; end = 63; }
+                    else
+                        { start = 64; end = 127; }
+                    }
                 
-                    int initial = 0;
-                    switch (i)
+                int initial = 0;
+                switch (i)
+                    {
+                    case SAWTOOTH:
                         {
-                        case SAWTOOTH:
+                        for(int h = start; h < end; h++)
                             {
-                                for(int h = start; h < end; h++)
-                                    {
-                                        setHarmonic(h, 1.0 / (initial + 1));
-                                        initial++;
-                                    }
+                            setHarmonic(h, 1.0 / (initial + 1));
+                            initial++;
                             }
-                            break;
-                        case SQUARE:
-                            {
-                                for(int h = start + 1; h < end; h += 2)
-                                    {
-                                        setHarmonic(h, 0);
-                                    }
-
-                                for(int h = start; h < end; h += 2)
-                                    {
-                                        setHarmonic(h, 1.0 / (initial + 1));
-                                        initial++;
-                                    }
-                            }
-                            break;
-                            // This assumes all positive harmonics of course, which 
-                            // is wrong but since humans can't hear phase differences...
-                        case TRIANGLE:
-                            {
-                                for(int h = start + 1; h < end; h += 2)
-                                    {
-                                        setHarmonic(h, 0);
-                                    }
-
-                                for(int h = start; h < end; h += 2)
-                                    {
-                                        setHarmonic(h, 1.0 / ((initial + 1) * (initial + 1)));
-                                        initial++;
-                                    }
-                            }
-                            break;
-                            /*
-                              case PSEUDO_TRIANGLE:
-                              {
-                              for(int h = start; h < end; h++)
-                              {
-                              setHarmonic(h, 0);
-                              }
-
-                              for(int h = start; h < end; h += 4)
-                              {
-                              setHarmonic(h, 1.0 / ((initial + 1) * (initial + 1)));
-                              initial++;
-                              }
-                              }
-                              break;
-                            */
-                        case ALL_OFF:
-                            {
-                                for(int h = start; h < end; h++)
-                                    {
-                                        setHarmonic(h, 0.0);
-                                    }
-                            }
-                            break;
-                        case ALL_ON:
-                            {
-                                for(int h = start; h < end; h++)
-                                    {
-                                        setHarmonic(h, 1.0);
-                                    }
-                            }
-                            break;
                         }
+                    break;
+                    case SQUARE:
+                        {
+                        for(int h = start + 1; h < end; h += 2)
+                            {
+                            setHarmonic(h, 0);
+                            }
+
+                        for(int h = start; h < end; h += 2)
+                            {
+                            setHarmonic(h, 1.0 / (initial + 1));
+                            initial++;
+                            }
+                        }
+                    break;
+                    // This assumes all positive harmonics of course, which 
+                    // is wrong but since humans can't hear phase differences...
+                    case TRIANGLE:
+                        {
+                        for(int h = start + 1; h < end; h += 2)
+                            {
+                            setHarmonic(h, 0);
+                            }
+
+                        for(int h = start; h < end; h += 2)
+                            {
+                            setHarmonic(h, 1.0 / ((initial + 1) * (initial + 1)));
+                            initial++;
+                            }
+                        }
+                    break;
+                    /*
+                      case PSEUDO_TRIANGLE:
+                      {
+                      for(int h = start; h < end; h++)
+                      {
+                      setHarmonic(h, 0);
+                      }
+
+                      for(int h = start; h < end; h += 4)
+                      {
+                      setHarmonic(h, 1.0 / ((initial + 1) * (initial + 1)));
+                      initial++;
+                      }
+                      }
+                      break;
+                    */
+                    case ALL_OFF:
+                        {
+                        for(int h = start; h < end; h++)
+                            {
+                            setHarmonic(h, 0.0);
+                            }
+                        }
+                    break;
+                    case ALL_ON:
+                        {
+                        for(int h = start; h < end; h++)
+                            {
+                            setHarmonic(h, 1.0);
+                            }
+                        }
+                    break;
+                    }
                     
-                    setSendMIDI(currentMIDI);
-                    sendAllParameters();
+                setSendMIDI(currentMIDI);
+                sendAllParameters();
                 }
             };
         vbox.add(comp);
@@ -861,403 +861,403 @@ public class KawaiK5 extends Synth
         
         if (source == 0)
             {
-                VBox vbox2 = new VBox();
-                String[] levels = new String[126];
-                String[] mods = new String[126];
-                for(int i = 0; i < levels.length; i++)
+            VBox vbox2 = new VBox();
+            String[] levels = new String[126];
+            String[] mods = new String[126];
+            for(int i = 0; i < levels.length; i++)
+                {
+                if (i < 63)
                     {
-                        if (i < 63)
-                            {
-                                levels[i] = "s" + 1 + "dhgharm" + (i + 1) + "level";
-                                mods[i] = "s" + 1 + "dhgharm" + (i + 1) + "envselmodyn";
-                            }
-                        else
-                            {
-                                levels[i] = "s" + 2 + "dhgharm" + (i + 1 - 63) + "level";
-                                mods[i] = "s" + 2 + "dhgharm" + (i + 1 - 63) + "envselmodyn";
-                            }
+                    levels[i] = "s" + 1 + "dhgharm" + (i + 1) + "level";
+                    mods[i] = "s" + 1 + "dhgharm" + (i + 1) + "envselmodyn";
+                    }
+                else
+                    {
+                    levels[i] = "s" + 2 + "dhgharm" + (i + 1 - 63) + "level";
+                    mods[i] = "s" + 2 + "dhgharm" + (i + 1 - 63) + "envselmodyn";
+                    }
+                }
+
+            double[] widths = new double[126];
+            for(int i = 1; i < widths.length; i++)
+                widths[i] = 1.0 / (126 - 1);
+
+            double[] heights = new double[126];
+            for(int i = 0; i < heights.length; i++)
+                heights[i] = 1.0 / 99;
+
+            double[] heights2 = new double[126];
+            for(int i = 0; i < heights2.length; i++)
+                heights2[i] = 1.0 / 4;
+
+            comp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), new String[63 * 2], mods, widths, heights2)
+                {
+                // The mouseDown and mouseUp code here enables us to only do undo()
+                // ONCE.
+                public void mouseDown()
+                    {
+                    getUndo().push(getModel());
+                    getUndo().setWillPush(false);
+                    }
+                
+                public void mouseUp()
+                    {
+                    getUndo().setWillPush(true);
+                    }
+                        
+                public void updateFromMouse(double x, double y, boolean continuation)
+                    {
+                    if (x < 0)
+                        x = 0;
+                    else if (x > 1)
+                        x = 1.0;
+
+                    if (y <= 0.0) y = 0.0;
+                    if (y >= 1.0) y = 1.0;
+                    int harmonic = (int)(x * (126.0 - 1) + 0.5);
+
+                    if (!constrainTo(harmonic))
+                        return;
+                                        
+                    double val = y * 4.0;
+                                
+                    int modconstraint = KawaiK5.this.model.get("constrainmodharmonics", 0);
+
+                    if (modconstraint > 0)
+                        {
+                        if (((int)val) != 0) 
+                            val = modconstraint; 
+                        }
+                                        
+                    if (harmonic < 63)
+                        KawaiK5.this.model.set("s" + 1 + "dhgharm" + (harmonic + 1) + "envselmodyn", (int)val);
+                    else
+                        KawaiK5.this.model.set("s" + 2 + "dhgharm" + (harmonic + 1 - 63) + "envselmodyn", (int)val);
                     }
 
-                double[] widths = new double[126];
-                for(int i = 1; i < widths.length; i++)
-                    widths[i] = 1.0 / (126 - 1);
-
-                double[] heights = new double[126];
-                for(int i = 0; i < heights.length; i++)
-                    heights[i] = 1.0 / 99;
-
-                double[] heights2 = new double[126];
-                for(int i = 0; i < heights2.length; i++)
-                    heights2[i] = 1.0 / 4;
-
-                comp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), new String[63 * 2], mods, widths, heights2)
+                public void updateHighlightIndex(int index)
                     {
-                        // The mouseDown and mouseUp code here enables us to only do undo()
-                        // ONCE.
-                        public void mouseDown()
+                    if (lastIndex >= 0)
                         {
-                            getUndo().push(getModel());
-                            getUndo().setWillPush(false);
+                        dials[lastIndex].setTextColor(Style.TEXT_COLOR());
+                        lastIndex = -1;
                         }
-                
-                        public void mouseUp()
-                        {
-                            getUndo().setWillPush(true);
-                        }
-                        
-                        public void updateFromMouse(double x, double y, boolean continuation)
-                        {
-                            if (x < 0)
-                                x = 0;
-                            else if (x > 1)
-                                x = 1.0;
-
-                            if (y <= 0.0) y = 0.0;
-                            if (y >= 1.0) y = 1.0;
-                            int harmonic = (int)(x * (126.0 - 1) + 0.5);
-
-                            if (!constrainTo(harmonic))
-                                return;
                                         
-                            double val = y * 4.0;
-                                
-                            int modconstraint = KawaiK5.this.model.get("constrainmodharmonics", 0);
-
-                            if (modconstraint > 0)
-                                {
-                                    if (((int)val) != 0) 
-                                        val = modconstraint; 
-                                }
-                                        
-                            if (harmonic < 63)
-                                KawaiK5.this.model.set("s" + 1 + "dhgharm" + (harmonic + 1) + "envselmodyn", (int)val);
-                            else
-                                KawaiK5.this.model.set("s" + 2 + "dhgharm" + (harmonic + 1 - 63) + "envselmodyn", (int)val);
-                        }
-
-                        public void updateHighlightIndex(int index)
+                    if (index >= 0)
                         {
-                            if (lastIndex >= 0)
-                                {
-                                    dials[lastIndex].setTextColor(Style.TEXT_COLOR());
-                                    lastIndex = -1;
-                                }
-                                        
-                            if (index >= 0)
-                                {
-                                    dials[index].setTextColor(Style.DYNAMIC_COLOR());
-                                    lastIndex = index;
-                                }
+                        dials[index].setTextColor(Style.DYNAMIC_COLOR());
+                        lastIndex = index;
                         }
+                    }
                                                                 
-                        public int highlightIndex(double x, double y, boolean continuation)
-                        {
-                            if (x < 0) x = 0;
-                            if (x > 1.0) x = 1.0;
-                            return (int)(x * (126.0 - 1) + 0.5);
-                        }
-
-                        public boolean constrainTo(int index) { return _constrainTo(index); }
-
-                        public int verticalBorderThickness() { return 4; }
-                    };
-                ((EnvelopeDisplay)comp).addVerticalDivider(0.5);
-                ((EnvelopeDisplay)comp).setPreferredHeight(40);
-                vbox2.add(comp);
-
-                comp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), new String[63 * 2], levels, widths, heights)
+                public int highlightIndex(double x, double y, boolean continuation)
                     {
-                        // The mouseDown and mouseUp code here enables us to only do undo()
-                        // ONCE.
-                        public void mouseDown()
-                        {
-                            getUndo().push(getModel());
-                            getUndo().setWillPush(false);
-                        }
+                    if (x < 0) x = 0;
+                    if (x > 1.0) x = 1.0;
+                    return (int)(x * (126.0 - 1) + 0.5);
+                    }
+
+                public boolean constrainTo(int index) { return _constrainTo(index); }
+
+                public int verticalBorderThickness() { return 4; }
+                };
+            ((EnvelopeDisplay)comp).addVerticalDivider(0.5);
+            ((EnvelopeDisplay)comp).setPreferredHeight(40);
+            vbox2.add(comp);
+
+            comp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), new String[63 * 2], levels, widths, heights)
+                {
+                // The mouseDown and mouseUp code here enables us to only do undo()
+                // ONCE.
+                public void mouseDown()
+                    {
+                    getUndo().push(getModel());
+                    getUndo().setWillPush(false);
+                    }
                 
-                        public void mouseUp()
-                        {
-                            getUndo().setWillPush(true);
-                        }
+                public void mouseUp()
+                    {
+                    getUndo().setWillPush(true);
+                    }
                         
-                        public void updateFromMouse(double x, double y, boolean continuation)
-                        {
-                            if (x < 0)
-                                x = 0;
-                            else if (x > 1)
-                                x = 1.0;
+                public void updateFromMouse(double x, double y, boolean continuation)
+                    {
+                    if (x < 0)
+                        x = 0;
+                    else if (x > 1)
+                        x = 1.0;
 
-                            if (y <= 0.0) y = 0.0;
-                            if (y >= 1.0) y = 1.0;
-                            int harmonic = (int)(x * (126.0 - 1) + 0.5);
+                    if (y <= 0.0) y = 0.0;
+                    if (y >= 1.0) y = 1.0;
+                    int harmonic = (int)(x * (126.0 - 1) + 0.5);
 
-                            if (!constrainTo(harmonic))
-                                return;
+                    if (!constrainTo(harmonic))
+                        return;
                                         
-                            double val = y * 99.0;
+                    double val = y * 99.0;
                                 
-                            if (harmonic < 63)
-                                KawaiK5.this.model.set("s" + 1 + "dhgharm" + (harmonic + 1) + "level", (int)val);
-                            else
-                                KawaiK5.this.model.set("s" + 2 + "dhgharm" + (harmonic + 1 - 63) + "level", (int)val);
-                        }
+                    if (harmonic < 63)
+                        KawaiK5.this.model.set("s" + 1 + "dhgharm" + (harmonic + 1) + "level", (int)val);
+                    else
+                        KawaiK5.this.model.set("s" + 2 + "dhgharm" + (harmonic + 1 - 63) + "level", (int)val);
+                    }
 
-                        public void updateHighlightIndex(int index)
+                public void updateHighlightIndex(int index)
+                    {
+                    if (lastIndex >= 0)
                         {
-                            if (lastIndex >= 0)
-                                {
-                                    dials[lastIndex].setTextColor(Style.TEXT_COLOR());
-                                    lastIndex = -1;
-                                }
+                        dials[lastIndex].setTextColor(Style.TEXT_COLOR());
+                        lastIndex = -1;
+                        }
                                         
-                            if (index >= 0)
-                                {
-                                    dials[index].setTextColor(Style.DYNAMIC_COLOR());
-                                    lastIndex = index;
-                                }
-                        }
-                                                                
-                        public int highlightIndex(double x, double y, boolean continuation)
+                    if (index >= 0)
                         {
-                            if (x < 0) x = 0;
-                            if (x > 1.0) x = 1.0;
-                            return (int)(x * (126.0 - 1) + 0.5);
+                        dials[index].setTextColor(Style.DYNAMIC_COLOR());
+                        lastIndex = index;
                         }
+                    }
+                                                                
+                public int highlightIndex(double x, double y, boolean continuation)
+                    {
+                    if (x < 0) x = 0;
+                    if (x > 1.0) x = 1.0;
+                    return (int)(x * (126.0 - 1) + 0.5);
+                    }
 
-                        public boolean constrainTo(int index) { return _constrainTo(index); }
-                    };
-                ((EnvelopeDisplay)comp).addVerticalDivider(0.5);
-                vbox2.addLast(comp);
-                hbox.addLast(vbox2);
+                public boolean constrainTo(int index) { return _constrainTo(index); }
+                };
+            ((EnvelopeDisplay)comp).addVerticalDivider(0.5);
+            vbox2.addLast(comp);
+            hbox.addLast(vbox2);
             }
         else
             {
-                VBox vbox2 = new VBox();
-                String[] levels = new String[63];
-                String[] mods = new String[63];
-                for(int i = 0; i < levels.length; i++)
+            VBox vbox2 = new VBox();
+            String[] levels = new String[63];
+            String[] mods = new String[63];
+            for(int i = 0; i < levels.length; i++)
+                {
+                levels[i] = "s" + source + "dhg" + "harm" + (i + 1) + "level";
+                mods[i] = "s" + source + "dhg" + "harm" + (i + 1) + "envselmodyn";
+                }
+
+            double[] widths = new double[63];
+            for(int i = 1; i < widths.length; i++)
+                widths[i] = 1.0 / (63 - 1);
+
+            double[] heights = new double[63];
+            for(int i = 0; i < heights.length; i++)
+                heights[i] = 1.0 / 99;
+                        
+            double[] heights2 = new double[63];
+            for(int i = 0; i < heights2.length; i++)
+                heights2[i] = 1.0 / 4;
+                        
+            comp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), new String[63], mods, widths, heights2)
+                {
+                public void updateFromMouse(double x, double y, boolean continuation)
                     {
-                        levels[i] = "s" + source + "dhg" + "harm" + (i + 1) + "level";
-                        mods[i] = "s" + source + "dhg" + "harm" + (i + 1) + "envselmodyn";
+                    if (x < 0)
+                        x = 0;
+                    else if (x > 1)
+                        x = 1.0;
+
+                    if (y <= 0.0) y = 0.0;
+                    if (y >= 1.0) y = 1.0;
+                    int harmonic = (int)(x * (63.0 - 1) + 0.5);
+
+                    if (!constrainTo(harmonic))
+                        return;
+                                        
+                    double val = y * 4.0;
+                                
+                    int modconstraint = KawaiK5.this.model.get("constrainmodharmonics", 0);
+
+                    if (modconstraint > 0)
+                        {
+                        if (((int)val) != 0) 
+                            val = modconstraint; 
+                        }
+                                        
+                    KawaiK5.this.model.set("s" + source + "dhg" + "harm" + (harmonic + 1) + "envselmodyn", (int)val);
                     }
 
-                double[] widths = new double[63];
-                for(int i = 1; i < widths.length; i++)
-                    widths[i] = 1.0 / (63 - 1);
-
-                double[] heights = new double[63];
-                for(int i = 0; i < heights.length; i++)
-                    heights[i] = 1.0 / 99;
-                        
-                double[] heights2 = new double[63];
-                for(int i = 0; i < heights2.length; i++)
-                    heights2[i] = 1.0 / 4;
-                        
-                comp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), new String[63], mods, widths, heights2)
+                public void updateHighlightIndex(int index)
                     {
-                        public void updateFromMouse(double x, double y, boolean continuation)
+                    if (lastIndex >= 0)
                         {
-                            if (x < 0)
-                                x = 0;
-                            else if (x > 1)
-                                x = 1.0;
-
-                            if (y <= 0.0) y = 0.0;
-                            if (y >= 1.0) y = 1.0;
-                            int harmonic = (int)(x * (63.0 - 1) + 0.5);
-
-                            if (!constrainTo(harmonic))
-                                return;
-                                        
-                            double val = y * 4.0;
-                                
-                            int modconstraint = KawaiK5.this.model.get("constrainmodharmonics", 0);
-
-                            if (modconstraint > 0)
-                                {
-                                    if (((int)val) != 0) 
-                                        val = modconstraint; 
-                                }
-                                        
-                            KawaiK5.this.model.set("s" + source + "dhg" + "harm" + (harmonic + 1) + "envselmodyn", (int)val);
+                        dials[lastIndex].setTextColor(Style.TEXT_COLOR());
+                        lastIndex = -1;
                         }
-
-                        public void updateHighlightIndex(int index)
+                                        
+                    if (index >= 0)
                         {
-                            if (lastIndex >= 0)
-                                {
-                                    dials[lastIndex].setTextColor(Style.TEXT_COLOR());
-                                    lastIndex = -1;
-                                }
-                                        
-                            if (index >= 0)
-                                {
-                                    dials[index].setTextColor(Style.DYNAMIC_COLOR());
-                                    lastIndex = index;
-                                }
+                        dials[index].setTextColor(Style.DYNAMIC_COLOR());
+                        lastIndex = index;
                         }
+                    }
                                                                 
-                        public int highlightIndex(double x, double y, boolean continuation)
-                        {
-                            if (x < 0) x = 0;
-                            if (x > 1.0) x = 1.0;
-                            return (int)(x * (63.0 - 1) + 0.5);
-                        }
+                public int highlightIndex(double x, double y, boolean continuation)
+                    {
+                    if (x < 0) x = 0;
+                    if (x > 1.0) x = 1.0;
+                    return (int)(x * (63.0 - 1) + 0.5);
+                    }
 
-                        public boolean constrainTo(int index) { return _constrainTo(index); }
+                public boolean constrainTo(int index) { return _constrainTo(index); }
 
-                        public int verticalBorderThickness() { return 4; }
-                    };
-                ((EnvelopeDisplay)comp).setPreferredHeight(24);
-                vbox2.add(comp);
+                public int verticalBorderThickness() { return 4; }
+                };
+            ((EnvelopeDisplay)comp).setPreferredHeight(24);
+            vbox2.add(comp);
                 
-                comp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), new String[63], levels, widths, heights)
+            comp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), new String[63], levels, widths, heights)
+                {
+                public void updateFromMouse(double x, double y, boolean continuation)
                     {
-                        public void updateFromMouse(double x, double y, boolean continuation)
-                        {
-                            if (x < 0)
-                                x = 0;
-                            else if (x > 1)
-                                x = 1.0;
+                    if (x < 0)
+                        x = 0;
+                    else if (x > 1)
+                        x = 1.0;
 
-                            if (y <= 0.0) y = 0.0;
-                            if (y >= 1.0) y = 1.0;
-                            int harmonic = (int)(x * (63.0 - 1) + 0.5);
+                    if (y <= 0.0) y = 0.0;
+                    if (y >= 1.0) y = 1.0;
+                    int harmonic = (int)(x * (63.0 - 1) + 0.5);
 
-                            if (!constrainTo(harmonic))
-                                return;
+                    if (!constrainTo(harmonic))
+                        return;
                                         
-                            double val = y * 99.0;
+                    double val = y * 99.0;
                                 
-                            KawaiK5.this.model.set("s" + source + "dhg" + "harm" + (harmonic + 1) + "level", (int)val);
-                        }
+                    KawaiK5.this.model.set("s" + source + "dhg" + "harm" + (harmonic + 1) + "level", (int)val);
+                    }
 
-                        public void updateHighlightIndex(int index)
+                public void updateHighlightIndex(int index)
+                    {
+                    if (lastIndex >= 0)
                         {
-                            if (lastIndex >= 0)
-                                {
-                                    dials[lastIndex].setTextColor(Style.TEXT_COLOR());
-                                    lastIndex = -1;
-                                }
+                        dials[lastIndex].setTextColor(Style.TEXT_COLOR());
+                        lastIndex = -1;
+                        }
                                         
-                            if (index >= 0)
-                                {
-                                    dials[index].setTextColor(Style.DYNAMIC_COLOR());
-                                    lastIndex = index;
-                                }
-                        }
-                                                                
-                        public int highlightIndex(double x, double y, boolean continuation)
+                    if (index >= 0)
                         {
-                            if (x < 0) x = 0;
-                            if (x > 1.0) x = 1.0;
-                            return (int)(x * (63.0 - 1) + 0.5);
+                        dials[index].setTextColor(Style.DYNAMIC_COLOR());
+                        lastIndex = index;
                         }
+                    }
+                                                                
+                public int highlightIndex(double x, double y, boolean continuation)
+                    {
+                    if (x < 0) x = 0;
+                    if (x > 1.0) x = 1.0;
+                    return (int)(x * (63.0 - 1) + 0.5);
+                    }
                         
-                        public boolean constrainTo(int index) { return _constrainTo(index); }
-                    };
-                vbox2.addLast(comp);
-                hbox.addLast(vbox2);
+                public boolean constrainTo(int index) { return _constrainTo(index); }
+                };
+            vbox2.addLast(comp);
+            hbox.addLast(vbox2);
             }
         
         main.addBottom(hbox);
         category.add(main, BorderLayout.CENTER);
         return category;
-    }
+        }
 
 
 
     boolean _constrainTo(int index)
-    {
+        {
         int constraints = model.get("constrainharmonics", 0);
         switch(constraints)
             {
             case ALL:
                 {
-                    return true;
+                return true;
                 }
             case ODD:
                 {
-                    return ((index & 0x1) == 0x0);  // yes, it looks backwards but it isn't
+                return ((index & 0x1) == 0x0);  // yes, it looks backwards but it isn't
                 }
             case EVEN:
                 {
-                    return ((index & 0x1) == 0x1);  // yes, it looks backwards but it isn't
+                return ((index & 0x1) == 0x1);  // yes, it looks backwards but it isn't
                 }
             case FIRST_THIRD:
                 {
-                    return (index % 3) == 0;
+                return (index % 3) == 0;
                 }
             case SECOND_THIRD:
                 {
-                    return (index % 3) == 1;
+                return (index % 3) == 1;
                 }
             case THIRD_THIRD:
                 {
-                    return (index % 3) == 2;
+                return (index % 3) == 2;
                 }
             case OCTAVE:
                 {
-                    for(int i = 0; i < OCTAVE_HARMONICS.length; i++)
-                        if (OCTAVE_HARMONICS[i] == (index + 1)) return true;
-                    return false; 
+                for(int i = 0; i < OCTAVE_HARMONICS.length; i++)
+                    if (OCTAVE_HARMONICS[i] == (index + 1)) return true;
+                return false; 
                 }
             case FIFTH:
                 {
-                    for(int i = 0; i < FIFTH_HARMONICS.length; i++)
-                        if (FIFTH_HARMONICS[i] == (index + 1)) return true;
-                    return false; 
+                for(int i = 0; i < FIFTH_HARMONICS.length; i++)
+                    if (FIFTH_HARMONICS[i] == (index + 1)) return true;
+                return false; 
                 }
             case MAJOR_THIRD:
                 {
-                    for(int i = 0; i < MAJOR_THIRD_HARMONICS.length; i++)
-                        if (MAJOR_THIRD_HARMONICS[i] == (index + 1)) return true;
-                    return false;                                           
+                for(int i = 0; i < MAJOR_THIRD_HARMONICS.length; i++)
+                    if (MAJOR_THIRD_HARMONICS[i] == (index + 1)) return true;
+                return false;                                           
                 }
             case MINOR_SEVENTH:
                 {
-                    for(int i = 0; i < MINOR_SEVENTH_HARMONICS.length; i++)
-                        if (MINOR_SEVENTH_HARMONICS[i] == (index + 1)) return true;
-                    return false;                                           
+                for(int i = 0; i < MINOR_SEVENTH_HARMONICS.length; i++)
+                    if (MINOR_SEVENTH_HARMONICS[i] == (index + 1)) return true;
+                return false;                                           
                 }
             case MAJOR_SECOND:
                 {
-                    for(int i = 0; i < MAJOR_SECOND_HARMONICS.length; i++)
-                        if (MAJOR_SECOND_HARMONICS[i] == (index + 1)) return true;
-                    return false;                                           
+                for(int i = 0; i < MAJOR_SECOND_HARMONICS.length; i++)
+                    if (MAJOR_SECOND_HARMONICS[i] == (index + 1)) return true;
+                return false;                                           
                 }
             case MAJOR_SEVENTH:
                 {
-                    for(int i = 0; i < MAJOR_SEVENTH_HARMONICS.length; i++)
-                        if (MAJOR_SEVENTH_HARMONICS[i] == (index + 1)) return true;
-                    return false;                                           
+                for(int i = 0; i < MAJOR_SEVENTH_HARMONICS.length; i++)
+                    if (MAJOR_SEVENTH_HARMONICS[i] == (index + 1)) return true;
+                return false;                                           
                 }
             case MINOR_SECOND:
                 {
-                    for(int i = 0; i < MINOR_SECOND_HARMONICS.length; i++)
-                        if (MINOR_SECOND_HARMONICS[i] == (index + 1)) return true;
-                    return false;                                           
+                for(int i = 0; i < MINOR_SECOND_HARMONICS.length; i++)
+                    if (MINOR_SECOND_HARMONICS[i] == (index + 1)) return true;
+                return false;                                           
                 }
             case MINOR_THIRD:
                 {
-                    for(int i = 0; i < MINOR_THIRD_HARMONICS.length; i++)
-                        if (MINOR_THIRD_HARMONICS[i] == (index + 1)) return true;
-                    return false;                                           
+                for(int i = 0; i < MINOR_THIRD_HARMONICS.length; i++)
+                    if (MINOR_THIRD_HARMONICS[i] == (index + 1)) return true;
+                return false;                                           
                 }
             case MAJOR_SIXTH:
                 {
-                    for(int i = 0; i < MAJOR_SIXTH_HARMONICS.length; i++)
-                        if (MAJOR_SIXTH_HARMONICS[i] == (index + 1)) return true;
-                    return false;                                           
+                for(int i = 0; i < MAJOR_SIXTH_HARMONICS.length; i++)
+                    if (MAJOR_SIXTH_HARMONICS[i] == (index + 1)) return true;
+                return false;                                           
                 }
 
             }
         return false;
-    }
+        }
         
         
     public JComponent addDHGEnvelope(int source, int envelope, Color color)
-    {
+        {
         Category category = new Category(this, "Harmonics (DHG) Envelope " + envelope, color);
         //        category.makePasteable("s" + source + "dhg");
         //        category.makeDistributable("s" + source + "dhg");
@@ -1280,10 +1280,10 @@ public class KawaiK5 extends Synth
 
         comp = new LabelledDial("Mod Depth", this, "s" + source + "dhg" + "env" + envelope + "moddepth", color, 0, 31)
             {
-                public String map(int val)
+            public String map(int val)
                 {
-                    if (val == 0) return "Off";
-                    else return "" + val;
+                if (val == 0) return "Off";
+                else return "" + val;
                 }
             };
         hbox.add(comp);
@@ -1326,33 +1326,33 @@ public class KawaiK5 extends Synth
         hbox.add(comp);
 
         comp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
-                                   new String[] { null,  
-                                                  "s" + source + "dhg" + "env" + envelope + "seg1rate",
-                                                  "s" + source + "dhg" + "env" + envelope + "seg2rate",
-                                                  "s" + source + "dhg" + "env" + envelope + "seg3rate",
-                                                  "s" + source + "dhg" + "env" + envelope + "seg4rate",
-                                                  "s" + source + "dhg" + "env" + envelope + "seg5rate",
-                                                  "s" + source + "dhg" + "env" + envelope + "seg6rate" },
-                                   new String[] { null,  
-                                                  "s" + source + "dhg" + "env" + envelope + "seg1level",
-                                                  "s" + source + "dhg" + "env" + envelope + "seg2level",
-                                                  "s" + source + "dhg" + "env" + envelope + "seg3level",
-                                                  "s" + source + "dhg" + "env" + envelope + "seg4level",
-                                                  "s" + source + "dhg" + "env" + envelope + "seg5level",
-                                                  "s" + source + "dhg" + "env" + envelope + "seg6level" },
-                                   new double[] { 0, .1666666666 / 31, .1666666666 / 31, .1666666666 / 31, .1666666666 / 31, .1666666666 / 31, .1666666666 / 31 },
-                                   new double[] { 0, 1.0 / 31, 1.0 / 31, 1.0 / 31, 1.0 / 31, 1.0 / 31, 1.0 / 31 });
+            new String[] { null,  
+                           "s" + source + "dhg" + "env" + envelope + "seg1rate",
+                           "s" + source + "dhg" + "env" + envelope + "seg2rate",
+                           "s" + source + "dhg" + "env" + envelope + "seg3rate",
+                           "s" + source + "dhg" + "env" + envelope + "seg4rate",
+                           "s" + source + "dhg" + "env" + envelope + "seg5rate",
+                           "s" + source + "dhg" + "env" + envelope + "seg6rate" },
+            new String[] { null,  
+                           "s" + source + "dhg" + "env" + envelope + "seg1level",
+                           "s" + source + "dhg" + "env" + envelope + "seg2level",
+                           "s" + source + "dhg" + "env" + envelope + "seg3level",
+                           "s" + source + "dhg" + "env" + envelope + "seg4level",
+                           "s" + source + "dhg" + "env" + envelope + "seg5level",
+                           "s" + source + "dhg" + "env" + envelope + "seg6level" },
+            new double[] { 0, .1666666666 / 31, .1666666666 / 31, .1666666666 / 31, .1666666666 / 31, .1666666666 / 31, .1666666666 / 31 },
+            new double[] { 0, 1.0 / 31, 1.0 / 31, 1.0 / 31, 1.0 / 31, 1.0 / 31, 1.0 / 31 });
         hbox.addLast(comp);
 
         category.add(hbox, BorderLayout.CENTER);
         return category;
-    }
+        }
                 
                 
 
         
     public JComponent addDHGEnvelopeGlobal(int source, Color color)
-    {
+        {
         Category category = new Category(this, "Harmonics (DHG) Envelope Global", color);
         //        category.makePasteable("s" + source + "dhg");
         category.makePasteable("s");
@@ -1496,14 +1496,14 @@ public class KawaiK5 extends Synth
 
         category.add(hbox, BorderLayout.CENTER);
         return category;
-    }
+        }
     
 
 
 
 
     public JComponent addEqualizer(Color color)
-    {
+        {
         Category category = new Category(this, "Formant Equalizer (DFT)", color);
         category.makeDistributable("dft");
 
@@ -1550,32 +1550,32 @@ public class KawaiK5 extends Synth
         hbox.add(comp);
 
         comp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
-                                   new String[] { null, null, null, null, null, null, null, null, null, null, null },
-                                   new String[] { 
-                                       "dftc11level",
-                                       "dftc0level",
-                                       "dftc1level",
-                                       "dftc2level",
-                                       "dftc3level",
-                                       "dftc4level",
-                                       "dftc5level",
-                                       "dftc6level",
-                                       "dftc7level",
-                                       "dftc8level",
-                                       "dftc9level"
-                                   },
-                                   new double[] { 0, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1 },
-                                   new double[] { 1.0 / 63, 1.0 / 63, 1.0 / 63, 1.0 / 63, 1.0 / 63, 1.0 / 63, 1.0 / 63, 1.0 / 63, 1.0 / 63, 1.0 / 63, 1.0 / 63 });
+            new String[] { null, null, null, null, null, null, null, null, null, null, null },
+            new String[] { 
+                "dftc11level",
+                "dftc0level",
+                "dftc1level",
+                "dftc2level",
+                "dftc3level",
+                "dftc4level",
+                "dftc5level",
+                "dftc6level",
+                "dftc7level",
+                "dftc8level",
+                "dftc9level"
+                },
+            new double[] { 0, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1, 0.1 },
+            new double[] { 1.0 / 63, 1.0 / 63, 1.0 / 63, 1.0 / 63, 1.0 / 63, 1.0 / 63, 1.0 / 63, 1.0 / 63, 1.0 / 63, 1.0 / 63, 1.0 / 63 });
         hbox.addLast(comp);
 
         category.add(hbox, BorderLayout.CENTER);
         return category;
-    }
+        }
 
 
 
     public JComponent addFilter(int source, Color color)
-    {
+        {
         Category category = new Category(this, "Filter (DDF)", color);
         //        category.makePasteable("s" + source + "ddf");
         category.makePasteable("s");
@@ -1635,10 +1635,10 @@ public class KawaiK5 extends Synth
 
         category.add(hbox, BorderLayout.CENTER);
         return category;
-    }
+        }
         
     public JComponent addFilterEnvelope(int source, Color color)
-    {
+        {
         Category category = new Category(this, "Filter (DDF) Envelope", color);
         //        category.makePasteable("s" + source + "ddf");
         //        category.makeDistributable("s" + source + "ddf");
@@ -1693,31 +1693,31 @@ public class KawaiK5 extends Synth
         hbox.add(comp);
 
         comp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
-                                   new String[] { null,  
-                                                  "s" + source + "ddf" + "envseg1rate",
-                                                  "s" + source + "ddf" + "envseg2rate",
-                                                  "s" + source + "ddf" + "envseg3rate",
-                                                  "s" + source + "ddf" + "envseg4rate",
-                                                  "s" + source + "ddf" + "envseg5rate",
-                                                  "s" + source + "ddf" + "envseg6rate" },
-                                   new String[] { null,  
-                                                  "s" + source + "ddf" + "envseg1level",
-                                                  "s" + source + "ddf" + "envseg2level",
-                                                  "s" + source + "ddf" + "envseg3level",
-                                                  "s" + source + "ddf" + "envseg4level",
-                                                  "s" + source + "ddf" + "envseg5level",
-                                                  "s" + source + "ddf" + "envseg6level" },
-                                   new double[] { 0, .1666666666 / 31, .1666666666 / 31, .1666666666 / 31, .1666666666 / 31, .1666666666 / 31, .1666666666 / 31 },
-                                   new double[] { 0, 1.0 / 31, 1.0 / 31, 1.0 / 31, 1.0 / 31, 1.0 / 31, 1.0 / 31 });
+            new String[] { null,  
+                           "s" + source + "ddf" + "envseg1rate",
+                           "s" + source + "ddf" + "envseg2rate",
+                           "s" + source + "ddf" + "envseg3rate",
+                           "s" + source + "ddf" + "envseg4rate",
+                           "s" + source + "ddf" + "envseg5rate",
+                           "s" + source + "ddf" + "envseg6rate" },
+            new String[] { null,  
+                           "s" + source + "ddf" + "envseg1level",
+                           "s" + source + "ddf" + "envseg2level",
+                           "s" + source + "ddf" + "envseg3level",
+                           "s" + source + "ddf" + "envseg4level",
+                           "s" + source + "ddf" + "envseg5level",
+                           "s" + source + "ddf" + "envseg6level" },
+            new double[] { 0, .1666666666 / 31, .1666666666 / 31, .1666666666 / 31, .1666666666 / 31, .1666666666 / 31, .1666666666 / 31 },
+            new double[] { 0, 1.0 / 31, 1.0 / 31, 1.0 / 31, 1.0 / 31, 1.0 / 31, 1.0 / 31 });
         hbox.addLast(comp);
 
         category.add(hbox, BorderLayout.CENTER);
         return category;
-    }
+        }
 
 
     public JComponent addDDA(int source, Color color)
-    {
+        {
         Category category = new Category(this, "Amplifier (DDA)", color);
         //        category.makePasteable("s" + source + "dda");
         category.makePasteable("s");
@@ -1761,10 +1761,10 @@ public class KawaiK5 extends Synth
 
         category.add(hbox, BorderLayout.CENTER);
         return category;
-    }
+        }
         
     public JComponent addDDAEnvelope(int source, Color color)
-    {
+        {
         Category category = new Category(this, "Amplifier (DDA) Envelope", color);
         //        category.makePasteable("s" + source + "dda");
         //        category.makeDistributable("s" + source + "dda");
@@ -1857,37 +1857,37 @@ public class KawaiK5 extends Synth
         vbox = new VBox();
 
         comp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
-                                   new String[] { null,  
-                                                  "s" + source + "dda" + "envseg1rate",
-                                                  "s" + source + "dda" + "envseg2rate",
-                                                  "s" + source + "dda" + "envseg3rate",
-                                                  "s" + source + "dda" + "envseg4rate",
-                                                  "s" + source + "dda" + "envseg5rate",
-                                                  "s" + source + "dda" + "envseg6rate",
-                                                  "s" + source + "dda" + "envseg7rate",
-                                   },
-                                   new String[] { null,  
-                                                  "s" + source + "dda" + "envseg1level",
-                                                  "s" + source + "dda" + "envseg2level",
-                                                  "s" + source + "dda" + "envseg3level",
-                                                  "s" + source + "dda" + "envseg4level",
-                                                  "s" + source + "dda" + "envseg5level",
-                                                  "s" + source + "dda" + "envseg6level",
-                                                  null
-                                   },
-                                   new double[] { 0, .1428571428 / 31, .1428571428 / 31, .1428571428 / 31, .1428571428 / 31, .1428571428 / 31, .1428571428 / 31,  .1428571428 / 31 },
-                                   new double[] { 0, 1.0 / 31, 1.0 / 31, 1.0 / 31, 1.0 / 31, 1.0 / 31, 1.0 / 31, 0 });
+            new String[] { null,  
+                           "s" + source + "dda" + "envseg1rate",
+                           "s" + source + "dda" + "envseg2rate",
+                           "s" + source + "dda" + "envseg3rate",
+                           "s" + source + "dda" + "envseg4rate",
+                           "s" + source + "dda" + "envseg5rate",
+                           "s" + source + "dda" + "envseg6rate",
+                           "s" + source + "dda" + "envseg7rate",
+                },
+            new String[] { null,  
+                           "s" + source + "dda" + "envseg1level",
+                           "s" + source + "dda" + "envseg2level",
+                           "s" + source + "dda" + "envseg3level",
+                           "s" + source + "dda" + "envseg4level",
+                           "s" + source + "dda" + "envseg5level",
+                           "s" + source + "dda" + "envseg6level",
+                           null
+                },
+            new double[] { 0, .1428571428 / 31, .1428571428 / 31, .1428571428 / 31, .1428571428 / 31, .1428571428 / 31, .1428571428 / 31,  .1428571428 / 31 },
+            new double[] { 0, 1.0 / 31, 1.0 / 31, 1.0 / 31, 1.0 / 31, 1.0 / 31, 1.0 / 31, 0 });
         hbox.addLast(comp);
 
         category.add(hbox, BorderLayout.CENTER);
         return category;
-    }
+        }
     
     // The K5 can't send to temporary memory, so we write to SID-12
     public boolean getSendsAllParametersAsDump() { return true; } // sendKawaiParametersInBulk; }
 
     public Object[] emitAll(String key)
-    {
+        {
         // we have to check for these or else they'll trigger later
         if (key.equals("s1dhgharm")) return new Object[0];
         if (key.equals("s2dhgharm")) return new Object[0];
@@ -1918,115 +1918,115 @@ public class KawaiK5 extends Synth
         int source = 0;  // doesn't matter
         if (key.startsWith("s1basic") || key.startsWith("s2basic"))
             {
-                source = (key.charAt(6) == '1' ? 0 : 1);
+            source = (key.charAt(6) == '1' ? 0 : 1);
             }
         else if (key.startsWith("s1ks") || key.startsWith("s2ks"))
             {
-                source = (key.charAt(3) == '1' ? 0 : 1);
+            source = (key.charAt(3) == '1' ? 0 : 1);
             }
         else if (key.startsWith("s1dhg") || key.startsWith("s2dhg") ||
-                 key.startsWith("s1dda") || key.startsWith("s2dda") ||
-                 key.startsWith("s1ddf") || key.startsWith("s2ddf") ||
-                 key.startsWith("s1dhg") || key.startsWith("s2dhg") ||
-                 key.startsWith("s1dfg") || key.startsWith("s2dfg"))
+            key.startsWith("s1dda") || key.startsWith("s2dda") ||
+            key.startsWith("s1ddf") || key.startsWith("s2ddf") ||
+            key.startsWith("s1dhg") || key.startsWith("s2dhg") ||
+            key.startsWith("s1dfg") || key.startsWith("s2dfg"))
             {
-                source = (key.charAt(4) == '1' ? 0 : 1);
+            source = (key.charAt(4) == '1' ? 0 : 1);
             }        
 
         if (key.equals("name"))
             {
-                String name = model.get(key, "        ") + "        ";
-                data = new Object[15];
-                for(int i = 0; i < data.length; i += 2)
-                    {
-                        byte c = (byte)(name.charAt(i/2));
-                        int paramNum = (byte)(200 + i/2);
-                        data[i] = new byte[] { (byte)0xF0, 0x40, (byte)(getChannelOut()), 0x10, 0x00, 0x02, 
-                                               (byte)((source << 1) | ((paramNum >>> 7) & 0x1)), (byte)(paramNum & 127), 
-                                               (byte)((c >>> 4) & 15), (byte)(c & 15), (byte)0xF7 };
-                        if (i + 1 < data.length) 
-                            data[i + 1] = Integer.valueOf(30);
-                    }
-                return data;
+            String name = model.get(key, "        ") + "        ";
+            data = new Object[15];
+            for(int i = 0; i < data.length; i += 2)
+                {
+                byte c = (byte)(name.charAt(i/2));
+                int paramNum = (byte)(200 + i/2);
+                data[i] = new byte[] { (byte)0xF0, 0x40, (byte)(getChannelOut()), 0x10, 0x00, 0x02, 
+                    (byte)((source << 1) | ((paramNum >>> 7) & 0x1)), (byte)(paramNum & 127), 
+                    (byte)((c >>> 4) & 15), (byte)(c & 15), (byte)0xF7 };
+                if (i + 1 < data.length) 
+                    data[i + 1] = Integer.valueOf(30);
+                }
+            return data;
             }
         else if ((key.startsWith("s1dhg") || key.startsWith("s2dhg"))&& key.endsWith("maxsegonoff") ||
-                 (key.startsWith("s1ddf") || key.startsWith("s2ddf")) && key.endsWith("maxsegonoff") ||
-                 (key.startsWith("s1dda") || key.startsWith("s2dda")) && key.endsWith("maxsegonoff"))
+            (key.startsWith("s1ddf") || key.startsWith("s2ddf")) && key.endsWith("maxsegonoff") ||
+            (key.startsWith("s1dda") || key.startsWith("s2dda")) && key.endsWith("maxsegonoff"))
             {
-                int paramNum = 0;
-                if (key.startsWith("s1ddf") || key.startsWith("s2ddf")) paramNum = 131;
-                else if (key.startsWith("s1dda") || key.startsWith("s2dda")) paramNum = 161;
-                else if (key.startsWith("s1dhgenv1") ||
-                         key.startsWith("s2dhgenv1")) paramNum = 52;
-                else if (key.startsWith("s1dhgenv2") ||
-                         key.startsWith("s2dhgenv2")) paramNum = 53;
-                else if (key.startsWith("s1dhgenv3") ||
-                         key.startsWith("s2dhgenv3")) paramNum = 54;
-                else if (key.startsWith("s1dhgenv4") ||
-                         key.startsWith("s2dhgenv4")) paramNum = 55;
-                else System.err.println("Warning (KawaiK5): Invalid Key " + key);
+            int paramNum = 0;
+            if (key.startsWith("s1ddf") || key.startsWith("s2ddf")) paramNum = 131;
+            else if (key.startsWith("s1dda") || key.startsWith("s2dda")) paramNum = 161;
+            else if (key.startsWith("s1dhgenv1") ||
+                key.startsWith("s2dhgenv1")) paramNum = 52;
+            else if (key.startsWith("s1dhgenv2") ||
+                key.startsWith("s2dhgenv2")) paramNum = 53;
+            else if (key.startsWith("s1dhgenv3") ||
+                key.startsWith("s2dhgenv3")) paramNum = 54;
+            else if (key.startsWith("s1dhgenv4") ||
+                key.startsWith("s2dhgenv4")) paramNum = 55;
+            else System.err.println("Warning (KawaiK5): Invalid Key " + key);
                 
-                int c = model.get(key, 0);
-                data[0] = new byte[] { (byte)0xF0, 0x40, (byte)(getChannelOut()), 0x10, 0x00, 0x02, (byte)((source << 1) | ((paramNum >>> 7) & 0x1)), (byte)(paramNum & 127),(byte)((c >>> 4) & 15), (byte)(c & 15), (byte)0xF7 };
-                return data;
+            int c = model.get(key, 0);
+            data[0] = new byte[] { (byte)0xF0, 0x40, (byte)(getChannelOut()), 0x10, 0x00, 0x02, (byte)((source << 1) | ((paramNum >>> 7) & 0x1)), (byte)(paramNum & 127),(byte)((c >>> 4) & 15), (byte)(c & 15), (byte)0xF7 };
+            return data;
             }
         else if ((key.startsWith("s1dhgharm") || key.startsWith("s2dhgharm")) && !(key.equals("s1dhgharmsel") || key.equals("s2dhgharmsel")))  // harmonics
             {
-                String[] numbers = key.split("[\\D]+");
-                int harmonic = Integer.parseInt(numbers[2]);
+            String[] numbers = key.split("[\\D]+");
+            int harmonic = Integer.parseInt(numbers[2]);
                 
-                if (key.endsWith("envselmodyn"))
-                    {
-                        int c = model.get(key, 0);
-                        int mod = (c == 0 ? 0 : 1);
-                        int env = (c == 0 ? model.get(key + "-env", 0) + 1 : c);  // use the default if need be.  Note that it's 1...4, not 0...3.  Don't ask.
+            if (key.endsWith("envselmodyn"))
+                {
+                int c = model.get(key, 0);
+                int mod = (c == 0 ? 0 : 1);
+                int env = (c == 0 ? model.get(key + "-env", 0) + 1 : c);  // use the default if need be.  Note that it's 1...4, not 0...3.  Don't ask.
 
-                        data = new Object[5];
-                        int paramNum = 40;
-                        data[0] = new byte[] { (byte)0xF0, 0x40, (byte)(getChannelOut()), 0x10, 0x00, 0x02, (byte)((source << 1) | ((paramNum >>> 7) & 0x1)), (byte)(paramNum & 127), (byte)((harmonic >>> 4) & 0xF), (byte)(harmonic & 0xF), (byte)0xF7 };
-                        data[1] = Integer.valueOf(30);
-                        paramNum = 42;
-                        data[2] = new byte[] { (byte)0xF0, 0x40, (byte)(getChannelOut()), 0x10, 0x00, 0x02, (byte)((source << 1) | ((paramNum >>> 7) & 0x1)), (byte)(paramNum & 127), (byte)((env >>> 4) & 0xF), (byte)(env & 0xF), (byte)0xF7 };
-                        data[3] = Integer.valueOf(30);
-                        paramNum = 43;
-                        data[4] = new byte[] { (byte)0xF0, 0x40, (byte)(getChannelOut()), 0x10, 0x00, 0x02, (byte)((source << 1) | ((paramNum >>> 7) & 0x1)), (byte)(paramNum & 127), (byte)((mod >>> 4) & 0xF), (byte)(mod & 0xF), (byte)0xF7 };
-                    }
-                else if(key.endsWith("level"))
-                    {
-                        data = new Object[3];
-                        int level = model.get(key, 0);
-                        int paramNum = 40;
-                        data[0] = new byte[] { (byte)0xF0, 0x40, (byte)(getChannelOut()), 0x10, 0x00, 0x02, (byte)((source << 1) | ((paramNum >>> 7) & 0x1)), (byte)(paramNum & 127), (byte)((harmonic >>> 4) & 0xF), (byte)(harmonic & 0xF), (byte)0xF7 };
-                        data[1] = Integer.valueOf(30);
-                        paramNum = 41;
-                        data[2] = new byte[] { (byte)0xF0, 0x40, (byte)(getChannelOut()), 0x10, 0x00, 0x02, (byte)((source << 1) | ((paramNum >>> 7) & 0x1)), (byte)(paramNum & 127), (byte)((level >>> 4) & 0xF), (byte)(level & 0xF), (byte)0xF7 };
-                    }
-                else 
-                    {
-                        // all the -env stuff will go here
-                        return new Object[0];
-                    }
+                data = new Object[5];
+                int paramNum = 40;
+                data[0] = new byte[] { (byte)0xF0, 0x40, (byte)(getChannelOut()), 0x10, 0x00, 0x02, (byte)((source << 1) | ((paramNum >>> 7) & 0x1)), (byte)(paramNum & 127), (byte)((harmonic >>> 4) & 0xF), (byte)(harmonic & 0xF), (byte)0xF7 };
+                data[1] = Integer.valueOf(30);
+                paramNum = 42;
+                data[2] = new byte[] { (byte)0xF0, 0x40, (byte)(getChannelOut()), 0x10, 0x00, 0x02, (byte)((source << 1) | ((paramNum >>> 7) & 0x1)), (byte)(paramNum & 127), (byte)((env >>> 4) & 0xF), (byte)(env & 0xF), (byte)0xF7 };
+                data[3] = Integer.valueOf(30);
+                paramNum = 43;
+                data[4] = new byte[] { (byte)0xF0, 0x40, (byte)(getChannelOut()), 0x10, 0x00, 0x02, (byte)((source << 1) | ((paramNum >>> 7) & 0x1)), (byte)(paramNum & 127), (byte)((mod >>> 4) & 0xF), (byte)(mod & 0xF), (byte)0xF7 };
+                }
+            else if(key.endsWith("level"))
+                {
+                data = new Object[3];
+                int level = model.get(key, 0);
+                int paramNum = 40;
+                data[0] = new byte[] { (byte)0xF0, 0x40, (byte)(getChannelOut()), 0x10, 0x00, 0x02, (byte)((source << 1) | ((paramNum >>> 7) & 0x1)), (byte)(paramNum & 127), (byte)((harmonic >>> 4) & 0xF), (byte)(harmonic & 0xF), (byte)0xF7 };
+                data[1] = Integer.valueOf(30);
+                paramNum = 41;
+                data[2] = new byte[] { (byte)0xF0, 0x40, (byte)(getChannelOut()), 0x10, 0x00, 0x02, (byte)((source << 1) | ((paramNum >>> 7) & 0x1)), (byte)(paramNum & 127), (byte)((level >>> 4) & 0xF), (byte)(level & 0xF), (byte)0xF7 };
+                }
+            else 
+                {
+                // all the -env stuff will go here
+                return new Object[0];
+                }
                         
-                return data;            
+            return data;            
             }
         else if (parametersToIndex.containsKey(key))
             {
-                int c = model.get(key, 0);
+            int c = model.get(key, 0);
                                 
-                // handle lfoshape specially, it has to go out as 1--6 rather than 0--5
-                if (key.equals("lfoshape"))
-                    c++;
+            // handle lfoshape specially, it has to go out as 1--6 rather than 0--5
+            if (key.equals("lfoshape"))
+                c++;
                                         
-                int paramNum = ((Integer)(parametersToIndex.get(key))).intValue();
-                data[0] = new byte[] { (byte)0xF0, 0x40, (byte)(getChannelOut()), 0x10, 0x00, 0x02, (byte)((source << 1) | ((paramNum >>> 7) & 0x1)), (byte)(paramNum & 127), (byte)((c >>> 4) & 15), (byte)(c & 15), (byte)0xF7 };
-                return data;
+            int paramNum = ((Integer)(parametersToIndex.get(key))).intValue();
+            data[0] = new byte[] { (byte)0xF0, 0x40, (byte)(getChannelOut()), 0x10, 0x00, 0x02, (byte)((source << 1) | ((paramNum >>> 7) & 0x1)), (byte)(paramNum & 127), (byte)((c >>> 4) & 15), (byte)(c & 15), (byte)0xF7 };
+            return data;
             }
         else 
             {
-                System.err.println("Warning (KawaiK5): Unknown Key " + key);
-                return new Object[0];
+            System.err.println("Warning (KawaiK5): Unknown Key " + key);
+            return new Object[0];
             }
-    }
+        }
 
 
     public JMenuItem copy = new JMenuItem("Copy Tab");
@@ -2038,7 +2038,7 @@ public class KawaiK5 extends Synth
     
 
     public void parseParameter(byte[] data)
-    {
+        {
         if (data.length == 9 &&                 // write error report
             data[0] == (byte)0xF0 &&
             data[1] == (byte)0x40 &&
@@ -2047,19 +2047,19 @@ public class KawaiK5 extends Synth
             data[4] == (byte)0x00 &&
             data[5] == (byte)0x03)
             {
-                String error = "Write Failed (Maybe Transmission Failure)";
-                // dump failed
-                if (data[3] == 0x42)
-                    error = "Patch is Write-Protected";
-                else if (data[3] == 0x43)
-                    error = "External Data Card is Not Inserted";
+            String error = "Write Failed (Maybe Transmission Failure)";
+            // dump failed
+            if (data[3] == 0x42)
+                error = "Patch is Write-Protected";
+            else if (data[3] == 0x43)
+                error = "External Data Card is Not Inserted";
                         
-                showSimpleError("Write Failed", error);
+            showSimpleError("Write Failed", error);
             }
-    }
+        }
 
     public int parse(byte[] result, boolean fromFile)
-    {
+        {
         model.set("bank", result[7] / 12);
         model.set("number", result[7] % 12);
 
@@ -2069,14 +2069,14 @@ public class KawaiK5 extends Synth
         int v = 8;
         for(int i = 0; i < data.length; i++)
             {
-                data[i] = (byte)(((result[v++] & 0xF) << 4) | (result[v++] & 0xF));
+            data[i] = (byte)(((result[v++] & 0xF) << 4) | (result[v++] & 0xF));
             }
 
         // Name ...
         
         try
             {
-                model.set("name", new String(data, 0, 8, "US-ASCII"));
+            model.set("name", new String(data, 0, 8, "US-ASCII"));
             }
         catch (UnsupportedEncodingException ex) { } // won't happen
         
@@ -2099,34 +2099,34 @@ public class KawaiK5 extends Synth
         int x = 0;
         for( ; x < 63 * 2; x++)
             {
-                model.set(HARMONICS_PARAMETERS[x], data[pos++] );
+            model.set(HARMONICS_PARAMETERS[x], data[pos++] );
             }
                 
         // Harmonics mod and env sel...
                 
         for( ; x < 63 * 2 + 62 * 2; x += 2)
             {
-                int mod2 = (data[pos] >>> 7) & 1;
-                int env2 = (data[pos] >>> 4) & 3;
-                int mod1 = (data[pos] >>> 3) & 1;
-                int env1 = (data[pos] >>> 0) & 3;
+            int mod2 = (data[pos] >>> 7) & 1;
+            int env2 = (data[pos] >>> 4) & 3;
+            int mod1 = (data[pos] >>> 3) & 1;
+            int env1 = (data[pos] >>> 0) & 3;
                         
-                if (mod2 == 1)
-                    model.set(HARMONICS_PARAMETERS[x + 0], env2 + 1);
-                else
-                    model.set(HARMONICS_PARAMETERS[x + 0], 0);
+            if (mod2 == 1)
+                model.set(HARMONICS_PARAMETERS[x + 0], env2 + 1);
+            else
+                model.set(HARMONICS_PARAMETERS[x + 0], 0);
                                 
-                model.set(HARMONICS_PARAMETERS[x + 0] + "-env", env2);
-                model.setStatus(HARMONICS_PARAMETERS[x + 0] + "-env", Model.STATUS_IMMUTABLE);
+            model.set(HARMONICS_PARAMETERS[x + 0] + "-env", env2);
+            model.setStatus(HARMONICS_PARAMETERS[x + 0] + "-env", Model.STATUS_IMMUTABLE);
                         
-                if (mod1 == 1)
-                    model.set(HARMONICS_PARAMETERS[x + 1], env1 + 1);
-                else
-                    model.set(HARMONICS_PARAMETERS[x + 1], 0);
+            if (mod1 == 1)
+                model.set(HARMONICS_PARAMETERS[x + 1], env1 + 1);
+            else
+                model.set(HARMONICS_PARAMETERS[x + 1], 0);
 
-                model.set(HARMONICS_PARAMETERS[x + 1] + "-env", env1);
-                model.setStatus(HARMONICS_PARAMETERS[x + 1] + "-env", Model.STATUS_IMMUTABLE);
-                pos++;
+            model.set(HARMONICS_PARAMETERS[x + 1] + "-env", env1);
+            model.setStatus(HARMONICS_PARAMETERS[x + 1] + "-env", Model.STATUS_IMMUTABLE);
+            pos++;
             }
 
         int mod2 = (data[pos] >>> 3) & 1;
@@ -2199,10 +2199,10 @@ public class KawaiK5 extends Synth
         pos++;
 
         return PARSE_SUCCEEDED;                 
-    }
+        }
     
     public void writeAllParameters(Model model)
-    {
+        {
         performChangePatch(model);     // we need to be at the start for the Oberheim Matrix 1000
         tryToSendMIDI(emitAll(model, false, false));
         
@@ -2213,16 +2213,16 @@ public class KawaiK5 extends Synth
         simplePause(400);  // think this is the right amount -- 300 won't cut it
 
         performChangePatch(model);     // do it at the end AND start here, as opposed to doSendtoPatch, which does it first.  We need to be at the end for the Kawai K4.
-    }
+        }
                 
         
     public boolean sendAllParametersInternal()
-    {
+        {
         boolean val = super.sendAllParametersInternal();        
 
         // we change patch to SID-12 if we're sending in bulk.
         //if (sendKawaiParametersInBulk)
-        {
+            {
             // for some insane reason, we must pause somewhat AFTER we have written the patch but 
             // BEFORE we change the patch to SID-12 or else it won't get
             // properly loaded into the patch.  I cannot explain it.  And it's a lot!
@@ -2234,12 +2234,12 @@ public class KawaiK5 extends Synth
             tempModel.set("number", 11);
             changePatch(tempModel);
             simplePause(getPauseAfterChangePatch());
-        }
+            }
         return val;
-    }
+        }
 
     public byte[] emit(Model tempModel, boolean toWorkingMemory, boolean toFile)
-    {
+        {
         if (tempModel == null)
             tempModel = getModel();
 
@@ -2273,21 +2273,21 @@ public class KawaiK5 extends Synth
         int x = 0;
         for( ; x < 63 * 2; x++)
             {
-                data[pos++] = (byte)model.get(HARMONICS_PARAMETERS[x], 0);
+            data[pos++] = (byte)model.get(HARMONICS_PARAMETERS[x], 0);
             }
                 
         // Harmonics mod and env sel...
                 
         for( ; x < 63 * 2 + 62 * 2; x += 2)
             {
-                int defaultenv2 = model.get(HARMONICS_PARAMETERS[x + 0] + "-env", 0);
-                int mod2 = model.get(HARMONICS_PARAMETERS[x + 0], 0) == 0 ? 0 : 1;
-                int env2 = model.get(HARMONICS_PARAMETERS[x + 0], 0) == 0 ? defaultenv2 : (model.get(HARMONICS_PARAMETERS[x + 0], 0) - 1);
-                int defaultenv1 = model.get(HARMONICS_PARAMETERS[x + 1] + "-env", 0);
-                int mod1 = model.get(HARMONICS_PARAMETERS[x + 1], 0) == 0 ? 0 : 1;
-                int env1 = model.get(HARMONICS_PARAMETERS[x + 1], 0) == 0 ? defaultenv1 : (model.get(HARMONICS_PARAMETERS[x + 1], 0) - 1);
+            int defaultenv2 = model.get(HARMONICS_PARAMETERS[x + 0] + "-env", 0);
+            int mod2 = model.get(HARMONICS_PARAMETERS[x + 0], 0) == 0 ? 0 : 1;
+            int env2 = model.get(HARMONICS_PARAMETERS[x + 0], 0) == 0 ? defaultenv2 : (model.get(HARMONICS_PARAMETERS[x + 0], 0) - 1);
+            int defaultenv1 = model.get(HARMONICS_PARAMETERS[x + 1] + "-env", 0);
+            int mod1 = model.get(HARMONICS_PARAMETERS[x + 1], 0) == 0 ? 0 : 1;
+            int env1 = model.get(HARMONICS_PARAMETERS[x + 1], 0) == 0 ? defaultenv1 : (model.get(HARMONICS_PARAMETERS[x + 1], 0) - 1);
                         
-                data[pos++] = (byte)((mod2 << 7) | (env2 << 4) | (mod1 << 3) | (env1 << 0) );
+            data[pos++] = (byte)((mod2 << 7) | (env2 << 4) | (mod1 << 3) | (env1 << 0) );
             }
 
         int defaultenv2 = model.get(HARMONICS_PARAMETERS[x + 0] + "-env", 0);
@@ -2351,7 +2351,7 @@ public class KawaiK5 extends Synth
         int sum = 0;
         for(int i = 0; i < data.length; i += 2)
             {
-                sum += (((data[i + 1] & 0xFF) << 8) | (data[i] & 0xFF));
+            sum += (((data[i + 1] & 0xFF) << 8) | (data[i] & 0xFF));
             }
                 
         sum = sum & 0xFFFF;
@@ -2378,49 +2378,49 @@ public class KawaiK5 extends Synth
         int v = 8;
         for(int i = 0; i < pos; i++)
             {
-                result[v++] = (byte)((data[i] & 0xFF) >>> 4);
-                result[v++] = (byte)(data[i] & 0xF);
+            result[v++] = (byte)((data[i] & 0xFF) >>> 4);
+            result[v++] = (byte)(data[i] & 0xF);
             }
         result[v] = (byte)0xF7;
         
         return result;
-    }
+        }
 
 
     public byte[] requestDump(Model tempModel)
-    {
+        {
         if (tempModel == null)
             tempModel = getModel();
 
         return new byte[] 
             { 
-                (byte)0xF0, 
-                (byte)0x40, 
-                (byte)getChannelOut(), 
-                (byte)0x00, 
-                (byte)0x00, 
-                (byte)0x02,
-                (byte)0x00,  // single
-                (byte)(tempModel.get("bank") * 12 + (tempModel.get("number"))),
-                (byte)0xF7
+            (byte)0xF0, 
+            (byte)0x40, 
+            (byte)getChannelOut(), 
+            (byte)0x00, 
+            (byte)0x00, 
+            (byte)0x02,
+            (byte)0x00,  // single
+            (byte)(tempModel.get("bank") * 12 + (tempModel.get("number"))),
+            (byte)0xF7
             };
-    }
+        }
     
     public static final int EXPECTED_SYSEX_LENGTH = 993;        
     
     boolean isLegalCharacter(char c)
-    {
+        {
         for(int i = 0; i < LEGAL_CHARACTERS.length; i++)
             {
-                if (c == LEGAL_CHARACTERS[i])
-                    return true;
+            if (c == LEGAL_CHARACTERS[i])
+                return true;
             }
         return false;
-    }
+        }
     
     public static final int MAXIMUM_NAME_LENGTH = 8;
     public String revisePatchName(String name)
-    {
+        {
         name = super.revisePatchName(name);  // trim first time
         if (name.length() > MAXIMUM_NAME_LENGTH)
             name = name.substring(0, MAXIMUM_NAME_LENGTH);
@@ -2430,17 +2430,17 @@ public class KawaiK5 extends Synth
         StringBuffer nameb = new StringBuffer(name);                            
         for(int i = 0 ; i < nameb.length(); i++)
             {
-                if (!isLegalCharacter(nameb.charAt(i)))
-                    nameb.setCharAt(i, ' ');
+            if (!isLegalCharacter(nameb.charAt(i)))
+                nameb.setCharAt(i, ' ');
             }
         name = nameb.toString();
         return super.revisePatchName(name);  // trim again
-    }        
+        }        
 
         
     /** Verify that all the parameters are within valid values, and tweak them if not. */
     public void revise()
-    {
+        {
         // check the easy stuff -- out of range parameters
         super.revise();
 
@@ -2448,7 +2448,7 @@ public class KawaiK5 extends Synth
         String newnm = revisePatchName(nm);
         if (!nm.equals(newnm))
             model.set("name", newnm);
-    }
+        }
         
     public static String getSynthName() { return "Kawai K5/K5m"; }
     
@@ -2458,7 +2458,7 @@ public class KawaiK5 extends Synth
     public int getPauseAfterSendOneParameter() { return 30; }  // Sad, needs 30ms
  
     public void changePatch(Model tempModel)
-    {
+        {
         byte BB = (byte)tempModel.get("bank");
         byte NN = (byte)tempModel.get("number");
         
@@ -2468,33 +2468,33 @@ public class KawaiK5 extends Synth
         int PC = (BB * 12 + NN);
         try 
             {
-                tryToSendMIDI(new ShortMessage(ShortMessage.PROGRAM_CHANGE, getChannelOut(), PC, 0));
+            tryToSendMIDI(new ShortMessage(ShortMessage.PROGRAM_CHANGE, getChannelOut(), PC, 0));
             }
         catch (Exception e) { Synth.handleException(e); }
-    }
+        }
     
     public Model getNextPatchLocation(Model model)
-    {
+        {
         int bank = model.get("bank");
         int number = model.get("number");
         
         number++;
         if (number >= 12)
             {
-                bank++;
-                number = 0;
-                if (bank >= 4)
-                    bank = 0;
+            bank++;
+            number = 0;
+            if (bank >= 4)
+                bank = 0;
             }
                 
         Model newModel = buildModel();
         newModel.set("bank", bank);
         newModel.set("number", number);
         return newModel;
-    }
+        }
 
     public String getPatchLocationName(Model model)
-    {
+        {
         // getPatchLocationName() is called from sprout() as a test to see if we should enable
         // batch downloading.  If we haven't yet created an .init file, then parameters won't exist
         // yet and this method will bomb badly.  So we return null in this case.
@@ -2502,1295 +2502,1295 @@ public class KawaiK5 extends Synth
         if (!model.exists("bank")) return null;
         
         return BANKS[model.get("bank")] + "-" +  (model.get("number") + 1);
-    }
+        }
         
 
     HashMap parametersToIndex = new HashMap();
 
     public static final String[] parameters = new String[]
-        {
-            /// BASIC
-            "name1",                                        // 0
-            "name2",
-            "name3",
-            "name4",
-            "name5",
-            "name6",
-            "name7",
-            "name8",
-            "volume",
-            "balance",
-            "s1basicdelay",                         // 10
-            "s2basicdelay",
-            "s1basicpedaldep",
-            "s2basicpedaldep",
-            "s1basicwheeldep",
-            "s2basicwheeldep",
-            "s1basicpedalassign",
-            "s1basicwheelassign",
-            "s2basicpedalassign",
-            "s2basicwheelassign",
-            "portamentosw",                         // 20 
-            "portamentospeed",
-            "mode",
-            "picmode",
+    {
+    /// BASIC
+    "name1",                                        // 0
+    "name2",
+    "name3",
+    "name4",
+    "name5",
+    "name6",
+    "name7",
+    "name8",
+    "volume",
+    "balance",
+    "s1basicdelay",                         // 10
+    "s2basicdelay",
+    "s1basicpedaldep",
+    "s2basicpedaldep",
+    "s1basicwheeldep",
+    "s2basicwheeldep",
+    "s1basicpedalassign",
+    "s1basicwheelassign",
+    "s2basicpedalassign",
+    "s2basicwheelassign",
+    "portamentosw",                         // 20 
+    "portamentospeed",
+    "mode",
+    "picmode",
         
-            /// DFG
+    /// DFG
         
-            "s1dfgcoarse",
-            "s2dfgcoarse",
-            "s1dfgfine",
-            "s2dfgfine",
-            "s1dfgkey",
-            "s1dfgfixno",
-            "s2dfgkey",                                     // 30
-            "s2dfgfixno",
-            "s1dfgenvdep",
-            "s2dfgenvdep",
-            "s1dfgprsdep",
-            "s2dfgprsdep",
-            "s1dfgbenderdep",
-            "s2dfgbenderdep",
-            "s1dfgveloenvdep",
-            "s2dfgveloenvdep",
-            "s1dfglfodep",                          // 40
-            "s2dfglfodep",
-            "s1dfgpreslfodep",
-            "s2dfgpreslfodep",
-            "s1dfgenvloop",
-            "s1dfgenvrateseg1",
-            "s2dfgenvloop",
-            "s2dfgenvrateseg1",
-            "s1dfgenvrateseg2",
-            "s2dfgenvrateseg2",
-            "s1dfgenvrateseg3",                             // 50
-            "s2dfgenvrateseg3",
-            "s1dfgenvrateseg4",
-            "s2dfgenvrateseg4",
-            "s1dfgenvrateseg5",
-            "s2dfgenvrateseg5",
-            "s1dfgenvrateseg6",
-            "s2dfgenvrateseg6",
-            "s1dfgenvlevelseg1",
-            "s2dfgenvlevelseg1",
-            "s1dfgenvlevelseg2",                    // 60
-            "s2dfgenvlevelseg2",
-            "s1dfgenvlevelseg3",
-            "s2dfgenvlevelseg3",
-            "s1dfgenvlevelseg4",
-            "s2dfgenvlevelseg4",
-            "s1dfgenvlevelseg5",
-            "s2dfgenvlevelseg5",
-            "s1dfgenvlevelseg6",
-            "s2dfgenvlevelseg6",
+    "s1dfgcoarse",
+    "s2dfgcoarse",
+    "s1dfgfine",
+    "s2dfgfine",
+    "s1dfgkey",
+    "s1dfgfixno",
+    "s2dfgkey",                                     // 30
+    "s2dfgfixno",
+    "s1dfgenvdep",
+    "s2dfgenvdep",
+    "s1dfgprsdep",
+    "s2dfgprsdep",
+    "s1dfgbenderdep",
+    "s2dfgbenderdep",
+    "s1dfgveloenvdep",
+    "s2dfgveloenvdep",
+    "s1dfglfodep",                          // 40
+    "s2dfglfodep",
+    "s1dfgpreslfodep",
+    "s2dfgpreslfodep",
+    "s1dfgenvloop",
+    "s1dfgenvrateseg1",
+    "s2dfgenvloop",
+    "s2dfgenvrateseg1",
+    "s1dfgenvrateseg2",
+    "s2dfgenvrateseg2",
+    "s1dfgenvrateseg3",                             // 50
+    "s2dfgenvrateseg3",
+    "s1dfgenvrateseg4",
+    "s2dfgenvrateseg4",
+    "s1dfgenvrateseg5",
+    "s2dfgenvrateseg5",
+    "s1dfgenvrateseg6",
+    "s2dfgenvrateseg6",
+    "s1dfgenvlevelseg1",
+    "s2dfgenvlevelseg1",
+    "s1dfgenvlevelseg2",                    // 60
+    "s2dfgenvlevelseg2",
+    "s1dfgenvlevelseg3",
+    "s2dfgenvlevelseg3",
+    "s1dfgenvlevelseg4",
+    "s2dfgenvlevelseg4",
+    "s1dfgenvlevelseg5",
+    "s2dfgenvlevelseg5",
+    "s1dfgenvlevelseg6",
+    "s2dfgenvlevelseg6",
         
-            /// DHG
-            /// Harmonics not listed, but then...
+    /// DHG
+    /// Harmonics not listed, but then...
         
-            "s1dhgvelodep",                                 // 70
-            "s2dhgvelodep",
-            "s1dhgpresdep",
-            "s2dhgpresdep",
-            "s1dhgksdep",
-            "s2dhgksdep",
-            "s1dhglfodep",
-            "s2dhglfodep",
-            "s1dhgenv1onoff",                               // 80
-            "s1dhgenv1moddepth",    // mistake,
-            "s2dhgenv1onoff",
-            "s2dhgenv1moddepth",    // mistake,
-            "s1dhgenv2onoff",
-            "s1dhgenv2moddepth",    // mistake,
-            "s2dhgenv2onoff",
-            "s2dhgenv2moddepth",    // mistake,
-            "s1dhgenv3onoff",
-            "s1dhgenv3moddepth",    // mistake,
-            "s2dhgenv3onoff",
-            "s2dhgenv3moddepth",    // mistake,
-            "s1dhgenv4onoff",                               // 90
-            "s1dhgenv4moddepth",    // mistake,
-            "s2dhgenv4onoff",
-            "s2dhgenv4moddepth",    // mistake,
-            "s1dhgmodonoff",
-            "s1dhgharmsel",
-            "s2dhgmodonoff",
-            "s2dhgharmsel",
-            "s1dhgrangefrom",
-            "s2dhgrangefrom",
-            "s1dhgrangeto",                         // 100
-            "s2dhgrangeto",
-            "s1dhgoddmodonoff",
-            "s1dhgoddenv",
-            "s1dhgevenmodonoff",    // this must be an error -- was 
-            "s1dhgevenenv",
-            "s2dhgoddmodonoff",
-            "s2dhgoddenv",
-            "s2dhgevenmodonoff",    // this must be an error -- was 
-            "s2dhgevenenv",
-            "s1dhgoctavemodonoff",                  // 110
-            "s1dhgoctaveenv",
-            "s1dhgfifthmodonoff",
-            "s1dhgfifthenv",
-            "s2dhgoctavemodonoff",
-            "s2dhgoctaveenv",
-            "s2dhgfifthmodonoff",
-            "s2dhgfifthenv",
-            "s1dhgallmodonoff",
-            "s1dhgallenv",                          // 120
-            "s2dhgallmodonoff",
-            "s2dhgallenv",
-            "s1dhgangle",
-            "s2dhgangle",
-            "s1dhgharm",
-            "s2dhgharm",
-            "s1dhgshadowonoff",     // mistake,
-            "s1dhgenv1maxsegonoff", // mistake,
-            "s1dhgenv1seg1level",
-            "s2dhgshadowonoff",     // mistake,
-            "s2dhgenv1maxsegonoff", // mistake,                     130
-            "s2dhgenv1seg1level",
-            "s1dhgenv1maxsegonoff", // mistake,
-            "s1dhgenv1seg2level",
-            "s2dhgenv1maxsegonoff", // mistake,
-            "s2dhgenv1seg2level",
-            "s1dhgenv1maxsegonoff", // mistake,
-            "s1dhgenv1seg3level",
-            "s2dhgenv1maxsegonoff", // mistake,
-            "s2dhgenv1seg3level",
-            "s1dhgenv1maxsegonoff", // mistake,                     140
-            "s1dhgenv1seg4level",
-            "s2dhgenv1maxsegonoff", // mistake,
-            "s2dhgenv1seg4level",
-            "s1dhgenv1maxsegonoff", // mistake,
-            "s1dhgenv1seg5level",
-            "s2dhgenv1maxsegonoff", // mistake,
-            "s2dhgenv1seg5level",
-            "s1dhgenv1maxsegonoff", // mistake,
-            "s1dhgenv1seg6level",
-            "s2dhgenv1maxsegonoff", // mistake,                     // 150
-            "s2dhgenv1seg6level",
-            "s1dhgenv1seg1rate",                                    
-            "s2dhgenv1seg1rate",
-            "s1dhgenv1seg2rate",
-            "s2dhgenv1seg2rate",
-            "s1dhgenv1seg3rate",
-            "s2dhgenv1seg3rate",
-            "s1dhgenv1seg4rate",
-            "s2dhgenv1seg4rate",
-            "s1dhgenv1seg5rate",                                    // 160
-            "s2dhgenv1seg5rate",
-            "s1dhgenv1seg6rate",
-            "s2dhgenv1seg6rate",
-            "s1dhgenv2maxsegonoff", // mistake,
-            "s1dhgenv2seg1level",
-            "s2dhgenv2maxsegonoff", // mistake,
-            "s2dhgenv2seg1level",
-            "s1dhgenv2maxsegonoff", // mistake,
-            "s1dhgenv2seg2level",
-            "s2dhgenv2maxsegonoff", // mistake,             // 170
-            "s2dhgenv2seg2level",
-            "s1dhgenv2maxsegonoff", // mistake,
-            "s1dhgenv2seg3level",
-            "s2dhgenv2maxsegonoff", // mistake,
-            "s2dhgenv2seg3level",
-            "s1dhgenv2maxsegonoff", // mistake,
-            "s1dhgenv2seg4level",
-            "s2dhgenv2maxsegonoff", // mistake,
-            "s2dhgenv2seg4level",
-            "s1dhgenv2maxsegonoff", // mistake,             // 180
-            "s1dhgenv2seg5level",
-            "s2dhgenv2maxsegonoff", // mistake,
-            "s2dhgenv2seg5level",
-            "s1dhgenv2maxsegonoff", // mistake,
-            "s1dhgenv2seg6level",
-            "s2dhgenv2maxsegonoff", // mistake,
-            "s2dhgenv2seg6level",
-            "s1dhgenv2seg1rate",
-            "s2dhgenv2seg1rate",
-            "s1dhgenv2seg2rate",                                    // 190
-            "s2dhgenv2seg2rate",
-            "s1dhgenv2seg3rate",
-            "s2dhgenv2seg3rate",
-            "s1dhgenv2seg4rate",
-            "s2dhgenv2seg4rate",
-            "s1dhgenv2seg5rate",
-            "s2dhgenv2seg5rate",
-            "s1dhgenv2seg6rate",
-            "s2dhgenv2seg6rate",
-            "s1dhgenv3maxsegonoff", // mistake,             // 200
-            "s1dhgenv3seg1level",
-            "s2dhgenv3maxsegonoff", // mistake,
-            "s2dhgenv3seg1level",
-            "s1dhgenv3maxsegonoff", // mistake,
-            "s1dhgenv3seg2level",
-            "s2dhgenv3maxsegonoff", // mistake,
-            "s2dhgenv3seg2level",
-            "s1dhgenv3maxsegonoff", // mistake,
-            "s1dhgenv3seg3level",
-            "s2dhgenv3maxsegonoff", // mistake,                     // 210
-            "s2dhgenv3seg3level",
-            "s1dhgenv3maxsegonoff", // mistake,
-            "s1dhgenv3seg4level",
-            "s2dhgenv3maxsegonoff", // mistake,
-            "s2dhgenv3seg4level",
-            "s1dhgenv3maxsegonoff", // mistake,
-            "s1dhgenv3seg5level",
-            "s2dhgenv3maxsegonoff", // mistake,
-            "s2dhgenv3seg5level",
-            "s1dhgenv3maxsegonoff", // mistake,                     // 220
-            "s1dhgenv3seg6level",
-            "s2dhgenv3maxsegonoff", // mistake,
-            "s2dhgenv3seg6level",
-            "s1dhgenv3seg1rate",
-            "s2dhgenv3seg1rate",
-            "s1dhgenv3seg2rate",
-            "s2dhgenv3seg2rate",
-            "s1dhgenv3seg3rate",
-            "s2dhgenv3seg3rate",
-            "s1dhgenv3seg4rate",                            // 230
-            "s2dhgenv3seg4rate",
-            "s1dhgenv3seg5rate",
-            "s2dhgenv3seg5rate",
-            "s1dhgenv3seg6rate",
-            "s2dhgenv3seg6rate",
-            "s1dhgenv4maxsegonoff", // mistake,
-            "s1dhgenv4seg1level",
-            "s2dhgenv4maxsegonoff", // mistake,
-            "s2dhgenv4seg1level",
-            "s1dhgenv4maxsegonoff", // mistake,             // 240
-            "s1dhgenv4seg2level",
-            "s2dhgenv4maxsegonoff", // mistake,
-            "s2dhgenv4seg2level",
-            "s1dhgenv4maxsegonoff", // mistake,
-            "s1dhgenv4seg3level",
-            "s2dhgenv4maxsegonoff", // mistake,
-            "s2dhgenv4seg3level",
-            "s1dhgenv4maxsegonoff", // mistake,
-            "s1dhgenv4seg4level",
-            "s2dhgenv4maxsegonoff", // mistake,             // 250
-            "s2dhgenv4seg4level",
-            "s1dhgenv4maxsegonoff", // mistake,
-            "s1dhgenv4seg5level",
-            "s2dhgenv4maxsegonoff", // mistake,
-            "s2dhgenv4seg5level",
-            "s1dhgenv4maxsegonoff", // mistake,
-            "s1dhgenv4seg6level",
-            "s2dhgenv4maxsegonoff", // mistake,
-            "s2dhgenv4seg6level",
-            "s1dhgenv4seg1rate",                                            // 260
-            "s2dhgenv4seg1rate",
-            "s1dhgenv4seg2rate",
-            "s2dhgenv4seg2rate",
-            "s1dhgenv4seg3rate",
-            "s2dhgenv4seg3rate",
-            "s1dhgenv4seg4rate",
-            "s2dhgenv4seg4rate",
-            "s1dhgenv4seg5rate",
-            "s2dhgenv4seg5rate",
-            "s1dhgenv4seg6rate",                                            // 270
-            "s2dhgenv4seg6rate",
+    "s1dhgvelodep",                                 // 70
+    "s2dhgvelodep",
+    "s1dhgpresdep",
+    "s2dhgpresdep",
+    "s1dhgksdep",
+    "s2dhgksdep",
+    "s1dhglfodep",
+    "s2dhglfodep",
+    "s1dhgenv1onoff",                               // 80
+    "s1dhgenv1moddepth",    // mistake,
+    "s2dhgenv1onoff",
+    "s2dhgenv1moddepth",    // mistake,
+    "s1dhgenv2onoff",
+    "s1dhgenv2moddepth",    // mistake,
+    "s2dhgenv2onoff",
+    "s2dhgenv2moddepth",    // mistake,
+    "s1dhgenv3onoff",
+    "s1dhgenv3moddepth",    // mistake,
+    "s2dhgenv3onoff",
+    "s2dhgenv3moddepth",    // mistake,
+    "s1dhgenv4onoff",                               // 90
+    "s1dhgenv4moddepth",    // mistake,
+    "s2dhgenv4onoff",
+    "s2dhgenv4moddepth",    // mistake,
+    "s1dhgmodonoff",
+    "s1dhgharmsel",
+    "s2dhgmodonoff",
+    "s2dhgharmsel",
+    "s1dhgrangefrom",
+    "s2dhgrangefrom",
+    "s1dhgrangeto",                         // 100
+    "s2dhgrangeto",
+    "s1dhgoddmodonoff",
+    "s1dhgoddenv",
+    "s1dhgevenmodonoff",    // this must be an error -- was 
+    "s1dhgevenenv",
+    "s2dhgoddmodonoff",
+    "s2dhgoddenv",
+    "s2dhgevenmodonoff",    // this must be an error -- was 
+    "s2dhgevenenv",
+    "s1dhgoctavemodonoff",                  // 110
+    "s1dhgoctaveenv",
+    "s1dhgfifthmodonoff",
+    "s1dhgfifthenv",
+    "s2dhgoctavemodonoff",
+    "s2dhgoctaveenv",
+    "s2dhgfifthmodonoff",
+    "s2dhgfifthenv",
+    "s1dhgallmodonoff",
+    "s1dhgallenv",                          // 120
+    "s2dhgallmodonoff",
+    "s2dhgallenv",
+    "s1dhgangle",
+    "s2dhgangle",
+    "s1dhgharm",
+    "s2dhgharm",
+    "s1dhgshadowonoff",     // mistake,
+    "s1dhgenv1maxsegonoff", // mistake,
+    "s1dhgenv1seg1level",
+    "s2dhgshadowonoff",     // mistake,
+    "s2dhgenv1maxsegonoff", // mistake,                     130
+    "s2dhgenv1seg1level",
+    "s1dhgenv1maxsegonoff", // mistake,
+    "s1dhgenv1seg2level",
+    "s2dhgenv1maxsegonoff", // mistake,
+    "s2dhgenv1seg2level",
+    "s1dhgenv1maxsegonoff", // mistake,
+    "s1dhgenv1seg3level",
+    "s2dhgenv1maxsegonoff", // mistake,
+    "s2dhgenv1seg3level",
+    "s1dhgenv1maxsegonoff", // mistake,                     140
+    "s1dhgenv1seg4level",
+    "s2dhgenv1maxsegonoff", // mistake,
+    "s2dhgenv1seg4level",
+    "s1dhgenv1maxsegonoff", // mistake,
+    "s1dhgenv1seg5level",
+    "s2dhgenv1maxsegonoff", // mistake,
+    "s2dhgenv1seg5level",
+    "s1dhgenv1maxsegonoff", // mistake,
+    "s1dhgenv1seg6level",
+    "s2dhgenv1maxsegonoff", // mistake,                     // 150
+    "s2dhgenv1seg6level",
+    "s1dhgenv1seg1rate",                                    
+    "s2dhgenv1seg1rate",
+    "s1dhgenv1seg2rate",
+    "s2dhgenv1seg2rate",
+    "s1dhgenv1seg3rate",
+    "s2dhgenv1seg3rate",
+    "s1dhgenv1seg4rate",
+    "s2dhgenv1seg4rate",
+    "s1dhgenv1seg5rate",                                    // 160
+    "s2dhgenv1seg5rate",
+    "s1dhgenv1seg6rate",
+    "s2dhgenv1seg6rate",
+    "s1dhgenv2maxsegonoff", // mistake,
+    "s1dhgenv2seg1level",
+    "s2dhgenv2maxsegonoff", // mistake,
+    "s2dhgenv2seg1level",
+    "s1dhgenv2maxsegonoff", // mistake,
+    "s1dhgenv2seg2level",
+    "s2dhgenv2maxsegonoff", // mistake,             // 170
+    "s2dhgenv2seg2level",
+    "s1dhgenv2maxsegonoff", // mistake,
+    "s1dhgenv2seg3level",
+    "s2dhgenv2maxsegonoff", // mistake,
+    "s2dhgenv2seg3level",
+    "s1dhgenv2maxsegonoff", // mistake,
+    "s1dhgenv2seg4level",
+    "s2dhgenv2maxsegonoff", // mistake,
+    "s2dhgenv2seg4level",
+    "s1dhgenv2maxsegonoff", // mistake,             // 180
+    "s1dhgenv2seg5level",
+    "s2dhgenv2maxsegonoff", // mistake,
+    "s2dhgenv2seg5level",
+    "s1dhgenv2maxsegonoff", // mistake,
+    "s1dhgenv2seg6level",
+    "s2dhgenv2maxsegonoff", // mistake,
+    "s2dhgenv2seg6level",
+    "s1dhgenv2seg1rate",
+    "s2dhgenv2seg1rate",
+    "s1dhgenv2seg2rate",                                    // 190
+    "s2dhgenv2seg2rate",
+    "s1dhgenv2seg3rate",
+    "s2dhgenv2seg3rate",
+    "s1dhgenv2seg4rate",
+    "s2dhgenv2seg4rate",
+    "s1dhgenv2seg5rate",
+    "s2dhgenv2seg5rate",
+    "s1dhgenv2seg6rate",
+    "s2dhgenv2seg6rate",
+    "s1dhgenv3maxsegonoff", // mistake,             // 200
+    "s1dhgenv3seg1level",
+    "s2dhgenv3maxsegonoff", // mistake,
+    "s2dhgenv3seg1level",
+    "s1dhgenv3maxsegonoff", // mistake,
+    "s1dhgenv3seg2level",
+    "s2dhgenv3maxsegonoff", // mistake,
+    "s2dhgenv3seg2level",
+    "s1dhgenv3maxsegonoff", // mistake,
+    "s1dhgenv3seg3level",
+    "s2dhgenv3maxsegonoff", // mistake,                     // 210
+    "s2dhgenv3seg3level",
+    "s1dhgenv3maxsegonoff", // mistake,
+    "s1dhgenv3seg4level",
+    "s2dhgenv3maxsegonoff", // mistake,
+    "s2dhgenv3seg4level",
+    "s1dhgenv3maxsegonoff", // mistake,
+    "s1dhgenv3seg5level",
+    "s2dhgenv3maxsegonoff", // mistake,
+    "s2dhgenv3seg5level",
+    "s1dhgenv3maxsegonoff", // mistake,                     // 220
+    "s1dhgenv3seg6level",
+    "s2dhgenv3maxsegonoff", // mistake,
+    "s2dhgenv3seg6level",
+    "s1dhgenv3seg1rate",
+    "s2dhgenv3seg1rate",
+    "s1dhgenv3seg2rate",
+    "s2dhgenv3seg2rate",
+    "s1dhgenv3seg3rate",
+    "s2dhgenv3seg3rate",
+    "s1dhgenv3seg4rate",                            // 230
+    "s2dhgenv3seg4rate",
+    "s1dhgenv3seg5rate",
+    "s2dhgenv3seg5rate",
+    "s1dhgenv3seg6rate",
+    "s2dhgenv3seg6rate",
+    "s1dhgenv4maxsegonoff", // mistake,
+    "s1dhgenv4seg1level",
+    "s2dhgenv4maxsegonoff", // mistake,
+    "s2dhgenv4seg1level",
+    "s1dhgenv4maxsegonoff", // mistake,             // 240
+    "s1dhgenv4seg2level",
+    "s2dhgenv4maxsegonoff", // mistake,
+    "s2dhgenv4seg2level",
+    "s1dhgenv4maxsegonoff", // mistake,
+    "s1dhgenv4seg3level",
+    "s2dhgenv4maxsegonoff", // mistake,
+    "s2dhgenv4seg3level",
+    "s1dhgenv4maxsegonoff", // mistake,
+    "s1dhgenv4seg4level",
+    "s2dhgenv4maxsegonoff", // mistake,             // 250
+    "s2dhgenv4seg4level",
+    "s1dhgenv4maxsegonoff", // mistake,
+    "s1dhgenv4seg5level",
+    "s2dhgenv4maxsegonoff", // mistake,
+    "s2dhgenv4seg5level",
+    "s1dhgenv4maxsegonoff", // mistake,
+    "s1dhgenv4seg6level",
+    "s2dhgenv4maxsegonoff", // mistake,
+    "s2dhgenv4seg6level",
+    "s1dhgenv4seg1rate",                                            // 260
+    "s2dhgenv4seg1rate",
+    "s1dhgenv4seg2rate",
+    "s2dhgenv4seg2rate",
+    "s1dhgenv4seg3rate",
+    "s2dhgenv4seg3rate",
+    "s1dhgenv4seg4rate",
+    "s2dhgenv4seg4rate",
+    "s1dhgenv4seg5rate",
+    "s2dhgenv4seg5rate",
+    "s1dhgenv4seg6rate",                                            // 270
+    "s2dhgenv4seg6rate",
         
-            /// DDF
+    /// DDF
         
-            "s1ddfcutoff",
-            "s2ddfcutoff",
-            "s1ddfcutoffmod",
-            "s2ddfcutoffmod",
-            "s1ddfslope",
-            "s2ddfslope",
-            "s1ddfslopemod",
-            "s2ddfslopemod",
-            "s1ddfflatlevel",                                       // 280
-            "s2ddfflatlevel",
-            "s1ddfvelodep",
-            "s2ddfvelodep",
-            "s1ddfpresdep",
-            "s2ddfpresdep",
-            "s1ddfksdep",
-            "s2ddfksdep",
-            "s1ddfenvdep",
-            "s2ddfenvdep",
-            "s1ddfveloenvdep",                              // 290
-            "s2ddfveloenvdep",
-            "s1ddfddfonoff",
-            "s1ddfddfmodonoff",
-            "s1ddflfodep",
-            "s2ddfddfonoff",
-            "s2ddfddfmodonoff",
-            "s2ddflfodep",
-            "s1ddfenvseg1rate",
-            "s2ddfenvseg1rate",
-            "s1ddfenvseg2rate",                             // 300
-            "s2ddfenvseg2rate",
-            "s1ddfenvseg3rate",
-            "s2ddfenvseg3rate",
-            "s1ddfenvseg4rate",
-            "s2ddfenvseg4rate",
-            "s1ddfenvseg5rate",
-            "s2ddfenvseg5rate",
-            "s1ddfenvseg6rate",
-            "s2ddfenvseg6rate",
-            "s1ddfenvmaxsegonoff",  // mistake,                     // 310
-            "s1ddfenvseg1level",
-            "s2ddfenvmaxsegonoff",  // mistake,
-            "s2ddfenvseg1level",
-            "s1ddfenvmaxsegonoff",  // mistake,
-            "s1ddfenvseg2level",
-            "s2ddfenvmaxsegonoff",  // mistake,
-            "s2ddfenvseg2level",
-            "s1ddfenvmaxsegonoff",  // mistake,
-            "s1ddfenvseg3level",
-            "s2ddfenvmaxsegonoff",  // mistake,                     // 320
-            "s2ddfenvseg3level",
-            "s1ddfenvmaxsegonoff",  // mistake,
-            "s1ddfenvseg4level",
-            "s2ddfenvmaxsegonoff",  // mistake,
-            "s2ddfenvseg4level",
-            "s1ddfenvmaxsegonoff",  // mistake,
-            "s1ddfenvseg5level",
-            "s2ddfenvmaxsegonoff",  // mistake,
-            "s2ddfenvseg5level",
-            "s1ddfenvmaxsegonoff",  // mistake,                     // 330  
-            "s1ddfenvseg6level",
-            "s2ddfenvmaxsegonoff",  // mistake,
-            "s2ddfenvseg6level",
+    "s1ddfcutoff",
+    "s2ddfcutoff",
+    "s1ddfcutoffmod",
+    "s2ddfcutoffmod",
+    "s1ddfslope",
+    "s2ddfslope",
+    "s1ddfslopemod",
+    "s2ddfslopemod",
+    "s1ddfflatlevel",                                       // 280
+    "s2ddfflatlevel",
+    "s1ddfvelodep",
+    "s2ddfvelodep",
+    "s1ddfpresdep",
+    "s2ddfpresdep",
+    "s1ddfksdep",
+    "s2ddfksdep",
+    "s1ddfenvdep",
+    "s2ddfenvdep",
+    "s1ddfveloenvdep",                              // 290
+    "s2ddfveloenvdep",
+    "s1ddfddfonoff",
+    "s1ddfddfmodonoff",
+    "s1ddflfodep",
+    "s2ddfddfonoff",
+    "s2ddfddfmodonoff",
+    "s2ddflfodep",
+    "s1ddfenvseg1rate",
+    "s2ddfenvseg1rate",
+    "s1ddfenvseg2rate",                             // 300
+    "s2ddfenvseg2rate",
+    "s1ddfenvseg3rate",
+    "s2ddfenvseg3rate",
+    "s1ddfenvseg4rate",
+    "s2ddfenvseg4rate",
+    "s1ddfenvseg5rate",
+    "s2ddfenvseg5rate",
+    "s1ddfenvseg6rate",
+    "s2ddfenvseg6rate",
+    "s1ddfenvmaxsegonoff",  // mistake,                     // 310
+    "s1ddfenvseg1level",
+    "s2ddfenvmaxsegonoff",  // mistake,
+    "s2ddfenvseg1level",
+    "s1ddfenvmaxsegonoff",  // mistake,
+    "s1ddfenvseg2level",
+    "s2ddfenvmaxsegonoff",  // mistake,
+    "s2ddfenvseg2level",
+    "s1ddfenvmaxsegonoff",  // mistake,
+    "s1ddfenvseg3level",
+    "s2ddfenvmaxsegonoff",  // mistake,                     // 320
+    "s2ddfenvseg3level",
+    "s1ddfenvmaxsegonoff",  // mistake,
+    "s1ddfenvseg4level",
+    "s2ddfenvmaxsegonoff",  // mistake,
+    "s2ddfenvseg4level",
+    "s1ddfenvmaxsegonoff",  // mistake,
+    "s1ddfenvseg5level",
+    "s2ddfenvmaxsegonoff",  // mistake,
+    "s2ddfenvseg5level",
+    "s1ddfenvmaxsegonoff",  // mistake,                     // 330  
+    "s1ddfenvseg6level",
+    "s2ddfenvmaxsegonoff",  // mistake,
+    "s2ddfenvseg6level",
         
-            /// DDA
+    /// DDA
         
-            "s1ddaattackvelodep",   // mistake,
-            "s2ddaattackvelodep",   // mistake,
-            "s1ddapresdep",
-            "s2ddapresdep",
-            "s1ddaksdep",
-            "s2ddaksdep",
-            "s1ddaddaonoff",                                                        // 340
-            "s1ddalfodep",
-            "s2ddaddaonoff",
-            "s2ddalfodep",
-            "s1ddaattackvelrate",   // mistake,
-            "s2ddaattackvelrate",   // mistake,
-            "s1ddareleasevelrate",
-            "s2ddareleasevelrate",
-            "s1ddaksrate",
-            "s2ddaksrate",
-            "s1ddaenvseg1modonoff",                                         // 350
-            "s1ddaenvseg1rate",
-            "s2ddaenvseg1modonoff",
-            "s2ddaenvseg1rate",
-            "s1ddaenvseg2modonoff",
-            "s1ddaenvseg2rate",
-            "s2ddaenvseg2modonoff",
-            "s2ddaenvseg2rate",
-            "s1ddaenvseg3modonoff",
-            "s1ddaenvseg3rate",
-            "s2ddaenvseg3modonoff",                                         // 360
-            "s2ddaenvseg3rate",
-            "s1ddaenvseg4modonoff",
-            "s1ddaenvseg4rate",
-            "s2ddaenvseg4modonoff",
-            "s2ddaenvseg4rate",
-            "s1ddaenvseg5modonoff",
-            "s1ddaenvseg5rate",
-            "s2ddaenvseg5modonoff",
-            "s2ddaenvseg5rate",
-            "s1ddaenvseg6modonoff",                                         // 370
-            "s1ddaenvseg6rate",
-            "s2ddaenvseg6modonoff",
-            "s2ddaenvseg6rate",
-            "s1ddaenvseg7modonoff",
-            "s1ddaenvseg7rate",
-            "s2ddaenvseg7modonoff",
-            "s2ddaenvseg7rate",
-            "s1ddaenvmaxsegonoff",  // mistake,
-            "s1ddaenvseg1level",
-            "s2ddaenvmaxsegonoff",  // mistake,                     // 380
-            "s2ddaenvseg1level",
-            "s1ddaenvmaxsegonoff",  // mistake,
-            "s1ddaenvseg2level",
-            "s2ddaenvmaxsegonoff",  // mistake,
-            "s2ddaenvseg2level",
-            "s1ddaenvmaxsegonoff",  // mistake,
-            "s1ddaenvseg3level",
-            "s2ddaenvmaxsegonoff",  // mistake,
-            "s2ddaenvseg3level",
-            "s1ddaenvmaxsegonoff",  // mistake,                     // 390
-            "s1ddaenvseg4level",
-            "s2ddaenvmaxsegonoff",  // mistake,
-            "s2ddaenvseg4level",
-            "s1ddaenvmaxsegonoff",  // mistake,
-            "s1ddaenvseg5level",
-            "s2ddaenvmaxsegonoff",  // mistake,
-            "s2ddaenvseg5level",
-            "s1ddaenvmaxsegonoff",  // mistake,
-            "s1ddaenvseg6level",
-            "s2ddaenvmaxsegonoff",  // mistake,
-            "s2ddaenvseg6level",
+    "s1ddaattackvelodep",   // mistake,
+    "s2ddaattackvelodep",   // mistake,
+    "s1ddapresdep",
+    "s2ddapresdep",
+    "s1ddaksdep",
+    "s2ddaksdep",
+    "s1ddaddaonoff",                                                        // 340
+    "s1ddalfodep",
+    "s2ddaddaonoff",
+    "s2ddalfodep",
+    "s1ddaattackvelrate",   // mistake,
+    "s2ddaattackvelrate",   // mistake,
+    "s1ddareleasevelrate",
+    "s2ddareleasevelrate",
+    "s1ddaksrate",
+    "s2ddaksrate",
+    "s1ddaenvseg1modonoff",                                         // 350
+    "s1ddaenvseg1rate",
+    "s2ddaenvseg1modonoff",
+    "s2ddaenvseg1rate",
+    "s1ddaenvseg2modonoff",
+    "s1ddaenvseg2rate",
+    "s2ddaenvseg2modonoff",
+    "s2ddaenvseg2rate",
+    "s1ddaenvseg3modonoff",
+    "s1ddaenvseg3rate",
+    "s2ddaenvseg3modonoff",                                         // 360
+    "s2ddaenvseg3rate",
+    "s1ddaenvseg4modonoff",
+    "s1ddaenvseg4rate",
+    "s2ddaenvseg4modonoff",
+    "s2ddaenvseg4rate",
+    "s1ddaenvseg5modonoff",
+    "s1ddaenvseg5rate",
+    "s2ddaenvseg5modonoff",
+    "s2ddaenvseg5rate",
+    "s1ddaenvseg6modonoff",                                         // 370
+    "s1ddaenvseg6rate",
+    "s2ddaenvseg6modonoff",
+    "s2ddaenvseg6rate",
+    "s1ddaenvseg7modonoff",
+    "s1ddaenvseg7rate",
+    "s2ddaenvseg7modonoff",
+    "s2ddaenvseg7rate",
+    "s1ddaenvmaxsegonoff",  // mistake,
+    "s1ddaenvseg1level",
+    "s2ddaenvmaxsegonoff",  // mistake,                     // 380
+    "s2ddaenvseg1level",
+    "s1ddaenvmaxsegonoff",  // mistake,
+    "s1ddaenvseg2level",
+    "s2ddaenvmaxsegonoff",  // mistake,
+    "s2ddaenvseg2level",
+    "s1ddaenvmaxsegonoff",  // mistake,
+    "s1ddaenvseg3level",
+    "s2ddaenvmaxsegonoff",  // mistake,
+    "s2ddaenvseg3level",
+    "s1ddaenvmaxsegonoff",  // mistake,                     // 390
+    "s1ddaenvseg4level",
+    "s2ddaenvmaxsegonoff",  // mistake,
+    "s2ddaenvseg4level",
+    "s1ddaenvmaxsegonoff",  // mistake,
+    "s1ddaenvseg5level",
+    "s2ddaenvmaxsegonoff",  // mistake,
+    "s2ddaenvseg5level",
+    "s1ddaenvmaxsegonoff",  // mistake,
+    "s1ddaenvseg6level",
+    "s2ddaenvmaxsegonoff",  // mistake,
+    "s2ddaenvseg6level",
         
-            /// LFO
+    /// LFO
         
-            "lfoshape",
-            "lfospeed",
-            "lfodelay",
-            "lfotrend",
+    "lfoshape",
+    "lfospeed",
+    "lfodelay",
+    "lfotrend",
         
-            /// KS
+    /// KS
         
-            "s1ksright",
-            "s2ksright",
-            "s1ksleft",
-            "s2ksleft",
-            "s1ksbreakpoint",                                                       // 410
-            "s2ksbreakpoint",
+    "s1ksright",
+    "s2ksright",
+    "s1ksleft",
+    "s2ksleft",
+    "s1ksbreakpoint",                                                       // 410
+    "s2ksbreakpoint",
         
-            /// DFT
+    /// DFT
         
-            "dftonoff",
-            "dftc11level",        // mistake,
-            "dftc0level",
-            "dftc1level",
-            "dftc2level",
-            "dftc3level",
-            "dftc4level",
-            "dftc5level",
-            "dftc6level",                                                           // 420
-            "dftc7level",
-            "dftc8level",
-            "dftc9level",
-        };
+    "dftonoff",
+    "dftc11level",        // mistake,
+    "dftc0level",
+    "dftc1level",
+    "dftc2level",
+    "dftc3level",
+    "dftc4level",
+    "dftc5level",
+    "dftc6level",                                                           // 420
+    "dftc7level",
+    "dftc8level",
+    "dftc9level",
+    };
 
     public static final int[] paramNumbers = new int[]
-        {
-            /// BASIC,
+    {
+    /// BASIC,
         
-            200,
-            201,
-            202,
-            203,
-            204,
-            205,
-            206,
-            207,
-            210,
-            211,
-            215,
-            218,
-            214,
-            217,
-            232,
-            233,
-            213,
-            230,
-            216,
-            231,
-            234,
-            235,
-            208,
-            236,
+    200,
+    201,
+    202,
+    203,
+    204,
+    205,
+    206,
+    207,
+    210,
+    211,
+    215,
+    218,
+    214,
+    217,
+    232,
+    233,
+    213,
+    230,
+    216,
+    231,
+    234,
+    235,
+    208,
+    236,
         
-            /// DFG,
+    /// DFG,
         
-            0,
-            0,
-            1,
-            1,
-            2,
-            3,
-            2,
-            3,
-            4,
-            4,
-            5,
-            5,
-            6,
-            6,
-            8,
-            8,
-            10,
-            10,
-            12,
-            12,
-            26,
-            14,
-            26,
-            14,
-            15,
-            15,
-            16,
-            16,
-            17,
-            17,
-            18,
-            18,
-            19,
-            19,
-            20,
-            20,
-            21,
-            21,
-            22,
-            22,
-            23,
-            23,
-            24,
-            24,
-            25,
-            25,
+    0,
+    0,
+    1,
+    1,
+    2,
+    3,
+    2,
+    3,
+    4,
+    4,
+    5,
+    5,
+    6,
+    6,
+    8,
+    8,
+    10,
+    10,
+    12,
+    12,
+    26,
+    14,
+    26,
+    14,
+    15,
+    15,
+    16,
+    16,
+    17,
+    17,
+    18,
+    18,
+    19,
+    19,
+    20,
+    20,
+    21,
+    21,
+    22,
+    22,
+    23,
+    23,
+    24,
+    24,
+    25,
+    25,
         
-            /// DHG,
-            /// Harmonics not listed, but then...,
+    /// DHG,
+    /// Harmonics not listed, but then...,
         
-            44,
-            44,
-            45,
-            45,
-            46,
-            46,
-            47,
-            47,
-            48,
-            188,
-            48,
-            188,
-            49,
-            189,
-            49,
-            189,
-            50,
-            190,
-            50,
-            190,
-            51,
-            191,
-            51,
-            191,
-            27,
-            28,
-            27,
-            28,
-            29,
-            29,
-            30,
-            30,
-            32,
-            31,
-            34,     // the text says this is parameter 33 but I think it may be wrong
-            33,     // the text says this is parameter 35 but I think it may be wrong
-            32,
-            31,
-            34,     // the text says this is parameter 33 but I think it may be wrong
-            33,     // the text says this is parameter 35 but I think it may be wrong
-            36,
-            35,
-            38,
-            37,
-            36,
-            35,
-            38,
-            37,
-            187,
-            186,
-            187,
-            186,
-            39,
-            39,
-            40,
-            40,
-            56,
-            52,
-            63,
-            56,
-            52,
-            63,
-            52,
-            64,
-            52,
-            64,
-            52,
-            65,
-            52,
-            65,
-            52,
-            66,
-            52,
-            66,
-            52,
-            67,
-            52,
-            67,
-            52,
-            68,
-            52,
-            68,
-            57,
-            57,
-            58,
-            58,
-            59,
-            59,
-            60,
-            60,
-            61,
-            61,
-            62,
-            62,
-            53,
-            75,
-            53,
-            75,
-            53,
-            76,
-            53,
-            76,
-            53,
-            77,
-            53,
-            77,
-            53,
-            78,
-            53,
-            78,
-            53,
-            79,
-            53,
-            79,
-            53,
-            80,
-            53,
-            80,
-            69,
-            69,
-            70,
-            70,
-            71,
-            71,
-            72,
-            72,
-            73,
-            73,
-            74,
-            74,
-            54,
-            87,
-            54,
-            87,
-            54,
-            88,
-            54,
-            88,
-            54,
-            89,
-            54,
-            89,
-            54,
-            90,
-            54,
-            90,
-            54,
-            91,
-            54,
-            91,
-            54,
-            92,
-            54,
-            92,
-            81,
-            81,
-            82,
-            82,
-            83,
-            83,
-            84,
-            84,
-            85,
-            85,
-            86,
-            86,
-            55,
-            99,
-            55,
-            99,
-            55,
-            100,
-            55,
-            100,
-            55,
-            101,
-            55,
-            101,
-            55,
-            102,
-            55,
-            102,
-            55,
-            103,
-            55,
-            103,
-            55,
-            104,
-            55,
-            104,
-            93,
-            93,
-            94,
-            94,
-            95,
-            95,
-            96,
-            96,
-            97,
-            97,
-            98,
-            98,
+    44,
+    44,
+    45,
+    45,
+    46,
+    46,
+    47,
+    47,
+    48,
+    188,
+    48,
+    188,
+    49,
+    189,
+    49,
+    189,
+    50,
+    190,
+    50,
+    190,
+    51,
+    191,
+    51,
+    191,
+    27,
+    28,
+    27,
+    28,
+    29,
+    29,
+    30,
+    30,
+    32,
+    31,
+    34,     // the text says this is parameter 33 but I think it may be wrong
+    33,     // the text says this is parameter 35 but I think it may be wrong
+    32,
+    31,
+    34,     // the text says this is parameter 33 but I think it may be wrong
+    33,     // the text says this is parameter 35 but I think it may be wrong
+    36,
+    35,
+    38,
+    37,
+    36,
+    35,
+    38,
+    37,
+    187,
+    186,
+    187,
+    186,
+    39,
+    39,
+    40,
+    40,
+    56,
+    52,
+    63,
+    56,
+    52,
+    63,
+    52,
+    64,
+    52,
+    64,
+    52,
+    65,
+    52,
+    65,
+    52,
+    66,
+    52,
+    66,
+    52,
+    67,
+    52,
+    67,
+    52,
+    68,
+    52,
+    68,
+    57,
+    57,
+    58,
+    58,
+    59,
+    59,
+    60,
+    60,
+    61,
+    61,
+    62,
+    62,
+    53,
+    75,
+    53,
+    75,
+    53,
+    76,
+    53,
+    76,
+    53,
+    77,
+    53,
+    77,
+    53,
+    78,
+    53,
+    78,
+    53,
+    79,
+    53,
+    79,
+    53,
+    80,
+    53,
+    80,
+    69,
+    69,
+    70,
+    70,
+    71,
+    71,
+    72,
+    72,
+    73,
+    73,
+    74,
+    74,
+    54,
+    87,
+    54,
+    87,
+    54,
+    88,
+    54,
+    88,
+    54,
+    89,
+    54,
+    89,
+    54,
+    90,
+    54,
+    90,
+    54,
+    91,
+    54,
+    91,
+    54,
+    92,
+    54,
+    92,
+    81,
+    81,
+    82,
+    82,
+    83,
+    83,
+    84,
+    84,
+    85,
+    85,
+    86,
+    86,
+    55,
+    99,
+    55,
+    99,
+    55,
+    100,
+    55,
+    100,
+    55,
+    101,
+    55,
+    101,
+    55,
+    102,
+    55,
+    102,
+    55,
+    103,
+    55,
+    103,
+    55,
+    104,
+    55,
+    104,
+    93,
+    93,
+    94,
+    94,
+    95,
+    95,
+    96,
+    96,
+    97,
+    97,
+    98,
+    98,
         
-            /// DDF,
+    /// DDF,
         
-            107,
-            107,
-            111,
-            111,
-            108,
-            108,
-            112,
-            112,
-            109,
-            109,
-            113,
-            113,
-            114,
-            114,
-            115,
-            115,
-            116,
-            116,
-            118,
-            118,
-            105,
-            106,
-            117,
-            105,
-            106,
-            117,
-            119,
-            119,
-            120,
-            120,
-            121,
-            121,
-            122,
-            122,
-            123,
-            123,
-            124,
-            124,
-            131,
-            125,
-            131,
-            125,
-            131,
-            126,
-            131,
-            126,
-            131,
-            127,
-            131,
-            127,
-            131,
-            128,
-            131,
-            128,
-            131,
-            129,
-            131,
-            129,
-            131,
-            130,
-            131,
-            130,
+    107,
+    107,
+    111,
+    111,
+    108,
+    108,
+    112,
+    112,
+    109,
+    109,
+    113,
+    113,
+    114,
+    114,
+    115,
+    115,
+    116,
+    116,
+    118,
+    118,
+    105,
+    106,
+    117,
+    105,
+    106,
+    117,
+    119,
+    119,
+    120,
+    120,
+    121,
+    121,
+    122,
+    122,
+    123,
+    123,
+    124,
+    124,
+    131,
+    125,
+    131,
+    125,
+    131,
+    126,
+    131,
+    126,
+    131,
+    127,
+    131,
+    127,
+    131,
+    128,
+    131,
+    128,
+    131,
+    129,
+    131,
+    129,
+    131,
+    130,
+    131,
+    130,
         
-            /// DDA,
+    /// DDA,
         
-            133,
-            133,
-            134,
-            134,
-            135,
-            135,
-            132,
-            136,
-            132,
-            136,
-            137,
-            137,
-            138,
-            138,
-            139,
-            139,
-            140,
-            147,
-            140,
-            147,
-            141,
-            148,
-            141,
-            148,
-            142,
-            149,
-            142,
-            149,
-            143,
-            150,
-            143,
-            150,
-            144,
-            151,
-            144,
-            151,
-            145,
-            152,
-            145,
-            152,
-            146,
-            153,
-            146,
-            153,
-            161,
-            154,
-            161,
-            154,
-            161,
-            155,
-            161,
-            155,
-            161,
-            156,
-            161,
-            156,
-            161,
-            157,
-            161,
-            157,
-            161,
-            158,
-            161,
-            158,
-            161,
-            159,
-            161,
-            159,
+    133,
+    133,
+    134,
+    134,
+    135,
+    135,
+    132,
+    136,
+    132,
+    136,
+    137,
+    137,
+    138,
+    138,
+    139,
+    139,
+    140,
+    147,
+    140,
+    147,
+    141,
+    148,
+    141,
+    148,
+    142,
+    149,
+    142,
+    149,
+    143,
+    150,
+    143,
+    150,
+    144,
+    151,
+    144,
+    151,
+    145,
+    152,
+    145,
+    152,
+    146,
+    153,
+    146,
+    153,
+    161,
+    154,
+    161,
+    154,
+    161,
+    155,
+    161,
+    155,
+    161,
+    156,
+    161,
+    156,
+    161,
+    157,
+    161,
+    157,
+    161,
+    158,
+    161,
+    158,
+    161,
+    159,
+    161,
+    159,
         
-            /// LFO,
+    /// LFO,
         
-            174,
-            175,
-            176,
-            177,
+    174,
+    175,
+    176,
+    177,
         
-            /// KS,
+    /// KS,
         
-            180,
-            180,
-            178,
-            178,
-            179,
-            179,
+    180,
+    180,
+    178,
+    178,
+    179,
+    179,
         
-            /// DFT,
+    /// DFT,
         
-            162,
-            163,
-            164,
-            165,
-            166,
-            167,
-            168,
-            169,
-            170,
-            171,
-            172,
-            173,
-        };
+    162,
+    163,
+    164,
+    165,
+    166,
+    167,
+    168,
+    169,
+    170,
+    171,
+    172,
+    173,
+    };
 
 
     public static final String[] HARMONICS_PARAMETERS = new String[]
-        {
-            "s1dhgharm1level",
-            "s2dhgharm1level",
-            "s1dhgharm2level",
-            "s2dhgharm2level",
-            "s1dhgharm3level",
-            "s2dhgharm3level",
-            "s1dhgharm4level",
-            "s2dhgharm4level",
-            "s1dhgharm5level",
-            "s2dhgharm5level",
-            "s1dhgharm6level",
-            "s2dhgharm6level",
-            "s1dhgharm7level",
-            "s2dhgharm7level",
-            "s1dhgharm8level",
-            "s2dhgharm8level",
-            "s1dhgharm9level",
-            "s2dhgharm9level",
-            "s1dhgharm10level",
-            "s2dhgharm10level",
-            "s1dhgharm11level",
-            "s2dhgharm11level",
-            "s1dhgharm12level",
-            "s2dhgharm12level",
-            "s1dhgharm13level",
-            "s2dhgharm13level",
-            "s1dhgharm14level",
-            "s2dhgharm14level",
-            "s1dhgharm15level",
-            "s2dhgharm15level",
-            "s1dhgharm16level",
-            "s2dhgharm16level",
-            "s1dhgharm17level",
-            "s2dhgharm17level",
-            "s1dhgharm18level",
-            "s2dhgharm18level",
-            "s1dhgharm19level",
-            "s2dhgharm19level",
-            "s1dhgharm20level",
-            "s2dhgharm20level",
-            "s1dhgharm21level",
-            "s2dhgharm21level",
-            "s1dhgharm22level",
-            "s2dhgharm22level",
-            "s1dhgharm23level",
-            "s2dhgharm23level",
-            "s1dhgharm24level",
-            "s2dhgharm24level",
-            "s1dhgharm25level",
-            "s2dhgharm25level",
-            "s1dhgharm26level",
-            "s2dhgharm26level",
-            "s1dhgharm27level",
-            "s2dhgharm27level",
-            "s1dhgharm28level",
-            "s2dhgharm28level",
-            "s1dhgharm29level",
-            "s2dhgharm29level",
-            "s1dhgharm30level",
-            "s2dhgharm30level",
-            "s1dhgharm31level",
-            "s2dhgharm31level",
-            "s1dhgharm32level",
-            "s2dhgharm32level",
-            "s1dhgharm33level",
-            "s2dhgharm33level",
-            "s1dhgharm34level",
-            "s2dhgharm34level",
-            "s1dhgharm35level",
-            "s2dhgharm35level",
-            "s1dhgharm36level",
-            "s2dhgharm36level",
-            "s1dhgharm37level",
-            "s2dhgharm37level",
-            "s1dhgharm38level",
-            "s2dhgharm38level",
-            "s1dhgharm39level",
-            "s2dhgharm39level",
-            "s1dhgharm40level",
-            "s2dhgharm40level",
-            "s1dhgharm41level",
-            "s2dhgharm41level",
-            "s1dhgharm42level",
-            "s2dhgharm42level",
-            "s1dhgharm43level",
-            "s2dhgharm43level",
-            "s1dhgharm44level",
-            "s2dhgharm44level",
-            "s1dhgharm45level",
-            "s2dhgharm45level",
-            "s1dhgharm46level",
-            "s2dhgharm46level",
-            "s1dhgharm47level",
-            "s2dhgharm47level",
-            "s1dhgharm48level",
-            "s2dhgharm48level",
-            "s1dhgharm49level",
-            "s2dhgharm49level",
-            "s1dhgharm50level",
-            "s2dhgharm50level",
-            "s1dhgharm51level",
-            "s2dhgharm51level",
-            "s1dhgharm52level",
-            "s2dhgharm52level",
-            "s1dhgharm53level",
-            "s2dhgharm53level",
-            "s1dhgharm54level",
-            "s2dhgharm54level",
-            "s1dhgharm55level",
-            "s2dhgharm55level",
-            "s1dhgharm56level",
-            "s2dhgharm56level",
-            "s1dhgharm57level",
-            "s2dhgharm57level",
-            "s1dhgharm58level",
-            "s2dhgharm58level",
-            "s1dhgharm59level",
-            "s2dhgharm59level",
-            "s1dhgharm60level",
-            "s2dhgharm60level",
-            "s1dhgharm61level",
-            "s2dhgharm61level",
-            "s1dhgharm62level",
-            "s2dhgharm62level",
-            "s1dhgharm63level",
-            "s2dhgharm63level",
-            "s1dhgharm2envselmodyn",
-            "s1dhgharm1envselmodyn",
-            "s2dhgharm2envselmodyn",
-            "s2dhgharm1envselmodyn",
-            "s1dhgharm4envselmodyn",
-            "s1dhgharm3envselmodyn",
-            "s2dhgharm4envselmodyn",
-            "s2dhgharm3envselmodyn",
-            "s1dhgharm6envselmodyn",
-            "s1dhgharm5envselmodyn",
-            "s2dhgharm6envselmodyn",
-            "s2dhgharm5envselmodyn",
-            "s1dhgharm8envselmodyn",
-            "s1dhgharm7envselmodyn",
-            "s2dhgharm8envselmodyn",
-            "s2dhgharm7envselmodyn",
-            "s1dhgharm10envselmodyn",
-            "s1dhgharm9envselmodyn",
-            "s2dhgharm10envselmodyn",
-            "s2dhgharm9envselmodyn",
-            "s1dhgharm12envselmodyn",
-            "s1dhgharm11envselmodyn",
-            "s2dhgharm12envselmodyn",
-            "s2dhgharm11envselmodyn",
-            "s1dhgharm14envselmodyn",
-            "s1dhgharm13envselmodyn",
-            "s2dhgharm14envselmodyn",
-            "s2dhgharm13envselmodyn",
-            "s1dhgharm16envselmodyn",
-            "s1dhgharm15envselmodyn",
-            "s2dhgharm16envselmodyn",
-            "s2dhgharm15envselmodyn",
-            "s1dhgharm18envselmodyn",
-            "s1dhgharm17envselmodyn",
-            "s2dhgharm18envselmodyn",
-            "s2dhgharm17envselmodyn",
-            "s1dhgharm20envselmodyn",
-            "s1dhgharm19envselmodyn",
-            "s2dhgharm20envselmodyn",
-            "s2dhgharm19envselmodyn",
-            "s1dhgharm22envselmodyn",
-            "s1dhgharm21envselmodyn",
-            "s2dhgharm22envselmodyn",
-            "s2dhgharm21envselmodyn",
-            "s1dhgharm24envselmodyn",
-            "s1dhgharm23envselmodyn",
-            "s2dhgharm24envselmodyn",
-            "s2dhgharm23envselmodyn",
-            "s1dhgharm26envselmodyn",
-            "s1dhgharm25envselmodyn",
-            "s2dhgharm26envselmodyn",
-            "s2dhgharm25envselmodyn",
-            "s1dhgharm28envselmodyn",
-            "s1dhgharm27envselmodyn",
-            "s2dhgharm28envselmodyn",
-            "s2dhgharm27envselmodyn",
-            "s1dhgharm30envselmodyn",
-            "s1dhgharm29envselmodyn",
-            "s2dhgharm30envselmodyn",
-            "s2dhgharm29envselmodyn",
-            "s1dhgharm32envselmodyn",
-            "s1dhgharm31envselmodyn",
-            "s2dhgharm32envselmodyn",
-            "s2dhgharm31envselmodyn",
-            "s1dhgharm34envselmodyn",
-            "s1dhgharm33envselmodyn",
-            "s2dhgharm34envselmodyn",
-            "s2dhgharm33envselmodyn",
-            "s1dhgharm36envselmodyn",
-            "s1dhgharm35envselmodyn",
-            "s2dhgharm36envselmodyn",
-            "s2dhgharm35envselmodyn",
-            "s1dhgharm38envselmodyn",
-            "s1dhgharm37envselmodyn",
-            "s2dhgharm38envselmodyn",
-            "s2dhgharm37envselmodyn",
-            "s1dhgharm40envselmodyn",
-            "s1dhgharm39envselmodyn",
-            "s2dhgharm40envselmodyn",
-            "s2dhgharm39envselmodyn",
-            "s1dhgharm42envselmodyn",
-            "s1dhgharm41envselmodyn",
-            "s2dhgharm42envselmodyn",
-            "s2dhgharm41envselmodyn",
-            "s1dhgharm44envselmodyn",
-            "s1dhgharm43envselmodyn",
-            "s2dhgharm44envselmodyn",
-            "s2dhgharm43envselmodyn",
-            "s1dhgharm46envselmodyn",
-            "s1dhgharm45envselmodyn",
-            "s2dhgharm46envselmodyn",
-            "s2dhgharm45envselmodyn",
-            "s1dhgharm48envselmodyn",
-            "s1dhgharm47envselmodyn",
-            "s2dhgharm48envselmodyn",
-            "s2dhgharm47envselmodyn",
-            "s1dhgharm50envselmodyn",
-            "s1dhgharm49envselmodyn",
-            "s2dhgharm50envselmodyn",
-            "s2dhgharm49envselmodyn",
-            "s1dhgharm52envselmodyn",
-            "s1dhgharm51envselmodyn",
-            "s2dhgharm52envselmodyn",
-            "s2dhgharm51envselmodyn",
-            "s1dhgharm54envselmodyn",
-            "s1dhgharm53envselmodyn",
-            "s2dhgharm54envselmodyn",
-            "s2dhgharm53envselmodyn",
-            "s1dhgharm56envselmodyn",
-            "s1dhgharm55envselmodyn",
-            "s2dhgharm56envselmodyn",
-            "s2dhgharm55envselmodyn",
-            "s1dhgharm58envselmodyn",
-            "s1dhgharm57envselmodyn",
-            "s2dhgharm58envselmodyn",
-            "s2dhgharm57envselmodyn",
-            "s1dhgharm60envselmodyn",
-            "s1dhgharm59envselmodyn",
-            "s2dhgharm60envselmodyn",
-            "s2dhgharm59envselmodyn",
-            "s1dhgharm62envselmodyn",
-            "s1dhgharm61envselmodyn",
-            "s2dhgharm62envselmodyn",
-            "s2dhgharm61envselmodyn",
-            "s1dhgharm63envselmodyn",
-            "s2dhgharm63envselmodyn",
-            "s2dhgharm63envselmodyn"
-        };
+    {
+    "s1dhgharm1level",
+    "s2dhgharm1level",
+    "s1dhgharm2level",
+    "s2dhgharm2level",
+    "s1dhgharm3level",
+    "s2dhgharm3level",
+    "s1dhgharm4level",
+    "s2dhgharm4level",
+    "s1dhgharm5level",
+    "s2dhgharm5level",
+    "s1dhgharm6level",
+    "s2dhgharm6level",
+    "s1dhgharm7level",
+    "s2dhgharm7level",
+    "s1dhgharm8level",
+    "s2dhgharm8level",
+    "s1dhgharm9level",
+    "s2dhgharm9level",
+    "s1dhgharm10level",
+    "s2dhgharm10level",
+    "s1dhgharm11level",
+    "s2dhgharm11level",
+    "s1dhgharm12level",
+    "s2dhgharm12level",
+    "s1dhgharm13level",
+    "s2dhgharm13level",
+    "s1dhgharm14level",
+    "s2dhgharm14level",
+    "s1dhgharm15level",
+    "s2dhgharm15level",
+    "s1dhgharm16level",
+    "s2dhgharm16level",
+    "s1dhgharm17level",
+    "s2dhgharm17level",
+    "s1dhgharm18level",
+    "s2dhgharm18level",
+    "s1dhgharm19level",
+    "s2dhgharm19level",
+    "s1dhgharm20level",
+    "s2dhgharm20level",
+    "s1dhgharm21level",
+    "s2dhgharm21level",
+    "s1dhgharm22level",
+    "s2dhgharm22level",
+    "s1dhgharm23level",
+    "s2dhgharm23level",
+    "s1dhgharm24level",
+    "s2dhgharm24level",
+    "s1dhgharm25level",
+    "s2dhgharm25level",
+    "s1dhgharm26level",
+    "s2dhgharm26level",
+    "s1dhgharm27level",
+    "s2dhgharm27level",
+    "s1dhgharm28level",
+    "s2dhgharm28level",
+    "s1dhgharm29level",
+    "s2dhgharm29level",
+    "s1dhgharm30level",
+    "s2dhgharm30level",
+    "s1dhgharm31level",
+    "s2dhgharm31level",
+    "s1dhgharm32level",
+    "s2dhgharm32level",
+    "s1dhgharm33level",
+    "s2dhgharm33level",
+    "s1dhgharm34level",
+    "s2dhgharm34level",
+    "s1dhgharm35level",
+    "s2dhgharm35level",
+    "s1dhgharm36level",
+    "s2dhgharm36level",
+    "s1dhgharm37level",
+    "s2dhgharm37level",
+    "s1dhgharm38level",
+    "s2dhgharm38level",
+    "s1dhgharm39level",
+    "s2dhgharm39level",
+    "s1dhgharm40level",
+    "s2dhgharm40level",
+    "s1dhgharm41level",
+    "s2dhgharm41level",
+    "s1dhgharm42level",
+    "s2dhgharm42level",
+    "s1dhgharm43level",
+    "s2dhgharm43level",
+    "s1dhgharm44level",
+    "s2dhgharm44level",
+    "s1dhgharm45level",
+    "s2dhgharm45level",
+    "s1dhgharm46level",
+    "s2dhgharm46level",
+    "s1dhgharm47level",
+    "s2dhgharm47level",
+    "s1dhgharm48level",
+    "s2dhgharm48level",
+    "s1dhgharm49level",
+    "s2dhgharm49level",
+    "s1dhgharm50level",
+    "s2dhgharm50level",
+    "s1dhgharm51level",
+    "s2dhgharm51level",
+    "s1dhgharm52level",
+    "s2dhgharm52level",
+    "s1dhgharm53level",
+    "s2dhgharm53level",
+    "s1dhgharm54level",
+    "s2dhgharm54level",
+    "s1dhgharm55level",
+    "s2dhgharm55level",
+    "s1dhgharm56level",
+    "s2dhgharm56level",
+    "s1dhgharm57level",
+    "s2dhgharm57level",
+    "s1dhgharm58level",
+    "s2dhgharm58level",
+    "s1dhgharm59level",
+    "s2dhgharm59level",
+    "s1dhgharm60level",
+    "s2dhgharm60level",
+    "s1dhgharm61level",
+    "s2dhgharm61level",
+    "s1dhgharm62level",
+    "s2dhgharm62level",
+    "s1dhgharm63level",
+    "s2dhgharm63level",
+    "s1dhgharm2envselmodyn",
+    "s1dhgharm1envselmodyn",
+    "s2dhgharm2envselmodyn",
+    "s2dhgharm1envselmodyn",
+    "s1dhgharm4envselmodyn",
+    "s1dhgharm3envselmodyn",
+    "s2dhgharm4envselmodyn",
+    "s2dhgharm3envselmodyn",
+    "s1dhgharm6envselmodyn",
+    "s1dhgharm5envselmodyn",
+    "s2dhgharm6envselmodyn",
+    "s2dhgharm5envselmodyn",
+    "s1dhgharm8envselmodyn",
+    "s1dhgharm7envselmodyn",
+    "s2dhgharm8envselmodyn",
+    "s2dhgharm7envselmodyn",
+    "s1dhgharm10envselmodyn",
+    "s1dhgharm9envselmodyn",
+    "s2dhgharm10envselmodyn",
+    "s2dhgharm9envselmodyn",
+    "s1dhgharm12envselmodyn",
+    "s1dhgharm11envselmodyn",
+    "s2dhgharm12envselmodyn",
+    "s2dhgharm11envselmodyn",
+    "s1dhgharm14envselmodyn",
+    "s1dhgharm13envselmodyn",
+    "s2dhgharm14envselmodyn",
+    "s2dhgharm13envselmodyn",
+    "s1dhgharm16envselmodyn",
+    "s1dhgharm15envselmodyn",
+    "s2dhgharm16envselmodyn",
+    "s2dhgharm15envselmodyn",
+    "s1dhgharm18envselmodyn",
+    "s1dhgharm17envselmodyn",
+    "s2dhgharm18envselmodyn",
+    "s2dhgharm17envselmodyn",
+    "s1dhgharm20envselmodyn",
+    "s1dhgharm19envselmodyn",
+    "s2dhgharm20envselmodyn",
+    "s2dhgharm19envselmodyn",
+    "s1dhgharm22envselmodyn",
+    "s1dhgharm21envselmodyn",
+    "s2dhgharm22envselmodyn",
+    "s2dhgharm21envselmodyn",
+    "s1dhgharm24envselmodyn",
+    "s1dhgharm23envselmodyn",
+    "s2dhgharm24envselmodyn",
+    "s2dhgharm23envselmodyn",
+    "s1dhgharm26envselmodyn",
+    "s1dhgharm25envselmodyn",
+    "s2dhgharm26envselmodyn",
+    "s2dhgharm25envselmodyn",
+    "s1dhgharm28envselmodyn",
+    "s1dhgharm27envselmodyn",
+    "s2dhgharm28envselmodyn",
+    "s2dhgharm27envselmodyn",
+    "s1dhgharm30envselmodyn",
+    "s1dhgharm29envselmodyn",
+    "s2dhgharm30envselmodyn",
+    "s2dhgharm29envselmodyn",
+    "s1dhgharm32envselmodyn",
+    "s1dhgharm31envselmodyn",
+    "s2dhgharm32envselmodyn",
+    "s2dhgharm31envselmodyn",
+    "s1dhgharm34envselmodyn",
+    "s1dhgharm33envselmodyn",
+    "s2dhgharm34envselmodyn",
+    "s2dhgharm33envselmodyn",
+    "s1dhgharm36envselmodyn",
+    "s1dhgharm35envselmodyn",
+    "s2dhgharm36envselmodyn",
+    "s2dhgharm35envselmodyn",
+    "s1dhgharm38envselmodyn",
+    "s1dhgharm37envselmodyn",
+    "s2dhgharm38envselmodyn",
+    "s2dhgharm37envselmodyn",
+    "s1dhgharm40envselmodyn",
+    "s1dhgharm39envselmodyn",
+    "s2dhgharm40envselmodyn",
+    "s2dhgharm39envselmodyn",
+    "s1dhgharm42envselmodyn",
+    "s1dhgharm41envselmodyn",
+    "s2dhgharm42envselmodyn",
+    "s2dhgharm41envselmodyn",
+    "s1dhgharm44envselmodyn",
+    "s1dhgharm43envselmodyn",
+    "s2dhgharm44envselmodyn",
+    "s2dhgharm43envselmodyn",
+    "s1dhgharm46envselmodyn",
+    "s1dhgharm45envselmodyn",
+    "s2dhgharm46envselmodyn",
+    "s2dhgharm45envselmodyn",
+    "s1dhgharm48envselmodyn",
+    "s1dhgharm47envselmodyn",
+    "s2dhgharm48envselmodyn",
+    "s2dhgharm47envselmodyn",
+    "s1dhgharm50envselmodyn",
+    "s1dhgharm49envselmodyn",
+    "s2dhgharm50envselmodyn",
+    "s2dhgharm49envselmodyn",
+    "s1dhgharm52envselmodyn",
+    "s1dhgharm51envselmodyn",
+    "s2dhgharm52envselmodyn",
+    "s2dhgharm51envselmodyn",
+    "s1dhgharm54envselmodyn",
+    "s1dhgharm53envselmodyn",
+    "s2dhgharm54envselmodyn",
+    "s2dhgharm53envselmodyn",
+    "s1dhgharm56envselmodyn",
+    "s1dhgharm55envselmodyn",
+    "s2dhgharm56envselmodyn",
+    "s2dhgharm55envselmodyn",
+    "s1dhgharm58envselmodyn",
+    "s1dhgharm57envselmodyn",
+    "s2dhgharm58envselmodyn",
+    "s2dhgharm57envselmodyn",
+    "s1dhgharm60envselmodyn",
+    "s1dhgharm59envselmodyn",
+    "s2dhgharm60envselmodyn",
+    "s2dhgharm59envselmodyn",
+    "s1dhgharm62envselmodyn",
+    "s1dhgharm61envselmodyn",
+    "s2dhgharm62envselmodyn",
+    "s2dhgharm61envselmodyn",
+    "s1dhgharm63envselmodyn",
+    "s2dhgharm63envselmodyn",
+    "s2dhgharm63envselmodyn"
+    };
 
     public int loadData(byte[] data, int pos, int start, int end)
-    {
+        {
         for(int i = start; i < end; i++)
             data[pos++] = (byte)model.get(parameters[i], 0); 
         return pos;
-    }
+        }
 
     public int loadData(byte[] data, int pos, int start, int end, int[] bit, int[] len)
-    {
+        {
         int i = start;
         while(i < end)
             {
-                data[pos] = 0;
-                for(int b = 0; b < bit.length; b++)
-                    {
-                        int result = model.get(parameters[i], 0);
-                        int stub = (result & (255 >>> (8 - len[b])));
-                        data[pos] = (byte)(data[pos] | (stub << bit[b]));
-                        i++;
-                    }
-                pos++;
+            data[pos] = 0;
+            for(int b = 0; b < bit.length; b++)
+                {
+                int result = model.get(parameters[i], 0);
+                int stub = (result & (255 >>> (8 - len[b])));
+                data[pos] = (byte)(data[pos] | (stub << bit[b]));
+                i++;
+                }
+            pos++;
             }
         return pos;
-    }
+        }
 
     public int loadDataUnified(byte[] data, int pos, int start, int end, int[] bit, int[] len)
-    {
+        {
         return loadDataUnified(data, pos, start, end, bit, len, new int[0]);
-    }
+        }
 
     public int loadDataUnified(byte[] data, int pos, int start, int end, int[] bit, int[] len, int[] skip)
-    {
+        {
         int count = 0;
         int i = start;
         while(i < end)
             {
-                boolean cont = false;
-                for(int j = 0; j < skip.length; j++)
-                    {
-                        if (i == skip[j]) { cont = true; break; }
-                    }
-                if (cont) { i++; continue; }
+            boolean cont = false;
+            for(int j = 0; j < skip.length; j++)
+                {
+                if (i == skip[j]) { cont = true; break; }
+                }
+            if (cont) { i++; continue; }
 
-                data[pos] = 0;
-                for(int b = 0; b < bit.length; b++)
-                    {
-                        int result = (b == 0 ? 
-                                      (model.get(parameters[i], 0) == (count / 2 + 1) ? 1 : 0) :              // the + 1 is beacause maxsegon/off is 0 if "no one is on"
-                                      (model.get(parameters[i], 0)));
-                        int stub = (result & (255 >>> (8 - len[b])));
-                        data[pos] = (byte)(data[pos] | (stub << bit[b]));
-                        i++;
-                    }
-                count++;
-                pos++;
+            data[pos] = 0;
+            for(int b = 0; b < bit.length; b++)
+                {
+                int result = (b == 0 ? 
+                    (model.get(parameters[i], 0) == (count / 2 + 1) ? 1 : 0) :              // the + 1 is beacause maxsegon/off is 0 if "no one is on"
+                    (model.get(parameters[i], 0)));
+                int stub = (result & (255 >>> (8 - len[b])));
+                data[pos] = (byte)(data[pos] | (stub << bit[b]));
+                i++;
+                }
+            count++;
+            pos++;
             }
         return pos;
-    }
+        }
  
  
     public int unloadData(byte[] data, int pos, int start, int end)
-    {
+        {
         for(int i = start; i < end; i++)
             {
-                model.set(parameters[i], data[pos++]);
+            model.set(parameters[i], data[pos++]);
             }
         return pos;
-    }
+        }
 
     public int unloadData(byte[] data, int pos, int start, int end, int[] bit, int[] len)
-    {
+        {
         int i = start;
         while(i < end)
             {
-                for(int b = 0; b < bit.length; b++)
-                    {
-                        model.set(parameters[i], (data[pos] >>> bit[b]) & (255 >>> (8 - len[b])));
-                        i++;
-                    }
-                pos++;
+            for(int b = 0; b < bit.length; b++)
+                {
+                model.set(parameters[i], (data[pos] >>> bit[b]) & (255 >>> (8 - len[b])));
+                i++;
+                }
+            pos++;
             }
         return pos;
-    }
+        }
 
     public int unloadDataUnified(byte[] data, int pos, int start, int end, int[] bit, int[] len)
-    {
+        {
         return unloadDataUnified(data, pos, start, end, bit, len, new int[0]);
-    }
+        }
 
     public int unloadDataUnified(byte[] data, int pos, int start, int end, int[] bit, int[] len, int[] skip)
-    {
+        {
         int count = 0;
         int i = start;
         while(i < end)
             {
-                boolean cont = false;
-                for(int j = 0; j < skip.length; j++)
-                    {
-                        if (i == skip[j]) { cont = true; break; }
-                    }
-                if (cont) { i++; continue; }
+            boolean cont = false;
+            for(int j = 0; j < skip.length; j++)
+                {
+                if (i == skip[j]) { cont = true; break; }
+                }
+            if (cont) { i++; continue; }
                         
-                for(int b = 0; b < bit.length; b++)
+            for(int b = 0; b < bit.length; b++)
+                {
+                int val = (data[pos] >>> bit[b]) & (255 >>> (8 - len[b]));
+                if (b == 0)
                     {
-                        int val = (data[pos] >>> bit[b]) & (255 >>> (8 - len[b]));
-                        if (b == 0)
-                            {
-                                if (val == 1)
-                                    {
-                                        model.set(parameters[i], count/2 + 1);
-                                    }
-                            }
-                        else
-                            {
-                                model.set(parameters[i], val);
-                            }
-                        i++;
+                    if (val == 1)
+                        {
+                        model.set(parameters[i], count/2 + 1);
+                        }
                     }
-                count++;
-                pos++;
+                else
+                    {
+                    model.set(parameters[i], val);
+                    }
+                i++;
+                }
+            count++;
+            pos++;
             }
         return pos;
-    }
+        }
 
 
 
@@ -3847,9 +3847,9 @@ public class KawaiK5 extends Synth
     // a zero goes here! 
 
     public boolean testVerify(Synth synth2, 
-                              String key,
-                              Object obj1, Object obj2) 
-    {
+        String key,
+        Object obj1, Object obj2) 
+        {
         // See discussion above about envselmodyn-env vs envselmodyn and how
         // it's different when written out
         if (key.endsWith("envselmodyn-env")) return true;
@@ -3862,21 +3862,21 @@ public class KawaiK5 extends Synth
         if (key.endsWith("constrainmodharmonics")) return true;
 
         return false;
-    }
+        }
 
 
     /** A convenience method for loading a WAV file. */
     public File doLoad(String title, final String[] filenameExtensions)
-    {
+        {
         FileDialog fd = new FileDialog((JFrame)(SwingUtilities.getRoot(this)), title, FileDialog.LOAD);
         fd.setFilenameFilter(new FilenameFilter()
             {
-                public boolean accept(File dir, String name)
+            public boolean accept(File dir, String name)
                 {
-                    for(int i = 0; i < filenameExtensions.length; i++)
-                        if (StringUtility.ensureFileEndsWith(name, filenameExtensions[i]).equals(name))
-                            return true;
-                    return false;
+                for(int i = 0; i < filenameExtensions.length; i++)
+                    if (StringUtility.ensureFileEndsWith(name, filenameExtensions[i]).equals(name))
+                        return true;
+                return false;
                 }
             });
 
@@ -3889,26 +3889,26 @@ public class KawaiK5 extends Synth
                 
         if (fd.getFile() != null)
             {
-                try
-                    {
-                        f = new File(fd.getDirectory(), fd.getFile());
-                        setLastX(f.getCanonicalPath(), "WavDirectory", getSynthNameLocal(), true);
-                    }                       
-                catch (Exception ex)
-                    {
-                        Synth.handleException(ex); 
-                    }
+            try
+                {
+                f = new File(fd.getDirectory(), fd.getFile());
+                setLastX(f.getCanonicalPath(), "WavDirectory", getSynthNameLocal(), true);
+                }                       
+            catch (Exception ex)
+                {
+                Synth.handleException(ex); 
+                }
             }
             
         return f;
-    }
+        }
 
     public static final int MAXIMUM_SAMPLES = 2048;
     public static final int WINDOW_SIZE = 65;
     public static final double MINIMUM_AMPLITUDE = 0.001;
 
     public double[] doLoadWave()
-    {
+        {
         File file = doLoad("Load Wave...", new String[] { "wav", "WAV" });
         if (file == null) return null;
         
@@ -3919,40 +3919,40 @@ public class KawaiK5 extends Synth
         WavFile wavFile = null;
         try 
             {
-                double[] _waves = new double[MAXIMUM_SAMPLES];
-                wavFile = WavFile.openWavFile(file);
+            double[] _waves = new double[MAXIMUM_SAMPLES];
+            wavFile = WavFile.openWavFile(file);
                         
-                while(true)
+            while(true)
+                {
+                // Read frames into buffer
+                int framesRead = wavFile.readFrames(buffer, buffer.length);
+                if (count + framesRead > MAXIMUM_SAMPLES)
                     {
-                        // Read frames into buffer
-                        int framesRead = wavFile.readFrames(buffer, buffer.length);
-                        if (count + framesRead > MAXIMUM_SAMPLES)
-                            {
-                                showSimpleError("File Too Large", "This file may contain no more than " + MAXIMUM_SAMPLES + " samples.");
-                                return null;
-                            }
-                        System.arraycopy(buffer, 0, _waves, count, framesRead);
-                        count += framesRead;
-                        if (framesRead < buffer.length) 
-                            break;
+                    showSimpleError("File Too Large", "This file may contain no more than " + MAXIMUM_SAMPLES + " samples.");
+                    return null;
                     }
-                waves = new double[count];
-                System.arraycopy(_waves, 0, waves, 0, count);
+                System.arraycopy(buffer, 0, _waves, count, framesRead);
+                count += framesRead;
+                if (framesRead < buffer.length) 
+                    break;
+                }
+            waves = new double[count];
+            System.arraycopy(_waves, 0, waves, 0, count);
             }
         catch (IOException ex)
             {
-                showSimpleError("File Error", "An error occurred on reading the file.");
-                return null;
+            showSimpleError("File Error", "An error occurred on reading the file.");
+            return null;
             }
         catch (WavFileException ex)
             {
-                showSimpleError("Not a proper WAV file", "WAV files must be mono 16-bit.");
-                return null;
+            showSimpleError("Not a proper WAV file", "WAV files must be mono 16-bit.");
+            return null;
             }
 
         try
             {
-                wavFile.close();
+            wavFile.close();
             }
         catch (Exception ex) { }
         
@@ -3961,50 +3961,50 @@ public class KawaiK5 extends Synth
                                                                         
         /// Resample to our sampling rate
         double[] newvals = WindowedSinc.interpolate(
-                                                    waves,
-                                                    currentSampleSize,
-                                                    desiredSampleSize,              // notice desired and current are swapped -- because these are SIZES, not RATES
-                                                    WINDOW_SIZE,
-                                                    true);           
+            waves,
+            currentSampleSize,
+            desiredSampleSize,              // notice desired and current are swapped -- because these are SIZES, not RATES
+            WINDOW_SIZE,
+            true);           
                         
         // Note no window.  Should still be okay (I think?)
         double[] harmonics = FFT.getHarmonics(newvals);
         double[] finished = new double[harmonics.length / 2];
         for (int s=1 ; s < harmonics.length / 2; s++)                   // we skip the DC offset (0) and set the Nyquist frequency bin (harmonics.length / 2) to 0
             {
-                finished[s - 1] = (harmonics[s] >= MINIMUM_AMPLITUDE ? harmonics[s]  : 0 );
+            finished[s - 1] = (harmonics[s] >= MINIMUM_AMPLITUDE ? harmonics[s]  : 0 );
             }
 
         double max = 0;
         for(int i = 0; i < finished.length; i++)
             {
-                if (max < finished[i])
-                    max = finished[i];
+            if (max < finished[i])
+                max = finished[i];
             }
                                         
         if (max > 0)
             {
-                for(int i = 0; i < finished.length; i++)
-                    {
-                        finished[i] /= max;
-                    }
+            for(int i = 0; i < finished.length; i++)
+                {
+                finished[i] /= max;
+                }
             }
                         
         return finished;
-    }
+        }
 
     public static final int HARMONICS_BOTH = 0;
     public static final int HARMONICS_1 = 1;
     public static final int HARMONICS_2 = 2;
     public void loadWaveAsHarmonics(int which)
-    {
+        {
         boolean currentMIDI = getSendMIDI();
         setSendMIDI(false);
         double[] harm = doLoadWave();
         if (harm == null) 
             {
-                setSendMIDI(currentMIDI);
-                return;
+            setSendMIDI(currentMIDI);
+            return;
             }
                 
         switch (which)
@@ -4012,70 +4012,70 @@ public class KawaiK5 extends Synth
             case HARMONICS_BOTH:
                 for(int i = 0; i < 63; i++)
                     {
-                        int h = (int)(harm[i] * 100);
-                        if (h == 100) h = 99;
-                        model.set("s1dhgharm" + (i + 1) + "level", h);
+                    int h = (int)(harm[i] * 100);
+                    if (h == 100) h = 99;
+                    model.set("s1dhgharm" + (i + 1) + "level", h);
                     }
                 for(int i = 0; i < 63; i++)
                     {
-                        int h = (int)(harm[i + 64] * 100);              // skip #63
-                        if (h == 100) h = 99;
-                        model.set("s2dhgharm" + (i + 1) + "level", h);
+                    int h = (int)(harm[i + 64] * 100);              // skip #63
+                    if (h == 100) h = 99;
+                    model.set("s2dhgharm" + (i + 1) + "level", h);
                     }
                 break;
             case HARMONICS_1:
                 for(int i = 0; i < 63; i++)
                     {
-                        int h = (int)(harm[i] * 100);
-                        if (h == 100) h = 99;
-                        model.set("s1dhgharm" + (i + 1) + "level", h);
+                    int h = (int)(harm[i] * 100);
+                    if (h == 100) h = 99;
+                    model.set("s1dhgharm" + (i + 1) + "level", h);
                     }
                 break;
             case HARMONICS_2:
                 for(int i = 0; i < 63; i++)
                     {
-                        int h = (int)(harm[i] * 100);
-                        if (h == 100) h = 99;
-                        model.set("s2dhgharm" + (i + 1) + "level", h);
+                    int h = (int)(harm[i] * 100);
+                    if (h == 100) h = 99;
+                    model.set("s2dhgharm" + (i + 1) + "level", h);
                     }
                 break;
             }
         setSendMIDI(currentMIDI);
         sendAllParameters();
         repaint();
-    }
+        }
 
     public void addK5Menu()
-    {
+        {
         JMenu menu = new JMenu("Kawai K5");
         menubar.add(menu);
         JMenuItem harmonicsMenu = new JMenuItem("Load Wave into Harmonics 1");
         harmonicsMenu.addActionListener(new ActionListener()
             {
-                public void actionPerformed(ActionEvent e)
+            public void actionPerformed(ActionEvent e)
                 {
-                    loadWaveAsHarmonics(HARMONICS_1);
+                loadWaveAsHarmonics(HARMONICS_1);
                 }
             });
         menu.add(harmonicsMenu);
         harmonicsMenu = new JMenuItem("Load Wave into Harmonics 2");
         harmonicsMenu.addActionListener(new ActionListener()
             {
-                public void actionPerformed(ActionEvent e)
+            public void actionPerformed(ActionEvent e)
                 {
-                    loadWaveAsHarmonics(HARMONICS_2);
+                loadWaveAsHarmonics(HARMONICS_2);
                 }
             });
         menu.add(harmonicsMenu);
         harmonicsMenu = new JMenuItem("Load Wave into Harmonics 1 + 2");
         harmonicsMenu.addActionListener(new ActionListener()
             {
-                public void actionPerformed(ActionEvent e)
+            public void actionPerformed(ActionEvent e)
                 {
-                    loadWaveAsHarmonics(HARMONICS_BOTH);
+                loadWaveAsHarmonics(HARMONICS_BOTH);
                 }
             });
         menu.add(harmonicsMenu);
+        }
     }
-}
                                         

@@ -23,7 +23,7 @@ import javax.sound.midi.*;
 */
 
 public class PreenFM2 extends Synth
-{
+    {
     // This seems like it's long enough but we may need to bump it to 20000L.
     public double getPauseBetweenMIDISends() { return 0.01; }
        
@@ -48,7 +48,7 @@ public class PreenFM2 extends Synth
 
 
     public static final ImageIcon[] ALGORITHM_ICONS = 
-    {
+        {
         new ImageIcon(PreenFM2.class.getResource("Algorithm1.png")),
         new ImageIcon(PreenFM2.class.getResource("Algorithm2.png")),
         new ImageIcon(PreenFM2.class.getResource("Algorithm3.png")),
@@ -77,20 +77,20 @@ public class PreenFM2 extends Synth
         new ImageIcon(PreenFM2.class.getResource("Algorithm26.png")),
         new ImageIcon(PreenFM2.class.getResource("Algorithm27.png")),
         new ImageIcon(PreenFM2.class.getResource("Algorithm28.png")),
-    };
+        };
 
     public JFrame sprout()
-    {
+        {
         JFrame frame = super.sprout();
         writeTo.setEnabled(false);
         transmitTo.setEnabled(false);
         //        merge.setEnabled(false);
         addPreenMenu();
         return frame;
-    }
+        }
 
     public PreenFM2()
-    {
+        {
         model.set("bank", 0);
         model.set("number", 0);
                 
@@ -124,7 +124,7 @@ public class PreenFM2 extends Synth
         
         for(int i = 1; i < 7; i++)
             {
-                vbox.add(addOperator(i, Style.COLOR_A()));
+            vbox.add(addOperator(i, Style.COLOR_A()));
             }
 
         operatorPanel.add(vbox, BorderLayout.CENTER);
@@ -170,7 +170,7 @@ public class PreenFM2 extends Synth
         buildParameterMap();
        
         loadDefaults();        
-    }
+        }
                 
     public String getDefaultResourceFileName() { return "PreenFM2.init"; }
     public String getHTMLResourceFileName() { return "PreenFM2.html"; }
@@ -178,16 +178,16 @@ public class PreenFM2 extends Synth
     public boolean getReceivesPatchesAsDumps() { return false; }
 
     public boolean gatherPatchInfo(String title, Model change, boolean writing)
-    {
+        {
         JComboBox type = null;
 
         if (writing)
             {
-                type = new JComboBox(BANK_TYPES_OUT);
+            type = new JComboBox(BANK_TYPES_OUT);
             }
         else
             {
-                type = new JComboBox(BANK_TYPES_IN);
+            type = new JComboBox(BANK_TYPES_IN);
             }
 
         // Banks are organized as
@@ -198,11 +198,11 @@ public class PreenFM2 extends Synth
         int _bank = model.get("bank");
         if (_bank >= 256 && writing)  // it's DX7
             {
-                _bank = 0;              // cannot write to DX7
+            _bank = 0;              // cannot write to DX7
             }
         else if (_bank > 64 && _bank < 256)  // It's combo or an invalid bank
             {
-                _bank = 0;              // cannot read or write this at all
+            _bank = 0;              // cannot read or write this at all
             }
         type.setSelectedIndex( _bank < 256 ? 0 : 1);
         type.setEditable(false);
@@ -210,7 +210,7 @@ public class PreenFM2 extends Synth
 
         if (_bank >= 256 && !writing) // it's DX7 and we're reading
             {
-                _bank -= 256;  
+            _bank -= 256;  
             }
                 
         JTextField bank = new JTextField("" + _bank, 3);
@@ -218,56 +218,56 @@ public class PreenFM2 extends Synth
                 
         while(true)
             {
-                boolean result = showMultiOption(this, new String[] { "Bank Type", "Bank", "Patch Number" }, 
-                                                 new JComponent[] { type, bank, number }, title, "Enter the Bank Type, Bank, and Patch Number.");
+            boolean result = showMultiOption(this, new String[] { "Bank Type", "Bank", "Patch Number" }, 
+                new JComponent[] { type, bank, number }, title, "Enter the Bank Type, Bank, and Patch Number.");
                 
-                if (result == false) 
-                    return false;
+            if (result == false) 
+                return false;
                 
-                int t = type.getSelectedIndex();
+            int t = type.getSelectedIndex();
                                 
-                int b;
-                try { b = Integer.parseInt(bank.getText()); }
-                catch (NumberFormatException e)
-                    {
-                        showSimpleError(title, "The Bank Number must be an integer");
-                        continue;
-                    }
-                if ((t == 0) && (b < 0 || b > 63))
-                    {
-                        showSimpleError(title, "The Bank Number must be an integer  0...63 for this bank type");
-                        continue;
-                    }
-                else if ((t == 1) && (b < 0 || b > 255))
-                    {
-                        showSimpleError(title, "The Bank Number must be an integer  0...255 for this bank type");
-                        continue;
-                    }
+            int b;
+            try { b = Integer.parseInt(bank.getText()); }
+            catch (NumberFormatException e)
+                {
+                showSimpleError(title, "The Bank Number must be an integer");
+                continue;
+                }
+            if ((t == 0) && (b < 0 || b > 63))
+                {
+                showSimpleError(title, "The Bank Number must be an integer  0...63 for this bank type");
+                continue;
+                }
+            else if ((t == 1) && (b < 0 || b > 255))
+                {
+                showSimpleError(title, "The Bank Number must be an integer  0...255 for this bank type");
+                continue;
+                }
 
-                int n;
-                try { n = Integer.parseInt(number.getText()); }
-                catch (NumberFormatException e)
-                    {
-                        showSimpleError(title, "The Patch Number must be an integer");
-                        continue;
-                    }
-                if ((t == 0) && (n < 0 || n > 127))
-                    {
-                        showSimpleError(title, "The Patch Number must be an integer  0...127 for this bank type");
-                        continue;
-                    }
-                else if ((t == 1) && (n < 0 || n > 31))
-                    {
-                        showSimpleError(title, "The Patch Number must be an integer  0...31 for this bank type");
-                        continue;
-                    }
+            int n;
+            try { n = Integer.parseInt(number.getText()); }
+            catch (NumberFormatException e)
+                {
+                showSimpleError(title, "The Patch Number must be an integer");
+                continue;
+                }
+            if ((t == 0) && (n < 0 || n > 127))
+                {
+                showSimpleError(title, "The Patch Number must be an integer  0...127 for this bank type");
+                continue;
+                }
+            else if ((t == 1) && (n < 0 || n > 31))
+                {
+                showSimpleError(title, "The Patch Number must be an integer  0...31 for this bank type");
+                continue;
+                }
                                 
-                change.set("bank", t == 0 ? b : b + 256);
-                change.set("number", n);
+            change.set("bank", t == 0 ? b : b + 256);
+            change.set("number", n);
                         
-                return true;
+            return true;
             }
-    }
+        }
 
 
     public static final int OFF = 0;
@@ -277,7 +277,7 @@ public class PreenFM2 extends Synth
     int mutationRestriction = OFF;
         
     public void addPreenMenu()
-    {
+        {
         JMenu menu = new JMenu("PreenFM2");
         menubar.add(menu);
 
@@ -298,10 +298,10 @@ public class PreenFM2 extends Synth
         JRadioButtonMenuItem off = new JRadioButtonMenuItem("Off");
         off.addActionListener(new ActionListener()
             {
-                public void actionPerformed(ActionEvent evt)
+            public void actionPerformed(ActionEvent evt)
                 {
-                    mutationRestriction = OFF;
-                    setLastX("OFF", "MutationRestriction", getSynthName(), true);
+                mutationRestriction = OFF;
+                setLastX("OFF", "MutationRestriction", getSynthName(), true);
                 }
             });
         restrictMutation.add(off);
@@ -311,10 +311,10 @@ public class PreenFM2 extends Synth
         JRadioButtonMenuItem tx81z = new JRadioButtonMenuItem("To TX81Z Values");
         tx81z.addActionListener(new ActionListener()
             {
-                public void actionPerformed(ActionEvent evt)
+            public void actionPerformed(ActionEvent evt)
                 {
-                    mutationRestriction = TX81Z;
-                    setLastX("TX81Z", "MutationRestriction", getSynthName(), true);
+                mutationRestriction = TX81Z;
+                setLastX("TX81Z", "MutationRestriction", getSynthName(), true);
                 }
             });
         restrictMutation.add(tx81z);
@@ -324,77 +324,77 @@ public class PreenFM2 extends Synth
         JRadioButtonMenuItem integers = new JRadioButtonMenuItem("To Integers");
         integers.addActionListener(new ActionListener()
             {
-                public void actionPerformed(ActionEvent evt)
+            public void actionPerformed(ActionEvent evt)
                 {
-                    mutationRestriction = INTEGERS;
-                    setLastX("INTEGERS", "MutationRestriction", getSynthName(), true);
+                mutationRestriction = INTEGERS;
+                setLastX("INTEGERS", "MutationRestriction", getSynthName(), true);
                 }
             });
         restrictMutation.add(integers);
         bg.add(integers);
         if (mutationRestriction == INTEGERS) integers.setSelected(true);
-    }
+        }
                 
     public class SubModel extends Model
-    {
-        public int reviseMutatedValue(String key, int old, int current)
         {
+        public int reviseMutatedValue(String key, int old, int current)
+            {
             if (mutationRestriction == OFF)
                 return current;
             else if (key.startsWith("op") && key.endsWith("finetune"))
                 {
-                    return 100;
+                return 100;
                 }
             else if (key.startsWith("op") && key.endsWith("frequency"))
                 {
-                    if (mutationRestriction == TX81Z)
-                        return LabelledDial.findClosestValue(current, YAMAHA_FREQUENCY_RATIOS);
-                    else if (mutationRestriction == INTEGERS)
+                if (mutationRestriction == TX81Z)
+                    return LabelledDial.findClosestValue(current, YAMAHA_FREQUENCY_RATIOS);
+                else if (mutationRestriction == INTEGERS)
+                    {
+                    if (current < 100)
                         {
-                            if (current < 100)
-                                {
-                                    // figure out who we're closest to: 25, 33, 50, or 100?
-                                    int oneThird = Math.abs(current - 33);
-                                    int oneHalf = Math.abs(current - 50);
-                                    int oneQuarter = Math.abs(current - 25);
-                                    int one = Math.abs(current - 100);
-                                    if (one < oneQuarter && one < oneThird && one < oneHalf)
-                                        return 100;
-                                    else if (oneHalf < oneThird && oneHalf < oneQuarter)
-                                        return 50;
-                                    else if (oneThird < oneQuarter)
-                                        return 33;
-                                    else
-                                        return 25;
-                                }
-                            else
-                                {
-                                    int i = (int)(Math.round(current / 100.0)) * 100;
-                                    // these should never happen, but ...
-                                    if (i < 0) i = 0;
-                                    if (i > 1600) i = 1600;
-                                    return i;
-                                }
+                        // figure out who we're closest to: 25, 33, 50, or 100?
+                        int oneThird = Math.abs(current - 33);
+                        int oneHalf = Math.abs(current - 50);
+                        int oneQuarter = Math.abs(current - 25);
+                        int one = Math.abs(current - 100);
+                        if (one < oneQuarter && one < oneThird && one < oneHalf)
+                            return 100;
+                        else if (oneHalf < oneThird && oneHalf < oneQuarter)
+                            return 50;
+                        else if (oneThird < oneQuarter)
+                            return 33;
+                        else
+                            return 25;
                         }
-                    else  // never happens
-                        return current;
+                    else
+                        {
+                        int i = (int)(Math.round(current / 100.0)) * 100;
+                        // these should never happen, but ...
+                        if (i < 0) i = 0;
+                        if (i > 1600) i = 1600;
+                        return i;
+                        }
+                    }
+                else  // never happens
+                    return current;
                 }
             else
                 return current;
+            }
         }
-    }
                 
     public Model buildModel()
-    {
+        {
         return new SubModel();
-    }
+        }
                 
         
 
         
     /** Add the global patch category (name, id, number, etc.) */
     public JComponent addNameGlobal(Color color)
-    {
+        {
         Category globalCategory = new Category(this, "PreenFM2", color);
         //globalCategory.makeUnresettable();
                 
@@ -411,15 +411,15 @@ public class PreenFM2 extends Synth
 
         comp = new StringComponent("Patch Name", this, "name", 12, "Name must be up to 12 ASCII characters.")
             {
-                public String replace(String val)
+            public String replace(String val)
                 {
-                    return revisePatchName(val);
+                return revisePatchName(val);
                 }
                 
-                public void update(String key, Model model)
+            public void update(String key, Model model)
                 {
-                    super.update(key, model);
-                    updateTitle();
+                super.update(key, model);
+                updateTitle();
                 }
             };
         vbox.add(comp);
@@ -429,14 +429,14 @@ public class PreenFM2 extends Synth
                         
         globalCategory.add(hbox, BorderLayout.WEST);
         return globalCategory;
-    }
+        }
 
     
     LabelledDial glide = null;
     HBox generalBox;
      
     public JComponent addGeneral(Color color)
-    {
+        {
         Category globalCategory = new Category(this, "Instrument", color);
         
         JComponent comp;
@@ -465,16 +465,16 @@ public class PreenFM2 extends Synth
 
         comp = new LabelledDial("Voices", this, "voice", color, 0, 14)
             {
-                public void update(String key, Model model)
+            public void update(String key, Model model)
                 {
-                    super.update(key, model);
-                    int voices = model.get(key);
-                    if (voices == 1)
-                        generalBox.add(glide);
-                    else
-                        generalBox.remove(glide);
-                    generalBox.revalidate();
-                    generalBox.repaint();
+                super.update(key, model);
+                int voices = model.get(key);
+                if (voices == 1)
+                    generalBox.add(glide);
+                else
+                    generalBox.remove(glide);
+                generalBox.revalidate();
+                generalBox.repaint();
                 }
             };
         //              model.register("voice", ((LabelledDial)comp));
@@ -483,10 +483,10 @@ public class PreenFM2 extends Synth
 
         globalCategory.add(hbox, BorderLayout.WEST);
         return globalCategory;
-    }
+        }
 
     public JComponent addMix(Color color)
-    {
+        {
         Category globalCategory = new Category(this, "Outputs", color);
         globalCategory.makeDistributable("output");
                 
@@ -496,40 +496,40 @@ public class PreenFM2 extends Synth
 
         for(int i = 1; i < 7; i++)
             {
-                VBox vbox = new VBox();
-                comp = new LabelledDial("Mix " + i, this, "output" + i + "mix", color, 0, 100)
+            VBox vbox = new VBox();
+            comp = new LabelledDial("Mix " + i, this, "output" + i + "mix", color, 0, 100)
+                {
+                public String map(int val)
                     {
-                        public String map(int val)
-                        {
-                            return "" + (val / 100.0);
-                        }
-                    };
-                vbox.add(comp);
+                    return "" + (val / 100.0);
+                    }
+                };
+            vbox.add(comp);
 
-                comp = new LabelledDial("Pan " + i, this, "output" + i + "pan", color, 0, 200)
+            comp = new LabelledDial("Pan " + i, this, "output" + i + "pan", color, 0, 200)
+                {
+                public String map(int val)
                     {
-                        public String map(int val)
-                        {
-                            if (val == 100) 
-                                return "--";
-                            else if (val > 100) 
-                                return "R " + (val - 100)/100.0;
-                            else // if (val < 100) 
-                                return "L " + (100 - val)/100.0;
-                        }
-                        public boolean isSymmetric() { return true; }
-                    };
-                vbox.add(comp);
-                hbox.add(vbox);
+                    if (val == 100) 
+                        return "--";
+                    else if (val > 100) 
+                        return "R " + (val - 100)/100.0;
+                    else // if (val < 100) 
+                        return "L " + (100 - val)/100.0;
+                    }
+                public boolean isSymmetric() { return true; }
+                };
+            vbox.add(comp);
+            hbox.add(vbox);
             }
 
 
         globalCategory.add(hbox, BorderLayout.WEST);
         return globalCategory;
-    }
+        }
 
     public JComponent addModulationIndices(Color color)
-    {
+        {
         Category globalCategory = new Category(this, "Operator Modulation Indices", color);
         globalCategory.makeDistributable("im");
                 
@@ -539,31 +539,31 @@ public class PreenFM2 extends Synth
 
         for(int i = 1; i < 6; i++)
             {
-                VBox vbox = new VBox();
-                comp = new LabelledDial("Index " + i, this, "im" + i, color, 0, 160)
+            VBox vbox = new VBox();
+            comp = new LabelledDial("Index " + i, this, "im" + i, color, 0, 160)
+                {
+                public String map(int val)
                     {
-                        public String map(int val)
-                        {
-                            return "" + (val / 10.0);
-                        }
-                    };
-                vbox.add(comp);
+                    return "" + (val / 10.0);
+                    }
+                };
+            vbox.add(comp);
 
-                comp = new LabelledDial("Index " + i, this, "im" + i + "velocity", color, 0, 160)
+            comp = new LabelledDial("Index " + i, this, "im" + i + "velocity", color, 0, 160)
+                {
+                public String map(int val)
                     {
-                        public String map(int val)
-                        {
-                            return "" + (val / 10.0);
-                        }
-                    };
-                ((LabelledDial)comp).addAdditionalLabel("Velocity");
-                vbox.add(comp);
+                    return "" + (val / 10.0);
+                    }
+                };
+            ((LabelledDial)comp).addAdditionalLabel("Velocity");
+            vbox.add(comp);
 
-                hbox.add(vbox);
+            hbox.add(vbox);
             }
         globalCategory.add(hbox, BorderLayout.WEST);
         return globalCategory;
-    }
+        }
 
     
     public static final int FILTER_OFF = 0;
@@ -579,7 +579,7 @@ public class PreenFM2 extends Synth
     VBox parameterBox;
         
     public JComponent addFilter(Color color)
-    {
+        {
         Category globalCategory = new Category(this, "Filter", color);
                 
         JComponent comp;
@@ -592,69 +592,69 @@ public class PreenFM2 extends Synth
              
         firstParameter = new LabelledDial("Param1", this, "filterparam1", color, 0, 100)
             {
-                public String map(int val)
+            public String map(int val)
                 {
-                    return "" + (val / 100.0);
+                return "" + (val / 100.0);
                 }
             };
 
         secondParameter = new LabelledDial("Param2", this, "filterparam2", color, 0, 100)
             {
-                public String map(int val)
+            public String map(int val)
                 {
-                    return "" + (val / 100.0);
+                return "" + (val / 100.0);
                 }
             };
 
         params = FILTER_TYPES;
         type = new Chooser("Type", this, "filtertype", params)
             {
-                public void update(String key, Model model)
+            public void update(String key, Model model)
                 {
-                    super.update(key, model);
-                    int type = model.get(key);
-                    parameterBox.add(firstParameter);
-                    parameterBox.add(secondParameter);
-                    parameterBox.remove(firstParameter);
-                    parameterBox.remove(secondParameter);
-                    switch(type)
-                        {
-                        case FILTER_OFF:
-                            break;
-                        case FILTER_MIX:
-                            parameterBox.add(firstParameter);
-                            firstParameter.setLabel("Pan");
-                            break;
-                        case FILTER_LP:
-                        case FILTER_HP:
-                            parameterBox.add(firstParameter);
-                            parameterBox.add(secondParameter);
-                            firstParameter.setLabel("Frequency");
-                            secondParameter.setLabel("Resonance");
-                            break;
-                        case FILTER_BASS:
-                            parameterBox.add(firstParameter);
-                            parameterBox.add(secondParameter);
-                            firstParameter.setLabel("Low Freq");
-                            secondParameter.setLabel("Boost");
-                            break;
-                        case FILTER_BP:
-                            parameterBox.add(firstParameter);
-                            parameterBox.add(secondParameter);
-                            firstParameter.setLabel("Frequency");
-                            secondParameter.setLabel("Q");
-                            break;
-                        case FILTER_CRUSH:
-                            parameterBox.add(firstParameter);
-                            parameterBox.add(secondParameter);
-                            firstParameter.setLabel("Rate");
-                            secondParameter.setLabel("Bits");
-                            break;
-                        default:
-                            throw new RuntimeException("Unknown Filter Case");
-                        }
-                    parameterBox.revalidate();
-                    parameterBox.repaint();
+                super.update(key, model);
+                int type = model.get(key);
+                parameterBox.add(firstParameter);
+                parameterBox.add(secondParameter);
+                parameterBox.remove(firstParameter);
+                parameterBox.remove(secondParameter);
+                switch(type)
+                    {
+                    case FILTER_OFF:
+                        break;
+                    case FILTER_MIX:
+                        parameterBox.add(firstParameter);
+                        firstParameter.setLabel("Pan");
+                        break;
+                    case FILTER_LP:
+                    case FILTER_HP:
+                        parameterBox.add(firstParameter);
+                        parameterBox.add(secondParameter);
+                        firstParameter.setLabel("Frequency");
+                        secondParameter.setLabel("Resonance");
+                        break;
+                    case FILTER_BASS:
+                        parameterBox.add(firstParameter);
+                        parameterBox.add(secondParameter);
+                        firstParameter.setLabel("Low Freq");
+                        secondParameter.setLabel("Boost");
+                        break;
+                    case FILTER_BP:
+                        parameterBox.add(firstParameter);
+                        parameterBox.add(secondParameter);
+                        firstParameter.setLabel("Frequency");
+                        secondParameter.setLabel("Q");
+                        break;
+                    case FILTER_CRUSH:
+                        parameterBox.add(firstParameter);
+                        parameterBox.add(secondParameter);
+                        firstParameter.setLabel("Rate");
+                        secondParameter.setLabel("Bits");
+                        break;
+                    default:
+                        throw new RuntimeException("Unknown Filter Case");
+                    }
+                parameterBox.revalidate();
+                parameterBox.repaint();
                 }
             };
         comp = type;
@@ -663,11 +663,11 @@ public class PreenFM2 extends Synth
 
         comp = new LabelledDial("Gain", this, "filtergain", color, 0, 200)
             {
-                public String map(int val)
+            public String map(int val)
                 {
-                    return "" + (val / 100.0);
+                return "" + (val / 100.0);
                 }
-                public int getDefaultValue() { return 100; }
+            public int getDefaultValue() { return 100; }
             };
         hbox.add(comp);
         model.setStatus("filtergain", model.STATUS_IMMUTABLE);
@@ -678,11 +678,11 @@ public class PreenFM2 extends Synth
 
         globalCategory.add(hbox, BorderLayout.WEST);
         return globalCategory;
-    }
+        }
 
         
     public JComponent addArpeggiator(Color color)
-    {
+        {
         Category globalCategory = new Category(this, "Arpeggiator", color);
                 
         JComponent comp;
@@ -707,7 +707,7 @@ public class PreenFM2 extends Synth
         params = new String[ARPEGGIATOR_PATTERNS.length];
         for(int i = 0; i < params.length; i++)
             {
-                params[i] = ARPEGGIATOR_PATTERNS[i].replace('o', '\uFFED').replace('.', '\uFFEE');
+            params[i] = ARPEGGIATOR_PATTERNS[i].replace('o', '\uFFED').replace('.', '\uFFEE');
             }
         comp = new Chooser("Pattern", this, "arpeggiatorpattern", params);
         vbox.add(comp);
@@ -733,7 +733,7 @@ public class PreenFM2 extends Synth
 
         globalCategory.add(hbox, BorderLayout.WEST);
         return globalCategory;
-    }
+        }
 
         
     
@@ -741,7 +741,7 @@ public class PreenFM2 extends Synth
 
 
     public JComponent addOperator(final int op, Color color)
-    {
+        {
         Category category = new Category(this, "Operator " + op, color);
         //        category.makePasteable("op" + op);
         category.makePasteable("op");
@@ -765,19 +765,19 @@ public class PreenFM2 extends Synth
         // downstream widgets.
         LabelledDial finetunecomp = new LabelledDial("Fine Tune", this, "op" + op + "finetune", color, 0, 200)
             {
-                public String map(int val)
+            public String map(int val)
                 {
-                    int fixed = model.get("op" + op + "freqtype");
-                    if (fixed == 1)
-                        {
-                            return "" + (val - 100);
-                        }
-                    else
-                        {
-                            return "" + (val - 100) / 100.0;
-                        }
+                int fixed = model.get("op" + op + "freqtype");
+                if (fixed == 1)
+                    {
+                    return "" + (val - 100);
+                    }
+                else
+                    {
+                    return "" + (val - 100) / 100.0;
+                    }
                 }
-                public boolean isSymmetric() { return true; }
+            public boolean isSymmetric() { return true; }
             };
         model.register("op" + op + "freqtype", (LabelledDial)finetunecomp);
         hbox.add(finetunecomp);
@@ -786,30 +786,30 @@ public class PreenFM2 extends Synth
         // there are really just 192 steps here, but apparently you can adjust this as you like.
         comp = new LabelledDial("Frequency", this, "op" + op + "frequency", color, 0, 1600)
             {
-                public int reviseToAltValue(int val)
+            public int reviseToAltValue(int val)
                 {
-                    int fixed = model.get("op" + op + "freqtype");
-                    if (fixed == 0)
-                        {
-                            return findClosestValue(val, YAMAHA_FREQUENCY_RATIOS);
-                        }
-                    else return val;
+                int fixed = model.get("op" + op + "freqtype");
+                if (fixed == 0)
+                    {
+                    return findClosestValue(val, YAMAHA_FREQUENCY_RATIOS);
+                    }
+                else return val;
                 }
                                 
-                public String map(int val)
+            public String map(int val)
                 {
-                    int fixed = model.get("op" + op + "freqtype");
-                    int finetune = model.get("op" + op + "finetune");
-                    if (fixed == 1)
-                        {
-                            int v = val * 10 + finetune - 100;
-                            if (v < 0) v = 0;
-                            return "" + v;
-                        }
-                    else
-                        {
-                            return "" + val / 100.0;
-                        }
+                int fixed = model.get("op" + op + "freqtype");
+                int finetune = model.get("op" + op + "finetune");
+                if (fixed == 1)
+                    {
+                    int v = val * 10 + finetune - 100;
+                    if (v < 0) v = 0;
+                    return "" + v;
+                    }
+                else
+                    {
+                    return "" + val / 100.0;
+                    }
                 }
             };
         model.register("op" + op + "freqtype", (LabelledDial)comp);
@@ -824,18 +824,18 @@ public class PreenFM2 extends Synth
 
         comp = new LabelledDial("Attack", this, "op" + op + "envattack", color, 0, 1600)
             {
-                public String map(int val)
+            public String map(int val)
                 {
-                    return "" + (val / 100.0);
+                return "" + (val / 100.0);
                 }
             };
         hbox.add(comp);
 
         comp = new LabelledDial("Attack", this, "op" + op + "envattacklevel", color, 0, 100)
             {
-                public String map(int val)
+            public String map(int val)
                 {
-                    return "" + (val / 100.0);
+                return "" + (val / 100.0);
                 }
             };
         ((LabelledDial) comp).addAdditionalLabel("Level");
@@ -843,18 +843,18 @@ public class PreenFM2 extends Synth
 
         comp = new LabelledDial("Decay", this, "op" + op + "envdecay", color, 0, 1600)
             {
-                public String map(int val)
+            public String map(int val)
                 {
-                    return "" + (val / 100.0);
+                return "" + (val / 100.0);
                 }
             };
         hbox.add(comp);
 
         comp = new LabelledDial("Decay", this, "op" + op + "envdecaylevel", color, 0, 100)
             {
-                public String map(int val)
+            public String map(int val)
                 {
-                    return "" + (val / 100.0);
+                return "" + (val / 100.0);
                 }
             };
         ((LabelledDial) comp).addAdditionalLabel("Level");
@@ -862,18 +862,18 @@ public class PreenFM2 extends Synth
 
         comp = new LabelledDial("Sustain", this, "op" + op + "envsustain", color, 0, 1600)
             {
-                public String map(int val)
+            public String map(int val)
                 {
-                    return "" + (val / 100.0);
+                return "" + (val / 100.0);
                 }
             };
         hbox.add(comp);
 
         comp = new LabelledDial("Sustain", this, "op" + op + "envsustainlevel", color, 0, 100)
             {
-                public String map(int val)
+            public String map(int val)
                 {
-                    return "" + (val / 100.0);
+                return "" + (val / 100.0);
                 }
             };
         ((LabelledDial) comp).addAdditionalLabel("Level");
@@ -881,38 +881,38 @@ public class PreenFM2 extends Synth
 
         comp = new LabelledDial("Release", this, "op" + op + "envrelease", color, 0, 1600)
             {
-                public String map(int val)
+            public String map(int val)
                 {
-                    return "" + (val / 100.0);
+                return "" + (val / 100.0);
                 }
             };
         hbox.add(comp);
 
         comp = new LabelledDial("Release", this, "op" + op + "envreleaselevel", color, 0, 100)          
             {
-                public String map(int val)
+            public String map(int val)
                 {
-                    return "" + (val / 100.0);
+                return "" + (val / 100.0);
                 }
             };
         ((LabelledDial) comp).addAdditionalLabel("Level");
         hbox.add(comp);
 
         comp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
-                                   new String[] { null, "op" + op + "envattack", "op" + op + "envdecay", "op" + op + "envsustain", null, "op" + op + "envrelease" },
-                                   new String[] { null , "op" + op + "envattacklevel", "op" + op + "envdecaylevel", "op" + op + "envsustainlevel",  "op" + op + "envsustainlevel", "op" + op + "envreleaselevel" },
-                                   new double[] { 0, 0.2/1600.0, 0.2/1600.0,  0.2/1600.0, 0.2, 0.2/1600.0},
-                                   new double[] { 0, 1/100.0, 1/100.0, 1/100.0, 1/100.0, 1/100.0 });
+            new String[] { null, "op" + op + "envattack", "op" + op + "envdecay", "op" + op + "envsustain", null, "op" + op + "envrelease" },
+            new String[] { null , "op" + op + "envattacklevel", "op" + op + "envdecaylevel", "op" + op + "envsustainlevel",  "op" + op + "envsustainlevel", "op" + op + "envreleaselevel" },
+            new double[] { 0, 0.2/1600.0, 0.2/1600.0,  0.2/1600.0, 0.2, 0.2/1600.0},
+            new double[] { 0, 1/100.0, 1/100.0, 1/100.0, 1/100.0, 1/100.0 });
         hbox.addLast(comp);
 
         category.add(hbox, BorderLayout.CENTER);
         return category;
-    }
+        }
 
 
     /** Add the Modulation category */
     public JComponent addModulation(Color color)
-    {
+        {
         Category category  = new Category(this, "Modulation", color);
         category.makeDistributable("modulation");
                        
@@ -924,57 +924,57 @@ public class PreenFM2 extends Synth
         
         for(int row = 1; row < 13; row+= 4)
             {
-                hbox = new HBox();
-                boolean first = true;
-                for(int i = row; i < row + 4; i++)
-                    {
-                        vbox = new VBox();
+            hbox = new HBox();
+            boolean first = true;
+            for(int i = row; i < row + 4; i++)
+                {
+                vbox = new VBox();
 
-                        // add some space
-                        if (!first)  // not the first one
-                            {
-                                hbox.add(Strut.makeHorizontalStrut(10));
-                            }
-
-                        params = MODULATION_SOURCES;
-                        comp = new Chooser("" + i + " Source", this, "modulation" + i + "source", params);
-                        vbox.add(comp);
-
-                        params = MODULATION_DESTINATIONS;
-                        comp = new Chooser("" + i + " Destination", this, "modulation" + i + "destination", params);
-                        vbox.add(comp);
-
-                        hbox.add(vbox);
-                        comp = new LabelledDial("" + i + " Level", this, "modulation" + i + "amount", color, 0, 2000)
-                            {
-                                public String map(int val)
-                                {
-                                    return "" + (val - 1000) / 100.0;
-                                }
-                                public boolean isSymmetric() { return true; }
-                            };
-                        hbox.add(comp);
-
-                        first = false;
-                    }
-                        
                 // add some space
-                if (row > 1)  // not the first one
+                if (!first)  // not the first one
                     {
-                        main.add(Strut.makeVerticalStrut(10));
+                    hbox.add(Strut.makeHorizontalStrut(10));
                     }
 
-                main.add(hbox);
+                params = MODULATION_SOURCES;
+                comp = new Chooser("" + i + " Source", this, "modulation" + i + "source", params);
+                vbox.add(comp);
+
+                params = MODULATION_DESTINATIONS;
+                comp = new Chooser("" + i + " Destination", this, "modulation" + i + "destination", params);
+                vbox.add(comp);
+
+                hbox.add(vbox);
+                comp = new LabelledDial("" + i + " Level", this, "modulation" + i + "amount", color, 0, 2000)
+                    {
+                    public String map(int val)
+                        {
+                        return "" + (val - 1000) / 100.0;
+                        }
+                    public boolean isSymmetric() { return true; }
+                    };
+                hbox.add(comp);
+
+                first = false;
+                }
+                        
+            // add some space
+            if (row > 1)  // not the first one
+                {
+                main.add(Strut.makeVerticalStrut(10));
+                }
+
+            main.add(hbox);
             }
                                 
         category.add(main, BorderLayout.WEST);
         return category;
-    }
+        }
 
 
 
     public JComponent addPerformanceParameters(Color color)
-    {
+        {
         Category category  = new Category(this, "Performance Parameters", color);
         category.makeDistributable("performanceparam");
                         
@@ -984,25 +984,25 @@ public class PreenFM2 extends Synth
         
         for(int p = 1; p < 5; p++)
             {
-                comp = new LabelledDial("Param " + p, this, "performanceparam" + p, color, 0, 200)
+            comp = new LabelledDial("Param " + p, this, "performanceparam" + p, color, 0, 200)
+                {
+                public String map(int val)
                     {
-                        public String map(int val)
-                        {
-                            return "" + (val - 100) / 100.0;
-                        }
-                        public boolean isSymmetric() { return true; }
-                    };
-                hbox.add(comp);
-                model.setStatus("performanceparam" + p, model.STATUS_IMMUTABLE);
+                    return "" + (val - 100) / 100.0;
+                    }
+                public boolean isSymmetric() { return true; }
+                };
+            hbox.add(comp);
+            model.setStatus("performanceparam" + p, model.STATUS_IMMUTABLE);
             }
                                 
         category.add(hbox, BorderLayout.WEST);
         return category;
-    }
+        }
 
 
     public JComponent addLFO(int lfo, Color color)
-    {
+        {
         Category category  = new Category(this, "LFO " + lfo, color);
         //        category.makePasteable("lfo" + lfo);
         category.makePasteable("lfo");
@@ -1019,25 +1019,25 @@ public class PreenFM2 extends Synth
         
         comp = new LabelledDial("Frequency", this, "lfo" + lfo + "frequency", color, 0, 339)
             {
-                public String map(int val)
+            public String map(int val)
                 {
-                    // It goes 0.00...0.99 by 0.01  (100 of them)
-                    // It goes 1.0 ... 24.0 by 0.10 (231 of them)
-                    // Then there is M/16, MC/8, MC/4, MC/2, MClk, MC*2, MC*3, MC*4, MC*8
-                    // so it's 340 altogether
+                // It goes 0.00...0.99 by 0.01  (100 of them)
+                // It goes 1.0 ... 24.0 by 0.10 (231 of them)
+                // Then there is M/16, MC/8, MC/4, MC/2, MClk, MC*2, MC*3, MC*4, MC*8
+                // so it's 340 altogether
                 
-                    if (val < 100)
-                        {
-                            return "" + val / 100.0;
-                        }
-                    else if (val < 331)
-                        {
-                            return "" + ((val - 100) / 10.0 + 1.0);
-                        }
-                    else
-                        {
-                            return LFO_CLOCKS[val - 331];
-                        }
+                if (val < 100)
+                    {
+                    return "" + val / 100.0;
+                    }
+                else if (val < 331)
+                    {
+                    return "" + ((val - 100) / 10.0 + 1.0);
+                    }
+                else
+                    {
+                    return LFO_CLOCKS[val - 331];
+                    }
                 }
             };
         model.setMetricMax("lfo" + lfo + "frequency", 330);
@@ -1045,20 +1045,20 @@ public class PreenFM2 extends Synth
         
         comp = new LabelledDial("Bias", this, "lfo" + lfo + "bias", color, 0, 200)
             {
-                public String map(int val)
+            public String map(int val)
                 {
-                    return "" + (val - 100) / 100.0;
+                return "" + (val - 100) / 100.0;
                 }
-                public boolean isSymmetric() { return true; }
+            public boolean isSymmetric() { return true; }
             };
         hbox.add(comp);
         
         comp = new LabelledDial("Key Sync", this, "lfo" + lfo + "keysync", color, 0, 1601)
             {
-                public String map(int val)
+            public String map(int val)
                 {
-                    if (val == 0) return "Off";
-                    else return "" + (val - 1) / 100.0;
+                if (val == 0) return "Off";
+                else return "" + (val - 1) / 100.0;
                 }
             };
         model.setMetricMin("lfo" + lfo + "keysync", 1);
@@ -1066,16 +1066,16 @@ public class PreenFM2 extends Synth
         
         comp = new LabelledDial("Phase", this, "lfo" + lfo + "phase", color, 0, 100)
             {
-                public String map(int val)
+            public String map(int val)
                 {
-                    return "" + val / 100.0;
+                return "" + val / 100.0;
                 }
             };
         hbox.add(comp);
 
         category.add(hbox, BorderLayout.WEST);
         return category;
-    }
+        }
 
 
 
@@ -1086,7 +1086,7 @@ public class PreenFM2 extends Synth
 
     /** Add a "standard" envelope category */
     public JComponent addEnvelope(final int env, Color color)
-    {
+        {
         Category category = new Category(this, "Envelope " + env, color);
         //        category.makePasteable("freeenv" + env);
         category.makePasteable("freeenv");
@@ -1097,87 +1097,87 @@ public class PreenFM2 extends Synth
         
         if (env == 2)
             {
-                comp = new LabelledDial("Silence", this, "freeenv" + env + "silence", color, 0, 1600)
+            comp = new LabelledDial("Silence", this, "freeenv" + env + "silence", color, 0, 1600)
+                {
+                public String map(int val)
                     {
-                        public String map(int val)
-                        {
-                            return "" + (val / 100.0);
-                        }
-                    };
-                hbox.add(comp);
+                    return "" + (val / 100.0);
+                    }
+                };
+            hbox.add(comp);
             }
 
         comp = new LabelledDial("Attack", this, "freeenv" + env + "attack", color, 0, 1600)
             {
-                public String map(int val)
+            public String map(int val)
                 {
-                    return "" + (val / 100.0);
+                return "" + (val / 100.0);
                 }
             };
         hbox.add(comp);
         
         comp = new LabelledDial("Decay", this, "freeenv" + env + "decay", color, 0, 1600)
             {
-                public String map(int val)
+            public String map(int val)
                 {
-                    return "" + (val / 100.0);
+                return "" + (val / 100.0);
                 }
             };
         hbox.add(comp);
         
         if (env == 1)
             {
-                comp = new LabelledDial("Sustain", this, "freeenv" + env + "sustain", color, 0, 1600)
+            comp = new LabelledDial("Sustain", this, "freeenv" + env + "sustain", color, 0, 1600)
+                {
+                public String map(int val)
                     {
-                        public String map(int val)
-                        {
-                            // this one is different from the others.  :-(  Must be formatted.
-                            return format.format(val / 1600.0);
-                        }
-                    };
-                hbox.add(comp);
+                    // this one is different from the others.  :-(  Must be formatted.
+                    return format.format(val / 1600.0);
+                    }
+                };
+            hbox.add(comp);
         
-                comp = new LabelledDial("Release", this, "freeenv" + env + "release", color, 0, 1600)
+            comp = new LabelledDial("Release", this, "freeenv" + env + "release", color, 0, 1600)
+                {
+                public String map(int val)
                     {
-                        public String map(int val)
-                        {
-                            return "" + (val / 100.0);
-                        }
-                    };
-                hbox.add(comp);
+                    return "" + (val / 100.0);
+                    }
+                };
+            hbox.add(comp);
 
-                comp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
-                                           new String[] { null, "freeenv" + env + "attack", "freeenv" + env + "decay", null, "freeenv" + env + "release" },
-                                           new String[] { null, null, "freeenv" + env + "sustain", "freeenv" + env + "sustain", null },
-                                           new double[] { 0, 0.25/1600, 0.25/1600,  0.25, 0.25/1600},
-                                           new double[] { 0, 1.0, 1.0/1600, 1.0/1600, 0 });
-                hbox.addLast(comp);
+            comp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
+                new String[] { null, "freeenv" + env + "attack", "freeenv" + env + "decay", null, "freeenv" + env + "release" },
+                new String[] { null, null, "freeenv" + env + "sustain", "freeenv" + env + "sustain", null },
+                new double[] { 0, 0.25/1600, 0.25/1600,  0.25, 0.25/1600},
+                new double[] { 0, 1.0, 1.0/1600, 1.0/1600, 0 });
+            hbox.addLast(comp);
             }
         else
             {
-                VBox vbox = new VBox();
-                params = ENV_LOOPS;
-                comp = new Chooser("Loop", this, "freeenv" + env + "loop", params);
-                vbox.add(comp);
-                hbox.add(vbox);
+            VBox vbox = new VBox();
+            params = ENV_LOOPS;
+            comp = new Chooser("Loop", this, "freeenv" + env + "loop", params);
+            vbox.add(comp);
+            hbox.add(vbox);
 
-                comp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
-                                           new String[] { null, "freeenv" + env + "silence", "freeenv" + env + "attack", "freeenv" + env + "decay" },
-                                           new String[] { null, null, null, null },
-                                           new double[] { 0, 0.33333/1600, 0.33333/1600, 0.33333/1600},
-                                           new double[] { 0, 0.0, 1.0, 0 });
-                hbox.addLast(comp);
+            comp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
+                new String[] { null, "freeenv" + env + "silence", "freeenv" + env + "attack", "freeenv" + env + "decay" },
+                new String[] { null, null, null, null },
+                new double[] { 0, 0.33333/1600, 0.33333/1600, 0.33333/1600},
+                new double[] { 0, 0.0, 1.0, 0 });
+            hbox.addLast(comp);
 
             }
         
         category.add(hbox, BorderLayout.CENTER);
         return category;
-    }
+        }
         
 
 
     public JComponent addStepSequencer(int seq, Color color)
-    {
+        {
         Category category  = new Category(this, "Step Sequencer " + seq, color);
         //        category.makePasteable("stepseq" + seq);
         //        category.makeDistributable("stepseq" + seq);
@@ -1193,25 +1193,25 @@ public class PreenFM2 extends Synth
         VBox vbox = new VBox();
         comp = new LabelledDial("BPM", this, "stepseq" + seq + "bpm", color, 10, 245)
             {
-                // goes 10...240
-                // then MC/4 MC/2 MC MCx2 MCx4
-                public String map(int val)
+            // goes 10...240
+            // then MC/4 MC/2 MC MCx2 MCx4
+            public String map(int val)
                 {
-                    if (val <= 240)
-                        {
-                            return "" + val;
-                        }
-                    else
-                        return SEQUENCER_CLOCKS[val - 241];
+                if (val <= 240)
+                    {
+                    return "" + val;
+                    }
+                else
+                    return SEQUENCER_CLOCKS[val - 241];
                 }
             };
         vbox.add(comp);
 
         comp = new LabelledDial("Gate", this, "stepseq" + seq + "gate", color, 0, 100)
             {
-                public String map(int val)
+            public String map(int val)
                 {
-                    return "" + (val / 100.0);
+                return "" + (val / 100.0);
                 }
             };
         vbox.add(comp);
@@ -1224,16 +1224,16 @@ public class PreenFM2 extends Synth
                 
         for(int i = 1; i < 9; i++)
             {
-                comp = new LabelledDial("Step " + i, this, "stepseq" + seq + "step" + i, color, 0, 15);
-                hbox.add(comp);
+            comp = new LabelledDial("Step " + i, this, "stepseq" + seq + "step" + i, color, 0, 15);
+            hbox.add(comp);
             }
         vbox.add(hbox);
                 
         hbox = new HBox();
         for(int i = 9; i < 17; i++)
             {
-                comp = new LabelledDial("Step " + i, this, "stepseq" + seq + "step" + i, color, 0, 15);
-                hbox.add(comp);
+            comp = new LabelledDial("Step " + i, this, "stepseq" + seq + "step" + i, color, 0, 15);
+            hbox.add(comp);
             }
         vbox.add(hbox);
         main.add(vbox);
@@ -1243,19 +1243,19 @@ public class PreenFM2 extends Synth
             steps[i] = "stepseq" + seq + "step" + (i + 1); 
                 
         comp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
-                                   new String[] { null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null },
-                                   steps,            
-                                   new double[] { 0, 1.0/15, 1.0/15, 1.0/15, 1.0/15,  1.0/15, 1.0/15, 1.0/15, 1.0/15,  1.0/15, 1.0/15, 1.0/15, 1.0/15,  1.0/15, 1.0/15, 1.0/15 },
-                                   new double[] { 1.0/15, 1.0/15, 1.0/15, 1.0/15, 1.0/15, 1.0/15, 1.0/15, 1.0/15, 1.0/15, 1.0/15, 1.0/15, 1.0/15, 1.0/15, 1.0/15, 1.0/15, 1.0/15 });
+            new String[] { null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null },
+            steps,            
+            new double[] { 0, 1.0/15, 1.0/15, 1.0/15, 1.0/15,  1.0/15, 1.0/15, 1.0/15, 1.0/15,  1.0/15, 1.0/15, 1.0/15, 1.0/15,  1.0/15, 1.0/15, 1.0/15 },
+            new double[] { 1.0/15, 1.0/15, 1.0/15, 1.0/15, 1.0/15, 1.0/15, 1.0/15, 1.0/15, 1.0/15, 1.0/15, 1.0/15, 1.0/15, 1.0/15, 1.0/15, 1.0/15, 1.0/15 });
         main.addLast(comp);
 
         category.add(main, BorderLayout.CENTER);
         return category;
-    }
+        }
 
 
     public JComponent addNoteScaling(int note, Color color)
-    {
+        {
         Category category  = new Category(this, "Note " + note + " MIDI Scaling", color);
         //        category.makePasteable("note" + note);
         category.makePasteable("note");
@@ -1278,9 +1278,9 @@ public class PreenFM2 extends Synth
 
         comp = new LabelledDial("Break Note", this, "note" + note + "break", color, 0, 127)
             {
-                public String map(int val)
+            public String map(int val)
                 {
-                    return KEYS[val % 12] + (val / 12 + 1);  // note integer division
+                return KEYS[val % 12] + (val / 12 + 1);  // note integer division
                 }
             };
         hbox.add(comp);
@@ -1289,10 +1289,10 @@ public class PreenFM2 extends Synth
 
         category.add(hbox, BorderLayout.WEST);
         return category;
-    }
+        }
 
     public void changePatch(Model tempModel)
-    {
+        {
         // Banks are organized as
         // 0..127               Bank    (actually, there are only 64)
         // 128...255            Combo   (actually, there are only 8)
@@ -1308,22 +1308,22 @@ public class PreenFM2 extends Synth
         // we assume that we successfully did it
         if (!isMerging())  // we're actually loading the patch, not merging with it
             {
-                setSendMIDI(false);
-                model.set("number", program);
-                model.set("bank", bank);
-                setSendMIDI(true);
+            setSendMIDI(false);
+            model.set("number", program);
+            model.set("bank", bank);
+            setSendMIDI(true);
             }
-    }
+        }
 
 
     public void performRequestCurrentDump()
-    {
+        {
         // Send an NRPN with param = MSB127, LSB127. It appears that the PreenFM2 is buggy with regard to the value: 0 seems to work.
         tryToSendMIDI(buildNRPN(getChannelOut(), (127 << 7) | 127, 0));
-    }
+        }
 
     public void performRequestDump(Model tempModel, boolean changePatch)
-    {
+        {
         if (tempModel == null)
             tempModel = getModel();
 
@@ -1332,13 +1332,13 @@ public class PreenFM2 extends Synth
                 
         // Send an NRPN with param = MSB127, LSB127. It appears that the PreenFM2 is buggy with regard to the value: 0 seems to work.
         tryToSendMIDI(buildNRPN(getChannelOut(), (127 << 7) | 127, 0));
-    }
+        }
         
     
     public static final int MAXIMUM_NAME_LENGTH = 12;
     public static final String VALID_CHARACTERS = "_ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz 0123456789.,;:<>&*$";  // yes, space appears twice.  Weird.
     public String revisePatchName(String name)
-    {
+        {
         name = super.revisePatchName(name);  // trim first time
         if (name.length() > MAXIMUM_NAME_LENGTH)
             name = name.substring(0, MAXIMUM_NAME_LENGTH);
@@ -1346,118 +1346,118 @@ public class PreenFM2 extends Synth
         StringBuffer nameb = new StringBuffer(name);                            
         for(int i = 0 ; i < nameb.length(); i++)
             {
-                char c = nameb.charAt(i);
-                if (VALID_CHARACTERS.indexOf(c) < 0)
-                    nameb.setCharAt(i, ' ');
+            char c = nameb.charAt(i);
+            if (VALID_CHARACTERS.indexOf(c) < 0)
+                nameb.setCharAt(i, ' ');
             }
         name = nameb.toString();
         return super.revisePatchName(name);  // trim again
-    }
+        }
 
     public Object[] emitAll(String key)
-    {
+        {
         Model model = getModel();
         int channel = getChannelOut();
         if (key.equals("name")) 
             {
-                String value = model.get(key, "Init Sound");
-                ArrayList list = new ArrayList();
-                for(int i = 1; i < 13; i++)
-                    {
-                        char c = ' ';
-                        if (value.length() >= i)
-                            { c = value.charAt(i - 1); }
-                        int param = ((Integer)(parameterToIndex.get("name" + i))).intValue();
-                        Object[] objs = buildNRPN(channel, param, c);
-                        for(int j = 0; j < objs.length; j++)
-                            list.add(objs[j]);
-                    }
-                return list.toArray(new Object[0]);
+            String value = model.get(key, "Init Sound");
+            ArrayList list = new ArrayList();
+            for(int i = 1; i < 13; i++)
+                {
+                char c = ' ';
+                if (value.length() >= i)
+                    { c = value.charAt(i - 1); }
+                int param = ((Integer)(parameterToIndex.get("name" + i))).intValue();
+                Object[] objs = buildNRPN(channel, param, c);
+                for(int j = 0; j < objs.length; j++)
+                    list.add(objs[j]);
+                }
+            return list.toArray(new Object[0]);
             }
         else if (key.equals("bank"))
             {
-                return new Object[0];
+            return new Object[0];
             }
         else if (key.equals("number"))
             {
-                return new Object[0];
+            return new Object[0];
             }
         else 
             {
-                int param = ((Integer)(parameterToIndex.get(key))).intValue();
-                if (key.startsWith("lfo1frequency") || key.startsWith("lfo2frequency") || key.startsWith("lfo3frequency"))
-                    {
-                        int value = model.get(key);
-                        if (value >= 100)
-                            value = (value - 100) * 10 + 100;
-                        else if (value >= (100 + 231))
-                            value = ((value - (100 + 231)) * 10 + 2410);
-                        return buildNRPN(channel, param, value);
-                    }
-                else if (key.startsWith("im"))
-                    {
-                        int value = model.get(key) * 10;
-                        return buildNRPN(channel, param, value);
-                    }
-                else
-                    {
-                        int value = model.get(key);
-                        return buildNRPN(channel, param, value);
-                    }
+            int param = ((Integer)(parameterToIndex.get(key))).intValue();
+            if (key.startsWith("lfo1frequency") || key.startsWith("lfo2frequency") || key.startsWith("lfo3frequency"))
+                {
+                int value = model.get(key);
+                if (value >= 100)
+                    value = (value - 100) * 10 + 100;
+                else if (value >= (100 + 231))
+                    value = ((value - (100 + 231)) * 10 + 2410);
+                return buildNRPN(channel, param, value);
+                }
+            else if (key.startsWith("im"))
+                {
+                int value = model.get(key) * 10;
+                return buildNRPN(channel, param, value);
+                }
+            else
+                {
+                int value = model.get(key);
+                return buildNRPN(channel, param, value);
+                }
             }
-    }
+        }
 
     // Maybe one day we'll merge this with emit(key)
     public int[] emitValue(String key, Model model)
-    {
+        {
         if (key.equals("name")) 
             {
-                String value = model.get(key, "Init Sound") + "            ";
-                int[] vals = new int[12];
-                for(int i = 1; i < 13; i++)
-                    {
-                        int param = ((Integer)(parameterToIndex.get("name" + i))).intValue();
-                        vals[i-1] = (int)(value.charAt(i-1));
-                    }
-                return vals;
+            String value = model.get(key, "Init Sound") + "            ";
+            int[] vals = new int[12];
+            for(int i = 1; i < 13; i++)
+                {
+                int param = ((Integer)(parameterToIndex.get("name" + i))).intValue();
+                vals[i-1] = (int)(value.charAt(i-1));
+                }
+            return vals;
             }
         else if (key.equals("bank"))
             {
-                return new int[0];
+            return new int[0];
             }
         else if (key.equals("number"))
             {
-                return new int[0];
+            return new int[0];
             }
         else 
             {
-                //              int param = ((Integer)(parameterToIndex.get(key))).intValue();
-                if (key.startsWith("lfo1frequency") || key.startsWith("lfo2frequency") || key.startsWith("lfo3frequency"))
-                    {
-                        int value = model.get(key);
-                        if (value >= 100)
-                            value = (value - 100) * 10 + 100;
-                        else if (value >= (100 + 231))
-                            value = ((value - (100 + 231)) * 10 + 2410);
-                        return new int[] { value };
-                    }
-                else if (key.startsWith("im"))
-                    {
-                        int value = model.get(key) * 10;
-                        return new int[] { value };
-                    }
-                else
-                    {
-                        int value = model.get(key);
-                        return new int[] { value };
-                    }
+            //              int param = ((Integer)(parameterToIndex.get(key))).intValue();
+            if (key.startsWith("lfo1frequency") || key.startsWith("lfo2frequency") || key.startsWith("lfo3frequency"))
+                {
+                int value = model.get(key);
+                if (value >= 100)
+                    value = (value - 100) * 10 + 100;
+                else if (value >= (100 + 231))
+                    value = ((value - (100 + 231)) * 10 + 2410);
+                return new int[] { value };
+                }
+            else if (key.startsWith("im"))
+                {
+                int value = model.get(key) * 10;
+                return new int[] { value };
+                }
+            else
+                {
+                int value = model.get(key);
+                return new int[] { value };
+                }
             }
-    }
+        }
 
         
     /** Verify that all the parameters are within valid values, and tweak them if not. */
     public void revise()
-    {
+        {
         // check the easy stuff -- out of range parameters
         super.revise();
 
@@ -1465,100 +1465,100 @@ public class PreenFM2 extends Synth
         String newnm = revisePatchName(nm);
         if (!nm.equals(newnm))
             model.set("name", newnm);
-    }
+        }
 
     public void handleNRPNParse(String key, int val, boolean canPush)
-    {
+        {
         handleNRPNParse(getModel(), key, val, canPush);
-    }    
+        }    
     
     public void handleNRPNParse(Model model, String key, int val, boolean canPush)
-    {
+        {
         if (key != null)
             {
-                // First things first.  If it's "name1", then this is the very first thing
-                // sent when the PreenFM2 is dumping to us.  So assume we're getting a dump, and do an undo push.
-                if (key.equals("name1") && canPush)
-                    {
-                        boolean pushVal = undo.getWillPush();
-                        undo.setWillPush(true);
-                        undo.push(model);
-                        undo.setWillPush(pushVal);
-                    }
+            // First things first.  If it's "name1", then this is the very first thing
+            // sent when the PreenFM2 is dumping to us.  So assume we're getting a dump, and do an undo push.
+            if (key.equals("name1") && canPush)
+                {
+                boolean pushVal = undo.getWillPush();
+                undo.setWillPush(true);
+                undo.push(model);
+                undo.setWillPush(pushVal);
+                }
                                 
                                 
-                // okay on with our regularly scheduled program
-                if (key.startsWith("name"))
-                    {
-                        int index = (int)(Integer.parseInt(key.substring(4)));
+            // okay on with our regularly scheduled program
+            if (key.startsWith("name"))
+                {
+                int index = (int)(Integer.parseInt(key.substring(4)));
                                 
-                        char[] name = (model.get("name", "Init Sound") + "            ").toCharArray();
-                        name[index - 1] = (char)(val);  // I hope!
-                        model.set("name", revisePatchName(new String(name)));
-                    }
-                else if (key.startsWith("lfo1frequency") || key.startsWith("lfo2frequency") || key.startsWith("lfo3frequency"))
-                    {
-                        int value = val;
-                        if (value >= 2410)
-                            value = (value - 2410) / 10 + 331;
-                        else if (value >= 100)
-                            value = ((value - 100) / 10) + 100;
-                        model.setBounded(key, value);
-                    }
-                else if (key.startsWith("im"))
-                    {
-                        model.setBounded(key, val / 10);
-                    }
-                else
-                    {
-                        model.setBounded(key, val);
-                    }
+                char[] name = (model.get("name", "Init Sound") + "            ").toCharArray();
+                name[index - 1] = (char)(val);  // I hope!
+                model.set("name", revisePatchName(new String(name)));
+                }
+            else if (key.startsWith("lfo1frequency") || key.startsWith("lfo2frequency") || key.startsWith("lfo3frequency"))
+                {
+                int value = val;
+                if (value >= 2410)
+                    value = (value - 2410) / 10 + 331;
+                else if (value >= 100)
+                    value = ((value - 100) / 10) + 100;
+                model.setBounded(key, value);
+                }
+            else if (key.startsWith("im"))
+                {
+                model.setBounded(key, val / 10);
+                }
+            else
+                {
+                model.setBounded(key, val);
+                }
             }
-    }
+        }
         
     Model mergeModel;
     public static final int LAST_MERGE_NUMBER = 399;
 
     public void handleSynthCCOrNRPN(Midi.CCData data)
-    {
+        {
         if (data.type == Midi.CCDATA_TYPE_NRPN)
             {
-                if (isMerging())
-                    {
-                        // build a model if we haven't yet
-                        if (mergeModel == null)
-                            mergeModel = buildModel();
+            if (isMerging())
+                {
+                // build a model if we haven't yet
+                if (mergeModel == null)
+                    mergeModel = buildModel();
                         
-                        // Load the key, they come in one at a time
-                        String key = (String)(indexToParameter.get(Integer.valueOf(data.number)));
-                        setSendMIDI(false);
-                        handleNRPNParse(mergeModel, key, data.value, true);
-                        setSendMIDI(true);
+                // Load the key, they come in one at a time
+                String key = (String)(indexToParameter.get(Integer.valueOf(data.number)));
+                setSendMIDI(false);
+                handleNRPNParse(mergeModel, key, data.value, true);
+                setSendMIDI(true);
 
-                        // if it's the last key, do the merge
-                        if (data.number == LAST_MERGE_NUMBER)
-                            {
-                                setSendMIDI(false);
-                                Model backup = (Model)(model.clone());
-                                model.recombine(random, mergeModel, getMutationKeys(), getMergeProbability());
-                                if (!backup.keyEquals(getModel()))
-                                    undo.push(backup);
-                                setSendMIDI(true);
-                                sendAllParameters();
-                                setMergeProbability(0.0);
-                                mergeModel = null;
-                            }
-                    }
-                else
+                // if it's the last key, do the merge
+                if (data.number == LAST_MERGE_NUMBER)
                     {
-                        setSendMIDI(false);
-                        mergeModel = null;
-                        String key = (String)(indexToParameter.get(Integer.valueOf(data.number)));
-                        handleNRPNParse(key, data.value, true);
-                        setSendMIDI(true);
+                    setSendMIDI(false);
+                    Model backup = (Model)(model.clone());
+                    model.recombine(random, mergeModel, getMutationKeys(), getMergeProbability());
+                    if (!backup.keyEquals(getModel()))
+                        undo.push(backup);
+                    setSendMIDI(true);
+                    sendAllParameters();
+                    setMergeProbability(0.0);
+                    mergeModel = null;
                     }
+                }
+            else
+                {
+                setSendMIDI(false);
+                mergeModel = null;
+                String key = (String)(indexToParameter.get(Integer.valueOf(data.number)));
+                handleNRPNParse(key, data.value, true);
+                setSendMIDI(true);
+                }
             }
-    }
+        }
         
     public static String getSynthName() { return "PreenFM2"; }
     
@@ -1568,14 +1568,14 @@ public class PreenFM2 extends Synth
     public HashMap indexToParameter = new HashMap();
 
     public void addParameter(String name, int msb, int lsb)
-    {
+        {
         Integer val = Integer.valueOf((msb << 7) | lsb);
         parameterToIndex.put(name, val);
         indexToParameter.put(val, name);
-    }
+        }
     
     public void buildParameterMap()     
-    {
+        {
         addParameter("algorithm", 0, 0);
         addParameter("velocity", 0, 1);
         addParameter("voice", 0, 2);
@@ -1672,12 +1672,12 @@ public class PreenFM2 extends Synth
             addParameter("stepseq1step" + i, 2, i - 1);     // I wonder if this is right
         for(int i = 1; i < 17; i++)
             addParameter("stepseq2step" + i, 3, i - 1);     // I wonder if this is right
-    }
+        }
                                 
     /** The PreenFM2 doesn't have a useful sysex emit mechanism, so we're inventing one here solely for
         the purposes of writing to a file. */
     public byte[] emit(Model tempModel, boolean toWorkingMemory, boolean toFile)
-    {
+        {
         if (tempModel == null)
             tempModel = getModel();
 
@@ -1686,7 +1686,7 @@ public class PreenFM2 extends Synth
         int[] vals = new int[sysexKeys.length + 11];  // + 11 is enough space for the name (12 chars) plus the other keys
         for(int i = 0; i < sysexKeys.length - 1; i++)
             {
-                vals[i] = emitValue(sysexKeys[i], getModel())[0];
+            vals[i] = emitValue(sysexKeys[i], getModel())[0];
             }
         int[] name = emitValue(sysexKeys[sysexKeys.length - 1], getModel());
         System.arraycopy(name, 0, vals, sysexKeys.length - 1, 12);
@@ -1727,47 +1727,47 @@ public class PreenFM2 extends Synth
         
         for(int i = 0; i < vals.length ; i++)
             {
-                byte msb = (byte)((vals[i] >>> 7) & 127);
-                byte lsb = (byte)(vals[i] & 127);
-                sysex[HEADER + i * 2] = msb;
-                sysex[HEADER + i * 2 + 1] = lsb;
+            byte msb = (byte)((vals[i] >>> 7) & 127);
+            byte lsb = (byte)(vals[i] & 127);
+            sysex[HEADER + i * 2] = msb;
+            sysex[HEADER + i * 2 + 1] = lsb;
             }
         sysex[sysex.length - 1] = (byte)0xF7;
         return sysex;
-    }
+        }
 
 
     /** The PreenFM2 doesn't have a useful sysex emit mechanism, so we're inventing one here solely for
         the purposes of reading a file. */
     public int parse(byte[] data, boolean fromFile)
-    {
+        {
         int HEADER = 18;
         if (data[8] == ' ') HEADER = 17;                // backward compatibility with version "0"
                 
         for(int i = 0; i < sysexKeys.length - 1; i++)
             {
-                byte msb = data[HEADER + i * 2];
-                byte lsb = data[HEADER + i * 2 + 1];
-                handleNRPNParse(sysexKeys[i], (msb << 7) | lsb, false);
+            byte msb = data[HEADER + i * 2];
+            byte lsb = data[HEADER + i * 2 + 1];
+            handleNRPNParse(sysexKeys[i], (msb << 7) | lsb, false);
             }
 
         // load the name
         int count = 1;
         for(int i = sysexKeys.length - 1; i < sysexKeys.length - 1 + 12; i++)
             {
-                byte msb = data[HEADER + i * 2];
-                byte lsb = data[HEADER + i * 2 + 1];
-                handleNRPNParse("name" + count, (msb << 7) | lsb, false); 
-                count++;
+            byte msb = data[HEADER + i * 2];
+            byte lsb = data[HEADER + i * 2 + 1];
+            handleNRPNParse("name" + count, (msb << 7) | lsb, false); 
+            count++;
             }
         return PARSE_SUCCEEDED;
-    }
+        }
                 
         
     // These are the keys in the model which will be queried, in order, to emit the model
     // to our fake Sysex file and parse it back in.
     public static final String[] sysexKeys = 
-    {
+        {
         "performanceparam1",
         "performanceparam2",
         "performanceparam3",
@@ -1984,47 +1984,47 @@ public class PreenFM2 extends Synth
         "note2after",
         "note2break",
         "name"
-    };
+        };
 
     public Model getNextPatchLocation(Model model)
-    {
+        {
         int bank = model.get("bank");
         int number = model.get("number");
         
         if (bank < 256)
             {
-                if (bank >= 64) // uh....
-                    { Synth.handleException(new RuntimeException("Invalid Bank " + bank)); bank = 0; }
-                number++;
-                if (number >= 127)
-                    {
-                        number = 0;
-                        bank++;
-                        if (bank >= 64)
-                            bank = 256;
-                    }
+            if (bank >= 64) // uh....
+                { Synth.handleException(new RuntimeException("Invalid Bank " + bank)); bank = 0; }
+            number++;
+            if (number >= 127)
+                {
+                number = 0;
+                bank++;
+                if (bank >= 64)
+                    bank = 256;
+                }
             }
         else
             {
-                number++;
-                if (number >= 32)
-                    {
-                        number = 0;
-                        bank++;
-                        if (bank >= 512)
-                            bank = 0;
-                    }
+            number++;
+            if (number >= 32)
+                {
+                number = 0;
+                bank++;
+                if (bank >= 512)
+                    bank = 0;
+                }
             }
                 
         Model newModel = buildModel();
         newModel.set("bank", bank);
         newModel.set("number", number);
         return newModel;
-    }
+        }
     public int getBatchDownloadWaitTime() { return 1000; }
 
     public String getPatchLocationName(Model model)
-    {
+        {
         // getPatchLocationName() is called from sprout() as a test to see if we should enable
         // batch downloading.  If we haven't yet created an .init file, then parameters won't exist
         // yet and this method will bomb badly.  So we return null in this case.
@@ -2038,6 +2038,6 @@ public class PreenFM2 extends Synth
             return "DX7 " + (bank - 256) + " " + number;
         else
             return "Bank " + bank + " " + number;
-    }
+        }
 
-}
+    }

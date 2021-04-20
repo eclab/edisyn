@@ -54,7 +54,7 @@ import java.util.*;
 */
 
 public class EnvelopeDisplay extends JComponent implements Updatable
-{
+    {
     ArrayList verticalDividers = new ArrayList();
     
     double xConstants[];
@@ -76,14 +76,14 @@ public class EnvelopeDisplay extends JComponent implements Updatable
     EnvelopeDisplay[] children = null;
     
     public void link(EnvelopeDisplay display)
-    {
+        {
         if (children == null) children = new EnvelopeDisplay[0];
         EnvelopeDisplay[] temp = new EnvelopeDisplay[children.length + 1];
         System.arraycopy(children, 0, temp, 0, children.length);
         temp[temp.length - 1] = display;
         children = temp;
         display.children = null;         // unlink it
-    }
+        }
     
     public static final double TIME = -1;
         
@@ -98,52 +98,52 @@ public class EnvelopeDisplay extends JComponent implements Updatable
     public void setSigned(boolean val) { signed = val; }
     
     public void addVerticalDivider(double location)
-    {
+        {
         verticalDividers.add(Double.valueOf(location));
-    }
+        }
         
     public void setFinalStageKey(String key)
-    {
+        {
         finalStageKey = key;
         synth.getModel().register(key, this);
-    }
+        }
 
     public void setSustainStageKey(String key)
-    {
+        {
         sustainStageKey = key;
         synth.getModel().register(key, this);
-    }
+        }
         
     public void setLoopKeys(int interval, String startKey, String endKey)
-    {
+        {
         this.startKey[interval] = startKey;
         this.endKey[interval] = endKey;
         synth.getModel().register(startKey, this);
         synth.getModel().register(endKey, this);
-    }
+        }
         
     public int postProcessLoopOrStageKey(String key, int val)
-    {
+        {
         return val;
-    }
+        }
                 
     public void setPreferredWidth(int width)
-    {
+        {
         this.width = width;
-    }
+        }
     
     public double getYOffset() { return yOffset; }
     public void setYOffset(double val) { yOffset = val; }
                 
     public int getPreferredWidth()
-    {
+        {
         return this.width;
-    }
+        }
      
     public void update(String key, Model model)
-    {
+        {
         repaint();
-    }
+        }
         
     public boolean isFilled() { return filled; }
     public void setFilled(boolean val) { filled = val; }
@@ -165,19 +165,19 @@ public class EnvelopeDisplay extends JComponent implements Updatable
     public boolean getHorizontalBorder() { return horizontalBorder; }
     
     public EnvelopeDisplay(Synth synth, Color color, String[] xKeys, String[] yKeys, double xConstants[], double yConstants[])
-    {
+        {
         this(synth, color, xKeys, yKeys, xConstants, yConstants, null);
-    }
+        }
 
     public AWTEventListener releaseListener = null;
     
     public EnvelopeDisplay(Synth synth, Color color, String[] xKeys, String[] yKeys, double xConstants[], double yConstants[], double[] angles)
-    {
+        {
         super();
         this.synth = synth;
         this.color = color;     
         semiTransparent = new Color(color.getRed(), color.getGreen(), 
-                                    color.getBlue(), (int)(color.getAlpha() * Style.ENVELOPE_DISPLAY_FILL_TRANSPARENCY()));
+            color.getBlue(), (int)(color.getAlpha() * Style.ENVELOPE_DISPLAY_FILL_TRANSPARENCY()));
         int len = 0;
         this.angles = angles;
         
@@ -220,88 +220,88 @@ public class EnvelopeDisplay extends JComponent implements Updatable
         
         MouseAdapter ma = new MouseAdapter()
             {
-                public void mouseDragged(MouseEvent e)
+            public void mouseDragged(MouseEvent e)
                 {
-                    highlightIndex = highlightIndex(mouseToX(e.getX()), mouseToY(e.getY()), true);
-                    updateFromMouse(mouseToX(e.getX()), mouseToY(e.getY()), true);
-                    updateHighlightIndex(highlightIndex);
-                    repaint();
+                highlightIndex = highlightIndex(mouseToX(e.getX()), mouseToY(e.getY()), true);
+                updateFromMouse(mouseToX(e.getX()), mouseToY(e.getY()), true);
+                updateHighlightIndex(highlightIndex);
+                repaint();
                 }
                                 
-                public void mouseEntered(MouseEvent e)
+            public void mouseEntered(MouseEvent e)
                 {
-                    highlightIndex = highlightIndex(mouseToX(e.getX()), mouseToY(e.getY()), false);
-                    updateHighlightIndex(highlightIndex);
-                    repaint();
+                highlightIndex = highlightIndex(mouseToX(e.getX()), mouseToY(e.getY()), false);
+                updateHighlightIndex(highlightIndex);
+                repaint();
                 }
                                 
-                public void mouseExited(MouseEvent e)
+            public void mouseExited(MouseEvent e)
                 {
-                    highlightIndex = NO_HIGHLIGHT;
-                    updateHighlightIndex(highlightIndex);
-                    repaint();
+                highlightIndex = NO_HIGHLIGHT;
+                updateHighlightIndex(highlightIndex);
+                repaint();
                 }
                                 
-                public void mouseMoved(MouseEvent e)
+            public void mouseMoved(MouseEvent e)
                 {
-                    highlightIndex = highlightIndex(mouseToX(e.getX()), mouseToY(e.getY()), false);
-                    updateHighlightIndex(highlightIndex);
-                    repaint();
+                highlightIndex = highlightIndex(mouseToX(e.getX()), mouseToY(e.getY()), false);
+                updateHighlightIndex(highlightIndex);
+                repaint();
                 }
                                 
-                public void mousePressed(MouseEvent e)
+            public void mousePressed(MouseEvent e)
                 {
-                    mouseDown();
-                    highlightIndex = highlightIndex(mouseToX(e.getX()), mouseToY(e.getY()), false);
-                    updateFromMouse(mouseToX(e.getX()), mouseToY(e.getY()), false);
-                    updateHighlightIndex(highlightIndex);
-                    repaint();
-                    if (releaseListener != null)
-                        {
-                            releaseListener = null;
-                        }
+                mouseDown();
+                highlightIndex = highlightIndex(mouseToX(e.getX()), mouseToY(e.getY()), false);
+                updateFromMouse(mouseToX(e.getX()), mouseToY(e.getY()), false);
+                updateHighlightIndex(highlightIndex);
+                repaint();
+                if (releaseListener != null)
+                    {
+                    releaseListener = null;
+                    }
 
-                    // This gunk fixes a BAD MISFEATURE in Java: mouseReleased isn't sent to the
-                    // same component that received mouseClicked.  What the ... ? Asinine.
-                    // So we create a global event listener which checks for mouseReleased and
-                    // calls our own private function.  EVERYONE is going to do this.
+                // This gunk fixes a BAD MISFEATURE in Java: mouseReleased isn't sent to the
+                // same component that received mouseClicked.  What the ... ? Asinine.
+                // So we create a global event listener which checks for mouseReleased and
+                // calls our own private function.  EVERYONE is going to do this.
                                                         
-                    Toolkit.getDefaultToolkit().addAWTEventListener( releaseListener = new AWTEventListener()
+                Toolkit.getDefaultToolkit().addAWTEventListener( releaseListener = new AWTEventListener()
+                    {
+                    public void eventDispatched(AWTEvent evt)
                         {
-                            public void eventDispatched(AWTEvent evt)
+                        if (evt instanceof MouseEvent && evt.getID() == MouseEvent.MOUSE_RELEASED)
                             {
-                                if (evt instanceof MouseEvent && evt.getID() == MouseEvent.MOUSE_RELEASED)
-                                    {
-                                        MouseEvent e = (MouseEvent) evt;
-                                        if (releaseListener != null)
-                                            {
-                                                mouseUp();
-                                                highlightIndex = highlightIndex(mouseToX(e.getX()), mouseToY(e.getY()), true);
-                                                updateHighlightIndex(highlightIndex);
-                                                Toolkit.getDefaultToolkit().removeAWTEventListener( releaseListener );
-                                                repaint();
-                                            }
-                                    }
+                            MouseEvent e = (MouseEvent) evt;
+                            if (releaseListener != null)
+                                {
+                                mouseUp();
+                                highlightIndex = highlightIndex(mouseToX(e.getX()), mouseToY(e.getY()), true);
+                                updateHighlightIndex(highlightIndex);
+                                Toolkit.getDefaultToolkit().removeAWTEventListener( releaseListener );
+                                repaint();
+                                }
                             }
-                        }, AWTEvent.MOUSE_EVENT_MASK);
+                        }
+                    }, AWTEvent.MOUSE_EVENT_MASK);
 
                 }
                                 
-                public void mouseReleased(MouseEvent e)
+            public void mouseReleased(MouseEvent e)
                 {
-                    if (releaseListener == null)
-                        {
-                            mouseUp();
-                            highlightIndex = highlightIndex(mouseToX(e.getX()), mouseToY(e.getY()), true);
-                            updateHighlightIndex(highlightIndex);
-                            repaint();
-                        }
+                if (releaseListener == null)
+                    {
+                    mouseUp();
+                    highlightIndex = highlightIndex(mouseToX(e.getX()), mouseToY(e.getY()), true);
+                    updateHighlightIndex(highlightIndex);
+                    repaint();
+                    }
                 }
             };
                 
         addMouseListener(ma);
         addMouseMotionListener(ma);
-    }
+        }
 
     /** Empty hook, called when mouse is pressed */
     public void mouseDown() { }
@@ -313,49 +313,49 @@ public class EnvelopeDisplay extends JComponent implements Updatable
 
     public static final int NO_HIGHLIGHT = -1;
     public int highlightIndex(double x, double y, boolean continuation)
-    {
+        {
         return NO_HIGHLIGHT;
-    }
+        }
                 
     public void updateHighlightIndex(int index) { }
         
     double mouseToX(double x)
-    {
+        {
         return (x - (horizontalBorder ? Style.ENVELOPE_DISPLAY_BORDER_THICKNESS() : 0)) / 
             (double)(getWidth() - (horizontalBorder ? Style.ENVELOPE_DISPLAY_BORDER_THICKNESS() * 2 : 0));
-    }
+        }
         
     double mouseToY(double y)
-    {
+        {
         // I'm pretty sure this is wrong -- it should just be y - Style.ENVELOPE_DISPLAY_TOP_BORDER_THICKNESS(),
         // but it looks more correct this way
         return 1.0 - (y - verticalBorderThickness() + Style.ENVELOPE_DISPLAY_TOP_BORDER_THICKNESS()) /
             (double)(getHeight() - verticalBorderThickness() * 2);
-    }
+        }
 
         
     public void updateFromMouse(double x, double y, boolean continuation)
-    {
-    }
+        {
+        }
 
     public double preprocessXKey(int index, String key, double value)
-    {
+        {
         return value;
-    }
+        }
 
     public double preprocessYKey(int index, String key, double value)
-    {
+        {
         return value;
-    }
+        }
 
     /** Mostly fills the background appropriately. */
     public void paintComponent(Graphics g)
-    {
+        {
         paintComponent(g, false);
-    }
+        }
         
     public void paintComponent(Graphics g, boolean asLink)
-    {
+        {
         Graphics2D graphics = (Graphics2D) g;
         
         // count loop intervals
@@ -372,23 +372,23 @@ public class EnvelopeDisplay extends JComponent implements Updatable
         
         for(int i = 0; i < xs.length; i++)
             {
-                if (yKeys[i] != null)
-                    ys[i] *= preprocessYKey(i, yKeys[i], synth.getModel().get(yKeys[i], 1));
-                ys[i] += yOffset;
+            if (yKeys[i] != null)
+                ys[i] *= preprocessYKey(i, yKeys[i], synth.getModel().get(yKeys[i], 1));
+            ys[i] += yOffset;
                 
-                if (xKeys[i] != null)
+            if (xKeys[i] != null)
+                {
+                if (angles != null && i > 0 && angles[i] != TIME)                    // we're doing angles
                     {
-                        if (angles != null && i > 0 && angles[i] != TIME)                    // we're doing angles
-                            {
-                                double yd = Math.abs(ys[i] - ys[i-1]);
-                                double xd = Math.abs(yd / Math.tan(Math.PI/2.0 - angles[i] * preprocessXKey(i, xKeys[i], synth.getModel().get(xKeys[i], 0))));
-                                xs[i] *= xd;
-                            }
-                        else
-                            {
-                                xs[i] *= preprocessXKey(i, xKeys[i], synth.getModel().get(xKeys[i], 1));
-                            }
+                    double yd = Math.abs(ys[i] - ys[i-1]);
+                    double xd = Math.abs(yd / Math.tan(Math.PI/2.0 - angles[i] * preprocessXKey(i, xKeys[i], synth.getModel().get(xKeys[i], 0))));
+                    xs[i] *= xd;
                     }
+                else
+                    {
+                    xs[i] *= preprocessXKey(i, xKeys[i], synth.getModel().get(xKeys[i], 1));
+                    }
+                }
             }
         
         postProcess(xs, ys);
@@ -407,11 +407,11 @@ public class EnvelopeDisplay extends JComponent implements Updatable
                 
         if (!asLink && children != null)
             {
-                for(int i = 0; i < children.length; i++)
-                    {
-                        children[i].setBounds(getBounds());
-                        children[i].paintComponent(g, true);            // draw it as a link
-                    }
+            for(int i = 0; i < children.length; i++)
+                {
+                children[i].setBounds(getBounds());
+                children[i].paintComponent(g, true);            // draw it as a link
+                }
             }
         
         // Now continue drawing
@@ -434,21 +434,21 @@ public class EnvelopeDisplay extends JComponent implements Updatable
         double xcurrent = 0;
         for(int i = 0; i < xs.length; i++)
             {
-                xs[i] *= rect.width;
-                double f = xs[i];
-                xs[i] += xcurrent;
-                xcurrent = xcurrent + f;
+            xs[i] *= rect.width;
+            double f = xs[i];
+            xs[i] += xcurrent;
+            xcurrent = xcurrent + f;
             }
             
         for(int i = 0; i < ys.length; i++)
             {
-                if (signed)     // instead of going 0...1 it goes -1...1, so we have to map it to 0...1
-                    {
-                        ys[i] /= 2.0;
-                        ys[i] += 0.5;
-                    }
+            if (signed)     // instead of going 0...1 it goes -1...1, so we have to map it to 0...1
+                {
+                ys[i] /= 2.0;
+                ys[i] += 0.5;
+                }
                 
-                ys[i] *= rect.height;
+            ys[i] *= rect.height;
             }
             
         double startHeight = rect.height;
@@ -464,16 +464,16 @@ public class EnvelopeDisplay extends JComponent implements Updatable
         p.moveTo(rect.x + xs[0], rect.y + rect.height - ys[0]);
         fillp.lineTo(rect.x + xs[0], rect.y + rect.height - ys[0]);
         marker[0] = new Ellipse2D.Double((rect.x + xs[0] - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0),
-                                         (rect.y + rect.height - ys[0] - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0),
-                                         Style.ENVELOPE_DISPLAY_MARKER_WIDTH(), Style.ENVELOPE_DISPLAY_MARKER_WIDTH());
+            (rect.y + rect.height - ys[0] - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0),
+            Style.ENVELOPE_DISPLAY_MARKER_WIDTH(), Style.ENVELOPE_DISPLAY_MARKER_WIDTH());
         
         for(int i = 1; i < xs.length; i++)
             {
-                p.lineTo(rect.x + xs[i], rect.y + rect.height - ys[i]);
-                fillp.lineTo(rect.x + xs[i], rect.y + rect.height - ys[i]);
-                marker[i] = new Ellipse2D.Double((rect.x + xs[i] - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0),
-                                                 (rect.y + rect.height - ys[i] - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0),
-                                                 Style.ENVELOPE_DISPLAY_MARKER_WIDTH(), Style.ENVELOPE_DISPLAY_MARKER_WIDTH());
+            p.lineTo(rect.x + xs[i], rect.y + rect.height - ys[i]);
+            fillp.lineTo(rect.x + xs[i], rect.y + rect.height - ys[i]);
+            marker[i] = new Ellipse2D.Double((rect.x + xs[i] - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0),
+                (rect.y + rect.height - ys[i] - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0),
+                Style.ENVELOPE_DISPLAY_MARKER_WIDTH(), Style.ENVELOPE_DISPLAY_MARKER_WIDTH());
             } 
         
         int end = xs.length - 1;
@@ -494,92 +494,92 @@ public class EnvelopeDisplay extends JComponent implements Updatable
         // draw dividers
         if (verticalDividers.size() > 0)
             {
-                graphics.setStroke(Style.ENVELOPE_AXIS_STROKE());
-                graphics.setColor(color);
-                for(int i = 0; i < verticalDividers.size(); i++)
-                    {
-                        double pos = (Double)(verticalDividers.get(i));
-                        double x = rect.x + rect.width * pos;
-                        line = new Line2D.Double(x, rect.y, x, rect.y + rect.height);
-                        if (!asLink)
-                            graphics.draw(line);
-                    }
+            graphics.setStroke(Style.ENVELOPE_AXIS_STROKE());
+            graphics.setColor(color);
+            for(int i = 0; i < verticalDividers.size(); i++)
+                {
+                double pos = (Double)(verticalDividers.get(i));
+                double x = rect.x + rect.width * pos;
+                line = new Line2D.Double(x, rect.y, x, rect.y + rect.height);
+                if (!asLink)
+                    graphics.draw(line);
+                }
             }
         
         // draw markers
         Color unset = Style.ENVELOPE_UNSET_COLOR();
         for(int i = 0; i < marker.length; i++)
             {
-                if (!constrainTo(i))
-                    graphics.setColor(unset);
-                else if (highlightIndex != NO_HIGHLIGHT && highlightIndex == highlightIndex(mouseToX(marker[i].x + marker[i].width / 2.0),
-                                                                                            mouseToY(marker[i].y + marker[i].height / 2.0), false))
-                    graphics.setColor(Style.TEXT_COLOR());
-                else
-                    graphics.setColor(color);
-                if (!asLink)
-                    graphics.fill(marker[i]);
+            if (!constrainTo(i))
+                graphics.setColor(unset);
+            else if (highlightIndex != NO_HIGHLIGHT && highlightIndex == highlightIndex(mouseToX(marker[i].x + marker[i].width / 2.0),
+                    mouseToY(marker[i].y + marker[i].height / 2.0), false))
+                graphics.setColor(Style.TEXT_COLOR());
+            else
+                graphics.setColor(color);
+            if (!asLink)
+                graphics.fill(marker[i]);
             }
         
         // draw axis
         if (axis != 0)
             {
-                graphics.setColor(color);
-                line = new Line2D.Double(rect.x, rect.y + startHeight, rect.x + rect.width, rect.y + startHeight);
-                graphics.setStroke(Style.ENVELOPE_AXIS_STROKE());
-                if (!asLink)
-                    graphics.draw(line);
+            graphics.setColor(color);
+            line = new Line2D.Double(rect.x, rect.y + startHeight, rect.x + rect.width, rect.y + startHeight);
+            graphics.setStroke(Style.ENVELOPE_AXIS_STROKE());
+            if (!asLink)
+                graphics.draw(line);
             }
             
         // draw stage ends
 
         if (sustainStageKey != null)
             {
-                int sustainStage = postProcessLoopOrStageKey(sustainStageKey, synth.getModel().get(sustainStageKey, 0));
-                line = new Line2D.Double(rect.x + xs[sustainStage], rect.y,
-                                         rect.x + xs[sustainStage], rect.y + rect.height);
-                graphics.setStroke(Style.ENVELOPE_AXIS_STROKE());
-                if (!asLink)
-                    graphics.draw(line);
+            int sustainStage = postProcessLoopOrStageKey(sustainStageKey, synth.getModel().get(sustainStageKey, 0));
+            line = new Line2D.Double(rect.x + xs[sustainStage], rect.y,
+                rect.x + xs[sustainStage], rect.y + rect.height);
+            graphics.setStroke(Style.ENVELOPE_AXIS_STROKE());
+            if (!asLink)
+                graphics.draw(line);
             }
         
 
         if (finalStageKey != null)
             {
-                int finalStage = postProcessLoopOrStageKey(finalStageKey, synth.getModel().get(finalStageKey, 0));
-                line = new Line2D.Double(rect.x + xs[finalStage], rect.y,
-                                         rect.x + xs[finalStage], rect.y + rect.height);
-                graphics.setStroke(new BasicStroke(1.0f));
-                if (!asLink)
-                    graphics.draw(line);
+            int finalStage = postProcessLoopOrStageKey(finalStageKey, synth.getModel().get(finalStageKey, 0));
+            line = new Line2D.Double(rect.x + xs[finalStage], rect.y,
+                rect.x + xs[finalStage], rect.y + rect.height);
+            graphics.setStroke(new BasicStroke(1.0f));
+            if (!asLink)
+                graphics.draw(line);
             }
         
         graphics.setStroke(new BasicStroke(1.0f));
         // draw intervals
         for(int i = 0; i < numLoops; i++)
             {
-                double loopStart = rect.x + xs[postProcessLoopOrStageKey(startKey[i], synth.getModel().get(startKey[i], 0))];
-                double loopEnd = rect.x + xs[postProcessLoopOrStageKey(endKey[i], synth.getModel().get(endKey[i], 0))];
-                double loopHeight = rect.y + rect.height + 6 * (i + 1);
-                line = new Line2D.Double(loopStart, loopHeight, loopEnd, loopHeight);
-                if (!asLink) 
-                    graphics.draw(line);
-                Ellipse2D.Double loopEndMarker = new Ellipse2D.Double( loopEnd - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0,
-                                                                       loopHeight - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0,
-                                                                       Style.ENVELOPE_DISPLAY_MARKER_WIDTH(), Style.ENVELOPE_DISPLAY_MARKER_WIDTH());
-                graphics.setColor(Style.BACKGROUND_COLOR());
-                if (!asLink)
-                    graphics.fill(loopEndMarker);
-                graphics.setColor(color);
-                if (!asLink)
-                    graphics.draw(loopEndMarker);
-                Ellipse2D.Double loopStartMarker = new Ellipse2D.Double( loopStart - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0,
-                                                                         loopHeight - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0,
-                                                                         Style.ENVELOPE_DISPLAY_MARKER_WIDTH(), Style.ENVELOPE_DISPLAY_MARKER_WIDTH());
-                if (!asLink)
-                    graphics.fill(loopStartMarker);
+            double loopStart = rect.x + xs[postProcessLoopOrStageKey(startKey[i], synth.getModel().get(startKey[i], 0))];
+            double loopEnd = rect.x + xs[postProcessLoopOrStageKey(endKey[i], synth.getModel().get(endKey[i], 0))];
+            double loopHeight = rect.y + rect.height + 6 * (i + 1);
+            line = new Line2D.Double(loopStart, loopHeight, loopEnd, loopHeight);
+            if (!asLink) 
+                graphics.draw(line);
+            Ellipse2D.Double loopEndMarker = new Ellipse2D.Double( loopEnd - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0,
+                loopHeight - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0,
+                Style.ENVELOPE_DISPLAY_MARKER_WIDTH(), Style.ENVELOPE_DISPLAY_MARKER_WIDTH());
+            graphics.setColor(Style.BACKGROUND_COLOR());
+            if (!asLink)
+                graphics.fill(loopEndMarker);
+            graphics.setColor(color);
+            if (!asLink)
+                graphics.draw(loopEndMarker);
+            Ellipse2D.Double loopStartMarker = new Ellipse2D.Double( loopStart - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0,
+                loopHeight - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0,
+                Style.ENVELOPE_DISPLAY_MARKER_WIDTH(), Style.ENVELOPE_DISPLAY_MARKER_WIDTH());
+            if (!asLink)
+                graphics.fill(loopStartMarker);
             }
-    }
+        }
         
     double axis = 0.0;
     public void setAxis(double val) { if (val >= 0.0 && val < 1.0) axis = val; }
@@ -588,6 +588,6 @@ public class EnvelopeDisplay extends JComponent implements Updatable
     public boolean constrainTo(int index) { return true; }
         
     public int verticalBorderThickness() { return Style.ENVELOPE_DISPLAY_BORDER_THICKNESS(); }
-}
+    }
 
 

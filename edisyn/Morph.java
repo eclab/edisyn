@@ -17,7 +17,7 @@ import edisyn.synth.*;
 import edisyn.util.*;
 
 public class Morph extends SynthPanel
-{
+    {
     Joystick joystick;
     Blank blank;
     PushButton[] buttons;
@@ -50,7 +50,7 @@ public class Morph extends SynthPanel
     String[] shuffledKeys;
            
     public Morph(final Synth synth)
-    {
+        {
         super(synth);
 
         blank = new Blank();
@@ -84,10 +84,10 @@ public class Morph extends SynthPanel
         String[] params = CATEGORICAL_STRATEGIES;
         Chooser nonmetric = new Chooser("Non-Metric Parameters", blank, "nonmetricparams", params)
             {
-                public void update(String key, Model model)
+            public void update(String key, Model model)
                 {
-                    super.update(key, model);
-                    updateAgain();
+                super.update(key, model);
+                updateAgain();
                 }
             };
         margin.add(nonmetric);
@@ -96,20 +96,20 @@ public class Morph extends SynthPanel
         params = SEND_TO_SYNTH;
         Chooser sendtosynth = new Chooser("Send to Synth", blank, "sendonchange", params)
             {
-                public void update(String key, Model model)
+            public void update(String key, Model model)
                 {
-                    super.update(key, model);
-                    if (timer != null)
+                super.update(key, model);
+                if (timer != null)
+                    {
+                    if (model.get("sendonchange", SEND_TYPE_NOTE) >= SEND_TYPE_TRICKLE)     // trickle or deluge
                         {
-                            if (model.get("sendonchange", SEND_TYPE_NOTE) >= SEND_TYPE_TRICKLE)     // trickle or deluge
-                                {
-                                    timer.start();
-                                }
-                            else
-                                {
-                                    timer.stop();
-                                }
+                        timer.start();
                         }
+                    else
+                        {
+                        timer.stop();
+                        }
+                    }
                 }
             };
         margin.add(sendtosynth);
@@ -118,14 +118,14 @@ public class Morph extends SynthPanel
                 
         margin.add(new PushButton("Export...", new String[]
             {
-                "Keep Patch",
-                "Edit Patch",
-                "Save to File"
+            "Keep Patch",
+            "Edit Patch",
+            "Save to File"
             })
             {
-                public void perform(int val)
+            public void perform(int val)
                 {
-                    save(val);
+                save(val);
                 }
             });
 
@@ -140,34 +140,34 @@ public class Morph extends SynthPanel
         pan.add(hbox, BorderLayout.CENTER);
         LabelledDial xCC = new LabelledDial("X CC", blank, "xcc", Style.COLOR_A(), -1, 127)
             {
-                public void update(String key, Model model)
+            public void update(String key, Model model)
                 {
-                    super.update(key, model);
-                    //System.err.println(model.get(key, -1));
-                    Synth.setLastX("" + model.get(key, -1), "XCC", EDISYN_MORPH_PREFERENCES_KEY); 
+                super.update(key, model);
+                //System.err.println(model.get(key, -1));
+                Synth.setLastX("" + model.get(key, -1), "XCC", EDISYN_MORPH_PREFERENCES_KEY); 
                 }
 
-                public String map(int value)
+            public String map(int value)
                 {
-                    if (value == -1) return "Off";
-                    else return "" + value;
+                if (value == -1) return "Off";
+                else return "" + value;
                 }
             };
         hbox.add(xCC); 
 
         LabelledDial yCC = new LabelledDial("Y CC", blank, "ycc", Style.COLOR_B(), -1, 127)
             {
-                public void update(String key, Model model)
+            public void update(String key, Model model)
                 {
-                    super.update(key, model);
-                    //System.err.println(model.get(key, -1));
-                    Synth.setLastX("" + model.get(key, -1), "YCC", EDISYN_MORPH_PREFERENCES_KEY); 
+                super.update(key, model);
+                //System.err.println(model.get(key, -1));
+                Synth.setLastX("" + model.get(key, -1), "YCC", EDISYN_MORPH_PREFERENCES_KEY); 
                 }
 
-                public String map(int value)
+            public String map(int value)
                 {
-                    if (value == -1) return "Off";
-                    else return "" + value;
+                if (value == -1) return "Off";
+                else return "" + value;
                 }
             };
         hbox.add(yCC); 
@@ -175,64 +175,64 @@ public class Morph extends SynthPanel
         buttons = new PushButton[4];
         for(int i = 0; i < 4; i++)
             {
-                int s = 0;
-                final int[] swap = new int[3];
-                for(int j = 0; j < 4; j++)
+            int s = 0;
+            final int[] swap = new int[3];
+            for(int j = 0; j < 4; j++)
+                {
+                if (j != i)
                     {
-                        if (j != i)
-                            {
-                                swap[s] = j;
-                                s++;
-                            }
+                    swap[s] = j;
+                    s++;
                     }
+                }
                                 
-                final int _i = i;
-                buttons[i] = new PushButton("[Empty]", new String[] 
-                    { 
-                        "Set to Current Patch",
-                        "Set to Joystick Position",
-                        "Load from File...",
-                        "Clear",
-                        null,
-                        "Swap with " + POSITIONS[swap[0]],
-                        "Swap with " + POSITIONS[swap[1]],
-                        "Swap with " + POSITIONS[swap[2]],
-                        null,
-                        "Take from Nudge 1",
-                        "Take from Nudge 2",
-                        "Take from Nudge 3",
-                        "Take from Nudge 4",
-                        null,
-                        "Take from Hill-Climb Archive q",
-                        "Take from Hill-Climb Archive r",
-                        "Take from Hill-Climb Archive s",
-                        "Take from Hill-Climb Archive t",
-                        "Take from Hill-Climb Archive u",
-                        "Take from Hill-Climb Archive v",
-                    })
+            final int _i = i;
+            buttons[i] = new PushButton("[Empty]", new String[] 
+                { 
+                "Set to Current Patch",
+                "Set to Joystick Position",
+                "Load from File...",
+                "Clear",
+                null,
+                "Swap with " + POSITIONS[swap[0]],
+                "Swap with " + POSITIONS[swap[1]],
+                "Swap with " + POSITIONS[swap[2]],
+                null,
+                "Take from Nudge 1",
+                "Take from Nudge 2",
+                "Take from Nudge 3",
+                "Take from Nudge 4",
+                null,
+                "Take from Hill-Climb Archive q",
+                "Take from Hill-Climb Archive r",
+                "Take from Hill-Climb Archive s",
+                "Take from Hill-Climb Archive t",
+                "Take from Hill-Climb Archive u",
+                "Take from Hill-Climb Archive v",
+                })
+                {
+                public void perform(int val)
                     {
-                        public void perform(int val)
-                        {
-                            if (val < 4)
-                                resetButton(_i, val);
-                            else if (val < 8)
-                                swap(_i, swap[val - 5]);
-                            else if (val < 13)
-                                takeFromNudge(_i, val - 9);
-                            else
-                                takeFromArchive(_i, val - 14);
-                            updateAgain();               
-                        }
-                    };
+                    if (val < 4)
+                        resetButton(_i, val);
+                    else if (val < 8)
+                        swap(_i, swap[val - 5]);
+                    else if (val < 13)
+                        takeFromNudge(_i, val - 9);
+                    else
+                        takeFromArchive(_i, val - 14);
+                    updateAgain();               
+                    }
+                };
             }
 
                 
         joystick = new Joystick(synth)
             {
-                public void updatePosition()
+            public void updatePosition()
                 {
-                    super.updatePosition();
-                    Morph.this.update(xPos, yPos);
+                super.updatePosition();
+                Morph.this.update(xPos, yPos);
                 }
             };
         joystick.setUnsetColor(Color.BLUE);
@@ -257,94 +257,94 @@ public class Morph extends SynthPanel
         top.add(buttons[1], BorderLayout.EAST);
         bottom.add(buttons[2], BorderLayout.WEST);
         bottom.add(buttons[3], BorderLayout.EAST);
-    }
+        }
     
     public void handleCC(Midi.CCData cc)
-    {
+        {
         // the channel is right, we already know that, so just check for type
         if (cc.type == Midi.CCDATA_TYPE_RAW_CC)
             {
-                boolean updated = false;
-                if (cc.number == blank.getModel().get("xcc", -1))
-                    {
-                        joystick.xPos = ((cc.value / 127.0) * 2.0) - 1.0;
-                        updated = true;
-                    }
+            boolean updated = false;
+            if (cc.number == blank.getModel().get("xcc", -1))
+                {
+                joystick.xPos = ((cc.value / 127.0) * 2.0) - 1.0;
+                updated = true;
+                }
                         
-                if (cc.number == blank.getModel().get("ycc", -1))       // note no "else"
-                    {
-                        joystick.yPos = ((cc.value / 127.0) * 2.0) - 1.0;
-                        updated = true;
-                    }
+            if (cc.number == blank.getModel().get("ycc", -1))       // note no "else"
+                {
+                joystick.yPos = ((cc.value / 127.0) * 2.0) - 1.0;
+                updated = true;
+                }
 
-                if (updated)
-                    {
-                        joystick.updatePosition();
-                        update(joystick.xPos, joystick.yPos);
-                    }
-                joystick.repaint();
+            if (updated)
+                {
+                joystick.updatePosition();
+                update(joystick.xPos, joystick.yPos);
+                }
+            joystick.repaint();
             }
-    }
+        }
     
     public void updateSound()
-    {
+        {
         if (isShowingPane())
             {
-                if (blank.getModel().get("sendonchange", SEND_TYPE_NOTE) == SEND_TYPE_NOTE)               // send on note instead
-                    {
-                        Model backup = synth.getModel();
-                        synth.model = current;
-                        synth.sendAllParameters();
-                        synth.model = backup;                   
-                    }
+            if (blank.getModel().get("sendonchange", SEND_TYPE_NOTE) == SEND_TYPE_NOTE)               // send on note instead
+                {
+                Model backup = synth.getModel();
+                synth.model = current;
+                synth.sendAllParameters();
+                synth.model = backup;                   
+                }
             }
-    }
+        }
         
     public void postUpdateSound()
-    {
-    }
+        {
+        }
         
     void takeFromNudge(int val, int nudge)
-    {
+        {
         Model n = synth.nudge[nudge];
         if (n == null)
             {
-                sources[val] = null;
-                buttons[val].getButton().setText("[Empty]");
+            sources[val] = null;
+            buttons[val].getButton().setText("[Empty]");
             }
         else
             {
-                sources[val] = n.copy();
-                buttons[val].getButton().setText("Nudge " + (nudge + 1));
+            sources[val] = n.copy();
+            buttons[val].getButton().setText("Nudge " + (nudge + 1));
             }
-    }
+        }
     
     void takeFromArchive(int val, int archive)
-    {
+        {
         HillClimb climb = synth.hillClimb;
         if (climb == null)
             {
-                sources[val] = null;
-                buttons[val].getButton().setText("[Empty]");
+            sources[val] = null;
+            buttons[val].getButton().setText("[Empty]");
             }
         else
             {
-                Model n = climb.currentModels[HillClimb.NUM_CANDIDATES + val];  // archive starts after candidates
-                if (n == null)
-                    {
-                        sources[val] = null;
-                        buttons[val].getButton().setText("[Empty]");
-                    }
-                else
-                    {
-                        sources[val] = n.copy();
-                        buttons[val].getButton().setText("Archive " + (char)('q' + archive));
-                    }
+            Model n = climb.currentModels[HillClimb.NUM_CANDIDATES + val];  // archive starts after candidates
+            if (n == null)
+                {
+                sources[val] = null;
+                buttons[val].getButton().setText("[Empty]");
+                }
+            else
+                {
+                sources[val] = n.copy();
+                buttons[val].getButton().setText("Archive " + (char)('q' + archive));
+                }
             }
-    }
+        }
     
     void swap(int a, int b)
-    {
+        {
         Model temp = sources[a];
         sources[a] = sources[b];
         sources[b] = temp;
@@ -352,114 +352,114 @@ public class Morph extends SynthPanel
         buttons[a].getButton().setText(buttons[b].getButton().getText());
         buttons[b].getButton().setText(tempString);
         repaint();
-    }
+        }
         
     void save(int operation)
-    {
+        {
         if (operation == 0)     // Keep
             {
-                // Keep for sure?
-                if (synth.showSimpleConfirm("Keep Patch", "Load Patch into Editor?"))
-                    {
-                        synth.tabs.setSelectedIndex(0);
-                        synth.setSendMIDI(false);
-                        // push to undo if they're not the same
-                        if (!current.keyEquals(synth.getModel()))
-                            synth.undo.push(synth.getModel());
+            // Keep for sure?
+            if (synth.showSimpleConfirm("Keep Patch", "Load Patch into Editor?"))
+                {
+                synth.tabs.setSelectedIndex(0);
+                synth.setSendMIDI(false);
+                // push to undo if they're not the same
+                if (!current.keyEquals(synth.getModel()))
+                    synth.undo.push(synth.getModel());
                                                                         
-                        // Load into the current model
-                        current.copyValuesTo(synth.getModel());
-                        synth.setSendMIDI(true);
-                        synth.sendAllParameters();
-                    }
+                // Load into the current model
+                current.copyValuesTo(synth.getModel());
+                synth.setSendMIDI(true);
+                synth.sendAllParameters();
+                }
             }
         else if (operation == 1)        // Edit
             {
-                Synth newSynth = synth.doDuplicateSynth();
-                // Copy the parameters forward into the synth, then
-                // link the synth's model back to currentModels[_i].
-                // We do this because the new synth's widgets are registered
-                // with its model, so we can't just replace the model.
-                // But we can certainly replace currentModels[_i]!
-                newSynth.setSendMIDI(false);
-                current.copyValuesTo(newSynth.getModel());
-                newSynth.setSendMIDI(true);
-                newSynth.sendAllParameters();
+            Synth newSynth = synth.doDuplicateSynth();
+            // Copy the parameters forward into the synth, then
+            // link the synth's model back to currentModels[_i].
+            // We do this because the new synth's widgets are registered
+            // with its model, so we can't just replace the model.
+            // But we can certainly replace currentModels[_i]!
+            newSynth.setSendMIDI(false);
+            current.copyValuesTo(newSynth.getModel());
+            newSynth.setSendMIDI(true);
+            newSynth.sendAllParameters();
             }
         else    // Save to File  -- FIXME, should we copy to the synth.model?
             {
-                Model backup = synth.model;
-                synth.model = current;
-                synth.doSaveAs("morphed." + synth.getPatchName(synth.getModel()) + ".syx");
-                synth.model = backup;
-                synth.updateTitle();
+            Model backup = synth.model;
+            synth.model = current;
+            synth.doSaveAs("morphed." + synth.getPatchName(synth.getModel()) + ".syx");
+            synth.model = backup;
+            synth.updateTitle();
             }
-    }
+        }
     
     
     int joy = 0;
     void resetButton(int button, int reset)
-    {
+        {
         if (reset == 0)
             {
-                sources[button] = synth.getModel().copy();
-                String currentPatchName = synth.getPatchName(synth.getModel());
-                buttons[button].getButton().setText(currentPatchName == null ? "Current Patch" : "" + currentPatchName);
+            sources[button] = synth.getModel().copy();
+            String currentPatchName = synth.getPatchName(synth.getModel());
+            buttons[button].getButton().setText(currentPatchName == null ? "Current Patch" : "" + currentPatchName);
             }
         else if (reset == 1)
             {
-                sources[button] = current.copy();
-                buttons[button].getButton().setText("Joystick " + (++joy));
+            sources[button] = current.copy();
+            buttons[button].getButton().setText("Joystick " + (++joy));
             }
         else if (reset == 2)
             {
-                Model cancel = sources[button];         //  the original model, to be restored if we failed
-                Model backup = synth.model;
-                sources[button] = backup.copy();
-                synth.model = sources[button];
-                synth.setShowingLimitedBankSysex(true);
-                boolean result = synth.doOpen(false);
-                synth.setShowingLimitedBankSysex(false);
-                synth.model = backup;           // restore
-                synth.updateTitle();
-                if (result)
+            Model cancel = sources[button];         //  the original model, to be restored if we failed
+            Model backup = synth.model;
+            sources[button] = backup.copy();
+            synth.model = sources[button];
+            synth.setShowingLimitedBankSysex(true);
+            boolean result = synth.doOpen(false);
+            synth.setShowingLimitedBankSysex(false);
+            synth.model = backup;           // restore
+            synth.updateTitle();
+            if (result)
+                {
+                String name = sources[button].get("name", "");
+                if (name.equals(""))
                     {
-                        String name = sources[button].get("name", "");
-                        if (name.equals(""))
-                            {
-                                File filename = synth.getFile();
-                                if (filename != null)
-                                    {
-                                        buttons[button].getButton().setText(filename.getName());
-                                    }
-                                else
-                                    {
-                                        buttons[button].getButton().setText(synth.getTitleBarSynthName().trim() + " " + (++joy));
-                                    }
-                            }
-                        else
-                            {
-                                buttons[button].getButton().setText(name);
-                            }
+                    File filename = synth.getFile();
+                    if (filename != null)
+                        {
+                        buttons[button].getButton().setText(filename.getName());
+                        }
+                    else
+                        {
+                        buttons[button].getButton().setText(synth.getTitleBarSynthName().trim() + " " + (++joy));
+                        }
                     }
                 else
                     {
-                        sources[button] = cancel;
+                    buttons[button].getButton().setText(name);
                     }
+                }
+            else
+                {
+                sources[button] = cancel;
+                }
             }
         else if (reset == 3)
             {
-                sources[button] = null;
-                buttons[button].getButton().setText("[Empty]");
+            sources[button] = null;
+            buttons[button].getButton().setText("[Empty]");
             }
-    }
+        }
     
     void updateAgain() { update(lastx, lasty); }
     
     double lastx = 0;
     double lasty = 0;
     void update(double x, double y)
-    {
+        {
         lastx = x;
         lasty = y;
         
@@ -493,13 +493,13 @@ public class Morph extends SynthPanel
         for(int i = 0; i < 4; i++)
             if (sources[i] != null)
                 {
-                    weights[i] = computeWeight(i, x, y);
-                    w[count] = weights[i];
-                    lw[count] = lastWeights[i];
-                    models[count] = sources[i];
-                    if (strategy == i)              // we were locking to this one
-                        strategy = count;       // change the index since we're removing null models
-                    count++;
+                weights[i] = computeWeight(i, x, y);
+                w[count] = weights[i];
+                lw[count] = lastWeights[i];
+                models[count] = sources[i];
+                if (strategy == i)              // we were locking to this one
+                    strategy = count;       // change the index since we're removing null models
+                count++;
                 }
         
         // perform morph
@@ -513,33 +513,33 @@ public class Morph extends SynthPanel
         // emit
         if (blank.getModel().get("sendonchange", SEND_TYPE_NOTE) == SEND_TYPE_CHANGING)               // send only on change
             {
-                Model backup = synth.getModel();
-                synth.model = current;
-                synth.sendAllParameters();
-                synth.model = backup;
+            Model backup = synth.getModel();
+            synth.model = current;
+            synth.sendAllParameters();
+            synth.model = backup;
             }
-    }
+        }
         
     double computeWeight(int index, double x, double y)
-    {
+        {
         if (index == 0) { x = 1 - x; y = 1 - y; }       // top left
         else if (index == 1) { y = 1 - y; }             // top right
         else if (index == 2) { x = 1 - x; }             // bottom left
         else if (index == 3) {  }                       // bottom right
         return (x < y ? x : y); 
-    }
+        }
    
     boolean isShowingPane()
-    {
+        {
         return (synth.morphPane != null && synth.tabs.getSelectedComponent() == synth.morphPane);
-    }
+        }
     
     boolean startedUp = false;
     
     
     int untitled = 0;
     public void initialize()
-    {
+        {
         current = synth.getModel().copy(); // load it up initially so it's not blank
         String currentPatchName = synth.getPatchName(synth.getModel());
         buttons[0].getButton().setText(currentPatchName == null ? ("Untitled " + (untitled++)) : currentPatchName);
@@ -557,83 +557,83 @@ public class Morph extends SynthPanel
         if (timer == null) 
             timer = new javax.swing.Timer(timerDelay, new ActionListener()
                 {
-                    public void actionPerformed(ActionEvent e)
+                public void actionPerformed(ActionEvent e)
                     {
-                        if (blank.getModel().get("sendonchange", SEND_TYPE_NOTE) == SEND_TYPE_TRICKLE)  // trickle
+                    if (blank.getModel().get("sendonchange", SEND_TYPE_NOTE) == SEND_TYPE_TRICKLE)  // trickle
+                        {
+                        timerCount++;
+                        if (timerCount >= shuffledKeys.length)
                             {
-                                timerCount++;
-                                if (timerCount >= shuffledKeys.length)
-                                    {
-                                        StringUtility.shuffle(shuffledKeys, synth.random);
-                                        timerCount = 0;
-                                    }
-                                Model backup = synth.getModel();
-                                synth.model = current;
-                                boolean sendMIDI = synth.getSendMIDI();
-                                synth.setSendMIDI(true);
-                                //                                      synth.simplePause(100);
-                                if (!(shuffledKeys[timerCount].startsWith("modmat") && shuffledKeys[timerCount].contains("amount")))
-                                    {
-                                        //System.err.println(shuffledKeys[timerCount]);
-                                        synth.sendOneParameter(shuffledKeys[timerCount]);
-                                    }
-                                synth.setSendMIDI(sendMIDI);
-                                synth.model = backup;                   
+                            StringUtility.shuffle(shuffledKeys, synth.random);
+                            timerCount = 0;
                             }
-                        else if (blank.getModel().get("sendonchange", SEND_TYPE_NOTE) == SEND_TYPE_DELUGE)      // deluge
+                        Model backup = synth.getModel();
+                        synth.model = current;
+                        boolean sendMIDI = synth.getSendMIDI();
+                        synth.setSendMIDI(true);
+                        //                                      synth.simplePause(100);
+                        if (!(shuffledKeys[timerCount].startsWith("modmat") && shuffledKeys[timerCount].contains("amount")))
                             {
-                                Model backup = synth.getModel();
-                                synth.model = current;
-                                boolean sendMIDI = synth.getSendMIDI();
-                                synth.setSendMIDI(true);
-                                synth.sendAllParameters();
-                                synth.setSendMIDI(sendMIDI);
-                                synth.model = backup;                   
+                            //System.err.println(shuffledKeys[timerCount]);
+                            synth.sendOneParameter(shuffledKeys[timerCount]);
                             }
-                        else
-                            {
-                                timer.stop();
-                            }
+                        synth.setSendMIDI(sendMIDI);
+                        synth.model = backup;                   
+                        }
+                    else if (blank.getModel().get("sendonchange", SEND_TYPE_NOTE) == SEND_TYPE_DELUGE)      // deluge
+                        {
+                        Model backup = synth.getModel();
+                        synth.model = current;
+                        boolean sendMIDI = synth.getSendMIDI();
+                        synth.setSendMIDI(true);
+                        synth.sendAllParameters();
+                        synth.setSendMIDI(sendMIDI);
+                        synth.model = backup;                   
+                        }
+                    else
+                        {
+                        timer.stop();
+                        }
                     }
                 });
-    }
+        }
         
     public void startup()
-    {
+        {
         if (!startedUp)
             {
-                if (!synth.isSendingTestNotes())
-                    {
-                        synth.doSendTestNotes();
-                    }
+            if (!synth.isSendingTestNotes())
+                {
+                synth.doSendTestNotes();
+                }
             }
         startedUp = true;
         if (timer != null)
             timer.start();
         updateSound();                  // otherwise the synth might not get it
-    }
+        }
                 
     public void shutdown()
-    {
+        {
         if (timer != null) 
             timer.stop();
         if (startedUp)
             {
-                synth.doSendAllSoundsOff(false);
-                if (synth.isSendingTestNotes())
-                    {
-                        synth.doSendTestNotes();
-                    }
-                if (synth.isRepeatingCurrentPatch())
-                    {
-                        synth.doRepeatCurrentPatch();
-                    }
-                // restore patch
-                synth.sendAllParameters();
+            synth.doSendAllSoundsOff(false);
+            if (synth.isSendingTestNotes())
+                {
+                synth.doSendTestNotes();
+                }
+            if (synth.isRepeatingCurrentPatch())
+                {
+                synth.doRepeatCurrentPatch();
+                }
+            // restore patch
+            synth.sendAllParameters();
             }
         startedUp = false;
-    }
+        }
                         
-}
+    }
         
         

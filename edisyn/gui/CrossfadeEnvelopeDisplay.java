@@ -14,7 +14,7 @@ import java.awt.event.*;
 
 
 public class CrossfadeEnvelopeDisplay extends JComponent implements Updatable
-{
+    {
     Synth synth;
     Color color;
     Color indexColor;
@@ -32,19 +32,19 @@ public class CrossfadeEnvelopeDisplay extends JComponent implements Updatable
     int width = 128;
 
     public void setPreferredWidth(int width)
-    {
+        {
         this.width = width;
-    }
+        }
                 
     public int getPreferredWidth()
-    {
+        {
         return this.width;
-    }
+        }
      
     public void update(String key, Model model)
-    {
+        {
         repaint();
-    }
+        }
         
     public Dimension getPreferredSize() { return new Dimension(width, 84); }
     public Dimension getMinimiumSize() { return new Dimension(84, 84); }
@@ -53,9 +53,9 @@ public class CrossfadeEnvelopeDisplay extends JComponent implements Updatable
     public Color getColor() { return color; }
     
     public CrossfadeEnvelopeDisplay(Synth synth, Color color, Color indexColor, String seqIndexKey, String seqLenKey, 
-                                    double[] lengthConstants, double[] heightConstants, double[] fadeConstants, 
-                                    String[] lengthKeys, String[] heightKeys, String[] fadeKeys, String magnifyKey)
-    {
+        double[] lengthConstants, double[] heightConstants, double[] fadeConstants, 
+        String[] lengthKeys, String[] heightKeys, String[] fadeKeys, String magnifyKey)
+        {
         super();
         this.synth = synth;
         this.color = color;  
@@ -105,10 +105,10 @@ public class CrossfadeEnvelopeDisplay extends JComponent implements Updatable
             model.register(magnifyKey, this);
                         
         setBackground(Style.BACKGROUND_COLOR());
-    }
+        }
 
     public void paintComponent(Graphics g)
-    {
+        {
         Graphics2D graphics = (Graphics2D) g;
         
         Rectangle rect = getBounds();
@@ -144,46 +144,46 @@ public class CrossfadeEnvelopeDisplay extends JComponent implements Updatable
         double y = rect.y + rect.height;
         for(int i = start; i < seqLen && x <= rect.width - (rect.width / 5); i++)
             {               
-                double fadein = 0.0;
-                if (i != 0)
-                    fadein = model.get(fadeKeys[i - 1], 0) * fadeConstants[i - 1] * magnify;
-                double fadeout = model.get(fadeKeys[i], 0) * fadeConstants[i] * magnify;
-                double height = model.get(heightKeys[i], 0) * heightConstants[i];
-                double length = model.get(lengthKeys[i], 0) * lengthConstants[i] * magnify;
+            double fadein = 0.0;
+            if (i != 0)
+                fadein = model.get(fadeKeys[i - 1], 0) * fadeConstants[i - 1] * magnify;
+            double fadeout = model.get(fadeKeys[i], 0) * fadeConstants[i] * magnify;
+            double height = model.get(heightKeys[i], 0) * heightConstants[i];
+            double length = model.get(lengthKeys[i], 0) * lengthConstants[i] * magnify;
                 
-                if (i == seqIndex)
-                    graphics.setColor(indexColor);
-                else
-                    graphics.setColor(color);
+            if (i == seqIndex)
+                graphics.setColor(indexColor);
+            else
+                graphics.setColor(color);
                         
-                graphics.fill(new Ellipse2D.Double(x - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0,
-                                                   y - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0,
-                                                   Style.ENVELOPE_DISPLAY_MARKER_WIDTH(), Style.ENVELOPE_DISPLAY_MARKER_WIDTH()));
+            graphics.fill(new Ellipse2D.Double(x - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0,
+                    y - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0,
+                    Style.ENVELOPE_DISPLAY_MARKER_WIDTH(), Style.ENVELOPE_DISPLAY_MARKER_WIDTH()));
 
-                graphics.draw(new Line2D.Double(x, y, 
-                                                x + rect.width * fadein, y - (rect.height * height)));
+            graphics.draw(new Line2D.Double(x, y, 
+                    x + rect.width * fadein, y - (rect.height * height)));
 
-                graphics.fill(new Ellipse2D.Double(x + rect.width * fadein - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0,
-                                                   y - (rect.height * height) - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0,
-                                                   Style.ENVELOPE_DISPLAY_MARKER_WIDTH(), Style.ENVELOPE_DISPLAY_MARKER_WIDTH()));
+            graphics.fill(new Ellipse2D.Double(x + rect.width * fadein - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0,
+                    y - (rect.height * height) - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0,
+                    Style.ENVELOPE_DISPLAY_MARKER_WIDTH(), Style.ENVELOPE_DISPLAY_MARKER_WIDTH()));
 
-                graphics.draw(new Line2D.Double(x + rect.width * fadein, y - (rect.height * height), 
-                                                x + rect.width * (fadein + length), y - (rect.height * height)));
+            graphics.draw(new Line2D.Double(x + rect.width * fadein, y - (rect.height * height), 
+                    x + rect.width * (fadein + length), y - (rect.height * height)));
 
-                graphics.fill(new Ellipse2D.Double(x + rect.width * (fadein + length) - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0,
-                                                   y - (rect.height * height) - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0,
-                                                   Style.ENVELOPE_DISPLAY_MARKER_WIDTH(), Style.ENVELOPE_DISPLAY_MARKER_WIDTH()));
+            graphics.fill(new Ellipse2D.Double(x + rect.width * (fadein + length) - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0,
+                    y - (rect.height * height) - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0,
+                    Style.ENVELOPE_DISPLAY_MARKER_WIDTH(), Style.ENVELOPE_DISPLAY_MARKER_WIDTH()));
 
-                graphics.draw(new Line2D.Double(x + rect.width * (fadein + length), y - (rect.height * height), 
-                                                x + rect.width * (fadein + length + fadeout), y));
+            graphics.draw(new Line2D.Double(x + rect.width * (fadein + length), y - (rect.height * height), 
+                    x + rect.width * (fadein + length + fadeout), y));
 
-                graphics.fill(new Ellipse2D.Double(x + rect.width * (fadein + length + fadeout) - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0,
-                                                   y - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0,
-                                                   Style.ENVELOPE_DISPLAY_MARKER_WIDTH(), Style.ENVELOPE_DISPLAY_MARKER_WIDTH()));
+            graphics.fill(new Ellipse2D.Double(x + rect.width * (fadein + length + fadeout) - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0,
+                    y - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0,
+                    Style.ENVELOPE_DISPLAY_MARKER_WIDTH(), Style.ENVELOPE_DISPLAY_MARKER_WIDTH()));
 
-                x += rect.width * (fadein + length);
+            x += rect.width * (fadein + length);
             }
+        }
     }
-}
 
 

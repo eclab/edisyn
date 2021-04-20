@@ -30,7 +30,7 @@ import java.awt.event.*;
 */
 
 public class PushButton extends JPanel
-{
+    {
     JButton button;
     JPopupMenu pop;
     
@@ -39,7 +39,7 @@ public class PushButton extends JPanel
     public JButton getButton() { return button; }
     
     public PushButton(final String text)
-    {
+        {
         button = new JButton(text);
         button.putClientProperty("JComponent.sizeVariant", "small");
         button.setFont(Style.SMALL_FONT());
@@ -47,84 +47,84 @@ public class PushButton extends JPanel
                 
         button.addActionListener(new ActionListener()
             {
-                public void actionPerformed(ActionEvent e)
+            public void actionPerformed(ActionEvent e)
                 {
-                    _perform();
+                _perform();
                 }
             });
         setBackground(Style.BACKGROUND_COLOR());
         setLayout(new BorderLayout());
         add(button, BorderLayout.CENTER);
-    }
+        }
     
     public PushButton(String text, String[] options)
-    {
+        {
         this(text);
         pop = new JPopupMenu();
         for(int i = 0; i < options.length; i++)
             {
-                if (options[i] == null)
+            if (options[i] == null)
+                {
+                pop.addSeparator();
+                }
+            else
+                {
+                JMenuItem menu = new JMenuItem(options[i]);
+                final int _i = i;
+                menu.addActionListener(new ActionListener()
                     {
-                        pop.addSeparator();
-                    }
-                else
-                    {
-                        JMenuItem menu = new JMenuItem(options[i]);
-                        final int _i = i;
-                        menu.addActionListener(new ActionListener()
-                            {
-                                public void actionPerformed(ActionEvent e)      
-                                {
-                                    perform(_i);
-                                }       
-                            });     
-                        pop.add(menu);
-                    }
+                    public void actionPerformed(ActionEvent e)      
+                        {
+                        perform(_i);
+                        }       
+                    });     
+                pop.add(menu);
+                }
             }
-    }
+        }
     
     public PushButton(String text, JMenuItem[] menuItems)
-    {
+        {
         this(text);
         pop = new JPopupMenu();
         for(int i = 0; i < menuItems.length; i++)
             {
-                if (menuItems[i] == null)
-                    pop.addSeparator();
-                else
-                    pop.add(menuItems[i]);
+            if (menuItems[i] == null)
+                pop.addSeparator();
+            else
+                pop.add(menuItems[i]);
             }
-    }
+        }
     
     void _perform()
-    {
+        {
         if (pop != null)
             {
-                button.add(pop);
-                if (Style.isMac())
-                    {
-                        // Mac buttons have strange insets, and only the top and bottom match the
-                        // actual border.
-                        Insets insets = button.getInsets();
-                        pop.show(button, button.getBounds().x + insets.top, button.getBounds().y + button.getBounds().height - insets.bottom);
-                    }
-                else
-                    {
-                        pop.show(button, button.getBounds().x, button.getBounds().y + button.getBounds().height);
-                    }
-                button.remove(pop);
+            button.add(pop);
+            if (Style.isMac())
+                {
+                // Mac buttons have strange insets, and only the top and bottom match the
+                // actual border.
+                Insets insets = button.getInsets();
+                pop.show(button, button.getBounds().x + insets.top, button.getBounds().y + button.getBounds().height - insets.bottom);
+                }
+            else
+                {
+                pop.show(button, button.getBounds().x, button.getBounds().y + button.getBounds().height);
+                }
+            button.remove(pop);
             }
         else
             {
-                perform();
+            perform();
             }
-    }
+        }
     
     public void perform()
-    {
-    }
+        {
+        }
         
     public void perform(int i)
-    {
+        {
+        }
     }
-}

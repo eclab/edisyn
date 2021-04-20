@@ -7,17 +7,17 @@ package edisyn.synth.emumorpheus;
 import edisyn.*;
 
 public class EmuMorpheusRec extends Recognize
-{
+    {
     public static final int NUM_PARAMETERS = 278;
         
     public static boolean recognize(byte[] data)
-    {
+        {
         return  data.length == 10 + NUM_PARAMETERS * 2 &&
             data[0] == (byte)0xF0 &&
             data[1] == (byte) 0x18 &&
             data[2] == (byte) 0x0C &&
             data[4] == (byte) 0x01 &&
             data[5] == (byte) 0x01;
-    }
+        }
         
-}
+    }

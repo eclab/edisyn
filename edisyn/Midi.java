@@ -29,7 +29,7 @@ import edisyn.util.*;
 
 
 public class Midi
-{
+    {
         
     /** A MIDI pipe.  Thru is a Receiver which attaches to other
         Receivers.  when it gets a message, it forwards it to ALL
@@ -38,38 +38,38 @@ public class Midi
         the Thru, they won't have a race condition. */
                 
     public static class Thru implements Receiver
-    {
+        {
         ArrayList receivers = new ArrayList();
                 
         public void close()
-        {
+            {
             for(int i = 0; i < receivers.size(); i++)
                 {
-                    ((Receiver)(receivers.get(i))).close();
+                ((Receiver)(receivers.get(i))).close();
                 }
             receivers = new ArrayList();
-        }
+            }
                         
         public synchronized void send(MidiMessage message, long timeStamp)
-        {
+            {
             for(int i = 0; i < receivers.size(); i++)
                 {
-                    ((Receiver)(receivers.get(i))).send(message, timeStamp);
+                ((Receiver)(receivers.get(i))).send(message, timeStamp);
                 }
-        }
+            }
                         
         /** Add a receiver to get routed to. */
         public void addReceiver(Receiver receiver)
-        {
+            {
             receivers.add(receiver);
-        }
+            }
                         
         /** Remove a receiver that was routed to. */
         public void removeReceiver(Receiver receiver)
-        {
+            {
             receivers.remove(receiver);
+            }
         }
-    }
 
 
     /** A wrapper for a MIDI device which displays its name in a pleasing and
@@ -78,16 +78,16 @@ public class Midi
         it as needed) and also a Thru for the device's transmitter. */
                 
     static class MidiDeviceWrapper
-    {
+        {
         public MidiDevice device;
                 
         public MidiDeviceWrapper(MidiDevice device)
-        {
+            {
             this.device = device;
-        }
+            }
                         
         public String toString() 
-        { 
+            { 
             String desc = device.getDeviceInfo().getDescription().trim();
             String name = device.getDeviceInfo().getName();
             if (name == null) 
@@ -105,7 +105,7 @@ public class Midi
                 return desc.trim(); 
             else 
                 return name;
-        }
+            }
                 
         Transmitter transmitter;
         Receiver receiver;
@@ -118,133 +118,133 @@ public class Midi
             same Transmitter so we don't have to build multiple Transmitters (triggering bugs).
         */
         public Thru getThru(Receiver receiver) 
-        { 
+            { 
             if (thru == null) 
                 try
                     {
-                        // we use a thru here so we can add many receivers to it
-                        if (!device.isOpen()) 
-                            device.open();
-                        transmitter = device.getTransmitter();
-                        thru = new Thru();
-                        transmitter.setReceiver(thru);
+                    // we use a thru here so we can add many receivers to it
+                    if (!device.isOpen()) 
+                        device.open();
+                    transmitter = device.getTransmitter();
+                    thru = new Thru();
+                    transmitter.setReceiver(thru);
                     }
                 catch(Exception e) { ExceptionDump.postThrowable(e, "Receiver: " + receiver + "\nDevice: " + device + "\nTransmitter: " + transmitter); Synth.handleException(e); }
                         
             if (thru != null)
                 {
-                    thru.addReceiver(receiver);
+                thru.addReceiver(receiver);
                 }
             return thru;
-        }
+            }
                         
         /** Returns a threadsafe Receiver.*/
         public Receiver getReceiver() 
-        { 
+            { 
             if (receiver == null) 
                 try
                     {
-                        // we use a secret Thru here so it's lockable
-                        if (!device.isOpen()) 
-                            device.open();
-                        Thru recv = new Thru();
-                        recv.addReceiver(device.getReceiver());
-                        receiver = recv;
+                    // we use a secret Thru here so it's lockable
+                    if (!device.isOpen()) 
+                        device.open();
+                    Thru recv = new Thru();
+                    recv.addReceiver(device.getReceiver());
+                    receiver = recv;
                     }
                 catch(Exception e) { ExceptionDump.postThrowable(e, "\nDevice: " + device); Synth.handleException(e); }
             return receiver; 
+            }
         }
-    }
 
 
     static Object findDevice(String name, ArrayList devices)
-    {
+        {
         if (name == null) return null;
         for(int i = 0; i < devices.size(); i++)
             {
-                if (devices.get(i) instanceof String)
-                    {
-                        if (((String)devices.get(i)).equals(name))
-                            return devices.get(i);
-                    }
-                else
-                    {
-                        MidiDeviceWrapper mdn = (MidiDeviceWrapper)(devices.get(i));
-                        if (mdn.toString().equals(name))
-                            return mdn;
-                    }
+            if (devices.get(i) instanceof String)
+                {
+                if (((String)devices.get(i)).equals(name))
+                    return devices.get(i);
+                }
+            else
+                {
+                MidiDeviceWrapper mdn = (MidiDeviceWrapper)(devices.get(i));
+                if (mdn.toString().equals(name))
+                    return mdn;
+                }
             }
         return null;
-    }
+        }
 
 
     static void updateDevices()
-    {
+        {
         MidiDevice.Info[] midiDevices;
         
         if (Style.isMac())
             //if (true)
             {
-                try
-                    {
-                        Class c = Class.forName("uk.co.xfactorylibrarians.coremidi4j.CoreMidiDeviceProvider");
-                        Method m = c.getMethod("getMidiDeviceInfo", new Class[0]);
-                        midiDevices = (MidiDevice.Info[])(m.invoke(null));
-                        //                midiDevices = uk.co.xfactorylibrarians.coremidi4j.CoreMidiDeviceProvider.getMidiDeviceInfo();
-                    }
-                catch (Throwable ex)
-                    {
-                        System.err.println("WARNING (Midi.java): error on obtaining CoreMIDI4J, but we think we're a Mac.  This should never happen.");
-                        Synth.handleException(ex);
-                        midiDevices = MidiSystem.getMidiDeviceInfo();
-                    }
+            try
+                {
+                Class c = Class.forName("uk.co.xfactorylibrarians.coremidi4j.CoreMidiDeviceProvider");
+                Method m = c.getMethod("getMidiDeviceInfo", new Class[0]);
+                midiDevices = (MidiDevice.Info[])(m.invoke(null));
+                //                midiDevices = uk.co.xfactorylibrarians.coremidi4j.CoreMidiDeviceProvider.getMidiDeviceInfo();
+                }
+            catch (Throwable ex)
+                {
+                System.err.println("WARNING (Midi.java): error on obtaining CoreMIDI4J, but we think we're a Mac.  This should never happen.");
+                Synth.handleException(ex);
+                midiDevices = MidiSystem.getMidiDeviceInfo();
+                }
             }
         else
             {
-                midiDevices = MidiSystem.getMidiDeviceInfo();
+            midiDevices = MidiSystem.getMidiDeviceInfo();
             }
 
         ArrayList allDevices = new ArrayList();
         for(int i = 0; i < midiDevices.length; i++)
             {
-                try
+            try
+                {
+                MidiDevice d = MidiSystem.getMidiDevice(midiDevices[i]);
+                // get rid of java devices
+                if (d instanceof javax.sound.midi.Sequencer ||
+                    d instanceof javax.sound.midi.Synthesizer)
+                    continue;
+                if (d.getMaxTransmitters() != 0 || d.getMaxReceivers() != 0)
                     {
-                        MidiDevice d = MidiSystem.getMidiDevice(midiDevices[i]);
-                        // get rid of java devices
-                        if (d instanceof javax.sound.midi.Sequencer ||
-                            d instanceof javax.sound.midi.Synthesizer)
-                            continue;
-                        if (d.getMaxTransmitters() != 0 || d.getMaxReceivers() != 0)
-                            {
-                                allDevices.add(new MidiDeviceWrapper(d));
-                            }
+                    allDevices.add(new MidiDeviceWrapper(d));
                     }
-                catch(Exception e) { ExceptionDump.postThrowable(e); }
+                }
+            catch(Exception e) { ExceptionDump.postThrowable(e); }
             }
             
         // Do they hold the same exact devices?
         if (Midi.allDevices != null && Midi.allDevices.size() == allDevices.size())
             {
-                Set set = new HashSet();
-                for(int i = 0; i < Midi.allDevices.size(); i++)
-                    {
-                        set.add(((MidiDeviceWrapper)(Midi.allDevices.get(i))).device);
-                    }
+            Set set = new HashSet();
+            for(int i = 0; i < Midi.allDevices.size(); i++)
+                {
+                set.add(((MidiDeviceWrapper)(Midi.allDevices.get(i))).device);
+                }
                 
-                boolean same = true;
-                for(int i = 0; i < allDevices.size(); i++)
+            boolean same = true;
+            for(int i = 0; i < allDevices.size(); i++)
+                {
+                if (!set.contains(((MidiDeviceWrapper)(allDevices.get(i))).device))
                     {
-                        if (!set.contains(((MidiDeviceWrapper)(allDevices.get(i))).device))
-                            {
-                                same = false;  // something's different
-                                break;
-                            }
+                    same = false;  // something's different
+                    break;
                     }
+                }
                 
-                if (same)
-                    {
-                        return;  // they're identical
-                    }
+            if (same)
+                {
+                return;  // they're identical
+                }
             }
                 
         // at this point allDevices isn't the same as Midi.allDevices, so set it and update
@@ -258,33 +258,33 @@ public class Midi
         key2Devices.add("None");
         for(int i = 0; i < allDevices.size(); i++)
             {
-                try
+            try
+                {
+                MidiDeviceWrapper mdn = (MidiDeviceWrapper)(allDevices.get(i));
+                if (mdn.device.getMaxTransmitters() != 0)
                     {
-                        MidiDeviceWrapper mdn = (MidiDeviceWrapper)(allDevices.get(i));
-                        if (mdn.device.getMaxTransmitters() != 0)
-                            {
-                                inDevices.add(mdn);
-                                keyDevices.add(mdn);
-                                key2Devices.add(mdn);
-                            }
+                    inDevices.add(mdn);
+                    keyDevices.add(mdn);
+                    key2Devices.add(mdn);
                     }
-                catch(Exception e) { ExceptionDump.postThrowable(e); }
+                }
+            catch(Exception e) { ExceptionDump.postThrowable(e); }
             }
 
         outDevices = new ArrayList();
         for(int i = 0; i < allDevices.size(); i++)
             {
-                try
+            try
+                {
+                MidiDeviceWrapper mdn = (MidiDeviceWrapper)(allDevices.get(i));
+                if (mdn.device.getMaxReceivers() != 0)
                     {
-                        MidiDeviceWrapper mdn = (MidiDeviceWrapper)(allDevices.get(i));
-                        if (mdn.device.getMaxReceivers() != 0)
-                            {
-                                outDevices.add(mdn);
-                            }
+                    outDevices.add(mdn);
                     }
-                catch(Exception e) { ExceptionDump.postThrowable(e); }
+                }
+            catch(Exception e) { ExceptionDump.postThrowable(e); }
             }
-    }
+        }
 
     static ArrayList allDevices;
     static ArrayList inDevices;
@@ -293,12 +293,12 @@ public class Midi
     static ArrayList key2Devices;
         
     static
-    {
+        {
         updateDevices();
-    }
+        }
 
     public static class Tuple
-    {
+        {
         /** Represents "any channel" in the Tuple. */
         public static final int KEYCHANNEL_OMNI = 0;
 
@@ -342,7 +342,7 @@ public class Midi
         int refcount = 1;
         
         public Tuple copy(Receiver inReceiver, Receiver keyReceiver, Receiver key2Receiver)
-        {
+            {
             if (refcount < 1)
                 throw new RuntimeException("Cannot copy a fully disposed Midi tuple");
                 
@@ -358,35 +358,35 @@ public class Midi
                 key2.addReceiver(key2Receiver);
                 
             return this; 
-        }
+            }
         
         public void dispose()
-        {
+            {
             refcount--;
             
             if (refcount == 0)
                 {
-                    if (key != null && keyReceiver != null)
-                        key.removeReceiver(keyReceiver);
-                    if (key2 != null && key2Receiver != null)
-                        key2.removeReceiver(key2Receiver);
-                    if (in != null && inReceiver!= null)
-                        in.removeReceiver(inReceiver);
+                if (key != null && keyReceiver != null)
+                    key.removeReceiver(keyReceiver);
+                if (key2 != null && key2Receiver != null)
+                    key2.removeReceiver(key2Receiver);
+                if (in != null && inReceiver!= null)
+                    in.removeReceiver(inReceiver);
 
-                    // We don't close() stuff because of prior MIDI bugs in coremidi4j which are getting fixed (I believe).
-                    // At any rate, the only time we will see a closed Receiver or a Thru is if it closes itself, because we
-                    // share them.  And when we quit, we just leak (probably can't help that anyway on a hard-quit).  
-                    // Hope that's okay.
+                // We don't close() stuff because of prior MIDI bugs in coremidi4j which are getting fixed (I believe).
+                // At any rate, the only time we will see a closed Receiver or a Thru is if it closes itself, because we
+                // share them.  And when we quit, we just leak (probably can't help that anyway on a hard-quit).  
+                // Hope that's okay.
 
-                    key = null;
-                    keyReceiver = null;
-                    key2 = null;
-                    key2Receiver = null;
-                    in = null;
-                    inReceiver = null;
+                key = null;
+                keyReceiver = null;
+                key2 = null;
+                key2Receiver = null;
+                in = null;
+                inReceiver = null;
                 }
-        }       
-    }
+            }       
+        }
 
     static void setLastTupleIn(String path, Synth synth) { Synth.setLastX(path, "LastTupleIn", synth.getSynthNameLocal(), false); }
     static String getLastTupleIn(Synth synth) { return Synth.getLastX("LastTupleIn", synth.getSynthNameLocal(), false); }
@@ -402,45 +402,45 @@ public class Midi
     
     static void setLastTupleOutChannel(int channel, Synth synth) { Synth.setLastX("" + channel, "LastTupleOutChannel", synth.getSynthNameLocal(), false); }
     static int getLastTupleOutChannel(Synth synth) 
-    { 
+        { 
         String val = Synth.getLastX("LastTupleOutChannel", synth.getSynthNameLocal(), false); 
         if (val == null) return -1;
         else 
             {
-                try
-                    { return Integer.parseInt(val); }
-                catch (Exception e)
-                    { ExceptionDump.postThrowable(e); Synth.handleException(e); return -1; }
+            try
+                { return Integer.parseInt(val); }
+            catch (Exception e)
+                { ExceptionDump.postThrowable(e); Synth.handleException(e); return -1; }
             }
-    }
+        }
     
     static void setLastTupleKeyChannel(int channel, Synth synth) { Synth.setLastX("" + channel, "LastTupleKeyChannel", synth.getSynthNameLocal(), false); }
     static int getLastTupleKeyChannel(Synth synth) 
-    { 
+        { 
         String val = Synth.getLastX("LastTupleKeyChannel", synth.getSynthNameLocal(), false); 
         if (val == null) return -1;
         else 
             {
-                try
-                    { return Integer.parseInt(val); }
-                catch (Exception e)
-                    { ExceptionDump.postThrowable(e); Synth.handleException(e); return -1; }
+            try
+                { return Integer.parseInt(val); }
+            catch (Exception e)
+                { ExceptionDump.postThrowable(e); Synth.handleException(e); return -1; }
             }
-    }
+        }
     
     static void setLastTupleKey2Channel(int channel, Synth synth) { Synth.setLastX("" + channel, "LastTupleKey2Channel", synth.getSynthNameLocal(), false); }
     static int getLastTupleKey2Channel(Synth synth) 
-    { 
+        { 
         String val = Synth.getLastX("LastTupleKey2Channel", synth.getSynthNameLocal(), false); 
         if (val == null) return -1;
         else 
             {
-                try
-                    { return Integer.parseInt(val); }
-                catch (Exception e)
-                    { ExceptionDump.postThrowable(e); Synth.handleException(e); return -1; }
+            try
+                { return Integer.parseInt(val); }
+            catch (Exception e)
+                { ExceptionDump.postThrowable(e); Synth.handleException(e); return -1; }
             }
-    }
+        }
 
 
     public static final Tuple CANCELLED = new Tuple();
@@ -451,229 +451,229 @@ public class Midi
         provide the inReceiver and keyReceiver and key2Receiver to be attached to the input and keyboard/controller
         input.  You get these with Synth.buildKeyReceiver() and Synth.buildInReceiver() */ 
     public static Tuple getNewTuple(Tuple old, Synth synth, String message, Receiver inReceiver, Receiver keyReceiver, Receiver key2Receiver)
-    {
+        {
         updateDevices();
         
         if (inDevices.size() == 0)
             {
-                synth.disableMenuBar();
-                JOptionPane.showOptionDialog(synth, "There are no MIDI devices available to receive from.",  
-                                             "Cannot Connect", JOptionPane.DEFAULT_OPTION, 
-                                             JOptionPane.WARNING_MESSAGE, null,
-                                             new String[] { "Run Disconnected" }, "Run Disconnected");
-                synth.enableMenuBar();
-                return CANCELLED;
+            synth.disableMenuBar();
+            JOptionPane.showOptionDialog(synth, "There are no MIDI devices available to receive from.",  
+                "Cannot Connect", JOptionPane.DEFAULT_OPTION, 
+                JOptionPane.WARNING_MESSAGE, null,
+                new String[] { "Run Disconnected" }, "Run Disconnected");
+            synth.enableMenuBar();
+            return CANCELLED;
             }
         else if (outDevices.size() == 0)
             {
-                synth.disableMenuBar();
-                JOptionPane.showOptionDialog(synth, "There are no MIDI devices available to send to.",  
-                                             "Cannot Connect", JOptionPane.DEFAULT_OPTION, 
-                                             JOptionPane.WARNING_MESSAGE, null,
-                                             new String[] { "Run Disconnected" }, "Run Disconnected");
-                synth.enableMenuBar();
-                return CANCELLED;
+            synth.disableMenuBar();
+            JOptionPane.showOptionDialog(synth, "There are no MIDI devices available to send to.",  
+                "Cannot Connect", JOptionPane.DEFAULT_OPTION, 
+                JOptionPane.WARNING_MESSAGE, null,
+                new String[] { "Run Disconnected" }, "Run Disconnected");
+            synth.enableMenuBar();
+            return CANCELLED;
             }
         else
             {
-                String[] kc = new String[] { "Any", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16" };
-                String[] k2c = new String[] { "Any", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16" };
-                String[] rc = new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16" };
+            String[] kc = new String[] { "Any", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16" };
+            String[] k2c = new String[] { "Any", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16" };
+            String[] rc = new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16" };
 
-                JComboBox inCombo = new JComboBox(inDevices.toArray());
-                inCombo.setMaximumRowCount(32);
-                if (old != null && old.inWrap != null && inDevices.indexOf(old.inWrap) != -1)
-                    inCombo.setSelectedIndex(inDevices.indexOf(old.inWrap));
-                else if (findDevice(getLastTupleIn(synth), inDevices) != null)
-                    inCombo.setSelectedItem(findDevice(getLastTupleIn(synth), inDevices));
+            JComboBox inCombo = new JComboBox(inDevices.toArray());
+            inCombo.setMaximumRowCount(32);
+            if (old != null && old.inWrap != null && inDevices.indexOf(old.inWrap) != -1)
+                inCombo.setSelectedIndex(inDevices.indexOf(old.inWrap));
+            else if (findDevice(getLastTupleIn(synth), inDevices) != null)
+                inCombo.setSelectedItem(findDevice(getLastTupleIn(synth), inDevices));
 
-                JComboBox outCombo = new JComboBox(outDevices.toArray());
-                outCombo.setMaximumRowCount(32);
-                if (old != null && old.outWrap != null && outDevices.indexOf(old.outWrap) != -1)
-                    outCombo.setSelectedIndex(outDevices.indexOf(old.outWrap));
-                else if (findDevice(getLastTupleOut(synth), outDevices) != null)
-                    outCombo.setSelectedItem(findDevice(getLastTupleOut(synth), outDevices));
+            JComboBox outCombo = new JComboBox(outDevices.toArray());
+            outCombo.setMaximumRowCount(32);
+            if (old != null && old.outWrap != null && outDevices.indexOf(old.outWrap) != -1)
+                outCombo.setSelectedIndex(outDevices.indexOf(old.outWrap));
+            else if (findDevice(getLastTupleOut(synth), outDevices) != null)
+                outCombo.setSelectedItem(findDevice(getLastTupleOut(synth), outDevices));
 
-                JComboBox keyCombo = new JComboBox(keyDevices.toArray());
-                keyCombo.setMaximumRowCount(32);
-                keyCombo.setSelectedIndex(0);  // "none"
-                if (old != null && old.keyWrap != null && keyDevices.indexOf(old.keyWrap) != -1)
-                    keyCombo.setSelectedIndex(keyDevices.indexOf(old.keyWrap));
-                else if (findDevice(getLastTupleKey(synth), keyDevices) != null)
-                    keyCombo.setSelectedItem(findDevice(getLastTupleKey(synth), keyDevices));
+            JComboBox keyCombo = new JComboBox(keyDevices.toArray());
+            keyCombo.setMaximumRowCount(32);
+            keyCombo.setSelectedIndex(0);  // "none"
+            if (old != null && old.keyWrap != null && keyDevices.indexOf(old.keyWrap) != -1)
+                keyCombo.setSelectedIndex(keyDevices.indexOf(old.keyWrap));
+            else if (findDevice(getLastTupleKey(synth), keyDevices) != null)
+                keyCombo.setSelectedItem(findDevice(getLastTupleKey(synth), keyDevices));
 
-                JComboBox key2Combo = new JComboBox(key2Devices.toArray());
-                key2Combo.setMaximumRowCount(32);
-                key2Combo.setSelectedIndex(0);  // "none"
-                if (old != null && old.key2Wrap != null && key2Devices.indexOf(old.key2Wrap) != -1)
-                    key2Combo.setSelectedIndex(key2Devices.indexOf(old.key2Wrap));
-                else if (findDevice(getLastTupleKey2(synth), key2Devices) != null)
-                    key2Combo.setSelectedItem(findDevice(getLastTupleKey2(synth), key2Devices));
+            JComboBox key2Combo = new JComboBox(key2Devices.toArray());
+            key2Combo.setMaximumRowCount(32);
+            key2Combo.setSelectedIndex(0);  // "none"
+            if (old != null && old.key2Wrap != null && key2Devices.indexOf(old.key2Wrap) != -1)
+                key2Combo.setSelectedIndex(key2Devices.indexOf(old.key2Wrap));
+            else if (findDevice(getLastTupleKey2(synth), key2Devices) != null)
+                key2Combo.setSelectedItem(findDevice(getLastTupleKey2(synth), key2Devices));
 
-                JTextField outID = null;
-                String initialID = synth.reviseID(null);
-                if (initialID != null)
-                    outID = new JTextField(synth.reviseID(null));
+            JTextField outID = null;
+            String initialID = synth.reviseID(null);
+            if (initialID != null)
+                outID = new JTextField(synth.reviseID(null));
 
-                JComboBox outChannelsCombo = new JComboBox(rc);
-                outChannelsCombo.setMaximumRowCount(17);
-                if (old != null)
-                    outChannelsCombo.setSelectedIndex(old.outChannel - 1);
-                else if (getLastTupleOutChannel(synth) > 0)
-                    outChannelsCombo.setSelectedIndex(getLastTupleOutChannel(synth) - 1);
+            JComboBox outChannelsCombo = new JComboBox(rc);
+            outChannelsCombo.setMaximumRowCount(17);
+            if (old != null)
+                outChannelsCombo.setSelectedIndex(old.outChannel - 1);
+            else if (getLastTupleOutChannel(synth) > 0)
+                outChannelsCombo.setSelectedIndex(getLastTupleOutChannel(synth) - 1);
                                 
-                JComboBox keyChannelsCombo = new JComboBox(kc);
-                keyChannelsCombo.setMaximumRowCount(17);
-                if (old != null)
-                    keyChannelsCombo.setSelectedIndex(old.keyChannel);
-                else if (getLastTupleKeyChannel(synth) > 0)
-                    keyChannelsCombo.setSelectedIndex(getLastTupleKeyChannel(synth));
+            JComboBox keyChannelsCombo = new JComboBox(kc);
+            keyChannelsCombo.setMaximumRowCount(17);
+            if (old != null)
+                keyChannelsCombo.setSelectedIndex(old.keyChannel);
+            else if (getLastTupleKeyChannel(synth) > 0)
+                keyChannelsCombo.setSelectedIndex(getLastTupleKeyChannel(synth));
 
-                JComboBox key2ChannelsCombo = new JComboBox(kc);
-                key2ChannelsCombo.setMaximumRowCount(17);
-                if (old != null)
-                    key2ChannelsCombo.setSelectedIndex(old.key2Channel);
-                else if (getLastTupleKey2Channel(synth) > 0)
-                    key2ChannelsCombo.setSelectedIndex(getLastTupleKey2Channel(synth));
+            JComboBox key2ChannelsCombo = new JComboBox(kc);
+            key2ChannelsCombo.setMaximumRowCount(17);
+            if (old != null)
+                key2ChannelsCombo.setSelectedIndex(old.key2Channel);
+            else if (getLastTupleKey2Channel(synth) > 0)
+                key2ChannelsCombo.setSelectedIndex(getLastTupleKey2Channel(synth));
                         
-                boolean result = false;
-                synth.disableMenuBar();
-                if (initialID != null)
-                    result = Synth.showMultiOption(synth, new String[] { "Receive From", "Send To", "Send/Receive Channel", "Synth ID", "Controller", "Controller Channel", "Controller 2", "Controller 2 Channel" },  new JComponent[] { inCombo, outCombo, outChannelsCombo, outID, keyCombo, keyChannelsCombo, key2Combo, key2ChannelsCombo }, "MIDI Devices", message);
-                else
-                    result = Synth.showMultiOption(synth, new String[] { "Receive From", "Send To", "Send/Receive Channel", "Controller", "Controller Channel", "Controller 2", "Controller 2 Channel" },  new JComponent[] { inCombo, outCombo, outChannelsCombo, keyCombo, keyChannelsCombo, key2Combo, key2ChannelsCombo }, "MIDI Devices", message);
-                synth.enableMenuBar();
+            boolean result = false;
+            synth.disableMenuBar();
+            if (initialID != null)
+                result = Synth.showMultiOption(synth, new String[] { "Receive From", "Send To", "Send/Receive Channel", "Synth ID", "Controller", "Controller Channel", "Controller 2", "Controller 2 Channel" },  new JComponent[] { inCombo, outCombo, outChannelsCombo, outID, keyCombo, keyChannelsCombo, key2Combo, key2ChannelsCombo }, "MIDI Devices", message);
+            else
+                result = Synth.showMultiOption(synth, new String[] { "Receive From", "Send To", "Send/Receive Channel", "Controller", "Controller Channel", "Controller 2", "Controller 2 Channel" },  new JComponent[] { inCombo, outCombo, outChannelsCombo, keyCombo, keyChannelsCombo, key2Combo, key2ChannelsCombo }, "MIDI Devices", message);
+            synth.enableMenuBar();
                              
-                if (result)
+            if (result)
+                {
+                // we need to build a tuple
+                                
+                Tuple tuple = new Tuple();
+                                
+                tuple.keyChannel = keyChannelsCombo.getSelectedIndex();
+                tuple.key2Channel = key2ChannelsCombo.getSelectedIndex();
+                tuple.outChannel = outChannelsCombo.getSelectedIndex() + 1;
+                
+                if (initialID != null)
                     {
-                        // we need to build a tuple
+                    String prospectiveID = outID.getText();
+                    tuple.id = synth.reviseID(prospectiveID);
+                    if (!tuple.id.equals(prospectiveID))
+                        {
+                        synth.disableMenuBar();
+                        JOptionPane.showMessageDialog(synth, "The ID was revised to: " + tuple.id, "Device ID", JOptionPane.WARNING_MESSAGE);
+                        synth.enableMenuBar();
+                        }
+                    }
                                 
-                        Tuple tuple = new Tuple();
-                                
-                        tuple.keyChannel = keyChannelsCombo.getSelectedIndex();
-                        tuple.key2Channel = key2ChannelsCombo.getSelectedIndex();
-                        tuple.outChannel = outChannelsCombo.getSelectedIndex() + 1;
-                
-                        if (initialID != null)
-                            {
-                                String prospectiveID = outID.getText();
-                                tuple.id = synth.reviseID(prospectiveID);
-                                if (!tuple.id.equals(prospectiveID))
-                                    {
-                                        synth.disableMenuBar();
-                                        JOptionPane.showMessageDialog(synth, "The ID was revised to: " + tuple.id, "Device ID", JOptionPane.WARNING_MESSAGE);
-                                        synth.enableMenuBar();
-                                    }
-                            }
-                                
-                        tuple.inWrap = ((MidiDeviceWrapper)(inCombo.getSelectedItem()));
-                        tuple.in = tuple.inWrap.getThru(inReceiver);
-                        tuple.inReceiver = inReceiver;
-                        if (tuple.in == null)
-                            {
-                                synth.showErrorWithStackTrace("Cannot Connect", "An error occurred while connecting to the incoming MIDI Device.");
-                                /*
-                                  synth.disableMenuBar();
-                                  JOptionPane.showOptionDialog(synth, "An error occurred while connecting to the incoming MIDI Device.",  
-                                  "Cannot Connect", JOptionPane.DEFAULT_OPTION, 
-                                  JOptionPane.WARNING_MESSAGE, null,
-                                  new String[] { "Run Disconnected" }, "Run Disconnected");
-                                  synth.enableMenuBar();
-                                */
-                                return FAILED;
-                            }
+                tuple.inWrap = ((MidiDeviceWrapper)(inCombo.getSelectedItem()));
+                tuple.in = tuple.inWrap.getThru(inReceiver);
+                tuple.inReceiver = inReceiver;
+                if (tuple.in == null)
+                    {
+                    synth.showErrorWithStackTrace("Cannot Connect", "An error occurred while connecting to the incoming MIDI Device.");
+                    /*
+                      synth.disableMenuBar();
+                      JOptionPane.showOptionDialog(synth, "An error occurred while connecting to the incoming MIDI Device.",  
+                      "Cannot Connect", JOptionPane.DEFAULT_OPTION, 
+                      JOptionPane.WARNING_MESSAGE, null,
+                      new String[] { "Run Disconnected" }, "Run Disconnected");
+                      synth.enableMenuBar();
+                    */
+                    return FAILED;
+                    }
 
-                        tuple.outWrap = ((MidiDeviceWrapper)(outCombo.getSelectedItem()));
-                        tuple.out = tuple.outWrap.getReceiver();
-                        if (tuple.out == null)
-                            {
-                                synth.showErrorWithStackTrace("Cannot Connect", "An error occurred while connecting to the outgoing MIDI Device.");
-                                /*
-                                  synth.disableMenuBar();
-                                  JOptionPane.showOptionDialog(synth, "An error occurred while connecting to the outgoing MIDI Device.",  
-                                  "Cannot Connect", JOptionPane.DEFAULT_OPTION, 
-                                  JOptionPane.WARNING_MESSAGE, null,
-                                  new String[] { "Run Disconnected" }, "Run Disconnected");
-                                  synth.enableMenuBar();
-                                */
-                                return FAILED;
-                            }
+                tuple.outWrap = ((MidiDeviceWrapper)(outCombo.getSelectedItem()));
+                tuple.out = tuple.outWrap.getReceiver();
+                if (tuple.out == null)
+                    {
+                    synth.showErrorWithStackTrace("Cannot Connect", "An error occurred while connecting to the outgoing MIDI Device.");
+                    /*
+                      synth.disableMenuBar();
+                      JOptionPane.showOptionDialog(synth, "An error occurred while connecting to the outgoing MIDI Device.",  
+                      "Cannot Connect", JOptionPane.DEFAULT_OPTION, 
+                      JOptionPane.WARNING_MESSAGE, null,
+                      new String[] { "Run Disconnected" }, "Run Disconnected");
+                      synth.enableMenuBar();
+                    */
+                    return FAILED;
+                    }
 
-                        if (keyCombo.getSelectedItem() instanceof String)
-                            {
-                                tuple.keyWrap = null;
-                                tuple.key = null;
-                            }
-                        else
-                            {
-                                tuple.keyWrap = ((MidiDeviceWrapper)(keyCombo.getSelectedItem()));
-                                tuple.key = tuple.keyWrap.getThru(keyReceiver);
-                                tuple.keyReceiver = keyReceiver;
-                                if (tuple.key == null)
-                                    {
-                                        synth.showErrorWithStackTrace("Cannot Connect", "An error occurred while connecting to the Controller MIDI Device.");
-                                        /*
-                                          synth.disableMenuBar();
-                                          JOptionPane.showOptionDialog(synth, "An error occurred while connecting to the Controller MIDI Device.",  
-                                          "Cannot Connect", JOptionPane.DEFAULT_OPTION, 
-                                          JOptionPane.WARNING_MESSAGE, null,
-                                          new String[] { "Run without Controller" }, "Run without Controller");
-                                        */
-                                        synth.enableMenuBar();
-                                        tuple.keyWrap = null;
-                                        tuple.key = null;
-                                    }
-                            }
-
-                        if (key2Combo.getSelectedItem() instanceof String)
-                            {
-                                tuple.key2Wrap = null;
-                                tuple.key2 = null;
-                            }
-                        else
-                            {
-                                tuple.key2Wrap = ((MidiDeviceWrapper)(key2Combo.getSelectedItem()));
-                                tuple.key2 = tuple.key2Wrap.getThru(key2Receiver);
-                                tuple.key2Receiver = key2Receiver;
-                                if (tuple.key2 == null)
-                                    {
-                                        synth.showErrorWithStackTrace("Cannot Connect", "An error occurred while connecting to the Controller 2 MIDI Device.");
-                                        /*
-                                          synth.disableMenuBar();
-                                          JOptionPane.showOptionDialog(synth, "An error occurred while connecting to the Controller MIDI Device.",  
-                                          "Cannot Connect", JOptionPane.DEFAULT_OPTION, 
-                                          JOptionPane.WARNING_MESSAGE, null,
-                                          new String[] { "Run without Controller" }, "Run without Controller");
-                                        */
-                                        synth.enableMenuBar();
-                                        tuple.key2Wrap = null;
-                                        tuple.key2 = null;
-                                    }
-                            }
-                    
-                        setLastTupleIn(tuple.inWrap.toString(), synth);
-                        setLastTupleOut(tuple.outWrap.toString(), synth);
-                        if (tuple.keyWrap == null)
-                            setLastTupleKey("None", synth);
-                        else
-                            setLastTupleKey(tuple.keyWrap.toString(), synth);
-                        if (tuple.key2Wrap == null)
-                            setLastTupleKey2("None", synth);
-                        else
-                            setLastTupleKey2(tuple.key2Wrap.toString(), synth);
-                        setLastTupleOutChannel(tuple.outChannel, synth);
-                        setLastTupleKeyChannel(tuple.keyChannel, synth);
-                        setLastTupleKey2Channel(tuple.key2Channel, synth);
-
-                
-                        return tuple;
+                if (keyCombo.getSelectedItem() instanceof String)
+                    {
+                    tuple.keyWrap = null;
+                    tuple.key = null;
                     }
                 else
                     {
-                        return CANCELLED;
+                    tuple.keyWrap = ((MidiDeviceWrapper)(keyCombo.getSelectedItem()));
+                    tuple.key = tuple.keyWrap.getThru(keyReceiver);
+                    tuple.keyReceiver = keyReceiver;
+                    if (tuple.key == null)
+                        {
+                        synth.showErrorWithStackTrace("Cannot Connect", "An error occurred while connecting to the Controller MIDI Device.");
+                        /*
+                          synth.disableMenuBar();
+                          JOptionPane.showOptionDialog(synth, "An error occurred while connecting to the Controller MIDI Device.",  
+                          "Cannot Connect", JOptionPane.DEFAULT_OPTION, 
+                          JOptionPane.WARNING_MESSAGE, null,
+                          new String[] { "Run without Controller" }, "Run without Controller");
+                        */
+                        synth.enableMenuBar();
+                        tuple.keyWrap = null;
+                        tuple.key = null;
+                        }
                     }
+
+                if (key2Combo.getSelectedItem() instanceof String)
+                    {
+                    tuple.key2Wrap = null;
+                    tuple.key2 = null;
+                    }
+                else
+                    {
+                    tuple.key2Wrap = ((MidiDeviceWrapper)(key2Combo.getSelectedItem()));
+                    tuple.key2 = tuple.key2Wrap.getThru(key2Receiver);
+                    tuple.key2Receiver = key2Receiver;
+                    if (tuple.key2 == null)
+                        {
+                        synth.showErrorWithStackTrace("Cannot Connect", "An error occurred while connecting to the Controller 2 MIDI Device.");
+                        /*
+                          synth.disableMenuBar();
+                          JOptionPane.showOptionDialog(synth, "An error occurred while connecting to the Controller MIDI Device.",  
+                          "Cannot Connect", JOptionPane.DEFAULT_OPTION, 
+                          JOptionPane.WARNING_MESSAGE, null,
+                          new String[] { "Run without Controller" }, "Run without Controller");
+                        */
+                        synth.enableMenuBar();
+                        tuple.key2Wrap = null;
+                        tuple.key2 = null;
+                        }
+                    }
+                    
+                setLastTupleIn(tuple.inWrap.toString(), synth);
+                setLastTupleOut(tuple.outWrap.toString(), synth);
+                if (tuple.keyWrap == null)
+                    setLastTupleKey("None", synth);
+                else
+                    setLastTupleKey(tuple.keyWrap.toString(), synth);
+                if (tuple.key2Wrap == null)
+                    setLastTupleKey2("None", synth);
+                else
+                    setLastTupleKey2(tuple.key2Wrap.toString(), synth);
+                setLastTupleOutChannel(tuple.outChannel, synth);
+                setLastTupleKeyChannel(tuple.keyChannel, synth);
+                setLastTupleKey2Channel(tuple.key2Channel, synth);
+
+                
+                return tuple;
+                }
+            else
+                {
+                return CANCELLED;
+                }
             }       
-    }
+        }
 
 
     public static final int CCDATA_TYPE_RAW_CC = 0;      
@@ -684,21 +684,21 @@ public class Midi
 
 
     public static class CCData
-    {
+        {
         public int type;
         public int number;
         public int value;
         public int channel;
         public boolean increment;
         public CCData(int type, int number, int value, int channel, boolean increment)
-        { this.type = type; this.number = number; this.value = value; this.increment = increment; this.channel = channel; }
-    }
+            { this.type = type; this.number = number; this.value = value; this.increment = increment; this.channel = channel; }
+        }
         
 
         
         
     public static class Parser
-    {
+        {
 
 
         ///// INTRODUCTION TO THE CC/RPN/NRPN PARSER
@@ -832,160 +832,160 @@ public class Midi
 
         // we presume that the channel never changes
         CCData parseCC(int channel, int number, int value, boolean requireLSB, boolean requireMSB)
-        {
+            {
             // BEGIN PARSER
 
             // Start of NRPN
             if (number == 99)
                 {
-                    status[channel] = NRPN_START;
-                    controllerNumberMSB[channel] = value;
-                    return null;
+                status[channel] = NRPN_START;
+                controllerNumberMSB[channel] = value;
+                return null;
                 }
 
             // End of NRPN
             else if (number == 98)
                 {
-                    controllerValueMSB[channel] = 0;
-                    if (status[channel] == NRPN_START)
-                        {
-                            status[channel] = NRPN_END;
-                            controllerNumberLSB[channel] = value;
-                            controllerValueLSB[channel]  = -1;
-                            controllerValueMSB[channel]  = -1;
-                        }
-                    else status[channel] = INVALID;
-                    return null;
+                controllerValueMSB[channel] = 0;
+                if (status[channel] == NRPN_START)
+                    {
+                    status[channel] = NRPN_END;
+                    controllerNumberLSB[channel] = value;
+                    controllerValueLSB[channel]  = -1;
+                    controllerValueMSB[channel]  = -1;
+                    }
+                else status[channel] = INVALID;
+                return null;
                 }
                 
             // Start of RPN or NULL
             else if (number == 101)
                 {
-                    if (value == 127)  // this is the NULL termination tradition, see for example http://www.philrees.co.uk/nrpnq.htm
-                        {
-                            status[channel] = INVALID;
-                        }
-                    else
-                        {
-                            status[channel] = RPN_START;
-                            controllerNumberMSB[channel] = value;
-                        }
-                    return null;
+                if (value == 127)  // this is the NULL termination tradition, see for example http://www.philrees.co.uk/nrpnq.htm
+                    {
+                    status[channel] = INVALID;
+                    }
+                else
+                    {
+                    status[channel] = RPN_START;
+                    controllerNumberMSB[channel] = value;
+                    }
+                return null;
                 }
 
             // End of RPN or NULL
             else if (number == 100)
                 {
-                    controllerValueMSB[channel] = 0;
-                    if (value == 127)  // this is the NULL termination tradition, see for example http://www.philrees.co.uk/nrpnq.htm
-                        {
-                            status[channel] = INVALID;
-                        }
-                    else if (status[channel] == RPN_START)
-                        {
-                            status[channel] = RPN_END;
-                            controllerNumberLSB[channel] = value;
-                            controllerValueLSB[channel]  = -1;
-                            controllerValueMSB[channel]  = -1;
-                        }
-                    return null;
+                controllerValueMSB[channel] = 0;
+                if (value == 127)  // this is the NULL termination tradition, see for example http://www.philrees.co.uk/nrpnq.htm
+                    {
+                    status[channel] = INVALID;
+                    }
+                else if (status[channel] == RPN_START)
+                    {
+                    status[channel] = RPN_END;
+                    controllerNumberLSB[channel] = value;
+                    controllerValueLSB[channel]  = -1;
+                    controllerValueMSB[channel]  = -1;
+                    }
+                return null;
                 }
 
             else if ((number == 6 || number == 38 || number == 96 || number == 97) && (status[channel] == NRPN_END || status[channel] == RPN_END))  // we're currently parsing NRPN or RPN
                 {
-                    int controllerNumber =  (((int) controllerNumberMSB[channel]) << 7) | controllerNumberLSB[channel] ;
+                int controllerNumber =  (((int) controllerNumberMSB[channel]) << 7) | controllerNumberLSB[channel] ;
                         
-                    if (number == 6)
-                        {
-                            controllerValueMSB[channel] = value;
-                            if (requireLSB && controllerValueLSB[channel] == -1)
-                                return null;
-                            if (status[channel] == NRPN_END)
-                                return handleNRPN(channel, controllerNumber, controllerValueLSB[channel] == -1 ? 0 : controllerValueLSB[channel], controllerValueMSB[channel]);
-                            else
-                                return handleRPN(channel, controllerNumber, controllerValueLSB[channel] == -1 ? 0 : controllerValueLSB[channel], controllerValueMSB[channel]);
-                        }
+                if (number == 6)
+                    {
+                    controllerValueMSB[channel] = value;
+                    if (requireLSB && controllerValueLSB[channel] == -1)
+                        return null;
+                    if (status[channel] == NRPN_END)
+                        return handleNRPN(channel, controllerNumber, controllerValueLSB[channel] == -1 ? 0 : controllerValueLSB[channel], controllerValueMSB[channel]);
+                    else
+                        return handleRPN(channel, controllerNumber, controllerValueLSB[channel] == -1 ? 0 : controllerValueLSB[channel], controllerValueMSB[channel]);
+                    }
                                                                                                                         
-                    // Data Entry LSB for RPN, NRPN
-                    else if (number == 38)
-                        {
-                            controllerValueLSB[channel] = value;
-                            if (requireMSB && controllerValueMSB[channel] == -1)
-                                return null;          
-                            if (status[channel] == NRPN_END)
-                                return handleNRPN(channel, controllerNumber, controllerValueLSB[channel], controllerValueMSB[channel] == -1 ? 0 : controllerValueMSB[channel]);
-                            else
-                                return handleRPN(channel, controllerNumber, controllerValueLSB[channel], controllerValueMSB[channel] == -1 ? 0 : controllerValueMSB[channel]);
-                        }
+                // Data Entry LSB for RPN, NRPN
+                else if (number == 38)
+                    {
+                    controllerValueLSB[channel] = value;
+                    if (requireMSB && controllerValueMSB[channel] == -1)
+                        return null;          
+                    if (status[channel] == NRPN_END)
+                        return handleNRPN(channel, controllerNumber, controllerValueLSB[channel], controllerValueMSB[channel] == -1 ? 0 : controllerValueMSB[channel]);
+                    else
+                        return handleRPN(channel, controllerNumber, controllerValueLSB[channel], controllerValueMSB[channel] == -1 ? 0 : controllerValueMSB[channel]);
+                    }
                                                                                                                         
-                    // Data Increment for RPN, NRPN
-                    else if (number == 96)
-                        {
-                            if (value == 0)
-                                value = 1;
-                            if (status[channel] == NRPN_END)
-                                return handleNRPNIncrement(channel, controllerNumber, value);
-                            else
-                                return handleRPNIncrement(channel, controllerNumber, value);
-                        }
+                // Data Increment for RPN, NRPN
+                else if (number == 96)
+                    {
+                    if (value == 0)
+                        value = 1;
+                    if (status[channel] == NRPN_END)
+                        return handleNRPNIncrement(channel, controllerNumber, value);
+                    else
+                        return handleRPNIncrement(channel, controllerNumber, value);
+                    }
 
-                    // Data Decrement for RPN, NRPN
-                    else // if (number == 97)
-                        {
-                            if (value == 0)
-                                value = -1;
-                            if (status[channel] == NRPN_END)
-                                return handleNRPNIncrement(channel, controllerNumber, -value);
-                            else
-                                return handleRPNIncrement(channel, controllerNumber, -value);
-                        }
+                // Data Decrement for RPN, NRPN
+                else // if (number == 97)
+                    {
+                    if (value == 0)
+                        value = -1;
+                    if (status[channel] == NRPN_END)
+                        return handleNRPNIncrement(channel, controllerNumber, -value);
+                    else
+                        return handleRPNIncrement(channel, controllerNumber, -value);
+                    }
                                 
                 }
                         
             else  // Some other CC
                 {
-                    // status[channel] = INVALID;           // I think it's fine to send other CC in the middle of NRPN or RPN
-                    return handleRawCC(channel, number, value);
+                // status[channel] = INVALID;           // I think it's fine to send other CC in the middle of NRPN or RPN
+                return handleRawCC(channel, number, value);
                 }
-        }
+            }
         
         public CCData processCC(ShortMessage message, boolean requireLSB, boolean requireMSB)
-        {
+            {
             int num = message.getData1();
             int val = message.getData2();
             int channel = message.getChannel();
             return parseCC(channel, num, val, requireLSB, requireMSB);
-        }
+            }
         
         public CCData handleNRPN(int channel, int controllerNumber, int _controllerValueLSB, int _controllerValueMSB)
-        {
+            {
             if (_controllerValueLSB < 0 || _controllerValueMSB < 0)
                 System.err.println("Warning (Midi): " + "LSB or MSB < 0.  RPN: " + controllerNumber + "   LSB: " + _controllerValueLSB + "  MSB: " + _controllerValueMSB);
             return new CCData(CCDATA_TYPE_NRPN, controllerNumber, _controllerValueLSB | (_controllerValueMSB << 7), channel, false);
-        }
+            }
         
         public CCData handleNRPNIncrement(int channel, int controllerNumber, int delta)
-        {
+            {
             return new CCData(CCDATA_TYPE_NRPN, controllerNumber, delta, channel, true);
-        }
+            }
 
         public CCData handleRPN(int channel, int controllerNumber, int _controllerValueLSB, int _controllerValueMSB)
-        {
+            {
             if (_controllerValueLSB < 0 || _controllerValueMSB < 0)
                 System.err.println("Warning (Midi): " + "LSB or MSB < 0.  RPN: " + controllerNumber + "   LSB: " + _controllerValueLSB + "  MSB: " + _controllerValueMSB);
             return new CCData(CCDATA_TYPE_RPN, controllerNumber, _controllerValueLSB | (_controllerValueMSB << 7), channel, false);
-        }
+            }
         
         public CCData handleRPNIncrement(int channel, int controllerNumber, int delta)
-        {
+            {
             return new CCData(CCDATA_TYPE_RPN, controllerNumber, delta, channel, true);
-        }
+            }
 
         public CCData handleRawCC(int channel, int controllerNumber, int value)
-        {
+            {
             return new CCData(CCDATA_TYPE_RAW_CC, controllerNumber, value, channel, false);
+            }
         }
-    }
                 
     public Parser controlParser = new Parser();
     public Parser synthParser = new Parser();
@@ -1001,21 +1001,21 @@ public class Midi
     */
         
     public static class DividedSysex extends MidiMessage
-    {
+        {
         public byte[] getData() { return data; }
         
         public Object clone()
-        {
+            {
             return new DividedSysex(getMessage());
-        }
+            }
         
         public DividedSysex(byte[] data)
-        {
+            {
             super(data.clone());
-        }
+            }
         
         public static DividedSysex[] divide(SysexMessage sysex, int chunksize)
-        {
+            {
             byte[] data = sysex.getMessage();
             
             int numchunks = data.length / chunksize;
@@ -1024,47 +1024,47 @@ public class Midi
             DividedSysex[] m = new DividedSysex[numchunks];  //  + extra];
             for(int i = 0, pos = 0; i < m.length; i++, pos += chunksize)
                 {
-                    // We need to insert an 0xF7 at the front of subsequent messages per Java spec 
-                    // (not part of MIDI spec, just a Java thing)
-                    // see https://docs.oracle.com/javase/7/docs/api/javax/sound/midi/SysexMessage.html
-                    // hence the (i == 0 ? 0 : 1)
+                // We need to insert an 0xF7 at the front of subsequent messages per Java spec 
+                // (not part of MIDI spec, just a Java thing)
+                // see https://docs.oracle.com/javase/7/docs/api/javax/sound/midi/SysexMessage.html
+                // hence the (i == 0 ? 0 : 1)
                 
-                    /// this code will create a first sysex which includes 0xF0 in the
-                    /// chunk, so has one less data byte.  The others have one more
-                    /// data byte because the initial 0xF0 isn't real.
-                    byte[] d = null;
-                    int size = (i == m.length - 1 ? data.length - pos : chunksize);
-                    if (i == 0)
-                        {
-                            d = new byte[size];
-                            System.arraycopy(data, pos, d, 0, size);
-                        }
-                    else
-                        {
-                            d = new byte[1 + size];
-                            System.arraycopy(data, pos, d, 1, size);
-                            d[0] = (byte)0xF7;
-                        }
-                    m[i] = new DividedSysex(d);
+                /// this code will create a first sysex which includes 0xF0 in the
+                /// chunk, so has one less data byte.  The others have one more
+                /// data byte because the initial 0xF0 isn't real.
+                byte[] d = null;
+                int size = (i == m.length - 1 ? data.length - pos : chunksize);
+                if (i == 0)
+                    {
+                    d = new byte[size];
+                    System.arraycopy(data, pos, d, 0, size);
+                    }
+                else
+                    {
+                    d = new byte[1 + size];
+                    System.arraycopy(data, pos, d, 1, size);
+                    d[0] = (byte)0xF7;
+                    }
+                m[i] = new DividedSysex(d);
                 }
             return m;
-        }
+            }
             
             
         public static DividedSysex[] create(byte[][] sysex)
-        {
+            {
             DividedSysex[] div = new DividedSysex[sysex.length];
             for(int i = 0; i < sysex.length; i++)
                 {
-                    if (sysex[i][0] == (byte)0xF0)  // we're good
-                        div[i] = new DividedSysex(sysex[i]);
-                    else 
-                        {
-                            byte[] sysex2 = new byte[sysex[i].length + 1];
-                            System.arraycopy(sysex[i], 0, sysex2, 1, sysex[i].length);
-                            sysex2[0] = (byte)0xF7; // see discussion in divide() above
-                            div[i] = new DividedSysex(sysex2);
-                        }
+                if (sysex[i][0] == (byte)0xF0)  // we're good
+                    div[i] = new DividedSysex(sysex[i]);
+                else 
+                    {
+                    byte[] sysex2 = new byte[sysex[i].length + 1];
+                    System.arraycopy(sysex[i], 0, sysex2, 1, sysex[i].length);
+                    sysex2[0] = (byte)0xF7; // see discussion in divide() above
+                    div[i] = new DividedSysex(sysex2);
+                    }
                 }
             /*
               for(int i = 0; i < div.length; i++)
@@ -1081,8 +1081,8 @@ public class Midi
               }
             */
             return div;
+            }
         }
-    }
     
 
     /** A DividedSysexOld message is a Sysex MidiMessage which has been broken into chunks.
@@ -1095,26 +1095,26 @@ public class Midi
     */
         
     public static class DividedSysexOld extends MidiMessage
-    {
+        {
         public byte[] getData() { return data; }
         
         public Object clone()
-        {
+            {
             return new DividedSysexOld(getMessage());
-        }
+            }
         
         public int getStatus() { return 0xF0; }   // not that this really matters
         
         public DividedSysexOld(byte[] data)
-        {
+            {
             super(data.clone());
-        }
+            }
         
         // We don't allow size-1 chunks because of the Windows/Linux 0xF7 bug
         static final int MINIMUM_LAST_CHUNK_SIZE = 2;
 
         public static DividedSysexOld[] divide(SysexMessage sysex, int chunksize)
-        {
+            {
             byte[] data = sysex.getMessage();
             int extra = 0;
             
@@ -1125,22 +1125,22 @@ public class Midi
                
             if ((data.length / chunksize) * chunksize < data.length - MINIMUM_LAST_CHUNK_SIZE)
                 {
-                    extra = 1;
+                extra = 1;
                 }
 
             DividedSysexOld[] m = new DividedSysexOld[data.length / chunksize + extra];
             for(int i = 0, pos = 0; i < m.length; i++, pos += chunksize)
                 {
-                    // the very last chunk might be smaller to slightly larger than chunksize
-                    byte[] d = new byte[i == m.length - 1 ? data.length - pos : chunksize];
-                    System.arraycopy(data, pos, d, 0, d.length);
-                    m[i] = new DividedSysexOld(d);
+                // the very last chunk might be smaller to slightly larger than chunksize
+                byte[] d = new byte[i == m.length - 1 ? data.length - pos : chunksize];
+                System.arraycopy(data, pos, d, 0, d.length);
+                m[i] = new DividedSysexOld(d);
                 }
             return m;
-        }
+            }
             
         public static DividedSysexOld[] create(byte[][] sysex)
-        {
+            {
             DividedSysexOld[] div = new DividedSysexOld[sysex.length];
             for(int i = 0; i < sysex.length; i++)
                 div[i] = new DividedSysexOld(sysex[i]);
@@ -1160,74 +1160,74 @@ public class Midi
             */
 
             return div;
+            }
         }
-    }
 
 
     public static String format(MidiMessage message)
-    {
+        {
         if (message == null)
             {
-                return "null";
+            return "null";
             }
         else if (message instanceof DividedSysexOld)
             {
-                byte[] d = ((DividedSysexOld)message).getData();
-                String s = "DividedSysexOld";
-                for(int i = 0; i < d.length; i++)
-                    s += (" " + String.format("%02x", d[i]));
-                return s;
+            byte[] d = ((DividedSysexOld)message).getData();
+            String s = "DividedSysexOld";
+            for(int i = 0; i < d.length; i++)
+                s += (" " + String.format("%02x", d[i]));
+            return s;
             }
         else if (message instanceof DividedSysex)
             {
-                byte[] d = ((DividedSysex)message).getData();
-                String s = "DividedSysex";
-                for(int i = 0; i < d.length; i++)
-                    s += (" " + String.format("%02x", d[i]));
-                return s;
+            byte[] d = ((DividedSysex)message).getData();
+            String s = "DividedSysex";
+            for(int i = 0; i < d.length; i++)
+                s += (" " + String.format("%02x", d[i]));
+            return s;
             }
         else if (message instanceof MetaMessage)
             {
-                return "A MIDI File MetaMessage (shouldn't happen)";
+            return "A MIDI File MetaMessage (shouldn't happen)";
             }
         else if (message instanceof SysexMessage)
             {
-                return "Sysex (" + getManufacturerForSysex(((SysexMessage)message).getData()) + ")";
+            return "Sysex (" + getManufacturerForSysex(((SysexMessage)message).getData()) + ")";
             }
         else // ShortMessage
             {
-                ShortMessage s = (ShortMessage) message;
-                int c = s.getChannel();
-                String type = "Unknown";
-                switch(s.getStatus())
-                    {
-                    case ShortMessage.ACTIVE_SENSING: type = "Active Sensing"; c = -1; break;
-                    case ShortMessage.CHANNEL_PRESSURE: type = "Channel Pressure"; break;
-                    case ShortMessage.CONTINUE: type = "Continue"; c = -1; break;
-                    case ShortMessage.CONTROL_CHANGE: type = "Control Change"; break;
-                    case ShortMessage.END_OF_EXCLUSIVE: type = "End of Sysex Marker"; c = -1; break;
-                    case ShortMessage.MIDI_TIME_CODE: type = "Midi Time Code"; c = -1; break;
-                    case ShortMessage.NOTE_OFF: type = "Note Off"; break;
-                    case ShortMessage.NOTE_ON: type = "Note On"; break;
-                    case ShortMessage.PITCH_BEND: type = "Pitch Bend"; break;
-                    case ShortMessage.POLY_PRESSURE: type = "Poly Pressure"; break;
-                    case ShortMessage.PROGRAM_CHANGE: type = "Program Change"; break;
-                    case ShortMessage.SONG_POSITION_POINTER: type = "Song Position Pointer"; c = -1; break;
-                    case ShortMessage.SONG_SELECT: type = "Song Select"; c = -1; break;
-                    case ShortMessage.START: type = "Start"; c = -1; break;
-                    case ShortMessage.STOP: type = "Stop"; c = -1; break;
-                    case ShortMessage.SYSTEM_RESET: type = "System Reset"; c = -1; break;
-                    case ShortMessage.TIMING_CLOCK: type = "Timing Clock"; c = -1; break;
-                    case ShortMessage.TUNE_REQUEST: type = "Tune Request"; c = -1; break;
-                    }
-                return type + (c == -1 ? "" : (" (Channel " + c + ")"));
+            ShortMessage s = (ShortMessage) message;
+            int c = s.getChannel();
+            String type = "Unknown";
+            switch(s.getStatus())
+                {
+                case ShortMessage.ACTIVE_SENSING: type = "Active Sensing"; c = -1; break;
+                case ShortMessage.CHANNEL_PRESSURE: type = "Channel Pressure"; break;
+                case ShortMessage.CONTINUE: type = "Continue"; c = -1; break;
+                case ShortMessage.CONTROL_CHANGE: type = "Control Change"; break;
+                case ShortMessage.END_OF_EXCLUSIVE: type = "End of Sysex Marker"; c = -1; break;
+                case ShortMessage.MIDI_TIME_CODE: type = "Midi Time Code"; c = -1; break;
+                case ShortMessage.NOTE_OFF: type = "Note Off"; break;
+                case ShortMessage.NOTE_ON: type = "Note On"; break;
+                case ShortMessage.PITCH_BEND: type = "Pitch Bend"; break;
+                case ShortMessage.POLY_PRESSURE: type = "Poly Pressure"; break;
+                case ShortMessage.PROGRAM_CHANGE: type = "Program Change"; break;
+                case ShortMessage.SONG_POSITION_POINTER: type = "Song Position Pointer"; c = -1; break;
+                case ShortMessage.SONG_SELECT: type = "Song Select"; c = -1; break;
+                case ShortMessage.START: type = "Start"; c = -1; break;
+                case ShortMessage.STOP: type = "Stop"; c = -1; break;
+                case ShortMessage.SYSTEM_RESET: type = "System Reset"; c = -1; break;
+                case ShortMessage.TIMING_CLOCK: type = "Timing Clock"; c = -1; break;
+                case ShortMessage.TUNE_REQUEST: type = "Tune Request"; c = -1; break;
+                }
+            return type + (c == -1 ? "" : (" (Channel " + c + ")"));
             }
-    }
+        }
 
     static HashMap manufacturers = null;
     
     static HashMap getManufacturers()
-    {
+        {
         if (manufacturers != null)
             return manufacturers;
                         
@@ -1235,50 +1235,50 @@ public class Midi
         Scanner scan = new Scanner(Midi.class.getResourceAsStream("Manufacturers.txt"));
         while(scan.hasNextLine())
             {
-                String nextLine = scan.nextLine().trim();
-                if (nextLine.equals("")) continue;
-                if (nextLine.startsWith("#")) continue;
+            String nextLine = scan.nextLine().trim();
+            if (nextLine.equals("")) continue;
+            if (nextLine.startsWith("#")) continue;
                         
-                int id = 0;
-                Scanner scan2 = new Scanner(nextLine);
-                int one = scan2.nextInt(16);  // in hex
-                if (one == 0x00)  // there are two more to read
-                    {
-                        id = id + (scan2.nextInt(16) << 8) + (scan2.nextInt(16) << 16);
-                    }
-                else
-                    {
-                        id = one;
-                    }
-                manufacturers.put(new Integer(id), scan.nextLine().trim());
+            int id = 0;
+            Scanner scan2 = new Scanner(nextLine);
+            int one = scan2.nextInt(16);  // in hex
+            if (one == 0x00)  // there are two more to read
+                {
+                id = id + (scan2.nextInt(16) << 8) + (scan2.nextInt(16) << 16);
+                }
+            else
+                {
+                id = one;
+                }
+            manufacturers.put(new Integer(id), scan.nextLine().trim());
             }
         return manufacturers;
-    }
+        }
 
     /** This works with or without F0 as the first data byte */
     public static String getManufacturerForSysex(byte[] data)
-    {
+        {
         int offset = 0;
         if (data[0] == (byte)0xF0)
             offset = 1;
         HashMap map = getManufacturers();
         if (data[0 + offset] == (byte)0x7D)             // educational use
             {
-                return (String)(map.get(new Integer(data[0 + offset]))) + 
-                    "\n\nNote that unregistered manufacturers or developers typically\n use this system exclusive region.";
+            return (String)(map.get(new Integer(data[0 + offset]))) + 
+                "\n\nNote that unregistered manufacturers or developers typically\n use this system exclusive region.";
             }
         else if (data[0 + offset] == (byte)0x00)
             {
-                return (String)(map.get(new Integer(
-                                                    0x00 + 
-                                                    ((data[1 + offset] < 0 ? data[1 + offset] + 256 : data[1 + offset]) << 8) + 
-                                                    ((data[2 + offset] < 0 ? data[2 + offset] + 256 : data[2 + offset]) << 16))));
+            return (String)(map.get(new Integer(
+                        0x00 + 
+                        ((data[1 + offset] < 0 ? data[1 + offset] + 256 : data[1 + offset]) << 8) + 
+                        ((data[2 + offset] < 0 ? data[2 + offset] + 256 : data[2 + offset]) << 16))));
             }
         else
             {
-                return (String)(map.get(new Integer(data[0 + offset])));
+            return (String)(map.get(new Integer(data[0 + offset])));
             }
-    }
+        }
     
     
     byte[] inSysex = null;
@@ -1286,49 +1286,49 @@ public class Midi
     byte[] key2Sysex = null;
     
     public void resetInSysexData()
-    {
+        {
         inSysex = null;
-    }
+        }
         
     public void resetKeySysexData()
-    {
+        {
         keySysex = null;
-    }
+        }
         
     public void resetKey2SysexData()
-    {
+        {
         key2Sysex = null;
-    }
+        }
         
     public byte[] gatherInSysexData(byte[] data, int messageLen)
-    {
+        {
         if (messageLen == 0) // uh...
             {
-                return null;
+            return null;
             }
                 
         if (data.length == 0) // uh...
             {
-                return null;
+            return null;
             }
                                 
         if (data[0] == (byte)0xF0)  // it's a new message
             {
-                //System.err.println("0xF0");
-                inSysex = new byte[messageLen];
-                System.arraycopy(data, 0, inSysex, 0, messageLen);
+            //System.err.println("0xF0");
+            inSysex = new byte[messageLen];
+            System.arraycopy(data, 0, inSysex, 0, messageLen);
             }
         else if (data[0] == (byte)0xF7)  // it's a continuation of a message
             {
-                //System.err.println("0xF7");
-                if (inSysex == null) // uh...
-                    return null;
-                byte[] temp = new byte[inSysex.length + messageLen - 1];
+            //System.err.println("0xF7");
+            if (inSysex == null) // uh...
+                return null;
+            byte[] temp = new byte[inSysex.length + messageLen - 1];
                 
-                // yeah yeah, O(n^2), I could obviously do much, much better, maybe later
-                System.arraycopy(inSysex, 0, temp, 0, inSysex.length);
-                System.arraycopy(data, 1, temp, inSysex.length, messageLen - 1);        // skip the 0xF7
-                inSysex = temp;
+            // yeah yeah, O(n^2), I could obviously do much, much better, maybe later
+            System.arraycopy(inSysex, 0, temp, 0, inSysex.length);
+            System.arraycopy(data, 1, temp, inSysex.length, messageLen - 1);        // skip the 0xF7
+            inSysex = temp;
             }
         /*
           else                // May be missing the 0xF7?
@@ -1348,47 +1348,47 @@ public class Midi
         */
         if (inSysex != null && inSysex.length != 0 && inSysex[inSysex.length - 1] == (byte)0xF7)  // completed
             {
-                //System.err.println("0xF7 END");
-                byte[] temp = inSysex;
-                inSysex = null;
-                return temp;
+            //System.err.println("0xF7 END");
+            byte[] temp = inSysex;
+            inSysex = null;
+            return temp;
             }
         else return null;
-    }
+        }
 
 
 
     public byte[] gatherInSysexData(SysexMessage message)
-    {
+        {
         int messageLen = message.getLength();
         
         if (messageLen == 0) // uh...
             {
-                return null;
+            return null;
             }
                 
         byte[] data = message.getMessage();
 
         if (data.length == 0) // uh...
             {
-                return null;
+            return null;
             }
                                 
         if (data[0] == (byte)0xF0)  // it's a new message
             {
-                inSysex = new byte[messageLen];
-                System.arraycopy(data, 0, inSysex, 0, inSysex.length);
+            inSysex = new byte[messageLen];
+            System.arraycopy(data, 0, inSysex, 0, inSysex.length);
             }
         else if (data[0] == (byte)0xF7)  // it's a continuation of a message
             {
-                if (inSysex == null) // uh...
-                    return null;
-                byte[] temp = new byte[inSysex.length + messageLen - 1];
+            if (inSysex == null) // uh...
+                return null;
+            byte[] temp = new byte[inSysex.length + messageLen - 1];
                 
-                // yeah yeah, O(n^2), I could obviously do much, much better, maybe later
-                System.arraycopy(inSysex, 0, temp, 0, inSysex.length);
-                System.arraycopy(data, 1, temp, inSysex.length, messageLen - 1);        // skip the 0xF7
-                inSysex = temp;
+            // yeah yeah, O(n^2), I could obviously do much, much better, maybe later
+            System.arraycopy(inSysex, 0, temp, 0, inSysex.length);
+            System.arraycopy(data, 1, temp, inSysex.length, messageLen - 1);        // skip the 0xF7
+            inSysex = temp;
             }
         /*
           else                // May be missing the 0xF7?
@@ -1404,15 +1404,15 @@ public class Midi
 
         if (inSysex != null && inSysex.length != 0 && inSysex[inSysex.length - 1] == (byte)0xF7)  // completed
             {
-                byte[] temp = inSysex;
-                inSysex = null;
-                return temp;
+            byte[] temp = inSysex;
+            inSysex = null;
+            return temp;
             }
         else return null;
-    }
+        }
 
     public byte[] gatherKeySysexData(SysexMessage message)
-    {
+        {
         int messageLen = message.getLength();
 
         if (messageLen == 0) // uh...
@@ -1425,18 +1425,18 @@ public class Midi
                 
         if (data[0] == 0xF0)  // it's a new message
             {
-                keySysex = new byte[messageLen];
-                System.arraycopy(data, 0, keySysex, 0, keySysex.length);
+            keySysex = new byte[messageLen];
+            System.arraycopy(data, 0, keySysex, 0, keySysex.length);
             }
         else if (data[0] == 0xF7)  // it's a continuation of a message
             {
-                if (keySysex == null) // uh...
-                    return null;
-                byte[] temp = new byte[keySysex.length + messageLen - 1];
+            if (keySysex == null) // uh...
+                return null;
+            byte[] temp = new byte[keySysex.length + messageLen - 1];
                 
-                // yeah yeah, O(n^2), I could obviously do much, much better, maybe later
-                System.arraycopy(keySysex, 0, temp, 0, keySysex.length);
-                System.arraycopy(data, 1, temp, keySysex.length, messageLen - 1);       // skip the 0xF7
+            // yeah yeah, O(n^2), I could obviously do much, much better, maybe later
+            System.arraycopy(keySysex, 0, temp, 0, keySysex.length);
+            System.arraycopy(data, 1, temp, keySysex.length, messageLen - 1);       // skip the 0xF7
             }
         /*
           else                // May be missing the 0xF7?
@@ -1452,15 +1452,15 @@ public class Midi
 
         if (keySysex != null && keySysex.length != 0 && keySysex[keySysex.length - 1] == 0xF7)  // completed
             {
-                byte[] temp = keySysex;
-                keySysex = null;
-                return temp;
+            byte[] temp = keySysex;
+            keySysex = null;
+            return temp;
             }
         else return null;
-    }
+        }
 
     public byte[] gatherKey2SysexData(SysexMessage message)
-    {
+        {
         int messageLen = message.getLength();
 
         if (messageLen == 0) // uh...
@@ -1473,18 +1473,18 @@ public class Midi
                 
         if (data[0] == 0xF0)  // it's a new message
             {
-                key2Sysex = new byte[messageLen];
-                System.arraycopy(data, 0, key2Sysex, 0, key2Sysex.length);
+            key2Sysex = new byte[messageLen];
+            System.arraycopy(data, 0, key2Sysex, 0, key2Sysex.length);
             }
         else if (data[0] == 0xF7)  // it's a continuation of a message
             {
-                if (key2Sysex == null) // uh...
-                    return null;
-                byte[] temp = new byte[key2Sysex.length + messageLen - 1];
+            if (key2Sysex == null) // uh...
+                return null;
+            byte[] temp = new byte[key2Sysex.length + messageLen - 1];
                 
-                // yeah yeah, O(n^2), I could obviously do much, much better, maybe later
-                System.arraycopy(key2Sysex, 0, temp, 0, key2Sysex.length);
-                System.arraycopy(data, 1, temp, key2Sysex.length, messageLen - 1);      // skip the 0xF7
+            // yeah yeah, O(n^2), I could obviously do much, much better, maybe later
+            System.arraycopy(key2Sysex, 0, temp, 0, key2Sysex.length);
+            System.arraycopy(data, 1, temp, key2Sysex.length, messageLen - 1);      // skip the 0xF7
             }
         /*
           else                // May be missing the 0xF7?
@@ -1500,10 +1500,10 @@ public class Midi
 
         if (key2Sysex != null && key2Sysex.length != 0 && key2Sysex[key2Sysex.length - 1] == 0xF7)  // completed
             {
-                byte[] temp = key2Sysex;
-                key2Sysex = null;
-                return temp;
+            byte[] temp = key2Sysex;
+            key2Sysex = null;
+            return temp;
             }
         else return null;
+        }
     }
-}

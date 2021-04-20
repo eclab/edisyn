@@ -23,7 +23,7 @@ import javax.sound.midi.*;
 */
 
 public class KawaiK5Multi extends Synth
-{
+    {
     // This is much, much, MUCH shorter and simpler than the single-patch editor!
     // It's about 690 lines, compared to the single-patch editor at 4050 lines (!)
         
@@ -34,7 +34,7 @@ public class KawaiK5Multi extends Synth
     public static final String[] KEYS = new String[] { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
     
     public KawaiK5Multi()
-    {
+        {
         /// SOUND PANEL
                 
         JComponent soundPanel = new SynthPanel(this);
@@ -91,14 +91,14 @@ public class KawaiK5Multi extends Synth
         model.set("number", 0);
         
         loadDefaults();        
-    }
+        }
                 
                 
     public String getDefaultResourceFileName() { return "KawaiK5Multi.init"; }
     public String getHTMLResourceFileName() { return "KawaiK5Multi.html"; }
 
     public boolean gatherPatchInfo(String title, Model change, boolean writing)
-    {
+        {
         JComboBox bank = new JComboBox(BANKS);
         bank.setSelectedIndex(model.get("bank"));
         
@@ -106,39 +106,39 @@ public class KawaiK5Multi extends Synth
 
         while(true)
             {
-                boolean result = showMultiOption(this, new String[] { "Bank", "Patch Number"}, 
-                                                 new JComponent[] { bank, number }, title, "Enter the Bank and Patch number");
+            boolean result = showMultiOption(this, new String[] { "Bank", "Patch Number"}, 
+                new JComponent[] { bank, number }, title, "Enter the Bank and Patch number");
                 
-                if (result == false) 
-                    return false;
+            if (result == false) 
+                return false;
                                 
-                int n;
-                try { n = Integer.parseInt(number.getText()); }
-                catch (NumberFormatException e)
-                    {
-                        showSimpleError(title, "The Patch Number must be an integer 1...12");
-                        continue;
-                    }
-                if (n < 1 || n > 12)
-                    {
-                        showSimpleError(title, "The Patch Number must be an integer 1...12");
-                        continue;
-                    }
+            int n;
+            try { n = Integer.parseInt(number.getText()); }
+            catch (NumberFormatException e)
+                {
+                showSimpleError(title, "The Patch Number must be an integer 1...12");
+                continue;
+                }
+            if (n < 1 || n > 12)
+                {
+                showSimpleError(title, "The Patch Number must be an integer 1...12");
+                continue;
+                }
                 
-                n--;
+            n--;
                                 
-                int i = bank.getSelectedIndex();
+            int i = bank.getSelectedIndex();
                         
-                change.set("bank", i);
-                change.set("number", n);
+            change.set("bank", i);
+            change.set("number", n);
                         
-                return true;
+            return true;
             }
-    }
+        }
         
     /** Add the global patch category (name, id, number, etc.) */
     public JComponent addNameGlobal(Color color)
-    {
+        {
         Category globalCategory = new Category(this, getSynthName(), color);
         //globalCategory.makeUnresettable();
                 
@@ -154,15 +154,15 @@ public class KawaiK5Multi extends Synth
         
         comp = new StringComponent("Patch Name", this, "name", MAXIMUM_NAME_LENGTH, "Name must be up to " + MAXIMUM_NAME_LENGTH + " ASCII characters.")
             {
-                public String replace(String val)
+            public String replace(String val)
                 {
-                    return revisePatchName(val);
+                return revisePatchName(val);
                 }
                                 
-                public void update(String key, Model model)
+            public void update(String key, Model model)
                 {
-                    super.update(key, model);
-                    updateTitle();
+                super.update(key, model);
+                updateTitle();
                 }
             };
         vbox.add(comp);
@@ -172,11 +172,11 @@ public class KawaiK5Multi extends Synth
                 
         globalCategory.add(hbox, BorderLayout.WEST);
         return globalCategory;
-    }
+        }
 
 
     public JComponent addGlobal(Color color)
-    {
+        {
         Category category = new Category(this, "Global", color);
 
         JComponent comp;
@@ -190,10 +190,10 @@ public class KawaiK5Multi extends Synth
                 
         category.add(hbox, BorderLayout.CENTER);
         return category;
-    }
+        }
         
     public JComponent addTrack(final int track, Color color)
-    {
+        {
         Category category = new Category(this, "Track " + track, color);
         //        category.makePasteable("t" + track);
         category.makePasteable("t");
@@ -214,45 +214,45 @@ public class KawaiK5Multi extends Synth
         
         final PushButton showButton = new PushButton("Show")
             {
-                public void perform()
+            public void perform()
                 {
-                    final KawaiK5 synth = new KawaiK5();
-                    if (tuple != null)
-                        synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver(), buildKey2Receiver());
-                    if (synth.tuple != null)
-                        {       
-                            // This is a little tricky.  When the dump comes in from the synth,
-                            // Edisyn will only send it to the topmost panel.  So we first sprout
-                            // the panel and show it, and THEN send the dump request.  But this isn't
-                            // enough, because what setVisible(...) does is post an event on the
-                            // Swing Event Queue to build the window at a later time.  This later time
-                            // happens to be after the dump comes in, so it's ignored.  So what we
-                            // ALSO do is post the dump request to occur at the end of the Event Queue,
-                            // so by the time the dump request has been made, the window is shown and
-                            // frontmost.
+                final KawaiK5 synth = new KawaiK5();
+                if (tuple != null)
+                    synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver(), buildKey2Receiver());
+                if (synth.tuple != null)
+                    {       
+                    // This is a little tricky.  When the dump comes in from the synth,
+                    // Edisyn will only send it to the topmost panel.  So we first sprout
+                    // the panel and show it, and THEN send the dump request.  But this isn't
+                    // enough, because what setVisible(...) does is post an event on the
+                    // Swing Event Queue to build the window at a later time.  This later time
+                    // happens to be after the dump comes in, so it's ignored.  So what we
+                    // ALSO do is post the dump request to occur at the end of the Event Queue,
+                    // so by the time the dump request has been made, the window is shown and
+                    // frontmost.
                                                 
-                            synth.sprout();
-                            JFrame frame = ((JFrame)(SwingUtilities.getRoot(synth)));
-                            frame.setVisible(true);
+                    synth.sprout();
+                    JFrame frame = ((JFrame)(SwingUtilities.getRoot(synth)));
+                    frame.setVisible(true);
 
-                            SwingUtilities.invokeLater(
-                                                       new Runnable()
-                                                       {
-                                                           public void run() 
-                                                           { 
-                                                               Model tempModel = buildModel();
-                                                               tempModel.set("number", KawaiK5Multi.this.model.get("t" + track + "singlenumber"));
-                                                               int bank = KawaiK5Multi.this.model.get("t" + track + "singlebank") + 
-                                                                   (KawaiK5Multi.this.model.get("bank") < 4 ? 0 : 4); 
-                                                               tempModel.set("bank", bank);     
-                                                               synth.performRequestDump(tempModel, false);
-                                                           }
-                                                       });
-                        }
-                    else
-                        {
-                            showSimpleError("Disconnected", "You can't show a patch when disconnected.");
-                        }
+                    SwingUtilities.invokeLater(
+                        new Runnable()
+                            {
+                            public void run() 
+                                { 
+                                Model tempModel = buildModel();
+                                tempModel.set("number", KawaiK5Multi.this.model.get("t" + track + "singlenumber"));
+                                int bank = KawaiK5Multi.this.model.get("t" + track + "singlebank") + 
+                                    (KawaiK5Multi.this.model.get("bank") < 4 ? 0 : 4); 
+                                tempModel.set("bank", bank);     
+                                synth.performRequestDump(tempModel, false);
+                                }
+                            });
+                    }
+                else
+                    {
+                    showSimpleError("Disconnected", "You can't show a patch when disconnected.");
+                    }
                 }
             };
         vbox.add(showButton);
@@ -300,18 +300,18 @@ public class KawaiK5Multi extends Synth
 
         comp = new LabelledDial("Zone Low", this, "t" + track + "zonelow", color, 0, 127)
             {
-                public String map(int val)
+            public String map(int val)
                 {
-                    return KEYS[val % 12] + (val / 12 - 2);  // note integer division
+                return KEYS[val % 12] + (val / 12 - 2);  // note integer division
                 }
             };
         hbox.add(comp);
 
         comp = new LabelledDial("Zone High", this, "t" + track + "zonehigh", color, 0, 127)
             {
-                public String map(int val)
+            public String map(int val)
                 {
-                    return KEYS[val % 12] + (val / 12 - 2);  // note integer division
+                return KEYS[val % 12] + (val / 12 - 2);  // note integer division
                 }
             };
         hbox.add(comp);
@@ -320,11 +320,11 @@ public class KawaiK5Multi extends Synth
         // FIXME: this one has a hole in it, 1-16 and then 255, which we'll may to 17 here
         comp = new LabelledDial("Polyphony", this, "t" + track + "polyphony", color, 0, 17)
             {
-                public String map(int val)
+            public String map(int val)
                 {
-                    if (val == 17)
-                        return "VR";
-                    else return "" + val;
+                if (val == 17)
+                    return "VR";
+                else return "" + val;
                 }
             };
         hbox.add(comp);
@@ -341,14 +341,14 @@ public class KawaiK5Multi extends Synth
         // FIXME: this is two's complement 
         comp = new LabelledDial("Transpose", this, "t" + track + "transpose", color, -48, 48)
             {
-                public boolean isSymmetric() { return true; }
+            public boolean isSymmetric() { return true; }
             };
         hbox.add(comp);
 
         // FIXME: this is two's complement 
         comp = new LabelledDial("Tune", this, "t" + track + "tune", color, -31, 31)
             {
-                public boolean isSymmetric() { return true; }
+            public boolean isSymmetric() { return true; }
             };
         hbox.add(comp);
 
@@ -360,14 +360,14 @@ public class KawaiK5Multi extends Synth
 
         category.add(hbox, BorderLayout.CENTER);
         return category;
-    }
+        }
         
         
         
     public static final int POLYPHONY_VR = 17;
 
     public int parse(byte[] result, boolean fromFile)
-    {
+        {
         model.set("bank", result[7] / 12);
         model.set("number", result[7] % 12);
 
@@ -377,57 +377,57 @@ public class KawaiK5Multi extends Synth
         int v = 8;
         for(int i = 0; i < data.length; i++)
             {
-                data[i] = (byte)(((result[v++] & 0xF) << 4) | (result[v++] & 0xF));
+            data[i] = (byte)(((result[v++] & 0xF) << 4) | (result[v++] & 0xF));
             }
 
         int pos = 0;
         
         for(int i = 1; i < 16; i++)
             {
-                model.set("t" + i + "singlebank", (data[pos] >>> 4) & 3);
-                model.set("t" + i + "singlenumber", (data[pos] >>> 0) & 15);
-                pos++;
-                model.set("t" + i + "zonelow", (data[pos] >>> 0) & 127);
-                pos++;
-                model.set("t" + i + "zonehigh", (data[pos] >>> 0) & 127);
-                pos++;
-                int poly = (data[pos] >>> 0) & 255;
-                if (poly == 255)
-                    model.set("t" + i + "polyphony", POLYPHONY_VR);
-                else
-                    model.set("t" + i + "polyphony", poly);
-                pos++;
-                model.set("t" + i + "channel", (data[pos] >>> 4) & 15);
-                model.set("t" + i + "mode", (data[pos] >>> 0) & 3);
-                pos++;
-                model.set("t" + i + "veloswhigh", (data[pos] >>> 4) & 7);
-                model.set("t" + i + "veloswlow", (data[pos] >>> 0) & 7);
-                pos++;
-                model.set("t" + i + "transpose", (byte)((data[pos] >>> 0) & 255));  // 2's complement, so we cast to a byte
-                pos++;
-                model.set("t" + i + "tune", (byte)((data[pos] >>> 0) & 255));  // 2's complement, so we cast to a byte
-                pos++;
-                model.set("t" + i + "out", (data[pos] >>> 6) & 3);
-                model.set("t" + i + "level", (data[pos] >>> 0) & 63);
-                pos++;
-                model.set("t" + i + "portamento", (data[pos] >>> 7) & 1);
-                model.set("t" + i + "hold", (data[pos] >>> 6) & 1);
-                model.set("t" + i + "volume", (data[pos] >>> 5) & 1);
-                model.set("t" + i + "modulation", (data[pos] >>> 4) & 1);
-                model.set("t" + i + "benderrange", (data[pos] >>> 3) & 1);
-                model.set("t" + i + "pressure", (data[pos] >>> 2) & 1);
-                model.set("t" + i + "expression", (data[pos] >>> 1) & 1);
-                model.set("t" + i + "pedal", (data[pos] >>> 0) & 1);
-                pos++;
-                model.set("t" + i + "velocity", (data[pos] >>> 1) & 1);
-                model.set("t" + i + "program", (data[pos] >>> 0) & 1);
-                pos++;
+            model.set("t" + i + "singlebank", (data[pos] >>> 4) & 3);
+            model.set("t" + i + "singlenumber", (data[pos] >>> 0) & 15);
+            pos++;
+            model.set("t" + i + "zonelow", (data[pos] >>> 0) & 127);
+            pos++;
+            model.set("t" + i + "zonehigh", (data[pos] >>> 0) & 127);
+            pos++;
+            int poly = (data[pos] >>> 0) & 255;
+            if (poly == 255)
+                model.set("t" + i + "polyphony", POLYPHONY_VR);
+            else
+                model.set("t" + i + "polyphony", poly);
+            pos++;
+            model.set("t" + i + "channel", (data[pos] >>> 4) & 15);
+            model.set("t" + i + "mode", (data[pos] >>> 0) & 3);
+            pos++;
+            model.set("t" + i + "veloswhigh", (data[pos] >>> 4) & 7);
+            model.set("t" + i + "veloswlow", (data[pos] >>> 0) & 7);
+            pos++;
+            model.set("t" + i + "transpose", (byte)((data[pos] >>> 0) & 255));  // 2's complement, so we cast to a byte
+            pos++;
+            model.set("t" + i + "tune", (byte)((data[pos] >>> 0) & 255));  // 2's complement, so we cast to a byte
+            pos++;
+            model.set("t" + i + "out", (data[pos] >>> 6) & 3);
+            model.set("t" + i + "level", (data[pos] >>> 0) & 63);
+            pos++;
+            model.set("t" + i + "portamento", (data[pos] >>> 7) & 1);
+            model.set("t" + i + "hold", (data[pos] >>> 6) & 1);
+            model.set("t" + i + "volume", (data[pos] >>> 5) & 1);
+            model.set("t" + i + "modulation", (data[pos] >>> 4) & 1);
+            model.set("t" + i + "benderrange", (data[pos] >>> 3) & 1);
+            model.set("t" + i + "pressure", (data[pos] >>> 2) & 1);
+            model.set("t" + i + "expression", (data[pos] >>> 1) & 1);
+            model.set("t" + i + "pedal", (data[pos] >>> 0) & 1);
+            pos++;
+            model.set("t" + i + "velocity", (data[pos] >>> 1) & 1);
+            model.set("t" + i + "program", (data[pos] >>> 0) & 1);
+            pos++;
             }
 
         // Name ...
         try
             {
-                model.set("name", new String(data, pos, 8, "US-ASCII").trim());
+            model.set("name", new String(data, pos, 8, "US-ASCII").trim());
             }
         catch (UnsupportedEncodingException ex) { } // won't happen
         pos += 8;
@@ -436,11 +436,11 @@ public class KawaiK5Multi extends Synth
         pos++;
 
         return PARSE_SUCCEEDED;                 
-    }
+        }
     
         
     public boolean sendAllParametersInternal()
-    {
+        {
         boolean val = super.sendAllParametersInternal();        
 
         // we change patch to MID-12 if we're sending in bulk.
@@ -456,10 +456,10 @@ public class KawaiK5Multi extends Synth
         changePatch(tempModel);
         simplePause(getPauseAfterChangePatch());
         return val;
-    }
+        }
 
     public byte[] emit(Model tempModel, boolean toWorkingMemory, boolean toFile)
-    {
+        {
         if (tempModel == null)
             tempModel = getModel();
 
@@ -469,38 +469,38 @@ public class KawaiK5Multi extends Synth
         
         for(int i = 1; i < 16; i++)
             {
-                data[pos] = (byte)((model.get("t" + i + "singlebank") << 4) | (model.get("t" + i + "singlenumber") << 0));
-                pos++;
-                data[pos] = (byte)((model.get("t" + i + "zonelow") << 0));
-                pos++;
-                data[pos] = (byte)((model.get("t" + i + "zonehigh") << 0));
-                pos++;
-                int poly = model.get("t" + i + "polyphony");
-                if (poly == POLYPHONY_VR) poly = 255;
-                data[pos] = (byte)(poly);
-                pos++;
-                data[pos] = (byte)((model.get("t" + i + "channel") << 4) | (model.get("t" + i + "mode") << 0));
-                pos++;
-                data[pos] = (byte)((model.get("t" + i + "veloswhigh") << 4) | (model.get("t" + i + "veloswlow") << 0));
-                pos++;
-                data[pos] = (byte)((model.get("t" + i + "transpose") << 0));
-                pos++;
-                data[pos] = (byte)((model.get("t" + i + "tune") << 0));
-                pos++;
-                data[pos] = (byte)((model.get("t" + i + "out") << 6) | (model.get("t" + i + "level") << 0));
-                pos++;
-                data[pos] = (byte)((model.get("t" + i + "portamento") << 7) | 
-                                   (model.get("t" + i + "hold") << 6) | 
-                                   (model.get("t" + i + "volume") << 5) | 
-                                   (model.get("t" + i + "modulation") << 4) | 
-                                   (model.get("t" + i + "benderrange") << 3) | 
-                                   (model.get("t" + i + "pressure") << 2) | 
-                                   (model.get("t" + i + "expression") << 1) | 
-                                   (model.get("t" + i + "pedal") << 0));
-                pos++;
-                data[pos] = (byte)((model.get("t" + i + "velocity") << 1) | 
-                                   (model.get("t" + i + "program") << 0));
-                pos++;
+            data[pos] = (byte)((model.get("t" + i + "singlebank") << 4) | (model.get("t" + i + "singlenumber") << 0));
+            pos++;
+            data[pos] = (byte)((model.get("t" + i + "zonelow") << 0));
+            pos++;
+            data[pos] = (byte)((model.get("t" + i + "zonehigh") << 0));
+            pos++;
+            int poly = model.get("t" + i + "polyphony");
+            if (poly == POLYPHONY_VR) poly = 255;
+            data[pos] = (byte)(poly);
+            pos++;
+            data[pos] = (byte)((model.get("t" + i + "channel") << 4) | (model.get("t" + i + "mode") << 0));
+            pos++;
+            data[pos] = (byte)((model.get("t" + i + "veloswhigh") << 4) | (model.get("t" + i + "veloswlow") << 0));
+            pos++;
+            data[pos] = (byte)((model.get("t" + i + "transpose") << 0));
+            pos++;
+            data[pos] = (byte)((model.get("t" + i + "tune") << 0));
+            pos++;
+            data[pos] = (byte)((model.get("t" + i + "out") << 6) | (model.get("t" + i + "level") << 0));
+            pos++;
+            data[pos] = (byte)((model.get("t" + i + "portamento") << 7) | 
+                (model.get("t" + i + "hold") << 6) | 
+                (model.get("t" + i + "volume") << 5) | 
+                (model.get("t" + i + "modulation") << 4) | 
+                (model.get("t" + i + "benderrange") << 3) | 
+                (model.get("t" + i + "pressure") << 2) | 
+                (model.get("t" + i + "expression") << 1) | 
+                (model.get("t" + i + "pedal") << 0));
+            pos++;
+            data[pos] = (byte)((model.get("t" + i + "velocity") << 1) | 
+                (model.get("t" + i + "program") << 0));
+            pos++;
             }
 
         // Name ...
@@ -515,7 +515,7 @@ public class KawaiK5Multi extends Synth
         int sum = 0;
         for(int i = 0; i < data.length; i += 2)
             {
-                sum += (((data[i + 1] & 0xFF) << 8) | (data[i] & 0xFF));
+            sum += (((data[i + 1] & 0xFF) << 8) | (data[i] & 0xFF));
             }
                 
         sum = sum & 0xFFFF;
@@ -542,51 +542,51 @@ public class KawaiK5Multi extends Synth
         int v = 8;
         for(int i = 0; i < pos; i++)
             {
-                result[v++] = (byte)((data[i] & 0xFF) >>> 4);
-                result[v++] = (byte)(data[i] & 0xF);
+            result[v++] = (byte)((data[i] & 0xFF) >>> 4);
+            result[v++] = (byte)(data[i] & 0xF);
             }
         result[v] = (byte)0xF7;
 
 
 
         return result;
-    }
+        }
 
     public byte[] requestDump(Model tempModel)
-    {
+        {
         if (tempModel == null)
             tempModel = getModel();
 
         return new byte[] 
             { 
-                (byte)0xF0, 
-                (byte)0x40, 
-                (byte)getChannelOut(), 
-                (byte)0x00, 
-                (byte)0x00, 
-                (byte)0x02,
-                (byte)0x01,  // multi
-                (byte)(tempModel.get("bank") * 12 + (tempModel.get("number"))),
-                (byte)0xF7
+            (byte)0xF0, 
+            (byte)0x40, 
+            (byte)getChannelOut(), 
+            (byte)0x00, 
+            (byte)0x00, 
+            (byte)0x02,
+            (byte)0x01,  // multi
+            (byte)(tempModel.get("bank") * 12 + (tempModel.get("number"))),
+            (byte)0xF7
             };
-    }
+        }
 
         
     public static final int EXPECTED_SYSEX_LENGTH = 361;        
     
     boolean isLegalCharacter(char c)
-    {
+        {
         for(int i = 0; i < LEGAL_CHARACTERS.length; i++)
             {
-                if (c == LEGAL_CHARACTERS[i])
-                    return true;
+            if (c == LEGAL_CHARACTERS[i])
+                return true;
             }
         return false;
-    }
+        }
     
     public static final int MAXIMUM_NAME_LENGTH = 8;
     public String revisePatchName(String name)
-    {
+        {
         name = super.revisePatchName(name);  // trim first time
         if (name.length() > MAXIMUM_NAME_LENGTH)
             name = name.substring(0, MAXIMUM_NAME_LENGTH);
@@ -596,17 +596,17 @@ public class KawaiK5Multi extends Synth
         StringBuffer nameb = new StringBuffer(name);                            
         for(int i = 0 ; i < nameb.length(); i++)
             {
-                if (!isLegalCharacter(nameb.charAt(i)))
-                    nameb.setCharAt(i, ' ');
+            if (!isLegalCharacter(nameb.charAt(i)))
+                nameb.setCharAt(i, ' ');
             }
         name = nameb.toString();
         return super.revisePatchName(name);  // trim again
-    }        
+        }        
 
         
     /** Verify that all the parameters are within valid values, and tweak them if not. */
     public void revise()
-    {
+        {
         // check the easy stuff -- out of range parameters
         super.revise();
 
@@ -614,7 +614,7 @@ public class KawaiK5Multi extends Synth
         String newnm = revisePatchName(nm);
         if (!nm.equals(newnm))
             model.set("name", newnm);
-    }
+        }
         
     public static String getSynthName() { return "Kawai K5/K5m [Multi]"; }
     
@@ -624,7 +624,7 @@ public class KawaiK5Multi extends Synth
     public int getPauseAfterSendOneParameter() { return 30; }  // Sad, needs 30ms
  
     public void changePatch(Model tempModel)
-    {
+        {
         byte BB = (byte)tempModel.get("bank");
         byte NN = (byte)tempModel.get("number");
         
@@ -633,33 +633,33 @@ public class KawaiK5Multi extends Synth
         int PC = (BB * 12 + NN);
         try 
             {
-                tryToSendSysex(new byte[] { (byte)0xF0, 0x40, (byte)getChannelOut(), 0x30, 0x00, 0x02, 0x01, (byte)PC, (byte)0xF7 } );
+            tryToSendSysex(new byte[] { (byte)0xF0, 0x40, (byte)getChannelOut(), 0x30, 0x00, 0x02, 0x01, (byte)PC, (byte)0xF7 } );
             }
         catch (Exception e) { Synth.handleException(e); }
-    }
+        }
     
     public Model getNextPatchLocation(Model model)
-    {
+        {
         int bank = model.get("bank");
         int number = model.get("number");
         
         number++;
         if (number >= 12)
             {
-                bank++;
-                number = 0;
-                if (bank >= 4)
-                    bank = 0;
+            bank++;
+            number = 0;
+            if (bank >= 4)
+                bank = 0;
             }
                 
         Model newModel = buildModel();
         newModel.set("bank", bank);
         newModel.set("number", number);
         return newModel;
-    }
+        }
 
     public String getPatchLocationName(Model model)
-    {
+        {
         // getPatchLocationName() is called from sprout() as a test to see if we should enable
         // batch downloading.  If we haven't yet created an .init file, then parameters won't exist
         // yet and this method will bomb badly.  So we return null in this case.
@@ -667,10 +667,10 @@ public class KawaiK5Multi extends Synth
         if (!model.exists("bank")) return null;
         
         return BANKS[model.get("bank")] + "-" +  (model.get("number") + 1);
-    }
+        }
         
     public JFrame sprout()
-    {
+        {
         JFrame frame = super.sprout();
         // We can't request the current working memory (don't ask why)
         receiveCurrent.setEnabled(false);
@@ -678,6 +678,6 @@ public class KawaiK5Multi extends Synth
         // We can't reasonably send to patches if we send in bulk.
         transmitTo.setEnabled(false);
         return frame;
-    }         
-}
+        }         
+    }
                                         

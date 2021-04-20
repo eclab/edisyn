@@ -23,17 +23,17 @@ import javax.sound.midi.*;
 */
 
 public class OberheimMatrix1000 extends Synth
-{
+    {
     boolean m1000 = true;
     JCheckBox m1000Check;
     public static final String M1000_KEY = "Matrix1000";
     
     public boolean isM1000() { return m1000; }
     public void setM1000(boolean val, boolean save)
-    {
+        {
         if (save)
             {
-                setLastX("" + (!val), M1000_KEY, getSynthName(), true);
+            setLastX("" + (!val), M1000_KEY, getSynthName(), true);
             }
         m1000 = val;
 
@@ -44,7 +44,7 @@ public class OberheimMatrix1000 extends Synth
         if (m1000Check != null)
             m1000Check.setSelected(val);  // hopefully this isn't recursive
         updateTitle();
-    }
+        }
     
 
     /// Various collections of parameter names for pop-up menus
@@ -67,19 +67,19 @@ public class OberheimMatrix1000 extends Synth
     public static final String[] MODULATION_DESTINATIONS = new String[] { "None", "DCO 1 Frequency", "DCO 1 Pulsewidth", "DCO 1 Wave Shape",  "DCO 2 Frequency", "DCO 2 Pulsewidth", "DCO 2 Wave Shape", "Mix Level", "Filter FM", "Filter Frequency", "Filter Resonance", "VCA 1 Level", "VCA 2 Level", "Env 1 Delay", "Env 1 Attack", "Env 1 Decay", "Env 1 Release", "Env 1 Amplitude", "Env 2 Delay", "Env 2 Attack", "Env 2 Decay", "Env 2 Release", "Env 2 Amplitude", "Env 3 Delay", "Env 3 Attack", "Env 3 Decay", "Env 3 Release", "Env 3 Amplitude", "LFO 1 Speed", "LFO 1 Amplitude", "LFO 2 Speed", "LFO 2 Amplitude", "Portamento Time" };
 
     public OberheimMatrix1000()
-    {
+        {
         String m = getLastX(M1000_KEY, getSynthName());
         m1000 = (m == null ? true : !Boolean.parseBoolean(m));
         setM1000(m1000, false);  // so we set the menu
 
         for(int i = 0; i < allParameters.length; i++)
             {
-                allParametersToIndex.put(allParameters[i], Integer.valueOf(i));
+            allParametersToIndex.put(allParameters[i], Integer.valueOf(i));
             }
 
         for(int i = 0; i < internalParameters.length; i++)
             {
-                internalParametersToIndex.put(internalParameters[i], Integer.valueOf(i));
+            internalParametersToIndex.put(internalParameters[i], Integer.valueOf(i));
             }
                         
         /// SOUND PANEL
@@ -143,61 +143,61 @@ public class OberheimMatrix1000 extends Synth
         model.set("number", 0);
         
         loadDefaults();        
-    }
+        }
                 
     public String getDefaultResourceFileName() { return "OberheimMatrix1000.init"; }
     public String getHTMLResourceFileName() { return "OberheimMatrix1000.html"; }
 
     String patchRange(boolean writing)
-    {
+        {
         if (m1000 && writing) return "0...199";
         else if (m1000) return "0...999";
         else return "0...99";
-    }
+        }
 
     public boolean gatherPatchInfo(String title, Model change, boolean writing)
-    {
+        {
         JTextField val = new JTextField("" + model.get("bank") + (model.get("number") < 10 ? "0" : "") + model.get("number"), 3);
         
         while(true)
             {
-                boolean result = showMultiOption(this, new String[] { "Patch Number"}, 
-                                                 new JComponent[] { val }, title, "Enter the Patch Number (" + patchRange(writing) + ")");
+            boolean result = showMultiOption(this, new String[] { "Patch Number"}, 
+                new JComponent[] { val }, title, "Enter the Patch Number (" + patchRange(writing) + ")");
                 
-                if (result == false) 
-                    return false;
+            if (result == false) 
+                return false;
                                 
-                int n;
-                try { n = Integer.parseInt(val.getText()); }
-                catch (NumberFormatException e)
-                    {
-                        showSimpleError(title, "The Patch Number must be an integer " + patchRange(writing));
-                        continue;
-                    }
-                if ((m1000 && writing && (n < 0 || n > 199)) ||
-                    (m1000 && !writing && (n < 0 || n > 999)) ||
-                    (!m1000 && (n < 0 || n > 99)))
-                    {
-                        showSimpleError(title, "The Patch Number must be an integer " + patchRange(writing));
-                        continue;
-                    }
+            int n;
+            try { n = Integer.parseInt(val.getText()); }
+            catch (NumberFormatException e)
+                {
+                showSimpleError(title, "The Patch Number must be an integer " + patchRange(writing));
+                continue;
+                }
+            if ((m1000 && writing && (n < 0 || n > 199)) ||
+                (m1000 && !writing && (n < 0 || n > 999)) ||
+                (!m1000 && (n < 0 || n > 99)))
+                {
+                showSimpleError(title, "The Patch Number must be an integer " + patchRange(writing));
+                continue;
+                }
                                 
-                change.set("bank", n / 100);
-                change.set("number", n % 100);
+            change.set("bank", n / 100);
+            change.set("number", n % 100);
                         
-                return true;
+            return true;
             }
-    }
+        }
         
     public JFrame sprout()
-    {
+        {
         JFrame frame = super.sprout();
         transmitTo.setEnabled(false);
         // The 6/6r can't receive current patch
         receiveCurrent.setEnabled(m1000);
         addOberheimMenu();
         return frame;
-    }         
+        }         
 
     // I believe (hope?) that Matrix 6/6R names are probably the char values 32...95,
     // which represent all-caps letters, all numbers, and most punctuation and space.
@@ -209,7 +209,7 @@ public class OberheimMatrix1000 extends Synth
     
     /** Add the global patch category (name, id, number, etc.) */
     public JComponent addNameGlobal(Color color)
-    {
+        {
         Category globalCategory = new Category(this, getSynthName(), color);
         //globalCategory.makeUnresettable();
                 
@@ -223,15 +223,15 @@ public class OberheimMatrix1000 extends Synth
         
         comp = new StringComponent("Patch Name", this, "name", 8, "Name must be up to 8 letters, numbers, spaces, or !\"#$%&'()*+,-./:;<=>?[\\]^_.")
             {
-                public String replace(String val)
+            public String replace(String val)
                 {
-                    return revisePatchName(val);
+                return revisePatchName(val);
                 }
                                 
-                public void update(String key, Model model)
+            public void update(String key, Model model)
                 {
-                    super.update(key, model);
-                    updateTitle();
+                super.update(key, model);
+                updateTitle();
                 }
             };
         vbox.add(comp);
@@ -241,9 +241,9 @@ public class OberheimMatrix1000 extends Synth
         m1000Check.setSelected(m1000);
         m1000Check.addActionListener(new ActionListener()
             {
-                public void actionPerformed(ActionEvent e)
+            public void actionPerformed(ActionEvent e)
                 {
-                    setM1000(m1000Check.isSelected(), true);
+                setM1000(m1000Check.isSelected(), true);
                 }
             });
         m1000Check.setFont(Style.SMALL_FONT());
@@ -254,10 +254,10 @@ public class OberheimMatrix1000 extends Synth
         
         globalCategory.add(hbox, BorderLayout.WEST);
         return globalCategory;
-    }
+        }
 
     public JComponent addOscillatorGlobal(Color color)
-    {
+        {
         Category category = new Category(this, "Keyboard", color);
 
         JComponent comp;
@@ -277,18 +277,18 @@ public class OberheimMatrix1000 extends Synth
 
         comp = new LabelledDial("Mix", this, "mix", color, 0, 63, 31)  // yes, there are *64* values, but 31 is center.  It's not quite symmetric.
             {
-                public double getStartAngle()
+            public double getStartAngle()
                 {
-                    return (270 / 2) * (31.5 / 64.0) * 2  + 90;
+                return (270 / 2) * (31.5 / 64.0) * 2  + 90;
                 }
                 
-                public int getDefaultValue() { return 31; }
+            public int getDefaultValue() { return 31; }
 
-                public String map(int val)
+            public String map(int val)
                 {
-                    if (val == 31) return "--";
-                    else if (val < 31) return "< " + (31 - val);
-                    else return "" + (val - 31) + " >";
+                if (val == 31) return "--";
+                else if (val < 31) return "< " + (31 - val);
+                else return "" + (val - 31) + " >";
                 }
             };
         ((LabelledDial)comp).addAdditionalLabel("DCO 2 <> 1");
@@ -309,11 +309,11 @@ public class OberheimMatrix1000 extends Synth
        
         category.add(hbox, BorderLayout.CENTER);
         return category;
-    }
+        }
                 
     /** Add an Oscillator category */
     public JComponent addOscillator(int osc, Color color)
-    {
+        {
         Category category = new Category(this, "Oscillator " + osc, color);
         //        category.makePasteable("dco" + osc);
         category.makePasteable("dco");
@@ -335,8 +335,8 @@ public class OberheimMatrix1000 extends Synth
         vbox.add(comp);
         if (osc==2)
             {
-                comp = new CheckBox("Key Tracking", this, "dco" + osc + "keytracking");
-                vbox.add(comp);
+            comp = new CheckBox("Key Tracking", this, "dco" + osc + "keytracking");
+            vbox.add(comp);
             }
         hbox.add(vbox);
 
@@ -350,8 +350,8 @@ public class OberheimMatrix1000 extends Synth
        
         if (osc==2)
             {
-                comp = new CheckBox("Noise", this, "dco" + osc + "noise");
-                vbox.add(comp);
+            comp = new CheckBox("Noise", this, "dco" + osc + "noise");
+            vbox.add(comp);
             }
 
         comp = new CheckBox("Click", this, "dco" + osc + "click");
@@ -365,7 +365,7 @@ public class OberheimMatrix1000 extends Synth
                 
         comp = new LabelledDial("Wave Shape", this, "dco" + osc + "shape", color, 0, 63)
             {
-                public boolean isSymmetric() { return true; }
+            public boolean isSymmetric() { return true; }
             };
         ((LabelledDial)comp).addAdditionalLabel("Saw <> Tri");
         hbox.add(comp);
@@ -379,16 +379,16 @@ public class OberheimMatrix1000 extends Synth
 
         comp = new LabelledDial("Pulse Width", this, "dco" + osc + "pulsewidth", color, 0, 63)
             {
-                public boolean isSymmetric() { return true; }
-                public int getDefaultValue() { return 31; }
+            public boolean isSymmetric() { return true; }
+            public int getDefaultValue() { return 31; }
             };
         hbox.add(comp);
 
         comp = new LabelledDial("Pulse Width", this, "dco" + osc + "pulsewidthmod", color, -63, 63)
             {
-                public void update(String key, Model model)
+            public void update(String key, Model model)
                 {
-                    super.update(key, model);
+                super.update(key, model);
                 }
             };
         ((LabelledDial)comp).addAdditionalLabel("LFO 2 Mod"); 
@@ -396,29 +396,29 @@ public class OberheimMatrix1000 extends Synth
 
         if (osc==2)
             {
-                comp = new LabelledDial("Detune", this, "dco" + osc + "detune", color, -31, 31)
-                    {
-                        public boolean isSymmetric() { return true; }
-                    };
-                hbox.add(comp);
+            comp = new LabelledDial("Detune", this, "dco" + osc + "detune", color, -31, 31)
+                {
+                public boolean isSymmetric() { return true; }
+                };
+            hbox.add(comp);
             }
 
         if (osc==1)
             {
-                vbox = new VBox();
-                params = SYNC;
-                comp = new Chooser("Sync", this, "dco" + osc + "sync", params);
-                vbox.add(comp);
-                hbox.add(vbox);
+            vbox = new VBox();
+            params = SYNC;
+            comp = new Chooser("Sync", this, "dco" + osc + "sync", params);
+            vbox.add(comp);
+            hbox.add(vbox);
             }
                 
         category.add(hbox, BorderLayout.CENTER);
         return category;
-    }
+        }
         
 
     public JComponent addFilter(Color color)
-    {
+        {
         Category category = new Category(this, "Filter", color);
                 
         JComponent comp;
@@ -467,7 +467,7 @@ public class OberheimMatrix1000 extends Synth
                 
         category.add(hbox, BorderLayout.WEST);
         return category;
-    }
+        }
 
 
 
@@ -477,7 +477,7 @@ public class OberheimMatrix1000 extends Synth
 
     /** Add Amplifier and Pan category */
     public JComponent addAmplifier(Color color)
-    {
+        {
         Category category = new Category(this, "Amplifier", color);
                 
         JComponent comp;
@@ -500,14 +500,14 @@ public class OberheimMatrix1000 extends Synth
         
         category.add(hbox, BorderLayout.WEST);
         return category;
-    }
+        }
 
 
     /** Add an LFO category */
     public JComponent addLFO(final int lfo, Color color)
-    {
+        {
         Category category = new Category(this, "LFO " + lfo + 
-                                         (lfo == 1 ? "   (Oscillator Frequency)" : "   (Oscillator Pulsewidth)"), color);
+            (lfo == 1 ? "   (Oscillator Frequency)" : "   (Oscillator Pulsewidth)"), color);
         //        category.makePasteable("lfo" + lfo);
         category.makePasteable("lfo");
                 
@@ -558,7 +558,7 @@ public class OberheimMatrix1000 extends Synth
                 
         category.add(hbox, BorderLayout.WEST);
         return category;
-    }
+        }
         
     EnvelopeDisplay[] dadr = new EnvelopeDisplay[3];
     EnvelopeDisplay[] dadsr = new EnvelopeDisplay[3];
@@ -566,10 +566,10 @@ public class OberheimMatrix1000 extends Synth
 
     /** Add a "standard" envelope category */
     public JComponent addEnvelope(final int env, Color color)
-    {
+        {
         Category category = new Category(this, "Envelope " + env + 
-                                         (env == 1 ? "   (Filter Frequency)" :
-                                          (env == 2 ?  "   (Amplitude)" : "   (Filter FM)")), color);
+                (env == 1 ? "   (Filter Frequency)" :
+                (env == 2 ?  "   (Amplitude)" : "   (Filter FM)")), color);
         //        category.makePasteable("env" + env);
         category.makePasteable("env");
                 
@@ -587,33 +587,33 @@ public class OberheimMatrix1000 extends Synth
         envelopeBox[env - 1] = new HBox();
         // DADR
         dadr[env - 1] = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
-                                            new String[] { null, "env" + env + "delay", "env" + env + "attack", "env" + env + "decay", "env" + env + "release" },
-                                            new String[] { null, null, null, "env" + env + "sustain", null },
-                                            new double[] { 0, 0.25/63.0, 0.25/63.0, 0.25 / 63.0, 0.25/63.0},
-                                            new double[] { 0, 0, 1.0, 1.0 / 63.0, 0 });
+            new String[] { null, "env" + env + "delay", "env" + env + "attack", "env" + env + "decay", "env" + env + "release" },
+            new String[] { null, null, null, "env" + env + "sustain", null },
+            new double[] { 0, 0.25/63.0, 0.25/63.0, 0.25 / 63.0, 0.25/63.0},
+            new double[] { 0, 0, 1.0, 1.0 / 63.0, 0 });
 
         // DADSR
         dadsr[env - 1] = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
-                                             new String[] { null, "env" + env + "delay", "env" + env + "attack", "env" + env + "decay", null, "env" + env + "release" },
-                                             new String[] { null, null, null, "env" + env + "sustain", "env" + env + "sustain", null },
-                                             new double[] { 0, 0.2/63.0, 0.2/63.0, 0.2 / 63.0,  0.2, 0.2/63.0},
-                                             new double[] { 0, 0, 1.0, 1.0 / 63.0, 1.0/63.0, 0 });
+            new String[] { null, "env" + env + "delay", "env" + env + "attack", "env" + env + "decay", null, "env" + env + "release" },
+            new String[] { null, null, null, "env" + env + "sustain", "env" + env + "sustain", null },
+            new double[] { 0, 0.2/63.0, 0.2/63.0, 0.2 / 63.0,  0.2, 0.2/63.0},
+            new double[] { 0, 0, 1.0, 1.0 / 63.0, 1.0/63.0, 0 });
         envelopeBox[env - 1].addLast(dadsr[env - 1]);
 
         params = ENV_MODES;
         comp = new Chooser("Envelope Mode", this, "env" + env + "mode", params)
             {
-                public void update(String key, Model model)
+            public void update(String key, Model model)
                 {
-                    super.update(key, model);
-                    envelopeBox[env - 1].removeLast();
-                    int val = model.get(key);
-                    if (val == 0 || val == 2)
-                        envelopeBox[env - 1].addLast(dadsr[env - 1]);
-                    else
-                        envelopeBox[env - 1].addLast(dadr[env - 1]);
-                    envelopeBox[env - 1].revalidate();
-                    envelopeBox[env - 1].repaint();
+                super.update(key, model);
+                envelopeBox[env - 1].removeLast();
+                int val = model.get(key);
+                if (val == 0 || val == 2)
+                    envelopeBox[env - 1].addLast(dadsr[env - 1]);
+                else
+                    envelopeBox[env - 1].addLast(dadr[env - 1]);
+                envelopeBox[env - 1].revalidate();
+                envelopeBox[env - 1].repaint();
                 }
             };
         vbox.add(comp);
@@ -651,7 +651,7 @@ public class OberheimMatrix1000 extends Synth
                 
         category.add(hbox, BorderLayout.CENTER);
         return category;
-    }
+        }
         
 
 
@@ -662,7 +662,7 @@ public class OberheimMatrix1000 extends Synth
 
     /** Add free envelope category */
     public JComponent addTracking(Color color)
-    {
+        {
         Category category = new Category(this, "Tracking Generator", color);
         category.makeDistributable("trackingpoint");
                 
@@ -693,22 +693,22 @@ public class OberheimMatrix1000 extends Synth
 
 
         comp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
-                                   new String[] { null, null, null, null, null },
-                                   new String[] { "trackingpoint1", "trackingpoint2", "trackingpoint3", "trackingpoint4", "trackingpoint5" },
-                                   new double[] { 0, 0.25, 0.25, 0.25, 0.25},
-                                   new double[] { 1.0/63, 1.0/63, 1.0/63, 1.0/63, 1.0/63 });
+            new String[] { null, null, null, null, null },
+            new String[] { "trackingpoint1", "trackingpoint2", "trackingpoint3", "trackingpoint4", "trackingpoint5" },
+            new double[] { 0, 0.25, 0.25, 0.25, 0.25},
+            new double[] { 1.0/63, 1.0/63, 1.0/63, 1.0/63, 1.0/63 });
         hbox.add(comp);
                            
         category.add(hbox, BorderLayout.CENTER);
         return category;
-    }
+        }
 
 
     /** Add free envelope category */
     public JComponent addRamp(int ramp, Color color)
-    {
+        {
         Category category = new Category(this, "Ramp " + ramp +
-                                         (ramp == 1 ? "   (LFO 1 Amplitude)" : "   (LFO 2 Amplitude)"), color);
+            (ramp == 1 ? "   (LFO 1 Amplitude)" : "   (LFO 2 Amplitude)"), color);
         //        category.makePasteable("ramp" + ramp);
         category.makePasteable("ramp");
                 
@@ -731,11 +731,11 @@ public class OberheimMatrix1000 extends Synth
 
         category.add(hbox, BorderLayout.CENTER);
         return category;
-    }
+        }
 
     /** Add the Modulation category */
     public JComponent addModulation(Color color)
-    {
+        {
         Category category  = new Category(this, "Modulation", color);
         category.makeDistributable("mod");
                         
@@ -745,36 +745,36 @@ public class OberheimMatrix1000 extends Synth
         
         for(int row = 0; row < 2; row++)
             {
-                if (row == 1)
-                    {
-                        vbox.add(Strut.makeVerticalStrut(30));
-                    }
+            if (row == 1)
+                {
+                vbox.add(Strut.makeVerticalStrut(30));
+                }
                         
-                HBox hbox = new HBox();
-                for(int j = 1; j < 6; j++)
-                    {
-                        int i = row * 5 + j;
+            HBox hbox = new HBox();
+            for(int j = 1; j < 6; j++)
+                {
+                int i = row * 5 + j;
                                 
-                        VBox vbox2 = new VBox();
-                        params = MODULATION_SOURCES;
-                        comp = new Chooser("" + i + " Source", this, "mod" + i + "source", params);
-                        vbox2.add(comp);
+                VBox vbox2 = new VBox();
+                params = MODULATION_SOURCES;
+                comp = new Chooser("" + i + " Source", this, "mod" + i + "source", params);
+                vbox2.add(comp);
 
-                        params = MODULATION_DESTINATIONS;
-                        comp = new Chooser("" + i + " Destination", this, "mod" + i + "destination", params);
-                        vbox2.add(comp);
+                params = MODULATION_DESTINATIONS;
+                comp = new Chooser("" + i + " Destination", this, "mod" + i + "destination", params);
+                vbox2.add(comp);
 
-                        comp = new LabelledDial("" + i + " Amount", this, "mod" + i + "amount", color, -63, 63);  // it's Level, not Amount, so we save some horizontal space
-                        vbox2.add(comp);
-                        hbox.add(vbox2);
-                    }
-                vbox.add(hbox);
+                comp = new LabelledDial("" + i + " Amount", this, "mod" + i + "amount", color, -63, 63);  // it's Level, not Amount, so we save some horizontal space
+                vbox2.add(comp);
+                hbox.add(vbox2);
+                }
+            vbox.add(hbox);
             }
 
                                     
         category.add(vbox, BorderLayout.WEST);
         return category;
-    }
+        }
 
 
 
@@ -795,108 +795,108 @@ public class OberheimMatrix1000 extends Synth
         from the order of parameters in the sysex list, and is missing stuff like modulation and name. */
                 
     final static String[] internalParameters = new String[]
-        {
-            "dco1frequency", 
-            "dco1frequencymod", 
-            "dco1sync", 
-            "dco1pulsewidth", 
-            "dco1pulsewidthmod", 
-            "dco1shape", 
-            "dco1waveenable", 
-            "dco1fixedmods1", 
-            "dco1fixedmods2", 
-            "dco1click", 
-            "dco2frequency", 
-            "dco2frequencymod", 
-            "dco2detune", 
-            "dco2pulsewidth", 
-            "dco2pulsewidthmod", 
-            "dco2shape", 
-            "dco2waveenable", 
-            "dco2fixedmods1", 
-            "dco2fixedmods2", 
-            "dco2click", 
-            "mix", 
-            "vcffrequency", 
-            "vcffrequencyenv1mod", 
-            "vcffrequencypressuremod", 
-            "vcfresonance", 
-            "vcffixedmods1", 
-            "vcffixedmods2", 
-            "vca1", 
-            "vca1velmod", 
-            "vca2env2mod", 
-            "vcffm", 
-            "vcffmenv3mod", 
-            "vcffmpressuremod", 
-            "trackingsource", 
-            "trackingpoint1", 
-            "trackingpoint2", 
-            "trackingpoint3", 
-            "trackingpoint4", 
-            "trackingpoint5", 
-            "-", 
-            "ramp1rate", 
-            "ramp1mode", 
-            "ramp2rate", 
-            "ramp2mode", 
-            "portamento", 
-            "portamentomod", 
-            "portamentomode", 
-            "portamentolegato", 
-            "keyboardmode", 
-            "-", 
-            "env1delay", 
-            "env1attack", 
-            "env1decay", 
-            "env1sustain", 
-            "env1release", 
-            "env1amplitude", 
-            "env1amplitudemod", 
-            "env1triggermode", 
-            "env1mode", 
-            "env1lfotriggermode", 
-            "env2delay", 
-            "env2attack", 
-            "env2decay", 
-            "env2sustain", 
-            "env2release", 
-            "env2amplitude", 
-            "env2amplitudemod", 
-            "env2triggermode", 
-            "env2mode", 
-            "env2lfotriggermode", 
-            "env3delay", 
-            "env3attack", 
-            "env3decay", 
-            "env3sustain", 
-            "env3release", 
-            "env3amplitude", 
-            "env3amplitudemod", 
-            "env3triggermode", 
-            "env3mode", 
-            "env3lfotriggermode", 
-            "lfo1speed", 
-            "lfo1speedmod", 
-            "lfo1shape", 
-            "lfo1retrigger", 
-            "lfo1amplitude", 
-            "lfo1amplitudemod", 
-            "lfo1trigger", 
-            "lfo1lag", 
-            "lfo1source", 
-            "-", 
-            "lfo2speed", 
-            "lfo2speedmod", 
-            "lfo2shape", 
-            "lfo2retrigger", 
-            "lfo2amplitude", 
-            "lfo2amplitudemod", 
-            "lfo2trigger", 
-            "lfo2lag", 
-            "lfo2source", 
-            "-"
-        };
+    {
+    "dco1frequency", 
+    "dco1frequencymod", 
+    "dco1sync", 
+    "dco1pulsewidth", 
+    "dco1pulsewidthmod", 
+    "dco1shape", 
+    "dco1waveenable", 
+    "dco1fixedmods1", 
+    "dco1fixedmods2", 
+    "dco1click", 
+    "dco2frequency", 
+    "dco2frequencymod", 
+    "dco2detune", 
+    "dco2pulsewidth", 
+    "dco2pulsewidthmod", 
+    "dco2shape", 
+    "dco2waveenable", 
+    "dco2fixedmods1", 
+    "dco2fixedmods2", 
+    "dco2click", 
+    "mix", 
+    "vcffrequency", 
+    "vcffrequencyenv1mod", 
+    "vcffrequencypressuremod", 
+    "vcfresonance", 
+    "vcffixedmods1", 
+    "vcffixedmods2", 
+    "vca1", 
+    "vca1velmod", 
+    "vca2env2mod", 
+    "vcffm", 
+    "vcffmenv3mod", 
+    "vcffmpressuremod", 
+    "trackingsource", 
+    "trackingpoint1", 
+    "trackingpoint2", 
+    "trackingpoint3", 
+    "trackingpoint4", 
+    "trackingpoint5", 
+    "-", 
+    "ramp1rate", 
+    "ramp1mode", 
+    "ramp2rate", 
+    "ramp2mode", 
+    "portamento", 
+    "portamentomod", 
+    "portamentomode", 
+    "portamentolegato", 
+    "keyboardmode", 
+    "-", 
+    "env1delay", 
+    "env1attack", 
+    "env1decay", 
+    "env1sustain", 
+    "env1release", 
+    "env1amplitude", 
+    "env1amplitudemod", 
+    "env1triggermode", 
+    "env1mode", 
+    "env1lfotriggermode", 
+    "env2delay", 
+    "env2attack", 
+    "env2decay", 
+    "env2sustain", 
+    "env2release", 
+    "env2amplitude", 
+    "env2amplitudemod", 
+    "env2triggermode", 
+    "env2mode", 
+    "env2lfotriggermode", 
+    "env3delay", 
+    "env3attack", 
+    "env3decay", 
+    "env3sustain", 
+    "env3release", 
+    "env3amplitude", 
+    "env3amplitudemod", 
+    "env3triggermode", 
+    "env3mode", 
+    "env3lfotriggermode", 
+    "lfo1speed", 
+    "lfo1speedmod", 
+    "lfo1shape", 
+    "lfo1retrigger", 
+    "lfo1amplitude", 
+    "lfo1amplitudemod", 
+    "lfo1trigger", 
+    "lfo1lag", 
+    "lfo1source", 
+    "-", 
+    "lfo2speed", 
+    "lfo2speedmod", 
+    "lfo2shape", 
+    "lfo2retrigger", 
+    "lfo2amplitude", 
+    "lfo2amplitudemod", 
+    "lfo2trigger", 
+    "lfo2lag", 
+    "lfo2source", 
+    "-"
+    };
     
     
     
@@ -916,302 +916,302 @@ public class OberheimMatrix1000 extends Synth
         parameter is expected to be signed. */
 
     final static int[] bitmasks = new int[/*100 or so*/]
-        {
-            7,
-            7,
-            7,
-            7,
-            7,
-            7,
-            7,
-            7,
-            2,
-            6,
-            6,
-            6,
-            2,
-            2,
-            6,
-            6,
-            6,
-            2,
-            3,
-            -6,
-            6,
-            2,
-            1,
-            2,
-            1,
-            2,
-            7,
-            6,
-            2,
-            2,
-            6,
-            6,
-            6,
-            2,
-            1,
-            6,
-            2,
-            1,
-            3,
-            5,
-            5,
-            6,
-            6,
-            2,
-            1,
-            3,
-            5,
-            5,
-            6,
-            3,
-            6,
-            6,
-            6,
-            6,
-            6,
-            6,
-            2,
-            2,
-            3,
-            6,
-            6,
-            6,
-            6,
-            6,
-            6,
-            2,
-            2,
-            3,
-            6,
-            6,
-            6,
-            6,
-            6,
-            6,
-            2,
-            2,
-            5,
-            6,
-            6,
-            6,
-            6,
-            6,
-            6,
-            2,
-            6,
-            2,
-            -7,
-            -7,
-            -7,
-            -7,
-            -7,
-            -7,
-            -7,
-            -7,
-            -7,
-            -7,
-            -7,
-            -7,
-            -7,
-            -7,
-            -7,
-            -7,
-            -7,
-            -7,
-            5,
-            -7,
-            5,
-            5,
-            -7,
-            5,
-            5,
-            -7,
-            5,
-            5,
-            -7,
-            5,
-            5,
-            -7,
-            5,
-            5,
-            -7,
-            5,
-            5,
-            -7,
-            5,
-            5,
-            -7,
-            5,
-            5,
-            -7,
-            5,
-            5,
-            -7,
-            5
-        };
+    {
+    7,
+    7,
+    7,
+    7,
+    7,
+    7,
+    7,
+    7,
+    2,
+    6,
+    6,
+    6,
+    2,
+    2,
+    6,
+    6,
+    6,
+    2,
+    3,
+    -6,
+    6,
+    2,
+    1,
+    2,
+    1,
+    2,
+    7,
+    6,
+    2,
+    2,
+    6,
+    6,
+    6,
+    2,
+    1,
+    6,
+    2,
+    1,
+    3,
+    5,
+    5,
+    6,
+    6,
+    2,
+    1,
+    3,
+    5,
+    5,
+    6,
+    3,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    2,
+    2,
+    3,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    2,
+    2,
+    3,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    2,
+    2,
+    5,
+    6,
+    6,
+    6,
+    6,
+    6,
+    6,
+    2,
+    6,
+    2,
+    -7,
+    -7,
+    -7,
+    -7,
+    -7,
+    -7,
+    -7,
+    -7,
+    -7,
+    -7,
+    -7,
+    -7,
+    -7,
+    -7,
+    -7,
+    -7,
+    -7,
+    -7,
+    5,
+    -7,
+    5,
+    5,
+    -7,
+    5,
+    5,
+    -7,
+    5,
+    5,
+    -7,
+    5,
+    5,
+    -7,
+    5,
+    5,
+    -7,
+    5,
+    5,
+    -7,
+    5,
+    5,
+    -7,
+    5,
+    5,
+    -7,
+    5,
+    5,
+    -7,
+    5
+    };
         
     final static boolean signed[] = new boolean[bitmasks.length];
         
     static
-    {
+        {
         for(int i = 0; i < bitmasks.length; i++)
             {
-                if (bitmasks[i] < 0)
-                    {
-                        bitmasks[i] = -bitmasks[i];
-                        signed[i] = true;
-                    }
+            if (bitmasks[i] < 0)
+                {
+                bitmasks[i] = -bitmasks[i];
+                signed[i] = true;
+                }
                                 
-                bitmasks[i] = (1 << bitmasks[i]) - 1;
+            bitmasks[i] = (1 << bitmasks[i]) - 1;
             }
-    }
+        }
                 
         
         
     final static String[] allParameters = new String[/*100 or so*/] 
-        {
-            "-",                // this is the name, but the Matrix 1000 doesn't recognize names
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "keyboardmode",                   
-            "dco1frequency",
-            "dco1shape",
-            "dco1pulsewidth",
-            "dco1fixedmods1",           // *
-            "dco1waveenable",           // *
-            "dco2frequency",
-            "dco2shape",
-            "dco2pulsewidth",
-            "dco2fixedmods1",           // *
-            "dco2waveenable",           // *
-            "dco2detune",
-            "mix",
-            "dco1fixedmods2",           // *
-            "dco1click",
-            "dco2fixedmods2",           // *
-            "dco2click",
-            "dco1sync",
-            "vcffrequency",
-            "vcfresonance",
-            "vcffixedmods1",                // *
-            "vcffixedmods2",                // *
-            "vcffm",
-            "vca1",
-            "portamento",
-            "portamentomode",               // *
-            "portamentolegato",
-            "lfo1speed",
-            "lfo1trigger",
-            "lfo1lag",
-            "lfo1shape",
-            "lfo1retrigger",
-            "lfo1source",
-            "lfo1amplitude",
-            "lfo2speed",
-            "lfo2trigger",
-            "lfo2lag",
-            "lfo2shape",
-            "lfo2retrigger",
-            "lfo2source",
-            "lfo2amplitude",
-            "env1triggermode",
-            "env1delay",
-            "env1attack",
-            "env1decay",
-            "env1sustain",
-            "env1release",
-            "env1amplitude",
-            "env1lfotriggermode",
-            "env1mode",
-            "env2triggermode",
-            "env2delay",
-            "env2attack",
-            "env2decay",
-            "env2sustain",
-            "env2release",
-            "env2amplitude",
-            "env2lfotriggermode",
-            "env2mode",
-            "env3triggermode",
-            "env3delay",
-            "env3attack",
-            "env3decay",
-            "env3sustain",
-            "env3release",
-            "env3amplitude",
-            "env3lfotriggermode",
-            "env3mode",
-            "trackingsource",
-            "trackingpoint1",
-            "trackingpoint2",
-            "trackingpoint3",
-            "trackingpoint4",
-            "trackingpoint5",
-            "ramp1rate",
-            "ramp1mode",
-            "ramp2rate",
-            "ramp2mode",
-            "dco1frequencymod",
-            "dco1pulsewidthmod",
-            "dco2frequencymod",
-            "dco2pulsewidthmod",
-            "vcffrequencyenv1mod",
-            "vcffrequencypressuremod",
-            "vca1velmod",
-            "vca2env2mod",
-            "env1amplitudemod",
-            "env2amplitudemod",
-            "env3amplitudemod",
-            "lfo1amplitudemod",
-            "lfo2amplitudemod",
-            "portamentomod",
-            "vcffmenv3mod",
-            "vcffmpressuremod",
-            "lfo1speedmod",
-            "lfo2speedmod",
-            "mod1source",
-            "mod1amount",
-            "mod1destination",
-            "mod2source",
-            "mod2amount",
-            "mod2destination",
-            "mod3source",
-            "mod3amount",
-            "mod3destination",
-            "mod4source",
-            "mod4amount",
-            "mod4destination",
-            "mod5source",
-            "mod5amount",
-            "mod5destination",
-            "mod6source",
-            "mod6amount",
-            "mod6destination",
-            "mod7source",
-            "mod7amount",
-            "mod7destination",
-            "mod8source",
-            "mod8amount",
-            "mod8destination",
-            "mod9source",
-            "mod9amount",
-            "mod9destination",
-            "mod10source",
-            "mod10amount",
-            "mod10destination"
-        };
+    {
+    "-",                // this is the name, but the Matrix 1000 doesn't recognize names
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "keyboardmode",                   
+    "dco1frequency",
+    "dco1shape",
+    "dco1pulsewidth",
+    "dco1fixedmods1",           // *
+    "dco1waveenable",           // *
+    "dco2frequency",
+    "dco2shape",
+    "dco2pulsewidth",
+    "dco2fixedmods1",           // *
+    "dco2waveenable",           // *
+    "dco2detune",
+    "mix",
+    "dco1fixedmods2",           // *
+    "dco1click",
+    "dco2fixedmods2",           // *
+    "dco2click",
+    "dco1sync",
+    "vcffrequency",
+    "vcfresonance",
+    "vcffixedmods1",                // *
+    "vcffixedmods2",                // *
+    "vcffm",
+    "vca1",
+    "portamento",
+    "portamentomode",               // *
+    "portamentolegato",
+    "lfo1speed",
+    "lfo1trigger",
+    "lfo1lag",
+    "lfo1shape",
+    "lfo1retrigger",
+    "lfo1source",
+    "lfo1amplitude",
+    "lfo2speed",
+    "lfo2trigger",
+    "lfo2lag",
+    "lfo2shape",
+    "lfo2retrigger",
+    "lfo2source",
+    "lfo2amplitude",
+    "env1triggermode",
+    "env1delay",
+    "env1attack",
+    "env1decay",
+    "env1sustain",
+    "env1release",
+    "env1amplitude",
+    "env1lfotriggermode",
+    "env1mode",
+    "env2triggermode",
+    "env2delay",
+    "env2attack",
+    "env2decay",
+    "env2sustain",
+    "env2release",
+    "env2amplitude",
+    "env2lfotriggermode",
+    "env2mode",
+    "env3triggermode",
+    "env3delay",
+    "env3attack",
+    "env3decay",
+    "env3sustain",
+    "env3release",
+    "env3amplitude",
+    "env3lfotriggermode",
+    "env3mode",
+    "trackingsource",
+    "trackingpoint1",
+    "trackingpoint2",
+    "trackingpoint3",
+    "trackingpoint4",
+    "trackingpoint5",
+    "ramp1rate",
+    "ramp1mode",
+    "ramp2rate",
+    "ramp2mode",
+    "dco1frequencymod",
+    "dco1pulsewidthmod",
+    "dco2frequencymod",
+    "dco2pulsewidthmod",
+    "vcffrequencyenv1mod",
+    "vcffrequencypressuremod",
+    "vca1velmod",
+    "vca2env2mod",
+    "env1amplitudemod",
+    "env2amplitudemod",
+    "env3amplitudemod",
+    "lfo1amplitudemod",
+    "lfo2amplitudemod",
+    "portamentomod",
+    "vcffmenv3mod",
+    "vcffmpressuremod",
+    "lfo1speedmod",
+    "lfo2speedmod",
+    "mod1source",
+    "mod1amount",
+    "mod1destination",
+    "mod2source",
+    "mod2amount",
+    "mod2destination",
+    "mod3source",
+    "mod3amount",
+    "mod3destination",
+    "mod4source",
+    "mod4amount",
+    "mod4destination",
+    "mod5source",
+    "mod5amount",
+    "mod5destination",
+    "mod6source",
+    "mod6amount",
+    "mod6destination",
+    "mod7source",
+    "mod7amount",
+    "mod7destination",
+    "mod8source",
+    "mod8amount",
+    "mod8destination",
+    "mod9source",
+    "mod9amount",
+    "mod9destination",
+    "mod10source",
+    "mod10amount",
+    "mod10destination"
+    };
 
 
     public byte[] emit(String key)
-    {
+        {
         if (key.equals("bank")) return new byte[0];  // this is not emittable
         if (key.equals("number")) return new byte[0];  // this is not emittable
 
@@ -1220,94 +1220,94 @@ public class OberheimMatrix1000 extends Synth
         
         if (key.equals("name"))
             {
-                return new byte[0];  // ignore
+            return new byte[0];  // ignore
             }
         else if (key.equals("env1lfotriggermode") || key.equals("env2lfotriggermode") || key.equals("env3lfotriggermode"))
             {
-                index = ((Integer)(internalParametersToIndex.get(key))).intValue();
-                value = model.get(key);
-                // convert
-                if (value >= 1) value = value + 1;  // there is no value = 1, that's the same as value = 0
+            index = ((Integer)(internalParametersToIndex.get(key))).intValue();
+            value = model.get(key);
+            // convert
+            if (value >= 1) value = value + 1;  // there is no value = 1, that's the same as value = 0
             }
         else if (key.equals("dco1bend") || key.equals("dco1vibrato"))
             {
-                index = ((Integer)(internalParametersToIndex.get("dco1fixedmods1"))).intValue();
-                value = model.get("dco1bend") |  (model.get("dco1vibrato") << 1);
+            index = ((Integer)(internalParametersToIndex.get("dco1fixedmods1"))).intValue();
+            value = model.get("dco1bend") |  (model.get("dco1vibrato") << 1);
             }
         else if (key.equals("dco1portamento"))
             {
-                index = ((Integer)(internalParametersToIndex.get("dco1fixedmods2"))).intValue();
-                value = model.get("dco1portamento");
+            index = ((Integer)(internalParametersToIndex.get("dco1fixedmods2"))).intValue();
+            value = model.get("dco1portamento");
             }
         else if (key.equals("dco2bend") || key.equals("dco2vibrato"))
             {
-                index = ((Integer)(internalParametersToIndex.get("dco2fixedmods1"))).intValue();
-                value = model.get("dco2bend") | (model.get("dco2vibrato") << 1);
+            index = ((Integer)(internalParametersToIndex.get("dco2fixedmods1"))).intValue();
+            value = model.get("dco2bend") | (model.get("dco2vibrato") << 1);
             }
         else if (key.equals("dco2portamento") || key.equals("dco2keytracking"))
             {
-                index = ((Integer)(internalParametersToIndex.get("dco2fixedmods2"))).intValue();
-                value = model.get("dco2portamento") | (model.get("dco2keytracking") << 1);
+            index = ((Integer)(internalParametersToIndex.get("dco2fixedmods2"))).intValue();
+            value = model.get("dco2portamento") | (model.get("dco2keytracking") << 1);
             }
         else if (key.equals("dco1wave") || key.equals("dco1pulse"))
             {
-                index = ((Integer)(internalParametersToIndex.get("dco1waveenable"))).intValue();
-                value = model.get("dco1pulse") | (model.get("dco1wave") << 1);
+            index = ((Integer)(internalParametersToIndex.get("dco1waveenable"))).intValue();
+            value = model.get("dco1pulse") | (model.get("dco1wave") << 1);
             }
         else if (key.equals("dco2wave") || key.equals("dco2pulse") || key.equals("dco2noise"))
             {
-                index = ((Integer)(internalParametersToIndex.get("dco2waveenable"))).intValue();
-                value = model.get("dco2pulse") | (model.get("dco2wave") << 1) | (model.get("dco2noise") << 2);
+            index = ((Integer)(internalParametersToIndex.get("dco2waveenable"))).intValue();
+            value = model.get("dco2pulse") | (model.get("dco2wave") << 1) | (model.get("dco2noise") << 2);
             }
         else if (key.equals("vcfbend") || key.equals("vcfvibrato"))
             {
-                index = ((Integer)(internalParametersToIndex.get("vcffixedmods1"))).intValue();
-                value = model.get("vcfbend") | (model.get("vcfvibrato") << 1);
+            index = ((Integer)(internalParametersToIndex.get("vcffixedmods1"))).intValue();
+            value = model.get("vcfbend") | (model.get("vcfvibrato") << 1);
             }
         else if (key.equals("vcfportamento") || key.equals("vcfkeytracking"))
             {
-                index = ((Integer)(internalParametersToIndex.get("vcffixedmods2"))).intValue();
-                value = model.get("vcfportamento") | (model.get("vcfkeytracking") << 1);
+            index = ((Integer)(internalParametersToIndex.get("vcffixedmods2"))).intValue();
+            value = model.get("vcfportamento") | (model.get("vcfkeytracking") << 1);
             }
         else if (key.equals("dco2detune"))
             {
-                index = ((Integer)(internalParametersToIndex.get(key))).intValue();
-                value = model.get(key) & 127;  // sign-extend to 7th bit only
+            index = ((Integer)(internalParametersToIndex.get(key))).intValue();
+            value = model.get(key) & 127;  // sign-extend to 7th bit only
             }
         else if (key.startsWith("mod"))
             {
-                int modnumber = (int)(key.charAt(3) - '0');
-                if (key.charAt(4) == '0') // it's 10
-                    modnumber = 10;
+            int modnumber = (int)(key.charAt(3) - '0');
+            if (key.charAt(4) == '0') // it's 10
+                modnumber = 10;
 
-                int modsource = model.get("mod" + modnumber  + "source");
-                int moddestination = model.get("mod" + modnumber  + "destination");
-                int modamount = model.get("mod" + modnumber  + "amount") & 127;
+            int modsource = model.get("mod" + modnumber  + "source");
+            int moddestination = model.get("mod" + modnumber  + "destination");
+            int modamount = model.get("mod" + modnumber  + "amount") & 127;
 
-                // if one is "None", then the other must be as well            
-                if (modsource == 0) moddestination = 0;
-                else if (moddestination == 0) modsource = 0;
+            // if one is "None", then the other must be as well            
+            if (modsource == 0) moddestination = 0;
+            else if (moddestination == 0) modsource = 0;
             
-                modnumber--;
+            modnumber--;
 
-                return new byte[] { (byte)0xF0, 0x10, 0x06, 0x0B, (byte)modnumber, (byte)modsource, (byte) modamount, (byte)moddestination, (byte)0xF7 };
+            return new byte[] { (byte)0xF0, 0x10, 0x06, 0x0B, (byte)modnumber, (byte)modsource, (byte) modamount, (byte)moddestination, (byte)0xF7 };
             }
         else if (key.equals("trackingsource"))
             {
-                index = ((Integer)(internalParametersToIndex.get(key))).intValue();
-                value = model.get(key) + 1;  // tracking source has no "none"
+            index = ((Integer)(internalParametersToIndex.get(key))).intValue();
+            value = model.get(key) + 1;  // tracking source has no "none"
             }
         // don't need to customize portamentomode though we'll have to do it on parse
         else
             {
-                index = ((Integer)(internalParametersToIndex.get(key))).intValue();
-                value = model.get(key);
+            index = ((Integer)(internalParametersToIndex.get(key))).intValue();
+            value = model.get(key);
             }
         
         byte VV = (byte)(value & 127);
         byte PP = (byte)(index & 127);
         return new byte[] { (byte)0xF0, 0x10, 0x06, 0x06, PP, VV, (byte)0xF7 };
-    }
+        }
     
 
     /// ERRORS IN MIDI SYSEX DESCRIPTION
@@ -1323,7 +1323,7 @@ public class OberheimMatrix1000 extends Synth
     /// push them to 0...127.
     
     public int parse(byte[] data, boolean fromFile)
-    {
+        {
         //  packing by two nibbles per byte (see http://www.youngmonkey.ca/nose/audio_tech/synth/Oberheim-OberheimMatrix1000.html)
         
         byte[] name = new byte[8];
@@ -1334,78 +1334,78 @@ public class OberheimMatrix1000 extends Synth
                         
         for(int i = 0; i < 134; i++)
             {
-                String key = allParameters[i];
+            String key = allParameters[i];
 
-                // unpack from nybbles
-                byte lonybble = data[i * 2 + 5];
-                byte hinybble = data[i * 2 + 5 + 1];
-                byte value = (byte)(((hinybble << 4) | (lonybble & 15)));
+            // unpack from nybbles
+            byte lonybble = data[i * 2 + 5];
+            byte hinybble = data[i * 2 + 5 + 1];
+            byte value = (byte)(((hinybble << 4) | (lonybble & 15)));
 
-                if (i < 8)  // it's the name
-                    name[i] = value;
-                else if (key.equals("env1lfotriggermode") || key.equals("env2lfotriggermode") || key.equals("env3lfotriggermode"))
-                    {
-                        // there is no value = 1, that's the same as value = 0
-                        if (value >= 1) value = (byte)(value - 1);
-                        model.set(key, value);
-                    }
-                else if (key.equals("dco1fixedmods1"))
-                    {
-                        model.set("dco1bend", value & 1);
-                        model.set("dco1vibrato", (value >>> 1) & 1);
-                    }
-                else if (key.equals("dco1fixedmods2"))
-                    {
-                        model.set("dco1portamento", value & 1);
-                    }
-                else if (key.equals("dco2fixedmods1"))
-                    {
-                        model.set("dco2bend", value & 1);
-                        model.set("dco2vibrato", (value >>> 1) & 1);
-                    }
-                else if (key.equals("dco2fixedmods2"))
-                    {
-                        model.set("dco2portamento", value & 1);
-                        model.set("dco2keytracking", (value >>> 1) & 1);
-                    }
-                else if (key.equals("dco1waveenable"))
-                    {
-                        model.set("dco1pulse", value & 1);
-                        model.set("dco1wave", (value >>> 1) & 1);
-                    }
-                else if (key.equals("dco2waveenable"))
-                    {
-                        model.set("dco2pulse", value & 1);
-                        model.set("dco2wave", (value >>> 1) & 1);
-                        model.set("dco2noise", (value >>> 2) & 1);
-                    }
-                else if (key.equals("vcffixedmods1"))
-                    {
-                        model.set("vcfbend", value & 1);
-                        model.set("vcfvibrato", (value >>> 1) & 1);
-                    }
-                else if (key.equals("vcffixedmods2"))
-                    {
-                        model.set("vcfportamento", value & 1);
-                        model.set("vcfkeytracking", (value >>> 1) & 1);
-                    }
-                else if (key.equals("portamentomode"))
-                    {
-                        if (value == 4)
-                            value = (byte)3;  // get rid of extra exponential
-                        model.set(key, value);
-                    }
-                else if (key.equals("trackingsource"))
-                    {
-                        if (value > 0)  // Some Matrix 1000 patches have the source set to 0 even though it's not supposed to be!
-                            model.set(key, (value - 1));  // tracking source has no "none"
-                        else
-                            System.err.println("Warning (OberheimMatrix1000): Tracking Source was incorrectly 0.  Setting to 1.");
-                    }
+            if (i < 8)  // it's the name
+                name[i] = value;
+            else if (key.equals("env1lfotriggermode") || key.equals("env2lfotriggermode") || key.equals("env3lfotriggermode"))
+                {
+                // there is no value = 1, that's the same as value = 0
+                if (value >= 1) value = (byte)(value - 1);
+                model.set(key, value);
+                }
+            else if (key.equals("dco1fixedmods1"))
+                {
+                model.set("dco1bend", value & 1);
+                model.set("dco1vibrato", (value >>> 1) & 1);
+                }
+            else if (key.equals("dco1fixedmods2"))
+                {
+                model.set("dco1portamento", value & 1);
+                }
+            else if (key.equals("dco2fixedmods1"))
+                {
+                model.set("dco2bend", value & 1);
+                model.set("dco2vibrato", (value >>> 1) & 1);
+                }
+            else if (key.equals("dco2fixedmods2"))
+                {
+                model.set("dco2portamento", value & 1);
+                model.set("dco2keytracking", (value >>> 1) & 1);
+                }
+            else if (key.equals("dco1waveenable"))
+                {
+                model.set("dco1pulse", value & 1);
+                model.set("dco1wave", (value >>> 1) & 1);
+                }
+            else if (key.equals("dco2waveenable"))
+                {
+                model.set("dco2pulse", value & 1);
+                model.set("dco2wave", (value >>> 1) & 1);
+                model.set("dco2noise", (value >>> 2) & 1);
+                }
+            else if (key.equals("vcffixedmods1"))
+                {
+                model.set("vcfbend", value & 1);
+                model.set("vcfvibrato", (value >>> 1) & 1);
+                }
+            else if (key.equals("vcffixedmods2"))
+                {
+                model.set("vcfportamento", value & 1);
+                model.set("vcfkeytracking", (value >>> 1) & 1);
+                }
+            else if (key.equals("portamentomode"))
+                {
+                if (value == 4)
+                    value = (byte)3;  // get rid of extra exponential
+                model.set(key, value);
+                }
+            else if (key.equals("trackingsource"))
+                {
+                if (value > 0)  // Some Matrix 1000 patches have the source set to 0 even though it's not supposed to be!
+                    model.set(key, (value - 1));  // tracking source has no "none"
                 else
-                    {
-                        model.set(key, value);
-                    }
+                    System.err.println("Warning (OberheimMatrix1000): Tracking Source was incorrectly 0.  Setting to 1.");
+                }
+            else
+                {
+                model.set(key, value);
+                }
             }
         
         // to get the bank, we'll try to extract it from the name.  It appears to be the fourth character
@@ -1421,66 +1421,66 @@ public class OberheimMatrix1000 extends Synth
         
         if (name[0] == 'B' && name[1] == 'N' && name[2] == 'K' && name[4] == ':' && name[5] == ' ')  // probably Matrix 1000, hence BNKx: yy
             {
-                bank = name[3] - '0';
-                if (bank < 0 || bank > 9)
-                    {
-                        bank = 0;
-                        char[] n = new char[8];
-                        for(int i = 0; i < 8; i++) 
-                            n[i] = (char)name[i];
-                        System.err.println("Warning (OberheimMatrix1000): \"BNK:\" found but invalid bank number discovered: " + new String(n));
-                    }
-                model.set("bank", bank);
-                                
-                if (bank >= 2 || useClassicPatchNames)
-                    model.set("name", PATCH_NAMES[bank * 100 + number]);
-                else
-                    model.set("name", "UNTITLED"); 
-            }
-        else                                                            // probably a Matrix 6/6R
-            {
-                boolean warning = false;
-                for(int i = 0; i < 8; i++)
-                    if (name[i] < 0x20)     // need to push up 0x00...0x1F to 0x40...0x5F
-                        name[i] += 0x40;
-                    else if (name[i] >= 0x40)       // need to keep 0x20...0x3F where it is, and there shouldn't be anything above 0x40 originally
-                        warning = true;
+            bank = name[3] - '0';
+            if (bank < 0 || bank > 9)
+                {
+                bank = 0;
                 char[] n = new char[8];
                 for(int i = 0; i < 8; i++) 
                     n[i] = (char)name[i];
-                if (warning)
-                    {
-                        System.err.println("Warning (OberheimMatrix1000): Invalid bytes in patch name discovered: " + new String(n));
-                    }
-                model.set("bank", 0);           // default?
-                model.set("name", new String(n));
+                System.err.println("Warning (OberheimMatrix1000): \"BNK:\" found but invalid bank number discovered: " + new String(n));
+                }
+            model.set("bank", bank);
+                                
+            if (bank >= 2 || useClassicPatchNames)
+                model.set("name", PATCH_NAMES[bank * 100 + number]);
+            else
+                model.set("name", "UNTITLED"); 
+            }
+        else                                                            // probably a Matrix 6/6R
+            {
+            boolean warning = false;
+            for(int i = 0; i < 8; i++)
+                if (name[i] < 0x20)     // need to push up 0x00...0x1F to 0x40...0x5F
+                    name[i] += 0x40;
+                else if (name[i] >= 0x40)       // need to keep 0x20...0x3F where it is, and there shouldn't be anything above 0x40 originally
+                    warning = true;
+            char[] n = new char[8];
+            for(int i = 0; i < 8; i++) 
+                n[i] = (char)name[i];
+            if (warning)
+                {
+                System.err.println("Warning (OberheimMatrix1000): Invalid bytes in patch name discovered: " + new String(n));
+                }
+            model.set("bank", 0);           // default?
+            model.set("name", new String(n));
             }
                 
         revise();
         return PARSE_SUCCEEDED;
-    }
+        }
     
 
     public boolean sendAllParametersInternal()
-    {
+        {
         if (m1000)
             {
-                return super.sendAllParametersInternal();
+            return super.sendAllParametersInternal();
             }
         else            // PC and write to scratch patch 99
             {
-                changePatch(0, 99);             // Patch 99 is our scratch patch for the Matrix 6/64
-                simplePause(getPauseAfterChangePatch());
-                tryToSendMIDI(emitAll(model, true, false));
-                return true;
+            changePatch(0, 99);             // Patch 99 is our scratch patch for the Matrix 6/64
+            simplePause(getPauseAfterChangePatch());
+            tryToSendMIDI(emitAll(model, true, false));
+            return true;
             }
-    }
+        }
 
 
     public int getPauseAfterWritePatch() { return 300; }        // Less than 200 and I'll get failures to PC the second time: at 250 I got a failure to write the patch.  250 might be enough but let's go for 300, yeah, it's a lot
     
     public byte[] emit(Model tempModel, boolean toWorkingMemory, boolean toFile)
-    {
+        {
         if (tempModel == null)
             tempModel = getModel();
 
@@ -1493,152 +1493,152 @@ public class OberheimMatrix1000 extends Synth
                 
         for(int i = 0; i < 134; i++)
             {
-                String key = allParameters[i];
+            String key = allParameters[i];
                 
-                if (i < 8)  // it's the name
-                    {
-                        value = name[i];
-                        if (value >= 0x40)
-                            value -= 0x40;  // push 0x40...0x5F to 0x00...0x1F
-                    }
-                else if (key.equals("env1lfotriggermode") || key.equals("env2lfotriggermode") || key.equals("env3lfotriggermode"))
-                    {
-                        value = model.get(key);
-                        // convert
-                        if (value >= 1) value = value + 1;  // there is no value = 1, that's the same as value = 0
-                    }
-                else if (key.equals("dco1fixedmods1"))
-                    {
-                        value = (model.get("dco1vibrato") << 1) |
-                            (model.get("dco1bend"));
-                    }
-                else if (key.equals("dco1fixedmods2"))
-                    {
-                        value = (model.get("dco1portamento"));
-                    }
-                else if (key.equals("dco2fixedmods1"))
-                    {
-                        value = (model.get("dco2vibrato") << 1) |
-                            (model.get("dco2bend"));
-                    }
-                else if (key.equals("dco2fixedmods2"))
-                    {
-                        value = (model.get("dco2keytracking") << 1) |
-                            (model.get("dco2portamento"));
-                    }
-                else if (key.equals("dco1waveenable"))
-                    {
-                        value = (model.get("dco1wave") << 1) |
-                            (model.get("dco1pulse"));
-                    }
-                else if (key.equals("dco2waveenable"))
-                    {
-                        value = (model.get("dco2noise") << 2) |
-                            (model.get("dco2wave") << 1) |
-                            (model.get("dco2pulse"));
-                    }
-                else if (key.equals("vcffixedmods1"))
-                    {
-                        value = (model.get("vcfvibrato") << 1) |
-                            (model.get("vcfbend"));
-                    }
-                else if (key.equals("vcffixedmods2"))
-                    {
-                        value = (model.get("vcfkeytracking") << 1) |
-                            (model.get("vcfportamento"));
-                    }
-                // Note: no need to handle portamentomode specially, but we DO have to parse it specially
+            if (i < 8)  // it's the name
+                {
+                value = name[i];
+                if (value >= 0x40)
+                    value -= 0x40;  // push 0x40...0x5F to 0x00...0x1F
+                }
+            else if (key.equals("env1lfotriggermode") || key.equals("env2lfotriggermode") || key.equals("env3lfotriggermode"))
+                {
+                value = model.get(key);
+                // convert
+                if (value >= 1) value = value + 1;  // there is no value = 1, that's the same as value = 0
+                }
+            else if (key.equals("dco1fixedmods1"))
+                {
+                value = (model.get("dco1vibrato") << 1) |
+                    (model.get("dco1bend"));
+                }
+            else if (key.equals("dco1fixedmods2"))
+                {
+                value = (model.get("dco1portamento"));
+                }
+            else if (key.equals("dco2fixedmods1"))
+                {
+                value = (model.get("dco2vibrato") << 1) |
+                    (model.get("dco2bend"));
+                }
+            else if (key.equals("dco2fixedmods2"))
+                {
+                value = (model.get("dco2keytracking") << 1) |
+                    (model.get("dco2portamento"));
+                }
+            else if (key.equals("dco1waveenable"))
+                {
+                value = (model.get("dco1wave") << 1) |
+                    (model.get("dco1pulse"));
+                }
+            else if (key.equals("dco2waveenable"))
+                {
+                value = (model.get("dco2noise") << 2) |
+                    (model.get("dco2wave") << 1) |
+                    (model.get("dco2pulse"));
+                }
+            else if (key.equals("vcffixedmods1"))
+                {
+                value = (model.get("vcfvibrato") << 1) |
+                    (model.get("vcfbend"));
+                }
+            else if (key.equals("vcffixedmods2"))
+                {
+                value = (model.get("vcfkeytracking") << 1) |
+                    (model.get("vcfportamento"));
+                }
+            // Note: no need to handle portamentomode specially, but we DO have to parse it specially
                         
-                // Ugh, all this below is to deal with the source=destination=0 requirement.  Yuck.
+            // Ugh, all this below is to deal with the source=destination=0 requirement.  Yuck.
                 
-                else if (key.equals("mod1source") || key.equals("mod1destination"))
-                    {
-                        value = model.get(key);
-                        if (model.get("mod1source") == 0 || model.get("mod1destination") == 0)
-                            value = 0;
-                    }
-                else if (key.equals("mod2source") || key.equals("mod2destination"))
-                    {
-                        value = model.get(key);
-                        if (model.get("mod2source") == 0 || model.get("mod2destination") == 0)
-                            value = 0;
-                    }
-                else if (key.equals("mod3source") || key.equals("mod3destination"))
-                    {
-                        value = model.get(key);
-                        if (model.get("mod3source") == 0 || model.get("mod3destination") == 0)
-                            value = 0;
-                    }
-                else if (key.equals("mod4source") || key.equals("mod4destination"))
-                    {
-                        value = model.get(key);
-                        if (model.get("mod4source") == 0 || model.get("mod4destination") == 0)
-                            value = 0;
-                    }
-                else if (key.equals("mod5source") || key.equals("mod5destination"))
-                    {
-                        value = model.get(key);
-                        if (model.get("mod5source") == 0 || model.get("mod5destination") == 0)
-                            value = 0;
-                    }
-                else if (key.equals("mod6source") || key.equals("mod6destination"))
-                    {
-                        value = model.get(key);
-                        if (model.get("mod6source") == 0 || model.get("mod6destination") == 0)
-                            value = 0;
-                    }
-                else if (key.equals("mod7source") || key.equals("mod7destination"))
-                    {
-                        value = model.get(key);
-                        if (model.get("mod7source") == 0 || model.get("mod7destination") == 0)
-                            value = 0;
-                    }
-                else if (key.equals("mod8source") || key.equals("mod8destination"))
-                    {
-                        value = model.get(key);
-                        if (model.get("mod8source") == 0 || model.get("mod8destination") == 0)
-                            value = 0;
-                    }
-                else if (key.equals("mod9source") || key.equals("mod9destination"))
-                    {
-                        value = model.get(key);
-                        if (model.get("mod9source") == 0 || model.get("mod9destination") == 0)
-                            value = 0;
-                    }
-                else if (key.equals("mod10source") || key.equals("mod10destination"))
-                    {
-                        value = model.get(key);
-                        if (model.get("mod10source") == 0 || model.get("mod10destination") == 0)
-                            value = 0;
-                    }
-                else if (key.equals("trackingsource"))
-                    {
-                        value = model.get(key) + 1;  // tracking source has no "none"
-                    }
-                else
-                    {
-                        value = model.get(key);
-                    }
+            else if (key.equals("mod1source") || key.equals("mod1destination"))
+                {
+                value = model.get(key);
+                if (model.get("mod1source") == 0 || model.get("mod1destination") == 0)
+                    value = 0;
+                }
+            else if (key.equals("mod2source") || key.equals("mod2destination"))
+                {
+                value = model.get(key);
+                if (model.get("mod2source") == 0 || model.get("mod2destination") == 0)
+                    value = 0;
+                }
+            else if (key.equals("mod3source") || key.equals("mod3destination"))
+                {
+                value = model.get(key);
+                if (model.get("mod3source") == 0 || model.get("mod3destination") == 0)
+                    value = 0;
+                }
+            else if (key.equals("mod4source") || key.equals("mod4destination"))
+                {
+                value = model.get(key);
+                if (model.get("mod4source") == 0 || model.get("mod4destination") == 0)
+                    value = 0;
+                }
+            else if (key.equals("mod5source") || key.equals("mod5destination"))
+                {
+                value = model.get(key);
+                if (model.get("mod5source") == 0 || model.get("mod5destination") == 0)
+                    value = 0;
+                }
+            else if (key.equals("mod6source") || key.equals("mod6destination"))
+                {
+                value = model.get(key);
+                if (model.get("mod6source") == 0 || model.get("mod6destination") == 0)
+                    value = 0;
+                }
+            else if (key.equals("mod7source") || key.equals("mod7destination"))
+                {
+                value = model.get(key);
+                if (model.get("mod7source") == 0 || model.get("mod7destination") == 0)
+                    value = 0;
+                }
+            else if (key.equals("mod8source") || key.equals("mod8destination"))
+                {
+                value = model.get(key);
+                if (model.get("mod8source") == 0 || model.get("mod8destination") == 0)
+                    value = 0;
+                }
+            else if (key.equals("mod9source") || key.equals("mod9destination"))
+                {
+                value = model.get(key);
+                if (model.get("mod9source") == 0 || model.get("mod9destination") == 0)
+                    value = 0;
+                }
+            else if (key.equals("mod10source") || key.equals("mod10destination"))
+                {
+                value = model.get(key);
+                if (model.get("mod10source") == 0 || model.get("mod10destination") == 0)
+                    value = 0;
+                }
+            else if (key.equals("trackingsource"))
+                {
+                value = model.get(key) + 1;  // tracking source has no "none"
+                }
+            else
+                {
+                value = model.get(key);
+                }
             
-                // pack to nybbles
+            // pack to nybbles
             
-                if (value < 0) value += 256;  // so we're positive.
-                byte lonybble = (byte)(value & 15);
-                byte hinybble = (byte)((value >>> 4) & 15);
+            if (value < 0) value += 256;  // so we're positive.
+            byte lonybble = (byte)(value & 15);
+            byte hinybble = (byte)((value >>> 4) & 15);
             
-                // From here:  http://www.youngmonkey.ca/nose/audio_tech/synth/Oberheim-Matrix6R.html
-                // it says this about the checksum:
-                //
-                // Checksum.
-                // The original (not transmitted) data is summed in seven bits ignoring overflows
-                //
-                // I think this means to add into a byte, and then mask to 127.
+            // From here:  http://www.youngmonkey.ca/nose/audio_tech/synth/Oberheim-Matrix6R.html
+            // it says this about the checksum:
+            //
+            // Checksum.
+            // The original (not transmitted) data is summed in seven bits ignoring overflows
+            //
+            // I think this means to add into a byte, and then mask to 127.
             
-                check += value;
+            check += value;
                 
-                // write
-                data[i * 2] = lonybble;
-                data[i * 2 + 1] = hinybble;
+            // write
+            data[i * 2] = lonybble;
+            data[i * 2 + 1] = hinybble;
             }
     
         byte checksum = (byte)(check & 127);
@@ -1649,21 +1649,21 @@ public class OberheimMatrix1000 extends Synth
 
         if (toWorkingMemory && m1000)
             {
-                // 0DH - SINGLE PATCH DATA TO EDIT BUFFER
-                d[3] = (byte)0x0D;
-                d[4] = (byte)0x00;
+            // 0DH - SINGLE PATCH DATA TO EDIT BUFFER
+            d[3] = (byte)0x0D;
+            d[4] = (byte)0x00;
             }
         else if (toWorkingMemory)   // 6/6R only
             {
-                // 01H-SINGLE PATCH DATA
-                d[3] = (byte)0x01;
-                d[4] = (byte)99;                    // our scratch patch
+            // 01H-SINGLE PATCH DATA
+            d[3] = (byte)0x01;
+            d[4] = (byte)99;                    // our scratch patch
             }
         else
             {
-                // 01H-SINGLE PATCH DATA
-                d[3] = (byte)0x01;
-                d[4] = (byte)tempModel.get("number");
+            // 01H-SINGLE PATCH DATA
+            d[3] = (byte)0x01;
+            d[4] = (byte)tempModel.get("number");
             }
 
         System.arraycopy(data, 0, d, 5, 268);
@@ -1671,18 +1671,18 @@ public class OberheimMatrix1000 extends Synth
         d[274] = (byte)0xF7;
                 
         return d;
-    }
+        }
         
         
         
     public void changePatch(Model tempModel)
-    {
+        {
         changePatch(tempModel.get("bank"), tempModel.get("number"));
-    }
+        }
 
 
     public void changePatch(int bank, int number)
-    {
+        {
         // first change the bank
                 
         // 0AH - SET BANK
@@ -1721,12 +1721,12 @@ public class OberheimMatrix1000 extends Synth
                 
         byte NN = (byte)number;
         tryToSendMIDI(buildPC(getChannelOut(), NN));
-    }
+        }
 
 
 
     public byte[] requestCurrentDump()
-    {               
+        {               
         byte[] data = new byte[7];
         data[0] = (byte)0xF0;
         data[1] = (byte)0x10;
@@ -1736,10 +1736,10 @@ public class OberheimMatrix1000 extends Synth
         data[5] = (byte)0x00;
         data[6] = (byte)0xF7;
         return data;
-    }
+        }
 
     public byte[] requestDump(Model tempModel)
-    {               
+        {               
         if (tempModel == null)
             tempModel = getModel();
 
@@ -1753,11 +1753,11 @@ public class OberheimMatrix1000 extends Synth
         data[5] = (byte)(tempModel.get("number"));
         data[6] = (byte)0xF7;
         return data;
-    }
+        }
                     
     public static final int MAXIMUM_NAME_LENGTH = 8;
     public String revisePatchName(String name)
-    {
+        {
         name = super.revisePatchName(name);  // trim first time
         if (name.length() > MAXIMUM_NAME_LENGTH)
             name = name.substring(0, MAXIMUM_NAME_LENGTH);
@@ -1765,19 +1765,19 @@ public class OberheimMatrix1000 extends Synth
         StringBuffer nameb = new StringBuffer(name);                            
         for(int i = 0 ; i < nameb.length(); i++)
             {
-                char c = nameb.charAt(i);
-                if (c >= 0x60) c = (char)(c - 0x20);  // make uppercase etc.
-                if (c < 0x20 || c >= 0x60) c = ' ';
-                nameb.setCharAt(i, c);
+            char c = nameb.charAt(i);
+            if (c >= 0x60) c = (char)(c - 0x20);  // make uppercase etc.
+            if (c < 0x20 || c >= 0x60) c = ' ';
+            nameb.setCharAt(i, c);
             }
         name = nameb.toString();
         return super.revisePatchName(name);  // trim again
-    }
+        }
 
 
     /** Verify that all the parameters are within valid values, and tweak them if not. */
     public void revise()
-    {
+        {
         // check the easy stuff -- out of range parameters
         super.revise();
         
@@ -1785,7 +1785,7 @@ public class OberheimMatrix1000 extends Synth
         String newnm = revisePatchName(nm);
         if (!nm.equals(newnm))
             model.set("name", newnm);
-    }
+        }
         
     public int getPauseAfterSendOneParameter() { return 75; }
 
@@ -1797,27 +1797,27 @@ public class OberheimMatrix1000 extends Synth
     
     
     public Model getNextPatchLocation(Model model)
-    {
+        {
         int bank = model.get("bank");
         int number = model.get("number");
         
         number++;
         if (number >= 100)
             {
-                bank++;
-                number = 0;
-                if (bank >= 10)
-                    bank = 0;
+            bank++;
+            number = 0;
+            if (bank >= 10)
+                bank = 0;
             }
                 
         Model newModel = buildModel();
         newModel.set("bank", bank);
         newModel.set("number", number);
         return newModel;
-    }
+        }
 
     public String getPatchLocationName(Model model)
-    {
+        {
         // getPatchLocationName() is called from sprout() as a test to see if we should enable
         // batch downloading.  If we haven't yet created an .init file, then parameters won't exist
         // yet and this method will bomb badly.  So we return null in this case.
@@ -1828,12 +1828,12 @@ public class OberheimMatrix1000 extends Synth
         return ("" + model.get("bank")) + 
             (number > 9 ? "" : "0") + 
             (model.get("number"));
-    }
+        }
 
     public boolean useClassicPatchNames = true;
 
     public void addOberheimMenu()
-    {
+        {
         JMenu menu = new JMenu("Matrix 1000");
         menubar.add(menu);
 
@@ -1844,10 +1844,10 @@ public class OberheimMatrix1000 extends Synth
 
         useClassicPatchNamesMenu.addActionListener(new ActionListener()
             {
-                public void actionPerformed(ActionEvent evt)
+            public void actionPerformed(ActionEvent evt)
                 {
-                    useClassicPatchNames = useClassicPatchNamesMenu.isSelected();
-                    setLastX("" + useClassicPatchNames, "UseClassicPatchNames", getSynthName(), true);
+                useClassicPatchNames = useClassicPatchNamesMenu.isSelected();
+                setLastX("" + useClassicPatchNames, "UseClassicPatchNames", getSynthName(), true);
                 }
             });
         
@@ -1865,32 +1865,32 @@ public class OberheimMatrix1000 extends Synth
         // load patch
         for(int i = 0; i < 1000; i += 50)
             {
-                JMenu patchgroup = new JMenu("" + "Request Patch " + (i < 100 ? (i < 10 ? "00" : "0") : "" ) + i + "..." + (i < 100 ? "0" : "") + (i + 49));
-                menu.add(patchgroup);
-                for(int j = i; j < i + 50; j++)
+            JMenu patchgroup = new JMenu("" + "Request Patch " + (i < 100 ? (i < 10 ? "00" : "0") : "" ) + i + "..." + (i < 100 ? "0" : "") + (i + 49));
+            menu.add(patchgroup);
+            for(int j = i; j < i + 50; j++)
+                {
+                final int _j = j;
+                JMenuItem patch = new JMenuItem("" + 
+                    (j < 100 ? (j < 10 ? "00" + j : "0" + j) : "" + j) + ": " + 
+                    PATCH_NAMES[j]);
+                patch.addActionListener(new ActionListener()
                     {
-                        final int _j = j;
-                        JMenuItem patch = new JMenuItem("" + 
-                                                        (j < 100 ? (j < 10 ? "00" + j : "0" + j) : "" + j) + ": " + 
-                                                        PATCH_NAMES[j]);
-                        patch.addActionListener(new ActionListener()
-                            {
-                                public void actionPerformed(ActionEvent evt)
-                                {
-                                    Model tempModel = buildModel();
-                                    tempModel.set("number", _j % 100);
-                                    tempModel.set("bank", _j / 100);
-                                    performRequestDump(tempModel, true);
-                                }
-                            });
-                        patchgroup.add(patch);
-                    }
+                    public void actionPerformed(ActionEvent evt)
+                        {
+                        Model tempModel = buildModel();
+                        tempModel.set("number", _j % 100);
+                        tempModel.set("bank", _j / 100);
+                        performRequestDump(tempModel, true);
+                        }
+                    });
+                patchgroup.add(patch);
+                }
             }
-    }
+        }
  
     // These are drawn from the "Matrix 1000 Patchbook"
     public static final String[] PATCH_NAMES = 
-    {
+        {
         "TOTOHORN",
         "1000STRG",
         "MOOOG_B",
@@ -2891,16 +2891,16 @@ public class OberheimMatrix1000 extends Synth
         "D\"AMMOND",
         "GREEZY1",
         "GRNDR 6*"
-    };
+        };
         
     public boolean testVerify(Synth synth2, 
-                              String key,
-                              Object obj1, Object obj2) 
-    {
+        String key,
+        Object obj1, Object obj2) 
+        {
         // destinations must be zero when sources are zero
         if (key.endsWith("source")) return true;
         if (key.endsWith("destination")) return true;
         return false;
-    }
+        }
 
-}
+    }

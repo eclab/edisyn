@@ -14,12 +14,12 @@ import java.awt.event.*;
 
 
 public class TextLabel extends JLabel
-{
-    public TextLabel(String text)
     {
+    public TextLabel(String text)
+        {
         super(text, SwingConstants.LEFT);
         setFont(Style.SMALL_FONT());
         setBackground(Style.BACKGROUND_COLOR());  // Style.TRANSPARENT);
         setForeground(Style.TEXT_COLOR());
+        }
     }
-}

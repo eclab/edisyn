@@ -23,7 +23,7 @@ import javax.sound.midi.*;
 */
 
 public class OberheimMatrix1000Global extends Synth
-{
+    {
     /// Various collections of parameter names for pop-up menus
     
     public static final String[] MOD_SOURCES = new String[] { "Off", "Lever 2", "Pedal 1" };
@@ -31,10 +31,10 @@ public class OberheimMatrix1000Global extends Synth
     public static final String[] SCALE_TYPES = new String[] { "Linear", "Exponential 1", "Exponential 2" }; 
     
     public OberheimMatrix1000Global()
-    {
+        {
         for(int i = 0; i < allParameters.length; i++)
             {
-                allParametersToIndex.put(allParameters[i], Integer.valueOf(i));
+            allParametersToIndex.put(allParameters[i], Integer.valueOf(i));
             }
 
         /// SOUND PANEL
@@ -71,24 +71,24 @@ public class OberheimMatrix1000Global extends Synth
         addTab("Groups 500-999", groupPanel);
 
         loadDefaults();        
-    }
+        }
                 
     public String getDefaultResourceFileName() { return "OberheimMatrix1000Global.init"; }
     public String getHTMLResourceFileName() { return "OberheimMatrix1000Global.html"; }
 
     public JFrame sprout()
-    {
+        {
         JFrame frame = super.sprout();
         receivePatch.setEnabled(false);
         transmitTo.setEnabled(false);
         writeTo.setEnabled(false);
         merge.setEnabled(false);
         return frame;
-    }
+        }
 
     /** Add the global patch category (name, id, number, etc.) */
     public JComponent addNameGlobal(Color color)
-    {
+        {
         Category globalCategory = new Category(this, "Oberheim Matrix 1000 [Global]", color);
         //globalCategory.makeUnresettable();
                 
@@ -100,10 +100,10 @@ public class OberheimMatrix1000Global extends Synth
         
         globalCategory.add(hbox, BorderLayout.WEST);
         return globalCategory;
-    }
+        }
 
     public JComponent addVibrato(Color color)
-    {
+        {
         Category category = new Category(this, "Vibrato", color);
 
         JComponent comp;
@@ -141,11 +141,11 @@ public class OberheimMatrix1000Global extends Synth
 
         category.add(hbox, BorderLayout.CENTER);
         return category;
-    }
+        }
                 
 
     public JComponent addMIDI(Color color)
-    {
+        {
         Category category = new Category(this, "MIDI", color);
                 
         JComponent comp;
@@ -195,11 +195,11 @@ public class OberheimMatrix1000Global extends Synth
                 
         category.add(hbox, BorderLayout.WEST);
         return category;
-    }
+        }
 
 
     public JComponent addGeneral(Color color)
-    {
+        {
         Category category = new Category(this, "General", color);
                 
         JComponent comp;
@@ -233,7 +233,7 @@ public class OberheimMatrix1000Global extends Synth
         hbox.add(comp);
         category.add(hbox, BorderLayout.WEST);
         return category;
-    }
+        }
 
 
     /*
@@ -310,7 +310,7 @@ public class OberheimMatrix1000Global extends Synth
 
         
     public JComponent addGroups(Color color)
-    {
+        {
         Category category = new Category(this, "Group Mode", color);
                 
         JComponent comp;
@@ -330,10 +330,10 @@ public class OberheimMatrix1000Global extends Synth
                         
         category.add(hbox, BorderLayout.WEST);
         return category;
-    }
+        }
 
     public JComponent addGroupsEnable(int start, Color color)
-    {
+        {
         Category category = new Category(this, "Group Mode Patches " + (start == 0 ? "0-499" : "500-999"), color);
         category.makeDistributable("group");
                                 
@@ -344,19 +344,19 @@ public class OberheimMatrix1000Global extends Synth
         
         for(int i = start; i < start + 500; i += 20)
             {
-                HBox hbox2 = new HBox();
-                for(int j = i; j < i + 20; j++)
-                    {
-                        comp = new CheckBox(j < 10 ? "00" + j : (j < 100 ? "0" + j : "" + j),  this, "group" + j);
-                        ((CheckBox)comp).addToWidth(1);
-                        hbox2.add(comp);
-                    }
-                vbox.add(hbox2);
+            HBox hbox2 = new HBox();
+            for(int j = i; j < i + 20; j++)
+                {
+                comp = new CheckBox(j < 10 ? "00" + j : (j < 100 ? "0" + j : "" + j),  this, "group" + j);
+                ((CheckBox)comp).addToWidth(1);
+                hbox2.add(comp);
+                }
+            vbox.add(hbox2);
             }
                         
         category.add(vbox, BorderLayout.WEST);
         return category;
-    }
+        }
 
 
 
@@ -365,57 +365,57 @@ public class OberheimMatrix1000Global extends Synth
     HashMap allParametersToIndex = new HashMap();
                 
     final static String[] allParameters = new String[/*100 or so*/] 
-        {
-            "-",
-            "vibratospeed",                   
-            "vibratospeedmodsourcecode",
-            "vibratospeedmodulationamount",
-            "vibratowaveform",
-            "vibratoamplitude",
-            "vibratoampmodsourcecode",
-            "vibratoampmodulationamount",
-            "mastertune",                                                       //   ** signed **
-            "-",
-            "-",
-            "midibasicchannel",
-            "midiomnimodeenable",
-            "midicontrollersenable",
-            "midipatchchangesenable",
-            "-",                                                
-            "-",
-            "midipedal1controller",
-            "midipedal2controller",
-            "midilever2controller",
-            "midilever3controller",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "midiechoenable",
-            "-",                                                        // byte 33.  Not directly stated in docs
-            "mastertranspose",                                          //      ** signed **
-            "midimonomodeenable",
+    {
+    "-",
+    "vibratospeed",                   
+    "vibratospeedmodsourcecode",
+    "vibratospeedmodulationamount",
+    "vibratowaveform",
+    "vibratoamplitude",
+    "vibratoampmodsourcecode",
+    "vibratoampmodulationamount",
+    "mastertune",                                                       //   ** signed **
+    "-",
+    "-",
+    "midibasicchannel",
+    "midiomnimodeenable",
+    "midicontrollersenable",
+    "midipatchchangesenable",
+    "-",                                                
+    "-",
+    "midipedal1controller",
+    "midipedal2controller",
+    "midilever2controller",
+    "midilever3controller",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "midiechoenable",
+    "-",                                                        // byte 33.  Not directly stated in docs
+    "mastertranspose",                                          //      ** signed **
+    "midimonomodeenable",
     
-            // Skip 125 group enables, then...
+    // Skip 125 group enables, then...
     
-            "-",
-            "-",
-            "bendrange",
-            "banklockenable",
-            "numberofunits",
-            "currentunitnumber",
-            "groupmodeenable",
-            "unisonenable",
-            "volumeinvertenable",
-            "memoryprotectenable",
-        };
+    "-",
+    "-",
+    "bendrange",
+    "banklockenable",
+    "numberofunits",
+    "currentunitnumber",
+    "groupmodeenable",
+    "unisonenable",
+    "volumeinvertenable",
+    "memoryprotectenable",
+    };
 
 
     /// ERRORS IN MIDI SYSEX DESCRIPTION
@@ -427,39 +427,39 @@ public class OberheimMatrix1000Global extends Synth
     /// the byte into two nybbles and that's all.
     
     public int parse(byte[] data, boolean fromFile)
-    {
+        {
         int pos = 5;
         
         for(int i = 0; i < 36; i++)
             {
-                String key = allParameters[i];
-                if (key.equals("-")) { pos += 2; continue; }
+            String key = allParameters[i];
+            if (key.equals("-")) { pos += 2; continue; }
             
-                // unpack from nybbles
-                byte lonybble = data[pos++];
-                byte hinybble = data[pos++];
-                byte value = (byte)(((hinybble << 4) | (lonybble & 15)));
+            // unpack from nybbles
+            byte lonybble = data[pos++];
+            byte hinybble = data[pos++];
+            byte value = (byte)(((hinybble << 4) | (lonybble & 15)));
                         
-                model.set(key, value);          // this *should* work for the signed ones too
+            model.set(key, value);          // this *should* work for the signed ones too
             }
                 
         int group = 0;
         // handle group enables
         for(int i = 0; i < 125; i++)
             {
-                // unpack from nybbles
-                byte lonybble = data[pos++];
-                byte hinybble = data[pos++];
-                byte value = (byte)(((hinybble << 4) | (lonybble & 15)));
+            // unpack from nybbles
+            byte lonybble = data[pos++];
+            byte hinybble = data[pos++];
+            byte value = (byte)(((hinybble << 4) | (lonybble & 15)));
                         
-                model.set("group" + group++, (value >>> 0) & 1);
-                model.set("group" + group++, (value >>> 1) & 1);
-                model.set("group" + group++, (value >>> 2) & 1);
-                model.set("group" + group++, (value >>> 3) & 1);
-                model.set("group" + group++, (value >>> 4) & 1);
-                model.set("group" + group++, (value >>> 5) & 1);
-                model.set("group" + group++, (value >>> 6) & 1);
-                model.set("group" + group++, (value >>> 7) & 1);
+            model.set("group" + group++, (value >>> 0) & 1);
+            model.set("group" + group++, (value >>> 1) & 1);
+            model.set("group" + group++, (value >>> 2) & 1);
+            model.set("group" + group++, (value >>> 3) & 1);
+            model.set("group" + group++, (value >>> 4) & 1);
+            model.set("group" + group++, (value >>> 5) & 1);
+            model.set("group" + group++, (value >>> 6) & 1);
+            model.set("group" + group++, (value >>> 7) & 1);
             }
                         
         // we have one extra byte from the group enables.  Not sure why.  We will be ignoring it.
@@ -467,31 +467,31 @@ public class OberheimMatrix1000Global extends Synth
                 
         for(int i = 36; i < 46; i++)
             {
-                String key = allParameters[i];
-                if (key.equals("-")) { pos += 2; continue; }
+            String key = allParameters[i];
+            if (key.equals("-")) { pos += 2; continue; }
             
-                // unpack from nybbles
-                byte lonybble = data[pos++];
-                byte hinybble = data[pos++];
-                byte value = (byte)(((hinybble << 4) | (lonybble & 15)));
+            // unpack from nybbles
+            byte lonybble = data[pos++];
+            byte hinybble = data[pos++];
+            byte value = (byte)(((hinybble << 4) | (lonybble & 15)));
             
-                if (key.equals("banklockenable"))
-                    model.set(key, hinybble > 0 ? 1 : 0);   // MSB only.  The M1000 sets 0x08 vs 0x00
-                else if (key.equals("groupmodeenable"))
-                    model.set(key, hinybble);               // MSB only
-                else
-                    model.set(key, value);          // this *should* work for the signed ones too
+            if (key.equals("banklockenable"))
+                model.set(key, hinybble > 0 ? 1 : 0);   // MSB only.  The M1000 sets 0x08 vs 0x00
+            else if (key.equals("groupmodeenable"))
+                model.set(key, hinybble);               // MSB only
+            else
+                model.set(key, value);          // this *should* work for the signed ones too
             }
                 
         revise();
         return PARSE_SUCCEEDED;
-    }
+        }
     
 
     public int getPauseAfterWritePatch() { return 300; }        // Less than 200 and I'll get failures to PC the second time: at 250 I got a failure to write the patch.  250 might be enough but let's go for 300, yeah, it's a lot
     
     public byte[] emit(Model tempModel, boolean toWorkingMemory, boolean toFile)
-    {
+        {
         if (tempModel == null)
             tempModel = getModel();
 
@@ -508,24 +508,24 @@ public class OberheimMatrix1000Global extends Synth
         int pos = 0;
         for(int i = 0; i < 36; i++)
             {
-                String key = allParameters[i];
-                if (key.equals("-")) { pos++; continue; }
+            String key = allParameters[i];
+            if (key.equals("-")) { pos++; continue; }
             
-                d[pos++] = (byte)model.get(key, 0);                 // should work for signed too
+            d[pos++] = (byte)model.get(key, 0);                 // should work for signed too
             }
                 
         int group = 0;
         // handle group enables
         for(int i = 0; i < 125; i++)
             {
-                d[pos++] = (byte)(      (model.get("group" + group++, 0) << 0) |
-                                        (model.get("group" + group++, 0) << 1) |
-                                        (model.get("group" + group++, 0) << 2) |
-                                        (model.get("group" + group++, 0) << 3) |
-                                        (model.get("group" + group++, 0) << 4) |
-                                        (model.get("group" + group++, 0) << 5) |
-                                        (model.get("group" + group++, 0) << 6) |
-                                        (model.get("group" + group++, 0) << 7));
+            d[pos++] = (byte)(      (model.get("group" + group++, 0) << 0) |
+                (model.get("group" + group++, 0) << 1) |
+                (model.get("group" + group++, 0) << 2) |
+                (model.get("group" + group++, 0) << 3) |
+                (model.get("group" + group++, 0) << 4) |
+                (model.get("group" + group++, 0) << 5) |
+                (model.get("group" + group++, 0) << 6) |
+                (model.get("group" + group++, 0) << 7));
             }
 
         // we have one extra byte from the group enables.  Not sure why.  CTRLR suggests
@@ -535,12 +535,12 @@ public class OberheimMatrix1000Global extends Synth
                 
         for(int i = 36; i < 46; i++)
             {
-                String key = allParameters[i];
-                if (key.equals("-")) { pos++; continue; }
-                if (key.equals("banklockenable") || key.equals("groupmodeenable"))
-                    d[pos++] = (byte)(model.get(key, 0) << 4);  // Shift to MSB only
-                else       
-                    d[pos++] = (byte)model.get(key, 0);                     // should work for signed too
+            String key = allParameters[i];
+            if (key.equals("-")) { pos++; continue; }
+            if (key.equals("banklockenable") || key.equals("groupmodeenable"))
+                d[pos++] = (byte)(model.get(key, 0) << 4);  // Shift to MSB only
+            else       
+                d[pos++] = (byte)model.get(key, 0);                     // should work for signed too
             }
                 
         int check = 0;
@@ -548,28 +548,28 @@ public class OberheimMatrix1000Global extends Synth
         // pack to nybbles
         for(int i = 0; i < 172; i++)
             {
-                int value = (d[i] & 255);  // make positive
-                data[i * 2 + 5] = (byte)(value & 15);
-                data[i * 2 + 5 + 1] = (byte)((value >>> 4) & 15);
+            int value = (d[i] & 255);  // make positive
+            data[i * 2 + 5] = (byte)(value & 15);
+            data[i * 2 + 5 + 1] = (byte)((value >>> 4) & 15);
             
-                // From here:  http://www.youngmonkey.ca/nose/audio_tech/synth/Oberheim-Matrix6R.html
-                // it says this about the checksum:
-                //
-                // Checksum.
-                // The original (not transmitted) data is summed in seven bits ignoring overflows
-                //
-                // I think this means to add into a byte, and then mask to 127.
+            // From here:  http://www.youngmonkey.ca/nose/audio_tech/synth/Oberheim-Matrix6R.html
+            // it says this about the checksum:
+            //
+            // Checksum.
+            // The original (not transmitted) data is summed in seven bits ignoring overflows
+            //
+            // I think this means to add into a byte, and then mask to 127.
             
-                check += value;
+            check += value;
             }
     
         data[data.length - 2] = (byte)(check & 127);
         return data;
-    }
+        }
         
 
     public byte[] requestCurrentDump()
-    {               
+        {               
         byte[] data = new byte[7];
         data[0] = (byte)0xF0;
         data[1] = (byte)0x10;
@@ -579,8 +579,8 @@ public class OberheimMatrix1000Global extends Synth
         data[5] = (byte)0x00;
         data[6] = (byte)0xF7;
         return data;
-    }
+        }
                         
     public static String getSynthName() { return "Oberheim Matrix 1000 [Global]"; }
     
-}
+    }

@@ -20,31 +20,31 @@ import java.awt.event.*;
 */
 
 public class Stretch
-{
-    public static JComponent makeHorizontalStretch()
     {
+    public static JComponent makeHorizontalStretch()
+        {
         return _makeStretch(Integer.MAX_VALUE, 0);
-    } 
+        } 
                 
     public static JComponent makeVerticalStretch()
-    {
+        {
         return _makeStretch(0, Integer.MAX_VALUE);
-    }
+        }
 
     public static JComponent makeStretch()
-    {
+        {
         return _makeStretch(Integer.MAX_VALUE, Integer.MAX_VALUE);
-    } 
+        } 
     
     static JComponent _makeStretch(final int horizontal, final int vertical)
-    {
+        {
         JPanel panel = new JPanel()
             {
-                public Dimension getMinimumSize() { return new Dimension(0, 0); }
-                public Dimension getPreferredSize() { return new Dimension(0, 0); }
-                public Dimension getMaximumSize() { return new Dimension(horizontal, vertical); }
+            public Dimension getMinimumSize() { return new Dimension(0, 0); }
+            public Dimension getPreferredSize() { return new Dimension(0, 0); }
+            public Dimension getMaximumSize() { return new Dimension(horizontal, vertical); }
             };
         panel.setBackground(Style.BACKGROUND_COLOR());
         return panel;
-    } 
-}
+        } 
+    }

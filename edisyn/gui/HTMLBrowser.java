@@ -22,7 +22,7 @@ import java.awt.*;
 */
 
 public class HTMLBrowser extends JPanel
-{
+    {
     Object HTMLTextToSet = null;
     
     java.util.Stack stack = new java.util.Stack();
@@ -30,7 +30,7 @@ public class HTMLBrowser extends JPanel
     JScrollPane scroll;
         
     public void setText(Object HTMLTextOrURL)
-    {
+        {
         if (HTMLTextOrURL == null) HTMLTextOrURL = "<html></body></html>";
         stack = new java.util.Stack();
         // delete any notion of a URL.  What a pain -- this is so backwards!
@@ -45,72 +45,72 @@ public class HTMLBrowser extends JPanel
         else if (HTMLTextOrURL instanceof URL)
             try
                 {
-                    infoPane.setPage((URL)HTMLTextOrURL);
+                infoPane.setPage((URL)HTMLTextOrURL);
                 }
             catch (IOException e) 
                 { 
-                    Synth.handleException(e);
-                    infoPane = new JEditorPane(); 
+                Synth.handleException(e);
+                infoPane = new JEditorPane(); 
                 }
         else
             {
-                Synth.handleException(new RuntimeException("Info object was neither a string nor a URL"));
-                infoPane = new JEditorPane();
+            Synth.handleException(new RuntimeException("Info object was neither a string nor a URL"));
+            infoPane = new JEditorPane();
             }
 
         // override a bug in JEditorPane which scrolls to the bottom on all subsequent Consoles
         infoPane.getCaret().setDot(0);
-    }
+        }
                 
     public static String readerToString(Reader reader)
-    {
+        {
         BufferedReader buf = new BufferedReader(reader);
         StringBuffer buffer = new StringBuffer();
         String text = null;
         try
             {
-                while((text = buf.readLine()) != null)
-                    buffer.append(text);
+            while((text = buf.readLine()) != null)
+                buffer.append(text);
             }
         catch (IOException e)
             {
-                Synth.handleException(e);
-                try { buf.close(); }
-                catch (IOException e2) { }
+            Synth.handleException(e);
+            try { buf.close(); }
+            catch (IOException e2) { }
             }
         return (buffer.toString());
-    }
+        }
     
     public HTMLBrowser(InputStream stream)
-    {
+        {
         this(new InputStreamReader(stream));
-    }
+        }
                     
     public Dimension getPreferredSize() { return getMinimumSize(); }
     public HTMLBrowser(Reader reader)
-    {
+        {
         this(readerToString(reader));
-    }
+        }
                     
     /** Constructs an HTMLBrowser using either an HTML string or a URL */
     public HTMLBrowser(final Object HTMLTextOrURL)
-    {
+        {
         HTMLTextToSet = HTMLTextOrURL;
         
         infoPane = new JEditorPane()
             {
-                public Insets getInsets() { return Style.HTML_DISPLAY_INSETS(); }
+            public Insets getInsets() { return Style.HTML_DISPLAY_INSETS(); }
 
-                // This is a trick to delay loading until or if the user displays the HTMLBrowser
-                // so as to save some time.
-                // For some reason I can't have this in the outer HTMLBrowser -- it's never called!
-                // So instead we have it here in the JEditorPane.
-                public void paintComponent(Graphics g)
+            // This is a trick to delay loading until or if the user displays the HTMLBrowser
+            // so as to save some time.
+            // For some reason I can't have this in the outer HTMLBrowser -- it's never called!
+            // So instead we have it here in the JEditorPane.
+            public void paintComponent(Graphics g)
                 {
-                    if (HTMLTextToSet != null)
-                        HTMLBrowser.this.setText(HTMLTextToSet);
-                    HTMLTextToSet = null;
-                    super.paintComponent(g);
+                if (HTMLTextToSet != null)
+                    HTMLBrowser.this.setText(HTMLTextToSet);
+                HTMLTextToSet = null;
+                super.paintComponent(g);
                 }
             };
                 
@@ -146,90 +146,90 @@ public class HTMLBrowser extends JPanel
         // make the hyperlinks active
         infoPane.addHyperlinkListener(new HyperlinkListener()
             {
-                public void hyperlinkUpdate( HyperlinkEvent he ) 
+            public void hyperlinkUpdate( HyperlinkEvent he ) 
                 {
 
-                    HyperlinkEvent.EventType type = he.getEventType();
-                    if (type == HyperlinkEvent.EventType.ENTERED) 
+                HyperlinkEvent.EventType type = he.getEventType();
+                if (type == HyperlinkEvent.EventType.ENTERED) 
+                    {
+                    infoPane.setCursor(Cursor.getPredefinedCursor( Cursor.HAND_CURSOR) );
+                    } 
+                else if (type == HyperlinkEvent.EventType.EXITED) 
+                    {
+                    infoPane.setCursor( Cursor.getDefaultCursor() );
+                    } 
+                else // clicked on it!
+                    {
+                    java.net.URL url = he.getURL();
+                    if((url.getProtocol().equals("http") ||
+                            url.getProtocol().equals("https")))
                         {
-                            infoPane.setCursor(Cursor.getPredefinedCursor( Cursor.HAND_CURSOR) );
-                        } 
-                    else if (type == HyperlinkEvent.EventType.EXITED) 
-                        {
-                            infoPane.setCursor( Cursor.getDefaultCursor() );
-                        } 
-                    else // clicked on it!
-                        {
-                            java.net.URL url = he.getURL();
-                            if((url.getProtocol().equals("http") ||
-                                url.getProtocol().equals("https")))
+                        if(Desktop.isDesktopSupported() &&
+                            Desktop.getDesktop().isSupported(Desktop.Action.BROWSE))
+                            {
+                            try
                                 {
-                                    if(Desktop.isDesktopSupported() &&
-                                       Desktop.getDesktop().isSupported(Desktop.Action.BROWSE))
-                                        {
-                                            try
-                                                {
-                                                    Desktop.getDesktop().browse(url.toURI());
-                                                }
-                                            catch(Exception e)
-                                                {
-                                                    Synth.handleException(e);
-                                                }
-                                        }
-                                    else
-                                        {
-                                            JOptionPane.showMessageDialog(
-                                                                          null,
-                                                                          new JTextArea("Opening link in external browser not supported on this computer. The URL was "  + url.toString()));
+                                Desktop.getDesktop().browse(url.toURI());
+                                }
+                            catch(Exception e)
+                                {
+                                Synth.handleException(e);
+                                }
+                            }
+                        else
+                            {
+                            JOptionPane.showMessageDialog(
+                                null,
+                                new JTextArea("Opening link in external browser not supported on this computer. The URL was "  + url.toString()));
 
-                                        }
-                                }
-                            else
-                                {
-                                    try
-                                        {
-                                            infoPane.getEditorKit().createDefaultDocument();
-                                            infoPane.setPage(url);
-                                            if (stack.isEmpty())
-                                                {
-                                                    // show back button
-                                                    add(backButtonBox,BorderLayout.SOUTH);
-                                                    revalidate();
-                                                }
-                                            stack.push(url);
-                                        }
-                                    catch (Exception e)
-                                        {
-                                            Synth.handleException(e);
-                                            java.awt.Toolkit.getDefaultToolkit().beep();
-                                        }
-                                }
+                            }
                         }
+                    else
+                        {
+                        try
+                            {
+                            infoPane.getEditorKit().createDefaultDocument();
+                            infoPane.setPage(url);
+                            if (stack.isEmpty())
+                                {
+                                // show back button
+                                add(backButtonBox,BorderLayout.SOUTH);
+                                revalidate();
+                                }
+                            stack.push(url);
+                            }
+                        catch (Exception e)
+                            {
+                            Synth.handleException(e);
+                            java.awt.Toolkit.getDefaultToolkit().beep();
+                            }
+                        }
+                    }
                 }
             });
 
         // code for when the user presses the "Back" button
         backButton.addActionListener(new ActionListener()
             {
-                public void actionPerformed(ActionEvent ae)
+            public void actionPerformed(ActionEvent ae)
                 {
-                    try
+                try
+                    {
+                    stack.pop();
+                    if (stack.isEmpty())
                         {
-                            stack.pop();
-                            if (stack.isEmpty())
-                                {
-                                    // hide back button
-                                    remove(backButtonBox);
-                                    revalidate();
-                                    setText(HTMLTextOrURL);
-                                }
-                            else infoPane.setPage((java.net.URL)(stack.peek()));
+                        // hide back button
+                        remove(backButtonBox);
+                        revalidate();
+                        setText(HTMLTextOrURL);
                         }
-                    catch (Exception e)
-                        {
-                            System.err.println("Warning (HTMLBrowser): This should never happen." + e);
-                        }
+                    else infoPane.setPage((java.net.URL)(stack.peek()));
+                    }
+                catch (Exception e)
+                    {
+                    System.err.println("Warning (HTMLBrowser): This should never happen." + e);
+                    }
                 }
             });
+        }
     }
-}

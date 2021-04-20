@@ -23,7 +23,7 @@ import javax.sound.midi.*;
 */
 
 public class KorgWavestationPatch extends KorgWavestationAbstract
-{
+    {
     /// Various collections of parameter names for pop-up menus
     
     public static final String[] WAVES = new String[] { "1:   A", "2:   A C", "4:   A B C D" };
@@ -44,15 +44,15 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
     KorgWavestationJoystick joy;
 
     public KorgWavestationPatch()
-    {
+        {
         for(int i = 0; i < keys.length; i++)
             {
-                keysToParameters.put(keys[i], parameters[i]);
+            keysToParameters.put(keys[i], parameters[i]);
             }
                         
         for(int i = 0; i < subkeys.length; i++)
             {
-                subkeysToSubparameters.put(subkeys[i], Integer.valueOf(subparameters[i]));
+            subkeysToSubparameters.put(subkeys[i], Integer.valueOf(subparameters[i]));
             }
 
         JComponent soundPanel = new SynthPanel(this);
@@ -68,41 +68,41 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
 
         for(int i = 1; i <= 4; i++)
             {
-                soundPanel = panels[i - 1] = new SynthPanel(this);
-                //            panels[i - 1].makePasteable("osc" + i);
-                panels[i - 1].makePasteable("osc");
+            soundPanel = panels[i - 1] = new SynthPanel(this);
+            //            panels[i - 1].makePasteable("osc" + i);
+            panels[i - 1].makePasteable("osc");
                         
-                vbox = new VBox();
-                hbox = new HBox();
-                hbox.add(addOscillatorMain(i, Style.COLOR_A()));
-                hbox.addLast(addFilter(i, Style.COLOR_B()));
-                vbox.add(hbox);
+            vbox = new VBox();
+            hbox = new HBox();
+            hbox.add(addOscillatorMain(i, Style.COLOR_A()));
+            hbox.addLast(addFilter(i, Style.COLOR_B()));
+            vbox.add(hbox);
 
-                hbox = new HBox();
-                hbox.add(addPitch(i, Style.COLOR_C()));
-                hbox.addLast(addAmplifier(i, Style.COLOR_C()));
-                vbox.add(hbox);
+            hbox = new HBox();
+            hbox.add(addPitch(i, Style.COLOR_C()));
+            hbox.addLast(addAmplifier(i, Style.COLOR_C()));
+            vbox.add(hbox);
 
 
-                hbox = new HBox();
-                hbox.add(addLFO(i, 1, Style.COLOR_B()));
-                hbox.addLast(addTuning(i, Style.COLOR_C()));
-                vbox.add(hbox);
+            hbox = new HBox();
+            hbox.add(addLFO(i, 1, Style.COLOR_B()));
+            hbox.addLast(addTuning(i, Style.COLOR_C()));
+            vbox.add(hbox);
 
-                hbox = new HBox();
-                hbox.add(addLFO(i, 2, Style.COLOR_B()));
-                hbox.addLast(addPan(i, Style.COLOR_C()));
-                vbox.add(hbox);
+            hbox = new HBox();
+            hbox.add(addLFO(i, 2, Style.COLOR_B()));
+            hbox.addLast(addPan(i, Style.COLOR_C()));
+            vbox.add(hbox);
 
-                vbox.add(addEnvelope(i, 1, Style.COLOR_A()));
-                vbox.add(addEnvelope(i, 2, Style.COLOR_A()));
+            vbox.add(addEnvelope(i, 1, Style.COLOR_A()));
+            vbox.add(addEnvelope(i, 2, Style.COLOR_A()));
 
-                hbox = new HBox();
-                //hbox.addLast(addMacros(i, Style.COLOR_C()));
-                vbox.add(hbox);
+            hbox = new HBox();
+            //hbox.addLast(addMacros(i, Style.COLOR_C()));
+            vbox.add(hbox);
                         
-                soundPanel.add(vbox, BorderLayout.CENTER);
-                addTab("Wave " + OSCILLATORS[i - 1], soundPanel);
+            soundPanel.add(vbox, BorderLayout.CENTER);
+            addTab("Wave " + OSCILLATORS[i - 1], soundPanel);
             }
                 
         model.set("name", "Init");
@@ -113,30 +113,30 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
         model.set("numoscillators", 0); // one oscillator
 
         loadDefaults();
-    }
+        }
  
     public JFrame sprout()     
-    {
+        {
         JFrame frame = super.sprout();
         addWavestationMenu();
         receiveCurrent.setEnabled(false);  // we can't request the "current" patch
         writeTo.setEnabled(false);  // can't write patches
         tabChanged();  // set up first time
         return frame;
-    }
+        }
 
     public void addWavestationMenu(JMenu menu)
-    {
+        {
         JMenuItem sendTestPerformanceMenu = new JMenuItem("Set up Test Performance in RAM 1 Slot 0");
         sendTestPerformanceMenu.addActionListener(new ActionListener()
             {
-                public void actionPerformed(ActionEvent e)
+            public void actionPerformed(ActionEvent e)
                 {
-                    sendTestPerformance();
+                sendTestPerformance();
                 }
             });
         menu.add(sendTestPerformanceMenu);
-    }
+        }
             
     public String getDefaultResourceFileName() { return "KorgWavestationPatch.init"; }
     public String getHTMLResourceFileName() { return "KorgWavestationPatch.html"; }
@@ -145,7 +145,7 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
               
     /** Add the global patch category (name, id, number, etc.) */
     public JComponent addNameGlobal(Color color)
-    {
+        {
         Category globalCategory = new Category(this, getSynthName(), color);
         //globalCategory.makeUnresettable();
                 
@@ -161,15 +161,15 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
         
         comp = new StringComponent("Patch Name", this, "name", 15, "Name must be up to 15 ASCII characters.")
             {
-                public String replace(String val)
+            public String replace(String val)
                 {
-                    return revisePatchName(val);
+                return revisePatchName(val);
                 }
                                 
-                public void update(String key, Model model)
+            public void update(String key, Model model)
                 {
-                    super.update(key, model);
-                    updateTitle();
+                super.update(key, model);
+                updateTitle();
                 }
             };
         vbox.addBottom(comp);  // doesn't work right :-(
@@ -179,23 +179,23 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
 
         globalCategory.add(hbox, BorderLayout.WEST);
         return globalCategory;
-    }
+        }
         
     public String revisePatchName(String name)
-    {
+        {
         name = super.revisePatchName(name);
         if (name == null) name = "";
         char[] chars = name.toCharArray();
         for(int i = 0; i < chars.length; i++)
             {
-                if (chars[i] < 32 || chars[i] > 127)
-                    chars[i] = ' ';
+            if (chars[i] < 32 || chars[i] > 127)
+                chars[i] = ' ';
             }
         return new String(chars);
-    }
+        }
 
     public JComponent addPatch(Color color)
-    {
+        {
         Category category  = new Category(this, "Patch", color);
                         
         JComponent comp;
@@ -206,45 +206,45 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
         params = WAVES;
         comp = new Chooser("Number of Waves", this, "numoscillators", params)
             {
-                public void update(String key, Model model)
+            public void update(String key, Model model)
                 {
-                    super.update(key, model);
+                super.update(key, model);
                                 
-                    if (getNumTabs() == 0)  // haven't been set up yet
-                        return;
+                if (getNumTabs() == 0)  // haven't been set up yet
+                    return;
                     
-                    String title = getSelectedTabTitle();
+                String title = getSelectedTabTitle();
                                 
-                    removeTab("Wave A");
-                    removeTab("Wave B");
-                    removeTab("Wave C");
-                    removeTab("Wave D");
+                removeTab("Wave A");
+                removeTab("Wave B");
+                removeTab("Wave C");
+                removeTab("Wave D");
 
-                    switch (model.get(key, 0))
-                        {
-                        case 0:
-                            insertTab("Wave A", panels[0], 1);
-                            break;
-                        case 1:
-                            insertTab("Wave A", panels[0], 1);
-                            insertTab("Wave C", panels[2], 2);
-                            break;
-                        default:
-                            insertTab("Wave A", panels[0], 1);
-                            insertTab("Wave B", panels[1], 2);
-                            insertTab("Wave C", panels[2], 3);
-                            insertTab("Wave D", panels[3], 4);
-                            break;
-                        }
+                switch (model.get(key, 0))
+                    {
+                    case 0:
+                        insertTab("Wave A", panels[0], 1);
+                        break;
+                    case 1:
+                        insertTab("Wave A", panels[0], 1);
+                        insertTab("Wave C", panels[2], 2);
+                        break;
+                    default:
+                        insertTab("Wave A", panels[0], 1);
+                        insertTab("Wave B", panels[1], 2);
+                        insertTab("Wave C", panels[2], 3);
+                        insertTab("Wave D", panels[3], 4);
+                        break;
+                    }
                 
-                    int t = getIndexOfTabTitle(title);
-                    if (t == -1)
-                        setSelectedTabIndex(0);
-                    else
-                        setSelectedTabIndex(t);
+                int t = getIndexOfTabTitle(title);
+                if (t == -1)
+                    setSelectedTabIndex(0);
+                else
+                    setSelectedTabIndex(t);
 
-                    // reset mutes
-                    resetSolo();
+                // reset mutes
+                resetSolo();
                 }
             };
         vbox.add(comp);
@@ -255,10 +255,10 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
                 
         category.add(vbox, BorderLayout.WEST);
         return category;
-    }
+        }
 
     public JComponent add2DMixer(Color color)
-    {
+        {
         Category category  = new Category(this, "2D Mixer", color);
         category.makeDistributable("mix");
                   
@@ -276,11 +276,11 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
                 
         comp = new LabelledDial("Loop", this, "mixlooprepeats", color, 0, 127)
             {
-                public String map(int val)
+            public String map(int val)
                 {
-                    if (val == 0) return "Off";
-                    else if (val == 127) return "Inf";
-                    else return "" + val;
+                if (val == 0) return "Off";
+                else if (val == 127) return "Inf";
+                else return "" + val;
                 }
             };
         ((LabelledDial)comp).addAdditionalLabel("Repeats");
@@ -292,9 +292,9 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
         realtime.setForeground(Style.TEXT_COLOR());
         realtime.addActionListener(new ActionListener()
             {
-                public void actionPerformed(ActionEvent e)
+            public void actionPerformed(ActionEvent e)
                 {
-                    joy.setRealtime(realtime.isSelected());
+                joy.setRealtime(realtime.isSelected());
                 }
             });
         hbox.add(Strut.makeHorizontalStrut(150));
@@ -309,7 +309,7 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
         // it appears that although the mix values are -127 to +127, they're sent as 0...254 as parameters!
         comp = new LabelledDial("AC 0", this, "mixx0", color, 0, 254, 127)
             {
-                public boolean isSymmetric() { return true; }
+            public boolean isSymmetric() { return true; }
             };
         ((LabelledDial)comp).getJLabel().setForeground(colors[0]);
         Component c1 = comp;
@@ -317,21 +317,21 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
 
         comp = new LabelledDial("AC 1", this, "mixx1", color,  0, 254, 127)
             {
-                public boolean isSymmetric() { return true; }
+            public boolean isSymmetric() { return true; }
             };
         ((LabelledDial)comp).getJLabel().setForeground(colors[1]);
         hbox.add(comp);
 
         comp = new LabelledDial("AC 2", this, "mixx2", color,  0, 254, 127)
             {
-                public boolean isSymmetric() { return true; }
+            public boolean isSymmetric() { return true; }
             };
         ((LabelledDial)comp).getJLabel().setForeground(colors[2]);
         hbox.add(comp);
 
         comp = new LabelledDial("AC 3", this, "mixx3", color,  0, 254, 127)
             {
-                public boolean isSymmetric() { return true; }
+            public boolean isSymmetric() { return true; }
             };
         ((LabelledDial)comp).getJLabel().setForeground(colors[3]);
         ((LabelledDial)comp).addAdditionalLabel("(Sustain)");
@@ -339,7 +339,7 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
 
         comp = new LabelledDial("AC 4", this, "mixx4", color,  0, 254, 127)
             {
-                public boolean isSymmetric() { return true; }
+            public boolean isSymmetric() { return true; }
             };
         ((LabelledDial)comp).getJLabel().setForeground(colors[4]);
         ((LabelledDial)comp).addAdditionalLabel("(Release)");
@@ -368,28 +368,28 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
         // it appears that although the mix values are -127 to +127, they're sent as 0...254 as parameters!
         comp = new LabelledDial("BD 0", this, "mixy0", color, 0, 254, 127)
             {
-                public boolean isSymmetric() { return true; }
+            public boolean isSymmetric() { return true; }
             };
         ((LabelledDial)comp).getJLabel().setForeground(colors[0]);
         hbox.add(comp);
 
         comp = new LabelledDial("BD 1", this, "mixy1", color, 0, 254, 127)
             {
-                public boolean isSymmetric() { return true; }
+            public boolean isSymmetric() { return true; }
             };
         ((LabelledDial)comp).getJLabel().setForeground(colors[1]);
         hbox.add(comp);
         
         comp = new LabelledDial("BD 2", this, "mixy2", color, 0, 254, 127)
             {
-                public boolean isSymmetric() { return true; }
+            public boolean isSymmetric() { return true; }
             };
         ((LabelledDial)comp).getJLabel().setForeground(colors[2]);
         hbox.add(comp);
     
         comp = new LabelledDial("BD 3", this, "mixy3", color, 0, 254, 127)
             {
-                public boolean isSymmetric() { return true; }
+            public boolean isSymmetric() { return true; }
             };
         ((LabelledDial)comp).getJLabel().setForeground(colors[3]);
         ((LabelledDial)comp).addAdditionalLabel("(Sustain)");
@@ -397,7 +397,7 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
     
         comp = new LabelledDial("BD 4", this, "mixy4", color, 0, 254, 127)
             {
-                public boolean isSymmetric() { return true; }
+            public boolean isSymmetric() { return true; }
             };
         ((LabelledDial)comp).getJLabel().setForeground(colors[4]);
         ((LabelledDial)comp).addAdditionalLabel("(Release)");
@@ -445,8 +445,8 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
         mainH.add(Stretch.makeVerticalStretch());
                 
         joy = new KorgWavestationJoystick(this, 
-                                          new String[] { "mixx0", "mixx1", "mixx2", "mixx3", "mixx4" },
-                                          new String[] { "mixy0", "mixy1", "mixy2", "mixy3", "mixy4" });
+            new String[] { "mixx0", "mixx1", "mixx2", "mixx3", "mixx4" },
+            new String[] { "mixy0", "mixy1", "mixy2", "mixy3", "mixy4" });
         joy.setNumPositions(colors);
         joy.updateAll();
         joy.setDrawsUnpressedCursor(false);
@@ -454,13 +454,13 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
         
         category.add(mainH, BorderLayout.CENTER);
         return category;
-    }
+        }
 
     boolean updatingBankWave = false;
     JButton[] showButton = new JButton[4];
 
     public JComponent addOscillatorMain(final int osc, Color color)
-    {
+        {
         Category category  = new Category(this, "Wave " + OSCILLATORS[osc - 1], color);
         //        category.makePasteable("osc" + osc);
         category.makePasteable("osc");
@@ -474,44 +474,44 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
         params = buildWaves(model.get("osc" + osc + "bank", 0));
         final Chooser waves = new Chooser("Wave", this, "osc" + osc + "wave", params)
             {
-                public void update(String key, Model model)
+            public void update(String key, Model model)
                 {
-                    super.update(key, model);
+                super.update(key, model);
                 
-                    int bank = model.get("osc" + osc + "wavebank", 0);
-                    model.set("osc" + osc + "wavebank", bank);
+                int bank = model.get("osc" + osc + "wavebank", 0);
+                model.set("osc" + osc + "wavebank", bank);
                 
-                    // Do we display the "Show" button?
-                    if (showButton[osc - 1] != null)
-                        {
-                            showButton[osc - 1].setEnabled(model.get(key, 0) < 32);
-                        }
+                // Do we display the "Show" button?
+                if (showButton[osc - 1] != null)
+                    {
+                    showButton[osc - 1].setEnabled(model.get(key, 0) < 32);
+                    }
                 }
             };
 
         comp = new LabelledDial("Wave Bank", this, "osc" + osc + "wavebank", color, 0, BANK_CARD)
             {
-                public String map(int val)
+            public String map(int val)
                 {
-                    String[] vals = BANKS;
-                    return vals[val];
+                String[] vals = BANKS;
+                return vals[val];
                 }
                 
-                public void update(String key, Model model)
+            public void update(String key, Model model)
                 {
-                    // We also need to update the wave at the same time
-                    if (updatingBankWave) return;  // break the cycle
-                    updatingBankWave = true; 
-                    super.update(key, model);
+                // We also need to update the wave at the same time
+                if (updatingBankWave) return;  // break the cycle
+                updatingBankWave = true; 
+                super.update(key, model);
                 
-                    int wave = model.get("osc" + osc + "wave", 0);
-                    // maybe should turn off MIDI transmission here so the chooser doesn't send a bunch of gunk
-                    boolean previousMIDI = getSendMIDI();
-                    setSendMIDI(false);
-                    waves.setElements("Wave", buildWaves(model.get(key, 0)));
-                    setSendMIDI(previousMIDI);
-                    model.set("osc" + osc + "wave", wave);
-                    updatingBankWave = false;
+                int wave = model.get("osc" + osc + "wave", 0);
+                // maybe should turn off MIDI transmission here so the chooser doesn't send a bunch of gunk
+                boolean previousMIDI = getSendMIDI();
+                setSendMIDI(false);
+                waves.setElements("Wave", buildWaves(model.get(key, 0)));
+                setSendMIDI(previousMIDI);
+                model.set("osc" + osc + "wave", wave);
+                updatingBankWave = false;
                 }
             };
         ((LabelledDial)comp).addAdditionalLabel(" ");
@@ -523,9 +523,9 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
         
         comp = new PushButton("Mute Others")
             {
-                public void perform()
+            public void perform()
                 {
-                    setSolo();
+                setSolo();
                 }
             };
         Marginalizer marg = new Marginalizer();
@@ -534,9 +534,9 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
 
         comp = new PushButton("Unmute All")
             {
-                public void perform()
+            public void perform()
                 {
-                    resetSolo();
+                resetSolo();
                 }
             };
         marg = new Marginalizer();
@@ -551,45 +551,45 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
                 
         comp = new PushButton("Show")
             {
-                public void perform()
+            public void perform()
                 {
-                    // nothing for the time being
-                    final KorgWavestationSequence synth = new KorgWavestationSequence();
-                    if (tuple != null)
-                        synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver(), buildKey2Receiver());
-                    if (synth.tuple != null)
-                        {       
-                            // This is a little tricky.  When the dump comes in from the synth,
-                            // Edisyn will only send it to the topmost panel.  So we first sprout
-                            // the panel and show it, and THEN send the dump request.  But this isn't
-                            // enough, because what setVisible(...) does is post an event on the
-                            // Swing Event Queue to build the window at a later time.  This later time
-                            // happens to be after the dump comes in, so it's ignored.  So what we
-                            // ALSO do is post the dump request to occur at the end of the Event Queue,
-                            // so by the time the dump request has been made, the window is shown and
-                            // frontmost.
+                // nothing for the time being
+                final KorgWavestationSequence synth = new KorgWavestationSequence();
+                if (tuple != null)
+                    synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver(), buildKey2Receiver());
+                if (synth.tuple != null)
+                    {       
+                    // This is a little tricky.  When the dump comes in from the synth,
+                    // Edisyn will only send it to the topmost panel.  So we first sprout
+                    // the panel and show it, and THEN send the dump request.  But this isn't
+                    // enough, because what setVisible(...) does is post an event on the
+                    // Swing Event Queue to build the window at a later time.  This later time
+                    // happens to be after the dump comes in, so it's ignored.  So what we
+                    // ALSO do is post the dump request to occur at the end of the Event Queue,
+                    // so by the time the dump request has been made, the window is shown and
+                    // frontmost.
                        
-                            synth.sprout();
-                            JFrame frame = ((JFrame)(SwingUtilities.getRoot(synth)));
-                            frame.setVisible(true);
+                    synth.sprout();
+                    JFrame frame = ((JFrame)(SwingUtilities.getRoot(synth)));
+                    frame.setVisible(true);
 
-                            SwingUtilities.invokeLater(
-                                                       new Runnable()
-                                                       {
-                                                           public void run() 
-                                                           { 
-                                                               Model tempModel = buildModel();
-                                                               tempModel.set("bank", KorgWavestationPatch.this.model.get("osc" + osc + "wavebank"));
-                                                               tempModel.set("number", KorgWavestationPatch.this.model.get("osc" + osc + "wave"));
-                                                               synth.requestingPatch = true; // otherwise the wave sequence editor will ask us for the number to load
-                                                               synth.performRequestDump(tempModel, false);
-                                                           }
-                                                       });
-                        }
-                    else
-                        {
-                            showSimpleError("Disconnected", "You can't show a patch when disconnected.");
-                        }
+                    SwingUtilities.invokeLater(
+                        new Runnable()
+                            {
+                            public void run() 
+                                { 
+                                Model tempModel = buildModel();
+                                tempModel.set("bank", KorgWavestationPatch.this.model.get("osc" + osc + "wavebank"));
+                                tempModel.set("number", KorgWavestationPatch.this.model.get("osc" + osc + "wave"));
+                                synth.requestingPatch = true; // otherwise the wave sequence editor will ask us for the number to load
+                                synth.performRequestDump(tempModel, false);
+                                }
+                            });
+                    }
+                else
+                    {
+                    showSimpleError("Disconnected", "You can't show a patch when disconnected.");
+                    }
                 }
             };
         showButton[osc - 1] = ((PushButton)comp).getButton();
@@ -613,13 +613,13 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
         
         category.add(hbox, BorderLayout.WEST);
         return category;
-    }
+        }
 
 
 
 
     public JComponent addLFO(int osc, int lfo, Color color)
-    {
+        {
         Category category  = new Category(this, "LFO " + lfo, color);
         //        category.makePasteable("osc" + osc + "lfo" + lfo);
         category.makePasteable("osc" + osc + "lfo");
@@ -671,7 +671,7 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
 
         category.add(hbox, BorderLayout.WEST);
         return category;
-    }    
+        }    
 
 
 
@@ -682,7 +682,7 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
 
 
     public JComponent addEnvelope(int osc, int env, Color color)
-    {
+        {
         Category category  = new Category(this, (env == 1 ? "Envelope 1" : "Amplitude Envelope"), color);
         //        category.makePasteable("osc" + osc + "env" + env);
         category.makePasteable("osc" + osc + "env");
@@ -722,12 +722,12 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
 
         if (env == 1)
             {
-                comp = new LabelledDial("Level 4", this, "osc" + osc + "env" + env + "level4e", color, 0, 99);
-                hbox.add(comp);
+            comp = new LabelledDial("Level 4", this, "osc" + osc + "env" + env + "level4e", color, 0, 99);
+            hbox.add(comp);
             }
         else
             {
-                hbox.add(Strut.makeStrut(levelthree));
+            hbox.add(Strut.makeStrut(levelthree));
             }
 
         comp = new LabelledDial("Attack", this, "osc" + osc + "env" + env + "attackvelocitymod", color, -127, 127);
@@ -744,26 +744,26 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
                 
         if (env == 1)
             {
-                comp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
-                                           new String[] { null,  "osc" + osc + "env" + env + "time1b", "osc" + osc + "env" + env + "time2c", "osc" + osc + "env" + env + "time3d", null, "osc" + osc + "env" + env + "time4e" },
-                                           new String[] { "osc" + osc + "env" + env + "level0a",  "osc" + osc + "env" + env + "level1b",  "osc" + osc + "env" + env + "level2c",  "osc" + osc + "env" + env + "level3d",  "osc" + osc + "env" + env + "level3d", "osc" + osc + "env" + env + "level4e" },
-                                           new double[] { 0, 0.2 / 99, 0.2 / 99, 0.2 / 99, 0.2, 0.2 / 99 },
-                                           new double[] { 1.0 / 99,  1.0 / 99, 1.0 / 99, 1.0 / 99, 1.0 / 99, 1.0 / 99 });
-                hbox.addLast(comp);
+            comp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
+                new String[] { null,  "osc" + osc + "env" + env + "time1b", "osc" + osc + "env" + env + "time2c", "osc" + osc + "env" + env + "time3d", null, "osc" + osc + "env" + env + "time4e" },
+                new String[] { "osc" + osc + "env" + env + "level0a",  "osc" + osc + "env" + env + "level1b",  "osc" + osc + "env" + env + "level2c",  "osc" + osc + "env" + env + "level3d",  "osc" + osc + "env" + env + "level3d", "osc" + osc + "env" + env + "level4e" },
+                new double[] { 0, 0.2 / 99, 0.2 / 99, 0.2 / 99, 0.2, 0.2 / 99 },
+                new double[] { 1.0 / 99,  1.0 / 99, 1.0 / 99, 1.0 / 99, 1.0 / 99, 1.0 / 99 });
+            hbox.addLast(comp);
             }
         else
             {
-                comp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
-                                           new String[] { null,  "osc" + osc + "env" + env + "time1b", "osc" + osc + "env" + env + "time2c", "osc" + osc + "env" + env + "time3d", null, "osc" + osc + "env" + env + "time4e"},
-                                           new String[] { "osc" + osc + "env" + env + "level0a",  "osc" + osc + "env" + env + "level1b",  "osc" + osc + "env" + env + "level2c",  "osc" + osc + "env" + env + "level3d",  "osc" + osc + "env" + env + "level3d", null },
-                                           new double[] { 0, 0.2 / 99, 0.2 / 99, 0.2 / 99, 0.2, 0.2 / 99 },
-                                           new double[] { 1.0 / 99,  1.0 / 99, 1.0 / 99, 1.0 / 99, 1.0 / 99, 0 });
-                hbox.addLast(comp);
+            comp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
+                new String[] { null,  "osc" + osc + "env" + env + "time1b", "osc" + osc + "env" + env + "time2c", "osc" + osc + "env" + env + "time3d", null, "osc" + osc + "env" + env + "time4e"},
+                new String[] { "osc" + osc + "env" + env + "level0a",  "osc" + osc + "env" + env + "level1b",  "osc" + osc + "env" + env + "level2c",  "osc" + osc + "env" + env + "level3d",  "osc" + osc + "env" + env + "level3d", null },
+                new double[] { 0, 0.2 / 99, 0.2 / 99, 0.2 / 99, 0.2, 0.2 / 99 },
+                new double[] { 1.0 / 99,  1.0 / 99, 1.0 / 99, 1.0 / 99, 1.0 / 99, 0 });
+            hbox.addLast(comp);
             }
 
         category.add(hbox, BorderLayout.CENTER);
         return category;
-    }    
+        }    
 
 
 
@@ -810,7 +810,7 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
     */
 
     public JComponent addFilter(int osc, Color color)
-    {
+        {
         Category category  = new Category(this, "Filter", color);
         //        category.makePasteable("osc" + osc);
         category.makePasteable("osc");
@@ -850,12 +850,12 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
 
         category.add(hbox, BorderLayout.WEST);
         return category;
-    }
+        }
 
 
 
     public JComponent addAmplifier(int osc, Color color)
-    {
+        {
         Category category  = new Category(this, "Amplifier", color);
         //        category.makePasteable("osc" + osc);
         category.makePasteable("osc");
@@ -887,13 +887,13 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
 
         category.add(hbox, BorderLayout.WEST);
         return category;
-    }
+        }
 
 
 
 
     public JComponent addPan(int osc, Color color)
-    {
+        {
         Category category  = new Category(this, "Pan", color);
         //        category.makePasteable("osc" + osc);
         category.makePasteable("osc");
@@ -911,11 +911,11 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
 
         category.add(hbox, BorderLayout.WEST);
         return category;
-    }
+        }
         
 
     public JComponent addTuning(int osc, Color color)
-    {
+        {
         Category category  = new Category(this, "Tuning", color);
         //        category.makePasteable("osc" + osc);
         category.makePasteable("osc");
@@ -936,26 +936,26 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
         // actual values are -200 ... 200 by 2
         comp = new LabelledDial("Slope", this, "osc" + osc + "tuningslope", color, -100, 100)
             {
-                public int getDefaultValue()
+            public int getDefaultValue()
                 {
-                    return 50;      // 1.0
+                return 50;      // 1.0
                 }
-                public String map(int val)
+            public String map(int val)
                 {
-                    return "" + (val / 50.0);
+                return "" + (val / 50.0);
                 }
             };
         hbox.add(comp);
 
         category.add(hbox, BorderLayout.WEST);
         return category;
-    }
+        }
 
 
 
 
     public JComponent addPitch(int osc, Color color)
-    {
+        {
         Category category  = new Category(this, "Pitch", color);
         //        category.makePasteable("osc" + osc);
         category.makePasteable("osc");
@@ -985,11 +985,11 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
 
         comp = new LabelledDial("Bend", this, "osc" + osc + "pitchbendrange", color, -1, 12)
             {
-                public String map(int val)
+            public String map(int val)
                 {
-                    if (val == 0) return "Off";
-                    else if (val == -1) return "Global";
-                    else return "" + val;
+                if (val == 0) return "Off";
+                else if (val == -1) return "Global";
+                else return "" + val;
                 }
             };
         ((LabelledDial)comp).addAdditionalLabel("Range");
@@ -1004,10 +1004,10 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
 
         comp = new LabelledDial("Ramp Time", this, "osc" + osc + "pitchramptime", color, 0, 100)
             {
-                public String map(int val)
+            public String map(int val)
                 {
-                    if (val == 100) return "On";
-                    else return "" + val;
+                if (val == 100) return "On";
+                else return "" + val;
                 }
             };
         hbox.add(comp);
@@ -1019,7 +1019,7 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
         
         category.add(hbox, BorderLayout.WEST);
         return category;
-    }
+        }
 
 
     /*
@@ -1042,278 +1042,278 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
     // the appropriate parameter.   The full key is called
     // osc<N><SUBKEY> where N is 1...4.
     public static final String[] subkeys = new String[]
-        {
-            "pitchbendmod1source", 
-            "pitchbendmod2source", 
-            "pitchbendmod1amount", 
-            "pitchbendmod2amount", 
-            "pitchbendrange", 
-            "pitchrampamount", 
-            "pitchramptime", 
-            "pitchrampvelocitymod", 
-            "lfo1ratemodsource", 
-            "lfo1depthmodsource", 
-            "lfo1shape", 
-            "lfo1sync", 
-            "lfo1rate", 
-            "lfo1amount", 
-            "lfo1delay", 
-            "lfo1fadein", 
-            "lfo1ratemod", 
-            "lfo1depthmod", 
-            "ampmod1source", 
-            "ampmod2source", 
-            "ampmod1amount", 
-            "ampmod2amount", 
-            "lfo2ratemodsource", 
-            "lfo2depthmodsource", 
-            "lfo2shape", 
-            "lfo2sync", 
-            "lfo2rate", 
-            "lfo2amount", 
-            "lfo2delay", 
-            "lfo2fadein", 
-            "lfo2ratemod", 
-            "lfo2depthmod", 
-            "pankeyboardmod", 
-            "panvelocitymod", 
-            "env1level0a", 
-            "env1time1b", 
-            "env1level1b", 
-            "env1time2c", 
-            "env1level2c", 
-            "env1time3d", 
-            "env1level3d", 
-            "env1time4e", 
-            "env1level4e", 
-            "env1amountvelocitymod", 
-            "env1attackvelocitymod", 
-            "env1ratekeyboardmod", 
-            "env2level0a", 
-            "env2time1b", 
-            "env2level1b", 
-            "env2time2c", 
-            "env2level2c", 
-            "env2time3d", 
-            "env2level3d", 
-            "env2time4e", 
-            "env2amountvelocitymod", 
-            "env2attackvelocitymod", 
-            "env2ratekeyboardmod", 
-            "filtermod1source", 
-            "filtermod2source", 
-            "filtercutoff", 
-            "filterexciter", 
-            "filterkeyboardtracking", 
-            "filtermod1amount", 
-            "filtermod2amount", 
-            //"pitchbendmacro", 
-            //"panmacro", 
-            //"amplitudeenvelopemacro", 
-            //"envelope1macro", 
-            //"filtermacro"
-        };
+    {
+    "pitchbendmod1source", 
+    "pitchbendmod2source", 
+    "pitchbendmod1amount", 
+    "pitchbendmod2amount", 
+    "pitchbendrange", 
+    "pitchrampamount", 
+    "pitchramptime", 
+    "pitchrampvelocitymod", 
+    "lfo1ratemodsource", 
+    "lfo1depthmodsource", 
+    "lfo1shape", 
+    "lfo1sync", 
+    "lfo1rate", 
+    "lfo1amount", 
+    "lfo1delay", 
+    "lfo1fadein", 
+    "lfo1ratemod", 
+    "lfo1depthmod", 
+    "ampmod1source", 
+    "ampmod2source", 
+    "ampmod1amount", 
+    "ampmod2amount", 
+    "lfo2ratemodsource", 
+    "lfo2depthmodsource", 
+    "lfo2shape", 
+    "lfo2sync", 
+    "lfo2rate", 
+    "lfo2amount", 
+    "lfo2delay", 
+    "lfo2fadein", 
+    "lfo2ratemod", 
+    "lfo2depthmod", 
+    "pankeyboardmod", 
+    "panvelocitymod", 
+    "env1level0a", 
+    "env1time1b", 
+    "env1level1b", 
+    "env1time2c", 
+    "env1level2c", 
+    "env1time3d", 
+    "env1level3d", 
+    "env1time4e", 
+    "env1level4e", 
+    "env1amountvelocitymod", 
+    "env1attackvelocitymod", 
+    "env1ratekeyboardmod", 
+    "env2level0a", 
+    "env2time1b", 
+    "env2level1b", 
+    "env2time2c", 
+    "env2level2c", 
+    "env2time3d", 
+    "env2level3d", 
+    "env2time4e", 
+    "env2amountvelocitymod", 
+    "env2attackvelocitymod", 
+    "env2ratekeyboardmod", 
+    "filtermod1source", 
+    "filtermod2source", 
+    "filtercutoff", 
+    "filterexciter", 
+    "filterkeyboardtracking", 
+    "filtermod1amount", 
+    "filtermod2amount", 
+    //"pitchbendmacro", 
+    //"panmacro", 
+    //"amplitudeenvelopemacro", 
+    //"envelope1macro", 
+    //"filtermacro"
+    };
         
     // This is a list of parameter for which you must first call CURRENT_WAVE and then
     // the appropriate parameter.   The full key is called
     // osc<N><SUBKEY> where N is 1...4.
     public static final int[] subparameters = new int[]
-        {
-            PITCH_SOURCE_1, 
-            PITCH_SOURCE_2, 
-            PITCH_SOURCE_1_AMOUNT,
-            PITCH_SOURCE_2_AMOUNT, 
-            PATCH_PITCH_BEND_RANGE, 
-            PATCH_PITCH_RAMP_AMT, 
-            PATCH_PITCH_RAMP_RATE,
-            PATCH_PITCH_VEL_AMT, 
-            LFO1_RATE_MOD_SOURCE,
-            LFO1_DEPTH_MOD_SOURCE, 
-            LFO1_SHAPE,
-            LFO1_SYNC,
-            LFO1_RATE,
-            LFO1_INITIAL_AMOUNT,
-            LFO1_DELAY,
-            LFO1_FADE_IN,
-            LFO1_RATE_MOD_SRC_AMT,
-            LFO1_DEPTH_MOD_SRC_AMT,
-            AMP_MOD_SOURCE_1, 
-            AMP_MOD_SOURCE_2, 
-            AMP_MOD_SOURCE_1_AMOUNT, 
-            AMP_MOD_SOURCE_2_AMOUNT, 
-            LFO2_RATE_MOD_SOURCE, 
-            LFO2_DEPTH_MOD_SOURCE, 
-            LFO2_SHAPE, 
-            LFO2_SYNC, 
-            LFO2_RATE, 
-            LFO2_INITIAL_AMOUNT, 
-            LFO2_DELAY, 
-            LFO2_FADE_IN, 
-            LFO2_RATE_MOD_SRC_AMT, 
-            LFO2_DEPTH_MOD_SRC_AMT, 
-            PAN_KEYBOARD_AMOUNT, 
-            PAN_VELOCITY_AMOUNT, 
-            GP_ENV_LEVEL_0, 
-            GP_ENV_RATE_1, 
-            GP_ENV_LEVEL_1, 
-            GP_ENV_RATE_2, 
-            GP_ENV_LEVEL_2, 
-            GP_ENV_RATE_3, 
-            GP_ENV_LEVEL_3, 
-            GP_ENV_RATE_4, 
-            GP_ENV_LEVEL_4, 
-            GP_VEL_ENV_AMT, 
-            ENV1_MOD_VEL_RATE, 
-            ENV1_MOD_KBD_RATE,
-            AMP_ENV_LEVEL_0, 
-            AMP_ENV_RATE_1, 
-            AMP_ENV_LEVEL_1, 
-            AMP_ENV_RATE_2, 
-            AMP_ENV_LEVEL_2, 
-            AMP_ENV_RATE_3, 
-            AMP_ENV_LEVEL_3, 
-            AMP_ENV_RATE_4, 
-            AMP_MOD_VEL_ENV_AMOUNT, 
-            AMP_MOD_VEL_ATTACK_RATE, 
-            AMP_MOD_KBD_DECAY_RATE,
-            FILTER_MOD_SOURCE1, 
-            FILTER_MOD_SOURCE2, 
-            FILTER_MOD_CUTOFF, 
-            FILTER_EXCITER_AMOUNT, 
-            FILTER_MOD_TRACKING, 
-            FILTER_MOD_SOURCE1_AMT, 
-            FILTER_MOD_SOURCE2_AMT, 
-            //PATCH_PITCH_MACRO, 
-            //PATCH_PAN_MACRO, 
-            //PATCH_AMP_MACRO, 
-            //PATCH_ENV_MACRO, 
-            //PATCH_FILTER_MACRO      
-        };
+    {
+    PITCH_SOURCE_1, 
+    PITCH_SOURCE_2, 
+    PITCH_SOURCE_1_AMOUNT,
+    PITCH_SOURCE_2_AMOUNT, 
+    PATCH_PITCH_BEND_RANGE, 
+    PATCH_PITCH_RAMP_AMT, 
+    PATCH_PITCH_RAMP_RATE,
+    PATCH_PITCH_VEL_AMT, 
+    LFO1_RATE_MOD_SOURCE,
+    LFO1_DEPTH_MOD_SOURCE, 
+    LFO1_SHAPE,
+    LFO1_SYNC,
+    LFO1_RATE,
+    LFO1_INITIAL_AMOUNT,
+    LFO1_DELAY,
+    LFO1_FADE_IN,
+    LFO1_RATE_MOD_SRC_AMT,
+    LFO1_DEPTH_MOD_SRC_AMT,
+    AMP_MOD_SOURCE_1, 
+    AMP_MOD_SOURCE_2, 
+    AMP_MOD_SOURCE_1_AMOUNT, 
+    AMP_MOD_SOURCE_2_AMOUNT, 
+    LFO2_RATE_MOD_SOURCE, 
+    LFO2_DEPTH_MOD_SOURCE, 
+    LFO2_SHAPE, 
+    LFO2_SYNC, 
+    LFO2_RATE, 
+    LFO2_INITIAL_AMOUNT, 
+    LFO2_DELAY, 
+    LFO2_FADE_IN, 
+    LFO2_RATE_MOD_SRC_AMT, 
+    LFO2_DEPTH_MOD_SRC_AMT, 
+    PAN_KEYBOARD_AMOUNT, 
+    PAN_VELOCITY_AMOUNT, 
+    GP_ENV_LEVEL_0, 
+    GP_ENV_RATE_1, 
+    GP_ENV_LEVEL_1, 
+    GP_ENV_RATE_2, 
+    GP_ENV_LEVEL_2, 
+    GP_ENV_RATE_3, 
+    GP_ENV_LEVEL_3, 
+    GP_ENV_RATE_4, 
+    GP_ENV_LEVEL_4, 
+    GP_VEL_ENV_AMT, 
+    ENV1_MOD_VEL_RATE, 
+    ENV1_MOD_KBD_RATE,
+    AMP_ENV_LEVEL_0, 
+    AMP_ENV_RATE_1, 
+    AMP_ENV_LEVEL_1, 
+    AMP_ENV_RATE_2, 
+    AMP_ENV_LEVEL_2, 
+    AMP_ENV_RATE_3, 
+    AMP_ENV_LEVEL_3, 
+    AMP_ENV_RATE_4, 
+    AMP_MOD_VEL_ENV_AMOUNT, 
+    AMP_MOD_VEL_ATTACK_RATE, 
+    AMP_MOD_KBD_DECAY_RATE,
+    FILTER_MOD_SOURCE1, 
+    FILTER_MOD_SOURCE2, 
+    FILTER_MOD_CUTOFF, 
+    FILTER_EXCITER_AMOUNT, 
+    FILTER_MOD_TRACKING, 
+    FILTER_MOD_SOURCE1_AMT, 
+    FILTER_MOD_SOURCE2_AMT, 
+    //PATCH_PITCH_MACRO, 
+    //PATCH_PAN_MACRO, 
+    //PATCH_AMP_MACRO, 
+    //PATCH_ENV_MACRO, 
+    //PATCH_FILTER_MACRO      
+    };
 
     // This is a list of keys which have unique parameters (as opposed to subkeys and subparameters as
     // mentioned earlier) and which don't need special handling.
     public static final String[] keys = new String[]
-        {
-            "osc1wavebank",
-            "osc1wave",
-            "osc1amplevel",
-            "osc1tuningcoarse", 
-            "osc1tuningfine", 
-            "osc1tuningslope", 
-            "osc1busa",
-            "osc1busb",
-            "osc1busc",
-            "osc1busd",
-            "osc2wavebank",
-            "osc2wave",
-            "osc2amplevel",
-            "osc2tuningcoarse", 
-            "osc2tuningfine", 
-            "osc2tuningslope", 
-            "osc2busa",
-            "osc2busb",
-            "osc2busc",
-            "osc2busd",
-            "osc3wavebank",
-            "osc3wave",
-            "osc3amplevel",
-            "osc3tuningcoarse", 
-            "osc3tuningfine", 
-            "osc3tuningslope", 
-            "osc3busa",
-            "osc3busb",
-            "osc3busc",
-            "osc3busd",
-            "osc4wavebank",
-            "osc4wave",
-            "osc4amplevel",
-            "osc4tuningcoarse", 
-            "osc4tuningfine", 
-            "osc4tuningslope", 
-            "osc4busa",
-            "osc4busb",
-            "osc4busc",
-            "osc4busd",
-            "hardsync",
-            "mixloop",
-            "mixlooprepeats",
-            "mixxmod1source",
-            "mixxmod2source",
-            "mixymod1source",
-            "mixymod2source",
-            "mixxmod1amount",
-            "mixxmod2amount",
-            "mixymod1amount",
-            "mixymod2amount",
-            "numoscillators",
-        };
+    {
+    "osc1wavebank",
+    "osc1wave",
+    "osc1amplevel",
+    "osc1tuningcoarse", 
+    "osc1tuningfine", 
+    "osc1tuningslope", 
+    "osc1busa",
+    "osc1busb",
+    "osc1busc",
+    "osc1busd",
+    "osc2wavebank",
+    "osc2wave",
+    "osc2amplevel",
+    "osc2tuningcoarse", 
+    "osc2tuningfine", 
+    "osc2tuningslope", 
+    "osc2busa",
+    "osc2busb",
+    "osc2busc",
+    "osc2busd",
+    "osc3wavebank",
+    "osc3wave",
+    "osc3amplevel",
+    "osc3tuningcoarse", 
+    "osc3tuningfine", 
+    "osc3tuningslope", 
+    "osc3busa",
+    "osc3busb",
+    "osc3busc",
+    "osc3busd",
+    "osc4wavebank",
+    "osc4wave",
+    "osc4amplevel",
+    "osc4tuningcoarse", 
+    "osc4tuningfine", 
+    "osc4tuningslope", 
+    "osc4busa",
+    "osc4busb",
+    "osc4busc",
+    "osc4busd",
+    "hardsync",
+    "mixloop",
+    "mixlooprepeats",
+    "mixxmod1source",
+    "mixxmod2source",
+    "mixymod1source",
+    "mixymod2source",
+    "mixxmod1amount",
+    "mixxmod2amount",
+    "mixymod1amount",
+    "mixymod2amount",
+    "numoscillators",
+    };
                 
     // This is a list of unique parameters (as opposed to subkeys and subparameters as
     // mentioned earlier) which don't need special handling.
     public static final int[] parameters = new int[]
-        {
-            WAVEA_BANK,
-            WAVEA_NUM,
-            WAVEA_LEVEL,
-            WAVEA_TUNE_COARSE, 
-            WAVEA_TUNE_FINE, 
-            WAVEA_TUNE_SLOPE, 
-            WAVEA_BUS_A,
-            WAVEA_BUS_B,
-            WAVEA_BUS_C,
-            WAVEA_BUS_D,
-            WAVEB_BANK,
-            WAVEB_NUM,
-            WAVEB_LEVEL,
-            WAVEB_TUNE_COARSE, 
-            WAVEB_TUNE_FINE, 
-            WAVEB_TUNE_SLOPE, 
-            WAVEB_BUS_A,
-            WAVEB_BUS_B,
-            WAVEB_BUS_C,
-            WAVEB_BUS_D,
-            WAVEC_BANK,
-            WAVEC_NUM,
-            WAVEC_LEVEL,
-            WAVEC_TUNE_COARSE, 
-            WAVEC_TUNE_FINE, 
-            WAVEC_TUNE_SLOPE, 
-            WAVEC_BUS_A,
-            WAVEC_BUS_B,
-            WAVEC_BUS_C,
-            WAVEC_BUS_D,
-            WAVED_BANK,
-            WAVED_NUM,
-            WAVED_LEVEL,
-            WAVED_TUNE_COARSE, 
-            WAVED_TUNE_FINE, 
-            WAVED_TUNE_SLOPE, 
-            WAVED_BUS_A,
-            WAVED_BUS_B,
-            WAVED_BUS_C,
-            WAVED_BUS_D,
-            PATCH_HARD_SYNC,
-            MIX_ENV_LOOP,
-            MIX_ENV_REPEATS,
-            MIX_MOD_X_SOURCE1,
-            MIX_MOD_X_SOURCE2,
-            MIX_MOD_Y_SOURCE1,
-            MIX_MOD_Y_SOURCE2,
-            MIX_MOD_X_SRC1_AMT,
-            MIX_MOD_X_SRC2_AMT,
-            MIX_MOD_Y_SRC1_AMT,
-            MIX_MOD_Y_SRC2_AMT,
-            PATCH_STRUCTURE,
-        };
+    {
+    WAVEA_BANK,
+    WAVEA_NUM,
+    WAVEA_LEVEL,
+    WAVEA_TUNE_COARSE, 
+    WAVEA_TUNE_FINE, 
+    WAVEA_TUNE_SLOPE, 
+    WAVEA_BUS_A,
+    WAVEA_BUS_B,
+    WAVEA_BUS_C,
+    WAVEA_BUS_D,
+    WAVEB_BANK,
+    WAVEB_NUM,
+    WAVEB_LEVEL,
+    WAVEB_TUNE_COARSE, 
+    WAVEB_TUNE_FINE, 
+    WAVEB_TUNE_SLOPE, 
+    WAVEB_BUS_A,
+    WAVEB_BUS_B,
+    WAVEB_BUS_C,
+    WAVEB_BUS_D,
+    WAVEC_BANK,
+    WAVEC_NUM,
+    WAVEC_LEVEL,
+    WAVEC_TUNE_COARSE, 
+    WAVEC_TUNE_FINE, 
+    WAVEC_TUNE_SLOPE, 
+    WAVEC_BUS_A,
+    WAVEC_BUS_B,
+    WAVEC_BUS_C,
+    WAVEC_BUS_D,
+    WAVED_BANK,
+    WAVED_NUM,
+    WAVED_LEVEL,
+    WAVED_TUNE_COARSE, 
+    WAVED_TUNE_FINE, 
+    WAVED_TUNE_SLOPE, 
+    WAVED_BUS_A,
+    WAVED_BUS_B,
+    WAVED_BUS_C,
+    WAVED_BUS_D,
+    PATCH_HARD_SYNC,
+    MIX_ENV_LOOP,
+    MIX_ENV_REPEATS,
+    MIX_MOD_X_SOURCE1,
+    MIX_MOD_X_SOURCE2,
+    MIX_MOD_Y_SOURCE1,
+    MIX_MOD_Y_SOURCE2,
+    MIX_MOD_X_SRC1_AMT,
+    MIX_MOD_X_SRC2_AMT,
+    MIX_MOD_Y_SRC1_AMT,
+    MIX_MOD_Y_SRC2_AMT,
+    PATCH_STRUCTURE,
+    };
 
     public int getPauseAfterSendOneParameter() 
-    { 
+        { 
         // without this, we seem to drop some packets as we overfill the buffer, unfortunately
         return 40; 
-    }
+        }
 
     public Object[] emitAll(String key)
-    {
+        {
         if (key.equals("bank")) return new Object[0];  // this is not emittable
         if (key.equals("number")) return new Object[0];  // this is not emittable
                 
@@ -1327,72 +1327,72 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
 
         if (key.equals("name"))
             {
-                byte[] mesg = paramBytes(PART_PATCH_NAME, model.get(key, ""));
-                return new byte[][] { /*bank_mesg, num_mesg, part_mesg,*/ mesg };
+            byte[] mesg = paramBytes(PART_PATCH_NAME, model.get(key, ""));
+            return new byte[][] { /*bank_mesg, num_mesg, part_mesg,*/ mesg };
             }
         else 
             {
-                int index = 0;
-                int val = model.get(key, 0);
+            int index = 0;
+            int val = model.get(key, 0);
                         
-                if (keysToParameters.containsKey(key))  // this has to be before "osc" because there are a few that start with "osc" in here
-                    {
-                        if (key.endsWith("bank"))
-                            { 
-                                val = edisynToWSBank[model.get(key, 0)];        // ugh, banks are mixed up
-                            }
-                        else if (key.endsWith("tuningslope"))
-                            { 
-                                val = val * 2;
-                            }
+            if (keysToParameters.containsKey(key))  // this has to be before "osc" because there are a few that start with "osc" in here
+                {
+                if (key.endsWith("bank"))
+                    { 
+                    val = edisynToWSBank[model.get(key, 0)];        // ugh, banks are mixed up
+                    }
+                else if (key.endsWith("tuningslope"))
+                    { 
+                    val = val * 2;
+                    }
 
-                        index = ((Integer)(keysToParameters.get(key))).intValue();
-                        byte[] mesg = paramBytes(index, val);
-                        return new byte[][] { /*bank_mesg, num_mesg, part_mesg,*/ mesg };
-                    }
-                else if (key.startsWith("osc"))
+                index = ((Integer)(keysToParameters.get(key))).intValue();
+                byte[] mesg = paramBytes(index, val);
+                return new byte[][] { /*bank_mesg, num_mesg, part_mesg,*/ mesg };
+                }
+            else if (key.startsWith("osc"))
+                {
+                int osc = extractNumbers(key)[0];
+                String subkey = key.substring(4);
+                index = ((Integer)(subkeysToSubparameters.get(subkey))).intValue();
+                byte[] wave_mesg = paramBytes(CURRENT_WAVE, osc - 1);
+                byte[] mesg = paramBytes(index, val);
+                return new byte[][] { /*bank_mesg, num_mesg, part_mesg,*/ wave_mesg, mesg };
+                }
+            else if (key.startsWith("mix"))
+                {
+                for(int i = 0; i <= 4; i++)
                     {
-                        int osc = extractNumbers(key)[0];
-                        String subkey = key.substring(4);
-                        index = ((Integer)(subkeysToSubparameters.get(subkey))).intValue();
-                        byte[] wave_mesg = paramBytes(CURRENT_WAVE, osc - 1);
-                        byte[] mesg = paramBytes(index, val);
-                        return new byte[][] { /*bank_mesg, num_mesg, part_mesg,*/ wave_mesg, mesg };
+                    if (key.equals("mixx" + i))
+                        {
+                        byte[] mix_mesg = paramBytes(MIX_ENV_POINT, i);
+                        byte[] mesg = paramBytes(MIX_ENV_X, val);
+                        return new byte[][] { /*bank_mesg, num_mesg, part_mesg,*/ mix_mesg, mesg };
+                        }
+                    else if (key.equals("mixy" + i))
+                        {
+                        byte[] mix_mesg = paramBytes(MIX_ENV_POINT, i);
+                        byte[] mesg = paramBytes(MIX_ENV_Y, val);
+                        return new byte[][] { /*bank_mesg, num_mesg, part_mesg,*/ mix_mesg, mesg };
+                        }
+                    else if (key.equals("mixtime" + i))
+                        {
+                        byte[] mix_mesg = paramBytes(MIX_ENV_POINT, i);
+                        byte[] mesg = paramBytes(MIX_ENV_RATE, val);
+                        return new byte[][] { /*bank_mesg, num_mesg, part_mesg,*/ mix_mesg, mesg };
+                        }
                     }
-                else if (key.startsWith("mix"))
-                    {
-                        for(int i = 0; i <= 4; i++)
-                            {
-                                if (key.equals("mixx" + i))
-                                    {
-                                        byte[] mix_mesg = paramBytes(MIX_ENV_POINT, i);
-                                        byte[] mesg = paramBytes(MIX_ENV_X, val);
-                                        return new byte[][] { /*bank_mesg, num_mesg, part_mesg,*/ mix_mesg, mesg };
-                                    }
-                                else if (key.equals("mixy" + i))
-                                    {
-                                        byte[] mix_mesg = paramBytes(MIX_ENV_POINT, i);
-                                        byte[] mesg = paramBytes(MIX_ENV_Y, val);
-                                        return new byte[][] { /*bank_mesg, num_mesg, part_mesg,*/ mix_mesg, mesg };
-                                    }
-                                else if (key.equals("mixtime" + i))
-                                    {
-                                        byte[] mix_mesg = paramBytes(MIX_ENV_POINT, i);
-                                        byte[] mesg = paramBytes(MIX_ENV_RATE, val);
-                                        return new byte[][] { /*bank_mesg, num_mesg, part_mesg,*/ mix_mesg, mesg };
-                                    }
-                            }
-                    }
+                }
             }
 
         // uh oh
         System.err.println("Warning (KorgWavestationPatch): Unknown Key " + key);
         return new Object[0];
-    }
+        }
 
 
     class Indiv
-    {
+        {
         int waveCoarse;
         int waveFine;
         int waveBank;
@@ -1473,7 +1473,7 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
         int waveNumExp;
         
         int read(byte[] data, int pos)
-        {
+            {
             waveCoarse = readByte(data, pos);
             pos += 1;
             waveFine = readByte(data, pos);
@@ -1629,10 +1629,10 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
             waveNumExp = readByte(data, pos);
             pos += 1;
             return pos;
-        }
+            }
                 
         int write(byte[] data, int pos)
-        {
+            {
             writeByte(waveCoarse, data, pos);
             pos += 1;
             writeByte(waveFine, data, pos);
@@ -1788,18 +1788,18 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
             writeByte(waveNumExp, data, pos);
             pos += 1;
             return pos;
+            }
         }
-    }
     
     class Patch
-    {
+        {
         char[] name = new char[16];
 
         public void setName(String val)
-        {
+            {
             val = val + "                ";
             System.arraycopy(val.toCharArray(), 0, name, 0, name.length);
-        }
+            }
                 
         int mixRate1;
         int mixRate2;
@@ -1847,13 +1847,13 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
         Indiv[] waves = new Indiv[4];
 
         public Patch()
-        {
+            {
             for(int i = 0; i < waves.length; i++)
                 waves[i] = new Indiv();
-        }
+            }
 
         int read(byte[] data, int pos)
-        {
+            {
             for(int i = 0; i < 16; i++)
                 name[i] = (char)data[i + pos];
             pos += 16;
@@ -1948,11 +1948,11 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
                 pos = waves[i].read(data, pos);
                                 
             return pos;
-        }
+            }
 
 
         int write(byte[] data, int pos)
-        {
+            {
             for(int i = 0; i < 16; i++)
                 data[i + pos] = (byte)name[i];
             pos += 16;
@@ -2047,56 +2047,56 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
                 pos = waves[i].write(data, pos);
                                 
             return pos;
+            }
+
+
         }
-
-
-    }
     
   
   
         
     public int parse(byte[] data, boolean fromFile)
-    {
+        {
         if (data[4] == (byte)0x40)
             {
-                model.set("bank", wsToEdisynBank[data[5]]);
-                model.set("number", data[6]);        
-                return subparse(data, 7);
+            model.set("bank", wsToEdisynBank[data[5]]);
+            model.set("number", data[6]);        
+            return subparse(data, 7);
             }
         else
             {
-                // extract names
-                String[] n = new String[35];
-                for(int i = 0; i < 35; i++)
-                    {
-                        // yuck, denybblize and extract the patch just to get the name...
-                        byte[] d = denybblize(data, i * 852 + 6, 852);
+            // extract names
+            String[] n = new String[35];
+            for(int i = 0; i < 35; i++)
+                {
+                // yuck, denybblize and extract the patch just to get the name...
+                byte[] d = denybblize(data, i * 852 + 6, 852);
         
-                        Patch patch = new Patch();
-                        patch.read(d, 0);
+                Patch patch = new Patch();
+                patch.read(d, 0);
         
-                        n[i] = new String(patch.name);
-                    } 
+                n[i] = new String(patch.name);
+                } 
                 
-                // Now that we have an array of names, one per patch, we present the user with options;
-                // 0. Cancel [handled automatically]
-                // 1. Save the bank data [handled automatically]
-                // 2. Upload the bank data [handled automatically] 
-                // 3. Load and edit a certain patch number
-                int patchNum = showBankSysexOptions(data, n);
-                if (patchNum < 0) return PARSE_CANCELLED;
+            // Now that we have an array of names, one per patch, we present the user with options;
+            // 0. Cancel [handled automatically]
+            // 1. Save the bank data [handled automatically]
+            // 2. Upload the bank data [handled automatically] 
+            // 3. Load and edit a certain patch number
+            int patchNum = showBankSysexOptions(data, n);
+            if (patchNum < 0) return PARSE_CANCELLED;
                 
-                model.set("bank", wsToEdisynBank[data[5]]);
-                model.set("number", patchNum);
+            model.set("bank", wsToEdisynBank[data[5]]);
+            model.set("number", patchNum);
 
-                // okay, we're loading and editing patch number patchNum.  Here we go.
-                return subparse(data, patchNum * 852 + 6);      
+            // okay, we're loading and editing patch number patchNum.  Here we go.
+            return subparse(data, patchNum * 852 + 6);      
             }
-    }
+        }
                 
                 
     public int subparse(byte[] data, int pos)
-    {
+        {
         data = denybblize(data, pos);
         
         Patch patch = new Patch();
@@ -2133,136 +2133,136 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
 
         for(int i = 0; i < 4; i++)
             {
-                String osc = "osc" + (i + 1);
-                model.set(osc + "pitchbendmod1source", patch.waves[i].s1Pitch); 
-                model.set(osc + "pitchbendmod1amount", patch.waves[i].s1PitchAmt); 
-                model.set(osc + "pitchbendmod2source", patch.waves[i].s2Pitch); 
-                model.set(osc + "pitchbendmod2amount", patch.waves[i].s2PitchAmt); 
-                model.set(osc + "pitchbendrange", patch.waves[i].pwRange); 
-                model.set(osc + "pitchrampamount", patch.waves[i].pegAmt); 
-                model.set(osc + "pitchramptime", patch.waves[i].pegRate); 
-                model.set(osc + "pitchrampvelocitymod", patch.waves[i].velPegA); 
+            String osc = "osc" + (i + 1);
+            model.set(osc + "pitchbendmod1source", patch.waves[i].s1Pitch); 
+            model.set(osc + "pitchbendmod1amount", patch.waves[i].s1PitchAmt); 
+            model.set(osc + "pitchbendmod2source", patch.waves[i].s2Pitch); 
+            model.set(osc + "pitchbendmod2amount", patch.waves[i].s2PitchAmt); 
+            model.set(osc + "pitchbendrange", patch.waves[i].pwRange); 
+            model.set(osc + "pitchrampamount", patch.waves[i].pegAmt); 
+            model.set(osc + "pitchramptime", patch.waves[i].pegRate); 
+            model.set(osc + "pitchrampvelocitymod", patch.waves[i].velPegA); 
 
-                model.set(osc + "lfo1ratemodsource", patch.waves[i].s1Lfo1R); 
-                model.set(osc + "lfo1depthmodsource", patch.waves[i].s1Lfo1A); 
-                model.set(osc + "lfo1shape", patch.waves[i].lfo1Shape & 127); 
-                model.set(osc + "lfo1sync", (patch.waves[i].lfo1Shape >>> 7) & 1); 
-                model.set(osc + "lfo1rate", patch.waves[i].lfo1Rate); 
-                model.set(osc + "lfo1amount", patch.waves[i].lfo1Amt); 
-                model.set(osc + "lfo1delay", patch.waves[i].lfo1Delay); 
-                model.set(osc + "lfo1fadein", patch.waves[i].lfo1Fade); 
-                model.set(osc + "lfo1ratemod", patch.waves[i].s1Lfo1RAmt); 
-                model.set(osc + "lfo1depthmod", patch.waves[i].s1Lfo1AAmt); 
+            model.set(osc + "lfo1ratemodsource", patch.waves[i].s1Lfo1R); 
+            model.set(osc + "lfo1depthmodsource", patch.waves[i].s1Lfo1A); 
+            model.set(osc + "lfo1shape", patch.waves[i].lfo1Shape & 127); 
+            model.set(osc + "lfo1sync", (patch.waves[i].lfo1Shape >>> 7) & 1); 
+            model.set(osc + "lfo1rate", patch.waves[i].lfo1Rate); 
+            model.set(osc + "lfo1amount", patch.waves[i].lfo1Amt); 
+            model.set(osc + "lfo1delay", patch.waves[i].lfo1Delay); 
+            model.set(osc + "lfo1fadein", patch.waves[i].lfo1Fade); 
+            model.set(osc + "lfo1ratemod", patch.waves[i].s1Lfo1RAmt); 
+            model.set(osc + "lfo1depthmod", patch.waves[i].s1Lfo1AAmt); 
 
-                model.set(osc + "ampmod1source", patch.waves[i].s1Amp); 
-                model.set(osc + "ampmod1amount", patch.waves[i].s1AmpAmt); 
-                model.set(osc + "ampmod2source", patch.waves[i].s2Amp); 
-                model.set(osc + "ampmod2amount", patch.waves[i].s2AmpAmt); 
+            model.set(osc + "ampmod1source", patch.waves[i].s1Amp); 
+            model.set(osc + "ampmod1amount", patch.waves[i].s1AmpAmt); 
+            model.set(osc + "ampmod2source", patch.waves[i].s2Amp); 
+            model.set(osc + "ampmod2amount", patch.waves[i].s2AmpAmt); 
 
-                model.set(osc + "lfo2ratemodsource", patch.waves[i].s1Lfo2R); 
-                model.set(osc + "lfo2depthmodsource", patch.waves[i].s1Lfo2A); 
-                model.set(osc + "lfo2shape", patch.waves[i].lfo2Shape & 127); 
-                model.set(osc + "lfo2sync", (patch.waves[i].lfo2Shape >>> 7) & 1); 
-                model.set(osc + "lfo2rate", patch.waves[i].lfo2Rate); 
-                model.set(osc + "lfo2amount", patch.waves[i].lfo2Amt); 
-                model.set(osc + "lfo2delay", patch.waves[i].lfo2Delay); 
-                model.set(osc + "lfo2fadein", patch.waves[i].lfo2Fade); 
-                model.set(osc + "lfo2ratemod", patch.waves[i].s1Lfo2RAmt); 
-                model.set(osc + "lfo2depthmod", patch.waves[i].s1Lfo2AAmt); 
+            model.set(osc + "lfo2ratemodsource", patch.waves[i].s1Lfo2R); 
+            model.set(osc + "lfo2depthmodsource", patch.waves[i].s1Lfo2A); 
+            model.set(osc + "lfo2shape", patch.waves[i].lfo2Shape & 127); 
+            model.set(osc + "lfo2sync", (patch.waves[i].lfo2Shape >>> 7) & 1); 
+            model.set(osc + "lfo2rate", patch.waves[i].lfo2Rate); 
+            model.set(osc + "lfo2amount", patch.waves[i].lfo2Amt); 
+            model.set(osc + "lfo2delay", patch.waves[i].lfo2Delay); 
+            model.set(osc + "lfo2fadein", patch.waves[i].lfo2Fade); 
+            model.set(osc + "lfo2ratemod", patch.waves[i].s1Lfo2RAmt); 
+            model.set(osc + "lfo2depthmod", patch.waves[i].s1Lfo2AAmt); 
 
-                model.set(osc + "pankeyboardmod", patch.waves[i].keyPanAmt); 
-                model.set(osc + "panvelocitymod", patch.waves[i].velPanAmt); 
-                model.set(osc + "env1level0a", patch.waves[i].egLevel0); 
-                model.set(osc + "env1time1b", patch.waves[i].egRate1); 
-                model.set(osc + "env1level1b", patch.waves[i].egLevel1); 
-                model.set(osc + "env1time2c", patch.waves[i].egRate2); 
-                model.set(osc + "env1level2c", patch.waves[i].egLevel2); 
-                model.set(osc + "env1time3d", patch.waves[i].egRate3); 
-                model.set(osc + "env1level3d", patch.waves[i].egLevel3); 
-                model.set(osc + "env1time4e", patch.waves[i].egRate4); 
-                model.set(osc + "env1level4e", patch.waves[i].egLevel4); 
-                model.set(osc + "env1amountvelocitymod", patch.waves[i].velEgA); 
-                model.set(osc + "env1attackvelocitymod", patch.waves[i].velEgR); 
-                model.set(osc + "env1ratekeyboardmod", patch.waves[i].keyEgR); 
-                model.set(osc + "env2level0a", patch.waves[i].aegLevel0); 
-                model.set(osc + "env2time1b", patch.waves[i].aegRate1); 
-                model.set(osc + "env2level1b", patch.waves[i].aegLevel1); 
-                model.set(osc + "env2time2c", patch.waves[i].aegRate2); 
-                model.set(osc + "env2level2c", patch.waves[i].aegLevel2); 
-                model.set(osc + "env2time3d", patch.waves[i].aegRate3); 
-                model.set(osc + "env2level3d", patch.waves[i].aegLevel3); 
-                model.set(osc + "env2time4e", patch.waves[i].aegRate4); 
-                model.set(osc + "env2amountvelocitymod", patch.waves[i].velAegA); 
-                model.set(osc + "env2attackvelocitymod", patch.waves[i].velAegR); 
-                model.set(osc + "env2ratekeyboardmod", patch.waves[i].keyAegR); 
+            model.set(osc + "pankeyboardmod", patch.waves[i].keyPanAmt); 
+            model.set(osc + "panvelocitymod", patch.waves[i].velPanAmt); 
+            model.set(osc + "env1level0a", patch.waves[i].egLevel0); 
+            model.set(osc + "env1time1b", patch.waves[i].egRate1); 
+            model.set(osc + "env1level1b", patch.waves[i].egLevel1); 
+            model.set(osc + "env1time2c", patch.waves[i].egRate2); 
+            model.set(osc + "env1level2c", patch.waves[i].egLevel2); 
+            model.set(osc + "env1time3d", patch.waves[i].egRate3); 
+            model.set(osc + "env1level3d", patch.waves[i].egLevel3); 
+            model.set(osc + "env1time4e", patch.waves[i].egRate4); 
+            model.set(osc + "env1level4e", patch.waves[i].egLevel4); 
+            model.set(osc + "env1amountvelocitymod", patch.waves[i].velEgA); 
+            model.set(osc + "env1attackvelocitymod", patch.waves[i].velEgR); 
+            model.set(osc + "env1ratekeyboardmod", patch.waves[i].keyEgR); 
+            model.set(osc + "env2level0a", patch.waves[i].aegLevel0); 
+            model.set(osc + "env2time1b", patch.waves[i].aegRate1); 
+            model.set(osc + "env2level1b", patch.waves[i].aegLevel1); 
+            model.set(osc + "env2time2c", patch.waves[i].aegRate2); 
+            model.set(osc + "env2level2c", patch.waves[i].aegLevel2); 
+            model.set(osc + "env2time3d", patch.waves[i].aegRate3); 
+            model.set(osc + "env2level3d", patch.waves[i].aegLevel3); 
+            model.set(osc + "env2time4e", patch.waves[i].aegRate4); 
+            model.set(osc + "env2amountvelocitymod", patch.waves[i].velAegA); 
+            model.set(osc + "env2attackvelocitymod", patch.waves[i].velAegR); 
+            model.set(osc + "env2ratekeyboardmod", patch.waves[i].keyAegR); 
 
-                model.set(osc + "filtermod1source", patch.waves[i].s1Filter); 
-                model.set(osc + "filtermod2source", patch.waves[i].s2Filter); 
-                model.set(osc + "filtercutoff", patch.waves[i].cutoff); 
-                model.set(osc + "filterexciter", patch.waves[i].filterExciter); 
-                model.set(osc + "filterkeyboardtracking", patch.waves[i].keyFilter); 
-                model.set(osc + "filtermod1amount", patch.waves[i].s1FilterAmt); 
-                model.set(osc + "filtermod2amount", patch.waves[i].s2FilterAmt); 
+            model.set(osc + "filtermod1source", patch.waves[i].s1Filter); 
+            model.set(osc + "filtermod2source", patch.waves[i].s2Filter); 
+            model.set(osc + "filtercutoff", patch.waves[i].cutoff); 
+            model.set(osc + "filterexciter", patch.waves[i].filterExciter); 
+            model.set(osc + "filterkeyboardtracking", patch.waves[i].keyFilter); 
+            model.set(osc + "filtermod1amount", patch.waves[i].s1FilterAmt); 
+            model.set(osc + "filtermod2amount", patch.waves[i].s2FilterAmt); 
 
-                //model.set(osc + "pitchbendmacro", patch.waves[i].pitchMac); 
-                //model.set(osc + "panmacro", patch.waves[i].panMac); 
-                //model.set(osc + "amplitudeenvelopemacro", patch.waves[i].ampMac); 
-                //model.set(osc + "envelope1macro", patch.waves[i].envMac); 
-                //model.set(osc + "filtermacro", patch.waves[i].filMac);
+            //model.set(osc + "pitchbendmacro", patch.waves[i].pitchMac); 
+            //model.set(osc + "panmacro", patch.waves[i].panMac); 
+            //model.set(osc + "amplitudeenvelopemacro", patch.waves[i].ampMac); 
+            //model.set(osc + "envelope1macro", patch.waves[i].envMac); 
+            //model.set(osc + "filtermacro", patch.waves[i].filMac);
 
-                model.set(osc + "wave", patch.waves[i].waveNum + patch.waves[i].waveNumExp);
-                model.set(osc + "amplevel", patch.waves[i].indivLevel);
-                model.set(osc + "tuningcoarse",  patch.waves[i].waveCoarse);
-                model.set(osc + "tuningfine",  patch.waves[i].waveFine);
-                model.set(osc + "tuningslope",  patch.waves[i].waveScale);
+            model.set(osc + "wave", patch.waves[i].waveNum + patch.waves[i].waveNumExp);
+            model.set(osc + "amplevel", patch.waves[i].indivLevel);
+            model.set(osc + "tuningcoarse",  patch.waves[i].waveCoarse);
+            model.set(osc + "tuningfine",  patch.waves[i].waveFine);
+            model.set(osc + "tuningslope",  patch.waves[i].waveScale);
 
-                // This is computed according to the Developer FAQ
-                model.set(osc + "busa", patch.waves[i].patchOutput & 1);
-                model.set(osc + "busb", (patch.waves[i].patchOutput >>> 1) & 1);
-                model.set(osc + "busc", (patch.waves[i].patchOutput >>> 2) & 1);
-                model.set(osc + "busd", (patch.waves[i].patchOutput >>> 3) & 1);
+            // This is computed according to the Developer FAQ
+            model.set(osc + "busa", patch.waves[i].patchOutput & 1);
+            model.set(osc + "busb", (patch.waves[i].patchOutput >>> 1) & 1);
+            model.set(osc + "busc", (patch.waves[i].patchOutput >>> 2) & 1);
+            model.set(osc + "busd", (patch.waves[i].patchOutput >>> 3) & 1);
 
-                /// These are computed as determined in the Developer FAQ.  We don't need them in parsing
-                //              long    Lfo1_Inc;               /* Lfo fade in amount increment*/
-                //              long    Lfo2_Inc;               /* Lfo fade in amount increment*/
+            /// These are computed as determined in the Developer FAQ.  We don't need them in parsing
+            //              long    Lfo1_Inc;               /* Lfo fade in amount increment*/
+            //              long    Lfo2_Inc;               /* Lfo fade in amount increment*/
 
 
-                // This one is complex.  There are twelve banks, in three groups of four.
-                // Bank_Exp specifies which group it is for each of the waves.  I believe
-                // it works like this.  For each Wave there are two bits.  If both bits are
-                // unset, it's group 1 (0, 1, 2, 3).  If the first bit is set, it's group 
-                // 2 (4, 5, 6, 7).  If the second bit is set, it's group 3 (8, 9, 10, 11).
-                // It's not clear what happens if both bits are set.
+            // This one is complex.  There are twelve banks, in three groups of four.
+            // Bank_Exp specifies which group it is for each of the waves.  I believe
+            // it works like this.  For each Wave there are two bits.  If both bits are
+            // unset, it's group 1 (0, 1, 2, 3).  If the first bit is set, it's group 
+            // 2 (4, 5, 6, 7).  If the second bit is set, it's group 3 (8, 9, 10, 11).
+            // It's not clear what happens if both bits are set.
 
-                int bita = ((patch.bankExp >>> i) & 1);   // we assume Wave A = 0, Wave B = 1, etc.
-                int bitb = ((patch.bankExp >>> (i + 4)) & 1);
+            int bita = ((patch.bankExp >>> i) & 1);   // we assume Wave A = 0, Wave B = 1, etc.
+            int bitb = ((patch.bankExp >>> (i + 4)) & 1);
 
-                if (bitb == 1)
-                    {
-                        model.set(osc + "wavebank", wsExpToEdisynBank[patch.waves[i].waveBank + 8]);
-                    }
-                else if (bita == 1)
-                    {
-                        model.set(osc + "wavebank", wsExpToEdisynBank[patch.waves[i].waveBank + 4]);
-                    }
-                else
-                    {
-                        model.set(osc + "wavebank", wsExpToEdisynBank[patch.waves[i].waveBank]);
-                    }
+            if (bitb == 1)
+                {
+                model.set(osc + "wavebank", wsExpToEdisynBank[patch.waves[i].waveBank + 8]);
+                }
+            else if (bita == 1)
+                {
+                model.set(osc + "wavebank", wsExpToEdisynBank[patch.waves[i].waveBank + 4]);
+                }
+            else
+                {
+                model.set(osc + "wavebank", wsExpToEdisynBank[patch.waves[i].waveBank]);
+                }
 
             }
 
         revise();
                 
         return PARSE_SUCCEEDED;     
-    }
+        }
     
     public static final int NYBBLIZED_LENGTH = 426;
 
     public static final int[] RATE_TAB = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 83, 85, 90, 95, 100, 110, 120, 130, 140, 150, 180, 210, 240, 270, 300, 400, 500, 600, 700 };
 
     public Object[] emitAll(Model tempModel, boolean toWorkingMemory, boolean toFile)
-    {
+        {
         if (tempModel == null)
             tempModel = getModel();
             
@@ -2364,121 +2364,121 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
 
         for(int i = 0; i < 4; i++)
             {
-                String osc = "osc" + (i + 1);
-                patch.waves[i].s1Pitch = model.get(osc + "pitchbendmod1source"); 
-                patch.waves[i].s1PitchAmt = model.get(osc + "pitchbendmod1amount"); 
-                patch.waves[i].s2Pitch = model.get(osc + "pitchbendmod2source"); 
-                patch.waves[i].s2PitchAmt = model.get(osc + "pitchbendmod2amount"); 
-                patch.waves[i].pwRange = model.get(osc + "pitchbendrange"); 
-                patch.waves[i].pegAmt = model.get(osc + "pitchrampamount"); 
-                patch.waves[i].pegRate = model.get(osc + "pitchramptime"); 
-                patch.waves[i].velPegA = model.get(osc + "pitchrampvelocitymod"); 
+            String osc = "osc" + (i + 1);
+            patch.waves[i].s1Pitch = model.get(osc + "pitchbendmod1source"); 
+            patch.waves[i].s1PitchAmt = model.get(osc + "pitchbendmod1amount"); 
+            patch.waves[i].s2Pitch = model.get(osc + "pitchbendmod2source"); 
+            patch.waves[i].s2PitchAmt = model.get(osc + "pitchbendmod2amount"); 
+            patch.waves[i].pwRange = model.get(osc + "pitchbendrange"); 
+            patch.waves[i].pegAmt = model.get(osc + "pitchrampamount"); 
+            patch.waves[i].pegRate = model.get(osc + "pitchramptime"); 
+            patch.waves[i].velPegA = model.get(osc + "pitchrampvelocitymod"); 
 
-                patch.waves[i].s1Lfo1R = model.get(osc + "lfo1ratemodsource"); 
-                patch.waves[i].s1Lfo1A = model.get(osc + "lfo1depthmodsource"); 
-                patch.waves[i].lfo1Shape = (model.get(osc + "lfo1sync") << 7) | model.get(osc + "lfo1shape");
-                patch.waves[i].lfo1Rate = model.get(osc + "lfo1rate"); 
-                patch.waves[i].lfo1Amt = model.get(osc + "lfo1amount"); 
-                patch.waves[i].lfo1Delay = model.get(osc + "lfo1delay"); 
-                patch.waves[i].lfo1Fade = model.get(osc + "lfo1fadein"); 
-                patch.waves[i].s1Lfo1RAmt = model.get(osc + "lfo1ratemod"); 
-                patch.waves[i].s1Lfo1AAmt = model.get(osc + "lfo1depthmod"); 
+            patch.waves[i].s1Lfo1R = model.get(osc + "lfo1ratemodsource"); 
+            patch.waves[i].s1Lfo1A = model.get(osc + "lfo1depthmodsource"); 
+            patch.waves[i].lfo1Shape = (model.get(osc + "lfo1sync") << 7) | model.get(osc + "lfo1shape");
+            patch.waves[i].lfo1Rate = model.get(osc + "lfo1rate"); 
+            patch.waves[i].lfo1Amt = model.get(osc + "lfo1amount"); 
+            patch.waves[i].lfo1Delay = model.get(osc + "lfo1delay"); 
+            patch.waves[i].lfo1Fade = model.get(osc + "lfo1fadein"); 
+            patch.waves[i].s1Lfo1RAmt = model.get(osc + "lfo1ratemod"); 
+            patch.waves[i].s1Lfo1AAmt = model.get(osc + "lfo1depthmod"); 
 
-                patch.waves[i].s1Amp = model.get(osc + "ampmod1source"); 
-                patch.waves[i].s1AmpAmt = model.get(osc + "ampmod1amount"); 
-                patch.waves[i].s2Amp = model.get(osc + "ampmod2source"); 
-                patch.waves[i].s2AmpAmt = model.get(osc + "ampmod2amount"); 
+            patch.waves[i].s1Amp = model.get(osc + "ampmod1source"); 
+            patch.waves[i].s1AmpAmt = model.get(osc + "ampmod1amount"); 
+            patch.waves[i].s2Amp = model.get(osc + "ampmod2source"); 
+            patch.waves[i].s2AmpAmt = model.get(osc + "ampmod2amount"); 
 
-                patch.waves[i].s1Lfo2R = model.get(osc + "lfo2ratemodsource"); 
-                patch.waves[i].s1Lfo2A = model.get(osc + "lfo2depthmodsource"); 
-                patch.waves[i].lfo2Shape = (model.get(osc + "lfo2sync") << 7) | model.get(osc + "lfo2shape");
-                patch.waves[i].lfo2Rate = model.get(osc + "lfo2rate"); 
-                patch.waves[i].lfo2Amt = model.get(osc + "lfo2amount"); 
-                patch.waves[i].lfo2Delay = model.get(osc + "lfo2delay"); 
-                patch.waves[i].lfo2Fade = model.get(osc + "lfo2fadein"); 
-                patch.waves[i].s1Lfo2RAmt = model.get(osc + "lfo2ratemod"); 
-                patch.waves[i].s1Lfo2AAmt = model.get(osc + "lfo2depthmod"); 
+            patch.waves[i].s1Lfo2R = model.get(osc + "lfo2ratemodsource"); 
+            patch.waves[i].s1Lfo2A = model.get(osc + "lfo2depthmodsource"); 
+            patch.waves[i].lfo2Shape = (model.get(osc + "lfo2sync") << 7) | model.get(osc + "lfo2shape");
+            patch.waves[i].lfo2Rate = model.get(osc + "lfo2rate"); 
+            patch.waves[i].lfo2Amt = model.get(osc + "lfo2amount"); 
+            patch.waves[i].lfo2Delay = model.get(osc + "lfo2delay"); 
+            patch.waves[i].lfo2Fade = model.get(osc + "lfo2fadein"); 
+            patch.waves[i].s1Lfo2RAmt = model.get(osc + "lfo2ratemod"); 
+            patch.waves[i].s1Lfo2AAmt = model.get(osc + "lfo2depthmod"); 
 
-                patch.waves[i].keyPanAmt = model.get(osc + "pankeyboardmod"); 
-                patch.waves[i].velPanAmt = model.get(osc + "panvelocitymod"); 
-                patch.waves[i].egLevel0 = model.get(osc + "env1level0a"); 
-                patch.waves[i].egRate1 = model.get(osc + "env1time1b"); 
-                patch.waves[i].egLevel1 = model.get(osc + "env1level1b"); 
-                patch.waves[i].egRate2 = model.get(osc + "env1time2c"); 
-                patch.waves[i].egLevel2 = model.get(osc + "env1level2c"); 
-                patch.waves[i].egRate3 = model.get(osc + "env1time3d"); 
-                patch.waves[i].egLevel3 = model.get(osc + "env1level3d"); 
-                patch.waves[i].egRate4 = model.get(osc + "env1time4e"); 
-                patch.waves[i].egLevel4 = model.get(osc + "env1level4e"); 
-                patch.waves[i].velEgA = model.get(osc + "env1amountvelocitymod"); 
-                patch.waves[i].velEgR = model.get(osc + "env1attackvelocitymod"); 
-                patch.waves[i].keyEgR = model.get(osc + "env1ratekeyboardmod"); 
-                patch.waves[i].aegLevel0 = model.get(osc + "env2level0a"); 
-                patch.waves[i].aegRate1 = model.get(osc + "env2time1b"); 
-                patch.waves[i].aegLevel1 = model.get(osc + "env2level1b"); 
-                patch.waves[i].aegRate2 = model.get(osc + "env2time2c"); 
-                patch.waves[i].aegLevel2 = model.get(osc + "env2level2c"); 
-                patch.waves[i].aegRate3 = model.get(osc + "env2time3d"); 
-                patch.waves[i].aegLevel3 = model.get(osc + "env2level3d"); 
-                patch.waves[i].aegRate4 = model.get(osc + "env2time4e"); 
-                patch.waves[i].velAegA = model.get(osc + "env2amountvelocitymod"); 
-                patch.waves[i].velAegR = model.get(osc + "env2attackvelocitymod"); 
-                patch.waves[i].keyAegR = model.get(osc + "env2ratekeyboardmod"); 
+            patch.waves[i].keyPanAmt = model.get(osc + "pankeyboardmod"); 
+            patch.waves[i].velPanAmt = model.get(osc + "panvelocitymod"); 
+            patch.waves[i].egLevel0 = model.get(osc + "env1level0a"); 
+            patch.waves[i].egRate1 = model.get(osc + "env1time1b"); 
+            patch.waves[i].egLevel1 = model.get(osc + "env1level1b"); 
+            patch.waves[i].egRate2 = model.get(osc + "env1time2c"); 
+            patch.waves[i].egLevel2 = model.get(osc + "env1level2c"); 
+            patch.waves[i].egRate3 = model.get(osc + "env1time3d"); 
+            patch.waves[i].egLevel3 = model.get(osc + "env1level3d"); 
+            patch.waves[i].egRate4 = model.get(osc + "env1time4e"); 
+            patch.waves[i].egLevel4 = model.get(osc + "env1level4e"); 
+            patch.waves[i].velEgA = model.get(osc + "env1amountvelocitymod"); 
+            patch.waves[i].velEgR = model.get(osc + "env1attackvelocitymod"); 
+            patch.waves[i].keyEgR = model.get(osc + "env1ratekeyboardmod"); 
+            patch.waves[i].aegLevel0 = model.get(osc + "env2level0a"); 
+            patch.waves[i].aegRate1 = model.get(osc + "env2time1b"); 
+            patch.waves[i].aegLevel1 = model.get(osc + "env2level1b"); 
+            patch.waves[i].aegRate2 = model.get(osc + "env2time2c"); 
+            patch.waves[i].aegLevel2 = model.get(osc + "env2level2c"); 
+            patch.waves[i].aegRate3 = model.get(osc + "env2time3d"); 
+            patch.waves[i].aegLevel3 = model.get(osc + "env2level3d"); 
+            patch.waves[i].aegRate4 = model.get(osc + "env2time4e"); 
+            patch.waves[i].velAegA = model.get(osc + "env2amountvelocitymod"); 
+            patch.waves[i].velAegR = model.get(osc + "env2attackvelocitymod"); 
+            patch.waves[i].keyAegR = model.get(osc + "env2ratekeyboardmod"); 
 
-                patch.waves[i].s1Filter = model.get(osc + "filtermod1source"); 
-                patch.waves[i].s2Filter = model.get(osc + "filtermod2source"); 
-                patch.waves[i].cutoff = model.get(osc + "filtercutoff"); 
-                patch.waves[i].filterExciter = model.get(osc + "filterexciter"); 
-                patch.waves[i].keyFilter = model.get(osc + "filterkeyboardtracking"); 
-                patch.waves[i].s1FilterAmt = model.get(osc + "filtermod1amount"); 
-                patch.waves[i].s2FilterAmt = model.get(osc + "filtermod2amount"); 
+            patch.waves[i].s1Filter = model.get(osc + "filtermod1source"); 
+            patch.waves[i].s2Filter = model.get(osc + "filtermod2source"); 
+            patch.waves[i].cutoff = model.get(osc + "filtercutoff"); 
+            patch.waves[i].filterExciter = model.get(osc + "filterexciter"); 
+            patch.waves[i].keyFilter = model.get(osc + "filterkeyboardtracking"); 
+            patch.waves[i].s1FilterAmt = model.get(osc + "filtermod1amount"); 
+            patch.waves[i].s2FilterAmt = model.get(osc + "filtermod2amount"); 
 
-                // hard-set the macros -- we assume that all the data in the editor is correct
+            // hard-set the macros -- we assume that all the data in the editor is correct
                     
-                final int MACRO_USER = -1;
-                patch.waves[i].pitchMac = MACRO_USER;  // model.get(osc + "pitchbendmacro"); 
-                patch.waves[i].panMac = MACRO_USER; // model.get(osc + "panmacro"); 
-                patch.waves[i].ampMac = MACRO_USER; // model.get(osc + "amplitudeenvelopemacro"); 
-                patch.waves[i].envMac = MACRO_USER; // model.get(osc + "envelope1macro"); 
-                patch.waves[i].filMac = MACRO_USER; // model.get(osc + "filtermacro");
+            final int MACRO_USER = -1;
+            patch.waves[i].pitchMac = MACRO_USER;  // model.get(osc + "pitchbendmacro"); 
+            patch.waves[i].panMac = MACRO_USER; // model.get(osc + "panmacro"); 
+            patch.waves[i].ampMac = MACRO_USER; // model.get(osc + "amplitudeenvelopemacro"); 
+            patch.waves[i].envMac = MACRO_USER; // model.get(osc + "envelope1macro"); 
+            patch.waves[i].filMac = MACRO_USER; // model.get(osc + "filtermacro");
 
-                //// Not sure how to split up the wave number.  This is my guess.
-                if (model.get(osc + "wave") < 397)
-                    {
-                        patch.waves[i].waveNum = model.get(osc + "wave");
-                        patch.waves[i].waveNumExp = 0;
-                    }
-                else
-                    {
-                        patch.waves[i].waveNum = 396;
-                        patch.waves[i].waveNumExp = model.get(osc + "wave") - patch.waves[i].waveNum;
-                    }
+            //// Not sure how to split up the wave number.  This is my guess.
+            if (model.get(osc + "wave") < 397)
+                {
+                patch.waves[i].waveNum = model.get(osc + "wave");
+                patch.waves[i].waveNumExp = 0;
+                }
+            else
+                {
+                patch.waves[i].waveNum = 396;
+                patch.waves[i].waveNumExp = model.get(osc + "wave") - patch.waves[i].waveNum;
+                }
 
-                patch.waves[i].indivLevel = model.get(osc + "amplevel");
-                patch.waves[i].waveCoarse = model.get(osc + "tuningcoarse");
-                patch.waves[i].waveFine = model.get(osc + "tuningfine");
-                patch.waves[i].waveScale = model.get(osc + "tuningslope");
+            patch.waves[i].indivLevel = model.get(osc + "amplevel");
+            patch.waves[i].waveCoarse = model.get(osc + "tuningcoarse");
+            patch.waves[i].waveFine = model.get(osc + "tuningfine");
+            patch.waves[i].waveScale = model.get(osc + "tuningslope");
 
-                // This is computed according to the Developer FAQ
-                patch.waves[i].patchOutput = ((model.get(osc + "busd") << 3) |
-                                              (model.get(osc + "busc") << 2) |
-                                              (model.get(osc + "busb") << 1) |
-                                              (model.get(osc + "busa")));
+            // This is computed according to the Developer FAQ
+            patch.waves[i].patchOutput = ((model.get(osc + "busd") << 3) |
+                (model.get(osc + "busc") << 2) |
+                (model.get(osc + "busb") << 1) |
+                (model.get(osc + "busa")));
                     
-                // I need to compute these I believe.  The following code is from the Developer FAQ.
+            // I need to compute these I believe.  The following code is from the Developer FAQ.
 
-                if (patch.waves[i].lfo1Fade == 0)
-                    patch.waves[i].lfo1Inc = (0x7FFFFFL * (long)patch.waves[i].lfo1Amt)/127;
-                else
-                    patch.waves[i].lfo1Inc = (0x7FFFFFL * (long)patch.waves[i].lfo1Amt) / (RATE_TAB[patch.waves[i].lfo1Fade] * 127);
+            if (patch.waves[i].lfo1Fade == 0)
+                patch.waves[i].lfo1Inc = (0x7FFFFFL * (long)patch.waves[i].lfo1Amt)/127;
+            else
+                patch.waves[i].lfo1Inc = (0x7FFFFFL * (long)patch.waves[i].lfo1Amt) / (RATE_TAB[patch.waves[i].lfo1Fade] * 127);
 
-                if (patch.waves[i].lfo2Fade == 0)
-                    patch.waves[i].lfo2Inc = (0x7FFFFFL * (long)patch.waves[i].lfo2Amt)/127;
-                else
-                    patch.waves[i].lfo2Inc = (0x7FFFFFL * (long)patch.waves[i].lfo2Amt) / (RATE_TAB[patch.waves[i].lfo2Fade] * 127);
+            if (patch.waves[i].lfo2Fade == 0)
+                patch.waves[i].lfo2Inc = (0x7FFFFFL * (long)patch.waves[i].lfo2Amt)/127;
+            else
+                patch.waves[i].lfo2Inc = (0x7FFFFFL * (long)patch.waves[i].lfo2Amt) / (RATE_TAB[patch.waves[i].lfo2Fade] * 127);
 
-                // Now I need to compute patch.waves[i].waveBank
-                patch.waves[i].waveBank = edisynToWSExpBank[model.get(osc + "wavebank")] % 4;
+            // Now I need to compute patch.waves[i].waveBank
+            patch.waves[i].waveBank = edisynToWSExpBank[model.get(osc + "wavebank")] % 4;
             }
 
         // Now compute patch.bankExp
@@ -2509,10 +2509,10 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
             return new Object[] { d };
         else
             {
-                // we'll attempt a write but fail  -- this doesn't work
-                return new Object[] { d, new byte[] { (byte)0xF0, (byte)0x42, (byte)(48 + getChannelOut()), (byte)0x28, (byte)0x11, d[4], d[5], (byte)0xF7 }};
+            // we'll attempt a write but fail  -- this doesn't work
+            return new Object[] { d, new byte[] { (byte)0xF0, (byte)0x42, (byte)(48 + getChannelOut()), (byte)0x28, (byte)0x11, d[4], d[5], (byte)0xF7 }};
             }
-    }
+        }
 
     public int getPauseAfterChangePatch() { return 300; }  // looks like 300 is about the minimum for a standard PC (see Performance.java); may be too much here.
 
@@ -2523,33 +2523,33 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
     public static final int[] MUTES_ABCD = new int[]{ 2 + 4 + 8, 1 + 4 + 8, 1 + 2 + 8, 1 + 2 + 4 };
     public static final int[] MUTES_AC = new int[]{ 4, 1 };
     public void setSolo()
-    {
+        {
         int wave = getSelectedTabIndex() - 1;           // 0 ... 3
         int numOsc = model.get("numoscillators");
         if (numOsc == 0)        // A
             {
-                // do nothing
+            // do nothing
             }
         else if (numOsc == 1)   // A C
             {
-                byte[] midi_mesg = paramBytes(WAVE_MUTE, MUTES_AC[wave]);
-                tryToSendSysex(midi_mesg);
+            byte[] midi_mesg = paramBytes(WAVE_MUTE, MUTES_AC[wave]);
+            tryToSendSysex(midi_mesg);
             }
         else                            // A B C D
             {
-                byte[] midi_mesg = paramBytes(WAVE_MUTE, MUTES_ABCD[wave]);
-                tryToSendSysex(midi_mesg);
+            byte[] midi_mesg = paramBytes(WAVE_MUTE, MUTES_ABCD[wave]);
+            tryToSendSysex(midi_mesg);
             }
-    }
+        }
                 
     public void resetSolo()
-    {
+        {
         byte[] midi_mesg = paramBytes(WAVE_MUTE, 0);
         tryToSendSysex(midi_mesg);
-    }
+        }
         
     public void changePatch(Model tempModel)
-    {
+        {
         byte[] midi_mesg = paramBytes(MIDI_MODE, MULTISET_MIDI_MODE);
         tryToSendSysex(midi_mesg);
         
@@ -2579,17 +2579,17 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
         tryToSendSysex(patch_poly_mesg);
         patch_poly_mesg = paramBytes(PERF_MIDI_MODE, 1);
         tryToSendSysex(patch_poly_mesg);
-    }
+        }
 
     public byte[] requestDump(Model tempModel)
-    {
+        {
         if (tempModel == null)
             tempModel = getModel();
 
         byte BB = (byte)edisynToWSBank[tempModel.get("bank")];
         byte NN = (byte)tempModel.get("number");
         return new byte[] { (byte)0xF0, (byte)0x42, (byte)(48 + getChannelOut()), 0x28, 0x10, BB, NN, (byte)0xF7 };
-    }
+        }
                                 
     
     public static final int EXPECTED_SYSEX_LENGTH = 861;    
@@ -2597,7 +2597,7 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
     /////// OTHER ABSTRACT METHODS
     
     public boolean gatherPatchInfo(String title, Model change, boolean writing)
-    {
+        {
         JComboBox bank = new JComboBox(BANKS);
         bank.setEditable(false);
         bank.setMaximumRowCount(32);
@@ -2607,35 +2607,35 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
                 
         while(true)
             {
-                boolean result = showMultiOption(this, new String[] { "Bank", "Patch Number"}, 
-                                                 new JComponent[] { bank, number }, title, "Enter the Bank and Patch number.");
+            boolean result = showMultiOption(this, new String[] { "Bank", "Patch Number"}, 
+                new JComponent[] { bank, number }, title, "Enter the Bank and Patch number.");
                 
-                if (result == false) 
-                    return false;
+            if (result == false) 
+                return false;
                                 
-                int n;
-                try { n = Integer.parseInt(number.getText()); }
-                catch (NumberFormatException e)
-                    {
-                        showSimpleError(title, "The Patch Number must be an integer 0 ... 34");
-                        continue;
-                    }
-                if (n < 0 || n > 34)
-                    {
-                        showSimpleError(title, "The Patch Number must be an integer 0... 34");
-                        continue;
-                    }
+            int n;
+            try { n = Integer.parseInt(number.getText()); }
+            catch (NumberFormatException e)
+                {
+                showSimpleError(title, "The Patch Number must be an integer 0 ... 34");
+                continue;
+                }
+            if (n < 0 || n > 34)
+                {
+                showSimpleError(title, "The Patch Number must be an integer 0... 34");
+                continue;
+                }
                                 
-                change.set("bank", bank.getSelectedIndex());
-                change.set("number", n);
+            change.set("bank", bank.getSelectedIndex());
+            change.set("number", n);
                         
-                return true;
+            return true;
             }
-    }
+        }
         
 
     public void revise()
-    {
+        {
         // check the easy stuff -- out of range parameters
         super.revise();
 
@@ -2643,7 +2643,7 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
         String newnm = revisePatchName(nm);
         if (!nm.equals(newnm))
             model.set("name", newnm);
-    }
+        }
         
     public static String getSynthName() { return "Korg Wavestation SR [Patch]"; }
     
@@ -2651,27 +2651,27 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
     
 
     public Model getNextPatchLocation(Model model)
-    {
+        {
         int bank = model.get("bank");
         int number = model.get("number");
         
         number++;
         if (number >= 34)
             {
-                bank++;
-                number = 0;
-                if (bank >= 4)
-                    bank = 0;
+            bank++;
+            number = 0;
+            if (bank >= 4)
+                bank = 0;
             }
                 
         Model newModel = buildModel();
         newModel.set("bank", bank);
         newModel.set("number", number);
         return newModel;
-    }
+        }
 
     public String getPatchLocationName(Model model)
-    {
+        {
         // getPatchLocationName() is called from sprout() as a test to see if we should enable
         // batch downloading.  If we haven't yet created an .init file, then parameters won't exist
         // yet and this method will bomb badly.  So we return null in this case.
@@ -2680,38 +2680,38 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
         
         int number = model.get("number");
         return BANKS[model.get("bank")] + " " + (number > 9 ? "" : "0") + number;
-    }
+        }
 
     public void sendTestPerformance()
-    {
+        {
         if (tuple == null)
             if (!setupMIDI(tuple))
                 return;
 
         if (tuple != null)
             {
-                final KorgWavestationPerformance synth = new KorgWavestationPerformance();
-                synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver(), buildKey2Receiver());
-                if (synth.tuple != null)
-                    {
-                        synth.loadDefaults();
-                        synth.getModel().set("part1bank", model.get("bank"));
-                        synth.getModel().set("part1number", model.get("number"));
-                        synth.performChangePatch(synth.getModel());
-                        synth.tryToSendMIDI(synth.emitAll(synth.getModel(), true, false));
+            final KorgWavestationPerformance synth = new KorgWavestationPerformance();
+            synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver(), buildKey2Receiver());
+            if (synth.tuple != null)
+                {
+                synth.loadDefaults();
+                synth.getModel().set("part1bank", model.get("bank"));
+                synth.getModel().set("part1number", model.get("number"));
+                synth.performChangePatch(synth.getModel());
+                synth.tryToSendMIDI(synth.emitAll(synth.getModel(), true, false));
 
-                        // load me into the patch location
-                        performChangePatch(getModel());
-                        tryToSendMIDI(emitAll(getModel(), true, false));       
-                    }
+                // load me into the patch location
+                performChangePatch(getModel());
+                tryToSendMIDI(emitAll(getModel(), true, false));       
+                }
             }
-    }
+        }
 
     public int getPauseBetweenHillClimbPlays()
-    {
+        {
         return 1100;
+        }
     }
-}
     
     
 /**

@@ -28,17 +28,17 @@ import javax.sound.midi.*;
 */
 
 public class YamahaFS1RMulti extends Synth
-{
+    {
     /// Various collections of parameter names for pop-up menus
 
     public static final String[] CATEGORIES = new String[]
-        { 
-            "[None]", "Piano (Pf)", "Chromatic Percussion (Cp)", "Organ (Or)", "Guitar (Gt)", "Bass (Ba)", 
-            "Strings/Orchestral (St)", "Ensemble (En)", "Brass (Br)", "Reed (Rd)", "Pipe (Pi)", 
-            "Synth Lead (Ld)", "Synth Pad (Pd)", "Synth Sound Effects (Fx)", "Ethnic (Et)", 
-            "Percussive (Pc)", "Sound Effects (Se)", "Drums (Dr)", "Synth Comping (Sc)", "Vocal (Vo)", 
-            "Combination (Co)", "Material Wave (Wv)", "Sequence (Sq)" 
-        };
+    { 
+    "[None]", "Piano (Pf)", "Chromatic Percussion (Cp)", "Organ (Or)", "Guitar (Gt)", "Bass (Ba)", 
+    "Strings/Orchestral (St)", "Ensemble (En)", "Brass (Br)", "Reed (Rd)", "Pipe (Pi)", 
+    "Synth Lead (Ld)", "Synth Pad (Pd)", "Synth Sound Effects (Fx)", "Ethnic (Et)", 
+    "Percussive (Pc)", "Sound Effects (Se)", "Drums (Dr)", "Synth Comping (Sc)", "Vocal (Vo)", 
+    "Combination (Co)", "Material Wave (Wv)", "Sequence (Sq)" 
+    };
 
 
     // Default names for all voices in banks A...K.  Internal bank is not listed.
@@ -54,7 +54,7 @@ public class YamahaFS1RMulti extends Synth
         { "(Et)    Ukabanjo", "(Et)    Xango", "(Et)    Xanu", "(Et)    Zimbalon", "(Et)    DX-Banjo", "(Et)    Shamisen 1", "(Et)    Shamisen 2", "(Et)    Shamisen 3", "(Et)    DX-Koto", "(Et)    DX-Klmb 1", "(Et)    DX-Klmb 2", "(Et)    DX-Klmb 3", "(Et)    DX-Klmb 4", "(Et)    DX-Klmb 5", "(Et)    DX-Bagpipe", "(Et)    DX-Fiddle", "(Et)    African", "(Et)    Bali", "(Et)    Tibetan", "(Et)    Charango", "(Et)    Gamelan 1", "(Et)    Gamelan 2", "(Et)    Gamelan 3", "(Et)    Kinzoku 1", "(Et)    Kinzoku 2", "(Et)    ScotchTone", "(Pc)    DX-Agogo 1", "(Pc)    DX-Agogo 2", "(Pc)    DX-Bongo", "(Pc)    Bongo", "(Pc)    DX-Clave", "(Pc)    DX-Perc", "(Pc)    Block", "(Pc)    Conga Drum", "(Pc)    Cowbell", "(Pc)    Flexatone", "(Pc)    Glaeser", "(Pc)    Log Drum", "(Pc)    SmlShaker", "(Pc)    Metal", "(Pc)    Percud", "(Pc)    RefrsWhstl", "(Pc)    Seq Pluck", "(Pc)    BigShaker", "(Pc)    Side Stick", "(Pc)    Perkabell", "(Pc)    Spoon", "(Pc)    DX-StelCan", "(Pc)    Steel Can", "(Pc)    DX-StelDr1", "(Pc)    DX-StelDr2", "(Pc)    SteelDrum1", "(Pc)    SteelDrum2", "(Pc)    Steel Band", "(Pc)    Jamaica", "(Pc)    Tambarin", "(Pc)    Triangle 1", "(Pc)    Triangle 2", "(Pc)    BellGliss1", "(Pc)    BellGliss2", "(Pc)    Twincle", "(Pc)    MetalBottl", "(Pc)    NipponDrm1", "(Pc)    NipponDrm2", "(Pc)    Janpany", "(Pc)    Nou", "(Pc)    Sumoh Drum", "(Pc)    HandBell 1", "(Pc)    HandBell 2", "(Pc)    JingleBell", "(Pc)    Light Year", "(Pc)    SlightBell", "(Pc)    TracerBell", "(Pc)    MM-SynDr 1", "(Pc)    MM-SynDr 2", "(Pc)    Click Kick", "(Pc)    Hexagon", "(Pc)    Whapit", "(Pc)    Hi-Hat", "(Pc)    Deep Snare", "(Pc)    DX-MtlSnr", "(Pc)    Snapie", "(Pc)    Snare", "(Pc)    Soft Head", "(Pc)    StreetSD", "(Pc)    Tom Herz", "(Pc)    DX-RevCym1", "(Pc)    DX-RevCym2", "(Vo)    DX-Chorus1", "(Vo)    DX-Chorus2", "(Vo)    DX-Chorus3", "(Vo)    DX-Chorus4", "(Vo)    DX-Chorus5", "(Vo)    DX-Chorus6", "(Vo)    DX-Chorus7", "(Vo)    DX-Chorus8", "(Vo)    DX-Chorus9", "(Vo)    DX-Voice 1", "(Vo)    DX-Voice 2", "(Vo)    MM-Voice 1", "(Vo)    MM-Voice 2", "(Vo)    MM-Voice 3", "(Vo)    MM-Voice 4", "(Vo)    DbVoxFem", "(Vo)    Fem Voice", "(Vo)    Lady Vox", "(Vo)    Space Vox", "(Vo)    Syn Vox", "(Co)    Bell+Pno 1", "(Co)    Bell+Pno 2", "(Co)    Bell+Vibe1", "(Co)    Bell+Str", "(Co)    Bell+Vibe2", "(Co)    Cho+Marimb", "(Co)    Clavi+Bass", "(Co)    DX-Ba+Lead", "(Co)    DX-HpSt", "(Co)    EP+Brass 1", "(Co)    EP+Brass 2", "(Co)    EP+Chime", "(Co)    EP+Clavi", "(Co)    Elec Combi", "(Co)    Glock+Brs", "(Co)    Glock+Pno", "(Co)    Harp+Flute", "(Co)    Koto+Flute", "(Co)    MalletHorn", "(Co)    Mrmb+Gtr" },
         { "(Co)    Orch Chime", "(Co)    Pno+Flute", "(Co)    StringTine", "(Co)    Xylo+Brass", "(Ld)    DX-SynLd 1", "(Ld)    DX-SynLd 2", "(Ld)    DX-SynLd 3", "(Ld)    DX-SynLd 4", "(Ld)    DX-SynLd 5", "(Ld)    DX-SynLd 6", "(Ld)    DX-SynLd 7", "(Ld)    DX-SynLd 8", "(Ld)    DX-SynLd 9", "(Ld)    Pluck Lead", "(Ld)    Perka Lead", "(Ld)    GuitsynLd", "(Ld)    DXSynLd 1", "(Ld)    DXSynLd 2", "(Ld)    DXSynLd 3", "(Ld)    DXSynLd 4", "(Ld)    DXSynLd 5", "(Ld)    DXSynLd 6", "(Ld)    DXSynLd 7", "(Ld)    DXSynLd 8", "(Ld)    SqueezeLd", "(Ld)    Mooganic", "(Ld)    BrassLead1", "(Ld)    BrassLead2", "(Ld)    BrassLead3", "(Ld)    BrassLead4", "(Ld)    Saw Lead", "(Ld)    DX-SawLd 1", "(Ld)    DX-SawLd 2", "(Ld)    DX-Squar", "(Ld)    DX-VoiceLd", "(Ld)    DX-WahLead", "(Ld)    DXAttackLd", "(Ld)    CaliopLd 1", "(Ld)    CaliopLd 2", "(Ld)    CaliopLd 3", "(Ld)    Fifths 1", "(Ld)    Fifths 2", "(Ld)    LdSubHarm", "(Ld)    Buzzer", "(Ld)    Au Campo", "(Ld)    Bass Lead", "(Ld)    Comp Lead", "(Ld)    EadgbeLead", "(Ld)    Flap Synth", "(Ld)    FretlessLd", "(Ld)    Giovanni", "(Ld)    HarmoSynth", "(Ld)    Lead Line", "(Ld)    Lead Phone", "(Ld)    Lyle Lead", "(Ld)    PekingLead", "(Ld)    Puff Pipe", "(Ld)    Reed Lead", "(Ld)    SingleLine", "(Ld)    Super DX", "(Ld)    Sweep Lead", "(Ld)    Vibratoron", "(Ld)    DX-Vocoder", "(Ld)    Winwood", "(Pd)    DrkSweeper", "(Pd)    AnaBrsPad", "(Pd)    8bitStrPad", "(Pd)    DX-ChoPad1", "(Pd)    DX-ChoPad2", "(Pd)    Bow Pad 1", "(Pd)    Bow Pad 2", "(Pd)    Bow Pad 3", "(Pd)    Glassharp", "(Pd)    Wineglass", "(Pd)    Ice Galaxy", "(Pd)    Ice Heaven", "(Pd)    Hit Pad 1", "(Pd)    Hit Pad 2", "(Pd)    SynBrsPad1", "(Pd)    SynBrsPad2", "(Pd)    SynBrsPad3", "(Pd)    SynBrsPad4", "(Pd)    SynBrsPad5", "(Pd)    SynBrsPad6", "(Pd)    SynBrsPad7", "(Pd)    Vector Pad", "(Pd)    Pada Perka", "(Pd)    DX-MetalPd", "(Pd)    DX-SawPad", "(Pd)    Anna Pad", "(Pd)    Baroque", "(Pd)    BrassyWarm", "(Pd)    Bright Pad", "(Pd)    Clavi Pad", "(Pd)    Digi Pad", "(Pd)    Dispo Pad", "(Pd)    Ethereal", "(Pd)    Film Pad", "(Pd)    Fl.Cloud", "(Pd)    Floating", "(Pd)    Forest99", "(Pd)    Gior Pad", "(Pd)    GreenPeace", "(Pd)    Grunge Pad", "(Pd)    Hyper Sqr", "(Pd)    MM-Pretty", "(Pd)    MonsterPad", "(Pd)    Orwell", "(Pd)    PhaseSweep", "(Pd)    Phasers", "(Pd)    Glass Pad", "(Pd)    Sanctus", "(Pd)    StacHeaven", "(Pd)    Sweep Pad", "(Pd)    Water Log", "(Pd)    Spec-trail", "(Pd)    Whaser Pad", "(Pd)    Whisper", "(Pd)    WhistlePad", "(Fx)    DX-ScFi 1", "(Fx)    DX-ScFi 2", "(Fx)    DX-ScFi 3", "(Fx)    Image 1", "(Fx)    Image 2", "(Fx)    Laser 1", "(Fx)    Laser 2", "(Fx)    Laser 3", "(Fx)    Ri-zer" },
         { "(Fx)    MM-Shock 1", "(Fx)    MM-Shock 2", "(Fx)    Wallop 1", "(Fx)    Wallop 2", "(Fx)    Angel", "(Fx)    BackSuir", "(Fx)    Bird View", "(Fx)    ChorusElms", "(Fx)    DX-Stars", "(Fx)    Electric", "(Fx)    Evolution", "(Fx)    FM-Growth", "(Fx)    Paddawire", "(Fx)    Fantasynt", "(Fx)    Fluv Push", "(Fx)    Fmilters", "(Fx)    Glassy", "(Fx)    Glastine", "(Fx)    Glocker", "(Fx)    IceRevEcho", "(Fx)    InitEnsmbl", "(Fx)    MetalSweep", "(Fx)    SquareModd", "(Fx)    Mpndg Doom", "(Fx)    Mystrian", "(Fx)    RepertRise", "(Fx)    Space Trip", "(Fx)    Syn Rise", "(Fx)    Glider", "(Sc)    Anna DX", "(Sc)    Analog-X", "(Sc)    DX-Atms 1", "(Sc)    DX-Atms 2", "(Sc)    DX-Bright1", "(Sc)    DX-Bright2", "(Sc)    90 K", "(Sc)    200 K", "(Sc)    Arrow-X", "(Sc)    Attacker", "(Sc)    Harp Pad", "(Sc)    ChiLight", "(Sc)    Digi Calio", "(Sc)    Digitar", "(Sc)    Distracted", "(Sc)    FinerThing", "(Sc)    Fuji Stabs", "(Sc)    TouchyEdgy", "(Sc)    Metal Box", "(Sc)    MilkyWays", "(Sc)    New Elms", "(Sc)    Pipebells", "(Sc)    Synsitar", "(Sc)    OctiLate", "(Sc)    NoBoKuto", "(Sc)    Syn Bright", "(Sc)    Ting Voice", "(Sc)    Bottlead", "(Sc)    WhapSynth", "(Se)    DX-Flght", "(Se)    Take Off", "(Se)    DX-Helicpt", "(Se)    Helicopter", "(Se)    DX-Ship", "(Se)    DX-Train", "(Se)    Mobile", "(Se)    Motors", "(Se)    MotorCycle", "(Se)    U Boat", "(Se)    Ambulance", "(Se)    Whiz By", "(Se)    Out-Da-Way", "(Se)    Patrol Car", "(Se)    Sirens", "(Se)    DX-TelBusy", "(Se)    DX-TelCall", "(Se)    DX-TelTone", "(Se)    DX-TlRing1", "(Se)    DX-TlRing2", "(Se)    Bugs&Birds", "(Se)    DX-Insect1", "(Se)    DX-Insect2", "(Se)    DX-Piyo", "(Se)    DX-Growl 1", "(Se)    DX-Growl 2", "(Se)    Animals", "(Se)    DX-Wolf", "(Se)    ManEater", "(Se)    Alarm !", "(Se)    Aura", "(Se)    Chi-S&H", "(Se)    Closing", "(Se)    Computer", "(Se)    Crasher", "(Se)    DX-BigBen", "(Se)    DX-Wave", "(Se)    Descent", "(Se)    Doppler", "(Se)    Factory", "(Se)    GhostLine", "(Se)    Heart Beat", "(Se)    Imaging", "(Se)    IronEcho 1", "(Se)    IronEcho 2", "(Se)    MM-Fall", "(Se)    MachineGun", "(Se)    MobbyDick", "(Se)    On the Run", "(Se)    OuterLimit", "(Se)    Perc Shot", "(Se)    Repeater", "(Se)    Jet Cars 1", "(Se)    Scorchers", "(Se)    Sci-Fi Too", "(Se)    Jet Cars 2", "(Se)    Speak-One", "(Se)    Stopper", "(Se)    Super Foot", "(Se)    Talking DX", "(Se)    Transport", "(Se)    Turn Table", "(Se)    UfoTakeOff", "(Se)    Waterfall", "(Se)    Whik Shot", "(Se)    Bubblets", "(Se)    Yes Talk", "(Se)    Help me !", "(Se)    Paranoir", "(Se)    Screamy" }
-    };
+        };
 
     public static final String[] FSEQS = { "Internal 1", "Internal 2", "Internal 3", "Internal 4", "Internal 5", "Internal 6", "ShoobyDo", "2BarBeat", "D&B", "D&B Fill", "4BarBeat", "YouCanG", "EBSayHey", "RtmSynth", "VocalRtm", "WooWaPa", "UooLha", "FemRtm", "ByonRole", "WowYeah", "ListenVo", "YAMAHAFS", "Laugh", "Laugh2", "AreYouR", "Oiyai", "Oiaiuo", "UuWaUu", "Wao", "RndArp1", "FiltrArp", "RndArp2", "TechArp", "RndArp3", "Voco-Seq", "PopTech", "1BarBeat", "1BrBeat2", "Undo", "RndArp4", "VoclRtm2", "Reiyowha", "RndArp5", "VocalArp", "CanYouGi", "Pu-Yo", "Yaof", "MyaOh", "ChuckRtm", "ILoveYou", "Jan-On", "Welcome", "One-Two", "Edokko", "Everybdy", "Uwau", "YEEAAH", "4-3-2-1", "Test123", "CheckSnd", "ShavaDo", "R-M-H-R", "HiSchool", "M.Blastr", "L&G MayI", "Hellow", "ChowaUu", "Everybd2", "Dodidowa", "Check123", "BranNewY", "BoomBoom", "Hi=Woo", "FreeForm", "FreqPad", "YouKnow", "OldTech", "B/M", "MiniJngl", "EveryB-S", "IYaan", "Yeah", "ThankYou", "Yes=No", "UnWaEDon", "MouthPop", "Fire", "TBLine", "China", "Aeiou", "YaYeYiYo", "C7Seq", "SoundLib", "IYaan2", "Relax" };
     //public static final String[] FSEQS = { "Internal 1", "Internal 2", "Internal 3", "Internal 4", "Internal 5", "Internal 6", "ShoobyDo: 504", "2BarBeat: 511", "D&B: 511", "D&B Fill: 511", "4BarBeat: 511", "YouCanG: 511", "EBSayHey: 510", "RtmSynth: 431", "VocalRtm: 500", "WooWaPa: 127", "UooLha: 117", "FemRtm: 125", "ByonRole: 77", "WowYeah: 127", "ListenVo: 127", "YAMAHAFS: 127", "Laugh: 121", "Laugh2: 127", "AreYouR: 127", "Oiyai: 127", "Oiaiuo: 127", "UuWaUu: 127", "Wao: 127", "RndArp1: 127", "FiltrArp: 127", "RndArp2: 127", "TechArp: 127", "RndArp3: 120", "Voco-Seq: 127", "PopTech: 113", "1BarBeat: 127", "1BrBeat2: 127", "Undo: 127", "RndArp4: 127", "VoclRtm2: 127", "Reiyowha: 127", "RndArp5: 103", "VocalArp: 127", "CanYouGi: 127", "Pu-Yo: 127", "Yaof: 127", "MyaOh: 127", "ChuckRtm: 127", "ILoveYou: 127", "Jan-On: 127", "Welcome: 127", "One-Two: 127", "Edokko: 127", "Everybdy: 127", "Uwau: 127", "YEEAAH: 127", "4-3-2-1: 127", "Test123: 127", "CheckSnd: 127", "ShavaDo: 127", "R-M-H-R: 127", "HiSchool: 127", "M.Blastr: 127", "L&G MayI: 127", "Hellow: 127", "ChowaUu: 127", "Everybd2: 127", "Dodidowa: 127", "Check123: 127", "BranNewY: 116", "BoomBoom: 127", "Hi=Woo: 127", "FreeForm: 127", "FreqPad: 127", "YouKnow: 127", "OldTech: 127", "B/M: 127", "MiniJngl: 127", "EveryB-S: 127", "IYaan: 127", "Yeah: 127", "ThankYou: 127", "Yes=No: 127", "UnWaEDon: 127", "MouthPop: 127", "Fire: 94", "TBLine: 104", "China: 127", "Aeiou: 127", "YaYeYiYo: 127", "C7Seq: 125", "SoundLib: 127", "IYaan2: 127", "Relax: 127" };
@@ -84,76 +84,76 @@ public class YamahaFS1RMulti extends Synth
     // The following two were taken with permission from FS1REditor by K_Take (https://synth-voice.sakura.ne.jp/fs1r_editor_english.html)
     public static final String[] CONTROL_DESTINATIONS = { "Ins->Rev", "Ins->Var", "Volume", "Pan", "Rev Send", "Var Send", "Flt Freq", "Flt Reso", "Flt EGDepth", "Attack Time", "Decay Time", "Release Time", "PEG InitLvl", "PEGAtakTime", "PEG ReleLvl", "PEGReleTime", "V/N Balance", "Formant", "FM", "Pitch Bias", "Amp EG Bias", "Freq Bias", "V BandWidth", "N BandWidth", "LFO1 Pitch", "LFO1 Amp", "LFO1 Freq", "LFO1 Filter", "LFO1 Speed", "LFO2 Filter", "LFO2 Speed", "Fseq Speed", "FseqScratch" };
     public static final int[] EQ_FREQUENCIES = new int[]
-        {
-            32,                             //[start low],
-            36,
-            40,
-            45,
-            50,
-            56,
-            63,
-            70,
-            80,
-            90,
-            100,                    //[start mid],
-            110,
-            125,
-            140,
-            160,
-            180,
-            200,
-            225,
-            250,
-            280,
-            315,
-            355,
-            400,
-            450,
-            500,                    //[start high],
-            560,
-            630,
-            700,
-            800,
-            900,
-            1000,
-            1100,
-            1200,
-            1400,
-            1600,
-            1800,
-            2000,                   //[end low],
-            2200,
-            2500,
-            2800,
-            3200,
-            3600,
-            4000,
-            4500,
-            5000,
-            5600,
-            6300,
-            7000,
-            8000,
-            9000,
-            10000,                  //[end mid],
-            11000,
-            12000,
-            14000,
-            16000,                  //[end high],
-        };
+    {
+    32,                             //[start low],
+    36,
+    40,
+    45,
+    50,
+    56,
+    63,
+    70,
+    80,
+    90,
+    100,                    //[start mid],
+    110,
+    125,
+    140,
+    160,
+    180,
+    200,
+    225,
+    250,
+    280,
+    315,
+    355,
+    400,
+    450,
+    500,                    //[start high],
+    560,
+    630,
+    700,
+    800,
+    900,
+    1000,
+    1100,
+    1200,
+    1400,
+    1600,
+    1800,
+    2000,                   //[end low],
+    2200,
+    2500,
+    2800,
+    3200,
+    3600,
+    4000,
+    4500,
+    5000,
+    5600,
+    6300,
+    7000,
+    8000,
+    9000,
+    10000,                  //[end mid],
+    11000,
+    12000,
+    14000,
+    16000,                  //[end high],
+    };
 
 
     public void addYamahaFS1RMenu()
-    {
+        {
         JMenu menu = new JMenu("FS1R");
         menubar.add(menu);
 
         JMenuItem mute = new JMenuItem("Mute Parts...");
         mute.addActionListener(new ActionListener()
             {
-                public void actionPerformed(ActionEvent e)
+            public void actionPerformed(ActionEvent e)
                 {
-                    showMuteDialog();                
+                showMuteDialog();                
                 }
             });
         menu.add(mute);
@@ -162,40 +162,40 @@ public class YamahaFS1RMulti extends Synth
         menu.add(swap);
         swap.addActionListener(new ActionListener()
             {
-                JComboBox part1 = new JComboBox(PARTS);
-                JComboBox part2 = new JComboBox(PARTS);
+            JComboBox part1 = new JComboBox(PARTS);
+            JComboBox part2 = new JComboBox(PARTS);
                 
-                public void actionPerformed(ActionEvent evt)
+            public void actionPerformed(ActionEvent evt)
                 {
-                    boolean result = showMultiOption(YamahaFS1RMulti.this, new String[] { "Swap", "With" }, 
-                                                     new JComponent[] { part1, part2 }, "Swap Parts...", "Enter the parts to swap with one another.");
+                boolean result = showMultiOption(YamahaFS1RMulti.this, new String[] { "Swap", "With" }, 
+                    new JComponent[] { part1, part2 }, "Swap Parts...", "Enter the parts to swap with one another.");
 
-                    if (result)
+                if (result)
+                    {
+                    int p1 = part1.getSelectedIndex() + 1;
+                    int p2 = part2.getSelectedIndex() + 1;
+
+                    undo.push(getModel());
+                    setSendMIDI(false);
+                    boolean currentPush = undo.getWillPush();
+                    undo.setWillPush(false);
+
+                    String[] parameters = model.getKeys();
+                    for(int i = 0; i < parameters.length; i++)
                         {
-                            int p1 = part1.getSelectedIndex() + 1;
-                            int p2 = part2.getSelectedIndex() + 1;
-
-                            undo.push(getModel());
-                            setSendMIDI(false);
-                            boolean currentPush = undo.getWillPush();
-                            undo.setWillPush(false);
-
-                            String[] parameters = model.getKeys();
-                            for(int i = 0; i < parameters.length; i++)
-                                {
-                                    if (parameters[i].startsWith("part" + p2))
-                                        {
-                                            int val2 = model.get(parameters[i]);
-                                            int val1 = model.get(("part" + p1) + parameters[i].substring(5));
-                                            model.set(("part" + p1) + parameters[i].substring(5), val2);
-                                            model.set(parameters[i], val1);
-                                        }
-                                }
-                                                                                
-                            undo.setWillPush(currentPush);
-                            setSendMIDI(true);
-                            sendAllParameters();
+                        if (parameters[i].startsWith("part" + p2))
+                            {
+                            int val2 = model.get(parameters[i]);
+                            int val1 = model.get(("part" + p1) + parameters[i].substring(5));
+                            model.set(("part" + p1) + parameters[i].substring(5), val2);
+                            model.set(parameters[i], val1);
+                            }
                         }
+                                                                                
+                    undo.setWillPush(currentPush);
+                    setSendMIDI(true);
+                    sendAllParameters();
+                    }
                 }
             });
 
@@ -203,69 +203,69 @@ public class YamahaFS1RMulti extends Synth
         menu.add(copy);
         copy.addActionListener(new ActionListener()
             {
-                JComboBox part1 = new JComboBox(PARTS);
-                JComboBox part2 = new JComboBox(PARTS_PLUS);
+            JComboBox part1 = new JComboBox(PARTS);
+            JComboBox part2 = new JComboBox(PARTS_PLUS);
                 
-                public void actionPerformed(ActionEvent evt)
+            public void actionPerformed(ActionEvent evt)
                 {
-                    boolean result = showMultiOption(YamahaFS1RMulti.this, new String[] { "Copy", "To"}, 
-                                                     new JComponent[] { part1, part2 }, "Copy Part To...", "Enter the parts to copy from and to.");
+                boolean result = showMultiOption(YamahaFS1RMulti.this, new String[] { "Copy", "To"}, 
+                    new JComponent[] { part1, part2 }, "Copy Part To...", "Enter the parts to copy from and to.");
 
-                    if (result)
+                if (result)
+                    {
+                    int p1 = part1.getSelectedIndex() + 1;
+                    int p2 = part2.getSelectedIndex() + 1;
+
+                    undo.push(getModel());
+                    setSendMIDI(false);
+                    boolean currentPush = undo.getWillPush();
+                    undo.setWillPush(false);
+
+                    String[] parameters = model.getKeys();
+                    for(int i = 0; i < parameters.length; i++)
                         {
-                            int p1 = part1.getSelectedIndex() + 1;
-                            int p2 = part2.getSelectedIndex() + 1;
-
-                            undo.push(getModel());
-                            setSendMIDI(false);
-                            boolean currentPush = undo.getWillPush();
-                            undo.setWillPush(false);
-
-                            String[] parameters = model.getKeys();
-                            for(int i = 0; i < parameters.length; i++)
+                        if (parameters[i].startsWith("part" + p1))
+                            {
+                            if (p2 == 5)        // "All"
                                 {
-                                    if (parameters[i].startsWith("part" + p1))
-                                        {
-                                            if (p2 == 5)        // "All"
-                                                {
-                                                    for(int j = 1; j <= 4; j++)
-                                                        {
-                                                            int val2 = model.get(parameters[i]);
-                                                            model.set(("part" + j) + parameters[i].substring(5), val2);
-                                                        }
-                                                }
-                                            else
-                                                {
-                                                    int val2 = model.get(parameters[i]);
-                                                    model.set(("part" + p2) + parameters[i].substring(5), val2);
-                                                }
-                                        }
+                                for(int j = 1; j <= 4; j++)
+                                    {
+                                    int val2 = model.get(parameters[i]);
+                                    model.set(("part" + j) + parameters[i].substring(5), val2);
+                                    }
                                 }
-                                                                                
-                            undo.setWillPush(currentPush);
-                            setSendMIDI(true);
-                            sendAllParameters();
+                            else
+                                {
+                                int val2 = model.get(parameters[i]);
+                                model.set(("part" + p2) + parameters[i].substring(5), val2);
+                                }
+                            }
                         }
+                                                                                
+                    undo.setWillPush(currentPush);
+                    setSendMIDI(true);
+                    sendAllParameters();
+                    }
                 }
             });
-    }
+        }
 
     public JFrame sprout()
-    {
+        {
         JFrame frame = super.sprout();  
         transmitTo.setEnabled(false);           // Though that doesn't matter any more
         addYamahaFS1RMenu();
         return frame;
-    }         
+        }         
 
     public YamahaFS1RMulti()
-    {
+        {
         model.set("number", 0);
         model.set("bank", 0);
                 
         for(int i = 0; i < allParameters.length; i++)
             {
-                allParametersToIndex.put(allParameters[i], Integer.valueOf(i));
+            allParametersToIndex.put(allParameters[i], Integer.valueOf(i));
             }
 
         JComponent soundPanel = new SynthPanel(this);
@@ -281,25 +281,25 @@ public class YamahaFS1RMulti extends Synth
 
         for(int i = 1; i <= 4; i++)
             {
-                soundPanel = new SynthPanel(this);
-                vbox = new VBox();
+            soundPanel = new SynthPanel(this);
+            vbox = new VBox();
 
-                hbox = new HBox();
-                hbox.add(addVoice(i, Style.COLOR_A()));
-                hbox.addLast(addOutput(i, Style.COLOR_B()));
-                vbox.add(hbox);
-                vbox.add(addTone(i, Style.COLOR_C()));
+            hbox = new HBox();
+            hbox.add(addVoice(i, Style.COLOR_A()));
+            hbox.addLast(addOutput(i, Style.COLOR_B()));
+            vbox.add(hbox);
+            vbox.add(addTone(i, Style.COLOR_C()));
 
-                hbox = new HBox();
-                hbox.add(addPitch(i, Style.COLOR_A()));
-                hbox.addLast(addEnvelopes(i, Style.COLOR_B()));
-                vbox.add(hbox);
+            hbox = new HBox();
+            hbox.add(addPitch(i, Style.COLOR_A()));
+            hbox.addLast(addEnvelopes(i, Style.COLOR_B()));
+            vbox.add(hbox);
 
-                vbox.addLast(addPlay(i, Style.COLOR_C()));
+            vbox.addLast(addPlay(i, Style.COLOR_C()));
                 
-                soundPanel.add(vbox, BorderLayout.CENTER);
-                addTab("Part " + i, soundPanel);
-                ((SynthPanel)soundPanel).makePasteable("part");
+            soundPanel.add(vbox, BorderLayout.CENTER);
+            addTab("Part " + i, soundPanel);
+            ((SynthPanel)soundPanel).makePasteable("part");
             }
 
         soundPanel = new SynthPanel(this);
@@ -322,35 +322,35 @@ public class YamahaFS1RMulti extends Synth
         vbox = new VBox();
         for(int i = 1; i <= 8; i+=2)
             {
-                HBox hbox2 = new HBox();
-                if (i % 4 == 1)
-                    {
-                        hbox2.add(addController(i, Style.COLOR_A()));
-                        hbox2.addLast(addController(i + 1, Style.COLOR_B()));
-                    }
-                else
-                    {
-                        hbox2.add(addController(i, Style.COLOR_B()));
-                        hbox2.addLast(addController(i + 1, Style.COLOR_A()));
-                    }
-                vbox.add(hbox2);
+            HBox hbox2 = new HBox();
+            if (i % 4 == 1)
+                {
+                hbox2.add(addController(i, Style.COLOR_A()));
+                hbox2.addLast(addController(i + 1, Style.COLOR_B()));
+                }
+            else
+                {
+                hbox2.add(addController(i, Style.COLOR_B()));
+                hbox2.addLast(addController(i + 1, Style.COLOR_A()));
+                }
+            vbox.add(hbox2);
             }
         
         soundPanel.add(vbox, BorderLayout.CENTER);
         addTab("Voice Control", soundPanel);
                         
         loadDefaults();        
-    }
+        }
                 
                 
     public void showMuteDialog()
-    {
+        {
         JCheckBox[] parts = new JCheckBox[4];
         Box partBox = new Box(BoxLayout.X_AXIS);
         for(int i = 0; i < parts.length; i++)
             {
-                parts[i] = new JCheckBox("" + (i + 1));
-                partBox.add(parts[i]);
+            parts[i] = new JCheckBox("" + (i + 1));
+            partBox.add(parts[i]);
             }
         partBox.add(Box.createGlue());
         
@@ -364,10 +364,10 @@ public class YamahaFS1RMulti extends Synth
         pcheck.setHorizontalAlignment(SwingConstants.CENTER);
         pcheck.addActionListener(new ActionListener()
             {
-                public void actionPerformed(ActionEvent e)
+            public void actionPerformed(ActionEvent e)
                 {
-                    for(int i = 0; i < parts.length; i++)
-                        parts[i].setSelected(true);
+                for(int i = 0; i < parts.length; i++)
+                    parts[i].setSelected(true);
                 }
             });
         pbox.add(pcheck);
@@ -377,10 +377,10 @@ public class YamahaFS1RMulti extends Synth
         puncheck.setHorizontalAlignment(SwingConstants.CENTER);
         puncheck.addActionListener(new ActionListener()
             {
-                public void actionPerformed(ActionEvent e)
+            public void actionPerformed(ActionEvent e)
                 {
-                    for(int i = 0; i < parts.length; i++)
-                        parts[i].setSelected(false);
+                for(int i = 0; i < parts.length; i++)
+                    parts[i].setSelected(false);
                 }
             });
         pbox.add(puncheck);
@@ -388,20 +388,20 @@ public class YamahaFS1RMulti extends Synth
         partPanel.add(pbox, BorderLayout.CENTER);
 
         boolean result = showMultiOption(YamahaFS1RMulti.this, new String[] { "<html>Parts</html>" }, 
-                                         new JComponent[] { partPanel }, "Mute Parts", "<html>Selected parts have their MIDI<br>channels temporarily turned Off.<br><br>Other parts have their MIDI<br> channels reset to patch settings.</html>");
+            new JComponent[] { partPanel }, "Mute Parts", "<html>Selected parts have their MIDI<br>channels temporarily turned Off.<br><br>Other parts have their MIDI<br> channels reset to patch settings.</html>");
         
         if (result)
             {
-                for(int part = 0; part < 4; part++)
-                    {
-                        mutePart(part, parts[part].isSelected());
-                    }
+            for(int part = 0; part < 4; part++)
+                {
+                mutePart(part, parts[part].isSelected());
+                }
             }
-    }
+        }
         
 
     void mutePart(int part, boolean mute)
-    {
+        {
         // F0 43 1n 5E 3p 00 ll vv vv F7
         // n: id
         // p: part
@@ -409,68 +409,68 @@ public class YamahaFS1RMulti extends Synth
         // vv vv:   00 mute 
         int channel = model.get("part" + (part + 1) + "rcvchannel");
         byte[] data = new byte[] { (byte)0xF0, (byte)0x43, (byte)(16 + getID() - 1), (byte)0x5E, 
-                                   (byte)(0x30 + part),                      // HIGH: part and common
-                                   (byte)0,
-                                   (byte)0x04,                                                                     // rcv channel
-                                   (byte)0,
-                                   (byte)(mute ? 0x7F : 
-                                          (channel == 17 ? 0x7F : channel)),              // deal with th ehole
-                                   (byte)0xF7 };
+            (byte)(0x30 + part),                      // HIGH: part and common
+            (byte)0,
+            (byte)0x04,                                                                     // rcv channel
+            (byte)0,
+            (byte)(mute ? 0x7F : 
+                (channel == 17 ? 0x7F : channel)),              // deal with th ehole
+            (byte)0xF7 };
         tryToSendSysex(data);
-    }        
+        }        
                 
 
     public String getDefaultResourceFileName() { return "YamahaFS1RMulti.init"; }
     public String getHTMLResourceFileName() { return "YamahaFS1RMulti.html"; }
 
     public boolean gatherPatchInfo(String title, Model change, boolean writing)
-    {
+        {
         JComboBox bank = new JComboBox(BANKS);
         bank.setEditable(false);
         bank.setMaximumRowCount(32);
         if (writing)
             {
-                bank = new JComboBox(new String[] { "Internal" });
-                bank.setEnabled(false);
+            bank = new JComboBox(new String[] { "Internal" });
+            bank.setEnabled(false);
             }
         else
             {
-                bank.setSelectedIndex(model.get("bank"));
+            bank.setSelectedIndex(model.get("bank"));
             }
                 
         JTextField number = new JTextField("" + (model.get("number") + 1), 3);
                 
         while(true)
             {
-                boolean result = showMultiOption(this, new String[] { "Bank", "Patch Number"}, 
-                                                 new JComponent[] { bank, number }, title, "Enter the Bank and Patch number.");
+            boolean result = showMultiOption(this, new String[] { "Bank", "Patch Number"}, 
+                new JComponent[] { bank, number }, title, "Enter the Bank and Patch number.");
                 
-                if (result == false) 
-                    return false;
+            if (result == false) 
+                return false;
                                 
-                int n;
-                try { n = Integer.parseInt(number.getText()); }
-                catch (NumberFormatException e)
-                    {
-                        showSimpleError(title, "The Patch Number must be an integer 1 ... 128");
-                        continue;
-                    }
-                if (n < 1 || n > 128)
-                    {
-                        showSimpleError(title, "The Patch Number must be an integer 1 ... 128");
-                        continue;
-                    }
+            int n;
+            try { n = Integer.parseInt(number.getText()); }
+            catch (NumberFormatException e)
+                {
+                showSimpleError(title, "The Patch Number must be an integer 1 ... 128");
+                continue;
+                }
+            if (n < 1 || n > 128)
+                {
+                showSimpleError(title, "The Patch Number must be an integer 1 ... 128");
+                continue;
+                }
                                 
-                change.set("bank", bank.getSelectedIndex());
-                change.set("number", n - 1);
+            change.set("bank", bank.getSelectedIndex());
+            change.set("number", n - 1);
                         
-                return true;
+            return true;
             }
-    }
+        }
                                     
     /** Add the global patch category (name, id, number, etc.) */
     public JComponent addNameGlobal(Color color)
-    {
+        {
         Category globalCategory = new Category(this, getSynthName(), color);
         //globalCategory.makeUnresettable();
                 
@@ -486,15 +486,15 @@ public class YamahaFS1RMulti extends Synth
         
         comp = new StringComponent("Patch Name", this, "name", 12, "Name must be up to 12 ASCII characters.")
             {
-                public String replace(String val)
+            public String replace(String val)
                 {
-                    return revisePatchName(val);
+                return revisePatchName(val);
                 }
                                 
-                public void update(String key, Model model)
+            public void update(String key, Model model)
                 {
-                    super.update(key, model);
-                    updateTitle();
+                super.update(key, model);
+                updateTitle();
                 }
             };
         vbox.add(comp);  // doesn't work right :-(
@@ -506,11 +506,11 @@ public class YamahaFS1RMulti extends Synth
 
         globalCategory.add(hbox, BorderLayout.WEST);
         return globalCategory;
-    }
+        }
 
 
     public JComponent addGlobal( Color color)
-    {
+        {
         Category category = new Category(this, "Global", color);
 
         JComponent comp;
@@ -528,22 +528,22 @@ public class YamahaFS1RMulti extends Synth
 
         comp = new LabelledDial("Pan", this, "performancepan", color, 1, 127)
             {
-                public boolean isSymmetric() { return true; }
-                public String map(int val)
+            public boolean isSymmetric() { return true; }
+            public String map(int val)
                 {
-                    if (val < 64)
-                        return "< " + (64 - val);
-                    else if (val == 64)
-                        return "--";
-                    else
-                        return "" + (val - 64) + " >";
+                if (val < 64)
+                    return "< " + (64 - val);
+                else if (val == 64)
+                    return "--";
+                else
+                    return "" + (val - 64) + " >";
                 }
             };
         hbox.add(comp);
         
         comp = new LabelledDial("Note Shift", this, "performancenoteshift", color, 0, 48)
             {
-                public boolean isSymmetric() { return true; }
+            public boolean isSymmetric() { return true; }
             };
         hbox.add(comp);
 
@@ -555,12 +555,12 @@ public class YamahaFS1RMulti extends Synth
 
         category.add(hbox, BorderLayout.CENTER);
         return category;
-    }
+        }
 
 
 
     public JComponent addFseq(Color color)
-    {
+        {
         Category category = new Category(this, "Fseq", color);
 
         JComponent comp;
@@ -582,87 +582,87 @@ public class YamahaFS1RMulti extends Synth
         params = FSEQS;
         comp = new Chooser("Fseq", this, "fseq", params)
             {
-                public void update(String key, Model model)
+            public void update(String key, Model model)
                 {
-                    super.update(key, model);
-                    int val = model.get(key);
+                super.update(key, model);
+                int val = model.get(key);
                 
-                    // reset to defaults
-                    model.set("fseqformantpitchmode", FSEQ_PARAMETER_SETTINGS[val][FSEQ_DEFAULT_PITCH_I]);
-                    model.set("fseqformantsequencedelay", FSEQ_PARAMETER_SETTINGS[val][FSEQ_DEFAULT_START_DELAY_I]);
-                    model.set("fseqloopmode", FSEQ_PARAMETER_SETTINGS[val][FSEQ_DEFAULT_LOOP_MODE_I]);
-                    model.set("fseqstartstepoflooppoint", FSEQ_PARAMETER_SETTINGS[val][FSEQ_DEFAULT_LOOP_START_I]);
-                    model.set("fseqendstepoflooppoint", FSEQ_PARAMETER_SETTINGS[val][FSEQ_DEFAULT_LOOP_END_I]);
+                // reset to defaults
+                model.set("fseqformantpitchmode", FSEQ_PARAMETER_SETTINGS[val][FSEQ_DEFAULT_PITCH_I]);
+                model.set("fseqformantsequencedelay", FSEQ_PARAMETER_SETTINGS[val][FSEQ_DEFAULT_START_DELAY_I]);
+                model.set("fseqloopmode", FSEQ_PARAMETER_SETTINGS[val][FSEQ_DEFAULT_LOOP_MODE_I]);
+                model.set("fseqstartstepoflooppoint", FSEQ_PARAMETER_SETTINGS[val][FSEQ_DEFAULT_LOOP_START_I]);
+                model.set("fseqendstepoflooppoint", FSEQ_PARAMETER_SETTINGS[val][FSEQ_DEFAULT_LOOP_END_I]);
                 
-                    // Update upper limits
-                    int maxLen = FSEQ_PARAMETER_SETTINGS[val][FSEQ_MAX_LENGTH_I];
+                // Update upper limits
+                int maxLen = FSEQ_PARAMETER_SETTINGS[val][FSEQ_MAX_LENGTH_I];
                 
-                    model.setMax("fseqstartstepoffset", maxLen);
-                    model.setMetricMax("fseqstartstepoffset", maxLen);
-                    if (model.get("fseqstartstepoffset") > maxLen)
-                        model.set("fseqstartstepoffset", maxLen);
-                    model.updateListenersForKey("fseqstartstepoffset");
+                model.setMax("fseqstartstepoffset", maxLen);
+                model.setMetricMax("fseqstartstepoffset", maxLen);
+                if (model.get("fseqstartstepoffset") > maxLen)
+                    model.set("fseqstartstepoffset", maxLen);
+                model.updateListenersForKey("fseqstartstepoffset");
 
-                    model.setMax("fseqstartstepoflooppoint", FSEQ_PARAMETER_SETTINGS[val][FSEQ_MAX_LENGTH_I]);
-                    model.setMetricMax("fseqstartstepoflooppoint", FSEQ_PARAMETER_SETTINGS[val][FSEQ_MAX_LENGTH_I]);
-                    if (model.get("fseqstartstepoflooppoint") > maxLen)
-                        model.set("fseqstartstepoflooppoint", maxLen);
-                    model.updateListenersForKey("fseqstartstepoflooppoint");
+                model.setMax("fseqstartstepoflooppoint", FSEQ_PARAMETER_SETTINGS[val][FSEQ_MAX_LENGTH_I]);
+                model.setMetricMax("fseqstartstepoflooppoint", FSEQ_PARAMETER_SETTINGS[val][FSEQ_MAX_LENGTH_I]);
+                if (model.get("fseqstartstepoflooppoint") > maxLen)
+                    model.set("fseqstartstepoflooppoint", maxLen);
+                model.updateListenersForKey("fseqstartstepoflooppoint");
 
-                    model.setMax("fseqendstepoflooppoint", FSEQ_PARAMETER_SETTINGS[val][FSEQ_MAX_LENGTH_I]);
-                    model.setMetricMax("fseqendstepoflooppoint", FSEQ_PARAMETER_SETTINGS[val][FSEQ_MAX_LENGTH_I]);
-                    if (model.get("fseqendstepoflooppoint") > maxLen)
-                        model.set("fseqendstepoflooppoint", maxLen);
-                    model.updateListenersForKey("fseqendstepoflooppoint");
+                model.setMax("fseqendstepoflooppoint", FSEQ_PARAMETER_SETTINGS[val][FSEQ_MAX_LENGTH_I]);
+                model.setMetricMax("fseqendstepoflooppoint", FSEQ_PARAMETER_SETTINGS[val][FSEQ_MAX_LENGTH_I]);
+                if (model.get("fseqendstepoflooppoint") > maxLen)
+                    model.set("fseqendstepoflooppoint", maxLen);
+                model.updateListenersForKey("fseqendstepoflooppoint");
                 }
             };
         vbox.add(comp);
 
         final PushButton pushbutton = new PushButton("Show")
             {
-                public void perform()
+            public void perform()
                 {
-                    final YamahaFS1RFseq synth = new YamahaFS1RFseq();
-                    if (tuple != null)
-                        synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver(), synth.buildKey2Receiver());
-                    if (synth.tuple != null)
-                        {       
-                            // This is a little tricky.  When the dump comes in from the synth,
-                            // Edisyn will only send it to the topmost panel.  So we first sprout
-                            // the panel and show it, and THEN send the dump request.  But this isn't
-                            // enough, because what setVisible(...) does is post an event on the
-                            // Swing Event Queue to build the window at a later time.  This later time
-                            // happens to be after the dump comes in, so it's ignored.  So what we
-                            // ALSO do is post the dump request to occur at the end of the Event Queue,
-                            // so by the time the dump request has been made, the window is shown and
-                            // frontmost.
+                final YamahaFS1RFseq synth = new YamahaFS1RFseq();
+                if (tuple != null)
+                    synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver(), synth.buildKey2Receiver());
+                if (synth.tuple != null)
+                    {       
+                    // This is a little tricky.  When the dump comes in from the synth,
+                    // Edisyn will only send it to the topmost panel.  So we first sprout
+                    // the panel and show it, and THEN send the dump request.  But this isn't
+                    // enough, because what setVisible(...) does is post an event on the
+                    // Swing Event Queue to build the window at a later time.  This later time
+                    // happens to be after the dump comes in, so it's ignored.  So what we
+                    // ALSO do is post the dump request to occur at the end of the Event Queue,
+                    // so by the time the dump request has been made, the window is shown and
+                    // frontmost.
                                                 
-                            synth.sprout();
-                            JFrame frame = ((JFrame)(SwingUtilities.getRoot(synth)));
-                            frame.setVisible(true);
+                    synth.sprout();
+                    JFrame frame = ((JFrame)(SwingUtilities.getRoot(synth)));
+                    frame.setVisible(true);
                     
-                            int val = model.get("fseq");
-                            int bank = (val < 6 ? 0 : 1);
-                            int number = (val < 6 ? val : val - 6);
+                    int val = model.get("fseq");
+                    int bank = (val < 6 ? 0 : 1);
+                    int number = (val < 6 ? val : val - 6);
 
-                            SwingUtilities.invokeLater(
-                                                       new Runnable()
-                                                       {
-                                                           public void run() 
-                                                           { 
-                                                               Model tempModel = buildModel();
-                                                               synth.setSendMIDI(false);
-                                                               tempModel.set("bank", bank);
-                                                               tempModel.set("number", number);
-                                                               synth.setSendMIDI(true);
-                                                               synth.performRequestDump(tempModel, false);
-                                                           }
-                                                       });
-                        }
-                    else
-                        {
-                            showSimpleError("Disconnected", "You can't show a patch when disconnected.");
-                        }
+                    SwingUtilities.invokeLater(
+                        new Runnable()
+                            {
+                            public void run() 
+                                { 
+                                Model tempModel = buildModel();
+                                synth.setSendMIDI(false);
+                                tempModel.set("bank", bank);
+                                tempModel.set("number", number);
+                                synth.setSendMIDI(true);
+                                synth.performRequestDump(tempModel, false);
+                                }
+                            });
+                    }
+                else
+                    {
+                    showSimpleError("Disconnected", "You can't show a patch when disconnected.");
+                    }
                 }
             };
         vbox.add(pushbutton);
@@ -694,9 +694,9 @@ public class YamahaFS1RMulti extends Synth
 
         PushButton button = new PushButton("Speed Preset", PRESETS)
             {
-                public void perform(int i)
+            public void perform(int i)
                 {
-                    getModel().set("fseqspeed", PRESET_VALS[i]);
+                getModel().set("fseqspeed", PRESET_VALS[i]);
                 }
             };
         vbox.add(button);
@@ -706,10 +706,10 @@ public class YamahaFS1RMulti extends Synth
 
         comp = new LabelledDial("Speed", this, "fseqspeed", color, 5, 5000)             // we'll have to convert this at parse/emit time
             {
-                public String map(int val)
+            public String map(int val)
                 {
-                    if (val < 10) return FSEQ_CLOCK[val - 5];
-                    else return String.format("%1.1f", (val / 10.0));                          // 10.0 ... 500.0
+                if (val < 10) return FSEQ_CLOCK[val - 5];
+                else return String.format("%1.1f", (val / 10.0));                          // 10.0 ... 500.0
                 } 
             };
         hbox.add(comp);
@@ -727,20 +727,20 @@ public class YamahaFS1RMulti extends Synth
 
         comp = new LabelledDial("Level Vel", this, "fseqlevelvelocitysensitivity", color, 0, 127, 64)
             {
-                public boolean isSymmetric() { return true; }
+            public boolean isSymmetric() { return true; }
             };
         ((LabelledDial)comp).addAdditionalLabel("Sensitivity");
         hbox.add(comp);
 
         category.add(hbox, BorderLayout.CENTER);
         return category;
-    }
+        }
     
 
     /** Builds destinations for a given controller.  These destinations must change depending
         on the choice of Insertion effect.  */
     String[] buildDestinations()
-    {
+        {
         String[] destinations = new String[15 + CONTROL_DESTINATIONS.length];
         int val = model.get("insertiontype");
         int version = YamahaFS1RFX.FX_VERSIONS[INSERTION][val] + 1;             // offset for the table
@@ -748,20 +748,20 @@ public class YamahaFS1RMulti extends Synth
         destinations[0] = "Off";
         for(int i = 1; i < 15; i++)
             {
-                destinations[i] = YamahaFS1RFX.ctrlDestNameTable[i-1][version];
-                if (destinations[i].equals(""))
-                    destinations[i] = "Ins " + i + " --- ";
+            destinations[i] = YamahaFS1RFX.ctrlDestNameTable[i-1][version];
+            if (destinations[i].equals(""))
+                destinations[i] = "Ins " + i + " --- ";
             }
         for(int i = 0; i < CONTROL_DESTINATIONS.length; i++)
             {
-                destinations[i + 15] = CONTROL_DESTINATIONS[i];
+            destinations[i + 15] = CONTROL_DESTINATIONS[i];
             }
         return destinations;
-    }
+        }
         
     public Chooser[] controllerChoosers = new Chooser[8];
     public JComponent addController(int controller, Color color)
-    {
+        {
         Category category = new Category(this, "Voice Control Set " + controller , color);
         //        category.makePasteable("controller" + controller);
         category.makePasteable("controller");
@@ -841,12 +841,12 @@ public class YamahaFS1RMulti extends Synth
                 
         category.add(hbox, BorderLayout.CENTER);
         return category;
-    }
+        }
         
     
     /** Revises the patch name in the Category title for a given Part. */
     void updatePatchName(int part, Category category)
-    {
+        {
         int bank = model.get("part" + part + "banknumber", -100) - 1;
         int number = model.get("part" + part + "programnumber", -100);
                 
@@ -854,16 +854,16 @@ public class YamahaFS1RMulti extends Synth
                 
         if (bank <= 0)
             {
-                category.setName("Voice " + part);
+            category.setName("Voice " + part);
             }
         else 
             {
-                category.setName("Voice " + part + ": " + VOICES[bank - 1][number]);
+            category.setName("Voice " + part + ": " + VOICES[bank - 1][number]);
             }
-    }
+        }
     
     public JComponent addVoice(int part, Color color)
-    {
+        {
         final Category category = new Category(this, "Voice " + part, color);
         //        category.makePasteable("part" + part);
         category.makePasteable("part");
@@ -874,49 +874,49 @@ public class YamahaFS1RMulti extends Synth
         
         final PushButton pushbutton = new PushButton("Show")
             {
-                public void perform()
+            public void perform()
                 {
-                    if (YamahaFS1RMulti.this.model.get("part" + part + "banknumber") == 0)  // off
-                        return;
+                if (YamahaFS1RMulti.this.model.get("part" + part + "banknumber") == 0)  // off
+                    return;
                         
-                    final YamahaFS1R synth = new YamahaFS1R();
-                    if (tuple != null)
-                        synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver(), synth.buildKey2Receiver());
-                    if (synth.tuple != null)
-                        {       
-                            // This is a little tricky.  When the dump comes in from the synth,
-                            // Edisyn will only send it to the topmost panel.  So we first sprout
-                            // the panel and show it, and THEN send the dump request.  But this isn't
-                            // enough, because what setVisible(...) does is post an event on the
-                            // Swing Event Queue to build the window at a later time.  This later time
-                            // happens to be after the dump comes in, so it's ignored.  So what we
-                            // ALSO do is post the dump request to occur at the end of the Event Queue,
-                            // so by the time the dump request has been made, the window is shown and
-                            // frontmost.
+                final YamahaFS1R synth = new YamahaFS1R();
+                if (tuple != null)
+                    synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver(), synth.buildKey2Receiver());
+                if (synth.tuple != null)
+                    {       
+                    // This is a little tricky.  When the dump comes in from the synth,
+                    // Edisyn will only send it to the topmost panel.  So we first sprout
+                    // the panel and show it, and THEN send the dump request.  But this isn't
+                    // enough, because what setVisible(...) does is post an event on the
+                    // Swing Event Queue to build the window at a later time.  This later time
+                    // happens to be after the dump comes in, so it's ignored.  So what we
+                    // ALSO do is post the dump request to occur at the end of the Event Queue,
+                    // so by the time the dump request has been made, the window is shown and
+                    // frontmost.
                                                 
-                            synth.sprout();
-                            JFrame frame = ((JFrame)(SwingUtilities.getRoot(synth)));
-                            frame.setVisible(true);
+                    synth.sprout();
+                    JFrame frame = ((JFrame)(SwingUtilities.getRoot(synth)));
+                    frame.setVisible(true);
 
-                            SwingUtilities.invokeLater(
-                                                       new Runnable()
-                                                       {
-                                                           public void run() 
-                                                           { 
-                                                               Model tempModel = buildModel();
-                                                               synth.setSendMIDI(false);
-                                                               synth.setPart(part - 1);                // so it auditions properly
-                                                               tempModel.set("bank", YamahaFS1RMulti.this.model.get("part" + part + "banknumber") - 1);
-                                                               tempModel.set("number", YamahaFS1RMulti.this.model.get("part" + part + "programnumber"));
-                                                               synth.setSendMIDI(true);
-                                                               synth.performRequestDump(tempModel, false);
-                                                           }
-                                                       });
-                        }
-                    else
-                        {
-                            showSimpleError("Disconnected", "You can't show a patch when disconnected.");
-                        }
+                    SwingUtilities.invokeLater(
+                        new Runnable()
+                            {
+                            public void run() 
+                                { 
+                                Model tempModel = buildModel();
+                                synth.setSendMIDI(false);
+                                synth.setPart(part - 1);                // so it auditions properly
+                                tempModel.set("bank", YamahaFS1RMulti.this.model.get("part" + part + "banknumber") - 1);
+                                tempModel.set("number", YamahaFS1RMulti.this.model.get("part" + part + "programnumber"));
+                                synth.setSendMIDI(true);
+                                synth.performRequestDump(tempModel, false);
+                                }
+                            });
+                    }
+                else
+                    {
+                    showSimpleError("Disconnected", "You can't show a patch when disconnected.");
+                    }
                 }
             };
         
@@ -924,11 +924,11 @@ public class YamahaFS1RMulti extends Synth
         params = VOICE_BANKS;
         comp = new Chooser("Voice Bank", this, "part" + part + "banknumber", params)
             {
-                public void update(String key, Model model)
+            public void update(String key, Model model)
                 {
-                    super.update(key, model);
-                    updatePatchName(part, category);
-                    pushbutton.getButton().setEnabled(model.get(key) != 0); // off
+                super.update(key, model);
+                updatePatchName(part, category);
+                pushbutton.getButton().setEnabled(model.get(key) != 0); // off
                 }
             };
         vbox.add(comp);
@@ -940,10 +940,10 @@ public class YamahaFS1RMulti extends Synth
 
         comp = new LabelledDial("Voice", this,  "part" + part + "programnumber", color, 0, 127, -1)
             {
-                public void update(String key, Model model)
+            public void update(String key, Model model)
                 {
-                    super.update(key, model);
-                    updatePatchName(part, category);
+                super.update(key, model);
+                updatePatchName(part, category);
                 }
             };
         ((LabelledDial)comp).addAdditionalLabel("Number");
@@ -951,11 +951,11 @@ public class YamahaFS1RMulti extends Synth
 
         comp = new LabelledDial("Receive", this,  "part" + part + "rcvchannel", color, 0, 17)
             {
-                public String map(int val)
+            public String map(int val)
                 {
-                    if (val == 16) return "Perf";
-                    else if (val == 17) return "Off";
-                    else return "" + (val + 1);
+                if (val == 16) return "Perf";
+                else if (val == 17) return "Off";
+                else return "" + (val + 1);
                 }
             };
         ((LabelledDial)comp).addAdditionalLabel("Channel");
@@ -963,20 +963,20 @@ public class YamahaFS1RMulti extends Synth
 
         comp = new LabelledDial("Receive", this,  "part" + part + "rcvchannelmax", color, 0, 16)
             {
-                public String map(int val)
+            public String map(int val)
                 {
-                    if (val == 16) return "Off";
-                    else return "" + (val + 1);
+                if (val == 16) return "Off";
+                else return "" + (val + 1);
                 }
             };
         ((LabelledDial)comp).addAdditionalLabel("Channel Max");
         if (part <= 2)
             {
-                hbox.add(comp);
+            hbox.add(comp);
             }
         else
             {
-                hbox.add(Strut.makeStrut(comp));
+            hbox.add(Strut.makeStrut(comp));
             }
 
         comp = new LabelledDial("Reserved", this,  "part" + part + "notereserve", color, 0, 32);
@@ -987,10 +987,10 @@ public class YamahaFS1RMulti extends Synth
         category.add(hbox, BorderLayout.CENTER);
         updatePatchName(part, category);
         return category;
-    }
+        }
 
     public JComponent addTone(int part, Color color)
-    {
+        {
         Category category = new Category(this, "Tone " + part, color);
         //        category.makePasteable("part" + part);
         category.makePasteable("part");
@@ -1048,12 +1048,12 @@ public class YamahaFS1RMulti extends Synth
 
         category.add(hbox, BorderLayout.CENTER);
         return category;
-    }
+        }
 
 
 
     public JComponent addPitch(int part, Color color)
-    {
+        {
         Category category = new Category(this, "Pitch " + part, color);
         //        category.makePasteable("part" + part);
         category.makePasteable("part");
@@ -1080,7 +1080,7 @@ public class YamahaFS1RMulti extends Synth
 
         comp = new LabelledDial("Note Shift", this,  "part" + part + "noteshift", color, 0, 48, 24)
             {
-                public boolean isSymmetric() { return true; }
+            public boolean isSymmetric() { return true; }
             };
         hbox.add(comp);
                 
@@ -1094,11 +1094,11 @@ public class YamahaFS1RMulti extends Synth
                 
         category.add(hbox, BorderLayout.CENTER);
         return category;
-    }
+        }
 
                 
     public JComponent addOutput(int part, Color color)
-    {
+        {
         Category category = new Category(this, "Output " + part, color);
         //        category.makePasteable("part" + part);
         category.makePasteable("part");
@@ -1118,13 +1118,13 @@ public class YamahaFS1RMulti extends Synth
 
         comp = new LabelledDial("Pan", this,  "part" + part + "pan", color, 0, 127)
             {
-                public boolean isSymmetric() { return true; }
-                public String map(int val)
+            public boolean isSymmetric() { return true; }
+            public String map(int val)
                 {
-                    if (val == 0) return "Rnd";
-                    else if (val < 64) return "< " + (64 - val);
-                    else if (val > 64) return "" + (val - 64) + " >";
-                    else return "--";
+                if (val == 0) return "Rnd";
+                else if (val < 64) return "< " + (64 - val);
+                else if (val > 64) return "" + (val - 64) + " >";
+                else return "--";
                 }
             };
         hbox.add(comp);
@@ -1149,12 +1149,12 @@ public class YamahaFS1RMulti extends Synth
 
         category.add(hbox, BorderLayout.CENTER);
         return category;
-    }
+        }
 
 
                 
     public JComponent addPlay(int part, Color color)
-    {
+        {
         Category category = new Category(this, "Play " + part, color);
         //        category.makePasteable("part" + part);
         category.makePasteable("part");
@@ -1178,18 +1178,18 @@ public class YamahaFS1RMulti extends Synth
 
         comp = new LabelledDial("Low Note", this,  "part" + part + "notelimitlow", color, 0, 127)
             {
-                public String map(int val)
+            public String map(int val)
                 {
-                    return NOTES[val % 12] + (val / 12 - 2);
+                return NOTES[val % 12] + (val / 12 - 2);
                 }
             };
         hbox.add(comp);
 
         comp = new LabelledDial("High Note", this,  "part" + part + "notelimithigh", color, 0, 127)
             {
-                public String map(int val)
+            public String map(int val)
                 {
-                    return NOTES[val % 12] + (val / 12 - 2);
+                return NOTES[val % 12] + (val / 12 - 2);
                 }
             };
         hbox.add(comp);
@@ -1214,11 +1214,11 @@ public class YamahaFS1RMulti extends Synth
 
         category.add(hbox, BorderLayout.CENTER);
         return category;
-    }
+        }
 
                 
     public JComponent addEnvelopes(int part, Color color)
-    {
+        {
         Category category = new Category(this, "Envelopes", color);
         //        category.makePasteable("part" + part);
         category.makePasteable("part");
@@ -1257,12 +1257,12 @@ public class YamahaFS1RMulti extends Synth
 
         category.add(hbox, BorderLayout.CENTER);
         return category;
-    }
+        }
 
 
     public JComponent[] reverbParams = new JComponent[17];
     public JComponent addReverb(Color color)
-    {
+        {
         Category category = new Category(this, "Reverb", color);
                 
         JComponent comp;
@@ -1271,7 +1271,7 @@ public class YamahaFS1RMulti extends Synth
         
         for(int i = 0; i < 17; i++)
             {
-                reverbParams[i] = buildReverb(i, color);
+            reverbParams[i] = buildReverb(i, color);
             }
                 
         final HBox outer = new HBox();
@@ -1279,13 +1279,13 @@ public class YamahaFS1RMulti extends Synth
         params = YamahaFS1RFX.effectNameTable[REVERB];
         comp = new Chooser("Effect Type", this, "reverbtype", params)
             {
-                public void update(String key, Model model)
+            public void update(String key, Model model)
                 {
-                    super.update(key, model);
-                    int val = model.get(key);
-                    outer.removeLast();
-                    outer.addLast(reverbParams[val]);
-                    outer.revalidate();
+                super.update(key, model);
+                int val = model.get(key);
+                outer.removeLast();
+                outer.addLast(reverbParams[val]);
+                outer.revalidate();
                 }
             };
         vbox.add(comp);
@@ -1293,14 +1293,14 @@ public class YamahaFS1RMulti extends Synth
         
         comp = new LabelledDial("Pan", this,  "reverbpan", color, 0, 127)
             {
-                public boolean isSymmetric() { return true; }
-                public String map(int val)
+            public boolean isSymmetric() { return true; }
+            public String map(int val)
                 {
-                    if (val < 64)
-                        return "< " + (64 - val);
-                    else if (val > 64)
-                        return "" + (val - 64) + " >";
-                    else return "--";
+                if (val < 64)
+                    return "< " + (64 - val);
+                else if (val > 64)
+                    return "" + (val - 64) + " >";
+                else return "--";
                 }
             };
         hbox.add(comp);
@@ -1313,12 +1313,12 @@ public class YamahaFS1RMulti extends Synth
 
         category.add(hbox, BorderLayout.CENTER);
         return category;
-    }
+        }
 
 
     public JComponent[] variationParams = new JComponent[29];
     public JComponent addVariation(Color color)
-    {
+        {
         Category category = new Category(this, "Variation", color);
                 
         JComponent comp;
@@ -1327,7 +1327,7 @@ public class YamahaFS1RMulti extends Synth
 
         for(int i = 0; i < 29; i++)
             {
-                variationParams[i] = buildVariation(i, color);
+            variationParams[i] = buildVariation(i, color);
             }
                 
         final HBox outer = new HBox();
@@ -1335,13 +1335,13 @@ public class YamahaFS1RMulti extends Synth
         params = YamahaFS1RFX.effectNameTable[VARIATION];
         comp = new Chooser("Effect Type", this, "variationtype", params)
             {
-                public void update(String key, Model model)
+            public void update(String key, Model model)
                 {
-                    super.update(key, model);
-                    int val = model.get(key);
-                    outer.removeLast();
-                    outer.addLast(variationParams[val]);
-                    outer.revalidate();
+                super.update(key, model);
+                int val = model.get(key);
+                outer.removeLast();
+                outer.addLast(variationParams[val]);
+                outer.revalidate();
                 }
             };
         vbox.add(comp);
@@ -1349,14 +1349,14 @@ public class YamahaFS1RMulti extends Synth
         
         comp = new LabelledDial("Pan", this,  "variationpan", color, 0, 127)
             {
-                public boolean isSymmetric() { return true; }
-                public String map(int val)
+            public boolean isSymmetric() { return true; }
+            public String map(int val)
                 {
-                    if (val < 64)
-                        return "< " + (64 - val);
-                    else if (val > 64)
-                        return "" + (val - 64) + " >";
-                    else return "--";
+                if (val < 64)
+                    return "< " + (64 - val);
+                else if (val > 64)
+                    return "" + (val - 64) + " >";
+                else return "--";
                 }
             };
         hbox.add(comp);
@@ -1373,11 +1373,11 @@ public class YamahaFS1RMulti extends Synth
 
         category.add(hbox, BorderLayout.CENTER);
         return category;
-    }
+        }
 
     public JComponent[] insertionParams = new JComponent[41];
     public JComponent addInsertion(Color color)
-    {
+        {
         Category category = new Category(this, "Insertion", color);
                 
         JComponent comp;
@@ -1386,7 +1386,7 @@ public class YamahaFS1RMulti extends Synth
 
         for(int i = 0; i < 41; i++)
             {
-                insertionParams[i] = buildInsertion(i, color);
+            insertionParams[i] = buildInsertion(i, color);
             }
                 
         final HBox outer = new HBox();
@@ -1394,20 +1394,20 @@ public class YamahaFS1RMulti extends Synth
         params = YamahaFS1RFX.effectNameTable[INSERTION];
         comp = new Chooser("Effect Type", this, "insertiontype", params)
             {
-                public void update(String key, Model model)
+            public void update(String key, Model model)
                 {
-                    super.update(key, model);
-                    int val = model.get(key);
-                    outer.removeLast();
-                    outer.addLast(insertionParams[val]);
-                    outer.revalidate();
+                super.update(key, model);
+                int val = model.get(key);
+                outer.removeLast();
+                outer.addLast(insertionParams[val]);
+                outer.revalidate();
                 
-                    // Change controller destinations
-                    for(int i = 0; i < 8; i++)
-                        {
-                            if (controllerChoosers[i] != null)              // may not be built yet
-                                controllerChoosers[i].replaceElements(buildDestinations());
-                        }
+                // Change controller destinations
+                for(int i = 0; i < 8; i++)
+                    {
+                    if (controllerChoosers[i] != null)              // may not be built yet
+                        controllerChoosers[i].replaceElements(buildDestinations());
+                    }
                 }
             };
         vbox.add(comp);
@@ -1415,14 +1415,14 @@ public class YamahaFS1RMulti extends Synth
         
         comp = new LabelledDial("Pan", this,  "insertionpan", color, 0, 127)
             {
-                public boolean isSymmetric() { return true; }
-                public String map(int val)
+            public boolean isSymmetric() { return true; }
+            public String map(int val)
                 {
-                    if (val < 64)
-                        return "< " + (64 - val);
-                    else if (val > 64)
-                        return "" + (val - 64) + " >";
-                    else return "--";
+                if (val < 64)
+                    return "< " + (64 - val);
+                else if (val > 64)
+                    return "" + (val - 64) + " >";
+                else return "--";
                 }
             };
         hbox.add(comp);
@@ -1445,10 +1445,10 @@ public class YamahaFS1RMulti extends Synth
                 
         category.add(hbox, BorderLayout.CENTER);
         return category;
-    }
+        }
 
     public JComponent addEqualization(Color color)
-    {
+        {
         Category category = new Category(this, "Equalization", color);
                 
         JComponent comp;
@@ -1466,9 +1466,9 @@ public class YamahaFS1RMulti extends Synth
 
         comp = new LabelledDial("Low Gain", this,  "eqlowfrequency", color, 4, 40)
             {
-                public String map(int val)
+            public String map(int val)
                 {
-                    return "" + EQ_FREQUENCIES[val - 4];
+                return "" + EQ_FREQUENCIES[val - 4];
                 }
             };
         ((LabelledDial)comp).addAdditionalLabel("Frequency");
@@ -1476,9 +1476,9 @@ public class YamahaFS1RMulti extends Synth
 
         comp = new LabelledDial("Low Q", this,  "eqlowq", color, 1, 120)
             {
-                public String map(int val)
+            public String map(int val)
                 {
-                    return String.format("%1.1f", (val * 0.1));
+                return String.format("%1.1f", (val * 0.1));
                 }
             };
         hbox.add(comp);
@@ -1489,9 +1489,9 @@ public class YamahaFS1RMulti extends Synth
 
         comp = new LabelledDial("Mid Gain", this,  "eqmidfrequency", color, 14, 54)
             {
-                public String map(int val)
+            public String map(int val)
                 {
-                    return "" + EQ_FREQUENCIES[val - 4];
+                return "" + EQ_FREQUENCIES[val - 4];
                 }
             };
         ((LabelledDial)comp).addAdditionalLabel("Frequency");
@@ -1499,9 +1499,9 @@ public class YamahaFS1RMulti extends Synth
 
         comp = new LabelledDial("Mid Q", this,  "eqmidq", color, 1, 120)
             {
-                public String map(int val)
+            public String map(int val)
                 {
-                    return String.format("%1.1f", (val * 0.1));
+                return String.format("%1.1f", (val * 0.1));
                 }
             };
         hbox.add(comp);
@@ -1510,9 +1510,9 @@ public class YamahaFS1RMulti extends Synth
         hbox.add(comp);
         comp = new LabelledDial("High Gain", this,  "eqhighfrequency", color, 28, 58)
             {
-                public String map(int val)
+            public String map(int val)
                 {
-                    return "" + EQ_FREQUENCIES[val - 4];
+                return "" + EQ_FREQUENCIES[val - 4];
                 }
             };
         ((LabelledDial)comp).addAdditionalLabel("Frequency");
@@ -1520,9 +1520,9 @@ public class YamahaFS1RMulti extends Synth
 
         comp = new LabelledDial("High Q", this,  "eqhighq", color, 1, 120)
             {
-                public String map(int val)
+            public String map(int val)
                 {
-                    return String.format("%1.1f", (val * 0.1));
+                return String.format("%1.1f", (val * 0.1));
                 }
             };
         hbox.add(comp);
@@ -1535,107 +1535,107 @@ public class YamahaFS1RMulti extends Synth
         
         category.add(hbox, BorderLayout.CENTER);
         return category;
-    }
+        }
 
 
 
     /** Rebuilds, then sets to default values the current reverb parameters for the given reverb type, where val = 0 is "No Effect". 
         This doesn't include the standard parameters (like pan). */
     JComponent buildReverb(int val, Color color)
-    {
+        {
         VBox vbox = new VBox();
         if (val == 0)   // No Effect
             {
             }
         else
             {
-                HBox hbox = new HBox();
-                vbox.add(hbox);
-                int version = YamahaFS1RFX.FX_VERSIONS[REVERB][val];
-                for(int i = 0; i < YamahaFS1RFX.revEffectNameTable.length; i++)
+            HBox hbox = new HBox();
+            vbox.add(hbox);
+            int version = YamahaFS1RFX.FX_VERSIONS[REVERB][val];
+            for(int i = 0; i < YamahaFS1RFX.revEffectNameTable.length; i++)
+                {
+                if (YamahaFS1RFX.revEffectNameTable[i][version].equals("Reverb Pan")) break;              // done
+                if (i == 9)
                     {
-                        if (YamahaFS1RFX.revEffectNameTable[i][version].equals("Reverb Pan")) break;              // done
-                        if (i == 9)
-                            {
-                                hbox = new HBox();
-                                vbox.add(hbox);
-                            }
-                        int type = YamahaFS1RFX.revParaTypeTable[version][i];
-                        String key = "reverb" + val + "parameter" + (i + 1);
-                        JComponent widget = YamahaFS1RFX.buildFXVals(YamahaFS1RFX.revEffectNameTable[i][version], type, key, color, this);
-                        model.set(key, YamahaFS1RFX.revParaInitValueTable[val][i]);
-
-                        hbox.add(widget);
+                    hbox = new HBox();
+                    vbox.add(hbox);
                     }
+                int type = YamahaFS1RFX.revParaTypeTable[version][i];
+                String key = "reverb" + val + "parameter" + (i + 1);
+                JComponent widget = YamahaFS1RFX.buildFXVals(YamahaFS1RFX.revEffectNameTable[i][version], type, key, color, this);
+                model.set(key, YamahaFS1RFX.revParaInitValueTable[val][i]);
+
+                hbox.add(widget);
+                }
             }
         return vbox;
-    }    
+        }    
     
     /** Rebuilds, then sets to default values the current variation parameters for the given variation type, where val = 0 is "No Effect". 
         This doesn't include the standard parameters (like pan).  */
     JComponent buildVariation(int val, Color color)
-    {
+        {
         VBox vbox = new VBox();
         if (val == 0)   // No Effect
             {
             }
         else
             {
-                HBox hbox = new HBox();
-                vbox.add(hbox);
-                int version = YamahaFS1RFX.FX_VERSIONS[VARIATION][val];
-                for(int i = 0; i < YamahaFS1RFX.varEffectNameTable.length; i++)
+            HBox hbox = new HBox();
+            vbox.add(hbox);
+            int version = YamahaFS1RFX.FX_VERSIONS[VARIATION][val];
+            for(int i = 0; i < YamahaFS1RFX.varEffectNameTable.length; i++)
+                {
+                if (YamahaFS1RFX.varEffectNameTable[i][version].equals("Var Pan")) break;              // done
+                if (i == 9)
                     {
-                        if (YamahaFS1RFX.varEffectNameTable[i][version].equals("Var Pan")) break;              // done
-                        if (i == 9)
-                            {
-                                hbox = new HBox();
-                                vbox.add(hbox);
-                            }
-                        int type = YamahaFS1RFX.varParaTypeTable[version][i];
-                        String key = "variation" + val + "parameter" + (i + 1);
-                        JComponent widget = YamahaFS1RFX.buildFXVals(YamahaFS1RFX.varEffectNameTable[i][version], type, key, color, this);
-                        model.set(key, YamahaFS1RFX.varParaInitValueTable[val][i]);
-
-                        hbox.add(widget);
+                    hbox = new HBox();
+                    vbox.add(hbox);
                     }
+                int type = YamahaFS1RFX.varParaTypeTable[version][i];
+                String key = "variation" + val + "parameter" + (i + 1);
+                JComponent widget = YamahaFS1RFX.buildFXVals(YamahaFS1RFX.varEffectNameTable[i][version], type, key, color, this);
+                model.set(key, YamahaFS1RFX.varParaInitValueTable[val][i]);
+
+                hbox.add(widget);
+                }
             }
         return vbox;
-    }    
+        }    
 
     /** Rebuilds, then sets to default values the current insertion parameters for the given insertion type, where val = 0 is "Thru". 
         This doesn't include the standard parameters (like pan).  */
     public JComponent buildInsertion(int val, Color color)
-    {    
+        {    
         VBox vbox = new VBox();
         if (val == 0)   // Thru
             {
             }
         else
             {
-                HBox hbox = new HBox();
-                vbox.add(hbox);
-                int version = YamahaFS1RFX.FX_VERSIONS[INSERTION][val];
-                for(int i = 0; i < YamahaFS1RFX.insEffectNameTable.length; i++)
+            HBox hbox = new HBox();
+            vbox.add(hbox);
+            int version = YamahaFS1RFX.FX_VERSIONS[INSERTION][val];
+            for(int i = 0; i < YamahaFS1RFX.insEffectNameTable.length; i++)
+                {
+                if (YamahaFS1RFX.insEffectNameTable[i][version].equals("Ins Pan")) break;              // done
+                if (i == 7 || i == 14)
                     {
-                        if (YamahaFS1RFX.insEffectNameTable[i][version].equals("Ins Pan")) break;              // done
-                        if (i == 7 || i == 14)
-                            {
-                                hbox = new HBox();
-                                vbox.add(hbox);
-                            }
-                        int type = YamahaFS1RFX.insParaTypeTable[version][i];
-                        String key = "insertion" + val + "parameter" + (i + 1);
-                        JComponent widget = YamahaFS1RFX.buildFXVals(YamahaFS1RFX.insEffectNameTable[i][version], type, key, color, this);
-                        //if (i == 5 && val == 30)
-                        //        System.err.println(YamahaFS1RFX.effectNameTable[INSERTION][val] + " " + val + " " + YamahaFS1RFX.insEffectNameTable[i][version] + " " + version + " " + key + " " + YamahaFS1RFX.insParaInitValueTable[val][i]);
-                        model.set(key, YamahaFS1RFX.insParaInitValueTable[val][i]);
-
-                        hbox.add(widget);
+                    hbox = new HBox();
+                    vbox.add(hbox);
                     }
+                int type = YamahaFS1RFX.insParaTypeTable[version][i];
+                String key = "insertion" + val + "parameter" + (i + 1);
+                JComponent widget = YamahaFS1RFX.buildFXVals(YamahaFS1RFX.insEffectNameTable[i][version], type, key, color, this);
+                //if (i == 5 && val == 30)
+                //        System.err.println(YamahaFS1RFX.effectNameTable[INSERTION][val] + " " + val + " " + YamahaFS1RFX.insEffectNameTable[i][version] + " " + version + " " + key + " " + YamahaFS1RFX.insParaInitValueTable[val][i]);
+                model.set(key, YamahaFS1RFX.insParaInitValueTable[val][i]);
+
+                hbox.add(widget);
+                }
             }
         return vbox;
-    }    
+        }    
 
 
                 
@@ -1648,670 +1648,670 @@ public class YamahaFS1RMulti extends Synth
     /** List of all Sysex parameters in order.  "-" is a reserved (unused and thus unnamed) parameter. */
 
     final static String[] allParameters = new String[] 
-        {
+    {
     
-            // COMMON
+    // COMMON
     
-            "-",        // Name
-            "-",        // Name
-            "-",        // Name
-            "-",        // Name
-            "-",        // Name
-            "-",        // Name
-            "-",        // Name
-            "-",        // Name
-            "-",        // Name
-            "-",        // Name
-            "-",        // Name
-            "-",        // Name
-            "-",    // Reserved    
-            "-",    // Reserved    
-            "category",
-            "-",    // Reserved    
-            "performancevolume",
-            "performancepan",
-            "performancenoteshift",
-            "-",    // Reserved    
-            "individualout",
-            "fseqpart",
-            "fseqbank",                               // need to join         --      fseq    [note that first 6 are internal]
-            "fseqnumber",                            // need to join         --      fseq
-            "fseqspeedhi",                              // This has a HOLE IN IT.  It goes 0, 1, 2, 3, 4, ---- , 100, 101, ...   We will to collapse it to 5, 6, 7, 8, 9, 10, ...
-            "fseqspeedlo",                              // this is not exactly documented in sysex
-            "fseqstartstepoffsethi",            // need to join
-            "fseqstartstepoffsetlo",
-            "fseqstartstepoflooppointhi",       // need to join
-            "fseqstartstepoflooppointlo",
-            "fseqendstepoflooppointhi",         // need to join
-            "fseqendstepoflooppointlo",                                // missing 3?  See below
-            "fseqloopmode",
-            "fseqplaymode",                                                     // need to customize.  This is 1..2, not 0..1
-            "fseqvelocitysensitivityfortempo",
-            "fseqformantpitchmode",
-            "fseqkeyontrigger",
-            "-",
-            "fseqformantsequencedelay",
-            "fseqlevelvelocitysensitivity",
-            "controller1partswitch",                    // need to join
-            "controller2partswitch",
-            "controller3partswitch",        
-            "controller4partswitch",        
-            "controller5partswitch",        
-            "controller6partswitch",        
-            "controller7partswitch",        
-            "controller8partswitch",        
-            "controller1sourceswitchhi",                //need to join
-            "controller1sourceswitchlo",
-            "controller2sourceswitchhi",
-            "controller2sourceswitchlo",
-            "controller3sourceswitchhi",        
-            "controller3sourceswitchlo",        
-            "controller4sourceswitchhi",        
-            "controller4sourceswitchlo",        
-            "controller5sourceswitchhi",        
-            "controller5sourceswitchlo",        
-            "controller6sourceswitchhi",        
-            "controller6sourceswitchlo",        
-            "controller7sourceswitchhi",        
-            "controller7sourceswitchlo",        
-            "controller8sourceswitchhi",        
-            "controller8sourceswitchlo",        
-            "controller1destination",
-            "controller2destination",
-            "controller3destination",        
-            "controller4destination",        
-            "controller5destination",        
-            "controller6destination",        
-            "controller7destination",        
-            "controller8destination",        
-            "controller1depth",
-            "controller2depth",
-            "controller3depth",        
-            "controller4depth",        
-            "controller5depth",        
-            "controller6depth",        
-            "controller7depth",        
-            "controller8depth",        
+    "-",        // Name
+    "-",        // Name
+    "-",        // Name
+    "-",        // Name
+    "-",        // Name
+    "-",        // Name
+    "-",        // Name
+    "-",        // Name
+    "-",        // Name
+    "-",        // Name
+    "-",        // Name
+    "-",        // Name
+    "-",    // Reserved    
+    "-",    // Reserved    
+    "category",
+    "-",    // Reserved    
+    "performancevolume",
+    "performancepan",
+    "performancenoteshift",
+    "-",    // Reserved    
+    "individualout",
+    "fseqpart",
+    "fseqbank",                               // need to join         --      fseq    [note that first 6 are internal]
+    "fseqnumber",                            // need to join         --      fseq
+    "fseqspeedhi",                              // This has a HOLE IN IT.  It goes 0, 1, 2, 3, 4, ---- , 100, 101, ...   We will to collapse it to 5, 6, 7, 8, 9, 10, ...
+    "fseqspeedlo",                              // this is not exactly documented in sysex
+    "fseqstartstepoffsethi",            // need to join
+    "fseqstartstepoffsetlo",
+    "fseqstartstepoflooppointhi",       // need to join
+    "fseqstartstepoflooppointlo",
+    "fseqendstepoflooppointhi",         // need to join
+    "fseqendstepoflooppointlo",                                // missing 3?  See below
+    "fseqloopmode",
+    "fseqplaymode",                                                     // need to customize.  This is 1..2, not 0..1
+    "fseqvelocitysensitivityfortempo",
+    "fseqformantpitchmode",
+    "fseqkeyontrigger",
+    "-",
+    "fseqformantsequencedelay",
+    "fseqlevelvelocitysensitivity",
+    "controller1partswitch",                    // need to join
+    "controller2partswitch",
+    "controller3partswitch",        
+    "controller4partswitch",        
+    "controller5partswitch",        
+    "controller6partswitch",        
+    "controller7partswitch",        
+    "controller8partswitch",        
+    "controller1sourceswitchhi",                //need to join
+    "controller1sourceswitchlo",
+    "controller2sourceswitchhi",
+    "controller2sourceswitchlo",
+    "controller3sourceswitchhi",        
+    "controller3sourceswitchlo",        
+    "controller4sourceswitchhi",        
+    "controller4sourceswitchlo",        
+    "controller5sourceswitchhi",        
+    "controller5sourceswitchlo",        
+    "controller6sourceswitchhi",        
+    "controller6sourceswitchlo",        
+    "controller7sourceswitchhi",        
+    "controller7sourceswitchlo",        
+    "controller8sourceswitchhi",        
+    "controller8sourceswitchlo",        
+    "controller1destination",
+    "controller2destination",
+    "controller3destination",        
+    "controller4destination",        
+    "controller5destination",        
+    "controller6destination",        
+    "controller7destination",        
+    "controller8destination",        
+    "controller1depth",
+    "controller2depth",
+    "controller3depth",        
+    "controller4depth",        
+    "controller5depth",        
+    "controller6depth",        
+    "controller7depth",        
+    "controller8depth",        
 
 
-            // EFFECT
+    // EFFECT
 
 
-            "reverbparameter1hi",                       // These will have to be joined of course
-            "reverbparameter1lo",        
-            "reverbparameter2hi",        
-            "reverbparameter2lo",        
-            "reverbparameter3hi",        
-            "reverbparameter3lo",        
-            "reverbparameter4hi",        
-            "reverbparameter4lo",        
-            "reverbparameter5hi",        
-            "reverbparameter5lo",        
-            "reverbparameter6hi",        
-            "reverbparameter6lo",        
-            "reverbparameter7hi",        
-            "reverbparameter7lo",        
-            "reverbparameter8hi",        
-            "reverbparameter8lo",        
-            "reverbparameter9",     
-            "reverbparameter10",     
-            "reverbparameter11",     
-            "reverbparameter12",     
-            "reverbparameter13",     
-            "reverbparameter14",     
-            "reverbparameter15",     
-            "reverbparameter16",     
+    "reverbparameter1hi",                       // These will have to be joined of course
+    "reverbparameter1lo",        
+    "reverbparameter2hi",        
+    "reverbparameter2lo",        
+    "reverbparameter3hi",        
+    "reverbparameter3lo",        
+    "reverbparameter4hi",        
+    "reverbparameter4lo",        
+    "reverbparameter5hi",        
+    "reverbparameter5lo",        
+    "reverbparameter6hi",        
+    "reverbparameter6lo",        
+    "reverbparameter7hi",        
+    "reverbparameter7lo",        
+    "reverbparameter8hi",        
+    "reverbparameter8lo",        
+    "reverbparameter9",     
+    "reverbparameter10",     
+    "reverbparameter11",     
+    "reverbparameter12",     
+    "reverbparameter13",     
+    "reverbparameter14",     
+    "reverbparameter15",     
+    "reverbparameter16",     
     
     
-            "variationparameter1hi",                    // These will have to be joined of course
-            "variationparameter1lo",        
-            "variationparameter2hi",        
-            "variationparameter2lo",        
-            "variationparameter3hi",        
-            "variationparameter3lo",        
-            "variationparameter4hi",        
-            "variationparameter4lo",        
-            "variationparameter5hi",        
-            "variationparameter5lo",        
-            "variationparameter6hi",        
-            "variationparameter6lo",        
-            "variationparameter7hi",        
-            "variationparameter7lo",        
-            "variationparameter8hi",        
-            "variationparameter8lo",        
-            "variationparameter9hi",        
-            "variationparameter9lo",     
-            "variationparameter10hi",     
-            "variationparameter10lo",     
-            "variationparameter11hi",     
-            "variationparameter11lo",     
-            "variationparameter12hi",     
-            "variationparameter12lo",     
-            "variationparameter13hi",     
-            "variationparameter13lo",     
-            "variationparameter14hi",     
-            "variationparameter14lo",     
-            "variationparameter15hi",     
-            "variationparameter15lo",     
-            "variationparameter16hi",     
-            "variationparameter16lo",     
+    "variationparameter1hi",                    // These will have to be joined of course
+    "variationparameter1lo",        
+    "variationparameter2hi",        
+    "variationparameter2lo",        
+    "variationparameter3hi",        
+    "variationparameter3lo",        
+    "variationparameter4hi",        
+    "variationparameter4lo",        
+    "variationparameter5hi",        
+    "variationparameter5lo",        
+    "variationparameter6hi",        
+    "variationparameter6lo",        
+    "variationparameter7hi",        
+    "variationparameter7lo",        
+    "variationparameter8hi",        
+    "variationparameter8lo",        
+    "variationparameter9hi",        
+    "variationparameter9lo",     
+    "variationparameter10hi",     
+    "variationparameter10lo",     
+    "variationparameter11hi",     
+    "variationparameter11lo",     
+    "variationparameter12hi",     
+    "variationparameter12lo",     
+    "variationparameter13hi",     
+    "variationparameter13lo",     
+    "variationparameter14hi",     
+    "variationparameter14lo",     
+    "variationparameter15hi",     
+    "variationparameter15lo",     
+    "variationparameter16hi",     
+    "variationparameter16lo",     
 
 
-            "insertionparameter1hi",                    // These will have to be joined of course
-            "insertionparameter1lo",        
-            "insertionparameter2hi",        
-            "insertionparameter2lo",        
-            "insertionparameter3hi",        
-            "insertionparameter3lo",        
-            "insertionparameter4hi",        
-            "insertionparameter4lo",        
-            "insertionparameter5hi",        
-            "insertionparameter5lo",        
-            "insertionparameter6hi",        
-            "insertionparameter6lo",        
-            "insertionparameter7hi",        
-            "insertionparameter7lo",        
-            "insertionparameter8hi",        
-            "insertionparameter8lo",        
-            "insertionparameter9hi",        
-            "insertionparameter9lo",     
-            "insertionparameter10hi",     
-            "insertionparameter10lo",     
-            "insertionparameter11hi",     
-            "insertionparameter11lo",     
-            "insertionparameter12hi",     
-            "insertionparameter12lo",     
-            "insertionparameter13hi",     
-            "insertionparameter13lo",     
-            "insertionparameter14hi",     
-            "insertionparameter14lo",     
-            "insertionparameter15hi",     
-            "insertionparameter15lo",     
-            "insertionparameter16hi",     
-            "insertionparameter16lo",     
+    "insertionparameter1hi",                    // These will have to be joined of course
+    "insertionparameter1lo",        
+    "insertionparameter2hi",        
+    "insertionparameter2lo",        
+    "insertionparameter3hi",        
+    "insertionparameter3lo",        
+    "insertionparameter4hi",        
+    "insertionparameter4lo",        
+    "insertionparameter5hi",        
+    "insertionparameter5lo",        
+    "insertionparameter6hi",        
+    "insertionparameter6lo",        
+    "insertionparameter7hi",        
+    "insertionparameter7lo",        
+    "insertionparameter8hi",        
+    "insertionparameter8lo",        
+    "insertionparameter9hi",        
+    "insertionparameter9lo",     
+    "insertionparameter10hi",     
+    "insertionparameter10lo",     
+    "insertionparameter11hi",     
+    "insertionparameter11lo",     
+    "insertionparameter12hi",     
+    "insertionparameter12lo",     
+    "insertionparameter13hi",     
+    "insertionparameter13lo",     
+    "insertionparameter14hi",     
+    "insertionparameter14lo",     
+    "insertionparameter15hi",     
+    "insertionparameter15lo",     
+    "insertionparameter16hi",     
+    "insertionparameter16lo",     
 
 
-            "reverbtype",
-            "reverbpan",
-            "reverbreturn",
-            "variationtype",
-            "variationpan",
-            "variationreturn",
-            "sendvariationtoreverb",
-            "insertiontype",
-            "insertionpan",
-            "sendinsertiontoreverb",
-            "sendinsertiontovariation",
-            "insertionlevel",
-            "eqlowgain",
-            "eqlowfrequency",
-            "eqlowq",
-            "eqlowshape",
-            "eqmidgain",
-            "eqmidfrequency",
-            "eqmidq",       
-            "eqhighgain",        
-            "eqhighfrequency",        
-            "eqhighq",        
-            "eqhighshape",        
-            "-",    // Reserved    
+    "reverbtype",
+    "reverbpan",
+    "reverbreturn",
+    "variationtype",
+    "variationpan",
+    "variationreturn",
+    "sendvariationtoreverb",
+    "insertiontype",
+    "insertionpan",
+    "sendinsertiontoreverb",
+    "sendinsertiontovariation",
+    "insertionlevel",
+    "eqlowgain",
+    "eqlowfrequency",
+    "eqlowq",
+    "eqlowshape",
+    "eqmidgain",
+    "eqmidfrequency",
+    "eqmidq",       
+    "eqhighgain",        
+    "eqhighfrequency",        
+    "eqhighq",        
+    "eqhighshape",        
+    "-",    // Reserved    
 
 
             // PERFORMANCE PART
 
 
-            "part1notereserve",
-            "part1banknumber",
-            "part1programnumber",
-            "part1rcvchannelmax",                       // we will have to customize this because it has a hole in it
-            "part1rcvchannel",                           // we will have to customize this because it has a hole in it
-            "part1monopolymode",
-            "part1monopriority",
-            "part1filtersw",
-            "part1noteshift",
-            "part1detune",
-            "part1voicedunvoicedbalance",
-            "part1volume",
-            "part1velocitysensedepth",
-            "part1velocitysenseoffset",
-            "part1pan",
-            "part1notelimitlow",
-            "part1notelimithigh",
-            "part1drylevel",
-            "part1variationsend",
-            "part1reverbsend",
-            "part1insertionsw",
-            "part1lfo1rate",
-            "part1lfo1pitchmoddepth",
-            "part1lfo1delay",
-            "part1filtercutofffreq",
-            "part1filterresonance",
-            "part1egattacktime",
-            "part1egdecaytime",
-            "part1egreleasetime",
-            "part1formant",
-            "part1fm",
-            "part1filteregdepth",
-            "part1pitcheginitiallevel",
-            "part1pitchegattacktime",
-            "part1pitchegreleaselevel",
-            "part1pitchegreleasetime",
-            "part1portamentoswitchmode",                        // part1portamentoswitch        part1portamentomode
-            "part1portamentotime",
-            "part1pitchbendrangehigh",
-            "part1pitchbendrangelow",
-            "part1panscaling",
-            "part1panlfodepth",
-            "part1velocitylimitlow",
-            "part1velocitylimithigh",
-            "part1expressionlowlimit",
-            "part1sustainrcvsw",
-            "part1lfo2rate",
-            "part1lfo2moddepth",
-            "-",    // Reserved    
-            "-",    // Reserved    
-            "-",    // Reserved    
-            "-",    // Reserved    
+    "part1notereserve",
+    "part1banknumber",
+    "part1programnumber",
+    "part1rcvchannelmax",                       // we will have to customize this because it has a hole in it
+    "part1rcvchannel",                           // we will have to customize this because it has a hole in it
+    "part1monopolymode",
+    "part1monopriority",
+    "part1filtersw",
+    "part1noteshift",
+    "part1detune",
+    "part1voicedunvoicedbalance",
+    "part1volume",
+    "part1velocitysensedepth",
+    "part1velocitysenseoffset",
+    "part1pan",
+    "part1notelimitlow",
+    "part1notelimithigh",
+    "part1drylevel",
+    "part1variationsend",
+    "part1reverbsend",
+    "part1insertionsw",
+    "part1lfo1rate",
+    "part1lfo1pitchmoddepth",
+    "part1lfo1delay",
+    "part1filtercutofffreq",
+    "part1filterresonance",
+    "part1egattacktime",
+    "part1egdecaytime",
+    "part1egreleasetime",
+    "part1formant",
+    "part1fm",
+    "part1filteregdepth",
+    "part1pitcheginitiallevel",
+    "part1pitchegattacktime",
+    "part1pitchegreleaselevel",
+    "part1pitchegreleasetime",
+    "part1portamentoswitchmode",                        // part1portamentoswitch        part1portamentomode
+    "part1portamentotime",
+    "part1pitchbendrangehigh",
+    "part1pitchbendrangelow",
+    "part1panscaling",
+    "part1panlfodepth",
+    "part1velocitylimitlow",
+    "part1velocitylimithigh",
+    "part1expressionlowlimit",
+    "part1sustainrcvsw",
+    "part1lfo2rate",
+    "part1lfo2moddepth",
+    "-",    // Reserved    
+    "-",    // Reserved    
+    "-",    // Reserved    
+    "-",    // Reserved    
 
-            "part2notereserve",
-            "part2banknumber",
-            "part2programnumber",
-            "part2rcvchannelmax",
-            "part2rcvchannel",
-            "part2monopolymode",
-            "part2monopriority",
-            "part2filtersw",
-            "part2noteshift",
-            "part2detune",
-            "part2voicedunvoicedbalance",
-            "part2volume",
-            "part2velocitysensedepth",
-            "part2velocitysenseoffset",
-            "part2pan",
-            "part2notelimitlow",
-            "part2notelimithigh",
-            "part2drylevel",
-            "part2variationsend",
-            "part2reverbsend",
-            "part2insertionsw",
-            "part2lfo1rate",
-            "part2lfo1pitchmoddepth",
-            "part2lfo1delay",
-            "part2filtercutofffreq",
-            "part2filterresonance",
-            "part2egattacktime",
-            "part2egdecaytime",
-            "part2egreleasetime",
-            "part2formant",
-            "part2fm",
-            "part2filteregdepth",
-            "part2pitcheginitiallevel",
-            "part2pitchegattacktime",
-            "part2pitchegreleaselevel",
-            "part2pitchegreleasetime",
-            "part2portamentoswitchmode",
-            "part2portamentotime",
-            "part2pitchbendrangehigh",
-            "part2pitchbendrangelow",
-            "part2panscaling",
-            "part2panlfodepth",
-            "part2velocitylimitlow",
-            "part2velocitylimithigh",
-            "part2expressionlowlimit",
-            "part2sustainrcvsw",
-            "part2lfo2rate",
-            "part2lfo2moddepth",
-            "-",    // Reserved    
-            "-",    // Reserved    
-            "-",    // Reserved    
-            "-",    // Reserved    
+    "part2notereserve",
+    "part2banknumber",
+    "part2programnumber",
+    "part2rcvchannelmax",
+    "part2rcvchannel",
+    "part2monopolymode",
+    "part2monopriority",
+    "part2filtersw",
+    "part2noteshift",
+    "part2detune",
+    "part2voicedunvoicedbalance",
+    "part2volume",
+    "part2velocitysensedepth",
+    "part2velocitysenseoffset",
+    "part2pan",
+    "part2notelimitlow",
+    "part2notelimithigh",
+    "part2drylevel",
+    "part2variationsend",
+    "part2reverbsend",
+    "part2insertionsw",
+    "part2lfo1rate",
+    "part2lfo1pitchmoddepth",
+    "part2lfo1delay",
+    "part2filtercutofffreq",
+    "part2filterresonance",
+    "part2egattacktime",
+    "part2egdecaytime",
+    "part2egreleasetime",
+    "part2formant",
+    "part2fm",
+    "part2filteregdepth",
+    "part2pitcheginitiallevel",
+    "part2pitchegattacktime",
+    "part2pitchegreleaselevel",
+    "part2pitchegreleasetime",
+    "part2portamentoswitchmode",
+    "part2portamentotime",
+    "part2pitchbendrangehigh",
+    "part2pitchbendrangelow",
+    "part2panscaling",
+    "part2panlfodepth",
+    "part2velocitylimitlow",
+    "part2velocitylimithigh",
+    "part2expressionlowlimit",
+    "part2sustainrcvsw",
+    "part2lfo2rate",
+    "part2lfo2moddepth",
+    "-",    // Reserved    
+    "-",    // Reserved    
+    "-",    // Reserved    
+    "-",    // Reserved    
 
-            "part3notereserve",
-            "part3banknumber",
-            "part3programnumber",
-            "part3rcvchannelmax",
-            "part3rcvchannel",
-            "part3monopolymode",
-            "part3monopriority",
-            "part3filtersw",
-            "part3noteshift",
-            "part3detune",
-            "part3voicedunvoicedbalance",
-            "part3volume",
-            "part3velocitysensedepth",
-            "part3velocitysenseoffset",
-            "part3pan",
-            "part3notelimitlow",
-            "part3notelimithigh",
-            "part3drylevel",
-            "part3variationsend",
-            "part3reverbsend",
-            "part3insertionsw",
-            "part3lfo1rate",
-            "part3lfo1pitchmoddepth",
-            "part3lfo1delay",
-            "part3filtercutofffreq",
-            "part3filterresonance",
-            "part3egattacktime",
-            "part3egdecaytime",
-            "part3egreleasetime",
-            "part3formant",
-            "part3fm",
-            "part3filteregdepth",
-            "part3pitcheginitiallevel",
-            "part3pitchegattacktime",
-            "part3pitchegreleaselevel",
-            "part3pitchegreleasetime",
-            "part3portamentoswitchmode",
-            "part3portamentotime",
-            "part3pitchbendrangehigh",
-            "part3pitchbendrangelow",
-            "part3panscaling",
-            "part3panlfodepth",
-            "part3velocitylimitlow",
-            "part3velocitylimithigh",
-            "part3expressionlowlimit",
-            "part3sustainrcvsw",
-            "part3lfo2rate",
-            "part3lfo2moddepth",
-            "-",    // Reserved    
-            "-",    // Reserved    
-            "-",    // Reserved    
-            "-",    // Reserved    
+    "part3notereserve",
+    "part3banknumber",
+    "part3programnumber",
+    "part3rcvchannelmax",
+    "part3rcvchannel",
+    "part3monopolymode",
+    "part3monopriority",
+    "part3filtersw",
+    "part3noteshift",
+    "part3detune",
+    "part3voicedunvoicedbalance",
+    "part3volume",
+    "part3velocitysensedepth",
+    "part3velocitysenseoffset",
+    "part3pan",
+    "part3notelimitlow",
+    "part3notelimithigh",
+    "part3drylevel",
+    "part3variationsend",
+    "part3reverbsend",
+    "part3insertionsw",
+    "part3lfo1rate",
+    "part3lfo1pitchmoddepth",
+    "part3lfo1delay",
+    "part3filtercutofffreq",
+    "part3filterresonance",
+    "part3egattacktime",
+    "part3egdecaytime",
+    "part3egreleasetime",
+    "part3formant",
+    "part3fm",
+    "part3filteregdepth",
+    "part3pitcheginitiallevel",
+    "part3pitchegattacktime",
+    "part3pitchegreleaselevel",
+    "part3pitchegreleasetime",
+    "part3portamentoswitchmode",
+    "part3portamentotime",
+    "part3pitchbendrangehigh",
+    "part3pitchbendrangelow",
+    "part3panscaling",
+    "part3panlfodepth",
+    "part3velocitylimitlow",
+    "part3velocitylimithigh",
+    "part3expressionlowlimit",
+    "part3sustainrcvsw",
+    "part3lfo2rate",
+    "part3lfo2moddepth",
+    "-",    // Reserved    
+    "-",    // Reserved    
+    "-",    // Reserved    
+    "-",    // Reserved    
 
-            "part4notereserve",
-            "part4banknumber",
-            "part4programnumber",
-            "part4rcvchannelmax",
-            "part4rcvchannel",
-            "part4monopolymode",
-            "part4monopriority",
-            "part4filtersw",
-            "part4noteshift",
-            "part4detune",
-            "part4voicedunvoicedbalance",
-            "part4volume",
-            "part4velocitysensedepth",
-            "part4velocitysenseoffset",
-            "part4pan",
-            "part4notelimitlow",
-            "part4notelimithigh",
-            "part4drylevel",
-            "part4variationsend",
-            "part4reverbsend",
-            "part4insertionsw",
-            "part4lfo1rate",
-            "part4lfo1pitchmoddepth",
-            "part4lfo1delay",
-            "part4filtercutofffreq",
-            "part4filterresonance",
-            "part4egattacktime",
-            "part4egdecaytime",
-            "part4egreleasetime",
-            "part4formant",
-            "part4fm",
-            "part4filteregdepth",
-            "part4pitcheginitiallevel",
-            "part4pitchegattacktime",
-            "part4pitchegreleaselevel",
-            "part4pitchegreleasetime",
-            "part4portamentoswitchmode",
-            "part4portamentotime",
-            "part4pitchbendrangehigh",
-            "part4pitchbendrangelow",
-            "part4panscaling",
-            "part4panlfodepth",
-            "part4velocitylimitlow",
-            "part4velocitylimithigh",
-            "part4expressionlowlimit",
-            "part4sustainrcvsw",
-            "part4lfo2rate",
-            "part4lfo2moddepth",
-            "-",    // Reserved    
-            "-",    // Reserved    
-            "-",    // Reserved    
-            "-",    // Reserved    
-        };
+    "part4notereserve",
+    "part4banknumber",
+    "part4programnumber",
+    "part4rcvchannelmax",
+    "part4rcvchannel",
+    "part4monopolymode",
+    "part4monopriority",
+    "part4filtersw",
+    "part4noteshift",
+    "part4detune",
+    "part4voicedunvoicedbalance",
+    "part4volume",
+    "part4velocitysensedepth",
+    "part4velocitysenseoffset",
+    "part4pan",
+    "part4notelimitlow",
+    "part4notelimithigh",
+    "part4drylevel",
+    "part4variationsend",
+    "part4reverbsend",
+    "part4insertionsw",
+    "part4lfo1rate",
+    "part4lfo1pitchmoddepth",
+    "part4lfo1delay",
+    "part4filtercutofffreq",
+    "part4filterresonance",
+    "part4egattacktime",
+    "part4egdecaytime",
+    "part4egreleasetime",
+    "part4formant",
+    "part4fm",
+    "part4filteregdepth",
+    "part4pitcheginitiallevel",
+    "part4pitchegattacktime",
+    "part4pitchegreleaselevel",
+    "part4pitchegreleasetime",
+    "part4portamentoswitchmode",
+    "part4portamentotime",
+    "part4pitchbendrangehigh",
+    "part4pitchbendrangelow",
+    "part4panscaling",
+    "part4panlfodepth",
+    "part4velocitylimitlow",
+    "part4velocitylimithigh",
+    "part4expressionlowlimit",
+    "part4sustainrcvsw",
+    "part4lfo2rate",
+    "part4lfo2moddepth",
+    "-",    // Reserved    
+    "-",    // Reserved    
+    "-",    // Reserved    
+    "-",    // Reserved    
+    };
     
 
         
     /** Returns the part associated with the given key.  For example, "part4pitchbendrangehigh" -> 4 and "eqlowgain" -> 0 */
     // common = 0, part = 1...4
     public int getPart(String key)
-    {
+        {
         if (key.startsWith("part"))
             {
-                return StringUtility.getFirstInt(key);
+            return StringUtility.getFirstInt(key);
             }
         else return 0;
-    }        
+        }        
 
     /** Returns the address associated with the given *sysex key*. */
     public int getAddress(String key)
-    {
+        {
         int addr = ((Integer)(allParametersToIndex.get(key))).intValue();
         if (addr < 128 + 0x40) return addr;
         // it's in a part
         addr -= (128 + 0x40);
         addr = addr % 52;               // part size
         return addr;
-    }
+        }
 
     public Object[] emitAll(String key)
-    {
+        {
         if (key.equals("number")) return new Object[0];  // this is not emittable
         if (key.equals("bank")) return new Object[0];  // this is not emittable
 
         if (key.equals("name"))
             {
-                Object[] result = new Object[10];
-                String name = model.get("name", "INIT VOICE") + "          ";
+            Object[] result = new Object[10];
+            String name = model.get("name", "INIT VOICE") + "          ";
 
-                for(int i = 0; i < 10; i++)
-                    {
-                        int ADDRESS = i;                // we're at the very beginning, so our addresses just happen to be 0...9
-                        int LSB = (byte)(name.charAt(i));
-                        byte[] data = new byte[] { (byte)0xF0, (byte)0x43, (byte)(16 + getID() - 1), (byte)0x5E, 
-                                                   (byte)16,                      // HIGH
-                                                   (byte)0,                       // MEDIUM
-                                                   (byte)ADDRESS,                 // LOW
-                                                   (byte)0,
-                                                   (byte)LSB, 
-                                                   (byte)0xF7 };
-                        result[i] = data;
-                    }
-                return result;
+            for(int i = 0; i < 10; i++)
+                {
+                int ADDRESS = i;                // we're at the very beginning, so our addresses just happen to be 0...9
+                int LSB = (byte)(name.charAt(i));
+                byte[] data = new byte[] { (byte)0xF0, (byte)0x43, (byte)(16 + getID() - 1), (byte)0x5E, 
+                    (byte)16,                      // HIGH
+                    (byte)0,                       // MEDIUM
+                    (byte)ADDRESS,                 // LOW
+                    (byte)0,
+                    (byte)LSB, 
+                    (byte)0xF7 };
+                result[i] = data;
+                }
+            return result;
             }
         else
             {
-                int address = 0;
-                int address2 = 0;
-                int val = 0;
-                int val2 = 0;
-                boolean pair = false;
-                int part = getPart(key);
+            int address = 0;
+            int address2 = 0;
+            int val = 0;
+            int val2 = 0;
+            boolean pair = false;
+            int part = getPart(key);
             
-                if (key.equals("fseq"))
-                    {
-                        int v = model.get(key);
-                        address = getAddress("fseqnumber");
-                        val = v < 6 ? v :v - 6;
-                        address2 = getAddress("fseqbank");
-                        val2 = v < 6 ? 0 : 1;
-                        pair = true;
-                    }
-                else if (key.equals("fseqspeed"))
-                    {
-                        int v = model.get(key);
-                        if (v > 4) key += 95;           // open the hole
-                        address = getAddress("fseqspeedhi");
-                        val = v; // (v >>> 7) & 127;
-                        //address2 = getAddress("fseqspeedlo");
-                        //val2 = (v & 127);               
-                        //pair = true;
-                    }
-                else if (key.equals("fseqstartstepoffset"))
-                    {
-                        int v = model.get(key);
-                        address = getAddress("fseqstartstepoffsethi");
-                        val = v; // (v >>> 7) & 127;
-                        //address2 = getAddress("fseqstartstepoffsetlo");
-                        //val2 = (v & 127);               
-                        //pair = true;
-                    }
-                else if (key.equals("fseqstartstepoflooppoint"))
-                    {
-                        int v = model.get(key);
-                        address = getAddress("fseqstartstepoflooppointhi");
-                        val = v; // (v >>> 7) & 127;
-                        //address2 = getAddress("fseqstartstepoflooppointlo");
-                        //val2 = (v & 127);               
-                        //pair = true;
-                    }
-                else if (key.equals("fseqendstepoflooppoint"))
-                    {
-                        int v = model.get(key);
-                        address = getAddress("fseqendstepoflooppointhi");
-                        val = v; // (v >>> 7) & 127;
-                        //address2 = getAddress("fseqendstepoflooppointlo");
-                        //val2 = (v & 127);               
-                        //pair = true;
-                    }
-                else if (key.equals("fseqplaymode"))
-                    {
-                        int v = model.get(key);
-                        address = getAddress("fseqplaymode");
-                        val = v + 1;
-                    }
-                else if (key.startsWith("controller") && (key.endsWith("part1") || key.endsWith("part2") || key.endsWith("part3") || key.endsWith("part4")))
-                    {
-                        int cont = StringUtility.getFirstInt(key);
-                        val = ((model.get("controller" + cont + "part1") << 0) | 
-                               (model.get("controller" + cont + "part2") << 1) |
-                               (model.get("controller" + cont + "part3") << 2) |
-                               (model.get("controller" + cont + "part4") << 3));
-                        address = getAddress("controller" + cont + "partswitch");
-                    }
-                else if (key.startsWith("controller") && (key.contains("kn") || key.contains("mc") || key.endsWith("fc") || key.endsWith("bc") || key.endsWith("pb") || key.endsWith("mw") || key.endsWith("cat") || key.endsWith("pat")))
-                    {
-                        int cont = StringUtility.getFirstInt(key);
-                        val = ((model.get("controller" + cont + "kn1") << 0) | 
-                               (model.get("controller" + cont + "kn2") << 1) |
-                               (model.get("controller" + cont + "kn3") << 2) |
-                               (model.get("controller" + cont + "kn4") << 3) | 
-                               (model.get("controller" + cont + "mc1") << 4) |
-                               (model.get("controller" + cont + "mc2") << 5) |
-                               (model.get("controller" + cont + "pb") << 6) |      
-                               (model.get("controller" + cont + "cat") << 7) | 
-                               (model.get("controller" + cont + "pat") << 8) |
-                               (model.get("controller" + cont + "fc") << 9) |
-                               (model.get("controller" + cont + "bc") << 10) | 
-                               (model.get("controller" + cont + "mc3") << 11) |
-                               (model.get("controller" + cont + "mw") << 12) |
-                               (model.get("controller" + cont + "mc4") << 13));
-                        address = getAddress("controller" + cont + "sourceswitchhi");
-                    }
-                else if (key.startsWith("reverb") && !key.equals("reverbtype") && !key.equals("reverbpan") && !key.equals("reverbreturn"))
-                    {
-                        int param = StringUtility.getSecondInt(key);
-                        int effect = model.get("reverbtype");
+            if (key.equals("fseq"))
+                {
+                int v = model.get(key);
+                address = getAddress("fseqnumber");
+                val = v < 6 ? v :v - 6;
+                address2 = getAddress("fseqbank");
+                val2 = v < 6 ? 0 : 1;
+                pair = true;
+                }
+            else if (key.equals("fseqspeed"))
+                {
+                int v = model.get(key);
+                if (v > 4) key += 95;           // open the hole
+                address = getAddress("fseqspeedhi");
+                val = v; // (v >>> 7) & 127;
+                //address2 = getAddress("fseqspeedlo");
+                //val2 = (v & 127);               
+                //pair = true;
+                }
+            else if (key.equals("fseqstartstepoffset"))
+                {
+                int v = model.get(key);
+                address = getAddress("fseqstartstepoffsethi");
+                val = v; // (v >>> 7) & 127;
+                //address2 = getAddress("fseqstartstepoffsetlo");
+                //val2 = (v & 127);               
+                //pair = true;
+                }
+            else if (key.equals("fseqstartstepoflooppoint"))
+                {
+                int v = model.get(key);
+                address = getAddress("fseqstartstepoflooppointhi");
+                val = v; // (v >>> 7) & 127;
+                //address2 = getAddress("fseqstartstepoflooppointlo");
+                //val2 = (v & 127);               
+                //pair = true;
+                }
+            else if (key.equals("fseqendstepoflooppoint"))
+                {
+                int v = model.get(key);
+                address = getAddress("fseqendstepoflooppointhi");
+                val = v; // (v >>> 7) & 127;
+                //address2 = getAddress("fseqendstepoflooppointlo");
+                //val2 = (v & 127);               
+                //pair = true;
+                }
+            else if (key.equals("fseqplaymode"))
+                {
+                int v = model.get(key);
+                address = getAddress("fseqplaymode");
+                val = v + 1;
+                }
+            else if (key.startsWith("controller") && (key.endsWith("part1") || key.endsWith("part2") || key.endsWith("part3") || key.endsWith("part4")))
+                {
+                int cont = StringUtility.getFirstInt(key);
+                val = ((model.get("controller" + cont + "part1") << 0) | 
+                    (model.get("controller" + cont + "part2") << 1) |
+                    (model.get("controller" + cont + "part3") << 2) |
+                    (model.get("controller" + cont + "part4") << 3));
+                address = getAddress("controller" + cont + "partswitch");
+                }
+            else if (key.startsWith("controller") && (key.contains("kn") || key.contains("mc") || key.endsWith("fc") || key.endsWith("bc") || key.endsWith("pb") || key.endsWith("mw") || key.endsWith("cat") || key.endsWith("pat")))
+                {
+                int cont = StringUtility.getFirstInt(key);
+                val = ((model.get("controller" + cont + "kn1") << 0) | 
+                    (model.get("controller" + cont + "kn2") << 1) |
+                    (model.get("controller" + cont + "kn3") << 2) |
+                    (model.get("controller" + cont + "kn4") << 3) | 
+                    (model.get("controller" + cont + "mc1") << 4) |
+                    (model.get("controller" + cont + "mc2") << 5) |
+                    (model.get("controller" + cont + "pb") << 6) |      
+                    (model.get("controller" + cont + "cat") << 7) | 
+                    (model.get("controller" + cont + "pat") << 8) |
+                    (model.get("controller" + cont + "fc") << 9) |
+                    (model.get("controller" + cont + "bc") << 10) | 
+                    (model.get("controller" + cont + "mc3") << 11) |
+                    (model.get("controller" + cont + "mw") << 12) |
+                    (model.get("controller" + cont + "mc4") << 13));
+                address = getAddress("controller" + cont + "sourceswitchhi");
+                }
+            else if (key.startsWith("reverb") && !key.equals("reverbtype") && !key.equals("reverbpan") && !key.equals("reverbreturn"))
+                {
+                int param = StringUtility.getSecondInt(key);
+                int effect = model.get("reverbtype");
                 
-                        int version = YamahaFS1RFX.FX_VERSIONS[REVERB][effect];
-                        int paraType = YamahaFS1RFX.revParaTypeTable[version][param - 1];
-                        int address_msb = 0x00;
-                        int address_lsb = YamahaFS1RFX.revEffectParaLSBTable[param - 1][version];
-                        address = (address_msb << 7) | address_lsb;
+                int version = YamahaFS1RFX.FX_VERSIONS[REVERB][effect];
+                int paraType = YamahaFS1RFX.revParaTypeTable[version][param - 1];
+                int address_msb = 0x00;
+                int address_lsb = YamahaFS1RFX.revEffectParaLSBTable[param - 1][version];
+                address = (address_msb << 7) | address_lsb;
                 
-                        val = ((model.get(key) + YamahaFS1RFX.getSysexMin(REVERB, version, paraType)));  //YamahaFS1RFX.sysexMinTable[paraType]));
-                    }
-                else if (key.startsWith("variation") && !key.equals("variationtype") && !key.equals("variationpan") && !key.equals("variationreturn"))
-                    {
-                        int param = StringUtility.getSecondInt(key);
-                        int effect = model.get("variationtype");
+                val = ((model.get(key) + YamahaFS1RFX.getSysexMin(REVERB, version, paraType)));  //YamahaFS1RFX.sysexMinTable[paraType]));
+                }
+            else if (key.startsWith("variation") && !key.equals("variationtype") && !key.equals("variationpan") && !key.equals("variationreturn"))
+                {
+                int param = StringUtility.getSecondInt(key);
+                int effect = model.get("variationtype");
 
-                        int version = YamahaFS1RFX.FX_VERSIONS[VARIATION][effect];
-                        int paraType = YamahaFS1RFX.varParaTypeTable[version][param - 1];
-                        int address_msb = YamahaFS1RFX.varEffectParaMSBTable[param - 1][version];
-                        int address_lsb = YamahaFS1RFX.varEffectParaLSBTable[param - 1][version];
-                        address = (address_msb << 7) | address_lsb;
+                int version = YamahaFS1RFX.FX_VERSIONS[VARIATION][effect];
+                int paraType = YamahaFS1RFX.varParaTypeTable[version][param - 1];
+                int address_msb = YamahaFS1RFX.varEffectParaMSBTable[param - 1][version];
+                int address_lsb = YamahaFS1RFX.varEffectParaLSBTable[param - 1][version];
+                address = (address_msb << 7) | address_lsb;
                     
-                        val = ((model.get(key) + YamahaFS1RFX.getSysexMin(VARIATION, version, paraType)));  //YamahaFS1RFX.sysexMinTable[paraType]));
-                    }
-                else if (key.startsWith("insertion") && !key.equals("insertiontype") && !key.equals("insertionpan") && !key.equals("insertionlevel"))
-                    {
-                        int param = StringUtility.getSecondInt(key);
-                        int effect = model.get("insertiontype");
+                val = ((model.get(key) + YamahaFS1RFX.getSysexMin(VARIATION, version, paraType)));  //YamahaFS1RFX.sysexMinTable[paraType]));
+                }
+            else if (key.startsWith("insertion") && !key.equals("insertiontype") && !key.equals("insertionpan") && !key.equals("insertionlevel"))
+                {
+                int param = StringUtility.getSecondInt(key);
+                int effect = model.get("insertiontype");
 
-                        int version = YamahaFS1RFX.FX_VERSIONS[INSERTION][effect];
-                        int paraType = YamahaFS1RFX.insParaTypeTable[version][param - 1];
-                        int address_msb = 0x01;
-                        int address_lsb = YamahaFS1RFX.insEffectParaLSBTable[param - 1][version];
-                        address = (address_msb << 7) | address_lsb;
+                int version = YamahaFS1RFX.FX_VERSIONS[INSERTION][effect];
+                int paraType = YamahaFS1RFX.insParaTypeTable[version][param - 1];
+                int address_msb = 0x01;
+                int address_lsb = YamahaFS1RFX.insEffectParaLSBTable[param - 1][version];
+                address = (address_msb << 7) | address_lsb;
                     
-                        val = ((model.get(key) + + YamahaFS1RFX.getSysexMin(INSERTION, version, paraType)));  //YamahaFS1RFX.sysexMinTable[paraType]));
-                    }
-                else if (key.endsWith("rcvchannelmax"))
+                val = ((model.get(key) + + YamahaFS1RFX.getSysexMin(INSERTION, version, paraType)));  //YamahaFS1RFX.sysexMinTable[paraType]));
+                }
+            else if (key.endsWith("rcvchannelmax"))
+                {
+                address = getAddress(key);
+                val = model.get(key);
+                if (val == 16)  // Off
                     {
-                        address = getAddress(key);
-                        val = model.get(key);
-                        if (val == 16)  // Off
-                            {
-                                val = 0x7F;
-                            }
+                    val = 0x7F;
                     }
-                else if (key.endsWith("rcvchannel"))
+                }
+            else if (key.endsWith("rcvchannel"))
+                {
+                address = getAddress(key);
+                val = model.get(key);
+                if (val == 17)  // Off, note 17 not 16 as in part1rcvchannelmax
                     {
-                        address = getAddress(key);
-                        val = model.get(key);
-                        if (val == 17)  // Off, note 17 not 16 as in part1rcvchannelmax
-                            {
-                                val = 0x7F;
-                            }
+                    val = 0x7F;
                     }
-                else if (key.endsWith("portamentoswitch") || key.endsWith("portamentomode"))
-                    {
-                        address = getAddress("part" + part + "portamentoswitchmode");
-                        val = (model.get("part" + part + "portamentoswitch") << 0) |
-                            (model.get("part" + part + "portamentomode") << 1);
-                    }
-                else
-                    {
-                        address = getAddress(key);
-                        val = model.get(key);
-                    }
+                }
+            else if (key.endsWith("portamentoswitch") || key.endsWith("portamentomode"))
+                {
+                address = getAddress("part" + part + "portamentoswitchmode");
+                val = (model.get("part" + part + "portamentoswitch") << 0) |
+                    (model.get("part" + part + "portamentomode") << 1);
+                }
+            else
+                {
+                address = getAddress(key);
+                val = model.get(key);
+                }
 
-                int MSB = (val >>> 7) & 127;
-                int LSB = (val & 127);
+            int MSB = (val >>> 7) & 127;
+            int LSB = (val & 127);
                         
-                byte[] data = new byte[] { (byte)0xF0, (byte)0x43, (byte)(16 + getID() - 1), (byte)0x5E, 
-                                           (byte)(part == 0 ? 0x10 : 0x30 - 1 + part),     // HIGH
-                                           (byte)((address >>> 7) & 127),                   // MEDIUM
-                                           (byte)(address & 127),                          // LOW
-                                           (byte)MSB,
-                                           (byte)LSB, 
-                                           (byte)0xF7 };
+            byte[] data = new byte[] { (byte)0xF0, (byte)0x43, (byte)(16 + getID() - 1), (byte)0x5E, 
+                (byte)(part == 0 ? 0x10 : 0x30 - 1 + part),     // HIGH
+                (byte)((address >>> 7) & 127),                   // MEDIUM
+                (byte)(address & 127),                          // LOW
+                (byte)MSB,
+                (byte)LSB, 
+                (byte)0xF7 };
 
-                if (pair)
-                    {
-                        MSB = (val2 >>> 7) & 127;
-                        LSB = (val2 & 127);
+            if (pair)
+                {
+                MSB = (val2 >>> 7) & 127;
+                LSB = (val2 & 127);
                                                 
-                        byte[] data2 = new byte[] { (byte)0xF0, (byte)0x43, (byte)(16 + getID() - 1), (byte)0x5E, 
-                                                    (byte)(part == 0 ? 0x10 : 0x30 - 1 + part),     // HIGH
-                                                    (byte)((address2 >>> 7) & 127),                                  // MEDIUM
-                                                    (byte)(address2 & 127),                                  // LOW
-                                                    (byte)MSB,
-                                                    (byte)LSB, 
-                                                    (byte)0xF7 };
+                byte[] data2 = new byte[] { (byte)0xF0, (byte)0x43, (byte)(16 + getID() - 1), (byte)0x5E, 
+                    (byte)(part == 0 ? 0x10 : 0x30 - 1 + part),     // HIGH
+                    (byte)((address2 >>> 7) & 127),                                  // MEDIUM
+                    (byte)(address2 & 127),                                  // LOW
+                    (byte)MSB,
+                    (byte)LSB, 
+                    (byte)0xF7 };
                                         
-                        return new Object[] { data, data2 };
-                    }
-                else
-                    {
-                        return new Object[] { data };
-                    }
+                return new Object[] { data, data2 };
+                }
+            else
+                {
+                return new Object[] { data };
+                }
             }
-    }
+        }
 
     public static final int POS_FSEQBANK = 0x16;
     public static final int POS_FSEQNUMBER = 0x17;
@@ -2340,14 +2340,14 @@ public class YamahaFS1RMulti extends Synth
 
     // Extracts the key from allParameters, then casts it to a byte.  A syntax sugar method, that's all. 
     public byte getB(int pos)
-    {
+        {
         String key = allParameters[pos];
         if (key.equals("-")) return (byte)0;
         else return (byte)(model.get(key));
-    }
+        }
 
     public byte[] emit(Model tempModel, boolean toWorkingMemory, boolean toFile)
-    {
+        {
         if (tempModel == null)
             tempModel = getModel();
 
@@ -2367,12 +2367,12 @@ public class YamahaFS1RMulti extends Synth
         String name = model.get("name", "INIT VOICE") + "          ";
         for(int i = 0; i < 12; i++)     
             {
-                data[i + 9] = (byte)(name.charAt(i));
+            data[i + 9] = (byte)(name.charAt(i));
             }
 
         for(int i = 12; i < POS_FSEQBANK; i++)
             {
-                data[i + 9] = getB(i);
+            data[i + 9] = getB(i);
             }
                 
         int val = model.get("fseq");
@@ -2381,7 +2381,7 @@ public class YamahaFS1RMulti extends Synth
                 
         for(int i = POS_FSEQNUMBER + 1 ; i < POS_FSEQSPEEDHI; i++)
             {
-                data[i + 9] = getB(i);
+            data[i + 9] = getB(i);
             }
 
         val = model.get("fseqspeed");
@@ -2403,7 +2403,7 @@ public class YamahaFS1RMulti extends Synth
 
         for(int i = POS_FSEQENDSTEPOFLOOPPOINTLO + 1; i < POS_FSEQPLAYMODE; i++)
             {
-                data[i + 9] = getB(i);
+            data[i + 9] = getB(i);
             }
 
         val = model.get("fseqplaymode");
@@ -2412,53 +2412,53 @@ public class YamahaFS1RMulti extends Synth
 
         for(int i = POS_FSEQPLAYMODE + 1; i < POS_CONTROLLER1PARTSWITCH; i++)
             {
-                data[i + 9] = getB(i);
+            data[i + 9] = getB(i);
             }
 
         for(int i = 0; i < 8; i++)
             {
-                data[POS_CONTROLLER1PARTSWITCH + i + 9] = (byte)
-                    (
-                     (model.get("controller" + (i+1) + "part1") << 0) | 
-                     (model.get("controller" + (i+1) + "part2") << 1) |
-                     (model.get("controller" + (i+1) + "part3") << 2) |
-                     (model.get("controller" + (i+1) + "part4") << 3)
-                     );
+            data[POS_CONTROLLER1PARTSWITCH + i + 9] = (byte)
+                (
+                (model.get("controller" + (i+1) + "part1") << 0) | 
+                (model.get("controller" + (i+1) + "part2") << 1) |
+                (model.get("controller" + (i+1) + "part3") << 2) |
+                (model.get("controller" + (i+1) + "part4") << 3)
+                );
             }
 
         for(int i = 0; i < 8; i++)
             {
-                data[POS_CONTROLLER1SOURCESWITCHHI + i * 2 + 9] = (byte)
-                    (
-                     (model.get("controller" + (i+1) +"cat") << 0) | 
-                     (model.get("controller" + (i+1) +"pat") << 1) |
-                     (model.get("controller" + (i+1) +"fc") << 2) |
-                     (model.get("controller" + (i+1) +"bc") << 3) | 
-                     (model.get("controller" + (i+1) +"mc3") << 4) |
-                     (model.get("controller" + (i+1) +"mw") << 5) |
-                     (model.get("controller" + (i+1) +"mc4") << 6)
-                     );
+            data[POS_CONTROLLER1SOURCESWITCHHI + i * 2 + 9] = (byte)
+                (
+                (model.get("controller" + (i+1) +"cat") << 0) | 
+                (model.get("controller" + (i+1) +"pat") << 1) |
+                (model.get("controller" + (i+1) +"fc") << 2) |
+                (model.get("controller" + (i+1) +"bc") << 3) | 
+                (model.get("controller" + (i+1) +"mc3") << 4) |
+                (model.get("controller" + (i+1) +"mw") << 5) |
+                (model.get("controller" + (i+1) +"mc4") << 6)
+                );
 
-                data[POS_CONTROLLER1SOURCESWITCHHI + i * 2 + 1 + 9] = (byte)
-                    (
-                     (model.get("controller" + (i+1) +"kn1") << 0) | 
-                     (model.get("controller" + (i+1) +"kn2") << 1) |
-                     (model.get("controller" + (i+1) +"kn3") << 2) |
-                     (model.get("controller" + (i+1) +"kn4") << 3) | 
-                     (model.get("controller" + (i+1) +"mc1") << 4) |
-                     (model.get("controller" + (i+1) +"mc2") << 5) |
-                     (model.get("controller" + (i+1) +"pb") << 6)
-                     );
+            data[POS_CONTROLLER1SOURCESWITCHHI + i * 2 + 1 + 9] = (byte)
+                (
+                (model.get("controller" + (i+1) +"kn1") << 0) | 
+                (model.get("controller" + (i+1) +"kn2") << 1) |
+                (model.get("controller" + (i+1) +"kn3") << 2) |
+                (model.get("controller" + (i+1) +"kn4") << 3) | 
+                (model.get("controller" + (i+1) +"mc1") << 4) |
+                (model.get("controller" + (i+1) +"mc2") << 5) |
+                (model.get("controller" + (i+1) +"pb") << 6)
+                );
             }
                 
         for(int i = POS_CONTROLLER1SOURCESWITCHHI + 8 * 2; i < POS_REVERBPARAMETER1HI; i++)
             {
-                data[i + 9] = getB(i);
+            data[i + 9] = getB(i);
             }
 
         for(int i = POS_REVERBTYPE; i < POS_PART_START; i++)
             {
-                data[i + 9] = getB(i);
+            data[i + 9] = getB(i);
             }
 
         int reverbType = model.get("reverbtype");
@@ -2466,20 +2466,20 @@ public class YamahaFS1RMulti extends Synth
         if (version != -1)
             for(int i = 0; i < YamahaFS1RFX.revEffectNameTable.length; i++)
                 {
-                    if (YamahaFS1RFX.revEffectNameTable[i][version].equals("Reverb Pan")) break;
+                if (YamahaFS1RFX.revEffectNameTable[i][version].equals("Reverb Pan")) break;
                         
-                    int paraType = YamahaFS1RFX.revParaTypeTable[version][i];
-                    val = model.get("reverb" + reverbType + "parameter" + (i + 1)) + YamahaFS1RFX.getSysexMin(REVERB, version, paraType);  // YamahaFS1RFX.sysexMinTable[paraType];
-                    int address = (0x00 << 7) | YamahaFS1RFX.revEffectParaLSBTable[i][version];
-                    if (address < 0x60)     // two bytes
-                        {
-                            data[address + 9] = (byte)((val >>> 7) & 127);          // hi   
-                            data[address + 1 + 9] = (byte)(val & 127);                      // lo
-                        }
-                    else
-                        {
-                            data[address + 9] = (byte)(val & 127);
-                        }
+                int paraType = YamahaFS1RFX.revParaTypeTable[version][i];
+                val = model.get("reverb" + reverbType + "parameter" + (i + 1)) + YamahaFS1RFX.getSysexMin(REVERB, version, paraType);  // YamahaFS1RFX.sysexMinTable[paraType];
+                int address = (0x00 << 7) | YamahaFS1RFX.revEffectParaLSBTable[i][version];
+                if (address < 0x60)     // two bytes
+                    {
+                    data[address + 9] = (byte)((val >>> 7) & 127);          // hi   
+                    data[address + 1 + 9] = (byte)(val & 127);                      // lo
+                    }
+                else
+                    {
+                    data[address + 9] = (byte)(val & 127);
+                    }
                 }
 
         // let's emit the effects parameters after the type, it's out of order but
@@ -2489,13 +2489,13 @@ public class YamahaFS1RMulti extends Synth
         if (version != -1)
             for(int i = 0; i < YamahaFS1RFX.varEffectNameTable.length; i++)
                 {
-                    if (YamahaFS1RFX.varEffectNameTable[i][version].equals("Var Pan")) break;
+                if (YamahaFS1RFX.varEffectNameTable[i][version].equals("Var Pan")) break;
                         
-                    int paraType = YamahaFS1RFX.varParaTypeTable[version][i];
-                    val = model.get("variation" + variationType + "parameter" + (i + 1)) + YamahaFS1RFX.getSysexMin(VARIATION, version, paraType);  // YamahaFS1RFX.sysexMinTable[paraType];
-                    int address = (YamahaFS1RFX.varEffectParaMSBTable[i][version] << 7) | YamahaFS1RFX.varEffectParaLSBTable[i][version];
-                    data[address + 9] = (byte)((val >>> 7) & 127);          // hi   
-                    data[address + 1 + 9] = (byte)(val & 127);                      // lo
+                int paraType = YamahaFS1RFX.varParaTypeTable[version][i];
+                val = model.get("variation" + variationType + "parameter" + (i + 1)) + YamahaFS1RFX.getSysexMin(VARIATION, version, paraType);  // YamahaFS1RFX.sysexMinTable[paraType];
+                int address = (YamahaFS1RFX.varEffectParaMSBTable[i][version] << 7) | YamahaFS1RFX.varEffectParaLSBTable[i][version];
+                data[address + 9] = (byte)((val >>> 7) & 127);          // hi   
+                data[address + 1 + 9] = (byte)(val & 127);                      // lo
                 }
 
 
@@ -2504,89 +2504,89 @@ public class YamahaFS1RMulti extends Synth
         if (version != -1)
             for(int i = 0; i < YamahaFS1RFX.insEffectNameTable.length; i++)
                 {
-                    if (YamahaFS1RFX.insEffectNameTable[i][version].equals("Ins Pan")) break;
+                if (YamahaFS1RFX.insEffectNameTable[i][version].equals("Ins Pan")) break;
 
-                    int paraType = YamahaFS1RFX.insParaTypeTable[version][i];
-                    val = model.get("insertion" + insertionType + "parameter" + (i + 1)) + YamahaFS1RFX.getSysexMin(INSERTION, version, paraType);  // YamahaFS1RFX.sysexMinTable[paraType];
-                    int address = (0x01 << 7) | YamahaFS1RFX.insEffectParaLSBTable[i][version];
-                    data[address + 9] = (byte)((val >>> 7) & 127);          // hi   
-                    data[address + 1 + 9] = (byte)(val & 127);                      // lo
+                int paraType = YamahaFS1RFX.insParaTypeTable[version][i];
+                val = model.get("insertion" + insertionType + "parameter" + (i + 1)) + YamahaFS1RFX.getSysexMin(INSERTION, version, paraType);  // YamahaFS1RFX.sysexMinTable[paraType];
+                int address = (0x01 << 7) | YamahaFS1RFX.insEffectParaLSBTable[i][version];
+                data[address + 9] = (byte)((val >>> 7) & 127);          // hi   
+                data[address + 1 + 9] = (byte)(val & 127);                      // lo
                 }
 
         for(int part = 0; part < 4; part++)
             {
-                int base = POS_PART_START + part * PART_LENGTH;
-                for(int i = base; i < base + OFFSET_RCVCHANNELMAX; i++)
-                    {
-                        data[i + 9] = getB(i);
-                    }
+            int base = POS_PART_START + part * PART_LENGTH;
+            for(int i = base; i < base + OFFSET_RCVCHANNELMAX; i++)
+                {
+                data[i + 9] = getB(i);
+                }
 
-                val = model.get("part" + (part + 1) + "rcvchannelmax");
-                if (val == 16) val = 0x7F;              // recreate the hole
-                data[base + OFFSET_RCVCHANNELMAX + 9] = (byte)val;
+            val = model.get("part" + (part + 1) + "rcvchannelmax");
+            if (val == 16) val = 0x7F;              // recreate the hole
+            data[base + OFFSET_RCVCHANNELMAX + 9] = (byte)val;
 
-                val = model.get("part" + (part + 1) + "rcvchannel");
-                if (val == 17) val = 0x7F;              // recreate the hole, notice 17 not 16
-                data[base + OFFSET_RCVCHANNEL + 9] = (byte)val;
+            val = model.get("part" + (part + 1) + "rcvchannel");
+            if (val == 17) val = 0x7F;              // recreate the hole, notice 17 not 16
+            data[base + OFFSET_RCVCHANNEL + 9] = (byte)val;
                 
-                for(int i = base + OFFSET_RCVCHANNEL + 1; i < base + OFFSET_PORTAMENTOSWITCHMODE; i++)
-                    {
-                        data[i + 9] = getB(i);
-                    }
+            for(int i = base + OFFSET_RCVCHANNEL + 1; i < base + OFFSET_PORTAMENTOSWITCHMODE; i++)
+                {
+                data[i + 9] = getB(i);
+                }
 
-                data[base + OFFSET_PORTAMENTOSWITCHMODE + 9] = (byte)
-                    (
-                     (model.get("part" + (part + 1) + "portamentoswitch") << 0) | 
-                     (model.get("part" + (part + 1) + "portamentomode") << 1) 
-                     );
+            data[base + OFFSET_PORTAMENTOSWITCHMODE + 9] = (byte)
+                (
+                (model.get("part" + (part + 1) + "portamentoswitch") << 0) | 
+                (model.get("part" + (part + 1) + "portamentomode") << 1) 
+                );
                         
-                for(int i = base + OFFSET_PORTAMENTOSWITCHMODE + 1; i < base + PART_LENGTH; i++)
-                    {
-                        data[i + 9] = getB(i);
-                    }
+            for(int i = base + OFFSET_PORTAMENTOSWITCHMODE + 1; i < base + PART_LENGTH; i++)
+                {
+                data[i + 9] = getB(i);
+                }
             }
 
         data[data.length - 2] = produceChecksum(data, 4);
         data[data.length - 1] = (byte)0xF7;
         return data;
-    }
+        }
 
 
 
 
 
     public int parse(byte[] data, boolean fromFile)
-    {
+        {
         // we're going to presume that incoming data doesn't
         // tell us anything about our bank or number; so we won't
         // change it unless we're fromFile
         if (fromFile)
             {
-                model.set("bank", 0);
-                model.set("number", 0);
+            model.set("bank", 0);
+            model.set("number", 0);
             }
         else
             {
-                // No change, we presume we set it when we did the request
+            // No change, we presume we set it when we did the request
             }
                 
         char[] name = new char[12];
         for(int i = 0; i < 12; i++)
             {
-                name[i] = (char)data[i + 9];
-                model.set("name", new String(name));
+            name[i] = (char)data[i + 9];
+            model.set("name", new String(name));
             }
             
         for(int i = 12; i < POS_FSEQBANK; i++)
             {
-                if (!allParameters[i].equals("-")) model.set(allParameters[i], data[i + 9]);
+            if (!allParameters[i].equals("-")) model.set(allParameters[i], data[i + 9]);
             }
         
         model.set("fseq", data[POS_FSEQBANK + 9] == 0 ? data[POS_FSEQNUMBER + 9] : data[POS_FSEQNUMBER + 9] + 6);
                 
         for(int i = POS_FSEQNUMBER + 1; i < POS_FSEQSPEEDHI; i++)
             {
-                if (!allParameters[i].equals("-")) model.set(allParameters[i], data[i + 9]);
+            if (!allParameters[i].equals("-")) model.set(allParameters[i], data[i + 9]);
             }
 
         int val = ((data[POS_FSEQSPEEDHI + 9] << 7) | data[POS_FSEQSPEEDLO + 9]);
@@ -2603,7 +2603,7 @@ public class YamahaFS1RMulti extends Synth
 
         for(int i = POS_FSEQENDSTEPOFLOOPPOINTLO + 1; i < POS_FSEQPLAYMODE; i++)
             {
-                if (!allParameters[i].equals("-")) model.set(allParameters[i], data[i + 9]);
+            if (!allParameters[i].equals("-")) model.set(allParameters[i], data[i + 9]);
             }
                 
         val = data[POS_FSEQPLAYMODE + 9];
@@ -2612,47 +2612,47 @@ public class YamahaFS1RMulti extends Synth
 
         for(int i = POS_FSEQPLAYMODE + 1; i < POS_CONTROLLER1PARTSWITCH; i++)
             {
-                if (!allParameters[i].equals("-")) model.set(allParameters[i], data[i + 9]);
+            if (!allParameters[i].equals("-")) model.set(allParameters[i], data[i + 9]);
             }
 
         for(int i = 0; i < 8; i++)
             {
-                val = data[POS_CONTROLLER1PARTSWITCH + i + 9];
-                model.set("controller" + (i+1) + "part1", (val >>> 0) & 1);
-                model.set("controller" + (i+1) + "part2", (val >>> 1) & 1);
-                model.set("controller" + (i+1) + "part3", (val >>> 2) & 1);
-                model.set("controller" + (i+1) + "part4", (val >>> 3) & 1);
+            val = data[POS_CONTROLLER1PARTSWITCH + i + 9];
+            model.set("controller" + (i+1) + "part1", (val >>> 0) & 1);
+            model.set("controller" + (i+1) + "part2", (val >>> 1) & 1);
+            model.set("controller" + (i+1) + "part3", (val >>> 2) & 1);
+            model.set("controller" + (i+1) + "part4", (val >>> 3) & 1);
             }
 
         for(int i = 0; i < 8; i++)
             {
-                val = data[POS_CONTROLLER1SOURCESWITCHHI + i * 2 + 9];
-                model.set("controller" + (i+1) +"cat", (val >>> 0) & 1);
-                model.set("controller" + (i+1) +"pat", (val >>> 1) & 1);
-                model.set("controller" + (i+1) +"fc", (val >>> 2) & 1);
-                model.set("controller" + (i+1) +"bc", (val >>> 3) & 1);
-                model.set("controller" + (i+1) +"mc3", (val >>> 4) & 1);
-                model.set("controller" + (i+1) +"mw", (val >>> 5) & 1);
-                model.set("controller" + (i+1) +"mc4", (val >>> 6) & 1);
+            val = data[POS_CONTROLLER1SOURCESWITCHHI + i * 2 + 9];
+            model.set("controller" + (i+1) +"cat", (val >>> 0) & 1);
+            model.set("controller" + (i+1) +"pat", (val >>> 1) & 1);
+            model.set("controller" + (i+1) +"fc", (val >>> 2) & 1);
+            model.set("controller" + (i+1) +"bc", (val >>> 3) & 1);
+            model.set("controller" + (i+1) +"mc3", (val >>> 4) & 1);
+            model.set("controller" + (i+1) +"mw", (val >>> 5) & 1);
+            model.set("controller" + (i+1) +"mc4", (val >>> 6) & 1);
 
-                val = data[POS_CONTROLLER1SOURCESWITCHHI + i * 2 + 1 + 9];
-                model.set("controller" + (i+1) +"kn1", (val >>> 0) & 1);
-                model.set("controller" + (i+1) +"kn2", (val >>> 1) & 1);
-                model.set("controller" + (i+1) +"kn3", (val >>> 2) & 1);
-                model.set("controller" + (i+1) +"kn4", (val >>> 3) & 1);
-                model.set("controller" + (i+1) +"mc1", (val >>> 4) & 1);
-                model.set("controller" + (i+1) +"mc2", (val >>> 5) & 1);
-                model.set("controller" + (i+1) +"pb", (val >>> 6) & 1);
+            val = data[POS_CONTROLLER1SOURCESWITCHHI + i * 2 + 1 + 9];
+            model.set("controller" + (i+1) +"kn1", (val >>> 0) & 1);
+            model.set("controller" + (i+1) +"kn2", (val >>> 1) & 1);
+            model.set("controller" + (i+1) +"kn3", (val >>> 2) & 1);
+            model.set("controller" + (i+1) +"kn4", (val >>> 3) & 1);
+            model.set("controller" + (i+1) +"mc1", (val >>> 4) & 1);
+            model.set("controller" + (i+1) +"mc2", (val >>> 5) & 1);
+            model.set("controller" + (i+1) +"pb", (val >>> 6) & 1);
             }
                                 
         for(int i = POS_CONTROLLER1SOURCESWITCHHI + 8 * 2; i < POS_REVERBPARAMETER1HI; i++)
             {
-                if (!allParameters[i].equals("-")) model.set(allParameters[i], data[i + 9]);
+            if (!allParameters[i].equals("-")) model.set(allParameters[i], data[i + 9]);
             }
                 
         for(int i = POS_REVERBTYPE; i < POS_PART_START; i++)
             {
-                if (!allParameters[i].equals("-")) model.set(allParameters[i], data[i + 9]);
+            if (!allParameters[i].equals("-")) model.set(allParameters[i], data[i + 9]);
             }
                 
         int reverbType = model.get("reverbtype");               // it's already been set
@@ -2660,20 +2660,20 @@ public class YamahaFS1RMulti extends Synth
         if (version != -1)
             for(int i = 0; i < YamahaFS1RFX.revEffectNameTable.length; i++)
                 {
-                    if (YamahaFS1RFX.revEffectNameTable[i][version].equals("Reverb Pan")) break;
+                if (YamahaFS1RFX.revEffectNameTable[i][version].equals("Reverb Pan")) break;
                         
-                    int paraType = YamahaFS1RFX.revParaTypeTable[version][i];
-                    int address = (0x00 << 7) | YamahaFS1RFX.revEffectParaLSBTable[i][version];
-                    if (address < 0x60)     // two bytes
-                        {
-                            val = ((data[address + 9] << 7) |
-                                   (data[address + 1 + 9]  << 0)) - YamahaFS1RFX.getSysexMin(REVERB, version, paraType);  // YamahaFS1RFX.sysexMinTable[paraType];
-                        }
-                    else
-                        {
-                            val = data[address + 9] - YamahaFS1RFX.getSysexMin(REVERB, version, paraType);  // YamahaFS1RFX.sysexMinTable[paraType];
-                        }
-                    model.set("reverb" + reverbType + "parameter" + (i + 1), val);
+                int paraType = YamahaFS1RFX.revParaTypeTable[version][i];
+                int address = (0x00 << 7) | YamahaFS1RFX.revEffectParaLSBTable[i][version];
+                if (address < 0x60)     // two bytes
+                    {
+                    val = ((data[address + 9] << 7) |
+                        (data[address + 1 + 9]  << 0)) - YamahaFS1RFX.getSysexMin(REVERB, version, paraType);  // YamahaFS1RFX.sysexMinTable[paraType];
+                    }
+                else
+                    {
+                    val = data[address + 9] - YamahaFS1RFX.getSysexMin(REVERB, version, paraType);  // YamahaFS1RFX.sysexMinTable[paraType];
+                    }
+                model.set("reverb" + reverbType + "parameter" + (i + 1), val);
                 }
 
         // let's emit the effects parameters after the type, it's out of order but
@@ -2683,15 +2683,15 @@ public class YamahaFS1RMulti extends Synth
         if (version != -1)
             for(int i = 0; i < YamahaFS1RFX.varEffectNameTable.length; i++)
                 {
-                    if (YamahaFS1RFX.varEffectNameTable[i][version].equals("Var Pan")) break;
+                if (YamahaFS1RFX.varEffectNameTable[i][version].equals("Var Pan")) break;
 
-                    int paraType = YamahaFS1RFX.varParaTypeTable[version][i];
-                    int address = (YamahaFS1RFX.varEffectParaMSBTable[i][version] << 7) | YamahaFS1RFX.varEffectParaLSBTable[i][version];
+                int paraType = YamahaFS1RFX.varParaTypeTable[version][i];
+                int address = (YamahaFS1RFX.varEffectParaMSBTable[i][version] << 7) | YamahaFS1RFX.varEffectParaLSBTable[i][version];
                         
-                    val = ((data[address + 9] << 7) |
-                           (data[address + 1 + 9]  << 0)) - YamahaFS1RFX.getSysexMin(VARIATION, version, paraType);  // YamahaFS1RFX.sysexMinTable[paraType];
+                val = ((data[address + 9] << 7) |
+                    (data[address + 1 + 9]  << 0)) - YamahaFS1RFX.getSysexMin(VARIATION, version, paraType);  // YamahaFS1RFX.sysexMinTable[paraType];
 
-                    model.set("variation" + variationType + "parameter" + (i + 1), val);
+                model.set("variation" + variationType + "parameter" + (i + 1), val);
                 }
 
 
@@ -2700,85 +2700,85 @@ public class YamahaFS1RMulti extends Synth
         if (version != -1)
             for(int i = 0; i < YamahaFS1RFX.insEffectNameTable.length; i++)
                 {
-                    if (YamahaFS1RFX.insEffectNameTable[i][version].equals("Ins Pan")) break;
+                if (YamahaFS1RFX.insEffectNameTable[i][version].equals("Ins Pan")) break;
 
-                    int paraType = YamahaFS1RFX.insParaTypeTable[version][i];
-                    int address = (0x01 << 7) | YamahaFS1RFX.insEffectParaLSBTable[i][version];
+                int paraType = YamahaFS1RFX.insParaTypeTable[version][i];
+                int address = (0x01 << 7) | YamahaFS1RFX.insEffectParaLSBTable[i][version];
                         
-                    val = ((data[address + 9] << 7) |
-                           (data[address + 1 + 9]  << 0)) - YamahaFS1RFX.getSysexMin(INSERTION, version, paraType);  // YamahaFS1RFX.sysexMinTable[paraType];
+                val = ((data[address + 9] << 7) |
+                    (data[address + 1 + 9]  << 0)) - YamahaFS1RFX.getSysexMin(INSERTION, version, paraType);  // YamahaFS1RFX.sysexMinTable[paraType];
 
-                    model.set("insertion" + insertionType + "parameter" + (i + 1), val);
+                model.set("insertion" + insertionType + "parameter" + (i + 1), val);
                 }
 
 
                 
         for(int part = 0; part < 4; part++)
             {
-                int base = POS_PART_START + part * PART_LENGTH;
+            int base = POS_PART_START + part * PART_LENGTH;
 
-                for(int i = 0; i < OFFSET_RCVCHANNELMAX; i++)
-                    {
-                        if (!allParameters[base + i].equals("-")) model.set(allParameters[base + i], data[base + i + 9]);
-                    }
+            for(int i = 0; i < OFFSET_RCVCHANNELMAX; i++)
+                {
+                if (!allParameters[base + i].equals("-")) model.set(allParameters[base + i], data[base + i + 9]);
+                }
                 
 
-                val = data[base + OFFSET_RCVCHANNELMAX + 9];
-                // There appear to be some invalid values in certain patches, such as val == 18.  These will
-                // get revised to 16 (OFF) anyway, hope that's right.
-                model.set("part" + (part + 1) + "rcvchannelmax", val == 0x7F ? 16 : val);
+            val = data[base + OFFSET_RCVCHANNELMAX + 9];
+            // There appear to be some invalid values in certain patches, such as val == 18.  These will
+            // get revised to 16 (OFF) anyway, hope that's right.
+            model.set("part" + (part + 1) + "rcvchannelmax", val == 0x7F ? 16 : val);
         
-                val = data[base + OFFSET_RCVCHANNEL + 9];
-                model.set("part" + (part + 1) + "rcvchannel", val == 0x7F ? 17 : val);
+            val = data[base + OFFSET_RCVCHANNEL + 9];
+            model.set("part" + (part + 1) + "rcvchannel", val == 0x7F ? 17 : val);
 
                 
-                for(int i = OFFSET_RCVCHANNEL + 1; i < OFFSET_PORTAMENTOSWITCHMODE; i++)
-                    {
-                        if (!allParameters[base + i].equals("-")) model.set(allParameters[base + i], data[base + i + 9]);
-                    }
+            for(int i = OFFSET_RCVCHANNEL + 1; i < OFFSET_PORTAMENTOSWITCHMODE; i++)
+                {
+                if (!allParameters[base + i].equals("-")) model.set(allParameters[base + i], data[base + i + 9]);
+                }
                                 
-                val = data[base + OFFSET_PORTAMENTOSWITCHMODE + 9];
-                model.set("part" + (part + 1) + "portamentoswitch", (val >> 0) & 1);
-                model.set("part" + (part + 1) + "portamentomode", (val >> 1) & 1);
+            val = data[base + OFFSET_PORTAMENTOSWITCHMODE + 9];
+            model.set("part" + (part + 1) + "portamentoswitch", (val >> 0) & 1);
+            model.set("part" + (part + 1) + "portamentomode", (val >> 1) & 1);
 
-                for(int i = OFFSET_PORTAMENTOSWITCHMODE + 1; i < PART_LENGTH; i++)
-                    {
-                        if (!allParameters[base + i].equals("-")) model.set(allParameters[base + i], data[base + i + 9]);
-                    }
+            for(int i = OFFSET_PORTAMENTOSWITCHMODE + 1; i < PART_LENGTH; i++)
+                {
+                if (!allParameters[base + i].equals("-")) model.set(allParameters[base + i], data[base + i + 9]);
+                }
             }
         
         revise();
         return PARSE_SUCCEEDED_UNTITLED;
-    }
+        }
     
     
     
     public byte getID() 
-    { 
+        { 
         try 
             { 
-                byte b = (byte)(Byte.parseByte(tuple.id));
-                if (b >= 1 && b < 16) return b;
+            byte b = (byte)(Byte.parseByte(tuple.id));
+            if (b >= 1 && b < 16) return b;
             }
         catch (NullPointerException e) { } // expected.  Happens when tuple's not built yet
         catch (NumberFormatException e) { Synth.handleException(e); }
         return 1;
-    }
+        }
         
     public String reviseID(String id)
-    {
+        {
         try 
             { 
-                byte b =(byte)(Byte.parseByte(id)); 
-                if (b >= 1 && b < 16) return "" + b;
+            byte b =(byte)(Byte.parseByte(id)); 
+            if (b >= 1 && b < 16) return "" + b;
             } 
         catch (NumberFormatException e) { }             // expected
         return "" + getID();
-    }
+        }
 
 
     byte produceChecksum(byte[] bytes, int start)
-    {
+        {
         //      It appears that the FS1R uses the same checksum as the 4-op and DX7 synths
         //
         //      The TX816 owner's manual (p. 54) says the checksum is:
@@ -2793,46 +2793,46 @@ public class YamahaFS1RMulti extends Synth
         for(int i = start; i < bytes.length; i++)
             checksum = (checksum + bytes[i]) & 127;
         return (byte)((128 - checksum) & 127);
-    }
+        }
 
 
     public void performRequestDump(Model tempModel, boolean changePatch)
-    {
+        {
         if (tempModel == null)
             tempModel = getModel();
 
         // We ALWAYS change the patch no matter what.  We have to.  We have to force it for merging
         changePatch(tempModel);
         tryToSendSysex(requestDump(tempModel));
-    }
+        }
 
     public byte[] requestDump(Model tempModel) 
-    {
+        {
         // we will have already done a change patch...
         // so all we need to do now is 
         
         return requestCurrentDump();
-    }
+        }
     
     // Will request the current part
     public byte[] requestCurrentDump()
-    {
+        {
         return new byte[]
             {
-                (byte)0xF0,
-                (byte)0x43,
-                (byte)(32 + getID() - 1),
-                (byte)0x5E,
-                (byte)0x10,
-                0, 
-                0, 
-                (byte)0xF7
+            (byte)0xF0,
+            (byte)0x43,
+            (byte)(32 + getID() - 1),
+            (byte)0x5E,
+            (byte)0x10,
+            0, 
+            0, 
+            (byte)0xF7
             };
-    }
+        }
 
     public static final int MAXIMUM_NAME_LENGTH = 12;
     public String revisePatchName(String name)
-    {
+        {
         name = super.revisePatchName(name);  // trim first time
         if (name.length() > MAXIMUM_NAME_LENGTH)
             name = name.substring(0, MAXIMUM_NAME_LENGTH);
@@ -2840,18 +2840,18 @@ public class YamahaFS1RMulti extends Synth
         StringBuffer nameb = new StringBuffer(name);                            
         for(int i = 0 ; i < nameb.length(); i++)
             {
-                char c = nameb.charAt(i);
-                if (c < 32 || c > 127)
-                    nameb.setCharAt(i, ' ');
+            char c = nameb.charAt(i);
+            if (c < 32 || c > 127)
+                nameb.setCharAt(i, ' ');
             }
         name = nameb.toString();
         return super.revisePatchName(name);  // trim again
-    }        
+        }        
 
 
     /** Verify that all the parameters are within valid values, and tweak them if not. */
     public void revise()
-    {
+        {
         // check the easy stuff -- out of range parameters
         super.revise();
 
@@ -2859,12 +2859,12 @@ public class YamahaFS1RMulti extends Synth
         String newnm = revisePatchName(nm);
         if (!nm.equals(newnm))
             model.set("name", newnm);
-    }
+        }
         
     public static String getSynthName() { return "Yamaha FS1R [Performance]"; }
 
     public void changePatch(Model tempModel) 
-    {
+        {
         // We need to set "Program Change Mode = multi". 
 
         // Send Bank MSB, which is always 63, go figure...
@@ -2877,35 +2877,35 @@ public class YamahaFS1RMulti extends Synth
         // we assume that we successfully did it
         if (!isMerging())  // we're actually loading the patch, not merging with it
             {
-                model.set("number", tempModel.get("number"));
-                model.set("bank", tempModel.get("bank"));
+            model.set("number", tempModel.get("number"));
+            model.set("bank", tempModel.get("bank"));
             }
-    }
+        }
     
     public String getPatchName(Model model) { return model.get("name", "INIT VOICE"); }
 
     public Model getNextPatchLocation(Model model)
-    {
+        {
         int bank = model.get("bank");
         int number = model.get("number");
         
         number++;
         if (number >= 128)
             {
-                bank++;
-                number = 0;
-                if (bank >= 4)             // C = 3, Internal = 0
-                    bank = 0;
+            bank++;
+            number = 0;
+            if (bank >= 4)             // C = 3, Internal = 0
+                bank = 0;
             }
                 
         Model newModel = buildModel();
         newModel.set("bank", bank);
         newModel.set("number", number);
         return newModel;
-    }
+        }
 
     public String getPatchLocationName(Model model)
-    {
+        {
         // getPatchLocationName() is called from sprout() as a test to see if we should enable
         // batch downloading.  If we haven't yet created an .init file, then parameters won't exist
         // yet and this method will bomb badly.  So we return null in this case.
@@ -2916,7 +2916,7 @@ public class YamahaFS1RMulti extends Synth
         int bank = model.get("bank");
         return (bank == 0 ? "Int " : BANKS[model.get("bank")]) + 
             (number > 99 ? "" : (number > 9 ? "0" : "00")) + number;
-    }
+        }
         
 
     public static final int FSEQ_DEFAULT_PITCH_I = 0;
@@ -2930,116 +2930,116 @@ public class YamahaFS1RMulti extends Synth
     // For each FSEQ, including the first 6 internal ones, provides default settings and the maximum length.
     // I am confused by this because FSEQ ROM Preset #0, from Facebook's patch collection, actually has less than 128 frames (6.3K bytes), but here it's listed as 504? 
     public static final int FSEQ_PARAMETER_SETTINGS[][] = new int[][]                   // [95][6] 
-        {
-            // INTERNAL
-            { 0, 0, 0,   0, 511, 511 },  // Int 01
-            { 0, 0, 0,   0, 511, 511 },  // Int 02
-            { 0, 0, 0,   0, 511, 511 },  // Int 03
-            { 0, 0, 0,   0, 511, 511 },  // Int 04
-            { 0, 0, 0,   0, 511, 511 },  // Int 05
-            { 0, 0, 0,   0, 511, 511 },  // Int 06
+    {
+    // INTERNAL
+    { 0, 0, 0,   0, 511, 511 },  // Int 01
+    { 0, 0, 0,   0, 511, 511 },  // Int 02
+    { 0, 0, 0,   0, 511, 511 },  // Int 03
+    { 0, 0, 0,   0, 511, 511 },  // Int 04
+    { 0, 0, 0,   0, 511, 511 },  // Int 05
+    { 0, 0, 0,   0, 511, 511 },  // Int 06
                         
-            // PRESETS
-            { 0, 0, 0,   0, 498, 504 },  // 01
-            { 0, 0, 0,   0, 465, 511 },  // 02
-            { 0, 0, 0,   0, 401, 511 },  // 03
-            { 0, 0, 0,   0, 455, 511 },  // 04
-            { 0, 0, 0,   0, 500, 511 },  // 05
-            { 0, 0, 0, 430, 430, 511 },  // 06
-            { 0, 0, 0,   0, 507, 510 },  // 07
-            { 0, 0, 0,   0, 431, 431 },  // 08
-            { 0, 0, 0,   0, 491, 500 },  // 09
-            { 1, 0, 0,  62, 125, 127 },  // 10
-            { 1, 0, 0, 116, 117, 117 },  // 11
-            { 0, 0, 1,  24, 124, 125 },  // 12
-            { 0, 0, 1,  30,  42,  77 },  // 13
-            { 1, 0, 1, 126, 126, 127 },  // 14
-            { 1, 0, 1,  71, 125, 127 },  // 15
-            { 0, 0, 0, 127, 127, 127 },  // 16
-            { 0, 0, 1,  56, 120, 121 },  // 17
-            { 0, 0, 0,   0, 127, 127 },  // 18
-            { 0, 0, 0, 127, 127, 127 },  // 19
-            { 1, 0, 0,  64, 127, 127 },  // 20
-            { 1, 0, 1, 127,   5, 127 },  // 21
-            { 1, 0, 0, 106, 106, 127 },  // 22
-            { 0, 0, 0,  95,  95, 127 },  // 23
-            { 0, 0, 0,   0, 106, 127 },  // 24
-            { 1, 0, 0,   0, 100, 127 },  // 25
-            { 1, 0, 0,   0, 119, 127 },  // 26
-            { 1, 0, 0,   0, 100, 127 },  // 27
-            { 0, 0, 0,   0,  99, 120 },  // 28
-            { 0, 0, 0,   0, 102, 127 },  // 29
-            { 0, 0, 0,   0,  99, 113 },  // 30
-            { 0, 0, 0,   0, 125, 127 },  // 31
-            { 1, 0, 0,   0, 125, 127 },  // 32
-            { 1, 0, 0, 109, 110, 127 },  // 33
-            { 1, 0, 0,   0, 124, 127 },  // 34
-            { 0, 0, 0,   0, 125, 127 },  // 35
-            { 0, 0, 0, 105, 105, 127 },  // 36
-            { 0, 0, 0,   0,  99, 103 },  // 37
-            { 0, 2, 0,   0, 114, 127 },  // 38
-            { 0, 0, 0, 127, 127, 127 },  // 39
-            { 0, 0, 0,  50,  50, 127 },  // 40
-            { 0, 0, 0,  97,  97, 127 },  // 41
-            { 1, 0, 0, 127, 127, 127 },  // 42
-            { 0, 0, 0,   0, 115, 127 },  // 43
-            { 1, 0, 0, 127, 127, 127 },  // 44
-            { 1, 0, 1,  60, 113, 127 },  // 45
-            { 0, 0, 0, 127, 127, 127 },  // 46
-            { 1, 0, 0,   6, 118, 127 },  // 47
-            { 1, 0, 0,   0, 100, 127 },  // 48
-            { 0, 0, 0, 127, 127, 127 },  // 49
-            { 0, 0, 0, 127, 127, 127 },  // 50
-            { 0, 0, 0, 127, 127, 127 },  // 51
-            { 0, 0, 0, 127, 127, 127 },  // 52
-            { 0, 0, 0, 127, 127, 127 },  // 53
-            { 0, 0, 0, 127, 127, 127 },  // 54
-            { 0, 0, 0, 127, 127, 127 },  // 55
-            { 0, 0, 1,   0, 114, 127 },  // 56
-            { 0, 0, 0,   0, 119, 127 },  // 57
-            { 0, 0, 0, 127, 127, 127 },  // 58
-            { 0, 0, 0, 127, 127, 127 },  // 59
-            { 0, 0, 0, 127, 127, 127 },  // 60
-            { 1, 0, 0, 120, 121, 127 },  // 61
-            { 0, 0, 0, 127, 127, 127 },  // 62
-            { 0, 0, 0, 127, 127, 127 },  // 63
-            { 0, 0, 0,  39, 127, 127 },  // 64
-            { 0, 0, 0, 116, 116, 116 },  // 65
-            { 0, 0, 0, 127, 127, 127 },  // 66
-            { 0, 0, 0,   0, 121, 127 },  // 67
-            { 1, 0, 1,   0, 127, 127 },  // 68
-            { 1, 0, 1,  16, 127, 127 },  // 69
-            { 0, 0, 0,   0, 127, 127 },  // 70
-            { 0, 0, 0,   0, 100, 127 },  // 71
-            { 0, 0, 0, 120, 120, 127 },  // 72
-            { 1, 0, 0,  23, 123, 127 },  // 73
-            { 0, 0, 0,   0, 125, 127 },  // 74
-            { 1, 0, 0,  99, 100, 127 },  // 75
-            { 0, 0, 0, 127, 127, 127 },  // 76
-            { 0, 0, 0, 127, 127, 127 },  // 77
-            { 0, 0, 0,   0, 127, 127 },  // 78
-            { 1, 0, 1,  50, 126, 127 },  // 79
-            { 0, 0, 0,   0, 126, 127 },  // 80
-            { 0, 0, 0,  94,  94,  94 },  // 81
-            { 0, 0, 0,   0, 100, 104 },  // 82
-            { 0, 0, 0,  75, 127, 127 },  // 83
-            { 0, 0, 1, 123, 123, 127 },  // 84
-            { 0, 0, 1, 120, 126, 127 },  // 85
-            { 0, 0, 0,  63, 125, 125 },  // 86
-            { 0, 0, 0, 127, 127, 127 },  // 87
-            { 1, 0, 0, 119, 119, 127 },  // 88
-            { 1, 0, 0,   1, 111, 127 },  // 89
-            { 0, 0, 0, 127, 127, 127 },  // 90
-        };
+    // PRESETS
+    { 0, 0, 0,   0, 498, 504 },  // 01
+    { 0, 0, 0,   0, 465, 511 },  // 02
+    { 0, 0, 0,   0, 401, 511 },  // 03
+    { 0, 0, 0,   0, 455, 511 },  // 04
+    { 0, 0, 0,   0, 500, 511 },  // 05
+    { 0, 0, 0, 430, 430, 511 },  // 06
+    { 0, 0, 0,   0, 507, 510 },  // 07
+    { 0, 0, 0,   0, 431, 431 },  // 08
+    { 0, 0, 0,   0, 491, 500 },  // 09
+    { 1, 0, 0,  62, 125, 127 },  // 10
+    { 1, 0, 0, 116, 117, 117 },  // 11
+    { 0, 0, 1,  24, 124, 125 },  // 12
+    { 0, 0, 1,  30,  42,  77 },  // 13
+    { 1, 0, 1, 126, 126, 127 },  // 14
+    { 1, 0, 1,  71, 125, 127 },  // 15
+    { 0, 0, 0, 127, 127, 127 },  // 16
+    { 0, 0, 1,  56, 120, 121 },  // 17
+    { 0, 0, 0,   0, 127, 127 },  // 18
+    { 0, 0, 0, 127, 127, 127 },  // 19
+    { 1, 0, 0,  64, 127, 127 },  // 20
+    { 1, 0, 1, 127,   5, 127 },  // 21
+    { 1, 0, 0, 106, 106, 127 },  // 22
+    { 0, 0, 0,  95,  95, 127 },  // 23
+    { 0, 0, 0,   0, 106, 127 },  // 24
+    { 1, 0, 0,   0, 100, 127 },  // 25
+    { 1, 0, 0,   0, 119, 127 },  // 26
+    { 1, 0, 0,   0, 100, 127 },  // 27
+    { 0, 0, 0,   0,  99, 120 },  // 28
+    { 0, 0, 0,   0, 102, 127 },  // 29
+    { 0, 0, 0,   0,  99, 113 },  // 30
+    { 0, 0, 0,   0, 125, 127 },  // 31
+    { 1, 0, 0,   0, 125, 127 },  // 32
+    { 1, 0, 0, 109, 110, 127 },  // 33
+    { 1, 0, 0,   0, 124, 127 },  // 34
+    { 0, 0, 0,   0, 125, 127 },  // 35
+    { 0, 0, 0, 105, 105, 127 },  // 36
+    { 0, 0, 0,   0,  99, 103 },  // 37
+    { 0, 2, 0,   0, 114, 127 },  // 38
+    { 0, 0, 0, 127, 127, 127 },  // 39
+    { 0, 0, 0,  50,  50, 127 },  // 40
+    { 0, 0, 0,  97,  97, 127 },  // 41
+    { 1, 0, 0, 127, 127, 127 },  // 42
+    { 0, 0, 0,   0, 115, 127 },  // 43
+    { 1, 0, 0, 127, 127, 127 },  // 44
+    { 1, 0, 1,  60, 113, 127 },  // 45
+    { 0, 0, 0, 127, 127, 127 },  // 46
+    { 1, 0, 0,   6, 118, 127 },  // 47
+    { 1, 0, 0,   0, 100, 127 },  // 48
+    { 0, 0, 0, 127, 127, 127 },  // 49
+    { 0, 0, 0, 127, 127, 127 },  // 50
+    { 0, 0, 0, 127, 127, 127 },  // 51
+    { 0, 0, 0, 127, 127, 127 },  // 52
+    { 0, 0, 0, 127, 127, 127 },  // 53
+    { 0, 0, 0, 127, 127, 127 },  // 54
+    { 0, 0, 0, 127, 127, 127 },  // 55
+    { 0, 0, 1,   0, 114, 127 },  // 56
+    { 0, 0, 0,   0, 119, 127 },  // 57
+    { 0, 0, 0, 127, 127, 127 },  // 58
+    { 0, 0, 0, 127, 127, 127 },  // 59
+    { 0, 0, 0, 127, 127, 127 },  // 60
+    { 1, 0, 0, 120, 121, 127 },  // 61
+    { 0, 0, 0, 127, 127, 127 },  // 62
+    { 0, 0, 0, 127, 127, 127 },  // 63
+    { 0, 0, 0,  39, 127, 127 },  // 64
+    { 0, 0, 0, 116, 116, 116 },  // 65
+    { 0, 0, 0, 127, 127, 127 },  // 66
+    { 0, 0, 0,   0, 121, 127 },  // 67
+    { 1, 0, 1,   0, 127, 127 },  // 68
+    { 1, 0, 1,  16, 127, 127 },  // 69
+    { 0, 0, 0,   0, 127, 127 },  // 70
+    { 0, 0, 0,   0, 100, 127 },  // 71
+    { 0, 0, 0, 120, 120, 127 },  // 72
+    { 1, 0, 0,  23, 123, 127 },  // 73
+    { 0, 0, 0,   0, 125, 127 },  // 74
+    { 1, 0, 0,  99, 100, 127 },  // 75
+    { 0, 0, 0, 127, 127, 127 },  // 76
+    { 0, 0, 0, 127, 127, 127 },  // 77
+    { 0, 0, 0,   0, 127, 127 },  // 78
+    { 1, 0, 1,  50, 126, 127 },  // 79
+    { 0, 0, 0,   0, 126, 127 },  // 80
+    { 0, 0, 0,  94,  94,  94 },  // 81
+    { 0, 0, 0,   0, 100, 104 },  // 82
+    { 0, 0, 0,  75, 127, 127 },  // 83
+    { 0, 0, 1, 123, 123, 127 },  // 84
+    { 0, 0, 1, 120, 126, 127 },  // 85
+    { 0, 0, 0,  63, 125, 125 },  // 86
+    { 0, 0, 0, 127, 127, 127 },  // 87
+    { 1, 0, 0, 119, 119, 127 },  // 88
+    { 1, 0, 0,   1, 111, 127 },  // 89
+    { 0, 0, 0, 127, 127, 127 },  // 90
+    };
 
 
 
 
 
     public boolean testVerify(Synth synth2, 
-                              String key,
-                              Object obj1, Object obj2) 
-    {
+        String key,
+        Object obj1, Object obj2) 
+        {
         int revtype = model.get("reverbtype");
         if (key.startsWith("reverb") && key.contains("parameter") && StringUtility.getFirstInt(key) != revtype)
             return true; // it's an invalid reverb type parameter
@@ -3053,7 +3053,7 @@ public class YamahaFS1RMulti extends Synth
             return true; // it's an invalid insertion type parameter
                 
         return false;
-    }
+        }
         
     // Writing takes a while to process.  However the FS1R has a huge buffer and can handle an entire
     // bank's worth of writes -- but then it's very slow to process through all of them, constantly displaying
@@ -3066,7 +3066,7 @@ public class YamahaFS1RMulti extends Synth
     // The FS1R is VERY slow to respond and also queues up responses (beware!)
     public int getBatchDownloadWaitTime() { return 3000; }
     public int getBatchDownloadFailureCountdown() { return 5; }
-}
+    }
  
  
  
@@ -3082,47 +3082,47 @@ public class YamahaFS1RMulti extends Synth
 /// with permission from FS1REditor by K_Take (https://synth-voice.sakura.ne.jp/fs1r_editor_english.html)
 
 class YamahaFS1RFX
-{
+    {
     // This lists the effect versions for each effect type, for the reverb, variation, and insertion effects.  
     // includes "NO EFFECT" (-1) and "THRU" (-1)
     public static final int[][] FX_VERSIONS =   // [REVERB/INSERTION/VARIATION][effect]
-    {
+        {
         { -1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 2, 3, 4, 5 },
         { -1, 0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 15, 16, 17, 18, 19, 20, 21, 22, 22, 22, 22 },
         { -1, 0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 12, 13, 13, 14, 14, 15, 16, 17, 18, 19, 20, 21, 21, 22, 23, 22, 23, 24, 25, 26, 27, 28, 29, 29, 30, 30 }
-    };
+        };
         
     
     // Returns the length of the vals list for the given type, that is, String[][type].
     // This list is transposed, which is why it's complex to do.   The list is over when an element is ""     
     // This is necessary because many of the tables below are oddly transposed.
     static int listLen(String[][] vals, int type)
-    {
+        {
         int n = vals.length;
         for(int i = 0; i < vals.length; i++)
             {
-                if (vals[i][type].equals("")) // done
-                    {
-                        n = i;
-                        break;
-                    }
+            if (vals[i][type].equals("")) // done
+                {
+                n = i;
+                break;
+                }
             }
         return n;
-    }
+        }
 
     // Extracts the list String[][type], up to but not including the first "".
     // This list is transposed, which is why it's complex to do. 
     // This is necessary because many of the tables below are oddly transposed.
     static String[] reduceList(String[][] vals, int type)
-    {
+        {
         String[] v = new String[listLen(vals, type)];
         int n = vals.length;
         for(int i = 0; i < v.length; i++)
             {
-                v[i] = vals[i][type];
+            v[i] = vals[i][type];
             }
         return v;
-    }
+        }
 
         
     public static final String[] MONO_STEREO = { "Mono", "Stereo" };
@@ -3133,328 +3133,328 @@ class YamahaFS1RFX
 
     /// Builds all the FX widgets.  We are provided with a name, a key, and a widget type (there are 50 some types).
     public static JComponent buildFXVals(String name, final int type, String key, Color color, Synth synth)
-    {
+        {
         /// These are totally out of order because they're approximately in the order found in Main.cpp of FS1REditor
         
         // First 21 effects: effectParaValueTable[][] 
         if (type == 9 || type == 14 || type == 19 || type == 20)
             {
-                VBox vbox = new VBox();
-                vbox.add(new Chooser(name, synth, key, reduceList(effectParaValueTable, type)));
-                return vbox;
+            VBox vbox = new VBox();
+            vbox.add(new Chooser(name, synth, key, reduceList(effectParaValueTable, type)));
+            return vbox;
             }
         else if (type < 21)
             {
-                return new LabelledDial(name, synth, key, color, 0, listLen(effectParaValueTable, type) - 1)
+            return new LabelledDial(name, synth, key, color, 0, listLen(effectParaValueTable, type) - 1)
+                {
+                public String map(int val)
                     {
-                        public String map(int val)
-                        {
-                            return effectParaValueTable[val][type];
-                        }
+                    return effectParaValueTable[val][type];
+                    }
                 };
             }
         else if (type == 53)
             {
-                return buildFXVals(name, 1, key, color, synth);
+            return buildFXVals(name, 1, key, color, synth);
             }
         else if (type == 54 || type == 55)
             {
-                return buildFXVals(name, 4, key, color, synth);
+            return buildFXVals(name, 4, key, color, synth);
             }
         else if (type == 34)
             {
-                return buildFXVals(name, 5, key, color, synth);
+            return buildFXVals(name, 5, key, color, synth);
             }
         else if (type == 35)
             {
-                return buildFXVals(name, 5, key, color, synth);
+            return buildFXVals(name, 5, key, color, synth);
             }
 
 
 
         else if (type == 21 || type == 41 || type == 43 || type == 44 || type == 46 || type == 47)
             {
-                return new LabelledDial(name, synth, key, color, 0, 127);
+            return new LabelledDial(name, synth, key, color, 0, 127);
             }
         else if (type == 48)
             {
-                return new LabelledDial(name, synth, key, color, 0, 123)
+            return new LabelledDial(name, synth, key, color, 0, 123)
+                {
+                public String map(int val)
                     {
-                        public String map(int val)
-                        {
-                            return "" + (val + 4);                  // is this right?
-                        }
+                    return "" + (val + 4);                  // is this right?
+                    }
                 };
             }
         else if (type == 49)
             {
-                return new LabelledDial(name, synth, key, color, 0, 124)
+            return new LabelledDial(name, synth, key, color, 0, 124)
+                {
+                public String map(int val)
                     {
-                        public String map(int val)
-                        {
-                            return "" + (val + 3);                  // is this right?
-                        }
+                    return "" + (val + 3);                  // is this right?
+                    }
                 };
             }
         else if (type == 58)
             {
-                return new LabelledDial(name, synth, key, color, 0, 127)
+            return new LabelledDial(name, synth, key, color, 0, 127)
+                {
+                public String map(int val)
                     {
-                        public String map(int val)
-                        {
-                            return "" + (val + 1);                  // is this right?
-                        }
+                    return "" + (val + 1);                  // is this right?
+                    }
                 };
             }
         else if (type == 22)
             {
-                return new LabelledDial(name, synth, key, color, 0, 126)
+            return new LabelledDial(name, synth, key, color, 0, 126)
+                {
+                public String map(int val)
                     {
-                        public String map(int val)
-                        {
-                            if (val == 63) return "--";
-                            else if (val < 63) return "< " + (63 - val);
-                            else return "" + (val - 63) + " >";
-                        }
-                        public boolean isSymmetric() { return true; }
+                    if (val == 63) return "--";
+                    else if (val < 63) return "< " + (63 - val);
+                    else return "" + (val - 63) + " >";
+                    }
+                public boolean isSymmetric() { return true; }
                 };
             }
         else if (type == 23)
             {
-                return new LabelledDial(name, synth, key, color, 0, 126)
+            return new LabelledDial(name, synth, key, color, 0, 126)
+                {
+                public String map(int val)
                     {
-                        public String map(int val)
-                        {
-                            if (val == 63) return "--";
-                            else if (val < 63) return "E< " + (63 - val);
-                            else return "" + (val - 63) + " >R";
-                        }
-                        public boolean isSymmetric() { return true; }
+                    if (val == 63) return "--";
+                    else if (val < 63) return "E< " + (63 - val);
+                    else return "" + (val - 63) + " >R";
+                    }
+                public boolean isSymmetric() { return true; }
                 };
             }
         else if (type == 25)
             {
-                return new LabelledDial(name, synth, key, color, 0, 126, 63);
+            return new LabelledDial(name, synth, key, color, 0, 126, 63);
             }
         else if (type == 38)
             {
-                return new LabelledDial(name, synth, key, color, 0, 126)
+            return new LabelledDial(name, synth, key, color, 0, 126)
+                {
+                public String map(int val)
                     {
-                        public String map(int val)
-                        {
-                            if (val == 63) return "--";
-                            else if (val < 63) return "D< " + (63 - val);
-                            else return "" + (val - 63) + " >W";
-                        }
-                        public boolean isSymmetric() { return true; }
+                    if (val == 63) return "--";
+                    else if (val < 63) return "D< " + (63 - val);
+                    else return "" + (val - 63) + " >W";
+                    }
+                public boolean isSymmetric() { return true; }
                 };
             }
         else if (type == 51)
             {
-                return new LabelledDial(name, synth, key, color, 0, 126)
+            return new LabelledDial(name, synth, key, color, 0, 126)
+                {
+                public String map(int val)
                     {
-                        public String map(int val)
-                        {
-                            if (val == 63) return "--";
-                            else if (val < 63) return "L< " + (63 - val);
-                            else return "" + (val - 63) + " >H";
-                        }
-                        public boolean isSymmetric() { return true; }
+                    if (val == 63) return "--";
+                    else if (val < 63) return "L< " + (63 - val);
+                    else return "" + (val - 63) + " >H";
+                    }
+                public boolean isSymmetric() { return true; }
                 };
             }
         else if (type == 24)
             {
-                return new LabelledDial(name, synth, key, color, 0, 10)
+            return new LabelledDial(name, synth, key, color, 0, 10)
+                {
+                public String map(int val)
                     {
-                        public String map(int val)
-                        {
-                            return String.format("%1.1f", (val + 1) * 0.1);
-                        }
+                    return String.format("%1.1f", (val + 1) * 0.1);
+                    }
                 };
             }
         else if (type == 27)
             {
-                return new LabelledDial(name, synth, key, color, 0, 24, 12)
-                    {
-                        public boolean isSymmetric() { return true; }
+            return new LabelledDial(name, synth, key, color, 0, 24, 12)
+                {
+                public boolean isSymmetric() { return true; }
                 };
             }
         else if (type == 29)
             {
-                VBox vbox = new VBox();
-                vbox.add(new Chooser(name, synth, key, MONO_STEREO));
-                return vbox;
+            VBox vbox = new VBox();
+            vbox.add(new Chooser(name, synth, key, MONO_STEREO));
+            return vbox;
             }
         else if (type == 42)
             {
-                VBox vbox = new VBox();
-                vbox.add(new Chooser(name, synth, key, OFF_ON));
-                return vbox;
+            VBox vbox = new VBox();
+            vbox.add(new Chooser(name, synth, key, OFF_ON));
+            return vbox;
             }
         else if (type == 45)
             {
-                VBox vbox = new VBox();
-                vbox.add(new Chooser(name, synth, key, A_B));
-                return vbox;
+            VBox vbox = new VBox();
+            vbox.add(new Chooser(name, synth, key, A_B));
+            return vbox;
             }
         else if (type == 56)
             {
-                VBox vbox = new VBox();
-                vbox.add(new Chooser(name, synth, key, NORMAL_INV));
-                return vbox;
+            VBox vbox = new VBox();
+            vbox.add(new Chooser(name, synth, key, NORMAL_INV));
+            return vbox;
             }
         else if (type == 57)
             {
-                VBox vbox = new VBox();
-                vbox.add(new Chooser(name, synth, key, L_R));
-                return vbox;
+            VBox vbox = new VBox();
+            vbox.add(new Chooser(name, synth, key, L_R));
+            return vbox;
             }
         else if (type == 30)
             {
-                return new LabelledDial(name, synth, key, color, 0, 120)
+            return new LabelledDial(name, synth, key, color, 0, 120)
+                {
+                public String map(int val)
                     {
-                        public String map(int val)
-                        {
-                            return "" + ((val - 60) * 3);
-                        }
-                        public boolean isSymmetric() { return true; }
+                    return "" + ((val - 60) * 3);
+                    }
+                public boolean isSymmetric() { return true; }
                 };
             }
         else if (type == 31)
             {
-                return new LabelledDial(name, synth, key, color, 0, 6)
+            return new LabelledDial(name, synth, key, color, 0, 6)
+                {
+                public String map(int val)
                     {
-                        public String map(int val)
-                        {
-                            return "" + (val + 4);                  // right?
-                        }
+                    return "" + (val + 4);                  // right?
+                    }
                 };
             }
         else if (type == 32)
             {
-                return new LabelledDial(name, synth, key, color, 0, 2)
+            return new LabelledDial(name, synth, key, color, 0, 2)
+                {
+                public String map(int val)
                     {
-                        public String map(int val)
-                        {
-                            return "" + (val + 3);                  // right?
-                        }
+                    return "" + (val + 3);                  // right?
+                    }
                 };
             }
         else if (type == 33)
             {
-                return new LabelledDial(name, synth, key, color, 0, 110)
+            return new LabelledDial(name, synth, key, color, 0, 110)
+                {
+                public String map(int val)
                     {
-                        public String map(int val)
-                        {
-                            return String.format("%1.1f", (val + 10) * 0.1);         // right?
-                        }
+                    return String.format("%1.1f", (val + 10) * 0.1);         // right?
+                    }
                 };
             }
         else if (type == 36)
             {
-                return new LabelledDial(name, synth, key, color, 0, 42)
+            return new LabelledDial(name, synth, key, color, 0, 42)
+                {
+                public String map(int val)
                     {
-                        public String map(int val)
-                        {
-                            return "-" + 30 + (42 - val);                                   // right?
-                        }
+                    return "-" + 30 + (42 - val);                                   // right?
+                    }
                 };
             }
         else if (type == 37)
             {
-                return new LabelledDial(name, synth, key, color, 0, 42)
+            return new LabelledDial(name, synth, key, color, 0, 42)
+                {
+                public String map(int val)
                     {
-                        public String map(int val)
-                        {
-                            return "-" + 6 + (42 - val);                                    // right?
-                        }
+                    return "-" + 6 + (42 - val);                                    // right?
+                    }
                 };
             }
         else if (type == 39)
             {
-                return new LabelledDial(name, synth, key, color, 0, 100, 50)
-                    {
-                        public boolean isSymmetric() { return true; }
+            return new LabelledDial(name, synth, key, color, 0, 100, 50)
+                {
+                public boolean isSymmetric() { return true; }
                 };
             }
         else if (type == 40)
             {
-                return new LabelledDial(name, synth, key, color, 0, 12, 6)
-                    {
-                        public boolean isSymmetric() { return true; }
+            return new LabelledDial(name, synth, key, color, 0, 12, 6)
+                {
+                public boolean isSymmetric() { return true; }
                 };
             }
         else if (type == 50)
             {
-                return new LabelledDial(name, synth, key, color, 0, 50, 25)
-                    {
-                        public boolean isSymmetric() { return true; }
+            return new LabelledDial(name, synth, key, color, 0, 50, 25)
+                {
+                public boolean isSymmetric() { return true; }
                 };
             }
         else if (type == 50)
             {
-                return new LabelledDial(name, synth, key, color, 0, 50, 25)
-                    {
-                        public boolean isSymmetric() { return true; }
+            return new LabelledDial(name, synth, key, color, 0, 50, 25)
+                {
+                public boolean isSymmetric() { return true; }
                 };
             }
         else if (type == 52)
             {
-                return new LabelledDial(name, synth, key, color, 0, 60)
+            return new LabelledDial(name, synth, key, color, 0, 60)
+                {
+                public String map(int val)
                     {
-                        public String map(int val)
-                        {
-                            return "" + (val * 3);
-                        }
+                    return "" + (val * 3);
+                    }
                 };
             }
         else if (type == 26)
             {
-                return new LabelledDial(name, synth, key, color, 1, 13650)      
+            return new LabelledDial(name, synth, key, color, 1, 13650)      
+                {
+                public String map(int val)
                     {
-                        public String map(int val)
-                        {
-                            return String.format("%1.1f", (val * 0.1));                        // does synth need String.format?
-                        }
+                    return String.format("%1.1f", (val * 0.1));                        // does synth need String.format?
+                    }
                 };
             }
         else if (type == 28)
             {
-                return new LabelledDial(name, synth, key, color, 1, 6820)       
+            return new LabelledDial(name, synth, key, color, 1, 6820)       
+                {
+                public String map(int val)
                     {
-                        public String map(int val)
-                        {
-                            return String.format("%1.1f", (val * 0.1));                        // does synth need String.format?
-                        }
+                    return String.format("%1.1f", (val * 0.1));                        // does synth need String.format?
+                    }
                 };
             }
         else
             {
-                System.err.println("Warning (YamahaFS1RMulti) buildFXVals: no such type " + type + " for key " + key);
-                return new VBox();              // Gotta return something
+            System.err.println("Warning (YamahaFS1RMulti) buildFXVals: no such type " + type + " for key " + key);
+            return new VBox();              // Gotta return something
             }
-    }
+        }
         
         
         
     /// Names to appear in the pop-up lists for each kind of effect (reverb, variation, insertion)
     public static final String[][] effectNameTable =
-    {
+        {
         { "No Effect", "Hall1", "Hall2", "Room1", "Room2", "Room3", "Stage1", "Stage2", "Plate", "White Room", "Tunnel", "Basement", "Canyon", "Delay LCR", "Delay L,R", "Echo", "Cross Delay" },
         { "No Effect", "Chorus", "Celeste", "Flanger", "Symphonic", "Phaser1", "Phaser2", "Ens Detune", "Rotary SP", "Tremolo", "Auto Pan", "Auto Wah", "Touch Wah", "3-Band EQ", "HM Enhncer", "Noise Gate", "Compressor", "Distortion", "Overdrive", "Amp Sim", "Delay LCR", "Delay L,R", "Echo", "Cross Delay", "Karaoke", "Hall", "Room", "Stage", "Plate", },
         { "Thru", "Chorus", "Celeste", "Flanger", "Symphonic", "Phaser1", "Phaser2", "Pitch Change", "Ens Detune", "Rotary SP", "2WayRotary", "Tremolo", "Auto Pan", "Ambience", "A-Wah +Dist", "A-Wah +Odrv", "T-Wah +Dist", "T-Wah +Odrv", "Wah-DS-Dly", "Wah-OD-Dly", "Lo-Fi", "3-Band EQ", "HM Enhncer", "Noise Gate", "Compressor", "Comp + Dist", "Cmp+DS+Dly", "Cmp+OD+Dly", "Distortion", "Dist+Delay", "Overdrive", "Odrv+Delay", "Amp Sim", "Delay LCR", "Delay L,R", "Echo", "Cross Delay", "ER 1", "ER 2", "Gate Reverb", "Reverse Gate" }
-    };
+        };
 
 
     public static final int getSysexMin(int effect, int version, int type)
-    {
+        {
         // special-case for certain bugs in original table
         if (effect == YamahaFS1RMulti.INSERTION && version == 13 /*t-wah + dist*/ && type == 12)
             {
-                return 0x34;
+            return 0x34;
             }
         else return sysexMinTable[type];
-    }
+        }
                 
     /// For some reason, some effect values are shifted by a certain amount in sysex.  I don't know why.
     // This table provides the amount to shift by, for each effect type.
@@ -3479,7 +3479,7 @@ class YamahaFS1RFX
         { ""           ,"High Damp"  ,""          ,""          ,"Reverb Pan",""             },
         { ""           ,"FB Level"   ,""          ,""          ,""          ,""             },
         { ""           ,"Reverb Pan" ,""          ,""          ,""          ,""             },
-    };
+        };
 
     // the only high-byte = 1 effect for reverb is pan, but I handle that separately, so effectively
     // all the reverb effects have a high byte of 0.
@@ -3522,7 +3522,7 @@ class YamahaFS1RFX
         { 0x00,0x65,0x00,0x00,0x29,0x00 },
         { 0x00,0x66,0x00,0x00,0x00,0x00 },
         { 0x00,0x29,0x00,0x00,0x00,0x00 },
-    };
+        };
 
     // parameter effect type for each parameter by versions in reverb.  revParaTypeTable[version][param] 
     public static final int revParaTypeTable[][] = new int[][] {                // [6][18]
@@ -3533,7 +3533,7 @@ class YamahaFS1RFX
         { 26,26,26,26,25,24, 5,27, 6,27,22, 0, 0, 0, 0, 0, 0, 0 }, // Delay L,R
         { 28,25,28,25,24,28,28,21, 5,27, 6,27,22, 0, 0, 0, 0, 0 }, // Echo
         { 28,28,25,57,24, 5,27, 6,27,22, 0, 0, 0, 0, 0, 0, 0, 0 }, // Cross Delay
-    };
+        };
 
 
     // initial values for each parameter effect type for each parameter by effect (not version!).   revParaInitValueTable[effect][param] 
@@ -3560,7 +3560,7 @@ class YamahaFS1RFX
         //        { 2499,3749,3751,3749,  86,   2,  22,  12,  18, 12, 63,  0,  0,  0,  0,  0,  0,  0 }, // Delay L,R
         //        { 2199,  85,2099,  84,   4,2299,2349,  62,  19,  6, 22, 11, 63,  0,  0,  0,  0,  0 }, // Echo
         //        { 3649,3649,  87,   1,   4,  21,  12,  22,  10, 63,  0,  0,  0,  0,  0,  0,  0,  0 }, // Cross Delay
-    };
+        };
 
 
 
@@ -3580,7 +3580,7 @@ class YamahaFS1RFX
         { ""            ,""            ,""            ,"SendVar-Rev","SendVar-Rev",""           ,""           ,""           ,""           ,""           ,""           ,""           ,""           ,""           ,""           ,""           ,""           ,"Var Pan"    ,"SendVar-Rev","EQ HiGain"  ,""           ,""           ,""            },
         { ""            ,""            ,""            ,""           ,""           ,""           ,""           ,""           ,""           ,""           ,""           ,""           ,""           ,""           ,""           ,""           ,""           ,"SendVar-Rev",""           ,"Var Pan"    ,""           ,""           ,""            },
         { ""            ,""            ,""            ,""           ,""           ,""           ,""           ,""           ,""           ,""           ,""           ,""           ,""           ,""           ,""           ,""           ,""           ,""           ,""           ,"SendVar-Rev",""           ,""           ,""            },
-    };
+        };
 
     // MSB of sysex address locations for parameters by parameter version.  varEffectParaMSBTable[param][version] 
     public static final int varEffectParaMSBTable[][] = new int[][] {           // [14][23]
@@ -3598,7 +3598,7 @@ class YamahaFS1RFX
         { 0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,0 },
         { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0,0,0 },
         { 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0 },
-    };
+        };
 
 
     // LSB of sysex address locations for parameters by parameter version.  varEffectParaLSBTable[param][version] 
@@ -3617,7 +3617,7 @@ class YamahaFS1RFX
         { 0x00,0x00,0x00,0x2e,0x2e,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x2c,0x2e,0x06,0x00,0x00,0x00 },
         { 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x2e,0x00,0x2c,0x00,0x00,0x00 },
         { 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x2e,0x00,0x00,0x00 },
-    };
+        };
 
     // parameter effect type for each parameter by versions in variation.   varParaTypeTable[version][param] 
     public static final int varParaTypeTable[][] = new int[][] {                                        // [23][18]
@@ -3645,7 +3645,7 @@ class YamahaFS1RFX
         { 28,28,25,57,24, 5,27, 6,27,22,21, 0, 0, 0, 0, 0, 0, 0 }, // Cross Delay
         { 16,25, 2, 3,22,21, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }, // Karaoke
         {  0,43, 1, 2, 3,46,23,24,25,22,21, 0, 0, 0, 0, 0, 0, 0 }, // Hall
-    };
+        };
 
 
 
@@ -3686,7 +3686,7 @@ class YamahaFS1RFX
         {    5,  10,  16,   4,  15,   2,  63,   7,  63, 63,  0,  0,  0,  0,  0,  0,  0,  0 }, // Room
         {   19,  10,  16,   7,  20,   2,  63,   5,  63, 63,  0,  0,  0,  0,  0,  0,  0,  0 }, // Stage
         {   25,  10,   6,   8,  15,   2,  63,   4,  63, 63,  0,  0,  0,  0,  0,  0,  0,  0 }, // Plate
-    };
+        };
 
 
 
@@ -3711,7 +3711,7 @@ class YamahaFS1RFX
         { "SendIns-Var" ,"SendIns-Var" ,""            ,""             ,""           ,""           ,""           ,""           ,""           ,"InsDryLevel",""           ,""           ,"SendIns-Rev" ,"SendIns-Rev" ,"InsDryLevel" ,""           ,""           ,""           ,""           ,""           ,"SendIns-Rev" ,"InsDryLevel" ,""            ,""            ,""            ,"InsDryLevel",""           ,"SendIns-Var",""            ,""           ,""            },
         { "InsDryLevel" ,"InsDryLevel" ,""            ,""             ,""           ,""           ,""           ,""           ,""           ,""           ,""           ,""           ,"SendIns-Var" ,"SendIns-Var" ,""            ,""           ,""           ,""           ,""           ,""           ,"SendIns-Var" ,""            ,""            ,""            ,""            ,""           ,""           ,"InsDryLevel",""            ,""           ,""            },
         { ""            ,""            ,""            ,""             ,""           ,""           ,""           ,""           ,""           ,""           ,""           ,""           ,"InsDryLevel" ,"InsDryLevel" ,""            ,""           ,""           ,""           ,""           ,""           ,"InsDryLevel" ,""            ,""            ,""            ,""            ,""           ,""           ,""           ,""            ,""           ,""            },
-    };
+        };
 
     // LSB of sysex address locations for parameters by parameter version.  insEffectParaLSBTable[param][version] 
     // All insertion effects have a high byte (MSB) of 1
@@ -3734,7 +3734,7 @@ class YamahaFS1RFX
         { 0x32,0x32,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x33,0x00,0x00,0x31,0x31,0x33,0x00,0x00,0x00,0x00,0x00,0x31,0x33,0x00,0x00,0x00,0x33,0x00,0x32,0x00,0x00,0x00 },
         { 0x33,0x33,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x32,0x32,0x00,0x00,0x00,0x00,0x00,0x00,0x32,0x00,0x00,0x00,0x00,0x00,0x00,0x33,0x00,0x00,0x00 },
         { 0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x33,0x33,0x00,0x00,0x00,0x00,0x00,0x00,0x33,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00 },
-    };
+        };
 
     // parameter effect type for each parameter by versions in insertion.   insParaTypeTable[version][param] 
     public static final int insParaTypeTable[][] = new int[][] {                // [31][18]
@@ -3770,7 +3770,7 @@ class YamahaFS1RFX
         { 28,28,25,57,24, 5,27, 6,27,38,22,21,21,21, 0, 0, 0, 0 }, // Cross Delay
         { 20,15,43, 1,25, 2, 3,43,44,24,38,22,21,21,21, 0, 0, 0 }, // ER 1
         { 45,15,43, 1,25, 2, 3,43,44,24,38,22,21,21,21, 0, 0, 0 }, // Gate Reverb
-    };
+        };
 
 
     // initial values for each parameter effect type for each parameter by effect (not version!).   insParaInitValueTable[effect][param] 
@@ -3822,7 +3822,7 @@ class YamahaFS1RFX
         {    2,  12,   8,   4,  66,   0,  22,   5,   3,  9, 28, 63,  0,  0,127,  0,  0,  0 }, // ER 2
         {    0,   6,  10,   0,  63,   0,  18,   5,   3,  4, 51, 63,  0,  0,127,  0,  0,  0 }, // Gate Reverb
         {    1,  15,   8,   3,  63,   0,  13,   6,   3,  9,126, 63,  0,  0,127,  0,  0,  0 }, // Reverse Gate
-    };
+        };
 
 
 
@@ -3973,7 +3973,7 @@ class YamahaFS1RFX
         { ""    ,"196.9",""    ,""     ,""    ,""    ,""     ,"37.35","46.9",""     ,""     ,""  ,""   ,""    ,""     ,"19.7","393.7","381"  ,""     ,""     ,""        }, //125
         { ""    ,"198.4",""    ,""     ,""    ,""    ,""     ,"40.28","48.4",""     ,""     ,""  ,""   ,""    ,""     ,"19.8","396.9","378"  ,""     ,""     ,""        }, //126
         { ""    ,"200.0",""    ,""     ,""    ,""    ,""     ,"43.21","50.0",""     ,""     ,""  ,""   ,""    ,""     ,"20.0","400.0","375"  ,""     ,""     ,""        }, //127
-    };
+        };
     
     // First 14 Controller Destinations, which are all insertion parameters, and change depending on the insertion effect used.  ctrlDestNameTable[dest][version]
     public static final String[][] ctrlDestNameTable = new String[][] {                 // [14][32] 
@@ -3992,5 +3992,5 @@ class YamahaFS1RFX
         { ""            ,"I:Mode"      ,""            ,""            ,""            ,""            ,""            ,""            ,""            ,""            ,""            ,""            ,""            ,"I:LPFCutoff","I:LPF Cutoff","I:Dry/Wet"   ,""            ,""            ,""            ,""            ,""            ,"I:Edge"     ,"I:Dry/Wet"   ,""            ,""            ,""            ,"I:Dry/Wet"   ,""            ,"I:EQ HiGain" ,""            ,""            ,""             },
         { ""            ,"I:Dry/Wet"   ,"I:Dry/Wet"   ,""            ,""            ,""            ,""            ,""            ,""            ,""            ,""            ,""            ,""            ,"I:Out Level","I:Out Level" ,""            ,""            ,""            ,""            ,""            ,""            ,"I:Out Level",""            ,""            ,""            ,""            ,""            ,""            ,"I:Dry/Wet"   ,""            ,""            ,""             },
         { ""            ,""            ,""            ,""            ,""            ,""            ,""            ,""            ,""            ,""            ,""            ,""            ,""            ,"I:Dry/Wet"  ,"I:Dry/Wet"   ,""            ,""            ,""            ,""            ,""            ,""            ,"I:Dry/Wet"  ,""            ,""            ,""            ,""            ,""            ,""            ,""            ,""            ,""            ,""             },
-    };
-}
+        };
+    }

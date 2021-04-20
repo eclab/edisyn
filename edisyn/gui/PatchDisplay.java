@@ -14,30 +14,30 @@ import java.awt.event.*;
 
 
 public class PatchDisplay extends JPanel implements Updatable
-{
+    {
     JLabel text;
     Synth synth;
     
     public PatchDisplay(Synth synth, int columns)
-    {
+        {
         this(synth, "Patch", "bank", "number", columns);
-    }
+        }
 
     public PatchDisplay(Synth synth, String bankKey, String numberKey, int columns)
-    {
+        {
         this(synth, "Patch", bankKey, numberKey, columns);
-    }
+        }
 
     static String buildInitialString(int columns)
-    {
+        {
         String s = "";
         for(int i = 0; i < columns; i++)
             s = s + "M";
         return s;
-    }
+        }
 
     public PatchDisplay(Synth synth, String label, final String bankKey, final String numberKey, int columns)
-    {
+        {
         this.synth = synth;
         Model model = synth.getModel();
         setBackground(Style.BACKGROUND_COLOR());
@@ -47,13 +47,13 @@ public class PatchDisplay extends JPanel implements Updatable
         final Dimension[] dim = new Dimension[1];
         text = new JLabel(buildInitialString(columns))
             {
-                public Dimension getMinimumSize() { return getPreferredSize(); }
-                public Dimension getMaximumSize() { return getPreferredSize(); }
-                public Dimension getPreferredSize() 
+            public Dimension getMinimumSize() { return getPreferredSize(); }
+            public Dimension getMaximumSize() { return getPreferredSize(); }
+            public Dimension getPreferredSize() 
                 { if (dim[0] == null) 
-                        { return super.getPreferredSize(); }
-                    else
-                        { return dim[0]; }
+                    { return super.getPreferredSize(); }
+                else
+                    { return dim[0]; }
                 }
             };
                 
@@ -78,23 +78,23 @@ public class PatchDisplay extends JPanel implements Updatable
 
         if (bankKey != null)
             {
-                model.register(bankKey, this);
-                model.setStatus(bankKey, Model.STATUS_IMMUTABLE);
+            model.register(bankKey, this);
+            model.setStatus(bankKey, Model.STATUS_IMMUTABLE);
             }
         
         if (numberKey != null)
             {
-                model.register(numberKey, this);
-                model.setStatus(numberKey, Model.STATUS_IMMUTABLE);
+            model.register(numberKey, this);
+            model.setStatus(numberKey, Model.STATUS_IMMUTABLE);
             }
-    }
+        }
     
     public void update(String key, Model model)
-    {
+        {
         String name = synth.getPatchLocationName(synth.getModel());
         if (name == null) name = "";
         text.setText(name);
         text.repaint(); 
-    }
+        }
 
-}
+    }

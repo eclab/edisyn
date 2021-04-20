@@ -7,9 +7,9 @@ package edisyn.synth.redsounddarkstar;
 import edisyn.*;
 
 public class RedSoundDarkStarRec extends Recognize
-{
-    public static boolean recognize(byte[] data)
     {
+    public static boolean recognize(byte[] data)
+        {
         // DarkStar data comes in the following forms
         // VOICEDATA is 100 bytes
         // Others are 1 byte each
@@ -37,16 +37,16 @@ public class RedSoundDarkStarRec extends Recognize
                 
         return (
                 (data.length == 108 ||
-                 data.length == 512 ||
-                 data.length == 516 ||
-                 data.length == 514 ||
-                 data.length == 520 ||
-                 data.length == 522) &&
-                data[0] == (byte)0xF0 &&
-                data[1] == (byte)0x00 &&
-                data[2] == (byte)0x20 &&
-                data[3] == (byte)0x3B &&
-                data[4] == (byte)0x02 &&
-                data[5] == (byte)0x01);        
+                data.length == 512 ||
+                data.length == 516 ||
+                data.length == 514 ||
+                data.length == 520 ||
+                data.length == 522) &&
+            data[0] == (byte)0xF0 &&
+            data[1] == (byte)0x00 &&
+            data[2] == (byte)0x20 &&
+            data[3] == (byte)0x3B &&
+            data[4] == (byte)0x02 &&
+            data[5] == (byte)0x01);        
+        }
     }
-}

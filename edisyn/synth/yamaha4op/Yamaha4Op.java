@@ -87,7 +87,7 @@ import javax.sound.midi.*;
 */
 
 public class Yamaha4Op extends Synth
-{
+    {
     /// Various collections of parameter names for pop-up menus
         
     public static final int TYPE_DX21 = 0;
@@ -102,7 +102,7 @@ public class Yamaha4Op extends Synth
     public static final String[] V50_BANKS = { "Internal", "Card", "Preset" };
     public static final String[] WAVES = {"W1", "W2", "W3", "W4", "W5", "W6", "W7", "W8"};
     public static final ImageIcon[] WAVE_ICONS = 
-    {
+        {
         new ImageIcon(Yamaha4Op.class.getResource("Wave1.png")),
         new ImageIcon(Yamaha4Op.class.getResource("Wave2.png")),
         new ImageIcon(Yamaha4Op.class.getResource("Wave3.png")),
@@ -111,9 +111,9 @@ public class Yamaha4Op extends Synth
         new ImageIcon(Yamaha4Op.class.getResource("Wave6.png")),
         new ImageIcon(Yamaha4Op.class.getResource("Wave7.png")),
         new ImageIcon(Yamaha4Op.class.getResource("Wave8.png"))
-    };
+        };
     public static final ImageIcon[] ALGORITHM_ICONS = 
-    {
+        {
         new ImageIcon(Yamaha4Op.class.getResource("Algorithm1.png")),
         new ImageIcon(Yamaha4Op.class.getResource("Algorithm2.png")),
         new ImageIcon(Yamaha4Op.class.getResource("Algorithm3.png")),
@@ -122,7 +122,7 @@ public class Yamaha4Op extends Synth
         new ImageIcon(Yamaha4Op.class.getResource("Algorithm6.png")),
         new ImageIcon(Yamaha4Op.class.getResource("Algorithm7.png")),
         new ImageIcon(Yamaha4Op.class.getResource("Algorithm8.png"))
-    };
+        };
     public static final String[] LFO_WAVES = { "Sawtooth", "Square", "Triangle", "Sample & Hold" };
     public static final String[] SHIFTS = { "96dB", "48dB", "24dB", "12dB" };
     public static final String[] FIX_HI_RANGES = { "255Hz", "510Hz", "1KHz", "2KHz", "4KHz", "8KHz", "16KHz", "32KHz" };
@@ -143,51 +143,51 @@ public class Yamaha4Op extends Synth
     public static final String[] EFFECTS = new String[] { "Reverb - Hall", "Reverb - Room", "Reverb - Plate", "Delay", "Delay - Left/Right", "Stereo Echo", "Distortion + Reverb", "Distortion + Echo", "Gated Reverb", "Reverse Gate" };
 
     public static final String[] V50_EFFECTS = new String[] 
-        { 
-            "Reverb Hall", "Reverb Room", "Reverb Plate", "Delay", "Delay L/R", "Stereo Echo", "Distortion Reverb", 
-            "Distortion Echo", "Gate Reverb", "Reverse Gate", "Early Reflections", "Tone Control 1", "Delay and Reverb", 
-            "Delay L/R and Reverb", "Distortion Delay", "Church", "Club", "Stage", "Bath Room", "Metal", "Tunnel", 
-            "Doubler 1", "Doubler 2", "Feed Back Gate", "Feed Back Reverse", "Feed Back E/R", "Delay and Tone Control 1", 
-            "Delay L/R and Tone Control 1", "Tone Control 2", "Delay and Tone Control 2", "Delay L/R and Tone Control 2", 
-            "Distortion", 
-        };
+    { 
+    "Reverb Hall", "Reverb Room", "Reverb Plate", "Delay", "Delay L/R", "Stereo Echo", "Distortion Reverb", 
+    "Distortion Echo", "Gate Reverb", "Reverse Gate", "Early Reflections", "Tone Control 1", "Delay and Reverb", 
+    "Delay L/R and Reverb", "Distortion Delay", "Church", "Club", "Stage", "Bath Room", "Metal", "Tunnel", 
+    "Doubler 1", "Doubler 2", "Feed Back Gate", "Feed Back Reverse", "Feed Back E/R", "Delay and Tone Control 1", 
+    "Delay L/R and Tone Control 1", "Tone Control 2", "Delay and Tone Control 2", "Delay L/R and Tone Control 2", 
+    "Distortion", 
+    };
  
  
     public static final String[][] V50_EFFECTS_PARAMETERS = new String[][]
-        {
-            { "Time", "LPF", "Delay", },                    // Reverb Hall
-            { "Time", "LPF", "Delay", },                    // Reverb Room
-            { "Time", "LPF", "Delay", },                    // Reverb Plate
-            { "Time", "FB Delay", "FB Gain", },                     // Delay
-            { "Lch Dly", "Rch Dly", "FB Gain", },                   // Delay L/R
-            { "Lch Dly", "Rch Dly", "FB Gain", },                   // Stereo Echo
-            { "Time", "Dist.", "Reverb", },                 // Distortion Reverb
-            { "Time", "FB Gain", "Dist.", },                        // Distortion Echo
-            { "Size", "LPF", "Delay", },                    // Gate Reverb
-            { "Size", "LPF", "Delay", },                    // Reverse Gate
-            { "Size", "LPF", "Delay", },                    // Early Reflections
-            { "Low", "Middle", "High", },                   // Tone Control 1
-            { "RevTime", "Delay", "FB Gain", },                     // Delay and Reverb
-            { "RevTime", "Lch Dly", "Rch Dly", },                   // Delay L/R and Reverb
-            { "Time", "FB Gain", "Dist.", },                        // Distortion Delay
-            { "Time", "LPF", "Delay", },                    // Church
-            { "Time", "LPF", "Delay", },                    // Club
-            { "Time", "LPF", "Delay", },                    // Stage
-            { "Time", "LPF", "Delay", },                    // Bath Room
-            { "Time", "LPF", "Delay", },                    // Metal
-            { "RevTime", "Delay", "FB Gain", },                     // Tunnel
-            { "DlyTime", "HPF", "LPF", },                   // Doubler 1
-            { "Lch Dly", "Rch Dly", "LPF", },                       // Doubler 2
-            { "Size", "LPF", "FB Gain", },                  // Feed Back Gate
-            { "Size", "LPF", "FB Gain", },                  // Feed Back Reverse
-            { "Size", "LPF", "FB Gain", },                  // Feed Back E/R
-            { "Bri.", "Delay", "FB Gain", },                        // Delay and Tone Control 1
-            { "Bri.", "Delay", "FB Gain", },                        // Delay L/R and Tone Control 1
-            { "HPF", "Middle", "LPF", },                    // Tone Control 2
-            { "Bri.", "Delay", "FB Gain", },                        // Delay and Tone Control 2
-            { "Bri.", "Delay", "FB Gain", },                        // Delay L/R and Tone Control 2
-            { "Dist.", "HPF", "LPF" }                       // Distortion
-        };
+    {
+    { "Time", "LPF", "Delay", },                    // Reverb Hall
+    { "Time", "LPF", "Delay", },                    // Reverb Room
+    { "Time", "LPF", "Delay", },                    // Reverb Plate
+    { "Time", "FB Delay", "FB Gain", },                     // Delay
+    { "Lch Dly", "Rch Dly", "FB Gain", },                   // Delay L/R
+    { "Lch Dly", "Rch Dly", "FB Gain", },                   // Stereo Echo
+    { "Time", "Dist.", "Reverb", },                 // Distortion Reverb
+    { "Time", "FB Gain", "Dist.", },                        // Distortion Echo
+    { "Size", "LPF", "Delay", },                    // Gate Reverb
+    { "Size", "LPF", "Delay", },                    // Reverse Gate
+    { "Size", "LPF", "Delay", },                    // Early Reflections
+    { "Low", "Middle", "High", },                   // Tone Control 1
+    { "RevTime", "Delay", "FB Gain", },                     // Delay and Reverb
+    { "RevTime", "Lch Dly", "Rch Dly", },                   // Delay L/R and Reverb
+    { "Time", "FB Gain", "Dist.", },                        // Distortion Delay
+    { "Time", "LPF", "Delay", },                    // Church
+    { "Time", "LPF", "Delay", },                    // Club
+    { "Time", "LPF", "Delay", },                    // Stage
+    { "Time", "LPF", "Delay", },                    // Bath Room
+    { "Time", "LPF", "Delay", },                    // Metal
+    { "RevTime", "Delay", "FB Gain", },                     // Tunnel
+    { "DlyTime", "HPF", "LPF", },                   // Doubler 1
+    { "Lch Dly", "Rch Dly", "LPF", },                       // Doubler 2
+    { "Size", "LPF", "FB Gain", },                  // Feed Back Gate
+    { "Size", "LPF", "FB Gain", },                  // Feed Back Reverse
+    { "Size", "LPF", "FB Gain", },                  // Feed Back E/R
+    { "Bri.", "Delay", "FB Gain", },                        // Delay and Tone Control 1
+    { "Bri.", "Delay", "FB Gain", },                        // Delay L/R and Tone Control 1
+    { "HPF", "Middle", "LPF", },                    // Tone Control 2
+    { "Bri.", "Delay", "FB Gain", },                        // Delay and Tone Control 2
+    { "Bri.", "Delay", "FB Gain", },                        // Delay L/R and Tone Control 2
+    { "Dist.", "HPF", "LPF" }                       // Distortion
+    };
  
  
  
@@ -198,30 +198,30 @@ public class Yamaha4Op extends Synth
         
     public int getSynthType() { return synthType; }
     public void setSynthType(int val, boolean save)
-    {
+        {
         if (save)
             {
-                setLastX("" + val, TYPE_KEY, getSynthName(), true);
+            setLastX("" + val, TYPE_KEY, getSynthName(), true);
             }
         synthType = val;
         synthTypeCombo.setSelectedIndex(val);  // hopefully this isn't recursive
         updateTitle();
-    }
+        }
 
     public Yamaha4Op()
-    {
+        {
         String m = getLastX(TYPE_KEY, getSynthName());
         try
             {
-                synthType = (m == null ? TYPE_TX81Z : Integer.parseInt(m));
-                if (synthType < TYPE_DX21 || synthType > TYPE_V50)
-                    {
-                        synthType = TYPE_TX81Z;
-                    }
+            synthType = (m == null ? TYPE_TX81Z : Integer.parseInt(m));
+            if (synthType < TYPE_DX21 || synthType > TYPE_V50)
+                {
+                synthType = TYPE_TX81Z;
+                }
             }
         catch (NumberFormatException ex)
             {
-                synthType = TYPE_TX81Z;
+            synthType = TYPE_TX81Z;
             }
         
         model.set("bank", 0);
@@ -229,27 +229,27 @@ public class Yamaha4Op extends Synth
                 
         for(int i = 0; i < vcedParameters.length; i++)
             {
-                vcedParametersToIndex.put(vcedParameters[i], Integer.valueOf(i));
+            vcedParametersToIndex.put(vcedParameters[i], Integer.valueOf(i));
             }
                 
         for(int i = 0; i < acedParameters.length; i++)
             {
-                acedParametersToIndex.put(acedParameters[i], Integer.valueOf(i));
+            acedParametersToIndex.put(acedParameters[i], Integer.valueOf(i));
             }
                 
         for(int i = 0; i < aced2Parameters.length; i++)
             {
-                aced2ParametersToIndex.put(aced2Parameters[i], Integer.valueOf(i));
+            aced2ParametersToIndex.put(aced2Parameters[i], Integer.valueOf(i));
             }
                 
         for(int i = 0; i < aced3Parameters.length; i++)
             {
-                aced3ParametersToIndex.put(aced3Parameters[i], Integer.valueOf(i));
+            aced3ParametersToIndex.put(aced3Parameters[i], Integer.valueOf(i));
             }
                 
         for(int i = 0; i < efedsParameters.length; i++)
             {
-                efedsParametersToIndex.put(efedsParameters[i], Integer.valueOf(i));
+            efedsParametersToIndex.put(efedsParameters[i], Integer.valueOf(i));
             }
                 
         /// SOUND PANEL
@@ -312,16 +312,16 @@ public class Yamaha4Op extends Synth
         model.setMax("portamento", 1);
 
         loadDefaults();        
-    }
+        }
                 
     public JFrame sprout()
-    {
+        {
         JFrame frame = super.sprout();
         transmitTo.setEnabled(false);
         writeTo.setEnabled(false);
         addYamaha4OpMenu();
         return frame;
-    }         
+        }         
 
     public String getDefaultResourceFileName() { return "Yamaha4Op.init"; }
     public String getHTMLResourceFileName() { return "Yamaha4Op.html"; }
@@ -334,99 +334,99 @@ public class Yamaha4Op extends Synth
     // TQ5 Dump Request                 [We can access voices 0...99.  There are three BANKS, Internal, Preset, and Card.]
 
     public boolean gatherPatchInfo(String title, Model change, boolean writing)
-    {
+        {
         int type = getSynthType();
         JComboBox bank = null;
         
         if (!writing && (type == TYPE_TX81Z || type == TYPE_DX11 || type == TYPE_DX27_DX100))
             {
-                bank = new JComboBox(BANKS);
-                bank.setSelectedIndex(model.get("bank"));
+            bank = new JComboBox(BANKS);
+            bank.setSelectedIndex(model.get("bank"));
             }
         else if (!writing && (type == TYPE_TQ5_YS100_YS200_B200))
             {
-                bank = new JComboBox(TQ5_BANKS);
-                if (model.get("bank") > 3)
-                    {
-                        System.err.println("Warning (Yamaha4Op): bank is invalid (" + bank + "), changing to 0");
-                        bank.setSelectedIndex(0);
-                    }
-                else
-                    bank.setSelectedIndex(model.get("bank"));
+            bank = new JComboBox(TQ5_BANKS);
+            if (model.get("bank") > 3)
+                {
+                System.err.println("Warning (Yamaha4Op): bank is invalid (" + bank + "), changing to 0");
+                bank.setSelectedIndex(0);
+                }
+            else
+                bank.setSelectedIndex(model.get("bank"));
             }
         else if (!writing && (type == TYPE_V50))
             {
-                bank = new JComboBox(V50_BANKS);
-                if (model.get("bank") > 3)
-                    {
-                        System.err.println("Warning (Yamaha4Op): bank is invalid (" + bank + "), changing to 0");
-                        bank.setSelectedIndex(0);
-                    }
-                else
-                    bank.setSelectedIndex(model.get("bank"));
+            bank = new JComboBox(V50_BANKS);
+            if (model.get("bank") > 3)
+                {
+                System.err.println("Warning (Yamaha4Op): bank is invalid (" + bank + "), changing to 0");
+                bank.setSelectedIndex(0);
+                }
+            else
+                bank.setSelectedIndex(model.get("bank"));
             }
         
         int maxNumber =
             (type == TYPE_DX21 ? 32 :
-             (type == TYPE_DX27_DX100 ? 24 :
-              (type == TYPE_DX11 ? 32 :
-               (type == TYPE_TX81Z ? 32 :
-                100))));                // TQ5 and also V50
+                (type == TYPE_DX27_DX100 ? 24 :
+                    (type == TYPE_DX11 ? 32 :
+                        (type == TYPE_TX81Z ? 32 :
+                        100))));                // TQ5 and also V50
         
         int num = model.get("number");
         if (num < 0 || num >= maxNumber)
             num = 0;
         
         JTextField number = new JTextField("" + 
-                                           ((type == TYPE_TQ5_YS100_YS200_B200 || type == TYPE_V50) ? num : num + 1), 3);
+            ((type == TYPE_TQ5_YS100_YS200_B200 || type == TYPE_V50) ? num : num + 1), 3);
 
         while(true)
             {
-                boolean result = false;
-                if (bank == null)
-                    result = showMultiOption(this, new String[] { "Patch Number" }, new JComponent[] { number }, title, "Enter the Patch number.");
-                else
-                    result = showMultiOption(this, new String[] { "Bank", "Patch Number"}, new JComponent[] { bank, number }, title, "Enter the Bank and Patch number.");
+            boolean result = false;
+            if (bank == null)
+                result = showMultiOption(this, new String[] { "Patch Number" }, new JComponent[] { number }, title, "Enter the Patch number.");
+            else
+                result = showMultiOption(this, new String[] { "Bank", "Patch Number"}, new JComponent[] { bank, number }, title, "Enter the Bank and Patch number.");
                 
-                if (result == false) 
-                    return false;
+            if (result == false) 
+                return false;
                                 
-                int n;
-                try { n = Integer.parseInt(number.getText()); }
-                catch (NumberFormatException e)
-                    {
-                        if (type == TYPE_TQ5_YS100_YS200_B200 || type == TYPE_V50)
-                            showSimpleError(title, "The Patch Number must be an integer 0...99");
-                        else
-                            showSimpleError(title, "The Patch Number must be an integer 1..." + maxNumber);
-                        continue;
-                    }
+            int n;
+            try { n = Integer.parseInt(number.getText()); }
+            catch (NumberFormatException e)
+                {
                 if (type == TYPE_TQ5_YS100_YS200_B200 || type == TYPE_V50)
-                    {
-                        if (n < 0 || n >= maxNumber)    // note >=
-                            {
-                                showSimpleError(title, "The Patch Number must be an integer 0...99");
-                                continue;
-                            }
-                    }
+                    showSimpleError(title, "The Patch Number must be an integer 0...99");
                 else
+                    showSimpleError(title, "The Patch Number must be an integer 1..." + maxNumber);
+                continue;
+                }
+            if (type == TYPE_TQ5_YS100_YS200_B200 || type == TYPE_V50)
+                {
+                if (n < 0 || n >= maxNumber)    // note >=
                     {
-                        if (n < 1 || n > maxNumber)             // note >
-                            {
-                                showSimpleError(title, "The Patch Number must be an integer 1..." + maxNumber);
-                                continue;
-                            }
-                        n--;
+                    showSimpleError(title, "The Patch Number must be an integer 0...99");
+                    continue;
                     }
+                }
+            else
+                {
+                if (n < 1 || n > maxNumber)             // note >
+                    {
+                    showSimpleError(title, "The Patch Number must be an integer 1..." + maxNumber);
+                    continue;
+                    }
+                n--;
+                }
                                 
-                int i = (bank == null ? 0 : bank.getSelectedIndex());
+            int i = (bank == null ? 0 : bank.getSelectedIndex());
                         
-                change.set("bank", i);
-                change.set("number", n);
+            change.set("bank", i);
+            change.set("number", n);
                         
-                return true;
+            return true;
             }
-    }
+        }
 
     public static final int OFF = 0;
     public static final int COARSE = 1;
@@ -435,7 +435,7 @@ public class Yamaha4Op extends Synth
     int mutationRestriction = OFF;
         
     public void addYamaha4OpMenu()
-    {
+        {
         JMenu menu = new JMenu("4-Op FM");
         menubar.add(menu);
 
@@ -455,10 +455,10 @@ public class Yamaha4Op extends Synth
         JRadioButtonMenuItem off = new JRadioButtonMenuItem("Off");
         off.addActionListener(new ActionListener()
             {
-                public void actionPerformed(ActionEvent evt)
+            public void actionPerformed(ActionEvent evt)
                 {
-                    mutationRestriction = OFF;
-                    setLastX("OFF", "MutationRestriction", getSynthName(), true);
+                mutationRestriction = OFF;
+                setLastX("OFF", "MutationRestriction", getSynthName(), true);
                 }
             });
         restrictMutation.add(off);
@@ -468,10 +468,10 @@ public class Yamaha4Op extends Synth
         JRadioButtonMenuItem coarse = new JRadioButtonMenuItem("To Coarse Values Only");
         coarse.addActionListener(new ActionListener()
             {
-                public void actionPerformed(ActionEvent evt)
+            public void actionPerformed(ActionEvent evt)
                 {
-                    mutationRestriction = COARSE;
-                    setLastX("COARSE", "MutationRestriction", getSynthName(), true);
+                mutationRestriction = COARSE;
+                setLastX("COARSE", "MutationRestriction", getSynthName(), true);
                 }
             });
         restrictMutation.add(coarse);
@@ -481,60 +481,60 @@ public class Yamaha4Op extends Synth
         JRadioButtonMenuItem integers = new JRadioButtonMenuItem("To Integer Coarse Values Only");
         integers.addActionListener(new ActionListener()
             {
-                public void actionPerformed(ActionEvent evt)
+            public void actionPerformed(ActionEvent evt)
                 {
-                    mutationRestriction = INTEGERS;
-                    setLastX("INTEGERS", "MutationRestriction", getSynthName(), true);
+                mutationRestriction = INTEGERS;
+                setLastX("INTEGERS", "MutationRestriction", getSynthName(), true);
                 }
             });
         restrictMutation.add(integers);
         bg.add(integers);
         if (mutationRestriction == INTEGERS) integers.setSelected(true);
-    }
+        }
                 
 
     public class SubModel extends Model
-    {
-        public int reviseMutatedValue(String key, int old, int current)
         {
+        public int reviseMutatedValue(String key, int old, int current)
+            {
             if (mutationRestriction == OFF)
                 return current;
             else if (key.startsWith("operator") && key.endsWith("frequencyfine"))
                 {
-                    return 0;
+                return 0;
                 }
             else if (key.startsWith("operator") && key.endsWith("frequencycoarse"))
                 {
-                    if (mutationRestriction == COARSE)
-                        return current;
-                    else if (mutationRestriction == INTEGERS)
+                if (mutationRestriction == COARSE)
+                    return current;
+                else if (mutationRestriction == INTEGERS)
+                    {
+                    double val = FREQUENCY_RATIO_NEAREST_INTS[current];
+                    for(int i = 0; i < FREQUENCY_RATIOS.length; i++)
                         {
-                            double val = FREQUENCY_RATIO_NEAREST_INTS[current];
-                            for(int i = 0; i < FREQUENCY_RATIOS.length; i++)
-                                {
-                                    if (FREQUENCY_RATIOS[i] == val)  // got it
-                                        return i;
-                                }
-                            // never happens
-                            return current;
+                        if (FREQUENCY_RATIOS[i] == val)  // got it
+                            return i;
                         }
-                    else  // never happens
-                        return current;
+                    // never happens
+                    return current;
+                    }
+                else  // never happens
+                    return current;
                 }
             else
                 return current;
+            }
         }
-    }
                 
     public Model buildModel()
-    {
+        {
         return new SubModel();
-    }
+        }
                 
                                 
     /** Add the global patch category (name, id, number, etc.) */
     public JComponent addNameGlobal(Color color)
-    {
+        {
         Category globalCategory = new Category(this, getSynthName(), color);
         //globalCategory.makeUnresettable();
                 
@@ -558,10 +558,10 @@ public class Yamaha4Op extends Synth
         synthTypeCombo.setSelectedIndex(getSynthType());
         synthTypeCombo.addActionListener(new ActionListener()
             {
-                public void actionPerformed(ActionEvent e)
+            public void actionPerformed(ActionEvent e)
                 {
-                    setSynthType(synthTypeCombo.getSelectedIndex(), true);
-                    pd.update("bank", model);  // doesn't matter what the key is, so I put in "bank"
+                setSynthType(synthTypeCombo.getSelectedIndex(), true);
+                pd.update("bank", model);  // doesn't matter what the key is, so I put in "bank"
                 }
             });
         synthTypeCombo.putClientProperty("JComponent.sizeVariant", "small");
@@ -574,15 +574,15 @@ public class Yamaha4Op extends Synth
         
         comp = new StringComponent("Patch Name", this, "name", 10, "Name must be up to 10 ASCII characters.")
             {
-                public String replace(String val)
+            public String replace(String val)
                 {
-                    return revisePatchName(val);
+                return revisePatchName(val);
                 }
                                 
-                public void update(String key, Model model)
+            public void update(String key, Model model)
                 {
-                    super.update(key, model);
-                    updateTitle();
+                super.update(key, model);
+                updateTitle();
                 }
             };
         vbox.addBottom(comp);  // doesn't work right :-(
@@ -593,11 +593,11 @@ public class Yamaha4Op extends Synth
 
         globalCategory.add(hbox, BorderLayout.WEST);
         return globalCategory;
-    }
+        }
 
 
     public JComponent addGlobal( Color color)
-    {
+        {
         Category category = new Category(this, "Global", color);
 
         JComponent comp;
@@ -633,7 +633,7 @@ public class Yamaha4Op extends Synth
 
         comp = new LabelledDial("Transpose", this, "transpose", color, 0, 48, 24)
             {
-                public boolean isSymmetric() { return true; }
+            public boolean isSymmetric() { return true; }
             };
         hbox2.add(comp);
         
@@ -649,11 +649,11 @@ public class Yamaha4Op extends Synth
 
         category.add(hbox, BorderLayout.CENTER);
         return category;
-    }
+        }
 
 
     public JComponent addPitchEnvelope(Color color)
-    {
+        {
         Category category = new Category(this, "Pitch Envelope", color);
 
         JComponent comp;
@@ -688,18 +688,18 @@ public class Yamaha4Op extends Synth
         // This will *more or less* work, though the release rate will be slightly short
         // for reasons beyond me.
         comp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
-                                   new String[] { null, "pitchattackrate", "pitchdecayrate", "pitchreleaserate" },
-                                   new String[] { "pitchreleaselevel", "pitchattacklevel", "pitchdecaylevel", "pitchreleaselevel" },
-                                   new double[] { 0, 1.0/2, 1.0/2, 1.0/2 },
-                                   new double[] { 1.0 / 99, 1.0 / 99, 1.0 / 99, 1.0 / 99},
-                                   new double[] { 0, (Math.PI/4/99), (Math.PI/4/99), (Math.PI/4/99) })
+            new String[] { null, "pitchattackrate", "pitchdecayrate", "pitchreleaserate" },
+            new String[] { "pitchreleaselevel", "pitchattacklevel", "pitchdecaylevel", "pitchreleaselevel" },
+            new double[] { 0, 1.0/2, 1.0/2, 1.0/2 },
+            new double[] { 1.0 / 99, 1.0 / 99, 1.0 / 99, 1.0 / 99},
+            new double[] { 0, (Math.PI/4/99), (Math.PI/4/99), (Math.PI/4/99) })
             {
-                public double preprocessXKey(int index, String key, double value)
+            public double preprocessXKey(int index, String key, double value)
                 {
-                    return 99.0 - value;
+                return 99.0 - value;
                 }
 
-                public void postProcess(double[] xVals, double[] yVals)
+            public void postProcess(double[] xVals, double[] yVals)
                 {
                 }
             };
@@ -714,10 +714,10 @@ public class Yamaha4Op extends Synth
         
         category.add(vbox2, BorderLayout.CENTER);
         return category;
-    }
+        }
 
     public JComponent addEffects(Color color)
-    {
+        {
         Category category = new Category(this, "Effects", color);
 
         JComponent comp;
@@ -742,10 +742,10 @@ public class Yamaha4Op extends Synth
 
         category.add(hbox, BorderLayout.CENTER);
         return category;
-    }
+        }
 
     public JComponent addV50Effects(Color color)
-    {
+        {
         Category category = new Category(this, "V50 Effects", color);
 
         JComponent comp;
@@ -762,12 +762,12 @@ public class Yamaha4Op extends Synth
         params = V50_EFFECTS;
         comp = new Chooser("Effect [V]", this, "veffectsel", params)
             {
-                public void update(String key, Model model)
+            public void update(String key, Model model)
                 {
-                    super.update(key, model);
-                    param1.setLabel(V50_EFFECTS_PARAMETERS[model.get(key)][0] + " [V]");
-                    param2.setLabel(V50_EFFECTS_PARAMETERS[model.get(key)][1] + " [V]");
-                    param3.setLabel(V50_EFFECTS_PARAMETERS[model.get(key)][2] + " [V]");
+                super.update(key, model);
+                param1.setLabel(V50_EFFECTS_PARAMETERS[model.get(key)][0] + " [V]");
+                param2.setLabel(V50_EFFECTS_PARAMETERS[model.get(key)][1] + " [V]");
+                param3.setLabel(V50_EFFECTS_PARAMETERS[model.get(key)][2] + " [V]");
                 }
             };
         vbox.add(comp);
@@ -779,7 +779,7 @@ public class Yamaha4Op extends Synth
                 
         comp = new LabelledDial("Balance [V]", this, "veffectbalance", color, 0, 100, 50)
             {
-                public boolean isSymmetric() { return true; }
+            public boolean isSymmetric() { return true; }
             };
         hbox.add(comp);
         
@@ -792,11 +792,11 @@ public class Yamaha4Op extends Synth
 
         category.add(hbox, BorderLayout.CENTER);
         return category;
-    }
+        }
 
 
     public JComponent addLFO(Color color)
-    {
+        {
         Category category = new Category(this, "LFO ", color);
 
         JComponent comp;
@@ -837,10 +837,10 @@ public class Yamaha4Op extends Synth
         
         category.add(hbox, BorderLayout.CENTER);
         return category;
-    }
+        }
     
     public JComponent addModulation(Color color)
-    {
+        {
         Category category = new Category(this, "Controllers", color);
 
         JComponent comp;
@@ -939,29 +939,29 @@ public class Yamaha4Op extends Synth
 
         category.add(hbox, BorderLayout.CENTER);
         return category;
-    }
+        }
     
     // From discussion with Matt Gregory (mgregory22@gmail.com),
     // who runs the TX81Z website http://the-all.org/tx81z/
     public double computeFineRatio(int coarse, int fine)
-    {
+        {
         double min = FREQUENCY_RATIOS[coarse];
         double max = FREQUENCY_RATIOS_MAX[coarse];
           
         if (min < 1.0)
             {
-                return Math.min(max, min + ((max - min) / 7.0) * fine);
+            return Math.min(max, min + ((max - min) / 7.0) * fine);
             }
         else
             {
-                return min + ((max - min) / 15.0) * fine;
+            return min + ((max - min) / 15.0) * fine;
             }
-    }
+        }
 
     // based on http://cd.textfiles.com/fredfish/v1.6/FF_Disks/571-600/FF_598/TX81z/TX81z.doc
     // in combination with the manual.
     public int computeCoarseFrequency(int range, int coarse)
-    {
+        {
         // the others are just multiples of it
         int base = 1;
         for(int i = 0; i < range; i++)
@@ -969,12 +969,12 @@ public class Yamaha4Op extends Synth
 
         if (coarse < 4) return 8 * base;
         else return 16 * (coarse / 4) * base;
-    }
+        }
 
     // based on http://cd.textfiles.com/fredfish/v1.6/FF_Disks/571-600/FF_598/TX81z/TX81z.doc
     // in combination with the manual.
     public int computeFrequency(int range, int coarse, int fine)
-    {
+        {
         // the others are just multiples of it
         int base = 1;
         for(int i = 0; i < range; i++)
@@ -985,7 +985,7 @@ public class Yamaha4Op extends Synth
 
         if (coarse < 4) return (8 + fine) * base;
         else return (16 * (coarse / 4) + fine) * base;
-    }
+        }
 
 
     LabelledDial[] frequencyRanges = new LabelledDial[4];
@@ -994,7 +994,7 @@ public class Yamaha4Op extends Synth
     java.text.DecimalFormat format = new java.text.DecimalFormat("0.0#");
 
     public JComponent addOperator(final int src, Color color)
-    {
+        {
         final Category category = new Category(this, "Operator " + src, color);
         //        category.makePasteable("operator" + src);
         category.makePasteable("operator");
@@ -1037,7 +1037,7 @@ public class Yamaha4Op extends Synth
 
         comp = new LabelledDial("Detune", this, "operator" + src + "detune", color, 0, 6, 3)
             {
-                public boolean isSymmetric() { return true; }
+            public boolean isSymmetric() { return true; }
             };
         hbox.add(comp);
 
@@ -1046,9 +1046,9 @@ public class Yamaha4Op extends Synth
 
         frequencyRanges[src - 1] = new LabelledDial("Frequency", this, "operator" + src + "fixedfrequencyrange", color, 0, 7)
             {
-                public String map(int val)
+            public String map(int val)
                 {
-                    return FIX_HI_RANGES[val];
+                return FIX_HI_RANGES[val];
                 }               
             };
         frequencyRanges[src - 1].addAdditionalLabel("Range");
@@ -1061,26 +1061,26 @@ public class Yamaha4Op extends Synth
     
         CheckBox fixcomp = new CheckBox("Fixed [11,TX,>,V]", this, "operator" + src + "fix")
             {
-                public void update(String key, Model model)
+            public void update(String key, Model model)
                 {
-                    super.update(key, model);
-                    if (model.get(key) == 0)
-                        {
-                            hbox.remove(frequencyRanges[src - 1]);
-                            if (coarseFrequencyLabels[src - 1] != null)                         // won't be the case initially
-                                coarseFrequencyLabels[src - 1].setText("Ratio");
-                            if (fineFrequencyLabels[src - 1] != null)                           // won't be the case initially
-                                fineFrequencyLabels[src - 1].setText("Ratio Fine");
-                        }
-                    else
-                        {
-                            hbox.add(frequencyRanges[src - 1]);
-                            if (coarseFrequencyLabels[src - 1] != null)                         // won't be the case initially
-                                coarseFrequencyLabels[src - 1].setText("Fixed");
-                            if (fineFrequencyLabels[src - 1] != null)                           // won't be the case initially
-                                fineFrequencyLabels[src - 1].setText("Fixed Fine");
-                        }
-                    hbox.revalidate();
+                super.update(key, model);
+                if (model.get(key) == 0)
+                    {
+                    hbox.remove(frequencyRanges[src - 1]);
+                    if (coarseFrequencyLabels[src - 1] != null)                         // won't be the case initially
+                        coarseFrequencyLabels[src - 1].setText("Ratio");
+                    if (fineFrequencyLabels[src - 1] != null)                           // won't be the case initially
+                        fineFrequencyLabels[src - 1].setText("Ratio Fine");
+                    }
+                else
+                    {
+                    hbox.add(frequencyRanges[src - 1]);
+                    if (coarseFrequencyLabels[src - 1] != null)                         // won't be the case initially
+                        coarseFrequencyLabels[src - 1].setText("Fixed");
+                    if (fineFrequencyLabels[src - 1] != null)                           // won't be the case initially
+                        fineFrequencyLabels[src - 1].setText("Fixed Fine");
+                    }
+                hbox.revalidate();
                 }
             };
         ((CheckBox)fixcomp).addToWidth(2);
@@ -1090,18 +1090,18 @@ public class Yamaha4Op extends Synth
 
         comp = new LabelledDial("Frequency ", this, "operator" + src + "frequencycoarse", color, 0, 63)  // extra space because OS X cuts off the 'y'
             {
-                public String map(int val)
+            public String map(int val)
                 {
-                    if (model.get("operator" + src + "fix") == 0)  // not fixed
-                        {
-                            return "" + FREQUENCY_RATIOS[val];
-                        }
-                    else
-                        {
-                            return "" + computeCoarseFrequency(
-                                                               model.get("operator" + src + "fixedfrequencyrange"),
-                                                               model.get("operator" + src + "frequencycoarse"));
-                        }
+                if (model.get("operator" + src + "fix") == 0)  // not fixed
+                    {
+                    return "" + FREQUENCY_RATIOS[val];
+                    }
+                else
+                    {
+                    return "" + computeCoarseFrequency(
+                        model.get("operator" + src + "fixedfrequencyrange"),
+                        model.get("operator" + src + "frequencycoarse"));
+                    }
                 }               
             };
         coarseFrequencyLabels[src - 1 ] = ((LabelledDial)comp).addAdditionalLabel("Fixed");
@@ -1112,21 +1112,21 @@ public class Yamaha4Op extends Synth
         format.setRoundingMode(java.math.RoundingMode.FLOOR);
         comp = new LabelledDial("Frequency", this, "operator" + src + "frequencyfine", color, 0, 15)  // extra space because OS X cuts off the 'y'
             {
-                public String map(int val)
+            public String map(int val)
                 {
-                    if (model.get("operator" + src + "fix") == 0)  // not fixed
-                        {
-                            return format.format(computeFineRatio(
-                                                                  model.get("operator" + src + "frequencycoarse"), 
-                                                                  model.get("operator" + src + "frequencyfine")));
-                        }
-                    else
-                        {
-                            return "" + computeFrequency(
-                                                         model.get("operator" + src + "fixedfrequencyrange"),
-                                                         model.get("operator" + src + "frequencycoarse"),
-                                                         model.get("operator" + src + "frequencyfine"));
-                        }
+                if (model.get("operator" + src + "fix") == 0)  // not fixed
+                    {
+                    return format.format(computeFineRatio(
+                            model.get("operator" + src + "frequencycoarse"), 
+                            model.get("operator" + src + "frequencyfine")));
+                    }
+                else
+                    {
+                    return "" + computeFrequency(
+                        model.get("operator" + src + "fixedfrequencyrange"),
+                        model.get("operator" + src + "frequencycoarse"),
+                        model.get("operator" + src + "frequencyfine"));
+                    }
                 }               
             };
         fineFrequencyLabels[src - 1] = ((LabelledDial)comp).addAdditionalLabel("Fixed Fine");
@@ -1148,10 +1148,10 @@ public class Yamaha4Op extends Synth
     
         category.add(hbox, BorderLayout.CENTER);
         return category;
-    }
+        }
                 
     public JComponent addEnvelope(final int envelope, Color color)
-    {
+        {
         Category category = new Category(this, "Operator Envelope " + envelope, color);
         //        category.makePasteable("operator" + envelope);
         category.makePasteable("operator");
@@ -1174,10 +1174,10 @@ public class Yamaha4Op extends Synth
 
         comp = new LabelledDial("Decay 2", this, "operator" + envelope + "decay2rate", color, 0, 31)
             {
-                public String map(int val)
+            public String map(int val)
                 {
-                    if (val == 0) return "Sustain";
-                    else return "" + val;
+                if (val == 0) return "Sustain";
+                else return "" + val;
                 }
             };
         ((LabelledDial)comp).addAdditionalLabel("Rate");
@@ -1203,29 +1203,29 @@ public class Yamaha4Op extends Synth
     
         if (envelope == 1)  // operator 1 doesn't have EG Shift
             {
-                comp = new LabelledDial("Shift", this, "operator" + envelope + "shift", color, 0, 0)  // fixed to 0
+            comp = new LabelledDial("Shift", this, "operator" + envelope + "shift", color, 0, 0)  // fixed to 0
+                {
+                public String map(int val)
                     {
-                        public String map(int val)
-                        {
-                            return SHIFTS[val];
-                        }
-                    };
-                ((LabelledDial)comp).addAdditionalLabel(" [11,TX,>,V] ");
-                // we're not going to add it.  Instead we're just going to put a space in.
-                comp = Strut.makeStrut(comp);
-                model.setStatus("operator" + envelope + "shift", Model.STATUS_IMMUTABLE);
+                    return SHIFTS[val];
+                    }
+                };
+            ((LabelledDial)comp).addAdditionalLabel(" [11,TX,>,V] ");
+            // we're not going to add it.  Instead we're just going to put a space in.
+            comp = Strut.makeStrut(comp);
+            model.setStatus("operator" + envelope + "shift", Model.STATUS_IMMUTABLE);
             }
         else
             {
-                // TODO: Modify envelope display to show shift
-                comp = new LabelledDial("Shift", this, "operator" + envelope + "shift", color, 0, 3)
+            // TODO: Modify envelope display to show shift
+            comp = new LabelledDial("Shift", this, "operator" + envelope + "shift", color, 0, 3)
+                {
+                public String map(int val)
                     {
-                        public String map(int val)
-                        {
-                            return SHIFTS[val];
-                        }
-                    };
-                ((LabelledDial)comp).addAdditionalLabel(" [11,TX,>,V] ");
+                    return SHIFTS[val];
+                    }
+                };
+            ((LabelledDial)comp).addAdditionalLabel(" [11,TX,>,V] ");
             }
         hbox.add(comp);
     
@@ -1234,44 +1234,44 @@ public class Yamaha4Op extends Synth
         // This will *more or less* work, though the release rate will be slightly short
         // for reasons beyond me.
         comp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
-                                   new String[] { null, "operator" + envelope + "attackrate", "operator" + envelope + "decay1rate", "operator" + envelope + "decay2rate", "operator" + envelope + "releaserate" },
-                                   new String[] { null, null, "operator" + envelope + "decay1level", "operator" + envelope + "decay1level", null },
-                                   new double[] { 0, 1.0/3, 1.0/3, 1.0/3, 1.0/3 },
-                                   new double[] { 0, 1.0, 1.0 / 15.0, 1.0 / 30.0, 0 },
-                                   new double[] { 0, (Math.PI/4/31), (Math.PI/4/31), (Math.PI/4/31), (Math.PI/4/31) })  // note we convert the release rate to 31
+            new String[] { null, "operator" + envelope + "attackrate", "operator" + envelope + "decay1rate", "operator" + envelope + "decay2rate", "operator" + envelope + "releaserate" },
+            new String[] { null, null, "operator" + envelope + "decay1level", "operator" + envelope + "decay1level", null },
+            new double[] { 0, 1.0/3, 1.0/3, 1.0/3, 1.0/3 },
+            new double[] { 0, 1.0, 1.0 / 15.0, 1.0 / 30.0, 0 },
+            new double[] { 0, (Math.PI/4/31), (Math.PI/4/31), (Math.PI/4/31), (Math.PI/4/31) })  // note we convert the release rate to 31
             {
-                public double preprocessXKey(int index, String key, double value)
+            public double preprocessXKey(int index, String key, double value)
                 {
-                    if (key.equals("operator" + envelope + "releaserate"))
-                        {
-                            return (31.0 - ( (value - 1) * 31.0 / 14.0 ));
-                        }
-                    else 
-                        return 31.0 - value;
+                if (key.equals("operator" + envelope + "releaserate"))
+                    {
+                    return (31.0 - ( (value - 1) * 31.0 / 14.0 ));
+                    }
+                else 
+                    return 31.0 - value;
                 }
 
-                public void postProcess(double[] xVals, double[] yVals)
+            public void postProcess(double[] xVals, double[] yVals)
                 {
-                    if (model.get("operator" + envelope + "decay2rate") == 0)
-                        {
-                            yVals[3] = yVals[2];
-                            xVals[3] = 1.0 / 3;
-                        }
+                if (model.get("operator" + envelope + "decay2rate") == 0)
+                    {
+                    yVals[3] = yVals[2];
+                    xVals[3] = 1.0 / 3;
+                    }
 
-                    int shift = model.get("operator" + envelope + "shift");
+                int shift = model.get("operator" + envelope + "shift");
                                         
-                    if (shift > 0)
+                if (shift > 0)
+                    {
+                    for(int i = 0; i < 5; i++)
                         {
-                            for(int i = 0; i < 5; i++)
-                                {
-                                    yVals[i] = 1 - yVals[i];
+                        yVals[i] = 1 - yVals[i];
                                                 
-                                    for(int j = 0; j < shift; j++)  
-                                        yVals[i] /= 2.0;
+                        for(int j = 0; j < shift; j++)  
+                            yVals[i] /= 2.0;
                                                                                                         
-                                    yVals[i] = 1 - yVals[i];
-                                }
+                        yVals[i] = 1 - yVals[i];
                         }
+                    }
                 }
             };
 
@@ -1280,7 +1280,7 @@ public class Yamaha4Op extends Synth
                 
         category.add(hbox, BorderLayout.CENTER);
         return category;
-    }
+        }
         
 
 
@@ -1295,106 +1295,106 @@ public class Yamaha4Op extends Synth
     /// that Waldorf decided to do.  :-(
 
     final static String[] vcedParameters = new String[] 
-        {
-            "operator4attackrate",
-            "operator4decay1rate",
-            "operator4decay2rate",
-            "operator4releaserate",
-            "operator4decay1level",
-            "operator4levelscaling",                            // vlevelscalingsign
-            "operator4ratescaling",
-            "operator4egbiassensitivity",
-            "operator4amplitudemodulationenable",                   
-            "operator4keyvelocitysensitivity",
-            "operator4outputlevel",
-            "operator4frequencycoarse",
-            "operator4detune",
+    {
+    "operator4attackrate",
+    "operator4decay1rate",
+    "operator4decay2rate",
+    "operator4releaserate",
+    "operator4decay1level",
+    "operator4levelscaling",                            // vlevelscalingsign
+    "operator4ratescaling",
+    "operator4egbiassensitivity",
+    "operator4amplitudemodulationenable",                   
+    "operator4keyvelocitysensitivity",
+    "operator4outputlevel",
+    "operator4frequencycoarse",
+    "operator4detune",
 
-            "operator2attackrate",
-            "operator2decay1rate",
-            "operator2decay2rate",
-            "operator2releaserate",
-            "operator2decay1level",
-            "operator2levelscaling",
-            "operator2ratescaling",
-            "operator2egbiassensitivity",
-            "operator2amplitudemodulationenable",                   
-            "operator2keyvelocitysensitivity",
-            "operator2outputlevel",
-            "operator2frequencycoarse",
-            "operator2detune",
+    "operator2attackrate",
+    "operator2decay1rate",
+    "operator2decay2rate",
+    "operator2releaserate",
+    "operator2decay1level",
+    "operator2levelscaling",
+    "operator2ratescaling",
+    "operator2egbiassensitivity",
+    "operator2amplitudemodulationenable",                   
+    "operator2keyvelocitysensitivity",
+    "operator2outputlevel",
+    "operator2frequencycoarse",
+    "operator2detune",
 
-            "operator3attackrate",
-            "operator3decay1rate",
-            "operator3decay2rate",
-            "operator3releaserate",
-            "operator3decay1level",
-            "operator3levelscaling",
-            "operator3ratescaling",
-            "operator3egbiassensitivity",
-            "operator3amplitudemodulationenable",                   
-            "operator3keyvelocitysensitivity",
-            "operator3outputlevel",
-            "operator3frequencycoarse",
-            "operator3detune",
+    "operator3attackrate",
+    "operator3decay1rate",
+    "operator3decay2rate",
+    "operator3releaserate",
+    "operator3decay1level",
+    "operator3levelscaling",
+    "operator3ratescaling",
+    "operator3egbiassensitivity",
+    "operator3amplitudemodulationenable",                   
+    "operator3keyvelocitysensitivity",
+    "operator3outputlevel",
+    "operator3frequencycoarse",
+    "operator3detune",
 
-            "operator1attackrate",
-            "operator1decay1rate",
-            "operator1decay2rate",
-            "operator1releaserate",
-            "operator1decay1level",
-            "operator1levelscaling",
-            "operator1ratescaling",
-            "operator1egbiassensitivity",
-            "operator1amplitudemodulationenable",                   
-            "operator1keyvelocitysensitivity",
-            "operator1outputlevel",
-            "operator1frequencycoarse",
-            "operator1detune",
+    "operator1attackrate",
+    "operator1decay1rate",
+    "operator1decay2rate",
+    "operator1releaserate",
+    "operator1decay1level",
+    "operator1levelscaling",
+    "operator1ratescaling",
+    "operator1egbiassensitivity",
+    "operator1amplitudemodulationenable",                   
+    "operator1keyvelocitysensitivity",
+    "operator1outputlevel",
+    "operator1frequencycoarse",
+    "operator1detune",
     
-            "algorithm",
-            "feedback",         
-            "lfospeed",
-            "lfodelay",
-            "lfopitchmodulationdepth",
-            "lfoamplitudemodulationdepth",        
-            "lfosync",        
-            "lfowave",
-            "lfopitchmodulationsensitivity",
-            "lfoamplitudemodulationsensitivity",    
-            "transpose",
+    "algorithm",
+    "feedback",         
+    "lfospeed",
+    "lfodelay",
+    "lfopitchmodulationdepth",
+    "lfoamplitudemodulationdepth",        
+    "lfosync",        
+    "lfowave",
+    "lfopitchmodulationsensitivity",
+    "lfoamplitudemodulationsensitivity",    
+    "transpose",
     
-            "mono",
-            "pitchbendrange",  
-            "fulltimeportamentomode",
-            "portamentotime",
-            "footcontrolvolume",
-            "sustain",                  // unused as it turns out
-            "portamento",       // unused as it turns out
-            "chorus",                   // unused as it turns out        
-            "modulationwheelpitch",
-            "modulationwheelamplitude",
-            "breathcontrolpitch",
-            "breathcontrolamplitude",          
-            "breathcontrolpitchbias",
-            "breathcontrolenvelopebias",
-            "name1",
-            "name2",
-            "name3",
-            "name4",
-            "name5",
-            "name6",
-            "name7",
-            "name8",
-            "name9",
-            "name10",
-            "pitchattackrate",                          // Yamaha DX21 only
-            "pitchdecayrate",                           // Yamaha DX21 only
-            "pitchreleaserate",                         // Yamaha DX21 only
-            "pitchattacklevel",                 // Yamaha DX21 only
-            "pitchdecaylevel",                  // Yamaha DX21 only
-            "pitchreleaselevel",                        // Yamaha DX21 only
-        };
+    "mono",
+    "pitchbendrange",  
+    "fulltimeportamentomode",
+    "portamentotime",
+    "footcontrolvolume",
+    "sustain",                  // unused as it turns out
+    "portamento",       // unused as it turns out
+    "chorus",                   // unused as it turns out        
+    "modulationwheelpitch",
+    "modulationwheelamplitude",
+    "breathcontrolpitch",
+    "breathcontrolamplitude",          
+    "breathcontrolpitchbias",
+    "breathcontrolenvelopebias",
+    "name1",
+    "name2",
+    "name3",
+    "name4",
+    "name5",
+    "name6",
+    "name7",
+    "name8",
+    "name9",
+    "name10",
+    "pitchattackrate",                          // Yamaha DX21 only
+    "pitchdecayrate",                           // Yamaha DX21 only
+    "pitchreleaserate",                         // Yamaha DX21 only
+    "pitchattacklevel",                 // Yamaha DX21 only
+    "pitchdecaylevel",                  // Yamaha DX21 only
+    "pitchreleaselevel",                        // Yamaha DX21 only
+    };
 
 
 
@@ -1402,92 +1402,92 @@ public class Yamaha4Op extends Synth
     HashMap acedParametersToIndex = new HashMap();
 
     final static String[] acedParameters = new String[] 
-        {
-            "operator4fix",
-            "operator4fixedfrequencyrange",
-            "operator4frequencyfine",
-            "operator4operatorwaveform",
-            "operator4shift",
+    {
+    "operator4fix",
+    "operator4fixedfrequencyrange",
+    "operator4frequencyfine",
+    "operator4operatorwaveform",
+    "operator4shift",
 
-            "operator2fix",
-            "operator2fixedfrequencyrange",
-            "operator2frequencyfine",
-            "operator2operatorwaveform",
-            "operator2shift",
+    "operator2fix",
+    "operator2fixedfrequencyrange",
+    "operator2frequencyfine",
+    "operator2operatorwaveform",
+    "operator2shift",
 
-            "operator3fix",
-            "operator3fixedfrequencyrange",
-            "operator3frequencyfine",
-            "operator3operatorwaveform",
-            "operator3shift",
+    "operator3fix",
+    "operator3fixedfrequencyrange",
+    "operator3frequencyfine",
+    "operator3operatorwaveform",
+    "operator3shift",
 
-            "operator1fix",
-            "operator1fixedfrequencyrange",
-            "operator1frequencyfine",
-            "operator1operatorwaveform",
-            "operator1shift",
+    "operator1fix",
+    "operator1fixedfrequencyrange",
+    "operator1frequencyfine",
+    "operator1operatorwaveform",
+    "operator1shift",
     
-            "reverbrate",
-            "footcontrolpitch",         
-            "footcontrolamplitude"
-        };
+    "reverbrate",
+    "footcontrolpitch",         
+    "footcontrolamplitude"
+    };
     
 
     /** Map of parameter -> index in the aced2Parameters array. */
     HashMap aced2ParametersToIndex = new HashMap();
 
     final static String[] aced2Parameters = new String[] 
-        {
-            "aftertouchpitch",
-            "aftertouchamplitude",
-            "aftertouchpitchbias",
-            "aftertouchenvelopebias",
-            "operator4vshift",
-            "operator2vshift",          // weirdly out of place
-            "operator3vshift",
-            "operator1vshift",
-            "vlevelscalingsign",                // 1, 2, 3, 4.  I don't know the ordering but I presume 1 is bit 0
-            "-"
-        };
+    {
+    "aftertouchpitch",
+    "aftertouchamplitude",
+    "aftertouchpitchbias",
+    "aftertouchenvelopebias",
+    "operator4vshift",
+    "operator2vshift",          // weirdly out of place
+    "operator3vshift",
+    "operator1vshift",
+    "vlevelscalingsign",                // 1, 2, 3, 4.  I don't know the ordering but I presume 1 is bit 0
+    "-"
+    };
 
 
     /** Map of parameter -> index in the aced3Parameters array. */
     HashMap aced3ParametersToIndex = new HashMap();
 
     final static String[] aced3Parameters = new String[] 
-        {
-            "veffectsel",
-            "veffectbalance",
-            "veffectoutlevel",
-            "veffectstereomix",
-            "veffectparam1",
-            "veffectparam2",
-            "veffectparam3",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-        };
+    {
+    "veffectsel",
+    "veffectbalance",
+    "veffectoutlevel",
+    "veffectstereomix",
+    "veffectparam1",
+    "veffectparam2",
+    "veffectparam3",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    };
 
 
     /** Map of parameter -> index in the efedsParameters array. */
     HashMap efedsParametersToIndex = new HashMap();
 
     final static String[] efedsParameters = new String[] 
-        {
-            "effectpreset",
-            "effecttime",
-            "effectbalance",
-        };
+    {
+    "effectpreset",
+    "effecttime",
+    "effectbalance",
+    };
 
 
     /*
@@ -1526,7 +1526,7 @@ public class Yamaha4Op extends Synth
     public static final int TQ5_REMOTE_SWITCH_GROUP = 0x24;
 
     public Object[] emitAll(String key)
-    {
+        {
         simplePause(50);
         if (key.equals("bank")) return new Object[0];  // this is not emittable
         if (key.equals("number")) return new Object[0];  // this is not emittable
@@ -1535,238 +1535,238 @@ public class Yamaha4Op extends Synth
         
         if (key.equals("name"))
             {
-                Object[] result = new Object[10];
+            Object[] result = new Object[10];
             
-                String name = model.get("name", "INIT VOICE") + "          ";
+            String name = model.get("name", "INIT VOICE") + "          ";
 
-                for(int i = 0; i < 10; i++)
-                    {
-                        result[i] = new byte[] { (byte)0xF0, 0x43, channel, VCED_GROUP, (byte)(77 + i), (byte)(name.charAt(i)), (byte)0xF7 };
-                    }
-                return result;
+            for(int i = 0; i < 10; i++)
+                {
+                result[i] = new byte[] { (byte)0xF0, 0x43, channel, VCED_GROUP, (byte)(77 + i), (byte)(name.charAt(i)), (byte)0xF7 };
+                }
+            return result;
             }
         else if (vcedParametersToIndex.containsKey(key) || key.endsWith("vkeyvelocitysensitivitysign"))
             {
-                int index = -1;
-                int value = -1;
+            int index = -1;
+            int value = -1;
             
-                for(int i = 0; i < 4; i++)
+            for(int i = 0; i < 4; i++)
+                {
+                if ((key.equals("operator" + (i + 1) + "vkeyvelocitysensitivitysign") ||
+                        key.equals("operator" + (i + 1) + "vkeyvelocitysensitivitysign")) && synthType == TYPE_V50)
                     {
-                        if ((key.equals("operator" + (i + 1) + "vkeyvelocitysensitivitysign") ||
-                             key.equals("operator" + (i + 1) + "vkeyvelocitysensitivitysign")) && synthType == TYPE_V50)
-                            {
-                                index = ((Integer)(vcedParametersToIndex.get("operator" + (i + 1) + "keyvelocitysensitivity"))).intValue();
-                                value = (model.get("operator" + (i + 1) + "keyvelocitysensitivity") | 
-                                         (model.get("operator" + (i + 1) + "vkeyvelocitysensitivitysign") << 3));
-                                break;
-                            }
+                    index = ((Integer)(vcedParametersToIndex.get("operator" + (i + 1) + "keyvelocitysensitivity"))).intValue();
+                    value = (model.get("operator" + (i + 1) + "keyvelocitysensitivity") | 
+                        (model.get("operator" + (i + 1) + "vkeyvelocitysensitivitysign") << 3));
+                    break;
                     }
+                }
                                 
-                if (index == -1)
+            if (index == -1)
+                {
+                if (key.endsWith("vkeyvelocitysensitivitysign"))  // invalid
+                    return new Object[0];
+                else
                     {
-                        if (key.endsWith("vkeyvelocitysensitivitysign"))  // invalid
-                            return new Object[0];
-                        else
-                            {
-                                index = ((Integer)(vcedParametersToIndex.get(key))).intValue();
-                                value = model.get(key);
-                            }
+                    index = ((Integer)(vcedParametersToIndex.get(key))).intValue();
+                    value = model.get(key);
                     }
+                }
                             
-                byte PP = (byte) index;
-                byte VV = (byte) value;
-                byte[] data = new byte[] { (byte)0xF0, 0x43, channel, VCED_GROUP, PP, VV, (byte)0xF7 };
-                return new Object[] { data };
+            byte PP = (byte) index;
+            byte VV = (byte) value;
+            byte[] data = new byte[] { (byte)0xF0, 0x43, channel, VCED_GROUP, PP, VV, (byte)0xF7 };
+            return new Object[] { data };
             }
         else if (acedParametersToIndex.containsKey(key))
             {
-                int index = ((Integer)(acedParametersToIndex.get(key))).intValue();
-                int value = model.get(key);
+            int index = ((Integer)(acedParametersToIndex.get(key))).intValue();
+            int value = model.get(key);
 
-                for(int i = 0; i < 4; i++)
+            for(int i = 0; i < 4; i++)
+                {
+                if (key.equals("operator" + (i+1) + "frequencyfine"))
                     {
-                        if (key.equals("operator" + (i+1) + "frequencyfine"))
-                            {
-                                if (model.get("operator" + (i+1) + "frequencycoarse") < 4)  // it's < 1.0
-                                    {
-                                        value = Math.min(value, 7);  //  only first 8 values are legal
-                                        break;
-                                    }
-                            }
+                    if (model.get("operator" + (i+1) + "frequencycoarse") < 4)  // it's < 1.0
+                        {
+                        value = Math.min(value, 7);  //  only first 8 values are legal
+                        break;
+                        }
                     }
+                }
                             
-                byte PP = (byte) index;
-                byte VV = (byte) value;
-                byte[] data = new byte[] { (byte)0xF0, 0x43, channel, ACED_GROUP, PP, VV, (byte)0xF7 };
-                return new Object[] { data };
+            byte PP = (byte) index;
+            byte VV = (byte) value;
+            byte[] data = new byte[] { (byte)0xF0, 0x43, channel, ACED_GROUP, PP, VV, (byte)0xF7 };
+            return new Object[] { data };
             }
         else if (aced2ParametersToIndex.containsKey(key) || key.endsWith("vlevelscalingsign"))
             {
-                int index = -1;
-                int value = -1;
+            int index = -1;
+            int value = -1;
             
-                if (key.endsWith("vlevelscalingsign") && synthType == TYPE_V50)
-                    {
-                        index = 8;
-                        value = ( model.get("operator1vlevelscalingsign") |
-                                  (model.get("operator2vlevelscalingsign") << 1) |
-                                  (model.get("operator3vlevelscalingsign") << 2) |
-                                  (model.get("operator4vlevelscalingsign") << 3));
-                    }
+            if (key.endsWith("vlevelscalingsign") && synthType == TYPE_V50)
+                {
+                index = 8;
+                value = ( model.get("operator1vlevelscalingsign") |
+                    (model.get("operator2vlevelscalingsign") << 1) |
+                    (model.get("operator3vlevelscalingsign") << 2) |
+                    (model.get("operator4vlevelscalingsign") << 3));
+                }
 
-                if (index == -1)
+            if (index == -1)
+                {
+                if (key.endsWith("vlevelscalingsign"))  // invalid
+                    return new Object[0];
+                else
                     {
-                        if (key.endsWith("vlevelscalingsign"))  // invalid
-                            return new Object[0];
-                        else
-                            {
-                                index = ((Integer)(aced2ParametersToIndex.get(key))).intValue();
-                                value = model.get(key);
-                            }
+                    index = ((Integer)(aced2ParametersToIndex.get(key))).intValue();
+                    value = model.get(key);
                     }
+                }
             
 
-                // There is no ACED2_GROUP.  We just continue the parameters from 22
-                byte PP = (byte) (index + 23);
-                byte VV = (byte) value;
-                byte[] data = new byte[] { (byte)0xF0, 0x43, channel, ACED_GROUP, PP, VV, (byte)0xF7 };
-                return new Object[] { data };
+            // There is no ACED2_GROUP.  We just continue the parameters from 22
+            byte PP = (byte) (index + 23);
+            byte VV = (byte) value;
+            byte[] data = new byte[] { (byte)0xF0, 0x43, channel, ACED_GROUP, PP, VV, (byte)0xF7 };
+            return new Object[] { data };
             }
         else if (aced3ParametersToIndex.containsKey(key))
             {
-                int index = ((Integer)(aced3ParametersToIndex.get(key))).intValue();
-                int value = model.get(key);
+            int index = ((Integer)(aced3ParametersToIndex.get(key))).intValue();
+            int value = model.get(key);
             
-                // There is no ACED3_GROUP.  We just continue the parameters from 32
-                byte PP = (byte) (index + 33);
-                byte VV = (byte) value;
-                byte[] data = new byte[] { (byte)0xF0, 0x43, channel, ACED_GROUP, PP, VV, (byte)0xF7 };
-                return new Object[] { data };
+            // There is no ACED3_GROUP.  We just continue the parameters from 32
+            byte PP = (byte) (index + 33);
+            byte VV = (byte) value;
+            byte[] data = new byte[] { (byte)0xF0, 0x43, channel, ACED_GROUP, PP, VV, (byte)0xF7 };
+            return new Object[] { data };
             }
         else if (efedsParametersToIndex.containsKey(key))
             {
-                int index = ((Integer)(efedsParametersToIndex.get(key))).intValue();
-                int value = model.get(key);
+            int index = ((Integer)(efedsParametersToIndex.get(key))).intValue();
+            int value = model.get(key);
             
-                byte PP = (byte) index;
-                byte VV = (byte) value;
-                byte[] data = new byte[] { (byte)0xF0, 0x43, channel, EFEDS_GROUP, PP, VV, (byte)0xF7 };
-                return new Object[] { data };
+            byte PP = (byte) index;
+            byte VV = (byte) value;
+            byte[] data = new byte[] { (byte)0xF0, 0x43, channel, EFEDS_GROUP, PP, VV, (byte)0xF7 };
+            return new Object[] { data };
             }
         else 
             {
-                System.err.println("Warning (Yamaha4Op): Can't emit key " + key);
-                return new Object[0];
+            System.err.println("Warning (Yamaha4Op): Can't emit key " + key);
+            return new Object[0];
             }
-    }
+        }
     
 
     public int parse(byte[] data, boolean fromFile)
-    {
+        {
         if (data.length == 4104)  // VMEM
             {
-                return parseVMEM(data, fromFile);
+            return parseVMEM(data, fromFile);
             }
         else
             {
-                int pos = 0;
-                boolean foundSomething = false;
-                boolean foundVCED = false;
+            int pos = 0;
+            boolean foundSomething = false;
+            boolean foundVCED = false;
             
-                // Look for ACED3
-                int val = parseACED3(data, pos);
-                if (val != FAIL)
-                    {
-                        pos = val;
-                        foundSomething = true;
-                    }
+            // Look for ACED3
+            int val = parseACED3(data, pos);
+            if (val != FAIL)
+                {
+                pos = val;
+                foundSomething = true;
+                }
 
-                // Look for EFEDS
-                val = parseEFEDS(data, pos);
-                if (val != FAIL)
-                    {
-                        pos = val;
-                        foundSomething = true;
-                    }
+            // Look for EFEDS
+            val = parseEFEDS(data, pos);
+            if (val != FAIL)
+                {
+                pos = val;
+                foundSomething = true;
+                }
 
-                // Look for ACED2
-                val = parseACED2(data, pos);
-                if (val != FAIL)
-                    {
-                        pos = val;
-                        foundSomething = true;
-                    }
+            // Look for ACED2
+            val = parseACED2(data, pos);
+            if (val != FAIL)
+                {
+                pos = val;
+                foundSomething = true;
+                }
 
-                // Look for ACED
-                val = parseACED(data, pos);
-                if (val != FAIL)
-                    {
-                        pos = val;
-                        foundSomething = true;
-                    }
+            // Look for ACED
+            val = parseACED(data, pos);
+            if (val != FAIL)
+                {
+                pos = val;
+                foundSomething = true;
+                }
             
-                // Look for VCED
-                val = parseVCED(data, pos);
-                if (val != FAIL)
-                    {
-                        pos = val;
-                        foundSomething = true;
-                        foundVCED = true;
-                    }
+            // Look for VCED
+            val = parseVCED(data, pos);
+            if (val != FAIL)
+                {
+                pos = val;
+                foundSomething = true;
+                foundVCED = true;
+                }
             
-                if (!foundSomething) return PARSE_FAILED;
-                else if (!foundVCED) return PARSE_INCOMPLETE;
-                else 
-                    {
-                        revise(); 
-                        return PARSE_SUCCEEDED;
-                    }
+            if (!foundSomething) return PARSE_FAILED;
+            else if (!foundVCED) return PARSE_INCOMPLETE;
+            else 
+                {
+                revise(); 
+                return PARSE_SUCCEEDED;
+                }
             }
-    }
+        }
         
     int parseVCED(byte[] data, int offset)
-    {
+        {
         if (findSysexLength(data, offset) == offset + 101 &&       // 6-byte header + 93 + 2 byte footer
             data[offset + 3] == 0x03 &&
             data[offset + 4] == 0x00 &&
             data[offset + 5] == 0x5D) // VCED?
             {
-                byte[] name = new byte[11];
-                name[10] = '\0';  // yes I know it's that already...
+            byte[] name = new byte[11];
+            name[10] = '\0';  // yes I know it's that already...
                 
-                for(int i = 0; i < vcedParameters.length; i++)
-                    {
-                        byte val = data[offset + i + 6];
+            for(int i = 0; i < vcedParameters.length; i++)
+                {
+                byte val = data[offset + i + 6];
                                 
-                        if (vcedParameters[i].equals("-"))
-                            continue;
-                        else if (i >= 77 && i <= 86) // name
-                            {
-                                name[i - 77] = val;
-                            }
-                        else if (vcedParameters[i].endsWith("keyvelocitysensitivity"))  // gotta break out the sign for the V50
-                            {
-                                model.set(vcedParameters[i], val & 7);
-                                model.set(vcedParameters[i].substring(0,9) + "v" + vcedParameters[i].substring(9) + "sign", (val >>> 3) & 1);
-                            }
-                        else
-                            {
-                                model.set(vcedParameters[i], val);
-                            }
+                if (vcedParameters[i].equals("-"))
+                    continue;
+                else if (i >= 77 && i <= 86) // name
+                    {
+                    name[i - 77] = val;
                     }
-                try { model.set("name", new String(name, "US-ASCII")); }
-                catch (Exception e) { Synth.handleException(e); return FAIL; }
+                else if (vcedParameters[i].endsWith("keyvelocitysensitivity"))  // gotta break out the sign for the V50
+                    {
+                    model.set(vcedParameters[i], val & 7);
+                    model.set(vcedParameters[i].substring(0,9) + "v" + vcedParameters[i].substring(9) + "sign", (val >>> 3) & 1);
+                    }
+                else
+                    {
+                    model.set(vcedParameters[i], val);
+                    }
+                }
+            try { model.set("name", new String(name, "US-ASCII")); }
+            catch (Exception e) { Synth.handleException(e); return FAIL; }
 
-                return offset + 101;    
+            return offset + 101;    
             }
         else 
             {
-                return FAIL;
+            return FAIL;
             }
-    }
+        }
 
     int parseACED(byte[] data, int offset)
-    {
+        {
         if (findSysexLength(data, offset) == offset + 41 &&   // 6-byte header + "LM  8976AE" + 23 + 2-byte footer
             data[offset + 3] == 0x7E &&
             data[offset + 4] == 0x00 &&
@@ -1783,28 +1783,28 @@ public class Yamaha4Op extends Synth
             data[offset + 14] == 'A' &&
             data[offset + 15] == 'E')
             {
-                for(int i = 0; i < acedParameters.length; i++)
-                    {
-                        byte val = data[offset + i + 16];
+            for(int i = 0; i < acedParameters.length; i++)
+                {
+                byte val = data[offset + i + 16];
                                 
-                        if (acedParameters[i].equals("-"))
-                            continue;
-                        else
-                            {
-                                model.set(acedParameters[i], val);
-                            }
+                if (acedParameters[i].equals("-"))
+                    continue;
+                else
+                    {
+                    model.set(acedParameters[i], val);
                     }
-                return offset + 41;    
+                }
+            return offset + 41;    
             }
         else 
             {
-                return FAIL;
+            return FAIL;
             }
-    }
+        }
 
                 
     int parseACED2(byte[] data, int offset)
-    {
+        {
         if (findSysexLength(data, offset) == offset + 28 &&   // 6-byte header + "LM  8023AE" + 10 + 2-byte footer
             data[offset + 3] == 0x7E &&
             data[offset + 4] == 0x00 &&
@@ -1821,35 +1821,35 @@ public class Yamaha4Op extends Synth
             data[offset + 14] == 'A' &&
             data[offset + 15] == 'E')
             {
-                for(int i = 0; i < aced2Parameters.length; i++)
-                    {
-                        byte val = data[offset + i + 16];
+            for(int i = 0; i < aced2Parameters.length; i++)
+                {
+                byte val = data[offset + i + 16];
                                 
-                        if (aced2Parameters[i].equals("-"))
-                            continue;
-                        else if (aced2Parameters[i].equals("vlevelscalingsign"))
-                            {
-                                // I *think* this is the right order?  that is, op 1 is bit 0
-                                model.set("operator1vlevelscalingsign", val & 1);
-                                model.set("operator2vlevelscalingsign", (val >>> 1) & 1);
-                                model.set("operator3vlevelscalingsign", (val >>> 2) & 1);
-                                model.set("operator4vlevelscalingsign", (val >>> 3) & 1);
-                            }
-                        else
-                            {
-                                model.set(aced2Parameters[i], val);
-                            }
+                if (aced2Parameters[i].equals("-"))
+                    continue;
+                else if (aced2Parameters[i].equals("vlevelscalingsign"))
+                    {
+                    // I *think* this is the right order?  that is, op 1 is bit 0
+                    model.set("operator1vlevelscalingsign", val & 1);
+                    model.set("operator2vlevelscalingsign", (val >>> 1) & 1);
+                    model.set("operator3vlevelscalingsign", (val >>> 2) & 1);
+                    model.set("operator4vlevelscalingsign", (val >>> 3) & 1);
                     }
-                return offset + 28;    
+                else
+                    {
+                    model.set(aced2Parameters[i], val);
+                    }
+                }
+            return offset + 28;    
             }
         else 
             {
-                return FAIL;
+            return FAIL;
             }
-    }
+        }
 
     int parseACED3(byte[] data, int offset)
-    {
+        {
         if (findSysexLength(data, offset) == offset + 38 &&   // 6-byte header + "LM  8073AE" + 20 + 2-byte footer
             data[offset + 3] == 0x7E &&
             data[offset + 4] == 0x00 &&
@@ -1866,28 +1866,28 @@ public class Yamaha4Op extends Synth
             data[offset + 14] == 'A' &&
             data[offset + 15] == 'E')
             {
-                for(int i = 0; i < aced3Parameters.length; i++)
-                    {
-                        byte val = data[offset + i + 16];
+            for(int i = 0; i < aced3Parameters.length; i++)
+                {
+                byte val = data[offset + i + 16];
                                 
-                        if (aced3Parameters[i].equals("-"))
-                            continue;
-                        else
-                            {
-                                model.set(aced3Parameters[i], val);
-                            }
+                if (aced3Parameters[i].equals("-"))
+                    continue;
+                else
+                    {
+                    model.set(aced3Parameters[i], val);
                     }
-                return offset + 38;    
+                }
+            return offset + 38;    
             }
         else 
             {
-                return FAIL;
+            return FAIL;
             }
-    }
+        }
 
 
     int parseEFEDS(byte[] data, int offset)
-    {
+        {
         if (findSysexLength(data, offset) == offset + 21 &&   // 3 + "LM  8036EF" + 8 byte wrapper
             data[offset + 3] == 0x7E &&
             data[offset + 4] == 0x00 &&
@@ -1904,42 +1904,42 @@ public class Yamaha4Op extends Synth
             data[offset + 14] == 'E' &&
             data[offset + 15] == 'F')
             {
-                for(int i = 0; i < efedsParameters.length; i++)
-                    {
-                        byte val = data[offset + i + 16];
+            for(int i = 0; i < efedsParameters.length; i++)
+                {
+                byte val = data[offset + i + 16];
                                 
-                        if (efedsParameters[i].equals("-"))
-                            continue;
-                        else
-                            {
-                                model.set(efedsParameters[i], val);
-                            }
+                if (efedsParameters[i].equals("-"))
+                    continue;
+                else
+                    {
+                    model.set(efedsParameters[i], val);
                     }
-                return offset + 21;    
+                }
+            return offset + 21;    
             }
         else 
             {
-                return FAIL;
+            return FAIL;
             }
-    }
+        }
 
 
     public int parseVMEM(byte[] data, boolean fromFile)
-    {
+        {
         // extract names
         char[][] names = new char[32][10];
         for(int i = 0; i < 32; i++)
             {
-                for (int j = 0; j < 10; j++)
-                    {
-                        names[i][j] = (char)(data[i * 128 + 57 + j + 6] & 127);
-                    }
+            for (int j = 0; j < 10; j++)
+                {
+                names[i][j] = (char)(data[i * 128 + 57 + j + 6] & 127);
+                }
             }
                         
         String[] n = new String[32];
         for(int i = 0; i < 32; i++)
             {
-                n[i] = "" + (i + 1) + "   " + new String(names[i]);
+            n[i] = "" + (i + 1) + "   " + new String(names[i]);
             }
             
         // Now that we have an array of names, one per patch, we present the user with options;
@@ -1961,36 +1961,36 @@ public class Yamaha4Op extends Synth
                                                                                 
         for(int op = 0; op < 4; op++)
             {
-                // attack rate
-                model.set(vcedParameters[pos++], data[patch + op * 10 + 0 + 6] & 31);
-                // decay 1 rate
-                model.set(vcedParameters[pos++], data[patch + op * 10 + 1 + 6] & 31);
-                // decay 2 rate
-                model.set(vcedParameters[pos++], data[patch + op * 10 + 2 + 6] & 31);
-                // release rate
-                model.set(vcedParameters[pos++], data[patch + op * 10 + 3 + 6] & 15);
-                // decay 1 level
-                model.set(vcedParameters[pos++], data[patch + op * 10 + 4 + 6] & 15);
-                // level scaling
-                model.set(vcedParameters[pos++], data[patch + op * 10 + 5 + 6] & 127);
-                // rate scaling
-                model.set(vcedParameters[pos++], (data[patch + op * 10 + 9 + 6] >>> 3) & 3);
-                // eg bias sensitivity
-                model.set(vcedParameters[pos++], (data[patch + op * 10 + 6 + 6] >>> 3) & 7);
-                // amplitude modulation
-                model.set(vcedParameters[pos++], (data[patch + op * 10 + 6 + 6] >>> 6) & 1);
-                // key velocity sensitivity
-                model.set(vcedParameters[pos++], (data[patch + op * 10 + 6 + 6] >>> 0) & 7);
-                // operator output level
-                model.set(vcedParameters[pos++], data[patch + op * 10 + 7 + 6] & 127);
-                // frequency
-                model.set(vcedParameters[pos++], data[patch + op * 10 + 8 + 6] & 63);
-                // detune
-                model.set(vcedParameters[pos++], (data[patch + op * 10 + 9 + 6] >>> 0) & 7);
-                // key velocity sensitivity sign (V50 only)
-                model.set("operator" + (op + 1) + "vkeyvelocitysensitivitysign", (data[patch + op * 10 + 9 + 6] >>> 3) & 1);
-                // level scaing sign (V50 only)
-                model.set("operator" + (op + 1) + "vlevelscalingsign", (data[patch + op * 10 + 9 + 6] >>> 6) & 1);
+            // attack rate
+            model.set(vcedParameters[pos++], data[patch + op * 10 + 0 + 6] & 31);
+            // decay 1 rate
+            model.set(vcedParameters[pos++], data[patch + op * 10 + 1 + 6] & 31);
+            // decay 2 rate
+            model.set(vcedParameters[pos++], data[patch + op * 10 + 2 + 6] & 31);
+            // release rate
+            model.set(vcedParameters[pos++], data[patch + op * 10 + 3 + 6] & 15);
+            // decay 1 level
+            model.set(vcedParameters[pos++], data[patch + op * 10 + 4 + 6] & 15);
+            // level scaling
+            model.set(vcedParameters[pos++], data[patch + op * 10 + 5 + 6] & 127);
+            // rate scaling
+            model.set(vcedParameters[pos++], (data[patch + op * 10 + 9 + 6] >>> 3) & 3);
+            // eg bias sensitivity
+            model.set(vcedParameters[pos++], (data[patch + op * 10 + 6 + 6] >>> 3) & 7);
+            // amplitude modulation
+            model.set(vcedParameters[pos++], (data[patch + op * 10 + 6 + 6] >>> 6) & 1);
+            // key velocity sensitivity
+            model.set(vcedParameters[pos++], (data[patch + op * 10 + 6 + 6] >>> 0) & 7);
+            // operator output level
+            model.set(vcedParameters[pos++], data[patch + op * 10 + 7 + 6] & 127);
+            // frequency
+            model.set(vcedParameters[pos++], data[patch + op * 10 + 8 + 6] & 63);
+            // detune
+            model.set(vcedParameters[pos++], (data[patch + op * 10 + 9 + 6] >>> 0) & 7);
+            // key velocity sensitivity sign (V50 only)
+            model.set("operator" + (op + 1) + "vkeyvelocitysensitivitysign", (data[patch + op * 10 + 9 + 6] >>> 3) & 1);
+            // level scaing sign (V50 only)
+            model.set("operator" + (op + 1) + "vlevelscalingsign", (data[patch + op * 10 + 9 + 6] >>> 6) & 1);
             }
 
         // algorithm
@@ -2062,18 +2062,18 @@ public class Yamaha4Op extends Synth
         pos = 0;        // reset, we're now doing ACED
         for(int op = 0; op < 4; op++)
             {
-                // fixed frequency
-                model.set(acedParameters[pos++], (data[patch + op * 2 + 73 + 6] >>> 3) & 1);
-                // fixed frequency range
-                model.set(acedParameters[pos++], (data[patch + op * 2 + 73 + 6] >>> 0) & 7);
-                // frequency range fine
-                model.set(acedParameters[pos++], (data[patch + op * 2 + 74 + 6] >>> 0) & 15);
-                // operator waveform
-                model.set(acedParameters[pos++], (data[patch + op * 2 + 74 + 6] >>> 4) & 7);
-                // eg shift
-                model.set(acedParameters[pos++], (data[patch + op * 2 + 73 + 6] >>> 4) & 3);
-                // fixed range mode (V50 only)
-                model.set("operator" + (op + 1) + "vshift", (data[patch + op * 2 + 73 + 6] >>> 6) & 1);  // in docs as "FIXRM" for "FIX RANGE MODE"
+            // fixed frequency
+            model.set(acedParameters[pos++], (data[patch + op * 2 + 73 + 6] >>> 3) & 1);
+            // fixed frequency range
+            model.set(acedParameters[pos++], (data[patch + op * 2 + 73 + 6] >>> 0) & 7);
+            // frequency range fine
+            model.set(acedParameters[pos++], (data[patch + op * 2 + 74 + 6] >>> 0) & 15);
+            // operator waveform
+            model.set(acedParameters[pos++], (data[patch + op * 2 + 74 + 6] >>> 4) & 7);
+            // eg shift
+            model.set(acedParameters[pos++], (data[patch + op * 2 + 73 + 6] >>> 4) & 3);
+            // fixed range mode (V50 only)
+            model.set("operator" + (op + 1) + "vshift", (data[patch + op * 2 + 73 + 6] >>> 6) & 1);  // in docs as "FIXRM" for "FIX RANGE MODE"
             }
 
         // reverb rate
@@ -2123,11 +2123,11 @@ public class Yamaha4Op extends Synth
         
         revise();
         return PARSE_SUCCEEDED;
-    }
+        }
  
     
     public Object[] emitAll(Model tempModel, boolean toWorkingMemory, boolean toFile)
-    {
+        {
         if (tempModel == null)
             tempModel = getModel();
         
@@ -2145,68 +2145,68 @@ public class Yamaha4Op extends Synth
         byte[] data = null;
         if (getSynthType() == TYPE_V50)
             {
-                // ACED3
-                result[0] = new byte[38];
-                data = new byte[30];
+            // ACED3
+            result[0] = new byte[38];
+            data = new byte[30];
         
-                data[0] = (byte)'L';
-                data[1] = (byte)'M';
-                data[2] = (byte)' ';
-                data[3] = (byte)' ';
-                data[4] = (byte)'8';
-                data[5] = (byte)'0';
-                data[6] = (byte)'7';
-                data[7] = (byte)'3';
-                data[8] = (byte)'A';
-                data[9] = (byte)'E';
+            data[0] = (byte)'L';
+            data[1] = (byte)'M';
+            data[2] = (byte)' ';
+            data[3] = (byte)' ';
+            data[4] = (byte)'8';
+            data[5] = (byte)'0';
+            data[6] = (byte)'7';
+            data[7] = (byte)'3';
+            data[8] = (byte)'A';
+            data[9] = (byte)'E';
                 
-                for(int i = 0; i < aced3Parameters.length; i++)
-                    {
-                        if (!(aced3Parameters[i].equals("-")))
-                            data[i + 10] = (byte)(model.get(aced3Parameters[i]));
-                    }
+            for(int i = 0; i < aced3Parameters.length; i++)
+                {
+                if (!(aced3Parameters[i].equals("-")))
+                    data[i + 10] = (byte)(model.get(aced3Parameters[i]));
+                }
         
-                result[0][0] = (byte)0xF0;
-                result[0][1] = 0x43;
-                result[0][2] = (byte)(getChannelOut()); //(byte)(32 + getChannelOut());
-                result[0][3] = (byte)0x7E;
-                result[0][4] = 0x00;
-                result[0][5] = 0x1E;
-                System.arraycopy(data, 0, result[0], 6, data.length);
-                result[0][6 + data.length] = produceChecksum(data);
-                result[0][7 + data.length] = (byte)0xF7;
+            result[0][0] = (byte)0xF0;
+            result[0][1] = 0x43;
+            result[0][2] = (byte)(getChannelOut()); //(byte)(32 + getChannelOut());
+            result[0][3] = (byte)0x7E;
+            result[0][4] = 0x00;
+            result[0][5] = 0x1E;
+            System.arraycopy(data, 0, result[0], 6, data.length);
+            result[0][6 + data.length] = produceChecksum(data);
+            result[0][7 + data.length] = (byte)0xF7;
             }
         else
             {
-                // EFEDS
-                result[0] = new byte[21];
-                data = new byte[13];
+            // EFEDS
+            result[0] = new byte[21];
+            data = new byte[13];
 
-                data[0] = (byte)'L';
-                data[1] = (byte)'M';
-                data[2] = (byte)' ';
-                data[3] = (byte)' ';
-                data[4] = (byte)'8';
-                data[5] = (byte)'0';
-                data[6] = (byte)'3';
-                data[7] = (byte)'6';
-                data[8] = (byte)'E';
-                data[9] = (byte)'F';
+            data[0] = (byte)'L';
+            data[1] = (byte)'M';
+            data[2] = (byte)' ';
+            data[3] = (byte)' ';
+            data[4] = (byte)'8';
+            data[5] = (byte)'0';
+            data[6] = (byte)'3';
+            data[7] = (byte)'6';
+            data[8] = (byte)'E';
+            data[9] = (byte)'F';
                 
-                for(int i = 0; i < efedsParameters.length; i++)
-                    {
-                        data[i + 10] = (byte)(model.get(efedsParameters[i]));
-                    }
+            for(int i = 0; i < efedsParameters.length; i++)
+                {
+                data[i + 10] = (byte)(model.get(efedsParameters[i]));
+                }
 
-                result[0][0] = (byte)0xF0;
-                result[0][1] = 0x43;
-                result[0][2] = (byte)(getChannelOut());
-                result[0][3] = (byte)0x7E;
-                result[0][4] = 0x00;
-                result[0][5] = 0x0D;
-                System.arraycopy(data, 0, result[0], 6, data.length);
-                result[0][6 + data.length] = produceChecksum(data);
-                result[0][7 + data.length] = (byte)0xF7;
+            result[0][0] = (byte)0xF0;
+            result[0][1] = 0x43;
+            result[0][2] = (byte)(getChannelOut());
+            result[0][3] = (byte)0x7E;
+            result[0][4] = 0x00;
+            result[0][5] = 0x0D;
+            System.arraycopy(data, 0, result[0], 6, data.length);
+            result[0][6 + data.length] = produceChecksum(data);
+            result[0][7 + data.length] = (byte)0xF7;
             }
         
         // ACED2
@@ -2226,15 +2226,15 @@ public class Yamaha4Op extends Synth
         
         for(int i = 0; i < aced2Parameters.length; i++)
             {
-                if (i == 8)  // "LS SIGN" (level scaling sign), handle specially
-                    {
-                        data[i + 10] = (byte)(  model.get("operator1vlevelscalingsign") |
-                                                (model.get("operator2vlevelscalingsign") << 1) |
-                                                (model.get("operator3vlevelscalingsign") << 2) |
-                                                (model.get("operator4vlevelscalingsign") << 3));
-                    }
-                else if (!(aced2Parameters[i].equals("-")))
-                    data[i + 10] = (byte)(model.get(aced2Parameters[i]));
+            if (i == 8)  // "LS SIGN" (level scaling sign), handle specially
+                {
+                data[i + 10] = (byte)(  model.get("operator1vlevelscalingsign") |
+                    (model.get("operator2vlevelscalingsign") << 1) |
+                    (model.get("operator3vlevelscalingsign") << 2) |
+                    (model.get("operator4vlevelscalingsign") << 3));
+                }
+            else if (!(aced2Parameters[i].equals("-")))
+                data[i + 10] = (byte)(model.get(aced2Parameters[i]));
             }
 
         result[1][0] = (byte)0xF0;
@@ -2264,17 +2264,17 @@ public class Yamaha4Op extends Synth
         
         for(int i = 0; i < acedParameters.length; i++)
             {
-                data[i + 10] = (byte)(model.get(acedParameters[i]));
+            data[i + 10] = (byte)(model.get(acedParameters[i]));
 
-                // handle low fine ratio values
-                for(int j = 0; j < 4; j++)
+            // handle low fine ratio values
+            for(int j = 0; j < 4; j++)
+                {
+                if (acedParameters[i].equals("operator" + j + "frequencyfine"))
                     {
-                        if (acedParameters[i].equals("operator" + j + "frequencyfine"))
-                            {
-                                if (model.get("operator" + j + "frequencycoarse") < 4)  // it's < 1.0
-                                    data[i + 10] = (byte)(Math.min(data[i + 10] , 7));  //  only first 8 values are legal
-                            }
+                    if (model.get("operator" + j + "frequencycoarse") < 4)  // it's < 1.0
+                        data[i + 10] = (byte)(Math.min(data[i + 10] , 7));  //  only first 8 values are legal
                     }
+                }
             }
 
         result[2][0] = (byte)0xF0;
@@ -2293,27 +2293,27 @@ public class Yamaha4Op extends Synth
         int pos = 0;
         for(int i = 0; i < vcedParameters.length - 16; i++)  // no name, no extra gunk
             {
-                if (vcedParameters[i].endsWith("keyvelocitysensitivity"))  // gotta break out the sign for the V50
-                    {
-                        data[pos++] = (byte)(model.get(vcedParameters[i]) | 
-                                             (model.get(vcedParameters[i].substring(0,9) + "v" + vcedParameters[i].substring(9) + "sign") << 3));
-                    }
-                else
-                    {
-                        data[pos++] = (byte)(model.get(vcedParameters[i]));
-                    }
+            if (vcedParameters[i].endsWith("keyvelocitysensitivity"))  // gotta break out the sign for the V50
+                {
+                data[pos++] = (byte)(model.get(vcedParameters[i]) | 
+                    (model.get(vcedParameters[i].substring(0,9) + "v" + vcedParameters[i].substring(9) + "sign") << 3));
+                }
+            else
+                {
+                data[pos++] = (byte)(model.get(vcedParameters[i]));
+                }
             }
         
         String name = model.get("name", "INIT VOICE") + "          ";
         
         for(int i = 0; i < 10; i++)
             {
-                data[pos++] = (byte)(name.charAt(i));
+            data[pos++] = (byte)(name.charAt(i));
             }
 
         for(int i = vcedParameters.length - 6; i < vcedParameters.length; i++)
             {
-                data[pos++] = (byte)(model.get(vcedParameters[i]));
+            data[pos++] = (byte)(model.get(vcedParameters[i]));
             }
         
         result[3][0] = (byte)0xF0;
@@ -2327,11 +2327,11 @@ public class Yamaha4Op extends Synth
         result[3][7 + data.length] = (byte)0xF7;
 
         return result;
-    }
+        }
 
     /** Generate a TX81Z checksum of the data bytes */
     byte produceChecksum(byte[] bytes)
-    {
+        {
         //      The TX81Z manual says the checksum is the
         //              "Twos complement of the lower 7 bits of the sum of all databytes".
         //
@@ -2344,24 +2344,24 @@ public class Yamaha4Op extends Synth
         for(int i = 0; i < bytes.length; i++)
             checksum = (checksum + bytes[i]) & 255;
         return (byte)((256 - checksum) & 127);
-    }
+        }
 
     public void performRequestDump(Model tempModel, boolean changePatch)
-    {
+        {
         if (tempModel == null)
             tempModel = getModel();
 
         // We ALWAYS change the patch no matter what.  We have to.
         performChangePatch(tempModel);
         tryToSendSysex(requestDump(tempModel));
-    }
+        }
 
     public byte[] requestDump(Model tempModel) 
-    {
+        {
         // since performRequestDump ALWAYS changes the patch, we might
         // as well just call requestCurrentDump() here 
         return requestCurrentDump(); 
-    }
+        }
     
 
     // DX21 Dump Request                F0 43 2CH 03 F7
@@ -2379,78 +2379,78 @@ public class Yamaha4Op extends Synth
     // V50 Dump Request                 [PC 122 to switch to Internal, 123 for Card, 124 for Preset.  Then 0...99 for the voice in question]
 
     public byte[] requestCurrentDump()
-    {
+        {
         byte channel = (byte)(getChannelOut());
         switch (getSynthType())
             {
             case TYPE_DX21: 
             case TYPE_DX27_DX100:
                 {
-                    return new byte[] { (byte)0xF0, 0x43, (byte)(32 + channel), 0x03, (byte)0xF7 }; 
+                return new byte[] { (byte)0xF0, 0x43, (byte)(32 + channel), 0x03, (byte)0xF7 }; 
                 }
-                //              break;
+            //              break;
             case TYPE_DX11:
                 {
-                    return new byte[] { (byte)0xF0, 0x43, (byte)(32 + channel), 0x7E, 
-                                        (byte)'L', (byte)'M', (byte)' ', (byte)' ',
-                                        (byte)'8', (byte)'0', (byte)'2', (byte)'3',
-                                        (byte)'A', (byte)'E', (byte)0xF7 }; 
+                return new byte[] { (byte)0xF0, 0x43, (byte)(32 + channel), 0x7E, 
+                    (byte)'L', (byte)'M', (byte)' ', (byte)' ',
+                    (byte)'8', (byte)'0', (byte)'2', (byte)'3',
+                    (byte)'A', (byte)'E', (byte)0xF7 }; 
                 }
-                //              break;
+            //              break;
             case TYPE_TX81Z:
                 {
-                    return new byte[] { (byte)0xF0, 0x43, (byte)(32 + channel), 0x7E, 
-                                        (byte)'L', (byte)'M', (byte)' ', (byte)' ',
-                                        (byte)'8', (byte)'9', (byte)'7', (byte)'6',
-                                        (byte)'A', (byte)'E', (byte)0xF7 }; 
+                return new byte[] { (byte)0xF0, 0x43, (byte)(32 + channel), 0x7E, 
+                    (byte)'L', (byte)'M', (byte)' ', (byte)' ',
+                    (byte)'8', (byte)'9', (byte)'7', (byte)'6',
+                    (byte)'A', (byte)'E', (byte)0xF7 }; 
                 }
-                //              break;
+            //              break;
             case TYPE_TQ5_YS100_YS200_B200:
                 {
-                    return new byte[] { (byte)0xF0, 0x43, (byte)(32 + channel), 0x7E, 
-                                        (byte)'L', (byte)'M', (byte)' ', (byte)' ',
-                                        (byte)'8', (byte)'0', (byte)'3', (byte)'6',
-                                        (byte)'E', (byte)'F', (byte)0xF7 }; 
+                return new byte[] { (byte)0xF0, 0x43, (byte)(32 + channel), 0x7E, 
+                    (byte)'L', (byte)'M', (byte)' ', (byte)' ',
+                    (byte)'8', (byte)'0', (byte)'3', (byte)'6',
+                    (byte)'E', (byte)'F', (byte)0xF7 }; 
                 }
-                //              break;
+            //              break;
             case TYPE_V50:
                 {
-                    return new byte[] { (byte)0xF0, 0x43, (byte)(32 + channel), 0x7E, 
-                                        (byte)'L', (byte)'M', (byte)' ', (byte)' ',
-                                        (byte)'8', (byte)'0', (byte)'7', (byte)'3',
-                                        (byte)'A', (byte)'E', (byte)0xF7 }; 
+                return new byte[] { (byte)0xF0, 0x43, (byte)(32 + channel), 0x7E, 
+                    (byte)'L', (byte)'M', (byte)' ', (byte)' ',
+                    (byte)'8', (byte)'0', (byte)'7', (byte)'3',
+                    (byte)'A', (byte)'E', (byte)0xF7 }; 
                 }
-                //              break;
+            //              break;
             }
         System.err.println("Warning (Yamaha4Op): Invalid synth type in requestCurrentDump(): " + getSynthType());
         return new byte[] { }; // just in case
-    }
+        }
     
     public int getPauseAfterChangePatch() { return 100; }               // TX81Z fails if it's less than 50 or so
     
     final static int FAIL = -1;
 
     public static int findSysexLength(byte[] data, int pos)
-    {
+        {
         for(int i = pos; i < data.length; i++)
             {
-                if (data[i] == (byte)0xF7)
-                    return i + 1;
+            if (data[i] == (byte)0xF7)
+                return i + 1;
             }
         return FAIL;
-    }
+        }
     
     ArrayList<byte[]> resultsSoFar = new ArrayList<byte[]>();
         
     public void doRequestMerge(double percentage)
-    {
+        {
         resultsSoFar = new ArrayList<byte[]>();
         super.doRequestMerge(percentage);
-    }
+        }
 
     // gotta get two merge results
     public int merge(byte[] data, double probability)
-    {
+        {
         resultsSoFar.add(data);
         if (data.length == 101 &&
             data[0] == (byte)0xF0 &&
@@ -2460,31 +2460,31 @@ public class Yamaha4Op extends Synth
             data[4] == (byte)0x00 &&
             data[5] == (byte)0x5D)                      // VCED, flatten
             {
-                // Flatten
-                int count = 0;
-                for(int i = 0; i < resultsSoFar.size(); i++)
-                    {
-                        count += resultsSoFar.get(i).length;
-                    }
-                byte[] total = new byte[count];
-                count = 0;
-                for(int i = 0; i < resultsSoFar.size(); i++)
-                    {
-                        byte[] d = resultsSoFar.get(i);
-                        System.arraycopy(d, 0, total, count, d.length);
-                        count += d.length;
-                    }
-                return super.merge(total, probability);
+            // Flatten
+            int count = 0;
+            for(int i = 0; i < resultsSoFar.size(); i++)
+                {
+                count += resultsSoFar.get(i).length;
+                }
+            byte[] total = new byte[count];
+            count = 0;
+            for(int i = 0; i < resultsSoFar.size(); i++)
+                {
+                byte[] d = resultsSoFar.get(i);
+                System.arraycopy(d, 0, total, count, d.length);
+                count += d.length;
+                }
+            return super.merge(total, probability);
             }
         else
             {
-                return PARSE_INCOMPLETE;
+            return PARSE_INCOMPLETE;
             }
-    }
+        }
     
     public static final int MAXIMUM_NAME_LENGTH = 10;
     public String revisePatchName(String name)
-    {
+        {
         name = super.revisePatchName(name);  // trim first time
         if (name.length() > MAXIMUM_NAME_LENGTH)
             name = name.substring(0, MAXIMUM_NAME_LENGTH);
@@ -2492,18 +2492,18 @@ public class Yamaha4Op extends Synth
         StringBuffer nameb = new StringBuffer(name);                            
         for(int i = 0 ; i < nameb.length(); i++)
             {
-                char c = nameb.charAt(i);
-                if (c < 32 || c > 127)
-                    nameb.setCharAt(i, ' ');
+            char c = nameb.charAt(i);
+            if (c < 32 || c > 127)
+                nameb.setCharAt(i, ' ');
             }
         name = nameb.toString();
         return super.revisePatchName(name);  // trim again
-    }        
+        }        
 
 
     /** Verify that all the parameters are within valid values, and tweak them if not. */
     public void revise()
-    {
+        {
         // check the easy stuff -- out of range parameters
         super.revise();
 
@@ -2511,7 +2511,7 @@ public class Yamaha4Op extends Synth
         String newnm = revisePatchName(nm);
         if (!nm.equals(newnm))
             model.set("name", newnm);
-    }
+        }
         
     public static String getSynthName() { return "Yamaha 4-Op FM"; }
 
@@ -2532,7 +2532,7 @@ public class Yamaha4Op extends Synth
     // V50 Dump Request                 [PC 122 to switch to Internal, 123 for Card, 124 for Preset.  Then 0...99 for the voice in question]
 
     public void changePatch(Model tempModel) 
-    {
+        {
         int bank = tempModel.get("bank");
         int number = tempModel.get("number");
 
@@ -2540,129 +2540,129 @@ public class Yamaha4Op extends Synth
             {
             case TYPE_DX21:
                 {
-                    if (number >= 32)
-                        {
-                            System.err.println("Warning (Yamaha4Op): Patch number is invalid (" + number + ", changing to " + (number % 32));
-                            number = number % 32;
-                        }
-                    tryToSendMIDI(buildPC(getChannelOut(), number));
+                if (number >= 32)
+                    {
+                    System.err.println("Warning (Yamaha4Op): Patch number is invalid (" + number + ", changing to " + (number % 32));
+                    number = number % 32;
+                    }
+                tryToSendMIDI(buildPC(getChannelOut(), number));
                 }
             case TYPE_DX27_DX100:
                 {
-                    if (number >= 24)
-                        {
-                            System.err.println("Warning (Yamaha4Op): Patch number is invalid (" + number + ", changing to " + (number % 24));
-                            number = number % 24;
-                        }
-                    number = number + bank * 24;
-                    tryToSendMIDI(buildPC(getChannelOut(), number));
+                if (number >= 24)
+                    {
+                    System.err.println("Warning (Yamaha4Op): Patch number is invalid (" + number + ", changing to " + (number % 24));
+                    number = number % 24;
+                    }
+                number = number + bank * 24;
+                tryToSendMIDI(buildPC(getChannelOut(), number));
                 }
-                break;
+            break;
             case TYPE_DX11:
             case TYPE_TX81Z:
                 {
-                    // [Note: I don't know if this will work for the DX11, but I'm taking a shot here.]
-                    // 
-                    // A program change in the TX81Z is a complicated affair.  We need to do three things:
-                    //
-                    // 1. Modify a slot in the program change table to the patch we want.  We'll modify slot 127.
-                    //
-                    // 2. At this point the TX81Z is in a strange "I got edited via MIDI" mode.  We need to get
-                    //    out of that and into standard program mode.  We do this by using sysex commands to virtually press
-                    //    the PLAY/PERFORM switch.
-                    //
-                    // 3. Now we're either in PLAY mode or we're in PERFORM mode.  At this point we send a PC 127, which
-                    //    causes the system to look up slot 127 in its table, discover it's a performance patch,
-                    //    and switch to that, while also changing to PERFORM mode. 
+                // [Note: I don't know if this will work for the DX11, but I'm taking a shot here.]
+                // 
+                // A program change in the TX81Z is a complicated affair.  We need to do three things:
+                //
+                // 1. Modify a slot in the program change table to the patch we want.  We'll modify slot 127.
+                //
+                // 2. At this point the TX81Z is in a strange "I got edited via MIDI" mode.  We need to get
+                //    out of that and into standard program mode.  We do this by using sysex commands to virtually press
+                //    the PLAY/PERFORM switch.
+                //
+                // 3. Now we're either in PLAY mode or we're in PERFORM mode.  At this point we send a PC 127, which
+                //    causes the system to look up slot 127 in its table, discover it's a performance patch,
+                //    and switch to that, while also changing to PERFORM mode. 
 
-                    // Change program change table position 127 to our desired patch
-                    int val = bank * 32 + number;
-                    byte lo = (byte)(val & 127);
-                    byte hi = (byte)(val >>> 7);
-                    byte[] table = new byte[9];
-                    table[0] = (byte)0xF0;
-                    table[1] = (byte)0x43;
-                    table[2] = (byte)(16 + getChannelOut());
-                    table[3] = (byte)0x10;
-                    table[4] = (byte)127;  // really!
-                    table[5] = (byte)127;  // we're changing table position 127
-                    table[6] = hi;
-                    table[7] = lo;
-                    table[8] = (byte)0xF7;
-                    tryToSendSysex(table);
+                // Change program change table position 127 to our desired patch
+                int val = bank * 32 + number;
+                byte lo = (byte)(val & 127);
+                byte hi = (byte)(val >>> 7);
+                byte[] table = new byte[9];
+                table[0] = (byte)0xF0;
+                table[1] = (byte)0x43;
+                table[2] = (byte)(16 + getChannelOut());
+                table[3] = (byte)0x10;
+                table[4] = (byte)127;  // really!
+                table[5] = (byte)127;  // we're changing table position 127
+                table[6] = hi;
+                table[7] = lo;
+                table[8] = (byte)0xF7;
+                tryToSendSysex(table);
 
-                    // Instruct the TX81Z to press its "PLAY/PERFORM" button.  Or "SINGLE" on the DX11
-                    byte PP = getSynthType() == TYPE_TX81Z ? (byte) 68 : (byte) 118;                // 119 is "PERFORM", 118 is "SINGLE"
-                    byte VV = (byte) 0;
-                    byte[] data = new byte[] { (byte)0xF0, (byte)0x43, (byte)(16 + getChannelOut()), REMOTE_SWITCH_GROUP, PP, (byte)0x7F, (byte)0xF7 };
-                    tryToSendSysex(data);
+                // Instruct the TX81Z to press its "PLAY/PERFORM" button.  Or "SINGLE" on the DX11
+                byte PP = getSynthType() == TYPE_TX81Z ? (byte) 68 : (byte) 118;                // 119 is "PERFORM", 118 is "SINGLE"
+                byte VV = (byte) 0;
+                byte[] data = new byte[] { (byte)0xF0, (byte)0x43, (byte)(16 + getChannelOut()), REMOTE_SWITCH_GROUP, PP, (byte)0x7F, (byte)0xF7 };
+                tryToSendSysex(data);
 
-                    // Do the program change to program 127
-                    tryToSendMIDI(buildPC(getChannelOut(), 127));
+                // Do the program change to program 127
+                tryToSendMIDI(buildPC(getChannelOut(), 127));
                 }
-                break;
+            break;
             case TYPE_TQ5_YS100_YS200_B200:
                 {
-                    if (bank > 3) 
-                        {
-                            System.err.println("Warning (Yamaha4Op): bank is invalid (" + bank + "), changing to 0");
-                            bank = 0;
-                        }
+                if (bank > 3) 
+                    {
+                    System.err.println("Warning (Yamaha4Op): bank is invalid (" + bank + "), changing to 0");
+                    bank = 0;
+                    }
                                 
-                    if (number >= 100)
-                        {
-                            System.err.println("Warning (Yamaha4Op): Patch number is invalid (" + number + ", changing to " + (number % 100));
-                            number = number % 100;
-                        }
+                if (number >= 100)
+                    {
+                    System.err.println("Warning (Yamaha4Op): Patch number is invalid (" + number + ", changing to " + (number % 100));
+                    number = number % 100;
+                    }
                         
-                    // First we'll attempt to switch to the right bank by pressing magic butons
-                    byte[] data = new byte[] { (byte)0xF0, (byte)0x43, (byte)(16 + getChannelOut()), TQ5_REMOTE_SWITCH_GROUP,
+                // First we'll attempt to switch to the right bank by pressing magic butons
+                byte[] data = new byte[] { (byte)0xF0, (byte)0x43, (byte)(16 + getChannelOut()), TQ5_REMOTE_SWITCH_GROUP,
                                 
-                                               // documentation is wrong here.  The manual says 116 = card 117 = user 118 = preset
-                                               // but in fact it's 116 = preset 117 = user 118 = card
-                                               (byte)(bank == 0 ? 116 :                // user
-                                                      (bank == 1 ? 117 :      // preset
-                                                       118)),                  // card
-                                               (byte)127, (byte)0xF7 };
-                    tryToSendSysex(data);
+                    // documentation is wrong here.  The manual says 116 = card 117 = user 118 = preset
+                    // but in fact it's 116 = preset 117 = user 118 = card
+                    (byte)(bank == 0 ? 116 :                // user
+                            (bank == 1 ? 117 :      // preset
+                            118)),                  // card
+                    (byte)127, (byte)0xF7 };
+                tryToSendSysex(data);
                                 
-                    // Do the program change
-                    tryToSendMIDI(buildPC(getChannelOut(), number));
+                // Do the program change
+                tryToSendMIDI(buildPC(getChannelOut(), number));
                 }
-                break;                  
+            break;                  
             case TYPE_V50:
                 {
-                    if (bank > 3) 
-                        {
-                            System.err.println("Warning (Yamaha4Op): bank is invalid (" + bank + "), changing to 0");
-                            bank = 0;
-                        }
+                if (bank > 3) 
+                    {
+                    System.err.println("Warning (Yamaha4Op): bank is invalid (" + bank + "), changing to 0");
+                    bank = 0;
+                    }
                                 
-                    if (number >= 100)
-                        {
-                            System.err.println("Warning (Yamaha4Op): Patch number is invalid (" + number + ", changing to " + (number % 100));
-                            number = number % 100;
-                        }
+                if (number >= 100)
+                    {
+                    System.err.println("Warning (Yamaha4Op): Patch number is invalid (" + number + ", changing to " + (number % 100));
+                    number = number % 100;
+                    }
                 
-                    // We do two PCs
-                    // First to change banks, this is a weird way to do it.
-                    tryToSendMIDI(buildPC(getChannelOut(), bank + 122));
-                    // Next to select the patcb                
-                    tryToSendMIDI(buildPC(getChannelOut(), number));
+                // We do two PCs
+                // First to change banks, this is a weird way to do it.
+                tryToSendMIDI(buildPC(getChannelOut(), bank + 122));
+                // Next to select the patcb                
+                tryToSendMIDI(buildPC(getChannelOut(), number));
                 }
-                break;                  
+            break;                  
             }
                 
         
         // we assume that we successfully did it
         if (!isMerging())  // we're actually loading the patch, not merging with it
             {
-                setSendMIDI(false);
-                model.set("number", number);
-                model.set("bank", bank);
-                setSendMIDI(true);
+            setSendMIDI(false);
+            model.set("number", number);
+            model.set("bank", bank);
+            setSendMIDI(true);
             }
-    }
+        }
     
     public String getPatchName(Model model) { return model.get("name", "INIT VOICE"); }
 
@@ -2674,42 +2674,42 @@ public class Yamaha4Op extends Synth
     // TQ5 Dump Request                 [We can access voices 0...99.  There are three BANKS, Internal, Preset, and Card.]
 
     public Model getNextPatchLocation(Model model)
-    {
+        {
         int bank = model.get("bank");
         int number = model.get("number");
         
         int type = getSynthType();
         int maxNumber =
             (type == TYPE_DX21 ? 32 :
-             (type == TYPE_DX27_DX100 ? 24 :
-              (type == TYPE_DX11 ? 32 :
-               (type == TYPE_TX81Z ? 32 :
-                100))));                // TQ5 and V50
+                (type == TYPE_DX27_DX100 ? 24 :
+                    (type == TYPE_DX11 ? 32 :
+                        (type == TYPE_TX81Z ? 32 :
+                        100))));                // TQ5 and V50
 
         int maxBank =
             (type == TYPE_DX21 ? 1 :
-             (type == TYPE_DX27_DX100 ? 5 :
-              (type == TYPE_DX11 ? 5 :
-               (type == TYPE_TX81Z ? 5 :
-                3))));                  // TQ5 and V50
+                (type == TYPE_DX27_DX100 ? 5 :
+                    (type == TYPE_DX11 ? 5 :
+                        (type == TYPE_TX81Z ? 5 :
+                        3))));                  // TQ5 and V50
                                                 
         number++;
         if (number >= maxNumber)
             {
-                bank++;
-                number = 0;
-                if (bank >= maxBank)
-                    bank = 0;
+            bank++;
+            number = 0;
+            if (bank >= maxBank)
+                bank = 0;
             }
                 
         Model newModel = buildModel();
         newModel.set("bank", bank);
         newModel.set("number", number);
         return newModel;
-    }
+        }
 
     public String getPatchLocationName(Model model)
-    {
+        {
         // getPatchLocationName() is called from sprout() as a test to see if we should enable
         // batch downloading.  If we haven't yet created an .init file, then parameters won't exist
         // yet and this method will bomb badly.  So we return null in this case.
@@ -2723,53 +2723,53 @@ public class Yamaha4Op extends Synth
             return BANKS[model.get("bank")] + (number > 9 ? "" : "0") + number;
         else if (type == TYPE_TQ5_YS100_YS200_B200)
             {
-                number -= 1;    // we start at 00
-                int bank = model.get("bank");
-                if (bank > 3) bank = 0;
-                return TQ5_BANKS[bank] + " " + (number > 9 ? "" : "0") + number;
+            number -= 1;    // we start at 00
+            int bank = model.get("bank");
+            if (bank > 3) bank = 0;
+            return TQ5_BANKS[bank] + " " + (number > 9 ? "" : "0") + number;
             }
         else if (type == TYPE_V50)
             {
-                number -= 1;    // we start at 00
-                int bank = model.get("bank");
-                if (bank > 3) bank = 0;
-                return V50_BANKS[bank] + " " + (number > 9 ? "" : "0") + number;
+            number -= 1;    // we start at 00
+            int bank = model.get("bank");
+            if (bank > 3) bank = 0;
+            return V50_BANKS[bank] + " " + (number > 9 ? "" : "0") + number;
             }
         else
             return "" + (number > 9 ? "" : "0") + number;
-    }
+        }
         
 
     public Object adjustBankSysexForEmit(byte[] data, Model model, int bank)
-    { 
+        { 
         data[2] = (byte) getChannelOut();
         return data; 
-    }
+        }
 
 
     public boolean testVerify(Synth synth2, String key, Object val1, Object val2)
-    {
+        {
         if (key.endsWith("frequencyfine"))  // this gets restricted to 7 if frequencycoarse is small, resulting in sanitycheck errors
             return true;
         if (((Yamaha4Op)synth2).getSynthType() == TYPE_V50)
             {
-                // Obviously won't have EFEDS parameters
-                return (
-                        key.equals("effectpreset") ||
-                        key.equals("effecttime") ||
-                        key.equals("effectbalance"));                   
+            // Obviously won't have EFEDS parameters
+            return (
+                key.equals("effectpreset") ||
+                key.equals("effecttime") ||
+                key.equals("effectbalance"));                   
             }
         else
             {
-                // Obviously won't have ACED3 parameters
-                return (
-                        key.equals("veffectparam1") ||
-                        key.equals("veffectparam2") ||
-                        key.equals("veffectparam3") ||
-                        key.equals("veffectsel") ||
-                        key.equals("veffectstereomix") ||
-                        key.equals("veffectbalance") ||
-                        key.equals("veffectoutlevel"));                 
+            // Obviously won't have ACED3 parameters
+            return (
+                key.equals("veffectparam1") ||
+                key.equals("veffectparam2") ||
+                key.equals("veffectparam3") ||
+                key.equals("veffectsel") ||
+                key.equals("veffectstereomix") ||
+                key.equals("veffectbalance") ||
+                key.equals("veffectoutlevel"));                 
             }
+        }
     }
-}

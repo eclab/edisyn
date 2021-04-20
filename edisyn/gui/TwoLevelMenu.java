@@ -14,7 +14,7 @@ import java.awt.event.*;
 */
 
 public class TwoLevelMenu extends JPanel
-{
+    {
     JComboBox primaryBox;
     JComboBox[] secondaryBox;
     JComboBox currentSecondary;
@@ -23,9 +23,9 @@ public class TwoLevelMenu extends JPanel
         
 
     public TwoLevelMenu(Object[] primary, Object[][] secondary, 
-                        String primaryLabel, String secondaryLabel, 
-                        int initialPrimary, int initialSecondary)
-    {
+        String primaryLabel, String secondaryLabel, 
+        int initialPrimary, int initialSecondary)
+        {
         double maxWidth = 0;
         primaryBox = new JComboBox(primary);
         primaryBox.setMaximumRowCount(25);
@@ -34,16 +34,16 @@ public class TwoLevelMenu extends JPanel
         // fix to standard widths
         for(int i = 0; i < secondary.length; i++)
             {
-                secondaryBox[i] = new JComboBox(secondary[i]);
-                secondaryBox[i].setMaximumRowCount(25);
-                double w = secondaryBox[i].getPreferredSize().getWidth();
-                if (maxWidth < w) maxWidth = w;
+            secondaryBox[i] = new JComboBox(secondary[i]);
+            secondaryBox[i].setMaximumRowCount(25);
+            double w = secondaryBox[i].getPreferredSize().getWidth();
+            if (maxWidth < w) maxWidth = w;
             }
         for(int i = 0; i < secondary.length; i++)
             {
-                Dimension d = secondaryBox[i].getPreferredSize();
-                d.width = (int)(maxWidth);
-                secondaryBox[i].setPreferredSize(d);
+            Dimension d = secondaryBox[i].getPreferredSize();
+            d.width = (int)(maxWidth);
+            secondaryBox[i].setPreferredSize(d);
             }
                 
         setLayout(new BorderLayout());
@@ -61,44 +61,44 @@ public class TwoLevelMenu extends JPanel
                 
         for(int i = 0; i < secondary.length; i++)
             {
-                secondaryBox[i].addItemListener(new ItemListener()
+            secondaryBox[i].addItemListener(new ItemListener()
+                {
+                public void itemStateChanged(ItemEvent e)
                     {
-                        public void itemStateChanged(ItemEvent e)
+                    if (e.getStateChange() == ItemEvent.SELECTED)       // not interested in deselection events
                         {
-                            if (e.getStateChange() == ItemEvent.SELECTED)       // not interested in deselection events
-                                {
-                                    selection(getPrimary(), getSecondary());
-                                }
+                        selection(getPrimary(), getSecondary());
                         }
-                    });
+                    }
+                });
             }
 
         primaryBox.addItemListener(new ItemListener()
             {
-                public void itemStateChanged(ItemEvent e)
+            public void itemStateChanged(ItemEvent e)
                 {
-                    if (e.getStateChange() == ItemEvent.SELECTED)       // not interested in deselection events
-                        {
-                            updateSecondaryBox();
-                            selection(getPrimary(), getSecondary());
-                        }
+                if (e.getStateChange() == ItemEvent.SELECTED)       // not interested in deselection events
+                    {
+                    updateSecondaryBox();
+                    selection(getPrimary(), getSecondary());
+                    }
                 }
             });
-    }
+        }
                 
     /** Override this to be informed when a selection is made. */
     public void selection(int primary, int secondary) { }
         
     void updateSecondaryBox()
-    {
+        {
         currentSecondaryContainer.remove(currentSecondary);
         currentSecondary = secondaryBox[primaryBox.getSelectedIndex()];
         currentSecondaryContainer.add(currentSecondary, BorderLayout.SOUTH);
         currentSecondaryContainer.revalidate();
         currentSecondaryContainer.repaint();
-    }
+        }
                 
     public int getPrimary() { return primaryBox.getSelectedIndex(); }
     public int getSecondary() { return currentSecondary.getSelectedIndex(); }
 
-}
+    }

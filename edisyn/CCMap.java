@@ -14,7 +14,7 @@ import java.util.prefs.*;
 */
 
 public class CCMap
-{
+    {
     HashMap map = new HashMap();
     HashMap reverseMap = new HashMap();
     HashMap typeMap = new HashMap();
@@ -30,159 +30,159 @@ public class CCMap
     public static final int TYPE_NRPN = 3;
     
     public Integer munge(int cc, int pane)
-    {
+        {
         return Integer.valueOf((cc << 8) | pane);
-    }
+        }
         
     public int cc(Integer munge)
-    {
+        {
         if (munge == null) return -1;
         else return munge.intValue() >>> 8;
-    }
+        }
         
     public int pane(Integer munge)
-    {
+        {
         if (munge == null) return -1;
         else return munge & 255;
-    }
+        }
         
     public int getTypeForCCPane(int cc, int pane)
-    {
+        {
         Integer val = (Integer)(typeMap.get(munge(cc, pane)));
         if (val == null) return -1;
         else return (val.intValue());
-    }
+        }
         
     public String getKeyForCCPane(int cc, int pane)
-    {
+        {
         return getKeyForInteger(munge(cc, pane));
-    }
+        }
         
     /** Returns the model key for the given CC value, or null if there is none. */
     public String getKeyForInteger(Integer munge)
-    {
+        {
         return (String)map.get(munge);
-    }
+        }
         
     /** Returns the model key for the given CC value, or null if there is none. */
     public Integer getIntegerForKey(String key)
-    {
+        {
         return (Integer)reverseMap.get(key);
-    }
+        }
         
     public int getCCForKey(String key)
-    {
+        {
         return cc(getIntegerForKey(key));
-    }
+        }
                 
     public int getPaneForKey(String key)
-    {
+        {
         return pane(getIntegerForKey(key));
-    }
+        }
     
     public void setKeyForCCPane(int cc, int pane, String key)
-    {
+        {
         setKeyForInteger(munge(cc, pane), key);
-    }
+        }
         
     public void setTypeForCCPane(int cc, int pane, int type)
-    {
+        {
         typeMap.put(munge(cc, pane), Integer.valueOf(type));
         typePrefs.put("" + munge(cc, pane).intValue(), "" + type);
         try 
             {
-                typePrefs.sync();
+            typePrefs.sync();
             }
         catch (Exception ex)
             {
-                Synth.handleException(ex);
+            Synth.handleException(ex);
             }
-    }
+        }
     
     /** Sets the model key for the given CC value, and syncs the Preferences (which isn't cheap). */
     public void setKeyForInteger(Integer munge, String key)
-    {
+        {
         map.put(munge, key);
         reverseMap.put(key, munge);
                 
         keyPrefs.put("" + munge.intValue(), key);
         try 
             {
-                keyPrefs.sync();
+            keyPrefs.sync();
             }
         catch (Exception ex)
             {
-                Synth.handleException(ex);
+            Synth.handleException(ex);
             }
-    }
+        }
 
     
     public CCMap(Preferences keyPrefs, Preferences typePrefs)
-    {
+        {
         this.keyPrefs = keyPrefs;
         this.typePrefs = typePrefs;
         
         // do a load
         try
             {
-                String[] keys = keyPrefs.keys();
-                for(int i = 0; i < keys.length; i++)
-                    {
-                        // each Key holds a CC INTEGER
+            String[] keys = keyPrefs.keys();
+            for(int i = 0; i < keys.length; i++)
+                {
+                // each Key holds a CC INTEGER
                         
-                        int munge = 0;
-                        try { munge = Integer.parseInt(keys[i]); }
-                        catch (Exception e) { Synth.handleException(e); }
+                int munge = 0;
+                try { munge = Integer.parseInt(keys[i]); }
+                catch (Exception e) { Synth.handleException(e); }
                         
-                        // each Value holds a MODEL KEY STRING
+                // each Value holds a MODEL KEY STRING
                         
-                        map.put(Integer.valueOf(munge), keyPrefs.get(keys[i], "-"));
-                        reverseMap.put(keyPrefs.get(keys[i], "-"), Integer.valueOf(munge));
-                    }
+                map.put(Integer.valueOf(munge), keyPrefs.get(keys[i], "-"));
+                reverseMap.put(keyPrefs.get(keys[i], "-"), Integer.valueOf(munge));
+                }
             }
         catch (Exception ex)
             {
-                Synth.handleException(ex);
+            Synth.handleException(ex);
             }
 
         try
             {
-                String[] keys = typePrefs.keys();
-                for(int i = 0; i < keys.length; i++)
-                    {
-                        // each Key holds a CC INTEGER
+            String[] keys = typePrefs.keys();
+            for(int i = 0; i < keys.length; i++)
+                {
+                // each Key holds a CC INTEGER
                         
-                        int munge = 0;
-                        try { munge = Integer.parseInt(keys[i]); }
-                        catch (Exception e) { Synth.handleException(e); }
+                int munge = 0;
+                try { munge = Integer.parseInt(keys[i]); }
+                catch (Exception e) { Synth.handleException(e); }
                         
-                        // each Value holds a TYPE INTEGER
+                // each Value holds a TYPE INTEGER
 
-                        int type = 0;
-                        try { type = Integer.parseInt(typePrefs.get(keys[i], "0")); }
-                        catch (Exception e) { Synth.handleException(e); }
+                int type = 0;
+                try { type = Integer.parseInt(typePrefs.get(keys[i], "0")); }
+                catch (Exception e) { Synth.handleException(e); }
                                                 
-                        typeMap.put(Integer.valueOf(munge), Integer.valueOf(type));
-                    }
+                typeMap.put(Integer.valueOf(munge), Integer.valueOf(type));
+                }
             }
         catch (Exception ex)
             {
-                Synth.handleException(ex);
+            Synth.handleException(ex);
             }
-    }
+        }
         
     public void clear()
-    {
+        {
         try
             {
-                keyPrefs.clear();
-                typePrefs.clear();
+            keyPrefs.clear();
+            typePrefs.clear();
             }
         catch (Exception ex)
             {
-                Synth.handleException(ex);
+            Synth.handleException(ex);
             }
         map = new HashMap();
         reverseMap = new HashMap();
+        }
     }
-}

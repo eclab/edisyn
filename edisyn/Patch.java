@@ -11,7 +11,7 @@ import edisyn.util.*;
 */
 
 public class Patch
-{
+    {
     public boolean bank;
     public byte[][] sysex;
     public int synth;
@@ -20,26 +20,26 @@ public class Patch
     public String location = null;
     
     public Patch(int synth, byte[][] sysex, boolean bank)
-    {
+        {
         this.synth = synth;
         this.sysex = sysex;
         this.bank = bank;
-    } 
+        } 
     
     public String toString()
-    {
+        {
         String s = "Patch[" + (location == null ? "" : location) + " " + name + ", " + synth + ", " + bank + ", " + index + ", " + sysex.length + "\n";
         for(int i = 0; i < sysex.length; i++)
             {
-                s = s + ("" + i + " (" + sysex[i].length + ") ->");
-                for(int j = 0; j < sysex[i].length; j++)
-                    {
-                        s = s + (" " + StringUtility.toHex(sysex[i][j]));
-                    }
-                s = s + "\n";
+            s = s + ("" + i + " (" + sysex[i].length + ") ->");
+            for(int j = 0; j < sysex[i].length; j++)
+                {
+                s = s + (" " + StringUtility.toHex(sysex[i][j]));
+                }
+            s = s + "\n";
             }
         return s + "\n] ";
-    }
+        }
         
-}
+    }
         

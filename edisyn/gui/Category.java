@@ -21,7 +21,7 @@ import edisyn.util.*;
 */
 
 public class Category extends JComponent implements Gatherable
-{             
+    {             
     Color color;
     Synth synth;
     
@@ -60,18 +60,18 @@ public class Category extends JComponent implements Gatherable
     PopupMenu pop = new PopupMenu();
       
     public boolean isPasteCompatible(String preamble)
-    {
+        {
         String copyPreamble = synth.getCopyPreamble();
         String myPreamble = preamble;
         if (copyPreamble == null) return false;
         if (myPreamble == null) return false;
 
         return (pasteable && 
-                StringUtility.reduceAllDigitsAfterPreamble(copyPreamble, "").equals(StringUtility.reduceAllDigitsAfterPreamble(myPreamble, "")));
-    }
+            StringUtility.reduceAllDigitsAfterPreamble(copyPreamble, "").equals(StringUtility.reduceAllDigitsAfterPreamble(myPreamble, "")));
+        }
         
     boolean canDistributeKey()   
-    {
+        {
         String lastKey = synth.getModel().getLastKey();
         if (lastKey == null) return false;
                 
@@ -79,23 +79,23 @@ public class Category extends JComponent implements Gatherable
         gatherAllComponents(components);
         for(int i = 0; i < components.size(); i++)
             {
-                if (components.get(i) instanceof HasKey)
-                    {
-                        HasKey nc = (HasKey)(components.get(i));
-                        String key = nc.getKey();
-                        if (key.equals(lastKey))
-                            return true;
-                    }
+            if (components.get(i) instanceof HasKey)
+                {
+                HasKey nc = (HasKey)(components.get(i));
+                String key = nc.getKey();
+                if (key.equals(lastKey))
+                    return true;
+                }
             }
         return false;
-    }
+        }
       
     void resetCategory()
-    {
+        {
         boolean currentMIDI = synth.getSendMIDI();
         if (sendsAllParameters)
             {
-                synth.setSendMIDI(false);
+            synth.setSendMIDI(false);
             }
                 
         Synth other = Synth.instantiate(synth.getClass(), true, true, synth.tuple);
@@ -103,37 +103,37 @@ public class Category extends JComponent implements Gatherable
         gatherAllComponents(components);
         for(int i = 0; i < components.size(); i++)
             {
-                if (components.get(i) instanceof HasKey)
+            if (components.get(i) instanceof HasKey)
+                {
+                HasKey nc = (HasKey)(components.get(i));
+                String key = nc.getKey();
+                if (synth.getModel().exists(key) && other.getModel().exists(key))
                     {
-                        HasKey nc = (HasKey)(components.get(i));
-                        String key = nc.getKey();
-                        if (synth.getModel().exists(key) && other.getModel().exists(key))
-                            {
-                                if (synth.getModel().isString(key))
-                                    {
-                                        synth.getModel().set(key, other.getModel().get(key, ""));
-                                    }
-                                else
-                                    {
-                                        synth.getModel().set(key, other.getModel().get(key, 0));
-                                    }
-                            }
-                        else
-                            System.err.println("Key missing in model : " + key);
+                    if (synth.getModel().isString(key))
+                        {
+                        synth.getModel().set(key, other.getModel().get(key, ""));
+                        }
+                    else
+                        {
+                        synth.getModel().set(key, other.getModel().get(key, 0));
+                        }
                     }
+                else
+                    System.err.println("Key missing in model : " + key);
+                }
             }               
 
         if (sendsAllParameters)
             {
-                synth.setSendMIDI(currentMIDI);
-                synth.sendAllParameters();
+            synth.setSendMIDI(currentMIDI);
+            synth.sendAllParameters();
             }
         // so we don't have independent updates in OS X
         repaint();
-    }
+        }
         
     void copyCategory(boolean includeImmutable)
-    {
+        {
         String[] mutationKeys = synth.getMutationKeys();
         if (mutationKeys == null) mutationKeys = new String[0];
         HashSet mutationSet = new HashSet(Arrays.asList(mutationKeys));
@@ -143,27 +143,27 @@ public class Category extends JComponent implements Gatherable
         gatherAllComponents(components);
         for(int i = 0; i < components.size(); i++)
             {
-                if (components.get(i) instanceof HasKey)
-                    {
-                        HasKey nc = (HasKey)(components.get(i));
-                        String key = nc.getKey();
-                        if (mutationSet.contains(key) || includeImmutable)
-                            keys.add(key);
-                    }
+            if (components.get(i) instanceof HasKey)
+                {
+                HasKey nc = (HasKey)(components.get(i));
+                String key = nc.getKey();
+                if (mutationSet.contains(key) || includeImmutable)
+                    keys.add(key);
+                }
             } 
         synth.setCopyKeys(keys);   
         synth.setCopyPreamble(preamble);
-    }
+        }
         
     
     void pasteCategory(boolean includeImmutable)        // ugly hack    
-    {
+        {
         for(int i = 0; i < synth.getNumberOfPastes(); i++)
             pasteCategory1(includeImmutable);
-    }
+        }
         
     void pasteCategory1(boolean includeImmutable)
-    {
+        {
         String copyPreamble = synth.getCopyPreamble();
         String myPreamble = preamble;
         if (copyPreamble == null) return;
@@ -179,19 +179,19 @@ public class Category extends JComponent implements Gatherable
         gatherAllComponents(components);
         for(int i = 0; i < components.size(); i++)
             {
-                if (components.get(i) instanceof HasKey)
-                    {
-                        String key = (String)(((HasKey)(components.get(i))).getKey());
-                        String reduced = StringUtility.reduceFirstDigitsAfterPreamble(key, myPreamble);
-                        reduced = StringUtility.reduceDigitsInPreamble(reduced, myPreamble);
-                        keys.put(reduced, key);
-                    }    
+            if (components.get(i) instanceof HasKey)
+                {
+                String key = (String)(((HasKey)(components.get(i))).getKey());
+                String reduced = StringUtility.reduceFirstDigitsAfterPreamble(key, myPreamble);
+                reduced = StringUtility.reduceDigitsInPreamble(reduced, myPreamble);
+                keys.put(reduced, key);
+                }    
             }               
 
         boolean currentMIDI = synth.getSendMIDI();
         if (sendsAllParameters)
             {
-                synth.setSendMIDI(false);
+            synth.setSendMIDI(false);
             }
 
         String[] mutationKeys = synth.getMutationKeys();
@@ -201,110 +201,110 @@ public class Category extends JComponent implements Gatherable
         // Now we change keys as appropriate
         for(int i = 0; i < copyKeys.size(); i++)
             {
-                String key = (String)(copyKeys.get(i));
-                String reduced = StringUtility.reduceFirstDigitsAfterPreamble(key, copyPreamble);
-                reduced = StringUtility.reduceDigitsInPreamble(reduced, copyPreamble);
-                String mapped = (String)(keys.get(reduced));
-                if (mapped != null)
+            String key = (String)(copyKeys.get(i));
+            String reduced = StringUtility.reduceFirstDigitsAfterPreamble(key, copyPreamble);
+            reduced = StringUtility.reduceDigitsInPreamble(reduced, copyPreamble);
+            String mapped = (String)(keys.get(reduced));
+            if (mapped != null)
+                {
+                Model model = synth.getModel();
+                if (model.exists(mapped) && (mutationSet.contains(mapped) || includeImmutable))
                     {
-                        Model model = synth.getModel();
-                        if (model.exists(mapped) && (mutationSet.contains(mapped) || includeImmutable))
-                            {
-                                if (model.isString(mapped))
-                                    {
-                                        model.set(mapped, model.get(key, model.get(mapped, "")));
-                                    }
-                                else
-                                    {
-                                        model.set(mapped, model.get(key, model.get(mapped, 0)));
-                                    }
-                            }
-                        else
-                            System.err.println("Warning (Category) 2: Key didn't exist " + mapped);
+                    if (model.isString(mapped))
+                        {
+                        model.set(mapped, model.get(key, model.get(mapped, "")));
+                        }
+                    else
+                        {
+                        model.set(mapped, model.get(key, model.get(mapped, 0)));
+                        }
                     }
                 else
-                    System.err.println("Warning (Category) 2: Null mapping for " + key + " (reduced to " + reduced + ")");                                        
+                    System.err.println("Warning (Category) 2: Key didn't exist " + mapped);
+                }
+            else
+                System.err.println("Warning (Category) 2: Null mapping for " + key + " (reduced to " + reduced + ")");                                        
             }
 
         synth.revise();
 
         if (sendsAllParameters)
             {
-                synth.setSendMIDI(currentMIDI);
-                synth.sendAllParameters();
+            synth.setSendMIDI(currentMIDI);
+            synth.sendAllParameters();
             }
         // so we don't have independent updates in OS X
         repaint();
-    }
+        }
         
     void distributeCategory(boolean includeImmutable)
-    {
+        {
         Model model = synth.getModel();
         String lastKey = model.getLastKey();
 
         if (lastKey != null)
             {
-                boolean currentMIDI = synth.getSendMIDI();
-                if (sendsAllParameters)
-                    {
-                        synth.setSendMIDI(false);
-                    }
+            boolean currentMIDI = synth.getSendMIDI();
+            if (sendsAllParameters)
+                {
+                synth.setSendMIDI(false);
+                }
                 
-                String lastReduced = StringUtility.reduceAllDigitsAfterPreamble(lastKey, distributePreamble);
+            String lastReduced = StringUtility.reduceAllDigitsAfterPreamble(lastKey, distributePreamble);
 
-                String[] mutationKeys = synth.getMutationKeys();
-                if (mutationKeys == null) mutationKeys = new String[0];
-                HashSet mutationSet = new HashSet(Arrays.asList(mutationKeys));
+            String[] mutationKeys = synth.getMutationKeys();
+            if (mutationKeys == null) mutationKeys = new String[0];
+            HashSet mutationSet = new HashSet(Arrays.asList(mutationKeys));
 
-                // Now we change keys as appropriate
-                ArrayList components = new ArrayList();
-                gatherAllComponents(components);
-                for(int i = 0; i < components.size(); i++)
+            // Now we change keys as appropriate
+            ArrayList components = new ArrayList();
+            gatherAllComponents(components);
+            for(int i = 0; i < components.size(); i++)
+                {
+                if (components.get(i) instanceof HasKey)
                     {
-                        if (components.get(i) instanceof HasKey)
-                            {
-                                HasKey nc = (HasKey)(components.get(i));
-                                String key = nc.getKey();
-                                String reduced = StringUtility.reduceAllDigitsAfterPreamble(key, distributePreamble);
+                    HasKey nc = (HasKey)(components.get(i));
+                    String key = nc.getKey();
+                    String reduced = StringUtility.reduceAllDigitsAfterPreamble(key, distributePreamble);
                                
-                                if (reduced.equals(lastReduced))
-                                    {
-                                        if (model.exists(key) && (mutationSet.contains(key) || includeImmutable))
-                                            {
-                                                if (model.isString(key))
-                                                    {
-                                                        model.set(key, model.get(lastKey, model.get(key, "")));
-                                                    }
-                                                else
-                                                    {
-                                                        model.set(key, model.get(lastKey, model.get(key, 0)));
-                                                    }
-                                            }
-                                        else
-                                            System.err.println("Warning (Category): Key didn't exist " + key);
-                                    }
-                                else
-                                    System.err.println("Warning (Category): Null mapping for " + key + " (reduced to " + reduced + ")");                                        
+                    if (reduced.equals(lastReduced))
+                        {
+                        if (model.exists(key) && (mutationSet.contains(key) || includeImmutable))
+                            {
+                            if (model.isString(key))
+                                {
+                                model.set(key, model.get(lastKey, model.get(key, "")));
+                                }
+                            else
+                                {
+                                model.set(key, model.get(lastKey, model.get(key, 0)));
+                                }
                             }
+                        else
+                            System.err.println("Warning (Category): Key didn't exist " + key);
+                        }
+                    else
+                        System.err.println("Warning (Category): Null mapping for " + key + " (reduced to " + reduced + ")");                                        
                     }
+                }
         
-                synth.revise();
+            synth.revise();
 
-                if (sendsAllParameters)
-                    {
-                        synth.setSendMIDI(currentMIDI);
-                        synth.sendAllParameters();
-                    }
+            if (sendsAllParameters)
+                {
+                synth.setSendMIDI(currentMIDI);
+                synth.sendAllParameters();
+                }
             }
         // so we don't have independent updates in OS X
         repaint();
-    }
+        }
     
             
     /** If synth is non-null, then double-clicking on the category will select or deselect all the
         components inside it for mutation purposes. */
     public Category(final Synth synth, String label, Color color)
-    {
+        {
         this.synth = synth;
         setLayout(new BorderLayout());
         this.color = color;     
@@ -312,102 +312,102 @@ public class Category extends JComponent implements Gatherable
 
         if (synth != null)
             {
-                addMouseListener(new MouseAdapter()
+            addMouseListener(new MouseAdapter()
+                {
+                public void mousePressed(MouseEvent e)
                     {
-                        public void mousePressed(MouseEvent e)
+                    if (e.getY() < 20 &&
+                            (((e.getModifiers() & InputEvent.BUTTON3_MASK) == InputEvent.BUTTON3_MASK) || 
+                            ((e.getModifiers() & InputEvent.SHIFT_MASK) == InputEvent.SHIFT_MASK)))
                         {
-                            if (e.getY() < 20 &&
-                                (((e.getModifiers() & InputEvent.BUTTON3_MASK) == InputEvent.BUTTON3_MASK) || 
-                                 ((e.getModifiers() & InputEvent.SHIFT_MASK) == InputEvent.SHIFT_MASK)))
-                                {
-                                    copy.setEnabled(pasteable);
-                                    copyFromMutable.setEnabled(pasteable);
-                                    paste.setEnabled(pasteable && isPasteCompatible(preamble));
-                                    pasteToMutable.setEnabled(pasteable && isPasteCompatible(preamble));
-                                    distribute.setEnabled(distributable && canDistributeKey());
-                                    distributeToMutable.setEnabled(distributable && canDistributeKey());
+                        copy.setEnabled(pasteable);
+                        copyFromMutable.setEnabled(pasteable);
+                        paste.setEnabled(pasteable && isPasteCompatible(preamble));
+                        pasteToMutable.setEnabled(pasteable && isPasteCompatible(preamble));
+                        distribute.setEnabled(distributable && canDistributeKey());
+                        distributeToMutable.setEnabled(distributable && canDistributeKey());
                         
-                                    // we add, then remove the popup because I've discovered (in the Korg Wavestation SR Sequence Editor)
-                                    // that if the popup is pre-added, then it takes quite a while to dynamically add or remove categories.
-                                    Category.this.add(pop);
-                                    pop.show(e.getComponent(), e.getX(), e.getY());
-                                    Category.this.remove(pop);
-                                }
+                        // we add, then remove the popup because I've discovered (in the Korg Wavestation SR Sequence Editor)
+                        // that if the popup is pre-added, then it takes quite a while to dynamically add or remove categories.
+                        Category.this.add(pop);
+                        pop.show(e.getComponent(), e.getX(), e.getY());
+                        Category.this.remove(pop);
                         }
-                        public void mouseClicked(MouseEvent e)
+                    }
+                public void mouseClicked(MouseEvent e)
+                    {
+                    if (synth.isShowingMutation())
                         {
-                            if (synth.isShowingMutation())
+                        boolean inBorder = ( e.getPoint().y < getInsets().top);
+                        if (e.getClickCount() == 2 && inBorder)
+                            {
+                            boolean turnOn = true;
+                            ArrayList comps = new ArrayList();
+                            gatherAllComponents(comps);
+                            for(int i = 0; i < comps.size(); i++)
                                 {
-                                    boolean inBorder = ( e.getPoint().y < getInsets().top);
-                                    if (e.getClickCount() == 2 && inBorder)
-                                        {
-                                            boolean turnOn = true;
-                                            ArrayList comps = new ArrayList();
-                                            gatherAllComponents(comps);
-                                            for(int i = 0; i < comps.size(); i++)
-                                                {
-                                                    if (comps.get(i) instanceof NumericalComponent)
-                                                        {
-                                                            NumericalComponent nc = (NumericalComponent)(comps.get(i));
-                                                            String key = nc.getKey();
-                                                            if (synth.mutationMap.isFree(key) && synth.getModel().getStatus(key) != Model.STATUS_IMMUTABLE)
-                                                                { turnOn = false; break; }
-                                                        }
-                                                }
-                                                                        
-                                            for(int i = 0; i < comps.size(); i++)
-                                                {
-                                                    if (comps.get(i) instanceof NumericalComponent)
-                                                        {
-                                                            NumericalComponent nc = (NumericalComponent)(comps.get(i));
-                                                            String key = nc.getKey();
-                                                            if (synth.getModel().getStatus(key) != Model.STATUS_IMMUTABLE)
-                                                                synth.mutationMap.setFree(key, turnOn);
-                                                        }
-                                                }
-                                            repaint();
-                                        }
+                                if (comps.get(i) instanceof NumericalComponent)
+                                    {
+                                    NumericalComponent nc = (NumericalComponent)(comps.get(i));
+                                    String key = nc.getKey();
+                                    if (synth.mutationMap.isFree(key) && synth.getModel().getStatus(key) != Model.STATUS_IMMUTABLE)
+                                        { turnOn = false; break; }
+                                    }
                                 }
+                                                                        
+                            for(int i = 0; i < comps.size(); i++)
+                                {
+                                if (comps.get(i) instanceof NumericalComponent)
+                                    {
+                                    NumericalComponent nc = (NumericalComponent)(comps.get(i));
+                                    String key = nc.getKey();
+                                    if (synth.getModel().getStatus(key) != Model.STATUS_IMMUTABLE)
+                                        synth.mutationMap.setFree(key, turnOn);
+                                    }
+                                }
+                            repaint();
+                            }
                         }
-                    });
+                    }
+                });
             }
                         
         pop.add(copy);
         copy.addActionListener(new ActionListener()
             {
-                public void actionPerformed(ActionEvent e)
+            public void actionPerformed(ActionEvent e)
                 {
-                    copyCategory(true);
+                copyCategory(true);
                 }
             });
 
         pop.add(paste);
         paste.addActionListener(new ActionListener()
             {
-                public void actionPerformed(ActionEvent e)
+            public void actionPerformed(ActionEvent e)
                 {
-                    synth.getUndo().push(synth.getModel());
-                    synth.getUndo().setWillPush(false);
-                    synth.setSendMIDI(false);
-                    pasteCategory(true);
-                    synth.setSendMIDI(true);
-                    // We do this TWICE because for some synthesizers, updating a parameter
-                    // will reveal other parameters which also must be updated but aren't yet
-                    // in the mapping.
-                    pasteCategory(true);
-                    synth.getUndo().setWillPush(true);
+                synth.getUndo().push(synth.getModel());
+                synth.getUndo().setWillPush(false);
+                synth.setSendMIDI(false);
+                pasteCategory(true);
+                synth.setSendMIDI(true);
+                // We do this TWICE because for some synthesizers, updating a parameter
+                // will reveal other parameters which also must be updated but aren't yet
+                // in the mapping.
+                pasteCategory(true);
+                synth.getUndo().setWillPush(true);
                 }
             });
 
         pop.add(distribute);
         distribute.addActionListener(new ActionListener()
             {
-                public void actionPerformed(ActionEvent e)
+            public void actionPerformed(ActionEvent e)
                 {
-                    synth.getUndo().push(synth.getModel());
-                    synth.getUndo().setWillPush(false);
-                    distributeCategory(true);
-                    synth.getUndo().setWillPush(true);
+                synth.getUndo().push(synth.getModel());
+                synth.getUndo().setWillPush(false);
+                distributeCategory(true);
+                synth.getUndo().setWillPush(true);
                 }
             });
             
@@ -416,39 +416,39 @@ public class Category extends JComponent implements Gatherable
         pop.add(copyFromMutable);
         copyFromMutable.addActionListener(new ActionListener()
             {
-                public void actionPerformed(ActionEvent e)
+            public void actionPerformed(ActionEvent e)
                 {
-                    copyCategory(false);
+                copyCategory(false);
                 }
             });
 
         pop.add(pasteToMutable);
         pasteToMutable.addActionListener(new ActionListener()
             {
-                public void actionPerformed(ActionEvent e)
+            public void actionPerformed(ActionEvent e)
                 {
-                    synth.getUndo().push(synth.getModel());
-                    synth.getUndo().setWillPush(false);
-                    synth.setSendMIDI(false);
-                    pasteCategory(false);
-                    synth.setSendMIDI(true);
-                    // We do this TWICE because for some synthesizers, updating a parameter
-                    // will reveal other parameters which also must be updated but aren't yet
-                    // in the mapping.
-                    pasteCategory(false);
-                    synth.getUndo().setWillPush(true);
+                synth.getUndo().push(synth.getModel());
+                synth.getUndo().setWillPush(false);
+                synth.setSendMIDI(false);
+                pasteCategory(false);
+                synth.setSendMIDI(true);
+                // We do this TWICE because for some synthesizers, updating a parameter
+                // will reveal other parameters which also must be updated but aren't yet
+                // in the mapping.
+                pasteCategory(false);
+                synth.getUndo().setWillPush(true);
                 }
             });
 
         pop.add(distributeToMutable);
         distributeToMutable.addActionListener(new ActionListener()
             {
-                public void actionPerformed(ActionEvent e)
+            public void actionPerformed(ActionEvent e)
                 {
-                    synth.getUndo().push(synth.getModel());
-                    synth.getUndo().setWillPush(false);
-                    distributeCategory(false);
-                    synth.getUndo().setWillPush(true);
+                synth.getUndo().push(synth.getModel());
+                synth.getUndo().setWillPush(false);
+                distributeCategory(false);
+                synth.getUndo().setWillPush(true);
                 }
             });
 
@@ -457,12 +457,12 @@ public class Category extends JComponent implements Gatherable
         pop.add(reset);
         reset.addActionListener(new ActionListener()
             {
-                public void actionPerformed(ActionEvent e)
+            public void actionPerformed(ActionEvent e)
                 {
-                    synth.getUndo().push(synth.getModel());
-                    synth.getUndo().setWillPush(false);
-                    resetCategory();
-                    synth.getUndo().setWillPush(true);
+                synth.getUndo().push(synth.getModel());
+                synth.getUndo().setWillPush(false);
+                resetCategory();
+                synth.getUndo().setWillPush(true);
                 }
             });
                 
@@ -475,17 +475,17 @@ public class Category extends JComponent implements Gatherable
         reset.setEnabled(true);
                 
         //Category.this.add(pop);
-    }
+        }
     
     public Insets getInsets() 
-    { 
+        { 
         Insets insets = (Insets)(super.getInsets().clone());
         insets.bottom = 0;
         return insets;
-    }
+        }
     
     public void setName(String label)
-    {
+        {
         // here we're going to do a little hack.  TitledBorder doesn't put the title
         // on the FAR LEFT of the line, so when we draw the border we get a little square
         // dot to the left of the title which looks really annoying.  Rather than build a
@@ -502,62 +502,62 @@ public class Category extends JComponent implements Gatherable
         
         final MatteBorder matteBorder = new MatteBorder(Style.CATEGORY_STROKE_WIDTH(), 0, 0, 0, color)
             {
-                public Insets getBorderInsets(Component c, Insets insets)
+            public Insets getBorderInsets(Component c, Insets insets)
                 {
-                    Insets ins = super.getBorderInsets(c, insets);
-                    if (paintingBorder[0]) 
-                        ins.left = -5;
-                    return ins;
+                Insets ins = super.getBorderInsets(c, insets);
+                if (paintingBorder[0]) 
+                    ins.left = -5;
+                return ins;
                 }
             };
         
         TitledBorder titledBorder = new TitledBorder(
-                                                     matteBorder,
-                                                     (label == null || label.equals("") ? "" : " " + label + " "),
-                                                     TitledBorder.LEFT,
-                                                     TitledBorder.TOP,
-                                                     Style.CATEGORY_FONT(),
-                                                     color)
+            matteBorder,
+            (label == null || label.equals("") ? "" : " " + label + " "),
+            TitledBorder.LEFT,
+            TitledBorder.TOP,
+            Style.CATEGORY_FONT(),
+            color)
             {
-                public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) 
+            public void paintBorder(Component c, Graphics g, int x, int y, int width, int height) 
                 {
-                    paintingBorder[0] = true;
-                    super.paintBorder(c, g, x, y, width, height);
-                    paintingBorder[0] = false;
+                paintingBorder[0] = true;
+                super.paintBorder(c, g, x, y, width, height);
+                paintingBorder[0] = false;
                 }
             };
                 
         Border b = BorderFactory.createCompoundBorder(Style.CATEGORY_BORDER(), titledBorder);
         setBorder(b);
         repaint();
-    }
+        }
     
     void gatherAllComponents(Container cont, java.util.ArrayList list)
-    {
+        {
         Component[] c = cont.getComponents();
         for(int i = 0; i < c.length; i++)
             {
-                list.add(c[i]);
-                if (c[i] instanceof Gatherable)
-                    ((Gatherable)c[i]).gatherAllComponents(list);
-                else if (c[i] instanceof JPanel)
-                    gatherAllComponents(((JPanel)c[i]), list);
-                else if (c[i] instanceof Box)       // just in case
-                    gatherAllComponents(((Box)c[i]), list);
+            list.add(c[i]);
+            if (c[i] instanceof Gatherable)
+                ((Gatherable)c[i]).gatherAllComponents(list);
+            else if (c[i] instanceof JPanel)
+                gatherAllComponents(((JPanel)c[i]), list);
+            else if (c[i] instanceof Box)       // just in case
+                gatherAllComponents(((Box)c[i]), list);
             }
-    }
+        }
         
     public void gatherAllComponents(java.util.ArrayList list)
-    {
+        {
         gatherAllComponents(this, list);
         if (auxillary != null)
             {
-                auxillary.gatherAllComponents(list);
+            auxillary.gatherAllComponents(list);
             }
-    }
+        }
     
     public void paintComponent(Graphics g)
-    {
+        {
         Graphics2D graphics = (Graphics2D) g;
 
         Style.prepareGraphics(g);
@@ -567,5 +567,5 @@ public class Category extends JComponent implements Gatherable
         rect.y = 0;
         graphics.setPaint(Style.BACKGROUND_COLOR());
         graphics.fill(rect);
+        }
     }
-}

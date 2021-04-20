@@ -119,7 +119,7 @@ import java.io.*;
 
 
 public class WaldorfBlofeldMulti extends Synth
-{
+    {
     /// Various collections of parameter names for pop-up menus
         
     public static final String[] BANKS = new String[] { "A", "B", "C", "D", "E", "F", "G", "H" };
@@ -127,7 +127,7 @@ public class WaldorfBlofeldMulti extends Synth
         
         
     public WaldorfBlofeldMulti()
-    {
+        {
         JComponent soundPanel = new SynthPanel(this);
         VBox vbox = new VBox();
         vbox.add(addNameGlobal(Style.COLOR_GLOBAL()));
@@ -135,7 +135,7 @@ public class WaldorfBlofeldMulti extends Synth
 
         for(int i = 1; i < 5; i++)
             {
-                vbox.add(addInstrument(i, Style.COLOR_B()));
+            vbox.add(addInstrument(i, Style.COLOR_B()));
             }
         
                 
@@ -147,7 +147,7 @@ public class WaldorfBlofeldMulti extends Synth
 
         for(int i = 5; i < 11; i++)
             {
-                vbox.add(addInstrument(i, Style.COLOR_B()));
+            vbox.add(addInstrument(i, Style.COLOR_B()));
             }
                 
         soundPanel.add(vbox, BorderLayout.CENTER);
@@ -158,7 +158,7 @@ public class WaldorfBlofeldMulti extends Synth
 
         for(int i = 11; i < 17; i++)
             {
-                vbox.add(addInstrument(i, Style.COLOR_B()));
+            vbox.add(addInstrument(i, Style.COLOR_B()));
             }
                 
         soundPanel.add(vbox, BorderLayout.CENTER);
@@ -169,61 +169,61 @@ public class WaldorfBlofeldMulti extends Synth
         model.set("name", "Init Multi");  // has to be 16 long
         
         loadDefaults();
-    }
+        }
     
     public JFrame sprout()
-    {
+        {
         JFrame frame = super.sprout();
         // multi-mode on the Blofeld can't switch patches
         transmitTo.setEnabled(false);    
         transmitParameters.setEnabled(false);
         transmitParameters.setSelected(false); 
         return frame;   
-    }         
+        }         
                 
     public void changePatch(Model tempModel)
-    {
+        {
         // Not possible in Multi Mode
-    }
+        }
 
     public String getDefaultResourceFileName() { return "WaldorfBlofeldMulti.init"; }
     public String getHTMLResourceFileName() { return "WaldorfBlofeldMulti.html"; }
 
     public boolean gatherPatchInfo(String title, Model change, boolean writing)
-    {
+        {
         JTextField number = new JTextField("" + (model.get("number") + 1), 3);
 
         while(true)
             {
-                boolean result = showMultiOption(this, new String[] { "Patch Number" }, 
-                                                 new JComponent[] { number }, title, "Enter the Patch number.");
+            boolean result = showMultiOption(this, new String[] { "Patch Number" }, 
+                new JComponent[] { number }, title, "Enter the Patch number.");
                 
-                if (result == false) 
-                    return false;
+            if (result == false) 
+                return false;
                                 
-                int n;
-                try { n = Integer.parseInt(number.getText()); }
-                catch (NumberFormatException e)
-                    {
-                        showSimpleError(title, "The Patch Number must be an integer 1 ... 128");
-                        continue;
-                    }
-                if (n < 1 || n > 128)
-                    {
-                        showSimpleError(title, "The Patch Number must be an integer 1 ... 128");
-                        continue;
-                    }
+            int n;
+            try { n = Integer.parseInt(number.getText()); }
+            catch (NumberFormatException e)
+                {
+                showSimpleError(title, "The Patch Number must be an integer 1 ... 128");
+                continue;
+                }
+            if (n < 1 || n > 128)
+                {
+                showSimpleError(title, "The Patch Number must be an integer 1 ... 128");
+                continue;
+                }
                                 
-                change.set("number", n - 1);
+            change.set("number", n - 1);
                         
-                return true;
+            return true;
             }
-    }
+        }
 
 
     /** Add the global patch category (name, id, number, etc.) */
     public JComponent addNameGlobal(Color color)
-    {
+        {
         Category globalCategory = new Category(this, "Waldorf Blofeld [Multi]", color);
         //globalCategory.makeUnresettable();
                 
@@ -241,15 +241,15 @@ public class WaldorfBlofeldMulti extends Synth
         vbox = new VBox();
         comp = new StringComponent("Patch Name", this, "name", 16, "Name must be up to 16 ASCII characters.")
             {            
-                public String replace(String val)
+            public String replace(String val)
                 {
-                    return revisePatchName(val);
+                return revisePatchName(val);
                 }
                                 
-                public void update(String key, Model model)
+            public void update(String key, Model model)
                 {
-                    super.update(key, model);
-                    updateTitle();
+                super.update(key, model);
+                updateTitle();
                 }
             };
         vbox.add(comp);
@@ -257,12 +257,12 @@ public class WaldorfBlofeldMulti extends Synth
                 
         globalCategory.add(hbox, BorderLayout.WEST);
         return globalCategory;
-    }
+        }
 
 
 
     public JComponent addMultiData(Color color)
-    {
+        {
         Category category = new Category(this, "General", color);
                 
         JComponent comp;
@@ -275,33 +275,33 @@ public class WaldorfBlofeldMulti extends Synth
 
         comp = new LabelledDial("Tempo", this, "arptempo", color, 1, 127)
             {
-                // 40...300
-                // BPM 165 and above we jump by 5
-                // BPM 90 and below we jump by 2
+            // 40...300
+            // BPM 165 and above we jump by 5
+            // BPM 90 and below we jump by 2
                         
-                // So 40...90 inclusive is 0...25
-                // 91 ... 165 is 26 ... 100
-                // 170 ... 300 is 101 ... 127
-                public String map(int val)
+            // So 40...90 inclusive is 0...25
+            // 91 ... 165 is 26 ... 100
+            // 170 ... 300 is 101 ... 127
+            public String map(int val)
                 {
-                    if (val < 25)
-                        return "" + ((val * 2) + 40);
-                    else if (val < 101)
-                        return "" + (val + 65);
-                    else
-                        return "" + (((val - 101) * 5) + 170);
+                if (val < 25)
+                    return "" + ((val * 2) + 40);
+                else if (val < 101)
+                    return "" + (val + 65);
+                else
+                    return "" + (((val - 101) * 5) + 170);
                 }
-                public int getDefaultValue() { return 55; }             // 120 BPM
+            public int getDefaultValue() { return 55; }             // 120 BPM
             };
         hbox.add(comp);
         
         category.add(hbox, BorderLayout.WEST);
         return category;
-    }
+        }
 
 
     public JComponent addInstrument(final int inst, Color color)
-    {
+        {
         Category category = new Category(this, "Part " + inst, color);
         //        category.makePasteable("inst" + inst);
         category.makePasteable("inst");
@@ -313,10 +313,10 @@ public class WaldorfBlofeldMulti extends Synth
 
         comp = new LabelledDial("Bank", this, "inst" + inst + "bank", color, 0, 7)
             {
-                public String map(int val)
+            public String map(int val)
                 {
-                    String[] vals = BANKS;
-                    return vals[val];
+                String[] vals = BANKS;
+                return vals[val];
                 }
             };
         ((LabelledDial)comp).addAdditionalLabel(" ");
@@ -333,43 +333,43 @@ public class WaldorfBlofeldMulti extends Synth
         
         comp = new PushButton("Show")
             {
-                public void perform()
+            public void perform()
                 {
-                    final WaldorfBlofeld synth = new WaldorfBlofeld();
-                    if (tuple != null)
-                        synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver(), synth.buildKey2Receiver());
-                    if (synth.tuple != null)
-                        {       
-                            // This is a little tricky.  When the dump comes in from the synth,
-                            // Edisyn will only send it to the topmost panel.  So we first sprout
-                            // the panel and show it, and THEN send the dump request.  But this isn't
-                            // enough, because what setVisible(...) does is post an event on the
-                            // Swing Event Queue to build the window at a later time.  This later time
-                            // happens to be after the dump comes in, so it's ignored.  So what we
-                            // ALSO do is post the dump request to occur at the end of the Event Queue,
-                            // so by the time the dump request has been made, the window is shown and
-                            // frontmost.
+                final WaldorfBlofeld synth = new WaldorfBlofeld();
+                if (tuple != null)
+                    synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver(), synth.buildKey2Receiver());
+                if (synth.tuple != null)
+                    {       
+                    // This is a little tricky.  When the dump comes in from the synth,
+                    // Edisyn will only send it to the topmost panel.  So we first sprout
+                    // the panel and show it, and THEN send the dump request.  But this isn't
+                    // enough, because what setVisible(...) does is post an event on the
+                    // Swing Event Queue to build the window at a later time.  This later time
+                    // happens to be after the dump comes in, so it's ignored.  So what we
+                    // ALSO do is post the dump request to occur at the end of the Event Queue,
+                    // so by the time the dump request has been made, the window is shown and
+                    // frontmost.
                                                 
-                            synth.sprout();
-                            JFrame frame = ((JFrame)(SwingUtilities.getRoot(synth)));
-                            frame.setVisible(true);
+                    synth.sprout();
+                    JFrame frame = ((JFrame)(SwingUtilities.getRoot(synth)));
+                    frame.setVisible(true);
 
-                            SwingUtilities.invokeLater(
-                                                       new Runnable()
-                                                       {
-                                                           public void run() 
-                                                           { 
-                                                               Model tempModel = buildModel();
-                                                               tempModel.set("bank", WaldorfBlofeldMulti.this.model.get("inst" + inst + "bank"));
-                                                               tempModel.set("number", WaldorfBlofeldMulti.this.model.get("inst" + inst + "number"));
-                                                               synth.performRequestDump(tempModel, false);
-                                                           }
-                                                       });
-                        }
-                    else
-                        {
-                            showSimpleError("Disconnected", "You can't show a patch when disconnected.");
-                        }
+                    SwingUtilities.invokeLater(
+                        new Runnable()
+                            {
+                            public void run() 
+                                { 
+                                Model tempModel = buildModel();
+                                tempModel.set("bank", WaldorfBlofeldMulti.this.model.get("inst" + inst + "bank"));
+                                tempModel.set("number", WaldorfBlofeldMulti.this.model.get("inst" + inst + "number"));
+                                synth.performRequestDump(tempModel, false);
+                                }
+                            });
+                    }
+                else
+                    {
+                    showSimpleError("Disconnected", "You can't show a patch when disconnected.");
+                    }
                 }
             };
         hbox2.add(comp);
@@ -425,11 +425,11 @@ public class WaldorfBlofeldMulti extends Synth
 
         comp = new LabelledDial("Panning", this, "inst" + inst + "panning", color, 0, 127, 64)
             {
-                public String map(int val)
+            public String map(int val)
                 {
-                    if ((val - 64) < 0) return "L " + Math.abs(val - 64);
-                    else if ((val - 64) > 0) return "R " + (val - 64);
-                    else return "--";
+                if ((val - 64) < 0) return "L " + Math.abs(val - 64);
+                else if ((val - 64) > 0) return "R " + (val - 64);
+                else return "--";
                 }
             };
         hbox.add(comp);
@@ -442,13 +442,13 @@ public class WaldorfBlofeldMulti extends Synth
 
         comp = new LabelledDial("MIDI", this, "inst" + inst + "channel", color, 0, 17)
             {
-                public String map(int val)
+            public String map(int val)
                 {
-                    if (val == 0)
-                        return "Omni";
-                    else if (val == 1)
-                        return "Global";
-                    else return "" + (val - 1);
+                if (val == 0)
+                    return "Omni";
+                else if (val == 1)
+                    return "Global";
+                else return "" + (val - 1);
                 }
             };
         model.removeMetricMinMax( "inst" + inst + "channel");
@@ -465,9 +465,9 @@ public class WaldorfBlofeldMulti extends Synth
 
         comp = new LabelledDial("Lowest", this, "inst" + inst + "lowkey", color, 0, 127) 
             {
-                public String map(int val)
+            public String map(int val)
                 {
-                    return KEYS[val % 12] + (val / 12 - 2);  // note integer division
+                return KEYS[val % 12] + (val / 12 - 2);  // note integer division
                 }
             };
         ((LabelledDial)comp).addAdditionalLabel("Key");
@@ -475,9 +475,9 @@ public class WaldorfBlofeldMulti extends Synth
 
         comp = new LabelledDial("Highest", this, "inst" + inst + "hikey", color, 0, 127)
             {
-                public String map(int val)
+            public String map(int val)
                 {
-                    return KEYS[val % 12] + (val / 12 - 2);  // note integer division
+                return KEYS[val % 12] + (val / 12 - 2);  // note integer division
                 }
             };
         ((LabelledDial)comp).addAdditionalLabel("Key");
@@ -485,7 +485,7 @@ public class WaldorfBlofeldMulti extends Synth
 
         category.add(hbox, BorderLayout.WEST);
         return category;
-    }
+        }
 
 
     /** List of all Waldorf parameters in order.  "-" is a reserved (unused and thus unnamed) parameter. */
@@ -494,459 +494,459 @@ public class WaldorfBlofeldMulti extends Synth
     /// that Waldorf decided to do.  :-(
 
     final static String[] allParameters = new String[/*248?*/] 
-        {
-            "name",         // *
-            "name",         // *
-            "name",         // *
-            "name",         // *
-            "name",         // *
-            "name",         // *
-            "name",         // *
-            "name",         // *
-            "name",         // *
-            "name",         // *
-            "name",         // *
-            "name",         // *
-            "name",         // *
-            "name",         // *
-            "name",         // *
-            "name",         // *
-            "-",
-            "volume",
-            "arptempo",                   
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
+    {
+    "name",         // *
+    "name",         // *
+    "name",         // *
+    "name",         // *
+    "name",         // *
+    "name",         // *
+    "name",         // *
+    "name",         // *
+    "name",         // *
+    "name",         // *
+    "name",         // *
+    "name",         // *
+    "name",         // *
+    "name",         // *
+    "name",         // *
+    "name",         // *
+    "-",
+    "volume",
+    "arptempo",                   
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
     
-            "inst1bank",
-            "inst1number",
-            "inst1volume",
-            "inst1panning",
-            "-",
-            "inst1transpose",
-            "inst1detune",
-            "inst1channel",
-            "inst1lowkey",
-            "inst1hikey",
-            "inst1lowvel",
-            "inst1hivel",
-            "inst1abits",
-            "inst1bbits",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
+    "inst1bank",
+    "inst1number",
+    "inst1volume",
+    "inst1panning",
+    "-",
+    "inst1transpose",
+    "inst1detune",
+    "inst1channel",
+    "inst1lowkey",
+    "inst1hikey",
+    "inst1lowvel",
+    "inst1hivel",
+    "inst1abits",
+    "inst1bbits",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
 
-            "inst2bank",
-            "inst2number",
-            "inst2volume",
-            "inst2panning",
-            "-",
-            "inst2transpose",
-            "inst2detune",
-            "inst2channel",
-            "inst2lowkey",
-            "inst2hikey",
-            "inst2lowvel",
-            "inst2hivel",
-            "inst2abits",
-            "inst2bbits",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
+    "inst2bank",
+    "inst2number",
+    "inst2volume",
+    "inst2panning",
+    "-",
+    "inst2transpose",
+    "inst2detune",
+    "inst2channel",
+    "inst2lowkey",
+    "inst2hikey",
+    "inst2lowvel",
+    "inst2hivel",
+    "inst2abits",
+    "inst2bbits",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
 
-            "inst3bank",
-            "inst3number",
-            "inst3volume",
-            "inst3panning",
-            "-",
-            "inst3transpose",
-            "inst3detune",
-            "inst3channel",
-            "inst3lowkey",
-            "inst3hikey",
-            "inst3lowvel",
-            "inst3hivel",
-            "inst3abits",
-            "inst3bbits",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
+    "inst3bank",
+    "inst3number",
+    "inst3volume",
+    "inst3panning",
+    "-",
+    "inst3transpose",
+    "inst3detune",
+    "inst3channel",
+    "inst3lowkey",
+    "inst3hikey",
+    "inst3lowvel",
+    "inst3hivel",
+    "inst3abits",
+    "inst3bbits",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
 
-            "inst4bank",
-            "inst4number",
-            "inst4volume",
-            "inst4panning",
-            "-",
-            "inst4transpose",
-            "inst4detune",
-            "inst4channel",
-            "inst4lowkey",
-            "inst4hikey",
-            "inst4lowvel",
-            "inst4hivel",
-            "inst4abits",
-            "inst4bbits",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
+    "inst4bank",
+    "inst4number",
+    "inst4volume",
+    "inst4panning",
+    "-",
+    "inst4transpose",
+    "inst4detune",
+    "inst4channel",
+    "inst4lowkey",
+    "inst4hikey",
+    "inst4lowvel",
+    "inst4hivel",
+    "inst4abits",
+    "inst4bbits",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
 
-            "inst5bank",
-            "inst5number",
-            "inst5volume",
-            "inst5panning",
-            "-",
-            "inst5transpose",
-            "inst5detune",
-            "inst5channel",
-            "inst5lowkey",
-            "inst5hikey",
-            "inst5lowvel",
-            "inst5hivel",
-            "inst5abits",
-            "inst5bbits",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
+    "inst5bank",
+    "inst5number",
+    "inst5volume",
+    "inst5panning",
+    "-",
+    "inst5transpose",
+    "inst5detune",
+    "inst5channel",
+    "inst5lowkey",
+    "inst5hikey",
+    "inst5lowvel",
+    "inst5hivel",
+    "inst5abits",
+    "inst5bbits",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
 
-            "inst6bank",
-            "inst6number",
-            "inst6volume",
-            "inst6panning",
-            "-",
-            "inst6transpose",
-            "inst6detune",
-            "inst6channel",
-            "inst6lowkey",
-            "inst6hikey",
-            "inst6lowvel",
-            "inst6hivel",
-            "inst6abits",
-            "inst6bbits",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
+    "inst6bank",
+    "inst6number",
+    "inst6volume",
+    "inst6panning",
+    "-",
+    "inst6transpose",
+    "inst6detune",
+    "inst6channel",
+    "inst6lowkey",
+    "inst6hikey",
+    "inst6lowvel",
+    "inst6hivel",
+    "inst6abits",
+    "inst6bbits",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
 
-            "inst7bank",
-            "inst7number",
-            "inst7volume",
-            "inst7panning",
-            "-",
-            "inst7transpose",
-            "inst7detune",
-            "inst7channel",
-            "inst7lowkey",
-            "inst7hikey",
-            "inst7lowvel",
-            "inst7hivel",
-            "inst7abits",
-            "inst7bbits",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
+    "inst7bank",
+    "inst7number",
+    "inst7volume",
+    "inst7panning",
+    "-",
+    "inst7transpose",
+    "inst7detune",
+    "inst7channel",
+    "inst7lowkey",
+    "inst7hikey",
+    "inst7lowvel",
+    "inst7hivel",
+    "inst7abits",
+    "inst7bbits",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
 
-            "inst8bank",
-            "inst8number",
-            "inst8volume",
-            "inst8panning",
-            "-",
-            "inst8transpose",
-            "inst8detune",
-            "inst8channel",
-            "inst8lowkey",
-            "inst8hikey",
-            "inst8lowvel",
-            "inst8hivel",
-            "inst8abits",
-            "inst8bbits",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
+    "inst8bank",
+    "inst8number",
+    "inst8volume",
+    "inst8panning",
+    "-",
+    "inst8transpose",
+    "inst8detune",
+    "inst8channel",
+    "inst8lowkey",
+    "inst8hikey",
+    "inst8lowvel",
+    "inst8hivel",
+    "inst8abits",
+    "inst8bbits",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
 
-            "inst9bank",
-            "inst9number",
-            "inst9volume",
-            "inst9panning",
-            "-",
-            "inst9transpose",
-            "inst9detune",
-            "inst9channel",
-            "inst9lowkey",
-            "inst9hikey",
-            "inst9lowvel",
-            "inst9hivel",
-            "inst9abits",
-            "inst9bbits",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
+    "inst9bank",
+    "inst9number",
+    "inst9volume",
+    "inst9panning",
+    "-",
+    "inst9transpose",
+    "inst9detune",
+    "inst9channel",
+    "inst9lowkey",
+    "inst9hikey",
+    "inst9lowvel",
+    "inst9hivel",
+    "inst9abits",
+    "inst9bbits",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
 
-            "inst10bank",
-            "inst10number",
-            "inst10volume",
-            "inst10panning",
-            "-",
-            "inst10transpose",
-            "inst10detune",
-            "inst10channel",
-            "inst10lowkey",
-            "inst10hikey",
-            "inst10lowvel",
-            "inst10hivel",
-            "inst10abits",
-            "inst10bbits",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
+    "inst10bank",
+    "inst10number",
+    "inst10volume",
+    "inst10panning",
+    "-",
+    "inst10transpose",
+    "inst10detune",
+    "inst10channel",
+    "inst10lowkey",
+    "inst10hikey",
+    "inst10lowvel",
+    "inst10hivel",
+    "inst10abits",
+    "inst10bbits",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
 
-            "inst11bank",
-            "inst11number",
-            "inst11volume",
-            "inst11panning",
-            "-",
-            "inst11transpose",
-            "inst11detune",
-            "inst11channel",
-            "inst11lowkey",
-            "inst11hikey",
-            "inst11lowvel",
-            "inst11hivel",
-            "inst11abits",
-            "inst11bbits",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
+    "inst11bank",
+    "inst11number",
+    "inst11volume",
+    "inst11panning",
+    "-",
+    "inst11transpose",
+    "inst11detune",
+    "inst11channel",
+    "inst11lowkey",
+    "inst11hikey",
+    "inst11lowvel",
+    "inst11hivel",
+    "inst11abits",
+    "inst11bbits",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
 
-            "inst12bank",
-            "inst12number",
-            "inst12volume",
-            "inst12panning",
-            "-",
-            "inst12transpose",
-            "inst12detune",
-            "inst12channel",
-            "inst12lowkey",
-            "inst12hikey",
-            "inst12lowvel",
-            "inst12hivel",
-            "inst12abits",
-            "inst12bbits",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
+    "inst12bank",
+    "inst12number",
+    "inst12volume",
+    "inst12panning",
+    "-",
+    "inst12transpose",
+    "inst12detune",
+    "inst12channel",
+    "inst12lowkey",
+    "inst12hikey",
+    "inst12lowvel",
+    "inst12hivel",
+    "inst12abits",
+    "inst12bbits",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
 
-            "inst13bank",
-            "inst13number",
-            "inst13volume",
-            "inst13panning",
-            "-",
-            "inst13transpose",
-            "inst13detune",
-            "inst13channel",
-            "inst13lowkey",
-            "inst13hikey",
-            "inst13lowvel",
-            "inst13hivel",
-            "inst13abits",
-            "inst13bbits",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
+    "inst13bank",
+    "inst13number",
+    "inst13volume",
+    "inst13panning",
+    "-",
+    "inst13transpose",
+    "inst13detune",
+    "inst13channel",
+    "inst13lowkey",
+    "inst13hikey",
+    "inst13lowvel",
+    "inst13hivel",
+    "inst13abits",
+    "inst13bbits",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
 
-            "inst14bank",
-            "inst14number",
-            "inst14volume",
-            "inst14panning",
-            "-",
-            "inst14transpose",
-            "inst14detune",
-            "inst14channel",
-            "inst14lowkey",
-            "inst14hikey",
-            "inst14lowvel",
-            "inst14hivel",
-            "inst14abits",
-            "inst14bbits",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
+    "inst14bank",
+    "inst14number",
+    "inst14volume",
+    "inst14panning",
+    "-",
+    "inst14transpose",
+    "inst14detune",
+    "inst14channel",
+    "inst14lowkey",
+    "inst14hikey",
+    "inst14lowvel",
+    "inst14hivel",
+    "inst14abits",
+    "inst14bbits",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
 
-            "inst15bank",
-            "inst15number",
-            "inst15volume",
-            "inst15panning",
-            "-",
-            "inst15transpose",
-            "inst15detune",
-            "inst15channel",
-            "inst15lowkey",
-            "inst15hikey",
-            "inst15lowvel",
-            "inst15hivel",
-            "inst15abits",
-            "inst15bbits",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
+    "inst15bank",
+    "inst15number",
+    "inst15volume",
+    "inst15panning",
+    "-",
+    "inst15transpose",
+    "inst15detune",
+    "inst15channel",
+    "inst15lowkey",
+    "inst15hikey",
+    "inst15lowvel",
+    "inst15hivel",
+    "inst15abits",
+    "inst15bbits",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
 
-            "inst16bank",
-            "inst16number",
-            "inst16volume",
-            "inst16panning",
-            "-",
-            "inst16transpose",
-            "inst16detune",
-            "inst16channel",
-            "inst16lowkey",
-            "inst16hikey",
-            "inst16lowvel",
-            "inst16hivel",
-            "inst16abits",
-            "inst16bbits",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
-            "-",
+    "inst16bank",
+    "inst16number",
+    "inst16volume",
+    "inst16panning",
+    "-",
+    "inst16transpose",
+    "inst16detune",
+    "inst16channel",
+    "inst16lowkey",
+    "inst16hikey",
+    "inst16lowvel",
+    "inst16hivel",
+    "inst16abits",
+    "inst16bbits",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
 
 
-        };
+    };
 
 
     // extracts a 1 or 2-digit integer starting at 'start'
     int extractInteger(String str, int start)
-    {
+        {
         int val = (int)(str.charAt(start) - '0');
         int val2 = (int)(str.charAt(start + 1) - '0');
         if (val2 >= 0 && val2 <= 9)
             {
-                val = val * 10 + val2;
+            val = val * 10 + val2;
             }
         return val;
-    }
+        }
 
     
     public byte[] emit(Model tempModel, boolean toWorkingMemory, boolean toFile)
-    {
+        {
         if (tempModel == null)
             tempModel = getModel();
             
@@ -959,46 +959,46 @@ public class WaldorfBlofeldMulti extends Synth
         
         for(int i = 16; i < 416; i++)   // skip the name
             {
-                String key = allParameters[i];
-                if (key.equals("-"))
-                    {
-                        bytes[i] = 0;
-                    }
-                else if (key.endsWith("abits"))
-                    {
-                        int part = extractInteger(key, 4);  // starts with "inst"
+            String key = allParameters[i];
+            if (key.equals("-"))
+                {
+                bytes[i] = 0;
+                }
+            else if (key.endsWith("abits"))
+                {
+                int part = extractInteger(key, 4);  // starts with "inst"
                         
-                        byte status = (byte)model.get("inst" + part + "status");
-                        byte local = (byte)model.get("inst" + part + "local");
-                        byte usb = (byte)model.get("inst" + part + "usb");
-                        byte midi = (byte)model.get("inst" + part + "midi");
+                byte status = (byte)model.get("inst" + part + "status");
+                byte local = (byte)model.get("inst" + part + "local");
+                byte usb = (byte)model.get("inst" + part + "usb");
+                byte midi = (byte)model.get("inst" + part + "midi");
                         
-                        bytes[i] = (byte)((status << 6) | (local << 2) | (usb << 1) | midi);
-                    }
-                else if (key.endsWith("bbits"))
-                    {
-                        int part = extractInteger(key, 4);  // starts with "inst"
+                bytes[i] = (byte)((status << 6) | (local << 2) | (usb << 1) | midi);
+                }
+            else if (key.endsWith("bbits"))
+                {
+                int part = extractInteger(key, 4);  // starts with "inst"
                         
-                        byte pressure = (byte)model.get("inst" + part + "pressure");
-                        byte bend = (byte)model.get("inst" + part + "bend");
-                        byte wheel = (byte)model.get("inst" + part + "modwheel");
-                        byte sustain = (byte)model.get("inst" + part + "sustain");
-                        byte edits = (byte)model.get("inst" + part + "edits");
-                        byte change = (byte)model.get("inst" + part + "progchange");
+                byte pressure = (byte)model.get("inst" + part + "pressure");
+                byte bend = (byte)model.get("inst" + part + "bend");
+                byte wheel = (byte)model.get("inst" + part + "modwheel");
+                byte sustain = (byte)model.get("inst" + part + "sustain");
+                byte edits = (byte)model.get("inst" + part + "edits");
+                byte change = (byte)model.get("inst" + part + "progchange");
                         
-                        bytes[i] = (byte)((change << 5) | (edits << 4) | (sustain << 3) | (pressure << 2) | (wheel << 1) | bend);
-                    }
-                else
-                    {
-                        bytes[i] = (byte)(model.get(key));
-                    }
+                bytes[i] = (byte)((change << 5) | (edits << 4) | (sustain << 3) | (pressure << 2) | (wheel << 1) | bend);
+                }
+            else
+                {
+                bytes[i] = (byte)(model.get(key));
+                }
             }
 
         String name = model.get("name", "Init Multi") + "                ";  // has to be 16 long
                                 
         for(int i = 0; i < 16; i++)
             {
-                bytes[i] = (byte)(name.charAt(i));
+            bytes[i] = (byte)(name.charAt(i));
             }
                 
         byte[] full = new byte[EXPECTED_SYSEX_LENGTH];
@@ -1014,12 +1014,12 @@ public class WaldorfBlofeldMulti extends Synth
         full[424] = (byte)0xF7;
 
         return full;
-    }
+        }
 
 
     /** Generate a Waldorf checksum of the data bytes */
     byte produceChecksum(byte[] bytes)
-    {
+        {
         //      From the sysex document:
         //
         //      "Sum of all databytes truncated to 7 bits.
@@ -1039,11 +1039,11 @@ public class WaldorfBlofeldMulti extends Synth
         b = (byte)(b & (byte)127);
         
         return b;
-    }
+        }
 
 
     public byte[] requestDump(Model tempModel)
-    {
+        {
         if (tempModel == null)
             tempModel = getModel();
             
@@ -1052,21 +1052,21 @@ public class WaldorfBlofeldMulti extends Synth
         byte NN = (byte)tempModel.get("number");
 
         return new byte[] { (byte)0xF0, 0x3E, 0x13, DEV, 0x01, BB, NN, (byte)0xF7 };
-    }
+        }
         
     public byte[] requestCurrentDump()
-    {
+        {
         byte DEV = (byte)(getID());
 
         return new byte[] { (byte)0xF0, 0x3E, 0x13, DEV, 0x01, 0x7F, 0x00, (byte)0xF7 };
-    }
+        }
 
     public static final int EXPECTED_SYSEX_LENGTH = 425;
         
         
     /** Verify that all the parameters are within valid values, and tweak them if not. */
     public void revise()
-    {
+        {
         // check the easy stuff -- out of range parameters
         super.revise();
 
@@ -1075,13 +1075,13 @@ public class WaldorfBlofeldMulti extends Synth
         String newnm = revisePatchName(nm);
         if (!nm.equals(newnm))
             model.set("name", newnm);
-    }
+        }
         
 
 
     public static final int MAXIMUM_NAME_LENGTH = 16;
     public String revisePatchName(String name)
-    {
+        {
         name = super.revisePatchName(name);  // trim first time
         if (name.length() > MAXIMUM_NAME_LENGTH)
             name = name.substring(0, MAXIMUM_NAME_LENGTH);
@@ -1089,135 +1089,135 @@ public class WaldorfBlofeldMulti extends Synth
         StringBuffer nameb = new StringBuffer(name);                            
         for(int i = 0 ; i < nameb.length(); i++)
             {
-                char c = nameb.charAt(i);
-                if (c < 32 || c > 127)
-                    nameb.setCharAt(i, ' ');
+            char c = nameb.charAt(i);
+            if (c < 32 || c > 127)
+                nameb.setCharAt(i, ' ');
             }
         name = nameb.toString();
         return super.revisePatchName(name);  // trim again
-    }
+        }
 
 
 
 
     public void setParameterByIndex(int i, byte b)
-    {
+        {
         String key = allParameters[i];
         int part = (i - 32) / 24 + 1;
         if (key.equals("-"))
             {
-                // do nothing
+            // do nothing
             }
         else if (i >= 0 && i < 16)              // name
             {
-                try 
-                    {
-                        String name = model.get("name", "Init Multi") + "                ";
-                        byte[] str = name.getBytes("US-ASCII");
-                        byte[] newstr = new byte[] { 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20 };
-                        System.arraycopy(str, 0, newstr, 0, 16);
-                        newstr[i] = b;
-                        model.set("name", new String(newstr, "US-ASCII"));
-                    }
-                catch (UnsupportedEncodingException e)
-                    {
-                        Synth.handleException(e); 
-                    }
+            try 
+                {
+                String name = model.get("name", "Init Multi") + "                ";
+                byte[] str = name.getBytes("US-ASCII");
+                byte[] newstr = new byte[] { 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20 };
+                System.arraycopy(str, 0, newstr, 0, 16);
+                newstr[i] = b;
+                model.set("name", new String(newstr, "US-ASCII"));
+                }
+            catch (UnsupportedEncodingException e)
+                {
+                Synth.handleException(e); 
+                }
             }
         else if (key.endsWith("abits"))
             {
-                model.set("inst" + part + "status", (b >>> 6) & 1);
-                model.set("inst" + part + "local", (b >>> 2) & 1);
-                model.set("inst" + part + "usb", (b >>> 1) & 1);
-                model.set("inst" + part + "midi", (b) & 1);
+            model.set("inst" + part + "status", (b >>> 6) & 1);
+            model.set("inst" + part + "local", (b >>> 2) & 1);
+            model.set("inst" + part + "usb", (b >>> 1) & 1);
+            model.set("inst" + part + "midi", (b) & 1);
             }
         else if (key.endsWith("bbits"))
             {
-                model.set("inst" + part + "progchange", (b >>> 5) & 1);
-                model.set("inst" + part + "edits", (b >>> 4) & 1);
-                model.set("inst" + part + "sustain", (b >>> 3) & 1);
-                model.set("inst" + part + "pressure", (b >>> 2) & 1);
-                model.set("inst" + part + "modwheel", (b >>> 1) & 1);
-                model.set("inst" + part + "bend", (b) & 1);
+            model.set("inst" + part + "progchange", (b >>> 5) & 1);
+            model.set("inst" + part + "edits", (b >>> 4) & 1);
+            model.set("inst" + part + "sustain", (b >>> 3) & 1);
+            model.set("inst" + part + "pressure", (b >>> 2) & 1);
+            model.set("inst" + part + "modwheel", (b >>> 1) & 1);
+            model.set("inst" + part + "bend", (b) & 1);
             }
         else
             {
-                model.set(key, b);
+            model.set(key, b);
             }
-    }
+        }
 
         
     public void parseParameter(byte[] data)
-    {
+        {
         // This doesn't work for multi mode on the Blofeld
-    }
+        }
         
 
     public int parse(byte[] data, boolean fromFile)
-    {
+        {
         boolean retval = true;
         if (data[5] < 8)  // 8?  Maybe 1.  Anyway otherwise it's probably just local patch data.  Too bad they do this. :-(
             {
-                model.set("number", data[6]);
+            model.set("number", data[6]);
             }
         else
             {
-                retval = false;
+            retval = false;
             }
         
         for(int i = 0; i < 416; i++)
             {
-                setParameterByIndex(i, data[i + 7]);
+            setParameterByIndex(i, data[i + 7]);
             }
         revise();  
         return PARSE_SUCCEEDED;    
-    }
+        }
 
     public static String getSynthName() { return "Waldorf Blofeld [Multi]"; }
     
     public String getPatchName(Model model) { return model.get("name", "Init Multi"); }
     
     public byte getID() 
-    { 
+        { 
         try 
             { 
-                byte b = (byte)(Byte.parseByte(tuple.id));
-                if (b >= 0) return b;
+            byte b = (byte)(Byte.parseByte(tuple.id));
+            if (b >= 0) return b;
             }
         catch (NullPointerException e) { } // expected.  Happens when tuple's not built yet
         catch (NumberFormatException e) { Synth.handleException(e); }
         return 0;
-    }
+        }
         
     public String reviseID(String id)
-    {
+        {
         try 
             { 
-                byte b =(byte)(Byte.parseByte(id)); 
-                if (b >= 0) return "" + b;
+            byte b =(byte)(Byte.parseByte(id)); 
+            if (b >= 0) return "" + b;
             } 
         catch (NumberFormatException e) { }             // expected
         return "" + getID();
-    }
+        }
 
 
     public Model getNextPatchLocation(Model model)
-    {
+        {
         int number = model.get("number");
         
         number++;
         if (number >= 128)
             {
-                number = 0;
+            number = 0;
             }
                 
         Model newModel = buildModel();
         newModel.set("number", number);
         return newModel;
-    }
+        }
 
     public String getPatchLocationName(Model model)
-    {
+        {
         // getPatchLocationName() is called from sprout() as a test to see if we should enable
         // batch downloading.  If we haven't yet created an .init file, then parameters won't exist
         // yet and this method will bomb badly.  So we return null in this case.
@@ -1225,11 +1225,11 @@ public class WaldorfBlofeldMulti extends Synth
         
         int number = model.get("number") + 1;
         return "M" + ( number > 99 ? "" : (number > 9 ? "0" : "00")) + number;
-    }
+        }
         
     public boolean getSendsParametersAfterNonMergeParse()
-    {
+        {
         return true;
-    }
+        }
     
-}
+    }

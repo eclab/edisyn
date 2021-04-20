@@ -106,11 +106,11 @@ public abstract class Synth extends JComponent implements Updatable
     public JMenuItem testIncomingSynth;
     /** The "Send All Sounds Off Before Note On" menu */
     public JCheckBoxMenuItem sendsAllSoundsOffBetweenNotesMenu;
-	/** The "Keep Next Popup Open" menu */
-	public JCheckBoxMenuItem persistentChooserMenu;
-	/** The "Blend" menu */
-	public JMenu blend;
-	
+    /** The "Keep Next Popup Open" menu */
+    public JCheckBoxMenuItem persistentChooserMenu;
+    /** The "Blend" menu */
+    public JMenu blend;
+        
     // The four nudge models 
     Model[] nudge = new Model[4];
     // The 8 nudge-towards menus
@@ -276,7 +276,7 @@ public abstract class Synth extends JComponent implements Updatable
                 {
                 synth.sprout();
                 final JFrame frame = ((JFrame)(SwingUtilities.getRoot(synth)));
-	            setLastSynth(_class.getName());
+                setLastSynth(_class.getName());
 
                 if (Style.isMac())
                     {
@@ -641,8 +641,8 @@ public abstract class Synth extends JComponent implements Updatable
     /// When a message is received from the synthesizer, Edisyn will do this:
     /// If the message is a Sysex Message, then
     ///     Call recognize(message data).  If it returns true, then
-    ///            			Call performParse(message data, fromFile) [we presume it's a dump or a load from a file]
-    ///                     		Call parse(message data, fromFile) [we presume it's a dump or a load from a file]
+    ///                                 Call performParse(message data, fromFile) [we presume it's a dump or a load from a file]
+    ///                                 Call parse(message data, fromFile) [we presume it's a dump or a load from a file]
     ///             Else
     ///                     Call parseParameter(message data) [we presume it's a parameter change, or maybe something else]
     /// Else if the message is a complete CC or NRPN message
@@ -1000,7 +1000,7 @@ public abstract class Synth extends JComponent implements Updatable
     public int getPauseAfterWritePatch() { return getPauseAfterSendAllParameters(); }
 
     /** Override this to make sure that the given additional time (in ms) has transpired after receiving a 
-    	requested patch before we request a second patch (without a change patch command).  
+        requested patch before we request a second patch (without a change patch command).  
         The default is to be the same as getPauseAfterChangePatch(); */
     public int getPauseAfterReceivePatch() { return getPauseAfterChangePatch(); }
 
@@ -1014,7 +1014,7 @@ public abstract class Synth extends JComponent implements Updatable
     public boolean getSendsParametersAfterNonMergeParse() { return false; }
     
     /** Override this to return TRUE if you want Edisyn to sendAllParmameters() solely in response to the user directly selecting "Send Current Patch"
-    	and in no other situation.  By default this returns false. */ 
+        and in no other situation.  By default this returns false. */ 
     public boolean getSendsParametersOnlyOnSendCurrentPatch() { return false; }
 
     /** Override this to return TRUE if you want Edisyn to sendAllParmameters() immediately after a patch write. This isn't very common (the Kyra seems to need it). */ 
@@ -1173,24 +1173,24 @@ public abstract class Synth extends JComponent implements Updatable
         
         
         
-	/////// PARSING
-	
+    /////// PARSING
+        
     public int performParse(byte[] data, boolean fromFile)
-    	{
-    	boolean previous = model.getUpdateListeners();
-    	model.setUpdateListeners(false);
-    	int val = PARSE_ERROR;
-    	try
-    		{
-    		val = parse(data, fromFile);
-    		}
-    	finally
-    		{
-	    	model.setUpdateListeners(previous);
-    		model.updateAllListeners();
-    		}
-    	return val;
-    	}
+        {
+        boolean previous = model.getUpdateListeners();
+        model.setUpdateListeners(false);
+        int val = PARSE_ERROR;
+        try
+            {
+            val = parse(data, fromFile);
+            }
+        finally
+            {
+            model.setUpdateListeners(previous);
+            model.updateAllListeners();
+            }
+        return val;
+        }
         
 
 
@@ -1276,7 +1276,7 @@ public abstract class Synth extends JComponent implements Updatable
                                             // result is now PARSE_ERROR
                                             }
                                          
-                                         System.err.println("Parse result : " + result);       
+                                        System.err.println("Parse result : " + result);       
                                         incomingPatch = (result == PARSE_SUCCEEDED || result == PARSE_SUCCEEDED_UNTITLED);
                                         if (result == PARSE_CANCELLED)
                                             {
@@ -1295,15 +1295,15 @@ public abstract class Synth extends JComponent implements Updatable
                                         if (!backup.keyEquals(getModel()))  // it's changed, do an undo push
                                             undo.push(backup);
                                         setSendMIDI(true);
-                                         System.err.println("Sending Parameters?");       
+                                        System.err.println("Sending Parameters?");       
                                         if (getSendsParametersAfterNonMergeParse())
-                                        	{
-                                        	                                         System.err.println("Yes?");       
+                                            {
+                                            System.err.println("Yes?");       
 
                                             sendAllParameters();
                                             }
                                         file = null;
-										updateBlend();
+                                        updateBlend();
                                         }
 
                                     updateTitle();
@@ -2102,8 +2102,8 @@ public abstract class Synth extends JComponent implements Updatable
 
     /** Sends all the parameters in a patch to the synth.
 
-		<p>If getSendsParametersOnlyOnSendCurrentPatch() is TRUE then this method
-		does nothing.
+        <p>If getSendsParametersOnlyOnSendCurrentPatch() is TRUE then this method
+        does nothing.
 
         <p>If getSendsAllParametersAsDump() returns TRUE, then this is done by sending
         a single patch write to working memory, which may not be supported by all synths.
@@ -2114,9 +2114,9 @@ public abstract class Synth extends JComponent implements Updatable
     public final void sendAllParameters()
         {
         if (!getSendsParametersOnlyOnSendCurrentPatch())
-        	{
-        	sendAllParametersInternal();
-        	}
+            {
+            sendAllParametersInternal();
+            }
         }
         
     /** Sends all the parameters in a patch to the synth.
@@ -2132,7 +2132,7 @@ public abstract class Synth extends JComponent implements Updatable
         <p>If you override this method, be sure to call super.sendAllParametersInternal();
     */     
     protected boolean sendAllParametersInternal()
-    	{
+        {
         if (!getSendMIDI())
             return false;  // don't bother!  MIDI is off
 
@@ -2147,7 +2147,7 @@ public abstract class Synth extends JComponent implements Updatable
             sendDifferentParameters(null);
             }
         return true;
-    	}
+        }
 
     /** Individually sends all parameters for which the current model differs from the provided model.
         If the provided model is null, then all parameters are sent. */     
@@ -2883,15 +2883,15 @@ public abstract class Synth extends JComponent implements Updatable
     public static boolean getLastXAsBoolean(String slot, String synth, boolean defaultVal, boolean getFromSynthOnly)
         {
         String val = getLastX(slot, synth, getFromSynthOnly);
-		if ("false".equalsIgnoreCase(val))
-			{
-			return false;
-			}
-		else if ("true".equalsIgnoreCase(val))
-			{
-			return true;
-			}
-		else return defaultVal;
+        if ("false".equalsIgnoreCase(val))
+            {
+            return false;
+            }
+        else if ("true".equalsIgnoreCase(val))
+            {
+            return true;
+            }
+        else return defaultVal;
         }
 
     /** Given a preferences path X for a given synth, returns the value stored in X as an integer.
@@ -2943,8 +2943,8 @@ public abstract class Synth extends JComponent implements Updatable
     
     // sets the last synthesizer opened to the given classname
     public static void setLastSynth(String synth) { 
-    	setLastX(synth, "Synth", null, false); 
-    	}
+        setLastX(synth, "Synth", null, false); 
+        }
     // returns the classname of the last synthesizer opened
     public static String getLastSynth() { return getLastX("Synth", null, false); }
         
@@ -3489,7 +3489,7 @@ public abstract class Synth extends JComponent implements Updatable
         undoAndRandomize.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_EQUALS, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 
 
-		blend = new JMenu("Blend");
+        blend = new JMenu("Blend");
         JMenuItem blendOnce = new JMenuItem("Once");
         blend.add(blendOnce);
         blendOnce.addActionListener(new ActionListener()
@@ -3518,7 +3518,7 @@ public abstract class Synth extends JComponent implements Updatable
                 }
             });
         undoAndBlend.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_MINUS, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
-		menu.add(blend);
+        menu.add(blend);
 
         JMenu nudgeMenu = new JMenu("Nudge");
         menu.add(nudgeMenu);
@@ -4104,7 +4104,7 @@ public abstract class Synth extends JComponent implements Updatable
                 }
             });
 
-		// we don't use this any more
+        // we don't use this any more
         transmitTo = new JMenuItem("Send to Patch...");        
 
         menu.addSeparator();
@@ -4826,9 +4826,9 @@ public abstract class Synth extends JComponent implements Updatable
         menu = new JMenu("Options");
         menubar.add(menu);
                         
-		persistentChooserMenu  = new JCheckBoxMenuItem("Keep Next Popup Open");
+        persistentChooserMenu  = new JCheckBoxMenuItem("Keep Next Popup Open");
         persistentChooserMenu.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
-		menu.add(persistentChooserMenu);
+        menu.add(persistentChooserMenu);
         
         JCheckBoxMenuItem launchMenu = new JCheckBoxMenuItem("Launch With Last Editor");
         menu.add(launchMenu);
@@ -5104,7 +5104,7 @@ public abstract class Synth extends JComponent implements Updatable
         Model tempModel = buildModel();
         if (gatherPatchInfo("Request Patch", tempModel, false))
             {
-			resetBlend();
+            resetBlend();
             setMergeProbability(0.0);
             performRequestDump(tempModel, true);
             }
@@ -5121,7 +5121,7 @@ public abstract class Synth extends JComponent implements Updatable
         Model tempModel = buildModel();
         if (gatherPatchInfo("Request Merge", tempModel, false))
             {
-			resetBlend();
+            resetBlend();
             setMergeProbability(percentage);
             performRequestDump(tempModel, false);
             }
@@ -5156,12 +5156,12 @@ public abstract class Synth extends JComponent implements Updatable
                 
     void doSendToCurrentPatch()
         {
-	if (tuple == null || tuple.out == null)
+        if (tuple == null || tuple.out == null)
             {
             if (!setupMIDI())
                 return;
             }
-        sendAllParametersInternal();		// this ALWAYS sends to parameters
+        sendAllParametersInternal();            // this ALWAYS sends to parameters
         }
                 
     void doReset()
@@ -5211,7 +5211,7 @@ public abstract class Synth extends JComponent implements Updatable
         simplePause(getPauseAfterWritePatch());
         performChangePatch(model);     // do it at the end AND start here, as opposed to doSendtoPatch, which does it first.  We need to be at the end for the Kawai K4.
         if (getSendsParametersAfterWrite())
-        	sendAllParameters();
+            sendAllParameters();
         }
                 
     void doChangeMIDI()
@@ -5829,8 +5829,8 @@ public abstract class Synth extends JComponent implements Updatable
             if (patchTimer != null)
                 {
                 patchTimer.stop();
-	            saveBatchPatches();
-					patchFileOrDirectory = null;
+                saveBatchPatches();
+                patchFileOrDirectory = null;
                 patchTimer = null;
                 }
             if (noteTimer != null)
@@ -6287,7 +6287,7 @@ public abstract class Synth extends JComponent implements Updatable
                 String location = patches[indices[i][j]].location;
                 String name = patches[indices[i][j]].name;
                 if (location != null)
-                	names[i][j] = location + "   " + name;
+                    names[i][j] = location + "   " + name;
                 else
                     names[i][j] = name;
                 }
@@ -6296,13 +6296,13 @@ public abstract class Synth extends JComponent implements Updatable
         }
         
     String[] flattenNames(String[][] names)
-    	{
-    	ArrayList<String> n = new ArrayList<String>();
-    	for(int i = 0; i < names.length; i++)
-    		for(int j = 0; j < names[i].length; j++)
-    			n.add(names[i][j]);
-    	return (String[])(n.toArray(new String[0]));
-    	}
+        {
+        ArrayList<String> n = new ArrayList<String>();
+        for(int i = 0; i < names.length; i++)
+            for(int j = 0; j < names[i].length; j++)
+                n.add(names[i][j]);
+        return (String[])(n.toArray(new String[0]));
+        }
 
     /** Reorganizes the patches in the order provided by indices. 
         Indices were generated by extractPatchIndices().
@@ -6321,37 +6321,37 @@ public abstract class Synth extends JComponent implements Updatable
         return p;
         }
         
-	Patch[] flattenPatches(Patch[][] patches)
-		{
-    	int len = 0;
-    	for(int i = 0; i < patches.length; i++)
-    		len += patches[i].length;
-    	Patch[] p = new Patch[len];
-    	int count = 0;
-    	for(int i = 0; i < patches.length; i++)
-    		for(int j = 0 ; j < patches[i].length; j++)    			
-	    		{
-	    		p[count++] = patches[i][j];
-	    		}
-	    return p;
-		}
+    Patch[] flattenPatches(Patch[][] patches)
+        {
+        int len = 0;
+        for(int i = 0; i < patches.length; i++)
+            len += patches[i].length;
+        Patch[] p = new Patch[len];
+        int count = 0;
+        for(int i = 0; i < patches.length; i++)
+            for(int j = 0 ; j < patches[i].length; j++)                     
+                {
+                p[count++] = patches[i][j];
+                }
+        return p;
+        }
 
     byte[][][] extractSysex(Patch[] patches)
-    	{
-    	byte[][][] data = new byte[patches.length][][];
-    	for(int i = 0; i < patches.length; i++)
-    		data[i] = patches[i].sysex;
-    	return data;
-    	}
+        {
+        byte[][][] data = new byte[patches.length][][];
+        for(int i = 0; i < patches.length; i++)
+            data[i] = patches[i].sysex;
+        return data;
+        }
 
     byte[][] flattenSysex(byte[][][] data)
-    	{
-    	ArrayList<byte[]> messages = new ArrayList<byte[]>();
-    	for(int i = 0; i < data.length; i++)
-    		for(int j = 0; j < data[i].length; j++)
-    			messages.add(data[i][j]);
-    	return (byte[][])(messages.toArray(new byte[0][0]));
-    	}
+        {
+        ArrayList<byte[]> messages = new ArrayList<byte[]>();
+        for(int i = 0; i < data.length; i++)
+            for(int j = 0; j < data[i].length; j++)
+                messages.add(data[i][j]);
+        return (byte[][])(messages.toArray(new byte[0][0]));
+        }
 
 
     // Returns 0 if cancelled, 1 if corrupt, fix, 2 if not corrupt
@@ -6473,7 +6473,7 @@ public abstract class Synth extends JComponent implements Updatable
     /** Displays a bulk dialog panel for patches, returning data in the form { result, primary, secondary }.
         primary and secondary are only meaningful if result is BULK_DIALOG_RESULT_LOCAL or BULK_DIALOG_RESULT_NEW. */
     public int[] displayLoadBulkDialog(Patch[] patches, int[][] patchIndices, String title, String localLoad, 
-    	String newLoad, String writeAll, String breakOut, String individual, String cancel, boolean reduced )
+        String newLoad, String writeAll, String breakOut, String individual, String cancel, boolean reduced )
         {
         String[][] patchnames = extractPatchNames(patches, patchIndices);
         String[] classnames = extractSynthClassNames(patches, patchIndices);
@@ -6704,112 +6704,112 @@ public abstract class Synth extends JComponent implements Updatable
                                 }
                             else if (result == BULK_DIALOG_RESULT_WRITE)
                                 {
-					 			String[][] names = extractPatchNames(patches, patchIndices);
-					 			if (pat.length == 1)
-                                	{
-									if (showSimpleConfirm("Write All Patches", "Write all patches to the synth?"))
-										{
-										succeeded = true;
-										byte[][][] d = extractSysex(pat[0]);		// will modify the sysex in the patches themselves, but that's okay, we're not reusing them
-										for(int i = 0; i < classNames.length; i++)
-											{
-											Synth temp = (Synth)(instantiate(classNames[i], true, false, null));
-											if (!temp.adjustBulkSysexForWrite(this, d))
-												{ succeeded = false; break; }
-											}
-										if (succeeded)
-											{
-											succeeded = writeBulk((Synth)(instantiate(classNames[0], true, false, null)), /*names[0]*/ null, flattenSysex(d));
-											}
-										}
-									else succeeded = false;
-                                	}
+                                String[][] names = extractPatchNames(patches, patchIndices);
+                                if (pat.length == 1)
+                                    {
+                                    if (showSimpleConfirm("Write All Patches", "Write all patches to the synth?"))
+                                        {
+                                        succeeded = true;
+                                        byte[][][] d = extractSysex(pat[0]);            // will modify the sysex in the patches themselves, but that's okay, we're not reusing them
+                                        for(int i = 0; i < classNames.length; i++)
+                                            {
+                                            Synth temp = (Synth)(instantiate(classNames[i], true, false, null));
+                                            if (!temp.adjustBulkSysexForWrite(this, d))
+                                                { succeeded = false; break; }
+                                            }
+                                        if (succeeded)
+                                            {
+                                            succeeded = writeBulk((Synth)(instantiate(classNames[0], true, false, null)), /*names[0]*/ null, flattenSysex(d));
+                                            }
+                                        }
+                                    else succeeded = false;
+                                    }
                                 else
-                                	{
-									succeeded = true;
-									int res = showMultiOption(this, new String[0], new JComponent[0], 
-										new String[] { "Just This Synth", "All Synths", "Cancel" },
-										0, "Write All Patches", 
-										new JLabel("Write patches for all synth types in file, or just for " + getSynthNames()[pat[primary][0].synth] + "?"));
-									if (res < 0 || res == 2)
-										succeeded = false;
-									else if (res == 0)
-										{
-										succeeded = true;
-										byte[][][] d = extractSysex(pat[primary]);		// will modify the sysex in the patches themselves, but that's okay, we're not reusing them
-										for(int i = 0; i < classNames.length; i++)
-											{
-											Synth temp = (Synth)(instantiate(classNames[i], true, false, null));
-											if (!temp.adjustBulkSysexForWrite(this, d))
-												{ succeeded = false; break; }
-											}
-										if (succeeded)
-											{
-											succeeded = writeBulk((Synth)(instantiate(classNames[primary], true, false, null)), /*names[primary]*/ null, flattenSysex(d));
-											}
-										}
-									else
-										{
-										for(int j = 0; j < pat.length; j++)
-											{
-											byte[][][] d = extractSysex(pat[j]);		// will modify the sysex in the patches themselves, but that's okay, we're not reusing them
-											for(int i = 0; i < classNames.length; i++)
-												{
-												Synth temp = (Synth)(instantiate(classNames[i], true, false, null));
-												if (!temp.adjustBulkSysexForWrite(this, d))
-													{ succeeded = false; break; }
-												}
-											if (!succeeded) break;
-											}
-										if (succeeded)
-											{
-											byte[][][] d = extractSysex(flattenPatches(pat));
-											succeeded = writeBulk((Synth)(instantiate(classNames[0], true, false, null)), /*flattenNames(names)*/ null, flattenSysex(d));
-											}
-										}
-                                	}
+                                    {
+                                    succeeded = true;
+                                    int res = showMultiOption(this, new String[0], new JComponent[0], 
+                                        new String[] { "Just This Synth", "All Synths", "Cancel" },
+                                        0, "Write All Patches", 
+                                        new JLabel("Write patches for all synth types in file, or just for " + getSynthNames()[pat[primary][0].synth] + "?"));
+                                    if (res < 0 || res == 2)
+                                        succeeded = false;
+                                    else if (res == 0)
+                                        {
+                                        succeeded = true;
+                                        byte[][][] d = extractSysex(pat[primary]);              // will modify the sysex in the patches themselves, but that's okay, we're not reusing them
+                                        for(int i = 0; i < classNames.length; i++)
+                                            {
+                                            Synth temp = (Synth)(instantiate(classNames[i], true, false, null));
+                                            if (!temp.adjustBulkSysexForWrite(this, d))
+                                                { succeeded = false; break; }
+                                            }
+                                        if (succeeded)
+                                            {
+                                            succeeded = writeBulk((Synth)(instantiate(classNames[primary], true, false, null)), /*names[primary]*/ null, flattenSysex(d));
+                                            }
+                                        }
+                                    else
+                                        {
+                                        for(int j = 0; j < pat.length; j++)
+                                            {
+                                            byte[][][] d = extractSysex(pat[j]);            // will modify the sysex in the patches themselves, but that's okay, we're not reusing them
+                                            for(int i = 0; i < classNames.length; i++)
+                                                {
+                                                Synth temp = (Synth)(instantiate(classNames[i], true, false, null));
+                                                if (!temp.adjustBulkSysexForWrite(this, d))
+                                                    { succeeded = false; break; }
+                                                }
+                                            if (!succeeded) break;
+                                            }
+                                        if (succeeded)
+                                            {
+                                            byte[][][] d = extractSysex(flattenPatches(pat));
+                                            succeeded = writeBulk((Synth)(instantiate(classNames[0], true, false, null)), /*flattenNames(names)*/ null, flattenSysex(d));
+                                            }
+                                        }
+                                    }
                                 }
                             else if (result == BULK_DIALOG_RESULT_BREAK_OUT)
                                 {
                                 if (pat.length == 1)
-                                	{
-									if (showSimpleConfirm("Save Bulk File...", "Save a bulk file for " + getSynthNames()[pat[primary][0].synth] + "?"))
-										{
-									 	succeeded = saveAllPatches(pat, 0, true);
-										}
-									else succeeded = false;
-                                	}
+                                    {
+                                    if (showSimpleConfirm("Save Bulk File...", "Save a bulk file for " + getSynthNames()[pat[primary][0].synth] + "?"))
+                                        {
+                                        succeeded = saveAllPatches(pat, 0, true);
+                                        }
+                                    else succeeded = false;
+                                    }
                                 else
-                                	{
-									int res = showMultiOption(this, new String[0], new JComponent[0], 
-										new String[] { "Just This Synth", "All Synths", "Cancel" },
-										0, "Save Bulk Files...", 
-										new JLabel("Save bulk files for all synth types in this file, or just for " + getSynthNames()[pat[primary][0].synth] + "?"));
-									if (res < 0 || res == 2)
-										succeeded = false;
-									else succeeded = saveAllPatches(pat, (res == 0 ? primary : -1), true);
-									}
+                                    {
+                                    int res = showMultiOption(this, new String[0], new JComponent[0], 
+                                        new String[] { "Just This Synth", "All Synths", "Cancel" },
+                                        0, "Save Bulk Files...", 
+                                        new JLabel("Save bulk files for all synth types in this file, or just for " + getSynthNames()[pat[primary][0].synth] + "?"));
+                                    if (res < 0 || res == 2)
+                                        succeeded = false;
+                                    else succeeded = saveAllPatches(pat, (res == 0 ? primary : -1), true);
+                                    }
                                 }
                             else if (result == BULK_DIALOG_RESULT_INDIVIDUAL)
                                 {
                                 if (pat.length == 1)
-                                	{
-									if (showSimpleConfirm("Save Individual Files...", "Save a individual files for " + getSynthNames()[pat[primary][0].synth] + "?"))
-										{
-									 	succeeded = saveAllPatches(pat, 0, false);
-										}
-									else succeeded = false;
-                                	}
+                                    {
+                                    if (showSimpleConfirm("Save Individual Files...", "Save a individual files for " + getSynthNames()[pat[primary][0].synth] + "?"))
+                                        {
+                                        succeeded = saveAllPatches(pat, 0, false);
+                                        }
+                                    else succeeded = false;
+                                    }
                                 else
-                                	{
-									int res = showMultiOption(this, new String[0], new JComponent[0], 
-										new String[] { "Just This Synth", "All Synths", "Cancel" },
-										0, "Save Individual Files...", 
-										new JLabel("Save all Synths in File, or just for " + getSynthNames()[pat[primary][0].synth] + "?"));
-									if (res < 0 || res == 2)
-										succeeded = false;
-									else succeeded = saveAllPatches(pat, (res == 0 ? primary : -1), false);
-									}
+                                    {
+                                    int res = showMultiOption(this, new String[0], new JComponent[0], 
+                                        new String[] { "Just This Synth", "All Synths", "Cancel" },
+                                        0, "Save Individual Files...", 
+                                        new JLabel("Save all Synths in File, or just for " + getSynthNames()[pat[primary][0].synth] + "?"));
+                                    if (res < 0 || res == 2)
+                                        succeeded = false;
+                                    else succeeded = saveAllPatches(pat, (res == 0 ? primary : -1), false);
+                                    }
                                 }
                             else            /// uh....`
                                 {
@@ -6850,125 +6850,125 @@ public abstract class Synth extends JComponent implements Updatable
     // otherwise it indicates saving only a specific type.
         
     boolean saveAllPatches(Patch[][] patches, int patchType, boolean groupByType)
-    	{
-		JFileChooser chooser = new JFileChooser();
-		chooser.setDialogTitle(groupByType ? "Select Directory to Save Patch Groups" : "Select Directory to Save Patches");
-		chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-		chooser.setAcceptAllFileFilterUsed(false);
+        {
+        JFileChooser chooser = new JFileChooser();
+        chooser.setDialogTitle(groupByType ? "Select Directory to Save Patch Groups" : "Select Directory to Save Patches");
+        chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+        chooser.setAcceptAllFileFilterUsed(false);
         
-		if (file != null)
-			{
-			chooser.setCurrentDirectory(new File(file.getParentFile().getPath()));
-			}
-		else
-			{
-			String path = getLastDirectory();
-			if (path != null)
-				chooser.setCurrentDirectory(new File(path));
-			}
-		disableMenuBar();         
-		if (chooser.showOpenDialog((Frame)(SwingUtilities.getRoot(this))) != JFileChooser.APPROVE_OPTION)
-			{
-			enableMenuBar();
-			return false;			// cancelled
-			}
-		else
-			{
-			enableMenuBar();
-			File dir = chooser.getSelectedFile();
-			
-			if (groupByType)
-				{
-				int start = 0;
-				int end = patches.length;
-				if (patchType != -1)
-					{
-					start = patchType;
-					end = patchType + 1;
-					}
-					
-				for(int i = start; i < end; i++)
-					{
-					FileOutputStream os = null;
-					String name = getSynthNames()[patches[i][0].synth];
-					File f = new File(dir, name + ".syx");
-					try
-						{
-						os = new FileOutputStream(f);
-						for(int j = 0; j < patches[i].length; j++)
-							{
-							os.write(flatten(patches[i][j].sysex));
-							}
-						os.close();
-						}
-					catch (IOException e) // fail
-						{
-						showErrorWithStackTrace(e, "Patch Save Error.", "An error occurred while saving to the file " + (f == null ? " " : f.getName()));
-						Synth.handleException(e);
-						return false;
-						}
-					finally
-						{
-						if (os != null)
-							try { os.close(); }
-							catch (IOException e) { }
-						}
-					}
-				}
-			else
-				{
-				int start = 0;
-				int end = patches.length;
-				if (patchType != -1)
-					{
-					start = patchType;
-					end = patchType + 1;
-					}
+        if (file != null)
+            {
+            chooser.setCurrentDirectory(new File(file.getParentFile().getPath()));
+            }
+        else
+            {
+            String path = getLastDirectory();
+            if (path != null)
+                chooser.setCurrentDirectory(new File(path));
+            }
+        disableMenuBar();         
+        if (chooser.showOpenDialog((Frame)(SwingUtilities.getRoot(this))) != JFileChooser.APPROVE_OPTION)
+            {
+            enableMenuBar();
+            return false;                   // cancelled
+            }
+        else
+            {
+            enableMenuBar();
+            File dir = chooser.getSelectedFile();
+                        
+            if (groupByType)
+                {
+                int start = 0;
+                int end = patches.length;
+                if (patchType != -1)
+                    {
+                    start = patchType;
+                    end = patchType + 1;
+                    }
+                                        
+                for(int i = start; i < end; i++)
+                    {
+                    FileOutputStream os = null;
+                    String name = getSynthNames()[patches[i][0].synth];
+                    File f = new File(dir, name + ".syx");
+                    try
+                        {
+                        os = new FileOutputStream(f);
+                        for(int j = 0; j < patches[i].length; j++)
+                            {
+                            os.write(flatten(patches[i][j].sysex));
+                            }
+                        os.close();
+                        }
+                    catch (IOException e) // fail
+                        {
+                        showErrorWithStackTrace(e, "Patch Save Error.", "An error occurred while saving to the file " + (f == null ? " " : f.getName()));
+                        Synth.handleException(e);
+                        return false;
+                        }
+                    finally
+                        {
+                        if (os != null)
+                            try { os.close(); }
+                            catch (IOException e) { }
+                        }
+                    }
+                }
+            else
+                {
+                int start = 0;
+                int end = patches.length;
+                if (patchType != -1)
+                    {
+                    start = patchType;
+                    end = patchType + 1;
+                    }
 
-				File subdir = dir;
-				for(int i = start; i < end; i++)
-					{
-					int count = 1;
-					if (end - start > 1)		// more than one being saved out
-						{
-						String name = getSynthNames()[patches[i][0].synth];
-						subdir = new File(dir, name);
-						if (!subdir.mkdir())
-							{
-							showSimpleError("Patch Save Error", "Could not create the subdirectory" + subdir + "\nIs there possibly a file by that name already?");
-							return false;
-							}
-						}
-						
-					FileOutputStream os = null;
-					for(int j = 0; j < patches[i].length; j++)
-						{
-						String name = ("" + (count++) + (patches[i][j].name == null ? "" : "." + patches[i][j].name));
-						File f = new File(subdir, name + ".syx");
-						try
-							{
-							os = new FileOutputStream(f);
-							os.write(flatten(patches[i][j].sysex));
-							os.close();
-							}
-						catch (IOException e) // fail
-							{
-							showErrorWithStackTrace(e, "Patch Save Error.", "An error occurred while saving to the file " + (f == null ? " " : f.getName()));
-							Synth.handleException(e);
-							return false;
-							}
-						finally
-							{
-							if (os != null)
-								try { os.close(); }
-								catch (IOException e) { }
-							}
-						}						
-					}
-				}
-			}
-		return true;
-		}
+                File subdir = dir;
+                for(int i = start; i < end; i++)
+                    {
+                    int count = 1;
+                    if (end - start > 1)            // more than one being saved out
+                        {
+                        String name = getSynthNames()[patches[i][0].synth];
+                        subdir = new File(dir, name);
+                        if (!subdir.mkdir())
+                            {
+                            showSimpleError("Patch Save Error", "Could not create the subdirectory" + subdir + "\nIs there possibly a file by that name already?");
+                            return false;
+                            }
+                        }
+                                                
+                    FileOutputStream os = null;
+                    for(int j = 0; j < patches[i].length; j++)
+                        {
+                        String name = ("" + (count++) + (patches[i][j].name == null ? "" : "." + patches[i][j].name));
+                        File f = new File(subdir, name + ".syx");
+                        try
+                            {
+                            os = new FileOutputStream(f);
+                            os.write(flatten(patches[i][j].sysex));
+                            os.close();
+                            }
+                        catch (IOException e) // fail
+                            {
+                            showErrorWithStackTrace(e, "Patch Save Error.", "An error occurred while saving to the file " + (f == null ? " " : f.getName()));
+                            Synth.handleException(e);
+                            return false;
+                            }
+                        finally
+                            {
+                            if (os != null)
+                                try { os.close(); }
+                                catch (IOException e) { }
+                            }
+                        }                                               
+                    }
+                }
+            }
+        return true;
+        }
         
 
     // This writes out a bulk sysex, using a JProgressBar and a cancel button.  It's a complex thing to
@@ -7003,8 +7003,8 @@ public abstract class Synth extends JComponent implements Updatable
             public void run()
                 {
                 showMultiOption(Synth.this, (names == null ? new String[] { "Progress " } : new String[] { "Progress ", "Original Location/Name " }), 
-                							(names == null ? new JComponent[] { bar } : new JComponent[] { bar, patchName }), 
-                							new String[] { "Cancel" }, 0, "Bulk Write", "Writing patches to synthesizer...");
+                    (names == null ? new JComponent[] { bar } : new JComponent[] { bar, patchName }), 
+                    new String[] { "Cancel" }, 0, "Bulk Write", "Writing patches to synthesizer...");
                 writeBulkCancelled[0] = true;
                 }
             });
@@ -7039,8 +7039,8 @@ public abstract class Synth extends JComponent implements Updatable
                     simplePause(pause);
                     index[0]++;
                     bar.setValue(index[0] + 1);
-					if (names != null && index[0] < names.length)
-						patchName.setText(names[index[0]]);
+                    if (names != null && index[0] < names.length)
+                        patchName.setText(names[index[0]]);
                     }
                 }
             });
@@ -7430,50 +7430,50 @@ public abstract class Synth extends JComponent implements Updatable
     public boolean isBatchDownloading() { return patchTimer != null; }
     
     void saveBatchPatches()
-    	{
-    	if (batchPatches != null)
-			{
-					try { batchPatches.close(); }
-					catch (IOException ex) { }
-			}
-		batchPatches = null;
-    	}
-    	
+        {
+        if (batchPatches != null)
+            {
+            try { batchPatches.close(); }
+            catch (IOException ex) { }
+            }
+        batchPatches = null;
+        }
+        
     void loadBatchPatch(byte[] sysex)
-    	{
-    	if (batchPatches != null)
-    		{
-    		try
-    			{
-    			batchPatches.write(sysex);
-    			batchPatches.flush();  // in case the user quits Edisyn
-    			}
-			catch (IOException e) // fail
-				{
-				showErrorWithStackTrace(e, "File Error", "An error occurred while saving to the bulk file " + (patchFileOrDirectory == null ? " " : patchFileOrDirectory.getName()));
-				Synth.handleException(e);
-				if (batchPatches != null)
-					try { batchPatches.close(); }
-					catch (IOException ex) { }
-				batchPatches = null;
-				}
-    		}
-    	}
+        {
+        if (batchPatches != null)
+            {
+            try
+                {
+                batchPatches.write(sysex);
+                batchPatches.flush();  // in case the user quits Edisyn
+                }
+            catch (IOException e) // fail
+                {
+                showErrorWithStackTrace(e, "File Error", "An error occurred while saving to the bulk file " + (patchFileOrDirectory == null ? " " : patchFileOrDirectory.getName()));
+                Synth.handleException(e);
+                if (batchPatches != null)
+                    try { batchPatches.close(); }
+                    catch (IOException ex) { }
+                batchPatches = null;
+                }
+            }
+        }
 
-	/** This method normally queries the user for start and end patch numbers to
-		use for batch downloading.  In rare cases you may need to customize this,
-		such as to hard-code the start and end patch.  Otherwise, don't override it.
-	*/
-	public boolean setupBatchStartingAndEndingPatches(Model startPatch, Model endPatch)
-		{
-		if (!gatherPatchInfo("Starting Patch", currentPatch, false))
-			return false;
-			
-		if (!gatherPatchInfo("Ending Patch", endPatch, false))
-			return false;
-		
-		return true;
-		}
+    /** This method normally queries the user for start and end patch numbers to
+        use for batch downloading.  In rare cases you may need to customize this,
+        such as to hard-code the start and end patch.  Otherwise, don't override it.
+    */
+    public boolean setupBatchStartingAndEndingPatches(Model startPatch, Model endPatch)
+        {
+        if (!gatherPatchInfo("Starting Patch", currentPatch, false))
+            return false;
+                        
+        if (!gatherPatchInfo("Ending Patch", endPatch, false))
+            return false;
+                
+        return true;
+        }
     
     void doGetAllPatches()
         {
@@ -7482,7 +7482,7 @@ public abstract class Synth extends JComponent implements Updatable
             patchTimer.stop();
             patchTimer = null;
             saveBatchPatches();
-					patchFileOrDirectory = null;
+            patchFileOrDirectory = null;
             getAll.setText("Download Batch...");
             showSimpleMessage("Batch Download", "Batch download stopped." );
             }
@@ -7493,91 +7493,91 @@ public abstract class Synth extends JComponent implements Updatable
                 doHillClimb();
             // turn off morphing
             if (morphing)
-            	doMorph();
+                doMorph();
                 
                 
             int result = showMultiOption(this, new String[0], new JComponent[0], new String[] { "Save as Individual Files", "Save to Bulk File", "Cancel"}, 0,
-            	"Batch Download", "Save the Patches as individual files or as a single bulk file?");
+                "Batch Download", "Save the Patches as individual files or as a single bulk file?");
             System.err.println(result);
             if (result == -1 || result == 2) return;
             if (result == 1)
-            	{
-				FileDialog fd = new FileDialog((Frame)(SwingUtilities.getRoot(this)), "Save to Bulk Sysex File...", FileDialog.SAVE);
+                {
+                FileDialog fd = new FileDialog((Frame)(SwingUtilities.getRoot(this)), "Save to Bulk Sysex File...", FileDialog.SAVE);
 
-				fd.setFile(StringUtility.reviseFileName(getSynthNameLocal() + ".bulk.syx"));
-				String path = getLastDirectory();
-				if (path != null)
-					fd.setDirectory(path);
-									
-				disableMenuBar();
-				fd.setVisible(true);
-				enableMenuBar();
-	
-				File f = null; // make compiler happy
-				FileOutputStream os = null;
-				if (fd.getFile() != null)
-					{
-					setLastDirectory(fd.getDirectory());
-					patchFileOrDirectory = new File(fd.getDirectory(), StringUtility.ensureFileEndsWith(fd.getFile(), ".syx"));
-					batchPatches = null;
-					try 
-						{
-						batchPatches = new FileOutputStream(patchFileOrDirectory);
-						} 
-					catch (IOException e) // fail
-						{
-						showErrorWithStackTrace(e, "File Error", "An error occurred while saving to the bulk file " + (patchFileOrDirectory == null ? " " : patchFileOrDirectory.getName()));
-						Synth.handleException(e);
-						if (batchPatches != null)
-							try { batchPatches.close(); }
-							catch (IOException ex) { }
-						batchPatches = null;
-						}
-					}
-				else return;
-            	}
+                fd.setFile(StringUtility.reviseFileName(getSynthNameLocal() + ".bulk.syx"));
+                String path = getLastDirectory();
+                if (path != null)
+                    fd.setDirectory(path);
+                                                                        
+                disableMenuBar();
+                fd.setVisible(true);
+                enableMenuBar();
+        
+                File f = null; // make compiler happy
+                FileOutputStream os = null;
+                if (fd.getFile() != null)
+                    {
+                    setLastDirectory(fd.getDirectory());
+                    patchFileOrDirectory = new File(fd.getDirectory(), StringUtility.ensureFileEndsWith(fd.getFile(), ".syx"));
+                    batchPatches = null;
+                    try 
+                        {
+                        batchPatches = new FileOutputStream(patchFileOrDirectory);
+                        } 
+                    catch (IOException e) // fail
+                        {
+                        showErrorWithStackTrace(e, "File Error", "An error occurred while saving to the bulk file " + (patchFileOrDirectory == null ? " " : patchFileOrDirectory.getName()));
+                        Synth.handleException(e);
+                        if (batchPatches != null)
+                            try { batchPatches.close(); }
+                            catch (IOException ex) { }
+                        batchPatches = null;
+                        }
+                    }
+                else return;
+                }
             else
-            	{	
-				JFileChooser chooser = new JFileChooser();
-				chooser.setDialogTitle("Select Directory for Patches");
-				chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-				chooser.setAcceptAllFileFilterUsed(false);
+                {       
+                JFileChooser chooser = new JFileChooser();
+                chooser.setDialogTitle("Select Directory for Patches");
+                chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+                chooser.setAcceptAllFileFilterUsed(false);
 
-				if (file != null)
-					{
-					chooser.setCurrentDirectory(new File(file.getParentFile().getPath()));
-					}
-				else
-					{
-					String path = getLastDirectory();
-					if (path != null)
-						chooser.setCurrentDirectory(new File(path));
-					}
-				disableMenuBar();         
-				if (chooser.showOpenDialog((Frame)(SwingUtilities.getRoot(this))) != JFileChooser.APPROVE_OPTION)
-					{
-					enableMenuBar();
-					currentPatch = null;
-					return;
-					}
-				enableMenuBar();
-				patchFileOrDirectory = chooser.getSelectedFile();
-				batchPatches = null;
-            	}
+                if (file != null)
+                    {
+                    chooser.setCurrentDirectory(new File(file.getParentFile().getPath()));
+                    }
+                else
+                    {
+                    String path = getLastDirectory();
+                    if (path != null)
+                        chooser.setCurrentDirectory(new File(path));
+                    }
+                disableMenuBar();         
+                if (chooser.showOpenDialog((Frame)(SwingUtilities.getRoot(this))) != JFileChooser.APPROVE_OPTION)
+                    {
+                    enableMenuBar();
+                    currentPatch = null;
+                    return;
+                    }
+                enableMenuBar();
+                patchFileOrDirectory = chooser.getSelectedFile();
+                batchPatches = null;
+                }
             
             currentPatch = buildModel();
             finalPatch = buildModel();
             if (!setupBatchStartingAndEndingPatches(currentPatch, finalPatch))
-            	{
-            	currentPatch = null;
-            	finalPatch = null;
-            	return;
-            	}
+                {
+                currentPatch = null;
+                finalPatch = null;
+                return;
+                }
                 
             // request patch
 
             getAll.setText("Stop Downloading Batch");
-			resetBlend();
+            resetBlend();
             setMergeProbability(0.0);
             performRequestDump(currentPatch, true);
             incomingPatch = false;
@@ -7608,7 +7608,7 @@ public abstract class Synth extends JComponent implements Updatable
                                 {
                                 batchDownloadFailureCountdown = getBatchDownloadFailureCountdown();
                                 System.err.println("Warning (Synth): Download of " + getPatchLocationName(currentPatch) + " failed.  Requesting again.");
-								resetBlend();
+                                resetBlend();
                                 setMergeProbability(0.0);
                                 performRequestDump(currentPatch, true);
                                 }
@@ -7633,15 +7633,15 @@ public abstract class Synth extends JComponent implements Updatable
             patchTimer.stop();
             patchTimer = null;
             saveBatchPatches();
- 			patchFileOrDirectory = null;
-           	getAll.setText("Download Batch...");
+            patchFileOrDirectory = null;
+            getAll.setText("Download Batch...");
             showSimpleMessage("Batch Download", "Batch download finished." );
             }
         else
             {
             currentPatch = getNextPatchLocation(currentPatch);
             System.err.println("Patch " + currentPatch.get("bank") + " " + currentPatch.get("number"));
-			resetBlend();
+            resetBlend();
             setMergeProbability(0.0);
             performRequestDump(currentPatch, true);
             incomingPatch = false;
@@ -7662,52 +7662,52 @@ public abstract class Synth extends JComponent implements Updatable
             if (patchFileOrDirectory == null) { Synth.handleException(new RuntimeException("Nonexistent directory or file for handling dump patch loads")); return; } // this shouldn't happen
             
             if (batchPatches != null)
-            	{
-            	loadBatchPatch(data);
-            	}
-            else	// saving to directory
-            	{
-				String filename = getPatchLocationName(getModel());
-				if (filename == null) filename = "";
-				if (filename.length() > 0) filename = filename + ".";
-				String patchname = getPatchName(getModel());
-				if (patchname != null && patchname.length() > 0)
-					filename = filename + getPatchName(getModel());
-				filename = filename.trim();
-				if (filename.length() == 0)
-					filename = "Patch" + patchCounter + ".syx";
-				else
-					filename = filename + ".syx";
-			
-				filename = StringUtility.makeValidFilename(filename);
-				// substitute separators. Might as well
-				// filename = filename.replace('/', '-').replace('\\', '-');
-			
-				FileOutputStream os = null;
-				File f = null;
-				try
-					{
-					os = new FileOutputStream(f = new File(patchFileOrDirectory, filename));
-					os.write(data);
-					}
-				catch (IOException e) // fail
-					{
-					patchTimer.stop();
-					patchTimer = null;
-					saveBatchPatches();
-					patchFileOrDirectory = null;
-					getAll.setText("Download Batch...");
-					showErrorWithStackTrace(e, "Batch Download Failed.", "An error occurred while saving to the file " + (f == null ? " " : f.getName()));
-					Synth.handleException(e);
-					}
-				finally
-					{
-					if (os != null)
-						try { os.close(); }
-						catch (IOException e) { }
-					}
-				}
-			}
+                {
+                loadBatchPatch(data);
+                }
+            else        // saving to directory
+                {
+                String filename = getPatchLocationName(getModel());
+                if (filename == null) filename = "";
+                if (filename.length() > 0) filename = filename + ".";
+                String patchname = getPatchName(getModel());
+                if (patchname != null && patchname.length() > 0)
+                    filename = filename + getPatchName(getModel());
+                filename = filename.trim();
+                if (filename.length() == 0)
+                    filename = "Patch" + patchCounter + ".syx";
+                else
+                    filename = filename + ".syx";
+                        
+                filename = StringUtility.makeValidFilename(filename);
+                // substitute separators. Might as well
+                // filename = filename.replace('/', '-').replace('\\', '-');
+                        
+                FileOutputStream os = null;
+                File f = null;
+                try
+                    {
+                    os = new FileOutputStream(f = new File(patchFileOrDirectory, filename));
+                    os.write(data);
+                    }
+                catch (IOException e) // fail
+                    {
+                    patchTimer.stop();
+                    patchTimer = null;
+                    saveBatchPatches();
+                    patchFileOrDirectory = null;
+                    getAll.setText("Download Batch...");
+                    showErrorWithStackTrace(e, "Batch Download Failed.", "An error occurred while saving to the file " + (f == null ? " " : f.getName()));
+                    Synth.handleException(e);
+                    }
+                finally
+                    {
+                    if (os != null)
+                        try { os.close(); }
+                        catch (IOException e) { }
+                    }
+                }
+            }
         }
         
         
@@ -7735,130 +7735,130 @@ public abstract class Synth extends JComponent implements Updatable
 
 
     /** Returns a "first" patch location (commonly bank 0 patch 0), or null 
-    	if there is no such location. If your synth has an unusual (non-zero) 
-    	starting number or bank, you may need to override this.  Otherwise you 
-    	can probably avoid implementing this method, assuming that 
-    	getNextPatchLocation(...) returns either null or a model with valid 
-    	numbers and/or banks.  */
+        if there is no such location. If your synth has an unusual (non-zero) 
+        starting number or bank, you may need to override this.  Otherwise you 
+        can probably avoid implementing this method, assuming that 
+        getNextPatchLocation(...) returns either null or a model with valid 
+        numbers and/or banks.  */
     public Model getFirstPatchLocation()
-    	{
+        {
         Model newModel = buildModel();
         newModel.set("number", 0);
         newModel.set("bank", 0);
         
         // test to see if this is legitimate
         Model nextModel = getNextPatchLocation(model);
-        if (nextModel == null)						// uh oh
-        	{
-        	return null;
-        	}
+        if (nextModel == null)                                          // uh oh
+            {
+            return null;
+            }
         // test to see if numbers are implemented
-        if (nextModel.get("number", -1000) == -1000)		// uh oh
-        	{
-        	return null;
-        	}
+        if (nextModel.get("number", -1000) == -1000)            // uh oh
+            {
+            return null;
+            }
         // test to see if banks are implemented
-        if (nextModel.get("bank", -1000) == -1000)		// no banks, revise
-        	{
-			newModel = buildModel();
-			newModel.set("number", 0);
-        	}
-        	
-       	return newModel;
+        if (nextModel.get("bank", -1000) == -1000)              // no banks, revise
+            {
+            newModel = buildModel();
+            newModel.set("number", 0);
+            }
+                
+        return newModel;
         }
     
-    PatchLocation[] allPatchLocations = null;		// a little cacheing
+    PatchLocation[] allPatchLocations = null;           // a little cacheing
     /** Returns all the readable patch locations available in the Synth. */
     public PatchLocation[] gatherAllPatchLocations()
-    	{
-    	if (allPatchLocations != null) return allPatchLocations;
-    	
-    	Model startPatch = getFirstPatchLocation();
-    	if (startPatch != null)
-    		{
-    		Model endPatch = getNextPatchLocation(startPatch);
-    		if (endPatch != null)
-    			{
-    			return gatherPatchLocations(endPatch, startPatch);		// notice they're backward!
-    			}
-    		else		// uh....
-    			{
-				Synth.handleException(new RuntimeException("Synth.gatherAllPatchLocations had no valid next location."));
-    			return new PatchLocation[0];
-    			}
-    		}	
-    	else return new PatchLocation[0];
-    	}
-    	
+        {
+        if (allPatchLocations != null) return allPatchLocations;
+        
+        Model startPatch = getFirstPatchLocation();
+        if (startPatch != null)
+            {
+            Model endPatch = getNextPatchLocation(startPatch);
+            if (endPatch != null)
+                {
+                return gatherPatchLocations(endPatch, startPatch);              // notice they're backward!
+                }
+            else            // uh....
+                {
+                Synth.handleException(new RuntimeException("Synth.gatherAllPatchLocations had no valid next location."));
+                return new PatchLocation[0];
+                }
+            }       
+        else return new PatchLocation[0];
+        }
+        
     /** Creates an array of patch locations starting at startPatch and ending at endPatch. */
     public PatchLocation[] gatherPatchLocations(Model startPatch, Model endPatch)
-    	{
-    	PatchLocation start = new PatchLocation(startPatch);
-    	PatchLocation end = new PatchLocation(endPatch);
-    	if (start.number == PatchLocation.NO_NUMBER) 
-    		{
-			Synth.handleException(new RuntimeException("Synth.gatherPatchLocations received a start patch with no valid number."));
-    		return new PatchLocation[0];
-			}
-    	if (end.number == PatchLocation.NO_NUMBER) 
-    		{
-			Synth.handleException(new RuntimeException("Synth.gatherPatchLocations received a start patch with no valid number."));
-    		return new PatchLocation[0];
-			}
-			    	
-		ArrayList patches = new ArrayList();
-    	while(true)
-    		{
-    		patches.add(start);
-    		if (start.equals(end))	// all done
-    			break;
-    			
-    		startPatch = getNextPatchLocation(startPatch);
-    		start = new PatchLocation(startPatch);
-    		}
-    		
-    	return (PatchLocation[])(patches.toArray(new PatchLocation[0]));
-    	}
+        {
+        PatchLocation start = new PatchLocation(startPatch);
+        PatchLocation end = new PatchLocation(endPatch);
+        if (start.number == PatchLocation.NO_NUMBER) 
+            {
+            Synth.handleException(new RuntimeException("Synth.gatherPatchLocations received a start patch with no valid number."));
+            return new PatchLocation[0];
+            }
+        if (end.number == PatchLocation.NO_NUMBER) 
+            {
+            Synth.handleException(new RuntimeException("Synth.gatherPatchLocations received a start patch with no valid number."));
+            return new PatchLocation[0];
+            }
+                                
+        ArrayList patches = new ArrayList();
+        while(true)
+            {
+            patches.add(start);
+            if (start.equals(end))  // all done
+                break;
+                        
+            startPatch = getNextPatchLocation(startPatch);
+            start = new PatchLocation(startPatch);
+            }
+                
+        return (PatchLocation[])(patches.toArray(new PatchLocation[0]));
+        }
         
 
-	Model secondModel = null;
-	PatchLocation[] blendLocations = null;
-	
-	public void doBlendFull()
-		{
+    Model secondModel = null;
+    PatchLocation[] blendLocations = null;
+        
+    public void doBlendFull()
+        {
         if (tuple == null || tuple.out == null)
             {
             if (!setupMIDI())
                 return;
             }
                 
-		PatchLocation[] locs = gatherAllPatchLocations();
-		if (locs.length == 0 || locs.length == 1) // uh oh
-			{
-			showSimpleError("Blend Error", "Cannot blend patches for this synthesizer.");
-			}
-		else
-			{
-			blendLocations = locs;
-			performBlend();
-			}
-		}
+        PatchLocation[] locs = gatherAllPatchLocations();
+        if (locs.length == 0 || locs.length == 1) // uh oh
+            {
+            showSimpleError("Blend Error", "Cannot blend patches for this synthesizer.");
+            }
+        else
+            {
+            blendLocations = locs;
+            performBlend();
+            }
+        }
 
-	public void doBlendInRange()
-		{
+    public void doBlendInRange()
+        {
         if (tuple == null || tuple.out == null)
             {
             if (!setupMIDI())
                 return;
             }
                 
-		PatchLocation[] locs = gatherAllPatchLocations();
-		if (locs.length == 0 || locs.length == 1) // uh oh
-			{
-			showSimpleError("Blend Error", "Cannot blend patches for this synthesizer.");
-			}
-		else
-			{
+        PatchLocation[] locs = gatherAllPatchLocations();
+        if (locs.length == 0 || locs.length == 1) // uh oh
+            {
+            showSimpleError("Blend Error", "Cannot blend patches for this synthesizer.");
+            }
+        else
+            {
             Model startPatch = buildModel();
             if (!gatherPatchInfo("Starting Patch", startPatch, false))
                 { startPatch = null; return; }
@@ -7866,71 +7866,71 @@ public abstract class Synth extends JComponent implements Updatable
             Model endPatch = buildModel();
             if (!gatherPatchInfo("Ending Patch", endPatch, false))
                 { endPatch = null; return; }
-			
-			blendLocations = gatherPatchLocations(startPatch, endPatch);
-			performBlend();
-			}
-		}
-	
-	void performBlend()
-		{		
-		PatchLocation first = blendLocations[random.nextInt(blendLocations.length)];
-		PatchLocation second = blendLocations[random.nextInt(blendLocations.length)];
-	
-		while(second.equals(first))
-			{
-			second = blendLocations[random.nextInt(blendLocations.length)];
-			}
-	
-		Model firstModel = first.assignLocations(buildModel());
-		secondModel = second.assignLocations(buildModel());
-	
-		setMergeProbability(0.0);
-		performRequestDump(firstModel, false);	// I don't *think* we need to change the patch
-		}
-		
-	public void doUndoAndBlendAgain()
-		{
-		if (undo.undo.size() >= 2)	// gotta have at least two, because we're undoing twice
-			{
-			if (tuple == null || tuple.out == null)
-				{
-				if (!setupMIDI())
-					return;
-				}
+                        
+            blendLocations = gatherPatchLocations(startPatch, endPatch);
+            performBlend();
+            }
+        }
+        
+    void performBlend()
+        {               
+        PatchLocation first = blendLocations[random.nextInt(blendLocations.length)];
+        PatchLocation second = blendLocations[random.nextInt(blendLocations.length)];
+        
+        while(second.equals(first))
+            {
+            second = blendLocations[random.nextInt(blendLocations.length)];
+            }
+        
+        Model firstModel = first.assignLocations(buildModel());
+        secondModel = second.assignLocations(buildModel());
+        
+        setMergeProbability(0.0);
+        performRequestDump(firstModel, false);  // I don't *think* we need to change the patch
+        }
                 
-			if (blendLocations != null)
-				{
-				doUndo(false);          // no reason to send it
-				doUndo(false);          // no reason to send it		// yes, twice
-				performBlend();
-				}
-			else
-				{
-				showSimpleError("Undo", "Can't Undo and Blend Again: no previous blending!");
-				}
-			}
-		else
-			{
-			showSimpleError("Undo", "Can't Undo and Blend Again: no previous blending!");
-			}
-		}
-		
-	void updateBlend()
-		{
-		if (secondModel != null)
-			{
-			setMergeProbability(random.nextDouble() * 0.5 + 0.5);	// from 0.5 to 1.0
-			simplePause(getPauseAfterReceivePatch());
-			performRequestDump(secondModel, false);
-			}
-		secondModel = null;
-		}
+    public void doUndoAndBlendAgain()
+        {
+        if (undo.undo.size() >= 2)      // gotta have at least two, because we're undoing twice
+            {
+            if (tuple == null || tuple.out == null)
+                {
+                if (!setupMIDI())
+                    return;
+                }
+                
+            if (blendLocations != null)
+                {
+                doUndo(false);          // no reason to send it
+                doUndo(false);          // no reason to send it         // yes, twice
+                performBlend();
+                }
+            else
+                {
+                showSimpleError("Undo", "Can't Undo and Blend Again: no previous blending!");
+                }
+            }
+        else
+            {
+            showSimpleError("Undo", "Can't Undo and Blend Again: no previous blending!");
+            }
+        }
+                
+    void updateBlend()
+        {
+        if (secondModel != null)
+            {
+            setMergeProbability(random.nextDouble() * 0.5 + 0.5);   // from 0.5 to 1.0
+            simplePause(getPauseAfterReceivePatch());
+            performRequestDump(secondModel, false);
+            }
+        secondModel = null;
+        }
 
-	void resetBlend()
-		{
-		secondModel = null;
-		}
+    void resetBlend()
+        {
+        secondModel = null;
+        }
 
                 
 
@@ -8185,16 +8185,16 @@ public abstract class Synth extends JComponent implements Updatable
     public Object adjustBankSysexForEmit(byte[] data, Model model, int bank) { return data; }
     
     /** Override this method to modify the given bulk sysex data, in the form
-    	data[patch][sysexmessage][bytes].  All the data will be for your kind of
-    	synthesizer.  If you return false, then the write is canceled.  The provided
-    	synthesizer is *not* the synthesizer for the data (that's you).  Instead, it
-    	allows you to properly pop up a confirm dialog centered at the given window.
-    	That's all it should be used for.
-    	*/
+        data[patch][sysexmessage][bytes].  All the data will be for your kind of
+        synthesizer.  If you return false, then the write is canceled.  The provided
+        synthesizer is *not* the synthesizer for the data (that's you).  Instead, it
+        allows you to properly pop up a confirm dialog centered at the given window.
+        That's all it should be used for.
+    */
     public boolean adjustBulkSysexForWrite(Synth window, byte[][][] data)
-    {
+        {
         return true;
-    }
+        }
 
     /** Override this method to add an additional JComponent to the Bank Sysex Options dialog; you can then
         query this JComponent later to revise the bank dump prior to writing it to disk or to the synth via
@@ -8206,10 +8206,10 @@ public abstract class Synth extends JComponent implements Updatable
     
     public static final int DEFAULT_PASTES = 3;
     /** Override this method to force Edisyn to paste multiple times to the same category or tab.
-    	The reason you might want to do this is because Edisyn uses the *receiving* category to 
-    	determine the parameters to paste to, and if this category contains componets which dynamically
-    	appear or disappear, it might require multiple pastes to cause them to appear and eventually
-    	receive parameter changes.  The default returns DEFAULT_PASTES (3).  */
+        The reason you might want to do this is because Edisyn uses the *receiving* category to 
+        determine the parameters to paste to, and if this category contains componets which dynamically
+        appear or disappear, it might require multiple pastes to cause them to appear and eventually
+        receive parameter changes.  The default returns DEFAULT_PASTES (3).  */
     public int getNumberOfPastes() { return DEFAULT_PASTES; }
     
     

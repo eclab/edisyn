@@ -491,11 +491,11 @@ public class HillClimb extends SynthPanel
         {
         super(synth);
         
- 		method = new JComboBox(synth instanceof ProvidesNN ?
- 			new String[] { "Hill-Climber", "Constrictor", "NN Hill-Climber" } :
- 			new String[] { "Hill-Climber", "Constrictor" });
+        method = new JComboBox(synth instanceof ProvidesNN ?
+            new String[] { "Hill-Climber", "Constrictor", "NN Hill-Climber" } :
+            new String[] { "Hill-Climber", "Constrictor" });
     
-            blank = new Blank();
+        blank = new Blank();
 
         addAncestorListener ( new AncestorListener ()
             {
@@ -605,14 +605,14 @@ public class HillClimb extends SynthPanel
             {
             public void perform()
                 {
-                if (method.getSelectedIndex() == 2)		// NN Climb
-                	{
-                	climbNN();
-                	}
+                if (method.getSelectedIndex() == 2)             // NN Climb
+                    {
+                    climbNN();
+                    }
                 else
-                	{
-                	climb();
-                	}
+                    {
+                    climb();
+                    }
                 resetCurrentPlay();
                 }
             };

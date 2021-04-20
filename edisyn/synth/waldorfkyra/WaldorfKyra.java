@@ -1142,8 +1142,8 @@ public class WaldorfKyra extends Synth
         params = DELAY_TYPES;
         comp = new Chooser("Type", this, "fxddltype", params);
         vbox.add(comp);
-		hbox.add(vbox);
-		
+        hbox.add(vbox);
+                
         vbox = new VBox();
         params = DELAY_CLOCK_SOURCES;
         comp = new Chooser("Clock Source", this, "fxddlclocksource", params);
@@ -2137,7 +2137,7 @@ public class WaldorfKyra extends Synth
     "fxddldelaytime",
     "fxddlfeedback",
     "fxddlmix",
-    "-",									// was "fxddlcolor",
+    "-",                                                                        // was "fxddlcolor",
     "fxddlclocksource",
     "fxddlclockbeat",
     "-",                                        // "spare16",

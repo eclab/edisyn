@@ -31,8 +31,8 @@ public class KawaiK4Multi extends Synth
     public static final String[] BANKS_SHORT = { "A", "B", "C", "D" };
     public static final String[] KEYS = new String[] { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
     public static final String[] VELOCITY_SWITCHES = { "Soft", "Loud", "All" };  
-    	// Documentation says { "All", "Soft", "Loud" }; but it is wrong (it *is* the right ordering for the K1)
-    	// Thanks to bug report by Benjamin Wild (wildjamin@gmx.de)
+    // Documentation says { "All", "Soft", "Loud" }; but it is wrong (it *is* the right ordering for the K1)
+    // Thanks to bug report by Benjamin Wild (wildjamin@gmx.de)
     public static final String[] PLAY_MODES = { "Keyboard", "MIDI", "Both" };
     public static final String[] SUBMIX_CHANNELS = { "A", "B", "C", "D", "E", "F", "G", "H" };
 

@@ -49,6 +49,8 @@ public class Model implements Cloneable
 
     // The undo listener
     Undo undoListener = null;
+	public double [] latentVector = null;
+	   
 
     // Listeners should be updated when a key is modified
     boolean updateListeners = true;
@@ -673,6 +675,15 @@ public class Model implements Cloneable
         m.recentlySet = false;
         m.lastKey = null;
         m.allKeysListeners = new ArrayList<Updatable>();
+        if(latentVector == null){
+	        m.latentVector = null;
+        } else {
+	        m.latentVector = new double[latentVector.length];
+	        for(int i = 0; i < latentVector.length; i++){
+		        m.latentVector[i] = latentVector[i];
+	        }
+	        
+        }
 
         return m;
         }

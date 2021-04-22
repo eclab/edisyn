@@ -7,6 +7,7 @@ package edisyn.synth.yamahadx7;
 
 import edisyn.*;
 import edisyn.gui.*;
+import edisyn.nn.*;
 import java.awt.*;
 import java.awt.geom.*;
 import javax.swing.border.*;
@@ -23,7 +24,7 @@ import javax.sound.midi.*;
    @author Sean Luke
 */
 
-public class YamahaDX7 extends Synth
+public class YamahaDX7 extends Synth implements ProvidesNN
     {
     /// Various collections of parameter names for pop-up menus
         
@@ -79,6 +80,22 @@ public class YamahaDX7 extends Synth
     
     public static final String[] KS_CURVES = { "- Linear", "- Exp", "+ Exp", "+ Linear" };
     public static final String[] NOTES = {"A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#" };
+    static Network encoder = null;
+    static Network decoder = null;
+
+    static Network getEncoder(){
+        if(encoder == null){
+            encoder = Network.loadFromFile("edisyn/synth/yamahadx7/encoder.txt");
+        }
+        return encoder;
+    }
+
+    static Network getDecoder(){
+        if(decoder == null){
+            decoder = Network.loadFromFile("edisyn/synth/yamahadx7/decoder.txt");
+        }
+        return decoder;
+    }
 
 
     public JFrame sprout()
@@ -817,6 +834,62 @@ public class YamahaDX7 extends Synth
     "name10",
 
     };
+	public double[] encode()
+	    {
+        // Hardcoded constant for now, really should fix this to be computed in the future
+        int encodedLength = 225;
+        double[] vector = new double[encodedLength];
+        int index = 0;
+        // Ignore the name parameters, so -10
+		for(int i = 0; i < allParameters.length-10; i++){
+			String parameter = allParameters[i];
+			if(model.metricMinExists(parameter)){
+				index = ProvidesNN.encodeScaled(vector,index,model.get(parameter), model.getMin(parameter), model.getMax(parameter));
+			} else {
+				index = ProvidesNN.encodeOneHot(vector,index,model.get(parameter), model.getMin(parameter), model.getMax(parameter));
+			}
+		}
+		return getEncoder().feed(vector);
+	    }
+	public double[] encode(Model model)
+	    {
+        // Hardcoded constant for now, really should fix this to be computed in the future
+        int encodedLength = 225;
+        double[] vector = new double[encodedLength];
+        int index = 0;
+        // Ignore the name parameters, so -10
+		for(int i = 0; i < allParameters.length-10; i++){
+			String parameter = allParameters[i];
+			if(model.metricMinExists(parameter)){
+				index = ProvidesNN.encodeScaled(vector,index,model.get(parameter), model.getMin(parameter), model.getMax(parameter));
+			} else {
+				index = ProvidesNN.encodeOneHot(vector,index,model.get(parameter), model.getMin(parameter), model.getMax(parameter));
+			}
+		}
+		return getEncoder().feed(vector);
+	    }
+	public Model decode(double[] vector)
+	    {
+		Model newModel = model.copy();
+		newModel.latentVector = vector;
+		vector = getDecoder().feed(vector);
+		int index = 0;
+        // Ignore the name parameters, so -10
+		for(int i = 0; i < allParameters.length-10; i++){
+			String parameter = allParameters[i];
+			if(model.metricMinExists(parameter)){
+				int[] v = ProvidesNN.decodeScaled(vector, index, model.getMin(parameter), model.getMax(parameter));
+				index = v[0];
+				newModel.set(parameter, v[1]);
+			} else {
+				int[] v = ProvidesNN.decodeOneHot(vector, index, model.getMin(parameter), model.getMax(parameter));
+				index = v[0];
+				newModel.set(parameter, v[1]);
+			}
+			
+		}
+		return newModel;
+	    }
 
     public Object[] emitAll(String key)
         {

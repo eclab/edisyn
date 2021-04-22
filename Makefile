@@ -4,10 +4,10 @@
 JAVAC = javac
 #JAVACFLAGS = -target 1.5 -source 1.5
 
-all: DUMMY
+all: 
 	javac -cp libraries/coremidi4j-1.5.jar:edisyn $$(find edisyn -name '*.java') 
 
-run: DUMMY
+run:
 	java -cp libraries/coremidi4j-1.5.jar:. edisyn.Edisyn
 
 indent:

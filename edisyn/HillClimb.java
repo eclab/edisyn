@@ -999,7 +999,7 @@ public class HillClimb extends SynthPanel
 
     void setMethod(int method)
         {
-        boolean c = (method == 0);
+        boolean c = (method == 0 || method == 2);
         climb.getButton().setEnabled(c);
         constrict.getButton().setEnabled(!c);
         for(int i = 0; i < ratings.length; i++)
@@ -1363,6 +1363,30 @@ public class HillClimb extends SynthPanel
             array[start + i] = temp;
             }
         }
+    double[] shiftVectorUniform(double[] vector, Random random, double amount)
+        {
+	    double[] out = new double[vector.length];
+        for(int i = 0; i < vector.length; i++){
+	        out[i] = vector[i]+2*(random.nextDouble()-0.5)*amount;
+        }
+        return out;
+
+
+        }
+
+    void produceNN(Random random, String[] keys, double weight, Model a)
+	    {
+		System.out.println(weight);
+		if(a.latentVector == null){
+			a.latentVector = ((ProvidesNN)synth).encode(a);
+		}
+        for(int i = 0; i < NUM_CANDIDATES; i++){
+	        currentModels[i] = ((ProvidesNN)synth).decode(shiftVectorUniform(a.latentVector, random, weight*5));
+        }
+        shuffle(random, currentModels, 0, NUM_CANDIDATES);
+        
+
+        }
 
     public static final double MUTATION_WEIGHT = 1.0;
     
@@ -1720,19 +1744,19 @@ public class HillClimb extends SynthPanel
         else if (bestModels[1] == -1)
             {
             pushStack(bestModels, new Model[] { currentModels[bestModels[0]], null, null }, getSelectedResults(), currentModels);
-            produce(random, keys, CLIMB_RECOMBINATION_RATE, weight, currentModels[bestModels[0]], oldA);
+            produceNN(random, keys, weight, currentModels[bestModels[0]]);
             operation = OPERATION_CLIMB_NN;
             }
         else if (bestModels[2] == -1)
             {
             pushStack(bestModels, new Model[] { currentModels[bestModels[0]], currentModels[bestModels[1]], null }, getSelectedResults(), currentModels);
-            produce(random, keys, CLIMB_RECOMBINATION_RATE, weight, currentModels[bestModels[0]], currentModels[bestModels[1]], oldA);
+            produceNN(random, keys, weight, currentModels[bestModels[0]]);
             operation = OPERATION_CLIMB_NN;
             }
         else
             {
             pushStack(bestModels, new Model[] { currentModels[bestModels[0]], currentModels[bestModels[1]], currentModels[bestModels[2]] }, getSelectedResults(), currentModels);
-            produce(random, keys, CLIMB_RECOMBINATION_RATE, weight, currentModels[bestModels[0]], currentModels[bestModels[1]], currentModels[bestModels[2]], oldA);
+            produceNN(random, keys, weight, currentModels[bestModels[0]]);
             operation = OPERATION_CLIMB_NN;
             }
         

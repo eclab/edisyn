@@ -226,7 +226,7 @@ public class Style
                 if(scale instanceof Integer && ((Integer) scale).intValue() == 2) return true;
                 }
             } 
-        catch (Exception e) { Synth.handleException(e); }
+        catch (Exception e) { } 	// Synth.handleException(e); }
         return false;
         }
 

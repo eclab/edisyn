@@ -1366,24 +1366,136 @@ public class HillClimb extends SynthPanel
     double[] shiftVectorUniform(double[] vector, Random random, double amount)
         {
 	    double[] out = new double[vector.length];
-        for(int i = 0; i < vector.length; i++){
+        for(int i = 0; i < vector.length; i++)
+	        {
 	        out[i] = vector[i]+2*(random.nextDouble()-0.5)*amount;
-        }
+	        }
         return out;
 
 
         }
 
+    double [] shiftVectorGaussian(double[] vector, Random random, double amount)
+	    {
+        double[] out = new double[vector.length];
+        for(int i = 0; i < vector.length; i++)
+	        {
+	        out[i] = vector[i] + (random.nextGaussian()*amount);
+	        }
+        return out;
+
+	    }
+
     void produceNN(Random random, String[] keys, double weight, Model a)
 	    {
 		System.out.println(weight);
-		if(a.latentVector == null){
+		if(a.latentVector == null)
+			{
 			a.latentVector = ((ProvidesNN)synth).encode(a);
-		}
-        for(int i = 0; i < NUM_CANDIDATES; i++){
-	        currentModels[i] = ((ProvidesNN)synth).decode(shiftVectorUniform(a.latentVector, random, weight*5));
-        }
+			}
+        for(int i = 0; i < NUM_CANDIDATES; i++)
+	        {
+	        currentModels[i] = ((ProvidesNN)synth).decode(shiftVectorGaussian(a.latentVector, random, weight*5));
+	        }
         shuffle(random, currentModels, 0, NUM_CANDIDATES);
+        
+
+        }
+
+    double[] meanVectors(double[] vec1, double[] vec2)
+        {
+	        double out[] = new double[vec2.length];
+	        for(int i = 0; i < vec1.length; i++)
+		        {
+			        out[i] = (vec1[i] + vec2[i])/2;
+		        }
+	        return out;
+
+        }
+    double[] meanVectors(double[] vec1, double[] vec2, double[] vec3)
+        {
+	        double out[] = new double[vec2.length];
+	        for(int i = 0; i < vec1.length; i++)
+		        {
+			        out[i] = (vec1[i] + vec2[i] + vec3[i])/3;
+		        }
+	        return out;
+
+        }
+	    
+
+	void produceNN(Random random, String[] keys, double weight, Model a, Model b)
+	    {
+		System.out.println(weight);
+        int numStages = NUM_CANDIDATES / STAGE_SIZE;
+		if(a.latentVector == null)
+			{
+			a.latentVector = ((ProvidesNN)synth).encode(a);
+            }
+		if(b.latentVector == null)
+			{
+			b.latentVector = ((ProvidesNN)synth).encode(b);
+            }
+		
+		for(int j = 0; j < numStages; j++)
+			{
+            for(int i = 0; i < STAGE_SIZE/2; i++)
+                {
+                currentModels[j*STAGE_SIZE + i] = ((ProvidesNN)synth).decode(shiftVectorGaussian(a.latentVector, random, weight*5));
+                }
+            for(int i = STAGE_SIZE/2; i < 3*STAGE_SIZE/4; i++)
+	            {
+                currentModels[j*STAGE_SIZE + i] = ((ProvidesNN)synth).decode(shiftVectorGaussian(b.latentVector, random, weight*5));
+	            }
+            for(int i = 3*STAGE_SIZE/4; i < STAGE_SIZE; i++)
+	            {
+		            currentModels[j*STAGE_SIZE + i] = ((ProvidesNN)synth).decode(shiftVectorGaussian(meanVectors(a.latentVector, b.latentVector), random, weight*5));
+	            }
+            }
+		shuffle(random, currentModels, 0, STAGE_SIZE);
+		shuffle(random, currentModels, STAGE_SIZE, STAGE_SIZE);
+        
+
+        }
+
+    void produceNN(Random random, String[] keys, double weight, Model a, Model b, Model c)
+	    {
+		System.out.println(weight);
+        int numStages = NUM_CANDIDATES / STAGE_SIZE;
+		if(a.latentVector == null)
+			{
+			a.latentVector = ((ProvidesNN)synth).encode(a);
+            }
+		if(b.latentVector == null)
+			{
+			b.latentVector = ((ProvidesNN)synth).encode(b);
+            }
+		if(c.latentVector == null)
+			{
+            c.latentVector = ((ProvidesNN)synth).encode(c);
+			}
+		
+		for(int j = 0; j < numStages; j++)
+			{
+                currentModels[j*STAGE_SIZE + 0] = ((ProvidesNN)synth).decode(shiftVectorGaussian(a.latentVector, random, weight*5));
+                currentModels[j*STAGE_SIZE + 1] = ((ProvidesNN)synth).decode(shiftVectorGaussian(a.latentVector, random, weight*5));
+                currentModels[j*STAGE_SIZE + 2] = ((ProvidesNN)synth).decode(shiftVectorGaussian(a.latentVector, random, weight*5));
+                currentModels[j*STAGE_SIZE + 3] = ((ProvidesNN)synth).decode(shiftVectorGaussian(a.latentVector, random, weight*5));
+                currentModels[j*STAGE_SIZE + 4] = ((ProvidesNN)synth).decode(shiftVectorGaussian(b.latentVector, random, weight*5));
+                currentModels[j*STAGE_SIZE + 5] = ((ProvidesNN)synth).decode(shiftVectorGaussian(b.latentVector, random, weight*5));
+                currentModels[j*STAGE_SIZE + 6] = ((ProvidesNN)synth).decode(shiftVectorGaussian(b.latentVector, random, weight*5));
+                currentModels[j*STAGE_SIZE + 7] = ((ProvidesNN)synth).decode(shiftVectorGaussian(c.latentVector, random, weight*5));
+                currentModels[j*STAGE_SIZE + 8] = ((ProvidesNN)synth).decode(shiftVectorGaussian(c.latentVector, random, weight*5));
+		        currentModels[j*STAGE_SIZE + 9] = ((ProvidesNN)synth).decode(shiftVectorGaussian(meanVectors(a.latentVector, b.latentVector), random, weight*5));
+		        currentModels[j*STAGE_SIZE + 10] = ((ProvidesNN)synth).decode(shiftVectorGaussian(meanVectors(a.latentVector, b.latentVector), random, weight*5));
+		        currentModels[j*STAGE_SIZE + 11] = ((ProvidesNN)synth).decode(shiftVectorGaussian(meanVectors(a.latentVector, c.latentVector), random, weight*5));
+		        currentModels[j*STAGE_SIZE + 12] = ((ProvidesNN)synth).decode(shiftVectorGaussian(meanVectors(a.latentVector, c.latentVector), random, weight*5));
+		        currentModels[j*STAGE_SIZE + 13] = ((ProvidesNN)synth).decode(shiftVectorGaussian(meanVectors(b.latentVector, c.latentVector), random, weight*5));
+		        currentModels[j*STAGE_SIZE + 14] = ((ProvidesNN)synth).decode(shiftVectorGaussian(meanVectors(b.latentVector, c.latentVector), random, weight*5));
+		        currentModels[j*STAGE_SIZE + 15] = ((ProvidesNN)synth).decode(shiftVectorGaussian(meanVectors(a.latentVector, b.latentVector, c.latentVector), random, weight*5));
+            }
+		shuffle(random, currentModels, 0, STAGE_SIZE);
+		shuffle(random, currentModels, STAGE_SIZE, STAGE_SIZE);
         
 
         }
@@ -1750,13 +1862,13 @@ public class HillClimb extends SynthPanel
         else if (bestModels[2] == -1)
             {
             pushStack(bestModels, new Model[] { currentModels[bestModels[0]], currentModels[bestModels[1]], null }, getSelectedResults(), currentModels);
-            produceNN(random, keys, weight, currentModels[bestModels[0]]);
+            produceNN(random, keys, weight, currentModels[bestModels[0]], currentModels[bestModels[1]]);
             operation = OPERATION_CLIMB_NN;
             }
         else
             {
             pushStack(bestModels, new Model[] { currentModels[bestModels[0]], currentModels[bestModels[1]], currentModels[bestModels[2]] }, getSelectedResults(), currentModels);
-            produceNN(random, keys, weight, currentModels[bestModels[0]]);
+            produceNN(random, keys, weight, currentModels[bestModels[0]], currentModels[bestModels[1]], currentModels[bestModels[2]]);
             operation = OPERATION_CLIMB_NN;
             }
         

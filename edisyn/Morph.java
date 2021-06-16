@@ -404,7 +404,7 @@ public class Morph extends SynthPanel
             {
             sources[button] = synth.getModel().copy();
             String currentPatchName = synth.getPatchName(synth.getModel());
-            buttons[button].getButton().setText(currentPatchName == null ? "Current Patch" : "" + currentPatchName);
+            buttons[button].getButton().setText(currentPatchName == null ? "Current Patch" : "" + currentPatchName.trim());
             }
         else if (reset == 1)
             {

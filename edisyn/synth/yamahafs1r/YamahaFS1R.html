@@ -26,7 +26,9 @@ Voices can't be played alone: they have to be placed in a Part in a Performance 
 The menu has several options which hopefully make working with the patch editor more useful:
 
 <ul>
-<li><b>Set Up Test Performance for Part 1 with Filter</b>&nbsp;&nbsp;&nbsp;This builds a blank Performance with empty effects, and sends it to the FS1R, then sets Send/Receive Part... to 1, and then Auditions the Part with the filter switch turned on (see menu options below).  As a result, the Performance is set up to receive notes only on Part 1, the voice gets sent to Part 1, Part 1's filter is turned on, and the other Parts are turned off.  You may find this useful for initiating and editing a brand new voice patch.
+<li><b>Show Current Performance</b>&nbsp;&nbsp;&nbsp;This does exactly what it says.
+
+<p><li><b>Set Up Test Performance for Part 1 with Filter</b>&nbsp;&nbsp;&nbsp;This builds a blank Performance with empty effects, and sends it to the FS1R, then sets Send/Receive Part... to 1, and then Auditions the Part with the filter switch turned on (see menu options below).  As a result, the Performance is set up to receive notes only on Part 1, the voice gets sent to Part 1, Part 1's filter is turned on, and the other Parts are turned off.  You may find this useful for initiating and editing a brand new voice patch.
 
 <p><li><b>Set Up Test Performance for Part 1 without Filter</b>&nbsp;&nbsp;&nbsp;Exactly the same as above, except that Part 1's filter switch is turned off.
 
@@ -36,7 +38,7 @@ The menu has several options which hopefully make working with the patch editor 
 
 <p><li><b>Strip Effects</b>&nbsp;&nbsp;&nbsp;This turns off all effects in the Performance.  You might wish to do this if you had loaded a performance and wanted to hear how a given voice actually sounded.
 
-<p><li><b>Mute Operators...</b>nbsp;&nbsp;&nbsp;This lets you temporarily mute voiced and unvoiced operators of your choice, notionally so you can focus on hearing certain operators.  "Muting" mean that Edisyn will send the FS1R a command to set their Output Level to 0, and another command to disable Fseq.  The actual parameter setting in Edisyn will be unaffected.  If an operator is unmuted, Output Level and Fseq will be restored.  Note that this only applies to immediate real-time changes: requesting a patch, writing a patch, or sending it, may reset the Mute settings.
+<p><li><b>Mute Operators...</b>&nbsp;&nbsp;&nbsp;This lets you temporarily mute voiced and unvoiced operators of your choice, notionally so you can focus on hearing certain operators.  "Muting" mean that Edisyn will send the FS1R a command to set their Output Level to 0, and another command to disable Fseq.  The actual parameter setting in Edisyn will be unaffected.  If an operator is unmuted, Output Level and Fseq will be restored.  Note that this only applies to immediate real-time changes: requesting a patch, writing a patch, or sending it, may reset the Mute settings.
 
 <p><li><b>Send/Receive Part (1, 2, 3, 4)</b>&nbsp;&nbsp;&nbsp;This causes Edisyn to use the given Part when sending and requesting the current voice patch.  This allows you to work on different Parts of a performance.  You may also wish to Audition on the part (see menu item above) after setting this.
   
@@ -70,7 +72,7 @@ It's easy: just use the DX7 Editor.
 <ul>
 <li>Changing patches or loading a patch takes a <b>very long amount of time</b>, during which the FS1R will be unresponsive to requests to play notes etc.  You will find this annoying.
 
-<li>Because loading a patch takes a long time (just under 3 seconds) batch-downloading patches from the unit can take much longer than you'd expect.
+<p><li>Because loading a patch takes a long time (just under 3 seconds) batch-downloading patches from the unit can take much longer than you'd expect.
 
 <p><li>If you set the bandwidth of an unvoiced operator to 0, unexpected and unstable sound occurs.  Don't do that: it's not clear why it's even an option.  See pages 80 and 81 of the manual.
 

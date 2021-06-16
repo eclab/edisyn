@@ -24,6 +24,7 @@ public class Category extends JComponent implements Gatherable
     {             
     Color color;
     Synth synth;
+    String name = "";
     
     String preamble;
     String preamble2;
@@ -58,6 +59,7 @@ public class Category extends JComponent implements Gatherable
     public void setAuxillary(Gatherable comp) { auxillary = comp; }
     
     PopupMenu pop = new PopupMenu();
+    int stringWidth;
       
     public boolean isPasteCompatible(String preamble)
         {
@@ -300,7 +302,6 @@ public class Category extends JComponent implements Gatherable
         repaint();
         }
     
-            
     /** If synth is non-null, then double-clicking on the category will select or deselect all the
         components inside it for mutation purposes. */
     public Category(final Synth synth, String label, Color color)
@@ -316,9 +317,11 @@ public class Category extends JComponent implements Gatherable
                 {
                 public void mousePressed(MouseEvent e)
                     {
-                    if (e.getY() < 20 &&
-                            (((e.getModifiers() & InputEvent.BUTTON3_MASK) == InputEvent.BUTTON3_MASK) || 
-                            ((e.getModifiers() & InputEvent.SHIFT_MASK) == InputEvent.SHIFT_MASK)))
+                   	if (e.getY() < 20 &&
+                    	(stringWidth == 0 || e.getX() < stringWidth)
+                    // && (((e.getModifiers() & InputEvent.BUTTON3_MASK) == InputEvent.BUTTON3_MASK) || 
+                       //     ((e.getModifiers() & InputEvent.SHIFT_MASK) == InputEvent.SHIFT_MASK))
+                            )
                         {
                         copy.setEnabled(pasteable);
                         copyFromMutable.setEnabled(pasteable);
@@ -486,6 +489,9 @@ public class Category extends JComponent implements Gatherable
     
     public void setName(String label)
         {
+        this.name = label;
+        stringWidth = 0; 		// reset
+        
         // here we're going to do a little hack.  TitledBorder doesn't put the title
         // on the FAR LEFT of the line, so when we draw the border we get a little square
         // dot to the left of the title which looks really annoying.  Rather than build a
@@ -556,9 +562,15 @@ public class Category extends JComponent implements Gatherable
             }
         }
     
+ 	// even with modification for the insets, the text position value seems to be off by a bit
+    int STRING_WIDTH_COMPENSATION = 10;
+    
     public void paintComponent(Graphics g)
         {
         Graphics2D graphics = (Graphics2D) g;
+ 
+ 		if (stringWidth == 0)
+			stringWidth = STRING_WIDTH_COMPENSATION + graphics.getFontMetrics(Style.CATEGORY_FONT()).stringWidth(name);
 
         Style.prepareGraphics(g);
 

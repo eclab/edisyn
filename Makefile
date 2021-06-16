@@ -2,13 +2,12 @@
 
 #JAVAC = javac ${JAVACFLAGS}
 JAVAC = javac
-#JAVACFLAGS = -target 1.5 -source 1.5
 
 all: DUMMY
-	javac -cp libraries/coremidi4j-1.5.jar:edisyn $$(find edisyn -name '*.java') 
+	javac -cp libraries/coremidi4j-1.6.jar:edisyn $$(find edisyn -name '*.java') 
 
 run: DUMMY
-	java -cp libraries/coremidi4j-1.5.jar:. edisyn.Edisyn
+	java -cp libraries/coremidi4j-1.6.jar:. edisyn.Edisyn
 
 indent:
 	touch ${HOME}/.emacs
@@ -20,9 +19,10 @@ jar:
 	touch /tmp/manifest.add
 	rm /tmp/manifest.add
 	echo "Main-Class: edisyn.Edisyn" > /tmp/manifest.add
-	cd libraries ; jar -xvf coremidi4j-1.5.jar
+	cd libraries ; jar -xvf coremidi4j-1.6.jar
 	mv libraries/META-INF . ; mv libraries/uk .
-	jar -cvfm install/edisyn.jar /tmp/manifest.add edisyn/synth/Synths.txt `find edisyn -name "*.class"` `find edisyn -name "*.init"` `find edisyn -name "*.html"` `find edisyn -name "*.png"` `find edisyn -name "*.jpg"` uk/ META-INF/
+	jar -cvfm install/edisyn.jar /tmp/manifest.add edisyn/synth/Synths.txt `find edisyn -name "*.class"` `find edisyn -name "*.init"` `find edisyn -name "*.html"` `find edisyn -name "*.png"` `find edisyn -name "*.jpg"`
+	echo jar -cvfm install/edisyn.jar /tmp/manifest.add edisyn/synth/Synths.txt `find edisyn -name "*.class"` `find edisyn -name "*.init"` `find edisyn -name "*.html"` `find edisyn -name "*.png"` `find edisyn -name "*.jpg"` uk/ META-INF/
 	rm -rf uk META-INF
 
 install: jar

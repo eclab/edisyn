@@ -3851,7 +3851,7 @@ public abstract class Synth extends JComponent implements Updatable
 
 
 
-        hillClimbMenu = new JMenuItem("Hill-Climb...");
+        hillClimbMenu = new JMenuItem("Hill-Climb");
         menu.add(hillClimbMenu);
         hillClimbMenu.addActionListener(new ActionListener()
             {
@@ -3861,7 +3861,7 @@ public abstract class Synth extends JComponent implements Updatable
                 }
             });
 
-        morphMenu = new JMenuItem("Morph...");
+        morphMenu = new JMenuItem("Morph");
         menu.add(morphMenu);
         morphMenu.addActionListener(new ActionListener()
             {
@@ -4841,7 +4841,7 @@ public abstract class Synth extends JComponent implements Updatable
                 }
             });
 
-        JMenuItem colorMenu = new JMenuItem("Change Color Scheme");
+        JMenuItem colorMenu = new JMenuItem("Change Color Scheme...");
         menu.add(colorMenu);
         colorMenu.addActionListener(new ActionListener()
             {
@@ -7359,7 +7359,7 @@ public abstract class Synth extends JComponent implements Updatable
             Component selected = tabs.getSelectedComponent();
             hillClimb.shutdown();
             tabs.remove(hillClimbPane);
-            hillClimbMenu.setText("Hill-Climb...");
+            hillClimbMenu.setText("Hill-Climb");
             if (selected == hillClimbPane)  // we were in the hill-climb pane when this menu was selected
                 tabs.setSelectedIndex(0);
             hillClimbing = false;
@@ -7394,7 +7394,7 @@ public abstract class Synth extends JComponent implements Updatable
             Component selected = tabs.getSelectedComponent();
             morph.shutdown();
             tabs.remove(morphPane);
-            morphMenu.setText("Morph...");
+            morphMenu.setText("Morph");
             if (selected == morphPane)  // we were in the morph pane when this menu was selected
                 tabs.setSelectedIndex(0);
             morphing = false;
@@ -7860,11 +7860,11 @@ public abstract class Synth extends JComponent implements Updatable
         else
             {
             Model startPatch = buildModel();
-            if (!gatherPatchInfo("Starting Patch", startPatch, false))
+            if (!gatherPatchInfo("Blend Starting Patch", startPatch, false))
                 { startPatch = null; return; }
                 
             Model endPatch = buildModel();
-            if (!gatherPatchInfo("Ending Patch", endPatch, false))
+            if (!gatherPatchInfo("Blend Ending Patch", endPatch, false))
                 { endPatch = null; return; }
                         
             blendLocations = gatherPatchLocations(startPatch, endPatch);

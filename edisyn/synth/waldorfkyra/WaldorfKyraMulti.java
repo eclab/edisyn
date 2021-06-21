@@ -616,10 +616,8 @@ public class WaldorfKyraMulti extends Synth
             {
             // main data
   
-            if (data[6] != 0x7F)
-                {
-                model.set("number", data[7]);
-                }
+  			// It doesn't matter what bank we're in (even the edit buffer) since there's only one bank...
+            model.set("number", data[7]);
 
             // handle non-name parameters
             for(int i = 0; i < 128; i++)

@@ -1914,9 +1914,18 @@ public class WaldorfKyra extends Synth
 
     public int parse(byte[] data, boolean fromFile)
         {
-        if (data[6] != 0x7F)
+        if (data[6] != 0x7F && 		// Edit Buffer
+        	data[6] != 0x7E)			// "Current Configured Bank (in the Config Menu)"
             {
-            model.set("bank", data[6]);
+            if (data[6] < 26)
+            	{
+            	model.set("bank", data[6]);
+            	}
+            else
+            	{
+            	System.err.println("WARNING: Invalid Bank number " + data[6] + " in Sysex, changing to 0 (Bank A)");
+            	model.set("bank", 0);
+            	}
             model.set("number", data[7]);
             }
 
@@ -1980,7 +1989,7 @@ public class WaldorfKyra extends Synth
     "voicemode",
     "dualmode",
     "bendrange",
-    "auxoscillatorlevel",                  // this is noise level or ringmod level
+    "auxoscillatorlevel",                  // this is noise level and ringmod level
     "panorama",
     "hypersawintensity",
     "hypersawspread",
@@ -2023,7 +2032,7 @@ public class WaldorfKyra extends Synth
     "osc2lfo2topulsewidth",
     "osc2hardsync",
     "hypersawsuboscillator",
-    "filter1mode",                                                      // The docs talk about two magic bits, "bypass" (0x08) and "enable" (0x10), but I am assured this is just internal and they never show up.
+    "filter1mode",                       // The docs talk about two magic bits, "bypass" (0x08) and "enable" (0x10), but I am assured this is just internal and they never show up.
     "filterconfiguration",
     "filter1frequency",
     "filter1resonance",
@@ -2033,7 +2042,7 @@ public class WaldorfKyra extends Synth
     "filter1lfo3tofreq",
     "filter1keyfollowkey",
     "filter1keyfollowamt",
-    "-",                                                                        // VCA Drive: this was never implemented                        
+    "-",                                   // VCA Drive: this was never implemented                        
     "fxlimitermode",                        // this was originally called PATCH_PARAM_VCA_SATURATOR_MODE 
     "vcapan",
     "vcalfo1toamp",

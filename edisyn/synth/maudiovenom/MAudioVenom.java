@@ -695,7 +695,6 @@ public class MAudioVenom extends Synth
         vbox.add(comp);
         hbox.add(vbox);
 
-		// Vyzex outputs 0 for this when unison is off
         comp = new LabelledDial("Unison", this, "unisoncount", color, 2, 12);
         ((LabelledDial)comp).addAdditionalLabel("Voices");
         hbox.add(comp);

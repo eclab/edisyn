@@ -37,7 +37,8 @@ public class WaldorfPulse2 extends Synth
     public static final String[] FILTER_TYPE = new String[] { "LP 24dB", "LP 12dB", "BP 12dB", "HP 12dB"};
     public static final String[] DRIVE_TYPE = new String[] { "None", "Tube Distortion", "Fuzz Distortion", "Effects Board Output" };
     public static final String[] MODULATION_SOURCE = new String[] { "Off", "LFO1 Output", "LFO1 x Mod Wheel", "LFO1 x Pressure", "LFO2", "LFO2 x Amplifier Envelope", "Filter Envelope", "Amplifier Envelope", "Keyboard Velocity", "Pitch Keytracking", "Pitch Follower (with Glide)", "Pitch Bend", "Mod Wheel", "Pressure", "Breath Controller", "Control X", "Keyboard Release Velocity", "Modulation Accumulator", "Modulation Productor", "Modulation Delay Line", "Modulation Smoother", "Modulation Minimizer", "Modulation Maximizer", "Highest Note Pressed", "Lowest Note Pressed" };
-    public static final String[] MODULATION_DESTINATION = new String[] { "Global Oscillator Pitch", "Oscillator 1 Pitch", "Oscillator 2 Pitch", "Oscillator 3 Pitch", "Oscillator 1 Pulse Width", "Oscillator 2 Pulse Width", "Oscillator 1 Level", "Oscillator 2 Level", "Oscillator 3 Level", "Noise Level", "Filter Cutoff", "Filter Resonance", "Volume", "Panning", "LFO 1 Speed", "Mod 1 Amount", "Drive", "Glide Rate", "Filter Env Rates", "Amp Env Rates", "Unison Detune", "Paraphonic Fade 1", "Paraphonic Fade 2", "Arpeggiator Swing", "CV Out"  };
+    // The manual doesn't list the destinations after CV Out, but they're in the unit
+    public static final String[] MODULATION_DESTINATION = new String[] { "Global Oscillator Pitch", "Oscillator 1 Pitch", "Oscillator 2 Pitch", "Oscillator 3 Pitch", "Oscillator 1 Pulse Width", "Oscillator 2 Pulse Width", "Oscillator 1 Level", "Oscillator 2 Level", "Oscillator 3 Level", "Noise Level", "Filter Cutoff", "Filter Resonance", "Volume", "Panning", "LFO 1 Speed", "Mod 1 Amount", "Drive", "Glide Rate", "Filter Env Rates", "Amp Env Rates", "Unison Detune", "Paraphonic Fade 1", "Paraphonic Fade 2", "Arpeggiator Swing", "CV Out", "Modulation Accumulator", "Modulation Productor", "Modulation Delay Line", "Modulation Smoother", "Modulation Minimizer", "Modulation Maximizer", "VCF Env Amount"  };
     public static final String[] SOUND_CATEGORY = new String[] { "None", "Arpeggiated", "Atmospheric", "Bass", "Drum Kit", "Special Effect", "Keys", "Lead", "Monophonic", "Pad", "Percussive", "Polyphonic", "Sound Sequence", "Dub", "Lushy", "String", "Puck", "Wind", "Noise", "External Input", "Init" };
     public static final String[] ARPEGGIATOR_STATE = new String[] { "Off", "On", "Hold" };
     public static final String[] ARPEGGIATOR_MODE = new String[] { "Up Time-Ordered", "Down Time-Ordered", "Up/Down Time-Ordered", "Random", "Up Pitch-Ordered", "Down Pitch-Ordered", "Up/Down Pitch-Ordered" };
@@ -1102,12 +1103,12 @@ public class WaldorfPulse2 extends Synth
             try { n = Integer.parseInt(number.getText()); }
             catch (NumberFormatException e)
                 {
-                showSimpleError(title, "The Patch Number must be an integer 1 ... " + (writing ? 499 : 499));
+                showSimpleError(title, "The Patch Number must be an integer 1 ... " + (writing ? 499 : 500));
                 continue;
                 }
-            if (n < 1 || n > 499 || (writing && n > 499))
+            if (n < 1 || n > 500 || (writing && n > 499))
                 {
-                showSimpleError(title, "The Patch Number must be an integer 1 ... " + (writing ? 499 : 499));
+                showSimpleError(title, "The Patch Number must be an integer 1 ... " + (writing ? 499 : 500));
                 continue;
                 }
                                 

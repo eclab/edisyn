@@ -274,6 +274,8 @@ By selecting {\bf Request Current Patch}, you can also ask your synthesizer to s
 
 {\bf Request Patch...} will ask the synthesizer to send Edisyn a specific patch that you specify.  Edisyn often (not always) does this by first asking the synthesizer to change to that patch and bank, and then requesting the current patch.
 
+{\bf Request Next Patch} is similar to Request Patch... except that it asks the synthesizer to send the next patch number beyond the patch Edisyn is editing.  Note that if your synth is set to a different patch number than Edisyn thinks it's working on, then Edisyn's number is used.
+
 {\bf Write to Patch...} will ask the synthesizer to change to a new patch and bank which you specify, then dump Edisyn's current patch to the synthesizer to its permanent memory.  Some synthesizers (like the PreenFM2 or TX81Z) cannot be written to remotely via Edisyn. Instead, you will need to Send to Current Patch, then manually save the current patch to patch RAM on the synth itself.
 
 {\bf Send to Current Patch} will dump Edisyn's current patch to the synthesizer, instructing it to only update its local working memory, and not to store the patch in permanent memory.  This operation is primarily used to sync up certain synthesizers which do not update themselves in real-time in response to parameter changes you make.
@@ -980,7 +982,7 @@ There are by convention three standard parameter names:
 \item {\bf name}\quad Patch name, a string
 \end{itemize}
 
-These are all optional.
+These are all optional.  If your synthesizer doesn't have (say) a notion of a bank, then that parameter should not exist at all.
 
 Parameters in general by convention are a combination of lower-case letters and numbers.  No hyphens, no spaces, no underscores or other punctuation.  The numbers serve to distinguish between identical hierarchical objects (like multiple envelopes or multiple voices).  Conventionally Edisyn parameter names are 1-indexed so as to match with common synthesizer parameter names in sysex documentation.
 
@@ -1107,7 +1109,9 @@ The most common widgets are:
 JComponent comp = new PatchDisplay(this, 4);		// 4 columns
 \end{verbatim}
 
-The number for your patch is stored in the model with the key {\bf number} (internally this should start at 0).  If your synth uses banks (and the DX7 does not), then it should also be a number (starting at 0) stored in your model with the key {\bf bank}.  PatchDisplay will then display your patch bank and number (which Edisyn calls the {\it patch location}), if you have implemented the method {\tt getPatchLocationName(Model model)}.  The DX7 has no banks, its first patch number is 1 (not 0, though we'll store them zero-based internally), and only has patch numbers less than 100, so this will suffice:
+The number for your patch is stored in the model with the key {\bf number} (internally this should start at 0).  The bank for the patch is stored with the key {\bf bank} (also internally starting at 0.  If your synth doesn't use banks (and the DX7 does not), you need 
+
+hen it should also be a number (starting at 0) stored in your model with the key {\bf bank}.  PatchDisplay will then display your patch bank and number (which Edisyn calls the {\it patch location}), if you have implemented the method {\tt getPatchLocationName(Model model)}.  The DX7 has no banks, its first patch number is 1 (not 0, though we'll store them zero-based internally), and only has patch numbers less than 100, so this will suffice:
 
 \begin{verbatim}
     public String getPatchLocationName(Model model)

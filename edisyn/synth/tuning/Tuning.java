@@ -71,7 +71,7 @@ public class Tuning extends Synth
         HBox hbox = new HBox();
 
         VBox vbox = new VBox();
-        comp = new PatchDisplay(this, 3);
+        comp = new PatchDisplay(this, 3, false);
         vbox.add(comp);
 
         comp = new StringComponent("Patch Name", this, "name", 16, "Name must be up to 16 ASCII characters.") 

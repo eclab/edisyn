@@ -157,11 +157,27 @@ public class AlesisD4 extends Synth
                 
         JComponent comp;
         String[] params;
-        HBox hbox = new HBox();
-                
+        HBox hbox = new HBox();                
         VBox vbox = new VBox();
-        comp = new PatchDisplay(this, null, "number", 9);
-        vbox.add(comp);
+
+        HBox hbox2 = new HBox();
+        comp = new PatchDisplay(this, 9, false);
+        hbox2.add(comp);
+
+        check = new JCheckBox("DM5");
+        check.setSelected(dm5);
+        check.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                setDM5(check.isSelected(), true);
+                }
+            });
+        check.setFont(Style.SMALL_FONT());
+        check.setOpaque(false);
+        check.setForeground(Style.TEXT_COLOR());
+        hbox2.addLast(check);
+		vbox.add(hbox2);
 
         comp = new StringComponent("Patch Name", this, "name", 15, "Name must be up to 15 ASCII characters.")
             {
@@ -176,23 +192,7 @@ public class AlesisD4 extends Synth
                 updateTitle();
                 }
             };
-        vbox.addBottom(comp);  // doesn't work right :-(
-
-        check = new JCheckBox("DM5 ");
-        check.setSelected(dm5);
-        check.addActionListener(new ActionListener()
-            {
-            public void actionPerformed(ActionEvent e)
-                {
-                setDM5(check.isSelected(), true);
-                }
-            });
-        check.setFont(Style.SMALL_FONT());
-        check.setOpaque(false);
-        check.setForeground(Style.TEXT_COLOR());
-        HBox hbox2 = new HBox();
-        hbox2.addLast(check);
-        vbox.add(hbox2);
+        vbox.add(comp);
 
         hbox.add(vbox);
 

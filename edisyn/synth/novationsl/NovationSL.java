@@ -548,7 +548,7 @@ public class NovationSL extends Synth
         HBox hbox = new HBox();
         VBox vbox = new VBox();
         
-        comp = new PatchDisplay(this, 4);
+        comp = new PatchDisplay(this, 4, false);
         vbox.add(comp);
         hbox.add(vbox);
         vbox = new VBox();

@@ -26,7 +26,7 @@ import javax.sound.midi.*;
 public class WaldorfPulse2 extends Synth
     {
     public static final String[] OSC1_WAVE = new String[] { "Pulse Width", "Sawtooth", "Triangle", "Alternate Pulse Width", "Unison Monophonic", "Unison Polyphonic", "Unison Monophonic Alternate Pulse Width", "Unison Polyphonic Alternate Pulse Width", "Paraphonic 8 Voice", "Paraphonic 4 Voice" };
-    public static final String[] OSC2_WAVE = new String[] { "Pulse Width", "Sawtooth", "Triangle", "Pulse Width Synced on OSC 3", "Pulse Width Synced on OSC 1" };
+    public static final String[] OSC2_WAVE = new String[] { "Pulse Width", "Sawtooth", "Triangle", "Pulse Width Synced to OSC 3", "Pulse Width Synced to OSC 1" };
     public static final String[] OSC3_WAVE = new String[] { "Square", "Sawtooth", "Triangle", "External Input", "Feedback" };
     public static final String[] OSC3_SOURCE = new String[] { "Osc Mixer", "Osc 2 Level", "Filter Cutoff", "Drive Level" };
     public static final String[] LFO_BARS = new String[] { "32", "24", "16", "12", "8", "6", "5", "4", "3", "2", "3/2", "4/3", "1", "3/4", "2/3", "1/2", "3/8", "1/3", "1/4", "3/16", "1/6", "1/8", "3/32", "1/12", "1/16", "3/64", "1/24", "1/32", "3/128", "1/48", "1/64", "1/96" };
@@ -142,7 +142,7 @@ public class WaldorfPulse2 extends Synth
                 
         VBox vbox = new VBox();
         HBox hbox2 = new HBox();
-        comp = new PatchDisplay(this, 4);
+        comp = new PatchDisplay(this, 4, false);
         hbox2.add(comp);
         vbox.add(hbox2);
         
@@ -808,9 +808,9 @@ public class WaldorfPulse2 extends Synth
             int stepType = model.get("patternstep" + i + "steptype");
             int stepLength = model.get("patternstep" + i + "steplength");
             int stepGlide = model.get("patternstep" + i + "stepglide");
-            int val = ((stepGlide & 0x1) << 6) | ((stepLength & 0x3) << 4) | ((stepType & 0x7) << 0);
+            int val = ((stepGlide & 0x1) << 6) | ((stepLength & 0x3) << 4) | ((stepType & 0xF) << 0);
 
-            byte[] data = new byte[] { (byte)0xF0, 0x3E, 0x16, DEV, 0x20, (byte)(90 + i), (byte)val, (byte)0xF7 };
+            byte[] data = new byte[] { (byte)0xF0, 0x3E, 0x16, DEV, 0x20, (byte)(89 + i), (byte)val, (byte)0xF7 };
             return new Object[] { data };
             }
         else if (key.equals("name"))
@@ -954,7 +954,14 @@ public class WaldorfPulse2 extends Synth
             else if (i >= 90 && i <= 105)   // pattern steps
                 {
                 int val = (data[i + offset] & 127);
-                model.set("patternstep" + (i - 90 + 1) + "steptype", val & 0xF);
+                int steptype = val & 0xF;
+                if (steptype > 8)	// this happens, let's set it to "reset", which appears to be what was intended
+                	{
+					System.err.println("Warning (WaldorfPulse2.parse): Revised " + 
+						"patternstep" + (i - 90 + 1) + "steptype" + " from " + steptype + " to 8 (Reset)");
+                	steptype = 8;
+                	}
+                model.set("patternstep" + (i - 90 + 1) + "steptype", steptype);
                 model.set("patternstep" + (i - 90 + 1) + "steplength", (val >> 4) & 0x3);
                 model.set("patternstep" + (i - 90 + 1) + "stepglide", (val >> 6) & 0x1);
                 }
@@ -1024,6 +1031,40 @@ public class WaldorfPulse2 extends Synth
             e.printStackTrace(); 
             }
         }
+
+    public void performRequestDump(Model tempModel, boolean changePatch)
+        {
+        /// The Pulse 2 has a serious bug in how it downloads patches.  If you request
+        /// a patch, and it's an *init patch*, the Pulse 2 will simply not respond at all.
+        /// That's bad.
+        ///
+        /// So the strategy I'm taking is this: if changePatch is true
+        /// (we're allowed to change the patch) then we'll do a change patch
+        /// and then a REQUEST CURRENT PATCH.  That should work for stuff like
+        /// batch downloads.
+        ///
+        /// Otherwise we just do a standard request dump and hope that it's not an init patch.
+        
+        if (changePatch)
+        	{
+            performChangePatch(tempModel);
+
+			// tempModel has to be non-null for performChangePatch to work anyway, but
+			// just in case...
+			if (tempModel == null)
+	            tempModel = getModel();
+	        int num = tempModel.get("number");
+
+			// now we set the number properly.  Yucky hack.
+	        model.set("number", num);
+	        tryToSendSysex(requestCurrentDump());
+            }
+        else
+        	{            
+	        tryToSendSysex(requestDump(tempModel));
+	        }
+        }
+
 
     public byte[] requestDump(Model tempModel)
         {
@@ -1129,5 +1170,6 @@ public class WaldorfPulse2 extends Synth
         return "" + (number > 99 ? "" : (number > 9 ? "0" : "00")) + number;
         }
 
+    public boolean getSendsParametersAfterWrite() { return true; }
     }
     

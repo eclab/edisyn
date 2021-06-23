@@ -489,6 +489,7 @@ public class Category extends JComponent implements Gatherable
     
     public void setName(String label)
         {
+        if (label == null) label = "";
         this.name = label;
         stringWidth = 0; 		// reset
         

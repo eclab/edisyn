@@ -16,7 +16,7 @@ This patch editor responds to real-time parameter changes from your Pulse 2.  Th
 
 <ul>
 <li>The Pulse 2 has a bug: if Edisyn requests a patch which happens to be an INIT patch, the Pulse 2 will not respond with the patch at all.  This means that if you attempt to MERGE or BLEND with an INIT patch, nothing will happen.
-<p><li>Patch 500 is special, as it makes random patches.  Edisyn can load patch 500 but cannot cause it to generate a random patch: you have to generate them manually on the unit itself. To make a random patch and load it into Edisyn, do the following:
+<p><li>Patch 500 is special, as it makes random patches.  Edisyn can load patch 500 but cannot trigger it to generate a random patch: you have to generate them manually on the unit itself. To make a random patch and load it into Edisyn, do the following:
 <ol>
 <li>Manually, on the unit, switch to some other patch (say, 499).
 <p><li>Manually, on the unit, switch back to patch 500.  This generates a random patch.

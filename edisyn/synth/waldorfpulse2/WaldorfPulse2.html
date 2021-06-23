@@ -16,9 +16,13 @@ This patch editor responds to real-time parameter changes from your Pulse 2.  Th
 
 <ul>
 <li>The Pulse 2 has a bug: if Edisyn requests a patch which happens to be an INIT patch, the Pulse 2 will not respond with the patch at all.  This means that if you attempt to MERGE or BLEND with an INIT patch, nothing will happen.
-<p><li>
-Patch 500 is special: it makes random patches.  But you can only operate it from the unit itself.
-Because patch 500 is special -- it makes random patches but only from the unit itself), Loading from and Saving to patch 500 does nothing, and so it has been disabled.
+<p><li>Patch 500 is special, as it makes random patches.  Edisyn can load patch 500 but cannot cause it to generate a random patch: you have to generate them manually on the unit itself. To make a random patch and load it into Edisyn, do the following:
+<ol>
+<li>Manually, on the unit, switch to some other patch (say, 499).
+<p><li>Manually, on the unit, switch back to patch 500.  This generates a random patch.
+<p><li>In Edisyn, select "Request Current Patch" or "Request Patch..." and choose 500.
+</ol>
+Edisyn cannot save to Patch 500.
 <p><li>Changing arpeggiator modulation parameters in Edisyn in real time will change them on the Pulse but will not update them on the Pulse 2 screen; you'll have to migrate away and back to see the changes displayed.
 <p><li>
 You can use lower-case letters in your patch names: but they will appear as various arbitary glyphs instead.  So don't do that.

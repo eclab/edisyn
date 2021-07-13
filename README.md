@@ -117,6 +117,10 @@ If you want to use Edisyn in combination with a DAW, see the manual's section on
 
 You can also run Edisyn from its jar file from the command line: see "Running from the command line" at end of these instructions. 
 
+#### Rosetta and the M1
+
+At present Edisyn only runs under Rosetta on the M1, because CoreMidi4J is compiled for Intel I believe.  Hopefully we'll get that dealt with soon.
+
 #### If Edisyn bombs in MacOS on selecting a patch editor...
 
 You may have installed the MMJ (MIDI Java) library in the past, which is now obsolete.  This library was required by old applications but no longer works properly and should be removed.  Look in /Library/Java/Extensions/ or in \[Your Home Directory\]/Library/Java/Extensions for the files **mmj.jar** or **libmmj.jnilib**.  If you find them, remove them from the directory and try again.

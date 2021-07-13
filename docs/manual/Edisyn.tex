@@ -39,7 +39,7 @@
 \begin{document}
 
 \noindent {\Huge\bf Edisyn}\\[0.5em]
-{\large \bf A Java-based Synthesizer Patch Editor, Version 27\\[0.2em]
+{\large \bf A Java-based Synthesizer Patch Editor, Version 28\\[0.2em]
 By Sean Luke\qquad sean@cs.gmu.edu}\\[0.2em]
 
 \vspace{-1em}
@@ -82,6 +82,7 @@ Edisyn is a no-nonsense synthesizer patch editor for the editing and parameter e
 \item Waldorf Blofeld Desktop, Blofeld Desktop SL, and Blofeld Keyboard (Single and Multimode, plus wavetable uploading in Single)
 \item Waldorf Kyra (Single and Multimode)
 \item Waldorf Microwave II, Microwave XT, and Microwave XTk (Single and Multimode)
+\item Waldorf Pulse 2
 \item Waldorf Rocket
 \item Yamaha DX7 Family (DX7, TX7, TX216/TX816, Korg Volca FM, Dexed, DX200, DX9, etc.) (Single)
 \item Yamaha 4-Op FM Family (DX21, DX27, DX100, TX81Z, DX11, TQ5, YS100, YS200, B200, etc.) (Single and  (for TX81Z and DX11) Multimode)
@@ -272,6 +273,8 @@ Now that you're up and running, if you change widgets in the patch editor, many 
 By selecting {\bf Request Current Patch}, you can also ask your synthesizer to send you a dump of whatever patch it is currently running.  It is often the case that synthesizers respond in such a way that Edisyn cannot tell what the patch number or bank is.  In these cases Edisyn will reset the patch number to some default (like A001).  
 
 {\bf Request Patch...} will ask the synthesizer to send Edisyn a specific patch that you specify.  Edisyn often (not always) does this by first asking the synthesizer to change to that patch and bank, and then requesting the current patch.
+
+{\bf Request Next Patch} is similar to Request Patch... except that it asks the synthesizer to send the next patch number beyond the patch Edisyn is editing.  Note that if your synth is set to a different patch number than Edisyn thinks it's working on, then Edisyn's number is used.
 
 {\bf Write to Patch...} will ask the synthesizer to change to a new patch and bank which you specify, then dump Edisyn's current patch to the synthesizer to its permanent memory.  Some synthesizers (like the PreenFM2 or TX81Z) cannot be written to remotely via Edisyn. Instead, you will need to Send to Current Patch, then manually save the current patch to patch RAM on the synth itself.
 
@@ -845,32 +848,33 @@ Non-metric parameters, such as (say) choice of filter or the PCM sampled sound p
 %Futuresonus Parva&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}&&&\\
 Alesis D4/DM5&{\cm}*&&{\cm}&&{\cm}&{\cm}& & &{\cm}            \\
 Casio CZ&&&{\cm}&{\cm}&{\cm}&{\cm}& & &{\cm}*            \\
-DSI Prophet '08&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}& & &{\cm}            \\
+DSI Prophet '08/ Mopho / Tetra&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}& & &{\cm}            \\
 E-Mu Morpheus / UltraProteus&{\cm}& &{\cm}& & &{\cm}& & &{\cm}            \\
 E-Mu Proteus&{\cm}& &{\cm}& & &{\cm}& & &{\cm}            \\
-Waldorf Microwave II/XT/XTk&{\cm}&{\cm}&{\cm}&{\cm}*&{\cm}&{\cm}&{\cm}& &{\cm}            \\
-Waldorf Blofeld&{\cm}*&{\cm}*&{\cm}&{\cm}*&{\cm}&{\cm}& & & {\cm}            \\
-Waldorf Kyra&{\cm}&{\cm}&{\cm}*&{\cm}*&{\cm}*&{\cm*}& & & {\cm}*            \\
-Waldorf Rocket&{\cm}&{\cm}& &{\cm}*&{\cm}*& & & &           \\
 Kawai K1/K1r/K1m&{\cm}*& &{\cm}& & &{\cm}& &{\cm}&{\cm}            \\
 Kawai K4/K4r&{\cm}*& &{\cm}& &{\cm}&{\cm}& &{\cm}&{\cm}            \\
 Kawai K5/K5m&{\cm}&{\cm}&{\cm}& & &{\cm}& &{\cm}&{\cm}            \\
+Korg Microsampler&{\cm}*&{\cm}*& & & & &  &  &         \\
+Korg SG Rack&&&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}& &{\cm}\\
+Korg Wavestation SR&{\cm}&&{\cm}&{\cm}*&{\cm}*&{\cm}&{\cm}*& &{\cm}\\
+M-Audio Venom&{\cm}&&{\cm}*&{\cm}&{\cm}*&{\cm}*&{\cm}*&{\cm}&{\cm}*\\
+Novation Drumstation/D Station&&&&&{\cm}*&{\cm}*& & &{\cm}          \\
+Novation SL&&&&&{\cm}&{\cm}&&&{\cm}*	\\
+Oberheim Matrix 1000&{\cm}&{\cm}&{\cm}& &{\cm}*&{\cm}& & &{\cm}          \\
+PreenFM2&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}& & & &\\
+Red Sound DarkStar/DarkStar XP2&&&&&{\cm}&{\cm}& & & {\cm}           \\
+Roland D-110&{\cm}& &{\cm}*&{\cm}*&{\cm}*&{\cm}*& & &{\cm}          \\
+Roland JV-80/880&{\cm}& &{\cm}&{\cm}&{\cm}&{\cm}& & &{\cm}*          \\
+Waldorf Microwave II/XT/XTk&{\cm}&{\cm}&{\cm}&{\cm}*&{\cm}&{\cm}&{\cm}& &{\cm}            \\
+Waldorf Blofeld&{\cm}*&{\cm}*&{\cm}&{\cm}*&{\cm}&{\cm}& & & {\cm}            \\
+Waldorf Kyra&{\cm}&{\cm}&{\cm}*&{\cm}*&{\cm}*&{\cm*}& & & {\cm}*            \\
+Waldorf Pulse 2&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}& & &{\cm}\\
+Waldorf Rocket&{\cm}&{\cm}& &{\cm}*&{\cm}*& & & &           \\
 Yamaha DX7&{\cm}&{\cm}& & & & &  & &{\cm}            \\
 Yamaha 4-Op&{\cm}*& &{\cm}&{\cm}&{\cm} & &  & &{\cm}*            \\
 Yamaha FB-01&{\cm}*& &{\cm}&{\cm}&{\cm}&{\cm}*&  & {\cm}&{\cm}*            \\
 Yamaha FS1R&{\cm}&{\cm}&{\cm}&{\cm}& &{\cm}& & &{\cm}            \\
 Yamaha TG33/SY22/SY35&{\cm}*& &{\cm}&{\cm}&{\cm}& &  & &{\cm}            \\
-PreenFM2&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}& & & &\\
-Red Sound DarkStar/DarkStar XP2&&&&&{\cm}&{\cm}& & & {\cm}           \\
-Roland D-110&{\cm}& &{\cm}*&{\cm}*&{\cm}*&{\cm}*& & &{\cm}          \\
-Roland JV-80/880&{\cm}& &{\cm}&{\cm}&{\cm}&{\cm}& & &{\cm}*          \\
-Novation Drumstation/D Station&&&&&{\cm}*&{\cm}*& & &{\cm}          \\
-Novation SL&&&&&{\cm}&{\cm}&&&{\cm}*	\\
-Oberheim Matrix 1000&{\cm}&{\cm}&{\cm}& &{\cm}*&{\cm}& & &{\cm}          \\
-Korg Microsampler&{\cm}*&{\cm}*& & & & &  &  &         \\
-Korg SG Rack&&&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}& &{\cm}\\
-Korg Wavestation SR&{\cm}&&{\cm}&{\cm}*&{\cm}*&{\cm}&{\cm}*& &{\cm}\\
-M-Audio Venom&{\cm}&&{\cm}*&{\cm}&{\cm}*&{\cm}*&{\cm}*&{\cm}&{\cm}*\\
 \end{tabular}
 }
 \\[1em]
@@ -978,7 +982,7 @@ There are by convention three standard parameter names:
 \item {\bf name}\quad Patch name, a string
 \end{itemize}
 
-These are all optional.
+These are all optional.  If your synthesizer doesn't have (say) a notion of a bank, then that parameter should not exist at all.
 
 Parameters in general by convention are a combination of lower-case letters and numbers.  No hyphens, no spaces, no underscores or other punctuation.  The numbers serve to distinguish between identical hierarchical objects (like multiple envelopes or multiple voices).  Conventionally Edisyn parameter names are 1-indexed so as to match with common synthesizer parameter names in sysex documentation.
 
@@ -1105,7 +1109,9 @@ The most common widgets are:
 JComponent comp = new PatchDisplay(this, 4);		// 4 columns
 \end{verbatim}
 
-The number for your patch is stored in the model with the key {\bf number} (internally this should start at 0).  If your synth uses banks (and the DX7 does not), then it should also be a number (starting at 0) stored in your model with the key {\bf bank}.  PatchDisplay will then display your patch bank and number (which Edisyn calls the {\it patch location}), if you have implemented the method {\tt getPatchLocationName(Model model)}.  The DX7 has no banks, its first patch number is 1 (not 0, though we'll store them zero-based internally), and only has patch numbers less than 100, so this will suffice:
+The number for your patch is stored in the model with the key {\bf number} (internally this should start at 0).  The bank for the patch is stored with the key {\bf bank} (also internally starting at 0.  If your synth doesn't use banks (and the DX7 does not), you need 
+
+hen it should also be a number (starting at 0) stored in your model with the key {\bf bank}.  PatchDisplay will then display your patch bank and number (which Edisyn calls the {\it patch location}), if you have implemented the method {\tt getPatchLocationName(Model model)}.  The DX7 has no banks, its first patch number is 1 (not 0, though we'll store them zero-based internally), and only has patch numbers less than 100, so this will suffice:
 
 \begin{verbatim}
     public String getPatchLocationName(Model model)

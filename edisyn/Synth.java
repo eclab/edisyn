@@ -79,6 +79,8 @@ public abstract class Synth extends JComponent implements Updatable
     /** The "Request Patch..." menu */
     public JMenuItem receivePatch;
     /** The "Sends Real Time Changes" menu */
+    public JMenuItem receiveNextPatch;
+    /** The "Request Next Patch" menu */
     public JCheckBoxMenuItem transmitParameters;
     /** The "Request Merge" menu */
     public JMenu merge;
@@ -1017,7 +1019,8 @@ public abstract class Synth extends JComponent implements Updatable
         and in no other situation.  By default this returns false. */ 
     public boolean getSendsParametersOnlyOnSendCurrentPatch() { return false; }
 
-    /** Override this to return TRUE if you want Edisyn to sendAllParmameters() immediately after a patch write. This isn't very common (the Kyra seems to need it). */ 
+    /** Override this to return TRUE if you want Edisyn to sendAllParmameters() immediately after a patch write, because the patch write writes
+    	to permanent memory but doesn't change working memory.  This isn't very common (the Kyra and Pulse 2 seem to need it). */ 
     public boolean getSendsParametersAfterWrite() { return false; }
 
     /** Return the filename of your default sysex file (for example "MySynth.init"). Should be located right next to the synth's class file ("MySynth.class") */
@@ -1276,7 +1279,6 @@ public abstract class Synth extends JComponent implements Updatable
                                             // result is now PARSE_ERROR
                                             }
                                          
-                                        System.err.println("Parse result : " + result);       
                                         incomingPatch = (result == PARSE_SUCCEEDED || result == PARSE_SUCCEEDED_UNTITLED);
                                         if (result == PARSE_CANCELLED)
                                             {
@@ -1295,11 +1297,8 @@ public abstract class Synth extends JComponent implements Updatable
                                         if (!backup.keyEquals(getModel()))  // it's changed, do an undo push
                                             undo.push(backup);
                                         setSendMIDI(true);
-                                        System.err.println("Sending Parameters?");       
                                         if (getSendsParametersAfterNonMergeParse())
                                             {
-                                            System.err.println("Yes?");       
-
                                             sendAllParameters();
                                             }
                                         file = null;
@@ -1636,6 +1635,12 @@ public abstract class Synth extends JComponent implements Updatable
 
     public void performChangePatch(Model tempModel)
         {
+        if (tempModel == null) // uh oh
+        	{
+        	System.err.println("Synth.performChangePatch() WARNING: No tempModel provided, so couldn't change patch.  This is likely a bug."); 
+        	return;
+        	}
+        	
         changePatch(tempModel);
         int p = getPauseAfterChangePatch();
         if (p > 0)
@@ -3851,7 +3856,7 @@ public abstract class Synth extends JComponent implements Updatable
 
 
 
-        hillClimbMenu = new JMenuItem("Hill-Climb...");
+        hillClimbMenu = new JMenuItem("Hill-Climb");
         menu.add(hillClimbMenu);
         hillClimbMenu.addActionListener(new ActionListener()
             {
@@ -3861,7 +3866,7 @@ public abstract class Synth extends JComponent implements Updatable
                 }
             });
 
-        morphMenu = new JMenuItem("Morph...");
+        morphMenu = new JMenuItem("Morph");
         menu.add(morphMenu);
         morphMenu.addActionListener(new ActionListener()
             {
@@ -4005,6 +4010,17 @@ public abstract class Synth extends JComponent implements Updatable
             public void actionPerformed( ActionEvent e)
                 {
                 doRequestPatch();
+                }
+            });
+                
+        receiveNextPatch = new JMenuItem("Request Next Patch");
+        receiveNextPatch.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.CTRL_MASK));
+        menu.add(receiveNextPatch);
+        receiveNextPatch.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                doRequestNextPatch();
                 }
             });
                 
@@ -4841,7 +4857,7 @@ public abstract class Synth extends JComponent implements Updatable
                 }
             });
 
-        JMenuItem colorMenu = new JMenuItem("Change Color Scheme");
+        JMenuItem colorMenu = new JMenuItem("Change Color Scheme...");
         menu.add(colorMenu);
         colorMenu.addActionListener(new ActionListener()
             {
@@ -5108,6 +5124,20 @@ public abstract class Synth extends JComponent implements Updatable
             setMergeProbability(0.0);
             performRequestDump(tempModel, true);
             }
+        } 
+
+    void doRequestNextPatch()
+        {
+        if (tuple == null || tuple.out == null)
+            {
+            if (!setupMIDI())
+                return;
+            }
+                
+    	Model tempModel = getNextPatchLocation(getModel());
+		resetBlend();
+		setMergeProbability(0.0);
+		performRequestDump(tempModel, true);
         } 
         
     public void doRequestMerge(double percentage)
@@ -7359,7 +7389,7 @@ public abstract class Synth extends JComponent implements Updatable
             Component selected = tabs.getSelectedComponent();
             hillClimb.shutdown();
             tabs.remove(hillClimbPane);
-            hillClimbMenu.setText("Hill-Climb...");
+            hillClimbMenu.setText("Hill-Climb");
             if (selected == hillClimbPane)  // we were in the hill-climb pane when this menu was selected
                 tabs.setSelectedIndex(0);
             hillClimbing = false;
@@ -7394,7 +7424,7 @@ public abstract class Synth extends JComponent implements Updatable
             Component selected = tabs.getSelectedComponent();
             morph.shutdown();
             tabs.remove(morphPane);
-            morphMenu.setText("Morph...");
+            morphMenu.setText("Morph");
             if (selected == morphPane)  // we were in the morph pane when this menu was selected
                 tabs.setSelectedIndex(0);
             morphing = false;
@@ -7640,7 +7670,6 @@ public abstract class Synth extends JComponent implements Updatable
         else
             {
             currentPatch = getNextPatchLocation(currentPatch);
-            System.err.println("Patch " + currentPatch.get("bank") + " " + currentPatch.get("number"));
             resetBlend();
             setMergeProbability(0.0);
             performRequestDump(currentPatch, true);
@@ -7742,10 +7771,6 @@ public abstract class Synth extends JComponent implements Updatable
         numbers and/or banks.  */
     public Model getFirstPatchLocation()
         {
-        Model newModel = buildModel();
-        newModel.set("number", 0);
-        newModel.set("bank", 0);
-        
         // test to see if this is legitimate
         Model nextModel = getNextPatchLocation(model);
         if (nextModel == null)                                          // uh oh
@@ -7760,11 +7785,17 @@ public abstract class Synth extends JComponent implements Updatable
         // test to see if banks are implemented
         if (nextModel.get("bank", -1000) == -1000)              // no banks, revise
             {
-            newModel = buildModel();
+        	Model newModel = buildModel();
             newModel.set("number", 0);
+	        return newModel;
             }
-                
-        return newModel;
+        else
+        	{
+        	Model newModel = buildModel();
+        	newModel.set("number", 0);
+        	newModel.set("bank", 0);
+	        return newModel;
+	        }
         }
     
     PatchLocation[] allPatchLocations = null;           // a little cacheing
@@ -7860,11 +7891,11 @@ public abstract class Synth extends JComponent implements Updatable
         else
             {
             Model startPatch = buildModel();
-            if (!gatherPatchInfo("Starting Patch", startPatch, false))
+            if (!gatherPatchInfo("Blend Starting Patch", startPatch, false))
                 { startPatch = null; return; }
                 
             Model endPatch = buildModel();
-            if (!gatherPatchInfo("Ending Patch", endPatch, false))
+            if (!gatherPatchInfo("Blend Ending Patch", endPatch, false))
                 { endPatch = null; return; }
                         
             blendLocations = gatherPatchLocations(startPatch, endPatch);

@@ -20,24 +20,19 @@ public class PatchDisplay extends JPanel implements Updatable
     
     public PatchDisplay(Synth synth, int columns)
         {
-        this(synth, "Patch", "bank", "number", columns);
+        this(synth, "Patch", columns, true);
         }
 
-    public PatchDisplay(Synth synth, String bankKey, String numberKey, int columns)
+    public PatchDisplay(Synth synth, int columns, boolean useBanks)
         {
-        this(synth, "Patch", bankKey, numberKey, columns);
+        this(synth, "Patch", columns, useBanks);
         }
 
-    static String buildInitialString(int columns)
+    public PatchDisplay(Synth synth, String label, int columns, boolean useBanks)
         {
-        String s = "";
-        for(int i = 0; i < columns; i++)
-            s = s + "M";
-        return s;
-        }
-
-    public PatchDisplay(Synth synth, String label, final String bankKey, final String numberKey, int columns)
-        {
+        String bankKey = (useBanks ? "bank" : null);
+        String numberKey = "number";
+        
         this.synth = synth;
         Model model = synth.getModel();
         setBackground(Style.BACKGROUND_COLOR());
@@ -89,6 +84,14 @@ public class PatchDisplay extends JPanel implements Updatable
             }
         }
     
+    static String buildInitialString(int columns)
+        {
+        String s = "";
+        for(int i = 0; i < columns; i++)
+            s = s + "M";
+        return s;
+        }
+
     public void update(String key, Model model)
         {
         String name = synth.getPatchLocationName(synth.getModel());

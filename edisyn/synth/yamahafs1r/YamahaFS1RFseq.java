@@ -55,7 +55,7 @@ public class YamahaFS1RFseq extends Synth
         vbox.add(hbox);
 
         vbox.add(Strut.makeVerticalStrut(10));
-        vbox.add(new Category(this, null, Style.COLOR_A()));
+        vbox.add(new Category(this, "", Style.COLOR_A()));
         vbox.add(Strut.makeVerticalStrut(10));
         vbox.addLast(addFrames(Style.COLOR_B(), Style.COLOR_A(), Style.COLOR_B()));
         
@@ -388,6 +388,7 @@ public class YamahaFS1RFseq extends Synth
         JMenu menu = new JMenu("FS1R");
         menubar.add(menu);
 
+/*
         JMenuItem text = new JMenuItem("Text");
         text.addActionListener(new ActionListener()
             {
@@ -430,6 +431,7 @@ public class YamahaFS1RFseq extends Synth
                 }
             });
         menu.add(smooth);
+*/
 
         /*
           JMenuItem dump = new JMenuItem("Dump");

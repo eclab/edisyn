@@ -548,7 +548,7 @@ public class NovationSL extends Synth
         HBox hbox = new HBox();
         VBox vbox = new VBox();
         
-        comp = new PatchDisplay(this, 4);
+        comp = new PatchDisplay(this, 4, false);
         vbox.add(comp);
         hbox.add(vbox);
         vbox = new VBox();
@@ -1202,7 +1202,7 @@ public class NovationSL extends Synth
                 (index < DRUMPADS_INDEX ? "Button " + num :
                     (index == REWIND_INDEX ? "Rewind" :
                         (index == SUSTAIN_INDEX ? "Sustain Pedal" :
-                            (index == FF_INDEX ? "Fast Foward" :
+                            (index == FF_INDEX ? "Fast Forward" :
                                 (index == STOP_INDEX ? "Stop" :
                                     (index == PLAY_INDEX ? "Play" :
                                     (index == RECORD_INDEX ? "Record" : "Loop"))))))), color);
@@ -3313,6 +3313,11 @@ public class NovationSL extends Synth
     public int getPauseAfterWritePatch() { return 200; }
 
 
+    public boolean testVerify(Synth synth2, String key, Object obj1, Object obj2)
+        {
+        // The SL won't test well due to all the options coming back as zero
+        return true;
+        }
 
     //// This class manages the sysex type, sysex length, data (dv) position, and all the sysex bytes
     //// in a consistent manner for all of the different controls.
@@ -3644,7 +3649,7 @@ public class NovationSL extends Synth
       *** Otherwise the sysex values for size and position are their display values
       *** Yes, that's weird
 
-      UNKNOWN      *** I do not know the meaning of some of these constants
+      UNKNOWN      *** I do not know the meaning of these constants
       67   43   (0x00)
       68   44   (0x5a)
       69   45   (0x29)

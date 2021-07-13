@@ -1,0 +1,46 @@
+<html><head></head><body bgcolor='black'>
+<font color='white'>
+<h1>Waldorf Pulse 2</h1> 
+<h2>Patch Editor</h2>
+
+<p>This editor will work with the <b>Waldorf Pulse 2,</b> but not the original Pulse nor Pulse+.  The editor is meant to work with Firmware version 1.20.
+
+<p><b>Communicating with Edisyn</b>&nbsp;&nbsp;&nbsp;&nbsp;Set Edisyn's MIDI channel to the same as your synth's MIDI channel (which probaby should not be Omni).  Set Edisyn's Synth ID to the same as the Pulse 2's Device ID (normally 0). You might want to disable MIDI Thru.  If you want Edisyn to respond to real-time parameter and knob changes on the Pulse 2, the TX Parameter should be set to CC, Sysex, or CC+Sys.  I suggest Sysex.
+
+<p><b>Hints</b>
+<ul>
+This patch editor responds to real-time parameter changes from your Pulse 2.  These changes can arrive as CC or as Sysex messages.
+</ul>
+
+<p><b>Gotchas</b> 
+
+<ul>
+<li>The Pulse 2 has a bug: if Edisyn requests a patch which happens to be an INIT patch, the Pulse 2 will not respond with the patch at all.  This means that if you attempt to MERGE or BLEND with an INIT patch, nothing will happen.
+<p><li>Patch 500 is special, as it makes random patches.  Edisyn can load patch 500 but cannot trigger it to generate a random patch: you have to generate them manually on the unit itself. To make a random patch and load it into Edisyn, do the following:
+<ol>
+<li>Manually, on the unit, switch to some other patch (say, 499).
+<p><li>Manually, on the unit, switch back to patch 500.  This generates a random patch.
+<p><li>In Edisyn, select "Request Current Patch" or "Request Patch..." and choose 500.
+</ol>
+Edisyn cannot save to Patch 500.
+<p><li>Changing arpeggiator modulation parameters in Edisyn in real time will change them on the Pulse but will not update them on the Pulse 2 screen; you'll have to migrate away and back to see the changes displayed.
+<p><li>
+You can use lower-case letters in your patch names: but they will appear as various arbitary glyphs instead.  So don't do that.
+<p><li> 
+There are a number of Pulse 2 features that you can change in Edisyn but only have effect depending on the setting of other options.  As one example, the Amp Env fade parameters only have effect if Oscillator 1's Shape is one of the Paraphonic choices.
+<p><li>The Pulse 2 can't handle the Deluge setting in the Morpher.  So don't do that.
+</ul>
+
+<br><br><h3>Thanks</h3>
+Thanks to Waldorf Music GmbH for their support and assistance in the development of this editor.
+
+
+<p><table border=0 cellpadding=0 cellspacing=5>
+<tr>
+<td align=right>By&nbsp;&nbsp;&nbsp;
+<td><b>Sean Luke</b>
+<tr>
+<td align=right>Date&nbsp;&nbsp;&nbsp;
+<td>May 2021
+</table>
+

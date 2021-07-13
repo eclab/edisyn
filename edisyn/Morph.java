@@ -404,7 +404,7 @@ public class Morph extends SynthPanel
             {
             sources[button] = synth.getModel().copy();
             String currentPatchName = synth.getPatchName(synth.getModel());
-            buttons[button].getButton().setText(currentPatchName == null ? "Current Patch" : "" + currentPatchName);
+            buttons[button].getButton().setText(currentPatchName == null ? "Current Patch" : "" + currentPatchName.trim());
             }
         else if (reset == 1)
             {
@@ -430,7 +430,7 @@ public class Morph extends SynthPanel
                     File filename = synth.getFile();
                     if (filename != null)
                         {
-                        buttons[button].getButton().setText(filename.getName());
+                        buttons[button].getButton().setText(filename.getName().trim());
                         }
                     else
                         {
@@ -439,7 +439,7 @@ public class Morph extends SynthPanel
                     }
                 else
                     {
-                    buttons[button].getButton().setText(name);
+                    buttons[button].getButton().setText(name.trim());
                     }
                 }
             else
@@ -542,7 +542,7 @@ public class Morph extends SynthPanel
         {
         current = synth.getModel().copy(); // load it up initially so it's not blank
         String currentPatchName = synth.getPatchName(synth.getModel());
-        buttons[0].getButton().setText(currentPatchName == null ? ("Untitled " + (untitled++)) : currentPatchName);
+        buttons[0].getButton().setText(currentPatchName == null ? ("Untitled " + (untitled++)) : currentPatchName.trim());
         buttons[1].getButton().setText("[Empty]");
         buttons[2].getButton().setText("[Empty]");
         buttons[3].getButton().setText("[Empty]");

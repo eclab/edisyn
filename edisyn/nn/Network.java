@@ -20,43 +20,43 @@ public class Network implements Layer {
 		}
 		return out;
 	}
-	public static void main(String[] args){
-		Network encoder = Network.loadFromFile("encoder.txt");
-		double[] out = new double[1];
-		out = encoder.feed(new double[]{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1});
-		for(int i = 0; i < out.length; i++){
-			System.out.print(out[i]);
-			System.out.print(" ");
-		}
-		System.out.println();
-		Network decoder = Network.loadFromFile("decoder.txt");
-		out = decoder.feed(out);
-		for(int i = 0; i < out.length; i++){
-			System.out.print(out[i]);
-			System.out.print(" ");
-		}
-		System.out.println();
+	/*public static void main(String[] args){
+      Network encoder = Network.loadFromStream(Network.class);
+      double[] out = new double[1];
+      out = encoder.feed(new double[]{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1});
+      for(int i = 0; i < out.length; i++){
+      System.out.print(out[i]);
+      System.out.print(" ");
+      }
+      System.out.println();
+        Network decoder = Network.loadFromStream();
+        out = decoder.feed(out);
+        for(int i = 0; i < out.length; i++){
+            System.out.print(out[i]);
+            System.out.print(" ");
+        }
+        System.out.println();
         
-	}
-	public static Network loadFromFile(String path) {
+        }*/
+	public static Network loadFromStream(InputStream stream) {
 		try{
-			BufferedReader reader = new BufferedReader(new FileReader(path));
-			String line = reader.readLine();
-			Network network = new Network();
-			while(line != null){
-				if(line.startsWith("Linear")){
-					network.addLayer(Linear.readFromString(line));
-				} else if (line.startsWith("SELU")){
-					network.addLayer(SELU.readFromString(line));
-				} else {
-					// Error, who cares
-				}
-				line = reader.readLine();
-			}
-			return network;
+            BufferedReader reader = new BufferedReader(new InputStreamReader(stream));
+            String line = reader.readLine();
+            Network network = new Network();
+            while (line != null) {
+                if (line.startsWith("Linear")) {
+                    network.addLayer(Linear.readFromString(line));
+                } else if (line.startsWith("SELU")) {
+                    network.addLayer(SELU.readFromString(line));
+                } else {
+                    // Error, who cares
+                }
+                line = reader.readLine();
+            }
+            return network;
 		} catch(Exception e) {
-			System.err.println(e);
-			return null;
+            e.printStackTrace(new java.io.PrintStream(System.err));
+            return null;
 		}
 		
 	}

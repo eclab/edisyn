@@ -77,26 +77,35 @@ public class YamahaDX7 extends Synth implements ProvidesNN
     public static final int NEGEXP = 1;
     public static final int POSEXP = 2;
     public static final int POSLINEAR = 3;
+    public static final int ENCODED_LENGTH = 225;
     
     public static final String[] KS_CURVES = { "- Linear", "- Exp", "+ Exp", "+ Linear" };
     public static final String[] NOTES = {"A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#" };
     static Network encoder = null;
     static Network decoder = null;
 
-    static Network getEncoder(){
+    static Network getEncoder()
+        {
         if(encoder == null){
-            encoder = Network.loadFromFile("edisyn/synth/yamahadx7/encoder.txt");
+            InputStream stream = YamahaDX7.class.getResourceAsStream("encoder.txt");
+            encoder = Network.loadFromStream(stream);
         }
         return encoder;
-    }
+        }
 
-    static Network getDecoder(){
+    static Network getDecoder()
+        {
         if(decoder == null){
-            decoder = Network.loadFromFile("edisyn/synth/yamahadx7/decoder.txt");
+            InputStream stream = YamahaDX7.class.getResourceAsStream("decoder.txt");
+            decoder = Network.loadFromStream(stream);
         }
         return decoder;
-    }
+        }
 
+    public void randomizeNNModel()
+        {
+        model.latentVector = ProvidesNN.shiftVectorUniform(new double[ENCODED_LENGTH], random, 1);
+        }
 
     public JFrame sprout()
         {
@@ -116,7 +125,7 @@ public class YamahaDX7 extends Synth implements ProvidesNN
             }
 
         /// SOUND PANEL
-                
+
         JComponent soundPanel = new SynthPanel(this);
         VBox vbox = new VBox();
         HBox hbox = new HBox();
@@ -837,8 +846,7 @@ public class YamahaDX7 extends Synth implements ProvidesNN
 	public double[] encode()
 	    {
         // Hardcoded constant for now, really should fix this to be computed in the future
-        int encodedLength = 225;
-        double[] vector = new double[encodedLength];
+        double[] vector = new double[ENCODED_LENGTH];
         int index = 0;
         // Ignore the name parameters, so -10
 		for(int i = 0; i < allParameters.length-10; i++){
@@ -854,8 +862,7 @@ public class YamahaDX7 extends Synth implements ProvidesNN
 	public double[] encode(Model model)
 	    {
         // Hardcoded constant for now, really should fix this to be computed in the future
-        int encodedLength = 225;
-        double[] vector = new double[encodedLength];
+        double[] vector = new double[ENCODED_LENGTH];
         int index = 0;
         // Ignore the name parameters, so -10
 		for(int i = 0; i < allParameters.length-10; i++){

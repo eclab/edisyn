@@ -10,11 +10,14 @@ package edisyn;
    @author Sean Luke
 */
 
+import java.util.*;
+
 public interface ProvidesNN
     {
 	    public Model decode(double [] vector);
 	    public double[] encode();
 	    public double[] encode(Model model);
+        public void randomizeNNModel();
 	    public static int encodeScaled(double[] vector, int index, int value, int min, int max)
             {
             vector[index] = ((double)value)/(max - min);
@@ -53,5 +56,15 @@ public interface ProvidesNN
 		    int val = (maxInd - index) + min;
 		    return new int[]{index + (max-min) + 1, val};
             }
-    }
+
+        public static double[] shiftVectorUniform(double[] vector, Random random, double amount)
+            {
+            double[] out = new double[vector.length];
+            for(int i = 0; i < vector.length; i++)
+                {
+                out[i] = vector[i]+2*(random.nextDouble()-0.5)*amount;
+                }
+            return out;
+            }
+}
         

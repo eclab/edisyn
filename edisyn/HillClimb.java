@@ -722,9 +722,24 @@ public class HillClimb extends SynthPanel
             {
             public void perform(int val)
                 {
-                initialize(val == OPERATION_SEED_FROM_PATCH ? synth.getModel() : 
-                    val == OPERATION_SEED_FROM_MORPH ? synth.morph.current : null, val);
-                resetCurrentPlay();
+
+                    if (method.getSelectedIndex() == 2) // NN Climb
+                      {
+                      Random random = synth.random;
+                      String[] keys = synth.getMutationKeys();
+                      double weight = blank.getModel().get("hillclimbrate", 0) / 100.0;
+                      weight = weight * weight * weight; // make more sensitive at low end
+                      Model model = (val == OPERATION_SEED_FROM_PATCH ? synth.getModel()
+                               : val == OPERATION_SEED_FROM_MORPH ? synth.morph.current : null);
+                      produceNN(random, keys, weight, model);
+                      } 
+                    else
+                        {
+                            initialize(val == OPERATION_SEED_FROM_PATCH ? synth.getModel()
+                               : val == OPERATION_SEED_FROM_MORPH ? synth.morph.current : null, val);
+                        }
+               
+                    resetCurrentPlay();
                 }
             };
         reset.getButton().setPreferredSize(back.getButton().getPreferredSize());
@@ -1232,11 +1247,23 @@ public class HillClimb extends SynthPanel
             currentModels[i] = (Model)(synth.getModel().clone());
             }       
         currentModels[NUM_CANDIDATES + ARCHIVE_SIZE] = synth.getModel();
-        
-        initialize(synth.getModel(),  OPERATION_SEED_FROM_PATCH);
+
+        if (method.getSelectedIndex() == 2)
+            {
+            System.out.println(method.getSelectedIndex());
+            Random random = synth.random;
+            String[] keys = synth.getMutationKeys();
+            double weight = blank.getModel().get("hillclimbrate", 0) / 100.0;
+            weight = weight * weight * weight; // make more sensitive at low end
+            produceNN(random, keys, weight, synth.getModel());
+            }
+        else
+            {
+            initialize(synth.getModel(), OPERATION_SEED_FROM_PATCH);
+            }
         }
 
-    boolean[] getSelectedResults()
+        boolean[] getSelectedResults()
         {
         boolean[] sel = new boolean[NUM_CANDIDATES];
         for(int i = 0; i < sel.length; i++)
@@ -1847,7 +1874,6 @@ public class HillClimb extends SynthPanel
             bestModels[2] = -1;
             }        
     
-        Model oldA = topStack().parents[0];
         
         if (bestModels[0] == -1)
             {

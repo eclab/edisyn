@@ -317,11 +317,11 @@ public class Category extends JComponent implements Gatherable
                 {
                 public void mousePressed(MouseEvent e)
                     {
-                   	if (e.getY() < 20 &&
-                    	(stringWidth == 0 || e.getX() < stringWidth)
-                    // && (((e.getModifiers() & InputEvent.BUTTON3_MASK) == InputEvent.BUTTON3_MASK) || 
-                       //     ((e.getModifiers() & InputEvent.SHIFT_MASK) == InputEvent.SHIFT_MASK))
-                            )
+                    if (e.getY() < 20 &&
+                        (stringWidth == 0 || e.getX() < stringWidth)
+                        // && (((e.getModifiers() & InputEvent.BUTTON3_MASK) == InputEvent.BUTTON3_MASK) || 
+                        //     ((e.getModifiers() & InputEvent.SHIFT_MASK) == InputEvent.SHIFT_MASK))
+                        )
                         {
                         copy.setEnabled(pasteable);
                         copyFromMutable.setEnabled(pasteable);
@@ -491,7 +491,7 @@ public class Category extends JComponent implements Gatherable
         {
         if (label == null) label = "";
         this.name = label;
-        stringWidth = 0; 		// reset
+        stringWidth = 0;                // reset
         
         // here we're going to do a little hack.  TitledBorder doesn't put the title
         // on the FAR LEFT of the line, so when we draw the border we get a little square
@@ -563,15 +563,15 @@ public class Category extends JComponent implements Gatherable
             }
         }
     
- 	// even with modification for the insets, the text position value seems to be off by a bit
+    // even with modification for the insets, the text position value seems to be off by a bit
     int STRING_WIDTH_COMPENSATION = 10;
     
     public void paintComponent(Graphics g)
         {
         Graphics2D graphics = (Graphics2D) g;
  
- 		if (stringWidth == 0)
-			stringWidth = STRING_WIDTH_COMPENSATION + graphics.getFontMetrics(Style.CATEGORY_FONT()).stringWidth(name);
+        if (stringWidth == 0)
+            stringWidth = STRING_WIDTH_COMPENSATION + graphics.getFontMetrics(Style.CATEGORY_FONT()).stringWidth(name);
 
         Style.prepareGraphics(g);
 

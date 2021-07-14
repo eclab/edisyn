@@ -3870,6 +3870,7 @@ public class KorgMicrosampler extends Synth
         blend.setEnabled(false);
         receiveCurrent.setEnabled(false);
         receivePatch.setEnabled(false);
+        receiveNextPatch.setEnabled(false);
         transmitTo.setEnabled(false);
         writeTo.setEnabled(false);
         merge.setEnabled(false);

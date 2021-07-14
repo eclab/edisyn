@@ -50,6 +50,7 @@ public class NovationDStation extends Synth
         writeTo.setEnabled(false);
         receiveCurrent.setEnabled(false);
         receivePatch.setEnabled(false);
+        receiveNextPatch.setEnabled(false);
         getAll.setEnabled(false);
         return frame;
         }         

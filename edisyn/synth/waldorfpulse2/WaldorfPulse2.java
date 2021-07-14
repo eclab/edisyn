@@ -38,7 +38,7 @@ public class WaldorfPulse2 extends Synth
     public static final String[] DRIVE_TYPE = new String[] { "None", "Tube Distortion", "Fuzz Distortion", "Effects Board Output" };
     public static final String[] MODULATION_SOURCE = new String[] { "Off", "LFO1 Output", "LFO1 x Mod Wheel", "LFO1 x Pressure", "LFO2", "LFO2 x Amplifier Envelope", "Filter Envelope", "Amplifier Envelope", "Keyboard Velocity", "Pitch Keytracking", "Pitch Follower (with Glide)", "Pitch Bend", "Mod Wheel", "Pressure", "Breath Controller", "Control X", "Keyboard Release Velocity", "Modulation Accumulator", "Modulation Productor", "Modulation Delay Line", "Modulation Smoother", "Modulation Minimizer", "Modulation Maximizer", "Highest Note Pressed", "Lowest Note Pressed" };
     // The manual doesn't list the destinations after CV Out, but they're in the unit
-    public static final String[] MODULATION_DESTINATION = new String[] { "Global Oscillator Pitch", "Oscillator 1 Pitch", "Oscillator 2 Pitch", "Oscillator 3 Pitch", "Oscillator 1 Pulse Width", "Oscillator 2 Pulse Width", "Oscillator 1 Level", "Oscillator 2 Level", "Oscillator 3 Level", "Noise Level", "Filter Cutoff", "Filter Resonance", "Volume", "Panning", "LFO 1 Speed", "Mod 1 Amount", "Drive", "Glide Rate", "Filter Env Rates", "Amp Env Rates", "Unison Detune", "Paraphonic Fade 1", "Paraphonic Fade 2", "Arpeggiator Swing", "CV Out", "Modulation Accumulator", "Modulation Productor", "Modulation Delay Line", "Modulation Smoother", "Modulation Minimizer", "Modulation Maximizer", "VCF Env Amount"  };
+    public static final String[] MODULATION_DESTINATION = new String[] { "Global Oscillator Pitch", "Oscillator 1 Pitch", "Oscillator 2 Pitch", "Oscillator 3 Pitch", "Oscillator 1 Pulse Width", "Oscillator 2 Pulse Width", "Oscillator 1 Level", "Oscillator 2 Level", "Oscillator 3 Level", "Noise Level", "Filter Cutoff", "Filter Resonance", "Volume", "Panning", "LFO 1 Speed", "Mod 1 Amount", "Drive", "Glide Rate", "Filter Env Rates", "Amp Env Rates", "Unison Detune", "Paraphonic Fade 1", "Paraphonic Fade 2", "Arpeggiator Swing", "CV Out", "Modulation Accumulator", "Modulation Productor", "Modulation Delay Line", "Modulation Smoother", "Modulation Minimizer", "Modulation Maximizer", "VCF Env Amount" };
     public static final String[] SOUND_CATEGORY = new String[] { "None", "Arpeggiated", "Atmospheric", "Bass", "Drum Kit", "Special Effect", "Keys", "Lead", "Monophonic", "Pad", "Percussive", "Polyphonic", "Sound Sequence", "Dub", "Lushy", "String", "Puck", "Wind", "Noise", "External Input", "Init" };
     public static final String[] ARPEGGIATOR_STATE = new String[] { "Off", "On", "Hold" };
     public static final String[] ARPEGGIATOR_MODE = new String[] { "Up Time-Ordered", "Down Time-Ordered", "Up/Down Time-Ordered", "Random", "Up Pitch-Ordered", "Down Pitch-Ordered", "Up/Down Pitch-Ordered" };
@@ -208,7 +208,7 @@ public class WaldorfPulse2 extends Synth
     public JComponent addLFO(final int lfo, Color color)
         {
         Category category = new Category(this, "LFO " + lfo, color);
-		category.makePasteable("lfo");
+        category.makePasteable("lfo");
 
         JComponent comp;
         String[] params;
@@ -266,7 +266,7 @@ public class WaldorfPulse2 extends Synth
     public JComponent addOscillator(final int osc, Color color)
         {
         Category category = new Category(this, "Oscillator " + osc, color);
-		category.makePasteable("osc");
+        category.makePasteable("osc");
 
         JComponent comp;
         String[] params;
@@ -400,7 +400,7 @@ public class WaldorfPulse2 extends Synth
     public JComponent addEnvelope(final int envelope, Color color)
         {
         Category category = new Category(this, (envelope == 1 ? "Filter" : "Amplifier") + " Envelope", color);
-		category.makePasteable("env");
+        category.makePasteable("env");
 
         JComponent comp;
         String[] params;
@@ -453,7 +453,7 @@ public class WaldorfPulse2 extends Synth
     public JComponent addModulation(Color color)
         {
         Category category  = new Category(this, "Modulation", color);
-		category.makeDistributable("mod");
+        category.makeDistributable("mod");
                         
         JComponent comp;
         String[] params;
@@ -610,7 +610,7 @@ public class WaldorfPulse2 extends Synth
     public JComponent addArpeggiatorPattern(Color color)
         {
         Category category  = new Category(this, "Arpeggiator Pattern", color);
-		category.makeDistributable("patternstep");
+        category.makeDistributable("patternstep");
                         
         JComponent comp;
         String[] params;
@@ -858,9 +858,9 @@ public class WaldorfPulse2 extends Synth
                 bytes[i] = 0;           // I think this one is vestigial
                 }
             else if (i >= 81 && i <= 84) 
-            	{
-            	bytes[i] = 0;			// empty
-            	}
+                {
+                bytes[i] = 0;                   // empty
+                }
             else if (i >= 90 && i <= 105)   // pattern steps
                 {
                 int stepType = model.get("patternstep" + (i - 90 + 1) + "steptype");
@@ -870,10 +870,10 @@ public class WaldorfPulse2 extends Synth
                 bytes[i] = (byte)val;
                 }
             else if (i >= 108 && i <= 112) 
-            	{
-            	if (i == 112) bytes[i] = 0x01;		// dunno why
-            	else bytes[i] = 0;			// empty
-            	}
+                {
+                if (i == 112) bytes[i] = 0x01;          // dunno why
+                else bytes[i] = 0;                      // empty
+                }
             else if (i >= 113 && i <= 126)  // name
                 {
                 bytes[i] = (byte)(name.charAt(i - 113));
@@ -949,27 +949,27 @@ public class WaldorfPulse2 extends Synth
                 // do nothing           // I think this one is vestigial
                 }
             else if (i >= 81 && i <= 84) 
-            	{
-            	// do nothing			// empty
-            	}
+                {
+                // do nothing                   // empty
+                }
             else if (i >= 90 && i <= 105)   // pattern steps
                 {
                 int val = (data[i + offset] & 127);
                 int steptype = val & 0xF;
-                if (steptype > 8)	// this happens, let's set it to "reset", which appears to be what was intended
-                	{
-					System.err.println("Warning (WaldorfPulse2.parse): Revised " + 
-						"patternstep" + (i - 90 + 1) + "steptype" + " from " + steptype + " to 8 (Reset)");
-                	steptype = 8;
-                	}
+                if (steptype > 8)       // this happens, let's set it to "reset", which appears to be what was intended
+                    {
+                    System.err.println("Warning (WaldorfPulse2.parse): Revised " + 
+                        "patternstep" + (i - 90 + 1) + "steptype" + " from " + steptype + " to 8 (Reset)");
+                    steptype = 8;
+                    }
                 model.set("patternstep" + (i - 90 + 1) + "steptype", steptype);
                 model.set("patternstep" + (i - 90 + 1) + "steplength", (val >> 4) & 0x3);
                 model.set("patternstep" + (i - 90 + 1) + "stepglide", (val >> 6) & 0x1);
                 }
             else if (i >= 108 && i <= 112) 
-            	{
-            	// do nothing			// empty
-            	}
+                {
+                // do nothing                   // empty
+                }
             else if (i >= 113 && i <= 126)  // name
                 {
                 // do nothing
@@ -1047,23 +1047,22 @@ public class WaldorfPulse2 extends Synth
         /// Otherwise we just do a standard request dump and hope that it's not an init patch.
         
         if (changePatch)
-        	{
+            {
             performChangePatch(tempModel);
 
-			// tempModel has to be non-null for performChangePatch to work anyway, but
-			// just in case...
-			if (tempModel == null)
-	            tempModel = getModel();
-	        int num = tempModel.get("number");
+            // tempModel has to be non-null for performChangePatch to work anyway, but
+            // just in case...
+            if (tempModel == null)
+                tempModel = getModel();
 
-			// now we set the number properly.  Yucky hack.
-	        model.set("number", num);
-	        tryToSendSysex(requestCurrentDump());
+            // now we set the number properly.  Yucky hack.
+            model.set("number", tempModel.get("number"));
+            tryToSendSysex(requestCurrentDump());
             }
         else
-        	{            
-	        tryToSendSysex(requestDump(tempModel));
-	        }
+            {            
+            tryToSendSysex(requestDump(tempModel));
+            }
         }
 
 

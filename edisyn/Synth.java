@@ -1020,7 +1020,7 @@ public abstract class Synth extends JComponent implements Updatable
     public boolean getSendsParametersOnlyOnSendCurrentPatch() { return false; }
 
     /** Override this to return TRUE if you want Edisyn to sendAllParmameters() immediately after a patch write, because the patch write writes
-    	to permanent memory but doesn't change working memory.  This isn't very common (the Kyra and Pulse 2 seem to need it). */ 
+        to permanent memory but doesn't change working memory.  This isn't very common (the Kyra and Pulse 2 seem to need it). */ 
     public boolean getSendsParametersAfterWrite() { return false; }
 
     /** Return the filename of your default sysex file (for example "MySynth.init"). Should be located right next to the synth's class file ("MySynth.class") */
@@ -1636,11 +1636,11 @@ public abstract class Synth extends JComponent implements Updatable
     public void performChangePatch(Model tempModel)
         {
         if (tempModel == null) // uh oh
-        	{
-        	System.err.println("Synth.performChangePatch() WARNING: No tempModel provided, so couldn't change patch.  This is likely a bug."); 
-        	return;
-        	}
-        	
+            {
+            System.err.println("Synth.performChangePatch() WARNING: No tempModel provided, so couldn't change patch.  This is likely a bug."); 
+            return;
+            }
+                
         changePatch(tempModel);
         int p = getPauseAfterChangePatch();
         if (p > 0)
@@ -3350,6 +3350,20 @@ public abstract class Synth extends JComponent implements Updatable
                 doSaveText();
                 }
             });
+            
+        if (!Style.isMac())
+            {
+            JMenuItem exit = new JMenuItem("Exit");
+            menu.addSeparator();
+            menu.add(exit);
+            exit.addActionListener(new ActionListener()
+                {
+                public void actionPerformed( ActionEvent e)
+                    {
+                    doQuit();
+                    }
+                });
+            }
 
         menu = new JMenu("Edit");
         menubar.add(menu);
@@ -4014,7 +4028,7 @@ public abstract class Synth extends JComponent implements Updatable
             });
                 
         receiveNextPatch = new JMenuItem("Request Next Patch");
-        receiveNextPatch.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_R, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.CTRL_MASK));
+        receiveNextPatch.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_E, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
         menu.add(receiveNextPatch);
         receiveNextPatch.addActionListener(new ActionListener()
             {
@@ -5134,10 +5148,10 @@ public abstract class Synth extends JComponent implements Updatable
                 return;
             }
                 
-    	Model tempModel = getNextPatchLocation(getModel());
-		resetBlend();
-		setMergeProbability(0.0);
-		performRequestDump(tempModel, true);
+        Model tempModel = getNextPatchLocation(getModel());
+        resetBlend();
+        setMergeProbability(0.0);
+        performRequestDump(tempModel, true);
         } 
         
     public void doRequestMerge(double percentage)
@@ -6803,11 +6817,11 @@ public abstract class Synth extends JComponent implements Updatable
                                 {
                                 if (pat.length == 1)
                                     {
-                                    if (showSimpleConfirm("Save Bulk File...", "Save a bulk file for " + getSynthNames()[pat[primary][0].synth] + "?"))
+                                    //if (showSimpleConfirm("Save Bulk File...", "Save a bulk file for " + getSynthNames()[pat[primary][0].synth] + "?"))
                                         {
                                         succeeded = saveAllPatches(pat, 0, true);
                                         }
-                                    else succeeded = false;
+                                    //  else succeeded = false;
                                     }
                                 else
                                     {
@@ -6824,11 +6838,11 @@ public abstract class Synth extends JComponent implements Updatable
                                 {
                                 if (pat.length == 1)
                                     {
-                                    if (showSimpleConfirm("Save Individual Files...", "Save a individual files for " + getSynthNames()[pat[primary][0].synth] + "?"))
+                                    // if (showSimpleConfirm("Save Individual Files...", "Save a individual files for " + getSynthNames()[pat[primary][0].synth] + "?"))
                                         {
                                         succeeded = saveAllPatches(pat, 0, false);
                                         }
-                                    else succeeded = false;
+                                    //  else succeeded = false;
                                     }
                                 else
                                     {
@@ -6870,7 +6884,58 @@ public abstract class Synth extends JComponent implements Updatable
         parsingForMerge = false;
         return succeeded;
         }
+    
+    
+    /** 
+        Returns a directory selected by the user, either for saving or for loading.
+        This method uses Mac-specific features to display a better file chooser
+        than the JFileChooser.
+    */ 
+    public File selectDirectory(String title, File initialParentDirectory, boolean save)
+        {
+        Frame parent = (Frame)(SwingUtilities.getRoot(this));
         
+        if (Style.isMac())
+            {
+            FileDialog fd = new FileDialog(parent, title, save ? FileDialog.SAVE : FileDialog.LOAD);
+            if (initialParentDirectory != null)
+                fd.setDirectory(initialParentDirectory.getAbsolutePath());
+            disableMenuBar();
+            System.setProperty("apple.awt.fileDialogForDirectories", "true");
+            fd.setVisible(true);
+            System.setProperty("apple.awt.fileDialogForDirectories", "false");
+            enableMenuBar();
+            if (fd.getFile() == null)
+                {
+                return null;
+                }
+            else 
+                {
+                return new File(fd.getFile());
+                }
+            }
+        else
+            {
+            JFileChooser chooser = new JFileChooser();
+            chooser.setDialogTitle(title);
+            chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+            chooser.setAcceptAllFileFilterUsed(false);
+            if (initialParentDirectory != null)
+                chooser.setCurrentDirectory(initialParentDirectory);
+            disableMenuBar();         
+            if (chooser.showOpenDialog(parent) == JFileChooser.APPROVE_OPTION)
+                {
+                enableMenuBar();
+                return chooser.getSelectedFile();
+                }
+            else
+                {
+                return null;
+                }
+            }
+        } 
+    
+    
     // This saves out a collection of patches to a directory in one of two ways.
     // If groupByType is TRUE, then the patches are grouped by synth type, and written out
     // as bulk files with the name of the synth type.
@@ -6881,32 +6946,45 @@ public abstract class Synth extends JComponent implements Updatable
         
     boolean saveAllPatches(Patch[][] patches, int patchType, boolean groupByType)
         {
-        JFileChooser chooser = new JFileChooser();
-        chooser.setDialogTitle(groupByType ? "Select Directory to Save Patch Groups" : "Select Directory to Save Patches");
-        chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-        chooser.setAcceptAllFileFilterUsed(false);
+        File dir = selectDirectory(groupByType ? "Select Directory to Save Patch Groups" : "Select Directory to Save Patches",
+            file != null ? new File(file.getParentFile().getPath()) : (getLastDirectory() == null ? new File(getLastDirectory()) : null), 
+            true);
+        if (dir != null) setLastDirectory(dir.getParent());
         
-        if (file != null)
+        /*
+          JFileChooser chooser = new JFileChooser();
+          chooser.setDialogTitle(groupByType ? "Select Directory to Save Patch Groups" : "Select Directory to Save Patches");
+          chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+          chooser.setAcceptAllFileFilterUsed(false);
+        
+          if (file != null)
+          {
+          chooser.setCurrentDirectory(new File(file.getParentFile().getPath()));
+          }
+          else
+          {
+          String path = getLastDirectory();
+          if (path != null)
+          chooser.setCurrentDirectory(new File(path));
+          }
+          disableMenuBar();         
+          if (chooser.showOpenDialog((Frame)(SwingUtilities.getRoot(this))) != JFileChooser.APPROVE_OPTION)
+          {
+          enableMenuBar();
+          return false;                   // cancelled
+          }
+          else
+          {
+          enableMenuBar();
+        */
+
+        if (dir == null)
             {
-            chooser.setCurrentDirectory(new File(file.getParentFile().getPath()));
+            return false;
             }
         else
             {
-            String path = getLastDirectory();
-            if (path != null)
-                chooser.setCurrentDirectory(new File(path));
-            }
-        disableMenuBar();         
-        if (chooser.showOpenDialog((Frame)(SwingUtilities.getRoot(this))) != JFileChooser.APPROVE_OPTION)
-            {
-            enableMenuBar();
-            return false;                   // cancelled
-            }
-        else
-            {
-            enableMenuBar();
-            File dir = chooser.getSelectedFile();
-                        
+            //File dir = chooser.getSelectedFile();          
             if (groupByType)
                 {
                 int start = 0;
@@ -7339,6 +7417,10 @@ public abstract class Synth extends JComponent implements Updatable
         frame.pack();
         frame.setResizable(false);
         frame.setLocationRelativeTo(null);
+        if (Style.isMac())
+            {
+            frame.setJMenuBar(makeDisabledMenuBar());
+            }
         frame.setVisible(true);
         }
         
@@ -7568,32 +7650,51 @@ public abstract class Synth extends JComponent implements Updatable
                 }
             else
                 {       
-                JFileChooser chooser = new JFileChooser();
-                chooser.setDialogTitle("Select Directory for Patches");
-                chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-                chooser.setAcceptAllFileFilterUsed(false);
-
-                if (file != null)
+                File dir = selectDirectory("Select Directory for Patches",
+                    file == null ? null : new File(file.getParentFile().getPath()), 
+                    true);
+                if (dir != null) setLastDirectory(dir.getParent());
+                
+                if (dir == null)
                     {
-                    chooser.setCurrentDirectory(new File(file.getParentFile().getPath()));
-                    }
-                else
-                    {
-                    String path = getLastDirectory();
-                    if (path != null)
-                        chooser.setCurrentDirectory(new File(path));
-                    }
-                disableMenuBar();         
-                if (chooser.showOpenDialog((Frame)(SwingUtilities.getRoot(this))) != JFileChooser.APPROVE_OPTION)
-                    {
-                    enableMenuBar();
                     currentPatch = null;
                     return;
                     }
-                enableMenuBar();
-                patchFileOrDirectory = chooser.getSelectedFile();
-                batchPatches = null;
+                else
+                    {
+                    patchFileOrDirectory = dir;
+                    batchPatches = null;
+                    }
                 }
+
+            /*
+              JFileChooser chooser = new JFileChooser();
+              chooser.setDialogTitle("Select Directory for Patches");
+              chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+              chooser.setAcceptAllFileFilterUsed(false);
+
+              if (file != null)
+              {
+              chooser.setCurrentDirectory(new File(file.getParentFile().getPath()));
+              }
+              else
+              {
+              String path = getLastDirectory();
+              if (path != null)
+              chooser.setCurrentDirectory(new File(path));
+              }
+              disableMenuBar();         
+              if (chooser.showOpenDialog((Frame)(SwingUtilities.getRoot(this))) != JFileChooser.APPROVE_OPTION)
+              {
+              enableMenuBar();
+              currentPatch = null;
+              return;
+              }
+              enableMenuBar();
+              patchFileOrDirectory = chooser.getSelectedFile();
+              batchPatches = null;
+              }
+            */
             
             currentPatch = buildModel();
             finalPatch = buildModel();
@@ -7785,17 +7886,17 @@ public abstract class Synth extends JComponent implements Updatable
         // test to see if banks are implemented
         if (nextModel.get("bank", -1000) == -1000)              // no banks, revise
             {
-        	Model newModel = buildModel();
+            Model newModel = buildModel();
             newModel.set("number", 0);
-	        return newModel;
+            return newModel;
             }
         else
-        	{
-        	Model newModel = buildModel();
-        	newModel.set("number", 0);
-        	newModel.set("bank", 0);
-	        return newModel;
-	        }
+            {
+            Model newModel = buildModel();
+            newModel.set("number", 0);
+            newModel.set("bank", 0);
+            return newModel;
+            }
         }
     
     PatchLocation[] allPatchLocations = null;           // a little cacheing
@@ -8269,5 +8370,50 @@ public abstract class Synth extends JComponent implements Updatable
         for(int i = 0; i < data.length; i++)
             System.err.print(" " + StringUtility.toHex(data[i]));
         System.err.println();
-        }    
+        }   
+        
+        
+    public JMenuBar makeDisabledMenuBar()
+        {
+        JMenuBar mb = new JMenuBar();
+        for(int i = 0; i < menubar.getMenuCount(); i++)
+            {
+            JMenu old = menubar.getMenu(i);
+            JMenu menu = new JMenu(old.getText());
+            for(int j = 0; j < old.getMenuComponentCount(); j++)
+                {
+                Component comp = old.getMenuComponent(j);
+                if (comp == null)
+                    {
+                    handleException(new RuntimeException("Unknown JMenu Component " + comp));
+                    }
+                else if (comp instanceof JMenu)
+                    {
+                    JMenu item = new JMenu(((JMenu)comp).getText());
+                    KeyStroke ks = ((JMenu)comp).getAccelerator();
+                    if (ks != null) item.setAccelerator(ks);
+                    item.setEnabled(false);
+                    menu.add(item);
+                    }
+                else if (comp instanceof JMenuItem)
+                    {
+                    JMenuItem item = new JMenuItem(((JMenuItem)comp).getText());
+                    KeyStroke ks = ((JMenuItem)comp).getAccelerator();
+                    if (ks != null) item.setAccelerator(ks);
+                    item.setEnabled(false);
+                    menu.add(item);
+                    }
+                else if (comp instanceof JSeparator)
+                    {
+                    menu.add(new JSeparator());
+                    }
+                else
+                    {
+                    handleException(new RuntimeException("Unknown JMenu IteComponentm " + comp));
+                    }               
+                }
+            mb.add(menu);
+            }
+        return mb;
+        }
     }

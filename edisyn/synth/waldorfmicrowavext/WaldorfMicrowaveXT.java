@@ -2408,7 +2408,7 @@ public class WaldorfMicrowaveXT extends Synth
             retval = false;
             }
 
-        for(int i = 0; i < 255; i++)
+        for(int i = 0; i < 256; i++)
             {
             setParameterByIndex(i, data[i + 7]);
             }

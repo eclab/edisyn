@@ -1914,18 +1914,18 @@ public class WaldorfKyra extends Synth
 
     public int parse(byte[] data, boolean fromFile)
         {
-        if (data[6] != 0x7F && 		// Edit Buffer
-        	data[6] != 0x7E)			// "Current Configured Bank (in the Config Menu)"
+        if (data[6] != 0x7F &&          // Edit Buffer
+            data[6] != 0x7E)                        // "Current Configured Bank (in the Config Menu)"
             {
             if (data[6] < 26)
-            	{
-            	model.set("bank", data[6]);
-            	}
+                {
+                model.set("bank", data[6]);
+                }
             else
-            	{
-            	System.err.println("WARNING: Invalid Bank number " + data[6] + " in Sysex, changing to 0 (Bank A)");
-            	model.set("bank", 0);
-            	}
+                {
+                System.err.println("WARNING: Invalid Bank number " + data[6] + " in Sysex, changing to 0 (Bank A)");
+                model.set("bank", 0);
+                }
             model.set("number", data[7]);
             }
 

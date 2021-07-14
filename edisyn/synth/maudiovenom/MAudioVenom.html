@@ -60,7 +60,7 @@ above 110 the Rates turn into MIDI Synced rates in the form of notes.  An explan
 <p><li>There appear to be some unwritten rules about using Mod1Amount ... Mod16Amount as destinations in your modulation matrix.  
 <ol>
 <li>A slot cannot have itself as a destination (so slot 5 can't have Mod5Amount as its destination).
-<p><li>If a slot is presently serving as a destination of another slot, it cannot use Mod1Amount ... Mod16Amount.  For example, if slot 5 has Mod6Amount as its destination, then slot 6 cannot use any of Mod1Amount ... Mod16Amount as its destinations.
+<p><li>If a slot is presently serving as a destination of another slot, it cannot use Mod1Amount ... Mod16Amount as destinations.  For example, if slot 5 has Mod6Amount as its destination, then slot 6 cannot itself use any of Mod1Amount ... Mod16Amount as its destinations.
 <p><li>Slots 1 and 2 can't use Mod1Amount ... Mod16Amount as destinations at all.
 </ol>
 
@@ -96,7 +96,7 @@ The Venom's waveforms come from certain sources as indicated by initials at the 
     
 <li>    HP = HP 200CD 1952 Valve Oscillator
 <li>    PB = Plan B Model 15     [Eurorack module]
-<li>    RP = ARP 2600 Grayface
+<li>    RP = ARP 2600 Gray Meanie
 <li>    MS = MS-20 
 <li>    SH = Roland SH-5
 <li>    OB = Oberheim SEM

@@ -1253,6 +1253,7 @@ public class Generic extends Synth
         transmitTo.setEnabled(false);
         transmitCurrent.setEnabled(false);
         receivePatch.setEnabled(false);
+        receiveNextPatch.setEnabled(false);
         receiveCurrent.setEnabled(false);
         merge.setEnabled(false);
         hillClimbMenu.setEnabled(false);

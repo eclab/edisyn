@@ -74,6 +74,7 @@ public class MAudioVenomGlobal extends Synth
         JFrame frame = super.sprout();
         blend.setEnabled(false);
         receivePatch.setEnabled(false);
+        receiveNextPatch.setEnabled(false);
         transmitTo.setEnabled(false);
         writeTo.setEnabled(false);
         merge.setEnabled(false);

@@ -16,6 +16,7 @@ import java.awt.event.*;
 import java.util.*;
 import java.io.*;
 import javax.sound.midi.*;
+import java.util.zip.*;
 
 
 /**
@@ -86,19 +87,29 @@ public class YamahaDX7 extends Synth implements ProvidesNN
 
     static Network getEncoder()
         {
-        if(encoder == null){
-            InputStream stream = YamahaDX7.class.getResourceAsStream("encoder.txt");
-            encoder = Network.loadFromStream(stream);
-        }
+        if (encoder == null)
+            {
+            try
+                {
+                InputStream stream = new GZIPInputStream(YamahaDX7.class.getResourceAsStream("encoder.txt.gz"));
+                encoder = Network.loadFromStream(stream);
+                }
+            catch (IOException ex) { }
+            }
         return encoder;
         }
 
     static Network getDecoder()
         {
-        if(decoder == null){
-            InputStream stream = YamahaDX7.class.getResourceAsStream("decoder.txt");
-            decoder = Network.loadFromStream(stream);
-        }
+        if (decoder == null)
+            {
+            try
+                {
+                InputStream stream = new GZIPInputStream(YamahaDX7.class.getResourceAsStream("decoder.txt.gz"));
+                decoder = Network.loadFromStream(stream);
+                }
+            catch (IOException ex) { }
+            }
         return decoder;
         }
 
@@ -843,60 +854,82 @@ public class YamahaDX7 extends Synth implements ProvidesNN
     "name10",
 
     };
-	public double[] encode()
-	    {
+    
+    /*
+      public double[] encode()
+      {
+      // Hardcoded constant for now, really should fix this to be computed in the future
+      double[] vector = new double[ENCODED_LENGTH];
+      int index = 0;
+      // Ignore the name parameters, so -10
+      for(int i = 0; i < allParameters.length-10; i++)
+      {
+      String parameter = allParameters[i];
+      if (model.metricMinExists(parameter))
+      {
+      index = ProvidesNN.encodeScaled(vector,index,model.get(parameter), model.getMin(parameter), model.getMax(parameter));
+      } 
+      else 
+      {
+      index = ProvidesNN.encodeOneHot(vector,index,model.get(parameter), model.getMin(parameter), model.getMax(parameter));
+      }
+      }
+      return getEncoder().feed(vector);
+      }
+    */
+    public double[] encode()
+        {
+        return encode(this.model);
+        }
+        
+            
+    public double[] encode(Model model)
+        {
         // Hardcoded constant for now, really should fix this to be computed in the future
         double[] vector = new double[ENCODED_LENGTH];
         int index = 0;
         // Ignore the name parameters, so -10
-		for(int i = 0; i < allParameters.length-10; i++){
-			String parameter = allParameters[i];
-			if(model.metricMinExists(parameter)){
-				index = ProvidesNN.encodeScaled(vector,index,model.get(parameter), model.getMin(parameter), model.getMax(parameter));
-			} else {
-				index = ProvidesNN.encodeOneHot(vector,index,model.get(parameter), model.getMin(parameter), model.getMax(parameter));
-			}
-		}
-		return getEncoder().feed(vector);
-	    }
-	public double[] encode(Model model)
-	    {
-        // Hardcoded constant for now, really should fix this to be computed in the future
-        double[] vector = new double[ENCODED_LENGTH];
+        for(int i = 0; i < allParameters.length-10; i++)
+            {
+            String parameter = allParameters[i];
+            if (model.metricMinExists(parameter))
+                {
+                index = ProvidesNN.encodeScaled(vector,index,model.get(parameter), model.getMin(parameter), model.getMax(parameter));
+                } 
+            else 
+                {
+                index = ProvidesNN.encodeOneHot(vector,index,model.get(parameter), model.getMin(parameter), model.getMax(parameter));
+                }
+            }
+        return getEncoder().feed(vector);
+        }
+            
+    public Model decode(double[] vector)
+        {
+        Model newModel = model.copy();
+        newModel.latentVector = vector;
+        vector = getDecoder().feed(vector);
         int index = 0;
         // Ignore the name parameters, so -10
-		for(int i = 0; i < allParameters.length-10; i++){
-			String parameter = allParameters[i];
-			if(model.metricMinExists(parameter)){
-				index = ProvidesNN.encodeScaled(vector,index,model.get(parameter), model.getMin(parameter), model.getMax(parameter));
-			} else {
-				index = ProvidesNN.encodeOneHot(vector,index,model.get(parameter), model.getMin(parameter), model.getMax(parameter));
-			}
-		}
-		return getEncoder().feed(vector);
-	    }
-	public Model decode(double[] vector)
-	    {
-		Model newModel = model.copy();
-		newModel.latentVector = vector;
-		vector = getDecoder().feed(vector);
-		int index = 0;
-        // Ignore the name parameters, so -10
-		for(int i = 0; i < allParameters.length-10; i++){
-			String parameter = allParameters[i];
-			if(model.metricMinExists(parameter)){
-				int[] v = ProvidesNN.decodeScaled(vector, index, model.getMin(parameter), model.getMax(parameter));
-				index = v[0];
-				newModel.set(parameter, v[1]);
-			} else {
-				int[] v = ProvidesNN.decodeOneHot(vector, index, model.getMin(parameter), model.getMax(parameter));
-				index = v[0];
-				newModel.set(parameter, v[1]);
-			}
-			
-		}
-		return newModel;
-	    }
+        for(int i = 0; i < allParameters.length-10; i++)
+            {
+            String parameter = allParameters[i];
+            if (model.metricMinExists(parameter))
+                {
+                int[] v = ProvidesNN.decodeScaled(vector, index, model.getMin(parameter), model.getMax(parameter));
+                index = v[0];
+                newModel.set(parameter, v[1]);
+                } 
+            else
+                {
+                int[] v = ProvidesNN.decodeOneHot(vector, index, model.getMin(parameter), model.getMax(parameter));
+                index = v[0];
+                newModel.set(parameter, v[1]);
+                }
+                        
+            }
+        return newModel;
+        }
 
     public Object[] emitAll(String key)
         {

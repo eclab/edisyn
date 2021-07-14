@@ -616,7 +616,7 @@ public class WaldorfKyraMulti extends Synth
             {
             // main data
   
-  			// It doesn't matter what bank we're in (even the edit buffer) since there's only one bank...
+            // It doesn't matter what bank we're in (even the edit buffer) since there's only one bank...
             model.set("number", data[7]);
 
             // handle non-name parameters
@@ -830,7 +830,7 @@ public class WaldorfKyraMulti extends Synth
     
     public boolean testVerify(Synth synth2, String key, Object obj1, Object obj2)
         {
-        if (key.equals("name")) return true;		// the name gets padded with space
+        if (key.equals("name")) return true;            // the name gets padded with space
         else return false;
         }
     }

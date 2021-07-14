@@ -270,11 +270,13 @@ First things first: if you're working in Disconnected mode, you'll need to set u
 
 Now that you're up and running, if you change widgets in the patch editor, many (not all) synthesizers will automatically update themselves.  The opposite happens as well: changing a parameter on the synthesizer will update it in Edisyn.  See the About pane to determine if your synthesizer can't do this.
 
-By selecting {\bf Request Current Patch}, you can also ask your synthesizer to send you a dump of whatever patch it is currently running.  It is often the case that synthesizers respond in such a way that Edisyn cannot tell what the patch number or bank is.  In these cases Edisyn will reset the patch number to some default (like A001).  
+By selecting {\bf Request Current Patch}, you can ask your synthesizer to send you a dump of whatever patch it is currently running.  In their response, synthesizers  often don't tell Edisyn what the patch number or bank is.  In these cases Edisyn will reset the patch number to some default (like A001).  
 
 {\bf Request Patch...} will ask the synthesizer to send Edisyn a specific patch that you specify.  Edisyn often (not always) does this by first asking the synthesizer to change to that patch and bank, and then requesting the current patch.
 
-{\bf Request Next Patch} is similar to Request Patch... except that it asks the synthesizer to send the next patch number beyond the patch Edisyn is editing.  Note that if your synth is set to a different patch number than Edisyn thinks it's working on, then Edisyn's number is used.
+{\bf Request Next Patch} is similar to {\it Request Patch...} except that it asks the synthesizer to send the next patch number beyond the patch Edisyn is editing.  
+
+This might not increment in the way you expect.  Edisyn will increment its own displayed patch number, but this can be different from your synth's current number.  For example, you may have just loaded a patch from disk, or changed the patch manually on the synth.  Also if you receive a patch using {\it Request Current Patch}, many synthesizers don't tell Edisyn what patch number it is, so the patch number will be out of sync.  You can fix all this by calling {\it Request Patch...} (which syncs Edisyn up with your synth) and then calling {\it Request Next Patch} from there.
 
 {\bf Write to Patch...} will ask the synthesizer to change to a new patch and bank which you specify, then dump Edisyn's current patch to the synthesizer to its permanent memory.  Some synthesizers (like the PreenFM2 or TX81Z) cannot be written to remotely via Edisyn. Instead, you will need to Send to Current Patch, then manually save the current patch to patch RAM on the synth itself.
 

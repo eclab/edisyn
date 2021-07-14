@@ -23,7 +23,7 @@ public class MAudioVenomMultiRec extends Recognize
               data[6] == (byte) 0x02 &&               // Write Data Dump
               data[7] == (byte) 0x02) ||              // Multi Edit Dump
             */
-            ((data.length == 210 || data.length == 221) &&	// might have extra if we've added a store patch command
+            ((data.length == 210 || data.length == 221) &&      // might have extra if we've added a store patch command
             data[0] == (byte)0xF0 &&
             data[1] == (byte) 0x00 &&       // M-Audio
             data[2] == (byte) 0x01 &&

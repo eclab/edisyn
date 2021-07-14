@@ -107,7 +107,7 @@ public class NovationSL extends Synth
         blend.setEnabled(false);
         receiveCurrent.setEnabled(false);
         receivePatch.setEnabled(false);
-        //getAll.setEnabled(false);
+        receiveNextPatch.setEnabled(false);
         merge.setEnabled(false);
         return frame;
         }         
@@ -780,7 +780,7 @@ public class NovationSL extends Synth
             public String replace(String val)
                 {
                 char[] chars = (val + "        ").toCharArray();
-                char[] newchars = new char[12];
+                char[] newchars = new char[8];
                 for(int i = 0; i < newchars.length; i++)
                     {
                     if (chars[i] >= 32 && chars[i] < 127)
@@ -3608,7 +3608,7 @@ public class NovationSL extends Synth
       and the SL does not retain the patch number.  I do not know why.
 
       PATCHNUM is located at position 0C (12) and has a value 0x00 ... 0x1F.  When doing bulk uploads, 
-      it there is a secret patch number 0x20 (32) which provides default information for 
+      there is a secret patch number 0x20 (32) which provides default information for 
       automaps [I believe], but it looks like you shouldn't fool around with that.  Indeed you
       can occasionally get the SL to indicate "Template-33" when it meant "Template-1": there are
       still some bugs in the device.

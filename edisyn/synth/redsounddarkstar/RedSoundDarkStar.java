@@ -61,6 +61,7 @@ public class RedSoundDarkStar extends Synth
         transmitTo.setEnabled(false);
         receiveCurrent.setEnabled(false);
         receivePatch.setEnabled(false);
+        receiveNextPatch.setEnabled(false);
         transmitParameters.setEnabled(false);
         transmitParameters.setSelected(false);
         addDarkStarMenu();

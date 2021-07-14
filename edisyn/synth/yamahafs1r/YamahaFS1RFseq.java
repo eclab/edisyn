@@ -389,48 +389,48 @@ public class YamahaFS1RFseq extends Synth
         menubar.add(menu);
 
 /*
-        JMenuItem text = new JMenuItem("Text");
-        text.addActionListener(new ActionListener()
-            {
-            public void actionPerformed(ActionEvent e)
-                {
-                buildPhonemes();
-                }
-            });
-        menu.add(text);
+  JMenuItem text = new JMenuItem("Text");
+  text.addActionListener(new ActionListener()
+  {
+  public void actionPerformed(ActionEvent e)
+  {
+  buildPhonemes();
+  }
+  });
+  menu.add(text);
 
-        JMenuItem smooth = new JMenuItem("Smooth");
-        smooth.addActionListener(new ActionListener()
-            {
-            public void actionPerformed(ActionEvent e)
-                {
-                Model old = model.copy();
+  JMenuItem smooth = new JMenuItem("Smooth");
+  smooth.addActionListener(new ActionListener()
+  {
+  public void actionPerformed(ActionEvent e)
+  {
+  Model old = model.copy();
                 
-                Model backup = (Model)(model.clone());
-                setSendMIDI(false);
-                undo.setWillPush(false);
+  Model backup = (Model)(model.clone());
+  setSendMIDI(false);
+  undo.setWillPush(false);
                                         
-                for(int f = 1; f <= 512; f++)
-                    {
-                    for(int i = 1; i <= 8; i++)
-                        {
-                        model.set("frame" + f + "voicedfrequency" + i, filter(old, f, "voicedfrequency" + i, true));
-                        model.set("frame" + f + "voicedlevel" + i, filter(old, f, "voicedlevel" + i, false));
-                        model.set("frame" + f + "unvoicedfrequency" + i, filter(old, f, "unvoicedfrequency" + i, true));
-                        model.set("frame" + f + "unvoicedlevel" + i, filter(old, f, "unvoicedlevel" + i, false));
-                        model.set("frame" + f + "pitch" + i, filter(old, f, "pitch" + i, true));
-                        }
-                    }
+  for(int f = 1; f <= 512; f++)
+  {
+  for(int i = 1; i <= 8; i++)
+  {
+  model.set("frame" + f + "voicedfrequency" + i, filter(old, f, "voicedfrequency" + i, true));
+  model.set("frame" + f + "voicedlevel" + i, filter(old, f, "voicedlevel" + i, false));
+  model.set("frame" + f + "unvoicedfrequency" + i, filter(old, f, "unvoicedfrequency" + i, true));
+  model.set("frame" + f + "unvoicedlevel" + i, filter(old, f, "unvoicedlevel" + i, false));
+  model.set("frame" + f + "pitch" + i, filter(old, f, "pitch" + i, true));
+  }
+  }
 
-                undo.setWillPush(true);
-                if (!backup.keyEquals(getModel()))  // it's changed, do an undo push
-                    undo.push(backup);
-                repaint();      // generally forces repaints to all happen at once
-                setSendMIDI(true);
-                sendAllParameters();
-                }
-            });
-        menu.add(smooth);
+  undo.setWillPush(true);
+  if (!backup.keyEquals(getModel()))  // it's changed, do an undo push
+  undo.push(backup);
+  repaint();      // generally forces repaints to all happen at once
+  setSendMIDI(true);
+  sendAllParameters();
+  }
+  });
+  menu.add(smooth);
 */
 
         /*

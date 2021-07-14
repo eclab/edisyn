@@ -148,125 +148,125 @@ public class RolandD110Tone extends Synth
             allCommonParametersToIndex.put(allCommonParameters[i], Integer.valueOf(i));
             }
 
-	if (altLayout)
-		{
-        JComponent sourcePanel = new SynthPanel(this);
-        VBox vbox = new VBox();
-        HBox hbox = new HBox();
-        hbox.add(addNameGlobal(Style.COLOR_GLOBAL()));
-        hbox.addLast(addGlobal(Style.COLOR_C()));
-        vbox.add(hbox);
-        hbox = new HBox();
-        hbox.add(addWaveGroup(1, Style.COLOR_A()));
-        hbox.addLast(addWaveGroup(2, Style.COLOR_B()));
-        vbox.add(hbox);
-        hbox = new HBox();
-        hbox.add(addWaveGroup(3, Style.COLOR_A()));
-        hbox.addLast(addWaveGroup(4, Style.COLOR_B()));
-        vbox.add(hbox);
-        sourcePanel.add(vbox, BorderLayout.CENTER);
-        addTab("Wave Group", sourcePanel);                
-
-         sourcePanel = new SynthPanel(this);
-        vbox = new VBox();
-        hbox = new HBox();
-        hbox.add(addPitch(1, Style.COLOR_A()));
-        hbox.addLast(addPitch(2, Style.COLOR_B()));
-        vbox.add(hbox);
-        vbox.add(addPitchEnvelope(1, Style.COLOR_A()));
-        vbox.add(addPitchEnvelope(2, Style.COLOR_B()));
-        hbox = new HBox();
-        hbox.add(addPitch(3, Style.COLOR_A()));
-        hbox.addLast(addPitch(4, Style.COLOR_B()));
-        vbox.add(hbox);
-        vbox.add(addPitchEnvelope(3, Style.COLOR_A()));
-        vbox.add(addPitchEnvelope(4, Style.COLOR_B()));
-        sourcePanel.add(vbox, BorderLayout.CENTER);
-        addTab("Pitch", sourcePanel);                
-
-
-         sourcePanel = new SynthPanel(this);
-        vbox = new VBox();
-        hbox = new HBox();
-        hbox.add(addFilter(1, Style.COLOR_A()));
-        hbox.addLast(addFilter(2, Style.COLOR_B()));
-        vbox.add(hbox);
-        vbox.add(addFilterEnvelope(1, Style.COLOR_A()));
-        vbox.add(addFilterEnvelope(2, Style.COLOR_B()));
-        hbox = new HBox();
-        hbox.add(addFilter(3, Style.COLOR_A()));
-        hbox.addLast(addFilter(4, Style.COLOR_B()));
-        vbox.add(hbox);
-        vbox.add(addFilterEnvelope(3, Style.COLOR_A()));
-        vbox.add(addFilterEnvelope(4, Style.COLOR_B()));
-        sourcePanel.add(vbox, BorderLayout.CENTER);
-        addTab("Filter", sourcePanel);                
-
-         sourcePanel = new SynthPanel(this);
-        vbox = new VBox();
-        hbox = new HBox();
-        hbox.add(addAmplifier(1, Style.COLOR_A()));
-        hbox.addLast(addAmplifier(2, Style.COLOR_B()));
-        vbox.add(hbox);
-        vbox.add(addAmplifierEnvelope(1, Style.COLOR_A()));
-        vbox.add(addAmplifierEnvelope(2, Style.COLOR_B()));
-        hbox = new HBox();
-        hbox.add(addAmplifier(3, Style.COLOR_A()));
-        hbox.addLast(addAmplifier(4, Style.COLOR_B()));
-        vbox.add(hbox);
-        vbox.add(addAmplifierEnvelope(3, Style.COLOR_A()));
-        vbox.add(addAmplifierEnvelope(4, Style.COLOR_B()));
-        sourcePanel.add(vbox, BorderLayout.CENTER);
-        addTab("Amplifier", sourcePanel);                
-		}
-	else
-		{
-        JComponent sourcePanel = new SynthPanel(this);
-        VBox vbox = new VBox();
-        HBox hbox = new HBox();
-        hbox.add(addNameGlobal(Style.COLOR_GLOBAL()));
-        hbox.add(addGlobal(Style.COLOR_A()));
-        hbox.addLast(addWaveGroup(1, Style.COLOR_A()));
-        vbox.add(hbox);
-
-        HBox hbox2 = new HBox();
-        hbox2.add(addPitch(1, Style.COLOR_A()));
-        hbox2.addLast(addFilter(1, Style.COLOR_B()));
-        vbox.add(hbox2);
-        vbox.add(addPitchEnvelope(1, Style.COLOR_A()));
-        vbox.add(addFilterEnvelope(1, Style.COLOR_B()));
-        vbox.add(addAmplifier(1, Style.COLOR_C()));
-        vbox.add(addAmplifierEnvelope(1, Style.COLOR_C()));
-
-        sourcePanel = new SynthPanel(this);
-        sourcePanel.add(vbox, BorderLayout.CENTER);
-        //        ((SynthPanel)sourcePanel).makePasteable("p" + 1);
-        ((SynthPanel)sourcePanel).makePasteable("p");
-        addTab("Common and Partial " + 1, sourcePanel);                
-
-        for(int i = 2; i < 5; i++)
+        if (altLayout)
             {
+            JComponent sourcePanel = new SynthPanel(this);
+            VBox vbox = new VBox();
+            HBox hbox = new HBox();
+            hbox.add(addNameGlobal(Style.COLOR_GLOBAL()));
+            hbox.addLast(addGlobal(Style.COLOR_C()));
+            vbox.add(hbox);
+            hbox = new HBox();
+            hbox.add(addWaveGroup(1, Style.COLOR_A()));
+            hbox.addLast(addWaveGroup(2, Style.COLOR_B()));
+            vbox.add(hbox);
+            hbox = new HBox();
+            hbox.add(addWaveGroup(3, Style.COLOR_A()));
+            hbox.addLast(addWaveGroup(4, Style.COLOR_B()));
+            vbox.add(hbox);
+            sourcePanel.add(vbox, BorderLayout.CENTER);
+            addTab("Wave Group", sourcePanel);                
+
             sourcePanel = new SynthPanel(this);
             vbox = new VBox();
-                
-            vbox.add(addWaveGroup(i, Style.COLOR_A()));
-                
-            hbox2 = new HBox();
-            hbox2.add(addPitch(i, Style.COLOR_A()));
-            hbox2.addLast(addFilter(i, Style.COLOR_B()));
+            hbox = new HBox();
+            hbox.add(addPitch(1, Style.COLOR_A()));
+            hbox.addLast(addPitch(2, Style.COLOR_B()));
+            vbox.add(hbox);
+            vbox.add(addPitchEnvelope(1, Style.COLOR_A()));
+            vbox.add(addPitchEnvelope(2, Style.COLOR_B()));
+            hbox = new HBox();
+            hbox.add(addPitch(3, Style.COLOR_A()));
+            hbox.addLast(addPitch(4, Style.COLOR_B()));
+            vbox.add(hbox);
+            vbox.add(addPitchEnvelope(3, Style.COLOR_A()));
+            vbox.add(addPitchEnvelope(4, Style.COLOR_B()));
+            sourcePanel.add(vbox, BorderLayout.CENTER);
+            addTab("Pitch", sourcePanel);                
+
+
+            sourcePanel = new SynthPanel(this);
+            vbox = new VBox();
+            hbox = new HBox();
+            hbox.add(addFilter(1, Style.COLOR_A()));
+            hbox.addLast(addFilter(2, Style.COLOR_B()));
+            vbox.add(hbox);
+            vbox.add(addFilterEnvelope(1, Style.COLOR_A()));
+            vbox.add(addFilterEnvelope(2, Style.COLOR_B()));
+            hbox = new HBox();
+            hbox.add(addFilter(3, Style.COLOR_A()));
+            hbox.addLast(addFilter(4, Style.COLOR_B()));
+            vbox.add(hbox);
+            vbox.add(addFilterEnvelope(3, Style.COLOR_A()));
+            vbox.add(addFilterEnvelope(4, Style.COLOR_B()));
+            sourcePanel.add(vbox, BorderLayout.CENTER);
+            addTab("Filter", sourcePanel);                
+
+            sourcePanel = new SynthPanel(this);
+            vbox = new VBox();
+            hbox = new HBox();
+            hbox.add(addAmplifier(1, Style.COLOR_A()));
+            hbox.addLast(addAmplifier(2, Style.COLOR_B()));
+            vbox.add(hbox);
+            vbox.add(addAmplifierEnvelope(1, Style.COLOR_A()));
+            vbox.add(addAmplifierEnvelope(2, Style.COLOR_B()));
+            hbox = new HBox();
+            hbox.add(addAmplifier(3, Style.COLOR_A()));
+            hbox.addLast(addAmplifier(4, Style.COLOR_B()));
+            vbox.add(hbox);
+            vbox.add(addAmplifierEnvelope(3, Style.COLOR_A()));
+            vbox.add(addAmplifierEnvelope(4, Style.COLOR_B()));
+            sourcePanel.add(vbox, BorderLayout.CENTER);
+            addTab("Amplifier", sourcePanel);                
+            }
+        else
+            {
+            JComponent sourcePanel = new SynthPanel(this);
+            VBox vbox = new VBox();
+            HBox hbox = new HBox();
+            hbox.add(addNameGlobal(Style.COLOR_GLOBAL()));
+            hbox.add(addGlobal(Style.COLOR_A()));
+            hbox.addLast(addWaveGroup(1, Style.COLOR_A()));
+            vbox.add(hbox);
+
+            HBox hbox2 = new HBox();
+            hbox2.add(addPitch(1, Style.COLOR_A()));
+            hbox2.addLast(addFilter(1, Style.COLOR_B()));
             vbox.add(hbox2);
-            vbox.add(addPitchEnvelope(i, Style.COLOR_A()));
-            vbox.add(addFilterEnvelope(i, Style.COLOR_B()));
-            vbox.add(addAmplifier(i, Style.COLOR_C()));
-            vbox.add(addAmplifierEnvelope(i, Style.COLOR_C()));
+            vbox.add(addPitchEnvelope(1, Style.COLOR_A()));
+            vbox.add(addFilterEnvelope(1, Style.COLOR_B()));
+            vbox.add(addAmplifier(1, Style.COLOR_C()));
+            vbox.add(addAmplifierEnvelope(1, Style.COLOR_C()));
 
             sourcePanel = new SynthPanel(this);
             sourcePanel.add(vbox, BorderLayout.CENTER);
-            //            ((SynthPanel)sourcePanel).makePasteable("p" + i);
+            //        ((SynthPanel)sourcePanel).makePasteable("p" + 1);
             ((SynthPanel)sourcePanel).makePasteable("p");
-            addTab("Partial " + i, sourcePanel);
+            addTab("Common and Partial " + 1, sourcePanel);                
+
+            for(int i = 2; i < 5; i++)
+                {
+                sourcePanel = new SynthPanel(this);
+                vbox = new VBox();
+                
+                vbox.add(addWaveGroup(i, Style.COLOR_A()));
+                
+                hbox2 = new HBox();
+                hbox2.add(addPitch(i, Style.COLOR_A()));
+                hbox2.addLast(addFilter(i, Style.COLOR_B()));
+                vbox.add(hbox2);
+                vbox.add(addPitchEnvelope(i, Style.COLOR_A()));
+                vbox.add(addFilterEnvelope(i, Style.COLOR_B()));
+                vbox.add(addAmplifier(i, Style.COLOR_C()));
+                vbox.add(addAmplifierEnvelope(i, Style.COLOR_C()));
+
+                sourcePanel = new SynthPanel(this);
+                sourcePanel.add(vbox, BorderLayout.CENTER);
+                //            ((SynthPanel)sourcePanel).makePasteable("p" + i);
+                ((SynthPanel)sourcePanel).makePasteable("p");
+                addTab("Partial " + i, sourcePanel);
+                }
             }
-        }
 
         model.set("patchname", "Init Patch");  // has to be 10 long
         model.set("number", 0);

@@ -79,6 +79,7 @@ public class WaldorfRocket extends Synth
         {
         JFrame frame = super.sprout();
         receivePatch.setEnabled(false);
+        receiveNextPatch.setEnabled(false);
         blend.setEnabled(false);
         merge.setEnabled(false);
         writeTo.setEnabled(false);

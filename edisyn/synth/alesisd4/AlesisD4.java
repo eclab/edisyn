@@ -177,7 +177,7 @@ public class AlesisD4 extends Synth
         check.setOpaque(false);
         check.setForeground(Style.TEXT_COLOR());
         hbox2.addLast(check);
-		vbox.add(hbox2);
+        vbox.add(hbox2);
 
         comp = new StringComponent("Patch Name", this, "name", 15, "Name must be up to 15 ASCII characters.")
             {

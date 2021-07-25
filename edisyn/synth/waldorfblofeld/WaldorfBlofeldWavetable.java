@@ -448,8 +448,8 @@ public class WaldorfBlofeldWavetable
                 // These values must be little-endian.
                 // We assume our code is being run on a little-endian processor.
                 data[8 + d * 3 + 2] = (byte)(v & 127);  // 7 bits
-                data[8 + d * 3 + 1] = (byte)((v >> 7) & 127);
-                data[8 + d * 3 + 0] = (byte)((v >> 14) & 127);
+                data[8 + d * 3 + 1] = (byte)((v >>> 7) & 127);
+                data[8 + d * 3 + 0] = (byte)((v >>> 14) & 127);
                 }
                                 
             /// LOAD NAME

@@ -669,11 +669,14 @@ public abstract class Synth extends JComponent implements Updatable
     /// You could override either of the emit...(tempModel...) methods, but probably not both.
     /// You could override either of the emit...(key...) methods, but probably not both.
 
-    /// SENDING TO A PATCH
+    /// WRITING TO A PATCH
     /// Call gatherPatchInfo(...,tempModel,...)
     /// If successful
-    ///     Call changePatch(tempModel)
-    ///     Call sendAllParameters().  This does:
+    ///     Call emitAll(tempModel, toWorkingMemory = false, toFile)
+    ///                     This calls emit(tempModel, toWorkingMemory = false, toFile)
+    ///     Call changePatch(tempModel) so we're at the patch we just wrote to
+    ///		If getSendsPararametersAfterWrite()
+    ///     	Call sendAllParameters().  This does:
     ///                     If getSendsAllParametersAsDump(), this calls:
     ///                             emitAll(tempModel, toWorkingMemory = true, toFile)
     ///                                     This calls emit(tempModel, toWorkingMemory = true, toFile)
@@ -683,17 +686,7 @@ public abstract class Synth extends JComponent implements Updatable
     ///     
     /// You could override either of the emit...(tempModel...) methods, but probably not both.
     /// You could override either of the emit...(key...) methods, but probably not both.
-        
-    /// WRITING OR SAVING
-    /// Call gatherPatchInfo(...,tempModel,...)
-    /// If successful
-    ///     Call emitAll(tempModel, toWorkingMemory = false, toFile)
-    ///                     This calls emit(tempModel, toWorkingMemory = false, toFile)
-    ///     Call changePatch(tempModel)
-    ///
-    /// You could override either of the emit methods, but probably not both.
-    /// Note that saving strips out the non-sysex bytes from emitAll.
-        
+                
     /// SAVING
     /// Call emitAll(tempModel, toWorkingMemory, toFile)
     ///             This calls emit(tempModel, toWorkingMemory, toFile)
@@ -5250,7 +5243,7 @@ public abstract class Synth extends JComponent implements Updatable
         
     public void writeAllParameters(Model model)
         {
-        performChangePatch(model);     // we need to be at the start for the Oberheim Matrix 1000
+        // performChangePatch(model);     // we need to be at the start for the Oberheim Matrix 1000
         tryToSendMIDI(emitAll(model, false, false));
         simplePause(getPauseAfterWritePatch());
         performChangePatch(model);     // do it at the end AND start here, as opposed to doSendtoPatch, which does it first.  We need to be at the end for the Kawai K4.

@@ -1479,7 +1479,7 @@ public class OberheimMatrix1000 extends Synth
 
     public int getPauseAfterWritePatch() { return 300; }        // Less than 200 and I'll get failures to PC the second time: at 250 I got a failure to write the patch.  250 might be enough but let's go for 300, yeah, it's a lot
     
-    public byte[] emit(Model tempModel, boolean toWorkingMemory, boolean toFile)
+    public Object[] emitAll(Model tempModel, boolean toWorkingMemory, boolean toFile)
         {
         if (tempModel == null)
             tempModel = getModel();
@@ -1670,7 +1670,31 @@ public class OberheimMatrix1000 extends Synth
         d[273] = checksum;
         d[274] = (byte)0xF7;
                 
-        return d;
+        if (toWorkingMemory || toFile || !m1000)
+        	{
+        	return new Object[] { d };
+        	}
+        else
+        	{
+        	// You have to set the bank before you can write a patch because the 
+        	// Matrix1000 patch upload command doesn't include bank information;
+        	// it assumes the bank has already been set.
+        	// 
+			// 0AH - SET BANK
+			// we write this store-command as a sysex command 
+			// so it gets stripped when we do a save to file
+			// 
+			// I think this should be compatible with the 6/6R because they don't respond to it at all
+			byte[] changeBank = new byte[6];
+			changeBank[0] = (byte)0xF0;
+			changeBank[1] = (byte)0x10;
+			changeBank[2] = (byte)0x06;  
+			changeBank[3] = (byte)0x0A;
+			changeBank[4] = (byte)tempModel.get("bank");
+			changeBank[5] = (byte)0xF7;
+
+        	return new Object[] { changeBank, d };
+        	}
         }
         
         
@@ -1700,8 +1724,13 @@ public class OberheimMatrix1000 extends Synth
 
         tryToSendSysex(data);
 
+        // Next do a program change.  We do a program change while the bank is locked because otherwise
+        // it'd select in bank 0.
+        
+        byte NN = (byte)number;
+        tryToSendMIDI(buildPC(getChannelOut(), NN));
 
-
+		// Now for good measure let's unlock the bank
 
         // 0CH - UNLOCK BANK
         // we write this store-command as a sysex command 
@@ -1715,12 +1744,7 @@ public class OberheimMatrix1000 extends Synth
         data[2] = (byte)0x06;  
         data[3] = (byte)0x0C;
         data[4] = (byte)0xF7;
-        //tryToSendSysex(data);                 // right now this really isn't necessary.
-                        
-        // Next do a program change
-                
-        byte NN = (byte)number;
-        tryToSendMIDI(buildPC(getChannelOut(), NN));
+        tryToSendSysex(data);
         }
 
 

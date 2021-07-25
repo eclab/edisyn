@@ -36,7 +36,7 @@ The PreenFM2 has an unusual approach to upoading and downloading sounds which ca
 <p>
 <p>As a result, <b>you cannot write patches and you cannot send them to specific locations. </b> To write a patch, you should send the current patch (which sends it to Instrument 1), and then manually save the patch on the PreenFM2.
 
-<p>Because the PreenFM2's parameters don't come in all at one time as a single sysex dump, <b>merging</b> may be flakey.  Edisyn waits until it sees parameter number 399 (notionally the last PreenFM2 parameter sent) to come in.  If it doesn't see this parameter (perhaps due to a MIDI transmission error), then it may stay in merging mode.  You can get it out of merging mode simply by doing a Request Current Patch or Request Patch...
+<p><p>Because the PreenFM2's parameters don't come in all at one time as a single sysex dump, <b>merging</b> may be flakey.  Edisyn waits until it sees parameter number 399 (notionally the last PreenFM2 parameter sent) to come in.  If it doesn't see this parameter (perhaps due to a MIDI transmission error), then it may stay in merging mode.  You can get it out of merging mode simply by doing a Request Current Patch or Request Patch...
 
 <p><li>If you send a full parameter dump to the PreenFM2 at full MIDI speed, it bombs.  So Edisyn is forced to send at about 1/3 speed.  Oh well.
 

@@ -645,7 +645,7 @@ public class MAudioVenom extends Synth
             comp = new Chooser("Source " + mod, this, "mod" + mod + "source", params);
             vbox.add(comp);
 
-            params = (mod >= 2 ? EXTENDED_MOD_DESTINATIONS : MOD_DESTINATIONS);
+            params = (mod > 2 ? EXTENDED_MOD_DESTINATIONS : MOD_DESTINATIONS);
             comp = new Chooser("Destination " + mod, this, "mod" + mod + "destination", params);
             vbox.add(comp);
 

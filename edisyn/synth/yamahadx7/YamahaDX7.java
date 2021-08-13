@@ -7,7 +7,6 @@ package edisyn.synth.yamahadx7;
 
 import edisyn.*;
 import edisyn.gui.*;
-import edisyn.nn.*;
 import java.awt.*;
 import java.awt.geom.*;
 import javax.swing.border.*;
@@ -16,7 +15,6 @@ import java.awt.event.*;
 import java.util.*;
 import java.io.*;
 import javax.sound.midi.*;
-import java.util.zip.*;
 
 
 /**
@@ -25,7 +23,7 @@ import java.util.zip.*;
    @author Sean Luke
 */
 
-public class YamahaDX7 extends Synth implements ProvidesNN
+public class YamahaDX7 extends Synth
     {
     /// Various collections of parameter names for pop-up menus
         
@@ -78,46 +76,27 @@ public class YamahaDX7 extends Synth implements ProvidesNN
     public static final int NEGEXP = 1;
     public static final int POSEXP = 2;
     public static final int POSLINEAR = 3;
-    public static final int ENCODED_LENGTH = 225;
     
     public static final String[] KS_CURVES = { "- Linear", "- Exp", "+ Exp", "+ Linear" };
     public static final String[] NOTES = {"A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#" };
-    static Network encoder = null;
-    static Network decoder = null;
 
-    static Network getEncoder()
+	boolean volca;
+    JCheckBox volcaCheck;
+    public static final String VOLCA_KEY = "Volca";
+
+    public boolean isVolca() { return volca; }
+    public void setVolca(boolean val, boolean save)
         {
-        if (encoder == null)
+        if (save)
             {
-            try
-                {
-                InputStream stream = new GZIPInputStream(YamahaDX7.class.getResourceAsStream("encoder.txt.gz"));
-                encoder = Network.loadFromStream(stream);
-                }
-            catch (IOException ex) { }
+            setLastX("" + val, VOLCA_KEY, getSynthName(), true);
             }
-        return encoder;
+        volca = val;
+        volcaCheck.setSelected(val);  // hopefully this isn't recursive
+        updateTitle();
         }
-
-    static Network getDecoder()
-        {
-        if (decoder == null)
-            {
-            try
-                {
-                InputStream stream = new GZIPInputStream(YamahaDX7.class.getResourceAsStream("decoder.txt.gz"));
-                decoder = Network.loadFromStream(stream);
-                }
-            catch (IOException ex) { }
-            }
-        return decoder;
-        }
-
-    public void randomizeNNModel()
-        {
-        model.latentVector = ProvidesNN.shiftVectorUniform(new double[ENCODED_LENGTH], random, 1);
-        }
-
+    
+	
     public JFrame sprout()
         {
         JFrame frame = super.sprout();
@@ -136,7 +115,7 @@ public class YamahaDX7 extends Synth implements ProvidesNN
             }
 
         /// SOUND PANEL
-
+                
         JComponent soundPanel = new SynthPanel(this);
         VBox vbox = new VBox();
         HBox hbox = new HBox();
@@ -208,15 +187,18 @@ public class YamahaDX7 extends Synth implements ProvidesNN
 
         model.set("name", "INIT VOICE");
         
+        // loadDefaults will reset Volca so here we're gonna reset it back
+        boolean v = isVolca();
         loadDefaults();        
-        }
+        setVolca(v, false);
+      }
                 
     public String getDefaultResourceFileName() { return "YamahaDX7.init"; }
     public String getHTMLResourceFileName() { return "YamahaDX7.html"; }
 
     public boolean gatherPatchInfo(String title, Model change, boolean writing)
         {
-        JTextField number = new JTextField("" + (model.get("number") + 1), 3);
+        JTextField number = new SelectedTextField("" + (model.get("number") + 1), 3);
 
         while(true)
             {
@@ -251,7 +233,7 @@ public class YamahaDX7 extends Synth implements ProvidesNN
     public JComponent addNameGlobal(Color color)
         {
         Category globalCategory = new Category(this, getSynthName(), color);
-        //globalCategory.makeUnresettable();
+        globalCategory.makeUnresettable();
                 
         JComponent comp;
         String[] params;
@@ -277,7 +259,23 @@ public class YamahaDX7 extends Synth implements ProvidesNN
                 }
             };
         vbox.add(comp);  // doesn't work right :-(
-        vbox.addBottom(Stretch.makeVerticalStretch()); 
+
+        volcaCheck = new JCheckBox("Korg Volca FM");
+        volcaCheck.setSelected(volca);
+        volcaCheck.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                setVolca(volcaCheck.isSelected(), true);
+                }
+            });
+        volcaCheck.setFont(Style.SMALL_FONT());
+        volcaCheck.setOpaque(false);
+        volcaCheck.setForeground(Style.TEXT_COLOR());
+		hbox2 = new HBox();
+        hbox2.add(volcaCheck);
+        vbox.add(hbox2);
+
         hbox.add(vbox);
 
         // Not enough space to show the title
@@ -467,8 +465,7 @@ public class YamahaDX7 extends Synth implements ProvidesNN
     public JComponent addKeyScaling(final int src, Color color)
         {
         final Category category = new Category(this, "Keyboard Level Scaling " + src, color);
-        //        category.makePasteable("operator" + src);
-        category.makePasteable("operator");
+        category.makePasteable("operator" + src);
 
         JComponent comp;
         String[] params;
@@ -522,8 +519,7 @@ public class YamahaDX7 extends Synth implements ProvidesNN
     public JComponent addOperator(final int src, Color color)
         {
         final Category category = new Category(this, "Operator " + src, color);
-        //        category.makePasteable("operator" + src);
-        category.makePasteable("operator");
+        category.makePasteable("operator" + src);
 
         JComponent comp;
         String[] params;
@@ -596,10 +592,8 @@ public class YamahaDX7 extends Synth implements ProvidesNN
     public JComponent addEnvelope(final int envelope, Color color)
         {
         Category category = new Category(this, "Operator Envelope " + envelope, color);
-        //        category.makePasteable("operator" + envelope);
-        //        category.makeDistributable("operator" + envelope);
-        category.makePasteable("operator");
-        category.makeDistributable("operator");
+        category.makePasteable("operator" + envelope);
+        category.makeDistributable("operator" + envelope);
 
         JComponent comp;
         String[] params;
@@ -675,7 +669,6 @@ public class YamahaDX7 extends Synth implements ProvidesNN
         return category;
         }
         
-
 
 
     /** Map of parameter -> index in the allParameters array. */
@@ -852,84 +845,7 @@ public class YamahaDX7 extends Synth implements ProvidesNN
     "name8",
     "name9",
     "name10",
-
     };
-    
-    /*
-      public double[] encode()
-      {
-      // Hardcoded constant for now, really should fix this to be computed in the future
-      double[] vector = new double[ENCODED_LENGTH];
-      int index = 0;
-      // Ignore the name parameters, so -10
-      for(int i = 0; i < allParameters.length-10; i++)
-      {
-      String parameter = allParameters[i];
-      if (model.metricMinExists(parameter))
-      {
-      index = ProvidesNN.encodeScaled(vector,index,model.get(parameter), model.getMin(parameter), model.getMax(parameter));
-      } 
-      else 
-      {
-      index = ProvidesNN.encodeOneHot(vector,index,model.get(parameter), model.getMin(parameter), model.getMax(parameter));
-      }
-      }
-      return getEncoder().feed(vector);
-      }
-    */
-    public double[] encode()
-        {
-        return encode(this.model);
-        }
-        
-            
-    public double[] encode(Model model)
-        {
-        // Hardcoded constant for now, really should fix this to be computed in the future
-        double[] vector = new double[ENCODED_LENGTH];
-        int index = 0;
-        // Ignore the name parameters, so -10
-        for(int i = 0; i < allParameters.length-10; i++)
-            {
-            String parameter = allParameters[i];
-            if (model.metricMinExists(parameter))
-                {
-                index = ProvidesNN.encodeScaled(vector,index,model.get(parameter), model.getMin(parameter), model.getMax(parameter));
-                } 
-            else 
-                {
-                index = ProvidesNN.encodeOneHot(vector,index,model.get(parameter), model.getMin(parameter), model.getMax(parameter));
-                }
-            }
-        return getEncoder().feed(vector);
-        }
-            
-    public Model decode(double[] vector)
-        {
-        Model newModel = model.copy();
-        newModel.latentVector = vector;
-        vector = getDecoder().feed(vector);
-        int index = 0;
-        // Ignore the name parameters, so -10
-        for(int i = 0; i < allParameters.length-10; i++)
-            {
-            String parameter = allParameters[i];
-            if (model.metricMinExists(parameter))
-                {
-                int[] v = ProvidesNN.decodeScaled(vector, index, model.getMin(parameter), model.getMax(parameter));
-                index = v[0];
-                newModel.set(parameter, v[1]);
-                } 
-            else
-                {
-                int[] v = ProvidesNN.decodeOneHot(vector, index, model.getMin(parameter), model.getMax(parameter));
-                index = v[0];
-                newModel.set(parameter, v[1]);
-                }
-                        
-            }
-        return newModel;
-        }
 
     public Object[] emitAll(String key)
         {
@@ -1124,8 +1040,19 @@ public class YamahaDX7 extends Synth implements ProvidesNN
             {
             data[allParameters.length - 10 + i + 6] = (byte)((model.get("name", "          ") + "          ").charAt(i));
             }
-                
-        data[161] = produceChecksum(data, 6);
+        
+        // Korg made a very stupid decision here for the Volca FM.  They use the checksum byte to specify which operators
+        // are on and which are off.  This makes them incompatible with the DX7!  Very dumb.
+        
+        if (isVolca())
+        	{
+        	data[161] = 127;		// "all operators on"
+        	}
+        else
+        	{
+	        data[161] = produceChecksum(data, 6);
+	        }
+	        
         data[162] = (byte)0xF7;
         
         return data;
@@ -1167,6 +1094,38 @@ public class YamahaDX7 extends Synth implements ProvidesNN
         return new byte[] { (byte)0xF0, (byte)0x43, channel, 0x00, (byte)0xF7 };
         }
 
+    public static boolean recognize(byte[] data)
+        {
+        return (
+            // 1 single
+                
+                (data.length == 163 &&
+                data[0] == (byte)0xF0 &&
+                data[1] == (byte)0x43 &&
+                // don't care about 2, it's the channel
+                data[3] == (byte)0x00 &&
+                data[4] == (byte)0x01 &&
+                data[5] == (byte)0x1B) 
+                
+            || recognizeBulk(data));
+            
+        }
+
+    public static boolean recognizeBulk(byte[] data)
+        {
+        return  (
+            // 32 bulk
+            
+            data.length == 4104 &&
+            data[0] == (byte)0xF0 &&
+            data[1] == (byte)0x43 &&
+            // don't care about 2, it's the channel
+            data[3] == (byte)0x09 &&
+            //data[4] == (byte)0x20 &&          // sometimes this is 0x10 by mistake
+            data[5] == (byte)0x00);
+        } 
+        
+               
     public static final int MAXIMUM_NAME_LENGTH = 10;
     public String revisePatchName(String name)
         {

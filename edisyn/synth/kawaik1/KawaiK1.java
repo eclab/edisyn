@@ -145,7 +145,7 @@ public class KawaiK1 extends Synth
         JComboBox bank = new JComboBox(BANKS);
         bank.setSelectedIndex(model.get("bank"));
         
-        JTextField number = new JTextField("" + (model.get("number") + 1), 3);
+        JTextField number = new SelectedTextField("" + (model.get("number") + 1), 3);
 
         while(true)
             {

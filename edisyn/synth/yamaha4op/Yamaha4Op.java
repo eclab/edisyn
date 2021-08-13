@@ -377,7 +377,7 @@ public class Yamaha4Op extends Synth
         if (num < 0 || num >= maxNumber)
             num = 0;
         
-        JTextField number = new JTextField("" + 
+        JTextField number = new SelectedTextField("" + 
             ((type == TYPE_TQ5_YS100_YS200_B200 || type == TYPE_V50) ? num : num + 1), 3);
 
         while(true)

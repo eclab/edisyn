@@ -118,7 +118,7 @@ public class Yamaha4OpMulti extends Synth
 
     public boolean gatherPatchInfo(String title, Model change, boolean writing)
         {
-        JTextField number = new JTextField("" + (model.get("number") + 1), 3);
+        JTextField number = new SelectedTextField("" + (model.get("number") + 1), 3);
 
         while(true)
             {

@@ -367,7 +367,7 @@ public class DSIProphet08 extends Synth
                 
         JComboBox bank = new JComboBox(banks);
         int num = model.get("number") + 1;
-        JTextField number = new JTextField("" + (num < 10 ? "00" : (num < 100 ? "0" : "")) + num, 3);
+        JTextField number = new SelectedTextField("" + (num < 10 ? "00" : (num < 100 ? "0" : "")) + num, 3);
         
         while(true)
             {

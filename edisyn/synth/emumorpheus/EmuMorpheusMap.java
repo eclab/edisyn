@@ -119,7 +119,7 @@ public class EmuMorpheusMap extends Synth
         {
         JComboBox bank = new JComboBox(BANKS);
         int num = model.get("number");
-        JTextField number = new JTextField("" + (num < 10 ? "00" : (num < 100 ? "0" : "")) + num, 3);
+        JTextField number = new SelectedTextField("" + (num < 10 ? "00" : (num < 100 ? "0" : "")) + num, 3);
         
         while(true)
             {

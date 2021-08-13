@@ -199,7 +199,7 @@ public class EmuMorpheus extends Synth
         {
         JComboBox bank = new JComboBox(BANKS);
         int num = model.get("number");
-        JTextField number = new JTextField("" + (num < 10 ? "00" : (num < 100 ? "0" : "")) + num, 3);
+        JTextField number = new SelectedTextField("" + (num < 10 ? "00" : (num < 100 ? "0" : "")) + num, 3);
         
         while(true)
             {
@@ -1274,7 +1274,7 @@ public class EmuMorpheus extends Synth
             JComboBox bank = new JComboBox(EmuMorpheusMap.BANKS);
             public void actionPerformed(ActionEvent e)
                 {
-                JTextField number = new JTextField("1", 3);
+                JTextField number = new SelectedTextField("1", 3);
                 
                 int n = 0;
                 String title = "Write Patch as Pseudo-MPE";
@@ -1298,6 +1298,8 @@ public class EmuMorpheus extends Synth
 
                     if (result) 
                         break;
+                    if (!result)
+                    	return;
                     }           
 
                 int i = bank.getSelectedIndex();

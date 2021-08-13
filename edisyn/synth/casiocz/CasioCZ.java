@@ -214,7 +214,7 @@ public class CasioCZ extends Synth
             }
         
         int num = model.get("number") + 1;
-        JTextField number = new JTextField("" + num, 3);
+        JTextField number = new SelectedTextField("" + num, 3);
         
         String instructions = "<html>Banks vary depending on device.<p>There are 8 patches per bank, except SC." +
             "<p><table><tr><td><b color=black>Bank</b></td><td><b color=black>CZ-1</b></td><td><b color=black>CZ-101/1K</b></td><td><b color=black>CZ-3K/5K</b></td><td><b color=black>CZ-230S</b></td></tr>" +

@@ -120,7 +120,7 @@ public class AlesisD4 extends Synth
 
     public boolean gatherPatchInfo(String title, Model change, boolean writing)
         {
-        JTextField number = new JTextField("" + model.get("number"), 3);
+        JTextField number = new SelectedTextField("" + model.get("number"), 3);
 
         while(true)
             {

@@ -894,7 +894,7 @@ public class YamahaFS1R extends Synth
             bank.setSelectedIndex(model.get("bank"));
             }
                 
-        JTextField number = new JTextField("" + (model.get("number") + 1), 3);
+        JTextField number = new SelectedTextField("" + (model.get("number") + 1), 3);
                 
         while(true)
             {

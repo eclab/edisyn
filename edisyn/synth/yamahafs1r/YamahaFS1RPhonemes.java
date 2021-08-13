@@ -33,7 +33,7 @@ public class YamahaFS1RPhonemes
 
     public static void buildModel(YamahaFS1RFseq synth)
         {
-        JTextField field = new JTextField("");
+        JTextField field = new SelectedTextField("");
         boolean result = synth.showMultiOption(synth, new String[] { "Phoneme String" }, new JComponent[] { field }, "Phonemes", "Enter a phoneme string.");
         if (result)
             {

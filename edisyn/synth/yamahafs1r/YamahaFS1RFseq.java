@@ -147,7 +147,7 @@ public class YamahaFS1RFseq extends Synth
         bank.setEditable(false);
         bank.setMaximumRowCount(32);
                 
-        JTextField number = new JTextField("" + (model.get("number") + 1), 3);
+        JTextField number = new SelectedTextField("" + (model.get("number") + 1), 3);
                 
         while(true)
             {
@@ -1106,7 +1106,7 @@ public class YamahaFS1RFseq extends Synth
             {
             LabelledSlider frame1 = new LabelledSlider(1, 512, 1);
             LabelledSlider frame2 = new LabelledSlider(1, 512, 512);
-            JTextField pitch = new JTextField("440.00");
+            JTextField pitch = new SelectedTextField("440.00");
                 
             public void actionPerformed(ActionEvent evt)
                 {
@@ -1468,7 +1468,7 @@ public class YamahaFS1RFseq extends Synth
         final int h = typical.getPreferredSize().height;
         final int w = typical.getPreferredSize().width;
         
-        ScrollableVBox frames = new ScrollableVBox()
+        VBox frames = new VBox()
             {
             public int getScrollableBlockIncrement(Rectangle visibleRect, int orientation, int direction)
                 {
@@ -1494,6 +1494,7 @@ public class YamahaFS1RFseq extends Synth
 
 
         JScrollPane pane = new JScrollPane(frames, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        pane.getViewport().setBackground(Style.BACKGROUND_COLOR());
         pane.setBorder(null);
                 
         return pane;
@@ -2611,38 +2612,6 @@ public class YamahaFS1RFseq extends Synth
     public int getBatchDownloadFailureCountdown() { return 5; }
     }
 
-
-class ScrollableVBox extends VBox implements javax.swing.Scrollable
-    {
-    public Dimension getPreferredScrollableViewportSize()
-        {
-        return null;
-        }
-                
-    // for now we're not doing a snap to the nearest category
-    public int getScrollableBlockIncrement(Rectangle visibleRect, int orientation, int direction)
-        {
-        if (orientation == SwingConstants.VERTICAL)
-            return 1;
-        else
-            return 1;
-        }
-
-    public boolean getScrollableTracksViewportHeight()
-        {
-        return false;
-        }
-
-    public boolean getScrollableTracksViewportWidth()
-        {
-        return true;
-        }
-        
-    public int getScrollableUnitIncrement(Rectangle visibleRect, int orientation, int direction)
-        {
-        return 1;
-        }
-    }
 
 
 

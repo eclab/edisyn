@@ -145,7 +145,7 @@ public class YamahaTG33Multi extends Synth
                 
         int original = model.get("number");
                 
-        JTextField number = new JTextField("" + ((original / 8 + 1) * 10 + (original % 8 + 1)), 3);
+        JTextField number = new SelectedTextField("" + ((original / 8 + 1) * 10 + (original % 8 + 1)), 3);
 
         while(true)
             {

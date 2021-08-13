@@ -423,7 +423,7 @@ public class YamahaTG33 extends Synth
                     bank.setSelectedIndex(0);
                 else
                     bank.setSelectedIndex(b);
-                JTextField number = new JTextField("" + (model.get("number") + 1), 3);
+                JTextField number = new SelectedTextField("" + (model.get("number") + 1), 3);
                 
                 int n = 0;
                 String title = "Send Patch as Pseudo-MPE";
@@ -446,7 +446,10 @@ public class YamahaTG33 extends Synth
                         continue;
                         }
                         
-                    break;
+                    if (result) 
+                        break;
+                    if (!result)
+                    	return;
                     }           
                     
                 n = ((n / 10) - 1) * 8 + ((n % 10) - 1);
@@ -505,7 +508,7 @@ public class YamahaTG33 extends Synth
                 
         int original = model.get("number");
                 
-        JTextField number = new JTextField("" + ((original / 8 + 1) * 10 + (original % 8 + 1)), 3);
+        JTextField number = new SelectedTextField("" + ((original / 8 + 1) * 10 + (original % 8 + 1)), 3);
 
         while(true)
             {

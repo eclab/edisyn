@@ -76,7 +76,7 @@ public abstract class TuningDefinition
     public JComponent getRootMIDINoteComponent(Synth synth)
         {
         String name = synth.getSynthNameLocal();
-        if (rootMIDINoteF == null) rootMIDINoteF = new JTextField("" + Synth.getLastXAsInt("rootMIDINote", name, DEFAULT_ROOT_MIDI_NOTE, true));
+        if (rootMIDINoteF == null) rootMIDINoteF = new SelectedTextField("" + Synth.getLastXAsInt("rootMIDINote", name, DEFAULT_ROOT_MIDI_NOTE, true));
         return rootMIDINoteF;
         }
 

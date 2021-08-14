@@ -211,7 +211,7 @@ public class YamahaFB01 extends Synth
             bank.setSelectedIndex(0);
             }                        
         
-        JTextField number = new JTextField("" + (model.get("number") + 1), 3);
+        JTextField number = new SelectedTextField("" + (model.get("number") + 1), 3);
 
         while(true)
             {
@@ -1235,7 +1235,7 @@ public class YamahaFB01 extends Synth
         
         Box box = new Box(BoxLayout.X_AXIS);
         box.add(new JLabel("Bank Name  "));
-        nameField = new JTextField(new String(n));
+        nameField = new SelectedTextField(new String(n));
         box.add(nameField);
         return box;
         }

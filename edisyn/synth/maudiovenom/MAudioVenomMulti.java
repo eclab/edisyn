@@ -171,7 +171,7 @@ public class MAudioVenomMulti extends Synth
             }
         bank.setSelectedIndex(b);
                 
-        JTextField number = new JTextField("" + (model.get("number")), 3);
+        JTextField number = new SelectedTextField("" + (model.get("number")), 3);
                 
         while(true)
             {

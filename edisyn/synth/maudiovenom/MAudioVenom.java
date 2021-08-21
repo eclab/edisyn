@@ -56,7 +56,7 @@ public class MAudioVenom extends Synth
     "FM Snare 3", "08 Hat Closed", "08 Hat Open", "09 Hat Closed", "09 Hat Open", 
     "DR Hat", "FM Hat Closed", "FM Hat Open ", "08 Crash", "08 Ride", "09 Crash", 
     "09 Ride", "08 Rim Shot", "09 Rim Shot", "DR Rim Shot", "08 Hand Clap", "09 Hand Clap", 
-    "08 Cowbell", "09 Cowbell", "FM Cowbell", "RP Guiro", "08 Conga", "08 Clave", 
+    "08 Cowbell", "FM Cowbell", "RP Guiro", "08 Conga", "08 Clave", 
     "08 Maracas", "RP Zap 1", "RP Zap 1", "RP Zap 3", "RP Zap 4", "TB Saw", "TB Square" 
     };
     public static final String[] FILTER_TYPES = new String[] { "Off", "Lowpass 12", "Bandpass 12", "Highpass 12", "Lowpass 24", "Bandpass 24", "Highpass 24" };
@@ -233,7 +233,7 @@ public class MAudioVenom extends Synth
             }
         bank.setSelectedIndex(b);
                 
-        JTextField number = new JTextField("" + (model.get("number")), 3);
+        JTextField number = new SelectedTextField("" + (model.get("number")), 3);
                 
         while(true)
             {

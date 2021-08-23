@@ -1244,9 +1244,11 @@ public class YamahaDX7 extends Synth implements ProvidesNN
         return data; 
         }
 
-    public void randomizeNNModel()
+    public void randomizeNNModel(double weight)
         {
-        model.latentVector = Network.shiftVectorUniform(new double[ENCODED_LENGTH], random, 1);
+        // SEAN QUESTION
+        // does the weight for shiftVectorUniform run between 0 and 1 inclusive?
+        model.latentVector = Network.shiftVectorUniform(new double[ENCODED_LENGTH], random, weight);
         }
 
     public double[] encode(Model model)

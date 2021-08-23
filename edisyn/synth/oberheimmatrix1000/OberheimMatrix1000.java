@@ -236,8 +236,8 @@ public class OberheimMatrix1000 extends Synth
             };
         vbox.add(comp);
         hbox.add(vbox);
-	
-		vbox = new VBox();
+        
+        vbox = new VBox();
         m1000Check = new JCheckBox("Matrix 1000");
         m1000Check.setSelected(m1000);
         m1000Check.addActionListener(new ActionListener()
@@ -1673,30 +1673,30 @@ public class OberheimMatrix1000 extends Synth
         d[274] = (byte)0xF7;
                 
         if (toWorkingMemory || toFile || !m1000)
-        	{
-        	return new Object[] { d };
-        	}
+            {
+            return new Object[] { d };
+            }
         else
-        	{
-        	// You have to set the bank before you can write a patch because the 
-        	// Matrix1000 patch upload command doesn't include bank information;
-        	// it assumes the bank has already been set.
-        	// 
-			// 0AH - SET BANK
-			// we write this store-command as a sysex command 
-			// so it gets stripped when we do a save to file
-			// 
-			// I think this should be compatible with the 6/6R because they don't respond to it at all
-			byte[] changeBank = new byte[6];
-			changeBank[0] = (byte)0xF0;
-			changeBank[1] = (byte)0x10;
-			changeBank[2] = (byte)0x06;  
-			changeBank[3] = (byte)0x0A;
-			changeBank[4] = (byte)tempModel.get("bank");
-			changeBank[5] = (byte)0xF7;
+            {
+            // You have to set the bank before you can write a patch because the 
+            // Matrix1000 patch upload command doesn't include bank information;
+            // it assumes the bank has already been set.
+            // 
+            // 0AH - SET BANK
+            // we write this store-command as a sysex command 
+            // so it gets stripped when we do a save to file
+            // 
+            // I think this should be compatible with the 6/6R because they don't respond to it at all
+            byte[] changeBank = new byte[6];
+            changeBank[0] = (byte)0xF0;
+            changeBank[1] = (byte)0x10;
+            changeBank[2] = (byte)0x06;  
+            changeBank[3] = (byte)0x0A;
+            changeBank[4] = (byte)tempModel.get("bank");
+            changeBank[5] = (byte)0xF7;
 
-        	return new Object[] { changeBank, d };
-        	}
+            return new Object[] { changeBank, d };
+            }
         }
         
         
@@ -1732,7 +1732,7 @@ public class OberheimMatrix1000 extends Synth
         byte NN = (byte)number;
         tryToSendMIDI(buildPC(getChannelOut(), NN));
 
-		// Now for good measure let's unlock the bank
+        // Now for good measure let's unlock the bank
 
         // 0CH - UNLOCK BANK
         // we write this store-command as a sysex command 
@@ -2930,19 +2930,19 @@ public class OberheimMatrix1000 extends Synth
         }
 
 /*
-	// print out the original patches among the 200 first ones
-	public static void main(String[] args)
-		{
-		foo:
-		for(int i = 0; i < 200; i++)
-			{
-			for(int j = 200; j < 1000; j++)
-				{
-				if (PATCH_NAMES[i].equals(PATCH_NAMES[j]))
-					continue foo;
-				}
-			System.err.println("" + i + "  " + PATCH_NAMES[i]);
-			}
-		}
+// print out the original patches among the 200 first ones
+public static void main(String[] args)
+{
+foo:
+for(int i = 0; i < 200; i++)
+{
+for(int j = 200; j < 1000; j++)
+{
+if (PATCH_NAMES[i].equals(PATCH_NAMES[j]))
+continue foo;
+}
+System.err.println("" + i + "  " + PATCH_NAMES[i]);
+}
+}
 */
     }

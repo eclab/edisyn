@@ -136,33 +136,33 @@ public class VBox extends JComponent implements Gatherable, Scrollable
             }               
         }
         
-	public Dimension getPreferredScrollableViewportSize()
-		{
-		return null;
-		}
-			
-	// for now we're not doing a snap to the nearest category
-	public int getScrollableBlockIncrement(Rectangle visibleRect, int orientation, int direction)
-		{
-		if (orientation == SwingConstants.VERTICAL)
-			return 1;
-		else
-			return 1;
-		}
+    public Dimension getPreferredScrollableViewportSize()
+        {
+        return null;
+        }
+                        
+    // for now we're not doing a snap to the nearest category
+    public int getScrollableBlockIncrement(Rectangle visibleRect, int orientation, int direction)
+        {
+        if (orientation == SwingConstants.VERTICAL)
+            return 1;
+        else
+            return 1;
+        }
 
-	public boolean getScrollableTracksViewportHeight()
-		{
-		return false;
-		}
+    public boolean getScrollableTracksViewportHeight()
+        {
+        return false;
+        }
 
-	public boolean getScrollableTracksViewportWidth()
-		{
-		return true;
-		}
-	
-	public int getScrollableUnitIncrement(Rectangle visibleRect, int orientation, int direction)
-		{
-		return 1;
-		}
+    public boolean getScrollableTracksViewportWidth()
+        {
+        return true;
+        }
+        
+    public int getScrollableUnitIncrement(Rectangle visibleRect, int orientation, int direction)
+        {
+        return 1;
+        }
 
     }

@@ -133,7 +133,7 @@ public class WaldorfBlofeld extends Synth
                     if (result) 
                         break;
                     if (!result)
-                    	return;
+                        return;
                     }           
                  
                 boolean send = getSendMIDI();

@@ -35,14 +35,14 @@ public class Morph extends SynthPanel
     public static final int TIMER_DELAY = 2;            // too large?  too small?  3ms would be half-time if the sysex messages were all 10 bytes long
     public static final String EDISYN_MORPH_PREFERENCES_KEY = "EdisynMorph";
     //    public static final double[] SEND_PROBABILITY = new double[] { 0, 0, 1, 0.5, 0.25, 0.125, 0.0625, 0.03125 };
-    public static final String[] SEND_TO_SYNTH = new String[] { "When Playing Test Notes", "When Changing", "Trickle" }; 	// "Deluge" };
+    public static final String[] SEND_TO_SYNTH = new String[] { "When Playing Test Notes", "When Changing", "Trickle" };        // "Deluge" };
     public static final String[] CATEGORICAL_STRATEGIES = new String[] { "Morph", "Use Closest", "Use Current Patch", "Use Top Left", "Use Top Right", "Use Bottom Left", "Use Bottom Right" };
     public static final String[] POSITIONS = new String[] { "Top Left", "Top Right", "Bottom Left", "Bottom Right" };
         
     public static final int SEND_TYPE_NOTE = 0;
     public static final int SEND_TYPE_CHANGING = 1;
     public static final int SEND_TYPE_TRICKLE = 2;
-   // public static final int SEND_TYPE_DELUGE = 3;
+    // public static final int SEND_TYPE_DELUGE = 3;
 
     javax.swing.Timer timer;
     int timerDelay = TIMER_DELAY;
@@ -103,17 +103,17 @@ public class Morph extends SynthPanel
                 {
                 super.update(key, model);
                 /*
-                if (timer != null)
-                    {
-                    if (model.get("sendonchange", SEND_TYPE_NOTE) >= SEND_TYPE_TRICKLE)     // trickle or deluge
-                        {
-                        timer.start();
-                        }
-                    else
-                        {
-                        timer.stop();
-                        }
-                    }
+                  if (timer != null)
+                  {
+                  if (model.get("sendonchange", SEND_TYPE_NOTE) >= SEND_TYPE_TRICKLE)     // trickle or deluge
+                  {
+                  timer.start();
+                  }
+                  else
+                  {
+                  timer.stop();
+                  }
+                  }
                 */
                 }
             };
@@ -146,14 +146,14 @@ public class Morph extends SynthPanel
                 {
                 super.update(key, model);
                 Morph.this.tricklerate = model.get("tricklerate", 1);
-               // Synth.setLastX("" + model.get(key, -1), "TrickleRate", EDISYN_MORPH_PREFERENCES_KEY); 
+                // Synth.setLastX("" + model.get(key, -1), "TrickleRate", EDISYN_MORPH_PREFERENCES_KEY); 
                 }
             };
         trickleRate.addAdditionalLabel("Rate");
         hbox.add(trickleRate); 
         margin.add(hbox);
         
-		margin.add(Strut.makeVerticalStrut(8));
+        margin.add(Strut.makeVerticalStrut(8));
 
         
         hbox = new HBox();
@@ -191,7 +191,7 @@ public class Morph extends SynthPanel
         margin.add(hbox);
 
 
-		margin.add(Strut.makeVerticalStrut(8));
+        margin.add(Strut.makeVerticalStrut(8));
 
         hbox = new HBox();
         LabelledDial randomJump = new LabelledDial("Autopilot", blank, "randomjump", Style.COLOR_A(), 0, 100)
@@ -215,9 +215,9 @@ public class Morph extends SynthPanel
             };
         randomMomentum.addAdditionalLabel("Smooth");
         hbox.add(randomMomentum); 
-		//margin.add(hbox);
+        //margin.add(hbox);
 
-       //hbox = new HBox();
+        //hbox = new HBox();
         LabelledDial randomRate = new LabelledDial("Autopilot", blank, "randomrate", Style.COLOR_A(), 0, 100)
             {
             public void update(String key, Model model)
@@ -228,7 +228,7 @@ public class Morph extends SynthPanel
             };
         randomRate.addAdditionalLabel("Rate");
         hbox.add(randomRate); 
-		margin.add(hbox);
+        margin.add(hbox);
 
 
         buttons = new PushButton[4];
@@ -601,81 +601,81 @@ public class Morph extends SynthPanel
     
     //// AUTOPILOT
     
-    double lastAutopilotXPos = 0.0;		// x position I was was last at
-    double lastAutopilotYPos = 0.0;		// y position I was was last at
-    double autopilotJump = 0.01;		// how far I jump on update
-    double autopilotMomentum = 0.6;		// how much I jump forward rather than randomly (0.0 ... 1.0)
-    public final static int MAX_AUTOPILOT_TRIES = 20;						// how many times I attempt to jump a mixture of forward and random before giving up
+    double lastAutopilotXPos = 0.0;             // x position I was was last at
+    double lastAutopilotYPos = 0.0;             // y position I was was last at
+    double autopilotJump = 0.01;                // how far I jump on update
+    double autopilotMomentum = 0.6;             // how much I jump forward rather than randomly (0.0 ... 1.0)
+    public final static int MAX_AUTOPILOT_TRIES = 20;                                           // how many times I attempt to jump a mixture of forward and random before giving up
     int autopilotCount = 0;
     int autopilotRate = 10;
     public static final int MAXIMUM_AUTOPILOT_RATE = 200;
     
     public void autopilot()
-    	{
-    	if (autopilotRate == MAXIMUM_AUTOPILOT_RATE) return;		// don't bother
-    	autopilotCount++;
-    	if (autopilotCount >= autopilotRate)
-    		{
-    		autopilotCount = 0;
-			for(int i = 0; i < MAX_AUTOPILOT_TRIES; i++)
-				{
-				double x = joystick.xPos;
-				double y = joystick.yPos;
-				double mx = (x - lastAutopilotXPos);
-				double my = (y - lastAutopilotYPos);
-				double ml = Math.sqrt(mx * mx + my * my);
-				if (ml == 0) break;
-				mx /= ml; 
-				my /= ml;
-			
-				double randomAngle = synth.random.nextDouble() * Math.PI * 2.0;
-				double dx = autopilotJump * (mx * autopilotMomentum + 
-									Math.cos(randomAngle) * (1.0 - autopilotMomentum));
-				double dy = autopilotJump * (my * autopilotMomentum + 
-									Math.sin(randomAngle) * (1.0 - autopilotMomentum));
-			
-				if (dx + x <= 1.0 && dx + x >= -1.0 && dy + y <= 1.0 && dy + y >= -1.0)
-					{
-					lastAutopilotXPos = joystick.xPos;
-					lastAutopilotYPos = joystick.yPos;
-					joystick.xPos = x + dx;
-					joystick.yPos = y + dy;
-					joystick.updatePosition();
-					//update(joystick.xPos, joystick.yPos);
-					joystick.repaint();
-					return;
-					}
-				}
-		
-			// at this point we failed to go foward, probably because we're in a corner.
-			// So pick a random direction
-			
-			while(true)
-				{
-				double x = joystick.xPos;
-				double y = joystick.yPos;
-				double randomAngle = synth.random.nextDouble() * Math.PI * 2.0;
-				double dx = autopilotJump * (Math.cos(randomAngle));
-				double dy = autopilotJump * (Math.sin(randomAngle));
-			
-				if (dx + x <= 1.0 && dx + x >= -1.0 && dy + y <= 1.0 && dy + y >= -1.0)
-					{
-					lastAutopilotXPos = joystick.xPos;
-					lastAutopilotYPos = joystick.yPos;
-					joystick.xPos = x + dx;
-					joystick.yPos = y + dy;
-					joystick.updatePosition();
-					//update(joystick.xPos, joystick.yPos);
-					joystick.repaint();
-					return;
-					}
-				}
-			}
-	   	}
-	   	
-	   	
+        {
+        if (autopilotRate == MAXIMUM_AUTOPILOT_RATE) return;            // don't bother
+        autopilotCount++;
+        if (autopilotCount >= autopilotRate)
+            {
+            autopilotCount = 0;
+            for(int i = 0; i < MAX_AUTOPILOT_TRIES; i++)
+                {
+                double x = joystick.xPos;
+                double y = joystick.yPos;
+                double mx = (x - lastAutopilotXPos);
+                double my = (y - lastAutopilotYPos);
+                double ml = Math.sqrt(mx * mx + my * my);
+                if (ml == 0) break;
+                mx /= ml; 
+                my /= ml;
+                        
+                double randomAngle = synth.random.nextDouble() * Math.PI * 2.0;
+                double dx = autopilotJump * (mx * autopilotMomentum + 
+                    Math.cos(randomAngle) * (1.0 - autopilotMomentum));
+                double dy = autopilotJump * (my * autopilotMomentum + 
+                    Math.sin(randomAngle) * (1.0 - autopilotMomentum));
+                        
+                if (dx + x <= 1.0 && dx + x >= -1.0 && dy + y <= 1.0 && dy + y >= -1.0)
+                    {
+                    lastAutopilotXPos = joystick.xPos;
+                    lastAutopilotYPos = joystick.yPos;
+                    joystick.xPos = x + dx;
+                    joystick.yPos = y + dy;
+                    joystick.updatePosition();
+                    //update(joystick.xPos, joystick.yPos);
+                    joystick.repaint();
+                    return;
+                    }
+                }
+                
+            // at this point we failed to go foward, probably because we're in a corner.
+            // So pick a random direction
+                        
+            while(true)
+                {
+                double x = joystick.xPos;
+                double y = joystick.yPos;
+                double randomAngle = synth.random.nextDouble() * Math.PI * 2.0;
+                double dx = autopilotJump * (Math.cos(randomAngle));
+                double dy = autopilotJump * (Math.sin(randomAngle));
+                        
+                if (dx + x <= 1.0 && dx + x >= -1.0 && dy + y <= 1.0 && dy + y >= -1.0)
+                    {
+                    lastAutopilotXPos = joystick.xPos;
+                    lastAutopilotYPos = joystick.yPos;
+                    joystick.xPos = x + dx;
+                    joystick.yPos = y + dy;
+                    joystick.updatePosition();
+                    //update(joystick.xPos, joystick.yPos);
+                    joystick.repaint();
+                    return;
+                    }
+                }
+            }
+        }
+                
+                
     
-    int tricklerate = 1;							// How many CCs I trickle in one pass
+    int tricklerate = 1;                                                        // How many CCs I trickle in one pass
     
     int untitled = 0;
     public void initialize()
@@ -706,36 +706,36 @@ public class Morph extends SynthPanel
                     if (blank.getModel().get("sendonchange", SEND_TYPE_NOTE) == SEND_TYPE_TRICKLE)  // trickle
                         {
                         for(int i = 0; i < tricklerate; i++)
-                        	{
-							timerCount++;
-							if (timerCount >= shuffledKeys.length)
-								{
-								StringUtility.shuffle(shuffledKeys, synth.random);
-								timerCount = 0;
-								}
-							Model backup = synth.getModel();
-							synth.model = current;
-							boolean sendMIDI = synth.getSendMIDI();
-							synth.setSendMIDI(true);
-							//if (!(shuffledKeys[timerCount].startsWith("modmat") && shuffledKeys[timerCount].contains("amount")))
-							//	{
-								synth.sendOneParameter(shuffledKeys[timerCount]);
-							//	}
-							synth.setSendMIDI(sendMIDI);
-							synth.model = backup;  
-							}                 
+                            {
+                            timerCount++;
+                            if (timerCount >= shuffledKeys.length)
+                                {
+                                StringUtility.shuffle(shuffledKeys, synth.random);
+                                timerCount = 0;
+                                }
+                            Model backup = synth.getModel();
+                            synth.model = current;
+                            boolean sendMIDI = synth.getSendMIDI();
+                            synth.setSendMIDI(true);
+                            //if (!(shuffledKeys[timerCount].startsWith("modmat") && shuffledKeys[timerCount].contains("amount")))
+                            //      {
+                            synth.sendOneParameter(shuffledKeys[timerCount]);
+                            //      }
+                            synth.setSendMIDI(sendMIDI);
+                            synth.model = backup;  
+                            }                 
                         }
                     /*
-                    else if (blank.getModel().get("sendonchange", SEND_TYPE_NOTE) == SEND_TYPE_DELUGE)      // deluge
-                        {
-                        Model backup = synth.getModel();
-                        synth.model = current;
-                        boolean sendMIDI = synth.getSendMIDI();
-                        synth.setSendMIDI(true);
-                        synth.sendAllParameters();
-                        synth.setSendMIDI(sendMIDI);
-                        synth.model = backup;                   
-                        }
+                      else if (blank.getModel().get("sendonchange", SEND_TYPE_NOTE) == SEND_TYPE_DELUGE)      // deluge
+                      {
+                      Model backup = synth.getModel();
+                      synth.model = current;
+                      boolean sendMIDI = synth.getSendMIDI();
+                      synth.setSendMIDI(true);
+                      synth.sendAllParameters();
+                      synth.setSendMIDI(sendMIDI);
+                      synth.model = backup;                   
+                      }
                     */
                     else
                         {

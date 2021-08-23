@@ -1299,7 +1299,7 @@ public class EmuMorpheus extends Synth
                     if (result) 
                         break;
                     if (!result)
-                    	return;
+                        return;
                     }           
 
                 int i = bank.getSelectedIndex();

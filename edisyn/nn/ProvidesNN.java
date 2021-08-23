@@ -10,8 +10,8 @@ import edisyn.*;
 
 public interface ProvidesNN
     {
-	    public Model decode(double [] vector);
-	    public double[] encode(Model model);
-        public void randomizeNNModel();
-}
+    public Model decode(double [] vector);
+    public double[] encode(Model model);
+    public void randomizeNNModel();
+    }
         

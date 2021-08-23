@@ -111,9 +111,9 @@ public abstract class Synth extends JComponent implements Updatable
     /** The "Keep Next Popup Open" menu */
     public JCheckBoxMenuItem persistentChooserMenu;
     /** The "Switching Menus Sends All Sounds Off" menu */
-	public JCheckBoxMenuItem clearNotesMenu;
-	/** The "Launch with Last Editor" menu */
-	public JCheckBoxMenuItem launchMenu;
+    public JCheckBoxMenuItem clearNotesMenu;
+    /** The "Launch with Last Editor" menu */
+    public JCheckBoxMenuItem launchMenu;
     /** The "Blend" menu */
     public JMenu blend;
         
@@ -682,8 +682,8 @@ public abstract class Synth extends JComponent implements Updatable
     ///     Call emitAll(tempModel, toWorkingMemory = false, toFile)
     ///                     This calls emit(tempModel, toWorkingMemory = false, toFile)
     ///     Call changePatch(tempModel) so we're at the patch we just wrote to
-    ///		If getSendsPararametersAfterWrite()
-    ///     	Call sendAllParameters().  This does:
+    ///         If getSendsPararametersAfterWrite()
+    ///         Call sendAllParameters().  This does:
     ///                     If getSendsAllParametersAsDump(), this calls:
     ///                             emitAll(tempModel, toWorkingMemory = true, toFile)
     ///                                     This calls emit(tempModel, toWorkingMemory = true, toFile)
@@ -4882,7 +4882,7 @@ public abstract class Synth extends JComponent implements Updatable
                 }
             });
 
-		menu.addSeparator();
+        menu.addSeparator();
 
         JMenuItem colorMenu = new JMenuItem("Change Color Scheme...");
         menu.add(colorMenu);
@@ -5087,7 +5087,7 @@ public abstract class Synth extends JComponent implements Updatable
                     {
                     sendAllSoundsOff(); // not doSendAllSoundsOff(false) because we don't want to turn off the test notes
                     }
-				updateMenu();
+                updateMenu();
                 windowBecameFront();
                 lastActiveWindow = frame;
                 }
@@ -5104,12 +5104,12 @@ public abstract class Synth extends JComponent implements Updatable
         }
 
 
-	void updateMenu()
-		{
-		launchMenu.setSelected(getLastXAsBoolean("ShowSynth", null, true, false));
-		clearNotesMenu.setSelected(clearNotes);
-		}
-	    
+    void updateMenu()
+        {
+        launchMenu.setSelected(getLastXAsBoolean("ShowSynth", null, true, false));
+        clearNotesMenu.setSelected(clearNotes);
+        }
+            
     void doPerChannelCCs(boolean val)
         {
         if (showSimpleConfirm("Change Per-Channel CC Settings?", "This clears all CCs.  Change your per-channel CC settings?"))

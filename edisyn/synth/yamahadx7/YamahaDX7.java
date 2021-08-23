@@ -89,40 +89,40 @@ public class YamahaDX7 extends Synth implements ProvidesNN
     static Network getEncoder()
         {
         if (encoder == null)
-        {
+            {
             try
-            	{
-            	InputStream stream = new GZIPInputStream(YamahaDX7.class.getResourceAsStream("encoder.txt.gz"));
-            	encoder = Network.loadFromStream(stream);
-            	}
+                {
+                InputStream stream = new GZIPInputStream(YamahaDX7.class.getResourceAsStream("encoder.txt.gz"));
+                encoder = Network.loadFromStream(stream);
+                }
             catch (IOException ex) { throw new RuntimeException(ex); }
-        }
+            }
         return encoder;
         }
 
     static Network getDecoder()
         {
         if (decoder == null)
-        {
-			try
-				{
-	            InputStream stream = new GZIPInputStream(YamahaDX7.class.getResourceAsStream("decoder.txt"));
-            decoder = Network.loadFromStream(stream);
-            	}
+            {
+            try
+                {
+                InputStream stream = new GZIPInputStream(YamahaDX7.class.getResourceAsStream("decoder.txt"));
+                decoder = Network.loadFromStream(stream);
+                }
             catch (IOException ex) { throw new RuntimeException(ex); }
-        }
+            }
         return decoder;
         }
 
-	boolean volca;
+    boolean volca;
     JCheckBox volcaCheck;
     public static final String VOLCA_KEY = "Volca";
 
     public boolean isVolca() 
-    	{ 
-    	return volca; 
-    	}
-    	
+        { 
+        return volca; 
+        }
+        
     public void setVolca(boolean val, boolean save)
         {
         if (save)
@@ -134,7 +134,7 @@ public class YamahaDX7 extends Synth implements ProvidesNN
         updateTitle();
         }
     
-	
+        
     public JFrame sprout()
         {
         JFrame frame = super.sprout();
@@ -229,7 +229,7 @@ public class YamahaDX7 extends Synth implements ProvidesNN
         boolean v = isVolca();
         loadDefaults();        
         setVolca(v, false);
-      }
+        }
                 
     public String getDefaultResourceFileName() { return "YamahaDX7.init"; }
     public String getHTMLResourceFileName() { return "YamahaDX7.html"; }
@@ -310,7 +310,7 @@ public class YamahaDX7 extends Synth implements ProvidesNN
         volcaCheck.setFont(Style.SMALL_FONT());
         volcaCheck.setOpaque(false);
         volcaCheck.setForeground(Style.TEXT_COLOR());
-		hbox2 = new HBox();
+        hbox2 = new HBox();
         hbox2.add(volcaCheck);
         vbox.add(hbox2);
 
@@ -1083,14 +1083,14 @@ public class YamahaDX7 extends Synth implements ProvidesNN
         // are on and which are off.  This makes them incompatible with the DX7!  Very dumb.
         
         if (isVolca())
-        	{
-        	data[161] = 127;		// "all operators on"
-        	}
+            {
+            data[161] = 127;                // "all operators on"
+            }
         else
-        	{
-	        data[161] = produceChecksum(data, 6);
-	        }
-	        
+            {
+            data[161] = produceChecksum(data, 6);
+            }
+                
         data[162] = (byte)0xF7;
         
         return data;
@@ -1249,52 +1249,52 @@ public class YamahaDX7 extends Synth implements ProvidesNN
         model.latentVector = Network.shiftVectorUniform(new double[ENCODED_LENGTH], random, 1);
         }
 
-	public double[] encode(Model model)
-	    {
+    public double[] encode(Model model)
+        {
         // Hardcoded constant for now, really should fix this to be computed in the future
         double[] vector = new double[ENCODED_LENGTH];
         int index = 0;
         // Ignore the name parameters, so -10
-		for(int i = 0; i < allParameters.length-10; i++)
-		{
-			String parameter = allParameters[i];
-			if (model.metricMinExists(parameter))
-			{
-				index = Network.encodeScaled(vector,index,model.get(parameter), model.getMin(parameter), model.getMax(parameter));
-			} 
-			else 
-			{
-				index = Network.encodeOneHot(vector,index,model.get(parameter), model.getMin(parameter), model.getMax(parameter));
-			}
-		}
-		return getEncoder().feed(vector);
-	    }
-	    
-	    
-	public Model decode(double[] vector)
-	    {
-		Model newModel = model.copy();
-		newModel.latentVector = vector;
-		vector = getDecoder().feed(vector);
-		int index = 0;
+        for(int i = 0; i < allParameters.length-10; i++)
+            {
+            String parameter = allParameters[i];
+            if (model.metricMinExists(parameter))
+                {
+                index = Network.encodeScaled(vector,index,model.get(parameter), model.getMin(parameter), model.getMax(parameter));
+                } 
+            else 
+                {
+                index = Network.encodeOneHot(vector,index,model.get(parameter), model.getMin(parameter), model.getMax(parameter));
+                }
+            }
+        return getEncoder().feed(vector);
+        }
+            
+            
+    public Model decode(double[] vector)
+        {
+        Model newModel = model.copy();
+        newModel.latentVector = vector;
+        vector = getDecoder().feed(vector);
+        int index = 0;
         // Ignore the name parameters, so -10
-		for(int i = 0; i < allParameters.length-10; i++)
-		{
-			String parameter = allParameters[i];
-			if (model.metricMinExists(parameter))
-			{
-				int[] v = Network.decodeScaled(vector, index, model.getMin(parameter), model.getMax(parameter));
-				index = v[0];
-				newModel.set(parameter, v[1]);
-			} else 
-			{
-				int[] v = Network.decodeOneHot(vector, index, model.getMin(parameter), model.getMax(parameter));
-				index = v[0];
-				newModel.set(parameter, v[1]);
-			}
-			
-		}
-		return newModel;
-	    }
+        for(int i = 0; i < allParameters.length-10; i++)
+            {
+            String parameter = allParameters[i];
+            if (model.metricMinExists(parameter))
+                {
+                int[] v = Network.decodeScaled(vector, index, model.getMin(parameter), model.getMax(parameter));
+                index = v[0];
+                newModel.set(parameter, v[1]);
+                } else 
+                {
+                int[] v = Network.decodeOneHot(vector, index, model.getMin(parameter), model.getMax(parameter));
+                index = v[0];
+                newModel.set(parameter, v[1]);
+                }
+                        
+            }
+        return newModel;
+        }
 
     }

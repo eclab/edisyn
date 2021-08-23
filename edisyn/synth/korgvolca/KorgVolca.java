@@ -44,9 +44,9 @@ public class KorgVolca extends Synth
     public static final int NUM_EDITABLE_VOLCAS = TYPE_VOLCA_MODULAR;
 
     public static final String[] VOLCAS = { "Bass", "Beats", "Drum (Single)", "Drum (Split)", "FM", "Keys", "Kick", "NuBass", "Sample/Sample2 (Multi)", // "Sample (Pajen Ch 11)", 
-    	"Sample2 (Single)" };
+                                            "Sample2 (Single)" };
     public static final String[] PREFIXES = { "bass", "beats", "drumsingle", "drumsplit", "fm", "keys", "kick", "nubass", "sample1", // "samplepajen", 
-    	"sample2" };
+                                              "sample2" };
         
     // Minimum value corresponding to octaves 1-6
     public static final int[] BASS_OCTAVES = { 00, 22, 44, 66, 88, 110 };
@@ -1035,7 +1035,7 @@ public class KorgVolca extends Synth
         vbox.add(addVolcaDrumSplitLayer(part, 1, color));
         vbox.add(addVolcaDrumSplitLayer(part, 2, color));
         hbox.add(vbox);
-       // hbox.add(Strut.makeHorizontalStrut(10));
+        // hbox.add(Strut.makeHorizontalStrut(10));
         
         vbox = new VBox();
         HBox hbox2 = new HBox();
@@ -1721,7 +1721,7 @@ public class KorgVolca extends Synth
         JComponent comp;
         String[] params;
         HBox hbox = new HBox();
-         VBox vbox = new VBox();
+        VBox vbox = new VBox();
               
         comp = new LabelledDial("VTO", this, "nubassvtopitch", color, 0, 127)
             {
@@ -1770,9 +1770,9 @@ public class KorgVolca extends Synth
         ((LabelledDial)comp).addAdditionalLabel("Intensity");
         hbox.add(comp);
 
-		vbox.add(hbox);
-		hbox = new HBox();
-		
+        vbox.add(hbox);
+        hbox = new HBox();
+                
         comp = new LabelledDial("VCF", this, "nubassvcfcutoff", color, 0, 127);
         ((LabelledDial)comp).addAdditionalLabel("Cutoff");
         hbox.add(comp);
@@ -1853,115 +1853,115 @@ public class KorgVolca extends Synth
             new double[] { 0.0,  1.0,              0.0                  });
         hbox.add(comp);
 
-		comp = new LabelledDial("Speed", this, "sample1part" + part + "speed", color, 0, 127)
-			{
-        	public String map(int value)
-        		{
-        		if (value == 0) return "-63";
-        		else return "" + (value - 64);
-        		}
-			};
-		hbox.add(comp);
+        comp = new LabelledDial("Speed", this, "sample1part" + part + "speed", color, 0, 127)
+            {
+            public String map(int value)
+                {
+                if (value == 0) return "-63";
+                else return "" + (value - 64);
+                }
+            };
+        hbox.add(comp);
 
         comp = new LabelledDial("Reverse", this, "sample1part" + part + "pajenreversepart", color, 0, 127)
-        	{
-        	public String map(int value)
-        		{
-        		if (value == 0) return "Off";
-        		else return "On";
-        		}
-        	};
-		((LabelledDial)comp).addAdditionalLabel("Part [P]");
+            {
+            public String map(int value)
+                {
+                if (value == 0) return "Off";
+                else return "On";
+                }
+            };
+        ((LabelledDial)comp).addAdditionalLabel("Part [P]");
         hbox.add(comp);
 
         comp = new LabelledDial("Mute", this, "sample1part" + part + "pajenmutepart", color, 0, 127)
-        	{
-        	public String map(int value)
-        		{
-        		if (value == 0) return "On";
-        		else return "Off";
-        		}
-        	};
-		((LabelledDial)comp).addAdditionalLabel("Part [P]");
+            {
+            public String map(int value)
+                {
+                if (value == 0) return "On";
+                else return "Off";
+                }
+            };
+        ((LabelledDial)comp).addAdditionalLabel("Part [P]");
         hbox.add(comp);
 
         comp = new LabelledDial("Solo", this, "sample1part" + part + "pajensolopart", color, 0, 127)
-        	{
-        	public String map(int value)
-        		{
-        		if (value == 0) return "Trig";
-        		else return "--";
-        		}
-        	};
-		((LabelledDial)comp).addAdditionalLabel("Part [P]");
+            {
+            public String map(int value)
+                {
+                if (value == 0) return "Trig";
+                else return "--";
+                }
+            };
+        ((LabelledDial)comp).addAdditionalLabel("Part [P]");
         hbox.add(comp);
 
 
-		vbox.add(hbox);
-		hbox = new HBox();
+        vbox.add(hbox);
+        hbox = new HBox();
                                                                         
-		comp = new LabelledDial("Sample", this, "sample1part" + part + "startpoint", color, 0, 127);
-		((LabelledDial)comp).addAdditionalLabel("Start");
-		hbox.add(comp);
-			
-		comp = new LabelledDial("Sample", this, "sample1part" + part + "length", color, 0, 127);
-		((LabelledDial)comp).addAdditionalLabel("Length");
-		hbox.add(comp);
+        comp = new LabelledDial("Sample", this, "sample1part" + part + "startpoint", color, 0, 127);
+        ((LabelledDial)comp).addAdditionalLabel("Start");
+        hbox.add(comp);
+                        
+        comp = new LabelledDial("Sample", this, "sample1part" + part + "length", color, 0, 127);
+        ((LabelledDial)comp).addAdditionalLabel("Length");
+        hbox.add(comp);
 
-		comp = new LabelledDial("Pitch Env", this, "sample1part" + part + "pitchegintensity", color, 0, 127)
-			{
-			public boolean isSymmetric() { return true; }
-			public String map(int value)
-				{
-				if (value == 0) return "-63";
-				else return "" + (value - 64);
-				}
-			};
-		((LabelledDial)comp).addAdditionalLabel("Intensity");
-		hbox.add(comp);
-			
-		comp = new LabelledDial("Pitch Env", this, "sample1part" + part + "pitchegattack", color, 0, 127);
-		((LabelledDial)comp).addAdditionalLabel("Attack");
-		hbox.add(comp);
-			
-		comp = new LabelledDial("Pitch Env", this, "sample1part" + part + "pitchegdecay", color, 0, 127);
-		((LabelledDial)comp).addAdditionalLabel("Decay");
-		hbox.add(comp);
-			
-		// AR
-		comp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
-			new String[] { null, "sample1part" + part + "pitchegattack",   "sample1part" + part + "pitchegdecay" },
-			new String[] { null, null,             null                 },
-			new double[] { 0,    0.5/127,          0.5/127              },
-			new double[] { 0.0,  1.0,              0.0                  });
-		hbox.add(comp);
+        comp = new LabelledDial("Pitch Env", this, "sample1part" + part + "pitchegintensity", color, 0, 127)
+            {
+            public boolean isSymmetric() { return true; }
+            public String map(int value)
+                {
+                if (value == 0) return "-63";
+                else return "" + (value - 64);
+                }
+            };
+        ((LabelledDial)comp).addAdditionalLabel("Intensity");
+        hbox.add(comp);
+                        
+        comp = new LabelledDial("Pitch Env", this, "sample1part" + part + "pitchegattack", color, 0, 127);
+        ((LabelledDial)comp).addAdditionalLabel("Attack");
+        hbox.add(comp);
+                        
+        comp = new LabelledDial("Pitch Env", this, "sample1part" + part + "pitchegdecay", color, 0, 127);
+        ((LabelledDial)comp).addAdditionalLabel("Decay");
+        hbox.add(comp);
+                        
+        // AR
+        comp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
+            new String[] { null, "sample1part" + part + "pitchegattack",   "sample1part" + part + "pitchegdecay" },
+            new String[] { null, null,             null                 },
+            new double[] { 0,    0.5/127,          0.5/127              },
+            new double[] { 0.0,  1.0,              0.0                  });
+        hbox.add(comp);
 
 
         comp = new LabelledDial("Sample", this, "sample1part" + part + "pajensampleselect", color, 0, 127);
-		((LabelledDial)comp).addAdditionalLabel("Select [P]");
+        ((LabelledDial)comp).addAdditionalLabel("Select [P]");
         hbox.add(comp);
                 
         comp = new LabelledDial("Reverb", this, "sample1part" + part + "pajenreverbonoff", color, 0, 127)
-        	{
-        	public String map(int value)
-        		{
-        		if (value == 0) return "Off";
-        		else return "On";
-        		}
-        	};
+            {
+            public String map(int value)
+                {
+                if (value == 0) return "Off";
+                else return "On";
+                }
+            };
         
-		((LabelledDial)comp).addAdditionalLabel("On/Off [P]");
+        ((LabelledDial)comp).addAdditionalLabel("On/Off [P]");
         hbox.add(comp);
         
         comp = new LabelledDial("Loop", this, "sample1part" + part + "pajenloop", color, 0, 127)
-        	{
-        	public String map(int value)
-        		{
-        		if (value == 0) return "Off";
-        		else return "On";
-        		}
-        	};
-		((LabelledDial)comp).addAdditionalLabel("Part [P]");
+            {
+            public String map(int value)
+                {
+                if (value == 0) return "Off";
+                else return "On";
+                }
+            };
+        ((LabelledDial)comp).addAdditionalLabel("Part [P]");
         hbox.add(comp);
 
         vbox.add(hbox);
@@ -1983,38 +1983,38 @@ public class KorgVolca extends Synth
         hbox = new HBox();
         
         comp = new LabelledDial("Part", this, "sample1part" + 1 + "pajenpartselect", color, 0, 127)
-        	{
-        	public String map(int value)
-        		{
-        		if (value <= 12) return "1";
-        		else if (value <= 25) return "2";
-        		else if (value <= 38) return "3";
-        		else if (value <= 51) return "4";
-        		else if (value <= 63) return "5";
-        		else if (value <= 76) return "6";
-        		else if (value <= 89) return "7";
-        		else if (value <= 102) return "8";
-        		else if (value <= 115) return "9";
-        		else return "10";
-        		}
-        	};
-		((LabelledDial)comp).addAdditionalLabel("Select [P]");
+            {
+            public String map(int value)
+                {
+                if (value <= 12) return "1";
+                else if (value <= 25) return "2";
+                else if (value <= 38) return "3";
+                else if (value <= 51) return "4";
+                else if (value <= 63) return "5";
+                else if (value <= 76) return "6";
+                else if (value <= 89) return "7";
+                else if (value <= 102) return "8";
+                else if (value <= 115) return "9";
+                else return "10";
+                }
+            };
+        ((LabelledDial)comp).addAdditionalLabel("Select [P]");
         hbox.add(comp);
 
         comp = new LabelledDial("Reverb", this, "sample1part" + 1 + "pajenreverbtype", color, 0, 127)
-        	{
-        	public String map(int value)
-        		{
-        		if (value <= 42) return "0";
-        		else if (value <= 85) return "1";
-        		else return "2";
-        		}
-        	};
-		((LabelledDial)comp).addAdditionalLabel("Type [P]");
+            {
+            public String map(int value)
+                {
+                if (value <= 42) return "0";
+                else if (value <= 85) return "1";
+                else return "2";
+                }
+            };
+        ((LabelledDial)comp).addAdditionalLabel("Type [P]");
         hbox.add(comp);
 
         comp = new LabelledDial("Reverb", this, "sample1part" + 1 + "pajenreverblevel", color, 0, 127);
-		((LabelledDial)comp).addAdditionalLabel("Level [P]");
+        ((LabelledDial)comp).addAdditionalLabel("Level [P]");
         hbox.add(comp);
 
 
@@ -2081,134 +2081,134 @@ public class KorgVolca extends Synth
         }
 
 /*
-    public JComponent addVolcaSamplePajenPart(int part, Color color)
-        {
-        JComponent comp;
-        String[] params;
-        HBox hbox = new HBox();
-        VBox vbox = new VBox();
+  public JComponent addVolcaSamplePajenPart(int part, Color color)
+  {
+  JComponent comp;
+  String[] params;
+  HBox hbox = new HBox();
+  VBox vbox = new VBox();
         
-        Category category = new Category(this, "Part " + part, color);
+  Category category = new Category(this, "Part " + part, color);
                 
-        comp = new LabelledDial("Level", this, "samplepajenpart" + part + "level", color, 0, 127);
-        hbox.add(comp);
+  comp = new LabelledDial("Level", this, "samplepajenpart" + part + "level", color, 0, 127);
+  hbox.add(comp);
                 
-        comp = new LabelledDial("Pan", this, "samplepajenpart" + part + "pan", color, 0, 127)
-            {
-            public boolean isSymmetric() { return true; }
+  comp = new LabelledDial("Pan", this, "samplepajenpart" + part + "pan", color, 0, 127)
+  {
+  public boolean isSymmetric() { return true; }
                                 
-            public String map(int value)
-                {
-                if (value == 64) return "--";
-                else if (value < 64) return "< " + (64 - value);
-                else return  (value - 64) + " >";
-                }
-            };
-        hbox.add(comp);
+  public String map(int value)
+  {
+  if (value == 64) return "--";
+  else if (value < 64) return "< " + (64 - value);
+  else return  (value - 64) + " >";
+  }
+  };
+  hbox.add(comp);
                 
-        comp = new LabelledDial("Hi", this, "samplepajenpart" + part + "hicutoff", color, 0, 127);
-        ((LabelledDial)comp).addAdditionalLabel("Cutoff");
-        hbox.add(comp);
+  comp = new LabelledDial("Hi", this, "samplepajenpart" + part + "hicutoff", color, 0, 127);
+  ((LabelledDial)comp).addAdditionalLabel("Cutoff");
+  hbox.add(comp);
 
-        comp = new LabelledDial(" Amp Env ", this, "samplepajenpart" + part + "ampegattack", color, 0, 127);
-        ((LabelledDial)comp).addAdditionalLabel("Attack");
-        hbox.add(comp);
+  comp = new LabelledDial(" Amp Env ", this, "samplepajenpart" + part + "ampegattack", color, 0, 127);
+  ((LabelledDial)comp).addAdditionalLabel("Attack");
+  hbox.add(comp);
                 
-        comp = new LabelledDial(" Amp Env ", this, "samplepajenpart" + part + "ampegdecay", color, 0, 127);
-        ((LabelledDial)comp).addAdditionalLabel("Decay");
-        hbox.add(comp);
+  comp = new LabelledDial(" Amp Env ", this, "samplepajenpart" + part + "ampegdecay", color, 0, 127);
+  ((LabelledDial)comp).addAdditionalLabel("Decay");
+  hbox.add(comp);
                 
-        // AR
-        comp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
-            new String[] { null, "samplepajenpart" + part + "ampegattack",   "samplepajenpart" + part + "ampegdecay" },
-            new String[] { null, null,             null                 },
-            new double[] { 0,    0.5/127,          0.5/127              },
-            new double[] { 0.0,  1.0,              0.0                  });
-        hbox.add(comp);
+  // AR
+  comp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
+  new String[] { null, "samplepajenpart" + part + "ampegattack",   "samplepajenpart" + part + "ampegdecay" },
+  new String[] { null, null,             null                 },
+  new double[] { 0,    0.5/127,          0.5/127              },
+  new double[] { 0.0,  1.0,              0.0                  });
+  hbox.add(comp);
 
-             comp = new LabelledDial("Speed", this, "samplepajenpart" + part + "speed", color, 0, 127);
-            hbox.add(comp);
+  comp = new LabelledDial("Speed", this, "samplepajenpart" + part + "speed", color, 0, 127);
+  hbox.add(comp);
 
-		vbox.add(hbox);
-		hbox = new HBox();
-		
-            comp = new LabelledDial("Sample", this, "samplepajenpart" + part + "startpoint", color, 0, 127);
-            ((LabelledDial)comp).addAdditionalLabel("Start");
-            hbox.add(comp);
+  vbox.add(hbox);
+  hbox = new HBox();
                 
-            comp = new LabelledDial("Sample", this, "samplepajenpart" + part + "length", color, 0, 127);
-            ((LabelledDial)comp).addAdditionalLabel("Length");
-            hbox.add(comp);
+  comp = new LabelledDial("Sample", this, "samplepajenpart" + part + "startpoint", color, 0, 127);
+  ((LabelledDial)comp).addAdditionalLabel("Start");
+  hbox.add(comp);
+                
+  comp = new LabelledDial("Sample", this, "samplepajenpart" + part + "length", color, 0, 127);
+  ((LabelledDial)comp).addAdditionalLabel("Length");
+  hbox.add(comp);
 
-            comp = new LabelledDial("Pitch Env", this, "samplepajenpart" + part + "pitchegintensity", color, 0, 127);
-            ((LabelledDial)comp).addAdditionalLabel("Intensity");
-            hbox.add(comp);
+  comp = new LabelledDial("Pitch Env", this, "samplepajenpart" + part + "pitchegintensity", color, 0, 127);
+  ((LabelledDial)comp).addAdditionalLabel("Intensity");
+  hbox.add(comp);
                 
-            comp = new LabelledDial("Pitch Env", this, "samplepajenpart" + part + "pitchegattack", color, 0, 127);
-            ((LabelledDial)comp).addAdditionalLabel("Attack");
-            hbox.add(comp);
+  comp = new LabelledDial("Pitch Env", this, "samplepajenpart" + part + "pitchegattack", color, 0, 127);
+  ((LabelledDial)comp).addAdditionalLabel("Attack");
+  hbox.add(comp);
                 
-            comp = new LabelledDial("Pitch Env", this, "samplepajenpart" + part + "pitchegdecay", color, 0, 127);
-            ((LabelledDial)comp).addAdditionalLabel("Decay");
-            hbox.add(comp);
+  comp = new LabelledDial("Pitch Env", this, "samplepajenpart" + part + "pitchegdecay", color, 0, 127);
+  ((LabelledDial)comp).addAdditionalLabel("Decay");
+  hbox.add(comp);
                 
-            // AR
-            comp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
-                new String[] { null, "samplepajenpart" + part + "pitchegattack",   "samplepajenpart" + part + "pitchegdecay" },
-                new String[] { null, null,             null                 },
-                new double[] { 0,    0.5/127,          0.5/127              },
-                new double[] { 0.0,  1.0,              0.0                  });
-            hbox.add(comp);
+  // AR
+  comp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
+  new String[] { null, "samplepajenpart" + part + "pitchegattack",   "samplepajenpart" + part + "pitchegdecay" },
+  new String[] { null, null,             null                 },
+  new double[] { 0,    0.5/127,          0.5/127              },
+  new double[] { 0.0,  1.0,              0.0                  });
+  hbox.add(comp);
  
-		vbox.add(hbox);
-		category.add(vbox);
+  vbox.add(hbox);
+  category.add(vbox);
                                                                        
-        return category;
-        }
+  return category;
+  }
 
-    public JComponent addVolcaSamplePajen(Color color)
-        {
-        Category category = new Category(this, "Sample (Pajen-7 Channel 11)", color);
+  public JComponent addVolcaSamplePajen(Color color)
+  {
+  Category category = new Category(this, "Sample (Pajen-7 Channel 11)", color);
                 
-        JComponent comp;
-        String[] params;
+  JComponent comp;
+  String[] params;
                
-        final JComponent typical = addVolcaSamplePajenPart(1, color);
-        final int h = typical.getPreferredSize().height;
-        final int w = typical.getPreferredSize().width;
+  final JComponent typical = addVolcaSamplePajenPart(1, color);
+  final int h = typical.getPreferredSize().height;
+  final int w = typical.getPreferredSize().width;
         
 
-        VBox vbox = new VBox()
-            {
-            public int getScrollableBlockIncrement(Rectangle visibleRect, int orientation, int direction)
-                {
-                if (orientation == SwingConstants.VERTICAL)
-                    return w;
-                else
-                    return h;
-                }
+  VBox vbox = new VBox()
+  {
+  public int getScrollableBlockIncrement(Rectangle visibleRect, int orientation, int direction)
+  {
+  if (orientation == SwingConstants.VERTICAL)
+  return w;
+  else
+  return h;
+  }
 
-            public Dimension getPreferredScrollableViewportSize()
-                {
-                Dimension size = getPreferredSize();
-                size.height = h * 2;
-                return size;
-                }
-            };
+  public Dimension getPreferredScrollableViewportSize()
+  {
+  Dimension size = getPreferredSize();
+  size.height = h * 2;
+  return size;
+  }
+  };
                 
-        for(int part = 1; part <= 10; part++)
-            {
-            vbox.add(addVolcaSamplePajenPart(part, color));
-            }
+  for(int part = 1; part <= 10; part++)
+  {
+  vbox.add(addVolcaSamplePajenPart(part, color));
+  }
                 
-        JScrollPane pane = new JScrollPane(vbox, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        pane.getViewport().setBackground(Style.BACKGROUND_COLOR());
-        pane.setBorder(null);
+  JScrollPane pane = new JScrollPane(vbox, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+  pane.getViewport().setBackground(Style.BACKGROUND_COLOR());
+  pane.setBorder(null);
                                                 
-        category.add(pane, BorderLayout.CENTER);
-        return category;
-        }        
-    */    
+  category.add(pane, BorderLayout.CENTER);
+  return category;
+  }        
+*/    
 
 
 
@@ -2279,14 +2279,14 @@ public class KorgVolca extends Synth
             hbox.add(comp);
 
             comp = new LabelledDial("Pitch Env", this, prefix + "part" + part + "pitchegintensity", color, 0, 127)
-			{
-			public boolean isSymmetric() { return true; }
-			public String map(int value)
-				{
-				if (value == 0) return "-63";
-				else return "" + (value - 64);
-				}
-			};
+                {
+                public boolean isSymmetric() { return true; }
+                public String map(int value)
+                    {
+                    if (value == 0) return "-63";
+                    else return "" + (value - 64);
+                    }
+                };
             ((LabelledDial)comp).addAdditionalLabel("Intensity");
             hbox.add(comp);
                 
@@ -2969,8 +2969,8 @@ public class KorgVolca extends Synth
         "sample1part10pajenreverbonoff",
         },
         {
-    			// Note that pajen partselect, pajen reverblevel, and pajen reverbtype are actually globals though they work in
-    			// different MIDI channels and so I have elected to keep them as separate parameters here for the time being
+        // Note that pajen partselect, pajen reverblevel, and pajen reverbtype are actually globals though they work in
+        // different MIDI channels and so I have elected to keep them as separate parameters here for the time being
         "samplepajenpart1level",
         "samplepajenpart1pan",
         "samplepajenpart1startpoint",
@@ -3164,7 +3164,7 @@ public class KorgVolca extends Synth
                 !key.equals("drumsplitbody") &&
                 !key.equals("drumsplittune"))
                 {
-                int num = StringUtility.getFirstInt(key);		// part
+                int num = StringUtility.getFirstInt(key);               // part
                 return buildCC(num - 1, ((Integer)allParametersToCC.get(key)).intValue(), model.get(key, 0));
                 }
             else
@@ -3679,9 +3679,9 @@ public class KorgVolca extends Synth
 
 
     DATA for Volca Sample [200 bytes]               
-    			* Note that the Sample is called the "Sample 1" internally in Edisyn for reasons that aren't worth explaining here
-    			* Note that pajen partselect, pajen reverblevel, and pajen reverbtype are actually globals though they work in
-    			*      different MIDI channels and so I have elected to keep them as separate parameters here for the time being
+    * Note that the Sample is called the "Sample 1" internally in Edisyn for reasons that aren't worth explaining here
+    * Note that pajen partselect, pajen reverblevel, and pajen reverbtype are actually globals though they work in
+    *      different MIDI channels and so I have elected to keep them as separate parameters here for the time being
     sample1part1level
     sample1part1pan
     sample1part1startpoint

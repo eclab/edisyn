@@ -449,7 +449,7 @@ public class YamahaTG33 extends Synth
                     if (result) 
                         break;
                     if (!result)
-                    	return;
+                        return;
                     }           
                     
                 n = ((n / 10) - 1) * 8 + ((n % 10) - 1);

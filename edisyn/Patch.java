@@ -32,24 +32,24 @@ public class Patch
         } 
     
     public String toString()
-    	{
-    	return name;
-    	}
-    /*
-    public String toString()
         {
-        String s = "Patch[" + (location == null ? "" : location) + " " + name + ", " + synth + ", " + bank + ", " + sysex.length + "\n";
-        for(int i = 0; i < sysex.length; i++)
-            {
-            s = s + ("" + i + " (" + sysex[i].length + ") ->");
-            for(int j = 0; j < sysex[i].length; j++)
-                {
-                s = s + (" " + StringUtility.toHex(sysex[i][j]));
-                }
-            s = s + "\n";
-            }
-        return s + "\n] ";
+        return name;
         }
+    /*
+      public String toString()
+      {
+      String s = "Patch[" + (location == null ? "" : location) + " " + name + ", " + synth + ", " + bank + ", " + sysex.length + "\n";
+      for(int i = 0; i < sysex.length; i++)
+      {
+      s = s + ("" + i + " (" + sysex[i].length + ") ->");
+      for(int j = 0; j < sysex[i].length; j++)
+      {
+      s = s + (" " + StringUtility.toHex(sysex[i][j]));
+      }
+      s = s + "\n";
+      }
+      return s + "\n] ";
+      }
     */
         
     }

@@ -18,11 +18,14 @@ import java.awt.event.*;
    Box with built-in insets, and which automatically compresses (no glue),
    making it dead easy to use: just create one and add stuff to it and you're done.
    This is particularly useful because glue is broken for vertical boxes!
-        
+
+   <b>VBox is javax.swing.Scrollable by default, so you can easily override
+   those methods to customize how it scrolls.
+   
    @author Sean Luke
 */
 
-public class VBox extends JComponent implements Gatherable
+public class VBox extends JComponent implements Gatherable, Scrollable
     {
     Box box;
     JPanel panel = new JPanel();
@@ -133,4 +136,33 @@ public class VBox extends JComponent implements Gatherable
             }               
         }
         
+	public Dimension getPreferredScrollableViewportSize()
+		{
+		return null;
+		}
+			
+	// for now we're not doing a snap to the nearest category
+	public int getScrollableBlockIncrement(Rectangle visibleRect, int orientation, int direction)
+		{
+		if (orientation == SwingConstants.VERTICAL)
+			return 1;
+		else
+			return 1;
+		}
+
+	public boolean getScrollableTracksViewportHeight()
+		{
+		return false;
+		}
+
+	public boolean getScrollableTracksViewportWidth()
+		{
+		return true;
+		}
+	
+	public int getScrollableUnitIncrement(Rectangle visibleRect, int orientation, int direction)
+		{
+		return 1;
+		}
+
     }

@@ -216,6 +216,9 @@ Now would be a good time to mention an Edisyn feature you may never notice other
 
 Persistence appears in other places too.  For example, the Initial Synthesizer dialog will default to the last synth you chose in that dialog.  Persistence shows up in many other places as well.
 
+\paragraph{Selecting Patch Editor Windows} When you bring a patch editor window to the front, Edisyn sends a bunch of All Sounds Off MIDI messages to clean things up for the editor.  However this may sometimes be undesirable: for example, if you are running a DAW and switch to Edisyn, it will turn off all your DAW's currently played notes.  To prevent this, just turn off {\bf Send All Sounds Off when Changing Windows}.
+
+
 \section{Loading and Saving Files}
 
 Edisyn is capable of reading both sysex files or MIDI files and extracting sysex patch data from them.  It can in some situations read files which contain many patches: but Edisyn only writes files with a single patch per file, and only in sysex file format.
@@ -258,7 +261,7 @@ Edisyn also has limited support for batch-downloading patches, one by one, and s
 If Edisyn can't download a particular patch (the synth isn't responding), it'll try again and again until successful.  So if it gets stuck, 
 you can always stop batch-downloading at any time by choosing {\bf Stop Downloading Batch} from the {\bf File} menu.  Note that you can still screw with knobs, etc. while Edisyn is busy downloading batches: but don't do that.  You're just messing up the batches getting saved.%\footnote{I may change this in the future to something less fragile.}
 
-Also note that as a failsafe Edisyn only allows the frontmost window to receive data over MIDI.  This means that while you're batch-downloading, you shouldn't switch to some other patch editor window: the downloading patch editor must stay in front.  You can go to another application though (read a web browser say).
+Also note that as a failsafe Edisyn only allows the frontmost window to receive data over MIDI.  Thus while you're batch-downloading, you shouldn't switch to some other patch editor window: the downloading patch editor must stay in front.  You can go to another application though (read a web browser say).
 
 \subsection{Exporting to Text}
 Perhaps you might wish to describe your patch on you blog or your favorite forum.  if you choose {\bf Export to Text...} from the {\bf File} menu, Edisyn will write out all of its patch parameters to a text file.   Edisyn may occasionally break out parameters more than your synthesizer does: though usually it's pretty close to a one-to-one mapping.  The parameter names can be cryptic sometimes: Edisyn often (not always) names parameters in a manner fairly similar to how they're specified by the synthesizer manufacturer in its MIDI Sysex document, and synth manufacturers are not known for being consistent in their naming between the sysex document and the user manual.
@@ -293,8 +296,6 @@ This might not increment in the way you expect.  Edisyn will increment its own d
 Some synthesizers cannot do one or another of these tasks.   When this happens, that feature will generally be disabled in the menu.  As always, read the About Tab to learn more about what's going on with that synthesizer model.  See Section \ref{inconsistent} for some information and griping about all this.
 
 A synthesizer can also offer its own sysex messages to Edisyn without Edisyn requesting them.  Edisyn will try to handle these appropriately.  Some synthesizers might send special {\it bank sysex} messages which contain an entire bank (or in some cases, an entire synthesizer's memory worth) of patches.  Only a few Edisyn patch editors know how to deal with these messages: notably the DX7 patch editor can handle these just fine.  In this case, you will be given three options, to upload the entire bank to the synthesizer (again), to save the entire bank to a file, or to select a single patch from the bank and edit it.
-
-\bump
 
 \subsection{Playing Test Notes}
 \label{playingtestnotes}
@@ -402,7 +403,6 @@ This procedure will create a bunch of of virtual devices with names like {\tt Vi
 \paragraph{Warning}  The ``loop'' in {\it loopback} is apropos.  If you fire up Edisyn and you're not careful, it may set up your loopback as both its input and output.  That would be unfortunate: Edisyn would send a patch out the loopback, which would then arrive at Edisyn's input, which would cause Edisyn to parse the same patch, which would in turn cause Edisyn to send the patch {\it again}, and so on.  So you want to make sure that Edisyn doesn't have the same loopback device as both input and output.  Obviously other devices (such as your MIDI/USB converter) can serve as both input and output.
 
 
-\vbox{
 \section{Editing and Exploratory Patch Creation}
 \label{editing}
 
@@ -413,7 +413,6 @@ Edisyn has a large number of facilities to help you program your synthesizer, in
 \paragraph{Undo and Redo}  Edisyn has infinite levels of undo and redo.  When you change a parameter or do a wholesale modification, this can be undone, as can patch dumps and merges from the synthesizer.  Individual parameter changes made manually on the synthesizer are not undoable even if they're reflected in Edisyn (it'd be too many).  Loading and saving patches is not undoable.  See the {\bf Edit} menu.
 
 \paragraph{Reset}  You can reset the patch editor to its ``init patch''.  Just choose {\bf Reset} in the {\bf Edit} menu.
-}
 
 \paragraph{Category Cut/Paste, Distribution, and Reset}  Each category has a pop-up menu you get when you right-click or shift-click (or two-finger click on a Mac trackpad) on the category name. You can:
 
@@ -469,11 +468,10 @@ You can restrict Mutation and Recombination (used in Randomize, Nudge, Merge, Bl
 
 You can change these of course: just click on them and you can remove them from being updated (or add them back).\footnote{Note that due to an error in Java's design, you can't click directly on a Combo Box (a pop-up menu) such as the ``Wave'' combo box in Figure \ref{mutationparameters}.  But you can click on its title (the text ``Wave'').}  You can also turn on (or turn off) all of the parameters in a category by double-clicking on the category title.  The categories in Figure \ref{mutationparameters} are {\it Yamaha TX81Z}, {\it Global}, {\it LFO}, and {\it Controllers}.  Finally, you can turn on all the parameters in the entire patch editor by selecting {\bf Set All Mutation Parameters} in the {\bf Edit} menu, or conversely turn them all of by selecting {\bf Clear All Mutation Parameters}.
 
-\bump
 
 \begin{wrapfigure}{r}{3in}
 \vspace{-1em}\includegraphics[scale=0.3]{5.png}
-\vspace{-3em}\caption{Editing Mutation Parameters}\label{mutationparameters}
+\vspace{-4em}\caption{Editing Mutation Parameters}\label{mutationparameters}
 \end{wrapfigure}
 
 Some parameters, such as the patch name or certain other parameters, can't be mutated no matter what: these have been declared {\it immutable} by the patch editor.  They will never have a red frame no matter how much you click them.
@@ -528,15 +526,16 @@ All the patches can be played by pressing their associated letter.  But addition
 \subsection{Constricting}
 \label{constrict}
 
+The {\it Constrictor} is similar to the Hill-Climber in many ways, yet its dynamics and behavior are quite different.   You choose the Constrictor in the same way as the Hill-Climber: by choosing {\bf Hill-Climb} in the {\bf Edit} menu.  But then in the Hill-Climb tab, change the ``Method'' combobox to {\it Constrictor}.    
+
 \begin{wrapfigure}{r}{3.6in}
-\vspace{-2.65em}\includegraphics[scale=0.27]{ConstrictorPanel.png}
+%\vspace{-2.65em}
+\vspace{-0.75em}\includegraphics[scale=0.27]{ConstrictorPanel.png}
 \vspace{-2.5em}
 \caption{The Hill-Climber Panel converted for Constricting.}
-\vspace{-1em}
+%\vspace{-1em}
 \label{constrictorpanel}
 \end{wrapfigure}
-
-The {\it Constrictor} is similar to the Hill-Climber in many ways, yet its dynamics and behavior are quite different.   You choose the Constrictor in the same way as the Hill-Climber: by choosing {\bf Hill-Climb} in the {\bf Edit} menu.  But then in the Hill-Climb tab, change the ``Method'' combobox to {\it Constrictor}.    
 
 The Constrictor auditions patches to you in exactly the same way was the Hill-Climber.  But you're not given the option of choosing your top three choices.  Instead, you're asked to choose which patches you {\it don't like}.  This is done by deselecting their checkboxes.  Afterwards, you click on the {\bf Constrict} button and those patches will be replaced with recombined and mutated versions of the remaining patches.  The newly recombined replacements will be moved to the front of the Candidates so you hear them first.
 
@@ -783,19 +782,20 @@ The other reason is because you have recently moved from \(S\) to \(P\), and now
 }
 
 
+\enlargethispage{1em}
 \subsection{Morphing}
 \label{morph}
+
+\begin{wrapfigure}{r}{3.6in}
+\vspace{-2em}\includegraphics[scale=0.27]{Morph.png}
+\vspace{-4em}
+\caption{The Morpher.}
+\label{morphpanel}
+\end{wrapfigure}
 
 The {\it Morpher} allows you to try out patches, in real time, that are a combination of four different patches. Shown in Figure~\ref{morphpanel}, the Morpher largely consists of a big rectangle with a different patch at each corner.  Once you have set up these patches, you can drag a joystick cursor (the blue circle) within this rectangle, and it will change the synthesizer's patch to reflect a combination of the four patches.  The closer the cursor is to a patch the more it will resemble it.
 
 Patches are updated on your synthesizer in real time as you change the joystick cursor position.  To do this, Edisyn sends the entire patch to the synthesizer on the fly in the same way that ``Send to Current Patch'' is done.  Keep in mind that some synthesizers can take a bit of time to update themselves to a new patch, so depending on the synthesizer this can be either smooth or a bit jumpy.
-
-\begin{wrapfigure}{r}{3.6in}
-\vspace{-2em}\includegraphics[scale=0.27]{Morph.png}
-\vspace{-3em}
-\caption{The Morpher.}
-\label{morphpanel}
-\end{wrapfigure}
 
 \paragraph{Initialization} When you fire up the Morpher, it will place a copy of the current patch in the top-left corner.  You can load patches in additional corners (or overwrite the top-left corner) by clicking on their buttons and choosing  {\it Load from File ...}, which loads a patch from a file.  You can also load a patch from any of the Hill-Climbing archive slots (q through v). And you can take a patch from any of the Nudge slots (1 through~4).  
 
@@ -812,13 +812,15 @@ Non-metric parameters, such as (say) choice of filter or the PCM sampled sound p
 \begin{itemize}
 \item {\it When Playing Test Notes}\quad This is the default, and usually the best option.  Here, the Morpher will send the entire patch immediately before it plays a test note.  (If you have turned off sending test notes, the Morpher will never send the patch).  
 \item {\it When Changing}\quad The Morpher will send the entire patch every time the joystick cursor changes.  This can be slow if the synthesizer takes a long time to update itself, but it is often the best choice if you are playing notes yourself.  Your synthesizer is unlikely to change its sound to reflect this change until the next note is played.
-\item {\it Trickle}\quad The Morpher will constantly send a single random parameter\footnote{Edisyn shuffles the parameters, then sends them in turn, then shuffles again, and so on.} to the synth.  If your synth updates itself in real-time in response to changes to these parameters, this will {\it slowly} update the patch sound of a long-playing note.  However many synths only update themselves when the next note is sounded, in which case it makes more sense to choose {\it When Playing Note}.  Note that sending individual parameters like this may take a while to fully update the patch on the synth.  Also note that this floods MIDI with messages.
-\item {\it Deluge}\quad The Morpher will constantly send the entire patch to the synth.  If your synth updates itself in real-time in response to changes to these parameters, this will {\it rapidly} update the patch sound of a long-playing note.  However many synths only update themselves when the next note is sounded, in which case it makes more sense to choose {\it When Playing Note}.  Note that this floods MIDI with messages, causing much more congestion than {\it Trickle} (there's a reason it's called {\it Deluge}).
+\item {\it Trickle}\quad The Morpher will constantly send a single random parameter\footnote{Edisyn shuffles the parameters, then sends them in turn, then shuffles again, and so on.} to the synth.  If your synth updates itself in real-time in response to changes to these parameters, this will {\it slowly} update the patch sound of a long-playing note.  However many synths only update themselves when the next note is sounded, in which case it makes more sense to choose {\it When Playing Note}.  Note that sending individual parameters like this may take a while to fully update the patch on the synth.  Also note that this floods MIDI with messages.  You can set the {\it Trickle Rate}, which changes the number of parameters sent to the synth each trickle timestep.  By default this is 1.
+%\item {\it Deluge}\quad The Morpher will constantly send the entire patch to the synth.  If your synth updates itself in real-time in response to changes to these parameters, this will {\it rapidly} update the patch sound of a long-playing note.  However many synths only update themselves when the next note is sounded, in which case it makes more sense to choose {\it When Playing Note}.  Note that this floods MIDI with messages, causing much more congestion than {\it Trickle} (there's a reason it's called {\it Deluge}).
 \end{itemize}
 
 \paragraph{Editing} During the morphing process you might wish to modify a corner.  In addition to reloading it from various sources as discussed earlier during {\it Initialization}, you have some more options available when clicking on its button.  For example, you can swap corners with one another, which is useful for rearranging corners as you like.  You can also {\it Set to Joystick Position}, which sets the corner to the the current auditioned patch at the Joystick position, and {\it Clear}, which clears a corner of its patch (setting it to ``[Empty]'').
 
 \paragraph{Moving the Joystick via CC}  You can set the Joystick's X and Y values via CC MIDI commands.  Simply set the X CC and Y CC dials to the CC parameter numbers to control the X and Y directions respectively.  Edisyn will remember these parameter settings in the future.
+
+\paragraph{Autopilot}  The morpher can be set to move the cursor randomly on its own to wander about in the space.   There are three parameters which affect this.  First, when the morpher is about to move the cursor, the {\it Autopilot Jump} specifies how far the cursor will be moved.  Second, the {\it Autopilot Smooth} specifies how much the movement will be totally random (jittery) rather than a mixture of moving forward and moving randomly.  Third, the {\it Autopilot Rate} specifies how often the cursor is moved (higher is faster).  Note that if your synthesizer requires significant pauses after sending a  parameter or sending a whole patch, this will significantly slow down the autopilot.  For example, if you are trickling, and the trickle rate is set to 20, then 20 trickles will be sent for each autopilot update, and if a single trickle is slow, the autopilot update rate will be very slow. 
 
 \paragraph{Exporting a Patch} When you are satisfied with the current sound at your Joystick cursor, you can save it by pressing the {\it Export...} button.  Your three options are to {\it Keep Patch}, which loads the cursor patch into the current editor, {\it Edit Patch}, which loads it into a new patch editor, and {\it Save to File}, which, well, saves it to a file.
 

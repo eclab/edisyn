@@ -1,4 +1,4 @@
-This directory contains various auxilliary resources that you might find
+This directory contains various auxiliary resources that you might find
 useful in conjunction with certain Edisyn patch editors.
 
 KawaiK1.iD8.RimSnare.syx
@@ -16,4 +16,4 @@ These are a collection of M-Audio Venom patches, originally in proprietary
 Vyzex format, converted to sysex for use in Edisyn.
 
 DX7.patchparams
-A collection of the parameters from almost 30,000 unique DX7 patches, gleaned from all corners of the globe, and stripped of their names.  We developed this collection to build the neural network for the DX7 hill-climber; it might be useful to other researchers.  The patches are one to a line, comma-separated, and the order of the parameters is the standard DX7 parameter order.  If you don't know what that is, see the array of strings edisyn.synth.yamahadx7.YamahaDX7.allParameters (minus the "name1" ... "name10")
+These aren't patches, but rather a collection of the *parameters*, in text, from almost 30,000 unique DX7 patches from the internet, stripped of their names.  We developed this collection to build the neural network for the DX7 hill-climber; it might be useful to other researchers.  The patches are one to a line, comma-separated, and the order of the parameters is the standard DX7 parameter order.  If you don't know what that is, see the array of strings edisyn.synth.yamahadx7.YamahaDX7.allParameters (minus the "name1" ... "name10")

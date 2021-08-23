@@ -7,6 +7,7 @@ package edisyn.synth.yamahadx7;
 
 import edisyn.*;
 import edisyn.gui.*;
+import edisyn.nn.*;
 import java.awt.*;
 import java.awt.geom.*;
 import javax.swing.border.*;
@@ -14,6 +15,7 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.util.*;
 import java.io.*;
+import java.util.zip.*;
 import javax.sound.midi.*;
 
 
@@ -23,7 +25,7 @@ import javax.sound.midi.*;
    @author Sean Luke
 */
 
-public class YamahaDX7 extends Synth
+public class YamahaDX7 extends Synth implements ProvidesNN
     {
     /// Various collections of parameter names for pop-up menus
         
@@ -80,11 +82,47 @@ public class YamahaDX7 extends Synth
     public static final String[] KS_CURVES = { "- Linear", "- Exp", "+ Exp", "+ Linear" };
     public static final String[] NOTES = {"A", "A#", "B", "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#" };
 
+    static Network encoder = null;
+    static Network decoder = null;
+    public static final int ENCODED_LENGTH = 225;
+
+    static Network getEncoder()
+        {
+        if (encoder == null)
+        {
+            try
+            	{
+            	InputStream stream = new GZIPInputStream(YamahaDX7.class.getResourceAsStream("encoder.txt.gz"));
+            	encoder = Network.loadFromStream(stream);
+            	}
+            catch (IOException ex) { throw new RuntimeException(ex); }
+        }
+        return encoder;
+        }
+
+    static Network getDecoder()
+        {
+        if (decoder == null)
+        {
+			try
+				{
+	            InputStream stream = new GZIPInputStream(YamahaDX7.class.getResourceAsStream("decoder.txt"));
+            decoder = Network.loadFromStream(stream);
+            	}
+            catch (IOException ex) { throw new RuntimeException(ex); }
+        }
+        return decoder;
+        }
+
 	boolean volca;
     JCheckBox volcaCheck;
     public static final String VOLCA_KEY = "Volca";
 
-    public boolean isVolca() { return volca; }
+    public boolean isVolca() 
+    	{ 
+    	return volca; 
+    	}
+    	
     public void setVolca(boolean val, boolean save)
         {
         if (save)
@@ -1205,5 +1243,58 @@ public class YamahaDX7 extends Synth
         data[2] = (byte) getChannelOut();
         return data; 
         }
+
+    public void randomizeNNModel()
+        {
+        model.latentVector = Network.shiftVectorUniform(new double[ENCODED_LENGTH], random, 1);
+        }
+
+	public double[] encode(Model model)
+	    {
+        // Hardcoded constant for now, really should fix this to be computed in the future
+        double[] vector = new double[ENCODED_LENGTH];
+        int index = 0;
+        // Ignore the name parameters, so -10
+		for(int i = 0; i < allParameters.length-10; i++)
+		{
+			String parameter = allParameters[i];
+			if (model.metricMinExists(parameter))
+			{
+				index = Network.encodeScaled(vector,index,model.get(parameter), model.getMin(parameter), model.getMax(parameter));
+			} 
+			else 
+			{
+				index = Network.encodeOneHot(vector,index,model.get(parameter), model.getMin(parameter), model.getMax(parameter));
+			}
+		}
+		return getEncoder().feed(vector);
+	    }
+	    
+	    
+	public Model decode(double[] vector)
+	    {
+		Model newModel = model.copy();
+		newModel.latentVector = vector;
+		vector = getDecoder().feed(vector);
+		int index = 0;
+        // Ignore the name parameters, so -10
+		for(int i = 0; i < allParameters.length-10; i++)
+		{
+			String parameter = allParameters[i];
+			if (model.metricMinExists(parameter))
+			{
+				int[] v = Network.decodeScaled(vector, index, model.getMin(parameter), model.getMax(parameter));
+				index = v[0];
+				newModel.set(parameter, v[1]);
+			} else 
+			{
+				int[] v = Network.decodeOneHot(vector, index, model.getMin(parameter), model.getMax(parameter));
+				index = v[0];
+				newModel.set(parameter, v[1]);
+			}
+			
+		}
+		return newModel;
+	    }
 
     }

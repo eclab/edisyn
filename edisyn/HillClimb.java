@@ -5,15 +5,16 @@
 
 package edisyn;
 
-import java.util.*;
-import java.io.*;
+import edisyn.synth.*;
+import edisyn.nn.*;
 import edisyn.gui.*;
 import javax.swing.*;
 import javax.swing.event.*;
 import javax.swing.border.*;
 import java.awt.*;
 import java.awt.event.*;
-import edisyn.synth.*;
+import java.util.*;
+import java.io.*;
 
 /***
 

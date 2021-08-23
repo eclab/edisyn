@@ -970,7 +970,7 @@ public class FuturesonusParva extends Synth
         bank.setMaximumRowCount(32);
         bank.setSelectedIndex(model.get("bank"));
                 
-        JTextField number = new JTextField("" + (model.get("number")), 3);
+        JTextField number = new SelectedTextField("" + (model.get("number")), 3);
                 
         while(true)
             {

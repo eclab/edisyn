@@ -108,7 +108,7 @@ public class WaldorfBlofeld extends Synth
             {
             public void actionPerformed(ActionEvent e)
                 {
-                JTextField number = new JTextField("" + (model.get("number") + 1), 3);
+                JTextField number = new SelectedTextField("" + (model.get("number") + 1), 3);
                 
                 int n = 0;
                 String title = "Write Patch as Pseudo-MPE";
@@ -132,6 +132,8 @@ public class WaldorfBlofeld extends Synth
 
                     if (result) 
                         break;
+                    if (!result)
+                    	return;
                     }           
                  
                 boolean send = getSendMIDI();
@@ -2407,7 +2409,7 @@ public class WaldorfBlofeld extends Synth
         bank.setMaximumRowCount(32);
         bank.setSelectedIndex(model.get("bank"));
                 
-        JTextField number = new JTextField("" + (model.get("number") + 1), 3);
+        JTextField number = new SelectedTextField("" + (model.get("number") + 1), 3);
                 
         while(true)
             {

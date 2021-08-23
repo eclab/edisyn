@@ -251,7 +251,7 @@ public class WaldorfBlofeldWavetable
                 
         while(true)
             {
-            JTextField id = new JTextField("" + _id);
+            JTextField id = new SelectedTextField("" + _id);
             JTextField number = new JTextField("" + _number);
             JTextField name = new JTextField(_name);
 
@@ -340,7 +340,7 @@ public class WaldorfBlofeldWavetable
                 
         while(true)
             {
-            JTextField id = new JTextField("" + _id);
+            JTextField id = new SelectedTextField("" + _id);
             JTextField number = new JTextField("" + _number);
             JTextField name = new JTextField(_name);
 

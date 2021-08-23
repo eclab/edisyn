@@ -1392,7 +1392,7 @@ public class KorgMicroKorg extends Synth
         bank.setSelectedIndex(model.get("bank"));
         
         int numberv = model.get("number");
-        JTextField number = new JTextField("" + (numberv / 8 + 1) + "" + (numberv % 8 + 1), 3);
+        JTextField number = new SelectedTextField("" + (numberv / 8 + 1) + "" + (numberv % 8 + 1), 3);
                 
         while(true)
             {

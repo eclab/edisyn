@@ -23,7 +23,7 @@ Novation's sysex is very strange in that the same exact sysex is meant to work f
 You can set any parameter you like, but note that the keyboards have certain capabilities the Zero does not, and vice versa.  Items specific to keyboards are marked with <b>[Key]</b> and the sole item specific to the Zero (Mk II only), namely the Cross-Fader, is marked with <b>[Zero]</b>.
 
 
-<br><br><h3>Sending Receiving a Patch</h3>
+<br><br><h3>Sending and Receiving a Patch</h3>
 The SL has limited sysex options.  Edisyn cannot request a patch (a "template") from the SL -- instead you must manually send Edisyn the patch from the unit.  
 
 <p>If you <b>Send to Current Patch</b> from Edisyn, it will upload the patch to the SL without a patch (template) number.  You'll then have to save it on the unit directly.  If you <b>Write to Patch...</b>, it'll save it directly at the patch number.
@@ -102,6 +102,9 @@ The SL also has a few bugs and oddities itself.
 <p><li>The entire reverse-engineered Novation ReMOTE SL sysex protocol is available at the end of the Java source code for Edisyn's SL editor.  Check it out!
 
 </ul>
+
+<p>Thanks to Focusrite PLC (Novation) for their assistance in gathering certain information helpful in development of this editor.
+
 
 
 <p><table border=0 cellpadding=0 cellspacing=5>

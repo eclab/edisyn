@@ -111,7 +111,7 @@ public class RolandJV880Multi extends Synth
             b = 0;
         bank.setSelectedIndex(b);
         
-        JTextField number = new JTextField("" + (model.get("number") + 1), 3);
+        JTextField number = new SelectedTextField("" + (model.get("number") + 1), 3);
 
         while(true)
             {

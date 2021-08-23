@@ -22,6 +22,7 @@ edisyn.synth.korgsg.KorgSGMulti	Korg SG Rack [Multi]
 edisyn.synth.korgwavestation.KorgWavestationPatch	Korg Wavestation SR [Patch]
 edisyn.synth.korgwavestation.KorgWavestationPerformance	Korg Wavestation SR [Performance]
 edisyn.synth.korgwavestation.KorgWavestationSequence	Korg Wavestation SR [Sequence]
+edisyn.synth.korgvolca.KorgVolca	Korg Volca Series
 edisyn.synth.maudiovenom.MAudioVenom	M-Audio Venom
 edisyn.synth.maudiovenom.MAudioVenomArp M-Audio Venom [Arp]
 edisyn.synth.maudiovenom.MAudioVenomGlobal	M-Audio Venom [Global]

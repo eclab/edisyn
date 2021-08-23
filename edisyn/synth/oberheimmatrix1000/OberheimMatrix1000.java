@@ -157,7 +157,7 @@ public class OberheimMatrix1000 extends Synth
 
     public boolean gatherPatchInfo(String title, Model change, boolean writing)
         {
-        JTextField val = new JTextField("" + model.get("bank") + (model.get("number") < 10 ? "0" : "") + model.get("number"), 3);
+        JTextField val = new SelectedTextField("" + model.get("bank") + (model.get("number") < 10 ? "0" : "") + model.get("number"), 3);
         
         while(true)
             {
@@ -236,7 +236,8 @@ public class OberheimMatrix1000 extends Synth
             };
         vbox.add(comp);
         hbox.add(vbox);
-
+	
+		vbox = new VBox();
         m1000Check = new JCheckBox("Matrix 1000");
         m1000Check.setSelected(m1000);
         m1000Check.addActionListener(new ActionListener()
@@ -249,7 +250,8 @@ public class OberheimMatrix1000 extends Synth
         m1000Check.setFont(Style.SMALL_FONT());
         m1000Check.setOpaque(false);
         m1000Check.setForeground(Style.TEXT_COLOR());
-        hbox.add(m1000Check);
+        vbox.add(m1000Check);
+        hbox.add(vbox);
         hbox.add(Strut.makeHorizontalStrut(50));
         
         globalCategory.add(hbox, BorderLayout.WEST);
@@ -2927,4 +2929,20 @@ public class OberheimMatrix1000 extends Synth
         return false;
         }
 
+/*
+	// print out the original patches among the 200 first ones
+	public static void main(String[] args)
+		{
+		foo:
+		for(int i = 0; i < 200; i++)
+			{
+			for(int j = 200; j < 1000; j++)
+				{
+				if (PATCH_NAMES[i].equals(PATCH_NAMES[j]))
+					continue foo;
+				}
+			System.err.println("" + i + "  " + PATCH_NAMES[i]);
+			}
+		}
+*/
     }

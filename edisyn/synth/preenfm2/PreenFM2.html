@@ -34,7 +34,7 @@ If you mutate or recombine patches (using randomize, merge, hill-climb, or nudge
 The PreenFM2 has an unusual approach to upoading and downloading sounds which can be challenging to use with an editor.  Specifically, it doesn't upload or download via sysex.  Rather, Edisyn can send and receive NRPN commands to change individual parameters.  
 
 <p>
-<p>As a result, <b>you cannot write patches and you cannot send them to specific locations. </b> To write a patch, you should send the current patch (which sends it to Instrument 1), and then manually save the patch on the PreenFM2.
+<p>As a result, <b>you cannot write patches on the PreenFM2 from Edisyn. </b> To write a patch, you should send the current patch (which sends it to Instrument 1), and then manually save the patch on the PreenFM2.
 
 <p><p>Because the PreenFM2's parameters don't come in all at one time as a single sysex dump, <b>merging</b> may be flakey.  Edisyn waits until it sees parameter number 399 (notionally the last PreenFM2 parameter sent) to come in.  If it doesn't see this parameter (perhaps due to a MIDI transmission error), then it may stay in merging mode.  You can get it out of merging mode simply by doing a Request Current Patch or Request Patch...
 

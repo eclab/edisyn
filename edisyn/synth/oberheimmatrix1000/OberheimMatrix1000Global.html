@@ -21,7 +21,9 @@ Multiple Matrix 1000 machines can be chained together to effectively form a sing
 <br><br><h3>Gotchas</h3> 
 
 <ul>
-<li>This editor deals with a global parameter region rather than a bank of patches.  But while sending to the current patch doesn't make much sense, it's important as a basic patch editor feature.  Thus when you send to the current patch, you're actually just writing (permanently) to the global region.  Likewise requesting the current patch reads from the global region.
+<li>Be careful with this editor: it allows you to mess things up, such as turning off Program (Patch) Changes (which will break patch writing from Edisyn), or mess with Memory Protect, group Mode, etc.  If you get stuck, you can reset the Matrix 1000 by turning it on while holding down the Enter button, then waiting a while.  Be sure to read the manual regardin what happens if you do this.
+
+<p><li>This editor deals with a global parameter region rather than a bank of patches.  But while sending to the current patch doesn't make much sense, it's important as a basic patch editor feature.  Thus when you send to the current patch, you're actually just writing (permanently) to the global region.  Likewise requesting the current patch reads from the global region.
 
 <p><li>There are no real-time individual parameter updates.
 </ul>

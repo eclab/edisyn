@@ -480,8 +480,8 @@ public class NovationSL extends Synth
     public boolean gatherPatchInfo(String title, Model change, boolean writing)
         {
         int num = model.get("number") + 1;
-        JTextField number = new JTextField("" + num, 2);
-
+        JTextField number = new SelectedTextField("" + num, 2);
+        
         while(true)
             {
             boolean result = showMultiOption(this, new String[] { "Patch Number"}, 

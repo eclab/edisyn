@@ -171,7 +171,7 @@ public class EmuProteus extends Synth
     public boolean gatherPatchInfo(String title, Model change, boolean writing)
         {
         int num = model.get("number");
-        JTextField number = new JTextField("" + (num < 10 ? "00" : (num < 100 ? "0" : "")) + num, 3);
+        JTextField number = new SelectedTextField("" + (num < 10 ? "00" : (num < 100 ? "0" : "")) + num, 3);
         
         while(true)
             {

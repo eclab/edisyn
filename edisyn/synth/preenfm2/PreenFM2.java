@@ -213,7 +213,7 @@ public class PreenFM2 extends Synth
             _bank -= 256;  
             }
                 
-        JTextField bank = new JTextField("" + _bank, 3);
+        JTextField bank = new SelectedTextField("" + _bank, 3);
         JTextField number = new JTextField("" + (model.get("number")), 3);
                 
         while(true)

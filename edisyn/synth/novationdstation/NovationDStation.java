@@ -138,7 +138,7 @@ public class NovationDStation extends Synth
       int num = model.get("number");
       if (writing && num < 25) 
       num = 25;
-      JTextField number = new JTextField("" + num, 2);
+      JTextField number = new SelectedTextField("" + num, 2);
 
       while(true)
       {

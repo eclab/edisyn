@@ -110,6 +110,10 @@ public abstract class Synth extends JComponent implements Updatable
     public JCheckBoxMenuItem sendsAllSoundsOffBetweenNotesMenu;
     /** The "Keep Next Popup Open" menu */
     public JCheckBoxMenuItem persistentChooserMenu;
+    /** The "Switching Menus Sends All Sounds Off" menu */
+	public JCheckBoxMenuItem clearNotesMenu;
+	/** The "Launch with Last Editor" menu */
+	public JCheckBoxMenuItem launchMenu;
     /** The "Blend" menu */
     public JMenu blend;
         
@@ -144,6 +148,8 @@ public abstract class Synth extends JComponent implements Updatable
     
     boolean testIncomingControllerMIDI;
     boolean testIncomingSynthMIDI;
+    
+    static boolean clearNotes;
 
 
     boolean parsingForMerge = false;
@@ -239,7 +245,8 @@ public abstract class Synth extends JComponent implements Updatable
 
         undo.setWillPush(false);  // instantiate undoes this
         random = new Random(System.currentTimeMillis());
-                
+        
+        clearNotes = getLastXAsBoolean("SwitchingSendsAllSoundsOff", null, true, false);        
         perChannelCCs = ("" + getLastX("PerChannelCC", getSynthNameLocal(), false)).equalsIgnoreCase("true");                  
         }
         
@@ -308,7 +315,7 @@ public abstract class Synth extends JComponent implements Updatable
                 // we call this here even though it's already been called as a result of frame.setVisible(true)
                 // because it's *after* setupMidi(...) and so it gives synths a chance to send
                 // a MIDI sysex message in response to the window becoming front.
-                if (synth.sendAllSoundsOffWhenWindowChanges())
+                if (clearNotes && synth.sendAllSoundsOffWhenWindowChanges())
                     {
                     synth.sendAllSoundsOff(); // not doSendAllSoundsOff(false) because we don't want to turn off the test notes
                     }
@@ -1036,7 +1043,8 @@ public abstract class Synth extends JComponent implements Updatable
     public boolean getSendsParametersAfterLoad() { return true; }
 
     /** Return whether we should be sending an ALL SOUNDS OFF / ALL NOTES OFF whenever we close the window,
-        switch to it, open it, etc.  By default this is normally true.  */
+        switch to it, open it, etc.  By default this is normally true.  Note that if the user has turned
+        off this feature in the menu, then sounds will not be sent regardless of this setting. */
     public boolean sendAllSoundsOffWhenWindowChanges() { return true; }
     
     /** Called when, during Sanity Check testing, another synth (synth2) contains a different value (obj2) for a given
@@ -3775,8 +3783,6 @@ public abstract class Synth extends JComponent implements Updatable
         else { nudgeMutationWeight = 0.10; nudgeMutation10.setSelected(true); }
 
 
-
-
         ButtonGroup nudgeRecombinationButtonGroup = new ButtonGroup();
         JMenu nudgeRecombination = new JMenu("Set Nudge Recombination");
         nudgeMenu.add(nudgeRecombination);
@@ -4853,7 +4859,7 @@ public abstract class Synth extends JComponent implements Updatable
         persistentChooserMenu.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
         menu.add(persistentChooserMenu);
         
-        JCheckBoxMenuItem launchMenu = new JCheckBoxMenuItem("Launch With Last Editor");
+        launchMenu = new JCheckBoxMenuItem("Launch with Last Editor");
         menu.add(launchMenu);
         launchMenu.setSelected(getLastXAsBoolean("ShowSynth", null, true, false));
         launchMenu.addActionListener(new ActionListener()
@@ -4863,6 +4869,20 @@ public abstract class Synth extends JComponent implements Updatable
                 setLastX("" + launchMenu.isSelected(), "ShowSynth", null);
                 }
             });
+
+        clearNotesMenu = new JCheckBoxMenuItem("Send All Sounds Off when Changing Windows");
+        menu.add(clearNotesMenu);
+        clearNotesMenu.setSelected(clearNotes);
+        clearNotesMenu.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                clearNotes = clearNotesMenu.isSelected();
+                setLastX("" + clearNotes, "SwitchingSendsAllSoundsOff", null);
+                }
+            });
+
+		menu.addSeparator();
 
         JMenuItem colorMenu = new JMenuItem("Change Color Scheme...");
         menu.add(colorMenu);
@@ -5063,10 +5083,11 @@ public abstract class Synth extends JComponent implements Updatable
 
             public void windowActivated(WindowEvent e)
                 {
-                if (sendAllSoundsOffWhenWindowChanges())
+                if (clearNotes && sendAllSoundsOffWhenWindowChanges())
                     {
                     sendAllSoundsOff(); // not doSendAllSoundsOff(false) because we don't want to turn off the test notes
                     }
+				updateMenu();
                 windowBecameFront();
                 lastActiveWindow = frame;
                 }
@@ -5082,7 +5103,13 @@ public abstract class Synth extends JComponent implements Updatable
         return frame;
         }
 
-    
+
+	void updateMenu()
+		{
+		launchMenu.setSelected(getLastXAsBoolean("ShowSynth", null, true, false));
+		clearNotesMenu.setSelected(clearNotes);
+		}
+	    
     void doPerChannelCCs(boolean val)
         {
         if (showSimpleConfirm("Change Per-Channel CC Settings?", "This clears all CCs.  Change your per-channel CC settings?"))
@@ -5627,7 +5654,7 @@ public abstract class Synth extends JComponent implements Updatable
         
     void doQuit()
         {
-        if (sendAllSoundsOffWhenWindowChanges())
+        if (clearNotes && sendAllSoundsOffWhenWindowChanges())
             {
             sendAllSoundsOff(); // not doSendAllSoundsOff(false) because we don't want to turn off the test notes
             }
@@ -5853,7 +5880,7 @@ public abstract class Synth extends JComponent implements Updatable
         
         else if (requestCloseWindow())
             {
-            if (sendAllSoundsOffWhenWindowChanges())
+            if (clearNotes && sendAllSoundsOffWhenWindowChanges())
                 {
                 sendAllSoundsOff(); // not doSendAllSoundsOff(false) because we don't want to turn off the test notes
                 }

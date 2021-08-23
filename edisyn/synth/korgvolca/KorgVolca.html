@@ -1,0 +1,479 @@
+<html><head></head> 
+<body> 
+ 
+<h1>Korg Volca Series</h1>  
+<h2>Patch Editor</h2> 
+ 
+<p>This is a combined patch editor for all MIDI-enabled Korg Volca devices: 
+ 
+<table> 
+<tr> 
+<td> 
+<ul> 
+<li>Bass 
+<li>Beats 
+<li>Drum (Single and Split Modes) 
+</ul> 
+<td> 
+<ul> 
+<li>FM (Including Pajen Firmware) 
+<li>Keys 
+<li>Kick 
+</ul> 
+<td> 
+<ul> 
+<li>NuBass 
+<li>Sample (Original and Pajen Firmware) 
+<li>Sample2 
+</ul> 
+</tr> 
+</table> 
+ 
+Why is this a combined editor? Partly because most Volcas have few parameters, no sysex, and no MIDI out. 
+And partly  
+because I didn't want to pollute Edisyn's list of synths with a zillion Volcas.  :-) (Actually Volcas  
+<i>are</i> believed to support sysex, perhaps for patch uploading and potentially downloading, but the sysex,  
+if any, is a closely-held Korg secret). 
+ 
+<br><br><h3>Communicating with Edisyn</h3> 
+ 
+Make certain that you have updated to the latest Korg or Pajen firmware revision on your Volca.  Turn "MIDI RX  
+Short Message" ON.  Set Edisyn's send/receive channel to your Volca's channel as appropriate. Then set the  
+Edisyn editor's Synth Type to the type of your Volca: this both displays the Volca's parameters and instructs  
+Edisyn to send data for that kind of unit.  The Volca Drum and Sample2 have two different MIDI modes: Single mode will
+respond to a single MIDI channel, while Multi (or Split) mode will break drums/parts out across multiple 
+channels.  Make sure you have set up your Volca to use the appropriate mode.
+ 
+<br><br><h3>Hints</h3> 
+ 
+<ul> 
+<li> 
+Every widget in this editor is a dial and not a checkbox or combobox, even when those would be far  
+more appropriate.	Why?  Because all Volcas are consistent in that they are 100% controlled by Continuous  
+Controller (CC) parameters always ranging from 0...127	even when there are only a few possible values.  For  
+this reason, I have opted to only use dials out of coding simplicity, though it can feel weird, especially  
+when there are only two possible values (like on/off). 
+ 
+<p><li>Because Volcas have no sysex format, this editor has its own sysex specification for saving Volca  
+parameters: see the Java source code.  This specification conveniently includes a 16-character patch name. 
+ 
+</ul> 
+ 
+<br><h3>About the Volca Bass</h3>  
+ 
+The Volca Bass has three options which do not exist on the front panel and can <i>only</i> be controlled over  
+MIDI (such as from Edisyn).  <b>Slide Time</b> determines the rate of a slide.  <b>Expression</b> is  
+effectively a seconary volume control.  And <b>Gate Time</b> controls the length of time between the start and  
+release of a sequencer note. 
+ 
+<p>The VCO Pitch is displayed either in cents ("c") or when appropriate in notes ("n"). 
+ 
+<br><br><h3>About the Volca Beats</h3> 
+ 
+To get Edisyn to play a drum note, set the "Test Notes Play" chooser to the  
+appropriate drum sound and start sending test notes.  This will override Edisyn's usual test note pitch to play  
+the appropriate drum. 
+ 
+<br><br><h3>About the Volca Drum [Single and Split]</h3> 
+
+You need to set your Volca Drum up properly or Edisyn will appear to be sending the wrong commands. 
+Specifically, the Volca Drum has two modes, <b>Split Mode</b> and <b>Single Mode</b>.  Split Mode is the default.  If  
+you have selected a MIDI channel, the unit changes to Single Mode.  To go back to Split mode, just deselect  
+your selected MIDI Channel (by pressing it again): the first six LEDS will light.  Edisyn has editors for both  
+modes.  Set up your Volca as you like, then use the appropriate editor.
+ 
+<p>In Split Mode, regardless of the setting of Edisyn's send/receive channel, the Volca Drum will commandeer  
+the first six MIDI channels, each corresponding to Parts 1 through 6 respectively.  Thus if you want to play a  
+drum note, just set the "Test Notes Play Part" combo-box to the appropriate part.  Don't hear anything?  Try  
+increasing both the Level and the Dry Gain. 
+
+<p>To get Edisyn to play a given drum part, set the "Test Notes Play Part" chooser to the
+appropriate drum part and start sending test notes.  This will override Edisyn's usual test note pitch to play
+the appropriate part.
+
+<p>A weird bug: it appears that the waveguide model cannot be changed by Edisyn unless the Volca Drum's sequencer is running. 
+ 
+<p>Remember that if motion sequencing is turned on, the Volca Drum will reset the changes you've made in Edisyn as you're playing a sequence. 
+
+<p>If you make changes to a part, you won't see those changes reflected on the Volca's screen in real time 
+unless you switch to that part on the Volca.
+ 
+<p>See the end of this document for a table on Korg Volca Drum pitch mappings. 
+ 
+ 
+ 
+<br><br><h3>About the Volca FM</h3> 
+ 
+The Transpose dial on Edisyn is the same as the Transpose slider on your Volca: and its effect on the Volca  
+depends on whether you've set it to transpose in semitones or in octaves.  Because Edisyn doesn't know what  
+you've set, it displays <i>both</i> of them in the form OCTAVES:SEMITONES. 
+ 
+<p>To upload a DX7 bank, just use Edisyn's DX7 editor. To upload a single DX7 patch and you're not using
+the /u/pajen firmware, you can use the DX7 editor but you need to check the "Korg Volca FM" checkbox: 
+see instructions in the DX7 editor About pane. 
+ 
+<p>If you are using /u/pajen's <a  
+href="https://www.reddit.com/r/volcas/comments/ezuzbt/volca_fm_firmware_109_unofficial_bugfix_and/">alternative  
+Volca Firmware 1.09</a> (and you really should) you can send real-time parameter changes to the Volca via  
+Edisyn's DX7 patch editor.  This firmware also has an option to turn off the mistake Korg made which requires  
+the "Korg Volca FM" checkbox discussed earlier, so you don't have to check that box if you're turned on that  
+firmware option.  See <a  
+href="https://www.reddit.com/r/volcas/comments/dj7f7v/volca_fm_firmware_108_unofficial_velocity_on_note/">here</a>  
+for a discussion of it (in the 1.08 documentation). 
+ 
+<p>/u/pajen's alternative firmware also includes a number of new CC messages, which you can modify from the  
+Volca editor.  See <a  
+href="https://www.reddit.com/r/volcas/comments/dj7f7v/volca_fm_firmware_108_unofficial_velocity_on_note/">the  
+explanation</a> on what and how Load Patch, Load Pattern, and Mod Wheel CC work. 
+ 
+ 
+<br><br><h3>About the Volca NuBass</h3> 
+ 
+The VTO Pitch is displayed either in cents ("c") or when appropriate in notes ("n"). 
+ 
+<br><br><h3>About the Volca Sample / Sample2 (Multi Channel)</h3> 
+ 
+This editor works for the Volca Sample, Sample (Pajeen Firmware), and <i>I think</i> the Sample2.  But <b>I do 
+not have any way to test it with the Sample2,</b> so I don't know for sure.  If you have a Sample2, please contact 
+me with bug reports. 
+ 
+<p>To get Edisyn to play a given sample part,  
+set the "Test Notes Play Part" chooser to the  
+appropriate sample part and start sending test notes.  This will override Edisyn's usual test note pitch to play  
+the appropriate part. 
+ 
+<P>Regardless of the setting of Edisyn's send/receive channel, the Volca Sample will commandeer the first ten MIDI  
+channels, each corresponding to Parts 1 through 10 respectively.  Thus if you want to play a sample for a given  
+part, you need to change Edisyn's send/receive channel to the MIDI channel corresponding to that part number. 
+
+<p>A Volca Sample bug: if you play a note via MIDI (rather than on the keyboard or through the sequencer),
+it will reset that part's level and speed.  Thus when Edisyn is sending test notes, you may be frustrated by 
+an inability to maintain level and speed.
+ 
+<p>If you are using /u/pajen's <a  
+href="https://www.reddit.com/r/volcas/comments/fzthpo/pajens_korg_volca_unofficial_firmware_information/">alternative  
+Volca Sample Firmware 7</a> (and you really should) there are additional parameters.  These are marked with a  
+<b>[P]</b>.  Edisyn doesn't implement the /u/pajen "Channel 11" CC parameters, as they do not add any  
+additional editing capabilities beyond the standard ones (they're meant to make things easier for sequencers  
+that don't do multiple channels). 
+ 
+<p>A few of the /u/pajen settings are ... strange.  You'd expect that binary  
+CC values have OFF as &lt; 64 and ON as >= 64.  But no!  For many of the dials,  
+OFF is 0 and ON is > 0.  And for Mute Part, ON is weirdly 0, and OFF is > 0.  Don't  
+ask.  Also Solo Part seems to work unusually.  To get a part to solo (or to un-solo),  
+you have to move the dial far away from Trig (0), then move it back to Trig to  
+"trigger" the operation.  Sometimes it doesn't work if you don't move far  
+enough away, or if you go too fast or too slow.  I've not determined the exact  
+rules for the procedure. Finally, the Part Select dial does exactly what its  
+name suggests: it merely selects the part.  And that's all.  It has no effect on  
+mute, solo, reversing, adding reverb, or looping a part. It just selects the  
+part on the unit. 
+ 
+<p>Because of their odd mappings, I would disable the mutation parameters  
+on all parts for /u/pajen reverse, mute, solo, reverb on/off, and loop prior to randomization,  
+nudging, hill-climbing, or morphing. 
+ 
+<br><br><h3>About the Volca Sample2 (Single Channel)</h3> 
+ 
+I <b>believe</b> that this editor should work properly with the Sample2 (Single Channel), but <b>I do  
+not have any way to test it with the Sample2,</b> so I cannot verify it.  It may be completely wrong!  
+If you have a Sample2, please contact me with bug reports.  
+ 
+<p>Korg never released a MIDI implementation for the Sample2, argh.  Based on my best guesses from  
+certain online postings, I believe that Part 1 may have more parameters than the other Parts, as shown 
+in the editor.  Again, this is a <b>guess</b>. 
+ 
+<p>To get Edisyn to play a given sample part,  
+set the "Test Notes Play Part" chooser to the  
+appropriate sample part and start sending test notes.  This will override Edisyn's usual test note pitch to play  
+the appropriate part. 
+ 
+ 
+<br><br><h3>Korg Volca Drum Pitch Table</h3> 
+ 
+This is from <a  
+href="https://www.reddit.com/r/volcas/comments/cxzyq7/korg_volca_drum_pitch_values_converted_to_note/">the  
+following posting</a> by /u/J0sephKnecht on reddit.  This table translates between Korg Volca Drum pitch  
+values, actual pitches, and frequencies.  Hopefully you may find it useful.  Note that as there are only 128 CC  
+values (spread over the 256 pitches), you can only dial every other pitch remotely via Edisyn. 
+ 
+<table><tr><td valign=top> 
+<table> 
+<tr><b>Value</b><td><b>Base</b><td><b>Offset</b><td><b>Freq<b></tr> 
+<tr><b></b><td><b>Note</b><td><b>(Cents)</b><td><b>(Hz)<b></tr> 
+<tr>01-08<td colspan=3>[unknown]</tr> 
+<tr>09<td>Ab0<td>-24<td>25.6</tr> 
+<tr>10<td>A0<td>-38<td>26.9</tr> 
+<tr>11<td>Bb0<td>-48<td>28.3</tr> 
+<tr>12<td>Bb0<td>+46<td>29.9</tr> 
+<tr>13<td>B0<td>+43<td>31.6</tr> 
+<tr>14<td>C1<td>+42<td>33.5</tr> 
+<tr>15<td>C#1<td>+42<td>35.5</tr> 
+<tr>16<td>D1<td>+44<td>37.6</tr> 
+<tr>17<td>Eb1<td>+45<td>39.9</tr> 
+<tr>18<td>E1<td>+47<td>42.3</tr> 
+<tr>19<td>F1<td>+48<td>44.9</tr> 
+<tr>20<td>F#1<td>+49<td>47.6</tr> 
+<tr>21<td>G1<td>+48<td>50.4</tr> 
+<tr>22<td>Ab1<td>+47<td>53.4</tr> 
+<tr>23<td>A1<td>+45<td>56.4</tr> 
+<tr>24<td>Bb1<td>+42<td>59.7</tr> 
+<tr>25<td>B1<td>+37<td>63.1</tr> 
+<tr>26<td>C2<td>+30<td>66.6</tr> 
+<tr>27<td>C#2<td>+23<td>70.2</tr> 
+<tr>28<td>D2<td>+14<td>74</tr> 
+<tr>29<td>Eb2<td>+4<td>78</tr> 
+<tr>30<td>E2<td>-8<td>82</tr> 
+<tr>31<td>F2<td>-22<td>86.2</tr> 
+<tr>32<td>F#2<td>-37<td>90.6</tr> 
+<tr>33<td>F#2<td>+47<td>95</tr> 
+<tr>34<td>G2<td>+29<td>99.7</tr> 
+<tr>35<td>Ab2<td>+10<td>104.4</tr> 
+<tr>36<td>A2<td>-11<td>109.3</tr> 
+<tr>37<td>Bb2<td>-33<td>114.3</tr> 
+<tr>38<td>Bb2<td>+43<td>119.5</tr> 
+<tr>39<td>B2<td>+19<td>124.8</tr> 
+<tr>40<td>C3<td>-8<td>130.3</tr> 
+<tr>41<td>C#3<td>-35<td>135.8</tr> 
+<tr>42<td>C#3<td>+37<td>141.5</tr> 
+<tr>43<td>D3<td>+7<td>147.4</tr> 
+<tr>44<td>Eb3<td>-24<td>153.4</tr> 
+<tr>45<td>Eb3<td>+44<td>159.5</tr> 
+<tr>46<td>E3<td>+10<td>165.8</tr> 
+<tr>47<td>F3<td>-24<td>172.2</tr> 
+<tr>48<td>F#3<td>+40<td>178.8</tr> 
+<tr>49<td>F#3<td>+4<td>185.4</tr> 
+<tr>50<td>G3<td>-33<td>192.3</tr> 
+<tr>51<td>G3<td>+28<td>199.2</tr> 
+<tr>52<td>Ab3<td>-11<td>206.3</tr> 
+<tr>53<td>Ab3<td>-49<td>213.5</tr> 
+<tr>54<td>A3<td>+7<td>220.9</tr> 
+<tr>55<td>Bb3<td>-35<td>228.4</tr> 
+<tr>56<td>Bb3<td>+22<td>236.1</tr> 
+<tr>57<td>B3<td>-21<td>243.9</tr> 
+<tr>58<td>B3<td>+34<td>251.8</tr> 
+<tr>59<td>C4<td>-12<td>259.8</tr> 
+<tr>60<td>C4<td>+42<td>268</tr> 
+<tr>61<td>C#4<td>-5<td>276.4</tr> 
+<tr>62<td>C#4<td>+47<td>284.9</tr> 
+<tr>63<td>D4<td>0<td>293.5</tr> 
+<tr>64<td>D4<td>+48<td>302.2</tr> 
+<tr>65<td>Eb4<td>0<td>311.1</tr> 
+<tr>66<td>Eb4<td>+49<td>320.1</tr> 
+<tr>67<td>E4<td>-2<td>329.3</tr> 
+<tr>68<td>E4<td>+47<td>338.6</tr> 
+<tr>69<td>F4<td>-6<td>348</tr> 
+<tr>70<td>F4<td>+41<td>357.6</tr> 
+<tr>71<td>F#4<td>-13<td>367.3</tr> 
+<tr>72<td>F#4<td>+33<td>377.2</tr> 
+<tr>73<td>G4<td>-21<td>387.2</tr> 
+<tr>74<td>G4<td>+23<td>397.3</tr> 
+<tr>75<td>Ab4<td>-33<td>407.6</tr> 
+<tr>76<td>Ab4<td>+11<td>418</tr> 
+<tr>77<td>A4<td>-46<td>428.5</tr> 
+<tr>78<td>A4<td>-3<td>439.2</tr> 
+<tr>79<td>A4<td>+39<td>450</tr> 
+<tr>80<td>Bb4<td>-19<td>461</tr> 
+<tr>81<td>Bb4<td>+22<td>472.1</tr> 
+<tr>82<td>B4<td>-37<td>483.3</tr> 
+<tr>83<td>B4<td>+3<td>494.7</tr> 
+<tr>84<td>B4<td>+43<td>506.2</tr> 
+<tr>85<td>C5<td>-18<td>517.8</tr> 
+<tr>86<td>C5<td>+21<td>529.6</tr> 
+<tr>87<td>C#5<td>-41<td>541.5</tr> 
+<tr>88<td>C#5<td>-3<td>553.6</tr> 
+<tr>89<td>C#5<td>+35<td>565.6</tr> 
+</table> 
+<td>&nbsp;&nbsp;&nbsp; 
+<td valign=top><table> 
+<tr><b>Value</b><td><b>Base</b><td><b>Offset</b><td><b>Freq<b></tr> 
+<tr><b></b><td><b>Note</b><td><b>(Cents)</b><td><b>(Hz)<b></tr> 
+<tr>90<td>D5<td>-27<td>578.1</tr> 
+<tr>91<td>D5<td>+10<td>590.6</tr> 
+<tr>92<td>D5<td>+46<td>603.2</tr> 
+<tr>93<td>Eb5<td>-18<td>615.9</tr> 
+<tr>94<td>Eb5<td>+18<td>628.8</tr> 
+<tr>95<td>E5<td>-46<td>641.8</tr> 
+<tr>96<td>E5<td>-11<td>655</tr> 
+<tr>97<td>E5<td>+24<td>668.3</tr> 
+<tr>98<td>F5<td>-42<td>681.7</tr> 
+<tr>99<td>F5<td>-8<td>695.3</tr> 
+<tr>100<td>F5<td>+26<td>709</tr> 
+<tr>101<td>F#5<td>-40<td>722.9</tr> 
+<tr>102<td>F#5<td>-7<td>736.8</tr> 
+<tr>103<td>F#5<td>+26<td>751</tr> 
+<tr>104<td>G5<td>-42<td>765.3</tr> 
+<tr>105<td>G5<td>-10<td>779.6</tr> 
+<tr>106<td>G5<td>+22<td>794.2</tr> 
+<tr>107<td>Ab5<td>-46<td>808.8</tr> 
+<tr>108<td>Ab5<td>-15<td>823.7</tr> 
+<tr>109<td>Ab5<td>+17<td>838.6</tr> 
+<tr>110<td>Ab5<td>+48<td>853.7</tr> 
+<tr>111<td>A5<td>-22<td>868.9</tr> 
+<tr>112<td>A5<td>+9<td>884.3</tr> 
+<tr>113<td>A5<td>+39<td>899.8</tr> 
+<tr>114<td>Bb5<td>-32<td>915.5</tr> 
+<tr>115<td>Bb5<td>-2<td>931.2</tr> 
+<tr>116<td>Bb5<td>+27<td>947.2</tr> 
+<tr>117<td>B5<td>-44<td>963.2</tr> 
+<tr>118<td>B5<td>-15<td>979.4</tr> 
+<tr>119<td>B5<td>+14<td>995.7</tr> 
+<tr>120<td>B5<td>+42<td>1012</tr> 
+<tr>121<td>C6<td>-30<td>1029</tr> 
+<tr>122<td>C6<td>-2<td>1046</tr> 
+<tr>123<td>C6<td>+26<td>1062</tr> 
+<tr>124<td>C#6<td>-46<td>1079</tr> 
+<tr>125<td>C#6<td>-19<td>1097</tr> 
+<tr>126<td>C#6<td>+8<td>1114</tr> 
+<tr>127<td>C#6<td>+35<td>1131</tr> 
+<tr>128<td>D6<td>-39<td>1149</tr> 
+<tr>129<td>D6<td>-12<td>1167</tr> 
+<tr>130<td>D6<td>+15<td>1185</tr> 
+<tr>131<td>D6<td>+40<td>1202</tr> 
+<tr>132<td>Eb6<td>-34<td>1220</tr> 
+<tr>133<td>Eb6<td>-8<td>1239</tr> 
+<tr>134<td>Eb6<td>+18<td>1257</tr> 
+<tr>135<td>Eb6<td>+43<td>1276</tr> 
+<tr>136<td>E6<td>-32<td>1294</tr> 
+<tr>137<td>E6<td>-7<td>1313</tr> 
+<tr>138<td>E6<td>+18<td>1332</tr> 
+<tr>139<td>E6<td>+42<td>1351</tr> 
+<tr>140<td>F6<td>-33<td>1370</tr> 
+<tr>141<td>F6<td>-9<td>1390</tr> 
+<tr>142<td>F6<td>+15<td>1409</tr> 
+<tr>143<td>F6<td>+39<td>1429</tr> 
+<tr>144<td>F#6<td>-37<td>1449</tr> 
+<tr>145<td>F#6<td>-13<td>1469</tr> 
+<tr>146<td>F#6<td>+10<td>1489</tr> 
+<tr>147<td>F#6<td>+33<td>1509</tr> 
+<tr>148<td>G6<td>-44<td>1529</tr> 
+<tr>149<td>G6<td>-20<td>1550</tr> 
+<tr>150<td>G6<td>+3<td>1570</tr> 
+<tr>151<td>G6<td>+26<td>1591</tr> 
+<tr>152<td>G6<td>+47<td>1611</tr> 
+<tr>153<td>Ab6<td>-30<td>1633</tr> 
+<tr>154<td>Ab6<td>-7<td>1654</tr> 
+<tr>155<td>Ab6<td>+15<td>1675</tr> 
+<tr>156<td>Ab6<td>+37<td>1698</tr> 
+<tr>157<td>A6<td>-42<td>1718</tr> 
+<tr>158<td>A6<td>-21<td>1739</tr> 
+<tr>159<td>A6<td>+2<td>1762</tr> 
+<tr>160<td>A6<td>+23<td>1784</tr> 
+<tr>161<td>A6<td>+45<td>1806</tr> 
+<tr>162<td>Bb6<td>-33<td>1829</tr> 
+<tr>163<td>Bb6<td>-13<td>1850</tr> 
+<tr>164<td>Bb6<td>+7<td>1872</tr> 
+<tr>165<td>Bb6<td>+29<td>1896</tr> 
+<tr>166<td>Bb6<td>+49<td>1919</tr> 
+<tr>167<td>B6<td>-30<td>1942</tr> 
+<tr>168<td>B6<td>-8<td>1967</tr> 
+<tr>169<td>B6<td>+12<td>1989</tr> 
+<tr>170<td>B6<td>+30<td>2010</tr> 
+<tr>171<td>B6<td>+49<td>2032</tr> 
+<tr>172<td>C7<td>-30<td>2057</tr> 
+</table> 
+<td>&nbsp;&nbsp;&nbsp; 
+<td valign=top><table> 
+<tr><b>Value</b><td><b>Base</b><td><b>Offset</b><td><b>Freq<b></tr> 
+<tr><b></b><td><b>Note</b><td><b>(Cents)</b><td><b>(Hz)<b></tr> 
+<tr>173<td>C7<td>-9<td>2082</tr> 
+<tr>174<td>C7<td>+11<td>2107</tr> 
+<tr>175<td>C7<td>+33<td>2133</tr> 
+<tr>176<td>C7<td>-48<td>2157</tr> 
+<tr>177<td>C#7<td>-30<td>2179</tr> 
+<tr>178<td>C#7<td>-13<td>2200</tr> 
+<tr>179<td>C#7<td>+5<td>2224</tr> 
+<tr>180<td>C#7<td>+26<td>2251</tr> 
+<tr>181<td>C#7<td>+46<td>2277</tr> 
+<tr>182<td>D7<td>-34<td>2303</tr> 
+<tr>183<td>D7<td>-14<td>2331</tr> 
+<tr>184<td>D7<td>+7<td>2358</tr> 
+<tr>185<td>D7<td>+24<td>2382</tr> 
+<tr>186<td>D7<td>+39<td>2403</tr> 
+<tr>187<td>Eb7<td>-46<td>2424</tr> 
+<tr>188<td>Eb7<td>-29<td>2448</tr> 
+<tr>189<td>Eb7<td>-9<td>2476</tr> 
+<tr>190<td>Eb7<td>+11<td>2505</tr> 
+<tr>191<td>Eb7<td>+31<td>2534</tr> 
+<tr>192<td>E7<td>-48<td>2564</tr> 
+<tr>193<td>E7<td>-28<td>2595</tr> 
+<tr>194<td>E7<td>-10<td>2622</tr> 
+<tr>195<td>E7<td>+5<td>2645</tr> 
+<tr>196<td>E7<td>+20<td>2667</tr> 
+<tr>197<td>E7<td>+33<td>2688</tr> 
+<tr>198<td>E7<td>+48<td>2711</tr> 
+<tr>199<td>F7<td>-35<td>2738</tr> 
+<tr>200<td>F7<td>-15<td>2770</tr> 
+<tr>201<td>F7<td>+5<td>2801</tr> 
+<tr>202<td>F7<td>+24<td>2832</tr> 
+<tr>203<td>F7<td>+43<td>2865</tr> 
+<tr>204<td>F#7<td>-36<td>2899</tr> 
+<tr>205<td>F#7<td>-17<td>2931</tr> 
+<tr>206<td>F#7<td>-1<td>2957</tr> 
+<tr>207<td>F#7<td>+12<td>2980</tr> 
+<tr>208<td>F#7<td>+24<td>3001</tr> 
+<tr>209<td>F#7<td>+35<td>3021</tr> 
+<tr>210<td>F#7<td>+47<td>3042</tr> 
+<tr>211<td>G7<td>-40<td>3065</tr> 
+<tr>212<td>G7<td>-24<td>3093</tr> 
+<tr>213<td>G7<td>+13<td>3158</tr> 
+<tr>214<td>G7<td>+26<td>3184</tr> 
+<tr>215<td>G7<td>+37<td>3204</tr> 
+<tr>216<td>G7<td>+48<td>3224</tr> 
+<tr>217<td>Ab7<td>-38<td>1625</tr> 
+<tr>218<td>Ab7<td>0<td>3323</tr> 
+<tr>219<td>Ab7<td>+16<td>3352</tr> 
+<tr>220<td>Ab7<td>+28<td>3377</tr> 
+<tr>221<td>Ab7<td>+40<td>3399</tr> 
+<tr>222<td>A7<td>-50<td>3420</tr> 
+<tr>223<td>A7<td>-40<td>3440</tr> 
+<tr>224<td>A7<td>-29<td>3462</tr> 
+<tr>225<td>A7<td>-17<td>3485</tr> 
+<tr>226<td>A7<td>-4<td>3511</tr> 
+<tr>227<td>A7<td>+20<td>3563</tr> 
+<tr>228<td>A7<td>+38<td>3600</tr> 
+<tr>229<td>A7<td>+48<td>3621</tr> 
+<tr>230<td>Bb7<td>-25<td>3676</tr> 
+<tr>231<td>Bb7<td>-16<td>3694</tr> 
+<tr>232<td>Bb7<td>-7<td>3714</tr> 
+<tr>233<td>Bb7<td>+18<td>3771</tr> 
+<tr>234<td>Bb7<td>+27<td>3792</tr> 
+<tr>235<td>Bb7<td>+38<td>3810</tr> 
+<tr>236<td>B7<td>-45<td>3850</tr> 
+<tr>237<td>B7<td>-8<td>3934</tr> 
+<tr>238<td>B7<td>+3<td>3957</tr> 
+<tr>239<td>B7<td>+11<td>3976</tr> 
+<tr>240<td>B7<td>+19<td>3994</tr> 
+<tr>241<td>B7<td>+26<td>4011</tr> 
+<tr>242<td>B7<td>+33<td>4028</tr> 
+<tr>243<td>B7<td>+41<td>4046</tr> 
+<tr>244<td>B7<td>+49<td>4064</tr> 
+<tr>245<td>C8<td>-9<td>4164</tr> 
+<tr>246<td>C8<td>+4<td>4212</tr> 
+<tr>247<td>C8<td>+16<td>4230</tr> 
+<tr>248<td>C8<td>+23<td>4245</tr> 
+<tr>249<td>C#8<td>-43<td>4326</tr> 
+<tr>250<td>C#8<td>-35<td>4346</tr> 
+<tr>251<td>C#8<td>-29<td>4362</tr> 
+<tr>252<td>C#8<td>-22<td>4380</tr> 
+<tr>253<td>C#8<td>-14<td>4398</tr> 
+<tr>254<td colspan=3>[unknown]</tr> 
+<tr>255<td>C#8<td>+23<td>4500</tr> 
+</table> 
+</tr></table> 
+ 
+ 
+<p>Thanks to Dave Mac (Volca Facebook Group) for providing the NuBass pitch values. 
+ 
+<p><table border=0 cellpadding=0 cellspacing=5> 
+<tr> 
+<td align=right>By&nbsp;&nbsp;&nbsp; 
+<td><b>Sean Luke</b> 
+<tr> 
+<td align=right>Date&nbsp;&nbsp;&nbsp; 
+<td>August 2021 
+</table> 
+ 
+ 
+ 
+ 

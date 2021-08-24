@@ -64,6 +64,7 @@ public class YamahaDX7 extends Synth implements ProvidesNN
         new ImageIcon(YamahaDX7.class.getResource("Algorithm31.png")),
         new ImageIcon(YamahaDX7.class.getResource("Algorithm32.png")),
         };
+        
     public static final String[] LFO_WAVES = { "Triangle", "Saw Down", "Saw Up", "Square", "Sine", "Sample & Hold" };
     public static final String[] DX9_TEXT = { " [DX9: 1] ", "", "", "", " [DX9: 5] ", "", " [DX9: 4] ", " [DX9: 3] ", "", "", "", "", "", " [DX9: 2] ", "", "", "", "", "", "", "", " [DX9: 6] ", "", "", "", "", "", "", "", "", " [DX9: 7] ", " [DX9: 8] " };
 
@@ -106,7 +107,7 @@ public class YamahaDX7 extends Synth implements ProvidesNN
             {
             try
                 {
-                InputStream stream = new GZIPInputStream(YamahaDX7.class.getResourceAsStream("decoder.txt"));
+                InputStream stream = new GZIPInputStream(YamahaDX7.class.getResourceAsStream("decoder.txt.gz"));
                 decoder = Network.loadFromStream(stream);
                 }
             catch (IOException ex) { throw new RuntimeException(ex); }
@@ -1256,8 +1257,9 @@ public class YamahaDX7 extends Synth implements ProvidesNN
         // Hardcoded constant for now, really should fix this to be computed in the future
         double[] vector = new double[ENCODED_LENGTH];
         int index = 0;
+        
         // Ignore the name parameters, so -10
-        for(int i = 0; i < allParameters.length-10; i++)
+        for(int i = 0; i < allParameters.length- 10; i++)
             {
             String parameter = allParameters[i];
             if (model.metricMinExists(parameter))
@@ -1279,8 +1281,9 @@ public class YamahaDX7 extends Synth implements ProvidesNN
         newModel.latentVector = vector;
         vector = getDecoder().feed(vector);
         int index = 0;
+        
         // Ignore the name parameters, so -10
-        for(int i = 0; i < allParameters.length-10; i++)
+        for(int i = 0; i < allParameters.length - 10; i++)
             {
             String parameter = allParameters[i];
             if (model.metricMinExists(parameter))
@@ -1288,7 +1291,8 @@ public class YamahaDX7 extends Synth implements ProvidesNN
                 int[] v = Network.decodeScaled(vector, index, model.getMin(parameter), model.getMax(parameter));
                 index = v[0];
                 newModel.set(parameter, v[1]);
-                } else 
+                } 
+            else 
                 {
                 int[] v = Network.decodeOneHot(vector, index, model.getMin(parameter), model.getMax(parameter));
                 index = v[0];

@@ -110,8 +110,10 @@ public class Network implements Layer
         {
         double maxVal = vector[index];
         int maxInd = index;
-        for(int i = index; i < index + (max-min) + 1; i++){
-            if (vector[i] > maxVal){
+        for(int i = index; i < index + (max-min) + 1; i++)
+        {
+            if (vector[i] > maxVal)
+            {
                 maxVal = vector[i];
                 maxInd = i;
                 }
@@ -130,6 +132,54 @@ public class Network implements Layer
         return out;
         }
 
+    public static double[] shiftVectorGaussian(double[] vector, Random random, double weight)
+        {
+        double[] out = new double[vector.length];
+        for(int i = 0; i < vector.length; i++)
+            {
+            out[i] = vector[i] + (random.nextGaussian() * weight);
+            }
+        return out;
+        }
+
+	static final int TRIES = 20;
+    public static double[] shiftVectorGaussianBounded(double[] vector, Random random, double weight, double bounds)
+        {
+        double[] out = new double[vector.length];
+        for(int i = 0; i < vector.length; i++)
+            {
+            double noise = 0;
+            for(int tries = 0; tries < TRIES; tries++)
+            	{
+             	noise = random.nextGaussian() * weight;
+            	if (vector[i] + noise <= bounds && vector[i] + noise >= -bounds) 
+            		break;
+            	}
+            out[i] = vector[i] + noise;
+            }
+        return out;
+        }
+
+    public static double[] vectorMean(double[] vec1, double[] vec2)
+        {
+        double out[] = new double[vec2.length];
+        for(int i = 0; i < vec1.length; i++)
+            {
+            out[i] = (vec1[i] + vec2[i])/2;
+            }
+        return out;
+
+        }
+    public static double[] vectorMean(double[] vec1, double[] vec2, double[] vec3)
+        {
+        double out[] = new double[vec2.length];
+        for(int i = 0; i < vec1.length; i++)
+            {
+            out[i] = (vec1[i] + vec2[i] + vec3[i])/3;
+            }
+        return out;
+        }
+            
     /*public static void main(String[] args){
       Network encoder = Network.loadFromStream(Network.class);
       double[] out = new double[1];

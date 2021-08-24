@@ -132,9 +132,9 @@ public class RolandD110Tone extends Synth
     boolean altLayout = true;
         
     // Sysex dumps from the emitLocation are TEMP_TONE_LENGTH long
-    public static final int TEMP_TONE_LENGTH = 256;  // 10 bytes + 246 data bytes
+    public static final int TEMP_TONE_LENGTH = 246;  
     // Sysex dumps from a RAM slot are MEMORY_TONE_LENGTH long
-    public static final int MEMORY_TONE_LENGTH = 266;  // 10 bytes + 256 data bytes
+    public static final int MEMORY_TONE_LENGTH = 256;  
 
     public RolandD110Tone()
         {
@@ -1204,27 +1204,36 @@ public class RolandD110Tone extends Synth
         }
 
 
+
+/// August 24, 2021: there appear to have been major errors in this with regard to 
+/// address computation.  However I don't have a D-110 any more so I can't test my
+/// fix, it just appears to output the right addresses according to the spec.
         
     public byte[] emit(String key)
         {
         if (key.equals("number")) return new byte[0];  // this is not emittable
 
-        byte AA = (byte)(0x04 + emitLocation * TEMP_TONE_LENGTH);
-        byte BB = (byte)0x00;
-        byte CC = (byte)0x00;
+        byte AA = (byte)(0x04);
+        int loc = emitLocation * TEMP_TONE_LENGTH;
+    	byte BB = (byte)((loc >>> 7) & 127);
+        byte CC = (byte)(loc & 127);
         
         // figure out the address
 
         if (key.endsWith("mute"))
             {
             CC += (byte)0x0C;
+            if (CC < 0) { CC = (byte)(CC & 127); BB += 1; }
             }
         else if (key.startsWith("p1"))
             {
             CC = (byte)(CC + 0x0E);
+            if (CC < 0) { CC = (byte)(CC & 127); BB += 1; }
+            
             if (key.endsWith("wgwaveform") || key.endsWith("wgpcmwavenumber"))
                 {
                 CC += (byte)0x04;               // we'll start at wgwaveform and do both of them
+            	if (CC < 0) { CC = (byte)(CC & 127); BB += 1; }
                 }
             else
                 {
@@ -1236,9 +1245,12 @@ public class RolandD110Tone extends Synth
         else if (key.startsWith("p2"))
             {
             CC = (byte)(CC + 0x48);
+            if (CC < 0) { CC = (byte)(CC & 127); BB += 1; }
+            
             if (key.endsWith("wgwaveform") || key.endsWith("wgpcmwavenumber"))
                 {
                 CC += (byte)0x04;               // we'll start at wgwaveform and do both of them
+            	if (CC < 0) { CC = (byte)(CC & 127); BB += 1; }
                 }
             else
                 {
@@ -1251,9 +1263,12 @@ public class RolandD110Tone extends Synth
             {
             BB = (byte)(BB + 0x01);
             CC = (byte)(CC + 0x02);
+            if (CC < 0) { CC = (byte)(CC & 127); BB += 1; }
+            
             if (key.endsWith("wgwaveform") || key.endsWith("wgpcmwavenumber"))
                 {
                 CC += (byte)0x04;               // we'll start at wgwaveform and do both of them
+            	if (CC < 0) { CC = (byte)(CC & 127); BB += 1; }
                 }
             else
                 {
@@ -1266,9 +1281,12 @@ public class RolandD110Tone extends Synth
             {
             BB = (byte)(BB + 0x01);
             CC = (byte)(CC + 0x3C);
+            if (CC < 0) { CC = (byte)(CC & 127); BB += 1; }
+            
             if (key.endsWith("wgwaveform") || key.endsWith("wgpcmwavenumber"))
                 {
                 CC += (byte)0x04;               // we'll start at wgwaveform and do both of them
+            	if (CC < 0) { CC = (byte)(CC & 127); BB += 1; }
                 }
             else
                 {
@@ -1292,9 +1310,10 @@ public class RolandD110Tone extends Synth
                 // The first parameter will be 1 (patchname is 0).  So we need to skip to 0x0A - 1
                 CC += (byte)(0x0A - 1);
                 CC = (byte)(CC + ((Integer)(allCommonParametersToIndex.get(key))).intValue());
+            	if (CC < 0) { CC = (byte)(CC & 127); BB += 1; }
                 }
             }
-        
+                    
         byte[] payload = getData(key);
 
         // Handle irregularities in multi-byte data
@@ -1404,7 +1423,7 @@ public class RolandD110Tone extends Synth
             tempModel = getModel();
 
         // set up buffer
-        byte[] buf = new byte[toWorkingMemory ? TEMP_TONE_LENGTH : TEMP_TONE_LENGTH];
+        byte[] buf = new byte[toWorkingMemory ? TEMP_TONE_LENGTH : MEMORY_TONE_LENGTH];
         
         buf[0] = (byte)0xF0;
         buf[1] = (byte)0x41;
@@ -1413,7 +1432,7 @@ public class RolandD110Tone extends Synth
         buf[4] = (byte)0x12;
         if (toWorkingMemory)
             {
-            int loc = emitLocation * (TEMP_TONE_LENGTH - 10);
+            int loc = emitLocation * TEMP_TONE_LENGTH;
             byte LSB = (byte)(loc & 127);
             byte MSB = (byte)((loc >>> 7) & 127);
             buf[5] = (byte)0x04;
@@ -1482,9 +1501,9 @@ public class RolandD110Tone extends Synth
     public byte[] requestCurrentDump()
         {
         byte AA = (byte)(0x04);
-        int loc = emitLocation * (TEMP_TONE_LENGTH - 10);
-        byte BB = (byte)(loc & 127);
-        byte CC = (byte)((loc >>> 7) & 127);
+        int loc = emitLocation * TEMP_TONE_LENGTH;
+        byte BB = (byte)((loc >>> 7) & 127);
+        byte CC = (byte)(loc & 127);
 
         // total length is 246.  Not sure why it's not 256
         byte LSB = (byte)118;           // 0x76

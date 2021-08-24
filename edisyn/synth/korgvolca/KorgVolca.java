@@ -573,11 +573,11 @@ public class KorgVolca extends Synth
         ((LabelledDial)comp).addAdditionalLabel("Level");
         hbox.add(comp);
 
-        comp = new LabelledDial("Lo Tom", this, "beatslotomlevel", color, 0, 127);
+        comp = new LabelledDial(" Lo Tom ", this, "beatslotomlevel", color, 0, 127);
         ((LabelledDial)comp).addAdditionalLabel("Level");
         hbox.add(comp);
 
-        comp = new LabelledDial("Hi Tom", this, "beatshitomlevel", color, 0, 127);
+        comp = new LabelledDial(" Hi Tom ", this, "beatshitomlevel", color, 0, 127);
         ((LabelledDial)comp).addAdditionalLabel("Level");
         hbox.add(comp);
 

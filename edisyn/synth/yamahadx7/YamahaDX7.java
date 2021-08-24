@@ -1247,9 +1247,10 @@ public class YamahaDX7 extends Synth implements ProvidesNN
 
     public void randomizeNNModel(double weight)
         {
-        // SEAN QUESTION
-        // does the weight for shiftVectorUniform run between 0 and 1 inclusive?
-        model.latentVector = Network.shiftVectorUniform(new double[ENCODED_LENGTH], random, weight);
+        /// SEAN QUESTIONS
+        // Should we bound this to +/ProvidesNN.MAX_BOUNDS ?
+        // Should we then change the weight to weight * 2 * ProvidesNN.MAX_BOUNDS to increase uniform randomization?  
+        model.latentVector = Network.shiftVectorGaussian(new double[ENCODED_LENGTH], random, weight * ProvidesNN.WEIGHT_SCALING);
         }
 
     public double[] encode(Model model)

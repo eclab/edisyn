@@ -1250,7 +1250,16 @@ public class YamahaDX7 extends Synth implements ProvidesNN
         /// SEAN QUESTIONS
         // Should we bound this to +/ProvidesNN.MAX_BOUNDS ?
         // Should we then change the weight to weight * 2 * ProvidesNN.MAX_BOUNDS to increase uniform randomization?  
-        model.latentVector = Network.shiftVectorGaussian(new double[ENCODED_LENGTH], random, weight * ProvidesNN.WEIGHT_SCALING);
+
+        // VI ANSWERS:
+        // No for the first one
+        // 
+        // 0.5 * ProvidesNN.WEIGHT_SCALING to the second: We want to make sure it
+        // can jump all the way to the other side if the weight is cranked to max.
+
+        // I've made the changes below
+
+        model.latentVector = Network.shiftVectorGaussianBounded(new double[ENCODED_LENGTH], random, ProvidesNN.WEIGHT_SCALING * weight, ProvidesNN.WEIGHT_SCALING * 0.5);
         }
 
     public double[] encode(Model model)
@@ -1286,15 +1295,19 @@ public class YamahaDX7 extends Synth implements ProvidesNN
         // Ignore the name parameters, so -10
         for(int i = 0; i < allParameters.length - 10; i++)
             {
+            // for each parameter
             String parameter = allParameters[i];
+            // check if it's metric
             if (model.metricMinExists(parameter))
                 {
+                // if it is, decode the value as a scaled value
                 int[] v = Network.decodeScaled(vector, index, model.getMin(parameter), model.getMax(parameter));
                 index = v[0];
                 newModel.set(parameter, v[1]);
                 } 
             else 
                 {
+                // Otherwise, it's categorical: decode it as a one-hot encoded value
                 int[] v = Network.decodeOneHot(vector, index, model.getMin(parameter), model.getMax(parameter));
                 index = v[0];
                 newModel.set(parameter, v[1]);

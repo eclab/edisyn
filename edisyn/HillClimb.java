@@ -1390,13 +1390,13 @@ public class HillClimb extends SynthPanel
 
     void produceNN(Random random, String[] keys, double weight, Model a)
         {
-        //System.out.println(weight);
         if(a.latentVector == null)
             {
             a.latentVector = ((ProvidesNN)synth).encode(a);
             }
         for(int i = 0; i < NUM_CANDIDATES; i++)
             {
+            // A
             currentModels[i] = ((ProvidesNN)synth).decode(Network.shiftVectorGaussian(a.latentVector, random, weight * ProvidesNN.WEIGHT_SCALING));
             }
         shuffle(random, currentModels, 0, NUM_CANDIDATES);
@@ -1404,7 +1404,6 @@ public class HillClimb extends SynthPanel
 
     void produceNN(Random random, String[] keys, double weight, Model a, Model b)
         {
-        //System.out.println(weight);
         int numStages = NUM_CANDIDATES / STAGE_SIZE;
         if(a.latentVector == null)
             {
@@ -1419,14 +1418,17 @@ public class HillClimb extends SynthPanel
             {
             for(int i = 0; i < STAGE_SIZE/2; i++)
                 {
+                // A
                 currentModels[j*STAGE_SIZE + i] = ((ProvidesNN)synth).decode(Network.shiftVectorGaussian(a.latentVector, random, weight * ProvidesNN.WEIGHT_SCALING));
                 }
             for(int i = STAGE_SIZE/2; i < 3*STAGE_SIZE/4; i++)
                 {
+                // B
                 currentModels[j*STAGE_SIZE + i] = ((ProvidesNN)synth).decode(Network.shiftVectorGaussian(b.latentVector, random, weight * ProvidesNN.WEIGHT_SCALING));
                 }
             for(int i = 3*STAGE_SIZE/4; i < STAGE_SIZE; i++)
                 {
+                // C
                 currentModels[j*STAGE_SIZE + i] = ((ProvidesNN)synth).decode(Network.shiftVectorGaussian(Network.vectorMean(a.latentVector, b.latentVector), random, weight * ProvidesNN.WEIGHT_SCALING));
                 }
             }
@@ -1438,7 +1440,6 @@ public class HillClimb extends SynthPanel
 
     void produceNN(Random random, String[] keys, double weight, Model a, Model b, Model c)
         {
-        //System.out.println(weight);
         int numStages = NUM_CANDIDATES / STAGE_SIZE;
         if(a.latentVector == null)
             {
@@ -1455,21 +1456,34 @@ public class HillClimb extends SynthPanel
                 
         for(int j = 0; j < numStages; j++)
             {
+            // A
             currentModels[j*STAGE_SIZE + 0] = ((ProvidesNN)synth).decode(Network.shiftVectorGaussian(a.latentVector, random, weight * ProvidesNN.WEIGHT_SCALING));
             currentModels[j*STAGE_SIZE + 1] = ((ProvidesNN)synth).decode(Network.shiftVectorGaussian(a.latentVector, random, weight * ProvidesNN.WEIGHT_SCALING));
             currentModels[j*STAGE_SIZE + 2] = ((ProvidesNN)synth).decode(Network.shiftVectorGaussian(a.latentVector, random, weight * ProvidesNN.WEIGHT_SCALING));
             currentModels[j*STAGE_SIZE + 3] = ((ProvidesNN)synth).decode(Network.shiftVectorGaussian(a.latentVector, random, weight * ProvidesNN.WEIGHT_SCALING));
+
+            // B
             currentModels[j*STAGE_SIZE + 4] = ((ProvidesNN)synth).decode(Network.shiftVectorGaussian(b.latentVector, random, weight * ProvidesNN.WEIGHT_SCALING));
             currentModels[j*STAGE_SIZE + 5] = ((ProvidesNN)synth).decode(Network.shiftVectorGaussian(b.latentVector, random, weight * ProvidesNN.WEIGHT_SCALING));
             currentModels[j*STAGE_SIZE + 6] = ((ProvidesNN)synth).decode(Network.shiftVectorGaussian(b.latentVector, random, weight * ProvidesNN.WEIGHT_SCALING));
+
+            // C
             currentModels[j*STAGE_SIZE + 7] = ((ProvidesNN)synth).decode(Network.shiftVectorGaussian(c.latentVector, random, weight * ProvidesNN.WEIGHT_SCALING));
             currentModels[j*STAGE_SIZE + 8] = ((ProvidesNN)synth).decode(Network.shiftVectorGaussian(c.latentVector, random, weight * ProvidesNN.WEIGHT_SCALING));
+
+            // Mean(A, B)
             currentModels[j*STAGE_SIZE + 9] = ((ProvidesNN)synth).decode(Network.shiftVectorGaussian(Network.vectorMean(a.latentVector, b.latentVector), random, weight * ProvidesNN.WEIGHT_SCALING));
             currentModels[j*STAGE_SIZE + 10] = ((ProvidesNN)synth).decode(Network.shiftVectorGaussian(Network.vectorMean(a.latentVector, b.latentVector), random, weight * ProvidesNN.WEIGHT_SCALING));
+
+            // Mean(A, C)
             currentModels[j*STAGE_SIZE + 11] = ((ProvidesNN)synth).decode(Network.shiftVectorGaussian(Network.vectorMean(a.latentVector, c.latentVector), random, weight * ProvidesNN.WEIGHT_SCALING));
             currentModels[j*STAGE_SIZE + 12] = ((ProvidesNN)synth).decode(Network.shiftVectorGaussian(Network.vectorMean(a.latentVector, c.latentVector), random, weight * ProvidesNN.WEIGHT_SCALING));
+
+            // Mean(B, C)
             currentModels[j*STAGE_SIZE + 13] = ((ProvidesNN)synth).decode(Network.shiftVectorGaussian(Network.vectorMean(b.latentVector, c.latentVector), random, weight * ProvidesNN.WEIGHT_SCALING));
             currentModels[j*STAGE_SIZE + 14] = ((ProvidesNN)synth).decode(Network.shiftVectorGaussian(Network.vectorMean(b.latentVector, c.latentVector), random, weight * ProvidesNN.WEIGHT_SCALING));
+
+            // Mean(A,B,C)
             currentModels[j*STAGE_SIZE + 15] = ((ProvidesNN)synth).decode(Network.shiftVectorGaussian(Network.vectorMean(a.latentVector, b.latentVector, c.latentVector), random, weight * ProvidesNN.WEIGHT_SCALING));
             }
         shuffle(random, currentModels, 0, STAGE_SIZE);

@@ -1696,8 +1696,8 @@ public class KorgVolca extends Synth
         ((LabelledDial)comp).addAdditionalLabel("Attack");
         hbox.add(comp);
         
-        comp = new LabelledDial("Amp", this, "kickamprelease", color, 0, 127);
-        ((LabelledDial)comp).addAdditionalLabel("Release");
+        comp = new LabelledDial("Amp", this, "kickampdecay", color, 0, 127);
+        ((LabelledDial)comp).addAdditionalLabel("Decay");
         hbox.add(comp);
 
         // AR
@@ -1868,6 +1868,7 @@ public class KorgVolca extends Synth
             public String map(int value)
                 {
                 if (value == 0) return "Off";
+                else if (value > 63) return "Toggle";
                 else return "On";
                 }
             };
@@ -1878,8 +1879,9 @@ public class KorgVolca extends Synth
             {
             public String map(int value)
                 {
-                if (value == 0) return "On";
-                else return "Off";
+                if (value == 0) return "Off";
+                else if (value > 63) return "Toggle";
+                else return "On";
                 }
             };
         ((LabelledDial)comp).addAdditionalLabel("Part [P]");
@@ -1889,8 +1891,9 @@ public class KorgVolca extends Synth
             {
             public String map(int value)
                 {
-                if (value == 0) return "Trig";
-                else return "--";
+                if (value == 0) return "Off";
+                else if (value > 63) return "Toggle";
+                else return "On";
                 }
             };
         ((LabelledDial)comp).addAdditionalLabel("Part [P]");
@@ -1946,6 +1949,7 @@ public class KorgVolca extends Synth
             public String map(int value)
                 {
                 if (value == 0) return "Off";
+                else if (value > 63) return "Toggle";
                 else return "On";
                 }
             };
@@ -1958,6 +1962,7 @@ public class KorgVolca extends Synth
             public String map(int value)
                 {
                 if (value == 0) return "Off";
+                else if (value > 63) return "Toggle";
                 else return "On";
                 }
             };
@@ -2745,7 +2750,7 @@ public class KorgVolca extends Synth
         "kickpulsecolor",
         "kickpulselevel",
         "kickampattack",
-        "kickamprelease",
+        "kickampdecay",
         "kickdrive",
         "kicktone",
         "kickresonatorpitch",
@@ -3655,7 +3660,7 @@ public class KorgVolca extends Synth
     kickpulsecolor
     kickpulselevel
     kickampattack
-    kickamprelease
+    kickampdecay
     kickdrive
     kicktone
     kickresonatorpitch

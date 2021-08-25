@@ -1423,7 +1423,7 @@ public class RolandD110Tone extends Synth
             tempModel = getModel();
 
         // set up buffer
-        byte[] buf = new byte[toWorkingMemory ? TEMP_TONE_LENGTH : MEMORY_TONE_LENGTH];
+        byte[] buf = new byte[(toWorkingMemory ? TEMP_TONE_LENGTH : MEMORY_TONE_LENGTH) + 10];		// need 10 extra for the header, checksum, and 0xF7
         
         buf[0] = (byte)0xF0;
         buf[1] = (byte)0x41;

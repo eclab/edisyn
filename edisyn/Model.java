@@ -692,8 +692,28 @@ public class Model implements Cloneable
         lastKey is reset in the model, and the listeners are updated.  */
     public void copyValuesTo(Model model)
         {
+        copyValuesTo(model, (String[])(storage.keySet().toArray(new String[0])));
+        }
+
+
+	/** Copies all keys EXCEPT the given keys to the given model.  This assumes that the models are the same; only values are transferred.
+        lastKey is reset in the model, and the listeners are updated.  */
+    public void copyValuesToExcept(Model model, String[] keys)
+    	{
+    	HashSet<String> allKeys = new HashSet(storage.keySet());
+    	for(int i = 0; i < keys.length; i++)
+    		{
+    		allKeys.remove(keys[i]);
+    		}
+        copyValuesTo(model, (String[])(allKeys.toArray(new String[0])));
+    	}
+
+    /** Copies the given keys to the given model.  This assumes that the models are the same; only values are transferred.
+        lastKey is reset in the model, and the listeners are updated.  */
+    public void copyValuesTo(Model model, String[] keys)
+        {
         // load keys
-        String[] keyset = (String[])(storage.keySet().toArray(new String[0]));
+        String[] keyset = keys;
         for(int i = 0; i < keyset.length; i++)
             {
             if (isString(keyset[i]))

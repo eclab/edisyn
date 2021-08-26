@@ -1245,7 +1245,7 @@ public class YamahaDX7 extends Synth implements ProvidesNN
         return data; 
         }
 
-    public void randomizeNNModel(double weight)
+    public Model randomizeNNModel(double weight)
         {
         /// SEAN QUESTIONS
         // Should we bound this to +/ProvidesNN.MAX_BOUNDS ?
@@ -1260,6 +1260,7 @@ public class YamahaDX7 extends Synth implements ProvidesNN
         // I've made the changes below
 
         model.latentVector = Network.shiftVectorGaussianBounded(new double[ENCODED_LENGTH], random, ProvidesNN.WEIGHT_SCALING * weight, ProvidesNN.WEIGHT_SCALING * 0.5);
+        return decode(model.latentVector);
         }
 
     public double[] encode(Model model)

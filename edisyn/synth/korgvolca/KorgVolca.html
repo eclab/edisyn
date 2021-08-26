@@ -1,7 +1,7 @@
 <html><head></head> 
 <body> 
  
-<h1>Korg Volca Series</h1>  
+<h1>Korg Volca Series</h1> 
 <h2>Patch Editor</h2> 
  
 <p>This is a combined patch editor for all MIDI-enabled Korg Volca devices: 
@@ -29,76 +29,47 @@
 </tr> 
 </table> 
  
-Why is this a combined editor? Partly because most Volcas have few parameters, no sysex, and no MIDI out. 
-And partly  
-because I didn't want to pollute Edisyn's list of synths with a zillion Volcas.  :-) (Actually Volcas  
-<i>are</i> believed to support sysex, perhaps for patch uploading and potentially downloading, but the sysex,  
-if any, is a closely-held Korg secret). 
+Why is this a combined editor? Partly because most Volcas have few parameters, no sysex, and no MIDI out. And partly because I didn't want to pollute Edisyn's list of synths with a zillion Volcas. :-) (Actually Volcas <i>are</i> believed to support sysex, perhaps for patch uploading and potentially downloading, but the sysex, if any, is a closely-held Korg secret). 
  
 <br><br><h3>Communicating with Edisyn</h3> 
  
-Make certain that you have updated to the latest Korg or Pajen firmware revision on your Volca.  Turn "MIDI RX  
-Short Message" ON.  Set Edisyn's send/receive channel to your Volca's channel as appropriate. Then set the  
-Edisyn editor's Synth Type to the type of your Volca: this both displays the Volca's parameters and instructs  
-Edisyn to send data for that kind of unit.  The Volca Drum and Sample2 have two different MIDI modes: Single mode will
-respond to a single MIDI channel, while Multi (or Split) mode will break drums/parts out across multiple 
-channels.  Make sure you have set up your Volca to use the appropriate mode.
+Make certain that you have updated to the latest Korg or Pajen firmware revision on your Volca. Turn "MIDI RX Short Message" ON. Set Edisyn's send/receive channel to your Volca's channel as appropriate. Then set the Edisyn editor's Synth Type to the type of your Volca: this both displays the Volca's parameters and instructs Edisyn to send data for that kind of unit. The Volca Drum and Sample2 have two different MIDI modes: Single mode will respond to a single MIDI channel, while Multi (or Split) mode will break drums/parts out across multiple channels. Make sure you have set up your Volca to use the appropriate mode.
  
 <br><br><h3>Hints</h3> 
  
 <ul> 
 <li> 
-Every widget in this editor is a dial and not a checkbox or combobox, even when those would be far  
-more appropriate.	Why?  Because all Volcas are consistent in that they are 100% controlled by Continuous  
-Controller (CC) parameters always ranging from 0...127	even when there are only a few possible values.  For  
-this reason, I have opted to only use dials out of coding simplicity, though it can feel weird, especially  
-when there are only two possible values (like on/off). 
+Every widget in this editor is a dial and not a checkbox or combobox, even when those would be far more appropriate. Why? Because all Volcas are consistent in that they are 100% controlled by Continuous Controller (CC) parameters always ranging from 0...127	even when there are only a few possible values. For this reason, I have opted to only use dials out of coding simplicity, though it can feel weird, especially when there are only two possible values (like on/off). 
  
-<p><li>Because Volcas have no sysex format, this editor has its own sysex specification for saving Volca  
-parameters: see the Java source code.  This specification conveniently includes a 16-character patch name. 
+<p><li>Because Volcas have no sysex format, this editor has its own sysex specification for saving Volca parameters: see the Java source code. This specification conveniently includes a 16-character patch name. 
  
 </ul> 
  
-<br><h3>About the Volca Bass</h3>  
+<br><h3>About the Volca Bass</h3> 
  
-The Volca Bass has three options which do not exist on the front panel and can <i>only</i> be controlled over  
-MIDI (such as from Edisyn).  <b>Slide Time</b> determines the rate of a slide.  <b>Expression</b> is  
-effectively a seconary volume control.  And <b>Gate Time</b> controls the length of time between the start and  
-release of a sequencer note. 
+The Volca Bass has three options which do not exist on the front panel and can <i>only</i> be controlled over MIDI (such as from Edisyn). <b>Slide Time</b> determines the rate of a slide. <b>Expression</b> is effectively a seconary volume control. And <b>Gate Time</b> controls the length of time between the start and release of a sequencer note. 
  
 <p>The VCO Pitch is displayed either in cents ("c") or when appropriate in notes ("n"). 
  
 <br><br><h3>About the Volca Beats</h3> 
  
-To get Edisyn to play a drum note, set the "Test Notes Play" chooser to the  
-appropriate drum sound and start sending test notes.  This will override Edisyn's usual test note pitch to play  
-the appropriate drum. 
+To get Edisyn to play a drum note, set the "Test Notes Play" chooser to the appropriate drum sound and start sending test notes. This will override Edisyn's usual test note pitch to play the appropriate drum. 
 
 <p>The higher Stutter Time values on Edisyn (125-127) are longer than you can set on the Volca directly.
  
 <br><br><h3>About the Volca Drum [Single and Split]</h3> 
 
-You need to set your Volca Drum up properly or Edisyn will appear to be sending the wrong commands. 
-Specifically, the Volca Drum has two modes, <b>Split Mode</b> and <b>Single Mode</b>.  Split Mode is the default.  If  
-you have selected a MIDI channel, the unit changes to Single Mode.  To go back to Split mode, just deselect  
-your selected MIDI Channel (by pressing it again): the first six LEDS will light.  Edisyn has editors for both  
-modes.  Set up your Volca as you like, then use the appropriate editor.
+You need to set your Volca Drum up properly or Edisyn will appear to be sending the wrong commands. Specifically, the Volca Drum has two modes, <b>Split Mode</b> and <b>Single Mode</b>. Split Mode is the default. If you have selected a MIDI channel, the unit changes to Single Mode. To go back to Split mode, just deselect your selected MIDI Channel (by pressing it again): the first six LEDS will light. Edisyn has editors for both modes. Set up your Volca as you like, then use the appropriate editor.
  
-<p>In Split Mode, regardless of the setting of Edisyn's send/receive channel, the Volca Drum will commandeer  
-the first six MIDI channels, each corresponding to Parts 1 through 6 respectively.  Thus if you want to play a  
-drum note, just set the "Test Notes Play Part" combo-box to the appropriate part.  Don't hear anything?  Try  
-increasing both the Level and the Dry Gain. 
-
-<p>To get Edisyn to play a given drum part, set the "Test Notes Play Part" chooser to the
-appropriate drum part and start sending test notes.  This will override Edisyn's usual test note pitch to play
-the appropriate part.
+<p>In Split Mode, regardless of the setting of Edisyn's send/receive channel, the Volca Drum will commandeer the first six MIDI channels, each corresponding to Parts 1 through 6 respectively. Thus if you want to play a drum note, just set the "Test Notes Play Part" combo-box to the appropriate part. Don't hear anything? Try increasing both the Level and the Dry Gain. 
+ 
+<p>To get Edisyn to play a given drum part, set the "Test Notes Play Part" chooser to the appropriate drum part and start sending test notes. This will override Edisyn's usual test note pitch to play the appropriate part.
 
 <p>A weird bug: it appears that the waveguide model cannot be changed by Edisyn unless the Volca Drum's sequencer is running. 
  
 <p>Remember that if motion sequencing is turned on, the Volca Drum will reset the changes you've made in Edisyn as you're playing a sequence. 
 
-<p>If you make changes to a part, you won't see those changes reflected on the Volca's screen in real time 
-unless you switch to that part on the Volca.
+<p>If you make changes to a part, you won't see those changes reflected on the Volca's screen in real time unless you switch to that part on the Volca.
  
 <p>See the end of this document for a table on Korg Volca Drum pitch mappings. 
  
@@ -106,27 +77,13 @@ unless you switch to that part on the Volca.
  
 <br><br><h3>About the Volca FM</h3> 
  
-The Transpose dial on Edisyn is the same as the Transpose slider on your Volca: and its effect on the Volca  
-depends on whether you've set it to transpose in semitones or in octaves.  Because Edisyn doesn't know what  
-you've set, it displays <i>both</i> of them in the form OCTAVES:SEMITONES. 
+The Transpose dial on Edisyn is the same as the Transpose slider on your Volca: and its effect on the Volca depends on whether you've set it to transpose in semitones or in octaves. Because Edisyn doesn't know what you've set, it displays <i>both</i> of them in the form OCTAVES:SEMITONES. 
  
-<p>To upload a DX7 bank, just use Edisyn's DX7 editor. To upload a single DX7 patch and you're not using
-the /u/pajen firmware, you can use the DX7 editor but you need to check the "Korg Volca FM" checkbox: 
-see instructions in the DX7 editor About pane. 
+<p>To upload a DX7 bank, just use Edisyn's DX7 editor. To upload a single DX7 patch and you're not using the /u/pajen firmware, you can use the DX7 editor but you need to check the "Korg Volca FM" checkbox: see instructions in the DX7 editor About pane. 
  
-<p>If you are using /u/pajen's <a  
-href="https://www.reddit.com/r/volcas/comments/ezuzbt/volca_fm_firmware_109_unofficial_bugfix_and/">alternative  
-Volca Firmware 1.09</a> (and you really should) you can send real-time parameter changes to the Volca via  
-Edisyn's DX7 patch editor.  This firmware also has an option to turn off the mistake Korg made which requires  
-the "Korg Volca FM" checkbox discussed earlier, so you don't have to check that box if you're turned on that  
-firmware option.  See <a  
-href="https://www.reddit.com/r/volcas/comments/dj7f7v/volca_fm_firmware_108_unofficial_velocity_on_note/">here</a>  
-for a discussion of it (in the 1.08 documentation). 
+<p>If you are using /u/pajen's <a href="https://www.reddit.com/r/volcas/comments/ezuzbt/volca_fm_firmware_109_unofficial_bugfix_and/">alternative Volca Firmware 1.09</a> (and you really should) you can send real-time parameter changes to the Volca via Edisyn's DX7 patch editor. This firmware also has an option to turn off the mistake Korg made which requires the "Korg Volca FM" checkbox discussed earlier, so you don't have to check that box if you're turned on that firmware option. See <a href="https://www.reddit.com/r/volcas/comments/dj7f7v/volca_fm_firmware_108_unofficial_velocity_on_note/">here</a> for a discussion of it (in the 1.08 documentation). 
  
-<p>/u/pajen's alternative firmware also includes a number of new CC messages, which you can modify from the  
-Volca editor.  See <a  
-href="https://www.reddit.com/r/volcas/comments/dj7f7v/volca_fm_firmware_108_unofficial_velocity_on_note/">the  
-explanation</a> on what and how Load Patch, Load Pattern, and Mod Wheel CC work. 
+<p>/u/pajen's alternative firmware also includes a number of new CC messages, which you can modify from the Volca editor. See <a href="https://www.reddit.com/r/volcas/comments/dj7f7v/volca_fm_firmware_108_unofficial_velocity_on_note/">the explanation</a> on what and how Load Patch, Load Pattern, and Mod Wheel CC work. 
  
  
 <br><br><h3>About the Volca NuBass</h3> 
@@ -135,69 +92,40 @@ The VTO Pitch is displayed either in cents ("c") or when appropriate in notes ("
  
 <br><br><h3>About the Volca Sample / Sample2 (Multi Channel)</h3> 
  
-This editor works for the Volca Sample, Sample (Pajeen Firmware), and <i>I think</i> the Sample2.  But <b>I do 
-not have any way to test it with the Sample2,</b> so I don't know for sure.  If you have a Sample2, please contact 
-me with bug reports. 
+This editor works for the Volca Sample, Sample (Pajeen Firmware), and <i>I think</i> the Sample2. But <b>I do not have any way to test it with the Sample2,</b> so I don't know for sure. If you have a Sample2, please contact me with bug reports. 
  
-<p>To get Edisyn to play a given sample part,  
-set the "Test Notes Play Part" chooser to the  
-appropriate sample part and start sending test notes.  This will override Edisyn's usual test note pitch to play  
-the appropriate part. 
+<p>To get Edisyn to play a given sample part, set the "Test Notes Play Part" chooser to the appropriate sample part and start sending test notes. This will override Edisyn's usual test note pitch to play the appropriate part. 
  
-<P>Regardless of the setting of Edisyn's send/receive channel, the Volca Sample will commandeer the first ten MIDI  
-channels, each corresponding to Parts 1 through 10 respectively.  Thus if you want to play a sample for a given  
-part, you need to change Edisyn's send/receive channel to the MIDI channel corresponding to that part number. 
+<P>Regardless of the setting of Edisyn's send/receive channel, the Volca Sample will commandeer the first ten MIDI channels, each corresponding to Parts 1 through 10 respectively. Thus if you want to play a sample for a given part, you need to change Edisyn's send/receive channel to the MIDI channel corresponding to that part number. 
 
-<p>A Volca Sample bug: if you play a note via MIDI (rather than on the keyboard or through the sequencer),
-it will reset that part's level and speed.  Thus when Edisyn is sending test notes, you may be frustrated by 
-an inability to maintain level and speed.
+<p>A Volca Sample bug: if you play a note via MIDI (rather than on the keyboard or through the sequencer), it will reset that part's level and speed. Thus when Edisyn is sending test notes, you may be frustrated by an inability to maintain level and speed.
  
-<p>If you are using /u/pajen's <a  
-href="https://www.reddit.com/r/volcas/comments/fzthpo/pajens_korg_volca_unofficial_firmware_information/">alternative  
-Volca Sample Firmware 7</a> (and you really should) there are additional parameters.  These are marked with a  
-<b>[P]</b>.  Edisyn doesn't implement the /u/pajen "Channel 11" CC parameters, as they do not add any  
-additional editing capabilities beyond the standard ones (they're meant to make things easier for sequencers  
-that don't do multiple channels). 
+<p>If you are using /u/pajen's <a href="https://www.reddit.com/r/volcas/comments/fzthpo/pajens_korg_volca_unofficial_firmware_information/">alternative Volca Sample Firmware 7</a> (and you really should) there are additional parameters. These are marked with a <b>[P]</b>. Edisyn doesn't implement the /u/pajen "Channel 11" CC parameters, as they do not add any additional editing capabilities beyond the standard ones (they're meant to make things easier for sequencers that don't do multiple channels). 
  
-<p>A few of the /u/pajen settings are ... strange.  You'd expect that binary  
-CC values have OFF as &lt; 64 and ON as >= 64.  But no!  For many of the dials,  
-OFF is 0 and ON is > 0.  And for Mute Part, ON is weirdly 0, and OFF is > 0.  Don't  
-ask.  Also Solo Part seems to work unusually.  To get a part to solo (or to un-solo),  
-you have to move the dial far away from Trig (0), then move it back to Trig to  
-"trigger" the operation.  Sometimes it doesn't work if you don't move far  
-enough away, or if you go too fast or too slow.  I've not determined the exact  
-rules for the procedure. Finally, the Part Select dial does exactly what its  
-name suggests: it merely selects the part.  And that's all.  It has no effect on  
-mute, solo, reversing, adding reverb, or looping a part. It just selects the  
-part on the unit. 
- 
-<p>Because of their odd mappings, I would disable the mutation parameters  
-on all parts for /u/pajen reverse, mute, solo, reverb on/off, and loop prior to randomization,  
-nudging, hill-climbing, or morphing. 
- 
+<p><b>Bugs in /u/pajen firmware</b> The /u/pajen firmware has two bugs and a significant oddity; these may get revised in the near future. But you need to be aware of them:
+
+<ul>
+<li>Oddity: the Loop, Reverb, Reverse, Mute, and Solo parameters have strange behavior. Specifically, value 0 turns the feature OFF, low values > 0 turn the feature ON, and high values TOGGLE the feature (turning it off if it was on, and on if it was off). Unfortunately, if you scroll through the toggle region it'll toggle on and off and on and off. So it's not very useful: you'll want to stick to the ON and OFF regions.
+
+<br><p>Also, because of their odd mappings, I would disable the mutation parameters on all parts for /u/pajen reverse, mute, solo, reverb on/off, and loop prior to randomization, nudging, hill-climbing, or morphing.
+
+<p><li>Bug: The TOGGLE region for Mute doesn't toggle Mute: it toggles Reverse. Oops!
+
+<p><li>Bug: The ON and OFF region for Solo don't work right. The ON region turns on Solo only if <i>Mute</i> (not Solo) is off. And the OFF region turns off Solo only if Mute is on. For this reason I suggest not using the Solo parameter.
+</ul>
+
 <br><br><h3>About the Volca Sample2 (Single Channel)</h3> 
  
-I <b>believe</b> that this editor should work properly with the Sample2 (Single Channel), but <b>I do  
-not have any way to test it with the Sample2,</b> so I cannot verify it.  It may be completely wrong!  
-If you have a Sample2, please contact me with bug reports.  
+I <b>believe</b> that this editor should work properly with the Sample2 (Single Channel), but <b>I do not have any way to test it with the Sample2,</b> so I cannot verify it. It may be completely wrong! If you have a Sample2, please contact me with bug reports. 
  
-<p>Korg never released a MIDI implementation for the Sample2, argh.  Based on my best guesses from  
-certain online postings, I believe that Part 1 may have more parameters than the other Parts, as shown 
-in the editor.  Again, this is a <b>guess</b>. 
+<p>Korg never released a MIDI implementation for the Sample2, argh. Based on my best guesses from certain online postings, I believe that Part 1 may have more parameters than the other Parts, as shown in the editor. Again, this is a <b>guess</b>. 
  
-<p>To get Edisyn to play a given sample part,  
-set the "Test Notes Play Part" chooser to the  
-appropriate sample part and start sending test notes.  This will override Edisyn's usual test note pitch to play  
-the appropriate part. 
+<p>To get Edisyn to play a given sample part, set the "Test Notes Play Part" chooser to the appropriate sample part and start sending test notes. This will override Edisyn's usual test note pitch to play the appropriate part. 
  
  
 <br><br><h3>Korg Volca Drum Pitch Table</h3> 
  
-This is from <a  
-href="https://www.reddit.com/r/volcas/comments/cxzyq7/korg_volca_drum_pitch_values_converted_to_note/">the  
-following posting</a> by /u/J0sephKnecht on reddit.  This table translates between Korg Volca Drum pitch  
-values, actual pitches, and frequencies.  Hopefully you may find it useful.  Note that as there are only 128 CC  
-values (spread over the 256 pitches), you can only dial every other pitch remotely via Edisyn. 
+This is from <a href="https://www.reddit.com/r/volcas/comments/cxzyq7/korg_volca_drum_pitch_values_converted_to_note/">the following posting</a> by /u/J0sephKnecht on reddit. This table translates between Korg Volca Drum pitch values, actual pitches, and frequencies. Hopefully you may find it useful. Note that as there are only 128 CC values (spread over the 256 pitches), you can only dial every other pitch remotely via Edisyn. 
  
 <table><tr><td valign=top> 
 <table> 

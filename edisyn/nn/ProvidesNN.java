@@ -24,7 +24,7 @@ public interface ProvidesNN
     public Model decode(double [] vector);
     public double[] encode(Model model);
     
-    /** Randomizes the model by a weight 0...1.0 */
-    public void randomizeNNModel(double weight);
+    /** Randomizes the model by a weight 0...1.0, yielding a new model */
+    public Model randomizeNNModel(double weight);
     }
         

@@ -9,6 +9,7 @@ package edisyn;
 import edisyn.gui.*;
 import edisyn.synth.*;
 import edisyn.util.*;
+import edisyn.nn.*;
 import java.awt.*;
 import java.awt.geom.*;
 import javax.swing.border.*;
@@ -116,6 +117,8 @@ public abstract class Synth extends JComponent implements Updatable
     public JCheckBoxMenuItem launchMenu;
     /** The "Blend" menu */
     public JMenu blend;
+    /** NN randomization checkbox, only appears if the Synth providesNN (such as a DX7) */
+    public JCheckBoxMenuItem nnRandomize;
         
     // The four nudge models 
     Model[] nudge = new Model[4];
@@ -308,7 +311,7 @@ public abstract class Synth extends JComponent implements Updatable
                         }
                     }
 
-                frame.show();
+                frame.setVisible(true);
                 if (setupMIDI) 
                     synth.setupMIDI("Choose MIDI devices to send to and receive from.", tuple);
 
@@ -3408,6 +3411,22 @@ public abstract class Synth extends JComponent implements Updatable
 
         JMenu randomize = new JMenu("Randomize");
         menu.add(randomize);
+        
+        if (this instanceof ProvidesNN)
+        	{
+        	nnRandomize = new JCheckBoxMenuItem("Randomizes using NN");
+        	nnRandomize.setSelected(getLastXAsBoolean("RandomizeNN", getSynthName(), false, true));        
+        	nnRandomize.addActionListener(new ActionListener()
+            	{
+            	public void actionPerformed( ActionEvent e)
+               		{
+               		setLastX("" + nnRandomize.isSelected(), "RandomizeNN", getSynthName(), true);
+                	}
+	            });
+        	randomize.add(nnRandomize);
+        	randomize.addSeparator();
+        	}
+        
         JMenuItem randomize1 = new JMenuItem("Randomize by 1%");
         randomize.add(randomize1);
         JMenuItem randomize2 = new JMenuItem("Randomize by 2%");
@@ -5748,8 +5767,15 @@ public abstract class Synth extends JComponent implements Updatable
         setSendMIDI(false);
         undo.setWillPush(false);
         Model backup = (Model)(model.clone());
-                
-        model.mutate(random, getMutationKeys(), probability);
+        
+        if (nnRandomize != null && nnRandomize.isSelected())
+        	{
+        	((ProvidesNN)this).randomizeNNModel(probability).copyValuesTo(model, getMutationKeys());
+        	}
+        else
+        	{
+	        model.mutate(random, getMutationKeys(), probability);
+	        }
         revise();  // just in case
                 
         undo.setWillPush(true);
@@ -6600,7 +6626,7 @@ public abstract class Synth extends JComponent implements Updatable
                                                                         
         JDialog dialog = pane.createDialog(this, title);
         disableMenuBar();
-        dialog.show();
+        dialog.setVisible(true);
         enableMenuBar();
         Object result = pane.getValue();
         if (result == null) return new int[] { BULK_DIALOG_RESULT_CANCEL, menu.getPrimary(), menu.getSecondary() };

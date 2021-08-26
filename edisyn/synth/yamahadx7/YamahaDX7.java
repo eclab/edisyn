@@ -1259,7 +1259,8 @@ public class YamahaDX7 extends Synth implements ProvidesNN
 
         // I've made the changes below
 
-        model.latentVector = Network.shiftVectorGaussianBounded(new double[ENCODED_LENGTH], random, ProvidesNN.WEIGHT_SCALING * weight, ProvidesNN.WEIGHT_SCALING * 0.5);
+		model.latentVector = encode(model);
+        model.latentVector = Network.shiftVectorGaussianBounded(model.latentVector, random, ProvidesNN.WEIGHT_SCALING * weight, ProvidesNN.BOUNDS);
         return decode(model.latentVector);
         }
 

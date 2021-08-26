@@ -828,6 +828,23 @@ Non-metric parameters, such as (say) choice of filter or the PCM sampled sound p
 
 
 
+\subsection{Deep Learned Neural Hill-Climbing and Randomization}
+
+The Yamaha DX7 editor has a special feature thanks to research done here at George Mason University by Bryan Hoyle.  Using approximately 30,000 unique DX7 patches found around the internet, we trained a special kind of deep-learned neural network called a {\it variational autoencoder}.  Using this network, we can improve both hill-climbing and patch randomization.
+
+If you're editing a DX7, you can use the neural network in hill-climbing by selecting {\bf NN Hill-Climber} in the Hill-Climber's ``Method'' chooser.  Thereafter instead of creating children patches via crossover and mutation, Edisyn will produce them using the autoencoder.  Similarly, if (when editing a DX7) you select Edit \(\rightarrow\) Randomize \(\rightarrow\) Randomizes Using NN, then randomization options will use the autoencoder rather than the standard mutator.
+
+\paragraph{What's the point?}  As anyone who programs synthesizer patches knows, the space of synthesizer patches consists of small useful regions surrounded by lots of patches which are garbage, even total silence.  The hill-climber tries many strategies to avoid presenting garbage and silence to the user, but is only partly successful   The goal of the autoencoder is to eliminate as much garbage and silence as possible, thus improving the chances that you'll get decent patch results.  We'd appreciate feedback as to how successful you think we were.
+ 
+\paragraph{How does it work?}  A variational autoencoder is a special kind of neural network trained to take an incoming patch and then output the same exact patch.  The trick, however, is that it has to get it through a narrow neck much smaller than the size of a standard patch: it must squeeze the patch down to a much smaller space, called the {\it latent space} of the autoencoder, in order to get it through.  The autoencoder must learn how to compress all the 30,000 patches fed to it such that when they are decompressed after passing through the narrow neck, they're more or less the same as they were originally.  
+
+In order to compress those 30,000 patches, the neural network has to learn the features more or less common to them.  In short, it tightly squeezes the regions of the patch space that contain those 30,000 patches into the latent space, and in doing so it ignores the features of the regions of the patch space that {\it didn't} contain those 30,000 patches.  What regions of the patch space were that?  Ideally, the useless garbage and silence!  Now the ``compressed'' space, with luck, contains only useful patch regions.
+
+Once we have trained the autoencoder, we can break it into two pieces: the compression portion and the decompression portion.  If we hand a random ``compressed'' vector to the decompression portion, it will decompress it into a patch somewhere in the vicinity of the 30,000 patches\,---\,and {\it not}, ideally, in garbage regions of the space.  So now we can mutate a patch by compressing it into the smaller space, then making some random mutations to its {\it compressed} form, then decompressing it.  And we can hill-climb by wandering around not in the patch space but in the compressed space, decompressing results as needed to audition them.
+
+\paragraph{Can you do it on anything but the DX7?} Training an autoencoder requires a great many patches.  Most synths just don't have enough unique patches available online.  One obvious target might be the Yamaha TX81Z: but it's only got around 5000 unique patches, which might not be enough.  We'll see.
+ 
+\paragraph{About those 30,000 patches...} In Edisyn's \texttt{resources} directory, we have included a text file containing, one to a line, the DX7 parameters of each of those patches as numbers. Perhaps it might be useful to other researchers. 
 
 
 \newcommand\samefootnote{\addtocounter{footnote}{-1}\footnotemark}
@@ -888,7 +905,6 @@ Yamaha TG33/SY22/SY35&{\cm}*& &{\cm}&{\cm}&{\cm}& &  & &{\cm}            \\
 \caption{Patch Editor Capabilities}
 \label{patcheditorcapabilities}
 \end{table}
-
 
 \section{Writing a Patch Editor}
 

@@ -6,6 +6,10 @@
 
 package edisyn.nn;
 
+/**
+   This class is a representation of a fully connected neural network layer
+   consisting of an input, weights, and output.
+*/
 public class Linear implements Layer
     {
 
@@ -15,11 +19,8 @@ public class Linear implements Layer
     private int columns;
 
     /**
-        This class is a representation of a fully connected neural network layer
-        consisting of an input, weights, and output.
-
-        Constructor takes the number of columns (layer input size) and number of rows
-        (layer output size) along with the weights and the bias values.
+       Constructor takes the number of columns (layer input size) and number of rows
+       (layer output size) along with the weights and the bias values.
 
     */
     public Linear(int rows, int columns, double[] initial_data, double[] bias)

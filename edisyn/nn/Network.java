@@ -8,6 +8,9 @@ package edisyn.nn;
 import java.util.*;
 import java.io.*;
 
+/**
+   An object representing a neural network comprised of layers.
+ */
 public class Network implements Layer 
     {
     // The feed-forward layers of the network

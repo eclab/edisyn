@@ -5,19 +5,19 @@
 
 package edisyn.nn;
 
+/** 
+    Scaled Exponential Linear Unit
+
+    See Paper: https://arxiv.org/abs/1706.02515v5
+
+    Tl;dr: this activation function enables fully connected neural networks to self
+    normalize due to fixed point attractors in regards to parameter space, but only
+    with specific values of alpha and lambda. Other than that, behaves similarly to
+    ReLU (because it behaves exactly like an exponential linear unit with constants
+    applied).
+*/
 public class SELU implements Layer 
     {
-    /** 
-        Scaled Exponential Linear Unit
-
-        See Paper: https://arxiv.org/abs/1706.02515v5
-
-        Tl;dr: this activation function enables fully connected neural networks to self
-        normalize due to fixed point attractors in regards to parameter space, but only
-        with specific values of alpha and lambda. Other than that, behaves similarly to
-        ReLU (because it behaves exactly like an exponential linear unit with constants
-        applied).
-    */
 
     private static double ALPHA = 1.6732632423543772848170429916717;
     private static double LAMBDA = 1.0507009873554804934193349852946;

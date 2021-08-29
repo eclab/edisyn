@@ -1,7 +1,7 @@
 ![Edisyn Splash Banner](https://raw.githubusercontent.com/eclab/edisyn/master/pics/Banner.png)
 
 # Edisyn
-Synthesizer Patch Editor (Version 27)
+Synthesizer Patch Editor (Version 28)
 
 By Sean Luke (sean@cs.gmu.edu)
 
@@ -45,6 +45,7 @@ Edisyn presently supports:
 * Korg MicroKorg (Single and Vocoder Modes)
 * Korg Microsampler
 * Korg Wavestation SR (Performance, Patch, and Wave Sequence Modes)
+* Korg Volca Series (Bass, Beats, Drum Single, Drum Split, FM, Keys, Kick, NuBass, Sample/Sample2 Multi, Sample2 Single, /u/pajen firmware)
 * M-Audio Venom (Single, Multi, Arpeggiator, and Global Modes)
 * Novation Drumstation and D Station
 * Novation ReMOTE SL, SL MKII, and SL Compact Series
@@ -73,6 +74,7 @@ Edisyn has infinite levels of undo, CC and NRPN mapping and learning, offline mo
 * *Nudging:* Pushing the patch to sound a bit more (or a bit less) like one of four other patches of your choice
 * *Morphing:* Real-time interpolation of four patches to form a new patch
 * *Hill-Climbing and Constriction:* evolutionary techniques for guided randomized search through the space of parameters, where Edisyn iteratively offers patch possibilities for you to grade, then looks for new ones based on your assessments.
+* *Deep-Learned Models:* improvements to Randomization and Hill-Climbing using a deep-learned Variational Autoencoder neural network (DX7 Family only)
 
 #### "Could You Develop a Patch Editor for Synth X for Me?"
 

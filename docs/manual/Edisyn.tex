@@ -70,6 +70,7 @@ Edisyn is a no-nonsense synthesizer patch editor for the editing and parameter e
 \item Korg SG Rack and SG Pro X (Single and (for SG Rack) Multimode)
 \item Korg Microkorg (Single)
 \item Korg Microsampler
+\item Korg Volca Series (Bass, Beats, Drum Single, Drum Split, FM, Keys, Kick, NuBass, Sample/Sample2 Multi, Sample2 Single, /u/pajen firmware)
 \item Korg Wavestation SR (Performance, Patch, and Wave Sequence)
 \item M-Audio Venom (Single, Multimode, Arp, and Global)
 \item Novation Drumstation and D Station
@@ -148,7 +149,7 @@ If you are not connected to MIDI, or if you cancel, then Edisyn will inform you 
 
 \section{Edisyn Patch Editors}
 
-An Edisyn patch editor is a single window with multiple tabbed panes.  You can switch tabs by clicking on them or via shortcuts (see the {\bf Tabs Menu}).  The far-right tab is the {\bf About Tab}.  It gives you information about the eccentricities of the synthesizer that require custom behavior in Edisyn (they all do!).  {\bf \color{red} You should read the About Tab carefully to understand how to get Edisyn to properly with your synthesizer.}
+An Edisyn patch editor is a single window with multiple tabbed panes.  You can switch tabs by clicking on them or via shortcuts (see the {\bf Tabs Menu}).  The far-right tab is the {\bf About Tab}.  It gives you information about the eccentricities of the synthesizer that require custom behavior in Edisyn (they all do!).  {\bf \color{red} You should read the About Tab for your synth's editor \textit{carefully} to understand how to get Edisyn to work properly with your synthesizer.}
 
 \paragraph{Categories}
 At right is a typical tab pane.  You'll note that various widgets are grouped together in regions (called {\bf Categories}).  There are four categories shown here.  Three are arbitrary categories for this synthesizer: ``Global'', ``LFO'', and ``Controllers''.  They're in various colors to differentiate them.  Other categories will be found in other tab panes.  But one category is special: the {\bf Synthesizer Category}, always shown in white, here named ``Yamaha TX81Z''.  It normally contains the patch name and bank/patch number.
@@ -877,6 +878,7 @@ Kawai K4/K4r&{\cm}*& &{\cm}& &{\cm}&{\cm}& &{\cm}&{\cm}            \\
 Kawai K5/K5m&{\cm}&{\cm}&{\cm}& & &{\cm}& &{\cm}&{\cm}            \\
 Korg Microsampler&{\cm}*&{\cm}*& & & & &  &  &         \\
 Korg SG Rack&&&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}& &{\cm}\\
+Korg Volca Series&{\cm}*&& & & & &  &  &         \\
 Korg Wavestation SR&{\cm}&&{\cm}&{\cm}*&{\cm}*&{\cm}&{\cm}*& &{\cm}\\
 M-Audio Venom&{\cm}&&{\cm}*&{\cm}&{\cm}*&{\cm}*&{\cm}*&{\cm}&{\cm}*\\
 Novation Drumstation/D Station&&&&&{\cm}*&{\cm}*& & &{\cm}          \\
@@ -921,7 +923,7 @@ Figure~\ref{patcheditorcapabilities} is a little table of the current patch edit
 
 \subsection{Setting Up the Development Environment}
 
-Still not scared away?  Okay, we'll start by getting Edisyn set up for development.  Probably the easiest way to fire up Edisyn for purposes of testing is as a build directory.  You just need to add two items to your CLASSPATH:
+Still not scared away? Let's start by getting Edisyn set up for development.  Probably the easiest way to fire up Edisyn for purposes of testing is as a build directory.  You just need to add two items to your CLASSPATH:
 
 \begin{enumerate}
 \item The {\tt coremidi4j-1.5.jar} file, located in the {\tt libraries/} folder (you can move it where you like).  This jar file contains the CoreMidi4J library, which enables sysex to work properly on Macs (you'll need it for non-Macs too).

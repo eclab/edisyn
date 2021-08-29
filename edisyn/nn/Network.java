@@ -10,7 +10,7 @@ import java.io.*;
 
 /**
    An object representing a neural network comprised of layers.
- */
+*/
 public class Network implements Layer 
     {
     // The feed-forward layers of the network
@@ -60,7 +60,7 @@ public class Network implements Layer
 
        Format:
 
-<p><tt>
+       <p><tt>
        {Linear|SELU} [layer arguments]
        ...
        
@@ -72,7 +72,7 @@ public class Network implements Layer
        Linear 1 2 -0.1 0.5 0.734 -0.65
        SELU
        --- FILE END --- (this line not included in file)
-</tt>
+       </tt>
     */    
     public static Network loadFromStream(InputStream stream) 
         {
@@ -127,7 +127,7 @@ public class Network implements Layer
        Encode an integer in the range min to max (inclusive) as a double between 0 to 1.
 
        Return the index into the vector of the next feature to encode
-     */
+    */
     public static int encodeScaled(double[] vector, int index, int value, int min, int max)
         {
         vector[index] = ((double)value)/(max - min);
@@ -161,13 +161,13 @@ public class Network implements Layer
        Decode a double value in the range 0-1 in the vector at the index given to an
        integer in the range from min to max, inclusive.
 
-<p><tt>
+       <p><tt>
        Returns a vector composed of 
        {
        index of the next feature to decode, 
        integer value from the scaled value
        }
-</tt>
+       </tt>
     */
     public static int[] decodeScaled(double[] vector, int index, int min, int max)
         {
@@ -190,7 +190,7 @@ public class Network implements Layer
        range as well as the length of the subvector. This is useful for getting
        categorical data.
 
-<p><tt>
+       <p><tt>
        Returns an array composed of 
        {
        index of the next feature to decode,
@@ -198,17 +198,17 @@ public class Network implements Layer
        }
 
        example:
-         vector: 0.1 0.8 2.6 -0.5 0.76
-         index:  1
-         min: 11
-         max: 13
-         would return
-         {
-         4 (which is the index of 0.76),
-         12 (class id 12, which means the highest value was the index 1 element of the subvector 0.8 2.6 -0.5)
-         }
-</tt>
-     */        
+       vector: 0.1 0.8 2.6 -0.5 0.76
+       index:  1
+       min: 11
+       max: 13
+       would return
+       {
+       4 (which is the index of 0.76),
+       12 (class id 12, which means the highest value was the index 1 element of the subvector 0.8 2.6 -0.5)
+       }
+       </tt>
+    */        
     public static int[] decodeOneHot(double[] vector, int index, int min, int max)
         {
         double maxVal = vector[index];
@@ -259,7 +259,7 @@ public class Network implements Layer
     
     // Number of tries before the rejection sampler gives up and just adds 0 for the
     // element
-	static final int TRIES = 20;
+    static final int TRIES = 20;
 
     /**
        Performs an addition of gaussian noise with variance == weight and mean == 0 to a
@@ -275,9 +275,9 @@ public class Network implements Layer
             {
             double noise = 0;
             for(int tries = 0; tries < TRIES; tries++)
-            	{
-             	noise = random.nextGaussian() * weight;
-            	if (vector[i] + noise <= bounds && vector[i] + noise >= -bounds)
+                {
+                noise = random.nextGaussian() * weight;
+                if (vector[i] + noise <= bounds && vector[i] + noise >= -bounds)
                     {
                     out[i] = vector[i] + noise;
                     break;

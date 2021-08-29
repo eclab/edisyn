@@ -9,8 +9,8 @@ import javax.swing.*;
 import java.awt.event.*;
 
 /***
-	This class modifies JTextField so that it assumes focus and selects its
-	text whenever its JFrame comes front.
+    This class modifies JTextField so that it assumes focus and selects its
+    text whenever its JFrame comes front.
 ***/
 
 public class SelectedTextField extends JTextField

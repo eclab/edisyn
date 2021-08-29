@@ -48,7 +48,7 @@ public class Linear implements Layer
 
        The input vector must be equal to columns in size and the resulting vector will be
        rows in size.
-     */
+    */
     public double[] feed(double[] vec)
         {
         // Sanity check
@@ -74,19 +74,19 @@ public class Linear implements Layer
     /**
        Takes in a plain text string representation of a layer and return a constructed
        layer object.
-<p><tt>
+       <p><tt>
        format:
-         Linear {rows} {columns} [biases: rows in size] [weights: rows * columns in size, provided in row major order]
+       Linear {rows} {columns} [biases: rows in size] [weights: rows * columns in size, provided in row major order]
        example:
-         Linear 2 3 1.3 0.2 -1.1 2.2 0.6 -2.6 4.2 5.3 6.8
-         ^^^^^^ ^ ^ ^^^^^^^^^^^^ ^^^^^^^^^^^^ ^^^^^^^^^^^
-            │   │ │     Bias         Row 1       Row 2                                               
-            │   │ │                                                                                 
-            │   │ └─────────────┐
-         ┌──┘   └───────┐       │ 
-         │              │       │
- Layer Type Specifier  rows  columns
- </tt>
+       Linear 2 3 1.3 0.2 -1.1 2.2 0.6 -2.6 4.2 5.3 6.8
+       ^^^^^^ ^ ^ ^^^^^^^^^^^^ ^^^^^^^^^^^^ ^^^^^^^^^^^
+       │   │ │     Bias         Row 1       Row 2                                               
+       │   │ │                                                                                 
+       │   │ └─────────────┐
+       ┌──┘   └───────┐       │ 
+       │              │       │
+       Layer Type Specifier  rows  columns
+       </tt>
     */
     public static Layer readFromString(String str)
         {

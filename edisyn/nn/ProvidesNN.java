@@ -11,14 +11,14 @@ import edisyn.*;
 public interface ProvidesNN
     {
     /** For models which use shiftVectorGaussianBounded 
-   		to randomize their models, this is a typical 
-   		bounds provided (so the range is +/- 5.0) */
+        to randomize their models, this is a typical 
+        bounds provided (so the range is +/- 5.0) */
     public static final double BOUNDS = 5.0;
     
     /** For models which use shiftVectorGaussian
-   		or shiftVectorGaussianBounded to randomize
-    	their models, this is a typical scaling of the
-    	weight factor (so it goes 0...5). */
+        or shiftVectorGaussianBounded to randomize
+        their models, this is a typical scaling of the
+        weight factor (so it goes 0...5). */
     public static final double WEIGHT_SCALING = 5.0;
     
     public Model decode(double [] vector);

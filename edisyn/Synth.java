@@ -3413,19 +3413,19 @@ public abstract class Synth extends JComponent implements Updatable
         menu.add(randomize);
         
         if (this instanceof ProvidesNN)
-        	{
-        	nnRandomize = new JCheckBoxMenuItem("Randomizes using NN");
-        	nnRandomize.setSelected(getLastXAsBoolean("RandomizeNN", getSynthName(), false, true));        
-        	nnRandomize.addActionListener(new ActionListener()
-            	{
-            	public void actionPerformed( ActionEvent e)
-               		{
-               		setLastX("" + nnRandomize.isSelected(), "RandomizeNN", getSynthName(), true);
-                	}
-	            });
-        	randomize.add(nnRandomize);
-        	randomize.addSeparator();
-        	}
+            {
+            nnRandomize = new JCheckBoxMenuItem("Randomizes using NN");
+            nnRandomize.setSelected(getLastXAsBoolean("RandomizeNN", getSynthName(), false, true));        
+            nnRandomize.addActionListener(new ActionListener()
+                {
+                public void actionPerformed( ActionEvent e)
+                    {
+                    setLastX("" + nnRandomize.isSelected(), "RandomizeNN", getSynthName(), true);
+                    }
+                });
+            randomize.add(nnRandomize);
+            randomize.addSeparator();
+            }
         
         JMenuItem randomize1 = new JMenuItem("Randomize by 1%");
         randomize.add(randomize1);
@@ -5769,13 +5769,13 @@ public abstract class Synth extends JComponent implements Updatable
         Model backup = (Model)(model.clone());
         
         if (nnRandomize != null && nnRandomize.isSelected())
-        	{
-        	((ProvidesNN)this).randomizeNNModel(probability).copyValuesTo(model, getMutationKeys());
-        	}
+            {
+            ((ProvidesNN)this).randomizeNNModel(probability).copyValuesTo(model, getMutationKeys());
+            }
         else
-        	{
-	        model.mutate(random, getMutationKeys(), probability);
-	        }
+            {
+            model.mutate(random, getMutationKeys(), probability);
+            }
         revise();  // just in case
                 
         undo.setWillPush(true);

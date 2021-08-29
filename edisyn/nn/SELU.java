@@ -36,7 +36,7 @@ public class SELU implements Layer
         
     /**
        Feed a vector into the activation. The result is the vector with selu applied element wise.
-     */
+    */
     public double[] feed(double[] vec)
         {
         double[] out = new double[vec.length]; 
@@ -48,7 +48,7 @@ public class SELU implements Layer
         }
     /**
        Doesn't do anything: has no parameters to initialize
-     */
+    */
     public static Layer readFromString(String str)
         {
         return new SELU();

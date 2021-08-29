@@ -12,7 +12,6 @@ package edisyn.nn;
 */
 public class Linear implements Layer
     {
-
     private double[] data;
     private double[] bias;
     private int rows;
@@ -27,7 +26,7 @@ public class Linear implements Layer
         {
         this.rows = rows;
         this.columns = columns;
-        data = new double[rows*columns];
+        data = new double[rows * columns];
         for(int i = 0; i < initial_data.length; i++)
             {
             // row major order for cache coherency
@@ -65,7 +64,7 @@ public class Linear implements Layer
             for(int c = 0; c < columns; c++)
                 {
                 // row major order for cache coherency
-                out[r] += data[r*columns + c] * vec[c];
+                out[r] += data[r * columns + c] * vec[c];
                 }
             // Add the bias value
             out[r] += bias[r];
@@ -75,9 +74,9 @@ public class Linear implements Layer
     /**
        Takes in a plain text string representation of a layer and return a constructed
        layer object.
-
+<p><tt>
        format:
-         Linear <rows> <columns> [biases: rows in size] [weights: rows*columns in size, provided in row major order]
+         Linear {rows} {columns} [biases: rows in size] [weights: rows * columns in size, provided in row major order]
        example:
          Linear 2 3 1.3 0.2 -1.1 2.2 0.6 -2.6 4.2 5.3 6.8
          ^^^^^^ ^ ^ ^^^^^^^^^^^^ ^^^^^^^^^^^^ ^^^^^^^^^^^
@@ -87,6 +86,7 @@ public class Linear implements Layer
          ┌──┘   └───────┐       │ 
          │              │       │
  Layer Type Specifier  rows  columns
+ </tt>
     */
     public static Layer readFromString(String str)
         {

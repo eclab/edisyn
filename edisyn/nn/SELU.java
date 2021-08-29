@@ -18,9 +18,8 @@ package edisyn.nn;
 */
 public class SELU implements Layer 
     {
-
-    private static double ALPHA = 1.6732632423543772848170429916717;
-    private static double LAMBDA = 1.0507009873554804934193349852946;
+    private static final double ALPHA = 1.6732632423543772848170429916717;
+    private static final double LAMBDA = 1.0507009873554804934193349852946;
     /**
        Helper method that actually runs the selu function
     */
@@ -28,11 +27,11 @@ public class SELU implements Layer
         {
         if (x > 0)
             {
-            return LAMBDA*x;
+            return LAMBDA * x;
             }
         // EXP is expensive here, might want to use an approximator if this is running too
         // slow in the future
-        return LAMBDA*(ALPHA * Math.exp(x) - ALPHA);
+        return LAMBDA * (ALPHA * Math.exp(x) - ALPHA);
         }
         
     /**

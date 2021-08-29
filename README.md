@@ -25,6 +25,15 @@ Related projects:
 
 Donations are welcome via Paypal to my email address (sean@cs.gmu.edu).
 
+## What's New
+
+Version 28 has many improvements, but the big ones are:
+
+* New Korg Volca Series Editor
+* New Waldorf Pulse 2 Editor
+* Fixes to M-Audio Venom Editor
+* Deep-Learned Variational Autoencoder, which compresses the parameter space for the Yamaha DX7 and thus improves randomization and hill-climbing.  See the manual.
+
 ## About
 
 Edisyn is a synthesizer patch editor library written in pure Java.   It runs on MacOS, Linux, and Windows.  
@@ -45,7 +54,12 @@ Edisyn presently supports:
 * Korg MicroKorg (Single and Vocoder Modes)
 * Korg Microsampler
 * Korg Wavestation SR (Performance, Patch, and Wave Sequence Modes)
+<<<<<<< .mine
+* Korg Volca Series (Joint editor for Bass, Beats, Drum Single, Drum Split, FM, Keys, Kick, NuBass, Sample/Sample2 Multi, Sample2 Single, /u/pajen firmware)
+||||||| .r1413
+=======
 * Korg Volca Series (Bass, Beats, Drum Single, Drum Split, FM, Keys, Kick, NuBass, Sample/Sample2 Multi, Sample2 Single, /u/pajen firmware)
+>>>>>>> .r1428
 * M-Audio Venom (Single, Multi, Arpeggiator, and Global Modes)
 * Novation Drumstation and D Station
 * Novation ReMOTE SL, SL MKII, and SL Compact Series

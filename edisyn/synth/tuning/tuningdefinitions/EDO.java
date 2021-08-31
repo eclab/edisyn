@@ -1,3 +1,8 @@
+/***
+    Copyright 2020 by V. Hoyle
+    Licensed under the Apache License version 2.0
+*/
+
 package edisyn.synth.tuning.tuningdefinitions;
 
 import edisyn.synth.tuning.*;

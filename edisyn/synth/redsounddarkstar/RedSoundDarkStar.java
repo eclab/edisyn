@@ -20,7 +20,7 @@ import javax.sound.midi.*;
 /**
    A patch editor for the Red Sound Darkstar.
         
-   @author Sean Luke and Bryan Hoyle
+   @author Sean Luke and V. Hoyle
 */
 
 public class RedSoundDarkStar extends Synth

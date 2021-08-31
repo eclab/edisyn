@@ -1,5 +1,5 @@
 /***
-    Copyright 2021 by Bryan Hoyle
+    Copyright 2021 by V. Hoyle
     Licensed under the Apache License version 2.0
 */
 

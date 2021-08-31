@@ -5824,7 +5824,7 @@ public abstract class Synth extends JComponent implements Updatable
             }
         else
             {
-            if (getPatchName(getModel()) != null)
+            if (getPatchName(getModel()) != null && getPatchName(getModel()).trim().length() > 0)
                 fd.setFile(StringUtility.reviseFileName(getPatchName(getModel()).trim() + ".syx"));
             else
                 fd.setFile(StringUtility.reviseFileName("Untitled.syx"));

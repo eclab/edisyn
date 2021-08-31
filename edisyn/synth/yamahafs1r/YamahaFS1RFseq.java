@@ -949,6 +949,116 @@ public class YamahaFS1RFseq extends Synth
                 }
             });
  
+        JMenuItem interpolate = new JMenuItem("Interpolate Frames...");
+        menu.add(interpolate);
+        interpolate.addActionListener(new ActionListener()
+            {
+            JComboBox part1 = new JComboBox(TRACKS_PLUS);
+            LabelledSlider frame1 = new LabelledSlider(1, 512, 1);
+            LabelledSlider frame2 = new LabelledSlider(1, 512, 512);
+            JCheckBox voicedLevel = new JCheckBox("", true);
+            JCheckBox voicedFrequency = new JCheckBox("", true);
+            JCheckBox unvoicedLevel = new JCheckBox("", true);
+            JCheckBox unvoicedFrequency = new JCheckBox("", true);
+            JCheckBox includePitch = new JCheckBox("", true);
+            
+            public void actionPerformed(ActionEvent evt)
+                {
+                part1.setMaximumRowCount(9);
+                part1.setSelectedIndex(8);  // "All"
+                JPanel panel = new JPanel();
+                panel.setLayout(new BorderLayout());
+                panel.add(part1, BorderLayout.WEST);
+                boolean result = showMultiOption(YamahaFS1RFseq.this, new String[] { "Track", "Start Frame", "End Frame", "Voiced Level", "Voiced Frequency", "Unvoiced Level", "Unvoiced Frequency", "Pitch" }, 
+                    new JComponent[] { panel, frame1, frame2, voicedLevel, voicedFrequency, unvoicedLevel, unvoicedFrequency, includePitch  }, 
+                    	"Interpolate Frames...", "Enter the frame range to interpolate from Start to End.");
+
+                if (result)
+                    {
+                     Model backup = (Model)(model.clone());
+                    setSendMIDI(false);
+                    undo.setWillPush(false);
+                                        
+                   int from = frame1.getValue();
+                    int to = frame2.getValue();
+                    int p1 = part1.getSelectedIndex() + 1;
+                    
+                    // p1 == TRACK_ALL 
+                    
+                   	boolean doVF = voicedFrequency.isSelected();
+                    boolean doVL = voicedLevel.isSelected();
+                    boolean doUF = unvoicedFrequency.isSelected();
+                    boolean doUL = unvoicedLevel.isSelected();
+                    boolean doPitch = includePitch.isSelected();
+                    
+				 	if (from > to)
+						{
+						int temp = from;
+						from = to;
+						to = temp;
+						}
+
+					// handle pitch
+					if (doPitch)
+						{
+						double startp = model.get("frame" + from + "pitch");
+						double endp = model.get("frame" + to + "pitch");
+
+						for(int i = from + 1; i <= to - 1; i++)
+							{
+							model.set("frame" + i + "pitch", (int)((i - from) / (double)(to - from) * (endp - startp) + startp));
+							}
+						}
+						
+					for(int j = 1; j <= 8; j++)
+						{
+						double startp = model.get("frame" + from + "pitch");
+						double endp = model.get("frame" + to + "pitch");
+					
+						if (j == p1 || p1 == TRACK_ALL)
+							{
+							double startvf = model.get("frame" + from + "voicedfrequency" + j);
+							double endvf = model.get("frame" + to + "voicedlevel" + j);
+							double startvl = model.get("frame" + from + "voicedfrequency" + j);
+							double endvl = model.get("frame" + to + "voicedlevel" + j);
+							double startuf = model.get("frame" + from + "unvoicedfrequency" + j);
+							double enduf = model.get("frame" + to + "unvoicedlevel" + j);
+							double startul = model.get("frame" + from + "unvoicedfrequency" + j);
+							double endul = model.get("frame" + to + "unvoicedlevel" + j);
+
+							for(int i = from + 1; i <= to - 1; i++)
+								{
+								if (doVF)
+									{
+									model.set("frame" + i + "voicedfrequency" + j, (int)((i - from) / (double)(to - from) * (endvf - startvf) + startvf));
+									}
+								if (doVL)
+									{
+									model.set("frame" + i + "unvoicedlevel" + j, (int)((i - from) / (double)(to - from) * (endvl - startvl) + startvl));
+									}
+								if (doUF)
+									{
+									model.set("frame" + i + "unvoicedfrequency" + j, (int)((i - from) / (double)(to - from) * (enduf - startuf) + startuf));
+									}
+								if (doUL)
+									{
+									model.set("frame" + i + "unvoicedlevel" + j, (int)((i - from) / (double)(to - from) * (endul - startul) + startul));
+									}
+								}
+							}
+                    	}
+
+                    undo.setWillPush(true);
+                    if (!backup.keyEquals(getModel()))  // it's changed, do an undo push
+                        undo.push(backup);
+                    repaint();      // generally forces repaints to all happen at once
+                    setSendMIDI(true);
+                    sendAllParameters();
+                	}
+                }
+            });
+
+
         JMenuItem distribute = new JMenuItem("Distribute Frame");
         menu.add(distribute);
         distribute.addActionListener(new ActionListener()

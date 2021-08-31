@@ -1,5 +1,5 @@
 /***
-    Copyright 2020 by Sean Luke and V. Hoyles
+    Copyright 2020 by Sean Luke and V. Hoyle
     Licensed under the Apache License version 2.0
 */
 

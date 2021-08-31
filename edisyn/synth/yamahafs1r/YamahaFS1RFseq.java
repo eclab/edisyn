@@ -1018,12 +1018,12 @@ public class YamahaFS1RFseq extends Synth
 						if (j == p1 || p1 == TRACK_ALL)
 							{
 							double startvf = model.get("frame" + from + "voicedfrequency" + j);
-							double endvf = model.get("frame" + to + "voicedlevel" + j);
-							double startvl = model.get("frame" + from + "voicedfrequency" + j);
+							double endvf = model.get("frame" + to + "voicedfrequency" + j);
+							double startvl = model.get("frame" + from + "voicedlevel" + j);
 							double endvl = model.get("frame" + to + "voicedlevel" + j);
 							double startuf = model.get("frame" + from + "unvoicedfrequency" + j);
-							double enduf = model.get("frame" + to + "unvoicedlevel" + j);
-							double startul = model.get("frame" + from + "unvoicedfrequency" + j);
+							double enduf = model.get("frame" + to + "unvoicedfrequency" + j);
+							double startul = model.get("frame" + from + "unvoicedlevel" + j);
 							double endul = model.get("frame" + to + "unvoicedlevel" + j);
 
 							for(int i = from + 1; i <= to - 1; i++)
@@ -2383,7 +2383,7 @@ public class YamahaFS1RFseq extends Synth
                 pos += 1;
                 }
             }
-                
+        
         data[data.length - 2] = produceChecksum(data, 4);
         data[data.length - 1] = (byte)0xF7;
         return data;

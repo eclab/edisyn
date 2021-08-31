@@ -831,7 +831,7 @@ Non-metric parameters, such as (say) choice of filter or the PCM sampled sound p
 
 \subsection{Deep Learned Neural Hill-Climbing and Randomization}
 
-The Yamaha DX7 editor has a special feature thanks to research done here at George Mason University by Bryan Hoyle.  Using approximately 30,000 unique DX7 patches found around the internet, we trained a special kind of deep-learned neural network called a {\it variational autoencoder}.  Using this network, we can improve both hill-climbing and patch randomization.
+The Yamaha DX7 editor has a special feature thanks to research done here at George Mason University by V. Hoyle.  Using approximately 30,000 unique DX7 patches found around the internet, we trained a special kind of deep-learned neural network called a {\it variational autoencoder}.  Using this network, we can improve both hill-climbing and patch randomization.
 
 If you're editing a DX7, you can use the neural network in hill-climbing by selecting {\bf NN Hill-Climber} in the Hill-Climber's ``Method'' chooser.  Thereafter instead of creating children patches via crossover and mutation, Edisyn will produce them using the autoencoder.  Similarly, if (when editing a DX7) you select Edit \(\rightarrow\) Randomize \(\rightarrow\) Randomizes Using NN, then randomization options will use the autoencoder rather than the standard mutator.
 

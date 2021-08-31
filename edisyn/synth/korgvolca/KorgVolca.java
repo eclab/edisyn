@@ -263,9 +263,15 @@ public class KorgVolca extends Synth
             setLastX("" + val, TYPE_KEY, getSynthName(), true);
             }
         synthType = val;
-        synthTypeCombo.setSelectedIndex(val);  // hopefully this isn't recursive
-        volcaPanel.removeAll();
-        volcaPanel.add(volcas[val], BorderLayout.CENTER);
+        if (synthTypeCombo != null) 
+        	{
+        	synthTypeCombo.setSelectedIndex(val);  // hopefully this isn't recursive
+        	}
+        if (volcaPanel != null)
+        	{
+        	volcaPanel.removeAll();
+        	volcaPanel.add(volcas[val], BorderLayout.CENTER);
+        	}
         revalidate();
         repaint();
         updateTitle();
@@ -379,7 +385,7 @@ public class KorgVolca extends Synth
         }         
 
                 
-//    public String getDefaultResourceFileName() { return "YamahaDX7.init"; }
+    public String getDefaultResourceFileName() { return "KorgVolca.init"; }
     public String getHTMLResourceFileName() { return "KorgVolca.html"; }
 
     /** Add the global patch category (name, id, number, etc.) */
@@ -698,6 +704,8 @@ public class KorgVolca extends Synth
         String[] params;
         HBox hbox = new HBox();
         Category category = new Category(this, "Part " + part, color);
+        category.makePasteable("drumsinglepart");
+
         
         comp = new LabelledDial("Select", this, "drumsinglepart" + part + "select", color, 0, 127)
             {
@@ -1030,6 +1038,8 @@ public class KorgVolca extends Synth
         VBox vbox = new VBox();
         
         Category category = new Category(this, "Part " + part, color);
+        category.makePasteable("drumsplitpart");
+
                 
         vbox.add(addVolcaDrumSplitLayer(part, 3, color));
         vbox.add(addVolcaDrumSplitLayer(part, 1, color));
@@ -1584,8 +1594,8 @@ public class KorgVolca extends Synth
                 {
                 if (val >= 110) return "1'";
                 else if (val >= 88) return "2'";
-                else if (val >= 66) return "4";
-                else if (val >= 44) return "8";
+                else if (val >= 66) return "4'";
+                else if (val >= 44) return "8'";
                 else if (val >= 22) return "16'";
                 else    // if (val >= 00) 
                     return "32'";
@@ -1702,7 +1712,7 @@ public class KorgVolca extends Synth
 
         // AR
         comp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
-            new String[] { null, "kickampattack",   "kickamprelease" },
+            new String[] { null, "kickampattack",   "kickampdecay" },
             new String[] { null, null,             null                 },
             new double[] { 0,    0.5/127,          0.5/127              },
             new double[] { 0.0,  1.0,              0.0                  });
@@ -1815,6 +1825,8 @@ public class KorgVolca extends Synth
         VBox vbox = new VBox();
         
         Category category = new Category(this, "Part " + part, color);
+        category.makePasteable("sample1part");
+
                 
         comp = new LabelledDial("Level", this, "sample1part" + part + "level", color, 0, 127);
         hbox.add(comp);
@@ -1855,6 +1867,11 @@ public class KorgVolca extends Synth
 
         comp = new LabelledDial("Speed", this, "sample1part" + part + "speed", color, 0, 127)
             {
+            public boolean isSymmetric()
+            	{
+            	return true;
+            	}
+            	
             public String map(int value)
                 {
                 if (value == 0) return "-63";
@@ -2005,6 +2022,12 @@ public class KorgVolca extends Synth
             };
         ((LabelledDial)comp).addAdditionalLabel("Select [P]");
         hbox.add(comp);
+        
+        // make some dummy labelled dials
+        for(int i = 2; i <= 10; i++)
+        	{
+        	comp = new LabelledDial("Part", this, "sample1part" + i + "pajenpartselect", color, 0, 127);
+        	}
 
         comp = new LabelledDial("Reverb", this, "sample1part" + 1 + "pajenreverbtype", color, 0, 127)
             {
@@ -2018,10 +2041,21 @@ public class KorgVolca extends Synth
         ((LabelledDial)comp).addAdditionalLabel("Type [P]");
         hbox.add(comp);
 
+        // make some dummy labelled dials
+        for(int i = 2; i <= 10; i++)
+        	{
+        	comp = new LabelledDial("Reverb", this, "sample1part" + i + "pajenreverbtype", color, 0, 127);
+        	}
+
         comp = new LabelledDial("Reverb", this, "sample1part" + 1 + "pajenreverblevel", color, 0, 127);
         ((LabelledDial)comp).addAdditionalLabel("Level [P]");
         hbox.add(comp);
 
+        // make some dummy labelled dials
+        for(int i = 2; i <= 10; i++)
+        	{
+        	comp = new LabelledDial("Reverb", this, "sample1part" + i + "pajenreverblevel", color, 0, 127);
+        	}
 
         JLabel label = new JLabel("  Test Notes Play Part ");
         label.setFont(Style.SMALL_FONT());
@@ -2085,137 +2119,6 @@ public class KorgVolca extends Synth
         return category;
         }
 
-/*
-  public JComponent addVolcaSamplePajenPart(int part, Color color)
-  {
-  JComponent comp;
-  String[] params;
-  HBox hbox = new HBox();
-  VBox vbox = new VBox();
-        
-  Category category = new Category(this, "Part " + part, color);
-                
-  comp = new LabelledDial("Level", this, "samplepajenpart" + part + "level", color, 0, 127);
-  hbox.add(comp);
-                
-  comp = new LabelledDial("Pan", this, "samplepajenpart" + part + "pan", color, 0, 127)
-  {
-  public boolean isSymmetric() { return true; }
-                                
-  public String map(int value)
-  {
-  if (value == 64) return "--";
-  else if (value < 64) return "< " + (64 - value);
-  else return  (value - 64) + " >";
-  }
-  };
-  hbox.add(comp);
-                
-  comp = new LabelledDial("Hi", this, "samplepajenpart" + part + "hicutoff", color, 0, 127);
-  ((LabelledDial)comp).addAdditionalLabel("Cutoff");
-  hbox.add(comp);
-
-  comp = new LabelledDial(" Amp Env ", this, "samplepajenpart" + part + "ampegattack", color, 0, 127);
-  ((LabelledDial)comp).addAdditionalLabel("Attack");
-  hbox.add(comp);
-                
-  comp = new LabelledDial(" Amp Env ", this, "samplepajenpart" + part + "ampegdecay", color, 0, 127);
-  ((LabelledDial)comp).addAdditionalLabel("Decay");
-  hbox.add(comp);
-                
-  // AR
-  comp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
-  new String[] { null, "samplepajenpart" + part + "ampegattack",   "samplepajenpart" + part + "ampegdecay" },
-  new String[] { null, null,             null                 },
-  new double[] { 0,    0.5/127,          0.5/127              },
-  new double[] { 0.0,  1.0,              0.0                  });
-  hbox.add(comp);
-
-  comp = new LabelledDial("Speed", this, "samplepajenpart" + part + "speed", color, 0, 127);
-  hbox.add(comp);
-
-  vbox.add(hbox);
-  hbox = new HBox();
-                
-  comp = new LabelledDial("Sample", this, "samplepajenpart" + part + "startpoint", color, 0, 127);
-  ((LabelledDial)comp).addAdditionalLabel("Start");
-  hbox.add(comp);
-                
-  comp = new LabelledDial("Sample", this, "samplepajenpart" + part + "length", color, 0, 127);
-  ((LabelledDial)comp).addAdditionalLabel("Length");
-  hbox.add(comp);
-
-  comp = new LabelledDial("Pitch Env", this, "samplepajenpart" + part + "pitchegintensity", color, 0, 127);
-  ((LabelledDial)comp).addAdditionalLabel("Intensity");
-  hbox.add(comp);
-                
-  comp = new LabelledDial("Pitch Env", this, "samplepajenpart" + part + "pitchegattack", color, 0, 127);
-  ((LabelledDial)comp).addAdditionalLabel("Attack");
-  hbox.add(comp);
-                
-  comp = new LabelledDial("Pitch Env", this, "samplepajenpart" + part + "pitchegdecay", color, 0, 127);
-  ((LabelledDial)comp).addAdditionalLabel("Decay");
-  hbox.add(comp);
-                
-  // AR
-  comp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
-  new String[] { null, "samplepajenpart" + part + "pitchegattack",   "samplepajenpart" + part + "pitchegdecay" },
-  new String[] { null, null,             null                 },
-  new double[] { 0,    0.5/127,          0.5/127              },
-  new double[] { 0.0,  1.0,              0.0                  });
-  hbox.add(comp);
- 
-  vbox.add(hbox);
-  category.add(vbox);
-                                                                       
-  return category;
-  }
-
-  public JComponent addVolcaSamplePajen(Color color)
-  {
-  Category category = new Category(this, "Sample (Pajen-7 Channel 11)", color);
-                
-  JComponent comp;
-  String[] params;
-               
-  final JComponent typical = addVolcaSamplePajenPart(1, color);
-  final int h = typical.getPreferredSize().height;
-  final int w = typical.getPreferredSize().width;
-        
-
-  VBox vbox = new VBox()
-  {
-  public int getScrollableBlockIncrement(Rectangle visibleRect, int orientation, int direction)
-  {
-  if (orientation == SwingConstants.VERTICAL)
-  return w;
-  else
-  return h;
-  }
-
-  public Dimension getPreferredScrollableViewportSize()
-  {
-  Dimension size = getPreferredSize();
-  size.height = h * 2;
-  return size;
-  }
-  };
-                
-  for(int part = 1; part <= 10; part++)
-  {
-  vbox.add(addVolcaSamplePajenPart(part, color));
-  }
-                
-  JScrollPane pane = new JScrollPane(vbox, ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-  pane.getViewport().setBackground(Style.BACKGROUND_COLOR());
-  pane.setBorder(null);
-                                                
-  category.add(pane, BorderLayout.CENTER);
-  return category;
-  }        
-*/    
-
-
 
     public JComponent addVolcaSample2Part(int part, Color color)
         {
@@ -2227,6 +2130,7 @@ public class KorgVolca extends Synth
         VBox vbox = new VBox();
         
         Category category = new Category(this, "Part " + part, color);
+        category.makePasteable("sample2part");
                                 
         comp = new LabelledDial("Level", this, prefix + "part" + part + "level", color, 0, 127);
         hbox.add(comp);
@@ -2280,7 +2184,19 @@ public class KorgVolca extends Synth
             ((LabelledDial)comp).addAdditionalLabel("Length");
             hbox.add(comp);
 
-            comp = new LabelledDial("Speed", this, prefix + "part" + part + "speed", color, 0, 127);
+            comp = new LabelledDial("Speed", this, prefix + "part" + part + "speed", color, 0, 127)
+            {
+            public boolean isSymmetric()
+            	{
+            	return true;
+            	}
+            	
+            public String map(int value)
+                {
+                if (value == 0) return "-63";
+                else return "" + (value - 64);
+                }
+            };
             hbox.add(comp);
 
             comp = new LabelledDial("Pitch Env", this, prefix + "part" + part + "pitchegintensity", color, 0, 127)
@@ -2625,7 +2541,7 @@ public class KorgVolca extends Synth
         "drumsplitpart4pan",
         "drumsplitpart4layer1select",
         "drumsplitpart4layer2select",
-        "drumsplitpart4ayer3select",
+        "drumsplitpart4layer3select",
         "drumsplitpart4layer1level",
         "drumsplitpart4layer2level",
         "drumsplitpart4layer3level",
@@ -2974,120 +2890,6 @@ public class KorgVolca extends Synth
         "sample1part10pajenreverbonoff",
         },
         {
-        // Note that pajen partselect, pajen reverblevel, and pajen reverbtype are actually globals though they work in
-        // different MIDI channels and so I have elected to keep them as separate parameters here for the time being
-        "samplepajenpart1level",
-        "samplepajenpart1pan",
-        "samplepajenpart1startpoint",
-        "samplepajenpart1length",
-        "samplepajenpart1hicutoff",
-        "samplepajenpart1speed",
-        "samplepajenpart1pitchegintensity",
-        "samplepajenpart1pitchegattack",
-        "samplepajenpart1pitchegdecay",
-        "samplepajenpart1ampegattack",
-        "samplepajenpart1ampegdecay",
-        "samplepajenpart2level",
-        "samplepajenpart2pan",
-        "samplepajenpart2startpoint",
-        "samplepajenpart2length",
-        "samplepajenpart2hicutoff",
-        "samplepajenpart2speed",
-        "samplepajenpart2pitchegintensity",
-        "samplepajenpart2pitchegattack",
-        "samplepajenpart2pitchegdecay",
-        "samplepajenpart2ampegattack",
-        "samplepajenpart2ampegdecay",
-        "samplepajenpart3level",
-        "samplepajenpart3pan",
-        "samplepajenpart3startpoint",
-        "samplepajenpart3length",
-        "samplepajenpart3hicutoff",
-        "samplepajenpart3speed",
-        "samplepajenpart3pitchegintensity",
-        "samplepajenpart3pitchegattack",
-        "samplepajenpart3pitchegdecay",
-        "samplepajenpart3ampegattack",
-        "samplepajenpart3ampegdecay",
-        "samplepajenpart4level",
-        "samplepajenpart4pan",
-        "samplepajenpart4startpoint",
-        "samplepajenpart4length",
-        "samplepajenpart4hicutoff",
-        "samplepajenpart4speed",
-        "samplepajenpart4pitchegintensity",
-        "samplepajenpart4pitchegattack",
-        "samplepajenpart4pitchegdecay",
-        "samplepajenpart4ampegattack",
-        "samplepajenpart4ampegdecay",
-        "samplepajenpart5level",
-        "samplepajenpart5pan",
-        "samplepajenpart5startpoint",
-        "samplepajenpart5length",
-        "samplepajenpart5hicutoff",
-        "samplepajenpart5speed",
-        "samplepajenpart5pitchegintensity",
-        "samplepajenpart5pitchegattack",
-        "samplepajenpart5pitchegdecay",
-        "samplepajenpart5ampegattack",
-        "samplepajenpart5ampegdecay",
-        "samplepajenpart6level",
-        "samplepajenpart6pan",
-        "samplepajenpart6startpoint",
-        "samplepajenpart6length",
-        "samplepajenpart6hicutoff",
-        "samplepajenpart6speed",
-        "samplepajenpart6pitchegintensity",
-        "samplepajenpart6pitchegattack",
-        "samplepajenpart6pitchegdecay",
-        "samplepajenpart6ampegattack",
-        "samplepajenpart6ampegdecay",
-        "samplepajenpart7level",
-        "samplepajenpart7pan",
-        "samplepajenpart7startpoint",
-        "samplepajenpart7length",
-        "samplepajenpart7hicutoff",
-        "samplepajenpart7speed",
-        "samplepajenpart7pitchegintensity",
-        "samplepajenpart7pitchegattack",
-        "samplepajenpart7pitchegdecay",
-        "samplepajenpart7ampegattack",
-        "samplepajenpart7ampegdecay",
-        "samplepajenpart8level",
-        "samplepajenpart8pan",
-        "samplepajenpart8startpoint",
-        "samplepajenpart8length",
-        "samplepajenpart8hicutoff",
-        "samplepajenpart8speed",
-        "samplepajenpart8pitchegintensity",
-        "samplepajenpart8pitchegattack",
-        "samplepajenpart8pitchegdecay",
-        "samplepajenpart8ampegattack",
-        "samplepajenpart8ampegdecay",
-        "samplepajenpart9level",
-        "samplepajenpart9pan",
-        "samplepajenpart9startpoint",
-        "samplepajenpart9length",
-        "samplepajenpart9hicutoff",
-        "samplepajenpart9speed",
-        "samplepajenpart9pitchegintensity",
-        "samplepajenpart9pitchegattack",
-        "samplepajenpart9pitchegdecay",
-        "samplepajenpart9ampegattack",
-        "samplepajenpart9ampegdecay",
-        "samplepajenpart10level",
-        "samplepajenpart10pan",
-        "samplepajenpart10startpoint",
-        "samplepajenpart10length",
-        "samplepajenpart10hicutoff",
-        "samplepajenpart10speed",
-        "samplepajenpart10pitchegintensity",
-        "samplepajenpart10pitchegattack",
-        "samplepajenpart10pitchegdecay",
-        "samplepajenpart10ampegattack",
-        "samplepajenpart10ampegdecay",
-        },
-        {
         "sample2part1level",
         "sample2part1pan",
         "sample2part1startpoint",
@@ -3216,17 +3018,28 @@ public class KorgVolca extends Synth
                 model.set(allParameters[type - 1][i], data[pos++] & 127);
                 }
             }
+            
+		if (type > 0)
+			{
+			setSynthType(type - 1, true);
+			}
+		
         return PARSE_SUCCEEDED;
         }
 
 
-                
+             
+    public static final int INIT_PATCH_DATA_LENGTH = 567;
+       
     public byte[] emit(Model tempModel, boolean toWorkingMemory, boolean toFile)
         {
         if (tempModel == null)
             tempModel = getModel();
         
-        byte[] data = new byte[163];
+        final boolean initPatch = false;
+		int type = getSynthType();
+
+        byte[] data = new byte[(initPatch ? INIT_PATCH_DATA_LENGTH : allParameters[type].length) + 38];
         data[0] = (byte)0xF0;
         data[1] = (byte)0x7D;
         data[2] = (byte)'E';
@@ -3249,40 +3062,43 @@ public class KorgVolca extends Synth
 
         // Load version
         data[19] = (byte) 0;
+        
+        // Set end
+        data[data.length - 1] = (byte)0xF7;
                 
         // Load name
-        char[] name = (model.get("name", "") + "                ").substring(16).toCharArray();
+        char[] name = (model.get("name", "") + "                ").substring(0, 16).toCharArray();
         for(int i = 0; i < name.length; i++)
             {
             if (name[i] < ' ' || name[i] >= 127)
                 name[i] = ' ';
             data[i + 20] = (byte)(name[i]);
             }
-
-
-        /*
-        // This code is used to generate the init patch
-        data[20 + 16] = (byte) 0;
-        int pos = 21 + 16;
-        for(int j = 0; j < allParameters.length; j++)
-        {
-        for(int i = 0; i < allParameters[j].length; i++)
-        {
-        data[pos++] = (byte)(model.get(allParameters[j][i], 0));
-        }
-        }
-        */
-
-        // This is the standard data output
-        // load type
-        int type = getSynthType();
-        data[20 + 16] = (byte) (type + 1);
-                
-        for(int i = 0; i < allParameters[type].length; i++)
-            {
-            data[21 + 16 + i] = (byte)(model.get(allParameters[type][i], 0));
-            }
-                        
+            
+		if (initPatch)
+			{
+			// This code is used to generate the init patch
+			data[20 + 16] = (byte) 0;
+			int pos = 21 + 16;
+			for(int j = 0; j < allParameters.length; j++)
+				{
+				for(int i = 0; i < allParameters[j].length; i++)
+					{
+					data[pos++] = (byte)(model.get(allParameters[j][i], 0));
+					}
+        		}
+        	}
+        else
+        	{
+			// This is the standard data output load type
+			data[20 + 16] = (byte) (type + 1);
+				
+			for(int i = 0; i < allParameters[type].length; i++)
+				{
+				data[21 + 16 + i] = (byte)(model.get(allParameters[type][i], 0));
+				}
+			}
+              
         return data;
         }
 
@@ -3341,7 +3157,7 @@ public class KorgVolca extends Synth
     Version number  (presently 0x0)
     16 bytes comprising an ASCII string of the patch name (internal to Edisyn), DEL and control characters not permitted except space
     Volca type [see Table 1]
-    Data [variable length, depends on Volca type.  Volca type 0 is the data of all Volcas concatenated in order, 429 bytes]
+    Data [variable length, depends on Volca type.  Volca type 0 is the data of all Volcas concatenated in order, 677 bytes]
     0xF7
 
 
@@ -3887,121 +3703,6 @@ public class KorgVolca extends Synth
     sample1part10pajenreverbtype
     sample1part10pajenreverblevel
     sample1part10pajenreverbonoff
-
-
-
-    DATA for Volca Sample (Pajen-7 Firmware) Channel 11 [110 bytes] 
-    samplepajenpart1level
-    samplepajenpart1pan
-    samplepajenpart1startpoint
-    samplepajenpart1length
-    samplepajenpart1hicutoff
-    samplepajenpart1speed
-    samplepajenpart1pitchegintensity
-    samplepajenpart1pitchegattack
-    samplepajenpart1pitchegdecay
-    samplepajenpart1ampegattack
-    samplepajenpart1ampegdecay
-    samplepajenpart2level
-    samplepajenpart2pan
-    samplepajenpart2startpoint
-    samplepajenpart2length
-    samplepajenpart2hicutoff
-    samplepajenpart2speed
-    samplepajenpart2pitchegintensity
-    samplepajenpart2pitchegattack
-    samplepajenpart2pitchegdecay
-    samplepajenpart2ampegattack
-    samplepajenpart2ampegdecay
-    samplepajenpart3level
-    samplepajenpart3pan
-    samplepajenpart3startpoint
-    samplepajenpart3length
-    samplepajenpart3hicutoff
-    samplepajenpart3speed
-    samplepajenpart3pitchegintensity
-    samplepajenpart3pitchegattack
-    samplepajenpart3pitchegdecay
-    samplepajenpart3ampegattack
-    samplepajenpart3ampegdecay
-    samplepajenpart4level
-    samplepajenpart4pan
-    samplepajenpart4startpoint
-    samplepajenpart4length
-    samplepajenpart4hicutoff
-    samplepajenpart4speed
-    samplepajenpart4pitchegintensity
-    samplepajenpart4pitchegattack
-    samplepajenpart4pitchegdecay
-    samplepajenpart4ampegattack
-    samplepajenpart4ampegdecay
-    samplepajenpart5level
-    samplepajenpart5pan
-    samplepajenpart5startpoint
-    samplepajenpart5length
-    samplepajenpart5hicutoff
-    samplepajenpart5speed
-    samplepajenpart5pitchegintensity
-    samplepajenpart5pitchegattack
-    samplepajenpart5pitchegdecay
-    samplepajenpart5ampegattack
-    samplepajenpart5ampegdecay
-    samplepajenpart6level
-    samplepajenpart6pan
-    samplepajenpart6startpoint
-    samplepajenpart6length
-    samplepajenpart6hicutoff
-    samplepajenpart6speed
-    samplepajenpart6pitchegintensity
-    samplepajenpart6pitchegattack
-    samplepajenpart6pitchegdecay
-    samplepajenpart6ampegattack
-    samplepajenpart6ampegdecay
-    samplepajenpart7level
-    samplepajenpart7pan
-    samplepajenpart7startpoint
-    samplepajenpart7length
-    samplepajenpart7hicutoff
-    samplepajenpart7speed
-    samplepajenpart7pitchegintensity
-    samplepajenpart7pitchegattack
-    samplepajenpart7pitchegdecay
-    samplepajenpart7ampegattack
-    samplepajenpart7ampegdecay
-    samplepajenpart8level
-    samplepajenpart8pan
-    samplepajenpart8startpoint
-    samplepajenpart8length
-    samplepajenpart8hicutoff
-    samplepajenpart8speed
-    samplepajenpart8pitchegintensity
-    samplepajenpart8pitchegattack
-    samplepajenpart8pitchegdecay
-    samplepajenpart8ampegattack
-    samplepajenpart8ampegdecay
-    samplepajenpart9level
-    samplepajenpart9pan
-    samplepajenpart9startpoint
-    samplepajenpart9length
-    samplepajenpart9hicutoff
-    samplepajenpart9speed
-    samplepajenpart9pitchegintensity
-    samplepajenpart9pitchegattack
-    samplepajenpart9pitchegdecay
-    samplepajenpart9ampegattack
-    samplepajenpart9ampegdecay
-    samplepajenpart10level
-    samplepajenpart10pan
-    samplepajenpart10startpoint
-    samplepajenpart10length
-    samplepajenpart10hicutoff
-    samplepajenpart10speed
-    samplepajenpart10pitchegintensity
-    samplepajenpart10pitchegattack
-    samplepajenpart10pitchegdecay
-    samplepajenpart10ampegattack
-    samplepajenpart10ampegdecay
-
 
 
     DATA for Volca Sample2 [56 bytes]

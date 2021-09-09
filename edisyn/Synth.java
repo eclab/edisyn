@@ -6933,7 +6933,7 @@ public abstract class Synth extends JComponent implements Updatable
     
     
     /** 
-        Returns a directory selected by the user, either for saving or for loading.
+        Returns a directory selected by the user for loading.
         This method uses Mac-specific features to display a better file chooser
         than the JFileChooser.
     */ 
@@ -6943,7 +6943,10 @@ public abstract class Synth extends JComponent implements Updatable
         
         if (Style.isMac())
             {
-            FileDialog fd = new FileDialog(parent, title, save ? FileDialog.SAVE : FileDialog.LOAD);
+            // MacOS's SAVE dialog is broken for directories.  We're forced to use the LOAD version
+            // Thanks to samstaton on github
+            
+            FileDialog fd = new FileDialog(parent, title, FileDialog.LOAD);
             if (initialParentDirectory != null)
                 fd.setDirectory(initialParentDirectory.getAbsolutePath());
             disableMenuBar();
@@ -6951,13 +6954,14 @@ public abstract class Synth extends JComponent implements Updatable
             fd.setVisible(true);
             System.setProperty("apple.awt.fileDialogForDirectories", "false");
             enableMenuBar();
-            if (fd.getFile() == null)
+            
+            if (fd.getDirectory() == null)
                 {
                 return null;
                 }
             else 
                 {
-                return new File(fd.getFile());
+                return new File(fd.getDirectory(), fd.getFile());
                 }
             }
         else
@@ -7656,7 +7660,6 @@ public abstract class Synth extends JComponent implements Updatable
                 
             int result = showMultiOption(this, new String[0], new JComponent[0], new String[] { "Save as Individual Files", "Save to Bulk File", "Cancel"}, 0,
                 "Batch Download", "Save the Patches as individual files or as a single bulk file?");
-            System.err.println(result);
             if (result == -1 || result == 2) return;
             if (result == 1)
                 {

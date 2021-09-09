@@ -2365,14 +2365,14 @@ public class Yamaha4Op extends Synth
     
 
     // DX21 Dump Request                F0 43 2CH 03 F7
-    // DX27/100 Dump Request                    F0 43 2CH 03 F7
+    // DX27/100 Dump Request            F0 43 2CH 03 F7
     // DX11 Dump Request                F0 43 2CH 7E "LM  8023AE" F7    [ACED2 + ACED + VCED]
     // TX81Z Dump Request               F0 43 2CH 7E "LM  8976AE" F7    [ACED + VCED]           // It says 0CH but that's wrong
     // TQ5 Dump Request                 F0 43 2CH 7E "LM  8036EF" F7    [EFEDS + ACED2 + ACED + VCED]
     // V50 Dump Request                 F0 43 2CH 7E "LM  8037AE" F7    [ACED3 + ACED2 + ACED + VCED]
 
     // DX21 Change Patch                [Though there are banks, we can only access the first one, just 32 values]
-    // DX27/100 Dump Request    [               We can access voices 0...23 in banks I, A, B, C, D, but only write to I]
+    // DX27/100 Dump Request            [We can access voices 0...32 in banks I, A, B, C, D, but only write to I]
     // DX11 Dump Request                [We can access voices 0...31 in banks I, A, B, C, D, but only write to I]
     // TX81Z Dump Request               [We can access voices 0...32 in banks I, A, B, C, D, but only write to I]
     // TQ5 Dump Request                 [We can access voices 0...99.  There are three BANKS, Internal, Preset, and Card.]
@@ -2388,7 +2388,6 @@ public class Yamaha4Op extends Synth
                 {
                 return new byte[] { (byte)0xF0, 0x43, (byte)(32 + channel), 0x03, (byte)0xF7 }; 
                 }
-            //              break;
             case TYPE_DX11:
                 {
                 return new byte[] { (byte)0xF0, 0x43, (byte)(32 + channel), 0x7E, 
@@ -2396,7 +2395,6 @@ public class Yamaha4Op extends Synth
                     (byte)'8', (byte)'0', (byte)'2', (byte)'3',
                     (byte)'A', (byte)'E', (byte)0xF7 }; 
                 }
-            //              break;
             case TYPE_TX81Z:
                 {
                 return new byte[] { (byte)0xF0, 0x43, (byte)(32 + channel), 0x7E, 
@@ -2404,7 +2402,6 @@ public class Yamaha4Op extends Synth
                     (byte)'8', (byte)'9', (byte)'7', (byte)'6',
                     (byte)'A', (byte)'E', (byte)0xF7 }; 
                 }
-            //              break;
             case TYPE_TQ5_YS100_YS200_B200:
                 {
                 return new byte[] { (byte)0xF0, 0x43, (byte)(32 + channel), 0x7E, 
@@ -2412,7 +2409,6 @@ public class Yamaha4Op extends Synth
                     (byte)'8', (byte)'0', (byte)'3', (byte)'6',
                     (byte)'E', (byte)'F', (byte)0xF7 }; 
                 }
-            //              break;
             case TYPE_V50:
                 {
                 return new byte[] { (byte)0xF0, 0x43, (byte)(32 + channel), 0x7E, 
@@ -2420,7 +2416,6 @@ public class Yamaha4Op extends Synth
                     (byte)'8', (byte)'0', (byte)'7', (byte)'3',
                     (byte)'A', (byte)'E', (byte)0xF7 }; 
                 }
-            //              break;
             }
         System.err.println("Warning (Yamaha4Op): Invalid synth type in requestCurrentDump(): " + getSynthType());
         return new byte[] { }; // just in case

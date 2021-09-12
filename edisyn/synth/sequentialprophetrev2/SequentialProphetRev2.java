@@ -6257,8 +6257,10 @@ public class SequentialProphetRev2 extends Synth
         P'08, with the exception of the 'slop' parameter which is doubled on the 
         Rev2."
         
-        -- however the slop parameter actually goes to *127* on the Rev2 I believe,
-        rather than 5 on the Prophet '08.
+        This goes along with our testing in loading Prophet '08 patches into the
+        Rev2 and then downloading them as Rev2 patches.  However I have been told
+        by people online that a 5 on the Prophet '08 sounds the same as a 5 on
+        the Rev2.        
         
 */
         

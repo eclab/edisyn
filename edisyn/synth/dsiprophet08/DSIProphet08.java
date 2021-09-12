@@ -7,6 +7,7 @@ package edisyn.synth.dsiprophet08;
 
 import edisyn.*;
 import edisyn.gui.*;
+import edisyn.synth.sequentialprophetrev2.*;
 import java.awt.*;
 import java.awt.geom.*;
 import javax.swing.border.*;
@@ -24,11 +25,26 @@ import javax.sound.midi.*;
 
 public class DSIProphet08 extends Synth
     {
+	public static final int[] PR_ARPEGGIATOR_MODES = { 0, 1, 2, 4, 3 };
+	public static final int[] PR_KEY_MODES = { 0, 2, 4, 1, 3, 5 };
+	public static final int[] PR_MODULATION_DESTINATIONS = { 0, 1, 2, 3, 4, 5, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 
+		19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 0, 0, 0, 0, 52 };		// SEQ24 slew is last
+	public static final int[] PR_MODULATION_SOURCES = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 0, 0 }; 
+	public static final int[] PR_LFO_SHAPES = { 0, 2, 1, 3, 4 };
+	public static final int[] PR_SEQUENCER_TRIGGERS = { 0, 1, 2, 3, 4, 5, 0 };
+	public static final String[] DESTINATION_TAGS = { "env3mod", "lfo1mod", "lfo2mod", "lfo3mod", "lfo4mod", 
+											"mod1", "mod2", "mod3", "mod4", "mod5", "mod6", "mod7", "mod8", 
+											"wheel", "pressure", "breath", "velocity", "foot",
+											"track1", "track2", "track3", "track4" };
+	
+	
+
+
     /// Various collections of parameter names for pop-up menus
         
     public static final String[] MODULATION_SOURCES = new String[] { "Off", "Track 1", "Track 2", "Track 3", "Track 4", "LFO 1", "LFO 2", "LFO 3", "LFO 4", "Filter Env", "Amp Env", "Env 3", "Pitch Bend", "Mod Wheel", "Pressure", "MIDI Breath", "MIDI Foot", "MIDI Expression", "Velocity", "Note Number", "Noise", "[MK]AudIn EnvFollow", "[MK]AudIn PkHold" };
-    public static final String[] MODULATION_DESTINATIONS = new String[] { "Off", "Osc 1 Freq", "Osc 2 Freq", "Osc 1&2 Freq", "Osc Mix", "Noise Level", "Osc 1 PW", "Osc 2 PW", "Osc 1&2 PW", "Filter Freq", "Filter Resonance", "Filter Audio Mod", "VCA Level", "Pan Sprd/[M]Pos", "LFO 1 Freq", "LFO 2 Freq", "LFO 3 Freq", "LFO 4 Freq", "All LFO Freqs", "LFO 1 Amt", "LFO 2 Amt", "LFO 3 Amt", "LFO 4 Amt", "All LFO Amts", "Filter Env Amt", "Amp Env Amt", "Env 3 Amt", "All Env Amts", "Env 1 Attack", "Env 2 Attack", "Env 3 Attack", "All Env Attacks", "Env 1 Decay", "Env 2 Decay", "Env 3 Decay", "All Env Decays", "Env 1 Release", "Env 2 Release", "Env 3 Release", "All Env Releases", "Mod 1 Amt", "Mod 2 Amt", "Mod 3 Amt", "Mod 4 Amt", "[TKX]Fdb[M]AudIn", "[TMKX] Sub Osc 1", "[TMKX] Sub Osc 2", "[TKX]Feedbk Gain" };
-    public static final String[] MODULATION_DESTINATIONS_SEQ24 = new String[] { "Off", "Osc 1 Freq", "Osc 2 Freq", "Osc 1&2 Freq", "Osc Mix", "Noise Level", "Osc 1 PW", "Osc 2 PW", "Osc 1&2 PW", "Filter Freq", "Filter Resonance", "Filter Audio Mod", "VCA Level", "Pan Sprd/[M]Pos", "LFO 1 Freq", "LFO 2 Freq", "LFO 3 Freq", "LFO 4 Freq", "All LFO Freqs", "LFO 1 Amt", "LFO 2 Amt", "LFO 3 Amt", "LFO 4 Amt", "All LFO Amts", "Filter Env Amt", "Amp Env Amt", "Env 3 Amt", "All Env Amts", "Env 1 Attack", "Env 2 Attack", "Env 3 Attack", "All Env Attacks", "Env 1 Decay", "Env 2 Decay", "Env 3 Decay", "All Env Decays", "Env 1 Release", "Env 2 Release", "Env 3 Release", "All Env Releases", "Mod 1 Amt", "Mod 2 Amt", "Mod 3 Amt", "Mod 4 Amt", "[TKX]Fdb[M]AudIn", "[TMKX] Sub Osc 1", "[TMKX] Sub Osc 2", "[TKX]Feedbk Gain", "[TKX] Slew" };
+    public static final String[] MODULATION_DESTINATIONS = new String[]       { "Off", "Osc 1 Freq", "Osc 2 Freq", "Osc 1&2 Freq", "Osc Mix", "Noise Level", "Osc 1 PW", "Osc 2 PW", "Osc 1&2 PW", "Filter Freq", "Filter Resonance", "Filter Audio Mod", "VCA Level", "Pan Sprd/[M]Pos", "LFO 1 Freq", "LFO 2 Freq", "LFO 3 Freq", "LFO 4 Freq", "All LFO Freqs", "LFO 1 Amt", "LFO 2 Amt", "LFO 3 Amt", "LFO 4 Amt", "All LFO Amts", "Filter Env Amt", "Amp Env Amt", "Env 3 Amt", "All Env Amts", "Env 1 Attack", "Env 2 Attack", "Env 3 Attack", "All Env Attacks", "Env 1 Decay", "Env 2 Decay", "Env 3 Decay", "All Env Decays", "Env 1 Release", "Env 2 Release", "Env 3 Release", "All Env Releases", "Mod 1 Amt", "Mod 2 Amt", "Mod 3 Amt", "Mod 4 Amt", "[TKX]Fdb[M]AudIn", "[TMKX] Sub Osc 1", "[TMKX] Sub Osc 2", "[TKX]Feedbk Gain" };
+    public static final String[] MODULATION_DESTINATIONS_SEQ24 = new String[] { "Off", "Osc 1 Freq", "Osc 2 Freq", "Osc 1&2 Freq", "Osc Mix", "Noise Level", "Osc 1 PW", "Osc 2 PW", "Osc 1&2 PW", "Filter Freq", "Filter Resonance", "Filter Audio Mod", "VCA Level", "Pan Sprd/[M]Pos", "LFO 1 Freq", "LFO 2 Freq", "LFO 3 Freq", "LFO 4 Freq", "All LFO Freqs", "LFO 1 Amt", "LFO 2 Amt", "LFO 3 Amt", "LFO 4 Amt", "All LFO Amts", "Filter Env Amt", "Amp Env Amt", "Env 3 Amt", "All Env Amts", "Env 1 Attack", "Env 2 Attack", "Env 3 Attack", "All Env Attacks", "Env 1 Decay", "Env 2 Decay", "Env 3 Decay", "All Env Decays", "Env 1 Release", "Env 2 Release", "Env 3 Release", "All Env Releases", "Mod 1 Amt", "Mod 2 Amt", "Mod 3 Amt", "Mod 4 Amt", "[TKX]Fdb[M]AudIn", "[TMKX] Sub Osc 1", "[TMKX] Sub Osc 2", "[TKX]Feedbk Gain", "[PTKX] Slew" };
     public static final String[] OSC_SHAPES = new String[] { "Off", "Saw", "Tri", "Saw/Tri" };
     public static final String[] GLIDE_MODES = new String[] { "Fixed Rate", "Fixed Rate Auto", "Fixed Time", "Fixed Time Auto" };
     public static final String[] FILTER_POLES = new String[] { "2-Pole", "4-Pole" };
@@ -181,7 +197,6 @@ public class DSIProphet08 extends Synth
         vbox.add(hbox);
 
         soundPanel.add(vbox, BorderLayout.CENTER);
-        //        soundPanel.makePasteable("layer1");
         soundPanel.makePasteable("layer");
         soundPanel.setSendsAllParameters(false);
         addTab("Oscillators and Filters A", soundPanel);
@@ -218,7 +233,6 @@ public class DSIProphet08 extends Synth
             }
 
         modulationPanel.add(vbox, BorderLayout.CENTER);
-        //        modulationPanel.makePasteable("layer1");
         modulationPanel.makePasteable("layer");
         addTab("Modulation A", modulationPanel);
 
@@ -236,11 +250,12 @@ public class DSIProphet08 extends Synth
         vbox.add(addSequencerTrack(1, 4, Style.COLOR_B()));
         
         sequence.add(vbox, BorderLayout.CENTER);
-        //        sequence.makePasteable("layer1");
-        sequence.makePasteable("layer2");
+        sequence.makePasteable("layer");
         addTab("Sequencer A", sequence);
         
         
+        
+        /// SOUND B
         soundPanel = new SynthPanel(this);
         vbox = new VBox();
         hbox = new HBox();
@@ -274,7 +289,6 @@ public class DSIProphet08 extends Synth
         vbox.add(hbox);
         
         soundPanel.add(vbox, BorderLayout.CENTER);
-        //        soundPanel.makePasteable("layer2");
         soundPanel.makePasteable("layer");
         soundPanel.setSendsAllParameters(false);
         addTab("Oscillators and Filters B", oscPanelB = soundPanel);
@@ -309,7 +323,6 @@ public class DSIProphet08 extends Synth
             }
 
         modulationPanel.add(vbox, BorderLayout.CENTER);
-        //        modulationPanel.makePasteable("layer2");
         modulationPanel.makePasteable("layer");
         addTab("Modulation B", modPanelB = modulationPanel);
 
@@ -324,7 +337,6 @@ public class DSIProphet08 extends Synth
         vbox.add(addSequencerTrack(2, 4, Style.COLOR_B()));
         
         sequence.add(vbox, BorderLayout.CENTER);
-        //        sequence.makePasteable("layer2");
         sequence.makePasteable("layer");
         addTab("Sequencer B", seqPanelB = sequence);
 
@@ -478,7 +490,7 @@ public class DSIProphet08 extends Synth
             {
             public String map(int val)
                 {
-                return (NOTES[val % 12] + " " + (val / 12));
+                return (NOTES[val % 12] + " " + ((val / 12) - 2));
                 }
             };
         hbox.add(comp);
@@ -492,7 +504,6 @@ public class DSIProphet08 extends Synth
     public JComponent addGlobal(int layer, Color color)
         {
         Category category = new Category(this, "Performance", color);
-        //        category.makePasteable("layer" + layer);
         category.makePasteable("layer");
 
         JComponent comp;
@@ -555,7 +566,6 @@ public class DSIProphet08 extends Synth
     public JComponent addOscillatorGlobal(int layer, Color color)
         {
         Category category = new Category(this, "Oscillators", color);
-        //        category.makePasteable("layer" + layer);
         category.makePasteable("layer");
 
         JComponent comp;
@@ -600,7 +610,6 @@ public class DSIProphet08 extends Synth
     public JComponent addOscillator(int layer, int osc, Color color)
         {
         Category category = new Category(this, "Oscillator " + osc, color);
-        //        category.makePasteable("layer" + layer + "dco" + osc);
         category.makePasteable("layer" + layer + "dco");
 
         JComponent comp;
@@ -661,7 +670,6 @@ public class DSIProphet08 extends Synth
     public JComponent addSuboscillator(int layer, Color color)
         {
         Category category = new Category(this, "Sub Osc", color);
-        //        category.makePasteable("layer" + layer + "tetrasuboscillator");
         category.makePasteable("layer");
 
         JComponent comp;
@@ -684,7 +692,6 @@ public class DSIProphet08 extends Synth
     public JComponent addFeedback(int layer, Color color)
         {
         Category category = new Category(this, "Feedback / Audio In", color);
-        //        category.makePasteable("layer" + layer + "tetrafeedback");
         category.makePasteable("layer");
 
         JComponent comp;
@@ -707,7 +714,6 @@ public class DSIProphet08 extends Synth
     public JComponent addFilter(int layer, Color color)
         {
         Category category = new Category(this, "Filter", color);
-        //        category.makePasteable("layer" + layer + "vcf");
         category.makePasteable("layer");
 
         JComponent comp;
@@ -743,7 +749,6 @@ public class DSIProphet08 extends Synth
         Category category = new Category(this, 
                 (env == FILTER_ENVELOPE ? "Filter Envelope" : 
                 (env == AMPLIFIER_ENVELOPE ? "Amplifier Envelope" : "Envelope 3")), color);
-        //        category.makePasteable("layer" + layer + "env" + env);
         category.makePasteable("layer" + layer + "env");
                 
         JComponent comp;
@@ -805,7 +810,6 @@ public class DSIProphet08 extends Synth
     public JComponent addAmplifier(int layer, Color color)
         {
         Category category = new Category(this, "Amplifier", color);
-        //        category.makePasteable("layer" + layer + "vca");
         category.makePasteable("layer");
                
         JComponent comp;
@@ -834,7 +838,6 @@ public class DSIProphet08 extends Synth
     public JComponent addExternalModulation(int layer, String title, String key, Color color)
         {
         Category category = new Category(this, title, color);
-        //        category.makePasteable("layer" + layer + "key");
         category.makePasteable("layer");
               
         JComponent comp;
@@ -861,8 +864,6 @@ public class DSIProphet08 extends Synth
     public JComponent addSequencerTrack(final int layer, final int track, Color color)
         {
         Category category = new Category(this, "Track " + track, color);
-        //        category.makeDistributable("layer" + layer + "track" + track);
-        //        category.makePasteable("layer" + layer + "track" + track);
         category.makeDistributable("layer" + layer + "track");
         category.makePasteable("layer" + layer + "track");
                 
@@ -909,7 +910,6 @@ public class DSIProphet08 extends Synth
     public JComponent addLFO(int layer, final int lfo, Color color)
         {
         Category category = new Category(this, "LFO " + lfo, color);
-        //        category.makePasteable("layer" + layer + "lfo" + lfo);
         category.makePasteable("layer" + layer + "lfo");
                 
         JComponent comp;
@@ -953,7 +953,6 @@ public class DSIProphet08 extends Synth
     public JComponent addModulation(int layer, int mod, Color color)
         {
         Category category  = new Category(this, "Modulation " + mod, color);
-        //        category.makePasteable("layer" + layer + "mod" + mod);
         category.makePasteable("layer" + layer + "mod");
 
         JComponent comp;
@@ -985,8 +984,6 @@ public class DSIProphet08 extends Synth
     public JComponent addSequencer(int layer, Color color)
         {
         final Category category  = new Category(this, "Sequencer", color);
-        //        category.makePasteable("layer" + layer);
-        //        category.makeDistributable("layer" + layer);
         category.makePasteable("layer");
         category.makeDistributable("layer");
                        
@@ -1029,7 +1026,6 @@ public class DSIProphet08 extends Synth
     public JComponent addTetra(int layer, Color color)
         {
         Category category = new Category(this, "Tetra Layer " + (layer == 1 ? "A / Mopho" : "B"), color);
-        //        category.makePasteable("layer" + layer + "tetra");
         category.makePasteable("layer");
                 
         JComponent comp;
@@ -1125,7 +1121,7 @@ public class DSIProphet08 extends Synth
         plus additional Tetra- or Mopho-only parameters mapped
         in the the appropriate location given their NRPN values. */
                 
-    final static String[] parameters = new String[]
+    public final static String[] parameters = new String[]
     {
     "layer1dco1frequency",    
     "layer1dco1finetune",    
@@ -2268,7 +2264,17 @@ public class DSIProphet08 extends Synth
 
         menu.addSeparator();
 
-        JMenuItem build = new JMenuItem("Build Tetra Combo");
+        JMenuItem prophetRev2 = new JMenuItem("To Prophet Rev2");
+        menu.add(prophetRev2);
+        prophetRev2.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent evt)
+                {
+				toRev2();
+                }
+            });	    
+
+        JMenuItem build = new JMenuItem("To Tetra Combo");
         menu.add(build);
         build.addActionListener(new ActionListener()
             {
@@ -2850,6 +2856,143 @@ public class DSIProphet08 extends Synth
     "Edit Name 16",
     };
 
+
+
+
+
+
+	public void convertToRev2(Model model, int[] suboctave, int[] sequencer)
+		{
+		// For each layer...
+		for(int layer = 1; layer <= 2; layer++)
+			{
+			for(int osc = 1; osc <= 2; osc++)
+				{
+				// Map Oscillator
+				String key = "layer" + layer + "dco" + osc + "shape";
+				int shape = (model.get(key));
+				if (shape == 3)	// SAW + TRI
+					{
+					model.set(key, 2);	// SAW + TRI
+					}
+				else if (shape == 2)	// TRI
+					{
+					model.set(key, 3);	// TRI				
+					}
+				else if (shape >= 4)	// PULSE
+					{
+					model.set("layer" + layer + "dco" + osc + "shapemod", shape - 4);
+					model.set(key, 4);			
+					}
+				}
+			
+			// Map Arpeggiator
+			model.set("layer" + layer + "arpeggiatoroctaves", model.get("layer" + layer + "arpeggiatormode") / 5);
+			model.set("layer" + layer + "arpeggiatormode", PR_ARPEGGIATOR_MODES[model.get("layer" + layer + "arpeggiatormode") % 5]);
+
+			// Map Sequencer.  Note that this assumes that the name "layer1sequencer" etc.
+			// has been changed or removed.
+			model.set("layer" + layer + "layer1gatedpolyseq", sequencer[layer- 1]);
+
+			// Map Sub Octave.  The Prophet '08 doesn't have a sub-octave, but the Mopho/Tetra do
+			model.set("layer" + layer + "subosc", suboctave[layer- 1]);
+
+			// Map Slop.  It appears that Prophet '08 0...5 maps to the Rev2's 0...10.
+			model.set("layer" + layer + "slop", model.get("layer" + layer + "slop") * 2);
+			
+			// Map Unison Key Mode
+			if (model.exists("layer" + layer + "unisonkeymode"))
+				{
+				model.set("layer" + layer + "unisonkeymode", 
+					PR_KEY_MODES[model.get("layer" + layer + "unisonkeymode")]);
+				}
+			
+			// Map Sequencer Trigger Mode
+			if (model.exists("layer" + layer + "sequencertrigger"))
+				{
+				model.set("layer" + layer + "sequencertrigger", 
+					PR_SEQUENCER_TRIGGERS[model.get("layer" + layer + "sequencertrigger")]);
+				}
+			
+			// Map LFO shapes
+			for(int l = 1; l <= 4; l++)
+				{
+				if (model.exists("layer" + layer + "lfo" + l + "shape"))
+					{
+					model.set("layer" + layer + "lfo" + l + "shape", 
+						PR_LFO_SHAPES[model.get("layer" + layer + "lfo" + l + "shape")]);
+					}
+				}
+			
+			// Map sources
+			for(int m = 1; m <= 8; m++)
+				{
+				if (model.exists("layer" + layer + "mod" + m + "source"))
+					{
+					model.set("layer" + layer + "mod" + m + "source", 
+						PR_MODULATION_SOURCES[model.get("layer" + layer + "mod" + m + "source")]);
+					}
+				}
+			
+			// Map destinations
+			for(int d = 0; d < DESTINATION_TAGS.length; d++)
+				{
+				if (model.exists("layer" + layer + DESTINATION_TAGS[d] + "destination"))
+					{
+					model.set("layer" + layer + DESTINATION_TAGS[d] + "destination", 
+						PR_MODULATION_DESTINATIONS[model.get("layer" + layer + DESTINATION_TAGS[d] + "destination")]);
+					}
+				}
+			}
+		}
+		
+   public void toRev2()
+           {
+			final SequentialProphetRev2 synth = new SequentialProphetRev2();
+			if (tuple != null)
+			synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver(), synth.buildKey2Receiver());
+				synth.sprout();
+			JFrame frame = ((JFrame)(SwingUtilities.getRoot(synth)));
+			frame.setVisible(true);
+			SwingUtilities.invokeLater(new Runnable()
+				{
+				public void run() 
+					{ 
+					synth.setSendMIDI(false);
+					synth.getUndo().setWillPush(false);
+
+					for(int i = 0; i < DSIProphet08.parameters.length; i++)
+						{
+						String key = DSIProphet08.parameters[i];
+						if (model.exists(key))
+							{
+							if (model.isString(key))		 // can only happen with "name"
+								{
+								synth.getModel().set(key, model.get(key, ""));
+								}
+							else
+								{
+								synth.getModel().set(key, model.get(key, 0));
+								}
+							}
+						}
+						
+					// now fix up
+					convertToRev2(synth.getModel(), 
+						new int[] { model.get("layer1tetrasuboscillator1level"), model.get("layer2tetrasuboscillator1level") },
+						new int[] { model.get("layer1sequencer"), model.get("layer2sequencer") } );
+
+					synth.getUndo().setWillPush(true);
+					synth.setSendMIDI(true);
+					}
+				});
+           };
+		
+
+
+
+
+    
     public boolean testVerify(Synth synth2, String key, Object val1, Object val2)
         {
         int t = getType();

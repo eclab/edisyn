@@ -57,7 +57,9 @@ The menu has several options that are useful for Prophet '08 and Tetra owners.
 
 <p><li> <b>Load Both Layers</b>, <b>Load Only A</>, and <b>Load Only B</b>&nbsp;&nbsp; When you load a sysex file, receive a dump or merge from your Prophet '08 or Tetra, or reset your patch, your setting here will dictate whether this will effect both layers, or just Layer A or Layer B (keeping the other one intact).  This way, for example, you can just clear out Layer A.  Or you could make a patch consisting of the Layer A of two different patches, by first loading one patch, then copying its Layer A to Layer B, then restricting loading to just Layer A, and then finally loading the second patch.
 
-<p><li><b>Build Tetra Combo</b> constructs a Tetra Combo patch out of this patch. This is done by copying Layer A to Voices 1 and 2 in the Combo, and Layer B to Voices 3 and 4.  All voices will share the same patch name.  The four "assignable parameters" will be distributed to the four voices.
+<p><li> <b>To Prophet Rev2</b>.  This converts the patch into one appropriate for a Prophet Rev2, and then loads it in a new editor.  This might be useful for converting Prophet '08 patches and then editing them for these machines (of course you can use the Prophet '08 editor to send patches directly to the Rev2, which can read Prophet '08 patches).
+
+<p><li><b>To Tetra Combo</b> constructs a Tetra Combo patch out of this patch. This is done by copying Layer A to Voices 1 and 2 in the Combo, and Layer B to Voices 3 and 4.  All voices will share the same patch name.  The four "assignable parameters" will be distributed to the four voices.
 
 <p><li><b>Send Assignable Params</b> toggles whether Edisyn sends real-time parameter change messages in response to changing any of the four "Assignable Parameter" parameters.  This is because doing so triggers a bug in the Tetra Beta firmware, which causes the parameter to be reset to Osc 1 Freq.  If you're running a Tetra using the Beta firmware, you might like to turn this on; otherwise you can ignore it.
 

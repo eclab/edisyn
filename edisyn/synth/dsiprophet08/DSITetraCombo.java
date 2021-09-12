@@ -2663,7 +2663,7 @@ public class DSITetraCombo extends Synth
         
         menu.addSeparator();
 
-        JMenuItem build = new JMenuItem("Build Single Patch...");
+        JMenuItem build = new JMenuItem("To Single Patch...");
         menu.add(build);
         build.addActionListener(new ActionListener()
             {
@@ -2673,7 +2673,7 @@ public class DSITetraCombo extends Synth
             public void actionPerformed(ActionEvent evt)
                 {
                 boolean result = showMultiOption(DSITetraCombo.this, new String[] { "Layer A", "Layer B" }, 
-                    new JComponent[] { part1, part2 }, "Build Single Patch...", "Enter the voices to put in layers.");
+                    new JComponent[] { part1, part2 }, "To Single Patch...", "Enter which voices to put in layers A and B.");
 
                 if (result)
                     {

@@ -1,0 +1,49 @@
+<html>
+<head>
+</head>
+<body>
+<h1>Sequential Prophet Rev2</h1>
+<h2>Single Patch Editor</h2>
+
+<p>This editor works with the Sequential Prophet Rev2.  It is not meant to work on similar models, such as the Prophet '08.</p>
+
+<p><b>Communicating with Edisyn</b><br>
+Set the MIDI Channel to the same as being used in Edisyn.  Set MIDI Param Send to NRPN.  Set MIDI Param Rec to NRPN.  Set MIDI Prog Enable to On.  Set MIDI SysEx Cable to MIDI or USB. </p>
+
+<br><br><h3>About the Menu</h3>
+
+<ul>
+<li> <b>Copy A->B</b>, <b>Copy A&lt;-B</b> and <b>Swap A&lt;->B</b>&nbsp;&nbsp; These menus allow you to move the A and B layers to each other.
+
+<p><li> <b>Load Both Layers</b>, <b>Load Only A</>, and <b>Load Only B</b>&nbsp;&nbsp; When you load a sysex file, receive a dump or merge from your Prophet Rev2, or reset your patch, your setting here will dictate whether this will effect both layers, or just Layer A or Layer B (keeping the other one intact).  This way, for example, you can just clear out Layer A.  Or you could make a patch consisting of the Layer A of two different patches, by first loading one patch, then copying its Layer A to Layer B, then restricting loading to just Layer A, and then finally loading the second patch.
+
+<p><li> <b>To Prophet '08 / Mopho / Tetra</b>.  This converts the Prophet Rev2 patch into one appropriate for a Prophet '08, Mopho series, or Tetra, and loads it in a new editor. This might be useful for converting Rev2 patches and then editing them for these machines.
+
+</ul>
+
+<br><h3>Hints</h3>
+
+<ul>
+<li>When you set the destination for a Gated Sequencer track to "Osc 1 Freq", "Osc 2 Freq", or "Osc 1&2 Freq", the track dials will change from number values to notes.  The lowest note, <b>C0</b>, corresponds to the note being played by the user -- that is, all sequenced notes are equal to or higher than the played note.  If you need notes lower than the played note, pitch the oscillator frequencies down.
+
+<p><li>The Velocity parameter in the Polyphonic Sequencer can have values "Reset", "Rest" and 1 to 127. The "Reset" is improperly displayed on the Rev2 as "Rest", so on the Rev2 you see no distinction between "Rest" and "Reset". Initially, the tracks are filled with "Reset" (shown as "Rest" on the Rev2). As soon as you record a track and modifiy the velocity, it can be set to "Rest" or to any velocity value, but never back to "Reset" (on the Rev2).  Edison instead shows the actual value and allows you to set it to "Reset" again.
+</ul>
+
+<br><h3>Gotchas</h3>
+<ul>
+<li>The velocity values of steps 63 and 64 of the Layer B polyphonic sequencer are not stored in the patch and are not transmitted over sysex as a patch dump.  This is a known bug in the Rev2.
+
+<p><li>The Rev2 ignores patch names sent as NRPN; but will accept them in patch dumps over sysex.  The Rev2 will <i>send</i> the patch name over NRPN, and Edisyn recognizes this.
+</ul>
+
+<p><table border=0 cellpadding=0 cellspacing=5>
+<tr>
+<td align=right>By&nbsp;&nbsp;&nbsp;
+<td><b>Wim Verheyen</b>
+<tr>
+<td align=right>Date&nbsp;&nbsp;&nbsp;
+<td>September 2021
+</table>
+
+</body>
+</html>

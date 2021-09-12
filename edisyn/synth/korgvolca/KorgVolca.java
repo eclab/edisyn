@@ -3134,6 +3134,18 @@ public class KorgVolca extends Synth
 
     public String getPatchName(Model model) { return model.get("name", "Untitled"); }
         
+    public boolean testVerify(Synth synth2, String key, Object val1, Object val2)
+    	{
+    	if (key.equals("name"))
+    		{ 
+    		return ((String)val1).trim() != ((String)val2).trim();
+			}    		
+    	// we ignore keys that don't start with the prefix we're interested in
+    	else if (!key.startsWith(PREFIXES[getSynthType()]))
+    		return true;
+    	return false;
+    	}
+
     }
 
 

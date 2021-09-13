@@ -6075,7 +6075,7 @@ public class SequentialProphetRev2 extends Synth
         group.add(restrictB);
 
         menu.addSeparator();
-        JMenuItem prophet08 = new JMenuItem("To Prophet '08 / Mopho / Tetra");
+        JMenuItem prophet08 = new JMenuItem("To Prophet '08 / Tetra / Mopho");
         menu.add(prophet08);
         prophet08.addActionListener(new ActionListener()
             {

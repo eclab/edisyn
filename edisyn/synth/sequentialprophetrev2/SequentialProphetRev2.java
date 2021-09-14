@@ -89,9 +89,6 @@ public class SequentialProphetRev2 extends Synth
     
     public SequentialProphetRev2()
         {
-        // Here you set up your interface.   You can look at other patch editors
-        // to see how they were done.  At the very end you typically would say something like:
-
         int panel = 0;
                 
         for(int i = 0; i < nrpnparameters.length; i++)
@@ -329,12 +326,11 @@ public class SequentialProphetRev2 extends Synth
         polyseqPanel.makePasteable("layer");
         addTab("Poly Seq B", polyseqPanelB = polyseqPanel);
                     
-        model.set("name", "Untitled");  // or whatever, to set the initial name of your patch (assuming you use "name" as the key for the patch name)
+        model.set("name", "Untitled");
         model.set("bank", 0);
         model.set("number", 0);
-        loadDefaults();                                 // this tells Edisyn to load the ".init" sysex file you created.  If you haven't set that up, it won't bother
+        loadDefaults();
         }
-        
 
     JComponent nameGlobal = null;
     /** Add the global patch category (name, id, number, etc.) */
@@ -467,7 +463,6 @@ public class SequentialProphetRev2 extends Synth
     public JComponent addArp(int layer, Color color)
         {
         Category category = new Category(this, "Arpeggiator", color);
-        //        category.makePasteable("layer" + layer);
         category.makePasteable("layer");
 
         JComponent comp;
@@ -505,7 +500,6 @@ public class SequentialProphetRev2 extends Synth
     public JComponent addClock(int layer, Color color)
         {
         Category category = new Category(this, "Clock", color);
-        //        category.makePasteable("layer" + layer);
         category.makePasteable("layer");
 
         JComponent comp;
@@ -581,7 +575,6 @@ public class SequentialProphetRev2 extends Synth
     public JComponent addOscillator(int layer, int osc, Color color)
         {
         Category category = new Category(this, "Oscillator " + osc, color);
-        //        category.makePasteable("layer" + layer + "dco" + osc);
         category.makePasteable("layer" + layer + "dco");
         
         JComponent comp;
@@ -630,7 +623,6 @@ public class SequentialProphetRev2 extends Synth
     public JComponent addFilter(int layer, Color color)
         {
         Category category = new Category(this, "Low-Pass Filter", color);
-        //        category.makePasteable("layer" + layer + "vcf");
         category.makePasteable("layer");
         
         JComponent comp;
@@ -662,7 +654,6 @@ public class SequentialProphetRev2 extends Synth
     public JComponent addAmplifier(int layer, Color color)
         {
         Category category = new Category(this, "Amplifier", color);
-        //        category.makePasteable("layer" + layer + "vca");
         category.makePasteable("layer");
                    
         JComponent comp;
@@ -697,7 +688,6 @@ public class SequentialProphetRev2 extends Synth
     public JComponent addAux(int layer,  Color color)
         {
         Category category = new Category(this, "Aux", color);
-        //        category.makePasteable("layer" + layer + "env" + env);
         category.makePasteable("layer");
                     
         JComponent comp;
@@ -772,7 +762,6 @@ public class SequentialProphetRev2 extends Synth
     public JComponent addExternalModulation(int layer, String title, String key, Color color)
         {
         Category category = new Category(this, title, color);
-        //        category.makePasteable("layer" + layer + "key");
         category.makePasteable("layer");
                   
         JComponent comp;
@@ -798,7 +787,6 @@ public class SequentialProphetRev2 extends Synth
     public JComponent addLFO(int layer, final int lfo, Color color)
         {
         Category category = new Category(this, "LFO " + lfo, color);
-        //        category.makePasteable("layer" + layer + "lfo" + lfo);
         category.makePasteable("layer" + layer + "lfo");
                     
         JComponent comp;
@@ -853,7 +841,6 @@ public class SequentialProphetRev2 extends Synth
     public JComponent addModulation(int layer, int mod, Color color)
         {
         Category category  = new Category(this, "Modulation " + mod, color);
-        //        category.makePasteable("layer" + layer + "mod" + mod);
         category.makePasteable("layer" + layer + "mod");
         
         JComponent comp;
@@ -884,8 +871,6 @@ public class SequentialProphetRev2 extends Synth
     public JComponent addSequencer(int layer, Color color)
         {
         final Category category  = new Category(this, "Sequencer", color);
-        //        category.makePasteable("layer" + layer);
-        //        category.makeDistributable("layer" + layer);
         category.makePasteable("layer");
         category.makeDistributable("layer");
                            
@@ -1354,7 +1339,6 @@ public class SequentialProphetRev2 extends Synth
         
         int number = (model.get("number") + 1);
         return ((BANKS_PROPHET[model.get("bank")]) + "-" + (number > 99 ? "" : (number > 9 ? "0" : "00")) + number);
-        
         }
 
     public Model getNextPatchLocation(Model model)
@@ -1377,12 +1361,10 @@ public class SequentialProphetRev2 extends Synth
         newModel.set("bank", bank);
         newModel.set("number", number);
         return newModel;
-
         }
 
     public String getPatchName(Model model) 
         {
-
         return model.get("name", "Untitled");
         }
 
@@ -1411,7 +1393,6 @@ public class SequentialProphetRev2 extends Synth
         String newnm = revisePatchName(nm);
         if (!nm.equals(newnm))
             model.set("name", newnm);
-
         }
 
     /** Map of parameter -> index in the allParameters array. */
@@ -5850,16 +5831,10 @@ public class SequentialProphetRev2 extends Synth
         data[5] = (byte)(tempModel.get("number", 0));
         data[6] = (byte)0xF7;
         return data;
-        }   
-    
+        }
 
     public byte[] requestCurrentDump()
         { 
-        // This asks the synth to dump the currently-playing patch 
-        // (number and bank etc. specified in tempModel).
-        //
-        // If you can do this with a single patch request, implement this version.
-        
         byte[] data = new byte[5];
         data[0] = (byte)0xF0;
         data[1] = (byte)0x01;   // Sequential
@@ -5872,9 +5847,6 @@ public class SequentialProphetRev2 extends Synth
     
     public Object[] emitAll(String key)
         {
-        // This writes a single parameter out to the synth.
-        //
-        // If you need to send more than just a simple sysex message, override this one.
         if (key.equals("bank")) return new Object[0];  // this is not emittable
         if (key.equals("number")) return new Object[0];  // this is not emittable
         
@@ -6075,7 +6047,7 @@ public class SequentialProphetRev2 extends Synth
         group.add(restrictB);
 
         menu.addSeparator();
-        JMenuItem prophet08 = new JMenuItem("To Prophet '08 / Tetra / Mopho");
+        JMenuItem prophet08 = new JMenuItem("To Prophet '08 / Mopho / Tetra");
         menu.add(prophet08);
         prophet08.addActionListener(new ActionListener()
             {
@@ -6085,8 +6057,6 @@ public class SequentialProphetRev2 extends Synth
                 }
             });     
         }
-    
-
 
     public void convertToP8(Model model, int[] suboctave, int[] sequencer, int[] octaves, int[][] shapemod)
         {

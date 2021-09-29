@@ -130,8 +130,8 @@ public class RedSoundDarkStar extends Synth
         menu.add(partmenu);
         }
 
-	JComponent nameGlobal = null;
-	
+    JComponent nameGlobal = null;
+        
     public RedSoundDarkStar()
         {
         model.set("number", 0);
@@ -156,9 +156,9 @@ public class RedSoundDarkStar extends Synth
                 hbox.add(nameGlobal = addNameGlobal(Style.COLOR_GLOBAL()));
                 }
             else
-            	{
-            	hbox.add(Strut.makeStrut(nameGlobal));
-            	}
+                {
+                hbox.add(Strut.makeStrut(nameGlobal));
+                }
                                 
             hbox.addLast(addGeneral(i, Style.COLOR_A()));
             vbox.add(hbox);

@@ -42,8 +42,12 @@ edisyn.synth.waldorfblofeld.WaldorfBlofeld	Waldorf Blofeld
 edisyn.synth.waldorfblofeld.WaldorfBlofeldMulti	Waldorf Blofeld [Multi]
 edisyn.synth.waldorfkyra.WaldorfKyra	Waldorf Kyra
 edisyn.synth.waldorfkyra.WaldorfKyraMulti	Waldorf Kyra [Multi]
+#edisyn.synth.waldorfmicrowave1.WaldorfMicrowave1	Waldorf Microwave I
+#edisyn.synth.waldorfmicrowave1.WaldorfMicrowave1Multi	Waldorf Microwave I [Multi]
+#edisyn.synth.waldorfmicrowave1.WaldorfMicrowave1Wavetable       Waldorf Microwave I [Wavetable]
 edisyn.synth.waldorfmicrowavext.WaldorfMicrowaveXT	Waldorf Microwave II/XT/XTk
 edisyn.synth.waldorfmicrowavext.WaldorfMicrowaveXTMulti	Waldorf Microwave II/XT/XTk [Multi]
+#edisyn.synth.waldorfmicrowavext.WaldorfMicrowaveXTWavetable       Waldorf Microwave II/XT/XTk [Wavetable]
 edisyn.synth.waldorfpulse2.WaldorfPulse2 Waldorf Pulse 2
 edisyn.synth.waldorfrocket.WaldorfRocket Waldorf Rocket
 edisyn.synth.yamaha4op.Yamaha4Op	Yamaha 4-Op FM

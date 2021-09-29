@@ -971,82 +971,82 @@ public class YamahaFS1RFseq extends Synth
                 panel.add(part1, BorderLayout.WEST);
                 boolean result = showMultiOption(YamahaFS1RFseq.this, new String[] { "Track", "Start Frame", "End Frame", "Voiced Level", "Voiced Frequency", "Unvoiced Level", "Unvoiced Frequency", "Pitch" }, 
                     new JComponent[] { panel, frame1, frame2, voicedLevel, voicedFrequency, unvoicedLevel, unvoicedFrequency, includePitch  }, 
-                    	"Interpolate Frames...", "Enter the frame range to interpolate from Start to End.");
+                    "Interpolate Frames...", "Enter the frame range to interpolate from Start to End.");
 
                 if (result)
                     {
-                     Model backup = (Model)(model.clone());
+                    Model backup = (Model)(model.clone());
                     setSendMIDI(false);
                     undo.setWillPush(false);
                                         
-                   int from = frame1.getValue();
+                    int from = frame1.getValue();
                     int to = frame2.getValue();
                     int p1 = part1.getSelectedIndex() + 1;
                     
                     // p1 == TRACK_ALL 
                     
-                   	boolean doVF = voicedFrequency.isSelected();
+                    boolean doVF = voicedFrequency.isSelected();
                     boolean doVL = voicedLevel.isSelected();
                     boolean doUF = unvoicedFrequency.isSelected();
                     boolean doUL = unvoicedLevel.isSelected();
                     boolean doPitch = includePitch.isSelected();
                     
-				 	if (from > to)
-						{
-						int temp = from;
-						from = to;
-						to = temp;
-						}
+                    if (from > to)
+                        {
+                        int temp = from;
+                        from = to;
+                        to = temp;
+                        }
 
-					// handle pitch
-					if (doPitch)
-						{
-						double startp = model.get("frame" + from + "pitch");
-						double endp = model.get("frame" + to + "pitch");
+                    // handle pitch
+                    if (doPitch)
+                        {
+                        double startp = model.get("frame" + from + "pitch");
+                        double endp = model.get("frame" + to + "pitch");
 
-						for(int i = from + 1; i <= to - 1; i++)
-							{
-							model.set("frame" + i + "pitch", (int)((i - from) / (double)(to - from) * (endp - startp) + startp));
-							}
-						}
-						
-					for(int j = 1; j <= 8; j++)
-						{
-						double startp = model.get("frame" + from + "pitch");
-						double endp = model.get("frame" + to + "pitch");
-					
-						if (j == p1 || p1 == TRACK_ALL)
-							{
-							double startvf = model.get("frame" + from + "voicedfrequency" + j);
-							double endvf = model.get("frame" + to + "voicedfrequency" + j);
-							double startvl = model.get("frame" + from + "voicedlevel" + j);
-							double endvl = model.get("frame" + to + "voicedlevel" + j);
-							double startuf = model.get("frame" + from + "unvoicedfrequency" + j);
-							double enduf = model.get("frame" + to + "unvoicedfrequency" + j);
-							double startul = model.get("frame" + from + "unvoicedlevel" + j);
-							double endul = model.get("frame" + to + "unvoicedlevel" + j);
+                        for(int i = from + 1; i <= to - 1; i++)
+                            {
+                            model.set("frame" + i + "pitch", (int)((i - from) / (double)(to - from) * (endp - startp) + startp));
+                            }
+                        }
+                                                
+                    for(int j = 1; j <= 8; j++)
+                        {
+                        double startp = model.get("frame" + from + "pitch");
+                        double endp = model.get("frame" + to + "pitch");
+                                        
+                        if (j == p1 || p1 == TRACK_ALL)
+                            {
+                            double startvf = model.get("frame" + from + "voicedfrequency" + j);
+                            double endvf = model.get("frame" + to + "voicedfrequency" + j);
+                            double startvl = model.get("frame" + from + "voicedlevel" + j);
+                            double endvl = model.get("frame" + to + "voicedlevel" + j);
+                            double startuf = model.get("frame" + from + "unvoicedfrequency" + j);
+                            double enduf = model.get("frame" + to + "unvoicedfrequency" + j);
+                            double startul = model.get("frame" + from + "unvoicedlevel" + j);
+                            double endul = model.get("frame" + to + "unvoicedlevel" + j);
 
-							for(int i = from + 1; i <= to - 1; i++)
-								{
-								if (doVF)
-									{
-									model.set("frame" + i + "voicedfrequency" + j, (int)((i - from) / (double)(to - from) * (endvf - startvf) + startvf));
-									}
-								if (doVL)
-									{
-									model.set("frame" + i + "unvoicedlevel" + j, (int)((i - from) / (double)(to - from) * (endvl - startvl) + startvl));
-									}
-								if (doUF)
-									{
-									model.set("frame" + i + "unvoicedfrequency" + j, (int)((i - from) / (double)(to - from) * (enduf - startuf) + startuf));
-									}
-								if (doUL)
-									{
-									model.set("frame" + i + "unvoicedlevel" + j, (int)((i - from) / (double)(to - from) * (endul - startul) + startul));
-									}
-								}
-							}
-                    	}
+                            for(int i = from + 1; i <= to - 1; i++)
+                                {
+                                if (doVF)
+                                    {
+                                    model.set("frame" + i + "voicedfrequency" + j, (int)((i - from) / (double)(to - from) * (endvf - startvf) + startvf));
+                                    }
+                                if (doVL)
+                                    {
+                                    model.set("frame" + i + "unvoicedlevel" + j, (int)((i - from) / (double)(to - from) * (endvl - startvl) + startvl));
+                                    }
+                                if (doUF)
+                                    {
+                                    model.set("frame" + i + "unvoicedfrequency" + j, (int)((i - from) / (double)(to - from) * (enduf - startuf) + startuf));
+                                    }
+                                if (doUL)
+                                    {
+                                    model.set("frame" + i + "unvoicedlevel" + j, (int)((i - from) / (double)(to - from) * (endul - startul) + startul));
+                                    }
+                                }
+                            }
+                        }
 
                     undo.setWillPush(true);
                     if (!backup.keyEquals(getModel()))  // it's changed, do an undo push
@@ -1054,7 +1054,7 @@ public class YamahaFS1RFseq extends Synth
                     repaint();      // generally forces repaints to all happen at once
                     setSendMIDI(true);
                     sendAllParameters();
-                	}
+                    }
                 }
             });
 

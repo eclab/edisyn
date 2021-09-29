@@ -2967,39 +2967,39 @@ public class YamahaTG33 extends Synth
         }
   
   
-  /*
-    The TG33 does NOT respond in real-time to the following individual parameters: 
+    /*
+      The TG33 does NOT respond in real-time to the following individual parameters: 
   
-	Tone A Amplitude (on/off)
-	Tone A Pitch (on/off)
-	Tone A Temperment
-	Tone A Detune
-	
-	Tone B Algorithm
-	Carrier B Wave
-	Carrier B Fixed Frequency (on/off)
-	Carrier B Amplitude (on/off)
-	Carrier B Pitch (on/off)
-	Carrier B Temperment
-	Carrier B Detune
-	Carrier B Frequency Ratio
-	Carrier B Envelope Type
-	ALL MODULATOR B AND MODULATOR B ENVELOPE PARAMETERS
-	
-	Tone C Amplitude (on/off)
-	Tone C Pitch (on/off)
-	Tone C Temperment
-	Tone C Detune
-	
-	Tone D Algorithm
-	Carrier D Wave
-	Carrier D Fixed Frequency (on/off)
-	Carrier D Amplitude (on/off)
-	Carrier D Pitch (on/off)
-	Carrier D Tempersment
-	Carrier D Detune
-	Carrier D Frequency Ratio
-	Carrier D Envelope Type
-	ALL MODULATOR D AND MODULATOR D ENVELOPE PARAMETERS
-  */      
+      Tone A Amplitude (on/off)
+      Tone A Pitch (on/off)
+      Tone A Temperment
+      Tone A Detune
+        
+      Tone B Algorithm
+      Carrier B Wave
+      Carrier B Fixed Frequency (on/off)
+      Carrier B Amplitude (on/off)
+      Carrier B Pitch (on/off)
+      Carrier B Temperment
+      Carrier B Detune
+      Carrier B Frequency Ratio
+      Carrier B Envelope Type
+      ALL MODULATOR B AND MODULATOR B ENVELOPE PARAMETERS
+        
+      Tone C Amplitude (on/off)
+      Tone C Pitch (on/off)
+      Tone C Temperment
+      Tone C Detune
+        
+      Tone D Algorithm
+      Carrier D Wave
+      Carrier D Fixed Frequency (on/off)
+      Carrier D Amplitude (on/off)
+      Carrier D Pitch (on/off)
+      Carrier D Tempersment
+      Carrier D Detune
+      Carrier D Frequency Ratio
+      Carrier D Envelope Type
+      ALL MODULATOR D AND MODULATOR D ENVELOPE PARAMETERS
+    */      
     }

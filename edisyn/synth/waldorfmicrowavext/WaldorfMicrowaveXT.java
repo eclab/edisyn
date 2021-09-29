@@ -103,9 +103,9 @@ public class WaldorfMicrowaveXT extends Synth
                 
         JComponent soundPanel = new SynthPanel(this);
         VBox vbox = new VBox();
-        HBox hbox = new HBox(HBox.LEFT_CONSUMES);
-        hbox.addLast(addNameGlobal(Style.COLOR_GLOBAL()));
-        hbox.add(addWavetable(Style.COLOR_A()));
+        HBox hbox = new HBox();
+        hbox.add(addNameGlobal(Style.COLOR_GLOBAL()));
+        hbox.addLast(addWavetable(Style.COLOR_A()));
                 
         vbox.add(hbox);
         
@@ -293,6 +293,8 @@ public class WaldorfMicrowaveXT extends Synth
                 }
             };
         hbox.add(comp);
+        
+        hbox.add(Strut.makeHorizontalStrut(20));
                         
         globalCategory.add(hbox, BorderLayout.WEST);
         return globalCategory;
@@ -869,7 +871,6 @@ public class WaldorfMicrowaveXT extends Synth
     public JComponent addLFO(final int lfo, Color color)
         {
         Category category = new Category(this, "LFO " + lfo, color);
-        //        category.makePasteable("lfo" + lfo);
         category.makePasteable("lfo");
                 
         JComponent comp;

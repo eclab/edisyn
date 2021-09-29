@@ -256,10 +256,15 @@ public class KawaiK4 extends Synth
 
         params = POLY_MODES;
         comp = new Chooser("Poly Mode", this, "polymode", params);
-        vbox.addBottom(comp);
+        vbox.add(comp);
         hbox2.add(vbox);
         
         VBox vbox2 = new VBox();
+ 
+        params = WHEEL_ASSIGNMENTS;
+        comp = new Chooser("Mod Wheel", this, "wheelassign", params);
+        vbox2.add(comp);  
+        
         comp = new PushButton("Show Effect/Ouput")
             {
             public void perform()
@@ -303,10 +308,6 @@ public class KawaiK4 extends Synth
             };
         vbox2.add(comp);
 
-        params = WHEEL_ASSIGNMENTS;
-        comp = new Chooser("Mod Wheel", this, "wheelassign", params);
-        vbox2.add(comp);  
-        
         vbox = new VBox();
         vbox.addBottom(vbox2);
         hbox2.add(vbox);

@@ -80,19 +80,19 @@ public class DSIProphet08 extends Synth
     int load = LOAD_BOTH;
     
     /// Mapping matrices for converting to the Rev2
-	public static final int[] PR_ARPEGGIATOR_MODES = { 0, 1, 2, 4, 3 };
-	public static final int[] PR_KEY_MODES = { 0, 2, 4, 1, 3, 5 };
-	public static final int[] PR_MODULATION_DESTINATIONS = { 0, 1, 2, 3, 4, 5, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 
-		19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 0, 0, 0, 0, 52 };		// SEQ24 slew is last
-	public static final int[] PR_MODULATION_SOURCES = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 0, 0 }; 
-	public static final int[] PR_LFO_SHAPES = { 0, 2, 1, 3, 4 };
-	public static final int[] PR_SEQUENCER_TRIGGERS = { 0, 1, 2, 3, 4, 5, 0 };
-	public static final String[] DESTINATION_TAGS = { "env3mod", "lfo1mod", "lfo2mod", "lfo3mod", "lfo4mod", 
-											"mod1", "mod2", "mod3", "mod4", "mod5", "mod6", "mod7", "mod8", 
-											"wheel", "pressure", "breath", "velocity", "foot",
-											"track1", "track2", "track3", "track4" };
-	
-	// JComponents
+    public static final int[] PR_ARPEGGIATOR_MODES = { 0, 1, 2, 4, 3 };
+    public static final int[] PR_KEY_MODES = { 0, 2, 4, 1, 3, 5 };
+    public static final int[] PR_MODULATION_DESTINATIONS = { 0, 1, 2, 3, 4, 5, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 
+                                                             19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 0, 0, 0, 0, 52 };               // SEQ24 slew is last
+    public static final int[] PR_MODULATION_SOURCES = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 0, 0 }; 
+    public static final int[] PR_LFO_SHAPES = { 0, 2, 1, 3, 4 };
+    public static final int[] PR_SEQUENCER_TRIGGERS = { 0, 1, 2, 3, 4, 5, 0 };
+    public static final String[] DESTINATION_TAGS = { "env3mod", "lfo1mod", "lfo2mod", "lfo3mod", "lfo4mod", 
+                                                      "mod1", "mod2", "mod3", "mod4", "mod5", "mod6", "mod7", "mod8", 
+                                                      "wheel", "pressure", "breath", "velocity", "foot",
+                                                      "track1", "track2", "track3", "track4" };
+        
+    // JComponents
     JComponent oscPanelB;
     JComponent modPanelB;
     JComponent seqPanelB;
@@ -2268,9 +2268,9 @@ public class DSIProphet08 extends Synth
             {
             public void actionPerformed(ActionEvent evt)
                 {
-				toRev2();
+                toRev2();
                 }
-            });	    
+            });     
 
         JMenuItem build = new JMenuItem("To Tetra Combo");
         menu.add(build);
@@ -2859,133 +2859,133 @@ public class DSIProphet08 extends Synth
 
 
 
-	public void convertToRev2(Model model, int[] suboctave, int[] sequencer)
-		{
-		// For each layer...
-		for(int layer = 1; layer <= 2; layer++)
-			{
-			for(int osc = 1; osc <= 2; osc++)
-				{
-				// Map Oscillator
-				String key = "layer" + layer + "dco" + osc + "shape";
-				int shape = (model.get(key));
-				if (shape == 3)	// SAW + TRI
-					{
-					model.set(key, 2);	// SAW + TRI
-					}
-				else if (shape == 2)	// TRI
-					{
-					model.set(key, 3);	// TRI				
-					}
-				else if (shape >= 4)	// PULSE
-					{
-					model.set("layer" + layer + "dco" + osc + "shapemod", shape - 4);
-					model.set(key, 4);			
-					}
-				}
-			
-			// Map Arpeggiator
-			model.set("layer" + layer + "arpeggiatoroctaves", model.get("layer" + layer + "arpeggiatormode") / 5);
-			model.set("layer" + layer + "arpeggiatormode", PR_ARPEGGIATOR_MODES[model.get("layer" + layer + "arpeggiatormode") % 5]);
+    public void convertToRev2(Model model, int[] suboctave, int[] sequencer)
+        {
+        // For each layer...
+        for(int layer = 1; layer <= 2; layer++)
+            {
+            for(int osc = 1; osc <= 2; osc++)
+                {
+                // Map Oscillator
+                String key = "layer" + layer + "dco" + osc + "shape";
+                int shape = (model.get(key));
+                if (shape == 3) // SAW + TRI
+                    {
+                    model.set(key, 2);      // SAW + TRI
+                    }
+                else if (shape == 2)    // TRI
+                    {
+                    model.set(key, 3);      // TRI                          
+                    }
+                else if (shape >= 4)    // PULSE
+                    {
+                    model.set("layer" + layer + "dco" + osc + "shapemod", shape - 4);
+                    model.set(key, 4);                      
+                    }
+                }
+                        
+            // Map Arpeggiator
+            model.set("layer" + layer + "arpeggiatoroctaves", model.get("layer" + layer + "arpeggiatormode") / 5);
+            model.set("layer" + layer + "arpeggiatormode", PR_ARPEGGIATOR_MODES[model.get("layer" + layer + "arpeggiatormode") % 5]);
 
-			// Map Sequencer.  Note that this assumes that the name "layer1sequencer" etc.
-			// has been changed or removed.
-			model.set("layer" + layer + "layer1gatedpolyseq", sequencer[layer- 1]);
+            // Map Sequencer.  Note that this assumes that the name "layer1sequencer" etc.
+            // has been changed or removed.
+            model.set("layer" + layer + "layer1gatedpolyseq", sequencer[layer- 1]);
 
-			// Map Sub Octave.  The Prophet '08 doesn't have a sub-octave, but the Mopho/Tetra do
-			model.set("layer" + layer + "subosc", suboctave[layer- 1]);
+            // Map Sub Octave.  The Prophet '08 doesn't have a sub-octave, but the Mopho/Tetra do
+            model.set("layer" + layer + "subosc", suboctave[layer- 1]);
 
-			// Map Slop.  It appears that Prophet '08 0...5 maps to the Rev2's 0...10.
-			model.set("layer" + layer + "slop", model.get("layer" + layer + "slop") * 2);
-			
-			// Map Unison Key Mode
-			if (model.exists("layer" + layer + "unisonkeymode"))
-				{
-				model.set("layer" + layer + "unisonkeymode", 
-					PR_KEY_MODES[model.get("layer" + layer + "unisonkeymode")]);
-				}
-			
-			// Map Sequencer Trigger Mode
-			if (model.exists("layer" + layer + "sequencertrigger"))
-				{
-				model.set("layer" + layer + "sequencertrigger", 
-					PR_SEQUENCER_TRIGGERS[model.get("layer" + layer + "sequencertrigger")]);
-				}
-			
-			// Map LFO shapes
-			for(int l = 1; l <= 4; l++)
-				{
-				if (model.exists("layer" + layer + "lfo" + l + "shape"))
-					{
-					model.set("layer" + layer + "lfo" + l + "shape", 
-						PR_LFO_SHAPES[model.get("layer" + layer + "lfo" + l + "shape")]);
-					}
-				}
-			
-			// Map sources
-			for(int m = 1; m <= 8; m++)
-				{
-				if (model.exists("layer" + layer + "mod" + m + "source"))
-					{
-					model.set("layer" + layer + "mod" + m + "source", 
-						PR_MODULATION_SOURCES[model.get("layer" + layer + "mod" + m + "source")]);
-					}
-				}
-			
-			// Map destinations
-			for(int d = 0; d < DESTINATION_TAGS.length; d++)
-				{
-				if (model.exists("layer" + layer + DESTINATION_TAGS[d] + "destination"))
-					{
-					model.set("layer" + layer + DESTINATION_TAGS[d] + "destination", 
-						PR_MODULATION_DESTINATIONS[model.get("layer" + layer + DESTINATION_TAGS[d] + "destination")]);
-					}
-				}
-			}
-		}
-		
-   public void toRev2()
-           {
-			final SequentialProphetRev2 synth = new SequentialProphetRev2();
-			if (tuple != null)
-			synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver(), synth.buildKey2Receiver());
-				synth.sprout();
-			JFrame frame = ((JFrame)(SwingUtilities.getRoot(synth)));
-			frame.setVisible(true);
-			SwingUtilities.invokeLater(new Runnable()
-				{
-				public void run() 
-					{ 
-					synth.setSendMIDI(false);
-					synth.getUndo().setWillPush(false);
+            // Map Slop.  It appears that Prophet '08 0...5 maps to the Rev2's 0...10.
+            model.set("layer" + layer + "slop", model.get("layer" + layer + "slop") * 2);
+                        
+            // Map Unison Key Mode
+            if (model.exists("layer" + layer + "unisonkeymode"))
+                {
+                model.set("layer" + layer + "unisonkeymode", 
+                    PR_KEY_MODES[model.get("layer" + layer + "unisonkeymode")]);
+                }
+                        
+            // Map Sequencer Trigger Mode
+            if (model.exists("layer" + layer + "sequencertrigger"))
+                {
+                model.set("layer" + layer + "sequencertrigger", 
+                    PR_SEQUENCER_TRIGGERS[model.get("layer" + layer + "sequencertrigger")]);
+                }
+                        
+            // Map LFO shapes
+            for(int l = 1; l <= 4; l++)
+                {
+                if (model.exists("layer" + layer + "lfo" + l + "shape"))
+                    {
+                    model.set("layer" + layer + "lfo" + l + "shape", 
+                        PR_LFO_SHAPES[model.get("layer" + layer + "lfo" + l + "shape")]);
+                    }
+                }
+                        
+            // Map sources
+            for(int m = 1; m <= 8; m++)
+                {
+                if (model.exists("layer" + layer + "mod" + m + "source"))
+                    {
+                    model.set("layer" + layer + "mod" + m + "source", 
+                        PR_MODULATION_SOURCES[model.get("layer" + layer + "mod" + m + "source")]);
+                    }
+                }
+                        
+            // Map destinations
+            for(int d = 0; d < DESTINATION_TAGS.length; d++)
+                {
+                if (model.exists("layer" + layer + DESTINATION_TAGS[d] + "destination"))
+                    {
+                    model.set("layer" + layer + DESTINATION_TAGS[d] + "destination", 
+                        PR_MODULATION_DESTINATIONS[model.get("layer" + layer + DESTINATION_TAGS[d] + "destination")]);
+                    }
+                }
+            }
+        }
+                
+    public void toRev2()
+        {
+        final SequentialProphetRev2 synth = new SequentialProphetRev2();
+        if (tuple != null)
+            synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver(), synth.buildKey2Receiver());
+        synth.sprout();
+        JFrame frame = ((JFrame)(SwingUtilities.getRoot(synth)));
+        frame.setVisible(true);
+        SwingUtilities.invokeLater(new Runnable()
+            {
+            public void run() 
+                { 
+                synth.setSendMIDI(false);
+                synth.getUndo().setWillPush(false);
 
-					for(int i = 0; i < DSIProphet08.parameters.length; i++)
-						{
-						String key = DSIProphet08.parameters[i];
-						if (model.exists(key))
-							{
-							if (model.isString(key))		 // can only happen with "name"
-								{
-								synth.getModel().set(key, model.get(key, ""));
-								}
-							else
-								{
-								synth.getModel().set(key, model.get(key, 0));
-								}
-							}
-						}
-						
-					// now fix up
-					convertToRev2(synth.getModel(), 
-						new int[] { model.get("layer1tetrasuboscillator1level"), model.get("layer2tetrasuboscillator1level") },
-						new int[] { model.get("layer1sequencer"), model.get("layer2sequencer") } );
+                for(int i = 0; i < DSIProphet08.parameters.length; i++)
+                    {
+                    String key = DSIProphet08.parameters[i];
+                    if (model.exists(key))
+                        {
+                        if (model.isString(key))                 // can only happen with "name"
+                            {
+                            synth.getModel().set(key, model.get(key, ""));
+                            }
+                        else
+                            {
+                            synth.getModel().set(key, model.get(key, 0));
+                            }
+                        }
+                    }
+                                                
+                // now fix up
+                convertToRev2(synth.getModel(), 
+                    new int[] { model.get("layer1tetrasuboscillator1level"), model.get("layer2tetrasuboscillator1level") },
+                    new int[] { model.get("layer1sequencer"), model.get("layer2sequencer") } );
 
-					synth.getUndo().setWillPush(true);
-					synth.setSendMIDI(true);
-					}
-				});
-           };
-		
+                synth.getUndo().setWillPush(true);
+                synth.setSendMIDI(true);
+                }
+            });
+        };
+                
 
 
 

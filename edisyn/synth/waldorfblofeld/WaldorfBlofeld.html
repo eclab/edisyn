@@ -20,11 +20,21 @@ The SL option gives you the option of specifying a <b>sound sample</b> instead o
 Under the Blofeld menu you'll find an option to upload a wavetable.  You can upload wavetables in three different formats:
 
 <ul>
-<li><b>WAV files from <a href="http://waveeditonline.com">http://waveeditonline.com</a></b>  This is a large collection of WAV files encoding wavetables for other devices.  You can even download all of them as one zip file.  Edisyn will convert them to the Blofeld as best it can (resampling to the Blofeld's lower sampling rate).  These are particularly good because there is a very nice free wavetable editor available, <b><a href="http://synthtech.com/waveedit">http://synthtech.com/waveedit</a></b>
-<p><li><b>Sysex files in SYX or MID format.</b>  These are groups of one or more wavetables in standard Blofeld sysex.  Some good sources for these are:
+<li><b>Sysex files in SYX or MID format.</b>  These are groups of one or more wavetables in standard Blofeld sysex.  Some good sources for these are:
 <ul><li>Stromeko's Waldorf downloads page.   <b><a href="http://synth.stromeko.net/Downloads.html">http://synth.stromeko.net/Downloads.html</a></b>
 <P><li>MarsMelons's custom wavetables.  <b><a href="http://www.marsmelons.com/custom-wavetables-waldorf-blofeld/">http://www.marsmelons.com/custom-wavetables-waldorf-blofeld/</a></b>
 <p><li>Big Gnome's VFX wavetables.  <b><a href="https://tinyurl.com/vfxwavetables">https://tinyurl.com/vfxwavetables</a></b> (from <b><a href="https://waldorfmusic.com/en/forum/blofeld-en/76-sharing-custom-set-of-blofeld-wavetables">https://waldorfmusic.com/en/forum/blofeld-en/76-sharing-custom-set-of-blofeld-wavetables</a></b>)
+</ul>
+
+<p><li><b>16-bit signed integer PCM WAV files.</b>  The WAV file is sliced up into chunks, and each chunk is converted to a wave in the wavetable.  
+
+<br><br><p><font color=red><b>Note:</b></font> When using WAV files, it's important to understand a weakness in Waldorf's wavetable design: all of its waves are symmetric: the second half of the wave is the negated and reversed version of the first half.  This was originally to save memory in the early Waldorf synthesizers: only the first half is uploaded to the Blofeld.  Thus you have two choices: either (1) treat each chunk in your WAV file as the <i>first half of the wave</i>, or (2) truncate each chunk in your WAV file and only upload the first half of it. 
+
+<br><br><p>WAV files come from two primary sources and correspondingly have two major chunk sizes:
+
+<ul>
+<li>256-sample chunk WAV files from <a href="http://waveeditonline.com">http://waveeditonline.com</a></b>  This is a large collection of WAV files encoding wavetables for other devices.  You can even download all of them as one zip file.  Edisyn will convert them to the Blofeld as best it can (resampling to the Blofeld's lower sampling rate).  These are particularly good because there is a very nice free wavetable editor available, <b><a href="http://synthtech.com/waveedit">http://synthtech.com/waveedit</a></b>
+<p><li>2048-sample chunk WAV files produced for the popular <b>Serum</b> soft-synthesizer.  One very large collection assembled on Reddit can be found <a href="https://www.reddit.com/r/edmproduction/comments/2jhew1/1700_waveforms_for_serums_wavetable_download_link/">here</a>.  Note that Serum wavetable WAV files are normally 32-bit floating point, which Edisyn can't load.  You'll have to convert them to 16-bit signed integer PCM using a program like <b>Audacity</b>.
 </ul>
 </ul>
 

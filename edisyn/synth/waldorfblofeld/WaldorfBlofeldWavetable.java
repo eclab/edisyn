@@ -44,7 +44,7 @@ import edisyn.util.*;
 public class WaldorfBlofeldWavetable
     {
     public static final int WAVEEDIT_WAVE_SIZE = 256;
-    public static final int WAVEEDIT_WAVETABLE_SIZE = 64;
+    public static final int SERUM_WAVE_SIZE = 2048;
     public static final int BLOFELD_WAVE_SIZE = 128;
     public static final int BLOFELD_WAVETABLE_SIZE = 64;
     public static final int TWO_TO_THE_TWENTY = 1048576;
@@ -110,7 +110,7 @@ public class WaldorfBlofeldWavetable
                 }
             catch (WavFileException ex)
                 {
-                synth.showSimpleError("Not a proper WAV file", "WAV files must be mono 16-bit.");
+                synth.showSimpleError("Improper Format", "WAV files must be mono, 16-bit signed integer PCM.\nThis file is not. Perhaps it's a Serum file, which is normally\n32-bit floating point?  You can convert files to mono,\n16-bit signed integer PCM using Audacity.");
                 }
         }
 
@@ -256,7 +256,7 @@ public class WaldorfBlofeldWavetable
             JTextField name = new JTextField(_name);
 
             boolean result = Synth.showMultiOption(synth, new String[] { "Device ID", "Wavetable Number", "Wavetable Name" }, 
-                new JComponent[] { id, number, name }, "Write to wavetable...", "Provide the device ID, wavetable number, and wavetable name.");
+                new JComponent[] { id, number, name }, "Write to wavetable...", "Provide the device ID, wavetable number (80 ... 118), and name.");
 
             if (!result) return;
                         
@@ -332,20 +332,25 @@ public class WaldorfBlofeldWavetable
         {
         int _id = synth.getID();
         int _number = 80;
+        boolean _truncate = false;
         String _name = file.getName();
         try { _name = _name.substring(0, _name.lastIndexOf('.')); }
         catch (Exception e) { }  // happens if name has no suffix
         if (_name.length() >= 14)
             _name = _name.substring(0, 14);
+        
+        int ws;
                 
         while(true)
             {
             JTextField id = new SelectedTextField("" + _id);
             JTextField number = new JTextField("" + _number);
             JTextField name = new JTextField(_name);
+            JComboBox waveSize = new JComboBox(new String[] { "256 (WaveEdit)", "2048 (Serum)" });
+            //JCheckBox truncate = new JCheckBox("");
 
-            boolean result = Synth.showMultiOption(synth, new String[] { "Device ID", "Wavetable Number", "Wavetable Name" }, 
-                new JComponent[] { id, number, name }, "Write to wavetable...", "Provide the device ID, wavetable number, and wavetable name.");
+            boolean result = Synth.showMultiOption(synth, new String[] { "Device ID", "Wavetable Number", "Wavetable Name", "Wave Size" },      ///  "Truncate Waves in Half" }, 
+                new JComponent[] { id, number, name, waveSize }, "Write to wavetable...", "Provide wavetable information.");
 
             if (!result) return;
                         
@@ -382,24 +387,26 @@ public class WaldorfBlofeldWavetable
                 continue;
                 }
 
+            ws = (waveSize.getSelectedIndex() == 0 ? WAVEEDIT_WAVE_SIZE : SERUM_WAVE_SIZE);
+            //_truncate = truncate.isSelected();
             // success!
             break;
             }
                 
-        writeData(synth, file, _id, _number, WINDOW_SIZE, _name);
+        writeData(synth, file, _id, _number, WINDOW_SIZE, _name, ws, BLOFELD_WAVETABLE_SIZE);   // _truncate);
         }
                 
 
     /** Load the data from the file and convert it into a Blofeld wavetable.  This is done by breaking
-        the WAV file into chunks 256 samples long (the length of a WaveEdit wavetable wave), then
+        the WAV file into chunks 256 or 2048 samples long (the length of a WaveEdit or Serum wavetable wave), then
         resampling them using Windowed Sinc Interpolation to chunks 128 samples long (the
         length of a Blofeld wavetable wave), then building the wavetable sysex from these resulting waves
         and uploading them.
     */
 
-    void writeData(WaldorfBlofeld synth, File file, int deviceID, int wavetableNumber, int windowSize, String name) throws IOException, WavFileException
+    void writeData(WaldorfBlofeld synth, File file, int deviceID, int wavetableNumber, int windowSize, String name, int waveSize, int wavetableSize) throws IOException, WavFileException
         {
-        double[][] waves = new double[WAVEEDIT_WAVETABLE_SIZE][WAVEEDIT_WAVE_SIZE];
+        double[][] waves = new double[wavetableSize][waveSize];
         WavFile wavFile = WavFile.openWavFile(file);
         name = (name + "              ").substring(0, 14);              // ensure exactly 14 long
                 
@@ -410,14 +417,25 @@ public class WaldorfBlofeldWavetable
             int framesRead = wavFile.readFrames(waves[i], waves[i].length);
             if (framesRead < waves[i].length) 
                 {
-                System.err.println("Uh oh, error");
+                synth.showSimpleError("File Warning", "File contains data for only " + i + " waves.\nRemaining waves (up to " + wavetableSize + ") will be set to silence.");
+                // clear out what we had just read
+                for(int j = 0; j < waves[i].length; j++)
+                    waves[i][j] = 0;
                 break;
                 }
             }
+            
+        // is it longer than expected?  Read another frame.
+        int framesRead = wavFile.readFrames(new double[waveSize], waveSize);
+        if (framesRead == waveSize) // uh oh
+            {
+            synth.showSimpleError("File Warning", "File contains more data than needed for " + wavetableSize + " wavetables.\nThe rest will be truncated. Perhaps you accidentially\nchose 256 samples per wave when you meant 2048?");
+            }
+                
         wavFile.close();
         
         // parse data
-        for(int i = 0; i < BLOFELD_WAVETABLE_SIZE; i++)
+        for(int i = 0; i < wavetableSize; i++)
             {
             byte[] data = new byte[410];
                         
@@ -429,21 +447,40 @@ public class WaldorfBlofeldWavetable
             data[5] = (byte)(wavetableNumber);
             data[6] = (byte)i;
             data[7] = (byte)0;
-                        
-            int madeUpSamplingRate = 256;
+                
+            /*       
+            // do we cut it in half?
+            if (truncate)
+            {
+            double[] foo = new double[waves[i].length / 2];
+            System.arraycopy(waves[i], 0, foo, 0, foo.length);
+            waves[i] = foo;
+            }
+            */
                         
             /// Resample to the Blofeld's sampling rate
             double[] newvals = WindowedSinc.interpolate(
                 waves[i],
-                madeUpSamplingRate,             // made up
-                madeUpSamplingRate / 2,
+                waves[i].length,
+                BLOFELD_WAVE_SIZE,
                 windowSize,
                 true); 
+
+/*
+/// Resample to the Blofeld's sampling rate
+double[] newvals = WindowedSinc.interpolate(
+waves[i],
+BLOFELD_WAVE_SIZE,
+waves[i].length,
+windowSize,
+true); 
+*/
                         
             for(int d = 0; d < BLOFELD_WAVE_SIZE; d++)
                 {
                 double val = newvals[d];
                 int v = (int)(val * TWO_TO_THE_TWENTY);
+                System.err.println(v);
 
                 // These values must be little-endian.
                 // We assume our code is being run on a little-endian processor.
@@ -451,6 +488,7 @@ public class WaldorfBlofeldWavetable
                 data[8 + d * 3 + 1] = (byte)((v >>> 7) & 127);
                 data[8 + d * 3 + 0] = (byte)((v >>> 14) & 127);
                 }
+            System.err.println("=============n\n");
                                 
             /// LOAD NAME
             for(int d = 0; d < 14; d++)
@@ -473,7 +511,6 @@ public class WaldorfBlofeldWavetable
             data[409] = (byte)0xF7;
 
             synth.tryToSendSysex(data);
-                        
             }
         }
 

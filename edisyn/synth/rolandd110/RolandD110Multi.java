@@ -109,7 +109,7 @@ public class RolandD110Multi extends Synth
         {
         JFrame frame = super.sprout();
         // It doesn't make sense to send to current patch
-        receiveCurrent.setEnabled(false);
+        // receiveCurrent.setEnabled(false);
         transmitTo.setEnabled(false);
         return frame;
         }         
@@ -366,8 +366,9 @@ public class RolandD110Multi extends Synth
                             public void run() 
                                 { 
                                 Model tempModel = buildModel();
+                                tempModel.set("bank", RolandD110Multi.this.model.get("p" + part + "tonegroup"));
                                 tempModel.set("number", RolandD110Multi.this.model.get("p" + part + "tonenumber"));
-                                synth.performRequestDump(tempModel, false);
+                                synth.performRequestDump(tempModel, true);
                                 }
                             });
                     }
@@ -386,7 +387,7 @@ public class RolandD110Multi extends Synth
                 {
                 super.update(key, model);
                 toneNumber.update("p" + part + "tonenumber", model);
-                showButton.getButton().setEnabled(model.get(key) == 2);         // internal/card
+                //showButton.getButton().setEnabled(model.get(key) == 2);         // internal/card
                 }
             };
         hbox2.add(comp);
@@ -702,56 +703,119 @@ public class RolandD110Multi extends Synth
         int AA = data[5];
         int BB = data[6];
         int CC = data[7];
-        if (AA == 0x06)
+
+        if (AA == 0x03 && BB == 0x00 && CC == 0x00 && !fromFile)
             {
-            model.set("number", BB);
+            // temporary timbre region
+            for(int t = 1; t < 9; t++)
+                {
+                int pos = 8 + (t - 1) * 16;
+                for(int i = 0; i < allPartParameters.length; i++)
+                    {
+                    if (allPartParameters[i].equals("-")) { pos++; continue; }  // there's a dummy in patch parameters
+                    else
+                        {
+                        model.set("p" + t + allPartParameters[i], data[pos++]);
+                        }
+                    }
+                }
+                        
+            // Now load just the output level of the rhythm part
+            model.set("rhythmoutputlevel", data[8 + 8 + (8 * 16)]);
+                
+            revise();
+            return PARSE_SUCCEEDED;
+            }
+        else if (AA == 0x10 && BB == 0x00 && CC == 0x00 && !fromFile)
+            {
+            int pos = 9;            // skip master tune, which is at 8
+                        
+            model.set("reverbmode", data[pos++]);
+            model.set("reverbtime", data[pos++]);
+            model.set("reverblevel", data[pos++]);
+                        
+            // partial reserve
+            for(int p = 1; p < 9; p++)
+                {
+                model.set("p" + p + "partialreserve", data[pos++]);
+                }
+            model.set("rhythmpartialreserve", data[pos++]);
+                        
+            // midi 
+            for(int p = 1; p < 9; p++)
+                {
+                model.set("p" + p + "midichannel", data[pos++]);
+                }
+            model.set("rhythmmidichannel", data[pos++]);
+
+            pos++;          // dummy
+                        
+            // name
+            String name = "";
+            for(int i = 0; i < 10; i++)
+                {
+                name = name + ((char)data[pos++]);
+                }
+
+            boolean sendMIDI = getSendMIDI();
+            setSendMIDI(true);
+            tryToSendSysex(requestCurrentDump2());
+            setSendMIDI(sendMIDI);
+            return PARSE_INCOMPLETE;
             }
         else
             {
-            model.set("number", 0);
-            }
-        
-        int pos = 8;
-        String name = "";
-        for(int i = 0; i < 10; i++)
-            {
-            name = name + ((char)data[pos++]);
-            }
-        model.set("patchname", name);
-        model.set("reverbmode", data[pos++]);
-        model.set("reverbtime", data[pos++]);
-        model.set("reverblevel", data[pos++]);
-        
-        // partial reserve
-        for(int p = 1; p < 9; p++)
-            {
-            model.set("p" + p + "partialreserve", data[pos++]);
-            }
-        model.set("rhythmpartialreserve", data[pos++]);
-
-        // midi 
-        for(int p = 1; p < 9; p++)
-            {
-            model.set("p" + p + "midichannel", data[pos++]);
-            }
-        model.set("rhythmmidichannel", data[pos++]);
-        
-
-        // parts
-        for(int t = 1; t < 9; t++)
-            {
-            for(int i = 0; i < allPartParameters.length; i++)
+            if (AA == 0x06)
                 {
-                if (allPartParameters[i].equals("-")) { pos++; continue; }  // there's a dummy in patch parameters
-                else
+                model.set("number", BB);
+                }
+            else
+                {
+                model.set("number", 0);
+                }
+                
+            int pos = 8;
+            String name = "";
+            for(int i = 0; i < 10; i++)
+                {
+                name = name + ((char)data[pos++]);
+                }
+            model.set("patchname", name);
+            model.set("reverbmode", data[pos++]);
+            model.set("reverbtime", data[pos++]);
+            model.set("reverblevel", data[pos++]);
+                
+            // partial reserve
+            for(int p = 1; p < 9; p++)
+                {
+                model.set("p" + p + "partialreserve", data[pos++]);
+                }
+            model.set("rhythmpartialreserve", data[pos++]);
+
+            // midi 
+            for(int p = 1; p < 9; p++)
+                {
+                model.set("p" + p + "midichannel", data[pos++]);
+                }
+            model.set("rhythmmidichannel", data[pos++]);
+                
+
+            // parts
+            for(int t = 1; t < 9; t++)
+                {
+                for(int i = 0; i < allPartParameters.length; i++)
                     {
-                    model.set("p" + t + allPartParameters[i], data[pos++]);
+                    if (allPartParameters[i].equals("-")) { pos++; continue; }  // there's a dummy in patch parameters
+                    else
+                        {
+                        model.set("p" + t + allPartParameters[i], data[pos++]);
+                        }
                     }
                 }
+            model.set("rhythmoutputlevel", data[pos++]);
+            revise();
+            return PARSE_SUCCEEDED;
             }
-        model.set("rhythmoutputlevel", data[pos++]);
-        revise();
-        return PARSE_SUCCEEDED;
         }
     
     
@@ -851,6 +915,43 @@ public class RolandD110Multi extends Synth
             return new Object[] { buf1 };
             }
         }
+
+    // First part of requesting the current dump data
+    public byte[] requestCurrentDump()
+        {
+        // This has to be in two parts. First, we'll request the system data.  Then when that's parsed,
+        // the parser will request the rest of the data
+
+        byte AA = (byte)(0x10);
+        byte BB = (byte)(0x00);
+        byte CC = (byte)(0x00);
+        byte LSB = (byte)33;
+        byte MSB = (byte)0; 
+        
+        byte checksum = produceChecksum(new byte[] { AA, BB, CC, (byte)0x00, LSB, MSB });
+        byte[] b = new byte[] { (byte)0xF0, (byte)0x41, getID(), (byte)0x16, (byte)0x11, 
+            AA, BB, CC, (byte)0x00, MSB, LSB, checksum, (byte)0xF7 }; 
+        return b;
+        }
+    
+    // Second part of requesting the current dump data
+    public byte[] requestCurrentDump2()
+        {
+        // This has to be in two parts. First, we'll request the system data.  Then when that's parsed,
+        // the parser will request the rest of the data
+
+        byte AA = (byte)(0x03);
+        byte BB = (byte)(0x00);
+        byte CC = (byte)(0x00);
+        byte LSB = (byte)16;                    // total size is 16 * 9, including rhythm, which is 16 more than 128
+        byte MSB = (byte)1; 
+        
+        byte checksum = produceChecksum(new byte[] { AA, BB, CC, (byte)0x00, LSB, MSB });
+        byte[] b = new byte[] { (byte)0xF0, (byte)0x41, getID(), (byte)0x16, (byte)0x11, 
+            AA, BB, CC, (byte)0x00, MSB, LSB, checksum, (byte)0xF7 }; 
+        return b;
+        }
+    
 
     // Requests a Patch from a specific RAM slot (1...64)
     public byte[] requestDump(Model tempModel)

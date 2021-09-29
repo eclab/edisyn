@@ -8,7 +8,7 @@
 
 <br><br><h3>Communicating with Edisyn</h3>
 
-When you set up MIDI in the patch editor, you can specify the MIDI channel and the Synth ID.  Set the synth ID to the same as your synthesizer (17 is customary).  Set the Send Channel to correspond to the channel of the Part/Timbre you want to test your Tone in.  I suggest Channel 1, and setting up Part 1 to use Channel 1 (see "About the D110 Menu" below).  Make certain that Memory Protect is OFF and (this is very important) that Overflow is OFF.  Earlier ROMs have a bug which causes sysex dumps to fail if Overflow is not OFF.  Note that you may have to Memory Protect to OFF every time you turn on the synthesizer.  
+When you set up MIDI in the patch editor, you can specify the MIDI channel and the Synth ID.  Set the synth ID to the same as your synthesizer (17 is customary).  Set the Send Channel to correspond to the channel of the Part/Timbre you want to test your Tone in.  The D-110 by default starts its Parts at Channel 2, so Part 1 is Channel 2, Part 2 is Channel 3, and so on.  Make certain that Memory Protect is OFF and (this is very important) that Overflow is OFF.  Earlier ROMs have a bug which causes sysex dumps to fail if Overflow is not OFF.  Note that you may have to set Memory Protect to OFF every time you turn on the synthesizer.  
 
 <br><br><h3>Real-Time Parameter Bugs</h3>
 
@@ -17,20 +17,26 @@ I have received a report that sending real-time parameter changes can crash the 
 <br><br><h3>About the D-110 Menu</h3>
 
 <ul>
-<li>A Tone roughly corresponds to a single playable voice on the D-110, but you can't just upload it and try it out.  This is because, insanely, the primary "patch" of the D-110 is a multi-mode patch.  There is no notion of a single-mode patch.  Thus in order to play a Tone, you have to set up a multi-mode patch which refers to the tone in one of its parts (or "timbres").  To make this easy, Edisyn has a menu option called <b>Set up Test Patch for Timbre 1 Only </b>, which does exactly what it says on the tin: it loads a test multimode patch which has Timbre 1 pointing to your Tone.  Timbre 1 is set to MIDI Channel 1, 100% volume, and all 32 partials (so be sure Edisyn is on Channel 1).  All other Timbres are turned off.  Your Tone is then loaded for good measure.
+<li>This patch editor is unusual in that it has two layouts: a standard layout (by part) and an alternate layout (by category).  You might prefer the alternate layout: select <b>Alternate Layout</b>.  The layout changes for the next editor you create.
 
-<br><p><li>If you'd like to load into a variety of timbres/parts, you can instead set up the multimode patch with <b>Set up Test Patch for All Timbres</b>.  This sets up each Timbre N to listen on channel N, at 100%, with 4 partials each.  The rhythm section is turned off.  Your Tone is <i>not</i> loaded automatically.  To send to a given Timbre N you need to (1) set Edisyn's channel to N and (2) select <b>Current Patch is Timbre <i>N</i></b> (see the menu options below).  
+<br><p><li>To display the current Multi Patch, just choose <b>Show Current Multi Patch</b>.
 
-<br><p><li>For convenience, you can also set up a Multi Patch for each Tone in your internal memory via the menu option <b>Write Multi Patches, One per Tone</b>.  Each Multi Patch will refer to its corresponding Tone in Timbre 1, other Timbres will be turned off, and the Multi Patch will be named after its Tone.  For example, Multi Patch #17 (that is, Patch "21" using the D-110's weird Multi Patch numbering scheme) will refer to Tone 17 and will be called "Patch 17".  This makes it easy to audition and play all the Tones in your internal memory.
+<br><p><li>A Tone roughly corresponds to a single playable voice on the D-110, but you can't just upload it and try it out.  This is because the primary "patch" of the D-110 is a multi-mode patch.  There is no notion of a single-mode patch.  Thus in order to play a Tone, you have to set up a multi-mode patch which refers to the tone in one of its eight parts.  To make this easy, Edisyn has a menu option called <b>Set up Test Patch for Part 1 Only </b>, which does exactly what it says on the tin: it loads a test multimode patch which has Part 1 pointing to your Tone.  Part 1 is set to <b>Edisyn's Current MIDI Channel</b>, 100% volume, and all 32 partials (so be sure Edisyn is on Channel 1).  All other Parts are turned off.  Your Tone is then loaded for good measure.
 
-<br><P><li>When you <b>Send to Current Patch</b>, which sends the Tone to temporary memory on the D-110, exactly which of the 8 Timbres does it send it to?  Similarly, which Timbre's Tone is loaded when you <b>Request Current Patch</b>?  You can specify this with one of the menus <b>Current Patch is Timbre <i>N</i></b>.  By default this is 1 (which would be the usual case).
+<br><p><li>If you'd like to load into a variety of parts, you can instead set up the multimode patch with <b>Set up Test Patch for All Parts</b>.  This sets up each Part N to listen on MIDI channel N+1, at 100%, with 4 partials each.  Thus Part 1 listens on MIDI channel 2; Part 2 listens on MIDI channel 3, and so on (this is the default, and crazy, setup for the D-110).  The rhythm section is turned off.  Your Tone is <i>not</i> loaded automatically.  To play Part N, set Edisyn to Channel N + 1.  To send to a given Part N you need to select <b>Current Patch is Part <i>N</i></b> (see the menu options below).  
+
+<br><p><li>For convenience, you can also set up a Multi Patch for each Tone in your internal memory via the menu option <b>Write Multi Patches, One per Tone</b>.  Each Multi Patch will refer to its corresponding Tone in Part 1, other Parts will be turned off, and the Multi Patch will be named after its Tone.  For example, Multi Patch #17 (that is, Patch "21" using the D-110's weird Multi Patch numbering scheme) will refer to Tone 17 and will be called "Patch 17".  This makes it easy to audition and play all the Tones in your internal memory.
+
+<br><P><li>When you <b>Send to Current Patch</b>, which sends the Tone to temporary memory on the D-110, exactly which of the 8 Parts does it send it to?  Similarly, which Part's Tone is loaded when you <b>Request Current Patch</b>?  You can specify this with one of the menus <b>Current Patch is Part <i>N</i></b>.  By default this is 1 (which would be the usual case).
 </ul>
 
 <br><br><h3>Gotchas</h3>
 
 <ul>
-<li>If you've used the D-110 long enough to figure out its bizarre structure, you probably know by now that the notion of a Timbre is completely useless.  It's a holdover from the Roland D-10 structure, where it made more sense.  Although you can save and load Timbres to RAM, Patches do not actually store references to Timbres: they store references to Tones.  Thus this patch editor provides no facilities for Timbres at all, just Tone editing.
+<li>If you've used the D-110 long enough to figure out its bizarre structure, you probably know by now that the notion of a Timbre is completely useless.  It's a holdover from the Roland D-10 structure, where it made more sense.  Although you can save and load Timbres to RAM, Patches do not actually store references to Timbres: they store references to Tones.  Thus Patches bypass Timbres entirely, and Timbres only effect things if you change them on-the-fly.  That is close to useless for editing.  Thus this patch editor provides no facilities for Timbres at all, just Tone editing.
 </ul>
+
+<p>Thanks to Keith (llamamusic@hotmail.com) for his extraordinary service in loaning a machine in a pinch, providing materials, and debugging.  If you are a D-110 owner, <a href="llamamusic.com">llamamusic.com</a> is a fantastic resource.
 
 <p><table border=0 cellpadding=0 cellspacing=5>
 <tr>

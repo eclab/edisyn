@@ -79,7 +79,7 @@ public class RolandD110Tone extends Synth
         "Electric Guitar (Loop)", "Clav (Loop)", "Cello (Loop)", "Violin (Loop)", "Electric Piano-1 (Loop)", "Electric Piano-2 (Loop)", "Harpsichord-1 (Loop)",
         "Harpsichord-2 (Loop)", "Telephone Bell (Loop)", "Female Voice-1 (Loop)", "Female Voice-2 (Loop)", "Male Voice-1 (Loop)", "Male Voice-2 (Loop)",
         "Spectrum-1 (Loop)", "Spectrum-2 (Loop)", "Spectrum-3 (Loop)", "Spectrum-4 (Loop)", "Spectrum-5 (Loop)", "Spectrum-6 (Loop)", "Spectrum-7 (Loop)",
-        "Spectrum-8 (Loop)", "Spectrum-9 (Loop)", "Spectrum-10 (Loop)", "Noise (Loop) (Loop)", "Shot-1", "Shot-2", "Shot-3", "Shot-4", "Shot-5", "Shot-6",
+        "Spectrum-8 (Loop)", "Spectrum-9 (Loop)", "Spectrum-10 (Loop)", "Noise (Loop)", "Shot-1", "Shot-2", "Shot-3", "Shot-4", "Shot-5", "Shot-6",
         "Shot-7", "Shot-8", "Shot-9", "Shot-10", "Shot-11", "Shot-12", "Shot-13", "Shot-14", "Shot-15", "Shot-16", "Shot-17", "Bass Drum-1", "Bass Drum-2",
         "Bass Drum-3", "Snare Drum-1", "Snare Drum-2", "Snare Drum-3", "Snare Drum-4", "Tom Tom-1", "Tom Tom-2", "High Hat", "High Hat (Loop)",
         "Crash Cymbal-1", "Crash Cymbal-2 (Loop)", "Ride Cymbal-1", "Ride Cymbal-2 (Loop)", "Cup", "China Cymbal-1", "China Cymbal-2 (Loop)", "Rim Shot",
@@ -92,6 +92,9 @@ public class RolandD110Tone extends Synth
         "Jam-5", "Jam-6", "Jam-7", "Jam-8", "Jam-9", "Jam-10", "Jam-11", "Jam-12", "Jam-13", "Jam-14", "Jam-15", "Jam-16", "Jam-17", "Jam-18", "Jam-19",
         "Jam-20", "Jam-21", "Jam-22", "Jam-23", "Jam-24", "Jam-25", "Jam-26", "Jam-27", "Jam-28", "Jam-29", "Jam-30", "Jam-31", "Jam-32", "Jam-33", "Jam-34" };
                 
+    public static final String[] TONE_GROUP_SHORT = new String[] { "A", "B", "I", "R" };
+    public static final String[] TONE_GROUP = new String[] { "Preset A", "Preset B", "Internal/Card", "Rhythm" };
+    public static final String[] WRITEABLE_TONE_GROUP = new String[] { "Internal/Card" };
     public static final String[] WG_KEYFOLLOW = new String[] { "-1", "-1/2", "-1/4", "0", "1/8", "1/4", "3/8", "1/2", "5/8", "3/4", "7/8", "1", "5/4", "3/2", "2", "S1", "S2" };    
     public static final String[] TVF_KEYFOLLOW = new String[] { "-1", "-1/2", "-1/4", "0", "1/8", "1/4", "3/8", "1/2", "5/8", "3/4", "7/8", "1", "5/4", "3/2", "2" };       
     public static final String[] WG_WAVEFORM = new String[] { "Square", "Sawtooth" };       
@@ -117,27 +120,33 @@ public class RolandD110Tone extends Synth
 
     ///// LOCATIONS
     /////
-    ///// emitLocation is the temporary memory tone which is considered to be the "current patch"
+    ///// part is the temporary memory tone which is considered to be the "current patch"
 
-    public static final int LOCATION_1 = 0;
-    public static final int LOCATION_2 = 1;
-    public static final int LOCATION_3 = 2;
-    public static final int LOCATION_4 = 3;
-    public static final int LOCATION_5 = 4;
-    public static final int LOCATION_6 = 5;
-    public static final int LOCATION_7 = 6;
-    public static final int LOCATION_8 = 7;
-    public static final int LOCATION_9 = 8;
-    int emitLocation = LOCATION_1;
-    boolean altLayout = true;
+    public static final int PART_1 = 0;
+    public static final int PART_2 = 1;
+    public static final int PART_3 = 2;
+    public static final int PART_4 = 3;
+    public static final int PART_5 = 4;
+    public static final int PART_6 = 5;
+    public static final int PART_7 = 6;
+    public static final int PART_8 = 7;
+    public static final int PART_9 = 8;
+    int part = PART_1;
+    boolean altLayout = false;
+    
+    public static final String ALT_LAYOUT_KEY = "AltLayout";
         
-    // Sysex dumps from the emitLocation are TEMP_TONE_LENGTH long
+    public static final int TEMP_TIMBRE_LENGTH = 16;  
+    // Sysex dumps from the part are TEMP_TONE_LENGTH long
     public static final int TEMP_TONE_LENGTH = 246;  
     // Sysex dumps from a RAM slot are MEMORY_TONE_LENGTH long
     public static final int MEMORY_TONE_LENGTH = 256;  
 
     public RolandD110Tone()
         {
+        String m = getLastX(ALT_LAYOUT_KEY, getSynthName());
+        altLayout = (m == null ? false : Boolean.parseBoolean(m));
+        
         for(int i = 0; i < allPartialParameters.length; i++)
             {
             allPartialParametersToIndex.put(allPartialParameters[i], Integer.valueOf(i));
@@ -270,6 +279,7 @@ public class RolandD110Tone extends Synth
 
         model.set("patchname", "Init Patch");  // has to be 10 long
         model.set("number", 0);
+        model.set("bank", 2);           // Internal
         loadDefaults();        
         }
                 
@@ -287,7 +297,59 @@ public class RolandD110Tone extends Synth
         {
         JMenu menu = new JMenu("D-110");
         menubar.add(menu);
-        JMenuItem setupTestPatchMenu = new JMenuItem("Set up Test Patch for Timbre 1 Only");
+        final JCheckBoxMenuItem altLayoutMenu = new JCheckBoxMenuItem("Alternate Layout");
+        altLayoutMenu.setSelected(altLayout);
+        altLayoutMenu.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                setLastX("" + altLayoutMenu.isSelected(), ALT_LAYOUT_KEY, getSynthName(), true);
+                }
+            });
+        menu.add(altLayoutMenu);
+
+        JMenuItem showCurrentMultiPatchMenu = new JMenuItem("Show Current Multi Patch");
+        showCurrentMultiPatchMenu.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                final RolandD110Multi synth = new RolandD110Multi();
+                if (tuple != null)
+                    synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver(), synth.buildKey2Receiver());
+                if (synth.tuple != null)
+                    {       
+                    // This is a little tricky.  When the dump comes in from the synth,
+                    // Edisyn will only send it to the topmost panel.  So we first sprout
+                    // the panel and show it, and THEN send the dump request.  But this isn't
+                    // enough, because what setVisible(...) does is post an event on the
+                    // Swing Event Queue to build the window at a later time.  This later time
+                    // happens to be after the dump comes in, so it's ignored.  So what we
+                    // ALSO do is post the dump request to occur at the end of the Event Queue,
+                    // so by the time the dump request has been made, the window is shown and
+                    // frontmost.
+                                                
+                    synth.sprout();
+                    JFrame frame = ((JFrame)(SwingUtilities.getRoot(synth)));
+                    frame.setVisible(true);
+
+                    SwingUtilities.invokeLater(
+                        new Runnable()
+                            {
+                            public void run() 
+                                { 
+                                Model tempModel = buildModel();
+                                synth.performRequestCurrentDump();
+                                }
+                            });
+                    }
+                else
+                    {
+                    showSimpleError("Disconnected", "You can't show a patch when disconnected.");
+                    }
+                }
+            });
+        menu.add(showCurrentMultiPatchMenu);
+        JMenuItem setupTestPatchMenu = new JMenuItem("Set up Test Patch for Part 1 Only");
         setupTestPatchMenu.addActionListener(new ActionListener()
             {
             public void actionPerformed(ActionEvent e)
@@ -296,7 +358,7 @@ public class RolandD110Tone extends Synth
                 }
             });
         menu.add(setupTestPatchMenu);
-        JMenuItem setupTestPatchMenu2 = new JMenuItem("Set up Test Patch for All Timbres");
+        JMenuItem setupTestPatchMenu2 = new JMenuItem("Set up Test Patch for All Parts");
         setupTestPatchMenu2.addActionListener(new ActionListener()
             {
             public void actionPerformed(ActionEvent e)
@@ -311,7 +373,7 @@ public class RolandD110Tone extends Synth
             public void actionPerformed(ActionEvent e)
                 {
                 disableMenuBar();
-                JComboBox combo = new JComboBox(RolandD110Multi.TONE_GROUP);
+                JComboBox combo = new JComboBox(TONE_GROUP);
                 combo.setSelectedIndex(2);  // Internal/Card
                 boolean result = Synth.showMultiOption(RolandD110Tone.this, 
                     new String[] { "Tone Group" },  
@@ -330,14 +392,14 @@ public class RolandD110Tone extends Synth
         for(int i = 0; i < 8; i++)
             {
             final int _i = i;
-            JRadioButtonMenuItem m = new JRadioButtonMenuItem("Current Patch is Timbre " + (i + 1));
+            JRadioButtonMenuItem m = new JRadioButtonMenuItem("Current Patch is Part " + (i + 1));
             if (i == 0)
                 m.setSelected(true);
             m.addActionListener(new ActionListener()
                 {
                 public void actionPerformed(ActionEvent e)
                     {
-                    emitLocation = _i;
+                    part = _i;
                     }
                 });
             g.add(m);
@@ -375,7 +437,7 @@ public class RolandD110Tone extends Synth
                     else
                         {
                         // turn on everybody, sharing equally
-                        synth.getModel().set("p" + i + "midichannel", (i - 1));
+                        synth.getModel().set("p" + i + "midichannel", i);                       // Thus Patch 1 has Midi Channel 2
                         synth.getModel().set("p" + i + "partialreserve", 4);
                         }
                     }
@@ -383,8 +445,8 @@ public class RolandD110Tone extends Synth
                 // prepare timbre1
                 if (timbre1)
                     {
-                    synth.getModel().set("p" + (emitLocation + 1) + "midichannel", getChannelOut());
-                    synth.getModel().set("p" + (emitLocation + 1) + "partialreserve", 32);
+                    synth.getModel().set("p" + (part + 1) + "midichannel", getChannelOut());
+                    synth.getModel().set("p" + (part + 1) + "partialreserve", 32);
                     }
             
                 // turn off rhythm
@@ -448,12 +510,14 @@ public class RolandD110Tone extends Synth
     // There are no banks
     public boolean gatherPatchInfo(String title, Model change, boolean writing)
         {
+        JComboBox bank = new JComboBox(writing ? WRITEABLE_TONE_GROUP : TONE_GROUP);
         JTextField number = new SelectedTextField("" + (model.get("number") + 1), 3);
+        if (!writing) bank.setSelectedIndex(model.get("bank"));
 
         while(true)
             {
-            boolean result = showMultiOption(this, new String[] { "Patch Number"}, 
-                new JComponent[] { number }, title, "Enter Patch number");
+            boolean result = showMultiOption(this, new String[] { "Bank", "Tone Number"}, 
+                new JComponent[] { bank, number }, title, "<html>Enter Bank and Tone Number.<br>These will be updated in Part " + (part + 1) + ".</html>");
                 
             if (result == false)
                 return false;
@@ -462,17 +526,18 @@ public class RolandD110Tone extends Synth
             try { n = Integer.parseInt(number.getText()); }
             catch (NumberFormatException e)
                 {
-                showSimpleError(title, "The Patch Number must be an integer 1...64");
+                showSimpleError(title, "The Tone Number must be an integer 1...64");
                 continue;
                 }
             if (n < 1 || n > 64)
                 {
-                showSimpleError(title, "The Patch Number must be an integer 1...64");
+                showSimpleError(title, "The Tone Number must be an integer 1...64");
                 continue;
                 }
                 
             n--;
             change.set("number", n);
+            change.set("bank", writing ? 2 : bank.getSelectedIndex());
             return true;
             }
         }
@@ -578,11 +643,11 @@ public class RolandD110Tone extends Synth
         
         VBox vbox = new VBox();
         params = WG_WAVEFORM;
-        comp = new Chooser("Waveform", this, "p" + partial + "wgwaveform", params);
+        comp = new Chooser("[S] Synthesizer Waveform", this, "p" + partial + "wgwaveform", params);
         vbox.add(comp);
 
         params = PCM;
-        comp = new Chooser("PCM Wave", this, "p" + partial + "wgpcmwavenumber", params);
+        comp = new Chooser("[P] PCM Wave", this, "p" + partial + "wgpcmwavenumber", params);
         vbox.add(comp);
         
         HBox hbox2 = new HBox();
@@ -1212,10 +1277,11 @@ public class RolandD110Tone extends Synth
     public byte[] emit(String key)
         {
         if (key.equals("number")) return new byte[0];  // this is not emittable
+        if (key.equals("bank")) return new byte[0];  // this is not emittable
 
         byte AA = (byte)(0x04);
-        int loc = emitLocation * TEMP_TONE_LENGTH;
-    	byte BB = (byte)((loc >>> 7) & 127);
+        int loc = part * TEMP_TONE_LENGTH;
+        byte BB = (byte)((loc >>> 7) & 127);
         byte CC = (byte)(loc & 127);
         
         // figure out the address
@@ -1233,7 +1299,7 @@ public class RolandD110Tone extends Synth
             if (key.endsWith("wgwaveform") || key.endsWith("wgpcmwavenumber"))
                 {
                 CC += (byte)0x04;               // we'll start at wgwaveform and do both of them
-            	if (CC < 0) { CC = (byte)(CC & 127); BB += 1; }
+                if (CC < 0) { CC = (byte)(CC & 127); BB += 1; }
                 }
             else
                 {
@@ -1250,7 +1316,7 @@ public class RolandD110Tone extends Synth
             if (key.endsWith("wgwaveform") || key.endsWith("wgpcmwavenumber"))
                 {
                 CC += (byte)0x04;               // we'll start at wgwaveform and do both of them
-            	if (CC < 0) { CC = (byte)(CC & 127); BB += 1; }
+                if (CC < 0) { CC = (byte)(CC & 127); BB += 1; }
                 }
             else
                 {
@@ -1268,7 +1334,7 @@ public class RolandD110Tone extends Synth
             if (key.endsWith("wgwaveform") || key.endsWith("wgpcmwavenumber"))
                 {
                 CC += (byte)0x04;               // we'll start at wgwaveform and do both of them
-            	if (CC < 0) { CC = (byte)(CC & 127); BB += 1; }
+                if (CC < 0) { CC = (byte)(CC & 127); BB += 1; }
                 }
             else
                 {
@@ -1286,7 +1352,7 @@ public class RolandD110Tone extends Synth
             if (key.endsWith("wgwaveform") || key.endsWith("wgpcmwavenumber"))
                 {
                 CC += (byte)0x04;               // we'll start at wgwaveform and do both of them
-            	if (CC < 0) { CC = (byte)(CC & 127); BB += 1; }
+                if (CC < 0) { CC = (byte)(CC & 127); BB += 1; }
                 }
             else
                 {
@@ -1310,7 +1376,7 @@ public class RolandD110Tone extends Synth
                 // The first parameter will be 1 (patchname is 0).  So we need to skip to 0x0A - 1
                 CC += (byte)(0x0A - 1);
                 CC = (byte)(CC + ((Integer)(allCommonParametersToIndex.get(key))).intValue());
-            	if (CC < 0) { CC = (byte)(CC & 127); BB += 1; }
+                if (CC < 0) { CC = (byte)(CC & 127); BB += 1; }
                 }
             }
                     
@@ -1363,13 +1429,11 @@ public class RolandD110Tone extends Synth
         int AA = data[5];
         int BB = data[6];
         int CC = data[7];
+        
         if (AA == 0x08)
             {
             model.set("number", BB / 2);
-            }
-        else
-            {
-            model.set("number", 0);
+            model.set("bank", 2);           // internal
             }
         
         int pos = 8;
@@ -1413,7 +1477,7 @@ public class RolandD110Tone extends Synth
         }
     
     
-    // If toWorkingMemory, then we emit to the given emitLocation.
+    // If toWorkingMemory, then we emit to the given part.
     // othewise we emit to a RAM location.  For reasons I cannot explain, the length
     // of Tones in RAM locations are 10 bytes longer than those in temporary memory.
         
@@ -1423,7 +1487,7 @@ public class RolandD110Tone extends Synth
             tempModel = getModel();
 
         // set up buffer
-        byte[] buf = new byte[(toWorkingMemory ? TEMP_TONE_LENGTH : MEMORY_TONE_LENGTH) + 10];		// need 10 extra for the header, checksum, and 0xF7
+        byte[] buf = new byte[(toWorkingMemory ? TEMP_TONE_LENGTH : MEMORY_TONE_LENGTH) + 10];          // need 10 extra for the header, checksum, and 0xF7
         
         buf[0] = (byte)0xF0;
         buf[1] = (byte)0x41;
@@ -1432,7 +1496,7 @@ public class RolandD110Tone extends Synth
         buf[4] = (byte)0x12;
         if (toWorkingMemory)
             {
-            int loc = emitLocation * TEMP_TONE_LENGTH;
+            int loc = part * TEMP_TONE_LENGTH;
             byte LSB = (byte)(loc & 127);
             byte MSB = (byte)((loc >>> 7) & 127);
             buf[5] = (byte)0x04;
@@ -1478,30 +1542,66 @@ public class RolandD110Tone extends Synth
         return buf;
         }
 
-    // Requests a Tone from a specific RAM slot (1...64)
-    public byte[] requestDump(Model tempModel)
+
+
+//// This editor used to download tones by grabbing them from tone memory.
+//// That only permitted grabbing internal/card tones, not presets or rhythm tones.
+//// This has been changed (September 2021) to changing the tone bank and number
+//// in the part/timbre and then doing a requestCurrentDump.
+
+    public void changePatch(Model tempModel) 
         {
         if (tempModel == null)
             tempModel = getModel();
 
         int number = tempModel.get("number");
-        byte AA = (byte)(0x08);
-        byte BB = (byte)(number * 2);
-        byte CC = (byte)(0x00);
-        byte LSB = (byte)118;           // 0x76
-        byte MSB = (byte)1; 
+        int bank = tempModel.get("bank");
         
-        byte checksum = produceChecksum(new byte[] { AA, BB, CC, (byte)0x00, LSB, MSB });
-        byte[] b = new byte[] { (byte)0xF0, (byte)0x41, getID(), (byte)0x16, (byte)0x11, 
-            AA, BB, CC, (byte)0x00, MSB, LSB, checksum, (byte)0xF7 }; 
-        return b;
+        // Change the tone group and number at the part
+        byte AA = (byte)(0x03);
+        byte BB = (byte)(part * TEMP_TIMBRE_LENGTH);
+        byte CC = (byte)(0x00);
+
+        byte checksum = produceChecksum(new byte[] { AA, BB, CC, (byte)bank, (byte)number });
+        byte[] b = new byte[] { (byte)0xF0, (byte)0x41, getID(), (byte)0x16, (byte)0x12, 
+            AA, BB, CC, (byte)bank, (byte)number, checksum, (byte)0xF7 }; 
+        tryToSendSysex(b);
+
+        model.set("number", number);
+        model.set("bank", bank);
         }
-    
-    // Requests a Tone from the current emitLocation
+
+    public byte[] requestDump(Model tempModel)
+        {
+        return requestCurrentDump();
+        }
+
+/*
+// Requests a Tone from a specific RAM slot (1...64)
+public byte[] requestDump(Model tempModel)
+{
+if (tempModel == null)
+tempModel = getModel();
+
+int number = tempModel.get("number");
+byte AA = (byte)(0x08);
+byte BB = (byte)(number * 2);
+byte CC = (byte)(0x00);
+byte LSB = (byte)118;           // 0x76
+byte MSB = (byte)1; 
+        
+byte checksum = produceChecksum(new byte[] { AA, BB, CC, (byte)0x00, LSB, MSB });
+byte[] b = new byte[] { (byte)0xF0, (byte)0x41, getID(), (byte)0x16, (byte)0x11, 
+AA, BB, CC, (byte)0x00, MSB, LSB, checksum, (byte)0xF7 }; 
+return b;
+}
+*/
+   
+    // Requests a Tone from the current part
     public byte[] requestCurrentDump()
         {
         byte AA = (byte)(0x04);
-        int loc = emitLocation * TEMP_TONE_LENGTH;
+        int loc = part * TEMP_TONE_LENGTH;
         byte BB = (byte)((loc >>> 7) & 127);
         byte CC = (byte)(loc & 127);
 
@@ -1559,15 +1659,22 @@ public class RolandD110Tone extends Synth
     public Model getNextPatchLocation(Model model)
         {
         int number = model.get("number");
+        int bank = model.get("bank");
         
         number++;
         if (number >= 64)
             {
             number = 0;
+            bank++;
+            if (bank > 3)
+                {
+                bank = 0;
+                }
             }
                 
         Model newModel = buildModel();
         newModel.set("number", number);
+        newModel.set("bank", number);
         return newModel;
         }
 
@@ -1578,7 +1685,8 @@ public class RolandD110Tone extends Synth
         // yet and this method will bomb badly.  So we return null in this case.
         if (!model.exists("number")) return null;
         
-        return (model.get("number") + 1 < 10 ? "0" : "") + ((model.get("number") + 1));
+        return TONE_GROUP_SHORT[model.get("bank")] + 
+            (model.get("number") + 1 < 10 ? "0" : "") + ((model.get("number") + 1));
         }
 
     public int getBatchDownloadWaitTime() { return 750; }

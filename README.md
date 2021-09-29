@@ -1,7 +1,7 @@
 ![Edisyn Splash Banner](https://raw.githubusercontent.com/eclab/edisyn/master/pics/Banner.png)
 
 # Edisyn
-Synthesizer Patch Editor (Version 28)
+Synthesizer Patch Editor (Version 29)
 
 By Sean Luke (sean@cs.gmu.edu)
 
@@ -18,6 +18,7 @@ Related projects:
 ## Contributors
 
 * V. Hoyle (collaboration on the Red Sound DarkStar and Microtuning editors)
+* Wim Verheyen (Prophet Rev2 editor)
 * Special thanks to Derek Cook's [CoreMidi4J](https://github.com/DerekCook/CoreMidi4J), which Edisyn uses to fix critical bugs in MacOS's sysex handling.
 * Thanks to the many beta testers and bug report submitters for various editors.  Many of these people are thanked in the individual About panels for different synth editors.
 
@@ -26,6 +27,11 @@ Related projects:
 Donations are welcome via Paypal to my email address (sean@cs.gmu.edu).
 
 ## What's New
+
+Version 29 has two changes:
+
+* New Sequential Prophet Rev2 Editor, courtesy of Wim Verheyen
+* Bug fixes to the Roland D-110 Editor
 
 Version 28 has many improvements, but the big ones are:
 
@@ -63,6 +69,7 @@ Edisyn presently supports:
 * Red Sound DarkStar and DarkStar XP2
 * Roland D-110 (Tone and Multi Modes)
 * Roland JV-80 and JV-880 (Single and Multi Modes)
+* Sequential Prophet Rev2
 * Waldorf Blofeld and Waldorf Blofeld Keyboard (Single and Multi Modes, plus Wavetable uploading)
 * Waldorf Kyra (Single and Multi Modes)
 * Waldorf Microwave II, XT, and XTk (Single and Multi Modes)

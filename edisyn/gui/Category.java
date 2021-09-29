@@ -69,7 +69,7 @@ public class Category extends JComponent implements Gatherable
         if (myPreamble == null) return false;
 
         return (pasteable && 
-            StringUtility.reduceAllDigitsAfterPreamble(copyPreamble, "").equals(StringUtility.reduceAllDigitsAfterPreamble(myPreamble, "")));
+            StringUtility.reduceFirstDigitsAfterPreamble(copyPreamble, "").equals(StringUtility.reduceFirstDigitsAfterPreamble(myPreamble, "")));
         }
         
     boolean canDistributeKey()   

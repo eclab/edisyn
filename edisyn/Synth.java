@@ -7141,7 +7141,12 @@ public abstract class Synth extends JComponent implements Updatable
     // if synth == null, then the pause between writes will be DEFAULT_BULK_WRITE_PAUSE (150ms)
         
     public static final int DEFAULT_BULK_WRITE_PAUSE = 150;
-        
+    
+    /// One unfortunate side effect of writeBulk having to run in the swing event thread is that
+    /// before things are written out, doOpen() completes, and if getSendsParametersAfterLoad() is true,
+    /// then the FIRST thing sent to the synthesizer will be the current patch (a send, not a write).
+    /// It's probably harmless but could be confusing to synth users.
+    
     boolean writeBulk(Synth synth, final String[] names, byte[][] data)
         {
         if (tuple == null || tuple.out == null)
@@ -7174,7 +7179,7 @@ public abstract class Synth extends JComponent implements Updatable
         final int pause = (synth == null ? DEFAULT_BULK_WRITE_PAUSE : synth.getPauseAfterWritePatch() + 1);
                 
         final long time = System.currentTimeMillis();
-        timer[0] = new javax.swing.Timer(pause , new ActionListener()
+        timer[0] = new javax.swing.Timer(pause, new ActionListener()
             {
             public void actionPerformed(ActionEvent e)
                 {

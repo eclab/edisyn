@@ -1101,6 +1101,8 @@ public class Model implements Cloneable
         This is done by identifying the value of the parameter on the OPPOSITE side of X from where Y is.
         We reduce this value Z (move it closer to X's value) by WEIGHT, bound Z to be within the metric
         region, and then choose a new random value between X and Z inclusive.  
+
+        If model is null (which can somehow happen sometimes), it's treated as the same as the existing model.
     */
     public Model opposite(Random random, Model model, double weight)
         {
@@ -1113,9 +1115,11 @@ public class Model implements Cloneable
         This is done by identifying the value of the parameter on the OPPOSITE side of X from where Y is.
         We reduce this value Z (move it closer to X's value) by WEIGHT, bound Z to be within the metric
         region, and then choose a new random value between X and Z inclusive.  
+        
+        If model is null (which can somehow happen sometimes), it's treated as the same as the existing model.
     */
     public Model opposite(Random random, Model model, String[] keys, double weight, boolean fleeIfSame)
-        {        
+        {       
         if (undoListener!= null)
             {
             undoListener.push(this);
@@ -1125,11 +1129,11 @@ public class Model implements Cloneable
         for(int i = 0; i < keys.length; i++)
             {
             // return if the key doesn't exist, is immutable or is a string, or is non-metric for someone
-            if (!model.exists(keys[i])) { continue; }
+            if (model != null && !model.exists(keys[i])) { continue; }
             if (getStatus(keys[i]) == STATUS_IMMUTABLE || getStatus(keys[i]) == STATUS_RESTRICTED || isString(keys[i])) continue;
             if (minExists(keys[i]) && maxExists(keys[i]) && getMin(keys[i]) >= getMax(keys[i]))  continue;  // no range
 
-            if ((get(keys[i], 0) == model.get(keys[i])) && fleeIfSame)
+            if ((model == null || get(keys[i], 0) == model.get(keys[i])) && fleeIfSame)
                 {
                 // need to flee.  First: are we metric?
                 if (metricMinExists(keys[i]) &&

@@ -197,7 +197,7 @@ public class Chooser extends NumericalComponent
         combo.putClientProperty("JComponent.sizeVariant", "small");
         combo.setEditable(false);
         combo.setFont(Style.SMALL_FONT());
-        combo.setMaximumRowCount(33);           // 33, not 32, to accommodate modulation destinations for Matrix 1000
+        combo.setMaximumRowCount(34);           // 34, not 32, to accommodate modulation sources for the Waldorf Kyra
 
         setElements(_label, elements, values);
 

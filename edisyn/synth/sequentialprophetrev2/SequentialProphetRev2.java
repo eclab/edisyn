@@ -332,7 +332,11 @@ public class SequentialProphetRev2 extends Synth
         loadDefaults();
         }
 
+
+
+
     JComponent nameGlobal = null;
+    
     /** Add the global patch category (name, id, number, etc.) */
     public JComponent addNameGlobal(Color color)
         {
@@ -382,6 +386,7 @@ public class SequentialProphetRev2 extends Synth
         globalCategory.add(hbox, BorderLayout.WEST);
         return globalCategory;
         }
+        
 
     /** Add the global patch category (name, id, number, etc.) */
     public JComponent addNameGlobal2(Color color)
@@ -414,6 +419,7 @@ public class SequentialProphetRev2 extends Synth
         category.add(vbox, BorderLayout.WEST);
         return category;
         }
+    s
 
     public JComponent addPerformance(int layer, Color color)
         {
@@ -460,6 +466,7 @@ public class SequentialProphetRev2 extends Synth
         return category;
         }
 
+
     public JComponent addArp(int layer, Color color)
         {
         Category category = new Category(this, "Arpeggiator", color);
@@ -497,6 +504,7 @@ public class SequentialProphetRev2 extends Synth
         return category;
         }
 
+
     public JComponent addClock(int layer, Color color)
         {
         Category category = new Category(this, "Clock", color);
@@ -522,6 +530,7 @@ public class SequentialProphetRev2 extends Synth
         category.add(hbox, BorderLayout.CENTER);
         return category;
         }
+
 
     public JComponent addOscillatorGlobal(int layer, Color color)
         {
@@ -571,6 +580,7 @@ public class SequentialProphetRev2 extends Synth
         category.add(hbox, BorderLayout.CENTER);
         return category;
         }
+        
             
     public JComponent addOscillator(int layer, int osc, Color color)
         {
@@ -619,7 +629,9 @@ public class SequentialProphetRev2 extends Synth
         return category;
         }
     
+    
     JComponent filter = null;  
+    
     public JComponent addFilter(int layer, Color color)
         {
         Category category = new Category(this, "Low-Pass Filter", color);
@@ -650,6 +662,7 @@ public class SequentialProphetRev2 extends Synth
         category.add(hbox, BorderLayout.WEST);
         return category;
         }
+        
         
     public JComponent addAmplifier(int layer, Color color)
         {
@@ -685,6 +698,7 @@ public class SequentialProphetRev2 extends Synth
         return category;
         }
     
+    
     public JComponent addAux(int layer,  Color color)
         {
         Category category = new Category(this, "Aux", color);
@@ -709,6 +723,7 @@ public class SequentialProphetRev2 extends Synth
         category.add(outer, BorderLayout.WEST);
         return category;
         }
+
 
     public JComponent addEnvelope(int layer, final int env, Color color)
         {
@@ -759,6 +774,7 @@ public class SequentialProphetRev2 extends Synth
         return category;
         }
 
+
     public JComponent addExternalModulation(int layer, String title, String key, Color color)
         {
         Category category = new Category(this, title, color);
@@ -783,6 +799,7 @@ public class SequentialProphetRev2 extends Synth
         category.add(hbox, BorderLayout.WEST);
         return category;
         }
+
 
     public JComponent addLFO(int layer, final int lfo, Color color)
         {
@@ -838,6 +855,7 @@ public class SequentialProphetRev2 extends Synth
         return category;
         }
 
+
     public JComponent addModulation(int layer, int mod, Color color)
         {
         Category category  = new Category(this, "Modulation " + mod, color);
@@ -867,6 +885,7 @@ public class SequentialProphetRev2 extends Synth
         category.add(hbox, BorderLayout.WEST);
         return category;
         }
+
 
     public JComponent addSequencer(int layer, Color color)
         {
@@ -915,6 +934,7 @@ public class SequentialProphetRev2 extends Synth
         category.add(hbox, BorderLayout.CENTER);
         return category;
         }
+        
 
     public JComponent addSequencerTrack(final int layer, final int track, Color color)
         {
@@ -957,6 +977,7 @@ public class SequentialProphetRev2 extends Synth
         category.add(hbox, BorderLayout.WEST);
         return category;
         }
+        
     
     public JComponent addEffects(int layer, Color color)
         {
@@ -1011,6 +1032,7 @@ public class SequentialProphetRev2 extends Synth
         return category;
         }
 
+
     public JComponent addSeqStart(int layer, Color color)
         {
         final Category category  = new Category(this, "Polyphonic Sequencer", color);
@@ -1047,6 +1069,7 @@ public class SequentialProphetRev2 extends Synth
         category.add(hbox, BorderLayout.CENTER);
         return category;
         }
+        
     
     public JComponent addSteps(int layer, Color color, Color colorA, Color colorB)
         {
@@ -1087,6 +1110,7 @@ public class SequentialProphetRev2 extends Synth
                 
         return pane;
         }
+        
 
     public JComponent addStep(int layer, int step, Color color)
         {
@@ -1133,10 +1157,12 @@ public class SequentialProphetRev2 extends Synth
         return category;
         }
     
+    
     public void changePatch(Model tempModel)
         {
         changePatch(tempModel.get("bank"), tempModel.get("number"));
         }
+        
 
     public void changePatch(int bank, int number)
         {
@@ -1149,6 +1175,7 @@ public class SequentialProphetRev2 extends Synth
             
         tryToSendMIDI(message);
         }
+
 
     public boolean gatherPatchInfo(String title, Model changeThis, boolean writing)     
         {
@@ -1189,6 +1216,7 @@ public class SequentialProphetRev2 extends Synth
             return true;
             }
         }
+        
 
     public int parse(byte[] data, boolean fromFile)
         { 
@@ -5757,6 +5785,7 @@ public class SequentialProphetRev2 extends Synth
     "layer2step63velocity6",
     "layer2step64velocity6"         
     };
+
 
     public byte[] emit(Model tempModel, boolean toWorkingMemory, boolean toFile) 
         {

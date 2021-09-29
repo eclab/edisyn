@@ -264,14 +264,14 @@ public class KorgVolca extends Synth
             }
         synthType = val;
         if (synthTypeCombo != null) 
-        	{
-        	synthTypeCombo.setSelectedIndex(val);  // hopefully this isn't recursive
-        	}
+            {
+            synthTypeCombo.setSelectedIndex(val);  // hopefully this isn't recursive
+            }
         if (volcaPanel != null)
-        	{
-        	volcaPanel.removeAll();
-        	volcaPanel.add(volcas[val], BorderLayout.CENTER);
-        	}
+            {
+            volcaPanel.removeAll();
+            volcaPanel.add(volcas[val], BorderLayout.CENTER);
+            }
         revalidate();
         repaint();
         updateTitle();
@@ -1868,10 +1868,10 @@ public class KorgVolca extends Synth
         comp = new LabelledDial("Speed", this, "sample1part" + part + "speed", color, 0, 127)
             {
             public boolean isSymmetric()
-            	{
-            	return true;
-            	}
-            	
+                {
+                return true;
+                }
+                
             public String map(int value)
                 {
                 if (value == 0) return "-63";
@@ -2025,9 +2025,9 @@ public class KorgVolca extends Synth
         
         // make some dummy labelled dials
         for(int i = 2; i <= 10; i++)
-        	{
-        	comp = new LabelledDial("Part", this, "sample1part" + i + "pajenpartselect", color, 0, 127);
-        	}
+            {
+            comp = new LabelledDial("Part", this, "sample1part" + i + "pajenpartselect", color, 0, 127);
+            }
 
         comp = new LabelledDial("Reverb", this, "sample1part" + 1 + "pajenreverbtype", color, 0, 127)
             {
@@ -2043,9 +2043,9 @@ public class KorgVolca extends Synth
 
         // make some dummy labelled dials
         for(int i = 2; i <= 10; i++)
-        	{
-        	comp = new LabelledDial("Reverb", this, "sample1part" + i + "pajenreverbtype", color, 0, 127);
-        	}
+            {
+            comp = new LabelledDial("Reverb", this, "sample1part" + i + "pajenreverbtype", color, 0, 127);
+            }
 
         comp = new LabelledDial("Reverb", this, "sample1part" + 1 + "pajenreverblevel", color, 0, 127);
         ((LabelledDial)comp).addAdditionalLabel("Level [P]");
@@ -2053,9 +2053,9 @@ public class KorgVolca extends Synth
 
         // make some dummy labelled dials
         for(int i = 2; i <= 10; i++)
-        	{
-        	comp = new LabelledDial("Reverb", this, "sample1part" + i + "pajenreverblevel", color, 0, 127);
-        	}
+            {
+            comp = new LabelledDial("Reverb", this, "sample1part" + i + "pajenreverblevel", color, 0, 127);
+            }
 
         JLabel label = new JLabel("  Test Notes Play Part ");
         label.setFont(Style.SMALL_FONT());
@@ -2185,18 +2185,18 @@ public class KorgVolca extends Synth
             hbox.add(comp);
 
             comp = new LabelledDial("Speed", this, prefix + "part" + part + "speed", color, 0, 127)
-            {
-            public boolean isSymmetric()
-            	{
-            	return true;
-            	}
-            	
-            public String map(int value)
                 {
-                if (value == 0) return "-63";
-                else return "" + (value - 64);
-                }
-            };
+                public boolean isSymmetric()
+                    {
+                    return true;
+                    }
+                
+                public String map(int value)
+                    {
+                    if (value == 0) return "-63";
+                    else return "" + (value - 64);
+                    }
+                };
             hbox.add(comp);
 
             comp = new LabelledDial("Pitch Env", this, prefix + "part" + part + "pitchegintensity", color, 0, 127)
@@ -3019,11 +3019,11 @@ public class KorgVolca extends Synth
                 }
             }
             
-		if (type > 0)
-			{
-			setSynthType(type - 1, true);
-			}
-		
+        if (type > 0)
+            {
+            setSynthType(type - 1, true);
+            }
+                
         return PARSE_SUCCEEDED;
         }
 
@@ -3037,7 +3037,7 @@ public class KorgVolca extends Synth
             tempModel = getModel();
         
         final boolean initPatch = false;
-		int type = getSynthType();
+        int type = getSynthType();
 
         byte[] data = new byte[(initPatch ? INIT_PATCH_DATA_LENGTH : allParameters[type].length) + 38];
         data[0] = (byte)0xF0;
@@ -3075,29 +3075,29 @@ public class KorgVolca extends Synth
             data[i + 20] = (byte)(name[i]);
             }
             
-		if (initPatch)
-			{
-			// This code is used to generate the init patch
-			data[20 + 16] = (byte) 0;
-			int pos = 21 + 16;
-			for(int j = 0; j < allParameters.length; j++)
-				{
-				for(int i = 0; i < allParameters[j].length; i++)
-					{
-					data[pos++] = (byte)(model.get(allParameters[j][i], 0));
-					}
-        		}
-        	}
+        if (initPatch)
+            {
+            // This code is used to generate the init patch
+            data[20 + 16] = (byte) 0;
+            int pos = 21 + 16;
+            for(int j = 0; j < allParameters.length; j++)
+                {
+                for(int i = 0; i < allParameters[j].length; i++)
+                    {
+                    data[pos++] = (byte)(model.get(allParameters[j][i], 0));
+                    }
+                }
+            }
         else
-        	{
-			// This is the standard data output load type
-			data[20 + 16] = (byte) (type + 1);
-				
-			for(int i = 0; i < allParameters[type].length; i++)
-				{
-				data[21 + 16 + i] = (byte)(model.get(allParameters[type][i], 0));
-				}
-			}
+            {
+            // This is the standard data output load type
+            data[20 + 16] = (byte) (type + 1);
+                                
+            for(int i = 0; i < allParameters[type].length; i++)
+                {
+                data[21 + 16 + i] = (byte)(model.get(allParameters[type][i], 0));
+                }
+            }
               
         return data;
         }
@@ -3135,16 +3135,16 @@ public class KorgVolca extends Synth
     public String getPatchName(Model model) { return model.get("name", "Untitled"); }
         
     public boolean testVerify(Synth synth2, String key, Object val1, Object val2)
-    	{
-    	if (key.equals("name"))
-    		{ 
-    		return ((String)val1).trim() != ((String)val2).trim();
-			}    		
-    	// we ignore keys that don't start with the prefix we're interested in
-    	else if (!key.startsWith(PREFIXES[getSynthType()]))
-    		return true;
-    	return false;
-    	}
+        {
+        if (key.equals("name"))
+            { 
+            return ((String)val1).trim() != ((String)val2).trim();
+            }               
+        // we ignore keys that don't start with the prefix we're interested in
+        else if (!key.startsWith(PREFIXES[getSynthType()]))
+            return true;
+        return false;
+        }
 
     }
 

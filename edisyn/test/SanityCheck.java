@@ -164,14 +164,14 @@ public class SanityCheck
                 else if (synth instanceof edisyn.synth.korgvolca.KorgVolca)
                     {
                     for(int i = 0; i < edisyn.synth.korgvolca.KorgVolca.PREFIXES.length; i++)
-                    	{
-						synth = Synth.instantiate(c[j], true, false, null);
-                    	((edisyn.synth.korgvolca.KorgVolca)synth).setSynthType(i, false);
-						synth2 = Synth.instantiate(c[j], true, false, null);
-                    	((edisyn.synth.korgvolca.KorgVolca)synth2).setSynthType(i, false);
-						System.err.println(c[j] + " " + edisyn.synth.korgvolca.KorgVolca.VOLCAS[i]);
-						test(synth, synth2);
-                    	}
+                        {
+                        synth = Synth.instantiate(c[j], true, false, null);
+                        ((edisyn.synth.korgvolca.KorgVolca)synth).setSynthType(i, false);
+                        synth2 = Synth.instantiate(c[j], true, false, null);
+                        ((edisyn.synth.korgvolca.KorgVolca)synth2).setSynthType(i, false);
+                        System.err.println(c[j] + " " + edisyn.synth.korgvolca.KorgVolca.VOLCAS[i]);
+                        test(synth, synth2);
+                        }
                     }
                 else
                     {

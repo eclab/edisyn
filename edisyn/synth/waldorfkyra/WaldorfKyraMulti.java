@@ -971,8 +971,8 @@ public class WaldorfKyraMulti extends Synth
                 
 
         TABLE 1.  PARAMETERS AND VALUES
-        0       outputchannel   0 ... 3:        A, B, C, D     "Part Output"
-        1       midichannel     0 ... 15:       channels 1 ... 16
+        0       outputchannel   0...3:        A, B, C, D     "Part Output"
+        1       midichannel     0...15:       channels 1 ... 16
         2       volume          0...127
         3       pan             0...127:        -64 ... +63
         4       patchbank       0...25:         A ... Z

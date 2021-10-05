@@ -835,3 +835,156 @@ public class WaldorfKyraMulti extends Synth
         }
     }
     
+    
+    /*** 
+    	Kyra Multi Sysex Format
+    	[As of Firmware 1.78, though it should roughly work with earlier versions]
+    	Sean Luke sean@cs.gmu.edu
+    	
+    	This is a rough description of the format used by the Edisyn editor.
+    	It may be superceeded by a better description from Waldorf, but at present
+    	that is not available [as of September 2021]
+
+		Be certain to properly set "Receive MIDI Program" to "USB", "MIDI+USB", or "MIDI"
+		depending on how you're communicating with the Kyra.
+		
+    	
+    	CHANGE PATCH
+    	Do a Program Change with MIDI Channel = Kyra's "Multi Channel", typically channel 16
+    		NOTE: "Multi Program Change" must be ON
+    		NOTE: A multimode patch change requires at least 200ms pause afterwards
+    	
+    	REQUEST PATCH DUMP 
+    	F0
+    	3E		Waldorf 
+    	22 		Kyra
+    	[ID] 	Synth ID, typically 17 (11 hex)
+    	21		Request Multimode patch
+    	01		Version 1	[current as of September 2021]
+    	[MSB]	MSB = 0 means a patch in storage.  MSB > 0 means the edit buffer (I use 7F)
+    	[LSB]	LSB = N (0...127) indicates which patch.  Ignored when using the edit buffer (I use 7F)
+    	F7
+    	
+    	REQUEST MULTI PATCH NAME
+    	F0
+    	3E		Waldorf 
+    	22 		Kyra
+    	[ID] 	Synth ID, typically 17 (11 hex)
+    	39		Request Multimode patch name
+    	01		Version 1	[current as of September 2021]
+    	[MSB]	MSB = 0 means a patch in storage.  MSB > 0 means the edit buffer (I use 7F)
+    	[LSB]	LSB = N (0...127) indicates which patch.  Ignored when using the edit buffer (I use 7F)
+    	F7
+    	
+		SEND SINGLE PARAMETER TO EDIT BUFFER
+		F0
+    	3E		Waldorf 
+    	22 		Kyra
+    	[ID] 	Synth ID, typically 17 (11 hex)
+    	22		Send Single Parameter to Kyra
+    	01		Version 1	[current as of September 2021]
+    	[PART]	0 ... 7:  Parts 1 ... 8
+    	[PARAM]	See Table 1
+    	[VALUE]	See Table 1
+    	F7
+    	
+    	NOTE: Kyra will not send individual multimode parameters to you
+    	
+    	
+		MULTI PATCH DUMP 	[Received from Kyra]
+		F0
+    	3E		Waldorf 
+    	22 		Kyra
+    	[ID] 	Synth ID, typically 17 (11 hex)
+    	41		Receive Multimode Patch Dump from Kyra
+    	01		Version 1	[current as of September 2021]
+    	[MSB]	MSB = 0 means a patch name in storage.  MSB > 0 means the edit buffer (I use 7F)
+    	[LSB]	LSB = N (0...127) indicates which patch.  Ignored when using the edit buffer (I use 7F)
+    	[PART 1 DATA]	16 bytes.  Values of parameters in order in Table 1.
+    	[PART 2 DATA]	16 bytes.  Values of parameters in order in Table 1.
+    	[PART 3 DATA]	16 bytes.  Values of parameters in order in Table 1.
+    	[PART 4 DATA]	16 bytes.  Values of parameters in order in Table 1.
+    	[PART 5 DATA]	16 bytes.  Values of parameters in order in Table 1.
+    	[PART 6 DATA]	16 bytes.  Values of parameters in order in Table 1.
+    	[PART 7 DATA]	16 bytes.  Values of parameters in order in Table 1.
+    	[PART 8 DATA]	16 bytes.  Values of parameters in order in Table 1.
+    	[CHECKSUM]	Checksum is sum of bytes in [PART 1 DATA] through [PART 8 DATA] mod 128, that is, & 0x7F 
+    	F7
+
+		MULTI PATCH DUMP 	[Sent to Kyra]
+		F0
+    	3E		Waldorf 
+    	22 		Kyra
+    	[ID] 	Synth ID, typically 17 (11 hex)
+    	01		Send Multimode Patch Dump to Kyra
+    	01		Version 1	[current as of September 2021]
+    	[MSB]	MSB = 0 means a patch in storage.  MSB > 0 means the edit buffer (I use 7F)
+    	[LSB]	LSB = N (0...127) indicates which patch.  Ignored when using the edit buffer (I use 7F)
+    	[PART 1 DATA]	16 bytes.  Values of parameters in order in Table 1.
+    	[PART 2 DATA]	16 bytes.  Values of parameters in order in Table 1.
+    	[PART 3 DATA]	16 bytes.  Values of parameters in order in Table 1.
+    	[PART 4 DATA]	16 bytes.  Values of parameters in order in Table 1.
+    	[PART 5 DATA]	16 bytes.  Values of parameters in order in Table 1.
+    	[PART 6 DATA]	16 bytes.  Values of parameters in order in Table 1.
+    	[PART 7 DATA]	16 bytes.  Values of parameters in order in Table 1.
+    	[PART 8 DATA]	16 bytes.  Values of parameters in order in Table 1.
+    	[CHECKSUM]	Checksum is sum of bytes in [PART 1 DATA] through [PART 8 DATA] mod 128, that is, & 0x7F 
+    	F7
+
+		NOTE: writing a patch/patch name to storage does not update the edit buffer.
+		You'll want to do that separately.
+
+
+		MULTI PATCH NAME DUMP 	[Received from Kyra]
+		F0
+    	3E		Waldorf 
+    	22 		Kyra
+    	[ID] 	Synth ID, typically 17 (11 hex)
+    	59		Receive Multimode Patch Name Dump from Kyra
+    	01		Version 1	[current as of September 2021]
+    	[MSB]	MSB = 0 means a patch in storage.  MSB > 0 means the edit buffer (I use 7F)
+    	[LSB]	LSB = N (0...127) indicates which patch.  Ignored when using the edit buffer (I use 7F)
+    	[DATA]	16 bytes, Patch name, in ASCII
+    	[CHECKSUM]	Checksum is sum of bytes in [DATA] mod 128, that is, & 0x7F 
+    	F7
+
+		NOTE: It's not clear why the name is not part of the standard dump (and quite annoying)
+
+		MULTI PATCH NAME DUMP 	[Sent to Kyra]
+		F0
+    	3E		Waldorf 
+    	22 		Kyra
+    	[ID] 	Synth ID, typically 17 (11 hex)
+    	19		Send Multimode Patch Name Dump to Kyra
+    	01		Version 1	[current as of September 2021]
+    	[MSB]	MSB = 0 means a patch in storage.  MSB > 0 means the edit buffer (I use 7F)
+    	[LSB]	LSB = N (0...127) indicates which patch.  Ignored when using the edit buffer (I use 7F)
+    	[DATA]	16 bytes, Patch name, in ASCII
+    	[CHECKSUM]	Checksum is sum of bytes in [DATA] mod 128, that is, & 0x7F 
+    	F7
+
+		NOTE: writing a patch/patch name to storage does not update the edit buffer.
+		You'll want to do that separately.
+
+		NOTE: It's not clear why the name is not part of the standard dump (and quite annoying)
+		
+
+		TABLE 1.  PARAMETERS AND VALUES
+		0	outputchannel	0 ... 3: 	A, B, C, D		"Part Output"
+    	1	midichannel		0 ... 15: 	channels 1 ... 16
+    	2	volume			0...127
+    	3	pan				0...127: 	-64 ... +63
+    	4	patchbank		0...25: 	A ... Z
+    	5	patchnumber		0...127
+    	6	transpose		0...48: 	-24 ... +24
+    	7	detune			0...127: 	-64 ... +63 
+    	8	lowerkeyrange	1...127		[NOTE MUST NOT BE 0]
+    	9	upperkeyrange	1...127		[NOTE MUST NOT BE 0]
+    	10	rxvolume		0...1
+    	11	rxprogram		0...1
+    	12	enabledelay		0...1
+    	13	enablemdfx		0...1		"Chorus"
+    	14	enableeq		0...1		"EQ / Formant"
+    	15	enablereverb	0...1
+
+*/

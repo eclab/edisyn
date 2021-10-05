@@ -892,14 +892,14 @@ public class WaldorfKyraMulti extends Synth
                 NOTE: Kyra will not send individual multimode parameters to you
         
         
-                MULTI PATCH DUMP        [Received from Kyra]
+        MULTI PATCH DUMP        [Received from Kyra]
         F0
         3E              Waldorf 
         22              Kyra
         [ID]            Synth ID, typically 17 (11 hex)
         41              Receive Multimode Patch Dump from Kyra
         01              Version 1       [current as of September 2021]
-        [MSB]           MSB = 0 means a patch name in storage.  MSB > 0 means the edit buffer (I use 7F)
+        [MSB]           MSB = 0 means a patch in storage.  MSB > 0 means the edit buffer (I use 7F)
         [LSB]           LSB = N (0...127) indicates which patch.  Ignored when using the edit buffer (I use 7F)
         [PART 1 DATA]   16 bytes.  Values of parameters in order in Table 1.
         [PART 2 DATA]   16 bytes.  Values of parameters in order in Table 1.

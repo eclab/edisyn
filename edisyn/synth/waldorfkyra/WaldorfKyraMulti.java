@@ -837,7 +837,7 @@ public class WaldorfKyraMulti extends Synth
     
     
     /*** 
-        Kyra Multi Sysex Format
+        Kyra Multimode Patch Sysex Format
         [As of Firmware 1.78, though it should roughly work with earlier versions]
         Sean Luke sean@cs.gmu.edu
         
@@ -849,13 +849,13 @@ public class WaldorfKyraMulti extends Synth
         depending on how you're communicating with the Kyra.
                 
         
-        CHANGE PATCH
+        CHANGE MULTIMODE PATCH
         Do a Program Change with MIDI Channel = Kyra's "Multi Channel", typically channel 16
         
                 NOTE: "Multi Program Change" must be ON
                 NOTE: A multimode patch change requires at least 200ms pause afterwards
         
-        REQUEST PATCH DUMP 
+        REQUEST MULTIMODE PATCH DUMP 
         F0
         3E              Waldorf 
         22              Kyra
@@ -866,7 +866,7 @@ public class WaldorfKyraMulti extends Synth
         [LSB]           LSB = N (0...127) indicates which patch.  Ignored when using the edit buffer (I use 7F)
         F7
         
-        REQUEST MULTI PATCH NAME
+        REQUEST MULTIMODE PATCH NAME
         F0
         3E              Waldorf 
         22              Kyra
@@ -877,7 +877,7 @@ public class WaldorfKyraMulti extends Synth
         [LSB]           LSB = N (0...127) indicates which patch.  Ignored when using the edit buffer (I use 7F)
         F7
         
-        SEND SINGLE PARAMETER TO EDIT BUFFER
+        SEND ONE MULTIMODE PARAMETER TO EDIT BUFFER
         F0
         3E              Waldorf 
         22              Kyra
@@ -892,7 +892,7 @@ public class WaldorfKyraMulti extends Synth
                 NOTE: Kyra will not send individual multimode parameters to you
         
         
-        MULTI PATCH DUMP        [Received from Kyra]
+        MULTIMODE PATCH DUMP        [Received from Kyra]
         F0
         3E              Waldorf 
         22              Kyra
@@ -912,7 +912,7 @@ public class WaldorfKyraMulti extends Synth
         [CHECKSUM]      Checksum is sum of bytes in [PART 1 DATA] through [PART 8 DATA] mod 128, that is, & 0x7F 
         F7
 
-        MULTI PATCH DUMP        [Sent to Kyra]
+        MULTIMODE PATCH DUMP        [Sent to Kyra]
         F0
         3E              Waldorf 
         22              Kyra
@@ -935,7 +935,7 @@ public class WaldorfKyraMulti extends Synth
                 NOTE: writing a patch/patch name to storage does not update the edit buffer.
                 You'll want to do that manually afterwards.
 
-        MULTI PATCH NAME DUMP   [Received from Kyra]
+        MULTIMODE PATCH NAME DUMP   [Received from Kyra]
         F0
         3E              Waldorf 
         22              Kyra
@@ -950,7 +950,7 @@ public class WaldorfKyraMulti extends Synth
 
                 NOTE: It's not clear why the name is not part of the standard dump (and quite annoying)
 
-        MULTI PATCH NAME DUMP   [Sent to Kyra]
+        MULTIMODE PATCH NAME DUMP   [Sent to Kyra]
         F0
         3E              Waldorf 
         22              Kyra

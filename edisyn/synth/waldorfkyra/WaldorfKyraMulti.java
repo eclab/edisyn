@@ -933,8 +933,7 @@ public class WaldorfKyraMulti extends Synth
         F7
 
                 NOTE: writing a patch/patch name to storage does not update the edit buffer.
-                You'll want to do that separately.
-
+                You'll want to do that manually afterwards.
 
         MULTI PATCH NAME DUMP   [Received from Kyra]
         F0
@@ -965,7 +964,7 @@ public class WaldorfKyraMulti extends Synth
         F7
 
                 NOTE: writing a patch/patch name to storage does not update the edit buffer.
-                You'll want to do that separately.
+                You'll want to do that manually afterwards.
 
                 NOTE: It's not clear why the name is not part of the standard dump (and quite annoying)
                 

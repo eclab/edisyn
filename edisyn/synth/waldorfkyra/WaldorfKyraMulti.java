@@ -945,7 +945,7 @@ public class WaldorfKyraMulti extends Synth
         01              Version 1       [current as of September 2021]
         [MSB]           MSB = 0 means a patch in storage.  MSB > 0 means the edit buffer (I use 7F)
         [LSB]           LSB = N (0...127) indicates which patch.  Ignored when using the edit buffer (I use 7F)
-        [DATA]          16 bytes, Patch name, in ASCII
+        [DATA]          16 bytes, Patch name, in ASCII chars >= ' ' (32) and < DEL (127)
         [CHECKSUM]      Checksum is sum of bytes in [DATA] mod 128, that is, & 0x7F 
         F7
 
@@ -960,7 +960,7 @@ public class WaldorfKyraMulti extends Synth
         01              Version 1       [current as of September 2021]
         [MSB]           MSB = 0 means a patch in storage.  MSB > 0 means the edit buffer (I use 7F)
         [LSB]           LSB = N (0...127) indicates which patch.  Ignored when using the edit buffer (I use 7F)
-        [DATA]          16 bytes, Patch name, in ASCII
+        [DATA]          16 bytes, Patch name, in ASCII chars >= ' ' (32) and < DEL (127)
         [CHECKSUM]      Checksum is sum of bytes in [DATA] mod 128, that is, & 0x7F 
         F7
 

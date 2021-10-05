@@ -845,12 +845,13 @@ public class WaldorfKyraMulti extends Synth
         It may be superceeded by a better description from Waldorf, but at present
         that is not available [as of September 2021]
 
-                Be certain to properly set "Receive MIDI Program" to "USB", "MIDI+USB", or "MIDI"
-                depending on how you're communicating with the Kyra.
+        Be certain to properly set "Receive MIDI Program" to "USB", "MIDI+USB", or "MIDI"
+        depending on how you're communicating with the Kyra.
                 
         
         CHANGE PATCH
         Do a Program Change with MIDI Channel = Kyra's "Multi Channel", typically channel 16
+        
                 NOTE: "Multi Program Change" must be ON
                 NOTE: A multimode patch change requires at least 200ms pause afterwards
         

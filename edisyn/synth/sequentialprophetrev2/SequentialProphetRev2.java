@@ -419,7 +419,6 @@ public class SequentialProphetRev2 extends Synth
         category.add(vbox, BorderLayout.WEST);
         return category;
         }
-    s
 
     public JComponent addPerformance(int layer, Color color)
         {

@@ -130,7 +130,7 @@ public class RolandJV880 extends Synth
             }
 
 
-        model.set("patchname", "Init Patch");  // has to be 10 long
+        model.set("name", "Init Patch");  // has to be 10 long
 
         model.set("bank", 0);           // internal
         model.set("number", 0);
@@ -215,7 +215,7 @@ public class RolandJV880 extends Synth
         hbox2.add(comp);
         vbox.add(hbox2);
         
-        comp = new StringComponent("Patch Name", this, "patchname", 12, "Name must be up to 12 ASCII characters.")
+        comp = new StringComponent("Patch Name", this, "name", 12, "Name must be up to 12 ASCII characters.")
             {
             public String replace(String val)
                 {
@@ -1333,7 +1333,7 @@ public class RolandJV880 extends Synth
         
     public byte[] getData(String key)
         {
-        if (key.startsWith("patchname"))                                // name is 12-byte
+        if (key.equals("name"))                                // name is 12-byte
             {
             byte[] data = new byte[12];
             String name = model.get(key, "Untitled");
@@ -1366,7 +1366,7 @@ public class RolandJV880 extends Synth
         if (key.equals("-")) return new Object[0];  // this is not emittable
         if (key.equals("bank")) return new Object[0];  // this is not emittable
         if (key.equals("number")) return new Object[0];  // this is not emittable
-
+        
         // address for "patch mode temporary patch"
         byte AA = (byte)0x00;
         byte BB = (byte)0x08;
@@ -1374,7 +1374,11 @@ public class RolandJV880 extends Synth
         byte DD = (byte)0x00;
             
         // figure out the address
-        if (key.startsWith("tone1"))
+        if (key.equals("name"))
+        	{
+        	// no changes
+        	}
+        else if (key.startsWith("tone1"))
             {
             CC = (byte)(CC + 0x08);
             DD = (byte)(DD + ((Integer)(allToneParametersToIndex.get(key.substring(5)))).intValue());  // get rid of the "tone1"
@@ -1475,7 +1479,7 @@ public class RolandJV880 extends Synth
                 {
                 name = name + ((char)data[pos++]);
                 }
-            model.set("patchname", name);
+            model.set("name", name);
                         
             // Load other patch common
             for(int i = 12; i < allGlobalParameters.length; i++)  // skip name parameters
@@ -1569,7 +1573,7 @@ public class RolandJV880 extends Synth
         byte[] buf = prepareBuffer(new byte[34 + 11], tempModel, toWorkingMemory, 0);
                 
         int pos = 9;
-        String name = model.get("patchname", "") + "            ";
+        String name = model.get("name", "") + "            ";
         for(int i = 0; i < 12; i++)
             {
             buf[pos++] = (byte)(name.charAt(i) & 0x7F);
@@ -1675,15 +1679,15 @@ public class RolandJV880 extends Synth
         // check the easy stuff -- out of range parameters
         super.revise();
 
-        String nm = model.get("patchname", "Init");
+        String nm = model.get("name", "Init");
         String newnm = revisePatchName(nm);
         if (!nm.equals(newnm))
-            model.set("patchname", newnm);
+            model.set("name", newnm);
         }
         
     public static String getSynthName() { return "Roland JV-80/880"; }
     
-    public String getPatchName(Model model) { return model.get("patchname", "Untitled  "); }
+    public String getPatchName(Model model) { return model.get("name", "Untitled  "); }
 
     public int getPauseAfterChangePatch() { return 100; }
 

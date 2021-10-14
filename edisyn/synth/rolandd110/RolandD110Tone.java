@@ -277,7 +277,7 @@ public class RolandD110Tone extends Synth
                 }
             }
 
-        model.set("patchname", "Init Patch");  // has to be 10 long
+        model.set("name", "Init Patch");  // has to be 10 long
         model.set("number", 0);
         model.set("bank", 2);           // Internal
         loadDefaults();        
@@ -493,7 +493,7 @@ public class RolandD110Tone extends Synth
                     synth.getModel().set("p1partialreserve", 32);
                     synth.getModel().set("p1tonegroup", bank);
                     synth.getModel().set("p1tonenumber", p);
-                    synth.getModel().set("patchname", "Patch " + p);
+                    synth.getModel().set("name", "Patch " + p);
                     synth.getModel().set("number", p);
                                 
                     synth.writeAllParameters(synth.getModel());
@@ -558,7 +558,7 @@ public class RolandD110Tone extends Synth
         hbox2.add(comp);
         vbox.add(hbox2);
         
-        comp = new StringComponent("Patch Name", this, "patchname", MAXIMUM_NAME_LENGTH, "Name must be up to 10 ASCII characters.")
+        comp = new StringComponent("Patch Name", this, "name", MAXIMUM_NAME_LENGTH, "Name must be up to 10 ASCII characters.")
             {
             public String replace(String val)
                 {
@@ -1155,7 +1155,7 @@ public class RolandD110Tone extends Synth
         
     final static String[] allCommonParameters = new String[]
     {
-    "patchname",                                        ///// **** Has to be handled specially
+    "name",                                        ///// **** Has to be handled specially
     "structure1and2",
     "structure3and4",
     "p1mute",
@@ -1238,7 +1238,7 @@ public class RolandD110Tone extends Synth
                     (model.get("p1mute") << 0))             
                 };
             }
-        else if (key.equals("patchname"))                                // name is 10-byte
+        else if (key.equals("name"))                                // name is 10-byte
             {
             byte[] data = new byte[10];
             String name = model.get(key, "Untitled");
@@ -1363,7 +1363,7 @@ public class RolandD110Tone extends Synth
             }
         else                // Common
             {
-            if (key.equals("patchname"))
+            if (key.equals("name"))
                 {
                 // do nothing, we're at the right spot
                 }
@@ -1442,7 +1442,7 @@ public class RolandD110Tone extends Synth
             {
             name = name + ((char)data[pos++]);
             }
-        model.set("patchname", name);
+        model.set("name", name);
         model.set("structure1and2", data[pos++]);
         model.set("structure3and4", data[pos++]);
         model.set("p1mute", (data[pos] >>> 0) & 1);
@@ -1513,7 +1513,7 @@ public class RolandD110Tone extends Synth
                 
         // tone common
         int pos = 8;
-        byte[] d = getData("patchname");
+        byte[] d = getData("name");
         System.arraycopy(d, 0, buf, pos, d.length);
         pos += d.length;
         buf[pos++] = getData("structure1and2")[0];
@@ -1642,15 +1642,15 @@ return b;
         // check the easy stuff -- out of range parameters
         super.revise();
 
-        String nm = model.get("patchname", "Init");
+        String nm = model.get("name", "Init");
         String newnm = revisePatchName(nm);
         if (!nm.equals(newnm))
-            model.set("patchname", newnm);
+            model.set("name", newnm);
         }
         
     public static String getSynthName() { return "Roland D-110 [Tone]"; }
     
-    public String getPatchName(Model model) { return model.get("patchname", "Untitled  "); }
+    public String getPatchName(Model model) { return model.get("name", "Untitled  "); }
 
     public int getPauseAfterSendAllParameters() { return 100; } 
  

@@ -97,7 +97,7 @@ public class RolandD110Multi extends Synth
         sourcePanel.add(vbox, BorderLayout.CENTER);
         addTab("Parts 4-8", sourcePanel);                
 
-        model.set("patchname", "Init Patch");  // has to be 10 long
+        model.set("name", "Init Patch");  // has to be 10 long
 
         model.set("number", 0);
                         
@@ -167,7 +167,7 @@ public class RolandD110Multi extends Synth
         hbox2.add(comp);
         vbox.add(hbox2);
         
-        comp = new StringComponent("Patch Name", this, "patchname", 10, "Name must be up to 10 ASCII characters.")
+        comp = new StringComponent("Patch Name", this, "name", 10, "Name must be up to 10 ASCII characters.")
             {
             public String replace(String val)
                 {
@@ -504,7 +504,7 @@ public class RolandD110Multi extends Synth
         
     final static String[] allCommonParameters = new String[]
     {
-    "patchname",
+    "name",
     "reverbmode",
     "reverbtime",
     "reverblevel",
@@ -555,7 +555,7 @@ public class RolandD110Multi extends Synth
     "p8midichannel",
     "rhythmmidichannel",
     "-",
-    "patchname",
+    "name",
     };
 
     public byte getID() 
@@ -602,7 +602,7 @@ public class RolandD110Multi extends Synth
     // which can be then inserted into an emit
     public byte[] getData(String key)
         {
-        if (key.equals("patchname"))                                // name is 10-byte
+        if (key.equals("name"))                                // name is 10-byte
             {
             byte[] data = new byte[10];
             String name = model.get(key, "Untitled");
@@ -780,7 +780,7 @@ public class RolandD110Multi extends Synth
                 {
                 name = name + ((char)data[pos++]);
                 }
-            model.set("patchname", name);
+            model.set("name", name);
             model.set("reverbmode", data[pos++]);
             model.set("reverbtime", data[pos++]);
             model.set("reverblevel", data[pos++]);
@@ -839,7 +839,7 @@ public class RolandD110Multi extends Synth
             for(int i = 0; i < allSystemParameters.length; i++)
                 {
                 if (allSystemParameters[i].equals("-")) continue;
-                if (allSystemParameters[i].equals("patchname"))         // it's last
+                if (allSystemParameters[i].equals("name"))         // it's last
                     {
                     String name = model.get(allSystemParameters[i], "Untitled") + "          ";
                     for(int c = 0; c < 10; c++)
@@ -888,14 +888,14 @@ public class RolandD110Multi extends Synth
             buf1[5] = (byte)0x06;
             buf1[6] = (byte)tempModel.get("number");
             buf1[7] = (byte)0x00;
-            String name = model.get("patchname", "Untitled") + "          ";
+            String name = model.get("name", "Untitled") + "          ";
             for(int c = 0; c < 10; c++)
                 {
                 buf1[8 + c] = (byte)(name.charAt(c));
                 }
             for(int i = 0; i < allCommonParameters.length; i++)
                 {
-                if (allCommonParameters[i].equals("patchname")) continue;  // already did it
+                if (allCommonParameters[i].equals("name")) continue;  // already did it
                 if (allCommonParameters[i].equals("-")) continue;
                 if (allCommonParameters[i].equals("rhythmoutputlevel")) continue;       // this is done at the end
                 buf1[10 + i + 8 - 1] = (byte)model.get(allCommonParameters[i]);
@@ -1000,15 +1000,15 @@ public class RolandD110Multi extends Synth
         // check the easy stuff -- out of range parameters
         super.revise();
 
-        String nm = model.get("patchname", "Init");
+        String nm = model.get("name", "Init");
         String newnm = revisePatchName(nm);
         if (!nm.equals(newnm))
-            model.set("patchname", newnm);
+            model.set("name", newnm);
         }
         
     public static String getSynthName() { return "Roland D-110 [Multi]"; }
     
-    public String getPatchName(Model model) { return model.get("patchname", "Untitled  "); }
+    public String getPatchName(Model model) { return model.get("name", "Untitled  "); }
 
     public int getPauseAfterChangePatch() { return 100; }
 

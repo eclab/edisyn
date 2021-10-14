@@ -30,6 +30,8 @@ public abstract class NumericalComponent extends JComponent implements Updatable
     String key;
     Synth synth;
     
+    public Synth getSynth() { return synth; }
+    
     /** Sets the component's key.  Does not update. */
     public void setKey(String key) { this.key = key; }
     

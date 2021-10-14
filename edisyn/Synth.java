@@ -1196,6 +1196,13 @@ public abstract class Synth extends JComponent implements Updatable
             model.setUpdateListeners(previous);
             model.updateAllListeners();
             }
+            
+        // update Morpher?
+        if (tabs.getSelectedComponent() == morphPane)
+        	{
+        	morph.setToCurrentPatch();
+        	}
+        
         return val;
         }
         

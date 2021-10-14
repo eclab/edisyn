@@ -248,7 +248,9 @@ public class Morph extends SynthPanel
             final int _i = i;
             buttons[i] = new PushButton("[Empty]", new String[] 
                 { 
-                "Set to Current Patch",
+                "Set to Editor Patch",
+                "Request Current Patch",
+                "Request Patch...",
                 "Set to Joystick Position",
                 "Load from File...",
                 "Clear",
@@ -269,17 +271,43 @@ public class Morph extends SynthPanel
                 "Take from Hill-Climb Archive u",
                 "Take from Hill-Climb Archive v",
                 })
+                // can't do this right now
+/*                new boolean[]
+                	{
+                	true, 
+                	synth.receiveCurrent.isEnabled(),
+                	synth.receivePatch.isEnabled(), 
+                	true,
+                	true,
+                	true, 
+                	true,
+                	true, 
+                	true,
+                	true,
+                	true, 
+                	true,
+                	true, 
+                	true,
+                	true,
+                	true, 
+                	true,
+                	true, 
+                	true,
+                	true,
+                	true,
+                	true,
+                	})*/
                 {
                 public void perform(int val)
                     {
-                    if (val < 4)
+                    if (val < 6)
                         resetButton(_i, val);
-                    else if (val < 8)
-                        swap(_i, swap[val - 5]);
-                    else if (val < 13)
-                        takeFromNudge(_i, val - 9);
+                    else if (val < 10)
+                        swap(_i, swap[val - 7]);
+                    else if (val < 15)
+                        takeFromNudge(_i, val - 11);
                     else
-                        takeFromArchive(_i, val - 14);
+                        takeFromArchive(_i, val - 16);
                     updateAgain();               
                     }
                 };
@@ -456,21 +484,57 @@ public class Morph extends SynthPanel
         }
     
     
+    public static final int NO_MENU_BUTTON = -1;
+    int menuButton = NO_MENU_BUTTON;
+    public void setToCurrentPatch()
+    	{
+    	if (menuButton != NO_MENU_BUTTON)
+    		{
+            sources[menuButton] = synth.getModel().copy();
+            String currentPatchName = synth.getPatchName(synth.getModel());
+            buttons[menuButton].getButton().setText(currentPatchName == null ? "Current Patch" : "" + currentPatchName.trim());
+    		menuButton = NO_MENU_BUTTON;
+    		}
+    	}
+    
     int joy = 0;
     void resetButton(int button, int reset)
         {
         if (reset == 0)
             {
-            sources[button] = synth.getModel().copy();
-            String currentPatchName = synth.getPatchName(synth.getModel());
-            buttons[button].getButton().setText(currentPatchName == null ? "Current Patch" : "" + currentPatchName.trim());
+            menuButton = button;
+            setToCurrentPatch();
             }
-        else if (reset == 1)
+        if (reset == 1)
+            {
+            if (synth.receiveCurrent.isEnabled())
+            	{
+	            menuButton = button;
+	            synth.doRequestCurrentPatch();
+	            }
+	        else
+	        	{
+	        	synth.showSimpleError("Cannot Request Current Patch", "This synthesizer does not support requesting the current patch (sorry).");
+	        	}
+            }
+        if (reset == 2)
+            {
+            if (synth.receivePatch.isEnabled())
+            	{
+	            menuButton = button;
+	            synth.doRequestPatch();
+	            }
+	        else
+	        	{
+	        	synth.showSimpleError("Cannot Request Patch", "This synthesizer does not support requesting a patch (sorry).");
+	        	}
+            }
+        else if (reset == 3)
             {
             sources[button] = current.copy();
             buttons[button].getButton().setText("Joystick " + (++joy));
             }
-        else if (reset == 2)
+        else if (reset == 4)
             {
             Model cancel = sources[button];         //  the original model, to be restored if we failed
             Model backup = synth.model;
@@ -506,7 +570,7 @@ public class Morph extends SynthPanel
                 sources[button] = cancel;
                 }
             }
-        else if (reset == 3)
+        else if (reset == 5)
             {
             sources[button] = null;
             buttons[button].getButton().setText("[Empty]");

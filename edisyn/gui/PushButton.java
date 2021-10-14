@@ -59,6 +59,11 @@ public class PushButton extends JPanel
     
     public PushButton(String text, String[] options)
         {
+        this(text, options, null);
+        }
+
+    public PushButton(String text, String[] options, boolean[] enabled)
+        {
         this(text);
         pop = new JPopupMenu();
         for(int i = 0; i < options.length; i++)
@@ -70,6 +75,10 @@ public class PushButton extends JPanel
             else
                 {
                 JMenuItem menu = new JMenuItem(options[i]);
+                if (enabled != null)
+                	{
+                	menu.setEnabled(enabled[i]);
+                	}
                 final int _i = i;
                 menu.addActionListener(new ActionListener()
                     {

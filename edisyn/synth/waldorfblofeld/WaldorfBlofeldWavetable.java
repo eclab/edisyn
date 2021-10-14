@@ -39,6 +39,9 @@ import edisyn.util.*;
 
   So ultimately a wavetable will consist of 64 sysex dumps.
 
+  You would think that a wavetable request would be IDM = 0x02.  But in fact
+  there does not appear to *be* a wavetable request implemented.
+
 */
         
 public class WaldorfBlofeldWavetable
@@ -49,6 +52,7 @@ public class WaldorfBlofeldWavetable
     public static final int BLOFELD_WAVETABLE_SIZE = 64;
     public static final int TWO_TO_THE_TWENTY = 1048576;
     public static final int WINDOW_SIZE = 65;
+    public static final int BLOFELD_WAVETABLE_NAME_LENGTH = 14;
     File file = null;
         
         
@@ -511,6 +515,85 @@ true);
             data[409] = (byte)0xF7;
 
             synth.tryToSendSysex(data);
+            }
+        }
+        
+        
+    public void reviseWavetableNames(Synth synth)
+        {
+        while(true)
+            {
+        String[] options = { "Update", "Reset", "Cancel" };
+        String title = "Revise User Wavetable Names";
+        String message = "<html>Update the following user wavetable names to be displayed in Edisyn's \"Wave\" choosers.<br>" +
+            "Names may not exceed 14 characters, and whitespace is trimmed.<br><br>" + 
+            "Setting these names just updates what Edisyn displays: it changes nothing on your Blofeld.<html> ";
+        int defaultOption = 0;
+        
+        JTextField[][] text = new JTextField[3][13];
+        String[][] labels = new String[3][13];
+        for(int j = 0; j < 3; j++)
+            for(int k = 0; k < 13; k++)
+                {
+                int i = j * 13 + k;
+                labels[j][k] = "" + (i + 80);
+                String name = synth.getLastX("WTName" + i,synth.getSynthNameLocal());
+                if (name == null) name = "User " + (i + 80);
+                text[j][k] = new JTextField(name, BLOFELD_WAVETABLE_NAME_LENGTH);
+                }
+                
+        WidgetList list1 = new WidgetList(labels[0], text[0]);
+        WidgetList list2 = new WidgetList(labels[1], text[1]);
+        WidgetList list3 = new WidgetList(labels[2], text[2]);
+        
+            JPanel list = new JPanel();
+            list.setLayout(new BorderLayout());
+            list.add(list1, BorderLayout.WEST);
+            list.add(list2, BorderLayout.CENTER);
+            list.add(list3, BorderLayout.EAST);
+
+            JPanel panel = new JPanel();
+            panel.setLayout(new BorderLayout());
+            JPanel p = new JPanel();
+            p.setLayout(new BorderLayout());
+            p.add(new JLabel("    "), BorderLayout.NORTH);
+            p.add(new JLabel(message), BorderLayout.CENTER);
+            p.add(new JLabel("    "), BorderLayout.SOUTH);
+            panel.add(list, BorderLayout.CENTER);
+            panel.add(p, BorderLayout.NORTH);
+
+            if (synth != null) synth.disableMenuBar();
+            int ret = JOptionPane.showOptionDialog(synth, panel, title, JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null, options, options[defaultOption]);
+            if (synth != null) synth.enableMenuBar();
+        
+            if (ret == 0)   // update
+                {
+                for(int j = 0; j < 3; j++)
+                    for(int k = 0; k < 13; k++)
+                        {
+                        int i = j * 13 + k;
+                        synth.setLastX(text[j][k].getText().trim(), "WTName" + i, synth.getSynthNameLocal(), true);
+                        }
+                ((WaldorfBlofeld)synth).rebuildWavetables();
+                return;
+                }
+            else if (ret == 1)              // reset
+                {
+                if (synth.showSimpleConfirm("Reset", "Reset all names to default settings?"))
+                    {
+                    for(int j = 0; j < 3; j++)
+                        for(int k = 0; k < 13; k++)
+                            {
+                            int i = j * 13 + k;
+                            synth.setLastX("User " + (i + 80), "WTName" + i, synth.getSynthNameLocal(), true);
+                            }
+                    }
+                ((WaldorfBlofeld)synth).rebuildWavetables();
+                }
+            else
+                {
+                return;
+                }
             }
         }
 

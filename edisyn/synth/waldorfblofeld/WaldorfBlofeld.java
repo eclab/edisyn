@@ -97,6 +97,27 @@ public class WaldorfBlofeld extends Synth
             });
         menu.add(writeWavetableMenu);
 
+        JMenuItem doit = new JMenuItem("Doit");
+        doit.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                model.set("osc1shape", 20);
+                WaldorfBlofeld.this.choosers[0].update("osc1shape", model);
+                }
+            });
+        menu.add(doit);
+
+        JMenuItem reviseWavetableNamesMenu = new JMenuItem("Revise User Wavetable Names...");
+        reviseWavetableNamesMenu.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                wavetable.reviseWavetableNames(WaldorfBlofeld.this);
+                }
+            });
+        menu.add(reviseWavetableNamesMenu);
+
         /// FIXME: the Blofeld can't seem to handle this even slowly.  It just freaks out and initializes
         /// the single patches!  So this is cut out for now.
         //mpeMenu = new JCheckBoxMenuItem("Write Pseudo-MPE on Batch Download");
@@ -1245,13 +1266,13 @@ public class WaldorfBlofeld extends Synth
         return category;
         }
 
-
+    Chooser choosers[] = new Chooser[3];
 
     // This array stores the previous selected index of the wave table for each wave
-    int waves[] = { 0, 0, 0 };  // we don't NEED 3, but it keeps me from special-casing osc 3 in buildWavetable
+    int waves[] = { -1, -1, -1 };  // we don't NEED 3, but it keeps me from special-casing osc 3 in buildWavetable
 
     // This array stores the previous selected index of the sample for each wave
-    int samples[] = { 0, 0, 0 };  // we don't NEED 3, but it keeps me from special-casing osc 3 in buildWavetable
+    int samples[] = { -1, -1, -1 };  // we don't NEED 3, but it keeps me from special-casing osc 3 in buildWavetable
         
     // Changes the wavetable chooser to be either a list of wavetables or
     // a list of sample numbers
@@ -1261,8 +1282,11 @@ public class WaldorfBlofeld extends Synth
                 
         if (bank == 0)
             {
-            if (chooser.getNumElements() != 0 && chooser.getElement(0).equals(WAVES_LONG[0]))
-                return;
+
+// This is commented out so we guarantee we rebuild, now that we have an option for changing
+// the user wavetables
+//            if (chooser.getNumElements() != 0 && chooser.getElement(0).equals(WAVES_LONG[0]))
+//                return;
                                 
             // save old sample index
             samples[osc - 1] = chooser.getIndex();
@@ -1274,7 +1298,11 @@ public class WaldorfBlofeld extends Synth
             for(int i = 73; i < 86; i++)
                 params[i] = "Reserved " + (i - 6);
             for(int i = 86; i < 125; i++)
-                params[i] = "User " + (i - 6);
+                {
+                params[i] = getLastX("WTName" + (i - 86), getSynthNameLocal());
+                if (params[i] == null) params[i] = "User " + (i - 86);
+                }
+            //"User " + (i - 6);
             if (osc == 3) params = WAVES_SHORT;
 
             // due to a bug, the chooser's gonna freak here, so we
@@ -1283,7 +1311,8 @@ public class WaldorfBlofeld extends Synth
             chooser.setElements("Wave", params);
                         
             // restore old wave index
-            chooser.setIndex(waves[osc - 1]);
+            //chooser.setIndex(waves[osc - 1]);
+            chooser.update("osc" + osc + "shape", model);
             chooser.setCallActionListener(true);
             }
         else
@@ -1309,11 +1338,22 @@ public class WaldorfBlofeld extends Synth
             chooser.setElements("Sample", params); 
                         
             // restore old sample index
-            chooser.setIndex(samples[osc - 1]);
+            // chooser.setIndex(samples[osc - 1]);
+            chooser.update("osc" + osc + "shape", model);
             chooser.setCallActionListener(true);
             }
         }
         
+    public void rebuildWavetables()
+        {
+        buildWavetable(choosers[0], 1, model.get("osc1samplebank"));
+        buildWavetable(choosers[1], 2, model.get("osc2samplebank"));
+        buildWavetable(choosers[2], 3, 0);
+        // now we need to reset them
+        choosers[0].update("osc1shape", model);
+        choosers[1].update("osc2shape", model);
+        choosers[2].update("osc3shape", model);
+        }
 
     /** Add an Oscillator category */
     public JComponent addOscillator(final int osc, Color color)
@@ -1328,6 +1368,7 @@ public class WaldorfBlofeld extends Synth
         VBox vbox = new VBox();
                 
         final Chooser chooser = new Chooser("Wave", this, "osc" + osc + "shape", new String[]{ "Yo Mama" });  // gotta have at least one item as a throwaway and it can't be WAVES_LONG[0]
+        choosers[osc - 1] = chooser;
         comp = chooser;
         vbox.add(comp);
         buildWavetable(chooser, osc, 0);
@@ -1379,6 +1420,7 @@ public class WaldorfBlofeld extends Synth
                 
         comp = new LabelledDial("Octave", this, "osc" + osc + "octave", color, 0, 8)
             {
+            public boolean isSymmetric() { return true; }       // so we don't have a weird orientation for no reason
             public String map(int val)
                 {
                 String[] oct = OSCILLATOR_OCTAVES;

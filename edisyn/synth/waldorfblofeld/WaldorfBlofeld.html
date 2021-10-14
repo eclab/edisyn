@@ -28,8 +28,6 @@ Under the Blofeld menu you'll find an option to upload a wavetable.  You can upl
 
 <p><li><b>16-bit signed integer PCM WAV files.</b>  The WAV file is sliced up into chunks, and each chunk is converted to a wave in the wavetable.  
 
-<br><br><p><font color=red><b>Note:</b></font> When using WAV files, it's important to understand a weakness in Waldorf's wavetable design: all of its waves are symmetric: the second half of the wave is the negated and reversed version of the first half.  This was originally to save memory in the early Waldorf synthesizers: only the first half is uploaded to the Blofeld.  Thus you have two choices: either (1) treat each chunk in your WAV file as the <i>first half of the wave</i>, or (2) truncate each chunk in your WAV file and only upload the first half of it. 
-
 <br><br><p>WAV files come from two primary sources and correspondingly have two major chunk sizes:
 
 <ul>
@@ -41,6 +39,12 @@ Under the Blofeld menu you'll find an option to upload a wavetable.  You can upl
 <b>Important note:</b> You probaby want to turn Limit WT <i>off</i> when using user wavetables.  Otherwise the Blofeld will not work properly with any PWM values greater than 120.  
 
 <p>Why? Limit WT stands for "Limit Wavetable".  Early Waldorf and PPG wavetables reserved the top few waves for sawtooth, square, and triangle waves regardless of the rest of the wavetable; this would make for weird modulation results.  The Blofeld has those wavetables internally, but LimitWT prevents modulation from reaching those waves.  But your own wavetable probably doesn't have that weirdness, so you want to turn Limit WT off. 
+
+<br><br><h3>Setting User Wavetable Names</h3>
+
+Edisyn can't query your Blofeld to see what names you have set for your user wavetables (there's no way to do that).  But if you're sick of Edisyn just saying "User 80" and so on in its Wave choosers, you can manually change what Edisyn displays for all 39 of your user wavetable names.  Just select <b>Revise User Wavetable Names...</b>.
+
+<p>This isn't possible for the Sample names for now (sorry): there are just too many of them.
 
 <br><br><h3>Uploading Pseudo-MPE</h3>
 

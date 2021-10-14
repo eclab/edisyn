@@ -71,8 +71,11 @@ public class Chooser extends NumericalComponent
 
     public void update(String key, Model model) 
         { 
-        if (combo == null) return;  // we're not ready yet
-                
+        if (combo == null) 
+        	{
+        	return;  // we're not ready yet
+        	}
+        
         int state = getState();
                 
         // it's possible that we're sharing a parameter
@@ -98,7 +101,6 @@ public class Chooser extends NumericalComponent
                 return;
                 }
             }
-        //        System.err.println("Invalid value for " + key + " (" + state + ")"); 
         }
 
     public Insets getInsets() 
@@ -322,9 +324,12 @@ public class Chooser extends NumericalComponent
         setMin(_min);
         setMax(_max);
         setCallActionListener(true);
-        
-        combo.setSelectedIndex(0);
-        setState(combo.getSelectedIndex());
+
+		if (getState() >= elements.length)
+			{
+			System.err.println("resetting from " + getState());
+    	    setState(0);
+    	    }
         revalidate();
         repaint();
         }

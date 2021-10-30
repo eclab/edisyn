@@ -33,8 +33,8 @@ import javax.sound.midi.*;
 /***
     ABOUT BANKS
 
-    CZ-1    CZ-101/1K       CZ-3K/5K
-    1-8             A               Preset          Preset          A
+    		CZ-1    CZ-101/1K       CZ-3K/5K
+    1-8     A               Preset          Preset          A
     9-16    B               Preset          Preset          B
     17-24   C                                       Preset          C
     25-32   D                                       Preset          D
@@ -51,6 +51,17 @@ import javax.sound.midi.*;
 public class CasioCZ extends Synth
     {
     /// Various collections of parameter names for pop-up menus
+
+	
+    public static final int TYPE_CZ1 = 0;
+    public static final int TYPE_CZ101_1000 = 1;
+    public static final int TYPE_CZ3000_5000 = 2;
+    public static final int TYPE_CZ230S = 3;
+    public static final String[] TYPES = { "CZ-1", "CZ-101/1000", "CZ-3000/5000", "CZ-230S" };
+    public static final String[] CZ1_BANKS = { "A", "B", "C", "D", "E", "F", "G", "H", "(Invalid)", "(Invalid)", "(Invalid)", "(Invalid)", "(Invalid)" };
+    public static final String[] CZ101_BANKS = { "Preset 1-8", "Preset 9-16", "(Invalid)", "(Invalid)", "Internal 1-8", "Internal 9-16", "(Invalid)", "(Invalid)", "Cartridge 1-8", "Cartridge 9-16", "(Invalid)", "(Invalid)", "(Invalid)" };
+    public static final String[] CZ3000_BANKS = { "Preset A", "Preset B", "Preset C", "Preset D", "Internal A", "Internal B",  "Internal C", "Internal D", "(Invalid)", "(Invalid)", "(Invalid)", "(Invalid)", "(Invalid)" };
+    public static final String[] CZ230S_BANKS = { "0-7", "8-15", "16-23", "24-31", "32-39", "40-47", "48-55", "56-63", "64-71", "72-79", "80-87", "88-95", "96-99" };
         
     public static final String[] BANKS = new String[] { "A", "B", "C", "D", "E", "F", "G", "H", "CA", "CB", "SA", "SB", "SC" };
     public static final String[] OCTAVE = new String[] { "0", "+1", "-1" };        
@@ -127,32 +138,44 @@ public class CasioCZ extends Synth
     //// Name                                       16 long!        A-Z 0-9 . - / SPACE
 
 
-    boolean cz1;
-    public static final String CZ_1_KEY = "CZ-1";
-    
-    public boolean isCZ1() { return cz1; }
-    public void setCZ1(boolean val)
+    public static final String TYPE_KEY = "type";
+    int synthType = TYPE_CZ1;
+    JComboBox synthTypeCombo;
+        
+    public int getSynthType() { return synthType; }
+    public void setSynthType(int val, boolean save)
         {
-        setLastX("" + (!val), CZ_1_KEY, getSynthName(), true);
-        cz1 = val;
+        if (save)
+            {
+            setLastX("" + val, TYPE_KEY, getSynthName(), true);
+            }
+        synthType = val;
+        synthTypeCombo.setSelectedIndex(val);  // hopefully this isn't recursive
         updateTitle();
         }
-    
+        
+    public boolean isCZ1() { return getSynthType() == TYPE_CZ1; }
 
     public CasioCZ()
         {
+        String m = getLastX(TYPE_KEY, getSynthName());
+        try
+            {
+            synthType = (m == null ? TYPE_CZ1 : Integer.parseInt(m));
+            if (synthType < TYPE_CZ1 || synthType > TYPE_CZ230S)
+                {
+                synthType = TYPE_CZ1;
+                }
+            }
+        catch (NumberFormatException ex)
+            {
+            synthType = TYPE_CZ1;
+            }
+        
+
+
         int panel = 0;
-        
-        /*
-          for(int i = 0; i < parameters.length; i++)
-          {
-          parametersToIndex.put(parameters[i], Integer.valueOf(i));
-          }
-        */
-                        
-        String m = getLastX(CZ_1_KEY, getSynthName());
-        cz1 = (m == null ? false : !Boolean.parseBoolean(m));
-        
+                
         /// SOUND PANEL
                 
         SynthPanel soundPanel = new SynthPanel(this);
@@ -288,25 +311,31 @@ public class CasioCZ extends Synth
         comp = new PatchDisplay(this, 8);
         hbox2.add(comp);
 
-        final JCheckBox check = new JCheckBox("CZ-1");
-        check.setSelected(cz1);
-        check.addActionListener(new ActionListener()
+        JLabel label = new JLabel(" Synth Type ");
+        label.setFont(Style.SMALL_FONT());
+        label.setBackground(Style.BACKGROUND_COLOR()); // TRANSPARENT);
+        label.setForeground(Style.TEXT_COLOR());
+
+        synthTypeCombo = new JComboBox(TYPES);
+        synthTypeCombo.setSelectedIndex(getSynthType());
+        synthTypeCombo.addActionListener(new ActionListener()
             {
             public void actionPerformed(ActionEvent e)
                 {
-                setCZ1(check.isSelected());
+                setSynthType(synthTypeCombo.getSelectedIndex(), true);
                 }
             });
-        check.setFont(Style.SMALL_FONT());
-        check.setOpaque(false);
-        check.setForeground(Style.TEXT_COLOR());
-        hbox2.add(check);
-        hbox.addLast(Stretch.makeHorizontalStretch());
-        vbox.add(hbox2);
+        synthTypeCombo.putClientProperty("JComponent.sizeVariant", "small");
+        synthTypeCombo.setEditable(false);
+        synthTypeCombo.setFont(Style.SMALL_FONT());
+        VBox st = new VBox();
+        st.add(label);
+        st.addLast(synthTypeCombo);
+        hbox2.add(st);
         
         vbox.add(hbox2);
         
-        comp = new StringComponent("Patch Name [CZ-1]", this, "name", 16, "Name must be up to 16 characters.")
+       comp = new StringComponent("Patch Name [CZ-1]", this, "name", 16, "Name must be up to 16 characters.")
             {
             public String replace(String val)
                 {
@@ -667,7 +696,7 @@ public class CasioCZ extends Synth
         {
         // ugh, CZ sysex is the *worst*.
         
-        boolean cz1 = false;
+        boolean cz1;
         int pos = 6;
         int high = 0;
         int low = 0;
@@ -738,7 +767,22 @@ public class CasioCZ extends Synth
             return PARSE_CANCELLED; // We do this because the CZ is chatty in response to us, and we don't want that misinterpreted as a failed parse
             }
                 
-        // System.err.println("CZ1: " + cz1);
+	if (!isParsingDefaults())
+        {
+        if (cz1)
+        	{
+        	setSynthType(TYPE_CZ1, false);
+        	}
+        else
+        	{
+        	if (getSynthType() == TYPE_CZ1)
+        		setSynthType(TYPE_CZ101_1000, false);
+        	}
+        }
+            
+            
+            
+                    // System.err.println("CZ1: " + cz1);
                 
                 
         // System.err.println("PFLAG " + pos);
@@ -1260,7 +1304,7 @@ public class CasioCZ extends Synth
 
             low = DCA_KEY_FOLLOW[model.get("line" + line + "env3keyfollow")][0];
             high = DCA_KEY_FOLLOW[model.get("line" + line + "env3keyfollow")][1];
-            if (cz1)
+            if (isCZ1())
                 {
                 low |= (dcaAllLevelToSysex(model.get("line" + line + "env3mainlevel")) << 4);
                 }
@@ -1272,7 +1316,7 @@ public class CasioCZ extends Synth
             // MWMD, MWMV   (DCW Key Follow)                ENV 2
             // System.err.println("MWMD (" + line + ") " + pos);
 
-            if (cz1)
+            if (isCZ1())
                 {
                 low = DCW_KEY_FOLLOW_CZ1[model.get("line" + line + "env2keyfollow")][0];
                 high = DCW_KEY_FOLLOW_CZ1[model.get("line" + line + "env2keyfollow")][1];
@@ -1293,7 +1337,7 @@ public class CasioCZ extends Synth
                 
             val = model.get("line" + line + "env3end");
                         
-            if (cz1)
+            if (isCZ1())
                 {
                 val |= (model.get("line" + line + "env3velocity") << 4);
                 }
@@ -1340,7 +1384,7 @@ public class CasioCZ extends Synth
                 
             val = model.get("line" + line + "env2end");
                         
-            if (cz1)
+            if (isCZ1())
                 {
                 // Note inversion from manual -- CORRECTION, according to Icaro Ferre (icaroferre on github) manual is incorrect.
                 val |= (model.get("line" + line + "env2velocity") << 4); // (15 - model.get("line" + line + "env2velocity") << 4);
@@ -1388,7 +1432,7 @@ public class CasioCZ extends Synth
                 
             val = model.get("line" + line + "env1end");
                         
-            if (cz1)
+            if (isCZ1())
                 {
                 // Note inversion from manual -- CORRECTION, according to Icaro Ferre (icaroferre on github) manual is incorrect.
                 val |= (model.get("line" + line + "env1velocity") << 4);   //(15 - model.get("line" + line + "env1velocity") << 4);
@@ -1435,7 +1479,7 @@ public class CasioCZ extends Synth
         // NAME
         // System.err.println("NAME " + pos);
                 
-        if (cz1)
+        if (isCZ1())
             {
             String n = model.get("name", "                ") + "                ";
             byte[] name = new byte[16];
@@ -1457,13 +1501,15 @@ public class CasioCZ extends Synth
             byte[] main = new byte[isCZ1() ? 144 * 2 + 1 : 128 * 2 + 1]; // new byte[isCZ1() ? 144 * 2 : 128 * 2];
             System.arraycopy(data, 7, main, 0, main.length);
             main[main.length - 1] = (byte)0xF7;
-            return new Object[] { new Midi.DividedSysex(header), new Integer(MIDI_PAUSE), new Midi.DividedSysex(main) }; 
+            Midi.DividedSysex[] syx = Midi.DividedSysex.create(new byte[][] { header, main });
+            //return new Object[] { new Midi.DividedSysex(header), new Integer(MIDI_PAUSE), new Midi.DividedSysex(main) }; 
+            return new Object[] { syx[0], new Integer(MIDI_PAUSE), syx[1], new Integer(MIDI_PAUSE) }; 
             // Never send this, it triggers a crash in Linux/Windows
             // new Integer(MIDI_PAUSE), new Midi.DividedSysex(new byte[] { (byte)0xF7 }) };
             }
         }
 
-    public static final int MIDI_PAUSE = 100;  // CZ
+    public static final int MIDI_PAUSE = 0;
         
     public void performRequestCurrentDump()
         {
@@ -1556,4 +1602,56 @@ public class CasioCZ extends Synth
                 key.equals("line2env3mainlevel"));
             }
         }
+
+
+
+
+	public  String[] getBankNames()
+		{
+		int type = getSynthType();
+		if (type == TYPE_CZ1)
+			{
+			return CZ1_BANKS;
+			}
+		else if (type == TYPE_CZ101_1000)
+			{
+			return CZ101_BANKS; 
+			}
+		else if (type == TYPE_CZ3000_5000)
+			{
+			return CZ3000_BANKS;
+			}
+		else // if (type == TYPE_CZ230S)
+			{
+			return CZ230S_BANKS;
+			}
+		}
+        
+    /** Return a list of all patch number names.  Default is { "Main" } */
+    public  String[] getPatchNumberNames() { return buildIntegerNames(8); }
+
+    /** Return a list whether patches in banks are writeable.  Default is { false } */
+    public boolean[] getWriteableBanks() 
+    	{ 
+		int type = getSynthType();
+		if (type == TYPE_CZ1)
+			{
+			return new boolean[] { true, true, true, true, true, true, true, true, false, false, false, false };
+			}
+		else if (type == TYPE_CZ101_1000)
+			{
+			return new boolean[] { false, false, false, false, true, true, false, false, true, true, false, false, false };
+			}
+		else if (type == TYPE_CZ3000_5000)
+			{
+			return new boolean[] { false, false, false, false, true, true, true, true, false, false, false, false, false };
+			}
+		else // if (type == TYPE_CZ230S)
+			{
+			return new boolean[] { false, false, false, false, false, false, false, false, false, false, false, false, true };
+			}
+		}
+
+    /** Return a list whether individual patches can be written.  Default is FALSE. */
+    public boolean supportsPatchWrites() { return true; }
     }

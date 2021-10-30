@@ -57,14 +57,14 @@ public class SanityCheck
                 Synth synth2 = Synth.instantiate(c[j], true, false, null);
                 if (synth instanceof edisyn.synth.casiocz.CasioCZ)
                     {
-                    ((edisyn.synth.casiocz.CasioCZ)synth).setCZ1(false);
-                    ((edisyn.synth.casiocz.CasioCZ)synth2).setCZ1(false);
+                    ((edisyn.synth.casiocz.CasioCZ)synth).setSynthType(edisyn.synth.casiocz.CasioCZ.TYPE_CZ101_1000, false);
+                    ((edisyn.synth.casiocz.CasioCZ)synth2).setSynthType(edisyn.synth.casiocz.CasioCZ.TYPE_CZ101_1000, false);
                     System.err.println(c[j]);
                     test(synth, synth2);
                     synth = Synth.instantiate(c[j], true, false, null);
                     synth2 = Synth.instantiate(c[j], true, false, null);
-                    ((edisyn.synth.casiocz.CasioCZ)synth).setCZ1(true);
-                    ((edisyn.synth.casiocz.CasioCZ)synth2).setCZ1(true);
+                    ((edisyn.synth.casiocz.CasioCZ)synth).setSynthType(edisyn.synth.casiocz.CasioCZ.TYPE_CZ1, false);
+                    ((edisyn.synth.casiocz.CasioCZ)synth2).setSynthType(edisyn.synth.casiocz.CasioCZ.TYPE_CZ1, false);
                     System.err.println(c[j] + " (CZ1)");
                     test(synth, synth2);
                     }

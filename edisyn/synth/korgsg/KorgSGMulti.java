@@ -34,7 +34,7 @@ public class KorgSGMulti extends Synth
       Classic, Jazz Piano, Mix Piano, Stage Bell, FM EP 2, Motion EP, MIDI Grant, EP&Strings, Perc Organ, Gospel Org, Mutronics, Crystaline, PadStrings, BreathyVox, Synth Air, FingerBass,
       Dynamic, Ballad, StagePiano, Stage Time, FM EP 3, Wave EP 2, Power Keys, EP Magic, Full Organ, Pipe Organ, Clavitar, BellString, StringsL&R, Voices, Synth Horn, Synth Bass
     */
-    
+
     /*
       PianoLayer  B03     C07
       PF&Strings  B08     B07
@@ -287,9 +287,57 @@ public class KorgSGMulti extends Synth
         comp = new Chooser("Program", this, "timbre" + val + "program", params);
         vbox.add(comp);
 
+
+		HBox inner = new HBox();
+
         // 0 is on, 1 is off.  That makes perfect sense.
         comp = new CheckBox("On", this, "timbre" + val + "switch", true);
-        vbox.add(comp);
+        inner.add(comp);
+
+        comp = new PushButton("Show")
+            {
+            public void perform()
+                {
+                final KorgSG synth = new KorgSG();
+                if (tuple != null)
+                    synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver(), synth.buildKey2Receiver());
+                if (synth.tuple != null)
+                    {
+                    // This is a little tricky.  When the dump comes in from the synth,
+                    // Edisyn will only send it to the topmost panel.  So we first sprout
+                    // the panel and show it, and THEN send the dump request.  But this isn't
+                    // enough, because what setVisible(...) does is post an event on the
+                    // Swing Event Queue to build the window at a later time.  This later time
+                    // happens to be after the dump comes in, so it's ignored.  So what we
+                    // ALSO do is post the dump request to occur at the end of the Event Queue,
+                    // so by the time the dump request has been made, the window is shown and
+                    // frontmost.
+                                                
+                    synth.setTitleBarAux("[Timbre " + (val == 1 ? "A" : "B") + " of " + KorgSGMulti.this.model.get("name", "") + "]");
+                    synth.sprout();
+                    JFrame frame = ((JFrame)(SwingUtilities.getRoot(synth)));
+                    frame.setVisible(true);                                 
+
+                    SwingUtilities.invokeLater(
+                        new Runnable()
+                            {
+                            public void run() 
+                                { 
+                                Model tempModel = buildModel();
+                                tempModel.set("number", KorgSGMulti.this.model.get("timbre" + val + "program") / 4);
+                                tempModel.set("bank", KorgSGMulti.this.model.get("timbre" + val + "program") % 4);
+                                synth.performRequestDump(tempModel, false);
+                                }
+                            });
+                    }
+                else
+                    {
+                    showSimpleError("Disconnected", "You can't show a patch when disconnected.");
+                    }
+                }
+            };
+        inner.add(comp);
+		vbox.add(inner);
 
         hbox.add(vbox);
 
@@ -352,7 +400,7 @@ public class KorgSGMulti extends Synth
                 return note + octave;
                 }
             };
-        ((LabelledDial)comp).addAdditionalLabel("Botttom");
+        ((LabelledDial)comp).addAdditionalLabel("Bottom");
         hbox.add(comp);
 
         comp = new LabelledDial("Vel Zone", this, "timbre" + val + "velzonetop", color, 1, 127);

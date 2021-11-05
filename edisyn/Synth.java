@@ -2692,6 +2692,12 @@ public abstract class Synth extends JComponent implements Updatable
     /** Returns the synth name to be used in the title bar. */
     public String getTitleBarSynthName() { return getSynthNameLocal(); }
 
+
+	String titleBarAux = "";
+	
+    /** Sets auxillary titlebar data, mostly used to indicate parts from a Multi. */
+    public void setTitleBarAux(String val) { titleBarAux = val;}
+
     /** Updates the JFrame title to reflect the synthesizer type, the patch information, and the filename if any. */
     public void updateTitle()
         {
@@ -2713,7 +2719,7 @@ public abstract class Synth extends JComponent implements Updatable
                     : "") : "");
             String restrictingWarning = (isShowingMutation() ? "   MUTATION PARAMETERS" : "");
         
-            frame.setTitle(synthName + fileName + "        " + disconnectedWarning + downloadingWarning + learningWarning + restrictingWarning);
+            frame.setTitle(synthName + fileName + " " + titleBarAux + "        " + disconnectedWarning + downloadingWarning + learningWarning + restrictingWarning);
             }
         }
                 
@@ -2754,7 +2760,11 @@ public abstract class Synth extends JComponent implements Updatable
         
         
     ////////// DEFAULTS
-        
+    
+    
+    boolean parsingDefaults;
+    // You can query this to see if your parse() is just a defaults/init load or reset
+    public boolean isParsingDefaults() { return parsingDefaults; }
         
     
     // Note that this isn't wrapped in undo, so we can block it at instantiation
@@ -2785,7 +2795,9 @@ public abstract class Synth extends JComponent implements Updatable
 
                 // parse                        
                 setSendMIDI(false);
+                parsingDefaults = true;
                 performParse(data, true);
+                parsingDefaults = false;
                 setSendMIDI(true);
                 model.setUndoListener(undo);    // okay, redundant, but that way the pattern stays the same
                 }
@@ -8470,11 +8482,56 @@ public abstract class Synth extends JComponent implements Updatable
                     }
                 else
                     {
-                    handleException(new RuntimeException("Unknown JMenu IteComponentm " + comp));
+                    handleException(new RuntimeException("Unknown JMenu Component" + comp));
                     }               
                 }
             mb.add(menu);
             }
         return mb;
         }
+    
+    
+    
+    //// LIBRARIAN SUPPORT
+    
+    public String[] buildIntegerNames(int num)
+    	{
+    	String[] names = new String[num];
+    	for(int i = 0; i < names.length; i++)
+    		names[i] = "" + i;
+    	return names;
+    	}
+
+    public String[] buildIntegerNames(int num, int offset)
+    	{
+    	String[] names = new String[num];
+    	for(int i = 0; i < names.length; i++)
+    		names[i] = "" + (i + offset);
+    	return names;
+    	}
+    
+    public boolean[] buildBankBooleans(int numTrue, int numFalse, int numTrue2)
+    	{
+    	boolean[] w = new boolean[numTrue + numFalse + numTrue2];
+    	for(int i = 0; i < numTrue; i++)
+    		w[i] = true;
+    	for(int i = numTrue + numFalse; i < numTrue + numFalse + numTrue2; i++)
+    		w[i] = true;
+    	return w;
+    	}
+    
+    /** Return a list of all patch number names.  Default is { "Main" } */
+    public String[] getPatchNumberNames()  { return new String[] { "Main" }; }
+
+    /** Return a list of all bank names.  Default is { "Main" } */
+    public String[] getBankNames() { return new String[] { "Main" }; }
+
+    /** Return a list whether patches in banks are writeable.  Default is { false } */
+    public boolean[] getWriteableBanks() { return new boolean[] { false }; }
+
+    /** Return a list whether individual patches can be written.  Default is FALSE. */
+    public boolean supportsPatchWrites() { return false; }
+
+    /** Return a list whether entire banks can be written.  Default is FALSE. */
+    public boolean supportsBankWrites() { return false; }
     }

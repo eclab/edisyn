@@ -442,6 +442,9 @@ public class Midi
             }
         }
 
+    static void setLastTupleID(String id, Synth synth) { Synth.setLastX(id, "LastTupleID", synth.getSynthNameLocal(), false); }
+    static String getLastTupleID(Synth synth) { return Synth.getLastX("LastTupleID", synth.getSynthNameLocal(), false); }
+    
 
     public static final Tuple CANCELLED = new Tuple();
     public static final Tuple FAILED = new Tuple();
@@ -511,9 +514,9 @@ public class Midi
                 key2Combo.setSelectedItem(findDevice(getLastTupleKey2(synth), key2Devices));
 
             JTextField outID = null;
-            String initialID = synth.reviseID(null);
+            String initialID = synth.reviseID(getLastTupleID(synth));
             if (initialID != null)
-                outID = new JTextField(synth.reviseID(null));
+                outID = new JTextField(initialID);	// synth.reviseID(null));
 
             JComboBox outChannelsCombo = new JComboBox(rc);
             outChannelsCombo.setMaximumRowCount(17);
@@ -521,6 +524,8 @@ public class Midi
                 outChannelsCombo.setSelectedIndex(old.outChannel - 1);
             else if (getLastTupleOutChannel(synth) > 0)
                 outChannelsCombo.setSelectedIndex(getLastTupleOutChannel(synth) - 1);
+            else 
+	            outChannelsCombo.setSelectedIndex(0);
                                 
             JComboBox keyChannelsCombo = new JComboBox(kc);
             keyChannelsCombo.setMaximumRowCount(17);
@@ -528,6 +533,8 @@ public class Midi
                 keyChannelsCombo.setSelectedIndex(old.keyChannel);
             else if (getLastTupleKeyChannel(synth) > 0)
                 keyChannelsCombo.setSelectedIndex(getLastTupleKeyChannel(synth));
+            else 
+	            keyChannelsCombo.setSelectedIndex(0);
 
             JComboBox key2ChannelsCombo = new JComboBox(kc);
             key2ChannelsCombo.setMaximumRowCount(17);
@@ -535,6 +542,8 @@ public class Midi
                 key2ChannelsCombo.setSelectedIndex(old.key2Channel);
             else if (getLastTupleKey2Channel(synth) > 0)
                 key2ChannelsCombo.setSelectedIndex(getLastTupleKey2Channel(synth));
+            else 
+	            key2ChannelsCombo.setSelectedIndex(0);
                         
             boolean result = false;
             synth.disableMenuBar();
@@ -665,7 +674,11 @@ public class Midi
                 setLastTupleKeyChannel(tuple.keyChannel, synth);
                 setLastTupleKey2Channel(tuple.key2Channel, synth);
 
-                
+                if (initialID != null)
+                	{
+                	setLastTupleID(tuple.id, synth);
+                	}
+                	
                 return tuple;
                 }
             else

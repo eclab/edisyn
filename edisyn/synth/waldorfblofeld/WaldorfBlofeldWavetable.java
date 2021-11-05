@@ -246,6 +246,7 @@ public class WaldorfBlofeldWavetable
         int _id = synth.getID();
         int _number = syx[0][5];
         String _name = "";
+        boolean update = true;
                 
         try
             {
@@ -258,12 +259,18 @@ public class WaldorfBlofeldWavetable
             JTextField id = new SelectedTextField("" + _id);
             JTextField number = new JTextField("" + _number);
             JTextField name = new JTextField(_name);
+            JCheckBox updateEdisyn = new JCheckBox("");
+            
+            updateEdisyn.setSelected(synth.getLastXAsBoolean("WavetableUpdate", synth.getSynthNameLocal(), true, true));
 
-            boolean result = Synth.showMultiOption(synth, new String[] { "Device ID", "Wavetable Number", "Wavetable Name" }, 
-                new JComponent[] { id, number, name }, "Write to wavetable...", "Provide the device ID, wavetable number (80 ... 118), and name.");
+            boolean result = Synth.showMultiOption(synth, new String[] { "Device ID", "Wavetable Number", "Wavetable Name", "Update Edisyn"  }, 
+                new JComponent[] { id, number, name, updateEdisyn }, "Write to wavetable...", "Provide the device ID, wavetable number (80 ... 118), and name.");
 
             if (!result) return;
                         
+            update = updateEdisyn.isSelected();
+            synth.setLastX("" + update, "WavetableUpdate", synth.getSynthNameLocal(), true);
+
             _name = name.getText();
             if (_name.length() > 14)
                 {
@@ -325,6 +332,12 @@ public class WaldorfBlofeldWavetable
 
             synth.tryToSendSysex(syx[i]);
             }
+
+		if (update)
+			{
+            synth.setLastX(_name, "WTName" + (_number - 80), synth.getSynthNameLocal(), true);
+            ((WaldorfBlofeld)synth).rebuildWavetables();
+			}
         }
 
 
@@ -337,6 +350,7 @@ public class WaldorfBlofeldWavetable
         int _id = synth.getID();
         int _number = 80;
         boolean _truncate = false;
+        boolean update = true;
         String _name = file.getName();
         try { _name = _name.substring(0, _name.lastIndexOf('.')); }
         catch (Exception e) { }  // happens if name has no suffix
@@ -351,13 +365,18 @@ public class WaldorfBlofeldWavetable
             JTextField number = new JTextField("" + _number);
             JTextField name = new JTextField(_name);
             JComboBox waveSize = new JComboBox(new String[] { "256 (WaveEdit)", "2048 (Serum)" });
-            //JCheckBox truncate = new JCheckBox("");
+            JCheckBox updateEdisyn = new JCheckBox("");
+            
+            updateEdisyn.setSelected(synth.getLastXAsBoolean("WavetableUpdate", synth.getSynthNameLocal(), true, true));
 
-            boolean result = Synth.showMultiOption(synth, new String[] { "Device ID", "Wavetable Number", "Wavetable Name", "Wave Size" },      ///  "Truncate Waves in Half" }, 
-                new JComponent[] { id, number, name, waveSize }, "Write to wavetable...", "Provide wavetable information.");
+            boolean result = Synth.showMultiOption(synth, new String[] { "Device ID", "Wavetable Number", "Wavetable Name", "Wave Size", "Update Edisyn" },      ///  "Truncate Waves in Half" }, 
+                new JComponent[] { id, number, name, waveSize, updateEdisyn }, "Write to wavetable...", "Provide wavetable information.");
 
             if (!result) return;
                         
+            update = updateEdisyn.isSelected();
+            synth.setLastX("" + update, "WavetableUpdate", synth.getSynthNameLocal(), true);
+
             _name = name.getText();
             if (_name.length() > 14)
                 {
@@ -397,7 +416,7 @@ public class WaldorfBlofeldWavetable
             break;
             }
                 
-        writeData(synth, file, _id, _number, WINDOW_SIZE, _name, ws, BLOFELD_WAVETABLE_SIZE);   // _truncate);
+        writeData(synth, file, _id, _number, WINDOW_SIZE, _name, ws, BLOFELD_WAVETABLE_SIZE, update);   // _truncate);
         }
                 
 
@@ -405,10 +424,10 @@ public class WaldorfBlofeldWavetable
         the WAV file into chunks 256 or 2048 samples long (the length of a WaveEdit or Serum wavetable wave), then
         resampling them using Windowed Sinc Interpolation to chunks 128 samples long (the
         length of a Blofeld wavetable wave), then building the wavetable sysex from these resulting waves
-        and uploading them.
+        and uploading them.`
     */
 
-    void writeData(WaldorfBlofeld synth, File file, int deviceID, int wavetableNumber, int windowSize, String name, int waveSize, int wavetableSize) throws IOException, WavFileException
+    void writeData(WaldorfBlofeld synth, File file, int deviceID, int wavetableNumber, int windowSize, String name, int waveSize, int wavetableSize, boolean updateEdisyn) throws IOException, WavFileException
         {
         double[][] waves = new double[wavetableSize][waveSize];
         WavFile wavFile = WavFile.openWavFile(file);
@@ -484,7 +503,6 @@ true);
                 {
                 double val = newvals[d];
                 int v = (int)(val * TWO_TO_THE_TWENTY);
-                System.err.println(v);
 
                 // These values must be little-endian.
                 // We assume our code is being run on a little-endian processor.
@@ -492,7 +510,6 @@ true);
                 data[8 + d * 3 + 1] = (byte)((v >>> 7) & 127);
                 data[8 + d * 3 + 0] = (byte)((v >>> 14) & 127);
                 }
-            System.err.println("=============n\n");
                                 
             /// LOAD NAME
             for(int d = 0; d < 14; d++)
@@ -516,6 +533,12 @@ true);
 
             synth.tryToSendSysex(data);
             }
+
+		if (updateEdisyn)
+			{
+            synth.setLastX(name, "WTName" + (wavetableNumber - 80), synth.getSynthNameLocal(), true);
+            ((WaldorfBlofeld)synth).rebuildWavetables();
+			}
         }
         
         

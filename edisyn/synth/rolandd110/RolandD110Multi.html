@@ -8,11 +8,19 @@
 
 <br><br><h3>Communicating with Edisyn</h3>
 
-Set the synth ID to the same as your synthesizer (17 is customary).  Make certain that Memory Protect is OFF and (this is very important) that Overflow is OFF.  Earlier ROMs have a bug which causes sysex dumps to fail if Overflow is not OFF.  Note that you may have to Memory Protect to OFF every time you turn on the synthesizer.  The D-110's Control Channel setting does not matter. 
+Set the synth ID to the same as your synthesizer (17 is customary).  Make certain that Memory Protect is OFF and (this is very important) that Overflow is OFF.  Earlier ROMs have a bug which causes sysex dumps to fail if Overflow is not OFF.  Note that you may have to Memory Protect to OFF every time you turn on the synthesizer.  
+
+<p>Set the Control Channel to Edisyn's output channel, or else you'll be able to download patches but not change them on the D-110, which would be confusing. Note that if you view the current Multi patch from the Tone patch menu, its channel will be set to the Tone patch's channel: you'll need to change the channel.  See <b>About the Menu</b> below for more on the implications of setting the Control Channel. 
+
 
 <br><br><h3>Real-Time Parameter Bugs</h3>
 
 I have received a report that sending real-time parameter changes can crash the D-110.  The configuration was a 1.06 ROM, Windows, and a Midiplus Tbox 2X2 adapter.  I have had no problems at all: I am using a 1.10 ROM, MacOS, Tascam 2x2 adapter.  I suspect the issue is the older ROM. If you experience this problem, you can uncheck the <b>Sends Real Time Changes</b> menu.  Please report any problems you have experienced.
+
+<br><br><h3>About the Menu</h3>
+
+Edisyn must have its output channel set to the same as the D-110 Control Channel or else you can't change patches.  But this inconvenient if you want to hear instruments on various parts.  To get around this, Edisyn lets you stipulate that test notes should be played through the channel specified by a selected part.  If this channel is "OFF", or if you have selected the Default Channel in the menu, then Edisyn will use the standard output channel again.  Beware that if you change the part's channel while playing a test note, the note could get stuck as its NOTE OFF got sent to the wrong channel.  In this case, just select Send All Sounds Off.
+
 
 <br><br><h3>Gotchas</h3>
 

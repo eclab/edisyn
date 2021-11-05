@@ -54,12 +54,9 @@ import javax.sound.midi.*;
    <li>WRITE TO PATCH... writes to a permanent memory location.
    </ul>
    
-   <p>At present I don't have a way to load a ROM tone.  To access a ROM tone you have to make a multimode patch referring to it, then load that patch,
-   which copies the tone into temporary memory.  This may be more bother than it's worth, since you can easily get the ROM tones directly online.
-
-   <p>You can have a card in the Roland D-110 but it just hijacks the memory.  I cannot copy from cards to internal memory, nor can I see internal memory
+   <p>You can have a card in the Roland D-110 but it just hijacks the memory.  Edisyn cannot copy from cards to internal memory, nor can it see internal memory
    once the cards are copied over.  So there while there are effectively several "banks" of tones (internal, card, preset A, preset B, rhythm), 
-   they can't be accessed independently of one another (or at all), so I'm treating the D-110 as not having banks of tones, just numbers.
+   they can't be accessed independently of one another (or at all), so we're treating the D-110 as not having banks of tones, just numbers.
         
    @author Sean Luke
 */
@@ -1674,7 +1671,7 @@ return b;
                 
         Model newModel = buildModel();
         newModel.set("number", number);
-        newModel.set("bank", number);
+        newModel.set("bank", bank);
         return newModel;
         }
 

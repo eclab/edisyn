@@ -18,7 +18,7 @@ import java.io.*;
 import javax.sound.midi.*;
 
 /**
-   A patch editor for the Roland JV-880.
+   A patch editor for the Roland D-110.
         
    @author Sean Luke
 */
@@ -111,10 +111,61 @@ public class RolandD110Multi extends Synth
         // It doesn't make sense to send to current patch
         // receiveCurrent.setEnabled(false);
         transmitTo.setEnabled(false);
+        addD110MultiMenu();
         return frame;
         }         
 
-    public String getDefaultResourceFileName() { return "RolandD110Multi.init"; }
+
+	int playPart = 0;
+    public void addD110MultiMenu()
+        {
+        JMenu menu = new JMenu("D-110");
+        menubar.add(menu);
+
+        ButtonGroup g = new ButtonGroup();
+        JRadioButtonMenuItem m = new JRadioButtonMenuItem("Play on Default Channel");
+		m.addActionListener(new ActionListener()
+			{
+			public void actionPerformed(ActionEvent e)
+				{
+				playPart = 0;
+				}
+			});
+        g.add(m);
+        m.setSelected(true);
+        menu.add(m);
+
+        for(int i = 0; i < 8; i++)
+            {
+            final int _i = i;
+            m = new JRadioButtonMenuItem("Play on Part " + (i + 1) + " Channel");
+            m.addActionListener(new ActionListener()
+                {
+                public void actionPerformed(ActionEvent e)
+                    {
+                    playPart = (_i + 1);
+                    }
+                });
+            g.add(m);
+            menu.add(m);
+            }
+        }
+        
+    public int getTestNoteChannel()
+    	{
+    	if (playPart == 0)
+    		return super.getTestNoteChannel();
+    	else
+    		{
+    		int chan = model.get("p" + playPart + "midichannel", 16);
+    		if (chan == 16)
+    			return super.getTestNoteChannel();
+    		else return chan;
+    		}
+    	}
+    	
+        
+            public String getDefaultResourceFileName() { return "RolandD110Multi.init"; }
     public String getHTMLResourceFileName() { return "RolandD110Multi.html"; }
 
     public boolean gatherPatchInfo(String title, Model change, boolean writing)
@@ -355,7 +406,8 @@ public class RolandD110Multi extends Synth
                     // ALSO do is post the dump request to occur at the end of the Event Queue,
                     // so by the time the dump request has been made, the window is shown and
                     // frontmost.
-                                                
+                	
+                    synth.setTitleBarAux("[Part " + part + " of " + RolandD110Multi.this.model.get("name", "") + "]");
                     synth.sprout();
                     JFrame frame = ((JFrame)(SwingUtilities.getRoot(synth)));
                     frame.setVisible(true);
@@ -368,6 +420,8 @@ public class RolandD110Multi extends Synth
                                 Model tempModel = buildModel();
                                 tempModel.set("bank", RolandD110Multi.this.model.get("p" + part + "tonegroup"));
                                 tempModel.set("number", RolandD110Multi.this.model.get("p" + part + "tonenumber"));
+                                // We also want to change the synth's MIDI channel since it will differ from the "Control MIDI Channel" of the Multi
+                                synth.tuple.outChannel = RolandD110Multi.this.model.get("p" + part + "midichannel") + 1;		// tuple channels start at channel 1
                                 synth.performRequestDump(tempModel, true);
                                 }
                             });
@@ -387,7 +441,6 @@ public class RolandD110Multi extends Synth
                 {
                 super.update(key, model);
                 toneNumber.update("p" + part + "tonenumber", model);
-                //showButton.getButton().setEnabled(model.get(key) == 2);         // internal/card
                 }
             };
         hbox2.add(comp);
@@ -552,7 +605,6 @@ public class RolandD110Multi extends Synth
     "p6midichannel",
     "p7midichannel",
     "p8midichannel",
-    "p8midichannel",
     "rhythmmidichannel",
     "-",
     "name",
@@ -704,6 +756,7 @@ public class RolandD110Multi extends Synth
         int BB = data[6];
         int CC = data[7];
 
+		// Timbre Temporary Area and Rhythm Temporary Area (request #2 from a requestCurrentPatch)
         if (AA == 0x03 && BB == 0x00 && CC == 0x00 && !fromFile)
             {
             // temporary timbre region
@@ -726,53 +779,47 @@ public class RolandD110Multi extends Synth
             revise();
             return PARSE_SUCCEEDED;
             }
+        
+        // System Area (request #1 from a requestCurrentPatch)
         else if (AA == 0x10 && BB == 0x00 && CC == 0x00 && !fromFile)
             {
             int pos = 9;            // skip master tune, which is at 8
-                        
-            model.set("reverbmode", data[pos++]);
-            model.set("reverbtime", data[pos++]);
-            model.set("reverblevel", data[pos++]);
-                        
-            // partial reserve
-            for(int p = 1; p < 9; p++)
-                {
-                model.set("p" + p + "partialreserve", data[pos++]);
-                }
-            model.set("rhythmpartialreserve", data[pos++]);
-                        
-            // midi 
-            for(int p = 1; p < 9; p++)
-                {
-                model.set("p" + p + "midichannel", data[pos++]);
-                }
-            model.set("rhythmmidichannel", data[pos++]);
+            
+            for(int i = 0; i < allSystemParameters.length; i++)
+            	{
+			 	if (allSystemParameters[i].equals("-"))
+			 		{
+            		pos++;
+			 		}
+			 	else if (allSystemParameters[i].equals("name"))
+					{
+	        	    // name
+					String name = "";
+					for(int j = 0; j < 10; j++)
+						{
+						name = name + ((char)data[pos++]);		// name data in fact starts at 00 18, not 00 17
+						}
+					model.set("name", name);
+					}
+            	else 
+            		{
+            		model.set(allSystemParameters[i], data[pos]);
+            		pos++;
+            		}
+            	}
 
-            pos++;          // dummy
-                        
-            // name
-            String name = "";
-            for(int i = 0; i < 10; i++)
-                {
-                name = name + ((char)data[pos++]);
-                }
-
+			// make the second request
             boolean sendMIDI = getSendMIDI();
             setSendMIDI(true);
             tryToSendSysex(requestCurrentDump2());
             setSendMIDI(sendMIDI);
             return PARSE_INCOMPLETE;
             }
-        else
+
+		// Patch dump (Patch Memory Area)
+        else // if (AA == 0x06)
             {
-            if (AA == 0x06)
-                {
-                model.set("number", BB);
-                }
-            else
-                {
-                model.set("number", 0);
-                }
+            model.set("number", BB);
                 
             int pos = 8;
             String name = "";
@@ -827,7 +874,8 @@ public class RolandD110Multi extends Synth
         if (toWorkingMemory)
             {
             // we have to emit to two locations
-            byte[] buf1 = new byte[33 + 10];
+            // First we emit to the system memory everything but master tune
+            byte[] buf1 = new byte[32 + 10];						// we do not include master tune, so it's 32, not 33
             buf1[0] = (byte)0xF0;
             buf1[1] = (byte)0x41;
             buf1[2] = (byte)getID();
@@ -835,7 +883,7 @@ public class RolandD110Multi extends Synth
             buf1[4] = (byte)0x12;
             buf1[5] = (byte)0x10;
             buf1[6] = (byte)0x00;
-            buf1[7] = (byte)0x01;               // skip master tune
+            buf1[7] = (byte)0x01;              						 // skip master tune
             for(int i = 0; i < allSystemParameters.length; i++)
                 {
                 if (allSystemParameters[i].equals("-")) continue;
@@ -855,6 +903,7 @@ public class RolandD110Multi extends Synth
             buf1[buf1.length - 2] = produceChecksum(buf1, 5, buf1.length - 2);
             buf1[buf1.length - 1] = (byte)0xF7;
 
+            // Next we emit to the temporary patch memory the remaining information
             byte[] buf2 = new byte[0x80 + 10];
             buf2[0] = (byte)0xF0;
             buf2[1] = (byte)0x41;
@@ -962,7 +1011,7 @@ public class RolandD110Multi extends Synth
         int number = tempModel.get("number");
         // we're loading from Tone Temporary [synth]
         byte AA = (byte)(0x06);
-        byte BB = (byte)(number * 2);
+        byte BB = (byte)(number);
         byte CC = (byte)(0x00);
         byte LSB = (byte)0;
         byte MSB = (byte)1; 
@@ -1010,7 +1059,7 @@ public class RolandD110Multi extends Synth
     
     public String getPatchName(Model model) { return model.get("name", "Untitled  "); }
 
-    public int getPauseAfterChangePatch() { return 100; }
+    public int getPauseAfterChangePatch() { return 100; }		// May be too short?
 
     public int getPauseAfterSendAllParameters() { return 100; } 
 
@@ -1053,7 +1102,7 @@ public class RolandD110Multi extends Synth
         if (!model.exists("number")) return null;
         
         int original = model.get("number");
-        return ("" + ((original / 8 + 1) * 10 + (original % 8 + 1)));
+        return ("I-" + ((original / 8 + 1) * 10 + (original % 8 + 1)));
         }
 
     /** Roland only allows IDs from 17...32.  Don't ask. */
@@ -1074,3 +1123,4 @@ public class RolandD110Multi extends Synth
         
     public int getBatchDownloadWaitTime() { return 750; }
     }
+    

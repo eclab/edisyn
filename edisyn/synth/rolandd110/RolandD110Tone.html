@@ -19,7 +19,7 @@ I have received a report that sending real-time parameter changes can crash the 
 <ul>
 <li>This patch editor is unusual in that it has two layouts: a standard layout (by part) and an alternate layout (by category).  You might prefer the alternate layout: select <b>Alternate Layout</b>.  The layout changes for the next editor you create.
 
-<br><p><li>To display the current Multi Patch, just choose <b>Show Current Multi Patch</b>.
+<br><p><li>To display the current Multi Patch, just choose <b>Show Current Multi Patch</b>.  Note that the Multi Patch's MIDI Channel will be the same as this patch's Channel: you may want to then change it to your D-110's Control Channel.
 
 <br><p><li>A Tone roughly corresponds to a single playable voice on the D-110, but you can't just upload it and try it out.  This is because the primary "patch" of the D-110 is a multi-mode patch.  There is no notion of a single-mode patch.  Thus in order to play a Tone, you have to set up a multi-mode patch which refers to the tone in one of its eight parts.  To make this easy, Edisyn has a menu option called <b>Set up Test Patch for Part 1 Only </b>, which does exactly what it says on the tin: it loads a test multimode patch which has Part 1 pointing to your Tone.  Part 1 is set to <b>Edisyn's Current MIDI Channel</b>, 100% volume, and all 32 partials (so be sure Edisyn is on Channel 1).  All other Parts are turned off.  Your Tone is then loaded for good measure.
 
@@ -30,13 +30,13 @@ I have received a report that sending real-time parameter changes can crash the 
 <br><P><li>When you <b>Send to Current Patch</b>, which sends the Tone to temporary memory on the D-110, exactly which of the 8 Parts does it send it to?  Similarly, which Part's Tone is loaded when you <b>Request Current Patch</b>?  You can specify this with one of the menus <b>Current Patch is Part <i>N</i></b>.  By default this is 1 (which would be the usual case).
 </ul>
 
-<br><br><h3>Gotchas</h3>
+<br><h3>Gotchas</h3>
 
 <ul>
 <li>If you've used the D-110 long enough to figure out its bizarre structure, you probably know by now that the notion of a Timbre is completely useless.  It's a holdover from the Roland D-10 structure, where it made more sense.  Although you can save and load Timbres to RAM, Patches do not actually store references to Timbres: they store references to Tones.  Thus Patches bypass Timbres entirely, and Timbres only effect things if you change them on-the-fly.  That is close to useless for editing.  Thus this patch editor provides no facilities for Timbres at all, just Tone editing.
 </ul>
 
-<p>Thanks to Keith (llamamusic@hotmail.com) for his extraordinary service in loaning a machine in a pinch, providing materials, and debugging.  If you are a D-110 owner, <a href="llamamusic.com">llamamusic.com</a> is a fantastic resource.
+<p>Thanks to Keith (llamamusic@hotmail.com) for his extraordinary service in loaning a machine in a pinch, providing materials, and debugging.  If you are a D-110 owner, <a href="llamamusic.com">llamamusic.com</a> is a fantastic resource.  Thanks also to Benjamin Wild (dj@benjaminwild.com) for debugging help and the editor's default init patch.
 
 <p><table border=0 cellpadding=0 cellspacing=5>
 <tr>

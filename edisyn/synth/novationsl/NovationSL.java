@@ -3649,13 +3649,22 @@ public class NovationSL extends Synth
       There is another variation of the SL called the SL Compact.  This unit has (effectively) four banks
       of encoders rather than a bank each of encoder, fader, and pot.  It appears the SL Compact uses the
       same exact sysex format as the regular SL models, and this is most unfortunate because the SL Compact
-      interprets some data as encoder data wheras the SL models interpret it as pot or fader or cross-fader
+      interprets some data as encoder data whereas the SL models interpret it as pot or fader or cross-fader
       data; and there doesn't appear to be much you can use in the actual sysex documentation to distinguish
       them in some cases.  It was a terrible design error from the standpoint of a sysex patch editor designer.
       I do not know if this documentation properly describes the Compact but I *believe* it does.
       
       There is a final version of the SL called the Nocturn.  I don't know anything about this unit.
       
+      
+      NOTES ON SYMBOLS
+      
+      +->  		This is used to denote multiple bits which are ORed together to form a single byte
+      ++Foo++	This indicates an unknown tag regarding this data in Novation's (extremely limited)
+      			original documentation.  Note that Novation lost its documentation and was kind enough
+      			to give me what they had left with the request that I do not distribute it (which I 
+      			will not -- don't ask) but that documentation is very close to useless.  :-(
+       
       
       -------------------------
       SINGLE PATCH DUMP COMMAND
@@ -3706,7 +3715,7 @@ public class NovationSL extends Synth
       13   0D   Name                  34 Bytes, ASCII, padded with 0x20
       47   2F   (0x20)
       48   30   Manufacturer          13 Bytes, ASCII, padded with 0x20
-      *** NOTE: Name + Maufacturer essentially comprise one string 48 bytes long
+      *** NOTE: Name + Manufacturer essentially comprise one string 48 bytes long
       
       61   3D   (0x00)
       62   3E   (0x00)
@@ -4059,7 +4068,7 @@ public class NovationSL extends Synth
       00  00  Name                            [8 bytes, padded with 0x20]
       08  08  Type                            0=off, 1=CC, 2=NRPN, 3=RPN 4=Sysex
       09  09  Low Value MSB
-      10  0a  Low     Value LSB 
+      10  0a  Low Value LSB 
       11  0b  High Value MSB
       12  0c  High Value LSB
       13  0d  (0x00)                          [Normally Button Type]
@@ -4101,7 +4110,7 @@ public class NovationSL extends Synth
       00  00  Name                            [8 bytes, padded with 0x20]
       08  08  Type                            0=off, 1=CC, 2=NRPN, 3=RPN 4=Sysex
       09  09  (0x00)                          [Normally Low Value MSB]
-      10  0a  Low     Value
+      10  0a  Low Value
       11  0b  (0x00)                          [Normally High Value MSB]
       12  0c  High Value
       13  0d  (0x00)                          [Normally Button Type]
@@ -4144,7 +4153,7 @@ public class NovationSL extends Synth
       00  00  Name                            [8 bytes, padded with 0x20]
       08  08  Type                            0=off, 1=CC, 2=NRPN, 3=RPN 4=Sysex 5=MMC 6=NoteOn/Off 8=Bank Change 9=PC 0C=Template 0D=Real Time 
       09  09  (0x00)                          [Normally Low Value MSB]
-      10  0a  Low     Value
+      10  0a  Low Value
       OR MMC Type
       OR Template Number (1-32, not 0-31)
       OR PC 
@@ -4193,7 +4202,7 @@ public class NovationSL extends Synth
       00  00  Name                            [8 bytes, padded with 0x20]
       08  08  Type                            0=off, 1=CC, 2=NRPN, 3=RPN 4=Sysex 5=MMC 0B=Drumnote 8=Bank Change 9=PC   0C=Template 0D=Real Time 
       09  09  (0x00)                          [Normally Low Value MSB]
-      10  0a  Low     Value
+      10  0a  Low Value
       OR MMC Type
       OR Template Number (1-32, not 0-31)
       OR PC 
@@ -4243,7 +4252,7 @@ public class NovationSL extends Synth
       00  00  Name                            [8 bytes, padded with 0x20]
       08  08  Type                            0=off, 1=CC, 2=NRPN, 3=RPN 4=Sysex 0A=Pitch Bend  
       09  09  (0x00)                          [Normally Low Value MSB]
-      10  0a  Low     Value
+      10  0a  Low Value
       11  0b  (0x00)                          [Normally High Value MSB]
       12  0c  High Value
       13  0d  (0x00)                          [Normally Button Type]
@@ -4285,7 +4294,7 @@ public class NovationSL extends Synth
       08  08  Type                            0=off, 1=CC, 2=NRPN, 3=RPN 4=Sysex 5=MMC 6=NoteOn/Off 8=Bank Change 9=PC  0A=Pitch Bend  0B=Drumnote 0C=Template 0D=Real Time 
       *** Note: 0x7, 0xC, and 0xE are not used
       09  09  Low Value MSB
-      10  0a  Low     Value LSB / MMC Type / Drum note Number/ Template Number (1-32, not 0-31) / PC 
+      10  0a  Low Value LSB / MMC Type / Drum note Number/ Template Number (1-32, not 0-31) / PC 
       11  0b  High Value MSB
       12  0c  High Value LSB / Drum note Velocity
       13  0d  Button Type                     0x00 = Normal, 0x04 = Momentary, 0x08 = Toggle, 0x10 = Step
@@ -4310,8 +4319,8 @@ public class NovationSL extends Synth
       21  15  Default Value LSB
       22  16  Step Size                       0...63  [representing 1...64]
       23  17  0x00                            
-      24  18  0x00                            --CNSPARE,3--
-      25  19  0x00                            --CNXATTR1--
+      24  18  0x00                            ++CNSPARE,3++
+      25  19  0x00                            ++CNXATTR1++
       26  1a  Sysex DV Type           0: no DV        1: Single       2: LSB-MSB      3: MSB-LSB 4: Roland  [See Table 9]
       27  1b  Sysex length            0...12
       28  1c  DV position                     0 = no DV, 1 = position 0, 2 = position 1, etc.

@@ -73,6 +73,7 @@ Edisyn presently supports:
 * Waldorf Blofeld and Waldorf Blofeld Keyboard (Single and Multi Modes, plus Wavetable uploading)
 * Waldorf Kyra (Single and Multi Modes)
 * Waldorf Microwave II, XT, and XTk (Single and Multi Modes)
+* Waldorf Pulse 2
 * Waldorf Rocket
 * Yamaha DX7 Family (DX7, TX7, TX802, TX216/TX816, Korg Volca FM, Dexed, DX200, DX9)
 * Yamaha 4-Op FM Family (DX21, DX27, DX100, TX81Z, DX11, TQ5, YS100, YS200, B200, V50, etc.) (Single and (for TX81Z and DX11) Multi Modes)
@@ -155,6 +156,10 @@ I believe that the following should work:
 3. Double-click on edisyn.jar to launch Edisyn.
 
 If you want to use Edisyn in combination with a DAW, see the manual's section on building a MIDI Loopback.
+
+#### Early Versions of Java
+
+I have had at least one report that Java 8 on Windows has serious problems with some Edisyn patch editors (probably memory).  Install something newer.
 
 #### Dealing with High-Resolution Displays
 

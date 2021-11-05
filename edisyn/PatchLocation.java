@@ -17,6 +17,7 @@ public class PatchLocation
     public int number;
     public PatchLocation(int bank, int number) { this.bank = bank; this.number = number; }
     public PatchLocation(Model model) { this(model.get("bank", NO_BANK), model.get("number", NO_NUMBER)); }
+    
     public boolean equals(Object obj)
         {
         if (obj == null) return false;
@@ -26,6 +27,7 @@ public class PatchLocation
         if (p.number != number) return false;
         return true;
         }
+        
     Model assignLocations(Model model)
         {
         if (number != NO_NUMBER)

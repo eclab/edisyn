@@ -518,7 +518,9 @@ public class LabelledDial extends NumericalComponent
                 graphics.setPaint(Style.DIAL_DYNAMIC_COLOR());
                 if (state == min)
                     {
-                    interval = -5;
+                    interval = 0;
+                    // This is NO LONGER TRUE:
+					// interval = -5;
                     // If we're basically at zero, we still want to show a little bit while the user is scrolling so
                     // he gets some feedback. 
                     //arc.setArc(rect.getX() + Style.DIAL_STROKE_WIDTH() / 2, rect.getY() + Style.DIAL_STROKE_WIDTH()/2, rect.getWidth() - Style.DIAL_STROKE_WIDTH(), rect.getHeight() - Style.DIAL_STROKE_WIDTH(), 270,  -5, Arc2D.OPEN);

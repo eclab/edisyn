@@ -38,11 +38,13 @@ Under the Blofeld menu you'll find an option to upload a wavetable.  You can upl
 
 <b>Important note:</b> You probaby want to turn Limit WT <i>off</i> when using user wavetables.  Otherwise the Blofeld will not work properly with any PWM values greater than 120.  
 
-<p>Why? Limit WT stands for "Limit Wavetable".  Early Waldorf and PPG wavetables reserved the top few waves for sawtooth, square, and triangle waves regardless of the rest of the wavetable; this would make for weird modulation results.  The Blofeld has those wavetables internally, but LimitWT prevents modulation from reaching those waves.  But your own wavetable probably doesn't have that weirdness, so you want to turn Limit WT off. 
+<p>Why? Limit WT stands for "Limit Wavetable".  Early Waldorf and PPG wavetables reserved the top few waves for sawtooth, square, and triangle waves regardless of the rest of the wavetable; this would make for weird modulation results.  The Blofeld has those wavetables internally, but LimitWT prevents modulation from reaching those waves.  But your own wavetable probably doesn't have that weirdness, so you want to turn Limit WT off.
 
 <br><br><h3>Setting User Wavetable Names</h3>
 
 Edisyn can't query your Blofeld to see what names you have set for your user wavetables (there's no way to do that).  But if you're sick of Edisyn just saying "User 80" and so on in its Wave choosers, you can manually change what Edisyn displays for all 39 of your user wavetable names.  Just select <b>Revise User Wavetable Names...</b>.
+
+<p>Also, when you upload a new user Wavetable, it will automatically update the name that Edisyn displays in its list.  If you don't want that, just uncheck the <b>Update Edisyn</b> checkbox when uploading.
 
 <p>This isn't possible for the Sample names for now (sorry): there are just too many of them.
 

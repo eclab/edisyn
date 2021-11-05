@@ -15,7 +15,7 @@ Synthesizers which adhere to MTS all have a <b>device number</b>.  You must set 
 
 MTS assigns a pitch to every MIDI note value from 0...127. Each of these knob pairs represents the frequency to assign to that value.
 
-<p>You compute the pitch by choosing an original note from the 12-tone-equal-temperment (A4-440hz standard modern western tuning) as well as an offset in cents from 0-100 above that note. Your resolution in cents is 100/2<sup style="font-size:small">16</sup>. The knob panel as it stands is a direct representation of the midi tuning standard sysex and allows you to manually input your desired values. <b>However</b>, this is not the recommended way to set these values. The <b>Tuning</b> menu option has utilities for calculating these knobs in bulk.
+<p>You compute the pitch by choosing an original note from the 12-tone-equal-temperment (A4-440hz standard modern western tuning) as well as an offset in cents from 0-99.99 above that note. Your resolution in cents is 100/2<sup style="font-size:small">16</sup>. The editor's dials allow you to manually input these values, but this is not the recommended way to set them. Instead, the <b>Tuning</b> menu option has utilities for calculating these knobs in bulk.
 
 <br><br><h2>Tuning Utilities</h2>
 
@@ -23,15 +23,17 @@ The <b>Tuning</b> menu gives access to various utilities to make it easy to set 
 
 <br><br><h3>Load Scala File...</h3>
 
-You can load tunings in the popular <b>Scala</b> format.  These files end in ".scl" or ".SCL".  Scala tunings are relative: you'll also need to specify what the root MIDI note and Root Frequency are.
+You can load tunings in the popular <b>Scala</b> format.  These files end in ".scl" or ".SCL".  Scala tunings are relative: you'll also need to specify what the Root MIDI Note and Root Frequency are.
 
 <br><br><h3>EDO</h3>
 
-EDO stands for <i>Equal number of Divisions per Octave</i> and is also commonly known as Equal Temperament.  You'll also see the acronyms "ET" or "TET".  Standard western tuning is EDO with A4 (MIDI note 69) set to 440hz, at 12 divisions per octave. Other tunings have their advantages and disadvantages and a decent summary of the topic can be found <a href="https://en.wikipedia.org/wiki/Equal_temperament">on Wikipedia</a>.  The calculate button gives the frequency of the selected midi number in standard western tuning, but feel free to use any positive number for frequncy for any midi note number as your root, all it is saying is "I want midi number x from my controller to equate to frequency y and to tune the rest of the notes using equal temperment with z divisons per octave."
+EDO stands for <i>Equal number of Divisions per Octave</i>, commonly known as Equal Temperament.  You'll also see the acronyms "ET" or "TET".  Standard western tuning is EDO with A4 (MIDI note 69) set to 440hz, and 12 divisions per octave. Other tunings have their advantages and disadvantages: a goo summary of the topic can be found <a href="https://en.wikipedia.org/wiki/Equal_temperament">on Wikipedia</a>.  
+
+<p>The calculate button gives the frequency of the selected MIDI number in standard western tuning, but feel free to use any positive number for frequncy for any MIDI note number as your root.  All it is saying is "I want MIDI number X from my controller to correspond to frequency Y and to tune the rest of the notes using equal temperment with Z divisons per octave."
 
 <br><br><h3>Named Scales</h3>
 
-These are scales that are either popular enough or notable enough to be named. You can find out more about them on Wikipedia.  Many of these scales are standard scales found in the MTS presets on Yamaha 4-operator synthesizers such as the TX81Z.  These are set up much in the same way that you set up EDO above.
+These are scales that are either popular or notable enough to be named. You can find out more about them on Wikipedia.  Many of these scales are standard scales found in the tuning presets on Yamaha 4-operator synthesizers such as the TX81Z.  They are set up much in the same way that you set up EDO above.
 
 <p><table border=0 cellpadding=0 cellspacing=5>
 <tr>

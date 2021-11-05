@@ -97,17 +97,6 @@ public class WaldorfBlofeld extends Synth
             });
         menu.add(writeWavetableMenu);
 
-        JMenuItem doit = new JMenuItem("Doit");
-        doit.addActionListener(new ActionListener()
-            {
-            public void actionPerformed(ActionEvent e)
-                {
-                model.set("osc1shape", 20);
-                WaldorfBlofeld.this.choosers[0].update("osc1shape", model);
-                }
-            });
-        menu.add(doit);
-
         JMenuItem reviseWavetableNamesMenu = new JMenuItem("Revise User Wavetable Names...");
         reviseWavetableNamesMenu.addActionListener(new ActionListener()
             {

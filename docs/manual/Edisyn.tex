@@ -799,9 +799,21 @@ The {\it Morpher} allows you to try out patches, in real time, that are a combin
 
 Patches are updated on your synthesizer in real time as you change the joystick cursor position.  To do this, Edisyn sends the entire patch to the synthesizer on the fly in the same way that ``Send to Current Patch'' is done.  Keep in mind that some synthesizers can take a bit of time to update themselves to a new patch, so depending on the synthesizer this can be either smooth or a bit jumpy.
 
-\paragraph{Initialization} When you fire up the Morpher, it will place a copy of the current patch in the top-left corner.  You can load patches in additional corners (or overwrite the top-left corner) by clicking on their buttons and choosing  {\it Load from File ...}, which loads a patch from a file.  You can also load a patch from any of the Hill-Climbing archive slots (q through v). And you can take a patch from any of the Nudge slots (1 through~4).  
+\paragraph{Initialization} When you fire up the Morpher, it will place a copy of the current patch in the top-left corner.  You can load patches in additional corners (or overwrite the top-left corner) by clicking on their buttons and choosing one of several options:
 
-If you want to load slots from the synth, at present you have to go the current patch editor, manually request the current patch, then go back to the Morpher and initialize a corner with {\it Set to Current Patch}.  This is because Edisyn is at present designed to load patches from synths directly into the editor and not into the Hill-Climber or Morpher. 
+\begin{itemize}
+\item {\it Set to Editor Patch}\quad Loads the current patch in the patch editor.
+\item {\it Request Current Patch}\quad Performs a {\it Request Current Patch} and, if the synthesizer responds, loads that.  This will also modify the current patch in the patch editor (you can undo it later).  If your synth is not capable of receiving current patch requests, Edisyn will tell you.\footnote{Yes, this is bad design: it ought to just disable out this option, but for irritating technical reasons this is not easy.}  Before requesting the current patch, you will probably want to temporarily turn off playing test notes because the Morpher may upload and change the patch each time it plays a new note, preventing you from changing the patch manually on your synth and then requesting it.  You can then turn modify test notes back on again to get the Morpher running.
+\item {\it Request Patch...}\quad Performs a {\it Request Patch...} and, if the synthesizer responds, loads that.  This will also modify the current patch in the patch editor (you can undo it later).If your synth is not capable of receiving current patch requests, Edisyn will tell you.\addtocounter{footnote}{-1}\footnotemark\ Before requesting a patch, you will probably want to temporarily turn off playing test notes because the Morpher may upload and change the patch each time it plays a new note, preventing you from changing the patch manually on your synth and then requesting it.  You can then turn modify test notes back on again to get the Morpher running.
+\item {\it Load from File ...}\quad Loads a patch from a file.
+\item {\it Set to Joystick Position}\quad Loads the corner with the current joystick morphed patch.
+\item {\it Clear}\quad Removes any patch from the corner.
+\item {\it Swap with...}\quad Swaps the corner with another corner.
+\item {\it Take from Nudge...}\quad Takes the patch from a current nudge target (1 through 4)
+\item {\it Take from Hill-Climb Archive...}\quad Takes the patch from a current hill-climber archive slot (q through v).
+\end{itemize}
+
+If your synth does not support patch requests, you can go back to the current patch editor, manually request the current patch, then go back to the Morpher and initialize a corner with {\it Set to Editor Patch}.
 
 If you don't initialize a corner, it is set to ``[Empty]''.  Empty corners do not participate in affecting the sound at the Joystick cursor position.  
 
@@ -834,7 +846,7 @@ Non-metric parameters, such as (say) choice of filter or the PCM sampled sound p
 
 The Yamaha DX7 editor has a special feature thanks to research done here at George Mason University by V. Hoyle.  Using approximately 30,000 unique DX7 patches found around the internet, we trained a special kind of deep-learned neural network called a {\it variational autoencoder}.  Using this network, we can improve both hill-climbing and patch randomization.
 
-If you're editing a DX7, you can use the neural network in hill-climbing by selecting {\bf NN Hill-Climber} in the Hill-Climber's ``Method'' chooser.  Thereafter instead of creating children patches via crossover and mutation, Edisyn will produce them using the autoencoder.  Similarly, if (when editing a DX7) you select Edit \(\rightarrow\) Randomize \(\rightarrow\) Randomizes Using NN, then randomization options will use the autoencoder rather than the standard mutator.
+If you're editing a DX7, you can use the neural network in hill-climbing by selecting {\bf NN Hill-Climber} in the Hill-Climber's ``Method'' chooser.  Thereafter instead of creating children patches via crossover and mutation, Edisyn will produce them using the autoencoder.  Similarly, if (when editing a DX7) you select {\bf Edit \(\rightarrow\) Randomize \(\rightarrow\) Randomizes Using NN}, then randomization options will use the autoencoder rather than the standard mutator.
 
 \paragraph{What's the point?}  As anyone who programs synthesizer patches knows, the space of synthesizer patches consists of small useful regions surrounded by lots of patches which are garbage, even total silence.  The hill-climber tries many strategies to avoid presenting garbage and silence to the user, but is only partly successful   The goal of the autoencoder is to eliminate as much garbage and silence as possible, thus improving the chances that you'll get decent patch results.  We'd appreciate feedback as to how successful you think we were.
  

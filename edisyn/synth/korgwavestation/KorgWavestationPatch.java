@@ -556,7 +556,7 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
                 // nothing for the time being
                 final KorgWavestationSequence synth = new KorgWavestationSequence();
                 if (tuple != null)
-                    synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver(), buildKey2Receiver());
+                    synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver(), synth.buildKey2Receiver());
                 if (synth.tuple != null)
                     {       
                     // This is a little tricky.  When the dump comes in from the synth,
@@ -569,6 +569,7 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
                     // so by the time the dump request has been made, the window is shown and
                     // frontmost.
                        
+                    synth.setTitleBarAux("[Wave " + OSCILLATORS[osc - 1] + " Seq of "  + KorgWavestationPatch.this.model.get("name", "") + "]");
                     synth.sprout();
                     JFrame frame = ((JFrame)(SwingUtilities.getRoot(synth)));
                     frame.setVisible(true);
@@ -2691,7 +2692,7 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
         if (tuple != null)
             {
             final KorgWavestationPerformance synth = new KorgWavestationPerformance();
-            synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver(), buildKey2Receiver());
+            synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver(), synth.buildKey2Receiver());
             if (synth.tuple != null)
                 {
                 synth.loadDefaults();

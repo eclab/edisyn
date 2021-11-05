@@ -47,7 +47,7 @@ public class AlesisD4 extends Synth
     // All the drum sounds are lumped together (see end of file).  These are the numbers
     // of each drum sound in each group -- I need this to break them out to send/receive sysex
     public static final int[] D4_BANKS = { 99, 99, 55, 92, 76, 80 };
-    public static final int[] D5M_BANKS = { 95, 117, 71, 34, 36, 114, 65, 16 };
+    public static final int[] DM5_BANKS = { 95, 117, 71, 34, 36, 114, 65, 16 };
     
     public int testNote = 60;
      
@@ -491,7 +491,7 @@ public class AlesisD4 extends Synth
                 
                 int banksum = 0;
                 for(int bb = 0; bb < bank; bb++)
-                    banksum += (d4 ? D4_BANKS[bb > 5 ? 0 : bb] : D5M_BANKS[bb > 7 ? 0 : bb]);
+                    banksum += (d4 ? D4_BANKS[bb > 5 ? 0 : bb] : DM5_BANKS[bb > 7 ? 0 : bb]);
                 
                 // assemble bank and number into voice
                 model.set("drum" + i + "voice", banksum + number);
@@ -536,16 +536,16 @@ public class AlesisD4 extends Synth
             
             int bank = -1;
             int number = -1;
-            for(int j = 0; j < (isDM5() ? D5M_BANKS.length : D4_BANKS.length); j++)
+            for(int j = 0; j < (isDM5() ? DM5_BANKS.length : D4_BANKS.length); j++)
                 {
-                if (voice < (isDM5() ? D5M_BANKS[j] : D4_BANKS[j]))
+                if (voice < (isDM5() ? DM5_BANKS[j] : D4_BANKS[j]))
                     {
                     bank = j;
                     number = voice;
                     break;
                     }
                 else
-                    voice -= (isDM5() ? D5M_BANKS[j] : D4_BANKS[j]);
+                    voice -= (isDM5() ? DM5_BANKS[j] : D4_BANKS[j]);
                 }
                         
             if (bank == -1) // error, should never happen
@@ -588,12 +588,12 @@ public class AlesisD4 extends Synth
 
             if (key.endsWith("voice"))
                 {
-                int total = (isDM5() ? D5M_BANKS.length : D4_BANKS.length);
+                int total = (isDM5() ? DM5_BANKS.length : D4_BANKS.length);
                 nrpn = buildNRPN(getChannelOut(), NRPN_BANK, (128 * ((bank + 1) * 127 / total)));  
                 for(int i = 0; i < nrpn.length; i++) data.add(nrpn[i]);
                 data.add(new Integer(PAUSE_NRPN));
                         
-                total = (isDM5() ? D5M_BANKS[bank]: D4_BANKS[bank]);
+                total = (isDM5() ? DM5_BANKS[bank]: D4_BANKS[bank]);
                 //int math = ((number + 1) * 127) / total;
                 //int math = ((number + 1 - 1) * 127) / (total - 1);
                 nrpn = buildNRPN(getChannelOut(), NRPN_NUMBER, 128 * map(number, total-1)); 
@@ -703,16 +703,16 @@ public class AlesisD4 extends Synth
             int voice = model.get("drum" + i + "voice");
             int bank = -1;
             int number = -1;
-            for(int j = 0; j < (isDM5() ? D5M_BANKS.length : D4_BANKS.length); j++)
+            for(int j = 0; j < (isDM5() ? DM5_BANKS.length : D4_BANKS.length); j++)
                 {
-                if (voice < (isDM5() ? D5M_BANKS[j] : D4_BANKS[j]))
+                if (voice < (isDM5() ? DM5_BANKS[j] : D4_BANKS[j]))
                     {
                     bank = j;
                     number = voice;
                     break;
                     }
                 else
-                    voice -= (isDM5() ? D5M_BANKS[j] : D4_BANKS[j]);
+                    voice -= (isDM5() ? DM5_BANKS[j] : D4_BANKS[j]);
                 }
                                 
             if (bank == -1) // error, should never happen
@@ -1869,4 +1869,12 @@ public class AlesisD4 extends Synth
         return false;
         }
         
+    /** Return a list of all patch number names.  Default is { "Main" } */
+    public String[] getPatchNumberNames()  { return buildIntegerNames(21); }
+
+    /** Return a list whether patches in banks are writeable.  Default is { false } */
+    public boolean[] getWriteableBanks() { return buildBankBooleans(21, 0, 0); }
+
+    /** Return a list whether individual patches can be written.  Default is FALSE. */
+    public boolean supportsPatchWrites() { return true; }
     }

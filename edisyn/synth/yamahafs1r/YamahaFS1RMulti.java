@@ -637,6 +637,7 @@ public class YamahaFS1RMulti extends Synth
                     // so by the time the dump request has been made, the window is shown and
                     // frontmost.
                                                 
+                    synth.setTitleBarAux("[Fseq of " + YamahaFS1RMulti.this.model.get("name", "") + "]");
                     synth.sprout();
                     JFrame frame = ((JFrame)(SwingUtilities.getRoot(synth)));
                     frame.setVisible(true);
@@ -894,6 +895,7 @@ public class YamahaFS1RMulti extends Synth
                     // so by the time the dump request has been made, the window is shown and
                     // frontmost.
                                                 
+                    synth.setTitleBarAux("[Part " + part + " of " + YamahaFS1RMulti.this.model.get("name", "") + "]");
                     synth.sprout();
                     JFrame frame = ((JFrame)(SwingUtilities.getRoot(synth)));
                     frame.setVisible(true);

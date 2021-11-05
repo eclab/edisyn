@@ -300,7 +300,7 @@ public class YamahaTG33Multi extends Synth
                 {
                 final YamahaTG33 synth = new YamahaTG33();
                 if (tuple != null)
-                    synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver(), buildKey2Receiver());
+                    synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver(), synth.buildKey2Receiver());
                 if (synth.tuple != null)
                     {       
                     // This is a little tricky.  When the dump comes in from the synth,
@@ -313,6 +313,7 @@ public class YamahaTG33Multi extends Synth
                     // so by the time the dump request has been made, the window is shown and
                     // frontmost.
                                                 
+                    synth.setTitleBarAux("[Channel " + channel + " of " + YamahaTG33Multi.this.model.get("name", "") + "]");
                     synth.sprout();
                     JFrame frame = ((JFrame)(SwingUtilities.getRoot(synth)));
                     frame.setVisible(true);

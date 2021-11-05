@@ -3995,6 +3995,7 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
                     // so by the time the dump request has been made, the window is shown and
                     // frontmost.
                                                 
+                    synth.setTitleBarAux("[Part " + part + " of " + KorgWavestationPerformance.this.model.get("name", "") + "]");
                     synth.sprout();
                     JFrame frame = ((JFrame)(SwingUtilities.getRoot(synth)));
                     frame.setVisible(true);

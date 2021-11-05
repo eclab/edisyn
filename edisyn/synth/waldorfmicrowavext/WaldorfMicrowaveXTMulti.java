@@ -321,6 +321,7 @@ public class WaldorfMicrowaveXTMulti extends Synth
                     // so by the time the dump request has been made, the window is shown and
                     // frontmost.
                                                 
+                    synth.setTitleBarAux("[Inst " + inst + " of " + WaldorfMicrowaveXTMulti.this.model.get("name", "") + "]");
                     synth.sprout();
                     JFrame frame = ((JFrame)(SwingUtilities.getRoot(synth)));
                     frame.setVisible(true);                                 

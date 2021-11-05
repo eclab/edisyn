@@ -302,6 +302,7 @@ public class Yamaha4OpMulti extends Synth
                     // so by the time the dump request has been made, the window is shown and
                     // frontmost.
                                                 
+                    synth.setTitleBarAux("[Inst " + src + " of " + Yamaha4OpMulti.this.model.get("name", "") + "]");
                     synth.sprout();
                     JFrame frame = ((JFrame)(SwingUtilities.getRoot(synth)));
                     frame.setVisible(true);                                 

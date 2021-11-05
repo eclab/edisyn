@@ -52,9 +52,9 @@ public class YamahaFB01Multi extends Synth
         hbox.addLast(addGlobal(Style.COLOR_A()));
         vbox.add(hbox);
         
-        vbox.add(addInstrument(1, Style.COLOR_A()));
+        vbox.add(addInstrument(1, Style.COLOR_B()));
         vbox.add(addInstrument(2, Style.COLOR_A()));
-        vbox.add(addInstrument(3, Style.COLOR_A()));
+        vbox.add(addInstrument(3, Style.COLOR_B()));
         vbox.add(addInstrument(4, Style.COLOR_A()));
 
         soundPanel.add(vbox, BorderLayout.CENTER);
@@ -63,9 +63,9 @@ public class YamahaFB01Multi extends Synth
         soundPanel = new SynthPanel(this);
         vbox = new VBox();
         
-        vbox.add(addInstrument(5, Style.COLOR_A()));
+        vbox.add(addInstrument(5, Style.COLOR_B()));
         vbox.add(addInstrument(6, Style.COLOR_A()));
-        vbox.add(addInstrument(7, Style.COLOR_A()));
+        vbox.add(addInstrument(7, Style.COLOR_B()));
         vbox.add(addInstrument(8, Style.COLOR_A()));
 
         soundPanel.add(vbox, BorderLayout.CENTER);
@@ -307,6 +307,7 @@ public class YamahaFB01Multi extends Synth
                     // so by the time the dump request has been made, the window is shown and
                     // frontmost.
                                                 
+                    synth.setTitleBarAux("[Inst " + src + " of " + YamahaFB01Multi.this.model.get("name", "") + "]");
                     synth.sprout();
                     JFrame frame = ((JFrame)(SwingUtilities.getRoot(synth)));
                     frame.setVisible(true);

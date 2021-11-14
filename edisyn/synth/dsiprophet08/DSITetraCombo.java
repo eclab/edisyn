@@ -492,7 +492,9 @@ public class DSITetraCombo extends Synth
             return true;
             }
         }
-        
+    
+    PatchDisplay pd = null;
+    
     /** Add the global patch category (name, id, number, etc.) */
     public JComponent addNameGlobal(int layer, Color color)
         {
@@ -504,8 +506,15 @@ public class DSITetraCombo extends Synth
         HBox hbox = new HBox();
                                 
         VBox vbox = new VBox();
-        comp = new PatchDisplay(this, 4);
-        vbox.add(comp);
+        if (pd == null)
+        	{
+        	comp = (pd = new PatchDisplay(this, 4));
+        	vbox.add(comp);
+        	}
+        else
+        	{
+        	vbox.add(Strut.makeStrut(pd));
+        	}
         
         comp = new StringComponent(
             (layer == 1 ? "Patch (and Voice 1) Name" : "Voice " + layer + " Name"), 

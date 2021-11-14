@@ -1634,7 +1634,7 @@ public class DSIProphet08 extends Synth
                 {
                 char[] name = (model.get("name", "Untitled") + "                ").toCharArray();
                 name[data.number - 184] = (char)(data.value);
-                model.set("name", new String(name));
+                model.set("name", new String(name).substring(0, 16));
                 }
             else
                 {
@@ -3043,7 +3043,42 @@ public class DSIProphet08 extends Synth
         return false;
         }
         
-        
+    /** Return a list of all patch number names.  Default is { "Main" } */
+    public String[] getNumberNames()  
+    	{ 
+    	return buildIntegerNames(128, 1);
+    	}
+
+    /** Return a list of all bank names.  Default is { "Main" } */
+    public String[] getBankNames() 
+    	{
+    	switch (getType())
+    		{
+    		case SYNTH_TYPE_PROPHET_08:
+    			return BANKS_PROPHET;
+    		case SYNTH_TYPE_TETRA:
+    			return BANKS_TETRA;
+    		case SYNTH_TYPE_MOPHO:
+    			return BANKS_MOPHO;
+    		case SYNTH_TYPE_MOPHO_KEYBOARD:
+    			return BANKS_MOPHO;
+    		case SYNTH_TYPE_MOPHO_X4:    		
+    			return BANKS_MOPHO_X4;
+    		}
+    	return new String[] { "Main" };		// never happens
+    	} 
+
+    /** Return a list whether patches in banks are writeable.  Default is { false } */
+    public boolean[] getWriteableBanks() 
+    	{ 
+    	return buildBankBooleans(128, 0, 0);
+    	}
+
+    /** Return a list whether individual patches can be written.  Default is FALSE. */
+    public boolean supportsPatchWrites() { return false; }
+
+    /** Return a list whether entire banks can be written.  Default is FALSE. */
+    public boolean supportsBankWrites() { return false; }
         
     }
 

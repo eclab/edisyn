@@ -5917,13 +5917,13 @@ public class SequentialProphetRev2 extends Synth
                 {
                 char[] name = (model.get("name", "Untitled") + "                ").toCharArray();
                 name[data.number - 256] = (char)(data.value);
-                model.set("name", new String(name));
+                model.set("name", new String(name).substring(0, MAXIMUM_NAME_LENGTH));
                 }
             else if (data.number >= 2304 && data.number <= 2323)  // Layer 2 Name
                 {
                 char[] name = (model.get("layer2name", "Untitled") + "                ").toCharArray();
                 name[data.number - 2304] = (char)(data.value);
-                model.set("layer2name", new String(name));
+                model.set("layer2name", new String(name).substring(0, MAXIMUM_NAME_LENGTH));
                 }
             else    
                 {

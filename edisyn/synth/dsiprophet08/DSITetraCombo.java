@@ -506,7 +506,7 @@ public class DSITetraCombo extends Synth
         HBox hbox = new HBox();
                                 
         VBox vbox = new VBox();
-        if (pd == null)
+        if (pd != null)
         	{
         	comp = (pd = new PatchDisplay(this, 4));
         	vbox.add(comp);
@@ -2143,7 +2143,7 @@ public class DSITetraCombo extends Synth
                 {
                 char[] name = (model.get("name", "Untitled") + "                ").toCharArray();
                 name[data.number - 696] = (char)(data.value);
-                model.set("name", new String(name));
+                model.set("name", new String(name).substring(0, 16));
                 }
             else
                 {

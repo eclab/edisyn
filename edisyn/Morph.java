@@ -308,7 +308,6 @@ public class Morph extends SynthPanel
                         takeFromNudge(_i, val - 11);
                     else
                         takeFromArchive(_i, val - 16);
-                    updateAgain();               
                     }
                 };
             }
@@ -404,6 +403,7 @@ public class Morph extends SynthPanel
             sources[val] = n.copy();
             buttons[val].getButton().setText("Nudge " + (nudge + 1));
             }
+		updateAgain();
         }
     
     void takeFromArchive(int val, int archive)
@@ -428,6 +428,7 @@ public class Morph extends SynthPanel
                 buttons[val].getButton().setText("Archive " + (char)('q' + archive));
                 }
             }
+		updateAgain();
         }
     
     void swap(int a, int b)
@@ -439,6 +440,7 @@ public class Morph extends SynthPanel
         buttons[a].getButton().setText(buttons[b].getButton().getText());
         buttons[b].getButton().setText(tempString);
         repaint();
+		updateAgain();
         }
         
     void save(int operation)
@@ -494,6 +496,7 @@ public class Morph extends SynthPanel
             String currentPatchName = synth.getPatchName(synth.getModel());
             buttons[menuButton].getButton().setText(currentPatchName == null ? "Current Patch" : "" + currentPatchName.trim());
     		menuButton = NO_MENU_BUTTON;
+			updateAgain();
     		}
     	}
     
@@ -504,6 +507,7 @@ public class Morph extends SynthPanel
             {
             menuButton = button;
             setToCurrentPatch();
+			updateAgain();
             }
         if (reset == 1)
             {
@@ -511,6 +515,7 @@ public class Morph extends SynthPanel
             	{
 	            menuButton = button;
 	            synth.doRequestCurrentPatch();
+	            // Notice we do NOT do updateAgain(); but we'll do it when the patch comes in
 	            }
 	        else
 	        	{
@@ -523,6 +528,7 @@ public class Morph extends SynthPanel
             	{
 	            menuButton = button;
 	            synth.doRequestPatch();
+	            // Notice we do NOT do updateAgain(); but we'll do it when the patch comes in
 	            }
 	        else
 	        	{
@@ -533,6 +539,7 @@ public class Morph extends SynthPanel
             {
             sources[button] = current.copy();
             buttons[button].getButton().setText("Joystick " + (++joy));
+			updateAgain();
             }
         else if (reset == 4)
             {
@@ -569,11 +576,13 @@ public class Morph extends SynthPanel
                 {
                 sources[button] = cancel;
                 }
+			updateAgain();
             }
         else if (reset == 5)
             {
             sources[button] = null;
             buttons[button].getButton().setText("[Empty]");
+			updateAgain();
             }
         }
     
@@ -583,7 +592,6 @@ public class Morph extends SynthPanel
     double lasty = 0;
     void update(double x, double y)
         {
-//        System.err.println("+updating");
         lastx = x;
         lasty = y;
         
@@ -595,54 +603,72 @@ public class Morph extends SynthPanel
         
         // determine how many models are non-null
         int count = 0;
+        int sole = -1;
         for(int i = 0; i < 4; i++)
+        	{
             if (sources[i] != null)
+                {
                 count++;
+                sole = i;
+                }
+            }
                         
         if (count == 0)         // uh ... stupid user
             return;
-                
-        Model[] models = new Model[count];
-        double[] weights = new double[4];
-        double[] lw = new double[count];
-        double[] w = new double[count];
-        
-        // Figure out our strategy
-        int strategy = blank.getModel().get("nonmetricparams", 0) + Model.CATEGORICAL_STRATEGY_MORPH;           // so it goes -3, -2, ..., 3
-        if (strategy >= 0 && sources[strategy] == null)         // fix null models right off the bat
-            strategy = Model.CATEGORICAL_STRATEGY_MORPH;
-        
-        // Fill the models, weights, and last weights
-        count = 0;
-        for(int i = 0; i < 4; i++)
-            if (sources[i] != null)
-                {
-                weights[i] = computeWeight(i, x, y);
-                w[count] = weights[i];
-                lw[count] = lastWeights[i];
-                models[count] = sources[i];
-                if (strategy == i)              // we were locking to this one
-                    strategy = count;       // change the index since we're removing null models
-                count++;
-                }
-        
-        // perform morph
-        synth.getUndo().setWillPush(false);
-        synth.setSendMIDI(false);
-        current = current.morph(synth.random, models, synth.getModel(), synth.getMutationKeys(), w, lw, strategy);
-        synth.getUndo().setWillPush(true);
-        synth.setSendMIDI(true);
-        lastWeights = weights;
-                                
-        // emit
-        if (blank.getModel().get("sendonchange", SEND_TYPE_NOTE) == SEND_TYPE_CHANGING)               // send only on change
-            {
-            Model backup = synth.getModel();
-            synth.model = current;
-            synth.sendAllParameters();
-            synth.model = backup;
-            }
-//        System.err.println("-updating");
+            
+        if (count == 1)		// we just have one model
+        	{
+			// just clone
+			synth.getUndo().setWillPush(false);
+			synth.setSendMIDI(false);
+			sources[sole].copyValuesTo(current);			// just copy 'em over
+			synth.getUndo().setWillPush(true);
+			synth.setSendMIDI(true);
+			lastWeights = new double[] { 1.0, 0.0, 0.0, 0.0 };
+        	}
+        else
+        	{ 
+			Model[] models = new Model[count];
+			double[] weights = new double[4];
+			double[] lw = new double[count];
+			double[] w = new double[count];
+		
+			// Figure out our strategy
+			int strategy = blank.getModel().get("nonmetricparams", 0) + Model.CATEGORICAL_STRATEGY_MORPH;           // so it goes -3, -2, ..., 3
+			if (strategy >= 0 && sources[strategy] == null)         // fix null models right off the bat
+				strategy = Model.CATEGORICAL_STRATEGY_MORPH;
+		
+			// Fill the models, weights, and last weights
+			count = 0;
+			for(int i = 0; i < 4; i++)
+				if (sources[i] != null)
+					{
+					weights[i] = computeWeight(i, x, y);
+					w[count] = weights[i];
+					lw[count] = lastWeights[i];
+					models[count] = sources[i];
+					if (strategy == i)              // we were locking to this one
+						strategy = count;       // change the index since we're removing null models
+					count++;
+					}
+		
+			// perform morph
+			synth.getUndo().setWillPush(false);
+			synth.setSendMIDI(false);
+			current = current.morph(synth.random, models, synth.getModel(), synth.getMutationKeys(), w, lw, strategy);
+			synth.getUndo().setWillPush(true);
+			synth.setSendMIDI(true);
+			lastWeights = weights;
+			}
+
+			// emit
+			if (blank.getModel().get("sendonchange", SEND_TYPE_NOTE) == SEND_TYPE_CHANGING)               // send only on change
+				{
+				Model backup = synth.getModel();
+				synth.model = current;
+				synth.sendAllParameters();
+				synth.model = backup;
+				}
         }
         
     double computeWeight(int index, double x, double y)

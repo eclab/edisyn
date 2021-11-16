@@ -93,7 +93,9 @@ public abstract class Synth extends JComponent implements Updatable
     public JMenuItem hillClimbMenu;
     /** The "Morph" menu */
     public JMenuItem morphMenu;
-    /** The "Send Test Notes" menu */
+    /** The "Librarian" menu */
+    public JMenuItem librarianMenu;
+    /** The "Report Next Controller MIDI" menu */
     public JCheckBoxMenuItem testNotes;
     /** The "Repeatedly Send Current Patch" menu */
     public JCheckBoxMenuItem repeatCurrentPatch;
@@ -101,6 +103,8 @@ public abstract class Synth extends JComponent implements Updatable
     public JComponent hillClimbPane;
     /** The Morphing pane */
     public JComponent morphPane;
+    /** The "Librarian" pane */
+    public JComponent librarianPane;
     /** The "Batch Download..." pane */
     public JMenuItem getAll;
     /** The "Report Next Controller MIDI" menu */
@@ -129,6 +133,18 @@ public abstract class Synth extends JComponent implements Updatable
     // The undo
     protected Undo undo = new Undo(this);
     
+    // This flag is a bandaid over a difficult problem: how to only do backups for the first
+    // of several incomplete parses.  When parses come in, and they're incomplete, we want
+    // to backup only for the first of them, not backup every time a new parse comes in.
+    // The probem is that we can't tell if an incomplete parse is the *first* such parse -- 
+    // we could get some willy-nilly random incomplete parse coming in.  They way I'm handling
+    // this is as follows.  When we request a patch from the synth, we clear this flag.  Then
+    // when a patch comes in, and it is INCOMPLETE, we do a backup and set the flag.  When
+    // the next incomplete part comes in, we don't do a backup.  If a COMPLETE comes in and
+    // the flag is not set, we backup: at any rate we clear the flag.  If a FAILED or CANCELED
+    // occurs we just clear the flag.
+    boolean backupDoneForParse = false;
+    
     public Undo getUndo() { return undo; }
     
     // The current copy preamble    
@@ -148,6 +164,8 @@ public abstract class Synth extends JComponent implements Updatable
 
     /** Returns the model associated with this editor. */
     public Model getModel() { return model; }
+    public void setModel(Model model) { this.model = model; }
+    
     
     boolean testIncomingControllerMIDI;
     boolean testIncomingSynthMIDI;
@@ -343,7 +361,6 @@ public abstract class Synth extends JComponent implements Updatable
 
 
     // CC HANDLING AND MAPPING
-        
 
     // Our CC Map
     CCMap ccmap;
@@ -498,6 +515,18 @@ public abstract class Synth extends JComponent implements Updatable
         {
         loadSynths();
         }
+    
+    public int getSynthNum()
+    	{
+    	String name = this.getClass().getName();
+    	for(int i = 0; i < synthClassNames.length; i++)
+    		{
+    		if (synthClassNames[i].equals(name))
+    			return i;
+    		}
+    	return -1;
+    	}
+    	
     
     static Class getSynth(int num)
         {
@@ -962,7 +991,7 @@ public abstract class Synth extends JComponent implements Updatable
         revise(model);
         }
         
-    boolean printRevised = true;
+    public boolean printRevised = true;
     
     /** Only revises / issues warnings on out-of-bounds numerical parameters. 
         You probably want to override this to check more stuff. */
@@ -1198,7 +1227,8 @@ public abstract class Synth extends JComponent implements Updatable
             }
             
         // update Morpher?
-        if (tabs.getSelectedComponent() == morphPane)
+        if (tabs.getSelectedComponent() == morphPane 
+        	&& (val == PARSE_SUCCEEDED || val == PARSE_SUCCEEDED_UNTITLED))		// ONLY when we have completed loading...
         	{
         	morph.setToCurrentPatch();
         	}
@@ -1290,23 +1320,33 @@ public abstract class Synth extends JComponent implements Updatable
                                             // result is now PARSE_ERROR
                                             }
                                          
-                                        incomingPatch = (result == PARSE_SUCCEEDED || result == PARSE_SUCCEEDED_UNTITLED);
-                                        if (result == PARSE_CANCELLED)
+                                        undo.setWillPush(true);
+                                        if (!backup.keyEquals(getModel()))  // it's changed, do an undo push
                                             {
+                                            if (!backupDoneForParse) { undo.push(backup); backupDoneForParse = true; } 
+                                            }
+
+                                        incomingPatch = (result == PARSE_SUCCEEDED || result == PARSE_SUCCEEDED_UNTITLED);
+                                        if (incomingPatch)
+                                        	{
+                                            backupDoneForParse = false;		// reset
+                                        	}
+                                        else if (result == PARSE_CANCELLED)
+                                            {
+                                            backupDoneForParse = false;		// reset
                                             // nothing
                                             }
                                         else if (result == PARSE_FAILED)
                                             {
+                                            backupDoneForParse = false;		// reset
                                             showSimpleError("Receive Error", "Could not read the patch.");
                                             }
                                         else if (result == PARSE_ERROR)
                                             {
+                                            backupDoneForParse = false;		// reset
                                             showSimpleError("Receive Error", "An error occurred on reading the patch.");
                                             }
 
-                                        undo.setWillPush(true);
-                                        if (!backup.keyEquals(getModel()))  // it's changed, do an undo push
-                                            undo.push(backup);
                                         setSendMIDI(true);
                                         if (getSendsParametersAfterNonMergeParse())
                                             {
@@ -2051,7 +2091,6 @@ public abstract class Synth extends JComponent implements Updatable
         
         if (result == PARSE_CANCELLED)
             {
-            System.err.println("CANCELLED");
             // nothing
             mergeSynth = null;
             setSendMIDI(false);
@@ -2059,7 +2098,6 @@ public abstract class Synth extends JComponent implements Updatable
             }
         else if (result == PARSE_INCOMPLETE)
             {
-            System.err.println("INCOMPLETE");
             setSendMIDI(false);
             return result;
             }
@@ -2095,13 +2133,14 @@ public abstract class Synth extends JComponent implements Updatable
                                 
             undo.setWillPush(true);
             if (!backup.keyEquals(getModel()))  // it's changed, do an undo push
-                undo.push(backup);
+				undo.push(backup);
             setSendMIDI(true);
             
             // sometimes synths don't have enough time after a random merge, so we pause here
             simplePause(getPauseAfterReceivePatch());
             sendAllParameters();
 
+			backupDoneForParse = false;
             return result;
             }
         }
@@ -3927,6 +3966,20 @@ public abstract class Synth extends JComponent implements Updatable
                 }
             });
 
+        librarianMenu = new JMenuItem("Open Librarian");
+        menu.add(librarianMenu);
+        librarianMenu.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                doLibrarian();
+                }
+            });
+        if (getNumberNames() == null)		// does not support librarians
+        	{
+        	librarianMenu.setEnabled(false);
+        	}
+
         menu.addSeparator();
         
         menu.add(copyTab);
@@ -5174,6 +5227,7 @@ public abstract class Synth extends JComponent implements Updatable
                 
         setMergeProbability(0.0);
         performRequestCurrentDump();
+		backupDoneForParse = false;		// reset
         }  
     
     /** Milliseconds in which we pause before sending a patch request.  The reason for this is that 
@@ -5196,6 +5250,7 @@ public abstract class Synth extends JComponent implements Updatable
             setMergeProbability(0.0);
             performRequestDump(tempModel, true);
             }
+		backupDoneForParse = false;		// reset
         } 
 
     void doRequestNextPatch()
@@ -5210,6 +5265,7 @@ public abstract class Synth extends JComponent implements Updatable
         resetBlend();
         setMergeProbability(0.0);
         performRequestDump(tempModel, true);
+		backupDoneForParse = false;		// reset
         } 
         
     public void doRequestMerge(double percentage)
@@ -5227,6 +5283,7 @@ public abstract class Synth extends JComponent implements Updatable
             setMergeProbability(percentage);
             performRequestDump(tempModel, false);
             }
+		backupDoneForParse = false;		// reset
         }
                 
     void doSendPatch()
@@ -6101,7 +6158,7 @@ public abstract class Synth extends JComponent implements Updatable
         (3) other data, notably Integers. #3 is stripped out, and 1 and 2 are concatenated into a stream of
         bytes suitable to save as a file or send to a synthesizer as a collection of sysex messages.
     */
-    public byte[] flatten(Object[] data)
+    public static byte[] flatten(Object[] data)
         {
         if (data == null)
             return null;
@@ -6223,7 +6280,7 @@ public abstract class Synth extends JComponent implements Updatable
         HashMap map = new HashMap();
         for(int i = 0; i < p.length; i++)
             {
-            if (p[i].bank)
+            if (p[i].isBankSysex)
                 {
                 String classname = getClassNames()[p[i].synth];
                 String bankname = getBankName(classname, flatten(p[i].sysex));
@@ -7600,6 +7657,37 @@ public abstract class Synth extends JComponent implements Updatable
         
         
         
+    ////// LIBRARIAN
+    
+    Librarian librarian;
+    boolean librarianOpen = false;
+        
+    void doLibrarian()
+        {
+        if (librarianOpen)
+            {
+            Component selected = tabs.getSelectedComponent();
+            tabs.remove(librarianPane);
+            librarianMenu.setText("Open Librarian");
+            if (selected == librarianPane)  // we were in the morph pane when this menu was selected
+                tabs.setSelectedIndex(0);
+            librarianOpen = false;
+            }
+        else
+            {
+            if (librarian == null)	
+            	{
+            	librarian = new Librarian(this);
+            	}
+            librarianPane = addTab("Librarian", librarian);
+            tabs.setSelectedComponent(librarianPane);
+            librarianMenu.setText("Close Librarian");
+            librarianOpen = true;
+            }
+        }  
+        
+        
+        
         
     //////// BATCH DOWNLOADING
     
@@ -8494,23 +8582,21 @@ public abstract class Synth extends JComponent implements Updatable
     
     //// LIBRARIAN SUPPORT
     
-    public String[] buildIntegerNames(int num)
+    /** Produce a list of Strings the form { "start", "start+1", "start+2", "start+3", ..., "start+num" },
+    	for example, buildIntegerNames(4, 2) produces { "2", "3", "4" "5" }.  This is
+    	a useful utility function for implementing getNumberNames() */
+    public static String[] buildIntegerNames(int num, int start)
     	{
     	String[] names = new String[num];
     	for(int i = 0; i < names.length; i++)
-    		names[i] = "" + i;
-    	return names;
-    	}
-
-    public String[] buildIntegerNames(int num, int offset)
-    	{
-    	String[] names = new String[num];
-    	for(int i = 0; i < names.length; i++)
-    		names[i] = "" + (i + offset);
+    		names[i] = "" + (i + start);
     	return names;
     	}
     
-    public boolean[] buildBankBooleans(int numTrue, int numFalse, int numTrue2)
+    /** Produce a list of booleans of the form { true, true, ..., false, false, ..., true, true }
+    	with the number of true, false, and true ("true2") sequences respectively.  This is 
+    	a useful utility function for implementing getWritableBanks()  */
+    public static boolean[] buildBankBooleans(int numTrue, int numFalse, int numTrue2)
     	{
     	boolean[] w = new boolean[numTrue + numFalse + numTrue2];
     	for(int i = 0; i < numTrue; i++)
@@ -8520,18 +8606,39 @@ public abstract class Synth extends JComponent implements Updatable
     	return w;
     	}
     
-    /** Return a list of all patch number names.  Default is { "Main" } */
-    public String[] getPatchNumberNames()  { return new String[] { "Main" }; }
+    /** Return a list of all patch number names.  
+    	Default is null, which indicates that the patch editor does not support librarians.  */
+    public String[] getNumberNames() { return null; } // { return new String[] { "Main" }; }
 
-    /** Return a list of all bank names.  Default is { "Main" } */
-    public String[] getBankNames() { return new String[] { "Main" }; }
+    /** Return a list of all bank names.  Default is null, indicating no banks are supported.  */
+    public String[] getBankNames() { return null; } // { return new String[] { "Main" }; }
 
-    /** Return a list whether patches in banks are writeable.  Default is { false } */
-    public boolean[] getWriteableBanks() { return new boolean[] { false }; }
+    /** Return a list of each bank, indicating which are writeable.  Default is null. */
+    public boolean[] getWriteableBanks() { return null; }
 
-    /** Return a list whether individual patches can be written.  Default is FALSE. */
+    /** Return whether individual patches can be written.  Default is FALSE. */
     public boolean supportsPatchWrites() { return false; }
 
-    /** Return a list whether entire banks can be written.  Default is FALSE. */
-    public boolean supportsBankWrites() { return false; }
+    /** Return a list whether entire banks can be written.  Default is !supportsPatchWrites(). */
+    public boolean supportsBankWrites() { return !supportsPatchWrites(); }
+
+    /** Sets patch.number and patch.bank to number and bank respectively, and also updates
+    	the sysex messages to reflect the revised patch number and bank if possible.
+    	By default just sets patch.number=number and patch.bank = bank.  */
+    public void setNumberAndBank(Patch patch, int number, int bank) { patch.number = number; patch.bank = bank; }
+
+    /** Sets patch.number and patch.bank to the number and bank stored in the sysex message.
+    	By default this just sets the number to NUMBER_NOT_SET and the bank to 0.  */
+    public void updateNumberAndBank(Patch patch) { patch.number = Patch.NUMBER_NOT_SET; patch.bank = 0; }
+
+    /** Parses a given patch number from the provided bank sysex, and returns PARSE_SUCCEEDED if successful,
+    	else PARSE_FAILED (the default). */
+    public int parseFromBank(byte[] bankSysex, int number) { return PARSE_FAILED; }
+
+    /** Emits the models as a bank.  The bank number is provided if necessary. By default does nothing. */
+    public Object[] emitBank(Model[] models, int bank) { return new Object[0]; }
+    
+    /** Returns the appropriate pause after a bank write.  By default this is just
+    	getPauseAfterWritePatch() */
+    public int getPauseAfterWriteBank() { return getPauseAfterWritePatch(); }    
     }

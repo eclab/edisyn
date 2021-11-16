@@ -25,17 +25,17 @@ public class RolandJV880Rec extends Recognize
             {
             if (start >= sysex.length)
                 {
-                System.err.println("RolandJV880MultiRec.getNextSysexPatchGroup(): could not find tone " + i + " before messages terminated.");
+                System.err.println("RolandJV880Rec.getNextSysexPatchGroup(): could not find tone " + i + " before messages terminated.");
                 return start;
                 }
             else if (!recognize(sysex[start + i]))
                 {
-                System.err.println("RolandJV880MultiRec.getNextSysexPatchGroup(): could not find tone " + i + ".");
+                System.err.println("RolandJV880Rec.getNextSysexPatchGroup(): could not find tone " + i + ".");
                 return start;
                 }
             else if (sysex[start + i].length != 116 + 11)
                 {
-                System.err.println("RolandJV880MultiRec.getNextSysexPatchGroup(): could not find tone " + i + ", invalid length " + sysex[start + i].length);
+                System.err.println("RolandJV880Rec.getNextSysexPatchGroup(): could not find tone " + i + ", invalid length " + sysex[start + i].length);
                 return start;
                 }
             }
@@ -50,14 +50,36 @@ public class RolandJV880Rec extends Recognize
             (data[3] == (byte)0x46) &&
             (data[4] == (byte)0x12) &&
                 
-            // Internal patch
+            /*
+                        // Internal patch
                 ((data[5] == 0x01 && (data[7] == 0x20 || data[7] == 0x28 || data[7] == 0x29 || data[7] == 0x2A || data[7] == 0x2B)) || 
                 // Card Patch
                 (data[5] == 0x02 && (data[7] == 0x20 || data[7] == 0x28 || data[7] == 0x29 || data[7] == 0x2A || data[7] == 0x2B)) ||
                 // Patch Mode Temporary Patch or Performance Mode Temporry Patch
                 (data[5] == 0x00 && data[6] == 0x08 && (data[7] == 0x20 || data[7] == 0x28 || data[7] == 0x29 || data[7] == 0x2A || data[7] == 0x2B))) &&
-                 
-            (data.length == 553 || data.length == 34 + 11 || data.length == 116 + 11));
+			*/
+
+            // Internal patch
+                ((data[5] == 0x01 && data[6] >= 0x40 && 
+                	//(data[7] == 0x10 || data[7] == 0x20 || data[7] == 0x40) &&
+                	!(data[6] == 0x7F && data[7] == 0x40))	// rhythm setup
+                	||
+                // Card Patch
+                (data[5] == 0x02 && data[6] >= 0x40 && 
+                	//(data[7] == 0x10 || data[7] == 0x20 || data[7] == 0x40) &&
+                	!(data[6] == 0x7F && data[7] == 0x40))	// rhythm setup
+                	||
+                // Performance Mode Temporary Patch
+                (data[5] == 0x00 && data[6] < 0x07 
+                	// && (data[7] == 0x10 || data[7] == 0x20 || data[7] == 0x40)
+                	)
+                	||
+                // Patch Mode Temporary Patch
+                (data[5] == 0x00 && data[6] == 0x08 
+                //&& data[7]== 0x20
+                )) &&
+
+	            (data.length == 553 || data.length == 34 + 11 || data.length == 116 + 11));
         }
         
         

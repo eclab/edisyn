@@ -82,7 +82,7 @@ public class RolandJV880Multi extends Synth
             }
 
 
-        model.set("performancename", "Init Patch");  // has to be 10 long
+        model.set("name", "Init Patch");  // has to be 10 long
 
         model.set("bank", 0);           // internal
         model.set("number", 0);
@@ -96,8 +96,54 @@ public class RolandJV880Multi extends Synth
         JFrame frame = super.sprout();
         // It doesn't make sense to send to current patch
         transmitTo.setEnabled(false);
+        addJV880Menu();
         return frame;
         }         
+
+	int playPart = 0;
+    public void addJV880Menu()
+        {
+        JMenu menu = new JMenu("JV-880");
+        menubar.add(menu);
+
+        ButtonGroup g = new ButtonGroup();
+        JRadioButtonMenuItem m = new JRadioButtonMenuItem("Play on Default Channel");
+		m.addActionListener(new ActionListener()
+			{
+			public void actionPerformed(ActionEvent e)
+				{
+				playPart = 0;
+				}
+			});
+        g.add(m);
+        m.setSelected(true);
+        menu.add(m);
+
+        for(int i = 0; i < 8; i++)
+            {
+            final int _i = i;
+            m = new JRadioButtonMenuItem("Play on Part " + (i + 1) + " Channel");
+            m.addActionListener(new ActionListener()
+                {
+                public void actionPerformed(ActionEvent e)
+                    {
+                    playPart = (_i + 1);
+                    }
+                });
+            g.add(m);
+            menu.add(m);
+            }
+        }
+
+    public int getTestNoteChannel()
+    	{
+    	if (playPart == 0)
+    		return super.getTestNoteChannel();
+    	else
+    		{
+    		return model.get("part" + playPart + "receivechannel", 16);
+    		}
+    	}
 
     public String getDefaultResourceFileName() { return "RolandJV880Multi.init"; }
     public String getHTMLResourceFileName() { return "RolandJV880Multi.html"; }
@@ -167,7 +213,7 @@ public class RolandJV880Multi extends Synth
         hbox2.add(comp);
         vbox.add(hbox2);
         
-        comp = new StringComponent("Patch Name", this, "performancename", 12, "Name must be up to 12 ASCII characters.")
+        comp = new StringComponent("Patch Name", this, "name", 12, "Name must be up to 12 ASCII characters.")
             {
             public String replace(String val)
                 {
@@ -541,6 +587,7 @@ public class RolandJV880Multi extends Synth
                     // so by the time the dump request has been made, the window is shown and
                     // frontmost.
                                                 
+                    synth.setTitleBarAux("[Part " + part + " of " + RolandJV880Multi.this.model.get("name", "") + "]");
                     synth.sprout();
                     JFrame frame = ((JFrame)(SwingUtilities.getRoot(synth)));
                     frame.setVisible(true);
@@ -753,11 +800,11 @@ public class RolandJV880Multi extends Synth
         
     public byte[] getData(String key)
         {
-        if (key.startsWith("performancename"))                          // name is 12-byte
+        if (key.startsWith("name"))                          // name is 12-byte
             {
             byte[] data = new byte[12];
-            String name = model.get(key, "Untitled");
-            for(int i = 0; i < name.length(); i++)
+        	String name = model.get("name", "") + "            ";
+            for(int i = 0; i < data.length; i++)
                 {
                 data[i] = (byte)(name.charAt(i));
                 }
@@ -914,7 +961,7 @@ public class RolandJV880Multi extends Synth
                 {
                 name = name + ((char)data[pos++]);
                 }
-            model.set("performancename", name);
+            model.set("name", name);
                         
             // Load other patch common
             for(int i = 12; i < allGlobalParameters.length; i++)  // skip name parameters
@@ -1000,7 +1047,7 @@ public class RolandJV880Multi extends Synth
         byte[] buf = prepareBuffer(new byte[31 + 11], tempModel, toWorkingMemory, 0);
                 
         int pos = 9;
-        String name = model.get("performancename", "") + "            ";
+        String name = model.get("name", "") + "            ";
         for(int i = 0; i < 12; i++)
             {
             buf[pos++] = (byte)(name.charAt(i) & 0x7F);

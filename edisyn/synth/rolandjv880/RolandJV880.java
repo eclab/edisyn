@@ -1336,8 +1336,8 @@ public class RolandJV880 extends Synth
         if (key.equals("name"))                                // name is 12-byte
             {
             byte[] data = new byte[12];
-            String name = model.get(key, "Untitled");
-            for(int i = 0; i < name.length(); i++)
+	        String name = model.get("name", "") + "            ";
+            for(int i = 0; i < data.length; i++)
                 {
                 data[i] = (byte)(name.charAt(i));
                 }
@@ -1412,7 +1412,7 @@ public class RolandJV880 extends Synth
                         
             // gather data which is checksummed
             byte[] checkdata = new byte[4 + 12];
-            System.arraycopy(new byte[] { AA, BB, CC, DD }, 0, data, 0, 4);
+            System.arraycopy(new byte[] { AA, BB, CC, DD }, 0, checkdata, 0, 4);
             System.arraycopy(payload, 0, checkdata, 4, payload.length);
                         
             // concatenate all data
@@ -1655,18 +1655,13 @@ public class RolandJV880 extends Synth
         if (name.length() > MAXIMUM_NAME_LENGTH)
             name = name.substring(0, MAXIMUM_NAME_LENGTH);
         
-        StringBuffer nameb = new StringBuffer(name);                            
-        for(int i = 0 ; i < nameb.length(); i++)
+        StringBuffer nameb = new StringBuffer(name);  
+        int len = nameb.length();                          
+        for(int i = 0 ; i < len; i++)
             {
             char c = nameb.charAt(i);
-            if (c >= 'A' && c <= 'Z')
-                continue;
-            else if (c >= '0' && c <= '9')
-                continue;
-            else if (c == '*' || c == '-' || c == '/' || c == ' ')
-                continue;
-            else
-                nameb.setCharAt(i, ' ');
+            if (c < 32 || c > 127)
+            	nameb.setCharAt(i, ' ');
             }
         name = nameb.toString();
         return super.revisePatchName(name);  // trim again

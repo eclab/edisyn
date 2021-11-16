@@ -8,7 +8,12 @@
 
 <br><br><h3>Communicating with Edisyn</h3>
 
-When you set up MIDI in the patch editor, you can specify the MIDI channel and the Synth ID.  Set your synthesizer's Performance Receive channel ("Control channel") to the same as Edisyn's channel (perhaps Channel 16), and its "Unit number" to the same as Edisyn's Synth ID (perhaps 17).  Set Program Change, Bank Select, and Exclusive to ON.   Finally, make sure the Patch/Performance button is set to PERFORMANCE, and the Edit button is OFF (these two are important, else your JV won't respond properly). 
+When you set up MIDI in the patch editor, you can specify the MIDI channel and the Synth ID.  Set your synthesizer's Performance Receive channel ("Control channel", under System in Performance Mode, not to be confused with the Rx Channel) to the same as Edisyn's channel (perhaps Channel 16), and its "Unit number" to the same as Edisyn's Synth ID (perhaps 17).  Set Program Change, Bank Select, and Exclusive to ON.   Finally, make sure the Patch/Performance button is set to PERFORMANCE, and the Edit button is OFF (these two are important, else your JV won't respond properly). 
+
+
+<br><br><h3>About the Menu</h3>
+
+Edisyn's MIDI channel is set to the Performance Receive (Control) Channel so Edisyn can change multimode patches.  To play a sound in a given part, yo'll need Edisyn to send note data out the appropriate Part channel.  To do this, just use the menu to set the Part you'd like Edisyn to play, and it will use the Receive Channel of that Part as you have set it in Edisyn.  If you use the menu to set the channel to the "default" channel, it'll use Edisyn's default MIDI output instead.
 
 <br><br><h3>Gotchas</h3>
 

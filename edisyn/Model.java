@@ -1442,15 +1442,6 @@ public class Model implements Cloneable
     
     public Model morph(Random random, Model[] models, Model categoricalDefaultModel, String[] keys, double[] weights, double[] previousWeights, int categoricalStrategy)
         {
-        /*
-        // First ... if none of our weights have changed, there's no reason to do this at all
-        boolean nothingChanged = true;
-        for(int i = 0; i < weights.length; i++)
-        if (weights[i] == previousWeights[i])
-        { nothingChanged = false; break; }
-        if (nothingChanged) return this;
-        */
-        
         // prepare undo listener if any (likely it will have been deleted)
         if (undoListener!= null)
             {

@@ -23,6 +23,7 @@ edisyn.synth.korgwavestation.KorgWavestationPatch	Korg Wavestation SR [Patch]
 edisyn.synth.korgwavestation.KorgWavestationPerformance	Korg Wavestation SR [Performance]
 edisyn.synth.korgwavestation.KorgWavestationSequence	Korg Wavestation SR [Sequence]
 edisyn.synth.korgvolca.KorgVolca	Korg Volca Series
+#edisyn.synth.kurzweilk2600.KurzweilK2600	Kurzweil K2600
 edisyn.synth.maudiovenom.MAudioVenom	M-Audio Venom
 edisyn.synth.maudiovenom.MAudioVenomArp M-Audio Venom [Arp]
 edisyn.synth.maudiovenom.MAudioVenomGlobal	M-Audio Venom [Global]
@@ -36,6 +37,7 @@ edisyn.synth.redsounddarkstar.RedSoundDarkStar	Red Sound DarkStar
 edisyn.synth.rolandd110.RolandD110Tone	Roland D-110 [Tone]
 edisyn.synth.rolandd110.RolandD110Multi	Roland D-110 [Multi]
 edisyn.synth.rolandjv880.RolandJV880	Roland JV-80/880
+edisyn.synth.rolandjv880.RolandJV880Drum	Roland JV-80/880 [Drum]
 edisyn.synth.rolandjv880.RolandJV880Multi	Roland JV-80/880 [Multi]
 edisyn.synth.sequentialprophetrev2.SequentialProphetRev2	Sequential Prophet Rev2
 edisyn.synth.waldorfblofeld.WaldorfBlofeld	Waldorf Blofeld

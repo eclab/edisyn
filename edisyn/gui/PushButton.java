@@ -76,9 +76,9 @@ public class PushButton extends JPanel
                 {
                 JMenuItem menu = new JMenuItem(options[i]);
                 if (enabled != null)
-                	{
-                	menu.setEnabled(enabled[i]);
-                	}
+                    {
+                    menu.setEnabled(enabled[i]);
+                    }
                 final int _i = i;
                 menu.addActionListener(new ActionListener()
                     {

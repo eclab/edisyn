@@ -104,9 +104,9 @@ public class Style
     /** Width of the unset region in Dials etc.  Should be a multiple of 2, ideally 2*/
     public static float DIAL_STROKE_THIN_WIDTH() { return 3.0f; }
     /** The stroke for the set region in Dials etc. */
-    public static BasicStroke DIAL_THIN_STROKE() { return new BasicStroke(DIAL_STROKE_THIN_WIDTH(), BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL); }
+    public static BasicStroke DIAL_THIN_STROKE() { return new BasicStroke(DIAL_STROKE_THIN_WIDTH(), BasicStroke.CAP_ROUND, BasicStroke.JOIN_BEVEL); }
     /** The stroke for the unset region in Dials etc. */
-    public static BasicStroke DIAL_THICK_STROKE() { return new BasicStroke(DIAL_STROKE_WIDTH(), BasicStroke.CAP_BUTT, BasicStroke.JOIN_BEVEL); }
+    public static BasicStroke DIAL_THICK_STROKE() { return new BasicStroke(DIAL_STROKE_WIDTH(), BasicStroke.CAP_ROUND, BasicStroke.JOIN_BEVEL); }
     /** Font used in the center of a dial. */
     public static Font DIAL_FONT() { return MEDIUM_FONT(); }
     /** Insets for labelled dials to set them apart slightly from one another. */

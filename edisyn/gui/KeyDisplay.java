@@ -40,7 +40,7 @@ public class KeyDisplay extends NumericalComponent
 
     public String getNote(int val)
         {
-        return KEYS[val % 12] + " " + (val / 12);
+        return KEYS[val % 12] + " " + ((val / 12) + octavesBelowZero);
         }
                 
     public Dimension getPreferredSize() { return new Dimension(whiteKeyVals.length * Style.KEYBOARD_DEFAULT_WHITE_KEY_WIDTH() + 1, Style.KEYBOARD_DEFAULT_WHITE_KEY_HEIGHT()); }
@@ -68,9 +68,9 @@ public class KeyDisplay extends NumericalComponent
         
     boolean dynamicUpdate;
     
-    public int OCTAVES_BELOW_ZERO_YAMAHA = -2;
-    public int OCTAVES_BELOW_ZERO_SPN = -1;
-    public int OCTAVES_BELOW_ZERO_MIDI = 0;
+    public static final int OCTAVES_BELOW_ZERO_YAMAHA = -2;
+    public static final int OCTAVES_BELOW_ZERO_SPN = -1;
+    public static final int OCTAVES_BELOW_ZERO_MIDI = 0;
     int octavesBelowZero = OCTAVES_BELOW_ZERO_YAMAHA;               // Yamaha
     
     public JLabel getLabel() { return label; }

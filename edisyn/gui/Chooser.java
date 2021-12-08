@@ -72,9 +72,9 @@ public class Chooser extends NumericalComponent
     public void update(String key, Model model) 
         { 
         if (combo == null) 
-        	{
-        	return;  // we're not ready yet
-        	}
+            {
+            return;  // we're not ready yet
+            }
         
         int state = getState();
                 
@@ -325,11 +325,11 @@ public class Chooser extends NumericalComponent
         setMax(_max);
         setCallActionListener(true);
 
-		if (getState() >= elements.length)
-			{
-			System.err.println("resetting from " + getState());
-    	    setState(0);
-    	    }
+        if (getState() >= elements.length)
+            {
+            System.err.println("resetting from " + getState());
+            setState(0);
+            }
         revalidate();
         repaint();
         }

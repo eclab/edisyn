@@ -89,7 +89,7 @@ public class RolandD110Tone extends Synth
         "Jam-5", "Jam-6", "Jam-7", "Jam-8", "Jam-9", "Jam-10", "Jam-11", "Jam-12", "Jam-13", "Jam-14", "Jam-15", "Jam-16", "Jam-17", "Jam-18", "Jam-19",
         "Jam-20", "Jam-21", "Jam-22", "Jam-23", "Jam-24", "Jam-25", "Jam-26", "Jam-27", "Jam-28", "Jam-29", "Jam-30", "Jam-31", "Jam-32", "Jam-33", "Jam-34" };
                 
-    public static final String[] TONE_GROUP_SHORT = new String[] { "A", "B", "I", "R" };
+    public static final String[] TONE_GROUP_SHORT = new String[] { "a", "b", "i", "r" };
     public static final String[] TONE_GROUP = new String[] { "Preset A", "Preset B", "Internal/Card", "Rhythm" };
     public static final String[] WRITEABLE_TONE_GROUP = new String[] { "Internal/Card" };
     public static final String[] WG_KEYFOLLOW = new String[] { "-1", "-1/2", "-1/4", "0", "1/8", "1/4", "3/8", "1/2", "5/8", "3/4", "7/8", "1", "5/4", "3/2", "2", "S1", "S2" };    
@@ -312,7 +312,7 @@ public class RolandD110Tone extends Synth
                 {
                 final RolandD110Multi synth = new RolandD110Multi();
                 if (tuple != null)
-                    synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver(), synth.buildKey2Receiver());
+                    synth.tuple = new Midi.Tuple(tuple, synth.buildInReceiver(), synth.buildKeyReceiver(), synth.buildKey2Receiver());
                 if (synth.tuple != null)
                     {       
                     // This is a little tricky.  When the dump comes in from the synth,
@@ -416,7 +416,7 @@ public class RolandD110Tone extends Synth
         if (tuple != null)
             {
             final RolandD110Multi synth = new RolandD110Multi();
-            synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver(), synth.buildKey2Receiver());
+            synth.tuple = new Midi.Tuple(tuple, synth.buildInReceiver(), synth.buildKeyReceiver(), synth.buildKey2Receiver());
             if (synth.tuple != null)
                 {
                 synth.loadDefaults();
@@ -468,7 +468,7 @@ public class RolandD110Tone extends Synth
         if (tuple != null)
             {
             final RolandD110Multi synth = new RolandD110Multi();
-            synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver(), synth.buildKey2Receiver());
+            synth.tuple = new Midi.Tuple(tuple, synth.buildInReceiver(), synth.buildKeyReceiver(), synth.buildKey2Receiver());
             
             // we need to set me to be the active synth because the little confirmation window that
             // pops up prior to this causes me to NOT be the active synth, grrr...
@@ -755,8 +755,10 @@ public class RolandD110Tone extends Synth
         comp = new LabelledDial("Time 3", this, "p" + partial + "penvtime3", color, 0, 100);
         hbox.add(comp);
 
-        comp = new LabelledDial("Sustain Level", this, "p" + partial + "penvsustainlevel", color, 0, 100, 50);
-        hbox.add(comp);
+        /*
+          comp = new LabelledDial("Sustain Level", this, "p" + partial + "penvsustainlevel", color, 0, 100, 50);
+          hbox.add(comp);
+        */
 
         comp = new LabelledDial("Time 4", this, "p" + partial + "penvtime4", color, 0, 100);
         hbox.add(comp);
@@ -766,9 +768,9 @@ public class RolandD110Tone extends Synth
 
         comp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
             new String[] { null, "p" + partial + "penvtime1", "p" + partial + "penvtime2", "p" + partial + "penvtime3", null, "p" + partial + "penvtime4" },
-            new String[] { "p" + partial + "penvlevel0", "p" + partial + "penvlevel1", "p" + partial + "penvlevel2", "p" + partial + "penvsustainlevel", "p" + partial + "penvsustainlevel", "p" + partial + "endlevel" },
+            new String[] { "p" + partial + "penvlevel0", "p" + partial + "penvlevel1", "p" + partial + "penvlevel2", /*"p" + partial + "penvsustainlevel", "p" + partial + "penvsustainlevel", */ null, null, "p" + partial + "endlevel" },
             new double[] { 0, 0.2 / 100.0, 0.2 / 100.0, 0.2 / 100.0, 0.2, 0.2 / 100.0 },
-            new double[] { 1.0 / 100.0, 1.0 / 100.0, 1.0 / 100.0, 1.0 / 100.0, 1.0 / 100.0, 1.0 / 100.0 });
+            new double[] { 1.0 / 100.0, 1.0 / 100.0, 1.0 / 100.0, /*1.0 / 100.0, 1.0 / 100.0,*/ 0.5, 0.5, 1.0 / 100.0 });
             
         ((EnvelopeDisplay)comp).setAxis(1.0 / 100.0 * 50.0);  // is this centered right?
         hbox.addLast(comp);
@@ -1105,7 +1107,8 @@ public class RolandD110Tone extends Synth
     "penvlevel0",
     "penvlevel1",
     "penvlevel2",
-    "penvsustainlevel",
+    //"penvsustainlevel",                       // The MT-32 has this but not the D-110
+    "-",
     "endlevel",
     "plforate",
     "plfodepth",
@@ -1275,7 +1278,7 @@ public class RolandD110Tone extends Synth
         {
         if (key.equals("number")) return new byte[0];  // this is not emittable
         if (key.equals("bank")) return new byte[0];  // this is not emittable
-
+                
         byte AA = (byte)(0x04);
         int loc = part * TEMP_TONE_LENGTH;
         byte BB = (byte)((loc >>> 7) & 127);
@@ -1454,7 +1457,11 @@ public class RolandD110Tone extends Synth
             {
             for(int i = 0; i < allPartialParameters.length; i++)
                 {
-                if (allPartialParameters[i].endsWith("wgpcmwavenumber"))
+                if (allPartialParameters[i].equals("-"))
+                    {
+                    pos++;
+                    }
+                else if (allPartialParameters[i].endsWith("wgpcmwavenumber"))
                     {
                     model.set("p" + t + "wgpcmwavenumber", data[pos] | ((data[pos-1] >>> 1) << 7));
                     pos++;
@@ -1523,7 +1530,11 @@ public class RolandD110Tone extends Synth
             {
             for(int i = 0; i < allPartialParameters.length; i++)
                 {
-                if (allPartialParameters[i].endsWith("wgpcmwavenumber")) continue; // we just did wgwaveform, which included this
+                if (allPartialParameters[i].equals("-"))
+                    {
+                    buf[pos++] = 0;         // pitch sustain level
+                    }
+                else if (allPartialParameters[i].endsWith("wgpcmwavenumber")) continue; // we just did wgwaveform, which included this
                 else
                     {
                     d = getData("p" + t + allPartialParameters[i]);

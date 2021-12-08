@@ -4,13 +4,13 @@
 <h1>Roland D-110</h1> 
 <h2>Multi Patch Editor</h2>
 
-<p>This patch editor is designed for the D-110.  Its behavior with the D-10 is unknown.
+<p>This patch editor is designed for the D-110.  It will not work properly with the D-10.
 
 <br><br><h3>Communicating with Edisyn</h3>
 
 Set the synth ID to the same as your synthesizer (17 is customary).  Make certain that Memory Protect is OFF and (this is very important) that Overflow is OFF.  Earlier ROMs have a bug which causes sysex dumps to fail if Overflow is not OFF.  Note that you may have to Memory Protect to OFF every time you turn on the synthesizer.  
 
-<p>Set the Control Channel to Edisyn's output channel, or else you'll be able to download patches but not change them on the D-110, which would be confusing. Note that if you view the current Multi patch from the Tone patch menu, its channel will be set to the Tone patch's channel: you'll need to change the channel.  See <b>About the Menu</b> below for more on the implications of setting the Control Channel. 
+<p>Set Edisyn's channel to your D-110's Control Channel (1 is customary), or else you'll be able to download patches but not change them on the D-110, which would be confusing. You'll want the Control Channel different from the individual part channels (which normally start at 2).  Note that if you view the current Multi patch from the Tone patch menu, its channel will be set to the Tone patch's channel: you'll need to change the channel.  See <b>About the Menu</b> below for more on the implications of setting the Control Channel. 
 
 
 <br><br><h3>Real-Time Parameter Bugs</h3>

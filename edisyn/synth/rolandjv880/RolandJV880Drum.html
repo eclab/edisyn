@@ -1,0 +1,46 @@
+<html><head></head>
+<body>
+
+<h1>Roland JV-80 / JV-880</h1> 
+<h2>Drum Patch Editor</h2>
+
+<p>This patch editor ought to work properly with both the JV-80 and the JV-880.  However it has only been tested with the JV-880. Please let me know of any discrepancies you discover.
+
+<br><br><h3>Communicating with Edisyn</h3>
+
+Set up for the Drum is more or less the same as setting up for the Multi mode:
+
+<p>Be sure to have the patch/perform button on your JV-80/880 set to "perform".  When you set up MIDI in the patch editor, you can specify the MIDI channel and the Synth ID.  Set Edisyn's channel to the same as your synth's Part Receive channel for Part 8 (or "Rx ch" for Rhythm -- typically this is preset to 10), and its "Unit number" to the same as Edisyn's Synth ID (perhaps 17).  Set Program Change, Bank Select, and Exclusive to ON.  Make sure write protect is off if you want to write changes.  Finally, make sure the Edit button is OFF or your JV won't respond properly.
+
+
+<br><br><h3>About the Menu</h3>
+
+<ul>
+<li>There is no way to request Drum Preset A or B from the synth.  So Edisyn has them built-in: just choose them from the menu.
+
+<p><li>If you want to rearrange notes, you can use <b>Swap with Note...</b> or <b>Copy to Note...</b>
+</ul>
+ 
+<br><br><h3>Notes</h3>
+
+<ul>
+<li>Because the drum patch has so many notes, instead of having separate tabs for them, Edisyn lets you select a drum note using its online keyboard; then you can edit that note.  Selecting the drum note also changes the pitch of the test notes being sent by Edisyn.
+</ul>
+
+<br><br><h3>Gotchas</h3>
+
+<ul>
+<li>A drum patch is very large, and takes a bit to upload and download (about 8 seconds). However when requesting a patch it'll look like it's nearly instantaneous because the data comes in 61 separate messages, and the early messages update the first drum notes.  You have to be patient.    
+
+<p><li>There is no way for Edisyn to change the current patch to the Internal or Card patch: it can only download them.  Furthermore Edisyn cannot reliably send back the patch data it has just received in order to update the current patch because the patch data comes in 61 separate messages.  Instead, after you download the Internal or Card patch, you should manually send to the Current Patch <b>after it has been entirely downloaded</b>.
+</ul>
+
+<p><table border=0 cellpadding=0 cellspacing=5>
+<tr>
+<td align=right>By&nbsp;&nbsp;&nbsp;
+<td><b>Sean Luke</b>
+<tr>
+<td align=right>Date&nbsp;&nbsp;&nbsp;
+<td>April 2019
+</table>
+

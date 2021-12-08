@@ -14,43 +14,59 @@ import edisyn.util.*;
 public class Patch
     {
     // Is this a bank sysex message?
-    public boolean bank;
+    public boolean isBankSysex;
     // Sysex messages
     public byte[][] sysex;
-    // Which kind of synth editor is designed for this Patch?
+    // Which kind of synth editor is designed to edit this Patch?
     public int synth;
     // Patch name
     public String name = null;
     // Patch location
     public String location = null;
     
-    public Patch(int synth, byte[][] sysex, boolean bank)
+    // Indicates no number at all
+    public static final int NUMBER_NOT_SET = -1;
+    // The patch number, if there is one set.
+    public int number = NUMBER_NOT_SET;
+    // The patch bank, if there is one set.
+    // If there are NO banks, then the "bank" is always 0
+    public int bank = 0;
+    // was the bank and number set arbitrarily by the Library (a flag it uses)
+    public boolean arbitrary = false;
+    
+    public Patch(int synth, byte[][] sysex, boolean isBankSysex)
         {
         this.synth = synth;
         this.sysex = sysex;
-        this.bank = bank;
+        this.isBankSysex = isBankSysex;
         } 
     
+    public String getName()
+        {
+        return name;
+        }
+        
     public String toString()
         {
         return name;
         }
-    /*
-      public String toString()
-      {
-      String s = "Patch[" + (location == null ? "" : location) + " " + name + ", " + synth + ", " + bank + ", " + sysex.length + "\n";
-      for(int i = 0; i < sysex.length; i++)
-      {
-      s = s + ("" + i + " (" + sysex[i].length + ") ->");
-      for(int j = 0; j < sysex[i].length; j++)
-      {
-      s = s + (" " + StringUtility.toHex(sysex[i][j]));
-      }
-      s = s + "\n";
-      }
-      return s + "\n] ";
-      }
-    */
+        
+    public Patch(Patch patch)
+        {
+        isBankSysex = patch.isBankSysex;
+        synth = patch.synth;
+        name = patch.name;
+        location = patch.location;
+        number = patch.number;
+        bank = patch.bank;
+        arbitrary = patch.arbitrary;
+        sysex = new byte[patch.sysex.length][];
+        for(int i = 0; i < patch.sysex.length; i++)
+            {
+            sysex[i] = new byte[patch.sysex[i].length];
+            System.arraycopy(patch.sysex[i], 0, sysex[i], 0, patch.sysex[i].length);
+            }
+        }
         
     }
         

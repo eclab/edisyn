@@ -33,6 +33,10 @@ Set up for the Drum is more or less the same as setting up for the Multi mode:
 <li>A drum patch is very large, and takes a bit to upload and download (about 8 seconds). However when requesting a patch it'll look like it's nearly instantaneous because the data comes in 61 separate messages, and the early messages update the first drum notes.  You have to be patient.    
 
 <p><li>There is no way for Edisyn to change the current patch to the Internal or Card patch: it can only download them.  Furthermore Edisyn cannot reliably send back the patch data it has just received in order to update the current patch because the patch data comes in 61 separate messages.  Instead, after you download the Internal or Card patch, you should manually send to the Current Patch <b>after it has been entirely downloaded</b>.
+
+<p><li>You can't edit, and sometimes can't play notes, unless the Patch/Perform button is set to "Perform".  Edisyn tries to set this button programmatically when it can, but sometimes it won't get set -- for example, when you just change windows from the Multi editor to the Single Editor.  So if you're having difficulty, make sure the button is properly set.
+</ul>
+
 </ul>
 
 <p><table border=0 cellpadding=0 cellspacing=5>

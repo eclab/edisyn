@@ -1642,6 +1642,9 @@ public class RolandJV880 extends Synth
         tryToSendSysex(new byte[] { (byte)0xF0, 0x41, getID(), 0x46, 0x12, 0x00, 0x00, 0x00, 0x00, 0x01, 
             produceChecksum(new byte[] { 0x00, 0x00, 0x00, 0x00, 0x01}), (byte)0xF7 });
 
+		// It takes a second for this to take effect
+		simplePause(200);
+
         byte AA = (byte)(0x00);
         byte BB = (byte)(0x08);
         byte CC = (byte)(0x20);
@@ -1713,6 +1716,10 @@ public class RolandJV880 extends Synth
             // Change the patch/performance button to "patch" -- this is parameter 0 in system
             tryToSendSysex(new byte[] { (byte)0xF0, 0x41, getID(), 0x46, 0x12, 0x00, 0x00, 0x00, 0x00, 0x01, 
                 produceChecksum(new byte[] { 0x00, 0x00, 0x00, 0x00, 0x01}), (byte)0xF7 });
+
+			// It takes a second for this to take effect
+			simplePause(200);
+
             tryToSendMIDI(new ShortMessage(ShortMessage.CONTROL_CHANGE, getChannelOut(), 0, BC));
             tryToSendMIDI(new ShortMessage(ShortMessage.PROGRAM_CHANGE, getChannelOut(), PC, 0));
             }

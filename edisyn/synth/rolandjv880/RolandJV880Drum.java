@@ -878,6 +878,9 @@ public class RolandJV880Drum extends Synth
         tryToSendSysex(new byte[] { (byte)0xF0, 0x41, getID(), 0x46, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00, 
             produceChecksum(new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00 }), (byte)0xF7 });
 
+		// It takes a second for this to take effect
+		simplePause(200);
+
         // Internal
         byte AA = (byte)(0x01);
         byte BB = (byte)(0x7F);
@@ -902,6 +905,9 @@ public class RolandJV880Drum extends Synth
         // Change the patch/performance button to "performance" -- this is parameter 0 in system
         tryToSendSysex(new byte[] { (byte)0xF0, 0x41, getID(), 0x46, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00, 
             produceChecksum(new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00 }), (byte)0xF7 });
+
+		// It takes a second for this to take effect
+		simplePause(200);
 
         byte AA = (byte)(0x00);
         byte BB = (byte)(0x07);

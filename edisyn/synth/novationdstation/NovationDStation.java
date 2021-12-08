@@ -188,7 +188,7 @@ public class NovationDStation extends Synth
         /*                
                           VBox vbox = new VBox();
                           HBox hbox2 = new HBox();
-                          comp = new PatchDisplay(this, "number", 4);
+                          comp = new PatchDisplay(this, "number", 4, false);
                           hbox2.add(comp);
                           vbox.add(hbox2);
                           hbox.add(vbox);

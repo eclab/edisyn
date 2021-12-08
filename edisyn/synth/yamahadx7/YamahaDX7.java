@@ -280,7 +280,7 @@ public class YamahaDX7 extends Synth implements ProvidesNN
                 
         VBox vbox = new VBox();
         HBox hbox2 = new HBox();
-        comp = new PatchDisplay(this, 4);
+        comp = new PatchDisplay(this, 4, false);
         hbox2.add(comp);
         vbox.add(hbox2);
         

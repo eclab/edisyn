@@ -57,8 +57,8 @@ public class KawaiK1 extends Synth
     public static final String[] POLY_MODES = new String[] { "Poly 1", "Poly 2", "Solo" };
     public static final String[] OUT_SELECTS = new String[] { "A", "B", "C", "D", "E", "F", "G", "H" };
     public static final String[] WHEEL_ASSIGNMENTS = new String[] { "Vibrato Depth", "Vibrato Speed" };
-    public static final String[] AM_S1_S2 = new String[] { "Off", "AM S1 -> S2", "AM S2 -> S1" };
-    public static final String[] AM_S3_S4 = new String[] { "Off", "AM S3 -> S4", "AM S4 -> S3" };
+    public static final String[] RING_S1_S2 = new String[] { "Off", "S1 -> S2", "S2 -> S1" };
+    public static final String[] RING_S3_S4 = new String[] { "Off", "S3 -> S4", "S4 -> S3" };
 
     public KawaiK1()
         {
@@ -413,13 +413,13 @@ public class KawaiK1 extends Synth
         vbox = new VBox();
         if (src == 1)
             {
-            params = AM_S1_S2;
+            params = RING_S1_S2;
             comp = new Chooser("Ring Modulation", this, "s1ams1>s2", params);
             vbox.add(comp);
             }
         else if (src == 3)
             {
-            params = AM_S3_S4;
+            params = RING_S3_S4;
             comp = new Chooser("Ring Modulation", this, "s3ams3>s4", params);
             vbox.add(comp);
             }

@@ -267,7 +267,7 @@ public class EmuProteus extends Synth
         VBox vbox = new VBox();
         
         VBox vbox2 = new VBox();
-        final PatchDisplay pd = new PatchDisplay(this, 3);
+        final PatchDisplay pd = new PatchDisplay(this, 3, false);
         comp = pd;
         vbox2.add(comp);
         hbox.add(vbox2);

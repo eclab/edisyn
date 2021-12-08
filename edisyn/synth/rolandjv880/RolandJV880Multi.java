@@ -100,7 +100,7 @@ public class RolandJV880Multi extends Synth
         return frame;
         }         
 
-	int playPart = 0;
+    int playPart = 0;
     public void addJV880Menu()
         {
         JMenu menu = new JMenu("JV-880");
@@ -108,13 +108,13 @@ public class RolandJV880Multi extends Synth
 
         ButtonGroup g = new ButtonGroup();
         JRadioButtonMenuItem m = new JRadioButtonMenuItem("Play on Default Channel");
-		m.addActionListener(new ActionListener()
-			{
-			public void actionPerformed(ActionEvent e)
-				{
-				playPart = 0;
-				}
-			});
+        m.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                playPart = 0;
+                }
+            });
         g.add(m);
         m.setSelected(true);
         menu.add(m);
@@ -136,14 +136,14 @@ public class RolandJV880Multi extends Synth
         }
 
     public int getTestNoteChannel()
-    	{
-    	if (playPart == 0)
-    		return super.getTestNoteChannel();
-    	else
-    		{
-    		return model.get("part" + playPart + "receivechannel", 16);
-    		}
-    	}
+        {
+        if (playPart == 0)
+            return super.getTestNoteChannel();
+        else
+            {
+            return model.get("part" + playPart + "receivechannel", 16);
+            }
+        }
 
     public String getDefaultResourceFileName() { return "RolandJV880Multi.init"; }
     public String getHTMLResourceFileName() { return "RolandJV880Multi.html"; }
@@ -171,12 +171,12 @@ public class RolandJV880Multi extends Synth
             try { n = Integer.parseInt(number.getText()); }
             catch (NumberFormatException e)
                 {
-                showSimpleError(title, "The Patch Number must be an integer 1...64");
+                showSimpleError(title, "The Patch Number must be an integer 1...16");
                 continue;
                 }
             if (n < 1 || n > 64)
                 {
-                showSimpleError(title, "The Patch Number must be an integer 1...64");
+                showSimpleError(title, "The Patch Number must be an integer 1...16");
                 continue;
                 }
                 
@@ -382,7 +382,7 @@ public class RolandJV880Multi extends Synth
 
     public JComponent addTransmit(int part, Color color)
         {
-        Category category = new Category(this, "Part " + part + " Transmit [JV-80]", color);
+        Category category = new Category(this, "Part " + part + (part == 8 ? " (Rhythm) " : "") + " Transmit [JV-80]", color);
         //        category.makePasteable("part" + part);
         category.makePasteable("part");
 
@@ -487,7 +487,7 @@ public class RolandJV880Multi extends Synth
 
     public JComponent addInternal(int part, Color color)
         {
-        Category category = new Category(this, "Part " + part + " Internal [JV-80]", color);
+        Category category = new Category(this, "Part " + part + (part == 8 ? " (Rhythm) " : "") + " Internal [JV-80]", color);
         //        category.makePasteable("part" + part);
         category.makePasteable("part");
 
@@ -545,7 +545,7 @@ public class RolandJV880Multi extends Synth
 
     public JComponent addPart(final int part, Color color)
         {
-        Category category = new Category(this, "Part " + part, color);
+        Category category = new Category(this, "Part " + part + (part == 8 ? " (Rhythm)" : ""), color);
         //        category.makePasteable("part" + part);
         category.makePasteable("part");
 
@@ -561,20 +561,43 @@ public class RolandJV880Multi extends Synth
                 String p = "" + (value % 64 + 1);
                 if (p.length() == 1) 
                     p = "0" + p;
-                return s + p;
+                if (part == 8) // rhythm
+                    {
+                    return s;
+                    }
+                else
+                    {
+                    return s + p;
+                    }
                 }
             };
         hbox.add(comp);
 
         VBox vbox = new VBox();
 
+        params = OUTPUT_SELECTS;
+        comp = new Chooser("Output Select", this, "part" + part + "outputselect", params);
+        vbox.add(comp);
+        hbox.add(vbox);
+
+
         comp = new PushButton("Show")
             {
             public void perform()
                 {
-                final RolandJV880 synth = new RolandJV880();
+                int bn = RolandJV880Multi.this.model.get("part" + part + "patchnumber");
+                final int bank = (bn / 64);
+                final int number = (bn % 64);
+
+                Synth _synth = null;
+                if (part == 8)                                                  // rhythm
+                    _synth = new RolandJV880Drum();
+                else
+                    _synth = new RolandJV880();
+
+                final Synth synth = _synth;
                 if (tuple != null)
-                    synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver(), synth.buildKey2Receiver());
+                    synth.tuple = new Midi.Tuple(tuple, synth.buildInReceiver(), synth.buildKeyReceiver(), synth.buildKey2Receiver());
                 if (synth.tuple != null)
                     {       
                     // This is a little tricky.  When the dump comes in from the synth,
@@ -586,26 +609,49 @@ public class RolandJV880Multi extends Synth
                     // ALSO do is post the dump request to occur at the end of the Event Queue,
                     // so by the time the dump request has been made, the window is shown and
                     // frontmost.
-                                                
+                                                                                                
                     synth.setTitleBarAux("[Part " + part + " of " + RolandJV880Multi.this.model.get("name", "") + "]");
                     synth.sprout();
                     JFrame frame = ((JFrame)(SwingUtilities.getRoot(synth)));
                     frame.setVisible(true);
-
+                                        
+                    // Change the CHANNEL of the synth tuple to be the channel used by the part.
+                    // That way we're modifying the appropriate part when we do a change patch
+                                        
                     SwingUtilities.invokeLater(
                         new Runnable()
                             {
                             public void run() 
                                 { 
-                                Model tempModel = buildModel();
-                                
-                                int bn = RolandJV880Multi.this.model.get("part" + part + "patchnumber");
-                                int bank = (bn / 64);
-                                int number = (bn % 64);
-                                
-                                tempModel.set("bank", bank);
-                                tempModel.set("number", number);
-                                synth.performRequestDump(tempModel, false);
+                                synth.tuple.outChannel = RolandJV880Multi.this.model.get("part" + part + "receivechannel") + 1;
+                                                                
+                                if (part == 8)                  // rhythm is handled specially
+                                    {
+                                    // let's handle the presets specially
+                                    if (bank == 2)          // preset A
+                                        {
+                                        ((RolandJV880Drum)synth).resetToA();
+                                        }
+                                    else if (bank == 3)             // preset B
+                                        {
+                                        ((RolandJV880Drum)synth).resetToB();
+                                        }
+                                    else                                    // internal or card
+                                        {
+                                        Model tempModel = buildModel();
+                                        tempModel.set("bank", bank);            // no number
+                                        synth.performRequestDump(tempModel, false);
+                                        }
+                                    }
+                                else
+                                    {
+                                    Model tempModel = buildModel();
+                                    tempModel.set("bank", bank);
+                                    tempModel.set("number", number);
+                                    ((RolandJV880)synth).requestPerformancePart = part;
+                                    synth.performRequestDump(tempModel, false);
+                                    ((RolandJV880)synth).requestPerformancePart = 0;
+                                    }
                                 }
                             });
                     }
@@ -616,11 +662,6 @@ public class RolandJV880Multi extends Synth
                 }
             };
         vbox.add(comp);
-
-        params = OUTPUT_SELECTS;
-        comp = new Chooser("Output Select", this, "part" + part + "outputselect", params);
-        vbox.add(comp);
-        hbox.add(vbox);
 
         vbox = new VBox();        
         comp = new CheckBox("Receive Switch", this, "part" + part + "receiveswitch");
@@ -803,7 +844,7 @@ public class RolandJV880Multi extends Synth
         if (key.startsWith("name"))                          // name is 12-byte
             {
             byte[] data = new byte[12];
-        	String name = model.get("name", "") + "            ";
+            String name = model.get("name", "") + "            ";
             for(int i = 0; i < data.length; i++)
                 {
                 data[i] = (byte)(name.charAt(i));
@@ -1087,24 +1128,20 @@ public class RolandJV880Multi extends Synth
 
     public byte[] requestDump(Model tempModel)
         {
+        model.set("number", tempModel.get("number"));
+        model.set("bank", tempModel.get("bank"));
+
         // performRequestDump has already changed the patch.  At this point the patch is in local memory, so we're
         // going to just call requestCurrentDump.  This allows us to grab presets A and B as well as internal and card.
         return requestCurrentDump();
-
-        /*
-          byte AA = ((tempModel.get("bank") == 0) ? (byte)0x01 : (byte)0x02);             // bank
-          byte BB = (byte)(0x40 + (tempModel.get("number")));                                             // number
-          byte CC = (byte)(0x20);
-          byte DD = (byte)(0x00);
-        
-          byte checksum = produceChecksum(new byte[] { AA, BB, CC, DD, (byte)0x00, (byte)0x00, (byte)0x10, (byte)0x00 });
-          return new byte[] { (byte)0xF0, (byte)0x41, getID(), (byte)0x46, (byte)0x11, 
-          AA, BB, CC , DD, (byte)0x00, (byte)0x00, (byte)0x10, (byte)0x00, checksum, (byte)0xF7 }; 
-        */
         }
 
     public byte[] requestCurrentDump()
         {
+        // Change the patch/performance button to "performance" -- this is parameter 0 in system
+        tryToSendSysex(new byte[] { (byte)0xF0, 0x41, getID(), 0x46, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00, 
+            produceChecksum(new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00 }), (byte)0xF7 });
+
         byte AA = (byte)(0x00);
         byte BB = (byte)(0x00);
         byte CC = (byte)(0x10);
@@ -1164,6 +1201,9 @@ public class RolandJV880Multi extends Synth
         
         try 
             {
+            // Change the patch/performance button to "performance" -- this is parameter 0 in system
+            tryToSendSysex(new byte[] { (byte)0xF0, 0x41, getID(), 0x46, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00, 
+                produceChecksum(new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00 }), (byte)0xF7 });
             tryToSendMIDI(new ShortMessage(ShortMessage.CONTROL_CHANGE, getChannelOut(), 0, BC));
             tryToSendMIDI(new ShortMessage(ShortMessage.PROGRAM_CHANGE, getChannelOut(), PC, 0));
             }

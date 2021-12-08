@@ -30,9 +30,8 @@ import edisyn.util.*;
 
 public class Midi
     {
-        
     /** A MIDI pipe.  Thru is a Receiver which attaches to other
-        Receivers.  when it gets a message, it forwards it to ALL
+        Receivers.  When it gets a message, it forwards it to ALL
         the other receivers.  Additionally, sending is synchronized,
         so you can guaranted that if multiple transmitters send to
         the Thru, they won't have a race condition. */
@@ -77,7 +76,7 @@ public class Midi
         a threadsafe receiver for the device (opening the device and building
         it as needed) and also a Thru for the device's transmitter. */
                 
-    static class MidiDeviceWrapper
+    public static class MidiDeviceWrapper
         {
         public MidiDevice device;
                 
@@ -85,7 +84,7 @@ public class Midi
             {
             this.device = device;
             }
-                        
+                                    
         public String toString() 
             { 
             String desc = device.getDeviceInfo().getDescription().trim();
@@ -107,53 +106,64 @@ public class Midi
                 return name;
             }
                 
-        Transmitter transmitter;
-        Receiver receiver;
-        Thru thru;
-                
+        Thru in;
+        Thru out;
+        Transmitter transmitter;                
 
-        /** Returns a Thru representing the Transmitter of this device.  You provide
-            a Receiver to attach to the Thru.  The Thru is then attached to the Transmitter.
-            This design allows multiple receivers to attach to the same Thru and thus to the
-            same Transmitter so we don't have to build multiple Transmitters (triggering bugs).
+		public MidiDevice getDevice() { return device; }
+
+        /** 
+        	You provide a Receiver to attach to the Transmitter.  Returns true if successful
         */
-        public Thru getThru(Receiver receiver) 
+        public boolean addToTransmitter(Receiver receiver) 
             { 
-            if (thru == null) 
+            if (in == null) 
+            	{
                 try
                     {
                     // we use a thru here so we can add many receivers to it
                     if (!device.isOpen()) 
                         device.open();
-                    transmitter = device.getTransmitter();
-                    thru = new Thru();
-                    transmitter.setReceiver(thru);
+                    Thru _in = new Thru();
+                    Transmitter _transmitter = device.getTransmitter();
+                    _transmitter.setReceiver(_in);
+                    transmitter = _transmitter;		// we set it last in case of an exception
+                    in = _in;						// we set it last in case of an exception
                     }
-                catch(Exception e) { ExceptionDump.postThrowable(e, "Receiver: " + receiver + "\nDevice: " + device + "\nTransmitter: " + transmitter); Synth.handleException(e); }
-                        
-            if (thru != null)
-                {
-                thru.addReceiver(receiver);
+                catch(Exception e) { Synth.handleException(e); return false; }
                 }
-            return thru;
+            
+            in.addReceiver(receiver);
+            return true;
             }
                         
-        /** Returns a threadsafe Receiver.*/
+        /** Returns a threadsafe Receiver, or null if not successful. */
         public Receiver getReceiver() 
             { 
-            if (receiver == null) 
+            if (out == null) 
+            	{
                 try
                     {
                     // we use a secret Thru here so it's lockable
                     if (!device.isOpen()) 
                         device.open();
-                    Thru recv = new Thru();
-                    recv.addReceiver(device.getReceiver());
-                    receiver = recv;
+                    Thru _out = new Thru();
+                    _out.addReceiver(device.getReceiver());
+                    out = _out;		// we set it last in case of an exception
                     }
-                catch(Exception e) { ExceptionDump.postThrowable(e, "\nDevice: " + device); Synth.handleException(e); }
-            return receiver; 
+                catch(Exception e) { Synth.handleException(e); return null; }
+    	         }
+
+            return out; 
             }
+        
+        public void close()
+        	{
+        	new Throwable().printStackTrace();
+        	if (transmitter != null) transmitter.close();
+        	if (out != null) out.close();
+        	// don't close in(), it'll just close all my own receivers
+        	}
         }
 
 
@@ -246,10 +256,8 @@ public class Midi
                 return;  // they're identical
                 }
             }
-                
-        // at this point allDevices isn't the same as Midi.allDevices, so set it and update
-        Midi.allDevices = allDevices;
 
+        Midi.allDevices = allDevices;
 
         inDevices = new ArrayList();
         keyDevices = new ArrayList();
@@ -302,90 +310,56 @@ public class Midi
         /** Represents "any channel" in the Tuple. */
         public static final int KEYCHANNEL_OMNI = 0;
 
-        /** The current output */
-        public Receiver out;
         /** The current output device wrapper */
         public MidiDeviceWrapper outWrap;
+        /** The current output device receiver */
+        public Receiver outReceiver;
         /** The channel to send voiced messages to on the output. */
         public int outChannel = 1;
+        public String id = "0";
                 
-        /** The current input */
-        public Thru in;
         /** The current input device's wrapper */
         public MidiDeviceWrapper inWrap;
-        /** The current receiver which is attached to the input to perform its
-            commands.  Typically generated with Synth.buildInReceiver() */
-        public Receiver inReceiver;
                 
-        /** The current keyboard/controller input */
-        public Thru key;
         /** The current keyboard/controller input device's wrapper */
         public MidiDeviceWrapper keyWrap;
-        /** The current receiver which is attached to the keyboard/controller input
-            to perform its commands.  Typically generated with Synth.buildKeyReceiver() */
-        public Receiver keyReceiver;
         /** The channel to receive voiced messages from on the keyboard/controller input. */
         public int keyChannel = KEYCHANNEL_OMNI;
         
-        /** The secondary keyboard/controller input */
-        public Thru key2;
         /** The secondary keyboard/controller input device's wrapper */
         public MidiDeviceWrapper key2Wrap;
-        /** The currsecondaryent receiver which is attached to the keyboard/controller input
-            to perform its commands.  Typically generated with Synth.buildKeyReceiver() */
-        public Receiver key2Receiver;
         /** The secondary to receive voiced messages from on the keyboard/controller input. */
         public int key2Channel = KEYCHANNEL_OMNI;
         
-        public String id = "0";
-           
-        int refcount = 1;
+        public Tuple() { }
         
-        public Tuple copy(Receiver inReceiver, Receiver keyReceiver, Receiver key2Receiver)
-            {
-            if (refcount < 1)
-                throw new RuntimeException("Cannot copy a fully disposed Midi tuple");
-                
-            refcount++; 
-                
-            if (in != null)
-                in.addReceiver(inReceiver);
-                
-            if (key != null)
-                key.addReceiver(keyReceiver);
-                
-            if (key2 != null)
-                key2.addReceiver(key2Receiver);
-                
-            return this; 
-            }
+        public Tuple(Tuple other, Receiver inReceiver, Receiver keyReceiver, Receiver key2Receiver)
+        	{
+        	outWrap = other.outWrap;
+        	inWrap = other.inWrap;
+        	keyWrap = other.keyWrap;
+        	key2Wrap = other.key2Wrap;
+        	outReceiver = other.outReceiver;
+        	outChannel = other.outChannel;
+        	id = other.id;
+        	keyChannel = other.keyChannel;
+        	key2Channel = other.key2Channel;
+        	
+        	inWrap.addToTransmitter(inReceiver);
+        	if (keyWrap != null) keyWrap.addToTransmitter(keyReceiver);
+        	if (key2Wrap != null) key2Wrap.addToTransmitter(key2Receiver);
+        	}
         
         public void dispose()
-            {
-            refcount--;
-            
-            if (refcount == 0)
-                {
-                if (key != null && keyReceiver != null)
-                    key.removeReceiver(keyReceiver);
-                if (key2 != null && key2Receiver != null)
-                    key2.removeReceiver(key2Receiver);
-                if (in != null && inReceiver!= null)
-                    in.removeReceiver(inReceiver);
+        	{
+        // dunno if we should even do this, the memory leak is well worth the nastu
+        // bugs on disposal...
 
-                // We don't close() stuff because of prior MIDI bugs in coremidi4j which are getting fixed (I believe).
-                // At any rate, the only time we will see a closed Receiver or a Thru is if it closes itself, because we
-                // share them.  And when we quit, we just leak (probably can't help that anyway on a hard-quit).  
-                // Hope that's okay.
-
-                key = null;
-                keyReceiver = null;
-                key2 = null;
-                key2Receiver = null;
-                in = null;
-                inReceiver = null;
-                }
-            }       
+        	//if (outWrap != null) outWrap.close();
+        	//if (inWrap != null) inWrap.close();
+        	//if (keyWrap != null) keyWrap.close();
+        	//if (key2Wrap != null) key2Wrap.close();
+        	}
         }
 
     static void setLastTupleIn(String path, Synth synth) { Synth.setLastX(path, "LastTupleIn", synth.getSynthNameLocal(), false); }
@@ -448,7 +422,12 @@ public class Midi
 
     public static final Tuple CANCELLED = new Tuple();
     public static final Tuple FAILED = new Tuple();
-        
+
+static final String[] kc = new String[] { "Any", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16" };
+static final String[] k2c = new String[] { "Any", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16" };
+static final String[] rc = new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16" };
+
+
     /** Works with the user to generate a new Tuple holding new MIDI connections.
         You may provide the old tuple for defaults or pass in null.  You also
         provide the inReceiver and keyReceiver and key2Receiver to be attached to the input and keyboard/controller
@@ -479,10 +458,6 @@ public class Midi
             }
         else
             {
-            String[] kc = new String[] { "Any", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16" };
-            String[] k2c = new String[] { "Any", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16" };
-            String[] rc = new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16" };
-
             JComboBox inCombo = new JComboBox(inDevices.toArray());
             inCombo.setMaximumRowCount(32);
             if (old != null && old.inWrap != null && inDevices.indexOf(old.inWrap) != -1)
@@ -516,7 +491,7 @@ public class Midi
             JTextField outID = null;
             String initialID = synth.reviseID(getLastTupleID(synth));
             if (initialID != null)
-                outID = new JTextField(initialID);	// synth.reviseID(null));
+                outID = new JTextField(initialID);      // synth.reviseID(null));
 
             JComboBox outChannelsCombo = new JComboBox(rc);
             outChannelsCombo.setMaximumRowCount(17);
@@ -525,7 +500,7 @@ public class Midi
             else if (getLastTupleOutChannel(synth) > 0)
                 outChannelsCombo.setSelectedIndex(getLastTupleOutChannel(synth) - 1);
             else 
-	            outChannelsCombo.setSelectedIndex(0);
+                outChannelsCombo.setSelectedIndex(0);
                                 
             JComboBox keyChannelsCombo = new JComboBox(kc);
             keyChannelsCombo.setMaximumRowCount(17);
@@ -534,7 +509,7 @@ public class Midi
             else if (getLastTupleKeyChannel(synth) > 0)
                 keyChannelsCombo.setSelectedIndex(getLastTupleKeyChannel(synth));
             else 
-	            keyChannelsCombo.setSelectedIndex(0);
+                keyChannelsCombo.setSelectedIndex(0);
 
             JComboBox key2ChannelsCombo = new JComboBox(kc);
             key2ChannelsCombo.setMaximumRowCount(17);
@@ -543,7 +518,7 @@ public class Midi
             else if (getLastTupleKey2Channel(synth) > 0)
                 key2ChannelsCombo.setSelectedIndex(getLastTupleKey2Channel(synth));
             else 
-	            key2ChannelsCombo.setSelectedIndex(0);
+                key2ChannelsCombo.setSelectedIndex(0);
                         
             boolean result = false;
             synth.disableMenuBar();
@@ -575,90 +550,49 @@ public class Midi
                         }
                     }
                                 
-                tuple.inWrap = ((MidiDeviceWrapper)(inCombo.getSelectedItem()));
-                tuple.in = tuple.inWrap.getThru(inReceiver);
-                tuple.inReceiver = inReceiver;
-                if (tuple.in == null)
+                tuple.outWrap = ((MidiDeviceWrapper)(outCombo.getSelectedItem()));
+                tuple.outReceiver = tuple.outWrap.getReceiver();
+                if (tuple.outReceiver == null)
                     {
-                    synth.showErrorWithStackTrace("Cannot Connect", "An error occurred while connecting to the incoming MIDI Device.");
-                    /*
-                      synth.disableMenuBar();
-                      JOptionPane.showOptionDialog(synth, "An error occurred while connecting to the incoming MIDI Device.",  
-                      "Cannot Connect", JOptionPane.DEFAULT_OPTION, 
-                      JOptionPane.WARNING_MESSAGE, null,
-                      new String[] { "Run Disconnected" }, "Run Disconnected");
-                      synth.enableMenuBar();
-                    */
+                    synth.showErrorWithStackTrace("Cannot Connect", "An error occurred while connecting to the outgoing MIDI Device.");
                     return FAILED;
                     }
 
-                tuple.outWrap = ((MidiDeviceWrapper)(outCombo.getSelectedItem()));
-                tuple.out = tuple.outWrap.getReceiver();
-                if (tuple.out == null)
+                tuple.inWrap = ((MidiDeviceWrapper)(inCombo.getSelectedItem()));
+                if (!tuple.inWrap.addToTransmitter(inReceiver))
                     {
-                    synth.showErrorWithStackTrace("Cannot Connect", "An error occurred while connecting to the outgoing MIDI Device.");
-                    /*
-                      synth.disableMenuBar();
-                      JOptionPane.showOptionDialog(synth, "An error occurred while connecting to the outgoing MIDI Device.",  
-                      "Cannot Connect", JOptionPane.DEFAULT_OPTION, 
-                      JOptionPane.WARNING_MESSAGE, null,
-                      new String[] { "Run Disconnected" }, "Run Disconnected");
-                      synth.enableMenuBar();
-                    */
+                    synth.showErrorWithStackTrace("Cannot Connect", "An error occurred while connecting to the incoming MIDI Device.");
                     return FAILED;
                     }
 
                 if (keyCombo.getSelectedItem() instanceof String)
                     {
                     tuple.keyWrap = null;
-                    tuple.key = null;
                     }
                 else
                     {
                     tuple.keyWrap = ((MidiDeviceWrapper)(keyCombo.getSelectedItem()));
-                    tuple.key = tuple.keyWrap.getThru(keyReceiver);
-                    tuple.keyReceiver = keyReceiver;
-                    if (tuple.key == null)
+                	if (!tuple.keyWrap.addToTransmitter(keyReceiver))
                         {
-                        synth.showErrorWithStackTrace("Cannot Connect", "An error occurred while connecting to the Controller MIDI Device.");
-                        /*
-                          synth.disableMenuBar();
-                          JOptionPane.showOptionDialog(synth, "An error occurred while connecting to the Controller MIDI Device.",  
-                          "Cannot Connect", JOptionPane.DEFAULT_OPTION, 
-                          JOptionPane.WARNING_MESSAGE, null,
-                          new String[] { "Run without Controller" }, "Run without Controller");
-                        */
-                        synth.enableMenuBar();
+                        synth.showErrorWithStackTrace("Cannot Connect", "An error occurred while connecting to the Controller 1 MIDI Device.");
                         tuple.keyWrap = null;
-                        tuple.key = null;
                         }
                     }
 
                 if (key2Combo.getSelectedItem() instanceof String)
                     {
                     tuple.key2Wrap = null;
-                    tuple.key2 = null;
                     }
                 else
                     {
                     tuple.key2Wrap = ((MidiDeviceWrapper)(key2Combo.getSelectedItem()));
-                    tuple.key2 = tuple.key2Wrap.getThru(key2Receiver);
-                    tuple.key2Receiver = key2Receiver;
-                    if (tuple.key2 == null)
+                	if (!tuple.key2Wrap.addToTransmitter(key2Receiver))
                         {
                         synth.showErrorWithStackTrace("Cannot Connect", "An error occurred while connecting to the Controller 2 MIDI Device.");
-                        /*
-                          synth.disableMenuBar();
-                          JOptionPane.showOptionDialog(synth, "An error occurred while connecting to the Controller MIDI Device.",  
-                          "Cannot Connect", JOptionPane.DEFAULT_OPTION, 
-                          JOptionPane.WARNING_MESSAGE, null,
-                          new String[] { "Run without Controller" }, "Run without Controller");
-                        */
-                        synth.enableMenuBar();
                         tuple.key2Wrap = null;
-                        tuple.key2 = null;
                         }
                     }
+
                     
                 setLastTupleIn(tuple.inWrap.toString(), synth);
                 setLastTupleOut(tuple.outWrap.toString(), synth);
@@ -675,10 +609,10 @@ public class Midi
                 setLastTupleKey2Channel(tuple.key2Channel, synth);
 
                 if (initialID != null)
-                	{
-                	setLastTupleID(tuple.id, synth);
-                	}
-                	
+                    {
+                    setLastTupleID(tuple.id, synth);
+                    }
+                        
                 return tuple;
                 }
             else

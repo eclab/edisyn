@@ -1670,7 +1670,7 @@ public class KorgWavestationSequence extends KorgWavestationAbstract
         if (tuple != null)
             {
             final KorgWavestationPerformance synth = new KorgWavestationPerformance();
-            synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver(), synth.buildKey2Receiver());
+            synth.tuple = new Midi.Tuple(tuple, synth.buildInReceiver(), synth.buildKeyReceiver(), synth.buildKey2Receiver());
             if (synth.tuple != null)
                 {
                 synth.loadDefaults();
@@ -1683,15 +1683,15 @@ public class KorgWavestationSequence extends KorgWavestationAbstract
                         
         if (tuple != null)
             {
-            final KorgWavestationPatch synth2 = new KorgWavestationPatch();
-            synth2.tuple = tuple.copy(synth2.buildInReceiver(), synth2.buildKeyReceiver(), synth2.buildKeyReceiver());
-            if (synth2.tuple != null)
+            final KorgWavestationPatch synth = new KorgWavestationPatch();
+            synth.tuple = new Midi.Tuple(tuple, synth.buildInReceiver(), synth.buildKeyReceiver(), synth.buildKey2Receiver());
+            if (synth.tuple != null)
                 {
-                synth2.loadDefaults();
-                synth2.getModel().set("osc1wavebank", model.get("bank"));
-                synth2.getModel().set("osc1wave", model.get("number"));
-                synth2.performChangePatch(synth2.getModel());
-                synth2.tryToSendMIDI(synth2.emitAll(synth2.getModel(), true, false));
+                synth.loadDefaults();
+                synth.getModel().set("osc1wavebank", model.get("bank"));
+                synth.getModel().set("osc1wave", model.get("number"));
+                synth.performChangePatch(synth.getModel());
+                synth.tryToSendMIDI(synth.emitAll(synth.getModel(), true, false));
                 }
             }
         }

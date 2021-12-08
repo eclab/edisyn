@@ -167,7 +167,7 @@ public class YamahaFB01Multi extends Synth
                 
         VBox vbox = new VBox();
         HBox hbox2 = new HBox();
-        comp = new PatchDisplay(this, 4);
+        comp = new PatchDisplay(this, 4, false);
         hbox2.add(comp);
         vbox.add(hbox2);
         
@@ -294,7 +294,7 @@ public class YamahaFB01Multi extends Synth
                 {
                 final YamahaFB01 synth = new YamahaFB01();
                 if (tuple != null)
-                    synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver(), synth.buildKey2Receiver());
+                    synth.tuple = new Midi.Tuple(tuple, synth.buildInReceiver(), synth.buildKeyReceiver(), synth.buildKey2Receiver());
                 if (synth.tuple != null)
                     {       
                     // This is a little tricky.  When the dump comes in from the synth,

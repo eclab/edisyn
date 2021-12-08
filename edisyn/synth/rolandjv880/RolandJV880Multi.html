@@ -8,17 +8,21 @@
 
 <br><br><h3>Communicating with Edisyn</h3>
 
-When you set up MIDI in the patch editor, you can specify the MIDI channel and the Synth ID.  Set your synthesizer's Performance Receive channel ("Control channel", under System in Performance Mode, not to be confused with the Rx Channel) to the same as Edisyn's channel (perhaps Channel 16), and its "Unit number" to the same as Edisyn's Synth ID (perhaps 17).  Set Program Change, Bank Select, and Exclusive to ON.   Finally, make sure the Patch/Performance button is set to PERFORMANCE, and the Edit button is OFF (these two are important, else your JV won't respond properly). 
+Be sure to have the patch/perform button on your JV-80/880 set to "perform". When you set up MIDI in the patch editor, you can specify the MIDI channel and the Synth ID.  Set your synthesizer's Performance Receive channel ("Control channel", under System in Performance Mode, not to be confused with the Rx Channel) to the same as Edisyn's channel (perhaps Channel 16), and its "Unit number" to the same as Edisyn's Synth ID (perhaps 17).  Set Program Change, Bank Select, and Exclusive to ON.   Make sure write protect is off if you want to write changes.  Finally, make sure the Edit button is OFF or your JV won't respond properly.
 
 
 <br><br><h3>About the Menu</h3>
 
 Edisyn's MIDI channel is set to the Performance Receive (Control) Channel so Edisyn can change multimode patches.  To play a sound in a given part, yo'll need Edisyn to send note data out the appropriate Part channel.  To do this, just use the menu to set the Part you'd like Edisyn to play, and it will use the Receive Channel of that Part as you have set it in Edisyn.  If you use the menu to set the channel to the "default" channel, it'll use Edisyn's default MIDI output instead.
 
-<br><br><h3>Gotchas</h3>
+<br><br><h3>Notes</h3>
 
 <ul>
-<li>As long as you've got the Performance Receive channel set, you won't be able to play an individual patch whose patch channel is set to the same value.
+<li>The JV-80/880 has individual current working memory for each Part, as well as a <b>separate</b> current working memory for Patch mode.   When you press the "Show" button on a Part, Edisyn will load and display the Single patch from the current working memory of the appropriate part; but thereafter if you try reloading that patch from current memory, it'll come from the Patch Mode current memory (which will be a different part).  This might be confusing.  Additionally, the MIDI channel will be the MIDI channel of the current part.  To edit this part, it might be best to switch to Patch mode.
+
+<p><li>Part 8 is the <b>Rhythm Part</b>.  It can only be set to one of four rhythm sections: preset A, preset B, internal, and card.  The dial is the same as the other parts, but all patches (such as I62) will simply be displayed as I.
+
+<p><li>The <b>Show Button</b> for Part 8 (Rhythm) is special. If you press it, it'll launch a Roland JV880 [Drum] editor rather than a standard JV880 editor, and either the internal or card drumset, or will specially load the Preset A or Preset B drumset.
 </ul>
 
 <p><table border=0 cellpadding=0 cellspacing=5>

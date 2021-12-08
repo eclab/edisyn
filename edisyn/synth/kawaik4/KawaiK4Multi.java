@@ -204,7 +204,7 @@ public class KawaiK4Multi extends Synth
                 {
                 final KawaiK4Effect synth = new KawaiK4Effect();
                 if (tuple != null)
-                    synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver(), synth.buildKey2Receiver());
+                    synth.tuple = new Midi.Tuple(tuple, synth.buildInReceiver(), synth.buildKeyReceiver(), synth.buildKey2Receiver());
                 if (synth.tuple != null)
                     {
                     // This is a little tricky.  When the dump comes in from the synth,
@@ -278,7 +278,7 @@ public class KawaiK4Multi extends Synth
                 {
                 final KawaiK4 synth = new KawaiK4();
                 if (tuple != null)
-                    synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver(), synth.buildKey2Receiver());
+                    synth.tuple = new Midi.Tuple(tuple, synth.buildInReceiver(), synth.buildKeyReceiver(), synth.buildKey2Receiver());
                 if (synth.tuple != null)
                     {
                     // This is a little tricky.  When the dump comes in from the synth,

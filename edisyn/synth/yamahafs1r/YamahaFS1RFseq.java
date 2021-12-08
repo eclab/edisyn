@@ -189,7 +189,7 @@ public class YamahaFS1RFseq extends Synth
         if (tuple != null)
             {
             final YamahaFS1RMulti synth = new YamahaFS1RMulti();
-            synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver(), synth.buildKey2Receiver());
+            synth.tuple = new Midi.Tuple(tuple, synth.buildInReceiver(), synth.buildKeyReceiver(), synth.buildKey2Receiver());
             if (synth.tuple != null)
                 {
                 // This is a little tricky.  When the dump comes in from the synth,
@@ -227,7 +227,7 @@ public class YamahaFS1RFseq extends Synth
         if (tuple != null)
             {
             final YamahaFS1R synth = new YamahaFS1R();
-            synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver(), synth.buildKey2Receiver());
+            synth.tuple = new Midi.Tuple(tuple, synth.buildInReceiver(), synth.buildKeyReceiver(), synth.buildKey2Receiver());
             if (synth.tuple != null)
                 {
                 // This is a little tricky.  When the dump comes in from the synth,
@@ -270,7 +270,7 @@ public class YamahaFS1RFseq extends Synth
                 {
                 // Set up Performance
                 YamahaFS1RMulti synth = new YamahaFS1RMulti();            
-                synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver(), synth.buildKey2Receiver());
+                synth.tuple = new Midi.Tuple(tuple, synth.buildInReceiver(), synth.buildKeyReceiver(), synth.buildKey2Receiver());
                 if (synth.tuple != null)
                     {
                     synth.loadDefaults();
@@ -294,7 +294,7 @@ public class YamahaFS1RFseq extends Synth
               {
               // Set up Voice
               YamahaFS1R synth = new YamahaFS1R();            
-              synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver(), synth.buildKey2Receiver());
+              synth.tuple = new Midi.Tuple(tuple, synth.buildInReceiver(), synth.buildKeyReceiver(), synth.buildKey2Receiver());
               if (synth.tuple != null)
               {
               synth.loadDefaults();

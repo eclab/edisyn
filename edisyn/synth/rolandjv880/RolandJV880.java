@@ -139,13 +139,13 @@ public class RolandJV880 extends Synth
         }
                 
                 
-    public JFrame sprout()
-        {
-        JFrame frame = super.sprout();
-        // It doesn't make sense to send to current patch
-        transmitTo.setEnabled(false);
-        return frame;
-        }         
+    /*
+      public JFrame sprout()
+      {
+      JFrame frame = super.sprout();
+      return frame;
+      }        
+    */ 
 
     public String getDefaultResourceFileName() { return "RolandJV880.init"; }
     public String getHTMLResourceFileName() { return "RolandJV880.html"; }
@@ -1336,7 +1336,7 @@ public class RolandJV880 extends Synth
         if (key.equals("name"))                                // name is 12-byte
             {
             byte[] data = new byte[12];
-	        String name = model.get("name", "") + "            ";
+            String name = model.get("name", "") + "            ";
             for(int i = 0; i < data.length; i++)
                 {
                 data[i] = (byte)(name.charAt(i));
@@ -1375,9 +1375,9 @@ public class RolandJV880 extends Synth
             
         // figure out the address
         if (key.equals("name"))
-        	{
-        	// no changes
-        	}
+            {
+            // no changes
+            }
         else if (key.startsWith("tone1"))
             {
             CC = (byte)(CC + 0x08);
@@ -1635,12 +1635,22 @@ public class RolandJV880 extends Synth
         */
         }
     
+    int requestPerformancePart = 0;
     public byte[] requestCurrentDump()
         {
+        // Change the patch/performance button to "patch" -- this is parameter 0 in system
+        tryToSendSysex(new byte[] { (byte)0xF0, 0x41, getID(), 0x46, 0x12, 0x00, 0x00, 0x00, 0x00, 0x01, 
+            produceChecksum(new byte[] { 0x00, 0x00, 0x00, 0x00, 0x01}), (byte)0xF7 });
+
         byte AA = (byte)(0x00);
         byte BB = (byte)(0x08);
         byte CC = (byte)(0x20);
         byte DD = (byte)(0x00);
+        
+        if (requestPerformancePart != 0)
+            {
+            BB = (byte) (0x01 * requestPerformancePart);
+            }
         
         byte checksum = produceChecksum(new byte[] { AA, BB, CC, DD, (byte)0x00, (byte)0x00, (byte)0x0C, (byte)0x00 });
         byte[] b = new byte[] { (byte)0xF0, (byte)0x41, getID(), (byte)0x46, (byte)0x11, 
@@ -1661,7 +1671,7 @@ public class RolandJV880 extends Synth
             {
             char c = nameb.charAt(i);
             if (c < 32 || c > 127)
-            	nameb.setCharAt(i, ' ');
+                nameb.setCharAt(i, ' ');
             }
         name = nameb.toString();
         return super.revisePatchName(name);  // trim again
@@ -1700,6 +1710,9 @@ public class RolandJV880 extends Synth
         
         try 
             {
+            // Change the patch/performance button to "patch" -- this is parameter 0 in system
+            tryToSendSysex(new byte[] { (byte)0xF0, 0x41, getID(), 0x46, 0x12, 0x00, 0x00, 0x00, 0x00, 0x01, 
+                produceChecksum(new byte[] { 0x00, 0x00, 0x00, 0x00, 0x01}), (byte)0xF7 });
             tryToSendMIDI(new ShortMessage(ShortMessage.CONTROL_CHANGE, getChannelOut(), 0, BC));
             tryToSendMIDI(new ShortMessage(ShortMessage.PROGRAM_CHANGE, getChannelOut(), PC, 0));
             }

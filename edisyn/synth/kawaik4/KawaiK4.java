@@ -104,7 +104,7 @@ public class KawaiK4 extends Synth
         vbox.add(hbox);
         
         soundPanel.add(vbox, BorderLayout.CENTER);
-        addTab("Global", soundPanel);
+        addTab("General", soundPanel);
                 
 
         JComponent sourcePanel = new SynthPanel(this);
@@ -242,7 +242,7 @@ public class KawaiK4 extends Synth
 
     public JComponent addSourceGlobal( Color color)
         {
-        Category category = new Category(this, "Sources Global", color);
+        Category category = new Category(this, "Sources", color);
 
         JComponent comp;
         String[] params;
@@ -271,7 +271,7 @@ public class KawaiK4 extends Synth
                 {
                 final KawaiK4Effect synth = new KawaiK4Effect();
                 if (tuple != null)
-                    synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver(), synth.buildKey2Receiver());
+                    synth.tuple = new Midi.Tuple(tuple, synth.buildInReceiver(), synth.buildKeyReceiver(), synth.buildKey2Receiver());
                 if (synth.tuple != null)
                     {
                     // This is a little tricky.  When the dump comes in from the synth,

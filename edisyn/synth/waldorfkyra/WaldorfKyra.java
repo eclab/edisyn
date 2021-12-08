@@ -28,12 +28,14 @@ public class WaldorfKyra extends Synth
     {
     public static final String[] BANKS = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z" };
     public static final String[] WRITABLE_BANKS = { "A", "B", "C", "D", "E", "F", "G" };
+    
     public static final String[] CATEGORIES = 
         {
         "Work in Progress", "Acid", "Ambient", "Arpeggio", "Bass", "EDM & Dubstep", "Effects", 
         "Electronica", "Guitars & Plucked", "Leads", "Lo-Fi & Distorted", "My Favourites",              // british "favorites" grrr
         "Orchestral", "Organs", "Pads", "Percussion", "Pianos", "Stabs & Strings", "Strings", "Trance"
         };
+        
     public static final String[] WAVE_GROUPS =
         {
         "Construction Set 1", "Construction Set 2", "Construction Set 3", "Construction Set 4", 
@@ -52,6 +54,7 @@ public class WaldorfKyra extends Synth
         "Snippets", "Square Bit Reduced", "Square", "Symmetric", "Tannernin", "Theremin", 
         "Triangle Bit Reduced", "Triangle", "Video Game 1", "Video Game 2", "Violin"
         };
+        
     public static final int[] WAVE_COUNTS = 
         {
         // Construction Set
@@ -79,6 +82,7 @@ public class WaldorfKyra extends Synth
     public static final String[] LFO_MODES = { "Monophonic", "Polyphonic", "Random Phase", "Dual Antiphase", "Dual Quadrature" }; 
     public static final String[] LFO3_MODES = { "Monophonic", "Polyphonic", "Random Phase" };
     public static final String[] LFO_TIME_SOURCES = { "Internal", "MIDI 1/16", "MIDI 1/8 T", "MIDI 3/32", "MIDI 1/8", "MIDI 1/4 T", "MIDI 3/16", "MIDI 1/4", "MIDI 1/2 T", "MIDI 3/8", "MIDI 1/1", "MIDI 2/1", "MIDI 2/1" };
+    
     public static final String[] MOD_SOURCES = { 
         "Pitch Bend", "Channel Pressure", "Mod Wheel (CC 1)", "Breadth (CC 2)", 
         "MIDI CC 3", "Foot (CC 4)", "Data Entry (CC 6)", "Balance (CC 8)", 
@@ -87,6 +91,7 @@ public class WaldorfKyra extends Synth
         "Envelope 1 [Poly]", "Envelope 2 [Poly]", "Envelope 3 [Poly]", "LFO 1 Unipolar [Poly]", "LFO 1 Bipolar [Poly]", 
         "LFO 2 Unipolar [Poly]", "LFO 2 Bipolar [Poly]", "LFO 3 Unipolar [Poly]", "LFO 3 Bipolar [Poly]", 
         "Note On Velocity [Poly]", "Random per Note [Poly]", "MIDI Note [Poly]", "Polyphonic Pressure [Poly]", "Note Off Velocity [Poly]" };
+    
     public static final String[] MOD_DESTINATIONS = {
         "Osc 1 Tune", "Osc 1 Detune", "Osc 1 Wave Osc 2 FM", "Osc 1 LFO 1 Pitch", 
         "Osc 1 LFO 2 Pulsewidth", "Osc 1 Sawtooth Level", "Osc 1 Wave Level", 
@@ -109,6 +114,7 @@ public class WaldorfKyra extends Synth
         "Reverb Damping", "Reverb Darkness", "EQ Mid Gain", "EQ Mid Frequency", 
         "Formant Filter Gain", "Formant Filter Tune", "Distortion Mix", "Distortion Drive", 
         "Final Level (Post-Effects)", "Dual Detune Amount"  };
+        
     public static final String[] DELAY_TYPES = {  "Stereo", "Ping Pong" };                      // Are these right?
     public static final String[] DELAY_CLOCK_SOURCES = { "Internal", "MIDI", "LFO3" };
     public static final String[] DELAY_CLOCK_BEATS = { "1/64", "1/32 T", "1/32", "1/16 T", "1/16", "1/8 T", "3/32", "1/8", "1/4 T", "3/16", "1/4", "1/2 T", "3/8", "1/2" };
@@ -116,6 +122,7 @@ public class WaldorfKyra extends Synth
     public static final String[] DISTORTION_ALGORITHMS = {  "Soft Rectifier", "Hard Rectifier", "Soft Bitcrusher", "Hard Bitcrusher", "Gnasher"  };
     public static final String[] FX_LIMITER_MODES = { "Light", "Medium", "Heavy" };                    // FIXME:  is this the vca saturator mode?  Are these names correct?
     public static final int NUM_AKWF_WAVE_GROUPS = 72;
+    
     public static final int[] EQ_MID_Q = new int[]
     {
     66, 68, 69, 71, 73, 75, 77, 79, 80, 83, 85, 87, 89, 91, 93, 96, 
@@ -127,6 +134,7 @@ public class WaldorfKyra extends Synth
     714, 732, 750, 769, 788, 808, 828, 849, 871, 892, 915, 938, 961, 985, 1010, 1040, 
     1060, 1090, 1120, 1140, 1170, 1200, 1230, 1260, 1300, 1330, 1360, 1400, 1430, 1470, 1500, 1540
     };
+    
     public static final int[] EQ_LOW_FREQUENCIES = new int[]
     {
     200, 205, 210, 215, 220, 230, 235, 240, 250, 255, 265, 270, 280, 285, 295, 
@@ -223,7 +231,9 @@ public class WaldorfKyra extends Synth
     4572, 4667, 4764, 4862, 4961, 5060, 5161, 5263, 5365, 5469, 5574, 5679, 5786, 5893, 6000, 6112, 
     6222, 6334, 6447, 6560, 6675, 6790, 6907, 7024, 7143, 7262, 7383, 7504, 7627, 7751, 7875, 8000
     };
+    
     public static final String[] NOTES = new String[] { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
+    
     public static final String[] LFO_SHAPE_NAMES = new String[] 
     { 
     "Sine", "Square", "Triangle", "Sample & Hold", "Sawtooth", "Ramp",
@@ -231,6 +241,7 @@ public class WaldorfKyra extends Synth
     "Filtered Square", "Thin Pulse", "Triangle Square", "Wobble Down",
     "Lagged Saw", "Lagged Square", "Sine Harmonic", "Blended Wave"
     };
+    
     public static final int[] LFO_SHAPE_COUNTS = new int[] { 1, 1, 1, 1, 1, 1, 6, 16, 1, 2, 1, 1, 1, 1, 1, 16, 16, 16, 44 };
     public static String[] LFO_SHAPES = null;               // built on the fly by buildLFOShapes()
         

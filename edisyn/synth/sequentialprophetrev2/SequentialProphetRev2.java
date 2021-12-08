@@ -6175,7 +6175,7 @@ public class SequentialProphetRev2 extends Synth
         {
         final DSIProphet08 synth = new DSIProphet08();
         if (tuple != null)
-            synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver(), synth.buildKey2Receiver());
+            synth.tuple = new Midi.Tuple(tuple, synth.buildInReceiver(), synth.buildKeyReceiver(), synth.buildKey2Receiver());
         synth.sprout();
         JFrame frame = ((JFrame)(SwingUtilities.getRoot(synth)));
         frame.setVisible(true);

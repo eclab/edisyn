@@ -333,11 +333,11 @@ public class WaldorfBlofeldWavetable
             synth.tryToSendSysex(syx[i]);
             }
 
-		if (update)
-			{
+        if (update)
+            {
             synth.setLastX(_name, "WTName" + (_number - 80), synth.getSynthNameLocal(), true);
             ((WaldorfBlofeld)synth).rebuildWavetables();
-			}
+            }
         }
 
 
@@ -534,11 +534,11 @@ true);
             synth.tryToSendSysex(data);
             }
 
-		if (updateEdisyn)
-			{
+        if (updateEdisyn)
+            {
             synth.setLastX(name, "WTName" + (wavetableNumber - 80), synth.getSynthNameLocal(), true);
             ((WaldorfBlofeld)synth).rebuildWavetables();
-			}
+            }
         }
         
         
@@ -546,28 +546,28 @@ true);
         {
         while(true)
             {
-        String[] options = { "Update", "Reset", "Cancel" };
-        String title = "Revise User Wavetable Names";
-        String message = "<html>Update the following user wavetable names to be displayed in Edisyn's \"Wave\" choosers.<br>" +
-            "Names may not exceed 14 characters, and whitespace is trimmed.<br><br>" + 
-            "Setting these names just updates what Edisyn displays: it changes nothing on your Blofeld.<html> ";
-        int defaultOption = 0;
+            String[] options = { "Update", "Reset", "Cancel" };
+            String title = "Revise User Wavetable Names";
+            String message = "<html>Update the following user wavetable names to be displayed in Edisyn's \"Wave\" choosers.<br>" +
+                "Names may not exceed 14 characters, and whitespace is trimmed.<br><br>" + 
+                "Setting these names just updates what Edisyn displays: it changes nothing on your Blofeld.<html> ";
+            int defaultOption = 0;
         
-        JTextField[][] text = new JTextField[3][13];
-        String[][] labels = new String[3][13];
-        for(int j = 0; j < 3; j++)
-            for(int k = 0; k < 13; k++)
-                {
-                int i = j * 13 + k;
-                labels[j][k] = "" + (i + 80);
-                String name = synth.getLastX("WTName" + i,synth.getSynthNameLocal());
-                if (name == null) name = "User " + (i + 80);
-                text[j][k] = new JTextField(name, BLOFELD_WAVETABLE_NAME_LENGTH);
-                }
+            JTextField[][] text = new JTextField[3][13];
+            String[][] labels = new String[3][13];
+            for(int j = 0; j < 3; j++)
+                for(int k = 0; k < 13; k++)
+                    {
+                    int i = j * 13 + k;
+                    labels[j][k] = "" + (i + 80);
+                    String name = synth.getLastX("WTName" + i,synth.getSynthNameLocal());
+                    if (name == null) name = "User " + (i + 80);
+                    text[j][k] = new JTextField(name, BLOFELD_WAVETABLE_NAME_LENGTH);
+                    }
                 
-        WidgetList list1 = new WidgetList(labels[0], text[0]);
-        WidgetList list2 = new WidgetList(labels[1], text[1]);
-        WidgetList list3 = new WidgetList(labels[2], text[2]);
+            WidgetList list1 = new WidgetList(labels[0], text[0]);
+            WidgetList list2 = new WidgetList(labels[1], text[1]);
+            WidgetList list3 = new WidgetList(labels[2], text[2]);
         
             JPanel list = new JPanel();
             list.setLayout(new BorderLayout());

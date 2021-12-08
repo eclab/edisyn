@@ -188,7 +188,7 @@ public class NovationSL extends Synth
         if (isCompact()) addTab("Encoders A", soundPanel);
         else addTab("Encoders", soundPanel);
 
-		vbox.add(addLayout(new String[] { "page1control1name","page1control2name","page1control3name","page1control4name","page1control5name","page1control6name","page1control7name","page1control8name" }));
+        vbox.add(addLayout(new String[] { "page1control1name","page1control2name","page1control3name","page1control4name","page1control5name","page1control6name","page1control7name","page1control8name" }));
 
         if (isCompact())
             {
@@ -211,7 +211,7 @@ public class NovationSL extends Synth
             hbox.addLast(addEncoder(8, "page2control8", index++, Style.COLOR_A()));
             vbox.add(hbox);
 
-		vbox.add(addLayout(new String[] { "page2control1name","page2control2name","page2control3name","page2control4name","page2control5name","page2control6name","page2control7name","page2control8name" }));
+            vbox.add(addLayout(new String[] { "page2control1name","page2control2name","page2control3name","page2control4name","page2control5name","page2control6name","page2control7name","page2control8name" }));
 
             soundPanel.add(vbox, BorderLayout.CENTER);
             ((SynthPanel)soundPanel).makePasteable("page");
@@ -239,7 +239,7 @@ public class NovationSL extends Synth
             ((SynthPanel)soundPanel).makePasteable("page");
             addTab("C", soundPanel);
 
-		vbox.add(addLayout(new String[] { "page3control1name","page3control2name","page3control3name","page3control4name","page3control5name","page3control6name","page3control7name","page3control8name" }));
+            vbox.add(addLayout(new String[] { "page3control1name","page3control2name","page3control3name","page3control4name","page3control5name","page3control6name","page3control7name","page3control8name" }));
 
             soundPanel = new SynthPanel(this);
             vbox = new VBox();
@@ -260,7 +260,7 @@ public class NovationSL extends Synth
             hbox.addLast(addEncoder(8, "page11control8", ENCODERS_D_INDEX + 7, Style.COLOR_B()));
             vbox.add(hbox);
             
-		vbox.add(addLayout(new String[] { "page11control1name","page11control2name","page11control3name","page11control4name","page11control5name","page11control6name","page11control7name","page11control8name" }));
+            vbox.add(addLayout(new String[] { "page11control1name","page11control2name","page11control3name","page11control4name","page11control5name","page11control6name","page11control7name","page11control8name" }));
 
             soundPanel.add(vbox, BorderLayout.CENTER);
             ((SynthPanel)soundPanel).makePasteable("page");
@@ -287,7 +287,7 @@ public class NovationSL extends Synth
             hbox.addLast(addPot(8, "page2control8", index++, Style.COLOR_A()));
             vbox.add(hbox);
 
-		vbox.add(addLayout(new String[] { "page2control1name","page2control2name","page2control3name","page2control4name","page2control5name","page2control6name","page2control7name","page2control8name" }));
+            vbox.add(addLayout(new String[] { "page2control1name","page2control2name","page2control3name","page2control4name","page2control5name","page2control6name","page2control7name","page2control8name" }));
 
             soundPanel.add(vbox, BorderLayout.CENTER);
             ((SynthPanel)soundPanel).makePasteable("page");
@@ -311,7 +311,7 @@ public class NovationSL extends Synth
             hbox.add(addPot(7, "page3control7", index++, Style.COLOR_B()));
             hbox.addLast(addPot(8, "page3control8", index++, Style.COLOR_B()));
 
-		vbox.add(addLayout(new String[] { "page3control1name","page3control2name","page3control3name","page3control4name","page3control5name","page3control6name","page3control7name","page3control8name" }));
+            vbox.add(addLayout(new String[] { "page3control1name","page3control2name","page3control3name","page3control4name","page3control5name","page3control6name","page3control7name","page3control8name" }));
 
             vbox.add(hbox);
             soundPanel.add(vbox, BorderLayout.CENTER);
@@ -338,7 +338,7 @@ public class NovationSL extends Synth
         hbox.addLast(addButton(8, "page4control8", index++, Style.COLOR_A()));
         vbox.add(hbox);
 
-		vbox.add(addLayout(new String[] { "page4control1name","page4control2name","page4control3name","page4control4name","page4control5name","page4control6name","page4control7name","page4control8name" }));
+        vbox.add(addLayout(new String[] { "page4control1name","page4control2name","page4control3name","page4control4name","page4control5name","page4control6name","page4control7name","page4control8name" }));
 
         soundPanel.add(vbox, BorderLayout.CENTER);
         ((SynthPanel)soundPanel).makePasteable("page");
@@ -365,7 +365,7 @@ public class NovationSL extends Synth
         hbox.addLast(addButton(8+8, "page5control8", index++, Style.COLOR_B()));
         vbox.add(hbox);
 
-		vbox.add(addLayout(new String[] { "page5control1name","page5control2name","page5control3name","page5control4name","page5control5name","page5control6name","page5control7name","page5control8name" }));
+        vbox.add(addLayout(new String[] { "page5control1name","page5control2name","page5control3name","page5control4name","page5control5name","page5control6name","page5control7name","page5control8name" }));
 
         soundPanel.add(vbox, BorderLayout.CENTER);
         ((SynthPanel)soundPanel).makePasteable("page");
@@ -391,7 +391,7 @@ public class NovationSL extends Synth
         hbox.addLast(addButton(8+16, "page6control8", index++, Style.COLOR_A()));
         vbox.add(hbox);
 
-		vbox.add(addLayout(new String[] { "page6control1name","page6control2name","page6control3name","page6control4name","page6control5name","page6control6name","page6control7name","page6control8name" }));
+        vbox.add(addLayout(new String[] { "page6control1name","page6control2name","page6control3name","page6control4name","page6control5name","page6control6name","page6control7name","page6control8name" }));
 
         soundPanel.add(vbox, BorderLayout.CENTER);
         ((SynthPanel)soundPanel).makePasteable("control");
@@ -417,7 +417,7 @@ public class NovationSL extends Synth
         hbox.addLast(addButton(8+24, "page7control8", index++, Style.COLOR_B()));
         vbox.add(hbox);
 
-		vbox.add(addLayout(new String[] { "page7control1name","page7control2name","page7control3name","page7control4name","page7control5name","page7control6name","page7control7name","page7control8name" }));
+        vbox.add(addLayout(new String[] { "page7control1name","page7control2name","page7control3name","page7control4name","page7control5name","page7control6name","page7control7name","page7control8name" }));
 
         soundPanel.add(vbox, BorderLayout.CENTER);
         ((SynthPanel)soundPanel).makePasteable("page");
@@ -446,7 +446,7 @@ public class NovationSL extends Synth
         ((SynthPanel)soundPanel).makePasteable("page");
         addTab("Pads", soundPanel);
         
-		vbox.add(addLayout(new String[] { "page8control1name","page8control2name","page8control3name","page8control4name","page8control5name","page8control6name","page8control7name","page8control8name" }));
+        vbox.add(addLayout(new String[] { "page8control1name","page8control2name","page8control3name","page8control4name","page8control5name","page8control6name","page8control7name","page8control8name" }));
 
         soundPanel = new SynthPanel(this);
         vbox = new VBox();
@@ -472,7 +472,7 @@ public class NovationSL extends Synth
         hbox.addLast(addPitchBend("page9control8", index++, Style.COLOR_B()));                  /// Y2
         vbox.add(hbox);
 
-		vbox.add(addLayout(new String[] { "page9control1name","page9control2name","page9control3name","page9control4name","page9control5name","page9control6name","page9control7name","page9control8name" }));
+        vbox.add(addLayout(new String[] { "page9control1name","page9control2name","page9control3name","page9control4name","page9control5name","page9control6name","page9control7name","page9control8name" }));
 
         soundPanel.add(vbox, BorderLayout.CENTER);
         ((SynthPanel)soundPanel).makePasteable("page");
@@ -500,7 +500,7 @@ public class NovationSL extends Synth
             vbox.add(addPot(7, "page10control7", CROSSFADER_INDEX, Style.COLOR_A()));                       /// CROSS-FADER
             }
 
-		vbox.add(addLayout(new String[] { "page10control1name","page10control2name","page10control3name","page10control4name","page10control5name","page10control6name","page10control7name","page10control8name" }));
+        vbox.add(addLayout(new String[] { "page10control1name","page10control2name","page10control3name","page10control4name","page10control5name","page10control6name","page10control7name" } ));		// no "page10control8name"
 
         soundPanel.add(vbox, BorderLayout.CENTER);
         ((SynthPanel)soundPanel).makePasteable("page");
@@ -2007,23 +2007,23 @@ public class NovationSL extends Synth
         }
 
 
-	class DisplayLabel extends TextLabel implements Updatable
-		{
-		public DisplayLabel(Synth synth, String key) 
-			{ 
-			super(model.get(key, "") + " "); // there is a bug in MacOS which cuts off the last letter
-			synth.getModel().register(key, DisplayLabel.this);
-			}
-			
-    	public void update(String key, Model model)
-    		{
-    		setText(model.get(key, "") + " "); // there is a bug in MacOS which cuts off the last letter
-    		}
-		}
-		
-	Font monospaced = new Font(Font.MONOSPACED, Font.PLAIN, 12);
-	public Component addLayout(String[] keys)
-		{
+    class DisplayLabel extends TextLabel implements Updatable
+        {
+        public DisplayLabel(Synth synth, String key) 
+            { 
+            super(model.get(key, "") + " "); // there is a bug in MacOS which cuts off the last letter
+            synth.getModel().register(key, DisplayLabel.this);
+            }
+                        
+        public void update(String key, Model model)
+            {
+            setText(model.get(key, "") + " "); // there is a bug in MacOS which cuts off the last letter
+            }
+        }
+                
+    Font monospaced = new Font(Font.MONOSPACED, Font.PLAIN, 12);
+    public Component addLayout(String[] keys)
+        {
         Category category = new Category(this, "Layout", Style.COLOR_C());
 
         JComponent comp;
@@ -2033,20 +2033,20 @@ public class NovationSL extends Synth
         hbox.add(Strut.makeHorizontalStrut(6));
         
         for(int i = 0; i < keys.length; i++)
-        	{
-        	if (i > 0)
-        		{
-        		hbox.add(Strut.makeHorizontalStrut(12));
-        		}
-        		
-        	DisplayLabel label = new DisplayLabel(this, keys[i]);
-        	label.setFont(monospaced);
-			hbox.add(label);
-        	}
+            {
+            if (i > 0)
+                {
+                hbox.add(Strut.makeHorizontalStrut(12));
+                }
+                        
+            DisplayLabel label = new DisplayLabel(this, keys[i]);
+            label.setFont(monospaced);
+            hbox.add(label);
+            }
 
         category.add(hbox, BorderLayout.CENTER);
         return category;
-		}
+        }
 
 
 
@@ -3659,11 +3659,11 @@ public class NovationSL extends Synth
       
       NOTES ON SYMBOLS
       
-      +->  		This is used to denote multiple bits which are ORed together to form a single byte
-      ++Foo++	This indicates an unknown tag regarding this data in Novation's (extremely limited)
-      			original documentation.  Note that Novation lost its documentation and was kind enough
-      			to give me what they had left with the request that I do not distribute it (which I 
-      			will not -- don't ask) but that documentation is very close to useless.  :-(
+      +->               This is used to denote multiple bits which are ORed together to form a single byte
+      ++Foo++   This indicates an unknown tag regarding this data in Novation's (extremely limited)
+      original documentation.  Note that Novation lost its documentation and was kind enough
+      to give me what they had left with the request that I do not distribute it (which I 
+      will not -- don't ask) but that documentation is very close to useless.  :-(
        
       
       -------------------------

@@ -288,7 +288,7 @@ public class KorgSGMulti extends Synth
         vbox.add(comp);
 
 
-		HBox inner = new HBox();
+        HBox inner = new HBox();
 
         // 0 is on, 1 is off.  That makes perfect sense.
         comp = new CheckBox("On", this, "timbre" + val + "switch", true);
@@ -300,7 +300,7 @@ public class KorgSGMulti extends Synth
                 {
                 final KorgSG synth = new KorgSG();
                 if (tuple != null)
-                    synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver(), synth.buildKey2Receiver());
+                    synth.tuple = new Midi.Tuple(tuple, synth.buildInReceiver(), synth.buildKeyReceiver(), synth.buildKey2Receiver());
                 if (synth.tuple != null)
                     {
                     // This is a little tricky.  When the dump comes in from the synth,
@@ -337,7 +337,7 @@ public class KorgSGMulti extends Synth
                 }
             };
         inner.add(comp);
-		vbox.add(inner);
+        vbox.add(inner);
 
         hbox.add(vbox);
 

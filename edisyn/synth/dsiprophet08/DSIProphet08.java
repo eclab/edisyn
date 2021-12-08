@@ -2948,7 +2948,7 @@ public class DSIProphet08 extends Synth
         {
         final SequentialProphetRev2 synth = new SequentialProphetRev2();
         if (tuple != null)
-            synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver(), synth.buildKey2Receiver());
+            synth.tuple = new Midi.Tuple(tuple, synth.buildInReceiver(), synth.buildKeyReceiver(), synth.buildKey2Receiver());
         synth.sprout();
         JFrame frame = ((JFrame)(SwingUtilities.getRoot(synth)));
         frame.setVisible(true);
@@ -3045,34 +3045,34 @@ public class DSIProphet08 extends Synth
         
     /** Return a list of all patch number names.  Default is { "Main" } */
     public String[] getNumberNames()  
-    	{ 
-    	return buildIntegerNames(128, 1);
-    	}
+        { 
+        return buildIntegerNames(128, 1);
+        }
 
     /** Return a list of all bank names.  Default is { "Main" } */
     public String[] getBankNames() 
-    	{
-    	switch (getType())
-    		{
-    		case SYNTH_TYPE_PROPHET_08:
-    			return BANKS_PROPHET;
-    		case SYNTH_TYPE_TETRA:
-    			return BANKS_TETRA;
-    		case SYNTH_TYPE_MOPHO:
-    			return BANKS_MOPHO;
-    		case SYNTH_TYPE_MOPHO_KEYBOARD:
-    			return BANKS_MOPHO;
-    		case SYNTH_TYPE_MOPHO_X4:    		
-    			return BANKS_MOPHO_X4;
-    		}
-    	return new String[] { "Main" };		// never happens
-    	} 
+        {
+        switch (getType())
+            {
+            case SYNTH_TYPE_PROPHET_08:
+                return BANKS_PROPHET;
+            case SYNTH_TYPE_TETRA:
+                return BANKS_TETRA;
+            case SYNTH_TYPE_MOPHO:
+                return BANKS_MOPHO;
+            case SYNTH_TYPE_MOPHO_KEYBOARD:
+                return BANKS_MOPHO;
+            case SYNTH_TYPE_MOPHO_X4:               
+                return BANKS_MOPHO_X4;
+            }
+        return new String[] { "Main" };         // never happens
+        } 
 
     /** Return a list whether patches in banks are writeable.  Default is { false } */
     public boolean[] getWriteableBanks() 
-    	{ 
-    	return buildBankBooleans(128, 0, 0);
-    	}
+        { 
+        return buildBankBooleans(128, 0, 0);
+        }
 
     /** Return a list whether individual patches can be written.  Default is FALSE. */
     public boolean supportsPatchWrites() { return false; }

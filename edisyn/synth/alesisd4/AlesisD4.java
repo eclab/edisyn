@@ -1870,7 +1870,7 @@ public class AlesisD4 extends Synth
         }
         
     /** Return a list of all patch number names.  Default is { "Main" } */
-    public String[] getPatchNumberNames()  { return buildIntegerNames(21); }
+    public String[] getPatchNumberNames()  { return buildIntegerNames(21, 0); }
 
     /** Return a list whether patches in banks are writeable.  Default is { false } */
     public boolean[] getWriteableBanks() { return buildBankBooleans(21, 0, 0); }

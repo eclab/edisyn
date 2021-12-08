@@ -308,7 +308,7 @@ public class WaldorfMicrowaveXTMulti extends Synth
                 {
                 final WaldorfMicrowaveXT synth = new WaldorfMicrowaveXT();
                 if (tuple != null)
-                    synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver(), synth.buildKey2Receiver());
+                    synth.tuple = new Midi.Tuple(tuple, synth.buildInReceiver(), synth.buildKeyReceiver(), synth.buildKey2Receiver());
                 if (synth.tuple != null)
                     {
                     // This is a little tricky.  When the dump comes in from the synth,

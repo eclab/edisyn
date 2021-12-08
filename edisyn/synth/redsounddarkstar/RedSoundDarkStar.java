@@ -245,7 +245,7 @@ public class RedSoundDarkStar extends Synth
         HBox hbox = new HBox();
                 
         VBox vbox = new VBox();
-        comp = new PatchDisplay(this, 2);
+        comp = new PatchDisplay(this, 2, false);
         vbox.add(comp);
 
         HBox hbox2 = new HBox();

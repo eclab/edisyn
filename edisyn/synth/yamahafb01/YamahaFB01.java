@@ -168,7 +168,7 @@ public class YamahaFB01 extends Synth
         if (tuple != null)
             {
             final YamahaFB01Multi synth = new YamahaFB01Multi();
-            synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver(), synth.buildKey2Receiver());
+            synth.tuple = new Midi.Tuple(tuple, synth.buildInReceiver(), synth.buildKeyReceiver(), synth.buildKey2Receiver());
             if (synth.tuple != null)
                 {
                 synth.loadDefaults();

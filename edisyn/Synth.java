@@ -517,16 +517,16 @@ public abstract class Synth extends JComponent implements Updatable
         }
     
     public int getSynthNum()
-    	{
-    	String name = this.getClass().getName();
-    	for(int i = 0; i < synthClassNames.length; i++)
-    		{
-    		if (synthClassNames[i].equals(name))
-    			return i;
-    		}
-    	return -1;
-    	}
-    	
+        {
+        String name = this.getClass().getName();
+        for(int i = 0; i < synthClassNames.length; i++)
+            {
+            if (synthClassNames[i].equals(name))
+                return i;
+            }
+        return -1;
+        }
+        
     
     static Class getSynth(int num)
         {
@@ -1094,7 +1094,6 @@ public abstract class Synth extends JComponent implements Updatable
 
 
 
-
     ////////  UTILITY METHODS FOR BUILDING MIDI MESSAGES
 
     /** Builds a sequence of CCs for an NRPN message. */
@@ -1228,10 +1227,10 @@ public abstract class Synth extends JComponent implements Updatable
             
         // update Morpher?
         if (tabs.getSelectedComponent() == morphPane 
-        	&& (val == PARSE_SUCCEEDED || val == PARSE_SUCCEEDED_UNTITLED))		// ONLY when we have completed loading...
-        	{
-        	morph.setToCurrentPatch();
-        	}
+            && (val == PARSE_SUCCEEDED || val == PARSE_SUCCEEDED_UNTITLED))         // ONLY when we have completed loading...
+            {
+            morph.setToCurrentPatch();
+            }
         
         return val;
         }
@@ -1328,22 +1327,22 @@ public abstract class Synth extends JComponent implements Updatable
 
                                         incomingPatch = (result == PARSE_SUCCEEDED || result == PARSE_SUCCEEDED_UNTITLED);
                                         if (incomingPatch)
-                                        	{
-                                            backupDoneForParse = false;		// reset
-                                        	}
+                                            {
+                                            backupDoneForParse = false;         // reset
+                                            }
                                         else if (result == PARSE_CANCELLED)
                                             {
-                                            backupDoneForParse = false;		// reset
+                                            backupDoneForParse = false;         // reset
                                             // nothing
                                             }
                                         else if (result == PARSE_FAILED)
                                             {
-                                            backupDoneForParse = false;		// reset
+                                            backupDoneForParse = false;         // reset
                                             showSimpleError("Receive Error", "Could not read the patch.");
                                             }
                                         else if (result == PARSE_ERROR)
                                             {
-                                            backupDoneForParse = false;		// reset
+                                            backupDoneForParse = false;         // reset
                                             showSimpleError("Receive Error", "An error occurred on reading the patch.");
                                             }
 
@@ -1424,8 +1423,7 @@ public abstract class Synth extends JComponent implements Updatable
         else return d;                          
         }
                 
-                
-
+                    
     /** Builds a receiver to attach to the current KEY transmitter.  The receiver
         can resend all incoming requests to the OUT receiver. */
     public Receiver buildKeyReceiver()
@@ -1750,7 +1748,7 @@ public abstract class Synth extends JComponent implements Updatable
             {
             if (tuple == null) return false;
             
-            Receiver receiver = tuple.out;
+            Receiver receiver = tuple.outReceiver;
             if (receiver == null) return false;
             
             // compute pause
@@ -1839,7 +1837,7 @@ public abstract class Synth extends JComponent implements Updatable
         if (getSendMIDI())
             {
             if (tuple == null) return false;
-            Receiver receiver = tuple.out;
+            Receiver receiver = tuple.outReceiver;
             if (receiver == null) return false;
 
             // compute pause
@@ -2133,14 +2131,14 @@ public abstract class Synth extends JComponent implements Updatable
                                 
             undo.setWillPush(true);
             if (!backup.keyEquals(getModel()))  // it's changed, do an undo push
-				undo.push(backup);
+                undo.push(backup);
             setSendMIDI(true);
             
             // sometimes synths don't have enough time after a random merge, so we pause here
             simplePause(getPauseAfterReceivePatch());
             sendAllParameters();
 
-			backupDoneForParse = false;
+            backupDoneForParse = false;
             return result;
             }
         }
@@ -2372,7 +2370,8 @@ public abstract class Synth extends JComponent implements Updatable
         
 
     /** Returns the position just after the end of the sysex group, starting at start,
-        which represents a single patch for the synthesizer of the given class.  */
+        which represents a single patch for the synthesizer of the given class.  
+        If there is no such patch, returns start.  */
     public static int getNextSysexPatchGroup(String synthClassName, byte[][] sysex, int start)
         {
         Class recognizer = getRecognizer(synthClassName);
@@ -2732,8 +2731,8 @@ public abstract class Synth extends JComponent implements Updatable
     public String getTitleBarSynthName() { return getSynthNameLocal(); }
 
 
-	String titleBarAux = "";
-	
+    String titleBarAux = "";
+        
     /** Sets auxillary titlebar data, mostly used to indicate parts from a Multi. */
     public void setTitleBarAux(String val) { titleBarAux = val;}
 
@@ -2748,7 +2747,7 @@ public abstract class Synth extends JComponent implements Updatable
                     (auxFile == null ? "        Untitled" : 
                     "        (" + auxFile.getName() + ")") :
                 "        " + file.getName());
-            String disconnectedWarning = ((tuple == null || tuple.in == null) ? "   DISCONNECTED" : "");
+            String disconnectedWarning = ((tuple == null || tuple.outReceiver == null) ? "   DISCONNECTED" : "");
             String downloadingWarning = (patchTimer != null ? "   DOWNLOADING" : "");
             String learningWarning = (learning ? "   LEARNING" +
                     (model.getLastKey() != null ? " " + model.getLastKey() + 
@@ -3967,7 +3966,7 @@ public abstract class Synth extends JComponent implements Updatable
             });
 
         librarianMenu = new JMenuItem("Open Librarian");
-        menu.add(librarianMenu);
+        //menu.add(librarianMenu);
         librarianMenu.addActionListener(new ActionListener()
             {
             public void actionPerformed( ActionEvent e)
@@ -3975,10 +3974,10 @@ public abstract class Synth extends JComponent implements Updatable
                 doLibrarian();
                 }
             });
-        if (getNumberNames() == null)		// does not support librarians
-        	{
-        	librarianMenu.setEnabled(false);
-        	}
+        if (getNumberNames() == null)           // does not support librarians
+            {
+            librarianMenu.setEnabled(false);
+            }
 
         menu.addSeparator();
         
@@ -5219,7 +5218,7 @@ public abstract class Synth extends JComponent implements Updatable
 
     void doRequestCurrentPatch()
         {
-        if (tuple == null || tuple.out == null)
+        if (tuple == null || tuple.outReceiver == null)
             {
             if (!setupMIDI())
                 return;
@@ -5227,7 +5226,7 @@ public abstract class Synth extends JComponent implements Updatable
                 
         setMergeProbability(0.0);
         performRequestCurrentDump();
-		backupDoneForParse = false;		// reset
+        backupDoneForParse = false;             // reset
         }  
     
     /** Milliseconds in which we pause before sending a patch request.  The reason for this is that 
@@ -5237,7 +5236,7 @@ public abstract class Synth extends JComponent implements Updatable
     
     void doRequestPatch()
         {
-        if (tuple == null || tuple.out == null)
+        if (tuple == null || tuple.outReceiver == null)
             {
             if (!setupMIDI())
                 return;
@@ -5250,12 +5249,12 @@ public abstract class Synth extends JComponent implements Updatable
             setMergeProbability(0.0);
             performRequestDump(tempModel, true);
             }
-		backupDoneForParse = false;		// reset
+        backupDoneForParse = false;             // reset
         } 
 
     void doRequestNextPatch()
         {
-        if (tuple == null || tuple.out == null)
+        if (tuple == null || tuple.outReceiver == null)
             {
             if (!setupMIDI())
                 return;
@@ -5265,12 +5264,12 @@ public abstract class Synth extends JComponent implements Updatable
         resetBlend();
         setMergeProbability(0.0);
         performRequestDump(tempModel, true);
-		backupDoneForParse = false;		// reset
+        backupDoneForParse = false;             // reset
         } 
         
     public void doRequestMerge(double percentage)
         {
-        if (tuple == null || tuple.out == null)
+        if (tuple == null || tuple.outReceiver == null)
             {
             if (!setupMIDI())
                 return;
@@ -5283,12 +5282,12 @@ public abstract class Synth extends JComponent implements Updatable
             setMergeProbability(percentage);
             performRequestDump(tempModel, false);
             }
-		backupDoneForParse = false;		// reset
+        backupDoneForParse = false;             // reset
         }
                 
     void doSendPatch()
         {
-        if (tuple == null || tuple.out == null)
+        if (tuple == null || tuple.outReceiver == null)
             {
             if (!setupMIDI())
                 return;
@@ -5299,7 +5298,7 @@ public abstract class Synth extends JComponent implements Updatable
         
     void doSendToPatch()
         {
-        if (tuple == null || tuple.out == null)
+        if (tuple == null || tuple.outReceiver == null)
             {
             if (!setupMIDI())
                 return;
@@ -5315,7 +5314,7 @@ public abstract class Synth extends JComponent implements Updatable
                 
     void doSendToCurrentPatch()
         {
-        if (tuple == null || tuple.out == null)
+        if (tuple == null || tuple.outReceiver == null)
             {
             if (!setupMIDI())
                 return;
@@ -5323,7 +5322,7 @@ public abstract class Synth extends JComponent implements Updatable
         sendAllParametersInternal();            // this ALWAYS sends to parameters
         }
                 
-    void doReset()
+    protected void doReset()
         {
         // this last statement fixes a mystery.  When I call Randomize or Reset on
         // a Blofeld or on a Microwave, all of the widgets update simultaneously.
@@ -5351,7 +5350,7 @@ public abstract class Synth extends JComponent implements Updatable
                 
     void doWriteToPatch()
         {
-        if (tuple == null || tuple.out == null)
+        if (tuple == null || tuple.outReceiver == null)
             {
             if (!setupMIDI())
                 return;
@@ -5459,7 +5458,6 @@ public abstract class Synth extends JComponent implements Updatable
         return testNotePause;
         }
 
-
     boolean sendingTestNotes = false;   
     javax.swing.Timer sendTestNotesTimer;
                     
@@ -5565,7 +5563,11 @@ public abstract class Synth extends JComponent implements Updatable
     int testNote = 60;
     void setTestNotePitch(int note) { testNote = note; }
     public int getTestNotePitch() { return testNote; }
-    void playChord()
+    
+    /** Return whether notes should have a NOTE OFF sent after their NOTE ON */
+    public boolean getClearsTestNotes() { return true; }
+    
+    void playChord(int testNote)
         {
         if (testNoteChord != null)
             {
@@ -5574,7 +5576,7 @@ public abstract class Synth extends JComponent implements Updatable
                 {
                 for(int i = 0; i < testNoteChord.length; i++)
                     {
-                    chord[i] = testNoteChord[i] + getTestNotePitch();
+                    chord[i] = testNoteChord[i] + testNote;
                     tryToSendMIDI(new ShortMessage(ShortMessage.NOTE_ON, getTestNoteChannel(), chord[i], getTestNoteVelocity()));
                     }
                 }
@@ -5613,15 +5615,16 @@ public abstract class Synth extends JComponent implements Updatable
     public int getTestNoteVelocity() { return testNoteVelocity; }
     
     javax.swing.Timer noteTimer = null;
+    
     public void doSendTestNote()
         {
-        doSendTestNote(getTestNotePitch(), true);
+        doSendTestNote(getTestNotePitch());
         }
 
-    public void doSendTestNote(int testNote, final boolean clearOldNotes)
+    public void doSendTestNote(int testNote)
         {
         // possibly clear all notes
-        if (clearOldNotes)
+        if (getClearsTestNotes())
             {
             if (getSendsAllSoundsOffBetweenNotes())
                 {
@@ -5631,7 +5634,7 @@ public abstract class Synth extends JComponent implements Updatable
             clearChord();
             }
             
-        playChord();
+        playChord(testNote);
                                                          
         // schedule a note off
         if (noteTimer != null) noteTimer.stop();
@@ -5639,7 +5642,7 @@ public abstract class Synth extends JComponent implements Updatable
             {
             public void actionPerformed(ActionEvent e)
                 {
-                if (clearOldNotes)
+                if (getClearsTestNotes())
                     {
                     clearChord();
                     }
@@ -5998,6 +6001,7 @@ public abstract class Synth extends JComponent implements Updatable
                 saveBatchPatches();
                 patchFileOrDirectory = null;
                 patchTimer = null;
+				updateTitle();
                 }
             if (noteTimer != null)
                 {
@@ -7225,7 +7229,7 @@ public abstract class Synth extends JComponent implements Updatable
     
     boolean writeBulk(Synth synth, final String[] names, byte[][] data)
         {
-        if (tuple == null || tuple.out == null)
+        if (tuple == null || tuple.outReceiver == null)
             {
             if (!setupMIDI())
                 return false;
@@ -7675,10 +7679,10 @@ public abstract class Synth extends JComponent implements Updatable
             }
         else
             {
-            if (librarian == null)	
-            	{
-            	librarian = new Librarian(this);
-            	}
+            if (librarian == null)      
+                {
+                librarian = new Librarian(this);
+                }
             librarianPane = addTab("Librarian", librarian);
             tabs.setSelectedComponent(librarianPane);
             librarianMenu.setText("Close Librarian");
@@ -7759,6 +7763,7 @@ public abstract class Synth extends JComponent implements Updatable
             patchFileOrDirectory = null;
             getAll.setText("Download Batch...");
             showSimpleMessage("Batch Download", "Batch download stopped." );
+ 			updateTitle();
             }
         else
             {
@@ -7928,6 +7933,7 @@ public abstract class Synth extends JComponent implements Updatable
             patchFileOrDirectory = null;
             getAll.setText("Download Batch...");
             showSimpleMessage("Batch Download", "Batch download finished." );
+			updateTitle();
             }
         else
             {
@@ -7989,6 +7995,7 @@ public abstract class Synth extends JComponent implements Updatable
                     patchFileOrDirectory = null;
                     getAll.setText("Download Batch...");
                     showErrorWithStackTrace(e, "Batch Download Failed.", "An error occurred while saving to the file " + (f == null ? " " : f.getName()));
+					updateTitle();
                     Synth.handleException(e);
                     }
                 finally
@@ -8119,7 +8126,7 @@ public abstract class Synth extends JComponent implements Updatable
         
     public void doBlendFull()
         {
-        if (tuple == null || tuple.out == null)
+        if (tuple == null || tuple.outReceiver == null)
             {
             if (!setupMIDI())
                 return;
@@ -8139,7 +8146,7 @@ public abstract class Synth extends JComponent implements Updatable
 
     public void doBlendInRange()
         {
-        if (tuple == null || tuple.out == null)
+        if (tuple == null || tuple.outReceiver == null)
             {
             if (!setupMIDI())
                 return;
@@ -8186,7 +8193,7 @@ public abstract class Synth extends JComponent implements Updatable
         {
         if (undo.undo.size() >= 2)      // gotta have at least two, because we're undoing twice
             {
-            if (tuple == null || tuple.out == null)
+            if (tuple == null || tuple.outReceiver == null)
                 {
                 if (!setupMIDI())
                     return;
@@ -8384,7 +8391,7 @@ public abstract class Synth extends JComponent implements Updatable
                                                 
                     if (choice)
                         {
-                        if (tuple == null || tuple.out == null)
+                        if (tuple == null || tuple.outReceiver == null)
                             {
                             if (!setupMIDI())
                                 continue;
@@ -8583,31 +8590,31 @@ public abstract class Synth extends JComponent implements Updatable
     //// LIBRARIAN SUPPORT
     
     /** Produce a list of Strings the form { "start", "start+1", "start+2", "start+3", ..., "start+num" },
-    	for example, buildIntegerNames(4, 2) produces { "2", "3", "4" "5" }.  This is
-    	a useful utility function for implementing getNumberNames() */
+        for example, buildIntegerNames(4, 2) produces { "2", "3", "4" "5" }.  This is
+        a useful utility function for implementing getNumberNames() */
     public static String[] buildIntegerNames(int num, int start)
-    	{
-    	String[] names = new String[num];
-    	for(int i = 0; i < names.length; i++)
-    		names[i] = "" + (i + start);
-    	return names;
-    	}
+        {
+        String[] names = new String[num];
+        for(int i = 0; i < names.length; i++)
+            names[i] = "" + (i + start);
+        return names;
+        }
     
     /** Produce a list of booleans of the form { true, true, ..., false, false, ..., true, true }
-    	with the number of true, false, and true ("true2") sequences respectively.  This is 
-    	a useful utility function for implementing getWritableBanks()  */
+        with the number of true, false, and true ("true2") sequences respectively.  This is 
+        a useful utility function for implementing getWritableBanks()  */
     public static boolean[] buildBankBooleans(int numTrue, int numFalse, int numTrue2)
-    	{
-    	boolean[] w = new boolean[numTrue + numFalse + numTrue2];
-    	for(int i = 0; i < numTrue; i++)
-    		w[i] = true;
-    	for(int i = numTrue + numFalse; i < numTrue + numFalse + numTrue2; i++)
-    		w[i] = true;
-    	return w;
-    	}
+        {
+        boolean[] w = new boolean[numTrue + numFalse + numTrue2];
+        for(int i = 0; i < numTrue; i++)
+            w[i] = true;
+        for(int i = numTrue + numFalse; i < numTrue + numFalse + numTrue2; i++)
+            w[i] = true;
+        return w;
+        }
     
     /** Return a list of all patch number names.  
-    	Default is null, which indicates that the patch editor does not support librarians.  */
+        Default is null, which indicates that the patch editor does not support librarians.  */
     public String[] getNumberNames() { return null; } // { return new String[] { "Main" }; }
 
     /** Return a list of all bank names.  Default is null, indicating no banks are supported.  */
@@ -8623,22 +8630,22 @@ public abstract class Synth extends JComponent implements Updatable
     public boolean supportsBankWrites() { return !supportsPatchWrites(); }
 
     /** Sets patch.number and patch.bank to number and bank respectively, and also updates
-    	the sysex messages to reflect the revised patch number and bank if possible.
-    	By default just sets patch.number=number and patch.bank = bank.  */
+        the sysex messages to reflect the revised patch number and bank if possible.
+        By default just sets patch.number=number and patch.bank = bank.  */
     public void setNumberAndBank(Patch patch, int number, int bank) { patch.number = number; patch.bank = bank; }
 
     /** Sets patch.number and patch.bank to the number and bank stored in the sysex message.
-    	By default this just sets the number to NUMBER_NOT_SET and the bank to 0.  */
+        By default this just sets the number to NUMBER_NOT_SET and the bank to 0.  */
     public void updateNumberAndBank(Patch patch) { patch.number = Patch.NUMBER_NOT_SET; patch.bank = 0; }
 
     /** Parses a given patch number from the provided bank sysex, and returns PARSE_SUCCEEDED if successful,
-    	else PARSE_FAILED (the default). */
+        else PARSE_FAILED (the default). */
     public int parseFromBank(byte[] bankSysex, int number) { return PARSE_FAILED; }
 
     /** Emits the models as a bank.  The bank number is provided if necessary. By default does nothing. */
     public Object[] emitBank(Model[] models, int bank) { return new Object[0]; }
     
     /** Returns the appropriate pause after a bank write.  By default this is just
-    	getPauseAfterWritePatch() */
+        getPauseAfterWritePatch() */
     public int getPauseAfterWriteBank() { return getPauseAfterWritePatch(); }    
     }

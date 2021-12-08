@@ -1451,7 +1451,7 @@ public class KorgVolca extends Synth
                 {
                 final YamahaDX7 synth = new YamahaDX7();
                 if (tuple != null)
-                    synth.tuple = tuple.copy(synth.buildInReceiver(), synth.buildKeyReceiver(), synth.buildKey2Receiver());
+                    synth.tuple = new Midi.Tuple(tuple, synth.buildInReceiver(), synth.buildKeyReceiver(), synth.buildKey2Receiver());
                 if (synth.tuple != null)
                     {       
                     synth.sprout();

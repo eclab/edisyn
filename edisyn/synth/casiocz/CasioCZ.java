@@ -33,7 +33,7 @@ import javax.sound.midi.*;
 /***
     ABOUT BANKS
 
-    		CZ-1    CZ-101/1K       CZ-3K/5K
+    CZ-1    CZ-101/1K       CZ-3K/5K
     1-8     A               Preset          Preset          A
     9-16    B               Preset          Preset          B
     17-24   C                                       Preset          C
@@ -52,7 +52,7 @@ public class CasioCZ extends Synth
     {
     /// Various collections of parameter names for pop-up menus
 
-	
+        
     public static final int TYPE_CZ1 = 0;
     public static final int TYPE_CZ101_1000 = 1;
     public static final int TYPE_CZ3000_5000 = 2;
@@ -335,7 +335,7 @@ public class CasioCZ extends Synth
         
         vbox.add(hbox2);
         
-       comp = new StringComponent("Patch Name [CZ-1]", this, "name", 16, "Name must be up to 16 characters.")
+        comp = new StringComponent("Patch Name [CZ-1]", this, "name", 16, "Name must be up to 16 characters.")
             {
             public String replace(String val)
                 {
@@ -767,22 +767,22 @@ public class CasioCZ extends Synth
             return PARSE_CANCELLED; // We do this because the CZ is chatty in response to us, and we don't want that misinterpreted as a failed parse
             }
                 
-	if (!isParsingDefaults())
-        {
-        if (cz1)
-        	{
-        	setSynthType(TYPE_CZ1, false);
-        	}
-        else
-        	{
-        	if (getSynthType() == TYPE_CZ1)
-        		setSynthType(TYPE_CZ101_1000, false);
-        	}
-        }
+        if (!isParsingDefaults())
+            {
+            if (cz1)
+                {
+                setSynthType(TYPE_CZ1, false);
+                }
+            else
+                {
+                if (getSynthType() == TYPE_CZ1)
+                    setSynthType(TYPE_CZ101_1000, false);
+                }
+            }
             
             
             
-                    // System.err.println("CZ1: " + cz1);
+        // System.err.println("CZ1: " + cz1);
                 
                 
         // System.err.println("PFLAG " + pos);
@@ -1606,51 +1606,51 @@ public class CasioCZ extends Synth
 
 
 
-	public  String[] getBankNames()
-		{
-		int type = getSynthType();
-		if (type == TYPE_CZ1)
-			{
-			return CZ1_BANKS;
-			}
-		else if (type == TYPE_CZ101_1000)
-			{
-			return CZ101_BANKS; 
-			}
-		else if (type == TYPE_CZ3000_5000)
-			{
-			return CZ3000_BANKS;
-			}
-		else // if (type == TYPE_CZ230S)
-			{
-			return CZ230S_BANKS;
-			}
-		}
+    public  String[] getBankNames()
+        {
+        int type = getSynthType();
+        if (type == TYPE_CZ1)
+            {
+            return CZ1_BANKS;
+            }
+        else if (type == TYPE_CZ101_1000)
+            {
+            return CZ101_BANKS; 
+            }
+        else if (type == TYPE_CZ3000_5000)
+            {
+            return CZ3000_BANKS;
+            }
+        else // if (type == TYPE_CZ230S)
+            {
+            return CZ230S_BANKS;
+            }
+        }
         
     /** Return a list of all patch number names.  Default is { "Main" } */
-    public  String[] getPatchNumberNames() { return buildIntegerNames(8); }
+    public  String[] getPatchNumberNames() { return buildIntegerNames(8, 0); }
 
     /** Return a list whether patches in banks are writeable.  Default is { false } */
     public boolean[] getWriteableBanks() 
-    	{ 
-		int type = getSynthType();
-		if (type == TYPE_CZ1)
-			{
-			return new boolean[] { true, true, true, true, true, true, true, true, false, false, false, false };
-			}
-		else if (type == TYPE_CZ101_1000)
-			{
-			return new boolean[] { false, false, false, false, true, true, false, false, true, true, false, false, false };
-			}
-		else if (type == TYPE_CZ3000_5000)
-			{
-			return new boolean[] { false, false, false, false, true, true, true, true, false, false, false, false, false };
-			}
-		else // if (type == TYPE_CZ230S)
-			{
-			return new boolean[] { false, false, false, false, false, false, false, false, false, false, false, false, true };
-			}
-		}
+        { 
+        int type = getSynthType();
+        if (type == TYPE_CZ1)
+            {
+            return new boolean[] { true, true, true, true, true, true, true, true, false, false, false, false };
+            }
+        else if (type == TYPE_CZ101_1000)
+            {
+            return new boolean[] { false, false, false, false, true, true, false, false, true, true, false, false, false };
+            }
+        else if (type == TYPE_CZ3000_5000)
+            {
+            return new boolean[] { false, false, false, false, true, true, true, true, false, false, false, false, false };
+            }
+        else // if (type == TYPE_CZ230S)
+            {
+            return new boolean[] { false, false, false, false, false, false, false, false, false, false, false, false, true };
+            }
+        }
 
     /** Return a list whether individual patches can be written.  Default is FALSE. */
     public boolean supportsPatchWrites() { return true; }

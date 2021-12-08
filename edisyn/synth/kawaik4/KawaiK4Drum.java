@@ -262,7 +262,7 @@ public class KawaiK4Drum extends Synth
             {
             public String map(int val)
                 {
-                return KEYS[val % 12] + (val / 12 + 1);  // note integer division
+                return KEYS[val % 12] + ((val / 12 - 2));  // note integer division
                 }
             };
         hbox.add(comp);
@@ -271,7 +271,7 @@ public class KawaiK4Drum extends Synth
             {
             public void userPressed(int key)
                 {
-                doSendTestNote(key, false);
+                doSendTestNote(key);
                 }
             };
         ((KeyDisplay)comp).setDynamicUpdate(true);
@@ -664,7 +664,10 @@ public class KawaiK4Drum extends Synth
         return frame;
         }
 
-
+    // The problem with this is that if we pick a sound that's not a drum sound,
+    // like an organ or whatnot, it will play forever
+//      public boolean getClearsTestNotes() { return false; }
+        
     public int getPauseAfterChangePatch() { return 200; }   // Seem to need about > 100ms
 
     public int getPauseAfterSendAllParameters() { return 100; } 

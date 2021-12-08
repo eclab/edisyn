@@ -543,6 +543,20 @@ public class Blank extends Synth
 
     ////// YOU MAY WANT TO IMPLEMENT SOME OF THE FOLLOWING
 
+    public int getTestNotePitch()
+        {
+        // Returns the test note pitch.  This is default whatever the user set,
+        // but you can override this to fix it to something else
+        return super.getTestNotePitch();
+        }
+
+    public boolean getClearsTestNotes()
+        {
+        // Returns whether test notes should be cleared via a NOTE OFF or an 
+        // all sounds / all notes off.  This is normally true, except for drum
+        // patches, where the notes ought to be allowed to naturally decay.             
+        return true;
+        }
 
     public static boolean recognizeBulk(byte[] data)
         {

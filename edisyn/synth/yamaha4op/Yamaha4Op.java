@@ -1974,7 +1974,7 @@ public class Yamaha4Op extends Synth
             // level scaling
             model.set(vcedParameters[pos++], data[patch + op * 10 + 5 + 6] & 127);
             // rate scaling
-            model.set(vcedParameters[pos++], (data[patch + op * 10 + 9 + 6] >>> 3) & 3);
+            model.set(vcedParameters[pos++], (data[patch + op * 10 + 9 + 6] >>> 3) & 3);			// out of order?
             // eg bias sensitivity
             model.set(vcedParameters[pos++], (data[patch + op * 10 + 6 + 6] >>> 3) & 7);
             // amplitude modulation
@@ -2006,7 +2006,7 @@ public class Yamaha4Op extends Synth
         // amplitude modulation depth
         model.set(vcedParameters[pos++], data[patch + 44 + 6] & 127);
         // lfo sync
-        model.set(vcedParameters[pos++], (data[patch + 40 + 6] >>> 6) & 1);
+        model.set(vcedParameters[pos++], (data[patch + 40 + 6] >>> 6) & 1);				// out of order
         // lfo wave
         model.set(vcedParameters[pos++], (data[patch + 45 + 6] >>> 0) & 3);
         // pitch modulation sensitivity
@@ -2016,7 +2016,7 @@ public class Yamaha4Op extends Synth
         // transpose
         model.set(vcedParameters[pos++], data[patch + 46 + 6] & 63);  // not marked in the documentation, but it goes 0...48
         // poly/mono
-        model.set(vcedParameters[pos++], (data[patch + 48 + 6] >>> 3) & 1);
+        model.set(vcedParameters[pos++], (data[patch + 48 + 6] >>> 3) & 1);				// out of order
         // pitch bend range
         model.set(vcedParameters[pos++], data[patch + 47 + 6] & 15);
         // portamento mode
@@ -2026,11 +2026,11 @@ public class Yamaha4Op extends Synth
         // foot control volume
         model.set(vcedParameters[pos++], data[patch + 50 + 6] & 127);
         // sustain
-        model.set(vcedParameters[pos++], (data[patch + 48 + 6] >>> 2) & 1);
+        model.set(vcedParameters[pos++], (data[patch + 48 + 6] >>> 2) & 1);				// out of order
         // portamento
-        model.set(vcedParameters[pos++], (data[patch + 48 + 6] >>> 1) & 1);
+        model.set(vcedParameters[pos++], (data[patch + 48 + 6] >>> 1) & 1);				// out of order
         // chorus
-        model.set(vcedParameters[pos++], (data[patch + 48 + 6] >>> 4) & 1);
+        model.set(vcedParameters[pos++], (data[patch + 48 + 6] >>> 4) & 1);				// out of order
         // modulation wheel pitch
         model.set(vcedParameters[pos++], data[patch + 51 + 6] & 127);
         // modulation wheel amplitude
@@ -2071,9 +2071,9 @@ public class Yamaha4Op extends Synth
             // operator waveform
             model.set(acedParameters[pos++], (data[patch + op * 2 + 74 + 6] >>> 4) & 7);
             // eg shift
-            model.set(acedParameters[pos++], (data[patch + op * 2 + 73 + 6] >>> 4) & 3);
+            model.set(acedParameters[pos++], (data[patch + op * 2 + 73 + 6] >>> 4) & 3);				// out of order
             // fixed range mode (V50 only)
-            model.set("operator" + (op + 1) + "vshift", (data[patch + op * 2 + 73 + 6] >>> 6) & 1);  // in docs as "FIXRM" for "FIX RANGE MODE"
+            model.set("operator" + (op + 1) + "vshift", (data[patch + op * 2 + 73 + 6] >>> 6) & 1);  // out of order	// in docs as "FIXRM" for "FIX RANGE MODE"
             }
 
         // reverb rate
@@ -2131,7 +2131,7 @@ public class Yamaha4Op extends Synth
         if (tempModel == null)
             tempModel = getModel();
         
-        simplePause(50);
+//        if (!toFile) simplePause(50);
         byte[][] result = new byte[4][];
   
   
@@ -2420,6 +2420,10 @@ public class Yamaha4Op extends Synth
         System.err.println("Warning (Yamaha4Op): Invalid synth type in requestCurrentDump(): " + getSynthType());
         return new byte[] { }; // just in case
         }
+
+	public int getPauseAfterSendAllParameters() { return 50; }			// also goes for write patch
+	
+    public int getPauseAfterSendOneParameter() { return 50; }
     
     public int getPauseAfterChangePatch() { return 100; }               // TX81Z fails if it's less than 50 or so
     

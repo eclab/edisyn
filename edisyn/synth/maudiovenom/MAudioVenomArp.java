@@ -381,7 +381,7 @@ public class MAudioVenomArp extends Synth
             }
                         
 
-        Category category = new Category(this, "Patterns " + start + "-" + (end - 1), color);
+        Category category = new Category(this, "Pattern Steps " + start + "-" + (end - 1), color);
               
         JComponent comp;
         String[] params;

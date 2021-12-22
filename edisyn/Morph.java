@@ -486,6 +486,7 @@ public class Morph extends SynthPanel
         }
     
     
+    boolean startSoundsAgain = false;
     public static final int NO_MENU_BUTTON = -1;
     int menuButton = NO_MENU_BUTTON;
     public void setToCurrentPatch()
@@ -497,6 +498,12 @@ public class Morph extends SynthPanel
             buttons[menuButton].getButton().setText(currentPatchName == null ? "Current Patch" : "" + currentPatchName.trim());
             menuButton = NO_MENU_BUTTON;
             updateAgain();
+
+			if (startSoundsAgain)
+				{
+				synth.doSendTestNotes();
+				startSoundsAgain = false;
+				}
             }
         }
     
@@ -514,6 +521,14 @@ public class Morph extends SynthPanel
             if (synth.receiveCurrent.isEnabled())
                 {
                 menuButton = button;
+                startSoundsAgain = false;
+                // we do this because some synths send data in chunks and in-between those
+                // chunks we may send current patch and play it, messing up the chunk (such as on the JV-880)
+                if (synth.isSendingTestNotes())
+                	{
+                	synth.doSendTestNotes();
+                	startSoundsAgain = true;
+                	}
                 synth.doRequestCurrentPatch();
                 // Notice we do NOT do updateAgain(); but we'll do it when the patch comes in
                 }
@@ -527,6 +542,14 @@ public class Morph extends SynthPanel
             if (synth.receivePatch.isEnabled())
                 {
                 menuButton = button;
+                startSoundsAgain = false;
+                // we do this because some synths send data in chunks and in-between those
+                // chunks we may send current patch and play it, messing up the chunk (such as on the JV-880)
+                if (synth.isSendingTestNotes())
+                	{
+                	synth.doSendTestNotes();
+                	startSoundsAgain = true;
+                	}
                 synth.doRequestPatch();
                 // Notice we do NOT do updateAgain(); but we'll do it when the patch comes in
                 }
@@ -839,7 +862,7 @@ public class Morph extends SynthPanel
         {
         if (!startedUp)
             {
-            if (!synth.isSendingTestNotes())
+            if (!synth.isSendingTestNotes() && synth.morphTestNotes)
                 {
                 synth.doSendTestNotes();
                 }

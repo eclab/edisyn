@@ -34,6 +34,11 @@ public class Patch
     // was the bank and number set arbitrarily by the Library (a flag it uses)
     public boolean arbitrary = false;
     
+    public Patch(int synth, byte[] sysex, boolean isBankSysex)
+        {
+        this(synth, Synth.cutUpSysex(sysex), isBankSysex);
+        } 
+    
     public Patch(int synth, byte[][] sysex, boolean isBankSysex)
         {
         this.synth = synth;

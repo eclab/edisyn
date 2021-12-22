@@ -1270,10 +1270,6 @@ public class RolandD110Tone extends Synth
 
 
 
-/// August 24, 2021: there appear to have been major errors in this with regard to 
-/// address computation.  However I don't have a D-110 any more so I can't test my
-/// fix, it just appears to output the right addresses according to the spec.
-        
     public byte[] emit(String key)
         {
         if (key.equals("number")) return new byte[0];  // this is not emittable
@@ -1697,5 +1693,25 @@ return b;
             (model.get("number") + 1 < 10 ? "0" : "") + ((model.get("number") + 1));
         }
 
-    public int getBatchDownloadWaitTime() { return 750; }
+    public int getBatchDownloadWaitTime() { return 275; }
+
+    /** Default is null, which indicates that the patch editor does not support librarians.  */
+    public String[] getPatchNumberNames() { return buildIntegerNames(64, 1); }
+
+    /** Return a list of all bank names.  Default is null, indicating no banks are supported.  */
+    public String[] getBankNames() { return TONE_GROUP; }	// or TONE_GROUP_SHORT?
+
+    /** Return a list of each bank, indicating which are writeable.  Default is an array, all true, the size of getBankNames(). */
+    public boolean[] getWriteableBanks() { return new boolean[] { false, false, true, false }; }
+
+    /** Return whether individual patches can be written.  Default is FALSE. */
+    public boolean getSupportsPatchWrites() { return true; }
+
+    /** Return the maximum number of characters a patch name may hold. The default returns 16. */
+    public int getPatchNameLength() { return 10; }
+
+    /** Return true if individual (non-bank) patches on the synthesizer contain location information (bank, number). 
+    	This will matter when reading patches from disk, rather than loading them from the synth, so as to put them
+    	in the right place. */
+    public boolean getPatchContainsLocation() { return true; }
     }

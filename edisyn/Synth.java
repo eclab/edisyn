@@ -94,7 +94,7 @@ public abstract class Synth extends JComponent implements Updatable
     /** The "Morph" menu */
     public JMenuItem morphMenu;
     /** The "Librarian" menu */
-    public JMenuItem librarianMenu;
+    public JMenuItem openLibrarianMenu;
     /** The "Report Next Controller MIDI" menu */
     public JCheckBoxMenuItem testNotes;
     /** The "Repeatedly Send Current Patch" menu */
@@ -119,10 +119,13 @@ public abstract class Synth extends JComponent implements Updatable
     public JCheckBoxMenuItem clearNotesMenu;
     /** The "Launch with Last Editor" menu */
     public JCheckBoxMenuItem launchMenu;
+    /** The "Morph/Hill-Climb Send Test Notes" menu */
+    public JCheckBoxMenuItem morphTestNotesMenu;
     /** The "Blend" menu */
     public JMenu blend;
     /** NN randomization checkbox, only appears if the Synth providesNN (such as a DX7) */
     public JCheckBoxMenuItem nnRandomize;
+    public JMenu librarianMenu;
         
     // The four nudge models 
     Model[] nudge = new Model[4];
@@ -171,7 +174,9 @@ public abstract class Synth extends JComponent implements Updatable
     boolean testIncomingSynthMIDI;
     
     static boolean clearNotes;
+    static boolean morphTestNotes;
 
+	boolean toLibrarian = false;		// should batch patches be routed to the librarian?
 
     boolean parsingForMerge = false;
     /** Indicates that we are a sacrificial synth which is parsing an incoming sysex dump and then will be merged with the main synth. */
@@ -268,6 +273,7 @@ public abstract class Synth extends JComponent implements Updatable
         random = new Random(System.currentTimeMillis());
         
         clearNotes = getLastXAsBoolean("SwitchingSendsAllSoundsOff", null, true, false);        
+        morphTestNotes = getLastXAsBoolean("SendTestNotesMorph", null, true, false);        
         perChannelCCs = ("" + getLastX("PerChannelCC", getSynthNameLocal(), false)).equalsIgnoreCase("true");                  
         }
         
@@ -516,9 +522,9 @@ public abstract class Synth extends JComponent implements Updatable
         loadSynths();
         }
     
-    public int getSynthNum()
+    public int getSynthNum(Class synthClass)
         {
-        String name = this.getClass().getName();
+        String name = synthClass.getName();
         for(int i = 0; i < synthClassNames.length; i++)
             {
             if (synthClassNames[i].equals(name))
@@ -527,7 +533,12 @@ public abstract class Synth extends JComponent implements Updatable
         return -1;
         }
         
-    
+     public int getSynthNum()
+        {
+        return getSynthNum(this.getClass());
+        }
+        
+   
     static Class getSynth(int num)
         {
         try
@@ -652,15 +663,35 @@ public abstract class Synth extends JComponent implements Updatable
     /** Update the Undo and Redo menus to be enabled or disabled. */
     public void updateUndoMenus()
         {
-        if (undo == null)               // we could just be a scratch synth, not one with a window
-            return;  
-                
-        if (redoMenu != null)
-            redoMenu.setEnabled(
-                undo.shouldShowRedoMenu());
-        if (undoMenu != null)
-            undoMenu.setEnabled(
-                undo.shouldShowUndoMenu());
+		if (undo == null)               // we could just be a scratch synth, not one with a window
+			return;  
+				
+        if (tabs.getSelectedComponent() == librarianPane)
+        	{
+			if (redoMenu != null)
+				{
+				redoMenu.setText("Redo Librarian Action");
+				redoMenu.setEnabled(librarian.getLibrary().hasRedo());
+				}
+			if (undoMenu != null)
+				{
+				undoMenu.setText("Undo Librarian Action");
+				undoMenu.setEnabled(librarian.getLibrary().hasUndo());
+				}
+        	}
+        else
+        	{
+			if (redoMenu != null)
+				{
+				redoMenu.setText("Redo");
+				redoMenu.setEnabled(undo.shouldShowRedoMenu());
+				}
+			if (undoMenu != null)
+				{
+				undoMenu.setText("Undo");
+				undoMenu.setEnabled(undo.shouldShowUndoMenu());
+				}
+			}
         }
 
 
@@ -1221,15 +1252,24 @@ public abstract class Synth extends JComponent implements Updatable
             }
         finally
             {
-            model.setUpdateListeners(previous);
-            model.updateAllListeners();
+           	if (val != PARSE_CANCELLED)
+           		{
+           		model.setUpdateListeners(previous);
+           		boolean send = getSendMIDI();
+           		setSendMIDI(false);
+	            model.updateAllListeners();
+	            setSendMIDI(send);
+	            }
+	        else model.setUpdateListeners(true);
             }
             
-        // update Morpher?
-        if (tabs.getSelectedComponent() == morphPane 
-            && (val == PARSE_SUCCEEDED || val == PARSE_SUCCEEDED_UNTITLED))         // ONLY when we have completed loading...
+        // update Morpher or Hill-Climber?
+        if (val == PARSE_SUCCEEDED || val == PARSE_SUCCEEDED_UNTITLED)         // ONLY when we have completed loading...
             {
-            morph.setToCurrentPatch();
+            if (tabs.getSelectedComponent() == morphPane) 
+            	morph.setToCurrentPatch();
+            else if (tabs.getSelectedComponent() == hillClimbPane)
+            	hillClimb.setToCurrentPatch();
             }
         
         return val;
@@ -3146,9 +3186,13 @@ public abstract class Synth extends JComponent implements Updatable
         }
 
 
+    Component oldTab = null;
     /** Called when a tab has been changed, to update various stuff. */
     public void tabChanged()
-        {
+        {        
+		// could be moving to/from the librarian
+		if (librarian != null) librarian.updateUndoRedo();
+		
         // cancel learning
         setLearningCC(false);
         
@@ -3157,16 +3201,34 @@ public abstract class Synth extends JComponent implements Updatable
             {
             morph.shutdown();
             hillClimb.startup();
+            // handle batch download
+            stopBatchDownload();
+			Librarian.setLibrarianMenuSelected(librarianMenu, false);
             }
         else if (tab == morphPane)
             {
             hillClimb.shutdown();
             morph.startup();
+            // handle batch download
+            stopBatchDownload();
+			Librarian.setLibrarianMenuSelected(librarianMenu, false);
             }
-        else
+        else if (tab == librarianPane)
+        	{
+            morph.shutdown();
+            hillClimb.shutdown();
+            // handle batch download
+            stopBatchDownload();
+			Librarian.setLibrarianMenuSelected(librarianMenu, true);
+        	}
+        else		// something else
             {
             morph.shutdown();
             hillClimb.shutdown();
+            // handle batch download
+            if (oldTab == librarianPane)	// gotta kill the librarian batch download if any
+            	stopBatchDownload();
+			Librarian.setLibrarianMenuSelected(librarianMenu, false);
             }
             
         pasteTab.setEnabled(false);
@@ -3193,6 +3255,8 @@ public abstract class Synth extends JComponent implements Updatable
                 pasteMutableTab.setEnabled(true);
                 }
             }
+        
+        oldTab = tab;
         }
 
 
@@ -3437,7 +3501,12 @@ public abstract class Synth extends JComponent implements Updatable
             {
             public void actionPerformed( ActionEvent e)
                 {
-                doUndo();
+				if (tabs.getSelectedComponent() == librarianPane)
+					{
+					librarian.getLibrary().doUndo();
+                	librarian.updateUndoRedo();
+					}
+                else doUndo();
                 }
             });
             
@@ -3449,7 +3518,12 @@ public abstract class Synth extends JComponent implements Updatable
             {
             public void actionPerformed( ActionEvent e)
                 {
-                doRedo();
+      			if (tabs.getSelectedComponent() == librarianPane)
+					{
+					librarian.getLibrary().doRedo();
+                	librarian.updateUndoRedo();
+					}
+		        else doRedo();
                 }
             });            
             
@@ -3965,18 +4039,18 @@ public abstract class Synth extends JComponent implements Updatable
                 }
             });
 
-        librarianMenu = new JMenuItem("Open Librarian");
-        //menu.add(librarianMenu);
-        librarianMenu.addActionListener(new ActionListener()
+        openLibrarianMenu = new JMenuItem("Open Librarian");
+//        menu.add(openLibrarianMenu);
+        openLibrarianMenu.addActionListener(new ActionListener()
             {
             public void actionPerformed( ActionEvent e)
                 {
                 doLibrarian();
                 }
             });
-        if (getNumberNames() == null)           // does not support librarians
+        if (getPatchNumberNames() == null)           // does not support librarians
             {
-            librarianMenu.setEnabled(false);
+            openLibrarianMenu.setEnabled(false);
             }
 
         menu.addSeparator();
@@ -4323,7 +4397,11 @@ public abstract class Synth extends JComponent implements Updatable
             {
             public void actionPerformed( ActionEvent e)
                 {
+				if (morphing)
+					morph.updateSound();
                 doSendTestNote();
+				if (morphing)
+					morph.postUpdateSound();
                 }
             });
 
@@ -4346,7 +4424,7 @@ public abstract class Synth extends JComponent implements Updatable
                 {
                 if (repeatingCurrentPatch)
                     {
-                    if (!hillClimbing)
+                    if (!hillClimbing && !morphing)
                         {
                         sendAllParameters();
                         }
@@ -4960,6 +5038,18 @@ public abstract class Synth extends JComponent implements Updatable
                 }
             });
 
+        morphTestNotesMenu = new JCheckBoxMenuItem("Morph/Hill-Climb Send Test Notes");
+        menu.add(morphTestNotesMenu);
+        morphTestNotesMenu.setSelected(morphTestNotes);
+        morphTestNotesMenu.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                morphTestNotes = morphTestNotesMenu.isSelected();
+                setLastX("" + morphTestNotes, "SendTestNotesMorph", null);
+                }
+            });
+
         clearNotesMenu = new JCheckBoxMenuItem("Send All Sounds Off when Changing Windows");
         menu.add(clearNotesMenu);
         clearNotesMenu.setSelected(clearNotes);
@@ -5183,6 +5273,9 @@ public abstract class Synth extends JComponent implements Updatable
                 }
 
             });
+        
+        librarianMenu = Librarian.buildLibrarianMenu(openLibrarianMenu, this);
+        menubar.add(librarianMenu);
     
         updateTitle();
         numOpenWindows++;  
@@ -5197,7 +5290,8 @@ public abstract class Synth extends JComponent implements Updatable
     void updateMenu()
         {
         launchMenu.setSelected(getLastXAsBoolean("ShowSynth", null, true, false));
-        clearNotesMenu.setSelected(clearNotes);
+        clearNotesMenu.setSelected(getLastXAsBoolean("SendTestNotesMorph", null, true, false));
+        morphTestNotesMenu.setSelected(morphTestNotes);
         }
             
     void doPerChannelCCs(boolean val)
@@ -6210,6 +6304,24 @@ public abstract class Synth extends JComponent implements Updatable
         return result;
         }
 
+    /** Removes the sysex messages from data, discarding the rest. */
+    public static byte[][] extractSysex(Object[] data)
+        {
+        int len = 0;
+        for(int i = 0; i < data.length; i++)
+        	{
+        	if (data[i] instanceof byte[]) len++;
+        	}
+        	
+        byte[][] result = new byte[len][];
+        len = 0;
+        for(int i = 0; i < data.length; i++)
+        	{
+        	if (data[i] instanceof byte[]) result[len++] = (byte[])data[i];
+        	}
+
+        return result;
+        } 
 
     /** Breaks data into multiple sysex messages, discarding apparent non-sysex data. */
     public static byte[][] cutUpSysex(byte[] data)
@@ -6639,11 +6751,13 @@ public abstract class Synth extends JComponent implements Updatable
     public static final int BULK_DIALOG_RESULT_WRITE = 3;
     public static final int BULK_DIALOG_RESULT_BREAK_OUT = 4;
     public static final int BULK_DIALOG_RESULT_INDIVIDUAL = 5;
+    public static final int BULK_DIALOG_RESULT_LOCAL_LIBRARIAN = 6;
+    public static final int BULK_DIALOG_RESULT_NEW_LIBRARIAN = 7;
         
     /** Displays a bulk dialog panel for patches, returning data in the form { result, primary, secondary }.
         primary and secondary are only meaningful if result is BULK_DIALOG_RESULT_LOCAL or BULK_DIALOG_RESULT_NEW. */
     public int[] displayLoadBulkDialog(Patch[] patches, int[][] patchIndices, String title, String localLoad, 
-        String newLoad, String writeAll, String breakOut, String individual, String cancel, boolean reduced )
+        String newLoad, String writeAll, String breakOut, String individual, String librarian, String newLibrarian, String cancel, boolean reduced )
         {
         String[][] patchnames = extractPatchNames(patches, patchIndices);
         String[] classnames = extractSynthClassNames(patches, patchIndices);
@@ -6678,7 +6792,9 @@ public abstract class Synth extends JComponent implements Updatable
         JComboBox actions = null;
         if (!reduced)
             {
-            actions = new JComboBox(new String[] { localLoad, newLoad, writeAll, breakOut, individual });
+            actions = new JComboBox(new String[] { localLoad, newLoad, writeAll, breakOut, individual, librarian, newLibrarian });
+            if (tabs.getSelectedComponent() == librarianPane)
+            	actions.setSelectedIndex(5);					// LIBRARIAN
             vbox.add(new JSeparator());
             vbox.add(new JLabel("   "));
 
@@ -6721,8 +6837,12 @@ public abstract class Synth extends JComponent implements Updatable
                 return new int[] { BULK_DIALOG_RESULT_WRITE, menu.getPrimary(), menu.getSecondary() };
             else if (actions.getSelectedIndex() == 3)  // save by type
                 return new int[] { BULK_DIALOG_RESULT_BREAK_OUT, menu.getPrimary(), menu.getSecondary() };
-            else // if (actions.getSelectedIndex() == 3)  // save individually
+            else if (actions.getSelectedIndex() == 4)  // save individually
                 return new int[] { BULK_DIALOG_RESULT_INDIVIDUAL, menu.getPrimary(), menu.getSecondary() };
+            else if (actions.getSelectedIndex() == 5)  // save individually
+                return new int[] { BULK_DIALOG_RESULT_LOCAL_LIBRARIAN, menu.getPrimary(), menu.getSecondary() };
+            else // if (actions.getSelectedIndex() == 6)  // save individually
+                return new int[] { BULK_DIALOG_RESULT_NEW_LIBRARIAN, menu.getPrimary(), menu.getSecondary() };
             }
         // cancelled in some way.  An apparent bug in JOptionPane is such that if you press ESC, then -1 is returned by getValue().  It should be returning null.
         else return new int[] { BULK_DIALOG_RESULT_CANCEL, menu.getPrimary(), menu.getSecondary() };
@@ -6853,6 +6973,8 @@ public abstract class Synth extends JComponent implements Updatable
                                 "Write All Patches to Synth...", 
                                 "Save All Patches as Bulk...", 
                                 "Save All Patches Individually...", 
+                                "Load All Patches into This Librarian",
+                                "Load All Patches into New Librarian",
                                 "Cancel", 
                                 (isShowingLimitedBankSysex() || merge) );
                             int result = results[0];
@@ -6981,10 +7103,40 @@ public abstract class Synth extends JComponent implements Updatable
                                     else succeeded = saveAllPatches(pat, (res == 0 ? primary : -1), false);
                                     }
                                 }
-                            else            /// uh....`
+                            else if (result == BULK_DIALOG_RESULT_LOCAL_LIBRARIAN)
                                 {
-                                succeeded = false;
-                                }
+                                Class synthType = getSynth(pat[primary][secondary].synth);
+                                int synthNum = getSynthNum(synthType);
+                                
+                                if (this.getClass() != synthType)
+                                	{
+									if (showSimpleConfirm("Load Other Synth Patch Librarian",
+											"File doesn't contain sysex data for the " + getSynthNameLocal() + 
+											".\nIt appears to contain data for the " + synthNames[synthNum] + 
+											".\nLoad for the " + synthNames[synthNum] + " instead?"))
+										{
+										Synth otherSynth = instantiate(synthType, false, true, null);
+										otherSynth.loadLibrarian(patches);
+										return true;
+										}
+									else
+										{
+										return false;
+										}                                               
+                                	}
+                                else
+                                	{
+                                	loadLibrarian(patches);
+                                	return true;
+                                	}
+								}
+                            else if (result == BULK_DIALOG_RESULT_NEW_LIBRARIAN)
+                                {
+                                Class synthType = getSynth(pat[primary][secondary].synth);
+								Synth otherSynth = instantiate(synthType, false, true, null);
+								otherSynth.loadLibrarian(patches);
+								return true;
+								}
                             }
                         }
                     }
@@ -7010,7 +7162,42 @@ public abstract class Synth extends JComponent implements Updatable
         parsingForMerge = false;
         return succeeded;
         }
-    
+ 
+ 
+ 		public void loadLibrarian(Patch[] patches)
+ 			{
+			// now we need to load the appropriate locations and names
+			boolean send = getSendMIDI();
+			setSendMIDI(false);
+			undo.setWillPush(false);
+			Model backup = (Model)(model.clone());	
+			model.setUpdateListeners(false);			// otherwise we GC badly	
+			for(int i = 0; i < patches.length; i++)
+				{
+				int res = parse(flatten(patches[i].sysex), true);
+				if (res == PARSE_SUCCEEDED || res == PARSE_SUCCEEDED_UNTITLED)
+					{
+					if (getPatchContainsLocation())
+						{
+						patches[i].number = model.get("number", Patch.NUMBER_NOT_SET);
+						patches[i].bank = model.get("bank", 0);
+						}
+					patches[i].name = model.get("name", "");
+					}
+				else patches[i] = null;			// failed to parse
+				}
+			model = backup;
+			undo.setWillPush(true);
+			setSendMIDI(send);
+		
+			// send it on!
+			if (!librarianOpen)
+				{
+				doLibrarian();		// open and move to it
+				}
+			librarian.getLibrary().receivePatches(patches);
+ 			}
+ 			 
     
     /** 
         Returns a directory selected by the user for loading.
@@ -7657,9 +7844,7 @@ public abstract class Synth extends JComponent implements Updatable
             morphing = true;
             }
         }  
-        
-        
-        
+
         
     ////// LIBRARIAN
     
@@ -7672,7 +7857,7 @@ public abstract class Synth extends JComponent implements Updatable
             {
             Component selected = tabs.getSelectedComponent();
             tabs.remove(librarianPane);
-            librarianMenu.setText("Open Librarian");
+            openLibrarianMenu.setText("Open Librarian");
             if (selected == librarianPane)  // we were in the morph pane when this menu was selected
                 tabs.setSelectedIndex(0);
             librarianOpen = false;
@@ -7685,8 +7870,9 @@ public abstract class Synth extends JComponent implements Updatable
                 }
             librarianPane = addTab("Librarian", librarian);
             tabs.setSelectedComponent(librarianPane);
-            librarianMenu.setText("Close Librarian");
+            openLibrarianMenu.setText("Close Librarian");
             librarianOpen = true;
+			Librarian.setLibrarianMenuSelected(librarianMenu, true);
             }
         }  
         
@@ -7709,12 +7895,17 @@ public abstract class Synth extends JComponent implements Updatable
     
     void saveBatchPatches()
         {
-        if (batchPatches != null)
-            {
-            try { batchPatches.close(); }
-            catch (IOException ex) { }
-            }
-        batchPatches = null;
+        if (toLibrarian)
+        	{
+        	toLibrarian = false;
+        	}
+        	
+		if (batchPatches != null)
+			{
+			try { batchPatches.close(); }
+			catch (IOException ex) { }
+			batchPatches = null;
+			}
         }
         
     void loadBatchPatch(byte[] sysex)
@@ -7753,17 +7944,11 @@ public abstract class Synth extends JComponent implements Updatable
         return true;
         }
     
-    void doGetAllPatches()
+    public void doGetAllPatches()
         {
         if (patchTimer != null)
             {
-            patchTimer.stop();
-            patchTimer = null;
-            saveBatchPatches();
-            patchFileOrDirectory = null;
-            getAll.setText("Download Batch...");
-            showSimpleMessage("Batch Download", "Batch download stopped." );
- 			updateTitle();
+            stopBatchDownload();
             }
         else
             {
@@ -7774,12 +7959,29 @@ public abstract class Synth extends JComponent implements Updatable
             if (morphing)
                 doMorph();
                 
+            boolean librarianAvailable = (getPatchNumberNames() != null);
                 
-            int result = showMultiOption(this, new String[0], new JComponent[0], new String[] { "Save as Individual Files", "Save to Bulk File", "Cancel"}, 0,
-                "Batch Download", "Save the Patches as individual files or as a single bulk file?");
-            if (result == -1 || result == 2) return;
-            if (result == 1)
+            int result = showMultiOption(this, new String[0], new JComponent[0], 
+            	librarianAvailable ? new String[] { "As Individual Files", "To Bulk File", "To Librarian", "Cancel"} :
+            					new String[] { "As Individual Files", "To Bulk File", "Cancel"}, 
+            		0, "Batch Download", "Save the Downloaded Patches...");
+            if (librarianAvailable && (result == -1 || result == 3)) return;
+            if (!librarianAvailable && (result == -1 || result == 2)) return;			// no librarian option
+
+            if (librarianAvailable && result == 2)
+            	{
+	            // turn ON librarian
+	            if (!librarianOpen)
+    	            doLibrarian();
+
+            	toLibrarian = true;
+            	}
+            else if (result == 1)
                 {
+	            // turn off librarian
+	            if (librarianOpen)
+    	            doLibrarian();
+
                 FileDialog fd = new FileDialog((Frame)(SwingUtilities.getRoot(this)), "Save to Bulk Sysex File...", FileDialog.SAVE);
 
                 fd.setFile(StringUtility.reviseFileName(getSynthNameLocal() + ".bulk.syx"));
@@ -7816,6 +8018,10 @@ public abstract class Synth extends JComponent implements Updatable
                 }
             else
                 {       
+	            // turn off librarian
+	            if (librarianOpen)
+    	            doLibrarian();
+
                 File dir = selectDirectory("Select Directory for Patches",
                     file == null ? null : new File(file.getParentFile().getPath()), 
                     true);
@@ -7832,35 +8038,6 @@ public abstract class Synth extends JComponent implements Updatable
                     batchPatches = null;
                     }
                 }
-
-            /*
-              JFileChooser chooser = new JFileChooser();
-              chooser.setDialogTitle("Select Directory for Patches");
-              chooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-              chooser.setAcceptAllFileFilterUsed(false);
-
-              if (file != null)
-              {
-              chooser.setCurrentDirectory(new File(file.getParentFile().getPath()));
-              }
-              else
-              {
-              String path = getLastDirectory();
-              if (path != null)
-              chooser.setCurrentDirectory(new File(path));
-              }
-              disableMenuBar();         
-              if (chooser.showOpenDialog((Frame)(SwingUtilities.getRoot(this))) != JFileChooser.APPROVE_OPTION)
-              {
-              enableMenuBar();
-              currentPatch = null;
-              return;
-              }
-              enableMenuBar();
-              patchFileOrDirectory = chooser.getSelectedFile();
-              batchPatches = null;
-              }
-            */
             
             currentPatch = buildModel();
             finalPatch = buildModel();
@@ -7870,10 +8047,84 @@ public abstract class Synth extends JComponent implements Updatable
                 finalPatch = null;
                 return;
                 }
-                
-            // request patch
 
+            startBatchDownload();
+            }
+        }
+
+
+
+    void doGetPatchesForLibrarian(int startbank, int startnum, int endbank, int endnum)
+        {
+        if (patchTimer != null)
+            {
+            stopBatchDownload();
+            }
+        else
+            {
+            // turn off hill-climbing
+            if (hillClimbing)
+                doHillClimb();
+            // turn off morphing
+            if (morphing)
+                doMorph();
+                
+            // send directly to librarian    
+            toLibrarian = true;
+            
+            currentPatch = buildModel();
+            if (startbank != PatchLocation.NO_BANK)
+            	currentPatch.set("bank", startbank);
+            if (startnum != PatchLocation.NO_NUMBER)
+            	currentPatch.set("number", startnum);
+
+            finalPatch = buildModel();
+            if (endbank != PatchLocation.NO_BANK)
+            	finalPatch.set("bank", endbank);
+            if (endnum != PatchLocation.NO_NUMBER)
+            	finalPatch.set("number", endnum);
+            
+            startBatchDownload();
+            }
+        }
+        
+    void stopBatchDownload()
+    	{
+    	if (patchTimer != null)			// we can sometimes call this even though we're not stopping anything
+    		{
+            patchTimer.stop();
+            patchTimer = null;
+            saveBatchPatches();
+            patchFileOrDirectory = null;
+            getAll.setText("Download Batch...");
+            if (librarian != null)
+            	{
+            	librarian.stopAction.getButton().setEnabled(false);
+            	/*
+            	librarian.downloadBox.removeAll();
+            	librarian.downloadBox.add(librarian.downloadAction.getButton());
+            	librarian.downloadBox.revalidate();
+            	librarian.downloadBox.repaint();
+            	*/
+            	}
+            showSimpleMessage("Batch Download", "Batch download stopped." );
+            updateTitle();			// has to be after we destroy the timer
+ 			}
+    	}
+    	
+    void startBatchDownload()
+		{
             getAll.setText("Stop Downloading Batch");
+            if (librarian != null)
+            	{
+            	librarian.stopAction.getButton().setEnabled(true);
+            	/*
+            	librarian.downloadBox.removeAll();
+            	librarian.downloadBox.add(librarian.stopAction.getButton());
+            	librarian.downloadBox.revalidate();
+            	librarian.downloadBox.repaint();
+            	*/
+            	}
             resetBlend();
             setMergeProbability(0.0);
             performRequestDump(currentPatch, true);
@@ -7897,6 +8148,10 @@ public abstract class Synth extends JComponent implements Updatable
                             else
                                 {
                                 System.err.println("Warning (Synth): Download of " + getPatchLocationName(currentPatch) + " failed.  Received unexpected patch " + getPatchLocationName(getModel()));
+                                batchDownloadFailureCountdown = getBatchDownloadFailureCountdown();
+                                resetBlend();
+                                setMergeProbability(0.0);
+                                performRequestDump(currentPatch, true);
                                 }
                             }
                         else 
@@ -7917,9 +8172,10 @@ public abstract class Synth extends JComponent implements Updatable
                         }
                     });
             patchTimer.start();
-            }
+            updateTitle();			// has to be after we build the timer
         }
 
+        
     public int getBatchDownloadFailureCountdown() { return 0; }
     int batchDownloadFailureCountdown;
 
@@ -7927,13 +8183,7 @@ public abstract class Synth extends JComponent implements Updatable
         {
         if (patchLocationEquals(currentPatch, finalPatch))     // we're done
             {
-            patchTimer.stop();
-            patchTimer = null;
-            saveBatchPatches();
-            patchFileOrDirectory = null;
-            getAll.setText("Download Batch...");
-            showSimpleMessage("Batch Download", "Batch download finished." );
-			updateTitle();
+            stopBatchDownload();
             }
         else
             {
@@ -7956,9 +8206,21 @@ public abstract class Synth extends JComponent implements Updatable
         byte[] data = flatten(emitAll((Model)null, false, true));
         if (data != null && data.length > 0)
             {
-            if (patchFileOrDirectory == null) { Synth.handleException(new RuntimeException("Nonexistent directory or file for handling dump patch loads")); return; } // this shouldn't happen
+            if (!toLibrarian && patchFileOrDirectory == null) { Synth.handleException(new RuntimeException("Nonexistent directory or file for handling dump patch loads")); return; } // this shouldn't happen
             
-            if (batchPatches != null)
+            if (toLibrarian)
+            	{
+            	Patch patch = new Patch(recognizeSynthForSysex(data), data, false);	// is this right?  Are we sure it's not bank sysex?
+            	patch.number = model.get("number", Patch.NUMBER_NOT_SET);
+            	patch.bank = model.get("bank", 0);
+            	patch.name = model.get("name", "");
+            	if (!librarianOpen)
+            		{
+            		doLibrarian();		// open and move to it
+            		}
+            	librarian.getLibrary().receivePatch(patch);
+            	}
+            else if (batchPatches != null)
                 {
                 loadBatchPatch(data);
                 }
@@ -8278,11 +8540,12 @@ public abstract class Synth extends JComponent implements Updatable
     // 4. BANK_UPLOADED     [uploaded to synth]
         
     // If the value is #1, then you have to edit or merge the patch, and return whatever is appropriate.
-    // If the value is BANK_CANCELLED, BANK_SAVED, or BANK_UPLOADED (all < 0), then you should return PARSE_FAILED
+    // If the value is BANK_CANCELLED, BANK_SAVED, BANK_UPLOADED, or BANK_LIBRARIAN (all < 0), then you should return PARSE_FAILED
         
     public static final int BANK_CANCELLED = -1;
     public static final int BANK_SAVED = -2;
-    public static final int BANK_UPLOADED = - 3;
+    public static final int BANK_UPLOADED = -3;
+    public static final int BANK_LIBRARIAN = -4;
     
     /** Displays a panel asking what to do with a bank sysex with the given data[], and which
         contains patches with the given names[].  If the user cancels the panel, then
@@ -8349,10 +8612,18 @@ public abstract class Synth extends JComponent implements Updatable
                 }
             else 
                 {
-                actions = new JComboBox(new String[] {  "Edit Patch in Bank", "Save Bank...", "Write Bank to Synthesizer" });
+                if (getSupportsBankWrites() && getPatchNumberNames() != null)
+                	{
+                	actions = new JComboBox(new String[] {  "Edit Patch in Bank", "Save Bank...", "Write Bank to Synthesizer", "Load Bank in This Librarian", "Load Bank in New Librarian" });
+                	if (tabs.getSelectedComponent() == librarianPane)
+                		actions.setSelectedIndex(3);		// load in this librarian
+                	}
+                else
+                	{
+                	actions = new JComboBox(new String[] {  "Edit Patch in Bank", "Save Bank...", "Write Bank to Synthesizer" });
+					}
                 vbox.add(new JLabel("   "));
                 vbox.add(new JSeparator());
-//                vbox.add(Strut.makeVerticalStrut(16));
                 JPanel actionsPanel = new JPanel();
                 actionsPanel.setLayout(new BorderLayout());
                 actionsPanel.add(new JLabel("Action "), BorderLayout.WEST);
@@ -8370,7 +8641,28 @@ public abstract class Synth extends JComponent implements Updatable
                 }
             else if (actions != null)
                 {
-                if (actions.getSelectedIndex() == 2)    // write bank
+                if (actions.getSelectedIndex() == 4)	// New Librarian
+                	{
+					Synth otherSynth = instantiate(getClass(), false, true, null);
+					// send it on!
+					if (!otherSynth.librarianOpen)
+						{
+						otherSynth.doLibrarian();		// open and move to it
+						}
+					otherSynth.librarian.getLibrary().readBank(data);	
+					return BANK_LIBRARIAN;				
+                	}
+                if (actions.getSelectedIndex() == 3)	// This Librarian
+                	{
+					// send it on!
+					if (!librarianOpen)
+						{
+						doLibrarian();		// open and move to it
+						}
+					librarian.getLibrary().readBank(data);	
+					return BANK_LIBRARIAN;				
+                	}
+                else if (actions.getSelectedIndex() == 2)    // write bank
                     {
                     boolean choice = false;
                     String[] banks = getBanksForBankSysex(data, getModel());
@@ -8613,39 +8905,47 @@ public abstract class Synth extends JComponent implements Updatable
         return w;
         }
     
-    /** Return a list of all patch number names.  
+    /** Return a list of all patch number names, such as "1", "2", "3", etc.
         Default is null, which indicates that the patch editor does not support librarians.  */
-    public String[] getNumberNames() { return null; } // { return new String[] { "Main" }; }
+    public String[] getPatchNumberNames() { return null; }
 
     /** Return a list of all bank names.  Default is null, indicating no banks are supported.  */
-    public String[] getBankNames() { return null; } // { return new String[] { "Main" }; }
+    public String[] getBankNames() { return null; }
 
-    /** Return a list of each bank, indicating which are writeable.  Default is null. */
-    public boolean[] getWriteableBanks() { return null; }
+    /** Return a list of each bank, indicating which are writeable.  Default is an array, all true, 
+    	the size of getBankNames(), or { true } if getBankNames() is null. */
+    public boolean[] getWriteableBanks() 
+    	{ 
+    	if (getBankNames() == null) return new boolean[] { true };
+     	else return buildBankBooleans(getBankNames().length, 0, 0); 
+     	}
 
     /** Return whether individual patches can be written.  Default is FALSE. */
-    public boolean supportsPatchWrites() { return false; }
+    public boolean getSupportsPatchWrites() { return false; }
 
-    /** Return a list whether entire banks can be written.  Default is !supportsPatchWrites(). */
-    public boolean supportsBankWrites() { return !supportsPatchWrites(); }
+    /** Return a list whether entire banks can be written.  Default is FALSE. */
+    public boolean getSupportsBankWrites() { return false; }
 
-    /** Sets patch.number and patch.bank to number and bank respectively, and also updates
-        the sysex messages to reflect the revised patch number and bank if possible.
-        By default just sets patch.number=number and patch.bank = bank.  */
-    public void setNumberAndBank(Patch patch, int number, int bank) { patch.number = number; patch.bank = bank; }
-
-    /** Sets patch.number and patch.bank to the number and bank stored in the sysex message.
-        By default this just sets the number to NUMBER_NOT_SET and the bank to 0.  */
-    public void updateNumberAndBank(Patch patch) { patch.number = Patch.NUMBER_NOT_SET; patch.bank = 0; }
-
-    /** Parses a given patch number from the provided bank sysex, and returns PARSE_SUCCEEDED if successful,
-        else PARSE_FAILED (the default). */
+    /** Parses a given patch from the provided bank sysex, and returns 
+    	PARSE_SUCCEEDED or PARSE_SUCCEEDED_UNTITLED if successful, else PARSE_FAILED (the default). */
     public int parseFromBank(byte[] bankSysex, int number) { return PARSE_FAILED; }
 
+    /** Parses the bank number from the provided bank sysex and returns it.  By default returns 0. */
+    public int getBank(byte[] bankSysex) { return 0; }
+
     /** Emits the models as a bank.  The bank number is provided if necessary. By default does nothing. */
-    public Object[] emitBank(Model[] models, int bank) { return new Object[0]; }
+    public Object[] emitBank(Model[] models, int bank, boolean toFile) { return new Object[0]; }
     
-    /** Returns the appropriate pause after a bank write.  By default this is just
-        getPauseAfterWritePatch() */
+    /** Returns the appropriate pause after a bank write.  By default this is just getPauseAfterWritePatch() */
     public int getPauseAfterWriteBank() { return getPauseAfterWritePatch(); }    
+    
+    /** Return the maximum number of characters a patch name may hold. The default returns 16. */
+    public int getPatchNameLength() { return 16; }
+
+    /** Return true if individual (non-bank) patches on the synthesizer contain location information (bank, number). */
+    public boolean getPatchContainsLocation() { return false; }
+
+    /** Revises a potential bank name. If returns null, this indicates that bank names are not permitted. 
+    	By default returns null, which is the common case. */
+    public String reviseBankName(String name) { return null; }
     }

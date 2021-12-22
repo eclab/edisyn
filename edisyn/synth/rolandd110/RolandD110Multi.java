@@ -1121,6 +1121,28 @@ public class RolandD110Multi extends Synth
             }
         }
         
-    public int getBatchDownloadWaitTime() { return 750; }
+    public int getBatchDownloadWaitTime() { return 275; }
+
+
+
+    /** Return a list of all patch number names, such as "1", "2", "3", etc.
+        Default is null, which indicates that the patch editor does not support librarians.  */
+    public String[] getPatchNumberNames() 
+    	{ 
+    	String[] str = new String[64];
+    	for(int i = 0; i < 8; i++)
+    		for(int j = 0; j < 8; j++)
+    			str[i * 8 + j] = "" + (i + 1) + (j + 1);		// weird
+    	return str;
+	    }
+
+    /** Return whether individual patches can be written.  Default is FALSE. */
+    public boolean getSupportsPatchWrites() { return true; }
+
+    /** Return the maximum number of characters a patch name may hold. The default returns 16. */
+    public int getPatchNameLength() { return MAXIMUM_NAME_LENGTH; }
+
+    /** Return true if individual (non-bank) patches on the synthesizer contain location information (bank, number). */
+    public boolean getPatchContainsLocation() { return true; }
     }
     

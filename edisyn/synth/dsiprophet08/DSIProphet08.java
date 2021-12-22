@@ -697,7 +697,7 @@ public class DSIProphet08 extends Synth
         HBox hbox = new HBox();
                
         comp = new LabelledDial("Feedback Volume [TKX]", this, "layer" + layer + "tetrafeedbackvolume", color, 0, 127);
-        ((LabelledDial)comp).addAdditionalLabel(" Audio Input Lvl [M] ");
+        ((LabelledDial)comp).addAdditionalLabel(" Audio Input Level [M] ");
         hbox.add(comp);
 
         comp = new LabelledDial("Feedback", this, "layer" + layer + "tetrafeedbackgain", color, 0, 127);
@@ -3043,13 +3043,14 @@ public class DSIProphet08 extends Synth
         return false;
         }
         
-    /** Return a list of all patch number names.  Default is { "Main" } */
-    public String[] getNumberNames()  
+        
+        
+        
+    public String[] getPatchNumberNames()  
         { 
         return buildIntegerNames(128, 1);
         }
 
-    /** Return a list of all bank names.  Default is { "Main" } */
     public String[] getBankNames() 
         {
         switch (getType())
@@ -3068,17 +3069,8 @@ public class DSIProphet08 extends Synth
         return new String[] { "Main" };         // never happens
         } 
 
-    /** Return a list whether patches in banks are writeable.  Default is { false } */
-    public boolean[] getWriteableBanks() 
-        { 
-        return buildBankBooleans(128, 0, 0);
-        }
+    public boolean getSupportsPatchWrites() { return true; }
 
-    /** Return a list whether individual patches can be written.  Default is FALSE. */
-    public boolean supportsPatchWrites() { return false; }
-
-    /** Return a list whether entire banks can be written.  Default is FALSE. */
-    public boolean supportsBankWrites() { return false; }
-        
+    public int getPatchNameLength() { return 16; }
     }
 

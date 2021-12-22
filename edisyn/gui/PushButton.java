@@ -115,11 +115,11 @@ public class PushButton extends JPanel
                 // Mac buttons have strange insets, and only the top and bottom match the
                 // actual border.
                 Insets insets = button.getInsets();
-                pop.show(button, button.getBounds().x + insets.top, button.getBounds().y + button.getBounds().height - insets.bottom);
+                pop.show(button, 0/*button.getBounds().x*/ + insets.top, button.getBounds().y + button.getBounds().height - insets.bottom);
                 }
             else
                 {
-                pop.show(button, button.getBounds().x, button.getBounds().y + button.getBounds().height);
+                pop.show(button, 0/*button.getBounds().x*/, button.getBounds().y + button.getBounds().height);
                 }
             button.remove(pop);
             }

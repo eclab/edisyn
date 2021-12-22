@@ -84,6 +84,7 @@ public class WaldorfKyra extends Synth
     public static final String[] LFO_TIME_SOURCES = { "Internal", "MIDI 1/16", "MIDI 1/8 T", "MIDI 3/32", "MIDI 1/8", "MIDI 1/4 T", "MIDI 3/16", "MIDI 1/4", "MIDI 1/2 T", "MIDI 3/8", "MIDI 1/1", "MIDI 2/1", "MIDI 2/1" };
     
     public static final String[] MOD_SOURCES = { 
+        "None",
         "Pitch Bend", "Channel Pressure", "Mod Wheel (CC 1)", "Breadth (CC 2)", 
         "MIDI CC 3", "Foot (CC 4)", "Data Entry (CC 6)", "Balance (CC 8)", 
         "CC 9", "Pan (CC 10)", "Expression (CC 11)", "CC 12", "CC 13", "CC 14", 
@@ -93,6 +94,7 @@ public class WaldorfKyra extends Synth
         "Note On Velocity [Poly]", "Random per Note [Poly]", "MIDI Note [Poly]", "Polyphonic Pressure [Poly]", "Note Off Velocity [Poly]" };
     
     public static final String[] MOD_DESTINATIONS = {
+        "None",
         "Osc 1 Tune", "Osc 1 Detune", "Osc 1 Wave Osc 2 FM", "Osc 1 LFO 1 Pitch", 
         "Osc 1 LFO 2 Pulsewidth", "Osc 1 Sawtooth Level", "Osc 1 Wave Level", 
         "Osc 1 Pulse Level", "Osc 1 Aux Osc Level", "Osc 1 Sub Level", "Osc 1 Sub Detune", 
@@ -101,7 +103,7 @@ public class WaldorfKyra extends Synth
         "Osc 2 Pulse Level", "Osc 2 Sub Level", "Osc 2 Sub Detune", "Osc 2 Pulsewidth", 
         "Hypersaw Intensity", "Hypersaw Spread", "Filter 1/2 Balance", "Filter 1 Cutoff", 
         "Filter 1 Resonance", "Filter 1 Env 1 Cutoff", "Filter 1 Env 2 Cutoff", 
-        "Filter 1 LFO 2 Cutoff", "Filter 2 Resonance", "Filter 2 Env 1 Cutoff", 
+        "Filter 1 LFO 2 Cutoff", "Filter 2 Cutoff", "Filter 2 Resonance", "Filter 2 Env 1 Cutoff", 
         "Filter 2 Env 2 Cutoff", "Filter 2 LFO 2 Cutoff", "VCA Level (Pre-Effects)", 
         "VCA Pan", "VCA Stereo Width", "VCA LFO 1 > Amp", "VCA LFO 2 > Pan", 
         "Env 1 Attack", "Env 1 Decay", "Env 1 Sustain", "Env 1 Release", "Env 2 Attack", 
@@ -2222,5 +2224,21 @@ public class WaldorfKyra extends Synth
     };
 
     
+    
+    public String[] getPatchNumberNames()  
+        { 
+        return buildIntegerNames(128, 0);
+        }
+
+    public String[] getBankNames() { return BANKS; }
+
+    public boolean getSupportsPatchWrites() { return true; }
+
+    public int getPatchNameLength() { return 22; }
+
+    /** Return true if individual (non-bank) patches on the synthesizer contain location information (bank, number). 
+    	This will matter when reading patches from disk, rather than loading them from the synth, so as to put them
+    	in the right place. */
+    public boolean getPatchContainsLocation() { return true; }
     }
     

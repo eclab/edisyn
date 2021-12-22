@@ -834,6 +834,23 @@ public class WaldorfKyraMulti extends Synth
         if (key.equals("name")) return true;            // the name gets padded with space
         else return false;
         }
+
+
+    public String[] getPatchNumberNames()  
+        { 
+        return buildIntegerNames(127, 0);
+        }
+
+    public String[] getBankNames() { return new String[] { "Bank" }; }
+
+    public boolean getSupportsPatchWrites() { return true; }
+
+    public int getPatchNameLength() { return 16; }
+
+    /** Return true if individual (non-bank) patches on the synthesizer contain location information (bank, number). 
+    	This will matter when reading patches from disk, rather than loading them from the synth, so as to put them
+    	in the right place. */
+    public boolean getPatchContainsLocation() { return true; }
     }
     
     

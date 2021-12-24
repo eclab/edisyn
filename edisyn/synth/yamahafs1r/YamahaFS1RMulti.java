@@ -3068,6 +3068,15 @@ public class YamahaFS1RMulti extends Synth
     // The FS1R is VERY slow to respond and also queues up responses (beware!)
     public int getBatchDownloadWaitTime() { return 3000; }
     public int getBatchDownloadFailureCountdown() { return 5; }
+
+
+
+
+    public String[] getBankNames() { return BANKS; }
+	public String[] getPatchNumberNames()  { return buildIntegerNames(128, 1); }
+	public boolean[] getWriteableBanks() { return new boolean[] { true, false, false, false }; }
+	public boolean getSupportsPatchWrites() { return true; }
+	public int getPatchNameLength() { return 12; }
     }
  
  

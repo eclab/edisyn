@@ -33,7 +33,7 @@ import javax.sound.midi.*;
 /***
     ABOUT BANKS
 
-    CZ-1    CZ-101/1K       CZ-3K/5K
+    		CZ-1    		CZ-101/1K       CZ-3K/5K
     1-8     A               Preset          Preset          A
     9-16    B               Preset          Preset          B
     17-24   C                                       Preset          C
@@ -1636,7 +1636,7 @@ public class CasioCZ extends Synth
         int type = getSynthType();
         if (type == TYPE_CZ1)
             {
-            return new boolean[] { true, true, true, true, true, true, true, true, false, false, false, false };
+            return new boolean[] { true, true, true, true, true, true, true, true, false, false, false, false, false };
             }
         else if (type == TYPE_CZ101_1000)
             {
@@ -1654,4 +1654,27 @@ public class CasioCZ extends Synth
 
     /** Return a list whether individual patches can be written.  Default is FALSE. */
     public boolean supportsPatchWrites() { return true; }
+
+	public int getPatchNameLength() { return 16; }
+
+	public boolean isValidPatchLocation(int bank, int num) 
+		{ 
+        int type = getSynthType();
+        if (type == TYPE_CZ1)
+            {
+            return (bank < 8);
+            }
+        else if (type == TYPE_CZ101_1000)
+            {
+            return (bank == 0 || bank == 1 || bank == 4 || bank == 5 || bank == 8 || bank == 9);
+            }
+        else if (type == TYPE_CZ3000_5000)
+            {
+            return (bank < 8);
+            }
+        else
+            {
+            return (bank < 12 || num < 4);
+            }
+		}
     }

@@ -42,7 +42,7 @@ public class YamahaFB01 extends Synth
     public static final String[] LFO_WAVES = { "Sawtooth", "Square", "Triangle", "Sample and Hold" };
     public static final String[] KEYBOARD_LEVEL_SCALING_TYPES = new String[] { "1", "2", "3", "4" };
     public static final String[] AMPLITUDE_MODULATION = new String[] { "Modulator (Off)", "Carrier (On)" };
-    public static final String[] WRITE_BANKS = { "1 (A)", "2 (B)" };
+    public static final String[] WRITABLE_BANKS = { "1 (A)", "2 (B)" };
     public static final String[] BANKS = { "1 (A)", "2 (B)", "3 (ROM 1)", "4 (ROM 2)", "5 (ROM 3)", "6 (ROM 4)", "7 (ROM 5)" };
 
     // It is not fully clear that these are the algorithms.  I suspect they are for two reasons:
@@ -207,7 +207,7 @@ public class YamahaFB01 extends Synth
         bank.setSelectedIndex(model.get("bank"));
         if (writing)
             {
-            bank = new JComboBox(WRITE_BANKS);
+            bank = new JComboBox(WRITABLE_BANKS);
             bank.setSelectedIndex(0);
             }                        
         
@@ -1242,7 +1242,7 @@ public class YamahaFB01 extends Synth
 
     public String[] getBanksForBankSysex(byte[] data, Model model) 
         { 
-        return WRITE_BANKS;
+        return WRITABLE_BANKS;
         }
 
     public int getDefaultBankForBankSysex(byte[] data, Model model) 
@@ -1337,6 +1337,19 @@ public class YamahaFB01 extends Synth
 
         return obj; 
         }
+
+    public String[] getBankNames() { return WRITABLE_BANKS; }
+
+	/** Return a list of all patch number names.  Default is { "Main" } */
+	public String[] getPatchNumberNames()  { return buildIntegerNames(48, 1); }
+
+	/** Return a list whether patches in banks are writeable.  Default is { false } */
+	public boolean[] getWriteableBanks() { return new boolean[] { true, true, false, false, false, false, false }; }
+
+	/** Return a list whether individual patches can be written.  Default is FALSE. */
+	public boolean getSupportsPatchWrites() { return true; }
+
+	public int getPatchNameLength() { return 7; }
 
 
     }

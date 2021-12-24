@@ -3926,4 +3926,9 @@ public class YamahaFS1R extends Synth
     public int getBatchDownloadWaitTime() { return 2750; }
     public int getBatchDownloadFailureCountdown() { return 5; }
 
+    public String[] getBankNames() { return BANKS; }
+	public String[] getPatchNumberNames()  { return buildIntegerNames(128, 1); }
+	public boolean[] getWriteableBanks() { return new boolean[] { true, false, false, false, false, false, false, false, false, false, false, false }; }
+	public boolean getSupportsPatchWrites() { return true; }
+	public int getPatchNameLength() { return 10; }
     }

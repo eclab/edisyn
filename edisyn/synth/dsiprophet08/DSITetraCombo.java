@@ -3002,5 +3002,16 @@ public class DSITetraCombo extends Synth
         
         else return false;
         }
+
+        
+        
+    public String[] getPatchNumberNames()  
+        { 
+        return buildIntegerNames(128, 1);
+        }
+
+    public boolean getSupportsPatchWrites() { return true; }
+
+    public int getPatchNameLength() { return 16; }
     }
 

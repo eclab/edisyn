@@ -7177,12 +7177,12 @@ public abstract class Synth extends JComponent implements Updatable
 				int res = parse(flatten(patches[i].sysex), true);
 				if (res == PARSE_SUCCEEDED || res == PARSE_SUCCEEDED_UNTITLED)
 					{
-					if (getPatchContainsLocation())
+					//if (getPatchContainsLocation())
 						{
 						patches[i].number = model.get("number", Patch.NUMBER_NOT_SET);
 						patches[i].bank = model.get("bank", 0);
 						}
-					patches[i].name = model.get("name", "");
+					patches[i].name = model.get("name", null);
 					}
 				else patches[i] = null;			// failed to parse
 				}
@@ -8213,7 +8213,7 @@ public abstract class Synth extends JComponent implements Updatable
             	Patch patch = new Patch(recognizeSynthForSysex(data), data, false);	// is this right?  Are we sure it's not bank sysex?
             	patch.number = model.get("number", Patch.NUMBER_NOT_SET);
             	patch.bank = model.get("bank", 0);
-            	patch.name = model.get("name", "");
+            	patch.name = model.get("name", "" + getPatchLocationName(getModel()));
             	if (!librarianOpen)
             		{
             		doLibrarian();		// open and move to it
@@ -8926,6 +8926,9 @@ public abstract class Synth extends JComponent implements Updatable
     /** Return a list whether entire banks can be written.  Default is FALSE. */
     public boolean getSupportsBankWrites() { return false; }
 
+    /** Return whether individual patches can be written.  Default is TRUE. */
+    public boolean getSupportsDownloads() { return true; }
+
     /** Parses a given patch from the provided bank sysex, and returns 
     	PARSE_SUCCEEDED or PARSE_SUCCEEDED_UNTITLED if successful, else PARSE_FAILED (the default). */
     public int parseFromBank(byte[] bankSysex, int number) { return PARSE_FAILED; }
@@ -8943,7 +8946,7 @@ public abstract class Synth extends JComponent implements Updatable
     public int getPatchNameLength() { return 16; }
 
     /** Return true if individual (non-bank) patches on the synthesizer contain location information (bank, number). */
-    public boolean getPatchContainsLocation() { return false; }
+    //public boolean getPatchContainsLocation() { return true; }
 
     /** Revises a potential bank name. If returns null, this indicates that bank names are not permitted. 
     	By default returns null, which is the common case. */

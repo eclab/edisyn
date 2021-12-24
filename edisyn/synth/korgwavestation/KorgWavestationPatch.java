@@ -2276,6 +2276,61 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
         d[5] = (byte)edisynToWSBank[tempModel.get("bank")];
         d[6] = (byte)tempModel.get("number");
        
+       	Patch patch = buildPatch();
+       	
+        byte[] data = new byte[NYBBLIZED_LENGTH];
+        patch.write(data, 0);
+        data = nybblize(data);
+        System.arraycopy(data, 0, d, 7, data.length);
+        int checksum = 0;
+        for(int i = 0; i < data.length; i++)
+            checksum += data[i];
+        checksum = (checksum & 127);
+        d[d.length - 2] = (byte)checksum;
+        d[d.length - 1] = (byte)0xF7;
+           
+        if (toFile || toWorkingMemory)
+            return new Object[] { d };
+        else
+            {
+            // we'll attempt a write but fail  -- this doesn't work
+            return new Object[] { d, new byte[] { (byte)0xF0, (byte)0x42, (byte)(48 + getChannelOut()), (byte)0x28, (byte)0x11, d[4], d[5], (byte)0xF7 }};
+            }
+        }
+    
+    public Object[] emitBank(Model[] models, int bank, boolean toFile) 
+    	{ 
+        byte[] d = new byte[29828];		// 852 * 35 + 8
+        d[0] = (byte)0xF0;
+        d[1] = (byte)0x42;
+        d[2] = (byte)(0x30 + getChannelOut());
+        d[3] = (byte)0x28;
+        d[4] = (byte)0x4C;
+        d[5] = (byte)edisynToWSBank[bank];
+       
+       	for(int i = 0; i < 35; i++)
+       		{
+			Patch patch = buildPatch();
+		
+			byte[] data = new byte[NYBBLIZED_LENGTH];
+			patch.write(data, 0);
+			data = nybblize(data);
+			System.arraycopy(data, 0, d, data.length * i + 6, data.length);		// data.length should be 852?
+			}
+			
+        int checksum = 0;
+        for(int i = 6; i < 852 * 35 + 6; i++)
+            checksum += d[i];
+        checksum = (checksum & 127);
+        d[d.length - 2] = (byte)checksum;
+        d[d.length - 1] = (byte)0xF7;
+           
+        return new Object[] { d };
+    	}
+        
+    
+    public Patch buildPatch()
+    	{
         Patch patch = new Patch();
 
         patch.setName(model.get("name", "Untitled"));  
@@ -2360,8 +2415,6 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
             patch.mixYSlope4 = 0x1000000L * ((long)patch.mixY4-(long)patch.mixY3)/RATE_TAB[patch.mixRate4];
         else
             patch.mixYSlope4 = -(0x1000000L * ((long)patch.mixY3-(long)patch.mixY4)/RATE_TAB[patch.mixRate4]);
-
-
 
         for(int i = 0; i < 4; i++)
             {
@@ -2493,27 +2546,9 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
             (b2 >= 8 ? 32 : b2 >= 4 ? 2 : 0) + 
             (b3 >= 8 ? 64 : b3 >= 4 ? 4 : 0) + 
             (b4 >= 8 ? 128 : b4 >= 4 ? 8 : 0); 
-
-
-        byte[] data = new byte[NYBBLIZED_LENGTH];
-        patch.write(data, 0);
-        data = nybblize(data);
-        System.arraycopy(data, 0, d, 7, data.length);
-        int checksum = 0;
-        for(int i = 0; i < data.length; i++)
-            checksum += data[i];
-        checksum = (checksum & 127);
-        d[d.length - 2] = (byte)checksum;
-        d[d.length - 1] = (byte)0xF7;
-           
-        if (toFile || toWorkingMemory)
-            return new Object[] { d };
-        else
-            {
-            // we'll attempt a write but fail  -- this doesn't work
-            return new Object[] { d, new byte[] { (byte)0xF0, (byte)0x42, (byte)(48 + getChannelOut()), (byte)0x28, (byte)0x11, d[4], d[5], (byte)0xF7 }};
-            }
-        }
+            
+        return patch;
+    	}
 
     public int getPauseAfterChangePatch() { return 300; }  // looks like 300 is about the minimum for a standard PC (see Performance.java); may be too much here.
 
@@ -2712,7 +2747,24 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
         {
         return 1100;
         }
+        
+
+    public boolean getSupportsBankWrites() { return true; }
+    public String[] getPatchNumberNames() { return buildIntegerNames(35, 0); }
+    public String[] getBankNames() { return BANKS; }
+    public boolean[] getWriteableBanks() { return new boolean[] { true, true, true, true, false, false, false, false, false, false, false, true }; }
+	public int getBank(byte[] bankSysex) { return wsToEdisynBank[bankSysex[5]]; }
+    public int parseFromBank(byte[] bankSysex, int number) 
+    	{
+		model.set("bank", wsToEdisynBank[bankSysex[5]]);
+		model.set("number", number);
+    	return subparse(bankSysex, number * 852 + 6); 
+    	}
+    public int getPatchNameLength() { return 15; }
     }
+    
+    
+    
     
     
 /**

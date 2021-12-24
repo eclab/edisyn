@@ -35,7 +35,8 @@ public class SequentialProphetRev2 extends Synth
     public static final String[] ARPEGGIATOR_MODES = new String[] { "Up", "Down", "Up/Down", "Random", "Assign"};
     public static final String[] CLOCK_DIVIDES = new String[] { "Half Note", "Quarter Note", "8th Note", "8th Note Half Swing", "8th Note Full Swing", "8th Note Triplets", "16th Note", "16th Note Half Swing", "16th Note Full Swing", "16th Note Triplets", "32nd Note", "32nd Note Triplets", "64th Note Triplets" };
     public static final String[] KEY_MODES = new String[] { "Low Note", "High Note", "Last Note", "Low Retrigger", "High Retrigger", "Last Retrigger" };
-    public static final String[] BANKS_PROPHET = new String[] { "U1", "U2", "U3", "U4", "F1", "F2", "F3", "F4" };
+    public static final String[] BANKS = new String[] { "U1", "U2", "U3", "U4", "F1", "F2", "F3", "F4" };
+    public static final String[] WRITEABLE_BANKS = new String[] { "U1", "U2", "U3", "U4" };
     public static final String[] GLIDE_MODES = new String[] { "Fixed Rate", "Fixed Rate Auto", "Fixed Time", "Fixed Time Auto" };
     public static final String[] SHAPES = new String[] { "Off", "Sawtooth", "Saw+Tri", "Triangle", "Pulse" };
     public static final String[] MODULATION_SOURCES = new String[] { "Off", "Seq 1", "Seq 2", "Seq 3", "Seq 4", "LFO 1", "LFO 2", "LFO 3", "LFO 4", "Env LPF", "Env VCA", "Env 3", "Pitch Bend", "Mod Wheel", "Pressure", "Breath", "Foot Pedal", "Expression Pedal", "Velocity", "Note Number", "Noise", "DC", "Audio Out" };
@@ -1178,7 +1179,7 @@ public class SequentialProphetRev2 extends Synth
 
     public boolean gatherPatchInfo(String title, Model changeThis, boolean writing)     
         {
-        String[] banks = BANKS_PROPHET;
+        String[] banks = (writing? WRITEABLE_BANKS : BANKS);
                 
         JComboBox bank = new JComboBox(banks);
         int num = model.get("number") + 1;
@@ -1365,7 +1366,7 @@ public class SequentialProphetRev2 extends Synth
         if (!model.exists("bank")) return null;
         
         int number = (model.get("number") + 1);
-        return ((BANKS_PROPHET[model.get("bank")]) + "-" + (number > 99 ? "" : (number > 9 ? "0" : "00")) + number);
+        return ((BANKS[model.get("bank")]) + "-" + (number > 99 ? "" : (number > 9 ? "0" : "00")) + number);
         }
 
     public Model getNextPatchLocation(Model model)
@@ -1373,7 +1374,7 @@ public class SequentialProphetRev2 extends Synth
         int bank = model.get("bank");
         int number = model.get("number");
         
-        int numBanks = BANKS_PROPHET.length;
+        int numBanks = BANKS.length;
         
         number++;
         if (number >= 128)
@@ -6227,6 +6228,13 @@ public class SequentialProphetRev2 extends Synth
         else return false;
         }
 
+        
+        
+    public String[] getPatchNumberNames() { return buildIntegerNames(128, 1); }
+    public String[] getBankNames() { return BANKS; }
+    public boolean[] getWriteableBanks() { return new boolean[] { true, true, true, true, false, false, false, false }; }
+    public boolean getSupportsPatchWrites() { return true; }
+    public int getPatchNameLength() { return MAXIMUM_NAME_LENGTH; }
     }
 
 

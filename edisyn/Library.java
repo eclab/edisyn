@@ -35,7 +35,9 @@ public class Library extends AbstractTableModel
     String[] userNames;
     Patch initPatch;
     Synth synth;
-    int synthNum;                                                                                       // integer referring to the synth class from Synth.getSynthNum()
+    int synthNum;  
+    
+    int nameCounter = 1;                                                                                     // integer referring to the synth class from Synth.getSynthNum()
         
     /** Builds a library model, including undo/redo, given a set of bank names,
         the size (length) of a bank, a default init patch, and a list of names
@@ -435,7 +437,14 @@ public class Library extends AbstractTableModel
 			for(n = 0; n < patch[0].length; n++)
 				{
 				if (patch[b][n] != null)
+					{
+					// fix name if it's null
+					if (patch[b][n].name == null)
+						{
+						patch[b][n].name = "" + (getNumBanks() == 1 ? "" : (getBankName(b) + "-")) + getPatchNumberNames()[n] + " (" + (nameCounter++) + ")";
+						}
 					setPatch(patch[b][n]);
+					}
 				}
 			}
         }
@@ -481,7 +490,7 @@ public class Library extends AbstractTableModel
                     location.set("bank", bank);
                     }
                 location.set("number", i);
-                String name = synth.getModel().get("name","");
+                String name = synth.getModel().get("name","" + synth.getPatchLocationName(synth.getModel()));
                 //byte[][] data = synth.cutUpSysex(synth.flatten(synth.emitAll(location, false, true)));          // I guess to a file so it doesn't try NRPN?
                 byte[][] data = synth.extractSysex(synth.emitAll(location, false, true));          // I guess to a file so it doesn't try NRPN?
                 Patch patch = new Patch(synthNum, data, false);

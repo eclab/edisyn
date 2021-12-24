@@ -2962,4 +2962,23 @@ public class MAudioVenom extends Synth
     { "Bounce", "Metropolis", "Percolate", "Robotheque", "GottaDance", "HipCricket", "Tradeoff", "MadeTheCut", "Drop Out", "InThPocket", "HoldSteady", "oh8-n-see", "Restart", "Coastin’", "PlastiPerc", "oh8daGreat", "Shufflin’", "Sambalicis", "ClappTrapp", "Happnin", "WooferTest", "Congregate", "Take Over", "Refocus", "RockinRide", "Thermometr", "HotPotato", "Contrasts", "Undertow", "StandClear", "Mid Scheme", "Back Hat", "Determin8n", "Hipalong", "KickTheCow", "Misfire", "Drop Kick", "Gypsy Clap", "BackNForth", "ClaveMastr", "Boot Scoot", "Power Of 3", "Nativitan", "AllYouNeed", "TriplThret", "Euro Club", "ThePunches", "PrettyCool", "MixinMatch", "MissingMan", "OneNFive", "OneNSeven", "PrettyHary", "Dozen Off", "BustedMain", "Assertive", "MattrOFact", "Omination", "BlackCoptr", "TooMuch4U", "DigginHard", "Radical", "16 Stage", "YouTakeIt", "JmaicaThis", "WhichCntry", "HalfWhole", "ZunkItUp", "TurtleSix", "SixShooter", "OctoFunk", "Malevolent", "Poly Fill", "Royalty", "MellowOut", "Contempl8", "3rdWorldly", "Backlash", "Nine Drop", "Climbin 9", "Ripper", "Funkworthy", "Tremulous", "ShufflWalk", "FunkyBend", "Finish ‘em", "Flame-n-Co", "Stutterfly", "Overwhelm", "Outpost", "ShuffleOff", "Paralyzer", "Provocativ", "Funky fill", "Dangerous", "Pressurize", "Recursive", "Off Kilter", "Plink", "Retrospect", "Two bar S", "One bar S", "Half bar S", "Quarter S", "Q-trip S", "8th S", "8-trip S", "16th S", "16-trip S", "32nd S", "Offbeat H", "Syncop8ion", "Q-LaidBack", "Q-FulSwing", "8-LaidBack", "8 swing 1", "8 swing 2", "8 swing 3", "16 swing 3", "HausToHaus", "Pluck 1", "Pluck 2", "Pluck 3", "Diggin In", "Climber", "Toads", "AspirinPlz", "BendUrWill", }, 
     };
 
+
+
+
+
+
+
+    public String[] getBankNames() { return BANKS; }
+
+	/** Return a list of all patch number names.  Default is { "Main" } */
+	public String[] getPatchNumberNames()  { return buildIntegerNames(128, 0); }
+
+	/** Return a list whether patches in banks are writeable.  Default is { false } */
+	public boolean[] getWriteableBanks() { return new boolean[] { false, false, true, true }; }
+
+	/** Return a list whether individual patches can be written.  Default is FALSE. */
+	public boolean getSupportsPatchWrites() { return true; }
+
+	public int getPatchNameLength() { return 10; }
+
     }

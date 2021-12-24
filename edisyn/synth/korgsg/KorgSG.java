@@ -1520,5 +1520,12 @@ public class KorgSG extends Synth
         if (key.equals("name")) return true; 
         return false;
         }
+
+
+    public String[] getBankNames() { return BANKS; }
+	public String[] getPatchNumberNames() { return buildIntegerNames(16, 1); }
+    public boolean[] getWriteableBanks() { return new boolean[] { true, true, true, true }; }
+    public int getPatchNameLength() { return 10; }
+
     }
     

@@ -60,6 +60,7 @@ public class Librarian extends JPanel
     public static final Color BACKGROUND_COLOR = new JTabbedPane().getBackground(); // new Color(200, 200, 200);
     public static final Color GRID_COLOR = Color.GRAY;
     public static final Color READ_ONLY_BACKGROUND_COLOR = new Color(250, 245, 255);
+    public static final Color SCRATCH_COLOR = new Color(240, 250, 250);
 
     public Librarian(Synth synth)
         {
@@ -109,6 +110,10 @@ public class Librarian extends JPanel
                 else if (isSelected)
                     {
                     comp.setBackground(SELECTED_COLOR);
+                    }
+                else if (column == 0)			// scratch
+                    {
+                    comp.setBackground(SCRATCH_COLOR);
                     }
                 else if (!Librarian.this.getLibrary().isWriteableBank(column - 1))
                     {
@@ -439,7 +444,7 @@ public class Librarian extends JPanel
                 {
                 Synth synth = getLibrary().getSynth();
                 int synthNum = getLibrary().getSynthNum();
-                String name = synth.getModel().get("name","");
+                String name = synth.getModel().get("name","" + synth.getPatchLocationName(synth.getModel()));
                 int number = synth.getModel().get("number", -1);
                 int bank = synth.getModel().get("bank", -1);
                 byte[][] data = synth.cutUpSysex(synth.flatten(synth.emitAll(synth.getModel(), false, true)));
@@ -709,6 +714,12 @@ public static JMenu buildLibrarianMenu(JMenuItem openMenu, Synth synth)
         
     void performDownload(int bank1, int patch1, int bank2, int patch2)
     	{
+    	if (!getLibrary().getSynth().getSupportsDownloads())
+    		{
+            getLibrary().synth.showSimpleError("Cannot Download", "Edisyn cannot request patches from this synthesizer.");
+    		return;
+    		}
+    		
     	boolean hasBanks = (getLibrary().getSynth().getBankNames() != null);
     	if (hasBanks)
     		{

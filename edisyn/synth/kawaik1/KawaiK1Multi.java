@@ -121,12 +121,12 @@ public class KawaiK1Multi extends Synth
             try { n = Integer.parseInt(number.getText()); }
             catch (NumberFormatException e)
                 {
-                showSimpleError(title, "The Patch Number must be an integer 1...16");
+                showSimpleError(title, "The Patch Number must be an integer 1...8");
                 continue;
                 }
-            if (n < 1 || n > 16)
+            if (n < 1 || n > 8)
                 {
-                showSimpleError(title, "The Patch Number must be an integer 1...16");
+                showSimpleError(title, "The Patch Number must be an integer 1...8");
                 continue;
                 }
                 
@@ -798,4 +798,10 @@ public class KawaiK1Multi extends Synth
         data[2] = (byte) getChannelOut();
         return data; 
         }
+
+    public boolean getSupportsPatchWrites() { return true; }
+    public String[] getPatchNumberNames() { return buildIntegerNames(8, 1); }
+    public String[] getBankNames() { return BANKS; }
+    public boolean[] getWriteableBanks() { return buildBankBooleans(8, 0, 0); }
+    public int getPatchNameLength() { return 10; }
     }

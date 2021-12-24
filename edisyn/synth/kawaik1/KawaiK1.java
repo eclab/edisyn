@@ -26,6 +26,8 @@ public class KawaiK1 extends Synth
     {
     /// Various collections of parameter names for pop-up menus
         
+    public static final String[] REAL_BANKS = { "I", "i", "E", "e" };
+    public static final String[] GROUPS = { "A", "B", "C", "D" };
     public static final String[] BANKS = { "IA", "IB", "IC", "ID", "iA", "iB", "iC", "iD", "EA", "EB", "EC", "ED", "eA", "eB", "eC", "eD"};
     public static final String[] WAVES = { "Sine 1st", "Sine 2nd", "Sine 3rd", "Sine 4th", "Sine 5th", "Sine 6th", "Sine 7th", "Sine 8th", "Sine 9th", "Sine 10th", "Sine 11th", "Sine 12th", "Sine 16th", 
                                            "Saw 1", "Saw 2", "Saw 3", "Saw 4", "Saw 5", "Saw 6", "Saw 7", "Saw 8", "Saw 9", "Saw 10", "Saw 11", "Saw 12", "Saw 13", "Saw 14", "Saw 15", "Saw 16", "Saw 17", "Saw 18", "Saw 19", 
@@ -1365,4 +1367,44 @@ public class KawaiK1 extends Synth
         data[2] = (byte) getChannelOut();
         return data; 
         }
+
+    public boolean getSupportsPatchWrites() { return true; }
+    public String[] getPatchNumberNames() 
+    { 
+    String str = new String[32];
+    for(int i = 0; i < 4; i++)
+    	{
+    	for(int j = 0; j < 8; j++)
+    		{
+    		str[i * 8 + j] = GROUPS[i] + (j + 1);
+    		}
+    	}
+    return str;
+    }
+    
+    //// FIXME: I have to change all of the K1's bank definitions.  YIKES.
+    
+    public String[] getBankNames() { return REAL_BANKS; }
+    public boolean[] getWriteableBanks() { return buildBankBooleans(4, 0, 0); }
+    public int getPatchNameLength() { return 10; }
+    
+    public int parseFromBank(byte[] bankSysex, int number)
+    	{ 
+		boolean upper = (bankSysex[7] == 0);  // == 0 is I or E, == 0x20 is i or e
+		boolean internal = (bankSysex[6] == 0);
+		
+		model.set("bank", (internal ? 0 : 2) + (upper ? 0 : 1));
+		model.set("number", number);
+
+		// okay, we're loading and editing patch number patchNum.  Here we go.
+		return subparse(bankSysex, number * 88 + 8);         
+    	}
+    	
+    public int getBank(byte[] bankSysex) 
+    	{ 
+		boolean upper = (bankSysex[7] == 0);  // == 0 is I or E, == 0x20 is i or e
+		boolean internal = (bankSysex[6] == 0);
+		return (internal ? 0 : 2) + (upper ? 0 : 1);
+    	}
+
     }

@@ -5101,5 +5101,23 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
         //      return model.get("hillclimbdelay");
         return 1100;
         }
+
+
+    public boolean getSupportsPatchWrites() { return true; }
+    public String[] getPatchNumberNames() { return buildIntegerNames(50, 0); }
+    public String[] getBankNames() { return BANKS; }
+    public boolean[] getWriteableBanks() { return new boolean[] { true, true, true, true, false, false, false, false, false, false, false, true }; }
+
+	/*
+	public int getBank(byte[] bankSysex) { return wsToEdisynBank[bankSysex[5]]; }
+    public int parseFromBank(byte[] bankSysex, int number) 
+    	{
+		model.set("bank", wsToEdisynBank[bankSysex[5]]);
+		model.set("number", number);
+    	return subparse(bankSysex, number * 852 + 6); 
+    	}
+    */
+
+    public int getPatchNameLength() { return 15; }
     }
     

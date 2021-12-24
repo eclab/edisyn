@@ -49,6 +49,9 @@ public class OberheimMatrix1000 extends Synth
 
     /// Various collections of parameter names for pop-up menus
         
+    public static final String[] BANKS = new String[] { "000", "100", "200", "300", "400", "500", "600", "700", "800", "900" };
+    public static final String[] WRITABLE_BANKS = new String[] { "000", "100" };
+    public static final String[] BANKS_6 = new String[] { "000" };
     public static final String[] KEYBOARD_MODES = new String[] { "Reassign", "Rotate", "Unison", "Reassign w/Rob" };
     public static final String[] SYNC = new String[] { "Off", "Soft", "Medium", "Hard" };
     // Note actually there are 4 lag modes, the fourth one is also exponential!                                                                                                                                                     
@@ -1409,7 +1412,7 @@ public class OberheimMatrix1000 extends Synth
                 model.set(key, value);
                 }
             }
-        
+                
         // to get the bank, we'll try to extract it from the name.  It appears to be the fourth character
         int bank = 0;
         
@@ -1457,7 +1460,9 @@ public class OberheimMatrix1000 extends Synth
             model.set("bank", 0);           // default?
             model.set("name", new String(n));
             }
-                
+    
+    
+    System.err.println("Bank for " + new String(name) + " is " + model.get("bank"));
         revise();
         return PARSE_SUCCEEDED;
         }
@@ -2945,4 +2950,20 @@ System.err.println("" + i + "  " + PATCH_NAMES[i]);
 }
 }
 */
+
+    public String[] getBankNames() { return isM1000() ? BANKS : BANKS_6; }
+
+	public String[] getPatchNumberNames() 
+		{ 
+		return buildIntegerNames(100, 0); 
+		}
+		
+    public boolean[] getWriteableBanks() 
+    	{ 
+    	return isM1000() ? new boolean[] { true, true, false, false, false, false, false, false, false, false } :
+    			new boolean[] { true };
+    	}
+    			
+    public int getPatchNameLength() { return 8; }
+
     }

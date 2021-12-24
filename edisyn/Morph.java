@@ -577,7 +577,7 @@ public class Morph extends SynthPanel
             synth.updateTitle();
             if (result)
                 {
-                String name = sources[button].get("name", "");
+                String name = sources[button].get("name", "" + synth.getPatchLocationName(synth.getModel()));
                 if (name.equals(""))
                     {
                     File filename = synth.getFile();

@@ -68,7 +68,7 @@ Edisyn presently supports:
 * PreenFM2
 * Red Sound DarkStar and DarkStar XP2
 * Roland D-110 (Tone and Multi Modes)
-* Roland JV-80 and JV-880 (Single and Multi Modes)
+* Roland JV-80 and JV-880 (Single, Multi, and Drum Modes)
 * Sequential Prophet Rev2
 * Waldorf Blofeld and Waldorf Blofeld Keyboard (Single and Multi Modes, plus Wavetable uploading)
 * Waldorf Kyra (Single and Multi Modes)

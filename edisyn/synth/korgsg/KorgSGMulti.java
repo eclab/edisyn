@@ -840,5 +840,11 @@ public class KorgSGMulti extends Synth
         // there are two kinds of the KorgSG with different filter options
         return (key.endsWith("filt"));    
         }
+
+    public String[] getBankNames() { return BANKS; }
+	public String[] getPatchNumberNames() { return buildIntegerNames(16, 1); }
+    public boolean[] getWriteableBanks() { return new boolean[] { true, true, true, true }; }
+    public int getPatchNameLength() { return 10; }
+
     }
     

@@ -698,45 +698,28 @@ public class Yamaha4OpMulti extends Synth
         revise();
         return PARSE_SUCCEEDED;
         }
-    
+  
+  
+  
+    /** Parses a given patch from the provided bank sysex, and returns 
+    	PARSE_SUCCEEDED or PARSE_SUCCEEDED_UNTITLED if successful, else PARSE_FAILED (the default). */
+    public int parseFromBank(byte[] data, int number)
+    	{
+        // okay, we're loading and editing patch number.  Here we go.
+        int patch = number * 76;
+        int pos = 0;
 
-    public int parsePMEM(byte[] data, boolean fromFile)
-        {
-        // data starts at byte 16
-                                
-        // extract names
-        char[][] names = new char[32][10];
-        for(int i = 0; i < 32; i++)
-            {
+        // extract name
+        char[][] name = new char[10];
             for (int j = 0; j < 10; j++)
                 {
-                names[i][j] = (char)(data[i * 76 + 66 + j + 16] & 127);
+                name[j] = (char)(data[patch * 76 + 66 + j + 16] & 127);
                 }
-            }
                         
-        String[] n = new String[32];
-        for(int i = 0; i < 32; i++)
-            {
-            n[i] = "" + (i + 1) + "   " + new String(names[i]);
-            }
-            
-        // Now that we have an array of names, one per patch, we present the user with options;
-        // 0. Cancel [handled automatically]
-        // 1. Save the bank data [handled automatically]
-        // 2. Upload the bank data [handled automatically] 
-        // 3. Load and edit a certain patch number
-        int patchNum = showBankSysexOptions(data, n);
-        if (patchNum < 0) 
-            return PARSE_CANCELLED;
-
-        model.set("name", new String(names[patchNum]));
+        model.set("name", new String(name));
         model.set("number", patchNum);
         model.set("bank", 0);                   // we don't know what the bank is in reality
                 
-        // okay, we're loading and editing patch number patchNum.  Here we go.
-        int patch = patchNum * 76;
-        int pos = 0;
-                                                                                
         for(int op = 0; op < 8; op++)
             {
             // max notes
@@ -779,10 +762,40 @@ public class Yamaha4OpMulti extends Synth
         // microtunekey
         model.set(allParameters[pos++], (data[patch + 65 + 16] >>> 3) & 15);
         
-        //// Names appear here
-        
         revise();
-        return PARSE_SUCCEEDED;
+        return PARSE_SUCCEEDED;  
+        }
+
+    public int parsePMEM(byte[] data, boolean fromFile)
+        {
+        // data starts at byte 16
+                                
+        // extract names
+        char[][] names = new char[32][10];
+        for(int i = 0; i < 32; i++)
+            {
+            for (int j = 0; j < 10; j++)
+                {
+                names[i][j] = (char)(data[i * 76 + 66 + j + 16] & 127);
+                }
+            }
+                        
+        String[] n = new String[32];
+        for(int i = 0; i < 32; i++)
+            {
+            n[i] = "" + (i + 1) + "   " + new String(names[i]);
+            }
+            
+        // Now that we have an array of names, one per patch, we present the user with options;
+        // 0. Cancel [handled automatically]
+        // 1. Save the bank data [handled automatically]
+        // 2. Upload the bank data [handled automatically] 
+        // 3. Load and edit a certain patch number
+        int patchNum = showBankSysexOptions(data, n);
+        if (patchNum < 0) 
+            return PARSE_CANCELLED;
+
+        return parseFromBank(data, patchNum);
         }
         
         

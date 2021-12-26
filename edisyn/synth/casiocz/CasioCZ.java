@@ -1628,7 +1628,7 @@ public class CasioCZ extends Synth
         }
         
     /** Return a list of all patch number names.  Default is { "Main" } */
-    public  String[] getPatchNumberNames() { return buildIntegerNames(8, 0); }
+    public  String[] getPatchNumberNames() { return buildIntegerNames(8, 1); }
 
     /** Return a list whether patches in banks are writeable.  Default is { false } */
     public boolean[] getWriteableBanks() 

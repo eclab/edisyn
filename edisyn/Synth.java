@@ -8649,7 +8649,7 @@ public abstract class Synth extends JComponent implements Updatable
 						{
 						otherSynth.doLibrarian();		// open and move to it
 						}
-					otherSynth.librarian.getLibrary().readBank(data);	
+					otherSynth.librarian.getLibrary().readBank(data, otherSynth.librarian);	
 					return BANK_LIBRARIAN;				
                 	}
                 if (actions.getSelectedIndex() == 3)	// This Librarian
@@ -8659,7 +8659,7 @@ public abstract class Synth extends JComponent implements Updatable
 						{
 						doLibrarian();		// open and move to it
 						}
-					librarian.getLibrary().readBank(data);	
+					librarian.getLibrary().readBank(data, librarian);	
 					return BANK_LIBRARIAN;				
                 	}
                 else if (actions.getSelectedIndex() == 2)    // write bank
@@ -8933,8 +8933,9 @@ public abstract class Synth extends JComponent implements Updatable
     	PARSE_SUCCEEDED or PARSE_SUCCEEDED_UNTITLED if successful, else PARSE_FAILED (the default). */
     public int parseFromBank(byte[] bankSysex, int number) { return PARSE_FAILED; }
 
-    /** Parses the bank number from the provided bank sysex and returns it.  By default returns 0. */
-    public int getBank(byte[] bankSysex) { return 0; }
+    /** Parses the bank number from the provided bank sysex and returns it.  
+    	If the bank is unknown, returns -1.  By default returns -1. */
+    public int getBank(byte[] bankSysex) { return -1; }
 
     /** Emits the models as a bank.  The bank number is provided if necessary. By default does nothing. */
     public Object[] emitBank(Model[] models, int bank, boolean toFile) { return new Object[0]; }
@@ -8951,4 +8952,9 @@ public abstract class Synth extends JComponent implements Updatable
     /** Revises a potential bank name. If returns null, this indicates that bank names are not permitted. 
     	By default returns null, which is the common case. */
     public String reviseBankName(String name) { return null; }
+    
+    /** Some synthesizers have ragged banks -- different banks have different lengths.  Edisyn stretches
+    	everything to the longest length, and then lets synths mark out some cells as "invalid".  This
+    	method normally returns true. */
+    public boolean isValidPatchLocation(int bank, int num) { return true; }
     }

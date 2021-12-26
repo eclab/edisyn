@@ -1923,42 +1923,26 @@ public class Yamaha4Op extends Synth
             }
         }
 
-
-    public int parseVMEM(byte[] data, boolean fromFile)
-        {
-        // extract names
-        char[][] names = new char[32][10];
-        for(int i = 0; i < 32; i++)
-            {
-            for (int j = 0; j < 10; j++)
-                {
-                names[i][j] = (char)(data[i * 128 + 57 + j + 6] & 127);
-                }
-            }
-                        
-        String[] n = new String[32];
-        for(int i = 0; i < 32; i++)
-            {
-            n[i] = "" + (i + 1) + "   " + new String(names[i]);
-            }
-            
-        // Now that we have an array of names, one per patch, we present the user with options;
-        // 0. Cancel [handled automatically]
-        // 1. Save the bank data [handled automatically]
-        // 2. Upload the bank data [handled automatically] 
-        // 3. Load and edit a certain patch number
-        int patchNum = showBankSysexOptions(data, n);
-        if (patchNum < 0) 
-            return PARSE_CANCELLED;
-
-        model.set("name", new String(names[patchNum]));
-        model.set("number", patchNum);
-        model.set("bank", 0);                   // we don't know what the bank is in reality
-                
-        // okay, we're loading and editing patch number patchNum.  Here we go.
-        int patch = patchNum * 128;
+    /** Parses a given patch from the provided bank sysex, and returns 
+    	PARSE_SUCCEEDED or PARSE_SUCCEEDED_UNTITLED if successful, else PARSE_FAILED (the default). */
+    public int parseFromBank(byte[] data, int number)
+    	{
+        // okay, we're loading and editing patch number.  Here we go.
+        int patch = number * 128;
         int pos = 0;
                                                                                 
+        // extract name
+        char[] name = new char[10];
+		for (int j = 0; j < 10; j++)
+			{
+			name[j] = (char)(data[patch + 57 + j + 6] & 127);
+			}
+			
+        model.set("name", new String(name));
+        model.set("number", number);
+        model.set("bank", 0);                   // we don't know what the bank is in reality
+                
+
         for(int op = 0; op < 4; op++)
             {
             // attack rate
@@ -2121,10 +2105,240 @@ public class Yamaha4Op extends Synth
         // V Param 3
         model.set(aced3Parameters[pos++], data[patch + 100 + 6] & 127);         // 0...99
         
-        revise();
-        return PARSE_SUCCEEDED;
+        revise();  
+        return PARSE_SUCCEEDED;  	
+        }
+
+
+
+    public int parseVMEM(byte[] data, boolean fromFile)
+        {
+        // extract names
+        char[][] names = new char[32][10];
+        for(int i = 0; i < 32; i++)
+            {
+            for (int j = 0; j < 10; j++)
+                {
+                names[i][j] = (char)(data[i * 128 + 57 + j + 6] & 127);
+                }
+            }
+                        
+        String[] n = new String[32];
+        for(int i = 0; i < 32; i++)
+            {
+            n[i] = "" + (i + 1) + "   " + new String(names[i]);
+            }
+            
+        // Now that we have an array of names, one per patch, we present the user with options;
+        // 0. Cancel [handled automatically]
+        // 1. Save the bank data [handled automatically]
+        // 2. Upload the bank data [handled automatically] 
+        // 3. Load and edit a certain patch number
+        int patchNum = showBankSysexOptions(data, n);
+        if (patchNum < 0) 
+            return PARSE_CANCELLED;
+
+        return parseFromBank(data, patchNum);
         }
  
+ 
+ 
+ 
+    public Object[] emitBank(Model[] models, int bank, boolean toFile)
+        {
+        byte[] data = new byte[4104];
+        data[0] = (byte)0xF0;
+        data[1] = (byte)0x43;
+        data[2] = (byte)(getChannelOut());;
+        data[3] = (byte)0x04;
+        data[4] = (byte)0x10;
+        data[5] = (byte)0x00;
+        
+        for(int number = 0; number < 32; number++)
+        	{
+			// okay, we're loading and editing patch number.  Here we go.
+			int patch = number * 128;
+			int pos = 0;
+																				
+			// emit name
+			char[] name = models[number].get("name", "INIT VOICE").toCharArray();
+			for (int j = 0; j < 10; j++)
+				{
+				data[patch + 57 + j + 6] = (byte)(name[j] & 127);
+				}
+			
+			for(int op = 0; op < 4; op++)
+				{
+				// attack rate
+				 data[patch + op * 10 + 0 + 6] = (byte) (models[number].get(vcedParameters[pos++]) & 31);
+				// decay 1 rate
+				 data[patch + op * 10 + 1 + 6] = (byte) (models[number].get(vcedParameters[pos++]) & 31);
+				// decay 2 rate
+				 data[patch + op * 10 + 2 + 6] = (byte) (models[number].get(vcedParameters[pos++]) & 31);
+				// release rate
+				 data[patch + op * 10 + 3 + 6] = (byte) (models[number].get(vcedParameters[pos++]) & 15);
+				// decay 1 level
+				 data[patch + op * 10 + 4 + 6] = (byte) (models[number].get(vcedParameters[pos++]) & 15);
+				// level scaling
+				 data[patch + op * 10 + 5 + 6] = (byte) (models[number].get(vcedParameters[pos++]) & 127);
+				// rate scaling
+				 data[patch + op * 10 + 9 + 6] |= (byte) (((models[number].get(vcedParameters[pos++]) & 3) << 3));			// out of order?
+				// eg bias sensitivity
+				 data[patch + op * 10 + 6 + 6] |= (byte) (((models[number].get(vcedParameters[pos++]) & 7) << 3));
+				// amplitude modulation
+				 data[patch + op * 10 + 6 + 6] |= (byte) (((models[number].get(vcedParameters[pos++]) & 1) << 6));
+				// key velocity sensitivity
+				 data[patch + op * 10 + 6 + 6] |= (byte) (((models[number].get(vcedParameters[pos++]) & 7) << 0));
+				// operator output level
+				 data[patch + op * 10 + 7 + 6] = (byte) (models[number].get(vcedParameters[pos++]) & 127);
+				// frequency
+				 data[patch + op * 10 + 8 + 6] = (byte) (models[number].get(vcedParameters[pos++]) & 63);
+				// detune
+				 data[patch + op * 10 + 9 + 6] |= (byte) (((models[number].get(vcedParameters[pos++]) & 7) << 0));
+				// key velocity sensitivity sign (V50 only)
+				 data[patch + op * 10 + 9 + 6] |= (byte) (((models[number].get("operator" + (op + 1) + "vkeyvelocitysensitivitysign") & 1) << 3));
+				// level scaing sign (V50 only)
+				 data[patch + op * 10 + 9 + 6] |= (byte) (((models[number].get("operator" + (op + 1) + "vlevelscalingsign") & 1) << 6));
+				}
+
+			// algorithm
+			 data[patch + 40 + 6] |= (byte) (((models[number].get(vcedParameters[pos++]) & 7) << 0));
+			// feedback
+			 data[patch + 40 + 6] |= (byte) (((models[number].get(vcedParameters[pos++]) & 7) << 3));
+			// lfo speed
+			 data[patch + 41 + 6] = (byte) (models[number].get(vcedParameters[pos++]) & 127);
+			// lfo delay
+			 data[patch + 42 + 6] = (byte) (models[number].get(vcedParameters[pos++]) & 127);
+			// pitch modulation depth
+			 data[patch + 43 + 6] = (byte) (models[number].get(vcedParameters[pos++]) & 127);
+			// amplitude modulation depth
+			 data[patch + 44 + 6] = (byte) (models[number].get(vcedParameters[pos++]) & 127);
+			// lfo sync
+			 data[patch + 40 + 6] |= (byte) (((models[number].get(vcedParameters[pos++]) & 1) << 6));				// out of order
+			// lfo wave
+			 data[patch + 45 + 6] |= (byte) (((models[number].get(vcedParameters[pos++]) & 3) << 0));
+			// pitch modulation sensitivity
+			 data[patch + 45 + 6] |= (byte) (((models[number].get(vcedParameters[pos++]) & 7) << 4));
+			// amplitude modulation sensitivity
+			 data[patch + 45 + 6] |= (byte) (((models[number].get(vcedParameters[pos++]) & 3) << 2));
+			// transpose
+			 data[patch + 46 + 6] = (byte) (models[number].get(vcedParameters[pos++]) & 63);  // not marked in the documentation, but it goes 0...48
+			// poly/mono
+			 data[patch + 48 + 6] |= (byte) (((models[number].get(vcedParameters[pos++]) & 1) << 3));				// out of order
+			// pitch bend range
+			 data[patch + 47 + 6] = (byte) (models[number].get(vcedParameters[pos++]) & 15);
+			// portamento mode
+			 data[patch + 48 + 6] |= (byte) (((models[number].get(vcedParameters[pos++]) & 1) << 0));
+			// portamento time
+			 data[patch + 49 + 6] = (byte) (models[number].get(vcedParameters[pos++]) & 127);
+			// foot control volume
+			 data[patch + 50 + 6] = (byte) (models[number].get(vcedParameters[pos++]) & 127);
+			// sustain
+			 data[patch + 48 + 6] |= (byte) (((models[number].get(vcedParameters[pos++]) & 1) << 2));				// out of order
+			// portamento
+			 data[patch + 48 + 6] |= (byte) (((models[number].get(vcedParameters[pos++]) & 1) << 1));				// out of order
+			// chorus
+			 data[patch + 48 + 6] |= (byte) (((models[number].get(vcedParameters[pos++]) & 1) << 4));				// out of order
+			// modulation wheel pitch
+			 data[patch + 51 + 6] = (byte) (models[number].get(vcedParameters[pos++]) & 127);
+			// modulation wheel amplitude
+			 data[patch + 52 + 6] = (byte) (models[number].get(vcedParameters[pos++]) & 127);
+			// breath control pitch
+			 data[patch + 53 + 6] = (byte) (models[number].get(vcedParameters[pos++]) & 127);
+			// breath control amplitude
+			 data[patch + 54 + 6] = (byte) (models[number].get(vcedParameters[pos++]) & 127);
+			// breath control pitch bias
+			 data[patch + 55 + 6] = (byte) (models[number].get(vcedParameters[pos++]) & 127);
+			// breath control eg bias
+			 data[patch + 56 + 6] = (byte) (models[number].get(vcedParameters[pos++]) & 127);
+		
+			//// We skip the name (we did it earlier)
+		
+			//// Pitch Rate 1
+			 data[patch + 67 + 6] = (byte) (models[number].get(vcedParameters[pos++]) & 127);
+			//// Pitch Rate 2
+			 data[patch + 68 + 6] = (byte) (models[number].get(vcedParameters[pos++]) & 127);
+			//// Pitch Rate 3
+			 data[patch + 69 + 6] = (byte) (models[number].get(vcedParameters[pos++]) & 127);
+			//// Pitch Level 1
+			 data[patch + 70 + 6] = (byte) (models[number].get(vcedParameters[pos++]) & 127);
+			//// Pitch Level 2
+			 data[patch + 71 + 6] = (byte) (models[number].get(vcedParameters[pos++]) & 127);
+			//// Pitch Level 3
+			 data[patch + 72 + 6] = (byte) (models[number].get(vcedParameters[pos++]) & 127);
+		
+			pos = 0;        // reset, we're now doing ACED
+			for(int op = 0; op < 4; op++)
+				{
+				// fixed frequency
+				 data[patch + op * 2 + 73 + 6] |= (byte) (((models[number].get(acedParameters[pos++]) & 1) << 3));
+				// fixed frequency range
+				 data[patch + op * 2 + 73 + 6] |= (byte) (((models[number].get(acedParameters[pos++]) & 7) << 0));
+				// frequency range fine
+				 data[patch + op * 2 + 74 + 6] |= (byte) (((models[number].get(acedParameters[pos++]) & 15) << 0));
+				// operator waveform
+				 data[patch + op * 2 + 74 + 6] |= (byte) (((models[number].get(acedParameters[pos++]) & 7) << 4));
+				// eg shift
+				 data[patch + op * 2 + 73 + 6] |= (byte) (((models[number].get(acedParameters[pos++]) & 3) << 4));				// out of order
+				// fixed range mode (V50 only)
+				 data[patch + op * 2 + 73 + 6] |= (byte) (((models[number].get("operator" + (op + 1) + "vshift") & 1) << 6));  // out of order	// in docs as "FIXRM" for "FIX RANGE MODE"
+				}
+
+			// reverb rate
+			 data[patch + 81 + 6] = (byte) (models[number].get(acedParameters[pos++]) & 7);
+			// foot controller pitch
+			 data[patch + 82 + 6] = (byte) (models[number].get(acedParameters[pos++]) & 127);
+			// foot controller amplitude
+			 data[patch + 83 + 6] = (byte) (models[number].get(acedParameters[pos++]) & 127);
+		
+		
+			pos = 0;        // reset, we're now doing ACED2
+			// Aftertouch Pitch
+			 data[patch + 84 + 6] = (byte) (models[number].get(aced2Parameters[pos++]) & 7);        
+			// Aftertouch Amplitude
+			 data[patch + 85 + 6] = (byte) (models[number].get(aced2Parameters[pos++]) & 7);
+			// Aftertouch Pitch Bias
+			 data[patch + 86 + 6] = (byte) (models[number].get(aced2Parameters[pos++]) & 7);
+			// Aftertouch EG BBias
+			 data[patch + 87 + 6] = (byte) (models[number].get(aced2Parameters[pos++]) & 7);
+
+			// skip bytes 88..90
+
+			pos = 0;        // reset, we're now doing EFEDS
+			// Effect Preset Number
+			 data[patch + 91 + 6] = (byte) (models[number].get(efedsParameters[pos++]) & 15);        
+			// Effect Time
+			 data[patch + 92 + 6] = (byte) (models[number].get(efedsParameters[pos++]) & 63);
+			// Effect Balance
+			 data[patch + 93 + 6] = (byte) (models[number].get(efedsParameters[pos++]) & 127);
+				
+				
+			pos = 0;        // reset, we're now doing ACED3, V50 only
+			// V Effect Sel
+			 data[patch + 94 + 6] = (byte) (models[number].get(aced3Parameters[pos++]) & 63);           // 0...32, so 64 bit argh     
+			// V Balance
+			 data[patch + 95 + 6] = (byte) (models[number].get(aced3Parameters[pos++]) & 127);          // 0...100        
+			// V Out Level
+			 data[patch + 96 + 6] = (byte) (models[number].get(aced3Parameters[pos++]) & 127);          // 0...100        
+			// V Effect Stereo Mix
+			 data[patch + 97 + 6] = (byte) (models[number].get(aced3Parameters[pos++]) & 1);                    // 0...1        
+			// V Param 1
+			 data[patch + 98 + 6] = (byte) (models[number].get(aced3Parameters[pos++]) & 127);          // 0...75     
+			// V Param 2
+			 data[patch + 99 + 6] = (byte) (models[number].get(aced3Parameters[pos++]) & 127);          // 0...99     
+			// V Param 3
+			 data[patch + 100 + 6] = (byte) (models[number].get(aced3Parameters[pos++]) & 127);         // 0...99
+			}
+			
+		data[data.length - 2] = produceChecksum(data, 6);
+		data[data.length - 1] = (byte)0xF7;
+		return new Object[] { data };
+        }
+        
+        
+        
+        
+        
     
     public Object[] emitAll(Model tempModel, boolean toWorkingMemory, boolean toFile)
         {
@@ -2330,7 +2544,7 @@ public class Yamaha4Op extends Synth
         }
 
     /** Generate a TX81Z checksum of the data bytes */
-    byte produceChecksum(byte[] bytes)
+    byte produceChecksum(byte[] bytes, int start)
         {
         //      The TX81Z manual says the checksum is the
         //              "Twos complement of the lower 7 bits of the sum of all databytes".
@@ -2341,9 +2555,15 @@ public class Yamaha4Op extends Synth
         //              It may be otherwise.  So here's my shot.
 
         int checksum = 0;
-        for(int i = 0; i < bytes.length; i++)
+        for(int i = start; i < bytes.length; i++)
             checksum = (checksum + bytes[i]) & 255;
         return (byte)((256 - checksum) & 127);
+        }
+
+    /** Generate a TX81Z checksum of the data bytes */
+    byte produceChecksum(byte[] bytes)
+        {
+        return produceChecksum(bytes, 0);
         }
 
     public void performRequestDump(Model tempModel, boolean changePatch)
@@ -2771,4 +2991,91 @@ public class Yamaha4Op extends Synth
                 key.equals("veffectoutlevel"));                 
             }
         }
+
+
+    public String[] getBankNames()
+    	{
+    	if (getSynthType() == TYPE_DX21)
+    		{
+    		return new String[] { "Bank" };
+    		}
+    	else if (getSynthType() == TYPE_DX27_DX100 ||
+				getSynthType() == TYPE_TX81Z ||
+				getSynthType() == TYPE_DX11)
+    		{
+    		return new String[] { "I", "A", "B", "C", "D" };
+    		}
+    	else if (getSynthType() == TYPE_TQ5_YS100_YS200_B200)
+    		{
+    		return new String[] { "Preset", "User", "Card" };
+    		}
+    	else if (getSynthType() == TYPE_V50)
+    		{
+    		return new String[] { "Internal", "Card", "Preset" };
+    		}
+    	else	// uh...
+    		{
+    		return new String[] { "Bank" };
+    		}
+    	}
+
+	/** Return a list of all patch number names.  Default is { "Main" } */
+	public String[] getPatchNumberNames()  
+		{
+	    if (getSynthType() == TYPE_DX21 || 
+	    	getSynthType() == TYPE_DX27_DX100 || 
+	    	getSynthType() == TYPE_TX81Z || 
+	    	getSynthType() == TYPE_DX11 )
+    			{
+    			return buildIntegerNames(32, 1); 
+    			}
+    	else
+    		{
+			return buildIntegerNames(32, 0); 
+    		}
+		}
+		
+	/** Return a list whether patches in banks are writeable.  Default is { false } */
+	public boolean[] getWriteableBanks() 
+		{
+	    if (getSynthType() == TYPE_DX21)
+    		{
+    		return new boolean[] { true };
+    		}
+    	else if (getSynthType() == TYPE_DX27_DX100 ||
+				getSynthType() == TYPE_TX81Z ||
+				getSynthType() == TYPE_DX11)
+    		{
+    		return new boolean[] {  true, false, false, false, false };
+    		}
+    	else if (getSynthType() == TYPE_TQ5_YS100_YS200_B200)
+    		{
+    		return new boolean[] { false, true, true };
+    		}
+    	else if (getSynthType() == TYPE_V50)
+    		{
+    		return new boolean[] { true, true, false };
+    		}
+    	else	// uh...
+    		{
+    		return new boolean[] {  true  };
+    		}
+    	}
+
+	public boolean getSupportsBankWrites() { return true; }
+
+	public int getPatchNameLength() { return 10; }
+	
+	public boolean isValidPatchLocation(int bank, int num) 
+		{ 
+		if (getSynthType() == TYPE_DX27_DX100)
+			{
+			return (num < 24);
+			}
+		else 
+			{
+			return true; 
+			}
+		}
+
     }

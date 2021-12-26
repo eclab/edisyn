@@ -12,7 +12,6 @@ import java.awt.event.*;
 import java.awt.dnd.*;
 import javax.swing.*;
 import javax.swing.table.*;
-import javax.activation.*;
 
 /**
    LIBRARIAN is a JComponent implementing a JTable backed by a LIBRARY as its model.
@@ -45,7 +44,13 @@ public class Librarian extends JPanel
         button.setHorizontalAlignment(SwingConstants.CENTER);
         }
         
-        
+    
+    /** Returns the selected table column, or -1 if none */
+    public int getSelectedColumn()
+    	{
+    	return table.getSelectedColumn();
+    	}
+    	
     public void updateUndoRedo()
     	{
 		undo.setEnabled(getLibrary().hasUndo());
@@ -61,6 +66,9 @@ public class Librarian extends JPanel
     public static final Color GRID_COLOR = Color.GRAY;
     public static final Color READ_ONLY_BACKGROUND_COLOR = new Color(250, 245, 255);
     public static final Color SCRATCH_COLOR = new Color(240, 250, 250);
+    public static final Color INVALID_COLOR = BACKGROUND_COLOR; //= new Color(64, 64, 64);
+    public static final Color INVALID_TEXT_COLOR = new Color(255, 0, 0);
+    public static final Color STANDARD_TEXT_COLOR = new Color(0, 0, 0);
 
     public Librarian(Synth synth)
         {
@@ -115,6 +123,10 @@ public class Librarian extends JPanel
                     {
                     comp.setBackground(SCRATCH_COLOR);
                     }
+                else if (column > 0 && !synth.isValidPatchLocation(column - 1, row))			// invalid cell
+                    {
+                    comp.setBackground(INVALID_COLOR);
+                    }
                 else if (!Librarian.this.getLibrary().isWriteableBank(column - 1))
                     {
                     comp.setBackground(READ_ONLY_BACKGROUND_COLOR);
@@ -124,10 +136,15 @@ public class Librarian extends JPanel
                     comp.setBackground(STANDARD_BACKGROUND_COLOR);
                     }
 
+                
                 // Change FOREGROUND COLOR
-                if (column == 0)
+                if (column > 0 && !synth.isValidPatchLocation(column - 1, row))			// invalid cell
                     {
-                    // No color change for now
+                    comp.setForeground(INVALID_TEXT_COLOR);
+                    }
+                else
+                    {
+                    comp.setForeground(STANDARD_TEXT_COLOR);
                     }
                 return comp;
                 }
@@ -498,6 +515,9 @@ public class Librarian extends JPanel
         
         buttonBox.add(Box.createGlue());
         add(buttonBox, BorderLayout.SOUTH);
+        
+		// declare some cells invalid?
+		
         }
 
 
@@ -1042,6 +1062,30 @@ public static JMenu buildLibrarianMenu(JMenuItem openMenu, Synth synth)
                 }
             }
 
+		public static Transferable buildTransferable(final PatchLocationSet locationSet)
+			{
+			return new Transferable()
+				{
+				public Object getTransferData(DataFlavor flavor) 
+					{
+					if (flavor.equals(localObjectFlavor))
+						return locationSet;
+					else
+						return null;
+					}
+				
+				public DataFlavor[] getTransferDataFlavors() 
+					{
+					return new DataFlavor[] { localObjectFlavor };
+					}
+
+				public boolean isDataFlavorSupported(DataFlavor flavor) 
+					{
+					return (flavor.equals(localObjectFlavor));
+					}
+				};
+			}
+
         // We allow all three kinds of drags
         public int getSourceActions(JComponent c) 
             {
@@ -1059,12 +1103,13 @@ public static JMenu buildLibrarianMenu(JMenuItem openMenu, Synth synth)
             JTable table = (JTable)c;
             if (isPatchWell(table))     // it's the current patch
                 {
-                return new DataHandler(new PatchLocationSet(synth, table, 0, 0, 1), localObjectFlavor.getMimeType());
+                //return new DataHandler(new PatchLocationSet(synth, table, 0, 0, 1), localObjectFlavor.getMimeType());
+                return buildTransferable(new PatchLocationSet(synth, table, 0, 0, 1));
                 }
             else
                 {
-                return new DataHandler(new PatchLocationSet(synth, table, Librarian.col(table, table.getSelectedColumn()), table.getSelectedRow(), table.getSelectedRowCount()),
-                    localObjectFlavor.getMimeType());
+                //return new DataHandler(new PatchLocationSet(synth, table, Librarian.col(table, table.getSelectedColumn()), table.getSelectedRow(), table.getSelectedRowCount()), localObjectFlavor.getMimeType());
+                return buildTransferable(new PatchLocationSet(synth, table, Librarian.col(table, table.getSelectedColumn()), table.getSelectedRow(), table.getSelectedRowCount()));
                 }
             }
 

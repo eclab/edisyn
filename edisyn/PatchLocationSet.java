@@ -11,7 +11,6 @@ import java.awt.event.*;
 import java.awt.dnd.*;
 import javax.swing.*;
 import javax.swing.table.*;
-import javax.activation.*;
 
 // This is the data that's transferred in a drag and drop operation from the Librarian
 public class PatchLocationSet

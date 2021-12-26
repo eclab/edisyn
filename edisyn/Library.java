@@ -450,7 +450,7 @@ public class Library extends AbstractTableModel
         }
                 
                 
-    public void readBank(byte[] incoming)
+    public void readBank(byte[] incoming, Librarian librarian)
         {
         pushUndo();
 
@@ -467,8 +467,30 @@ public class Library extends AbstractTableModel
         Model location = new Model();
         boolean hasBanks = (synth.getBankNames() != null);
         
-        int bank = synth.getBank(incoming) + 1;
-        
+        // We have to figure out what bank to use
+        int bank = 0;
+        int b = synth.getBank(incoming);
+        if (b >= 0)	// bank known
+        	{
+        	bank = b + 1;
+        	}
+        else 	// bank unknown
+        	{
+        	/*
+        	// Check the librarian to see which bank is selected
+        	int col = librarian.getSelectedColumn();
+        	if (col >= 0)
+        		{
+        		bank = col + 1;
+        		}
+        	else
+        	*/
+        		{
+        		// Use the scratch bank
+        		bank = 0;
+        		}
+        	}
+        	
         for(int i = 0; i < getBankSize(); i++)
             {
             boolean showed = false;

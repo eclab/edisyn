@@ -4,10 +4,16 @@ Edisyn's librarian is in its very early stages, and I can only test it on certai
 
 Below are the various stages of implementation and testing of the librarian system for various editors.
 
-## Not Fully Coded
 
-* Kawai K1
-* Kawai K1 Multi
+## Well Tested
+
+* [ None ]
+
+## Coded and Barely Tested
+
+* DSI Prophet '08 / Mopho / Tetra
+* Roland D110
+* Roland D110 Multi
 
 ## Coded but Untested
 
@@ -55,15 +61,10 @@ Below are the various stages of implementation and testing of the librarian syst
 * Yamaha FS1R
 * Yamaha FS1R Multi
 
-## Coded and Barely Tested
+## Not Fully Coded
 
-* DSI Prophet '08 / Mopho / Tetra
-* Roland D110
-* Roland D110 Multi
-
-## Well Tested
-
-* [ None ]
+* Kawai K1
+* Kawai K1 Multi
 
 ## Cannot Support Librarians 
 

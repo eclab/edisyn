@@ -9,7 +9,7 @@ Below are the various stages of implementation and testing of the librarian syst
 * Kawai K1
 * Kawai K1 Multi
 
-## Untested
+## Coded but Untested
 
 * Alesis D4/DM5
 * Casio CZ
@@ -55,7 +55,7 @@ Below are the various stages of implementation and testing of the librarian syst
 * Yamaha FS1R
 * Yamaha FS1R Multi
 
-## Barely Tested
+## Coded and Barely Tested
 
 * DSI Prophet '08 / Mopho / Tetra
 * Roland D110

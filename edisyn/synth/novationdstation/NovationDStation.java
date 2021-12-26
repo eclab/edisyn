@@ -25,7 +25,7 @@ import javax.sound.midi.*;
 
 public class NovationDStation extends Synth
     {
-    public static final String[] PANS = { "L 4", "L 3", "L 2", "L 2", "--", "R 1", "R 2", "R 3", "R 4", "O 1", "O 2", "O 3", "O 4", "O 5", "O 6" };             // #15 is "O 4" again...
+    public static final String[] PANS = { "L 4", "L 3", "L 2", "L 1", "--", "R 1", "R 2", "R 3", "R 4", "O 1", "O 2", "O 3", "O 4", "O 5", "O 6" };             // #15 is "O 4" again...
     public static final String[] DRUMS = { "808 Bass Drum", "808 Snare Drum", "808 Low Tom", "808 Mid Tom", "808 High Tom", "808 Rim Shot", "808 Hand Clap", "808 Cowbell", "808 Closed High Hat", "808 Open High Hat", "808 Crash Cymbal", "808 Low Conga", "808 Mid Conga", "808 High Conga", "808 Maracas", "808 Claves", "909 Bass Drum", "909 Snare Drum", "909 Low Tom", "909 Mid Tom", "909 High Tom", "909 Rim Shot", "909 Hand Clap", "909 Closed High Hat", "909 Open High Hat", "909 Crash Cymbal", "909 Ride Cymbal" };
     public static final String[] SETS = { "808", "909" };
 

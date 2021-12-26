@@ -51,7 +51,7 @@ Below are the various stages of implementation and testing of the librarian syst
 * Waldorf Kyra
 * Waldorf Kyra Multi
 * Waldorf Microwave II/XT/XTk
-* Waldorf Microwave II/Xt/XTk Multi
+* Waldorf Microwave II/XT/XTk Multi
 * Waldorf Pulse 2
 * Yamaha 4 Op
 * Yamaha 4 Op Multi

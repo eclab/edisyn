@@ -9,7 +9,7 @@ Below are the various stages of implementation and testing of the librarian syst
 
 * [ None ]
 
-## Coded and Barely Tested
+## Somewhat Tested
 
 * DSI Prophet '08 / Mopho / Tetra
 * Roland D110

@@ -701,6 +701,8 @@ public class Yamaha4OpMulti extends Synth
   
   
   
+  
+  
     /** Parses a given patch from the provided bank sysex, and returns 
     	PARSE_SUCCEEDED or PARSE_SUCCEEDED_UNTITLED if successful, else PARSE_FAILED (the default). */
     public int parseFromBank(byte[] data, int number)
@@ -710,15 +712,15 @@ public class Yamaha4OpMulti extends Synth
         int pos = 0;
 
         // extract name
-        char[][] name = new char[10];
+        char[] name = new char[10];
             for (int j = 0; j < 10; j++)
                 {
                 name[j] = (char)(data[patch * 76 + 66 + j + 16] & 127);
                 }
                         
         model.set("name", new String(name));
-        model.set("number", patchNum);
-        model.set("bank", 0);                   // we don't know what the bank is in reality
+        model.set("number", number);
+        //model.set("bank", 0);                   // we don't know what the bank is in reality
                 
         for(int op = 0; op < 8; op++)
             {
@@ -810,6 +812,89 @@ public class Yamaha4OpMulti extends Synth
         }
 
 
+	// PMEM
+    public Object[] emitBank(Model[] models, int bank, boolean toFile)
+    	{
+        byte[] data = new byte[4104];
+        data[0] = (byte)0xF0;
+        data[1] = (byte)0x43;
+        data[2] = (byte)(getChannelOut());;
+        data[3] = (byte)0x7E;
+        data[4] = (byte)0x13;
+        data[5] = (byte)0x0A;
+        data[6] = (byte)'L';
+        data[7] = (byte)'M';
+        data[8] = (byte)' ';
+        data[9] = (byte)' ';
+        data[10] = (byte)'8';
+        data[11] = (byte)'9';
+        data[12] = (byte)'7';
+        data[13] = (byte)'6';
+        data[14] = (byte)'P';
+        data[15] = (byte)'M';
+        
+        for(int number = 0; number < 32; number++)
+        	{
+			// okay, we're loading and editing patch number.  Here we go.
+			int patch = number * 76;
+			int pos = 0;
+
+			// emit name
+			char[] name = models[number].get("name", "INIT VOICE").toCharArray();
+			for (int j = 0; j < 10; j++)
+				{
+				data[patch * 76 + 66 + j + 16] = (byte)(name[j] & 127);
+				}
+						
+			for(int op = 0; op < 8; op++)
+				{
+				// max notes
+				data[patch + op * 8 + 0 + 16] |= (byte) ((models[number].get(allParameters[pos++]) & 15) << 0);
+				// voice number msb
+				data[patch + op * 8 + 0 + 16] |= (byte) ((models[number].get(allParameters[pos++]) & 1) << 4);
+				// voice number lsb
+				data[patch + op * 8 + 1 + 16] = (byte) (models[number].get(allParameters[pos++]) & 127);
+				// channel
+				data[patch + op * 8 + 2 + 16] |= (byte) ((models[number].get(allParameters[pos++]) & 31) << 0);
+				// low key
+				data[patch + op * 8 + 3 + 16] = (byte) (models[number].get(allParameters[pos++]) & 127);
+				// high key
+				data[patch + op * 8 + 4 + 16] = (byte) (models[number].get(allParameters[pos++]) & 127);
+				// detune
+				data[patch + op * 8 + 5 + 16] = (byte) (models[number].get(allParameters[pos++]) & 15);
+				// note shift
+				data[patch + op * 8 + 6 + 16] |= ((byte) (models[number].get(allParameters[pos++]) & 63) << 0);
+				// volume
+				data[patch + op * 8 + 7 + 16] = (byte) (models[number].get(allParameters[pos++]) & 127);
+				// out assign
+				data[patch + op * 8 + 0 + 16] |= ((byte) (models[number].get(allParameters[pos++]) & 3) << 5);
+				// lfo select
+				data[patch + op * 8 + 2 + 16] |= ((byte) (models[number].get(allParameters[pos++]) & 3) << 5);
+				// micro tune enabled
+				data[patch + op * 8 + 6 + 16] |= ((byte) (models[number].get(allParameters[pos++]) & 1) << 6);            
+				}
+
+			// microtunetable
+			data[patch + 64 + 16] = (byte) (models[number].get(allParameters[pos++]) & 15);
+	   
+			// The documentation is poorly written here.  But I believe that
+			// KEY (which needs 4 bits) is b3...b6, EFSEL (which needs 2 bits)
+			// is b1...b2, and ASMODE (which needs 1 bit) is b0.
+	   
+			// assignmode
+			data[patch + 65 + 16] |= (byte) ((models[number].get(allParameters[pos++]) & 1) << 0);
+			// effectselect
+			data[patch + 65 + 16] |= (byte) ((models[number].get(allParameters[pos++]) & 3) << 1);
+			// microtunekey
+			data[patch + 65 + 16] |= (byte) ((models[number].get(allParameters[pos++]) & 15) << 3);
+			}
+		
+		data[data.length - 2] = produceChecksum(data, 16);
+		data[data.length - 1] = (byte)0xF7;
+		return new Object[] { data };
+        }
+
+
     public byte[] emit(Model tempModel, boolean toWorkingMemory, boolean toFile)
         {
         if (tempModel == null)
@@ -884,7 +969,7 @@ public class Yamaha4OpMulti extends Synth
         }
 
     /** Generate a TX81Z checksum of the data bytes */
-    byte produceChecksum(byte[] bytes)
+    byte produceChecksum(byte[] bytes, int start)
         {
         //      The TX81Z manual says the checksum is the
         //              "Twos complement of the lower 7 bits of the sum of all databytes".
@@ -895,9 +980,15 @@ public class Yamaha4OpMulti extends Synth
         //              It may be otherwise.  So here's my shot.
 
         int checksum = 0;
-        for(int i = 0; i < bytes.length; i++)
+        for(int i = start; i < bytes.length; i++)
             checksum = (checksum + bytes[i]) & 255;
         return (byte)((256 - checksum) & 127);
+        }
+
+    /** Generate a TX81Z checksum of the data bytes */
+    byte produceChecksum(byte[] bytes)
+        {
+        return produceChecksum(bytes, 0);
         }
 
 
@@ -1052,4 +1143,13 @@ public class Yamaha4OpMulti extends Synth
         return data; 
         }
   
+	/** Return a list of all patch number names.  Default is { "Main" } */
+	public String[] getPatchNumberNames() { return buildIntegerNames(24, 1); }
+		
+	/** Return a list whether patches in banks are writeable.  Default is { false } */
+	public boolean[] getWriteableBanks() { return new boolean[] { true }; }
+
+	public boolean getSupportsBankWrites() { return true; }
+
+	public int getPatchNameLength() { return 10; }
     }

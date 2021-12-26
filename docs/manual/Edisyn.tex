@@ -880,23 +880,36 @@ Once we have trained the autoencoder, we can break it into two pieces: the compr
 \label{librarianpanel}
 \end{wrapfigure}
 
-Most patch editors in Edisyn sport a simple librarian.  You can call up the librarian by choosing {\bf Open Librarian} from the {\bf Librarian} menu.  The Librarian pops up as its own tab, and looks something like what's shown in Figure~\ref{librarianpanel}, thought the particular layout will vary depending on your synthesizer. The purpose of a librarian is to allow you to load and save, rearrange, and upload or download patches in bulk.  Edisyn's libarians are rudimentary but they should get the job done.  {\color{red}\bf Warning: The Librarian is in beta.  It has only been tested on a few synthesizers, and is subject to radical change.}
+\hspace{0em}{\color{red}\bf Warning: The Librarian is not ready for prime time.  It has only been tested on a few synthesizers, and is subject to radical change.  You may not  even have it on your version of Edisyn yet.}
 
-The Librarian presents itself as a table with columns and rows.  Each column is a {\it bank} in your synthesizer, and each row is a {\it patch number} across all banks.  Edisyn tries to label the banks and the patch numbers like your synthesizer does: for example, in the Roland D-110 [Tone], patch numbers start at 11, so the Librarian does too.  You can rearrange and resize the bank columns.  The first column, called the {\bf Scratch Bank}, is special.  This isn't a bank in your synthesizer: it's just some extra room for you to temporarily stash stuff as you move things around via drag-and-drop.
+Most patch editors in Edisyn sport a simple librarian.  You can call up the librarian by choosing {\bf Open Librarian} from the {\bf Librarian} menu.  The Librarian pops up as its own tab, and looks something like what's shown in Figure~\ref{librarianpanel}, thought the particular layout will vary depending on your synthesizer. The purpose of a librarian is to allow you to load and save, rearrange, and upload or download patches in bulk.  Edisyn's libarians are rudimentary but they should get the job done.  
+
+The Librarian presents itself as a table with columns and rows.  Each column is a {\it bank} in your synthesizer, and each row is a {\it patch number} across all banks.  Edisyn tries to label the banks and the patch numbers like your synthesizer does: for example, in the Roland D-110 [Tone], patch numbers start at 11, so the Librarian does too.  You can rearrange and resize the bank columns.  
+
+\paragraph{Slot Colors} 
+
+Patch slots come in different colors depending on the situation:
+
+\begin{itemize}
+\item {\it Pale Green: the \textbf{Scratch Bank}}\quad The first column is special.  This isn't a bank in your synthesizer: it's just some extra room for you to temporarily stash stuff as you move things around via drag-and-drop. 
+\item {\it White}\quad These are patches in locations which can be written to your synthesizer.
+\item {\it Pale Magenta}\quad These are patches in locations which {\bf cannot} be written to your synthesizer because they're read-only on your machine.  However you can save them to disk, and can load them from the disk or from your synth.
+\item {\it Light Gray with Red Lettering}\quad These are patches in locations which {\bf cannot} be written to your synthesizer because they're not valid locations.  Why does Edisyn provide them then?  Because some synths have banks with varying lengths or present other unusual situations, and Edisyn has to be consistent.  You can treat them as scratch locations.
+\item {\it Dark Gray}\quad These are patches you have selected.
+\item {\it Pale Violet}\quad This is the drop location for drag-and-drop.
+\end{itemize}
 
 \paragraph{Relationship with the Editor} 
 
 Many editor/librarian GUIs out there organize themselves so that you're presented with a librarian first, and can only edit patches once you have selected them in the librarian.  Edisyn doesn't do this: it is first and foremost an editor.  The Librarian is entirely separate from the editor and works independently of it.  For example, if you select a patch in the Librarian and arrange for it to be edited in the editor, the editor is editing a {\it copy} of the patch, not the original patch in the librarian. They're not linked.  You'll have to copy it back to the librarian once you have finished editing it.
 
+
+
 \subsection{Loading Patches} 
 
 \paragraph{Loading Patches into the Librarian from your Synthesizer}
 
-Usually you do this by selecting one of the {\bf Download...} options in the Librarian.  As the patches are loaded, they appear in the Librarian.  You can also select {\bf Batch Download} from the {\bf File} menu and select the {\bf To Librarian} option.  Alternatively, if you send Edisyn a Bank Sysex message from your synthesizer, Edisyn will give you the option to load the bank into the Librarian or into a new Librarian.  If the patches don't indicate their bank or number, or if multiple patches indicate the same bank or number, the Librarian will do its best to place them somewhere rational.
-
-Note that even if the Librarian is open, if you {\bf request or receive a single patch} from your synthesizer, it'll get loaded into your editor, not into the Librarian.  But the patch will be available as the {\bf Current Patch} in the Librarian window.
-
-Loaded patches will overwrite existing patches in those slots: but patches in other slots (and in the Scratch bank) will remain unaffected: thus you might want to clear first (see below).
+Usually you do this by selecting one of the {\bf Download...} options in the Librarian.  As the patches are loaded, they appear in the Librarian.  You can also select {\bf Batch Download} from the {\bf File} menu and select the {\bf To Librarian} option.  Alternatively, if you send Edisyn a Bank Sysex message from your synthesizer, Edisyn will give you the option to load the bank into the Librarian or into a new Librarian. 
 
 While the patches are loading, the window will say {DOWNLOADING}.  If you need to prematurely stop downloading, just click on the {\bf Stop Download} button in the Librarian.  Alternatively you can select {\bf Stop Downloading Batch} from the {\bf File} menu.
 
@@ -904,9 +917,14 @@ While the patches are loading, the window will say {DOWNLOADING}.  If you need t
 
 If you open a bulk or bank sysex file, you'll be given the option (among other things) to load the data into your current Librarian or into one attached to a new editor.  If the Librarian isn't already open, it'll be opened for you.  Note that many synthesizer patches don't indicate their bank or number: Edisyn will just start filling them in starting at the first bank.  If multiple patches in the same file incorrectly have the same bank and number, Edisyn will put them where it can.  
 
-This is the case for bulk/bank sysex files.  But when you load a {\it single} patch from a file, it'll always get loaded into your Editor, not the Librarian, even if the Librarian is currently open.  However the patch will be available as the {\bf Current Patch} in the Librarian window.
+\paragraph{Where Loaded Patches Go}
 
-Loaded patches will overwrite existing patches in those slots: but patches in other slots (and in the Scratch bank) will remain unaffected: thus you might want to clear first (see below).
+If you load a single patch, it'll go in the editor not the librarian.  The patch will be available as the {\bf Current Patch} in the Librarian window
+
+If you load a range of patches, the Librarian will try to be smart about it.  If the patches come with locations, the Librarian will put them in their locations.  If they don't, it'll stick them in order starting with your first bank.  
+
+Some synthesizers can send whole banks to Edisyn.   Even so, when loading a bank from a synthesizer, Edisyn will request the patches one by one.  But if Edisyn receives a bank message from a synthesizer or disk, it'll try to be smart about where to put it.  If the bank message indicates which bank it is, Edisyn will put it there.  Otherwise it'll put it in the scratch bank.
+
 
 \subsection{Editing the Library} 
 

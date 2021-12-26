@@ -80,6 +80,9 @@ Below are the various stages of implementation and testing of the librarian syst
 
 ## Will Not Implement
 
-* Yamaha TG33. Patch sysex format is too nonstandard.
-* Yamaha TG33 Multi.  Patch sysex format is too nonstandard.
+* Yamaha TG33.
+  * Patch sysex format is too nonstandard.
+
+* Yamaha TG33 Multi.
+  * Patch sysex format is too nonstandard.
 

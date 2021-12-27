@@ -2385,6 +2385,7 @@ public class WaldorfBlofeld extends Synth
         }
 
     public int getPauseAfterChangePatch() { return 200; }
+	public int getPauseAfterWritePatch() { return 75; }
 
     public void changePatch(Model tempModel)
         {

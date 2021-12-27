@@ -917,6 +917,10 @@ While the patches are loading, the window will say {DOWNLOADING}.  If you need t
 
 If you open a bulk or bank sysex file, you'll be given the option (among other things) to load the data into your current Librarian or into one attached to a new editor.  If the Librarian isn't already open, it'll be opened for you.  Note that many synthesizer patches don't indicate their bank or number: Edisyn will just start filling them in starting at the first bank.  If multiple patches in the same file incorrectly have the same bank and number, Edisyn will put them where it can.  
 
+\paragraph{Requesting Banks}
+
+Normally if you download a range of patches, a bank, or, all the patches, Edisyn will request each patch one by one.  However a few synthesizers are capable of sending entire banks of patches in special sysex messages, and in some cases Edisyn is capable of requesting and reading these.  In these cases, you may see an additional menu item, {\bf Request Bank from Synth}.  Choosing this menu will allow you to select which bank to request, and then Edisyn will request it from the synthesizer.
+
 \paragraph{Where Loaded Patches Go}
 
 If you load a single patch, it'll go in the editor not the librarian.  The patch will be available as the {\bf Current Patch} in the Librarian window

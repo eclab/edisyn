@@ -602,8 +602,37 @@ public static JMenu buildLibrarianMenu(JMenuItem openMenu, Synth synth)
 	menu.add(item);
 	item.setEnabled(false);
 		
-	menu.addSeparator();
+	item = new JMenuItem("Request Bank from Synth");
+	item.addActionListener(new ActionListener()
+		{
+		public void actionPerformed(ActionEvent evt) 
+			{
+			JComboBox bank = new JComboBox(synth.getBankNames()); 
+			while(true)
+				{
+				boolean result = Synth.showMultiOption(synth, new String[] { "Bank" }, 
+					new JComponent[] { bank }, "Bank Request", "Enter the Bank.");
+				
+				if (result == false) return;
+								
+				byte[] data = synth.requestBankDump(bank.getSelectedIndex());
+				if (data != null)
+					{
+					synth.tryToSendSysex(data);
+					}
+				}
+			}
+		});
 	
+	menu.addSeparator();
+
+	if (synth.requestBankDump(0) != null)	// we have bank dump requests
+		{
+		menu.add(item);
+		item.setEnabled(false);
+		menu.addSeparator();
+		}
+			
 	item = new JMenuItem("Write Selected Patches to Synth");
 	item.addActionListener(new ActionListener()
 		{

@@ -8072,6 +8072,7 @@ public abstract class Synth extends JComponent implements Updatable
             // send directly to librarian    
             toLibrarian = true;
             
+            //System.err.println(startnum);
             currentPatch = buildModel();
             if (startbank != PatchLocation.NO_BANK)
             	currentPatch.set("bank", startbank);
@@ -8282,7 +8283,9 @@ public abstract class Synth extends JComponent implements Updatable
         int number1 = patch1.get("number", Integer.MIN_VALUE);
         int bank2 = patch2.get("bank", Integer.MIN_VALUE);
         int number2 = patch2.get("number", Integer.MIN_VALUE);
-        return (bank1 == bank2 && number1 == number2);
+        // we match even if one of us is missing a bank (perhaps the other had been set to a bank of 0
+        // but in fact there are no banks -- this happens in the librarian)
+        return (( bank1 == bank2 || bank1 == Integer.MIN_VALUE || bank2 == Integer.MIN_VALUE) && number1 == number2);
         }
        
         
@@ -8612,7 +8615,7 @@ public abstract class Synth extends JComponent implements Updatable
                 }
             else 
                 {
-                if (getSupportsBankWrites() && getPatchNumberNames() != null)
+                if (getSupportsBankReads() && getPatchNumberNames() != null)
                 	{
                 	actions = new JComboBox(new String[] {  "Edit Patch in Bank", "Save Bank...", "Write Bank to Synthesizer", "Load Bank in This Librarian", "Load Bank in New Librarian" });
                 	if (tabs.getSelectedComponent() == librarianPane)
@@ -8926,6 +8929,9 @@ public abstract class Synth extends JComponent implements Updatable
     /** Return a list whether entire banks can be written.  Default is FALSE. */
     public boolean getSupportsBankWrites() { return false; }
 
+    /** Return a list whether entire banks can be read .  Default is getSupportsBankWrites(). */
+    public boolean getSupportsBankReads() { return getSupportsBankWrites(); }
+
     /** Return whether individual patches can be written.  Default is TRUE. */
     public boolean getSupportsDownloads() { return true; }
 
@@ -8946,9 +8952,6 @@ public abstract class Synth extends JComponent implements Updatable
     /** Return the maximum number of characters a patch name may hold. The default returns 16. */
     public int getPatchNameLength() { return 16; }
 
-    /** Return true if individual (non-bank) patches on the synthesizer contain location information (bank, number). */
-    //public boolean getPatchContainsLocation() { return true; }
-
     /** Revises a potential bank name. If returns null, this indicates that bank names are not permitted. 
     	By default returns null, which is the common case. */
     public String reviseBankName(String name) { return null; }
@@ -8957,4 +8960,7 @@ public abstract class Synth extends JComponent implements Updatable
     	everything to the longest length, and then lets synths mark out some cells as "invalid".  This
     	method normally returns true. */
     public boolean isValidPatchLocation(int bank, int num) { return true; }
+
+	/** Return null if bank dump requests are not supported. */
+    public byte[] requestBankDump(int bank) { return null; }
     }

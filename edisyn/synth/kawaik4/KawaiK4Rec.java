@@ -34,8 +34,8 @@ public class KawaiK4Rec extends Recognize
                 data[3] == (byte)0x21 &&    // block
                 data[4] == (byte)0x00 &&
                 data[5] == (byte)0x04 &&
-                // don't care about 6, we'll use it later
-                data[7] == (byte)0x00)
+            	((data[6] == (byte)0x00) || (data[6] == (byte)0x02)) &&		// Int/Ext for singles and multis, second bit used to distinguish from effects
+                data[7] == (byte)0x00)			 // Single
             
             ||
             

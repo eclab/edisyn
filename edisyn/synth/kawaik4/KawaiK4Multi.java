@@ -799,6 +799,8 @@ public class KawaiK4Multi extends Synth
         }
 
     public boolean getSupportsPatchWrites() { return true; }
+    public boolean getSupportsBankReads() { return true; }			// we read right now but don't write
+
     public String[] getPatchNumberNames()
         { 
 		String[] str = new String[64];
@@ -806,7 +808,7 @@ public class KawaiK4Multi extends Synth
 			{
 			for(int j = 0; j < 16; j++)
 				{
-				str[i * 8 + j] = GROUPS[i] + (j + 1);
+				str[i * 16 + j] = GROUPS[i] + (j + 1);
 				}
     		}
     	return str;
@@ -828,5 +830,10 @@ public class KawaiK4Multi extends Synth
     public int getBank(byte[] bankSysex) 
     	{ 
     	return (bankSysex[6] == 0 ? 0 : 1);
+    	}
+
+    public byte[] requestBankDump(int bank) 
+    	{
+    	return new byte[] { (byte)0xF0, 0x40, (byte)getChannelOut(), 0x01, 0x00, 0x04, (byte)(bank == 0 ? 0x00 : 0x02), 0x40, (byte)0xF7 }; 
     	}
    }

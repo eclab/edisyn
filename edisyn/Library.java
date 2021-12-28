@@ -598,9 +598,8 @@ public class Library extends AbstractTableModel
                 // parse
                 boolean localFailed = false;
                 Patch p = getPatch(b, n);
-                byte[][] sysex = p.sysex;
-                if (sysex == null)
-                	sysex = initPatch.sysex;
+                if (p == null) p = initPatch;
+                byte[][] sysex = sysex = initPatch.sysex;
                 for(int j = 0; j < sysex.length; j++)
                     {
                     int result = synth.parse(sysex[j], true);                     //dunno, from file or not?
@@ -958,6 +957,7 @@ public class Library extends AbstractTableModel
 					// parse
 					boolean localFailed = false;
 					Patch p = getPatch(bank, i);
+                	if (p == null) p = initPatch;
 					for(int j = 0; j < p.sysex.length; j++)
 						{
 						int result = synth.parse(p.sysex[j], true);                     //dunno, from file or not?

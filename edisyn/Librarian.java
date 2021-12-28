@@ -20,18 +20,12 @@ import javax.swing.table.*;
 public class Librarian extends JPanel
     {
     JTable patchWell;
-    
     JTable table;
     JScrollPane scrollPane;
     JButton undo = new JButton("Undo");
     JButton redo = new JButton("Redo");
-    PushButton clearAction;
-    PushButton downloadAction;
-    PushButton writeAction;
-    PushButton saveAction;
     PushButton stopAction;
     Box buttonBox;
-//    Box downloadBox;
     
     /** Returns the current library (which is the table's model) */    
     public Library getLibrary() { return (Library)(table.getModel()); }
@@ -310,60 +304,8 @@ public class Librarian extends JPanel
 
         buttonBox = new Box(BoxLayout.X_AXIS);
 
-/*
-        setupButton(undo);
-        undo.addActionListener(new ActionListener()
-            {
-            public void actionPerformed(ActionEvent e)
-                {
-                getLibrary().doUndo();
-                updateUndoRedo();
-                synth.updateUndoMenus();
-                }
-            });
-        buttonBox.add(undo);
-
-        setupButton(redo);
-        redo.addActionListener(new ActionListener()
-            {
-            public void actionPerformed(ActionEvent e)
-                {
-                getLibrary().doRedo();
-                updateUndoRedo();
-                synth.updateUndoMenus();
-                }
-            });
-        buttonBox.add(redo);
-*/
-
 		updateUndoRedo();
 
-/*
-        clearAction = new PushButton("Clear...",
-        	new String[] { "Clear Selected Patches", "Clear Bank", "Clear All Patches" })
-        		{
-        		public void perform(int val)
-        			{
-        			 if (val == 0) clear();
-        			else if (val == 1) clearBank();
-        			else if (val == 2) clearAll();
-        			}
-        		};
-        buttonBox.add(clearAction.getButton());
-
-        downloadBox = new Box(BoxLayout.X_AXIS);
-        downloadAction = new PushButton("Download...",
-        	new String[] { "Download Selected Patches from Synth", "Download Bank from Synth", "Download All Patches from Synth" })
-        		{
-        		public void perform(int val)
-        			{
-        			if (val == 0) download();
-        			else if (val == 1) downloadBank();
-        			else if (val == 2) downloadAll();
-        			}
-        		};
-        setupButton(downloadAction.getButton());
-  */      
         stopAction = new PushButton("Stop Download")
         		{
         		public void perform()
@@ -375,35 +317,7 @@ public class Librarian extends JPanel
         if (getLibrary().getSynth().patchTimer == null)  // we're not running
         	stopAction.getButton().setEnabled(false);
 		buttonBox.add(stopAction.getButton());
-		
-//        downloadBox.add(downloadAction.getButton());
-//       buttonBox.add(downloadBox);
-        
-/*        writeAction = new PushButton("Write...",
-        	new String[] { "Write Selected Patches to Synth", "Write Bank to Synth", "Write All Patches to Synth" })
-        		{
-        		public void perform(int val)
-        			{
-        			if (val == 0) write();
-        			else if (val == 1) writeBank();
-        			else if (val == 2) writeAll();
-        			}
-        		};
-        buttonBox.add(writeAction.getButton());
-
-        saveAction = new PushButton("Save...",
-        	new String[] { "Save Selected Patches to File", "Save Bank to File", "Save All Patches to File" })
-        		{
-        		public void perform(int val)
-        			{
-        			if (val == 0) save();
-        			else if (val == 1) saveBank();
-        			else if (val == 2) saveAll();
-        			}
-        		};
-        buttonBox.add(saveAction.getButton());
-*/
-        	        
+		   
         patchWell = new JTable()
             {
             public void changeSelection(int rowIndex, int columnIndex, boolean toggle, boolean extend)
@@ -862,20 +776,22 @@ public static JMenu buildLibrarianMenu(JMenuItem openMenu, Synth synth)
         
     void performDownload(int bank1, int patch1, int bank2, int patch2)
     	{
-    	if (!getLibrary().getSynth().getSupportsDownloads())
+        Synth synth = getLibrary().getSynth();
+        
+    	if (!synth.getSupportsDownloads())
     		{
-            getLibrary().synth.showSimpleError("Cannot Download", "Edisyn cannot request patches from this synthesizer.");
+           	synth.showSimpleError("Cannot Download", "Edisyn cannot request patches from this synthesizer.");
     		return;
     		}
     		
-    	boolean hasBanks = (getLibrary().getSynth().getBankNames() != null);
+    	boolean hasBanks = (synth.getBankNames() != null);
     	if (hasBanks)
     		{
-    		getLibrary().getSynth().doGetPatchesForLibrarian(bank1, patch1, bank2, patch2);
+    		synth.doGetPatchesForLibrarian(bank1, patch1, bank2, patch2);
     		}
 		else
 			{    	
-    		getLibrary().getSynth().doGetPatchesForLibrarian(PatchLocation.NO_BANK, patch1, PatchLocation.NO_BANK, patch2);
+    		synth.doGetPatchesForLibrarian(PatchLocation.NO_BANK, patch1, PatchLocation.NO_BANK, patch2);
     		}
     	}
 
@@ -883,12 +799,19 @@ public static JMenu buildLibrarianMenu(JMenuItem openMenu, Synth synth)
     /** Writes all locations. */
     public void writeAll()
         {
-        getLibrary().writeRange(Library.ALL_PATCHES, 0, 0);
+        Synth synth = getLibrary().getSynth();
+        
+		if (synth.showSimpleConfirm("Write All", "Write All Patches to Synthesizer?\nThis operation cannot be canceled.\nWriting a bank may take a very long time.", "Write"))
+			{
+        	getLibrary().writeRange(Library.ALL_PATCHES, 0, 0);
+        	}
         }
 
     /** Writes all locations in bank. */
     public void writeBank()
         {
+        Synth synth = getLibrary().getSynth();
+        
         int column = col(table, table.getSelectedColumn());
         int row = table.getSelectedRow();
         int len = table.getSelectedRowCount();
@@ -901,40 +824,62 @@ public static JMenu buildLibrarianMenu(JMenuItem openMenu, Synth synth)
         		}
         	else
         		{
-	            getLibrary().synth.showSimpleError("Cannot Write", "Please select a patch in the bank to write first.");
+	            synth.showSimpleError("Cannot Write", "Please select a patch in the bank to write first.");
             	return;
             	}
             }
             
         if (column == 0)
         	{
-            getLibrary().synth.showSimpleError("Cannot Write", "Edisyn cannot write patches from the scratch bank.\nSelect another bank.");
+            synth.showSimpleError("Cannot Write", "Edisyn cannot write patches from the scratch bank.\nSelect another bank.");
 			return;
 			}
-        getLibrary().writeBank(column - 1);
+			
+		if (synth.showSimpleConfirm("Write Bank", "Write Bank to Synthesizer?\nThis operation cannot be canceled.\nWriting a bank may take a long time.", "Write"))
+			{
+        	getLibrary().writeBank(column - 1);
+        	}
         }
 
 
+	public static final int LARGE_REGION = 10;
+	
     /** Writes the selected locations. */
     public void write()
         {
+        Synth synth = getLibrary().getSynth();
+        
         int column = col(table, table.getSelectedColumn());
         int row = table.getSelectedRow();
         int len = table.getSelectedRowCount();
                         
         if (column < 0 || row < 0 || len == 0) // nope
         	{
-            getLibrary().synth.showSimpleError("Cannot Write", "Please select a patch or patch range to write first.");
+            synth.showSimpleError("Cannot Write", "Please select a patch or patch range to write first.");
             return;
             }
             
         if (column == 0)
         	{
-            getLibrary().synth.showSimpleError("Cannot Write", "Edisyn cannot write patches from the scratch bank.\nSelect another bank.");
+            synth.showSimpleError("Cannot Write", "Edisyn cannot write patches from the scratch bank.\nSelect another bank.");
 			return;
 			}
-            
-        getLibrary().writeRange(column - 1, row, len);
+
+		if (len == 1)
+			{
+		 	if (synth.showSimpleConfirm("Write Patch", "Write Patch to Synthesizer?", "Write"))
+	        	getLibrary().writeRange(column - 1, row, len);
+		 	}
+		 else if (len < LARGE_REGION)
+			{
+		 	if (synth.showSimpleConfirm("Write Selected Region", "Write Selected Region to Synthesizer?", "Write"))
+	        	getLibrary().writeRange(column - 1, row, len);
+			}
+		else
+			{
+		 	if (synth.showSimpleConfirm("Write Selected Region", "Write Selected Region to Synthesizer?\nThis operation cannot be canceled.\nWriting a large region can take a long time.", "Write"))
+        		getLibrary().writeRange(column - 1, row, len);
+        	}
         }
 
 	public void saveAll()
@@ -1081,7 +1026,9 @@ public static JMenu buildLibrarianMenu(JMenuItem openMenu, Synth synth)
             }
         else
             {
-            to.getLibrary().getSynth().getUndo().push(to.getLibrary().getSynth().getModel());
+	        Synth toSynth = to.getLibrary().getSynth();
+        
+            toSynth.getUndo().push(toSynth.getModel());
             }
         
         Patch p = null;
@@ -1137,7 +1084,9 @@ public static JMenu buildLibrarianMenu(JMenuItem openMenu, Synth synth)
             }
         else
             {
-            to.getLibrary().getSynth().getUndo().push(to.getLibrary().getSynth().getModel());
+	        Synth toSynth = to.getLibrary().getSynth();
+        
+            toSynth.getUndo().push(toSynth.getModel());
             }
 
         if (!isPatchWell(fromTable))            // as opposed to patchWell

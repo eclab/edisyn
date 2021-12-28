@@ -923,9 +923,7 @@ Normally if you download a range of patches, a bank, or, all the patches, Edisyn
 
 \paragraph{Where Loaded Patches Go}
 
-If you load a single patch, it'll go in the editor not the librarian.  The patch will be available as the {\bf Current Patch} in the Librarian window
-
-If you load a range of patches, the Librarian will try to be smart about it.  If the patches come with locations, the Librarian will put them in their locations.  If they don't, it'll stick them in order starting with your first bank.  
+If a single patch arrives while the librarian is open, it'll go in the librarian rather than the editor.  If you load a range of patches, the Librarian will try to be smart about it.  If the patches come with locations, the Librarian will put them in their locations.  If they don't, it'll stick them in order starting with your first bank.  
 
 Some synthesizers can send whole banks to Edisyn.   Even so, when loading a bank from a synthesizer, Edisyn will request the patches one by one.  But if Edisyn receives a bank message from a synthesizer or disk, it'll try to be smart about where to put it.  If the bank message indicates which bank it is, Edisyn will put it there.  Otherwise it'll put it in the scratch bank.
 

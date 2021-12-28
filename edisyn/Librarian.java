@@ -602,6 +602,9 @@ public static JMenu buildLibrarianMenu(JMenuItem openMenu, Synth synth)
 	menu.add(item);
 	item.setEnabled(false);
 		
+	menu.addSeparator();
+
+	boolean requests = false;
 	item = new JMenuItem("Request Bank from Synth");
 	item.addActionListener(new ActionListener()
 		{
@@ -624,15 +627,42 @@ public static JMenu buildLibrarianMenu(JMenuItem openMenu, Synth synth)
 			}
 		});
 	
-	menu.addSeparator();
-
 	if (synth.requestBankDump(0) != null)	// we have bank dump requests
 		{
 		menu.add(item);
 		item.setEnabled(false);
+		requests = true;
+		}
+			
+	item = new JMenuItem("Request All Patches from Synth");
+	item.addActionListener(new ActionListener()
+		{
+		public void actionPerformed(ActionEvent evt) 
+			{
+			if (synth.showSimpleConfirm("All Patches", "Request All Patches from the Synth?", "Request"))
+				{
+				byte[] data = synth.requestAllDump();
+				if (data != null)
+					{
+					synth.tryToSendSysex(data);
+					}
+				}
+			}
+		});
+	
+	if (synth.requestAllDump() != null)	// we have all-dump requests
+		{
+		menu.add(item);
+		item.setEnabled(false);
+		requests = true;
+		}
+
+	if (requests)
+		{
 		menu.addSeparator();
 		}
 			
+
 	item = new JMenuItem("Write Selected Patches to Synth");
 	item.addActionListener(new ActionListener()
 		{

@@ -1358,44 +1358,62 @@ public abstract class Synth extends JComponent implements Updatable
                                             Synth.handleException(ex);
                                             // result is now PARSE_ERROR
                                             }
-                                         
-                                        undo.setWillPush(true);
-                                        if (!backup.keyEquals(getModel()))  // it's changed, do an undo push
-                                            {
-                                            if (!backupDoneForParse) { undo.push(backup); backupDoneForParse = true; } 
-                                            }
+			
+										// If we're in the librarian, and we're not auto-downloading the patch, and we received a patch,
+										// we want to just load it into the librarian. For example, if the synth is engaged in a multi-patch
+										// patch dump to us, we want to load it properly.  So we need to handle it here. One item we need to make
+										// sure of is to not do a push of the backup, but rather just replace it
+										if ((result == PARSE_SUCCEEDED || result == PARSE_SUCCEEDED_UNTITLED) &&
+											patchTimer == null && tabs.getSelectedComponent() == librarianPane)		 // if we're in the librarian and not doing downloading, handle it specially
+											{
+							            	Patch patch = new Patch(recognizeSynthForSysex(data), data, false);	// is this right?  Are we sure it's not bank sysex?
+            								patch.number = model.get("number", Patch.NUMBER_NOT_SET);
+            								patch.bank = model.get("bank", 0);
+            								patch.name = model.get("name", "" + getPatchLocationName(getModel()));
+							            	librarian.getLibrary().receivePatch(patch);
+							            	backup.copyValuesTo(model);		// restore the old model, but don't push an undo
+											undo.setWillPush(true);
+											}
+										else
+											{
+											undo.setWillPush(true);
+											if (!backup.keyEquals(getModel()))   // it's changed, do an undo push
+												{
+												if (!backupDoneForParse) { undo.push(backup); backupDoneForParse = true; } 
+												}
 
-                                        incomingPatch = (result == PARSE_SUCCEEDED || result == PARSE_SUCCEEDED_UNTITLED);
-                                        if (incomingPatch)
-                                            {
-                                            backupDoneForParse = false;         // reset
-                                            }
-                                        else if (result == PARSE_CANCELLED)
-                                            {
-                                            backupDoneForParse = false;         // reset
-                                            // nothing
-                                            }
-                                        else if (result == PARSE_FAILED)
-                                            {
-                                            backupDoneForParse = false;         // reset
-                                            showSimpleError("Receive Error", "Could not read the patch.");
-                                            }
-                                        else if (result == PARSE_ERROR)
-                                            {
-                                            backupDoneForParse = false;         // reset
-                                            showSimpleError("Receive Error", "An error occurred on reading the patch.");
-                                            }
+											incomingPatch = (result == PARSE_SUCCEEDED || result == PARSE_SUCCEEDED_UNTITLED);
+											if (incomingPatch)
+												{
+												backupDoneForParse = false;         // reset
+												}
+											else if (result == PARSE_CANCELLED)
+												{
+												backupDoneForParse = false;         // reset
+												// nothing
+												}
+											else if (result == PARSE_FAILED)
+												{
+												backupDoneForParse = false;         // reset
+												showSimpleError("Receive Error", "Could not read the patch.");
+												}
+											else if (result == PARSE_ERROR)
+												{
+												backupDoneForParse = false;         // reset
+												showSimpleError("Receive Error", "An error occurred on reading the patch.");
+												}
 
-                                        setSendMIDI(true);
-                                        if (getSendsParametersAfterNonMergeParse())
-                                            {
-                                            sendAllParameters();
-                                            }
-                                        file = null;
-                                        updateBlend();
-                                        }
+											setSendMIDI(true);
+											if (getSendsParametersAfterNonMergeParse())
+												{
+												sendAllParameters();
+												}
+											file = null;
+											updateBlend();
+											}
 
-                                    updateTitle();
+										updateTitle();
+                                    	}
                                     }
                                 else    // Maybe it's a local Parameter change in sysex?
                                     {
@@ -8963,4 +8981,7 @@ public abstract class Synth extends JComponent implements Updatable
 
 	/** Return null if bank dump requests are not supported. */
     public byte[] requestBankDump(int bank) { return null; }
+    
+	/** Return null if all dump requests are not supported. */
+    public byte[] requestAllDump() { return null; }
     }

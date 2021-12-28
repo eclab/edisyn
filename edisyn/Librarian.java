@@ -239,13 +239,7 @@ public class Librarian extends JPanel
 				{
 				if (mouseEvent.getClickCount() == 2) 
 					{
-					int column = col(table, table.getSelectedColumn());
-					int row = table.getSelectedRow();
-    				if (column >= 0 && row >= 0)
-    					{
-    					copy(Librarian.this, table, column, row, 1, Librarian.this, patchWell, 0, 0, true);
-    					synth.setCurrentTab(0);
-    					}
+					loadOneInternal();
 					}
 			}
 		});  
@@ -519,7 +513,58 @@ public class Librarian extends JPanel
 		// declare some cells invalid?
 		
         }
+        
+    public void loadOneInternal()
+    	{
+		int column = col(table, table.getSelectedColumn());
+		int row = table.getSelectedRow();
+		if (column >= 0 && row >= 0)
+			{
+			copy(Librarian.this, table, column, row, 1, Librarian.this, patchWell, 0, 0, true);
+			getLibrary().getSynth().setCurrentTab(0);
+			}
+    	}
 
+	public void loadOneExternal()
+		{
+		int column = col(table, table.getSelectedColumn());
+		int row = table.getSelectedRow();
+		if (column >= 0 && row >= 0)
+			{
+			Synth synth = getLibrary().getSynth();
+			Patch p = getLibrary().getPatch(column - 1, row);
+			if (p == null) p = getLibrary().getInitPatch();
+			
+			Synth otherSynth = synth.instantiate(synth.getClass(), false, true, null);
+			otherSynth.setSendMIDI(false);
+			otherSynth.undo.setWillPush(false);
+
+			// this last statement fixes a mystery.  When I call Randomize or Reset on
+			// a Blofeld or on a Microwave, all of the widgets update simultaneously.
+			// But on a Blofeld Multi or Microwave Multi they update one at a time.
+			// I've tried a zillion things, even moving all the widgets from the Blofeld Multi
+			// into the Blofeld, and it makes no difference!  For some reason the OS X
+			// repaint manager is refusing to coallesce their repaint requests.  So I do it here.
+			otherSynth.repaint();
+		
+			try
+				{
+				otherSynth.performParse(synth.flatten(p.sysex), true);
+				}
+			catch (Exception ex)
+				{
+				Synth.handleException(ex);
+				}
+
+			otherSynth.undo.setWillPush(true);
+			otherSynth.setSendMIDI(true);
+
+			if (otherSynth.getSendsParametersAfterLoad()) // we'll need to do this
+				otherSynth.sendAllParameters();
+
+			otherSynth.updateTitle();       // so it shows the right filename
+			}
+		}
 
 public static void setLibrarianMenuSelected(JMenu menu, boolean val)
 	{
@@ -709,6 +754,30 @@ public static JMenu buildLibrarianMenu(JMenuItem openMenu, Synth synth)
 	item.addActionListener(new ActionListener()
 		{
 		public void actionPerformed(ActionEvent evt) { synth.librarian.saveAll(); }
+		});
+	menu.add(item);
+	item.setEnabled(false);
+		
+	menu.addSeparator();		
+
+	item = new JMenuItem("Edit in This Editor");
+	item.addActionListener(new ActionListener()
+		{
+		public void actionPerformed(ActionEvent evt) 
+			{ 
+			synth.librarian.loadOneInternal(); 
+			}
+		});
+	menu.add(item);
+	item.setEnabled(false);
+
+	item = new JMenuItem("Edit in New Editor");
+	item.addActionListener(new ActionListener()
+		{
+		public void actionPerformed(ActionEvent evt) 
+			{ 
+			synth.librarian.loadOneExternal(); 
+			}
 		});
 	menu.add(item);
 	item.setEnabled(false);
@@ -1096,6 +1165,9 @@ public static JMenu buildLibrarianMenu(JMenuItem openMenu, Synth synth)
         }
 
     static boolean isPatchWell(JTable table) { return table.getTableHeader() == null; }
+
+
+
 
         
     //// DRAG AND DROP JUNK

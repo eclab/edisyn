@@ -486,8 +486,8 @@ public class Library extends AbstractTableModel
         	else
         	*/
         		{
-        		// Use the scratch bank
-        		bank = 0;
+        		// Use the first bank
+        		bank = 1;
         		}
         	}
         	

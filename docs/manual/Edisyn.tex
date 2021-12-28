@@ -915,17 +915,18 @@ While the patches are loading, the window will say {DOWNLOADING}.  If you need t
 
 \paragraph{Loading Patches into the Librarian from a File}
 
-If you open a bulk or bank sysex file, you'll be given the option (among other things) to load the data into your current Librarian or into one attached to a new editor.  If the Librarian isn't already open, it'll be opened for you.  Note that many synthesizer patches don't indicate their bank or number: Edisyn will just start filling them in starting at the first bank.  If multiple patches in the same file incorrectly have the same bank and number, Edisyn will put them where it can.  
+If you open a bulk or bank sysex file, you'll be given the option (among other things) to load the data into your current Librarian or into one attached to a new editor.  If the Librarian isn't already open, it'll be opened for you.
 
-\paragraph{Requesting Banks}
+\paragraph{Fast Requests}
 
-Normally if you download a range of patches, a bank, or, all the patches, Edisyn will request each patch one by one.  However a few synthesizers are capable of sending entire banks of patches in special sysex messages, and in some cases Edisyn is capable of requesting and reading these.  In these cases, you may see an additional menu item, {\bf Request Bank from Synth}.  Choosing this menu will allow you to select which bank to request, and then Edisyn will request it from the synthesizer.
+Normally if you download a range of patches, a bank, or, all the patches, Edisyn will request each patch one by one, carefully and slowly.  However a few synthesizers are capable of rapidly dumping banks of patches, or all stored patches, in response to a special sysex messages.  If Edisyn can do this, you may see the menu items {\bf Request Bank from Synth} or {\bf Request All Patches from Synth}.
 
 \paragraph{Where Loaded Patches Go}
 
-If a single patch arrives while the librarian is open, it'll go in the librarian rather than the editor.  If you load a range of patches, the Librarian will try to be smart about it.  If the patches come with locations, the Librarian will put them in their locations.  If they don't, it'll stick them in order starting with your first bank.  
+If you load a single patch from disk, it'll go to the editor.  But If a single patch arrives from the synth while the librarian is open, it'll go in the librarian rather than the editor.  If you load a range of patches, the Librarian will try to be smart about it.  If the patches come with locations, the Librarian will put them in their locations.  If they don't, it'll stick them in order starting with your first bank.  
 
-Some synthesizers can send whole banks to Edisyn.   Even so, when loading a bank from a synthesizer, Edisyn will request the patches one by one.  But if Edisyn receives a bank message from a synthesizer or disk, it'll try to be smart about where to put it.  If the bank message indicates which bank it is, Edisyn will put it there.  Otherwise it'll put it in the scratch bank.
+Some synthesizers can send whole banks to Edisyn.   Even so, when loading a bank from a synthesizer, Edisyn will request the patches one by one.  But if Edisyn receives a bank message from a synthesizer or disk, it'll try to be smart about where to put it.  If the bank message indicates which bank it is, Edisyn will put it there.  Otherwise it'll put it in the first bank.
+
 
 
 \subsection{Editing the Library} 
@@ -943,11 +944,11 @@ Java's table facility is weird about selecting and dragging table cells, but the
 
 \paragraph{Moving Patches to and from the Editor}
 
-The Editor is completely separate from its Librarian.  Changing a patch in the editor doesn't change it in the Librarian, and loading a new patch in the Librarian doesn't overwrite it in the Editor. 
+The Editor is completely separate from its Librarian.  Changing a patch in the editor doesn't change it in the Librarian, and loading a new patch in the Librarian doesn't overwrite it in the Editor.   The Editor's current patch is shown in the Librarian as the {\bf Current Patch}.  If you want to copy the Editor's current patch to the Librarian, just drag the Current Patch field into a slot in the Librarian.  
 
-Instead, the Editor's current patch is shown in the Librarian as the {\bf Current Patch}.  If you want to copy the Editor's current patch to the Librarian, just drag the Current Patch field into the Librarian's table.  Likewise if you want to load a Librarian patch into the Editor, just drag the patch to the Current Patch field.  Additionally you can double-click on a Librarian patch to do the same thing: this will also switch to the Editor for your convenience. 
+If you want to edit a patch from the Librarian, select a patch and choose {\bf Edit in This Editor} from the {\bf Librarian} menu.  Alternatively you can just double-click on the Librarian patch.  This switches to the Editor for your convenience.  You can also drag the patch from the Librarian to the Current Patch field to load it into the Editor without switching to the Editor.  To edit a patch in a new Editor, select the patch and choose {\bf Edit in New Editor} from the {\bf Librarian} menu.
 
-A common need is to rename the patch.  At present this must be done in the Editor.  First, double-click the patch in the Librarian.  Then change the name in the Editor.  Go back to the Librarian and drag the Current Patch field over the patch in the Librarian table, overwriting it.  (Yes this is cumbersome).
+A common need is to rename the patch.  At present this must be done in the Editor.  Typically you'd double-click the patch in the Librarian, then change the name in the Editor, then return to the Librarian, and finally drag the Current Patch field over the patch in the Librarian table, overwriting it.  (Yes this is cumbersome).
 
 \paragraph{Clearing Patches}
 

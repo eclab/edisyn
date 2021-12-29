@@ -86,7 +86,7 @@ public class NovationDStation extends Synth
         soundPanel = new SynthPanel(this);
         vbox = new VBox();
         vbox.add(add808("RS", 5, Style.COLOR_A()));
-        vbox.add(add808("HC", 6, Style.COLOR_B()));
+        vbox.add(add808("CP", 6, Style.COLOR_B()));
         vbox.add(add808("CB", 7, Style.COLOR_A()));
         vbox.add(add808("CH", 8, Style.COLOR_B()));
         vbox.add(add808("OH", 9, Style.COLOR_A()));
@@ -118,7 +118,7 @@ public class NovationDStation extends Synth
         soundPanel = new SynthPanel(this);
         vbox = new VBox();
         vbox.add(add909("RS", 5 + 16, Style.COLOR_B()));
-        vbox.add(add909("HC", 6 + 16, Style.COLOR_A()));
+        vbox.add(add909("CP", 6 + 16, Style.COLOR_A()));
         vbox.add(add909("CH", 7 + 16, Style.COLOR_B()));
         vbox.add(add909("OH", 8 + 16, Style.COLOR_A()));
         vbox.add(add909("CC", 9 + 16, Style.COLOR_B()));
@@ -632,7 +632,7 @@ public class NovationDStation extends Synth
             pos = parseDrum(d, pos, "909BD", 6);
             pos = parseDrum(d, pos, "909RS", 4);
             pos = parseDrum(d, pos, "909SD", 6);
-            pos = parseDrum(d, pos, "909HC", 4);
+            pos = parseDrum(d, pos, "909CP", 4);
             pos = parseDrum(d, pos, "909LT", 5);
             pos = parseDrum(d, pos, "909MT", 5);
             pos = parseDrum(d, pos, "909CH", 5);
@@ -642,7 +642,7 @@ public class NovationDStation extends Synth
             pos = parseDrum(d, pos, "909OH", 5);
             pos = parseDrum(d, pos, "808BD", 6);
             pos = parseDrum(d, pos, "808RS", 4);
-            pos = parseDrum(d, pos, "808HC", 4);
+            pos = parseDrum(d, pos, "808CP", 4);
             pos = parseDrum(d, pos, "808SD", 6);
             pos = parseDrum(d, pos, "808CH", 5);
             pos = parseDrum(d, pos, "808LT", 5);
@@ -688,7 +688,7 @@ public class NovationDStation extends Synth
         pos = parseDrum(d, pos, "909BD", 6);
         pos = parseDrum(d, pos, "909RS", 4);
         pos = parseDrum(d, pos, "909SD", 6);
-        pos = parseDrum(d, pos, "909HC", 4);
+        pos = parseDrum(d, pos, "909CP", 4);
         pos = parseDrum(d, pos, "909LT", 5);
         pos = parseDrum(d, pos, "909MT", 5);
         pos = parseDrum(d, pos, "909CH", 5);
@@ -698,7 +698,7 @@ public class NovationDStation extends Synth
         pos = parseDrum(d, pos, "909OH", 5);
         pos = parseDrum(d, pos, "808BD", 6);
         pos = parseDrum(d, pos, "808RS", 4);
-        pos = parseDrum(d, pos, "808HC", 4);
+        pos = parseDrum(d, pos, "808CP", 4);
         pos = parseDrum(d, pos, "808SD", 6);
         pos = parseDrum(d, pos, "808CH", 5);
         pos = parseDrum(d, pos, "808LT", 5);
@@ -742,7 +742,7 @@ public class NovationDStation extends Synth
         pos = emitDrum(d, pos, "909BD", 6);
         pos = emitDrum(d, pos, "909RS", 4);
         pos = emitDrum(d, pos, "909SD", 6);
-        pos = emitDrum(d, pos, "909HC", 4);
+        pos = emitDrum(d, pos, "909CP", 4);
         pos = emitDrum(d, pos, "909LT", 5);
         pos = emitDrum(d, pos, "909MT", 5);
         pos = emitDrum(d, pos, "909CH", 5);
@@ -752,7 +752,7 @@ public class NovationDStation extends Synth
         pos = emitDrum(d, pos, "909OH", 5);
         pos = emitDrum(d, pos, "808BD", 6);
         pos = emitDrum(d, pos, "808RS", 4);
-        pos = emitDrum(d, pos, "808HC", 4);
+        pos = emitDrum(d, pos, "808CP", 4);
         pos = emitDrum(d, pos, "808SD", 6);
         pos = emitDrum(d, pos, "808CH", 5);
         pos = emitDrum(d, pos, "808LT", 5);
@@ -811,8 +811,8 @@ public class NovationDStation extends Synth
     "808HTdecay",
     "808RSpan",
     "808RStune",
-    "808HCpan",
-    "808HCtune",
+    "808CPpan",
+    "808CPtune",
     "808CBpan",
     "808CBdistortion",
     "808CBtune",
@@ -861,8 +861,8 @@ public class NovationDStation extends Synth
     "909HTdecay",
     "909RSpan",
     "909RStune",
-    "909HCpan",
-    "909HCtune",
+    "909CPpan",
+    "909CPtune",
     "909CHdistortion",
     "909CHtune",
     "909CHdecay",
@@ -951,7 +951,7 @@ public class NovationDStation extends Synth
       6 bytes 909 BD Data
       4 bytes 909 RS Data
       6 bytes 909 SD Data
-      4 bytes 909 HC Data
+      4 bytes 909 CP Data
       5 bytes 909 LT Data
       5 bytes 909 MT Data
       5 bytes 909 CH Data
@@ -961,7 +961,7 @@ public class NovationDStation extends Synth
       5 bytes 909 OH Data
       6 bytes 808 BD Data
       4 bytes 808 RS Data
-      4 bytes 808 HC Data
+      4 bytes 808 CP Data
       6 bytes 808 SD Data
       5 bytes 808 CH Data
       5 bytes 808 LT Data
@@ -1052,7 +1052,7 @@ public class NovationDStation extends Synth
       3  808 MT  
       4  808 HT  
       5  808 RS  
-      6  808 HC  
+      6  808 CP
       7  808 CB  
       8  808 CH               *** MidiQuest appears to have 808 CH and 808 OH switched erroneously
       9  808 OH
@@ -1068,7 +1068,7 @@ public class NovationDStation extends Synth
       19 909 MT 
       20 909 HT 
       21 909 RS 
-      22 909 HC 
+      22 909 CP
       23 909 CH
       24 909 OH
       25 909 CC 
@@ -1136,7 +1136,7 @@ public class NovationDStation extends Synth
       6 bytes 909 BD Data
       4 bytes 909 RS Data
       6 bytes 909 SD Data
-      4 bytes 909 HC Data
+      4 bytes 909 CP Data
       5 bytes 909 LT Data
       5 bytes 909 MT Data
       5 bytes 909 CH Data
@@ -1146,7 +1146,7 @@ public class NovationDStation extends Synth
       5 bytes 909 OH Data
       6 bytes 808 BD Data
       4 bytes 808 RS Data
-      4 bytes 808 HC Data
+      4 bytes 808 CP Data
       6 bytes 808 SD Data
       5 bytes 808 CH Data
       5 bytes 808 LT Data

@@ -272,7 +272,7 @@ public class NovationDStation extends Synth
         vbox.add(comp);
         hbox.add(vbox);
         
-        if (drum.equals("BD") || drum.equals("LT") || drum.equals("MT") || drum.equals("HT") || drum.equals("CH") || drum.equals("OH") ||  drum.equals("OC") || drum.equals("CC"))
+        if (drum.equals("BD") || drum.equals("LT") || drum.equals("MT") || drum.equals("HT") || drum.equals("CH") || drum.equals("OH") || drum.equals("CC"))
             {
             comp = new CheckBox("Decay Velocity", this, "808" + drum + "decayvelocity");
             vbox.add(comp);
@@ -333,7 +333,7 @@ public class NovationDStation extends Synth
         comp = new LabelledDial("Front Cut", this, "808" + drum + "frontcut", color, 0, 99);
         hbox.add(comp);
         
-        if (drum.equals("BD") || drum.equals("LT") || drum.equals("MT") || drum.equals("HT") || drum.equals("CH") || drum.equals("OH") || drum.equals("OC") || drum.equals("CC"))
+        if (drum.equals("BD") || drum.equals("LT") || drum.equals("MT") || drum.equals("HT") || drum.equals("CH") || drum.equals("OH") || drum.equals("CC"))
             {
             comp = new LabelledDial("Decay", this, "808" + drum + "decay", color, 0, 127)
                 {
@@ -406,7 +406,7 @@ public class NovationDStation extends Synth
         vbox.add(comp);
         hbox.add(vbox);
 
-        if (drum.equals("BD") || drum.equals("LT") || drum.equals("MT") || drum.equals("HT") || drum.equals("CH") || drum.equals("OH") || drum.equals("OC") || drum.equals("CC") || drum.equals("RC"))
+        if (drum.equals("BD") || drum.equals("LT") || drum.equals("MT") || drum.equals("HT") || drum.equals("CH") || drum.equals("OH") || drum.equals("CC") || drum.equals("RC"))
             {
             comp = new CheckBox("Decay Velocity", this, "909" + drum + "decayvelocity");
             vbox.add(comp);
@@ -465,7 +465,7 @@ public class NovationDStation extends Synth
         comp = new LabelledDial("Front Cut", this, "909" + drum + "frontcut", color, 0, 99);
         hbox.add(comp);
         
-        if (drum.equals("BD") || drum.equals("LT") || drum.equals("MT") || drum.equals("HT") || drum.equals("CH") || drum.equals("OH") || drum.equals("OC") || drum.equals("CC") || drum.equals("RC"))
+        if (drum.equals("BD") || drum.equals("LT") || drum.equals("MT") || drum.equals("HT") || drum.equals("CH") || drum.equals("OH") || drum.equals("CC") || drum.equals("RC"))
             {
             comp = new LabelledDial("Decay", this, "909" + drum + "decay", color, 0, 127)
                 {

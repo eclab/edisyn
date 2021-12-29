@@ -1713,9 +1713,9 @@ public class MAudioVenom extends Synth
         if (tempModel == null)
             tempModel = getModel();
 
-        int BB = model.get("bank", 0);
-        int NN = model.get("number", 0);
-
+        int BB = tempModel.get("bank", 0);
+        int NN = tempModel.get("number", 0);
+        
         // there is a bug in the venom's patch format.  Working memory is correct,
         // but submission to patch slots directly incorrectly inserts an extra repeated byte
         // after osc2waveform.  I have to deal with this here, since it's 240 instead of 239
@@ -2375,7 +2375,8 @@ public class MAudioVenom extends Synth
         }
 
     public int getPauseAfterChangePatch() { return 500; }                               // quite a long time
-    public int getPauseAfterSendAllParameters() { return 750; }
+    public int getPauseAfterSendAllParameters() { return 2000; }	//{ return 750; }
+    public int getPauseAfterWritePatch() { return 2000; }	//{ return 750; }
 
     // This is how you'd request a patch, but we're not using it because we have
     // overridden performRequestDump above.

@@ -1459,8 +1459,8 @@ public class MAudioVenomMulti extends Synth
         if (tempModel == null)
             tempModel = getModel();
 
-        int BB = model.get("bank", 0);
-        int NN = model.get("number", 0);
+        int BB = tempModel.get("bank", 0);
+        int NN = tempModel.get("number", 0);
 
         byte[] data = new byte[210];
         

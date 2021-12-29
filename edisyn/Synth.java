@@ -3498,7 +3498,23 @@ public abstract class Synth extends JComponent implements Updatable
                 doSaveText();
                 }
             });
-            
+ 
+        openLibrarianMenu = new JMenuItem("Open Librarian");
+        menu.add(openLibrarianMenu);
+        openLibrarianMenu.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+        openLibrarianMenu.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                doLibrarian();
+                }
+            });
+        if (getPatchNumberNames() == null)           // does not support librarians
+            {
+            openLibrarianMenu.setEnabled(false);
+            }
+
+           
         if (!Style.isMac())
             {
             JMenuItem exit = new JMenuItem("Exit");
@@ -4061,20 +4077,6 @@ public abstract class Synth extends JComponent implements Updatable
                 doMorph();
                 }
             });
-
-        openLibrarianMenu = new JMenuItem("Open Librarian");
-//        menu.add(openLibrarianMenu);
-        openLibrarianMenu.addActionListener(new ActionListener()
-            {
-            public void actionPerformed( ActionEvent e)
-                {
-                doLibrarian();
-                }
-            });
-        if (getPatchNumberNames() == null)           // does not support librarians
-            {
-            openLibrarianMenu.setEnabled(false);
-            }
 
         menu.addSeparator();
         
@@ -4965,13 +4967,11 @@ public abstract class Synth extends JComponent implements Updatable
         sendsAllSoundsOffBetweenNotes = Boolean.parseBoolean(str1);
         sendsAllSoundsOffBetweenNotesMenu.setSelected(sendsAllSoundsOffBetweenNotes);
 
-
-
         menu = new JMenu("Map");
         menubar.add(menu);
 
         learningMenuItem = new JMenuItem("Map Absolute CC / NRPN");
-        learningMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+        learningMenuItem.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_K, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
         menu.add(learningMenuItem);
         learningMenuItem.addActionListener(new ActionListener()
             {
@@ -4981,9 +4981,8 @@ public abstract class Synth extends JComponent implements Updatable
                 }
             });
                 
-        //        learningMenuItem64 = new JMenuItem("Map Relative CC [64]");
         learningMenuItem64 = new JMenuItem("Map Relative CC");
-        learningMenuItem64.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_K, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+        learningMenuItem64.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_K, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()  | InputEvent.SHIFT_MASK));
         menu.add(learningMenuItem64);
         learningMenuItem64.addActionListener(new ActionListener()
             {
@@ -5297,8 +5296,8 @@ public abstract class Synth extends JComponent implements Updatable
 
             });
         
-        librarianMenu = Librarian.buildLibrarianMenu(openLibrarianMenu, this);
-        menubar.add(librarianMenu);
+        librarianMenu = Librarian.buildLibrarianMenu(this);
+        //menubar.add(librarianMenu);
     
         updateTitle();
         numOpenWindows++;  
@@ -7885,6 +7884,7 @@ public abstract class Synth extends JComponent implements Updatable
             if (selected == librarianPane)  // we were in the morph pane when this menu was selected
                 tabs.setSelectedIndex(0);
             librarianOpen = false;
+			menubar.remove(librarianMenu);
             }
         else
             {
@@ -7897,6 +7897,7 @@ public abstract class Synth extends JComponent implements Updatable
             openLibrarianMenu.setText("Close Librarian");
             librarianOpen = true;
 			Librarian.setLibrarianMenuSelected(librarianMenu, true);
+			menubar.add(librarianMenu);
             }
         }  
         

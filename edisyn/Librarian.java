@@ -500,7 +500,7 @@ public static void setLibrarianMenuSelected(JMenu menu, boolean val)
 	{
 	// ugh, accessign subelements is so convoluted
 	MenuElement[] m = menu.getSubElements()[0].getSubElements();
-	for(int i = 1; i < m.length; i++)		// skip "Open Librarian"
+	for(int i = 0; i < m.length; i++)
 		{
 		if (m[i] instanceof JMenuItem)
 			{
@@ -509,12 +509,11 @@ public static void setLibrarianMenuSelected(JMenu menu, boolean val)
 		}
 	}
 	
-public static JMenu buildLibrarianMenu(JMenuItem openMenu, Synth synth)
+public static JMenu buildLibrarianMenu(Synth synth)
 	{
 	JMenu menu = new JMenu("Librarian");
 
-	menu.add(openMenu);
-//	menu.add(stopDownloadingMenu);
+//	menu.add(openMenu);
 
 	menu.addSeparator();
 

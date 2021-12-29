@@ -2375,8 +2375,7 @@ public class MAudioVenom extends Synth
         }
 
     public int getPauseAfterChangePatch() { return 500; }                               // quite a long time
-    public int getPauseAfterSendAllParameters() { return 2000; }	//{ return 750; }
-    public int getPauseAfterWritePatch() { return 2000; }	//{ return 750; }
+    public int getPauseAfterSendAllParameters() { return 750; }	
 
     // This is how you'd request a patch, but we're not using it because we have
     // overridden performRequestDump above.

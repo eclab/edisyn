@@ -1078,6 +1078,8 @@ public class WaldorfBlofeldMulti extends Synth
             model.set("name", newnm);
         }
         
+    public int getPauseAfterChangePatch() { return 200; }
+	public int getPauseAfterWritePatch() { return 75; }
 
 
     public static final int MAXIMUM_NAME_LENGTH = 16;

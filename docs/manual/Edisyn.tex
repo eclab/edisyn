@@ -882,7 +882,7 @@ Once we have trained the autoencoder, we can break it into two pieces: the compr
 
 \hspace{0em}{\color{red}\bf Warning: The Librarian is not ready for prime time.  It has only been tested on a few synthesizers, and is subject to radical change.  You may not  even have it on your version of Edisyn yet.}
 
-Most patch editors in Edisyn sport a simple librarian.  You can call up the librarian by choosing {\bf Open Librarian} from the {\bf Librarian} menu.  The Librarian pops up as its own tab, and looks something like what's shown in Figure~\ref{librarianpanel}, thought the particular layout will vary depending on your synthesizer. The purpose of a librarian is to allow you to load and save, rearrange, and upload or download patches in bulk.  Edisyn's libarians are rudimentary but they should get the job done.  
+Most patch editors in Edisyn sport a simple librarian.  You can call up the librarian (or close it again) by choosing {\bf Open Librarian} from the {\bf File} menu.  The Librarian pops up as its own tab, and looks something like what's shown in Figure~\ref{librarianpanel}, thought the particular layout will vary depending on your synthesizer. The purpose of a librarian is to allow you to load and save, rearrange, and upload or download patches in bulk.  %Edisyn's libarians are rudimentary but they should get the job done.  
 
 The Librarian presents itself as a table with columns and rows.  Each column is a {\it bank} in your synthesizer, and each row is a {\it patch number} across all banks.  Edisyn tries to label the banks and the patch numbers like your synthesizer does: for example, in the Roland D-110 [Tone], patch numbers start at 11, so the Librarian does too.  You can rearrange and resize the bank columns.  
 
@@ -946,7 +946,7 @@ Java's table facility is weird about selecting and dragging table cells, but the
 
 The Editor is completely separate from its Librarian.  Changing a patch in the editor doesn't change it in the Librarian, and loading a new patch in the Librarian doesn't overwrite it in the Editor.   The Editor's current patch is shown in the Librarian as the {\bf Current Patch}.  If you want to copy the Editor's current patch to the Librarian, just drag the Current Patch field into a slot in the Librarian.  
 
-If you want to edit a patch from the Librarian, select a patch and choose {\bf Edit in This Editor} from the {\bf Librarian} menu.  Alternatively you can just double-click on the Librarian patch.  This switches to the Editor for your convenience.  You can also drag the patch from the Librarian to the Current Patch field to load it into the Editor without switching to the Editor.  To edit a patch in a new Editor, select the patch and choose {\bf Edit in New Editor} from the {\bf Librarian} menu.
+If you want to edit a patch from the Librarian, select a patch and choose {\bf Edit Patch in This Editor} from the {\bf Librarian} menu.  Alternatively you can just double-click on the Librarian patch.  This switches to the Editor for your convenience.  You can also drag the patch from the Librarian to the Current Patch field to load it into the Editor without switching to the Editor.  To edit a patch in a new Editor, select the patch and choose {\bf Edit Patch in New Editor} from the {\bf Librarian} menu.
 
 A common need is to rename the patch.  At present this must be done in the Editor.  Typically you'd double-click the patch in the Librarian, then change the name in the Editor, then return to the Librarian, and finally drag the Current Patch field over the patch in the Librarian table, overwriting it.  (Yes this is cumbersome).
 
@@ -996,7 +996,7 @@ You can close the Librarian by selecting {\bf Close Librarian} in the {\bf Edit}
 
 
 
-\section{Writing a Patch Editor}
+\section{Building a Patch Editor}
 
 So you want to write a patch editor?  They're not easy.  But they're fun!  Here are some hints. 
 

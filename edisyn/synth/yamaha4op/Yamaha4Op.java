@@ -2151,7 +2151,7 @@ public class Yamaha4Op extends Synth
         data[1] = (byte)0x43;
         data[2] = (byte)(getChannelOut());;
         data[3] = (byte)0x04;
-        data[4] = (byte)0x10;
+        data[4] = (byte)0x20;				// manual says 10 but this is wrong
         data[5] = (byte)0x00;
         
         for(int number = 0; number < 32; number++)
@@ -2161,7 +2161,7 @@ public class Yamaha4Op extends Synth
 			int pos = 0;
 																				
 			// emit name
-			char[] name = models[number].get("name", "INIT VOICE").toCharArray();
+			char[] name = (models[number].get("name", "INIT VOICE") + "          ").toCharArray();
 			for (int j = 0; j < 10; j++)
 				{
 				data[patch + 57 + j + 6] = (byte)(name[j] & 127);
@@ -3078,4 +3078,7 @@ public class Yamaha4Op extends Synth
 			}
 		}
 
+    public int getRequestableBank() { return 0; }
+    
+    public byte[] requestBankDump(int bank) { return new byte[] { (byte)0xF0, 0x43, (byte)(0x20 + getChannelOut()), 0x04, (byte)0xF7 }; }
     }

@@ -1344,6 +1344,7 @@ public abstract class Synth extends JComponent implements Updatable
                                         {
                                         mergeSynth = null;
                                         // we turn off MIDI because parse() calls revise() which triggers setParameter() with its changes
+                                        boolean originalMIDI = getSendMIDI();
                                         setSendMIDI(false);
                                         undo.setWillPush(false);
                                         Model backup = (Model)(model.clone());
@@ -1373,6 +1374,7 @@ public abstract class Synth extends JComponent implements Updatable
 							            	librarian.getLibrary().receivePatch(patch);
 							            	backup.copyValuesTo(model);		// restore the old model, but don't push an undo
 											undo.setWillPush(true);
+											setSendMIDI(originalMIDI);
 											}
 										else
 											{
@@ -1403,7 +1405,7 @@ public abstract class Synth extends JComponent implements Updatable
 												showSimpleError("Receive Error", "An error occurred on reading the patch.");
 												}
 
-											setSendMIDI(true);
+											setSendMIDI(originalMIDI);
 											if (getSendsParametersAfterNonMergeParse())
 												{
 												sendAllParameters();
@@ -1421,9 +1423,10 @@ public abstract class Synth extends JComponent implements Updatable
                                     boolean willPush = undo.getWillPush();
                                     undo.setWillPush(false);
                                                                                         
-                                    sendMIDI = false;  // so we don't send out parameter updates in response to reading/changing parameters
+									boolean originalMIDI = getSendMIDI();
+									setSendMIDI(false); 	// so we don't send out parameter updates in response to reading/changing parameters
                                     parseParameter(data);
-                                    sendMIDI = true;
+                                    setSendMIDI(originalMIDI); 	
                                     updateTitle();
                                                                                         
                                     undo.setWillPush(willPush);
@@ -1439,14 +1442,15 @@ public abstract class Synth extends JComponent implements Updatable
                                     undo.setWillPush(false);
                                                                                                                 
                                     // we don't do undo here.  It's not great but PreenFM2 etc. would wreak havoc
-                                    sendMIDI = false;  // so we don't send out parameter updates in response to reading/changing parameters
+									boolean originalMIDI = getSendMIDI();
+									setSendMIDI(false); 	// so we don't send out parameter updates in response to reading/changing parameters
                                     // let's try parsing it
                                     handleInRawCC(sm);
                                     if (!getReceivesPatchesAsDumps()) 
                                         {
                                         incomingPatch = true;
                                         }
-                                    sendMIDI = true;
+                                    setSendMIDI(originalMIDI); 	
                                     updateTitle();
                                                                                                                 
                                     undo.setWillPush(willPush);
@@ -1857,7 +1861,7 @@ public abstract class Synth extends JComponent implements Updatable
         valid (4) an error occurred when the receiver tried to send the data.  */
     public boolean tryToSendSysex(byte[] data)
         {
-        if (data == null || data.length == 0) 
+        if (data == null || data.length == 0)
             return false;
         else if (!amActiveSynth())
             {
@@ -8979,6 +8983,10 @@ public abstract class Synth extends JComponent implements Updatable
     	method normally returns true. */
     public boolean isValidPatchLocation(int bank, int num) { return true; }
 
+	/** Some synths (Yamaha 4-op) can only request a single bank.  This returns
+		that bank, or -1 if all banks are requestable by requestBankDump (the default). */
+    public int getRequestableBank() { return -1; }
+    
 	/** Return null if bank dump requests are not supported. */
     public byte[] requestBankDump(int bank) { return null; }
     

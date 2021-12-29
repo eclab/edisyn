@@ -713,10 +713,10 @@ public class Yamaha4OpMulti extends Synth
 
         // extract name
         char[] name = new char[10];
-            for (int j = 0; j < 10; j++)
-                {
-                name[j] = (char)(data[patch * 76 + 66 + j + 16] & 127);
-                }
+		for (int j = 0; j < 10; j++)
+			{
+			name[j] = (char)(data[patch + 66 + j + 16] & 127);
+			}
                         
         model.set("name", new String(name));
         model.set("number", number);
@@ -803,7 +803,7 @@ public class Yamaha4OpMulti extends Synth
         
     public int getPauseAfterChangePatch()
         { 
-        return 100; 
+        return 500; 								// Sucks, but we'll often fail if it's any less than this.  :-(
         }
     
     public int getPauseAfterSendAllParameters() 
@@ -833,17 +833,17 @@ public class Yamaha4OpMulti extends Synth
         data[14] = (byte)'P';
         data[15] = (byte)'M';
         
-        for(int number = 0; number < 32; number++)
+        for(int number = 0; number < 24; number++)
         	{
 			// okay, we're loading and editing patch number.  Here we go.
 			int patch = number * 76;
 			int pos = 0;
 
 			// emit name
-			char[] name = models[number].get("name", "INIT VOICE").toCharArray();
+			char[] name = (models[number].get("name", "INIT VOICE") + "          ").toCharArray();
 			for (int j = 0; j < 10; j++)
 				{
-				data[patch * 76 + 66 + j + 16] = (byte)(name[j] & 127);
+				data[patch + 66 + j + 16] = (byte)(name[j] & 127);
 				}
 						
 			for(int op = 0; op < 8; op++)
@@ -998,7 +998,7 @@ public class Yamaha4OpMulti extends Synth
             tempModel = getModel();
 
         // We ALWAYS change the patch no matter what.  We have to.
-        changePatch(tempModel);
+        performChangePatch(tempModel);
         tryToSendSysex(requestDump(tempModel));
         }
 
@@ -1152,4 +1152,28 @@ public class Yamaha4OpMulti extends Synth
 	public boolean getSupportsBankWrites() { return true; }
 
 	public int getPatchNameLength() { return 10; }
+
+    public int getRequestableBank() { return 0; }
+    
+    public byte[] requestBankDump(int bank) 
+    	{ 
+    	return new byte[] 
+			{ 
+			(byte)0xF0, 
+			0x43, 
+			(byte)(0x20 + getChannelOut()), 
+			0x7E,
+			(byte)'L',
+			(byte)'M',
+			(byte)' ',
+			(byte)' ',
+			(byte)'8',
+			(byte)'9',
+			(byte)'7',
+			(byte)'6',
+			(byte)'P',
+			(byte)'M',
+			(byte)0xF7 
+			}; 
+    	}
     }

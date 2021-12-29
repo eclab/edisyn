@@ -74,6 +74,22 @@ public class Librarian extends JPanel
         table = new JTable()
             {
             int selectedColumn = -1;
+            
+            public void selectAll() 
+            	{ 
+				int column = col(table, table.getSelectedColumn());
+            	if (column >= 0)
+            		{
+            		changeSelection(0, column, false, false);
+            		changeSelection(getLibrary().getBankSize() - 1, column, true, true);
+            		}
+            	else
+            		{
+             		changeSelection(0, 0, false, false);
+            		changeSelection(getLibrary().getBankSize() - 1, 0, true, true);
+           			}
+            	}
+            
             public void changeSelection(int rowIndex, int columnIndex, boolean toggle, boolean extend)
                 {
                 if (selectedColumn != columnIndex && extend)
@@ -569,18 +585,33 @@ public static JMenu buildLibrarianMenu(JMenuItem openMenu, Synth synth)
 		{
 		public void actionPerformed(ActionEvent evt) 
 			{
-			JComboBox bank = new JComboBox(synth.getBankNames()); 
-			while(true)
+			int requestableBank = synth.getRequestableBank();
+			if (requestableBank == -1)
 				{
-				boolean result = Synth.showMultiOption(synth, new String[] { "Bank" }, 
-					new JComponent[] { bank }, "Bank Request", "Enter the Bank.");
-				
-				if (result == false) return;
-								
-				byte[] data = synth.requestBankDump(bank.getSelectedIndex());
-				if (data != null)
+				JComboBox bank = new JComboBox(synth.getBankNames()); 
+				while(true)
 					{
-					synth.tryToSendSysex(data);
+					boolean result = Synth.showMultiOption(synth, new String[] { "Bank" }, 
+						new JComponent[] { bank }, "Bank Request", "Enter the Bank.");
+				
+					if (result == false) return;
+								
+					byte[] data = synth.requestBankDump(bank.getSelectedIndex());
+					if (data != null)
+						{
+						synth.tryToSendSysex(data);
+						}
+					}
+				}
+			else
+				{
+				if (synth.showSimpleConfirm("Bank Request", "Request Bank " + synth.librarian.getLibrary().getBankName(requestableBank) + "?\nOnly this bank can be requested.", "Request"))
+					{
+					byte[] data = synth.requestBankDump(requestableBank);
+					if (data != null)
+						{
+						synth.tryToSendSysex(data);
+						}
 					}
 				}
 			}
@@ -865,7 +896,11 @@ public static JMenu buildLibrarianMenu(JMenuItem openMenu, Synth synth)
 			return;
 			}
 
-		if (len == 1)
+        if (!synth.getSupportsPatchWrites())
+            {
+            synth.showSimpleError("Not Supported", "Edisyn cannot write arbitrary patches to this synthesizer.");
+            }
+		else if (len == 1)
 			{
 		 	if (synth.showSimpleConfirm("Write Patch", "Write Patch to Synthesizer?", "Write"))
 	        	getLibrary().writeRange(column - 1, row, len);

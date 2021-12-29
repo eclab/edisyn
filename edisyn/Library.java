@@ -51,6 +51,7 @@ public class Library extends AbstractTableModel
         synthNum = synth.getSynthNum();                 // O(n) unfortunately
 
         // compute the init patch
+        boolean originalMIDI = synth.getSendMIDI();
         synth.setSendMIDI(false);
         synth.undo.setWillPush(false);
         Model backup = (Model)(synth.model.clone());
@@ -59,7 +60,7 @@ public class Library extends AbstractTableModel
         Patch initPatch = new Patch(synthNum, data, false);
         synth.setModel(backup);                                 // restore
         synth.undo.setWillPush(true);
-        synth.setSendMIDI(true);
+        synth.setSendMIDI(originalMIDI);
 
         numberNames = synth.getPatchNumberNames();
         // generally this should not hapen as numberNames == null means no library support, but just to be on the safe side...
@@ -549,7 +550,7 @@ public class Library extends AbstractTableModel
         {
         ArrayList data = new ArrayList();
         
-        if (toFile || synth.showSimpleConfirm(
+        /*if (toFile || synth.showSimpleConfirm(
         	//toFile ?
 	        //	(bank == ALL_PATCHES ? "Save All Patches" : 
 	        //		(len == 1 ? "Save Patch" : "Save Patches")) :
@@ -560,6 +561,7 @@ public class Library extends AbstractTableModel
 	        //		(len == 1 ? "Save patch to file?" : "Save selected patches to file?")) : 
 	        	(bank == ALL_PATCHES ? "Write all patches to the synthesizer?" :
 	        		(len == 1 ? "Write patch to the synthesizer?" : "Write selected patches to the synthesizer?"))))
+*/
 	        {
             // backup
             boolean originalMIDI = synth.getSendMIDI();
@@ -570,7 +572,6 @@ public class Library extends AbstractTableModel
             synth.getUndo().setWillPush(false);
             Model original = synth.getModel();
             synth.setModel(original.copy());
-            synth.setSendMIDI(false);
                  
             Model location = new Model();
             boolean hasBanks = (synth.getBankNames() != null);
@@ -599,7 +600,7 @@ public class Library extends AbstractTableModel
                 boolean localFailed = false;
                 Patch p = getPatch(b, n);
                 if (p == null) p = initPatch;
-                byte[][] sysex = sysex = initPatch.sysex;
+                byte[][] sysex = p.sysex;
                 for(int j = 0; j < sysex.length; j++)
                     {
                     int result = synth.parse(sysex[j], true);                     //dunno, from file or not?
@@ -628,7 +629,6 @@ public class Library extends AbstractTableModel
                 }
                 
             // restore
-            synth.setSendMIDI(false);
             synth.setModel(original);
             synth.setSendMIDI(originalMIDI);
             synth.printRevised = originalPrintRevised;
@@ -639,7 +639,7 @@ public class Library extends AbstractTableModel
  
              return data.toArray();
             }
-        return null;
+//        return null;
         }
         
 	/** Writes to the synthesizer all the patches from start to start+len-1 in bank.
@@ -817,9 +817,9 @@ public class Library extends AbstractTableModel
 				return;
 				}
 									
-			if (synth.showSimpleConfirm(
-					(bank == ALL_PATCHES ? "Write All Patches" : "Write Bank"),
-					(bank == ALL_PATCHES ? "Write all patches to the synthesizer?" : "Write bank to the synthesizer?")))
+			//if (synth.showSimpleConfirm(
+			//		(bank == ALL_PATCHES ? "Write All Patches" : "Write Bank"),
+			//		(bank == ALL_PATCHES ? "Write all patches to the synthesizer?" : "Write bank to the synthesizer?")))
 				{
 				Object[] data = null;
 				data = emitBank(bank, false);
@@ -945,7 +945,6 @@ public class Library extends AbstractTableModel
 				synth.printRevised = false;
 				boolean originalGetWillPush = synth.getUndo().getWillPush();
 				synth.getUndo().setWillPush(false);
-				synth.setSendMIDI(false);
 				Model original = synth.getModel();
        		 	boolean hasBanks = (synth.getBankNames() != null);
 				

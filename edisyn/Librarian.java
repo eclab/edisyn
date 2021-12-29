@@ -674,7 +674,7 @@ public static JMenu buildLibrarianMenu(JMenuItem openMenu, Synth synth)
 		
 	menu.addSeparator();		
 
-	item = new JMenuItem("Edit in This Editor");
+	item = new JMenuItem("Edit Patch in This Editor");
 	item.addActionListener(new ActionListener()
 		{
 		public void actionPerformed(ActionEvent evt) 
@@ -685,7 +685,7 @@ public static JMenu buildLibrarianMenu(JMenuItem openMenu, Synth synth)
 	menu.add(item);
 	item.setEnabled(false);
 
-	item = new JMenuItem("Edit in New Editor");
+	item = new JMenuItem("Edit Patch in New Editor");
 	item.addActionListener(new ActionListener()
 		{
 		public void actionPerformed(ActionEvent evt) 

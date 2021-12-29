@@ -16,6 +16,12 @@ Below are the various stages of implementation and testing of the librarian syst
 * DSI Prophet '08 / Mopho / Tetra
 * Roland D110
 * Roland D110 Multi
+* Waldorf Blofeld
+* Waldorf Blofeld Multi
+* Yamaha 4 Op
+* Yamaha 4 Op Multi
+
+
 
 ## Coded but Untested
 
@@ -48,15 +54,11 @@ Below are the various stages of implementation and testing of the librarian syst
 * Roland JV880 Multi
 * Sequential Prophet Rev2
 * Tuning
-* Waldorf Blofeld
-* Waldorf Blofeld Multi
 * Waldorf Kyra
 * Waldorf Kyra Multi
 * Waldorf Microwave II/XT/XTk
 * Waldorf Microwave II/XT/XTk Multi
 * Waldorf Pulse 2
-* Yamaha 4 Op
-* Yamaha 4 Op Multi
 * Yamaha DX7
 * Yamaha FB01
 * Yamaha FB01 Multi

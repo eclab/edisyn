@@ -26,7 +26,7 @@ import javax.sound.midi.*;
 public class NovationDStation extends Synth
     {
     public static final String[] PANS = { "L 4", "L 3", "L 2", "L 1", "--", "R 1", "R 2", "R 3", "R 4", "O 1", "O 2", "O 3", "O 4", "O 5", "O 6" };             // #15 is "O 4" again...
-    public static final String[] DRUMS = { "808 Bass Drum", "808 Snare Drum", "808 Low Tom", "808 Mid Tom", "808 High Tom", "808 Rim Shot", "808 Hand Clap", "808 Cowbell", "808 Closed High Hat", "808 Open High Hat", "808 Crash Cymbal", "808 Low Conga", "808 Mid Conga", "808 High Conga", "808 Maracas", "808 Claves", "909 Bass Drum", "909 Snare Drum", "909 Low Tom", "909 Mid Tom", "909 High Tom", "909 Rim Shot", "909 Hand Clap", "909 Closed High Hat", "909 Open High Hat", "909 Crash Cymbal", "909 Ride Cymbal" };
+    public static final String[] DRUMS = { "909 Bass Drum", "909 Snare Drum", "909 Low Tom", "909 Mid Tom", "909 High Tom", "909 Rim Shot", "909 Hand Clap", "909 Closed High Hat", "909 Open High Hat", "909 Crash Cymbal", "909 Ride Cymbal", "808 Bass Drum", "808 Snare Drum", "808 Low Tom", "808 Mid Tom", "808 High Tom", "808 Rim Shot", "808 Hand Clap", "808 Cowbell", "808 Closed High Hat", "808 Open High Hat", "808 Crash Cymbal", "808 Low Conga", "808 Mid Conga", "808 High Conga", "808 Maracas", "808 Claves" };
     public static final String[] SETS = { "808", "909" };
 
     /*
@@ -74,55 +74,55 @@ public class NovationDStation extends Synth
         hbox.addLast(addBanks(Style.COLOR_A()));
         vbox.add(hbox);
         
-        vbox.add(add808("BD", 0, Style.COLOR_B()));
-        vbox.add(add808("SD", 1, Style.COLOR_A()));
-        vbox.add(add808("LT", 2, Style.COLOR_B()));
-        vbox.add(add808("MT", 3, Style.COLOR_A()));
-        vbox.add(add808("HT", 4, Style.COLOR_B()));
+        vbox.add(add808("BD", 0 + 11, Style.COLOR_B()));
+        vbox.add(add808("SD", 1 + 11, Style.COLOR_A()));
+        vbox.add(add808("LT", 2 + 11, Style.COLOR_B()));
+        vbox.add(add808("MT", 3 + 11, Style.COLOR_A()));
+        vbox.add(add808("HT", 4 + 11, Style.COLOR_B()));
         soundPanel.add(vbox, BorderLayout.CENTER);
         addTab("Global, 808 A", soundPanel);
                 
 
         soundPanel = new SynthPanel(this);
         vbox = new VBox();
-        vbox.add(add808("RS", 5, Style.COLOR_A()));
-        vbox.add(add808("CP", 6, Style.COLOR_B()));
-        vbox.add(add808("CB", 7, Style.COLOR_A()));
-        vbox.add(add808("CH", 8, Style.COLOR_B()));
-        vbox.add(add808("OH", 9, Style.COLOR_A()));
-        vbox.add(add808("CC", 10, Style.COLOR_B()));
+        vbox.add(add808("RS", 5 + 11, Style.COLOR_A()));
+        vbox.add(add808("CP", 6 + 11, Style.COLOR_B()));
+        vbox.add(add808("CB", 7 + 11, Style.COLOR_A()));
+        vbox.add(add808("CH", 8 + 11, Style.COLOR_B()));
+        vbox.add(add808("OH", 9 + 11, Style.COLOR_A()));
+        vbox.add(add808("CC", 10 + 11, Style.COLOR_B()));
         soundPanel.add(vbox, BorderLayout.CENTER);
         addTab("808 B", soundPanel);
         
         soundPanel = new SynthPanel(this);
         vbox = new VBox();
-        vbox.add(add808("LC", 11, Style.COLOR_B()));
-        vbox.add(add808("MC", 12, Style.COLOR_A()));
-        vbox.add(add808("HC", 13, Style.COLOR_B()));
-        vbox.add(add808("MA", 14, Style.COLOR_A()));
-        vbox.add(add808("CL", 15, Style.COLOR_B()));
+        vbox.add(add808("LC", 11 + 11, Style.COLOR_B()));
+        vbox.add(add808("MC", 12 + 11, Style.COLOR_A()));
+        vbox.add(add808("HC", 13 + 11, Style.COLOR_B()));
+        vbox.add(add808("MA", 14 + 11, Style.COLOR_A()));
+        vbox.add(add808("CL", 15 + 11, Style.COLOR_B()));
         soundPanel.add(vbox, BorderLayout.CENTER);
         addTab("808 C", soundPanel);
                 
 
         soundPanel = new SynthPanel(this);
         vbox = new VBox();
-        vbox.add(add909("BD", 0 + 16, Style.COLOR_A()));
-        vbox.add(add909("SD", 1 + 16, Style.COLOR_B()));
-        vbox.add(add909("LT", 2 + 16, Style.COLOR_A()));
-        vbox.add(add909("MT", 3 + 16, Style.COLOR_B()));
-        vbox.add(add909("HT", 4 + 16, Style.COLOR_A()));
+        vbox.add(add909("BD", 0, Style.COLOR_A()));
+        vbox.add(add909("SD", 1, Style.COLOR_B()));
+        vbox.add(add909("LT", 2, Style.COLOR_A()));
+        vbox.add(add909("MT", 3, Style.COLOR_B()));
+        vbox.add(add909("HT", 4, Style.COLOR_A()));
         soundPanel.add(vbox, BorderLayout.CENTER);
         addTab("909 A", soundPanel);
 
         soundPanel = new SynthPanel(this);
         vbox = new VBox();
-        vbox.add(add909("RS", 5 + 16, Style.COLOR_B()));
-        vbox.add(add909("CP", 6 + 16, Style.COLOR_A()));
-        vbox.add(add909("CH", 7 + 16, Style.COLOR_B()));
-        vbox.add(add909("OH", 8 + 16, Style.COLOR_A()));
-        vbox.add(add909("CC", 9 + 16, Style.COLOR_B()));
-        vbox.add(add909("RC", 10 + 16, Style.COLOR_A()));
+        vbox.add(add909("RS", 5, Style.COLOR_B()));
+        vbox.add(add909("CP", 6, Style.COLOR_A()));
+        vbox.add(add909("CH", 7, Style.COLOR_B()));
+        vbox.add(add909("OH", 8, Style.COLOR_A()));
+        vbox.add(add909("CC", 9, Style.COLOR_B()));
+        vbox.add(add909("RC", 10, Style.COLOR_A()));
         soundPanel.add(vbox, BorderLayout.CENTER);
         addTab("909 B", soundPanel);
 
@@ -1046,33 +1046,33 @@ public class NovationDStation extends Synth
 
       [TABLE 6] Each Bank data is a single byte with the possible values
 
-      0  808 BD 
-      1  808 SD 
-      2  808 LT  
-      3  808 MT  
-      4  808 HT  
-      5  808 RS  
-      6  808 CP
-      7  808 CB  
-      8  808 CH               *** MidiQuest appears to have 808 CH and 808 OH switched erroneously
-      9  808 OH
-      10 808 CC  
-      11 808 LC  
-      12 808 MC  
-      13 808 HC  
-      14 808 MA  
-      15 808 CL
-      16 909 BD 
-      17 909 SD 
-      18 909 LT 
-      19 909 MT 
-      20 909 HT 
-      21 909 RS 
-      22 909 CP
-      23 909 CH
-      24 909 OH
-      25 909 CC 
-      26 909 RC
+      0  909 BD
+      1  909 SD
+      2  909 LT
+      3  909 MT
+      4  909 HT
+      5  909 RS
+      6  909 CP
+      7  909 CH
+      8  909 OH
+      9  909 CC
+      10 909 RC
+      11 808 BD
+      12 808 SD
+      13 808 LT
+      14 808 MT
+      15 808 HT
+      16 808 RS
+      17 808 CP
+      18 808 CB
+      19 808 CH               *** MidiQuest appears to have 808 CH and 808 OH switched erroneously
+      20 808 OH
+      21 808 CC
+      22 808 LC
+      23 808 MC
+      24 808 HC
+      25 808 MA
+      26 808 CL
 
 
 

@@ -1372,6 +1372,7 @@ public abstract class Synth extends JComponent implements Updatable
             								patch.bank = model.get("bank", 0);
             								patch.name = model.get("name", "" + getPatchLocationName(getModel()));
 							            	librarian.getLibrary().receivePatch(patch);
+											librarian.updateUndoRedo();		
 							            	backup.copyValuesTo(model);		// restore the old model, but don't push an undo
 											undo.setWillPush(true);
 											setSendMIDI(originalMIDI);
@@ -7218,6 +7219,7 @@ public abstract class Synth extends JComponent implements Updatable
 				doLibrarian();		// open and move to it
 				}
 			librarian.getLibrary().receivePatches(patches);
+			librarian.updateUndoRedo();		
  			}
  			 
     
@@ -8242,6 +8244,7 @@ public abstract class Synth extends JComponent implements Updatable
             		doLibrarian();		// open and move to it
             		}
             	librarian.getLibrary().receivePatch(patch);
+				librarian.updateUndoRedo();		
             	}
             else if (batchPatches != null)
                 {
@@ -8675,6 +8678,7 @@ public abstract class Synth extends JComponent implements Updatable
 						otherSynth.doLibrarian();		// open and move to it
 						}
 					otherSynth.librarian.getLibrary().readBank(data, otherSynth.librarian);	
+					otherSynth.librarian.updateUndoRedo();		
 					return BANK_LIBRARIAN;				
                 	}
                 if (actions.getSelectedIndex() == 3)	// This Librarian
@@ -8685,6 +8689,7 @@ public abstract class Synth extends JComponent implements Updatable
 						doLibrarian();		// open and move to it
 						}
 					librarian.getLibrary().readBank(data, librarian);	
+					librarian.updateUndoRedo();		
 					return BANK_LIBRARIAN;				
                 	}
                 else if (actions.getSelectedIndex() == 2)    // write bank

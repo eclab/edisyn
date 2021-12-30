@@ -16,6 +16,11 @@ Set Edisyn's MIDI channel to the same as your Venom.
 
 <p>The Venom's sysex documentation indicates that you can set the Venom's Synth ID.  But to my knowledge this does not actually exist.  If it does, please let me know.  By default Edisyn is hard-coded to use 127.
 
+<p><b>Warning</b><br>
+
+The Venom's USB MIDI device can and does hang permanently until you power cycle the machine.  You may still see the
+ device in Edisyn but nothing will happen when Edisyn tries to send stuff to it.  
+
 <p><b>Important Note</b><br>
 
 One of the Venom's global parameters specifies the MIDI Out mode (USB vs Key). Changing this mode could disconnect the Venom from Edisyn, and so Edisyn does not display this parameter, nor does it upload the parameter when you send parameters to the Venom.

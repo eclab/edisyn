@@ -1659,6 +1659,26 @@ public class MAudioVenomMulti extends Synth
 
     public int parse(byte[] data, boolean fromFile)
         {
+		// Since we're issuing a store patch command to get around Multi bugs,
+		// it's likely that we'll be receiving one too via the librian.
+		// So we handle that here:
+		
+		if (data[6] == 0x06)		// Store Patch
+			{
+			if (data[7] == 0x02)     // it's going to a specific patch (0x02 == Multi Patch Dump as opposed to 0x00 == Edit Buffer Dump)
+				{
+				int bank = data[8] - 1;
+				if (bank < 0 || bank > 1) bank = 0;
+				model.set("bank", bank);
+				int number = data[9];
+				model.set("number", number);
+				}
+			return PARSE_SUCCEEDED;			// should this be PARSE_INCOMPLETE?
+			}
+			
+			
+		// Okay, it's a standard dump at this point.
+
         if (data[7] == 0x02)     // it's going to a specific patch (0x02 == Multi Patch Dump as opposed to 0x00 == Edit Buffer Dump)
             {
             int bank = data[8] - 1;
@@ -1680,7 +1700,7 @@ public class MAudioVenomMulti extends Synth
             name[i] = (char)(d[163 + i] & 127);
             }
         model.set("name", new String(name));
-                                
+                                        
         // Load remaining parameters
         for(int i = 0; i < parameters.length; i++)
             {
@@ -1810,7 +1830,6 @@ public class MAudioVenomMulti extends Synth
             //System.err.println("" + i + " " + key + " " + d[i]);
             }
                         
-                        
         // we must now let the venom know to shut up or else it'll keep sending us junk
 
         //        model.debug = false;
@@ -1827,7 +1846,6 @@ public class MAudioVenomMulti extends Synth
                 (byte)DEFAULT_ID, //getID(), 
                 0x7D,                       // ACK is 0x7F
                 (byte)0xF7 });
-                                
             
             setSendMIDI(sendMIDI);
             }

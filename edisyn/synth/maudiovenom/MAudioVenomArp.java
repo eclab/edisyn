@@ -896,9 +896,11 @@ public class MAudioVenomArp extends Synth
         // Compute checksum
         data2[data2.length - 2] = checksum(data2, 6, data2.length - 2);         // starting at command
 
-        Object[] result = new Object[] { data, data2 };
+        Object[] result = new Object[] { data, POST_HEADER_PAUSE, data2 };
         return result;
         }
+        
+    public static final int POST_HEADER_PAUSE = 300;
 
     // manual says: 
     // The checksum is calculated as the sum of all bytes taken from the <cmd> byte 
@@ -1716,6 +1718,7 @@ public class MAudioVenomArp extends Synth
         else return false;
         }
 
+    public int getPauseAfterSendAllParameters() { return 750; }	
 
     public String[] getBankNames() { return BANKS; }
 

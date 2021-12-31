@@ -11,9 +11,10 @@
 
 Set your K4 to receive Program Changes (RCV PGM = NORM) and Exclusive (RCV EXCL = ON).  See pages 79 and 80 of the manual.  You'll also probably want your send channel and receive channel to be the same.  I wouldn't set the receive channel to OMNI, as this might conflict with drums.
 
-<br><br><h3>Bank Sysex</h3>
+<br><br><h3>K4 Banks</h3>
 
-This patch editor knows about bank sysex messages (which group together multiple patches) as well as single-patch sysex messages.  If Edisyn loads or receives a bank sysex message, you will be given the option to edit a patch from it, to save the whole bank sysex, or to upload the whole bank sysex.
+You'd think that the "A, B, C, D" buttons on the K4 designate four banks.  But they don't.  For purposes of sysex (and for Edisyn's purposes) the K4 only has two banks: internal and external, each with 64 patches.  Edisyn designates the "A, B, C, D" as so-called <b>groups</b>.
+
 
 <br><br><h3>Hints</h3>
 

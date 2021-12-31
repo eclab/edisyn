@@ -1527,7 +1527,6 @@ public class Yamaha4Op extends Synth
 
     public Object[] emitAll(String key)
         {
-        new Throwable().printStackTrace();
         simplePause(50);
         if (key.equals("bank")) return new Object[0];  // this is not emittable
         if (key.equals("number")) return new Object[0];  // this is not emittable

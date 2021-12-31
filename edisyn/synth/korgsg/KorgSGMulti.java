@@ -600,12 +600,6 @@ public class KorgSGMulti extends Synth
         if (tempModel == null)
             tempModel = getModel();
             
-        // The SG cannot write to a patch.  We have to emit to current memory, then save
-        // to a patch, so we'll tack some extra sysex on in that situation
-            
-        byte BB = (byte) tempModel.get("bank");
-        byte NN = (byte) tempModel.get("number");
-        
         Object[] d = new Object[1];
         if (!toWorkingMemory && !toFile)
             {
@@ -683,6 +677,12 @@ public class KorgSGMulti extends Synth
         
         if (!toWorkingMemory && !toFile)
             {
+			// The SG cannot write to a patch.  We have to emit to current memory, then save
+			// to a patch, so we'll tack some extra sysex on in that situation
+			
+			byte BB = (byte) tempModel.get("bank");
+			byte NN = (byte) tempModel.get("number");
+        
             data = new byte[] { (byte)0xF0, (byte)0x42, (byte)(48 + getChannelOut()), (byte)0x4A, (byte)0x1A, (byte)0,
                 (byte)(BB * 16 + NN), (byte)0xF7 };
             d[1] = data;
@@ -692,6 +692,7 @@ public class KorgSGMulti extends Synth
 
         
     public int getPauseAfterChangePatch() { return 200; }
+	public int getPauseAfterWritePatch() { return 200; }
 
     public void changePatch(Model tempModel)
         {
@@ -722,7 +723,7 @@ public class KorgSGMulti extends Synth
             tempModel = getModel();
 
         // we always change the patch no matter what
-        changePatch(tempModel);
+        performChangePatch(tempModel);
 
         // enter performance edit mode, which loads the patch into edit buffer memory
         tryToSendSysex(new byte[] { (byte)0xF0, 0x42, (byte)(48 + getChannelOut()), 0x4A, 0x4E, 0x01, 0x0, (byte)0xF7 });

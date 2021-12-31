@@ -7,23 +7,26 @@ Edisyn's librarian is in its very early stages, and I can only test it on certai
 Below are the various stages of implementation and testing of the librarian system for various editors.
 
 
-## Well Tested
-
-* [ None ]
-
-## Somewhat Tested
+## Moderately Tested
 
 * DSI Prophet '08 / Mopho / Tetra
+* M-Audio Venom
+* M-Audio Venom Multi
+* M-Audio Venom Arp
+* Oberheim Matrix 6/6R/1000
 * Roland D110
 * Roland D110 Multi
 * Waldorf Blofeld
 * Waldorf Blofeld Multi
+* Waldorf Pulse 2
 * Yamaha 4 Op
 * Yamaha 4 Op Multi
+* Yamaha FS1R
+* Yamaha FS1R Multi
+* Yamaha FS1R Fseq
 
 
-
-## Coded but Untested
+## Untested
 
 * Alesis D4/DM5
 * Casio CZ
@@ -43,12 +46,8 @@ Below are the various stages of implementation and testing of the librarian syst
 * Korg SG Multi
 * Korg Wavestation SR
 * Korg Wavestation SR Performance
-* M-Audio Venom
-* M-Audio Venom Multi
-* M-Audio Venom Arp
 * Novation Drumstation / D Station
 * Novation SL
-* Oberheim Matrix 1000
 * Red Sound DarkStar
 * Roland JV880
 * Roland JV880 Multi
@@ -58,12 +57,9 @@ Below are the various stages of implementation and testing of the librarian syst
 * Waldorf Kyra Multi
 * Waldorf Microwave II/XT/XTk
 * Waldorf Microwave II/XT/XTk Multi
-* Waldorf Pulse 2
 * Yamaha DX7
 * Yamaha FB01
 * Yamaha FB01 Multi
-* Yamaha FS1R
-* Yamaha FS1R Multi
 
 ## Not Fully Coded
 
@@ -81,7 +77,6 @@ Below are the various stages of implementation and testing of the librarian syst
 * Preen FM2
 * Roland JV880 Drum
 * Waldorf Rocket
-* Yamaha FS1R Fseq
 
 ## Will Not Implement
 

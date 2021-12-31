@@ -1653,7 +1653,7 @@ public class CasioCZ extends Synth
         }
 
     /** Return a list whether individual patches can be written.  Default is FALSE. */
-    public boolean supportsPatchWrites() { return true; }
+	public boolean getSupportsPatchWrites() { return true; }
 
 	public int getPatchNameLength() { return 16; }
 

@@ -1462,7 +1462,6 @@ public class OberheimMatrix1000 extends Synth
             }
     
     
-    System.err.println("Bank for " + new String(name) + " is " + model.get("bank"));
         revise();
         return PARSE_SUCCEEDED;
         }
@@ -2966,4 +2965,5 @@ System.err.println("" + i + "  " + PATCH_NAMES[i]);
     			
     public int getPatchNameLength() { return 8; }
 
+    public boolean getSupportsPatchWrites() { return true; }
     }

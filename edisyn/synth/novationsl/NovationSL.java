@@ -3633,6 +3633,7 @@ public class NovationSL extends Synth
     public boolean[] getWriteableBanks() { return new boolean[] { true }; }
     public int getPatchNameLength() { return 34; }
     public boolean getSupportsDownloads() { return false; }
+	public boolean getSupportsPatchWrites() { return true; }
 
     }
 

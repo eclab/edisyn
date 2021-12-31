@@ -845,6 +845,7 @@ public class KorgSGMulti extends Synth
 	public String[] getPatchNumberNames() { return buildIntegerNames(16, 1); }
     public boolean[] getWriteableBanks() { return new boolean[] { true, true, true, true }; }
     public int getPatchNameLength() { return 10; }
+	public boolean getSupportsPatchWrites() { return true; }
 
     }
     

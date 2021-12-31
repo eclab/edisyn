@@ -2719,7 +2719,7 @@ public class YamahaFS1RFseq extends Synth
 
     // The FS1R is VERY slow to respond and also queues up responses (beware!)
     public int getBatchDownloadWaitTime() { return 3000; }
-    public int getBatchDownloadFailureCountdown() { return 5; }
+    public int getBatchDownloadFailureCountdown() { return 10; }
     
     
     public String[] getBankNames() { return BANKS; }
@@ -2736,6 +2736,8 @@ public class YamahaFS1RFseq extends Synth
 	public int getPatchNameLength() { return 8; }
 
 	public boolean isValidPatchLocation(int bank, int num) { return (bank == 1 || num < 6); }
+	
+    public boolean getUpdatesListenersOnDownload() { return false; } 	
     }
 
 

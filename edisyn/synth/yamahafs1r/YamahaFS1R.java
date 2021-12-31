@@ -3652,7 +3652,7 @@ public class YamahaFS1R extends Synth
         if (tempModel == null)
             tempModel = getModel();
 
-        // We ALWAYS change the patch no matter what.  We have to.  We have to force it for merging
+        // We ALWAYS change the patch no matter what.  We have to.  We have to force it for merging.
         changePatch(tempModel);
         tryToSendSysex(requestDump(tempModel));
         }

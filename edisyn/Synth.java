@@ -8152,7 +8152,10 @@ public abstract class Synth extends JComponent implements Updatable
             updateTitle();			// has to be after we destroy the timer
             undo.setWillPush2(true);		// restore undo that we disabled to do batch download without blowing out the heap
  			model.setUpdateListeners(true);
+ 			boolean send = getSendMIDI();
+ 			setSendMIDI(false);
  			model.updateAllListeners();
+ 			setSendMIDI(send);
  			}
     	}
     	

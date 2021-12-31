@@ -25,7 +25,8 @@ public class Librarian extends JPanel
     JButton undo = new JButton("Undo");
     JButton redo = new JButton("Redo");
     PushButton stopAction;
-    Box buttonBox;
+    JProgressBar writeProgress = new JProgressBar();
+    JPanel bottomPanel;
     
     /** Returns the current library (which is the table's model) */    
     public Library getLibrary() { return (Library)(table.getModel()); }
@@ -318,22 +319,11 @@ public class Librarian extends JPanel
         scrollPane.setBackground(BACKGROUND_COLOR);
         add(scrollPane, BorderLayout.CENTER);
 
-        buttonBox = new Box(BoxLayout.X_AXIS);
-
+        bottomPanel = new JPanel();
+        bottomPanel.setLayout(new BorderLayout());
+        
 		updateUndoRedo();
 
-        stopAction = new PushButton("Stop Download")
-        		{
-        		public void perform()
-        			{
-        			getLibrary().getSynth().stopBatchDownload();
-        			}
-        		};
-        setupButton(stopAction.getButton());
-        if (getLibrary().getSynth().patchTimer == null)  // we're not running
-        	stopAction.getButton().setEnabled(false);
-		buttonBox.add(stopAction.getButton());
-		   
         patchWell = new JTable()
             {
             public void changeSelection(int rowIndex, int columnIndex, boolean toggle, boolean extend)
@@ -410,6 +400,15 @@ public class Librarian extends JPanel
 				boolean send = synth.getSendMIDI();
 				synth.setSendMIDI(false);
 				synth.performParse(synth.flatten(patch.sysex), false);  // is this from a file?  I'm saying false
+				
+				// revise the patch location to where it came from in the librarian
+				if (patch.number != Patch.NUMBER_NOT_SET)
+					{
+					synth.getModel().set("number", patch.number);
+                	int b = synth.getModel().get("bank", -1);
+                	if (b != -1 && patch.bank >= 0)
+                		synth.getModel().set("bank", patch.bank);
+					}
 				synth.setSendMIDI(send);
 				synth.undo.setWillPush(true);
 				synth.sendAllParameters();
@@ -422,7 +421,6 @@ public class Librarian extends JPanel
         patchWell.setRowSelectionAllowed(false);
         patchWell.setColumnSelectionAllowed(false);
         patchWell.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-//        patchWell.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         patchWell.setDefaultEditor(Object.class, null);
         
         // Enable Drag and Drop
@@ -434,14 +432,35 @@ public class Librarian extends JPanel
         patchWellLabel.putClientProperty("JComponent.sizeVariant", "small");
         patchWellLabel.setFont(Style.SMALL_FONT());
 
-        buttonBox.add(patchWellLabel);
-        buttonBox.add(patchWell);
-        
-        buttonBox.add(Box.createGlue());
-        add(buttonBox, BorderLayout.SOUTH);
-        
-		// declare some cells invalid?
+		Box box = new Box(BoxLayout.X_AXIS);
 		
+        stopAction = new PushButton("Stop Download")
+        		{
+        		public void perform()
+        			{
+        			getLibrary().getSynth().stopBatchDownload();
+        			}
+        		};
+		stopAction.getButton().setEnabled(false);
+        setupButton(stopAction.getButton());
+        box.add(stopAction.getButton());
+        		
+        box.add(patchWellLabel, BorderLayout.WEST);
+        box.add(patchWell, BorderLayout.CENTER);
+        box.add(box.createGlue());
+        bottomPanel.add(box, BorderLayout.CENTER);
+        
+        add(bottomPanel, BorderLayout.SOUTH);
+        
+        if (getLibrary().getSynth().patchTimer != null)  // we're running!
+        	{
+        	//bottomPanel.add(stopAction.getButton(), BorderLayout.WEST);
+			stopAction.getButton().setEnabled(true);
+        	}
+		   
+		writeProgress.setStringPainted(false);
+		writeProgress.setEnabled(true);
+    	// bottomPanel.add(writeProgress, BorderLayout.EAST);				// Not working right now :-(
         }
         
     public void loadOneInternal()
@@ -480,6 +499,17 @@ public class Librarian extends JPanel
 			try
 				{
 				otherSynth.performParse(synth.flatten(p.sysex), true);
+				
+				int bank = (column - 1);
+				int number = row;
+				if (bank != -1)			// don't revise the patch location if it's the scratch bank
+					{
+					// revise the patch location to where it came from in the librarian
+					synth.getModel().set("number", number);
+					int b = synth.getModel().get("bank", -1);
+					if (b != -1)
+					synth.getModel().set("bank", bank);
+					}
 				}
 			catch (Exception ex)
 				{
@@ -550,15 +580,6 @@ public static JMenu buildLibrarianMenu(Synth synth)
 		});
 	menu.add(item);
 	item.setEnabled(false);
-		
-/*	item = new JMenuItem("Download Range from Synth");
-	item.addActionListener(new ActionListener()
-		{
-		public void actionPerformed(ActionEvent evt) { synth.librarian.downloadRange(); }
-		});
-	menu.add(item);
-	item.setEnabled(false);
-*/
 		
 	item = new JMenuItem("Download Bank from Synth");
 	item.addActionListener(new ActionListener()
@@ -1061,7 +1082,6 @@ public static JMenu buildLibrarianMenu(Synth synth)
         else
             {
 	        Synth toSynth = to.getLibrary().getSynth();
-        
             toSynth.getUndo().push(toSynth.getModel());
             }
         
@@ -1075,8 +1095,20 @@ public static JMenu buildLibrarianMenu(Synth synth)
                 }
             else
             	{
-                toTable.setValueAt(_from, toRow + i, toCol);  
+                toTable.setValueAt((p = _from), toRow + i, toCol);  
                 }             
+        
+        	if (!isPatchWell(fromTable) && p != null)
+            	{
+				int bank = (fromCol - 1);
+				int number = fromRow;
+				if (bank != -1)			// don't revise the patch location if it's the scratch bank
+					{
+					// revise the patch location to where it came from in the librarian
+					p.number = number;
+					p.bank = bank;
+					}
+            	}
             }
             
         // Change the selection

@@ -388,6 +388,9 @@ public class Library extends AbstractTableModel
         
         for(int i = 0; i < len; i++)
             {
+            /// NOTE: in fact incoming patches from a file all will have their numbers set,
+            /// even if just to zero, because they've been parsed into models first.  :-(  But I think
+            /// that's okay?
             if (incoming[i].number == Patch.NUMBER_NOT_SET || 
             	patch[incoming[i].bank][incoming[i].number] != null)		// someone is already there
                 {
@@ -491,7 +494,8 @@ public class Library extends AbstractTableModel
         		bank = 1;
         		}
         	}
-        	
+        
+        synth.getModel().setUpdateListeners(false);
         for(int i = 0; i < getBankSize(); i++)
             {
             boolean showed = false;
@@ -523,6 +527,7 @@ public class Library extends AbstractTableModel
                 patches[bank][i] = patch;
                 }
             }
+        synth.getModel().setUpdateListeners(true);
         
         // restore synth
         synth.setModel(original);
@@ -584,6 +589,7 @@ public class Library extends AbstractTableModel
             	len = getNumBanks() * getBankSize();
             	}
             
+        	synth.getModel().setUpdateListeners(false);
             boolean failed = false;
             for(int i = start; i < start + len; i++)
                 {
@@ -617,7 +623,7 @@ public class Library extends AbstractTableModel
                 if (localFailed) continue;
                                         
                 // now emit
-                Object[] objs = synth.emitAll(location, false, true);
+                Object[] objs = synth.emitAll(location, false, toFile);
                 for(int o = 0; o < objs.length; o++)
                 	data.add(objs[o]);
                 	
@@ -627,6 +633,7 @@ public class Library extends AbstractTableModel
                 	if (pause > 0) data.add(Integer.valueOf(pause));
                 	}
                 }
+        	synth.getModel().setUpdateListeners(true);
                 
             // restore
             synth.setModel(original);
@@ -649,6 +656,9 @@ public class Library extends AbstractTableModel
     	{
     	if (writingRange) return;
     	writingRange = true;
+
+    	Librarian librarian = synth.librarian;
+    	
         if (!synth.getSupportsPatchWrites())
             {
             // Let's try writing via banks
@@ -677,7 +687,8 @@ public class Library extends AbstractTableModel
 						return;
 						}				
 					}
-				synth.tryToSendMIDI(data);
+
+				synth.tryToSendMIDI(data, librarian.writeProgress);
 				synth.sendAllParameters();
 				}
         	}           
@@ -948,6 +959,8 @@ public class Library extends AbstractTableModel
 				Model original = synth.getModel();
        		 	boolean hasBanks = (synth.getBankNames() != null);
 				
+	        	synth.getModel().setUpdateListeners(false);
+
 				boolean failed = false;
 				for(int i = 0; i < getBankSize(); i++)
 					{				
@@ -980,6 +993,7 @@ public class Library extends AbstractTableModel
 					
 					patches[i] = synth.getModel();
 					}
+        		synth.getModel().setUpdateListeners(true);
 										
 				// now emit
 				Object[] data = synth.emitBank(patches, bank, toFile);

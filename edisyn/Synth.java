@@ -1960,11 +1960,28 @@ public abstract class Synth extends JComponent implements Updatable
         (4) an error occurred when the receiver tried to send the data.  
     */
     public boolean tryToSendMIDI(Object[] data)
+    	{
+    	return tryToSendMIDI(data, null);
+    	}
+    	
+    public boolean tryToSendMIDI(Object[] data, JProgressBar progress)
         {
         if (data == null) return false;
         if (data.length == 0) return false;
+        if (progress != null) 
+        	{
+    		progress.setMinimum(0);
+    		progress.setMaximum(data.length - 1);
+    		}
+    		
         for(int i = 0; i < data.length; i++)
             {
+    		if (progress != null)
+    			{
+    			progress.setValue(i);
+	    		progress.paintImmediately(progress.getBounds());    	
+    			}
+
             if (data[i] == null)
                 {
                 continue;
@@ -1988,6 +2005,7 @@ public abstract class Synth extends JComponent implements Updatable
                 }
             sentMIDI(data[i], i, data.length);
             }
+            
         sentMIDI(null, 0, 0);
         return true;
         }
@@ -7217,6 +7235,8 @@ public abstract class Synth extends JComponent implements Updatable
 				{
 				doLibrarian();		// open and move to it
 				}
+			// I think we should clear the librarian first
+			librarian.clearAll();
 			librarian.getLibrary().receivePatches(patches);
 			librarian.updateUndoRedo();		
  			}
@@ -8125,16 +8145,14 @@ public abstract class Synth extends JComponent implements Updatable
             getAll.setText("Download Batch...");
             if (librarian != null)
             	{
+//            	librarian.bottomPanel.remove(librarian.stopAction.getButton());
             	librarian.stopAction.getButton().setEnabled(false);
-            	/*
-            	librarian.downloadBox.removeAll();
-            	librarian.downloadBox.add(librarian.downloadAction.getButton());
-            	librarian.downloadBox.revalidate();
-            	librarian.downloadBox.repaint();
-            	*/
             	}
             showSimpleMessage("Batch Download", "Batch download stopped." );
             updateTitle();			// has to be after we destroy the timer
+            undo.setWillPush2(true);		// restore undo that we disabled to do batch download without blowing out the heap
+ 			model.setUpdateListeners(true);
+ 			model.updateAllListeners();
  			}
     	}
     	
@@ -8143,13 +8161,8 @@ public abstract class Synth extends JComponent implements Updatable
             getAll.setText("Stop Downloading Batch");
             if (librarian != null)
             	{
+//            	librarian.bottomPanel.add(librarian.stopAction.getButton(), BorderLayout.WEST);
             	librarian.stopAction.getButton().setEnabled(true);
-            	/*
-            	librarian.downloadBox.removeAll();
-            	librarian.downloadBox.add(librarian.stopAction.getButton());
-            	librarian.downloadBox.revalidate();
-            	librarian.downloadBox.repaint();
-            	*/
             	}
             resetBlend();
             setMergeProbability(0.0);
@@ -8197,6 +8210,7 @@ public abstract class Synth extends JComponent implements Updatable
                             }
                         }
                     });
+            undo.push(model);
             patchTimer.start();
             updateTitle();			// has to be after we build the timer
         }
@@ -8213,6 +8227,8 @@ public abstract class Synth extends JComponent implements Updatable
             }
         else
             {
+            undo.setWillPush2(false);
+ 			model.setUpdateListeners(getUpdatesListenersOnDownload());
             currentPatch = getNextPatchLocation(currentPatch);
             resetBlend();
             setMergeProbability(0.0);
@@ -8912,6 +8928,12 @@ public abstract class Synth extends JComponent implements Updatable
     
     //// LIBRARIAN SUPPORT
     
+    //// The Librarian has a lot of hooks to determine a variety of information about patch organization.
+    //// Patch editors typicaly only have to implement a few of these.  Editors which handle bank uploading
+    //// and downloading usually need to do a lot more. If you're not implementing the Librarian for your
+    //// patch editor, you shouldn't override ANY of these methods.  In particular, overriding
+    //// getPatchNumberNames() to return non-null will signal to Edisyn that you support a Librarian.
+    
     /** Produce a list of Strings the form { "start", "start+1", "start+2", "start+3", ..., "start+num" },
         for example, buildIntegerNames(4, 2) produces { "2", "3", "4" "5" }.  This is
         a useful utility function for implementing getNumberNames() */
@@ -8998,4 +9020,9 @@ public abstract class Synth extends JComponent implements Updatable
     
 	/** Return null if all dump requests are not supported. */
     public byte[] requestAllDump() { return null; }
+    
+    /** Return true if we should disable updating listeners on batch downloads.  This is normally only done
+    	for very large patch editors such as YamahaFS1RFseq, where such updating is extremely costly and 
+    	creates memory leaks. */
+    public boolean getUpdatesListenersOnDownload() { return true; } 
     }

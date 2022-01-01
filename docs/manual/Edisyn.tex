@@ -976,6 +976,8 @@ If you drag patches from one Librarian into another, you have affected {\it two 
 
 \paragraph{Writing Patches to your Synthesizer}
 
+First note that a big weakness in the Librarian (for the time being) is that while you can {\it download} patches in the background, when you {\it write} them to the synthesizer you must wait until they have completed: there's no warning and no way to cancel.  So if you're writing a lot of stuff that's slow and takes time, be prepared.  Maybe this will change in the future.
+
 To write a patch or a range of selected patches to your synthesizer, select the range and choose {\bf Write Selected Patches to Synth} from the {\bf Librarian} menu.  This writes the patches as if you had loaded each one in the editor and chosen {\bf Write to Patch...}.  Note that some synthesizers (such as the Yamaha DX7) cannot do this: you can only write whole banks to them.  So....
 
 To write a bank of patches to your synthesizer, select the a patch in the bank and choose {\bf Write Bank} from the {\bf Librarian} menu.  This writes the whole bank of patches to the synthesizer.  On some synthesizers (like the Yamaha DX7) this will use a special bank-writing sysex message. For most synthesizers, it'll just write each patch separately.

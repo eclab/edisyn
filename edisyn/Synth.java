@@ -6021,6 +6021,12 @@ public abstract class Synth extends JComponent implements Updatable
         the editor. */
     void doSaveAs(String filename)
         {
+        if (tabs.getSelectedComponent() == librarianPane)
+        	{
+        	librarian.saveAll();
+        	return;
+        	}
+        	
         FileDialog fd = new FileDialog((Frame)(SwingUtilities.getRoot(this)), "Save Patch to Sysex File...", FileDialog.SAVE);
                 
         if (filename != null)
@@ -6082,6 +6088,12 @@ public abstract class Synth extends JComponent implements Updatable
         the editor, else it calls doSaveAs(). */
     void doSave()
         {
+        if (tabs.getSelectedComponent() == librarianPane)
+        	{
+        	librarian.saveAll();
+        	return;
+        	}
+        	
         if (file == null)
             {
             doSaveAs();
@@ -7235,6 +7247,7 @@ public abstract class Synth extends JComponent implements Updatable
 				{
 				doLibrarian();		// open and move to it
 				}
+				
 			// I think we should clear the librarian first
 			librarian.clearAll();
 			librarian.getLibrary().receivePatches(patches);
@@ -8156,7 +8169,15 @@ public abstract class Synth extends JComponent implements Updatable
  			setSendMIDI(false);
  			model.updateAllListeners();
  			setSendMIDI(send);
- 			}
+
+			// at this point we have batch gunk in the model.  We have pushed
+			// the previous model on the undo stack during startBatchDownload(),
+			//  so we could do an undo
+			// to restore it HERE.  But I'm a little worried the user might have
+			// done his own undo asynchronously and we'd be messing things up.
+			// Nonetheless here we go...
+			undo.undo(model);
+			}
     	}
     	
     void startBatchDownload()
@@ -8213,7 +8234,7 @@ public abstract class Synth extends JComponent implements Updatable
                             }
                         }
                     });
-            undo.push(model);
+            //undo.push(model);
             patchTimer.start();
             updateTitle();			// has to be after we build the timer
         }

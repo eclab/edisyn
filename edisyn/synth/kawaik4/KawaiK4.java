@@ -172,9 +172,9 @@ public class KawaiK4 extends Synth
         bank.setSelectedIndex(model.get("bank"));
 
         JComboBox group = new JComboBox(GROUPS);
-        group.setSelectedIndex(model.get("number") % 16);
+        group.setSelectedIndex(model.get("number") / 16);
         
-        JTextField number = new SelectedTextField("" + (model.get("number") / 16 + 1), 3);
+        JTextField number = new SelectedTextField("" + (model.get("number") % 16 + 1), 3);
 
         while(true)
             {
@@ -1376,7 +1376,7 @@ public class KawaiK4 extends Synth
 
                 
         boolean external = tempModel.get("bank") > 0; 									// (tempModel.get("bank") > 3);
-        int position = tempModel.get("bank") * 16 + tempModel.get("number");		// (byte)((tempModel.get("bank") % 3) * 16 + (tempModel.get("number")));  // 0...63 for A1 .... D16
+        int position = tempModel.get("number");									// (byte)((tempModel.get("bank") % 3) * 16 + (tempModel.get("number")));  // 0...63 for A1 .... D16
                         														// Looks like I have % 3 rather than & 3, oops
         byte[] result = new byte[EXPECTED_SYSEX_LENGTH];
         result[0] = (byte)0xF0;
@@ -1410,7 +1410,7 @@ public class KawaiK4 extends Synth
             tempModel = getModel();
 
         boolean external = tempModel.get("bank") > 0; 									// (tempModel.get("bank") > 3);
-        int position = tempModel.get("bank") * 16 + tempModel.get("number");		// (byte)((tempModel.get("bank") & 3) * 16 + (tempModel.get("number")));  // 0...63 for A1 .... D16
+        int position = tempModel.get("number");		// (byte)((tempModel.get("bank") & 3) * 16 + (tempModel.get("number")));  // 0...63 for A1 .... D16
         return new byte[] { (byte)0xF0, 0x40, (byte)getChannelOut(), 0x00, 0x00, 0x04, 
             (byte)(external ? 0x02 : 0x00),
             (byte)position, (byte)0xF7};

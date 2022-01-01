@@ -28,6 +28,14 @@ Set your K4 to receive Program Changes (RCV PGM) and Exclusive (RCV EXCL).  See 
 <p><li>When you update a parameter, it's not reflected on the K4's LCD until you move to something else and back again.
 </ul>
 
+<br><br><h3>Librarian Support</h3>
+
+Effect patches don't have names.  This can be very confusing when writing and downloading banks.  For example, if you copy Internal04 to the slot of Internal01 (which is slot 1), then re-download it, it'll come back as Internal01!  This is because, lacking a patch name, when Edisyn receives the patch, it has to come up with a name for it, and just uses the slot number.
+
+<p>When Edisyn attempts to download the External bank, and you don't have a card in your K4, the K4 will simply ignore requests from Edisyn.  This wil make it look like Edisyn is hanging: just stop the download.
+
+
+
 <p><table border=0 cellpadding=0 cellspacing=5>
 <tr>
 <td align=right>By&nbsp;&nbsp;&nbsp;

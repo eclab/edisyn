@@ -80,6 +80,8 @@ public class KawaiK4Effect extends Synth
         
 
 
+    public boolean getSupportsPatchWrites() { return true; }
+
     public int getPauseAfterChangePatch() { return 200; }   // Seem to need about > 100ms
 
     public int getPauseAfterSendAllParameters() { return 100; } 
@@ -546,6 +548,7 @@ public class KawaiK4Effect extends Synth
 
 	// Librarian Support
 	
+    public String[] getPatchNumberNames() { return buildIntegerNames(32, 1); }
     public String[] getBankNames() { return BANKS; }
     public boolean[] getWriteableBanks() { return new boolean[] { true, true }; }
     public boolean getSupportsBankReads() { return true; }			// we read right now but don't write

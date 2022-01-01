@@ -13,6 +13,9 @@ I'll update this list as I or others successfully test librarians and/or fix the
 ### Moderately Tested
 
 * DSI Prophet '08 / Mopho / Tetra
+* Kawai K4
+* Kawai K4 Effect
+* Kawai K4 Multi
 * Korg SG
 * Korg SG Multi
 * M-Audio Venom
@@ -43,10 +46,6 @@ I'll update this list as I or others successfully test librarians and/or fix the
 * Emu Morpheus Hyper
 * Emu Morpheus Map
 * Emu Proteus
-* Kawai K4
-* Kawai K4 Drum
-* Kawai K4 Effect
-* Kawai K4 Multi
 * Kawai K5
 * Korg MicroKorg
 * Korg MicroKorg Vocoder
@@ -71,6 +70,7 @@ I'll update this list as I or others successfully test librarians and/or fix the
 ### Cannot Support Librarians 
 
 * Generic
+* Kawai K4 Drum
 * Korg Microsampler
 * Korg Volca
 * Korg Wavestation SR Sequence

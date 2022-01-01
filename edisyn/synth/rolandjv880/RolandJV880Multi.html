@@ -31,6 +31,14 @@ Edisyn's MIDI channel is set to the Performance Receive (Control) Channel so Edi
 <li>You can't edit, and sometimes can't play notes, unless the Patch/Perform button is set to "Perform".  Edisyn tries to set this button programmatically when it can, but sometimes it won't get set -- for example, when you just change windows from the Multi editor to the Single Editor.  So if you're having difficulty, make sure the button is properly set.
 </ul>
 
+<br><br><h3>Librarian Support</h3>
+
+In order to download one performance patch, Edisyn must (1) change the patch/performance button to "performance" (2) send a change-bank request (3) send a program-change request (4) load the patch. The problem is that each of these tasks requires about a 700ms break afterwards or the JV-880 can get confused. As a result, loading patches into the Librarian at present is very, very slow: about 2-3 seconds per patch.  I'm sorry about that.  
+
+<p>Also note that if the JV-880 has failed to do any of these tasks, when Edisyn loads the patch proper, it'll load the previous patch. That's why, when you try to load all patches, the "Card" bank gets loaded with dummy patches equivalent to the last patch in the Internal bank: because they've all failed (there's no card).  
+
+
+
 <p><table border=0 cellpadding=0 cellspacing=5>
 <tr>
 <td align=right>By&nbsp;&nbsp;&nbsp;

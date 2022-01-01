@@ -1191,7 +1191,7 @@ public class RolandJV880Multi extends Synth
     
     public String getPatchName(Model model) { return model.get("name", "Untitled  "); }
 
-    public int getPauseAfterChangePatch() { return 200; }   // Seem to need about > 100ms
+    public int getPauseAfterChangePatch() { return 700; }   // Seem to need about > 100ms
 
     public int getPauseAfterSendAllParameters() { return 100; } 
  
@@ -1208,10 +1208,14 @@ public class RolandJV880Multi extends Synth
             tryToSendSysex(new byte[] { (byte)0xF0, 0x41, getID(), 0x46, 0x12, 0x00, 0x00, 0x00, 0x00, 0x00, 
                 produceChecksum(new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00 }), (byte)0xF7 });
 
-		// It takes a second for this to take effect
-		simplePause(200);
+			// It takes a second for this to take effect
+			simplePause(700);
 
             tryToSendMIDI(new ShortMessage(ShortMessage.CONTROL_CHANGE, getChannelOut(), 0, BC));
+
+			// It takes a second for this to take effect
+			simplePause(700);
+
             tryToSendMIDI(new ShortMessage(ShortMessage.PROGRAM_CHANGE, getChannelOut(), PC, 0));
             }
         catch (Exception e) { Synth.handleException(e); }
@@ -1223,7 +1227,7 @@ public class RolandJV880Multi extends Synth
         int number = model.get("number");
         
         number++;
-        if (number >= 64)
+        if (number >= 16)
             {
             bank++;
             number = 0;
@@ -1264,7 +1268,8 @@ public class RolandJV880Multi extends Synth
             }
         }
         
-    public int getBatchDownloadWaitTime() { return 750; }
+	// Takes a long time for batches to come in, particularly Orch Stab 2 (patch Internal 11, dunno why)
+    public int getBatchDownloadWaitTime() { return 2000; }
 
 
 

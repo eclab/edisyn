@@ -680,7 +680,7 @@ public class AlesisD4 extends Synth
         data[3] = (byte)0x0E;
         data[4] = (byte)(d4 ? 0x06 : 0x13);
         data[5] = (byte)getChannelOut();
-        data[6] = (byte)(toWorkingMemory ? 0x01 : 32 + model.get("number"));
+        data[6] = (byte)(toWorkingMemory ? 0x01 : 32 + tempModel.get("number"));
         
         int pos = 7;            // start of data
                 
@@ -789,10 +789,8 @@ public class AlesisD4 extends Synth
         return newModel;
         }
 
-    public int getPauseAfterChangePatch()
-        {
-        return 0;
-        }
+    public int getPauseAfterChangePatch() { return 200; }
+    public int getPauseAfterWritePatch() { return 2000; }
                 
     public void changePatch(Model tempModel) 
         {

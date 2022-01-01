@@ -3386,7 +3386,8 @@ public class NovationSL extends Synth
 
     ///// Novation's editor pauses for almost 750ms.  But my tests with the zero suggests
     ///// that it can tolerate almost no pause at all.  I'm using 200ms for the moment
-    public int getPauseAfterWritePatch() { return 200; }
+    ///// -- Note that it looks like it needs more for librarian downloads
+    public int getPauseAfterWritePatch() { return 750; }
 
 
     public boolean testVerify(Synth synth2, String key, Object obj1, Object obj2)

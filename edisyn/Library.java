@@ -33,7 +33,7 @@ public class Library extends AbstractTableModel
     String[] bankNames;                                     // Note that bankNames[0] is the scratch bank name
     boolean[] writeableBanks;                               // Note that writeableBanks[0] is true (for the scratch bank)
     String[] userNames;
-    Patch initPatch;
+    private Patch initPatch;
     Synth synth;
     int synthNum;  
     
@@ -57,7 +57,7 @@ public class Library extends AbstractTableModel
         Model backup = (Model)(synth.model.clone());
         synth.loadDefaults();
         byte[][] data = synth.cutUpSysex(synth.flatten(synth.emitAll(synth.getModel(), false, true)));
-        Patch initPatch = new Patch(synthNum, data, false);
+        initPatch = new Patch(synthNum, data, false);
         synth.setModel(backup);                                 // restore
         synth.undo.setWillPush(true);
         synth.setSendMIDI(originalMIDI);
@@ -687,7 +687,6 @@ public class Library extends AbstractTableModel
 						return;
 						}				
 					}
-
 				synth.tryToSendMIDI(data, librarian.writeProgress);
 				synth.sendAllParameters();
 				}
@@ -776,15 +775,32 @@ public class Library extends AbstractTableModel
 					len = getBankSize();
 					}
 				
-				for(int b = bank; bank == ALL_PATCHES ? (b < getNumBanks()) : (b < bank + 1); b++)	// this little magic does ONE bank unless it's ALL_PATCHES, in which case it does ALL banks
+				// If we're not doing ALL_PATCHES, we have a single bank and our numbers go from start to start + len
+				int startbank = bank;
+				int endbank = bank + 1;
+				int startnum = start;
+				int endnum = start + len;
+				
+				// If we're doing ALL_PATCHES, we have multiple banks and mutiple numbers
+				if (bank == ALL_PATCHES)
 					{
-					for(int i = start; i < start + len; i++)
+					startbank = 0;
+					endbank = getNumBanks();
+					startnum = 0;
+					endnum = getBankSize();
+					}
+					
+				for(int b = startbank; b < endbank; b++)
+					{
+					for(int i = startnum; i < endnum; i++)
 						{
 						FileOutputStream os = null;
 						Patch patch = getPatch(b, i);
 						if (patch == null) patch = initPatch;
-						String name = synth.getSynthNames()[patch.synth];
-						File f = new File(dir, name + ".syx");
+						String filename = ((getNumBanks() > 1 ? (getBankName(b) + ".") : "") + getPatchNumberNames()[i] + "." + patch.name.trim());
+						filename = StringUtility.makeValidFilename(filename);
+						File f = new File(dir, filename + ".syx");
+
 						try
 							{
 							os = new FileOutputStream(f);

@@ -126,6 +126,15 @@ public abstract class Synth extends JComponent implements Updatable
     /** NN randomization checkbox, only appears if the Synth providesNN (such as a DX7) */
     public JCheckBoxMenuItem nnRandomize;
     public JMenu librarianMenu;
+    
+    
+    /// Librarian menus that may not be turned on
+    JMenuItem downloadMenu;
+    JMenuItem downloadBankMenu;
+    JMenuItem downloadAllMenu;
+    JMenuItem writeMenu;
+    
+
         
     // The four nudge models 
     Model[] nudge = new Model[4];
@@ -3231,73 +3240,77 @@ public abstract class Synth extends JComponent implements Updatable
     /** Called when a tab has been changed, to update various stuff. */
     public void tabChanged()
         {        
-		// could be moving to/from the librarian
-		if (librarian != null) librarian.updateUndoRedo();
-		
-        // cancel learning
-        setLearningCC(false);
-        
         Component tab = tabs.getSelectedComponent();
-        if (tab == hillClimbPane)
-            {
-            morph.shutdown();
-            hillClimb.startup();
-            // handle batch download
-            stopBatchDownload();
-			Librarian.setLibrarianMenuSelected(librarianMenu, false);
-            }
-        else if (tab == morphPane)
-            {
-            hillClimb.shutdown();
-            morph.startup();
-            // handle batch download
-            stopBatchDownload();
-			Librarian.setLibrarianMenuSelected(librarianMenu, false);
-            }
-        else if (tab == librarianPane)
+        // We check for oldTab != tab because some synths change the tabs when parsing, such as the Wavestation.
+        // We don't want to cancel downloading just because of that!
+        if (tab != oldTab)
         	{
-            morph.shutdown();
-            hillClimb.shutdown();
-            // handle batch download
-            stopBatchDownload();
-			Librarian.setLibrarianMenuSelected(librarianMenu, true);
-        	}
-        else		// something else
-            {
-            morph.shutdown();
-            hillClimb.shutdown();
-            // handle batch download
-            if (oldTab == librarianPane)	// gotta kill the librarian batch download if any
-            	stopBatchDownload();
-			Librarian.setLibrarianMenuSelected(librarianMenu, false);
-            }
-            
-        pasteTab.setEnabled(false);
-        pasteMutableTab.setEnabled(false);
-        copyTab.setEnabled(false);
-        copyMutableTab.setEnabled(false);
-        resetTab.setEnabled(false);
+			// could be moving to/from the librarian
+			if (librarian != null) librarian.updateUndoRedo();
+		
+			// cancel learning
+			setLearningCC(false);
         
-        SynthPanel panel = findPanel();
-        if (panel != null)
-            {
-            if (panel.isPasteable())
-                {
-                copyTab.setEnabled(true);
-                copyMutableTab.setEnabled(true);
-                }
-            if (!panel.isUnresettable())
-                {
-                resetTab.setEnabled(true);
-                }
-            if (panel.isPasteCompatible(getCopyPreamble()))
-                {
-                pasteTab.setEnabled(true);
-                pasteMutableTab.setEnabled(true);
-                }
-            }
-        
-        oldTab = tab;
+			if (tab == hillClimbPane)
+				{
+				morph.shutdown();
+				hillClimb.startup();
+				// handle batch download
+				stopBatchDownload();
+				Librarian.setLibrarianMenuSelected(librarianMenu, false, this);
+				}
+			else if (tab == morphPane)
+				{
+				hillClimb.shutdown();
+				morph.startup();
+				// handle batch download
+				stopBatchDownload();
+				Librarian.setLibrarianMenuSelected(librarianMenu, false, this);
+				}
+			else if (tab == librarianPane)
+				{
+				morph.shutdown();
+				hillClimb.shutdown();
+				// handle batch download
+				stopBatchDownload();
+				Librarian.setLibrarianMenuSelected(librarianMenu, true, this);
+				}
+			else		// something else
+				{
+				morph.shutdown();
+				hillClimb.shutdown();
+				// handle batch download
+				if (oldTab == librarianPane)	// gotta kill the librarian batch download if any
+					stopBatchDownload();
+				Librarian.setLibrarianMenuSelected(librarianMenu, false, this);
+				}
+			
+			pasteTab.setEnabled(false);
+			pasteMutableTab.setEnabled(false);
+			copyTab.setEnabled(false);
+			copyMutableTab.setEnabled(false);
+			resetTab.setEnabled(false);
+		
+			SynthPanel panel = findPanel();
+			if (panel != null)
+				{
+				if (panel.isPasteable())
+					{
+					copyTab.setEnabled(true);
+					copyMutableTab.setEnabled(true);
+					}
+				if (!panel.isUnresettable())
+					{
+					resetTab.setEnabled(true);
+					}
+				if (panel.isPasteCompatible(getCopyPreamble()))
+					{
+					pasteTab.setEnabled(true);
+					pasteMutableTab.setEnabled(true);
+					}
+				}
+	        oldTab = tab;
+			}
         }
 
 
@@ -7238,7 +7251,7 @@ public abstract class Synth extends JComponent implements Updatable
 					}
 				else patches[i] = null;			// failed to parse
 				}
-			model = backup;
+			model = backup;		// this also restores updating listeners I think
 			undo.setWillPush(true);
 			setSendMIDI(send);
 		
@@ -7252,7 +7265,7 @@ public abstract class Synth extends JComponent implements Updatable
 			librarian.clearAll();
 			librarian.getLibrary().receivePatches(patches);
 			librarian.updateUndoRedo();		
- 			}
+			}
  			 
     
     /** 
@@ -7929,7 +7942,7 @@ public abstract class Synth extends JComponent implements Updatable
             tabs.setSelectedComponent(librarianPane);
             openLibrarianMenu.setText("Close Librarian");
             librarianOpen = true;
-			Librarian.setLibrarianMenuSelected(librarianMenu, true);
+			Librarian.setLibrarianMenuSelected(librarianMenu, true, this);
 			menubar.add(librarianMenu);
             }
         }  
@@ -8200,6 +8213,7 @@ public abstract class Synth extends JComponent implements Updatable
                     {
                     public void actionPerformed(ActionEvent e)
                         {
+                        System.err.println("" + getBatchDownloadWaitTime() + " " + batchDownloadFailureCountdown);
                         if (incomingPatch)
                             {
                             if (patchLocationEquals(getModel(), currentPatch))
@@ -8997,17 +9011,21 @@ public abstract class Synth extends JComponent implements Updatable
      	else return buildBankBooleans(getBankNames().length, 0, 0); 
      	}
 
+
+
     /** Return whether individual patches can be written.  Default is FALSE. */
     public boolean getSupportsPatchWrites() { return false; }
 
     /** Return a list whether entire banks can be written.  Default is FALSE. */
     public boolean getSupportsBankWrites() { return false; }
 
-    /** Return a list whether entire banks can be read .  Default is getSupportsBankWrites(). */
+    /** Return a list whether entire banks can be read or downloaded.  Default is getSupportsBankWrites(). */
     public boolean getSupportsBankReads() { return getSupportsBankWrites(); }
 
     /** Return whether individual patches can be written.  Default is TRUE. */
     public boolean getSupportsDownloads() { return true; }
+
+
 
     /** Parses a given patch from the provided bank sysex, and returns 
     	PARSE_SUCCEEDED or PARSE_SUCCEEDED_UNTITLED if successful, else PARSE_FAILED (the default). */

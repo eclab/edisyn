@@ -2661,6 +2661,11 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             {
             public String map(int val)
                 {
+                if (val == 0) 
+                	{
+                	System.err.println("KorgWavestationPerformance.buildFX() fx" + val + "class8param1 incorrectly set to 0");
+                	val = 1;
+                	}
                 return CHORUS_LFO_RATE[val - 1];
                 }
             };
@@ -2731,6 +2736,11 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             {
             public String map(int val)
                 {
+                if (val == 0) 
+                	{
+                	System.err.println("KorgWavestationPerformance.buildFX() fx" + val + "class9param3 incorrectly set to 0");
+                	val = 1;
+                	}
                 return CHORUS_LFO_RATE[val - 1];
                 }
             };
@@ -3023,6 +3033,11 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             {
             public String map(int val)
                 {
+                if (val == 0) 
+                	{
+                	System.err.println("KorgWavestationPerformance.buildFX() fx" + val + "class14param2 incorrectly set to 0");
+                	val = 1;
+                	}
                 return CHORUS_LFO_RATE[val - 1];
                 }
             };
@@ -3032,6 +3047,11 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             {
             public String map(int val)
                 {
+                if (val == 0) 
+                	{
+                	System.err.println("KorgWavestationPerformance.buildFX() fx" + val + "class14param3 incorrectly set to 0");
+                	val = 1;
+                	}
                 return CHORUS_LFO_RATE[val - 1];
                 }
             };
@@ -3093,6 +3113,11 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             {
             public String map(int val)
                 {
+                if (val == 0) 
+                	{
+                	System.err.println("KorgWavestationPerformance.buildFX() fx" + val + "class15param6 incorrectly set to 0");
+                	val = 1;
+                	}
                 return CHORUS_LFO_RATE[val - 1];
                 }
             };
@@ -3185,6 +3210,11 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             {
             public String map(int val)
                 {
+                if (val == 0) 
+                	{
+                	System.err.println("KorgWavestationPerformance.buildFX() fx" + val + "class17param3 incorrectly set to 0");
+                	val = 1;
+                	}
                 return CHORUS_LFO_RATE[val - 1];
                 }
             };
@@ -3239,6 +3269,11 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             {
             public String map(int val)
                 {
+                if (val == 0) 
+                	{
+                	System.err.println("KorgWavestationPerformance.buildFX() fx" + val + "class18param3 incorrectly set to 0");
+                	val = 1;
+                	}
                 return CHORUS_LFO_RATE[val - 1];
                 }
             };
@@ -3490,6 +3525,11 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             {
             public String map(int val)
                 {
+                if (val == 0) 
+                	{
+                	System.err.println("KorgWavestationPerformance.buildFX() fx" + val + "class24param5 incorrectly set to 0");
+                	val = 1;
+                	}
                 return CHORUS_LFO_RATE[val - 1];
                 }
             };
@@ -3525,6 +3565,11 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             {
             public String map(int val)
                 {
+                if (val == 0) 
+                	{
+                	System.err.println("KorgWavestationPerformance.buildFX() fx" + val + "class25param3 incorrectly set to 0");
+                	val = 1;
+                	}
                 return CHORUS_LFO_RATE[val - 1];
                 }
             };
@@ -3534,6 +3579,11 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             {
             public String map(int val)
                 {
+                if (val == 0) 
+                	{
+                	System.err.println("KorgWavestationPerformance.buildFX() fx" + val + "class25param4 incorrectly set to 0");
+                	val = 1;
+                	}
                 return CHORUS_LFO_RATE[val - 1];
                 }
             };
@@ -4189,6 +4239,9 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
 
     public void resetFX(int fx)
         {
+        // This is called by parsers etc. which may have ALREADY set the push value to false, so 
+        // I need to restore it to either true or false, rather than just setting it to true at the end.
+        boolean wasPushing = undo.getWillPush();
         undo.setWillPush(false);
         for(int fxtype = 1; fxtype < FX_GROUP.length; fxtype++)
             {
@@ -4244,7 +4297,7 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             String key = "fx" + fx + "class" + FX_GROUP[fxtype] + "param" + i;
             model.set(key, (model.get(key, 0)));
             }
-        undo.setWillPush(true);
+        undo.setWillPush(wasPushing);
         }
         
         
@@ -4478,7 +4531,7 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             }
         }
     
-    class Performance
+    class PerformanceStructure
         {
         char[] name = new char[16];
         byte[] fxPerfBlock = new byte[21];
@@ -4490,7 +4543,7 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             System.arraycopy(val.toCharArray(), 0, name, 0, name.length);
             }
         
-        public Performance()
+        public PerformanceStructure()
             {
             for(int i = 0; i < parts.length; i++)
                 parts[i] = new Part();
@@ -4526,7 +4579,7 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
         }
 
     
-    public static final int NYBBLIZED_LENGTH = 181;
+    public static final int DENYBBLIZED_LENGTH = 181;
 
     public int parse(byte[] data, boolean fromFile)
         {
@@ -4543,9 +4596,9 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             for(int i = 0; i < 50; i++)
                 {
                 // yuck, denybblize and extract the patch just to get the name...
-                byte[] d = denybblize(data, i * NYBBLIZED_LENGTH * 2 + 6, NYBBLIZED_LENGTH * 2);
+                byte[] d = denybblize(data, i * DENYBBLIZED_LENGTH * 2 + 6, DENYBBLIZED_LENGTH * 2);
         
-                Performance performance = new Performance();
+                PerformanceStructure performance = new PerformanceStructure();
                 performance.read(d, 0);
         
                 n[i] = new String(performance.name);
@@ -4563,7 +4616,7 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             model.set("number", patchNum);
 
             // okay, we're loading and editing patch number patchNum.  Here we go.
-            return subparse(data, patchNum * NYBBLIZED_LENGTH * 2 + 6);      
+            return subparse(data, patchNum * DENYBBLIZED_LENGTH * 2 + 6);      
             }
         }
                 
@@ -4633,7 +4686,7 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
         // bits 1 and 3 being set).  This doesn't happen in Mix 4 because in Parallel, 
         // Mix 4's default is RIGHT, which is the same value (11) as WET.
                    
-        Performance performance = new Performance();
+        PerformanceStructure performance = new PerformanceStructure();
         performance.read(data, 0);        
 
         model.set("name", new String(performance.name));
@@ -4664,7 +4717,14 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             if (extendedEffects && fxtype == 0 && ((performance.fxPerfBlock[(fx == 1 ? 5 : 13)] & 15) > 0))
                 fxtype = 47 + (performance.fxPerfBlock[(fx == 1 ? 5 : 13)] & 15);  // mod pitch shift (1) is effect 48
 
+			if (fxtype < 0) 		// Patch DIAG TEST WAVE (RAM 2 patch 49) has an fxtype block value of 0; but they start at 2.  The WS interprets this as NO EFFECT.
+				{
+				System.err.println("KorgWavestationPerformance.subparse(): fx" + fx + "type incorrectly set to a value (" + fxtype + ") less than 0 in patch " + new String(performance.name) + ".  Setting to 0.");
+				fxtype = 0;		// NO_EFFECT
+				}
+				
             model.set("fx" + fx + "type", fxtype);
+            
                         
             if (fxtype == 0) // NO_EFFECT
                 continue;
@@ -4809,21 +4869,9 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
     
     public static final int EXPECTED_SYSEX_LENGTH = 371;
 
-    public Object[] emitAll(Model tempModel, boolean toWorkingMemory, boolean toFile)
-        {
-        if (tempModel == null)
-            tempModel = getModel();
-        
-        byte[] d = new byte[EXPECTED_SYSEX_LENGTH];
-        d[0] = (byte)0xF0;
-        d[1] = (byte)0x42;
-        d[2] = (byte)(48 + getChannelOut());
-        d[3] = (byte)0x28;
-        d[4] = (byte)0x49;
-        d[5] = (byte)edisynToWSBank[tempModel.get("bank")];
-        d[6] = (byte)tempModel.get("number");
-       
-        Performance performance = new Performance();
+	public PerformanceStructure buildPerformance()
+		{
+        PerformanceStructure performance = new PerformanceStructure();
 
         performance.setName(model.get("name", "Untitled"));
                 
@@ -4941,8 +4989,28 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             performance.parts[i].susEnable = model.get(part + "sustain");
             performance.parts[i].delay = model.get(part + "delay");
             }
+            
+        return performance;
+		}
+		
+		
+    public Object[] emitAll(Model tempModel, boolean toWorkingMemory, boolean toFile)
+        {
+        if (tempModel == null)
+            tempModel = getModel();
+            	
+        byte[] d = new byte[EXPECTED_SYSEX_LENGTH];
+        d[0] = (byte)0xF0;
+        d[1] = (byte)0x42;
+        d[2] = (byte)(48 + getChannelOut());
+        d[3] = (byte)0x28;
+        d[4] = (byte)0x49;
+        d[5] = (byte)edisynToWSBank[tempModel.get("bank")];
+        d[6] = (byte)tempModel.get("number");
+       
+		PerformanceStructure performance = buildPerformance();
 
-        byte[] data = new byte[NYBBLIZED_LENGTH];
+        byte[] data = new byte[DENYBBLIZED_LENGTH];
         performance.write(data, 0);
         data = nybblize(data);
         System.arraycopy(data, 0, d, 7, data.length);
@@ -5098,26 +5166,77 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
 
     public int getPauseBetweenHillClimbPlays()
         {
-        //      return model.get("hillclimbdelay");
         return 1100;
         }
 
+	public int getBatchDownloadFailureCountdown()
+		{
+		return 30;
+		}    
 
+    public boolean getSupportsBankWrites() { return true; }
     public boolean getSupportsPatchWrites() { return true; }
     public String[] getPatchNumberNames() { return buildIntegerNames(50, 0); }
     public String[] getBankNames() { return BANKS; }
-    public boolean[] getWriteableBanks() { return new boolean[] { true, true, true, true, false, false, false, false, false, false, false, true }; }
+    public boolean[] getWriteableBanks() { return new boolean[] { true, true, true, false, false, false, false, false, false, false, false, true }; }
 
-	/*
 	public int getBank(byte[] bankSysex) { return wsToEdisynBank[bankSysex[5]]; }
+	
     public int parseFromBank(byte[] bankSysex, int number) 
     	{
 		model.set("bank", wsToEdisynBank[bankSysex[5]]);
 		model.set("number", number);
-    	return subparse(bankSysex, number * 852 + 6); 
+    	return subparse(bankSysex, number * DENYBBLIZED_LENGTH * 2 + 6); 
     	}
-    */
 
     public int getPatchNameLength() { return 15; }
+
+
+    public byte[] requestBankDump(int bank) 
+    	{ 
+    	return new byte[] { (byte)0xF0, 0x42, (byte)(0x30 + getChannelOut()), 0x28, 0x1D, (byte)edisynToWSBank[bank], (byte)0xF7 };
+    	}
+
+    public Object[] emitBank(Model[] models, int bank, boolean toFile) 
+    	{ 
+        byte[] d = new byte[18108];
+        d[0] = (byte)0xF0;
+        d[1] = (byte)0x42;
+        d[2] = (byte)(0x30 + getChannelOut());
+        d[3] = (byte)0x28;
+        d[4] = (byte)0x4D;
+        d[5] = (byte)edisynToWSBank[bank];
+        int pos = 0;
+		int checksum = 0;
+        
+        boolean originalMIDI = getSendMIDI();
+        setSendMIDI(false);
+        Model backup = model;
+        undo.setWillPush(false);
+
+        for(int i = 0; i < 50; i++)
+        	{
+        	pos = 6 + i * DENYBBLIZED_LENGTH * 2;
+        	model = models[i];
+			PerformanceStructure patch = buildPerformance();
+			byte[] data = new byte[DENYBBLIZED_LENGTH];
+			patch.write(data, 0);
+			data = nybblize(data);
+			System.arraycopy(data, 0, d, pos, data.length);
+			for(int j = 0; j < data.length; j++)
+				checksum += data[j];
+        	}
+        	
+        model = backup;
+        undo.setWillPush(true);
+	    setSendMIDI(originalMIDI);
+
+		checksum = (checksum & 127);
+		d[d.length - 2] = (byte)checksum;
+		d[d.length - 1] = (byte)0xF7;
+		return new Object[] { d };
+    	}
+
+
     }
     

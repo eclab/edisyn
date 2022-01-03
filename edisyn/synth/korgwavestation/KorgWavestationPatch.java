@@ -1792,7 +1792,7 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
             }
         }
     
-    class Patch
+    class PatchStructure
         {
         char[] name = new char[16];
 
@@ -1847,7 +1847,7 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
         int dummy141;
         Indiv[] waves = new Indiv[4];
 
-        public Patch()
+        public PatchStructure()
             {
             for(int i = 0; i < waves.length; i++)
                 waves[i] = new Indiv();
@@ -2073,7 +2073,7 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
                 // yuck, denybblize and extract the patch just to get the name...
                 byte[] d = denybblize(data, i * 852 + 6, 852);
         
-                Patch patch = new Patch();
+                PatchStructure patch = new PatchStructure();
                 patch.read(d, 0);
         
                 n[i] = new String(patch.name);
@@ -2100,7 +2100,7 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
         {
         data = denybblize(data, pos);
         
-        Patch patch = new Patch();
+        PatchStructure patch = new PatchStructure();
         patch.read(data, 0);
         
         model.set("name", new String(patch.name));
@@ -2258,7 +2258,7 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
         return PARSE_SUCCEEDED;     
         }
     
-    public static final int NYBBLIZED_LENGTH = 426;
+    public static final int DENYBBLIZED_LENGTH = 426;
 
     public static final int[] RATE_TAB = new int[] { 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 83, 85, 90, 95, 100, 110, 120, 130, 140, 150, 180, 210, 240, 270, 300, 400, 500, 600, 700 };
 
@@ -2276,9 +2276,9 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
         d[5] = (byte)edisynToWSBank[tempModel.get("bank")];
         d[6] = (byte)tempModel.get("number");
        
-       	Patch patch = buildPatch();
+       	PatchStructure patch = buildPatch();
        	
-        byte[] data = new byte[NYBBLIZED_LENGTH];
+        byte[] data = new byte[DENYBBLIZED_LENGTH];
         patch.write(data, 0);
         data = nybblize(data);
         System.arraycopy(data, 0, d, 7, data.length);
@@ -2298,6 +2298,7 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
             }
         }
     
+    /*
     public Object[] emitBank(Model[] models, int bank, boolean toFile) 
     	{ 
         byte[] d = new byte[29828];		// 852 * 35 + 8
@@ -2312,7 +2313,7 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
        		{
 			Patch patch = buildPatch();
 		
-			byte[] data = new byte[NYBBLIZED_LENGTH];
+			byte[] data = new byte[DENYBBLIZED_LENGTH];
 			patch.write(data, 0);
 			data = nybblize(data);
 			System.arraycopy(data, 0, d, data.length * i + 6, data.length);		// data.length should be 852?
@@ -2327,11 +2328,12 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
            
         return new Object[] { d };
     	}
+    */
         
     
-    public Patch buildPatch()
+    public PatchStructure buildPatch()
     	{
-        Patch patch = new Patch();
+        PatchStructure patch = new PatchStructure();
 
         patch.setName(model.get("name", "Untitled"));  
                      
@@ -2747,20 +2749,71 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
         {
         return 1100;
         }
-        
+
+	public int getBatchDownloadFailureCountdown()
+		{
+		return 30;
+		}    
 
     public boolean getSupportsBankWrites() { return true; }
     public String[] getPatchNumberNames() { return buildIntegerNames(35, 0); }
     public String[] getBankNames() { return BANKS; }
-    public boolean[] getWriteableBanks() { return new boolean[] { true, true, true, true, false, false, false, false, false, false, false, true }; }
+    public boolean[] getWriteableBanks() { return new boolean[] { true, true, true, false, false, false, false, false, false, false, false, true }; }
 	public int getBank(byte[] bankSysex) { return wsToEdisynBank[bankSysex[5]]; }
+
     public int parseFromBank(byte[] bankSysex, int number) 
     	{
 		model.set("bank", wsToEdisynBank[bankSysex[5]]);
 		model.set("number", number);
     	return subparse(bankSysex, number * 852 + 6); 
     	}
+
     public int getPatchNameLength() { return 15; }
+
+    public byte[] requestBankDump(int bank) 
+    	{ 
+    	return new byte[] { (byte)0xF0, 0x42, (byte)(0x30 + getChannelOut()), 0x28, 0x1c, (byte)edisynToWSBank[bank], (byte)0xF7 };
+    	}
+
+    public Object[] emitBank(Model[] models, int bank, boolean toFile) 
+    	{ 
+        byte[] d = new byte[29828];
+        d[0] = (byte)0xF0;
+        d[1] = (byte)0x42;
+        d[2] = (byte)(0x30 + getChannelOut());
+        d[3] = (byte)0x28;
+        d[4] = (byte)0x4C;
+        d[5] = (byte)edisynToWSBank[bank];
+        int pos = 0;
+		int checksum = 0;
+        
+        boolean originalMIDI = getSendMIDI();
+        setSendMIDI(false);
+        Model backup = model;
+        undo.setWillPush(false);
+
+        for(int i = 0; i < 35; i++)
+        	{
+        	pos = 6 + i * 852;
+        	model = models[i];
+			PatchStructure patch = buildPatch();
+			byte[] data = new byte[852 / 2];
+			patch.write(data, 0);
+			data = nybblize(data);
+			System.arraycopy(data, 0, d, pos, data.length);
+			for(int j = 0; j < data.length; j++)
+				checksum += data[j];
+        	}
+        	
+        model = backup;
+        undo.setWillPush(true);
+	    setSendMIDI(originalMIDI);
+
+		checksum = (checksum & 127);
+		d[d.length - 2] = (byte)checksum;
+		d[d.length - 1] = (byte)0xF7;
+		return new Object[] { d };
+    	}
     }
     
     

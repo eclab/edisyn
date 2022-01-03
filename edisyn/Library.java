@@ -551,9 +551,15 @@ public class Library extends AbstractTableModel
 	
 	// Emits MIDI representing all the patches from start to start+len-1 in bank.
 	// If bank == ALL_PATCHES, then emits the entire library
-    Object[] emitRange(int bank, int start, int len, boolean toFile)
+	// if forceIndependent, then emitRange will NEVER call emitBank
+    Object[] emitRange(int bank, int start, int len, boolean toFile, boolean forceIndependent)
         {
         ArrayList data = new ArrayList();
+        
+        if (bank == ALL_PATCHES && synth.getSupportsBankWrites() && !forceIndependent)
+        	{
+        	return emitBank(bank, toFile);
+        	}
         
         /*if (toFile || synth.showSimpleConfirm(
         	//toFile ?
@@ -676,7 +682,7 @@ public class Library extends AbstractTableModel
 				return;
 				}
 									
-        	Object[] data = emitRange(bank, start, len, false);
+        	Object[] data = emitRange(bank, start, len, false, false);
         	if (data != null)
         		{
 				if (synth.tuple == null || synth.tuple.outReceiver == null)
@@ -705,7 +711,7 @@ public class Library extends AbstractTableModel
 		if (result == 2) return;
 		else if (result == 1)
         	{
-			Object[] d = emitRange(bank, start, len, true);
+			Object[] d = emitRange(bank, start, len, true, false);
 
 			if (d != null)
 				{
@@ -757,7 +763,7 @@ public class Library extends AbstractTableModel
 	If bank == ALL_PATCHES, then writes the entire library */
     public void saveRangeIndependently(int bank, int start, int len)
     	{
-        Object[] d = emitRange(bank, start, len, true);
+        Object[] d = emitRange(bank, start, len, true, true);		// force independent patch saves
         int offset = 0;
 
         if (d != null)
@@ -942,7 +948,7 @@ public class Library extends AbstractTableModel
 		int pos = 0;
 		for(int i = 0; i < data.length; i++)
 			{
-			System.arraycopy(data[i], 0, data, pos, data[i].length);
+			System.arraycopy(data[i], 0, result, pos, data[i].length);
 			pos += data[i].length;
 			}
 		return result;

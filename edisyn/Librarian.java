@@ -526,7 +526,7 @@ public class Librarian extends JPanel
 			}
 		}
 
-public static void setLibrarianMenuSelected(JMenu menu, boolean val)
+public static void setLibrarianMenuSelected(JMenu menu, boolean val, Synth synth)
 	{
 	// ugh, accessign subelements is so convoluted
 	MenuElement[] m = menu.getSubElements()[0].getSubElements();
@@ -534,6 +534,13 @@ public static void setLibrarianMenuSelected(JMenu menu, boolean val)
 		{
 		if (m[i] instanceof JMenuItem)
 			{
+			if ((m[i] == synth.downloadMenu ||
+				m[i] == synth.downloadAllMenu ||
+				m[i] == synth.downloadBankMenu) && !synth.getSupportsDownloads())
+					continue;
+			if ((m[i] == synth.writeMenu) && !synth.getSupportsPatchWrites())
+					continue;
+					
 			((JMenuItem)m[i]).setEnabled(val);
 			}
 		}
@@ -574,6 +581,7 @@ public static JMenu buildLibrarianMenu(Synth synth)
 	menu.addSeparator();
 	
 	item = new JMenuItem("Download Selected Patches from Synth");
+	synth.downloadMenu = item;
 	item.addActionListener(new ActionListener()
 		{
 		public void actionPerformed(ActionEvent evt) { synth.librarian.download(); }
@@ -582,6 +590,7 @@ public static JMenu buildLibrarianMenu(Synth synth)
 	item.setEnabled(false);
 		
 	item = new JMenuItem("Download Bank from Synth");
+	synth.downloadBankMenu = item;
 	item.addActionListener(new ActionListener()
 		{
 		public void actionPerformed(ActionEvent evt) { synth.librarian.downloadBank(); }
@@ -590,6 +599,7 @@ public static JMenu buildLibrarianMenu(Synth synth)
 	item.setEnabled(false);
 		
 	item = new JMenuItem("Download All Patches from Synth");
+	synth.downloadAllMenu = item;
 	item.addActionListener(new ActionListener()
 		{
 		public void actionPerformed(ActionEvent evt) { synth.librarian.downloadAll(); }
@@ -606,24 +616,44 @@ public static JMenu buildLibrarianMenu(Synth synth)
 		public void actionPerformed(ActionEvent evt) 
 			{
 			int requestableBank = synth.getRequestableBank();
-			if (requestableBank == -1)
+			if (requestableBank == -1)		// "All Banks can be Requestable"
 				{
 				JComboBox bank = new JComboBox(synth.getBankNames()); 
-				while(true)
-					{
-					boolean result = Synth.showMultiOption(synth, new String[] { "Bank" }, 
-						new JComponent[] { bank }, "Bank Request", "Enter the Bank.");
+				Librarian lib = synth.librarian;
 				
-					if (result == false) return;
-								
-					byte[] data = synth.requestBankDump(bank.getSelectedIndex());
-					if (data != null)
-						{
-						synth.tryToSendSysex(data);
-						}
+				// Let's make a good guess as to which bank he wants
+				int index = 0;
+        		int column = lib.col(lib.table, lib.table.getSelectedColumn());
+        		int row = lib.table.getSelectedRow();
+        		int len = lib.table.getSelectedRowCount();
+                        
+				if (column < 0 || row < 0 || len == 0) // nope
+					{
+					index = 0;
+					}
+				else if (column == 0)	// scratch
+					{
+					index = 0;
+					}
+				else
+					{
+					index = column - 1;
+					}
+
+				bank.setSelectedIndex(index);
+				
+				boolean result = Synth.showMultiOption(synth, new String[] { "Bank" }, 
+					new JComponent[] { bank }, "Bank Request", "Enter the Bank.");
+			
+				if (result == false) return;
+							
+				byte[] data = synth.requestBankDump(bank.getSelectedIndex());
+				if (data != null)		// this should always be true
+					{
+					synth.tryToSendSysex(data);
 					}
 				}
-			else
+			else				// "Only a specific Bank"
 				{
 				if (synth.showSimpleConfirm("Bank Request", "Request Bank " + synth.librarian.getLibrary().getBankName(requestableBank) + "?\nOnly this bank can be requested.", "Request"))
 					{
@@ -674,6 +704,7 @@ public static JMenu buildLibrarianMenu(Synth synth)
 			
 
 	item = new JMenuItem("Write Selected Patches to Synth");
+	synth.writeMenu = item;
 	item.addActionListener(new ActionListener()
 		{
 		public void actionPerformed(ActionEvent evt) { synth.librarian.write(); }
@@ -754,13 +785,29 @@ public static JMenu buildLibrarianMenu(Synth synth)
 	
 	
 	/* JTable says that it maintains the proper column values even if the columns are rearranged,
-		but this is a lie.  You have to do it manually.  This function does the proper conversion. */
+		but this is a lie.  You have to do it manually.  This function does the proper conversion table -> model. */
 	static int col(JTable table, int column)
 		{
 		if (column < 0) return column;
 		else return table.getColumnModel().getColumn(column).getModelIndex();
 		}
 
+
+	/* JTable says that it maintains the proper column values even if the columns are rearranged,
+		but this is a lie.  You have to do it manually.  This function does the proper conversion model -> table. */
+	static int antiCol(JTable table, int index)
+		{
+		if (index < 0) return index;
+		/// UGH, this is O(n).  Seriously, Java has no way to do this?
+		TableColumnModel tableModel = table.getColumnModel();
+		int numColumns = tableModel.getColumnCount();
+		for(int i = 0; i < numColumns; i++)
+			{
+			if (tableModel.getColumn(i).getModelIndex() == index)
+				return i;
+			}
+		return -1;			// maybe?
+		}
 
 	public void downloadRange()
 		{
@@ -1065,9 +1112,11 @@ public static JMenu buildLibrarianMenu(Synth synth)
     /** Sets all the values of a given set of locations to copies of a certain value. */
     public void fill(JTable table, int col, int row, int len, Patch val)
         {
+		int anticol = antiCol(table, col);
+		
         for(int i = row; i < row + len; i++)
             {
-            table.setValueAt(val == null ? null : new Patch(val), i, col);
+            table.setValueAt(val == null ? null : new Patch(val), i, anticol);
             }
         }
 
@@ -1085,22 +1134,25 @@ public static JMenu buildLibrarianMenu(Synth synth)
             toSynth.getUndo().push(toSynth.getModel());
             }
         
+       int antiFrom = antiCol(fromTable, fromCol);
+       int antiTo = antiCol(toTable, toCol);
+        
         Patch p = null;
         for(int i = 0; i < len; i++)
             {
-            Patch _from = (Patch)(fromTable.getValueAt(fromRow + i, fromCol));
+            Patch _from = (Patch)(fromTable.getValueAt(fromRow + i, antiFrom));
             if (duplicate)
                 {
-                toTable.setValueAt(p = (_from == null ? null : new Patch(_from)), toRow + i, toCol);
+                toTable.setValueAt(p = (_from == null ? null : new Patch(_from)), toRow + i, antiTo);
                 }
             else
             	{
-                toTable.setValueAt((p = _from), toRow + i, toCol);  
+                toTable.setValueAt((p = _from), toRow + i, antiTo);  
                 }             
         
         	if (!isPatchWell(fromTable) && p != null)
             	{
-				int bank = (fromCol - 1);
+				int bank = (antiFrom - 1);
 				int number = fromRow;
 				if (bank != -1)			// don't revise the patch location if it's the scratch bank
 					{
@@ -1114,8 +1166,8 @@ public static JMenu buildLibrarianMenu(Synth synth)
         // Change the selection
         fromTable.clearSelection();
         toTable.clearSelection();
-        toTable.changeSelection(toRow, toCol, false, false);
-        toTable.changeSelection(toRow + len - 1, toCol, false, true);		// not sure why we need to do -1, but we do
+        toTable.changeSelection(toRow, antiTo, false, false);
+        toTable.changeSelection(toRow + len - 1, antiTo, false, true);		// not sure why we need to do -1, but we do
         } 
                 
     /** Moves one set of locations to another, clearing the original locations. */
@@ -1133,11 +1185,13 @@ public static JMenu buildLibrarianMenu(Synth synth)
             }
         fill(fromTable, fromCol, fromRow, len, null);		// to.getLibrary().getInitPatch());
 
+        int antiTo = antiCol(toTable, toCol);
+
         // Change the selection
         fromTable.clearSelection();
         toTable.clearSelection();
-        toTable.changeSelection(toRow, toCol, false, false);
-        toTable.changeSelection(toRow + len - 1, toCol, false, true);		// not sure why we need to do -1, but we do
+        toTable.changeSelection(toRow, antiTo, false, false);
+        toTable.changeSelection(toRow + len - 1, antiTo, false, true);		// not sure why we need to do -1, but we do
         }
         
     /** Swaps one set of locations with another. */
@@ -1164,19 +1218,22 @@ public static JMenu buildLibrarianMenu(Synth synth)
                 }
             }
                         
+		int antiTo = antiCol(toTable, toCol);
+		int antiFrom = antiCol(fromTable, fromCol);
+		
         for(int i = 0; i < len; i++)
             {
-            Object obj = toTable.getValueAt(toRow + i, toCol);
-            Object with = fromTable.getValueAt(fromRow + i, fromCol);
-            toTable.setValueAt(with, toRow + i, toCol);
-            fromTable.setValueAt(obj, fromRow + i, fromCol);
+            Object obj = toTable.getValueAt(toRow + i, antiTo);
+            Object with = fromTable.getValueAt(fromRow + i, antiFrom);
+            toTable.setValueAt(with, toRow + i, antiTo);
+            fromTable.setValueAt(obj, fromRow + i, antiFrom);
             }
 
         // Change the selection
         fromTable.clearSelection();
         toTable.clearSelection();
-        toTable.changeSelection(toRow, toCol, false, false);
-        toTable.changeSelection(toRow + len - 1, toCol, false, true);		// not sure why we need to do -1, but we do
+        toTable.changeSelection(toRow, antiTo, false, false);
+        toTable.changeSelection(toRow + len - 1, antiTo, false, true);		// not sure why we need to do -1, but we do
         }
 
     static boolean isPatchWell(JTable table) { return table.getTableHeader() == null; }

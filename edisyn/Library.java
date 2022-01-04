@@ -42,7 +42,7 @@ public class Library extends AbstractTableModel
     /** Builds a library model, including undo/redo, given a set of bank names,
         the size (length) of a bank, a default init patch, and a list of names
         representing numberNames of patches in bankNames (like 001 or whatnot). 
-        The model will also contain one extra "bank" called "[Scratch]" which
+        The model will also contain one extra "bank" called "Scratch" which
         makes it easier to drag and drop.
     */
     public Library(Synth synth)
@@ -70,7 +70,7 @@ public class Library extends AbstractTableModel
         String[] b = synth.getBankNames();
         if (b == null) b = new String[] { "Bank" };
         bankNames = new String[b.length + 1];
-        bankNames[0] = "<html><span color=gray>[Scratch]</span></html>";
+        bankNames[0] = "<html><span color=gray>Scratch</span></html>";
         System.arraycopy(b, 0, bankNames, 1, b.length);
         boolean[] w = synth.getWriteableBanks();
         if (w == null) w = new boolean[] { false };
@@ -559,20 +559,7 @@ public class Library extends AbstractTableModel
         	{
         	return emitBank(bank, toFile);
         	}
-        
-        /*if (toFile || synth.showSimpleConfirm(
-        	//toFile ?
-	        //	(bank == ALL_PATCHES ? "Save All Patches" : 
-	        //		(len == 1 ? "Save Patch" : "Save Patches")) :
-	        	(bank == ALL_PATCHES ? "Write All Patches" : 
-	        		(len == 1 ? "Write Patch" : "Write Patches")),
-        	//toFile ?
-	        //	(bank == ALL_PATCHES ? "Save all patches to file?" :
-	        //		(len == 1 ? "Save patch to file?" : "Save selected patches to file?")) : 
-	        	(bank == ALL_PATCHES ? "Write all patches to the synthesizer?" :
-	        		(len == 1 ? "Write patch to the synthesizer?" : "Write selected patches to the synthesizer?"))))
-*/
-	        {
+
             // backup
             boolean originalMIDI = synth.getSendMIDI();
             synth.setSendMIDI(false);
@@ -647,11 +634,11 @@ public class Library extends AbstractTableModel
             synth.getUndo().setWillPush(originalGetWillPush);
             
             // should I do a change patch?
-            if (failed) synth.showSimpleError("Incomplete Patch Write", "Some patches were malformed and could not be written.");
+            if (failed) 
+            	synth.showSimpleError("Incomplete Patch Write", "Some patches were malformed and could not be written.");
  
              return data.toArray();
-            }
-//        return null;
+
         }
         
 	/** Writes to the synthesizer all the patches from start to start+len-1 in bank.
@@ -706,7 +693,7 @@ public class Library extends AbstractTableModel
     	JComboBox combo = null;
     	JComponent[] comp = new JComponent[0];
     	String[] str = new String[0];
-    	if (synth.getSupportsBankWrites() && synth.getSupportsPatchWrites())
+    	if (synth.getSupportsBankWrites() && synth.getSupportsPatchWrites() && ((start == 0 && len == getBankSize()) || bank == ALL_PATCHES))
     		{
     		combo = new JComboBox(new String[] { "Bank Sysex", "Individual Patch Sysex" });
     		comp = new JComponent[] { combo };
@@ -795,10 +782,9 @@ public class Library extends AbstractTableModel
 				int startnum = start;
 				int endnum = start + len;
 				
-				// If we're doing ALL_PATCHES, we have multiple banks and mutiple numbers
-				if (synth.getSupportsBankWrites() && !forceIndependent)
+				if (bank == ALL_PATCHES)
 					{
-					if (bank == ALL_PATCHES)
+					if (synth.getSupportsBankWrites() && !forceIndependent)
 						{
 						// All patches, thus all banks but since we're saving per-bank we only do the first "number"
 						startbank = 0;
@@ -808,21 +794,27 @@ public class Library extends AbstractTableModel
 						}
 					else
 						{
-						// Single bank as before, but since we're saving per-bank we only do the first "number"
-						startnum = 0;
-						endnum = 1;
-						}
-					}
-				else 
-					{
-					if (bank == ALL_PATCHES)
-						{
 						// All patches, thus all banks and all numbers
 						startbank = 0;
 						endbank = getNumBanks();
 						startnum = 0;
 						endnum = getBankSize();
 						}
+					}
+				else
+					{
+					if (synth.getSupportsBankWrites() && 					// we can write banks
+						!forceIndependent && 								// we have the option of writing banks (which we will take)
+						start == 0 && len == getBankSize())					// Our range is one entire bank
+ 						{
+						// Single bank as before, but since we're saving per-bank we only do the first "number"
+						startnum = 0;
+						endnum = 1;
+ 						}
+ 					else
+ 						{
+ 						// do the default
+ 						}
 					}
 					
 				for(int b = startbank; b < endbank; b++)

@@ -18,6 +18,8 @@ I'll update this list as I or others successfully test librarians and/or fix the
 * Kawai K4 Multi
 * Korg SG
 * Korg SG Multi
+* Korg Wavestation SR
+* Korg Wavestation SR Performance
 * M-Audio Venom
 * M-Audio Venom Multi
 * M-Audio Venom Arp
@@ -49,8 +51,6 @@ I'll update this list as I or others successfully test librarians and/or fix the
 * Kawai K5
 * Korg MicroKorg
 * Korg MicroKorg Vocoder
-* Korg Wavestation SR
-* Korg Wavestation SR Performance
 * Red Sound DarkStar
 * Sequential Prophet Rev2
 * Tuning

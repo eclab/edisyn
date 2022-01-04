@@ -892,11 +892,11 @@ Patch slots come in different colors depending on the situation:
 
 \begin{itemize}
 \item {\it Pale Green: the \textbf{Scratch Bank}}\quad The first column is special.  This isn't a bank in your synthesizer: it's just some extra room for you to temporarily stash stuff as you move things around via drag-and-drop. 
-\item {\it White}\quad These are patches in locations which can be written to your synthesizer.
-\item {\it Pale Magenta}\quad These are patches in locations which {\bf cannot} be written to your synthesizer because they're read-only on your machine.  However you can save them to disk, and can load them from the disk or from your synth.
-\item {\it Light Gray with Red Lettering}\quad These are patches in locations which {\bf cannot} be written to your synthesizer because they're not valid locations.  Why does Edisyn provide them then?  Because some synths have banks with varying lengths or present other unusual situations, and Edisyn has to be consistent.  You can treat them as scratch locations.
-\item {\it Dark Gray}\quad These are patches you have selected.
-\item {\it Pale Violet}\quad This is the drop location for drag-and-drop.
+\item {\it White}\quad Patches in locations which can be written to your synthesizer.
+\item {\it Pale Magenta}\quad Paatches in locations which {\bf cannot} be written to your synthesizer because they're read-only on your machine.  However you can save them to disk, and can load them from the disk or from your synth.
+\item {\it Light Gray with Red Lettering}\quad Patches in locations which {\bf cannot} be written to your synthesizer because they're invalid patch locations.  Why does Edisyn provide them then?  Because some synths have banks with varying lengths or present other unusual situations which violate the rectangular table structure used by Edisyn.  You can treat them as scratch locations.
+\item {\it Dark Gray}\quad Patches you have selected.
+\item {\it Pale Violet}\quad The drop location for drag-and-drop.
 \end{itemize}
 
 \paragraph{Relationship with the Editor} 
@@ -928,9 +928,11 @@ If you open a bulk or bank sysex file, you'll be given the option (among other t
 
 \paragraph{Where Loaded Patches Go}
 
-If you load a single patch from disk, it'll go to the editor.  But If a single patch arrives from the synth while the librarian is open, it'll go in the librarian rather than the editor.  If you load a range of patches, the Librarian will try to be smart about it.  If the patches come with locations, the Librarian will put them in their locations.  If they don't, it'll stick them in order starting with your first bank.  
+If you load a single patch from disk, it'll go to the editor.  But if a single patch arrives from the synth while the librarian is open, it'll go in the librarian rather than the editor.  You can drag it from the {\it Current Patch} field into the librarian.
 
-Some synthesizers can send whole banks to Edisyn.   Even so, when loading a bank from a synthesizer, Edisyn will request the patches one by one.  But if Edisyn receives a bank message from a synthesizer or disk, it'll try to be smart about where to put it.  If the bank message indicates which bank it is, Edisyn will put it there.  Otherwise it'll put it in the first bank.
+If you load a range of patches, the Librarian will try to be smart about it.  If the patches come with locations, the Librarian will put them in their locations.  If they don't, it'll stick them in order starting with your first bank.  
+
+If you load one or more entire banks, either from disk or because your synthesizer sent Edisyn a bank sysex, Edisyn will stick them in the right place.  If the bank message indicates which bank it is, Edisyn will put them it in the right place.  Otherwise it'll put it in the first bank.
 
 
 
@@ -990,11 +992,11 @@ In order to receive patches from Edisyn, your synthesizer may need to be set up 
 
 \paragraph{Saving Patches to a File}
 
-To save a patch or a range of selected patches to a file, select the range and choose {\bf Save Selected Patches} from the {\bf Librarian} menu.  This will save all the patches to a single bulk file.
+To save a patch or a range of selected patches to a single file or collection of files, select the range and choose {\bf Save Selected Patches} from the {\bf Librarian} menu.
 
-To save a bank of patches to a file, select the a patch in the bank and choose {\bf Save Bank} from the {\bf Librarian} menu.  On some synthesizers (like the Yamaha DX7) this will save with a special bank-writing sysex message. For most synthesizers, it'll just write each patch separately to the file.
+To save a bank of patches to a single file, select the a patch in the bank and choose {\bf Save Bank} from the {\bf Librarian} menu.  Some synthesizers can save out banks with a single bank sysex message: Edisyn will use this if it's available. Otherwise, it'll just write each patch separately to the file.
 
-To save all patches in the Librarian to a file, choose {\bf Save All Patches} from the {\bf Librarian} menu.  On some synthesizers (like the Yamaha DX7) this will save with a special bank-writing sysex message. For most synthesizers, it'll just write each patch separately to the file.
+To save all patches in the Librarian  to a single file or collection of files, choose {\bf Save All Patches} from the {\bf Librarian} menu.  Some synthesizers can save out banks either with a single bank sysex message or as individual patch sysex messages.  Edisyn will give you the option if it can.  Note that if you select {\bf Save} or {\bf Save As...} from the {\bf File} menu while in the Librarian, it'll do the same thing as {\bf Save All Patches}.
 
 \paragraph{Closing the Librarian}
 
@@ -1024,6 +1026,7 @@ Figure~\ref{patcheditorcapabilities} is a little table of the current patch edit
 \newcommand\cm{\checkmark}
 
 \begin{table}[t!]
+\vspace{5em}
 \begin{center}
 {\small
 \begin{tabular}{rllllllllll}
@@ -1078,6 +1081,7 @@ Yamaha TG33/SY22/SY35&{\cm}*& &{\cm}&{\cm}&{\cm}& &  & &{\cm}            \\
 \vspace{-1em}
 \caption{Patch Editor Capabilities}
 \label{patcheditorcapabilities}
+\vspace{5em}
 \end{table}
 
 \subsection{Setting Up the Development Environment}

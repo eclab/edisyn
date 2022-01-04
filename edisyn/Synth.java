@@ -5328,7 +5328,6 @@ public abstract class Synth extends JComponent implements Updatable
             });
         
         librarianMenu = Librarian.buildLibrarianMenu(this);
-        //menubar.add(librarianMenu);
     
         updateTitle();
         numOpenWindows++;  
@@ -7231,6 +7230,18 @@ public abstract class Synth extends JComponent implements Updatable
  
  		public void loadLibrarian(Patch[] patches)
  			{
+			if (!librarianOpen)
+				{
+				doLibrarian();		// open and move to it
+				}
+				
+			// I think we should clear the librarian first
+			librarian.clearAll();
+
+			// We inform the loading system that if it comes across any bank patches, it should
+			// automatically load them into the librarian without bugging the user.
+			setAlwaysLoadInLibrarian(true);
+
 			// now we need to load the appropriate locations and names
 			boolean send = getSendMIDI();
 			setSendMIDI(false);
@@ -7242,11 +7253,8 @@ public abstract class Synth extends JComponent implements Updatable
 				int res = parse(flatten(patches[i].sysex), true);
 				if (res == PARSE_SUCCEEDED || res == PARSE_SUCCEEDED_UNTITLED)
 					{
-					//if (getPatchContainsLocation())
-						{
-						patches[i].number = model.get("number", Patch.NUMBER_NOT_SET);
-						patches[i].bank = model.get("bank", 0);
-						}
+					patches[i].number = model.get("number", Patch.NUMBER_NOT_SET);
+					patches[i].bank = model.get("bank", 0);
 					patches[i].name = model.get("name", null);
 					}
 				else patches[i] = null;			// failed to parse
@@ -7256,17 +7264,10 @@ public abstract class Synth extends JComponent implements Updatable
 			setSendMIDI(send);
 		
 			// send it on!
-			if (!librarianOpen)
-				{
-				doLibrarian();		// open and move to it
-				}
-				
-			// I think we should clear the librarian first
-			librarian.clearAll();
 			librarian.getLibrary().receivePatches(patches);
-			librarian.updateUndoRedo();		
-			}
- 			 
+			librarian.updateUndoRedo();	
+			setAlwaysLoadInLibrarian(false);
+			}	 			 
     
     /** 
         Returns a directory selected by the user for loading.
@@ -8615,6 +8616,17 @@ public abstract class Synth extends JComponent implements Updatable
 
     //// BANK SYSEX SUPPORT
         
+
+    boolean showingLimitedBankSysex = false;
+    boolean isShowingLimitedBankSysex() { return showingLimitedBankSysex; }
+    void setShowingLimitedBankSysex(boolean val) { showingLimitedBankSysex = val; }
+    
+
+    boolean alwaysLoadInLibrarian = false;
+    boolean getAlwaysLoadInLibrarian() { return alwaysLoadInLibrarian; }
+    void setAlwaysLoadInLibrarian(boolean val) { alwaysLoadInLibrarian = val; }
+    
+
         
     // This returns one of:
     // 1. 0 ... names.length - 1    [choice of name]
@@ -8639,13 +8651,18 @@ public abstract class Synth extends JComponent implements Updatable
         then this method returns the patch number (0....) in the bank.
     */
     
-    boolean showingLimitedBankSysex = false;
-    boolean isShowingLimitedBankSysex() { return showingLimitedBankSysex; }
-    void setShowingLimitedBankSysex(boolean val) { showingLimitedBankSysex = val; }
-    
-
     public int showBankSysexOptions(byte[] data, String[] names)
         {
+        if (getAlwaysLoadInLibrarian())	
+        	{
+        	// librarian already exists because loadLibrarian called us
+			librarian.getLibrary().readBank(data, librarian);	
+			// we don't update undo because this is called from
+			// loadLibrarian, which does it for us.
+			//librarian.updateUndoRedo();		
+        	return BANK_LIBRARIAN;		// done and done
+        	}
+        
         while(true)
             {
             Color color = new JPanel().getBackground();

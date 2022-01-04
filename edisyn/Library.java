@@ -366,12 +366,27 @@ public class Library extends AbstractTableModel
 
     public void receivePatches(Patch[] incoming)
         {
-        pushUndo();
+        // These patches could be null because they've already been processed earlier as banks
+        // and this sets the patch to null.  So let's check to see how many there are.
+        int count = 0;
+        for(int i = 0; i < incoming.length; i++)
+        	{
+        	if (incoming[i] != null) count++;
+        	}
+        if (count == 0) return;
         
-        // deep copy
-        Patch[] in = new Patch[incoming.length];
-        for(int i = 0; i < in.length; i++)
-            in[i] = new Patch(incoming[i]);
+        pushUndo();
+
+        // deep copy and reduce
+        int pos = 0;
+        Patch[] in = new Patch[count];
+        for(int i = 0; i < incoming.length; i++)
+        	{
+        	if (incoming[i] != null)
+	            {
+	            in[pos++] = new Patch(incoming[i]);
+	            }
+            }
         incoming = in;
         
         int len = incoming.length;
@@ -476,23 +491,7 @@ public class Library extends AbstractTableModel
         int b = synth.getBank(incoming);
         if (b >= 0)	// bank known
         	{
-        	bank = b + 1;
-        	}
-        else 	// bank unknown
-        	{
-        	/*
-        	// Check the librarian to see which bank is selected
-        	int col = librarian.getSelectedColumn();
-        	if (col >= 0)
-        		{
-        		bank = col + 1;
-        		}
-        	else
-        	*/
-        		{
-        		// Use the first bank
-        		bank = 1;
-        		}
+        	bank = b;
         	}
         
         synth.getModel().setUpdateListeners(false);
@@ -507,7 +506,7 @@ public class Library extends AbstractTableModel
                     synth.showSimpleError("Bad Patches in Bank", "This file has a bank with bad patches.  They will be replaced with blanks.");
                     showed = true;
                     }
-                patches[bank][i] = new Patch(initPatch);
+                patches[bank + 1][i] = new Patch(initPatch);
                 }
             else
                 {
@@ -524,7 +523,7 @@ public class Library extends AbstractTableModel
                 patch.name = name;
                 patch.bank = bank;
                 patch.number = i;
-                patches[bank][i] = patch;
+                patches[bank + 1][i] = patch;
                 }
             }
         synth.getModel().setUpdateListeners(true);
@@ -704,14 +703,23 @@ public class Library extends AbstractTableModel
 	If bank == ALL_PATCHES, then writes the entire library */
     public void saveRange(int bank, int start, int len)
     	{
-		int result = Synth.showMultiOption(synth, new String[0], new JComponent[0], 
-			new String[] { "As Individual Files", "To Bulk File", "Cancel" },
+    	JComboBox combo = null;
+    	JComponent[] comp = new JComponent[0];
+    	String[] str = new String[0];
+    	if (synth.getSupportsBankWrites() && synth.getSupportsPatchWrites())
+    		{
+    		combo = new JComboBox(new String[] { "Bank Sysex", "Individual Patch Sysex" });
+    		comp = new JComponent[] { combo };
+    		str = new String[] { "Write" };
+    		}
+		int result = Synth.showMultiOption(synth, str, comp, 
+			new String[] { "As Separate Files", "To Bulk File", "Cancel" },
 			0, "Save Patches", "Save the Patches...");
 			
 		if (result == 2) return;
 		else if (result == 1)
         	{
-			Object[] d = emitRange(bank, start, len, true, false);
+			Object[] d = emitRange(bank, start, len, true, (combo != null && combo.getSelectedIndex() == 1));
 
 			if (d != null)
 				{
@@ -754,16 +762,16 @@ public class Library extends AbstractTableModel
 			}
         else
         	{
-        	saveRangeIndependently(bank, start, len);
+        	saveRangeSeparately(bank, start, len, (combo != null && combo.getSelectedIndex() == 1));
         	}
     	}
     	
 
 	/** Saves to disk all the patches from start to start+len-1 in bank.
 	If bank == ALL_PATCHES, then writes the entire library */
-    public void saveRangeIndependently(int bank, int start, int len)
+    public void saveRangeSeparately(int bank, int start, int len, boolean forceIndependent)
     	{
-        Object[] d = emitRange(bank, start, len, true, true);		// force independent patch saves
+        Object[] d = emitRange(bank, start, len, true, forceIndependent);		// force independent patch saves
         int offset = 0;
 
         if (d != null)
@@ -781,19 +789,40 @@ public class Library extends AbstractTableModel
 					len = getBankSize();
 					}
 				
-				// If we're not doing ALL_PATCHES, we have a single bank and our numbers go from start to start + len
+				// Basic form: single bank, range within the bank
 				int startbank = bank;
 				int endbank = bank + 1;
 				int startnum = start;
 				int endnum = start + len;
 				
 				// If we're doing ALL_PATCHES, we have multiple banks and mutiple numbers
-				if (bank == ALL_PATCHES)
+				if (synth.getSupportsBankWrites() && !forceIndependent)
 					{
-					startbank = 0;
-					endbank = getNumBanks();
-					startnum = 0;
-					endnum = getBankSize();
+					if (bank == ALL_PATCHES)
+						{
+						// All patches, thus all banks but since we're saving per-bank we only do the first "number"
+						startbank = 0;
+						endbank = getNumBanks();
+						startnum = 0;
+						endnum = 1;
+						}
+					else
+						{
+						// Single bank as before, but since we're saving per-bank we only do the first "number"
+						startnum = 0;
+						endnum = 1;
+						}
+					}
+				else 
+					{
+					if (bank == ALL_PATCHES)
+						{
+						// All patches, thus all banks and all numbers
+						startbank = 0;
+						endbank = getNumBanks();
+						startnum = 0;
+						endnum = getBankSize();
+						}
 					}
 					
 				for(int b = startbank; b < endbank; b++)
@@ -804,6 +833,8 @@ public class Library extends AbstractTableModel
 						Patch patch = getPatch(b, i);
 						if (patch == null) patch = initPatch;
 						String filename = ((getNumBanks() > 1 ? (getBankName(b) + ".") : "") + getPatchNumberNames()[i] + "." + patch.name.trim());
+						if (synth.getSupportsBankWrites() && !forceIndependent)
+							filename = (getNumBanks() > 1 ? getBankName(b) : "Bank");
 						filename = StringUtility.makeValidFilename(filename);
 						File f = new File(dir, filename + ".syx");
 
@@ -967,7 +998,7 @@ public class Library extends AbstractTableModel
 				}
 			else
 				{
-				if (!isWriteableBank(bank)) return new Object[0];
+				if (!isWriteableBank(bank) && !toFile) return new Object[0];
 									
 				Model[] patches = new Model[getBankSize()];
 				

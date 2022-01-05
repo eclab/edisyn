@@ -1381,7 +1381,7 @@ public class SequentialProphetRev2 extends Synth
             {
             bank++;
             number = 0;
-            if (bank >= 2)
+            if (bank >= 8)
                 bank = 0;
             }
                 

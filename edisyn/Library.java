@@ -617,7 +617,6 @@ public class Library extends AbstractTableModel
 					if (localFailed) continue;
 										
 					// now emit
-					System.err.println("Bank " + b + " Number " + n);
 					Object[] objs = synth.emitAll(location, false, toFile);
 					for(int o = 0; o < objs.length; o++)
 						data.add(objs[o]);

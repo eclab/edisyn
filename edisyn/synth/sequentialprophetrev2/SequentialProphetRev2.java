@@ -5975,8 +5975,9 @@ public class SequentialProphetRev2 extends Synth
                 if (!check.isSelected() ||
                     showSimpleConfirm("Writeable Factory Banks", "Treat banks F1 ... F4 as writeable?"))
                     {
-                    setLastX("" + check.isSelected(), WRITE_TO_F_KEY, getSynthName(), true);
-                    }
+                    writeToF = check.isSelected();
+                    setLastX("" + writeToF, WRITE_TO_F_KEY, getSynthName(), true);
+              		}
                 else check.setSelected(false);
                 }
             });

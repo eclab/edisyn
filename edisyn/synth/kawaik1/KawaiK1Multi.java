@@ -28,11 +28,14 @@ public class KawaiK1Multi extends Synth
     /// Various collections of parameter names for pop-up menus
         
     // These are the MULTI Banks
-    public static final String[] BANKS = { "IA", "IB", "IC", "ID", "EA", "EB", "EC", "ED"};
+    public static final String[] BANKS = { "Internal", "External"};
+    public static final String[] GROUPS = { "A", "B", "C", "D" };	
     
     // These are the SINGLE banks
-    public static final String[] INTERNAL_BANKS = { "IA", "IB", "IC", "ID", "iA", "iB", "iC", "iD"};
-    public static final String[] EXTERNAL_BANKS = { "EA", "EB", "EC", "ED", "eA", "eB", "eC", "eD"};
+    //public static final String[] INTERNAL_BANKS = { "IA", "IB", "IC", "ID", "iA", "iB", "iC", "iD"};
+    //public static final String[] EXTERNAL_BANKS = { "EA", "EB", "EC", "ED", "eA", "eB", "eC", "eD"};
+    //public static final String[] SINGLE_BANKS = { "I", "E", "i", "e" };
+    public static final String[] SINGLE_GROUPS = { "A", "B", "C", "D" };	
     public static final String[] KEYS = new String[] { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
     public static final String[] VELOCITY_SWITCHES = { "All", "Soft", "Loud" };
     public static final String[] PLAY_MODES = { "Keyboard", "MIDI", "Both" };
@@ -106,8 +109,11 @@ public class KawaiK1Multi extends Synth
         {
         JComboBox bank = new JComboBox(BANKS);
         bank.setSelectedIndex(model.get("bank"));
+
+        JComboBox group = new JComboBox(GROUPS);
+        group.setSelectedIndex(model.get("number") / 8);
         
-        JTextField number = new SelectedTextField("" + (model.get("number") + 1), 3);
+        JTextField number = new SelectedTextField("" + (model.get("number") % 8 + 1), 3);
 
         while(true)
             {
@@ -133,10 +139,10 @@ public class KawaiK1Multi extends Synth
             n--;
                                 
             int i = bank.getSelectedIndex();
-                        
+            int g = group.getSelectedIndex();
                         
             change.set("bank", i);
-            change.set("number", n);
+            change.set("number", g * 8 + n);
                         
             return true;
             }
@@ -271,24 +277,16 @@ public class KawaiK1Multi extends Synth
 
         hbox.add(vbox);
                 
-                
-                                
-        comp = new LabelledDial("Bank", this, "section" + src + "bank", color, 0, 7)
-            {
-            public String map(int val)
-                {
-                int multibank = model.get("bank", 0);
-                if (multibank < 4)
-                    return INTERNAL_BANKS[val];
-                else
-                    return EXTERNAL_BANKS[val];
-                }
-            };
-        model.removeMetricMinMax("section" + src + "bank");
-        hbox.add(comp);
-        
-        comp = new LabelledDial("Number", this, "section" + src + "number", color, 0, 7, -1);
-        model.removeMetricMinMax("section" + src + "number");
+        comp = new LabelledDial("Patch", this, "section" + src + "singleno", color, 0, 127)
+        	{
+        	public String map(int val)
+        		{
+        		return (model.get("bank") == 0 ? (val < 32 ? "I" : "i") : (val < 32 ? "E" : "e")) +
+        				SINGLE_GROUPS[(val % 32) / 4] + 
+        				((val % 32) % 4);
+        		}
+        	};
+        model.removeMetricMinMax("section" + src + "singleno");
         hbox.add(comp);
 
         comp = new LabelledDial("Poly", this, "section" + src + "poly", color, 0, 9)
@@ -401,14 +399,14 @@ public class KawaiK1Multi extends Synth
     "name10",
     "volume",
                 
-    "section1singleno",                     // *
-    "section2singleno",                     // *
-    "section3singleno",                     // *
-    "section4singleno",                     // *
-    "section5singleno",                     // *
-    "section6singleno",                     // *
-    "section7singleno",                     // *
-    "section8singleno",                     // *
+    "section1singleno",                     
+    "section2singleno",                     
+    "section3singleno",                     
+    "section4singleno",                     
+    "section5singleno",                     
+    "section6singleno",                     
+    "section7singleno",                     
+    "section8singleno",                     
 
     "section1lowkey",
     "section2lowkey",
@@ -480,8 +478,8 @@ public class KawaiK1Multi extends Synth
         {
         if (data[3] == (byte)0x20) // single
             {
-            model.set("bank", ((data[7] - 64) / 8) + (data[6] == 0x00 ? 0 : 4));
-            model.set("number", (data[7] - 64) % 8);
+            model.set("bank", (data[6] == 0 ? 0 : 1));
+            model.set("number", (data[7] - 64));
             return subparse(data, 8);
             }
         else                            // block 
@@ -512,8 +510,8 @@ public class KawaiK1Multi extends Synth
             
             boolean internal = (data[6] == 0);
             
-            model.set("bank", (patchNum / 8) + (internal ? 0 : 4));
-            model.set("number", patchNum % 8);
+            model.set("bank", (data[6] == 0 ? 0 : 1));			// (patchNum / 16) + (data[6] == 0x00 ? 0 : 4));
+            model.set("number", patchNum);						// patchNum % 16);
 
             // okay, we're loading and editing patch number patchNum.  Here we go.
             return subparse(data, patchNum * 76 + 8);         
@@ -534,6 +532,7 @@ public class KawaiK1Multi extends Synth
                 {
                 name[i] = data[i + pos];
                 }
+            /*
             else if (key.endsWith("singleno"))
                 {
                 int bank = data[i + pos] / 8;
@@ -542,6 +541,7 @@ public class KawaiK1Multi extends Synth
                 model.set("section" + section + "bank", bank);
                 model.set("section" + section + "number", number);
                 }
+            */
             else if (key.endsWith("poly_output_playmode1"))
                 {
                 final int NEXT_SECTION = 8;
@@ -633,10 +633,12 @@ public class KawaiK1Multi extends Synth
                 {
                 data[i] = (byte)name.charAt(i);
                 }
+            /*
             else if (key.endsWith("singleno"))
                 {
                 data[i] = (byte)(model.get("section" + section + "bank") * 8 + model.get("section" + section + "number"));
                 }
+            */
             else if (key.endsWith("poly_output_playmode1"))
                 {
                 data[i] = (byte)(((model.get("section" + section + "playmode") & 1) << 6) | (model.get("section" + section + "output") << 4) | (model.get("section" + section + "poly")));
@@ -654,8 +656,8 @@ public class KawaiK1Multi extends Synth
         boolean external;
         byte position;
         
-        external = (tempModel.get("bank") > 3);
-        position = (byte)((tempModel.get("bank") & 3) * 8 + (tempModel.get("number")) + 64);
+        external = tempModel.get("bank") > 0; 									
+        position = (byte)(tempModel.get("number") + 64);		
                         
         byte[] result = new byte[EXPECTED_SYSEX_LENGTH];
         result[0] = (byte)0xF0;
@@ -665,11 +667,10 @@ public class KawaiK1Multi extends Synth
         result[4] = (byte)0x00;
         result[5] = (byte)0x03;
         result[6] = (byte)(external ? 0x01 : 0x00);
+        result[7] = (byte)position;
         
         if (toWorkingMemory && sendKawaiParametersInBulk)
             result[7] = (byte)95;
-        else
-            result[7] = (byte)position;
         
         System.arraycopy(data, 0, result, 8, data.length);
         result[8 + data.length] = (byte)produceChecksum(data);
@@ -681,7 +682,7 @@ public class KawaiK1Multi extends Synth
     public byte[] requestDump(Model tempModel)
         {
         boolean external = (tempModel.get("bank") > 3);
-        byte position = (byte)((tempModel.get("bank") & 3) * 8 + (tempModel.get("number")) + 64);  // 64 for "multi", that is, 64...127 for A1 .... D16
+        int position =  tempModel.get("number") + 64;
         return new byte[] { (byte)0xF0, 0x40, (byte)getChannelOut(), 0x00, 0x00, 0x03, 
             (byte)(external ? 0x02 : 0x00),
             (byte)position, (byte)0xF7};
@@ -768,11 +769,11 @@ public class KawaiK1Multi extends Synth
         int number = model.get("number");
         
         number++;
-        if (number >= 8)
+        if (number >= 32)
             {
             bank++;
             number = 0;
-            if (bank >= 8)
+            if (bank >= 2)
                 bank = 0;
             }
                 
@@ -790,7 +791,8 @@ public class KawaiK1Multi extends Synth
         if (!model.exists("number")) return null;
         if (!model.exists("bank")) return null;
         
-        return BANKS[model.get("bank")] + (model.get("number") + 1 < 10 ? "0" : "") + ((model.get("number") + 1));
+        int number = model.get("number") ;
+        return (model.get("bank") == 0 ? "I" : "E") + GROUPS[number / 8] + ((number % 8) + 1 < 10 ? "0" : "") + ((number % 8) + 1);
         }
 
     public Object adjustBankSysexForEmit(byte[] data, Model model, int bank)
@@ -799,9 +801,47 @@ public class KawaiK1Multi extends Synth
         return data; 
         }
 
+
+
     public boolean getSupportsPatchWrites() { return true; }
-    public String[] getPatchNumberNames() { return buildIntegerNames(8, 1); }
+    public boolean getSupportsBankReads() { return true; }			// we read right now but don't write
+
+    public String[] getPatchNumberNames()
+        { 
+		String[] str = new String[32];
+		for(int i = 0; i < 4; i++)
+			{
+			for(int j = 0; j < 8; j++)
+				{
+				str[i * 8 + j] = GROUPS[i] + (j + 1);
+				}
+    		}
+    	return str;
+    	}
+
     public String[] getBankNames() { return BANKS; }
-    public boolean[] getWriteableBanks() { return buildBankBooleans(8, 0, 0); }
+    public boolean[] getWriteableBanks() { return new boolean[]{ true, true }; }
     public int getPatchNameLength() { return 10; }
+ 
+    public int parseFromBank(byte[] bankSysex, int number)
+    	{ 
+		model.set("bank", (bankSysex[6] == 0 ? 0 : 1));			// (patchNum / 16) + (data[6] == 0x00 ? 0 : 4));
+        model.set("number", number);										
+
+		// okay, we're loading and editing patch number patchNum.  Here we go.
+		return subparse(bankSysex, number * 77 + 8);         
+    	}
+
+    public int getBank(byte[] bankSysex) 
+    	{ 
+    	return (bankSysex[6] == 0 ? 0 : 1);
+    	}
+
+    public byte[] requestBankDump(int bank) 
+    	{
+    	return new byte[] { (byte)0xF0, 0x40, (byte)getChannelOut(), 0x01, 0x00, 0x11, 
+    		(byte)(bank == 0 || bank == 2 ? 0 : 1),  		// int vs ext
+    		0x40,											// Multi
+    		(byte)0xF7 }; 
+    	}
     }

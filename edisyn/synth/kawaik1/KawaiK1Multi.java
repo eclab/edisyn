@@ -31,11 +31,7 @@ public class KawaiK1Multi extends Synth
     public static final String[] BANKS = { "Internal", "External"};
     public static final String[] GROUPS = { "A", "B", "C", "D" };	
     
-    // These are the SINGLE banks
-    //public static final String[] INTERNAL_BANKS = { "IA", "IB", "IC", "ID", "iA", "iB", "iC", "iD"};
-    //public static final String[] EXTERNAL_BANKS = { "EA", "EB", "EC", "ED", "eA", "eB", "eC", "eD"};
-    //public static final String[] SINGLE_BANKS = { "I", "E", "i", "e" };
-    public static final String[] SINGLE_GROUPS = { "A", "B", "C", "D" };	
+    public static final String[] SINGLE_GROUPS = GROUPS;	// { "A", "B", "C", "D" };	
     public static final String[] KEYS = new String[] { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
     public static final String[] VELOCITY_SWITCHES = { "All", "Soft", "Loud" };
     public static final String[] PLAY_MODES = { "Keyboard", "MIDI", "Both" };
@@ -479,7 +475,7 @@ public class KawaiK1Multi extends Synth
         if (data[3] == (byte)0x20) // single
             {
             model.set("bank", (data[6] == 0 ? 0 : 1));
-            model.set("number", (data[7] - 64));
+            model.set("number", (data[7] - 64));				// A1...D8 starts at 64
             return subparse(data, 8);
             }
         else                            // block 
@@ -508,10 +504,8 @@ public class KawaiK1Multi extends Synth
             int patchNum = showBankSysexOptions(data, n);
             if (patchNum < 0) return PARSE_CANCELLED;
             
-            boolean internal = (data[6] == 0);
-            
-            model.set("bank", (data[6] == 0 ? 0 : 1));			// (patchNum / 16) + (data[6] == 0x00 ? 0 : 4));
-            model.set("number", patchNum);						// patchNum % 16);
+            model.set("bank", (data[6] == 0 ? 0 : 1));
+            model.set("number", patchNum);
 
             // okay, we're loading and editing patch number patchNum.  Here we go.
             return subparse(data, patchNum * 76 + 8);         
@@ -606,8 +600,8 @@ public class KawaiK1Multi extends Synth
         if (sendKawaiParametersInBulk)
             {
             Model tempModel = buildModel();
-            tempModel.set("bank", 7);
-            tempModel.set("number", 7);
+            tempModel.set("bank", model.get("bank"));			// I or E
+            tempModel.set("number", 63);						// D8
             changePatch(tempModel);
             simplePause(getPauseAfterChangePatch());
             }
@@ -653,12 +647,6 @@ public class KawaiK1Multi extends Synth
                 }
             }
 
-        boolean external;
-        byte position;
-        
-        external = tempModel.get("bank") > 0; 									
-        position = (byte)(tempModel.get("number") + 64);		
-                        
         byte[] result = new byte[EXPECTED_SYSEX_LENGTH];
         result[0] = (byte)0xF0;
         result[1] = (byte)0x40;
@@ -666,11 +654,11 @@ public class KawaiK1Multi extends Synth
         result[3] = (byte)0x20;
         result[4] = (byte)0x00;
         result[5] = (byte)0x03;
-        result[6] = (byte)(external ? 0x01 : 0x00);
-        result[7] = (byte)position;
+        result[6] = (byte)tempModel.get("bank");
+        result[7] = (byte)(tempModel.get("number") + 64);	// A1 ... D8 starts at 64	
         
         if (toWorkingMemory && sendKawaiParametersInBulk)
-            result[7] = (byte)95;
+            result[7] = (byte)95;							// D8
         
         System.arraycopy(data, 0, result, 8, data.length);
         result[8 + data.length] = (byte)produceChecksum(data);
@@ -681,10 +669,10 @@ public class KawaiK1Multi extends Synth
 
     public byte[] requestDump(Model tempModel)
         {
-        boolean external = (tempModel.get("bank") > 3);
-        int position =  tempModel.get("number") + 64;
+        boolean internal = (tempModel.get("bank") == 0);
+        int position =  tempModel.get("number") + 64;					// A1 ... D8 starts at 64
         return new byte[] { (byte)0xF0, 0x40, (byte)getChannelOut(), 0x00, 0x00, 0x03, 
-            (byte)(external ? 0x02 : 0x00),
+            (byte)(internal ? 0x00 : 0x01),
             (byte)position, (byte)0xF7};
         }
                 
@@ -749,13 +737,12 @@ public class KawaiK1Multi extends Synth
 
     public void changePatch(Model tempModel)
         {
-        byte BB = (byte)tempModel.get("bank");
         byte NN = (byte)tempModel.get("number");
         
         /// The K1 cannot change patches to and from internal or external I believe.  :-(
         /// So I'm not sure what to do here.        
-        if (BB >= 8) BB -= 8;
-        int PC = (BB * 8 + NN) + 64;
+        
+        int PC = NN + 64;
         try 
             {
             tryToSendMIDI(new ShortMessage(ShortMessage.PROGRAM_CHANGE, getChannelOut(), PC, 0));
@@ -791,8 +778,10 @@ public class KawaiK1Multi extends Synth
         if (!model.exists("number")) return null;
         if (!model.exists("bank")) return null;
         
-        int number = model.get("number") ;
-        return (model.get("bank") == 0 ? "I" : "E") + GROUPS[number / 8] + ((number % 8) + 1 < 10 ? "0" : "") + ((number % 8) + 1);
+        int num = model.get("number") ;
+        int bank = model.get("bank");
+
+        return BANKS[bank] + GROUPS[num/8] + (num % 8 + 1);
         }
 
     public Object adjustBankSysexForEmit(byte[] data, Model model, int bank)
@@ -825,7 +814,7 @@ public class KawaiK1Multi extends Synth
  
     public int parseFromBank(byte[] bankSysex, int number)
     	{ 
-		model.set("bank", (bankSysex[6] == 0 ? 0 : 1));			// (patchNum / 16) + (data[6] == 0x00 ? 0 : 4));
+		model.set("bank", bankSysex[6] == 0 ? 0 : 1);
         model.set("number", number);										
 
 		// okay, we're loading and editing patch number patchNum.  Here we go.
@@ -839,9 +828,9 @@ public class KawaiK1Multi extends Synth
 
     public byte[] requestBankDump(int bank) 
     	{
-    	return new byte[] { (byte)0xF0, 0x40, (byte)getChannelOut(), 0x01, 0x00, 0x11, 
-    		(byte)(bank == 0 || bank == 2 ? 0 : 1),  		// int vs ext
-    		0x40,											// Multi
+    	return new byte[] { (byte)0xF0, 0x40, (byte)getChannelOut(), 0x01, 0x00, 0x03, 
+    		(byte)bank,  					// int vs ext
+    		0x40,							// Multi
     		(byte)0xF7 }; 
     	}
     }

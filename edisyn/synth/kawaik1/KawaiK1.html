@@ -26,8 +26,6 @@ The Kawai K1 has no sysex command which would enable Edisyn to send a patch to i
 <ul>
 <li>The Kawai K1's sysex is <b>slow</b>: individual parameter changes can only occur once every 50ms.  Indeed Edisyn's patch editor has been set up so that every single MIDI event takes 50ms just in case.  See the discussion about menu options above.
 
-<p><li>Because the K1 has no easy way to send patches to temporary working memory (see menu options above), the <b>Send to Patch...</b> option has been disabled.
-
 <p><li>
 You can't set mute as a parameter change.  So when you set mute, Edisyn will just tell the synth to turn the volume (VCA Envelope Level) to 0 for that source.  Further, if you write a patch with mute set, Edisyn will write the patch with the mute unset, but zero the volume.  
 

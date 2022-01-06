@@ -378,7 +378,7 @@ public class Librarian extends JPanel
                 String name = synth.getModel().get("name","" + synth.getPatchLocationName(synth.getModel()));
                 int number = synth.getModel().get("number", -1);
                 int bank = synth.getModel().get("bank", -1);
-                byte[][] data = synth.cutUpSysex(synth.flatten(synth.emitAll(synth.getModel(), false, true)));
+                byte[][] data = synth.cutUpSysex(synth.flatten(synth.emitAll(synth.getModel(), false, true)));			// we're pretending we're writing to a file here
                 Patch patch = new Patch(synthNum, data, false);
                 patch.name = name;
                 patch.bank = (bank == -1 ? 0 : bank);

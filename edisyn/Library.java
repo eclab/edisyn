@@ -56,7 +56,7 @@ public class Library extends AbstractTableModel
         synth.undo.setWillPush(false);
         Model backup = (Model)(synth.model.clone());
         synth.loadDefaults();
-        byte[][] data = synth.cutUpSysex(synth.flatten(synth.emitAll(synth.getModel(), false, true)));
+        byte[][] data = synth.cutUpSysex(synth.flatten(synth.emitAll(synth.getModel(), false, true)));		// we're pretending we're writing to a file here
         initPatch = new Patch(synthNum, data, false);
         synth.setModel(backup);                                 // restore
         synth.undo.setWillPush(true);
@@ -588,42 +588,46 @@ public class Library extends AbstractTableModel
                 int b = (bank == ALL_PATCHES ? i / getBankSize() : bank);
                 int n = (bank == ALL_PATCHES ? i % getBankSize() : i);
                 
-                if (hasBanks)
-                    {
-                    location.set("bank", b);
-                    }
-                location.set("number", n);
-
-                // parse
-                boolean localFailed = false;
-                Patch p = getPatch(b, n);
-                if (p == null) p = initPatch;
-                byte[][] sysex = p.sysex;
-                for(int j = 0; j < sysex.length; j++)
-                    {
-                    int result = synth.parse(sysex[j], true);                     //dunno, from file or not?
-                    if (result == Synth.PARSE_CANCELLED ||
-                        result == Synth.PARSE_FAILED ||
-                        (result == Synth.PARSE_INCOMPLETE && j == p.sysex.length - 1))  // last one
-                        {
-                        failed = true;
-                        localFailed = true;
-                        break;
-                        }
-                    }
-                    
-                if (localFailed) continue;
-                                        
-                // now emit
-                Object[] objs = synth.emitAll(location, false, toFile);
-                for(int o = 0; o < objs.length; o++)
-                	data.add(objs[o]);
-                	
-                if (!toFile)
+                if (isWriteableBank(b) || toFile)
                 	{
-                	int pause = synth.getPauseAfterWritePatch();
-                	if (pause > 0) data.add(Integer.valueOf(pause));
-                	}
+					if (hasBanks)
+						{
+						location.set("bank", b);
+						}
+					location.set("number", n);
+
+					// parse
+					boolean localFailed = false;
+					Patch p = getPatch(b, n);
+					if (p == null) p = initPatch;
+					byte[][] sysex = p.sysex;
+					for(int j = 0; j < sysex.length; j++)
+						{
+						int result = synth.parse(sysex[j], true);                     //dunno, from file or not?
+						if (result == Synth.PARSE_CANCELLED ||
+							result == Synth.PARSE_FAILED ||
+							(result == Synth.PARSE_INCOMPLETE && j == p.sysex.length - 1))  // last one
+							{
+							failed = true;
+							localFailed = true;
+							break;
+							}
+						}
+					
+					if (localFailed) continue;
+										
+					// now emit
+					System.err.println("Bank " + b + " Number " + n);
+					Object[] objs = synth.emitAll(location, false, toFile);
+					for(int o = 0; o < objs.length; o++)
+						data.add(objs[o]);
+					
+					if (!toFile)
+						{
+						int pause = synth.getPauseAfterWritePatch();
+						if (pause > 0) data.add(Integer.valueOf(pause));
+						}
+					}
                 }
         	synth.getModel().setUpdateListeners(true);
                 
@@ -703,7 +707,7 @@ public class Library extends AbstractTableModel
 			new String[] { "As Separate Files", "To Bulk File", "Cancel" },
 			0, "Save Patches", "Save the Patches...");
 			
-		if (result == 2) return;
+		if (result == 2 || result == -1) return;
 		else if (result == 1)
         	{
 			Object[] d = emitRange(bank, start, len, true, (combo != null && combo.getSelectedIndex() == 1));

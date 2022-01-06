@@ -86,10 +86,16 @@ public class SequentialProphetRev2 extends Synth
     JComponent gseqeuncerPanelB;
     JComponent polyseqPanelB;
     
-    boolean sendAssignableParams;
+    //boolean sendAssignableParams;
+    
+    boolean writeToF;
+    public static final String WRITE_TO_F_KEY = "WriteToF";
     
     public SequentialProphetRev2()
         {
+        String m = getLastX(WRITE_TO_F_KEY, getSynthName());
+        writeToF = (m == null ? false : Boolean.parseBoolean(m));
+        
         int panel = 0;
                 
         for(int i = 0; i < nrpnparameters.length; i++)
@@ -357,7 +363,7 @@ public class SequentialProphetRev2 extends Synth
         comp = new Chooser("Keyboard Mode", this, "keyboardmode", params);
         inner.addLast(comp);
         vbox.add(inner);
- 
+                
         comp = new StringComponent("Patch Name", this, "name", MAXIMUM_NAME_LENGTH, "Name must be up to 20 characters.")
             {
             public String replace(String val)
@@ -373,7 +379,7 @@ public class SequentialProphetRev2 extends Synth
             };
         vbox.add(comp);
         hbox.add(vbox);
-
+        
         comp = new LabelledDial("Split Point", this, "splitpoint", color, 0, 120)
             {
             public String map(int val)
@@ -1179,7 +1185,8 @@ public class SequentialProphetRev2 extends Synth
 
     public boolean gatherPatchInfo(String title, Model changeThis, boolean writing)     
         {
-        String[] banks = (writing? WRITEABLE_BANKS : BANKS);
+        String[] banks = (writing ? WRITEABLE_BANKS : BANKS);
+        if (writeToF) banks = BANKS;            // we're permitting everything
                 
         JComboBox bank = new JComboBox(banks);
         int num = model.get("number") + 1;
@@ -5958,6 +5965,23 @@ public class SequentialProphetRev2 extends Synth
         {
         JMenu menu = new JMenu("Prophet Rev2");
         menubar.add(menu);
+
+        JMenuItem check = new JCheckBoxMenuItem("Writeable Factory Banks");
+        check.setSelected(writeToF);
+        check.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                if (!check.isSelected() ||
+                    showSimpleConfirm("Writeable Factory Banks", "Treat banks F1 ... F4 as writeable?"))
+                    {
+                    setLastX("" + check.isSelected(), WRITE_TO_F_KEY, getSynthName(), true);
+                    }
+                else check.setSelected(false);
+                }
+            });
+        menu.add(check);
+        menu.addSeparator();
         
         JMenuItem a2b = new JMenuItem("Copy A -> B");
         menu.add(a2b);
@@ -6229,10 +6253,17 @@ public class SequentialProphetRev2 extends Synth
         }
 
         
-        
+    public int getPauseAfterWritePatch() { return 10; }
+       
     public String[] getPatchNumberNames() { return buildIntegerNames(128, 1); }
     public String[] getBankNames() { return BANKS; }
-    public boolean[] getWriteableBanks() { return new boolean[] { true, true, true, true, false, false, false, false }; }
+    public boolean[] getWriteableBanks() 
+        { 
+        if (writeToF)
+            return new boolean[] { true, true, true, true, true, true, true, true }; 
+        else
+            return new boolean[] { true, true, true, true, false, false, false, false }; 
+        }
     public boolean getSupportsPatchWrites() { return true; }
     public int getPatchNameLength() { return MAXIMUM_NAME_LENGTH; }
     }

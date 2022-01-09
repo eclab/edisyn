@@ -28,7 +28,7 @@ public class KawaiK1Multi extends Synth
     /// Various collections of parameter names for pop-up menus
         
     // These are the MULTI Banks
-    public static final String[] BANKS = { "Internal", "External"};
+    public static final String[] BANKS = { "Int", "Ext"};
     public static final String[] GROUPS = { "A", "B", "C", "D" };	
     
     public static final String[] SINGLE_GROUPS = GROUPS;	// { "A", "B", "C", "D" };	
@@ -156,7 +156,7 @@ public class KawaiK1Multi extends Synth
                 
         VBox vbox = new VBox();
         HBox hbox2 = new HBox();
-        comp = new PatchDisplay(this, 4);
+        comp = new PatchDisplay(this, 8);
         hbox2.add(comp);
         vbox.add(hbox2);
         
@@ -218,10 +218,14 @@ public class KawaiK1Multi extends Synth
 
         params = PLAY_MODES;
         comp = new Chooser("Play Mode [K1]", this, "section" + src + "playmode", params);
-        vbox.addBottom(comp);
+        vbox.add(comp);
         hbox.add(vbox);
         
         vbox = new VBox();
+
+        params = OUTPUT;
+        comp = new Chooser("Output", this, "section" + src + "output", params);
+        vbox.add(comp);
 
         comp = new PushButton("Show")
             {
@@ -268,21 +272,19 @@ public class KawaiK1Multi extends Synth
                     }
                 }
             };
-        vbox.add(comp);
-
-        params = OUTPUT;
-        comp = new Chooser("Output", this, "section" + src + "output", params);
-        vbox.addBottom(comp);
+        vbox.addLast(comp);
 
         hbox.add(vbox);
                 
-        comp = new LabelledDial("Patch", this, "section" + src + "singleno", color, 0, 127)
+        comp = new LabelledDial("Patch", this, "section" + src + "singleno", color, 0, 63)
         	{
         	public String map(int val)
         		{
-        		return (model.get("bank") == 0 ? (val < 32 ? "I" : "i") : (val < 32 ? "E" : "e")) +
-        				SINGLE_GROUPS[(val % 32) / 4] + 
-        				((val % 32) % 4);
+        		System.err.println(val);
+        		return (model.get("bank") == 0 ? (val < 32 ? "I" : "i") : (val < 32 ? "E" : "e")) +	
+        				// SINGLE_GROUPS (which is basically KawaiK1.GROUPS) is exactly the same as KawaiK1Multi.GROUPS
+        				SINGLE_GROUPS[(val % 32) / 8] + 
+        				(val % 8);
         		}
         	};
         model.removeMetricMinMax("section" + src + "singleno");
@@ -768,7 +770,7 @@ public class KawaiK1Multi extends Synth
         int num = model.get("number") ;
         int bank = model.get("bank");
 
-        return BANKS[bank] + GROUPS[num/8] + (num % 8 + 1);
+        return BANKS[bank] + " " + GROUPS[num/8] + (num % 8 + 1);
         }
 
     public Object adjustBankSysexForEmit(byte[] data, Model model, int bank)

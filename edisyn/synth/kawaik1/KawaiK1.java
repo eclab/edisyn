@@ -1303,8 +1303,8 @@ public class KawaiK1 extends Synth
         
         /// The K1 cannot change patches to and from internal or external I believe.  :-(
         /// So I'm not sure what to do here.        
-        if (BB == 3) BB = 2;		//	e -> i
-        if (BB == 1) BB = 0;		//	E -> I
+        if (BB == 3) BB = 2;			//	e -> i
+        else if (BB == 1) BB = 0;		//	E -> I
         
         int PC = (BB * 16 + NN);		// yes, * 16 rather than * 32, since BB is 0 or 2
         try 

@@ -253,8 +253,11 @@ public class KawaiK1Multi extends Synth
                             public void run() 
                                 { 
                                 Model tempModel = buildModel();
-                                tempModel.set("bank", KawaiK1Multi.this.model.get("section" + src + "bank"));
-                                tempModel.set("number", KawaiK1Multi.this.model.get("section" + src + "number"));
+                                int val = KawaiK1Multi.this.model.get("section" + src + "singleno");
+                                // If my bank is INTERNAL (0) then if the value is < 32 (upper) then it's I (0), else it's i (2)
+                                // If my bank is EXTERNAL (1) then if the vlaue is < 32 (upper) then it's E (1), else it's e (3)
+                                tempModel.set("bank", (model.get("bank") == 0) ? (val < 32 ? 0 : 2) : (val < 32 ? 1 : 3));
+                                tempModel.set("number", val % 32);
                                 synth.performRequestDump(tempModel, false);
                                 }
                             });
@@ -526,16 +529,6 @@ public class KawaiK1Multi extends Synth
                 {
                 name[i] = data[i + pos];
                 }
-            /*
-            else if (key.endsWith("singleno"))
-                {
-                int bank = data[i + pos] / 8;
-                int number = data[i + pos] % 8;
-                
-                model.set("section" + section + "bank", bank);
-                model.set("section" + section + "number", number);
-                }
-            */
             else if (key.endsWith("poly_output_playmode1"))
                 {
                 final int NEXT_SECTION = 8;
@@ -627,12 +620,6 @@ public class KawaiK1Multi extends Synth
                 {
                 data[i] = (byte)name.charAt(i);
                 }
-            /*
-            else if (key.endsWith("singleno"))
-                {
-                data[i] = (byte)(model.get("section" + section + "bank") * 8 + model.get("section" + section + "number"));
-                }
-            */
             else if (key.endsWith("poly_output_playmode1"))
                 {
                 data[i] = (byte)(((model.get("section" + section + "playmode") & 1) << 6) | (model.get("section" + section + "output") << 4) | (model.get("section" + section + "poly")));
@@ -828,9 +815,12 @@ public class KawaiK1Multi extends Synth
 
     public byte[] requestBankDump(int bank) 
     	{
-    	return new byte[] { (byte)0xF0, 0x40, (byte)getChannelOut(), 0x01, 0x00, 0x03, 
+    	return new byte[] 
+    		{ 
+    		(byte)0xF0, 0x40, (byte)getChannelOut(), 0x01, 0x00, 0x03, 
     		(byte)bank,  					// int vs ext
     		0x40,							// Multi
-    		(byte)0xF7 }; 
+    		(byte)0xF7 
+    		}; 
     	}
     }

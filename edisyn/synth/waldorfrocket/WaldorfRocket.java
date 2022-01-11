@@ -41,7 +41,7 @@ public class WaldorfRocket extends Synth
         
     public WaldorfRocket()
         {
-        // altMap = getLastXAsBoolean("altMap", getSynthName(), false, true);
+        // altMap = getLastXAsBoolean("altMap", getSynthClassName(), false, true);
 
         for(int i = 0; i < parameters.length; i++)
             {
@@ -136,7 +136,7 @@ public class WaldorfRocket extends Synth
           public void actionPerformed(ActionEvent e)
           {
           altMap = check.isSelected();
-          setLastX("" + (altMap ? true : false), "altMap", getSynthName(), true);
+          setLastX("" + (altMap ? true : false), "altMap", getSynthClassName(), true);
           tryToSendSysex(new byte[]
           {
           (byte)0xF0, (byte)0x3E, (byte)0x17, (byte)0x00, 

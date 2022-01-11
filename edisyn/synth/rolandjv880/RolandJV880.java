@@ -1794,4 +1794,5 @@ public class RolandJV880 extends Synth
 
 	public int getPatchNameLength() { return 12; }
 
+    public boolean librarianTested() { return true; }
     }

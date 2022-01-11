@@ -67,6 +67,8 @@ public class Librarian extends JPanel
 
     public Librarian(Synth synth)
         {
+        warnLibrarian(synth);
+        
         Library model = new Library(synth);
         
         setLayout(new BorderLayout());
@@ -1060,9 +1062,6 @@ public static JMenu buildLibrarianMenu(Synth synth)
             }
                                 
         fill(table, column, row, len, null);		// getLibrary().getInitPatch());
-
-        // Change the selection
-        //table.clearSelection();
         }
 
     /** Clears current selected bank. */
@@ -1089,24 +1088,32 @@ public static JMenu buildLibrarianMenu(Synth synth)
             }
                                 
         fill(table, column, 0, getLibrary().getBankSize(), null);		// getLibrary().getInitPatch());
-
-        // Change the selection
-        //table.clearSelection();
         }
+
+	public void pushUndo()
+		{
+		getLibrary().pushUndo();
+		updateUndoRedo();
+		}
 
     /** Clears all. */
     public void clearAll()
+    	{
+    	clearAll(true);
+    	}
+    	
+    public void clearAll(boolean pushUndo)
         {
-        getLibrary().pushUndo();
-		updateUndoRedo();
+        if (pushUndo)
+        	{
+        	getLibrary().pushUndo();
+			updateUndoRedo();
+			}
 
         for(int i = 0; i < getLibrary().getNumBanks() + 1; i++)                     
         	{
         	fill(table, i, 0, getLibrary().getBankSize(), null);		// getLibrary().getInitPatch());
         	}
-
-        // Change the selection
-        //table.clearSelection();
         }
 
     /** Sets all the values of a given set of locations to copies of a certain value. */
@@ -1173,8 +1180,6 @@ public static JMenu buildLibrarianMenu(Synth synth)
     /** Moves one set of locations to another, clearing the original locations. */
     public void move(Librarian from, JTable fromTable, int fromCol, int fromRow, int len, Librarian to, JTable toTable, int toCol, int toRow)
         {
-        copy(from, fromTable, fromCol, fromRow, len, to, toTable, toCol, toRow, false);
-        
         if (!isPatchWell(fromTable))            // as opposed to patchWell
             {
             if (fromTable != toTable)               // don't double-undo
@@ -1183,7 +1188,9 @@ public static JMenu buildLibrarianMenu(Synth synth)
                 from.updateUndoRedo();
                 }
             }
-        fill(fromTable, fromCol, fromRow, len, null);		// to.getLibrary().getInitPatch());
+
+        copy(from, fromTable, fromCol, fromRow, len, to, toTable, toCol, toRow, false);
+        fill(fromTable, fromCol, fromRow, len, null);
 
         int antiTo = antiCol(toTable, toCol);
 
@@ -1205,7 +1212,6 @@ public static JMenu buildLibrarianMenu(Synth synth)
         else
             {
 	        Synth toSynth = to.getLibrary().getSynth();
-        
             toSynth.getUndo().push(toSynth.getModel());
             }
 
@@ -1410,36 +1416,31 @@ public static JMenu buildLibrarianMenu(Synth synth)
         // 3. The data being dropped (from which we can get the table which initiated the drop and other stuff)
         public boolean importData(TransferHandler.TransferSupport info) 
             {
-            JTable target = (JTable) info.getComponent();
-
-            // find the from-librarian
-            JComponent c = target;
+            // find the to-librarian
+            JTable toTable = (JTable)(info.getComponent());
+            JComponent c = toTable;
             while(!(c instanceof Librarian))
                 c = (JComponent)(c.getParent());
-            Librarian from = (Librarian) c;
+            Librarian to = (Librarian) c;
 
             // reset the cursor
-            target.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
+            toTable.setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
 
             // let's just call this again to double check
             if (!canImport(info)) return false;
           
             JTable.DropLocation dl = (JTable.DropLocation) info.getDropLocation();
-            JTable toTable = (JTable)(info.getComponent());
-            int col = Librarian.col(toTable, dl.getColumn());
-            int row = dl.getRow();
 
             try 
                 {
                 PatchLocationSet pls = (PatchLocationSet)(info.getTransferable().getTransferData(localObjectFlavor));
                           
-                // find the to-librarian
-                c = toTable;
+                // find the from-librarian
+				JTable fromTable = pls.table;
+				c = fromTable;
                 while(!(c instanceof Librarian))
                     c = (JComponent)(c.getParent());
-                Librarian to = (Librarian) c;
-                          
-				JTable fromTable = pls.table;
+                Librarian from = (Librarian) c;
 				int fromCol = pls.column;
 				int fromRow = pls.row;
 				int len = pls.length;
@@ -1487,6 +1488,17 @@ public static JMenu buildLibrarianMenu(Synth synth)
             {
             ((JTable)c).setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
             }
-
         }
+
+	void warnLibrarian(Synth synth)
+		{
+		if (!synth.getLastXAsBoolean("LibrarianWarned", synth.getSynthClassName(), false, true))
+			{
+			synth.showSimpleMessage("Librarian Untested", 
+				"The Librarian for the " + synth.getSynthNameLocal() + " has not yet been tested because\n" +
+				"I no longer have a unit.  It may not work. If you have this synth, help me test it.\n" + 
+				"Send mail to sean@cs.gmu.edu");
+			synth.setLastX("" + true, "LibrarianWarned", synth.getSynthClassName(), true);
+			}
+		}
     }

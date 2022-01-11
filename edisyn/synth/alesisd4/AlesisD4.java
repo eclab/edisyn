@@ -64,7 +64,7 @@ public class AlesisD4 extends Synth
         {
         if (reenntrantBlock) return;
         reenntrantBlock = true;
-        if (store) setLastX("" + (!val), DM5_KEY, getSynthName(), false);
+        if (store) setLastX("" + (!val), DM5_KEY, getSynthClassName(), false);
         dm5 = val;
         updateTitle();
         updateChoosers();
@@ -78,7 +78,7 @@ public class AlesisD4 extends Synth
         {
         model.set("number", 0);
         
-        String m = getLastX(DM5_KEY, getSynthName());
+        String m = getLastX(DM5_KEY, getSynthClassName());
         dm5 = (m == null ? false : !Boolean.parseBoolean(m));
         
         VBox vbox = new VBox();

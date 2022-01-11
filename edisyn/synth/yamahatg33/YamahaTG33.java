@@ -210,7 +210,7 @@ public class YamahaTG33 extends Synth
         {
         if (save)
             {
-            setLastX("" + val, TYPE_KEY, getSynthName(), true);
+            setLastX("" + val, TYPE_KEY, getSynthClassName(), true);
             }
         synthType = val;
         synthTypeCombo.setSelectedIndex(val);  // hopefully this isn't recursive
@@ -255,7 +255,7 @@ public class YamahaTG33 extends Synth
 
     public YamahaTG33()
         {
-        String m = getLastX(TYPE_KEY, getSynthName());
+        String m = getLastX(TYPE_KEY, getSynthClassName());
         try
             {
             synthType = (m == null ? TYPE_TG33 : Integer.parseInt(m));

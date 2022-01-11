@@ -128,7 +128,7 @@ public class YamahaDX7 extends Synth implements ProvidesNN
         {
         if (save)
             {
-            setLastX("" + val, VOLCA_KEY, getSynthName(), true);
+            setLastX("" + val, VOLCA_KEY, getSynthClassName(), true);
             }
         volca = val;
         volcaCheck.setSelected(val);  // hopefully this isn't recursive

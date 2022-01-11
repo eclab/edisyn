@@ -147,7 +147,7 @@ public class CasioCZ extends Synth
         {
         if (save)
             {
-            setLastX("" + val, TYPE_KEY, getSynthName(), true);
+            setLastX("" + val, TYPE_KEY, getSynthClassName(), true);
             }
         synthType = val;
         synthTypeCombo.setSelectedIndex(val);  // hopefully this isn't recursive
@@ -158,7 +158,7 @@ public class CasioCZ extends Synth
 
     public CasioCZ()
         {
-        String m = getLastX(TYPE_KEY, getSynthName());
+        String m = getLastX(TYPE_KEY, getSynthClassName());
         try
             {
             synthType = (m == null ? TYPE_CZ1 : Integer.parseInt(m));
@@ -226,7 +226,7 @@ public class CasioCZ extends Synth
         
         // figure bank
         int mb = model.get("bank", 0);
-        int b = Synth.getLastXAsInt("lastbank", getSynthNameLocal(), -1, true);
+        int b = Synth.getLastXAsInt("lastbank", getSynthClassName(), -1, true);
         if (b == 12)    // CZ230S Writable Bank
             {
             bank.setSelectedIndex(b);
@@ -289,7 +289,7 @@ public class CasioCZ extends Synth
                         
             change.set("bank", i);
             change.set("number", n);
-            Synth.setLastX("" + i, "lastbank", getSynthNameLocal(), true);
+            Synth.setLastX("" + i, "lastbank", getSynthClassName(), true);
                         
             return true;
             }
@@ -1569,7 +1569,7 @@ public class CasioCZ extends Synth
     public JFrame sprout()
         {
         JFrame frame = super.sprout();
-        if (!checkAndSet("WindowsWarning", getSynthNameLocal()))
+        if (!checkAndSet("WindowsWarning", getSynthClassName()))
             {
             if (Style.isWindows() || Style.isUnix())
                 {

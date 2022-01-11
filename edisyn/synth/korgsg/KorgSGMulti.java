@@ -848,5 +848,6 @@ public class KorgSGMulti extends Synth
     public int getPatchNameLength() { return 10; }
 	public boolean getSupportsPatchWrites() { return true; }
 
+    public boolean librarianTested() { return true; }
     }
     

@@ -572,4 +572,5 @@ public class KawaiK4Effect extends Synth
     	return new byte[] { (byte)0xF0, 0x40, (byte)getChannelOut(), 0x01, 0x00, 0x04, (byte)(bank == 0 ? 0x01 : 0x03), 0x00, (byte)0xF7 }; 
     	}
 
+    public boolean librarianTested() { return true; }
     }

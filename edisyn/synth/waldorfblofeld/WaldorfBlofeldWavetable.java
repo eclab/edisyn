@@ -261,7 +261,7 @@ public class WaldorfBlofeldWavetable
             JTextField name = new JTextField(_name);
             JCheckBox updateEdisyn = new JCheckBox("");
             
-            updateEdisyn.setSelected(synth.getLastXAsBoolean("WavetableUpdate", synth.getSynthNameLocal(), true, true));
+            updateEdisyn.setSelected(synth.getLastXAsBoolean("WavetableUpdate", synth.getSynthClassName(), true, true));
 
             boolean result = Synth.showMultiOption(synth, new String[] { "Device ID", "Wavetable Number", "Wavetable Name", "Update Edisyn"  }, 
                 new JComponent[] { id, number, name, updateEdisyn }, "Write to wavetable...", "Provide the device ID, wavetable number (80 ... 118), and name.");
@@ -269,7 +269,7 @@ public class WaldorfBlofeldWavetable
             if (!result) return;
                         
             update = updateEdisyn.isSelected();
-            synth.setLastX("" + update, "WavetableUpdate", synth.getSynthNameLocal(), true);
+            synth.setLastX("" + update, "WavetableUpdate", synth.getSynthClassName(), true);
 
             _name = name.getText();
             if (_name.length() > 14)
@@ -335,7 +335,7 @@ public class WaldorfBlofeldWavetable
 
         if (update)
             {
-            synth.setLastX(_name, "WTName" + (_number - 80), synth.getSynthNameLocal(), true);
+            synth.setLastX(_name, "WTName" + (_number - 80), synth.getSynthClassName(), true);
             ((WaldorfBlofeld)synth).rebuildWavetables();
             }
         }
@@ -367,7 +367,7 @@ public class WaldorfBlofeldWavetable
             JComboBox waveSize = new JComboBox(new String[] { "256 (WaveEdit)", "2048 (Serum)" });
             JCheckBox updateEdisyn = new JCheckBox("");
             
-            updateEdisyn.setSelected(synth.getLastXAsBoolean("WavetableUpdate", synth.getSynthNameLocal(), true, true));
+            updateEdisyn.setSelected(synth.getLastXAsBoolean("WavetableUpdate", synth.getSynthClassName(), true, true));
 
             boolean result = Synth.showMultiOption(synth, new String[] { "Device ID", "Wavetable Number", "Wavetable Name", "Wave Size", "Update Edisyn" },      ///  "Truncate Waves in Half" }, 
                 new JComponent[] { id, number, name, waveSize, updateEdisyn }, "Write to wavetable...", "Provide wavetable information.");
@@ -375,7 +375,7 @@ public class WaldorfBlofeldWavetable
             if (!result) return;
                         
             update = updateEdisyn.isSelected();
-            synth.setLastX("" + update, "WavetableUpdate", synth.getSynthNameLocal(), true);
+            synth.setLastX("" + update, "WavetableUpdate", synth.getSynthClassName(), true);
 
             _name = name.getText();
             if (_name.length() > 14)
@@ -536,7 +536,7 @@ true);
 
         if (updateEdisyn)
             {
-            synth.setLastX(name, "WTName" + (wavetableNumber - 80), synth.getSynthNameLocal(), true);
+            synth.setLastX(name, "WTName" + (wavetableNumber - 80), synth.getSynthClassName(), true);
             ((WaldorfBlofeld)synth).rebuildWavetables();
             }
         }
@@ -560,7 +560,7 @@ true);
                     {
                     int i = j * 13 + k;
                     labels[j][k] = "" + (i + 80);
-                    String name = synth.getLastX("WTName" + i,synth.getSynthNameLocal());
+                    String name = synth.getLastX("WTName" + i,synth.getSynthClassName());
                     if (name == null) name = "User " + (i + 80);
                     text[j][k] = new JTextField(name, BLOFELD_WAVETABLE_NAME_LENGTH);
                     }
@@ -595,7 +595,7 @@ true);
                     for(int k = 0; k < 13; k++)
                         {
                         int i = j * 13 + k;
-                        synth.setLastX(text[j][k].getText().trim(), "WTName" + i, synth.getSynthNameLocal(), true);
+                        synth.setLastX(text[j][k].getText().trim(), "WTName" + i, synth.getSynthClassName(), true);
                         }
                 ((WaldorfBlofeld)synth).rebuildWavetables();
                 return;
@@ -608,7 +608,7 @@ true);
                         for(int k = 0; k < 13; k++)
                             {
                             int i = j * 13 + k;
-                            synth.setLastX("User " + (i + 80), "WTName" + i, synth.getSynthNameLocal(), true);
+                            synth.setLastX("User " + (i + 80), "WTName" + i, synth.getSynthClassName(), true);
                             }
                     }
                 ((WaldorfBlofeld)synth).rebuildWavetables();

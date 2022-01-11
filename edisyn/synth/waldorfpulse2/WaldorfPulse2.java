@@ -1180,5 +1180,6 @@ public class WaldorfPulse2 extends Synth
 
 	public int getPatchNameLength() { return 14; }
 
+    public boolean librarianTested() { return true; }
     }
     

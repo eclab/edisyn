@@ -80,14 +80,14 @@ public abstract class TuningDefinition
         
     public JComponent getRootMIDINoteComponent(Synth synth)
         {
-        String name = synth.getSynthNameLocal();
+        String name = synth.getSynthClassName();
         if (rootMIDINoteF == null) rootMIDINoteF = new SelectedTextField("" + Synth.getLastXAsInt("rootMIDINote", name, DEFAULT_ROOT_MIDI_NOTE, true));
         return rootMIDINoteF;
         }
 
     public JComponent getRootFrequencyComponent(final Synth synth)
         {
-        String name = synth.getSynthNameLocal();
+        String name = synth.getSynthClassName();
         getRootMIDINote();  // compute it
         rootFrequencyF = new JTextField("" + Synth.getLastXAsDouble("rootFrequency", name, DEFAULT_ROOT_FREQUENCY, true));
         JButton compute = new JButton("Compute");
@@ -114,7 +114,7 @@ public abstract class TuningDefinition
         
     public int getRootMeanNoteValue(Synth synth)
         {
-        String name = synth.getSynthNameLocal();
+        String name = synth.getSynthClassName();
         int rmn = -1;
         try { rmn = Integer.parseInt(rootMIDINoteF.getText()); if (rmn < 0 || rmn > 127) throw new RuntimeException(); }
         catch (Exception ex)
@@ -128,7 +128,7 @@ public abstract class TuningDefinition
 
     public double getRootFrequencyValue(Synth synth)
         {
-        String name = synth.getSynthNameLocal();
+        String name = synth.getSynthClassName();
         double rf = -1;
         try { rf = Double.parseDouble(rootFrequencyF.getText()); if (rf <= 0.0) throw new RuntimeException(); }
         catch (Exception ex)
@@ -143,7 +143,7 @@ public abstract class TuningDefinition
         
     public void resetRootMIDINoteAndFrequency(Synth synth)
         {
-        String name = synth.getSynthNameLocal();
+        String name = synth.getSynthClassName();
         Synth.setLastX("" + DEFAULT_ROOT_MIDI_NOTE, "rootMIDINote", name, false);
         Synth.setLastX("" + DEFAULT_ROOT_FREQUENCY, "rootFrequency", name, false);
         rootMIDINoteF.setText("" + DEFAULT_ROOT_MIDI_NOTE);
@@ -152,7 +152,7 @@ public abstract class TuningDefinition
         
     public void setRootMIDINoteAndFrequency(Synth synth, int midiNote, double frequency)
         {
-        String name = synth.getSynthNameLocal();
+        String name = synth.getSynthClassName();
         Synth.setLastX("" + midiNote, "rootMIDINote", name, false);
         Synth.setLastX("" + frequency, "rootFrequency", name, false);
         // these are probably not necessary

@@ -33,7 +33,7 @@ public class OberheimMatrix1000 extends Synth
         {
         if (save)
             {
-            setLastX("" + (!val), M1000_KEY, getSynthName(), true);
+            setLastX("" + (!val), M1000_KEY, getSynthClassName(), true);
             }
         m1000 = val;
 
@@ -71,7 +71,7 @@ public class OberheimMatrix1000 extends Synth
 
     public OberheimMatrix1000()
         {
-        String m = getLastX(M1000_KEY, getSynthName());
+        String m = getLastX(M1000_KEY, getSynthClassName());
         m1000 = (m == null ? true : !Boolean.parseBoolean(m));
         setM1000(m1000, false);  // so we set the menu
 
@@ -1877,11 +1877,11 @@ public class OberheimMatrix1000 extends Synth
             public void actionPerformed(ActionEvent evt)
                 {
                 useClassicPatchNames = useClassicPatchNamesMenu.isSelected();
-                setLastX("" + useClassicPatchNames, "UseClassicPatchNames", getSynthName(), true);
+                setLastX("" + useClassicPatchNames, "UseClassicPatchNames", getSynthClassName(), true);
                 }
             });
         
-        String str = getLastX("UseClassicPatchNames", getSynthName(), true);
+        String str = getLastX("UseClassicPatchNames", getSynthClassName(), true);
         if (str == null)
             useClassicPatchNames = true;
         else if (str.equalsIgnoreCase("true"))
@@ -2966,4 +2966,6 @@ System.err.println("" + i + "  " + PATCH_NAMES[i]);
     public int getPatchNameLength() { return 8; }
 
     public boolean getSupportsPatchWrites() { return true; }
+
+    public boolean librarianTested() { return true; }
     }

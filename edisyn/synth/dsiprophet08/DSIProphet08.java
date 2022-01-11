@@ -109,7 +109,7 @@ public class DSIProphet08 extends Synth
         {
         if (reenntrantBlock) return;
         reenntrantBlock = true;
-        if (store) setLastX("" + val, TYPE_KEY, getSynthName(), false);
+        if (store) setLastX("" + val, TYPE_KEY, getSynthClassName(), false);
         type = val;
         
         // reset bank
@@ -138,7 +138,7 @@ public class DSIProphet08 extends Synth
         
         try
             {
-            String v = getLastX(TYPE_KEY, getSynthName());
+            String v = getLastX(TYPE_KEY, getSynthClassName());
             if (v == null)
                 setType(SYNTH_TYPE_PROPHET_08, true);
             else
@@ -2318,7 +2318,7 @@ public class DSIProphet08 extends Synth
                 }
             });        
  
-        String str = getLastX("SendAssignableParams", getSynthName(), true);
+        String str = getLastX("SendAssignableParams", getSynthClassName(), true);
         if (str == null)
             sendAssignableParams = true;            // default is true
         else if (str.equalsIgnoreCase("true"))
@@ -2335,7 +2335,7 @@ public class DSIProphet08 extends Synth
             public void actionPerformed(ActionEvent evt)
                 {
                 sendAssignableParams = beta.isSelected();
-                setLastX("" + sendAssignableParams, "SendAssignableParams", getSynthName(), true);
+                setLastX("" + sendAssignableParams, "SendAssignableParams", getSynthClassName(), true);
                 }
             });
         }
@@ -3072,5 +3072,7 @@ public class DSIProphet08 extends Synth
     public boolean getSupportsPatchWrites() { return true; }
 
     public int getPatchNameLength() { return 16; }
+
+    public boolean librarianTested() { return true; }
     }
 

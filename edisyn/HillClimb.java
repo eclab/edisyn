@@ -703,7 +703,7 @@ public class HillClimb extends SynthPanel
                 
         hillClimbBox.add(climb);
 
-        String s = synth.getLastX("HillClimbRate", synth.getSynthNameLocal());
+        String s = synth.getLastX("HillClimbRate", synth.getClass().getName());
         hillClimbRate = new LabelledDial("Mutation Rate", blank, "hillclimbrate", Style.COLOR_GLOBAL(), 0, 100)
             {
             public String map(int val)
@@ -720,7 +720,7 @@ public class HillClimb extends SynthPanel
             public void update(String key, Model model)
                 {
                 super.update(key, model);
-                synth.setLastX("" + model.get(key), "HillClimbRate", synth.getSynthNameLocal());
+                synth.setLastX("" + model.get(key), "HillClimbRate", synth.getClass().getName());
                 }
             };
         
@@ -746,7 +746,7 @@ public class HillClimb extends SynthPanel
         constrict.getButton().setFocusable(false);
         constrictBox.add(constrict);
 
-        s = synth.getLastX("ConstrictRate", synth.getSynthNameLocal());  // we don't do this one anyway
+        s = synth.getLastX("ConstrictRate", synth.getClass().getName());  // we don't do this one anyway
 
         constrictRate = new LabelledDial("Mutation Rate", blank, "constrictrate", Style.COLOR_GLOBAL(), 0, 100)
             {
@@ -764,7 +764,7 @@ public class HillClimb extends SynthPanel
             public void update(String key, Model model)
                 {
                 super.update(key, model);
-                synth.setLastX("" + model.get(key), "ConstrictRate", synth.getSynthNameLocal());
+                synth.setLastX("" + model.get(key), "ConstrictRate", synth.getClass().getName());
                 }
             };
 
@@ -829,7 +829,7 @@ public class HillClimb extends SynthPanel
         
         panel.add(iterationsBox, BorderLayout.CENTER);
 
-        s = synth.getLastX("HillClimbMethod", synth.getSynthNameLocal());
+        s = synth.getLastX("HillClimbMethod", synth.getClass().getName());
         method.setFont(Style.SMALL_FONT());
         method.putClientProperty("JComponent.sizeVariant", "small");
         method.addActionListener(new ActionListener()
@@ -837,7 +837,7 @@ public class HillClimb extends SynthPanel
             public void actionPerformed(ActionEvent e)
                 {
                 int m = method.getSelectedIndex();
-                synth.setLastX("" + m, "HillClimbMethod", synth.getSynthNameLocal());
+                synth.setLastX("" + m, "HillClimbMethod", synth.getClass().getName());
                 setMethod(m);
                 }
             });
@@ -875,7 +875,7 @@ public class HillClimb extends SynthPanel
         bigger.setFont(Style.SMALL_FONT());
         bigger.putClientProperty("JComponent.sizeVariant", "small");
         
-        s = synth.getLastX("HillClimbBigger", synth.getSynthNameLocal());
+        s = synth.getLastX("HillClimbBigger", synth.getClass().getName());
 
         bigger.addActionListener(new ActionListener()
             {
@@ -1035,7 +1035,7 @@ public class HillClimb extends SynthPanel
         candidates.revalidate();
         candidates.repaint();
 
-        synth.setLastX("" + bigger, "HillClimbBigger", synth.getSynthNameLocal());
+        synth.setLastX("" + bigger, "HillClimbBigger", synth.getClass().getName());
         } 
                 
     public static final int UPDATE_SOUND_RATE = 1;

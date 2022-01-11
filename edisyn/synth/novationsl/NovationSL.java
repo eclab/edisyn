@@ -125,7 +125,7 @@ public class NovationSL extends Synth
         
     public void setCompact(boolean val)
         {
-        setLastX("" + val, COMPACT_KEY, getSynthName(), true);
+        setLastX("" + val, COMPACT_KEY, getSynthClassName(), true);
         compact = val;
         updateTitle();
         }
@@ -139,7 +139,7 @@ public class NovationSL extends Synth
 
     public NovationSL()
         {
-        String c = getLastX(COMPACT_KEY, getSynthName());
+        String c = getLastX(COMPACT_KEY, getSynthClassName());
         compact = (c == null ? false : Boolean.parseBoolean(c));
         titleBarSynthName = "Novation ReMOTE SL" + (compact ? " (Compact)" : "");
         updateTitle();
@@ -3636,6 +3636,7 @@ public class NovationSL extends Synth
     public boolean getSupportsDownloads() { return false; }
 	public boolean getSupportsPatchWrites() { return true; }
 
+    public boolean librarianTested() { return true; }
     }
 
 

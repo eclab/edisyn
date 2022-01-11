@@ -284,7 +284,7 @@ public class PreenFM2 extends Synth
         JMenu restrictMutation = new JMenu("Restrict Mutated Frequency Ratios...");
         menu.add(restrictMutation);
                 
-        String str = getLastX("MutationRestriction", getSynthName(), true);
+        String str = getLastX("MutationRestriction", getSynthClassName(), true);
         if (str == null)
             mutationRestriction = OFF;
         else if (str.equalsIgnoreCase("TX81Z"))
@@ -301,7 +301,7 @@ public class PreenFM2 extends Synth
             public void actionPerformed(ActionEvent evt)
                 {
                 mutationRestriction = OFF;
-                setLastX("OFF", "MutationRestriction", getSynthName(), true);
+                setLastX("OFF", "MutationRestriction", getSynthClassName(), true);
                 }
             });
         restrictMutation.add(off);
@@ -314,7 +314,7 @@ public class PreenFM2 extends Synth
             public void actionPerformed(ActionEvent evt)
                 {
                 mutationRestriction = TX81Z;
-                setLastX("TX81Z", "MutationRestriction", getSynthName(), true);
+                setLastX("TX81Z", "MutationRestriction", getSynthClassName(), true);
                 }
             });
         restrictMutation.add(tx81z);
@@ -327,7 +327,7 @@ public class PreenFM2 extends Synth
             public void actionPerformed(ActionEvent evt)
                 {
                 mutationRestriction = INTEGERS;
-                setLastX("INTEGERS", "MutationRestriction", getSynthName(), true);
+                setLastX("INTEGERS", "MutationRestriction", getSynthClassName(), true);
                 }
             });
         restrictMutation.add(integers);

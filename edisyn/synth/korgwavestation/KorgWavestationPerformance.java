@@ -5237,6 +5237,7 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
 		return new Object[] { d };
     	}
 
+    public boolean librarianTested() { return true; }
 
     }
     

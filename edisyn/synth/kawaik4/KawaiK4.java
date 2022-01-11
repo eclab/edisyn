@@ -1580,4 +1580,6 @@ public class KawaiK4 extends Synth
     	{
     	return new byte[] { (byte)0xF0, 0x40, (byte)getChannelOut(), 0x01, 0x00, 0x04, (byte)(bank == 0 ? 0x00 : 0x02), 0x00, (byte)0xF7 }; 
     	}
+
+    public boolean librarianTested() { return true; }
     }

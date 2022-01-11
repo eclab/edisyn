@@ -850,7 +850,7 @@ public abstract class KorgWavestationAbstract extends Synth
         JMenu sendParameters = new JMenu("Send Parameters");
         menu.add(sendParameters);
                 
-        String str = getLastX("SendParameters", getSynthName(), true);
+        String str = getLastX("SendParameters", getSynthClassName(), true);
         if (str == null)
         sendWavestationParametersInBulk = true;
         else if (str.equalsIgnoreCase("BULK"))
@@ -867,7 +867,7 @@ public abstract class KorgWavestationAbstract extends Synth
         public void actionPerformed(ActionEvent evt)
         {
         sendWavestationParametersInBulk = false;
-        setLastX("INDIVIDUALLY", "SendParameters", getSynthName(), true);
+        setLastX("INDIVIDUALLY", "SendParameters", getSynthClassName(), true);
         }
         });
         sendParameters.add(separately);
@@ -881,7 +881,7 @@ public abstract class KorgWavestationAbstract extends Synth
         public void actionPerformed(ActionEvent evt)
         {
         sendWavestationParametersInBulk = true;
-        setLastX("BULK", "SendParameters", getSynthName(), true);
+        setLastX("BULK", "SendParameters", getSynthClassName(), true);
         }
         });
         sendParameters.add(bulk);

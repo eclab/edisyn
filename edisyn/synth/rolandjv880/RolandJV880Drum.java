@@ -1174,4 +1174,6 @@ public class RolandJV880Drum extends Synth
         "chorussendlevel",
         "outputselect"
         };
+
+    public boolean librarianTested() { return true; }
     }

@@ -1286,4 +1286,5 @@ public class RolandJV880Multi extends Synth
 
 	public int getPatchNameLength() { return 12; }
 
+    public boolean librarianTested() { return true; }
     }

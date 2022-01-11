@@ -1288,7 +1288,7 @@ public class WaldorfBlofeld extends Synth
                 params[i] = "Reserved " + (i - 6);
             for(int i = 86; i < 125; i++)
                 {
-                params[i] = getLastX("WTName" + (i - 86), getSynthNameLocal());
+                params[i] = getLastX("WTName" + (i - 86), getSynthClassName());
                 if (params[i] == null) params[i] = "User " + (i - 86);
                 }
             //"User " + (i - 6);
@@ -2582,5 +2582,6 @@ public class WaldorfBlofeld extends Synth
     	{
     	return new byte[] { (byte)0xF0, 0x3E, 0x13, (byte)getID(), 0x00, 0x40, 0x00, (byte)0xF7 };
     	}
+    public boolean librarianTested() { return true; }
     }
     

@@ -201,7 +201,7 @@ public class Yamaha4Op extends Synth
         {
         if (save)
             {
-            setLastX("" + val, TYPE_KEY, getSynthName(), true);
+            setLastX("" + val, TYPE_KEY, getSynthClassName(), true);
             }
         synthType = val;
         synthTypeCombo.setSelectedIndex(val);  // hopefully this isn't recursive
@@ -210,7 +210,7 @@ public class Yamaha4Op extends Synth
 
     public Yamaha4Op()
         {
-        String m = getLastX(TYPE_KEY, getSynthName());
+        String m = getLastX(TYPE_KEY, getSynthClassName());
         try
             {
             synthType = (m == null ? TYPE_TX81Z : Integer.parseInt(m));
@@ -442,7 +442,7 @@ public class Yamaha4Op extends Synth
         JMenu restrictMutation = new JMenu("Restrict Mutated Frequency Ratios...");
         menu.add(restrictMutation);
                 
-        String str = getLastX("MutationRestriction", getSynthName(), true);
+        String str = getLastX("MutationRestriction", getSynthClassName(), true);
         if (str == null)
             mutationRestriction = OFF;
         else if (str.equalsIgnoreCase("COARSE"))
@@ -458,7 +458,7 @@ public class Yamaha4Op extends Synth
             public void actionPerformed(ActionEvent evt)
                 {
                 mutationRestriction = OFF;
-                setLastX("OFF", "MutationRestriction", getSynthName(), true);
+                setLastX("OFF", "MutationRestriction", getSynthClassName(), true);
                 }
             });
         restrictMutation.add(off);
@@ -471,7 +471,7 @@ public class Yamaha4Op extends Synth
             public void actionPerformed(ActionEvent evt)
                 {
                 mutationRestriction = COARSE;
-                setLastX("COARSE", "MutationRestriction", getSynthName(), true);
+                setLastX("COARSE", "MutationRestriction", getSynthClassName(), true);
                 }
             });
         restrictMutation.add(coarse);
@@ -484,7 +484,7 @@ public class Yamaha4Op extends Synth
             public void actionPerformed(ActionEvent evt)
                 {
                 mutationRestriction = INTEGERS;
-                setLastX("INTEGERS", "MutationRestriction", getSynthName(), true);
+                setLastX("INTEGERS", "MutationRestriction", getSynthClassName(), true);
                 }
             });
         restrictMutation.add(integers);
@@ -3081,4 +3081,5 @@ public class Yamaha4Op extends Synth
     public int getRequestableBank() { return 0; }
     
     public byte[] requestBankDump(int bank) { return new byte[] { (byte)0xF0, 0x43, (byte)(0x20 + getChannelOut()), 0x04, (byte)0xF7 }; }
+    public boolean librarianTested() { return true; }
     }

@@ -93,7 +93,7 @@ public class SequentialProphetRev2 extends Synth
     
     public SequentialProphetRev2()
         {
-        String m = getLastX(WRITE_TO_F_KEY, getSynthName());
+        String m = getLastX(WRITE_TO_F_KEY, getSynthClassName());
         writeToF = (m == null ? false : Boolean.parseBoolean(m));
         
         int panel = 0;
@@ -5976,7 +5976,7 @@ public class SequentialProphetRev2 extends Synth
                     showSimpleConfirm("Writeable Factory Banks", "Treat banks F1 ... F4 as writeable?"))
                     {
                     writeToF = check.isSelected();
-                    setLastX("" + writeToF, WRITE_TO_F_KEY, getSynthName(), true);
+                    setLastX("" + writeToF, WRITE_TO_F_KEY, getSynthClassName(), true);
               		}
                 else check.setSelected(false);
                 }
@@ -6267,6 +6267,8 @@ public class SequentialProphetRev2 extends Synth
         }
     public boolean getSupportsPatchWrites() { return true; }
     public int getPatchNameLength() { return MAXIMUM_NAME_LENGTH; }
+    public boolean librarianTested() { return true; }
+
     }
 
 

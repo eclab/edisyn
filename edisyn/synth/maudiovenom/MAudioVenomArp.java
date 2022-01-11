@@ -1733,4 +1733,5 @@ public class MAudioVenomArp extends Synth
 
 	public int getPatchNameLength() { return 10; }
 
+    public boolean librarianTested() { return true; }
     }

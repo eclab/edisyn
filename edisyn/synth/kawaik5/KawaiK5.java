@@ -3880,7 +3880,7 @@ public class KawaiK5 extends Synth
                 }
             });
 
-        fd.setDirectory(getLastX("WavDirectory", getSynthNameLocal(), true));
+        fd.setDirectory(getLastX("WavDirectory", getSynthClassName(), true));
 
         disableMenuBar();
         fd.setVisible(true);
@@ -3892,7 +3892,7 @@ public class KawaiK5 extends Synth
             try
                 {
                 f = new File(fd.getDirectory(), fd.getFile());
-                setLastX(f.getCanonicalPath(), "WavDirectory", getSynthNameLocal(), true);
+                setLastX(f.getCanonicalPath(), "WavDirectory", getSynthClassName(), true);
                 }                       
             catch (Exception ex)
                 {

@@ -3077,6 +3077,8 @@ public class YamahaFS1RMulti extends Synth
 	public boolean[] getWriteableBanks() { return new boolean[] { true, false, false, false }; }
 	public boolean getSupportsPatchWrites() { return true; }
 	public int getPatchNameLength() { return 12; }
+
+    public boolean librarianTested() { return true; }
     }
  
  
@@ -4004,4 +4006,5 @@ class YamahaFS1RFX
         { ""            ,"I:Dry/Wet"   ,"I:Dry/Wet"   ,""            ,""            ,""            ,""            ,""            ,""            ,""            ,""            ,""            ,""            ,"I:Out Level","I:Out Level" ,""            ,""            ,""            ,""            ,""            ,""            ,"I:Out Level",""            ,""            ,""            ,""            ,""            ,""            ,"I:Dry/Wet"   ,""            ,""            ,""             },
         { ""            ,""            ,""            ,""            ,""            ,""            ,""            ,""            ,""            ,""            ,""            ,""            ,""            ,"I:Dry/Wet"  ,"I:Dry/Wet"   ,""            ,""            ,""            ,""            ,""            ,""            ,"I:Dry/Wet"  ,""            ,""            ,""            ,""            ,""            ,""            ,""            ,""            ,""            ,""             },
         };
+
     }

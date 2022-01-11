@@ -1144,5 +1144,7 @@ public class RolandD110Multi extends Synth
 
     /** Return true if individual (non-bank) patches on the synthesizer contain location information (bank, number). */
     public boolean getPatchContainsLocation() { return true; }
+
+    public boolean librarianTested() { return true; }
     }
     

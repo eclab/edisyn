@@ -47,7 +47,7 @@ public class Yamaha4OpMulti extends Synth
         {
         if (save)
             {
-            setLastX("" + val, TYPE_KEY, getSynthName(), true);
+            setLastX("" + val, TYPE_KEY, getSynthClassName(), true);
             }
         synthType = val;
         synthTypeCombo.setSelectedIndex(val);  // hopefully this isn't recursive
@@ -1176,4 +1176,5 @@ public class Yamaha4OpMulti extends Synth
 			(byte)0xF7 
 			}; 
     	}
+    public boolean librarianTested() { return true; }
     }

@@ -44,7 +44,7 @@ public class EmuMorpheus extends Synth
         {
         if (save)
             {
-            setLastX("" + (!val), ULTRAPROTEUS_KEY, getSynthName(), true);
+            setLastX("" + (!val), ULTRAPROTEUS_KEY, getSynthClassName(), true);
             }
         morpheus = val;
         for(int i = 0; i < 2; i++)
@@ -69,7 +69,7 @@ public class EmuMorpheus extends Synth
             System.arraycopy(ULTRAPROTEUS_FILTER_TYPES, 0, MORPHEUS_FILTER_TYPES, 0, NUM_MORPHEUS_FILTERS);
             }
         
-        String m = getLastX(ULTRAPROTEUS_KEY, getSynthName());
+        String m = getLastX(ULTRAPROTEUS_KEY, getSynthClassName());
         morpheus = (m == null ? false : !Boolean.parseBoolean(m));
         
         for(int i = 0; i < parameters.length; i++)

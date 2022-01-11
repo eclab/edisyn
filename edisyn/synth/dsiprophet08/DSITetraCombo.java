@@ -2731,7 +2731,7 @@ public class DSITetraCombo extends Synth
                 }
             });
 
-        String str = getLastX("SendAssignableParams", getSynthName(), true);
+        String str = getLastX("SendAssignableParams", getSynthClassName(), true);
         if (str == null)
             sendAssignableParams = true;            // default is true
         else if (str.equalsIgnoreCase("true"))
@@ -2748,7 +2748,7 @@ public class DSITetraCombo extends Synth
             public void actionPerformed(ActionEvent evt)
                 {
                 sendAssignableParams = beta.isSelected();
-                setLastX("" + sendAssignableParams, "SendAssignableParams", getSynthName(), true);
+                setLastX("" + sendAssignableParams, "SendAssignableParams", getSynthClassName(), true);
                 }
             });
         }
@@ -3013,5 +3013,7 @@ public class DSITetraCombo extends Synth
     public boolean getSupportsPatchWrites() { return true; }
 
     public int getPatchNameLength() { return 16; }
+
+    public boolean librarianTested() { return true; }
     }
 

@@ -260,7 +260,7 @@ public class KorgVolca extends Synth
         {
         if (save)
             {
-            setLastX("" + val, TYPE_KEY, getSynthName(), true);
+            setLastX("" + val, TYPE_KEY, getSynthClassName(), true);
             }
         synthType = val;
         if (synthTypeCombo != null) 
@@ -323,7 +323,7 @@ public class KorgVolca extends Synth
                 }
             }
                 
-        String m = getLastX(TYPE_KEY, getSynthName());
+        String m = getLastX(TYPE_KEY, getSynthClassName());
         try
             {
             synthType = (m == null ? TYPE_VOLCA_BASS : Integer.parseInt(m));

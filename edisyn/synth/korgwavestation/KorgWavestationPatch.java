@@ -2814,6 +2814,8 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
 		d[d.length - 1] = (byte)0xF7;
 		return new Object[] { d };
     	}
+
+    public boolean librarianTested() { return true; }
     }
     
     

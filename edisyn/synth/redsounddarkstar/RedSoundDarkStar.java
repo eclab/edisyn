@@ -46,7 +46,7 @@ public class RedSoundDarkStar extends Synth
     public boolean isXP2() { return xp2; }
     public void setXP2(boolean val)
         {
-        setLastX("" + (!val), XP2_KEY, getSynthName(), true);
+        setLastX("" + (!val), XP2_KEY, getSynthClassName(), true);
         xp2 = val;
         updateTitle();
         }
@@ -136,7 +136,7 @@ public class RedSoundDarkStar extends Synth
         {
         model.set("number", 0);
                 
-        String m = getLastX(XP2_KEY, getSynthName());
+        String m = getLastX(XP2_KEY, getSynthClassName());
         xp2 = (m == null ? false : !Boolean.parseBoolean(m));
 
         VBox vbox = new VBox();

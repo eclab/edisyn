@@ -1727,7 +1727,7 @@ public class KorgWavestationSequence extends KorgWavestationAbstract
 
         final JCheckBoxMenuItem blockSendingMenu = new JCheckBoxMenuItem("Block Sending Any Parameters");
         
-        String str = getLastX("BlockSendingParameters", getSynthName(), true);
+        String str = getLastX("BlockSendingParameters", getSynthClassName(), true);
         
         if (str == null)
             blockSending = false;
@@ -1742,7 +1742,7 @@ public class KorgWavestationSequence extends KorgWavestationAbstract
             public void actionPerformed(ActionEvent e)
                 {
                 blockSending = blockSendingMenu.isSelected(); 
-                setLastX(blockSending ? "YES" : "NO", "BlockSendingParameters", getSynthName(), true);
+                setLastX(blockSending ? "YES" : "NO", "BlockSendingParameters", getSynthClassName(), true);
                 }
             });
         menu.add(blockSendingMenu);

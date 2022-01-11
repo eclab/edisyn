@@ -226,7 +226,9 @@ public class Library extends AbstractTableModel
             System.arraycopy(patches[i], 0, np[i], 0, patches[i].length);
         return np;
         }
-        
+    
+    static int foo = 0;
+      
     /** Copies the existing patches and pushes them onto the undo stack */
     public void pushUndo()
         {
@@ -251,7 +253,7 @@ public class Library extends AbstractTableModel
         {
         if (hasUndo())
             {
-            redo.add(patches);
+            redo.add(copy());
             patches = undo.remove(undo.size() - 1);
             fireTableDataChanged();
             }
@@ -262,7 +264,7 @@ public class Library extends AbstractTableModel
         {
         if (hasRedo())
             {
-            undo.add(patches);
+            undo.add(copy());
             patches = redo.remove(redo.size() - 1);
             fireTableDataChanged();
             }

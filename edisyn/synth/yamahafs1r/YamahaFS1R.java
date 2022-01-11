@@ -3931,4 +3931,5 @@ public class YamahaFS1R extends Synth
 	public boolean[] getWriteableBanks() { return new boolean[] { true, false, false, false, false, false, false, false, false, false, false, false }; }
 	public boolean getSupportsPatchWrites() { return true; }
 	public int getPatchNameLength() { return 10; }
+    public boolean librarianTested() { return true; }
     }

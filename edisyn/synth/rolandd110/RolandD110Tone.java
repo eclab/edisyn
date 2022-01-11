@@ -141,7 +141,7 @@ public class RolandD110Tone extends Synth
 
     public RolandD110Tone()
         {
-        String m = getLastX(ALT_LAYOUT_KEY, getSynthName());
+        String m = getLastX(ALT_LAYOUT_KEY, getSynthClassName());
         altLayout = (m == null ? false : Boolean.parseBoolean(m));
         
         for(int i = 0; i < allPartialParameters.length; i++)
@@ -300,7 +300,7 @@ public class RolandD110Tone extends Synth
             {
             public void actionPerformed(ActionEvent e)
                 {
-                setLastX("" + altLayoutMenu.isSelected(), ALT_LAYOUT_KEY, getSynthName(), true);
+                setLastX("" + altLayoutMenu.isSelected(), ALT_LAYOUT_KEY, getSynthClassName(), true);
                 }
             });
         menu.add(altLayoutMenu);
@@ -1714,4 +1714,6 @@ return b;
     	This will matter when reading patches from disk, rather than loading them from the synth, so as to put them
     	in the right place. */
     public boolean getPatchContainsLocation() { return true; }
+
+    public boolean librarianTested() { return true; }
     }

@@ -362,22 +362,22 @@ public class Midi
         	}
         }
 
-    static void setLastTupleIn(String path, Synth synth) { Synth.setLastX(path, "LastTupleIn", synth.getSynthNameLocal(), false); }
-    static String getLastTupleIn(Synth synth) { return Synth.getLastX("LastTupleIn", synth.getSynthNameLocal(), false); }
+    static void setLastTupleIn(String path, Synth synth) { synth.setLastX(path, "LastTupleIn", synth.getSynthClassName(), false); }
+    static String getLastTupleIn(Synth synth) { return Synth.getLastX("LastTupleIn", synth.getSynthClassName(), false); }
     
-    static void setLastTupleOut(String path, Synth synth) { Synth.setLastX(path, "LastTupleOut", synth.getSynthNameLocal(), false); }
-    static String getLastTupleOut(Synth synth) { return Synth.getLastX("LastTupleOut", synth.getSynthNameLocal(), false); }
+    static void setLastTupleOut(String path, Synth synth) { synth.setLastX(path, "LastTupleOut", synth.getSynthClassName(), false); }
+    static String getLastTupleOut(Synth synth) { return Synth.getLastX("LastTupleOut", synth.getSynthClassName(), false); }
     
-    static void setLastTupleKey(String path, Synth synth) { Synth.setLastX(path, "LastTupleKey", synth.getSynthNameLocal(), false); }
-    static String getLastTupleKey(Synth synth) { return Synth.getLastX("LastTupleKey", synth.getSynthNameLocal(), false); }
+    static void setLastTupleKey(String path, Synth synth) { synth.setLastX(path, "LastTupleKey", synth.getSynthClassName(), false); }
+    static String getLastTupleKey(Synth synth) { return Synth.getLastX("LastTupleKey", synth.getSynthClassName(), false); }
     
-    static void setLastTupleKey2(String path, Synth synth) { Synth.setLastX(path, "LastTupleKey2", synth.getSynthNameLocal(), false); }
-    static String getLastTupleKey2(Synth synth) { return Synth.getLastX("LastTupleKey2", synth.getSynthNameLocal(), false); }
+    static void setLastTupleKey2(String path, Synth synth) { synth.setLastX(path, "LastTupleKey2", synth.getSynthClassName(), false); }
+    static String getLastTupleKey2(Synth synth) { return Synth.getLastX("LastTupleKey2", synth.getSynthClassName(), false); }
     
-    static void setLastTupleOutChannel(int channel, Synth synth) { Synth.setLastX("" + channel, "LastTupleOutChannel", synth.getSynthNameLocal(), false); }
+    static void setLastTupleOutChannel(int channel, Synth synth) { synth.setLastX("" + channel, "LastTupleOutChannel", synth.getSynthClassName(), false); }
     static int getLastTupleOutChannel(Synth synth) 
         { 
-        String val = Synth.getLastX("LastTupleOutChannel", synth.getSynthNameLocal(), false); 
+        String val = Synth.getLastX("LastTupleOutChannel", synth.getSynthClassName(), false); 
         if (val == null) return -1;
         else 
             {
@@ -388,10 +388,10 @@ public class Midi
             }
         }
     
-    static void setLastTupleKeyChannel(int channel, Synth synth) { Synth.setLastX("" + channel, "LastTupleKeyChannel", synth.getSynthNameLocal(), false); }
+    static void setLastTupleKeyChannel(int channel, Synth synth) { synth.setLastX("" + channel, "LastTupleKeyChannel", synth.getSynthClassName(), false); }
     static int getLastTupleKeyChannel(Synth synth) 
         { 
-        String val = Synth.getLastX("LastTupleKeyChannel", synth.getSynthNameLocal(), false); 
+        String val = Synth.getLastX("LastTupleKeyChannel", synth.getSynthClassName(), false); 
         if (val == null) return -1;
         else 
             {
@@ -402,10 +402,10 @@ public class Midi
             }
         }
     
-    static void setLastTupleKey2Channel(int channel, Synth synth) { Synth.setLastX("" + channel, "LastTupleKey2Channel", synth.getSynthNameLocal(), false); }
+    static void setLastTupleKey2Channel(int channel, Synth synth) { synth.setLastX("" + channel, "LastTupleKey2Channel", synth.getSynthClassName(), false); }
     static int getLastTupleKey2Channel(Synth synth) 
         { 
-        String val = Synth.getLastX("LastTupleKey2Channel", synth.getSynthNameLocal(), false); 
+        String val = Synth.getLastX("LastTupleKey2Channel", synth.getSynthClassName(), false); 
         if (val == null) return -1;
         else 
             {
@@ -416,8 +416,8 @@ public class Midi
             }
         }
 
-    static void setLastTupleID(String id, Synth synth) { Synth.setLastX(id, "LastTupleID", synth.getSynthNameLocal(), false); }
-    static String getLastTupleID(Synth synth) { return Synth.getLastX("LastTupleID", synth.getSynthNameLocal(), false); }
+    static void setLastTupleID(String id, Synth synth) { synth.setLastX(id, "LastTupleID", synth.getSynthClassName(), false); }
+    static String getLastTupleID(Synth synth) { return Synth.getLastX("LastTupleID", synth.getSynthClassName(), false); }
     
 
     public static final Tuple CANCELLED = new Tuple();

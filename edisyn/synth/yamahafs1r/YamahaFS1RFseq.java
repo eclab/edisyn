@@ -2738,6 +2738,8 @@ public class YamahaFS1RFseq extends Synth
 	public boolean isValidPatchLocation(int bank, int num) { return (bank == 1 || num < 6); }
 	
     public boolean getUpdatesListenersOnDownload() { return false; } 	
+
+    public boolean librarianTested() { return true; }
     }
 
 

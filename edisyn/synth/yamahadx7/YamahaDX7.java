@@ -1413,4 +1413,17 @@ public class YamahaDX7 extends Synth implements ProvidesNN
 
 		data[patch + 117 + 6] = (byte)(model.get(allParameters[pos++]) & 63);
     	}
-    	    }
+
+
+	/** Some synths (Yamaha 4-op) can only request a single bank.  This returns
+		that bank, or -1 if all banks are requestable by requestBankDump (the default). */
+    //public int getRequestableBank() { return -1; }
+
+	/** Return null if bank dump requests are not supported. */
+    public byte[] requestBankDump(int bank) 
+    	{ 
+        byte channel = (byte)(32 + getChannelOut());
+        // on the TX216/816, f=9 is 32 voice bulk request
+    	return new byte[] { (byte)0xF0, (byte)0x43, channel, 9, (byte)0xF7 };
+    	}
+    }

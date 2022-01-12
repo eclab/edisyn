@@ -1338,7 +1338,7 @@ public class YamahaFB01 extends Synth
         return obj; 
         }
 
-    public String[] getBankNames() { return WRITABLE_BANKS; }
+    public String[] getBankNames() { return BANKS; }
 
 	/** Return a list of all patch number names.  Default is { "Main" } */
 	public String[] getPatchNumberNames()  { return buildIntegerNames(48, 1); }
@@ -1351,5 +1351,10 @@ public class YamahaFB01 extends Synth
 
 	public int getPatchNameLength() { return 7; }
 
-
+    public byte[] requestBankDump(int bank) 
+    	{ 
+    	// The manual says that the banks are 0...6, but the service manual says that they're 1...7
+    	// Given that the service manual has multiple other errors, I'm going with 0...6
+    	return new byte[] { (byte)0xF0, (byte)0x43, (byte)0x75, (byte)getChannelOut(), 0x20, 0x00, (byte)bank, (byte)0xF7 };
+    	}
     }

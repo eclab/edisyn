@@ -620,42 +620,52 @@ public static JMenu buildLibrarianMenu(Synth synth)
 			int requestableBank = synth.getRequestableBank();
 			if (requestableBank == -1)		// "All Banks can be Requestable"
 				{
-				JComboBox bank = new JComboBox(synth.getBankNames()); 
-				Librarian lib = synth.librarian;
+				String[] bankNames = synth.getBankNames();
+				int bankIndex = 0;
+				if (bankNames == null || bankNames.length == 1)			// there's only one bank
+					{
+					if (!synth.showSimpleConfirm("Bank Request", "Request Bank?", "Request")) return;
+					}
+				else			// multiple banks, must chooes
+					{
+					JComboBox bank = new JComboBox(bankNames); 
+					Librarian lib = synth.librarian;
 				
-				// Let's make a good guess as to which bank he wants
-				int index = 0;
-        		int column = lib.col(lib.table, lib.table.getSelectedColumn());
-        		int row = lib.table.getSelectedRow();
-        		int len = lib.table.getSelectedRowCount();
-                        
-				if (column < 0 || row < 0 || len == 0) // nope
-					{
-					index = 0;
-					}
-				else if (column == 0)	// scratch
-					{
-					index = 0;
-					}
-				else
-					{
-					index = column - 1;
-					}
+					// Let's make a good guess as to which bank he wants
+					int index = 0;
+					int column = lib.col(lib.table, lib.table.getSelectedColumn());
+					int row = lib.table.getSelectedRow();
+					int len = lib.table.getSelectedRowCount();
+						
+					if (column < 0 || row < 0 || len == 0) // nope
+						{
+						index = 0;
+						}
+					else if (column == 0)	// scratch
+						{
+						index = 0;
+						}
+					else
+						{
+						index = column - 1;
+						}
 
-				bank.setSelectedIndex(index);
+					bank.setSelectedIndex(index);
 				
-				boolean result = Synth.showMultiOption(synth, new String[] { "Bank" }, 
-					new JComponent[] { bank }, "Bank Request", "Enter the Bank.");
+					boolean result = Synth.showMultiOption(synth, new String[] { "Bank" }, 
+						new JComponent[] { bank }, "Bank Request", "Enter the Bank.");
 			
-				if (result == false) return;
+					if (result == false) return;
+					else bankIndex = bank.getSelectedIndex();
+					}
 							
-				byte[] data = synth.requestBankDump(bank.getSelectedIndex());
+				byte[] data = synth.requestBankDump(bankIndex);
 				if (data != null)		// this should always be true
 					{
 					synth.tryToSendSysex(data);
 					}
 				}
-			else				// "Only a specific Bank"
+			else				// "Only a specific Bank" -- must let the user know
 				{
 				if (synth.showSimpleConfirm("Bank Request", "Request Bank " + synth.librarian.getLibrary().getBankName(requestableBank) + "?\nOnly this bank can be requested.", "Request"))
 					{
@@ -769,7 +779,7 @@ public static JMenu buildLibrarianMenu(Synth synth)
 	menu.add(item);
 	item.setEnabled(false);
 
-	item = new JMenuItem("Edit Patch in New Editor");
+	item = new JMenuItem("Edit Patch in a New Editor");
 	item.addActionListener(new ActionListener()
 		{
 		public void actionPerformed(ActionEvent evt) 
@@ -901,7 +911,7 @@ public static JMenu buildLibrarianMenu(Synth synth)
         {
         Synth synth = getLibrary().getSynth();
         
-		if (synth.showSimpleConfirm("Write All", "Write All Patches to Synthesizer?\nThis operation cannot be canceled.\nWriting a bank may take a very long time.", "Write"))
+		if (synth.showSimpleConfirm("Write All", "Write All Patches to Synthesizer?\nThis operation cannot be canceled.\nWriting all patches may take a very long time.", "Write"))
 			{
         	getLibrary().writeRange(Library.ALL_PATCHES, 0, 0);
         	}

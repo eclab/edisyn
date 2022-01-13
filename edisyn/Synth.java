@@ -8223,7 +8223,6 @@ public abstract class Synth extends JComponent implements Updatable
                     {
                     public void actionPerformed(ActionEvent e)
                         {
-                        System.err.println("" + getBatchDownloadWaitTime() + " " + batchDownloadFailureCountdown);
                         if (incomingPatch)
                             {
                             if (patchLocationEquals(getModel(), currentPatch))

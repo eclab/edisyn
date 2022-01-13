@@ -1877,4 +1877,6 @@ public class AlesisD4 extends Synth
     public boolean getSupportsPatchWrites() { return true; }
 
     public int getPatchNameLength() { return 15; }
+
+    public boolean librarianTested() { return true; }
     }

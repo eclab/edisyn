@@ -12,6 +12,8 @@ I'll update this list as I or others successfully test librarians and/or fix the
 
 ### Moderately Tested
 
+* Alesis D4/DM5
+* Casio CZ
 * DSI Prophet '08 / Mopho / Tetra
 * Kawai K4
 * Kawai K4 Effect
@@ -29,11 +31,15 @@ I'll update this list as I or others successfully test librarians and/or fix the
 * Roland D110 Multi
 * Roland JV880
 * Roland JV880 Multi
+* Sequential Prophet Rev2
 * Waldorf Blofeld
 * Waldorf Blofeld Multi
+* Waldorf Microwave II/XT/XTk
+* Waldorf Microwave II/XT/XTk Multi
 * Waldorf Pulse 2
 * Yamaha 4 Op
 * Yamaha 4 Op Multi
+* Yamaha DX7
 * Yamaha FS1R
 * Yamaha FS1R Multi
 * Yamaha FS1R Fseq
@@ -41,8 +47,6 @@ I'll update this list as I or others successfully test librarians and/or fix the
 
 ### Untested
 
-* Alesis D4/DM5
-* Casio CZ
 * DSI Tetra Combo
 * Emu Morpheus
 * Emu Morpheus Hyper
@@ -52,13 +56,9 @@ I'll update this list as I or others successfully test librarians and/or fix the
 * Korg MicroKorg
 * Korg MicroKorg Vocoder
 * Red Sound DarkStar
-* Sequential Prophet Rev2
 * Tuning
 * Waldorf Kyra
 * Waldorf Kyra Multi
-* Waldorf Microwave II/XT/XTk
-* Waldorf Microwave II/XT/XTk Multi
-* Yamaha DX7
 * Yamaha FB01
 * Yamaha FB01 Multi
 

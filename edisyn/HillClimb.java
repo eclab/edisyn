@@ -156,14 +156,14 @@ public class HillClimb extends SynthPanel
         if (menuButton != NO_MENU_BUTTON)
             {
             currentModels[menuButton] = synth.getModel().copy();
-			currentPlay = menuButton;
+            currentPlay = menuButton;
             menuButton = NO_MENU_BUTTON;
 
-			if (startSoundsAgain)
-				{
-				synth.doSendTestNotes();
-				startSoundsAgain = false;
-				}
+            if (startSoundsAgain)
+                {
+                synth.doSendTestNotes();
+                startSoundsAgain = false;
+                }
             }
         }
         
@@ -399,25 +399,25 @@ public class HillClimb extends SynthPanel
             {
             public void actionPerformed(ActionEvent e)
                 {
-				if (synth.receiveCurrent.isEnabled())
-					{
-					menuButton = _i;
-					startSoundsAgain = false;
-					// we do this because some synths send data in chunks and in-between those
-					// chunks we may send current patch and play it, messing up the chunk (such as on the JV-880)
-					if (synth.isSendingTestNotes())
-						{
-						synth.doSendTestNotes();
-						startSoundsAgain = true;
-						}
-					synth.doRequestCurrentPatch();
-					// Notice we do NOT do updateAgain(); but we'll do it when the patch comes in
-					}
-				else
-					{
-					synth.showSimpleError("Cannot Request Current Patch", "This synthesizer does not support requesting the current patch (sorry).");
-					}
-				}
+                if (synth.receiveCurrent.isEnabled())
+                    {
+                    menuButton = _i;
+                    startSoundsAgain = false;
+                    // we do this because some synths send data in chunks and in-between those
+                    // chunks we may send current patch and play it, messing up the chunk (such as on the JV-880)
+                    if (synth.isSendingTestNotes())
+                        {
+                        synth.doSendTestNotes();
+                        startSoundsAgain = true;
+                        }
+                    synth.doRequestCurrentPatch();
+                    // Notice we do NOT do updateAgain(); but we'll do it when the patch comes in
+                    }
+                else
+                    {
+                    synth.showSimpleError("Cannot Request Current Patch", "This synthesizer does not support requesting the current patch (sorry).");
+                    }
+                }
             });
         if (_i == NUM_CANDIDATES + ARCHIVE_SIZE)
             doItems[4].setEnabled(false);
@@ -429,24 +429,24 @@ public class HillClimb extends SynthPanel
             {
             public void actionPerformed(ActionEvent e)
                 {
-				if (synth.receivePatch.isEnabled())
-					{
-					menuButton = _i;
-					startSoundsAgain = false;
-					// we do this because some synths send data in chunks and in-between those
-					// chunks we may send current patch and play it, messing up the chunk (such as on the JV-880)
-					if (synth.isSendingTestNotes())
-						{
-						synth.doSendTestNotes();
-						startSoundsAgain = true;
-						}
-					synth.doRequestPatch();
-					// Notice we do NOT do updateAgain(); but we'll do it when the patch comes in
-					}
-				else
-					{
-                	synth.showSimpleError("Cannot Request Patch", "This synthesizer does not support requesting a patch (sorry).");
-					}
+                if (synth.receivePatch.isEnabled())
+                    {
+                    menuButton = _i;
+                    startSoundsAgain = false;
+                    // we do this because some synths send data in chunks and in-between those
+                    // chunks we may send current patch and play it, messing up the chunk (such as on the JV-880)
+                    if (synth.isSendingTestNotes())
+                        {
+                        synth.doSendTestNotes();
+                        startSoundsAgain = true;
+                        }
+                    synth.doRequestPatch();
+                    // Notice we do NOT do updateAgain(); but we'll do it when the patch comes in
+                    }
+                else
+                    {
+                    synth.showSimpleError("Cannot Request Patch", "This synthesizer does not support requesting a patch (sorry).");
+                    }
                 }
             });
         if (_i == NUM_CANDIDATES + ARCHIVE_SIZE)

@@ -2724,20 +2724,20 @@ public class YamahaFS1RFseq extends Synth
     
     public String[] getBankNames() { return BANKS; }
 
-	/** Return a list of all patch number names.  Default is { "Main" } */
-	public String[] getPatchNumberNames()  { return buildIntegerNames(90, 1); }
+    /** Return a list of all patch number names.  Default is { "Main" } */
+    public String[] getPatchNumberNames()  { return buildIntegerNames(90, 1); }
 
-	/** Return a list whether patches in banks are writeable.  Default is { false } */
-	public boolean[] getWriteableBanks() { return new boolean[] { true, false }; }
+    /** Return a list whether patches in banks are writeable.  Default is { false } */
+    public boolean[] getWriteableBanks() { return new boolean[] { true, false }; }
 
-	/** Return a list whether individual patches can be written.  Default is FALSE. */
-	public boolean getSupportsPatchWrites() { return true; }
+    /** Return a list whether individual patches can be written.  Default is FALSE. */
+    public boolean getSupportsPatchWrites() { return true; }
 
-	public int getPatchNameLength() { return 8; }
+    public int getPatchNameLength() { return 8; }
 
-	public boolean isValidPatchLocation(int bank, int num) { return (bank == 1 || num < 6); }
-	
-    public boolean getUpdatesListenersOnDownload() { return false; } 	
+    public boolean isValidPatchLocation(int bank, int num) { return (bank == 1 || num < 6); }
+        
+    public boolean getUpdatesListenersOnDownload() { return false; }    
 
     public boolean librarianTested() { return true; }
     }

@@ -980,13 +980,13 @@ public class KorgSG extends Synth
         // We may get a message to save to a given location due to the librarian.
         // So we interpret that as just setting the bank and number
         
-        if (data[4] == 0x11)	// patch write request
-        	{
-        	int val = data[6] % 64;
-        	model.set("bank", val / 16);
-        	model.set("number", val % 16);
-        	return PARSE_SUCCEEDED;
-        	}
+        if (data[4] == 0x11)    // patch write request
+            {
+            int val = data[6] % 64;
+            model.set("bank", val / 16);
+            model.set("number", val % 16);
+            return PARSE_SUCCEEDED;
+            }
         
         // The data is F0, 42, 3[CHANNEL], 4A, 40, ... DATA ..., F7
         
@@ -1380,7 +1380,7 @@ public class KorgSG extends Synth
 
 
     public int getPauseAfterChangePatch() { return 200; }
-	public int getPauseAfterWritePatch() { return 200; }
+    public int getPauseAfterWritePatch() { return 200; }
 
     public void changePatch(Model tempModel)
         {
@@ -1416,7 +1416,7 @@ public class KorgSG extends Synth
         // enter program edit mode, which loads the patch into edit buffer memory
         tryToSendSysex(new byte[] { (byte)0xF0, 0x42, (byte)(48 + getChannelOut()), 0x4A, 0x4E, 0x03, 0x0, (byte)0xF7 });
         tryToSendSysex(requestCurrentDump());
-       }
+        }
             
     public void performRequestCurrentDump()
         {
@@ -1535,10 +1535,10 @@ public class KorgSG extends Synth
 
 
     public String[] getBankNames() { return BANKS; }
-	public String[] getPatchNumberNames() { return buildIntegerNames(16, 1); }
+    public String[] getPatchNumberNames() { return buildIntegerNames(16, 1); }
     public boolean[] getWriteableBanks() { return new boolean[] { true, true, true, true }; }
     public int getPatchNameLength() { return 10; }
-	public boolean getSupportsPatchWrites() { return true; }
+    public boolean getSupportsPatchWrites() { return true; }
 
     public boolean librarianTested() { return true; }
     }

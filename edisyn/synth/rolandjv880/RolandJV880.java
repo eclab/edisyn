@@ -1642,8 +1642,8 @@ public class RolandJV880 extends Synth
         tryToSendSysex(new byte[] { (byte)0xF0, 0x41, getID(), 0x46, 0x12, 0x00, 0x00, 0x00, 0x00, 0x01, 
             produceChecksum(new byte[] { 0x00, 0x00, 0x00, 0x00, 0x01}), (byte)0xF7 });
 
-		// It takes a second for this to take effect
-		simplePause(200);
+        // It takes a second for this to take effect
+        simplePause(200);
 
         byte AA = (byte)(0x00);
         byte BB = (byte)(0x08);
@@ -1697,7 +1697,7 @@ public class RolandJV880 extends Synth
     
     public String getPatchName(Model model) { return model.get("name", "Untitled  "); }
 
-	// It takes a long time (about 700ms) for this to take effect
+    // It takes a long time (about 700ms) for this to take effect
     public int getPauseAfterChangePatch() { return 700; }
 
     public int getPauseAfterSendAllParameters() { return 300; }
@@ -1718,13 +1718,13 @@ public class RolandJV880 extends Synth
             tryToSendSysex(new byte[] { (byte)0xF0, 0x41, getID(), 0x46, 0x12, 0x00, 0x00, 0x00, 0x00, 0x01, 
                 produceChecksum(new byte[] { 0x00, 0x00, 0x00, 0x00, 0x01}), (byte)0xF7 });
 
-			// It takes a long time (about 700ms) for this to take effect
-			simplePause(700);
+            // It takes a long time (about 700ms) for this to take effect
+            simplePause(700);
 
             tryToSendMIDI(new ShortMessage(ShortMessage.CONTROL_CHANGE, getChannelOut(), 0, BC));
 
-			// It takes a long time (about 700ms) for this to take effect
-			simplePause(700);
+            // It takes a long time (about 700ms) for this to take effect
+            simplePause(700);
 
             tryToSendMIDI(new ShortMessage(ShortMessage.PROGRAM_CHANGE, getChannelOut(), PC, 0));
             }
@@ -1778,21 +1778,21 @@ public class RolandJV880 extends Synth
             }
         }
         
-	// Takes a long time for batches to come in, particularly Orch Stab 2 (patch Internal 11, dunno why)
+    // Takes a long time for batches to come in, particularly Orch Stab 2 (patch Internal 11, dunno why)
     public int getBatchDownloadWaitTime() { return 2000; }
 
     public String[] getBankNames() { return BANKS; }
 
-	/** Return a list of all patch number names.  Default is { "Main" } */
-	public String[] getPatchNumberNames()  { return buildIntegerNames(64, 1); }
+    /** Return a list of all patch number names.  Default is { "Main" } */
+    public String[] getPatchNumberNames()  { return buildIntegerNames(64, 1); }
 
-	/** Return a list whether patches in banks are writeable.  Default is { false } */
-	public boolean[] getWriteableBanks() { return new boolean[] { true, true, false, false }; }
+    /** Return a list whether patches in banks are writeable.  Default is { false } */
+    public boolean[] getWriteableBanks() { return new boolean[] { true, true, false, false }; }
 
-	/** Return a list whether individual patches can be written.  Default is FALSE. */
-	public boolean getSupportsPatchWrites() { return true; }
+    /** Return a list whether individual patches can be written.  Default is FALSE. */
+    public boolean getSupportsPatchWrites() { return true; }
 
-	public int getPatchNameLength() { return 12; }
+    public int getPatchNameLength() { return 12; }
 
     public boolean librarianTested() { return true; }
     }

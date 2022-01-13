@@ -2236,11 +2236,11 @@ public class EmuProteus extends Synth
     "Tribe 2",
     };
     
-	public String[] getPatchNumberNames() { return buildIntegerNames(192, 0); }
+    public String[] getPatchNumberNames() { return buildIntegerNames(192, 0); }
 
-	public boolean[] getWriteableBanks() { return new boolean[] { true }; }
+    public boolean[] getWriteableBanks() { return new boolean[] { true }; }
 
-	public boolean getSupportsPatchWrites() { return true; }
+    public boolean getSupportsPatchWrites() { return true; }
 
-	public int getPatchNameLength() { return 12; }
+    public int getPatchNameLength() { return 12; }
     }

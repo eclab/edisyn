@@ -500,7 +500,7 @@ public class NovationSL extends Synth
             vbox.add(addPot(7, "page10control7", CROSSFADER_INDEX, Style.COLOR_A()));                       /// CROSS-FADER
             }
 
-        vbox.add(addLayout(new String[] { "page10control1name","page10control2name","page10control3name","page10control4name","page10control5name","page10control6name","page10control7name" } ));		// no "page10control8name"
+        vbox.add(addLayout(new String[] { "page10control1name","page10control2name","page10control3name","page10control4name","page10control5name","page10control6name","page10control7name" } ));              // no "page10control8name"
 
         soundPanel.add(vbox, BorderLayout.CENTER);
         ((SynthPanel)soundPanel).makePasteable("page");
@@ -3630,11 +3630,11 @@ public class NovationSL extends Synth
             }
         }
 
-	public String[] getPatchNumberNames() { return buildIntegerNames(32, 1); }
+    public String[] getPatchNumberNames() { return buildIntegerNames(32, 1); }
     public boolean[] getWriteableBanks() { return new boolean[] { true }; }
     public int getPatchNameLength() { return 34; }
     public boolean getSupportsDownloads() { return false; }
-	public boolean getSupportsPatchWrites() { return true; }
+    public boolean getSupportsPatchWrites() { return true; }
 
     public boolean librarianTested() { return true; }
     }

@@ -984,90 +984,90 @@ public class YamahaDX7 extends Synth implements ProvidesNN
         }
 
 
-	public int parseFromBank(byte[] data, int patchNum) 
-		{
-	    // extract names
-	    char[] name = new char[10];
-		for (int j = 0; j < 10; j++)
-			{
-			name[j] = (char)(data[6 + (patchNum * 128) + 118 + j] & 127);
-			}
-			            
-	// okay, we're loading and editing patch number patchNum.  Here we go.
-		int patch = patchNum * 128;
-		int pos = 0;
-													
-		for(int op = 0; op < 6; op++)
-			{
-			// operatorNrate1 ... operatorNkeyboardlevelscalingrightdepth
-			for(int i = 0; i < 11; i++)
-				{
-				model.set(allParameters[pos++], data[patch + op * 17 + i + 6]);
-				}
-									
-			// scaling left curve
-			model.set(allParameters[pos++], data[patch + op * 17 + 11 + 6] & 3);
-			// scaling right curve
-			model.set(allParameters[pos++], (data[patch + op * 17 + 11 + 6] >>> 2) & 3);
-							
-			// rate scaling
-			model.set(allParameters[pos++], data[patch + op * 17 + 12 + 6] & 7);
-							
-			// amp mod sensitivity
-			model.set(allParameters[pos++], data[patch + op * 17 + 13 + 6] & 3);
-			// key velocity
-			model.set(allParameters[pos++], (data[patch + op * 17 + 13 + 6] >>> 2) & 7);
+    public int parseFromBank(byte[] data, int patchNum) 
+        {
+        // extract names
+        char[] name = new char[10];
+        for (int j = 0; j < 10; j++)
+            {
+            name[j] = (char)(data[6 + (patchNum * 128) + 118 + j] & 127);
+            }
+                                    
+        // okay, we're loading and editing patch number patchNum.  Here we go.
+        int patch = patchNum * 128;
+        int pos = 0;
+                                                                                                        
+        for(int op = 0; op < 6; op++)
+            {
+            // operatorNrate1 ... operatorNkeyboardlevelscalingrightdepth
+            for(int i = 0; i < 11; i++)
+                {
+                model.set(allParameters[pos++], data[patch + op * 17 + i + 6]);
+                }
+                                                                        
+            // scaling left curve
+            model.set(allParameters[pos++], data[patch + op * 17 + 11 + 6] & 3);
+            // scaling right curve
+            model.set(allParameters[pos++], (data[patch + op * 17 + 11 + 6] >>> 2) & 3);
+                                                        
+            // rate scaling
+            model.set(allParameters[pos++], data[patch + op * 17 + 12 + 6] & 7);
+                                                        
+            // amp mod sensitivity
+            model.set(allParameters[pos++], data[patch + op * 17 + 13 + 6] & 3);
+            // key velocity
+            model.set(allParameters[pos++], (data[patch + op * 17 + 13 + 6] >>> 2) & 7);
 
-			// output level
-			model.set(allParameters[pos++], data[patch + op * 17 + 14 + 6]);
-									
-			// osc mode
-			model.set(allParameters[pos++], data[patch + op * 17 + 15 + 6] & 1);
-			// freq coarse
-			model.set(allParameters[pos++], (data[patch + op * 17 + 15 + 6] >>> 1) & 31);
-			// freq fine
-			model.set(allParameters[pos++], data[patch + op * 17 + 16 + 6]);
-			// detune  [note this one is out of position, why Yamaha why?]
-			model.set(allParameters[pos++], (data[patch + op * 17 + 12 + 6] >>> 3) & 15);
-			}
-					
-		// pitchegrate1 ... pitcheglevel4
-		for(int i = 102; i < 110; i++)
-			{
-			model.set(allParameters[pos++], data[patch + i + 6]);
-			}
-							
-		// algorithm select
-		model.set(allParameters[pos++], data[patch + 110 + 6] & 31);
-		// feedback
-		model.set(allParameters[pos++], data[patch + 111 + 6] & 7);
-		// osc key sync
-		model.set(allParameters[pos++], (data[patch + 111 + 6] >>> 3) & 1);
+            // output level
+            model.set(allParameters[pos++], data[patch + op * 17 + 14 + 6]);
+                                                                        
+            // osc mode
+            model.set(allParameters[pos++], data[patch + op * 17 + 15 + 6] & 1);
+            // freq coarse
+            model.set(allParameters[pos++], (data[patch + op * 17 + 15 + 6] >>> 1) & 31);
+            // freq fine
+            model.set(allParameters[pos++], data[patch + op * 17 + 16 + 6]);
+            // detune  [note this one is out of position, why Yamaha why?]
+            model.set(allParameters[pos++], (data[patch + op * 17 + 12 + 6] >>> 3) & 15);
+            }
+                                        
+        // pitchegrate1 ... pitcheglevel4
+        for(int i = 102; i < 110; i++)
+            {
+            model.set(allParameters[pos++], data[patch + i + 6]);
+            }
+                                                        
+        // algorithm select
+        model.set(allParameters[pos++], data[patch + 110 + 6] & 31);
+        // feedback
+        model.set(allParameters[pos++], data[patch + 111 + 6] & 7);
+        // osc key sync
+        model.set(allParameters[pos++], (data[patch + 111 + 6] >>> 3) & 1);
 
-		// lfospeed ... lfoamplitudemodulationdepth
-		for(int i = 112; i < 116; i++)
-			{
-			model.set(allParameters[pos++], data[patch + i + 6]);
-			}
-							
-		// key sync
-		model.set(allParameters[pos++], data[patch + 116 + 6] & 1);
-		// wave
-		model.set(allParameters[pos++], (data[patch + 116 + 6] >>> 1) & 7);
-		// lfo pitch mod sens
-		model.set(allParameters[pos++], (data[patch + 116 + 6] >>> 4) & 7);
-		// transpose
-		model.set(allParameters[pos++], (data[patch + 117 + 6]) & 63);
-							
-		model.set("name", new String(name));
-		model.set("number", patchNum);
+        // lfospeed ... lfoamplitudemodulationdepth
+        for(int i = 112; i < 116; i++)
+            {
+            model.set(allParameters[pos++], data[patch + i + 6]);
+            }
+                                                        
+        // key sync
+        model.set(allParameters[pos++], data[patch + 116 + 6] & 1);
+        // wave
+        model.set(allParameters[pos++], (data[patch + 116 + 6] >>> 1) & 7);
+        // lfo pitch mod sens
+        model.set(allParameters[pos++], (data[patch + 116 + 6] >>> 4) & 7);
+        // transpose
+        model.set(allParameters[pos++], (data[patch + 117 + 6]) & 63);
+                                                        
+        model.set("name", new String(name));
+        model.set("number", patchNum);
 
-		revise(); 
-		return PARSE_SUCCEEDED_UNTITLED;
-		}
+        revise(); 
+        return PARSE_SUCCEEDED_UNTITLED;
+        }
     
 
-	public int getPauseAfterSendAllParameters() { return 50; }			// also goes for write patch
+    public int getPauseAfterSendAllParameters() { return 50; }                      // also goes for write patch
 
     public byte[] emit(Model tempModel, boolean toWorkingMemory, boolean toFile)
         {
@@ -1354,9 +1354,9 @@ public class YamahaDX7 extends Synth implements ProvidesNN
         data[5] = (byte)0x00;
         
         for(int i = 0; i < 32; i++)
-        	{
-        	emitBankPatch(data, models[i], i);
-        	}
+            {
+            emitBankPatch(data, models[i], i);
+            }
         
         data[data.length - 2] = produceChecksum(data, 6);
         data[data.length - 1] = (byte)0xF7;
@@ -1364,68 +1364,68 @@ public class YamahaDX7 extends Synth implements ProvidesNN
         }
     
     public void emitBankPatch(byte[] data, Model model, int patchNum)
-    	{
-		int patch = patchNum * 128;
+        {
+        int patch = patchNum * 128;
 
-    	char[] name = (model.get("name", "INIT VOICE") + "          ").substring(0, 10).toCharArray();
-		for (int j = 0; j < 10; j++)
-			{
-			data[6 + patch + 118 + j] = (byte)(name[j] & 127);
-			}
-			            
-		int pos = 0;
-		for(int op = 0; op < 6; op++)
-			{
-			// operatorNrate1 ... operatorNkeyboardlevelscalingrightdepth
-			for(int i = 0; i < 11; i++)
-				{
-				data[patch + op * 17 + i + 6] = (byte)(model.get(allParameters[pos++]));
-				}
-									
-			data[patch + op * 17 + 11 + 6] = (byte)((model.get(allParameters[pos++]) & 3) | ((model.get(allParameters[pos++]) & 3) << 2));
-			int back = patch + op * 17 + 12 + 6;
-			data[back] = (byte)((model.get(allParameters[pos++]) & 7));		
+        char[] name = (model.get("name", "INIT VOICE") + "          ").substring(0, 10).toCharArray();
+        for (int j = 0; j < 10; j++)
+            {
+            data[6 + patch + 118 + j] = (byte)(name[j] & 127);
+            }
+                                    
+        int pos = 0;
+        for(int op = 0; op < 6; op++)
+            {
+            // operatorNrate1 ... operatorNkeyboardlevelscalingrightdepth
+            for(int i = 0; i < 11; i++)
+                {
+                data[patch + op * 17 + i + 6] = (byte)(model.get(allParameters[pos++]));
+                }
+                                                                        
+            data[patch + op * 17 + 11 + 6] = (byte)((model.get(allParameters[pos++]) & 3) | ((model.get(allParameters[pos++]) & 3) << 2));
+            int back = patch + op * 17 + 12 + 6;
+            data[back] = (byte)((model.get(allParameters[pos++]) & 7));             
 
-			data[patch + op * 17 + 13 + 6] = (byte)((model.get(allParameters[pos++]) & 3) | ((model.get(allParameters[pos++]) & 7) << 2));
-			data[patch + op * 17 + 14 + 6] = (byte)(model.get(allParameters[pos++]));
-			data[patch + op * 17 + 15 + 6] = (byte)((model.get(allParameters[pos++]) & 1) | ((model.get(allParameters[pos++]) & 31) << 1));
-			data[patch + op * 17 + 16 + 6] = (byte)(model.get(allParameters[pos++]));
-			// detune  [note this one is out of position, why Yamaha why?]
-			data[back] = (byte)(data[back] | ((model.get(allParameters[pos++]) & 15) << 3));
-			}
-					
-		// pitchegrate1 ... pitcheglevel4
-		for(int i = 102; i < 110; i++)
-			{
-			data[patch + i + 6] = (byte)(model.get(allParameters[pos++]));
-			}
-							
-		data[patch + 110 + 6] = (byte)(model.get(allParameters[pos++]) & 31);
-		data[patch + 111 + 6] = (byte)((model.get(allParameters[pos++]) & 7) | ((model.get(allParameters[pos++]) & 1) << 3));
+            data[patch + op * 17 + 13 + 6] = (byte)((model.get(allParameters[pos++]) & 3) | ((model.get(allParameters[pos++]) & 7) << 2));
+            data[patch + op * 17 + 14 + 6] = (byte)(model.get(allParameters[pos++]));
+            data[patch + op * 17 + 15 + 6] = (byte)((model.get(allParameters[pos++]) & 1) | ((model.get(allParameters[pos++]) & 31) << 1));
+            data[patch + op * 17 + 16 + 6] = (byte)(model.get(allParameters[pos++]));
+            // detune  [note this one is out of position, why Yamaha why?]
+            data[back] = (byte)(data[back] | ((model.get(allParameters[pos++]) & 15) << 3));
+            }
+                                        
+        // pitchegrate1 ... pitcheglevel4
+        for(int i = 102; i < 110; i++)
+            {
+            data[patch + i + 6] = (byte)(model.get(allParameters[pos++]));
+            }
+                                                        
+        data[patch + 110 + 6] = (byte)(model.get(allParameters[pos++]) & 31);
+        data[patch + 111 + 6] = (byte)((model.get(allParameters[pos++]) & 7) | ((model.get(allParameters[pos++]) & 1) << 3));
 
-		// lfospeed ... lfoamplitudemodulationdepth
-		for(int i = 112; i < 116; i++)
-			{
-			data[patch + i + 6] = (byte)(model.get(allParameters[pos++]));
-			}
-							
-		data[patch + 116 + 6] = (byte)((model.get(allParameters[pos++]) & 1) | ((model.get(allParameters[pos++]) & 7) << 1) | ((model.get(allParameters[pos++]) & 7) << 4)); 
+        // lfospeed ... lfoamplitudemodulationdepth
+        for(int i = 112; i < 116; i++)
+            {
+            data[patch + i + 6] = (byte)(model.get(allParameters[pos++]));
+            }
+                                                        
+        data[patch + 116 + 6] = (byte)((model.get(allParameters[pos++]) & 1) | ((model.get(allParameters[pos++]) & 7) << 1) | ((model.get(allParameters[pos++]) & 7) << 4)); 
 
-		data[patch + 117 + 6] = (byte)(model.get(allParameters[pos++]) & 63);
-    	}
+        data[patch + 117 + 6] = (byte)(model.get(allParameters[pos++]) & 63);
+        }
 
 
-	/** Some synths (Yamaha 4-op) can only request a single bank.  This returns
-		that bank, or -1 if all banks are requestable by requestBankDump (the default). */
+    /** Some synths (Yamaha 4-op) can only request a single bank.  This returns
+        that bank, or -1 if all banks are requestable by requestBankDump (the default). */
     //public int getRequestableBank() { return -1; }
 
-	/** Return null if bank dump requests are not supported. */
+    /** Return null if bank dump requests are not supported. */
     public byte[] requestBankDump(int bank) 
-    	{ 
+        { 
         byte channel = (byte)(32 + getChannelOut());
         // on the TX216/816, f=9 is 32 voice bulk request
-    	return new byte[] { (byte)0xF0, (byte)0x43, channel, 9, (byte)0xF7 };
-    	}
+        return new byte[] { (byte)0xF0, (byte)0x43, channel, 9, (byte)0xF7 };
+        }
 
     public boolean librarianTested() { return true; }
     }

@@ -1659,25 +1659,25 @@ public class MAudioVenomMulti extends Synth
 
     public int parse(byte[] data, boolean fromFile)
         {
-		// Since we're issuing a store patch command to get around Multi bugs,
-		// it's likely that we'll be receiving one too via the librian.
-		// So we handle that here:
-		
-		if (data[6] == 0x06)		// Store Patch
-			{
-			if (data[7] == 0x02)     // it's going to a specific patch (0x02 == Multi Patch Dump as opposed to 0x00 == Edit Buffer Dump)
-				{
-				int bank = data[8] - 1;
-				if (bank < 0 || bank > 1) bank = 0;
-				model.set("bank", bank);
-				int number = data[9];
-				model.set("number", number);
-				}
-			return PARSE_SUCCEEDED;			// should this be PARSE_INCOMPLETE?
-			}
-			
-			
-		// Okay, it's a standard dump at this point.
+        // Since we're issuing a store patch command to get around Multi bugs,
+        // it's likely that we'll be receiving one too via the librian.
+        // So we handle that here:
+                
+        if (data[6] == 0x06)            // Store Patch
+            {
+            if (data[7] == 0x02)     // it's going to a specific patch (0x02 == Multi Patch Dump as opposed to 0x00 == Edit Buffer Dump)
+                {
+                int bank = data[8] - 1;
+                if (bank < 0 || bank > 1) bank = 0;
+                model.set("bank", bank);
+                int number = data[9];
+                model.set("number", number);
+                }
+            return PARSE_SUCCEEDED;                 // should this be PARSE_INCOMPLETE?
+            }
+                        
+                        
+        // Okay, it's a standard dump at this point.
 
         if (data[7] == 0x02)     // it's going to a specific patch (0x02 == Multi Patch Dump as opposed to 0x00 == Edit Buffer Dump)
             {
@@ -2269,16 +2269,16 @@ public class MAudioVenomMulti extends Synth
 
     public String[] getBankNames() { return BANKS; }
 
-	/** Return a list of all patch number names.  Default is { "Main" } */
-	public String[] getPatchNumberNames()  { return buildIntegerNames(128, 0); }
+    /** Return a list of all patch number names.  Default is { "Main" } */
+    public String[] getPatchNumberNames()  { return buildIntegerNames(128, 0); }
 
-	/** Return a list whether patches in banks are writeable.  Default is { false } */
-	public boolean[] getWriteableBanks() { return new boolean[] { false, true }; }
+    /** Return a list whether patches in banks are writeable.  Default is { false } */
+    public boolean[] getWriteableBanks() { return new boolean[] { false, true }; }
 
-	/** Return a list whether individual patches can be written.  Default is FALSE. */
-	public boolean getSupportsPatchWrites() { return true; }
+    /** Return a list whether individual patches can be written.  Default is FALSE. */
+    public boolean getSupportsPatchWrites() { return true; }
 
-	public int getPatchNameLength() { return 10; }
+    public int getPatchNameLength() { return 10; }
 
     public boolean librarianTested() { return true; }
     }

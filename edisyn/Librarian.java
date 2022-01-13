@@ -42,16 +42,16 @@ public class Librarian extends JPanel
     
     /** Returns the selected table column, or -1 if none */
     public int getSelectedColumn()
-    	{
-    	return table.getSelectedColumn();
-    	}
-    	
+        {
+        return table.getSelectedColumn();
+        }
+        
     public void updateUndoRedo()
-    	{
-		undo.setEnabled(getLibrary().hasUndo());
-		redo.setEnabled(getLibrary().hasRedo());
-		getLibrary().synth.updateUndoMenus();
-    	}
+        {
+        undo.setEnabled(getLibrary().hasUndo());
+        redo.setEnabled(getLibrary().hasRedo());
+        getLibrary().synth.updateUndoMenus();
+        }
 
 
     public static final Color STANDARD_BACKGROUND_COLOR = new Color(250, 250, 250);
@@ -79,19 +79,19 @@ public class Librarian extends JPanel
             int selectedColumn = -1;
             
             public void selectAll() 
-            	{ 
-				int column = col(table, table.getSelectedColumn());
-            	if (column >= 0)
-            		{
-            		changeSelection(0, column, false, false);
-            		changeSelection(getLibrary().getBankSize() - 1, column, true, true);
-            		}
-            	else
-            		{
-             		changeSelection(0, 0, false, false);
-            		changeSelection(getLibrary().getBankSize() - 1, 0, true, true);
-           			}
-            	}
+                { 
+                int column = col(table, table.getSelectedColumn());
+                if (column >= 0)
+                    {
+                    changeSelection(0, column, false, false);
+                    changeSelection(getLibrary().getBankSize() - 1, column, true, true);
+                    }
+                else
+                    {
+                    changeSelection(0, 0, false, false);
+                    changeSelection(getLibrary().getBankSize() - 1, 0, true, true);
+                    }
+                }
             
             public void changeSelection(int rowIndex, int columnIndex, boolean toggle, boolean extend)
                 {
@@ -132,11 +132,11 @@ public class Librarian extends JPanel
                     {
                     comp.setBackground(SELECTED_COLOR);
                     }
-                else if (column == 0)			// scratch
+                else if (column == 0)                   // scratch
                     {
                     comp.setBackground(SCRATCH_COLOR);
                     }
-                else if (column > 0 && !synth.isValidPatchLocation(column - 1, row))			// invalid cell
+                else if (column > 0 && !synth.isValidPatchLocation(column - 1, row))                    // invalid cell
                     {
                     comp.setBackground(INVALID_COLOR);
                     }
@@ -151,7 +151,7 @@ public class Librarian extends JPanel
 
                 
                 // Change FOREGROUND COLOR
-                if (column > 0 && !synth.isValidPatchLocation(column - 1, row))			// invalid cell
+                if (column > 0 && !synth.isValidPatchLocation(column - 1, row))                 // invalid cell
                     {
                     comp.setForeground(INVALID_TEXT_COLOR);
                     }
@@ -174,17 +174,17 @@ public class Librarian extends JPanel
         table.setGridColor(GRID_COLOR);
         table.getTableHeader().setBackground(BACKGROUND_COLOR);
 
-		// deterimine the width of the columns
-		String nm = "";
-		for(int i = 0; i < synth.getPatchNameLength(); i++) nm += "M";
-		int w = table.getFontMetrics(table.getFont()).stringWidth(nm);
-		
-		for(int i = 0; i < table.getColumnModel().getColumnCount(); i++)
-			{
-			TableColumn tc = table.getColumnModel().getColumn(i);
-			//tc.setPreferredWidth(w * 4 / 5 + 4);	// We'll do about 3/4 the maximum theoretical limit, which seems to be a good outer bound for most patch names, plus a tiny bit of slop.
-			tc.setPreferredWidth(w + 4);	// We'll do about 3/4 the maximum theoretical limit, which seems to be a good outer bound for most patch names, plus a tiny bit of slop.
-			}
+        // deterimine the width of the columns
+        String nm = "";
+        for(int i = 0; i < synth.getPatchNameLength(); i++) nm += "M";
+        int w = table.getFontMetrics(table.getFont()).stringWidth(nm);
+                
+        for(int i = 0; i < table.getColumnModel().getColumnCount(); i++)
+            {
+            TableColumn tc = table.getColumnModel().getColumn(i);
+            //tc.setPreferredWidth(w * 4 / 5 + 4);  // We'll do about 3/4 the maximum theoretical limit, which seems to be a good outer bound for most patch names, plus a tiny bit of slop.
+            tc.setPreferredWidth(w + 4);    // We'll do about 3/4 the maximum theoretical limit, which seems to be a good outer bound for most patch names, plus a tiny bit of slop.
+            }
         
         // Enable double-clicking on table headers to select columns
         final JTable _table = table;
@@ -197,7 +197,7 @@ public class Librarian extends JPanel
                     int c = _table.columnAtPoint(e.getPoint());
                     _table.setColumnSelectionInterval(c, c);
                     if(_table.getRowCount() > 0)
-                    	{
+                        {
                         _table.setRowSelectionInterval(0, table.getRowCount() - 1);
                         }
                     }
@@ -205,38 +205,38 @@ public class Librarian extends JPanel
                     {
                     String val = getLibrary().synth.reviseBankName("test");
                     if (val == null) 
-                    	{
-                    	getLibrary().synth.showSimpleError("Cannot Set Bank Name", "This synthesizer does not support custom bank names.");
-                    	}
+                        {
+                        getLibrary().synth.showSimpleError("Cannot Set Bank Name", "This synthesizer does not support custom bank names.");
+                        }
                     else
-                    	{
-						int c = _table.columnAtPoint(e.getPoint());
-						if (c == 0) // scratch bank
-							{
-                    		getLibrary().synth.showSimpleError("Cannot Set Bank Name", "You can't change the name of the scratch bank.");
-							}
-						else
-							{
-							String bankName = getLibrary().getUserName(c - 1);
-							if (bankName == null) bankName = "";
-							final JTextField field = new JTextField(bankName);
-							int result = getLibrary().synth.showMultiOption(
-								getLibrary().synth,
-								new String[] { "Bank Name" },
-								new JComponent[] { field }, 
-								new String[] { "Set Name", "Cancel" },
-								0, 
-								"Bank Name",
-								"Enter a name for Bank " + getLibrary().getBankName(c - 1));
-							if (result == 0)
-								{
-								bankName = getLibrary().synth.reviseBankName(field.getText());
-								getLibrary().setUserName(c - 1, bankName);
-								table.getColumnModel().getColumn(c).setHeaderValue(getLibrary().getColumnName(c));
-								}
-							}
-						}
-					}
+                        {
+                        int c = _table.columnAtPoint(e.getPoint());
+                        if (c == 0) // scratch bank
+                            {
+                            getLibrary().synth.showSimpleError("Cannot Set Bank Name", "You can't change the name of the scratch bank.");
+                            }
+                        else
+                            {
+                            String bankName = getLibrary().getUserName(c - 1);
+                            if (bankName == null) bankName = "";
+                            final JTextField field = new JTextField(bankName);
+                            int result = getLibrary().synth.showMultiOption(
+                                getLibrary().synth,
+                                new String[] { "Bank Name" },
+                                new JComponent[] { field }, 
+                                new String[] { "Set Name", "Cancel" },
+                                0, 
+                                "Bank Name",
+                                "Enter a name for Bank " + getLibrary().getBankName(c - 1));
+                            if (result == 0)
+                                {
+                                bankName = getLibrary().synth.reviseBankName(field.getText());
+                                getLibrary().setUserName(c - 1, bankName);
+                                table.getColumnModel().getColumn(c).setHeaderValue(getLibrary().getColumnName(c));
+                                }
+                            }
+                        }
+                    }
                 }
             });
             
@@ -246,32 +246,32 @@ public class Librarian extends JPanel
         table.setTransferHandler(new LibrarianTransferHandler(getLibrary().synth)); 
                 
 
-		table.addMouseListener(new MouseAdapter() 
-			{
-			public void mousePressed(MouseEvent mouseEvent) 
-				{
-				if (mouseEvent.getClickCount() == 2) 
-					{
-					loadOneInternal();
-					}
-			}
-		});  
-		
-		table.addKeyListener(new KeyAdapter()
-			{
-			public void keyPressed(KeyEvent e)
-				{
-				int key = e.getKeyCode();
-				if (key == 8 ||		// backspace
-					key == 127)		// DEL
-					{
-					clear();
-					}
-				}
-			});
-		
-		
-		              
+        table.addMouseListener(new MouseAdapter() 
+            {
+            public void mousePressed(MouseEvent mouseEvent) 
+                {
+                if (mouseEvent.getClickCount() == 2) 
+                    {
+                    loadOneInternal();
+                    }
+                }
+            });  
+                
+        table.addKeyListener(new KeyAdapter()
+            {
+            public void keyPressed(KeyEvent e)
+                {
+                int key = e.getKeyCode();
+                if (key == 8 ||         // backspace
+                    key == 127)             // DEL
+                    {
+                    clear();
+                    }
+                }
+            });
+                
+                
+                              
         JTable rowNames = new javax.swing.JTable()
             {
             public Component prepareRenderer(TableCellRenderer renderer, int row, int col) 
@@ -290,7 +290,7 @@ public class Librarian extends JPanel
         rowNames.getTableHeader().setReorderingAllowed(false);
         rowNames.getTableHeader().setResizingAllowed(false);
         rowNames.setDefaultEditor(Object.class, null);
-        rowNames.getTableHeader().setBackground(BACKGROUND_COLOR);	//BACKGROUND_COLOR);
+        rowNames.getTableHeader().setBackground(BACKGROUND_COLOR);      //BACKGROUND_COLOR);
         rowNames.setGridColor(GRID_COLOR);
 
         // transpose
@@ -324,7 +324,7 @@ public class Librarian extends JPanel
         bottomPanel = new JPanel();
         bottomPanel.setLayout(new BorderLayout());
         
-		updateUndoRedo();
+        updateUndoRedo();
 
         patchWell = new JTable()
             {
@@ -380,7 +380,7 @@ public class Librarian extends JPanel
                 String name = synth.getModel().get("name","" + synth.getPatchLocationName(synth.getModel()));
                 int number = synth.getModel().get("number", -1);
                 int bank = synth.getModel().get("bank", -1);
-                byte[][] data = synth.cutUpSysex(synth.flatten(synth.emitAll(synth.getModel(), false, true)));			// we're pretending we're writing to a file here
+                byte[][] data = synth.cutUpSysex(synth.flatten(synth.emitAll(synth.getModel(), false, true)));                  // we're pretending we're writing to a file here
                 Patch patch = new Patch(synthNum, data, false);
                 patch.name = name;
                 patch.bank = (bank == -1 ? 0 : bank);
@@ -392,30 +392,30 @@ public class Librarian extends JPanel
                 {
                 Patch patch = (Patch)value;     
                 
-                if (patch == null) return;			// I don't like the idea of dragging null to a patch, and it "transforms" into "UNTITLED"
-                	// patch = getLibrary().getInitPatch();
-                	
-				// do we need to modify the bank and number?
-				
-				synth.undo.push(synth.model);
-				synth.undo.setWillPush(false);
-				boolean send = synth.getSendMIDI();
-				synth.setSendMIDI(false);
-				synth.performParse(synth.flatten(patch.sysex), false);  // is this from a file?  I'm saying false
-				
-				// revise the patch location to where it came from in the librarian
-				if (patch.number != Patch.NUMBER_NOT_SET)
-					{
-					synth.getModel().set("number", patch.number);
-                	int b = synth.getModel().get("bank", -1);
-                	if (b != -1 && patch.bank >= 0)
-                		synth.getModel().set("bank", patch.bank);
-					}
-				synth.setSendMIDI(send);
-				synth.undo.setWillPush(true);
-				synth.sendAllParameters();
-				
-				fireTableCellUpdated(row, col);
+                if (patch == null) return;                      // I don't like the idea of dragging null to a patch, and it "transforms" into "UNTITLED"
+                // patch = getLibrary().getInitPatch();
+                        
+                // do we need to modify the bank and number?
+                                
+                synth.undo.push(synth.model);
+                synth.undo.setWillPush(false);
+                boolean send = synth.getSendMIDI();
+                synth.setSendMIDI(false);
+                synth.performParse(synth.flatten(patch.sysex), false);  // is this from a file?  I'm saying false
+                                
+                // revise the patch location to where it came from in the librarian
+                if (patch.number != Patch.NUMBER_NOT_SET)
+                    {
+                    synth.getModel().set("number", patch.number);
+                    int b = synth.getModel().get("bank", -1);
+                    if (b != -1 && patch.bank >= 0)
+                        synth.getModel().set("bank", patch.bank);
+                    }
+                synth.setSendMIDI(send);
+                synth.undo.setWillPush(true);
+                synth.sendAllParameters();
+                                
+                fireTableCellUpdated(row, col);
                 }
             });
                         
@@ -434,19 +434,19 @@ public class Librarian extends JPanel
         patchWellLabel.putClientProperty("JComponent.sizeVariant", "small");
         patchWellLabel.setFont(Style.SMALL_FONT());
 
-		Box box = new Box(BoxLayout.X_AXIS);
-		
+        Box box = new Box(BoxLayout.X_AXIS);
+                
         stopAction = new PushButton("Stop Download")
-        		{
-        		public void perform()
-        			{
-        			getLibrary().getSynth().stopBatchDownload();
-        			}
-        		};
-		stopAction.getButton().setEnabled(false);
+            {
+            public void perform()
+                {
+                getLibrary().getSynth().stopBatchDownload();
+                }
+            };
+        stopAction.getButton().setEnabled(false);
         setupButton(stopAction.getButton());
         box.add(stopAction.getButton());
-        		
+                        
         box.add(patchWellLabel, BorderLayout.WEST);
         box.add(patchWell, BorderLayout.CENTER);
         box.add(box.createGlue());
@@ -455,381 +455,381 @@ public class Librarian extends JPanel
         add(bottomPanel, BorderLayout.SOUTH);
         
         if (getLibrary().getSynth().patchTimer != null)  // we're running!
-        	{
-        	//bottomPanel.add(stopAction.getButton(), BorderLayout.WEST);
-			stopAction.getButton().setEnabled(true);
-        	}
-		   
-		writeProgress.setStringPainted(false);
-		writeProgress.setEnabled(true);
-    	// bottomPanel.add(writeProgress, BorderLayout.EAST);				// Not working right now :-(
+            {
+            //bottomPanel.add(stopAction.getButton(), BorderLayout.WEST);
+            stopAction.getButton().setEnabled(true);
+            }
+                   
+        writeProgress.setStringPainted(false);
+        writeProgress.setEnabled(true);
+        // bottomPanel.add(writeProgress, BorderLayout.EAST);                           // Not working right now :-(
         }
         
     public void loadOneInternal()
-    	{
-		int column = col(table, table.getSelectedColumn());
-		int row = table.getSelectedRow();
-		if (column >= 0 && row >= 0)
-			{
-			copy(Librarian.this, table, column, row, 1, Librarian.this, patchWell, 0, 0, true);
-			getLibrary().getSynth().setCurrentTab(0);
-			}
-    	}
+        {
+        int column = col(table, table.getSelectedColumn());
+        int row = table.getSelectedRow();
+        if (column >= 0 && row >= 0)
+            {
+            copy(Librarian.this, table, column, row, 1, Librarian.this, patchWell, 0, 0, true);
+            getLibrary().getSynth().setCurrentTab(0);
+            }
+        }
 
-	public void loadOneExternal()
-		{
-		int column = col(table, table.getSelectedColumn());
-		int row = table.getSelectedRow();
-		if (column >= 0 && row >= 0)
-			{
-			Synth synth = getLibrary().getSynth();
-			Patch p = getLibrary().getPatch(column - 1, row);
-			if (p == null) p = getLibrary().getInitPatch();
-			
-			Synth otherSynth = synth.instantiate(synth.getClass(), false, true, null);
-			otherSynth.setSendMIDI(false);
-			otherSynth.undo.setWillPush(false);
+    public void loadOneExternal()
+        {
+        int column = col(table, table.getSelectedColumn());
+        int row = table.getSelectedRow();
+        if (column >= 0 && row >= 0)
+            {
+            Synth synth = getLibrary().getSynth();
+            Patch p = getLibrary().getPatch(column - 1, row);
+            if (p == null) p = getLibrary().getInitPatch();
+                        
+            Synth otherSynth = synth.instantiate(synth.getClass(), false, true, null);
+            otherSynth.setSendMIDI(false);
+            otherSynth.undo.setWillPush(false);
 
-			// this last statement fixes a mystery.  When I call Randomize or Reset on
-			// a Blofeld or on a Microwave, all of the widgets update simultaneously.
-			// But on a Blofeld Multi or Microwave Multi they update one at a time.
-			// I've tried a zillion things, even moving all the widgets from the Blofeld Multi
-			// into the Blofeld, and it makes no difference!  For some reason the OS X
-			// repaint manager is refusing to coallesce their repaint requests.  So I do it here.
-			otherSynth.repaint();
-		
-			try
-				{
-				otherSynth.performParse(synth.flatten(p.sysex), true);
-				
-				int bank = (column - 1);
-				int number = row;
-				if (bank != -1)			// don't revise the patch location if it's the scratch bank
-					{
-					// revise the patch location to where it came from in the librarian
-					synth.getModel().set("number", number);
-					int b = synth.getModel().get("bank", -1);
-					if (b != -1)
-					synth.getModel().set("bank", bank);
-					}
-				}
-			catch (Exception ex)
-				{
-				Synth.handleException(ex);
-				}
+            // this last statement fixes a mystery.  When I call Randomize or Reset on
+            // a Blofeld or on a Microwave, all of the widgets update simultaneously.
+            // But on a Blofeld Multi or Microwave Multi they update one at a time.
+            // I've tried a zillion things, even moving all the widgets from the Blofeld Multi
+            // into the Blofeld, and it makes no difference!  For some reason the OS X
+            // repaint manager is refusing to coallesce their repaint requests.  So I do it here.
+            otherSynth.repaint();
+                
+            try
+                {
+                otherSynth.performParse(synth.flatten(p.sysex), true);
+                                
+                int bank = (column - 1);
+                int number = row;
+                if (bank != -1)                 // don't revise the patch location if it's the scratch bank
+                    {
+                    // revise the patch location to where it came from in the librarian
+                    synth.getModel().set("number", number);
+                    int b = synth.getModel().get("bank", -1);
+                    if (b != -1)
+                        synth.getModel().set("bank", bank);
+                    }
+                }
+            catch (Exception ex)
+                {
+                Synth.handleException(ex);
+                }
 
-			otherSynth.undo.setWillPush(true);
-			otherSynth.setSendMIDI(true);
+            otherSynth.undo.setWillPush(true);
+            otherSynth.setSendMIDI(true);
 
-			if (otherSynth.getSendsParametersAfterLoad()) // we'll need to do this
-				otherSynth.sendAllParameters();
+            if (otherSynth.getSendsParametersAfterLoad()) // we'll need to do this
+                otherSynth.sendAllParameters();
 
-			otherSynth.updateTitle();       // so it shows the right filename
-			}
-		}
+            otherSynth.updateTitle();       // so it shows the right filename
+            }
+        }
 
-public static void setLibrarianMenuSelected(JMenu menu, boolean val, Synth synth)
-	{
-	// ugh, accessign subelements is so convoluted
-	MenuElement[] m = menu.getSubElements()[0].getSubElements();
-	for(int i = 0; i < m.length; i++)
-		{
-		if (m[i] instanceof JMenuItem)
-			{
-			if ((m[i] == synth.downloadMenu ||
-				m[i] == synth.downloadAllMenu ||
-				m[i] == synth.downloadBankMenu) && !synth.getSupportsDownloads())
-					continue;
-			if ((m[i] == synth.writeMenu) && !synth.getSupportsPatchWrites())
-					continue;
-					
-			((JMenuItem)m[i]).setEnabled(val);
-			}
-		}
-	}
-	
-public static JMenu buildLibrarianMenu(Synth synth)
-	{
-	JMenu menu = new JMenu("Librarian");
+    public static void setLibrarianMenuSelected(JMenu menu, boolean val, Synth synth)
+        {
+        // ugh, accessign subelements is so convoluted
+        MenuElement[] m = menu.getSubElements()[0].getSubElements();
+        for(int i = 0; i < m.length; i++)
+            {
+            if (m[i] instanceof JMenuItem)
+                {
+                if ((m[i] == synth.downloadMenu ||
+                        m[i] == synth.downloadAllMenu ||
+                        m[i] == synth.downloadBankMenu) && !synth.getSupportsDownloads())
+                    continue;
+                if ((m[i] == synth.writeMenu) && !synth.getSupportsPatchWrites())
+                    continue;
+                                        
+                ((JMenuItem)m[i]).setEnabled(val);
+                }
+            }
+        }
+        
+    public static JMenu buildLibrarianMenu(Synth synth)
+        {
+        JMenu menu = new JMenu("Librarian");
 
-//	menu.add(openMenu);
+//      menu.add(openMenu);
 
-	menu.addSeparator();
+        menu.addSeparator();
 
-	JMenuItem item = new JMenuItem("Clear Selected Patches");
-	item.addActionListener(new ActionListener()
-		{
-		public void actionPerformed(ActionEvent evt) { synth.librarian.clear(); }
-		});
-	menu.add(item);
-	item.setEnabled(false);
-	
-	item = new JMenuItem("Clear Bank");
-	item.addActionListener(new ActionListener()
-		{
-		public void actionPerformed(ActionEvent evt) { synth.librarian.clearBank(); }
-		});
-	menu.add(item);
-	item.setEnabled(false);
-		
-	item = new JMenuItem("Clear All Patches");
-	item.addActionListener(new ActionListener()
-		{
-		public void actionPerformed(ActionEvent evt) { synth.librarian.clearAll(); }
-		});
-	menu.add(item);
-	item.setEnabled(false);
-		
-	menu.addSeparator();
-	
-	item = new JMenuItem("Download Selected Patches from Synth");
-	synth.downloadMenu = item;
-	item.addActionListener(new ActionListener()
-		{
-		public void actionPerformed(ActionEvent evt) { synth.librarian.download(); }
-		});
-	menu.add(item);
-	item.setEnabled(false);
-		
-	item = new JMenuItem("Download Bank from Synth");
-	synth.downloadBankMenu = item;
-	item.addActionListener(new ActionListener()
-		{
-		public void actionPerformed(ActionEvent evt) { synth.librarian.downloadBank(); }
-		});
-	menu.add(item);
-	item.setEnabled(false);
-		
-	item = new JMenuItem("Download All Patches from Synth");
-	synth.downloadAllMenu = item;
-	item.addActionListener(new ActionListener()
-		{
-		public void actionPerformed(ActionEvent evt) { synth.librarian.downloadAll(); }
-		});
-	menu.add(item);
-	item.setEnabled(false);
-		
-	menu.addSeparator();
+        JMenuItem item = new JMenuItem("Clear Selected Patches");
+        item.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent evt) { synth.librarian.clear(); }
+            });
+        menu.add(item);
+        item.setEnabled(false);
+        
+        item = new JMenuItem("Clear Bank");
+        item.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent evt) { synth.librarian.clearBank(); }
+            });
+        menu.add(item);
+        item.setEnabled(false);
+                
+        item = new JMenuItem("Clear All Patches");
+        item.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent evt) { synth.librarian.clearAll(); }
+            });
+        menu.add(item);
+        item.setEnabled(false);
+                
+        menu.addSeparator();
+        
+        item = new JMenuItem("Download Selected Patches from Synth");
+        synth.downloadMenu = item;
+        item.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent evt) { synth.librarian.download(); }
+            });
+        menu.add(item);
+        item.setEnabled(false);
+                
+        item = new JMenuItem("Download Bank from Synth");
+        synth.downloadBankMenu = item;
+        item.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent evt) { synth.librarian.downloadBank(); }
+            });
+        menu.add(item);
+        item.setEnabled(false);
+                
+        item = new JMenuItem("Download All Patches from Synth");
+        synth.downloadAllMenu = item;
+        item.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent evt) { synth.librarian.downloadAll(); }
+            });
+        menu.add(item);
+        item.setEnabled(false);
+                
+        menu.addSeparator();
 
-	boolean requests = false;
-	item = new JMenuItem("Request Bank from Synth");
-	item.addActionListener(new ActionListener()
-		{
-		public void actionPerformed(ActionEvent evt) 
-			{
-			int requestableBank = synth.getRequestableBank();
-			if (requestableBank == -1)		// "All Banks can be Requestable"
-				{
-				String[] bankNames = synth.getBankNames();
-				int bankIndex = 0;
-				if (bankNames == null || bankNames.length == 1)			// there's only one bank
-					{
-					if (!synth.showSimpleConfirm("Bank Request", "Request Bank?", "Request")) return;
-					}
-				else			// multiple banks, must chooes
-					{
-					JComboBox bank = new JComboBox(bankNames); 
-					Librarian lib = synth.librarian;
-				
-					// Let's make a good guess as to which bank he wants
-					int index = 0;
-					int column = lib.col(lib.table, lib.table.getSelectedColumn());
-					int row = lib.table.getSelectedRow();
-					int len = lib.table.getSelectedRowCount();
-						
-					if (column < 0 || row < 0 || len == 0) // nope
-						{
-						index = 0;
-						}
-					else if (column == 0)	// scratch
-						{
-						index = 0;
-						}
-					else
-						{
-						index = column - 1;
-						}
+        boolean requests = false;
+        item = new JMenuItem("Request Bank from Synth");
+        item.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent evt) 
+                {
+                int requestableBank = synth.getRequestableBank();
+                if (requestableBank == -1)              // "All Banks can be Requestable"
+                    {
+                    String[] bankNames = synth.getBankNames();
+                    int bankIndex = 0;
+                    if (bankNames == null || bankNames.length == 1)                 // there's only one bank
+                        {
+                        if (!synth.showSimpleConfirm("Bank Request", "Request Bank?", "Request")) return;
+                        }
+                    else                    // multiple banks, must chooes
+                        {
+                        JComboBox bank = new JComboBox(bankNames); 
+                        Librarian lib = synth.librarian;
+                                
+                        // Let's make a good guess as to which bank he wants
+                        int index = 0;
+                        int column = lib.col(lib.table, lib.table.getSelectedColumn());
+                        int row = lib.table.getSelectedRow();
+                        int len = lib.table.getSelectedRowCount();
+                                                
+                        if (column < 0 || row < 0 || len == 0) // nope
+                            {
+                            index = 0;
+                            }
+                        else if (column == 0)   // scratch
+                            {
+                            index = 0;
+                            }
+                        else
+                            {
+                            index = column - 1;
+                            }
 
-					bank.setSelectedIndex(index);
-				
-					boolean result = Synth.showMultiOption(synth, new String[] { "Bank" }, 
-						new JComponent[] { bank }, "Bank Request", "Enter the Bank.");
-			
-					if (result == false) return;
-					else bankIndex = bank.getSelectedIndex();
-					}
-							
-				byte[] data = synth.requestBankDump(bankIndex);
-				if (data != null)		// this should always be true
-					{
-					synth.tryToSendSysex(data);
-					}
-				}
-			else				// "Only a specific Bank" -- must let the user know
-				{
-				if (synth.showSimpleConfirm("Bank Request", "Request Bank " + synth.librarian.getLibrary().getBankName(requestableBank) + "?\nOnly this bank can be requested.", "Request"))
-					{
-					byte[] data = synth.requestBankDump(requestableBank);
-					if (data != null)
-						{
-						synth.tryToSendSysex(data);
-						}
-					}
-				}
-			}
-		});
-	
-	if (synth.requestBankDump(0) != null)	// we have bank dump requests
-		{
-		menu.add(item);
-		item.setEnabled(false);
-		requests = true;
-		}
-			
-	item = new JMenuItem("Request All Patches from Synth");
-	item.addActionListener(new ActionListener()
-		{
-		public void actionPerformed(ActionEvent evt) 
-			{
-			if (synth.showSimpleConfirm("All Patches", "Request All Patches from the Synth?", "Request"))
-				{
-				byte[] data = synth.requestAllDump();
-				if (data != null)
-					{
-					synth.tryToSendSysex(data);
-					}
-				}
-			}
-		});
-	
-	if (synth.requestAllDump() != null)	// we have all-dump requests
-		{
-		menu.add(item);
-		item.setEnabled(false);
-		requests = true;
-		}
+                        bank.setSelectedIndex(index);
+                                
+                        boolean result = Synth.showMultiOption(synth, new String[] { "Bank" }, 
+                            new JComponent[] { bank }, "Bank Request", "Enter the Bank.");
+                        
+                        if (result == false) return;
+                        else bankIndex = bank.getSelectedIndex();
+                        }
+                                                        
+                    byte[] data = synth.requestBankDump(bankIndex);
+                    if (data != null)               // this should always be true
+                        {
+                        synth.tryToSendSysex(data);
+                        }
+                    }
+                else                            // "Only a specific Bank" -- must let the user know
+                    {
+                    if (synth.showSimpleConfirm("Bank Request", "Request Bank " + synth.librarian.getLibrary().getBankName(requestableBank) + "?\nOnly this bank can be requested.", "Request"))
+                        {
+                        byte[] data = synth.requestBankDump(requestableBank);
+                        if (data != null)
+                            {
+                            synth.tryToSendSysex(data);
+                            }
+                        }
+                    }
+                }
+            });
+        
+        if (synth.requestBankDump(0) != null)   // we have bank dump requests
+            {
+            menu.add(item);
+            item.setEnabled(false);
+            requests = true;
+            }
+                        
+        item = new JMenuItem("Request All Patches from Synth");
+        item.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent evt) 
+                {
+                if (synth.showSimpleConfirm("All Patches", "Request All Patches from the Synth?", "Request"))
+                    {
+                    byte[] data = synth.requestAllDump();
+                    if (data != null)
+                        {
+                        synth.tryToSendSysex(data);
+                        }
+                    }
+                }
+            });
+        
+        if (synth.requestAllDump() != null)     // we have all-dump requests
+            {
+            menu.add(item);
+            item.setEnabled(false);
+            requests = true;
+            }
 
-	if (requests)
-		{
-		menu.addSeparator();
-		}
-			
+        if (requests)
+            {
+            menu.addSeparator();
+            }
+                        
 
-	item = new JMenuItem("Write Selected Patches to Synth");
-	synth.writeMenu = item;
-	item.addActionListener(new ActionListener()
-		{
-		public void actionPerformed(ActionEvent evt) { synth.librarian.write(); }
-		});
-	menu.add(item);
-	item.setEnabled(false);
-		
-	item = new JMenuItem("Write Bank to Synth");
-	item.addActionListener(new ActionListener()
-		{
-		public void actionPerformed(ActionEvent evt) { synth.librarian.writeBank(); }
-		});
-	menu.add(item);
-	item.setEnabled(false);
-		
-	item = new JMenuItem("Write All Patches to Synth");
-	item.addActionListener(new ActionListener()
-		{
-		public void actionPerformed(ActionEvent evt) { synth.librarian.writeAll(); }
-		});
-	menu.add(item);
-	item.setEnabled(false);
-		
-	menu.addSeparator();
-	
-	item = new JMenuItem("Save Selected Patches");
-	item.addActionListener(new ActionListener()
-		{
-		public void actionPerformed(ActionEvent evt) { synth.librarian.save(); }
-		});
-	menu.add(item);
-	item.setEnabled(false);
-		
-	item = new JMenuItem("Save Bank");
-	item.addActionListener(new ActionListener()
-		{
-		public void actionPerformed(ActionEvent evt) { synth.librarian.saveBank(); }
-		});
-	menu.add(item);
-	item.setEnabled(false);
-		
-	item = new JMenuItem("Save All Patches");
-	item.addActionListener(new ActionListener()
-		{
-		public void actionPerformed(ActionEvent evt) { synth.librarian.saveAll(); }
-		});
-	menu.add(item);
-	item.setEnabled(false);
-		
-	menu.addSeparator();		
+        item = new JMenuItem("Write Selected Patches to Synth");
+        synth.writeMenu = item;
+        item.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent evt) { synth.librarian.write(); }
+            });
+        menu.add(item);
+        item.setEnabled(false);
+                
+        item = new JMenuItem("Write Bank to Synth");
+        item.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent evt) { synth.librarian.writeBank(); }
+            });
+        menu.add(item);
+        item.setEnabled(false);
+                
+        item = new JMenuItem("Write All Patches to Synth");
+        item.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent evt) { synth.librarian.writeAll(); }
+            });
+        menu.add(item);
+        item.setEnabled(false);
+                
+        menu.addSeparator();
+        
+        item = new JMenuItem("Save Selected Patches");
+        item.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent evt) { synth.librarian.save(); }
+            });
+        menu.add(item);
+        item.setEnabled(false);
+                
+        item = new JMenuItem("Save Bank");
+        item.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent evt) { synth.librarian.saveBank(); }
+            });
+        menu.add(item);
+        item.setEnabled(false);
+                
+        item = new JMenuItem("Save All Patches");
+        item.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent evt) { synth.librarian.saveAll(); }
+            });
+        menu.add(item);
+        item.setEnabled(false);
+                
+        menu.addSeparator();            
 
-	item = new JMenuItem("Edit Patch in This Editor");
-	item.addActionListener(new ActionListener()
-		{
-		public void actionPerformed(ActionEvent evt) 
-			{ 
-			synth.librarian.loadOneInternal(); 
-			}
-		});
-	menu.add(item);
-	item.setEnabled(false);
+        item = new JMenuItem("Edit Patch in This Editor");
+        item.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent evt) 
+                { 
+                synth.librarian.loadOneInternal(); 
+                }
+            });
+        menu.add(item);
+        item.setEnabled(false);
 
-	item = new JMenuItem("Edit Patch in a New Editor");
-	item.addActionListener(new ActionListener()
-		{
-		public void actionPerformed(ActionEvent evt) 
-			{ 
-			synth.librarian.loadOneExternal(); 
-			}
-		});
-	menu.add(item);
-	item.setEnabled(false);
-		
-	return menu;
-	}
-	
-	
-	
-	
-	/* JTable says that it maintains the proper column values even if the columns are rearranged,
-		but this is a lie.  You have to do it manually.  This function does the proper conversion table -> model. */
-	static int col(JTable table, int column)
-		{
-		if (column < 0) return column;
-		else return table.getColumnModel().getColumn(column).getModelIndex();
-		}
+        item = new JMenuItem("Edit Patch in a New Editor");
+        item.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent evt) 
+                { 
+                synth.librarian.loadOneExternal(); 
+                }
+            });
+        menu.add(item);
+        item.setEnabled(false);
+                
+        return menu;
+        }
+        
+        
+        
+        
+    /* JTable says that it maintains the proper column values even if the columns are rearranged,
+       but this is a lie.  You have to do it manually.  This function does the proper conversion table -> model. */
+    static int col(JTable table, int column)
+        {
+        if (column < 0) return column;
+        else return table.getColumnModel().getColumn(column).getModelIndex();
+        }
 
 
-	/* JTable says that it maintains the proper column values even if the columns are rearranged,
-		but this is a lie.  You have to do it manually.  This function does the proper conversion model -> table. */
-	static int antiCol(JTable table, int index)
-		{
-		if (index < 0) return index;
-		/// UGH, this is O(n).  Seriously, Java has no way to do this?
-		TableColumnModel tableModel = table.getColumnModel();
-		int numColumns = tableModel.getColumnCount();
-		for(int i = 0; i < numColumns; i++)
-			{
-			if (tableModel.getColumn(i).getModelIndex() == index)
-				return i;
-			}
-		return -1;			// maybe?
-		}
+    /* JTable says that it maintains the proper column values even if the columns are rearranged,
+       but this is a lie.  You have to do it manually.  This function does the proper conversion model -> table. */
+    static int antiCol(JTable table, int index)
+        {
+        if (index < 0) return index;
+        /// UGH, this is O(n).  Seriously, Java has no way to do this?
+        TableColumnModel tableModel = table.getColumnModel();
+        int numColumns = tableModel.getColumnCount();
+        for(int i = 0; i < numColumns; i++)
+            {
+            if (tableModel.getColumn(i).getModelIndex() == index)
+                return i;
+            }
+        return -1;                      // maybe?
+        }
 
-	public void downloadRange()
-		{
-		getLibrary().getSynth().doGetAllPatches();
-		}
-		
+    public void downloadRange()
+        {
+        getLibrary().getSynth().doGetAllPatches();
+        }
+                
     /** Downloads all locations. */
     public void downloadAll()
         {
-        performDownload(0, 0, getLibrary().getNumBanks() - 1, getLibrary().getBankSize() - 1 );		// wrap-around
+        performDownload(0, 0, getLibrary().getNumBanks() - 1, getLibrary().getBankSize() - 1 );         // wrap-around
         }
 
     /** Downloads all locations in bank. */
@@ -840,23 +840,23 @@ public static JMenu buildLibrarianMenu(Synth synth)
         int len = table.getSelectedRowCount();
                         
         if (column < 0 || row < 0 || len == 0) // nope
-        	{
-        	if (getLibrary().getNumBanks() == 1)
-        		{
-        		column = 1;		// assume it's "the" bank
-        		}
-        	else
-        		{
-	            getLibrary().synth.showSimpleError("Cannot Download", "Please select a patch in the bank to download first.");
-            	return;
-            	}
+            {
+            if (getLibrary().getNumBanks() == 1)
+                {
+                column = 1;             // assume it's "the" bank
+                }
+            else
+                {
+                getLibrary().synth.showSimpleError("Cannot Download", "Please select a patch in the bank to download first.");
+                return;
+                }
             }
             
         if (column == 0)
-        	{
+            {
             getLibrary().synth.showSimpleError("Cannot Download", "Edisyn cannot download patches to the scratch bank.\nSelect another bank.");
-			return;
-			}
+            return;
+            }
 
         performDownload(column - 1, 0, column - 1, getLibrary().getBankSize() - 1 );
         }
@@ -870,40 +870,40 @@ public static JMenu buildLibrarianMenu(Synth synth)
         int len = table.getSelectedRowCount();
                         
         if (column < 0 || row < 0 || len == 0) // nope
-        	{
+            {
             getLibrary().synth.showSimpleError("Cannot Download", "Please select a patch or patch range to download first.");
             return;
             }
             
         if (column == 0)
-        	{
+            {
             getLibrary().synth.showSimpleError("Cannot Download", "Edisyn cannot download patches from the scratch bank.\nSelect another bank.");
-			return;
-			}
-    	
+            return;
+            }
+        
         performDownload(column - 1, row, column - 1, row + len - 1);
         }
         
     void performDownload(int bank1, int patch1, int bank2, int patch2)
-    	{
+        {
         Synth synth = getLibrary().getSynth();
         
-    	if (!synth.getSupportsDownloads())
-    		{
-           	synth.showSimpleError("Cannot Download", "Edisyn cannot request patches from this synthesizer.");
-    		return;
-    		}
-    		
-    	boolean hasBanks = (synth.getBankNames() != null);
-    	if (hasBanks)
-    		{
-    		synth.doGetPatchesForLibrarian(bank1, patch1, bank2, patch2);
-    		}
-		else
-			{    	
-    		synth.doGetPatchesForLibrarian(PatchLocation.NO_BANK, patch1, PatchLocation.NO_BANK, patch2);
-    		}
-    	}
+        if (!synth.getSupportsDownloads())
+            {
+            synth.showSimpleError("Cannot Download", "Edisyn cannot request patches from this synthesizer.");
+            return;
+            }
+                
+        boolean hasBanks = (synth.getBankNames() != null);
+        if (hasBanks)
+            {
+            synth.doGetPatchesForLibrarian(bank1, patch1, bank2, patch2);
+            }
+        else
+            {       
+            synth.doGetPatchesForLibrarian(PatchLocation.NO_BANK, patch1, PatchLocation.NO_BANK, patch2);
+            }
+        }
 
 
     /** Writes all locations. */
@@ -911,10 +911,10 @@ public static JMenu buildLibrarianMenu(Synth synth)
         {
         Synth synth = getLibrary().getSynth();
         
-		if (synth.showSimpleConfirm("Write All", "Write All Patches to Synthesizer?\nThis operation cannot be canceled.\nWriting all patches may take a very long time.", "Write"))
-			{
-        	getLibrary().writeRange(Library.ALL_PATCHES, 0, 0);
-        	}
+        if (synth.showSimpleConfirm("Write All", "Write All Patches to Synthesizer?\nThis operation cannot be canceled.\nWriting all patches may take a very long time.", "Write"))
+            {
+            getLibrary().writeRange(Library.ALL_PATCHES, 0, 0);
+            }
         }
 
     /** Writes all locations in bank. */
@@ -927,33 +927,33 @@ public static JMenu buildLibrarianMenu(Synth synth)
         int len = table.getSelectedRowCount();
                         
         if (column < 0 || row < 0 || len == 0) // nope
-        	{
-        	if (getLibrary().getNumBanks() == 1)
-        		{
-        		column = 1;		// assume it's "the" bank
-        		}
-        	else
-        		{
-	            synth.showSimpleError("Cannot Write", "Please select a patch in the bank to write first.");
-            	return;
-            	}
+            {
+            if (getLibrary().getNumBanks() == 1)
+                {
+                column = 1;             // assume it's "the" bank
+                }
+            else
+                {
+                synth.showSimpleError("Cannot Write", "Please select a patch in the bank to write first.");
+                return;
+                }
             }
             
         if (column == 0)
-        	{
+            {
             synth.showSimpleError("Cannot Write", "Edisyn cannot write patches from the scratch bank.\nSelect another bank.");
-			return;
-			}
-			
-		if (synth.showSimpleConfirm("Write Bank", "Write Bank to Synthesizer?\nThis operation cannot be canceled.\nWriting a bank may take a long time.", "Write"))
-			{
-        	getLibrary().writeBank(column - 1);
-        	}
+            return;
+            }
+                        
+        if (synth.showSimpleConfirm("Write Bank", "Write Bank to Synthesizer?\nThis operation cannot be canceled.\nWriting a bank may take a long time.", "Write"))
+            {
+            getLibrary().writeBank(column - 1);
+            }
         }
 
 
-	public static final int LARGE_REGION = 10;
-	
+    public static final int LARGE_REGION = 10;
+        
     /** Writes the selected locations. */
     public void write()
         {
@@ -964,44 +964,44 @@ public static JMenu buildLibrarianMenu(Synth synth)
         int len = table.getSelectedRowCount();
                         
         if (column < 0 || row < 0 || len == 0) // nope
-        	{
+            {
             synth.showSimpleError("Cannot Write", "Please select a patch or patch range to write first.");
             return;
             }
             
         if (column == 0)
-        	{
+            {
             synth.showSimpleError("Cannot Write", "Edisyn cannot write patches from the scratch bank.\nSelect another bank.");
-			return;
-			}
+            return;
+            }
 
         if (!synth.getSupportsPatchWrites())
             {
             synth.showSimpleError("Not Supported", "Edisyn cannot write arbitrary patches to this synthesizer.");
             }
-		else if (len == 1)
-			{
-		 	if (synth.showSimpleConfirm("Write Patch", "Write Patch to Synthesizer?", "Write"))
-	        	getLibrary().writeRange(column - 1, row, len);
-		 	}
-		 else if (len < LARGE_REGION)
-			{
-		 	if (synth.showSimpleConfirm("Write Selected Region", "Write Selected Region to Synthesizer?", "Write"))
-	        	getLibrary().writeRange(column - 1, row, len);
-			}
-		else
-			{
-		 	if (synth.showSimpleConfirm("Write Selected Region", "Write Selected Region to Synthesizer?\nThis operation cannot be canceled.\nWriting a large region can take a long time.", "Write"))
-        		getLibrary().writeRange(column - 1, row, len);
-        	}
+        else if (len == 1)
+            {
+            if (synth.showSimpleConfirm("Write Patch", "Write Patch to Synthesizer?", "Write"))
+                getLibrary().writeRange(column - 1, row, len);
+            }
+        else if (len < LARGE_REGION)
+            {
+            if (synth.showSimpleConfirm("Write Selected Region", "Write Selected Region to Synthesizer?", "Write"))
+                getLibrary().writeRange(column - 1, row, len);
+            }
+        else
+            {
+            if (synth.showSimpleConfirm("Write Selected Region", "Write Selected Region to Synthesizer?\nThis operation cannot be canceled.\nWriting a large region can take a long time.", "Write"))
+                getLibrary().writeRange(column - 1, row, len);
+            }
         }
 
-	public void saveAll()
-		{
+    public void saveAll()
+        {
         getLibrary().saveRange(Library.ALL_PATCHES, 0, 0);
-		}
-		
-		
+        }
+                
+                
     /** Writes all locations in bank. */
     public void saveBank()
         {
@@ -1011,22 +1011,22 @@ public static JMenu buildLibrarianMenu(Synth synth)
                         
         if (column < 0 || row < 0 || len == 0) // nope
             {
-        	if (getLibrary().getNumBanks() == 1)
-        		{
-        		column = 1;		// assume it's "the" bank
-        		}
-        	else
-        		{
-	            getLibrary().synth.showSimpleError("Cannot Save", "Please select a patch in the bank to save first.");
-            	return;
-            	}
+            if (getLibrary().getNumBanks() == 1)
+                {
+                column = 1;             // assume it's "the" bank
+                }
+            else
+                {
+                getLibrary().synth.showSimpleError("Cannot Save", "Please select a patch in the bank to save first.");
+                return;
+                }
             }
             
         if (column == 0)
-        	{
+            {
             getLibrary().synth.showSimpleError("Cannot Write", "Edisyn cannot save patches from the scratch bank.\nSelect another bank.");
-			return;
-			}
+            return;
+            }
         getLibrary().saveBank(column - 1);
         }
 
@@ -1039,17 +1039,17 @@ public static JMenu buildLibrarianMenu(Synth synth)
         int len = table.getSelectedRowCount();
                         
         if (column < 0 || row < 0 || len == 0) // nope
-        	{
+            {
             getLibrary().synth.showSimpleError("Cannot Save", "Please select a patch or patch range to save first.");
             return;
             }
             
             
         if (column == 0)
-        	{
+            {
             getLibrary().synth.showSimpleError("Cannot Save", "Edisyn cannot save patches from the scratch bank.\nSelect another bank.");
-			return;
-			}
+            return;
+            }
             
         getLibrary().saveRange(column - 1, row, len);
         }
@@ -1059,78 +1059,78 @@ public static JMenu buildLibrarianMenu(Synth synth)
     public void clear()
         {
         getLibrary().pushUndo();
-		updateUndoRedo();
+        updateUndoRedo();
 
         int column = col(table, table.getSelectedColumn());
         int row = table.getSelectedRow();
         int len = table.getSelectedRowCount();
                         
         if (column < 0 || row < 0 || len == 0) // nope
-        	{
+            {
             getLibrary().synth.showSimpleError("Cannot Clear", "Please select a patch or patch range to clear first.");
             return;
             }
                                 
-        fill(table, column, row, len, null);		// getLibrary().getInitPatch());
+        fill(table, column, row, len, null);            // getLibrary().getInitPatch());
         }
 
     /** Clears current selected bank. */
     public void clearBank()
         {
         getLibrary().pushUndo();
-		updateUndoRedo();
+        updateUndoRedo();
 
         int column = col(table, table.getSelectedColumn());
         int row = table.getSelectedRow();
         int len = table.getSelectedRowCount();
                         
         if (column < 0 || row < 0 || len == 0) // nope
-        	{
-        	if (getLibrary().getNumBanks() == 1)
-        		{
-        		column = 1;		// assume it's "the" bank
-        		}
-        	else
-        		{
-	            getLibrary().synth.showSimpleError("Cannot Clear", "Please select a patch in the bank to clear first.");
-	            return;
-	            }
+            {
+            if (getLibrary().getNumBanks() == 1)
+                {
+                column = 1;             // assume it's "the" bank
+                }
+            else
+                {
+                getLibrary().synth.showSimpleError("Cannot Clear", "Please select a patch in the bank to clear first.");
+                return;
+                }
             }
                                 
-        fill(table, column, 0, getLibrary().getBankSize(), null);		// getLibrary().getInitPatch());
+        fill(table, column, 0, getLibrary().getBankSize(), null);               // getLibrary().getInitPatch());
         }
 
-	public void pushUndo()
-		{
-		getLibrary().pushUndo();
-		updateUndoRedo();
-		}
+    public void pushUndo()
+        {
+        getLibrary().pushUndo();
+        updateUndoRedo();
+        }
 
     /** Clears all. */
     public void clearAll()
-    	{
-    	clearAll(true);
-    	}
-    	
+        {
+        clearAll(true);
+        }
+        
     public void clearAll(boolean pushUndo)
         {
         if (pushUndo)
-        	{
-        	getLibrary().pushUndo();
-			updateUndoRedo();
-			}
+            {
+            getLibrary().pushUndo();
+            updateUndoRedo();
+            }
 
         for(int i = 0; i < getLibrary().getNumBanks() + 1; i++)                     
-        	{
-        	fill(table, i, 0, getLibrary().getBankSize(), null);		// getLibrary().getInitPatch());
-        	}
+            {
+            fill(table, i, 0, getLibrary().getBankSize(), null);            // getLibrary().getInitPatch());
+            }
         }
 
     /** Sets all the values of a given set of locations to copies of a certain value. */
     public void fill(JTable table, int col, int row, int len, Patch val)
         {
-		int anticol = antiCol(table, col);
-		
+        int anticol = antiCol(table, col);
+                
         for(int i = row; i < row + len; i++)
             {
             table.setValueAt(val == null ? null : new Patch(val), i, anticol);
@@ -1147,12 +1147,12 @@ public static JMenu buildLibrarianMenu(Synth synth)
             }
         else
             {
-	        Synth toSynth = to.getLibrary().getSynth();
+            Synth toSynth = to.getLibrary().getSynth();
             toSynth.getUndo().push(toSynth.getModel());
             }
         
-       int antiFrom = antiCol(fromTable, fromCol);
-       int antiTo = antiCol(toTable, toCol);
+        int antiFrom = antiCol(fromTable, fromCol);
+        int antiTo = antiCol(toTable, toCol);
         
         Patch p = null;
         for(int i = 0; i < len; i++)
@@ -1163,28 +1163,28 @@ public static JMenu buildLibrarianMenu(Synth synth)
                 toTable.setValueAt(p = (_from == null ? null : new Patch(_from)), toRow + i, antiTo);
                 }
             else
-            	{
+                {
                 toTable.setValueAt((p = _from), toRow + i, antiTo);  
                 }             
         
-        	if (!isPatchWell(fromTable) && p != null)
-            	{
-				int bank = (antiFrom - 1);
-				int number = fromRow;
-				if (bank != -1)			// don't revise the patch location if it's the scratch bank
-					{
-					// revise the patch location to where it came from in the librarian
-					p.number = number;
-					p.bank = bank;
-					}
-            	}
+            if (!isPatchWell(fromTable) && p != null)
+                {
+                int bank = (antiFrom - 1);
+                int number = fromRow;
+                if (bank != -1)                 // don't revise the patch location if it's the scratch bank
+                    {
+                    // revise the patch location to where it came from in the librarian
+                    p.number = number;
+                    p.bank = bank;
+                    }
+                }
             }
             
         // Change the selection
         fromTable.clearSelection();
         toTable.clearSelection();
         toTable.changeSelection(toRow, antiTo, false, false);
-        toTable.changeSelection(toRow + len - 1, antiTo, false, true);		// not sure why we need to do -1, but we do
+        toTable.changeSelection(toRow + len - 1, antiTo, false, true);          // not sure why we need to do -1, but we do
         } 
                 
     /** Moves one set of locations to another, clearing the original locations. */
@@ -1208,7 +1208,7 @@ public static JMenu buildLibrarianMenu(Synth synth)
         fromTable.clearSelection();
         toTable.clearSelection();
         toTable.changeSelection(toRow, antiTo, false, false);
-        toTable.changeSelection(toRow + len - 1, antiTo, false, true);		// not sure why we need to do -1, but we do
+        toTable.changeSelection(toRow + len - 1, antiTo, false, true);          // not sure why we need to do -1, but we do
         }
         
     /** Swaps one set of locations with another. */
@@ -1221,7 +1221,7 @@ public static JMenu buildLibrarianMenu(Synth synth)
             }
         else
             {
-	        Synth toSynth = to.getLibrary().getSynth();
+            Synth toSynth = to.getLibrary().getSynth();
             toSynth.getUndo().push(toSynth.getModel());
             }
 
@@ -1234,9 +1234,9 @@ public static JMenu buildLibrarianMenu(Synth synth)
                 }
             }
                         
-		int antiTo = antiCol(toTable, toCol);
-		int antiFrom = antiCol(fromTable, fromCol);
-		
+        int antiTo = antiCol(toTable, toCol);
+        int antiFrom = antiCol(fromTable, fromCol);
+                
         for(int i = 0; i < len; i++)
             {
             Object obj = toTable.getValueAt(toRow + i, antiTo);
@@ -1249,7 +1249,7 @@ public static JMenu buildLibrarianMenu(Synth synth)
         fromTable.clearSelection();
         toTable.clearSelection();
         toTable.changeSelection(toRow, antiTo, false, false);
-        toTable.changeSelection(toRow + len - 1, antiTo, false, true);		// not sure why we need to do -1, but we do
+        toTable.changeSelection(toRow + len - 1, antiTo, false, true);          // not sure why we need to do -1, but we do
         }
 
     static boolean isPatchWell(JTable table) { return table.getTableHeader() == null; }
@@ -1281,29 +1281,29 @@ public static JMenu buildLibrarianMenu(Synth synth)
                 }
             }
 
-		public static Transferable buildTransferable(final PatchLocationSet locationSet)
-			{
-			return new Transferable()
-				{
-				public Object getTransferData(DataFlavor flavor) 
-					{
-					if (flavor.equals(localObjectFlavor))
-						return locationSet;
-					else
-						return null;
-					}
-				
-				public DataFlavor[] getTransferDataFlavors() 
-					{
-					return new DataFlavor[] { localObjectFlavor };
-					}
+        public static Transferable buildTransferable(final PatchLocationSet locationSet)
+            {
+            return new Transferable()
+                {
+                public Object getTransferData(DataFlavor flavor) 
+                    {
+                    if (flavor.equals(localObjectFlavor))
+                        return locationSet;
+                    else
+                        return null;
+                    }
+                                
+                public DataFlavor[] getTransferDataFlavors() 
+                    {
+                    return new DataFlavor[] { localObjectFlavor };
+                    }
 
-				public boolean isDataFlavorSupported(DataFlavor flavor) 
-					{
-					return (flavor.equals(localObjectFlavor));
-					}
-				};
-			}
+                public boolean isDataFlavorSupported(DataFlavor flavor) 
+                    {
+                    return (flavor.equals(localObjectFlavor));
+                    }
+                };
+            }
 
         // We allow all three kinds of drags
         public int getSourceActions(JComponent c) 
@@ -1388,8 +1388,8 @@ public static JMenu buildLibrarianMenu(Synth synth)
             Librarian to = (Librarian) c;
 
             // we fail if the synths are different of course         
-			if (pls.synth.getClass() != synth.getClass())
-				return false;                
+            if (pls.synth.getClass() != synth.getClass())
+                return false;                
 
             int toNumRows = toTable.getModel().getRowCount();
             JTable fromTable = pls.table;
@@ -1397,8 +1397,8 @@ public static JMenu buildLibrarianMenu(Synth synth)
             int fromRow = pls.row;
             int len = pls.length;
             int toCol = Librarian.col(toTable, dl.getColumn());
-            int toRow = dl.getRow() - (fromTable.getSelectionModel().getLeadSelectionIndex() - fromRow);		// gotta offset by where we dragged
-			if (isPatchWell(fromTable)) toRow = dl.getRow();           		// because its selectionIndex is -1
+            int toRow = dl.getRow() - (fromTable.getSelectionModel().getLeadSelectionIndex() - fromRow);                // gotta offset by where we dragged
+            if (isPatchWell(fromTable)) toRow = dl.getRow();                        // because its selectionIndex is -1
       
             // We fail under any of the following conditions:
             if ((toCol < 0) || (toRow < 0)  ||
@@ -1446,17 +1446,17 @@ public static JMenu buildLibrarianMenu(Synth synth)
                 PatchLocationSet pls = (PatchLocationSet)(info.getTransferable().getTransferData(localObjectFlavor));
                           
                 // find the from-librarian
-				JTable fromTable = pls.table;
-				c = fromTable;
+                JTable fromTable = pls.table;
+                c = fromTable;
                 while(!(c instanceof Librarian))
                     c = (JComponent)(c.getParent());
                 Librarian from = (Librarian) c;
-				int fromCol = pls.column;
-				int fromRow = pls.row;
-				int len = pls.length;
-				int toCol = Librarian.col(toTable, dl.getColumn());
-				int toRow = dl.getRow() - (fromTable.getSelectionModel().getLeadSelectionIndex() - fromRow);		// gotta offset by where we dragged
-				if (isPatchWell(fromTable)) toRow = dl.getRow();     		// because its selectionIndex is -1 
+                int fromCol = pls.column;
+                int fromRow = pls.row;
+                int len = pls.length;
+                int toCol = Librarian.col(toTable, dl.getColumn());
+                int toRow = dl.getRow() - (fromTable.getSelectionModel().getLeadSelectionIndex() - fromRow);            // gotta offset by where we dragged
+                if (isPatchWell(fromTable)) toRow = dl.getRow();                // because its selectionIndex is -1 
 
                 // perform the appropriate action
                 
@@ -1500,15 +1500,15 @@ public static JMenu buildLibrarianMenu(Synth synth)
             }
         }
 
-	void warnLibrarian(Synth synth)
-		{
-		if (!synth.getLastXAsBoolean("LibrarianWarned", synth.getSynthClassName(), false, true))
-			{
-			synth.showSimpleMessage("Librarian Untested", 
-				"The Librarian for the " + synth.getSynthNameLocal() + " has not yet been tested because\n" +
-				"I no longer have a unit.  It may not work. If you have this synth, help me test it.\n" + 
-				"Send mail to sean@cs.gmu.edu");
-			synth.setLastX("" + true, "LibrarianWarned", synth.getSynthClassName(), true);
-			}
-		}
+    void warnLibrarian(Synth synth)
+        {
+        if (!synth.getLastXAsBoolean("LibrarianWarned", synth.getSynthClassName(), false, true))
+            {
+            synth.showSimpleMessage("Librarian Untested", 
+                "The Librarian for the " + synth.getSynthNameLocal() + " has not yet been tested because\n" +
+                "I no longer have a unit.  It may not work. If you have this synth, help me test it.\n" + 
+                "Send mail to sean@cs.gmu.edu");
+            synth.setLastX("" + true, "LibrarianWarned", synth.getSynthClassName(), true);
+            }
+        }
     }

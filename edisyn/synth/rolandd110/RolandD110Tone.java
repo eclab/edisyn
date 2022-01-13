@@ -1699,7 +1699,7 @@ return b;
     public String[] getPatchNumberNames() { return buildIntegerNames(64, 1); }
 
     /** Return a list of all bank names.  Default is null, indicating no banks are supported.  */
-    public String[] getBankNames() { return TONE_GROUP; }	// or TONE_GROUP_SHORT?
+    public String[] getBankNames() { return TONE_GROUP; }       // or TONE_GROUP_SHORT?
 
     /** Return a list of each bank, indicating which are writeable.  Default is an array, all true, the size of getBankNames(). */
     public boolean[] getWriteableBanks() { return new boolean[] { false, false, true, false }; }
@@ -1711,8 +1711,8 @@ return b;
     public int getPatchNameLength() { return 10; }
 
     /** Return true if individual (non-bank) patches on the synthesizer contain location information (bank, number). 
-    	This will matter when reading patches from disk, rather than loading them from the synth, so as to put them
-    	in the right place. */
+        This will matter when reading patches from disk, rather than loading them from the synth, so as to put them
+        in the right place. */
     public boolean getPatchContainsLocation() { return true; }
 
     public boolean librarianTested() { return true; }

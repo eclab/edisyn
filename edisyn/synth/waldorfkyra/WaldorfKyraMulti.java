@@ -848,8 +848,8 @@ public class WaldorfKyraMulti extends Synth
     public int getPatchNameLength() { return 16; }
 
     /** Return true if individual (non-bank) patches on the synthesizer contain location information (bank, number). 
-    	This will matter when reading patches from disk, rather than loading them from the synth, so as to put them
-    	in the right place. */
+        This will matter when reading patches from disk, rather than loading them from the synth, so as to put them
+        in the right place. */
     public boolean getPatchContainsLocation() { return true; }
     }
     

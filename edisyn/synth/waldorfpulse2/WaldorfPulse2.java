@@ -1172,13 +1172,13 @@ public class WaldorfPulse2 extends Synth
 
     public boolean getSendsParametersAfterWrite() { return true; }
 
-	/** Return a list of all patch number names.  Default is { "Main" } */
-	public String[] getPatchNumberNames()  { return buildIntegerNames(499, 1); }
+    /** Return a list of all patch number names.  Default is { "Main" } */
+    public String[] getPatchNumberNames()  { return buildIntegerNames(499, 1); }
 
-	/** Return a list whether individual patches can be written.  Default is FALSE. */
-	public boolean getSupportsPatchWrites() { return true; }
+    /** Return a list whether individual patches can be written.  Default is FALSE. */
+    public boolean getSupportsPatchWrites() { return true; }
 
-	public int getPatchNameLength() { return 14; }
+    public int getPatchNameLength() { return 14; }
 
     public boolean librarianTested() { return true; }
     }

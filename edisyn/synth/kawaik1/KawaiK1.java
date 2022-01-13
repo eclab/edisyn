@@ -32,7 +32,7 @@ public class KawaiK1 extends Synth
     //// Similarly bank dump requests are for just the four banks I, E, i, e.
         
     public static final String[] BANKS = { "I", "E", "i", "e" };
-    public static final String[] GROUPS = { "A", "B", "C", "D" };	
+    public static final String[] GROUPS = { "A", "B", "C", "D" };       
     public static final String[] WAVES = { "Sine 1st", "Sine 2nd", "Sine 3rd", "Sine 4th", "Sine 5th", "Sine 6th", "Sine 7th", "Sine 8th", "Sine 9th", "Sine 10th", "Sine 11th", "Sine 12th", "Sine 16th", 
                                            "Saw 1", "Saw 2", "Saw 3", "Saw 4", "Saw 5", "Saw 6", "Saw 7", "Saw 8", "Saw 9", "Saw 10", "Saw 11", "Saw 12", "Saw 13", "Saw 14", "Saw 15", "Saw 16", "Saw 17", "Saw 18", "Saw 19", 
                                            "Square 1", "Square 2", "Square 3", "Square 4", "Square 5", "Inverse", "Triangle", "Random", 
@@ -826,7 +826,7 @@ public class KawaiK1 extends Synth
         {
         if (data[3] == (byte)0x20) // single
             {
-            boolean upper = (data[7] < 32);			// < 32 is A...D,  >= 32 is a...d
+            boolean upper = (data[7] < 32);                     // < 32 is A...D,  >= 32 is a...d
             model.set("bank", (upper ? 0 : 2) + (data[6] == 0 ? 0 : 1));
             model.set("number", data[7] % 32);
             return subparse(data, 8);
@@ -857,11 +857,11 @@ public class KawaiK1 extends Synth
             int patchNum = showBankSysexOptions(data, n);
             if (patchNum < 0) return PARSE_CANCELLED;
   
-  			// weirdly this parse is different from the one-single message
-  			
-            boolean upper = (data[7] == 0);		// Upper is 0, lower is 0x20
+            // weirdly this parse is different from the one-single message
+                        
+            boolean upper = (data[7] == 0);             // Upper is 0, lower is 0x20
             model.set("bank", (upper ? 0 : 2) + (data[6] == 0 ? 0 : 1));
-            model.set("number", patchNum);		// chosen by the user
+            model.set("number", patchNum);              // chosen by the user
 
             // okay, we're loading and editing patch number patchNum.  Here we go.
             return subparse(data, patchNum * 88 + 8);         
@@ -1070,8 +1070,8 @@ public class KawaiK1 extends Synth
             boolean internal = (b == 0 || b == 2);
             
             Model tempModel = buildModel();
-			tempModel.set("bank", (internal ? 2 : 3));		// i or e
-            tempModel.set("number", 63);					// D8
+            tempModel.set("bank", (internal ? 2 : 3));              // i or e
+            tempModel.set("number", 63);                                        // D8
             changePatch(tempModel);
             simplePause(getPauseAfterChangePatch());
             }
@@ -1213,11 +1213,11 @@ public class KawaiK1 extends Synth
         result[3] = (byte)0x20;
         result[4] = (byte)0x00;
         result[5] = (byte)0x03;
-        result[6] = (byte)(bank % 2);						// internal
-        result[7] = (byte)((bank < 2 ? 0 : 32) + number);	// A1...D8  then 	a1...d8
+        result[6] = (byte)(bank % 2);                                           // internal
+        result[7] = (byte)((bank < 2 ? 0 : 32) + number);       // A1...D8  then        a1...d8
         
         if (toWorkingMemory && sendKawaiParametersInBulk)
-            result[7] = (byte)63;							// d8
+            result[7] = (byte)63;                                                       // d8
         
         System.arraycopy(data, 0, result, 8, data.length);
         result[8 + data.length] = (byte)produceChecksum(data);
@@ -1231,9 +1231,9 @@ public class KawaiK1 extends Synth
         if (tempModel == null)
             tempModel = getModel();
 
-		int bank = tempModel.get("bank");
+        int bank = tempModel.get("bank");
         boolean internal = (bank % 2 == 0);
-        byte position = (byte) ((bank < 2 ? 0 : 32) + tempModel.get("number"));		// A1...D8  then 	a1...d8
+        byte position = (byte) ((bank < 2 ? 0 : 32) + tempModel.get("number"));         // A1...D8  then        a1...d8
         return new byte[] { (byte)0xF0, 0x40, (byte)getChannelOut(), 0x00, 0x00, 0x03, 
             (byte)(internal ? 0x00 : 0x01),
             position, (byte)0xF7};
@@ -1303,10 +1303,10 @@ public class KawaiK1 extends Synth
         
         /// The K1 cannot change patches to and from internal or external I believe.  :-(
         /// So I'm not sure what to do here.        
-        if (BB == 3) BB = 2;			//	e -> i
-        else if (BB == 1) BB = 0;		//	E -> I
+        if (BB == 3) BB = 2;                    //      e -> i
+        else if (BB == 1) BB = 0;               //      E -> I
         
-        int PC = (BB * 16 + NN);		// yes, * 16 rather than * 32, since BB is 0 or 2
+        int PC = (BB * 16 + NN);                // yes, * 16 rather than * 32, since BB is 0 or 2
         try 
             {
             tryToSendMIDI(new ShortMessage(ShortMessage.PROGRAM_CHANGE, getChannelOut(), PC, 0));
@@ -1386,46 +1386,46 @@ public class KawaiK1 extends Synth
 
 
     public boolean getSupportsPatchWrites() { return true; }
-    public boolean getSupportsBankReads() { return true; }			// we read right now but don't write
+    public boolean getSupportsBankReads() { return true; }                      // we read right now but don't write
     
     public String[] getPatchNumberNames()
         { 
-		String[] str = new String[32];
-		for(int i = 0; i < 4; i++)
-			{
-			for(int j = 0; j < 8; j++)
-				{
-				str[i * 8 + j] = GROUPS[i] + (j + 1);
-				}
-    		}
-    	return str;
-    	}
-    	
+        String[] str = new String[32];
+        for(int i = 0; i < 4; i++)
+            {
+            for(int j = 0; j < 8; j++)
+                {
+                str[i * 8 + j] = GROUPS[i] + (j + 1);
+                }
+            }
+        return str;
+        }
+        
     public String[] getBankNames() { return BANKS; }
     public boolean[] getWriteableBanks() { return new boolean[] { true, true }; }
     public int getPatchNameLength() { return 10; }
 
     public int parseFromBank(byte[] bankSysex, int number)
-    	{ 
-        boolean upper = (bankSysex[7] == 0);		// Upper is 0, lower is 0x20
-        model.set("bank", (upper ? 0 : 2) + (bankSysex[6] == 0 ? 0 : 1));		
-        model.set("number", number);										
+        { 
+        boolean upper = (bankSysex[7] == 0);            // Upper is 0, lower is 0x20
+        model.set("bank", (upper ? 0 : 2) + (bankSysex[6] == 0 ? 0 : 1));               
+        model.set("number", number);                                                                            
 
-		// okay, we're loading and editing patch number patchNum.  Here we go.
-		return subparse(bankSysex, number * 88 + 8);         
-    	}
+        // okay, we're loading and editing patch number patchNum.  Here we go.
+        return subparse(bankSysex, number * 88 + 8);         
+        }
 
     public int getBank(byte[] bankSysex) 
-    	{ 
-        boolean upper = (bankSysex[7] == 0);		// Upper is 0, lower is 0x20
-       	return (upper ? 0 : 2) + (bankSysex[6] == 0 ? 0 : 1);		
-    	}
+        { 
+        boolean upper = (bankSysex[7] == 0);            // Upper is 0, lower is 0x20
+        return (upper ? 0 : 2) + (bankSysex[6] == 0 ? 0 : 1);           
+        }
 
     public byte[] requestBankDump(int bank) 
-    	{
-    	return new byte[] { (byte)0xF0, 0x40, (byte)getChannelOut(), 0x01, 0x00, 0x03, 
-    		(byte)((bank == 0 || bank == 2) ? 0 : 1),  		// int vs ext
-    		(byte)(bank < 2 ? 0 : 0x20),					// I/E vs i/e
-    		(byte)0xF7 }; 
-    	}
+        {
+        return new byte[] { (byte)0xF0, 0x40, (byte)getChannelOut(), 0x01, 0x00, 0x03, 
+            (byte)((bank == 0 || bank == 2) ? 0 : 1),               // int vs ext
+            (byte)(bank < 2 ? 0 : 0x20),                                    // I/E vs i/e
+            (byte)0xF7 }; 
+        }
     }

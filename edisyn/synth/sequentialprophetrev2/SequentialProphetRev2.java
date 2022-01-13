@@ -5977,7 +5977,7 @@ public class SequentialProphetRev2 extends Synth
                     {
                     writeToF = check.isSelected();
                     setLastX("" + writeToF, WRITE_TO_F_KEY, getSynthClassName(), true);
-              		}
+                    }
                 else check.setSelected(false);
                 }
             });

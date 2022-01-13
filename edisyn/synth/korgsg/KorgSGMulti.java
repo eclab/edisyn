@@ -677,11 +677,11 @@ public class KorgSGMulti extends Synth
         
         if (!toWorkingMemory && !toFile)
             {
-			// The SG cannot write to a patch.  We have to emit to current memory, then save
-			// to a patch, so we'll tack some extra sysex on in that situation
-			
-			byte BB = (byte) tempModel.get("bank");
-			byte NN = (byte) tempModel.get("number");
+            // The SG cannot write to a patch.  We have to emit to current memory, then save
+            // to a patch, so we'll tack some extra sysex on in that situation
+                        
+            byte BB = (byte) tempModel.get("bank");
+            byte NN = (byte) tempModel.get("number");
         
             data = new byte[] { (byte)0xF0, (byte)0x42, (byte)(48 + getChannelOut()), (byte)0x4A, (byte)0x1A, (byte)0,
                 (byte)(BB * 16 + NN), (byte)0xF7 };
@@ -692,7 +692,7 @@ public class KorgSGMulti extends Synth
 
         
     public int getPauseAfterChangePatch() { return 200; }
-	public int getPauseAfterWritePatch() { return 200; }
+    public int getPauseAfterWritePatch() { return 200; }
 
     public void changePatch(Model tempModel)
         {
@@ -843,10 +843,10 @@ public class KorgSGMulti extends Synth
         }
 
     public String[] getBankNames() { return BANKS; }
-	public String[] getPatchNumberNames() { return buildIntegerNames(16, 1); }
+    public String[] getPatchNumberNames() { return buildIntegerNames(16, 1); }
     public boolean[] getWriteableBanks() { return new boolean[] { true, true, true, true }; }
     public int getPatchNameLength() { return 10; }
-	public boolean getSupportsPatchWrites() { return true; }
+    public boolean getSupportsPatchWrites() { return true; }
 
     public boolean librarianTested() { return true; }
     }

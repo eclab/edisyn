@@ -1079,7 +1079,7 @@ public class WaldorfBlofeldMulti extends Synth
         }
         
     public int getPauseAfterChangePatch() { return 200; }
-	public int getPauseAfterWritePatch() { return 75; }
+    public int getPauseAfterWritePatch() { return 75; }
 
 
     public static final int MAXIMUM_NAME_LENGTH = 16;
@@ -1235,17 +1235,17 @@ public class WaldorfBlofeldMulti extends Synth
         return true;
         }
     
-	/** Return a list of all patch number names.  Default is { "Main" } */
-	public String[] getPatchNumberNames()  { return buildIntegerNames(128, 1); }
+    /** Return a list of all patch number names.  Default is { "Main" } */
+    public String[] getPatchNumberNames()  { return buildIntegerNames(128, 1); }
 
-	/** Return a list whether individual patches can be written.  Default is FALSE. */
-	public boolean getSupportsPatchWrites() { return true; }
+    /** Return a list whether individual patches can be written.  Default is FALSE. */
+    public boolean getSupportsPatchWrites() { return true; }
 
-	public int getPatchNameLength() { return 16; }
+    public int getPatchNameLength() { return 16; }
 
     public byte[] requestAllDump() 
-    	{
-    	return new byte[] { (byte)0xF0, 0x3E, 0x13, (byte)getID(), 0x01, 0x40, 0x00, (byte)0xF7 };
-    	}
+        {
+        return new byte[] { (byte)0xF0, 0x3E, 0x13, (byte)getID(), 0x01, 0x40, 0x00, (byte)0xF7 };
+        }
     public boolean librarianTested() { return true; }
     }

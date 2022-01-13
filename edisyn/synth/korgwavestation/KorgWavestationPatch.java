@@ -2276,8 +2276,8 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
         d[5] = (byte)edisynToWSBank[tempModel.get("bank")];
         d[6] = (byte)tempModel.get("number");
        
-       	PatchStructure patch = buildPatch();
-       	
+        PatchStructure patch = buildPatch();
+        
         byte[] data = new byte[DENYBBLIZED_LENGTH];
         patch.write(data, 0);
         data = nybblize(data);
@@ -2299,40 +2299,40 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
         }
     
     /*
-    public Object[] emitBank(Model[] models, int bank, boolean toFile) 
-    	{ 
-        byte[] d = new byte[29828];		// 852 * 35 + 8
-        d[0] = (byte)0xF0;
-        d[1] = (byte)0x42;
-        d[2] = (byte)(0x30 + getChannelOut());
-        d[3] = (byte)0x28;
-        d[4] = (byte)0x4C;
-        d[5] = (byte)edisynToWSBank[bank];
+      public Object[] emitBank(Model[] models, int bank, boolean toFile) 
+      { 
+      byte[] d = new byte[29828];             // 852 * 35 + 8
+      d[0] = (byte)0xF0;
+      d[1] = (byte)0x42;
+      d[2] = (byte)(0x30 + getChannelOut());
+      d[3] = (byte)0x28;
+      d[4] = (byte)0x4C;
+      d[5] = (byte)edisynToWSBank[bank];
        
-       	for(int i = 0; i < 35; i++)
-       		{
-			Patch patch = buildPatch();
-		
-			byte[] data = new byte[DENYBBLIZED_LENGTH];
-			patch.write(data, 0);
-			data = nybblize(data);
-			System.arraycopy(data, 0, d, data.length * i + 6, data.length);		// data.length should be 852?
-			}
-			
-        int checksum = 0;
-        for(int i = 6; i < 852 * 35 + 6; i++)
-            checksum += d[i];
-        checksum = (checksum & 127);
-        d[d.length - 2] = (byte)checksum;
-        d[d.length - 1] = (byte)0xF7;
+      for(int i = 0; i < 35; i++)
+      {
+      Patch patch = buildPatch();
+                
+      byte[] data = new byte[DENYBBLIZED_LENGTH];
+      patch.write(data, 0);
+      data = nybblize(data);
+      System.arraycopy(data, 0, d, data.length * i + 6, data.length);         // data.length should be 852?
+      }
+                        
+      int checksum = 0;
+      for(int i = 6; i < 852 * 35 + 6; i++)
+      checksum += d[i];
+      checksum = (checksum & 127);
+      d[d.length - 2] = (byte)checksum;
+      d[d.length - 1] = (byte)0xF7;
            
-        return new Object[] { d };
-    	}
+      return new Object[] { d };
+      }
     */
         
     
     public PatchStructure buildPatch()
-    	{
+        {
         PatchStructure patch = new PatchStructure();
 
         patch.setName(model.get("name", "Untitled"));  
@@ -2550,7 +2550,7 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
             (b4 >= 8 ? 128 : b4 >= 4 ? 8 : 0); 
             
         return patch;
-    	}
+        }
 
     public int getPauseAfterChangePatch() { return 300; }  // looks like 300 is about the minimum for a standard PC (see Performance.java); may be too much here.
 
@@ -2750,33 +2750,33 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
         return 1100;
         }
 
-	public int getBatchDownloadFailureCountdown()
-		{
-		return 30;
-		}    
+    public int getBatchDownloadFailureCountdown()
+        {
+        return 30;
+        }    
 
     public boolean getSupportsBankWrites() { return true; }
     public String[] getPatchNumberNames() { return buildIntegerNames(35, 0); }
     public String[] getBankNames() { return BANKS; }
     public boolean[] getWriteableBanks() { return new boolean[] { true, true, true, false, false, false, false, false, false, false, false, true }; }
-	public int getBank(byte[] bankSysex) { return wsToEdisynBank[bankSysex[5]]; }
+    public int getBank(byte[] bankSysex) { return wsToEdisynBank[bankSysex[5]]; }
 
     public int parseFromBank(byte[] bankSysex, int number) 
-    	{
-		model.set("bank", wsToEdisynBank[bankSysex[5]]);
-		model.set("number", number);
-    	return subparse(bankSysex, number * 852 + 6); 
-    	}
+        {
+        model.set("bank", wsToEdisynBank[bankSysex[5]]);
+        model.set("number", number);
+        return subparse(bankSysex, number * 852 + 6); 
+        }
 
     public int getPatchNameLength() { return 15; }
 
     public byte[] requestBankDump(int bank) 
-    	{ 
-    	return new byte[] { (byte)0xF0, 0x42, (byte)(0x30 + getChannelOut()), 0x28, 0x1c, (byte)edisynToWSBank[bank], (byte)0xF7 };
-    	}
+        { 
+        return new byte[] { (byte)0xF0, 0x42, (byte)(0x30 + getChannelOut()), 0x28, 0x1c, (byte)edisynToWSBank[bank], (byte)0xF7 };
+        }
 
     public Object[] emitBank(Model[] models, int bank, boolean toFile) 
-    	{ 
+        { 
         byte[] d = new byte[29828];
         d[0] = (byte)0xF0;
         d[1] = (byte)0x42;
@@ -2785,7 +2785,7 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
         d[4] = (byte)0x4C;
         d[5] = (byte)edisynToWSBank[bank];
         int pos = 0;
-		int checksum = 0;
+        int checksum = 0;
         
         boolean originalMIDI = getSendMIDI();
         setSendMIDI(false);
@@ -2793,27 +2793,27 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
         undo.setWillPush(false);
 
         for(int i = 0; i < 35; i++)
-        	{
-        	pos = 6 + i * 852;
-        	model = models[i];
-			PatchStructure patch = buildPatch();
-			byte[] data = new byte[852 / 2];
-			patch.write(data, 0);
-			data = nybblize(data);
-			System.arraycopy(data, 0, d, pos, data.length);
-			for(int j = 0; j < data.length; j++)
-				checksum += data[j];
-        	}
-        	
+            {
+            pos = 6 + i * 852;
+            model = models[i];
+            PatchStructure patch = buildPatch();
+            byte[] data = new byte[852 / 2];
+            patch.write(data, 0);
+            data = nybblize(data);
+            System.arraycopy(data, 0, d, pos, data.length);
+            for(int j = 0; j < data.length; j++)
+                checksum += data[j];
+            }
+                
         model = backup;
         undo.setWillPush(true);
-	    setSendMIDI(originalMIDI);
+        setSendMIDI(originalMIDI);
 
-		checksum = (checksum & 127);
-		d[d.length - 2] = (byte)checksum;
-		d[d.length - 1] = (byte)0xF7;
-		return new Object[] { d };
-    	}
+        checksum = (checksum & 127);
+        d[d.length - 2] = (byte)checksum;
+        d[d.length - 1] = (byte)0xF7;
+        return new Object[] { d };
+        }
 
     public boolean librarianTested() { return true; }
     }

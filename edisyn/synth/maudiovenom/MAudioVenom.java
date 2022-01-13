@@ -2375,7 +2375,7 @@ public class MAudioVenom extends Synth
         }
 
     public int getPauseAfterChangePatch() { return 500; }                               // quite a long time
-    public int getPauseAfterSendAllParameters() { return 750; }	
+    public int getPauseAfterSendAllParameters() { return 750; } 
 
     // This is how you'd request a patch, but we're not using it because we have
     // overridden performRequestDump above.
@@ -2970,16 +2970,16 @@ public class MAudioVenom extends Synth
 
     public String[] getBankNames() { return BANKS; }
 
-	/** Return a list of all patch number names.  Default is { "Main" } */
-	public String[] getPatchNumberNames()  { return buildIntegerNames(128, 0); }
+    /** Return a list of all patch number names.  Default is { "Main" } */
+    public String[] getPatchNumberNames()  { return buildIntegerNames(128, 0); }
 
-	/** Return a list whether patches in banks are writeable.  Default is { false } */
-	public boolean[] getWriteableBanks() { return new boolean[] { false, false, true, true }; }
+    /** Return a list whether patches in banks are writeable.  Default is { false } */
+    public boolean[] getWriteableBanks() { return new boolean[] { false, false, true, true }; }
 
-	/** Return a list whether individual patches can be written.  Default is FALSE. */
-	public boolean getSupportsPatchWrites() { return true; }
+    /** Return a list whether individual patches can be written.  Default is FALSE. */
+    public boolean getSupportsPatchWrites() { return true; }
 
-	public int getPatchNameLength() { return 10; }
+    public int getPatchNameLength() { return 10; }
 
     public boolean librarianTested() { return true; }
     }

@@ -499,11 +499,11 @@ public class Morph extends SynthPanel
             menuButton = NO_MENU_BUTTON;
             updateAgain();
 
-			if (startSoundsAgain)
-				{
-				synth.doSendTestNotes();
-				startSoundsAgain = false;
-				}
+            if (startSoundsAgain)
+                {
+                synth.doSendTestNotes();
+                startSoundsAgain = false;
+                }
             }
         }
     
@@ -525,10 +525,10 @@ public class Morph extends SynthPanel
                 // we do this because some synths send data in chunks and in-between those
                 // chunks we may send current patch and play it, messing up the chunk (such as on the JV-880)
                 if (synth.isSendingTestNotes())
-                	{
-                	synth.doSendTestNotes();
-                	startSoundsAgain = true;
-                	}
+                    {
+                    synth.doSendTestNotes();
+                    startSoundsAgain = true;
+                    }
                 synth.doRequestCurrentPatch();
                 // Notice we do NOT do updateAgain(); but we'll do it when the patch comes in
                 }
@@ -546,10 +546,10 @@ public class Morph extends SynthPanel
                 // we do this because some synths send data in chunks and in-between those
                 // chunks we may send current patch and play it, messing up the chunk (such as on the JV-880)
                 if (synth.isSendingTestNotes())
-                	{
-                	synth.doSendTestNotes();
-                	startSoundsAgain = true;
-                	}
+                    {
+                    synth.doSendTestNotes();
+                    startSoundsAgain = true;
+                    }
                 synth.doRequestPatch();
                 // Notice we do NOT do updateAgain(); but we'll do it when the patch comes in
                 }

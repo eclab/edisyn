@@ -3073,10 +3073,10 @@ public class YamahaFS1RMulti extends Synth
 
 
     public String[] getBankNames() { return BANKS; }
-	public String[] getPatchNumberNames()  { return buildIntegerNames(128, 1); }
-	public boolean[] getWriteableBanks() { return new boolean[] { true, false, false, false }; }
-	public boolean getSupportsPatchWrites() { return true; }
-	public int getPatchNameLength() { return 12; }
+    public String[] getPatchNumberNames()  { return buildIntegerNames(128, 1); }
+    public boolean[] getWriteableBanks() { return new boolean[] { true, false, false, false }; }
+    public boolean getSupportsPatchWrites() { return true; }
+    public int getPatchNameLength() { return 12; }
 
     public boolean librarianTested() { return true; }
     }

@@ -328,18 +328,18 @@ public class KorgMicroKorgVocoder extends KorgMicroKorg
 
     public String[] getBankNames() { return BANKS; }
 
-	/** Return a list of all patch number names.  Default is { "Main" } */
-	public String[] getPatchNumberNames()  
-		{
-		return new String[] { "81", "82", "83", "84", "85", "86", "87", "88" };
-		}
+    /** Return a list of all patch number names.  Default is { "Main" } */
+    public String[] getPatchNumberNames()  
+        {
+        return new String[] { "81", "82", "83", "84", "85", "86", "87", "88" };
+        }
 
-	/** Return a list whether patches in banks are writeable.  Default is { false } */
-	public boolean[] getWriteableBanks() { return new boolean[] { true, true }; }
+    /** Return a list whether patches in banks are writeable.  Default is { false } */
+    public boolean[] getWriteableBanks() { return new boolean[] { true, true }; }
 
-	/** Return a list whether individual patches can be written.  Default is FALSE. */
-	public boolean getSupportsPatchWrites() { return true; }
+    /** Return a list whether individual patches can be written.  Default is FALSE. */
+    public boolean getSupportsPatchWrites() { return true; }
 
-	public int getPatchNameLength() { return 12; }
+    public int getPatchNameLength() { return 12; }
     }
     

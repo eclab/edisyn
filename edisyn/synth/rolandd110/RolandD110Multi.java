@@ -1128,13 +1128,13 @@ public class RolandD110Multi extends Synth
     /** Return a list of all patch number names, such as "1", "2", "3", etc.
         Default is null, which indicates that the patch editor does not support librarians.  */
     public String[] getPatchNumberNames() 
-    	{ 
-    	String[] str = new String[64];
-    	for(int i = 0; i < 8; i++)
-    		for(int j = 0; j < 8; j++)
-    			str[i * 8 + j] = "" + (i + 1) + (j + 1);		// weird
-    	return str;
-	    }
+        { 
+        String[] str = new String[64];
+        for(int i = 0; i < 8; i++)
+            for(int j = 0; j < 8; j++)
+                str[i * 8 + j] = "" + (i + 1) + (j + 1);                // weird
+        return str;
+        }
 
     /** Return whether individual patches can be written.  Default is FALSE. */
     public boolean getSupportsPatchWrites() { return true; }

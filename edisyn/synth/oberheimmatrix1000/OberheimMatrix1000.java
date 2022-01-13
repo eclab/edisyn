@@ -2952,17 +2952,17 @@ System.err.println("" + i + "  " + PATCH_NAMES[i]);
 
     public String[] getBankNames() { return isM1000() ? BANKS : BANKS_6; }
 
-	public String[] getPatchNumberNames() 
-		{ 
-		return buildIntegerNames(100, 0); 
-		}
-		
+    public String[] getPatchNumberNames() 
+        { 
+        return buildIntegerNames(100, 0); 
+        }
+                
     public boolean[] getWriteableBanks() 
-    	{ 
-    	return isM1000() ? new boolean[] { true, true, false, false, false, false, false, false, false, false } :
-    			new boolean[] { true };
-    	}
-    			
+        { 
+        return isM1000() ? new boolean[] { true, true, false, false, false, false, false, false, false, false } :
+        new boolean[] { true };
+        }
+                        
     public int getPatchNameLength() { return 8; }
 
     public boolean getSupportsPatchWrites() { return true; }

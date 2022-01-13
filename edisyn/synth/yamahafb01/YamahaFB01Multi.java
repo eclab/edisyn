@@ -1086,16 +1086,16 @@ public class YamahaFB01Multi extends Synth
     "SineWave"
     };
                 
-	/** Return a list of all patch number names.  Default is { "Main" } */
-	public String[] getPatchNumberNames()  { return buildIntegerNames(20, 1); }
+    /** Return a list of all patch number names.  Default is { "Main" } */
+    public String[] getPatchNumberNames()  { return buildIntegerNames(20, 1); }
 
-	/** Return a list whether individual patches can be written.  Default is FALSE. */
-	public boolean getSupportsPatchWrites() { return true; }
+    /** Return a list whether individual patches can be written.  Default is FALSE. */
+    public boolean getSupportsPatchWrites() { return true; }
 
-	public int getPatchNameLength() { return 7; }
+    public int getPatchNameLength() { return 7; }
 
     public byte[] requestBankDump(int bank) 
-    	{ 
-    	return new byte[] { (byte)0xF0, (byte)0x43, (byte)0x75, (byte)(getID() - 1), 0x20, 0x03, 0x00, (byte)0xF7 };
-    	}
+        { 
+        return new byte[] { (byte)0xF0, (byte)0x43, (byte)0x75, (byte)(getID() - 1), 0x20, 0x03, 0x00, (byte)0xF7 };
+        }
     }

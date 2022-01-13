@@ -243,20 +243,20 @@ public class KawaiK4Effect extends Synth
         {
         if (data[3] == (byte)0x20) // single
             {               
-			model.set("bank", data[6] == 0x01 ? 0 : 1);
-			model.set("number", data[7]);
-			return subparse(data, 8);  
-			}
-		else
-			{
-			// There are no names for Effects
-			
-			String[] n = new String[32];
+            model.set("bank", data[6] == 0x01 ? 0 : 1);
+            model.set("number", data[7]);
+            return subparse(data, 8);  
+            }
+        else
+            {
+            // There are no names for Effects
+                        
+            String[] n = new String[32];
             for(int i = 0; i < 32; i++)
                 {
                 n[i] = "" + (i + 1) + " Effect";
                 } 
-			
+                        
             // Now that we have an array of names, one per patch, we present the user with options;
             // 0. Cancel [handled automatically]
             // 1. Save the bank data [handled automatically]
@@ -265,17 +265,17 @@ public class KawaiK4Effect extends Synth
             int patchNum = showBankSysexOptions(data, n);
             if (patchNum < 0) return PARSE_CANCELLED;
                 
-            model.set("bank", (data[6] == 1 ? 0 : 1));			// (patchNum / 16) + (data[6] == 0x00 ? 0 : 4));
-            model.set("number", patchNum);						// patchNum % 16);
+            model.set("bank", (data[6] == 1 ? 0 : 1));                  // (patchNum / 16) + (data[6] == 0x00 ? 0 : 4));
+            model.set("number", patchNum);                                              // patchNum % 16);
 
             // okay, we're loading and editing patch number patchNum.  Here we go.
             return subparse(data, patchNum * 34 + 8);                                                  
-			}
-		}
+            }
+        }
         
         
     public int subparse(byte[] data, int offset)
-    	{
+        {
         for(int i = 0; i < 34; i++)
             {
             String key = allParameters[i];
@@ -287,7 +287,7 @@ public class KawaiK4Effect extends Synth
 
         revise();
         return PARSE_SUCCEEDED;
-    	}
+        }
     
     public static final int EXPECTED_SYSEX_LENGTH = 34 + 10;
     
@@ -546,31 +546,31 @@ public class KawaiK4Effect extends Synth
         }
 
 
-	// Librarian Support
-	
+    // Librarian Support
+        
     public String[] getPatchNumberNames() { return buildIntegerNames(32, 1); }
     public String[] getBankNames() { return BANKS; }
     public boolean[] getWriteableBanks() { return new boolean[] { true, true }; }
-    public boolean getSupportsBankReads() { return true; }			// we read right now but don't write
+    public boolean getSupportsBankReads() { return true; }                      // we read right now but don't write
  
     public int parseFromBank(byte[] bankSysex, int number)
-    	{ 
-		model.set("bank", (bankSysex[6] == 1 ? 0 : 1));			// (patchNum / 16) + (data[6] == 0x00 ? 0 : 4));
-		model.set("number", number);						// patchNum % 16);
+        { 
+        model.set("bank", (bankSysex[6] == 1 ? 0 : 1));                 // (patchNum / 16) + (data[6] == 0x00 ? 0 : 4));
+        model.set("number", number);                                            // patchNum % 16);
 
-		// okay, we're loading and editing patch number patchNum.  Here we go.
-		return subparse(bankSysex, number * 34 + 8);         
-    	}
+        // okay, we're loading and editing patch number patchNum.  Here we go.
+        return subparse(bankSysex, number * 34 + 8);         
+        }
 
     public int getBank(byte[] bankSysex) 
-    	{ 
-    	return (bankSysex[6] == 1 ? 0 : 1);
-    	}
+        { 
+        return (bankSysex[6] == 1 ? 0 : 1);
+        }
 
     public byte[] requestBankDump(int bank) 
-    	{
-    	return new byte[] { (byte)0xF0, 0x40, (byte)getChannelOut(), 0x01, 0x00, 0x04, (byte)(bank == 0 ? 0x01 : 0x03), 0x00, (byte)0xF7 }; 
-    	}
+        {
+        return new byte[] { (byte)0xF0, 0x40, (byte)getChannelOut(), 0x01, 0x00, 0x04, (byte)(bank == 0 ? 0x01 : 0x03), 0x00, (byte)0xF7 }; 
+        }
 
     public boolean librarianTested() { return true; }
     }

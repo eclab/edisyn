@@ -29,10 +29,10 @@ public class Undo
     public void setWillPush(boolean val) { willPush = val; }
     public boolean getWillPush() { return willPush; }
     
-	// The purpose of the second willPush is so that batch downloading can positively
-	// disable undo pushes even while underlying machinery tries to restore them.
-     void setWillPush2(boolean val) { willPush2 = val; }
-     boolean getWillPush2() { return willPush2; }
+    // The purpose of the second willPush is so that batch downloading can positively
+    // disable undo pushes even while underlying machinery tries to restore them.
+    void setWillPush2(boolean val) { willPush2 = val; }
+    boolean getWillPush2() { return willPush2; }
     
     public void push(Model obj)
         {

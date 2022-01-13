@@ -1485,28 +1485,28 @@ public class KorgMicroKorg extends Synth
 
     public String[] getBankNames() { return BANKS; }
 
-	/** Return a list of all patch number names.  Default is { "Main" } */
-	public String[] getPatchNumberNames()  
-		{
-		String[] names = new String[64];
-		
-		int pos = 0;
-		for(int i = 1; i < 9; i++)
-			{
-			for(int j = 1; j < 9; j++)
-				{
-				names[pos++] = "" + i + "" + j;
-				}
-			}
-		return names;
-		}
+    /** Return a list of all patch number names.  Default is { "Main" } */
+    public String[] getPatchNumberNames()  
+        {
+        String[] names = new String[64];
+                
+        int pos = 0;
+        for(int i = 1; i < 9; i++)
+            {
+            for(int j = 1; j < 9; j++)
+                {
+                names[pos++] = "" + i + "" + j;
+                }
+            }
+        return names;
+        }
 
-	/** Return a list whether patches in banks are writeable.  Default is { false } */
-	public boolean[] getWriteableBanks() { return new boolean[] { true, true }; }
+    /** Return a list whether patches in banks are writeable.  Default is { false } */
+    public boolean[] getWriteableBanks() { return new boolean[] { true, true }; }
 
-	/** Return a list whether individual patches can be written.  Default is FALSE. */
-	public boolean getSupportsPatchWrites() { return true; }
+    /** Return a list whether individual patches can be written.  Default is FALSE. */
+    public boolean getSupportsPatchWrites() { return true; }
 
-	public int getPatchNameLength() { return 12; }
+    public int getPatchNameLength() { return 12; }
     }
     

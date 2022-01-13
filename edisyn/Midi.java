@@ -110,15 +110,15 @@ public class Midi
         Thru out;
         Transmitter transmitter;                
 
-		public MidiDevice getDevice() { return device; }
+        public MidiDevice getDevice() { return device; }
 
         /** 
-        	You provide a Receiver to attach to the Transmitter.  Returns true if successful
+            You provide a Receiver to attach to the Transmitter.  Returns true if successful
         */
         public boolean addToTransmitter(Receiver receiver) 
             { 
             if (in == null) 
-            	{
+                {
                 try
                     {
                     // we use a thru here so we can add many receivers to it
@@ -127,8 +127,8 @@ public class Midi
                     Thru _in = new Thru();
                     Transmitter _transmitter = device.getTransmitter();
                     _transmitter.setReceiver(_in);
-                    transmitter = _transmitter;		// we set it last in case of an exception
-                    in = _in;						// we set it last in case of an exception
+                    transmitter = _transmitter;         // we set it last in case of an exception
+                    in = _in;                                           // we set it last in case of an exception
                     }
                 catch(Exception e) { Synth.handleException(e); return false; }
                 }
@@ -141,7 +141,7 @@ public class Midi
         public Receiver getReceiver() 
             { 
             if (out == null) 
-            	{
+                {
                 try
                     {
                     // we use a secret Thru here so it's lockable
@@ -149,21 +149,21 @@ public class Midi
                         device.open();
                     Thru _out = new Thru();
                     _out.addReceiver(device.getReceiver());
-                    out = _out;		// we set it last in case of an exception
+                    out = _out;         // we set it last in case of an exception
                     }
                 catch(Exception e) { Synth.handleException(e); return null; }
-    	         }
+                }
 
             return out; 
             }
         
         public void close()
-        	{
-        	new Throwable().printStackTrace();
-        	if (transmitter != null) transmitter.close();
-        	if (out != null) out.close();
-        	// don't close in(), it'll just close all my own receivers
-        	}
+            {
+            new Throwable().printStackTrace();
+            if (transmitter != null) transmitter.close();
+            if (out != null) out.close();
+            // don't close in(), it'll just close all my own receivers
+            }
         }
 
 
@@ -334,32 +334,32 @@ public class Midi
         public Tuple() { }
         
         public Tuple(Tuple other, Receiver inReceiver, Receiver keyReceiver, Receiver key2Receiver)
-        	{
-        	outWrap = other.outWrap;
-        	inWrap = other.inWrap;
-        	keyWrap = other.keyWrap;
-        	key2Wrap = other.key2Wrap;
-        	outReceiver = other.outReceiver;
-        	outChannel = other.outChannel;
-        	id = other.id;
-        	keyChannel = other.keyChannel;
-        	key2Channel = other.key2Channel;
-        	
-        	inWrap.addToTransmitter(inReceiver);
-        	if (keyWrap != null) keyWrap.addToTransmitter(keyReceiver);
-        	if (key2Wrap != null) key2Wrap.addToTransmitter(key2Receiver);
-        	}
+            {
+            outWrap = other.outWrap;
+            inWrap = other.inWrap;
+            keyWrap = other.keyWrap;
+            key2Wrap = other.key2Wrap;
+            outReceiver = other.outReceiver;
+            outChannel = other.outChannel;
+            id = other.id;
+            keyChannel = other.keyChannel;
+            key2Channel = other.key2Channel;
+                
+            inWrap.addToTransmitter(inReceiver);
+            if (keyWrap != null) keyWrap.addToTransmitter(keyReceiver);
+            if (key2Wrap != null) key2Wrap.addToTransmitter(key2Receiver);
+            }
         
         public void dispose()
-        	{
-        // dunno if we should even do this, the memory leak is well worth the nastu
-        // bugs on disposal...
+            {
+            // dunno if we should even do this, the memory leak is well worth the nastu
+            // bugs on disposal...
 
-        	//if (outWrap != null) outWrap.close();
-        	//if (inWrap != null) inWrap.close();
-        	//if (keyWrap != null) keyWrap.close();
-        	//if (key2Wrap != null) key2Wrap.close();
-        	}
+            //if (outWrap != null) outWrap.close();
+            //if (inWrap != null) inWrap.close();
+            //if (keyWrap != null) keyWrap.close();
+            //if (key2Wrap != null) key2Wrap.close();
+            }
         }
 
     static void setLastTupleIn(String path, Synth synth) { synth.setLastX(path, "LastTupleIn", synth.getSynthClassName(), false); }
@@ -423,9 +423,9 @@ public class Midi
     public static final Tuple CANCELLED = new Tuple();
     public static final Tuple FAILED = new Tuple();
 
-static final String[] kc = new String[] { "Any", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16" };
-static final String[] k2c = new String[] { "Any", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16" };
-static final String[] rc = new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16" };
+    static final String[] kc = new String[] { "Any", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16" };
+    static final String[] k2c = new String[] { "Any", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16" };
+    static final String[] rc = new String[] { "1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16" };
 
 
     /** Works with the user to generate a new Tuple holding new MIDI connections.
@@ -572,7 +572,7 @@ static final String[] rc = new String[] { "1", "2", "3", "4", "5", "6", "7", "8"
                 else
                     {
                     tuple.keyWrap = ((MidiDeviceWrapper)(keyCombo.getSelectedItem()));
-                	if (!tuple.keyWrap.addToTransmitter(keyReceiver))
+                    if (!tuple.keyWrap.addToTransmitter(keyReceiver))
                         {
                         synth.showErrorWithStackTrace("Cannot Connect", "An error occurred while connecting to the Controller 1 MIDI Device.");
                         tuple.keyWrap = null;
@@ -586,7 +586,7 @@ static final String[] rc = new String[] { "1", "2", "3", "4", "5", "6", "7", "8"
                 else
                     {
                     tuple.key2Wrap = ((MidiDeviceWrapper)(key2Combo.getSelectedItem()));
-                	if (!tuple.key2Wrap.addToTransmitter(key2Receiver))
+                    if (!tuple.key2Wrap.addToTransmitter(key2Receiver))
                         {
                         synth.showErrorWithStackTrace("Cannot Connect", "An error occurred while connecting to the Controller 2 MIDI Device.");
                         tuple.key2Wrap = null;

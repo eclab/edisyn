@@ -1677,4 +1677,6 @@ public class CasioCZ extends Synth
             return (bank < 12 || num < 4);
             }
 		}
+
+    public boolean librarianTested() { return true; }
     }

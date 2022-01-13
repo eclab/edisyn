@@ -2513,4 +2513,5 @@ public class WaldorfMicrowaveXT extends Synth
 
 	public int getPatchNameLength() { return 16; }
 
+    public boolean librarianTested() { return true; }
     }

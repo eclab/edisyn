@@ -1426,4 +1426,6 @@ public class YamahaDX7 extends Synth implements ProvidesNN
         // on the TX216/816, f=9 is 32 voice bulk request
     	return new byte[] { (byte)0xF0, (byte)0x43, channel, 9, (byte)0xF7 };
     	}
+
+    public boolean librarianTested() { return true; }
     }

@@ -1094,4 +1094,8 @@ public class YamahaFB01Multi extends Synth
 
 	public int getPatchNameLength() { return 7; }
 
+    public byte[] requestBankDump(int bank) 
+    	{ 
+    	return new byte[] { (byte)0xF0, (byte)0x43, (byte)0x75, (byte)(getID() - 1), 0x20, 0x03, 0x00, (byte)0xF7 };
+    	}
     }

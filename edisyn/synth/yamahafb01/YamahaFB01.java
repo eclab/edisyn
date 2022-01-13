@@ -1355,6 +1355,6 @@ public class YamahaFB01 extends Synth
     	{ 
     	// The manual says that the banks are 0...6, but the service manual says that they're 1...7
     	// Given that the service manual has multiple other errors, I'm going with 0...6
-    	return new byte[] { (byte)0xF0, (byte)0x43, (byte)0x75, (byte)getChannelOut(), 0x20, 0x00, (byte)bank, (byte)0xF7 };
+    	return new byte[] { (byte)0xF0, (byte)0x43, (byte)0x75, (byte)(getID() - 1), 0x20, 0x00, (byte)bank, (byte)0xF7 };
     	}
     }

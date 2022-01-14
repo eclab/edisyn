@@ -50,6 +50,8 @@ I'll update this list as I or others successfully test librarians and/or fix the
 * Emu Morpheus Hyper
 * Emu Morpheus Map
 * Emu Proteus
+* Kawai K1
+* Kawai K1 Multi
 * Kawai K5
 * Korg MicroKorg
 * Korg MicroKorg Vocoder
@@ -60,10 +62,6 @@ I'll update this list as I or others successfully test librarians and/or fix the
 * Yamaha FB01
 * Yamaha FB01 Multi
 
-### Not Fully Coded
-
-* Kawai K1
-* Kawai K1 Multi
 
 ### Cannot Support Librarians 
 

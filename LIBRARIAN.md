@@ -1,8 +1,6 @@
 # Librarian Support
 
-NOTE: The Librarian is not present in the current build.  It'll show up in the coming build.
-
-Edisyn's librarian is in its very early stages, and I can only test it on certain machines here and there.  If you'd like to assist in testing, I would be greatful -- just report errors on github or mail me directly (sean@cs.gmu.edu).  For instructions on how to test, see HOW TO TEST below.
+Edisyn's librarian is in its early stages, and I can only test it on certain machines that I still have access to.  If you'd like to assist in testing, I would be greatful -- just report errors on github or mail me directly (sean@cs.gmu.edu).  For instructions on how to test, see HOW TO TEST below.
 
 Below are the various stages of implementation and testing of the librarian system for various editors.
 

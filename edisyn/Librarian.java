@@ -1502,6 +1502,8 @@ public class Librarian extends JPanel
 
     void warnLibrarian(Synth synth)
         {
+        if (synth.librarianTested()) return;
+        
         if (!synth.getLastXAsBoolean("LibrarianWarned", synth.getSynthClassName(), false, true))
             {
             synth.showSimpleMessage("Librarian Untested", 

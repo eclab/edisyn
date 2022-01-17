@@ -2582,6 +2582,7 @@ public class WaldorfBlofeld extends Synth
         {
         return new byte[] { (byte)0xF0, 0x3E, 0x13, (byte)getID(), 0x00, 0x40, 0x00, (byte)0xF7 };
         }
+        
     public boolean librarianTested() { return true; }
     }
     

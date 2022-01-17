@@ -7237,7 +7237,12 @@ public abstract class Synth extends JComponent implements Updatable
         librarian.pushUndo();
                                                         
         // I think we should clear the librarian first
-        librarian.clearAll(false);
+		int res = showMultiOption(this, new String[0], new JComponent[0], 
+			new String[] { "Clear", "Overwrite", "Cancel" }, 0, "Load Patches", 
+			new JLabel("Clear all existing patches, or overwrite them as needed with new ones?"));
+		if (res < 0 || res == 2) return;
+        
+        if (res == 0) librarian.clearAll(false);
 
         // We inform the loading system that if it comes across any bank patches, it should
         // automatically load them into the librarian without bugging the user.
@@ -7251,7 +7256,7 @@ public abstract class Synth extends JComponent implements Updatable
         model.setUpdateListeners(false);                        // otherwise we GC badly        
         for(int i = 0; i < patches.length; i++)
             {
-            int res = parse(flatten(patches[i].sysex), true);
+            res = parse(flatten(patches[i].sysex), true);
             if (res == PARSE_SUCCEEDED || res == PARSE_SUCCEEDED_UNTITLED)
                 {
                 patches[i].number = model.get("number", Patch.NUMBER_NOT_SET);
@@ -9055,8 +9060,6 @@ public abstract class Synth extends JComponent implements Updatable
     /** Return whether individual patches can be written.  Default is TRUE. */
     public boolean getSupportsDownloads() { return true; }
 
-
-
     /** Parses a given patch from the provided bank sysex, and returns 
         PARSE_SUCCEEDED or PARSE_SUCCEEDED_UNTITLED if successful, else PARSE_FAILED (the default). */
     public int parseFromBank(byte[] bankSysex, int number) { return PARSE_FAILED; }
@@ -9093,10 +9096,12 @@ public abstract class Synth extends JComponent implements Updatable
     /** Return null if all dump requests are not supported. */
     public byte[] requestAllDump() { return null; }
     
-    /** Return true if we should disable updating listeners on batch downloads.  This is normally only done
+    /** Return false if we should disable updating listeners on batch downloads.  This is normally only done
         for very large patch editors such as YamahaFS1RFseq, where such updating is extremely costly and 
-        creates memory leaks. */
+        creates memory leaks. By default returns true. */
     public boolean getUpdatesListenersOnDownload() { return true; } 
     
+    /** Return true if the librarian has been adequately tested for this editor.  
+    	Otherwise Edisyn will add  */
     public boolean librarianTested() { return false; }
     }

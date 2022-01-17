@@ -309,22 +309,7 @@ public class Blank extends Synth
         }
     
     
-    
-    
-    ////// DO NOT OVERRIDE THE FOLLOWING
-    
-    public static boolean recognize(byte[] data)
-        {
-        // This is deprecated, and won't work any more.
-        // You should override this in your Recognizer class instead.
-        
-        return false;
-        }
-
-
-    
-    
- 
+     
  
     ////// YOU PROBABLY WANT TO OVERRIDE ALL OF THE FOLLOWING
 
@@ -924,5 +909,235 @@ public class Blank extends Synth
         // difference is legitimate, else false.  By default, all differences are considered illegitimate.
         return false;
         }
+
+
+
+
+
+    ////// LIBRARIAN SUPPORT
+    //////
+    ////// You will need to override some of these methods in order to support the librarian
+    ////// working properly with your patch editor.  If you do not intend to permit the librarian
+    ////// then you do not need to override any of them except possibly getUpdatesListenersOnDownload(),
+    ////// which also affects batch downloads in general.
+
+
+    /** Return a list of all patch number names, such as "1", "2", "3", etc.
+        Default is null, which indicates that the patch editor does not support librarians.  */
+    public String[] getPatchNumberNames() 
+    	{
+    	// This should return a list of all the numbers in a bank.  For example if your
+    	// bank has patch numbers "1" through "128", then you should return an array of
+    	// the form { "1", "2", "3", ..., "128" }.
+    	//
+    	// Synth.buildIntegerNames(...) is a useful utility method for building this array for
+    	// you if you don't want to implement it by hand.
+    	//
+    	// This method is also used to determine whether the synth should have a librarian
+    	// at all.  By default this method returns NULL, which means that the synthesizer
+    	// should NOT have a librarian. 
+    	return null; 
+    	}
+
+    public String[] getBankNames() 
+    	{
+    	// This should return a list of all the bank names.  For example, your bank names
+    	// might be { "A", "B", "C", and "D" }, or they might be { "Internal", "Card" }.
+    	//
+    	// This method is also used to determine whether the synth has banks.  If your synth
+    	// doesn't support banks, return NULL to indicate this.  Technically it has still 
+    	// *one* bank, which Edisyn will automatically call "Bank".
+    	return null; 
+    	}
+
+    public boolean[] getWriteableBanks() 
+    	{
+    	// This should return a list of booleans, one per bank, indicating if the
+    	// bank is writeable.  You may not return null here: if getBankNames() returned null,
+    	// then you should return { true } or { false } as appropriate.  The default form
+    	// returns an array that is all true.
+    	//
+    	// Synth.buildBankBooleans(...) is a useful utility method for uilding this array
+    	// for you if you don't want to implement it by hand.
+    	return super.getWriteableBanks(); 
+    	}
+
+    public boolean getSupportsPatchWrites() 
+    	{
+    	// Return true if the synth can receive and store individual patch writes (to actual
+    	// patch RAM, NOT sends to current working memory).  The default is false.
+    	//
+    	// Either this method, or getSupportsBankWrites(), or both, should be true if you are
+    	// supporting a librarian.
+    	return false; 
+    	}
+
+    public boolean getSupportsBankWrites() 
+    	{ 
+    	// Return true if the synth can receive and store bank writes.  The default is false.
+    	//
+    	// Either this method, or getSupportsPatchWrites(), or both, should be true if you are
+    	// supporting a librarian.
+    	return false; 
+    	}
+
+    public boolean getSupportsBankReads() 
+    	{ 
+    	// Return true if the synth can dump bank messages that your editor can read.  By default
+    	// this just returns whatever getSupportsBankWrites() returned.  However it is possible
+    	// that your editor can READ banks from the synth even if it cannot WRITE banks to the synth
+    	// and must instead write individual patches.  In this case getSupportsBankWrites() might
+    	// return false but getSupportsBankReads() would return true.
+    	return getSupportsBankWrites(); 
+    	}
+
+    public boolean getSupportsDownloads() 
+    	{
+    	// Return true if the synth can respond to requests to download individual or bank patches.
+    	// If you return false, Edisyn won't permit users to attempt a download.  By default,
+    	// true is returned.
+    	return true; 
+    	}
+
+    public int getPatchNameLength() 
+    	{
+    	// Returns the length of a patch name.  By default, this returns 16. 
+    	return 16; 
+    	}
+
+    public String reviseBankName(String name) 
+    	{
+    	// Given a name for a bank, revises it to a valid name.  By default, this method
+    	// returns null, which indicates that bank names may not be revised.  There is only
+    	// one synthesizer supported by Edisyn which permits revised bank names at present:
+    	// The Yamaha FB-01.
+    	//
+    	// Note that this method has an evil twin in your recognizer class.  See
+    	// BlankRec.getBankName(...)
+    	return null; 
+    	}
+    
+    public boolean isValidPatchLocation(int bank, int num) 
+    	{
+    	// Returns if the given bank and patch number define a valid patch location.  The
+    	// bank values passed in will always be between 0 and the number of banks (minus 1) inclusive.
+    	// Similarly the patch numbers passed in will always be between 0 and getPatchNumberNames() - 1
+    	// inclusive.  By default this method always returns true, which is in most cases correct.
+    	// The reason for this method is that some synthesizers have banks with different lengths.
+    	// For example, the Casio CZ-230s has fewer patches (4) in its final bank than in others (8).
+    	// In other cases, certain synthsizers permit more patches in banks than others of the same
+    	// family, but must share the same sysex files.  In these cases, Edisyn permits patches to be
+    	// loaded into "invalid" slots (defined by this method), and saved to files from them, but not
+    	// written to synthesizers from those locations.
+    	return true; 
+    	}
+    
+    public boolean getUpdatesListenersOnDownload() 
+    	{
+    	// Returns true if we should disable updating listeners on batch downloads.  This is 
+    	// normally only done for very large patch editors such as YamahaFS1RFseq, where 
+    	// such updating is extremely costly/slow or creates memory leaks.  By default, returns true.
+    	return true; 
+    	} 
+    
+    public boolean librarianTested() 
+    	{
+    	// Override this method to return true to indicate that the librarian for this
+    	// editor has been tested reasonably well and no longer requires a warning to the
+    	// musician when he attempts to use it.  By default this method returns false.
+    	return false; 
+    	}
+
+    public byte[] requestAllDump() 
+    	{ 
+    	// Returns a sysex message to request all patches from the synthesizer.  If your synthesizer
+    	// does not support this kind of request, this method should return null (the default).
+    	// This method is meant for synthesizers with multiple banks.  If the synthesizer has a 
+    	// single bank, and you support bank sysex messages (see below),
+    	// then you instead should override requestBankDump() instead.
+    	//
+    	// Edisyn can support all-patches dump requests in which the synthesizer responds by dumping
+    	// each patch individually.  If the synthesizer responds by dumping banks as bank messages,
+    	// this will cause Edisyn to ask the user, each time, where the bank should go, which isn't
+    	// great.  So if your synth only provides all-patches dump requests with bank responses
+    	// (and I don't know of any that do), get ahold of me first -- Sean.
+    	return null; 
+    	}
+
+
+	//// THE NEXT SIX METHODS WOULD ONLY BE IMPLEMENTED WHEN BANK SYSEX MESSAGES ARE SUPPORTED.
+	////
+	//// YOU WILL ALSO NEED TO IMPLEMENT BANK SYSEX HANDLING IN parseAll(Model, ...) AND ALSO
+	//// RECOGNIZE BANK SYSEX IN YOUR PATCH EDITOR RECOGNIZER CLASS. ALSO YOU CAN THEORETICALLY
+	//// IMPLEMENT requestBankDump() EVEN IF YOU DON'T SUPPORT BANK SYSEX.
+
+    public int parseFromBank(byte[] bankSysex, int number) 
+    	{
+    	// Given a bank sysex message, and a patch number, parses that patch from the
+    	// bank sysex data, and returns PARSE_SUCCEEDED or PARSE_FAILED.  The default is to
+    	// return PARSE_FAILED.  This method only needs to be implemented if your patch
+    	// editor supports bank reads (see documentation for getSupportsBankReads()
+    	// and getSupportsBankWrites())
+    	return PARSE_FAILED; 
+    	}
+
+    public int getBank(byte[] bankSysex) 
+    	{ 
+    	// Given a bank sysex message, returns the bank number of the given bank, else 
+    	// -1 if there is no number indicated.  The default is to return -1.
+		// This method only needs to be implemented if your patch
+    	// editor supports bank reads (see documentation for getSupportsBankReads()
+    	// and getSupportsBankWrites())
+    	return -1; 
+    	}
+
+    public Object[] emitBank(Model[] models, int bank, boolean toFile) 
+    	{ 
+    	// Builds a set of models collectively comprising one bank's worth of patches,
+    	// and a bank number, emits sysex and MIDI messages meant to write this bank
+    	// as a collective bank message.  The objects which may be placed in the Object[]
+    	// are the same as those returned by emitAll().   This method only needs to be 
+    	// implemented, if your patch editor supports bank reads (see documentation for 
+    	// getSupportsBankReads() and getSupportsBankWrites()).  By default an empty
+    	// array is returned.
+    	return new Object[0]; 
+    	}
+    
+    public int getPauseAfterWriteBank() 
+    	{
+    	// Returns the pause, in milliseconds, after writing a bank sysex message
+    	// to the synthesizer. 	By default this returns the value of 
+    	// getPauseAfterWritePatch();   This method only needs to be implemented 
+    	// if your patch editor supports bank reads (see documentation for 
+    	// getSupportsBankReads() and getSupportsBankWrites()).
+    	return getPauseAfterWritePatch(); 
+    	}    
+    
+    public byte[] requestBankDump(int bank) 
+    	{ 
+    	// Returns a sysex message to request a given bank dump.  If your synthesizer
+    	// does not permit bank dump requests, return null (the default).   This method 
+    	// only needs to be implemented, if at all,
+    	// if your patch editor supports bank reads (see documentation for 
+    	// getSupportsBankReads() and getSupportsBankWrites()).
+    	//
+    	// It's reasonsble for the synth to respond to a dump request of this kind by
+    	// sending all patches one by one or by sending a bank sysex.
+    	return null; 
+    	}
+
+    public int getRequestableBank() 
+    	{
+		// Some synths (such Yamaha 4-op) can request individual patches from any bank, but
+    	// can only request a single bank via a bank sysex message provided in requestBankDump().
+    	// This method returns that bank, or -1 if any bank can be requested via requestBankDump().
+    	// The default is -1.  This method only needs to be method if your patch editor supports
+    	// bank reads (see documentation for getSupportsBankReads() and getSupportsBankWrites()) 
+    	// and also bank requests (via requestBankDump()).
+    	return -1; 
+    	}
+
+	//// END BANK SYSEX SUPPORT
+	
 
     }

@@ -950,7 +950,7 @@ public class WaldorfKyraMulti extends Synth
      [CHECKSUM]      Checksum is sum of bytes in [PART 1 DATA] through [PART 8 DATA] mod 128, that is, & 0x7F 
      F7
 
-     NOTE: writing a patch/patch name to storage does not update the edit buffer.
+     NOTE: writing a patch to storage does not update the edit buffer.
      You'll want to do that manually afterwards.
 
      MULTIMODE PATCH NAME DUMP   [Received from Kyra]
@@ -981,7 +981,7 @@ public class WaldorfKyraMulti extends Synth
      [CHECKSUM]      Checksum is sum of bytes in [DATA] mod 128, that is, & 0x7F 
      F7
 
-     NOTE: writing a patch/patch name to storage does not update the edit buffer.
+     NOTE: writing a patch name to storage does not update the edit buffer.
      You'll want to do that manually afterwards.
 
      NOTE: It's not clear why the name is not part of the standard dump (and quite annoying)

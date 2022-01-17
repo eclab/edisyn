@@ -656,7 +656,13 @@ public class WaldorfKyra extends Synth
         hbox.add(comp);
 
         // the tempo goes 58...185, and sysex goes 0...127 but the documentation suggests 0...117 which makes no sense
-        comp = new LabelledDial("Tempo", this, "arptempo", color, 0, 127);
+        comp = new LabelledDial("Tempo", this, "arptempo", color, 0, 127)
+        	{
+        	public String map(int value)
+        		{
+        		return "" + (value + 58);
+        		}
+        	};
         hbox.add(comp);
 
         category.add(hbox, BorderLayout.CENTER);
@@ -1636,7 +1642,7 @@ public class WaldorfKyra extends Synth
         data[4] = (byte)0x20;                   // Request Patch
         data[5] = (byte)0x01;                   // Current Version
         data[6] = (byte)0x7f;           // Current Bank -- perhaps we should do 0x7E "curent configured bank in the Config menu"?
-        data[7] = (byte)0x7f;           // Current Part -- or should we force it t0 part 0, or maybe we should have a menu option to request different parts?
+        data[7] = (byte)0x7f;           // Current Part -- or should we force it to part 0, or maybe we should have a menu option to request different parts?
         data[8] = (byte)0xF7;
         return data;
         }
@@ -2242,3 +2248,1745 @@ public class WaldorfKyra extends Synth
     public boolean getPatchContainsLocation() { return true; }
     }
     
+    
+    
+    
+    
+    
+    
+/*** 
+     Kyra Single Patch Sysex Format
+     [As of Firmware 1.78, though it should roughly work with earlier versions]
+     Sean Luke sean@cs.gmu.edu
+        
+     This is a rough description of the format used by the Edisyn editor.
+     Waldorf has a less complete description [as of January 2022]
+     
+     This description is derived from my code and may have errors.  Let me know what errors
+     you find.  My code works well, so if there is a discrepancy between this description
+     and the actual code, use the code.
+
+     Be certain to properly set "Receive MIDI Program" to "USB", "MIDI+USB", or "MIDI"
+     depending on how you're communicating with the Kyra.
+                
+        
+     CHANGE MULTIMODE PATCH
+     Do an *LSB* Bank Change (CC = 32) with MIDI Channel = the channel for the part number.
+     Do a Program Change with MIDI Channel = the channel for the part number.
+        
+     NOTE: This channel may not be the Kyra's "Multi Channel"
+     NOTE: Banks and Patches start at 0
+     NOTE: A patch change requires at least 200ms pause afterwards
+        
+     REQUEST PATCH DUMP 
+     F0
+     3E              Waldorf 
+     22              Kyra
+     [ID]            Synth ID, typically 17 (11 hex)
+     20              Request Single patch
+     01              Version 1       [current as of September 2021]
+     [MSB]           Bank number as follows:
+                     (Current Working Patch): MSB = 0x7E
+                     (Patch in Memory): MSB = 0 ... 25		(represents banks A ... Z)           
+     [LSB]           Patch number as follows:
+                     (Current Working Patch): LSB = part, or 0x7F (current part)
+                     (Patch in Memory): MSB = patch number          
+     F7
+                
+     SEND ONE PARAMETER TO EDIT BUFFER
+     F0
+     3E              Waldorf 
+     22              Kyra
+     [ID]            Synth ID, typically 17 (11 hex)
+     10              Send Single Parameter to Kyra
+     01              Version 1       [current as of September 2021]
+     [PARAM 1]       Bit 0 is high bit (bit 7) of parameter number, Bits 4..6 are part
+     [PARAM 2]       Bits 0 ... 6 of parameter number
+     [VALUE]         Parameter Value (see Table 1)
+     F7
+        
+     NOTE: Param1 in java would be     (byte)(((param >>> 7) & 0x01) | (part << 4));
+     NOTE: Param2 in java would be     (byte)(param & 127);
+    
+        
+     SINGLE PATCH DUMP        [Received from Kyra]
+     F0
+     3E              Waldorf 
+     22              Kyra
+     [ID]            Synth ID, typically 17 (11 hex)
+     40              Single Patch Dump from Kyra
+     01              Version 1       [current as of September 2021]
+     [BANK]          0...25    0x7F indicates current working memory
+     [NUMBER]        0...127   For current working memory I set 0x7F
+     [DATA]          See Table 0
+     [CHECKSUM]      Checksum is sum of bytes in [DATA] mod 128, that is, & 0x7F 
+     F7
+
+     SINGLE PATCH DUMP        [Sent to Kyra]
+     F0
+     3E              Waldorf 
+     22              Kyra
+     [ID]            Synth ID, typically 17 (11 hex)
+     00              Send Single Patch Dump to Kyra
+     01              Version 1       [current as of September 2021]
+     [BANK]          0...25    0x7F indicates current working memory
+     [NUMBER]        0...127   For current working memory I set 0x7F
+     [DATA]          See Table 0
+     [CHECKSUM]      Checksum is sum of bytes in [DATA] mod 128, that is, & 0x7F 
+     F7
+
+     NOTE: writing a patch to storage does not update the edit buffer.
+     You'll want to do that manually afterwards.
+
+
+                
+
+     TABLE 1.  PARAMETERS AND VALUES
+     Num   Name                     Values
+     0     magic                    (always 0x2e)
+     1     version                  (presently 0x00)
+     2     patchvolume              0...127
+     3     portamentotime           0...127
+     4     voicemode                0 = Wave, 1 = Hypersaw
+     5     dualmode                 0 = Mono, 1 = Stereo
+     6     bendrange                0...12
+     7     auxoscillatorlevel       0...127  (this is noise and/or ringmod level)
+     8     panorama                 0...127  (only available when dual mode is stereo)
+     9     hypersawintensity        0...127
+     10    hypersawspread           0...127
+     11    arpenable                0...1
+     12    arpmode                  0 = UpDown, 1 = Up, 2 = Down, 3 = Chord, 4 = Random
+     13    arprange                 0 = 1 Oct, 1 = 2 Oct, 2 = 3 Oct
+     14    arppattern               0...127
+     15    arpgatelength            0...99, representing 1% ... 100%  (Waldorf docs appear to be wrong)
+     16    arptempo                 0...127  representing 58...185 (Waldorf docs say 0....117 but this appears to be wrong)
+     17    arptimesource            0...1        (Arp MIDI clock)
+     18    arpbeat                  0 = 1/32, 1 = 1/16 T, 2 = 1/16, 3 = 1/8 T, 4 = 1/16 D, 5 = 1/8, 6 = 1/4 T, 7 = 1/8 D, 8 = 1/4
+     19    keymode                  0 = Polyphonic, 1 = Monophonic
+     20    osc1coarsetune           0...48 representing -24 ... + 24
+     21    osc1sawtoothlevel        0...127
+     22    osc1pulselevel           0...127
+     23    osc1wavetablelevel       0...127
+     24    osc1pulsewidth           0...127
+     25    osc1subosclevel          0...127
+     26    osc1suboscpulsewidth     0 = Saw, 1 = Square, 2 = Pulse, 3 = Triangle, 4 = Saw / Root, 5 = Square / Root, 6 = Pulse / Root, 7 = Triangle / Root      (this is all labelled 'pulsewidth' in docs but it is not.  It's shape)
+     27    osc1suboscdetune         0...127 representing -64 ... + 63
+     28    osc1wavetablegroup       See Table 2   (groups start at 0)
+     29    osc1wavetablenumber      See Table 2   (waves start at 0)
+     30    osc1lfo1topitch          0...127
+     31    osc1lfo2topulsewidth     0...127
+     32    osc1fmamount             0...127
+     33    [Unused]
+     34    auxoscillatormode        0 = Noise, 1 = Ring Mod
+     35    osc2coarsetune           0...48 representing -24 ... + 24
+     36    osc2detune               0...127 representing -64 ... + 64
+     37    osc2sawtoothlevel        0...127
+     38    osc2pulselevel           0...127
+     39    osc2wavetablelevel       0...127
+     40    osc2pulsewidth           0...127
+     41    osc2subosclevel          0...127
+     42    osc2suboscpulsewidth     0 = Saw, 1 = Square, 2 = Pulse, 3 = Triangle, 4 = Saw / Root, 5 = Square / Root, 6 = Pulse / Root, 7 = Triangle / Root      (this is all labelled 'pulsewidth' in docs but it is not.  It's shape)
+     43    osc2suboscdetune         0...127 representing -64 ... + 63
+     44    osc2wavetablegroup       See Table 2   (groups start at 0)
+     45    osc2wavetablenumber      See Table 2   (waves start at 0)
+     46    osc2lfo1topitch          0...127
+     47    osc2lfo2topulsewidth     0...127
+     48    osc2hardsync             0...1
+     49    hypersawsuboscillator    0...1
+     50    filter1mode              0 = 12db Low Pass, 1 = 24dB Low Pass, 2 = 12dB Band Pass, 3 = 24dB Band Pass, 4 = 12dB High Pass, 5 = 24dB High Pass
+     51    filter1frequency         See Table 3
+     52    filter1resonance         0...127
+     53    filter1eg1tofreq         0...127 representing -64 ... +63
+     54    filter1eg2tofreq         0...127 representing -64 ... +63
+     55    filter1lfo2tofreq        0...127 representing -64 ... +63
+     56    filter1lfo3tofreq        0...127 representing -64 ... +63
+     57    filter1keyfollowkey      0...127 representing all MIDI Note Values
+     58    filter1keyfollowamt      0...127
+     59    [Unused]
+     60    fxlimitermode            0 = Light, 1 = Medium, 2 = Heavy   (this was originally called vca saturator mode)
+     61    vcapan                   0...127 representing -64 (full left) ... +63 (full right)
+     62    vcalfo1toamp             0...127
+     63    vcalfo2topan             0...127
+     64    filter2mode              0 = 12db Low Pass, 1 = 24dB Low Pass, 2 = 12dB Band Pass, 3 = 24dB Band Pass, 4 = 12dB High Pass, 5 = 24dB High Pass
+     65    filter2resonance         0...127
+     66    filter2eg1tofreq         0...127 representing -64 ... +63
+     67    filter2eg2tofreq         0...127 representing -64 ... +63
+     68    eg1attack                See Table 4
+     69    eg1decay                 See Table 4
+     70    eg1sustain               0...127
+     71    eg1release               See Table 4
+     72    [Unused]
+     73    eg2attack                See Table 4
+     74    eg2decay                 See Table 4
+     75    eg2sustain               0...127
+     76    eg2release               See Table 4
+     77    [Unused]
+     78    eg3attack                See Table 4
+     79    eg3decay                 See Table 4
+     80    eg3sustain               0...127
+     81    eg3release               See Table 4
+     82    [Unused]
+     83    filter2lfo2tofreq        0...127 representing -64 ... +63
+     84    filter2lfo3tofreq        0...127 representing -64 ... +63
+     85    filter2keyfollowkey      0...127 representing all MIDI Note Values
+     86    filter2keyfollowamt      0...127
+     87    filterbalance            0...127 representing -64 (all filter 1) ... +63 (all filter 2).  Only has effect when filter configuration is single
+     88    lfo1shape                See Table 5
+     89    lfo2shape                See Table 5
+     90    lfo3shape                See Table 4
+     91    lfo1rate                 n = 0 ... 127 representing (n + 1)/10 Hz.  If lfo1range is 1 (extended), then represents (n + 1) * 4 /10
+     92    lfo2rate                 n = 0 ... 127 representing (n + 1)/10 Hz.  If lfo2range is 1 (extended), then represents (n + 1) * 4 /10
+     93    lfo3rate                 n = 0 ... 127 representing (n + 1)/10 Hz.
+     94    lfo1mode                 0 = Monophonic, 2 = Polyphonic, 3 = Random Phase, 4 = Dual Antiphase, 5 = Dual Quadrature
+     95    lfo2mode                 0 = Monophonic, 2 = Polyphonic, 3 = Random Phase, 4 = Dual Antiphase, 5 = Dual Quadrature
+     96    lfo3mode                 0 = Monophonic, 2 = Polyphonic, 3 = Random Phase
+     97    lfo1timesource           0 = Internal, 1 = MIDI 1/16, 2 = MIDI 1/8 T, 2 = MIDI 3/32, 3 = MIDI 1/8, 4 = MII 1/4 T, 5 = MIDI 3/16, 6 = MIDI 1/4, 7 = MIDI 1/2 T, 8 = MIDI 3/8, 9 = MIDI 1/1, 10 = MIDI 2/1, 11 = MIDI 2/1
+     98    lfo2timesource           0 = Internal, 1 = MIDI 1/16, 2 = MIDI 1/8 T, 2 = MIDI 3/32, 3 = MIDI 1/8, 4 = MII 1/4 T, 5 = MIDI 3/16, 6 = MIDI 1/4, 7 = MIDI 1/2 T, 8 = MIDI 3/8, 9 = MIDI 1/1, 10 = MIDI 2/1, 11 = MIDI 2/1
+     99    lfo3timesource           0 = Internal, 1 = MIDI 1/16, 2 = MIDI 1/8 T, 2 = MIDI 3/32, 3 = MIDI 1/8, 4 = MII 1/4 T, 5 = MIDI 3/16, 6 = MIDI 1/4, 7 = MIDI 1/2 T, 8 = MIDI 3/8, 9 = MIDI 1/1, 10 = MIDI 2/1, 11 = MIDI 2/1
+     100   lfo1delay                See Table 4
+     101   lfo2delay                See Table 4
+     102   velocityscaling          0...127
+     103   modmat0source            See Table 6
+     104   modmat0destination0      See Table 7
+     105   modmat0amount0           0...127 representing -64 ... +63
+     106   modmat0destination1      See Table 7
+     107   modmat0amount1           0...127 representing -64 ... +63
+     108   modmat0destination2      See Table 7
+     109   modmat0amount2           0...127 representing -64 ... +63
+     110   modmat1source            See Table 6
+     111   modmat1destination0      See Table 7
+     112   modmat1amount0           0...127 representing -64 ... +63
+     113   modmat1destination1      See Table 7
+     114   modmat1amount1           0...127 representing -64 ... +63
+     115   modmat1destination2      See Table 7
+     116   modmat1amount2           0...127 representing -64 ... +63
+     117   modmat2source            See Table 6
+     118   modmat2destination0      See Table 7
+     119   modmat2amount0           0...127 representing -64 ... +63
+     120   modmat2destination1      See Table 7
+     121   modmat2amount1           0...127 representing -64 ... +63
+     122   modmat2destination2      See Table 7
+     123   modmat2amount2           0...127 representing -64 ... +63
+     124   modmat3source            See Table 6
+     125   modmat3destination0      See Table 7
+     126   modmat3amount0           0...127 representing -64 ... +63
+     127   modmat3destination1      See Table 7
+     128   modmat3amount1           0...127 representing -64 ... +63
+     129   modmat3destination2      See Table 7
+     130   modmat3amount2           0...127 representing -64 ... +63
+     131   modmat4source            See Table 6
+     132   modmat4destination0      See Table 7
+     133   modmat4amount0           0...127 representing -64 ... +63
+     134   modmat4destination1      See Table 7
+     135   modmat4amount1           0...127 representing -64 ... +63
+     136   modmat4destination2      See Table 7
+     137   modmat4amount2           0...127 representing -64 ... +63
+     138   modmat5source            See Table 6
+     139   modmat5destination0      See Table 7
+     140   modmat5amount0           0...127 representing -64 ... +63
+     141   modmat5destination1      See Table 7
+     142   modmat5amount1           0...127 representing -64 ... +63
+     143   modmat5destination2      See Table 7
+     144   modmat5amount2           0...127 representing -64 ... +63
+     145   eg1slope                 0...127 representing -64 ... +63
+     146   eg2slope                 0...127 representing -64 ... +63
+     147   eg3slope                 0...127 representing -64 ... +63
+     148   fxphaserfrequency        0...127
+     149   fxphasermodspeed         0...127
+     150   fxphasermoddepth         0...127
+     151   fxphaserfeedback         0...127
+     152   fxphasermix              0...127
+     153   fxphaserwaveshape        See Table 5
+     154   lfo1range                0...1   (LFO 1 Extended Range)
+     155   lfo2range                0...1   (LFO 2 Extended Range)
+     156   lfo1phase                See Table 8
+     157   lfo2phase                See Table 8
+     158   fxddltype                0 = Stereo, 1 = Ping Pong   (DDL is Dynamic Delay Line)
+     159   fxddldelaytime           See Table 9  (DDL is Dynamic Delay Line)
+     160   fxddlfeedback            0...127      (DDL is Dynamic Delay Line)
+     161   fxddlmix                 0...127      (DDL is Dynamic Delay Line)
+     162   [Unused]
+     163   fxddlclocksource         0 = Internal, 1 = MIDI, 2 = LFO 3
+     164   fxddlclockbeat           0 = 1/64, 1 = 1/32 T, 2 = 1/32, 3 = 1/16 T, 4 = 1/16, 5 = 1/8 T, 6 = 3/32, 7 = 1/8, 8 = 1/4 T, 9 = 3/16, 10 = 1/4, 11 = 1/2 T, 12 = 3/8, 13 = 1/2
+     165   [Unused]
+     166   [Unused]
+     167   latchmode                0 = Sustain Pedal, 1 = Key Latch
+     168   fxmdfxdelaytime          0...127      (mdfx is chorus effects)
+     169   fxmdfxdelayscale         0 = Comb (0-10ms), 1 = Flanger (0-20ms), 2 = Chorus (0-40ms), 3 = Doubler (0-160ms)      (mdfx is chorus effects)
+     170   fxmdfxfeedback           0...127      (mdfx is chorus effects)
+     171   fxmdfxmodspeed           0...127      (mdfx is chorus effects)
+     172   fxmdfxmoddepth           0...127      (mdfx is chorus effects)
+     173   fxmdfxmix                0...127      (mdfx is chorus effects)
+     174   [Unused]
+     175   [Unused]
+     176   [Unused]
+     177   dualmodedetune           0...127      (only available when hypersaw is off and dual mode is stereo)
+     178   fxreverbpredelay         0...127
+     179   fxreverbrt60             0...127      (this is reverb time)
+     180   fxreverbdamping          0...127
+     181   fxreverbdarkness         0...127
+     182   fxreverbmix              0...127
+     183   fxdistortionmix          0...127
+     184   fxdistortiondrive        0...127
+     185   fxdistortiontype         0 = Soft Rectifier, 1 = Hard Rectifier, 2 = Soft Bitcrusher, 3 = Hard Bitcrusher, 4 = Gnasher
+     186   fxdynamicsfinallevel     0...127
+     187   fxdistortionlpf          0 = 1 kHz, 1 = 2 kHz, 3 = 4 kHz, 4 = kHz     (this is distortion rolloff corner)
+     188   fxeqlowshelffreq         See Table 10
+     189   fxeqlowshelfgain         0...127 Representing -16 ... +15.75 in 0.25 increments
+     190   fxeqmidfreq              See Table 11
+     191   fxeqmidq                 See Table 12
+     192   fxeqmidgain              0...127 Representing -16 ... +15.75 in 0.25 increments
+     193   fxeqhighshelffreq        See Table 13
+     194   fxeqhighshelfgain        0...127 Representing -16 ... +15.75 in 0.25 increments
+     195   fxformantgain            0...63 Representing 0 ... +15.75 in 0.25 increments
+     196   fxformanttune            0...127
+     197   fxformantmodspeed        0...127
+     198   category                 See Table 14
+     199   fxformantmoddepth        0...127
+     200   name00                   ASCII, excepting < 32 and 127
+     201   name01                   ASCII, excepting < 32 and 127
+     202   name02                   ASCII, excepting < 32 and 127
+     203   name03                   ASCII, excepting < 32 and 127
+     204   name04                   ASCII, excepting < 32 and 127
+     205   name05                   ASCII, excepting < 32 and 127
+     206   name06                   ASCII, excepting < 32 and 127
+     207   name07                   ASCII, excepting < 32 and 127
+     208   name08                   ASCII, excepting < 32 and 127
+     209   name09                   ASCII, excepting < 32 and 127
+     210   name10                   ASCII, excepting < 32 and 127
+     211   name11                   ASCII, excepting < 32 and 127
+     212   name12                   ASCII, excepting < 32 and 127
+     213   name13                   ASCII, excepting < 32 and 127
+     214   name14                   ASCII, excepting < 32 and 127
+     215   name15                   ASCII, excepting < 32 and 127
+     216   name16                   ASCII, excepting < 32 and 127
+     217   name17                   ASCII, excepting < 32 and 127
+     218   name18                   ASCII, excepting < 32 and 127
+     219   name19                   ASCII, excepting < 32 and 127
+     220   name20                   ASCII, excepting < 32 and 127
+     221   name21                   ASCII, excepting < 32 and 127
+     
+     NOTE: These names are taken from Waldorf documents, and so in some cases may not make sense anymore
+     
+     
+     TABLE 2.  WAVE GROUPS
+     Val  Num Waves Group Name
+     0    100       Construction Set 1
+     1    100       Construction Set 2
+     2    100       Construction Set 3
+     3    100       Construction Set 4
+     4    100       Construction Set 5
+     5    100       Construction Set 6
+     6    100       Construction Set 7
+     7    100       Construction Set 8
+     8    100       Construction Set 9
+     9    100       Construction Set 10
+     10   100       Construction Set 11
+     11   100       Construction Set 12
+     12   100       Construction Set 13
+     13   100       Construction Set 14
+     14   100       Construction Set 15
+     15   100       Construction Set 16
+     16   100       Construction Set 17
+     17   100       Construction Set 18
+     18   100       Construction Set 19
+     19   111       Construction Set 20
+     20   38        Acoustic Guitar
+     21   26        Alto Saxophone
+     22   14        Birds
+     23   40        Bit Reduced Lo-Fi
+     24   73        Blended Waveforms
+     25   10        Bright Sawtooth
+     26   32        C604
+     27   19        Cello
+     28   6         Cheezy Strings
+     29   25        Clarinet
+     30   33        Clavinet
+     31   69        Double Bass
+     32   45        Distorted
+     33   70        Electric Bass
+     34   22        Electric Guitar
+     35   128       Electric Organ 1
+     36   27        Electric Organ 2
+     37   73        Electric Piano
+     38   16        Flute
+     39   122       FM Synth
+     40   42        Gapped Sawtooth
+     41   44        Granular
+     42   50        Hand Drawn
+     43   104       Human Voice
+     44   85        Linear Waveforms
+     45   13        Oboe
+     46   128       Osc Chip Lo-Fi 1
+     47   30        Osc Chip Lo-Fi 2
+     48   44        Overtone
+     49   30        Piano
+     50   9         Pluck Algorithm
+     51   26        Rounded Squares
+     52   36        Raw Waveforms
+     53   26        Round Squares Sym
+     54   26        Round Squares Asym
+     55   26        Rounded Saw Sym
+     56   8         Sawtooth Bit Reduced
+     57   50        Sawtooth
+     58   8         Sine Bit Reduced
+     59   16        Sine Harmonics
+     60   12        Sine
+     61   48        Snippets
+     62   7         Square Bit Reduced
+     63   100       Square
+     64   17        Symmetric
+     65   4         Tannernin
+     66   22        Theremin
+     67   8         Triangle Bit Reduced
+     68   25        Triangle
+     69   128       Video Game 1
+     70   11        Video Game 2
+     71   14        Violin
+     
+     NOTE: These waves are directly from the AdventureKid waveform collection
+           https://www.adventurekid.se/AKRTfiles/AKWF/view/waveforms_index.html
+     
+     
+     
+     TABLE 3.  FILTER FREQUENCIES
+     Val   Frequency
+     0     40
+     1     42
+     2     44
+     3     46
+     4     49
+     5     51
+     6     54
+     7     56
+     8     59
+     9     62
+     10    65
+     11    69
+     12    72
+     13    76
+     14    80
+     15    84
+     16    88
+     17    92
+     18    97
+     19    102
+     20    107
+     21    112
+     22    118
+     23    124
+     24    130
+     25    137
+     26    143
+     27    151
+     28    158
+     29    166
+     30    175
+     31    183
+     32    193
+     33    202
+     34    212
+     35    223
+     36    234
+     37    246
+     38    259
+     39    272
+     40    285
+     41    300
+     42    315
+     43    331
+     44    347
+     45    365
+     46    383
+     47    402
+     48    423
+     49    444
+     50    466
+     51    490
+     52    515
+     53    540
+     54    568
+     55    596
+     56    626
+     57    658
+     58    691
+     59    726
+     60    762
+     61    800
+     62    841
+     63    883
+     64    928
+     65    974
+     66    1020
+     67    1080
+     68    1130
+     69    1190
+     70    1250
+     71    1310
+     72    1370
+     73    1440
+     74    1520
+     75    1600
+     76    1670
+     77    1760
+     78    1850
+     79    1950
+     80    2040
+     81    2140
+     82    2250
+     83    2360
+     84    2480
+     85    2600
+     86    2730
+     87    2870
+     88    3020
+     89    3170
+     90    3330
+     91    3490
+     92    3670
+     93    3850
+     94    4050
+     95    4250
+     96    4470
+     97    4700
+     98    4930
+     99    5180
+     100   5430
+     101   5710
+     102   6000
+     103   6300
+     104   6620
+     105   6950
+     106   7300
+     107   7670
+     108   8060
+     109   8460
+     110   8890
+     111   9330
+     112   9800
+     113   10300
+     114   10800
+     115   11400
+     116   11900
+     117   12500
+     118   13200
+     119   13800
+     120   14500
+     121   15200
+     122   16000
+     123   16800
+     124   17700
+     125   18600
+     126   19500
+     127   20500
+     
+     
+     TABLE 4.  EG ATTACK, DECAY, RELEASE, AND LFO DELAY TIMES
+     Val   Time
+     0     0
+     1     1
+     2     2
+     3     5
+     4     8
+     5     13
+     6     18
+     7     25
+     8     32
+     9     41
+     10    50
+     11    61
+     12    72
+     13    84
+     14    98
+     15    112
+     16    127
+     17    114
+     18    161
+     19    180
+     20    200
+     21    219
+     22    241
+     23    263
+     24    286
+     25    311
+     26    336
+     27    362
+     28    389
+     29    418
+     30    447
+     31    477
+     32    508
+     33    541
+     34    574
+     35    608
+     36    643
+     37    680
+     38    717
+     39    755
+     40    794
+     41    834
+     42    875
+     43    918
+     44    961
+     45    1005
+     46    1050
+     47    1096
+     48    1143
+     49    1191
+     50    1241
+     51    1291
+     52    1342
+     53    1394
+     54    1447
+     55    1500
+     56    1556
+     57    1612
+     58    1669
+     59    1727
+     60    1786
+     61    1846
+     62    1907
+     63    1969
+     64    2032
+     65    2096
+     66    2161
+     67    2227
+     68    2294
+     69    2362
+     70    2431
+     71    2500
+     72    2572
+     73    2644
+     74    2717
+     75    2791
+     76    2865
+     77    2941
+     78    3018
+     79    3096
+     80    3175
+     81    3255
+     82    3336
+     83    3417
+     84    3500
+     85    3584
+     86    3669
+     87    3755
+     88    3842
+     89    3929
+     90    4018
+     91    4108
+     92    4200
+     93    4290
+     94    4383
+     95    4477
+     96    4572
+     97    4667
+     98    4764
+     99    4862
+     100   4961
+     101   5060
+     102   5161
+     103   5263
+     104   5365
+     105   5469
+     106   5574
+     107   5679
+     108   5786
+     109   5893
+     110   6000
+     111   6112
+     112   6222
+     113   6334
+     114   6447
+     115   6560
+     116   6675
+     117   6790
+     118   6907
+     119   7024
+     120   7143
+     121   7262
+     122   7383
+     123   7504
+     124   7627
+     125   7751
+     126   7875
+     127   8000
+     
+     
+     TABLE 5.  LFO WAVE SHAPES AND PHASER SHAPE
+     Val   Shape
+     0     Sine
+     1     Square
+     2     Triangle
+     3     Sample & Hold
+     4     Sawtooth
+     5     Ramp
+     6     Sine Ramp 1
+     7     Sine Ramp 2
+     8     Sine Ramp 3
+     9     Sine Ramp 4
+     10    Sine Ramp 5
+     11    Sine Ramp 6
+     12    Round Square 1
+     13    Round Square 2
+     14    Round Square 3
+     15    Round Square 4
+     16    Round Square 5
+     17    Round Square 6
+     18    Round Square 7
+     19    Round Square 8
+     20    Round Square 9
+     21    Round Square 10
+     22    Round Square 11
+     23    Round Square 12
+     24    Round Square 13
+     25    Round Square 14
+     26    Round Square 15
+     27    Round Square 16
+     28    Sine Saw
+     29    Pulse 1
+     30    Pulse 2
+     31    Ramp Square
+     32    Filtered Square
+     33    Thin Pulse
+     34    Triangle Square
+     35    Wobble Down
+     36    Lagged Saw 1
+     37    Lagged Saw 2
+     38    Lagged Saw 3
+     39    Lagged Saw 4
+     40    Lagged Saw 5
+     41    Lagged Saw 6
+     42    Lagged Saw 7
+     43    Lagged Saw 8
+     44    Lagged Saw 9
+     45    Lagged Saw 10
+     46    Lagged Saw 11
+     47    Lagged Saw 12
+     48    Lagged Saw 13
+     49    Lagged Saw 14
+     50    Lagged Saw 15
+     51    Lagged Saw 16
+     52    Lagged Square 1
+     53    Lagged Square 2
+     54    Lagged Square 3
+     55    Lagged Square 4
+     56    Lagged Square 5
+     57    Lagged Square 6
+     58    Lagged Square 7
+     59    Lagged Square 8
+     60    Lagged Square 9
+     61    Lagged Square 10
+     62    Lagged Square 11
+     63    Lagged Square 12
+     64    Lagged Square 13
+     65    Lagged Square 14
+     66    Lagged Square 15
+     67    Lagged Square 16
+     68    Sine Harmonic 1
+     69    Sine Harmonic 2
+     70    Sine Harmonic 3
+     71    Sine Harmonic 4
+     72    Sine Harmonic 5
+     73    Sine Harmonic 6
+     74    Sine Harmonic 7
+     75    Sine Harmonic 8
+     76    Sine Harmonic 9
+     77    Sine Harmonic 10
+     78    Sine Harmonic 11
+     79    Sine Harmonic 12
+     80    Sine Harmonic 13
+     81    Sine Harmonic 14
+     82    Sine Harmonic 15
+     83    Sine Harmonic 16
+     84    Blended Wave 1
+     85    Blended Wave 2
+     86    Blended Wave 3
+     87    Blended Wave 4
+     88    Blended Wave 5
+     89    Blended Wave 6
+     90    Blended Wave 7
+     91    Blended Wave 8
+     92    Blended Wave 9
+     93    Blended Wave 10
+     94    Blended Wave 11
+     95    Blended Wave 12
+     96    Blended Wave 13
+     97    Blended Wave 14
+     98    Blended Wave 15
+     99    Blended Wave 16
+     100   Blended Wave 17
+     101   Blended Wave 18
+     102   Blended Wave 19
+     103   Blended Wave 20
+     104   Blended Wave 21
+     105   Blended Wave 22
+     106   Blended Wave 23
+     107   Blended Wave 24
+     108   Blended Wave 25
+     109   Blended Wave 26
+     110   Blended Wave 27
+     111   Blended Wave 28
+     112   Blended Wave 29
+     113   Blended Wave 30
+     114   Blended Wave 31
+     115   Blended Wave 32
+     116   Blended Wave 33
+     117   Blended Wave 34
+     118   Blended Wave 35
+     119   Blended Wave 36
+     120   Blended Wave 37
+     121   Blended Wave 38
+     122   Blended Wave 39
+     123   Blended Wave 40
+     124   Blended Wave 41
+     125   Blended Wave 42
+     126   Blended Wave 43
+     127   Blended Wave 44
+     
+     
+     TABLE 6.  MOD SOURCES
+     Val   Source
+     0     None
+     1     Pitch Bend
+     2     Channel Pressure
+     3     Mod Wheel (CC 1)
+     4     Breadth (CC 2)
+     5     MIDI CC 3
+     6     Foot (CC 4)
+     7     Data Entry (CC 6)
+     8     Balance (CC 8)
+     9     CC 9
+     10    Pan (CC 10)
+     11    Expression (CC 11)
+     12    CC 12
+     13    CC 13
+     14    CC 14
+     15    CC 15
+     16    CC 16
+     17    CC 17
+     18    CC 18
+     19    CC 19
+     20    Sustain (CC 64)
+     21    Envelope 1 [Poly]
+     22    Envelope 2 [Poly]
+     23    Envelope 3 [Poly]
+     24    LFO 1 Unipolar [Poly]
+     25    LFO 1 Bipolar [Poly]
+     26    LFO 2 Unipolar [Poly]
+     27    LFO 2 Bipolar [Poly]
+     28    LFO 3 Unipolar [Poly]
+     29    LFO 3 Bipolar [Poly]
+     30    Note On Velocity [Poly]
+     31    Random per Note [Poly]
+     32    MIDI Note [Poly]
+     33    Polyphonic Pressure [Poly]
+     34    Note Off Velocity [Poly]
+     
+     
+     TABLE 7.  MOD DESTINATIONS
+     Val   Destination
+     0     None
+     1     Osc 1 Tune
+     2     Osc 1 Detune             (Osc 1 Detune is not available as a direct parameter, only as a destination)
+     3     Osc 1 Wave Osc 2 FM
+     4     Osc 1 LFO 1 Pitch
+     5     Osc 1 LFO 2 Pulsewidth
+     6     Osc 1 Sawtooth Level
+     7     Osc 1 Wave Level
+     8     Osc 1 Pulse Level
+     9     Osc 1 Aux Osc Level
+     10    Osc 1 Sub Level
+     11    Osc 1 Sub Detune
+     12    Osc 1 Pulsewidth
+     13    Osc 2 Tune
+     14    Osc 2 Detune
+     15    Osc 2 LFO 1 Pitch
+     16    Osc 2 LFO 2 Pulsewidth
+     17    Osc 2 Sawtooth Level
+     18    Osc 2 Wave Level
+     19    Osc 2 Pulse Level
+     20    Osc 2 Sub Level
+     21    Osc 2 Sub Detune
+     22    Osc 2 Pulsewidth
+     23    Hypersaw Intensity
+     24    Hypersaw Spread
+     25    Filter 1/2 Balance
+     26    Filter 1 Cutoff
+     27    Filter 1 Resonance
+     28    Filter 1 Env 1 Cutoff
+     29    Filter 1 Env 2 Cutoff
+     30    Filter 1 LFO 2 Cutoff
+     31    Filter 2 Cutoff
+     32    Filter 2 Resonance
+     33    Filter 2 Env 1 Cutoff
+     34    Filter 2 Env 2 Cutoff
+     35    Filter 2 LFO 2 Cutoff
+     36    VCA Level (Pre-Effects)
+     37    VCA Pan
+     38    VCA Stereo Width
+     39    VCA LFO 1 > Amp
+     40    VCA LFO 2 > Pan
+     41    Env 1 Attack
+     42    Env 1 Decay
+     43    Env 1 Sustain
+     44    Env 1 Release
+     45    Env 2 Attack
+     46    Env 2 Decay
+     47    Env 2 Sustain
+     48    Env 2 Release
+     49    Env 3 Attack
+     50    Env 3 Decay
+     51    Env 3 Sustain
+     52    Env 3 Release
+     53    LFO 1 Speed
+     54    LFO 1 Delay
+     55    LFO 2 Speed
+     56    LFO 2 Delay
+     57    LFO 3 Speed
+     58    DDL Mix
+     59    DDL Delay 
+     60    DDL Feedback
+     61    Phaser Mix
+     62    Phaser Feedback
+     63    Phaser Modulation Rate
+     64    Phaser Modulation Depth
+     65    Phaser Frequency
+     66    Chorus Mix
+     67    Chorus Delay
+     68    Chorus Feedback
+     69    Chorus Modulation Rate
+     70    Chorus Modulation Depth
+     71    Reverb Mix
+     72    Reverb Time
+     73    Reverb Damping
+     74    Reverb Darkness
+     75    EQ Mid Gain
+     76    EQ Mid Frequency
+     77    Formant Filter Gain
+     78    Formant Filter Tune
+     79    Distortion Mix
+     80    Distortion Drive
+     81    Final Level (Post-Effects)
+     82    Dual Detune Amount
+     
+     
+     
+     TABLE 8.  LFO PHASES
+     Val  Phase
+     0    0
+     1    1
+     2    3
+     3    4
+     4    6
+     5    7
+     6    9
+     7    10
+     8    11
+     9    13
+     10    14
+     11    16
+     12    17
+     13    18
+     14    20
+     15    21
+     16    23
+     17    24
+     18    26
+     19    27
+     20    28
+     21    30
+     22    31
+     23    33
+     24    34
+     25    35
+     26    37
+     27    38
+     28    40
+     29    41
+     30    43
+     31    44
+     32    45
+     33    47
+     34    48
+     35    50
+     36    51
+     37    52
+     38    54
+     39    55
+     40    57
+     41    58
+     42    60
+     43    61
+     44    62
+     45    64
+     46    65
+     47    67
+     48    68
+     49    69
+     50    71
+     51    72
+     52    74
+     53    75
+     54    77
+     55    78
+     56    79
+     57    81
+     58    82
+     59    84
+     60    85
+     61    86
+     62    88
+     63    90
+     64    91
+     65    92
+     66    94
+     67    95
+     68    96
+     69    98
+     70    99
+     71    101
+     72    102
+     73    103
+     74    105
+     75    106
+     76    108
+     77    109
+     78    111
+     79    112
+     80    113
+     81    115
+     82    116
+     83    118
+     84    119
+     85    120
+     86    122
+     87    123
+     88    125
+     89    126
+     90    128
+     91    129
+     92    130
+     93    132
+     94    133
+     95    135
+     96    136
+     97    137
+     98    139
+     99    140
+     100    142
+     101    143
+     102    145
+     103    146
+     104    147
+     105    149
+     106    150
+     107    152
+     108    153
+     109    154
+     110    156
+     111    157
+     112    159
+     113    160
+     114    162
+     115    163
+     116    164
+     117    166
+     118    167
+     119    169
+     120    170
+     121    171
+     122    173
+     123    174
+     124    176
+     125    177
+     126    179
+     127    180
+     
+     
+     TABLE 9.  DELAY TIMES
+     Val  Time
+     0    21
+     1    42
+     2    63
+     3    81
+     4    105
+     5    126
+     6    147
+     7    168
+     8    189
+     9    210
+     10    231
+     11    252
+     12    273
+     13    294
+     14    315
+     15    336
+     16    357
+     17    378
+     18    399
+     19    420
+     20    441
+     21    462
+     22    483
+     23    504
+     24    525
+     25    546
+     26    567
+     27    588
+     28    609
+     29    630
+     30    651
+     31    672
+     32    693
+     33    714
+     34    735
+     35    756
+     36    777
+     37    798
+     38    819
+     39    840
+     40    861
+     41    882
+     42    903
+     43    924
+     44    945
+     45    966
+     46    987
+     47    1010
+     48    1030
+     49    1040
+     50    1070
+     51    1090
+     52    1110
+     53    1130
+     54    1160
+     55    1180
+     56    1200
+     57    1220
+     58    1240
+     59    1260
+     60    1280
+     61    1300
+     62    1320
+     63    1340
+     64    1370
+     65    1390
+     66    1410
+     67    1430
+     68    1450
+     69    1470
+     70    1490
+     71    1510
+     72    1530
+     73    1550
+     74    1580
+     75    1600
+     76    1620
+     77    1640
+     78    1660
+     79    1680
+     80    1700
+     81    1720
+     82    1740
+     83    1760
+     84    1790
+     85    1810
+     86    1830
+     87    1850
+     88    1870
+     89    1890
+     90    1910
+     91    1930
+     92    1950
+     93    1970
+     94    2000
+     95    2020
+     96    2040
+     97    2060
+     98    2080
+     99    2100
+     100    2120
+     101    2140
+     102    2160
+     103    2180
+     104    2210
+     105    2230
+     106    2250
+     107    2270
+     108    2290
+     109    2310
+     110    2330
+     111    2350
+     112    2370
+     113    2390
+     114    2420
+     115    2440
+     116    2460
+     117    2480
+     118    2500
+     119    2520
+     120    2540
+     121    2560
+     122    2580
+     123    2600
+     124    2630
+     125    2650
+     126    2670
+     127    2690
+     
+     
+     TABLE 10.  EQ LOW FREQUENCIES
+     Val  Frequency
+     0    20.0
+     1    20.5
+     2    21.0
+     3    21.5
+     4    22.0
+     5    23.0
+     6    23.5
+     7    24.0
+     8    25.0
+     9    25.5
+     10    26.5
+     11    27.0
+     12    28.0
+     13    28.5
+     14    29.5
+     15    30.0
+     16    31.0
+     17    32.0
+     18    33.0
+     19    34.0
+     20    35.0
+     21    36.0
+     22    37.0
+     23    38.0
+     24    39.0
+     25    40.0
+     26    41.0
+     27    42.0
+     28    43.0
+     29    44.0
+     30    45.0
+     31    46.0
+     32    48.0
+     33    49.0
+     34    50.0
+     35    52.0
+     36    53.0
+     37    55.0
+     38    56.0
+     39    58.0
+     40    60.0
+     41    61.0
+     42    63.0
+     43    65.0
+     44    66.0
+     45    68.0
+     46    70.0
+     47    72.0
+     48    74.0
+     49    76.0
+     50    78.0
+     51    80.0
+     52    82.0
+     53    85.0
+     54    87.0
+     55    90.0
+     56    92.0
+     57    95.0
+     58    97.0
+     59    100.0
+     60    103.0
+     61    106.0
+     62    109.0
+     63    111.0
+     64    115.0
+     65    118.0
+     66    121.0
+     67    124.0
+     68    128.0
+     69    131.0
+     70    135.0
+     71    139.0
+     72    143.0
+     73    147.0
+     74    151.0
+     75    155.0
+     76    159.0
+     77    164.0
+     78    168.0
+     79    173.0
+     80    177.0
+     81    182.0
+     82    187.0
+     83    193.0
+     84    198.0
+     85    203.0
+     86    209.0
+     87    215.0
+     88    220.0
+     89    227.0
+     90    233.0
+     91    240.0
+     92    246.0
+     93    253.0
+     94    260.0
+     95    267.0
+     96    275.0
+     97    282.0
+     98    290.0
+     99    298.0
+     100    306.0
+     101    315.0
+     102    324.0
+     103    332.0
+     104    341.0
+     105    351.0
+     106    361.0
+     107    371.0
+     108    381.0
+     109    392.0
+     110    402.0
+     111    414.0
+     112    425.0
+     113    437.0
+     114    449.0
+     115    461.0
+     116    474.0
+     117    487.0
+     118    501.0
+     119    514.0
+     120    529.0
+     121    543.0
+     122    558.0
+     123    574.0
+     124    590.0
+     125    606.0
+     126    623.0
+     127    640.0
+     
+     
+     
+     TABLE 11.  EQ MID FREQUENCIES
+     Val  Frequency
+     0    20
+     1    21
+     2    22
+     3    23
+     4    25
+     5    26
+     6    28
+     7    29
+     8    31
+     9    33
+     10    35
+     11    36
+     12    38
+     13    41
+     14    43
+     15    45
+     16    48
+     17    51
+     18    53
+     19    56
+     20    60
+     21    63
+     22    66
+     23    70
+     24    74
+     25    78
+     26    83
+     27    87
+     28    92
+     29    97
+     30    102
+     31    109
+     32    115
+     33    121
+     34    128
+     35    135
+     36    143
+     37    151
+     38    159
+     39    168
+     40    177
+     41    187
+     42    198
+     43    209
+     44    221
+     45    233
+     46    246
+     47    260
+     48    275
+     49    290
+     50    306
+     51    324
+     52    342
+     53    361
+     54    381
+     55    402
+     56    425
+     57    449
+     58    474
+     59    501
+     60    529
+     61    558
+     62    590
+     63    623
+     64    658
+     65    695
+     66    734
+     67    775
+     68    818
+     69    864
+     70    913
+     71    964
+     72    1010
+     73    1080
+     74    1140
+     75    1200
+     76    1270
+     77    1340
+     78    1410
+     79    1490
+     80    1580
+     81    1670
+     82    1760
+     83    1860
+     84    1960
+     85    2070
+     86    2190
+     87    2310
+     88    2440
+     89    2570
+     90    2720
+     91    2870
+     92    3030
+     93    3200
+     94    3380
+     95    3570
+     96    3770
+     97    3980
+     98    4200
+     99    4440
+     100    4700
+     101    7960
+     102    5230
+     103    5530
+     104    5840
+     105    6160
+     106    6510
+     107    6870
+     108    7260
+     109    7670
+     110    8100
+     111    8560
+     112    9030
+     113    9540
+     114    10000
+     115    10600
+     116    11200
+     117    11900
+     118    12500
+     119    13200
+     120    14000
+     121    14800
+     122    15600
+     123    16500
+     124    17400
+     125    18400
+     126    19400
+     127    20500
+     
+     
+     
+     TABLE 12.  EQ MID Q VALUES
+     Val  Q
+     0    0.66
+     1    0.68
+     2    0.69
+     3    0.71
+     4    0.73
+     5    0.75
+     6    0.77
+     7    0.79
+     8    0.80
+     9    0.83
+     10    0.85
+     11    0.87
+     12    0.89
+     13    0.91
+     14    0.93
+     15    0.96
+     16    0.98
+     17    1.01
+     18    1.03
+     19    1.06
+     20    1.08
+     21    1.11
+     22    1.14
+     23    1.17
+     24    1.20
+     25    1.23
+     26    1.26
+     27    1.29
+     28    1.32
+     29    1.35
+     30    1.39
+     31    1.42
+     32    1.46
+     33    1.50
+     34    1.53
+     35    1.57
+     36    1.61
+     37    1.65
+     38    1.69
+     39    1.74
+     40    1.78
+     41    1.82
+     42    1.87
+     43    1.92
+     44    1.97
+     45    2.01
+     46    2.07
+     47    2.12
+     48    2.17
+     49    2.23
+     50    2.28
+     51    2.34
+     52    2.40
+     53    2.46
+     54    2.52
+     55    2.58
+     56    2.65
+     57    2.71
+     58    2.78
+     59    2.85
+     60    2.92
+     61    3.00
+     62    3.07
+     63    3.15
+     64    3.23
+     65    3.31
+     66    3.39
+     67    3.48
+     68    3.56
+     69    3.65
+     70    3.75
+     71    3.84
+     72    3.94
+     73    4.04
+     74    4.14
+     75    4.24
+     76    4.35
+     77    4.46
+     78    4.57
+     79    4.68
+     80    4.80
+     81    4.92
+     82    5.04
+     83    5.17
+     84    5.30
+     85    5.43
+     86    5.57
+     87    5.71
+     88    5.85
+     89    6.00
+     90    6.15
+     91    6.31
+     92    6.46
+     93    6.63
+     94    6.79
+     95    6.96
+     96    7.14
+     97    7.32
+     98    7.50
+     99    7.69
+     100    7.88
+     101    8.08
+     102    8.28
+     103    8.49
+     104    8.71
+     105    8.92
+     106    9.15
+     107    9.38
+     108    9.61
+     109    9.85
+     110    10.10
+     111    10.40
+     112    10.60
+     113    10.90
+     114    11.20
+     115    11.40
+     116    11.70
+     117    12.00
+     118    12.30
+     119    12.60
+     120    13.00
+     121    13.30
+     122    13.60
+     123    14.00
+     124    14.30
+     125    14.70
+     126    15.00
+     127    15.40
+     
+     
+     
+     TABLE 13.  EQ HIGH FREQUENCIES
+     Val  Frequency
+     0    1280
+     1    1310
+     2    1340
+     3    1370
+     4    1400
+     5    1430
+     6    1460
+     7    1490
+     8    1520
+     9    1560
+     10    1590
+     11    1630
+     12    1660
+     13    1700
+     14    1740
+     15    1780
+     16    1820
+     17    1860
+     18    1900
+     19    1940
+     20    1980
+     21    2020
+     22    2070
+     23    2110
+     24    2160
+     25    2210
+     26    2260
+     27    2310
+     28    2360
+     29    2410
+     30    2460
+     31    2520
+     32    2570
+     33    2630
+     34    2690
+     35    2750
+     36    2810
+     37    2870
+     38    2930
+     39    3000
+     40    3070
+     41    3130
+     42    3200
+     43    3270
+     44    3340
+     45    3420
+     46    3490
+     47    3570
+     48    3650
+     49    3730
+     50    3810
+     51    3900
+     52    3980
+     53    4070
+     54    4160
+     55    4250
+     56    4350
+     57    4440
+     58    4540
+     59    4640
+     60    4740
+     61    4850
+     62    4960
+     63    5060
+     64    5180
+     65    5290
+     66    5410
+     67    5530
+     68    5650
+     69    5770
+     70    5900
+     71    6030
+     72    6160
+     73    6300
+     74    6440
+     75    6590
+     76    6730
+     77    6880
+     78    7030
+     79    7180
+     80    7340
+     81    7500
+     82    7670
+     83    7840
+     84    8010
+     85    8190
+     86    8370
+     87    8560
+     88    8740
+     89    8930
+     90    9130
+     91    9330
+     92    9540
+     93    9750
+     94    9960
+     95    10200
+     96    10400
+     97    10600
+     98    10900
+     99    11100
+     100    11400
+     101    11600
+     102    11900
+     103    12100
+     104    12400
+     105    12700
+     106    12900
+     107    13200
+     108    13500
+     109    13800
+     110    14100
+     111    14400
+     112    14800
+     113    15100
+     114    15400
+     115    15800
+     116    16100
+     117    16500
+     118    16800
+     119    17200
+     120    17600
+     121    18000
+     122    18400
+     123    18800
+     124    19200
+     125    19600
+     126    20000
+     127    20500
+     
+     
+     TABLE 14.  CATEGORIES
+     Val  Category
+     0    Work in Progress
+     1    Acid
+     2    Ambient
+     3    Arpeggio
+     4    Bass
+     5    EDM & Dubstep
+     6    Effects
+     7    Electronica
+     8    Guitars & Plucked
+     9    Leads
+     10    Lo-Fi & Distorted
+     11    My Favourites
+     12    Orchestral
+     13    Organs
+     14    Pads
+     15    Percussion
+     16    Pianos
+     17    Stabs & Strings
+     18    Strings
+     19    Trance
+*/

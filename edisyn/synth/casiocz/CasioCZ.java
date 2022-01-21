@@ -1501,7 +1501,7 @@ public class CasioCZ extends Synth
             byte[] main = new byte[isCZ1() ? 144 * 2 + 1 : 128 * 2 + 1]; // new byte[isCZ1() ? 144 * 2 : 128 * 2];
             System.arraycopy(data, 7, main, 0, main.length);
             main[main.length - 1] = (byte)0xF7;
-            Midi.DividedSysex[] syx = Midi.DividedSysex.create(new byte[][] { header, main });
+            MidiMessage[] syx = DividedSysex.create(new byte[][] { header, main });
             //return new Object[] { new Midi.DividedSysex(header), new Integer(MIDI_PAUSE), new Midi.DividedSysex(main) }; 
             return new Object[] { syx[0], new Integer(MIDI_PAUSE), syx[1], new Integer(MIDI_PAUSE) }; 
             // Never send this, it triggers a crash in Linux/Windows
@@ -1509,7 +1509,7 @@ public class CasioCZ extends Synth
             }
         }
 
-    public static final int MIDI_PAUSE = 0;
+    public static final int MIDI_PAUSE = 200;
         
     public void performRequestCurrentDump()
         {
@@ -1524,9 +1524,9 @@ public class CasioCZ extends Synth
         byte chan = (byte)(0x70 | getChannelOut());
 
         Object[] data = new Object[4];  /// new Object[5];
-        data[0] = new Midi.DividedSysex(new byte[] { (byte)0xF0, 0x44, 0x00, 0x00, chan, cz1, 0x60 });
+        data[0] = new DividedSysex(new byte[] { (byte)0xF0, 0x44, 0x00, 0x00, chan, cz1, 0x60 });
         data[1] = new Integer(MIDI_PAUSE);
-        data[2] = new Midi.DividedSysex(new byte[] { chan, 0x31 });
+        data[2] = new DividedSysex(new byte[] { chan, 0x31 });
         data[3] = new Integer(MIDI_PAUSE);
         // Never send this last one, it triggers a crash in Windows and Linux
         //data[4] = new Midi.DividedSysex(new byte[] { (byte)0xF7 });
@@ -1557,9 +1557,9 @@ public class CasioCZ extends Synth
         byte location = (byte)(bank * 8 + number);
 
         Object[] data = new Object[4];  /// new Object[5];
-        data[0] = new Midi.DividedSysex(new byte[] { (byte)0xF0, 0x44, 0x00, 0x00, chan, cz1, location });
+        data[0] = new DividedSysex(new byte[] { (byte)0xF0, 0x44, 0x00, 0x00, chan, cz1, location });
         data[1] = new Integer(MIDI_PAUSE);
-        data[2] = new Midi.DividedSysex(new byte[] { chan, 0x31 });
+        data[2] = new DividedSysex(new byte[] { chan, 0x31 });
         data[3] = new Integer(MIDI_PAUSE);
         // Never send this last one, it triggers a crash in Windows and Linux
         //data[4] = new Midi.DividedSysex(new byte[] { (byte)0xF7 });

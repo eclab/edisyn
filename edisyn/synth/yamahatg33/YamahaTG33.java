@@ -1740,7 +1740,7 @@ public class YamahaTG33 extends Synth
         System.arraycopy(data, pos, sysex[sysex.length - 1], 0, data.length - pos);
                 
         // Now we need to build the divided sysex with spaces in-between
-        Midi.DividedSysex[] div = Midi.DividedSysex.create(sysex);
+        MidiMessage[] div = DividedSysex.create(sysex);
         Object[] d = new Object[div.length * 2 - 1];
         for(int i = 0; i < div.length; i++)
             {

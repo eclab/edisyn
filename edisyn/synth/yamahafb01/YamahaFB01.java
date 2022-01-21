@@ -1318,14 +1318,7 @@ public class YamahaFB01 extends Synth
                 }
             }
 
-        Object[] div = Midi.DividedSysex.create(d);             // build the divided sysex
-        /*
-          for(int i = 0; i < div.length; i++)
-          {
-          System.err.println("\n" + i);
-          System.err.println(Midi.DividedSysex.toString((SysexMessage)div[i]));
-          }
-        */
+        Object[] div = DividedSysex.create(d);             // build the divided sysex
                 
         Object[] obj = new Object[49 * 2 - 1];                  // insert 120ms (100ms is the minimum) in-between the 49 divided packets
         for(int i = 0; i < d.length; i++)

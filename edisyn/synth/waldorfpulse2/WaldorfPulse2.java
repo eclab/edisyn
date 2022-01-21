@@ -1180,6 +1180,11 @@ public class WaldorfPulse2 extends Synth
 
     public int getPatchNameLength() { return 14; }
 
+    public byte[] requestAllDump() 
+        {
+        return new byte[] { (byte)0xF0, 0x3E, 0x16, (byte)getID(), 0x00, 0x40, 0x00, (byte)0xF7 };
+        }
+        
     public boolean librarianTested() { return true; }
     }
     

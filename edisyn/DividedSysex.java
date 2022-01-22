@@ -39,6 +39,16 @@ public class DividedSysex extends MidiMessage
 		super(data.clone());
 		}
 	
+	static boolean doHack()
+		{
+		// At present the Mac, which is using the latest versions of CoreMidi4J, can handle
+		// properly split SysexMessage objects.  However it can *also* hande DividedSysex
+		// objects (the hack).  Windows and Linux can only work with the hack.  So we can 
+		// at present just return true here if we wished; but for now I am returning 
+		// true if we're Windows or Linux, and false if we're on a Mac.
+		
+		return !Style.isMac();
+		}
 	
 	/** Builds an array of either SysexMessage or DividedSysex messages, depending on
 		the platform (windows and linux have a bug which causes them to bomb).
@@ -47,14 +57,10 @@ public class DividedSysex extends MidiMessage
 		which can be sent in multiple pieces and can be separated by pauses.  Do not
 		insert other messages in-between them: it'll break things. Chunksize must be
 		greater than 3. */
+
 	public static MidiMessage[] create(SysexMessage sysex, int chunksize)
 		{
-		return create(sysex, chunksize, !Style.isMac());
-		}
-
-	static MidiMessage[] create(SysexMessage sysex, int chunksize, boolean hack)
-		{
-		return create(sysex.getMessage(), chunksize, hack);
+		return create(sysex.getMessage(), chunksize);
 		}            
 		
 	/** Builds an array of either SysexMessage or DividedSysex messages, depending on
@@ -65,12 +71,7 @@ public class DividedSysex extends MidiMessage
 		insert other messages in-between them: it'll break things.  Chunksize must be
 		greater than 3. */
 
-	 public static MidiMessage[] create(byte[] sysex, int chunksize)
-		{
-		return create(sysex, chunksize, !Style.isMac());
-		}
-
-	static MidiMessage[] create(byte[] sysex, int chunksize, boolean hack)
+	public static MidiMessage[] create(byte[] sysex, int chunksize)
 		{
 		// we need a little headroom to guarantee we can't reduce chunksize to 1, not including the header.
 		if (chunksize <= 3) // uh... ? 
@@ -89,7 +90,7 @@ public class DividedSysex extends MidiMessage
 			System.arraycopy(sysex, chunksize * i, newsysex, 0, chunksize);
 			}
 
-		return create(newsysex, hack);
+		return create(newsysex);
 		}
 		
 
@@ -99,14 +100,10 @@ public class DividedSysex extends MidiMessage
 		Each of these messages encapsulate one provided fragment.  Each fragment size
 		must be at least 3.  These messages can be separated by pauses.  Do not
 		insert other messages in-between them: it'll break things. */
+
 	 public static MidiMessage[] create(byte[][] sysex)
 		{
-		return create(sysex, !Style.isMac());        	
-		}
-
-	 static MidiMessage[] create(byte[][] sysex, boolean hack)
-		{
-		if (hack)		// Windows and Linux
+		if (doHack())		// Windows and Linux
 			{
 			// We just break up the message into pieces and assign a DividedSysex
 			// to each piece.

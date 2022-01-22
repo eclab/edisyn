@@ -1915,7 +1915,8 @@ public abstract class Synth extends JComponent implements Updatable
             // compute pause
             midiPause(getNanoPauseBetweenMIDISends());
                                         
-            try { 
+            try 
+            	{ 
                 SysexMessage message = new SysexMessage(data, data.length);
                 synchronized(midiSendLock)
                     {
@@ -1926,7 +1927,7 @@ public abstract class Synth extends JComponent implements Updatable
                         }
                     else
                         {
-                        MidiMessage[] messages = Midi.DividedSysex.divide(message, fragmentSize);
+                        MidiMessage[] messages = DividedSysex.create(message, fragmentSize);
                         for(int i = 0; i < messages.length; i++)
                             {
                             if (i > 0) simplePause(getPauseBetweenSysexFragments());

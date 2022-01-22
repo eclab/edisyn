@@ -1509,7 +1509,7 @@ public class CasioCZ extends Synth
             }
         }
 
-    public static final int MIDI_PAUSE = 200;
+    public static final int MIDI_PAUSE = 100;
         
     public void performRequestCurrentDump()
         {

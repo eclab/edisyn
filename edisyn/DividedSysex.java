@@ -129,9 +129,10 @@ public class DividedSysex extends MidiMessage
 				SysexMessage[] div = new SysexMessage[sysex.length];
 				for(int i = 0; i < sysex.length; i++)
 					{
+					//System.err.println(edisyn.util.StringUtility.toHex(sysex[i]));
 					if (i == 0)
 						{
-						div[i] = new SysexMessage(sysex[i], sysex.length);
+						div[i] = new SysexMessage(sysex[i], sysex[i].length);
 						}
 					else 
 						{

@@ -316,6 +316,16 @@ public class StringUtility
         return String.format("%02X", val);
         }
 
+    /** Returns the byte as a hex number */
+    public static String toHex(byte[] vals)
+        {
+        String str = "";
+     	for(int i = 0; i < vals.length; i++)
+     		str += (" " + toHex(vals[i]));
+     	return str;
+        }
+
+
     /** Returns the integer as a hex number */
     public static String toHexInt(int val)
         {

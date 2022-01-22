@@ -891,10 +891,10 @@ The Librarian presents itself as a table with columns and rows.  Each column is 
 Patch slots come in different colors depending on the situation:
 
 \begin{itemize}
-\item {\it Pale Green: the \textbf{Scratch Bank}}\quad The first column is special.  This isn't a bank in your synthesizer: it's just some extra room for you to temporarily stash stuff as you move things around via drag-and-drop. 
+\item {\it Pale Green: the \textbf{Scratch Bank}}\quad The first column is special.  This isn't a bank in your synthesizer: it's just some extra room for you to temporarily stash stuff as you move things around via drag-and-drop.  It's not written to the synthesizer nor saved to disk.
 \item {\it White}\quad Patches in locations which can be written to your synthesizer.
-\item {\it Pale Magenta}\quad Paatches in locations which {\bf cannot} be written to your synthesizer because they're read-only on your machine.  However you can save them to disk, and can load them from the disk or from your synth.
-\item {\it Light Gray with Red Lettering}\quad Patches in locations which {\bf cannot} be written to your synthesizer because they're invalid patch locations.  Why does Edisyn provide them then?  Because some synths have banks with varying lengths or present other unusual situations which violate the rectangular table structure used by Edisyn.  You can treat them as scratch locations.
+\item {\it Pale Magenta}\quad Paatches in locations which cannot be written to your synthesizer because they're {\bf read-only} on your machine.  However you can save them to disk, and can load them from the disk or from your synth.
+\item {\it Light Gray with Red Lettering}\quad Patches in locations which cannot be written to your synthesizer because they're {\bf invalid patch locations.}  Why does Edisyn provide them then?  Because some synths have banks with varying lengths or present other unusual situations which violate the rectangular table structure used by Edisyn.  You can treat them as scratch locations.
 \item {\it Dark Gray}\quad Patches you have selected.
 \item {\it Pale Violet}\quad The drop location for drag-and-drop.
 \end{itemize}
@@ -905,30 +905,28 @@ Many editor/librarian GUIs out there organize themselves so that you're presente
 
 
 
-\subsection{Loading Patches} 
-
-\paragraph{Loading Patches into the Librarian from your Synthesizer}
-
-Usually you do this by selecting one of the {\bf Download...} options in the Librarian.  As the patches are loaded, they appear in the Librarian.  You can also select {\bf Batch Download} from the {\bf File} menu and select the {\bf To Librarian} option.  Alternatively, if you send Edisyn a Bank Sysex message from your synthesizer, Edisyn will give you the option to load the bank into the Librarian or into a new Librarian. 
-
-While the patches are loading, the window will say {DOWNLOADING}.  If you need to prematurely stop downloading, just click on the {\bf Stop Download} button in the Librarian.  Alternatively you can select {\bf Stop Downloading Batch} from the {\bf File} menu.
-
-\paragraph{Fast Requests}
-
-Normally if you download a range of patches, a bank, or, all the patches, Edisyn will request each patch one by one, carefully and slowly.  However a few synthesizers are capable of rapidly dumping banks of patches, or all stored patches, in response to a special sysex messages.  If Edisyn can do this, you may see the menu items {\bf Request Bank from Synth} or {\bf Request All Patches from Synth}.
-
-{\color{red}\bf Downloading from a Synthesizer is often quite slow.}  I'd suggest downloading your whole synthesizer once and saving it as a file, which would make things easier to edit in the future.
-
+\subsection{Loading and Downloading} 
 
 \paragraph{Loading Patches into the Librarian from a File}
 
 If you open a bulk or bank sysex file, you'll be given the option (among other things) to load the data into your current Librarian or into one attached to a new editor.  If the Librarian isn't already open, it'll be opened for you.
 
+\paragraph{Downloading Patches into the Librarian from your Synthesizer}
+
+Usually you do this by selecting one of the {\bf Download...} options in the Librarian.  As the patches are loaded, they appear in the Librarian.  You can also select {\bf Batch Download} from the {\bf File} menu and select the {\bf To Librarian} option.  Alternatively, if you send Edisyn a Bank Sysex message from your synthesizer, Edisyn will give you the option to load the bank into the Librarian or into a new Librarian. 
+
+While the patches are loading, the window will say {DOWNLOADING}.  If you need to prematurely stop downloading, just click on the {\bf Stop Download} button in the Librarian.  Alternatively you can select {\bf Stop Downloading Batch} from the {\bf File} menu.
+
+{\color{red}\bf Downloading from a Synthesizer is often quite slow.}  I'd suggest downloading your whole synthesizer once and saving it as a file, which would make things easier to edit in the future.
+
+\paragraph{Fast Downloading}
+
+Normally if you download a range of patches, a bank, or, all the patches, Edisyn will request each patch one by one, carefully and slowly.  However a few synthesizers are capable of rapidly dumping banks of patches, or all stored patches, in response to a special request.  If your synthesizer can do this, you may see the menu items {\bf Request Bank from Synth} or {\bf Request All Patches from Synth}.
 
 
 \paragraph{Where Loaded Patches Go}
 
-If you load a single patch from disk, it'll go to the editor.  But if a single patch arrives from the synth while the librarian is open, it'll go in the librarian rather than the editor.  You can drag it from the {\it Current Patch} field into the librarian.
+If you load a single patch from disk, it'll go to the editor.  But if a single patch arrives from the synth while the librarian is open, it'll go in the librarian rather than the editor.  %You can drag it from the {\it Current Patch} field into the librarian.
 
 If you load a range of patches, the Librarian will try to be smart about it.  If the patches come with locations, the Librarian will put them in their locations.  If they don't, it'll stick them in order starting with your first bank.  
 
@@ -946,7 +944,7 @@ After you have selected a patch range, you can drag it from one column to anothe
 
 Drag and Drop isn't restricted to just one Librarian: if you have two Librarians open for the same synthesizer, you can drag patches from one to the other. 
 
-Java's table facility is weird about selecting and dragging table cells, but the general rule is this: you must first select a patch or patch range, then {\it let go of the mouse,} before you can go back and drag it.
+Java's table facility is weird about selecting and dragging table cells, but the general rule is this: you must first select a patch or patch range, then {\it let go of the mouse,} before you can go back and drag it. Additionally, when you drag a region, Java is particular about where the dragged region will get dropped.  For example, if you selected a region of ten cells, then clicked on the third cell in the region and dragged it, Java will highlight a drop cell location in pale violet.  This location will be where the third cell will go; and this in turn will determine where the rest of the region will be dropped.   If the region can't fit in that position, then the drop cell won't get highlighted.  If this is confusing to you, I suggest always dragging from the first cell in the selected region: then the drop location will be where the beginning of the region will get dropped.
 
 
 \paragraph{Moving Patches to and from the Editor}
@@ -976,6 +974,14 @@ If you drag patches from one Librarian into another, you have affected {\it two 
 
 \subsection{Writing and Saving} 
 
+\paragraph{Saving Patches to a File}
+
+To save a patch or a range of selected patches to a single file or collection of files, select the range and choose {\bf Save Selected Patches} from the {\bf Librarian} menu.
+
+To save a bank of patches to a single file, select the a patch in the bank and choose {\bf Save Bank} from the {\bf Librarian} menu.  Some synthesizers can save out banks with a single bank sysex message: Edisyn will use this if it's available. Otherwise, it'll just write each patch separately to the file.
+
+To save all patches in the Librarian  to a single file or collection of files, choose {\bf Save All Patches} from the {\bf Librarian} menu.  Some synthesizers can save out banks either with a single bank sysex message or as individual patch sysex messages.  Edisyn will give you the option if it can.  Note that if you select {\bf Save} or {\bf Save As...} from the {\bf File} menu while in the Librarian, it'll do the same thing as {\bf Save All Patches}.
+
 \paragraph{Writing Patches to your Synthesizer}
 
 First note that a big weakness in the Librarian (for the time being) is that while you can {\it download} patches in the background, when you {\it write} them to the synthesizer you must wait until they have completed: there's no warning and no way to cancel.  So if you're writing a lot of stuff that's slow and takes time, be prepared.  Maybe this will change in the future.
@@ -989,14 +995,6 @@ To write all patches to your synthesizer, choose {\bf Write All Patches} from th
 Keep in mind that if you choose the {\bf Write to Patch...} or {\bf Send to Current Patch} menu options from the {\bf MIDI} menu, this will write the current patch in the {\it editor}, not in the Librarian, even if you have selected a single patch.  It probably isn't what you wanted to do.
 
 In order to receive patches from Edisyn, your synthesizer may need to be set up properly, such as turning off memory protection. See your patch editor's About Panel for instructions.
-
-\paragraph{Saving Patches to a File}
-
-To save a patch or a range of selected patches to a single file or collection of files, select the range and choose {\bf Save Selected Patches} from the {\bf Librarian} menu.
-
-To save a bank of patches to a single file, select the a patch in the bank and choose {\bf Save Bank} from the {\bf Librarian} menu.  Some synthesizers can save out banks with a single bank sysex message: Edisyn will use this if it's available. Otherwise, it'll just write each patch separately to the file.
-
-To save all patches in the Librarian  to a single file or collection of files, choose {\bf Save All Patches} from the {\bf Librarian} menu.  Some synthesizers can save out banks either with a single bank sysex message or as individual patch sysex messages.  Edisyn will give you the option if it can.  Note that if you select {\bf Save} or {\bf Save As...} from the {\bf File} menu while in the Librarian, it'll do the same thing as {\bf Save All Patches}.
 
 \paragraph{Closing the Librarian}
 

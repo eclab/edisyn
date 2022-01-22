@@ -653,7 +653,29 @@ public class Blank extends Synth
         // getSysexFragmentSize() allow you to break large sysex messages
         // into multiple fragments, each with a pause between, in order
         // to send a message successfully.
+        //
+        // You can also manually break up a sysex message into fragments,
+        // and manually insert whatever time you'd like between them.
+        // This is done using the DividedSysex class.
+        //
         return 0;
+        }
+        
+    public int getSysexFragmentSize() 
+        {
+        // Some synths have small MIDI buffers and are so slow that you
+        // cannot send large messages (that is, sysex) to them at full
+        // speed without them dying.  The Kawai K1 is an example of this.
+        // The methods getPauseBetweenSysexFragments() and
+        // getSysexFragmentSize() allow you to break large sysex messages
+        // into multiple fragments, each with a pause between, in order
+        // to send a message successfully.
+        //
+        // You can also manually break up a sysex message into fragments,
+        // and manually insert whatever time you'd like between them.
+        // This is done using the DividedSysex class.
+        //
+        return NO_SYSEX_FRAGMENT_SIZE;
         }
         
     public int getPauseBetweenHillClimbPlays()
@@ -671,18 +693,6 @@ public class Blank extends Synth
         // This pause is in milliseconds.  By default this function returns 
         // getPauseAfterChangePatch(), which is a lot but probably adequate.
         return super.getPauseAfterReceivePatch();
-        }
-        
-    public int getSysexFragmentSize() 
-        {
-        // Some synths have small MIDI buffers and are so slow that you
-        // cannot send large messages (that is, sysex) to them at full
-        // speed without them dying.  The Kawai K1 is an example of this.
-        // The methods getPauseBetweenSysexFragments() and
-        // getSysexFragmentSize() allow you to break large sysex messages
-        // into multiple fragments, each with a pause between, in order
-        // to send a message successfully.
-        return NO_SYSEX_FRAGMENT_SIZE;
         }
         
     public int getBatchDownloadWaitTime()
@@ -865,16 +875,6 @@ public class Blank extends Synth
         return null; 
         }
  
-    public String getBankName(byte[] data)
-        {
-        // Before saving a bank sysex file out to a file,
-        // this method is called to return an appropriate name for the bank.  This
-        // name is then used to form a filename.  Typically banks don't have names,
-        // so you might as well just use the default return value, which is "Bank".
-        // At present the one synthesizer with bank names is the Yamaha FB-01.
-        return "Bank";
-        }
-
     public boolean setupBatchStartingAndEndingPatches(Model startPatch, Model endPatch)
         {
         // This method normally queries the user for start and end patch numbers/banks to
@@ -889,7 +889,7 @@ public class Blank extends Synth
         {  
         // Override this method to force Edisyn to paste multiple times to the same category or tab.
         // The reason you might want to do this is because Edisyn uses the *receiving* category to 
-        // determine the parameters to paste to, and if this category contains componets which dynamically
+        // determine the parameters to paste to, and if this category contains components which dynamically
         // appear or disappear, it might require multiple pastes to cause them to appear and eventually
         // receive parameter changes.  The default returns DEFAULT_PASTES (3), which is fine for all
         // current editors.
@@ -941,7 +941,7 @@ public class Blank extends Synth
 
     public String[] getBankNames() 
     	{
-    	// This should return a list of all the bank names.  For example, your bank names
+    	// This should return a list of all standard bank names.  For example, your bank names
     	// might be { "A", "B", "C", and "D" }, or they might be { "Internal", "Card" }.
     	//
     	// This method is also used to determine whether the synth has banks.  If your synth

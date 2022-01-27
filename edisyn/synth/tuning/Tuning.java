@@ -219,7 +219,91 @@ public class Tuning extends Synth
             namedMenu.add(menuItem);
             }
         menu.add(namedMenu);
+        
+        menu.addSeparator();
+
+        JMenuItem tx81zR = new JMenuItem("Request from DX11/TX81Z");
+        tx81zR.addActionListener(new ActionListener() 
+            {
+            public void actionPerformed(ActionEvent e) 
+                {
+                requestTX81Z();
+                }
+            });
+        menu.add(tx81zR);
+        JMenuItem tx81z = new JMenuItem("Send to DX11/TX81Z");
+        tx81z.addActionListener(new ActionListener() 
+            {
+            public void actionPerformed(ActionEvent e) 
+                {
+                doTX81Z();
+                }
+            });
+        menu.add(tx81z);
         }
+        
+        
+    public void requestTX81Z()
+        {
+        tryToSendSysex(new byte[]
+        	{ (byte)0xF0, (byte)0x43, (byte)(0x20 + getChannelOut()), (byte)0x7E,
+        	  (byte)'L', (byte)'M', (byte)' ', (byte)' ', (byte)'M', (byte)'C', (byte)'R', (byte)'T', (byte)'E', (byte)'1',
+        	  (byte)0xF7 });
+        }
+        
+    public void doTX81Z()
+    	{
+    	byte[] coarse = new byte[128];
+    	byte[] fine = new byte[128];
+    	int checksum = 0;
+    	
+    	for(int i = 0; i < 128; i++)
+    		{
+    		// One of the problems with the TX81Z/DX11 is that even though
+    		// we define microtuning for every MIDI note, we can only play
+    		// SOUNDS as low as standard MIDI note 13 and as high as 108.
+    		// But we're going to ignore that.
+    		
+    		int base = model.get("base" + i);
+    		int detune = model.get("detune" + i);
+    		
+    		// detune is only positive and goes up to just under semitone.
+    		// However I think the TX81Z's "fine" adjustment is ALSO positive.
+
+			coarse[i] = (byte)base;
+			fine[i] = (byte)((detune * 64) / 16384);
+    		}
+    	
+    	byte[] d = new byte[274];
+    	d[0] = (byte)0xF0;
+    	d[1] = (byte)0x43;
+    	d[2] = (byte)(getChannelOut());
+    	d[3] = (byte)0x7E;
+    	d[4] = (byte)0x00;
+    	d[5] = (byte)0x22;
+    	d[6] = (byte)'L';
+    	d[7] = (byte)'M';
+    	d[8] = (byte)' ';
+    	d[9] = (byte)' ';
+    	d[10] = (byte)'M';
+    	d[11] = (byte)'C';
+    	d[12] = (byte)'R';
+    	d[13] = (byte)'T';
+    	d[14] = (byte)'E';
+    	d[15] = (byte)'1';
+    	
+    	for(int i = 0; i < 128; i++)
+    		{
+    		d[16 + i * 2] = coarse[i];
+    		d[16 + i * 2 + 1] = fine[i];
+            checksum = (checksum + d[16 + i * 2]) & 255;
+            checksum = (checksum + d[16 + i * 2 + 1]) & 255;
+    		}
+    	d[d.length - 2] = (byte)((256 - checksum) & 127);
+    	d[d.length - 1] = (byte)0xF7;
+    	
+    	tryToSendSysex(d);
+    	}
 
     public byte getID() 
         {
@@ -355,9 +439,31 @@ public class Tuning extends Synth
 
         return new String(c);
         }
+        
+    public int parseTX81Z(byte[] data)
+    	{
+    	byte[] coarse = new byte[128];
+    	byte[] fine = new byte[128];
+    	    	
+    	for(int i = 0; i < 128; i++)
+    		{
+    		coarse[i] = data[16 + i * 2];
+    		fine[i] = data[16 + i * 2 + 1];
+    		}
+    		
+    	for(int i = 0; i < 128; i++)
+    		{
+    		model.set("base" + i, coarse[i]);
+    		model.set("detune" + i, (fine[i] * 16384) / 64);
+    		}
+        return PARSE_SUCCEEDED;
+    	}
 
     public int parse(byte[] data, boolean fromFile) 
         {
+        if (data.length == 274)
+        	return parseTX81Z(data);
+        
         char[] n = new char[16];
         for (int i = 0; i < 16; i++) 
             {

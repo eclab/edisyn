@@ -310,10 +310,10 @@ public class NovationSL extends Synth
             hbox = new HBox();
             hbox.add(addPot(7, "page3control7", index++, Style.COLOR_B()));
             hbox.addLast(addPot(8, "page3control8", index++, Style.COLOR_B()));
+            vbox.add(hbox);
 
             vbox.add(addLayout(new String[] { "page3control1name","page3control2name","page3control3name","page3control4name","page3control5name","page3control6name","page3control7name","page3control8name" }));
 
-            vbox.add(hbox);
             soundPanel.add(vbox, BorderLayout.CENTER);
             ((SynthPanel)soundPanel).makePasteable("page");
             addTab("Faders", soundPanel);
@@ -589,7 +589,7 @@ public class NovationSL extends Synth
         hbox.add(vbox);
         vbox = new VBox();
                 
-        comp = new StringComponent("Patch Name", this, "name", 34, "Name must be up to 34 ASCII characters.")
+        comp = new StringComponent("Patch Name        [Display shows first 8 chars]", this, "name", 34, "Name must be up to 34 ASCII characters.")
             {
             public String replace(String val)
                 {
@@ -3630,7 +3630,14 @@ public class NovationSL extends Synth
             }
         }
 
+// We have to deal with the Automap template (bank 33).  One strategy is to permit bank 33
+// but declare it invalid.  That'd be done like this:
+//    public String[] getPatchNumberNames() { return buildIntegerNames(33, 1); }
+//    public boolean isValidPatchLocation(int bank, int num) { return (num < 32 && bank == 0); }
+// The other strategy is to not include bank 33 in the library at all, and so when we
+// receive it we get an exception but we don't handle it.  I prefer this approach currently:
     public String[] getPatchNumberNames() { return buildIntegerNames(32, 1); }
+    
     public boolean[] getWriteableBanks() { return new boolean[] { true }; }
     public int getPatchNameLength() { return 34; }
     public boolean getSupportsDownloads() { return false; }

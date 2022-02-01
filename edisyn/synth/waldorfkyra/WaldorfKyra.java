@@ -2260,7 +2260,8 @@ public class WaldorfKyra extends Synth
      Sean Luke sean@cs.gmu.edu
         
      This is a rough description of the format used by the Edisyn editor.
-     Waldorf has a less complete description [as of January 2022]
+     Note that there are more commands than this -- it's just what Edisyn uses.
+     Waldorf has a somewhat fuller description [as of January 2022]
      
      This description is derived from my code and may have errors.  Let me know what errors
      you find.  My code works well, so if there is a discrepancy between this description

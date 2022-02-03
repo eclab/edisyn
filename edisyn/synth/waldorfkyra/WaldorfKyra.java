@@ -268,7 +268,8 @@ public class WaldorfKyra extends Synth
                 }
             }
         }
-                
+    
+    int currentPart = 0;   
 
     public WaldorfKyra()
         {
@@ -1476,6 +1477,8 @@ public class WaldorfKyra extends Synth
         return frame;
         }
 
+	JCheckBoxMenuItem[] partMenu = new JCheckBoxMenuItem[8];
+
     public void addKyraMenu()
         {
         JMenu menu = new JMenu("Kyra");
@@ -1522,7 +1525,49 @@ public class WaldorfKyra extends Synth
             });
 
         menu.add(oneMPEMenu);
+        
+
+        menu.addSeparator();
+		ButtonGroup buttonGroup = new ButtonGroup();
+        for(int i = 0; i < 8; i++)
+        	{
+        	final int _i = i;
+        	partMenu[i] = new JCheckBoxMenuItem("Send to Part " + (i + 1) + " as Current Patch");
+        	if (i == 0) partMenu[i].setSelected(true);
+        	partMenu[i].addActionListener(new ActionListener()
+        		{
+            	public void actionPerformed(ActionEvent e)
+                	{
+                	currentPart = _i;
+                	updateCurrentPart();
+                	}
+        		});
+        	buttonGroup.add(partMenu[i]);
+        	menu.add(partMenu[i]);
+        	}
         }
+      
+    void setPart(int part)
+    	{
+    	partMenu[part].setSelected(true);
+		currentPart = part;
+		updateCurrentPart();
+    	}
+    	
+	void updateCurrentPart()
+		{
+		tryToSendSysex(new byte[]
+			{
+			(byte)0xF0,
+			(byte)0x3E,
+			(byte)0x22,
+			(byte)getID(),
+			(byte)0x13,
+			0, 0, 0,
+			(byte)currentPart,
+			(byte)0xF7,
+			});
+		}
         
     public Object[] getMPEForPatch(int bank, int number, int multinumber, String name)
         {
@@ -1671,7 +1716,7 @@ public class WaldorfKyra extends Synth
 
     public Object[] emitAll(String key)
         {
-        int part = 0;           // Maybe customize for different parts?
+        int part = currentPart;           // Maybe customize for different parts?
         if (key.equals("-") || key.equals("bank") || key.equals("number"))
             {
             return new Object[0];           // do nothing
@@ -1789,14 +1834,14 @@ public class WaldorfKyra extends Synth
             }
         }
 
-    public byte[] emit(Model tempModel, boolean toWorkingMemory, boolean toFile)
+    public Object[] emitAll(Model tempModel, boolean toWorkingMemory, boolean toFile)
         {
         if (tempModel == null)
             tempModel = getModel();
                 
         byte BB = (byte) tempModel.get("bank");
         byte NN = (byte) tempModel.get("number");
-        if (toWorkingMemory) { BB = 0x7F; NN = 0x7F; }  // current bank, current part?
+        if (toWorkingMemory) { BB = 0x7F; NN = 0x7F;}  // current bank, current part?
 
         byte[] data = new byte[224 + 10];
         data[0] = (byte)0xF0;
@@ -1857,7 +1902,29 @@ public class WaldorfKyra extends Synth
 
         data[data.length - 2] = (byte)(checksum & 127);
         data[data.length - 1] = (byte)0xF7;
-        return data;
+        
+        if (toWorkingMemory)	// need to change current part to working memory
+        	{
+        	return new Object[] 
+        		{
+        		new byte[]
+        			{
+					(byte)0xF0,
+					(byte)0x3E,
+					(byte)0x22,
+					(byte)getID(),
+					(byte)0x13,
+					0, 0, 0,
+					(byte)currentPart,
+					(byte)0xF7,
+					},
+				data
+				};
+        	}
+        else
+        	{
+	        return new Object[] { data };
+	        }
         }
 
     public void parseParameter(byte[] data)
@@ -1936,7 +2003,7 @@ public class WaldorfKyra extends Synth
     public int parse(byte[] data, boolean fromFile)
         {
         if (data[6] != 0x7F &&          // Edit Buffer
-            data[6] != 0x7E)                        // "Current Configured Bank (in the Config Menu)"
+            data[6] != 0x7E)            // "Current Configured Bank (in the Config Menu)"
             {
             if (data[6] < 26)
                 {
@@ -2269,6 +2336,8 @@ public class WaldorfKyra extends Synth
 
      Be certain to properly set "Receive MIDI Program" to "USB", "MIDI+USB", or "MIDI"
      depending on how you're communicating with the Kyra.
+     
+     For the Kyra Multimode patch sysex format, see the end of WaldorfKyraMulti.java
                 
         
      CHANGE MULTIMODE PATCH
@@ -2293,7 +2362,7 @@ public class WaldorfKyra extends Synth
                      (Current Working Patch): LSB = part, or 0x7F (current part)
                      (Patch in Memory): MSB = patch number          
      F7
-                
+
      SEND ONE PARAMETER TO EDIT BUFFER
      F0
      3E              Waldorf 
@@ -2339,6 +2408,46 @@ public class WaldorfKyra extends Synth
      NOTE: writing a patch to storage does not update the edit buffer.
      You'll want to do that manually afterwards.
 
+     REQUEST WHICH PART NUMBER IS CURRENT 
+     F0
+     3E              Waldorf 
+     22              Kyra
+     [ID]            Synth ID, typically 17 (11 hex)
+     23              Request which Part Number is Current
+     00              
+     00              
+     00              
+     00              
+     F7
+                
+     NOTE: you can omit one of the 00 bytes.
+     
+     RESPONSE AS TO WHICH PART NUMBER IS CURRENT  [Received from Kyra]
+     F0
+     3E              Waldorf 
+     22              Kyra
+     [ID]            Synth ID, typically 17 (11 hex)
+     43              Request which Part Number is Current
+     00              
+     00              
+     00
+     [PART]          Current Part Number
+     F7
+
+     NOTE: this message is also automatically sent from the Kyra whenever
+     the user changes the current part.
+
+     SET WHICH PART NUMBER IS CURRENT  [Sent to Kyra]
+     F0
+     3E              Waldorf 
+     22              Kyra
+     [ID]            Synth ID, typically 17 (11 hex)
+     13              Set which Part Number is Current
+     00              
+     00              
+     00
+     [PART]          Desired Current Part Number
+     F7
 
                 
 
@@ -3969,17 +4078,17 @@ public class WaldorfKyra extends Synth
      
      
      TABLE 14.  CATEGORIES
-     Val  Category
-     0    Work in Progress
-     1    Acid
-     2    Ambient
-     3    Arpeggio
-     4    Bass
-     5    EDM & Dubstep
-     6    Effects
-     7    Electronica
-     8    Guitars & Plucked
-     9    Leads
+     Val   Category
+     0     Work in Progress
+     1     Acid
+     2     Ambient
+     3     Arpeggio
+     4     Bass
+     5     EDM & Dubstep
+     6     Effects
+     7     Electronica
+     8     Guitars & Plucked
+     9     Leads
      10    Lo-Fi & Distorted
      11    My Favourites
      12    Orchestral

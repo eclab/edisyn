@@ -16,6 +16,18 @@ To communicate with your Kyra over USB, make sure that "Receive MIDI Program" is
 
 <p>If you want Edisyn to update in real time to changes you make on your Kyra (like turning a knob), set "Transmit Automation" to "USB" or "MIDI" as appropriate. 
 
+<br><br><h3>About the Menu: Uploading Pseudo-MPE</h3>
+
+The Kyra doesn't support MPE.  But we can fake it by setting up one of its multimode patches in a special way, and this can be taken advantage of by instruments such as the Linnstrument.
+
+<P>You can prepare a multimode patch slot with <b>Write Patch as Psuedo-MPE</b>.  This writes a multimode patch which points to your current single patch, including the current name, bank, and (single patch) number.  Each slot in the multimode patch will refer to this patch but have a unique MIDI channel. You get to choose what multimode patch number to write to.  Note that your single-patch must already be written to the synth.
+
+<br><br><h3>About the Menu: Current Parts</h3>
+
+The Kyra has a curious notion of a <b>current part</b> among the various parts in the Multi.  When Edisyn sends to current patch, it will send to a part number, and then instruct the Kyra to make that part the current part.  You tell Edisyn which part number this should be via the menu: the default is always Part 0.  Additionally when you change parameters, they are changed in your chosen part number, even if it is not the current part.  You can always jump to your chosen part number by re-selecting it as the current part in the menu.
+
+
+
 
 <p><b>Gotchas</b><br>
 

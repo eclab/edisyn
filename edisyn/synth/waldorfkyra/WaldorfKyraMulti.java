@@ -218,6 +218,7 @@ public class WaldorfKyraMulti extends Synth
                                 
                                 tempModel.set("bank", WaldorfKyraMulti.this.model.get("part" + part + "patchbank"));
                                 tempModel.set("number", WaldorfKyraMulti.this.model.get("part" + part + "patchnumber"));
+                                synth.setPart(part - 1);
                                 synth.performRequestDump(tempModel, false);
                                 }
                             });
@@ -866,13 +867,43 @@ public class WaldorfKyraMulti extends Synth
      Be certain to properly set "Receive MIDI Program" to "USB", "MIDI+USB", or "MIDI"
      depending on how you're communicating with the Kyra.
                 
+     For the Kyra Single patch sysex format, see the end of WaldorfKyra.java
+
         
      CHANGE MULTIMODE PATCH
      Do a Program Change with MIDI Channel = Kyra's "Multi Channel", typically channel 16
         
      NOTE: "Multi Program Change" must be ON
      NOTE: A multimode patch change requires at least 200ms pause afterwards
+     NOTE: There exists a sysex command (0x14) which notionally sets the current Multi patch.
+           However it does not appear to work.
         
+     REQUEST WHICH MULTIMODE PATCH IS LOADED 
+     F0
+     3E              Waldorf 
+     22              Kyra
+     [ID]            Synth ID, typically 17 (11 hex)
+     24              Request which Part Number is Current
+     00              
+     00              
+     00              
+     00              
+     F7
+
+     NOTE: you can omit one of the 00 bytes.
+                
+     RESPONSE AS TO WHICH MULTIMODE PATCH IS LOADED  [Received from Kyra]
+     F0
+     3E              Waldorf 
+     22              Kyra
+     [ID]            Synth ID, typically 17 (11 hex)
+     44              Request which Part Number is Current
+     00              
+     00              
+     00
+     [PART]          Current Part Number
+     F7
+                
      REQUEST MULTIMODE PATCH DUMP 
      F0
      3E              Waldorf 

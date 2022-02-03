@@ -1402,7 +1402,7 @@ public class KawaiK1 extends Synth
         }
         
     public String[] getBankNames() { return BANKS; }
-    public boolean[] getWriteableBanks() { return new boolean[] { true, true }; }
+    public boolean[] getWriteableBanks() { return new boolean[] { true, true, true, true }; }
     public int getPatchNameLength() { return 10; }
 
     public int parseFromBank(byte[] bankSysex, int number)

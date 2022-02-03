@@ -2997,18 +2997,18 @@ public abstract class Synth extends JComponent implements Updatable
         a cover function (see for example getLastSynth(...) ) */
     public static String getLastX(String x, String synthName, boolean onlyGetFromSynth)
         {
-        String lastDir = null;
+        String result = null;
         if (synthName != null)
             {
-            lastDir = Prefs.getAppPreferences(synthName, "Edisyn").get(x, null);
+            result = Prefs.getAppPreferences(synthName, "Edisyn").get(x, null);
             }
         
-        if (!onlyGetFromSynth && lastDir == null)
+        if (!onlyGetFromSynth && result == null)
             {
-            lastDir = getLastX(x);
+            result = getLastX(x);
             }
                 
-        return lastDir;         
+        return result;         
         }
         
     private static final String getLastX(String x)
@@ -5854,7 +5854,7 @@ public abstract class Synth extends JComponent implements Updatable
     public void doNewSynth(int synth)
         {
         String[] synthNames = getSynthNames();
-        instantiate(getSynth(synth), false, true, tuple);
+        instantiate(getSynth(synth), false, true, null); 	// tuple);
         }
                 
     Synth doDuplicateSynth()

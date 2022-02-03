@@ -352,7 +352,7 @@ public class Midi
         
         public void dispose()
             {
-            // dunno if we should even do this, the memory leak is well worth the nastu
+            // dunno if we should even do this, the memory leak is well worth the nasty
             // bugs on disposal...
 
             //if (outWrap != null) outWrap.close();
@@ -377,43 +377,19 @@ public class Midi
     static void setLastTupleOutChannel(int channel, Synth synth) { synth.setLastX("" + channel, "LastTupleOutChannel", synth.getSynthClassName(), false); }
     static int getLastTupleOutChannel(Synth synth) 
         { 
-        String val = Synth.getLastX("LastTupleOutChannel", synth.getSynthClassName(), false); 
-        if (val == null) return -1;
-        else 
-            {
-            try
-                { return Integer.parseInt(val); }
-            catch (Exception e)
-                { ExceptionDump.postThrowable(e); Synth.handleException(e); return -1; }
-            }
+        return Synth.getLastXAsInt("LastTupleOutChannel", synth.getSynthClassName(), -1, false);
         }
     
     static void setLastTupleKeyChannel(int channel, Synth synth) { synth.setLastX("" + channel, "LastTupleKeyChannel", synth.getSynthClassName(), false); }
     static int getLastTupleKeyChannel(Synth synth) 
-        { 
-        String val = Synth.getLastX("LastTupleKeyChannel", synth.getSynthClassName(), false); 
-        if (val == null) return -1;
-        else 
-            {
-            try
-                { return Integer.parseInt(val); }
-            catch (Exception e)
-                { ExceptionDump.postThrowable(e); Synth.handleException(e); return -1; }
-            }
+        {
+        return Synth.getLastXAsInt("LastTupleKeyChannel", synth.getSynthClassName(), -1, false);
         }
     
     static void setLastTupleKey2Channel(int channel, Synth synth) { synth.setLastX("" + channel, "LastTupleKey2Channel", synth.getSynthClassName(), false); }
     static int getLastTupleKey2Channel(Synth synth) 
-        { 
-        String val = Synth.getLastX("LastTupleKey2Channel", synth.getSynthClassName(), false); 
-        if (val == null) return -1;
-        else 
-            {
-            try
-                { return Integer.parseInt(val); }
-            catch (Exception e)
-                { ExceptionDump.postThrowable(e); Synth.handleException(e); return -1; }
-            }
+        {
+        return Synth.getLastXAsInt("LastTupleKey2Channel", synth.getSynthClassName(), -1, false);
         }
 
     static void setLastTupleID(String id, Synth synth) { synth.setLastX(id, "LastTupleID", synth.getSynthClassName(), false); }

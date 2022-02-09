@@ -2408,7 +2408,7 @@ public class WaldorfKyra extends Synth
      NOTE: writing a patch to storage does not update the edit buffer.
      You'll want to do that manually afterwards.
 
-     REQUEST WHICH PART NUMBER IS CURRENT 
+     REQUEST WHICH PART NUMBER IS CURRENT   [Sent to Kyra]
      F0
      3E              Waldorf 
      22              Kyra

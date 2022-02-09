@@ -3675,7 +3675,7 @@ public class NovationSL extends Synth
       
       NOTES ON SYMBOLS
       
-      +->               This is used to denote multiple bits which are ORed together to form a single byte
+      +->       This is used to denote multiple bits which are ORed together to form a single byte
       ++Foo++   This indicates an unknown tag regarding this data in Novation's (extremely limited)
       original documentation.  Note that Novation lost its documentation and was kind enough
       to give me what they had left with the request that I do not distribute it (which I 
@@ -3787,13 +3787,13 @@ public class NovationSL extends Synth
       MIDI PORT GROUPS KEYBOARD
       99   63   Channel                               0-16                            [1-16, "As Common"]
       100  64   Ports                         [See Table 4]
-      *** Note: I have seen this corrupted on the unit, where it returns 0x05 for "Common"
-      *** Note: On the SL Compact Editor, MIDI 2 is not supported
+      *** NOTE: I have seen this corrupted on the unit, where it returns 0x05 for "Common"
+      *** NOTE: On the SL Compact Editor, MIDI 2 is not supported
       
       MIDI PORT GROUPS COMMON
       101  65   Channel                               0-15                            [1-16]
       102  66   Ports                         [See Table 3]
-      *** Note: On the SL Compact Editor, MIDI 2 is not supported
+      *** NOTE: On the SL Compact Editor, MIDI 2 is not supported
 
       UNKNOWN      *** I do not know the meaning of these constants
       103  67   (0x00)
@@ -3803,7 +3803,7 @@ public class NovationSL extends Synth
       106  6A   Octave Setting                0-9             [representing -4 ... 5]
       107  6B   Pot Pickup ON         0x01
       +->  Aftertouch OFF     0x04
-      *** Note: the original SL and SL Compact do not have pot pickup
+      *** NOTE: the original SL and SL Compact do not have pot pickup
 
       UNKNOWN      *** I do not know the meaning of these constants
       108  6C   (0x00)
@@ -3814,7 +3814,7 @@ public class NovationSL extends Synth
 
       111  6F   Zone 1 Channel                0-15    [1-16]
       112  70   Zone 1 Ports                                  [See Table 8]
-      *** Note: On the SL Compact Editor, MIDI 2 is not supported
+      *** NOTE: On the SL Compact Editor, MIDI 2 is not supported
       113  71   Zone 1 Vel Offset     0-126           [representing 1-127]
       114  72   Zone 1 Min                    0-127
       115  73   Zone 1 Max                    0-127
@@ -3827,7 +3827,7 @@ public class NovationSL extends Synth
       120  78  (0x00)
       121  79   Zone 2 Channel                0-15    [1-16]
       122  7A   Zone 2 Ports          [                       See Table 8]
-      *** Note: On the SL Compact Editor, MIDI 2 is not supported
+      *** NOTE: On the SL Compact Editor, MIDI 2 is not supported
       123  7B   Zone 2 Vel Offset     0-126           [representing 1-127]
       124  7C   Zone 2 Min                    0-127
       125  7D   Zone 2 Max                    0-127
@@ -3840,7 +3840,7 @@ public class NovationSL extends Synth
       130  82  (0x00)
       131  83   Zone 3 Channel                0-15    [1-16]
       132  84   Zone 3 Ports          [                       See Table 8]
-      *** Note: On the SL Compact Editor, MIDI 2 is not supported
+      *** NOTE: On the SL Compact Editor, MIDI 2 is not supported
       133  85   Zone 3 Vel Offset     0-126           [representing 1-127]
       134  86   Zone 3 Min                    0-127
       135  87   Zone 3 Max                    0-127
@@ -3853,7 +3853,7 @@ public class NovationSL extends Synth
       140  8C  (0x00)
       141  8D   Zone 4 Channel                0-15    [1-16]
       142  8E   Zone 4 Ports                                  [See Table 8]
-      *** Note: On the SL Compact Editor, MIDI 2 is not supported
+      *** NOTE: On the SL Compact Editor, MIDI 2 is not supported
       143  8F   Zone 4 Vel Offset     0-126           [representing 1-127]
       144  90   Zone 4 Min                    0-127
       145  91   Zone 4 Max                    0-127
@@ -4095,8 +4095,8 @@ public class NovationSL extends Synth
       16  10  RPN or NRPN MSB
       17  11  CC, RPN, or NRPN LSB
       18  12  Ports                           [See Table 5]
-      *** Note: I have seen this corrupted on the unit, where it returns 0x05 for "Common"
-      *** Note: On the SL Compact Editor, MIDI 2 is not supported
+      *** NOTE: I have seen this corrupted on the unit, where it returns 0x05 for "Common"
+      *** NOTE: On the SL Compact Editor, MIDI 2 is not supported
       19  13  Channel                         00: Common      20: Keyboard    40-4F:  [1-16]
       20  14  Default Value MSB
       21  15  Default Value LSB
@@ -4140,8 +4140,8 @@ public class NovationSL extends Synth
       16  10  RPN or NRPN MSB
       17  11  CC, RPN, or NRPN LSB
       18  12  Ports                           [See Table 5]
-      *** Note: I have seen this corrupted on the unit, where it returns 0x05 for "Common"
-      *** Note: On the SL Compact Editor, MIDI 2 is not supported
+      *** NOTE: I have seen this corrupted on the unit, where it returns 0x05 for "Common"
+      *** NOTE: On the SL Compact Editor, MIDI 2 is not supported
       19  13  Channel                         00: Common      20: Keyboard    40-4F:  [1-16]
       20  14  (0x00)                          [Normally Default Value MSB]
       21  15  Default Value
@@ -4188,8 +4188,8 @@ public class NovationSL extends Synth
       16  10  RPN/NRPN/Bank MSB
       17  11  CC/RPN/NRPN/Bank LSB
       18  12  Ports                           [See Table 5]
-      *** Note: I have seen this corrupted on the unit, where it returns 0x05 for "Common"
-      *** Note: On the SL Compact Editor, MIDI 2 is not supported
+      *** NOTE: I have seen this corrupted on the unit, where it returns 0x05 for "Common"
+      *** NOTE: On the SL Compact Editor, MIDI 2 is not supported
       19  13  Channel                         00: Common      20: Keyboard    40-4F:  [1-16]
       OR MMC Device           0...127
       20  14  (0x00)                          [Normally Default Value MSB]
@@ -4225,7 +4225,7 @@ public class NovationSL extends Synth
       OR Drum Note Number
       11  0b  (0x00)                          [Normally High Value MSB]
       12  0c  High Value
-      OR Drum note Velocity
+      OR Drum Note Velocity
       13  0d  Button Type                     0x00 = Normal, 0x04 = Velocity, 0x08 = Toggle, 0x10 = Step
       **** NOTE: it says +0x01 is SEND THE MS VALUE FIRST and +0x02 is SEND A 2BYTE VALUE
       **** But these are not options available in the editors or on the unit
@@ -4237,8 +4237,8 @@ public class NovationSL extends Synth
       16  10  RPN/NRPN/Bank MSB
       17  11  CC/RPN/NRPN/Bank LSB
       18  12  Ports                           [See Table 5]
-      *** Note: I have seen this corrupted on the unit, where it returns 0x05 for "Common"
-      *** Note: On the SL Compact Editor, MIDI 2 is not supported
+      *** NOTE: I have seen this corrupted on the unit, where it returns 0x05 for "Common"
+      *** NOTE: On the SL Compact Editor, MIDI 2 is not supported
       19  13  Channel                         00: Common      20: Keyboard    40-4F:  [1-16]
       OR MMC Device           0...127
       20  14  (0x00)                          [Normally Default Value MSB]
@@ -4282,8 +4282,8 @@ public class NovationSL extends Synth
       16  10  RPN or NRPN MSB
       17  11  CC, RPN, or NRPN LSB
       18  12  Ports                           [See Table 5]
-      *** Note: I have seen this corrupted on the unit, where it returns 0x05 for "Common"
-      *** Note: On the SL Compact Editor, MIDI 2 is not supported
+      *** NOTE: I have seen this corrupted on the unit, where it returns 0x05 for "Common"
+      *** NOTE: On the SL Compact Editor, MIDI 2 is not supported
       19  13  Channel                         00: Common      20: Keyboard    40-4F:  [1-16]
       21  15  Default Value
       22  16  (0x00)                          [Normally Step Size]
@@ -4308,7 +4308,7 @@ public class NovationSL extends Synth
       DEC HEX
       00  00  Name                            [8 bytes, padded with 0x20]
       08  08  Type                            0=off, 1=CC, 2=NRPN, 3=RPN 4=Sysex 5=MMC 6=NoteOn/Off 8=Bank Change 9=PC  0A=Pitch Bend  0B=Drumnote 0C=Template 0D=Real Time 
-      *** Note: 0x7, 0xC, and 0xE are not used
+      *** NOTE: 0x7, 0xC, and 0xE are not used
       09  09  Low Value MSB
       10  0a  Low Value LSB / MMC Type / Drum note Number/ Template Number (1-32, not 0-31) / PC 
       11  0b  High Value MSB
@@ -4327,8 +4327,8 @@ public class NovationSL extends Synth
       16  10  RPN/NRPN/Bank MSB
       17  11  CC/RPN/NRPN/Bank LSB
       18  12  Ports                           [See Table 5]
-      *** Note: I have seen this corrupted on the unit, where it returns 0x05 for "Common"
-      *** Note: On the SL Compact Editor, MIDI 2 is not supported
+      *** NOTE: I have seen this corrupted on the unit, where it returns 0x05 for "Common"
+      *** NOTE: On the SL Compact Editor, MIDI 2 is not supported
       19  13  Channel                 00: Common      20: Keyboard    40-4F:  [1-16]          // Note AFTER USB Port, which is different.  Also differnet from other "common" stuff
       +-> [or] MMC Device                     0...127
       20  14  Default Value MSB
@@ -4410,7 +4410,7 @@ public class NovationSL extends Synth
 
 
       TABLE 3: COMMON PORTS
-      *** Note: On the SL Compact Editor, MIDI 2 is not supported
+      *** NOTE: On the SL Compact Editor, MIDI 2 is not supported
       0       Off
       41      MIDI 1
       42      MIDI 2
@@ -4433,10 +4433,10 @@ public class NovationSL extends Synth
 
 
       TABLE 4: PROGRAM PORTS
-      *** Note: the "program" port is the port that pedals and drum pads go to, and I think is also the
+      *** NOTE: the "program" port is the port that pedals and drum pads go to, and I think is also the
       *** port that the keyboard goes to if zones are not turned on.  Called "Keyboard" in the editor
       *** but called "PROG" in the unit.
-      *** Note: On the SL Compact Editor, MIDI 2 is not supported
+      *** NOTE: On the SL Compact Editor, MIDI 2 is not supported
       0       Use Common Ports
       40      Off
       41      MIDI 1
@@ -4457,7 +4457,7 @@ public class NovationSL extends Synth
 
 
       TABLE 5: CONTROL PORTS
-      *** Note: On the SL Compact Editor, MIDI 2 is not supported
+      *** NOTE: On the SL Compact Editor, MIDI 2 is not supported
       0       Use Common Ports
       *** NOTE from the SL editor we often see 7, and from the SL MkII editor we often see 5.
       *** This appears to be spurious data, and should be interpreted as 0.
@@ -4514,7 +4514,7 @@ public class NovationSL extends Synth
 
 
       TABLE 8: KEYBOARD PORTS
-      *** Note: On the SL Compact Editor, MIDI 2 is not supported
+      *** NOTE: On the SL Compact Editor, MIDI 2 is not supported
       40      Off
       41      MIDI 1
       42      MIDI 2

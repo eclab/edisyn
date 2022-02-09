@@ -47,8 +47,7 @@ public class DividedSysex extends MidiMessage
 		// at present just return true here if we wished; but for now I am returning 
 		// true if we're Windows or Linux, and false if we're on a Mac.
 		
-		return false;
-		//return !Style.isMac();
+		return !Style.isMac();
 		}
 	
 	/** Builds an array of either SysexMessage or DividedSysex messages, depending on

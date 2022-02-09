@@ -47,7 +47,8 @@ public class DividedSysex extends MidiMessage
 		// at present just return true here if we wished; but for now I am returning 
 		// true if we're Windows or Linux, and false if we're on a Mac.
 		
-		return !Style.isMac();
+		return false;
+		//return !Style.isMac();
 		}
 	
 	/** Builds an array of either SysexMessage or DividedSysex messages, depending on
@@ -67,28 +68,43 @@ public class DividedSysex extends MidiMessage
 		the platform (windows and linux have a bug which causes them to bomb).
 		These messages break up the given sysex message into objects of either
 		*chunksize* or *chunksize - 1* (varying to work around another windows/linux bug),
-		which can be sent in multiple pieces and can be separated by pauses.  Do not
-		insert other messages in-between them: it'll break things.  Chunksize must be
-		greater than 3. */
+		with the last chunk possibly less in size, but always larger than 1.
+		These messages can later be separated by pauses.  Do not
+		insert other messages in-between them: it'll break things. Chunksize must be
+		greater than 2. */
 
 	public static MidiMessage[] create(byte[] sysex, int chunksize)
 		{
 		// we need a little headroom to guarantee we can't reduce chunksize to 1, not including the header.
-		if (chunksize <= 3) // uh... ? 
-			throw new RuntimeException("Illegal chunksize in DivideSysex.create(), must be > 3, was " + chunksize);
+		if (chunksize <= 2) // uh... ? 
+			throw new RuntimeException("Illegal chunksize in DivideSysex.create(), must be > 2, was " + chunksize);
 
-		// adjust chunksize if necessary
-		if (sysex.length % chunksize == 1)		// the last chunk would be a bare F7, which bombs windows
+		byte[][] newsysex = new byte[sysex.length / chunksize][];
+
+		// We're looking for a good revised chunk size. 
+		// First, revise chunksize if necessary.  This will put the extra in the final array
+		if (sysex.length % chunksize == 1)		// otherwise the last chunk would be a bare F7, which bombs windows
 			{
 			chunksize--;
+
+			// This might have made the last chunk too big.  Let's try breaking it into two
+			if (sysex.length % chunksize > 1)			// if breaking it up into two will NOT leave the second chunk with only one byte
+				{
+				newsysex = new byte[newsysex.length + 1][];
+				}
 			}
+			
 		
 		// build the sysex chunks
-		byte[][] newsysex = new byte[sysex.length / chunksize][];
-		for(int i = 0; i < newsysex.length; i++)
+		for(int i = 0; i < newsysex.length - 1; i++)		// don't do the last chunk
 			{
-			System.arraycopy(sysex, chunksize * i, newsysex, 0, chunksize);
+			newsysex[i] = new byte[chunksize];
+			System.arraycopy(sysex, chunksize * i, newsysex[i], 0, chunksize);
 			}
+		// do the last chunk, which may be different in length
+		int i = newsysex.length - 1;
+		newsysex[i] = new byte[sysex.length - chunksize * i];
+		System.arraycopy(sysex, chunksize * i, newsysex[i], 0, newsysex[i].length);
 
 		return create(newsysex);
 		}
@@ -97,8 +113,8 @@ public class DividedSysex extends MidiMessage
 	/** Given a sysex message which is broken into multiple fragments, builds an 
 		array of either SysexMessage or DividedSysex messages, depending on
 		the platform (windows and linux have a bug which causes them to bomb).
-		Each of these messages encapsulate one provided fragment.  Each fragment size
-		must be at least 3.  These messages can be separated by pauses.  Do not
+		Each of these messages encapsulate one provided fragment.  
+		These messages can later be separated by pauses.  Do not
 		insert other messages in-between them: it'll break things. */
 
 	 public static MidiMessage[] create(byte[][] sysex)

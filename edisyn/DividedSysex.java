@@ -120,12 +120,33 @@ public class DividedSysex extends MidiMessage
 		{
 		if (doHack())		// Windows and Linux
 			{
+			/*
 			// We just break up the message into pieces and assign a DividedSysex
 			// to each piece.
 			DividedSysex[] div = new DividedSysex[sysex.length];
 			for(int i = 0; i < sysex.length; i++)
 				{
 				div[i] = new DividedSysex(sysex[i]);
+				}
+			return div;
+			*/
+
+			// We just break up the message into pieces and assign a DividedSysex
+			// to each piece.
+			SysexMessage[] div = new SysexMessage[sysex.length];
+			for(int i = 0; i < sysex.length; i++)
+				{
+				div[i] = new SysexMessage()
+					{
+					public void setMessage(byte[] data, int length) throws InvalidMidiDataException
+						{
+						this.length = length;
+						this.data = new byte[this.length];
+						System.arraycopy(data, 0, this.data, 0, length);
+						}
+                	};
+                try { div[i].setMessage(sysex[i], sysex[i].length); }
+                catch (InvalidMidiDataException ex) { ex.printStackTrace(); }
 				}
 			return div;
 			}

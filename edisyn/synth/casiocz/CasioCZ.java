@@ -7,6 +7,7 @@ package edisyn.synth.casiocz;
 
 import edisyn.*;
 import edisyn.gui.*;
+import edisyn.util.*;
 import java.awt.*;
 import java.awt.geom.*;
 import javax.swing.border.*;
@@ -1528,12 +1529,22 @@ public class CasioCZ extends Synth
  			{ (byte)0xF7}
          	});
          	
+        System.err.println(div[0].getClass());
+        for(int i = 0; i < div.length; i++)
+        	{
+        	byte[] d = div[i].getMessage();
+        	for(int j = 0; j < d.length; j++)
+        		System.err.print(" " + StringUtility.toHex(d[j]));
+        	System.err.println();
+        	}         	
+         	
         data[0] = div[0];
         data[1] = new Integer(MIDI_PAUSE);
         data[2] = div[1];
         // Never send this last one, it triggers a crash in Windows and Linux
 		//data[3] = new Integer(MIDI_PAUSE);
         //data[4] = div[2];
+        
         tryToSendMIDI(data);
         }
 

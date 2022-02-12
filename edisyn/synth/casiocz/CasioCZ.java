@@ -1507,7 +1507,7 @@ public class CasioCZ extends Synth
             }
         }
 
-    public static final int MIDI_PAUSE = 0;
+    public static final int MIDI_PAUSE = 200;
         
     public void performRequestCurrentDump()
         {
@@ -1528,15 +1528,6 @@ public class CasioCZ extends Synth
  			{ chan, 0x31 }, 
  			{ (byte)0xF7}
          	});
-         	
-        System.err.println(div[0].getClass());
-        for(int i = 0; i < div.length; i++)
-        	{
-        	byte[] d = div[i].getMessage();
-        	for(int j = 0; j < d.length; j++)
-        		System.err.print(" " + StringUtility.toHex(d[j]));
-        	System.err.println();
-        	}         	
          	
         data[0] = div[0];
         data[1] = new Integer(MIDI_PAUSE);

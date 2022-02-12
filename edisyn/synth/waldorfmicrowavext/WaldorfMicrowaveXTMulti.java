@@ -163,7 +163,7 @@ public class WaldorfMicrowaveXTMulti extends Synth
     /** Add the global patch category (name, id, number, etc.) */
     public JComponent addNameGlobal(Color color)
         {
-        Category globalCategory = new Category(this, "Waldorf Microwave II/XT/XTk [Multi]", color);
+        Category globalCategory = new Category(this, "Waldorf MicroWave II/XT/XTk [Multi]", color);
         //globalCategory.makeUnresettable();
                 
         JComponent comp;
@@ -1123,7 +1123,7 @@ public class WaldorfMicrowaveXTMulti extends Synth
         return PARSE_SUCCEEDED;   
         }
 
-    public static String getSynthName() { return "Waldorf Microwave II/XT/XTk [Multi]"; }
+    public static String getSynthName() { return "Waldorf MicroWave II/XT/XTk [Multi]"; }
     
     public String getPatchName(Model model) { return model.get("name", "Init Sound V1.1 "); }
 

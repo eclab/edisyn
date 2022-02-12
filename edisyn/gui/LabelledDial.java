@@ -268,7 +268,9 @@ public class LabelledDial extends NumericalComponent
         int getProposedState(MouseEvent e)
             {
             int y = -(e.getY() - startY);
-            int range = (getMax() - getMin() + 1 );
+            int min = getMin();
+            int max =  getMax();
+            int range = (max - min + 1 );
             double multiplicand = 1;
                                         
             double extent = range;
@@ -298,6 +300,11 @@ public class LabelledDial extends NumericalComponent
                 {
                 proposedState = reviseToAltValue(proposedState);
                 }
+            
+            if (proposedState < min)
+            	proposedState = min;
+            else if (proposedState > max)
+            	proposedState = max;
             return proposedState;
             }
                 

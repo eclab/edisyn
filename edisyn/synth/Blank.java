@@ -1091,6 +1091,17 @@ public class Blank extends Synth
     	return -1; 
     	}
 
+    public int[] getBanks(byte[] bankSysex) 
+    	{ 
+    	// Given a bank sysex message, returns the bank numbers of the banks in the message,
+    	// else null if there are no numbers indicated for them.  The default calls
+    	// getBank(...) and returns null if it returned -1, else returns an array consisting
+    	// of the getBank(...) value.  Normally you wouldn't override this method, it's only
+    	// needed for unusual synths which return more than one bank in a single bank message
+    	// (such as the Waldorf MicroWave).
+    	return super.getBanks(bankSysex); 
+    	}
+
     public Object[] emitBank(Model[] models, int bank, boolean toFile) 
     	{ 
     	// Builds a set of models collectively comprising one bank's worth of patches,

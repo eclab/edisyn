@@ -8670,7 +8670,7 @@ public abstract class Synth extends JComponent implements Updatable
         if (getAlwaysLoadInLibrarian()) 
             {
             // librarian already exists because loadLibrarian called us
-            librarian.getLibrary().readBank(data, librarian);       
+            librarian.getLibrary().readBanks(data, librarian);       
             // we don't update undo because this is called from
             // loadLibrarian, which does it for us.
             //librarian.updateUndoRedo();           
@@ -8763,7 +8763,7 @@ public abstract class Synth extends JComponent implements Updatable
                         {
                         otherSynth.doLibrarian();               // open and move to it
                         }
-                    otherSynth.librarian.getLibrary().readBank(data, otherSynth.librarian); 
+                    otherSynth.librarian.getLibrary().readBanks(data, otherSynth.librarian); 
                     otherSynth.librarian.updateUndoRedo();          
                     return BANK_LIBRARIAN;                          
                     }
@@ -8774,7 +8774,7 @@ public abstract class Synth extends JComponent implements Updatable
                         {
                         doLibrarian();          // open and move to it
                         }
-                    librarian.getLibrary().readBank(data, librarian);       
+                    librarian.getLibrary().readBanks(data, librarian);       
                     librarian.updateUndoRedo();             
                     return BANK_LIBRARIAN;                          
                     }
@@ -9047,8 +9047,6 @@ public abstract class Synth extends JComponent implements Updatable
         else return buildBankBooleans(getBankNames().length, 0, 0); 
         }
 
-
-
     /** Return whether individual patches can be written.  Default is FALSE. */
     public boolean getSupportsPatchWrites() { return false; }
 
@@ -9066,8 +9064,21 @@ public abstract class Synth extends JComponent implements Updatable
     public int parseFromBank(byte[] bankSysex, int number) { return PARSE_FAILED; }
 
     /** Parses the bank number from the provided bank sysex and returns it.  
-        If the bank is unknown, returns -1.  By default returns -1. */
+        If the bank is unknown, returns -1.  By default returns -1. 
+        You can override this or getBanks() but not both.  If you're choosing, you'll usually
+        need to chooes getBank(...) */
     public int getBank(byte[] bankSysex) { return -1; }
+
+    /** Parses the bank numbers from the provided bank sysex and returns them.  
+        If the banks are unknown, returns null.  By default this calls getBank(...). 
+        You can override this or getBank() but not both.    If you're choosing, you'll usually
+        need to chooes getBank(...) */
+    public int[] getBanks(byte[] bankSysex) 
+    	{
+    	int val = getBank(bankSysex);
+    	if (val == -1) return null;
+    	else return new int[] { val };
+    	}
 
     /** Emits the models as a bank.  The bank number is provided if necessary. By default does nothing. */
     public Object[] emitBank(Model[] models, int bank, boolean toFile) { return new Object[0]; }
@@ -9094,7 +9105,7 @@ public abstract class Synth extends JComponent implements Updatable
     /** Return null if bank dump requests are not supported. */
     public byte[] requestBankDump(int bank) { return null; }
     
-    /** Return null if all dump requests are not supported. */
+    /** Return null if all-patch dump requests are not supported. */
     public byte[] requestAllDump() { return null; }
     
     /** Return false if we should disable updating listeners on batch downloads.  This is normally only done

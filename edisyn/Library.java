@@ -468,8 +468,9 @@ public class Library extends AbstractTableModel
             }
         }
                 
-                
-    public void readBank(byte[] incoming, Librarian librarian)
+    // reads a sysex bank message holding one or (rarely) more than one bank,
+    // and loads the patches in that bank or those banks
+    public void readBanks(byte[] incoming, Librarian librarian)
         {
         pushUndo();
 
@@ -486,45 +487,49 @@ public class Library extends AbstractTableModel
         Model location = new Model();
         boolean hasBanks = (synth.getBankNames() != null);
         
-        // We have to figure out what bank to use
-        int bank = 0;
-        int b = synth.getBank(incoming);
-        if (b >= 0)     // bank known
+        // We have to figure out what banks to use
+        int[] banks = synth.getBanks(incoming);
+        if (banks == null)     // banks unknown
             {
-            bank = b;
+            banks = new int[] { 0 };
             }
         
         synth.getModel().setUpdateListeners(false);
-        for(int i = 0; i < getBankSize(); i++)
-            {
-            boolean showed = false;
-            int result = synth.parseFromBank(incoming, i);
-            if (result == Synth.PARSE_FAILED)
-                {
-                if (!showed)
-                    {
-                    synth.showSimpleError("Bad Patches in Bank", "This file has a bank with bad patches.  They will be replaced with blanks.");
-                    showed = true;
-                    }
-                patches[bank + 1][i] = new Patch(initPatch);
-                }
-            else
-                {
-                // force the location to be correct
-                if (hasBanks)
-                    {
-                    location.set("bank", bank);
-                    }
-                location.set("number", i);
-                String name = synth.getModel().get("name","" + synth.getPatchLocationName(synth.getModel()));
-                //byte[][] data = synth.cutUpSysex(synth.flatten(synth.emitAll(location, false, true)));          // I guess to a file so it doesn't try NRPN?
-                byte[][] data = synth.extractSysex(synth.emitAll(location, false, true));          // I guess to a file so it doesn't try NRPN?
-                Patch patch = new Patch(synthNum, data, false);
-                patch.name = name;
-                patch.bank = bank;
-                patch.number = i;
-                patches[bank + 1][i] = patch;
-                }
+        
+		boolean showed = false;
+        for(int b = 0; b < banks.length ; b++)
+        	{
+        	int bank = banks[b];		
+			for(int i = 0; i < getBankSize(); i++)
+				{
+				int result = synth.parseFromBank(incoming, i);
+				if (result == Synth.PARSE_FAILED)
+					{
+					if (!showed)
+						{
+						synth.showSimpleError("Bad Patches in Bank", "This file has a bank with bad patches.  They will be replaced with blanks.");
+						showed = true;
+						}
+					patches[bank + 1][i] = new Patch(initPatch);
+					}
+				else
+					{
+					// force the location to be correct
+					if (hasBanks)
+						{
+						location.set("bank", bank);
+						}
+					location.set("number", i);
+					String name = synth.getModel().get("name","" + synth.getPatchLocationName(synth.getModel()));
+					//byte[][] data = synth.cutUpSysex(synth.flatten(synth.emitAll(location, false, true)));          // I guess to a file so it doesn't try NRPN?
+					byte[][] data = synth.extractSysex(synth.emitAll(location, false, true));          // I guess to a file so it doesn't try NRPN?
+					Patch patch = new Patch(synthNum, data, false);
+					patch.name = name;
+					patch.bank = bank;
+					patch.number = i;
+					patches[bank + 1][i] = patch;
+					}
+				}
             }
         synth.getModel().setUpdateListeners(true);
         

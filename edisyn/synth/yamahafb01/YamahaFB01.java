@@ -162,7 +162,7 @@ public class YamahaFB01 extends Synth
     public void setupTestPatch()
         {
         if (tuple == null)
-            if (!setupMIDI(tuple))
+            if (!setupMIDI())
                 return;
 
         if (tuple != null)

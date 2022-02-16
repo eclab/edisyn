@@ -249,7 +249,7 @@ public class YamahaFS1R extends Synth
     public void setupTestPerformance(boolean filter)
         {
         if (tuple == null)
-            if (!setupMIDI(tuple))
+            if (!setupMIDI())
                 return;
 
         if (tuple != null)
@@ -271,7 +271,7 @@ public class YamahaFS1R extends Synth
     public void showMulti()
         {
         if (tuple == null)
-            if (!setupMIDI(tuple))
+            if (!setupMIDI())
                 return;
 
         if (tuple != null)

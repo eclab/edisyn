@@ -183,7 +183,7 @@ public class YamahaFS1RFseq extends Synth
     public void showMulti()
         {
         if (tuple == null)
-            if (!setupMIDI(tuple))
+            if (!setupMIDI())
                 return;
 
         if (tuple != null)
@@ -221,7 +221,7 @@ public class YamahaFS1RFseq extends Synth
     public void showVoice()
         {
         if (tuple == null)
-            if (!setupMIDI(tuple))
+            if (!setupMIDI())
                 return;
 
         if (tuple != null)
@@ -262,7 +262,7 @@ public class YamahaFS1RFseq extends Synth
     public void setupTestPerformance(int base)
         {
         if (tuple == null)
-            if (!setupMIDI(tuple))
+            if (!setupMIDI())
                 return;
 
         if (tuple != null)

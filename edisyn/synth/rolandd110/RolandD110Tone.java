@@ -410,7 +410,7 @@ public class RolandD110Tone extends Synth
     public void setupTestPatch(boolean timbre1)
         {
         if (tuple == null)
-            if (!setupMIDI(tuple))
+            if (!setupMIDI())
                 return;
 
         if (tuple != null)
@@ -462,7 +462,7 @@ public class RolandD110Tone extends Synth
     public void writeMultiPatches(int bank)
         {
         if (tuple == null)
-            if (!setupMIDI(tuple))
+            if (!setupMIDI())
                 return;
 
         if (tuple != null)

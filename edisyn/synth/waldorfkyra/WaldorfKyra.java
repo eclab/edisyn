@@ -2307,6 +2307,11 @@ public class WaldorfKyra extends Synth
         return buildIntegerNames(128, 0);
         }
 
+    public boolean[] getWriteableBanks() 
+        { 
+        return buildBankBooleans(7, 19, 0); 		// first 7 banks are writeable, remaining 19 are not
+        }
+
     public String[] getBankNames() { return BANKS; }
 
     public boolean getSupportsPatchWrites() { return true; }

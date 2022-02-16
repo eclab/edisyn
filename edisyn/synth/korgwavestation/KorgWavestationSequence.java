@@ -1664,7 +1664,7 @@ public class KorgWavestationSequence extends KorgWavestationAbstract
     public void sendTestPerformance()
         {
         if (tuple == null)
-            if (!setupMIDI(tuple))
+            if (!setupMIDI())
                 return;
 
         if (tuple != null)

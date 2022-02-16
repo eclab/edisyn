@@ -42,11 +42,7 @@ public class Midi
                 
         public void close()
             {
-            for(int i = 0; i < receivers.size(); i++)
-                {
-                ((Receiver)(receivers.get(i))).close();
-                }
-            receivers = new ArrayList();
+            removeAllReceivers();
             }
                         
         public synchronized void send(MidiMessage message, long timeStamp)
@@ -63,10 +59,27 @@ public class Midi
             receivers.add(receiver);
             }
                         
+        /** Sets the only receiver to get routed to. */
+        public void setReceiver(Receiver receiver)
+            {
+            removeAllReceivers();
+            receivers.add(receiver);
+            }
+                        
         /** Remove a receiver that was routed to. */
         public void removeReceiver(Receiver receiver)
             {
             receivers.remove(receiver);
+            }
+
+        /** Remove all receivers. */
+        public void removeAllReceivers()
+            {
+            for(int i = 0; i < receivers.size(); i++)
+                {
+                ((Receiver)(receivers.get(i))).close();
+                }
+            receivers = new ArrayList();
             }
         }
 
@@ -133,6 +146,78 @@ public class Midi
                 catch(Exception e) { Synth.handleException(e); return false; }
                 }
             
+            //System.err.println("Adding " + receiver + " to " + in);
+            in.addReceiver(receiver);
+            return true;
+            }
+
+         public boolean removeFromTransmitter(Receiver receiver) 
+            {
+            if (in == null) 
+                {
+                try
+                    {
+                    // we use a thru here so we can add many receivers to it
+                    if (!device.isOpen()) 
+                        device.open();
+                    Thru _in = new Thru();
+                    Transmitter _transmitter = device.getTransmitter();
+                    _transmitter.setReceiver(_in);
+                    transmitter = _transmitter;         // we set it last in case of an exception
+                    in = _in;                                           // we set it last in case of an exception
+                    }
+                catch(Exception e) { Synth.handleException(e); return false; }
+                }
+            
+            //System.err.println("Removing " + receiver + " from " + in);
+            in.removeReceiver(receiver);
+            return true;
+            }
+
+       public boolean removeAllFromTransmitter() 
+            {
+            if (in == null) 
+                {
+                try
+                    {
+                    // we use a thru here so we can add many receivers to it
+                    if (!device.isOpen()) 
+                        device.open();
+                    Thru _in = new Thru();
+                    Transmitter _transmitter = device.getTransmitter();
+                    _transmitter.setReceiver(_in);
+                    transmitter = _transmitter;         // we set it last in case of an exception
+                    in = _in;                                           // we set it last in case of an exception
+                    }
+                catch(Exception e) { Synth.handleException(e); return false; }
+                }
+            
+            in.removeAllReceivers();
+            return true;
+            }
+
+       /** 
+            You provide a Receiver to solely attach to the Transmitter.  Returns true if successful
+        */
+        public boolean connectToTransmitter(Receiver receiver) 
+            {
+            if (in == null) 
+                {
+                try
+                    {
+                    // we use a thru here so we can add many receivers to it
+                    if (!device.isOpen()) 
+                        device.open();
+                    Thru _in = new Thru();
+                    Transmitter _transmitter = device.getTransmitter();
+                    _transmitter.setReceiver(_in);
+                    transmitter = _transmitter;         // we set it last in case of an exception
+                    in = _in;                                           // we set it last in case of an exception
+                    }
+                catch(Exception e) { Synth.handleException(e); return false; }
+                }
+            
+            in.removeAllReceivers();
             in.addReceiver(receiver);
             return true;
             }
@@ -159,7 +244,7 @@ public class Midi
         
         public void close()
             {
-            new Throwable().printStackTrace();
+            //new Throwable().printStackTrace();
             if (transmitter != null) transmitter.close();
             if (out != null) out.close();
             // don't close in(), it'll just close all my own receivers
@@ -331,6 +416,10 @@ public class Midi
         /** The secondary to receive voiced messages from on the keyboard/controller input. */
         public int key2Channel = KEYCHANNEL_OMNI;
         
+        public Receiver inReceiver;
+        public Receiver keyReceiver;
+        public Receiver key2Receiver;
+        
         public Tuple() { }
         
         public Tuple(Tuple other, Receiver inReceiver, Receiver keyReceiver, Receiver key2Receiver)
@@ -344,10 +433,13 @@ public class Midi
             id = other.id;
             keyChannel = other.keyChannel;
             key2Channel = other.key2Channel;
+            this.inReceiver = inReceiver;
+            this.keyReceiver = keyReceiver;
+            this.key2Receiver = key2Receiver;
                 
-            inWrap.addToTransmitter(inReceiver);
-            if (keyWrap != null) keyWrap.addToTransmitter(keyReceiver);
-            if (key2Wrap != null) key2Wrap.addToTransmitter(key2Receiver);
+            inWrap.connectToTransmitter(inReceiver);
+            if (keyWrap != null) keyWrap.connectToTransmitter(keyReceiver);
+            if (key2Wrap != null) key2Wrap.connectToTransmitter(key2Receiver);
             }
         
         public void dispose()
@@ -407,8 +499,14 @@ public class Midi
     /** Works with the user to generate a new Tuple holding new MIDI connections.
         You may provide the old tuple for defaults or pass in null.  You also
         provide the inReceiver and keyReceiver and key2Receiver to be attached to the input and keyboard/controller
-        input.  You get these with Synth.buildKeyReceiver() and Synth.buildInReceiver() */ 
-    public static Tuple getNewTuple(Tuple old, Synth synth, String message, Receiver inReceiver, Receiver keyReceiver, Receiver key2Receiver)
+        input.  You get these with Synth.buildKeyReceiver() and Synth.buildInReceiver() 
+        If the old Tuple is the previous tuple of
+        this synthesizer, then you will want to set removeReceiversFromOldTuple to TRUE so that when
+        new receivers are attached, the old ones are eliminated.  However if old Tuple is from another
+        active synthesizer editor, and so is just being used to provide defaults, then you should set
+        removeReceiversFromOldTuple to FALSE so it doesn't muck with the previous synthesizer.
+    */ 
+    public static Tuple getNewTuple(Tuple old, Synth synth, String message, Receiver inReceiver, Receiver keyReceiver, Receiver key2Receiver, boolean removeReceiversFromOldTuple)
         {
         updateDevices();
         
@@ -534,6 +632,29 @@ public class Midi
                     return FAILED;
                     }
 
+
+
+			//// FIXME: If you (1) create a synth connected to MidiKeys as the Key receiver
+			//// (2) make another synth with the same
+			///  then the first synth is disconnected from the key receiver
+			
+			
+			
+			
+			
+			
+
+				// first we delete all the existing receiving device connections.
+				// This is redundant to some degree
+				if (old != null && removeReceiversFromOldTuple)
+					{
+                	if (old.inWrap != null) old.inWrap.removeFromTransmitter(old.inReceiver);
+                	if (old.keyWrap != null) old.keyWrap.removeFromTransmitter(old.keyReceiver);
+                	if (old.key2Wrap != null) old.key2Wrap.removeFromTransmitter(old.key2Receiver);
+					}
+				
+				// now we reestablish them
+				tuple.inReceiver = inReceiver;
                 tuple.inWrap = ((MidiDeviceWrapper)(inCombo.getSelectedItem()));
                 if (!tuple.inWrap.addToTransmitter(inReceiver))
                     {
@@ -543,24 +664,25 @@ public class Midi
 
                 if (keyCombo.getSelectedItem() instanceof String)
                     {
-                    tuple.keyWrap = null;
                     }
                 else
                     {
+					tuple.keyReceiver = keyReceiver;
                     tuple.keyWrap = ((MidiDeviceWrapper)(keyCombo.getSelectedItem()));
                     if (!tuple.keyWrap.addToTransmitter(keyReceiver))
                         {
                         synth.showErrorWithStackTrace("Cannot Connect", "An error occurred while connecting to the Controller 1 MIDI Device.");
                         tuple.keyWrap = null;
                         }
+                    //System.err.println(tuple.keyWrap);
                     }
 
                 if (key2Combo.getSelectedItem() instanceof String)
                     {
-                    tuple.key2Wrap = null;
                     }
                 else
                     {
+					tuple.key2Receiver = key2Receiver;
                     tuple.key2Wrap = ((MidiDeviceWrapper)(key2Combo.getSelectedItem()));
                     if (!tuple.key2Wrap.addToTransmitter(key2Receiver))
                         {

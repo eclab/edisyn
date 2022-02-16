@@ -346,7 +346,7 @@ public abstract class Synth extends JComponent implements Updatable
 
                 frame.setVisible(true);
                 if (setupMIDI) 
-                    synth.setupMIDI("Choose MIDI devices to send to and receive from.", tuple);
+                    synth.setupMIDI("Choose MIDI devices to send to and receive from.", tuple, false);
 
                 // we call this here even though it's already been called as a result of frame.setVisible(true)
                 // because it's *after* setupMidi(...) and so it gives synths a chance to send
@@ -1714,16 +1714,19 @@ public abstract class Synth extends JComponent implements Updatable
     public boolean getSendMIDI() { return sendMIDI; }
         
     /** Same as setupMIDI(message, null), with a default "you are disconnected" message. */
-    public boolean setupMIDI() { return setupMIDI("You are disconnected. Choose MIDI devices to send to and receive from.", null); }
+    public boolean setupMIDI() { return setupMIDI("You are disconnected. Choose MIDI devices to send to and receive from.", null, false); }
         
-    /** Same as setupMIDI(message, oldTuple), with a default "you are disconnected" message. */
-    public boolean setupMIDI(Midi.Tuple oldTuple) { return setupMIDI("You are disconnected. Choose MIDI devices to send to and receive from.", oldTuple); }
-        
-    /** Lets the user set up the MIDI in/out/key devices.  TheMIDI old devices are provided in oldTuple,
-        or you may pass null in if there are no old devices.  Returns TRUE if a new tuple was set up. */
-    public boolean setupMIDI(String message, Midi.Tuple oldTuple)
+    /** Lets the user set up the MIDI in/out/key devices.  The old MIDI devices are provided in oldTuple,
+        or you may pass null in if there are no old devices.  If the oldTuple is the previous tuple of
+        this synthesizer, then you will want to set removeReceiversFromOldTuple to TRUE so that when
+        new receivers are attached, the old ones are eliminated.  However if oldTuple is from another
+        active synthesizer editor, and so is just being used to provide defaults, then you should set
+        removeReceiversFromOldTuple to FALSE so it doesn't muck with the previous synthesizer.
+        Returns TRUE if a new tuple was set up. */
+    public boolean setupMIDI(String message, Midi.Tuple oldTuple, boolean removeReceiversFromOldTuple)
         {
-        Midi.Tuple result = Midi.getNewTuple(oldTuple, this, message, buildInReceiver(), buildKeyReceiver(), buildKey2Receiver());
+//        new Throwable().printStackTrace();
+        Midi.Tuple result = Midi.getNewTuple(oldTuple, this, message, buildInReceiver(), buildKeyReceiver(), buildKey2Receiver(), removeReceiversFromOldTuple);
         boolean retval = false;
                 
         if (result == Midi.FAILED)
@@ -5521,7 +5524,7 @@ public abstract class Synth extends JComponent implements Updatable
                 
     void doChangeMIDI()
         {
-        if (!setupMIDI("Choose new MIDI devices to send to and receive from.", tuple))
+        if (!setupMIDI("Choose new MIDI devices to send to and receive from.", tuple, true))
             return;
         }
     

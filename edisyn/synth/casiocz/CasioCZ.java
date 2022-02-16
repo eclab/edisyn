@@ -668,6 +668,13 @@ public class CasioCZ extends Synth
         model.set("bank", bank);
         model.set("number", number);
         }
+        
+    public static final int MIDI_PAUSE = 200;
+        
+    public int getPauseAfterChangePatch()
+    	{
+    	return MIDI_PAUSE;
+    	}
 
     public int unnybblize(byte lsb, byte msb)
         {
@@ -1489,11 +1496,12 @@ public class CasioCZ extends Synth
             }
                                         
                 
-        if (toFile)
+        //if (toFile)
             {
             data[pos] = (byte)0xF7;
             return new Object[] { data };
             }
+        /*
         else
             {
             // break up
@@ -1505,10 +1513,9 @@ public class CasioCZ extends Synth
             MidiMessage[] syx = DividedSysex.create(new byte[][] { header, main });
             return new Object[] { syx[0], new Integer(MIDI_PAUSE), syx[1], new Integer(MIDI_PAUSE) }; 
             }
+        */
         }
 
-    public static final int MIDI_PAUSE = 200;
-        
     public void performRequestCurrentDump()
         {
         // The CZ series has insane sysex.  You have to send the sysex message in pieces
@@ -1520,13 +1527,17 @@ public class CasioCZ extends Synth
         
         byte cz1 = (byte)(isCZ1() ? 0x11 : 0x10);
         byte chan = (byte)(0x70 | getChannelOut());
-
-        Object[] data = new Object[3];
+		Object[] data = new Object[]
+			{
+			new byte[] { (byte)0xF0, 0x44, 0x00, 0x00, chan, cz1, 0x60, chan, 0x31, (byte)0xF7 }
+			};
+/*        
+		Object[] data = new Object[3];
         MidiMessage[] div = DividedSysex.create(new byte[][] 
         	{
         	{ (byte)0xF0, 0x44, 0x00, 0x00, chan, cz1, 0x60 },
  			{ chan, 0x31 }, 
- 			{ (byte)0xF7}
+ 			{ (byte)0xF7 }
          	});
          	
         data[0] = div[0];
@@ -1535,7 +1546,8 @@ public class CasioCZ extends Synth
         // Never send this last one, it triggers a crash in Windows and Linux
 		//data[3] = new Integer(MIDI_PAUSE);
         //data[4] = div[2];
-        
+*/
+
         tryToSendMIDI(data);
         }
 
@@ -1562,12 +1574,13 @@ public class CasioCZ extends Synth
         int number = tempModel.get("number");
         byte location = (byte)(bank * 8 + number);
 
+/*        
         Object[] data = new Object[3];
         MidiMessage[] div = DividedSysex.create(new byte[][] 
         	{
         	{ (byte)0xF0, 0x44, 0x00, 0x00, chan, cz1, location },
  			{ chan, 0x31 }, 
- 			{ (byte)0xF7}
+ 			{ (byte)0xF7 }
          	});
 
         data[0] = div[0];
@@ -1576,6 +1589,13 @@ public class CasioCZ extends Synth
         // Never send this last one, it triggers a crash in Windows and Linux
 		//data[3] = new Integer(MIDI_PAUSE);
         //data[4] = div[2];
+*/
+
+		Object[] data = new Object[]
+			{
+			new byte[] {(byte)0xF0, 0x44, 0x00, 0x00, chan, cz1, location, chan, 0x31, (byte)0xF7 }
+			};
+
         tryToSendMIDI (data);
         }
 

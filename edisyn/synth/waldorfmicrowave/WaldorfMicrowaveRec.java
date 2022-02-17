@@ -17,19 +17,19 @@ public class WaldorfMicrowaveRec extends Recognize
             data[0] == (byte)0xF0 &&
             data[1] == (byte)0x3E &&
             data[2] == (byte)0x00 &&
-            data[4] == (byte)0x42) ||		// BPRD Dump
+            data[4] == (byte)0x42) ||           // BPRD Dump
             (
             data.length == EXPECTED_SYSEX_LENGTH + 1 &&
             data[0] == (byte)0xF0 &&
             data[1] == (byte)0x3E &&
             data[2] == (byte)0x00 &&
-            data[4] == (byte)0x4B) ||		// ABPD Dump, not likely to happen
-			(
+            data[4] == (byte)0x4B) ||           // ABPD Dump, not likely to happen
+            (
             data.length == 11527 &&
             data[0] == (byte)0xF0 &&
             data[1] == (byte)0x3E &&
             data[2] == (byte)0x00 &&
-            data[4] == (byte)0x50);		// BPBD Bank Dump
+            data[4] == (byte)0x50);             // BPBD Bank Dump
         return v;
         }
     }

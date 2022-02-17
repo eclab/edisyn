@@ -15,13 +15,13 @@ public class WaldorfMicrowaveMultiRec extends Recognize
             data[0] == (byte)0xF0 &&
             data[1] == (byte)0x3E &&
             data[2] == (byte)0x00 &&
-            data[4] == (byte)0x43) ||		// ARPD Dump
+            data[4] == (byte)0x43) ||           // ARPD Dump
             (
             data.length == 14471 &&
             data[0] == (byte)0xF0 &&
             data[1] == (byte)0x3E &&
             data[2] == (byte)0x00 &&
-            data[4] == (byte)0x51);		// APBD Bank Dump
+            data[4] == (byte)0x51);             // APBD Bank Dump
         return v;
         }
         

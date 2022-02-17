@@ -320,9 +320,9 @@ public class StringUtility
     public static String toHex(byte[] vals)
         {
         String str = "";
-     	for(int i = 0; i < vals.length; i++)
-     		str += (" " + toHex(vals[i]));
-     	return str;
+        for(int i = 0; i < vals.length; i++)
+            str += (" " + toHex(vals[i]));
+        return str;
         }
 
 

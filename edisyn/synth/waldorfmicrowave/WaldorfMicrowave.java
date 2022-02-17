@@ -352,22 +352,22 @@ public class WaldorfMicrowave extends Synth
 
         if (osc==1)
             {
-	        params = PITCH_MODES;
-	        comp = new Chooser("Pitch Mode", this, "osc" + osc + "pitchmode", params);
-	        vbox.add(comp);
+            params = PITCH_MODES;
+            comp = new Chooser("Pitch Mode", this, "osc" + osc + "pitchmode", params);
+            vbox.add(comp);
             }
-		else
+        else
             {
-			HBox hbox2 = new HBox();
-	        params = PITCH_MODES;
-	        comp = new Chooser("Pitch Mode", this, "osc" + osc + "pitchmode", params);
-	        hbox2.add(comp);
+            HBox hbox2 = new HBox();
+            params = PITCH_MODES;
+            comp = new Chooser("Pitch Mode", this, "osc" + osc + "pitchmode", params);
+            hbox2.add(comp);
 
             comp = new CheckBox("Link ", this, "osc" + osc + "linkmode");
             hbox2.add(comp);    
-			vbox.add(hbox2);
+            vbox.add(hbox2);
             }
-		
+                
         hbox.add(vbox);
 
         comp = new LabelledDial("Octave", this, "osc" + osc + "octave", color, 0, 4, 2)
@@ -678,10 +678,6 @@ public class WaldorfMicrowave extends Synth
             ((LabelledDial)comp).addAdditionalLabel("Amount");
             hbox.add(comp);
                 
-            comp = new LabelledDial("Level Mod", this, "lfo" + lfo + "levelmodifieramount", color, 0, 127, 64);
-            ((LabelledDial)comp).addAdditionalLabel("Amount");
-            hbox.add(comp);
-
             comp = new LabelledDial("Delay", this, "lfo" + lfo + "delay", color, 0, 127)
                 {
                 public String map(int val)
@@ -1097,7 +1093,6 @@ public class WaldorfMicrowave extends Synth
     "lfo1ratemodifiersource",
     "lfo1ratemodifieramount",
     "lfo1levelmodifiersource",
-    "lfo1levelmodifieramount",
     "lfo1sync",
     "lfo1delay",
     "lfo1attack", 
@@ -1155,93 +1150,93 @@ public class WaldorfMicrowave extends Synth
         if (key.equals("bank")) return new Object[0];  // this is not emittable
         if (key.equals("number")) return new Object[0];  // this is not emittable
 
-		int instrument = 0;		// need to change this
-		byte id = (byte)getID();
-		
-		if (key.equals("name"))
-			{
-			char[] name = (model.get("name", "Untitled") + "                ").toCharArray();
-			Object[] obj = new Object[16];
-			for(int i = 0; i < obj.length; i++)
-				{
-				int param = 148 + i;
-				// nybblize param number
-				int HH = (param >>> 4) & 15;
-				int LL = param & 15;
+        int instrument = 0;             // need to change this
+        byte id = (byte)getID();
+                
+        if (key.equals("name"))
+            {
+            char[] name = (model.get("name", "Untitled") + "                ").toCharArray();
+            Object[] obj = new Object[16];
+            for(int i = 0; i < obj.length; i++)
+                {
+                int param = 148 + i;
+                // nybblize param number
+                int HH = (param >>> 4) & 15;
+                int LL = param & 15;
 
-				byte[] data = new byte[] 
-					{ 
-					(byte)0xF0, 
-					0x3E, 				// Waldorf
-					0x00,				// Microwave 1 
-					id,
-					0x60, 				// RTBP (Real Time BPR Edit)
-					(byte)instrument,
-					(byte)HH,
-					(byte)LL,
-					(byte)(byte)name[i],
-					0,	// checksum
-					(byte)0xF7 
-					};
-				data[9] = produceChecksum(data, 5, 9);
-				
-				obj[i] = data;
-				}
-			return obj;
-			}
-		else
-			{
-			// The parameter numbers are 0...179
-			// corresponding to (I think) bytes 5...184 in the dump
-			int param = ((Integer)(allParametersToIndex.get(key))).intValue();
-			int val = model.get(key);
-			
-			if (key.equals("osc1octave") || key.equals("osc2octave"))
-				{
-				// handle specially
-				val = (val + 2) * 16;
-				}
-			else if (key.equals("osc1semitone") || key.equals("osc2semitone"))
-				{
-				// handle specially
-				// Range 0...12 maps to 0...96 I think, but the docs say 0...120
-				val = val * 8;
-				}
-			else if (key.equals("wave1volume") || key.equals("wave2volume") || key.equals("noisevolume"))
-				{
-				// handle specially
-				// Range 0...7 maps to 0...112
-				val = val * 16;
-				}
-			else if (key.equals("wave1levelmodifieramount") || key.equals("wave2levelmodifieramount") || key.equals("noiselevelmodifieramount"))
-				{
-				// handle specially
-				// Range -7 ... + 7 maps to 8 ... 120
-				val = (val + 7) * 8 + 8;
-				}
-			
-			// nybblize param number
-			int HH = (param >>> 4) & 15;
-			int LL = param & 15;
-			
+                byte[] data = new byte[] 
+                    { 
+                    (byte)0xF0, 
+                    0x3E,                           // Waldorf
+                    0x00,                           // Microwave 1 
+                    id,
+                    0x60,                           // RTBP (Real Time BPR Edit)
+                    (byte)instrument,
+                    (byte)HH,
+                    (byte)LL,
+                    (byte)(byte)name[i],
+                    0,      // checksum
+                    (byte)0xF7 
+                    };
+                data[9] = produceChecksum(data, 5, 9);
+                                
+                obj[i] = data;
+                }
+            return obj;
+            }
+        else
+            {
+            // The parameter numbers are 0...179
+            // corresponding to (I think) bytes 5...184 in the dump
+            int param = ((Integer)(allParametersToIndex.get(key))).intValue();
+            int val = model.get(key);
+                        
+            if (key.equals("osc1octave") || key.equals("osc2octave"))
+                {
+                // handle specially
+                val = (val + 2) * 16;
+                }
+            else if (key.equals("osc1semitone") || key.equals("osc2semitone"))
+                {
+                // handle specially
+                // Range 0...12 maps to 0...96 I think, but the docs say 0...120
+                val = val * 8;
+                }
+            else if (key.equals("wave1volume") || key.equals("wave2volume") || key.equals("noisevolume"))
+                {
+                // handle specially
+                // Range 0...7 maps to 0...112
+                val = val * 16;
+                }
+            else if (key.equals("wave1levelmodifieramount") || key.equals("wave2levelmodifieramount") || key.equals("noiselevelmodifieramount"))
+                {
+                // handle specially
+                // Range -7 ... + 7 maps to 8 ... 120
+                val = (val + 7) * 8 + 8;
+                }
+                        
+            // nybblize param number
+            int HH = (param >>> 4) & 15;
+            int LL = param & 15;
+                        
             byte[] data = new byte[] 
-            	{ 
-            	(byte)0xF0, 
-            	0x3E, 				// Waldorf
-            	0x00,				// Microwave 1 
-            	id,
-            	0x60, 				// RTBP (Real Time BPR Edit)
-            	(byte)instrument,
-            	(byte)HH,
-            	(byte)LL,
-            	(byte)val,
-            	0,	// checksum
-            	(byte)0xF7 
-            	};
+                { 
+                (byte)0xF0, 
+                0x3E,                           // Waldorf
+                0x00,                           // Microwave 1 
+                id,
+                0x60,                           // RTBP (Real Time BPR Edit)
+                (byte)instrument,
+                (byte)HH,
+                (byte)LL,
+                (byte)val,
+                0,      // checksum
+                (byte)0xF7 
+                };
             data[9] = produceChecksum(data, 5, 9);
             
             return new Object[] { data };
-			}
+            }
         }
     
     
@@ -1263,69 +1258,69 @@ public class WaldorfMicrowave extends Synth
         
         byte[] bytes = new byte[187];
         
-        bytes[0] = (byte)0xF0;		
-        bytes[1] = (byte)0x3E;		// Waldorf
-        bytes[2] = (byte)0x00;		// Microwave 1
+        bytes[0] = (byte)0xF0;          
+        bytes[1] = (byte)0x3E;          // Waldorf
+        bytes[2] = (byte)0x00;          // Microwave 1
         bytes[3] = DEV;
-        bytes[4] = (byte)0x42;		// BPRD
-        bytes[184] = (byte)0x55;	// the "Valid" flag
+        bytes[4] = (byte)0x42;          // BPRD
+        bytes[184] = (byte)0x55;        // the "Valid" flag
         bytes[186] = (byte)0xF7;
         
-		char[] name = (model.get("name", "Untitled") + "                ").toCharArray();
+        char[] name = (model.get("name", "Untitled") + "                ").toCharArray();
         
         for(int i = 0; i < allParameters.length; i++)
             {
             String key = allParameters[i];
             int val = model.get(key);
             if (key.equals("-"))
-            	{
-            	val = 0;
-            	}
+                {
+                val = 0;
+                }
             else if (key.equals("name"))
-            	{
-				val = (byte)name[i - 153 + 5];
-            	}
+                {
+                val = (byte)name[i - 153 + 5];
+                }
             else if (key.equals("osc1octave") || key.equals("osc2octave"))
                 {
                 val = (val + 2) * 16;
                 }
-			else if (key.equals("osc1semitone") || key.equals("osc2semitone"))
-				{
-				// handle specially
-				// Range 0...12 maps to 0...96 I think, but the docs say 0...120
-				val = val * 8;
-				}
-			else if (key.equals("wave1volume") || key.equals("wave2volume") || key.equals("noisevolume"))
-				{
-				// handle specially
-				// Range 0...7 maps to 0...112
-				val = val * 16;
-				}
-			else if (key.equals("wave1levelmodifieramount") || key.equals("wave2levelmodifieramount") || key.equals("noiselevelmodifieramount"))
-				{
-				// handle specially
-				// Range -7 ... + 7 maps to 8 ... 120
-				val = (val + 7) * 8 + 8;
-				}
-				
-			bytes[i + 5] = (byte)val;
+            else if (key.equals("osc1semitone") || key.equals("osc2semitone"))
+                {
+                // handle specially
+                // Range 0...12 maps to 0...96 I think, but the docs say 0...120
+                val = val * 8;
+                }
+            else if (key.equals("wave1volume") || key.equals("wave2volume") || key.equals("noisevolume"))
+                {
+                // handle specially
+                // Range 0...7 maps to 0...112
+                val = val * 16;
+                }
+            else if (key.equals("wave1levelmodifieramount") || key.equals("wave2levelmodifieramount") || key.equals("noiselevelmodifieramount"))
+                {
+                // handle specially
+                // Range -7 ... + 7 maps to 8 ... 120
+                val = (val + 7) * 8 + 8;
+                }
+                                
+            bytes[i + 5] = (byte)val;
             }
         
         bytes[185] = produceChecksum(bytes, 5, 185);
         
-		// if we're just doing a send, or writing to a file, return this
-		if (toWorkingMemory || toFile)
-			return new Object[] { bytes };
+        // if we're just doing a send, or writing to a file, return this
+        if (toWorkingMemory || toFile)
+            return new Object[] { bytes };
 
-		// Otherwise we need to build an STRB
-		else
-			{
-			byte instrument = 0;
-			byte[] strb = new byte[] { (byte)0xF0, (byte)0x3E, (byte)0x00, DEV, (byte)0x71,
-				instrument, (byte)(BB * 64 + NN), 0, (byte)0xF7 };
-			strb[7] = produceChecksum(strb, 5, 7);
-			return new Object[] { bytes, strb };
-			}
+        // Otherwise we need to build an STRB
+        else
+            {
+            byte instrument = 0;
+            byte[] strb = new byte[] { (byte)0xF0, (byte)0x3E, (byte)0x00, DEV, (byte)0x71,
+                instrument, (byte)(BB * 64 + NN), 0, (byte)0xF7 };
+            strb[7] = produceChecksum(strb, 5, 7);
+            return new Object[] { bytes, strb };
+            }
         }
 
 
@@ -1334,12 +1329,12 @@ public class WaldorfMicrowave extends Synth
         {
         // From the sysex document:
         //
-		// CHKSUM    : Sum of all data bytes truncated to 7 bits. The addition is done
-		//             in 8 bit format, the result is masked to 7 bits (00h to 7Fh).
-		//             IMPORTANT: The MIDI status bytes as well as the ID's are not
-		//                        used for computing the checksum.
-		//                        If there are no data bytes in the message (simple
-		//                        request), the checksum will always be 00h.
+        // CHKSUM    : Sum of all data bytes truncated to 7 bits. The addition is done
+        //             in 8 bit format, the result is masked to 7 bits (00h to 7Fh).
+        //             IMPORTANT: The MIDI status bytes as well as the ID's are not
+        //                        used for computing the checksum.
+        //                        If there are no data bytes in the message (simple
+        //                        request), the checksum will always be 00h.
 
         byte b = 0;
         for(int i = start; i < end; i++)
@@ -1418,62 +1413,62 @@ public class WaldorfMicrowave extends Synth
         
     
     public void parseParameter(byte[] data)
-    	{
+        {
         if (data.length == 11 &&
             data[0] == (byte)0xF0 &&
             data[1] == (byte)0x3E &&
             data[2] == (byte)0x00 &&
-            data[4] == (byte)0x60)  		// RTBP Real Time BPR Edit          
+            data[4] == (byte)0x60)              // RTBP Real Time BPR Edit          
             {
-    		int param = ((data[6] & 15) << 4) | (data[7] & 15);
+            int param = ((data[6] & 15) << 4) | (data[7] & 15);
             String key = allParameters[param];
             int val = data[8];
             
             if (key.equals("-"))
-            	{
-            	System.err.println("WARNING WaldorfMicrowave.parseParameter(): key was - for param " + param);
-            	return;
-            	}
+                {
+                System.err.println("WARNING WaldorfMicrowave.parseParameter(): key was - for param " + param);
+                return;
+                }
             else if (key.equals("name"))
-            	{
-				char[] name = (model.get("name", "Untitled") + "                ").toCharArray();
-            	name[param - 153 + 5] = (char)val;
-				model.set("name", String.valueOf(name).trim());
-            	}
+                {
+                char[] name = (model.get("name", "Untitled") + "                ").toCharArray();
+                name[param - 153 + 5] = (char)val;
+                model.set("name", String.valueOf(name).trim());
+                }
             else if (key.equals("osc1octave") || key.equals("osc2octave"))
                 {
-    			model.set(key, val/16 - 2);
+                model.set(key, val/16 - 2);
                 }
-			else if (key.equals("osc1semitone") || key.equals("osc2semitone"))
-				{
-    			model.set(key, val/8);
-				}
-			else if (key.equals("wave1volume") || key.equals("wave2volume") || key.equals("noisevolume"))
-				{
-    			model.set(key, val/16);
-				}
-			else if (key.equals("wave1levelmodifieramount") || key.equals("wave2levelmodifieramount") || key.equals("noiselevelmodifieramount"))
-				{
-    			model.set(key, (val - 8) / 8 - 7);
-				}
-			else
-				{
-    			model.set(key, val);
-				}
+            else if (key.equals("osc1semitone") || key.equals("osc2semitone"))
+                {
+                model.set(key, val/8);
+                }
+            else if (key.equals("wave1volume") || key.equals("wave2volume") || key.equals("noisevolume"))
+                {
+                model.set(key, val/16);
+                }
+            else if (key.equals("wave1levelmodifieramount") || key.equals("wave2levelmodifieramount") || key.equals("noiselevelmodifieramount"))
+                {
+                model.set(key, (val - 8) / 8 - 7);
+                }
+            else
+                {
+                model.set(key, val);
+                }
 // should we do this?
-//    		revise();
+//              revise();
             }
-    	}
-    	
+        }
+        
     public int parse(byte[] data, boolean fromFile)
         {
         int index = -1;
         byte b = 0;
                 
-    	if (data.length == 11527)  // bulk
-    		{
-    		// extract names
-            char[][] names = new char[64][16];		// both "banks"
+        if (data.length == 11527)  // bulk
+            {
+            // extract names
+            char[][] names = new char[64][16];          // both "banks"
             for(int i = 0; i < 64; i++)
                 {
                 for (int j = 0; j < 16; j++)
@@ -1486,13 +1481,13 @@ public class WaldorfMicrowave extends Synth
             for(int i = 0; i < 64; i++)
                 {
                 if (i < 32)
-                	{
-                	n[i] = "A" + (i < 9 ? "0" : "") + (i + 1) + "  " + String.valueOf(names[i]);
-                	}
+                    {
+                    n[i] = "A" + (i < 9 ? "0" : "") + (i + 1) + "  " + String.valueOf(names[i]);
+                    }
                 else
-                	{
-                	n[i] = "B" + (i < 41 ? "0" : "") + (i - 32 + 1) + "  " + String.valueOf(names[i]);
-                	}
+                    {
+                    n[i] = "B" + (i < 41 ? "0" : "") + (i - 32 + 1) + "  " + String.valueOf(names[i]);
+                    }
                 }
              
             // Now that we have an array of names, one per patch, we present the user with options;
@@ -1503,62 +1498,66 @@ public class WaldorfMicrowave extends Synth
             int patchNum = showBankSysexOptions(data, n);
             if (patchNum < 0) return PARSE_CANCELLED;
             else return extractPatch(data, 5 + 180 * patchNum, patchNum);
-    		}
-    	else if (data[4] == 0x4B)	// ABPD, includes instrument number which we must skip
-    		return extractPatch(data, 6, -1);
-    	else return extractPatch(data, 5, -1);
-    	}
-    	
-    	
-    	// Extracts a single patch from either single or "bank" patch data
-    	public int extractPatch(byte[] data, int offset, int number)
-    		{
-    		if (number >= 0)	// valid number
-    			{
-    			model.set("bank", number / 32);
-    			model.set("number", number % 32);
-    			}
-    			
-    		char[] name = new char[16];
-    		for(int i = 0; i < 16; i++)
-    			{
-    			name[i] = (char)(data[i + 153 - 5 + offset]);
-    			}
-    		model.set("name", String.valueOf(name).trim());
-    			
-    		for(int i = 0; i < allParameters.length; i++)
-    			{
-				String key = allParameters[i];
-				int val = data[i +  offset];
-				if (key.equals("-"))
-					{
-					continue;
-					}
-				else if (key.equals("name"))
-					{
-					continue;
-					}
-				else if (key.equals("osc1octave") || key.equals("osc2octave"))
-					{
-					model.set(key, val / 16 - 2);
-					}
-				else if (key.equals("osc1semitone") || key.equals("osc2semitone"))
-					{
-					model.set(key, val / 8);
-					}
-				else if (key.equals("wave1volume") || key.equals("wave2volume") || key.equals("noisevolume"))
-					{
-					model.set(key, val / 16);
-					}
-				else if (key.equals("wave1levelmodifieramount") || key.equals("wave2levelmodifieramount") || key.equals("noiselevelmodifieramount"))
-					{
-					model.set(key, (val - 8) / 8 - 7);
-					}
-				else
-					{
-					model.set(key, val);
-					}
-    			}
+            }
+        else if (data[4] == 0x4B)       // ABPD, includes instrument number which we must skip
+            return extractPatch(data, 6, -1);
+        else return extractPatch(data, 5, -1);
+        }
+        
+        
+    // Extracts a single patch from either single or "bank" patch data
+    public int extractPatch(byte[] data, int offset, int number)
+        {
+        if (number >= 0)        // valid number
+            {
+            model.set("bank", number / 32);
+            model.set("number", number % 32);
+            }
+        else
+            {
+            number = 0;             // number offset of -1 needs to be changed to 0
+            }
+                        
+        char[] name = new char[16];
+        for(int i = 0; i < 16; i++)
+            {
+            name[i] = (char)(data[i + 180 * number + 153 - 5 + offset]);
+            }
+        model.set("name", String.valueOf(name).trim());
+                        
+        for(int i = 0; i < allParameters.length; i++)
+            {
+            String key = allParameters[i];
+            int val = data[i + 180 * number + offset];
+            if (key.equals("-"))
+                {
+                continue;
+                }
+            else if (key.equals("name"))
+                {
+                continue;
+                }
+            else if (key.equals("osc1octave") || key.equals("osc2octave"))
+                {
+                model.set(key, val / 16 - 2);
+                }
+            else if (key.equals("osc1semitone") || key.equals("osc2semitone"))
+                {
+                model.set(key, val / 8);
+                }
+            else if (key.equals("wave1volume") || key.equals("wave2volume") || key.equals("noisevolume"))
+                {
+                model.set(key, val / 16);
+                }
+            else if (key.equals("wave1levelmodifieramount") || key.equals("wave2levelmodifieramount") || key.equals("noiselevelmodifieramount"))
+                {
+                model.set(key, (val - 8) / 8 - 7);
+                }
+            else
+                {
+                model.set(key, val);
+                }
+            }
         revise();
         return PARSE_SUCCEEDED;     
         }
@@ -1625,6 +1624,14 @@ public class WaldorfMicrowave extends Synth
 
 
 
+    public boolean testVerify(Synth synth2, String key, Object obj1, Object obj2)
+        {
+        // we allow names that are padded with whitespace
+        if (key.equals("name")) return true;
+        return false;
+        }
+
+
 
 // Librarian Support
     public String[] getBankNames() { return BANKS; }
@@ -1634,38 +1641,42 @@ public class WaldorfMicrowave extends Synth
     // we write both banks in the same message.  We're not going to permit that.
     public boolean getSupportsPatchWrites() { return true; }
     public int getPatchNameLength() { return 16; }
-	public int parseFromBank(byte[] bankSysex, int number) 
-		{ 
-		return extractPatch(bankSysex, 5 + 180 * number, number);
-		}
-	public int[] getBanks(byte[] bankSysex) { return new int[] { 0, 1 }; }
-		
+    public int parseFromBank(byte[] bankSysex, int number) 
+        { 
+        return extractPatch(bankSysex, 5 + 180 * number, number);
+        }
+    public int[] getBanks(byte[] bankSysex) { return new int[] { 0, 1 }; }
+                
     public byte[] requestAllDump() 
         { 
         return new byte[] 
-        	{ 
-			(byte)0xF0, 
-			0x3E, 				// Waldorf
-			0x00,				// Microwave 1 
-			(byte)getID(),
-			0x10, 				// BPBR (Sound Program (BPR) Bank Dump Request)
-			0,	// checksum
-			(byte)0xF7
-			};
-		}
+            { 
+            (byte)0xF0, 
+            0x3E,                           // Waldorf
+            0x00,                           // Microwave 1 
+            (byte)getID(),
+            0x10,                           // BPBR (Sound Program (BPR) Bank Dump Request)
+            0,      // checksum
+            (byte)0xF7
+            };
+        }
 
     public boolean librarianTested() { return true; }
+
+
+
+
     }
 
 
 
 
 /*
-Notes
+  Notes
 
-SEMITONE
-	"6     Osc 1 Semitone (0...120, 1 Semitone equals a value of 8)"
-	However the manual says semitone goes 0...12.  12*8 is not 120.  What?
-	For the moment I am assuming that semitone only goes to 96.
-	
+  SEMITONE
+  "6     Osc 1 Semitone (0...120, 1 Semitone equals a value of 8)"
+  However the manual says semitone goes 0...12.  12*8 is not 120.  What?
+  For the moment I am assuming that semitone only goes to 96.
+        
 */

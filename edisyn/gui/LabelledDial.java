@@ -302,9 +302,9 @@ public class LabelledDial extends NumericalComponent
                 }
             
             if (proposedState < min)
-            	proposedState = min;
+                proposedState = min;
             else if (proposedState > max)
-            	proposedState = max;
+                proposedState = max;
             return proposedState;
             }
                 

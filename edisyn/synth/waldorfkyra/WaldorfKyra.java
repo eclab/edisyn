@@ -112,7 +112,7 @@ public class WaldorfKyra extends Synth
         "LFO 2 Delay", "LFO 3 Rate", 
         "EQ Mid Gain", "EQ Mid Frequency", 
         "Distortion Mix", "Distortion Drive",
-    	"Formant Filter Gain", "Formant Filter Tune",  
+        "Formant Filter Gain", "Formant Filter Tune",  
         "Delay Mix", "Delay Delay ", "Delay Feedback", 
         "Phaser Mix", "Phaser Feedback", "Phaser Modulation Rate", "Phaser Modulation Depth", "Phaser Frequency", 
         "Chorus Mix", "Chorus Delay", "Chorus Feedback", 
@@ -662,12 +662,12 @@ public class WaldorfKyra extends Synth
 
         // the tempo goes 58...185, and sysex goes 0...127 but the documentation suggests 0...117 which makes no sense
         comp = new LabelledDial("Tempo", this, "arptempo", color, 0, 127)
-        	{
-        	public String map(int value)
-        		{
-        		return "" + (value + 58);
-        		}
-        	};
+            {
+            public String map(int value)
+                {
+                return "" + (value + 58);
+                }
+            };
         hbox.add(comp);
 
         category.add(hbox, BorderLayout.CENTER);
@@ -1481,7 +1481,7 @@ public class WaldorfKyra extends Synth
         return frame;
         }
 
-	JCheckBoxMenuItem[] partMenu = new JCheckBoxMenuItem[8];
+    JCheckBoxMenuItem[] partMenu = new JCheckBoxMenuItem[8];
 
     public void addKyraMenu()
         {
@@ -1532,46 +1532,46 @@ public class WaldorfKyra extends Synth
         
 
         menu.addSeparator();
-		ButtonGroup buttonGroup = new ButtonGroup();
+        ButtonGroup buttonGroup = new ButtonGroup();
         for(int i = 0; i < 8; i++)
-        	{
-        	final int _i = i;
-        	partMenu[i] = new JCheckBoxMenuItem("Send to Part " + (i + 1) + " as Current Patch");
-        	if (i == 0) partMenu[i].setSelected(true);
-        	partMenu[i].addActionListener(new ActionListener()
-        		{
-            	public void actionPerformed(ActionEvent e)
-                	{
-                	currentPart = _i;
-                	updateCurrentPart();
-                	}
-        		});
-        	buttonGroup.add(partMenu[i]);
-        	menu.add(partMenu[i]);
-        	}
+            {
+            final int _i = i;
+            partMenu[i] = new JCheckBoxMenuItem("Send to Part " + (i + 1) + " as Current Patch");
+            if (i == 0) partMenu[i].setSelected(true);
+            partMenu[i].addActionListener(new ActionListener()
+                {
+                public void actionPerformed(ActionEvent e)
+                    {
+                    currentPart = _i;
+                    updateCurrentPart();
+                    }
+                });
+            buttonGroup.add(partMenu[i]);
+            menu.add(partMenu[i]);
+            }
         }
       
     void setPart(int part)
-    	{
-    	partMenu[part].setSelected(true);
-		currentPart = part;
-		updateCurrentPart();
-    	}
-    	
-	void updateCurrentPart()
-		{
-		tryToSendSysex(new byte[]
-			{
-			(byte)0xF0,
-			(byte)0x3E,
-			(byte)0x22,
-			(byte)getID(),
-			(byte)0x13,
-			0, 0, 0,
-			(byte)currentPart,
-			(byte)0xF7,
-			});
-		}
+        {
+        partMenu[part].setSelected(true);
+        currentPart = part;
+        updateCurrentPart();
+        }
+        
+    void updateCurrentPart()
+        {
+        tryToSendSysex(new byte[]
+            {
+            (byte)0xF0,
+            (byte)0x3E,
+            (byte)0x22,
+            (byte)getID(),
+            (byte)0x13,
+            0, 0, 0,
+            (byte)currentPart,
+            (byte)0xF7,
+            });
+        }
         
     public Object[] getMPEForPatch(int bank, int number, int multinumber, String name)
         {
@@ -1907,28 +1907,28 @@ public class WaldorfKyra extends Synth
         data[data.length - 2] = (byte)(checksum & 127);
         data[data.length - 1] = (byte)0xF7;
         
-        if (toWorkingMemory)	// need to change current part to working memory
-        	{
-        	return new Object[] 
-        		{
-        		new byte[]
-        			{
-					(byte)0xF0,
-					(byte)0x3E,
-					(byte)0x22,
-					(byte)getID(),
-					(byte)0x13,
-					0, 0, 0,
-					(byte)currentPart,
-					(byte)0xF7,
-					},
-				data
-				};
-        	}
+        if (toWorkingMemory)    // need to change current part to working memory
+            {
+            return new Object[] 
+                {
+                new byte[]
+                    {
+                    (byte)0xF0,
+                    (byte)0x3E,
+                    (byte)0x22,
+                    (byte)getID(),
+                    (byte)0x13,
+                    0, 0, 0,
+                    (byte)currentPart,
+                    (byte)0xF7,
+                    },
+                data
+                };
+            }
         else
-        	{
-	        return new Object[] { data };
-	        }
+            {
+            return new Object[] { data };
+            }
         }
 
     public void parseParameter(byte[] data)
@@ -2309,7 +2309,7 @@ public class WaldorfKyra extends Synth
 
     public boolean[] getWriteableBanks() 
         { 
-        return buildBankBooleans(7, 19, 0); 		// first 7 banks are writeable, remaining 19 are not
+        return buildBankBooleans(7, 19, 0);             // first 7 banks are writeable, remaining 19 are not
         }
 
     public String[] getBankNames() { return BANKS; }
@@ -2365,11 +2365,11 @@ public class WaldorfKyra extends Synth
      20              Request Single patch
      01              Version 1       [current as of September 2021]
      [MSB]           Bank number as follows:
-                     (Current Working Patch): MSB = 0x7E
-                     (Patch in Memory): MSB = 0 ... 25		(represents banks A ... Z)           
+     (Current Working Patch): MSB = 0x7E
+     (Patch in Memory): MSB = 0 ... 25          (represents banks A ... Z)           
      [LSB]           Patch number as follows:
-                     (Current Working Patch): LSB = part, or 0x7F (current part)
-                     (Patch in Memory): MSB = patch number          
+     (Current Working Patch): LSB = part, or 0x7F (current part)
+     (Patch in Memory): MSB = patch number          
      F7
 
      SEND ONE PARAMETER TO EDIT BUFFER
@@ -2764,7 +2764,7 @@ public class WaldorfKyra extends Synth
      71   14        Violin
      
      NOTE: These waves are directly from the AdventureKid waveform collection
-           https://www.adventurekid.se/AKRTfiles/AKWF/view/waveforms_index.html
+     https://www.adventurekid.se/AKRTfiles/AKWF/view/waveforms_index.html
      
      
      

@@ -672,9 +672,9 @@ public class CasioCZ extends Synth
     public static final int MIDI_PAUSE = 200;
         
     public int getPauseAfterChangePatch()
-    	{
-    	return MIDI_PAUSE;
-    	}
+        {
+        return MIDI_PAUSE;
+        }
 
     public int unnybblize(byte lsb, byte msb)
         {
@@ -1502,17 +1502,17 @@ public class CasioCZ extends Synth
             return new Object[] { data };
             }
         /*
-        else
-            {
-            // break up
-            byte[] header = new byte[7];
-            System.arraycopy(data, 0, header, 0, header.length);
-            byte[] main = new byte[isCZ1() ? 144 * 2 + 1 : 128 * 2 + 1];
-            System.arraycopy(data, 7, main, 0, main.length);
-            main[main.length - 1] = (byte)0xF7;
-            MidiMessage[] syx = DividedSysex.create(new byte[][] { header, main });
-            return new Object[] { syx[0], new Integer(MIDI_PAUSE), syx[1], new Integer(MIDI_PAUSE) }; 
-            }
+          else
+          {
+          // break up
+          byte[] header = new byte[7];
+          System.arraycopy(data, 0, header, 0, header.length);
+          byte[] main = new byte[isCZ1() ? 144 * 2 + 1 : 128 * 2 + 1];
+          System.arraycopy(data, 7, main, 0, main.length);
+          main[main.length - 1] = (byte)0xF7;
+          MidiMessage[] syx = DividedSysex.create(new byte[][] { header, main });
+          return new Object[] { syx[0], new Integer(MIDI_PAUSE), syx[1], new Integer(MIDI_PAUSE) }; 
+          }
         */
         }
 
@@ -1527,26 +1527,26 @@ public class CasioCZ extends Synth
         
         byte cz1 = (byte)(isCZ1() ? 0x11 : 0x10);
         byte chan = (byte)(0x70 | getChannelOut());
-		Object[] data = new Object[]
-			{
-			new byte[] { (byte)0xF0, 0x44, 0x00, 0x00, chan, cz1, 0x60, chan, 0x31, (byte)0xF7 }
-			};
+        Object[] data = new Object[]
+            {
+            new byte[] { (byte)0xF0, 0x44, 0x00, 0x00, chan, cz1, 0x60, chan, 0x31, (byte)0xF7 }
+            };
 /*        
-		Object[] data = new Object[3];
-        MidiMessage[] div = DividedSysex.create(new byte[][] 
-        	{
-        	{ (byte)0xF0, 0x44, 0x00, 0x00, chan, cz1, 0x60 },
- 			{ chan, 0x31 }, 
- 			{ (byte)0xF7 }
-         	});
-         	
-        data[0] = div[0];
-        data[1] = new Integer(MIDI_PAUSE);
-        data[2] = div[1];
-        // Never send this last one, it triggers a crash in Windows and Linux
-		//data[3] = new Integer(MIDI_PAUSE);
-        //data[4] = div[2];
-*/
+          Object[] data = new Object[3];
+          MidiMessage[] div = DividedSysex.create(new byte[][] 
+          {
+          { (byte)0xF0, 0x44, 0x00, 0x00, chan, cz1, 0x60 },
+          { chan, 0x31 }, 
+          { (byte)0xF7 }
+          });
+                
+          data[0] = div[0];
+          data[1] = new Integer(MIDI_PAUSE);
+          data[2] = div[1];
+          // Never send this last one, it triggers a crash in Windows and Linux
+          //data[3] = new Integer(MIDI_PAUSE);
+          //data[4] = div[2];
+          */
 
         tryToSendMIDI(data);
         }
@@ -1575,26 +1575,26 @@ public class CasioCZ extends Synth
         byte location = (byte)(bank * 8 + number);
 
 /*        
-        Object[] data = new Object[3];
-        MidiMessage[] div = DividedSysex.create(new byte[][] 
-        	{
-        	{ (byte)0xF0, 0x44, 0x00, 0x00, chan, cz1, location },
- 			{ chan, 0x31 }, 
- 			{ (byte)0xF7 }
-         	});
+          Object[] data = new Object[3];
+          MidiMessage[] div = DividedSysex.create(new byte[][] 
+          {
+          { (byte)0xF0, 0x44, 0x00, 0x00, chan, cz1, location },
+          { chan, 0x31 }, 
+          { (byte)0xF7 }
+          });
 
-        data[0] = div[0];
-        data[1] = new Integer(MIDI_PAUSE);
-        data[2] = div[1];
-        // Never send this last one, it triggers a crash in Windows and Linux
-		//data[3] = new Integer(MIDI_PAUSE);
-        //data[4] = div[2];
-*/
+          data[0] = div[0];
+          data[1] = new Integer(MIDI_PAUSE);
+          data[2] = div[1];
+          // Never send this last one, it triggers a crash in Windows and Linux
+          //data[3] = new Integer(MIDI_PAUSE);
+          //data[4] = div[2];
+          */
 
-		Object[] data = new Object[]
-			{
-			new byte[] {(byte)0xF0, 0x44, 0x00, 0x00, chan, cz1, location, chan, 0x31, (byte)0xF7 }
-			};
+        Object[] data = new Object[]
+            {
+            new byte[] {(byte)0xF0, 0x44, 0x00, 0x00, chan, cz1, location, chan, 0x31, (byte)0xF7 }
+            };
 
         tryToSendMIDI (data);
         }

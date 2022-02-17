@@ -1919,7 +1919,7 @@ public abstract class Synth extends JComponent implements Updatable
             midiPause(getNanoPauseBetweenMIDISends());
                                         
             try 
-            	{ 
+                { 
                 SysexMessage message = new SysexMessage(data, data.length);
                 synchronized(midiSendLock)
                     {
@@ -5857,7 +5857,7 @@ public abstract class Synth extends JComponent implements Updatable
     public void doNewSynth(int synth)
         {
         String[] synthNames = getSynthNames();
-        instantiate(getSynth(synth), false, true, null); 	// tuple);
+        instantiate(getSynth(synth), false, true, null);        // tuple);
         }
                 
     Synth doDuplicateSynth()
@@ -7241,10 +7241,10 @@ public abstract class Synth extends JComponent implements Updatable
         librarian.pushUndo();
                                                         
         // I think we should clear the librarian first
-		int res = showMultiOption(this, new String[0], new JComponent[0], 
-			new String[] { "Clear", "Overwrite", "Cancel" }, 0, "Load Patches", 
-			new JLabel("Clear all existing patches, or overwrite them as needed with new ones?"));
-		if (res < 0 || res == 2) return;
+        int res = showMultiOption(this, new String[0], new JComponent[0], 
+            new String[] { "Clear", "Overwrite", "Cancel" }, 0, "Load Patches", 
+            new JLabel("Clear all existing patches, or overwrite them as needed with new ones?"));
+        if (res < 0 || res == 2) return;
         
         if (res == 0) librarian.clearAll(false);
 
@@ -9077,11 +9077,11 @@ public abstract class Synth extends JComponent implements Updatable
         You can override this or getBank() but not both.    If you're choosing, you'll usually
         need to chooes getBank(...) */
     public int[] getBanks(byte[] bankSysex) 
-    	{
-    	int val = getBank(bankSysex);
-    	if (val == -1) return null;
-    	else return new int[] { val };
-    	}
+        {
+        int val = getBank(bankSysex);
+        if (val == -1) return null;
+        else return new int[] { val };
+        }
 
     /** Emits the models as a bank.  The bank number is provided if necessary. By default does nothing. */
     public Object[] emitBank(Model[] models, int bank, boolean toFile) { return new Object[0]; }
@@ -9117,6 +9117,6 @@ public abstract class Synth extends JComponent implements Updatable
     public boolean getUpdatesListenersOnDownload() { return true; } 
     
     /** Return true if the librarian has been adequately tested for this editor.  
-    	Otherwise Edisyn will add  */
+        Otherwise Edisyn will add  */
     public boolean librarianTested() { return false; }
     }

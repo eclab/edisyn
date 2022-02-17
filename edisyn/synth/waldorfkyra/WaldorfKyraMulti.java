@@ -876,7 +876,7 @@ public class WaldorfKyraMulti extends Synth
      NOTE: "Multi Program Change" must be ON
      NOTE: A multimode patch change requires at least 200ms pause afterwards
      NOTE: There exists a sysex command (0x14) which notionally sets the current Multi patch.
-           However it does not appear to work.
+     However it does not appear to work.
         
      REQUEST WHICH MULTIMODE PATCH IS LOADED 
      F0

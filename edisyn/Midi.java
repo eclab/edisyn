@@ -151,7 +151,7 @@ public class Midi
             return true;
             }
 
-         public boolean removeFromTransmitter(Receiver receiver) 
+        public boolean removeFromTransmitter(Receiver receiver) 
             {
             if (in == null) 
                 {
@@ -174,7 +174,7 @@ public class Midi
             return true;
             }
 
-       public boolean removeAllFromTransmitter() 
+        public boolean removeAllFromTransmitter() 
             {
             if (in == null) 
                 {
@@ -196,7 +196,7 @@ public class Midi
             return true;
             }
 
-       /** 
+        /** 
             You provide a Receiver to solely attach to the Transmitter.  Returns true if successful
         */
         public boolean connectToTransmitter(Receiver receiver) 
@@ -634,27 +634,27 @@ public class Midi
 
 
 
-			//// FIXME: If you (1) create a synth connected to MidiKeys as the Key receiver
-			//// (2) make another synth with the same
-			///  then the first synth is disconnected from the key receiver
-			
-			
-			
-			
-			
-			
+                //// FIXME: If you (1) create a synth connected to MidiKeys as the Key receiver
+                //// (2) make another synth with the same
+                ///  then the first synth is disconnected from the key receiver
+                        
+                        
+                        
+                        
+                        
+                        
 
-				// first we delete all the existing receiving device connections.
-				// This is redundant to some degree
-				if (old != null && removeReceiversFromOldTuple)
-					{
-                	if (old.inWrap != null) old.inWrap.removeFromTransmitter(old.inReceiver);
-                	if (old.keyWrap != null) old.keyWrap.removeFromTransmitter(old.keyReceiver);
-                	if (old.key2Wrap != null) old.key2Wrap.removeFromTransmitter(old.key2Receiver);
-					}
-				
-				// now we reestablish them
-				tuple.inReceiver = inReceiver;
+                // first we delete all the existing receiving device connections.
+                // This is redundant to some degree
+                if (old != null && removeReceiversFromOldTuple)
+                    {
+                    if (old.inWrap != null) old.inWrap.removeFromTransmitter(old.inReceiver);
+                    if (old.keyWrap != null) old.keyWrap.removeFromTransmitter(old.keyReceiver);
+                    if (old.key2Wrap != null) old.key2Wrap.removeFromTransmitter(old.key2Receiver);
+                    }
+                                
+                // now we reestablish them
+                tuple.inReceiver = inReceiver;
                 tuple.inWrap = ((MidiDeviceWrapper)(inCombo.getSelectedItem()));
                 if (!tuple.inWrap.addToTransmitter(inReceiver))
                     {
@@ -667,7 +667,7 @@ public class Midi
                     }
                 else
                     {
-					tuple.keyReceiver = keyReceiver;
+                    tuple.keyReceiver = keyReceiver;
                     tuple.keyWrap = ((MidiDeviceWrapper)(keyCombo.getSelectedItem()));
                     if (!tuple.keyWrap.addToTransmitter(keyReceiver))
                         {
@@ -682,7 +682,7 @@ public class Midi
                     }
                 else
                     {
-					tuple.key2Receiver = key2Receiver;
+                    tuple.key2Receiver = key2Receiver;
                     tuple.key2Wrap = ((MidiDeviceWrapper)(key2Combo.getSelectedItem()));
                     if (!tuple.key2Wrap.addToTransmitter(key2Receiver))
                         {
@@ -1067,13 +1067,13 @@ public class Midi
         else if (message instanceof SysexMessage)
             {
             if (((SysexMessage)message).getMessage()[0] == 0xF0)  // First one
-            	{
-	            return "Sysex (" + getManufacturerForSysex(((SysexMessage)message).getData()) + ")";
-	            }
-	        else
-	        	{
-	            return "Sysex Fragment";
-	            }
+                {
+                return "Sysex (" + getManufacturerForSysex(((SysexMessage)message).getData()) + ")";
+                }
+            else
+                {
+                return "Sysex Fragment";
+                }
             }
         else // ShortMessage
             {

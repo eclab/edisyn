@@ -496,40 +496,40 @@ public class Library extends AbstractTableModel
         
         synth.getModel().setUpdateListeners(false);
         
-		boolean showed = false;
+        boolean showed = false;
         for(int b = 0; b < banks.length ; b++)
-        	{
-        	int bank = banks[b];		
-			for(int i = 0; i < getBankSize(); i++)
-				{
-				int result = synth.parseFromBank(incoming, i);
-				if (result == Synth.PARSE_FAILED)
-					{
-					if (!showed)
-						{
-						synth.showSimpleError("Bad Patches in Bank", "This file has a bank with bad patches.  They will be replaced with blanks.");
-						showed = true;
-						}
-					patches[bank + 1][i] = new Patch(initPatch);
-					}
-				else
-					{
-					// force the location to be correct
-					if (hasBanks)
-						{
-						location.set("bank", bank);
-						}
-					location.set("number", i);
-					String name = synth.getModel().get("name","" + synth.getPatchLocationName(synth.getModel()));
-					//byte[][] data = synth.cutUpSysex(synth.flatten(synth.emitAll(location, false, true)));          // I guess to a file so it doesn't try NRPN?
-					byte[][] data = synth.extractSysex(synth.emitAll(location, false, true));          // I guess to a file so it doesn't try NRPN?
-					Patch patch = new Patch(synthNum, data, false);
-					patch.name = name;
-					patch.bank = bank;
-					patch.number = i;
-					patches[bank + 1][i] = patch;
-					}
-				}
+            {
+            int bank = banks[b];            
+            for(int i = 0; i < getBankSize(); i++)
+                {
+                int result = synth.parseFromBank(incoming, i);
+                if (result == Synth.PARSE_FAILED)
+                    {
+                    if (!showed)
+                        {
+                        synth.showSimpleError("Bad Patches in Bank", "This file has a bank with bad patches.  They will be replaced with blanks.");
+                        showed = true;
+                        }
+                    patches[bank + 1][i] = new Patch(initPatch);
+                    }
+                else
+                    {
+                    // force the location to be correct
+                    if (hasBanks)
+                        {
+                        location.set("bank", bank);
+                        }
+                    location.set("number", i);
+                    String name = synth.getModel().get("name","" + synth.getPatchLocationName(synth.getModel()));
+                    //byte[][] data = synth.cutUpSysex(synth.flatten(synth.emitAll(location, false, true)));          // I guess to a file so it doesn't try NRPN?
+                    byte[][] data = synth.extractSysex(synth.emitAll(location, false, true));          // I guess to a file so it doesn't try NRPN?
+                    Patch patch = new Patch(synthNum, data, false);
+                    patch.name = name;
+                    patch.bank = bank;
+                    patch.number = i;
+                    patches[bank + 1][i] = patch;
+                    }
+                }
             }
         synth.getModel().setUpdateListeners(true);
         

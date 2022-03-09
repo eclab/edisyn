@@ -1133,7 +1133,7 @@ public class Model implements Cloneable
             if (getStatus(keys[i]) == STATUS_IMMUTABLE || getStatus(keys[i]) == STATUS_RESTRICTED || isString(keys[i])) continue;
             if (minExists(keys[i]) && maxExists(keys[i]) && getMin(keys[i]) >= getMax(keys[i]))  continue;  // no range
 
-            if ((model == null || get(keys[i], 0) == model.get(keys[i])) && fleeIfSame)
+            if (model == null || (get(keys[i], 0) == model.get(keys[i]) && fleeIfSame))
                 {
                 // need to flee.  First: are we metric?
                 if (metricMinExists(keys[i]) &&

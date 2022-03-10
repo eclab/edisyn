@@ -140,7 +140,7 @@ public class Yamaha4Op extends Synth
     public static final String[] POLY_MODES = new String[] { "Poly 1", "Poly 2", "Solo 1", "Solo 2" };
     public static final String[] OUT_SELECTS = new String[] { "A", "B", "C", "D", "E", "F", "G", "H" };
     public static final String[] WHEEL_ASSIGNMENTS = new String[] { "Vibrato", "LFO", "Filter" };
-    public static final String[] EFFECTS = new String[] { "Reverb - Hall", "Reverb - Room", "Reverb - Plate", "Delay", "Delay - Left/Right", "Stereo Echo", "Distortion + Reverb", "Distortion + Echo", "Gated Reverb", "Reverse Gate" };
+    public static final String[] EFFECTS = new String[] { "Off", "Reverb - Hall", "Reverb - Room", "Reverb - Plate", "Delay", "Delay - Left/Right", "Stereo Echo", "Distortion + Reverb", "Distortion + Echo", "Gated Reverb", "Reverse Gate" };
 
     public static final String[] V50_EFFECTS = new String[] 
     { 
@@ -734,7 +734,16 @@ public class Yamaha4Op extends Synth
         vbox.add(comp);
         hbox.add(vbox);
                 
-        comp = new LabelledDial("Time [>]", this, "effecttime", color, 0, 40);
+        final JLabel[] lab = new JLabel[1];
+        comp = new LabelledDial("     Time [>]     ", this, "effecttime", color, 0, 75)
+        	{
+            public void update(String key, Model model)
+                {
+                super.update(key, model);
+				if (lab[0] != null) lab[0].setText(model.get(key) < 41 ? "                     " : " (Delay/Echo) ");
+                }
+        	};
+        lab[0] = ((LabelledDial)comp).addAdditionalLabel(" ");
         hbox.add(comp);
 
         comp = new LabelledDial("Balance [>]", this, "effectbalance", color, 0, 99);
@@ -1648,8 +1657,9 @@ public class Yamaha4Op extends Synth
             int index = ((Integer)(efedsParametersToIndex.get(key))).intValue();
             int value = model.get(key);
             
-            byte PP = (byte) index;
+            byte PP = (byte) (index + 4);
             byte VV = (byte) value;
+//            if (key.equals("effectpreset")) VV = (byte)(VV + 1);					   		// 0...9 -> 1...10
             byte[] data = new byte[] { (byte)0xF0, 0x43, channel, EFEDS_GROUP, PP, VV, (byte)0xF7 };
             return new Object[] { data };
             }
@@ -1908,10 +1918,16 @@ public class Yamaha4Op extends Synth
                 {
                 byte val = data[offset + i + 16];
                                 
-                if (efedsParameters[i].equals("-"))
+                if (efedsParameters[i].equals("-"))									// never happens
                     continue;
                 else
                     {
+                	/*
+                	if (efedsParameters[i].equals("effectpreset"))
+                    	{
+                    	val = (byte)(val - 1);											// 1...10 -> 0...9
+                    	}
+                    */
                     model.set(efedsParameters[i], val);
                     }
                 }
@@ -2082,9 +2098,10 @@ public class Yamaha4Op extends Synth
 
         pos = 0;        // reset, we're now doing EFEDS
         // Effect Preset Number
-        model.set(efedsParameters[pos++], data[patch + 91 + 6] & 15);        
+        // model.set(efedsParameters[pos++], data[patch + 91 + 6] & 15 - 1);   	// 1...10 -> 0...9     
+        model.set(efedsParameters[pos++], data[patch + 91 + 6] & 15);   		   
         // Effect Time
-        model.set(efedsParameters[pos++], data[patch + 92 + 6] & 63);
+        model.set(efedsParameters[pos++], data[patch + 92 + 6] & 127);			// could go clear to 75
         // Effect Balance
         model.set(efedsParameters[pos++], data[patch + 93 + 6] & 127);
                 
@@ -2097,7 +2114,7 @@ public class Yamaha4Op extends Synth
         // V Out Level
         model.set(aced3Parameters[pos++], data[patch + 96 + 6] & 127);          // 0...100        
         // V Effect Stereo Mix
-        model.set(aced3Parameters[pos++], data[patch + 97 + 6] & 1);                    // 0...1        
+        model.set(aced3Parameters[pos++], data[patch + 97 + 6] & 1);            // 0...1        
         // V Param 1
         model.set(aced3Parameters[pos++], data[patch + 98 + 6] & 127);          // 0...75     
         // V Param 2
@@ -2306,9 +2323,10 @@ public class Yamaha4Op extends Synth
 
             pos = 0;        // reset, we're now doing EFEDS
             // Effect Preset Number
-            data[patch + 91 + 6] = (byte) (models[number].get(efedsParameters[pos++]) & 15);        
+//            data[patch + 91 + 6] = (byte) (models[number].get(efedsParameters[pos++] + 1) & 15);       // 0...9 -> 1...10
+            data[patch + 91 + 6] = (byte) (models[number].get(efedsParameters[pos++]) & 15);
             // Effect Time
-            data[patch + 92 + 6] = (byte) (models[number].get(efedsParameters[pos++]) & 63);
+            data[patch + 92 + 6] = (byte) (models[number].get(efedsParameters[pos++]) & 127);			// could go clear to 75
             // Effect Balance
             data[patch + 93 + 6] = (byte) (models[number].get(efedsParameters[pos++]) & 127);
                                 
@@ -2409,7 +2427,14 @@ public class Yamaha4Op extends Synth
                 
             for(int i = 0; i < efedsParameters.length; i++)
                 {
-                data[i + 10] = (byte)(model.get(efedsParameters[i]));
+                //if (efedsParameters[i].equals("effectpreset"))
+                //	{
+                //	data[i + 10] = (byte)(model.get(efedsParameters[i]) + 1);		  		// 0...9 -> 1...10
+                //	}
+                //else
+                //	{
+	                data[i + 10] = (byte)(model.get(efedsParameters[i]));
+	            //  }
                 }
 
             result[0][0] = (byte)0xF0;

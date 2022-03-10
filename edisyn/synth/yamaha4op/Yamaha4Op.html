@@ -29,6 +29,12 @@ The 4-Op synthesizers differ from one another in how their memory is organized (
 
 <p>It's also important to set the right synthesizer type before uploading or saving a patch, particularly if you have the V50; or otherwise not all patch information may be uploaded or saved.
 
+<br><br><h3>About the TQ-5, YS100, YS200 and B200</h3>
+
+These units have their own special effects units.  Some effects have legal time values from 0 to 40.  Others (echoes and delays) extend these time values from 0 to 75.  Edisyn does not try to change the bounds of the values depending on the effect you have chosen: instead if you choose a value from 41 to 75, Edisyn will display a little statement that this is for echoes and delays only.  
+
+<p>Additionally, there is one special effect that is not available from the front panel, but is available over sysex: <b>OFF!</b>  Incredibly this is only an option over sysex.  Don't ask.
+
 <br><br><h3>About the V50</h3>
 
 The V50 editor is not completed yet, and is in a partial state.  In particular, if you Shift to Hi, the Frequency Ratio and Frequency Ratio Fine knobs won't display the proper frequencies (because I don't have that data yet).  However, if you change the knobs, they'll affect the Hi parameters appropriately.
@@ -91,7 +97,7 @@ The TX81Z can store microtuning information from the user, and it also has sever
 
 <br><br><h3>Thanks</h3>
 
-Thanks to Matt Gregory (mgregory22@gmail.com) for his considerable help in debugging this patch editor.  Thanks also to Jesse Guessford and the GMU School of Music.  And thanks to Thor Zollinger (thor276@cableone.net) for his help in getting the DX11 editor working properly.  Finally, thanks to Jay Lifton (jay@jaylifton.com) for help on the V50.
+Thanks to Matt Gregory (mgregory22@gmail.com) for his considerable help in debugging this patch editor.  Thanks also to Jesse Guessford and the GMU School of Music.  And thanks to Thor Zollinger (thor276@cableone.net) for his help in getting the DX11 editor working properly.  Thanks to Vasilis (kasiofz@gmail.com) for reporting and testing bugs in the TQ-5.  Finally, thanks to Jay Lifton (jay@jaylifton.com) for help on the V50.
 
 <p><table border=0 cellpadding=0 cellspacing=5>
 <tr>

@@ -1126,6 +1126,9 @@ public class RolandJV880Multi extends Synth
         }
 
 
+	// We have to force a change patch always because we're doing the equivalent of requestCurrentDump here
+	public boolean getAlwaysChangesPatchesOnRequestDump() { return true; }
+
     public byte[] requestDump(Model tempModel)
         {
         model.set("number", tempModel.get("number"));

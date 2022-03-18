@@ -1373,4 +1373,6 @@ public class EmuMorpheusMap extends Synth
     public boolean getSupportsPatchWrites() { return true; }
 
     public int getPatchNameLength() { return 12; }
+
+    public boolean getSendsAllParametersAsDump() { return false; }
     }

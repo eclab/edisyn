@@ -1283,8 +1283,8 @@ public class DSITetraCombo extends Synth
     "layer1clockdivide",    
     "layer1pitchbendrange",    
     "layer1sequencertrigger",    
-    "layer1unisonmode",    
     "layer1unisonkeymode",    
+    "layer1unisonmode",    
     "layer1arpeggiatormode",    
 
     "layer1env3repeat",    
@@ -1509,8 +1509,8 @@ public class DSITetraCombo extends Synth
     "layer2clockdivide",    
     "layer2pitchbendrange",    
     "layer2sequencertrigger",    
-    "layer2unisonmode",    
     "layer2unisonkeymode",    
+    "layer2unisonmode",    
     "layer2arpeggiatormode",    
 
     "layer2env3repeat",    
@@ -1735,8 +1735,8 @@ public class DSITetraCombo extends Synth
     "layer3clockdivide",    
     "layer3pitchbendrange",    
     "layer3sequencertrigger",    
-    "layer3unisonmode",    
     "layer3unisonkeymode",    
+    "layer3unisonmode",    
     "layer3arpeggiatormode",    
 
     "layer3env3repeat",    
@@ -1962,8 +1962,8 @@ public class DSITetraCombo extends Synth
     "layer4clockdivide",    
     "layer4pitchbendrange",    
     "layer4sequencertrigger",    
-    "layer4unisonmode",    
     "layer4unisonkeymode",    
+    "layer4unisonmode",    
     "layer4arpeggiatormode",    
 
     "layer4env3repeat",    

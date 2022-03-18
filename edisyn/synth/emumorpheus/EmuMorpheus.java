@@ -4235,4 +4235,5 @@ public class EmuMorpheus extends Synth
 
     public int getPatchNameLength() { return 12; }
 
+    public boolean getSendsAllParametersAsDump() { return false; }
     }

@@ -1,5 +1,5 @@
 /***
-    Copyright 2021 by Sean Luke
+    Copyright 2022s by Sean Luke
     Licensed under the Apache License version 2.0
 */
 
@@ -23,11 +23,25 @@ import javax.sound.midi.*;
    @author Sean Luke
 */
 
+/*** 
+     NOTES ON SYSEX according to Vladimir at Waldorf
+        
+     1. Wavetable values?
+     2. lfo2humanize values can be 0...7?
+     3. wave1levelmodifiersource and amount, wave2levelmodifiersource and amount, and noiselevelmodifiersource and amount
+     did not exist in version 1.xx of the MW sysex specs.  So these values can be arbitrary.  Likewise for lfo2phaseshift.
+     In all cases I will set them to zero in revise()
+*/
+           
+
+
 public class WaldorfMicrowave extends Synth
     {
         
     static final String[] BANKS = new String[] { "A", "B" };
-    static final String[] MOD_SOURCES = new String[] {"LFO1", "LFO 1", "LFO 2", "Volume Envelope", "Filter Envelope", "Wave Envelope", "LFO1 Envelope", "Keytrack", "Velocity", "Release Velocity", "Aftertouch", "Poly Pressure", "Pitch Bend", "Modulation Wheel", "Sustain Pedal", "Volume Controller", "Panning Controller", "Breath Controller", "Controller W", "Controller X", "Controller Y", "Controller Z", "Maximum", "Minimum", "MIDI Clock Rate" };
+    static final String[] MOD_SOURCES = new String[] {"LFO 1", "LFO 2", "Volume Envelope", "Filter Envelope", "Wave Envelope", "LFO 1 Envelope", "Keytrack", "Velocity", "Release Velocity", "Aftertouch", "Poly Pressure", 
+                                                      "Pitch Bend", "Modulation Wheel", "Sustain Pedal", "Volume Controller", "Panning Controller", "Breath Controller", "Controller W", "Controller X", "Controller Y", "Controller Z", 
+                                                      "Maximum", "Minimum", "MIDI Clock Rate" };
     static final String[] WAVE_MODES = new String[] { "Stepped", "Smooth" };
     static final String[] PITCH_MODES = new String[] { "Normal", "Fixed" };
     static final String[] LFO_SHAPES = new String[] { "Sine", "Sawtooth", "Pulse", "Random", "Sample & Hold" };
@@ -98,7 +112,7 @@ public class WaldorfMicrowave extends Synth
         vbox.add(addLFO(2, Style.COLOR_B()));
         vbox.add(addWaveEnvelope(Style.COLOR_A()));
         envelopePanel.add(vbox, BorderLayout.CENTER);
-        addTab("Modulation", envelopePanel);
+        addTab("LFO and Wave Envelope", envelopePanel);
 
         
         model.set("name", "Init Sound V1.1 ");
@@ -269,7 +283,7 @@ public class WaldorfMicrowave extends Synth
         ((LabelledDial)comp).addAdditionalLabel("Amount");
         hbox.add(comp);
         
-        comp = new LabelledDial("Noise Level Mod", this, "noiselevelmodifieramount", color, -7, 7);
+        comp = new LabelledDial("Noise Level Mod", this, "noiselevelmodifieramount", color, 0, 14, -7);
         ((LabelledDial)comp).addAdditionalLabel("Amount");
         hbox.add(comp);
         
@@ -511,7 +525,7 @@ public class WaldorfMicrowave extends Synth
         ((LabelledDial)comp).addAdditionalLabel("Amount");
         hbox.add(comp);
         
-        comp = new LabelledDial("Level Mod", this, "wave" + wave + "levelmodifieramount", color, -7, 7);
+        comp = new LabelledDial("Level Mod", this, "wave" + wave + "levelmodifieramount", color, 0, 14, -7);
         ((LabelledDial)comp).addAdditionalLabel("Amount");
         hbox.add(comp);
         
@@ -773,14 +787,14 @@ public class WaldorfMicrowave extends Synth
         HBox hbox = new HBox();
         VBox vbox = new VBox();
 
+        vbox = new VBox();
         if (env == 2)
             {
             params = MOD_SOURCES;
-            comp = new Chooser("Decay Modifier Source", this, prefix + "delaymodifiersource", params);
+            comp = new Chooser("Delay Modifier Source", this, prefix + "delaymodifiersource", params);
             vbox.add(comp);
             }
 
-        vbox = new VBox();
         params = MOD_SOURCES;
         comp = new Chooser("Attack Modifier Source", this, prefix + "attackmodifiersource", params);
         vbox.add(comp);
@@ -795,10 +809,12 @@ public class WaldorfMicrowave extends Synth
         comp = new Chooser("Sustain Modifier Source", this, prefix + "sustainmodifiersource", params);
         vbox.add(comp);
 
-        vbox = new VBox();
         params = MOD_SOURCES;
         comp = new Chooser("Release Modifier Source", this, prefix + "releasemodifiersource", params);
         vbox.add(comp);
+
+        vbox.add(comp);
+        hbox.add(vbox);
 
         if (env == 2)
             {
@@ -960,7 +976,7 @@ public class WaldorfMicrowave extends Synth
     /// * indicates parameters which must be handled specially due to packing
     /// that Waldorf decided to do.  :-(
 
-    final static String[] allParameters = new String[/*256*/] 
+    final static String[] allParameters = new String[] 
     {
     "osc1octave",                   
     "osc1semitone",                                     // has to be handled specially
@@ -1144,6 +1160,21 @@ public class WaldorfMicrowave extends Synth
     };
 
 
+    // Where the parameters start in the sysex message
+    static final int PARAMETER_OFFSET = (5);
+        
+    // Where the name starts in the sysex
+    static final int NAME_OFFSET = (153);
+        
+    // Where the name starts in the parameter list
+    static final int NAME_START = (NAME_OFFSET - PARAMETER_OFFSET);
+        
+    // Where the name starts in the parameter list
+    static final int NUM_PARAMETERS = (allParameters.length);
+        
+    // The size of the data section in the BPRD CHUNK
+    static final int BPRD_CHUNK = NUM_PARAMETERS + 1;               // include the valid flag
+
 
     public Object[] emitAll(String key)
         {
@@ -1159,7 +1190,7 @@ public class WaldorfMicrowave extends Synth
             Object[] obj = new Object[16];
             for(int i = 0; i < obj.length; i++)
                 {
-                int param = 148 + i;
+                int param = NAME_START + i;
                 // nybblize param number
                 int HH = (param >>> 4) & 15;
                 int LL = param & 15;
@@ -1178,7 +1209,7 @@ public class WaldorfMicrowave extends Synth
                     0,      // checksum
                     (byte)0xF7 
                     };
-                data[9] = produceChecksum(data, 5, 9);
+                data[9] = produceChecksum(data, PARAMETER_OFFSET, 9);
                                 
                 obj[i] = data;
                 }
@@ -1194,7 +1225,7 @@ public class WaldorfMicrowave extends Synth
             if (key.equals("osc1octave") || key.equals("osc2octave"))
                 {
                 // handle specially
-                val = (val + 2) * 16;
+                val = val * 16;
                 }
             else if (key.equals("osc1semitone") || key.equals("osc2semitone"))
                 {
@@ -1211,8 +1242,8 @@ public class WaldorfMicrowave extends Synth
             else if (key.equals("wave1levelmodifieramount") || key.equals("wave2levelmodifieramount") || key.equals("noiselevelmodifieramount"))
                 {
                 // handle specially
-                // Range -7 ... + 7 maps to 8 ... 120
-                val = (val + 7) * 8 + 8;
+                // Range -7 ... + 7 (0...14) maps to 8 ... 120
+                val = val * 8 + 8;
                 }
                         
             // nybblize param number
@@ -1233,13 +1264,11 @@ public class WaldorfMicrowave extends Synth
                 0,      // checksum
                 (byte)0xF7 
                 };
-            data[9] = produceChecksum(data, 5, 9);
+            data[9] = produceChecksum(data, PARAMETER_OFFSET, 9);
             
             return new Object[] { data };
             }
         }
-    
-    
     
     
     public Object[] emitAll(Model tempModel, boolean toWorkingMemory, boolean toFile)
@@ -1256,15 +1285,14 @@ public class WaldorfMicrowave extends Synth
         byte NN = (byte) tempModel.get("number");
         byte BB = (byte) tempModel.get("bank");
         
-        byte[] bytes = new byte[187];
+        byte[] bytes = new byte[WaldorfMicrowaveRec.EXPECTED_SYSEX_LENGTH];
         
         bytes[0] = (byte)0xF0;          
         bytes[1] = (byte)0x3E;          // Waldorf
         bytes[2] = (byte)0x00;          // Microwave 1
         bytes[3] = DEV;
         bytes[4] = (byte)0x42;          // BPRD
-        bytes[184] = (byte)0x55;        // the "Valid" flag
-        bytes[186] = (byte)0xF7;
+        bytes[bytes.length - 3] = (byte)0x55;        // the "Valid" flag
         
         char[] name = (model.get("name", "Untitled") + "                ").toCharArray();
         
@@ -1278,11 +1306,11 @@ public class WaldorfMicrowave extends Synth
                 }
             else if (key.equals("name"))
                 {
-                val = (byte)name[i - 153 + 5];
+                val = (byte)name[i - NAME_START];
                 }
             else if (key.equals("osc1octave") || key.equals("osc2octave"))
                 {
-                val = (val + 2) * 16;
+                val = val * 16;
                 }
             else if (key.equals("osc1semitone") || key.equals("osc2semitone"))
                 {
@@ -1299,14 +1327,15 @@ public class WaldorfMicrowave extends Synth
             else if (key.equals("wave1levelmodifieramount") || key.equals("wave2levelmodifieramount") || key.equals("noiselevelmodifieramount"))
                 {
                 // handle specially
-                // Range -7 ... + 7 maps to 8 ... 120
-                val = (val + 7) * 8 + 8;
+                // Range -7 ... + 7 (0...14) maps to 8 ... 120
+                val = val * 8 + 8;
                 }
                                 
-            bytes[i + 5] = (byte)val;
+            bytes[i + PARAMETER_OFFSET] = (byte)val;
             }
         
-        bytes[185] = produceChecksum(bytes, 5, 185);
+        bytes[bytes.length - 2] = produceChecksum(bytes, PARAMETER_OFFSET, bytes.length - 2);
+        bytes[bytes.length - 1] = (byte)0xF7;
         
         // if we're just doing a send, or writing to a file, return this
         if (toWorkingMemory || toFile)
@@ -1318,7 +1347,7 @@ public class WaldorfMicrowave extends Synth
             byte instrument = 0;
             byte[] strb = new byte[] { (byte)0xF0, (byte)0x3E, (byte)0x00, DEV, (byte)0x71,
                 instrument, (byte)(BB * 64 + NN), 0, (byte)0xF7 };
-            strb[7] = produceChecksum(strb, 5, 7);
+            strb[7] = produceChecksum(strb, PARAMETER_OFFSET, 7);
             return new Object[] { bytes, strb };
             }
         }
@@ -1353,41 +1382,23 @@ public class WaldorfMicrowave extends Synth
         byte BB = (byte)tempModel.get("bank");
         byte NN = (byte)tempModel.get("number");
         try {
-            // Bank change is CC 32
-            tryToSendMIDI(new ShortMessage(ShortMessage.CONTROL_CHANGE, getChannelOut(), 32, BB));
-            simplePause(getPauseAfterChangePatch());
-            // Number change is PC
-            tryToSendMIDI(new ShortMessage(ShortMessage.PROGRAM_CHANGE, getChannelOut(), NN, 0));
+            tryToSendMIDI(new ShortMessage(ShortMessage.PROGRAM_CHANGE, getChannelOut(), (byte)((BB == 0 ? 0 : 32) + NN), 0));
             }
         catch (Exception e) { Synth.handleException(e); }
         }
 
+	// We have to force a change patch always because we're doing the equivalent of requestCurrentDump here
+	public boolean getAlwaysChangesPatchesOnRequestDump() { return true; }
+
     public byte[] requestDump(Model tempModel)
         {
-        if (tempModel == null)
-            tempModel = getModel();
-            
-        byte DEV = (byte)(getID());
-        byte BB = (byte)tempModel.get("bank");
-        byte NN = (byte)tempModel.get("number");
-        //(BB + NN)&127 is checksum
-        return new byte[] { (byte)0xF0, 0x3E, 0x0E, DEV, 0x00, BB, NN, (byte)((BB + NN)&127), (byte)0xF7 };
-        }
-        
-    public byte[] requestDump(int bank, int number, int id)
-        {
-        byte DEV = (byte)id;
-        byte BB = (byte)bank;
-        byte NN = (byte)number;
-        //(BB + NN)&127 is checksum
-        return new byte[] { (byte)0xF0, 0x3E, 0x0E, DEV, 0x00, BB, NN, (byte)((BB + NN)&127), (byte)0xF7 };
+        return requestCurrentDump();
         }
         
     public byte[] requestCurrentDump()
         {
         byte DEV = (byte)(getID());
-        //(0x75 + 0x00)&127 is checksum
-        return new byte[] { (byte)0xF0, 0x3E, 0x0E, DEV, 0x00, 0x20, 0x00, (byte)((0x20 + 0x00)&127), (byte)0xF7 };
+        return new byte[] { (byte)0xF0, 0x3E, 0x00, DEV, 0x02, (byte)0xF7 };
         }
 
 
@@ -1432,24 +1443,24 @@ public class WaldorfMicrowave extends Synth
             else if (key.equals("name"))
                 {
                 char[] name = (model.get("name", "Untitled") + "                ").toCharArray();
-                name[param - 153 + 5] = (char)val;
+                name[param - NAME_START] = (char)val;
                 model.set("name", String.valueOf(name).trim());
                 }
             else if (key.equals("osc1octave") || key.equals("osc2octave"))
                 {
-                model.set(key, val/16 - 2);
+                model.set(key, val / 16);
                 }
             else if (key.equals("osc1semitone") || key.equals("osc2semitone"))
                 {
-                model.set(key, val/8);
+                model.set(key, val / 8);
                 }
             else if (key.equals("wave1volume") || key.equals("wave2volume") || key.equals("noisevolume"))
                 {
-                model.set(key, val/16);
+                model.set(key, val / 16);
                 }
             else if (key.equals("wave1levelmodifieramount") || key.equals("wave2levelmodifieramount") || key.equals("noiselevelmodifieramount"))
                 {
-                model.set(key, (val - 8) / 8 - 7);
+                model.set(key, (val - 8) / 8);
                 }
             else
                 {
@@ -1465,7 +1476,7 @@ public class WaldorfMicrowave extends Synth
         int index = -1;
         byte b = 0;
                 
-        if (data.length == 11527)  // bulk
+        if (data.length == WaldorfMicrowaveRec.EXPECTED_BULK_LENGTH)  // bulk
             {
             // extract names
             char[][] names = new char[64][16];          // both "banks"
@@ -1473,7 +1484,7 @@ public class WaldorfMicrowave extends Synth
                 {
                 for (int j = 0; j < 16; j++)
                     {
-                    names[i][j] = (char)(data[180 * i + j + 153 - 5]);
+                    names[i][j] = (char)(data[BPRD_CHUNK * i + j + NAME_START + 5]);
                     }
                 }
 
@@ -1497,11 +1508,19 @@ public class WaldorfMicrowave extends Synth
             // 3. Load and edit a certain patch number
             int patchNum = showBankSysexOptions(data, n);
             if (patchNum < 0) return PARSE_CANCELLED;
-            else return extractPatch(data, 5 + 180 * patchNum, patchNum);
+            else 
+                {
+                return extractPatch(data, 5, patchNum);
+                }
             }
         else if (data[4] == 0x4B)       // ABPD, includes instrument number which we must skip
-            return extractPatch(data, 6, -1);
-        else return extractPatch(data, 5, -1);
+            {
+            return extractPatch(data, (PARAMETER_OFFSET + 1), -1);
+            }
+        else 
+            {
+            return extractPatch(data, PARAMETER_OFFSET, -1);
+            }
         }
         
         
@@ -1521,14 +1540,15 @@ public class WaldorfMicrowave extends Synth
         char[] name = new char[16];
         for(int i = 0; i < 16; i++)
             {
-            name[i] = (char)(data[i + 180 * number + 153 - 5 + offset]);
+            name[i] = (char)(data[i + BPRD_CHUNK * number + NAME_START + offset]);
             }
         model.set("name", String.valueOf(name).trim());
                         
         for(int i = 0; i < allParameters.length; i++)
             {
             String key = allParameters[i];
-            int val = data[i + 180 * number + offset];
+            int val = data[i + BPRD_CHUNK * number + offset];
+            
             if (key.equals("-"))
                 {
                 continue;
@@ -1539,7 +1559,7 @@ public class WaldorfMicrowave extends Synth
                 }
             else if (key.equals("osc1octave") || key.equals("osc2octave"))
                 {
-                model.set(key, val / 16 - 2);
+                model.set(key, val / 16);
                 }
             else if (key.equals("osc1semitone") || key.equals("osc2semitone"))
                 {
@@ -1551,7 +1571,7 @@ public class WaldorfMicrowave extends Synth
                 }
             else if (key.equals("wave1levelmodifieramount") || key.equals("wave2levelmodifieramount") || key.equals("noiselevelmodifieramount"))
                 {
-                model.set(key, (val - 8) / 8 - 7);
+                model.set(key, (val - 8) / 8);
                 }
             else
                 {
@@ -1643,7 +1663,7 @@ public class WaldorfMicrowave extends Synth
     public int getPatchNameLength() { return 16; }
     public int parseFromBank(byte[] bankSysex, int number) 
         { 
-        return extractPatch(bankSysex, 5 + 180 * number, number);
+        return extractPatch(bankSysex, PARAMETER_OFFSET, number);
         }
     public int[] getBanks(byte[] bankSysex) { return new int[] { 0, 1 }; }
                 
@@ -1661,10 +1681,33 @@ public class WaldorfMicrowave extends Synth
             };
         }
 
+    // For the time being we can read banks but not write them, they have to be written individually
+    public boolean getSupportsBankReads() { return true; }
+
     public boolean librarianTested() { return true; }
 
-
-
+    public void revise(Model model)
+        {
+        // we're going to revise illegal values to 0 rather than to their nearest legitimate values
+                
+        String[] keys = model.getKeys();
+        for(int i = 0; i < keys.length; i++)
+            {
+            String key = keys[i];
+            if (!model.isString(key) &&
+                model.minExists(key) && 
+                model.maxExists(key))
+                {
+                // verify
+                int val = model.get(key);
+                if (val < model.getMin(key))
+                    { model.set(key, 0); if (printRevised) System.err.println("Warning (WaldorfMicrowaveMulti): Revised " + key + " from " + val + " to " + model.get(key));}
+                if (val > model.getMax(key))
+                    { model.set(key, 0); if (printRevised) System.err.println("Warning (WaldorfMicrowaveMulti): Revised " + key + " from " + val + " to " + model.get(key));}
+                }
+            }
+            
+        }
 
     }
 

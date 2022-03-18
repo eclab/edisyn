@@ -1002,6 +1002,9 @@ public class Yamaha4OpMulti extends Synth
         tryToSendSysex(requestDump(tempModel));
         }
 
+	// We have to force a change patch always because we're doing the equivalent of requestCurrentDump here
+	public boolean getAlwaysChangesPatchesOnRequestDump() { return true; }
+
     public byte[] requestDump(Model tempModel) 
         {
         // since performRequestDump ALWAYS changes the patch, we might

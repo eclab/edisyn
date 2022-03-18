@@ -1,5 +1,5 @@
 /***
-    Copyright 2021 by Sean Luke
+    Copyright 2022 by Sean Luke
     Licensed under the Apache License version 2.0
 */
 
@@ -17,22 +17,14 @@ import java.io.*;
 import javax.sound.midi.*;
 
 /**
-   A patch editor for the Waldorf Microwave.  Does not deal with Multi mode, global parameters,
-   modifying wavetables, or uploading samples.  Only Single mode patches.
-        
+   A patch editor for the Waldorf Microwave, multi-mode.
+   
    @author Sean Luke
 */
 
+
 public class WaldorfMicrowaveMulti extends Synth
     {
-    // NOTES:
-    // Sound Arp?
-    // "Alternating"?
-    // Is the dump length really the same as the dump length for the XT?
-
-
-    /// Various collections of parameter names for pop-up menus
-        
     static final String[] BANKS = new String[] { "A", "B" };
     static final String[] INSTRUMENT_BANKS = new String[] { "A", "B", "C", "D" };
     static final String[] ROUTINGS = new String[] { "L + R", "Out 1", "Out 2", "Out 3", "Out 4" };
@@ -106,33 +98,18 @@ public class WaldorfMicrowaveMulti extends Synth
         loadDefaults();
         }
     
-    public JFrame sprout()
-        {
-        JFrame frame = super.sprout();
-        // multi-mode on the Microwave can't switch patches
-        transmitTo.setEnabled(false);
-        return frame;
-        }         
-
-    public void windowBecameFront() { updateMode(); }
-    
-    public void updateMode()
-        {
-        boolean send = getSendMIDI();
-        setSendMIDI(true);
-        byte DEV = (byte)(getID());
-        // we'll send a mode dump to change the mode to Single
-        tryToSendSysex(new byte[] { (byte)0xF0, 0x3E, 0x0E, DEV, 0x17, 0x01, (byte)0xF7 });
-        setSendMIDI(send);
-        }
-               
     public void changePatch(Model tempModel)
         {
-        // Not possible in Multi Mode
+        byte BB = (byte)tempModel.get("bank");
+        byte NN = (byte)tempModel.get("number");
+        try {
+            tryToSendMIDI(new ShortMessage(ShortMessage.PROGRAM_CHANGE, getChannelOut(), (byte)((BB == 0 ? 0 : 32) + NN), 0));
+            }
+        catch (Exception e) { Synth.handleException(e); }
         }
 
-    //public String getDefaultResourceFileName() { return "WaldorfMicrowaveMulti.init"; }
-    //public String getHTMLResourceFileName() { return "WaldorfMicrowaveMulti.html"; }
+    public String getDefaultResourceFileName() { return "WaldorfMicrowaveMulti.init"; }
+    public String getHTMLResourceFileName() { return "WaldorfMicrowaveMulti.html"; }
 
     public boolean gatherPatchInfo(String title, Model change, boolean writing)
         {
@@ -459,7 +436,7 @@ public class WaldorfMicrowaveMulti extends Synth
     /// * indicates parameters which must be handled specially due to packing
     /// that Waldorf decided to do.  :-(
 
-    final static String[] allParameters = new String[/*256*/] 
+    final static String[] allParameters = new String[] 
     {
     "mastervolumeofarrangement",
     "midicontrollerw",                   
@@ -695,12 +672,25 @@ public class WaldorfMicrowaveMulti extends Synth
     "instrument8sustainpedalfilter",
     "instrument8voiceallocationmode",
     "-",
-
-
     };
 
 
 
+    // Where the parameters start in the sysex message
+    static final int PARAMETER_OFFSET = (5);
+        
+    // Where the name starts in the sysex
+    static final int NAME_OFFSET = (15);
+        
+    // Where the name starts in the parameter list
+    static final int NAME_START = (NAME_OFFSET - PARAMETER_OFFSET);
+
+    // Where the name starts in the parameter list
+    static final int NUM_PARAMETERS = (allParameters.length);
+        
+    // The size of the data section in the ARPD CHUNK
+    static final int ARPD_CHUNK = NUM_PARAMETERS;           // there's no valid flag to add
+        
 
     public Object[] emitAll(String key)
         {
@@ -734,7 +724,7 @@ public class WaldorfMicrowaveMulti extends Synth
                     0,      // checksum
                     (byte)0xF7 
                     };
-                data[8] = produceChecksum(data, 5, 8);
+                data[8] = produceChecksum(data, PARAMETER_OFFSET, 8);
                                 
                 obj[i] = data;
                 }
@@ -762,7 +752,7 @@ public class WaldorfMicrowaveMulti extends Synth
                 0,      // checksum
                 (byte)0xF7 
                 };
-            data[9] = produceChecksum(data, 5, 8);
+            data[9] = produceChecksum(data, PARAMETER_OFFSET, 8);
             
             return new Object[] { data };
             }
@@ -785,7 +775,7 @@ public class WaldorfMicrowaveMulti extends Synth
         byte NN = (byte) tempModel.get("number");
         byte BB = (byte) tempModel.get("bank");
         
-        byte[] bytes = new byte[233];
+        byte[] bytes = new byte[WaldorfMicrowaveMultiRec.EXPECTED_SYSEX_LENGTH];
         
         bytes[0] = (byte)0xF0;          
         bytes[1] = (byte)0x3E;          // Waldorf
@@ -805,14 +795,14 @@ public class WaldorfMicrowaveMulti extends Synth
                 }
             else if (key.equals("name"))
                 {
-                val = (byte)name[i - 15 + 5];
+                val = (byte)name[i - NAME_START];
                 }
 
-            bytes[i + 5] = (byte)val;
+            bytes[i + PARAMETER_OFFSET] = (byte)val;
             }
         
         bytes[14] = 0x55;                       // "valid flag"
-        bytes[231] = produceChecksum(bytes, 5, 231);
+        bytes[231] = produceChecksum(bytes, PARAMETER_OFFSET, 231);
         bytes[232] = (byte)0xF7;
         
         return new Object[] { bytes };
@@ -843,30 +833,20 @@ public class WaldorfMicrowaveMulti extends Synth
         return 50;
         }
 
+	// We have to force a change patch always because we're doing the equivalent of requestCurrentDump here
+	public boolean getAlwaysChangesPatchesOnRequestDump() { return true; }
+
     public byte[] requestDump(Model tempModel)
         {
-        // In Section 2.21 of sysex document, MULR is declared to be 0x11, but then in the
-        // format example, it's written as 0x01.  It's actually 0x01.
-                
-        if (tempModel == null)
-            tempModel = getModel();
-            
-        byte DEV = (byte)(getID());
-        byte BB = 0;  // only 1 bank
-        byte NN = (byte)tempModel.get("number");
-        //(BB + NN)&127 is checksum
-        return new byte[] { (byte)0xF0, 0x3E, 0x0E, DEV, 0x01, BB, NN, (byte)((BB + NN)&127), (byte)0xF7 };
+        return requestCurrentDump();
         }
         
     public byte[] requestCurrentDump()
         {
-        // In Section 2.21 of sysex document, MULR is declared to be 0x11, but then in the
-        // format example, it's written as 0x01.  It's actually 0x01.
-                
         byte DEV = (byte)(getID());
-        //(0x75 + 0x00)&127 is checksum
-        return new byte[] { (byte)0xF0, 0x3E, 0x0E, DEV, 0x01, 0x20, 0x00, (byte)((0x20 + 0x00)&127), (byte)0xF7 };
+        return new byte[] { (byte)0xF0, 0x3E, 0x00, DEV, 0x03, (byte)0xF7 };
         }
+
 
         
         
@@ -912,7 +892,7 @@ public class WaldorfMicrowaveMulti extends Synth
             else if (key.equals("name"))
                 {
                 char[] name = (model.get("name", "Untitled") + "                ").toCharArray();
-                name[param - 15 + 5] = (char)val;
+                name[param - NAME_START] = (char)val;
                 model.set("name", String.valueOf(name).trim());
                 }
             else
@@ -946,7 +926,7 @@ public class WaldorfMicrowaveMulti extends Synth
         int index = -1;
         byte b = 0;
                 
-        if (data.length == 14471)  // bulk
+        if (data.length == WaldorfMicrowaveMultiRec.EXPECTED_BULK_LENGTH)  // bulk
             {
             // extract names
             char[][] names = new char[64][16];          // both "banks"
@@ -954,7 +934,7 @@ public class WaldorfMicrowaveMulti extends Synth
                 {
                 for (int j = 0; j < 16; j++)
                     {
-                    names[i][j] = (char)(data[226 * i + j + 10]);
+                    names[i][j] = (char)(data[ARPD_CHUNK * i + j + 10]);
                     }
                 }
 
@@ -978,9 +958,9 @@ public class WaldorfMicrowaveMulti extends Synth
             // 3. Load and edit a certain patch number
             int patchNum = showBankSysexOptions(data, n);
             if (patchNum < 0) return PARSE_CANCELLED;
-            else return extractPatch(data, 5 + 226 * patchNum, patchNum);
+            else return extractPatch(data, PARAMETER_OFFSET + ARPD_CHUNK * patchNum, patchNum);
             }
-        else return extractPatch(data, 5, -1);
+        else return extractPatch(data, PARAMETER_OFFSET, -1);
         }
         
         
@@ -1000,14 +980,14 @@ public class WaldorfMicrowaveMulti extends Synth
         char[] name = new char[16];
         for(int i = 0; i < 16; i++)
             {
-            name[i] = (char)(data[i + 226 * number + 10 + offset]);
+            name[i] = (char)(data[i + ARPD_CHUNK * number + 10 + offset]);
             }
         model.set("name", String.valueOf(name).trim());
                         
         for(int i = 0; i < allParameters.length; i++)
             {
             String key = allParameters[i];
-            int val = data[i + 226 * number + offset];
+            int val = data[i + ARPD_CHUNK * number + offset];
             if (key.equals("-"))
                 {
                 continue;
@@ -1097,7 +1077,7 @@ public class WaldorfMicrowaveMulti extends Synth
     public int getPatchNameLength() { return 16; }
     public int parseFromBank(byte[] bankSysex, int number) 
         { 
-        return extractPatch(bankSysex, 5 + 180 * number, number);
+        return extractPatch(bankSysex, PARAMETER_OFFSET, number);
         }
     public int[] getBanks(byte[] bankSysex) { return new int[] { 0, 1 }; }
                 
@@ -1115,5 +1095,33 @@ public class WaldorfMicrowaveMulti extends Synth
             };
         }
 
+    // For the time being we can read banks but not write them, they have to be written individually
+    public boolean getSupportsBankReads() { return true; }
+
     public boolean librarianTested() { return true; }
+
+    public void revise(Model model)
+        {
+        // we're going to revise illegal values to 0 rather than to their nearest legitimate values
+                
+        String[] keys = model.getKeys();
+        for(int i = 0; i < keys.length; i++)
+            {
+            String key = keys[i];
+            if (!model.isString(key) &&
+                model.minExists(key) && 
+                model.maxExists(key))
+                {
+                // verify
+                int val = model.get(key);
+                if (val < model.getMin(key))
+                    { model.set(key, 0); if (printRevised) System.err.println("Warning (WaldorfMicrowaveMulti): Revised " + key + " from " + val + " to " + model.get(key));}
+                if (val > model.getMax(key))
+                    { model.set(key, 0); if (printRevised) System.err.println("Warning (WaldorfMicrowaveMulti): Revised " + key + " from " + val + " to " + model.get(key));}
+                }
+            }
+            
+        }
+
+
     }

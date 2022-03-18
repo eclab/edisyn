@@ -1101,4 +1101,5 @@ public class EmuMorpheusHyper extends Synth
 
     public int getPatchNameLength() { return 12; }
 
+    public boolean getSendsAllParametersAsDump() { return false; }
     }

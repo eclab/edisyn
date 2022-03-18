@@ -113,7 +113,7 @@ public class Blank extends Synth
     ///     Call gatherPatchInfo(...,tempModel,...)
     ///             If successful
     ///                     Call performRequestDump(tempModel)
-    ///                             This calls changePatch(tempModel)
+    ///                             This calls changePatch(tempModel) USUALLY
     ///                             Then it calls requestDump(tempModel)
     ///
     /// You could override performRequestCurrentDump or requestCurrentDump, but probably not both.
@@ -527,6 +527,18 @@ public class Blank extends Synth
 
 
     ////// YOU MAY WANT TO IMPLEMENT SOME OF THE FOLLOWING
+
+	public boolean getAlwaysChangesPatchesOnRequestDump() 
+		{ 
+		// This is called by performRequestDump() to determine if it should changePatch() first.
+		// If not, then in some cases performRequestDump() can avoid changing the patch, which 
+		// is good for things like the SHOW button in Multimode patches, or blending, or merging,
+		// where we're just loading a patch temporarily or in an auxiliary fashion.  However
+		// many synths do not have the ability to request a dump and must instead just do
+		// a change patch followed by requestCurrentDump ALWAYS.  In this case, override this
+		// method to return TRUE.
+		return false; 
+		}
 
     public int getTestNotePitch()
         {

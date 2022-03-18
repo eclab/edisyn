@@ -1609,30 +1609,31 @@ public class RolandJV880 extends Synth
         return data;
         }
 
+	// We have to force a change patch always because we're doing the equivalent of requestCurrentDump here
+	public boolean getAlwaysChangesPatchesOnRequestDump() { return true; }
 
     //// I CAN GET ALL 4 PATCH SEGMENTS WITH
     ////    F0 41 10 46 11 01 48 20 00 00 00 0C 00 0B F7
 
     public byte[] requestDump(Model tempModel)
         {
-        // performRequestDump has already changed the patch.  At this point the patch is in local memory, so we're
-        // going to just call requestCurrentDump.  This allows us to grab presets A and B as well as internal and card.
-        return requestCurrentDump();
-        
-        /*
-        // update our patch, since Roland won't do it
-        model.set("bank", tempModel.get("bank"));
-        model.set("number", tempModel.get("number"));
-        
-        byte AA = ((tempModel.get("bank") == 0) ? (byte)0x01 : (byte)0x02);             // bank
-        byte BB = (byte)(0x40 + (tempModel.get("number")));                                             // number
+        // We just had a change patch, so no need to set the patch/performance button.  
+        // Instead, let's go straight to doing the same thing as requestCurrentDump()
+
+        byte AA = (byte)(0x00);
+        byte BB = (byte)(0x08);
         byte CC = (byte)(0x20);
         byte DD = (byte)(0x00);
         
+        if (requestPerformancePart != 0)
+            {
+            BB = (byte) (0x01 * requestPerformancePart);
+            }
+        
         byte checksum = produceChecksum(new byte[] { AA, BB, CC, DD, (byte)0x00, (byte)0x00, (byte)0x0C, (byte)0x00 });
-        return new byte[] { (byte)0xF0, (byte)0x41, getID(), (byte)0x46, (byte)0x11, 
-        AA, BB, CC , DD, (byte)0x00, (byte)0x00, (byte)0x0C, (byte)0x00, checksum, (byte)0xF7 }; 
-        */
+        byte[] b = new byte[] { (byte)0xF0, (byte)0x41, getID(), (byte)0x46, (byte)0x11, 
+            AA, BB, CC , DD, (byte)0x00, (byte)0x00, (byte)0x0C, (byte)0x00, checksum, (byte)0xF7 }; 
+        return b;
         }
     
     int requestPerformancePart = 0;
@@ -1642,7 +1643,7 @@ public class RolandJV880 extends Synth
         tryToSendSysex(new byte[] { (byte)0xF0, 0x41, getID(), 0x46, 0x12, 0x00, 0x00, 0x00, 0x00, 0x01, 
             produceChecksum(new byte[] { 0x00, 0x00, 0x00, 0x00, 0x01}), (byte)0xF7 });
 
-        // It takes a second for this to take effect
+        // It takes a bit for this to take effect
         simplePause(200);
 
         byte AA = (byte)(0x00);
@@ -1698,7 +1699,7 @@ public class RolandJV880 extends Synth
     public String getPatchName(Model model) { return model.get("name", "Untitled  "); }
 
     // It takes a long time (about 700ms) for this to take effect
-    public int getPauseAfterChangePatch() { return 700; }
+    public int getPauseAfterChangePatch() { return 900; } 	// 1500; }		// 700
 
     public int getPauseAfterSendAllParameters() { return 300; }
 
@@ -1719,12 +1720,12 @@ public class RolandJV880 extends Synth
                 produceChecksum(new byte[] { 0x00, 0x00, 0x00, 0x00, 0x01}), (byte)0xF7 });
 
             // It takes a long time (about 700ms) for this to take effect
-            simplePause(700);
+            simplePause(getPauseAfterChangePatch());
 
             tryToSendMIDI(new ShortMessage(ShortMessage.CONTROL_CHANGE, getChannelOut(), 0, BC));
 
             // It takes a long time (about 700ms) for this to take effect
-            simplePause(700);
+            simplePause(getPauseAfterChangePatch());
 
             tryToSendMIDI(new ShortMessage(ShortMessage.PROGRAM_CHANGE, getChannelOut(), PC, 0));
             }
@@ -1779,7 +1780,7 @@ public class RolandJV880 extends Synth
         }
         
     // Takes a long time for batches to come in, particularly Orch Stab 2 (patch Internal 11, dunno why)
-    public int getBatchDownloadWaitTime() { return 2000; }
+    public int getBatchDownloadWaitTime() { return 8000; }		// 2000
 
     public String[] getBankNames() { return BANKS; }
 

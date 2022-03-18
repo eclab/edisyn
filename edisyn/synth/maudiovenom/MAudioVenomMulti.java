@@ -1139,6 +1139,8 @@ public class MAudioVenomMulti extends Synth
 
     public Object[] emitAll(String key)
         {
+        System.err.println(key);
+                
         if (key.equals("number")) return new Object[0];  // this is not emittable
         if (key.equals("bank")) return new Object[0];
         
@@ -1198,7 +1200,7 @@ public class MAudioVenomMulti extends Synth
             // 3    expression
             // 4    keyboard
             // 5    external midi input
-                
+            
             byte paramMSB = (byte)0x00;
             byte paramLSB = (byte)(0x0D + 20 * (part - 1) + 19);        // 0x20, 0x34, 0x48, 0x5C
             int val = (model.get("part" + part + "pitchbendenable") << 0) |
@@ -1250,9 +1252,11 @@ public class MAudioVenomMulti extends Synth
             // 0    channel single
             // 1    voice single
             // 2    arpsource
-                
+            
             byte paramMSB = (byte)0x00;
             byte paramLSB = (byte)(part - 1);   // 00 ... 04
+            System.err.println("PART " + part);
+            
             int val = (model.get("part" + part + "channelsingle") << 0) |
                 (model.get("part" + part + "voicesingle") << 1) |
                 ((model.get("part" + part + "arpsource") == 1 ? 1 : 0) << 2);           // if it's single (1), set 1, else set 0
@@ -1278,8 +1282,9 @@ public class MAudioVenomMulti extends Synth
             
             // we also need to emit Arpsrc_f    
 
-            paramMSB = (byte)0x00;
-            paramLSB = (byte)(0x7C + 10 * (part - 1)); // 00 ... 04
+            int param = 0x7C + 10 * (part - 1);                             // 0x7C is arpsrc_f 0, and the arpsrc_f params are spaced by 10 per part
+            paramMSB = (byte)((param >>> 7) & 127);
+            paramLSB = (byte)(param & 127);
             val = (model.get("part" + part + "arpsource") == 0 ? 0x7F : 0);                    // if it's Multi (0), set 0x7F else set 0
             valMSB = (byte)(val >>> 7);
             valLSB = (byte)(val & 127);
@@ -1922,6 +1927,9 @@ public class MAudioVenomMulti extends Synth
                 
         switchScreen();
         }
+
+	// We have to force a change patch always because we're doing the equivalent of requestCurrentDump here
+	public boolean getAlwaysChangesPatchesOnRequestDump() { return true; }
 
     public void performRequestDump(Model tempModel, boolean changePatch)
         {

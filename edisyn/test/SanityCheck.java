@@ -34,7 +34,7 @@ public class SanityCheck
         quiet = !main.hasFlag("-v");
         dump = main.hasFlag("-d");
         
-        System.err.println("For help, try:  java edisyn.synth.SanityCheck -h");
+        System.err.println("For help, try:  java edisyn.test.SanityCheck -h");
           
         String[] c = Synth.getClassNames();          
         if (main.getString("-c") != null)

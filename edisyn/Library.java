@@ -499,10 +499,10 @@ public class Library extends AbstractTableModel
         boolean showed = false;
         for(int b = 0; b < banks.length ; b++)
             {
-            int bank = banks[b];            
+            int bank = banks[b]; 
             for(int i = 0; i < getBankSize(); i++)
                 {
-                int result = synth.parseFromBank(incoming, i);
+                int result = synth.parseFromBank(incoming, i + b * getBankSize());
                 if (result == Synth.PARSE_FAILED)
                     {
                     if (!showed)

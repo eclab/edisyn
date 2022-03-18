@@ -930,6 +930,12 @@ public abstract class Synth extends JComponent implements Updatable
     */
     public byte[] requestCurrentDump() { return new byte[0]; }
 
+	/** Override this to return true if your synthesizer must always call changePatch()
+		prior to a performRequestDump() in order for it to work.  This would happen, 
+		for example, if requestDump() in turn called requestCurrentDump() because you
+		had no direct sysex message to request patch dumps. */
+	public boolean getAlwaysChangesPatchesOnRequestDump() { return false; }
+	
     /** Performs a request for a dump of the patch indicated in tempModel.
         This method by default does a changePatch() as necessary, then calls
         requestDump(...) and submits it to tryToSendSysex(...), 
@@ -941,7 +947,10 @@ public abstract class Synth extends JComponent implements Updatable
         wants to pop up a single patch to display it. */    
     public void performRequestDump(Model tempModel, boolean changePatch)
         {
-        if (changePatch)
+        // We'll ALWAYS change the patch, because some editors MUST have the
+        // patch changed, and then they do a requestCurrentDump internally
+        
+        if (changePatch || getAlwaysChangesPatchesOnRequestDump())
             performChangePatch(tempModel);
             
         tryToSendSysex(requestDump(tempModel));
@@ -1033,7 +1042,7 @@ public abstract class Synth extends JComponent implements Updatable
         
     public boolean printRevised = true;
     
-    /** Only revises / issues warnings on out-of-bounds numerical parameters. 
+    /** Only revises / issues warnings on out-of-bounds numerical parameters, bounding them to the nearest legal value.
         You probably want to override this to check more stuff. */
     public void revise(Model model)
         {
@@ -8181,6 +8190,12 @@ public abstract class Synth extends JComponent implements Updatable
         
     void stopBatchDownload()
         {
+        stopBatchDownload(true);
+        }
+
+    // we'll only show a success dialog if successful; else we fail silently.
+    void stopBatchDownload(boolean success)
+        {
         if (patchTimer != null)                 // we can sometimes call this even though we're not stopping anything
             {
             patchTimer.stop();
@@ -8193,7 +8208,10 @@ public abstract class Synth extends JComponent implements Updatable
 //              librarian.bottomPanel.remove(librarian.stopAction.getButton());
                 librarian.stopAction.getButton().setEnabled(false);
                 }
-            showSimpleMessage("Batch Download", "Batch download stopped." );
+            if (success)
+                {
+                showSimpleMessage("Batch Download", "Batch download stopped." );
+                }
             updateTitle();                      // has to be after we destroy the timer
             undo.setWillPush2(true);            // restore undo that we disabled to do batch download without blowing out the heap
             model.setUpdateListeners(true);
@@ -8226,6 +8244,8 @@ public abstract class Synth extends JComponent implements Updatable
         incomingPatch = false;
             
         batchDownloadFailureCountdown = getBatchDownloadFailureCountdown();
+        batchDownloadFailureGlobalCountdown = BATCH_DOWNLOAD_FAILURE_GLOBAL_COUNTDOWN;
+
         // set timer to request further patches         
         patchTimer = new javax.swing.Timer(getBatchDownloadWaitTime(),
             new ActionListener()
@@ -8237,6 +8257,7 @@ public abstract class Synth extends JComponent implements Updatable
                         if (patchLocationEquals(getModel(), currentPatch))
                             {
                             batchDownloadFailureCountdown = getBatchDownloadFailureCountdown();
+                            batchDownloadFailureGlobalCountdown = BATCH_DOWNLOAD_FAILURE_GLOBAL_COUNTDOWN;
                             processCurrentPatch();
                             requestNextPatch();
                             }
@@ -8244,6 +8265,11 @@ public abstract class Synth extends JComponent implements Updatable
                             {
                             System.err.println("Warning (Synth): Download of " + getPatchLocationName(currentPatch) + " failed.  Received unexpected patch " + getPatchLocationName(getModel()));
                             batchDownloadFailureCountdown = getBatchDownloadFailureCountdown();
+                            if (batchDownloadFailureGlobalCountdown-- <= 0)
+                                {
+                                stopBatchDownload();
+                                showSimpleError("Batch Download Failed", "Stopping batch download after failing " + BATCH_DOWNLOAD_FAILURE_GLOBAL_COUNTDOWN + " times to download patch\n" + getPatchLocationName(currentPatch) + "\nNo response from the synthesizer." );
+                                }
                             resetBlend();
                             setMergeProbability(0.0);
                             performRequestDump(currentPatch, true);
@@ -8251,9 +8277,16 @@ public abstract class Synth extends JComponent implements Updatable
                         }
                     else 
                         {
-                        if ((batchDownloadFailureCountdown--) == 0)
+                        if ((batchDownloadFailureCountdown--) <= 0)
                             {
                             batchDownloadFailureCountdown = getBatchDownloadFailureCountdown();
+                            if (batchDownloadFailureGlobalCountdown-- <= 0)
+                                {
+                                stopBatchDownload();
+                                showSimpleError("Batch Download Failed", "Stopping batch download after failing " + BATCH_DOWNLOAD_FAILURE_GLOBAL_COUNTDOWN + " times to download patch\n" + getPatchLocationName(currentPatch) + "\nNo response from the synthesizer." );
+                                }
+
+
                             System.err.println("Warning (Synth): Download of " + getPatchLocationName(currentPatch) + " failed.  Requesting again.");
                             resetBlend();
                             setMergeProbability(0.0);
@@ -8272,8 +8305,10 @@ public abstract class Synth extends JComponent implements Updatable
         }
 
         
-    public int getBatchDownloadFailureCountdown() { return 0; }
+    public int getBatchDownloadFailureCountdown() { return 0; }                 // default, can be overridden such as in the FS1R or Wavestation SR
     int batchDownloadFailureCountdown;
+    static final int BATCH_DOWNLOAD_FAILURE_GLOBAL_COUNTDOWN = 50;
+    int batchDownloadFailureGlobalCountdown;
 
     void requestNextPatch()
         {

@@ -29,9 +29,13 @@ Donations are welcome via Paypal to my email address (sean@cs.gmu.edu).
 ## Jump to...
 
 *[Edisyn's Manual](#manual)
+
 *[Installing on a Mac](#mac)
+
 *[Installing on Windows](#windows)
+
 *[Installing on Linux](#linux)
+
 *[Running from the Command Line](#command)
 
 ## What's New

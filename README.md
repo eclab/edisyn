@@ -26,6 +26,13 @@ Related projects:
 
 Donations are welcome via Paypal to my email address (sean@cs.gmu.edu).
 
+## Jump to...
+[Edisyn's Manua](#manual)
+[Installing on a Mac](#mac)
+[Installing on Windows](#windows)
+[Installing on Linux](#linux)
+[Running from the Command Line](#command)
+
 ## What's New
 
 Version 30 has lots of improements, but one big one in particular:
@@ -46,7 +53,7 @@ Version 28 has many improvements, but the big ones are:
 * Fixes to M-Audio Venom Editor
 * Deep-Learned Variational Autoencoder, which compresses the parameter space for the Yamaha DX7 and thus improves randomization and hill-climbing.  See the manual.
 
-## About
+## About Edisyn
 
 Edisyn is a synthesizer patch editor library written in pure Java.   It runs on MacOS, Linux, and Windows.  
 
@@ -108,6 +115,7 @@ Sure!  But building a patch editor is a long-term commitment of debugging and ma
 I have a special interest in hard-to-program synths, either because they have very poor interfaces (or no interface at all), or because their synthesis architecture is difficult to program (FM, Additive).  You'll note the high number of 1U rackmounts.  :-)  Certain other synths (Blofeld, Prophet '08, etc.) are there because I own them and like making stuff for them.
 
 
+<a name="manual"/>
 ## Manual
 
 Edisyn has an [extensive manual](https://cs.gmu.edu/~eclab/projects/edisyn/Edisyn.pdf) which describes how to run it, and (if you are so inclined) how to make new patch editors.
@@ -116,7 +124,7 @@ Edisyn has an [extensive manual](https://cs.gmu.edu/~eclab/projects/edisyn/Edisy
 
 Edisyn is cross-platform and will run on a variety of platforms (Windows, Linux) but I am personally developing on and for MacOS.  I'd appreciate feedback and screenshots of it running on Windows and Linux so I can tweak things.
 
-
+<a name="mac"/>
 ### Installation and Running on MacOS
 
 First install Edisyn from the [Edisyn.app.zip](https://cs.gmu.edu/~eclab/projects/edisyn/Edisyn.app.zip) file.  Sadly, it's a whopping 70MB because it includes the Java VM.  :-(
@@ -151,6 +159,7 @@ At present Edisyn only runs under Rosetta on the M1, because its package contain
 You may have installed the MMJ (MIDI Java) library in the past, which is now obsolete.  This library was required by old applications but no longer works properly and should be removed.  Look in /Library/Java/Extensions/ or in \[Your Home Directory\]/Library/Java/Extensions for the files **mmj.jar** or **libmmj.jnilib**.  If you find them, remove them from the directory and try again.
 
 
+<a name="windows"/>
 ### Installation and Running on Windows
 
 I believe that the following should work:
@@ -190,6 +199,7 @@ Edisyn makes heavy use of Java preferences to store persistence information: wha
 
 When you double-click on a jar file, Windows may not launch Java properly because it has jar files associated with the wrong Java instance.  It's easy to fix this using [JarFix](https://johann.loefflmann.net/en/software/jarfix/index.html)
 
+<a name="linux"/>
 ### Installation and Running on Linux
 
 I'm told that Edisyn works fine if you have installed at least Java 8.  After this:
@@ -203,7 +213,7 @@ I'm told that Edisyn works fine if you have installed at least Java 8.  After th
 If you want to use Edisyn in combination with a DAW, see the manual's section on building a MIDI Loopback.
 
 
-
+<a name="command"/>
 ### Running from the command line (OS X, Windows, Linux)
 
 1. Make sure Java is installed.

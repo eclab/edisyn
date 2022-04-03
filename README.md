@@ -197,7 +197,7 @@ Java doesn't handle high-resolution displays properly in Windows, especially Win
 3. Click on the "Compatibility" tab
 4. Click on "Change high DPI settings"
 5. Here you can try checking "Use this setting to fix scaling problems for this program instead of the one in Settings"
-6. If #5 isn't working, you might instead try "Override high DPI scaling behavior.  Scaling performed by: System (Enhanced)"
+6. If \#5 isn't working, you might instead try "Override high DPI scaling behavior.  Scaling performed by: System (Enhanced)"
 
 #### Java Preference Problems
 

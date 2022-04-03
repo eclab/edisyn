@@ -163,6 +163,10 @@ I believe that the following should work:
 
 If you want to use Edisyn in combination with a DAW, see the manual's section on building a MIDI Loopback.
 
+#### Java Crashing on Windows
+
+I have reports of Java crashing on Windows if you set Edisyn's "Receive From" or "Send To" devices to the same device as the "Controller" or "Controller 2" devices.  So don't do that: there is never a need to do so.  If you don't have a dedicated controller, you should leave the "Controller" and "Controller 2" devices blank.
+
 #### Early Versions of Java
 
 I have had at least one report that Java 8 on Windows has serious problems with some Edisyn patch editors (probably memory).  Install something newer.

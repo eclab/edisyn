@@ -11,6 +11,15 @@ Related projects:
 * [Gizmo](https://cs.gmu.edu/~sean/projects/gizmo/), an Arduino-based MIDI Swiss Army knife.
 * [Computational Music Synthesis](https://cs.gmu.edu/~sean/book/synthesis/), an open-content book on building software synthesizers.
 
+
+## Jump to...
+
+* [Edisyn's Manual](#manual)
+* [Installing on a Mac](#mac)
+* [Installing on Windows](#windows)
+* [Installing on Linux](#linux)
+
+
 ## Paper on Edisyn's Stochastic Patch Exploration Tools
 
 [Paper Here](https://cs.gmu.edu/~sean/papers/evomusart19.pdf).  Presented at EvoMUSART 2019.
@@ -25,14 +34,6 @@ Related projects:
 ## Donations
 
 Donations are welcome via Paypal to my email address (sean@cs.gmu.edu).
-
-## Jump to...
-
-* [Edisyn's Manual](#manual)
-* [Installing on a Mac](#mac)
-* [Installing on Windows](#windows)
-* [Installing on Linux](#linux)
-* [Running from the Command Line](#command)
 
 ## What's New
 

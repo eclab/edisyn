@@ -17,11 +17,15 @@ If you erased these patches, you can restore them from sysex files stored in the
 
 <br><br><h3>About Patch Names</h3>
 
-The Matrix 1000 and the Matrix 6 store patch names differently.  The 1000 doesn't actually store a name, but just information about bank and number.  If Edisyn sees this, it will attempt to replace this placeholder name with the original "classic" name.  This will include the writeable patches less than 200, unless you uncheck "Use Classic Patch Names" in the Matrix 1000 menu.
+The Matrix 1000 and the Matrix 6 store patch names differently.  The 1000 doesn't actually store a name, but just information about bank and number.  If Edisyn sees this, it will attempt to replace this placeholder name with the original "classic" name.  This will include the writeable patches less than 200, unless you uncheck "Use Classic Patch Names" in the Matrix menu.
 
 <br><br><h3>Looking Up Patch Names by Classic Matrix 1000 Name</h3>
 
-<p>If you would like to load a patch from memory, you can look it up by patch name in the Matrix 1000 menu.
+<p>If you would like to load a patch from memory, you can look it up by patch name in the Matrix menu.
+
+<br><br><h3>Sending Individual Parameters to the Matrix 6/6R</h3>
+
+Weirdly, the 6/6R require a special sysex message before they will start receiving individual parameter changes.  Ideally we'd send this message before every single individual parameter change, but that would be costly.  So instead Edisyn sends this message whenever requesting a patch, or sending or writing a patch (manually or via undo/redo/reset/randomization/etc.), or when you uncheck the "Matrix 1000" box.  If your 6/6R is not responding to individual parameters, you can also send the message manually by selecting "Request Sending Parameters" in the Matrix menu.
 
 <br><br><h3>Suggestions</h3>
 

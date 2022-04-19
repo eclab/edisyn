@@ -44,6 +44,8 @@ public class OberheimMatrix1000 extends Synth
         if (m1000Check != null)
             m1000Check.setSelected(val);  // hopefully this isn't recursive
         updateTitle();
+        
+		if (!m1000) requestSendingParameters();
         }
     
 
@@ -1676,9 +1678,14 @@ public class OberheimMatrix1000 extends Synth
         d[273] = checksum;
         d[274] = (byte)0xF7;
                 
-        if (toWorkingMemory || toFile || !m1000)
-            {
+        if (toFile)
+        	{
             return new Object[] { d };
+        	}
+        else if (toWorkingMemory || !m1000)
+            {
+            // See requestSendingParameters() for an explanation of the second message here
+            return new Object[] { d , new byte[] { (byte)0xF0, 0x10, 0x06, 0x05, (byte)0xF7 }};
             }
         else
             {
@@ -1753,10 +1760,20 @@ public class OberheimMatrix1000 extends Synth
         tryToSendSysex(data);
         }
 
+	public void performRequestDump(Model tempModel, boolean changePatch)
+		{
+		super.performRequestDump(tempModel, changePatch);
+		if (!m1000) requestSendingParameters();
+		}
 
+	public void performRequestCurrentDump()
+		{
+		super.performRequestCurrentDump();
+		if (!m1000) requestSendingParameters();
+		}
 
     public byte[] requestCurrentDump()
-        {               
+        {
         byte[] data = new byte[7];
         data[0] = (byte)0xF0;
         data[1] = (byte)0x10;
@@ -1862,10 +1879,31 @@ public class OberheimMatrix1000 extends Synth
 
     public boolean useClassicPatchNames = true;
 
+	// This strange little message sets up the Matrix 6 and 6R to receive individual parameter
+	// changes.  It is not, to my knowledge, required for the Matrix 1000.   I don't want to
+	// send it before every individual parameter change, so instead I am sending it at certain
+	// opportune times, like each patch emit, patch request, and when the user asks for it
+	// via a menu option.
+	void requestSendingParameters()
+		{
+		tryToSendSysex( new byte[] { (byte)0xF0, 0x10, 0x06, 0x05, (byte)0xF7 } );
+		}
+
     public void addOberheimMenu()
         {
-        JMenu menu = new JMenu("Matrix 1000");
+        JMenu menu = new JMenu("Matrix");
         menubar.add(menu);
+
+		JMenuItem sendParameterMenu = new JMenuItem("Request Sending Parameters");
+		sendParameterMenu.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent evt)
+                {
+                requestSendingParameters();
+                }
+            });
+            
+        menu.add(sendParameterMenu);
 
         // classic patch names
                 

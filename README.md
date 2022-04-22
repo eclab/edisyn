@@ -38,7 +38,7 @@ Donations are welcome via Paypal to my email address (sean@cs.gmu.edu).
 
 ## What's New
 
-Version 30 has lots of improements, but one big one in particular:
+Version 30 has lots of improvements, but one big one in particular:
 
 * Edisyn now has a Librarian!  
 * The Librarian should work with a large number of Edisyn's editors, though has been tested only on about 2/3 of them.  The ones for which it has not been tested will issue a warning.  I need help testing them.  To see the current Librarian status, or to get involved testing, see the [Librarian Page](LIBRARIAN.md).

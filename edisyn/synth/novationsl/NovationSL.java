@@ -3630,10 +3630,11 @@ public class NovationSL extends Synth
             }
         }
 
-// We have to deal with the Automap template (bank 33).  One strategy is to permit bank 33
+// We have to deal with the Automap template (patch 33).  One strategy is to permit patch 33
 // but declare it invalid.  That'd be done like this:
 //    public String[] getPatchNumberNames() { return buildIntegerNames(33, 1); }
 //    public boolean isValidPatchLocation(int bank, int num) { return (num < 32 && bank == 0); }
+//    public int getValidBankSize(int bank) { return 32; }
 // The other strategy is to not include bank 33 in the library at all, and so when we
 // receive it we get an exception but we don't handle it.  I prefer this approach currently:
     public String[] getPatchNumberNames() { return buildIntegerNames(32, 1); }

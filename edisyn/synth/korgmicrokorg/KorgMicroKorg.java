@@ -218,6 +218,9 @@ public class KorgMicroKorg extends Synth
                     if (getNumTabs() == 0)  // haven't been set up yet
                         return;
                                 
+                    // remember where we were
+		            String title = getSelectedTabTitle();
+
                     removeTab("Timbre 1");
                     removeTab("Timbre 2");
                     removeTab("Vocoder");
@@ -237,6 +240,11 @@ public class KorgMicroKorg extends Synth
                             insertTab("Channels", panels[3], 2);
                             break;
                         }
+                    
+                    // go back to where we were
+                    int index = getIndexOfTabTitle(title);
+                    if (index < 0) index = 0;
+                    setSelectedTabIndex(index);
                     }
                 };
             vbox.add(comp);

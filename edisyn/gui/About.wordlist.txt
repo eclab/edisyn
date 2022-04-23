@@ -1,0 +1,8 @@
+This collection of words is derived from the no-swears wordlists here:
+
+	https://github.com/first20hours/google-10000-english
+
+... which in turn is derived from Peter Norvig's collection of 
+the most common words on the web:
+
+	https://norvig.com/ngrams/count_1w.txt

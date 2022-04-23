@@ -299,6 +299,7 @@ public class KorgMicrosampler extends Synth
                 
         comp = new StringComponent("Bank Name", this, "name", 8, "Name must be up to 8 ASCII characters.")
             {
+            /*
             public boolean isValid(String val)
                 {
                 if (val.length() > 8) return false;
@@ -309,6 +310,7 @@ public class KorgMicrosampler extends Synth
                     }
                 return true;
                 }
+            */
                                 
             public void update(String key, Model model)
                 {
@@ -326,7 +328,21 @@ public class KorgMicrosampler extends Synth
         globalCategory.add(hbox, BorderLayout.WEST);
         return globalCategory;
         }
-                
+  
+      public String revisePatchName(String name)
+        {
+        if (name == null) name = "";
+        name = (name + "        ").substring(8);
+        char[] chars = name.toCharArray();
+        for(int i = 0; i < chars.length; i++)
+            {
+            if (chars[i] < 32 || chars[i] > 127)
+                chars[i] = ' ';
+            }
+        return new String(chars);
+        }
+
+              
                                         
     /** Add the global patch category (name, id, number, etc.) */
     public JComponent addGlobal(Color color)
@@ -3871,7 +3887,6 @@ public class KorgMicrosampler extends Synth
         receiveCurrent.setEnabled(false);
         receivePatch.setEnabled(false);
         receiveNextPatch.setEnabled(false);
-        transmitTo.setEnabled(false);
         writeTo.setEnabled(false);
         merge.setEnabled(false);
         return frame;

@@ -108,9 +108,6 @@ public class RolandD110Multi extends Synth
     public JFrame sprout()
         {
         JFrame frame = super.sprout();
-        // It doesn't make sense to send to current patch
-        // receiveCurrent.setEnabled(false);
-        transmitTo.setEnabled(false);
         addD110MultiMenu();
         return frame;
         }         

@@ -107,7 +107,6 @@ public class Yamaha4OpMulti extends Synth
     public JFrame sprout()
         {
         JFrame frame = super.sprout();
-        transmitTo.setEnabled(false);
         writeTo.setEnabled(false);
         return frame;
         }         

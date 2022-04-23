@@ -787,8 +787,6 @@ public class YamahaFS1R extends Synth
     public JFrame sprout()
         {
         JFrame frame = super.sprout();
-        transmitTo.setEnabled(false);
-        //writeTo.setEnabled(false);
         addYamahaFS1RMenu();
         return frame;
         }         

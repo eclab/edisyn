@@ -954,7 +954,6 @@ public class EmuProteus extends Synth
         {
         JFrame frame = super.sprout();
         receiveCurrent.setEnabled(false); // can't request current
-        transmitTo.setEnabled(false);  // can't send to a given patch
         return frame;
         }
     

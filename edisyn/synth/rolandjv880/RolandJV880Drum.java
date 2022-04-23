@@ -935,8 +935,6 @@ public class RolandJV880Drum extends Synth
     public JFrame sprout()
         {
         JFrame frame = super.sprout();
-        // It doesn't make sense to send to current patch
-        transmitTo.setEnabled(false);
         addJV880DrumMenu();
         return frame;
         }
@@ -1090,9 +1088,9 @@ public class RolandJV880Drum extends Synth
     // like an organ or whatnot, it will play forever
 //      public boolean getClearsTestNotes() { return false; }
         
-    public int getPauseAfterChangePatch() { return 100; } 
+    public int getPauseAfterChangePatch() { return 100; }
 
-    public int getPauseAfterSendAllParameters() { return 100; } 
+    public int getPauseAfterSendAllParameters() { return 300; }		// works at 100 in 1.01 but I want to be careful 
  
     public String getPatchName(Model model) { return "Drum"; }
         

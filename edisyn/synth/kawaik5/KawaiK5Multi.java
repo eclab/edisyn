@@ -676,8 +676,6 @@ public class KawaiK5Multi extends Synth
         // We can't request the current working memory (don't ask why)
         receiveCurrent.setEnabled(false);
 
-        // We can't reasonably send to patches if we send in bulk.
-        transmitTo.setEnabled(false);
         return frame;
         }         
 

@@ -75,7 +75,6 @@ public class MAudioVenomGlobal extends Synth
         blend.setEnabled(false);
         receivePatch.setEnabled(false);
         receiveNextPatch.setEnabled(false);
-        transmitTo.setEnabled(false);
         writeTo.setEnabled(false);
         merge.setEnabled(false);
         return frame;

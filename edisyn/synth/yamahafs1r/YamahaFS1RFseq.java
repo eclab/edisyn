@@ -346,7 +346,6 @@ public class YamahaFS1RFseq extends Synth
     public JFrame sprout()
         {
         JFrame frame = super.sprout();  
-        transmitTo.setEnabled(false);           // Though that doesn't matter any more
         addYamahaFS1RMenu();
         return frame;
         }         
@@ -2739,6 +2738,18 @@ public class YamahaFS1RFseq extends Synth
     public int getPatchNameLength() { return 8; }
 
     public boolean isValidPatchLocation(int bank, int num) { return (bank == 1 || num < 6); }
+
+    public int getValidBankSize(int bank)
+    	{
+        if (bank == 1)
+            {
+            return super.getValidBankSize(bank);
+            }
+        else 
+            {
+            return 6; 
+            }
+    	}
         
     public boolean getUpdatesListenersOnDownload() { return false; }    
 

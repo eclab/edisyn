@@ -197,7 +197,6 @@ public class OberheimMatrix1000 extends Synth
     public JFrame sprout()
         {
         JFrame frame = super.sprout();
-        transmitTo.setEnabled(false);
         // The 6/6r can't receive current patch
         receiveCurrent.setEnabled(m1000);
         addOberheimMenu();

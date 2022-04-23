@@ -119,7 +119,6 @@ public class YamahaFB01 extends Synth
     public JFrame sprout()
         {
         JFrame frame = super.sprout();
-        transmitTo.setEnabled(false);
         addYamahaFB01Menu();
         return frame;
         }         
@@ -1334,6 +1333,17 @@ public class YamahaFB01 extends Synth
         return obj; 
         }
 
+/*
+    public String reviseBankName(String name) 
+    	{
+    	char[] old = name.toCharArray() + "                ";
+    	char[] name = char[16];
+    	for(int i = 0; i < 16; i++)
+    		name[i] = (char)(old[i] & 127);
+    	return String.valueOf(name);
+    	}
+*/
+    
     public String[] getBankNames() { return BANKS; }
 
     /** Return a list of all patch number names.  Default is { "Main" } */

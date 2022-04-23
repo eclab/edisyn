@@ -83,7 +83,6 @@ public class KorgWavestationSequence extends KorgWavestationAbstract
     public JFrame sprout()
         {
         JFrame frame = super.sprout();
-        transmitTo.setEnabled(false);  // there's no such thing as "sending to" another patch -- you should always write to it
         receiveCurrent.setEnabled(false);  // we can't request the "current" sequence
         addWavestationMenu();
         return frame;

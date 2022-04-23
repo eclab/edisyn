@@ -83,8 +83,6 @@ public class PreenFM2 extends Synth
         {
         JFrame frame = super.sprout();
         writeTo.setEnabled(false);
-        transmitTo.setEnabled(false);
-        //        merge.setEnabled(false);
         addPreenMenu();
         return frame;
         }

@@ -284,8 +284,6 @@ public class RolandD110Tone extends Synth
     public JFrame sprout()
         {
         JFrame frame = super.sprout();
-        // It doesn't make sense to send to another patch
-        transmitTo.setEnabled(false);
         addD110ToneMenu();
         return frame;
         }         

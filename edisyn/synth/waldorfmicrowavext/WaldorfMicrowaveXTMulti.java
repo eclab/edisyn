@@ -103,8 +103,6 @@ public class WaldorfMicrowaveXTMulti extends Synth
     public JFrame sprout()
         {
         JFrame frame = super.sprout();
-        // multi-mode on the Microwave can't switch patches
-        transmitTo.setEnabled(false);
         return frame;
         }         
 

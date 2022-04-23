@@ -253,7 +253,6 @@ public class YamahaFS1RMulti extends Synth
     public JFrame sprout()
         {
         JFrame frame = super.sprout();  
-        transmitTo.setEnabled(false);           // Though that doesn't matter any more
         addYamahaFS1RMenu();
         return frame;
         }         

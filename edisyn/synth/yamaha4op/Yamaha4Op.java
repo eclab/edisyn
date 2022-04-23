@@ -317,7 +317,6 @@ public class Yamaha4Op extends Synth
     public JFrame sprout()
         {
         JFrame frame = super.sprout();
-        transmitTo.setEnabled(false);
         writeTo.setEnabled(false);
         addYamaha4OpMenu();
         return frame;
@@ -3106,7 +3105,17 @@ public class Yamaha4Op extends Synth
             }
         }
 
-    public int getRequestableBank() { return 0; }
+    public int getValidBankSize(int bank)
+    	{
+        if (getSynthType() == TYPE_DX27_DX100)
+            {
+            return 24;
+            }
+        else 
+            {
+            return super.getValidBankSize(bank); 
+            }
+    	}
     
     public byte[] requestBankDump(int bank) { return new byte[] { (byte)0xF0, 0x43, (byte)(0x20 + getChannelOut()), 0x04, (byte)0xF7 }; }
     public boolean librarianTested() { return true; }

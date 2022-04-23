@@ -81,7 +81,6 @@ public class OberheimMatrix1000Global extends Synth
         JFrame frame = super.sprout();
         receivePatch.setEnabled(false);
         receiveNextPatch.setEnabled(false);
-        transmitTo.setEnabled(false);
         writeTo.setEnabled(false);
         merge.setEnabled(false);
         return frame;

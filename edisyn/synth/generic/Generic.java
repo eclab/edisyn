@@ -1250,7 +1250,6 @@ public class Generic extends Synth
         {
         JFrame frame = super.sprout();
         writeTo.setEnabled(false);
-        transmitTo.setEnabled(false);
         transmitCurrent.setEnabled(false);
         receivePatch.setEnabled(false);
         receiveNextPatch.setEnabled(false);

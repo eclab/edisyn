@@ -139,7 +139,6 @@ public class YamahaDX7 extends Synth implements ProvidesNN
     public JFrame sprout()
         {
         JFrame frame = super.sprout();
-        transmitTo.setEnabled(false);
         writeTo.setEnabled(false);
         return frame;
         }         

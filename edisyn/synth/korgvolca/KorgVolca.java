@@ -373,7 +373,6 @@ public class KorgVolca extends Synth
     public JFrame sprout()
         {
         JFrame frame = super.sprout();
-        transmitTo.setEnabled(false);
         writeTo.setEnabled(false);
         receiveCurrent.setEnabled(false);
         receivePatch.setEnabled(false);

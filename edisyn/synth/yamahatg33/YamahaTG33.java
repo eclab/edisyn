@@ -247,7 +247,6 @@ public class YamahaTG33 extends Synth
     public JFrame sprout()
         {
         JFrame frame = super.sprout();
-        transmitTo.setEnabled(false);
         writeTo.setEnabled(false);
         addTG33Menu();
         return frame;

@@ -186,6 +186,7 @@ public class KorgMicroKorg extends Synth
     public String revisePatchName(String name)
         {
         if (name == null) name = "";
+        name = (name + "            ").substring(12);
         char[] chars = name.toCharArray();
         for(int i = 0; i < chars.length; i++)
             {

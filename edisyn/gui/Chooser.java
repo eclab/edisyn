@@ -284,6 +284,11 @@ public class Chooser extends NumericalComponent
         label.setText("  " + _label);
         }
         
+    public void setElements(String[] elements)
+        {
+        setElements(getLabelText(), elements);
+        }
+
     public void setElements(String _label, String[] elements)
         {
         setElements(_label, elements, buildDefaultValues(elements));

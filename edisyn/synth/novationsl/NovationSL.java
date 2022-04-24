@@ -510,7 +510,19 @@ public class NovationSL extends Synth
         }
        
                 
-    public String getDefaultResourceFileName() { return "NovationSL.init"; }
+    public String getDefaultResourceFileName() 
+    	{ 
+    	// We have two different init files depending on whether we're compact or not
+    	if (isCompact())
+    		{
+	    	return "NovationSLCompact.init"; 
+    		}
+    	else
+    		{
+	    	return "NovationSL.init"; 
+	    	}
+    	}
+    	
     public String getHTMLResourceFileName() { return "NovationSL.html"; }
 
     public boolean gatherPatchInfo(String title, Model change, boolean writing)
@@ -3670,9 +3682,7 @@ public class NovationSL extends Synth
       data; and there doesn't appear to be much you can use in the actual sysex documentation to distinguish
       them in some cases.  It was a terrible design error from the standpoint of a sysex patch editor designer.
       I do not know if this documentation properly describes the Compact but I *believe* it does.
-      
-      There is a final version of the SL called the Nocturn.  I don't know anything about this unit.
-      
+            
       
       NOTES ON SYMBOLS
       
@@ -3786,13 +3796,13 @@ public class NovationSL extends Synth
       98   62   (0x05)
 
       MIDI PORT GROUPS KEYBOARD
-      99   63   Channel                               0-16                            [1-16, "As Common"]
+      99   63   Channel                       0-16                            [1-16, "As Common"]
       100  64   Ports                         [See Table 4]
       *** NOTE: I have seen this corrupted on the unit, where it returns 0x05 for "Common"
       *** NOTE: On the SL Compact Editor, MIDI 2 is not supported
       
       MIDI PORT GROUPS COMMON
-      101  65   Channel                               0-15                            [1-16]
+      101  65   Channel                       0-15                            [1-16]
       102  66   Ports                         [See Table 3]
       *** NOTE: On the SL Compact Editor, MIDI 2 is not supported
 
@@ -3801,7 +3811,7 @@ public class NovationSL extends Synth
       104  68   (0x00)
 
       105  69   Velocity Curve                0-126   [representing 1-127]
-      106  6A   Octave Setting                0-9             [representing -4 ... 5]
+      106  6A   Octave Setting                0-9     [representing -4 ... 5]
       107  6B   Pot Pickup ON         0x01
       +->  Aftertouch OFF     0x04
       *** NOTE: the original SL and SL Compact do not have pot pickup

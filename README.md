@@ -221,9 +221,7 @@ If you want to use Edisyn in combination with a DAW, see the manual's section on
 ### Running from the command line (OS X, Windows, Linux)
 
 1. Make sure Java is installed.
-
 2. Download [Edisyn's jar file](https://cs.gmu.edu/~eclab/projects/edisyn/edisyn.jar).
-
 3. Run Edisyn as:   `java -jar edisyn.jar`
 
 

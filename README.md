@@ -173,9 +173,7 @@ You may have installed the MMJ (MIDI Java) library in the past, which is now obs
 I believe that the following should work:
 
 1. Download and install at least [Java 11](http://www.oracle.com/technetwork/java/javase/downloads/index.html).  The JRE should work fine, but if Oracle is no longer offering the JRE, install the JDK (which installs a JRE among other gunk).
-
 2. Download Edisyn's jar file, called [edisyn.jar](https://cs.gmu.edu/~eclab/projects/edisyn/edisyn.jar).
-
 3. Double-click on edisyn.jar to launch Edisyn.
 
 If you want to use Edisyn in combination with a DAW, see the manual's section on building a MIDI Loopback.
@@ -214,9 +212,7 @@ When you double-click on a jar file, Windows may not launch Java properly becaus
 I'm told that Edisyn works fine if you have installed at least Java 8.  After this:
 
 1. Download [Edisyn's jar file](https://cs.gmu.edu/~eclab/projects/edisyn/edisyn.jar).
-
 2. You'll need to figure out how to make it so that double-clicking on the jar file launches it in java.  In Ubuntu, here's what you do: right-click on the jar file icon and choose "Properties".  Then select the "Open With" tab, and select your Java VM (for example "Open JDK Java 8 Runtime").  The press "Set as Default".  This makes the Java VM the default application to launch jar files.
-
 3. Thereafter you should be able to just double-click on the file to launch Edisyn.
 
 If you want to use Edisyn in combination with a DAW, see the manual's section on building a MIDI Loopback.

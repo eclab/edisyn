@@ -491,8 +491,9 @@ public class NovationSL extends Synth
         hbox = new HBox();
         
         // Loop and Record are out of order, notice index++ not used
-        hbox.add(addButton(6, "page10control5", index, Style.COLOR_B()));                                       /// LOOP
+        hbox.add(addButton(6, "page10control5", index, Style.COLOR_B()));                        /// LOOP
         hbox.addLast(addButton(5, "page10control6", index + 1, Style.COLOR_B()));                       /// RECORD
+        // NOW we increment index for both of them
         index += 2;
         vbox.add(hbox);
         if (!isCompact())

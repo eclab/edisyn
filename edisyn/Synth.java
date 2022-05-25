@@ -65,8 +65,6 @@ public abstract class Synth extends JComponent implements Updatable
 
     /** The Synth menu bar */
     public JMenuBar menubar;
-    /** The "Send to Patch..." menu */
-    public JMenuItem transmitTo;
     /** The "Send to Current Patch" menu */
     public JMenuItem transmitCurrent;
     /** The "Write to Patch..." menu */
@@ -126,7 +124,7 @@ public abstract class Synth extends JComponent implements Updatable
     /** NN randomization checkbox, only appears if the Synth providesNN (such as a DX7) */
     public JCheckBoxMenuItem nnRandomize;
     public JMenu librarianMenu;
-    
+    boolean sprouted = false;
     
     /// Librarian menus that may not be turned on
     JMenuItem downloadMenu;
@@ -319,7 +317,12 @@ public abstract class Synth extends JComponent implements Updatable
             Synth synth = (Synth)(_class.newInstance()); // this will setWillPush(false);
             if (!throwaway)
                 {
+                // Make sure to turn off MIDI!
+                synth.setSendMIDI(false);
                 synth.sprout();
+                synth.sprouted = true;
+                synth.setSendMIDI(true);
+
                 final JFrame frame = ((JFrame)(SwingUtilities.getRoot(synth)));
                 setLastSynth(_class.getName());
 
@@ -355,7 +358,8 @@ public abstract class Synth extends JComponent implements Updatable
                     {
                     synth.sendAllSoundsOff(); // not doSendAllSoundsOff(false) because we don't want to turn off the test notes
                     }
-                synth.windowBecameFront();                              
+                synth.windowCreated();
+                synth.windowBecameFront();                            
                 }
             synth.undo.setWillPush(true);
             return synth;
@@ -887,7 +891,10 @@ public abstract class Synth extends JComponent implements Updatable
         what condition emitAll(...) is being called, such as STATUS_SENDING_ALL_PARAMETERS
         or STATUS_UPDATING_ONE_PARAMETER.  By default, this calls emitAll(key);
         
-        If you return a zero-length byte array, nothing will be sent.  */
+        If you return a zero-length byte array, nothing will be sent.  
+        
+     	If you do not support individual parameters, then you should return NULL, rather than an empty array. 
+		*/
     public Object[] emitAll(String key, int status)
         {
         return emitAll(key);
@@ -897,12 +904,16 @@ public abstract class Synth extends JComponent implements Updatable
         OR MORE sysex dumps or other MIDI messages.  Each sysex dump is a separate byte array,
         and other midi messages are MIDI message objects.
         
-        If you return a zero-length byte array, nothing will be sent.  */
+        If you return a zero-length byte array, nothing will be sent.  
+        
+        If you do not support individual parameters, then you should return NULL, rather than an empty array. 
+        */
     public Object[] emitAll(String key)
         {
         byte[] result = emit(key);
-        if (result == null ||
-            result.length == 0)
+        if (result == null)
+        	return null;
+        else if (result.length == 0)
             return new Object[0];
         else
             return new Object[] { result };
@@ -910,10 +921,13 @@ public abstract class Synth extends JComponent implements Updatable
 
     /** Produces a sysex parameter change request for the given parameter.  
         If you return a zero-length byte array, nothing will be sent.
+        If you do not support individual parameters, then you should return NULL, rather than an empty array. 
+        This is the default.
         
         <p>Note that this method will only be called by emitAll(...).  So if you 
-        have overridden emitAll(...) you don't need to implement this method. */        
-    public byte[] emit(String key) { return new byte[0]; }
+        have overridden emitAll(...) you don't need to implement this method. 
+	*/        
+    public byte[] emit(String key) { return null; }
     
     /** Produces a sysex message to send to a synthesizer to request it to initiate
         a patch dump to you.  If you return a zero-length byte array, nothing will be sent. 
@@ -1112,6 +1126,9 @@ public abstract class Synth extends JComponent implements Updatable
 
     /** Override this as you see fit to do something special when your window becomes front. */
     public void windowBecameFront() { }
+    
+    /** Override this as you see fit to do something special after the window has been created (and MIDI devices set up) but before the Synth is doing undo */
+    public void windowCreated() { }
 
     /** Returns whether the synth sends its patch dump (TRUE) as one single sysex dump or by
         sending multiple separate parameter change requests (FALSE).  By default this is TRUE. */
@@ -2256,6 +2273,64 @@ public abstract class Synth extends JComponent implements Updatable
         return channel;
         }
 
+
+    /** Schedules sending all the parameters in a patch to the synth via sendAllParameters.
+    	The scheduling delay is set to sendAllTimerDelay;
+    */     
+    javax.swing.Timer sendAllParametersTimer = null;
+    
+    void scheduleSendAllParameters()
+    	{
+    	// We first check to see if we're currently sending MIDI.  This is because lots of
+    	// operations (like undo, or hill-climbing), make modifications to parameters
+    	// but don't want those parameters sent until they send them by bulk themselves
+    	// later on.  So they set MIDI to false.  As a result, in sendOneParameter(...) 
+    	// we just call tryToSendMIDI(....) but this is blocked.  However if
+    	// sendOneParameters(...) instead tried to call scheduleSendAllParameters(), this
+    	// would NOT be blocked as it'd put a send on a timer.  We need to prevent this so
+    	// scheduleSendAllParameters() is blocked just like sending a single parameter.
+    	//
+    	// This is enough to stop us from trying to send parameters when we're sprouted;
+    	// but it's not enough to stop us from sending parameters when we're initialized.
+    	// To prevent that, we also check sprouted.
+    	if (!sprouted || !getSendMIDI())
+    		{
+    		// Kill the timer if it exists
+    		if (sendAllParametersTimer != null)
+    			{
+    			sendAllParametersTimer.stop();
+    			sendAllParametersTimer = null;
+    			}
+    		return;
+    		}
+    	
+		sendAllParameters();
+
+    	/*
+		if (sendAllParametersTimer == null)
+			{
+			sendAllParametersTimer = new javax.swing.Timer(getPauseAfterSendAllParameters(), new ActionListener()
+				{
+				public void actionPerformed(ActionEvent e)
+					{
+					sendAllParametersTimer.stop();
+					sendAllParametersTimer = null;
+					sendAllParameters();
+					// FIXME
+					// This should emit the pause because getSendsAllParametersAsDump() needs to be true for this synth.
+					// If it's not, we've got an issue
+					}
+				});
+			sendAllParametersTimer.start();
+			}
+		*/
+		}
+        
+        
+    //// FIXME This section should be revised, getting rid of the diff stuff, which is never used and is 
+    ////       problematic for synths that can't send individual parameters anyway
+
+
     /** Sends all the parameters in a patch to the synth.
 
         <p>If getSendsParametersOnlyOnSendCurrentPatch() is TRUE then this method
@@ -2300,6 +2375,7 @@ public abstract class Synth extends JComponent implements Updatable
             }
         else
             {
+            // this should never be called if the synth doesn't do individual parameters
             sendDifferentParameters(null);
             }
         return true;
@@ -2307,14 +2383,16 @@ public abstract class Synth extends JComponent implements Updatable
 
     /** Individually sends all parameters for which the current model differs from the provided model.
         If the provided model is null, then all parameters are sent. */     
-    public void sendDifferentParameters(Model other)
+    // This doesn't check to see if the synth can send individual parameters or not.  Don't call it if it can't.
+    void sendDifferentParameters(Model other)
         {
         sendDifferentParameters(other, 1.0);
         }
         
 
-    public void sendDifferentParameters(Model other, double probability)
+    void sendDifferentParameters(Model other, double probability)
         {
+	    // This doesn't check to see if the synth can send individual parameters or not.  Don't call it if it can't.
         if (!getSendMIDI())
             return;  // don't bother!  MIDI is off
 
@@ -3168,8 +3246,10 @@ public abstract class Synth extends JComponent implements Updatable
         {
         if (activeSynth) return true;
         
-        Window activeWindow = javax.swing.FocusManager.getCurrentManager().getActiveWindow();
         Component synthWindow = SwingUtilities.getRoot(Synth.this);
+        if (synthWindow == null) return false;
+        
+        Window activeWindow = javax.swing.FocusManager.getCurrentManager().getActiveWindow();
                                         
         // we want to be either the currently active window, the parent of a dialog box which is the active window, or the last active window if the user is doing something else
         return (synthWindow == activeWindow || (activeWindow != null && synthWindow == activeWindow.getOwner()) ||
@@ -4355,6 +4435,7 @@ public abstract class Synth extends JComponent implements Updatable
         transmitParameters.setSelected(allowsTransmitsParameters);
 
                 
+                /*
         repeatCurrentPatch = new JCheckBoxMenuItem("Repeatedly Send to Current Patch");
         //repeatCurrentPatch.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_U, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()  |  InputEvent.SHIFT_MASK));
         menu.add(repeatCurrentPatch);
@@ -4365,9 +4446,7 @@ public abstract class Synth extends JComponent implements Updatable
                 doRepeatCurrentPatch();
                 }
             });
-
-        // we don't use this any more
-        transmitTo = new JMenuItem("Send to Patch...");        
+            */
 
         menu.addSeparator();
 
@@ -6241,11 +6320,6 @@ public abstract class Synth extends JComponent implements Updatable
         
         
         
-        
-        
-        
-        
-        
     ///// SYSEX UTILITIES
         
     /** Returns all sysex messages in the given MIDI file (not sysex file). */
@@ -6327,7 +6401,7 @@ public abstract class Synth extends JComponent implements Updatable
 
 
 
-
+		
     /** Flattens a two-dimensional array to a one-dimensional array, stripping out the non-sysex elements. 
         The array may contain (1) byte[] sysex data (2) Sysex Messages of the form javax.sound.midi.SysexMessage
         (3) other data, notably Integers. #3 is stripped out, and 1 and 2 are concatenated into a stream of
@@ -8655,8 +8729,16 @@ public abstract class Synth extends JComponent implements Updatable
         {
         if (allowsTransmitsParameters && getSendMIDI())
             {
-            if (tryToSendMIDI(emitAll(key, STATUS_UPDATING_ONE_PARAMETER)))
-                simplePause(getPauseAfterSendOneParameter());
+            Object[] output = emitAll(key, STATUS_UPDATING_ONE_PARAMETER);
+            if (output == null)
+            	{
+            	scheduleSendAllParameters();
+            	}
+            else if (output.length != 0)
+            	{
+	            if (tryToSendMIDI(output))
+	                simplePause(getPauseAfterSendOneParameter());
+	        	}
             }
         }
 
@@ -9135,6 +9217,12 @@ public abstract class Synth extends JComponent implements Updatable
         everything to the longest length, and then lets synths mark out some cells as "invalid".  This
         method normally returns true. */
     public boolean isValidPatchLocation(int bank, int num) { return true; }
+
+    /** Some synthesizers have ragged banks -- different banks have different lengths.  Edisyn stretches
+        everything to the longest length, and then lets synths mark out some cells as "invalid".  
+        This method should return the actual length of the bank; by default it just
+        returns -1, indicating that it's the "standard" bank size. */
+    public int getValidBankSize(int bank) { return -1; }
 
     /** Some synths (Yamaha 4-op) can only request a single bank.  This returns
         that bank, or -1 if all banks are requestable by requestBankDump (the default). */

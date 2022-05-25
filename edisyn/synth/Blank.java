@@ -19,9 +19,8 @@ import javax.sound.midi.*;
 public class Blank extends Synth
     {
 
-    ////// BELOW ARE DEFAULT IMPLEMENTATION OF COMMON METHODS THAT SYNTH EDITORS IMPLEMENT OR OVERRIDE.
-    ////// If you do not need to implement or override a method, you should delete that method entirely
-    ////// unless it is abstract, in which case, keep the default method described here.
+    ////// BELOW ARE DEFAULT IMPLEMENTATIONS OF COMMON HOOK METHODS THAT SYNTH EDITORS IMPLEMENT OR OVERRIDE.
+    ////// If you do not need to implement or override a method, you should delete that method entirely.
         
         
 
@@ -423,6 +422,8 @@ public class Blank extends Synth
     public Object[] emitAll(String key)
         {
         // This writes a single parameter out to the synth.
+        // If nothing should be emitted for the given key, return a zero-length array.
+        // If your synth does not support emitting for individual keys at all, return null.
         //
         // If you need to send more than just a simple sysex message, override this one.
         return super.emitAll(key);
@@ -431,9 +432,11 @@ public class Blank extends Synth
     public byte[] emit(String key) 
         { 
         // This writes a single parameter out to the synth.
+        // If nothing should be emitted for the given key, return a zero-length array.
+        // If your synth does not support emitting for individual keys at all, return null.
         //
         // If you need to send just a simple sysex message, override this one.
-        return new byte[0]; 
+        return super.emit(key); 
         }
 
 
@@ -736,6 +739,15 @@ public class Blank extends Synth
         // when their window comes to the fore.
         return; 
         }
+        
+    public void windowCreated()
+    	{
+        // If your editor's window was just created and the user has selected
+        // MIDI device parameters (or chose not to), this method will
+        // be called to inform you.  For example, you could use this to issue a
+        // Sysex device inquiry message to help further set up the synth.
+    	return;
+    	}
 
     public boolean getSendsAllParametersAsDump() 
         {
@@ -1043,6 +1055,26 @@ public class Blank extends Synth
         // written to synthesizers from those locations.
         return true; 
         }
+        
+    public int getValidBankSize(int bank)
+    	{
+    	// Returns the actual number of valid patches in the bank (see isValidPatchLocation(...)).
+    	// By default this is just the "standard" bank size as returned by getPatchNumberNames().length, 
+    	// indicated with a -1.
+    	return -1;
+    	
+    	// A simple but stupid O(n) way to compute this would be:
+    	//
+    	//String[] s = getPatchNumberNames();
+    	//if (s == null) return 0;
+    	//int valid = 0; 
+    	//for(int i = 0; i < s.length; i++)
+    	//	{
+    	//	if (isValidPatchLocation(bank, i))
+    	//		valid++;
+    	//	}
+    	//return valid;
+    	}
     
     public boolean getUpdatesListenersOnDownload() 
         {

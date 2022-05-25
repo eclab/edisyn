@@ -868,6 +868,7 @@ public class RolandJV880Drum extends Synth
         }
 
 
+	public static final int PAUSE_AFTER_CHANGE_PATCH_PERFORMANCE_BUTTON = 200;
 
     //// I CAN GET ALL 4 PATCH SEGMENTS WITH
     ////    F0 41 10 46 11 01 48 20 00 00 00 0C 00 0B F7
@@ -879,7 +880,7 @@ public class RolandJV880Drum extends Synth
             produceChecksum(new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00 }), (byte)0xF7 });
 
         // It takes a second for this to take effect
-        simplePause(200);
+        simplePause(PAUSE_AFTER_CHANGE_PATCH_PERFORMANCE_BUTTON);
 
         // Internal
         byte AA = (byte)(0x01);
@@ -907,7 +908,7 @@ public class RolandJV880Drum extends Synth
             produceChecksum(new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00 }), (byte)0xF7 });
 
         // It takes a second for this to take effect
-        simplePause(200);
+        simplePause(PAUSE_AFTER_CHANGE_PATCH_PERFORMANCE_BUTTON);
 
         byte AA = (byte)(0x00);
         byte BB = (byte)(0x07);

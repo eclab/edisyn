@@ -94,8 +94,6 @@ public class RolandJV880Multi extends Synth
     public JFrame sprout()
         {
         JFrame frame = super.sprout();
-        // It doesn't make sense to send to current patch
-        transmitTo.setEnabled(false);
         addJV880Menu();
         return frame;
         }         
@@ -881,7 +879,12 @@ public class RolandJV880Multi extends Synth
         byte DD = (byte)0x00;
             
         // figure out the address
-        if (key.startsWith("part1"))
+        if (key.equals("name"))
+        	{
+            CC = (byte)(CC + 0x00);
+            DD = (byte)(DD + 0x00);
+            }
+        else if (key.startsWith("part1"))
             {
             CC = (byte)(CC + 0x08);
             DD = (byte)(DD + ((Integer)(allToneParametersToIndex.get(key.substring(5)))).intValue());  // get rid of the "part1"
@@ -925,7 +928,7 @@ public class RolandJV880Multi extends Synth
             {
             DD = (byte)(DD + ((Integer)(allGlobalParametersToIndex.get(key))).intValue());
             }
-        
+            
         byte[] payload = getData(key);
 
         // Handle irregularities in multi-byte data
@@ -935,7 +938,7 @@ public class RolandJV880Multi extends Synth
                         
             // gather data which is checksummed
             byte[] checkdata = new byte[4 + 12];
-            System.arraycopy(new byte[] { AA, BB, CC, DD }, 0, data, 0, 4);
+            System.arraycopy(new byte[] { AA, BB, CC, DD }, 0, checkdata, 0, 4);
             System.arraycopy(payload, 0, checkdata, 4, payload.length);
                         
             // concatenate all data
@@ -1056,7 +1059,7 @@ public class RolandJV880Multi extends Synth
         buf[2] = (byte)getID();
         buf[3] = (byte)0x46;
         buf[4] = (byte)0x12;
-        if (true || toWorkingMemory || model.get("bank", 0) >= 2)       // we can't write to preset banks)
+        if (toWorkingMemory || model.get("bank", 0) >= 2)       // we can't write to preset banks)
             {
             buf[5] = (byte)0x00;
             buf[6] = (byte)0x00;
@@ -1134,10 +1137,21 @@ public class RolandJV880Multi extends Synth
         model.set("number", tempModel.get("number"));
         model.set("bank", tempModel.get("bank"));
 
-        // performRequestDump has already changed the patch.  At this point the patch is in local memory, so we're
-        // going to just call requestCurrentDump.  This allows us to grab presets A and B as well as internal and card.
-        return requestCurrentDump();
+        // We just had a change patch, so no need to set the patch/performance button.  
+        // Instead, let's go straight to doing the same thing as requestCurrentDump()
+
+        byte AA = (byte)(0x00);
+        byte BB = (byte)(0x00);
+        byte CC = (byte)(0x10);
+        byte DD = (byte)(0x00);
+        
+        byte checksum = produceChecksum(new byte[] { AA, BB, CC, DD, (byte)0x00, (byte)0x00, (byte)0x10, (byte)0x00 });
+        return new byte[] { (byte)0xF0, (byte)0x41, getID(), (byte)0x46, (byte)0x11, 
+            AA, BB, CC , DD, (byte)0x00, (byte)0x00, (byte)0x10, (byte)0x00, checksum, (byte)0xF7 }; 
         }
+
+	static final int PAUSE_AFTER_CHANGE_PATCH_PERFORMANCE_BUTTON = 200;		// 700; //200;
+	static final int PAUSE_AFTER_CHANGE_BANK = 700; //200;
 
     public byte[] requestCurrentDump()
         {
@@ -1146,7 +1160,7 @@ public class RolandJV880Multi extends Synth
             produceChecksum(new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00 }), (byte)0xF7 });
 
         // It takes a second for this to take effect
-        simplePause(200);
+        simplePause(PAUSE_AFTER_CHANGE_PATCH_PERFORMANCE_BUTTON);
 
         byte AA = (byte)(0x00);
         byte BB = (byte)(0x00);
@@ -1196,7 +1210,7 @@ public class RolandJV880Multi extends Synth
 
     public int getPauseAfterChangePatch() { return 700; }   // Seem to need about > 100ms
 
-    public int getPauseAfterSendAllParameters() { return 100; } 
+    public int getPauseAfterSendAllParameters() { return 300; } 
  
     public void changePatch(Model tempModel)
         {
@@ -1212,12 +1226,12 @@ public class RolandJV880Multi extends Synth
                 produceChecksum(new byte[] { 0x00, 0x00, 0x00, 0x00, 0x00 }), (byte)0xF7 });
 
             // It takes a second for this to take effect
-            simplePause(700);
+            simplePause(PAUSE_AFTER_CHANGE_PATCH_PERFORMANCE_BUTTON);
 
             tryToSendMIDI(new ShortMessage(ShortMessage.CONTROL_CHANGE, getChannelOut(), 0, BC));
 
             // It takes a second for this to take effect
-            simplePause(700);
+            simplePause(PAUSE_AFTER_CHANGE_BANK);
 
             tryToSendMIDI(new ShortMessage(ShortMessage.PROGRAM_CHANGE, getChannelOut(), PC, 0));
             }
@@ -1272,7 +1286,7 @@ public class RolandJV880Multi extends Synth
         }
         
     // Takes a long time for batches to come in, particularly Orch Stab 2 (patch Internal 11, dunno why)
-    public int getBatchDownloadWaitTime() { return 2000; }
+    public int getBatchDownloadWaitTime() { return 8000; } 		// { return 2500; }		// 2000;
 
 
 

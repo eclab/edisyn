@@ -10,7 +10,7 @@
 <p>There are some later 4-Op synthesizers (YS100, YS200, B200, etc.) which support a simple kind of multimode, but as a global system setting, not as a patch.  At present I have elected not to support these synthesizers.
 
 <br><br><h3>Communicating with Edisyn</h3>
-Set your synth's receive and transmit channel to the same thing (perhaps Channel 1).  Set the program change to be <b>Com</b> (Common).  Make sure that Sysex is turned <b>on</b>.
+Set your synth's receive and transmit channel to the same thing (perhaps Channel 1), and set Edisyn's Send and Receive channels to that as well.  Set the program change to be <b>Com</b> (Common).  Make sure that Sysex is turned <b>on</b>.
 
 <br><br><h3>Bank Sysex</h3>
 This patch editor knows about bank sysex messages (which group together multiple patches) as well as single-patch sysex messages.  If Edisyn loads or receives a bank sysex message, you will be given the option to edit a patch from it, to save the whole bank sysex, or to upload the whole bank sysex.

@@ -75,7 +75,8 @@ import javax.sound.midi.*;
    <p>Two synthesizers in this family (TX81Z and DX11) also support multitimbral facilities with
    up to 8 different sounds.  These are handled by a different sysex command called PCED.  Edisyn
    supports PCED in a different patch editor.  Four other synthesizers (TQ5, YS100, YS200, B200)
-   are also 8-way multitimbral but via a different sysex command, and this is currently not supported.
+   are also 8-way multitimbral but via a different sysex command, and this is currently not supported,
+   as their multitimbral feature is not really a patch mechanism so much as a global setting. 
         
    <p>Because these synthesizers have (unfortunately) different bank memory structures and
    (really unfortunately) different dump request commands and (really really unfortunately)
@@ -2771,7 +2772,7 @@ public class Yamaha4Op extends Synth
     // V50 Dump Request                 [We can access voices 0...99.  There are three BANKS, Internal, Preset, and Card.]
 
     // DX21 Change Patch                PC
-    // DX27/100 Dump Request                    PC
+    // DX27/100 Dump Request            PC
     // DX11 Dump Request                Unknown: maybe modify slot 127 in PC table to PC value, press SINGLE, send PC 127.  See page 50 of service manual
     // TX81Z Dump Request               Modify slot 127 in PC table to PC value, press PLAY/PERFORM, send PC 127
     // TQ5 Dump Request                 Send command to press the "preset", "card", or "internal" button, then PC  

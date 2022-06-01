@@ -529,6 +529,7 @@ public abstract class Synth extends JComponent implements Updatable
     static String[] synthClassNames;
     static String[] synthRecognizers;
     static String[] synthNames;
+    static String[] synthMakes;
     
     static
         {
@@ -569,6 +570,7 @@ public abstract class Synth extends JComponent implements Updatable
         {
         ArrayList<String> classes = new ArrayList<String>();
         ArrayList<String> names = new ArrayList<String>();
+        ArrayList<String> makes = new ArrayList<String>();
         Scanner scan = new java.util.Scanner(edisyn.Synth.class.getResourceAsStream("synth/Synths.txt"));
         boolean firstTime = true;
         while(scan.hasNextLine())
@@ -576,33 +578,23 @@ public abstract class Synth extends JComponent implements Updatable
             String str = scan.nextLine().trim();
             if (!(str.length() == 0 || str.startsWith("#")))
                 {
-                int space = str.indexOf(' ');
-                int tab = str.indexOf('\t');
-                if (space == -1 && tab == -1) 
+                String[] strs = str.trim().split("\t");
+                if (strs.length < 3) 
                     {
-                    if (firstTime) System.err.println("synth/Synths.txt has no synth name for certain synths.  Here's what they are, add them:");
+                    if (firstTime) System.err.println("synth/Synths.txt has no synth name or make for certain synths:");
                     firstTime = false;
-                    try
-                        {
-                        System.err.print(str + "\t");
-                        Class _class = Class.forName(str);
-                        Method method = _class.getMethod("getSynthName", new Class[] { });
-                        System.err.print((String)(method.invoke(null, new Object[] { } )));
-                        }
-                    catch (Exception ex) { }
-                    System.err.println();
+                    System.err.print(str);
                     continue;
                     }
                 // grab the first one
-                int result = (tab == -1 ? space : (space == -1 ? tab : (space < tab ? space : tab)));
-                String classname = str.substring(0, result).trim();
-                String synthname = str.substring(result).trim();
-                classes.add(classname);
-                names.add(synthname);
+                classes.add(strs[0].trim());
+                makes.add(strs[1].trim());
+                names.add(strs[2].trim());
                 }       
             }
         synthClassNames = (String[])(classes.toArray(new String[0]));
         synthNames = (String[])(names.toArray(new String[0]));
+        synthMakes = (String[])(makes.toArray(new String[0]));
         synthRecognizers = new String[synthClassNames.length];
         for(int i = 0; i < synthRecognizers.length; i++)
             synthRecognizers[i] = synthClassNames[i] + "Rec";
@@ -623,6 +615,12 @@ public abstract class Synth extends JComponent implements Updatable
     public static String[] getSynthNames()
         {
         return synthNames;
+        }
+                
+    /** All synthesizer makes in Edisyn, one per class in synths.  These are loaded from synth/Synths.txt */
+    public static String[] getSynthMakes()
+        {
+        return synthMakes;
         }
                 
     /** Return the synth name for a given class name, or null if an error occurred. */

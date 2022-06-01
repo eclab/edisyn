@@ -231,9 +231,14 @@ public class Favorites
         if (hasFavorite)
             newSynth.addSeparator();
 
+		JMenu synthMakeMenu = null;
+        final String[] synthMakes = synth.getSynthMakes();
+		
         for(int i = 0; i < synthNames.length; i++)
             {
             final int _i = i;
+            if (synthMakeMenu == null || !synthMakes[i].equals(synthMakeMenu.getText()))
+            	synthMakeMenu = new JMenu(synthMakes[i]);
             JMenuItem synthMenu = new JMenuItem(synthNames[i]);
             synthMenu.addActionListener(new ActionListener()
                 {
@@ -243,7 +248,8 @@ public class Favorites
                     synth.doNewSynth(_i);
                     }
                 });
-            newSynth.add(synthMenu);
+            synthMakeMenu.add(synthMenu);
+            newSynth.add(synthMakeMenu);		 // will be added multiple times but that's okay?
             }
 
         newSynth.addSeparator();

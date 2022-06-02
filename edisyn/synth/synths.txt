@@ -1,7 +1,27 @@
+### Copyright 2020 Sean Luke
+### Licensed under Apache License Version 2.0
+
+### SYNTHS.TXT
+###
+### This file contains the list of patch editors that Edisyn has available.
+### Even if Edisyn has the class files for a given patch editor, it will not
+### be loaded and used unless it appears here.  Patch editors must have their
+### associated recognition classes, which must have the exact same classname
+### as the patch editor, except end in "Rec".
+###
+### Each line represents one patch editor and is of the form
+### FULL JAVA CLASS NAME [Tab] MANUFACTURER [Tab] PATCH EDITOR
+### The manufacturer must be identical to other synths with the same make,
+### because it will be used as a sort key to put them under the same menu.
+### Otherwise the synthesizers will be added to Edisyn in the order below,
+### so they should be listed in alphabetical order more or less.
+###
+### In this file, blank lines and lines starting with a # are ignored.
+
 edisyn.synth.alesisd4.AlesisD4	Alesis	Alesis D4/DM5
 edisyn.synth.casiocz.CasioCZ	Casio	Casio CZ
-edisyn.synth.dsiprophet08.DSIProphet08	Dave Smith Instruments	DSI Prophet '08 / Tetra / Mopho
-edisyn.synth.dsiprophet08.DSITetraCombo	Dave Smith Instruments	DSI Tetra [Combo]
+edisyn.synth.dsiprophet08.DSIProphet08	DSI/Sequential	DSI Prophet '08 / Tetra / Mopho
+edisyn.synth.dsiprophet08.DSITetraCombo	DSI/Sequential	DSI Tetra [Combo]
 edisyn.synth.emumorpheus.EmuMorpheus	E-Mu	E-Mu Morpheus / Ultra Proteus
 edisyn.synth.emumorpheus.EmuMorpheusHyper	E-Mu	E-Mu Morpheus / Ultra Proteus [Hyper]
 edisyn.synth.emumorpheus.EmuMorpheusMap	E-Mu	E-Mu Morpheus / Ultra Proteus [MidiMap]
@@ -33,20 +53,20 @@ edisyn.synth.novationdstation.NovationDStation	Novation	Novation Drumstation / D
 edisyn.synth.novationsl.NovationSL	Novation	Novation ReMOTE SL
 edisyn.synth.oberheimmatrix1000.OberheimMatrix1000	Oberheim	Oberheim Matrix 6/6R/1000
 edisyn.synth.oberheimmatrix1000.OberheimMatrix1000Global	Oberheim	Oberheim Matrix 1000 [Global]
-edisyn.synth.preenfm2.PreenFM2	Preen	PreenFM2
+edisyn.synth.preenfm2.PreenFM2	PreenFM	PreenFM2
 edisyn.synth.redsounddarkstar.RedSoundDarkStar	Red Sound	Red Sound DarkStar
 edisyn.synth.rolandd110.RolandD110Tone	Roland	Roland D-110 [Tone]
 edisyn.synth.rolandd110.RolandD110Multi	Roland	Roland D-110 [Multi]
 edisyn.synth.rolandjv880.RolandJV880	Roland	Roland JV-80/880
 edisyn.synth.rolandjv880.RolandJV880Drum	Roland	Roland JV-80/880 [Drum]
 edisyn.synth.rolandjv880.RolandJV880Multi	Roland	Roland JV-80/880 [Multi]
-edisyn.synth.sequentialprophetrev2.SequentialProphetRev2	Sequential	Sequential Prophet Rev2
+edisyn.synth.sequentialprophetrev2.SequentialProphetRev2	DSI/Sequential	Sequential Prophet Rev2
 edisyn.synth.waldorfblofeld.WaldorfBlofeld	Waldorf	Waldorf Blofeld
 edisyn.synth.waldorfblofeld.WaldorfBlofeldMulti	Waldorf	Waldorf Blofeld [Multi]
 edisyn.synth.waldorfkyra.WaldorfKyra	Waldorf	Waldorf Kyra
 edisyn.synth.waldorfkyra.WaldorfKyraMulti	Waldorf	Waldorf Kyra [Multi]
-edisyn.synth.waldorfmicrowave.WaldorfMicrowave	Waldorf	Waldorf MicroWave
-edisyn.synth.waldorfmicrowave.WaldorfMicrowaveMulti	Waldorf	Waldorf MicroWave [Multi]
+#edisyn.synth.waldorfmicrowave.WaldorfMicrowave	Waldorf	Waldorf MicroWave
+#edisyn.synth.waldorfmicrowave.WaldorfMicrowaveMulti	Waldorf	Waldorf MicroWave [Multi]
 #edisyn.synth.waldorfmicrowave.WaldorfMicrowaveWavetable       Waldorf	Waldorf MicroWave [Wavetable]
 edisyn.synth.waldorfmicrowavext.WaldorfMicrowaveXT	Waldorf	Waldorf MicroWave II/XT/XTk
 edisyn.synth.waldorfmicrowavext.WaldorfMicrowaveXTMulti	Waldorf	Waldorf MicroWave II/XT/XTk [Multi]

@@ -231,14 +231,22 @@ public class Favorites
         if (hasFavorite)
             newSynth.addSeparator();
 
-		JMenu synthMakeMenu = null;
+		JMenu synthMakeMenu;
+		HashMap<String,JMenu> map = new HashMap<>();				// This is the existing collection of synth manufacturer menus I've made so far
         final String[] synthMakes = synth.getSynthMakes();
 		
         for(int i = 0; i < synthNames.length; i++)
             {
             final int _i = i;
-            if (synthMakeMenu == null || !synthMakes[i].equals(synthMakeMenu.getText()))
-            	synthMakeMenu = new JMenu(synthMakes[i]);
+            synthMakeMenu = map.get(synthMakes[i]);
+			if (synthMakeMenu == null)
+				{
+				// Build a new manufacturer menu
+				synthMakeMenu = new JMenu(synthMakes[i]);
+            	newSynth.add(synthMakeMenu);
+           		map.put(synthMakes[i], synthMakeMenu);
+				}
+				
             JMenuItem synthMenu = new JMenuItem(synthNames[i]);
             synthMenu.addActionListener(new ActionListener()
                 {
@@ -249,7 +257,6 @@ public class Favorites
                     }
                 });
             synthMakeMenu.add(synthMenu);
-            newSynth.add(synthMakeMenu);		 // will be added multiple times but that's okay?
             }
 
         newSynth.addSeparator();

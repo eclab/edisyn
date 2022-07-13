@@ -34,11 +34,13 @@ I have received a report that sending real-time parameter changes can crash the 
 
 <ul>
 <li>If you've used the D-110 long enough to figure out its bizarre structure, you probably know by now that the notion of a Timbre is completely useless.  It's a holdover from the Roland D-10 structure, where it made more sense.  Although you can save and load Timbres to RAM, Patches do not actually store references to Timbres: they store references to Tones.  Thus Patches bypass Timbres entirely, and Timbres only effect things if you change them on-the-fly.  That is close to useless for editing.  Thus this patch editor provides no facilities for Timbres at all, just Tone editing.
-<p><li>Though the filter and amplifier envelopes have a sustain level, the pitch envelope does not: it is fixed to 50 (half-way).  The MT-32 <i>does</i> have a sustain level, so we might reintroduce this in the future.
+
+<!--<p><li>Though the filter and amplifier envelopes have a sustain level, the pitch envelope does not: it is fixed to 50 (half-way).  The MT-32 <i>does</i> have a sustain level, so we might reintroduce this in the future.
+-->
 </ul>
 
 <br><br><h3>Thanks</h3>
-Thanks to Keith (llamamusic@hotmail.com) for his extraordinary service in loaning a machine in a pinch, providing materials, and debugging.  If you are a D-110 owner, <a href="llamamusic.com">llamamusic.com</a> is a fantastic resource.  Thanks also to Benjamin Wild (dj@benjaminwild.com) for debugging help and the editor's default init patch.
+Thanks to Keith (llamamusic@hotmail.com) for his extraordinary service in loaning a machine in a pinch, providing materials, and debugging.  If you are a D-110 owner, <a href="llamamusic.com">llamamusic.com</a> is a fantastic resource.  Thanks also to Benjamin Wild (dj@benjaminwild.com) for debugging help and the editor's default init patch, and 02FD <tauble04@gmail.com> for determining that the D-110 supports pitch envelope sustain not withstanding the documentation.
 
 <p><table border=0 cellpadding=0 cellspacing=5>
 <tr>

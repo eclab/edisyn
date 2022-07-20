@@ -24,6 +24,18 @@ import javax.sound.midi.*;
 
 public class EmuMorpheus extends Synth
     {
+    public static final String[] BANKS = new String[] { "RAM", "ROM", "Card" };
+    public static final String[] NOTES = new String[] { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
+    public static final String[] TUNE_TABLES = new String[] { "Equal", "Just C", "Vallotti", "19-Tone", "Gamelan", "User" };
+    public static final String[] MIX_BUS = new String[] { "Main", "Sub1", "FXA", "FXB" };
+    public static final String[] XFADE_MODES = new String[] { "Off", "XFade", "XSwitch" };
+    public static final String[] XFADE_DIRECTIONS = new String[] { "Pri->Sec", "Sec->Pri" };
+    public static final String[] LFO_SHAPES = new String[] { "Rand", "Tri", "Sine", "Saw", "Square" };
+    public static final String[] SOLO_MODES = new String[] { "Off", "Wind", "Synth" };
+    public static final String[] SOLO_PRIORITIES = new String[] { "Hi", "Low", "First", "Last", "Drum" };
+    public static final String[] FUNCTION_GENERATOR_TYPES = new String[] { "Absolute", "Delta", "Rnd Absolute", "Rnd Delta" };
+        
+    
     Chooser[] instrumentChoosers = new Chooser[2];
     public HashMap ultraproteusInstrumentOffsetsToIndex = new HashMap();
     public HashMap ultraproteusFilterOffsetsToIndex = new HashMap();
@@ -573,7 +585,7 @@ public class EmuMorpheus extends Synth
             {
             VBox vbox = new VBox();
 
-            params = FUNCTION_GENERATOR__TYPES;
+            params = FUNCTION_GENERATOR_TYPES;
             comp = new Chooser("" + i + " Type", this, "fg" + fg + "seg" + i + "type", params);
             vbox.add(comp);
 
@@ -1011,9 +1023,14 @@ public class EmuMorpheus extends Synth
                 else if (key.equals("layer1filttype") ||
                     key.equals("layer2filttype"))
                     {
+                        // Because the morpheus filters are a subset of the ultraproteus filters, and all are shown
+                        // in the chooser at one time, we shouldn't try to map values to morpheus filters because
+                        // they could be out of range (in the ultraproteus range).
+                	/*
                     if (morpheus)
                         val = MORPHEUS_FILTER_OFFSETS[val];
                     else
+                	*/
                         val = ULTRAPROTEUS_FILTER_OFFSETS[val];
                     }
                 }
@@ -1097,9 +1114,14 @@ public class EmuMorpheus extends Synth
             else if (parameters[i].equals("layer1filttype") ||
                 parameters[i].equals("layer2filttype"))
                 {
+                        // Because the morpheus filters are a subset of the ultraproteus filters, and all are shown
+                        // in the chooser at one time, we shouldn't try to map values to morpheus filters because
+                        // they could be out of range (in the ultraproteus range).
+                /*
                 if (morpheus)
                     val = MORPHEUS_FILTER_OFFSETS[val];
                 else
+                */
                     val = ULTRAPROTEUS_FILTER_OFFSETS[val];
                 }
                         
@@ -1202,10 +1224,15 @@ public class EmuMorpheus extends Synth
                     int v = val;
                     try
                         {
+                        // Because the morpheus filters are a subset of the ultraproteus filters, and all are shown
+                        // in the chooser at one time, we shouldn't try to map values to morpheus filters because
+                        // they could be out of range (in the ultraproteus range).
+                        /*
                         if (isMorpheus())
                             val = ((Integer)(morpheusFilterOffsetsToIndex.get(Integer.valueOf(val)))).intValue();
-                        else                                            
-                            val = ((Integer)(ultraproteusFilterOffsetsToIndex.get(Integer.valueOf(val)))).intValue();
+                        else  
+                    	*/                                          
+                        val = ((Integer)(ultraproteusFilterOffsetsToIndex.get(Integer.valueOf(val)))).intValue();
                         }
                     catch (Exception ex)
                         {
@@ -1704,15 +1731,6 @@ public class EmuMorpheus extends Synth
     };
     
 
-    public static final String[] BANKS = new String[] { "RAM", "ROM", "Card" };
-    public static final String[] NOTES = new String[] { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
-    public static final String[] TUNE_TABLES = new String[] { "Equal", "Just C", "Vallotti", "19-Tone", "Gamelan", "User" };
-    public static final String[] MIX_BUS = new String[] { "Main", "Sub1", "FXA", "FXB" };
-    public static final String[] XFADE_MODES = new String[] { "Off", "XFade", "XSwitch" };
-    public static final String[] XFADE_DIRECTIONS = new String[] { "Pri->Sec", "Sec->Pri" };
-    public static final String[] LFO_SHAPES = new String[] { "Rand", "Tri", "Sine", "Saw", "Square" };
-    public static final String[] SOLO_MODES = new String[] { "Off", "Wind", "Synth" };
-    public static final String[] SOLO_PRIORITIES = new String[] { "Hi", "Low", "First", "Last", "Drum" };
     public static final String[] NOTE_ON_PATCHCORD_SOURCES = new String[]
     {
     "Key",
@@ -1887,8 +1905,6 @@ public class EmuMorpheus extends Synth
     "VelEnd",
     "KeyEnd"
     };
-        
-    public static final String[] FUNCTION_GENERATOR__TYPES = new String[] { "Absolute", "Delta", "Rnd Absolute", "Rnd Delta" };
         
     public static final String[] ULTRAPROTEUS_FILTERS = new String[]
     {

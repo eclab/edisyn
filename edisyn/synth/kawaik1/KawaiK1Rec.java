@@ -33,7 +33,8 @@ public class KawaiK1Rec extends Recognize
             // don't care about 2, it's the channel
             data[3] == (byte)0x21 &&    // block
             data[4] == (byte)0x00 &&
-            data[5] == (byte)0x03);
+            data[5] == (byte)0x03 &&
+	    data[7] != (byte)0x40);	// that would be multi
         // don't care about 6, we'll use it later
         // don't care about 7, we'll use it later
         } 

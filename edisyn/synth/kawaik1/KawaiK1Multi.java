@@ -113,8 +113,8 @@ public class KawaiK1Multi extends Synth
 
         while(true)
             {
-            boolean result = showMultiOption(this, new String[] { "Bank", "Patch Number"}, 
-                new JComponent[] { bank, number }, title, "Enter the Bank and Patch number");
+            boolean result = showMultiOption(this, new String[] { "Bank", "Group", "Patch Number"}, 
+                new JComponent[] { bank, group, number }, title, "Enter the Bank, Group, and Patch number");
                 
             if (result == false) 
                 return false;
@@ -280,7 +280,6 @@ public class KawaiK1Multi extends Synth
             {
             public String map(int val)
                 {
-                System.err.println(val);
                 return (model.get("bank") == 0 ? (val < 32 ? "I" : "i") : (val < 32 ? "E" : "e")) +     
                     // SINGLE_GROUPS (which is basically KawaiK1.GROUPS) is exactly the same as KawaiK1Multi.GROUPS
                     SINGLE_GROUPS[(val % 32) / 8] + 
@@ -596,7 +595,7 @@ public class KawaiK1Multi extends Synth
             {
             Model tempModel = buildModel();
             tempModel.set("bank", model.get("bank"));                   // I or E
-            tempModel.set("number", 63);                                                // D8
+            tempModel.set("number", 63);                                // D8
             changePatch(tempModel);
             simplePause(getPauseAfterChangePatch());
             }
@@ -807,7 +806,7 @@ public class KawaiK1Multi extends Synth
         model.set("number", number);                                                                            
 
         // okay, we're loading and editing patch number patchNum.  Here we go.
-        return subparse(bankSysex, number * 77 + 8);         
+        return subparse(bankSysex, number * 76 + 8);         
         }
 
     public int getBank(byte[] bankSysex) 

@@ -145,21 +145,22 @@ public class Blank extends Synth
         //     // My synth doesn't report patch info in its parsed data, so here assume that we successfully did it
         //     if (!isMerging())
         //         {
-        //         setSendMIDI(false);
+        //         boolean midi = getSendMIDI();	// is MIDI turned off right now?
+        //         setSendMIDI(false);				// you should always turn off MIDI prior to messing with the model so nothing gets emitted, just in case
         //         model.set("number", number);
         //         model.set("bank", bank);
-        //         setSendMIDI(true);
+        //         setSendMIDI(midi);				// restore to whatever state it was
         //         }
         }
 
     public boolean gatherPatchInfo(String title, Model changeThis, boolean writing)     
         {
         // Here you want to pop up a window which gathers information about a patch,
-        // such as the patch number and the bank, sufficient to load a specific patch
-        // or save a specific patch to/from the synthesizer.  If WRITING is true, you
-        // may assume that you are writing out to the synthesizer (because sometimes
-        // you can read from some banks but can't write to them).  The title of your
-        // dialog window should be TITLE.
+        // such as the patch number and the bank, sufficient to load/read a specific patch
+        // or save/write a specific patch to/from the synthesizer.  If WRITING is true, you
+        // may assume that you are writing out to the synthesizer or saving to disk.  This
+        // allows you to determine whether to permit the user to select certain read-only
+        // banks or refuse to do so.  The title of your dialog window should be TITLE.
         //
         // Return TRUE if you successfully gathered information, FALSE if the user cancelled.
         //
@@ -197,12 +198,24 @@ public class Blank extends Synth
         { 
         // This method should return the name of your synthsizer.
         // Typically these names are of the form BRANDNAME MODELNAME 
-        // or BRANDNAME MODELNAME [Multi]               (to indicate a multimode patch)
+        // or BRANDNAME MODELNAME [TYPE]
         //
         // For example:
         //              "Waldorf Microwave II/XT/XTk"
         // or
         //              "Waldorf Microwave II/XT/XTk [Multi]"
+        //
+        // Single-patches do not have the [TYPE] moniker unless it needs to be made clear.
+        // Example types are:
+        //	[Multi]		Multimode patches
+        //	[Drum]		Separate drum patches
+        //	[Effect]	Effects patches
+        //	[Global]	Global patches
+        //	[Arp]		Arpeggiations
+        //
+        // Sometimes I use a [TYPE] because the synthesizer refers to patches in a certain
+        // specific way, such as [Hyper] (Ultra Proteus) or [Perforance] (Wavestation)
+        // See the synths.txt file for examples
         //
         // Notice that this is a STATIC method -- but you need to implement it
         // anyway.  Edisyn will call the right static version using reflection magic.
@@ -969,7 +982,7 @@ public class Blank extends Synth
         // might be { "A", "B", "C", and "D" }, or they might be { "Internal", "Card" }.
         //
         // This method is also used to determine whether the synth has banks.  If your synth
-        // doesn't support banks, return NULL to indicate this.  Technically it has still 
+        // doesn't support banks, return NULL to indicate this.  Technically it still has 
         // *one* bank, which Edisyn will automatically call "Bank".
         return null; 
         }

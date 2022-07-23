@@ -23,7 +23,7 @@ It's easy: just use Edisyn's E-Mu Proteus editor.  Be sure to first turn ON the 
 <br><br><h3>Gotchas</h3>
 
 <ul>
-<li>Neither the Morpheus nor the Ultra Proteus can send to the current patch -- they can only write patches, or send individual parameters.  But sending to the current patch is a critical function.  Earlier versions of Edisyn used to write to patch 126, but as of Version 31, Edisyn just (slowly) sends individual parameters to the Morpheus/Ultra Proteus.  This change is because the Morpheus/Ultra Proteus uses Flash RAM, and frequently writing to patch 126 will gradually burn it out.
+<li>Neither the Morpheus nor the Ultra Proteus can send to the current patch -- they can only write patches, or send individual parameters.  But sending to the current patch is a critical function.  Earlier versions of Edisyn used to write to patch 126, but as of Version 31, Edisyn just (slowly) sends individual parameters to the Morpheus/Ultra Proteus.  This change is because it is unclear if the Morpheus/Ultra Proteus uses Flash RAM, and frequently writing to patch 126 will gradually burn it out.
   <!--<li>Neither the Morpheus nor the Ultra Proteus can send to the current patch -- they can only write patches, or send individual parameters.  But sending to the current patch is a critical function.  Instead of (slowly) sending all parameters, Edisyn instead will write to patch 126 of the Preset RAM bank.  This means that you will overwrite this patch number every time you "send" the current patch.  (It's 126 because 127 is the default init patch).
 -->
 

@@ -4,7 +4,7 @@
 <h1>Roland D-110</h1> 
 <h2>Tone Editor</h2>
 
-<p>This patch editor is designed for the D-110.  It appears to also work properly with the D-10.
+<p>This patch editor is designed for the D-110.  It might also work, more or less, with the D-10.
 
 <br><br><h3>Communicating with Edisyn</h3>
 
@@ -19,9 +19,9 @@ I have received a report that sending real-time parameter changes can crash the 
 <ul>
 <li>This patch editor is unusual in that it has two layouts: a standard layout (by part) and an alternate layout (by category).  You might prefer the alternate layout: select <b>Alternate Layout</b>.  The layout changes for the next editor you create.
 
-<br><p><li>To display the current Multi Patch, just choose <b>Show Current Multi Patch</b>.  Note that the Multi Patch's MIDI Channel will be the same as this patch's Channel: you may want to then change it to your D-110's Control Channel.
+<br><p><li>A Tone roughly corresponds to a single playable voice on the D-110, but you can't just upload it and try it out.  This is because the primary "patch" of the D-110 is a multi-mode patch.  There is no notion of a single-mode patch.  Thus in order to play a Tone, you have to set up a multi-mode patch which refers to the tone in one of its eight parts.  To make this easy, Edisyn has a menu option called <b>Set up Test Patch for Part 1 Only </b>, which does exactly what it says on the tin: it loads a test multimode patch which has Part 1 pointing to your Tone.  Part 1 is set to <b>Edisyn's Current MIDI Channel</b>, 100% volume, and all 32 partials.  All other Parts are turned off.  Your Tone is then loaded for good measure.
 
-<br><p><li>A Tone roughly corresponds to a single playable voice on the D-110, but you can't just upload it and try it out.  This is because the primary "patch" of the D-110 is a multi-mode patch.  There is no notion of a single-mode patch.  Thus in order to play a Tone, you have to set up a multi-mode patch which refers to the tone in one of its eight parts.  To make this easy, Edisyn has a menu option called <b>Set up Test Patch for Part 1 Only </b>, which does exactly what it says on the tin: it loads a test multimode patch which has Part 1 pointing to your Tone.  Part 1 is set to <b>Edisyn's Current MIDI Channel</b>, 100% volume, and all 32 partials (so be sure Edisyn is on Channel 1).  All other Parts are turned off.  Your Tone is then loaded for good measure.
+<br><p><li>To display the current Multi Patch, just choose <b>Show Current Multi Patch</b>.  Note that the Multi Patch's MIDI Channel will be the same as your current Tone patch editor's Channel: you may want to then change it to your D-110's Control Channel. (The D-110 has a MIDI channel, called the "Control Channel" for multi patches which is different than the MIDI channels for each of the tones stored each multi patch.  Don't ask.)
 
 <br><p><li>If you'd like to load into a variety of parts, you can instead set up the multimode patch with <b>Set up Test Patch for All Parts</b>.  This sets up each Part N to listen on MIDI channel N+1, at 100%, with 4 partials each.  Thus Part 1 listens on MIDI channel 2; Part 2 listens on MIDI channel 3, and so on (this is the default, and crazy, setup for the D-110).  The rhythm section is turned off.  Your Tone is <i>not</i> loaded automatically.  To play Part N, set Edisyn to Channel N + 1.  To send to a given Part N you need to select <b>Current Patch is Part <i>N</i></b> (see the menu options below).  
 

@@ -1,0 +1,38 @@
+<html><head></head><body>
+
+
+<h1>E-Mu Planet Phatt, Orbit (v1 and v2), Carnaval, Vintage Keys, and Vintage Keys Plus</h1>
+<h2>Single Patch Editor</h2>
+
+<p>This editor will work with the <b>E-Mu Planet Phatt</b>, both versions of the <b>Orbit</b> (V1 9090 and V2 9095), <b>Carnaval</b>, <b>Vintage Keys</b> with or without the extension kit, and <b>Vintage Keys Plus</b>.  You will need to set a switch to indicate which one you are using.
+
+<br><br><h3>Communicating with Edisyn</h3>
+
+Set the MIDI ID to the same you'll be setting in Edisyn (typically 0).  Select a MIDI Channel to use on your synthesizer (perhaps channel 1) and set Edisyn's MIDI channel to that value.  Set the MIDI Mode to Omni or to Poly.  Set the Preset Change to ON for all channels (and in particular the MIDI channel you are using).
+
+<br><br><h3>Gotchas</h3>
+
+<ul>
+<li>There is no way to send an entire patch to current memory in E-Mu synthesizers.  Instead Edisyn must either dedicate a RAM patch to be a &ldquo;scratch patch&rdquo;, or it must send each parameter individually (which is slow but doesn't waste a patch).  I have elected to the second for the time being.
+
+<p><li>None of these machines permits you to change patches using Bank Change and Program Change combinations: thus the only way that Edisyn can change a patch is to modify the machine's Program Map.  So if you have a custom Program Map, expect it to get blown away by Edisyn.
+
+<p><li>You cannot request the current patch on any of these machines.
+
+</ul>
+
+<br><br><h3>Thanks</h3>
+
+Thanks to Ray Bellis (ray@bellis.me.uk) and Austin Taylor (austin1@ataylor.ca) for extracting instrument dumps to make proper mapping possible for these machines.
+
+<p><table border=0 cellpadding=0 cellspacing=5>
+<tr>
+<td align=right>By&nbsp;&nbsp;&nbsp;
+<td><b>Sean Luke</b>
+<tr>
+<td align=right>Date&nbsp;&nbsp;&nbsp;
+<td>October 2018
+</table>
+
+
+

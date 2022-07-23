@@ -51,6 +51,8 @@ public class HillClimb extends SynthPanel
     public static final int OPERATION_SEED_FROM_NUDGE = 2;
     public static final int OPERATION_SEED_FROM_FOUR = 3;
     public static final int OPERATION_SEED_FROM_SIX = 4;
+    public static final int OPERATION_SEED_FROM_LIBRARIAN = 100;
+
     public static final int OPERATION_CLIMB = 4;
     public static final int OPERATION_CONSTRICT = 5;
     public static final int OPERATION_CLIMB_NN = 6;
@@ -1439,6 +1441,29 @@ public class HillClimb extends SynthPanel
                 {
                 double weight = blank.getModel().get("constrictrate", 0) / 100.0;
                 int m = 6;
+                for(int i = 0; i < 6; i++)
+                    for(int j = 0; j < 6; j++)
+                        {
+                        if (j == i) continue;
+                        if (m >= 32) break;
+                        currentModels[m++] = currentModels[i].copy().crossover(random, currentModels[j], keys, weight);
+                        }
+                }
+            break;
+            case OPERATION_SEED_FROM_LIBRARIAN:
+                {
+                double weight = blank.getModel().get("constrictrate", 0) / 100.0;
+                int column = synth.librarian.getCurrentColumn();
+                int row = synth.librarian.getCurrentRow();
+                int len = synth.librarian.getCurrentLength();
+                if (len == 0) return;
+                
+                for(int i = 0; i < Math.min(len, 32); i++)
+                	{
+                    currentModels[i] = (Model)(synth.librarian.getModel(row + i, column).clone());
+                    }
+                    
+                int m = len;
                 for(int i = 0; i < 6; i++)
                     for(int j = 0; j < 6; j++)
                         {

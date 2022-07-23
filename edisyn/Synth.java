@@ -125,7 +125,8 @@ public abstract class Synth extends JComponent implements Updatable
     public JCheckBoxMenuItem nnRandomize;
     public JMenu librarianMenu;
     boolean sprouted = false;
-    
+	JMenuItem mixAgainMenu = null;
+
     /// Librarian menus that may not be turned on
     JMenuItem downloadMenu;
     JMenuItem downloadBankMenu;

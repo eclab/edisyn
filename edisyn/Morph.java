@@ -389,7 +389,19 @@ public class Morph extends SynthPanel
     public void postUpdateSound()
         {
         }
-        
+    
+    public void clear(int val)
+    	{
+    	sources[val] = null;
+        buttons[val].getButton().setText("[Empty]");
+    	}
+
+    public void set(int val, Model model)
+    	{
+    	sources[val] = model;
+        buttons[val].getButton().setText(synth.getPatchName(model));
+    	}
+    	
     void takeFromNudge(int val, int nudge)
         {
         Model n = synth.nudge[nudge];

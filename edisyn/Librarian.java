@@ -590,7 +590,8 @@ public class Librarian extends JPanel
                 if ((m[i] == synth.writeMenu) && !synth.getSupportsPatchWrites())
                     continue;
                                         
-                ((JMenuItem)m[i]).setEnabled(val);
+                if (((JMenuItem)m[i]) != synth.mixAgainMenu)
+                    ((JMenuItem)m[i]).setEnabled(val);
                 }
             }
         }
@@ -872,6 +873,7 @@ public class Librarian extends JPanel
         menu.add(item);
         item.setEnabled(false);
 
+        menu.addSeparator();
         item = new JMenuItem("Mix Uniformly");
         item.addActionListener(new ActionListener()
             {
@@ -915,6 +917,19 @@ public class Librarian extends JPanel
             });
         menu.add(item);
         item.setEnabled(false);
+
+        item = new JMenuItem("Do Mix Again");
+        item.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent evt) 
+                { 
+                synth.librarian.mixAgain(); 
+                }
+            });
+        menu.add(item);
+		synth.mixAgainMenu = item;
+        item.setEnabled(true);
+        item.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_M, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.SHIFT_MASK));
         return menu;
         }
         
@@ -1085,6 +1100,19 @@ public class Librarian extends JPanel
 	public static final int MIX_TYPE_ONE_HALF = 2;
 	public static final int MIX_TYPE_TWO_THIRDS = 3;
 
+	int lastMixType = -1;
+	
+	public void mixAgain()
+		{
+		if (lastMixType == -1)
+			{
+           	getLibrary().synth.showSimpleError("Cannot Mix A Second Time", "Choose a first-time mix type first.");
+            return;
+			}
+
+		mix(lastMixType);
+		}
+		
 	public void mix(int mixType)
 		{
         int column = col(table, table.getSelectedColumn());
@@ -1150,6 +1178,7 @@ public class Librarian extends JPanel
 
 		// Switch to patch editor
         getLibrary().getSynth().setCurrentTab(0);
+        lastMixType = mixType;
  		}
 
 

@@ -272,7 +272,7 @@ public class EmuProteus extends Synth
         vbox2.add(comp);
         hbox.add(vbox2);
         
-        JLabel label = new JLabel("Synth Type");
+        JLabel label = new JLabel("  Synth Type");
         label.setFont(Style.SMALL_FONT());
         label.setBackground(Style.BACKGROUND_COLOR()); // TRANSPARENT);
         label.setForeground(Style.TEXT_COLOR());

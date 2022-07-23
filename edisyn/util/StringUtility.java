@@ -331,6 +331,5 @@ public class StringUtility
         {
         return String.format("%08X", val);
         }
-
     }
 

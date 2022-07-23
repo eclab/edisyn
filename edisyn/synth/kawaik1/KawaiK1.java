@@ -155,8 +155,8 @@ public class KawaiK1 extends Synth
 
         while(true)
             {
-            boolean result = showMultiOption(this, new String[] { "Bank", "Patch Number"}, 
-                new JComponent[] { bank, number }, title, "Enter the Bank and Patch number");
+            boolean result = showMultiOption(this, new String[] { "Bank", "Group", "Patch Number"}, 
+                new JComponent[] { bank, group, number }, title, "Enter the Bank, Group, and Patch number");
                 
             if (result == false) 
                 return false;
@@ -1068,7 +1068,7 @@ public class KawaiK1 extends Synth
             
             Model tempModel = buildModel();
             tempModel.set("bank", (internal ? 2 : 3));              // i or e
-            tempModel.set("number", 63);                                        // D8
+            tempModel.set("number", 31);                            // D8
             changePatch(tempModel);
             simplePause(getPauseAfterChangePatch());
             }
@@ -1210,8 +1210,8 @@ public class KawaiK1 extends Synth
         result[3] = (byte)0x20;
         result[4] = (byte)0x00;
         result[5] = (byte)0x03;
-        result[6] = (byte)(bank % 2);                                           // internal
-        result[7] = (byte)((bank < 2 ? 0 : 32) + number);       // A1...D8  then        a1...d8
+        result[6] = (byte)(bank % 2);                           // internal are 0 and 2, external are 1 and 3
+        result[7] = (byte)((bank < 2 ? 0 : 32) + number);       // A1...D8  then a1...d8
         
         if (toWorkingMemory && sendKawaiParametersInBulk)
             result[7] = (byte)63;                                                       // d8

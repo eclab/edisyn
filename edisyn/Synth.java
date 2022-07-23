@@ -1494,6 +1494,8 @@ public abstract class Synth extends JComponent implements Updatable
                         if (testIncomingSynthMIDI) 
                             {
                             showSimpleMessage("Incoming MIDI from Synthesizer", "A MIDI message has arrived from the Synthesizer:\n" + Midi.format(message) + "\nTime: " + timeStamp); 
+                            
+                            System.err.println(StringUtility.toHex(message.getMessage()));
                             testIncomingSynthMIDI = false; 
                             testIncomingSynth.setText("Report Next Synth MIDI");
                             } 
@@ -2303,6 +2305,7 @@ public abstract class Synth extends JComponent implements Updatable
     		}
     	
 		sendAllParameters();
+		simplePause(getPauseAfterSendAllParameters());
 
     	/*
 		if (sendAllParametersTimer == null)
@@ -5112,8 +5115,20 @@ public abstract class Synth extends JComponent implements Updatable
                 doMapCC(CCMap.TYPE_RELATIVE_CC_64);
                 }
             });
-        menu.addSeparator();
         
+        
+        JMenuItem manualMap = new JMenuItem("Manual Map");
+        menu.add(manualMap);
+        manualMap.addActionListener(new ActionListener()
+        	{
+        	public void actionPerformed( ActionEvent e)
+        		{
+        		doManualMapCC();
+        		}
+        	});
+
+        menu.addSeparator();
+
         JMenuItem clearAllCC = new JMenuItem("Clear all Mapped CCs");
         menu.add(clearAllCC);
         clearAllCC.addActionListener(new ActionListener()
@@ -5905,6 +5920,61 @@ public abstract class Synth extends JComponent implements Updatable
             }
         }
 
+	void doManualMapCC()
+		{
+        JComboBox type = new JComboBox( new String[] { "CC", "Relative CC", "NRPN" });
+        int num = model.get("number");
+        JTextField number = new SelectedTextField("0", 5);
+
+		while(true)
+			{
+			boolean result = showMultiOption(this, new String[] { "Type", "Number"}, 
+				new JComponent[] { type, number }, "Manually Map Widget", "Map the last modified widget to a CC or NRPN parameter number.");
+			if (result == false) return;
+			
+            int n;
+            try { n = Integer.parseInt(number.getText()); }
+            catch (NumberFormatException e)
+                {
+                if (type.getSelectedIndex() == 2)	// NRPN
+                	showSimpleError("Invalid Number", "The Number must be an integer 0...16383");
+                else
+                    showSimpleError("Invalid Number", "The Number must be an integer 0...127");
+                continue;
+                }
+            if (type.getSelectedIndex() == 2 && (n < 0 || n > 16383))
+            	{
+                showSimpleError("Invalid Number", "The Number must be an integer 0...16383");
+                continue;
+            	}
+            else if (n < 0 || n > 127)
+                {
+                showSimpleError("Invalid Number", "The Number must be an integer 0...127");
+                continue;
+                }
+                                                
+            int i = type.getSelectedIndex();
+            
+			String key = model.getLastKey();
+			if (key == null)
+				{
+				showSimpleMessage("No Widget Selected", "Please tweak a widget a little bit first.");
+				return;
+				}
+			else
+				{
+				int sub = getCurrentTab();
+				if (perChannelCCs)
+					sub = tuple.keyChannel;		// not key2Channel
+				ccmap.setKeyForCCPane(n, sub, key);
+				ccmap.setTypeForCCPane(n, sub, (i == 0 ? CCMap.TYPE_ABSOLUTE_CC : (i == 1 ? CCMap.TYPE_RELATIVE_CC_64 : CCMap.TYPE_NRPN)));
+				}
+			
+			setLearningCC(false);
+			break;
+            }
+		}
+		
     void doMapCC(int type)
         {
         // has to be done first because doPassThroughCC(false) may turn it off
@@ -7338,16 +7408,19 @@ public abstract class Synth extends JComponent implements Updatable
         setSendMIDI(false);
         undo.setWillPush(false);
         Model backup = (Model)(model.clone());  
-        model.setUpdateListeners(false);                        // otherwise we GC badly        
+        model.setUpdateListeners(false);                        // otherwise we GC badly  
         for(int i = 0; i < patches.length; i++)
             {
-            res = parse(flatten(patches[i].sysex), true);
+            byte[] flat = flatten(patches[i].sysex);
+            if (!recognizeLocal(flat)) { patches[i] = null; continue; }
+            
+            res = parse(flat, true);
             if (res == PARSE_SUCCEEDED || res == PARSE_SUCCEEDED_UNTITLED)
                 {
                 patches[i].number = model.get("number", Patch.NUMBER_NOT_SET);
                 patches[i].bank = model.get("bank", 0);
                 patches[i].name = model.get("name", null);
-                }
+                                }
             else patches[i] = null;                 // failed to parse
             }
         model = backup;         // this also restores updating listeners I think
@@ -8004,7 +8077,7 @@ public abstract class Synth extends JComponent implements Updatable
             morphMenu.setText("Stop Morphing");
             morphing = true;
             }
-        }  
+        }
 
         
     ////// LIBRARIAN

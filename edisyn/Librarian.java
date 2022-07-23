@@ -465,7 +465,54 @@ public class Librarian extends JPanel
         // bottomPanel.add(writeProgress, BorderLayout.EAST);                           // Not working right now :-(
         }
         
-    public void loadOneInternal()
+    // Generates a model from the given patch slot.
+    // If row is < 0, then an init patch is generated
+	Model getModel(int row, int col)
+		{
+		Patch patch = null;
+		
+		if (row < 0) 
+			{
+			patch = new Patch(getLibrary().getInitPatch());		// Make a copy
+			}
+		else
+			{
+			patch = getLibrary().getPatch(col - 1, row);
+			if (patch == null)
+				{
+				patch = new Patch(getLibrary().getInitPatch());		// Make a copy
+				}
+			}
+			
+		Synth synth = getLibrary().getSynth();
+		 
+		// do we need to modify the bank and number?
+		synth.undo.setWillPush(false);
+		boolean send = synth.getSendMIDI();
+		synth.setSendMIDI(false);
+		synth.model.setUpdateListeners(false);
+		Model backup = (Model)(synth.model.clone());
+		synth.performParse(synth.flatten(patch.sysex), false);  // is this from a file?  I'm saying false
+				
+		// revise the patch location to where it came from in the librarian
+		if (patch.number != Patch.NUMBER_NOT_SET)
+			{
+			synth.getModel().set("number", patch.number);
+			int b = synth.getModel().get("bank", -1);
+			if (b != -1 && patch.bank >= 0)
+				synth.getModel().set("bank", patch.bank);
+			}
+		synth.setSendMIDI(send);
+		synth.undo.setWillPush(true);
+		synth.model.setUpdateListeners(true);
+
+		Model retval = synth.model;
+		synth.model = backup;
+		return retval;
+		}
+	
+	
+	public void loadOneInternal()
         {
         int column = col(table, table.getSelectedColumn());
         int row = table.getSelectedRow();
@@ -789,7 +836,85 @@ public class Librarian extends JPanel
             });
         menu.add(item);
         item.setEnabled(false);
-                
+        
+        menu.addSeparator();
+        
+        item = new JMenuItem("To Nudge Targets");
+        item.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent evt) 
+                { 
+                synth.librarian.toNudgeTargets(); 
+                }
+            });
+        menu.add(item);
+        item.setEnabled(false);
+
+        item = new JMenuItem("To Morph Targets");
+        item.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent evt) 
+                { 
+                synth.librarian.toMorphTargets(); 
+                }
+            });
+        menu.add(item);
+        item.setEnabled(false);
+
+        item = new JMenuItem("To Hill Climber");
+        item.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent evt) 
+                { 
+                synth.librarian.toHillClimber(); 
+                }
+            });
+        menu.add(item);
+        item.setEnabled(false);
+
+        item = new JMenuItem("Mix Uniformly");
+        item.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent evt) 
+                { 
+                synth.librarian.mix(Librarian.MIX_TYPE_UNIFORM); 
+                }
+            });
+        menu.add(item);
+        item.setEnabled(false);
+
+        item = new JMenuItem("Mix Light Bias");
+        item.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent evt) 
+                { 
+                synth.librarian.mix(Librarian.MIX_TYPE_ONE_THIRD); 
+                }
+            });
+        menu.add(item);
+        item.setEnabled(false);
+
+        item = new JMenuItem("Mix Medium Bias");
+        item.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent evt) 
+                { 
+                synth.librarian.mix(Librarian.MIX_TYPE_ONE_HALF); 
+                }
+            });
+        menu.add(item);
+        item.setEnabled(false);
+
+        item = new JMenuItem("Mix Heavy Bias");
+        item.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent evt) 
+                { 
+                synth.librarian.mix(Librarian.MIX_TYPE_TWO_THIRDS); 
+                }
+            });
+        menu.add(item);
+        item.setEnabled(false);
         return menu;
         }
         
@@ -832,6 +957,21 @@ public class Librarian extends JPanel
         performDownload(0, 0, getLibrary().getNumBanks() - 1, getLibrary().getBankSize() - 1 );         // wrap-around
         }
 
+	public int getCurrentColumn()
+		{
+		return col(table, table.getSelectedColumn());
+		}
+		
+	public int getCurrentRow()
+		{
+		return table.getSelectedRow();
+		}
+		
+	public int getCurrentLength()
+		{
+		return table.getSelectedRowCount();
+		}
+
     /** Downloads all locations in bank. */
     public void downloadBank()
         {
@@ -860,6 +1000,157 @@ public class Librarian extends JPanel
 
         performDownload(column - 1, 0, column - 1, getLibrary().getBankSize() - 1 );
         }
+
+	public void toNudgeTargets()
+		{
+        int column = col(table, table.getSelectedColumn());
+        int row = table.getSelectedRow();
+        int len = table.getSelectedRowCount();
+                
+        if (column < 0 || row < 0 || len == 0) // nope
+            {
+            getLibrary().synth.showSimpleError("Cannot Send to Nudge Targets", "Please select up to four patches first.");
+            return;
+            }
+
+		// First clear all the nudge targets
+		for(int i = 0; i < 4; i++)
+			{
+			getLibrary().synth.doSetNudge(i, getModel(-1, 0), "Untitled");
+			}
+			
+		// Next load the targets
+		for(int i = 0; i < Math.min(4, len); i++)
+			{
+			Patch patch = getLibrary().getPatch(column - 1, row + i);
+			getLibrary().synth.doSetNudge(i, getModel(row + i, column), patch.getName());
+			}
+
+        getLibrary().getSynth().setCurrentTab(0);
+		}
+
+	public void toMorphTargets()
+		{
+        int column = col(table, table.getSelectedColumn());
+        int row = table.getSelectedRow();
+        int len = table.getSelectedRowCount();
+        Synth synth = getLibrary().synth;
+        
+        if (column < 0 || row < 0 || len == 0) // nope
+            {
+           	synth.showSimpleError("Cannot Send to Morph Targets", "Please select up to four patches first.");
+            return;
+            }
+            
+        // First make sure the morph tab is open
+        if (!synth.morphing) synth.doMorph();
+        
+        Morph morph = synth.morph;
+
+        // Now clear the buttons
+        for(int i = 0; i < 4; i++)
+        	morph.clear(i);
+
+        // Now set the buttons
+        for(int i = 0; i < Math.min(4, len); i++)
+        	morph.set(i, getModel(row + i, column));
+
+        synth.tabs.setSelectedComponent(synth.morphPane);
+		}
+
+
+	public void toHillClimber()
+		{
+        int column = col(table, table.getSelectedColumn());
+        int row = table.getSelectedRow();
+        int len = table.getSelectedRowCount();
+        Synth synth = getLibrary().synth;
+        
+        if (column < 0 || row < 0 || len == 0) // nope
+            {
+           	synth.showSimpleError("Cannot Send to Hill Climber", "Please select some patches first.");
+            return;
+            }
+            
+        // First make sure the hill-climb tab is open
+        if (!synth.hillClimbing) synth.doHillClimb();
+        
+        synth.hillClimb.initialize(null, HillClimb.OPERATION_SEED_FROM_LIBRARIAN);
+        
+        synth.tabs.setSelectedComponent(synth.hillClimbPane);
+		}
+
+	public static final int MIX_TYPE_UNIFORM = 0;
+	public static final int MIX_TYPE_ONE_THIRD = 1;
+	public static final int MIX_TYPE_ONE_HALF = 2;
+	public static final int MIX_TYPE_TWO_THIRDS = 3;
+
+	public void mix(int mixType)
+		{
+        int column = col(table, table.getSelectedColumn());
+        int row = table.getSelectedRow();
+        int len = table.getSelectedRowCount();
+        Synth synth = getLibrary().synth;
+        
+        if (column < 0 || row < 0 || len == 0) // nope
+            {
+           	synth.showSimpleError("Cannot Mix", "Please select some patches first.");
+            return;
+            }
+
+        if (len == 1) // nope
+            {
+           	synth.showSimpleError("Cannot Mix", "Mixing a single patch does nothing.  Mix two or more!");
+            return;
+            }
+        
+	    Model model = null;
+	    String[] mutationKeys = synth.getMutationKeys();
+        double probability = 1.0;
+	    if (mixType == MIX_TYPE_UNIFORM)
+        	{
+        	// descending -- we start with the top patch
+        	model = getModel(row, column).copy();		// we don't want the listeners etc.
+       	 	for(int i = 1; i < len; i++)
+       	 		{
+	        	if (i == len - 1) // last one, mix half/half
+	        		probability /= 2.0; 
+        		else 		// 1/2 -> 1/3 -> 1/4 -> 1/5 etc.
+	        		probability = 1.0 / ((1.0 / probability) + 1);
+        		model = model.recombine(synth.random, getModel(row + i, column), mutationKeys, probability);
+       	 		}
+        	}
+        else
+        	{
+        	// ascending -- start with the bottom patch and recombine till we get to the big patch up top
+	        model = getModel(row + len - 1, column).copy();		// we don't want the listeners etc.
+        	for(int i = len - 2; i >= 0; i--)
+	        	{
+	        	if (i == len - 2) // first one, mix half/half
+	        		probability = 1.0 / 2.0;
+	        	else if (mixType == MIX_TYPE_ONE_THIRD)
+	        		probability = 1.0 / 3.0;
+	        	else if (mixType == MIX_TYPE_ONE_HALF)
+	        		probability = 1.0 / 2.0;
+	        	else if (mixType == MIX_TYPE_TWO_THIRDS)
+	        		probability = 2.0 / 3.0;
+        		model = model.recombine(synth.random, getModel(row + i, column), mutationKeys, probability);
+	        	}
+	        }
+	        
+	    // Load model
+        synth.getUndo().push(synth.getModel());
+		synth.undo.setWillPush(false);
+		boolean send = synth.getSendMIDI();
+		synth.setSendMIDI(false);
+		model.copyValuesTo(synth.model);
+		synth.setSendMIDI(send);
+		synth.undo.setWillPush(true);
+		synth.sendAllParameters();
+
+		// Switch to patch editor
+        getLibrary().getSynth().setCurrentTab(0);
+ 		}
 
 
     /** Downloads the selected locations. */

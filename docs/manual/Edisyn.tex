@@ -64,6 +64,7 @@ Edisyn is a no-nonsense synthesizer patch editor and librarian for the editing a
 \item Dave Smith Instruments Prophet '08 and '08 Desktop, Tetra, Mopho, Mopho Keyboard, Mopho SE, and Mopho X4 (Single and (for Tetra) Combo Modes)
 \item E-Mu Morpheus and Ultraproteus (Single, Hyperpreset, and MidiMap)
 \item E-Mu Proteus 1, 1 XR, 2, 2 XR, 3, 3 XR, and 1+Orchestral (Single)
+\item E-Mu Planet Phatt, Orbit V1 and V2, Carnaval, Vintage Keys, and Vintage Keys Plus
 \item Kawai K1, K1m, and K1r (Single and Multimode)
 \item Kawai K4 and K4r (Single, Multimode, Drum, Effects)
 \item Kawai K5 and K5m (Single and Multimode)
@@ -210,7 +211,7 @@ If you are connected to a synthesizer over MIDI, then changing a widget will mod
 
 \section{Creating and Setting Up Additional Patch Editors}
 
-A patch editor is created by selecting one of the various {\bf New...} menu options in the {\bf File} menu.\footnote{The {\bf New Synth} menu presents you with several options.  First there are the patch editors you have {\it recently selected}, if any.  Next come {\it all available} patch editors.  Finally, you have menu choices to {\it remove} patch editors from the recent list.}   You have to create a new a patch editor before you can start loading a patch from a file or from the synthesizer.  You can also {\bf Duplicate} an existing patch editor (in the {\bf File} menu).  This will exactly duplicate the existing patch as well.  
+A patch editor is created by selecting one of the various {\bf New...} menu options in the {\bf File} menu.\footnote{The {\bf New Synth} menu presents you with several options.  First there are the patch editors you have {\it recently selected}, if any.  Next come {\it all available} patch editors, organized by manufacturer.  Finally, you have menu choices to {\it remove} patch editors from the recent list.}   You have to create a new a patch editor before you can start loading a patch from a file or from the synthesizer.  You can also {\bf Duplicate} an existing patch editor (in the {\bf File} menu).  This will exactly duplicate the existing patch as well.  
 
 Whenever you create a new patch editor or duplicate one, you will once again be asked to set up MIDI as discussed in Section \ref{startingedisyn}, or to run in Disconnected Mode.
 
@@ -240,10 +241,11 @@ A {\bf bulk sysex} file is just a bunch of individual patch sysex messages conca
 When Edisyn loads a bulk sysex file, it will present you a couple of options: 
 
 \begin{itemize}
-\item {\it Select and edit} a single patch from that file, either in the current editor or in a new editor
+\item {\it Select and edit} a single patch from that file, either in the current editor or in a new editor.  Note that if this is a bank patch, you'll be given bank options as discussed next.
 \item {\it Write} (upload) all of the patches in the file, or patches matching a current synth type, to your synthesizer.
 \item {\it Save} all of the patches in the file, or patches matching a current synth type, to bulk files (one bulk file per synth type).
 \item {\it Save} all of the patches in the file, or patches matching a current synth type, to individual patch files.  If there are multiple synth types, the individual patch files will be placed in separate directories by synth type.
+\item {\it Load} all of the patches matching a current synth type into the this editor's librarian or into a new librarian.  Note that if these are bank patches, their individual patches will be loaded into the librarian: and they may overwrite other bank patches also being loaded.  See Section~\ref{librarian} for more information about the librarian.
 \end{itemize}
 
 Other synthesizers have special {\bf bank sysex} messages.  Here, an entire bank (or in some cases, an entire synthesizer's memory's worth) of patches are stored in a single special sysex message.  For example, most files on the internet for the Yamaha DX7 synthesizer are bank sysex files.   Edisyn might find a message like this when loading a file, or it might receive the message from the synth over MIDI.   When Edisyn has received a bank sysex message or has loaded one from a file, you can:
@@ -252,6 +254,7 @@ Other synthesizers have special {\bf bank sysex} messages.  Here, an entire bank
 \item {\it Select and edit} a single patch from that file, either in the current editor or in a new editor
 \item {\it Write} (upload) all of the patches in the bank to your synthesizer.
 \item {\it Save} the whole bank to a single bank sysex file.
+\item {\it Load} all of the patches in the bank into the this editor's librarian or into a new librarian.    See Section~\ref{librarian} for more information about the librarian.
 \end{itemize}
 
 It's entirely possible that a bulk sysex file might itself contain multiple bank sysex messages (or a mixture of bank and standard messages).  These sysex messages will typically be labelled ``Bank Sysex'', since Edisyn usually has no other patch name for them (with the exception of the Yamaha FB-01).  If from the Bulk Sysex window you select a bank sysex message to edit, Edisyn will then present you with the Bank Sysex window for that bank. 
@@ -342,8 +345,9 @@ If you're not sure if you have MIDI data coming to Edisyn from your controller, 
 \subsection{Remote Control of your Synthesizer} 
 If you play a note, do a pitch bend, etc., on your control surface, and {\bf Pass Through Controller Data} is set, then Edisyn will route all of those MIDI messages directly to your synthesizer (changing the messages' channel to the one that Edisyn is using to talk to the synthesizer).  Control Change (CC) and NRPN messages from your control surface are passed through only if you have {\it also} toggled {\bf Pass Through All CCs} in the {\bf Map} menu.  Otherwise they {\it might} used to control Edisyn' via its parameter mapping (see the end of Section~\ref{remotecontrolofedisyn}).
 
-If your controller is sending these messages on Edisyn's Controller Channel, Edisyn usually just routes them through unchanged, but it {\it might} route those messages to some other channel instead.  This only happens in certain patch editors where it's appropriate.  For example, the Kawai K4/Kr4 [Drum] Patch Editor needs to forward note messages like these to the Kawai K4's ``Drum'' channel to hear them.  The ``Drum'' channel is different from the Kawai's primary MIDI communication channel (which is what Edisyn's Send Channel is set to).  
+If your controller is sending these messages on Edisyn's Controller Channel, Edisyn usually routes them through unchanged, but it {\it might} route them to some other channel instead.  This only happens in certain patch editors where it's appropriate.  For example, the Kawai K4/Kr4 [Drum] Patch Editor needs to forward note messages like these to the Kawai K4's ``Drum'' channel to hear them.  The ``Drum'' channel is different from the Kawai's primary MIDI communication channel (which is what Edisyn's Send Channel is set to).  
 
+\enlargethispage{0.5em}
 \subsection{Remote Control of Edisyn} 
 \label{remotecontrolofedisyn}
 
@@ -366,7 +370,7 @@ Mapping a parameter is easy:
 \item {\bf Absolute CC}\quad  The value of the CC sent is exactly what the parameter will be set to (between 0...127).  To map, choose {\bf Map CC/NRPN} in the {\bf Map} menu.  This style is particularly useful for potentiometers or sliders.  You are not permitted to map CC numbers 6, 38, 98, 99, 100, or 101, or Edisyn will think you're sending NRPN.  So you only have 121 CCs to play with.
 \item {\bf Relative CC}\quad  Here, the CC value you send indicates how much to {\it add to} or {\it subtract from} the existing parameter value.\footnote{Specifically, a value \(x=64\) means 0 (add nothing), a value \(x<64\) means to subtract \(64-x\) from the current value, and a value \(x>64\) means to add \(x - 64\) to the current value.}  This style is supported by a number of controllers and is useful for encoders.\footnote{You could also map a pair of pushbuttons to be up/down cursors using this method: set up the ``down'' pushbutton to send 63 and the ``up'' pushbutton to send 65.}   For example, the Novation controller series calls this ``REL1'' or ``REL2''\footnote{The difference being that in REL2 mode, if you spin the encoder rapidly, the amount added/subtracted is nonlinearly more than expected, whereas in REL1 the speed doesn't matter, all that matters is how far the encoder was turned.  Novation controllers also have a relative CC mode called ``APOT'', which is not supported.}, and the BeatStep calls this ``Relative 1''.\footnote{The Beatstep also has relative CC modes called ``Relative 2'' and ``Relative 3'', which are not supported.}  To map, choose {\bf Map Relative CC} in the {\bf Map} menu.  Again, you're not permitted to map CC numbers 6, 38, 98, 99, 100, or 101.
 %\item {\bf Relative CC ``0''}\quad  Here, the CC value you send again indicates how much to {\it add to} or {\it subtract from} the existing parameter value.   In this form of Relative ŒCC, 0 means 0 (add nothing), a high value \(64<x<128\) means to subtract \(128-x\) from the current value, and a low value \(0>x\geq64\) means to add \(x\) to the current value.   This style is also supported by a number of controllers and is useful for encoders.  To map, choose {\bf Map Relative CC[0]} in the {\bf Map} menu.
-\item {\bf NRPN}\quad You are permitted to map any NRPN parameter you like.  The value of the CC sent is exactly what the parameter will be set to: all 14 bits.  If your controller can only send 7-bit NRPN, then you should configure it to send ``Fine'' or ``LSB-only''.  Edisyn also supports the NRPN Increment and Decrement options, though those are rarely supported by hardware.  To  map, choose {\bf Map CC/NRPN} in the {\bf Map} menu.  
+\item {\bf NRPN}\quad You can map any NRPN parameter.  The value of the CC sent is exactly what the parameter will be set to: all 14 bits.  If your controller can only send 7-bit NRPN, then you should configure it to send ``Fine'' or ``LSB-only''.  Edisyn also supports the NRPN Increment and Decrement options, though those are rarely supported by hardware.  To  map, choose {\bf Map CC/NRPN} in the {\bf Map} menu.  
 \end{itemize}
 
 \paragraph{Mapping by Panel or by MIDI Channel}
@@ -448,6 +452,7 @@ Edisyn has a large number of facilities to help you program your synthesizer, in
 \end{itemize}
 
 \subsection{Exploration Tools} 
+\label{explorationtools} 
 
 \paragraph{Randomize (by some amount)}  You can add some randomness your patch parameters.  Try a small value: values \(\geq 50\%\) are essentially full randomization.  See the {\bf Randomize} submenu in the {\bf Edit} menu.   Because it's so common to randomize, then undo and try again, you can also do undo-and-randomize-again as a single task: select {\bf Undo and Randomize Again} in the {\bf Randomize} submenu of the {\bf MIDI} menu.  %See below for a discussion of how randomization (called {\bf mutation}) works in Edisyn.
 
@@ -469,12 +474,19 @@ When you chose any of {\bf Towards 1:...} through {\bf Towards 4:...}, your curr
 
 A hint.  It's a good idea to select target patches which don't have some radical difference creating a nonlinearity in the space between them: for example, if you were doing FM, I'd pick patches which all used the same operator Algorithm.  See below for a discussion of how recombination works in Edisyn.
 
-\enlargethispage{1.5em}
+\paragraph{Mix}  This is an option only available in the Librarian's menu (Section~\ref{librarian}).  Here, you select two or more patches\,---\,often many\,---\, and Edisyn will use recombination to blend them all together to form a new random patch.  You have four options depending on how much you want to bias the result to favor the earlier (topmost) patch or patches.
+
+\begin{itemize}
+\item Mix Uniformly.  The final patch is a uniform combination of all the patches.
+\item Mix Light Bias.  The final patch consists of 1/3 of the first (topmost) patch, with the remainder being 1/3 of the next patch, and so on.  The last two patches split their remainder fifty-fifty.
+\item Mix Medium Bias.  The final patch consists of 1/2 of the first (topmost) patch, with the remainder being 1/2 of the next patch, and so on.  The last two patches split their remainder fifty-fifty.
+\item Mix Heavy Bias.  The final patch consists of 2/3 of the first (topmost) patch, with the remainder being 2/3 of the next patch, and so on.  The last two patches split their remainder fifty-fifty.
+\item Do Mix Again.  Perform the same random mix as last time.  You can choose this (it has a menu shortcut) from any panel in the editor, not just the librarian.  This allows you to try a mix, then repeatedly try new ones with the shortcut until you find one you like.
+\end{itemize}
 
 \paragraph{Hill-Climb}  Hill-Climbing repeatedly presents you with sixteen sounds and asks you to choose your top three preferred ones.  Once you have selected the three best, it performs various recombinations and mutations on those sounds to prefer sixteen new ones and the process repeats again.  The idea is for your preferences to guide the hill-climber as it wanders through the space of synth parameters until it lands on something you really like.\footnote{If you're technically inclined, this is basically an evolution strategy (ES) with an elitism of 1 and a biased mutation procedure.  If you'd like to learn more about evolutionary computation methods, google for the free online book {\it Essentials of Metaheuristics} by me.}  For more on the Hill-Climber, see Section \ref{hillclimb}.
 
 \paragraph{Morph}  Morphing interpolates in real-time between four different patches.  It's similar to nudge in certain respects, but is more interactive.  The big difference is that Nudge always moves the patch directly towards or away from a single patch (of four); but Morph changes the patch based on its relative distance to up to four patches in combination.   For more on the Morph tool, see Section \ref{morph}.
-
 
 \subsection{Restricting Mutation and Recombination to Only Certain Parameters}
 \label{restriction} 
@@ -495,6 +507,7 @@ The parameters you have selected will be the only ones changed when you mutate (
 
 Once you're done choosing parameters to mutate or recombine, just select {\bf Stop Editing Mutation Parameters} in the {\bf Edit} menu.  Note that your parameter choices, as well as using them for recombination, are persistent: they're saved in the preferences.
 
+\bump
 
 \subsection{Morphing}
 \label{morph}
@@ -601,10 +614,10 @@ The amount of mutation noise used when generating new patches is specified by th
 All the patches can be played by pressing their associated letter.  But additionally you can (at present) {\bf Climb} by pressing the Space Bar, {\bf Retry} by pressing the Return/Enter key, and {\bf Back Up} by pressing Backspace.
 
 \begin{wrapfigure}{r}{3.6in}
-\vspace{-2em}\includegraphics[scale=0.27]{ConstrictorPanel.png}
+\vspace{-3em}\includegraphics[scale=0.27]{ConstrictorPanel.png}
 \vspace{-3em}
 \caption{The Hill-Climber Panel converted for Constricting.}
-%\vspace{-1em}
+\vspace{-1em}
 \label{constrictorpanel}
 \end{wrapfigure}
 
@@ -978,6 +991,7 @@ If you drag patches from one Librarian into another, you have affected {\it two 
 
 \paragraph{Setting Bank Names}  A very small set of synthesizers (currently just the Yamaha FB-01) allow you to change the name of the bank.  You can do this by triple-clicking on the current bank name (the column header).
 
+\paragraph{Exploration Tools} If you have selected a group of patches, you can route them to be Nudge targets, Morph targets, or the initial values of the Hill-Climber by choosing {\bf To Nudge Targets}, {\bf To Morph Targets}, or {\bf To Hill-Climber} respectively.   The Librarian also has its own unique exploration tool, {\bf mixing}, which lets you blend a potentially large number of patches into one single patch.  See the {\bf Mix} paragraph in Section~\ref{explorationtools} for discussion of this.
 
 \subsection{Writing and Saving} 
 
@@ -1006,7 +1020,6 @@ In order to receive patches from Edisyn, your synthesizer may need to be set up 
 \paragraph{Closing the Librarian}
 
 You can close the Librarian by selecting {\bf Close Librarian} in the {\bf Edit} menu.  The data doesn't go away: if you reopen it, you'll be right back to where you left off.
-
 
 
 

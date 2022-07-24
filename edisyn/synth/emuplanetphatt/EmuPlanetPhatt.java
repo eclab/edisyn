@@ -63,8 +63,68 @@ public class EmuPlanetPhatt extends Synth
         }
         
 
+    public void addEmuMenu()
+        {
+        JMenu menu = new JMenu("E-Mu");
+        menubar.add(menu);
 
-    public EmuPlanetPhatt()
+        JMenuItem oneMPEMenu = new JMenuItem("Set Up Patch as Pseudo-MPE");
+        oneMPEMenu.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+				JComboBox bank = new JComboBox(getSynthType() == SYNTH_TYPE_ORBIT_V1 || getSynthType() == SYNTH_TYPE_VINTAGE_KEYS || getSynthType() == SYNTH_TYPE_VINTAGE_KEYS_PLUS ? SHORT_BANKS : BANKS);
+				bank.setSelectedIndex(model.get("bank", 0));
+				int num = model.get("number");
+				JTextField number = new SelectedTextField("" + (num < 10 ? "00" : (num < 100 ? "0" : "")) + num, 3);
+                
+                int n = 0;
+                String title = "Set Up Patch as Pseudo-MPE";
+                while(true)
+                    {
+                    boolean result = showMultiOption(EmuPlanetPhatt.this, new String[] { "Bank", "Patch Number"}, 
+                        new JComponent[] { bank, number }, title, "Enter the Patch number.");
+                                
+                    try { n = Integer.parseInt(number.getText()); }
+                    catch (NumberFormatException ex)
+                        {
+                        showSimpleError(title, "The Patch Number must be an integer 0 ... 127");
+                        continue;
+                        }
+                                
+                    if (n < 0 || n > 127)
+                        {
+                        showSimpleError(title, "The Patch Number must be an integer 0 ... 127");
+                        continue;
+                        }
+
+                    if (result) 
+                        break;
+                    if (!result)
+                        return;
+                    }           
+
+                int b = bank.getSelectedIndex();
+                                                         
+                boolean send = getSendMIDI();
+                setSendMIDI(true);
+                
+                // set up all the channels
+				for(int i = 0; i < 15; i++)
+					{
+					setUpChannelForBank(i, b);
+        			tryToSendMIDI(buildPC(i, n));
+					}
+                setSendMIDI(send);
+                }
+            });
+
+        menu.add(oneMPEMenu);
+        }
+
+
+
+	public EmuPlanetPhatt()
         {
         String m = getLastX(SYNTH_TYPE_KEY, getSynthClassName());
         synthType = (m == null ? SYNTH_TYPE_PLANET_PHATT : Integer.parseInt(m));
@@ -187,9 +247,9 @@ public class EmuPlanetPhatt extends Synth
         soundPanel.add(vbox, BorderLayout.CENTER);
         addTab("Patching", soundPanel);
                         
-        model.set("name", "Untitled");
-        model.set("bank", 0);
-        model.set("number", 0);
+//        model.set("name", "Untitled");
+//        model.set("bank", 0);
+//        model.set("number", 0);
         
         // loadDefaults will reset the synth type so here we're gonna reset it back
         int st = getSynthType();
@@ -203,6 +263,7 @@ public class EmuPlanetPhatt extends Synth
     public boolean gatherPatchInfo(String title, Model change, boolean writing)
         {
         JComboBox bank = new JComboBox(writing ? WRITABLE_BANKS : (getSynthType() == SYNTH_TYPE_ORBIT_V1 || getSynthType() == SYNTH_TYPE_VINTAGE_KEYS || getSynthType() == SYNTH_TYPE_VINTAGE_KEYS_PLUS ? SHORT_BANKS : BANKS) );
+        bank.setSelectedIndex(model.get("bank", 0));
         int num = model.get("number");
         JTextField number = new SelectedTextField("" + (num < 10 ? "00" : (num < 100 ? "0" : "")) + num, 3);
         
@@ -884,6 +945,11 @@ public class EmuPlanetPhatt extends Synth
         // Though the documentation doesn't say this, it appears that None is often midi = 0 regardless of offset.
         // So this doesn't tell us anything about what instrument we are
         if (midi == 0) return -1;
+        
+        if (midi == 3328 || midi == 3584) return SYNTH_TYPE_PLANET_PHATT;	// none
+        else if (midi == 2816 || midi == 3072) return SYNTH_TYPE_ORBIT_V2;	// none
+        else if (midi == 3840 || midi == 4096) return SYNTH_TYPE_CARNAVAL; 	// none
+        else if (midi == 1536) return SYNTH_TYPE_VINTAGE_KEYS;
                         
         if (PLANET_PHATT_OFFSETS_INV.containsKey(midi))
             return SYNTH_TYPE_PLANET_PHATT;
@@ -907,7 +973,12 @@ public class EmuPlanetPhatt extends Synth
                 
         // Though the documentation doesn't say this, it appears that None is often midi = 0 regardless of offset.
         if (midi == 0) return 0;
-                        
+        
+        if (midi == 3328 || midi == 3584) return 0;	// none
+        else if (midi == 2816 || midi == 3072) return 0;	// none
+        else if (midi == 3840 || midi == 4096) return 0; 	// none
+        else if (midi == 1536) return 0;
+
         if (m == -1) // uh oh
             {
             System.err.println("EmuPlanetPhatt.convertMIDIToInstrument: Unknown synth for MIDI instrument " + midi);
@@ -1086,9 +1157,6 @@ public class EmuPlanetPhatt extends Synth
         return result;
         }
 
-    public boolean getSendsParametersAfterNonMergeParse() { return true; }
-
-
     public int parse(byte[] data, boolean fromFile)
         {
         int NN = data[5] + data[6] * 128;
@@ -1148,12 +1216,63 @@ public class EmuPlanetPhatt extends Synth
         return PARSE_SUCCEEDED;
         }
     
+    void setUpChannelForBank(int channel, int bank)
+    	{
+		// First we set the bank for the channel in question
+		int chan = 367 + channel;
+		tryToSendSysex(new byte[]
+			{
+			(byte)0xF0, 
+			(byte)0x18, 
+			(byte)0x0A, 
+			getID(), 
+			(byte)0x03, 
+				(byte)(chan & 127),
+				(byte)((chan >>> 7) & 127),		// will always be zero of course
+				(byte)(bank & 127),
+				(byte)((bank >>> 7) & 127),		// will always be zero of course
+				(byte)0xF7
+			});
+
+		// Next we turn on the channel in question
+		int enable = 384 + channel;
+		tryToSendSysex(new byte[]
+			{
+			(byte)0xF0, 
+			(byte)0x18, 
+			(byte)0x0A, 
+			getID(), 
+			(byte)0x03, 
+				(byte)(enable & 127),
+				(byte)((enable >>> 7) & 127),		// will always be zero of course
+				(byte)1,
+				(byte)0,
+				(byte)0xF7
+			});
+
+		// Next we turn on PC for the channel in question
+		int enablePC = 400 + channel;
+		tryToSendSysex(new byte[]
+			{
+			(byte)0xF0, 
+			(byte)0x18, 
+			(byte)0x0A, 
+			getID(), 
+			(byte)0x03, 
+				(byte)(enablePC & 127),
+				(byte)((enablePC >>> 7) & 127),		// will always be zero of course
+				(byte)1,
+				(byte)0,
+				(byte)0xF7
+			});
+    	}
         
     public void changePatch(Model tempModel)
         {
         int bank = tempModel.get("bank", 0);
         int number = tempModel.get("number", 0);
 
+/*
         // Changing patch is nasty on these machines.  We need to modify the program map,
         // then do a PC.  Let's first emit a program map where EVERY SINGLE PC goes to our
         // desired patch
@@ -1174,9 +1293,16 @@ public class EmuPlanetPhatt extends Synth
         tryToSendSysex(data);
                 
         // Do we need a pause here?  Dunno
+        //simplePause(1000);
                 
         // Now send a PC to 0
         tryToSendMIDI(buildPC(getChannelOut(), 0));
+*/
+
+		// set up channel
+		setUpChannelForBank(getChannelOut(), bank);
+		// Last we do a PC to the number
+        tryToSendMIDI(buildPC(getChannelOut(), number));
         }
 
     public byte[] requestDump(Model tempModel)
@@ -3745,4 +3871,11 @@ public class EmuPlanetPhatt extends Synth
     public int getPatchNameLength() { return 12; }
 
     public boolean getSendsAllParametersAsDump() { return false; }
+
+    //public int getPauseAfterChangePatch() { return 1000; }
+
+    //public int getPauseAfterReceivePatch() { return 1000; }
+    public int getBatchDownloadWaitTime() { return 400; }
+
+    public boolean getSendsParametersAfterNonMergeParse() { return true; }
     }

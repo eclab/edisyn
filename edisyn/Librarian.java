@@ -120,6 +120,12 @@ public class Librarian extends JPanel
                 {
                 Component comp = super.getTableCellRendererComponent(table,value,isSelected,hasFocus,row,column);
 
+				// Note to get the underlying column number, you have to get the column model and pull out the column.
+				// We have stored the original column numberin the column's "identifier", so you can grab that as shown here.
+				// Note that you CANNOT use table.getColumn(), as this grabs the column by identifier, which is the number
+				// we set, so that'll be the wrong column.
+				int originalColumn = ((Integer)(table.getColumnModel().getColumn(column).getIdentifier())).intValue();
+
                 // Change BACKGROUND COLOR
                                 
                 // Are we a drop location?
@@ -132,15 +138,15 @@ public class Librarian extends JPanel
                     {
                     comp.setBackground(SELECTED_COLOR);
                     }
-                else if (column == 0)                   // scratch
+                else if (originalColumn == 0)                   // scratch
                     {
                     comp.setBackground(SCRATCH_COLOR);
                     }
-                else if (column > 0 && !synth.isValidPatchLocation(column - 1, row))                    // invalid cell
+                else if (originalColumn > 0 && !synth.isValidPatchLocation(originalColumn - 1, row))                    // invalid cell
                     {
                     comp.setBackground(INVALID_COLOR);
                     }
-                else if (!Librarian.this.getLibrary().isWriteableBank(column - 1))
+                else if (!Librarian.this.getLibrary().isWriteableBank(originalColumn - 1))
                     {
                     comp.setBackground(READ_ONLY_BACKGROUND_COLOR);
                     }
@@ -151,7 +157,7 @@ public class Librarian extends JPanel
 
                 
                 // Change FOREGROUND COLOR
-                if (column > 0 && !synth.isValidPatchLocation(column - 1, row))                 // invalid cell
+                if (originalColumn > 0 && !synth.isValidPatchLocation(originalColumn - 1, row))                 // invalid cell
                     {
                     comp.setForeground(INVALID_TEXT_COLOR);
                     }
@@ -179,10 +185,17 @@ public class Librarian extends JPanel
         for(int i = 0; i < synth.getPatchNameLength(); i++) nm += "M";
         int w = table.getFontMetrics(table.getFont()).stringWidth(nm);
                 
+		// Give the columns unique names
         for(int i = 0; i < table.getColumnModel().getColumnCount(); i++)
             {
             TableColumn tc = table.getColumnModel().getColumn(i);
-            //tc.setPreferredWidth(w * 4 / 5 + 4);  // We'll do about 3/4 the maximum theoretical limit, which seems to be a good outer bound for most patch names, plus a tiny bit of slop.
+            tc.setIdentifier(Integer.valueOf(i));
+            }
+
+		// Give the columns widths
+        for(int i = 0; i < table.getColumnModel().getColumnCount(); i++)
+            {
+            TableColumn tc = table.getColumnModel().getColumn(i);
             tc.setPreferredWidth(w + 4);    // We'll do about 3/4 the maximum theoretical limit, which seems to be a good outer bound for most patch names, plus a tiny bit of slop.
             }
         

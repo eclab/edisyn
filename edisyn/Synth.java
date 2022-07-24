@@ -1103,7 +1103,8 @@ public abstract class Synth extends JComponent implements Updatable
     /** Override this to return TRUE if, after a patch write, we need to change to the patch *again* so as to load it into memory. */
     public boolean getShouldChangePatchAfterWrite() { return false; }
     
-    /** Override this to return TRUE if, after recieving a NON-MERGE patch from the synthesizer, we should turn around and sendAllParameters() to it.
+    /** Override this to return TRUE if, after recieving a NON-MERGE patch from the synthesizer, and a NON-BATCH-DOWNLOAD patch,
+    	we should turn around and sendAllParameters() to it.
         This commonly is needed in some synth multi-mode editors, where program changes have no effect (they don't switch to a new multi-mode synth),
         and so we'll receive the correct patch but the synthesizer won't switch to it.  We can turn around and emit changes to it to get the right
         sound in the edit buffer. */ 
@@ -1441,7 +1442,7 @@ public abstract class Synth extends JComponent implements Updatable
                                                 }
 
                                             setSendMIDI(originalMIDI);
-                                            if (getSendsParametersAfterNonMergeParse())
+                                            if (getSendsParametersAfterNonMergeParse() && !isBatchDownloading())
                                                 {
                                                 sendAllParameters();
                                                 }
@@ -8365,6 +8366,7 @@ public abstract class Synth extends JComponent implements Updatable
             setSendMIDI(false);
             model.updateAllListeners();
             setSendMIDI(send);
+            sendAllParameters();	// get us back up to speed
 
             // at this point we have batch gunk in the model.  We have pushed
             // the previous model on the undo stack during startBatchDownload(),
@@ -8405,6 +8407,7 @@ public abstract class Synth extends JComponent implements Updatable
                             batchDownloadFailureCountdown = getBatchDownloadFailureCountdown();
                             batchDownloadFailureGlobalCountdown = BATCH_DOWNLOAD_FAILURE_GLOBAL_COUNTDOWN;
                             processCurrentPatch();
+            				simplePause(getPauseAfterReceivePatch());
                             requestNextPatch();
                             }
                         else
@@ -8431,8 +8434,6 @@ public abstract class Synth extends JComponent implements Updatable
                                 stopBatchDownload();
                                 showSimpleError("Batch Download Failed", "Stopping batch download after failing " + BATCH_DOWNLOAD_FAILURE_GLOBAL_COUNTDOWN + " times to download patch\n" + getPatchLocationName(currentPatch) + "\nNo response from the synthesizer." );
                                 }
-
-
                             System.err.println("Warning (Synth): Download of " + getPatchLocationName(currentPatch) + " failed.  Requesting again.");
                             resetBlend();
                             setMergeProbability(0.0);

@@ -8,14 +8,14 @@
 
 <br><br><h3>Communicating with Edisyn</h3>
 
-Set the MIDI ID to the same you'll be setting in Edisyn (typically 0).  Select a MIDI Channel to use on your synthesizer (perhaps channel 1) and set Edisyn's MIDI channel to that value.  Set the MIDI Mode to Omni or to Poly.  Set the Preset Change to ON for all channels (and in particular the MIDI channel you are using).
+Set the MIDI ID to the same you'll be setting in Edisyn (typically 0).  Select a MIDI Channel to use on your synthesizer (perhaps channel 1) and set Edisyn's MIDI channel to that value.  Set the MIDI Mode to Omni or to Poly.  
 
 <br><br><h3>Gotchas</h3>
 
 <ul>
 <li>There is no way to send an entire patch to current memory in E-Mu synthesizers.  Instead Edisyn must either dedicate a RAM patch to be a &ldquo;scratch patch&rdquo;, or it must send each parameter individually (which is slow but doesn't waste a patch).  I have elected to the second for the time being.
 
-<p><li>None of these machines permits you to change patches using Bank Change and Program Change combinations: thus the only way that Edisyn can change a patch is to modify the machine's Program Map.  So if you have a custom Program Map, expect it to get blown away by Edisyn.
+<p><li>If Edisyn is selecting the wrong patch, you might check to see if you have modified your synth's Program Map.  If so, you'll need to reset it to its defaults.
 
 <p><li>You cannot request the current patch on any of these machines.
 
@@ -31,7 +31,7 @@ Thanks to Ray Bellis (ray@bellis.me.uk) and Austin Taylor (austin1@ataylor.ca) f
 <td><b>Sean Luke</b>
 <tr>
 <td align=right>Date&nbsp;&nbsp;&nbsp;
-<td>October 2018
+<td>July 2022
 </table>
 
 

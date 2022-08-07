@@ -52,6 +52,11 @@ public class Librarian extends JPanel
         redo.setEnabled(getLibrary().hasRedo());
         getLibrary().synth.updateUndoMenus();
         }
+        
+    public JTable getTable()
+    	{
+    	return table;
+    	}
 
 
     public static final Color STANDARD_BACKGROUND_COLOR = new Color(250, 250, 250);
@@ -113,6 +118,41 @@ public class Librarian extends JPanel
                 // do nothing
                 }
             };
+        
+        table.addKeyListener(new KeyListener()
+        	{
+        	public void keyPressed(KeyEvent e)
+        		{
+        		if (e.getKeyCode() == KeyEvent.VK_ENTER)
+        			{ 
+        			e.consume(); 
+
+					int column = col(table, table.getSelectedColumn());
+					int row = table.getSelectedRow();
+					int len = table.getSelectedRowCount();
+						
+					if (column < 0 || row < 0 || len == 0) // nope
+						{
+						getLibrary().synth.showSimpleError("Cannot Change Name", "Please select a patch to change first.");
+						return;
+						}
+			
+					getLibrary().changeName(column - 1, row, len);
+        			}
+        		}
+        		
+        	public void keyReleased(KeyEvent e)
+        		{
+        		if (e.getKeyCode() == KeyEvent.VK_ENTER)
+        			{ e.consume(); }
+        		}
+        	
+        	public void keyTyped(KeyEvent e)
+        		{
+        		if (e.getKeyCode() == KeyEvent.VK_ENTER)
+        			{ e.consume(); }
+        		}
+        	});
                 
         table.setDefaultRenderer(Object.class, new DefaultTableCellRenderer()
             {
@@ -121,7 +161,7 @@ public class Librarian extends JPanel
                 Component comp = super.getTableCellRendererComponent(table,value,isSelected,hasFocus,row,column);
 
 				// Note to get the underlying column number, you have to get the column model and pull out the column.
-				// We have stored the original column numberin the column's "identifier", so you can grab that as shown here.
+				// We have stored the original column number in the column's "identifier", so you can grab that as shown here.
 				// Note that you CANNOT use table.getColumn(), as this grabs the column by identifier, which is the number
 				// we set, so that'll be the wrong column.
 				int originalColumn = ((Integer)(table.getColumnModel().getColumn(column).getIdentifier())).intValue();
@@ -142,7 +182,7 @@ public class Librarian extends JPanel
                     {
                     comp.setBackground(SCRATCH_COLOR);
                     }
-                else if (originalColumn > 0 && !synth.isValidPatchLocation(originalColumn - 1, row))                    // invalid cell
+                else if (originalColumn > 0 && (!synth.isValidPatchLocation(originalColumn - 1, row) || !synth.isAppropriatePatchLocation(originalColumn - 1, row)))                    // invalid cell
                     {
                     comp.setBackground(INVALID_COLOR);
                     }
@@ -388,17 +428,7 @@ public class Librarian extends JPanel
 
             public Object getValueAt(int row, int col) 
                 {
-                Synth synth = getLibrary().getSynth();
-                int synthNum = getLibrary().getSynthNum();
-                String name = synth.getModel().get("name","" + synth.getPatchLocationName(synth.getModel()));
-                int number = synth.getModel().get("number", -1);
-                int bank = synth.getModel().get("bank", -1);
-                byte[][] data = synth.cutUpSysex(synth.flatten(synth.emitAll(synth.getModel(), false, true)));                  // we're pretending we're writing to a file here
-                Patch patch = new Patch(synthNum, data, false);
-                patch.name = name;
-                patch.bank = (bank == -1 ? 0 : bank);
-                patch.number = (number == -1 ? Patch.NUMBER_NOT_SET : number);          // FIXME: should I use NUMBER_NOT_SET?
-                return patch;
+                return getLibrary().getPatch(getLibrary().getSynth().getModel());
                 }
                                 
             public void setValueAt(Object value, int row, int col) 
@@ -478,51 +508,6 @@ public class Librarian extends JPanel
         // bottomPanel.add(writeProgress, BorderLayout.EAST);                           // Not working right now :-(
         }
         
-    // Generates a model from the given patch slot.
-    // If row is < 0, then an init patch is generated
-	Model getModel(int row, int col)
-		{
-		Patch patch = null;
-		
-		if (row < 0) 
-			{
-			patch = new Patch(getLibrary().getInitPatch());		// Make a copy
-			}
-		else
-			{
-			patch = getLibrary().getPatch(col - 1, row);
-			if (patch == null)
-				{
-				patch = new Patch(getLibrary().getInitPatch());		// Make a copy
-				}
-			}
-			
-		Synth synth = getLibrary().getSynth();
-		 
-		// do we need to modify the bank and number?
-		synth.undo.setWillPush(false);
-		boolean send = synth.getSendMIDI();
-		synth.setSendMIDI(false);
-		synth.model.setUpdateListeners(false);
-		Model backup = (Model)(synth.model.clone());
-		synth.performParse(synth.flatten(patch.sysex), false);  // is this from a file?  I'm saying false
-				
-		// revise the patch location to where it came from in the librarian
-		if (patch.number != Patch.NUMBER_NOT_SET)
-			{
-			synth.getModel().set("number", patch.number);
-			int b = synth.getModel().get("bank", -1);
-			if (b != -1 && patch.bank >= 0)
-				synth.getModel().set("bank", patch.bank);
-			}
-		synth.setSendMIDI(send);
-		synth.undo.setWillPush(true);
-		synth.model.setUpdateListeners(true);
-
-		Model retval = synth.model;
-		synth.model = backup;
-		return retval;
-		}
 	
 	
 	public void loadOneInternal()
@@ -1044,14 +1029,14 @@ public class Librarian extends JPanel
 		// First clear all the nudge targets
 		for(int i = 0; i < 4; i++)
 			{
-			getLibrary().synth.doSetNudge(i, getModel(-1, 0), "Untitled");
+			getLibrary().synth.doSetNudgeEmpty(i, getLibrary().getModel(0, -1));		// init patch
 			}
 			
 		// Next load the targets
 		for(int i = 0; i < Math.min(4, len); i++)
 			{
 			Patch patch = getLibrary().getPatch(column - 1, row + i);
-			getLibrary().synth.doSetNudge(i, getModel(row + i, column), patch.getName());
+			getLibrary().synth.doSetNudge(i, getLibrary().getModel(column - 1, row + i));
 			}
 
         getLibrary().getSynth().setCurrentTab(0);
@@ -1081,7 +1066,7 @@ public class Librarian extends JPanel
 
         // Now set the buttons
         for(int i = 0; i < Math.min(4, len); i++)
-        	morph.set(i, getModel(row + i, column));
+        	morph.set(i, getLibrary().getModel(column - 1, row + i));
 
         synth.tabs.setSelectedComponent(synth.morphPane);
 		}
@@ -1122,7 +1107,6 @@ public class Librarian extends JPanel
            	getLibrary().synth.showSimpleError("Cannot Mix A Second Time", "Choose a first-time mix type first.");
             return;
 			}
-
 		mix(lastMixType);
 		}
 		
@@ -1148,23 +1132,30 @@ public class Librarian extends JPanel
 	    Model model = null;
 	    String[] mutationKeys = synth.getMutationKeys();
         double probability = 1.0;
+        
+        // Recombination is odd: we pick a weighted point p between the original a and the new b, and
+        // then pick a random point BETWEEN a and p.  Thus if we weight ALL the way to b, we're still
+        // only doing 50% recombination.  But below I want to have specific probabilities of "recombination",
+        // so I'm using crossover instead, passing in 'false' so it uses the true crossover probability and not
+        // halving it.
+        
 	    if (mixType == MIX_TYPE_UNIFORM)
         	{
         	// descending -- we start with the top patch
-        	model = getModel(row, column).copy();		// we don't want the listeners etc.
+        	model = getLibrary().getModel(column - 1, row).copy();		// we don't want the listeners etc.
        	 	for(int i = 1; i < len; i++)
        	 		{
 	        	if (i == len - 1) // last one, mix half/half
 	        		probability /= 2.0; 
         		else 		// 1/2 -> 1/3 -> 1/4 -> 1/5 etc.
 	        		probability = 1.0 / ((1.0 / probability) + 1);
-        		model = model.recombine(synth.random, getModel(row + i, column), mutationKeys, probability);
+        		model = model.crossover(synth.random, getLibrary().getModel(column - 1, row + i), mutationKeys, probability, false);
        	 		}
         	}
         else
         	{
         	// ascending -- start with the bottom patch and recombine till we get to the big patch up top
-	        model = getModel(row + len - 1, column).copy();		// we don't want the listeners etc.
+	        model = getLibrary().getModel(column - 1, row + len - 1).copy();		// we don't want the listeners etc.
         	for(int i = len - 2; i >= 0; i--)
 	        	{
 	        	if (i == len - 2) // first one, mix half/half
@@ -1175,7 +1166,7 @@ public class Librarian extends JPanel
 	        		probability = 1.0 / 2.0;
 	        	else if (mixType == MIX_TYPE_TWO_THIRDS)
 	        		probability = 2.0 / 3.0;
-        		model = model.recombine(synth.random, getModel(row + i, column), mutationKeys, probability);
+        		model = model.crossover(synth.random, getLibrary().getModel(column - 1, row + i), mutationKeys, probability, false);
 	        	}
 	        }
 	        

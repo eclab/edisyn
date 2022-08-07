@@ -10,6 +10,7 @@ import java.util.*;
 import java.io.*;
 import java.awt.*;
 import edisyn.util.*;
+import edisyn.gui.*;
 
 /**
    LIBRARY is the model for the librarian.  It contains a two-dimensional [bank][number] 
@@ -531,13 +532,13 @@ public class Library extends AbstractTableModel
                     }
                 }
             }
-        synth.getModel().setUpdateListeners(true);
         
         // restore synth
         synth.setModel(original);
         synth.setSendMIDI(originalMIDI);
         synth.printRevised = originalPrintRevised;
         synth.getUndo().setWillPush(originalGetWillPush);
+        synth.getModel().setUpdateListeners(true);
         }
 
 
@@ -665,7 +666,6 @@ public class Library extends AbstractTableModel
                                         
                 patches[i] = synth.getModel();
                 }
-            synth.getModel().setUpdateListeners(true);
                     
             // At this point we've gathered all the patches to form the bank.                                                                
             // Now emit them as one bank sysex
@@ -688,6 +688,7 @@ public class Library extends AbstractTableModel
             synth.setSendMIDI(originalMIDI);
             synth.printRevised = originalPrintRevised;
             synth.getUndo().setWillPush(originalGetWillPush);
+            synth.getModel().setUpdateListeners(true);
                 
             // should I do a change patch?
             if (failed) synth.showSimpleError("Incomplete Patch Write", "Some patches from bank " + getBankName(bank) + " were malformed and could not be written.");
@@ -799,13 +800,13 @@ public class Library extends AbstractTableModel
 					}
 				}
             }
-        synth.getModel().setUpdateListeners(true);
                 
         // restore
         synth.setModel(original);
         synth.setSendMIDI(originalMIDI);
         synth.printRevised = originalPrintRevised;
         synth.getUndo().setWillPush(originalGetWillPush);
+        synth.getModel().setUpdateListeners(true);
             
         // should I do a change patch?
         if (failed) 
@@ -855,6 +856,72 @@ public class Library extends AbstractTableModel
             synth.showSimpleError("Not Supported", "Edisyn cannot write arbitrary patches to this synthesizer.");
             }
        }
+
+
+    public void changeName(int bank, int start, int len)
+    	{
+		Patch patch = getPatch(bank, start);
+		if (patch == null) patch = initPatch;
+		String name = patch.getName();
+		if (name == null) // uhm....?
+			{
+            synth.showSimpleError("Empty Patch", "Edisyn cannot change the name of an empty patch.");
+            }
+        else
+        	{
+        	Model model = getModel(bank, start);
+        	if (model.get("name", (String) null) == null)
+        		{
+            	synth.showSimpleError("Not Supported", "Edisyn cannot change the names of patches for this synthesizer.");
+            	}
+        	else
+            	{
+				// Load model
+				synth.getUndo().push(synth.getModel());
+				synth.undo.setWillPush(false);
+				boolean send = synth.getSendMIDI();
+				synth.setSendMIDI(false);
+				model.copyValuesTo(synth.model);
+				
+				// Find the StringComponent
+				boolean foundit = false;
+				ArrayList listeners = synth.model.getListeners("name");
+				for(int i = 0; i < listeners.size(); i++)
+					{
+					Object obj = listeners.get(i);
+					if (obj instanceof StringComponent) // hope this is it
+						{
+						foundit = true;
+						StringComponent sc = (StringComponent)obj;
+						sc.perform(synth);
+						synth.revise();
+						name = synth.model.get("name", "");
+						model.set("name", name);
+						
+						// Now put back
+						pushUndo();
+						patch = getPatch(model);
+						// the model will have a different patch number
+						patch.bank = bank;
+						patch.number = start;
+						setPatch(patch);
+						break;
+						}
+					}
+					
+				if (!foundit)
+					{
+             		synth.showSimpleError("Not Supported", "Edisyn cannot change the names of patches for this synthesizer.");
+            		}
+            		
+				// Unload model
+				synth.undo.setWillPush(true);
+				synth.getUndo().undo(null);
+				synth.setSendMIDI(send);
+            	}
+        	}
+    	}
+
 
     /** Saves to disk all the patches from start to start+len-1 in bank.
         If bank == ALL_PATCHES, then writes the entire library; in this
@@ -1155,6 +1222,73 @@ public class Library extends AbstractTableModel
             synth.showSimpleError("Not Supported", "Edisyn cannot save banks of this type to a file.");
             }
         }    
+
+
+	public Patch getPatch(Model model)
+		{
+		Synth synth = getSynth();
+		int synthNum = getSynthNum();
+		String name = model.get("name","" + synth.getPatchLocationName(synth.getModel()));
+		int number = model.get("number", -1);
+		int bank = model.get("bank", -1);
+		byte[][] data = synth.cutUpSysex(synth.flatten(synth.emitAll(model, false, true)));                  // we're pretending we're writing to a file here
+		Patch patch = new Patch(synthNum, data, false);
+		patch.name = name;
+		patch.bank = (bank == -1 ? 0 : bank);
+		patch.number = (number == -1 ? Patch.NUMBER_NOT_SET : number);          // FIXME: should I use NUMBER_NOT_SET?
+		return patch;
+		}
+		
+    /** Generates a model from the given patch slot.
+     If number < 0, then an init patch is generated
+     If bank is < 0, then the scratch bank is assumed
+     */
+	public Model getModel(int bank, int number)
+		{
+		Patch patch = null;
+		
+		if (number < 0) 
+			{
+			patch = new Patch(getInitPatch());		// Make a copy
+			}
+		else
+			{
+			patch = getPatch(bank, number);
+			if (patch == null)
+				{
+				patch = new Patch(getInitPatch());		// Make a copy
+				}
+			}
+			
+		Synth synth = getSynth();
+		 
+		// do we need to modify the bank and number?
+		synth.undo.setWillPush(false);
+		boolean send = synth.getSendMIDI();
+		synth.setSendMIDI(false);
+		boolean shouldUpdate = synth.model.getUpdateListeners();
+		synth.model.setUpdateListeners(false);
+		Model backup = (Model)(synth.model.clone());
+		synth.performParse(synth.flatten(patch.sysex), false);  // is this from a file?  I'm saying false
+				
+		// revise the patch location to where it came from in the librarian
+		if (patch.number != Patch.NUMBER_NOT_SET)
+			{
+			synth.getModel().set("number", patch.number);
+			int b = synth.getModel().get("bank", -1);
+			if (b != -1 && patch.bank >= 0)
+				synth.getModel().set("bank", patch.bank);
+			}
+		synth.setSendMIDI(send);
+		synth.undo.setWillPush(true);
+
+		Model retval = synth.model;
+		synth.model = backup;
+		synth.model.setUpdateListeners(shouldUpdate);
+		return retval;
+		}
+
+
     }
         
         

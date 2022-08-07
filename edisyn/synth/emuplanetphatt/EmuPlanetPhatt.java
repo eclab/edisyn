@@ -1,5 +1,5 @@
 /***
-    Copyright 2018 by Sean Luke
+    Copyright 2022 by Sean Luke
     Licensed under the Apache License version 2.0
 */
 
@@ -110,7 +110,7 @@ public class EmuPlanetPhatt extends Synth
                 setSendMIDI(true);
                 
                 // set up all the channels
-				for(int i = 0; i < 15; i++)
+				for(int i = 0; i < 16; i++)
 					{
 					setUpChannelForBank(i, b);
         			tryToSendMIDI(buildPC(i, n));
@@ -1328,6 +1328,7 @@ public class EmuPlanetPhatt extends Synth
         {
         JFrame frame = super.sprout();
         receiveCurrent.setEnabled(false); // can't request current
+        addEmuMenu();
         return frame;
         }        
                 
@@ -1560,9 +1561,8 @@ public class EmuPlanetPhatt extends Synth
     public static final String[] WRITABLE_BANKS = new String[] { "0 RAM", "1 RAM" };
     public static final String[] XFADE_MODES = new String[] { "Off", "XFade", "XSwitch" };
     public static final String[] XFADE_DIRECTIONS = new String[] { "Pri->Sec", "Sec->Pri" };
-    // FIXME -- I don't know if this is the right order
-    public static final String[] LFO_SHAPES = new String[] { "Tri", "Sine", "Square", "Saw", "Rand", "Sync Tri", "Sync Sine", "Sync Square", "Sync Saw"};
-    // FIXME -- I don't know if this is the right order
+    // This is the correct order, different from what's indicated in the text
+    public static final String[] LFO_SHAPES = new String[] { "Rand", "Tri", "Sine", "Saw", "Square", "Sync Tri", "Sync Sine", "Sync Saw", "Sync Square"};
     public static final String[] SUBMIXES = new String[] { "Main", "Sub 1", "Sub 2" };
     public static final String[] KEYBOARD_TUNINGS = { "Equal", "Just C", "Valotti", "19 Tone", "Gamelan", "User" };
     

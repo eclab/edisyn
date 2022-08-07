@@ -1,5 +1,5 @@
 /**
-   Copyright 2020 by Sean Luke
+   Copyright 2022 by Sean Luke
    Licensed under the Apache License version 2.0
 */
 
@@ -8,7 +8,6 @@ import edisyn.*;
 
 public class EmuPlanetPhattRec extends Recognize
     {
-        
     public static boolean recognize(byte[] data)
         {
         return  data.length == 281 &&
@@ -17,5 +16,4 @@ public class EmuPlanetPhattRec extends Recognize
             data[2] == (byte) 0x0A &&
             data[4] == (byte) 0x01;
         }
-        
     }

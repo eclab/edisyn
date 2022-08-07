@@ -50,7 +50,18 @@ public class Model implements Cloneable
     // The undo listener
     Undo undoListener = null;
     public double [] latentVector = null;
-           
+    
+    // The fixer
+    Synth fixer = null;
+    /** Sets the Model's fixer. This Synth ALWAYS has its fix(String, Model) method called on every
+    	key that is updated for any reason, regardless of whether updateListeners is called.  By default
+    	Synth.fix(String, Model) does nothing at all.  The fixer was introduced to revise the min/max range of
+    	parameters due to a change in a given parameter.  For example, in the Proteus 2000, changing a 
+    	ROM parameter will radically change the min/max values of the available instruments (for example)
+    	in the ROM.  Assuming the ROM parameter gets mutated or changed first, we can modify the min/max
+    	values of the instruments so that they can be changed afterwards within the proper range. 
+    	By default the fixer is null, so nothing is called or changed. */
+    public void setFixer(Synth val) { fixer = val; }
 
     // Listeners should be updated when a key is modified
     boolean updateListeners = true;
@@ -649,7 +660,7 @@ public class Model implements Cloneable
         }
 
 
-    /** Duplicates the model without listeners, without undo listener, and without the last key. */
+    /** Duplicates the model without listeners, without undo listener, and without the last key, but with the fixer. */
     public Model copy()
         {
         Model m = null;
@@ -834,6 +845,9 @@ public class Model implements Cloneable
     /** Updates all listeners for the key, and for ALL_KEYS, unless updateListeners is true */
     public void updateListenersForKey(String key)
         {
+		if (fixer != null) 
+			fixer.fix(key, this);
+		
         if (!updateListeners) return;
         
         Node node = storage.get(key);
@@ -852,6 +866,15 @@ public class Model implements Cloneable
     /** Updates all listeners for for keys, and for ALL_KEYS, unless updateListeners is true */
     public void updateAllListeners()
         {
+		if (fixer != null)
+			{
+			String[] keyset = (String[])(storage.keySet().toArray(new String[0]));
+			for(int j = 0; j < keyset.length; j++)
+				{
+				fixer.fix(keyset[j], this);
+				}
+			}
+
         if (!updateListeners) return;
         
         String[] keyset = (String[])(storage.keySet().toArray(new String[0]));
@@ -1086,6 +1109,9 @@ public class Model implements Cloneable
                             randomValueWithin(random, getMin(keys[i]), getMax(keys[i]))));
                     }
                 }
+                
+            if (fixer != null)
+            	fixer.fix(keys[i], this);
             }
 
         if (undoListener!= null)
@@ -1207,6 +1233,9 @@ public class Model implements Cloneable
                 // different but someone is non-metric.  Don't change.
                 continue;
                 }
+
+            if (fixer != null)
+            	fixer.fix(keys[i], this);
             }
 
         if (undoListener!= null)
@@ -1222,30 +1251,48 @@ public class Model implements Cloneable
 
     /** Recombines (potentially) all keys.  
         Recombination works as follows.  For each key, we first see if we're permitted to mutate it
-        (no immutable status, other model doesn't have the key).  Next with 1.0 - WEIGHT probability 
-        we don't recombine at all. Otherwise we recombine:
-                
-        <p>If the parameter is a string, we keep our value.  
-        If the parameter is an integer, and we have a metric range,
-        and BOTH our value AND the other model's value are within that range, then we do 
-        metric crossover: we pick a random new value between the two values inclusive.
-        Otherwise with 0.5 probability we select our parameter, else the other model's parameter.
+        (no immutable status, other model doesn't have the key).  If so, if we're METRIC or both
+        of us are within the metric region of a hybrid parameter, then
+        we do a metric recombination.  Otherwise we do a categorical recombination.
+        
+        <p>
+        METRIC RECOMBINATION.  Let A be me and B be the other guy.  Let C be the weighted
+        average betweeen A and B (low weight favors A, high weight favors B).  Now pick
+        a random position between A and C.  This means that a low weight just retains A,
+        and a high weight picks a random value between A and B.  Note that there is no
+        weight which *favors B*.  See crossover(), which might have a B-favoring option for you.
+        
+        <p>
+        CATEGORICAL RECOMBINATION.
+        We do a coin toss with WEIGHT probability.  If this is TRUE then we do another
+        coin toss of 0.5 probability.  If this is TRUE, then we adopt B's value, else we
+        retain A's value.  The 0.5 is there to make this roughly the same mutative effect
+        as metric recombination.
     */
     public Model recombine(Random random, Model model, double weight)
         {
         return recombine(random, model, getKeys(), weight);
         }
 
-    /** Recombines (potentially the keys provided.  
+    /** Recombines (potentially) only the keys provided, leaving the others alone.  
         Recombination works as follows.  For each key, we first see if we're permitted to mutate it
-        (no immutable status, other model doesn't have the key).  Next with 1.0 - WEIGHT probability 
-        we don't recombine at all. Otherwise we recombine:
-                
-        <p>If the parameter is a string, we keep our value.  
-        If the parameter is an integer, and we have a metric range,
-        and BOTH our value AND the other model's value are within that range, then we do 
-        metric crossover: we pick a random new value between the two values inclusive.
-        Otherwise with 0.5 probability we select our parameter, else the other model's parameter.
+        (no immutable status, other model doesn't have the key).  If so, if we're METRIC or both
+        of us are within the metric region of a hybrid parameter, then
+        we do a metric recombination.  Otherwise we do a categorical recombination.
+        
+        <p>
+        METRIC RECOMBINATION.  Let A be me and B be the other guy.  Let C be the weighted
+        average betweeen A and B (low weight favors A, high weight favors B).  Now pick
+        a random position between A and C.  This means that a low weight just retains A,
+        and a high weight picks a random value between A and B.  Note that there is no
+        weight which *favors B*.  See crossover(), which might have a B-favoring option for you.
+        
+        <p>
+        CATEGORICAL RECOMBINATION.
+        We do a coin toss with WEIGHT probability.  If this is TRUE then we do another
+        coin toss of 0.5 probability.  If this is TRUE, then we adopt B's value, else we
+        retain A's value.  The 0.5 is there to make this roughly the same mutative effect
+        as metric recombination.
     */
     public Model recombine(Random random, Model model, String[] keys, double weight)
         {
@@ -1289,7 +1336,10 @@ public class Model implements Cloneable
                 if (coinToss(random, 0.5))
                     set(keys[i], reviseMutatedValue(keys[i], get(keys[i], 0), model.get(keys[i], 0)));
                 }
-            }
+ 
+             if (fixer != null)
+            	fixer.fix(keys[i], this);
+           }
 
         if (undoListener!= null)
             {
@@ -1299,12 +1349,20 @@ public class Model implements Cloneable
         }
 
 
-    /** Crosses over the keys provided.  This works as follows. 
-        For each key, we first see if we're permitted to mutate it
-        (no immutable status, other model doesn't have the key).  Next with 1.0 - WEIGHT probability 
-        we don't cross over at all. Otherwise we adopt the parameter from the other individual half of the time.
+    /** Crosses over (potentially) only the keys provided, leaving the others alone.  
+        Crossover works as follows.  For each key, we first see if we're permitted to mutate it
+        (no immutable status, other model doesn't have the key).  If so, then:
+
+        <p>
+        We do a coin toss with WEIGHT probability.  If this is TRUE then we do another
+        coin toss of 0.5 probability.  If this is TRUE, or if postCoinToss is FALSE [so we
+        skip the second coin toss] then we adopt B's value, else we
+        retain A's value.  The 0.5 is there to make this roughly the same mutative effect
+        as recombination: crossover is effectively biased to go roughly from 0.0 to 0.5 probability
+        of mutating to B, rather than than 0.0 to 1.0 probability.  If you want to go from 0.0 to 1.0
+        then set postCoinToss to FALSE.
     */
-    public Model crossover(Random random, Model model, String[] keys, double weight)
+    public Model crossover(Random random, Model model, String[] keys, double weight, boolean postCoinToss)
         {
         if (undoListener!= null)
             {
@@ -1320,9 +1378,12 @@ public class Model implements Cloneable
             
             if (coinToss(random, weight))
                 {
-                if (coinToss(random, 0.5))
+                if (!postCoinToss || coinToss(random, 0.5))
                     set(keys[i], reviseMutatedValue(keys[i], get(keys[i], 0), model.get(keys[i], 0)));
                 }
+                
+            if (fixer != null)
+            	fixer.fix(keys[i], this);
             }
 
         if (undoListener!= null)
@@ -1331,6 +1392,23 @@ public class Model implements Cloneable
             }
             
         return this;
+        }
+
+    /** Crosses over (potentially) only the keys provided, leaving the others alone.  
+        Crossover works as follows.  For each key, we first see if we're permitted to mutate it
+        (no immutable status, other model doesn't have the key).  If so, then:
+
+        <p>
+        We do a coin toss with WEIGHT probability.  If this is TRUE then we do another
+        coin toss of 0.5 probability.  If this is TRUE, then we adopt B's value, else we
+        retain A's value.  The 0.5 is there to make this roughly the same mutative effect
+        as recombination: crossover is effectively biased to go roughly from 0.0 to 0.5 probability
+        of mutating to B, rather than than 0.0 to 1.0 probability.  If you want to go from 0.0 to 1.0
+        then call crossover(random, model, keys, weight, FALSE) instead.
+    */
+    public Model crossover(Random random, Model model, String[] keys, double weight)
+        {
+		return crossover(random, model, keys, weight, true);
         }
 
     // used by morph to determine if a key is in a metric region for all models 
@@ -1370,28 +1448,27 @@ public class Model implements Cloneable
         
         <pre>
         If (weight == previousWeight)
-        return                                                          // no change in push
+        .   return                                                          // no change in push
         
         For each key:
-        If the key is METRIC,
-        average model and model2 by weight
-        If the key is CATEGORICAL (non-metric)
-        If weight >= previousWeight             // we're moving towards model
-        m <- model
-        p <- weight 
-        pw <- previousWeight
-        else
-        m <- model2                                     // we're moving towards model2
-        p <- 1 - weight
-        pw <- 1 - previousWeight
-
-        If we are different from m
-        With a *low* p^a probability                                    // maybe use a = 3?
-        With probability p                                              // mutator A
-        Set key to value in m
-        Else
-        With probability (p - pw)                               // mutator B
-        Set key to value in m
+        .   If the key is METRIC,
+        .      average model and model2 by weight
+        .   If the key is CATEGORICAL (non-metric)
+        .      If weight >= previousWeight             // we're moving towards model
+        .         m <- model
+        .         p <- weight 
+        .         pw <- previousWeight
+        .      Else
+        .         m <- model2                          // we're moving towards model2
+        .         p <- 1 - weight
+        .         pw <- 1 - previousWeight
+        .      If we are different from m
+        .          With a *low* p^a probability                                    // maybe use a = 3?
+        .              With probability p                                              // mutator A
+        .                  Set key to value in m
+        .          Else
+        .              With probability (p - pw)                               // mutator B
+        .                  Set key to value in m
         </pre>
  
         <p>
@@ -1589,6 +1666,9 @@ public class Model implements Cloneable
                         }
                     }
                 }
+
+            if (fixer != null)
+            	fixer.fix(keys[i], this);
             }
 
         // update undoListener

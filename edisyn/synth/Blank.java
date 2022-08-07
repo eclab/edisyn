@@ -736,6 +736,13 @@ public class Blank extends Synth
         return 1000; 
         }
 
+    public int getBatchDownloadFailureCountdown()
+        {
+        // Each getBatchDownloadWaitTime() Edisyn will count this down until
+        // it reaches -1, at which time it gives up waiting for a bulk download.
+        return 0; 
+        }
+
     public int getTestNoteChannel()
         {
         // It's possible that your synth has a special channel for this patch
@@ -1069,6 +1076,21 @@ public class Blank extends Synth
         return true; 
         }
         
+    public boolean isAppropriatePatchLocation(int bank, int num) 
+    	{
+        // Returns if the given bank and patch number define an "appropriate" patch location, meaning
+        // one that the user is encouraged to upload and download from.  For example, the Proteus 2000
+        // has many ROMs as "banks", and the user is free to save and load those "banks" even if he
+        // does not have them installed on his machine -- he can even attempt to upload/download from 
+        // them but it would be stupid to do so.  In this case we merely want to color the patches as
+        // a warning, not prevent the user from doing what he wants to do.  That is the purpose of this
+        // method.  The bank values passed in will always be between 0 and the number of banks (minus 1) 
+        // inclusive. Similarly the patch numbers passed in will always be between 0 and 
+        // getPatchNumberNames() - 1 inclusive.  By default this method always returns true, which is 
+        // in most cases correct.
+    	return true;
+    	}
+
     public int getValidBankSize(int bank)
     	{
     	// Returns the actual number of valid patches in the bank (see isValidPatchLocation(...)).
@@ -1120,7 +1142,14 @@ public class Blank extends Synth
         // (and I don't know of any that do), get ahold of me first -- Sean.
         return null; 
         }
-
+    
+    public void librarianCreated(Librarian librarian) 
+    	{
+    	// This is simply a hook to let your Synth know that its Librarian has been created.
+    	// The Proteus 2000 editor uses this to rearrange the Librarian's columns. 
+    	}
+    	
+    	
 
     //// THE NEXT SIX METHODS WOULD ONLY BE IMPLEMENTED WHEN BANK SYSEX MESSAGES ARE SUPPORTED.
     ////

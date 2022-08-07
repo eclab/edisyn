@@ -1067,15 +1067,39 @@ public abstract class Synth extends JComponent implements Updatable
                 model.minExists(key) && 
                 model.maxExists(key))
                 {
-                // verify
+                // Ensure the value is within min/max.  Previously we would do this by bounding the
+                // value to the min or max values, but this results in ugly pushing into corners when
+                // mutating etc.  So now we're doing MOD, which should distribute to new values
+                // in a more interesting fashion.  This is particularly important for Proteus 2000's fix(...)
+                // method, so make sure that still works well if we're reverting this back....
                 int val = model.get(key);
+                if (val < model.getMin(key) || val > model.getMax(key))
+                	{
+                	int min = model.getMin(key);
+                	int max = model.getMax(key);
+                	int top = max + 1;
+                	// shift everything so that min = 0;
+                	int newTop = top - min;
+                	int newVal = val - min;
+                	// Now our range is [0...newTop)
+                	// and newVal is a value that NEEDS to be in that range.
+                	// We do a double mod
+                	newVal = newVal % newTop;
+                	if (newVal < 0) newVal = val + newTop;	
+                	// Now newVal is within the range [0...newTop)
+                	// So we now shift back to [min...top), that is, [min...max]
+                	newVal += min;
+					model.set(key, newVal);
+					if (printRevised) System.err.println("Warning (Synth): Revised " + key + " from " + val + " to " + newVal);       	
+					}
+                /*
                 if (val < model.getMin(key))
                     { model.set(key, model.getMin(key)); if (printRevised) System.err.println("Warning (Synth): Revised " + key + " from " + val + " to " + model.get(key));}
                 if (val > model.getMax(key))
                     { model.set(key, model.getMax(key)); if (printRevised) System.err.println("Warning (Synth): Revised " + key + " from " + val + " to " + model.get(key));}
+                */
                 }
             }
-            
         }
 
     /** Override this to make sure that at *least* the given time (in Milliseconds) has transpired between MIDI sends. */
@@ -1390,7 +1414,7 @@ public abstract class Synth extends JComponent implements Updatable
                                             }
                                         catch (Exception ex)
                                             {
-                                            System.err.println("The exception is " + ex);
+                                            //System.err.println("The exception is " + ex);
                                             Synth.handleException(ex);
                                             // result is now PARSE_ERROR
                                             }
@@ -1442,8 +1466,9 @@ public abstract class Synth extends JComponent implements Updatable
                                                 }
 
                                             setSendMIDI(originalMIDI);
-                                            if (getSendsParametersAfterNonMergeParse() && !isBatchDownloading())
+                                            if (getSendsParametersAfterNonMergeParse() && !isBatchDownloading() && incomingPatch)
                                                 {
+                                                simplePause(getPauseAfterReceivePatch());
                                                 sendAllParameters();
                                                 }
                                             file = null;
@@ -1453,6 +1478,10 @@ public abstract class Synth extends JComponent implements Updatable
                                         updateTitle();
                                         }
                                     }
+                                else if (handleDeviceInquiry(data))
+                                	{
+                                	// do nothing
+                                	}
                                 else    // Maybe it's a local Parameter change in sysex?
                                     {
                                     // we don't do undo here.  It's not great but PreenFM2 etc. would wreak havoc
@@ -3311,7 +3340,6 @@ public abstract class Synth extends JComponent implements Updatable
             setLastColor("dynamic-color", dynamic.getColor());
             setLastColor("unset-color", dial.getColor());
             setLastColor("envelope-color", envelope.getColor());
-            System.err.println(envelope.getColor());
             Style.updateColors();
             }
         }
@@ -4019,9 +4047,9 @@ public abstract class Synth extends JComponent implements Updatable
                 }
             });
         
-        // reset the nudges now
+        // reset the nudges now, we presume getModel() is the default patch
         for(int i = 0; i < nudge.length; i++)
-            doSetNudge(i);
+            doSetNudgeEmpty(i, getModel());
 
 
                 
@@ -6082,13 +6110,23 @@ public abstract class Synth extends JComponent implements Updatable
     void doSetNudge(int i, Model model, String name)
         {
         nudge[i] = model.copy(); // (Model)(model.clone());             /// don't need listeners
-        nudgeTowards[i].setText("Towards " + (i + 1) + ": " + name);
-        nudgeTowards[i + 4].setText("Away from " + (i + 1) + ": " + name);
+        nudgeTowards[i].setText("Towards " + (i + 1) + (name == null ? "" : (": " + name)));
+        nudgeTowards[i + 4].setText("Away from " + (i + 1) + (name == null ? "" : (": " + name)));
+        }
+
+    void doSetNudge(int i, Model model)
+        {
+        doSetNudge(i, model, getPatchName(model));
+        }
+
+    void doSetNudgeEmpty(int i, Model model)
+        {
+        doSetNudge(i, model, null);
         }
 
     void doSetNudge(int i)
         {
-        doSetNudge(i, getModel(), getPatchName(getModel()));
+        doSetNudge(i, getModel());
         }
 
     Model getNudge(int i)
@@ -6543,6 +6581,24 @@ public abstract class Synth extends JComponent implements Updatable
 
         return result;
         } 
+
+	public static int numSysexMessages(byte[] data)
+		{
+		int count = 0;
+		boolean in = false;
+		for(int i = 0; i < data.length; i++)
+			{
+			if (in)
+				{
+				if (data[i] == (byte)0xF7) { count++; in = false; }
+				}
+			else
+				{
+				if (data[i] == (byte)0xF0) { in = true; }
+				}
+			}
+		return count;
+		}
 
     /** Breaks data into multiple sysex messages, discarding apparent non-sysex data. */
     public static byte[][] cutUpSysex(byte[] data)
@@ -7714,8 +7770,22 @@ public abstract class Synth extends JComponent implements Updatable
 
         return true;
         }
-                        
-                        
+    
+    void submitDeviceInquiry()
+    	{
+        tryToSendSysex(new byte[] { (byte)0xF0, 0x7E, 0x7F, 0x06, 0x01, (byte)0xF7 });
+    	}               
+                       
+	boolean handleDeviceInquiry(byte[] data)
+		{
+		String response = Midi.getManufacturerForDeviceInquiry(data);
+		if (response == null) return false;
+		else
+			{
+			showSimpleMessage("Device Inquiry Response", "A Synthesizer Responded to a Device Inquiry.\n\n" + response);
+			return true;
+			}
+		}               
                         
     // Private function used by doOpen(...) to issue an error when Edisyn doesn't know how to parse
     // the provided sysex data.
@@ -8111,6 +8181,7 @@ public abstract class Synth extends JComponent implements Updatable
             librarianOpen = true;
             Librarian.setLibrarianMenuSelected(librarianMenu, true, this);
             menubar.add(librarianMenu);
+            librarianCreated(librarian);
             }
         }  
         
@@ -9141,8 +9212,8 @@ public abstract class Synth extends JComponent implements Updatable
         System.err.println();
         }   
         
-        
-    public JMenuBar makeDisabledMenuBar()
+    // Makes a disabled version of the menu bar; this is used only internally for Mac code
+    JMenuBar makeDisabledMenuBar()
         {
         JMenuBar mb = new JMenuBar();
         for(int i = 0; i < menubar.getMenuCount(); i++)
@@ -9187,6 +9258,7 @@ public abstract class Synth extends JComponent implements Updatable
         }
     
     
+	/** Returns the classname of the synthesizer editor.  As simple and stupid as it sounds */
     public String getSynthClassName()
         {
         return getClass().getName();
@@ -9291,6 +9363,11 @@ public abstract class Synth extends JComponent implements Updatable
         method normally returns true. */
     public boolean isValidPatchLocation(int bank, int num) { return true; }
 
+    /** Some synthesizers have patches which might not be good choices to read/write; for example,
+    	the Proteus 2000 has ROMs which might not be installed.  This indicates these patches,
+    	and is primarily used to color them, not to prevent the user from using them as he sees fit. */
+    public boolean isAppropriatePatchLocation(int bank, int num) { return true; }
+
     /** Some synthesizers have ragged banks -- different banks have different lengths.  Edisyn stretches
         everything to the longest length, and then lets synths mark out some cells as "invalid".  
         This method should return the actual length of the bank; by default it just
@@ -9315,4 +9392,11 @@ public abstract class Synth extends JComponent implements Updatable
     /** Return true if the librarian has been adequately tested for this editor.  
         Otherwise Edisyn will add  */
     public boolean librarianTested() { return false; }
+    
+    /** This is potentially called by a model to fix some errors in the model regardless of
+    	the setting of updateListeners.  See Proteus 2000. */
+    public void fix(String key, Model model) { }
+    
+    /** Notifies the Synth that its librarian has been created. */
+    public void librarianCreated(Librarian librarian) { }
     }

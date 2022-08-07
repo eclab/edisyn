@@ -2349,7 +2349,7 @@ public class WaldorfKyra extends Synth
      For the Kyra Multimode patch sysex format, see the end of WaldorfKyraMulti.java
                 
         
-     CHANGE MULTIMODE PATCH
+     CHANGE SINGLE PATCH
      Do an *LSB* Bank Change (CC = 32) with MIDI Channel = the channel for the part number.
      Do a Program Change with MIDI Channel = the channel for the part number.
         
@@ -2357,7 +2357,7 @@ public class WaldorfKyra extends Synth
      NOTE: Banks and Patches start at 0
      NOTE: A patch change requires at least 200ms pause afterwards
         
-     REQUEST PATCH DUMP 
+     REQUEST SINGLE PATCH DUMP 
      F0
      3E              Waldorf 
      22              Kyra
@@ -2365,11 +2365,11 @@ public class WaldorfKyra extends Synth
      20              Request Single patch
      01              Version 1       [current as of September 2021]
      [MSB]           Bank number as follows:
-     (Current Working Patch): MSB = 0x7E
-     (Patch in Memory): MSB = 0 ... 25          (represents banks A ... Z)           
+     -->             (Current Working Patch): MSB = 0x7E
+     -->             (Patch in Memory): MSB = 0 ... 25          (represents banks A ... Z)           
      [LSB]           Patch number as follows:
-     (Current Working Patch): LSB = part, or 0x7F (current part)
-     (Patch in Memory): MSB = patch number          
+     -->             (Current Working Patch): LSB = part, or 0x7F (current part)
+     -->             (Patch in Memory): MSB = patch number          
      F7
 
      SEND ONE PARAMETER TO EDIT BUFFER

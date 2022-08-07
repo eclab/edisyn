@@ -29,9 +29,12 @@ public class StringComponent extends JComponent implements Updatable, HasKey
     JLabel label;
     JButton change;
     Random rand = new Random();
+    int maxLength;
         
     String key;
+    String instructions;
     Synth synth;
+    
     
     static String[] wordList = null;
     
@@ -82,11 +85,13 @@ public class StringComponent extends JComponent implements Updatable, HasKey
     public String getTitle() { return label.getText().trim(); }
     public String getCommand() { return "Enter " + getTitle(); }
     
-    public StringComponent(final String _label, final Synth synth, final String key, final int maxLength, final String instructions)
+    public StringComponent(final String _label, final Synth synth, final String key, int maxLength, String instructions)
         {
         super();
         this.key = key;
         this.synth = synth;
+        this.maxLength = maxLength;
+        this.instructions = instructions;
         synth.getModel().register(key, this);
                 
         setBackground(Style.BACKGROUND_COLOR());
@@ -112,9 +117,19 @@ public class StringComponent extends JComponent implements Updatable, HasKey
                 
         change.addActionListener(new ActionListener()
             {
-            String currentText = synth.getModel().get(key, "");
             public void actionPerformed(ActionEvent e)
                 {
+                perform(StringComponent.this);
+                }
+            });
+                
+        add(change, BorderLayout.SOUTH);
+        synth.getModel().set(key, "");          // gotta set it to something
+        }
+        
+    public void perform(Component parent)
+    	{
+            String currentText = synth.getModel().get(key, "");
                 while(true)
                     {
                     String val = synth.getModel().get(key, "").trim();
@@ -140,21 +155,21 @@ public class StringComponent extends JComponent implements Updatable, HasKey
                     vbox.add(text);
                     
                     synth.disableMenuBar();
-                    int opt = JOptionPane.showOptionDialog(StringComponent.this, vbox, getTitle(),
+                    int opt = JOptionPane.showOptionDialog(parent, vbox, getTitle(),
                         JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, new String[] { "Enter", "Cancel", "Rand", "Rules" }, "Enter");
                     synth.enableMenuBar();
                                         
                     if (opt == 3)       // this is "Rules"
                         {
                         synth.disableMenuBar();
-                        JOptionPane.showMessageDialog(StringComponent.this, instructions, "Rules", JOptionPane.INFORMATION_MESSAGE);
+                        JOptionPane.showMessageDialog(parent, instructions, "Rules", JOptionPane.INFORMATION_MESSAGE);
                         synth.enableMenuBar();
                         }
                     else if (opt == 2)       // this is "Rand"
                         {
                         if (wordList == null)
                         	{
-                        	Scanner scan = new Scanner(this.getClass().getResourceAsStream("wordList.txt"));
+                        	Scanner scan = new Scanner(StringComponent.class.getResourceAsStream("wordlist.txt"));
 							ArrayList<String> tokens = new ArrayList<>();
 							while (scan.hasNext()) tokens.add(scan.nextLine());
 							wordList = tokens.toArray(new String[0]);
@@ -194,12 +209,7 @@ public class StringComponent extends JComponent implements Updatable, HasKey
                             }
                         }
                     }
-                }
-            });
-                
-        add(change, BorderLayout.SOUTH);
-        synth.getModel().set(key, "");          // gotta set it to something
-        }
+    	}
 
     public void paintComponent(Graphics g)
         {

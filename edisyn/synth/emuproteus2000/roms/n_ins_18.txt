@@ -1,0 +1,410 @@
+   :None        
+epo:Dyno EP 1   
+epo:Dyno EP 2   
+epo:Dyno EP 3   
+epo:Dyno EP 4   
+epo:Dyno Low    
+epo:Dyno Med    
+epo:Dyno Hd/Med 
+epo:Dyno Lw/Hd  
+epo:Dyno Hard   
+epo:Mello EP    
+epo:Mello EP Low
+epo:Mello EP Hd 
+epo:Wurly EP    
+epo:Wurly Soft  
+epo:Wurly Medium
+epo:Wurly Hard  
+epo:CP70        
+epo:CP70 Medium 
+epo:CP70 Hard   
+epo:FM EP       
+org:1st3 Slow   
+org:1st3 Fast   
+org:1st4 Slow vb
+org:AllOutSlwDst
+org:AllOutFstDst
+org:Perc 2nd    
+org:Perc 3rd    
+org:Farfisa     
+org:Vox Jaguar  
+key:Clavinet 1  
+key:Clavinet 2  
+syn:OB WideBrass
+syn:OBX PWM     
+syn:OB Saw PWM  
+syn:OB PulseSync
+key:OB Clav     
+epo:OB EP       
+syn:SEM Fuzz    
+syn:SEM Saws    
+syn:Rogue Saws  
+syn:Rogue Sqr   
+syn:Classic Mini
+syn:Mini Saws   
+syn:JP8Brass    
+syn:SuperJuno   
+syn:Big JX      
+syn:Angry Juno  
+syn:P10 Big     
+syn:P10 Fat Saw 
+syn:P5 Sync     
+syn:P5 UniSync  
+syn:P5 Uni Saw  
+syn:P5 Piper    
+syn:M12 Lead    
+syn:ARP SyncMod 
+syn:ArpPlsRsmp  
+syn:Arp Saw     
+syn:Arp Square  
+syn:Sync Wah    
+syn:101VariPulse
+syn:E-mu Modular
+bas:Fat Taurus  
+bas:Taurus Osc. 
+bas:SEM QBass 1 
+bas:SEM QBass 2 
+bas:SEM QBass 3 
+bas:SEMSyncBs 1 
+bas:SEMSyncBs 2 
+bas:MiniSnapBass
+bas:M WarmSquare
+bas:PPG Bass    
+bas:PPG DigiBass
+bas:P5 Bass     
+bas:ArpFatBass  
+bas:DX EP Bass 1
+bas:DX EP Bass 2
+bas:FM Bass     
+bas:FM Polybass 
+bas:Synth Hummer
+bas:Pilot       
+bas:Bagg        
+bas:Finger      
+gtr:Electric    
+gtr:Happy Strum 
+gtr:Wacka 1     
+gtr:Wacka 2     
+str:Tron Strings
+str:M12 Strings 
+str:Solina      
+str:Elka CelIo  
+str:Elka String 
+str:Elka Combo  
+str:Synth String
+vox:Tron Males  
+vox:Tron Females
+vox:Tron Mix    
+vox:P10 Choir   
+vox:Flight Aahs 
+brs:Tron Brass  
+wnd:Tron Flute  
+wav:MiniTriangle
+wav:Mini Saw    
+wav:Mini Square 
+wav:Mini Pulse 1
+wav:Mini Pulse 2
+wav:JX Square   
+wav:JX Saw      
+wav:JX Pulse    
+wav:Juno Square 
+wav:Juno Saw    
+wav:Juno Pulse  
+wav:P10 Saw     
+wav:P10 Triangle
+wav:P10 Pulse   
+wav:P10Inharmonc
+wav:JX          
+wav:101 Square  
+wav:101 Saw     
+wav:Sine        
+wav:Sine Squared
+wav:Sine InvSqrd
+wav:Sine Cubed  
+wav:SineInvCubed
+wav:Aluminum    
+nse:Spectrum 1  
+nse:Spectrum 2  
+nse:Spectrum 3  
+nse:Spectrum 4  
+nse:Hi Pass     
+nse:Xcite HiPass
+nse:White Noise 
+nse:Pink Noise  
+nse:101 Noise   
+sfx:Whine       
+sfx:Clav Tick   
+sfx:Tack Attack 
+sfx:Bad Synth   
+sfx:Cluster Vox 
+sfx:Kluster Loop
+kit:Electro GM 1
+kit:Electro GM 2
+kit:808         
+kit:909         
+kit:MS20        
+kit:MS20 #2     
+kit:SK-1        
+kit:SP1200      
+kit:Electronic 1
+kit:Electronic 2
+kit:Electronic 3
+kit:Electronic 4
+kit:Electronic 5
+kit:Electronic 6
+kit:Electronic 7
+kit:Electronic 8
+kit:Acoustic GM 
+kit:Acoustic 2  
+kit:Acoustic 3  
+kit:Acoustic 4  
+kit:Jazz Brush  
+kit:Hybrid      
+prc:All Kicks   
+prc:All Snares  
+prc:All Toms    
+prc:All Hats    
+prc:All Cymbals 
+prc:Shakers etc 
+prc:Snaps etc   
+prc:Congas etc  
+prc:Misc        
+prc:Kick 1      
+prc:Kick 2      
+prc:Kick 3      
+prc:Kick 4      
+prc:Kick 5      
+prc:Kick 6      
+prc:Kick 7      
+prc:Kick 8      
+prc:Kick 9      
+prc:Kick 10     
+prc:Kick 11     
+prc:Kick 12     
+prc:Kick 13     
+prc:Kick 14     
+prc:Kick 15     
+prc:Kick 16     
+prc:Kick 17     
+prc:Kick 18     
+prc:Kick 19     
+prc:Kick 20     
+prc:Kick 21     
+prc:Kick 22     
+prc:Kick 23     
+prc:Kick 24     
+prc:Kick 25     
+prc:Snare 1     
+prc:Snare 2     
+prc:Snare 3     
+prc:Snare 4     
+prc:Snare 5     
+prc:Snare 6     
+prc:Snare 7     
+prc:Snare 8     
+prc:Snare 9     
+prc:Snare 10    
+prc:Snare 11    
+prc:Snare 12    
+prc:Snare 13    
+prc:Snare 14    
+prc:Snare 15    
+prc:Snare 16    
+prc:Snare 17    
+prc:Snare 18    
+prc:Snare 19    
+prc:Snare 20    
+prc:Snare 21    
+prc:Snare 22    
+prc:Snare 23    
+prc:Snare 24    
+prc:Snare 25    
+prc:Snare 26    
+prc:Snare 27    
+prc:Snare 28    
+prc:Snare 29    
+prc:Snare 30    
+prc:Snare 31    
+prc:Snare 32    
+prc:Snare 33    
+prc:Snare 34    
+prc:Snare 35    
+prc:Tom 1       
+prc:Tom 2       
+prc:Tom 3       
+prc:Tom 4       
+prc:Tom 5       
+prc:Tom 6       
+prc:Tom 7       
+prc:Tom 8       
+prc:Tom 9       
+prc:Tom 10      
+prc:Tom 11      
+prc:Tom 12      
+prc:Tom 13      
+prc:Tom 14      
+prc:Tom 15      
+prc:Tom 16      
+prc:Tom 17      
+prc:Hat 1       
+prc:Hat 2       
+prc:Hat 3       
+prc:Hat 4       
+prc:Hat 5       
+prc:Hat 6       
+prc:Hat 7       
+prc:Hat 8       
+prc:Hat 9       
+prc:Hat 10      
+prc:Hat 11      
+prc:Hat 12      
+prc:Hat 13      
+prc:Hat 14      
+prc:Hat 15      
+prc:Hat 16      
+prc:Hat 17      
+prc:Hat 18      
+prc:Hat 19      
+prc:Hat 20      
+prc:Hat 21      
+prc:Hat 22      
+prc:Hat 23      
+prc:Hat 24      
+prc:Hat 25      
+prc:Hat 26      
+prc:Hat 27      
+prc:Cymbal 1    
+prc:Cymbal 2    
+prc:Cymbal 3    
+prc:Cymbal 4    
+prc:Cymbal 5    
+prc:Cymbal 6    
+prc:Cymbal 7    
+prc:Cymbal 8    
+prc:Cymbal 9    
+prc:Cymbal 10   
+prc:Cymbal 11   
+prc:Cymbal 12   
+prc:Cymbal 13   
+prc:Cymbal 14   
+prc:Cymbal 15   
+prc:Cymbal 16   
+prc:Vibraslap   
+prc:Clave 1     
+prc:Clave 2     
+prc:Clave 3     
+prc:Cowbell 1   
+prc:Cowbell 2   
+prc:Cowbell 3   
+prc:Cowbell 4   
+prc:Tamb 1      
+prc:Tamb 2      
+prc:Triangle 1  
+prc:Triangle 2  
+prc:Whistle     
+prc:Shaker 1    
+prc:Shaker 2    
+prc:Shaker 3    
+prc:Shaker 4    
+prc:Shaker 5    
+prc:Shaker 6    
+prc:Shaker 7    
+prc:Shaker 8    
+prc:Shaker 9    
+prc:Shaker 10   
+prc:Shaker 11   
+prc:Shaker 12   
+prc:Shaker 13   
+prc:Shaker 14   
+prc:Shaker 15   
+prc:Shaker 16   
+prc:Shaker 17   
+prc:Shaker 18   
+prc:Shaker 19   
+prc:Shaker 20   
+prc:Shaker 21   
+prc:Shaker 22   
+prc:Shaker 23   
+prc:Shaker 24   
+prc:Shaker 25   
+prc:Clap 1      
+prc:Clap 2      
+prc:Clap 3      
+prc:Clap 4      
+prc:Clap 5      
+prc:Clap 6      
+prc:Clap 7      
+prc:Snap        
+prc:Conga 1     
+prc:Conga 2     
+prc:Conga 3     
+prc:Conga 4     
+prc:Conga 5     
+prc:Conga 6     
+prc:Conga 7     
+prc:Conga 8     
+prc:Conga 9     
+prc:Conga 10    
+prc:Conga 11    
+prc:Conga 12    
+prc:Conga 13    
+prc:Conga 14    
+prc:Conga 15    
+prc:Misc 1      
+prc:Misc 2      
+prc:Misc 3      
+prc:Misc 4      
+prc:Misc 5      
+prc:Misc 6      
+prc:Misc 7      
+prc:Misc 8      
+prc:Misc 9      
+prc:Misc 10     
+prc:Misc 11     
+prc:Misc 12     
+prc:Misc 13     
+prc:Misc 14     
+prc:Misc 15     
+prc:Misc 16     
+prc:Misc 17     
+prc:Misc 18     
+prc:Misc 19     
+prc:Misc 20     
+prc:Misc 21     
+prc:Misc 22     
+prc:Misc 23     
+prc:Big Hit 1   
+prc:Big Hit 2   
+prc:Scratch 1   
+prc:Scratch 2   
+sfx:Wakka 1     
+sfx:Wakka 2     
+sfx:Wakka 3     
+sfx:Wakka 4     
+sfx:Wakka 5     
+sfx:Wakka 6     
+sfx:Wakka 7     
+sfx:Wakka 8     
+sfx:Wakka 9     
+sfx:Wakka 10    
+sfx:Wakka 11    
+sfx:Wakka 12    
+sfx:Wakka 13    
+sfx:Wakka Map   
+sfx:Tick 1      
+sfx:Tick 2      
+sfx:Tick 3      
+sfx:Tick 4      
+sfx:Tick 5      
+sfx:Tick 6      
+sfx:Tick 7      
+sfx:Tick 8      
+sfx:Tick 9      
+sfx:Tick 10     
+sfx:Tick 11     
+sfx:Tick 12     
+sfx:Tick 13     
+bas:Bright Saw  
+bas:BrightResSaw
+bas:BrightSquare
+bas:Res Square  

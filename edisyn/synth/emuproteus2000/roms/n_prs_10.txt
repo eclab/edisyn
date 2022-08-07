@@ -1,0 +1,384 @@
+vln:16 Leg Str  
+vln:16 Leg Mono1
+vln:16 Leg Mono2
+vln:16 Leg HiPas
+vln:16 Xpression
+vln:16 Xprssn * 
+vln:16 Leg Oct 1
+vln:16 Leg Oct 2
+vln:FullViolins1
+vln:16 Trems Str
+vln:16 Trems Mno
+vln:16 Leg&Trems
+vln:16 Lg&TrmMno
+vln:Stereo Pizz 
+vln:16 Pizz Mno 
+vln:16 Pizz Long
+vln:16 Leg/Pzz w
+vln:16 Pizz/Trem
+vln:16 Pizz Plus
+vln:16 Leg/Spicv
+vln:16 Dark     
+vln:16 Sim Bow  
+vln:16 Sleepy   
+vln:5 Leg Str   
+vln:5 Leg Mno   
+vln:5 Xpression 
+vln:5 Leg Octave
+vln:FullViolins2
+vln:5 Trems Str 
+vln:5 Trems Mno 
+vln:5 Leg Str   
+vln:5 Pizz Mno  
+vln:5 Leg/Pizz w
+vln:5 Pizz/Trems
+vln:5 Spiccato  
+vln:5 Leg/Spic v
+vln:5 Pizz/Spicv
+vln:5 Leg/Spic w
+vln:5 Dark      
+vln:5 Sleepy    
+vln:5 Lg Studio 
+vln:5 LgStdXprsn
+vln:5 LgStd Oct 
+vln:FullViolins3
+vln:5 SpicStudio
+vln:5 Lg/SpcStdv
+vln:5 Lg/SpcStdw
+vln:5 Std Slow  
+vla:15 Leg Str  
+vla:15 Leg Mono 
+vla:15 Legato * 
+vla:15 Leg Oct  
+vla:FullViolas 1
+vla:15 Leg/Trems
+vla:15 Pizz     
+vla:15 Leg/Pzz w
+vla:10 Dreams   
+vla:5 Leg Str   
+vla:5 Leg Mno   
+vla:5 Xpression 
+vla:5 Leg Oct   
+vla:FullViolas 2
+vla:5 Trems Str 
+vla:5 Trems Mno 
+vla:5 Leg&Trems 
+vla:5 Pizzicato 
+vla:5 Leg/Pizz w
+vla:5 Spiccato  
+vla:5 Leg/Spic v
+vla:5 Lg Studio 
+vla:5 Std Xprsn 
+vla:5 Lg Std Oct
+vla:FullViolas 3
+vla:5 Std Spic  
+vla:5 StdLg/Spcv
+cel:10 Leg Str  
+cel:10 Leg Mno  
+cel:10 Legato * 
+cel:10 Xpression
+cel:10 Leg Oct  
+cel:10 Trems Str
+cel:10 Trems Mno
+cel:10 Leg/Trems
+cel:10 Deepness 
+cel:10 Pizzicato
+cel:10 Leg/Pzz w
+cel:10 Spiccato 
+cel:10 Lg/Spic v
+cel:5 Leg Str   
+cel:5 Leg Mno   
+cel:5 Xpression 
+cel:5 Leg Oct   
+cel:5 Leg/Trems 
+cel:5 Pizzicato 
+cel:5 Leg/Pizz w
+cel:5 Spiccato  
+cel:5 Leg/Spic v
+cel:5 Lg Studio 
+cel:5 Std Xprsn 
+cel:5 Std Spic 1
+cel:5 Std Spic 2
+bas:6 Leg Str   
+bas:6 Xpression 
+bas:6 Legato *  
+bas:3 Legato    
+bas:6&3 Leg/Spic
+bas:6&3 Leg Oct 
+bas:4 Trems     
+bas:6Leg&4Trems 
+bas:3Leg&4Trems 
+bas:3 Spiccato  
+bas:3 Leg/Spic v
+bas:3 Pizzicato 
+bas:3 Leg/Pizz w
+bas:3 Lg Studio 
+bas:3 Std Xprssn
+bas:Full House  
+bas:Full Depth  
+cmb:Bss&CelliTrm
+str:SynthString1
+str:SynthString2
+str:SynthString3
+str:SynthString4
+str:SynthString5
+str:SynthString6
+str:SynthString7
+str:SynthString8
+str:SlackLgStdSt
+str:Virtuoso    
+orc:Symphony    
+orc:Orchestra   
+orc:Ensemble    
+wnd:Woodwinds   
+brs:Brass       
+prc:Batterie    
+hrp:Harp        
+str:Mass Strings
+str:Hall Pizz   
+str:HallSpiccato
+str:Chamber     
+cmb:Bell Strings
+cmb:String&Woods
+cmb:String&Brass
+cmb:Brass&Woods 
+orc:Unison Orch 
+wnd:Soft Winds  
+wnd:HallWindSect
+wnd:Flute Beauty
+wnd:Bassoon Hall
+brs:Big Brass   
+cmb:SoloBone&Wnd
+brs:Trumpet     
+str:Quartet     
+prc:Bells       
+str:Leg/Spicv   
+str:Studio Leg  
+str:StudioXprssn
+str:Hall Pizz 2 
+str:Studio Spic 
+str:Combo Spic  
+str:Hall Trems  
+str:Chamber 2   
+str:Solo&HallStr
+str:Solo & Orch 
+str:Solo Quartet
+str:Solo Pizz 1 
+str:Pizz Combo  
+hrp:Harp&Strings
+str:Voice String
+cmb:SynBrass&Pad
+org:Pipe Organ  
+org:Voice Organ1
+str:Solo Vibrato
+cmb:FrenchString
+sfx:THZ *       
+sfx:Flutedream  
+sfx:Extrinsic   
+hrp:HarpFantasy 
+prc:Bss/Snr/Crsh
+prc:Pitched Timp
+prc:All Timpani 
+prc:All Piatti  
+prc:All Snares  
+prc:All BassDrum
+prc:Batterie 2  
+prc:Orch Bells  
+prc:TubularBells
+prc:Celesta     
+prc:Xylophone   
+prc:Marimba     
+prc:Marimba&Pizz
+prc:Mallets     
+str:HallLgSctn1 
+str:HallLgSctn2 
+str:FulLegHall  
+str:HallXprsOct1
+str:HallXprsOct2
+str:Hall Lg Plus
+str:Hall Vel Leg
+str:Hall Marcato
+str:Vln/Celli 1 
+str:Vln/Celli 2 
+str:Bass/Violin1
+str:Bass/Violin2
+str:Vln&Viola 1 
+str:Vln&Viola 2 
+str:Viola/Celli 
+str:Bass/Celli  
+str:Hall Trems 2
+str:Hall Trems 3
+str:HallLgw/Tmp 
+str:Hall Spic 2 
+str:Hall Spic 3 
+str:Hall Spic 4 
+str:Hall Pizz 3 
+str:Hall Pizz 4 
+str:Hall Pizz 5 
+str:HallPizzOct 
+str:HallSpicPizz
+str:HallLegato  
+str:Hall5Sectn 2
+str:Hall5Sectn 3
+str:Hall5Sectn 4
+str:Hall5SectOct
+str:Hall5SctExpr
+str:Hall5SctDark
+str:Hll5VlnViola
+str:Hll5VlnCelli
+str:Hll5VlaCelli
+str:Hll5VlaBass 
+str:Hll5BssCelli
+str:Studio Leg 2
+str:Studio Leg 3
+str:Studio Leg 4
+str:Studio Leg 5
+str:Std Marcato 
+str:Std Leg Plus
+str:Std5VioCello
+str:Std5VlaCello
+str:Std5VlnBass 
+str:StudioSpic 1
+str:StudioSpic 2
+str:StudioSpic 3
+str:StdSpicPizz 
+str:Combo5VlaVio
+str:Leg Combo   
+str:Marc Combo  
+str:LegComboOct1
+str:LegComboOct2
+lnk:ComboPizzLnk
+lnk:BssSnrCshLnk
+lnk:Chamber1Link
+lnk:Chamber2Link
+lnk:UniOrch Link
+lnk:OrchLink    
+lnk:PtchdTimpLnk
+str:Second Mass 
+orc:Pizz Orch   
+str:HallLgTremWh
+str:Solo&Hll5Str
+cmb:String/Timp 
+cmb:Str/Timp/Wnd
+cmb:Str/Timp/Brs
+cmb:Str/Harp 1  
+str:Hall Spic 5 
+str:HallXprssn  
+str:Wind&HallStr
+cmb:WSec/Hall 1 
+cmb:WSec/Hall2w 
+str:SoloStr&Wind
+str:S.Wnd&S.Str 
+cmb:BSec/Hall   
+wnd:Woodwinds 1 
+wnd:Woodwinds 2 
+wnd:Woodwinds 3 
+wnd:Woodwinds 4 
+wnd:Woodwinds 5 
+wnd:Woodwinds 6 
+wnd:Warm Winds  
+wnd:BsClar/CtraB
+wnd:mf WoodSectn
+wnd:Mega-Woods  
+wnd:Deep Woods  
+cmb:SoloBone&Wnd
+cmb:Brass&Reeds 
+cmb:Winds&Brass 
+cmb:WarmBrssWind
+brs:Dyna Brass  
+brs:Sfz Brass   
+brs:SectionBrass
+brs:Big Brass 2 
+brs:FrenchHorns2
+brs:FHornsp/mf/f
+brs:Trmptsp/m/f 
+brs:Trumpets    
+brs:Warm Bones  
+brs:Tbones p/m/f
+brs:BTbones p/mf
+brs:Trumpet *   
+brs:Trombone *  
+brs:FrenchHorn *
+brs:Brass 1 *   
+brs:Brass 2 *   
+brs:Brass 3 *   
+brs:Brass 4 *   
+wnd:Piccolo *   
+wnd:Flute *     
+wnd:AltoFlute*  
+wnd:Clarinet *  
+wnd:English Hn *
+wnd:BassClar *  
+wnd:Bassoon *   
+wnd:Full Wood 1*
+wnd:Full Wood 2*
+cmb:Flt/Clar w *
+prc:Batterie 3  
+prc:Batterie *  
+prc:Dual Batt's 
+prc:The Timps   
+prc:VeloTimp 1  
+prc:VeloTimp 2  
+prc:VeloTimp 3  
+prc:VeloTimp 4  
+prc:Velo Timp1/2
+prc:Velo Timp3/4
+prc:Bass Drums  
+prc:Bass Drm *  
+prc:Velo Bass 1 
+prc:Velo Bass 2 
+prc:Velo Bass 3 
+prc:Q'd Snares  
+prc:Snare Drm * 
+prc:Velo Snare 1
+prc:Velo Snare 2
+prc:Velo Snare 3
+prc:Timps&Snares
+prc:Timp&Cymbl 1
+prc:Timp&Cymbl 2
+prc:Timp&Cymbl 3
+prc:VelTimpDrms1
+prc:Clockworx   
+prc:Piatti Metal
+prc:Velo Piatti 
+prc:Timps&Piatti
+prc:OrchBells   
+prc:OrchBells * 
+prc:TublrBells  
+prc:TublrBells *
+prc:Bell Tree   
+prc:Bell Tree * 
+prc:Celesta     
+prc:Celesta *   
+prc:The Bells   
+prc:Xylophone   
+prc:Xylophone  *
+prc:Marimba     
+prc:Marimba *   
+prc:Marimba&Xylo
+hrp:Harp 2      
+hrp:Harp 3      
+hrp:Harp 4      
+hrp:Magic Harps 
+cmb:Pizz/Harp/Mb
+org:Simple Organ
+org:Voice Organ2
+brs:SynthBrass 1
+brs:SynthBrass 2
+brs:SynthBrass 3
+brs:SynthBrass 4
+brs:Synth Wind  
+brs:4th Trump   
+sfx:Bowed Radio 
+sfx:Orchbella   
+sfx:Reedone     
+sfx:Lodown Bass 
+sfx:Richdelay   
+sfx:Voxcycle    
+sfx:D Tudor     
+sfx:Multipizz   
+sfx:Orion       
+prc:Timberell   
+prc:Childbells  
+lnk:VelTmpDm1Lnk
+   :V2K 1.2     

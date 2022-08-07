@@ -1,0 +1,512 @@
+kb4:Soft Ballad 
+pad:Daydreams   
+gtr:Stratapad   
+str:PearlyGates 
+eth:Shenari     
+bs3:Bariphunk   
+brs:Frencharen  
+vox:Nepal       
+cmb:Benn Hurr   
+sfx:Under Rocks 
+brs:Mutant Mute 
+vox:Sun Chorus  
+kb4:El.Pianaahhs
+str:1001 Strings
+wnd:Sax-A-Fones 
+syn:Semi Dee    
+gtr:Doves Eye   
+eth:Loves Combo 
+pad:Brasstrings 
+syn:Harmbarimba 
+str:Astrotron   
+kb2:ChorusRhodez
+syn:Kotofin     
+bs3:New Synbass 
+vox:Scattered5th
+syn:Banjoteen   
+pad:Hybridstring
+str:BiggerString
+gtr:Mutepizz    
+syn:Protesyn    
+eth:Tar Celli   
+syn:Glimp Leed  
+bpm:St. Arrival 
+gtr:Plucked Pad 
+vox:Voxed Up    
+syn:Thingar     
+syn:Saronabell  
+syn:Heavy Tooter
+pad:Lush & Mello
+vox:Slo Voxfly  
+eth:Gated Teklin
+syn:Wepoo Lead  
+syn:Metasyntha  
+eth:Ethnotinn   
+str:Part Arvo   
+syn:Weenshield  
+brs:Slip Brass  
+vox:Bigger Vox  
+eth:Vibro Picked
+syn:Proteen Comp
+wnd:Beauty Slo  
+bas:Pluck Bass  
+eth:Toink       
+kb3:Kinda Organ 
+eth:Snuck Below 
+syn:Melatronist 
+eth:Wet Pick    
+syn:Wazzit      
+bas:Homey       
+eth:Hatek       
+gtr:Guitar Pad  
+syn:StringSweep 
+str:HarpoMatic  
+org:B3 1st3 wPrc
+pad:Avalon      
+gtr:Mutes Plus  
+kb4:Dyn Pianic  
+eth:Indian Mojo 
+vox:Y3k         
+gtr:Surfs Up    
+str:Full Section
+str:Score       
+prc:Mallet-Head 
+sfx:Swimmer'sEar
+syn:SweptAway   
+syn:TeleStar    
+bpm:Trendy      
+sfx:Not Modern  
+kb4:Ekko        
+vox:Stray Waifs 
+pad:VeloCello   
+prc:Tea Ming    
+syn:GulaGula    
+orc:PizzFlute   
+led:Lead w/Voice
+pad:Harp Bell   
+vox:Vocal Fades 
+gtr:Beauty 3    
+prc:Velo City   
+wnd:Ocallo      
+prc:Temple 8    
+pad:HornCloud   
+eth:Imposter    
+sfx:ClockWork   
+prc:Safari      
+pad:Cloud 3     
+pad:Saxpad      
+wnd:MouthBreathr
+prc:Sumatraphone
+pad:Ether       
+sfx:Realm       
+prc:BooBam      
+led:Bari & Co   
+syn:Folk Tale   
+sfx:PuddleDrop  
+led:4 Chuck G   
+prc:Water Chimes
+sfx:NeptuneTwist
+pad:Breathe-    
+sfx:Titanic     
+prc:Chimp       
+sfx:Pidgeons    
+str:DroanBouras 
+str:4 Course Hmr
+vox:Trust Me    
+prc:Java X      
+brs:SlowSynthBrs
+str:Kuartet     
+pad:BoomPad     
+pad:PlayItLow   
+syn:WrongPlanet 
+prc:Gong Hit    
+wnd:Space Kilt  
+pad:Precautions 
+kit:GM Drums 1  
+kit:GM Drums 2  
+kit:GM Drums 3  
+kit:GM Drums 4  
+P/1:Stereo Piano
+P/1:Hall Strings
+P/1:InChoirIrie 
+P/1:BigCityBrass
+P/1:Stereo Sax  
+P/1:Acoustic Gtr
+P/1:Modern Gtr  
+P/1:Thunder Bass
+P/1:MiniMoogBass
+P/1:B3 Mod->Lesl
+P/1:Phantazia   
+P/1:ZoundTrax   
+P/1:Vibe n Me   
+P/1:Tiki Threat 
+P/1:Rock Drums 1
+P/1:Metal Vapor 
+P/1:Heaven      
+P/1:Verb Flute  
+P/1:El. Piano   
+P/1:F. Horn Sect
+P/1:Velcty Falls
+P/1:Stereo Mutes
+P/1:StoneBs&Hrms
+P/1:Slap/PopBass
+P/1:Rap Bass    
+P/1:Special FX 1
+P/1:Harmonic Syn
+P/1:Beyond FM   
+P/1:Kyoto Forest
+P/1:Balinesia   
+P/1:Latin Drums 
+P/1:Wind Chimes 
+P/1:Harpsikord  
+P/1:String Orch.
+P/1:Human Voices
+P/1:Baritone Sax
+P/1:Solo Trumpet
+P/1:12 String   
+P/1:Modern Harp 
+P/1:Str.Bs/Piano
+P/1:Mythical Pad
+P/1:PianoBell   
+P/1:Noh Way!    
+P/1:Empyrean    
+P/1:Glocken     
+P/1:Wide Marimba
+P/1:Latin Perc. 
+P/1:Space Bk.Gtr
+P/1:Grand Piano 
+P/1:FlangeString
+P/1:White Veil  
+P/1:Dark World  
+P/1:Miles Solos 
+P/1:SoloTrombone
+P/1:XprsivEl.Gtr
+P/1:SpaceBassPad
+P/1:Dune        
+P/1:RB`s Wine   
+P/1:Octave Choir
+P/1:Gitano      
+P/1:ThaiBathHse.
+P/1:MedicineDrum
+P/1:Radical Drum
+P/1:Mtlphn Arp 9
+P/1:FMstylePiano
+P/1:Isham Strngs
+P/1:WeAteFlangrs
+P/1:SpaceClavier
+P/1:Hard Trmp Am
+P/1:Ball Game   
+P/1:Clean Strat 
+P/1:NozeBass/Pad
+P/1:Wide Neck   
+P/1:Space Horn  
+P/1:Blue Ice    
+P/1:EmberedTines
+P/1:Odd Vibes   
+P/1:Bright Steel
+P/1:Native Power
+P/1:Insects     
+P/1:VibrantPiano
+P/1:Emperor     
+P/1:NoiseFree LA
+P/1:Orch. Brass 
+P/1:Lo Oct Bones
+P/1:Synthibell  
+P/1:SpaceSteel  
+P/1:Jet **      
+P/1:Jet  **     
+P/1:SquarishLead
+P/1:Synth String
+P/1:Space Trmpt 
+P/1:Metal Throat
+P/1:Light Mallet
+P/1:Congablock  
+P/1:Hold&Sample 
+P/1:Piano Drama 
+P/1:Punctuate   
+P/1:Lunar Window
+P/1:Reedy Keys  
+P/1:String Swell
+P/1:Jingle Pad  
+P/1:Solo Lead   
+P/1:Buzzy Frets 
+P/1:Bass & Synth
+P/1:Gillectro   
+P/1:Pop Pad     
+P/1:BanJovi     
+P/1:Malletumba  
+P/1:SlipperyBass
+P/1:Hall2Strgs**
+P/1:Hall2Link** 
+P/1:WinstonGrand
+P/1:STRings     
+P/1:Sharp Edge  
+P/1:Uboe        
+P/1:Vibes/Choir 
+P/1:Solo Synth 3
+P/1:Rock Gitaro 
+P/1:Animal 1 ** 
+P/1:Animal **   
+P/1:Bed Tine    
+P/1:Mr Minister 
+P/1:Bone Face   
+P/1:Tremolo Vibe
+P/1:Dulcimer    
+P/1:Block Head  
+P/1:BarberPole  
+P/2:Solo Cello  
+P/2:Solo Viola  
+P/2:Solo Violin 
+P/2:Quartet     
+P/2:Solo Chamber
+P/2:Arco Basses 
+P/2:Arco Celli  
+P/2:Arco Violas 
+P/2:Arco Violins
+P/2:Marcato 1   
+P/2:Marcato 2   
+P/2:Legato Str  
+P/2:Concerto    
+P/2:Pizz Basses 
+P/2:Pizz Celli  
+P/2:Pizz Violas 
+P/2:Pizz Violins
+P/2:Pizzicato 1 
+P/2:Pizzicato 2 
+P/2:Trem Strings
+P/2:Tremulus    
+P/2:Strgs/Flutes
+P/2:Resting Pad 
+P/2:Divertimento
+P/2:Flute       
+P/2:Piccolo     
+P/2:Oboe        
+P/2:English Horn
+P/2:Clarinet    
+P/2:BassClarinet
+P/2:Bassoon     
+P/2:Contrbassoon
+P/2:Chamber Wind
+P/2:SectionWinds
+P/2:Epilogue    
+P/2:Wind Stack  
+P/2:FrenchHorn 1
+P/2:FrenchHorn 2
+P/2:SectionHorns
+P/2:Trumpet 1   
+P/2:Trumpet 2   
+P/2:Two Trumpets
+P/2:Harmon Mute 
+P/2:Trombone 1  
+P/2:Trombone 2  
+P/2:Tuba        
+P/2:Back Brass  
+P/2:Bright Brass
+P/2:ChamberBrass
+P/2:BrassStrings
+P/2:Timpani     
+P/2:Gong/Cymbal 
+P/2:Bass/Snare+ 
+P/2:Temple Block
+P/2:Xylophone   
+P/2:Glockenspiel
+P/2:Celesta     
+P/2:TubularBells
+P/2:Percussion 1
+P/2:Percussion 2
+P/2:Harp        
+P/2:Harpstrings 
+P/2:Harpsikord  
+P/2:Notre Dame  
+P/2:Winter Signs
+P/2:Deep Pad    
+P/2:Portamento/F
+P/2:BellEnsemble
+P/2:Cyberspace  
+P/2:PizzMoogBass
+P/2:Marimbala   
+P/2:GrimReaper  
+P/2:Tinker Bell 
+P/2:Carousel    
+P/2:Exotic Harp 
+P/2:Darn Saucers
+P/2:Bronze Pad  
+P/2:Vibraphone  
+P/2:Astral Flute
+P/2:Kool Bass   
+P/2:Sombre Winds
+P/2:Space Cowboy
+P/2:The Machine 
+P/2:Early Perc  
+P/2:Gently Now  
+P/2:Piccolodeeyo
+P/2:Infinite One
+P/2:ShimmerWays 
+P/2:Turbo Bass  
+P/2:Requiem     
+P/2:Wrong Room  
+P/2:Analog Pad  
+P/2:Chapel Organ
+P/2:Electrovocal
+P/2:Fat Boy Tuba
+P/2:SawBass/Lead
+P/2:Vienna Dream
+P/2:Vertigo Pad 
+P/2:Tarkus Twin 
+P/2:RoomOfStrngs
+P/2:Magic Bells 
+P/2:Reginatron  
+P/2:Sub It!     
+P/2:Psychlotron 
+P/2:CloudChamber
+P/2:Sepulcher   
+P/2:Lurch Pluck 
+P/2:Pizz/Piccolo
+P/2:Vampirical  
+P/2:String Thing
+P/2:Galapagos   
+P/2:Square One  
+P/2:Square Link 
+P/2:  < * >     
+P/2:Sardonicus  
+P/2:Master Tron 
+P/2:Lo Wind Inst
+P/2:Sympathetic 
+P/2:Windchimes  
+P/2:Boat Haus   
+P/2:Glitter God 
+P/2:Story Bass  
+P/2:Nice Night  
+P/2:Prophet Lead
+P/2:Prophet Link
+P/2:Whistl'n Joe
+P/2:Link2Shimmer
+P/2:Ascending   
+P/3:Troubadour  
+P/3:Accordian   
+P/3:Desert Dawn 
+P/3:Blue Grass  
+P/3:Spirit Catch
+P/3:Ney Flute   
+P/3:Koto        
+P/3:East Indian 
+P/3:Percussion 1
+P/3:Waterphone  
+P/3:Irish Harp  
+P/3:Shofars     
+P/3:Psaltery    
+P/3:Fragrant Tar
+P/3:Didjeridu 1 
+P/3:Pan Flute   
+P/3:Dulcimer    
+P/3:Bagpipe     
+P/3:Percussion 2
+P/3:Hanoi Drone 
+P/3:Nylon Guitar
+P/3:Mizmars     
+P/3:Back In Bowl
+P/3:Lotus Land  
+P/3:AmbiJewsHarp
+P/3:Shenai      
+P/3:Oud         
+P/3:Harmonium   
+P/3:Bata Drums  
+P/3:DeepSea Life
+P/3:Pizzicatos  
+P/3:ModHarmonica
+P/3:Temple Gong 
+P/3:Mod Sitars  
+P/3:Mbira       
+P/3:Shakuhachi  
+P/3:Cimbalom    
+P/3:Hybrid Winds
+P/3:Baya Suwuk  
+P/3:Peter's Pad 
+P/3:Harp Tones  
+P/3:ParisMusette
+P/3:Nu Age      
+P/3:Shamisen    
+P/3:Syn Kalimba 
+P/3:Ocarina Solo
+P/3:Tamburas    
+P/3:Dulcet Bow  
+P/3:Udu Tones   
+P/3:Jade Spring 
+P/3:Hybrid Pluck
+P/3:Fsw->Bagpipe
+P/3:Sake Bell   
+P/3:Celtic Split
+P/3:Brite Bonang
+P/3:Suling      
+P/3:Pizz Bass   
+P/3:Psaltines   
+P/3:Pitchin'Perc
+P/3:Mizmarized  
+P/3:Santur      
+P/3:Fifths Ney  
+P/3:Ethnocentric
+P/3:Shinto      
+P/3:Dream I     
+P/3:Flautissimo 
+P/3:Er-Hu       
+P/3:Miya Daiko  
+P/3:So Dark     
+P/3:Breathing   
+P/3:Reso Bass   
+P/3:Europa I    
+P/3:Dream II    
+P/3:Whambambu   
+P/3:Forboding   
+P/3:Tabla Tarang
+P/3:Elec. Piano 
+P/3:Eurostructur
+P/3:Spanish Ney 
+P/3:Whistling   
+P/3:Star of Siam
+P/3:Basov Chorus
+P/3:Analogue I  
+P/3:Silk & Spice
+P/3:Disembodied 
+P/3:Saronkembe  
+P/3:Yesir Rebab 
+P/3:Sukiyaki    
+P/3:Bali Bells  
+P/3:Stereo Shake
+P/3:Arctic Vista
+P/3:Heralds     
+P/3:Bender Bells
+P/3:Brook Babble
+P/3:Flautaland  
+P/3:On Land     
+P/3:Air Gamelan 
+P/3:Clarinet    
+P/3:Krafter Bass
+P/3:Resokeys    
+P/3:Uduhachi    
+P/3:Brass Pad   
+P/3:Requiem     
+P/3:MetalCutter 
+P/3:Orgone      
+P/3:Dream III   
+P/3:Bass Mbira  
+P/3:Heavy Tibet 
+P/3:Bali Reeds  
+P/3:Asiatic Dron
+P/3:Deep Synth  
+P/3:Xanax       
+P/3:Rubber Band 
+P/3:Afro Mallets
+P/3:Europa II   
+P/3:Fried Eggs  
+P/3:New Jerusalm
+P/3:AutomanEmpir
+P/3:Sandrum     
+P/3:Ice Bella   
+P/3:Good Breath 
+P/3:Sundareem   
+P/3:Balafon     
+P/3:Groan Droan 
+P/3:Vodan Drums 
+P/3:Bass        
+P/3:Jungle Book 
+P/3:Balithang   

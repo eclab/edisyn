@@ -1,0 +1,512 @@
+kit:Planet Earth
+pr4:Kalimba Ens 
+pr4:Clay Tones  
+pr1:African Drms
+pr1:Liquidity   
+pr4:Balifon Ntrl
+wnd:SuperBans   
+cmb:Gaohachet   
+cmb:ExpressOh   
+wnd:Brazidiz    
+arp:DreamMallets
+arp:No Age      
+arp:UduGhatmTube
+cmb:Mute        
+pr4:Steel Drum  
+cmb:Bottlerina  
+pr1:Udu/KimKim1 
+wnd:Okamia      
+cmb:Nyebodems   
+cmb:Phaz Split  
+pr4:Balifon Chrm
+plk:Celtic Harp 
+cmb:Buzz Factor 
+bas:Lowness     
+cmb:Shamitone   
+cmb:Sweetness   
+cmb:Xaozone     
+cmb:Magical 7th 
+plk:Bazouki Trem
+sfx:The Monks   
+cmb:Blocarooey  
+kit:World       
+kit:Brazilian   
+kit:Salsa       
+kit:Ritual Drums
+kit:Earth 01    
+kit:Earth 02    
+kit:Earth 03    
+kit:Earth 04    
+kit:Earth 05    
+kit:Earth 06    
+kit:Earth 07    
+kit:Earth 08    
+kit:Earth 09    
+kit:Earth 10    
+kit:Earth 11    
+kit:Earth 12    
+kit:Earth 13    
+kit:Earth 14    
+kit:Earth 15    
+kit:Earth 16    
+kit:Earth 17    
+kit:Earth 18    
+kit:Earth 19    
+kit:Earth 20    
+plk:Cumbus Saz  
+plk:Su Gzheng   
+plk:Tenor Banjo 
+plk:Bazouki     
+plk:Baglama     
+plk:Prima Domra 
+plk:Segndo Domra
+plk:SegDomraMute
+plk:Oud         
+plk:Shamisen    
+plk:World Harp 1
+plk:HmmrDulcimer
+plk:Mandolin    
+plk:Banjuoki    
+plk:Oudomute    
+plk:Anjomra     
+plk:Sazo        
+plk:Supersaz    
+plk:Su Zhouki   
+plk:Octar       
+plk:Noctar      
+plk:Domora 1    
+plk:Domora 2    
+plk:Shaoud 1    
+plk:Shaoud 2    
+plk:Sinoud      
+plk:Celtar 1    
+plk:Celtar 2    
+plk:World Harp 2
+plk:Sazheng 1   
+plk:Sazheng 2   
+plk:Baglomra 1  
+plk:Baglomra 2  
+plk:Baglomra 3  
+plk:Segramu 1   
+plk:Segramu 2   
+wnd:SuperBans 2 
+plk:Dulcolin    
+plk:Primandl 1  
+plk:Primandl 2  
+plk:Mandomra 1  
+plk:Mandomra 2  
+plk:Baglama w   
+plk:Cimbalon    
+plk:Mostly Harp 
+plk:Hammers Plus
+plk:P.Domra Plus
+plk:MandolinPlus
+bow:Erhu w-wah  
+bow:Zhonghu     
+bow:Gaohu       
+bow:Ehru        
+bow:Gao Landz   
+bow:Nervosa     
+bow:Gaohu&Zhnghu
+bow:Erhu&Gahou  
+bow:Gaozong     
+bas:CB Balalaika
+bas:CB Bala Mute
+bas:Guitarron   
+bas:Oud Bass    
+bas:Punchy 2    
+bas:Punchy 3    
+bas:CB 1        
+bas:CB 2        
+bas:CB 3        
+bas:CB 4        
+bas:Synthy 1    
+bas:Synthy 2    
+bas:Synthy 3    
+bas:Lowness 2   
+bas:Lowness 3   
+bas:Lowness 4   
+wnd:Bansuri     
+wnd:Pan Flute   
+wnd:Shakuhachi  
+wnd:Suling      
+wnd:Ocarina     
+wnd:BrazilWhstle
+wnd:Mizmar      
+wnd:Suona       
+wnd:Dizi        
+wnd:Shenai      
+wnd:Pennywhistle
+wnd:Venu        
+wnd:Nye         
+wnd:Mizmars     
+wnd:StackDizi   
+wnd:GlobalWinds1
+wnd:GlobalWinds2
+wnd:Clayiope    
+wnd:Accordion 1 
+wnd:Accordion 2 
+wnd:WahWhAccrdn 
+wnd:Concertina  
+wnd:Lye         
+wnd:Blue Wind   
+wnd:Wind Fingers
+wnd:So Dizi     
+wnd:Amazone     
+wnd:Whisuling w 
+wnd:East Winds  
+wnd:Eurasian    
+wnd:KeyBans     
+wnd:WarmReeds   
+wnd:Rice Winds  
+wnd:South Wind  
+wnd:FluteScape  
+wnd:Suparina    
+wnd:X-Flutus    
+wnd:Shenaidelic 
+wnd:Mizereams   
+wnd:Bansuri Pad 
+wnd:Nye Harms   
+wnd:River Nye   
+wnd:Pulsuri     
+wnd:Worm Flute  
+wnd:AfterTheWind
+wnd:Whistler    
+wnd:PressoHachi 
+wnd:SuperBans 2 
+cmb:Oud & Flutes
+cmb:Bows&Winds  
+cmb:BzoukiSplit+
+cmb:Suling&Bows 
+cmb:Bow Fingers 
+cmb:Hammerai    
+cmb:Kalimbodd   
+cmb:Ghatam Tones
+cmb:Temple Tones
+cmb:Block Tones 
+cmb:TDrum Tones 
+cmb:Udu Tones   
+cmb:Paka Tones  
+cmb:Pipe+Tones  
+cmb:Ceramic     
+cmb:Bazouka     
+cmb:Melotria    
+cmb:Boingel     
+cmb:Quentall    
+cmb:Technotti   
+cmb:Ethnosyn    
+cmb:Swiper      
+cmb:Venus Cells 
+cmb:Zhonghu Zone
+cmb:SuonaCombo  
+cmb:ShakuSynth  
+cmb:Magical Harp
+cmb:Spiritphone 
+cmb:BambuZhonghu
+cmb:Cosmovivor  
+cmb:Pliniad     
+cmb:Flute Bells 
+cmb:RazorShenai 
+pad:Exotic 1    
+pad:Exotic 2    
+pad:Exotic 3    
+pad:Exotic 4    
+pad:Exotic 5    
+pad:Exotic 6    
+pad:Exotic 7    
+cmb:Wind Jam 1  
+cmb:Wind Jam 2  
+cmb:EastMeetWest
+cmb:Cuic Me     
+cmb:Metaperco   
+cmb:Org 1       
+cmb:Org 2       
+cmb:Chiff Organ 
+cmb:BabyOcarina 
+cmb:BazoukiXtra 
+cmb:HiPassSquare
+cmb:Windz Keyz  
+cmb:L Combo     
+pad:Slo Pan     
+pad:SynthVenu   
+pad:Exo Pad 1   
+pad:GentleBells 
+pad:HackettVoice
+pad:PennyIsSad  
+pad:MistyReeds  
+pad:GhostsAgain 
+sfx:WindBells   
+sfx:Splotoa1    
+sfx:Splotoa2    
+sfx:P57K-009    
+sfx:SeaShanty   
+sfx:LofiRitual  
+sfx:CaveRitual  
+sfx:TweakrShenai
+sfx:Digital Noiz
+sfx:Exo Bird    
+sfx:Loco World  
+sfx:The Birds 1 
+sfx:The Birds 2 
+sfx:DeeperKloker
+sfx:Cow&Bell    
+sfx:Toon Cat    
+sfx:Mo X        
+sfx:Earth Harms 
+sfx:Shakoniums  
+pr1:Celtic Perc 
+pr1:Bodhran 1   
+pr1:Bodhran 2   
+pr1:Bones 1     
+pr1:Bones 2     
+pr1:Djembes     
+pr1:Djembe 1 w  
+pr1:Djembe 2 w  
+pr1:Djembe 3 w  
+pr1:Djembe 4 w  
+pr1:Djembe 5 w  
+pr1:Ashikos     
+pr1:VelAshiko1  
+pr1:VelAshiko2  
+pr1:VelAshiko3  
+pr1:VelAshiko4  
+pr1:VelAshiko5  
+pr1:Talking Drms
+pr1:Vel TDrum1 w
+pr1:Vel TDrum2 w
+pr2:African Perc
+pr2:Gankokwe Set
+pr2:Vel Gankokwe
+pr2:Toke Set    
+pr2:Vel TokeBell
+pr2:VelToke2 w  
+pr2:Shekere X   
+pr2:Vel Shekere 
+pr2:ShekerettleX
+pr2:Belraclapod 
+pr1:Vel Rattle  
+pr2:VelSeedShake
+pr2:VelShek/Pods
+pr1:Liquidity 2 
+pr1:Vel Udu 1   
+pr1:Vel Udu 2   
+pr1:KimKim w    
+pr1:Ghatam      
+pr1:Vel Ghatam1w
+pr1:Vel Ghatam2w
+pr2:Tubes       
+pr1:Taiko Drms1 
+pr1:Taiko Drms 2
+pr1:Vel Taiko1 w
+pr1:Big Taiko w 
+pr1:World Drms 3
+pr1:Dholak Sets 
+pr1:Dholak w    
+pr1:Darvutaboran
+pr1:Darvul w    
+pr1:Tabor w     
+pr1:Pakawaj w   
+pr1:Tambour w   
+pr1:Dmbk+MBongo1
+pr1:Dmbk+MBongo2
+pr1:Dmbk+MBongo3
+pr1:Dumbongo
+pr1:ClayBng w
+pr1:Pandeiros
+pr1:Brazil Drums
+pr1:BD,Tm,Sn Set
+pr1:Snare Set
+pr1:Vel Snare 1
+pr1:Vel Snare 2
+pr1:BDs & Toms
+pr1:BDs&Toms Mel
+pr1:Melodic Dr 1
+pr1:Melodic Dr 2
+pr1:Melodic Dr 3
+pr1:Meloctav Dr1
+pr1:Meloctav Dr2
+pr1:Meloctav Dr3
+pr3:Simmons
+pr3:ElectricPerc
+pr3:E Snrs in 3s
+pr3:E Snare Sets
+pr3:E Perc Set
+pr3:E Snares 1
+pr3:E Snares 2
+pr1:Timbales
+pr1:VelHiTimbale
+pr1:VelLoTimbale
+pr1:Conga&Bongo
+pr1:VelCongaRand
+pr1:Vel Conga Hi
+pr1:Bongo Rand
+pr2:Percussion3X
+pr2:Castanet w
+pr2:Pots&Pans
+pr2:Vel Triangle
+pr2:Shake&Scrape
+pr2:VlCabasaGuir
+pr2:VelSistrm w
+pr2:SandBlock w
+pr2:Block&Bells
+pr2:Wood Bl Mel
+pr2:Wood Bl Sets
+pr2:Wood Blox 3
+pr2:WoodThing 1
+pr2:WoodThing 2
+pr2:Metalofons 1
+pr2:Metalofons 2
+pr2:Pipes 1
+pr2:Pipes 2
+pr2:Vel Pipe
+pr1:Ritu Drums
+pr1:Ritual Pops
+pr1:Palm Drums 1
+pr1:Palm Drums 2
+pr1:Palm Drums 3
+pr1:PalmDrum w
+pr2:Cymbal Array
+pr1:RideCymbal
+pr2:Finger Bell
+pr2:Tik-Tak Drum
+pr2:TikTak+Taiko
+pr2:Tongue Drums
+pr2:DjembeAshiko
+pr2:PressurTreat
+pr2:Dmbk+Others
+pr2:Jaw Harp
+pr2:DoomGong
+pr2:Punchy
+pr4:Kalimba
+pr2:Deep Metal
+pr1:Ice Shek
+pr2:Triangles
+pr1:Liquidity 3
+pr4:Thumb Piano
+pr4:Bass Kalimba
+pr4:Buzz Kalimba
+pr4:BamBoo Mrmba
+pr4:Bootungi
+pr4:BassBBooMar
+pr4:BasBuBaliMar
+pr4:Sweet Mar 1
+pr4:Sweet Mar 2
+pr4:Sweet Mar 3
+pr4:Almglocken 1
+pr4:Almglocken 2
+pr4:Almglocken 3
+pr4:SongBells 1
+pr4:SongBells 2
+pr4:SongBells 3
+pr4:Boo-Bams 1
+pr4:Boo-Bams 2
+pr4:Boo-Bams 3
+pr4:Boo-Bams 4
+pr4:Metalofon 1
+pr4:Metalofon 2
+pr4:Metalofon 3
+pr4:Metalofon 4
+pr4:Metalofon 5
+pr4:Metalofon 6
+pr4:Metalofon 7
+pr4:Metalofon 8
+pr4:Balimba
+pr4:MetaBalifon
+pr4:Metalimba 1
+pr4:Metalimba 2
+pr4:Bottle 1
+pr4:Bottle 2
+pr4:Bottles 1&2
+pr4:Tungba 1
+pr4:Tungba 2
+pr4:Blokba 1
+pr4:Blokba 2
+pr4:Sudanklung 1
+pr4:Sudanklung 2
+pr4:Agobbi
+pr4:Pandebal
+pr4:Steely Pan
+pr4:Stoli Fan
+pr4:Thumbam
+pr4:Kalibam
+pr4:Ootun ee-ee
+pr4:Bongarang
+pr4:Limbafon 1
+pr4:Limbafon 2
+pr4:Limbafon 3
+pr4:Limbafon 4
+pr4:Dholaglock
+pr4:Gankofon
+pr4:Clavepipe
+pr4:Jaw Stack
+pr4:Smoochofone
+pr4:Chamberfone
+pr4:Steel Combo
+pr4:Subaopic
+pr4:Sumantra
+whs:WorldWhistle
+whs:Whistle 1
+whs:Whistle 2
+whs:Whistle 3
+whs:Whistle 4
+whs:Whistle 5
+arp:Volcanic
+arp:Ganken
+arp:Mystic land
+arp:W-light
+arp:Free Ride
+arp:Lust Heart
+arp:Full Flight
+arp:One World
+arp:Filter Boy
+arp:Crystal
+arp:Jungle Love
+arp:X-Piper
+bts:Toke Set
+bts:Punchy
+bts:African
+bts:DjembeAshiko
+bts:World GM
+bts:Indonese
+bts:Bass/BBoo
+bts:HiLife
+bts:Celtic
+bts:Jaw Harp
+bts:World Perc
+bts:Salsa
+bts:Bazouki
+bts:UduGhaTube
+bts:Timbales
+bts:Palm Drm
+bts:Taikupe
+bts:Electronic1
+bts:JahMaica
+bts:RndTheWorld1
+bts:RndTheWorld2
+bts:LatinBas+Prc
+bts:RiverDance
+bts:Discoteca
+bts:Brazilian
+bts:MarleyBob
+bts:Electronic2
+bts:NewDehli
+bts:Asian
+bts:SouthAmerica
+bts:WorldParty
+bts:RitualJam
+bts:Celtic Song
+bts:Vulcanu
+bts:Lost Tribe
+bts:Western Arab
+bts:EarthKit 1
+bts:EarthKit 2
+bts:EarthKit 3
+cmb:Earth Works
+cmb:Whstl/Kalmba
+cmb:Gadaran
+cmb:Mutants
+:default
+:default
+:default
+:default
+:Earth V1.1

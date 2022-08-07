@@ -1,0 +1,288 @@
+   :None        
+wav:Sine        
+wav:Saw         
+wav:Square      
+wav:Triangle    
+wav:AuditySaw   
+wav:AuditySquare
+wav:AudityBlend 
+wav:AuditySync 1
+wav:AuditySync 2
+wav:AuditySync 3
+wav:AuditySync 4
+wav:AuditySync 5
+wav:AudityPWM 1 
+wav:AudityPWM 2 
+wav:AudityPWM 3 
+wav:Ring Mod 1  
+wav:Ring Mod 2  
+wav:Ring Mod 3  
+wav:Metal Wave  
+syn:Jungle Lead 
+syn:Metalik     
+brs:Lead 1      
+brs:Lead 2      
+syn:AudityLead 1
+syn:AudityLead 2
+syn:AudityLead 3
+syn:AudityLead 4
+syn:AudityLead 5
+syn:AudityLead 6
+syn:AudityLead 7
+syn:AudityLead 8
+syn:AudityLead 9
+syn:AudityLead10
+syn:AudityLead11
+syn:ClassicLead1
+syn:ClassicLead2
+syn:ClassicLead3
+syn:ClassicLead4
+syn:Digi Lead   
+syn:Synth 1     
+syn:Synth 2     
+syn:Synth 3     
+syn:Synth 4     
+syn:Synth 5     
+syn:Synth 6     
+syn:Synth 7     
+syn:Synth 8     
+syn:Synth 9     
+syn:Synth 10    
+syn:Synth 11    
+syn:Synth 12    
+syn:Synth 13    
+syn:Synth 14    
+bas:Audity 1    
+bas:Audity 2    
+bas:Audity 3    
+bas:Acid 1      
+bas:Acid 2      
+bas:Acid 3      
+bas:Acid 4      
+bas:Acid 5      
+bas:Acid 6      
+bas:Acid 7      
+bas:Acid 8      
+bas:Acid 9      
+bas:Acid 10     
+bas:Hybrid 1    
+bas:Hybrid 2    
+bas:Hybrid 2b   
+bas:Dance 1     
+bas:Dance 2     
+bas:Mikro       
+bas:Shush       
+bas:Fuzz        
+bas:Flange      
+bas:Buzz        
+bas:Booty Q 1   
+bas:Booty Q 2   
+bas:Zodiac 1    
+bas:Zodiac 2    
+bas:Prodigal    
+bas:Zeek        
+bel:Audity 1    
+bel:Audity 2    
+bel:Audity 3    
+bel:Audity 4    
+bel:Audity 5    
+vox:Humana      
+vox:Vapor       
+vox:Chronic     
+vox:Wave 1      
+vox:Wave 2      
+vox:Wave 3      
+vox:Wave 4      
+vox:Wave 5      
+vox:Wave 6      
+nse:White Noise 
+nse:Pink Noise  
+wal:Audity 1    
+wal:Audity 2    
+wal:Audity 3    
+wal:Audity 4    
+wal:Audity 5    
+wal:Audity 6    
+wal:Audity 7    
+nse:Noise Tunnel
+syn:Air Pipe    
+syn:CrystalCavrn
+syn:Sonar       
+edg:Audity 1    
+edg:Audity 1b   
+edg:Audity 1c   
+edg:Audity 2    
+edg:Audity 3    
+sfx:Future World
+syn:Grinder     
+syn:Growly      
+sfx:Cricket     
+sfx:Fuzz Ball   
+sfx:Droid Scrape
+sfx:Rez Honk    
+hit:Krunchy Hit 
+sfx:Turbo       
+sfx:Interference
+bas:Bass        
+bas:Dis Bass 1  
+bas:Dis Bass 2  
+bas:Dis Bass 3  
+bas:Perc Bass   
+sfx:Grind       
+sfx:Siren       
+sfx:Turbine     
+sfx:Alien       
+sfx:Laser Rip   
+vox:Aud Vox     
+scr:Scratch 1   
+scr:Scratch 2   
+scr:Scratch 3   
+scr:Scratch 4   
+prc:Looped  1   
+prc:Looped  2   
+prc:Looped  3   
+prc:Looped  4   
+prc:Looped  5   
+prc:Looped  6   
+prc:Looped  7   
+prc:Looped  8   
+prc:Looped  9   
+prc:Looped  10  
+prc:Looped  11  
+prc:Looped  12  
+prc:Looped  13  
+prc:Looped  14  
+prc:Looped  15  
+prc:Looped  16  
+prc:Looped  17  
+prc:Looped  18  
+prc:Looped  19  
+prc:Looped  20  
+prc:Looped  21  
+prc:Looped  22  
+prc:Looped  23  
+prc:Looped  24  
+prc:Looped  25  
+prc:Looped  26  
+prc:Looped  27  
+prc:Looped  28  
+prc:Looped  29  
+prc:Looped  30  
+prc:Looped  31  
+prc:Looped  32  
+prc:Looped  33  
+prc:Looped  34  
+prc:Looped  35  
+prc:Looped  36  
+prc:Looped  37  
+prc:Looped  38  
+prc:Looped  39  
+prc:Looped  40  
+prc:Looped  41  
+prc:Looped  42  
+prc:Looped  43  
+prc:Looped  44  
+prc:Looped  45  
+prc:Looped  46  
+prc:Looped  47  
+prc:Looped  48  
+prc:Looped  49  
+prc:Looped  50  
+prc:Looped  51  
+prc:Looped  52  
+prc:1 Shot  1   
+prc:1 Shot  2   
+prc:1 Shot  3   
+prc:1 Shot  4   
+prc:1 Shot  5   
+prc:1 Shot  6   
+prc:1 Shot  7   
+prc:1 Shot  8   
+prc:1 Shot  9   
+prc:1 Shot  10  
+prc:1 Shot  11  
+prc:1 Shot  12  
+prc:1 Shot  13  
+prc:1 Shot  14  
+prc:1 Shot  15  
+prc:1 Shot  16  
+prc:1 Shot  17  
+prc:1 Shot  18  
+prc:1 Shot  19  
+prc:1 Shot  20  
+prc:1 Shot  21  
+prc:1 Shot  22  
+prc:1 Shot  23  
+prc:1 Shot  24  
+prc:1 Shot  25  
+prc:1 Shot  26  
+prc:1 Shot  27  
+prc:1 Shot  28  
+prc:1 Shot  29  
+prc:1 Shot  30  
+prc:1 Shot  31  
+prc:1 Shot  32  
+prc:1 Shot  33  
+prc:1 Shot  34  
+prc:1 Shot  35  
+prc:1 Shot  36  
+prc:1 Shot  37  
+prc:1 Shot  38  
+prc:1 Shot  39  
+prc:1 Shot  40  
+prc:1 Shot  41  
+prc:1 Shot  42  
+prc:1 Shot  43  
+prc:1 Shot  44  
+prc:1 Shot  45  
+prc:1 Shot  46  
+prc:1 Shot  47  
+prc:1 Shot  48  
+prc:1 Shot  49  
+prc:1 Shot  50  
+prc:1 Shot  51  
+prc:1 Shot  52  
+prc:1 Shot  53  
+prc:1 Shot  54  
+prc:1 Shot  55  
+prc:1 Shot  56  
+prc:1 Shot  57  
+prc:1 Shot  58  
+prc:1 Shot  59  
+prc:1 Shot  60  
+prc:1 Shot  61  
+prc:1 Shot  62  
+prc:1 Shot  63  
+prc:1 Shot  64  
+prc:1 Shot  65  
+prc:1 Shot  66  
+prc:1 Shot  67  
+prc:1 Shot  68  
+prc:1 Shot  69  
+prc:1 Shot  70  
+prc:1 Shot  71  
+prc:1 Shot  72  
+prc:1 Shot  73  
+prc:1 Shot  74  
+prc:1 Shot  75  
+prc:1 Shot  76  
+prc:1 Shot  77  
+prc:1 Shot  78  
+prc:1 Shot  79  
+prc:1 Shot  80  
+prc:1 Shot  81  
+scr:Scratches   
+kit:El Perc 1   
+kit:El 1 Looped 
+kit:Env Loops 1 
+kit:El Perc 2   
+kit:El 2 Looped 
+kit:Env Loops 2 
+kit:Hybrid Perc 
+kit:WarehousePrc
+kit:Acoustic A  
+kit:AcKick+Snare
+kit:Acoustic A+B
+kit:Hardcore 1  
+kit:Hardcore 2  
+kit:Hardcore 3  

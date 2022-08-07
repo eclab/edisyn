@@ -1,0 +1,388 @@
+KEY-C3          
+KEY-C3 (2 Bars) 
+KEY-C3 (4 Bars) 
+KEY-C4          
+KEY-Cs Up       
+KEY-Cs Up-Down  
+KEY-C Triad     
+KEY-Cm7         
+KEY-Cm9         
+KEY-Cmaj7       
+BAS-2600        
+BAS-3 O Worm    
+BAS-A Ku Stq    
+BAS-ATC 3       
+BAS-BadTube     
+BAS-Brolin's 1st
+BAS-Distorto-TB 
+BAS-Easy        
+BAS-Finger1     
+BAS-Fingered In 
+BAS-FingerHarms2
+BAS-Finger Out  
+BAS-Finger&Harms
+BAS-Four U      
+BAS-Fretless 2  
+BAS-Froggy      
+BAS-Homeboy E   
+BAS-In the Money
+BAS-Lead Bottom 
+BAS-Metal Heart 
+BAS-Mini More   
+BAS-Mod da Wheel
+BAS-Mr. Clean   
+BAS-Mutation    
+BAS-Plexy       
+BAS-PuLs A'ting 
+BAS-Q Bass 2    
+BAS-Reverend JB 
+BAS-RoundabouT  
+BAS-SE Micro    
+BAS-Say What    
+BAS-Shift       
+BAS-SignFeld Pop
+BAS-Simple 3    
+BAS-Slap Me     
+BAS-Slappity    
+BAS-Soft&Hard   
+BAS-Stomper     
+BAS-Sub Core    
+BAS-Sub Pummeled
+BAS-Sub-Basement
+BAS-Sugar Freak 
+BAS-The Reason  
+BAS-ThickFretles
+BAS-Thickley Dub
+BAS-VeloFretless
+BAS-WalkinUprite
+BAS-WalknUprite2
+BAS-Walky Talk  
+BAS-WalkyTalk2  
+BRS-Alt TptLoops
+BRS-Barry Bones 
+BRS-Brass&Bari  
+BRS-BreathTBone 
+BRS-Centurions  
+BRS-Don'sTrumpet
+BRS-Horny       
+BRS-Huge Brass  
+BRS-MelloD'Trmp 
+BRS-Milez       
+BRS-Movie Brass 
+BRS-MutedTrumpet
+BRS-Soft Trumpet
+BRS-The Ensemble
+BRS-Trmpt&Sect  
+GTR-Carlos      
+GTR-Cast Teller 
+GTR-Cast Teller2
+GTR-Chuckin     
+GTR-Dark Gut    
+GTR-Distorter-X 
+GTR-Distorter-X2
+GTR-Distorter-X3
+GTR-Distorter-X4
+GTR-Dolobroso   
+GTR-Electric    
+GTR-Electric 2  
+GTR-ElectricDis 
+GTR-EmmTV Crunch
+GTR-FallingNylon
+GTR-FlangnVioWah
+GTR-FullNylon   
+GTR-GenericClean
+GTR-Grusty      
+GTR-JangleWah   
+GTR-Jazzed      
+GTR-LA Strata   
+GTR-Looz 12s    
+GTR-MellowElect 
+GTR-Metal Head  
+GTR-Mutant Pick 
+GTR-Mutant Pick2
+GTR-Mutes       
+GTR-Nrysty12    
+GTR-Nylon       
+GTR-NyloSteel   
+GTR-Nylon Silk  
+GTR-Nylonistic  
+GTR-Spy         
+GTR-Steel       
+GTR-SteelReal   
+GTR-Stolen7     
+GTR-Stolen7Away 
+GTR-WaaKeeGa    
+HIT-Brass Hits 2
+HIT-Fashion     
+HIT-MasterBlast 
+HIT-Organ Hits 2
+KBD-And Voice   
+KBD-And Voice2  
+KBD-B3 X-Wheel  
+KBD-B3 X-Wheel 2
+KBD-Ballad Tine 
+KBD-Bally Yard  
+KBD-Classic EP  
+KBD-Clav 1      
+KBD-Clavinetti 1
+KBD-Clavinetti 2
+KBD-Comp Keyz 2 
+KBD-Crystal     
+KBD-DynofunkEP  
+KBD-DynamicGrand
+KBD-DynoPiano   
+KBD-E Grand     
+KBD-EP Roll 2   
+KBD-Elecre 2    
+KBD-Elecro7CP80 
+KBD-FM2Classc   
+KBD-Filmscore   
+KBD-GenBalladEP 
+KBD-Gospel Soul 
+KBD-Grand FM    
+KBD-Grand Piano2
+KBD-Grande 4    
+KBD-GreenEyed   
+KBD-Hard Comp 1 
+KBD-Hard Comp 5 
+KBD-Hard Dyno   
+KBD-HonTonkeyz  
+KBD-JimmyJazzyB 
+KBD-Klassical   
+KBD-Knockkerz   
+KBD-KoolNMelo   
+KBD-Lovers FM EP
+KBD-Med Dyno    
+KBD-Med EP      
+KBD-Mellow man  
+KBD-Melosoul EP 
+KBD-Miami Grand 
+KBD-Organomics X
+KBD-PerkyRhodes 
+KBD-Piano&Strng1
+KBD-Pure Fog    
+KBD-Pure Roll 2 
+KBD-Pure Roll 3 
+KBD-Rock'in B   
+KBD-RollinDreams
+KBD-Stereo Grand
+KBD-StereoGrand2
+KBD-StereoGrand3
+KBD-Suitcase EP 
+KBD-Supatramp EP
+KBD-TechnoUprite
+KBD-WheelSpeed B
+KBD-WideSuitcase
+KBD-Yo My Dynos 
+KIT-424         
+KIT-Acoustic 1  
+KIT-Acoustic 2  
+KIT-BMF         
+KIT-Bag O Tricks
+KIT-Berzerker   
+KIT-Booster     
+KIT-ClassicHouse
+KIT-Clean R&B   
+KIT-ClubVinyl   
+KIT-CookUsAHit  
+KIT-CookUsAHit 2
+KIT-DearLyBeEmuD
+KIT-DeepBooty   
+KIT-DeepBooty2  
+KIT-DeepBooty3  
+KIT-Disengrate  
+KIT-Drum 303    
+KIT-Drum Buzza  
+KIT-Drum-Bass 1a
+KIT-Drum-Bass 1b
+KIT-Drum-Bass 2 
+KIT-Drum-Bass 3a
+KIT-Drum-Bass 3b
+KIT-Drum-Bass 4a
+KIT-Drum-Bass 4b
+KIT-Drum-Bass 5 
+KIT-Drum-Bass 6 
+KIT-Electro     
+KIT-For Real    
+KIT-For Real 2  
+KIT-Gett..OutPt2
+KIT-Gritkitt    
+KIT-Hot Swing   
+KIT-Jams        
+KIT-Kit 01 a    
+KIT-Kit 01 b    
+KIT-Kit 02 a    
+KIT-Kit 02 b    
+KIT-Kit 02 c    
+KIT-Kit 03 a    
+KIT-Kit 03 b    
+KIT-Kit 03 c    
+KIT-Kit 03 d    
+KIT-Kit 03 e    
+KIT-Kit 03 f    
+KIT-Kit 04 a    
+KIT-Kit 04 b    
+KIT-Kit 05 a    
+KIT-Kit 05 b    
+KIT-Kit 06      
+KIT-Kit 07 a    
+KIT-Kit 07 b    
+KIT-Kit 07 c    
+KIT-Kit 08      
+KIT-Kit 09 a    
+KIT-Kit 09 b    
+KIT-Kit 09 c    
+KIT-Kit 10      
+KIT-Kit 11 a    
+KIT-Kit 11 b    
+KIT-Kit 11 c    
+KIT-Kit 11 d    
+KIT-Kit 12 a    
+KIT-Kit 12 b    
+KIT-Kit 12 c    
+KIT-Kit 13 a    
+KIT-Kit 13 b    
+KIT-Kit 14      
+KIT-Kit 15 a    
+KIT-Kit 15 b    
+KIT-Kit 15 c    
+KIT-Kit 16 a    
+KIT-Kit 16 b    
+KIT-Kit 17      
+KIT-Kit 18      
+KIT-Kit 19 a    
+KIT-Kit 19 b    
+KIT-Kit 20      
+KIT-OnTheTip    
+KIT-Shag        
+KIT-Smackers    
+KIT-SounDfacTory
+KIT-Swing Hop 3 
+KIT-Swing Hop a 
+KIT-Swing Hop b 
+KIT-This & That 
+KIT-Tribal House
+KIT-Werzerker   
+LED-Apple Eater 
+LED-Blue Danube 
+LED-Ethereosity 
+LED-Freakus     
+LED-inBottles   
+LED-Post 90's DM
+LED-Q Snapper   
+LED-Quacker     
+LED-Sci-Fi B    
+LED-Shiner      
+LED-Soft Slip   
+LED-Weezy Lead  
+LED-Worm        
+LED-Worm 2      
+LED-Worm Up     
+LED-Wormwood    
+LED-Zimppler    
+ORC-Combo       
+ORC-Orchestra   
+PAD-Airborn     
+PAD-Ganic       
+PAD-Highway     
+PAD-Infants     
+PAD-Infants2    
+PAD-MetalBeats  
+PAD-My Hero     
+PAD-Pad Life    
+PAD-Paddy       
+PAD-Phat        
+PAD-Sophia      
+PRC-Acidphone   
+PRC-Claves      
+PRC-Congas      
+PRC-Congas 2    
+PRC-Cymbals     
+PRC-Hats 1      
+PRC-Kalimba     
+PRC-Kalimba 2   
+PRC-Log On      
+PRC-Marimba     
+PRC-Plexitone   
+PRC-Progress a  
+PRC-Progress b  
+PRC-Shakers     
+PRC-SiameseCats 
+PRC-TV Spy Vibes
+PRC-Velo Vibes  
+PRC-Velo Vibes 2
+PRC-Village     
+PRC-Xylophone   
+SFX-MetalScience
+SFX-Oh No Its   
+STR-AbbeyStrngs 
+STR-AbbeyStrngs2
+STR-Allin a Pizz
+STR-AllinaPizz 2
+STR-AllinaPizz 3
+STR-ArcotremPizz
+STR-Dyna-heim   
+STR-ExtremeStrng
+STR-Filmscore   
+STR-HindooKurdoo
+STR-Japanman    
+STR-Kult E Vatn 
+STR-Pizzicati   
+STR-SitarTalk   
+STR-Solo Quartet
+STR-Strg + Choir
+STR-Swoon       
+STR-Texture     
+STR-TronStrings 
+STR-Velo Marcato
+STR-Victrola    
+SYN-Bender      
+SYN-Brazz       
+SYN-Ensemblist  
+SYN-Euro Wave   
+SYN-Festival    
+SYN-Hydraine    
+SYN-ProfitMargin
+SYN-Silk OBXsaws
+SYN-Sync Trance 
+SYN-Syntax On2  
+SYN-Synthall AT 
+SYN-ThinTecPulse
+SYN-Z&C Leeder  
+VOX-Ahhs        
+VOX-Frozen Time 
+VOX-Lo-Fi Ether 
+VOX-MauzeWowz   
+VOX-Mist        
+VOX-New Age Oohs
+VOX-Odd Boys    
+VOX-Pop Oohs    
+VOX-Slo Lunarvox
+VOX-Spiritworld 
+VOX-SynthSing   
+VOX-Voxicord    
+WAV-Lowtronics  
+WAV-M12         
+WAV-Metal 2     
+WAV-vs37        
+WND-A-Sax       
+WND-Alto Saxo   
+WND-Bottle Blow 
+WND-Breather    
+WND-Chamber Orch
+WND-Clarinet    
+WND-Ethnic Reed 
+WND-Fieldberries
+WND-Flute       
+WND-Harmonica   
+WND-Nuages      
+WND-Oboe        
+WND-Ocarina a   
+WND-Ocarina b   
+WND-Pan Flute   
+WND-Pastoral    
+WND-Real Flute  
+WND-Real Flute 2
+WND-Synth Flute 
+WND-T-Sax       
+WND-Virtuaccord 

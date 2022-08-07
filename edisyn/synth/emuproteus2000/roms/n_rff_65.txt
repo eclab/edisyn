@@ -1,0 +1,201 @@
+KEY-C3          
+KEY-C3 (2 Bars) 
+KEY-C3 (4 Bars) 
+KEY-C4          
+KEY-Cs Up       
+KEY-Cs Up-Down  
+KEY-C Triad     
+KEY-Cm7         
+KEY-Cm9         
+KEY-Cmaj7       
+BAS-DaMoogy1    
+BAS-DaMoogy2    
+BAS-DaMoogy3    
+BAS-Disco Me    
+BAS-Krafta      
+BAS-Mini XX     
+BAS-T-Be 1      
+BAS-T-Be 2      
+BAS-T-Be 3 ctrl 
+BAS-ToB@SS1     
+BAS-ToB@SS2     
+BAS-ToB@SS3     
+BAS-ToB@SS4     
+BAS-ToB@SS5     
+BAS-ToB@SS6     
+BPM-Org S1      
+BPM-Pad 1       
+BPM-VoxSeq1     
+GM1-098 CR nat. 
+GM1-118bpm nat. 
+GM1-136Disco nat
+GM1-140Spec nat 
+GM1-TR808 nat.  
+GM2-118bpm bass 
+GM2-136Disco bas
+GM2-140Spec bas 
+GM2-TR808 bass  
+GM3-118bpm perc 
+HIT-Drum&C4 1   
+HIT-GroovModWhl1
+HIT-GroovModWhl2
+HIT-Groove 1    
+HIT-Groove&Dr 1 
+KEY-Hit C4&C3   
+KEY-Hit one C1  
+KEY-Hit one C2  
+KEY-Hit one C3  
+KEY-Hit one C4  
+KEY-Hit one C5  
+KEY-HitC1&C2    
+KIT-909 098bpm  
+KIT-909 114bpm  
+KIT-909 126bpm  
+KIT-909 136bpm  
+KIT-909 140bpm  
+KIT-909 BD      
+KIT-NoisHit1a   
+KIT-NoisHit1b   
+KIT-NoisHit3a   
+KIT-NoiseVel1   
+KIT-NoiseVel2   
+KIT-NoiseVel3   
+KIT-Perc1       
+KIT-Perc2       
+KIT-Tec 1       
+KIT-Tec 3 Base1 
+KIT-Tec 3 Base2 
+KIT-Tec 4 Base1 
+KIT-Tec 4 Base2 
+KIT-Tec 5 Base1 
+KIT-Tec 5 Base2 
+KIT-Tec 6 Base1 
+KIT-Tec 6 Base2 
+KIT-Tec BD 1    
+KIT-Tec BD 2    
+KIT-Tec BD 3    
+KIT-Tec BD 4    
+KIT-Tec BD 5    
+KIT-Tec BD 6    
+KIT-Tec BD m    
+KIT-Tec Claps   
+KIT-Tec1 909HH  
+KIT-Tec1LowBD1  
+KIT-Tec2Disco1  
+KIT-Tec2Jngl1a  
+KIT-Tec2Jngl1b  
+KIT-Tec2Jngl1c  
+KIT-Tec2Jngl1d  
+LED-Panflute 1  
+LED-Solo slow 1 
+ORC-Pizzic & Dr1
+ORC-Pizzic & Dr2
+ORG-Bass to     
+ORG-Chord 1     
+ORG-Dance 1     
+ORG-Dance 2     
+ORG-Dance 3     
+ORG-Kraft       
+PAD-Chord 1     
+PAD-Rhythm 1    
+PAD-Slow Chord 1
+PAD-Slow Chord 2
+PRC-909CL&revers
+PRC-C4 roll 1   
+PRC-C4 roll 2   
+PRC-C4 steady 1 
+PRC-C4 straight1
+PRC-C4 straight2
+PRC-Clap Ctrl 1 
+PRC-Clap reverse
+PRC-MS bongos   
+PRC-NoisHit1a   
+PRC-NoisHit1b   
+PRC-NoisHit1c   
+PRC-NoisHit1d   
+PRC-NoisHit1e   
+PRC-NoisHit1f   
+PRC-Tec BD 1    
+PRC-Tec BD 2    
+PRC-Vin Metal 1 
+SFX-Emu TeCnO   
+SFX-Music       
+SFX-Proteus     
+SND-By RP       
+SUB-Prophet 1   
+SUB-Prophet 2   
+SYN-DaTech 1    
+SYN-Juno D1     
+SYN-Tec2        
+TEC-Bass&Lead 1 
+TEC-Chord Play 1
+TEC-Dutch Stab 1
+TEC-Lead Modwhl 
+TEC-Snaro Lead  
+TEC-Veloc 1     
+TEC-Veloc 2     
+TEC-Watch out   
+BAS-Bass Oct    
+BAS-Seq 132     
+BAS-Trance 139  
+BPM-Chord 120   
+BPM-Seq 1       
+BPM-VoxSeq2     
+KIT-909 132 sp1 
+KIT-909 138 sp2 
+KIT-GM 133bpm   
+KIT-Tec 4 114   
+KIT-Tec 4 136   
+KIT-Tec Dr&B 5  
+KIT-Tec2Dr&B 1  
+KIT-Tec2Dr&B 2  
+KIT-Tec2Dr&B 3a 
+KIT-Tec2Dr&B 3b 
+KIT-Tec2Dr&B 4  
+PAD-Chord2      
+PAD-Padlead 1   
+PAD-Padlead 2   
+PAD-SlowChord3  
+SYN-Guitaro     
+TEC-Chord Play 2
+TEC-Dutch Stab 2
+TEC-Techno 139  
+TEC-Trancer 1   
+TEC-Trancer 2   
+TEC-Trancer 3a  
+TEC-Trancer 3b  
+TEC-Trancer 3c  
+TEC-Trancer 3d  
+TEC-Trancer 3e  
+TEC-Tranco 139  
+TEC-Velo 3      
+TEC-Velo 4      
+ARP-Bass 1      
+ARP-Bass 2      
+ARP-Bass 3      
+ARP-Bass 4      
+ARP-Bass 5      
+ARP-Bass 6 whl  
+ARP-Bass 6      
+ARP-Bass 7      
+ARP-Bass 8      
+ARP-Bass 9      
+ARP-Chord 1     
+ARP-Chord 2     
+ARP-Chord 3     
+ARP-Chord 4     
+ARP-Chord 5     
+ARP-Chord 6     
+ARP-Chord 7     
+ARP-Chord 8     
+ARP-Chord 9     
+ARP-Chord10     
+ARP-Chord11     
+ARP-Panfluto    
+ARP-T Bee 1 whl 
+ARP-T Bee 1     
+ARP-T Bee 2 whl 
+ARP-T Bee 2     
+ARP-T Bee 3     
+ARP-T Bee 4 whl 
+ARP-T Bee 4     

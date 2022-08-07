@@ -1,0 +1,295 @@
+KEY-C3          
+AIR-Bat Pann    
+AIR-Breathless  
+AIR-Futura      
+BAS-1 Shot      
+BAS-2600x       
+BAS-3O3x        
+BAS-Acid Mono   
+BAS-BadTubex    
+BAS-Bullit      
+BAS-Dist TB1    
+BAS-DistortoTBx 
+BAS-DoFi        
+BAS-Filter 1    
+BAS-Filter 2    
+BAS-Filter 3    
+BAS-Heavy M     
+BAS-Interfear   
+BAS-Lo-Za       
+BAS-Metal Heartx
+BAS-Mini Morex  
+BAS-Pdg         
+BAS-Q Bassx     
+BAS-SE Microx   
+BAS-Say Whatx   
+BAS-Shiftx      
+BAS-Sub Corex   
+BEL-Bellsa      
+BEL-Modular     
+BEL-Mystery     
+BPM-Boogy       
+BPM-Bounce      
+BPM-UnderC      
+EDG-Boxt filter 
+EDG-FilterQ     
+GTR-Chuckinx    
+HIT-Enrezzle    
+HIT-Guit Hits   
+HIT-Orgy Hitts  
+HIT-Tite        
+KEY-C Triad     
+KEY-C2 (2 Bars) 
+KEY-C2 (4 Bars) 
+KEY-C3 (2 Bars) 
+KEY-C3 (4 Bars) 
+KEY-C4          
+KEY-Cm7         
+KEY-Cm9         
+KEY-Cmaj7       
+KEY-Cs Up-Down  
+KEY-Cs Up       
+KEY-DxJx        
+KEY-Groove      
+KEY-Organik     
+KEY-Synhiss     
+KIT-80's 4track 
+KIT-Boom 4track 
+KIT-Compre 4trac
+KIT-Dirt 5track 
+KIT-G 4track    
+KIT-Hide 4track 
+KIT-K'werk 4trac
+KIT-Mant 4track 
+LED-Boxt mono   
+LED-Krane       
+LED-More S      
+LED-Tunnel      
+LED-Wet         
+NSE-LucyF       
+PAD-BP Strings  
+PAD-Danube      
+PAD-Dark City   
+PRC-Construct   
+PRC-Crash Head  
+RAW-Drama       
+SYN- 7064       
+SYN-4 track a   
+SYN-4 track b   
+SYN-Basic       
+SYN-Compu X     
+SYN-Enviroment  
+SYN-Grind Me    
+SYN-Nordica     
+SYN-Octivate    
+SYN-Orion       
+SYN-Quadra      
+SYN-Saint       
+SYN-Sinner      
+SYN-South E2    
+SYN-Tran 3track 
+SYN-Tripper     
+VOX-Bliss       
+VOX-Zephr       
+WAL-Abyss       
+WAL-CRide       
+WAL-Love 2bee   
+WAL-Mammoth     
+WAL-Raverot     
+XTR-Booty Q     
+ARP-Cryo        
+ARP-Dry Waste   
+ARP-On a trip   
+ARP-Robo Trace  
+EDG-Square Pulse
+HIT-Organist    
+LED-Matrix      
+PAD-Super Pad   
+BAS HardHouse   
+KIT Acoustic 1  
+KIT Ambi        
+KIT Amster      
+KIT Artic       
+KIT Basshead    
+KIT Freak       
+KIT Hybrid      
+KIT K00         
+KIT K01         
+KIT K02         
+KIT K03         
+KIT K04         
+KIT K05         
+KIT K06a        
+KIT K06b        
+KIT K07         
+KIT K08         
+KIT K09         
+KIT K10         
+KIT K11         
+KIT K12         
+KIT K13         
+KIT K14         
+KIT K15         
+KIT K17         
+KIT K909        
+KIT Pusher      
+KIT Scape       
+BTS-007  1      
+BTS-4am flyin 1 
+BTS-808 Street 1
+BTS-Acid 1      
+BTS-Big Body 1  
+BTS-Big Shaker 1
+BTS-Black House1
+BTS-C-Man       
+BTS-Club it 1   
+BTS-D&B Smooth 2
+BTS-D&B Tight 1 
+BTS-D-House 1   
+BTS-Dark Hero 1 
+BTS-Dist Treo 1 
+BTS-DJ-A        
+BTS-DoFi 1      
+BTS-Drumatic 2  
+BTS-Elbowroom 1 
+BTS-Europiavis1 
+BTS-Frantikk 1  
+BTS-Ginger 1    
+BTS-Groove II 1 
+BTS-Groove IT 1 
+BTS-HBtoo 3     
+BTS-Heaven 3    
+BTS-HI-NRG      
+BTS-HiHo 1      
+BTS-House of Tec
+BTS-Humana      
+BTS-Indy-T 1    
+BTS-Jump Hard 1 
+BTS-Kraftwork 1 
+BTS-L-101 1     
+BTS-Light-R 2   
+BTS-Lily's Rage 
+BTS-Lo-Z  1     
+BTS-LoFi 1      
+BTS-Logic1      
+BTS-Metallic    
+BTS-Mind Game 2 
+BTS-Mind Game 3 
+BTS-Organic Cube
+BTS-Peak777 1   
+BTS-Perception 1
+BTS-placeholder 
+BTS-Rocket      
+BTS-RollerGirl 1
+BTS-Rush 1      
+BTS-Semi-Time 2 
+BTS-System X 1  
+BTS-TeknoTribe 1
+BTS-The Beast 1 
+BTS-Trance Date 
+BTS-Trancer 1   
+BTS-TranzAmbient
+BTS-Unhooked 1  
+BTS-X-Mox 3     
+BTS-Xie-racy 1  
+ff
+ff
+ff
+ff
+ff
+ff
+ff
+ff
+ff
+ff
+ff
+ff
+ff
+ff
+ff
+ff
+ff
+ff
+ff
+ff
+ff
+ff
+ff
+ff
+ff
+ff
+ff
+ff
+ff
+ff
+ff
+ff
+ff
+ff
+ff
+ff
+ff
+ff
+ff
+ff
+ff
+ff
+ff
+ff
+ff
+ff
+ff
+ff
+ff
+ff
+ff
+ff
+ff
+ff
+ff
+ff
+ff
+ff
+ff
+ff
+ff
+ff
+ff
+ff
+ff
+ff
+ff
+ff
+ff
+ff
+ff
+ff
+ff
+ff
+ff
+ff
+ff
+ff
+ff
+ff
+ff
+ff
+ff
+ff
+ff
+ff
+ff
+ff
+ff
+ff
+ff
+ff
+ff
+ff
+ff
+ff
+ff
+ff
+ff
+ff
+ff

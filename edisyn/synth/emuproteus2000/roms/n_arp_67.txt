@@ -1,0 +1,100 @@
+Chord Beat 1    
+Chord Beat 2    
+Chord Beat 3    
+Chord Beat 4    
+Chord Beat 5    
+Chord Beat 6    
+Chord Beat 7    
+Chord Beat 8    
+Chord Beat 9    
+Chord Beat10    
+Chord Beat11    
+Chord Beat12    
+Chord Beat13    
+Chord Beat14    
+Chord Beat15    
+Chord Velo 1    
+Chord Velo 2    
+Chord Velo 3    
+Chord Velo 4    
+Chord Velo 5    
+Chord Velo 6    
+Chord Velo 7    
+Chord Velo 8    
+Chord Velo 9    
+Chord Velo10    
+Chord Velo11    
+Chord Velo12    
+Chord Velo13    
+Chord Velo14    
+Chord Velo15    
+Ch Vel u&d1     
+Ch Vel u&d2     
+Ch Vel u&d3     
+Ch Vel u&d4     
+Ch Vel u&d5     
+Ch Vel u&d6     
+Ch Vel u&d7     
+Ch Vel u&d8     
+Ch Vel u&d9     
+U-know 1        
+U-know 2        
+U-know 3        
+U-know 4        
+U-know 5        
+U-know 1velo    
+U-know 2velo    
+U-know 3velo    
+U-know 4velo    
+U-know 5velo    
+U-know 6velo    
+BassGroove 1    
+BassGroove 2    
+BassGroove 3    
+BassGroove 4    
+BassGroove 5    
+Trance Up  1    
+Trance Up  2    
+Trance Up  3    
+Trance Up  4    
+Trance Up  5    
+SlapBass   1    
+SlapBass   2    
+SlapBass   3    
+SlapBass   4    
+SlapBass   5    
+TBglide vel1    
+TBglide vel2    
+TBglide vel3    
+TBglide vel4    
+TBglide vel5    
+rythm git  1    
+rythm git  2    
+rythm git  3    
+rythm git  4    
+rythm git  5    
+rythm git  6    
+rythm git  7    
+rythm git  8    
+rythm git  9    
+rythm git 10    
+rythm git 11    
+rythm git 12    
+rythm git 13    
+rythm git 14    
+rythm git 15    
+rythm git 16    
+rythm git 17    
+rythm git 18    
+rythm git 19    
+rythm git 20    
+rythm git df    
+RT Xfd vel 1    
+RT Xfd vel 2    
+RT Xfd vel 3    
+RT Xfd vel 4    
+RT Xfd vel 5    
+RT Xfd vel 6    
+RT Xfd vel 7    
+Beat Chaser     
+Film Chaser     

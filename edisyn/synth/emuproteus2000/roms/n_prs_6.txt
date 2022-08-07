@@ -1,0 +1,384 @@
+org:888000000 2 
+org:888000000 3 
+org:888888888mw 
+org:886311588 v 
+org:888800000 2 
+org:888800000 3 
+org:800000008 v 
+org:888800000 v2
+org:888800000 v3
+org:888888888 v 
+org:888000000 fx
+org:B-3 Efx     
+org:886311586   
+org:858000000 2 
+org:858000000 3 
+org:888500000   
+org:888060000   
+org:870060500   
+org:888850000   
+org:800000007   
+org:870650000   
+org:870607000   
+org:888888888 pr
+org:860000000 ds
+org:860000000 df
+org:800000008 ds
+org:800000008 df
+org:808000000 ds
+org:808000000 df
+org:888000050 pr
+org:008004000   
+org:008500000   
+org:888000000   
+org:888000000 3 
+org:888000000 2 
+org:888000v/808 
+org:888000000 pr
+org:888800000   
+org:888800000 3 
+org:88880000b v3
+org:888800000vmw
+org:888888888 a 
+org:888888888vb 
+org:888888888 b 
+org:8888-8888vmw
+org:888888888vmw
+org:888811580 v 
+org:686311586   
+org:886311588   
+org:888000000   
+org:888000007   
+org:888000050   
+org:888000000 d 
+org:888000000 3 
+org:888800000 v 
+org:888888888 v 
+org:888888888 d 
+org:888888888 c 
+org:888888888 t 
+org:886311580   
+org:886311588 v 
+org:800000008   
+org:800000006 v 
+org:888000000 fx
+org:086311588 v 
+org:850700007   
+org:850700070   
+org:850008700   
+org:850000067   
+org:808700070   
+org:808000078   
+org:808006700   
+org:808067000   
+org:808880000   
+org:808800800   
+org:808088000   
+org:808850000   
+org:808000000   
+org:8888-AllOut 
+org:888-AllOut  
+org:888-AllOut 1
+org:888-AllOut 2
+org:16/1-HS     
+org:8888-AllOut 
+org:888-AllOut s
+org:888-AllOut f
+org:888-HShoe f 
+org:AllOut-888 f
+org:AllOut-8888 
+org:AllOut-888 f
+org:AllOut-8888v
+cmb:Ped/Swl/Gt 1
+cmb:Ped/Swl/Gt 2
+cmb:Ped/Swl/Gt 3
+cmb:Ped/Swl/Gt 4
+cmb:Ped/Swl/Gt 5
+cmb:Ped/Swl/Gt 6
+cmb:Ped/Swl/Gt 7
+cmb:Ped/Swl/Gt 8
+cmb:Ped/Swl/Gt 9
+cmb:Ped/Gt 1    
+cmb:Ped/Gt 2    
+cmb:Ped/Gt 3    
+cmb:Ped/Gt 4    
+cmb:Ped/Gt 5    
+cmb:Ped/Gt 6    
+cmb:Ped/Gt 7    
+cmb:Ped/Gt 8    
+cmb:Ped/Gt 9    
+org:Pedals 01   
+org:Pedals 02   
+org:Pedals 03   
+org:Pedals 04   
+org:Pedals 05   
+org:Pedals 06   
+org:Pedals 07   
+org:Pedals 08   
+org:Pedals 09   
+org:Pedals 10   
+sfx:Stab        
+sfx:Percy 1     
+sfx:Percy 2     
+sfx:Percy 3     
+sfx:Percy 4     
+sfx:Rotozone    
+sfx:Volution    
+sfx:DenseTexture
+sfx:Drawbars    
+dir:800000000 2 
+dir:800000000 3 
+dir:880000000 2 
+dir:880000000 3 
+dir:888000000 2 
+dir:888000000 3 
+dir:888800000 2 
+dir:888800000 3 
+dir:888860000 2 
+dir:888888888   
+dir:888060000 3 
+dir:888000001   
+dir:818000005   
+dir:858000000 3 
+dir:888000050 3 
+dir:860000240 3 
+dir:888400350 2 
+dir:860000000 3 
+dir:860650000 3 
+dir:860607000 3 
+dir:870060000 3 
+dir:870060500 3 
+dir:808000000 3 
+dir:800700000 2 
+dir:800060000 2 
+dir:800005000 2 
+dir:800000340 3 
+dir:800000060 3 
+dir:800000005   
+dir:800000007   
+dir:008004000   
+dir:008500000   
+dir:008500300   
+dir:000800008   
+dir:000088880   
+dir:000005678   
+dir:880800000 2 
+dir:880800000 3 
+dir:880800800 3 
+dir:880080000 2 
+dir:808850000 2 
+dir:808850000 3 
+dir:808850050 3 
+dir:886322588   
+dir:876400566   
+dir:888766000 3 
+dir:888800230 3 
+dir:808808008   
+dir:408808004   
+dir:860060320 2 
+dir:058050230 3 
+dir:080050320 3 
+dir:865300053   
+dir:868040020 3 
+dir:858054030 2 
+dir:870030320 3 
+dir:078030020 3 
+dir:088803455   
+dir:038800230 3 
+dir:008600030 3 
+dir:808504002 2 
+dir:800704002 2 
+dir:848040000 2 
+dir:888800560 3 
+dir:888880060 3 
+dir:868800000 ds
+dir:868800000 df
+dir:868008000 ds
+dir:860808800 df
+dir:886422588 fx
+dir:888888888 fx
+dir:808808008 fx
+dir:888000000 3d
+dir:888800000 3d
+dir:008600030 fx
+dir:860040300 fx
+dir:858000000 fx
+dir:888000000 mx
+dir:888600000 mx
+dir:800000004 fx
+dir:800000008 mx
+dir:867500000 mx
+dir:878644302 mx
+dir:886311580 mx
+dir:084000020 mx
+dir:824000030 mx
+dir:858040030 mx
+dir:888000040 mx
+dir:788800240 mx
+dir:888844440 mx
+dir:Ped/Grt1 mx 
+dir:Ped/Grt2 mx 
+dir:Ped/Grt3 mx 
+dir:Ped/Grt4 mx 
+dir:888888000 mx
+dir:888888800 mx
+dir:888888888 mx
+dir:888600000mfx
+dir:800000008mfx
+dir:886311588mfx
+lnk:000080000   
+lnk:000088000   
+lnk:000080800   
+lnk:000080080   
+lnk:000080008   
+lnk:000008000   
+lnk:000008800   
+lnk:000008080   
+lnk:000008008   
+lnk:000000800   
+lnk:000000880   
+lnk:000000808   
+lnk:000000080   
+lnk:000000088   
+lnk:000000008   
+lnk:000000888   
+lnk:000088000alt
+lnk:Perc9thDir a
+lnk:Perc2ndDir a
+lnk:Perc3rdDir a
+lnk:Perc2ndDir b
+lnk:Perc3rdDir b
+lnk:Perc2ndDir c
+lnk:Perc3rdDir c
+   :B-3 default 
+   :B-3 default 
+   :B-3 default 
+   :Blank       
+var:1st3PlyPerc2
+var:1st3PlyPerc3
+var:1st4PlyPerc2
+var:1st4PlyPerc3
+var:Cathedral   
+var:Bi Phase    
+var:AM          
+var:All Out Dist
+var:Sweet Bees  
+var:Rocker      
+var:V-Bass Split
+var:V-Q5        
+var:Bull Runner 
+var:Rez Touch 1 
+var:Rez Touch 2 
+var:Rez Touch 3 
+var:Rez Touch 4 
+var:KingsSweep  
+var:999999999   
+var:Slivering   
+var:Sky 4       
+var:B Known     
+var:Ice B3      
+var:B a Squak   
+var:Sweeper     
+var:Slow Q      
+var:Reed Tone   
+var:3 Decaying  
+var:9 Decaying  
+var:Big Classic 
+var:Four Out    
+var:Three Sweep 
+var:888&8888 V3 
+var:Heavens B   
+var:B-Files     
+var:Mojo B      
+var:Penny Organ 
+var:1st3 Plus   
+var:1st3 Dist   
+var:1st3 mw 3   
+var:1st3-4 mw 3 
+var:1st3&4 Phase
+var:1st4 Plus   
+var:1st4 Dist   
+var:1st4 Ultra  
+var:1st 5 Phase 
+var:1st6 Slow mw
+var:1st9 Slow mw
+var:1st5PrsPlay 
+var:AllOutWhlWah
+var:Full House  
+var:Ghost B     
+var:HorsePresWah
+var:1st4+Harms  
+var:Mello Spin  
+var:Motions 1   
+var:Motions 2   
+var:Motions 3   
+var:Harmoniums  
+var:Harms All   
+var:Harm Seq 1  
+var:Harm Seq 2  
+var:To Harms    
+var:888 Gruzz   
+var:Pulse Fix   
+var:Blah Blah   
+var:Mysteria    
+var:Outer Solo  
+var:8888SlackPhz
+var:1st3 Perc9th
+var:1st4 Perc9th
+var:8888 Gruzz  
+var:All 9 Gruzz 
+var:Lo Fi       
+var:Mr Perk     
+var:Submerged   
+var:Coming Back 
+var:B Careful   
+var:X-1 Tracker 
+var:Shifter     
+lnk:800000008 v 
+lnk:800000000   
+lnk:080000000   
+lnk:008000000   
+lnk:000800000   
+lnk:800080000   
+lnk:000008000   
+lnk:000000800   
+lnk:000000080   
+lnk:000000008   
+lnk:008800000   
+lnk:008080000   
+lnk:008008000   
+lnk:008000800   
+lnk:008000080   
+lnk:008000008   
+lnk:000880000   
+lnk:000808000   
+lnk:000800800   
+lnk:000800080   
+lnk:000800008   
+lnk:000088000   
+lnk:000080800   
+lnk:000080080   
+lnk:000080008   
+lnk:000008800   
+lnk:000008080   
+lnk:000008008   
+lnk:000000880   
+lnk:000000808   
+lnk:000000088   
+lnk:000000008   
+lnk:008800000 b 
+lnk:Perc9th     
+lnk:Perc2nd a   
+lnk:Perc3rd a   
+lnk:Perc2ndVel  
+lnk:Perc3rdVel  
+lnk:Perc2nd b   
+lnk:Perc3rd b   
+lnk:Perc2ndPly  
+lnk:Perc3rdPly  
+lnk:HarmsAllLnk1
+lnk:HarmsAllLnk2
+lnk:Harm Seq Lnk
+   :B-3 default 
+   :B-3 default 
+   :Blank       

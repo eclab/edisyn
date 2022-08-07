@@ -1,0 +1,260 @@
+AUD-C1 (4 bars) 
+AUD-C3 (1 bar)  
+AUD-C3 (2 Bars) 
+AUD-C3 (4 Bars) 
+AUD-C4          
+AUD-C Triad     
+AUD-Cm7         
+AUD-Cm9         
+AUD-Cmaj7       
+AUD-Cs Up       
+AUD-Cs Up-Down  
+ARP-Classic     
+ARP-Downtown    
+BAS-Arp Snap    
+BAS-Arpy Bass   
+BAS-Arpy Bass2  
+BAS-Bagg        
+BAS-Bagg 2      
+BAS-Big FM Bass 
+BAS-Big Taurus  
+BAS-Big Taurus2 
+BAS-BigSnap     
+BAS-BigSnap2    
+BAS-Bottom 101  
+BAS-Bottom 101 2
+BAS-Deep End 1  
+BAS-Deep End 2  
+BAS-Expressive  
+BAS-Finger      
+BAS-Hummer      
+BAS-Hummer 2    
+BAS-Mini Snap   
+BAS-Mini Snap 2 
+BAS-MurkySweep  
+BAS-Picote      
+BAS-Picote2     
+BAS-Pilot       
+BAS-Taurnado    
+BAS-TaurusPedals
+BAS-ThiklySettle
+BAS-TS Mini     
+BRS-Big Swell 2 
+BRS-E2 Brass    
+BRS-E2 Brass2   
+BRS-FullTrnBrass
+BRS-Thick Brass 
+BRS-ThickBrass  
+BRS-Windy Brass 
+CMB-B3EP        
+CMB-PulseMadness
+CMB-Rogue Mini  
+CMB-Taurus&Strng
+CMB-Flute&String
+EPO-Analog FM   
+EPO-ChorusDyn2  
+EPO-ChorusDyno  
+EPO-Classic CP  
+EPO-CP Layer    
+EPO-CP Layer2   
+EPO-CP70        
+EPO-CP70 2      
+EPO-Dyno        
+EPO-Dyno 2      
+EPO-DynoChorus  
+EPO-DynoOdd     
+EPO-DynoSft1    
+EPO-DynoStcase  
+EPO-Fm Flanger  
+EPO-FM Phase 1  
+EPO-FM Phase 2  
+EPO-FMDelicate  
+EPO-Heavy Dyno  
+EPO-MarshMello  
+EPO-LiteDyno    
+EPO-Lullaby     
+EPO-Mama'sWurli 
+EPO-Mello EP1   
+EPO-Mello EP2   
+EPO-Mellow Pop  
+EPO-MetalBars   
+EPO-OB EP       
+EPO-OB EP 2     
+EPO-OB Tine EP  
+EPO-Real CP     
+EPO-Studio  EP  
+EPO-The CP70    
+EPO-Vintage CP  
+EPO-Wurlilayer  
+EPO-Wurlilayer2 
+EPO-Wurly       
+EPO-Wurly 2     
+GTR-Hackettism  
+GTR-Hackettism2 
+GTR-Hit It      
+GTR-Jazzy       
+GTR-Spy vs Spy  
+GTR-SpyvsSpy2   
+GTR-Wacka       
+KEY-Buzzy Clav  
+KEY-Clav 1      
+KEY-Clav2       
+KEY-Clav1&2     
+KEY-Clav2 Phase 
+KEY-Funk Master 
+KEY-FunkMaster  
+KEY-PhaseClav1  
+KEY-StereoClav 1
+KEY-Synth Clav  
+KEY-TwoClavs    
+LED-BeginAgain  
+LED-Frank Stein 
+LED-JunoOvrDrive
+LED-M12         
+LED-Mean Wheel  
+LED-OverDrive101
+LED-PortaLead   
+LED-Power Mini  
+LED-Pulse       
+LED-Pulse 2     
+LED-Soft&Round  
+LED-WickedSquare
+ORG-1st3 2      
+ORG-1st3 2ndPerc
+ORG-1st3 3rdPerc
+ORG-1st3FullDist
+ORG-1st4 Vibrato
+ORG-All Out     
+ORG-B3 Rock1    
+ORG-B3 Rock2    
+ORG-Distortion  
+ORG-Distortion 2
+ORG-Far Away    
+ORG-MelloCombo  
+ORG-PortaVib    
+ORG-PortaVib 2  
+PAD-Annunaki    
+PAD-Believe     
+PAD-Chiffer     
+PAD-Lunadef     
+PAD-Lunadef 2   
+PAD-Lunadef 3   
+PAD-Lunadef 4   
+PAD-Matches     
+PAD-ProfitMargin
+PAD-QuietSaws   
+PAD-Sentinels   
+PAD-Thin Lad    
+PRC-Arnold 1    
+PRC-Few ChoreMen
+PRC-Steeely     
+PRC-Steeely 1   
+SFX-DragonBreath
+SFX-EvilSaws    
+STR-Analog Harp 
+STR-Big M12     
+STR-Elka Combo  
+STR-Lush70'sFade
+STR-Lush70sFade2
+STR-Sepiatone   
+STR-Sepiatone2  
+STR-Smooth&Wide 
+STR-Solina      
+STR-String Box  
+STR-VeloBows    
+SYN-10101       
+SYN-80zFuzzPad  
+SYN-80zFuzzPad2 
+SYN-Big Mini    
+SYN-El Effo Sr  
+SYN-FuzzBell    
+SYN-Huge SEM    
+SYN-Juno        
+SYN-Juno Pulse  
+SYN-Late 80z    
+SYN-Monster Clav
+SYN-Morpheus    
+SYN-Nephilim    
+SYN-NoteOffChime
+SYN-NoteOffChme2
+SYN-Nunzio 1    
+SYN-Nunzio 2    
+SYN-Nunzio 3    
+SYN-OB Glider   
+SYN-OBSEMFuzz   
+SYN-ProphetPiano
+SYN-P Ten       
+SYN-P10         
+SYN-P10 SkySweep
+SYN-P5 PolySync 
+SYN-Merlot      
+SYN-Phase1Alert 
+SYN-PortaLead   
+SYN-Power Juno  
+SYN-Random OB   
+SYN-Regbit      
+SYN-Rogue       
+SYN-Round Mini  
+SYN-Runner      
+SYN-SawsofOld   
+SYN-Syrupy      
+SYN-TouchRez    
+SYN-Wall O Saws 
+SYN-Wide OB     
+SYN-Wide OB 2   
+VOX-BigTronChoir
+VOX-Light Aahs  
+VOX-Light Aahs 2
+VOX-Light Aahs 3
+WND-LoFi Flute  
+WND-StereoMtron 
+WND-Tron Flute  
+WND-Tron Flute2 
+KIT-Acoustic 2  
+KIT-DoubleKit   
+KIT-El GM Kit 1 
+KIT-Electronic 3
+KIT-Flashback   
+KIT-HighBoy     
+KIT-Kit 01      
+KIT-Kit 02      
+KIT-Kit 03      
+KIT-Kit 04      
+KIT-Kit 05      
+KIT-Kit 06      
+KIT-Kit 07      
+KIT-Kit 08      
+KIT-Kit 09      
+KIT-Kit 10      
+KIT-Kit 11      
+KIT-MS20        
+KIT-SK-1        
+KIT-SK-1 2      
+KIT-Soft Fuzz   
+KIT-SP1200      
+BTS-Acoustic    
+BTS-Acoustic 4  
+BTS-Brick       
+BTS-Chill Room  
+BTS-Clav        
+BTS-CPStage     
+BTS-Dreamland   
+BTS-Dropbeat    
+BTS-DropBeatBglu
+BTS-DX Style    
+BTS-Evolution   
+BTS-Fast Rocker 
+BTS-Fast Rocker 
+BTS-Fusion      
+BTS-Jazz        
+BTS-Lush        
+BTS-NeoLatinRock
+BTS-NuRocker    
+BTS-Reggae      
+BTS-Rock        
+BTS-Rock 2      
+BTS-Shuffle     
+BTS-Teardrop    
+BTS-The Pulse   
+BTS-Latin       
+BTS-Funkersize  

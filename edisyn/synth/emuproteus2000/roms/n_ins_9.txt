@@ -1,0 +1,808 @@
+   :None        
+kit:Brazilian GM
+kit:Salsa GM    
+kit:Ritual Drums
+kit:World GM 1  
+kit:World GM 2  
+kit:World GM 3  
+kit:World GM 4  
+kit:World GM 5  
+prc:Celtic Perc 
+prc:African Perc
+prc:Percussion 3
+prc:DjmbAshiTDrm
+prc:World Drums3
+prc:UduGhatmTube
+prc:E Perc Set  
+prc:Conga/Bongo 
+prc:Timbales    
+prc:Blocks/Bells
+prc:Shake&Scrape
+prc:BDs & Toms 1
+prc:BDs&Toms 2  
+prc:BDs,Toms,Sn 
+prc:Cymbal Array
+prc:Toke Set    
+prc:Gankokwe Set
+prc:Shek,Rattl &
+prc:Bel Rtl(G's)
+prc:ClprPod(C2,5
+prc:Shekere     
+prc:Wood Bl Mldc
+prc:Wood Bl Sets
+prc:Wood Blox 3 
+prc:Pipes 1     
+prc:Pipes 2     
+prc:DjembeAshiko
+prc:Djembe      
+prc:Ashiko      
+prc:Talking Drum
+prc:Taiko Drums1
+prc:Taiko Drums2
+prc:Palm Drums 1
+prc:Palm Drums 2
+prc:Palm Drums 3
+prc:Dholak Sets 
+prc:Darvutaboran
+prc:Dmbk/MBongo1
+prc:Dmbk/MBongo2
+prc:Dmbk/MBongo3
+prc:Dmbk/MBongo4
+prc:Udu/KimKim  
+prc:Ghatam      
+prc:Tubes       
+prc:Ritual Pops 
+prc:Snare Set   
+prc:Melodic Dr 1
+prc:Melodic Dr 2
+prc:Melodic Dr 3
+prc:Brazil Drums
+prc:Pandeiros   
+prc:Wood Thing 1
+prc:Wood Thing 2
+prc:E Snrs in 3s
+prc:E Snare Sets
+prc:Bodhran 1   
+prc:Bodhran 2   
+prc:Balifon Ntrl
+prc:Balifon Chrm
+prc:Bass Marimba
+prc:Bamboo Mrmba
+prc:Steel Drum  
+prc:Metalofon 1 
+prc:Metalofon 2 
+prc:Metalofon 3 
+prc:Metalofon 4 
+prc:Metalofon 5 
+prc:Metalofon 6 
+prc:Metalofon 7 
+prc:Metalofon 8 
+prc:Metalphons A
+prc:Metalphons B
+prc:Songbells 1 
+prc:Songbells 2 
+prc:Songbells 3 
+prc:Bottles 1&2 
+prc:Bottle 1    
+prc:Bottle 2    
+prc:Almglocken  
+prc:Almglocken 1
+prc:Almglocken 2
+prc:Tongue Drums
+prc:BassKalimba 
+prc:Buzz Kalimba
+prc:Thumb Piano 
+prc:Jaw Harp    
+plk:Cumbus Saz  
+plk:Su Gzheng   
+plk:Tenor Banjo 
+plk:Grk Bazouki 
+plk:Segndo Domra
+plk:SegDomraMute
+plk:Oud         
+plk:Shamisen    
+plk:Celtic Harp 
+plk:Baglama     
+plk:Prima Domra 
+plk:HmmrDulcimer
+plk:Mandolin    
+bas:Guitarron   
+bas:CB Balalaika
+bas:CB Bllka Mt 
+bow:Zhonghu     
+bow:Gaohu       
+bow:Erhu        
+wnd:Venu        
+wnd:Nye         
+wnd:Bansuri     
+wnd:Pan Flute   
+wnd:Shokuhachi  
+wnd:Suling      
+wnd:PennyWhistle
+wnd:Ocarina     
+wnd:BrazilWhstle
+wnd:Mizmar      
+wnd:Suona       
+wnd:Dizi        
+wnd:Shenai      
+wnd:Concertina  
+whs:WorldWhistle
+whs:Whistle 1   
+whs:Whistle 2   
+whs:Whistle 3   
+whs:Whistle 4   
+whs:Whistle 5   
+whs:Whistle 6   
+whs:Whistle 7   
+whs:Whistle 8   
+whs:Whistle 9   
+whs:Whistle 10  
+whs:Whistle 11  
+prc:Kick Drum   
+prc:Open Bass Dr
+prc:Tom Tom 16" 
+prc:Tom Tom 14" 
+prc:Tom Tom 8"  
+prc:Snare f     
+prc:Snare ff Rim
+prc:Snare X-Stik
+prc:Timbale 1   
+prc:Timbale 2   
+prc:Timbal Low O
+prc:Timbal Low R
+prc:Timbal Mid O
+prc:Timbale Hi O
+prc:Timbale Hi R
+prc:Timbal Shel1
+prc:Timbal Shel2
+prc:Tubano 1    
+prc:Tubano 2    
+prc:Tubano 3    
+prc:Conga Slap 1
+prc:Quinto Slap 
+prc:Conga Mid Op
+prc:Conga Low Op
+prc:Conga Bass  
+prc:Conga Slide 
+prc:Conga Hi Op 
+prc:Conga Hi Slp
+prc:Bongo Hi Pop
+prc:Bongo Lo Slp
+prc:Bongo Mid Op
+prc:Bongo Low Op
+prc:Hi Hat Tap 1
+prc:Hi Hat Tap 2
+prc:Hi Hat Foot 
+prc:HiHatBelSizl
+prc:HiHatTapSizl
+prc:Splash Cym  
+prc:Ride Cym f  
+prc:Ride Cym p  
+prc:Ride Cym Bel
+prc:China Cymbal
+prc:Crash Cym 1 
+prc:Clap        
+prc:Tambourine 1
+prc:Vibraslap   
+prc:Cabasa Short
+prc:Cabasa Long 
+prc:Maraca Shrt1
+prc:Maraca Long 
+prc:Guiro Short 
+prc:Guiro Long  
+prc:Maraca Shrt2
+prc:Shaker 1    
+prc:Triangl Mute
+prc:Triangl Open
+prc:Block Low   
+prc:Block High  
+prc:Clave 1     
+prc:Cowbell 1   
+prc:Gankokwe 1  
+prc:Gankokwe 2  
+prc:Gankokwe 3  
+prc:Gankokwe 4  
+prc:Gankokwe 5  
+prc:Gankokwe 6  
+prc:Gankokwe 7  
+prc:Gankokwe 8  
+prc:Gankokwe 9  
+prc:Gankokwe 10 
+prc:Gankokwe 11 
+prc:Gankokwe 12 
+prc:Toke Bell 1 
+prc:Toke Bell 2 
+prc:Toke Bell 3 
+prc:Toke Bell 4 
+prc:Toke Bell 5 
+prc:Toke Bell 6 
+prc:Toke Bell 7 
+prc:Toke Bell 8 
+prc:Toke Bell 9 
+prc:Toke Bell 10
+prc:Toke Bell 11
+prc:Shekere Tap1
+prc:Shekere Shef
+prc:Shekere Shuf
+prc:Shekere Shof
+prc:Pods        
+prc:Bell Rattl 1
+prc:Bell Rattl 2
+prc:Bell Rattl 3
+prc:Seed Shake 1
+prc:Seed Shake 2
+prc:Temple Block
+prc:Block 3     
+prc:Block 4     
+prc:Block 5     
+prc:Block 6     
+prc:Block 7     
+prc:BlokStrum Up
+prc:BlokStrum Dn
+prc:Klocker Hit 
+prc:Klocker Roll
+prc:Pipe 3      
+prc:Pipe 4      
+prc:Pipe 5      
+prc:Pipe 6      
+prc:Sistrum Hi  
+prc:Sistrum Lo  
+prc:Maraca Tap 1
+prc:Maraca Tap 2
+prc:Maraca Swirl
+prc:Maraca ShkRl
+prc:Sandblock 1 
+prc:Sandblock 2 
+prc:Sandblock 3 
+prc:Castanet 1  
+prc:Castanet 2  
+prc:Castanet Rol
+prc:Djembe GUN 1
+prc:Djembe GUN 2
+prc:Djembe PlmO1
+prc:Djembe PlmO2
+prc:Djembe PlmO3
+prc:Djembe Clsd1
+prc:Djembe Clsd2
+prc:Djembe Clsd3
+prc:Djembe GO 1 
+prc:Djembe DO 1 
+prc:Djembe PA   
+prc:Djembe TA   
+prc:Djembe TIN  
+prc:Djembe Snap 
+prc:Djembe Pop 1
+prc:Djembe Pop 2
+prc:Djembe Roll1
+prc:Ashiko GUN 1
+prc:Ashiko GUN 2
+prc:Ashiko PlmO1
+prc:Ashiko PlmO2
+prc:Ashiko PlmO3
+prc:Ashiko Slap 
+prc:Ashiko Snap 
+prc:Ashiko Pop 1
+prc:Ashiko Pop 2
+prc:Ashiko GO   
+prc:Ashiko DO   
+prc:Ashiko PA   
+prc:Ashiko TA   
+prc:Ashiko Pop 3
+prc:Ashiko TIN  
+prc:Ashiko Roll 
+prc:TDrum Tone 1
+prc:TDrum Tone 4
+prc:TDrum Tone 7
+prc:TDrum Up 1  
+prc:TDrum Up 2  
+prc:TDrum Up 3  
+prc:TDrum Dwn 1 
+prc:TDrum Dwn 2 
+prc:Palm Dr Lo 1
+prc:Palm Dr Lo 2
+prc:Palm Dr Hi
+prc:Palm Dr Mid
+prc:Dohlak DUN
+prc:Dohlak DA
+prc:Dohlak DE
+prc:Dohlak TET
+prc:Darvul Open1
+prc:Darvul Mute1
+prc:Darvul Snap1
+prc:Tabor Open
+prc:Tabor Stick1
+prc:Tabor Stick2
+prc:Pakawaj TUM
+prc:Pakawaj Slap
+prc:Pakawaj Din
+prc:Tambour TUM
+prc:Tambour Slp1
+prc:Tambour Slp1
+prc:Dumbek TUM
+prc:Dumbek DIN
+prc:Dumbek NA
+prc:Dumbek Pop
+prc:Clay Bongo 1
+prc:Clay Bongo 2
+prc:Clay Bongo 3
+prc:Clay Bongo 4
+prc:Tik-Tak Drum
+prc:Taiko 1
+prc:Taiko 2
+prc:Taiko 3
+prc:Taiko 4
+prc:Taiko 5
+prc:Taiko Shell1
+prc:Taiko Shell2
+prc:Udu Tone Lo1
+prc:Udu Tone Lo2
+prc:Udu Release
+prc:Udu Slap Lo1
+prc:Udu Slap Lo2
+prc:Udu Release2
+prc:Udu Finger 1
+prc:Udu Finger 2
+prc:Udu HiTone 1
+prc:Udu Hi Rlse
+prc:Udu Hi Fngr1
+prc:Udu Hi Fngr2
+prc:Udu Hi Slap
+prc:KimKim Tone1
+prc:KimKim Tone2
+prc:KimKim Rlse
+prc:KimKim Tone3
+prc:KimKim Rlse3
+prc:Ghatam TAK 1
+prc:Ghatam TAK 2
+prc:Ghatam TUM 1
+prc:Ghatam DIN
+prc:Ghatam TUM 2
+prc:Ghatam TA 1
+prc:Ghatam NA
+prc:Tube A Open
+prc:Tube A Slap
+prc:Tube B Open1
+prc:Tube B Slap1
+prc:Tube B Open2
+prc:Tube B Slap2
+prc:Tube B Wah 1
+prc:Tube B Wah 2
+prc:Bodhran B1
+prc:Bodhran B2
+prc:Bodhran B3
+prc:Bodhran B4
+prc:Bodhran B5
+prc:Bodhran A1
+prc:Bodhran A2
+prc:Bodhran A3
+prc:Wood Bones 1
+prc:Wood Bones 2
+prc:Wood Bones 3
+prc:Wood Bones 4
+prc:Wood Bones 5
+prc:Bone Bones 1
+prc:Bone Bones 2
+prc:Bone Bones 3
+prc:Bone Bones 4
+prc:Bone Bones 5
+prc:Bone Bones 6
+prc:SuBasso 1
+prc:SuBasso 2
+prc:SuBasso 3
+prc:Subasso 4
+prc:Ritual Kick
+prc:Alt Pop 1
+prc:Alt Pop 2
+prc:Alt Drum 2
+prc:Alt Drum 3
+prc:Alt Pop 3
+prc:Alt Pop 4
+prc:Ry Drum 6
+prc:Ry Drum 1
+prc:Ry Drum 3
+prc:Ry Drum 4
+prc:Ry Drum 5
+prc:Ambi Pop 2
+prc:Ambi Pop 1
+prc:Ambi Pop 2
+prc:Tenor Drum 2
+prc:IndoDrum Slp
+prc:Deep Wave
+prc:Jing Drum 1
+prc:Jing Drum 2
+prc:Clackers!
+prc:Anac Mute 1
+prc:Anac Mute 2
+prc:Anac Drum 1
+prc:Terabek 1
+prc:Terabek 2
+prc:Kufi 1
+prc:Kufi 2
+prc:Pico 1
+prc:Terabek 3
+prc:Terabek 4
+prc:Sistrabob 1
+prc:Sistrabob 2
+prc:Sistrabob 3
+prc:Tubob 1
+prc:Surdo Open
+prc:Surdo Hand
+prc:Surdo Shell
+prc:Street Snar1
+prc:Street Snar2
+prc:Soprano Dr 1
+prc:Soprano Dr 2
+prc:Bombo
+prc:Tamborim 4
+prc:Tamborim 3
+prc:Tamborim 2
+prc:Tamborim 1
+prc:Caxixi 2
+prc:Caxixi 3
+prc:Crashers
+prc:Pan 2
+prc:Pan 1
+prc:Jopa Bell
+prc:Reco Bell
+prc:Reco Open
+prc:Reco Strike
+prc:Reco Scrape
+prc:Agogo Low
+prc:Agogo Hi
+prc:Cricket
+prc:Block Hi
+prc:Block Low
+prc:Cabasa 2
+prc:Ganza
+prc:Pandeiro Hit
+prc:Pandro J Rol
+prc:Pandro Open1
+prc:Pandro Open2
+prc:Pandro Pop
+prc:Pandro Open3
+prc:Pandro Open4
+prc:Pandro Heel
+prc:Pandro Palm
+prc:Cuica Low
+prc:Cuica Hi
+prc:Triangle 2 M
+prc:Triangle 2 L
+prc:Flexi Up
+prc:Flexi Down
+prc:Balifon D#3
+prc:Balifon F3
+prc:Balifon G#3
+prc:Balifon A#3
+prc:Balifon C4
+prc:Balifon D#4
+prc:Balifon F4
+prc:Balifon G#4
+prc:Balifon A#4
+prc:Balifon C5
+prc:Balifon D#5
+prc:Balifon F5
+prc:Bamb Mar A#2
+prc:Bamb Mar D#3
+prc:Bamb Mar C4
+prc:Stl Drum D3
+prc:Stl Drum A3
+prc:Stl Drum C#4
+prc:Stl Drum G4
+prc:Stl Drum C#5
+prc:Stl Drum E5
+prc:Tongue 1
+prc:Tongue 2
+prc:Tongue 3
+prc:Tongue 4
+prc:Tongue 5
+prc:Tongue 6
+prc:Tongue 7
+prc:Tongue 8
+prc:Tongue 9
+prc:Tongue 10
+prc:Tongue 11
+prc:B Kalimb F1
+prc:B Kalimb C2
+prc:B Kalimb D#2
+prc:B Kalimb G2
+prc:B Kalimb D#3
+prc:Kalimba B2
+prc:Kalimba D3
+prc:Kalimba F#3
+prc:Kalimba C#4
+prc:Thumb Pno E3
+prc:Thumb Pno G3
+prc:Thumb Pno B3
+prc:Thumb Pno D4
+prc:Jaw Harp 1
+prc:Jaw Harp 2
+prc:Jaw Harp 3
+prc:Jaw Harp 4
+prc:Jaw Harp 5
+prc:Jaw Harp 6
+prc:Jaw Harp 7
+prc:Jaw Harp 8
+prc:Jaw Harp 9
+prc:Jaw Harp 10
+prc:Jaw Harp 11
+prc:Jaw Harp 12
+prc:Jaw Harp 13
+prc:Jaw Harp 14
+prc:Jaw Harp 15
+rc:Jaw Harp 16
+prc:Jaw Harp 17
+prc:Jaw Harp 18
+prc:Jaw Harp 19
+prc:Jaw Harp 20
+prc:Jaw Harp 21
+prc:Jaw Harp 22
+prc:Jaw Harp 23
+prc:E Kick 1
+prc:E Kick 2
+prc:E Kick 3
+prc:E Kick 4
+prc:E Snare 1
+prc:E Snare 2
+prc:E Snare 3
+prc:E Snare 4
+prc:E Snare 5
+prc:E Snare 6
+prc:E Snare 7
+prc:E Snare 8
+prc:E Snare 9
+prc:E Snare 10
+prc:E Snare 11
+prc:E Snare 12
+prc:E Snare 13
+prc:E Tom 1
+prc:E Tom 2
+prc:E Tom 3
+prc:E Tom 4
+prc:E Clap 1
+prc:E Clap 2
+prc:E Clap 3
+prc:E Splash 1
+prc:E Hat 1
+prc:E Hat 2
+prc:E Hat 3
+prc:E Hat 4
+prc:E Hat 5
+prc:E Bell 1
+prc:E Cymbal 1
+prc:E Tick 1
+prc:E Clave 1
+prc:E Click 1
+prc:E Rim 1
+prc:E Click 2
+prc:E Foot 1
+plk:Cmbus Saz A1
+plk:Cmbus Saz E2
+plk:Cmbus Saz A2
+plk:Cmbus Saz D3
+plk:Cmbus Saz G3
+plk:Cmbus Saz C4
+plk:Su Gzhen E1
+plk:Su Gzhen F#2
+plk:Su Gzhen A2
+plk:Su Gzhen E3
+plk:Su Gzhen A#3
+plk:Tnr Banj D2
+plk:Tnr Banj G2
+plk:Tnr Banj C#3
+plk:Tnr Banj G3
+plk:Gr Bzouki D2
+plk:Gr Bzouki A2
+plk:Gr Bzouki D3
+plk:Gr Bzouki A3
+plk:Gr Bzouki D4
+plk:Gr Bzouki G4
+plk:Gr Bzouki C5
+plk:Sg Domra E1
+plk:Sg Domra A1
+plk:Sg Domra E2
+plk:Sg Domra B2
+plk:Sg Domra E3
+plk:Sg Domra A3
+plk:SDomraMt E1
+plk:SDomraMt A1
+plk:SDomraMt E2
+plk:SDomraMt B2
+plk:SDomraMt F#3
+plk:SDomraMt A3
+plk:Oud E1
+plk:Oud B1
+plk:Oud F#2
+plk:Oud B2
+plk:Oud E3
+plk:Oud G3
+plk:Shamison F2
+plk:Shamison A2
+plk:Shamison C3
+plk:Shamison F#3
+plk:Shamison B3
+plk:Shamison D#4
+plk:Shamison A4
+plk:Celt Harp G1
+plk:Celt Harp C2
+plk:Celt Harp F2
+plk:Celt Harp B2
+plk:Celt Harp E3
+plk:Celt Harp A3
+plk:Celt Harp D4
+plk:Celt Harp G4
+plk:Celt Harp C5
+plk:Celt Harp F5
+plk:Baglama D3
+plk:Baglama G3
+plk:Baglama C4
+plk:Baglama G4
+plk:Baglama C5
+plk:Baglama G5
+plk:Pr.Domra D#3
+plk:Pr.Domra A#3
+plk:Pr.Domra D#4
+plk:Pr.Domra A#4
+plk:Pr.Domra D#5
+plk:HmrDulci E2
+plk:HmrDulci A2
+plk:HmrDulci C#3
+plk:HmrDulci F#3
+plk:HmrDulci C4
+plk:HmrDulci F#4
+plk:HmrDulci B4
+plk:HmrDulci E5
+plk:Mandolin A2
+plk:Mandolin C3
+plk:Mandolin F#3
+plk:Mandolin A3
+plk:Mandolin F#4
+plk:Mandolin B4
+plk:Mandolin E5
+plk:Mandolin G5
+bas:Guitarrn G1
+bas:Guitarrn C2
+bas:Guitarrn F2
+bas:Guitarrn A#2
+bas:CB Bllka E1
+bas:CB Bllka A1
+bas:CB Bllka D#2
+bas:CB Bllka C3
+bas:CB Bllka E3
+bas:CBBllkaMt E1
+bas:CBBllkaMt A1
+bas:CBBllkaMtD#2
+bas:CBBllkaMt A2
+bas:CBBllkaMt E3
+wnd:VenuFluteG#3
+wnd:VenuFluteC#4
+wnd:VenuFluteF#4
+wnd:VenuFlute A4
+wnd:VenuFlute E5
+wnd:Nye FluteA#2
+wnd:Nye FluteD#3
+wnd:Nye Flute G3
+wnd:Nye Flute C4
+wnd:Nye Flute F4
+wnd:Tnr Bonsr B2
+wnd:Tnr BonsrD#3
+wnd:Tnr BonsrG#3
+wnd:Tnr BonsrD#4
+wnd:Tnr BonsrG#4
+wnd:Pan Flute E3
+wnd:Pan Flute A4
+wnd:Pan Flute E5
+wnd:ShokuhachiD3
+wnd:ShokuhachiA3
+wnd:ShokuhachiD4
+wnd:ShokuhachiA4
+wnd:ShokuhachiD5
+wnd:Suling E3
+wnd:Suling C4
+wnd:Suling G#4
+wnd:Suling C5
+wnd:PennyWhstlE3
+wnd:PennyWhstlA3
+wnd:PennyWhstlE4
+wnd:PennyWhstlA4
+wnd:PennyWhstC#5
+wnd:Mizmar G3
+wnd:Mizmar D4
+wnd:Mizmar F4
+wnd:Mizmar A4
+wnd:Mizmar D5
+wnd:Mizmar F#5
+wnd:Mizmar A5
+wnd:Dizi C#4
+wnd:Dizi F#4
+wnd:Dizi B4
+wnd:Shenai C3
+wnd:Shenai F#3
+wnd:Shenai A#3
+wnd:Shenai D4
+wnd:Shenai G4
+wnd:ConcertnaAlt
+wav:Sine Wave
+wav:TriangleWave
+wav:Square Wave
+wav:SawtoothWave
+wav:Pulse 75%
+wav:Pulse 90%
+wav:Pulse 94%
+wav:Pulse 96%
+wav:Pulse 98%
+wav:Four Octaves
+wav:Low Odds
+wav:Low Evens
+kit:Brzl GM Dr A
+kit:Brzl GM PrcB
+kit:Brzl GM PndC
+kit:Brzl GM c/fD
+kit:Salsa GM A
+kit:Salsa GM B
+kit:Ritual Dr A
+kit:Ritual Dr B
+prc:Perc 3 A
+prc:Perc 3 B
+prc:Shake&ScrapA
+prc:Shake&ScrapB
+prc:ShekeRattl A
+prc:ShekeRattl B
+prc:Shekere A
+prc:Shekere B
+prc:Ghatam A
+prc:Ghatam B
+kit:World GM 6
+kit:World GM 7
+kit:World GM 8
+kit:World GM 9
+kit:World GM 10
+kit:World GM 11
+kit:World GM 12
+kit:World GM 13
+kit:World GM 14
+kit:World GM 15
+kit:World GM 16
+kit:World GM 17
+kit:World GM 18
+kit:World GM 19
+kit:World GM 20
+kit:World GM 1A
+kit:World GM 1B
+kit:World GM 2A
+kit:World GM 2B
+kit:World GM 3A
+kit:World GM 3B
+kit:World GM 4A
+kit:World GM 4B
+kit:World GM 5A
+kit:World GM 5B
+kit:World GM 6A
+kit:World GM 6B
+kit:World GM 7A
+kit:World GM 7B
+kit:World GM 8A
+kit:World GM 8B
+kit:World GM 9A
+kit:World GM 9B
+kit:World GM 10A
+kit:World GM 10B
+kit:World GM 11A
+kit:World GM 11B
+kit:World GM 12A
+kit:World GM 12B
+kit:World GM 13A
+kit:World GM 13B
+kit:World GM 14A
+kit:World GM 14B
+kit:World GM 15A
+kit:World GM 15B
+kit:World GM 16A
+kit:World GM 16B
+kit:World GM 17A
+kit:World GM 17B
+kit:World GM 18A
+kit:World GM 18B
+kit:World GM 19A
+kit:World GM 19B
+kit:World GM 20A
+kit:World GM 20B

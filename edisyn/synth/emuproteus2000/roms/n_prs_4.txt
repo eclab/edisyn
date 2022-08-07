@@ -1,0 +1,1024 @@
+brs:SforzadoSect
+brs:Soft Trumpet
+brs:Solo 'Bone  
+brs:Synth Brass 
+brs:The Ensemble
+brs:Too Bahhd   
+brs:Trmpt+Sect  
+brs:Tromboned   
+brs:Trombrass   
+brs:Trump FX etc
+brs:Trumpet FX 1
+brs:Trumpet FX 2
+brs:Trumpet FX 3
+brs:Trumpet FX 4
+brs:Trumpet FX 5
+brs:Trumpet FX 6
+brs:Trumpet FX 7
+brs:Trumpet Hard
+brs:TrumpetMute1
+brs:TrumpetMute2
+wnd:A-SAX       
+wnd:AiryClarinet
+wnd:Akkordione  
+wnd:Alto Saxo   
+wnd:B-Sax       
+wnd:B2-Sax      
+wnd:Bari        
+wnd:Big Top     
+wnd:Bottle Blow 
+wnd:Breathy Flt1
+wnd:Breathy Flt2
+wnd:Chamber Orch
+wnd:Chi-Town    
+wnd:Clar/Oboe   
+wnd:Clarinet    
+wnd:Clarinette  
+wnd:English Horn
+wnd:Fieldberries
+wnd:Flt/Obe/Bone
+wnd:Flute       
+wnd:Full Bari   
+wnd:G's Soprano 
+wnd:Grouch      
+wnd:Harmonica   
+wnd:Harmonika   
+wnd:Harmony     
+wnd:Monica Blow 
+wnd:Nuages      
+wnd:Oboe 1      
+wnd:Oboe 2      
+wnd:Ocarina 1   
+wnd:Ocarina 2   
+wnd:Pan Flute 1 
+wnd:Pan Flute 2 
+wnd:Pastoral    
+wnd:Polka Cheat 
+wnd:S-Sax       
+wnd:Sax FX 1 2 3
+wnd:Sax Session 
+wnd:Shenai      
+wnd:Synth Flute 
+wnd:T-Sax       
+wnd:Tenor Phone 
+wnd:Virtuaccord 
+wnd:WindTrio    
+vox:Ahhs        
+vox:Arco Breath 
+vox:Common Vox  
+vox:Dark Angels 
+vox:Gossamer    
+vox:Gothic Dream
+vox:Lo FakeChoir
+vox:Lo-Fi Ether 
+vox:Majestic    
+vox:MauzeWowz   
+vox:Mist        
+vox:Odd Boys    
+vox:Odd Vox     
+vox:Oohs Souls  
+vox:PhasePhlips 
+vox:Pop Aahs    
+vox:Pop Oohs    
+vox:Slo Lunarvox
+vox:Soul Oohs   
+vox:SpiritWorld 
+vox:SynthSing   
+vox:Tarzanalien 
+vox:ThroatRattle
+vox:Tokenring   
+vox:Trapped     
+led:Apple Eater 
+led:Blue Danube 
+led:Cat's Nip   
+led:Dancerama   
+led:Dwiddle     
+led:Ethereosity 
+led:Flutter     
+led:Freakus     
+led:Intervalis  
+led:JabbaStabba 
+led:Laser Larry 
+led:Nice Lead   
+led:Post 90's DM
+led:Q Snapper   
+led:Quacker     
+led:RememberWhen
+led:Sci-Fi B    
+led:Shimmy      
+led:Shiner      
+led:SineSurprise
+led:Smack Bender
+led:Speedronic  
+led:Syrian Nod  
+led:Wandering   
+led:Weezy Lead  
+led:Worm 1      
+led:Worm 2      
+led:Wormwood    
+led:Wormy Janis 
+led:Zaw Za Zah  
+wav:Arp         
+wav:Bass Synth  
+wav:Bell Synth  
+wav:Blipper     
+wav:Buzz Saw Syn
+wav:Chime       
+wav:CZ Echo     
+wav:CZ Lead     
+wav:CZ101 Digi  
+wav:Dig Buzz Syn
+wav:Eraser      
+wav:ES Rag      
+wav:Fat Attack  
+wav:Glass Perc  
+wav:Hollow Deep 
+wav:Juno Pulse  
+wav:Juno Square 
+wav:Log Hit     
+wav:M12 Lead    
+wav:M12 Sync    
+wav:Magic       
+wav:Metal 1     
+wav:Metal 2     
+wav:MetalAttack 
+wav:Mini Lead   
+wav:Moog Lead   
+wav:Narrow Synth
+wav:Overtone Syn
+wav:Perc Axe Syn
+wav:Pluck Tone  
+wav:Pop Square  
+wav:PPG         
+wav:Pure H20    
+wav:PWM         
+wav:Rast Keys   
+wav:Rezzy       
+wav:Spacey Keys 
+wav:Square Lead 
+wav:SquareAttack
+wav:SquareChorus
+wav:Syn Tone    
+wav:Sync 1      
+wav:Sync 2      
+wav:Sync 3      
+wav:Sync 4      
+wav:Sync 5      
+wav:Sync 6      
+wav:Synth Wave  
+wav:Synthetic   
+wav:VS Vox      
+wav:VS37        
+wav:VS48        
+wav:Whine       
+wav:Wild Synth  
+syn:5th Brass   
+syn:8O8 Synthax 
+syn:Arpitty     
+syn:BenderPlanet
+syn:Big Planet  
+syn:Blippoid    
+syn:Brazz       
+syn:Buzz Synth  
+syn:Conglomo    
+syn:CZ Synstring
+syn:DigiBuzphaze
+syn:Digiglass   
+syn:DinkedSquare
+syn:Ensemblist  
+syn:Ethnosplint 
+syn:Euro Wave   
+syn:Fat Slide   
+syn:Festival    
+syn:Gritstrings 
+syn:Heavy       
+syn:Hi Oct Synth
+syn:Hi String   
+syn:Hydraine    
+syn:Little Tins 
+syn:LOCoCution  
+syn:Messy 55    
+syn:Mood Strings
+syn:Moog 55     
+syn:NarrowEscape
+syn:Nervous     
+syn:No NerveNet 
+syn:OBX Saws    
+syn:OohAhh Vox  
+syn:P5 Brass    
+syn:ProfitMargin
+syn:Promoseus   
+syn:Pulse Pulse 
+syn:Pulsey!     
+syn:Pweet Square
+syn:Razor       
+syn:Razor Edge  
+syn:Rez Synth   
+syn:Rezzy Wave  
+syn:Saw Blip    
+syn:Saw Stack   
+syn:Saw Sweep   
+syn:SawsweepComp
+syn:Skreach Arp 
+syn:Soft Synth  
+syn:Synbrasso   
+syn:Syncsyn Clav
+syn:Syncty      
+syn:SynEnsemble 
+syn:Syntax On2  
+syn:Synthall AT 
+syn:Synth Brass 
+syn:ThinHi Worm 
+syn:ThinTecPulse
+syn:Transpander 
+syn:VoxNonsense 
+syn:Wheezy Worm 
+syn:Wildsync    
+syn:Z&C Leeder  
+pad:AirBorn     
+pad:Classic     
+pad:Cloud 9     
+pad:Crystal Beam
+pad:Dance Chord 
+pad:Dances Well 
+pad:Deep Spacy  
+pad:Dream Pad   
+pad:Dreamer     
+pad:Dreamy      
+pad:Floatatious 
+pad:GreaT       
+pad:Highway     
+pad:Infants     
+pad:JP6 Pad     
+pad:Keyngdom    
+pad:Kingdom High
+pad:LOCoMotion  
+pad:Meloden     
+pad:MetalBeats  
+pad:MovingBells 
+pad:Pad Life    
+pad:Paddy       
+pad:Paddy Flange
+pad:Phat Pad    
+pad:Phat Pan    
+pad:Pulsation   
+pad:PWM Melopadd
+pad:PWM Rezslide
+pad:RiffTrippin'
+pad:Spinwip Octa
+pad:SweptAway   
+pad:Synth Pad   
+pad:Tunguska    
+pad:Under Pad FM
+pad:Urban Pipe  
+pad:Whisp       
+pad:Xylo Pad    
+pad:Zoom        
+pad:Zoom 2000!  
+pad:Zyzzle      
+bpm:Build Up    
+bpm:Choice 1    
+bpm:Deep Blue   
+bpm:DXBeat      
+bpm:Electronica 
+bpm:Free Love   
+bpm:Freeze      
+bpm:Industry Vox
+bpm:Move Clock !
+bpm:Something   
+bpm:The Man     
+bpm:Waver       
+hit:Alta Trumpet
+hit:Bass Slips  
+hit:Basses      
+hit:Big Band    
+hit:Biggy Brass 
+hit:Brass Batz  
+hit:Brass Bite  
+hit:Brass Hits 1
+hit:Brass Hits 2
+hit:Brass Hits 3
+hit:Brass Hits 4
+hit:Brass Hittas
+hit:Brass Hitz  
+hit:Da Danzits  
+hit:Dance Hits 1
+hit:Dance Hits 2
+hit:Deep Brass  
+hit:Dirt Strings
+hit:Fashion     
+hit:Garagiste   
+hit:Guitars     
+hit:Guitarzits  
+hit:Orch Fatlow 
+hit:Organ Hits 1
+hit:Organ Hits 2
+hit:Poker       
+hit:Punch Prak  
+hit:Sax Scandals
+hit:Skweeler    
+hit:String Hits 
+hit:Synth Basses
+hit:Vox Grunts  
+hit:Vox Hits 1  
+hit:Vox Hits 2  
+hit:Vox Hitties 
+orc:Brasso      
+orc:Combo       
+orc:Fanfare     
+orc:Orch w/Perc 
+orc:Orchestra   
+orc:PnoBrsStrg  
+orc:Str/Brs/Wd1 
+orc:Str/Brs/Wd2 
+orc:Str/Brs/Wd3 
+sfx:3001        
+sfx:7O's Phazzy 
+sfx:AKS Vinyl   
+sfx:Bad Bells   
+sfx:Bass Scrape 
+sfx:Bass Thud   
+sfx:Crickets    
+sfx:Crowd       
+sfx:DawnFollows 
+sfx:Full Circle 
+sfx:Gtr Scrape 1
+sfx:Gtr Scrape 2
+sfx:GtrBodyKnock
+sfx:Guitar Pick 
+sfx:Hello!!!    
+sfx:Hill        
+sfx:It's Coming 
+sfx:Loop 3      
+sfx:NightCrawler
+sfx:Oh No its...
+sfx:Ohh         
+sfx:PnoSndBoard 
+sfx:PoppysOnMars
+sfx:Ritual      
+sfx:StringScrape
+sfx:TarzansDance
+sfx:We Ha       
+sfx:WhoaWhoa    
+sfx:Woooo!      
+sfx:Ya Who      
+nse:Carrion     
+nse:Dust Bunny  
+nse:Jungle Pump 
+nse:Lift Off    
+nse:Pink        
+nse:StopThat!   
+nse:Vinyl       
+nse:White       
+scr:Cuts & Hats 
+scr:DissedSkrach
+scr:Dogs'nHeat  
+scr:From Vinyl  
+scr:Monsta Slips
+scr:Outa Sqaced 
+scr:Play It     
+scr:PuppyAlarm  
+scr:Scratches 1 
+scr:Scratches 2 
+scr:Skratch Dis 
+scr:Vinyl Set   
+prc:Acidphone   
+prc:Agogos      
+prc:Bell Tree 1 
+prc:Bell Tree 2 
+prc:Bells1      
+prc:Bells2      
+prc:Blocks1     
+prc:Blocks2     
+prc:Borneo      
+prc:C Bells     
+prc:Cargo       
+prc:Claps 1     
+prc:Claps 2     
+prc:Claves      
+prc:Congas1     
+prc:Congas2     
+prc:Cyms 1      
+prc:Cyms 2      
+prc:Electro     
+prc:Flexi       
+prc:Guiros      
+prc:Hard Vibes  
+prc:Hats 1      
+prc:Hats 2      
+prc:Hi Bell     
+prc:Kalimba     
+prc:Kix 1       
+prc:Kix 2       
+prc:Log On      
+prc:Maracas     
+prc:Marimba     
+prc:Miscellany  
+prc:Orchestral  
+prc:Perky Dance 
+prc:PerkyThings1
+prc:PerkyThings2
+prc:Plexitone   
+prc:Progress    
+prc:Shakers     
+prc:SiameseCats 
+prc:Snaps       
+prc:Snares 1    
+prc:Snares 2    
+prc:Soft Vibes  
+prc:Stuff 1     
+prc:Stuff 2     
+prc:Tams 1      
+prc:Tams 2      
+prc:Timbs 1     
+prc:Timbs 2     
+prc:Timpani     
+prc:Toms 1      
+prc:Toms 2      
+prc:TV Spy Vibes
+prc:Velo Vibes  
+prc:Vibraslap   
+prc:Village     
+prc:WoodHitsBell
+prc:Xylophone   
+kit:424         
+kit:Kit 02      
+kit:Kit 03      
+kit:Kit 04      
+kit:Kit 05      
+kit:Kit 06      
+kit:Kit 07      
+kit:Kit 08      
+kit:Kit 09      
+kit:Kit 10      
+kit:Kit 11      
+kit:Kit 12      
+kit:Kit 13      
+kit:Kit 14      
+kit:Kit 15      
+kit:Kit 16      
+kit:Kit 17      
+kit:Kit 18      
+kit:Kit 19      
+kit:Kit 20      
+kit:Acoustic 2  
+kit:All Niter   
+kit:Berzerker   
+kit:BMF         
+kit:Booster     
+kit:ClassicHouse
+kit:Clean R&B   
+kit:ClubVinyl   
+kit:CookUsAHit  
+kit:Dance 1     
+kit:Dance 2     
+kit:DearLyBeEmuD
+kit:Dee and Be 1
+kit:Dee and Be 2
+kit:DeepBooty   
+kit:Disenegrate 
+kit:Drum 303    
+kit:Drum/Bass 1 
+kit:Drum/Bass 2 
+kit:Drum/Bass 3 
+kit:Drum/Bass 4 
+kit:Drum/Bass 5 
+kit:Drum/Bass 6 
+kit:DrumBuzza   
+kit:For Real    
+kit:Gate Dances 
+kit:Gett..OutPt2
+kit:GritKitt    
+kit:HatAttack   
+kit:Hot Swing   
+kit:Jams        
+kit:Jazz Quartet
+kit:Jazz Trio   
+kit:OnTheTip    
+kit:Phased DrumR
+kit:Phattasassin
+kit:R&B Flava   
+kit:Shag        
+kit:Skin Drums  
+kit:Smackers    
+kit:SounDfacTory
+kit:Speed Garage
+kit:Subversive  
+kit:Swing Hop 1 
+kit:Swing Hop 2 
+kit:Swing Hop 3 
+kit:This & That 
+kit:Tribal House
+kit:Werzerker   
+kb1:DynamicGrand
+kb4:Yo My Dynos 
+orc:Orchestral  
+gtr:Grusty      
+bs1:A Ku Stq    
+kb3:Rock'in B   
+kb2:WideSuitcase
+led:Zimppler    
+bs4:AnalogPlanet
+kit:Kit 1       
+kb1:And Voice   
+sfx:MetalScience
+syn:Silk OBXsaws
+gtr:Stolen7Away 
+brs:Movie Brass 
+str:Dyna-heim   
+bpm:Jumping     
+vox:New Age Oohs
+bs4:Sugar Freak 
+kb4:Clavinetti  
+kit:Acoustic 1  
+brs:BreathyTBone
+wnd:Real Flute  
+str:Allin a Pizz
+bs4:Walky Talk  
+str:Filmscore   
+led:L.V.'s Worm 
+kit:Bag O Tricks
+kb2:Melosoul EP 
+wnd:Breather    
+vox:Frozen Time 
+hit:MasterBlast 
+gtr:NyloSteel   
+kb3:JimmyJazzy B
+kit:Kit 18      
+bs2:Fing&Harms 2
+kb2:Lovers Fm EP
+syn:JunoPlseComp
+gtr:WaaKeeGa    
+led:inBottles   
+kb1:Ballad Grand
+kb1:Chime Grand 
+kb1:Concert Pno 
+kb1:Dance Pno   
+kb1:Elecro7CP80 
+kb1:Grande      
+kb1:HonkTonkeyz 
+kb1:Klassical   
+kb1:Layer Piano 
+kb1:Miami Grand 
+kb1:Piano Mio   
+kb1:Piano&Strng1
+kb1:Piano&Strng2
+kb1:StereoGrand1
+kb1:StereoGrand2
+kb1:StereoGrand3
+kb1:StereoGrand4
+kb1:Sung Piano  
+kb1:Techno Piano
+kb2:Ballad Tine 
+kb2:Classic EP 1
+kb2:Classic EP 2
+kb2:Classic EP 3
+kb2:Classic EP 4
+kb2:DooGie      
+kb2:Dynofunk EP 
+kb2:FM El Piano 
+kb2:FM EP 1     
+kb2:FM EP 2     
+kb2:FM2Classic  
+kb2:Hard Dyno   
+kb2:Hard EP     
+kb2:Hard Tine   
+kb2:Med Dyno    
+kb2:Med EP      
+kb2:Pretty EP   
+kb2:PrettyLushEP
+kb2:Rezzroadz   
+kb2:Suitcase EP 
+kb2:Supatramp EP
+kb2:Wurlitzer Hd
+kb2:WurlitzerSft
+kb2:WurlyD'Layer
+kb3:B3 X-Wheel 1
+kb3:B3OrganWave1
+kb3:B3OrganWave2
+kb3:Bally Yard  
+kb3:Clean X-Whl 
+kb3:Clicky B    
+kb3:Day         
+kb3:DirT baG    
+kb3:DirtyHertz  
+kb3:Disco       
+kb3:Drawbar     
+kb3:Drawbars    
+kb3:DX          
+kb3:DX Organ    
+kb3:Full Organ  
+kb3:Gospel Soul 
+kb3:GreenEyed   
+kb3:Gritty B Wav
+kb3:Grundge XXX 
+kb3:JX Organ    
+kb3:Kool N Mello
+kb3:Mellow Man  
+kb3:Nod         
+kb3:Oddd Organ  
+kb3:Org Lite    
+kb3:Organomics X
+kb3:Perc Organ  
+kb3:Pipe Organ  
+kb3:Simple Organ
+kb3:Testify     
+kb3:Tone Organ  
+kb3:Upper B     
+kb3:Vox 1       
+kb3:Vox 2       
+kb3:WheelSpeed B
+kb4:Breathy     
+kb4:Clavinet 1  
+kb4:Clavinet 2  
+kb4:Clavinet 3  
+kb4:Clavin' It  
+kb4:Clavity     
+kb4:Comp Keyz 1 
+kb4:Comp Keyz 2 
+kb4:Comp Keyz 3 
+kb4:Crystal     
+kb4:Dance       
+kb4:Dyno Piano  
+kb4:DynoWahClav 
+kb4:E Grand     
+kb4:Elecre 1    
+kb4:Elecre 2    
+kb4:Elecre 3    
+kb4:Electrified 
+kb4:EP Fog      
+kb4:EP Roll 1   
+kb4:EP Roll 2   
+kb4:EP Roll 3   
+kb4:Farfisa 1   
+kb4:Farfisa 2   
+kb4:Farfisa 3   
+kb4:Grand FM    
+kb4:Hard Comp 1 
+kb4:Hard Comp 2 
+kb4:Hard Comp 3 
+kb4:Hard Comp 4 
+kb4:Hard Comp 5 
+kb4:Hard Tined  
+kb4:Knockkerz   
+kb4:M12Tines    
+kb4:Mystery Roll
+kb4:Nu Tynez 1  
+kb4:Nu Tynez 2  
+kb4:PerkyRhodes 
+kb4:Pharpheeza  
+kb4:PnoWndStrg 1
+kb4:PnoWndStrg 2
+kb4:Roll        
+kb4:RollinDreams
+kb4:Syn Ballad  
+kb4:Synth Cheese
+kb4:Synth Organ 
+kb4:Tine EP     
+kb4:Vox-A-Phaze 
+kb4:Whistle Keys
+bs1:Acoustic    
+bs1:DynoStandUp 
+bs1:Up ~        
+bs1:Upright 1   
+bs1:Upright 2   
+bs1:Upright Days
+bs1:WalkinUprite
+bs2:BADtube     
+bs2:Big Basic   
+bs2:EP 1        
+bs2:EP 2        
+bs2:EP 3        
+bs2:EP Bass     
+bs2:Fing&Harms 1
+bs2:Finger Out  
+bs2:Finger&Harmz
+bs2:Finger1     
+bs2:Finger2     
+bs2:Fingered In 
+bs2:Fretless 1  
+bs2:Fretless 2  
+bs2:Fretless 3  
+bs2:Fretless 4  
+bs2:Fretless 5  
+bs2:Fretless'd  
+bs2:FretterNot  
+bs2:Full Finger 
+bs2:Gruzzy Pop  
+bs2:Harmonics   
+bs2:MelloRounder
+bs2:Picked      
+bs2:Picked Off  
+bs2:Pop         
+bs2:Pop Slide 1 
+bs2:Pop Slide 2 
+bs2:Pop Slide 3 
+bs2:Pop Slide 4 
+bs2:Signfeld Pop
+bs2:Slap 1      
+bs2:Slap 2      
+bs2:Slap 3      
+bs2:Slap 4      
+bs2:Slap 5      
+bs2:Slap Me!    
+bs2:SlapBack    
+bs2:Slappity    
+bs2:Slop Bass   
+bs2:Sloppiest   
+bs2:Spankin     
+bs2:ThickFretles
+bs2:VeloFretless
+bs3:2600        
+bs3:Analow      
+bs3:ATC 1       
+bs3:ATC 2       
+bs3:ATC 3       
+bs3:ATC 4       
+bs3:Beauty      
+bs3:Below Sub   
+bs3:Big Basic   
+bs3:DB Sub      
+bs3:Easy        
+bs3:Face Bass   
+bs3:Fat Sunbass 
+bs3:Four U      
+bs3:HipPocket   
+bs3:Homeboy E   
+bs3:Ice         
+bs3:JP-Moog 4   
+bs3:Line        
+bs3:Lowness     
+bs3:MassiveMini 
+bs3:MooG DropS  
+bs3:Moogy Mudd  
+bs3:Planet Bass 
+bs3:Plex        
+bs3:Poly Style  
+bs3:Real Low    
+bs3:RoundabouT  
+bs3:SE Micro    
+bs3:SE Sub 1    
+bs3:SE Sub 2    
+bs3:Spanker     
+bs3:Spkr Damage 
+bs3:Sub Core    
+bs3:Sub Drop    
+bs3:Sub Plunk   
+bs3:Sub Poke    
+bs3:Sub Pummeled
+bs3:Sub-Basement
+bs3:Subtle Bass 
+bs3:Super Sub   
+bs3:The Tunnel  
+bs3:Thickley Dub
+bs3:Thip Kong   
+bs3:Way Low Down
+bs3:Wide Chorus 
+bs3:ZuB CoMpLeX 
+bs4:3 O WorM    
+bs4:Acid        
+bs4:Acid 4 Ever 
+bs4:Analogic    
+bs4:Asidic Bass 
+bs4:Bass Hit    
+bs4:Bass ic     
+bs4:Bernie Funk 
+bs4:Big Sync    
+bs4:Bondomatic  
+bs4:Brite Beauty
+bs4:Brolin's 1st
+bs4:Buzza       
+bs4:Crystal Meth
+bs4:CZ101       
+bs4:DB          
+bs4:DB9 1       
+bs4:DB9 2       
+bs4:Deep Pocket 
+bs4:Digi-Punch  
+bs4:Distorto-TB 
+bs4:Examination 
+bs4:FM          
+bs4:FM Sonic    
+bs4:FP Powerbass
+bs4:HaLLoW !    
+bs4:In the Money
+bs4:JP4 Bass    
+bs4:Juno        
+bs4:Luke's Best 
+bs4:Memory Moog 
+bs4:Micro       
+bs4:Mini 1      
+bs4:Mini 2      
+bs4:Mini 3      
+bs4:Mini 4      
+bs4:Mini More   
+bs4:Mod da Wheel
+bs4:Moog 1      
+bs4:Moog 2      
+bs4:Moog Tri    
+bs4:Mr. Clean   
+bs4:Not So Mini 
+bs4:Occitan Root
+bs4:Octave      
+bs4:Org Gruz    
+bs4:Osc-Kars    
+bs4:PercoOrgana 
+bs4:Plexy       
+bs4:Power Q     
+bs4:PuLs A'ting 
+bs4:Q Attack    
+bs4:Q Bass 1    
+bs4:Q Bass 2    
+bs4:Q Bass 3    
+bs4:Q Bass 4    
+bs4:Q Snap      
+bs4:Reverend JB 
+bs4:Ripped303   
+bs4:Saw Sync    
+bs4:Sawz        
+bs4:SE 1        
+bs4:SE 2        
+bs4:SE One      
+bs4:Shift       
+bs4:Simple 3    
+bs4:Sobered Up  
+bs4:StraytUPjunO
+bs4:Sync Echo   
+bs4:Synth 1     
+bs4:Synth 2     
+bs4:Synth 3     
+bs4:Synth 4     
+bs4:Synth 5     
+bs4:Synth 6     
+bs4:Synth 7     
+bs4:Synth 8     
+bs4:Synth 9     
+bs4:Synth10     
+bs4:TB 1        
+bs4:TB 2        
+bs4:TB 3        
+bs4:TB 4        
+bs4:Thunk       
+bs4:Tight Mo MW 
+bs4:Tres o Tres 
+bs4:Walky Talk2 
+bs5:All Purpose 
+bs5:Buzzed      
+bs5:DX 1        
+bs5:DX 2        
+bs5:DX 3        
+bs5:Feeder      
+bs5:Funkalicous 
+bs5:Home 1      
+bs5:Home 2      
+bs5:Hybrid      
+bs5:Knocker     
+bs5:Mozambique  
+bs5:Mozamdrip   
+bs5:Oh Yea      
+bs5:Organ Bass 1
+bs5:Organ Bass 2
+bs5:Perco       
+bs5:Phlappy     
+bs5:Pocket      
+bs5:Pure        
+bs5:Say What    
+bs5:Slider      
+bs5:Smoothy     
+bs5:Soft & Hard 
+bs5:Sonics      
+bs5:Spitt       
+bs5:Spread      
+bs5:Standard    
+bs5:Street      
+bs5:Tapp        
+bs5:Thickener   
+bs5:Ultimate 1  
+bs5:Ultimate 2  
+bs5:Ultimate 3  
+bs5:VP1 1       
+bs5:VP1 2       
+bs5:WetMonica   
+gtr:Carlos      
+gtr:Cast Teller 
+gtr:Chuckin     
+gtr:Cry Babies  
+gtr:Dark Gut    
+gtr:Distorter-X 
+gtr:Dolobroso   
+gtr:El Mute 1   
+gtr:El Mute 2   
+gtr:Electric 1  
+gtr:Electric 2  
+gtr:ElectricDis 
+gtr:EmmTV Crunch
+gtr:FlangnVioWah
+gtr:FullNylon   
+gtr:FunkChunk   
+gtr:Heavy Mon   
+gtr:JangleWah   
+gtr:Jazz        
+gtr:Jazzed      
+gtr:LA Strata   
+gtr:Looz 12s    
+gtr:MellowElect 
+gtr:Metal Head  
+gtr:MutableJazz 
+gtr:Mutant Pick 
+gtr:Mute Gtr vsw
+gtr:Mute-Ted    
+gtr:Mutes       
+gtr:Nrysty      
+gtr:Nrysty12    
+gtr:Nye Lonny   
+gtr:Nylon       
+gtr:Nylon Silk  
+gtr:Nylon Vox   
+gtr:Nylonistic  
+gtr:Pantastic   
+gtr:Power 1     
+gtr:Power 2     
+gtr:Rezatronics 
+gtr:Slippery Joe
+gtr:SlipSly     
+gtr:Spy         
+gtr:Steel       
+gtr:Steel Real  
+gtr:Strat Wow   
+gtr:The 12String
+gtr:ThickPick   
+gtr:TwangyNylon 
+gtr:Waaaa Waaaa 
+gtr:Wah Minor   
+gtr:WahWah Spice
+str:Abbey'Strngs
+str:Analog      
+str:Analogic    
+str:ArcotremPizz
+str:Big Strings 
+str:ChamberGrp  
+str:DarkMoods   
+str:Digital 1   
+str:Digital 2   
+str:Drews Harp  
+str:ExtremeStrng
+str:Fortuna     
+str:GlissiPizzi 
+str:Helium      
+str:Hindookurdoo
+str:Japanman    
+str:Koto        
+str:Kult E Vatn'
+str:Many Quarts 
+str:Matrix Synth
+str:MeltroniKnbD
+str:Morocco Feel
+str:Obie'anna   
+str:Pizzicati   
+str:Pizzicato   
+str:Real Matrix 
+str:Rich Analogs
+str:Section     
+str:Sectioned   
+str:Sham Wave   
+str:SitarTalk   
+str:Sneajy      
+str:Solo Quartet
+str:So Long     
+str:SoloOutFront
+str:Swoon       
+str:Texture     
+str:The Lonely 1
+str:Tron        
+str:TronStrings 
+str:Velo Marcato
+str:Victrola    
+brs:5th Wave    
+brs:Airy Trumpet
+brs:B4PCM Brass 
+brs:Barry Bones 
+brs:Bigga       
+brs:Bone        
+brs:Brass&Bari  
+brs:BrassControl
+brs:Brassy      
+brs:Breathy Mute
+brs:ClassicBrass
+brs:Da Brasses  
+brs:Dizzy       
+brs:Don'sTrumpet
+brs:Ensemble    
+brs:Han's E4s   
+brs:Horny       
+brs:Huge Brass  
+brs:Louis       
+brs:MellowD'Trmp
+brs:Miles       
+brs:Profit 5    
+brs:RadioHorns  
+brs:Reed & Brass
+brs:S'miles     
+brs:Schwyn 1    
+brs:Section     
+brs:SforzadoEnsb
+   :default     

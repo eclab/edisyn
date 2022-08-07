@@ -1,0 +1,405 @@
+   :None        
+pno:Piano       
+pno:Piano Pad   
+pno:Loose Piano 
+pno:Tight Piano 
+str:Strings     
+str:Long String 
+str:Slow String 
+str:Dark String 
+vox:Voices      
+vox:Slow Voices 
+vox:Dark Choir  
+wnd:Synth Flute 
+wnd:Soft Flute  
+wnd:Alto Sax    
+wnd:Tenor Sax   
+wnd:Baritone Sax
+wnd:Dark Sax    
+brs:Trumpet Sft 
+brs:Dark TrumS  
+brs:Trumpet Hrd 
+brs:Dark TrumpH 
+brs:Horn Falls  
+brs:Trombone 1  
+brs:Trombone 2  
+brs:French Horn 
+brs:Brass 1     
+brs:Brass 2     
+brs:Brass 3     
+brs:Trom / Sax  
+gtr:Guitar Mute 
+gtr:El. Guitar  
+gtr:Ac. Guitar  
+bas:Rock Bass   
+bas:Stone Bass  
+bas:Flint Bass  
+bas:Funk Slap   
+bas:Funk Pop    
+bas:Harmonics   
+bas:Rock/Harms  
+bas:Stone/Harms 
+bas:Nose Bass   
+bas:Bass Syn 1  
+bas:Bass Syn 2  
+pad:Synth Pad   
+pad:Med Env Pad 
+pad:Lng Env Pad 
+pad:Dark Synth  
+org:Perc. Organ 
+prc:Marimba     
+prc:Vibraphone  
+kit:All Perc. B 
+kit:All Perc.UB 
+kit:Standard 1  
+kit:Standard 2  
+kit:Standard 3  
+prc:Kicks       
+prc:Snares      
+prc:Toms        
+prc:Cymbals     
+kit:Latin Drums 
+kit:Latin Perc. 
+prc:AGoGo       
+prc:Woodblock   
+prc:Conga       
+prc:Timbal      
+prc:Ride        
+kit:Perc FX 1   
+kit:Perc FX 2   
+prc:Metal       
+vox:StrayVoice1 
+vox:StrayVoice2 
+vox:StrayVoice3 
+vox:StrayVoice4 
+str:SynthStrng1 
+str:SynthStrng2 
+sfx:Animals     
+wnd:Reed        
+gtr:Pluck 1     
+gtr:Pluck 2     
+prc:Mallet 1    
+prc:Mallet 2    
+str:Arco Basses 
+str:Arco Celli  
+str:Arco Violas 
+str:ArcoViolins 
+str:Dark Basses 
+str:Dark Celli  
+str:Dark Violas 
+str:DarkViolins 
+str:Low Tremolo 
+str:HighTremolo 
+str:Tremolande  
+str:Strings 1   
+str:Strings 2   
+str:Strings 3   
+str:Solo Cello  
+str:Solo Viola  
+str:Solo Violin 
+str:Quartet 1   
+str:Quartet 2   
+str:Quartet 3   
+str:Quartet 4   
+str:Gambambo    
+str:Pizz Basses 
+str:Pizz Celli  
+str:Pizz Violas 
+str:Pizz Violin 
+str:Pizzicombo  
+wnd:Flute w/Vib 
+wnd:Flute noVib 
+wnd:Alt. Flute  
+wnd:Piccolo     
+wnd:Bass Clar.  
+wnd:Clarinet    
+wnd:B.Clar/Clar 
+wnd:Cntrbassoon 
+wnd:Bassoon     
+wnd:EnglishHorn 
+wnd:Oboe w/Vib  
+wnd:Oboe noVib  
+wnd:Alt. Oboe   
+wnd:Woodwinds   
+brs:Hi Trombone 
+brs:Lo Trombone 
+brs:mf Trumpet  
+brs:ff Trumpet  
+brs:Harmon Mute 
+brs:mf Fr. Horn 
+brs:ff Fr. Horn 
+brs:Tuba        
+brs:ff Brass    
+brs:mf Brass    
+str:Harp        
+prc:Xylophone   
+prc:Celesta     
+prc:Triangle    
+prc:Bass Drum   
+prc:Snare Drum+ 
+prc:Piatti      
+prc:TempleBlock 
+prc:Glockenspiel
+kit:Percussion1 
+kit:Percussion2 
+kit:Low Perc 2  
+kit:High Perc 2 
+prc:Tubular Bell
+prc:Timpani     
+prc:Timp./T.Bell
+prc:Tambourine  
+prc:Tam Tam     
+kit:Percussion3 
+sfx:Special FX  
+bas:Filter Bass 
+bas:UprightPizz 
+gtr:NylonPluck1 
+gtr:NylonPluck2 
+bas:PluckedBass 
+eth:Renaissance 
+eth:East Indian 
+eth:Folk America
+eth:Down Under  
+str:Troubador   
+str:Irish Harp  
+str:Dulcimer    
+eth:Koto        
+gtr:Banjo       
+eth:Hi Tar      
+gtr:Guitar      
+eth:Sitar       
+eth:Tambouras   
+eth:Psaltry     
+sfx:Waterphone1 
+sfx:Waterphone2 
+bas:Pizz Bass   
+eth:Tam/Sitar   
+red:Accordion   
+red:Harmonica   
+red:VbHarmonica 
+eth:Mizmars     
+eth:Shenai      
+wnd:PenWhistle  
+wnd:Ocarina     
+eth:Shofar A    
+eth:Shofar B    
+eth:Shofars     
+eth:Siku        
+eth:Shakuhachi  
+eth:Ney Flute   
+eth:BagpipeDrone
+eth:Chanter A   
+eth:Chanter B   
+eth:Dron/ChantA 
+eth:Dron/ChantB 
+eth:Roarr/Catch 
+eth:Bull Roarer 
+eth:SpiritCtchr 
+eth:Didjeridu   
+eth:Didjeridu A 
+eth:Didjeridu B 
+eth:Didjeridu C 
+eth:Jews Harp   
+eth:Jews Harp A 
+eth:Jews Harp B 
+eth:Jews Harp C 
+eth:Jews Harp D 
+brs:Trombone    
+brs:FrenchHornP3
+brs:Trumpet     
+kit:MidEastDrum 
+kit:Udu Drum    
+kit:Bata Drums  
+kit:The Tabla   
+kit:Wood Drum   
+prc:Gamelan     
+prc:BonangKenon 
+prc:KenongBnang 
+prc:SeribuPulua 
+prc:Surdo Drum  
+prc:Maracas     
+prc:Plexitones  
+kit:Traps       
+kit:All Perc 1  
+kit:All Perc 1P 
+kit:All Perc 2  
+prc:Snare Drum  
+prc:Kick Drum   
+prc:Hihat Clsed 
+prc:Hihat Open  
+prc:Woodblock P3
+prc:Steel Drum  
+prc:Castanet    
+prc:Buzz/Lkmbe  
+prc:Likembe     
+prc:LikembeBuzz 
+prc:Surdo Open  
+prc:Surdo Mute  
+prc:Deff Slap   
+prc:Deff Mute   
+prc:Bendir      
+prc:Req Open    
+prc:Req Slap    
+prc:Maraca A    
+prc:Maraca B    
+prc:Maraca C    
+prc:Maraca D    
+prc:Udu Tone    
+prc:Udu Release 
+prc:Udu Finger  
+prc:Udu Slap    
+prc:BatalpuTone 
+prc:BatalpuSlap 
+prc:BataEnuTone 
+prc:Bata HiTone 
+prc:Bata HiMute 
+prc:Bata HiSlap 
+prc:Crickets    
+prc:Baya Tone   
+prc:Baya Slap   
+prc:Baya Hit    
+prc:Tabla Tone  
+prc:Tabla MuteA 
+prc:Tabla MuteB 
+prc:Tabla MuteC 
+prc:Tabla Open  
+prc:China Gong  
+prc:Nepal Cymbal
+prc:Tibetan Bowl
+prc:Crotales    
+prc:Bonang      
+prc:Kenong      
+prc:Saron       
+prc:Suwuk Gong  
+prc:ClapprStick 
+prc:RoseWd Bass 
+prc:RoseWd Tick 
+prc:RoseWd Harm 
+prc:RoseWd Fngr 
+prc:Tanz Shaker 
+prc:Hula Stick  
+prc:Log Drum    
+prc:Plexi-Tone  
+prc:Plexi-SlapA 
+prc:Plexi-SlapB 
+prc:Plexi-SlapC 
+prc:AsianGongs1 
+prc:AsianGongs2 
+prc:Suwak Wave  
+kit:SavannahLand
+sfx:Swamp Thing 
+sfx:Bugs 1      
+sfx:Bugs 2      
+sfx:Bugs 3      
+sfx:Bugs 4      
+sfx:Bugs 5      
+sfx:Bugs 6      
+sfx:Crickets    
+sfx:Woodpecker1 
+sfx:Woodpecker2 
+sfx:Frogz       
+sfx:Tribe 1     
+sfx:Tribe 2     
+wav:Oct 1 Sine  
+wav:Oct 2 All   
+wav:Oct 3 All   
+wav:Oct 4 All   
+wav:Oct 5 All   
+wav:Oct 6 All   
+wav:Oct 7 All   
+wav:Oct 2 Odd   
+wav:Oct 3 Odd   
+wav:Oct 4 Odd   
+wav:Oct 5 Odd   
+wav:Oct 6 Odd   
+wav:Oct 7 Odd   
+wav:Oct 2 Even  
+wav:Oct 3 Even  
+wav:Oct 4 Even  
+wav:Oct 5 Even  
+wav:Oct 6 Even  
+wav:Oct 7 Even  
+wav:Low Odds    
+wav:Low Evens   
+wav:FourOctaves 
+wav:Synth Cyc 1 
+wav:Synth Cyc 2 
+wav:Synth Cyc 3 
+wav:Synth Cyc 4 
+wav:Fund Gone 1 
+wav:Fund Gone 2 
+wav:Bite Cyc    
+wav:Buzzy Cyc 1 
+wav:Metlphone 1 
+wav:Metlphone 2 
+wav:Metlphone 3 
+wav:Metlphone 4 
+wav:Duck Cyc 1  
+wav:Duck Cyc 2  
+wav:Duck Cyc 3  
+wav:Wind Cyc 1  
+wav:Wind Cyc 2  
+wav:Wind Cyc 3  
+wav:Wind Cyc 4  
+wav:Organ Cyc 1 
+wav:Organ Cyc 2 
+sfx:Noise       
+sfx:Dark Noise  
+wav:Sine Wave   
+wav:Triangle    
+wav:Tri Wave    
+wav:Square      
+wav:Square Wave 
+wav:Pulse 33%   
+wav:Pulse 25%   
+wav:Pulse 10%   
+wav:Sawtooth    
+wav:SawOddGone  
+wav:Ramp        
+wav:RampEveOnly 
+wav:Vio Essence 
+wav:Buzzoon     
+wav:Brassy Wave 
+wav:Reedy Buzz  
+wav:Growl Wave  
+wav:HarpsiWave  
+wav:Fuzzy Gruzz 
+wav:Power 5ths  
+wav:Filt Saw    
+wav:Ice Bell    
+wav:Bronze Age  
+wav:Iron Plate  
+wav:Aluminum    
+wav:Lead Beam   
+wav:SteelXtract 
+wav:WinterGlass 
+wav:TwnBellWash 
+wav:Orch Bells  
+wav:Tubular SE  
+wav:SoftBellWave
+wav:Swirly      
+wav:Tack Attack 
+wav:ShimmerWave 
+wav:Moog Lead   
+wav:B3 SE       
+wav:Mild Tone   
+wav:Piper       
+wav:Ah Wave     
+wav:Vocal Wave  
+wav:Fuzzy Clav  
+wav:Electrhode  
+wav:Whine 1     
+wav:Whine 2     
+wav:Metal Drone 
+wav:Silver Race 
+wav:MetalAttack 
+kit:GM Drums 1  
+kit:GM Drums 2  
+kit:GM Drums 3  
+kit:GM Drums 4  
+kit:GM 1 No Hats
+kit:GM 2 No Hats
+kit:GM 3 No Hats
+kit:GM 4 No Hats
+kit:GM Hi Hats 1
+kit:GM Hi Hats 2

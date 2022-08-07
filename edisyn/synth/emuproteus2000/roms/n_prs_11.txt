@@ -1,0 +1,256 @@
+wnd:All Winds   
+wnd:Reed Group1 
+wnd:Reed Group2 
+wnd:Reed Group3 
+wnd:FluteSection
+wnd:Simple Woods
+wnd:Light Winds 
+wnd:Woods Room  
+wnd:LoSoft Woods
+wnd:Woodwinds1  
+wnd:Woodwinds2  
+brs:All Brass 1 
+brs:All Brass 2 
+brs:All Brass 3 
+brs:Large Brass 
+brs:OctTrumpets 
+brs:OctBrassSect
+cmb:Vln/Oboe w  
+cmb:Cel/Bassn w 
+cmb:Bss/CntBsn w
+cmb:Flt/Clar w  
+cmb:Flt/Oboe w  
+wnd:2 AFlutes mf
+str:Quartet 1   
+str:Quartet 2   
+str:Group Pizz 1
+str:Group Pizz 2
+str:Group Pizz 3
+str:Group Pizz 4
+vln:SoloVibrato1
+vln:SoloVibrato2
+vln:Solo Pizz   
+vln:Solo/Pizz w 
+vla:SoloVibrato1
+vla:SoloVibrato2
+vla:SoloVibrato3
+vla:Sad Viola   
+vla:Solo Pizz   
+vla:Solo/Pizz w 
+cel:SoloVibrato1
+cel:SoloVibrato2
+cel:Solo Pizz   
+cel:Solo/Pizz w 
+bas:SoloVibrato1
+bas:SoloVibrato2
+bas:Solo Pizz   
+bas:Solo/Pizz w 
+str:BassClloDeep
+wnd:Piccolo     
+wnd:Piccolo p   
+wnd:Atk Piccolo 
+wnd:Real Piccolo
+wnd:Piccolo Hall
+wnd:Flute       
+wnd:Flute p     
+wnd:Room Flute  
+wnd:Chiff Flute 
+wnd:Click Flute 
+wnd:Hall Flute  
+wnd:AltoFlute   
+wnd:AltoFlute p 
+wnd:A.Flt w/Hall
+wnd:Click A.Flt 
+wnd:AltoFlteHall
+wnd:Oboe        
+wnd:Oboe p      
+wnd:Soft Oboe   
+wnd:Oboe w/Hall 
+wnd:Oboe Hall   
+wnd:English Horn
+wnd:E.Horn p    
+wnd:Dyna-EHorn  
+wnd:E.Horn w/Hll
+wnd:E.Horn Hall 
+wnd:Clarinet    
+wnd:Clarinet p  
+wnd:Clarinette  
+wnd:Clar w/Hall 
+wnd:DynaClarinet
+wnd:ClarinetHall
+wnd:BassClarinet
+wnd:B.Clar p    
+wnd:B.Clar Atk  
+wnd:B.Clar w/Hll
+wnd:B.Clar Hall 
+wnd:Bassoon     
+wnd:Bassoon p   
+wnd:Bassoon Dark
+wnd:Bassoon Soft
+wnd:Dyna-Bassoon
+wnd:Bassoon Hall
+wnd:ContraBassn 
+wnd:ContraBssn p
+wnd:CntraBssnDrk
+wnd:Dyna-CntBssn
+wnd:CntrBssnHall
+brs:Soft FHorn  
+brs:MezzFHorn   
+brs:PairOfHorns 
+brs:Full Horns  
+brs:Velo French 
+brs:FHorns Hall 
+brs:FHorn p/mf/f
+brs:Dyna-French 
+brs:Trumpet mf  
+brs:Soft Trumpet
+brs:Trumpet ff  
+brs:Trumpet 1   
+brs:Trumpet 2   
+brs:2 Trumpets  
+brs:Trumpets    
+brs:Soft TrmBone
+brs:Trombone mf 
+brs:Bright Tbone
+brs:Trombone    
+brs:Velo-TrmBone
+brs:Dyna-Bone   
+brs:Tbone p/m/f 
+brs:Bass Tbone  
+brs:Bass TrmBone
+brs:Velo BsTbone
+brs:DynaBsTbone 
+brs:BTbone p/mf 
+brs:Tuba 1      
+brs:Dyna-Tuba   
+brs:Tuba 2      
+brs:Velo Tuba   
+brs:Tuba p/mf/ff
+wnd:Woodwinds   
+wnd:Soft Winds  
+wnd:HallWindSect
+wnd:Flute Beauty
+wnd:Warm Winds  
+wnd:mf WoodSectn
+wnd:Mega-Woods  
+wnd:Deep Woods  
+wnd:WarmFltsUni 
+wnd:WarmFltsOcts
+wnd:WrmFlts&Pics
+wnd:Warm Oboes  
+wnd:Warm EHorns 
+wnd:Woodwinds 1 
+wnd:Woodwinds 2 
+wnd:Woodwinds 3 
+wnd:Woodwinds 4 
+wnd:Woodwinds 5 
+wnd:Woodwinds 6 
+wnd:BsClar/CtraB
+wnd:Bassoon Hall
+brs:Brass       
+brs:Big Brass 1 
+brs:Big Brass 2 
+brs:Trumpet     
+brs:Trumpets    
+brs:Trmptsp/m/f 
+brs:FrenchHorns1
+brs:FrenchHorns2
+brs:FHornsp/mf/f
+brs:Warm Bones  
+brs:Tbones p/m/f
+brs:BTbones p/mf
+brs:Dyna Brass  
+brs:Sfz Brass   
+brs:SectionBrass
+prc:Batterie 1  
+prc:Batterie 2  
+prc:Dual Batt's 
+prc:Bss/Snr/Crsh
+prc:Bass Drums  
+prc:Velo Bass 1 
+prc:Velo Bass 2 
+prc:Velo Bass 3 
+prc:All BassDrum
+prc:Pitched Timp
+prc:All Timpani 
+prc:All Snares  
+prc:Velo Snare 1
+prc:Velo Snare 2
+prc:Velo Snare 3
+prc:Q'd Snares  
+prc:The Timps   
+prc:VeloTimp 1  
+prc:VeloTimp 2  
+prc:VeloTimp 3  
+prc:VeloTimp 4  
+prc:Velo Timp1/2
+prc:Velo Timp3/4
+prc:VelTimpDrums
+prc:Timps&Snares
+prc:Timp&Cymbl 1
+prc:Timp&Cymbl 2
+prc:Timp&Cymbl 3
+prc:Timps&Piatti
+prc:All Piatti  
+prc:Piatti Wide 
+prc:Velo Piatti 
+prc:Toms1&2/3&4w
+prc:Orch Bells 1
+prc:Orch Bells 2
+prc:T Bells Mono
+prc:TBells Wide 
+prc:Celesta     
+prc:Celesta&Xylo
+prc:Marimba     
+prc:Marimba&Xylo
+prc:Xylophone1  
+prc:Xylophone2  
+prc:Mallets     
+prc:Celebells   
+prc:The Bells   
+prc:Bell Tree   
+prc:Timberell   
+prc:Childbells  
+prc:Triangle w  
+prc:Bongo 1 w   
+prc:Bongo 2 w   
+prc:FngrCym+ w  
+prc:Castanets w 
+prc:Block/Stik w
+prc:Maracas w   
+prc:Guiro/Clve w
+prc:Tambourine w
+prc:Sheet/Anvl w
+prc:Ratchet wh  
+prc:Gng/Piatti w
+prc:Clockworx   
+org:Pipe Organ2 
+cmb:Strgs&Flute 
+cmb:SoloBone&Wnd
+cmb:BSec/Hall   
+cmb:Brass&Woods 
+cmb:SoloBone&Wnd
+cmb:Brass&Reeds 
+cmb:Winds&Brass 
+cmb:WarmBrssWind
+cmb:Sloopy      
+cmb:RoundChamber
+cmb:Viological  
+cmb:MysticalHarp
+cmb:Warrior     
+cmb:SynBrass&Pad
+brs:SynthBrass 1
+brs:SynthBrass 2
+brs:SynthBrass 3
+brs:SynthBrass 4
+brs:Synth Wind  
+hrp:Harp 1      
+hrp:Harp 2      
+hrp:Harp 3      
+hrp:Stereo Harp 
+hrp:Magic Harps 
+hrp:Bell Harp   
+sfx:VisionQuest 
+sfx:Darthwaves  
+lnk:PtchdTimpLnk
+   :V2KRom2 V1.0

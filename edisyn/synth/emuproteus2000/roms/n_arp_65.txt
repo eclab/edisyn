@@ -1,0 +1,100 @@
+Chord Tech 1    
+Chord Tech 2    
+Chord Tech 3    
+Chord Tech 4    
+Chord Tech 5    
+Chord Tech 6    
+Chord Tech 7    
+Chord Tech 8    
+Chord Tech 9    
+Chord Tech10    
+Chord Tech11    
+Chord Tech12    
+Chord Tech13    
+Chord Tech14    
+Chord Tech15    
+Velo Chord 1    
+Velo Chord 2    
+Velo Chord 3    
+Velo Chord 4    
+Velo Chord 5    
+Velo Chord 6    
+Velo Chord 7    
+Velo Chord 8    
+Velo Chord 9    
+Velo Chord10    
+Velo Chord11    
+Velo Chord12    
+Velo Chord13    
+Velo Chord14    
+Velo Chord15    
+Velo   u&d1     
+Velo   u&d2     
+Velo   u&d3     
+Velo   u&d4     
+Velo   u&d5     
+Velo   u&d6     
+Velo   u&d7     
+Velo   u&d8     
+Velo   u&d9     
+U-knower   1    
+U-knower   2    
+U-knower   3    
+U-knower   4    
+U-knower   5    
+U-velocity 1    
+U-velocity 2    
+U-velocity 3    
+U-velocity 4    
+U-velocity 5    
+U-velocity 6    
+BassGroover1    
+BassGroover2    
+BassGroover3    
+BassGroover4    
+BassGroover5    
+TranceBass 1    
+TranceBass 2    
+TranceBass 3    
+TranceBass 4    
+TranceBass 5    
+Bass on    1    
+Bass on    2    
+Bass on    3    
+Bass on    4    
+Bass on    5    
+T-Bee  vel 1    
+T-Bee  vel 2    
+T-Bee  vel 3    
+T-Bee  vel 4    
+T-Bee  vel 5    
+T-Bee  vel 6    
+T-Bee  vel 7    
+T-Bee  vel 8    
+T-Bee  vel 9    
+T-Bee  vel10    
+Low groove 1    
+Low groove 2    
+Low groove 3    
+Low groove 4    
+Low groove 5    
+TSCY seq   1    
+TSCY seq   2    
+TSCY seq   3    
+TSCY seq   4    
+TSCY seq   5    
+TSCY seq   6    
+TSCY seq   7    
+PanflutoMove    
+Tec O Quence    
+Da la la la     
+Sequenceron     
+RT Xfd vel 1    
+RT Xfd vel 2    
+RT Xfd vel 3    
+RT Xfd vel 4    
+RT Xfd vel 5    
+RT Xfd vel 6    
+RT Xfd vel 7    
+RT Xfd vel 8    
+RT Xfd vel 9    

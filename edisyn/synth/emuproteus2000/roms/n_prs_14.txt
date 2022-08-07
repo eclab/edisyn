@@ -1,0 +1,512 @@
+kit:K-0         
+kit:K-1         
+kit:K-2         
+kit:K-3         
+kit:K-4         
+kit:K-5         
+kit:K-6         
+kit:K-7         
+kit:K-8         
+kit:K-9         
+kit:K-10        
+kit:K-11        
+kit:K-12        
+kit:K-13        
+kit:K-14        
+kit:K-15        
+kit:K-16        
+kit:K-17        
+kit:K-808       
+kit:K-909       
+kit:Acoustic 1  
+kit:Acoustic 2  
+kit:Hybrid      
+kit:Hard 1      
+kit:Hard 2      
+kit:K-1  HPF    
+kit:K-1 up 9    
+kit:K-2 millini 
+kit:K-3 LFO~LPF 
+kit:K-4 LFO~AMP 
+kit:K-5 Octave  
+kit:K-5 up 7    
+kit:K-5 Klub    
+kit:K-6 Chorus  
+kit:K-7 LFO~REZ 
+kit:K-8 16tsPan 
+kit:K-8~8 go    
+kit:K-9 D-Pan   
+kit:K-9 up 12   
+kit:K-10 D-Up   
+kit:K-10 High Q 
+kit:K-11 T-Dly  
+kit:K-12 Q-Dly  
+kit:K-13 QP-Dly 
+kit:K-14 D-Down 
+kit:K-15 D-D2   
+kit:K-16 Tremor 
+kit:808 Delay   
+kit:Envelope    
+prc:Kicks 1     
+prc:Kicks 2     
+prc:Solo Kick 1 
+prc:Solo Kick 2 
+prc:Snares 1    
+prc:Snares 2    
+prc:Snares 1 +7 
+prc:Snares 2 Eff
+prc:Snares 2 Rev
+prc:Snare Fill 1
+prc:Snare Fill 2
+prc:Ambi Snare  
+prc:Toms & Stuff
+prc:Congas etc 1
+prc:Congas etc 2
+prc:Hats 1      
+prc:Hats 2      
+prc:Solo Hat 1  
+prc:Solo Hat 2  
+prc:Tambs       
+prc:Cymbals     
+prc:Shakers etc.
+prc:Bells       
+prc:Blocks      
+prc:Claps/Snaps 
+prc:Misc        
+prc:Warehouse   
+prc:Scratches 1 
+prc:Scratches 2 
+prc:Tic a Tak   
+prc:Ubu Delay FX
+hit:Enrezzle    
+hit:PLATINUM    
+hit:Voxy        
+hit:Krunchy     
+hit:Dreamer Tags
+hit:Boink-King  
+hit:Nice 1      
+hit:Nice 2      
+hit:Nice 3      
+hit:Logger      
+hit:Dance  1    
+hit:Dance  2    
+hit:Dance  3    
+hit:Dance  4    
+hit:Dance  8    
+hit:Dance 11    
+hit:Dance 12    
+hit:Dance 14    
+hit:Dance 16    
+hit:Dance 20    
+hit:Dance 21    
+hit:Dance 22    
+hit:Dance 23    
+hit:Dance 24    
+hit:Dance 25    
+hit:Dance 26    
+hit:Organ 3     
+hit:Organ 4     
+hit:Organ 5     
+hit:Organ 6     
+hit:UnisonString
+hit:Unison Brass
+hit:Brass  6    
+hit:Brass  7    
+hit:Brass  9    
+hit:Brass 18    
+hit:Trumpet FX 1
+hit:Trumpet FX 2
+hit:Sax FX      
+hit:Blipp       
+hit:Buzz Blip   
+hit:Game        
+hit:Bell        
+hit:CMI         
+hit:Bass Stab   
+hit:H G         
+hit:H G Dive    
+hit:Drum Stab   
+syn:Basic Saw   
+syn:ORiON       
+syn:Spiders     
+syn:Nordica     
+syn:Sync4Sequenc
+syn:Tink Or Toy 
+syn:Kyng Doam   
+syn:70-64       
+syn:12-30       
+syn:Trancer     
+syn:MortalSynth 
+syn:The Grid    
+syn:Calmer      
+syn:Cyborg      
+syn:South Euro 1
+syn:South Euro 2
+syn:Big E       
+syn:Riverdancing
+syn:Air Age     
+syn:Trem String 
+syn:OBX         
+syn:40-10       
+syn:12-20       
+syn:3 O 3       
+syn:Geaxoils    
+syn:XtoZ        
+syn:Munster     
+syn:Booty Qooty 
+syn:Uborator    
+syn:Prophety    
+syn:Raved Pass  
+syn:D Pee       
+syn:Jesuasynth  
+syn:Wavetable   
+syn:Minor Evil  
+syn:Profit Brass
+syn:Sweepy      
+syn:Glider      
+syn:Grumpy      
+syn:Gothica     
+syn:Too Big     
+syn:Echoing     
+syn:Screamer    
+syn:Electric    
+syn:CZ BIG      
+syn:SinEnsemble 
+syn:BigDandyBoy 
+syn:Willy 4     
+syn:R&B Stegas  
+syn:60-30       
+syn:SweetDream  
+led:Wet         
+led:Cyber 1     
+led:Cyber 5     
+led:Cyber 6     
+led:Cyber 7     
+led:Saturn      
+led:More Senses 
+led:Wormy 2     
+led:Wormy 3     
+led:Zeaxy 2     
+led:Brixx 2     
+led:Apoly 1     
+led:Fat S12     
+led:Fat CL1     
+led:Fat INT     
+led:Groove Wow  
+led:Alter 4     
+led:Alter 6     
+led:Synrg 7     
+led:Synrg 9     
+led:Fat Saw     
+led:Scizy 2     
+led:Scizy 4     
+led:Jungle X    
+led:Hypass Ditty
+led:Heavy       
+led:Dreamlead   
+led:Duzbe 2     
+led:Fuzzer      
+led:Weezel      
+led:Noise F     
+led:P Mod 1     
+led:DesertTrance
+led:TB 2        
+led:Metallic    
+led:PureSaw     
+led:Wormsine    
+led:Technoval   
+led:Falling     
+led:Scizy 2     
+pad:Rumble Pad  
+pad:Super Pad   
+pad:ARK Covet   
+pad:E P I C     
+pad:Sleepy      
+pad:Tecnorise   
+pad:Cvox        
+pad:Soft Trace  
+pad:Ice Dreams  
+pad:Big Chief   
+pad:Slow Dance  
+pad:Warm&Lush   
+pad:Art Deko    
+pad:Daddy's Girl
+pad:Strings Box 
+pad:Hi&LowLight 
+pad:Vespers     
+pad:Ambi Pad    
+pad:Pure Synth  
+pad:HarmonicLift
+pad:Lunar Trail 
+pad:Cryo Stasus 
+pad:Genesis     
+pad:Dark City   
+pad:SlogritStrng
+pad:SaturnRings 
+pad:Smoovie     
+pad:Aki's World 
+pad:Low Back    
+pad:www.f mono  
+pad:Spelunkers  
+pad:Lifedream   
+pad:Perception  
+pad:Involved    
+pad:Lo Fi String
+pad:AmbString 1 
+pad:AmbString 2 
+bas:Top Tri     
+bas:UK shoota   
+bas:Love Bee    
+bas:Jump Up     
+bas:Sub Duh     
+bas:Hybrid Phase
+bas:A.D. 3033   
+bas:Vortex      
+bas:Saws Normal 
+bas:1 Shot      
+bas:Hard X      
+bas:Pinhead     
+bas:Go Long     
+bas:Square V    
+bas:H20         
+bas:Interference
+bas:B-Acer      
+bas:P-dg        
+bas:Fatso       
+bas:F16         
+bas:Acid 7      
+bas:Sonic       
+bas:Bullit      
+bas:Dance II    
+bas:Rippedbass  
+bas:Depth       
+bas:Arplikebass 
+bas:Fat Arc     
+bas:PPX 1       
+bas:PPX 2       
+bas:Jungle Sub  
+bas:Fat Juno    
+bas:Smooth      
+bas:Heavy B     
+bas:Sub E       
+bas:S-Bass      
+bas:Thwip       
+bas:Log Bass    
+bas:Disser      
+bas:Sunny       
+bas:HardHouse   
+bas:Garage Sub  
+bas:Planet X    
+edg:Boxt        
+edg:Matrix      
+edg:Honker      
+edg:Analog Beast
+edg:Zorkon      
+edg:AudKlav     
+edg:Scrape      
+edg:Hlywd Native
+edg:Ringer      
+edg:Bare Edge   
+edg:Spawn       
+edg:Rez Zip     
+edg:FuzzGrinder 
+edg:Love All    
+edg:Squeake     
+edg:2 Flange    
+edg:Teeth       
+edg:Slicer      
+edg:Skreecher   
+edg:Love Hurts  
+wal:Strangled   
+wal:The Macheen 
+wal:Duckfuzz    
+wal:C-Ride      
+wal:HoverCraft  
+wal:Clavonate   
+wal:DailyBread  
+wal:I made it   
+wal:Backdraft   
+wal:Mammoth     
+wal:Maryland    
+wal:Thickets    
+wal:Ice Ring    
+wal:Silkness    
+wal:Byzantine   
+wal:Raverotic   
+wal:Ripped      
+wal:Balls2The.. 
+wal:W6 3sEvEn   
+wal:Abyss       
+wal:GoSpeedRacer
+wal:Tension     
+wal:Big Wall    
+wal:Luscious    
+nse:Interfear   
+nse:Diffuser    
+nse:Radon Shield
+nse:That'sCreepy
+nse:Future Steps
+nse:LittleWeasel
+nse:Martians    
+nse:Cast        
+nse:SpottedWhite
+nse:Heavy Mental
+nse:Hadrian's   
+nse:Machined    
+nse:Rezawrect   
+nse:Massive     
+nse:Soline 7x   
+nse:Quiet Wall  
+nse:Bottom Floor
+nse:Distructor  
+nse:Undertaker  
+nse:Coyote      
+nse:Turbonic    
+nse:GrainyPixel 
+nse:Faucet Drip 
+nse:Psychic Sea 
+nse:Aarno Ldt   
+key:Smarm Organ 
+key:Disca Queen 
+key:Rave Organ  
+key:Organik     
+key:SynhissOrgan
+key:Deep Organ  
+key:P-soul      
+key:TechnoGrand 
+key:Ocean       
+key:HybridTine  
+key:EP Roll 1   
+key:EP Roll 2   
+key:EP Fog      
+gtr:Guit Hits   
+gtr:Univibe     
+gtr:Clicky Picky
+arp:Deeper Love 
+arp:Glider      
+arp:Alloy M     
+arp:JUNOsis     
+arp:A Trip      
+arp:Dreamer     
+arp:Palomar     
+arp:Raving      
+arp:Robo Trace  
+arp:Glory II    
+arp:Hollographic
+arp:Pele        
+arp:Lust II     
+arp:Bottom Perc 
+arp:You Know It 
+arp:X-light II  
+arp:OrbisTabula 
+arp:OrbisPitcher
+arp:The Grind   
+arp:Tron X      
+arp:Dry Wastland
+arp:Axis One    
+arp:Bouchete    
+arp:Saw Standard
+arp:Phrophetics 
+arp:Sine Drum   
+arp:Gutter Punk 
+arp:MooGie-D    
+arp:No Lo       
+arp:Sanctuary   
+arp:Pissto Hi   
+arp:T-2000      
+bpm:Bouncerette 
+bpm:Traveler    
+bpm:Boogy Synth 
+bpm:Lighter     
+bpm:End         
+bpm:E Room      
+bpm:Monster     
+bpm:Peak 7      
+bpm:Cult-feel   
+bpm:Love II     
+bpm:Synthex 90' 
+bpm:Underclass  
+bpm:Tempo LFOs  
+bpm:Carpe Diem  
+bpm:L Room      
+bpm:Reepeter    
+bpm:Solace      
+bpm:GRITS       
+bpm:TRIPPER     
+bpm:Higher Power
+bpm:Trashy      
+bpm:Vision      
+bpm:Wading      
+bpm:Grinded     
+bpm:Electon     
+bpm:Bubbler     
+bpm:End         
+bpm:Wicked Low  
+bpm:RadioDaze   
+bpm:Panhandel   
+bpm:Minator     
+bpm:Lucy-Q      
+air:Bat Pann    
+air:GhostStories
+air:Breath Stack
+air:Tibet       
+air:Futura      
+air:Air Surf    
+air:Eastern Mist
+air:Vampirella  
+air:Floater     
+air:Warm Chill  
+air:Digital Noiz
+air:Scary Noise 
+air:StickyFinger
+air:LeaveMeAlone
+air:Breathless  
+air:FluteState  
+vox:LuciferDom  
+vox:Upper Bottom
+vox:QVoxDelay   
+vox:Aah Eeh     
+vox:Choirish    
+vox:Ooh,Voices! 
+vox:Lushorch Vox
+vox:Toxic Vox   
+vox:Zephyr      
+vox:Air Voices  
+vox:SIRRUS      
+vox:Future Vox  
+vox:Bliss       
+vox:ARMAGEDDON  
+vox:ANGELIKA    
+vox:Galaxal     
+vox:Bandvoxxe   
+vox:Exploration 
+vox:AfterShock  
+vox:Surfacing   
+vox:Ethereal    
+vox:Suffocating 
+vox:Space Voxxal
+sfx:Moby's Trip 
+sfx:Odd Quasar  
+sfx:S-METAL     
+sfx:Zoned       
+sfx:OverTheEdge 
+sfx:Granules    
+sfx:Glassers    
+sfx:Alienator   
+sfx:Ripped Lazer
+sfx:FoldingSpace
+sfx:Uncertainty 
+sfx:CosmicCompny
+sfx:REZA'S LaB  
+sfx:TerrorZoNE  
+sfx:LupeDeKool  
+sfx:CyberSience 
+bel:Modular Ring
+bel:Efemm Bellsa
+bel:Mult-A-Metal
+bel:Mystery Bell
+bel:NordicCalm  
+bel:Rainbellz   
+bel:Agualla Bell
+bel:Capsulate   
+   :Default v1.0

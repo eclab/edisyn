@@ -1,0 +1,215 @@
+AIR-Bat Pann    
+ARP-Crystal     
+BAS-1 Shot      
+BAS-Acid Mono   
+BAS-Bullit      
+BAS-Filter 1    
+BAS-Filter 2    
+BAS-Filter 3    
+BAS-Interfear   
+BAS-Lowness 1   
+BAS-Lowness 2   
+BAS-Pdg         
+Berzerker Riff  
+BOW-Gaohu       
+BOW-Gaozong 5   
+BOW-Zhonghu     
+BPM-Boogy       
+CMB-Clay Tones  
+CMB-Cosmovivor  
+CMB-EastMeetWest
+CMB-HiPassSquare
+CMB-TDrum Tones 
+EDG-Boxt filter 
+EDG-FilterQ     
+GRV-Hip 05      
+GRV-Hip 08      
+GRV-Hip 11      
+GRV-Hip 13      
+GRV-Hip 18      
+GRV-Hip 22      
+KBD-Elecro7CP80 
+KBD-FM2Classc   
+KBD-GenBalladEP 
+KBD-Grand Piano2
+KBD-Grande 4    
+KBD-Hard Dyno   
+KBD-Lovers FM EP
+KBD-Med Dyno    
+KBD-Piano&Strng1
+KBD-Pure Fog    
+KBD-RollinDreams
+KBD-TechnoUprite
+KEY-C 2 Bars    
+KEY-C 4 Bars    
+KEY-C Triad     
+KEY-C's Up-Down 
+KEY-C's Up      
+KEY-C4          
+KEY-Cm7         
+KEY-Cm9         
+KEY-Cmaj7       
+KEY-MiddleC     
+KIT-BMF         
+KIT-Booster     
+KIT-BrazilianGM1
+KIT-ClassicHouse
+KIT-ClubVinyl   
+KIT-DearLyBeEmuD
+KIT-Earth 03    
+KIT-Earth 04a   
+KIT-Earth 05    
+KIT-Earth 05b   
+KIT-Earth 06    
+KIT-Earth       
+KIT-Electro     
+KIT-Gritkitt    
+KIT-Jams        
+KIT-Kit 1 a     
+KIT-Kit 1       
+KIT-Kit 1a      
+KIT-Pure 10     
+KIT-Pure 3      
+KIT-Pure 4a     
+KIT-Pure 5b     
+KIT-Pure 6      
+KIT-Pure 7      
+KIT-Pure 8      
+KIT-Pure 9a     
+KIT-Pure4       
+KIT-Pure5       
+KIT-Pure9       
+KIT-Ritual Drum 
+KIT-Salsa Ens   
+KIT-Salsa GM1   
+KIT-Salsa GM4   
+KIT-Salsa GMX 2 
+KIT-Salsa GMX   
+KIT-Shag        
+KIT-Speedman    
+KIT-Swing Hop b 
+KIT-Swing Hop   
+LED-Blue Danube 
+LED-Boxt mono   
+LED-Ethereosity 
+LED-Freakus     
+LED-Q Snapper   
+LED-Quacker     
+LED-Sci-Fi B    
+LED-Tunnel      
+LED-Weezy Lead  
+LED-Wet         
+LED-Worm 2      
+LED-Worm Talk   
+ORC-Orchestra   
+ORG-JimmyJazzyB2
+PAD-Airborn     
+PAD-BP Strings  
+PAD-Danube      
+PAD-Dark City   
+PAD-Exo Pad 2   
+PAD-Exotic 2    
+PAD-Exotic 5    
+PAD-Highway     
+PAD-Infants2    
+PAD-MetalBeats  
+PAD-My Hero     
+PAD-Paddy       
+PAD-PennyIsSad  
+PLK-Celtic Harp 
+PLK-HmmrDulcimer
+PLK-Shamisen b  
+PLK-Su Zhouki   
+PLK-Tenor Banjo 
+PR1-Brazil Drums
+PRC-Acoustic 2  
+PRC-Bag O Tricks
+PRC-Claves      
+PRC-Congas 2    
+PRC-Congas      
+PRC-Cymbals     
+PRC-DeepBooty2  
+PRC-Disengrate  
+PRC-Drum 303    
+PRC-Drum-Bass 1 
+PRC-Drum-Bass 1b
+PRC-Drum-Bass 2 
+PRC-For Real    
+PRC-Get OutPt2  
+PRC-Hats 1      
+PRC-Kalimba     
+PRC-Kalimba2    
+PRC-Kit 02 a    
+PRC-Kit 02 b    
+PRC-Kit 02 c    
+PRC-Kit 07c     
+PRC-Kit 11 a    
+PRC-Kit 11 b    
+PRC-Kit 11 c    
+PRC-Kit 11 d    
+PRC-Kit 12 a    
+PRC-Kit 12 b    
+PRC-Kit 12 c    
+PRC-Kit 13 b    
+PRC-Kit 13      
+PRC-Kit 14      
+PRC-Kit 15 a    
+PRC-Kit 15 b    
+PRC-Kit 15 c    
+PRC-Kit 16 b    
+PRC-Kit 16      
+PRC-Kit 17      
+PRC-Kit 18      
+PRC-Kit 19      
+PRC-Kit 20      
+PRC-Kit 9 b     
+PRC-Log On      
+PRC-Plexitone   
+PRC-Pure 3      
+PRC-Pure 3c     
+PRC-Pure 3d     
+PRC-Pure 3e     
+PRC-Pure 3f     
+PRC-Pure 7b     
+PRC-This & That 
+SFX-MetalScience
+SFX-Oh No Its 4 
+STR-Film Score  
+STR-Japanman    
+STR-Pizzicati   
+STR-Swoon       
+STR-TronStrings 
+SYN-7064        
+SYN-Basic       
+SYN-Bender      
+SYN-Booty Q     
+SYN-Brazz       
+SYN-Compu X     
+SYN-Enviroment  
+SYN-Grind Me    
+SYN-Nordica     
+SYN-Octivate    
+SYN-Orion       
+SYN-ProfitMargin
+SYN-Quadra      
+SYN-Saint       
+SYN-Silk OBXsaws
+SYN-Sinner      
+SYN-South E2    
+SYN-Sync Trance 
+SYN-Syntax On2  
+SYN-Synthall AT 
+SYN-ThinTecPulse
+SYN-Tran 3track 
+SYN-Tripper     
+VOX-Ahhs        
+VOX-Frozen Time 
+VOX-Lo-Fi Ether 
+VOX-Mist        
+VOX-Slo Lunarvox
+VOX-Voxichord   
+WAV-Metal 2     
+WND-Accordian 2 
+WND-Mizereams   
+WND-Nuages      
+WND-Pan Flute   

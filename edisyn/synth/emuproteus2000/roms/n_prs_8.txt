@@ -1,0 +1,640 @@
+kb1:PerfectPno 1
+kb1:PerfectPno 2
+kb1:PerfectPno 3
+kb1:PerfectPno 4
+kb1:PerfectPno 5
+kb1:PerfectPno 6
+kb1:PerfectPno 7
+kb1:PerfectPno 8
+kb1:PerfectPno 9
+kb1:PerfectPno10
+kb1:PerfectPno11
+kb1:PerfPno+EP 1
+kb1:PerfPno+EP 2
+kb1:PerfPno+EP 3
+kb1:PerfPno+Str1
+kb1:PerfPno+Str2
+kb1:PerfPno+Str3
+kb1:Bright Grand
+kb1:ConcertGrand
+kb1:Dark Piano  
+kb1:Jazzy Grand 
+kb1:Grand Room  
+kb1:Warm Piano  
+kb2:Tine Love   
+kb1:Latin Octave
+kb2:Wurli       
+kb4:Classic EP  
+kb4:ElecPno+Str1
+kb4:ElecPno+Str2
+kb4:ElecPno+Str3
+kb4:ElecPno+Vox 
+kb4:Hybrid EP 1 
+kb3:B3 in 3-B   
+kb3:Percussive  
+kb3:Jammin Org  
+kb3:Organized   
+kb3:Rock Organ 1
+kb3:Pop Organ 1 
+kb3:Muted Organ 
+kb3:Rock Organ 2
+kb3:Jazzy Organ 
+kb3:Pop Organ 2 
+kb3:Reedy Organ 
+kb3:Bright Organ
+kb3:Rotary      
+kb3:Clicky Organ
+kb3:Green Organ 
+kb3:Gimme a Bee 
+kb3:Gospel      
+kb3:Pop Pedals  
+kb3:Drawbars    
+kb3:Cheezy      
+kb3:Full-B      
+kb3:Organ Lite  
+kb3:Mellow Organ
+kb3:PureBell Org
+kb3:B Pedals    
+kb3:CathedralOrg
+kb3:Stately Org 
+kb3:Organ Hall  
+kb3:Full Pipes  
+kb3:Recital     
+kb3:With Pedals 
+kb3:Reed Stops  
+kb3:Chapel      
+kb3:Processional
+kb3:Soft Pipes  
+kb3:Flute Stops 
+kb3:Chime Organ 
+kb3:Deep Pedals 
+kb1:Harpsichord 
+orc:Harp        
+orc:New Age Harp
+str:Warm Strings
+str:Digi Section
+str:Pizz Strings
+bs1:Upright Bass
+bs1:Guitarron   
+bs1:Fretless 1  
+bs2:Bs Harmonix1
+bs2:Bs Harmonix2
+bs2:Finger Bass 
+bs2:Fretless 2  
+bs2:Muted Bass1 
+bs2:Muted Bass2 
+bs2:P-Bass      
+bs2:P-Bass Slap 
+bs2:PickdFretles
+bs2:Picked Bass1
+bs2:Picked Bass2
+bs2:Switch Bass 
+bs2:Switch Pop 1
+bs2:Switch Pop 2
+bs3:303 Bass    
+bs3:Big Bottom  
+bs3:Dance Bass  
+bs3:Fat Bottom  
+bs3:GreasySynBs 
+bs3:Rap Bass    
+bs3:Smack Bass  
+bs5:Harmonix Fun
+bs3:Wrapper     
+brs:Bone+Tpt 1  
+brs:Bone+Tpt 2  
+brs:Flugelhorn  
+brs:Fr.Horn Sect
+brs:Muted Tpt   
+brs:Solo Fr.Horn
+brs:Solo Trumpet
+brs:Stereo Brass
+brs:Trombone    
+brs:SectionHorns
+brs:3 Horns #1  
+brs:3 Horns #2  
+wav:Rez Lead    
+wav:Rez Q       
+syn:Formant Sync
+led:Chatty Lead 
+sfx:Tape Rewind 
+sfx:Vinyl Noise 
+pad:Swept Voices
+syn:Big Bell    
+syn:Coffee      
+pad:Formant Pad 
+vox:Cascades    
+syn:Lush Str-Whl
+syn:Sparkles    
+syn:Step Bells  
+kb1:Piano 1-GM  
+kb1:Piano 2-GM  
+kb1:Piano 3-GM  
+kb1:HonkyTonk-GM
+kb2:ElPiano 1-GM
+kb2:ElPiano 2-GM
+kb4:Harpsichr-GM
+kb4:Clavinet-GM 
+orc:Celeste-GM  
+orc:Glocken-GM  
+kb4:Music Box-GM
+orc:Vibraphone-G
+orc:Marimba-GM  
+orc:Xylophone-GM
+orc:TubularBl-GM
+gtr:Santur-GM   
+kb3:Organ 1-GM  
+kb3:Organ 2-GM  
+kb3:Organ 3-GM  
+kb3:ChurchOrg-GM
+kb3:ReedOrgan-GM
+wnd:Accordion-GM
+wnd:Harmonica-GM
+wnd:Bandoneon-GM
+gtr:Nylon Gtr-GM
+gtr:Steel Gtr-GM
+gtr:Jazz Gtr-GM 
+gtr:Clean Gtr-GM
+gtr:Muted Gtr-GM
+gtr:Overdrive-GM
+gtr:Distorted-GM
+gtr:Harmonix-GM 
+bs1:Ac Bass-GM  
+bs2:Finger Bs-GM
+bs2:PickBass-GM 
+bs2:FretlssBs-GM
+bs2:SlapBass1-GM
+bs2:SlapBass2-GM
+bs3:SynBass 1-GM
+bs3:SynBass 2-GM
+str:Violin-GM   
+str:Viola-GM    
+str:Cello-GM    
+str:ContraBs-GM 
+str:Trem Str-GM 
+str:Pizz Str-GM 
+orc:Harp-GM     
+orc:Tympani-GM  
+str:Strings-GM  
+str:SlowStrng-GM
+str:SynStrng1-GM
+str:SynStrng2   
+vox:ChoirAah-GM 
+vox:Vox Oohs-GM 
+vox:Syn Vox-GM  
+orc:Orch Hit-GM 
+brs:Trumpet-GM  
+brs:Trombone-GM 
+brs:Tuba-GM     
+brs:MutedTrpt-GM
+brs:FrenchHrn-GM
+brs:Brass 1-GM  
+brs:SynBrass1-GM
+brs:SynBrass2-GM
+wnd:Sopr Sax-GM 
+wnd:Alto Sax-GM 
+wnd:Tenor Sax-GM
+wnd:Bari Sax-GM 
+wnd:Oboe-GM     
+wnd:Eng. Horn-GM
+wnd:Bassoon-GM  
+wnd:Clarinet-GM 
+wnd:Piccolo-GM  
+wnd:Flute-GM    
+wnd:Recorder-GM 
+wnd:Pan Flute-GM
+wnd:BottleBlowGM
+wnd:ShakuhachiGM
+wnd:Whistle-GM  
+wnd:Ocarina-GM  
+syn:Square Wv-GM
+syn:Saw Wave-GM 
+syn:SynCaliopeGM
+wnd:ChiffLead-GM
+str:Charang-GM  
+vox:Solo Vox-GM 
+syn:5ths Wave-GM
+syn:Bs & Lead-GM
+syn:Fantasia-GM 
+syn:Warm Pad-GM 
+syn:Poly Syn-GM 
+syn:Space Vox-GM
+syn:BowedGlas-GM
+syn:Metal Pad-GM
+syn:Halo Pad-GM 
+syn:Sweep Pad-GM
+syn:Ice Rain-GM 
+syn:SoundTrackGM
+syn:Crystal-GM  
+syn:AtmosphereGM
+syn:Briteness-GM
+syn:Goblin-GM   
+syn:Echo Drop-GM
+syn:StarTheme-GM
+gtr:Sitar-GM    
+gtr:Banjo-GM    
+gtr:Shamisen-GM 
+gtr:Koto-GM     
+prc:Kalimba-GM  
+wnd:Bagpipes-GM 
+str:Fiddle-GM   
+wnd:Shannai-GM  
+syn:TinkleBellGM
+prc:Agogo-GM    
+prc:SteelDrum-GM
+prc:Woodblock-GM
+prc:Taiko-GM    
+prc:MellowTom-GM
+prc:SynthDrum-GM
+prd:RevCymbal-GM
+gtr:FretNoise-GM
+wnd:BreathNse-GM
+sfx:Seashore-GM 
+sfx:Birdsong-GM 
+sfx:Telephone-GM
+sfx:HelicopterGM
+sfx:Applause-GM 
+sfx:Gunshot-GM  
+syn:Bella       
+syn:CascadeBell 
+syn:Chimey      
+kb1:Tack Grand  
+kb2:Rock Wurli  
+syn:DelayBells 1
+syn:DelayBells 2
+syn:Drone One   
+syn:Echo Stabber
+syn:Frozen Wind 
+syn:Harpily     
+led:Lucky       
+pad:Marscape    
+syn:Milky Way   
+syn:Mr.Square   
+syn:Nebula      
+pad:Pop Stab Pad
+pad:Pulsation   
+syn:RandmPanBell
+syn:SFZ SynBrass
+syn:SimpleBell 1
+syn:Sitarred    
+syn:Slow Bells 1
+syn:Sneezy      
+pad:Sweep Time  
+syn:Swept Voxes 
+syn:SynBrass 1  
+syn:Sync Man 1  
+syn:Tempo Stab 1
+syn:Tempo Stab 2
+syn:Tempo Filter
+pad:Timed Env   
+syn:Vaporous    
+syn:Vintg.Filter
+syn:Arpy        
+led:Loose Lead  
+pad:Wash        
+syn:WaWaWaWaWaaa
+pad:WindyStrings
+vox:Air Song    
+vox:DreamChoir  
+vox:E I E I O   
+vox:Ether       
+vox:Lush Love   
+vox:Monk's Song 
+bs1:Fat Upright 
+bs2:Ana-Fingers1
+bs2:Ana-Fingers2
+bs2:HybridAcBass
+bs2:Picked Bass3
+bs2:Q Bass 1    
+bs3:Dull Thud   
+bs3:Mono Man    
+bs3:Snap Bass   
+bs3:Squarely    
+bs3:Techno Bs 1 
+bs3:Techno Bs 2 
+bs3:Tight Bs 1  
+bs3:Tri-Angled  
+bs3:Vel-o-Bass  
+bs4:1/16 Bass   
+bs4:Moogie      
+bs4:Rez FM Bs 1 
+bs4:Swept FM Bs1
+bs5:Fat Dance Bs
+bs5:Modern FM   
+bs5:Old Time    
+bs5:Splattered  
+bs5:Veloci-Wow  
+bs5:Beoww       
+gtr:12 String   
+gtr:Coral       
+gtr:Electric 12 
+gtr:Ethereal 12 
+gtr:Rock 5ths   
+gtr:SpaghettiGtr
+gtr:Steel String
+gtr:Wakka 1     
+gtr:Wakka 2     
+gtr:Wheel Wah   
+kb1:Moms Old Pno
+kb2:Clacky Tines
+kb2:E.Pno Pan 1 
+kb2:El.& Ac.EP1 
+kb4:Afrika      
+kb4:Clav, Eh!   
+kb4:FM Clav     
+kb4:FM Wurly    
+kb4:Lucy 2000   
+kb4:New EP Pad  
+led:Soloist     
+led:Rezzy       
+str:Clouds      
+pad:Soft & Slow 
+str:Swept String
+wav:Simple Sqr  
+wnd:Bluesy Harm.
+wnd:ChrHarmonica
+wnd:Pan Flute 1 
+wnd:Recorder 1  
+pad:Lush Sawz   
+brs:Hybrid Horn1
+brs:Jazzy Tpt.  
+gtr:Funk Muted  
+gtr:R&B Mute Gtr
+vox:Gregorian   
+syn:Rich Bells 1
+kb2:Vintage Clav
+kb2:Rez-o-Clav  
+kb2:FM Klav     
+kb2:Synth Clav  
+wav:Simple Bass 
+pad:Now & Later 
+syn:Choppy Stab 
+bs3:FatDarkMono 
+wnd:BreathyTenor
+wnd:Breathy Alto
+wnd:Breathy Sop.
+wnd:Solo Bassoon
+wnd:Solo Oboe   
+syn:Dance Stab 1
+syn:Dance Stab 2
+bs3:FatBoy Mono 
+syn:RepeatOctave
+wnd:Alto + Tenor
+syn:ReznantVowel
+syn:SquareTooth 
+syn:BlatzdString
+kit:Live        
+kit:Standard    
+kit:Agressive   
+kit:Slam Dance  
+kit:Big Room    
+kit:Vanilla     
+kit:Machine     
+kit:808 Toys    
+kit:Dance Techno
+kit:Kranked     
+kit:Nice & Plain
+kit:Jazzz Brush 
+kit:Tight       
+kit:Gated       
+kit:Loop Maker  
+kit:Clean       
+kit:Abrasive    
+kit:Junky       
+kit:Trashy      
+kit:Roomy       
+kit:Electro     
+kit:Low Down    
+kit:Tuned Up    
+kit:Little Toys 
+kit:Slash       
+kit:Wheel Filter
+kit:Talkin' Set 
+kit:Way High    
+kit:Low Low Low 
+kit:Basic Kit-E 
+kit:Studio Kit-E
+kit:Pop Kit-E   
+kit:CountryKit-E
+kit:Dance Kit-E 
+kit:Room Kit-E  
+kit:Brush Kit-E 
+kit:Rock Kit-E  
+kit:Slam Kit-E  
+kit:Deep Kit-E  
+kit:Funky Kit-E 
+kit:Grungy Kit-E
+kit:Thin Kit-E  
+kit:Flange Kit-E
+kit:EFX Kit-E   
+kit:Whack Kit-E 
+kit:HiPass Kit-E
+kit:Un-Kit-E    
+prc:Kick Drums 1
+prc:Kick Drums 2
+prc:Kick Drums 3
+prc:Snare Drums1
+prc:Snare Drums2
+prc:Brushes     
+prc:Cymbals 1   
+prc:Cymbals 2   
+prc:Crash Cym 1 
+prc:Crash Cym 2 
+prc:Choked Crash
+prc:China Crash1
+prc:China Crash2
+prc:Choked China
+prc:All Toms    
+prc:Big Toms    
+prc:Live Toms   
+prc:Dry Toms    
+prc:Pure Toms   
+prc:Rock Toms   
+prc:Percussion 1
+prc:Percussion 2
+prc:Shakers 1   
+prc:Shakers 2   
+prc:Tambourines 
+prc:Timbales    
+prc:Cowbells    
+prc:Congas      
+prc:Shaker Up-Dn
+prc:Tamb Up-Down
+prc:Cabasa Up-Dn
+prc:Claps       
+prc:Snaps       
+prc:Syn Cabasa  
+prc:Sm TunedGong
+prc:OrchBassDrum
+prc:Tympani     
+prc:ShortTympani
+prc:Toy Percs   
+prc:Toy Percs Lo
+prc:Rainstick   
+prc:RainstickHit
+prc:Nut Rattle 1
+prc:Nut Rattle 2
+sfx:Frontier    
+sfx:Spinvox     
+sfx:Arctic Winds
+sfx:Silly Boids 
+prc:Tuned Clave 
+prc:Sleighbell  
+bpm:TempoClaps 1
+bpm:TempoConga 1
+bpm:TempoConga 2
+bpm:TempoConga 3
+bpm:TempoCowbel1
+bpm:TempoCowbel2
+bpm:TempoShaker1
+bpm:TempoShaker2
+bpm:TempoShaker3
+bpm:TempoShaker4
+bpm:TempoShaker5
+bpm:TempoTambo 1
+sfx:Wind on Mars
+prc:Windchimes  
+hit:Dance Hit 1 
+hit:Dance Hit 2 
+hit:Orch Hit 1  
+hit:Tape Stop!  
+scr:Scratches   
+prc:Gong        
+prc:Jaw Harp    
+sfx:Synth RezZap
+prc:Cactus Loop 
+prc:Karimbell   
+prc:Log Drums   
+prc:Kalimba     
+prc:Handbells   
+prc:Bowl Gongs  
+sfx:Ghosts      
+sfx:Machinery   
+   :QRom 1 v1.0 
+jam:Grand Piano 
+jam:Jammin EP   
+jam:LA Keys     
+jam:Piano Split 
+jam:Big B       
+jam:Gospel Split
+jam:Wurli Split 
+jam:Salsa Piano 
+jam:Dream Scape 
+jam:Vocal Moog  
+jam:All Drums   
+jam:Chase String
+jam:Leader      
+jam:Trans Oh    
+bts:The Standard
+bts:That's Right
+bts:Fall Brushes
+bts:Kranked     
+bts:Golden Boy  
+bts:Ya Baby     
+kb1:PerfectPno12
+kb1:Piano Tine  
+kb1:Piano String
+kb2:Tine Love 2 
+kb1:Latin Octave
+kb3:Rock Organ 3
+kb3:Green O     
+str:Full Strings
+bs2:Deep Fret   
+bs2:P-B Slap    
+bs2:Picked Delay
+brs:Bone+Tpt 3  
+brs:The Tower   
+syn:Chatter     
+syn:Red Planet  
+bpm:Voices Pad  
+cmb:Tenor/Tpt.  
+kit:Standard 2  
+kit:Studio Kit-E
+kit:CountryKit-E
+cmb:Key/Bass 1  
+cmb:Key/Bass 2  
+cmb:Key/Bass 3  
+cmb:Key/Bass 4  
+cmb:Key/Bass 5  
+cmb:Key/Bass 6  
+cmb:Key/Bass 7  
+cmb:Key/Bass 8  
+cmb:Key/Bass 9  
+cmb:Key/Bass 10 
+bts:Dynamic     
+bts:Smooth      
+bts:Ellie       
+bts:Mr. Clean   
+bts:Sunrise     
+bts:Chill'n     
+bts:Beating Halo
+bts:Mission X   
+bts:Fastbuck    
+bts:Feel It     
+bts:Gospel Soul 
+bts:Big Rock    
+bts:Sailing     
+bts:Euro Fantasy
+bts:On The Bay  
+bts:Wangadang   
+bts:Prettw B-3  
+bts:Latin Dreams
+bts:Hip Twang   
+bts:Cortez      
+bts:Dropping In 
+bts:Agogo       
+bts:Club Swing  
+bts:Slider      
+bts:Platinum    
+bts:Jazz Man    
+bts:Bangin      
+bts:Drums/Bass 1
+bts:Drums/Bass 2
+bts:Drums/Bass 3
+arp:System Down 
+arp:B-Movie     
+arp:Do the Do   
+arp:Landing     
+arp:Choppy Arp  
+arp:Night Life  
+arp:Techno Ride 
+arp:Spiral      
+arp:Ice Palace  
+arp:Ravorotic   
+arp:Mystic Falls
+arp:Worldy      
+arp:Free Ride   
+arp:Out There   
+arp:One World   
+arp:Gentle Bell 
+arp:Razor Guitar
+arp:BB Hit      
+arp:Magical     
+arp:Classical   
+arp:Box Maker   
+arp:Kick'n Room 
+arp:In The Air  
+arp:Harp Delay  
+arp:Breath      
+arp:Up/Down Pno 
+arp:303 Groove  
+arp:Warning     
+arp:Deeper      
+arp:Muted Wish  
+arp:Sunday      
+arp:Bouncy Tenor
+arp:Classic Arp 
+arp:Flange Kit  
+arp:Tribal-T    
+bpm:Falling     
+bpm:Soft Decay  
+bpm:Moving Sync 
+bpm:Cutter      
+bpm:Cluster     
+bpm:Smack Jam   
+bpm:Boogy Vox   
+bpm:Bounce Haus 
+bpm:Waver       
+bpm:She Pad     
+bpm:Sonar       
+bpm:Deep Blue   
+bpm:The End     

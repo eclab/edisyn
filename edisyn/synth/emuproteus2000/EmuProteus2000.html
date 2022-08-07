@@ -1,0 +1,95 @@
+<html><head></head><body>
+
+
+<h1>E-Mu Proteus 2000 Series</h1>
+<h2>Single Patch Editor</h2>
+
+<p>This editor should work with many E-Mu Proteus 1000, 2000, and 2500 series machines, though I have only tested on the latest firmware (2.26).  You ought to update the firmware on your unit if possible: an easy way to do this is to use Ray Bellis's <a href="https://www.emu.tools/e-loader/">emu.tools firmware updater</a>. 
+
+<p>The Proteus 2000 family includes some 22 models, the primary difference among them lies in which ROMs they have stored in their SIMM slots.  Edisyn knows about the following ROMS:
+
+<p>
+<table>
+<tr><td><b><i>Screen</i></b><td><b><i>ROM Name</i></b><td><b><i>Standard on these Synthesizers</i></b></tr>
+<tr><td>AUDTY <td>			Audity	                           <td> Audity 2000 (OS 2.0 or higher)	            </tr>
+<tr><td>CMPSR <td>			Composer	                       <td> Proteus 2000, Proteus 1000  </tr>
+<tr><td>P/123 <td>			Protozoa                           <td> 		</tr>
+<tr><td>B-3   <td>		Definitive B-3                     <td> B-3		</tr>
+<tr><td>XLEAD <td>		X-Lead		                       <td> Xtreme Lead-1, XL-1 Turbo		</tr>
+<tr><td>ZR    <td>		Sounds of the ZR                   <td> 		</tr>
+<tr><td>World <td>		World Expedition                   <td> Planet Earth		</tr>
+<tr><td>ORCH1 <td>		Orchestral Sessions Vol. 1	       <td> Virtuoso 2000		</tr>
+<tr><td>ORCH2 <td>		Orchestral Sessions Vol. 2	       <td> Virtuoso 2000		</tr>
+<tr><td>PHATT <td>		Pure Phatt	                       <td> Mo'Phatt, Turbo Phatt		</tr>
+<tr><td>XL-7  <td>		X-Lead Vol. 2	                   <td> XL-7		</tr>
+<tr><td>MP-7  <td>		Pure Phatt 2	                   <td> MP-7		</tr>
+<tr><td>SONIQ <td>		Ensoniq Project                    <td> 		</tr>
+<tr><td>PROM1 <td>		Proteus Pop Collection	           <td> Proteus 2500, PK-6		</tr>
+<tr><td>VROM  <td>		Vintage Collection	               <td> Vintage Keys, Vintage Pro		</tr>
+<tr><td>DRUM  <td>		Protean Drums	                   <td> PX-7		</tr>
+<tr><td>GRAIL <td>		Holy Grail Piano                   <td> 		</tr>
+<tr><td>TECNO <td>		Techno Synth Contruction Yard	   <td>	Orbit-3			</tr>
+<tr><td>AOrch <td>		Peter Siedlaczek Advanced Orchestra <td> 		</tr>
+<tr><td>BEAT  <td>		Beat Garden	                       <td> Orbit-3		</tr>
+</table>
+
+<p>Also note that the Audity 2000 will only work if it has OS 2.0 or greater (earlier versions had broken sysex).  
+
+<p>Edisyn does not have information available for any of the following ROMs.  If you have a machine with one of these ROMs, please contact me:
+
+<p>
+<table>
+<tr><td><b><i>Screen</i></b><td><b><i>ROM Name</i></b><td><b><i>Standard on these Synthesizers</i></b></tr>
+<tr><td>XTREM <td>         Audity Extreme                     <td> </tr>
+<tr><td>QROM <td>         ??                     <td> Halo         </tr>
+<tr><td>MROM1 <td>         ??                     <td> MK-6          </tr>
+<tr><td>XROM1 <td>          ??                     <td> XK-6          </tr>
+</table>
+
+
+<br><br><h3>Communicating with Edisyn</h3>
+
+Set the MIDI ID to the same you'll be setting in Edisyn (typically 0).  Select a MIDI Channel to use on your synthesizer (perhaps channel 1) and set Edisyn's MIDI channel to that value.  Set the MIDI Mode to Omni or to Poly.  Make certain that Receive Program Change is ON for your MIDI channel: you might as well turn them all on (if your MIDI Mode is omni or Poly, I believe Receive Program Change should be on by default).
+
+<br><br><h3>About the Menu</h3>
+
+The menu lets you set the configuration of ROMs in your machine's SIMM sockets; or you can request that configuration from the synthesizer itself.  This is largely to make things more convenient for you.  This configuration is only used in three places at present:
+
+<ul>
+<li>If when requesting or writing a patch to/from the synth you uncheck the "Show All ROMs" button, the ROM list will only contain the ROMs from the SIMM sockets.
+
+<p><li>When you pop up a Librarian, the SIMM socket SIMMs will appear first and the others will be grayed out.
+
+<p><li>When you do a batch download, Edisyn will try to skip the non-SIMM ROMs.
+</ul>
+
+<br><br><h3>Gotchas</h3>
+
+<ul>
+<li>Unfortunately changing individual parameters does not affect the current sound, only future notes played.
+
+<p><li>If Edisyn is selecting the wrong patch, you might check to see if you have modified your synth's Program Map.  If so, you'll need to reset it to its defaults.
+
+</ul>
+
+<br><br><h3>Hints</h3>
+
+<ul>
+<li>Tired of downloads taking a long time?  Set your Proteus 2000's Midi Sysex Packet delay to 0 milliseconds (the default is for some reason 300).  Edisyn can handle it.  It's in the Master menu.
+</ul>
+
+<br><br><h3>Thanks</h3>
+
+<p>Thanks to Jan Mann (rdxesy@yahoo.de), the author of Prodatum, who kindly let me steal his ROM database.
+
+<p><table border=0 cellpadding=0 cellspacing=5>
+<tr>
+<td align=right>By&nbsp;&nbsp;&nbsp;
+<td><b>Sean Luke</b>
+<tr>
+<td align=right>Date&nbsp;&nbsp;&nbsp;
+<td>August 2022
+</table>
+
+
+

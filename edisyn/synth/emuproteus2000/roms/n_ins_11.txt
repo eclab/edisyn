@@ -1,0 +1,241 @@
+   :None        
+wnd:Piccolo p   
+wnd:Piccolo mf  
+wnd:Piccolo Hall
+wnd:Piccolo p/mf
+wnd:Piclo p/mf/H
+wnd:Flute p     
+wnd:Flute mf    
+wnd:Flute Hall  
+wnd:Flute p/mf  
+wnd:Flute p/mf/H
+wnd:AltoFlute p 
+wnd:AltoFlute mf
+wnd:AltoFlute H 
+wnd:AltoFlt p/mf
+wnd:AltFl p/mf/H
+wnd:Oboe p      
+wnd:Oboe mf     
+wnd:Oboe Hall   
+wnd:Oboe p/mf   
+wnd:Oboe p/mf/H 
+wnd:EngHorn p   
+wnd:EngHorn mf  
+wnd:Eng Horn H  
+wnd:EngHorn p/mf
+wnd:EngHn p/mf/H
+wnd:Clarinet p  
+wnd:Clarinet mf 
+wnd:Clarinet H  
+wnd:Clarnt p/mf 
+wnd:Clar p/mf/H 
+wnd:Bass Clar p 
+wnd:Bass Clar mf
+wnd:Bass Clar H 
+wnd:BasClar p/mf
+wnd:BsClarp/mf/H
+wnd:Bassoon p   
+wnd:Bassoon mf  
+wnd:Bassoon Hall
+wnd:Bassoon p/mf
+wnd:Bassn p/mf/H
+wnd:CntraBssn p 
+wnd:CntraBssn mf
+wnd:CntraBssn H 
+wnd:CtrBsn p/mf 
+wnd:CtrBsnp/mf/H
+wnd:Section 1   
+wnd:Section 1 H 
+wnd:Section 2   
+wnd:Section 2 H 
+wnd:Section 3   
+wnd:Section 3 H 
+wnd:Section 4   
+wnd:Section 4 H 
+brs:FrenchHorn p
+brs:FrenchHornmf
+brs:FrenchHornff
+brs:FrenchHorn H
+brs:FHorn p/m/f 
+brs:FHornp/m/f/H
+brs:Trumpet p   
+brs:Trumpet mf  
+brs:Trumpet ff  
+brs:Trumpet Hall
+brs:Trmpt p/m/f 
+brs:Tmpt p/m/f/H
+brs:Trombone p  
+brs:Trombone mf 
+brs:Trombone ff 
+brs:Trombone H  
+brs:Tbone p/m/f 
+brs:Tbne p/m/f/H
+brs:BassTbone p 
+brs:BassTbone mf
+brs:BassTbone H 
+brs:BTbone p/mf 
+brs:BTbonep/mf/H
+brs:Tuba p      
+brs:Tuba mf     
+brs:Tuba ff     
+brs:Tuba Hall   
+brs:Tuba p/mf/f 
+brs:Tubap/mf/f/H
+brs:Section 1   
+brs:Section 1 H 
+brs:Section 2   
+brs:Section 2 H 
+brs:Section 3   
+brs:Section 3 H 
+brs:Section 4   
+brs:Section 4 H 
+vln:Solo Vibrato
+vln:Solo No Vib 
+vln:Solo Pizz   
+vla:Solo Vibrato
+vla:Solo No Vib 
+vla:Solo Pizz   
+cel:Solo Vibrato
+cel:Solo No Vib 
+cel:Solo Pizz   
+bas:Solo Vibrato
+bas:Solo No Vib 
+bas:Solo Pizz   
+prc:Batterie    
+prc:All BassDrum
+prc:Bass Drum 1 
+prc:Bass Drum 2 
+prc:Bass Drum 3 
+prc:Bass Drum 4 
+prc:Bass Drum 5 
+prc:Bass Drum 6 
+prc:All Snares  
+prc:Snare Drum 1
+prc:Snare Drum 2
+prc:Snare Drum 3
+prc:Snare Drum 4
+prc:Snare Drum 5
+prc:Snare Drum 6
+prc:Snare Drum 7
+prc:All Piatti  
+prc:Piatti 1    
+prc:Piatti 2    
+prc:Piatti 3    
+prc:Piatti 4    
+prc:Piatti 5    
+prc:Piatti 6    
+prc:Piatti 7    
+prc:Piatti 8    
+prc:All Timpani 
+prc:Timpani 1 mf
+prc:Timpani 1 ff
+prc:Timpani 2 mf
+prc:Timpani 2 ff
+prc:Timpani 3 mf
+prc:Timpani 3 ff
+prc:Timpani 4 mf
+prc:Timpani 4 ff
+prc:Orch Bells  
+prc:TubularBells
+prc:Bell Tree   
+prc:Harp        
+prc:Celeste     
+prc:Xylophone   
+prc:Marimba     
+sfx:Piccolo Air 
+sfx:Pic Key Clik
+sfx:AltoFluteAir
+sfx:AltFlute Key
+sfx:BassClar Air
+sfx:BassClarKey1
+sfx:BassClarKey2
+sfx:Bassn Breath
+sfx:Bassoon Air 
+sfx:Bassoon Key1
+sfx:Bassoon Key2
+sfx:Bassoon Key3
+sfx:Bassoon Key4
+sfx:Eng Horn Air
+sfx:EngHorn Key1
+sfx:EngHorn Key2
+sfx:EngHorn Key3
+sfx:EngHorn Key4
+sfx:EngHorn Key5
+sfx:CntraBssnAir
+sfx:CtraBssnKey1
+sfx:CtraBssnKey2
+sfx:CtraBssnKey3
+sfx:Trombone Air
+sfx:TrmptBreath1
+sfx:TrmptBreath2
+wav:Air         
+wav:Pink Noise  
+wav:White Noise 
+wav:HiPass Noise
+wav:Triangle    
+wav:Square      
+wav:Sawtooth    
+wav:Sine        
+cmb:Solo Vibrato
+prc:Hi Hat 1    
+prc:Hi Hat 2    
+prc:Hi Hat 2a   
+prc:Hi Hat 2b   
+prc:Hi Hat 3    
+prc:Hi Hat 3b   
+prc:Hi Hat 4    
+prc:Hi Hat 5    
+prc:Hi Hat 6    
+prc:Hi Hat 7    
+prc:Hi Hat 8    
+prc:Hi Hat 9    
+prc:Hi Hat 10   
+prc:Piatti 9    
+prc:Cowbell 1   
+prc:Snare Roll 1
+prc:Cowbell 2   
+prc:Block 1     
+prc:Snare Roll 2
+prc:Snare Drum 8
+prc:Snare Drum 9
+prc:Snare Drum10
+prc:Concert Tom1
+prc:Concert Tom2
+prc:Concert Tom3
+prc:Concert Tom4
+prc:Block 2     
+prc:Bongo 1     
+prc:Bongo 2     
+prc:Bongo Roll 1
+prc:Bongo 3     
+prc:Bongo 4     
+prc:Bongo Roll 2
+prc:Castanet 1  
+prc:Castanet 2  
+prc:CastanetRoll
+prc:Glock 1     
+prc:Glock 2     
+prc:Block 3     
+prc:Block 4     
+prc:Maracas 1   
+prc:Maracas 2   
+prc:MaracasShake
+prc:SlapStick   
+prc:Guiro 1     
+prc:Guiro 2     
+prc:Clave       
+prc:Block 5     
+prc:Tambourine  
+prc:Tamb Shake  
+prc:Triangle 1  
+prc:Triangle 2  
+prc:TriangleRoll
+prc:Finger Cym 1
+prc:Finger Cym 2
+prc:Bell Tree   
+prc:ThundrSheet1
+prc:ThundrSheet2
+prc:Anvil       
+prc:Ratchet     
+prc:Ratchet Roll
+prc:Gong        

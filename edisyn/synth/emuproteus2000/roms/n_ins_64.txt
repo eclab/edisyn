@@ -1,0 +1,40 @@
+   :None        
+pno:mf Piano    
+pno:mf Split 2  
+pno:mf Split 3  
+pno:mf Mono 1   
+pno:mf Mono 2   
+pno:ff Piano    
+pno:ff Split 2  
+pno:ff Split 3  
+pno:ff Mono 1   
+pno:ff Mono 2   
+pno:HammerOn/Off
+pno:Hammer On   
+pno:Hammer Off  
+pno:Piano Action
+pno:Action+Highs
+pno:Pedal Stomp 
+pno:SusPed Model
+pno:Piano Magic 
+pno:Mono Magic  
+pno:Highest Keys
+pno:Mono HiNotes
+pno:Pedal FX 1  
+pno:Pedal FX 2  
+pno:Pedal FX 3  
+pno:Pedal FX 4  
+pno:Pedal FX 5  
+pno:Pedal FX 6  
+pno:Pedal FX 7  
+pno:Pedal FX 8  
+pno:Pedal FX 9  
+pno:Pedal FX 10 
+pno:Pedal FX 11 
+pno:Pedal FX 12 
+pno:Hammer FX   
+pno:Sustain FX  
+pno:TackPianoFX1
+pno:TackPianoFX2
+pno:TackPianoFX3
+pno:TackPianoFX4

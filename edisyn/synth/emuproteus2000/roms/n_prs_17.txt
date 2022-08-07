@@ -1,0 +1,512 @@
+arp:Guitartar   
+kit:D&B Tight   
+str:Golden      
+bas:Sustainer   
+gtr:Clean String
+bts:Foggy       
+led:UnderTone   
+key:Piano Grand 
+brs:Section 8   
+syn:ThikPlsLayer
+vox:Christmas   
+hit:RingaDinDing
+wnd:Reeds&String
+prc:Q Stick     
+bpm:Trekia      
+pad:Japan Town  
+sfx:At the Races
+bas:Sub Blipper 
+key:DownTheRhodz
+key:Late Night  
+key:GlassPiano  
+key:Piano Mio   
+key:StereoGrand1
+key:StereoGrand2
+key:Grande      
+key:Piano/String
+key:Piano Pad   
+key:EP 1        
+key:EP 2        
+key:EP 3        
+key:EP 4        
+key:EP 5        
+key:EP 6        
+key:Wurly       
+key:Wurly Tramp 
+key:ClavStandard
+key:Process?Clav
+key:Elecro7CP80 
+key:Fuzzy Pad   
+key:1-900Rhodez 
+key:Haunted EP  
+key:TwinkleToes 
+key:Missy       
+key:Techno Piano
+key:HonkTonkeyz 
+key:Eno's Piano 
+key:FM JazzSplit
+key:Bass/Keys1  
+key:PianoString2
+key:Piano/Synth 
+key:Piano/Str/EP
+key:Piano/Analog
+key:Comp n' Pad 
+key:Stage Piano 
+key:Pno/Str/EP2 
+key:B-3 3rd     
+key:B-3 2nd     
+key:B-3 Lo/Hi   
+key:B-X Fade 1  
+key:B-X Fade 2  
+key:B-3 Leakage 
+key:Distortion  
+key:B-Hive      
+key:Assassin    
+key:Munchkin B3 
+key:AutoChord   
+key:(B3- PI)/7  
+key:Pno/Str/EP3 
+key:Space Case  
+key:Clav Metal  
+key:Clav 2      
+key:Sweet Ballad
+bas:ATC 3       
+bas:Sub 1       
+bas:Sub 2       
+bas:Sub 3       
+bas:Big DX      
+bas:Perco Plus  
+bas:Micro Moog  
+bas:Basic Moog  
+bas:Log Bass    
+bas:PopGrowler  
+bas:ChubbyChaser
+bas:Jaguar Bass 
+bas:InYourFace! 
+bas:Modem       
+bas:Nerdo       
+bas:Synth Bass  
+bas:PlasticBass 
+bas:Taurus      
+bas:Less Than   
+bas:FingerSlap1 
+bas:FingerSlap2 
+bas:Slap 1      
+bas:Slap 2      
+bas:Over Picked 
+bas:Finger 1    
+bas:Finger 2    
+bas:SE          
+bas:Street      
+bas:Finger Snap 
+bas:Bang'in Up  
+bas:Basss ic    
+bas:Acoustic    
+bas:Upright 1   
+bas:Upright 2   
+bas:Switch Up   
+bas:Harms       
+bas:Fretless 1  
+bas:Fretless 2  
+bas:Fretless 3  
+bas:Fretless 4  
+bas:Fretless 5  
+bas:Fretless 6  
+bas:LookMaNoFret
+bas:Driver      
+led:TooMuchLead 
+led:Bender      
+led:SquareChorus
+led:Balls Out   
+led:Spiraling   
+led:Prophetic   
+led:OneBigMoFo! 
+led:Class Lead  
+led:Pulse Lead  
+led:Worm 5      
+led:EKKo        
+led:Tutor       
+kit:Acoustic 1&2
+kit:Acoustic 3&4
+kit:Dance       
+kit:Kit 01      
+kit:Kit 02      
+kit:Kit 03      
+kit:Kit 04      
+kit:Kit 05      
+kit:Kit 06      
+kit:Kit 07      
+kit:Kit 08      
+kit:Kit 09      
+kit:Kit 10      
+kit:Kit 11      
+kit:Kit 12      
+kit:Kit 13      
+kit:Kit 14      
+kit:Kit 15      
+kit:Kit 16      
+kit:Swing Hop 1 
+kit:Swing Hop 2 
+kit:Swing Hop 3 
+kit:GM Dance    
+kit:E-mu 2003   
+kit:FunDaMental 
+kit:Booster     
+kit:All Niter   
+kit:StadiumRockr
+kit:Hard Ass    
+kit:CurrentBeatz
+kit:Crackle Kit 
+kit:Tainted     
+kit:BarelyLegal 
+kit:SicK Fx     
+kit:Krunkee     
+kit:Streetwise  
+bts:RasclyRapper
+bts:WhatNow!#$%?
+bts:RaD RaceR   
+bts:FilterPhaser
+bts:BiteZapper  
+bts:Inna City   
+bts:Ripped      
+bts:Detourant   
+bts:MAD Onna    
+bts:Bleak       
+bts:Magnetic    
+bts:Stringy     
+bts:CuzIWuzStond
+bts:Electro     
+bts:Jungle*Club 
+bts:Moderno     
+bts:Nu Metal    
+bts:Outside     
+bts:Rubbish     
+bts:Smasher     
+bts:BigPimpin!  
+bts:ChunkyButt  
+bts:PhatterStill
+bts:Lowness     
+bts:FreakShifter
+bts:Maestro     
+syn:Unsuspecting
+kit:KastOff     
+prc:Kicks 1     
+prc:Kicks 2     
+prc:Snares 1    
+prc:Snares 2    
+prc:Hats 1      
+prc:Hats 2      
+prc:Cymbals 1   
+prc:Cymbals 2   
+prc:Toms 1      
+prc:Toms 2      
+prc:Shakers     
+prc:Maracas     
+prc:Timbales 1  
+prc:Timbales 2  
+prc:Congas + 1  
+prc:Congas + 2  
+prc:Bells 1     
+prc:Bells 2     
+prc:Blocks 1    
+prc:Blocks 2    
+prc:Tams 1      
+prc:Tams 2      
+prc:Claps 1     
+prc:Claps 2     
+prc:Snaps       
+prc:Claves      
+prc:Orch        
+prc:Misc        
+prc:Misc Perc 1 
+prc:Misc Perc 2 
+prc:Vibraslap   
+prc:Guiro Roll  
+prc:Cowbells    
+prc:Agogos      
+prc:Carillon    
+prc:Belltree    
+prc:Flexi       
+prc:Soft Vibes  
+prc:Hard Vibes  
+prc:Both Vibes  
+prc:VibeSwap    
+prc:Xylo        
+prc:Marimba     
+prc:Kalimba     
+prc:Plexy       
+prc:KikKastr    
+prc:XcitSyn     
+prc:Xcite       
+prc:MetalThing  
+prc:I lands     
+prc:Squelch!    
+str:Big Layerz  
+prc:Vibe Split  
+bel:A Pale Horse
+bel:Chimes      
+bel:Droplets    
+bel:PlinkerBells
+bel:Tinker      
+bel:HauntedBells
+bel:Metal Trip  
+key:Foot Keyz   
+key:NightOrgan  
+key:Dyno Grand  
+key:Tines       
+led:Wormy       
+led:Warning!    
+led:Warm Worm   
+hit:Organ Hits 1
+hit:Dance Chord 
+hit:Voxxy       
+hit:Garagiste   
+hit:HellaBoom   
+hit:Honker      
+hit:Cazio Jamin!
+hit:EchoOrgan   
+hit:Get Funky!  
+hit:Sad Ending  
+hit:Vox Hits    
+hit:Brassist    
+hit:Lush Dance  
+bas:PWM Oldskool
+bas:Octave Cat  
+led:FusionMini  
+led:HippoSauce  
+vox:REBman      
+vox:Aah 1       
+vox:Aah 2       
+vox:Ooh 1       
+vox:Ooh 2       
+vox:Filter 1    
+vox:Filter 2    
+vox:Filter 3    
+vox:Filter 4    
+vox:Big Chorus  
+vox:Talk to Me  
+vox:Harmony     
+vox:Male        
+vox:Shimmerings 
+vox:ReflecSyn   
+vox:Luna'sWood  
+vox:TV Land     
+str:Orchestra1  
+str:Orchestra2  
+str:Section1    
+str:Section2    
+str:Pizz 1      
+str:Pizz 2      
+str:Tron Strings
+str:Quartet     
+str:Section/Qrt 
+str:Leg/Pizz Cmb
+str:Legato/Pizz 
+str:RubbrStrngs 
+str:ProcessoTron
+str:DramaQueen  
+str:FilmLayerz  
+str:WeirdStrngs 
+str:Digital     
+str:Neo Strings 
+str:Asia Layers 
+str:Solo Strings
+str:Solo & Sect 
+str:Trio Solo   
+str:FluteTron   
+str:String Pad  
+str:UltraTron   
+cmb:String/Brs w
+cmb:Brass/Tenor 
+cmb:Analog 1    
+cmb:Nylon/Str w 
+cmb:Analog 2    
+cmb:Fear Day    
+cmb:SoloStr & EP
+cmb:Cool 5th    
+cmb:Strung Block
+orc:SoloStr&Wind
+orc:S.Sax&Winds 
+led:ManyASquare 
+brs:SforzandoSct
+brs:TaDa!       
+brs:Trumpet     
+brs:Mute Trmpt  
+brs:Glide Bone  
+brs:Big Band    
+brs:Jazz Combo  
+brs:Brass Hits 1
+brs:Brass Hits 2
+brs:The Trumpet 
+brs:3 Bones     
+brs:2 Trumpets  
+brs:Trump&Bones1
+brs:Trump&Bones2
+brs:Matrix Horn 
+brs:Pseudo Brass
+wnd:Tenor Sax   
+wnd:Oboe        
+wnd:Clarinet    
+wnd:FluteCake   
+wnd:BariSax     
+wnd:Squeel 1    
+wnd:Squeel 2    
+wnd:AltoSax     
+wnd:TenorSax    
+wnd:Synth Flute 
+wnd:Flute & Oboe
+wnd:Saxophones  
+wnd:New Ager    
+wnd:Clarinuff   
+gtr:Singlecoil  
+gtr:Nylon       
+gtr:Electric Pwr
+gtr:Solo Jazz   
+gtr:Trash       
+gtr:Thrash Lead 
+gtr:Surf 1 w    
+gtr:Surf 2 w    
+gtr:Chord Chuck 
+gtr:Mo'Mutes    
+gtr:Jazz Slide w
+gtr:SlamitDown  
+gtr:Acoustic    
+gtr:Jazz        
+gtr:Nylon       
+gtr:Steel       
+gtr:Ghosted     
+gtr:Seduced     
+gtr:Cordal      
+gtr:Nylon&on    
+gtr:Hard Garage 
+gtr:Jazzy Comp  
+gtr:Enchantment 
+gtr:Nylonium    
+pad:Richness    
+pad:Your Fault  
+pad:PianoMeltz  
+pad:OutofTime   
+pad:Moon Flute  
+pad:OldSaws     
+pad:Evidence    
+pad:EvenMoEPIC! 
+pad:Under       
+pad:Life        
+pad:Phatt       
+pad:Keyngdom    
+pad:Dance Chord 
+pad:Brassage    
+pad:Crystal     
+pad:Elysium     
+pad:CloudBuster 
+pad:Star Seeker 
+pad:Trilogy     
+pad:Squirmy     
+pad:Paddy Cake  
+pad:Vector      
+pad:Velour      
+pad:Jarreing    
+pad:PWMpathy    
+arp:Azian       
+vox:Percolator  
+hit:HouseStrum  
+hit:Disco Stab  
+gtr:Mute Trails 
+gtr:Mute 5ths   
+syn:Re Entry    
+syn:Dance Split 
+syn:Pluck Pad   
+syn:Profit 500  
+syn:ClassicMoog 
+syn:Synth Bass  
+syn:Sync        
+syn:Saw Fifths  
+syn:VFX Stack   
+syn:Big Dance   
+syn:Riff Trip   
+syn:Brazz 5ths  
+syn:VS          
+syn:Goliath     
+syn:Xtra Large  
+syn:Major Saw   
+syn:Minor Saw   
+syn:JP Six      
+syn:Row Tate    
+syn:Rezelle     
+syn:SlowRide    
+syn:LFO Synth   
+syn:FrogLead    
+syn:Ubu II      
+syn:Serial Fly  
+syn:Matrix Pad  
+syn:CZone       
+syn:Benda       
+syn:Asian Dreams
+syn:Big Comp    
+syn:Chipper     
+syn:RubberBands 
+syn:PeachyFuzz  
+sfx:Porch*Night 
+sfx:SFX 1       
+sfx:SFX 2       
+sfx:Scratches 1 
+sfx:Scratches 2 
+sfx:MCScratch   
+sfx:Space Wiggle
+sfx:HeavySynth  
+sfx:Slicer      
+sfx:Cymbolater  
+sfx:Post Razz   
+sfx:Goblins     
+arp:Vectrek     
+sfx:8BitGameOver
+nse:WinditDown  
+nse:SpaceDreams 
+arp:Synth Bass  
+arp:Syrup HP    
+arp:LowPercRoll 
+arp:MadEndingYo 
+arp:Plucked 5ths
+led:DX Gone Mini
+led:Lego        
+bpm:PWM Voxation
+bpm:Classic     
+bpm:Drum 1      
+bpm:Drum 2      
+bpm:Drum 3      
+bpm:Octover     
+bpm:Chaser      
+gtr:Nyl ONDa    
+bas:Killer SE   
+bas:Fing'd      
+bas:Finger Oxx  
+bas:Hangem Mono 
+bas:Hiptainer   
+bas:Container   
+bas:Go Deep     
+bas:Drop Sub 2  
+bas:Drop Sub 3  
+bas:Low Rider   
+bas:PopSlidah   
+bas:Real Low    
+bas:Sub H2O     
+bas:Subber 1    
+bas:Subber 2    
+bas:Wheel Wide  
+bas:Pepper Bass 
+key:Simple EP   
+key:Tine EP 1   
+key:Tine EP 2   
+key:Tine EP 3   
+key:Pianostic   
+key:Spread Grand
+key:Chorus Dyno 
+key:Piano & Pizz
+key:Dramatic    
+key:Drama At Sea
+key:Polarity    
+key:Piano Night 
+syn:Pliedes     
+syn:Sensitive   
+syn:SoftClipHarp
+   :default V1.0

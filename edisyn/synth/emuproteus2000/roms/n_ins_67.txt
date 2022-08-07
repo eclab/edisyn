@@ -1,0 +1,548 @@
+   :None        
+bas:JD-Marc01   
+bas:JD-Marc01cho
+bas:JD-Marc01oct
+bas:JD-Marc02   
+bas:JD-Marc02cho
+bas:JD-Marc02oct
+bas:JD-Pick     
+bas:JD-Pick  cho
+bas:JD-Pick  oct
+bas:JD-Marc03   
+bas:JD-MarcDP   
+bas:JD-MarcDPoct
+bas:JD-Marc04 2v
+bas:JD-Marc05 2v
+bas:JD-Marc06 2v
+bas:JD-Slap01+  
+bas:JD-Slap01+b 
+bas:JD-Slap02+  
+bas:JD-Slap02+b 
+bas:JD-Slap03   
+bas:JD-Slap03b  
+bas:JD-Slap03oct
+bas:JD-Slap03ocb
+bas:JD-Stack01  
+bas:JD-Stack02  
+bas:JD-Stack03  
+bas:JD-Stack04  
+bas:JD-Stack05  
+bas:JD-Stack06  
+bas:JD-Stack07  
+bas:JD-Stack08  
+bas:JD-Stack09  
+bas:Attacka   2v
+bas:AttBoom   2v
+bas:PhatSawer   
+bas:PhatSawer ch
+bas:PhatSawer oc
+bas:PhatSawer#01
+bas:PhatSawer#02
+bas:A-SyBass1   
+bas:A-SyBass1cho
+bas:A-SyBass1oct
+bas:A-Syntha  2v
+bas:B-Syntha  2v
+bas:C-Syntha  2v
+bas:D-Syntha  2v
+bas:DejaVu 01   
+bas:DejaVu 01cho
+bas:DejaVu 01oct
+bas:DejaVu 02 2v
+bas:DejaVu DJ-8 
+bas:DejaVu DJ-8b
+bas:DeeperDJ8 2v
+bas:SquaraAtt 2v
+bas:MoreOver  2v
+bas:PhataDJ-A 2v
+bas:PhataDJ-B 2v
+bas:PhataDJ-C 2v
+bas:PhataDJ-D 2v
+bas:PhataDJ-E 2v
+bas:PhataDJ-F 2v
+bas:DeepTube  2v
+bas:Tube Lowa 2v
+bas:TubeAtt1  2v
+bas:TubeAtt2  2v
+bas:AttackSQR  1
+bas:AttackSQR  2
+bas:AttackSQR  3
+bas:AttackSQR  4
+bas:AttSQR-A  2v
+bas:AttSQR-B  2v
+bas:AttSQR-C  2v
+bas:AttSQR-D  2v
+bas:AttSQR-E  2v
+bas:AttackPulz 1
+bas:AttPulz-X 2v
+bas:AttPulz-Q 2v
+bas:AttackPulz 2
+bas:AttPulz2 oct
+bas:AttPack-A 2v
+bas:AttPack-B 2v
+bas:AttPack-C 2v
+bas:Attack 8    
+bas:Attack 8 oct
+bas:Attack 8 cho
+bas:Att-8Deep 2v
+bas:Att-8II     
+bas:Att-8II  oct
+bas:Att-8II  cho
+bas:Att-8Deep 2v
+bas:Att-8Lowa 2v
+bas:LowerMe Bass
+bas:LowerMeB oct
+bas:LowerYou  2v
+bas:LowerThem 2v
+bas:LowerDown 2v
+bas:LowerMega 2v
+bas:LowerMod  2v
+bas:5th Organ   
+bas:5th Org  oct
+bas:5th Org  cho
+bas:5th OrLow 2v
+bas:5th OrSyn 2v
+bas:5th OrTub 2v
+bas:5th OrUdo 2v
+bas:Be3 Two     
+bas:Be3 Two  oct
+bas:Be3 Two  cho
+bas:Be3 Two5  2v
+bas:Be3 Attac 2v
+bas:Be3 Deep  2v
+bas:Be3 Tube  2v
+bas:Be3 One     
+bas:Be3 One  oct
+bas:Be3 One  cho
+bas:Be3 O-Syn 2v
+bas:Be3 O-Att 2v
+bas:Be3 O-Low 2v
+bas:Be3 O-5th 2v
+bas:Be3 O-Fra 2v
+bas:Be3 O-Dep 2v
+bas:Be3 O-Tub 2v
+bas:Be3 O-Caj 2v
+bas:Be3 O-Coj 2v
+bas:Be3 O-Cej 2v
+bas:Be3 O-Udo 2v
+bas:Be3 O-Dje 2v
+bas:Acoustic    
+bas:Acoustic cho
+bas:Acoustic oct
+bas:Acous-JD  2v
+bas:Acous-Sy1 2v
+bas:Acous-Sy2 2v
+bas:Acous-Sy3 2v
+bas:Acous-Sy4 2v
+bas:Acous-Sy5 2v
+bas:Acous-Sy6 2v
+bas:Acous-Sy7 2v
+bas:AcousCaj1 2v
+bas:AcousCaj2 2v
+bas:AcousUdo  2v
+bas:AcousDje  2v
+bas:AcousFra  2v
+bas:Cajon 1     
+bas:Cajon 1  oct
+bas:Cajon 1  cho
+bas:CajonSta1 2v
+bas:CajonSta2 2v
+bas:CajonSta3 2v
+bas:CajonSta4 2v
+bas:CajonSta5 2v
+bas:CajonDjem 2v
+bas:CajonUdo  2v
+bas:CajonUdy  2v
+bas:CajonFra  2v
+bas:Cajon 2     
+bas:Cajon 2  oct
+bas:Cajon 2  cho
+bas:Cajon2ST  2v
+bas:Cajon2Sta 2v
+bas:Cajon2Dje 2v
+bas:Cajon2Udo 2v
+bas:Cajon2Udy 2v
+bas:Cajon2Fra 2v
+bas:Cajon 3     
+bas:Cajon 3  oct
+bas:Cajon 3  cho
+bas:Cajon3ST  2v
+bas:Cajon3Dje 2v
+bas:Cajon3Udo 2v
+bas:Cajon3Udy 2v
+bas:Cajon3Fra 2v
+bas:DjembeFX    
+bas:DjembeFX oct
+bas:DjembeFX cho
+bas:DjembeFra 2v
+bas:DjembeUdo 2v
+bas:DjembeUdy 2v
+bas:Udo FX      
+bas:Udo FX   oct
+bas:Udo FX   cho
+bas:UdoFrame1 2v
+bas:UdoFrame2 2v
+git:muted       
+git:muted    oct
+git:muted ST oct
+git:muted    cho
+git:muted-sun 2v
+git:muted-syn 2v
+git:mutedDeep 2v
+git:Funk groover
+hit:PolPlus Hit 
+hit:PolPlusOc 4v
+hit:A Ugly      
+hit:A Hit hit 2 
+hit:PolTrump  4v
+hit:PolStrngs 4v
+hit:PolSynth  4v
+led:High Trumpet
+led:H Trumpet st
+led:2Trumpets 2v
+led:Hip Recorder
+wav:Deep Sinus  
+wav:Deep Saw    
+wav:Deep Pulse  
+wav:Triangle    
+wav:Dance Saw   
+wav:Dance Pulse1
+wav:Dance Pulse2
+wav:Dance Pulse3
+wav:Dance Pulse4
+wav:Dance Pulse5
+wav:Dance Pulse6
+wav:Beat Garden 
+wav:White Noise 
+wav:W Noise ST  
+wav:Pink Noise  
+wav:P Noise ST  
+wav:More Saws 2v
+wav:More Puls 2v
+wav:More Tria 2v
+syn:PadStrings  
+syn:PadStr.1 oct
+syn:PadStr.2 oct
+syn:PadStr-A  2v
+syn:PadStr-B  2v
+syn:PadStr-C  2v
+syn:StackPad1   
+syn:St.Pad1a oct
+syn:St.Pad1b oct
+syn:StackPad1cho
+syn:StackPad2 2v
+syn:StackPad3 2v
+syn:StackPad4 2v
+syn:VoStrings 2v
+syn:PAD PWM01   
+syn:PAD PWM01cho
+syn:PAD PWM01oct
+syn:Sol Ina Str 
+syn:Sol Ina  oct
+syn:Sol Ina  cho
+syn:AttackPWM   
+syn:Att PWM  oct
+syn:Att PWM  cho
+syn:Att PWM+  2v
+syn:MorePWM   2v
+syn:RadioW BG  1
+syn:RadioW BG st
+syn:RadioWbg2 2v
+syn:RadioWbg3 2v
+syn:RadioWbg4 3v
+syn:AndSpace    
+syn:AndSpace oct
+syn:AndSpace cho
+syn:AndSpace2 2v
+syn:AndSpace3 2v
+vox:Female      
+vox:Female   oct
+vox:FemaleSyn 2v
+vox:FemalHiss 2v
+vox:Very Big  2v
+vox:FemDream  2v
+vox:FemSpace  2v
+vox:Fab Syntha  
+vox:FabSynth oct
+vox:FabSynth cho
+vox:FabSyAah  2v
+vox:FabHiss   2v
+vox:FabHiss ST2v
+vox:FabSpace  2v
+vox:FabDream  2v
+vox:FabDream2 2v
+vox:Thinny      
+vox:Thinny   oct
+vox:Thinny   cho
+vox:ThinnyAh1 2v
+vox:ThinnyAh2 2v
+vox:ThinnyBA  2v
+vox:ThinnySyn 2v
+vox:ThiSyn ST 2v
+vox:ThinnyHi  2v
+vox:ThiHi ST  2v
+vox:ThinnyHi2 2v
+vox:ThiOrg1   2v
+vox:ThiOrg1ST 2v
+vox:ThiOrg2   2v
+vox:ThiOrg2ST 2v
+vox:Deep Aahs   
+vox:DeepAahs cho
+vox:DeepAahs2 2v
+vox:Dirty Aahs  
+vox:D AahsBig 2v
+vox:D AahSynt 2v
+vox:D AahsHi  2v
+syn:Choir Big   
+syn:ChoirBig oct
+vox:Synthamike  
+vox:Syntham  oct
+vox:Syntham  cho
+vox:SynthamHi 2v
+vox:SynthamOr 2v
+vox:HighLady    
+vox:HighLady oct
+vox:HighLady cho
+vox:HighLadyO 2v
+vox:OrganVocals 
+vox:OrganVoc oct
+vox:OrganVoc cho
+vox:Huh of Jon  
+vox:Huh of JonST
+vox:Jell of Jon 
+vox:Jell of J ST
+vox:Breath Snare
+vox:Breath SN ST
+sfx:Thin Tube   
+sfx:Thin Tube ch
+sfx:ThinTube oct
+sfx:Chimy       
+sfx:Chimy    oct
+sfx:Chimy ST    
+sfx:ChimyShe  2v
+sfx:ChimyThin 2v
+sfx:Shells      
+sfx:Shells   oct
+sfx:Shells ST   
+sfx:ShellsBel 2v
+sfx:ShellsRi  2v
+sfx:ShellsThi 2v
+sfx:ShellsFi  2v
+sfx:ShellsMet 2v
+sfx:ShellsThi 2v
+sfx:ThinShells  
+sfx:ThinSh.  oct
+sfx:ThinShell ST
+sfx:ThinShMet 2v
+sfx:FrameDr Bass
+sfx:FrameDrMe 2v
+sfx:Doppler FX 1
+sfx:Doppler FX 2
+sfx:Doppler A 4v
+sfx:Doppler B 4v
+sfx:Spec FX1    
+sfx:Spec FX1  ST
+sfx:Spec FX1B 2v
+sfx:Spec FX2    
+sfx:Spec FX2  ST
+sfx:Spec FX2B 2v
+sfx:Spec FX2C 2v
+sfx:Spec FX3    
+sfx:Spec FX3  ST
+sfx:Spec FX3B 2v
+sfx:Spec FX4    
+sfx:Spec FX4  ST
+sfx:Spec FX5    
+sfx:Spec FX5 oct
+sfx:Spec FX5  ST
+sfx:DeepSpring  
+sfx:DeepSpr. oct
+sfx:DeepSpringST
+sfx:Spec FX6    
+sfx:Spec FX6  ST
+sfx:ChimeFX LP  
+sfx:ChimeFX  oct
+sfx:ChFX-Bell 2v
+sfx:ChFX-Thin 2v
+sfx:ChFX-Fing 2v
+prc:Xylophone   
+prc:Xyloph. oct 
+prc:XyloTube  2v
+prc:XyloSyn-A 2v
+prc:XyloSyn-B 2v
+prc:XyloSyn-C 2v
+prc:XyloSyn-D 2v
+prc:XyloSyn-E 2v
+prc:BelloTuned  
+prc:BelloTun.cho
+prc:BelloTun.Oct
+prc:BelloThin 2v
+prc:BelloThim 2v
+prc:BelloFing 2v
+prc:BelloFong 2v
+prc:ChimeThin   
+prc:ChimeThin ST
+prc:ChimeThi.oct
+prc:ChimeTh-A 2v
+prc:ChimeTh-B 2v
+prc:Finger Bell 
+prc:FingerB. oct
+prc:FingerB. cho
+kit:BD 1        
+kit:BD 1b       
+kit:BD Room   2v
+kit:BD Room b 2v
+kit:BD Elec 1   
+kit:BD Elec 1b  
+kit:BD Elec 2   
+kit:BD Elec 2b  
+kit:Claps ST+Mo 
+kit:Claps Stereo
+kit:CLPs Stack2v
+kit:Claps mono  
+kit:SN Elec 1   
+kit:SN Elec 1b  
+kit:SN Elec1  ST
+kit:SN Elec1b ST
+kit:SN Elec 2 2v
+kit:SN Elec 3 2v
+kit:SN E-CLP  2v
+kit:SN E-CLP b2v
+kit:Snares ST 1 
+kit:Snares 2    
+kit:Snares 2b   
+kit:Snares 3  ST
+kit:Snares 3b ST
+kit:SNjungle s+m
+kit:SN jungle ST
+kit:Toms ST+Mo  
+kit:Hi Hats     
+kit:Cymb&Rides 1
+kit:Cymb&Rides 2
+kit:Percussion 1
+kit:Percussion 2
+kit:Percussion 3
+kit:Jazzy & Bass
+kit:BD+HH Elec1 
+kit:BD+HH Elec1b
+kit:BD+HH Elec2 
+kit:BD+HH Elec2b
+kit:HH+BD 1     
+kit:HH+BD 2     
+kit:HH+BD 1room 
+kit:HH+BD 2room 
+kit:HH+BD 3     
+kit:HH+BD 4     
+kit:HH+BD 3room 
+kit:HH+BD 4room 
+kit:HH+BD Elec3 
+kit:HH+BD Elec3b
+kit:HH+BD Elec4 
+kit:HH+BD Elec4b
+kit:CLP  +SN1+CY
+kit:CLP b+SN1+CY
+kit:CLP  +SN1S+C
+kit:CLP b+SN1S+C
+kit:CLP  +SN2+CY
+kit:CLP b+SN2+CY
+kit:CLP  +SN3+CY
+kit:CLP b+SN3+CY
+kit:CLP  +SN4+CY
+kit:CLP b+SN4+CY
+kit:CLP  +SN5   
+kit:CLP  +SN5b  
+kit:CLP b+SN5   
+kit:CLP b+SN5b  
+kit:CLP  +SN6+CY
+kit:CLP b+SN6+CY
+kit:CLP  +SN7+CY
+kit:CLP b+SN7+CY
+kit:CLP  +SN8+CY
+kit:CLP b+SN8+CY
+kit:CLP  +SN9+CY
+kit:CLP b+SN9+CY
+kit:CLP  +SN10+C
+kit:CLP b+SN10+C
+kit:CLP  +SN11+C
+kit:CLP b+SN11+C
+kit:CLP  +SN12+C
+kit:CLP b+SN12+C
+kit:CLP  +SN13+C
+kit:CLP b+SN13+C
+kit:Perc.1+2A   
+kit:Perc.1+2B   
+kit:Perc.1+2C   
+kit:Perc.1+3A   
+kit:Perc.1+3B   
+kit:Perc.1+3C   
+kit:Perc.2+3A-B 
+kit:Perc.2+3B-C 
+kit:Perc.2+3C ++
+kit:WeirdPercus1
+kit:WeirdPercus2
+prc:Tuned Jungle
+prc:Tuned Ele BD
+prc:sfx LoFi1 SN
+prc:sfx LoFi2 SN
+prc:sfx LoFi3 SN
+prc:sfx LoFi4 SN
+prc:SleighBell  
+prc:SleighB. oct
+prc:SleighB.  ST
+prc:Splash 8"sft
+prc:China 22" ST
+prc:Conga 1     
+prc:Conga 2     
+prc:Quinto 1    
+prc:Quinto 2    
+prc:Tumba 1     
+prc:Tumba 2 wuha
+prc:Tumba FX    
+prc:Djembe 1    
+prc:Djembe 2    
+prc:Udo Special 
+prc:High Sizz   
+prc:High Sizz 2v
+prc:Beatring1   
+prc:Beatring2 2v
+prc:Clap 1ST  C4
+prc:Clap 2ST  C4
+prc:Clap 3ST  C4
+prc:Clap 4ST  C4
+prc:Clap 5ST  C4
+prc:Clap 6ST  C4
+prc:Clap 7ST  C4
+prc:Clap 8ST  C4
+prc:Clap 9ST  C4
+prc:Clap10ST  C4
+prc:Clap11ST  C4
+prc:Clap12ST  C4
+prc:Clap13ST  C4
+prc:Clap14ST  C4
+prc:Clap15ST  C4
+prc:Clap16ST  C4
+prc:Clap17ST  C4
+prc:Clap18ST  C4
+prc:Clap19ST  C4
+prc:Clap20ST  C4
+prc:Clap21ST  C4
+prc:Clap22ST  C4
+prc:Clap23ST  C4
+prc:Clap24ST  C4
+prc:Clap25ST  C4
+prc:Clap26ST  C4
+prc:Clap27ST  C4
+prc:Clap28ST  C4
+prc:Clap29ST  C4
+prc:Clap30ST  C4
+prc:Clap31ST  C4
+prc:Clap32ST  C4
+prc:Clap33ST  C4
+prc:Clap34ST  C4
+prc:Clap35ST  C4
+prc:Fsnap1ST  C4
+prc:Fsnap2ST  C4
+prc:Fsnap3ST  C4
+prc:Fsnap4ST  C4
+prc:Fsnap5ST  C4
+kit:riff set    

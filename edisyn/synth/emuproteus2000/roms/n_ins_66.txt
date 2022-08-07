@@ -1,0 +1,59 @@
+   :None        
+str:Vibrato f   
+str:Vibrato mp  
+str:Soft Sustain
+str:Tremolo ff  
+str:Tremolo mp  
+str:Sordino     
+str:Staccato    
+str:Pizzicato   
+str:Vi Col Legno
+str:Va Col Legno
+brs:Sustained ff
+brs:Staccato f  
+brs:Staccato mp 
+wnd:Sustained ff
+wnd:Staccato f  
+wnd:Staccato mp 
+prc:Orchestra   
+prc:Tmple Blocks
+prc:Cowbell f 3G
+prc:Cowbell f C5
+prc:Cowbell p 3G
+prc:Cowbell p C5
+prc:Clave A#5   
+prc:Clave B5    
+prc:Windchimes  
+prc:Orch P2K V1 
+prc:Orch P2K V2 
+prc:Orch P2K V3 
+prc:Timpani   V1
+prc:Timpani   V2
+prc:Cymbals   V1
+prc:Cymbals   V2
+prc:Snare     V1
+prc:Snare     V2
+prc:Snare     V3
+prc:Snare     V4
+prc:Gran Cssa V1
+prc:Gran Cssa V2
+prc:Gran Cssa V3
+prc:Gran Cssa V4
+prc:Tam Tam   V1
+prc:Tam Tam   V2
+prc:Orch E4 V01 
+prc:Orch E4 V02 
+prc:Orch E4 V03 
+prc:Orch E4 V04 
+prc:Orch E4 V05 
+prc:Orch E4 V06 
+prc:Orch E4 V07 
+prc:Orch E4 V08 
+prc:Orch E4 V09 
+prc:Orch E4 V10 
+prc:Orch E4 V11 
+prc:Orch E4 V12 
+prc:Orch E4 V13 
+prc:Orch E4 V14 
+prc:Orch E4 V15 
+prc:Orch E4 V16 

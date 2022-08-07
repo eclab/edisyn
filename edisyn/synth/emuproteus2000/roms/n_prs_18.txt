@@ -1,0 +1,512 @@
+syn:Vintage     
+epo:Classic EP  
+epo:CP Seventy  
+epo:Wurly       
+key:Clavinet    
+org:B-3 OvrDrive
+epo:Mello Tines 
+vox:BigTronChoir
+led:BeginAgain  
+bas:TaurusPedals
+str:Tron Violins
+brs:'99 Brass   
+syn:SEM         
+syn:Airscopix   
+syn:OB Glider   
+kit:Electra     
+syn:Analogic    
+epo:Dyno Vox    
+epo:CP Pad      
+org:Jazz Pro    
+key:Clav Flanger
+org:Old Red Top 
+pad:Sentinels   
+vox:Light Aahs  
+syn:Back at U   
+bas:Mini Snap   
+cmb:Flute/String
+brs:Thick Brass 
+syn:Synth Stack 
+syn:OB-Xa       
+brs:Tron Brass  
+kit:FusionMover 
+epo:Dyno Piano  
+epo:Chorus Dyno 
+epo:Lite Dyno   
+epo:Heavy Dyno  
+epo:StudioDyno1 
+epo:StudioDyno2 
+epo:DynoStcase  
+epo:DynoChorus  
+epo:Stereo EP   
+epo:DynoOdd     
+epo:Dyno Soft   
+epo:String EP   
+epo:MetalBars   
+epo:MetalBarsXfd
+epo:EP Silver   
+epo:Canada      
+epo:Toyo        
+epo:MarshMello  
+epo:Mello EP1   
+epo:Mello EP2   
+epo:Mellow Pop  
+epo:OB Tine EP  
+epo:OB EP       
+epo:FM Tines    
+epo:FM SimpleEP 
+epo:FM Delicate 
+epo:FM Phase    
+epo:FM Flanger  
+epo:Dynamic FM  
+epo:Analog FM   
+epo:Wurlilayer  
+epo:Mama'sWurli 
+epo:Real CP     
+epo:ClassicCP   
+epo:CP 70       
+epo:CP Layer    
+epo:Vintage CP  
+epo:Rock CP     
+epo:Stage CP    
+epo:CP Light    
+epo:CP Tight    
+epo:CP Uptown   
+epo:Lullaby     
+epo:AOR Ballad  
+key:Clav 1      
+key:Clav 2      
+key:Clav 3      
+key:Clav1&2     
+key:StereoClav 2
+key:Buzzy Clav  
+key:FunkMaster  
+key:PhaseClav   
+key:SynthClav   
+key:PhaseClav2  
+key:Phase Clav3 
+key:TwoClavs    
+key:ThinClav    
+key:Clavsichord 
+key:Monster Clav
+key:AnaClav     
+key:Klav Mav    
+key:WakTclav    
+key:Clav Freak  
+key:Kloid's Jam 
+key:Clav Wah 1  
+key:Clav Wah 2  
+key:Clavicle    
+key:P5Hrpsichrd 
+key:Clavitzer   
+org:All Out     
+org:1st3 2ndPerc
+org:1st3 3rdPerc
+org:1st4 Vib    
+org:1st4Vib2Perc
+org:1st4Vib3Perc
+org:Six Out     
+org:Jazz'n Jimmy
+org:1st3HiDrBr  
+org:1st3FullDist
+org:1st4VFullDis
+org:Pipe Organ  
+org:Far Away    
+org:Clicky      
+org:Comp        
+org:PortaVib    
+org:PortaVibSt  
+org:Shimmer     
+org:OBX Organ   
+org:PlasticOrg  
+org:MelloCombo  
+org:BrashCombo  
+org:ComboTrem   
+org:Dr. Please  
+org:Grindo      
+org:Smooth      
+org:Perc Three  
+syn:Wide OB     
+syn:P10         
+syn:Juno        
+syn:Rogue       
+syn:Huge SEM    
+syn:Round Mini  
+syn:Big Mini    
+syn:Juno Pulse  
+syn:10101       
+syn:Profit/Loss 
+syn:FuzzBell    
+syn:Random OB   
+syn:Phase1Alert 
+syn:JX Oct Split
+syn:JunoOctSplit
+syn:Syrupy JP   
+syn:ProphetPiano
+syn:ArpClarinet 
+syn:JupyPad     
+syn:MoogShrtPuls
+syn:Poly ARP    
+syn:SEM Bat Fuzz
+syn:Juno & DX   
+syn:Deep Sky    
+syn:80zFuzzPad  
+syn:P10 SkySweep
+syn:Nephilim    
+syn:P5 PolySync 
+syn:OB Glider2  
+syn:Power Juno  
+syn:OBSEMFuzz1  
+syn:OBSEMFuzz2  
+syn:Vin Syn     
+syn:Regbit      
+syn:Stabber     
+syn:Distant     
+syn:Synth Ringer
+syn:Late 80z    
+syn:Late 80z 2  
+syn:NoteOffChime
+syn:Nunzio      
+syn:FiltrBrass1 
+syn:FiltrBrass2 
+syn:Robot ca1960
+syn:Glass Pipe  
+syn:Merlot      
+syn:AirCommand  
+syn:Ex-plorer   
+syn:Sneaker Flap
+syn:Poly Mono   
+syn:Angel Eyes  
+syn:Little      
+syn:Lush        
+syn:OBeast Sync 
+syn:ArmyOJunos  
+syn:OB Saw Octs 
+syn:Wall O Saws 
+syn:TouchRez    
+syn:X Tron      
+syn:Shade Pad   
+syn:Total Recall
+syn:Ice Eyes    
+syn:Enchanted   
+syn:Chimelope   
+syn:S&Holding   
+syn:Runner      
+syn:Weild 5ths  
+syn:NightTime   
+syn:Perc Rouge  
+syn:MiniSaw Octs
+syn:ProFive Octs
+syn:Arp Octs    
+syn:Modular Octs
+syn:Mucho Octs  
+syn:RogueSawOcts
+syn:SySaPhUs    
+syn:P5 Sync 1   
+syn:P5 Sync 2   
+syn:P5 Sync 3   
+syn:Morpheus    
+syn:Synphonix 1 
+syn:Synphonix 2 
+syn:KotoRize    
+syn:Arp Axxe    
+syn:Sin Brass   
+syn:Megasync    
+syn:Sawphony    
+syn:AnalogBell  
+syn:D Fiftease  
+syn:VS Ghost    
+syn:Now & Zen   
+syn:Metasynth1  
+syn:Metasynth2  
+led:Sonic Six   
+led:Muddy Sync  
+led:RhaspyClickr
+led:BigSoloSqr  
+led:Pulse       
+led:M12         
+led:OBX SyncMono
+led:PortaLead   
+led:Power Mini  
+led:WickedSquare
+led:OverDrive101
+led:Frank Stein 
+led:Odd Lead    
+led:Soft&Round  
+led:Glass Rim   
+led:Spike       
+led:Oh Boy      
+led:JunoOvrDrive
+led:OB Lead     
+led:Mean Wheel  
+led:PulseFlanger
+led:Zawi        
+led:Stinger     
+led:Raspy       
+led:Mini Soul   
+led:SawsOfOld   
+led:ThinPotent  
+led:OB Pulser   
+led:Full Body   
+led:Squawky OB  
+led:Skware!!    
+led:GrowlySynth 
+led:Big ARP     
+led:E-MU Modular
+led:Funky Junk  
+pad:ChifferPad  
+pad:Thin Lad    
+pad:Lunar       
+pad:Believe     
+pad:Angel Eyes  
+pad:PreSamplers 
+pad:Sentinels2  
+pad:Ghost Vox   
+pad:O.D.        
+pad:Liquid 1    
+pad:Liquid 2    
+pad:Liquid 3    
+pad:Beauteous   
+pad:ProfitMargin
+pad:Tri Res     
+pad:QuietSaws   
+pad:Lunar 2     
+pad:Slippery    
+pad:Matches     
+pad:Poly Pad    
+pad:iBubble     
+pad:M12 Skyline 
+pad:Raindance   
+pad:Horizons    
+pad:Big Pad     
+pad:SlitherPad  
+pad:HarshSwell  
+pad:Grainy      
+pad:GrimFemVox  
+pad:Pipey       
+pad:Organ Synth 
+pad:Fem Strings 
+str:MemMoogStrng
+str:Solina      
+str:Elka Combo  
+str:SuperElka   
+str:Lush70'sFade
+str:Big M12     
+str:Ensemble    
+str:Muffled     
+str:Sepiatone   
+str:Analog Harp 
+str:Old Time1   
+str:Old Time2   
+str:Old Time3   
+str:String Vox  
+str:String Flute
+str:VeloBows    
+str:String Box  
+str:Elka & Mtron
+str:Celli Sect  
+str:Smooth&Wide 
+str:String Fever
+str:Its The Pitz
+str:ClosetCleanR
+str:String Cheez
+str:Filtron     
+vox:Tron Males  
+vox:Cluttex     
+vox:SnowBound   
+vox:Chiffer     
+vox:BreathBlow 2
+vox:TronMalesSt 
+vox:TronMixSt   
+vox:VS Ghost    
+vox:ThroatEnergy
+vox:TalkBox Pro 
+vox:Moon Flute  
+brs:FullTrnBrass
+brs:WindyBrass  
+brs:E2 Brass    
+brs:Big Swell   
+brs:Big Swell 2 
+brs:Rich Brass  
+brs:ElegantBrass
+brs:F-Hrns      
+brs:Coronation  
+brs:HugeOB Brass
+brs:BrassKicker 
+brs:Brassitude  
+wnd:StereoMtron 
+wnd:Flute Sect  
+wnd:Tron Flute  
+wnd:Flute Bed   
+wnd:SoftFlutes  
+wnd:LoFi Flute  
+wnd:Flooting    
+wnd:Dark Satyr  
+wnd:Reedy       
+cmb:Produkshun  
+cmb:CP/Strings  
+cmb:FM/Strings  
+cmb:EPJunoTron  
+cmb:Juno/P5     
+cmb:TronVoxStrng
+cmb:Str & Brass 
+cmb:Dyno B to B 
+cmb:Flute&String
+cmb:B3/EP       
+cmb:PulseMadness
+cmb:Rogue Mini  
+cmb:Taurus&Strng
+cmb:TarusStngVox
+cmb:Gymnosticks 
+cmb:Wurli & Roti
+cmb:Dyn Logic   
+cmb:TV Stack    
+cmb:Wurly B     
+cmb:SynStr+SynBs
+cmb:Many Junos  
+cmb:80sStackBass
+cmb:GtrStrings  
+cmb:C P R       
+cmb:MachineHeart
+jam:DX Style    
+jam:CP Stage    
+jam:Clav        
+jam:Lush        
+jam:Latin       
+jam:Funkersize  
+bpm:Beat Row 1  
+bpm:Beat Row 2  
+bpm:Spinner     
+bpm:El Effo Sr. 
+bpm:Q Noiz Klock
+bpm:S/H Operator
+bpm:Q PulseKlock
+bpm:RoboJive    
+bas:Big Taurus  
+bas:Big FM Bass 
+bas:Bottom 101  
+bas:Warm SEM    
+bas:Arpy Bass   
+bas:Mini Snap 2 
+bas:Arp Snap    
+bas:BigSnap     
+bas:FatFingers  
+bas:Deep End 1  
+bas:Deep End 2  
+bas:Wide & Deep 
+bas:ThiklySettld
+bas:VintSynBass1
+bas:MurkySweep  
+bas:LayerBass   
+bas:Expressive  
+bas:Taurnado    
+bas:Picote      
+bas:Finger      
+bas:Pilot       
+bas:Hummer      
+bas:Bagg        
+bas:TS Mini     
+bas:MonoMe      
+bas:MonoMe2     
+bas:Bounce      
+bas:303 Saws    
+bas:303 Squares 
+bas:Phatt Taurus
+bas:So Lo Pro   
+gtr:Hackettism  
+gtr:Spy vs Spy  
+gtr:AirGuitar   
+gtr:Hit It      
+gtr:Wacka 1     
+gtr:Wacka 2     
+gtr:Jazzy       
+gtr:Clav Guitar 
+gtr:HarmonicTone
+sfx:Evil Saws   
+sfx:DragonBreath
+sfx:SpaceMuffin 
+sfx:GorgeousCrzy
+sfx:Nepatunism  
+sfx:The Dead See
+sfx:Hold Up     
+sfx:The Garden  
+sfx:Acid Rain   
+sfx:NoZ         
+arp:Loopy Gruv  
+arp:Drifter     
+arp:Classic     
+arp:Downtown    
+arp:Khord       
+arp:Tracker     
+arp:MinorHorns  
+arp:Sparkle     
+arp:DrumPitchy  
+arp:SquareThumpr
+arp:MinorFinale 
+arp:HiPassCmputr
+arp:EMU 2 Live! 
+arp:BowCircuit  
+arp:HardRepeat  
+arp:Tribal Toms 
+arp:DrumRoller  
+arp:ZipTripper  
+arp:Log Funk    
+bts:FastRock    
+bts:RockFunk    
+bts:Shuffle     
+bts:Chill Room  
+bts:Teardrop    
+bts:Evolution   
+bts:The Pulse   
+bts:Dreamland   
+bts:Fusion      
+bts:Jazz        
+bts:DropBeatBglu
+kit:Acoustic GM 
+kit:Acoustic 2  
+kit:El GM Kit 1 
+kit:El GM Kit 2 
+kit:808         
+kit:909         
+kit:MS20        
+kit:MS20 #2     
+kit:SK-1        
+kit:SP1200      
+kit:Electronic 1
+kit:Electronic 2
+kit:Electronic 3
+kit:Electronic 4
+kit:Electronic 5
+kit:HighBoy     
+kit:Double Kit  
+kit:VintagePhase
+kit:Flashback   
+kit:Stadium     
+kit:Soft Fuzz   
+kit:NickleMix   
+kit:Soul Power  
+kit:Beef Cake   
+kit:BrightMoment
+kit:Lil Popper  
+kit:InTheAir    
+kit:B Boy       
+prc:All Kicks   
+prc:All Snares  
+prc:All Toms    
+prc:All Hats    
+prc:All Cymbals 
+prc:Shakers     
+prc:Snaps       
+prc:Congas      
+prc:Misc        
+prc:Few ChoreMen
+prc:Steeely 1   
+prc:Steeely 2   
+prc:Arnold 1    
+prc:8bit Blocks 
+prc:Air Strike  
+bts:Reggae      
+prc:A Sine      
+bts:NeoLatinRock
+bts:NuRocker    
+   :Default v1.0

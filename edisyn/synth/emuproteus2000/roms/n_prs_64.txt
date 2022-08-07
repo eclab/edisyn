@@ -1,0 +1,128 @@
+pno:TheHolyGrail
+pno:Concert Pno 
+pno:Concert 2   
+pno:Studio      
+pno:Piano Bar   
+pno:R&B         
+pno:Ballad      
+pno:Wide Ballad 
+pno:Smooth      
+pno:Rocker      
+pno:Rock        
+pno:Stadium     
+pno:GrailRock   
+pno:Techno      
+pno:Club        
+pno:GrailHouseWl
+pno:HonkyTonk 1 
+pno:HonkyTonk 2 
+pno:Grand Flange
+pno:Flange 2    
+pno:Chorus 1    
+pno:Chorus 2    
+pno:Dance Hall  
+pno:Slap Back   
+pno:Pong        
+pno:Tack        
+pno:Slap Tack 1 
+pno:Slap Tack 2 
+pno:Velo Light  
+pno:Velo Med    
+pno:Heavy Harp  
+pno:WeightedKey1
+pno:WeightedKey2
+pno:WeightedKey3
+pno:WeightedKey4
+pno:1 Layer     
+pno:AnotherLayer
+pno:Mono        
+pno:Versatile 1 
+pno:Versatile 2 
+pno:Dark        
+pno:Somber      
+pno:Mr. Mello   
+pno:Slow        
+pno:Briter      
+pno:Parlor      
+pno:Cut Hard    
+pno:Cut Sustain 
+pno:Pacific     
+pno:Manor       
+pno:Percussive  
+pno:Pann        
+pno:Variation 1 
+pno:Variation 2 
+pno:Variation 3 
+pno:Variation 4 
+pno:Variation 5 
+pno:Variation 6 
+pno:Cool Cat    
+pno:Symp Res 1  
+pno:Symp Res 2  
+pno:Max Res     
+pno:ResonanceOnC
+pno:SostenutoOn2
+pno:Sostenuto 2 
+pno:FS2 FX      
+pno:FS2SoftPedal
+pno:FS2BassPedal
+pno:Upright     
+pno:FX MWheel 1 
+pno:FX MWheel 2 
+pno:FX MWheel 3 
+pno:Dis On C    
+pno:Delay On C  
+cmb:Jazz Joint  
+cmb:Bass Split 2
+cmb:Pizz/Piano  
+cmb:Tine Grand  
+cmb:Tine 2      
+cmb:Tine 3      
+cmb:Grand & B   
+cmb:Biano       
+cmb:Analog      
+cmb:Digital     
+cmb:Piano&String
+cmb:Piano & Saw 
+cmb:StringGrail 
+cmb:Padded      
+cmb:Votif       
+cmb:Voxis       
+cmb:Breath      
+cmb:Soul        
+cmb:Lezzlee     
+cmb:Worship     
+cmb:B n' O      
+cmb:Harmonic    
+cmb:SineBelow 1 
+cmb:SineBelow 2 
+cmb:Piano Dianne
+cmb:Fog Bank    
+cmb:Piano Roll  
+cmb:Dynorganic  
+pad:Padd Grail  
+pad:ResMagic1   
+pad:ResMagic2   
+pad:Magician    
+pad:Spacey      
+pad:Errett's    
+pad:RezDropper  
+pad:Whisper     
+pad:Grail Trails
+pad:Voice Over  
+sfx:Transpiano  
+sfx:Key Huffer  
+sfx:Scored      
+sfx:Scared      
+sfx:Nasal Somber
+sfx:VMS Model l 
+sfx:VMS Model 2 
+sfx:VMS Model 3 
+sfx:VMS Model 4 
+sfx:TreasureChst
+sfx:L'Omnibus   
+sfx:Moonscape   
+sfx:Submerged   
+sfx:Future Now  
+sfx:MeteorShower
+sfx:Mojave Dawn 

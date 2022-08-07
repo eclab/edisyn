@@ -1,0 +1,643 @@
+   :None        
+bas:303 Bass 1  
+bas:303 Bass 2  
+bas:303 Bass 3  
+bas:303 Sub Bs 1
+bas:303 Sub Bs 2
+bas:Ac Bass 1   
+bas:AcBsFngrNoiz
+bas:Ana Bass 1  
+bas:Ana Bass 2  
+bas:Ana Bass Atk
+bas:Buzz E. Bass
+bas:Clicky AnaBs
+bas:E Bass Wave1
+bas:E Bass Wave2
+bas:Euro Bass 1 
+bas:Fred Bs Hard
+bas:Fred Bs Soft
+bas:Gonk Bass   
+bas:Jazzy Bass 1
+bas:Jazzy Bass 2
+bas:Mmmm Bass   
+bas:Octa Bass   
+bas:Sine Bass 1 
+bas:Sine Bass 2 
+bas:Snappy Bass 
+bas:Warm Bass   
+cym:All Cymbals 
+cym:All Hats    
+cym:Chabara     
+cym:ChabaraVelSw
+cym:Cha Mute    
+cym:CrashCymbal1
+cym:CrashCymbal2
+cym:CrashCymbal3
+cym:CrashCymbal4
+cym:CrashCymbal5
+cym:CrashCymbal6
+cym:CrashCymbal7
+cym:Crash Map 1 
+cym:Crash Map 2 
+cym:Crash Map 3 
+cym:Cymbal Mix  
+cym:Hat Closed 1
+cym:Hat Closed 2
+cym:Hat Closed 3
+cym:Hat Closed 4
+cym:Hat Closed 5
+cym:Hat Closed 6
+cym:Hat Closed 7
+cym:Hat Open 1  
+cym:Hat Open 2  
+cym:Hat Open 3  
+cym:Hat - Toys 1
+cym:Hat - Toys 2
+cym:Hat - Toys 3
+cym:Hat - Toys 4
+cym:Jing        
+cym:Koenkari Hit
+cym:Luo 1 Hard  
+cym:Luo 1 Soft  
+cym:Luo 2 Hard  
+cym:Luo 3 Small 
+cym:ReverseCym1 
+cym:Ride Bell 1 
+cym:Ride Cymbal1
+cym:Ride Cymbal2
+cym:Ride Cymbal3
+cym:Ride Cymbal4
+cym:Ride Cymbal5
+cym:Ride Cymbal6
+cym:Ride Cymbal7
+cym:Ride Cymbal8
+cym:Ride Map 1  
+cym:Ride Map 2  
+cym:Ride Map 3  
+cym:Syn Crash   
+cym:Syn Ride    
+cym:Wadora      
+cym:Wadora Rim  
+cym:Wohan Gong  
+epo:Clavinet    
+epo:Digi Piano  
+epo:FM EPno A   
+epo:FM EPno Attk
+epo:FM EPno B   
+epo:FM EPno C   
+epo:Real EPno 1 
+epo:Real EPno 2 
+epo:Real EPno XS
+epo:Tine EPno A 
+epo:Tine EPnoAtk
+epo:Tine EPno B 
+epo:Tine EPno C 
+epo:Tine EPno D 
+epo:Wurli Hi Vel
+epo:Wurli Lo Vel
+epo:Wurli XSw 1 
+epo:Wurli XSw 2 
+gtr:8ve Strings 
+gtr:Bandolin    
+gtr:Banjo       
+gtr:Berimbau Atk
+gtr:Berimbau Wah
+gtr:BowedPsaltry
+gtr:BowPsaltryWF
+gtr:Charango    
+gtr:Chord Wakkas
+gtr:Double Str 1
+gtr:Double Str 2
+gtr:Double Str 3
+gtr:Gayagum     
+gtr:GopechanStrm
+gtr:Guitar Falls
+gtr:Gu Qin      
+gtr:HamrDulcAtk 
+gtr:HamrDulcimer
+gtr:HyungumHard 
+gtr:HyungumSoft 
+gtr:Jurda Saz   
+gtr:Kantele     
+gtr:Koto        
+gtr:PluckedSitar
+gtr:Sarod       
+gtr:Senegalese  
+gtr:Sitar       
+gtr:Sitar Mix   
+gtr:Taisho Koto 
+gtr:Tamboura 1  
+gtr:Tamboura 2  
+gtr:Ukelele     
+gtr:Vel Wakkas  
+gtr:Wakka Map   
+gtr:Yangkeum    
+hit:Chord Hit 1 
+hit:Euro Hito   
+hit:Guitar Stab 
+hit:Hit Me Hard 
+hit:Horn Hit    
+hit:Horny Stab  
+hit:Metal Ray   
+hit:Noise Hit 1 
+hit:Old Classic 
+hit:PinkNoiseHit
+hit:Rave Org Hit
+hit:Sine Hit 1  
+hit:Sine Hit 2  
+hit:Squeal 1    
+hit:Squeal 2    
+hit:Squeal 3    
+hit:Squeal 4    
+hit:Squealarama1
+hit:Squealarama2
+hit:Squeal Map 1
+hit:Tech Chord  
+hit:Wht NoiseHit
+kit:01 a        
+kit:02 a        
+kit:03 a        
+kit:04 a        
+kit:05 a        
+kit:06 a        
+kit:07 a        
+kit:08 a        
+kit:09 a        
+kit:10 a        
+kit:01 b        
+kit:02 b        
+kit:03 b        
+kit:04 b        
+kit:05 b        
+kit:06 b        
+kit:07 b        
+kit:08 b        
+kit:09 b        
+kit:10 b        
+kit:11 b        
+kit:12 b        
+kit:13 b        
+kit:14 b        
+kit:15 b        
+kit:16 b        
+kit:17 b        
+kit:18 b        
+kit:19 b        
+kit:20 b        
+kit:21 b        
+kit:22 b        
+kit:23 b        
+kit:24 b        
+kit:25 b        
+kit:26 b        
+kit:27 b        
+kit:28 b        
+kit:29 b        
+kit:30 b        
+kit:31 b        
+kit:32 b        
+kit:33 b        
+kit:34 b        
+kit:35 b        
+kit:01 c        
+kit:02 c        
+kit:03 c        
+kit:04 c        
+kit:05 c        
+kit:06 c        
+kit:07 c        
+kit:08 c        
+kit:09 c        
+kit:10 c        
+kit:11 c        
+kit:12 c        
+kit:13 c        
+kit:14 c        
+kit:15 c        
+kit:16 c        
+kit:17 c        
+kit:18 c        
+kit:19 c        
+kit:20 c        
+kit:01 d        
+kit:02 d        
+kit:03 d        
+kit:04 d        
+kit:05 d        
+kit:06 d        
+kit:07 d        
+kit:08 d        
+kit:09 d        
+kit:10 d        
+nse:Pink Noise  
+nse:White Noise 
+nse:FilteredNoiz
+org:House of Org
+org:Org775305004
+org:Org888000000
+org:Org888856444
+org:Org888880880
+org:Used Organ  
+prc:AfricanClave
+prc:Afuche Loop 
+prc:Agogo Bell 1
+prc:Agogo Bell 2
+prc:Agogo Bell 3
+prc:All Claps   
+prc:All Kicks 1 
+prc:Am IndianTom
+prc:Bata Drum 1 
+prc:Bata Drum 2 
+prc:Bata Drum 3 
+prc:Bata Drum 4 
+prc:Bata Drum 5 
+prc:Bata Drum 6 
+prc:Bata Drum 7 
+prc:Bata Drum 8 
+prc:Bata Drum 9 
+prc:Bata Drum 10
+prc:BataDrumMix 
+prc:BlackBlacks 
+prc:BobbyWhistle
+prc:Bongo High 1
+prc:Bongo High 2
+prc:Bongo High 3
+prc:BongoHiRoll 
+prc:BongoLoRoll 
+prc:BongoLoSlap 
+prc:BongoLoTap1 
+prc:BongoLoTap2 
+prc:BongoLoTap3 
+prc:Bongo Low 1 
+prc:Bongo Low 2 
+prc:Bongo Mix   
+prc:Buk Hit     
+prc:Bullroarer 1
+prc:Bullroarer 2
+prc:Castanet Mix
+prc:CastanetRoll
+prc:Castanets 1 
+prc:Castanets 2 
+prc:Chalgo      
+prc:Changko Low1
+prc:Changko Low2
+prc:Changko Mix 
+prc:ChangkoOpen1
+prc:ChangkoOpen2
+prc:Changko Roll
+prc:ChangkoStik1
+prc:ChangkoStik2
+prc:Changko Tap 
+prc:Chingo      
+prc:Chuan Ling  
+prc:Clap Map 1  
+prc:Clap Map 2  
+prc:Clap Map 3  
+prc:Clap Map 4  
+prc:Clap Map 5  
+prc:Clap Map 6  
+prc:Clap Map 7  
+prc:Clappy Noise
+prc:ClayDr Mute1
+prc:ClayDr Mute2
+prc:ClayDr Open1
+prc:ClayDr Open2
+prc:ClayDr Open3
+prc:Clay Drum Hi
+prc:Clay DrumLow
+prc:ClayDrum Mix
+prc:Conga Heel  
+prc:Conga Hit   
+prc:Conga Mix   
+prc:Conga Open H
+prc:Conga Open L
+prc:Conga Slap H
+prc:Conga Slap L
+prc:Cowbell 1Mix
+prc:Cowbell 2   
+prc:Cowbell 2Mix
+prc:Cowbell 3   
+prc:Cowbell 3Mix
+prc:Cowbell-Vel1
+prc:Cowbell-Vel2
+prc:Cricket 1   
+prc:Cricket 2   
+prc:Cuica 1     
+prc:Cuica 2     
+prc:Cuica 3     
+prc:Digeridoo 1 
+prc:Djembe Dbl  
+prc:DjembeHiSlap
+prc:Djembe Low 1
+prc:Djembe Mix  
+prc:Djembe Slap1
+prc:Djembe Slap2
+prc:Djembe Slap3
+prc:Djembe Slap4
+prc:DjembeVelSw1
+prc:DjembeVelSw2
+prc:DjembeVelSw3
+prc:DjembeVelSw4
+prc:DjembeVelSw5
+prc:Dumbek Fngr 
+prc:Dumbek Mix  
+prc:Dumbek Mute 
+prc:Dumbek Open 
+prc:Dumbek Rim  
+prc:Dumbek Roll 
+prc:Dumbek Slap 
+prc:Dumbek Swish
+prc:Dumbek Tap 1
+prc:Dumbek Tap 2
+prc:Frame Drum  
+prc:Grio Whistle
+prc:Gu 1        
+prc:Gu 2        
+prc:Guiro Long  
+prc:Guiro Mix   
+prc:GuiroShort1 
+prc:GuiroShort2 
+prc:Guiro-Vel1  
+prc:Hirado Rim  
+prc:Jaw Harp Mix
+prc:JawHarpVowel
+prc:Kashishi    
+prc:Kayamba Loop
+prc:KayambaShort
+prc:Kick Map 01 
+prc:Kick Map 02 
+prc:Kick Map 03 
+prc:Kick Map 04 
+prc:Kick Map 05 
+prc:Kick Map 06 
+prc:Kick Map 07 
+prc:Kick Map 08 
+prc:Kick Map 09 
+prc:Kick Map 10 
+prc:Kick Map 11 
+prc:Kick Map 12 
+prc:Kick Map 13 
+prc:Kick Map 14 
+prc:Ko Tzumi Hit
+prc:Ko Tzumi Slp
+prc:Madahl Drum 
+prc:Mokusho 1   
+prc:Mokusho 2   
+prc:Mokusho Mix 
+prc:NanBang Roll
+prc:Ndjuka Stick
+prc:Nogo        
+prc:Nut Rattle  
+prc:O Hit       
+prc:Percs Mix 1 
+prc:Percs Mix 2 
+prc:Percs Mix 3 
+prc:Rainstick   
+prc:Rek Hit 1   
+prc:Rek Hit 2   
+prc:Rek Hit 3   
+prc:Rek Mix     
+prc:Rek Shaken  
+prc:Reverse Sn 1
+prc:Reverse Sn 2
+prc:Reverse Sn 3
+prc:Rev Sn Map 1
+prc:Sacha Tum 1 
+prc:Sacha Tum 2 
+prc:Sacha Tum 3 
+prc:Sacha Tum 4 
+prc:Sacha Tum 5 
+prc:SachaTumMix 
+prc:SachaTumVel1
+prc:Sakara Mix  
+prc:Samba Whistl
+prc:Sassaru Fast
+prc:Sassaru Mix 
+prc:Sassaru Slow
+prc:Shakestick 1
+prc:Shakestick 2
+prc:Shakesticks 
+prc:Snare Map 01
+prc:Snare Map 02
+prc:Snare Map 03
+prc:Snare Map 04
+prc:Snare Map 05
+prc:Snare Map 06
+prc:Snare Roll  
+prc:Snares 01   
+prc:Snares 02   
+prc:Sticks 1    
+prc:Sticks 2    
+prc:Tabla BendUp
+prc:Tabla Hit 1 
+prc:Tabla Hit 2 
+prc:Tabla Mix   
+prc:Tabla Mute 1
+prc:Tabla Mute 2
+prc:Tabla Mute 3
+prc:Tabla Open 1
+prc:Tabla Open 2
+prc:Tabla Slap  
+prc:TablaSlapRol
+prc:Tabla-Vel1  
+prc:Tabla-Vel2  
+prc:Tambo XS 1  
+prc:Tambo Map 1 
+prc:Tambo Map 2 
+prc:Tambo XS 2  
+prc:Timbale High
+prc:Timbale Low 
+prc:Timbale Rim1
+prc:Timbale Rim2
+prc:Timbale Rim3
+prc:Timbale Rim4
+prc:TimbaleShell
+prc:Timbali Mix 
+prc:Toms Live 1 
+prc:Toms Live 2 
+prc:Toms Live 3 
+prc:Toms Live 4 
+prc:Toms Machine
+prc:Tsuridai Hit
+prc:Tsuridai Mix
+prc:TsuridaiRim1
+prc:TsuridaiRim2
+prc:Tumba Mix   
+prc:Udu Drum 1  
+prc:Udu Drum 2  
+prc:Udu Drum 3  
+prc:Udu Drum 4  
+prc:Udu Drum 5  
+prc:Udu Drum 6  
+prc:Udu Drum 7  
+prc:Udu Drum 8  
+prc:Udu Drum Mix
+prc:Yunngo      
+sfx:All Zaps    
+sfx:Beep Map    
+sfx:Cable Out   
+sfx:Needle Up   
+sfx:Record's Bad
+sfx:Scratch Map 
+sfx:Shortwave 1 
+sfx:SurfaceNoiz1
+sfx:SurfaceNoiz2
+sfx:SurfaceNoiz3
+sfx:Synthy Noise
+sfx:Zap 1       
+sfx:Zap 2       
+sfx:Zap 3       
+sfx:Zap 4       
+sfx:Zap 5       
+sfx:Zap 6       
+str:Rebab       
+syn:Analog Str 1
+syn:Analog Str 2
+syn:Beep Beep   
+syn:Buzzer      
+syn:Cheesy Str  
+syn:Dance Piano 
+syn:Drone 1     
+syn:ESQ 1 Sound 
+syn:Fat Saws    
+syn:Granular 1  
+syn:Granular 2  
+syn:Industrial 1
+syn:Inharmonic 1
+syn:Inharmonic 2
+syn:Inharmonic 3
+syn:Inharmonic 4
+syn:Inharmonic 5
+syn:Krinklephish
+syn:Lo-Fi String
+syn:Metal Loop  
+syn:Obee Rez    
+syn:PW Lead 1   
+syn:PW Lead 2   
+syn:PW Lead 3   
+syn:PW Lead 4   
+syn:PW Lead XS1 
+syn:Rackbell    
+syn:Slow AnaStr1
+syn:Slow AnaStr2
+syn:Slow AnaStr3
+syn:Slow AnaStr4
+syn:Solitude    
+syn:Space Syn 1 
+syn:Space Syn 2 
+syn:Space Syn 3 
+syn:Space Syn 4 
+syn:Space Syn 5 
+syn:Spinning Man
+syn:SynthString1
+syn:SynthString2
+syn:SynthString3
+syn:SynthString4
+syn:SynthString5
+tpc:Agogo Melody
+tpc:Angklung    
+tpc:Balaphone 1 
+tpc:Balaphone 2 
+tpc:Bell Attack1
+tpc:Bell Attack2
+tpc:Bian Qing   
+tpc:Bian Zhong  
+tpc:Buddah Bell 
+tpc:Conga Melody
+tpc:Cowbell Mel 
+tpc:Ethnic Metal
+tpc:Gankoqui    
+tpc:Kalimba 1   
+tpc:Kalimba 2   
+tpc:Log Drum 1  
+tpc:Log Drum 2  
+tpc:Log Drum 3  
+tpc:Log Drum 4  
+tpc:Log Drum Atk
+tpc:MissionBell1
+tpc:MissionBell2
+tpc:Octa Metal 1
+tpc:Odd Bell    
+tpc:Orient Bell1
+tpc:Orugoru     
+tpc:Pan Hyang   
+tpc:Peng Zhong  
+tpc:Pyon Gyong  
+tpc:Pyon Jong   
+tpc:Steel Drum  
+tpc:Thumb Piano1
+tpc:Thumb Piano2
+tpc:Tibetan Bowl
+tpc:TibetBowlSlo
+tpc:Tibet Bell 1
+tpc:Udu Melodic 
+tpc:Unla        
+tpc:Unla Wave   
+vox:All Vox     
+vox:Ay Ahh!     
+vox:Goh         
+vox:Hah!        
+vox:Hey!        
+vox:Hooo!       
+vox:Huh!        
+vox:Monks       
+vox:Oh          
+vox:Ohhh        
+vox:Oww! 1      
+vox:Oww! 2      
+vox:Shout       
+vox:So Confused 
+vox:Uhh! 1      
+vox:Uhh! 2      
+vox:Uhh! 3      
+vox:Uhh! 4      
+vox:Velocity Vox
+vox:Vox Mix 1   
+vox:Vox Mix 2   
+vox:Welle Welle 
+vox:Whoo!       
+vox:Yo Yell     
+wav:5ths Wave   
+wav:Bell Wave 1 
+wav:Bell Wave 2 
+wav:Brainiac    
+wav:Brass Wave  
+wav:Grumpy      
+wav:Jupiter     
+wav:P-5 Sync    
+wav:Pulse 50%   
+wav:Rez Saw 1   
+wav:Rez Saw 2   
+wav:Rez Saw 3   
+wav:Rez Saw 4   
+wav:Rez Saw XS 1
+wav:Rez Saw XS 2
+wav:Sawtooth    
+wav:Shprockets 1
+wav:Shprockets 2
+wav:Sine        
+wav:Square      
+wav:Syllables   
+wav:Triangle    
+wnd:Bandoneon   
+wnd:Bandoneon 2 
+wnd:BandoneonClk
+wnd:Breathe In  
+wnd:Flute Air 1 
+wnd:Flute Air 2 
+wnd:Flute Attack
+wnd:Hyang Piri  
+wnd:Quena 1     
+wnd:Quena Trill 
+wnd:Recorder    
+wnd:Saeng Hwang 
+wnd:Shaku Attack
+wnd:Shaku Chiff 
+wnd:Shakuhachi  
+wnd:Shawm       
+wnd:Sikus       
+wnd:Sikus Chiff 
+wnd:Taepyungso  
+wnd:Tang Piri   
+wnd:Tanso Flute 
+wnd:Tanso Slow  

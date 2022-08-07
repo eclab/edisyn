@@ -1,0 +1,186 @@
+AUD-C Triad     
+AUD-C1 (4 bars) 
+AUD-C3 (1 bar)  
+AUD-C3 (2 Bars) 
+AUD-C3 (4 Bars) 
+AUD-C4          
+AUD-Cm7         
+AUD-Cm9         
+AUD-Cmaj7       
+AUD-Cs Up       
+AUD-Cs Up-Down  
+BAS-Abyss       
+BAS-Acoustician 
+BAS-Acoustician2
+BAS-Beep        
+BAS-Chugalug    
+BAS-Chugalug 2  
+BAS-ConeBlower  
+BAS-Dirty Finger
+BAS-DX+         
+BAS-Finger      
+BAS-Finger 2    
+BAS-FM+         
+BAS-Fooger      
+BAS-Fooger 2    
+BAS-Fret St     
+BAS-Juno        
+BAS-Juno 2      
+BAS-Mad Boomy   
+BAS-New Wave    
+BAS-Octave Pick 
+BAS-Octave Pick2
+BAS-Old Skool B 
+BAS-Organ Bass  
+BAS-Phase       
+BAS-Sassy       
+BAS-Saw Bass    
+BAS-Scuzzy      
+BAS-Snappy      
+BAS-Stand       
+BAS-Stand 2     
+BAS-Sub         
+BAS-Vintage Sq  
+BAS-Wizard      
+BEL-Pastoralis D
+BTS-BodyDouble1 
+BTS-BodyDouble2 
+BTS-BottomFloor 
+BTS-CozmikBeetz 
+BTS-EchoTek     
+BTS-FilterFunk  
+BTS-FullOnRockin
+BTS-Introference
+BTS-RaunchStomp 
+BTS-XpolyNation 
+CMB-Hempi       
+CMB-Odd Mix     
+CMB-Otala       
+CMB-Regba       
+HIT-Don Stop    
+HIT-Sax Hop     
+KEY-Percolate   
+KEY-TWinkler    
+KIT-1200 Remix  
+KIT-Alien 2     
+KIT-BacknForth  
+KIT-basPTCHbndC1
+KIT-Beat Mine   
+KIT-Big Booty   
+KIT-Big Booty 2 
+KIT-BlueHeights 
+KIT-Bluesman    
+KIT-BreakCrunch 
+KIT-Broken      
+KIT-Chillavibe  
+KIT-Classic Rock
+KIT-ClassicRock2
+KIT-Danccommand 
+KIT-DB Ambience 
+KIT-Digadedaa   
+KIT-DivebombTom 
+KIT-Drawcab     
+KIT-DrawkcaB 2  
+KIT-DrawkcaB 3  
+Kit-Dub Style   
+KIT-Egg Beater  
+KIT-Electromix  
+KIT-Electromix 2
+KIT-Electromix 3
+KIT-Eramoti     
+KIT-Eye DM 2    
+KIT-Funk-o-matic
+KIT-FunkoMatic 2
+KIT-G Rider     
+KIT-G Rider 2   
+KIT-Hand Built  
+KIT-Hertz Spiral
+KIT-Highboy     
+KIT-Highboy 2   
+KIT-Hip Hop 1   
+KIT-Hip Hop 10  
+KIT-Hip Hop 10 2
+KIT-Hip Hop 11  
+KIT-Hip Hop 2   
+KIT-Hip Hop 2 2 
+KIT-Hip Hop 3   
+KIT-Hip Hop 4   
+KIT-Hip Hop 5   
+KIT-Hip Hop 5 2 
+KIT-Hip Hop 6   
+KIT-Hip Hop 6 2 
+KIT-Hip Hop 8   
+KIT-Hip Hop 9   
+KIT-Hip Hop 9 2 
+KIT-Hiphopster4 
+KIT-Hiphopster4b
+KIT-HopHop V    
+KIT-In theStudio
+KIT-Inteletronic
+KIT-Jabberwocky 
+KIT-Jazz Brsh   
+KIT-Kolas       
+KIT-Lectrophonic
+KIT-Mouthful    
+KIT-MS Bumper   
+KIT-MS Bumper 2 
+KIT-MS Bumper 3 
+KIT-Natural Funk
+KIT-Nemesis     
+KIT-Nemesis 2   
+KIT-Oddskool    
+KIT-Outbreak    
+KIT-Overload    
+KIT-Player 1    
+KIT-Player 1 2  
+KIT-Player 1 3  
+KIT-Player 1 4  
+KIT-Player 1st  
+KIT-Player 2    
+KIT-Player 2 2  
+KIT-Player 2 3  
+KIT-Quasimatic  
+KIT-Skewer      
+KIT-Small B Kit 
+KIT-Solid State3
+KIT-Solid States
+KIT-Solidstate 1
+KIT-St Spread 2 
+KIT-Studio Rock 
+KIT-Studio Rock2
+KIT-Sweepy      
+KIT-Swinger     
+KIT-Swinger 2   
+KIT-Techschure  
+KIT-Tommi Lee   
+KIT-Tommi Lee 2 
+KIT-Tribalrush  
+KIT-U-U Boy     
+KIT-XPolyNation 
+LED-Nasal Riff  
+PRC-All Snare 1 
+PRC-Ambicil     
+PRC-BabyBell    
+PRC-Baysicer    
+PRC-Baysik      
+PRC-Crazey      
+PRC-Drumattic   
+PRC-InTheClouds 
+PRC-Kicks       
+PRC-Lagrimas    
+PRC-Mallets 1   
+PRC-Mallets 2   
+PRC-Mallets 3   
+PRC-Mallets 4   
+PRC-Shakin      
+PRC-Stawln      
+PRC-Swoln       
+PRC-Yowie       
+PRC-Zowie       
+SFX-Deathstar   
+SYN-Blowing     
+SYN-Demican     
+SYN-GeeBe El    
+SYN-Organing    
+SYN-SawKeying   
+WND-Fluffykins  

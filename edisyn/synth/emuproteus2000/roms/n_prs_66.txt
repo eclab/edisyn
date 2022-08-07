@@ -1,0 +1,256 @@
+cmb:AdvancedOrch
+cmb:Traditional 
+str:LegatoString
+cmb:Orch Split  
+prc:Orchestra 1 
+brs:Brass       
+cmb:Full Symph  
+cmb:Symph Minor 
+str:Vib mp-f vSt
+str:Sus Stereo  
+str:Sor Stereo  
+str:Expressive  
+wnd:Expressive  
+brs:Expressive  
+cmb:BrassOverStr
+wnd:Warm Octs   
+cmb:Orch Hit    
+str:Staccato 1  
+str:Pizzicato 1 
+cmb:WarmWnd&Str 
+cmb:Brass&Winds1
+cmb:Velo Orch   
+str:Trem Stereo 
+str:Con Sordino 
+cmb:Legato Orch 
+prc:BassSnareCym
+prc:Timpani 1   
+prc:Timpani 2   
+syn:HP Sweep Sus
+syn:Mechawinds  
+sfx:Initiator   
+sfx:Space Choir 
+str:Vibrato f   
+str:Vib f Stereo
+str:Vibrato mp  
+str:Vib mf Str  
+str:Vibrato mp-f
+str:Vib mp-f v  
+str:Vib mp-f Oct
+str:Vib mp 3 Oct
+str:Vib mp-Sus  
+str:Vb mp-SusOct
+str:Vib mp-Tr mp
+str:Vib mp-Tr f 
+str:Vib f-Tr f  
+str:Soft Sustain
+str:Sus Octave  
+str:Sus-Vib f   
+str:Sus-Vib fOct
+str:Tremolo ff  
+str:Trem f Str  
+str:Tremolo mp  
+str:Trem mp Str 
+str:Trem mp-fOct
+str:VibTrem Str 
+str:VbTr mp-fOct
+str:Legato 1    
+str:Legato 2    
+str:Sor - Vib mp
+str:Sor-Vb mpOct
+str:Sor - Vib f 
+str:Sor-Vib fOct
+str:Sor - Sus   
+str:Sor-Sus Oct 
+str:Staccato 2  
+brs:Sustained ff
+brs:Sus Str ff  
+brs:Sus Oct ff  
+brs:Sustained mp
+brs:Sustained mf
+brs:Sus pp-ff w 
+brs:Shout Brass 
+brs:WhlWah Brass
+brs:Sfz Brass   
+brs:Staccato f  
+brs:Stac f w    
+brs:Staccato mp 
+brs:Warm Brass  
+brs:Warm Octs   
+brs:Synthy Brass
+brs:SweepyFourth
+brs:Brass Min 9 
+brs:Brass Maj6-9
+wnd:Sustained ff
+wnd:Sus ff Str  
+wnd:Sus ff Oct  
+wnd:Sustained mp
+wnd:Sus mp Str  
+wnd:Staccato f  
+wnd:Staccato mp 
+wnd:Super Winds1
+wnd:Super Winds2
+wnd:Super Winds3
+wnd:Warm Winds  
+wnd:Slack Winds 
+wnd:Sweep Winds 
+wnd:Drift Winds 
+wnd:Homers Wind 
+wnd:Winds Minor 
+prc:Orchestra 2 
+prc:Alt Timpani 
+prc:Gran Cassa  
+prc:GranCassa EQ
+prc:Snare       
+prc:Snare EQ    
+prc:Bass & Tymp 
+prc:BassTympTam 
+prc:Cymbals 1   
+prc:Cymbals 2   
+prc:Tam Tam 1   
+prc:Tam Tam 2   
+prc:TamTam&Cymb 
+prc:TempleBlcks1
+prc:TempleBlcks2
+prc:Cowbell p G3
+prc:Cowbell f G3
+prc:Cow p-f G3 v
+prc:Cowbell p C5
+prc:Cowbell f C5
+prc:Cow p-f C5 v
+prc:Clave B5    
+prc:Clave A#5   
+prc:Windchimes 1
+prc:Windchimes 2
+prc:Layered Perc
+lnk:OrchHitLink 
+cmb:AdvancedLnk1
+cmb:AdvancedLnk2
+str:Hall Strings
+str:Dark Legato 
+str:Vib w/Stac v
+str:Sus w/Stac  
+str:Pizzicato 2 
+str:PizzicatoOct
+str:Pizz Sustain
+str:Spic & Pizz 
+str:Vi Col Legno
+str:Va Col Legno
+str:ViVaColLegno
+str:VaCoLeg&Spic
+str:VaCoLeg&Pizz
+str:SuperStrngs1
+str:SuperStrngs2
+str:SuperStrngs3
+str:Staccato Oct
+str:Bright Octs 
+str:Smooth Pad  
+str:Warm Octs 1 
+str:Warm Octs 2 
+str:Warm Octs 3 
+str:String Maj  
+str:String Min 9
+str:Expressive 2
+str:Legato Octs 
+str:Slo Sordino 
+str:Alpha 7     
+str:B MovieSweep
+str:Slak Vibrato
+str:Trans Trem  
+str:Lilting     
+cmb:Full Symph 2
+cmb:Full Symph 3
+cmb:Stac Combo  
+cmb:Solo Symph  
+cmd:Symph 4 Octs
+cmb:Split Orch 1
+cmb:Split Orch 2
+cmb:Split Orch 3
+cmb:Split Orch 4
+cmb:Split Orch 5
+cmb:Split Orch 6
+cmb:VibratoOrch1
+cmb:VibratoOrch2
+cmb:Sordino Orch
+cmb:Sustain Orch
+cmb:Phase Orch  
+cmb:String&Brs 1
+cmb:String&Brs 2
+cmb:String&Brs 3
+cmb:String&Brs 4
+cmb:StrOverBrsWd
+cmb:WrmBrs&Str1 
+cmb:WrmBrs&Str2 
+cmb:Winds&Strng1
+cmb:Winds&Strng2
+cmb:WindsOverStr
+cmb:Staccati    
+cmb:Theme Pad   
+cmb:Brass&Winds2
+cmb:High School 
+cmb:AccordnSectn
+cmb:Brs StrAtk w
+cmb:Wnd StrAtk w
+cmb:FanfareBrass
+cmb:WndLead&Pad 
+cmb:Over Ventura
+cmb:Enjoy Symph 
+cmb:FrenchString
+cmb:Brass Mod   
+cmb:Tremers     
+cmb:Ozz         
+cmb:Stacc Echos 
+cmb:Clave Winds 
+cmb:Wind Blocks 
+cmb:Moo Bells   
+cmb:Hidden Fifth
+cmb:Reflection  
+cmb:Chime String
+syn:BrsLead&Pad 
+syn:Millennium  
+syn:Digital     
+syn:Density     
+syn:Astrus      
+syn:Sharp Symph 
+syn:Rezor Symph 
+syn:Tambo Spin  
+syn:Tinky Pad   
+syn:Evolute 1   
+syn:Evolute 2   
+syn:Synth Keyz  
+syn:BandPassion 
+syn:Atmos Radio 
+syn:String Me   
+syn:Wind Harms  
+syn:Spiritus    
+syn:Orkadelic   
+syn:Oceanix     
+syn:Voice Symph 
+syn:Mid Phasics 
+syn:Hi Phasics  
+syn:Downmode    
+syn:Synth Orch 1
+syn:Synth Orch 2
+syn:Synth Orch 3
+syn:Synth Orch 4
+syn:East Temple 
+syn:Boinker     
+syn:Temple Keys 
+syn:FreedomSynth
+syn:Col Leg No  
+syn:In Depth    
+org:Wind Org 1  
+org:Wind Org 2  
+org:Combo Org 1 
+org:Combo Org 2 
+org:Blue Org    
+sfx:The Core    
+sfx:Scary       
+sfx:Extropia    
+sfx:Possum Perc 
+sfx:InstntSerial
+sfx:Pulse Orch  
+sfx:Way Alt Ork 
+sfx:Orch Efx 1  
+sfx:Orch Efx 2  
+   :A.O. V1.0   

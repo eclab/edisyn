@@ -1,0 +1,141 @@
+   :None        
+org:1st3 Slow S 
+org:1st3 Slow M 
+org:1st3 Fast S 
+org:1st3 Fast M 
+org:1st4 Slow S 
+org:1st4 Slow M 
+org:1st4 Fast S 
+org:1st4 Fast M 
+org:1st4SlowVibM
+org:1st4FastVibM
+org:16&1SlowVibM
+org:0863115.SlwS
+org:0863115.SlwM
+org:0863115.FstS
+org:0863115.FstM
+org:08631.SlwVbM
+org:AllOutSlow S
+org:AllOutSlow M
+org:AllOutFast S
+org:AllOutFast M
+org:AllOutSlwVbS
+org:AllOutSlwVbM
+org:SlowPedals S
+org:16'Slow S Fb
+org:16'Slow M Fb
+org:5-1/3'SlwSFb
+org:5-1/3'SlwMFb
+org:8'Slow S Fb 
+org:8'Slow M Fb 
+org:4'Slow S Fb 
+org:4'Slow M Fb 
+org:2-2/3'SlwSFb
+org:2-2/3'SlwMFb
+org:2'Slow S Fb 
+org:2'Slow M Fb 
+org:1-3/5'SlwSFb
+org:1-3/5'SlwMFb
+org:1-1/3'SlwSFb
+org:1-1/3'SlwMFb
+org:1'Slow S Fb 
+org:1'Slow M Fb 
+org:16'Fast S Fb
+org:16'Fast M Fb
+org:5-1/3'FstSFb
+org:5-1/3'FstMFb
+org:8'Fast S Fb 
+org:8'Fast M Fb 
+org:4'Fast S Fb 
+org:4'Fast M Fb 
+org:2-2/3'FstSFb
+org:2-2/3'FstMFb
+org:2'Fast S Fb 
+org:2'Fast M Fb 
+org:1-3/5'FstSFb
+org:1-3/5'FstMFb
+org:1-1/3'FstSFb
+org:1-1/3'FstMFb
+org:1'Fast S Fb 
+org:1'Fast M Fb 
+org:Perc2ndSlwFb
+org:Perc3rdSlwFb
+org:16'SlowS Fb2
+org:16'SlowM Fb2
+org:16'Slow S   
+org:16'Slow M   
+org:5-1/3'Slow S
+org:5-1/3'Slow M
+org:8'Slow S    
+org:8'Slow M    
+org:4'Slow S    
+org:4'Slow M    
+org:2-2/3'Slow S
+org:2-2/3'Slow M
+org:2'Slow S    
+org:2'Slow M    
+org:1-3/5'Slow S
+org:1-3/5'Slow M
+org:1-1/3'Slow S
+org:1-1/3'Slow M
+org:1'Slow S    
+org:1'Slow M    
+org:16'FastS Fb2
+org:16'FastM Fb2
+org:16'Fast S   
+org:16'Fast M   
+org:5-1/3'Fast S
+org:5-1/3'Fast M
+org:8'Fast S    
+org:8'Fast M    
+org:4'Fast S    
+org:4'Fast M    
+org:2-2/3'Fast S
+org:2-2/3'Fast M
+org:2'Fast S    
+org:2'Fast M    
+org:1-3/5'Fast S
+org:1-3/5'Fast M
+org:1-1/3'Fast S
+org:1-1/3'Fast M
+org:1'Fast S    
+org:1'Fast M    
+org:Perc2ndSlow 
+org:Perc3rdSlow 
+org:16' DirectFb
+org:5-1/3'Dir Fb
+org:8' Direct Fb
+org:4' Direct Fb
+org:2-2/3'Dir Fb
+org:2' Direct Fb
+org:1-3/5'Dir Fb
+org:1-1/3'Dir Fb
+org:1' Direct Fb
+org:Perc2ndDirFb
+org:Perc3rdDirFb
+org:16'DirectFb2
+org:16' Direct  
+org:5-1/3'Direct
+org:8' Direct   
+org:4' Direct   
+org:2-2/3'Direct
+org:2' Direct   
+org:1-3/5'Direct
+org:1-1/3'Direct
+org:1' Direct   
+org:Perc2ndDir  
+org:Perc3rdDir  
+org:Efx Master  
+org:Rotor Pan   
+org:Generator   
+org:Volution    
+org:Harms Vox   
+org:DenseTexture
+org:Drawbar     
+org:Start Switch
+org:Stab        
+org:Percy 1     
+org:Percy 2     
+org:Percy 3     
+org:Percy 4     
+org:No-Tone     

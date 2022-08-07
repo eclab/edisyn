@@ -1,0 +1,1174 @@
+   :None        
+pno:Stereo Grand
+pno:Grand Piano2
+pno:Techno Piano
+epo:Med Rhodes  
+epo:Hard Rhodes 
+epo:DynoRhodesMd
+epo:DynoRhodesHd
+epo:Hard Tine   
+epo:WurlitzerSft
+epo:Wurlitzer Hd
+epo:FM El Piano 
+epo:Tine EP     
+epo:Pretty EP   
+epo:Classic EP  
+epo:FM EP 1     
+epo:FM EP 2     
+epo:Clavinet 1  
+epo:Clavinet 2  
+epo:EP Roll 1   
+epo:EP Roll 2   
+epo:EP Roll 3   
+epo:EP Fog      
+org:B3DistLowSlo
+org:B3 Dist Fast
+org:B3 Hi Slow  
+org:B3 Hi Fast  
+org:B3 Perc 3rd 
+org:B3OrganWave1
+org:B3OrganWave2
+org:Gritty B Wav
+org:Farfisa 1   
+org:Farfisa 2   
+org:Farfisa 3   
+org:Vox 1       
+org:Vox 2       
+org:Pipe Organ  
+org:Drawbar     
+org:Perc Organ  
+org:Day         
+org:Disco       
+org:DX Organ    
+org:JX Organ    
+org:Tone Organ  
+org:Simple Organ
+org:Org Lite    
+org:Nod         
+org:Full Organ  
+org:Synth Organ 
+org:Breathy     
+org:Dance       
+org:Synth Cheeze
+org:Oddd Organ  
+sub:Bass Hum    
+sub:Below Sub   
+sub:Super Sub   
+sub:SE Sub 1    
+sub:SE Sub 2    
+sub:SE Sub 3    
+sub:SE Sub 4    
+sub:SE Sub 5    
+sub:SE Sub 6    
+sub:SE Sub 7    
+sub:Subtle Bass 
+sub:Moog 1      
+sub:Moog 2      
+sub:Q Attack    
+sub:Juno        
+sub:Complex     
+sub:Full Octave 
+sub:Deep Pocket 
+sub:JP4 Bass    
+sub:Bass Hit    
+bas:Acid        
+bas:TB 1        
+bas:TB 2        
+bas:TB 3        
+bas:TB 4        
+bas:Saw Sync    
+bas:Big Sync    
+bas:Power Q     
+bas:Buzzed      
+bas:SE 1        
+bas:SE 2        
+bas:Basss ic    
+bas:Stereo VP 1 
+bas:VP1 2       
+bas:FM          
+bas:DB          
+bas:Memory Moog 
+bas:Moog Tri    
+bas:Moog Basic  
+bas:Mini 1      
+bas:Mini 2      
+bas:Mini 3      
+bas:Mini 4      
+bas:Micro Moog  
+bas:Not So Mini 
+bas:Sawz        
+bas:Lowness     
+bas:Ice         
+bas:Analow      
+bas:Fat Sunbass 
+bas:Analogic    
+bas:Q Bass 1    
+bas:Q Bass 2    
+bas:Q Bass 3    
+bas:Planet Bass 
+bas:2600        
+bas:Synth 1     
+bas:Synth 2     
+bas:Synth 3     
+bas:Synth 4     
+bas:Synth 5     
+bas:Synth 6     
+bas:Synth 7     
+bas:Synth 8     
+bas:Synth 9     
+bas:Synth 10    
+bas:CZ101       
+bas:PPG Hybrid  
+bas:Ultimate 1  
+bas:Ultimate 2  
+bas:DB9 1       
+bas:DB9 2       
+bas:Phlappy     
+bas:Pocket      
+bas:Sonics      
+bas:Perco       
+bas:Spitt       
+bas:Tapp        
+bas:DX 1        
+bas:DX 2        
+bas:DX 3        
+bas:Finger 1    
+bas:Finger 2    
+bas:Picked      
+bas:Slap 1      
+bas:Slap 2      
+bas:Slap 3      
+bas:Slap 4      
+bas:Slap 5      
+bas:Pop         
+bas:Fretless 1  
+bas:Fretless 2  
+bas:Fretless 3  
+bas:Fretless 4  
+bas:Fretless 5  
+bas:Fretless 6  
+bas:EP 1        
+bas:EP 2        
+bas:EP 3        
+bas:Home 1      
+bas:Home 2      
+bas:Street      
+bas:Pure        
+bas:Fing&Harms 1
+bas:Fing&Harms 2
+bas:All Purpose 
+bas:Standard    
+bas:Gruzzy Pop  
+bas:Pop Slide 1 
+bas:Pop Slide 2 
+bas:Pop Slide 3 
+bas:Pop Slide 4 
+bas:Organ Bass 1
+bas:Organ Bass 2
+bas:Acoustic    
+bas:Harmonics   
+bas:Upright 1   
+bas:Upright 2   
+gtr:Nylon       
+gtr:Steel       
+gtr:Jazz        
+gtr:Electric 1  
+gtr:Electric 2  
+gtr:El Mute 1   
+gtr:El Mute 2   
+gtr:Mutes       
+gtr:ElectricDis 
+gtr:Power 1     
+gtr:Power 2     
+gtr:Power Hit   
+gtr:Synth Axe   
+gtr:Gtr Hi Chuck
+gtr:Gtr Up Strk 
+gtr:Gtr Scratch 
+gtr:Muted String
+gtr:Klean Chuck 
+gtr:Jangle      
+gtr:Riff 1      
+gtr:Riff 2      
+gtr:Riff 3      
+gtr:Funky Hit   
+gtr:Another Hit 
+gtr:Jazz Riff 1 
+gtr:Jazz Riff 2 
+gtr:Jazz Riff 3 
+gtr:Slide Riff  
+gtr:Pop Slide   
+gtr:Pop         
+gtr:Chord Chuck 
+gtr:Slide       
+gtr:Sad Guitar  
+gtr:Wawa 1      
+gtr:Wawa 2      
+gtr:Wawa 3      
+gtr:Wawa 4      
+gtr:Wawa 5      
+gtr:Wawa 6      
+gtr:Heavy Hit   
+gtr:Heavy Dive  
+str:Solo Quartet
+str:Section     
+str:Pizzicato   
+str:Tron        
+str:Analog      
+str:Matrix Synth
+str:Digital     
+str:Sham Wave   
+str:Koto        
+str:Sitar       
+brs:Soft Trumpet
+brs:Hard Trumpet
+brs:MuteTrumpet1
+brs:MuteTrumpet2
+brs:Trombone    
+brs:Tuba        
+brs:Trumpet FX 1
+brs:Trumpet FX 2
+brs:Trumpet FX 3
+brs:Trumpet FX 4
+brs:Trumpet FX 5
+brs:Trumpet FX 6
+brs:Trumpet FX 7
+brs:Alt TptLoops
+brs:Ensemble    
+brs:Section     
+brs:Brass Hits 1
+brs:Brass Hits 2
+brs:ClassicBrass
+brs:Moog        
+brs:Prophet 5   
+brs:5th Wave    
+wnd:Ocarina     
+wnd:Pan Flute   
+wnd:Flute       
+wnd:Synth Flute 
+wnd:Clarinet    
+wnd:Oboe        
+wnd:English Horn
+wnd:Soprano Sax 
+wnd:Alto Sax    
+wnd:Tenor Sax   
+wnd:Sax Wave    
+wnd:Bari Sax 1  
+wnd:Bari Sax 2  
+wnd:Sax Riff    
+wnd:Sax FX 1    
+wnd:Sax FX 2    
+wnd:Sax FX 3    
+wnd:Bottle Blow 
+wnd:Shenai      
+wnd:Harmonica   
+vox:Pop Oohs    
+vox:Pop Aahs    
+vox:Soul Oohs   
+vox:Breathy 1   
+vox:Breathy 2   
+vox:Very Breathy
+vox:VS Wave     
+vox:Choir Wave  
+vox:Jax Breath  
+vox:Vox Synth   
+vox:Orch Vox    
+vox:CMI Breath  
+vox:Tarzana     
+vox:Gothic      
+vox:Oow         
+vox:Comon Vox   
+vox:Odd Vox     
+vox:Mmm Hmm     
+vox:Ah Hah      
+wav:PWM         
+wav:Eraser      
+wav:M12 Sync    
+wav:Stereo Synth
+wav:FeedbackWave
+wav:MetalAttack 
+wav:Arp 1       
+wav:Arp 2       
+wav:Arp 3       
+wav:ARP Lead    
+wav:Metal 1     
+wav:Metal 2     
+wav:Metal 3     
+wav:PPG         
+wav:VS Vox      
+wav:VS37        
+wav:VS48        
+wav:Rezzy       
+wav:Glass Perc  
+wav:Moog Lead   
+wav:Fretless    
+wav:Magic       
+wav:ES Rag      
+wav:Chime       
+wav:Pure H20    
+wav:Log Hit     
+wav:Pluck Tone  
+wav:Hollow Deep 
+wav:Bell Synth  
+wav:Syn Tone    
+wav:Perc Axe Syn
+wav:Whine       
+wav:CZ101 Digi  
+wav:CZ Lead     
+wav:CZ Echo Lead
+wav:Wild Synth  
+wav:Spacey Keys 
+wav:Dig Buzz Syn
+wav:Rast Keys   
+wav:Narrow Synth
+wav:Fat Attack  
+wav:Synthetic   
+wav:Overtone Syn
+wav:Buzz Saw Syn
+wav:Blipper     
+wav:Full Synth  
+wav:Bass Synth  
+wav:Mini Lead   
+wav:M12 Lead    
+wav:Sync 1      
+wav:Sync 2      
+wav:Sync 3      
+wav:Sync 4      
+wav:Sync 5      
+wav:Sync 6      
+wav:Pop Square  
+wav:Juno Square 
+wav:SquareAttack
+wav:Square Lead 
+wav:SquareChorus
+wav:Juno Pulse  
+wav:Worm Lead 1 
+wav:Worm Lead 2 
+wav:Worm Lead 3 
+wav:Worm Lead 4 
+wav:Worm Lead 5 
+wav:Worm Lead 6 
+wav:Sinusoid    
+wav:Sine Wave 2 
+wav:Sine Squared
+wav:Sine Inv Sqr
+wav:Sine Cubed  
+wav:SineInvCubed
+wav:Triangle    
+wav:Square      
+wav:Sawtooth 1  
+wav:Sawtooth 2  
+wav:Pulse Plus  
+wav:Pulse 75%   
+wav:Pulse 90%   
+wav:Pulse 94%   
+wav:Pulse 96%   
+wav:Pulse 98%   
+wav:FourOctaves 
+wav:Low Odds    
+wav:Low Evens   
+syn:Saw Stack   
+syn:Moog 55     
+syn:Buzz Synth  
+syn:Bender      
+syn:Soft Synth  
+syn:Hi String   
+syn:OBX Saws    
+syn:Big Planet  
+syn:Saw Sweep   
+wav:Juno Pulse  
+syn:CZ Synstring
+syn:SynEnsemble 
+syn:Rezzy Wave  
+syn:Heavy       
+syn:Rez Synth   
+syn:Hi Oct Synth
+syn:Mood Strings
+syn:Brazz       
+syn:Synth Brass 
+syn:P5 Brass    
+pad:JP6 Pad     
+pad:Dreamy      
+pad:Phat Pad    
+pad:Synth Pad   
+pad:Pad Life    
+pad:Classic     
+pad:Dream Pad   
+pad:Paddy       
+pad:Dance Chord 
+pad:Zoom        
+pad:Keyngdom    
+pad:Under Pad FM
+pad:Xylo Pad    
+hit:Organ Hits 1
+hit:Organ Hits 2
+hit:Basses      
+hit:Synth Basses
+hit:Guitars     
+hit:String Hits 
+hit:Brass Hits 1
+hit:Brass Hits 2
+hit:Vox Hits 1  
+hit:Vox Hits 2  
+hit:Dance Hits 1
+hit:Dance Hits 2
+hit:Organ Hit 1 
+hit:Organ Hit 2 
+hit:Organ Hit 3 
+hit:Organ Hit 4 
+hit:Organ Hit 5 
+hit:Organ Hit 6 
+hit:Bass Stab 1 
+hit:Bass Stab 2 
+hit:Bass Slide  
+hit:Orch C3     
+hit:UnisonString
+hit:Unison Brass
+hit:Brass Hit 1 
+hit:Brass Hit 2 
+hit:Brass Hit 3 
+hit:Brass Hit 4 
+hit:Brass Hit 5 
+hit:Brass Hit 6 
+hit:Brass Hit 7 
+hit:Brass Hit 8 
+hit:Brass Hit 9 
+hit:Brass Hit 10
+hit:Brass Hit 11
+hit:Brass Hit 12
+hit:Brass Hit 13
+hit:Brass Hit 14
+hit:Brass Hit 15
+hit:Brass Hit 16
+hit:Brass Hit 17
+hit:Brass Hit 18
+hit:Brass Hit 19
+hit:Brass Hit 20
+hit:Boink       
+hit:Fat Low Syn 
+hit:Hit On It   
+hit:Jazz Short  
+hit:Blamp Hit   
+hit:Blipp       
+hit:Buzz Blip   
+hit:Game Hit    
+hit:Diss Hit    
+hit:Bell Hit    
+hit:Klang Hit   
+hit:Metal Hit   
+hit:Slinky Q Hit
+hit:Space Whip  
+hit:Short Quack 
+hit:Quack Ahhh  
+hit:Bowser Bark 
+hit:Chiffin     
+hit:Ripped      
+hit:Drum Stab   
+hit:Hip Hop Hit 
+hit:Drum Stall  
+hit:Dance Hit 1 
+hit:Dance Hit 2 
+hit:Dance Hit 3 
+hit:Dance Hit 4 
+hit:Dance Hit 5 
+hit:Dance Hit 6 
+hit:Dance Hit 7 
+hit:Dance Hit 8 
+hit:Dance Hit 9 
+hit:Dance Hit 10
+hit:Dance Hit 11
+hit:Dance Hit 12
+hit:Dance Hit 13
+hit:Dance Hit 14
+hit:Dance Hit 15
+hit:Dance Hit 16
+hit:Dance Hit 17
+hit:Dance Hit 18
+hit:Dance Hit 19
+hit:Dance Hit 20
+hit:Dance Hit 21
+hit:Dance Hit 22
+hit:Dance Hit 23
+hit:Dance Hit 24
+hit:Dance Hit 25
+hit:Dance Hit 26
+hit:Dance Hit 27
+sfx:Q Snap      
+sfx:Bass Scrape 
+sfx:Bass Thud   
+sfx:Gtr Scrape 1
+sfx:Gtr Scrape 2
+sfx:Guitar Pick 
+sfx:GtrBodyKnock
+sfx:StringScrape
+sfx:Tpt Breath  
+sfx:Alto Breath 
+sfx:PnoSndBoard 
+sfx:Loop 1      
+sfx:Loop 2      
+sfx:Loop 3      
+sfx:Loop 4      
+sfx:Loop 5      
+sfx:Loop 6      
+sfx:Loop 7      
+sfx:Loop 8      
+sfx:Crickets    
+sfx:Crowd       
+sfx:Music Crowd 
+sfx:Lawn Mower  
+sfx:Riff Trip   
+sfx:Cyber Pan   
+sfx:Groove Thing
+sfx:Science     
+sfx:Sci Fi      
+sfx:Synth Siren 
+sfx:Space Wiggle
+sfx:Sqweal Rev  
+nse:White 1     
+nse:No Pitch    
+nse:Pink 1      
+nse:Pink 2      
+nse:Spectrum 1  
+nse:Spectrum 2  
+nse:Spectrum 3  
+nse:Spectrum 4  
+nse:Air         
+nse:High Pass   
+nse:Excited HP  
+nse:IP Wave     
+nse:Metal Noise 
+nse:Vinyl 1     
+nse:Vinyl 2     
+nse:Vinyl 3     
+nse:Vinyl 4     
+nse:Vinyl 1 NTF 
+nse:Vinyl 2 NTF 
+nse:Vinyl 3 NTF 
+nse:Vinyl 4 NTF 
+nse:CMI Hot Air 
+nse:L9000 Noise 
+scr:Scratches 1 
+scr:Scratches 2 
+scr:Vinyl Set   
+scr:Stalled     
+scr:Wind Down 1 
+scr:Wind Down 2 
+scr:Draggit     
+scr:MC Scratch  
+scr:Fun Scratch 
+scr:SSSSystem 1 
+scr:SSSSystem 2 
+scr:Scratch Here
+scr:Scratch On I
+scr:Scratch Diss
+scr:Bow Wow     
+scr:Diva Scratch
+scr:OrganBlipper
+scr:Classic Tape
+scr:Scratch Out!
+scr:Punch It    
+scr:Ork Scratch 
+scr:Tape Stop   
+scr:Zip Scratch 
+scr:Tape Pull   
+scr:Wild Scratch
+scr:Up Scratch  
+scr:Scratch Away
+scr:Frenzy      
+scr:KickScratch1
+scr:KickScratch2
+scr:SnareScratch
+scr:Tite Scratch
+scr:Scratch Up  
+scr:Barker      
+scr:Plunger     
+scr:Skipper     
+scr:Fast Scratch
+prc:Soft Vibes  
+prc:Hard Vibes  
+prc:Xylophone   
+prc:Marimba     
+prc:Kalimba     
+prc:Plexitone   
+prc:Orchestral  
+prc:Miscellany  
+prc:FM Log Drum 
+prc:SynDrum Wave
+prc:X-ite Tick  
+prc:Kicks 1     
+prc:Kicks 2     
+prc:Snares 1    
+prc:Snares 2    
+prc:Toms 1      
+prc:Toms 2      
+prc:Timbales 1  
+prc:Timbales 2  
+prc:Congas etc 1
+prc:Congas etc 2
+prc:Hats 1      
+prc:Hats 2      
+prc:Cymbals 1   
+prc:Cymbals 2   
+prc:Shakers     
+prc:Maracas     
+prc:Bells 1     
+prc:Bells 2     
+prc:Blocks 1    
+prc:Blocks 2    
+prc:Tams 1      
+prc:Tams 2      
+prc:Claps 1     
+prc:Claps 2     
+prc:Snaps       
+prc:Claves      
+prc:Vibraslap   
+prc:Guiro Roll  
+prc:Cowbells    
+prc:Agogos      
+prc:Carillon    
+prc:Misc Perc 1 
+prc:Misc Perc 2 
+kit:Acoustic 1&2
+kit:Acoustic 3&4
+kit:Dance Set   
+kit:Dance Perc  
+kit:Kit 1       
+kit:Kit 2       
+kit:Kit 3       
+kit:Kit 4       
+kit:Kit 5       
+kit:Kit 6       
+kit:Kit 7       
+kit:Kit 8       
+kit:Kit 9       
+kit:Kit 10      
+kit:Kit 11      
+kit:Kit 12      
+kit:Kit 13      
+kit:Kit 14      
+kit:Kit 15      
+kit:Kit 16      
+kit:GM Dance    
+kit:Swing Hop   
+kit:Swing Hop 2 
+kit:Swing Hop 3 
+prc:Kick 1      
+prc:Kick 2      
+prc:Kick 3      
+prc:Kick 4      
+prc:Kick 5      
+prc:Kick 6      
+prc:Kick 7      
+prc:Kick 8      
+prc:Kick 9      
+prc:Kick 10     
+prc:Kick 11     
+prc:Kick 12     
+prc:Kick 13     
+prc:Kick 14     
+prc:Kick 15     
+prc:Kick 16     
+prc:Kick 17     
+prc:Kick 18     
+prc:Kick 19     
+prc:Kick 20     
+prc:Kick 21     
+prc:Kick 22     
+prc:Kick 23     
+prc:Kick 24     
+prc:Kick 25     
+prc:Kick 26     
+prc:Kick 27     
+prc:Kick 28     
+prc:Kick 29     
+prc:Kick 30     
+prc:Kick 31     
+prc:Kick 32     
+prc:Kick 33     
+prc:Kick 34     
+prc:Kick 35     
+prc:Kick 36     
+prc:Kick 37     
+prc:Kick 38     
+prc:Kick 39     
+prc:Kick 40     
+prc:Kick 41     
+prc:Kick 42     
+prc:Kick 43     
+prc:Kick 44     
+prc:Kick 45     
+prc:Kick 46     
+prc:Kick 47     
+prc:Kick 48     
+prc:Kick 49     
+prc:Kick 50     
+prc:Kick 51     
+prc:Kick 52     
+prc:Kick 53     
+prc:Kick 54     
+prc:Kick 55     
+prc:Kick 56     
+prc:Kick 57     
+prc:Kick 58     
+prc:Kick 59     
+prc:Kick 60     
+prc:Kick 61     
+prc:Kick 62     
+prc:Kick 63     
+prc:Kick 64     
+prc:Kick 65     
+prc:Kick 66     
+prc:Kick 67     
+prc:Kick 68     
+prc:Kick 69     
+prc:Kick 70     
+prc:Kick 71     
+prc:Snare 1     
+prc:Snare 2     
+prc:Snare 3     
+prc:Snare 4     
+prc:Snare 5     
+prc:Snare 6     
+prc:Snare 7     
+prc:Snare 8     
+prc:Snare 9     
+prc:Snare 10    
+prc:Snare 11    
+prc:Snare 12    
+prc:Snare 13    
+prc:Snare 14    
+prc:Snare 15    
+prc:Snare 16    
+prc:Snare 17    
+prc:Snare 18    
+prc:Snare 19    
+prc:Snare 20    
+prc:Snare 21    
+prc:Snare 22    
+prc:Snare 23    
+prc:Snare 24    
+prc:Snare 25    
+prc:Snare 26    
+prc:Snare 27    
+prc:Snare 28    
+prc:Snare 29    
+prc:Snare 30    
+prc:Snare 31    
+prc:Snare 32    
+prc:Snare 33    
+prc:Snare 34    
+prc:Snare 35    
+prc:Snare 36    
+prc:Snare 37    
+prc:Snare 38    
+prc:Snare 39    
+prc:Snare 40    
+prc:Snare 41    
+prc:Snare 42    
+prc:Snare 43    
+prc:Snare 44    
+prc:Snare 45    
+prc:Snare 46    
+prc:Snare 47    
+prc:Snare 48    
+prc:Snare 49    
+prc:Snare 50    
+prc:Snare 51    
+prc:Snare 52    
+prc:Snare 53    
+prc:Snare 54    
+prc:Snare 55    
+prc:Snare 56    
+prc:Snare 57    
+prc:Snare 58    
+prc:Snare 59    
+prc:Snare 60    
+prc:Snare 61    
+prc:Snare 62    
+prc:Snare 63    
+prc:Snare 64    
+prc:Snare 65    
+prc:Snare 66    
+prc:Snare 67    
+prc:Snare 68    
+prc:Snare 69    
+prc:Snare 70    
+prc:Snare 71    
+prc:Snare 72    
+prc:Snare 73    
+prc:Snare 74    
+prc:Snare 75    
+prc:Snare 76    
+prc:Snare 77    
+prc:Snare 78    
+prc:Snare 79    
+prc:Snare 80    
+prc:Snare 81    
+prc:Snare 82    
+prc:Snare 83    
+prc:Snare 84    
+prc:Snare 85    
+prc:Snare 86    
+prc:Snare 87    
+prc:Snare 88    
+prc:Snare 89    
+prc:Snare 90    
+prc:Snare 91    
+prc:Snare 92    
+prc:Snare 93    
+prc:Snare 94    
+prc:Snare 95    
+prc:Snare 96    
+prc:Snare 97    
+prc:Snare 98    
+prc:Snare 99    
+prc:Snare 100   
+prc:Snare 101   
+prc:Snare 102   
+prc:Snare 103   
+prc:Snare 104   
+prc:Snare 105   
+prc:Snare 106   
+prc:Snare 107   
+prc:Snare 108   
+prc:Snare 109   
+prc:Snare 110   
+prc:Snare 111   
+prc:Snare 112   
+prc:Snare 113   
+prc:Snare 114   
+prc:Snare 115   
+prc:Snare 116   
+prc:Snare 117   
+prc:Snare 118   
+prc:Snare 119   
+prc:Snare 120   
+prc:Snare 121   
+prc:Snare 122   
+prc:Snare 123   
+prc:Snare 124   
+prc:Snare 125   
+prc:Snare 126   
+prc:Snare 127   
+prc:Snare 128   
+prc:Snare 129   
+prc:Snare 130   
+prc:Snare 131   
+prc:Timbale 1   
+prc:Timbale 2   
+prc:Timbale 3   
+prc:Timbale 4   
+prc:Timbale 5   
+prc:Timbale 6   
+prc:Tom 1       
+prc:Tom 2       
+prc:Tom 3       
+prc:Tom 4       
+prc:Tom 5       
+prc:Tom 6       
+prc:Tom 7       
+prc:Tom 8       
+prc:Tom 9       
+prc:Tom 10      
+prc:Tom 11      
+prc:Tom 12      
+prc:Tom 13      
+prc:Tom 14      
+prc:Tom 15      
+prc:Tom 16      
+prc:Tom 17      
+prc:Tom 18      
+prc:Tom 19      
+prc:Tom 20      
+prc:Tom 21      
+prc:Tom 22      
+prc:Tom 23      
+prc:Tom 24      
+prc:Tom 25      
+prc:Tom 26      
+prc:Tom 27      
+prc:Tom 28      
+prc:Tom 29      
+prc:Tom 30      
+prc:Tom 31      
+prc:Conga 1     
+prc:Conga 2     
+prc:Conga 3     
+prc:Conga 4     
+prc:Conga 5     
+prc:Conga 6     
+prc:Conga 7     
+prc:Conga 8     
+prc:Conga 9     
+prc:Conga 10    
+prc:Conga 11    
+prc:Conga 12    
+prc:Conga 13    
+prc:Conga 14    
+prc:Conga 15    
+prc:Conga 16    
+prc:Conga 17    
+prc:Conga 18    
+prc:Conga 19    
+prc:Conga 20    
+prc:Conga 21    
+prc:Hat 1       
+prc:Hat 2       
+prc:Hat 3       
+prc:Hat 4       
+prc:Hat 5       
+prc:Hat 6       
+prc:Hat 7       
+prc:Hat 8       
+prc:Hat 9       
+prc:Hat 10      
+prc:Hat 11      
+prc:Hat 12      
+prc:Hat 13      
+prc:Hat 14      
+prc:Hat 15      
+prc:Hat 16      
+prc:Hat 17      
+prc:Hat 18      
+prc:Hat 19      
+prc:Hat 20      
+prc:Hat 21      
+prc:Hat 22      
+prc:Hat 23      
+prc:Hat 24      
+prc:Hat 25      
+prc:Hat 26      
+prc:Hat 27      
+prc:Hat 28      
+prc:Hat 29      
+prc:Hat 30      
+prc:Hat 31      
+prc:Hat 32      
+prc:Hat 33      
+prc:Hat 34      
+prc:Hat 35      
+prc:Hat 36      
+prc:Hat 37      
+prc:Hat 38      
+prc:Hat 39      
+prc:Hat 40      
+prc:Hat 41      
+prc:Hat 42      
+prc:Hat 43      
+prc:Hat 44      
+prc:Hat 45      
+prc:Hat 46      
+prc:Hat 47      
+prc:Hat 48      
+prc:Hat 49      
+prc:Hat 50      
+prc:Hat 51      
+prc:Hat 52      
+prc:Hat 53      
+prc:Hat 54      
+prc:Hat 55      
+prc:Hat 56      
+prc:Hat 57      
+prc:Hat 58      
+prc:Hat 59      
+prc:Hat 60      
+prc:Hat 61      
+prc:Hat 62      
+prc:Hat 63      
+prc:Hat 64      
+prc:Hat 65      
+prc:Hat 66      
+prc:Hat 67      
+prc:Hat 68      
+prc:Hat 69      
+prc:Hat 70      
+prc:Hat 71      
+prc:Hat 72      
+prc:Hat 73      
+prc:Hat 74      
+prc:Hat 75      
+prc:Hat 76      
+prc:Hat 77      
+prc:Hat 78      
+prc:Hat 79      
+prc:Hat 80      
+prc:Hat 81      
+prc:Hat 82      
+prc:Hat 83      
+prc:Hat 84      
+prc:Hat 85      
+prc:Hat 86      
+prc:Hat 87      
+prc:Hat 88      
+prc:Hat 89      
+prc:Hat 90      
+prc:Hat 91      
+prc:Hat 92      
+prc:Hat 93      
+prc:Hat 94      
+prc:Hat 95      
+prc:Cymbal 1    
+prc:Cymbal 2    
+prc:Cymbal 3    
+prc:Cymbal 4    
+prc:Cymbal 5    
+prc:Cymbal 6    
+prc:Cymbal 7    
+prc:Cymbal 8    
+prc:Cymbal 9    
+prc:Cymbal 10   
+prc:Cymbal 11   
+prc:Cymbal 12   
+prc:Cymbal 13   
+prc:Cymbal 14   
+prc:Cymbal 15   
+prc:Cymbal 16   
+prc:Cymbal 17   
+prc:Cymbal 19   
+prc:Cymbal 20   
+prc:Cymbal 21   
+prc:Cymbal 22   
+prc:Cymbal 23   
+prc:Cymbal 24   
+prc:Cymbal 25   
+prc:Cymbal 26   
+prc:Cymbal 27   
+prc:Cymbal 28   
+prc:Cymbal 29   
+prc:Shaker 1    
+prc:Shaker 2    
+prc:Shaker 3    
+prc:Shaker 4    
+prc:Shaker 5    
+prc:Shaker 6    
+prc:Shaker 7    
+prc:Shaker 8    
+prc:Shaker 9    
+prc:Shaker 10   
+prc:Shaker 11   
+prc:Shaker 12   
+prc:Shaker 13   
+prc:Shaker 14   
+prc:Shaker 15   
+prc:Shaker 16   
+prc:Shaker 17   
+prc:Shaker 18   
+prc:Shaker 19   
+prc:Shaker 20   
+prc:Shaker 21   
+prc:Shaker 22   
+prc:Shaker 23   
+prc:Shaker 24   
+prc:Shaker 25   
+prc:Shaker 26   
+prc:Shaker 27   
+prc:Shaker 28   
+prc:Flexitone   
+prc:Bell 1      
+prc:Bell 2      
+prc:Bell 3      
+prc:Bell 4      
+prc:Bell 5      
+prc:Bell 6      
+prc:Bell 7      
+prc:Bell 8      
+prc:Bell 9      
+prc:Bell 10     
+prc:Bell 11     
+prc:Bell Tree   
+prc:Bell 12     
+prc:Bell 13     
+prc:Bell 14     
+prc:Bell 15     
+prc:Bell 16     
+prc:Bell 17     
+prc:Bell 18     
+prc:Bell 19     
+prc:Bell 20     
+prc:Bell 21     
+prc:Bell 22     
+prc:Bell 23     
+prc:Bell 24     
+prc:Bell 25     
+prc:Bell 26     
+prc:Bell 27     
+prc:Bell 28     
+prc:Block 1     
+prc:Block 2     
+prc:Block 3     
+prc:Block 4     
+prc:Block 5     
+prc:Block 6     
+prc:Block 7     
+prc:Block 8     
+prc:Block 9     
+prc:Block 10    
+prc:Block 11    
+prc:Block 12    
+prc:Block 13    
+prc:Block 14    
+prc:Tam 1       
+prc:Tam 2       
+prc:Tam 3       
+prc:Tam 4       
+prc:Tam 5       
+prc:Tam 6       
+prc:Tam 7       
+prc:Tam 8       
+prc:Tam 9       
+prc:Clap 1      
+prc:Clap 2      
+prc:Clap 3      
+prc:Clap 4      
+prc:Clap 5      
+prc:Clap 6      
+prc:Clap 7      
+prc:Clap 8      
+prc:Clap 9      
+prc:Clap 10     
+prc:Clap 11     
+prc:Clap 12     
+prc:Clap 13     
+prc:Clap 14     
+prc:Clap 15     
+prc:Clap 16     
+prc:Clap 17     
+prc:Clap 18     
+prc:Snap 1      
+prc:Snap 2      
+prc:Snap 3      
+prc:Snap 4      
+prc:Snap 5      
+prc:Snap 6      
+prc:Misc 1      
+prc:Misc 2      
+prc:Misc 3      
+prc:Misc 4      
+prc:Misc 5      
+prc:Misc 6      
+prc:Misc 7      
+prc:Misc 8      
+prc:Misc 9      
+prc:Misc 10     
+prc:Misc 11     
+prc:Misc 12     
+prc:Misc 13     
+prc:Misc 14     
+prc:Misc 15     
+prc:Misc 16     
+prc:Misc 17     
+prc:Misc 18     
+prc:Misc 19     
+prc:Misc 20     
+prc:Misc 21     
+prc:Misc 22     
+prc:Misc 23     
+prc:Misc 24     
+prc:Misc 25     
+prc:Misc 26     
+prc:Misc 27     
+prc:Misc 28     
+prc:Misc 29     
+prc:Misc 30     
+prc:Misc 31     
+prc:Misc 32     

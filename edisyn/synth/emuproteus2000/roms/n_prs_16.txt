@@ -1,0 +1,512 @@
+kb2:East        
+kb4:Koto E Piano
+pad:Wheeled Inn 
+kb4:Plucked     
+led:Cultures    
+pad:New Crop    
+arp:Tibetan Bowl
+syn:Filter Sweep
+gtr:Koto Dreams 
+bs3:Blender     
+kit:Tablah      
+kit:Deep End    
+prc:Congas      
+tpc:Chime In    
+gtr:HamrDulcimer
+tpc:Slow Bowls  
+syn:Steam Bells 
+tpc:Metals&Synth
+kb4:Padded EPno1
+kb2:Belled      
+nse:Fly By      
+arp:Euro Hito   
+kb3:House of Org
+kit:Jazz Dude   
+kb4:Orion       
+pad:Source      
+kb3:PlainOrgan 1
+led:Theramined  
+kb4:Rezklav     
+kb2:Whirling    
+sfx:Moondust    
+arp:HiPass Hit  
+hit:Tights      
+kb4:Dancified   
+bs4:Rogue       
+wnd:Modern Wind 
+kb2:lower case  
+hit:Storm Coming
+gtr:Vel-o-Wakka 
+pad:Pulse Pad   
+pad:Distance    
+prc:Bata Drums  
+prc:Vel Cowbell1
+bs1:Bs Dulcimer 
+pad:In Hand     
+cym:Eastern Set 
+bs4:Gonky Bass  
+bs3:Absent      
+bs3:Subbed Dood 
+bs1:Worldly     
+bs4:Bass Face   
+arp:Horn Hit    
+kb4:Lands Afar  
+hit:Metal Thingy
+bs4:Ultra Touch 
+kb4:Great Prizes
+prc:Klapz       
+hit:Vel-o-Squeal
+kit:Just In Case
+pad:Pulsar      
+arp:Got Rez?    
+cym:XSwitch Gong
+arp:Ride Delay  
+bs3:Flobbit     
+kit:Dis         
+arp:Plank       
+arp:Plink       
+arp:Plunk       
+arp:Wide Bells  
+arp:Brassy Bass 
+arp:Bandolin    
+arp:Squared Off 
+arp:Tabla Gruv 1
+arp:Tabla Gruv 2
+arp:Koto up    1
+arp:Koto up    2
+arp:Koto down 1 
+arp:Koto down 2 
+arp:Wholetoned  
+arp:Chugga Bass 
+arp:E.Pno 6th  1
+arp:E.Pno 7th  1
+arp:E.Pno m7   1
+arp:E.Pno maj7 1
+arp:E.Pno sus  1
+arp:ZZaps       
+arp:White Noizer
+arp:Toy Hat Gruv
+arp:Hitz Riff   
+arp:Diminished !
+arp:Circles     
+arp:Fuzed       
+arp:Spiked      
+arp:L > R Delay 
+arp:Noise Hit   
+arp:Hats Delay  
+arp:Jumper      
+arp:A Noiz 2 Hit
+arp:New ESQ     
+arp:FreqQ       
+arp:Go Agogo 1  
+arp:Lovely Hit  
+arp:Shaker Gruv1
+arp:Shaker Gruv2
+bs1:Old Upright 
+bs1:Stand Up    
+bs3:Win This    
+bs3:Deep End    
+bs3:Glider      
+bs3:Sine Narra  
+bs3:Fatso       
+bs3:Off the Top 
+bs3:Vel-o-Snap  
+bs3:3 Ways      
+bs3:Express     
+bs3:ScaryFatness
+bs3:No Left Turn
+bs3:Vector      
+bs3:C U Later   
+bs3:Substance   
+bs3:Sub Basics  
+bs3:Dr. Fatbass 
+bs3:Get It      
+bs3:Sluggo Sub  
+bs4:Vintage Rez 
+bs4:Jazzy Bass  
+bs4:Snapper     
+bs4:X-Large     
+bs4:Buzz E. Bass
+bs4:Ratso Bass  
+bs4:Tank        
+bs4:U B Busted  
+bs4:Dance King  
+bs4:FM Mono     
+bs4:Octa Basso  
+bs4:Tracker     
+bs4:Mono RezX   
+bs4:Sludge      
+bs4:Gated Base  
+bs4:Numb        
+bs4:SnapDecision
+bs4:Bumper      
+bs4:Rumbler     
+bs4:Snap Mono   
+bs4:Bust It     
+bs4:Subversive  
+bs4:Bass Effects
+gtr:Banjo       
+gtr:Berimbau Wah
+gtr:Charango    
+gtr:Dbl String  
+gtr:Gayagum     
+gtr:GopechanStrm
+gtr:Gu Qin      
+gtr:Hyungum     
+gtr:Kantele     
+gtr:Koto        
+gtr:Koto Rhythm 
+gtr:Octa Tremolo
+gtr:Sarod       
+gtr:Saz         
+gtr:Saz Tremolo 
+gtr:Senegalese  
+gtr:Sitar       
+gtr:Taisho Koto 
+gtr:Tamboura    
+gtr:Ukelele     
+gtr:EasternPluck
+gtr:PluckedSitar
+gtr:Sitar Mix   
+gtr:Sitarzando  
+gtr:Fall Efx    
+gtr:Guitar Stab 
+gtr:Wakka Map   
+led:Cypress     
+led:Dragons     
+led:Ethnologist 
+led:Follower    
+led:GoGo Octave 
+led:New Dehli   
+led:Ol'Faithful 
+led:Orator      
+led:She Vox     
+led:Sine Octa   
+led:Sine Up     
+led:Throaty Sing
+led:Uncle Floyd 
+led:Vantage     
+led:X Whistler  
+kb2:Brite Tines 
+kb2:Entry 6     
+kb2:Oceans      
+kb2:Shimmers    
+kb2:With a Pad  
+kb2:Dance Piano 
+kb2:Klanky      
+kb2:Padded Cell 
+kb2:RaunchyWurli
+kb2:Ethno Tines 
+kb2:Wurli EPno  
+kb2:Excaliber   
+kb2:Knockin'    
+kb2:Thumbed     
+kb2:Trem &Clacks
+kb3:Chorus Organ
+kb3:Jazzy Organ 
+kb3:Pop Organ   
+kb3:Used Organ  
+kb3:Stops Here  
+kb3:Drawbars    
+kb3:PlainOrgan 2
+kb3:Mono Organ 1
+kb3:Mono Organ 2
+kb4:Eastern EPno
+kb4:Icy         
+kb4:Padded EPno2
+kb4:Pad-L Koto-R
+kb4:Bubbling    
+kb4:Mysterious  
+kb4:ElecTamboura
+kb4:Feathered   
+pad:BandPass Str
+pad:Smooth Strng
+pad:Aquamarine  
+pad:Liquid      
+pad:Poohbah     
+pad:Blah Blah   
+pad:Masque      
+pad:Amnesia     
+pad:Contraband  
+pad:Gruv Pads   
+pad:To The Sides
+pad:Cinematic   
+pad:Zzzzzzzzzzz 
+pad:Aye Captain 
+pad:Spy Guy     
+pad:Brain Dump  
+pad:Soundstage  
+pad:Castle      
+pad:Swept Up    
+str:Cheezy Str  
+str:Pizza Kato  
+str:Repeats Env 
+syn:Worldpad    
+syn:Cauldron    
+syn:Glyde       
+syn:Metal Rack  
+syn:Pursuit     
+syn:Spudz       
+syn:Timed Sweep 
+syn:Communicate 
+syn:Midnight Efx
+syn:Thin Air    
+syn:FiltrSampler
+syn:Pass the Saw
+syn:Traveller   
+syn:Blinky      
+syn:Method      
+syn:Nubell      
+syn:Thoughts    
+syn:Da Buzz     
+syn:Dance Drone 
+syn:Petals      
+syn:Pressured   
+syn:Steel It    
+syn:The Sauce   
+syn:WeatherCentr
+syn:Caravan     
+syn:Octaver     
+syn:Robot Choir 
+syn:Stream      
+syn:Abyss       
+syn:Dreamland   
+syn:Inharmonix  
+syn:Relaxation  
+syn:String Thing
+syn:Wealthy Man 
+syn:Flangy Sawz 
+syn:In Motion   
+syn:Metal Attack
+syn:Ancient     
+syn:Internationl
+syn:Randomizer  
+syn:Tower Bridge
+syn:Dreamers    
+syn:Tempo Bells 
+syn:Animatic    
+syn:Granular    
+syn:Loooong     
+syn:Rizer       
+syn:Brassified  
+syn:Empire      
+syn:Haunting    
+syn:Material    
+syn:Sienna      
+syn:Speed Limit 
+tpc:Blend Metal 
+tpc:Mango Man   
+tpc:Thumb Piano 
+tpc:Anklungs    
+tpc:Dual Logdrum
+tpc:Glass Bells 
+tpc:Monks Bell  
+tpc:The Bells   
+tpc:Top Banana  
+tpc:Unla        
+vox:Velocity Vox
+vox:Voice Mix 1 
+vox:Voice Mix 2 
+wnd:Bandoneon   
+wnd:Concertina  
+wnd:DistantPiper
+wnd:Hyang Piri  
+wnd:Quena       
+wnd:Shakuhachi  
+wnd:Sikus       
+nse:Cosmic Wind 
+nse:Cyclotron X 
+nse:No Soup 4 U 
+nse:Panner FX   
+nse:Swooshed    
+hit:Chord Slam  
+hit:Club Hit    
+hit:Horny Hit   
+hit:Rave Hit    
+hit:Sine Hit    
+hit:Shorts      
+hit:Symbols     
+hit:Tech Chord  
+hit:Weapon      
+hit:Sax Map     
+hit:Sax Squeal 1
+hit:Sax Squeal 2
+hit:Sax Squeal 3
+hit:Sax Squeal 4
+hit:Squealarama 
+hit:Horn Stabber
+hit:Noiz Hit    
+hit:E.Pno 6th  1
+hit:E.Pno 6th  2
+hit:E.Pno 6th  3
+hit:E.Pno 7th  1
+hit:E.Pno 7th  2
+hit:E.Pno 7th  3
+hit:E.Pno m7   2
+hit:E.Pno m7   3
+hit:E.Pno m7   1
+hit:E.Pno maj7 1
+hit:E.Pno maj7 2
+hit:E.Pno maj7 3
+hit:E.Pno sus  1
+hit:E.Pno sus  2
+hit:E.Pno sus  3
+sfx:Stuck Groove
+sfx:Needle Up!  
+sfx:Dull Vinyl  
+sfx:Vinyl 33 1/3
+scr:Scratch Map 
+sfx:SonarWarblee
+sfx:Beam Me Up  
+sfx:Crop Circles
+sfx:Shortwave   
+sfx:Windswept   
+sfx:Bullcopter  
+sfx:Cable's Out 
+sfx:Fixation    
+sfx:Graffix     
+sfx:Ringy Dingy 
+sfx:Science!    
+sfx:Spacewind   
+sfx:Tunnel      
+cym:All Cymbals 
+cym:All Hats    
+cym:Crash Map 1 
+cym:Crash Map 2 
+cym:Crash Map 3 
+cym:Crash 1     
+cym:Crash 2     
+cym:Crash 3     
+cym:Crash 4     
+cym:Crash 5     
+cym:Crash 6     
+cym:Crash 7     
+cym:Reversed Cym
+cym:Ride Map 1  
+cym:Ride Map 2  
+cym:Ride Map 3  
+cym:Ride 1      
+cym:Ride 2      
+cym:Ride 3      
+cym:Ride 4      
+cym:Ride 5      
+cym:Ride 6      
+cym:Ride 7      
+cym:Ride Bell 1 
+cym:Ride Bell 2 
+cym:Synth Crash 
+cym:Synth Ride  
+cym:Toy Hats 1  
+cym:Toy Hats 2  
+cym:Toy Hats 3  
+cym:Toy Hats 4  
+cym:Chabara     
+cym:Jing        
+cym:Koenkari    
+cym:Luo Gong    
+cym:Small Gongs 
+cym:Wadora      
+cym:Wadora Rim  
+cym:Crying Gong 
+cym:HardHit Gong
+cym:Special Gong
+prc:Bongos      
+prc:Buk         
+prc:Chalgo      
+prc:Changko     
+prc:Chingo      
+prc:Clay Drums  
+prc:Crickets    
+prc:Dbl Bongos  
+prc:Dbl Djembes 
+prc:Dbl Dumbeks 
+prc:Dbl Tablas  
+prc:Digeridoo   
+prc:Djembe      
+prc:Dumbek      
+prc:Frame Drum  
+prc:Guiro       
+prc:Jaw Harp    
+prc:Kayamba     
+prc:Ko Tzumi    
+prc:Madahl Drum 
+prc:Mokusho     
+prc:Sacha Tum   
+prc:Sakara      
+prc:Tablas      
+prc:Timbale     
+prc:Tsuridai    
+prc:Tumba       
+prc:Udu Drums   
+prc:Rainstick   
+prc:Cowbells 1  
+prc:Cowbells 2  
+prc:Cowbells 3  
+prc:Vel Cowbell2
+prc:All Claps   
+prc:Perc Mix 1  
+prc:Perc Mix 2  
+prc:Perc Mix 3  
+prc:All Kicks   
+prc:All Snares 1
+prc:All Snares 2
+prc:Large Toms1 
+prc:Live Toms 1 
+prc:Live Toms 2 
+prc:Live Toms 3 
+prc:Live Toms 4 
+prc:909 Toms    
+kit:2B Hit      
+kit:Dontcha Know
+kit:HighlyLikely
+kit:Nasty Thang 
+kit:Talkin'     
+kit:Cool Out    
+kit:As If I Care
+kit:Bumpy Filter
+kit:East & West 
+kit:Filtered    
+kit:Hitch Hike  
+kit:Kreature    
+kit:Nude        
+kit:Slicker     
+kit:Veloci T    
+kit:Worldly     
+kit:EFX Kit 1   
+kit:EFX Kit 2   
+kit:Mechanic    
+kit:Philtered   
+kit:Sizzle      
+kit:Trax        
+kit:Oh #$%^&*!  
+kit:What The... 
+kit:Dance Box   
+kit:Filtered Too
+kit:Hey Yo      
+kit:Melting     
+kit:NextBigThing
+kit:So It Is    
+kit:With No Name
+kit:Attatood    
+kit:Eat At Joe's
+kit:Puzzled     
+kit:Slim        
+kit:Trash Man   
+kit:Away Today  
+kit:Far Enough  
+kit:In The City 
+kit:Klub Kit    
+kit:Mod Filter  
+kit:Bent        
+kit:Farkle      
+kit:Melvin      
+kit:You Mean    
+kit:Hand Drums  
+kit:Crabby Face 
+kit:Jungle Man  
+kit:Yet Another 
+kit:Crusty the K
+kit:Get It Here 
+kit:Shaggin'    
+kit:Z Last Kit  
+   :Default v1.0

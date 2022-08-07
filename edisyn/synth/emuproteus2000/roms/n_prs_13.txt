@@ -1,0 +1,512 @@
+bts:Becky Boise 
+bts:The Ultimate
+bts:Iced Out    
+bas:SubLevel    
+gtr:Wah Getarrs 
+bts:MooshooClan 
+key:Chords&Hits 
+pad:Spirit Call 
+str:GothStrings 
+bts:Hot n Steamy
+bts:8nt Urz     
+kit:Hive Jiver  
+syn:Plucky      
+bas:Slap Pop    
+gtr:Sexy Slider 
+pad:Cherubs     
+bts:I Miss You  
+vox:theWatcher  
+key:SOOTCaSE'000
+led:Handwormed  
+sfx:WooleyBOB!  
+str:Sincerely   
+syn:Synelead    
+syn:Prof Brass  
+gtr:HardCore    
+bpm:Clockworx 1 
+gtr:General'sGtr
+syn:SycoGirL    
+key:Klav Synth  
+str:MadDramA \  
+hit:All 1       
+gtr:NyLonArP    
+gtr:Pinky Fingaz
+str:Harpo       
+pad:Synthetic   
+bas:YarsRevenge 
+pad:Blades      
+brs:SlapdatBrass
+key:VINYL  73   
+key:FAR-FG-NUGEN
+syn:LadyOrgan1  
+pad:QuietTime   
+led:MonoGrunge  
+gtr:Linky Fingaz
+str:Ooops!      
+pad:Nitrogen    
+str:Pizz Strings
+bts:YeaYeaZ     
+arp:SupermanSaw 
+key:Orgg Doggie 
+syn:TinkerToyz  
+pad:JP Layer    
+gtr:BedofFire   
+key:Phat Klav   
+bts:Beat Prophet
+kit:Betta Beata 
+led:AllJackedUp!
+sfx:SolarBaBies 
+syn:DeGlown     
+bts:KattznJammah
+kit:MuSic2DrIvBy
+gtr:SyCoCry     
+vox:All Talk    
+bas:Digger Bass 
+gtr:Heavy       
+kit:Oh Yeah     
+kit:Jelly Belly 
+syn:BoogieBAbY  
+kit:Cool Guy    
+kit:FriscoLayer 
+bts:CreatrLayer 
+bts:I Miss You 2
+bts:VideoGamez  
+syn:WePhattField
+syn:Ohoooo!     
+sfx:MarsattaksII
+key:Sitar 88    
+vox:Agony Agony 
+vox:Voicyst     
+syn:WhY Me ?    
+vox:DadeezGAL:) 
+amb:Underground 
+bas:Rez Ripper  
+pad:DeadMetal 1 
+key:Org De Borg 
+key:Piano Jam   
+key:Tiny Wonders
+kit:Obsession   
+kit:Regal Gate  
+bas:Fretless    
+sfx:Sick Girl   
+sfx:KindaMuddy  
+syn:SPICEBOY:-) 
+syn:SuKaButt    
+str:Fade It     
+hit:StrikezAgain
+syn:WeirdVox    
+bas:Box O Bass  
+bas:Poppy       
+pad:OuterLimits 
+str:FakingIt    
+str:Section     
+str:Pizz&Sct  MW
+str:Nightmare   
+syn:SoftStuff   
+kit:10HiHatMode 
+str:MistyStrng  
+pad:StringLayer 
+pad:HiQ Skwarez 
+amb:PeakinHard! 
+prc:Kix 1       
+prc:Kix 2       
+prc:Snares 1    
+prc:Snares 2    
+prc:Snares 3    
+prc:Hats 1      
+prc:Hats 2      
+prc:Cymbals     
+prc:CongasBongos
+prc:ClapsnSnaps 
+prc:Toms        
+prc:Bells       
+prc:Claves      
+amb:LiquidBatz  
+prc:ShakeHerz   
+amb:DeathLaughs 
+prc:Misc        
+led:I Saw Worms 
+bts:TEMPLATE    
+syn:Auto Doom   
+vox:Zeldas Fault
+pad:Darth Works 
+key:Harp Klav   
+key:Tine Split  
+syn:VoxRoller   
+prc:Rainstick   
+prc:WhirlyBird  
+prc:Fills       
+prc:Shakers     
+prc:Scratches   
+prc:SciFi Toy 1 
+prc:SciFi Toy 2 
+amb:PlezLemmeGo!
+gtr:Gener El    
+hit:All 2       
+prc:Thumb Piano 
+prc:Per Oct     
+prc:PerOctLink  
+gtr:NylonFantasy
+brs:Crunchy     
+bts:Play Cousin 
+bas:SubVocoder  
+bts:ShakitZ     
+bts:Girl Watcher
+kit:TribeOMatic 
+bas:Standin     
+str:Ballad Harp 
+hit:DroppinOff  
+key:CityGiggin  
+brs:Philta      
+brs:Biggg       
+gtr:WackaParty83
+gtr:WackaParty2 
+gtr:Wacka 96    
+gtr:Wacka 113   
+gtr:Wacka 3 83  
+key:Crunch Klav 
+brs:Hitz        
+bas:Sonic Sine  
+vox:TB Eweew    
+gtr:Cyclone     
+sfx:DownTheDrain
+arp:PhiltaSweepa
+kit:09HiHatMode 
+bas:SubSonicTri 
+brs:Brass+Tine  
+sfx:YaYaYa      
+bas:Deeper      
+bas:Acid        
+bas:BelowaWoofer
+bas:GutPunched  
+kit:WhatYouWant?
+bas:It Too      
+brs:Lotsa       
+bas:Fishy       
+bas:SubOne      
+bts:Wide Hive   
+bas:FuzzSubby   
+bas:SubTwo      
+bas:SubThree    
+bas:SubFour     
+bas:SubFive     
+bas:SubSix      
+bas:Election    
+bas:Acid 2      
+bas:Crandle     
+bas:Frogged     
+bas:Babybass    
+bas:Soulfuzz    
+bas:Speakeasy   
+bas:BellyButton 
+bas:KeyOnate    
+bas:Prophet     
+bas:Persistent  
+bas:Squared     
+bas:TheoryBass  
+bas:MarkOther   
+bas:Funk Pop 1  
+bas:Funk Pop 2  
+bas:Velo SlapPop
+bas:Funky Finger
+bas:Funky Pik   
+bas:Funk Wave   
+bas:Accidental  
+bas:Fingered    
+bas:Bagg        
+bas:Distroy     
+bas:Blip        
+bas:Hecho Itter 
+bas:Dubby       
+bas:Dubby 2     
+bas:Grit        
+bas:Kraft       
+bas:Kraft 2     
+bas:Technoid    
+key:PianoJam2   
+bas:Plucky      
+bas:Harpbass    
+bas:Upright     
+gtr:Crybabe 1   
+gtr:Wacka       
+gtr:Wacka Talkin
+gtr:Wacka Do    
+gtr:Chickn'1    
+gtr:Chickn'Dist 
+gtr:Chickn'Slide
+gtr:Exciteable  
+gtr:Hen Drix    
+gtr:Lik Delay   
+gtr:Lik Choppy  
+gtr:Wackaloo    
+gtr:Willpy      
+gtr:Odlil       
+gtr:YeWah       
+gtr:Wah DisLik  
+gtr:Wah Not     
+gtr:Wah Scale 4 
+gtr:Wah Scale 7 
+gtr:Wah Upper   
+gtr:SpRinkel    
+bas:Eat Me!     
+syn:WapperFuzz  
+syn:Slippery    
+gtr:DirtyNoter  
+kit:HappY'Z     
+str:Uni Strings 
+gtr:Wah Walker  
+syn:Sin Symph 1 
+gtr:Mood        
+gtr:Nylon       
+gtr:Nylon 2     
+gtr:Slide Hit   
+gtr:Fine Slide  
+gtr:Grit Slide  
+gtr:Strata      
+gtr:Strum Glass 
+gtr:Flange Pick 
+gtr:Grunge      
+gtr:One Shot    
+gtr:Slo Strum   
+gtr:Kraked Tube 
+gtr:Burnt       
+gtr:Weezl Fuzz  
+gtr:Slicer      
+gtr:Dissed Hit  
+gtr:Doom 1      
+pad:Drone 1     
+pad:Drone 2     
+pad:Drone Swirl 
+pad:Siren Spin  
+pad:Leon's      
+hit:Guit n Hat  
+hit:Satisfying  
+hit:Org Creept  
+led:Deep Thought
+led:70's Lead   
+led:Guitlet     
+syn:Synthomatic 
+pad:Transform   
+amb:Droning MW  
+amb:Rubble MW   
+bas:DropOffSine1
+bas:DropOffSine2
+key:So Kazual   
+hit:Wheely Gal  
+bas:DropOffSine3
+bas:DropOffSine4
+key:Org Basic   
+key:Klav Mav    
+syn:ReturnToZoo 
+str:Disco Diva  
+pad:DanceLitez  
+gtr:Weeoww      
+led:RaveEEEE    
+led:RaveAAHH    
+pad:AditivOrgan 
+pad:Trans       
+pad:Narwhal     
+amb:Trippin MW  
+kit:WideOne     
+kit:ThugItUp    
+kit:OnDaStreet  
+kit:The Wiz     
+pad:KnobbyTwirly
+kit:PhilterFreak
+kit:Nu Funk     
+kit:Relapse     
+kit:HardStep    
+rom:Play Thru   
+hit:Sweeit      
+hit:Knock U Out 
+hit:Nice Under  
+hit:Splash      
+str:Suspence    
+key:Growl Drop  
+key:HarpsiFlange
+str:HybridSweep 
+key:Kool Kord   
+key:Org Roll    
+key:Perk Organ  
+str:Synth String
+key:Horror Glide
+brs:Caliente    
+brs:Trump Slide 
+led:FantasyWormz
+bts:SpaceBoyZ   
+led:Yearning    
+led:Reeder      
+led:Violetta    
+led:Stevie      
+sfx:Mr.Clean    
+sfx:Shield      
+sfx:Syclear     
+sfx:Reaper      
+vox:Ahyeeyah    
+pad:Pulsar      
+hit:Carney Hits 
+hit:Brazit 1    
+hit:Brazit 2    
+hit:Brazit 3    
+hit:Brazit 4    
+hit:Brazit 5    
+hit:Spizy       
+pad:Worry       
+str:Orchestsyn  
+syn:Grinder     
+syn:Weeperr     
+amb:Seascape    
+sfx:Wet Trippy  
+syn:Two Step    
+syn:Prosync     
+kit:Mo Dist     
+kit:Slappy      
+kit:DarkFlower  
+kit:Funk 4 Life 
+kit:Perky       
+kit:Crunch      
+kit:Klippy      
+kit:GM Two      
+kit:SubwayTunnel
+kit:ClasikStudio
+kit:ScratchHead 
+kit:FiltrSKRATCH
+kit:Vilper      
+kit:DubItUp     
+kit:NewBeat     
+kit:CornaSto'   
+sfx:BlowinUp1MW 
+prc:ScratchMatic
+kit:Construction
+kit:NuMetal     
+bas:Cube Bass   
+bas:Iggio Basso 
+syn:Objections  
+vox:Dronodians C
+bts:ItsUAgAIn?  
+kit:UainT@&#!   
+bts:AllmyMoMeeS 
+bts:Glo BabieeS 
+bts:Sistahoney  
+bts:IT'SLIKE Dat
+str:StackedLegs 
+bts:Q BORO      
+vox:SingingTB   
+bts:My Girl YO  
+kit:RiDe E-Z    
+bts:DirTay drTee
+bts:MounTenbery 
+kit:SalsA Crunk 
+vox:FemmeDoTell 
+kit:Lesster     
+key:NoMoreKlav  
+bts:LAST CHANCE 
+kit:A YO IIGHT  
+kit:GOOD MU Sic 
+syn:Sin Symph 2 
+bts:MALE BASHER 
+bts:DoitZ       
+kit:GuesWho'sBak
+bts:U4 Got  ME  
+vox:Pretteeee.II
+bts:Dr.Banner   
+rom:I Like U    
+bts:SmoothoneZ  
+kit:TiME SquaRe 
+bts:Oh BaebeeZ  
+bts:GrungeZ     
+bts:ClapYoHandZ 
+bts:LaLaZ       
+bts:DialToneZ   
+str:Sa-Spen Ful 
+key:Perc Klav   
+key:SiMPeL      
+sfx:theHitcher  
+key:Pretteeee...
+gtr:DaBradies   
+amb:CosmicKlasik
+syn:WAWIFLHEAD  
+vox:Voxcade     
+key:MO 88       
+key:SOOTCaSE'300
+arp:Plop        
+key:Doodee      
+gtr:Gen X       
+key:KeyStonE    
+str:VIRGOE      
+vox:PretteeeeIII
+arp:AgonyOrgon  
+vox:SycoBoy     
+key:MO'E DAN    
+key:StoneGroove 
+key:WaThunk     
+vox:Vespers     
+gtr:SprinkleItOn
+kit:EasyRider   
+syn:WeirdVox2   
+kit:Stoopit     
+syn:SilkWerm    
+syn:LadyOrgan2  
+amb:RaveSlave   
+amb:MiseryMod   
+kit:Young Luv   
+pad:TheMadSweep 
+kit:Woo Kid     
+pad:JoVox       
+bas:Razza       
+led:RaveLine    
+led:SineWorm    
+led:ProphetLine 
+bts:MO'HAPPYfeet
+amb:YouPhoned?  
+amb:PhonedAgain?
+pad:OB Layer    
+amb:VocodAhhh...
+key:PhatttTines 
+bts:Luvline 1   
+bts:Luvline 2   
+bts:Luvline 3   
+key:CloudKeys   
+pad:Luxury      
+led:Glue Tone   
+kit:MarchMadnezZ
+key:Tine Fuzzies
+gtr:Voyeur Trax 
+bts:Boombaa     
+bts:AstralTravel
+key:IntoTheLight
+gtr:Psycho      
+kit:7 HiHatMode 
+key:Tine Klav   
+bts:Geechee GLO 
+kit:WhatUstarted
+kit:BabyDoll    
+bts:New WhirlOdr
+bts:Wile U Werk 
+kit:U NO        
+bts:HeY !       
+kit:My Main Man 
+bts:Can I Talk  
+bts:DJ GLO Jenkn
+bpm:Clockworx 2 
+prc:HiHatMono 1 
+prc:HiHatMono 2 
+key:Skini Klav  
+prc:Bells Mono  
+key:HipHopTines1
+key:HipHopTines2
+vox:You         
+led:Screamer    
+led:MonoBrass   
+pad:Chasers MW  
+pad:LadyPulsar  
+pad:MeltingHartz
+arp:Low&Square  
+vox:LetsDance   
+vox:Earth Lisa  
+gtr:Disturbed   
+bts:DaPhattest  
+bts:Sunrise     
+key:ReBeckTines 
+bts:Luv Joe'ns  
+   :Default v1.2

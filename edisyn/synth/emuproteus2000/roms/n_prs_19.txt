@@ -1,0 +1,512 @@
+kit:True        
+kit:Drums 102   
+kit:BreadnButter
+kit:Studio      
+kit:Funky       
+kit:Stadium     
+kit:Brush       
+kit:Super 9     
+kit:SweetAsSuga!
+kit:Sintickets  
+kit:[[WideLoad]]
+bts:FullOnRockin
+kit:BeatboxTight
+kit:Inteletronic
+kit:Break'Crunch
+bts:XPolyNationk
+it:Studious    k
+it:StayUp4Ever k
+it:Quasimatic  k
+it:Funk Review k
+it:Studied     k
+it:Staple      k
+it:Stadi Yum   k
+it:Klap Ruse 1 k
+it:Jazzazz     k
+it:RoomToMove  k
+it:Sweeper     k
+it:Pitcher     k
+it:NY Tight    k
+it:Tite Trap   k
+it:Happy Hour  k
+it:SuperSquishyk
+it:JanzJoint*E1k
+it:StudioAltSnrk
+it:All Purpose k
+it:BrushSwiped k
+it:SpikedPunch k
+it:RockParty   k
+it:Natural Kit k
+it:Small B Kit k
+it:Big Studio Kk
+it:Broken 8-bitk
+it:Sweepy Kit  k
+it:HandOfAfricak
+it:AM LO-FI 909k
+it:S Echo Kit  k
+it:Player 1    k
+it:Player 2    k
+it:Studio Rock k
+it:Classic Rockk
+it:drawkcaB    k
+it:Funk-o-Matick
+it:Tommy Leigh k
+it:Swinger     k
+it:1200 Remix  k
+it:MS Bumper   k
+it:Hertz Spiralk
+it:Live Ringer k
+it:ElectromiX  k
+it:Hand Built  k
+it:Nemesis     k
+it:G Rider     k
+it:Big Booty   k
+it:InTheStudio k
+it:Rock        k
+it:Dub Style   k
+it:Highboy )   k
+it:Migrane     k
+it:Twinmill    k
+it:GarageJam   k
+it:Egg Beater  k
+it:HotRodz Kit k
+it:Peashooter  k
+it:Boomy       k
+it:FunkyBoosterk
+it:MouthBoosteRk
+it:HipHopster4 k
+it:Repeater13  k
+it:MoDeffeKtOR2k
+it:RockReunion k
+it:PlayWithIt! k
+it:Choke*ItPTCHk
+it:HatRingExp2*k
+it:StereoSpreadk
+it:St Spread 2 k
+it:Solid State1k
+it:Solid State2k
+it:Solid State3k
+it:TechnoState1k
+it:TechnoState2k
+it:Hip Hop 1   k
+it:Hip Hop 2   k
+it:Hip Hop 3   k
+it:Hip Hop 4   k
+it:Hip Hop 5   k
+it:Hip Hop 6   k
+it:Hip Hop 7   k
+it:Hip Hop 8   k
+it:Hip Hop 9   k
+it:Hip Hop 10  k
+it:Hip Hop 11  k
+it:BackNForth  k
+it:Mod Tom Rev k
+it:DanceCommandk
+it:Overloaded  k
+it:Overloaded 2k
+it:Mouthoff    k
+it:Player1 St 2k
+it:Player2 St2 k
+it:All Bells   k
+it:Ballad ?    k
+it:StripRepeat k
+it:Best Effect k
+it:Vynalizer   k
+it:Bonus       k
+it:Echo Up Up  k
+it:Echo Up 2   k
+it:PedalKeyHat k
+it:Mix It      k
+it:StereoBrush k
+it:Skewer      k
+it:BoilerMaker k
+it:James Funk  k
+it:Hybrid 1    k
+it:Alien Kit 1 k
+it:Alien Kit 2 k
+it:Hip Hop V   k
+it:SP1200+     k
+it:Fyuchrbrakezk
+it:Ruffneck Kitk
+it:Divebomb Tomk
+it:Deep Fun    k
+it:Quazz       k
+it:OddSkool*IDMk
+it:Sink-It-Deepb
+ts:EchoTekEthnok
+it:DropN'Grind b
+ts:RaunchStomp!k
+it:NVironments k
+it:Multomeldo  k
+it:Filter Funk b
+ts:BodyDouble-1b
+ts:BodyDouble-2k
+it:EyeDM-1 @100k
+it:EyeDM-2 @100b
+ts:Introferencek
+it:Techschure  k
+it:Nasty Ringerk
+it:LookoutBeLowk
+it:Blue Heightsb
+ts:ElectroClashk
+it:Warbly w/Padk
+it:Power!      k
+it:Tribal      k
+it:PseudoArpy-1k
+it:PseudoArpy-2k
+it:Sayrpeggio-1k
+it:Sayrpeggio-2k
+it:Sayrpeggio-3a
+rp:DA-Basic 01 a
+rp:DA-Basic 02 a
+rp:DA-Basic 03 a
+rp:DA-Basic 04 a
+rp:DA-Basic 05 a
+rp:DA-Basic 06 a
+rp:DA-Basic 07 a
+rp:DA-Basic 08 a
+rp:DA-Basic 09 a
+rp:DA-Basic 10 a
+rp:DA-Basic 11 a
+rp:DA-Basic 12 a
+rp:DA-Basic 13 a
+rp:DA-Basic 14 a
+rp:DA-Basic 15 a
+rp:DA-Basic 16 a
+rp:DA-Basic 17 a
+rp:DA-Basic 18 a
+rp:DA-Basic 19 a
+rp:DA-Basic 20 a
+rp:DA-Hippie 1 a
+rp:DA-P Chaser a
+rp:DA-F1 Chasera
+rp:DA-F2 Chasera
+rp:DA-D&B      a
+rp:DA-Jumpper  a
+rp:DA-Alien    a
+rp:DA-Vocalism a
+rp:DA-The Bump a
+rp:DA-Bck&Fortha
+rp:DA-E Rule   a
+rp:DA-Back Attka
+rp:DA-Cymbalisma
+rp:DA-Q Bee    a
+rp:DA-Wordly   a
+rp:DA-Filter DBa
+rp:DA-Repeater a
+rp:DA-Dbl Time a
+rp:DA-Late 8   a
+rp:DA-Odesa    a
+rp:DA-Up&Away  a
+rp:DA-Slicer   a
+rp:DA-Groovy Z a
+rp:DA-Tommee   a
+rp:DA-Zoommy   a
+rp:DA-Stereo Rga
+rp:DA-Indio    a
+rp:DA-Big Boy  a
+rp:DA-March On a
+rp:DA-Flying   a
+rp:DiscoSnap   a
+rp:Squareorama a
+rp:Dirty H Hop a
+rp:TranceWave  a
+rp:BlingBling  a
+rp:Marching SN a
+rp:Species M   a
+rp:Congo Bongo a
+rp:Jelly Pulse a
+rp:Sun Jamaica a
+rp:Basic C1+ 1 a
+rp:Basic C1+ 2 a
+rp:Basic C1+ 3 a
+rp:Basic C1+ 4 a
+rp:Basic C1+ 5 k
+ey:PercoLate   k
+ey:Tuna Perca  k
+ey:Faithfull EPk
+ey:VirtualWurlik
+ey:Harmones    k
+ey:Tine EP     k
+ey:RodeY       k
+ey:ms.Cherchee k
+ey:Twinker     k
+ey:MegaRode    o
+rg:Mod Org     o
+rg:Shaper      o
+rg:Homer       o
+rg:Epilog      o
+rg:Kristal Org o
+rg:In Klav     o
+rg:Arky Organ  s
+yn:Wayfayer    s
+yn:Penta Synth s
+yn:Myster Keyz s
+yn:Warm Stringss
+yn:Early Strings
+yn:SinthStringss
+yn:Supa Brass  s
+yn:Cats Coomb  s
+yn:Tubs Brass  s
+yn:New East    s
+yn:Bogtoon     s
+yn:Sluicy      s
+yn:Shimmerman  s
+yn:Glimmerman  s
+yn:Demican MW  p
+rc:All Kicks 1 p
+rc:All Kicks 2 p
+rc:All Snares 1p
+rc:All Snares 2p
+rc:All Snares 3p
+rc:All Hats 1  p
+rc:All Hats 2  p
+rc:All Toms 1  p
+rc:All Toms 2  p
+rc:All Cymbals p
+rc:All Congas +p
+rc:All Shakers p
+rc:All Bells   p
+rc:All Snaps + p
+rc:All Scratch p
+rc:All Misc    p
+rc:Vibe        p
+rc:Xylo        p
+rc:Marimba     p
+rc:Kalimba     p
+rc:Log Drum    p
+rc:Flexi       p
+rc:Steel       p
+rc:Eastern     p
+rc:Rainstick   p
+rc:Taiko       p
+rc:Belltree    p
+rc:TubularBell p
+rc:Glock Bell  p
+rc:Dance Kicks p
+rc:HipHopKicks p
+rc:Brush Swipe p
+rc:Hand Drums  p
+rc:Carnaval 1  p
+rc:Carnaval 2  p
+rc:Carnaval 3  p
+rc:Mallets 1   p
+rc:Mallets 2   p
+rc:Mallets 3   p
+rc:Mallets 4   p
+rc:Ambicil     p
+rc:Angelic 01  p
+rc:Drumattic   p
+rc:Cage        p
+rc:GeeBe El    b
+ts:Cozmik*Beetzk
+it:D&B Ambiencek
+it:Jabberwocky k
+it:basPTCHbndC1k
+it:Beat Mine   k
+it:U-U Boy     k
+it:Jazz Brsh   k
+it:Tribalrush  k
+it:Kolas MW    k
+it:Oct Suit    k
+it:Echoeister  k
+it:Danger      k
+it:Gater Alley k
+it:Power Shots k
+it:AmBIGuous   k
+it:Gut Groove  k
+it:AxioAtomic  k
+it:Syncratic   k
+it:Salty       k
+it:Big Hip     k
+it:Pinnacles 1 k
+it:Pinnacles 2 k
+it:Syntactix   k
+it:Stack 909   k
+it:We Dance    k
+it:Back Beast 1k
+it:Back Beast 3k
+it:Back Beast 2k
+it:SquashAttackk
+it:Rand Delay  k
+it:PhazySquishyk
+it:Q Phase     p
+rc:Pow Toms    p
+rc:KlapTrax    k
+it:Sympel      k
+it:Lo SkooL    p
+rc:SycoCushon  k
+it:Banger      p
+rc:Cortoon     p
+rc:SkareeMoo   p
+rc:SkareeMoo V2k
+it:Hanger      p
+rc:Wowzers     p
+rc:Yowzers     p
+rc:Klosenhousenk
+it:Kruushoo    p
+rc:Kangeroo J  p
+rc:CloudMalletsp
+rc:Underwater  p
+rc:Arpegiationsp
+rc:Rainforest  p
+rc:Xylo Fantasyp
+rc:SteelFantaszp
+rc:Highlander  p
+rc:Laserimbas  p
+rc:CymbiOsis   p
+rc:Thumb       p
+rc:Scratch Up  p
+rc:KickSnareUp1p
+rc:KickSnareUp2p
+rc:WhipSnapper p
+rc:DarkIndustryp
+rc:Temple Bell p
+rc:TaikoDrumingp
+rc:ForbidenCavep
+rc:Xyloair     p
+rc:Vibrations  p
+rc:Calimba     p
+rc:Blow Bot    p
+rc:Klosencouterp
+rc:Stawlnallcrsp
+rc:Skaree      p
+rc:Gongsho     p
+rc:Maareid:(   p
+rc:Yowee!      p
+rc:Zowee!      p
+rc:Kangeroo    p
+rc:Baysik      p
+rc:Baysicer    p
+rc:kwagmire    p
+rc:SWowln      k
+it:B Adds Bass*k
+it:Drums102BASSk
+it:X*SpearmintLk
+it:Cross{+}Hairk
+it:Outbreak@118k
+it:Filt 2D Rim b
+as:Acoustician b
+as:ConeBlower  b
+as:Finger      b
+as:Fret S      b
+as:Abyss       b
+as:Sassy       b
+as:DX +        b
+as:FM +        b
+as:New Wave    b
+as:Snappy      b
+as:Mad Boomy   b
+as:Octave Pick b
+as:Juno Bass   b
+as:PhaseBass   b
+as:Chugalug    b
+as:Stand       b
+as:Beep        b
+as:Fooger      b
+as:Dirty Fingerb
+as:Organ Bass  b
+as:Saw Bass    b
+as:OldSkool B  b
+as:VintageSquarb
+as:Scuzzy      b
+as:Forage      b
+as:Sined Punch b
+as:Kalimba Deepb
+as:SlapUpright b
+as:Lolyfinger  b
+as:Hapyfinger  b
+as:Punchee     b
+as:Acoustic 2  k
+it:Squeezvortexb
+ts:Bottom Floork
+it:Lectrophonick
+it:Dubadelic105s
+fx:FrozenWindBes
+fx:Schvitz     s
+fx:Hempi MW    c
+mb:Otala       l
+ed:Square Dove l
+ed:Nasal Lead  l
+ed:Up*         l
+ed:New Wave    l
+ed:Dove Love   l
+ed:L9          l
+ed:Snappy      l
+ed:Simplicity  l
+ed:Kliy Max    l
+ed:uuhh!hoo    l
+ed:resh!hfuo   v
+ox:Rez Tracker v
+ox:S&H Vox     v
+ox:VoXilium    w
+nd:Easy Winds  w
+nd:Meta Flute  w
+nd:Bottle      w
+nd:Ocarina     w
+nd:New Wind    w
+nd:Ancestor    w
+nd:Sassy Brass w
+nd:Sassy Brass2w
+nd:Blow Pad    w
+nd:Blowin It   w
+nd:Cartman     h
+it:Don stop    h
+it:OneChord1Drmh
+it:PostModern  h
+it:Sax Hop     h
+it:Banjovi     h
+it:GuitStarted h
+it:Music Stabs h
+it:Faithless   b
+el:Pastoralis Db
+el:Lagrimas    b
+el:FlexTimeUp  b
+el:Ring Up     b
+el:BabyBell    b
+el:Misty       h
+it:Quitit      k
+it:Regba       c
+mb:Bad Mangos  c
+mb:Culture     c
+mb:DiscoVery   c
+mb:Voice Jammerc
+mb:Odd Mix     c
+mb:Orch        c
+mb:OrchFade    s
+fx:SandInvasions
+yn:SawKeys     s
+yn:VintagePolySs
+yn:Deep Pad    s
+fx:Solar Flare s
+fx:Infernal    s
+fx:Death Star  p
+rc:Gongsho     s
+fx:Pink Noise  s
+yn:Microtune   s
+yn:Puffy       s
+fx:Spacechime  s
+fx:B Galactica s
+fx:Woodpecker  z
+zz:expressive  l
+nk:GM 1        l
+nk:Cym1        l
+nk:Cym2        l
+nk:Cym3        l
+nk:Cym4        l
+nk:Cym5        l
+nk:Hats 1      l
+nk:Hats 2      l
+nk:Hats 3      l
+nk:Hats 4      l
+nk:Hats 5      l
+nk:Hats 6      z
+zz:StereoSpreadl
+nk:Toms 1      l
+nk:Toms 2      l
+nk:Toms 3      z
+zz:4LayerMap   l
+nk:GM 2        z
+zz:timebase    z
+zz:blank       z
+zz:defaultv1.0 

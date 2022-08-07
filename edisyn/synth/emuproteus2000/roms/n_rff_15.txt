@@ -1,0 +1,362 @@
+AUD-C Triad     
+AUD-C1 (4 bars) 
+AUD-C3 (1 bar)  
+AUD-C3 (2 Bars) 
+AUD-C3 (4 Bars) 
+AUD-C4          
+AUD-Cm7         
+AUD-Cm9         
+AUD-Cmaj7       
+AUD-Cs Up       
+AUD-Cs Up-Down  
+AMB-Underground 
+AMB-Vocoder     
+BAS-Acid1       
+BAS-AnythingOnce
+BAS-Avalanched  
+BAS-Bagg        
+BAS-Baby        
+BAS-BellyButton 
+BAS-BellyButton2
+BAS-BelowaWoofer
+BAS-Blip        
+BAS-Box O       
+BAS-Crandle     
+BAS-Cube        
+BAS-Decision99  
+BAS-Deeper      
+BAS-Digger      
+BAS-EatMe       
+BAS-Fishy       
+BAS-Frogged     
+BAS-Funk PM     
+BAS-Funk Pop    
+BAS-Funk Slap   
+BAS-Funky Pik   
+BAS-Grit        
+BAS-GutPunched  
+BAS-HarpOS1     
+BAS-HarpOS2     
+BAS-HarpOS3     
+BAS-HellaBoom   
+BAS-Hummertime  
+BAS-InTheory    
+BAS-It Too      
+BAS-KeyONate    
+BAS-KeyONate2   
+BAS-MarkOther   
+BAS-MidWest     
+BAS-Nanife      
+BAS-Persistence 
+BAS-PhattPeaches
+BAS-Plucky      
+BAS-PluckySynth 
+BAS-Poppy       
+BAS-Prophet     
+BAS-RezRipper   
+BAS-SP Stand-Up 
+BAS-SlapPop     
+BAS-SonicSine   
+BAS-Soulified   
+BAS-Soul Trouble
+BAS-Soulfuzz    
+BAS-Speakeasy   
+BAS-Speakeasy 2 
+BAS-Squared     
+BAS-Standin     
+BAS-Standin 2   
+BAS-Subby       
+BAS-SubFive     
+BAS-SubOne      
+BAS-SubsonicTRi 
+BAS-Talk2Me     
+BAS-Technoid    
+BAS-TheDeepest  
+BAS-TheDeepest2 
+BAS-Theory      
+BAS-TheOtherMarc
+BAS-Upright One 
+BAS-WarmWelcome 
+BAS-We Be Subbin
+BAS-WhereIsShe  
+BAS-WoofaWrekka 
+BAS-YarsRevenge 
+BRS-Bigg        
+BRS-BrassTine   
+BRS-Hitz        
+BRS-Caliente    
+BRS-Crunchy     
+BRS-Lotsa       
+BRS-Lotsa2      
+BRS-Mo          
+BRS-Philta      
+BRS-SlapDatBrass
+BRS-SlapDat 2   
+GTR-AllWahs     
+GTR-Burnt       
+GTR-Chord Bed   
+GTR-Cyclone     
+GTR-DissedHit   
+GTR-Fine Slide  
+GTR-Flange Pick 
+GTR-Gen X       
+GTR-Gen X 2     
+GTR-GenerEl     
+GTR-Grit Slide  
+GTR-Grunge      
+GTR-HrndrixWah  
+GTR-Lik Choppy  
+GTR-LikeThisLik 
+GTR-Mood Riff   
+GTR-Nylon       
+GTR-Nylon 1 2   
+GTR-Nylon 2     
+GTR-Nylon 2 2   
+GTR-NylonArp    
+GTR-NylonArp2   
+GTR-NylonFantasy
+GTR-One Shot    
+GTR-PhiltaSweep 
+GTR-Pinky Fingaz
+GTR-Pop 2       
+GTR-RBNylonWav  
+GTR-SlideHit    
+GTR-Slo Strum   
+GTR-Sprinkle    
+GTR-Strata      
+GTR-Strata 2    
+GTR-StrumGlass  
+GTR-Wacka 113   
+GTR-Wacka 96    
+GTR-Wackaloo    
+GTR-WahGettars  
+GTR-Wah Not     
+GTR-WahScale4   
+GTR-WeezlFuzz   
+HIT-DroppinOff  
+HIT-GuitHat     
+HIT-Houseping   
+HIT-InConcert   
+HIT-KnockUOut   
+HIT-Nice Under  
+HIT-OrgCreept   
+HIT-Satisfying  
+HIT-Serious     
+HIT-Serious2    
+HIT-Splash      
+HIT-StrikezAgain
+HIT-Sweeit      
+KEY-010FuzzTine 
+KEY-1NoteMello  
+KEY-ChordsHits  
+KEY-ChordsHits2 
+KEY-CityGiggin  
+KEY-DX Organ    
+KEY-Far fg nOrgn
+KEY-GrowlDrop   
+KEY-HarpsiFlange
+KEY-Horror Glide
+KEY-HybridSweep 
+KEY-Keystone    
+KEY-Klav Synth  
+KEY-Klavin It   
+KEY-KoolKord    
+KEY-Mo 88       
+KEY-Mo E Dan    
+KEY-Org Roll    
+KEY-OrgLite     
+KEY-OrgRoll2    
+KEY-OrgStoneGruv
+KEY-Perc Org    
+KEY-Sitar 88    
+KEY-Syco Vox 88 
+KEY-TremblRODES 
+KEY-Vinyl 73    
+KEY-WahChunk    
+LED-70s Lead    
+LED-Deep Thought
+LED-DeepThought2
+LED-Fantasy     
+LED-Fantasy2    
+LED-Fantasy3    
+LED-I Saw Worms 
+LED-ProphetLine 
+LED-Raveline    
+LED-Raveline2   
+LED-Reeder      
+LED-SineWorm    
+LED-SineWorm2   
+LED-Stevie      
+LED-Violetta    
+LED-Wali Wali   
+LED-Yearning    
+PAD-Addtive Org 
+PAD-Cherubs     
+PAD-Cherubs 2   
+PAD-DanceLitez  
+PAD-DeadMetal1  
+PAD-Drone 1     
+PAD-Drone 1 2   
+PAD-Drone 2     
+PAD-DroneSwirl  
+PAD-OBLayer1    
+PAD-PluckedGold 
+PAD-StringLayer 
+PAD-StringLayr2 
+PAD-TheMadSweep 
+SFX-BLABTAR     
+SFX-DstruCshunn 
+SFX-GoDzilaVsEmu
+SFX-Solar Babies
+SFX-WooleyBob   
+SFX-YaYAYA      
+STR-BalladHarp  
+STR-BalladHarp2 
+STR-BalladHarp3 
+STR-Destiny     
+STR-Harpo       
+STR-HybridSynth 
+STR-Mondo       
+STR-PizzStrings 
+STR-Pitzy Pluck 
+STR-Oops        
+STR-OrchHarp    
+STR-Sa-Spen Ful 
+STR-SectionPizz 
+STR-Sincerely 1 
+STR-Sincerely 2 
+STR-Suspense    
+STR-SynthString 
+STR-Virgoe      
+SYN-2 Step      
+SYN-AgonyOrgon  
+SYN-BrassProphet
+SYN-Classic 1   
+SYN-Countrytalk 
+SYN-Kutter      
+SYN-LadyOrg1    
+SYN-LadyOrg2    
+SYN-Pan Coyote  
+SYN-PLUCKY      
+SYN-Plucky 2    
+SYN-Prosync     
+SYN-Silkwerm    
+SYN-Syco Girl   
+SYN-Wan X       
+SYN-Weeperr     
+SYN-Winny       
+VOX-Agony Agony 
+VOX-DaddysGal   
+VOX-Voicyst     
+VOX-Voxcade     
+WAV-Sinusoid    
+WAV-Square      
+PRC-Kicks 1     
+PRC-Kix 1       
+PRC-Kix 2       
+PRC-Misc        
+PRC-Per Oct     
+PRC-Scratches   
+KIT-AllmyMoMeeS 
+KIT-BettaBeata  
+KIT-Construction
+KIT-CornaSto    
+KIT-CornaSto2   
+KIT-Crunch      
+KIT-DarkFlower  
+KIT-DarkFlower2 
+KIT-DePhlanga   
+KIT-FriscoLayer 
+KIT-Funk 4 Life 
+KIT-GM One      
+KIT-GM Two      
+KIT-GuessWhosBak
+KIT-HappyZ      
+KIT-HiverJiver  
+KIT-HiverJiver2 
+KIT-Hot n Steamy
+KIT-KattznJammah
+KIT-KlasicStudio
+KIT-Klippy      
+KIT-Lesster     
+KIT-MO GM 1     
+KIT-MarchMadness
+KIT-MarchMadnezZ
+KIT-Mo Dist     
+KIT-Music2DrivBy
+KIT-New Beat    
+KIT-NuMetal     
+KIT-Oh Yeah     
+KIT-OnDaStreet  
+KIT-Perky       
+KIT-Perky2      
+KIT-PhiltaFreak 
+KIT-PhiltaFreak2
+KIT-Relapse     
+KIT-Relapse2    
+KIT-ScratchHead 
+KIT-Slappy      
+KIT-SubwayTunnel
+KIT-The Ultimate
+KIT-ThugitUp    
+KIT-TimesSquare 
+KIT-U Aint      
+KIT-U No        
+KIT-Vilper      
+KIT-Vilper2     
+KIT-Warp        
+KIT-Wide One    
+KIT-WideOne2    
+KIT-Woo Kid     
+BTS-8nt Urz     
+BTS-AllMyMomeeS 
+BTS-BabyDoll    
+BTS-Beat Prophet
+BTS-Becky Boise 
+BTS-Can I Talk  
+BTS-ClapYoHandZ 
+BTS-CreatrLayr  
+BTS-CreatrLayr2 
+BTS-DialToneZ   
+BTS-DirTay drTee
+BTS-DJ GLO Jenkn
+BTS-DoiTZ       
+BTS-Dr. Banner  
+BTS-FemaleBasher
+BTS-Geechee GLO 
+BTS-GLO BabieeS 
+BTS-GrungeZ     
+BTS-HeY         
+BTS-Hot n Steam2
+BTS-Hot n Steamy
+BTS-I Miss U    
+BTS-Iced Out    
+BTS-ItsLikeDat  
+BTS-ItsUAgAIn   
+BTS-KattznJammah
+BTS-LaLaZ       
+BTS-Last Chance 
+BTS-Lily 3      
+BTS-Lily 4      
+BTS-Lily 5      
+BTS-Luv Joens   
+BTS-MaleBasher  
+BTS-MoHappyFeet 
+BTS-MooshooClan 
+BTS-MounTenbery 
+BTS-My Girl     
+BTS-NWO         
+BTS-Oh BaebeeZ  
+BTS-Play Cousin 
+BTS-Q BORO      
+BTS-ShakitZ     
+BTS-SistaHoney  
+BTS-SmoothOneZ  
+BTS-SpaceBoyZ   
+BTS-The Ultimate
+BTS-U4 Got ME   
+BTS-VideoGamez  
+BTS-While U Werk
+BTS-Wide Hive   
+BTS-YeaYeaZ     
+BTS-ZMan        

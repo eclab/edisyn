@@ -1,0 +1,181 @@
+KEY-C3          
+KEY-C3 (2 Bars) 
+KEY-C3 (4 Bars) 
+KEY-C4          
+KEY-C Triad     
+BAS-Leg3 Studio 
+BAS-Legato 1    
+BAS-Legato 2    
+BAS-Mystery     
+BAS-Solo        
+BAS-SoloPizz w  
+BRS-Bass Tbone  
+BRS-Brass       
+BRS-Dyna-Trump1 
+BRS-Dyna-Trump2 
+BRS-Fanfare 1   
+BRS-FrenchHorn 1
+BRS-FrenchHorn 2
+BRS-FrenchHorn 3
+BRS-FrenchHorns 
+BRS-Horns       
+BRS-Solo        
+BRS-SynthBrass  
+BRS-Trombone    
+BRS-Trombone 2  
+BRS-Trumpet     
+BRS-Trumpet 2   
+BRS-Trumpet ff  
+BRS-Trumpet mf  
+BRS-Tuba 1      
+BRS-Tuba 2      
+BRS-Tuba 3      
+CEL- Solo 1     
+CEL-CelloVib    
+CEL-Legato 1    
+CEL-Legato 2    
+CEL-Solo 2      
+CEL-SoloPizz v  
+CMB-Bas&Ctra    
+CMB-Cel&Bssn    
+CMB-Vln&Oboe    
+EFX-Bowed Radio 
+EFX-Flutedream  
+EFX-Lodown Bass 
+EFX-Orion       
+EFX-VoxCycle    
+ORC-Full Orch 1 
+ORC-Full Orch 2 
+ORC-Full Orch 3 
+ORC-Full Orch 4 
+ORC-Full Orch 5 
+ORC-Small Orch  
+ORC-Unison Orch 
+ORG-Classical 1 
+ORG-Classical 2 
+PRC-All BassDrum
+PRC-All Piatti  
+PRC-All Timpani1
+PRC-All Timpani2
+PRC-Batterie 1  
+PRC-Batterie 2  
+PRC-Batterie 3  
+PRC-Celeste 1   
+PRC-Celeste 2   
+PRC-Childbells  
+PRC-Harp 1      
+PRC-Harp 2      
+PRC-HarpFantasy 
+PRC-Marimba     
+PRC-Multipizz   
+PRC-Orch Bells 1
+PRC-Orch Bells 2
+PRC-Snare 1     
+PRC-Snare 2     
+PRC-Snare 3     
+PRC-Snare 4     
+PRC-Timberell   
+PRC-Timps       
+PRC-Timps&Piatti
+PRC-TubulrBells1
+PRC-TubulrBells2
+PRC-Xylophone   
+STR-Chamber     
+STR-FulLegHall  
+STR-FullXprsive 
+STR-Hall Pizz   
+STR-Hall Trems  
+STR-HallLgSect  
+STR-HallSpic    
+STR-Leg&Spic    
+STR-Legato 1    
+STR-Legato 2    
+STR-Legato 3    
+STR-Legato 4    
+STR-Marcato 1   
+STR-Orchestra   
+STR-Orchestra 2 
+STR-Pizz 1      
+STR-Pizz 2      
+STR-Pizz 3      
+STR-Pizz&Trem   
+STR-Quartet 1   
+STR-Quartet 2   
+STR-Quartet 3   
+STR-Run 1       
+STR-Run 2       
+STR-Run 3       
+STR-Run 4       
+STR-Section 1   
+STR-Section 2   
+STR-Section 3   
+STR-Section 4   
+STR-Section 5   
+STR-Section 6   
+STR-Section 7   
+STR-Solo 1      
+STR-Solo 2      
+STR-Solo Pizz   
+STR-Spic        
+STR-SpicPizz    
+STR-StrSection1 
+STR-StrSection2 
+STR-StrSection3 
+STR-StrSection4 
+STR-StrSection5 
+STR-Synth 1     
+STR-SynthStrings
+STR-Trem 1      
+STR-Trem 2      
+STR-Trem 3      
+STR-Velo Marcato
+STR-Vln&Celli   
+VLA-Legato 1    
+VLA-Legato 2    
+VLA-Pizz        
+VLA-Sad Viola   
+VLA-Solo        
+VLN-Fiddle      
+VLN-Legato      
+VLN-Pizz&Tremolo
+VLN-Solo 1      
+VLN-Solo 2      
+VLN-VlnSolo     
+WND-AltoFlute   
+WND-Bassoon 1   
+WND-Bassoon 2   
+WND-Bassoon 3   
+WND-BssClarinet1
+WND-BssClarinet2
+WND-Chiff Flute 
+WND-Clarinet    
+WND-Clarinet 2  
+WND-ContrBssn 3 
+WND-ContraBssn 1
+WND-ContraBssn 2
+WND-DeepWoods   
+WND-Dyno Flute  
+WND-EnglshHorn 1
+WND-EnglshHorn 2
+WND-Flute 1     
+WND-Flute 2     
+WND-FluteBeauty 
+WND-FluteSection
+WND-HallWindSect
+WND-Oboe 1      
+WND-Oboe 2      
+WND-Oboe 3      
+WND-Piccolo     
+WND-Reed Group  
+WND-Section 1   
+WND-Section 2   
+WND-Section 3   
+WND-Section 4   
+WND-Section 5   
+WND-Section 6   
+WND-SectionWoods
+WND-Solo 1      
+WND-Solo 2      
+WND-The Oboe    
+WND-WindSection1
+WND-WindSection2

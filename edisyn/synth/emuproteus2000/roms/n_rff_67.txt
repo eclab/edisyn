@@ -1,0 +1,362 @@
+AMB-Snowy Trees 
+ARP-Bass 1      
+ARP-Bass 2 Mwhl 
+ARP-Bass 2      
+ARP-Beat Chord 1
+ARP-Beat Chord 2
+ARP-Beat Chord 3
+ARP-Beat Chord 4
+ARP-Beat Chord 5
+ARP-Beat Chord 6
+ARP-Beat Chord 7
+ARP-BeatFlache  
+ARP-Git Major 1 
+ARP-Git Major W 
+ARP-Git Minor7 1
+ARP-Git Minor7 2
+ARP-Git Minor7 W
+ARP-Slap it 1   
+ARP-Slap it 2   
+ARP-T Beat 1    
+ARP-T Beat 2    
+ARP-T Beat 2Mwhl
+ARP-TuberMute   
+ARP-U know 1    
+ARP-U know 2    
+BAS-Acacia      
+BAS-Acoustic    
+BAS-Ana Tree    
+BAS-BeatSquare 1
+BAS-Cactus      
+BAS-Cool it     
+BAS-Distal      
+BAS-Dorn atplant
+BAS-Framer      
+BAS-Low Beat    
+BAS-Marc One 1  
+BAS-Marc One 2  
+BAS-Oak Tree    
+BAS-Park 1      
+BAS-Park 2      
+BAS-PhatSawer 1 
+BAS-Slap it 1   
+BAS-Slap it 2   
+BAS-Spruce 1    
+BAS-Spruce 2    
+BAS-Sub 1       
+BAS-Trance 1    
+BAS-Trance 2    
+BAS-Trance 3    
+BD1-All BD 1    
+BD1-All BD 2room
+BD2-All BD Elec1
+BD2-All BD Elec2
+BPM-MarsGarden  
+CB1-All CymRid 1
+CB1-All CymRid1b
+CB1-CupRide 1   
+CB1-HotGroove 1 
+CB1-Jazzy 1     
+CB2-All CymRid 1
+CB2-Weirdo 1    
+CB2-Weirdo 2    
+CB2-Weirdo 3    
+CLP-All Claps 1 
+CLP-All Claps 1d
+GIT-gr 1 + drums
+GIT-gr 1 A#maj  
+GIT-gr 1 A#min7 
+GIT-gr 1 Amaj   
+GIT-gr 1 Amin7  
+GIT-gr 1 Bmaj   
+GIT-gr 1 Bmin7  
+GIT-gr 1 C#maj  
+GIT-gr 1 C#min7 
+GIT-gr 1 Cmaj   
+GIT-gr 1 Cmin7  
+GIT-gr 1 D#maj  
+GIT-gr 1 D#min7 
+GIT-gr 1 Dmaj   
+GIT-gr 1 Dmin7  
+GIT-gr 1 Emaj   
+GIT-gr 1 Emin7  
+GIT-gr 1 F#maj  
+GIT-gr 1 F#min7 
+GIT-gr 1 Fmaj   
+GIT-gr 1 Fmin7  
+GIT-gr 1 G#maj  
+GIT-gr 1 G#min7 
+GIT-Muted 1     
+GIT-Muted 2     
+GIT-Muted 3     
+HH1-12inch 1    
+HH1-12inch 2    
+HH1-12inch 3    
+HH1-12inch 4    
+HH1-14 Bright 1 
+HH1-14 Bright 2 
+HH1-14 Bright 2b
+HH1-14 Bright 3 
+HH1-14 Dark 1   
+HH1-14 Dark 2   
+HH1-14 Dark 3   
+HH1-14 Rock 1   
+HH1-14 Rock 2   
+HH1-6inch Mini 1
+HH1-6inch Mini 2
+HH1-6inch Mini 3
+HH1-80 1        
+HH1-80 2        
+HH1-808 1       
+HH1-808 2       
+HH1-808 3       
+HH1-808 4       
+HH1-909 1       
+HH1-909 2       
+HH1-909 3       
+HH1-909 4       
+HH1-909 5       
+HH1-909 6       
+HH1-All HH 1    
+HH1-All poly    
+HH1-D9 1        
+HH1-D9 2        
+HH1-D9 3        
+HH1-DRS60 1     
+HH1-DRS60 2     
+HH1-FX Splash 1 
+HH1-FX Splash 2 
+HH1-Jazz 1      
+HH1-Jazz 2      
+HH1-KR 1        
+HH1-KR 2        
+HH1-SNDmaster 1 
+HH1-SNDmaster 2 
+HH1-SNDmaster 3 
+HH1-SNDmaster 4 
+HH1-SNDmaster 5 
+HH1-SNDmaster 6 
+HH1-SNDmaster 7 
+HH1-Vi 1        
+HH1-Vi 2        
+HIT-Movie       
+HIT-Newish 1    
+HIT-Newish 2    
+HIT-SF Garden   
+KEY-C2 4bars    
+KIT-Jazz & Bass 
+KIT-Jazz Brush 1
+KIT-Jazz Brush 2
+KIT-Jazz Brush 3
+LED-AuroraFlute 
+LED-Funky Tree  
+PAD-ArticSweep  
+PAD-Bowed       
+PAD-Flower 1    
+PAD-GardenString
+PAD-Gardensynth 
+PAD-Solina      
+PAD-Strings gr 1
+PAD-Tension     
+PR1-All instrum 
+PR1-Beatring 1  
+PR1-Beatring 2  
+PR1-Beatring 3  
+PR1-Beatring 4  
+PR1-Cabasa F2F#2
+PR1-Cajon 1     
+PR1-Cajon 2     
+PR1-Claves 1    
+PR1-Claves 2    
+PR1-Claves&Frog1
+PR1-Claves&Frog2
+PR1-Claves&Frog3
+PR1-Cowbells 1  
+PR1-Egg A#4-C5 1
+PR1-Egg D4-D#4 1
+PR1-Egg E4-G4 1 
+PR1-Egg G#4-A4 1
+PR1-Guiro 1     
+PR1-Jam Blocks 1
+PR1-Jam Blocks 2
+PR1-Jam Blocks 3
+PR2-Agogo bells1
+PR2-All instrum 
+PR2-BigM Shaker1
+PR2-BigM Shaker2
+PR2-Bongo's 1   
+PR2-Bongo's 1b  
+PR2-Bongo's 2   
+PR2-Bongo's 3   
+PR2-Conga's 1   
+PR2-Conga's 2   
+PR2-Djembe 1    
+PR2-Djembe 2    
+PR2-Djembe 3    
+PR2-Djembe 4    
+PR2-FingerCymb 1
+PR2-FingerCymb 2
+PR2-Mara+Caba 1 
+PR2-SleighBell 1
+PR2-Tumba fx 1  
+PR2-Tumba fx 2  
+PR3-All instrum 
+PR3-Caxici DBL 2
+PR3-Caxici DBL 3
+PR3-Crash Box 1 
+PR3-Ganz.Shaker1
+PR3-Ganz.Shells1
+PR3-Ganzeiro 1  
+PR3-Ganzeiro 2  
+PR3-Shaker Mid 1
+PR3-Shaker Mid 2
+PR3-Shaker Mid 3
+PR3-Shaker Plas1
+PR3-Shaker Plas2
+PR3-Shaker Plas3
+PR3-Shaker Plas4
+PR3-Shekere 1   
+PR3-Shekere 2   
+PR3-Tambourim 1 
+PR3-Tambourine 1
+PR3-Tambourine 2
+PR3-Tarine 1    
+PR3-Tarine 2    
+PR3-Tarine 3    
+PR3-Triangle 6 1
+PR3-Triangle 6 2
+PR3-Triangle 9 1
+PR3-Triangle 9 2
+PR3-Udo 1       
+PR3-Udo 2       
+PRC-XyloUdo     
+SFX-B Field 1gr1
+SFX-B Field 1gr2
+SFX-B Field 2gr1
+SFX-B Field 2gr2
+SFX-B Field 2gr3
+SFX-B Field 2gr4
+SFX-Beat Field 1
+SFX-Beat Field 2
+SFX-C4 + dr 1   
+SFX-C4 + dr 2   
+SFX-Chimes      
+SFX-Cold wind   
+SFX-FightDrum 1 
+SFX-Forest      
+SFX-Huh of Jon  
+SFX-Nice drink  
+SFX-SF Bug      
+SFX-Special & Dr
+SFX-Starfighter 
+SFX-Tuned Tube  
+SFX-Yell of Jon 
+SN1-All Snares 1
+SN1-groove 1    
+SN1-groove 2    
+SN1-groove 3    
+SN1-groove 4    
+SN1-groove 5    
+SN1-groove 6 br 
+SN1-groove 6    
+SN2-All Snares 2
+SN2-groove 1    
+SN2-groove 2 br 
+SN2-groove 2    
+SN2-groove 3    
+SN2-groove 4    
+SN2-groove 5    
+SN2-groove 6 br 
+SN2-groove 6    
+SN2-groove 8    
+SN2-groove 9 br 
+SN2-groove 9    
+SN2-groove10 br 
+SN2-groove10    
+SN3-All Snares 3
+SN3-groove 1 br 
+SN3-groove 1    
+SN3-groove 2    
+SN3-groove 3 br 
+SN3-groove 3    
+SN3-groove 4    
+SN3-groove 5    
+SN3-groove 6    
+SN3-groove 7    
+SN4-All Jungle 1
+SN4-groove 1 br 
+SN4-groove 1    
+SN4-groove 2 br 
+SN4-groove 2    
+SN4-groove 3 br 
+SN4-groove 3    
+SN4-groove 4    
+SN5-All Jungle 2
+SN5-groove 1    
+SN5-groove 2 br 
+SN5-groove 2    
+SN5-groove 3    
+SN5-groove 4 br 
+SN5-groove 4    
+SN6-All Elec SN1
+SN6-All Elec SN2
+SN6-groove 1 br 
+SN6-groove 1    
+SN6-groove 2    
+SN6-groove 3 br 
+SN6-groove 3    
+SN6-groove 4 br 
+SN6-groove 4    
+SN7-All SN+CLP 1
+SN7-groove 1    
+SN7-groove 2    
+SN7-groove 3    
+SN7-groove 4    
+SN7-groove 5    
+SN7-groove 6    
+SYN-AngelSword  
+SYN-Chimy Pad   
+SYN-ClickNBass  
+SYN-ClubOpener  
+SYN-Garden Stab 
+SYN-GardenSt 1  
+SYN-Percussive 1
+SYN-Percussive 2
+SYN-PlantoDance 
+SYN-RnB Bell 1  
+SYN-RnB Bell 2  
+SYN-Sequanca    
+SYN-Sweep+Dr 1  
+SYN-TulpBells   
+SYN-XyloSynth D 
+TOM-All toms 1  
+VOX-BG singers  
+VOX-Big Choir   
+VOX-Slow Chord 1
+VOX-Slow Chord 2
+BTS-Beat Garden 
+BTS-Brush Garden
+BTS-Disco Garden
+BTS-DnB Garden  
+BTS-DnB Warp    
+BTS-ElectroField
+BTS-Fantasy     
+BTS-Filter Disco
+BTS-GroovyGroove
+BTS-Hi Temp     
+BTS-Jungle Eyes 
+BTS-Low Kick    
+BTS-Moveda Floor
+BTS-Oak groove  
+BTS-Park groove 
+BTS-Post groove 
+BTS-RnB Flower 1
+BTS-RnB Flower 2
+BTS-Rock Garden 
+BTS-ScottsValley
+BTS-SFX Garden  
+BTS-Shake Garden
+BTS-Slowa       
+BTS-Swing Garden
+BTS-Tulip Garden
+BTS-Z-Planer    

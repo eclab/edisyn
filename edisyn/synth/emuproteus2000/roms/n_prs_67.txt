@@ -1,0 +1,512 @@
+bts:Beat Garden 
+bas:Beat Square 
+syn:Tulip Bells 
+vox:FlowerBed   
+bts:Disco Garden
+bts:RnB Flower 2
+bas:Oak Tree    
+git:Riff me    2
+pad:DestyFlower1
+bas:Bamboe DJ   
+arp:Beat Flache 
+sub:LowerMeBass1
+pr1:Percussion 1
+pr2:Percussion 2
+pr3:Percussion 3
+sn1:Snares 1 St.
+sn2:Snares 2mono
+sn3:Snares 3 St.
+sn4:Jungle SN St
+sn5:Jngl SN St+M
+sn6:Elec SN 1mon
+sn6:Elec SN 2 St
+sn6:Elec SN 3   
+sn6:Elec SN 4   
+sn7:Elec SN+CLP1
+clp:Claps St.  1
+clp:Claps St+M.1
+clp:Claps Stack1
+bd1:BG BD      1
+bd1:BG BD room 2
+bd2:BG BD Elec 1
+bd2:BG BD Elec 2
+hh1:HiHats monoI
+cb1:Cymb&Rides 1
+cb2:Cymb&Rides 2
+tom:Beat Toms   
+kit:Jazz & Bass 
+sfx:Beat Field 1
+sfx:Beat Field 2
+git:Riff me    1
+syn:XyloSynth D 
+amb:Snowy Trees 
+bas:Slap it 1cho
+sfx:Special & Dr
+syn:Angel Sword 
+git:Muted Alka  
+bas:Jungle GSM  
+pad:GardenString
+bas:PhatSawer   
+amb:Angel Pad   
+led:Funky Plant 
+kb2:Aurora      
+bts:Z-planer    
+bts:Filter Disco
+bts:Slowa       
+pad:Silk Padings
+bas:Analoga Tree
+syn:Chimy Pad   
+bts:Rock Garden 
+bts:Tulip Garden
+bas:Saw Leaves  
+bts:Post groove 
+bts:Hi Temp     
+pad:Artic Sweep 
+bas:Spruce      
+sfx:SF Chimes   
+bts:Jungle Eyes 
+bts:ScottsValley
+bts:Low Rider   
+bts:Swing Garden
+bas:Swing Garden
+bts:Fantasy     
+bas:Acous-Syn  5
+pad:Versatility 
+bas:Voca T-Bee  
+bts:Park groove 
+arp:M-Es Twenty 
+vox:Fab Syntha  
+bts:DnB Garden  
+git:Plectrum-B  
+kb2:Butterfly   
+bas:Balled      
+hit:Newish II   
+syn:PlantoDance 
+arp:Beat Chord 1
+pad:Gardensynth 
+arp:T-Beat 1    
+bas:Wild Plant  
+vox:Big BG Choir
+syn:Garden Party
+hit:@ BeatGarden
+bts:Moveda Floor
+bas:Cactus VI   
+pad:Dramatique  
+bts:SFX Garden  
+brs:Beat Section
+syn:Beat Sweep 1
+arp:git C3-C6  1
+arp:git C1-C4  1
+bas:Dream Tree  
+hit:SF Garden   
+arp:Beat Chord 2
+bas:Flip Trance 
+bts:ElectroField
+bts:Brush Garden
+bas:Acous-Syn  4
+pad:Bombasticom 
+arp:Velo Garden2
+pr1:BPM LF0    1
+pr2:BPM LFO    1
+pr3:BPM LFO    1
+sfx:Big Break C4
+bas:24dB Plant  
+vox:Open Flower 
+bas:JD-Stack  IX
+pad:FlowerFields
+arp:git C3-C6  2
+arp:git C1-C4  2
+bts:Shake Garden
+bts:Oak groove  
+bts:GroovyGroove
+bas:Pick S it Is
+pad:Morning     
+bts:DnB Warp    
+bts:RnB Flower 1
+syn:Garden Stab 
+bas:Slap a Synth
+bpm:Mars Garden?
+pr1:Cajon      1
+pr1:BeatRing   1
+pr1:BeatRing   2
+pr1:BeatRing   3
+pr1:BeatRing   4
+pr1:Cabasa     1
+pr1:Cowbells   1
+pr1:Egg E4-G4  1
+pr1:Egg D4-D#4 1
+pr1:Egg A#4-C5 1
+pr2:Djembe   gr1
+pr2:Djembe   gr4
+pr2:BigM Shaker1
+pr2:SleighBell 1
+pr2:Agogo bells1
+pr2:FingerCymb 1
+pr2:Bongos     1
+pr2:Congas     1
+pr2:Congas     2
+pr2:Tumba fx 1  
+pr3:Triangle 6 1
+pr3:Triangle 9 1
+pr3:Shaker Mid 1
+pr3:Shaker Mid 2
+pr3:Shaker Plas2
+pr3:Shaker Plas3
+pr3:Ganzeiro   2
+pr3:Ganz.Shaker1
+pr3:Ganz.Shells1
+pr3:Udo        1
+pr3:Caxici DBL 1
+pr3:Caxici DBL 2
+pr3:Caxici DBL 3
+pr3:Tarine     2
+pr3:Tarine     3
+pr3:Tambourim  1
+pr3:Tambourine 2
+pr3:Shekere    1
+pr3:Crash Box  1
+prc:Xylophone   
+syn:GardenStack1
+sub:AcoustyLow  
+bas:Slap it 1   
+bas:Marc One Cho
+syn:Click N Bass
+pad:Artic White 
+org:Organ&Bass  
+hh1:HiHats poly 
+sub:LowerMeBass2
+arp:Beat U-know1
+git:Riff me    3
+bas:Sl+Pull1 F#1
+bas:Sl+Pull2 F#1
+pad:SolinaString
+bas:Udo Frame I 
+git:Muted Meaty 
+syn:XyloSynth C 
+led:Funky Tree  
+bas:Spruce Leaf 
+vox:Botanic     
+syn:RnB Stab    
+sfx:FightDrum   
+led:Aurora Flute
+syn:TumbaLa Bass
+arp:T-Beat 2    
+pad:DestyFlower2
+bas:Dorn @ Plant
+pad:Faling2Leave
+git:Muted       
+syn:Djembe Toys 
+arp:Velo Garden1
+vox:BG singers  
+bas:Spruce Color
+pad:Romarin     
+led:Beat da bass
+kb2:Garden keys 
+sub:Deep Forest 
+pad:VocaleOrgan 
+bas:Park II     
+syn:RnB Bell   I
+bas:JD-Stack   I
+bpm:Evening Vox 
+syn:Nippon      
+hit:Newish I    
+bas:OrganTube   
+arp:Cords Tree  
+syn:Big Section 
+pad:Bowed Angel 
+bas:Acacia Shade
+pad:Artic Voices
+syn:Pro-Teusion 
+bas:Acoustic    
+git:Muted Bliss 
+prc:Xylo-Udo    
+vox:Synthamike I
+bas:Distal      
+arp:git C3-C6 1W
+arp:git C1-C4 1W
+arp:git C3-C6 2W
+arp:git C1-C4 2W
+arp:git C3-C6 3W
+arp:git C1-C4 3W
+arp:git C3-C6 4W
+arp:git C1-C4 4W
+arp:git C3-C6 5W
+arp:git C1-C4 5W
+arp:git C3-C6 6W
+arp:git C1-C4 6W
+arp:git C3-C6 7W
+arp:git C1-C4 7W
+arp:git C3-C6 8W
+arp:git C1-C4 8W
+arp:git C3-C6  3
+arp:git C1-C4  3
+arp:git C3-C6  4
+arp:git C1-C4  4
+arp:git C3-C6  5
+arp:git C1-C4  5
+arp:git C3-C6  6
+arp:git C1-C4  6
+arp:git C3-C6  7
+arp:git C1-C4  7
+arp:git C3-C6  8
+arp:git C1-C4  8
+arp:git C3-C6  9
+arp:git C1-C4  9
+arp:git C3-C6  T
+arp:git C1-C4  T
+sfx:a cold wind 
+bas:Jungle GSM 2
+arp:Film Chaser 
+git:Muted Rave  
+arp:T-Beat 3 Mwl
+sfx:Djembe I    
+arp:Velo Garden3
+hit:Newish IV   
+vox:Thin Leaves 
+bas:PWM Cajon   
+pad:Eastern Wind
+syn:Ting Shells 
+bas:Udo Octave  
+pad:Phasing Tree
+sfx:NovaZembla 2
+syn:ScottsValley
+bas:Jungle Nok  
+pad:PlantoVox   
+hit:Radio W Beat
+pad:Tilleul     
+sfx:DSP chat    
+arp:MdWhl Trance
+bas:SynthaConga 
+arp:PlasticWheel
+arp:SlapYourKeys
+sub:Pepples I   
+vox:Thinny-A    
+pr1:BPM LF0    2
+pr1:BPM LF0    3
+pr1:BPM LF0    4
+pr1:BPM LF0    5
+pr1:BPM LF0    6
+bas:Mahony I    
+syn:Club Opener 
+arp:Com Plex    
+bas:Analoga Puls
+arp:Beat O-Phat 
+sfx:Djembe Oct. 
+vox:Next 2 Organ
+arp:Stereo Movie
+bas:SQR laChorus
+pr2:BPM LFO    2
+pr2:BPM LFO    3
+pr2:BPM LFO    4
+pr2:BPM LFO    5
+pr2:BPM LFO    6
+vox:Gardenlized 
+arp:SlapPull F#1
+bas:Mahony II   
+syn:RnB Bell  IV
+arp:Beat Chord 1
+pad:Epicea      
+bas:Djembe Udo I
+pad:Sweep it up 
+sub:Pepples II  
+pr3:BPM LFO    2
+pr3:BPM LFO    3
+pr3:BPM LFO    4
+pr3:BPM LFO    5
+pr3:BPM LFO    6
+bas:Cajon&Udo   
+syn:XyloSynth C 
+arp:Epicea Bass 
+syn:Obie CanObie
+bas:Mahony III  
+vox:Deep Aahs I 
+arp:Tuber B Mute
+bas:Deep Trance 
+bas:TumbaConga  
+arp:Pick a Synth
+pad:Faling Leave
+sfx:Dig Scratch1
+sfx:Dig Scratch2
+led:Sunflower   
+bas:Click a Bass
+vox:Hi Lady     
+led:Hi Trumpet  
+arp:Cyber Plant 
+bpm:Alien Park  
+syn:XyloSynth B 
+bas:Cajon MarkII
+sfx:starfighter 
+vox:FlowerSmell 
+bas:Saw laChorus
+bas:Djembe Frame
+pad:Vocoderlon  
+git:Muted Flanga
+hit:Newish Octav
+arp:Seek Quence 
+syn:Obie Plant  
+syn:My BelloBell
+sfx:Tuned Frame 
+arp:Beat U-know2
+pad:Lavende     
+arp:Velo Garden3
+syn:Moveda Floor
+led:Mini Plant  
+syn:Iceland     
+sfx:Beat Field 3
+sfx:Beat Field 4
+arp:Turn a knob 
+sn6:Elec SN 5 St
+sn6:Elec SN 6 St
+sn6:Elec SN 7 St
+sn1:Snares 1  FX
+sn1:Snares 2  FX
+bas:Slowa Deep  
+sfx:Dig Scratch4
+sfx:Dig Scratch5
+bas:Lower Swing 
+bas:Shake Garden
+amb:Dawning     
+sfx:Beat Field 5
+sfx:Beat Field 6
+bas:Ace of Saw  
+pad:Meta Macro  
+git:Plectrum-A  
+bas:RnB Flower 1
+led:Pulsy Plant 
+git:Muted Switch
+git:Plectrum-F  
+bas:Puls Number5
+sub:SinusMoogy  
+bpm:E-mu Garden 
+git:Plectrum-Q  
+bas:RnB Flower 2
+kit:Riff set    
+syn:RnB BellXylo
+bas:Marc One    
+bas:Marc Three  
+bas:Marc & Synth
+bas:Marc Six    
+bas:Marc Five   
+bas:Marc Middy  
+sfx:Alien Steps 
+bas:Pick Chorus 
+bas:Sweep Leaf  
+arp:T-Beat 4 Mwl
+bas:JD-Stack  II
+bas:JD-Stack III
+bas:JD-Stack  IV
+bas:JD-Stack   V
+bas:JD-Stack  VI
+bas:JD-StackVII 
+bpm:Botanic Rain
+bas:Distal II   
+bas:SpeakFlower 
+bas:Deja Vu I   
+pad:E-motion    
+bas:Coniferae   
+bas:Vibirnum    
+bas:T-Beat      
+bas:Elm Tree    
+bas:AttackChorus
+bas:Cactus I    
+bas:Acous-Syn  1
+bas:CajonFrame  
+sfx:digital H2O 
+arp:Velo Garden4
+hit:Newish Phat 
+bas:Marc One Two
+sub:Dark Earth  
+bas:Creamy Palm 
+sub:Underclick  
+bas:Four Voice  
+bas:Cactus II   
+bas:Acous-Syn  2
+sub:PulsyMoogy  
+prc:Tuned Cajon 
+bas:Cajon Stack 
+pad:Bowed Flower
+sfx:Huh of Jon  
+sfx:Yell of Jon 
+sfx:Nice drink !
+sfx:Tuned Tube  
+vox:FemalaSpace 
+bas:Spruce Robes
+bas:Deja Vu II  
+bas:PhataTubes  
+bas:Cactus III  
+sub:Dark Forest 
+bas:Acous-Syn  3
+bas:Jungle GSM 3
+vox:Deep Aahs II
+sfx:Tumba Tuned 
+sfx:Tuned Shells
+sfx:Doppler FX 1
+sfx:Doppler FX 2
+sfx:Groove Click
+vox:ThinnyHigh  
+sfx:GardenChimes
+pad:Stack 4 U   
+bas:Spruce Top  
+bas:AcaciaChorus
+pad:Reso Fields 
+bas:AttackDeeper
+sub:Deep Pedal  
+bas:Djembe UdoII
+sfx:La La synth 
+sfx:X-LoFi Snare
+sfx:X-Voca Snare
+sfx:X-Meta Snare
+sfx:Door Snare  
+sfx:Broken Door 
+sfx:NovaZembla 1
+vox:ThinnyOrgan 
+sfx:Doppler FX 3
+sfx:Doppler FX 4
+arp:Puls Plant  
+bas:Cactus IV   
+bas:Organ&Udo   
+bas:Acous-Syn  6
+bas:Udo         
+vox:FemalaSynth 
+sfx:SF bug      
+sfx:SF bug    ST
+sfx:FightDrum  M
+vox:A Big Aah   
+syn:OvertoneBell
+led:Garden Flute
+prc:Frame Drum  
+prc:Tuned Conga 
+prc:TunedQuinto1
+prc:TunedQuinto2
+bas:Cactus V    
+bas:5th Organ   
+bas:Acous-Syn  7
+sub:SawyMoogy   
+vox:FemalaHiss  
+syn:RnB Bell  II
+prc:Tumba Wuha  
+prc:Tumba Plop  
+prc:TunedDjembe1
+prc:TunedDjembe2
+prc:Tuned Udo FX
+prc:Tuned Sizzle
+prc:Tuned China 
+prc:Tuned Sleigh
+syn:Snaro Wood  
+sfx:Tumba & More
+sub:Wood        
+bas:CajonSawer  
+bas:Udo Frame II
+vox:FemalaDream 
+sfx:DeepSpring 1
+sfx:DeepSpring 2
+bas:Park I      
+hit:Radio W Big 
+syn:Bass a Wood 
+prc:Tuned BassDr
+pad:Eucalyptus  
+arp:Hi Tech Tree
+syn:RnB Bell III
+sfx:NovaZembla 3
+vox:OrganVocals 
+   :TemplateV1.0

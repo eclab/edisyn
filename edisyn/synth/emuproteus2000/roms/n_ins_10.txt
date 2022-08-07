@@ -1,0 +1,82 @@
+   :None        
+vln:16 Leg Hall 
+vln:16LegHall L 
+vln:16LegHall R 
+vln:16 Pizz Hall
+vln:16PizzHall L
+vln:16PizzHall R
+vln:16 Tremolo  
+vln:16 Tremolo L
+vln:16 Tremolo R
+vln:5 Leg Hall  
+vln:5 Spic Hall 
+vln:5 Pizz Hall 
+vln:5 Tremolo   
+vln:5 Leg Studio
+vln:5 SpicStudio
+vla:15 Leg Hall 
+vla:15 Pizz Hall
+vla:5 Leg Hall  
+vla:5 Spic Hall 
+vla:5 Pizz Hall 
+vla:5 Leg Studio
+vla:5 SpicStudio
+vla:5 Tremolo   
+cel:10 Leg Hall 
+cel:10 Spic Hall
+cel:10 Pizz Hall
+cel:10 Tremolo  
+cel:5 Leg Hall  
+cel:5 Spic Hall 
+cel:5 Pizz Hall 
+cel:5 Leg Studio
+cel:5 SpicStudio
+bas:6 Leg Hall  
+bas:3 Leg Hall  
+bas:3 Spic Hall 
+bas:3 Pizz Hall 
+bas:3 Leg Studio
+bas:4 Tremolo   
+cmb:Leg Section1
+cmb:Leg Section2
+cmb:Leg Section3
+cmb:Leg Section4
+cmb:Leg Section5
+cmb:Leg Section6
+cmb:PizzSection1
+cmb:PizzSection2
+cmb:PizzSection3
+cmb:PizzSection4
+cmb:SpicSection1
+cmb:SpicSection2
+cmb:SpicSection3
+cmb:SpicSection4
+sfx:Vln No Pitch
+sfx:Vln Scrape 1
+sfx:Vln Scrape 2
+sfx:Vln Knock   
+wav:Sine        
+wav:Sine Squared
+wav:Sine Inv Sqd
+wav:Sine Cubed  
+wav:SineInvCubed
+wav:Triangle    
+wav:Square      
+wav:Sawtooth    
+wav:Pulse Wave +
+wav:Pulse 75%   
+wav:Pulse 90%   
+wav:Pulse 94%   
+wav:Pulse 96%   
+wav:Pulse 98%   
+wav:Four Octaves
+wav:Low Odds    
+wav:Low Evens   
+wav:Metal Wave 1
+wav:Metal Wave 2
+wav:Metal Wave 3
+wav:Chime Wave  
+wav:ExitedHP Nse
+wav:Noise IP    
+wav:Pink Noise  
+wav:White Noise 

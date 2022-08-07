@@ -1,0 +1,312 @@
+KEY-C3          
+KEY-C3 (2 Bars) 
+KEY-C3 (4 Bars) 
+KEY-C4          
+KEY-Cs Up       
+KEY-Cs Up-Down  
+KEY-C Triad     
+KEY-Cm7         
+KEY-Cm9         
+KEY-Cmaj7       
+ARP-Crystal     
+ARP-Filter Boy  
+ARP-Free Ride   
+ARP-Jungle Love 
+ARP-Lust Heart  
+ARP-Mystic      
+ARP-One World   
+ARP-W-Light     
+ARP-X-Piper     
+BAS-CB 2        
+BAS-CB 3        
+BAS-CB Bala Mute
+BAS-Lowness 1   
+BAS-Lowness 2   
+BAS-Lowness 3   
+BAS-Lowness 4   
+BAS-Punchy 2    
+BOW-Erhu w-wah  
+BOW-Gaohu       
+BOW-Gaozong     
+BOW-Gaozong 5   
+BOW-Nervosa     
+BOW-Zhonghu     
+BTS-African     
+BTS-African EM  
+BTS-Bazouki EM  
+BTS-Brazilian   
+BTS-Celtic EM   
+BTS-Congabongo  
+BTS-Discoteca   
+BTS-DjmbAshikoEM
+BTS-Djmbashi    
+BTS-Earth 11    
+BTS-Earth 13    
+BTS-Earth 15    
+BTS-HiLife EM   
+BTS-Palm Drum EM
+BTS-Punchy EM   
+BTS-Ritual      
+BTS-Ritual EM   
+BTS-RndTheWorld1
+BTS-Salsa       
+BTS-Timbales EM 
+BTS-Toke Set EM 
+BTS-World       
+BTS-World GM    
+BTS-World10     
+BTS-World13     
+BTS-Worldgm3    
+CMB-BabyOcarina 
+CMB-BazoukiXtra 
+CMB-BmbuZhonghu 
+CMB-Chiff Organ 
+CMB-Clay Tones  
+CMB-Cosmovivor a
+CMB-Cosmovivor b
+CMB-Cuic Me     
+CMB-EastMeetWest
+CMB-Flute Bells 
+CMB-Gaohachet   
+CMB-HiPassSquare
+CMB-Melotria    
+CMB-Org Tool 1  
+CMB-Org Tool 2  
+CMB-Paka Tones  
+CMB-RazerShenai 
+CMB-Shamitone   
+CMB-Spiritphone 
+CMB-TDrum Tones 
+CMB-Wind Jam 1  
+CMB-Wind Jam 2  
+GRV-Hip 01      
+GRV-Hip 02      
+GRV-Hip 03      
+GRV-Hip 04      
+GRV-Hip 05      
+GRV-Hip 06      
+GRV-Hip 07      
+GRV-Hip 08      
+GRV-Hip 09      
+GRV-Hip 10      
+GRV-Hip 11      
+GRV-Hip 12      
+GRV-Hip 13      
+GRV-Hip 14      
+GRV-Hip 15      
+GRV-Hip 16      
+GRV-Hip 17      
+GRV-Hip 18      
+GRV-Hip 19      
+GRV-Hip 20      
+GRV-Hip 21      
+GRV-Hip 22      
+KIT-African     
+KIT-BrazilianGM1
+KIT-BrazilianGM2
+KIT-BrazilianGM3
+KIT-Earth       
+KIT-Earth 01    
+KIT-Earth 02a   
+KIT-Earth 02b   
+KIT-Earth 03    
+KIT-Earth 04a   
+KIT-Earth 04b   
+KIT-Earth 04c   
+KIT-Earth 05a   
+KIT-Earth 05b   
+KIT-Earth 05c   
+KIT-Earth 06a   
+KIT-Earth 06b   
+KIT-Earth 06c   
+KIT-Earth 14    
+KIT-Earth 14 b  
+KIT-Earth 16    
+KIT-Earth 20 a  
+KIT-Earth 20 b  
+KIT-Earth Dance 
+KIT-JahMaica    
+KIT-OnTheTip    
+KIT-Ritual Drum 
+KIT-Salsa ENS   
+KIT-Salsa GM1   
+KIT-Salsa GM2   
+KIT-Salsa GM3   
+KIT-Salsa GM4   
+KIT-Salsa GM5   
+KIT-Salsa GMX 1 
+KIT-Salsa GMX 2 
+KIT-Speedman    
+KIT-World GM    
+PAD-Exo Pad 1   
+PAD-Exo Pad 2   
+PAD-Exotic 1    
+PAD-Exotic 2    
+PAD-Exotic 3    
+PAD-Exotic 5    
+PAD-Exotic 6    
+PAD-PennyIsSad  
+PAD-Slo Pan     
+PAD-Slo Pan 2   
+PLK-Anjomra     
+PLK-Baglama     
+PLK-Banjuoki    
+PLK-Celtar 2    
+PLK-Celtic Harp 
+PLK-Celtic Harp1
+PLK-Domora 3    
+PLK-Dulcolin 2  
+PLK-Hammers Plus
+PLK-HmrDulcimerA
+PLK-HmmrDulcimer
+PLK-Mostly Harp 
+PLK-Noctar      
+PLK-Octar       
+PLK-Oudomute    
+PLK-Prima Domra 
+PLK-SegDomraMut1
+PLK-Segndo Domra
+PLK-Shamisen    
+PLK-Shaoud 2    
+PLK-Su Gzheng   
+PLK-Su Zhouki   
+PLK-Tenor Banjo 
+PR1-Ashikos     
+PR1-Brazil Drums
+PR1-Celtic Perc 
+PR1-Conga&Bongo 
+PR1-Darvul w    
+PR1-Darvutaboran
+PR1-DholakSets a
+PR1-DholakSets b
+PR1-Djembe 1 w  
+PR1-Djembe 2 w  
+PR1-Djembe 4 w  
+PR1-Djembe 5 w  
+PR1-Djembes     
+PR1-Dmbk+MBongo1
+PR1-Dmbk+Mbongo3
+PR1-DmbkMBongo1 
+PR1-Ghatam X    
+PR1-KimKim w    
+PR1-Liquidity 1 
+PR1-Meloctave Dr
+PR1-Melodic Dr 3
+PR1-Pandeiros   
+PR1-RituDrums   
+PR1-Tabor w     
+PR1-Taiko Drms 2
+PR1-Taiko Drums2
+PR1-Talking Drms
+PR1-Timbales    
+PR1-UduKimKim   
+PR1-Vel Rattle  
+PR1-Vel TDrum2 w
+PR1-VelAshiko 4 
+PR1-VelAshiko1 w
+PR1-VelAshiko2 w
+PR1-VelAshiko5 w
+PR1-VelGhatam1w 
+PR1-VelGhatam2w 
+PR1-VelSnare 1  
+PR1-VelTDrum1 w 
+PR1-WorldDrums3a
+PR1-WorldDrums3b
+PR2-Castinet w  
+PR2-Cymbal Array
+PR2-DjembeAshiko
+PR2-Dmbk+Others 
+PR2-Finger Cym +
+PR2-Gankokwe Set
+PR2-Jaw Harp    
+PR2-Pipes 1     
+PR2-Pots&Pans   
+PR2-PressurTreat
+PR2-Shekere X   
+PR2-Shekerettle 
+PR2-Tik-Tak Drum
+PR2-Toke Set    
+PR2-TongueDrumsA
+PR2-TongueDrumsB
+PR2-Tubes       
+PR2-Vel TokeBell
+PR2-WoodThing1St
+PR3-E Perc Set a
+PR3-E Perc Set b
+PR3-Punchy      
+PR3-Simmons     
+PR4-Agobbi      
+PR4-Balifon Ntrl
+PR4-BamBoo Mrmba
+PR4-BasBuBaliMar
+PR4-Blokba a    
+PR4-Blokba b    
+PR4-Boo-Bams 1  
+PR4-Boo-Bams 2  
+PR4-Boo-Bams 4  
+PR4-BooBams 4   
+PR4-Bootungi    
+PR4-Kalimba     
+PR4-Kalimba ENS 
+PR4-Limbafon 3  
+PR4-MetaBalifon 
+PR4-Metalofon 4 
+PR4-Metalofon 7 
+PR4-Pandebal    
+PR4-SongBells 1 
+PR4-SongBells 3 
+PR4-Steel Drum  
+PR4-Sumantra    
+PR4-Sweet Mar 1 
+PR4-Sweet Mar 3 
+PRC-Tribal House
+SFX-CaveRitual  
+SFX-Earth Harms 
+SFX-P57K-009    
+SFX-Shokoniums  
+SFX-Splotoa     
+SFX-The Birds 1 
+SFX-The Birds 2 
+WHS-WorldWhistle
+WND-Accordian 2 
+WND-Amazone 1   
+WND-Amazone 2   
+WND-Blue Wind   
+WND-BrazilWhstle
+WND-Clayiope    
+WND-Concertina  
+WND-Eurasian 2  
+WND-Eurasion    
+WND-FluteScape  
+WND-Mizereams   
+WND-Nye         
+WND-Ocarina a   
+WND-Ocarina b   
+WND-Okamia a    
+WND-Shakuhachi  
+WND-Rice Winds  
+WND-River Nye   
+WND-Shenaidelic 
+WND-South Wind  
+WND-StackDizi   
+WND-Whistle 1   
+WND-Whistle 2   
+WND-Whisuling   
+WND-Wind Fingers
+WND-X-Flutus    
+PLK-Banjouki    
+PLK-Bazouki     
+PLK-Noctar      
+PLK-Oud         
+PLK-OudoMute    
+PLK-Shamisen b  
+PLK-Shaoud 2 b  
+PLK-Shoud 5-oc  
+WND-BrazilWhistl
+WND-Dizi        
+WND-Mizmar      
+WND-Ocarina b   
+WND-Suling      
+BTS-Celtic Song 
+BTS-Lost Tribe  
+BTS-Western Arab

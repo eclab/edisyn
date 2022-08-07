@@ -27,7 +27,7 @@ edisyn.synth.emumorpheus.EmuMorpheusHyper	E-Mu	E-Mu Morpheus / Ultra Proteus [Hy
 edisyn.synth.emumorpheus.EmuMorpheusMap	E-Mu	E-Mu Morpheus / Ultra Proteus [MidiMap]
 edisyn.synth.emuproteus.EmuProteus	E-Mu	E-Mu Proteus
 edisyn.synth.emuplanetphatt.EmuPlanetPhatt	E-Mu	E-Mu Planet Phatt / Orbit / Carnaval / Vintage Keys
-#edisyn.synth.emuproteus2000.EmuProteus2000	E-Mu	E-Mu Proteus 2000
+edisyn.synth.emuproteus2000.EmuProteus2000	E-Mu	E-Mu Proteus 2000 Series
 edisyn.synth.kawaik1.KawaiK1	Kawai	Kawai K1 / K1r / K1m
 edisyn.synth.kawaik1.KawaiK1Multi	Kawai	Kawai K1 / K1r / K1m [Multi]
 #edisyn.synth.kawaik3.KawaiK3	Kawai	Kawai K3 / K3m

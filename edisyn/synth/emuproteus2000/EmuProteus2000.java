@@ -1,5 +1,5 @@
 /***
-    Copyright 2018 by Sean Luke
+    Copyright 2022 by Sean Luke
     Licensed under the Apache License version 2.0
 */
 

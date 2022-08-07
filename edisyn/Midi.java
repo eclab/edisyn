@@ -1136,6 +1136,37 @@ public class Midi
         return manufacturers;
         }
 
+    public static String getManufacturerForDeviceInquiry(byte[] data)
+        {
+		if (data.length >= 15 &&
+			data[0] == (byte)0xF0 &&
+			data[1] == (byte)0x7E &&
+			data[3] == (byte)0x06 &&
+			data[4] == (byte)0x02)
+			{
+			if (data[5] == (byte)0x00 && 		// extended manufacturer ID
+				data.length == 17 &&
+				data[16] == (byte)0xF7)
+				{
+				String manufacturer = getManufacturerForSysex(new byte[] { data[5], data[6], data[7] });
+				String family = StringUtility.toHex(new byte[] { data[8], data[9] });
+				String member = StringUtility.toHex(new byte[] { data[10], data[11] });
+				String revision = StringUtility.toHex(new byte[] { data[12], data[13], data[14], data[15] });
+				return "Manufacturer:  " + manufacturer + "\nFamily: " + family + "\nMember: " + member + "\nRevision: " + revision;
+				}
+			else if (data[14] == (byte)0xF7)		// short manufacturer ID
+			 	{
+				String manufacturer = getManufacturerForSysex(new byte[] { data[5] });
+				String family = StringUtility.toHex(new byte[] { data[6], data[7] });
+				String member = StringUtility.toHex(new byte[] { data[8], data[9] });
+				String revision = StringUtility.toHex(new byte[] { data[10], data[11], data[12], data[13] });
+				return "Manufacturer:  " + manufacturer + "\nFamily: " + family + "\nMember: " + member + "\nRevision: " + revision;
+			 	}
+			 else return null;
+			 }
+		else return null;
+        }
+    
     /** This works with or without F0 as the first data byte */
     public static String getManufacturerForSysex(byte[] data)
         {

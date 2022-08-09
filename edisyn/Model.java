@@ -35,7 +35,7 @@ public class Model implements Cloneable
     public static final int STATUS_RESTRICTED = 3;                      // The parameter cannot be mutated and shouldn't appear in getKeys()
     public static final String ALL_KEYS = "ALL_KEYS";                           // The "key" which registers a listener with all keys
 
-    // The actual value storage.  It's a linked hash map so data iterates in a rational format (basically the order in which it was added originally)
+    // The actual value storage.  It's a linked hash map so data iterates in a rational format that I can guess (basically the order in which it was added originally)
     LinkedHashMap<String, Node> storage = new LinkedHashMap<String, Node>();
 
     // The last key which was set

@@ -423,7 +423,7 @@ This procedure will create a bunch of of virtual devices with names like {\tt Vi
 \section{Editing and Exploratory Patch Creation}
 \label{editing}
 
-Edisyn has a large number of facilities to help you program your synthesizer, including tools to help you wander through the possible space of patches to hunt for the sound you want.  Here's what you can do.
+Edisyn has a large number of facilities to help you program your synthesizer, including tools to help you wander through the  space of possible patches to hunt for the sound you want.  Here's what you can do.
 
 \subsection{Editing Tools} 
 
@@ -474,14 +474,14 @@ When you chose any of {\bf Towards 1:...} through {\bf Towards 4:...}, your curr
 
 A hint.  It's a good idea to select target patches which don't have some radical difference creating a nonlinearity in the space between them: for example, if you were doing FM, I'd pick patches which all used the same operator Algorithm.  See below for a discussion of how recombination works in Edisyn.
 
-\paragraph{Mix}  This is an option only available in the Librarian's menu (Section~\ref{librarian}).  Here, you select two or more patches\,---\,often many\,---\, and Edisyn will use recombination to blend them all together to form a new random patch.  You have four options depending on how much you want to bias the result to favor the earlier (topmost) patch or patches.
+\paragraph{Mix}  This option is available in the Librarian (Section~\ref{librarian}).  Here, you select several patches as parents, and Edisyn will use {\it cross them over} to form a new child patch.  Unlike recombination, crossover doesn't interpolate parameters between parents: instead the child is some {\it combination} of the parents' parameters.  You have four options depending on how much you want to bias the result to favor the earlier (topmost) patch or patches.
 
 \begin{itemize}
-\item Mix Uniformly.  The final patch is a uniform combination of all the patches.
-\item Mix Light Bias.  The final patch consists of 1/3 of the first (topmost) patch, with the remainder being 1/3 of the next patch, and so on.  The last two patches split their remainder fifty-fifty.
-\item Mix Medium Bias.  The final patch consists of 1/2 of the first (topmost) patch, with the remainder being 1/2 of the next patch, and so on.  The last two patches split their remainder fifty-fifty.
-\item Mix Heavy Bias.  The final patch consists of 2/3 of the first (topmost) patch, with the remainder being 2/3 of the next patch, and so on.  The last two patches split their remainder fifty-fifty.
-\item Do Mix Again.  Perform the same random mix as last time.  You can choose this (it has a menu shortcut) from any panel in the editor, not just the librarian.  This allows you to try a mix, then repeatedly try new ones with the shortcut until you find one you like.
+\item Mix Uniformly.  The child patch is a uniform combination of all the parent patches.
+\item Mix Light Bias.  The child patch consists of 1/3 of the first (topmost) parent patch, with the remainder being 1/3 of the next parent, and so on.  The last two parents split their remainder fifty-fifty.
+\item Mix Medium Bias.  The child patch consists of 1/2 of the first (topmost) parent patch, with the remainder being 1/2 of the next parent, and so on.  The last two parents split their remainder fifty-fifty.
+\item Mix Heavy Bias.  The final patch consists of 2/3 of the first (topmost) parent patch, with the remainder being 2/3 of the next parent, and so on.  The last two parents split their remainder fifty-fifty.
+\item Do Mix Again.  Perform the same random mix as last time.  You can choose this (it has a menu shortcut) from any panel in the editor, not just the Librarian.  This allows you to try a mix, then repeatedly try new ones with the shortcut until you find one you like.
 \end{itemize}
 
 \paragraph{Hill-Climb}  Hill-Climbing repeatedly presents you with sixteen sounds and asks you to choose your top three preferred ones.  Once you have selected the three best, it performs various recombinations and mutations on those sounds to prefer sixteen new ones and the process repeats again.  The idea is for your preferences to guide the hill-climber as it wanders through the space of synth parameters until it lands on something you really like.\footnote{If you're technically inclined, this is basically an evolution strategy (ES) with an elitism of 1 and a biased mutation procedure.  If you'd like to learn more about evolutionary computation methods, google for the free online book {\it Essentials of Metaheuristics} by me.}  For more on the Hill-Climber, see Section \ref{hillclimb}.
@@ -875,7 +875,7 @@ The other reason is because you have recently moved from \(S\) to \(P\), and now
 
 The Yamaha DX7 editor has a special feature thanks to research done here at George Mason University by V.~Hoyle and myself.  Using approximately 30,000 unique DX7 patches found around the internet, we trained a special kind of deep-learned neural network called a {\it variational autoencoder}.  Using this network, we can improve both hill-climbing and patch randomization.
 
-If you're editing a DX7, you can use the neural network in hill-climbing by selecting {\bf NN Hill-Climber} in the Hill-Climber's ``Method'' chooser.  Thereafter instead of creating children patches via crossover and mutation, Edisyn will produce them using the autoencoder.  Similarly, if (when editing a DX7) you select {\bf Edit \(\rightarrow\) Randomize \(\rightarrow\) Randomizes Using NN}, then randomization options will use the autoencoder rather than the standard mutator.
+If you're editing a DX7, you can use the neural network in hill-climbing by selecting {\bf NN Hill-Climber} in the Hill-Climber's ``Method'' chooser.  Thereafter instead of creating children patches via recombination and mutation, Edisyn will produce them using the autoencoder.  Similarly, if (when editing a DX7) you select {\bf Edit \(\rightarrow\) Randomize \(\rightarrow\) Randomizes Using NN}, then randomization options will use the autoencoder rather than the standard mutator.
 
 \paragraph{What's the point?}  As anyone who programs synthesizer patches knows, the space of synthesizer patches consists of small useful regions surrounded by lots of patches which are garbage, even total silence.  The hill-climber tries many strategies to avoid presenting garbage and silence to the user, but is only partly successful   The goal of the autoencoder is to eliminate as much garbage and silence as possible, thus improving the chances that you'll get decent patch results.  We'd appreciate feedback as to how successful you think we were.
  
@@ -958,7 +958,7 @@ If you load one or more entire banks, either from disk or because your synthesiz
 
 \paragraph{Selecting Patches and Moving Them Around}
 
-Once you have patches loaded into your Librarian, you can select a range of patches in a given bank by dragging the mouse over them.  Alternatively you can double-click on the bank name (the column header) and all the patches in the bank will be selected.
+Once you have patches loaded into your Librarian, you can select a range of patches in a given bank by dragging the mouse over them, or by using the up/down cursor keys in combination with Shift.  Alternatively you can double-click on the bank name (the column header) and all the patches in the bank will be selected.
 
 After you have selected a patch range, you can drag it from one column to another.  By default, dragging will {\bf move} the patches to the new location, overwriting the patches you dropped them on top of.  If you instead hold down the Control key while dragging (on the Mac you can also hold down the Option key), the you will instead {\bf copy} the patches: copies will move to the new location but the originals will stay put.  Finally if you hold down the Control and Shift keys while dragging, the drag cursor changes to Java's ``link'' cursor:   Edisyn uses this final mode to indicate that you will {\bf swap} the patches with the ones they're being dragged on top of.
 
@@ -966,14 +966,13 @@ Drag and Drop isn't restricted to just one Librarian: if you have two Librarians
 
 Java's table facility is weird about selecting and dragging table cells, but the general rule is this: you must first select a patch or patch range, then {\it let go of the mouse,} before you can go back and drag it. Additionally, when you drag a region, Java is particular about where the dragged region will get dropped.  For example, if you selected a region of ten cells, then clicked on the third cell in the region and dragged it, Java will highlight a drop cell location in pale violet.  This location will be where the third cell will go; and this in turn will determine where the rest of the region will be dropped.   If the region can't fit in that position, then the drop cell won't get highlighted.  If this is confusing to you, I suggest always dragging from the first cell in the selected region: then the drop location will be where the beginning of the region will get dropped.
 
+\paragraph{Renaming Patches}  Select a patch and press Return.  If the patch can be renamed in place, the patch's name editor will pop up.
 
 \paragraph{Moving Patches to and from the Editor}
 
 The Editor is completely separate from its Librarian.  Changing a patch in the editor doesn't change it in the Librarian, and loading a new patch in the Librarian doesn't overwrite it in the Editor.   The Editor's current patch is shown in the Librarian as the {\bf Current Patch}.  If you want to copy the Editor's current patch to the Librarian, just drag the Current Patch field into a slot in the Librarian.  
 
 If you want to edit a patch from the Librarian, select a patch and choose {\bf Edit Patch in This Editor} from the {\bf Librarian} menu.  Alternatively you can just double-click on the Librarian patch.  This switches to the Editor for your convenience.  You can also drag the patch from the Librarian to the Current Patch field to load it into the Editor without switching to the Editor.  To edit a patch in a new Editor, select the patch and choose {\bf Edit Patch in New Editor} from the {\bf Librarian} menu.
-
-A common need is to rename the patch.  At present this must be done in the Editor.  Typically you'd double-click the patch in the Librarian, then change the name in the Editor, then return to the Librarian, and finally drag the Current Patch field over the patch in the Librarian table, overwriting it.  (Yes this is cumbersome).
 
 \paragraph{Clearing Patches}
 
@@ -1065,6 +1064,7 @@ Casio CZ&&&{\cm}&{\cm}&{\cm}&{\cm}& & &{\cm}*            \\
 DSI Prophet '08/ Mopho / Tetra&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}& & &{\cm}            \\
 E-Mu Morpheus / UltraProteus&{\cm}& &{\cm}& & &{\cm}& & &{\cm}            \\
 E-Mu Proteus&{\cm}& &{\cm}& & &{\cm}& & &{\cm}            \\
+E-Mu Planet Phatt/Orbit/Carnaval/Vintage Keys&{\cm}& &{\cm}& & &{\cm}& & &{\cm}            \\
 Kawai K1/K1r/K1m&{\cm}*& &{\cm}& & &{\cm}& &{\cm}&{\cm}            \\
 Kawai K4/K4r&{\cm}*& &{\cm}& &{\cm}&{\cm}& &{\cm}&{\cm}            \\
 Kawai K5/K5m&{\cm}&{\cm}&{\cm}& & &{\cm}& &{\cm}&{\cm}            \\

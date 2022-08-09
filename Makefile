@@ -21,8 +21,8 @@ jar:
 	echo "Main-Class: edisyn.Edisyn" > /tmp/manifest.add
 	cd libraries ; jar -xvf coremidi4j-1.6.jar
 	mv libraries/META-INF . ; mv libraries/uk .
-	jar -cvfm install/edisyn.jar /tmp/manifest.add edisyn/synth/Synths.txt `find edisyn -name "*.class"` `find edisyn -name "*.init"` `find edisyn -name "*.html"` `find edisyn -name "*.png"` `find edisyn -name "*.jpg"` `find edisyn/synth/ -name "*.txt.gz"` uk/ META-INF/
-	echo jar -cvfm install/edisyn.jar /tmp/manifest.add edisyn/synth/Synths.txt `find edisyn -name "*.class"` `find edisyn -name "*.init"` `find edisyn -name "*.html"` `find edisyn -name "*.png"` `find edisyn -name "*.jpg"` `find edisyn/synth/ -name "*.txt.gz"` uk/ META-INF/
+	jar -cvfm install/edisyn.jar /tmp/manifest.add edisyn/synth/Synths.txt `find edisyn -name "*.class"` `find edisyn -name "*.init"` `find edisyn -name "*.html"` `find edisyn -name "*.png"` `find edisyn -name "*.jpg"` `find edisyn/synth/ -name "*.txt.gz"` `find edisyn/synth/ -name "n_*.txt"` uk/ META-INF/
+	echo jar -cvfm install/edisyn.jar /tmp/manifest.add edisyn/synth/Synths.txt `find edisyn -name "*.class"` `find edisyn -name "*.init"` `find edisyn -name "*.html"` `find edisyn -name "*.png"` `find edisyn -name "*.jpg"` `find edisyn/synth/ -name "*.txt.gz"` `find edisyn/synth/ -name "n_*.txt"` uk/ META-INF/
 	rm -rf uk META-INF
 
 install: jar

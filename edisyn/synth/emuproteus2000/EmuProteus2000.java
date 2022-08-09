@@ -388,7 +388,6 @@ public class EmuProteus2000 extends Synth
         updateFromFile(rom, RIFF_NAMES, "roms/n_rff_" + ROM_IDS[rom] + ".txt");
         }
 
-
     public EmuProteus2000()
         {
         buildParameters();

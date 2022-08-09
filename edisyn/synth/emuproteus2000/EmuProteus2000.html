@@ -6,12 +6,19 @@
 
 <p>This editor should work with many E-Mu Proteus 1000, 2000, and 2500 series machines, though I have only tested on the latest firmware (2.26).  You ought to update the firmware on your unit if possible: an easy way to do this is to use Ray Bellis's <a href="https://www.emu.tools/e-loader/">emu.tools firmware updater</a>. 
 
-<p>The Proteus 2000 family includes some 22 models, the primary difference among them lies in which ROMs they have stored in their SIMM slots.  Edisyn knows about the following ROMS:
+<br><br><h3>Communicating with Edisyn</h3>
+
+Set the MIDI ID to the same you'll be setting in Edisyn (typically 0).  Select a MIDI Channel to use on your synthesizer (perhaps channel 1) and set Edisyn's MIDI channel to that value.  Set the MIDI Mode to Omni or to Poly.  Make certain that Receive Program Change is ON for your MIDI channel: you might as well turn them all on (if your MIDI Mode is omni or Poly, I believe Receive Program Change should be on by default).
+
+
+<br><br><h3>Proteus 2000 ROMs</h3>
+
+<p>The Proteus 2000 family includes some 22 models, and the primary difference among them lies in which ROMs they have stored in their SIMM slots.  Edisyn knows about the following ROMS:
 
 <p>
 <table>
 <tr><td><b><i>Screen</i></b><td><b><i>ROM Name</i></b><td><b><i>Standard on these Synthesizers</i></b></tr>
-<tr><td>AUDTY <td>			Audity	                           <td> Audity 2000 (OS 2.0 or higher)	            </tr>
+<tr><td>AUDTY <td>			Audity	                           <td> Audity 2000 (OS 2.0 or higher only)	            </tr>
 <tr><td>CMPSR <td>			Composer	                       <td> Proteus 2000, Proteus 1000  </tr>
 <tr><td>P/123 <td>			Protozoa                           <td> 		</tr>
 <tr><td>B-3   <td>		Definitive B-3                     <td> B-3		</tr>
@@ -33,9 +40,7 @@
 <tr><td>BEAT  <td>		Beat Garden	                       <td> Orbit-3		</tr>
 </table>
 
-<p>Also note that the Audity 2000 will only work if it has OS 2.0 or greater (earlier versions had broken sysex).  
-
-<p>Edisyn does not have information available for any of the following ROMs.  If you have a machine with one of these ROMs, please contact me:
+<p>There are four ROMs that Edisyn has no information on. If you have a machine with one of these ROMs, please contact me:
 
 <p>
 <table>
@@ -46,10 +51,6 @@
 <tr><td>XROM1 <td>          ??                     <td> XK-6          </tr>
 </table>
 
-
-<br><br><h3>Communicating with Edisyn</h3>
-
-Set the MIDI ID to the same you'll be setting in Edisyn (typically 0).  Select a MIDI Channel to use on your synthesizer (perhaps channel 1) and set Edisyn's MIDI channel to that value.  Set the MIDI Mode to Omni or to Poly.  Make certain that Receive Program Change is ON for your MIDI channel: you might as well turn them all on (if your MIDI Mode is omni or Poly, I believe Receive Program Change should be on by default).
 
 <br><br><h3>About the Menu</h3>
 

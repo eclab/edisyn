@@ -291,6 +291,7 @@ public abstract class Synth extends JComponent implements Updatable
         If SETUPMIDI is false, then MIDI won't be set up.  The TUPLE provides the default
         MIDI devices. */
         
+    static final boolean hackInstantiateError = true;
     public static Synth instantiate(String classname, boolean throwaway, boolean setupMIDI, Midi.Tuple tuple)
         {
         try
@@ -299,6 +300,9 @@ public abstract class Synth extends JComponent implements Updatable
             }
         catch (Exception ex)
             {
+            if (hackInstantiateError)
+            showErrorWithStackTraceUnsafe(ex, "An error occurred while creating the synth editor for \n" + classname, "Creation Error");
+            else
             JOptionPane.showMessageDialog(null, "An error occurred while creating the synth editor for \n" + classname, "Creation Error", JOptionPane.ERROR_MESSAGE);
             Synth.handleException(ex);
             return null;
@@ -368,6 +372,9 @@ public abstract class Synth extends JComponent implements Updatable
         catch (Exception e2)
             {
             Synth.handleException(e2);
+            if (hackInstantiateError)
+            showErrorWithStackTraceUnsafe(e2, "An error occurred while creating the synth editor for \n" + _class.getSimpleName(), "Creation Error");
+            else
             JOptionPane.showMessageDialog(null, "An error occurred while creating the synth editor for \n" + _class.getSimpleName(), "Creation Error", JOptionPane.ERROR_MESSAGE);
             }
         return null;
@@ -2815,6 +2822,19 @@ public abstract class Synth extends JComponent implements Updatable
         enableMenuBar();
         inSimpleError = false;
         }
+
+
+    /** Display a simple error message. */
+    public static void showErrorWithStackTraceUnsafe(Throwable error, String message, String title)
+        {
+		String[] options = new String[] { "Okay", "Save Error" };
+		int ret = JOptionPane.showOptionDialog(null, message, title, JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE, null, options, options[0]);                
+		if (ret == 1)
+			{
+			ExceptionDump.saveThrowable(error);
+			}
+        }
+
 
     /** Display a simple error message. */
     public void showErrorWithStackTrace(Throwable error, String title, String message)

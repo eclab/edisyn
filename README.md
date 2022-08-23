@@ -1,7 +1,7 @@
 ![Edisyn Splash Banner](https://raw.githubusercontent.com/eclab/edisyn/master/pics/Banner.png)
 
 # Edisyn
-Synthesizer Patch Editor (Version 30)
+Synthesizer Patch Editor (Version 31)
 
 By Sean Luke (sean@cs.gmu.edu)
 
@@ -27,8 +27,8 @@ Related projects:
 
 ## Contributors
 
-* V. Hoyle (collaboration on the Red Sound DarkStar and Microtuning editors)
-* Wim Verheyen (Prophet Rev2 editor)
+* V. Hoyle collaborated on the Red Sound DarkStar and Microtuning editors, and cooked the deep-learned variational autoencoder for the DX7
+* Wim Verheyen wrote the Prophet Rev2 editor
 * Special thanks to Derek Cook's [CoreMidi4J](https://github.com/DerekCook/CoreMidi4J), which Edisyn uses to fix critical bugs in MacOS's sysex handling.
 * Thanks to the many beta testers and bug report submitters for various editors.  Many of these people are thanked in the individual About panels for different synth editors.
 
@@ -37,6 +37,11 @@ Related projects:
 Donations are welcome via Paypal to my email address (sean@cs.gmu.edu).
 
 ## What's New
+
+Version 31 has various bug fixes and two new editors:
+
+* E-Mu Planet Phatt, Orbit v1 and Orbit v2, Carnaval, Vintage Keys, and Vintage Keys Plus
+* E-Mu Proteus 2000 Series 
 
 Version 30 has lots of improvements, but one big one in particular:
 
@@ -70,7 +75,9 @@ Edisyn presently supports:
 * Casio CZ Series (CZ101, CZ1000, CZ3000, CZ5000, CZ-1, CZ-230S)
 * DSI Prophet '08, Tetra, Mopho, Mopho Keyboard, Mopho SE, and Mopho x4 (Single and (for Tetra) Combo modes)
 * E-Mu Morpheus and Ultraproteus (Single, Hyperpreset, and MidiMap modes)
+* E-Mu Planet Phatt, Orbit and Orbit v2, Carnaval, Vintage Keys, and Vintage Keys Plus
 * E-Mu Proteus 1, 1XR, 2, 2XR, 3, 3XR, and 1+Orchestral
+* E-Mu Proteus 2000 series (Proteus 1000/2000/2500, Audity 2000, Virtuoso 2000, Xtreme Lead-1, Mo'Phatt, B-3, Planet Earth, Orbit-3, Proteus Custom, XL-1 Turbo, Turbo Phatt, Vintage Pro, XL-7, MP-7, PX-7, PK-6, XK-6, MK-6, Halo, and Vintage Keys Keyboard).
 * Kawai K1, Kawai K1m, and Kawai K1r (Single and Multi Modes)
 * Kawai K4 and Kawai K4r (Single, Multi, Drum, and Effect Modes)
 * Kawai K5 and K5m (Single and Multi Modes, plus single-cycle wave uploading)
@@ -105,11 +112,13 @@ Edisyn has infinite levels of undo, CC and NRPN mapping and learning, offline mo
 
 * *Randomization:* Weighted patch mutation
 * *Merging:* Weighted recombination of two patches of your choice
+* *Mixing:* Bulk recombination of many patches into a single one
 * *Blending:* Random recombination of two randomly-chosen patches on your synth
 * *Nudging:* Pushing the patch to sound a bit more (or a bit less) like one of four other patches of your choice
 * *Morphing:* Real-time interpolation of four patches to form a new patch
 * *Hill-Climbing and Constriction:* evolutionary techniques for guided randomized search through the space of parameters, where Edisyn iteratively offers patch possibilities for you to grade, then looks for new ones based on your assessments.
 * *Deep-Learned Models:* improvements to Randomization and Hill-Climbing using a deep-learned Variational Autoencoder neural network (DX7 Family only)
+* *Mixing:* recombining large numbers of patches to form one blended patch
 
 #### "Could You Develop a Patch Editor for Synth X for Me?"
 
@@ -178,11 +187,13 @@ I believe that the following should work:
 
 If you want to use Edisyn in combination with a DAW, see the manual's section on building a MIDI Loopback.
 
+#### Casio CZ, Yamaha FB01 and SY22/35/TG33 editors on Windows
+
+These editors require an unusual quirk of MIDI sysex which is not properly supported by Java under Windows.  I have failed to find a workaround for it, and so these editors may not work properly under Windows.  Notably the CZ editor will definitely not work right.  I'm sorry about that.
+
 #### Java Crashing on Windows
 
 I have reports of Java crashing on Windows if you set Edisyn's "Receive From" or "Send To" devices to the same device as the "Controller" or "Controller 2" devices.  So don't do that: there is never a need to do so.  If you don't have a dedicated controller, you should leave the "Controller" and "Controller 2" devices blank.
-
-#### Early Versions of Java
 
 I have had at least one report that Java 8 on Windows has serious problems with some Edisyn patch editors (probably memory).  Install something newer.
 
@@ -216,6 +227,10 @@ I'm told that Edisyn works fine if you have installed at least Java 8.  After th
 3. Thereafter you should be able to just double-click on the file to launch Edisyn.
 
 If you want to use Edisyn in combination with a DAW, see the manual's section on building a MIDI Loopback.
+
+#### Problems with Jack
+
+Edisyn (or more likely Java) seems to have compatibility problems with Jack; disabling Jack will often allow Edisyn to communicate with MIDI devies.  See issues #33 and #52.
 
 
 ### Running from the command line (OS X, Windows, Linux)

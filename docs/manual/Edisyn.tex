@@ -39,7 +39,7 @@
 \begin{document}
 
 \noindent {\Huge\bf Edisyn}\\[0.5em]
-{\large \bf A Java-based Synthesizer Patch Editor and Librarian, Version 30\\[0.2em]
+{\large \bf A Java-based Synthesizer Patch Editor and Librarian, Version 31\\[0.2em]
 By Sean Luke\qquad sean@cs.gmu.edu}\\[0.2em]
 
 \vspace{-1em}
@@ -64,7 +64,8 @@ Edisyn is a no-nonsense synthesizer patch editor and librarian for the editing a
 \item Dave Smith Instruments Prophet '08 and '08 Desktop, Tetra, Mopho, Mopho Keyboard, Mopho SE, and Mopho X4 (Single and (for Tetra) Combo Modes)
 \item E-Mu Morpheus and Ultraproteus (Single, Hyperpreset, and MidiMap)
 \item E-Mu Proteus 1, 1 XR, 2, 2 XR, 3, 3 XR, and 1+Orchestral (Single)
-\item E-Mu Planet Phatt, Orbit V1 and V2, Carnaval, Vintage Keys, and Vintage Keys Plus
+\item E-Mu Planet Phatt, Orbit and Orbit V2, Carnaval, Vintage Keys, and Vintage Keys Plus (Single)
+\item E-Mu Proteus 1000/2000/2500, Audity 2000, Virtuoso 2000, Xtreme Lead-1, Mo'Phatt, B-3, Planet Earth, Orbit-3, Proteus Custom, XL-1 Turbo, Turbo Phatt, Vintage Pro, XL-7, MP-7, PX-7, PK-6, XK-6, MK-6, Halo, and Vintage Keys Keyboard (Single)
 \item Kawai K1, K1m, and K1r (Single and Multimode)
 \item Kawai K4 and K4r (Single, Multimode, Drum, Effects)
 \item Kawai K5 and K5m (Single and Multimode)
@@ -551,7 +552,7 @@ Non-metric parameters, such as (say) choice of filter or the PCM sampled sound p
 \begin{itemize}
 \item {\it When Playing Test Notes}\quad This is the default, and usually the best option.  Here, the Morpher will send the entire patch immediately before it plays a test note.  (If you have turned off sending test notes, the Morpher will never send the patch).  
 \item {\it When Changing}\quad The Morpher will send the entire patch every time the joystick cursor changes.  This can be slow if the synthesizer takes a long time to update itself, but it is often the best choice if you are playing notes yourself.  Your synthesizer is unlikely to change its sound to reflect this change until the next note is played.
-\item {\it Trickle}\quad The Morpher will constantly send a single random parameter\footnote{Edisyn shuffles the parameters, then sends them in turn, then shuffles again, and so on.} to the synth.  If your synth updates itself in real-time in response to changes to these parameters, this will {\it slowly} update the patch sound of a long-playing note.  However many synths only update themselves when the next note is sounded, in which case it makes more sense to choose {\it When Playing Note}.  Note that sending individual parameters like this may take a while to fully update the patch on the synth.  Also note that this floods MIDI with messages.  You can set the {\it Trickle Rate}, which changes the number of parameters sent to the synth each trickle timestep.  By default this is 1.
+%\item {\it Trickle}\quad The Morpher will constantly send a single random parameter\footnote{Edisyn shuffles the parameters, then sends them in turn, then shuffles again, and so on.} to the synth.  If your synth updates itself in real-time in response to changes to these parameters, this will {\it slowly} update the patch sound of a long-playing note.  However many synths only update themselves when the next note is sounded, in which case it makes more sense to choose {\it When Playing Note}.  Note that sending individual parameters like this may take a while to fully update the patch on the synth.  Also note that this floods MIDI with messages.  You can set the {\it Trickle Rate}, which changes the number of parameters sent to the synth each trickle timestep.  By default this is 1.
 %\item {\it Deluge}\quad The Morpher will constantly send the entire patch to the synth.  If your synth updates itself in real-time in response to changes to these parameters, this will {\it rapidly} update the patch sound of a long-playing note.  However many synths only update themselves when the next note is sounded, in which case it makes more sense to choose {\it When Playing Note}.  Note that this floods MIDI with messages, causing much more congestion than {\it Trickle} (there's a reason it's called {\it Deluge}).
 \end{itemize}
 
@@ -561,7 +562,8 @@ You can turn off automatic test notes by turning off {\bf Send Test Notes} or by
 
 \paragraph{Moving the Joystick via CC}  You can set the Joystick's X and Y values via CC MIDI commands.  Simply set the X CC and Y CC dials to the CC parameter numbers to control the X and Y directions respectively.  Edisyn will remember these parameter settings in the future.
 
-\paragraph{Autopilot}  The morpher can be set to move the cursor randomly on its own to wander about in the space.   There are three parameters which affect this.  First, when the morpher is about to move the cursor, the {\it Autopilot Jump} specifies how far the cursor will be moved.  Second, the {\it Autopilot Smooth} specifies how much the movement will be totally random (jittery) rather than a mixture of moving forward and moving randomly.  Third, the {\it Autopilot Rate} specifies how often the cursor is moved (higher is faster).  Note that if your synthesizer requires significant pauses after sending a  parameter or sending a whole patch, this will significantly slow down the autopilot.  For example, if you are trickling, and the trickle rate is set to 20, then 20 trickles will be sent for each autopilot update, and if a single trickle is slow, the autopilot update rate will be very slow. 
+\paragraph{Autopilot}  The morpher can be set to move the cursor randomly on its own to wander about in the space.   There are three parameters which affect this.  First, when the morpher is about to move the cursor, the {\it Autopilot Jump} specifies how far the cursor will be moved.  Second, the {\it Autopilot Smooth} specifies how much the movement will be totally random (jittery) rather than a mixture of moving forward and moving randomly.  Third, the {\it Autopilot Rate} specifies how often the cursor is moved (higher is faster).  Note that if your synthesizer requires significant pauses after sending a parameter or sending a whole patch, this will significantly slow down the autopilot. 
+%For example, if you are trickling, and the trickle rate is set to 20, then 20 trickles will be sent for each autopilot update, and if a single trickle is slow, the autopilot update rate will be very slow. 
 
 \paragraph{Exporting a Patch} When you are satisfied with the current sound at your Joystick cursor, you can save it by pressing the {\it Export...} button.  Your three options are to {\it Keep Patch}, which loads the cursor patch into the current editor, {\it Edit Patch}, which loads it into a new patch editor, and {\it Save to File}, which, well, saves it to a file.
 

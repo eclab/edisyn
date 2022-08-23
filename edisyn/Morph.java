@@ -35,7 +35,7 @@ public class Morph extends SynthPanel
     public static final int TIMER_DELAY = 2;            // too large?  too small?  3ms would be half-time if the sysex messages were all 10 bytes long
     public static final String EDISYN_MORPH_PREFERENCES_KEY = "EdisynMorph";
     //    public static final double[] SEND_PROBABILITY = new double[] { 0, 0, 1, 0.5, 0.25, 0.125, 0.0625, 0.03125 };
-    public static final String[] SEND_TO_SYNTH = new String[] { "When Playing Test Notes", "When Changing", "Trickle" };        // "Deluge" };
+    public static final String[] SEND_TO_SYNTH = new String[] { "When Playing Test Notes", "When Changing" }; 	// , "Trickle" };        // "Deluge" };
     public static final String[] CATEGORICAL_STRATEGIES = new String[] { "Morph", "Use Closest", "Use Current Patch", "Use Top Left", "Use Top Right", "Use Bottom Left", "Use Bottom Right" };
     public static final String[] POSITIONS = new String[] { "Top Left", "Top Right", "Bottom Left", "Bottom Right" };
         
@@ -62,9 +62,6 @@ public class Morph extends SynthPanel
         int ycc = Synth.getLastXAsInt("YCC", EDISYN_MORPH_PREFERENCES_KEY, -1, true); 
         if (ycc < -1 || ycc > 127) ycc = -1;
         blank.getModel().set("ycc", ycc);
-//        int tricklerate = Synth.getLastXAsInt("TrickleRate", EDISYN_MORPH_PREFERENCES_KEY, -1, true); 
-//        if (tricklerate < 1 || tricklerate > 100) xcc = 1;
-//        blank.getModel().set("tricklerate", tricklerate);
        
         sources = new Model[4];
         current = new Model();
@@ -139,6 +136,7 @@ public class Morph extends SynthPanel
         JPanel pan;
         HBox hbox;
 
+/*
         hbox = new HBox();
         LabelledDial trickleRate = new LabelledDial("Trickle", blank, "tricklerate", Style.COLOR_A(), 1, 100)
             {
@@ -154,7 +152,7 @@ public class Morph extends SynthPanel
         margin.add(hbox);
         
         margin.add(Strut.makeVerticalStrut(8));
-
+*/
         
         hbox = new HBox();
         LabelledDial xCC = new LabelledDial("X CC", blank, "xcc", Style.COLOR_A(), -1, 127)

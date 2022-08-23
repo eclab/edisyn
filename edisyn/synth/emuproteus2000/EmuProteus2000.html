@@ -40,15 +40,16 @@ Set the MIDI ID to the same you'll be setting in Edisyn (typically 0).  Select a
 <tr><td>BEAT  <td>		Beat Garden	                       <td> Orbit-3		</tr>
 </table>
 
-<p>There are four ROMs that Edisyn has no information on. If you have a machine with one of these ROMs, please contact me:
+<p>There are five ROMs that Edisyn has no information on. If you have a machine with one of these ROMs, please contact me:
 
 <p>
 <table>
 <tr><td><b><i>Screen</i></b><td><b><i>ROM Name</i></b><td><b><i>Standard on these Synthesizers</i></b></tr>
 <tr><td>XTREM <td>         Audity Extreme                     <td> </tr>
-<tr><td>QROM <td>         ??                     <td> Halo         </tr>
-<tr><td>MROM1 <td>         ??                     <td> MK-6          </tr>
-<tr><td>XROM1 <td>          ??                     <td> XK-6          </tr>
+<tr><td>QROM <td>      Sounds of the ZR (variation)              <td> Halo         </tr>
+<tr><td>MROM1 <td>    Pure Phatt (variation)             <td> MK-6          </tr>
+<tr><td>XROM1 <td>   X-Lead Vol.2 (variation)             <td> XK-6          </tr>
+<tr><td>[unknown] <td> Composer (variation)		 <td>Proteus 2500 </tr>
 </table>
 
 
@@ -64,6 +65,10 @@ The menu lets you set the configuration of ROMs in your machine's SIMM sockets; 
 <p><li>When you do a batch download, Edisyn will try to skip the non-SIMM ROMs.
 </ul>
 
+<br><br><h3>About Multisetups (Multimode)</h3>
+
+Edisyn doesn't support multisetups at present.  The reason for this is simple: the Proteus 2000 doesn't have any sysex commands to load and save multisetups as patches, unlike many other multitimbral synthesizers.  Instead you can only load and save <i>all</i> of them, and all global parameters, as one dump.  This makes editing them as individual arrangements very difficult.
+
 <br><br><h3>Gotchas</h3>
 
 <ul>
@@ -71,13 +76,30 @@ The menu lets you set the configuration of ROMs in your machine's SIMM sockets; 
 
 <p><li>If Edisyn is selecting the wrong patch, you might check to see if you have modified your synth's Program Map.  If so, you'll need to reset it to its defaults.
 
+<p><li>The Proteus 2000 can't handle a long stream of individual parameters sent to it, even if done so slowly.  You might encounter the error "Error! Code = 000. Sysex too fast".
+<!--  In practice, this really means: don't use Trickle to change parameters in the Morpher: you'll get a the error "Error! Code = 000. Sysex too fast".
+-->
+
 </ul>
 
 <br><br><h3>Hints</h3>
 
 <ul>
 <li>Tired of downloads taking a long time?  Set your Proteus 2000's Midi Sysex Packet delay to 0 milliseconds (the default is for some reason 300).  Edisyn can handle it.  It's in the Master menu.
+<p><li>The Proteus 2000 has two parameters for every filter, called "Freq" and "Q" which each go 0..127 on the unit.  These are sometimes used for cutoff frequency and resonance (of course), but not always: sometimes they're used for other hidden functions.  The Proteus 2000 sysex docs happen to make it clear what the cutoff frequency values are in Hz (they vary from filter to filter) and certain values for Q.  Edisyn tries to be helpful here, describing the actual meaning of the parameters and their values whenever it can.  There are six different classes of filters in this respect.  
+
+<ul><li>The Classic, Smooth, and Steeper filters have cutoff and resonance, with cutoff set to a certain Hz range.  
+<p><li>The Shallow and Deeper filters do as well but with a different Hz range.  
+<p><li>The Band-pass1, Band-pass2, and Contraband filters have yet another Hz range.  
+<p><li>The SweptOct filters have cutoff frequency in Hz, but do not have a resonance: instead they have a <i>Gain</i> in dB.  
+<p><li>The Aah-Ay-Eeh and Ooh-To-Aah filters do not have cutoff nor resonance.  Instead they have <i>Morph</i> and <i>Body Size</i>.  
+<p><li>All the remaining filters have unusual and usually unexplained uses for the Freq and Q parameters which very often are neither cutoff frequency nor resonance.  For these, we simply call them Freq and Q as on the machine, and let them go 0...127.
 </ul>
+</ul>
+
+<br><br><h3>About the Librarian</h3>
+
+<p>Normally the Librarian's grid has patch numbers down the side and banks along the top.  But the Proteus 2000 presents a difficulty: it is three dimensional, with patch numbers, banks, and ROMs.  There are many strategies of coping with this, but the approach Edisyn takes is to have patch numbers AND banks down the side and different ROMs along the top. This jibes with sysex internals (the Proteus 2000 sysex treats ROMs as its "banks" and combines patch numbers and banks into just patch numbers).  It also is a lot easier for Edisyn to manage.  But it means that you'll have lots of ROMs across the top that you don't own.  Edisyn tries to make this easier by moving to the front those ROMs you specified in the Proteus 2000 menu. It will make the other ROMs dark gray in color, though they're still present.
 
 <br><br><h3>Thanks</h3>
 

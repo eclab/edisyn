@@ -231,22 +231,22 @@ public class Favorites
         if (hasFavorite)
             newSynth.addSeparator();
 
-		JMenu synthMakeMenu;
-		HashMap<String,JMenu> map = new HashMap<>();				// This is the existing collection of synth manufacturer menus I've made so far
+        JMenu synthMakeMenu;
+        HashMap<String,JMenu> map = new HashMap<>();                            // This is the existing collection of synth manufacturer menus I've made so far
         final String[] synthMakes = synth.getSynthMakes();
-		
+                
         for(int i = 0; i < synthNames.length; i++)
             {
             final int _i = i;
             synthMakeMenu = map.get(synthMakes[i]);
-			if (synthMakeMenu == null)
-				{
-				// Build a new manufacturer menu
-				synthMakeMenu = new JMenu(synthMakes[i]);
-            	newSynth.add(synthMakeMenu);
-           		map.put(synthMakes[i], synthMakeMenu);
-				}
-				
+            if (synthMakeMenu == null)
+                {
+                // Build a new manufacturer menu
+                synthMakeMenu = new JMenu(synthMakes[i]);
+                newSynth.add(synthMakeMenu);
+                map.put(synthMakes[i], synthMakeMenu);
+                }
+                                
             JMenuItem synthMenu = new JMenuItem(synthNames[i]);
             synthMenu.addActionListener(new ActionListener()
                 {

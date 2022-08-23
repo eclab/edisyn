@@ -125,7 +125,7 @@ public abstract class Synth extends JComponent implements Updatable
     public JCheckBoxMenuItem nnRandomize;
     public JMenu librarianMenu;
     boolean sprouted = false;
-	JMenuItem mixAgainMenu = null;
+    JMenuItem mixAgainMenu = null;
 
     /// Librarian menus that may not be turned on
     JMenuItem downloadMenu;
@@ -301,9 +301,9 @@ public abstract class Synth extends JComponent implements Updatable
         catch (Exception ex)
             {
             if (hackInstantiateError)
-            showErrorWithStackTraceUnsafe(ex, "An error occurred while creating the synth editor for \n" + classname, "Creation Error");
+                showErrorWithStackTraceUnsafe(ex, "An error occurred while creating the synth editor for \n" + classname, "Creation Error");
             else
-            JOptionPane.showMessageDialog(null, "An error occurred while creating the synth editor for \n" + classname, "Creation Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "An error occurred while creating the synth editor for \n" + classname, "Creation Error", JOptionPane.ERROR_MESSAGE);
             Synth.handleException(ex);
             return null;
             }
@@ -373,9 +373,9 @@ public abstract class Synth extends JComponent implements Updatable
             {
             Synth.handleException(e2);
             if (hackInstantiateError)
-            showErrorWithStackTraceUnsafe(e2, "An error occurred while creating the synth editor for \n" + _class.getSimpleName(), "Creation Error");
+                showErrorWithStackTraceUnsafe(e2, "An error occurred while creating the synth editor for \n" + _class.getSimpleName(), "Creation Error");
             else
-            JOptionPane.showMessageDialog(null, "An error occurred while creating the synth editor for \n" + _class.getSimpleName(), "Creation Error", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(null, "An error occurred while creating the synth editor for \n" + _class.getSimpleName(), "Creation Error", JOptionPane.ERROR_MESSAGE);
             }
         return null;
         }  
@@ -899,8 +899,8 @@ public abstract class Synth extends JComponent implements Updatable
         
         If you return a zero-length byte array, nothing will be sent.  
         
-     	If you do not support individual parameters, then you should return NULL, rather than an empty array. 
-		*/
+        If you do not support individual parameters, then you should return NULL, rather than an empty array. 
+    */
     public Object[] emitAll(String key, int status)
         {
         return emitAll(key);
@@ -913,12 +913,12 @@ public abstract class Synth extends JComponent implements Updatable
         If you return a zero-length byte array, nothing will be sent.  
         
         If you do not support individual parameters, then you should return NULL, rather than an empty array. 
-        */
+    */
     public Object[] emitAll(String key)
         {
         byte[] result = emit(key);
         if (result == null)
-        	return null;
+            return null;
         else if (result.length == 0)
             return new Object[0];
         else
@@ -932,7 +932,7 @@ public abstract class Synth extends JComponent implements Updatable
         
         <p>Note that this method will only be called by emitAll(...).  So if you 
         have overridden emitAll(...) you don't need to implement this method. 
-	*/        
+    */        
     public byte[] emit(String key) { return null; }
     
     /** Produces a sysex message to send to a synthesizer to request it to initiate
@@ -950,12 +950,12 @@ public abstract class Synth extends JComponent implements Updatable
     */
     public byte[] requestCurrentDump() { return new byte[0]; }
 
-	/** Override this to return true if your synthesizer must always call changePatch()
-		prior to a performRequestDump() in order for it to work.  This would happen, 
-		for example, if requestDump() in turn called requestCurrentDump() because you
-		had no direct sysex message to request patch dumps. */
-	public boolean getAlwaysChangesPatchesOnRequestDump() { return false; }
-	
+    /** Override this to return true if your synthesizer must always call changePatch()
+        prior to a performRequestDump() in order for it to work.  This would happen, 
+        for example, if requestDump() in turn called requestCurrentDump() because you
+        had no direct sysex message to request patch dumps. */
+    public boolean getAlwaysChangesPatchesOnRequestDump() { return false; }
+        
     /** Performs a request for a dump of the patch indicated in tempModel.
         This method by default does a changePatch() as necessary, then calls
         requestDump(...) and submits it to tryToSendSysex(...), 
@@ -1081,29 +1081,29 @@ public abstract class Synth extends JComponent implements Updatable
                 // method, so make sure that still works well if we're reverting this back....
                 int val = model.get(key);
                 if (val < model.getMin(key) || val > model.getMax(key))
-                	{
-                	int min = model.getMin(key);
-                	int max = model.getMax(key);
-                	int top = max + 1;
-                	// shift everything so that min = 0;
-                	int newTop = top - min;
-                	int newVal = val - min;
-                	// Now our range is [0...newTop)
-                	// and newVal is a value that NEEDS to be in that range.
-                	// We do a double mod
-                	newVal = newVal % newTop;
-                	if (newVal < 0) newVal = val + newTop;	
-                	// Now newVal is within the range [0...newTop)
-                	// So we now shift back to [min...top), that is, [min...max]
-                	newVal += min;
-					model.set(key, newVal);
-					if (printRevised) System.err.println("Warning (Synth): Revised " + key + " from " + val + " to " + newVal);       	
-					}
+                    {
+                    int min = model.getMin(key);
+                    int max = model.getMax(key);
+                    int top = max + 1;
+                    // shift everything so that min = 0;
+                    int newTop = top - min;
+                    int newVal = val - min;
+                    // Now our range is [0...newTop)
+                    // and newVal is a value that NEEDS to be in that range.
+                    // We do a double mod
+                    newVal = newVal % newTop;
+                    if (newVal < 0) newVal = val + newTop;  
+                    // Now newVal is within the range [0...newTop)
+                    // So we now shift back to [min...top), that is, [min...max]
+                    newVal += min;
+                    model.set(key, newVal);
+                    if (printRevised) System.err.println("Warning (Synth): Revised " + key + " from " + val + " to " + newVal);             
+                    }
                 /*
-                if (val < model.getMin(key))
-                    { model.set(key, model.getMin(key)); if (printRevised) System.err.println("Warning (Synth): Revised " + key + " from " + val + " to " + model.get(key));}
-                if (val > model.getMax(key))
-                    { model.set(key, model.getMax(key)); if (printRevised) System.err.println("Warning (Synth): Revised " + key + " from " + val + " to " + model.get(key));}
+                  if (val < model.getMin(key))
+                  { model.set(key, model.getMin(key)); if (printRevised) System.err.println("Warning (Synth): Revised " + key + " from " + val + " to " + model.get(key));}
+                  if (val > model.getMax(key))
+                  { model.set(key, model.getMax(key)); if (printRevised) System.err.println("Warning (Synth): Revised " + key + " from " + val + " to " + model.get(key));}
                 */
                 }
             }
@@ -1135,7 +1135,7 @@ public abstract class Synth extends JComponent implements Updatable
     public boolean getShouldChangePatchAfterWrite() { return false; }
     
     /** Override this to return TRUE if, after recieving a NON-MERGE patch from the synthesizer, and a NON-BATCH-DOWNLOAD patch,
-    	we should turn around and sendAllParameters() to it.
+        we should turn around and sendAllParameters() to it.
         This commonly is needed in some synth multi-mode editors, where program changes have no effect (they don't switch to a new multi-mode synth),
         and so we'll receive the correct patch but the synthesizer won't switch to it.  We can turn around and emit changes to it to get the right
         sound in the edit buffer. */ 
@@ -1486,9 +1486,9 @@ public abstract class Synth extends JComponent implements Updatable
                                         }
                                     }
                                 else if (handleDeviceInquiry(data))
-                                	{
-                                	// do nothing
-                                	}
+                                    {
+                                    // do nothing
+                                    }
                                 else    // Maybe it's a local Parameter change in sysex?
                                     {
                                     // we don't do undo here.  It's not great but PreenFM2 etc. would wreak havoc
@@ -2313,57 +2313,57 @@ public abstract class Synth extends JComponent implements Updatable
 
 
     /** Schedules sending all the parameters in a patch to the synth via sendAllParameters.
-    	The scheduling delay is set to sendAllTimerDelay;
+        The scheduling delay is set to sendAllTimerDelay;
     */     
     javax.swing.Timer sendAllParametersTimer = null;
     
     void scheduleSendAllParameters()
-    	{
-    	// We first check to see if we're currently sending MIDI.  This is because lots of
-    	// operations (like undo, or hill-climbing), make modifications to parameters
-    	// but don't want those parameters sent until they send them by bulk themselves
-    	// later on.  So they set MIDI to false.  As a result, in sendOneParameter(...) 
-    	// we just call tryToSendMIDI(....) but this is blocked.  However if
-    	// sendOneParameters(...) instead tried to call scheduleSendAllParameters(), this
-    	// would NOT be blocked as it'd put a send on a timer.  We need to prevent this so
-    	// scheduleSendAllParameters() is blocked just like sending a single parameter.
-    	//
-    	// This is enough to stop us from trying to send parameters when we're sprouted;
-    	// but it's not enough to stop us from sending parameters when we're initialized.
-    	// To prevent that, we also check sprouted.
-    	if (!sprouted || !getSendMIDI())
-    		{
-    		// Kill the timer if it exists
-    		if (sendAllParametersTimer != null)
-    			{
-    			sendAllParametersTimer.stop();
-    			sendAllParametersTimer = null;
-    			}
-    		return;
-    		}
-    	
-		sendAllParameters();
-		simplePause(getPauseAfterSendAllParameters());
+        {
+        // We first check to see if we're currently sending MIDI.  This is because lots of
+        // operations (like undo, or hill-climbing), make modifications to parameters
+        // but don't want those parameters sent until they send them by bulk themselves
+        // later on.  So they set MIDI to false.  As a result, in sendOneParameter(...) 
+        // we just call tryToSendMIDI(....) but this is blocked.  However if
+        // sendOneParameters(...) instead tried to call scheduleSendAllParameters(), this
+        // would NOT be blocked as it'd put a send on a timer.  We need to prevent this so
+        // scheduleSendAllParameters() is blocked just like sending a single parameter.
+        //
+        // This is enough to stop us from trying to send parameters when we're sprouted;
+        // but it's not enough to stop us from sending parameters when we're initialized.
+        // To prevent that, we also check sprouted.
+        if (!sprouted || !getSendMIDI())
+            {
+            // Kill the timer if it exists
+            if (sendAllParametersTimer != null)
+                {
+                sendAllParametersTimer.stop();
+                sendAllParametersTimer = null;
+                }
+            return;
+            }
+        
+        sendAllParameters();
+        simplePause(getPauseAfterSendAllParameters());
 
-    	/*
-		if (sendAllParametersTimer == null)
-			{
-			sendAllParametersTimer = new javax.swing.Timer(getPauseAfterSendAllParameters(), new ActionListener()
-				{
-				public void actionPerformed(ActionEvent e)
-					{
-					sendAllParametersTimer.stop();
-					sendAllParametersTimer = null;
-					sendAllParameters();
-					// FIXME
-					// This should emit the pause because getSendsAllParametersAsDump() needs to be true for this synth.
-					// If it's not, we've got an issue
-					}
-				});
-			sendAllParametersTimer.start();
-			}
-		*/
-		}
+        /*
+          if (sendAllParametersTimer == null)
+          {
+          sendAllParametersTimer = new javax.swing.Timer(getPauseAfterSendAllParameters(), new ActionListener()
+          {
+          public void actionPerformed(ActionEvent e)
+          {
+          sendAllParametersTimer.stop();
+          sendAllParametersTimer = null;
+          sendAllParameters();
+          // FIXME
+          // This should emit the pause because getSendsAllParametersAsDump() needs to be true for this synth.
+          // If it's not, we've got an issue
+          }
+          });
+          sendAllParametersTimer.start();
+          }
+        */
+        }
         
         
     //// FIXME This section should be revised, getting rid of the diff stuff, which is never used and is 
@@ -2431,7 +2431,7 @@ public abstract class Synth extends JComponent implements Updatable
 
     void sendDifferentParameters(Model other, double probability)
         {
-	    // This doesn't check to see if the synth can send individual parameters or not.  Don't call it if it can't.
+        // This doesn't check to see if the synth can send individual parameters or not.  Don't call it if it can't.
         if (!getSendMIDI())
             return;  // don't bother!  MIDI is off
 
@@ -2827,12 +2827,12 @@ public abstract class Synth extends JComponent implements Updatable
     /** Display a simple error message. */
     public static void showErrorWithStackTraceUnsafe(Throwable error, String message, String title)
         {
-		String[] options = new String[] { "Okay", "Save Error" };
-		int ret = JOptionPane.showOptionDialog(null, message, title, JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE, null, options, options[0]);                
-		if (ret == 1)
-			{
-			ExceptionDump.saveThrowable(error);
-			}
+        String[] options = new String[] { "Okay", "Save Error" };
+        int ret = JOptionPane.showOptionDialog(null, message, title, JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE, null, options, options[0]);                
+        if (ret == 1)
+            {
+            ExceptionDump.saveThrowable(error);
+            }
         }
 
 
@@ -4486,18 +4486,18 @@ public abstract class Synth extends JComponent implements Updatable
         transmitParameters.setSelected(allowsTransmitsParameters);
 
                 
-                /*
-        repeatCurrentPatch = new JCheckBoxMenuItem("Repeatedly Send to Current Patch");
-        //repeatCurrentPatch.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_U, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()  |  InputEvent.SHIFT_MASK));
-        menu.add(repeatCurrentPatch);
-        repeatCurrentPatch.addActionListener(new ActionListener()
-            {
-            public void actionPerformed( ActionEvent e)
-                {
-                doRepeatCurrentPatch();
-                }
-            });
-            */
+        /*
+          repeatCurrentPatch = new JCheckBoxMenuItem("Repeatedly Send to Current Patch");
+          //repeatCurrentPatch.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_U, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()  |  InputEvent.SHIFT_MASK));
+          menu.add(repeatCurrentPatch);
+          repeatCurrentPatch.addActionListener(new ActionListener()
+          {
+          public void actionPerformed( ActionEvent e)
+          {
+          doRepeatCurrentPatch();
+          }
+          });
+        */
 
         menu.addSeparator();
 
@@ -5170,12 +5170,12 @@ public abstract class Synth extends JComponent implements Updatable
         JMenuItem manualMap = new JMenuItem("Manual Map");
         menu.add(manualMap);
         manualMap.addActionListener(new ActionListener()
-        	{
-        	public void actionPerformed( ActionEvent e)
-        		{
-        		doManualMapCC();
-        		}
-        	});
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                doManualMapCC();
+                }
+            });
 
         menu.addSeparator();
 
@@ -5970,33 +5970,33 @@ public abstract class Synth extends JComponent implements Updatable
             }
         }
 
-	void doManualMapCC()
-		{
+    void doManualMapCC()
+        {
         JComboBox type = new JComboBox( new String[] { "CC", "Relative CC", "NRPN" });
         int num = model.get("number");
         JTextField number = new SelectedTextField("0", 5);
 
-		while(true)
-			{
-			boolean result = showMultiOption(this, new String[] { "Type", "Number"}, 
-				new JComponent[] { type, number }, "Manually Map Widget", "Map the last modified widget to a CC or NRPN parameter number.");
-			if (result == false) return;
-			
+        while(true)
+            {
+            boolean result = showMultiOption(this, new String[] { "Type", "Number"}, 
+                new JComponent[] { type, number }, "Manually Map Widget", "Map the last modified widget to a CC or NRPN parameter number.");
+            if (result == false) return;
+                        
             int n;
             try { n = Integer.parseInt(number.getText()); }
             catch (NumberFormatException e)
                 {
-                if (type.getSelectedIndex() == 2)	// NRPN
-                	showSimpleError("Invalid Number", "The Number must be an integer 0...16383");
+                if (type.getSelectedIndex() == 2)       // NRPN
+                    showSimpleError("Invalid Number", "The Number must be an integer 0...16383");
                 else
                     showSimpleError("Invalid Number", "The Number must be an integer 0...127");
                 continue;
                 }
             if (type.getSelectedIndex() == 2 && (n < 0 || n > 16383))
-            	{
+                {
                 showSimpleError("Invalid Number", "The Number must be an integer 0...16383");
                 continue;
-            	}
+                }
             else if (n < 0 || n > 127)
                 {
                 showSimpleError("Invalid Number", "The Number must be an integer 0...127");
@@ -6005,26 +6005,26 @@ public abstract class Synth extends JComponent implements Updatable
                                                 
             int i = type.getSelectedIndex();
             
-			String key = model.getLastKey();
-			if (key == null)
-				{
-				showSimpleMessage("No Widget Selected", "Please tweak a widget a little bit first.");
-				return;
-				}
-			else
-				{
-				int sub = getCurrentTab();
-				if (perChannelCCs)
-					sub = tuple.keyChannel;		// not key2Channel
-				ccmap.setKeyForCCPane(n, sub, key);
-				ccmap.setTypeForCCPane(n, sub, (i == 0 ? CCMap.TYPE_ABSOLUTE_CC : (i == 1 ? CCMap.TYPE_RELATIVE_CC_64 : CCMap.TYPE_NRPN)));
-				}
-			
-			setLearningCC(false);
-			break;
+            String key = model.getLastKey();
+            if (key == null)
+                {
+                showSimpleMessage("No Widget Selected", "Please tweak a widget a little bit first.");
+                return;
+                }
+            else
+                {
+                int sub = getCurrentTab();
+                if (perChannelCCs)
+                    sub = tuple.keyChannel;         // not key2Channel
+                ccmap.setKeyForCCPane(n, sub, key);
+                ccmap.setTypeForCCPane(n, sub, (i == 0 ? CCMap.TYPE_ABSOLUTE_CC : (i == 1 ? CCMap.TYPE_RELATIVE_CC_64 : CCMap.TYPE_NRPN)));
+                }
+                        
+            setLearningCC(false);
+            break;
             }
-		}
-		
+        }
+                
     void doMapCC(int type)
         {
         // has to be done first because doPassThroughCC(false) may turn it off
@@ -6529,7 +6529,7 @@ public abstract class Synth extends JComponent implements Updatable
 
 
 
-		
+                
     /** Flattens a two-dimensional array to a one-dimensional array, stripping out the non-sysex elements. 
         The array may contain (1) byte[] sysex data (2) Sysex Messages of the form javax.sound.midi.SysexMessage
         (3) other data, notably Integers. #3 is stripped out, and 1 and 2 are concatenated into a stream of
@@ -6602,23 +6602,23 @@ public abstract class Synth extends JComponent implements Updatable
         return result;
         } 
 
-	public static int numSysexMessages(byte[] data)
-		{
-		int count = 0;
-		boolean in = false;
-		for(int i = 0; i < data.length; i++)
-			{
-			if (in)
-				{
-				if (data[i] == (byte)0xF7) { count++; in = false; }
-				}
-			else
-				{
-				if (data[i] == (byte)0xF0) { in = true; }
-				}
-			}
-		return count;
-		}
+    public static int numSysexMessages(byte[] data)
+        {
+        int count = 0;
+        boolean in = false;
+        for(int i = 0; i < data.length; i++)
+            {
+            if (in)
+                {
+                if (data[i] == (byte)0xF7) { count++; in = false; }
+                }
+            else
+                {
+                if (data[i] == (byte)0xF0) { in = true; }
+                }
+            }
+        return count;
+        }
 
     /** Breaks data into multiple sysex messages, discarding apparent non-sysex data. */
     public static byte[][] cutUpSysex(byte[] data)
@@ -7498,7 +7498,7 @@ public abstract class Synth extends JComponent implements Updatable
                 patches[i].number = model.get("number", Patch.NUMBER_NOT_SET);
                 patches[i].bank = model.get("bank", 0);
                 patches[i].name = model.get("name", null);
-                                }
+                }
             else patches[i] = null;                 // failed to parse
             }
         model = backup;         // this also restores updating listeners I think
@@ -7792,20 +7792,20 @@ public abstract class Synth extends JComponent implements Updatable
         }
     
     void submitDeviceInquiry()
-    	{
+        {
         tryToSendSysex(new byte[] { (byte)0xF0, 0x7E, 0x7F, 0x06, 0x01, (byte)0xF7 });
-    	}               
+        }               
                        
-	boolean handleDeviceInquiry(byte[] data)
-		{
-		String response = Midi.getManufacturerForDeviceInquiry(data);
-		if (response == null) return false;
-		else
-			{
-			showSimpleMessage("Device Inquiry Response", "A Synthesizer Responded to a Device Inquiry.\n\n" + response);
-			return true;
-			}
-		}               
+    boolean handleDeviceInquiry(byte[] data)
+        {
+        String response = Midi.getManufacturerForDeviceInquiry(data);
+        if (response == null) return false;
+        else
+            {
+            showSimpleMessage("Device Inquiry Response", "A Synthesizer Responded to a Device Inquiry.\n\n" + response);
+            return true;
+            }
+        }               
                         
     // Private function used by doOpen(...) to issue an error when Edisyn doesn't know how to parse
     // the provided sysex data.
@@ -8457,7 +8457,7 @@ public abstract class Synth extends JComponent implements Updatable
             setSendMIDI(false);
             model.updateAllListeners();
             setSendMIDI(send);
-            sendAllParameters();	// get us back up to speed
+            sendAllParameters();        // get us back up to speed
 
             // at this point we have batch gunk in the model.  We have pushed
             // the previous model on the undo stack during startBatchDownload(),
@@ -8498,7 +8498,7 @@ public abstract class Synth extends JComponent implements Updatable
                             batchDownloadFailureCountdown = getBatchDownloadFailureCountdown();
                             batchDownloadFailureGlobalCountdown = BATCH_DOWNLOAD_FAILURE_GLOBAL_COUNTDOWN;
                             processCurrentPatch();
-            				simplePause(getPauseAfterReceivePatch());
+                            simplePause(getPauseAfterReceivePatch());
                             requestNextPatch();
                             }
                         else
@@ -8895,14 +8895,14 @@ public abstract class Synth extends JComponent implements Updatable
             {
             Object[] output = emitAll(key, STATUS_UPDATING_ONE_PARAMETER);
             if (output == null)
-            	{
-            	scheduleSendAllParameters();
-            	}
+                {
+                scheduleSendAllParameters();
+                }
             else if (output.length != 0)
-            	{
-	            if (tryToSendMIDI(output))
-	                simplePause(getPauseAfterSendOneParameter());
-	        	}
+                {
+                if (tryToSendMIDI(output))
+                    simplePause(getPauseAfterSendOneParameter());
+                }
             }
         }
 
@@ -9278,7 +9278,7 @@ public abstract class Synth extends JComponent implements Updatable
         }
     
     
-	/** Returns the classname of the synthesizer editor.  As simple and stupid as it sounds */
+    /** Returns the classname of the synthesizer editor.  As simple and stupid as it sounds */
     public String getSynthClassName()
         {
         return getClass().getName();
@@ -9384,8 +9384,8 @@ public abstract class Synth extends JComponent implements Updatable
     public boolean isValidPatchLocation(int bank, int num) { return true; }
 
     /** Some synthesizers have patches which might not be good choices to read/write; for example,
-    	the Proteus 2000 has ROMs which might not be installed.  This indicates these patches,
-    	and is primarily used to color them, not to prevent the user from using them as he sees fit. */
+        the Proteus 2000 has ROMs which might not be installed.  This indicates these patches,
+        and is primarily used to color them, not to prevent the user from using them as he sees fit. */
     public boolean isAppropriatePatchLocation(int bank, int num) { return true; }
 
     /** Some synthesizers have ragged banks -- different banks have different lengths.  Edisyn stretches
@@ -9414,7 +9414,7 @@ public abstract class Synth extends JComponent implements Updatable
     public boolean librarianTested() { return false; }
     
     /** This is potentially called by a model to fix some errors in the model regardless of
-    	the setting of updateListeners.  See Proteus 2000. */
+        the setting of updateListeners.  See Proteus 2000. */
     public void fix(String key, Model model) { }
     
     /** Notifies the Synth that its librarian has been created. */

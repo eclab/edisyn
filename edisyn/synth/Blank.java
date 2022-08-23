@@ -145,11 +145,11 @@ public class Blank extends Synth
         //     // My synth doesn't report patch info in its parsed data, so here assume that we successfully did it
         //     if (!isMerging())
         //         {
-        //         boolean midi = getSendMIDI();	// is MIDI turned off right now?
-        //         setSendMIDI(false);				// you should always turn off MIDI prior to messing with the model so nothing gets emitted, just in case
+        //         boolean midi = getSendMIDI();        // is MIDI turned off right now?
+        //         setSendMIDI(false);                          // you should always turn off MIDI prior to messing with the model so nothing gets emitted, just in case
         //         model.set("number", number);
         //         model.set("bank", bank);
-        //         setSendMIDI(midi);				// restore to whatever state it was
+        //         setSendMIDI(midi);                           // restore to whatever state it was
         //         }
         }
 
@@ -207,11 +207,11 @@ public class Blank extends Synth
         //
         // Single-patches do not have the [TYPE] moniker unless it needs to be made clear.
         // Example types are:
-        //	[Multi]		Multimode patches
-        //	[Drum]		Separate drum patches
-        //	[Effect]	Effects patches
-        //	[Global]	Global patches
-        //	[Arp]		Arpeggiations
+        //      [Multi]         Multimode patches
+        //      [Drum]          Separate drum patches
+        //      [Effect]        Effects patches
+        //      [Global]        Global patches
+        //      [Arp]           Arpeggiations
         //
         // Sometimes I use a [TYPE] because the synthesizer refers to patches in a certain
         // specific way, such as [Hyper] (Ultra Proteus) or [Perforance] (Wavestation)
@@ -544,17 +544,17 @@ public class Blank extends Synth
 
     ////// YOU MAY WANT TO IMPLEMENT SOME OF THE FOLLOWING
 
-	public boolean getAlwaysChangesPatchesOnRequestDump() 
-		{ 
-		// This is called by performRequestDump() to determine if it should changePatch() first.
-		// If not, then in some cases performRequestDump() can avoid changing the patch, which 
-		// is good for things like the SHOW button in Multimode patches, or blending, or merging,
-		// where we're just loading a patch temporarily or in an auxiliary fashion.  However
-		// many synths do not have the ability to request a dump and must instead just do
-		// a change patch followed by requestCurrentDump ALWAYS.  In this case, override this
-		// method to return TRUE.
-		return false; 
-		}
+    public boolean getAlwaysChangesPatchesOnRequestDump() 
+        { 
+        // This is called by performRequestDump() to determine if it should changePatch() first.
+        // If not, then in some cases performRequestDump() can avoid changing the patch, which 
+        // is good for things like the SHOW button in Multimode patches, or blending, or merging,
+        // where we're just loading a patch temporarily or in an auxiliary fashion.  However
+        // many synths do not have the ability to request a dump and must instead just do
+        // a change patch followed by requestCurrentDump ALWAYS.  In this case, override this
+        // method to return TRUE.
+        return false; 
+        }
 
     public int getTestNotePitch()
         {
@@ -761,13 +761,13 @@ public class Blank extends Synth
         }
         
     public void windowCreated()
-    	{
+        {
         // If your editor's window was just created and the user has selected
         // MIDI device parameters (or chose not to), this method will
         // be called to inform you.  For example, you could use this to issue a
         // Sysex device inquiry message to help further set up the synth.
-    	return;
-    	}
+        return;
+        }
 
     public boolean getSendsAllParametersAsDump() 
         {
@@ -1077,7 +1077,7 @@ public class Blank extends Synth
         }
         
     public boolean isAppropriatePatchLocation(int bank, int num) 
-    	{
+        {
         // Returns if the given bank and patch number define an "appropriate" patch location, meaning
         // one that the user is encouraged to upload and download from.  For example, the Proteus 2000
         // has many ROMs as "banks", and the user is free to save and load those "banks" even if he
@@ -1088,28 +1088,28 @@ public class Blank extends Synth
         // inclusive. Similarly the patch numbers passed in will always be between 0 and 
         // getPatchNumberNames() - 1 inclusive.  By default this method always returns true, which is 
         // in most cases correct.
-    	return true;
-    	}
+        return true;
+        }
 
     public int getValidBankSize(int bank)
-    	{
-    	// Returns the actual number of valid patches in the bank (see isValidPatchLocation(...)).
-    	// By default this is just the "standard" bank size as returned by getPatchNumberNames().length, 
-    	// indicated with a -1.
-    	return -1;
-    	
-    	// A simple but stupid O(n) way to compute this would be:
-    	//
-    	//String[] s = getPatchNumberNames();
-    	//if (s == null) return 0;
-    	//int valid = 0; 
-    	//for(int i = 0; i < s.length; i++)
-    	//	{
-    	//	if (isValidPatchLocation(bank, i))
-    	//		valid++;
-    	//	}
-    	//return valid;
-    	}
+        {
+        // Returns the actual number of valid patches in the bank (see isValidPatchLocation(...)).
+        // By default this is just the "standard" bank size as returned by getPatchNumberNames().length, 
+        // indicated with a -1.
+        return -1;
+        
+        // A simple but stupid O(n) way to compute this would be:
+        //
+        //String[] s = getPatchNumberNames();
+        //if (s == null) return 0;
+        //int valid = 0; 
+        //for(int i = 0; i < s.length; i++)
+        //      {
+        //      if (isValidPatchLocation(bank, i))
+        //              valid++;
+        //      }
+        //return valid;
+        }
     
     public boolean getUpdatesListenersOnDownload() 
         {
@@ -1144,12 +1144,12 @@ public class Blank extends Synth
         }
     
     public void librarianCreated(Librarian librarian) 
-    	{
-    	// This is simply a hook to let your Synth know that its Librarian has been created.
-    	// The Proteus 2000 editor uses this to rearrange the Librarian's columns. 
-    	}
-    	
-    	
+        {
+        // This is simply a hook to let your Synth know that its Librarian has been created.
+        // The Proteus 2000 editor uses this to rearrange the Librarian's columns. 
+        }
+        
+        
 
     //// THE NEXT SIX METHODS WOULD ONLY BE IMPLEMENTED WHEN BANK SYSEX MESSAGES ARE SUPPORTED.
     ////

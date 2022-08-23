@@ -2601,8 +2601,8 @@ public class Yamaha4Op extends Synth
         tryToSendSysex(requestDump(tempModel));
         }
 
-	// We have to force a change patch always because we're doing the equivalent of requestCurrentDump here
-	public boolean getAlwaysChangesPatchesOnRequestDump() { return true; }
+    // We have to force a change patch always because we're doing the equivalent of requestCurrentDump here
+    public boolean getAlwaysChangesPatchesOnRequestDump() { return true; }
 
     public byte[] requestDump(Model tempModel) 
         {
@@ -3107,7 +3107,7 @@ public class Yamaha4Op extends Synth
         }
 
     public int getValidBankSize(int bank)
-    	{
+        {
         if (getSynthType() == TYPE_DX27_DX100)
             {
             return 24;
@@ -3116,7 +3116,7 @@ public class Yamaha4Op extends Synth
             {
             return super.getValidBankSize(bank); 
             }
-    	}
+        }
     
     public byte[] requestBankDump(int bank) { return new byte[] { (byte)0xF0, 0x43, (byte)(0x20 + getChannelOut()), 0x04, (byte)0xF7 }; }
     public boolean librarianTested() { return true; }

@@ -2366,7 +2366,7 @@ public class DSIProphet08 extends Synth
     65, 66, 67, 68, 69, 71, 72, 73, 74, 75, 
     76, 77, 78, 79, 80, 81, 82, 107, 108, 109, 
     110, 83, 84, 85, 86, 87, 88, 89, 90, 91, 
-    92, 101, 102, 15, 105, 93, 94, 103, 70, 95, 			// Docs say 94, 93 but this is an error due to the UnisonMode/UnisonKeyMode swap bug in Prophet '08.
+    92, 101, 102, 15, 105, 93, 94, 103, 70, 95,                         // Docs say 94, 93 but this is an error due to the UnisonMode/UnisonKeyMode swap bug in Prophet '08.
     104, 106, -1, -1, -1, 111, 112, 113, 114, -1, 
     19, 96, 97, 98, 5, 11, 18, 117, 99, 100, 
     120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 
@@ -2391,7 +2391,7 @@ public class DSIProphet08 extends Synth
     65, 66, 67, 68, 69, 71, 72, 73, 74, 75, 
     76, 77, 78, 79, 80, 81, 82, 107, 108, 109, 
     110, 83, 84, 85, 86, 87, 88, 89, 90, 91, 
-    92, 101, 102, 15, 105, 93, 94, 103, 70, 95, 			// Docs say 94, 93 but I *think* this is an error due to the UnisonMode/UnisonKeyMode swap bug in Prophet '08.
+    92, 101, 102, 15, 105, 93, 94, 103, 70, 95,                         // Docs say 94, 93 but I *think* this is an error due to the UnisonMode/UnisonKeyMode swap bug in Prophet '08.
     104, 106, -1, -1, -1, -1, -1, -1, -1, -1, 
     19, 96, 97, 98, 5, 11, 18, -1, -1, -1, 
     120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 
@@ -2418,7 +2418,7 @@ public class DSIProphet08 extends Synth
     104, 82, 83, 84, 85, 86, 87, 88, 89, 90, 
     91, 95, 96, 15, 99, -1, 16, 97, 69, -1, 
     98, 100, -1, -1, -1, 105, 106, 107, 108, -1, 
-    -1, 92, 93, 94, 5, 11, 19, -1, -1, -1, 							// is this right?
+    -1, 92, 93, 94, 5, 11, 19, -1, -1, -1,                                                      // is this right?
     120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 
     130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 
     140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 

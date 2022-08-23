@@ -549,7 +549,7 @@ public class Library extends AbstractTableModel
 
     public static final int ALL_PATCHES = -1;
         
-	// A utility function: flattens the separate data[] elements into one large array
+    // A utility function: flattens the separate data[] elements into one large array
     Object[] concatenate(Object[][] data)
         {
         int size = 0;
@@ -565,22 +565,22 @@ public class Library extends AbstractTableModel
         return result;
         }
 
-	// Emits all the patches in the synthesizer, using bank-write functions only.
-	//
-	Object[][] emitAllAsBankSysex(boolean toFile)
-		{
+    // Emits all the patches in the synthesizer, using bank-write functions only.
+    //
+    Object[][] emitAllAsBankSysex(boolean toFile)
+        {
         // This function only works if we support bank writes.  We should emit an error here.
         if (!synth.getSupportsBankWrites())
-        	{
-        	System.err.println("Library.emitAllAsBankSysex Error: emitBank() called on synthesizer " + synth.getSynthClassName() + ", which does not support bank sysex writes.");
-        	return new Object[0][0];
-        	}
+            {
+            System.err.println("Library.emitAllAsBankSysex Error: emitBank() called on synthesizer " + synth.getSynthClassName() + ", which does not support bank sysex writes.");
+            return new Object[0][0];
+            }
 
-		Object[][] data = new Object[getNumBanks()][];
-		for(int i = 0; i < data.length; i++)
-			data[i] = emitBank(i, toFile);
-		return data;
-		}
+        Object[][] data = new Object[getNumBanks()][];
+        for(int i = 0; i < data.length; i++)
+            data[i] = emitBank(i, toFile);
+        return data;
+        }
 
 
 
@@ -596,10 +596,10 @@ public class Library extends AbstractTableModel
         {
         // This function only works if we support bank writes.  We should emit an error here.
         if (!synth.getSupportsBankWrites())
-        	{
-        	System.err.println("Library.emitBank Error: emitBank() called on synthesizer " + synth.getSynthClassName() + ", which does not support bank sysex writes.");
-        	return new Object[0];
-        	}
+            {
+            System.err.println("Library.emitBank Error: emitBank() called on synthesizer " + synth.getSynthClassName() + ", which does not support bank sysex writes.");
+            return new Object[0];
+            }
 
         // If we want to emit the entire synth, we need to gather it.  We do this by calling
         // ourselves recursivesly on each bank and concatenating the result.
@@ -610,11 +610,11 @@ public class Library extends AbstractTableModel
 
         else
             {
-        	// If we have nothing to emit, and we're trying to write to the synth, we return empty
+            // If we have nothing to emit, and we're trying to write to the synth, we return empty
             if (!isWriteableBank(bank) && !toFile) 
-            	{
-            	return new Object[0];
-            	}
+                {
+                return new Object[0];
+                }
                         
             int validBankSize = synth.getValidBankSize(bank);
             if (validBankSize == -1) validBankSize = getBankSize();
@@ -714,15 +714,15 @@ public class Library extends AbstractTableModel
         
         if (bank == ALL_PATCHES && synth.getSupportsBankWrites() && !forceIndependent)
             {
-			return emitAllAsBankSysex(toFile);
+            return emitAllAsBankSysex(toFile);
             }
 // We may not support writes, but we always support saves...
 /*
-        else if (!synth.getSupportsPatchWrites())
-        	{
-        	System.err.println("Library.emitRange Error: emitRange() called on synthesizer " + synth.getSynthClassName() + ", which does not support independent patch sysex writes.");
-        	return new Object[0][0];
-        	} 
+  else if (!synth.getSupportsPatchWrites())
+  {
+  System.err.println("Library.emitRange Error: emitRange() called on synthesizer " + synth.getSynthClassName() + ", which does not support independent patch sysex writes.");
+  return new Object[0][0];
+  } 
 */
 
         // backup
@@ -742,7 +742,7 @@ public class Library extends AbstractTableModel
         if (bank == ALL_PATCHES)
             {
             start = 0;
-            len = getNumBanks() * getBankSize();			// if we have ragged banks, this won't be the full size
+            len = getNumBanks() * getBankSize();                        // if we have ragged banks, this won't be the full size
             }
             
         synth.getModel().setUpdateListeners(false);
@@ -752,53 +752,53 @@ public class Library extends AbstractTableModel
             int b = (bank == ALL_PATCHES ? i / getBankSize() : bank);
             int n = (bank == ALL_PATCHES ? i % getBankSize() : i);
             
-            if (synth.isValidPatchLocation(b, n))		// only write if it's a real spot (remember we can be ragged)
-            	{
-            	if (isWriteableBank(b) || toFile)
-					{
-					if (hasBanks)
-						{
-						location.set("bank", b);
-						}
-					location.set("number", n);
+            if (synth.isValidPatchLocation(b, n))               // only write if it's a real spot (remember we can be ragged)
+                {
+                if (isWriteableBank(b) || toFile)
+                    {
+                    if (hasBanks)
+                        {
+                        location.set("bank", b);
+                        }
+                    location.set("number", n);
 
-					// parse
-					boolean localFailed = false;
-					Patch p = getPatch(b, n);
-					if (p == null) p = initPatch;
-					byte[][] sysex = p.sysex;
-					for(int j = 0; j < sysex.length; j++)
-						{
-						int result = synth.parse(sysex[j], true);                     //dunno, from file or not?
-						if (result == Synth.PARSE_CANCELLED ||
-							result == Synth.PARSE_FAILED ||
-							(result == Synth.PARSE_INCOMPLETE && j == p.sysex.length - 1))  // last one
-							{
-							failed = true;
-							localFailed = true;
-							break;
-							}
-						}
-										
-					if (localFailed) continue;
-																				
-					// now emit
-					Object[] objs = synth.emitAll(location, false, toFile);
-										
-					if (!toFile)
-						{
-						int pause = synth.getPauseAfterWritePatch();
-						if (pause > 0) 
-							{
-							Object[] newObjs = new Object[objs.length + 1];
-							System.arraycopy(objs, 0, newObjs, 0, objs.length);
-							newObjs[newObjs.length - 1] = Integer.valueOf(pause);
-							objs = newObjs;
-							}
-						}
-					data.add(objs);                    
-					}
-				}
+                    // parse
+                    boolean localFailed = false;
+                    Patch p = getPatch(b, n);
+                    if (p == null) p = initPatch;
+                    byte[][] sysex = p.sysex;
+                    for(int j = 0; j < sysex.length; j++)
+                        {
+                        int result = synth.parse(sysex[j], true);                     //dunno, from file or not?
+                        if (result == Synth.PARSE_CANCELLED ||
+                            result == Synth.PARSE_FAILED ||
+                            (result == Synth.PARSE_INCOMPLETE && j == p.sysex.length - 1))  // last one
+                            {
+                            failed = true;
+                            localFailed = true;
+                            break;
+                            }
+                        }
+                                                                                
+                    if (localFailed) continue;
+                                                                                                                                                                
+                    // now emit
+                    Object[] objs = synth.emitAll(location, false, toFile);
+                                                                                
+                    if (!toFile)
+                        {
+                        int pause = synth.getPauseAfterWritePatch();
+                        if (pause > 0) 
+                            {
+                            Object[] newObjs = new Object[objs.length + 1];
+                            System.arraycopy(objs, 0, newObjs, 0, objs.length);
+                            newObjs[newObjs.length - 1] = Integer.valueOf(pause);
+                            objs = newObjs;
+                            }
+                        }
+                    data.add(objs);                    
+                    }
+                }
             }
                 
         // restore
@@ -847,80 +847,80 @@ public class Library extends AbstractTableModel
                         }                               
                     }
 
-	            synth.tryToSendMIDI(concatenate(data), librarian.writeProgress);
+                synth.tryToSendMIDI(concatenate(data), librarian.writeProgress);
                 synth.sendAllParameters();
                 }
             }           
         else
-        	{
+            {
             synth.showSimpleError("Not Supported", "Edisyn cannot write arbitrary patches to this synthesizer.");
             }
-       }
+        }
 
 
     public void changeName(int bank, int start, int len)
-    	{
-		Patch patch = getPatch(bank, start);
-		if (patch == null) patch = initPatch;
-		String name = patch.getName();
-		if (name == null) // uhm....?
-			{
+        {
+        Patch patch = getPatch(bank, start);
+        if (patch == null) patch = initPatch;
+        String name = patch.getName();
+        if (name == null) // uhm....?
+            {
             synth.showSimpleError("Empty Patch", "Edisyn cannot change the name of an empty patch.");
             }
         else
-        	{
-        	Model model = getModel(bank, start);
-        	if (model.get("name", (String) null) == null)
-        		{
-            	synth.showSimpleError("Not Supported", "Edisyn cannot change the names of patches for this synthesizer.");
-            	}
-        	else
-            	{
-				// Load model
-				synth.getUndo().push(synth.getModel());
-				synth.undo.setWillPush(false);
-				boolean send = synth.getSendMIDI();
-				synth.setSendMIDI(false);
-				model.copyValuesTo(synth.model);
-				
-				// Find the StringComponent
-				boolean foundit = false;
-				ArrayList listeners = synth.model.getListeners("name");
-				for(int i = 0; i < listeners.size(); i++)
-					{
-					Object obj = listeners.get(i);
-					if (obj instanceof StringComponent) // hope this is it
-						{
-						foundit = true;
-						StringComponent sc = (StringComponent)obj;
-						sc.perform(synth);
-						synth.revise();
-						name = synth.model.get("name", "");
-						model.set("name", name);
-						
-						// Now put back
-						pushUndo();
-						patch = getPatch(model);
-						// the model will have a different patch number
-						patch.bank = bank;
-						patch.number = start;
-						setPatch(patch);
-						break;
-						}
-					}
-					
-				if (!foundit)
-					{
-             		synth.showSimpleError("Not Supported", "Edisyn cannot change the names of patches for this synthesizer.");
-            		}
-            		
-				// Unload model
-				synth.undo.setWillPush(true);
-				synth.getUndo().undo(null);
-				synth.setSendMIDI(send);
-            	}
-        	}
-    	}
+            {
+            Model model = getModel(bank, start);
+            if (model.get("name", (String) null) == null)
+                {
+                synth.showSimpleError("Not Supported", "Edisyn cannot change the names of patches for this synthesizer.");
+                }
+            else
+                {
+                // Load model
+                synth.getUndo().push(synth.getModel());
+                synth.undo.setWillPush(false);
+                boolean send = synth.getSendMIDI();
+                synth.setSendMIDI(false);
+                model.copyValuesTo(synth.model);
+                                
+                // Find the StringComponent
+                boolean foundit = false;
+                ArrayList listeners = synth.model.getListeners("name");
+                for(int i = 0; i < listeners.size(); i++)
+                    {
+                    Object obj = listeners.get(i);
+                    if (obj instanceof StringComponent) // hope this is it
+                        {
+                        foundit = true;
+                        StringComponent sc = (StringComponent)obj;
+                        sc.perform(synth);
+                        synth.revise();
+                        name = synth.model.get("name", "");
+                        model.set("name", name);
+                                                
+                        // Now put back
+                        pushUndo();
+                        patch = getPatch(model);
+                        // the model will have a different patch number
+                        patch.bank = bank;
+                        patch.number = start;
+                        setPatch(patch);
+                        break;
+                        }
+                    }
+                                        
+                if (!foundit)
+                    {
+                    synth.showSimpleError("Not Supported", "Edisyn cannot change the names of patches for this synthesizer.");
+                    }
+                        
+                // Unload model
+                synth.undo.setWillPush(true);
+                synth.getUndo().undo(null);
+                synth.setSendMIDI(send);
+                }
+            }
+        }
 
 
     /** Saves to disk all the patches from start to start+len-1 in bank.
@@ -936,39 +936,39 @@ public class Library extends AbstractTableModel
         String title = "Save Patches";
         String query = "Save the Patches...";
         
-		// do we have to choose between bank and patch writes?
-		// I commented things out because I only want the user to choose banks vs. patches
-		// if he's saving everything.
+        // do we have to choose between bank and patch writes?
+        // I commented things out because I only want the user to choose banks vs. patches
+        // if he's saving everything.
         if (synth.getSupportsBankWrites() /* && synth.getSupportsPatchWrites()*/ &&
-         (/* (start == 0 && len == getBankSize()) || */ bank == ALL_PATCHES))
+            (/* (start == 0 && len == getBankSize()) || */ bank == ALL_PATCHES))
             {
             combo = new JComboBox(new String[] { "Bank Sysex", "Individual Patch Sysex" });
             comp = new JComponent[] { combo };
             str = new String[] { "Format" };
-        	title = "Save All Patches";
-        	query = "Save all Patches...";
-        	}
+            title = "Save All Patches";
+            query = "Save all Patches...";
+            }
         /*
-        else if (bank == ALL_PATCHES && synth.getSupportsBankWrites())
-        	{
-        	// we're gonna attempt bank writes for the whole synth so we should make that clear to the user
-        	title = "Save All Banks";
-        	query = "Save the Banks...";
-        	}
+          else if (bank == ALL_PATCHES && synth.getSupportsBankWrites())
+          {
+          // we're gonna attempt bank writes for the whole synth so we should make that clear to the user
+          title = "Save All Banks";
+          query = "Save the Banks...";
+          }
         */
         else if (bank == ALL_PATCHES)
-        	{
-        	// we're gonna attempt individual patch writes for the whole synth so we should make that clear to the user
-        	title = "Save All Patches";
-        	query = "Save all Patches...";
-        	}
+            {
+            // we're gonna attempt individual patch writes for the whole synth so we should make that clear to the user
+            title = "Save All Patches";
+            query = "Save all Patches...";
+            }
 
         int result = Synth.showMultiOption(synth, str, comp, 
             new String[] { "As Separate Files", "To Bulk File", "Cancel" },
             0, title, query);
                         
         if (result == 2 || result == -1) return;
-        else if (result == 1)			// To Bulk File
+        else if (result == 1)                   // To Bulk File
             {
             Object[][] d = emitRange(bank, start, len, true, (combo != null && combo.getSelectedIndex() == 1));
 
@@ -1011,7 +1011,7 @@ public class Library extends AbstractTableModel
                 else return;
                 }
             }
-        else		// As Separate Files
+        else            // As Separate Files
             {
             saveRangeSeparately(bank, start, len, (combo == null || combo.getSelectedIndex() == 1));
             }
@@ -1092,8 +1092,8 @@ public class Library extends AbstractTableModel
                         Patch patch = getPatch(b, i);
                         if (patch == null) patch = initPatch;
                         String filename = ((getNumBanks() > 1 ? (getBankName(b) + ".") : "") + 
-                        	getPatchNumberNames()[i] + "." + 
-                        	(patch.name == null ? "Untitled" : patch.name.trim()));
+                            getPatchNumberNames()[i] + "." + 
+                            (patch.name == null ? "Untitled" : patch.name.trim()));
                         if (synth.getSupportsBankWrites() && !forceIndependent)
                             filename = (getNumBanks() > 1 ? getBankName(b) : "Bank");
                         filename = StringUtility.makeValidFilename(filename);
@@ -1102,7 +1102,7 @@ public class Library extends AbstractTableModel
                         try
                             {
                             os = new FileOutputStream(f);
-                           	os.write(Synth.flatten(d[offset++]));
+                            os.write(Synth.flatten(d[offset++]));
                             os.close();
                             }
                         catch (IOException e) // fail
@@ -1137,18 +1137,18 @@ public class Library extends AbstractTableModel
                 return;
                 }
                                                                         
-			Object[] data = null;
-			data = emitBank(bank, false);
-			if (data != null)
-				{
-				if (synth.tuple == null || synth.tuple.outReceiver == null)
-					{
-					if (!synth.setupMIDI())
-						return;
-					}
-				synth.tryToSendMIDI(data);
-				synth.sendAllParameters();
-				}
+            Object[] data = null;
+            data = emitBank(bank, false);
+            if (data != null)
+                {
+                if (synth.tuple == null || synth.tuple.outReceiver == null)
+                    {
+                    if (!synth.setupMIDI())
+                        return;
+                    }
+                synth.tryToSendMIDI(data);
+                synth.sendAllParameters();
+                }
             }
         else if (synth.getSupportsPatchWrites())
             {
@@ -1178,8 +1178,8 @@ public class Library extends AbstractTableModel
                 FileDialog fd = new FileDialog((Frame)(SwingUtilities.getRoot(synth)), "Save to Bulk Sysex File...", FileDialog.SAVE);
 
                 fd.setFile(StringUtility.reviseFileName(bank == ALL_PATCHES ? 
-                	synth.getSynthNameLocal() + ".bulk.syx" : 
-                	synth.getSynthNameLocal() + "." + getBankName(bank) + ".syx"));
+                        synth.getSynthNameLocal() + ".bulk.syx" : 
+                        synth.getSynthNameLocal() + "." + getBankName(bank) + ".syx"));
                 String path = synth.getLastDirectory();
                 if (path != null)
                     fd.setDirectory(path);
@@ -1224,69 +1224,69 @@ public class Library extends AbstractTableModel
         }    
 
 
-	public Patch getPatch(Model model)
-		{
-		Synth synth = getSynth();
-		int synthNum = getSynthNum();
-		String name = model.get("name","" + synth.getPatchLocationName(synth.getModel()));
-		int number = model.get("number", -1);
-		int bank = model.get("bank", -1);
-		byte[][] data = synth.cutUpSysex(synth.flatten(synth.emitAll(model, false, true)));                  // we're pretending we're writing to a file here
-		Patch patch = new Patch(synthNum, data, false);
-		patch.name = name;
-		patch.bank = (bank == -1 ? 0 : bank);
-		patch.number = (number == -1 ? Patch.NUMBER_NOT_SET : number);          // FIXME: should I use NUMBER_NOT_SET?
-		return patch;
-		}
-		
+    public Patch getPatch(Model model)
+        {
+        Synth synth = getSynth();
+        int synthNum = getSynthNum();
+        String name = model.get("name","" + synth.getPatchLocationName(synth.getModel()));
+        int number = model.get("number", -1);
+        int bank = model.get("bank", -1);
+        byte[][] data = synth.cutUpSysex(synth.flatten(synth.emitAll(model, false, true)));                  // we're pretending we're writing to a file here
+        Patch patch = new Patch(synthNum, data, false);
+        patch.name = name;
+        patch.bank = (bank == -1 ? 0 : bank);
+        patch.number = (number == -1 ? Patch.NUMBER_NOT_SET : number);          // FIXME: should I use NUMBER_NOT_SET?
+        return patch;
+        }
+                
     /** Generates a model from the given patch slot.
-     If number < 0, then an init patch is generated
-     If bank is < 0, then the scratch bank is assumed
-     */
-	public Model getModel(int bank, int number)
-		{
-		Patch patch = null;
-		
-		if (number < 0) 
-			{
-			patch = new Patch(getInitPatch());		// Make a copy
-			}
-		else
-			{
-			patch = getPatch(bank, number);
-			if (patch == null)
-				{
-				patch = new Patch(getInitPatch());		// Make a copy
-				}
-			}
-			
-		Synth synth = getSynth();
-		 
-		// do we need to modify the bank and number?
-		synth.undo.setWillPush(false);
-		boolean send = synth.getSendMIDI();
-		synth.setSendMIDI(false);
-		boolean shouldUpdate = synth.model.getUpdateListeners();
-		synth.model.setUpdateListeners(false);
-		Model backup = (Model)(synth.model.clone());
-		synth.performParse(synth.flatten(patch.sysex), false);  // is this from a file?  I'm saying false
-				
-		// revise the patch location to where it came from in the librarian
-		if (patch.number != Patch.NUMBER_NOT_SET)
-			{
-			synth.getModel().set("number", patch.number);
-			int b = synth.getModel().get("bank", -1);
-			if (b != -1 && patch.bank >= 0)
-				synth.getModel().set("bank", patch.bank);
-			}
-		synth.setSendMIDI(send);
-		synth.undo.setWillPush(true);
+        If number < 0, then an init patch is generated
+        If bank is < 0, then the scratch bank is assumed
+    */
+    public Model getModel(int bank, int number)
+        {
+        Patch patch = null;
+                
+        if (number < 0) 
+            {
+            patch = new Patch(getInitPatch());              // Make a copy
+            }
+        else
+            {
+            patch = getPatch(bank, number);
+            if (patch == null)
+                {
+                patch = new Patch(getInitPatch());              // Make a copy
+                }
+            }
+                        
+        Synth synth = getSynth();
+                 
+        // do we need to modify the bank and number?
+        synth.undo.setWillPush(false);
+        boolean send = synth.getSendMIDI();
+        synth.setSendMIDI(false);
+        boolean shouldUpdate = synth.model.getUpdateListeners();
+        synth.model.setUpdateListeners(false);
+        Model backup = (Model)(synth.model.clone());
+        synth.performParse(synth.flatten(patch.sysex), false);  // is this from a file?  I'm saying false
+                                
+        // revise the patch location to where it came from in the librarian
+        if (patch.number != Patch.NUMBER_NOT_SET)
+            {
+            synth.getModel().set("number", patch.number);
+            int b = synth.getModel().get("bank", -1);
+            if (b != -1 && patch.bank >= 0)
+                synth.getModel().set("bank", patch.bank);
+            }
+        synth.setSendMIDI(send);
+        synth.undo.setWillPush(true);
 
-		Model retval = synth.model;
-		synth.model = backup;
-		synth.model.setUpdateListeners(shouldUpdate);
-		return retval;
-		}
+        Model retval = synth.model;
+        synth.model = backup;
+        synth.model.setUpdateListeners(shouldUpdate);
+        return retval;
+        }
 
 
     }

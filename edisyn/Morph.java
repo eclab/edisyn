@@ -35,7 +35,7 @@ public class Morph extends SynthPanel
     public static final int TIMER_DELAY = 2;            // too large?  too small?  3ms would be half-time if the sysex messages were all 10 bytes long
     public static final String EDISYN_MORPH_PREFERENCES_KEY = "EdisynMorph";
     //    public static final double[] SEND_PROBABILITY = new double[] { 0, 0, 1, 0.5, 0.25, 0.125, 0.0625, 0.03125 };
-    public static final String[] SEND_TO_SYNTH = new String[] { "When Playing Test Notes", "When Changing" }; 	// , "Trickle" };        // "Deluge" };
+    public static final String[] SEND_TO_SYNTH = new String[] { "When Playing Test Notes", "When Changing" };   // , "Trickle" };        // "Deluge" };
     public static final String[] CATEGORICAL_STRATEGIES = new String[] { "Morph", "Use Closest", "Use Current Patch", "Use Top Left", "Use Top Right", "Use Bottom Left", "Use Bottom Right" };
     public static final String[] POSITIONS = new String[] { "Top Left", "Top Right", "Bottom Left", "Bottom Right" };
         
@@ -137,21 +137,21 @@ public class Morph extends SynthPanel
         HBox hbox;
 
 /*
-        hbox = new HBox();
-        LabelledDial trickleRate = new LabelledDial("Trickle", blank, "tricklerate", Style.COLOR_A(), 1, 100)
-            {
-            public void update(String key, Model model)
-                {
-                super.update(key, model);
-                Morph.this.tricklerate = model.get("tricklerate", 1);
-                // Synth.setLastX("" + model.get(key, -1), "TrickleRate", EDISYN_MORPH_PREFERENCES_KEY); 
-                }
-            };
-        trickleRate.addAdditionalLabel("Rate");
-        hbox.add(trickleRate); 
-        margin.add(hbox);
+  hbox = new HBox();
+  LabelledDial trickleRate = new LabelledDial("Trickle", blank, "tricklerate", Style.COLOR_A(), 1, 100)
+  {
+  public void update(String key, Model model)
+  {
+  super.update(key, model);
+  Morph.this.tricklerate = model.get("tricklerate", 1);
+  // Synth.setLastX("" + model.get(key, -1), "TrickleRate", EDISYN_MORPH_PREFERENCES_KEY); 
+  }
+  };
+  trickleRate.addAdditionalLabel("Rate");
+  hbox.add(trickleRate); 
+  margin.add(hbox);
         
-        margin.add(Strut.makeVerticalStrut(8));
+  margin.add(Strut.makeVerticalStrut(8));
 */
         
         hbox = new HBox();
@@ -389,17 +389,17 @@ public class Morph extends SynthPanel
         }
     
     public void clear(int val)
-    	{
-    	sources[val] = null;
+        {
+        sources[val] = null;
         buttons[val].getButton().setText("[Empty]");
-    	}
+        }
 
     public void set(int val, Model model)
-    	{
-    	sources[val] = model;
+        {
+        sources[val] = model;
         buttons[val].getButton().setText(synth.getPatchName(model));
-    	}
-    	
+        }
+        
     void takeFromNudge(int val, int nudge)
         {
         Model n = synth.nudge[nudge];

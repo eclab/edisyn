@@ -512,18 +512,18 @@ public class NovationSL extends Synth
        
                 
     public String getDefaultResourceFileName() 
-    	{ 
-    	// We have two different init files depending on whether we're compact or not
-    	if (isCompact())
-    		{
-	    	return "NovationSLCompact.init"; 
-    		}
-    	else
-    		{
-	    	return "NovationSL.init"; 
-	    	}
-    	}
-    	
+        { 
+        // We have two different init files depending on whether we're compact or not
+        if (isCompact())
+            {
+            return "NovationSLCompact.init"; 
+            }
+        else
+            {
+            return "NovationSL.init"; 
+            }
+        }
+        
     public String getHTMLResourceFileName() { return "NovationSL.html"; }
 
     public boolean gatherPatchInfo(String title, Model change, boolean writing)

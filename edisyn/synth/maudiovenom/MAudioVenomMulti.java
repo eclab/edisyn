@@ -1928,8 +1928,8 @@ public class MAudioVenomMulti extends Synth
         switchScreen();
         }
 
-	// We have to force a change patch always because we're doing the equivalent of requestCurrentDump here
-	public boolean getAlwaysChangesPatchesOnRequestDump() { return true; }
+    // We have to force a change patch always because we're doing the equivalent of requestCurrentDump here
+    public boolean getAlwaysChangesPatchesOnRequestDump() { return true; }
 
     public void performRequestDump(Model tempModel, boolean changePatch)
         {

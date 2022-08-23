@@ -73,10 +73,10 @@ public class EmuPlanetPhatt extends Synth
             {
             public void actionPerformed(ActionEvent e)
                 {
-				JComboBox bank = new JComboBox(getSynthType() == SYNTH_TYPE_ORBIT_V1 || getSynthType() == SYNTH_TYPE_VINTAGE_KEYS || getSynthType() == SYNTH_TYPE_VINTAGE_KEYS_PLUS ? SHORT_BANKS : BANKS);
-				bank.setSelectedIndex(model.get("bank", 0));
-				int num = model.get("number");
-				JTextField number = new SelectedTextField("" + (num < 10 ? "00" : (num < 100 ? "0" : "")) + num, 3);
+                JComboBox bank = new JComboBox(getSynthType() == SYNTH_TYPE_ORBIT_V1 || getSynthType() == SYNTH_TYPE_VINTAGE_KEYS || getSynthType() == SYNTH_TYPE_VINTAGE_KEYS_PLUS ? SHORT_BANKS : BANKS);
+                bank.setSelectedIndex(model.get("bank", 0));
+                int num = model.get("number");
+                JTextField number = new SelectedTextField("" + (num < 10 ? "00" : (num < 100 ? "0" : "")) + num, 3);
                 
                 int n = 0;
                 String title = "Set Up Patch as Pseudo-MPE";
@@ -110,11 +110,11 @@ public class EmuPlanetPhatt extends Synth
                 setSendMIDI(true);
                 
                 // set up all the channels
-				for(int i = 0; i < 16; i++)
-					{
-					setUpChannelForBank(i, b);
-        			tryToSendMIDI(buildPC(i, n));
-					}
+                for(int i = 0; i < 16; i++)
+                    {
+                    setUpChannelForBank(i, b);
+                    tryToSendMIDI(buildPC(i, n));
+                    }
                 setSendMIDI(send);
                 }
             });
@@ -124,7 +124,7 @@ public class EmuPlanetPhatt extends Synth
 
 
 
-	public EmuPlanetPhatt()
+    public EmuPlanetPhatt()
         {
         String m = getLastX(SYNTH_TYPE_KEY, getSynthClassName());
         synthType = (m == null ? SYNTH_TYPE_PLANET_PHATT : Integer.parseInt(m));
@@ -946,9 +946,9 @@ public class EmuPlanetPhatt extends Synth
         // So this doesn't tell us anything about what instrument we are
         if (midi == 0) return -1;
         
-        if (midi == 3328 || midi == 3584) return SYNTH_TYPE_PLANET_PHATT;	// none
-        else if (midi == 2816 || midi == 3072) return SYNTH_TYPE_ORBIT_V2;	// none
-        else if (midi == 3840 || midi == 4096) return SYNTH_TYPE_CARNAVAL; 	// none
+        if (midi == 3328 || midi == 3584) return SYNTH_TYPE_PLANET_PHATT;       // none
+        else if (midi == 2816 || midi == 3072) return SYNTH_TYPE_ORBIT_V2;      // none
+        else if (midi == 3840 || midi == 4096) return SYNTH_TYPE_CARNAVAL;      // none
         else if (midi == 1536) return SYNTH_TYPE_VINTAGE_KEYS;
                         
         if (PLANET_PHATT_OFFSETS_INV.containsKey(midi))
@@ -974,9 +974,9 @@ public class EmuPlanetPhatt extends Synth
         // Though the documentation doesn't say this, it appears that None is often midi = 0 regardless of offset.
         if (midi == 0) return 0;
         
-        if (midi == 3328 || midi == 3584) return 0;	// none
-        else if (midi == 2816 || midi == 3072) return 0;	// none
-        else if (midi == 3840 || midi == 4096) return 0; 	// none
+        if (midi == 3328 || midi == 3584) return 0;     // none
+        else if (midi == 2816 || midi == 3072) return 0;        // none
+        else if (midi == 3840 || midi == 4096) return 0;        // none
         else if (midi == 1536) return 0;
 
         if (m == -1) // uh oh
@@ -1217,55 +1217,55 @@ public class EmuPlanetPhatt extends Synth
         }
     
     void setUpChannelForBank(int channel, int bank)
-    	{
-		// First we set the bank for the channel in question
-		int chan = 367 + channel;
-		tryToSendSysex(new byte[]
-			{
-			(byte)0xF0, 
-			(byte)0x18, 
-			(byte)0x0A, 
-			getID(), 
-			(byte)0x03, 
-				(byte)(chan & 127),
-				(byte)((chan >>> 7) & 127),		// will always be zero of course
-				(byte)(bank & 127),
-				(byte)((bank >>> 7) & 127),		// will always be zero of course
-				(byte)0xF7
-			});
+        {
+        // First we set the bank for the channel in question
+        int chan = 367 + channel;
+        tryToSendSysex(new byte[]
+            {
+            (byte)0xF0, 
+            (byte)0x18, 
+            (byte)0x0A, 
+            getID(), 
+            (byte)0x03, 
+            (byte)(chan & 127),
+            (byte)((chan >>> 7) & 127),             // will always be zero of course
+            (byte)(bank & 127),
+            (byte)((bank >>> 7) & 127),             // will always be zero of course
+            (byte)0xF7
+            });
 
-		// Next we turn on the channel in question
-		int enable = 384 + channel;
-		tryToSendSysex(new byte[]
-			{
-			(byte)0xF0, 
-			(byte)0x18, 
-			(byte)0x0A, 
-			getID(), 
-			(byte)0x03, 
-				(byte)(enable & 127),
-				(byte)((enable >>> 7) & 127),		// will always be zero of course
-				(byte)1,
-				(byte)0,
-				(byte)0xF7
-			});
+        // Next we turn on the channel in question
+        int enable = 384 + channel;
+        tryToSendSysex(new byte[]
+            {
+            (byte)0xF0, 
+            (byte)0x18, 
+            (byte)0x0A, 
+            getID(), 
+            (byte)0x03, 
+            (byte)(enable & 127),
+            (byte)((enable >>> 7) & 127),           // will always be zero of course
+            (byte)1,
+            (byte)0,
+            (byte)0xF7
+            });
 
-		// Next we turn on PC for the channel in question
-		int enablePC = 400 + channel;
-		tryToSendSysex(new byte[]
-			{
-			(byte)0xF0, 
-			(byte)0x18, 
-			(byte)0x0A, 
-			getID(), 
-			(byte)0x03, 
-				(byte)(enablePC & 127),
-				(byte)((enablePC >>> 7) & 127),		// will always be zero of course
-				(byte)1,
-				(byte)0,
-				(byte)0xF7
-			});
-    	}
+        // Next we turn on PC for the channel in question
+        int enablePC = 400 + channel;
+        tryToSendSysex(new byte[]
+            {
+            (byte)0xF0, 
+            (byte)0x18, 
+            (byte)0x0A, 
+            getID(), 
+            (byte)0x03, 
+            (byte)(enablePC & 127),
+            (byte)((enablePC >>> 7) & 127),         // will always be zero of course
+            (byte)1,
+            (byte)0,
+            (byte)0xF7
+            });
+        }
         
     public void changePatch(Model tempModel)
         {
@@ -1273,35 +1273,35 @@ public class EmuPlanetPhatt extends Synth
         int number = tempModel.get("number", 0);
 
 /*
-        // Changing patch is nasty on these machines.  We need to modify the program map,
-        // then do a PC.  Let's first emit a program map where EVERY SINGLE PC goes to our
-        // desired patch
+// Changing patch is nasty on these machines.  We need to modify the program map,
+// then do a PC.  Let's first emit a program map where EVERY SINGLE PC goes to our
+// desired patch
                 
-        byte[] data = new byte[262];
-        data[0] = (byte)0xF0;
-        data[1] = (byte)0x18;
-        data[2] = (byte)0x0A;
-        data[3] = (byte)getID();
-        data[4] = (byte)0x07;
-        data[261] = (byte)0xF7;
-        for(int i = 0; i < 128; i++)
-            {
-            int val = bank * 128 + number;
-            data[i*2+5] = (byte)(val & 127);        // I *think* this is lsb first?  It's not explained in the docs
-            data[i*2+5+1] = (byte)((val >>> 7) & 127);
-            }
-        tryToSendSysex(data);
+byte[] data = new byte[262];
+data[0] = (byte)0xF0;
+data[1] = (byte)0x18;
+data[2] = (byte)0x0A;
+data[3] = (byte)getID();
+data[4] = (byte)0x07;
+data[261] = (byte)0xF7;
+for(int i = 0; i < 128; i++)
+{
+int val = bank * 128 + number;
+data[i*2+5] = (byte)(val & 127);        // I *think* this is lsb first?  It's not explained in the docs
+data[i*2+5+1] = (byte)((val >>> 7) & 127);
+}
+tryToSendSysex(data);
                 
-        // Do we need a pause here?  Dunno
-        //simplePause(1000);
+// Do we need a pause here?  Dunno
+//simplePause(1000);
                 
-        // Now send a PC to 0
-        tryToSendMIDI(buildPC(getChannelOut(), 0));
+// Now send a PC to 0
+tryToSendMIDI(buildPC(getChannelOut(), 0));
 */
 
-		// set up channel
-		setUpChannelForBank(getChannelOut(), bank);
-		// Last we do a PC to the number
+        // set up channel
+        setUpChannelForBank(getChannelOut(), bank);
+        // Last we do a PC to the number
         tryToSendMIDI(buildPC(getChannelOut(), number));
         }
 

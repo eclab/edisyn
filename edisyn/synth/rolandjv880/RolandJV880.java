@@ -1609,8 +1609,8 @@ public class RolandJV880 extends Synth
         return data;
         }
 
-	// We have to force a change patch always because we're doing the equivalent of requestCurrentDump here
-	public boolean getAlwaysChangesPatchesOnRequestDump() { return true; }
+    // We have to force a change patch always because we're doing the equivalent of requestCurrentDump here
+    public boolean getAlwaysChangesPatchesOnRequestDump() { return true; }
 
     //// I CAN GET ALL 4 PATCH SEGMENTS WITH
     ////    F0 41 10 46 11 01 48 20 00 00 00 0C 00 0B F7
@@ -1644,7 +1644,7 @@ public class RolandJV880 extends Synth
             produceChecksum(new byte[] { 0x00, 0x00, 0x00, 0x00, 0x01}), (byte)0xF7 });
 
         // It takes a bit for this to take effect
-	    simplePause(PAUSE_AFTER_CHANGE_PATCH_PERFORMANCE_BUTTON);
+        simplePause(PAUSE_AFTER_CHANGE_PATCH_PERFORMANCE_BUTTON);
 
         byte AA = (byte)(0x00);
         byte BB = (byte)(0x08);
@@ -1699,13 +1699,13 @@ public class RolandJV880 extends Synth
     public String getPatchName(Model model) { return model.get("name", "Untitled  "); }
 
     // It takes a long time (about 700ms) for this to take effect
-    public int getPauseAfterChangePatch() { return 800; } 	// 1500; }		// 700
+    public int getPauseAfterChangePatch() { return 800; }       // 1500; }              // 700
 
     public int getPauseAfterSendAllParameters() { return 300; }
 
 
-	static final int PAUSE_AFTER_CHANGE_PATCH_PERFORMANCE_BUTTON = 200;
-	static final int PAUSE_AFTER_CHANGE_BANK = 200;
+    static final int PAUSE_AFTER_CHANGE_PATCH_PERFORMANCE_BUTTON = 200;
+    static final int PAUSE_AFTER_CHANGE_BANK = 200;
 
     public void changePatch(Model tempModel)
         {
@@ -1723,7 +1723,7 @@ public class RolandJV880 extends Synth
             tryToSendSysex(new byte[] { (byte)0xF0, 0x41, getID(), 0x46, 0x12, 0x00, 0x00, 0x00, 0x00, 0x01, 
                 produceChecksum(new byte[] { 0x00, 0x00, 0x00, 0x00, 0x01}), (byte)0xF7 });
 
-	        simplePause(PAUSE_AFTER_CHANGE_PATCH_PERFORMANCE_BUTTON);
+            simplePause(PAUSE_AFTER_CHANGE_PATCH_PERFORMANCE_BUTTON);
 
             tryToSendMIDI(new ShortMessage(ShortMessage.CONTROL_CHANGE, getChannelOut(), 0, BC));
 
@@ -1782,7 +1782,7 @@ public class RolandJV880 extends Synth
         }
         
     // Takes a long time for batches to come in, particularly Orch Stab 2 (patch Internal 11, dunno why)
-    public int getBatchDownloadWaitTime() { return 2500; }		// 2000
+    public int getBatchDownloadWaitTime() { return 2500; }              // 2000
 
     public String[] getBankNames() { return BANKS; }
 

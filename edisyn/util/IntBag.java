@@ -300,22 +300,22 @@ public class IntBag implements java.io.Serializable, Cloneable, Indexed
     
     /** Shuffles (randomizes the order of) the IntBag */
 /*
-    public void shuffle(ec.util.MersenneTwisterFast random)
-        {
-        // teeny bit faster
-        int[] objs = this.objs;
-        int numObjs = this.numObjs;
-        int obj;
-        int rand;
+  public void shuffle(ec.util.MersenneTwisterFast random)
+  {
+  // teeny bit faster
+  int[] objs = this.objs;
+  int numObjs = this.numObjs;
+  int obj;
+  int rand;
         
-        for(int x=numObjs-1; x >= 1 ; x--)
-            {
-            rand = random.nextInt(x+1);
-            obj = objs[x];
-            objs[x] = objs[rand];
-            objs[rand] = obj;
-            }
-        }
+  for(int x=numObjs-1; x >= 1 ; x--)
+  {
+  rand = random.nextInt(x+1);
+  obj = objs[x];
+  objs[x] = objs[rand];
+  objs[rand] = obj;
+  }
+  }
 */
     
     /** Reverses order of the elements in the IntBag */

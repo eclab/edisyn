@@ -71,7 +71,7 @@ public class EmuProteus2000 extends Synth
                                                     "Pure Phatt (Mo'Phatt/Turbo)", "Extreme Lead (XL7)", "Pure Phatt 2 (MP7)", "Ensoniq Project",
                                                     "Proteus Pop (P2500/PK6)", "Vintage Collection (Pro, Keys)", "Protean Drums (PX7)", "Holy Grail Piano",
                                                     "Techno Synth Cons. Yard (Orbit3)", "Siedlaczek", "Beat Garden (Orbit3)"  };  // even dumber that we have to do this AGAIN
-	// This is totally different than the documentation
+    // This is totally different than the documentation
     public static final String[] TEMPO_OFFSETS = { "Current", "Current x 2", "Current / 2" };   
     public static final String[] KEYBOARD_TUNINGS = { "Equal Temperament", "Just C", "Just C2", "Just C minor", "Just C 3", "Valotti", "19 Tone", "Gamelan", "Werkmeister III", "Kirnberger", "Scarlatti", "Repeating Octave",
                                                       "User 1", "User 2", "User 3", "User 4", "User 5", "User 6", "User 7", "User 8", "User 9", "User 10", "User 11", "User 12" };
@@ -147,8 +147,8 @@ public class EmuProteus2000 extends Synth
                                                              "Clock Eighth Note", "Clock Sixteenth Note", "Clock Octal Whole Note", "Clock Quad Whole Note", "DC Offset", "Summing Amp", "Switch", "Absolute Value", "Diode", "Flip Flop", "Quantizer", "Gain 4X" };
     public static final int[] LAYER_PATCHCORD_SOURCE_INDICES = { 0, 4, 8, 9, 10, 11, 12, 13, 14, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 48, 72, 73, 74, 80, 81, 82, 88, 89, 90, 96, 97, 98, 99, 100, 101, 104, 105, 106, 107, 108, 109, 128, 129, 144, 145, 146, 147, 148, 149, 150, 151, 160, 161, 162, 163, 164, 165, 166, 167 };
 
-	
-	// The documentation is wrong in several places here: it's missing envelope sustains, has retriggers for envelopes other than volume, and has "chorus poition ITD" which doesn't exist.
+        
+    // The documentation is wrong in several places here: it's missing envelope sustains, has retriggers for envelopes other than volume, and has "chorus poition ITD" which doesn't exist.
     // I think Amplifier Crossfade is RTXFade (for "Real Time XFade")
     public static final String[] LAYER_PATCHCORD_DESTINATIONS = { "Off", "Key Sustain", "Fine Pitch", "Pitch", "Glide", "Chorus Amount", "Sample Start", "Sample Loop", "Sample Retrigger", "Filter Frequency", "Filter Resonance", "Amplifier Volume", "Amplifier Pan", "Amplifier Crossfade", "Volume Envelope Rates", "Volume Envelope Attack", 
                                                                   "Volume Envelope Decay", "Volume Envelope Sustain", "Volume Envelope Release", "Filter Envelope Rates", "Filter Envelope Attack", "Filter Envelope Decay", "Filter Envelope Sustain", "Filter Envelope Release", "Auxiliary Envelope Rates", "Auxiliary Envelope Attack", "Auxiliary Envelope Decay", "Auxiliary Envelope Sustain", "Auxiliary Envelope Release", 
@@ -318,15 +318,15 @@ public class EmuProteus2000 extends Synth
         
 
 
-	//// RESOURCE LOADING
-	//// The Proteus 2000 has lots of possible ROMs, and each ROM has a set of PRESETS, a set of ARPEGGIOS, a set of INSTRUMENTS, and a set of RIFFS.
-	//// These sets may zero, and they can also be quite large, and they're highly variable in size from ROM to ROM.  We don't want to load all of them
-	//// when we fire up the editor.  So instead we're loading them on the fly.  If the presets, arps, instruments, and riffs are loaded for a given
-	//// ROM, then (for example) PRESET_NAMES[rom] will be non-null, where "rom" is the rom number, not the rom ID.  Rom 0 is USER.  However only
-	//// the PRESET will load names from user, as the user memory doesn't have arps, instruments, or riffs.
-	////
-	//// To do loading on the fly we call updateFromFile(...), which loads from a given resource into one of the four arrays. This
-	//// is in turn called by updateArps(rom), updatePresets(rom), updateInstruments(rom), and updateRiffs(rom).  
+    //// RESOURCE LOADING
+    //// The Proteus 2000 has lots of possible ROMs, and each ROM has a set of PRESETS, a set of ARPEGGIOS, a set of INSTRUMENTS, and a set of RIFFS.
+    //// These sets may zero, and they can also be quite large, and they're highly variable in size from ROM to ROM.  We don't want to load all of them
+    //// when we fire up the editor.  So instead we're loading them on the fly.  If the presets, arps, instruments, and riffs are loaded for a given
+    //// ROM, then (for example) PRESET_NAMES[rom] will be non-null, where "rom" is the rom number, not the rom ID.  Rom 0 is USER.  However only
+    //// the PRESET will load names from user, as the user memory doesn't have arps, instruments, or riffs.
+    ////
+    //// To do loading on the fly we call updateFromFile(...), which loads from a given resource into one of the four arrays. This
+    //// is in turn called by updateArps(rom), updatePresets(rom), updateInstruments(rom), and updateRiffs(rom).  
                 
     // These are loaded on request.  Note that PRESET_NAMES includes the USER preset
     public static final String[][] ARP_NAMES = new String[ROMS.length][];
@@ -358,16 +358,16 @@ public class EmuProteus2000 extends Synth
                     String str = reader.readLine();
                     if (str == null) break;
                     if (update == PRESET_NAMES)
-                    	{
-						int bank = item / 128;
-						int number = item % 128;
-						String pad = (number < 100 ? (number < 10 ? "00" : "0") : "") + number;
-						txt.add("" + bank + "/" + pad + " " + str);
-						}
-					else
-						{
-						txt.add("" + item + " " + str);
-						}
+                        {
+                        int bank = item / 128;
+                        int number = item % 128;
+                        String pad = (number < 100 ? (number < 10 ? "00" : "0") : "") + number;
+                        txt.add("" + bank + "/" + pad + " " + str);
+                        }
+                    else
+                        {
+                        txt.add("" + item + " " + str);
+                        }
                     item++;
                     }
                 }
@@ -499,44 +499,44 @@ public class EmuProteus2000 extends Synth
         rom.setMaximumRowCount(32);
         rom.setSelectedIndex(writing ? 0 : lastBank);   // model.get("bank"));          // let's retain the ROM if we possibly can
 
-		final JCheckBox showAll = new JCheckBox("");
+        final JCheckBox showAll = new JCheckBox("");
         showAll.addActionListener(new ActionListener()
             {
             public void actionPerformed(ActionEvent e)
                 {
                 if (!writing)
-                	{
-					rom.removeAllItems();
-					if (showAll.isSelected()) 
-						{
-						for(int i = 0; i < ROMS_AND_USER.length; i++)
-							{
-							rom.addItem(ROMS_AND_USER[i]);
-							}
-						rom.setSelectedIndex(lastBank);   
-						}
-					else
-						{
-						rom.addItem(ROMS_AND_USER[0]);
-						if (lastBank == 0)
-							rom.setSelectedIndex(0);   
-						for(int i = 0; i < simms.length; i++)
-							{
-							if (simms[i] != 0) 
-								{
-								rom.addItem(ROMS_AND_USER[simms[i]]);
-								if (lastBank == simms[i])
-									rom.setSelectedIndex(i + 1);   
-								}
-							}
-						}
-					}
-				}
+                    {
+                    rom.removeAllItems();
+                    if (showAll.isSelected()) 
+                        {
+                        for(int i = 0; i < ROMS_AND_USER.length; i++)
+                            {
+                            rom.addItem(ROMS_AND_USER[i]);
+                            }
+                        rom.setSelectedIndex(lastBank);   
+                        }
+                    else
+                        {
+                        rom.addItem(ROMS_AND_USER[0]);
+                        if (lastBank == 0)
+                            rom.setSelectedIndex(0);   
+                        for(int i = 0; i < simms.length; i++)
+                            {
+                            if (simms[i] != 0) 
+                                {
+                                rom.addItem(ROMS_AND_USER[simms[i]]);
+                                if (lastBank == simms[i])
+                                    rom.setSelectedIndex(i + 1);   
+                                }
+                            }
+                        }
+                    }
+                }
             });
-		// because setSelected doesn't trigger the action listener, and we want to do that to set up the ROM list,
-		// we set to the wrong value and click once.
-		showAll.setSelected(!showingAll);
-		showAll.doClick();
+        // because setSelected doesn't trigger the action listener, and we want to do that to set up the ROM list,
+        // we set to the wrong value and click once.
+        showAll.setSelected(!showingAll);
+        showAll.doClick();
 
         int num = model.get("number");
         int bnk = num / 128;
@@ -548,8 +548,8 @@ public class EmuProteus2000 extends Synth
         while(true)
             {
             boolean result = (writing ?
-            	showMultiOption(this, new String[] { "Bank", "Number" }, new JComponent[] { bank, number }, title, "Enter the User Bank and Patch Number") :
-            	showMultiOption(this, new String[] { "Show All ROMs", "ROM", "Bank", "Number" }, new JComponent[] { showAll, rom, bank, number }, title, "Enter the User/ROM, Bank, and Patch Number"));
+                showMultiOption(this, new String[] { "Bank", "Number" }, new JComponent[] { bank, number }, title, "Enter the User Bank and Patch Number") :
+                showMultiOption(this, new String[] { "Show All ROMs", "ROM", "Bank", "Number" }, new JComponent[] { showAll, rom, bank, number }, title, "Enter the User/ROM, Bank, and Patch Number"));
                                         
             if (result == false) 
                 return false;
@@ -583,28 +583,28 @@ public class EmuProteus2000 extends Synth
             
             // Now we have to figure out what ROM was selected
             if (writing)
-            	{
-            	change.set("bank", 0);
-            	}
-            else if (showAll.isSelected() || rom.getSelectedIndex() == 0)	// show all ROMS, or user
-            	{
-            	change.set("bank", rom.getSelectedIndex());
-            	}
+                {
+                change.set("bank", 0);
+                }
+            else if (showAll.isSelected() || rom.getSelectedIndex() == 0)       // show all ROMS, or user
+                {
+                change.set("bank", rom.getSelectedIndex());
+                }
             else
-            	{
-            	// Find the sim
-            	for(int i = 0; i < simms.length; i++)
-            		{
-					if (ROMS_AND_USER[simms[i]].equals(rom.getSelectedItem()))  // got it 
-						{
-            			change.set("bank", simms[i]);
-            			break;
-						}
-            		}
-            	}
-           	
+                {
+                // Find the sim
+                for(int i = 0; i < simms.length; i++)
+                    {
+                    if (ROMS_AND_USER[simms[i]].equals(rom.getSelectedItem()))  // got it 
+                        {
+                        change.set("bank", simms[i]);
+                        break;
+                        }
+                    }
+                }
+                
             change.set("number", b * 128 + n);
-            if (!writing) setLastX("" + rom.getSelectedIndex(), "LastROM", getSynthClassName(), true);        			// only set in synth
+            if (!writing) setLastX("" + rom.getSelectedIndex(), "LastROM", getSynthClassName(), true);                          // only set in synth
             if (!writing) setLastX(showAll.isSelected() ? "1" : "0", "ShowAllROMs", getSynthClassName(), true);        // only set in synth
                         
             return true;
@@ -778,10 +778,10 @@ public class EmuProteus2000 extends Synth
                 hbox.add(vbox);
                         
                 comp = new LabelledDial("Amount " + (j + 1), this, "cord" + j + "amount", color, -100, 255)
-                	{
-					public double getStartAngle() { return 170; }
-					public int getDefaultValue() { return 0; }
-                	};
+                    {
+                    public double getStartAngle() { return 170; }
+                    public int getDefaultValue() { return 0; }
+                    };
                 hbox.add(comp);
 
                 if (j < i + 2)
@@ -1068,14 +1068,14 @@ public class EmuProteus2000 extends Synth
         hbox.add(vbox);
 
         comp = new LabelledDial("Velocity", this, "arpvel", color, 0, 127)
-        	{
+            {
             public String map(int val)
                 {
                 if (val == 0) return "Played";
                 else return "" + val + "%";
                 }
-        	};
-        	
+            };
+                
         hbox.add(comp);
                         
         comp = new LabelledDial("Gate Time", this, "arpgatetime", color, 1, 100)
@@ -1528,7 +1528,7 @@ public class EmuProteus2000 extends Synth
                 }
             };
         hbox.add(comp);
-        ((LabelledDial)comp).addAdditionalLabel(" ");			// this prevents the whole row from increasing in height when the user sets a filter other than "Off"
+        ((LabelledDial)comp).addAdditionalLabel(" ");                   // this prevents the whole row from increasing in height when the user sets a filter other than "Off"
 
         category.add(hbox, BorderLayout.CENTER);
         return category;
@@ -1551,38 +1551,38 @@ public class EmuProteus2000 extends Synth
         
         EnvelopeDisplay _disp = null;
         
-        if (env == 1)	// volume envelope has only positive levels
-        	{
-			_disp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
-				new String[] { null, "layer" + layer + "env" + env + "atk1rate", "layer" + layer + "env" + env + "atk2rate", "layer" + layer + "env" + env + "dcy1rate", "layer" + layer + "env" + env + "dcy2rate", "layer" + layer + "env" + env + "rls1rate", "layer" + layer + "env" + env + "rls2rate" },
-				new String[] { null, "layer" + layer + "env" + env + "atk1lvl", "layer" + layer + "env" + env + "atk2lvl", "layer" + layer + "env" + env + "dcy1lvl", "layer" + layer + "env" + env + "dcy2lvl", "layer" + layer + "env" + env + "rls1lvl", "layer" + layer + "env" + env + "rls2lvl" },
-				new double[] { 0, 1/6.0/127, 1/6.0/127, 1/6.0/127, 1/6.0/127, 1/6.0/127, 1/6.0/127 },
-				new double[] { 0, 1.0/100, 1.0/100, 1.0/100, 1.0/100, 1.0/100, 1.0/100 } 
-				);
-			}
-		else		// filter and auxiliary envelopes have positive and negative levels
-			{
-			_disp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
-				new String[] { null, "layer" + layer + "env" + env + "atk1rate", "layer" + layer + "env" + env + "atk2rate", "layer" + layer + "env" + env + "dcy1rate", "layer" + layer + "env" + env + "dcy2rate", "layer" + layer + "env" + env + "rls1rate", "layer" + layer + "env" + env + "rls2rate" },
-				new String[] { null, "layer" + layer + "env" + env + "atk1lvl", "layer" + layer + "env" + env + "atk2lvl", "layer" + layer + "env" + env + "dcy1lvl", "layer" + layer + "env" + env + "dcy2lvl", "layer" + layer + "env" + env + "rls1lvl", "layer" + layer + "env" + env + "rls2lvl" },
-				new double[] { 0, 1/6.0/127, 1/6.0/127, 1/6.0/127, 1/6.0/127, 1/6.0/127, 1/6.0/127 },
-				new double[] { 0, 0.5/100, 0.5/100, 0.5/100, 0.5/100, 0.5/100, 0.5/100 } 
-				)
-				{
-				public void postProcess(double[] xVals, double[] yVals)
-					{
-					for(int i = 1; i < yVals.length; i++)
-						{
-						yVals[i] += 0.5;
-						}
-					}
-				};
-			_disp.setAxis(0.5);
-			}
+        if (env == 1)   // volume envelope has only positive levels
+            {
+            _disp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
+                new String[] { null, "layer" + layer + "env" + env + "atk1rate", "layer" + layer + "env" + env + "atk2rate", "layer" + layer + "env" + env + "dcy1rate", "layer" + layer + "env" + env + "dcy2rate", "layer" + layer + "env" + env + "rls1rate", "layer" + layer + "env" + env + "rls2rate" },
+                new String[] { null, "layer" + layer + "env" + env + "atk1lvl", "layer" + layer + "env" + env + "atk2lvl", "layer" + layer + "env" + env + "dcy1lvl", "layer" + layer + "env" + env + "dcy2lvl", "layer" + layer + "env" + env + "rls1lvl", "layer" + layer + "env" + env + "rls2lvl" },
+                new double[] { 0, 1/6.0/127, 1/6.0/127, 1/6.0/127, 1/6.0/127, 1/6.0/127, 1/6.0/127 },
+                new double[] { 0, 1.0/100, 1.0/100, 1.0/100, 1.0/100, 1.0/100, 1.0/100 } 
+                );
+            }
+        else            // filter and auxiliary envelopes have positive and negative levels
+            {
+            _disp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
+                new String[] { null, "layer" + layer + "env" + env + "atk1rate", "layer" + layer + "env" + env + "atk2rate", "layer" + layer + "env" + env + "dcy1rate", "layer" + layer + "env" + env + "dcy2rate", "layer" + layer + "env" + env + "rls1rate", "layer" + layer + "env" + env + "rls2rate" },
+                new String[] { null, "layer" + layer + "env" + env + "atk1lvl", "layer" + layer + "env" + env + "atk2lvl", "layer" + layer + "env" + env + "dcy1lvl", "layer" + layer + "env" + env + "dcy2lvl", "layer" + layer + "env" + env + "rls1lvl", "layer" + layer + "env" + env + "rls2lvl" },
+                new double[] { 0, 1/6.0/127, 1/6.0/127, 1/6.0/127, 1/6.0/127, 1/6.0/127, 1/6.0/127 },
+                new double[] { 0, 0.5/100, 0.5/100, 0.5/100, 0.5/100, 0.5/100, 0.5/100 } 
+                )
+                {
+                public void postProcess(double[] xVals, double[] yVals)
+                    {
+                    for(int i = 1; i < yVals.length; i++)
+                        {
+                        yVals[i] += 0.5;
+                        }
+                    }
+                };
+            _disp.setAxis(0.5);
+            }
         
         final EnvelopeDisplay disp = _disp;
 
-        params = (env == 1 ? VOL_ENV_MODES : ENV_MODES);			// volume envelope has three modes 0 1 2, including "factory", others just have two modes but irritatingly they're 1, 2
+        params = (env == 1 ? VOL_ENV_MODES : ENV_MODES);                        // volume envelope has three modes 0 1 2, including "factory", others just have two modes but irritatingly they're 1, 2
         comp = new Chooser("Mode", this, "layer" + layer + "env" + env + "mode", params)
             {
             public void update(String key, Model model)
@@ -1837,26 +1837,26 @@ public class EmuProteus2000 extends Synth
 
 
 
-	////// MACHINE ROM CONFIGURATION
+    ////// MACHINE ROM CONFIGURATION
 
-	/// The Proteus 2000 machines have custom configurations of ROMs depending on the machine type and user's whim.
-	/// Edisyn doesn't *really* need to know the configuration of the machine, since these ROMs are all read-only
-	/// and the user can just ask for patches from whatever ROM he wants whether or not it exists in the machine.
-	/// But knowing the configuration is useful because it makes it convenient to present the user with the ROMS
-	/// on his machine so he doesn't have to deal with the others; and it also helps Edisyn iterate through all
-	/// the patches for things like batch downloads.
+    /// The Proteus 2000 machines have custom configurations of ROMs depending on the machine type and user's whim.
+    /// Edisyn doesn't *really* need to know the configuration of the machine, since these ROMs are all read-only
+    /// and the user can just ask for patches from whatever ROM he wants whether or not it exists in the machine.
+    /// But knowing the configuration is useful because it makes it convenient to present the user with the ROMS
+    /// on his machine so he doesn't have to deal with the others; and it also helps Edisyn iterate through all
+    /// the patches for things like batch downloads.
 
 
-	/** Requests the configuration from the synthesizer. */
+    /** Requests the configuration from the synthesizer. */
     public void requestConfiguration()
         {
         tryToSendSysex(new byte[] { (byte)0xF0, 0x18, 0x0F, getID(), 0x55, 0x0A, (byte)0xF7 });
         }
         
-	/** Processes the configuration returned by the synthesizer. The ROMs returned are stored
-		in the global array "simms", and are also stored in preferences.  These are then
-		reloaded from preferences during initialization.
-	 */
+    /** Processes the configuration returned by the synthesizer. The ROMs returned are stored
+        in the global array "simms", and are also stored in preferences.  These are then
+        reloaded from preferences during initialization.
+    */
     public int processConfiguration(byte[] data)
         {
         try
@@ -1931,21 +1931,21 @@ public class EmuProteus2000 extends Synth
 
 
 
-	////// PARSING
+    ////// PARSING
 
-	/// Parsing is a two-step process.  First, Edisyn reads in a HEADER sysex message, then some N DATA sysex
-	/// messages.  When it has received what it believes to be the final data sysex message, it calls processParse()
-	/// on the header and all the data to actually parse the sysex dump.  The Proteus 2000 can send these messages
-	/// in either open loop (asynchronously) or closed loop (synchronously): Edisyn naturally requests them open loop.
-	/// The parse message also recognizes ROM configuration messages (see section above) and calls processConfiguration(...)
-	/// as appropriate.
-	///
-	/// By the time parse has called processParse() it has created and loaded several variables.  First, header is the
-	/// header message, which processParse will parse to extract the number of data bytes in each Proteus 2000 section.
-	/// Second, loadedData is essentially an ArrayList of bytes.  It contains all the bytes of the actual data.  Also
-	/// the bytes variable contains the number of bytes: this is really kinda useless since loadedData can be queried for
-	/// this too.  Finally, expectBytes contains the number of bytes expected to parse from the various data sysex messages
-	/// before Edisyn decides it's got the entire patch and calls processParse().  This number is extracted from the header.
+    /// Parsing is a two-step process.  First, Edisyn reads in a HEADER sysex message, then some N DATA sysex
+    /// messages.  When it has received what it believes to be the final data sysex message, it calls processParse()
+    /// on the header and all the data to actually parse the sysex dump.  The Proteus 2000 can send these messages
+    /// in either open loop (asynchronously) or closed loop (synchronously): Edisyn naturally requests them open loop.
+    /// The parse message also recognizes ROM configuration messages (see section above) and calls processConfiguration(...)
+    /// as appropriate.
+    ///
+    /// By the time parse has called processParse() it has created and loaded several variables.  First, header is the
+    /// header message, which processParse will parse to extract the number of data bytes in each Proteus 2000 section.
+    /// Second, loadedData is essentially an ArrayList of bytes.  It contains all the bytes of the actual data.  Also
+    /// the bytes variable contains the number of bytes: this is really kinda useless since loadedData can be queried for
+    /// this too.  Finally, expectBytes contains the number of bytes expected to parse from the various data sysex messages
+    /// before Edisyn decides it's got the entire patch and calls processParse().  This number is extracted from the header.
 
 
     byte[] header = null;
@@ -2011,14 +2011,14 @@ public class EmuProteus2000 extends Synth
     
     /// PROCESS PARSE
     
-	/// processParse() is nontrivial.  E-mu's data bytes are partitioned into little categories, like effects, links, layer 1 filter, layer 2 lfo,
-	/// and so on.  The size of these partitions can technically vary so you have to predetermine their sizes from the header. [Also note that these
-	/// partitions are entirely independent of the respective sizes of the individual data packets]. After that you
-	/// iterate your way through the data as a state machine (the state is the partition you're presently in), and based on the state and the
-	/// current byte number after the last state changed, you determine which parameter you're loading.  Most parameters are two-byte two's complement,
-	/// but the patch name is a string of single bytes (with no explanation or warning in the docs).  There appears to be an extra superfluous
-	/// pair of junk bytes after each ENVELOPE state [a bug].  Also many parameters have to be run through a nonlinear mapping table for no
-	/// good reason, ugh.  
+    /// processParse() is nontrivial.  E-mu's data bytes are partitioned into little categories, like effects, links, layer 1 filter, layer 2 lfo,
+    /// and so on.  The size of these partitions can technically vary so you have to predetermine their sizes from the header. [Also note that these
+    /// partitions are entirely independent of the respective sizes of the individual data packets]. After that you
+    /// iterate your way through the data as a state machine (the state is the partition you're presently in), and based on the state and the
+    /// current byte number after the last state changed, you determine which parameter you're loading.  Most parameters are two-byte two's complement,
+    /// but the patch name is a string of single bytes (with no explanation or warning in the docs).  There appears to be an extra superfluous
+    /// pair of junk bytes after each ENVELOPE state [a bug].  Also many parameters have to be run through a nonlinear mapping table for no
+    /// good reason, ugh.  
 
     public static final int STATE_COMMON_GENERAL = 0;
     public static final int STATE_RESERVED = 1;
@@ -2088,43 +2088,43 @@ public class EmuProteus2000 extends Synth
             int presetROMID = header[33] + (header[34] << 7);       // maybe this should be MSB first?
 
 
-		// I have found that numPresetLayerEnvelope is reported to be one more than it actually is
-		// -- but there's no mystery parameter.  It looks to be an error.  So we need to double-check
-		// and bound these to be certain
-        int _numPresetCommonGeneral = 52;   		// This does not include the name chars, so we subtract 16.  We'll leave 4 for CTRL13...16 just in case
-        int _numReserved = 19;                      // I don't know if these are arpeggio or not: there are exactly 20 arp params...
-        int _numPresetCommonEffects = 16;
-        int _numPresetCommonLink = 20;
-        int _numLayers = 4;
-        int _numPresetLayerGeneral = 31;
-        int _numPresetLayerFilter = 3;
-        int _numPresetLayerLFO = 10;
-        int _numPresetLayerEnvelope = 42;		// one more parameter than actually exists	-- this is a BUG in the Proteus 2000 I believe
-        int _numPresetLayerPatchCords = 72;
+            // I have found that numPresetLayerEnvelope is reported to be one more than it actually is
+            // -- but there's no mystery parameter.  It looks to be an error.  So we need to double-check
+            // and bound these to be certain
+            int _numPresetCommonGeneral = 52;               // This does not include the name chars, so we subtract 16.  We'll leave 4 for CTRL13...16 just in case
+            int _numReserved = 19;                      // I don't know if these are arpeggio or not: there are exactly 20 arp params...
+            int _numPresetCommonEffects = 16;
+            int _numPresetCommonLink = 20;
+            int _numLayers = 4;
+            int _numPresetLayerGeneral = 31;
+            int _numPresetLayerFilter = 3;
+            int _numPresetLayerLFO = 10;
+            int _numPresetLayerEnvelope = 42;               // one more parameter than actually exists      -- this is a BUG in the Proteus 2000 I believe
+            int _numPresetLayerPatchCords = 72;
 
-		// Let's check:
-		if (numPresetCommonGeneral != _numPresetCommonGeneral) 
-			{ System.err.println("processParse(): numPresetCommonGeneral params reported by synth is not standard: " + numPresetCommonGeneral + " vs " + _numPresetCommonGeneral); }
-		if (numReserved != _numReserved) 
-			{ System.err.println("processParse(): numReserved params reported by synth is not standard: " + numReserved + " vs " + _numReserved); }
-		if (numPresetCommonEffects != _numPresetCommonEffects) 
-			{ System.err.println("processParse(): numPresetCommonEffects params reported by synth is not standard: " + numPresetCommonEffects + " vs " + _numPresetCommonEffects); }
-		if (numPresetCommonLink != _numPresetCommonLink) 
-			{ System.err.println("processParse(): numPresetCommonLink params reported by synth is not standard: " + numPresetCommonLink + " vs " + _numPresetCommonLink); }
-		if (numLayers != numLayers) 
-			{ System.err.println("processParse(): numLayers params reported by synth is not standard: " + numLayers + " vs " + _numLayers); }
-		if (numPresetLayerGeneral != _numPresetLayerGeneral) 
-			{ System.err.println("processParse(): numPresetLayerGeneral params reported by synth is not standard: " + numPresetLayerGeneral + " vs " + _numPresetLayerGeneral); }
-		if (numPresetLayerFilter != _numPresetLayerFilter) 
-			{ System.err.println("processParse(): numPresetLayerFilter params reported by synth is not standard: " + numPresetLayerFilter + " vs " + _numPresetLayerFilter); }
-		if (numPresetLayerLFO != _numPresetLayerLFO) 
-			{ System.err.println("processParse(): numPresetLayerLFO params reported by synth is not standard: " + numPresetLayerLFO + " vs " + _numPresetLayerLFO); }
-		// We KNOW this one is wrong but we already adjusted for it above
-		if (numPresetLayerEnvelope != _numPresetLayerEnvelope) 
-			{ System.err.println("processParse(): numPresetLayerEnvelope params reported by synth is not standard: " + numPresetLayerEnvelope + " vs " + _numPresetLayerEnvelope); }
-		if (numPresetLayerPatchCords != _numPresetLayerPatchCords) 
-			{ System.err.println("processParse(): numPresetLayerPatchCords params reported by synth is not standard: " + numPresetLayerPatchCords + " vs " + _numPresetLayerPatchCords); }
-		
+            // Let's check:
+            if (numPresetCommonGeneral != _numPresetCommonGeneral) 
+                { System.err.println("processParse(): numPresetCommonGeneral params reported by synth is not standard: " + numPresetCommonGeneral + " vs " + _numPresetCommonGeneral); }
+            if (numReserved != _numReserved) 
+                { System.err.println("processParse(): numReserved params reported by synth is not standard: " + numReserved + " vs " + _numReserved); }
+            if (numPresetCommonEffects != _numPresetCommonEffects) 
+                { System.err.println("processParse(): numPresetCommonEffects params reported by synth is not standard: " + numPresetCommonEffects + " vs " + _numPresetCommonEffects); }
+            if (numPresetCommonLink != _numPresetCommonLink) 
+                { System.err.println("processParse(): numPresetCommonLink params reported by synth is not standard: " + numPresetCommonLink + " vs " + _numPresetCommonLink); }
+            if (numLayers != numLayers) 
+                { System.err.println("processParse(): numLayers params reported by synth is not standard: " + numLayers + " vs " + _numLayers); }
+            if (numPresetLayerGeneral != _numPresetLayerGeneral) 
+                { System.err.println("processParse(): numPresetLayerGeneral params reported by synth is not standard: " + numPresetLayerGeneral + " vs " + _numPresetLayerGeneral); }
+            if (numPresetLayerFilter != _numPresetLayerFilter) 
+                { System.err.println("processParse(): numPresetLayerFilter params reported by synth is not standard: " + numPresetLayerFilter + " vs " + _numPresetLayerFilter); }
+            if (numPresetLayerLFO != _numPresetLayerLFO) 
+                { System.err.println("processParse(): numPresetLayerLFO params reported by synth is not standard: " + numPresetLayerLFO + " vs " + _numPresetLayerLFO); }
+            // We KNOW this one is wrong but we already adjusted for it above
+            if (numPresetLayerEnvelope != _numPresetLayerEnvelope) 
+                { System.err.println("processParse(): numPresetLayerEnvelope params reported by synth is not standard: " + numPresetLayerEnvelope + " vs " + _numPresetLayerEnvelope); }
+            if (numPresetLayerPatchCords != _numPresetLayerPatchCords) 
+                { System.err.println("processParse(): numPresetLayerPatchCords params reported by synth is not standard: " + numPresetLayerPatchCords + " vs " + _numPresetLayerPatchCords); }
+                
             if (numLayers > 4)
                 {
                 numLayers = 4;
@@ -2177,7 +2177,7 @@ public class EmuProteus2000 extends Synth
                 numParameters[i * 5 + STATE_LAYER_1_PATCH_CORDS] = numPresetLayerPatchCords;
                 } 
 
-			// Load our maximum values just to be certain
+            // Load our maximum values just to be certain
             int[] maxParameters = new int[4 + 5 * _numLayers];
             maxParameters[STATE_COMMON_GENERAL] = _numPresetCommonGeneral + 16;      // give slop for name
             maxParameters[STATE_RESERVED] = _numReserved;
@@ -2214,16 +2214,16 @@ public class EmuProteus2000 extends Synth
                         break;  // all done
                     }
                 else if (param >= maxParameters[state])
-                	{
-                	/// uhh.....
-                	System.err.println("EmuProteus2000.processParse WARNING: Extra parameter");
-                	param++;
-                	continue;
-                	}
+                    {
+                    /// uhh.....
+                    System.err.println("EmuProteus2000.processParse WARNING: Extra parameter");
+                    param++;
+                    continue;
+                    }
                 
                 // Grab next parameter
                 String p = parameters[param + STATE_PARAM_STARTS[state]];
-				
+                                
                 if (!(p.equals("---")))
                     {
                     int v = (data[i] | (data[i+1] << 7));
@@ -2291,9 +2291,9 @@ public class EmuProteus2000 extends Synth
                         // nothing
                         }
                     if (!p.equals("layer1fakeparam") && !p.equals("layer2fakeparam") && !p.equals("layer3fakeparam") && !p.equals("layer4fakeparam"))
-                    	{
-                    	model.set(p, v);
-                    	}
+                        {
+                        model.set(p, v);
+                        }
                     }
                 param++;
                 }
@@ -2318,14 +2318,14 @@ public class EmuProteus2000 extends Synth
 
     /// REVISION
     
-	/// Revision is normally simple in edisyn, but not here.  Thie is because the length of the number
-	/// of presets, arps, riffs, and instruments depends on the particular ROM chosen for them.  What
-	/// happens is that the ROM gets changed (perhaps during mutation), and so does the preset say, 
-	/// but the min/max values for the preset list are based on the *previous* ROM and so get bounded
-	/// to that range rather than to the new range.  We have to fix that.  Also note that this
-	/// issue resulted in me modifying how revision bounded things in the first place in Synth.java.
-	/// Previously things were bounded to min or max; now they are bounded with mod so as to provide
-	/// some more interesting randomness.  
+    /// Revision is normally simple in edisyn, but not here.  Thie is because the length of the number
+    /// of presets, arps, riffs, and instruments depends on the particular ROM chosen for them.  What
+    /// happens is that the ROM gets changed (perhaps during mutation), and so does the preset say, 
+    /// but the min/max values for the preset list are based on the *previous* ROM and so get bounded
+    /// to that range rather than to the new range.  We have to fix that.  Also note that this
+    /// issue resulted in me modifying how revision bounded things in the first place in Synth.java.
+    /// Previously things were bounded to min or max; now they are bounded with mod so as to provide
+    /// some more interesting randomness.  
 
 
     public void revise(Model model)
@@ -2401,11 +2401,11 @@ public class EmuProteus2000 extends Synth
 
     /// EMITTING A SINGLE PARAMETER
     
-	/// Emitting one parameter isn't that interesting except that we have to tell the Proteus 2000 that
-	/// we are modifying current working memory by emitting a special PRESET = -1 sysex command.
-	/// THEN we may have to instruct the Proteus 2000 which layer we're changing by emitting
-	/// another special LAYER = ... command.  Finally, we emit the command to change the parameter.
-	
+    /// Emitting one parameter isn't that interesting except that we have to tell the Proteus 2000 that
+    /// we are modifying current working memory by emitting a special PRESET = -1 sysex command.
+    /// THEN we may have to instruct the Proteus 2000 which layer we're changing by emitting
+    /// another special LAYER = ... command.  Finally, we emit the command to change the parameter.
+        
 
     byte[] buildParameterBytes(int param, int val)
         {
@@ -2537,15 +2537,15 @@ public class EmuProteus2000 extends Synth
 
     /// EMITTING A PATCH
     
-	/// To emit a patch we have to first emit a header packet, then collect all our parameters into a data array,
-	/// then break the data array into 244-byte chunks, the insert each chunk into its own data packet.  What a mess!
-	/// Note that to emit to current working memory, our "Patch Number" is 16383 (7F 7F).  It'd sure be nice if earlier
-	/// Proteus models had this feature, but sadly they do not.
-	///
-	/// An apparent bug in the Proteus 2000: after you upload a patch, you can no longer make real-time parameter
-	/// changes.  Thankfully Prodatum found a workaround for this: emitting a special sysex message; see very the end of
-	/// emitAll(...).  This fixes things.
-	
+    /// To emit a patch we have to first emit a header packet, then collect all our parameters into a data array,
+    /// then break the data array into 244-byte chunks, the insert each chunk into its own data packet.  What a mess!
+    /// Note that to emit to current working memory, our "Patch Number" is 16383 (7F 7F).  It'd sure be nice if earlier
+    /// Proteus models had this feature, but sadly they do not.
+    ///
+    /// An apparent bug in the Proteus 2000: after you upload a patch, you can no longer make real-time parameter
+    /// changes.  Thankfully Prodatum found a workaround for this: emitting a special sysex message; see very the end of
+    /// emitAll(...).  This fixes things.
+        
 
     public Object[] emitAll(Model tempModel, boolean toWorkingMemory, boolean toFile)
         {
@@ -2560,9 +2560,9 @@ public class EmuProteus2000 extends Synth
             NN = 16383;                     // 7F 7F
             }
 
-		// Let's define some parameters
+        // Let's define some parameters
         int numNameBytes = 16;
-        int numPresetCommonGeneral = 52;   		// This does not include the name chars, so we subtract 16.  We ALSO remove 4 params for CTRL13...16, which are not included in the dump
+        int numPresetCommonGeneral = 52;                // This does not include the name chars, so we subtract 16.  We ALSO remove 4 params for CTRL13...16, which are not included in the dump
         int numReserved = 19;                   // I don't know if these are arpeggio or not: there are exactly 20 arp params...
         int numPresetCommonEffects = 16;
         int numPresetCommonLink = 20;
@@ -2599,7 +2599,7 @@ public class EmuProteus2000 extends Synth
         header[10] = (byte)((dataBytes >>> 7) & 127);
         header[11] = (byte)((dataBytes >>> 14) & 127);
         header[12] = (byte)((dataBytes >>> 21) & 127);
-        header[13] = (byte)((numPresetCommonGeneral) & 127);			// don't include name
+        header[13] = (byte)((numPresetCommonGeneral) & 127);                    // don't include name
         header[14] = (byte)(((numPresetCommonGeneral) >>> 7) & 127);
         header[15] = (byte)(numReserved & 127);
         header[16] = (byte)((numReserved >>> 7) & 127);
@@ -2619,8 +2619,8 @@ public class EmuProteus2000 extends Synth
         header[30] = (byte)((numPresetLayerEnvelope >>> 7) & 127);
         header[31] = (byte)(numPresetLayerPatchCord & 127);
         header[32] = (byte)((numPresetLayerPatchCord >>> 7) & 127);
-        header[33] = (byte)(BB & 127);			// always gonna be 0
-        header[34] = (byte)((BB >>> 7) & 127);	// always gonna be 0
+        header[33] = (byte)(BB & 127);                  // always gonna be 0
+        header[34] = (byte)((BB >>> 7) & 127);  // always gonna be 0
         header[35] = (byte)0xF7;                        // there is no checksum
   
         byte[] data = new byte[dataBytes];              // the 16 name chars are only 1 byte each, so remove half
@@ -2639,15 +2639,15 @@ public class EmuProteus2000 extends Synth
             {
             String p = parameters[i];
             if (p.equals("---"))  // skip
-            	continue;
-            	
+                continue;
+                
             if (p.equals("ctrl13") || p.equals("ctrl14") || p.equals("ctrl15") || p.equals("ctrl16"))
-            	continue;	// these are not included in the final dump
-            	
+                continue;       // these are not included in the final dump
+                
             //System.err.println("" + offset + " " + i + " " + parameters[i]);
-            	
+                
             // we're going to just upload ctrl12 ... ctrl15 as they are, since they're not used
-            int v = model.get(p, 0);            		// "---" will be 0	  -- this includes layer1fakeparam, layer2fakeparam, layer3fakeparam, layer4fakeparam
+            int v = model.get(p, 0);                            // "---" will be 0        -- this includes layer1fakeparam, layer2fakeparam, layer3fakeparam, layer4fakeparam
 
             
             // Unfortunately we have a LOT of custom parameters strewn throughout, and we have to do
@@ -2715,14 +2715,14 @@ public class EmuProteus2000 extends Synth
             data[offset++] = (byte)((v >>> 7) & 127);
             }
             
-		// Now that we have our data, we have to break it into packets
+        // Now that we have our data, we have to break it into packets
         // Each data packet can hold at most 244 bytes.
         // We have 1494 bytes.  Thus we need 7 data packets, plus the header and the footer
         Object[] result = new Object[9];
         result[0] = header;
 
         offset = 0;             // in bytes
-        for(int i = 1; i < result.length - 1; i++)		// retain space for footer
+        for(int i = 1; i < result.length - 1; i++)              // retain space for footer
             {
             int numBytes = Math.min(244, data.length - offset);
             byte[] packet = new byte[11 + numBytes];
@@ -2733,8 +2733,8 @@ public class EmuProteus2000 extends Synth
             packet[4] = (byte)0x55;
             packet[5] = (byte)0x10;                 // Preset Dump
             packet[6] = (byte)0x04;                 // Open Loop Data Packet
-            packet[7] = (byte)(i & 127);		// packet count.  note i starts at 1
-            packet[8] = (byte)((i >>> 7) & 127);	// packet count.   note i starts at 1
+            packet[7] = (byte)(i & 127);                // packet count.  note i starts at 1
+            packet[8] = (byte)((i >>> 7) & 127);        // packet count.   note i starts at 1
                 
             System.arraycopy(data, offset, packet, 9, numBytes);
             offset += numBytes;
@@ -2751,14 +2751,14 @@ public class EmuProteus2000 extends Synth
             result[i] = packet;
             }
 
-		// Without this magical message, once we have modified the current working memory, the
-		// synthesizer will refuse to respond to real-time changes, or at least won't update its
-		// screen.  This message is output by Prodatum and is changing a specific parameter: the multimode "ROM ID"
-		// (see page 41 of specification).  I seriously have no idea why this is necessary.
-		byte[] footer = 
-			(toFile ? new byte[0] :
-				new byte[] { (byte)0xF0, 0x18, 0x0F, 0x00, 0x55, 0x01, 0x02, 0x0A, 0x01, 0x00, 0x00, (byte)0xF7 });
-		result[8] = footer;
+        // Without this magical message, once we have modified the current working memory, the
+        // synthesizer will refuse to respond to real-time changes, or at least won't update its
+        // screen.  This message is output by Prodatum and is changing a specific parameter: the multimode "ROM ID"
+        // (see page 41 of specification).  I seriously have no idea why this is necessary.
+        byte[] footer = 
+            (toFile ? new byte[0] :
+            new byte[] { (byte)0xF0, 0x18, 0x0F, 0x00, 0x55, 0x01, 0x02, 0x0A, 0x01, 0x00, 0x00, (byte)0xF7 });
+        result[8] = footer;
         return result;
         }
         
@@ -2816,7 +2816,7 @@ public class EmuProteus2000 extends Synth
 
 
 
-	// To request the current patch, we request patch number 7F 7F (16383).
+    // To request the current patch, we request patch number 7F 7F (16383).
     public byte[] requestCurrentDump()
         {
         // We're going to use "Preset Dump Request (Closed Loop)", page 17 of the sysex spec
@@ -2984,7 +2984,7 @@ public class EmuProteus2000 extends Synth
         
         
         
-	//// ITERATING THROUGH PATCHES        
+    //// ITERATING THROUGH PATCHES        
     
     //// We iterate by skipping ROMs that we believe the user does not have installed, and sticking only
     //// with the ones he indicated in the Proteus 2000 menu.
@@ -3322,7 +3322,7 @@ public class EmuProteus2000 extends Synth
     "layer1env3rls2lvl",            // 1831
     "layer1env2repeat",             // 1833
     "layer1env3repeat",             // 1834
-    "layer1fakeparam",							// we'll call it 1835, it's a bug
+    "layer1fakeparam",                                                  // we'll call it 1835, it's a bug
 //// BEGIN COMMON LAYER 1 PATCH CORDS
     "---",          // 1920
     "layer1cord0src",               // 1921
@@ -3490,7 +3490,7 @@ public class EmuProteus2000 extends Synth
     "layer2env3rls2lvl",            // 1831
     "layer2env2repeat",             // 1833
     "layer2env3repeat",             // 1834
-    "layer2fakeparam",							// we'll call it 1835, it's a bug
+    "layer2fakeparam",                                                  // we'll call it 1835, it's a bug
 //// BEGIN COMMON LAYER 2 PATCH CORDS
     "---",          // 1920
     "layer2cord0src",               // 1921
@@ -3658,7 +3658,7 @@ public class EmuProteus2000 extends Synth
     "layer3env3rls2lvl",            // 1831
     "layer3env2repeat",             // 1833
     "layer3env3repeat",             // 1834
-    "layer3fakeparam",							// we'll call it 1835, it's a bug
+    "layer3fakeparam",                                                  // we'll call it 1835, it's a bug
 //// BEGIN COMMON LAYER 3 PATCH CORDS
     "---",          // 1920
     "layer3cord0src",               // 1921
@@ -3826,7 +3826,7 @@ public class EmuProteus2000 extends Synth
     "layer4env3rls2lvl",            // 1831
     "layer4env2repeat",             // 1833
     "layer4env3repeat",             // 1834
-    "layer4fakeparam",							// we'll call it 1835, it's a bug
+    "layer4fakeparam",                                                  // we'll call it 1835, it's a bug
 //// BEGIN COMMON LAYER 4 PATCH CORDS
     "---",          // 1920
     "layer4cord0src",               // 1921
@@ -4185,7 +4185,7 @@ public class EmuProteus2000 extends Synth
     1831,           // layer1env3rls2lvl
     1833,           // layer1env2repeat
     1834,           // layer1env3repeat
-    1835,			// THIS DOES NOT EXIST.  It's an E-Mu bug but we need a stand-in here
+    1835,                       // THIS DOES NOT EXIST.  It's an E-Mu bug but we need a stand-in here
     /// LAYER PATCH CORDS
     1920,           // ---
     1921,           // layer1cord0src
@@ -4292,75 +4292,75 @@ public class EmuProteus2000 extends Synth
     public int getBatchDownloadFailureCountdown() { return 50; }
 
     public boolean testVerify(Synth synth2, String key, Object obj1, Object obj2)
-   		{
-   		// The following keys are permitted to deviate:
-   		return (key.equals("riff") ||
-   			key.equals("arppattern") ||
-   			key.equals("link1preset") ||
-   			key.equals("link2preset") ||
-   			key.equals("layer1instrument") ||
-   			key.equals("layer2instrument") ||
-   			key.equals("layer3instrument") ||
-   			key.equals("layer4instrument"));
-   		}
-   		
-   	// Here we're coloring the non-installed ROMs gray and the rest magenta
+        {
+        // The following keys are permitted to deviate:
+        return (key.equals("riff") ||
+            key.equals("arppattern") ||
+            key.equals("link1preset") ||
+            key.equals("link2preset") ||
+            key.equals("layer1instrument") ||
+            key.equals("layer2instrument") ||
+            key.equals("layer3instrument") ||
+            key.equals("layer4instrument"));
+        }
+                
+    // Here we're coloring the non-installed ROMs gray and the rest magenta
     public boolean isAppropriatePatchLocation(int bank, int num) 
-    	{
-    	if (bank == 0) return true;
-    	
-    	boolean installedSimms = false;
-    	for(int i = 0; i < simms.length; i++)
-    		{
-    		if (simms[i] == bank) return true;
-    		if (simms[i] != 0) installedSimms = true;
-    		}
-    	return !installedSimms;
-    	}
+        {
+        if (bank == 0) return true;
+        
+        boolean installedSimms = false;
+        for(int i = 0; i < simms.length; i++)
+            {
+            if (simms[i] == bank) return true;
+            if (simms[i] != 0) installedSimms = true;
+            }
+        return !installedSimms;
+        }
 
     public void librarianCreated(Librarian librarian)
-    	{
-    	// We need to reorder the columns 
+        {
+        // We need to reorder the columns 
 
-    	JTable table = librarian.getTable();
-    	ArrayList<TableColumn> columns = new ArrayList<>();
-    	
-    	// The only way to reorder columns in a JTable without modifying their underlying indices
-    	// is (as far as I know) to physically remove the TableColumns and then reinsert them in
-    	// the desired order.  So that's what we're gonna do.
-    	
-    	// remove all columns
-    	int len = table.getColumnModel().getColumnCount();
-    	for(int i = 2; i < len; i++)
-    		{
-    		TableColumn column = table.getColumn(i);
-			table.removeColumn(column);
-    		columns.add(column);		// this removes the column identified/named as "i", since we named the columns the same as their ordering
-    		}
+        JTable table = librarian.getTable();
+        ArrayList<TableColumn> columns = new ArrayList<>();
+        
+        // The only way to reorder columns in a JTable without modifying their underlying indices
+        // is (as far as I know) to physically remove the TableColumns and then reinsert them in
+        // the desired order.  So that's what we're gonna do.
+        
+        // remove all columns
+        int len = table.getColumnModel().getColumnCount();
+        for(int i = 2; i < len; i++)
+            {
+            TableColumn column = table.getColumn(i);
+            table.removeColumn(column);
+            columns.add(column);            // this removes the column identified/named as "i", since we named the columns the same as their ordering
+            }
 
-    	// insert special columns
-    	for(int i = 0; i < simms.length; i++)
-    		{
-    		if (simms[i] != 0)
-    			{
-    			for(int j = 0; j < columns.size(); j++)
-    				{
-    				if (((Integer)(columns.get(j).getIdentifier())).intValue() == simms[i] + 1)	// got it ( + 1 compensates for User in the columns)
-    					{
-    					table.addColumn(columns.remove(j));
-    					break;
-    					}
-    				}
-    			}
-    		}
+        // insert special columns
+        for(int i = 0; i < simms.length; i++)
+            {
+            if (simms[i] != 0)
+                {
+                for(int j = 0; j < columns.size(); j++)
+                    {
+                    if (((Integer)(columns.get(j).getIdentifier())).intValue() == simms[i] + 1)     // got it ( + 1 compensates for User in the columns)
+                        {
+                        table.addColumn(columns.remove(j));
+                        break;
+                        }
+                    }
+                }
+            }
 
-    	// reinsert remainder
-		for(int j = 0; j < columns.size(); j++)
-			{
-			table.addColumn(columns.remove(j));
-			}
-    	}
-   		
+        // reinsert remainder
+        for(int j = 0; j < columns.size(); j++)
+            {
+            table.addColumn(columns.remove(j));
+            }
+        }
+                
     }
 
 
@@ -4369,81 +4369,81 @@ public class EmuProteus2000 extends Synth
 
 
 /* 
-     THE EMU PROTEUS 2000 RANT
+   THE EMU PROTEUS 2000 RANT
 
-     SYSEX.
-     The Proteus 2000 has awful, just awful sysex.  Compared to its predecessors, it has an ENORMOUS
-     sysex specification, and yet this specification is missing an extraordinary amount of critical
-     information.  For example, the Proteus 2000 has an arpeggiator, and it has a bunch of sysex
-     commands for updating the arpeggiator by itself.  But the spec writers kinda forgot to indicate
-     where the arpeggiator parameters appear in the standard patch format.  In reality, it secretly 
-     shows up in a shadowy and undocumented area called "Reserved", with no hints to that effect.  
-     Also, the specification contains a million parameters, and provides them in a nicely convenient 
-     list, but doesn't mention that the parameters appear in the patch format in a **different order** 
-     than in the list, nor does it explain what that order is [the order is in fact the order of each 
-     of the IDs of the parameters]. It also doesn't explain that the first two parameters do not appear 
-     in the patch format all, and that the name parameters are one byte each while all other parameters 
-     are two bytes.  Also the name parameters aren't included in the parameter tally for the so-called
-     "Common General" parameters, even though they're listed as Common General parameters.  The only 
-     way to discover these unfortunate misfeatures is to reverse engineer the spec by hand.  Oh yeah,
-     and there are myriad range errors in the documentation and user manual: effects delays go -12...127,
-     not 0...127; arp notes are offset by 1; several patchcoord destinations are missing; others are
-     listed as there, but they actually aren't.  Did I mention that the number of parameters reported
-     in dumps is wrong?  There's one fewer envelope parameter than the machine indicates.  Also wrong:
-     LFO shapes, tempo offsets, ...
+   SYSEX.
+   The Proteus 2000 has awful, just awful sysex.  Compared to its predecessors, it has an ENORMOUS
+   sysex specification, and yet this specification is missing an extraordinary amount of critical
+   information.  For example, the Proteus 2000 has an arpeggiator, and it has a bunch of sysex
+   commands for updating the arpeggiator by itself.  But the spec writers kinda forgot to indicate
+   where the arpeggiator parameters appear in the standard patch format.  In reality, it secretly 
+   shows up in a shadowy and undocumented area called "Reserved", with no hints to that effect.  
+   Also, the specification contains a million parameters, and provides them in a nicely convenient 
+   list, but doesn't mention that the parameters appear in the patch format in a **different order** 
+   than in the list, nor does it explain what that order is [the order is in fact the order of each 
+   of the IDs of the parameters]. It also doesn't explain that the first two parameters do not appear 
+   in the patch format all, and that the name parameters are one byte each while all other parameters 
+   are two bytes.  Also the name parameters aren't included in the parameter tally for the so-called
+   "Common General" parameters, even though they're listed as Common General parameters.  The only 
+   way to discover these unfortunate misfeatures is to reverse engineer the spec by hand.  Oh yeah,
+   and there are myriad range errors in the documentation and user manual: effects delays go -12...127,
+   not 0...127; arp notes are offset by 1; several patchcoord destinations are missing; others are
+   listed as there, but they actually aren't.  Did I mention that the number of parameters reported
+   in dumps is wrong?  There's one fewer envelope parameter than the machine indicates.  Also wrong:
+   LFO shapes, tempo offsets, ...
      
 
-     On top of it, the Proteus 2000's sysex is needlessly broken into many 255-byte chunks: it cannot 
-     receive its entire patch format at one time.  And like all other E-Mu machines, it's impossible 
-     to request the current working patch in memory; and furthermore there is no command to dump to the 
-     current working patch in memory.  In other E-Mu machines I as a developer have two options to get
-     around this significant failing, at least when it comes to dumping to memory (there's no way to
-     request, full stop): either to submit each parameter one at a time to current memory, or to write 
-     a patch to some "scratch" location (say, user patch 255) and then switch to tht patch, which would 
-     load it into current memory.  But unlike all other E-Mu machines, the second option is not reasonable 
-     because the memory is in flash, and so writing to a scratch location over and over again will burn 
-     it out.  However unlike all other E-Mu machines, the first option is very **slow** because on the 
-     Proteus 2000 there are 800 or so parameters!  But the first option is the only real choice.
+   On top of it, the Proteus 2000's sysex is needlessly broken into many 255-byte chunks: it cannot 
+   receive its entire patch format at one time.  And like all other E-Mu machines, it's impossible 
+   to request the current working patch in memory; and furthermore there is no command to dump to the 
+   current working patch in memory.  In other E-Mu machines I as a developer have two options to get
+   around this significant failing, at least when it comes to dumping to memory (there's no way to
+   request, full stop): either to submit each parameter one at a time to current memory, or to write 
+   a patch to some "scratch" location (say, user patch 255) and then switch to tht patch, which would 
+   load it into current memory.  But unlike all other E-Mu machines, the second option is not reasonable 
+   because the memory is in flash, and so writing to a scratch location over and over again will burn 
+   it out.  However unlike all other E-Mu machines, the first option is very **slow** because on the 
+   Proteus 2000 there are 800 or so parameters!  But the first option is the only real choice.
 
-     SIMMS AND "BANKS".
-     E-Mu must have thought they were really smart by allowing each of these machines to have up to four
-     SIMMs.  But it's just a nightmare for a patch editor because nowhere did they document the presets,
-     instruments, arpeggios, and riffs on these SIMMs, nor did they even keep the same number of each
-     on each SIMM.  Instead they assumed you'd query a machine's SIMMs for information.  Now Edisyn uses
-     patch editors for many things and they can't all query your current machine; thus Edisyn doesn't
-     engage in synchronous back-and-forth with synthesizers.  But even if it **did**, this still wouldn't
-     work because patches are permitted to link to, refer to riffs and arps of, and even use instruments
-     from SIMMs that aren't present on the machine, under the asumption that later they might be loaded
-     onto a machine which does have those SIMMs.  This makes querying completely useless.  The only
-     alternative is to compile a big list of all this information.  Fortunately someone has largely done
-     this for me already (thanks Jan).  Unfortunately this list is incomplete: there are at least four
-     ROMs out there with no known information.  And on top of it you can create your own "ROM" SIMMs out 
-     of Flash.
+   SIMMS AND "BANKS".
+   E-Mu must have thought they were really smart by allowing each of these machines to have up to four
+   SIMMs.  But it's just a nightmare for a patch editor because nowhere did they document the presets,
+   instruments, arpeggios, and riffs on these SIMMs, nor did they even keep the same number of each
+   on each SIMM.  Instead they assumed you'd query a machine's SIMMs for information.  Now Edisyn uses
+   patch editors for many things and they can't all query your current machine; thus Edisyn doesn't
+   engage in synchronous back-and-forth with synthesizers.  But even if it **did**, this still wouldn't
+   work because patches are permitted to link to, refer to riffs and arps of, and even use instruments
+   from SIMMs that aren't present on the machine, under the asumption that later they might be loaded
+   onto a machine which does have those SIMMs.  This makes querying completely useless.  The only
+   alternative is to compile a big list of all this information.  Fortunately someone has largely done
+   this for me already (thanks Jan).  Unfortunately this list is incomplete: there are at least four
+   ROMs out there with no known information.  And on top of it you can create your own "ROM" SIMMs out 
+   of Flash.
 
-     And then there's the problem of banks.  From the perspective of a sysex writer, a SIMM is a bank.
-     Everywhere in Proteus 2000 sysex, addresses are referred to as tuples, <SIMM or User Memory, number>.  
-     This corresponds to the <bank, number> approach on other synths.  EXCEPT that the user is presented 
-     with a lie on-screen: he is given a TRIPLE of the form <SIMM or User Memory, number / 128, number % 128>.
-     This is supposed to make the user think that patches are organized as <SIMM/User Memory, bank, number>.
-     The intent is that from the user's perspective, each SIMM has some N "banks", each of which has 128
-     patches, arps, instruments, or riffs.  The number of "banks" varies wildly from SIMM to SIMM.  Even
-     the user RAM memory is divided up into "banks".  Normally this falsehood wouldn't be an issue at all,
-     after how hard is it to do div and mod?   But remember that E-Mu SIMMs vary in the number of patches:
-     and thus they would vary in the number of "banks".  This turns out to cause problems in many places, 
-     but none moreso than when developing a librarian.  
+   And then there's the problem of banks.  From the perspective of a sysex writer, a SIMM is a bank.
+   Everywhere in Proteus 2000 sysex, addresses are referred to as tuples, <SIMM or User Memory, number>.  
+   This corresponds to the <bank, number> approach on other synths.  EXCEPT that the user is presented 
+   with a lie on-screen: he is given a TRIPLE of the form <SIMM or User Memory, number / 128, number % 128>.
+   This is supposed to make the user think that patches are organized as <SIMM/User Memory, bank, number>.
+   The intent is that from the user's perspective, each SIMM has some N "banks", each of which has 128
+   patches, arps, instruments, or riffs.  The number of "banks" varies wildly from SIMM to SIMM.  Even
+   the user RAM memory is divided up into "banks".  Normally this falsehood wouldn't be an issue at all,
+   after how hard is it to do div and mod?   But remember that E-Mu SIMMs vary in the number of patches:
+   and thus they would vary in the number of "banks".  This turns out to cause problems in many places, 
+   but none moreso than when developing a librarian.  
 
-     Edisyn's librarians are two-dimensional tables with banks along the horizontal and patch numbers 
-     along the vertical.  These tables can accommodate banks with different numbers of patches per bank.  
-     But how would we organize these banks?  We can't just display the "banks" of the SIMMs that the user 
-     has on his machine, because libraries are loaded from sysex files, and these files pay no heed to a 
-     user's current configuration.  Any preset from any SIMM might be in that library.  Okay, so how about
-     just listing every bank from every SIMM?  This would result in some 70-odd columns, nearly all of 
-     which would be BLANK.  Instead the only reasonable approach would be to once again treat SIMMs as
-     banks: thus we'd have one column for User RAM, and about 15 columns for known ROMs.  The problem here
-     is that some ROMs have many patches: indeed one has over a thousand of them.  But other ROMs have just
-     a hundred or so.  So we would have not only ragged columns but ones which are highly variable.  And
-     it would be confusing to the user, who has been lied to about the actual organization of his patches,
-     thinking that 128-patch "banks" are real.  C'est la vie.
+   Edisyn's librarians are two-dimensional tables with banks along the horizontal and patch numbers 
+   along the vertical.  These tables can accommodate banks with different numbers of patches per bank.  
+   But how would we organize these banks?  We can't just display the "banks" of the SIMMs that the user 
+   has on his machine, because libraries are loaded from sysex files, and these files pay no heed to a 
+   user's current configuration.  Any preset from any SIMM might be in that library.  Okay, so how about
+   just listing every bank from every SIMM?  This would result in some 70-odd columns, nearly all of 
+   which would be BLANK.  Instead the only reasonable approach would be to once again treat SIMMs as
+   banks: thus we'd have one column for User RAM, and about 15 columns for known ROMs.  The problem here
+   is that some ROMs have many patches: indeed one has over a thousand of them.  But other ROMs have just
+   a hundred or so.  So we would have not only ragged columns but ones which are highly variable.  And
+   it would be confusing to the user, who has been lied to about the actual organization of his patches,
+   thinking that 128-patch "banks" are real.  C'est la vie.
 
 */
 

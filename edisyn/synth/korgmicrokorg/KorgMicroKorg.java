@@ -219,7 +219,7 @@ public class KorgMicroKorg extends Synth
                         return;
                                 
                     // remember where we were
-		            String title = getSelectedTabTitle();
+                    String title = getSelectedTabTitle();
 
                     removeTab("Timbre 1");
                     removeTab("Timbre 2");

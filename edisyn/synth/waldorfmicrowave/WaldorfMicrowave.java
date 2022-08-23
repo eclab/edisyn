@@ -1387,8 +1387,8 @@ public class WaldorfMicrowave extends Synth
         catch (Exception e) { Synth.handleException(e); }
         }
 
-	// We have to force a change patch always because we're doing the equivalent of requestCurrentDump here
-	public boolean getAlwaysChangesPatchesOnRequestDump() { return true; }
+    // We have to force a change patch always because we're doing the equivalent of requestCurrentDump here
+    public boolean getAlwaysChangesPatchesOnRequestDump() { return true; }
 
     public byte[] requestDump(Model tempModel)
         {

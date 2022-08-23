@@ -1459,7 +1459,7 @@ public class HillClimb extends SynthPanel
                 if (len == 0) return;
                 
                 for(int i = 0; i < Math.min(len, 32); i++)
-                	{
+                    {
                     currentModels[i] = (Model)(synth.librarian.getLibrary().getModel(column - 1, row + i).clone());
                     }
                     

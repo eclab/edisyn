@@ -1043,8 +1043,8 @@ public class YamahaFB01 extends Synth
         tryToSendSysex(requestDump(tempModel));
         }
 
-	// We have to force a change patch always because we're doing the equivalent of requestCurrentDump here
-	public boolean getAlwaysChangesPatchesOnRequestDump() { return true; }
+    // We have to force a change patch always because we're doing the equivalent of requestCurrentDump here
+    public boolean getAlwaysChangesPatchesOnRequestDump() { return true; }
 
     public byte[] requestDump(Model tempModel) 
         {
@@ -1334,14 +1334,14 @@ public class YamahaFB01 extends Synth
         }
 
 /*
-    public String reviseBankName(String name) 
-    	{
-    	char[] old = name.toCharArray() + "                ";
-    	char[] name = char[16];
-    	for(int i = 0; i < 16; i++)
-    		name[i] = (char)(old[i] & 127);
-    	return String.valueOf(name);
-    	}
+  public String reviseBankName(String name) 
+  {
+  char[] old = name.toCharArray() + "                ";
+  char[] name = char[16];
+  for(int i = 0; i < 16; i++)
+  name[i] = (char)(old[i] & 127);
+  return String.valueOf(name);
+  }
 */
     
     public String[] getBankNames() { return BANKS; }

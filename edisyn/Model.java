@@ -54,13 +54,13 @@ public class Model implements Cloneable
     // The fixer
     Synth fixer = null;
     /** Sets the Model's fixer. This Synth ALWAYS has its fix(String, Model) method called on every
-    	key that is updated for any reason, regardless of whether updateListeners is called.  By default
-    	Synth.fix(String, Model) does nothing at all.  The fixer was introduced to revise the min/max range of
-    	parameters due to a change in a given parameter.  For example, in the Proteus 2000, changing a 
-    	ROM parameter will radically change the min/max values of the available instruments (for example)
-    	in the ROM.  Assuming the ROM parameter gets mutated or changed first, we can modify the min/max
-    	values of the instruments so that they can be changed afterwards within the proper range. 
-    	By default the fixer is null, so nothing is called or changed. */
+        key that is updated for any reason, regardless of whether updateListeners is called.  By default
+        Synth.fix(String, Model) does nothing at all.  The fixer was introduced to revise the min/max range of
+        parameters due to a change in a given parameter.  For example, in the Proteus 2000, changing a 
+        ROM parameter will radically change the min/max values of the available instruments (for example)
+        in the ROM.  Assuming the ROM parameter gets mutated or changed first, we can modify the min/max
+        values of the instruments so that they can be changed afterwards within the proper range. 
+        By default the fixer is null, so nothing is called or changed. */
     public void setFixer(Synth val) { fixer = val; }
 
     // Listeners should be updated when a key is modified
@@ -845,9 +845,9 @@ public class Model implements Cloneable
     /** Updates all listeners for the key, and for ALL_KEYS, unless updateListeners is true */
     public void updateListenersForKey(String key)
         {
-		if (fixer != null) 
-			fixer.fix(key, this);
-		
+        if (fixer != null) 
+            fixer.fix(key, this);
+                
         if (!updateListeners) return;
         
         Node node = storage.get(key);
@@ -866,14 +866,14 @@ public class Model implements Cloneable
     /** Updates all listeners for for keys, and for ALL_KEYS, unless updateListeners is true */
     public void updateAllListeners()
         {
-		if (fixer != null)
-			{
-			String[] keyset = (String[])(storage.keySet().toArray(new String[0]));
-			for(int j = 0; j < keyset.length; j++)
-				{
-				fixer.fix(keyset[j], this);
-				}
-			}
+        if (fixer != null)
+            {
+            String[] keyset = (String[])(storage.keySet().toArray(new String[0]));
+            for(int j = 0; j < keyset.length; j++)
+                {
+                fixer.fix(keyset[j], this);
+                }
+            }
 
         if (!updateListeners) return;
         
@@ -1111,7 +1111,7 @@ public class Model implements Cloneable
                 }
                 
             if (fixer != null)
-            	fixer.fix(keys[i], this);
+                fixer.fix(keys[i], this);
             }
 
         if (undoListener!= null)
@@ -1235,7 +1235,7 @@ public class Model implements Cloneable
                 }
 
             if (fixer != null)
-            	fixer.fix(keys[i], this);
+                fixer.fix(keys[i], this);
             }
 
         if (undoListener!= null)
@@ -1337,9 +1337,9 @@ public class Model implements Cloneable
                     set(keys[i], reviseMutatedValue(keys[i], get(keys[i], 0), model.get(keys[i], 0)));
                 }
  
-             if (fixer != null)
-            	fixer.fix(keys[i], this);
-           }
+            if (fixer != null)
+                fixer.fix(keys[i], this);
+            }
 
         if (undoListener!= null)
             {
@@ -1383,7 +1383,7 @@ public class Model implements Cloneable
                 }
                 
             if (fixer != null)
-            	fixer.fix(keys[i], this);
+                fixer.fix(keys[i], this);
             }
 
         if (undoListener!= null)
@@ -1408,7 +1408,7 @@ public class Model implements Cloneable
     */
     public Model crossover(Random random, Model model, String[] keys, double weight)
         {
-		return crossover(random, model, keys, weight, true);
+        return crossover(random, model, keys, weight, true);
         }
 
     // used by morph to determine if a key is in a metric region for all models 
@@ -1668,7 +1668,7 @@ public class Model implements Cloneable
                 }
 
             if (fixer != null)
-            	fixer.fix(keys[i], this);
+                fixer.fix(keys[i], this);
             }
 
         // update undoListener

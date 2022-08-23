@@ -868,7 +868,7 @@ public class RolandJV880Drum extends Synth
         }
 
 
-	public static final int PAUSE_AFTER_CHANGE_PATCH_PERFORMANCE_BUTTON = 200;
+    public static final int PAUSE_AFTER_CHANGE_PATCH_PERFORMANCE_BUTTON = 200;
 
     //// I CAN GET ALL 4 PATCH SEGMENTS WITH
     ////    F0 41 10 46 11 01 48 20 00 00 00 0C 00 0B F7
@@ -1091,7 +1091,7 @@ public class RolandJV880Drum extends Synth
         
     public int getPauseAfterChangePatch() { return 100; }
 
-    public int getPauseAfterSendAllParameters() { return 300; }		// works at 100 in 1.01 but I want to be careful 
+    public int getPauseAfterSendAllParameters() { return 300; }         // works at 100 in 1.01 but I want to be careful 
  
     public String getPatchName(Model model) { return "Drum"; }
         

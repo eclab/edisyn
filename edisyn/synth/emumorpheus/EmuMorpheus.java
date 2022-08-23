@@ -1023,15 +1023,15 @@ public class EmuMorpheus extends Synth
                 else if (key.equals("layer1filttype") ||
                     key.equals("layer2filttype"))
                     {
-                        // Because the morpheus filters are a subset of the ultraproteus filters, and all are shown
-                        // in the chooser at one time, we shouldn't try to map values to morpheus filters because
-                        // they could be out of range (in the ultraproteus range).
-                	/*
-                    if (morpheus)
-                        val = MORPHEUS_FILTER_OFFSETS[val];
-                    else
-                	*/
-                        val = ULTRAPROTEUS_FILTER_OFFSETS[val];
+                    // Because the morpheus filters are a subset of the ultraproteus filters, and all are shown
+                    // in the chooser at one time, we shouldn't try to map values to morpheus filters because
+                    // they could be out of range (in the ultraproteus range).
+                    /*
+                      if (morpheus)
+                      val = MORPHEUS_FILTER_OFFSETS[val];
+                      else
+                    */
+                    val = ULTRAPROTEUS_FILTER_OFFSETS[val];
                     }
                 }
 
@@ -1114,15 +1114,15 @@ public class EmuMorpheus extends Synth
             else if (parameters[i].equals("layer1filttype") ||
                 parameters[i].equals("layer2filttype"))
                 {
-                        // Because the morpheus filters are a subset of the ultraproteus filters, and all are shown
-                        // in the chooser at one time, we shouldn't try to map values to morpheus filters because
-                        // they could be out of range (in the ultraproteus range).
+                // Because the morpheus filters are a subset of the ultraproteus filters, and all are shown
+                // in the chooser at one time, we shouldn't try to map values to morpheus filters because
+                // they could be out of range (in the ultraproteus range).
                 /*
-                if (morpheus)
-                    val = MORPHEUS_FILTER_OFFSETS[val];
-                else
+                  if (morpheus)
+                  val = MORPHEUS_FILTER_OFFSETS[val];
+                  else
                 */
-                    val = ULTRAPROTEUS_FILTER_OFFSETS[val];
+                val = ULTRAPROTEUS_FILTER_OFFSETS[val];
                 }
                         
             if (val < 0) val = val + 16384;
@@ -1228,10 +1228,10 @@ public class EmuMorpheus extends Synth
                         // in the chooser at one time, we shouldn't try to map values to morpheus filters because
                         // they could be out of range (in the ultraproteus range).
                         /*
-                        if (isMorpheus())
-                            val = ((Integer)(morpheusFilterOffsetsToIndex.get(Integer.valueOf(val)))).intValue();
-                        else  
-                    	*/                                          
+                          if (isMorpheus())
+                          val = ((Integer)(morpheusFilterOffsetsToIndex.get(Integer.valueOf(val)))).intValue();
+                          else  
+                        */                                          
                         val = ((Integer)(ultraproteusFilterOffsetsToIndex.get(Integer.valueOf(val)))).intValue();
                         }
                     catch (Exception ex)

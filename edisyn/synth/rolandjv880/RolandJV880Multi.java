@@ -880,7 +880,7 @@ public class RolandJV880Multi extends Synth
             
         // figure out the address
         if (key.equals("name"))
-        	{
+            {
             CC = (byte)(CC + 0x00);
             DD = (byte)(DD + 0x00);
             }
@@ -1129,8 +1129,8 @@ public class RolandJV880Multi extends Synth
         }
 
 
-	// We have to force a change patch always because we're doing the equivalent of requestCurrentDump here
-	public boolean getAlwaysChangesPatchesOnRequestDump() { return true; }
+    // We have to force a change patch always because we're doing the equivalent of requestCurrentDump here
+    public boolean getAlwaysChangesPatchesOnRequestDump() { return true; }
 
     public byte[] requestDump(Model tempModel)
         {
@@ -1150,8 +1150,8 @@ public class RolandJV880Multi extends Synth
             AA, BB, CC , DD, (byte)0x00, (byte)0x00, (byte)0x10, (byte)0x00, checksum, (byte)0xF7 }; 
         }
 
-	static final int PAUSE_AFTER_CHANGE_PATCH_PERFORMANCE_BUTTON = 200;		// 700; //200;
-	static final int PAUSE_AFTER_CHANGE_BANK = 700; //200;
+    static final int PAUSE_AFTER_CHANGE_PATCH_PERFORMANCE_BUTTON = 200;             // 700; //200;
+    static final int PAUSE_AFTER_CHANGE_BANK = 700; //200;
 
     public byte[] requestCurrentDump()
         {
@@ -1286,7 +1286,7 @@ public class RolandJV880Multi extends Synth
         }
         
     // Takes a long time for batches to come in, particularly Orch Stab 2 (patch Internal 11, dunno why)
-    public int getBatchDownloadWaitTime() { return 8000; } 		// { return 2500; }		// 2000;
+    public int getBatchDownloadWaitTime() { return 8000; }              // { return 2500; }             // 2000;
 
 
 

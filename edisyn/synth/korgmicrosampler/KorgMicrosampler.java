@@ -300,16 +300,16 @@ public class KorgMicrosampler extends Synth
         comp = new StringComponent("Bank Name", this, "name", 8, "Name must be up to 8 ASCII characters.")
             {
             /*
-            public boolean isValid(String val)
-                {
-                if (val.length() > 8) return false;
-                for(int i = 0 ; i < val.length(); i++)
-                    {
-                    char c = val.charAt(i);
-                    if (c < 32 || c > 127) return false;
-                    }
-                return true;
-                }
+              public boolean isValid(String val)
+              {
+              if (val.length() > 8) return false;
+              for(int i = 0 ; i < val.length(); i++)
+              {
+              char c = val.charAt(i);
+              if (c < 32 || c > 127) return false;
+              }
+              return true;
+              }
             */
                                 
             public void update(String key, Model model)
@@ -329,7 +329,7 @@ public class KorgMicrosampler extends Synth
         return globalCategory;
         }
   
-      public String revisePatchName(String name)
+    public String revisePatchName(String name)
         {
         if (name == null) name = "";
         name = (name + "        ").substring(8);

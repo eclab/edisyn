@@ -128,88 +128,88 @@ public class StringComponent extends JComponent implements Updatable, HasKey
         }
         
     public void perform(Component parent)
-    	{
-            String currentText = synth.getModel().get(key, "");
-                while(true)
-                    {
-                    String val = synth.getModel().get(key, "").trim();
-                    VBox vbox = new VBox();
-                    vbox.add(new JLabel(getCommand()));
-                    final JTextField text = new JTextField(maxLength);
-                    text.setText(currentText);
+        {
+        String currentText = synth.getModel().get(key, "");
+        while(true)
+            {
+            String val = synth.getModel().get(key, "").trim();
+            VBox vbox = new VBox();
+            vbox.add(new JLabel(getCommand()));
+            final JTextField text = new JTextField(maxLength);
+            text.setText(currentText);
                     
-                    // The following hack is inspired by https://tips4java.wordpress.com/2010/03/14/dialog-focus/
-                    // and results in the text field being selected (which is what should have happened in the first place) 
+            // The following hack is inspired by https://tips4java.wordpress.com/2010/03/14/dialog-focus/
+            // and results in the text field being selected (which is what should have happened in the first place) 
                     
-                    text.addAncestorListener(new javax.swing.event.AncestorListener()
-                        {
-                        public void ancestorAdded(javax.swing.event.AncestorEvent e)    
-                            { 
-                            JComponent component = e.getComponent();
-                            component.requestFocusInWindow();
-                            text.selectAll(); 
-                            }
-                        public void ancestorMoved(javax.swing.event.AncestorEvent e) {}
-                        public void ancestorRemoved(javax.swing.event.AncestorEvent e) {}
-                        });
-                    vbox.add(text);
+            text.addAncestorListener(new javax.swing.event.AncestorListener()
+                {
+                public void ancestorAdded(javax.swing.event.AncestorEvent e)    
+                    { 
+                    JComponent component = e.getComponent();
+                    component.requestFocusInWindow();
+                    text.selectAll(); 
+                    }
+                public void ancestorMoved(javax.swing.event.AncestorEvent e) {}
+                public void ancestorRemoved(javax.swing.event.AncestorEvent e) {}
+                });
+            vbox.add(text);
                     
-                    synth.disableMenuBar();
-                    int opt = JOptionPane.showOptionDialog(parent, vbox, getTitle(),
-                        JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, new String[] { "Enter", "Cancel", "Rand", "Rules" }, "Enter");
-                    synth.enableMenuBar();
+            synth.disableMenuBar();
+            int opt = JOptionPane.showOptionDialog(parent, vbox, getTitle(),
+                JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, new String[] { "Enter", "Cancel", "Rand", "Rules" }, "Enter");
+            synth.enableMenuBar();
                                         
-                    if (opt == 3)       // this is "Rules"
-                        {
-                        synth.disableMenuBar();
-                        JOptionPane.showMessageDialog(parent, instructions, "Rules", JOptionPane.INFORMATION_MESSAGE);
-                        synth.enableMenuBar();
-                        }
-                    else if (opt == 2)       // this is "Rand"
-                        {
-                        if (wordList == null)
-                        	{
-                        	Scanner scan = new Scanner(StringComponent.class.getResourceAsStream("wordlist.txt"));
-							ArrayList<String> tokens = new ArrayList<>();
-							while (scan.hasNext()) tokens.add(scan.nextLine());
-							wordList = tokens.toArray(new String[0]);
-							}
-						if (wordList != null && wordList.length > 0)
-							{
-							String word = wordList[rand.nextInt(wordList.length)];
-							currentText = word.substring(0, 1).toUpperCase() + word.substring(1);
-							//currentText = wordList[rand.nextInt(wordList.length)].toUpperCase();
-							}
-						else
-							{
-							synth.showSimpleError("Random Word", "Error in loading random wordList, sorry.");
-							}
-                        }
-                    else if (opt == 1)  // this is "Cancel"
+            if (opt == 3)       // this is "Rules"
+                {
+                synth.disableMenuBar();
+                JOptionPane.showMessageDialog(parent, instructions, "Rules", JOptionPane.INFORMATION_MESSAGE);
+                synth.enableMenuBar();
+                }
+            else if (opt == 2)       // this is "Rand"
+                {
+                if (wordList == null)
+                    {
+                    Scanner scan = new Scanner(StringComponent.class.getResourceAsStream("wordlist.txt"));
+                    ArrayList<String> tokens = new ArrayList<>();
+                    while (scan.hasNext()) tokens.add(scan.nextLine());
+                    wordList = tokens.toArray(new String[0]);
+                    }
+                if (wordList != null && wordList.length > 0)
+                    {
+                    String word = wordList[rand.nextInt(wordList.length)];
+                    currentText = word.substring(0, 1).toUpperCase() + word.substring(1);
+                    //currentText = wordList[rand.nextInt(wordList.length)].toUpperCase();
+                    }
+                else
+                    {
+                    synth.showSimpleError("Random Word", "Error in loading random wordList, sorry.");
+                    }
+                }
+            else if (opt == 1)  // this is "Cancel"
+                { 
+                return; 
+                }
+            else                                // This is "Enter"
+                {
+                String result = convert(text.getText());
+                if (result == null) return;
+                String str = replace(result);
+                if (str == null)
+                    {
+                    if (isValid(result))
                         { 
-                        return; 
-                        }
-                    else				// This is "Enter"
-                        {
-                        String result = convert(text.getText());
-                        if (result == null) return;
-                        String str = replace(result);
-                        if (str == null)
-                            {
-                            if (isValid(result))
-                                { 
-                                setText(result); 
-                                return;
-                                }
-                            }
-                        else
-                            {
-                            setText(str); 
-                            return;
-                            }
+                        setText(result); 
+                        return;
                         }
                     }
-    	}
+                else
+                    {
+                    setText(str); 
+                    return;
+                    }
+                }
+            }
+        }
 
     public void paintComponent(Graphics g)
         {

@@ -2580,8 +2580,8 @@ public class YamahaFS1RFseq extends Synth
         tryToSendSysex(requestDump(tempModel));
         }
 
-	// We have to force a change patch always because we're doing the equivalent of requestCurrentDump here
-	public boolean getAlwaysChangesPatchesOnRequestDump() { return true; }
+    // We have to force a change patch always because we're doing the equivalent of requestCurrentDump here
+    public boolean getAlwaysChangesPatchesOnRequestDump() { return true; }
 
     public byte[] requestDump(Model tempModel) 
         {
@@ -2740,7 +2740,7 @@ public class YamahaFS1RFseq extends Synth
     public boolean isValidPatchLocation(int bank, int num) { return (bank == 1 || num < 6); }
 
     public int getValidBankSize(int bank)
-    	{
+        {
         if (bank == 1)
             {
             return super.getValidBankSize(bank);
@@ -2749,7 +2749,7 @@ public class YamahaFS1RFseq extends Synth
             {
             return 6; 
             }
-    	}
+        }
         
     public boolean getUpdatesListenersOnDownload() { return false; }    
 

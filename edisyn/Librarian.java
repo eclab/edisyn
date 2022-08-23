@@ -54,9 +54,9 @@ public class Librarian extends JPanel
         }
         
     public JTable getTable()
-    	{
-    	return table;
-    	}
+        {
+        return table;
+        }
 
 
     public static final Color STANDARD_BACKGROUND_COLOR = new Color(250, 250, 250);
@@ -120,39 +120,39 @@ public class Librarian extends JPanel
             };
         
         table.addKeyListener(new KeyListener()
-        	{
-        	public void keyPressed(KeyEvent e)
-        		{
-        		if (e.getKeyCode() == KeyEvent.VK_ENTER)
-        			{ 
-        			e.consume(); 
+            {
+            public void keyPressed(KeyEvent e)
+                {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER)
+                    { 
+                    e.consume(); 
 
-					int column = col(table, table.getSelectedColumn());
-					int row = table.getSelectedRow();
-					int len = table.getSelectedRowCount();
-						
-					if (column < 0 || row < 0 || len == 0) // nope
-						{
-						getLibrary().synth.showSimpleError("Cannot Change Name", "Please select a patch to change first.");
-						return;
-						}
-			
-					getLibrary().changeName(column - 1, row, len);
-        			}
-        		}
-        		
-        	public void keyReleased(KeyEvent e)
-        		{
-        		if (e.getKeyCode() == KeyEvent.VK_ENTER)
-        			{ e.consume(); }
-        		}
-        	
-        	public void keyTyped(KeyEvent e)
-        		{
-        		if (e.getKeyCode() == KeyEvent.VK_ENTER)
-        			{ e.consume(); }
-        		}
-        	});
+                    int column = col(table, table.getSelectedColumn());
+                    int row = table.getSelectedRow();
+                    int len = table.getSelectedRowCount();
+                                                
+                    if (column < 0 || row < 0 || len == 0) // nope
+                        {
+                        getLibrary().synth.showSimpleError("Cannot Change Name", "Please select a patch to change first.");
+                        return;
+                        }
+                        
+                    getLibrary().changeName(column - 1, row, len);
+                    }
+                }
+                        
+            public void keyReleased(KeyEvent e)
+                {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER)
+                    { e.consume(); }
+                }
+                
+            public void keyTyped(KeyEvent e)
+                {
+                if (e.getKeyCode() == KeyEvent.VK_ENTER)
+                    { e.consume(); }
+                }
+            });
                 
         table.setDefaultRenderer(Object.class, new DefaultTableCellRenderer()
             {
@@ -160,11 +160,11 @@ public class Librarian extends JPanel
                 {
                 Component comp = super.getTableCellRendererComponent(table,value,isSelected,hasFocus,row,column);
 
-				// Note to get the underlying column number, you have to get the column model and pull out the column.
-				// We have stored the original column number in the column's "identifier", so you can grab that as shown here.
-				// Note that you CANNOT use table.getColumn(), as this grabs the column by identifier, which is the number
-				// we set, so that'll be the wrong column.
-				int originalColumn = ((Integer)(table.getColumnModel().getColumn(column).getIdentifier())).intValue();
+                // Note to get the underlying column number, you have to get the column model and pull out the column.
+                // We have stored the original column number in the column's "identifier", so you can grab that as shown here.
+                // Note that you CANNOT use table.getColumn(), as this grabs the column by identifier, which is the number
+                // we set, so that'll be the wrong column.
+                int originalColumn = ((Integer)(table.getColumnModel().getColumn(column).getIdentifier())).intValue();
 
                 // Change BACKGROUND COLOR
                                 
@@ -225,14 +225,14 @@ public class Librarian extends JPanel
         for(int i = 0; i < synth.getPatchNameLength(); i++) nm += "M";
         int w = table.getFontMetrics(table.getFont()).stringWidth(nm);
                 
-		// Give the columns unique names
+        // Give the columns unique names
         for(int i = 0; i < table.getColumnModel().getColumnCount(); i++)
             {
             TableColumn tc = table.getColumnModel().getColumn(i);
             tc.setIdentifier(Integer.valueOf(i));
             }
 
-		// Give the columns widths
+        // Give the columns widths
         for(int i = 0; i < table.getColumnModel().getColumnCount(); i++)
             {
             TableColumn tc = table.getColumnModel().getColumn(i);
@@ -508,9 +508,9 @@ public class Librarian extends JPanel
         // bottomPanel.add(writeProgress, BorderLayout.EAST);                           // Not working right now :-(
         }
         
-	
-	
-	public void loadOneInternal()
+        
+        
+    public void loadOneInternal()
         {
         int column = col(table, table.getSelectedColumn());
         int row = table.getSelectedRow();
@@ -925,7 +925,7 @@ public class Librarian extends JPanel
                 }
             });
         menu.add(item);
-		synth.mixAgainMenu = item;
+        synth.mixAgainMenu = item;
         item.setEnabled(true);
         item.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_M, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.SHIFT_MASK));
         return menu;
@@ -970,20 +970,20 @@ public class Librarian extends JPanel
         performDownload(0, 0, getLibrary().getNumBanks() - 1, getLibrary().getBankSize() - 1 );         // wrap-around
         }
 
-	public int getCurrentColumn()
-		{
-		return col(table, table.getSelectedColumn());
-		}
-		
-	public int getCurrentRow()
-		{
-		return table.getSelectedRow();
-		}
-		
-	public int getCurrentLength()
-		{
-		return table.getSelectedRowCount();
-		}
+    public int getCurrentColumn()
+        {
+        return col(table, table.getSelectedColumn());
+        }
+                
+    public int getCurrentRow()
+        {
+        return table.getSelectedRow();
+        }
+                
+    public int getCurrentLength()
+        {
+        return table.getSelectedRowCount();
+        }
 
     /** Downloads all locations in bank. */
     public void downloadBank()
@@ -1014,8 +1014,8 @@ public class Librarian extends JPanel
         performDownload(column - 1, 0, column - 1, getLibrary().getBankSize() - 1 );
         }
 
-	public void toNudgeTargets()
-		{
+    public void toNudgeTargets()
+        {
         int column = col(table, table.getSelectedColumn());
         int row = table.getSelectedRow();
         int len = table.getSelectedRowCount();
@@ -1026,24 +1026,24 @@ public class Librarian extends JPanel
             return;
             }
 
-		// First clear all the nudge targets
-		for(int i = 0; i < 4; i++)
-			{
-			getLibrary().synth.doSetNudgeEmpty(i, getLibrary().getModel(0, -1));		// init patch
-			}
-			
-		// Next load the targets
-		for(int i = 0; i < Math.min(4, len); i++)
-			{
-			Patch patch = getLibrary().getPatch(column - 1, row + i);
-			getLibrary().synth.doSetNudge(i, getLibrary().getModel(column - 1, row + i));
-			}
+        // First clear all the nudge targets
+        for(int i = 0; i < 4; i++)
+            {
+            getLibrary().synth.doSetNudgeEmpty(i, getLibrary().getModel(0, -1));            // init patch
+            }
+                        
+        // Next load the targets
+        for(int i = 0; i < Math.min(4, len); i++)
+            {
+            Patch patch = getLibrary().getPatch(column - 1, row + i);
+            getLibrary().synth.doSetNudge(i, getLibrary().getModel(column - 1, row + i));
+            }
 
         getLibrary().getSynth().setCurrentTab(0);
-		}
+        }
 
-	public void toMorphTargets()
-		{
+    public void toMorphTargets()
+        {
         int column = col(table, table.getSelectedColumn());
         int row = table.getSelectedRow();
         int len = table.getSelectedRowCount();
@@ -1051,7 +1051,7 @@ public class Librarian extends JPanel
         
         if (column < 0 || row < 0 || len == 0) // nope
             {
-           	synth.showSimpleError("Cannot Send to Morph Targets", "Please select up to four patches first.");
+            synth.showSimpleError("Cannot Send to Morph Targets", "Please select up to four patches first.");
             return;
             }
             
@@ -1062,18 +1062,18 @@ public class Librarian extends JPanel
 
         // Now clear the buttons
         for(int i = 0; i < 4; i++)
-        	morph.clear(i);
+            morph.clear(i);
 
         // Now set the buttons
         for(int i = 0; i < Math.min(4, len); i++)
-        	morph.set(i, getLibrary().getModel(column - 1, row + i));
+            morph.set(i, getLibrary().getModel(column - 1, row + i));
 
         synth.tabs.setSelectedComponent(synth.morphPane);
-		}
+        }
 
 
-	public void toHillClimber()
-		{
+    public void toHillClimber()
+        {
         int column = col(table, table.getSelectedColumn());
         int row = table.getSelectedRow();
         int len = table.getSelectedRowCount();
@@ -1081,7 +1081,7 @@ public class Librarian extends JPanel
         
         if (column < 0 || row < 0 || len == 0) // nope
             {
-           	synth.showSimpleError("Cannot Send to Hill Climber", "Please select some patches first.");
+            synth.showSimpleError("Cannot Send to Hill Climber", "Please select some patches first.");
             return;
             }
             
@@ -1091,27 +1091,27 @@ public class Librarian extends JPanel
         synth.hillClimb.initialize(null, HillClimb.OPERATION_SEED_FROM_LIBRARIAN);
         
         synth.tabs.setSelectedComponent(synth.hillClimbPane);
-		}
+        }
 
-	public static final int MIX_TYPE_UNIFORM = 0;
-	public static final int MIX_TYPE_ONE_THIRD = 1;
-	public static final int MIX_TYPE_ONE_HALF = 2;
-	public static final int MIX_TYPE_TWO_THIRDS = 3;
+    public static final int MIX_TYPE_UNIFORM = 0;
+    public static final int MIX_TYPE_ONE_THIRD = 1;
+    public static final int MIX_TYPE_ONE_HALF = 2;
+    public static final int MIX_TYPE_TWO_THIRDS = 3;
 
-	int lastMixType = -1;
-	
-	public void mixAgain()
-		{
-		if (lastMixType == -1)
-			{
-           	getLibrary().synth.showSimpleError("Cannot Mix A Second Time", "Choose a first-time mix type first.");
+    int lastMixType = -1;
+        
+    public void mixAgain()
+        {
+        if (lastMixType == -1)
+            {
+            getLibrary().synth.showSimpleError("Cannot Mix A Second Time", "Choose a first-time mix type first.");
             return;
-			}
-		mix(lastMixType);
-		}
-		
-	public void mix(int mixType)
-		{
+            }
+        mix(lastMixType);
+        }
+                
+    public void mix(int mixType)
+        {
         int column = col(table, table.getSelectedColumn());
         int row = table.getSelectedRow();
         int len = table.getSelectedRowCount();
@@ -1119,18 +1119,18 @@ public class Librarian extends JPanel
         
         if (column < 0 || row < 0 || len == 0) // nope
             {
-           	synth.showSimpleError("Cannot Mix", "Please select some patches first.");
+            synth.showSimpleError("Cannot Mix", "Please select some patches first.");
             return;
             }
 
         if (len == 1) // nope
             {
-           	synth.showSimpleError("Cannot Mix", "Mixing a single patch does nothing.  Mix two or more!");
+            synth.showSimpleError("Cannot Mix", "Mixing a single patch does nothing.  Mix two or more!");
             return;
             }
         
-	    Model model = null;
-	    String[] mutationKeys = synth.getMutationKeys();
+        Model model = null;
+        String[] mutationKeys = synth.getMutationKeys();
         double probability = 1.0;
         
         // Recombination is odd: we pick a weighted point p between the original a and the new b, and
@@ -1139,51 +1139,51 @@ public class Librarian extends JPanel
         // so I'm using crossover instead, passing in 'false' so it uses the true crossover probability and not
         // halving it.
         
-	    if (mixType == MIX_TYPE_UNIFORM)
-        	{
-        	// descending -- we start with the top patch
-        	model = getLibrary().getModel(column - 1, row).copy();		// we don't want the listeners etc.
-       	 	for(int i = 1; i < len; i++)
-       	 		{
-	        	if (i == len - 1) // last one, mix half/half
-	        		probability /= 2.0; 
-        		else 		// 1/2 -> 1/3 -> 1/4 -> 1/5 etc.
-	        		probability = 1.0 / ((1.0 / probability) + 1);
-        		model = model.crossover(synth.random, getLibrary().getModel(column - 1, row + i), mutationKeys, probability, false);
-       	 		}
-        	}
+        if (mixType == MIX_TYPE_UNIFORM)
+            {
+            // descending -- we start with the top patch
+            model = getLibrary().getModel(column - 1, row).copy();          // we don't want the listeners etc.
+            for(int i = 1; i < len; i++)
+                {
+                if (i == len - 1) // last one, mix half/half
+                    probability /= 2.0; 
+                else            // 1/2 -> 1/3 -> 1/4 -> 1/5 etc.
+                    probability = 1.0 / ((1.0 / probability) + 1);
+                model = model.crossover(synth.random, getLibrary().getModel(column - 1, row + i), mutationKeys, probability, false);
+                }
+            }
         else
-        	{
-        	// ascending -- start with the bottom patch and recombine till we get to the big patch up top
-	        model = getLibrary().getModel(column - 1, row + len - 1).copy();		// we don't want the listeners etc.
-        	for(int i = len - 2; i >= 0; i--)
-	        	{
-	        	if (i == len - 2) // first one, mix half/half
-	        		probability = 1.0 / 2.0;
-	        	else if (mixType == MIX_TYPE_ONE_THIRD)
-	        		probability = 1.0 / 3.0;
-	        	else if (mixType == MIX_TYPE_ONE_HALF)
-	        		probability = 1.0 / 2.0;
-	        	else if (mixType == MIX_TYPE_TWO_THIRDS)
-	        		probability = 2.0 / 3.0;
-        		model = model.crossover(synth.random, getLibrary().getModel(column - 1, row + i), mutationKeys, probability, false);
-	        	}
-	        }
-	        
-	    // Load model
+            {
+            // ascending -- start with the bottom patch and recombine till we get to the big patch up top
+            model = getLibrary().getModel(column - 1, row + len - 1).copy();                // we don't want the listeners etc.
+            for(int i = len - 2; i >= 0; i--)
+                {
+                if (i == len - 2) // first one, mix half/half
+                    probability = 1.0 / 2.0;
+                else if (mixType == MIX_TYPE_ONE_THIRD)
+                    probability = 1.0 / 3.0;
+                else if (mixType == MIX_TYPE_ONE_HALF)
+                    probability = 1.0 / 2.0;
+                else if (mixType == MIX_TYPE_TWO_THIRDS)
+                    probability = 2.0 / 3.0;
+                model = model.crossover(synth.random, getLibrary().getModel(column - 1, row + i), mutationKeys, probability, false);
+                }
+            }
+                
+        // Load model
         synth.getUndo().push(synth.getModel());
-		synth.undo.setWillPush(false);
-		boolean send = synth.getSendMIDI();
-		synth.setSendMIDI(false);
-		model.copyValuesTo(synth.model);
-		synth.setSendMIDI(send);
-		synth.undo.setWillPush(true);
-		synth.sendAllParameters();
+        synth.undo.setWillPush(false);
+        boolean send = synth.getSendMIDI();
+        synth.setSendMIDI(false);
+        model.copyValuesTo(synth.model);
+        synth.setSendMIDI(send);
+        synth.undo.setWillPush(true);
+        synth.sendAllParameters();
 
-		// Switch to patch editor
+        // Switch to patch editor
         getLibrary().getSynth().setCurrentTab(0);
         lastMixType = mixType;
- 		}
+        }
 
 
     /** Downloads the selected locations. */

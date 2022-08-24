@@ -72,7 +72,7 @@ public class EmuProteus2000 extends Synth
                                                     "Proteus Pop (P2500/PK6)", "Vintage Collection (Pro, Keys)", "Protean Drums (PX7)", "Holy Grail Piano",
                                                     "Techno Synth Cons. Yard (Orbit3)", "Siedlaczek", "Beat Garden (Orbit3)"  };  // even dumber that we have to do this AGAIN
     // This is totally different than the documentation
-    public static final String[] TEMPO_OFFSETS = { "Current", "Current x 2", "Current / 2" };   
+    public static final String[] TEMPO_OFFSETS = { "Current / 2", "Current", "Current x 2" };   
     public static final String[] KEYBOARD_TUNINGS = { "Equal Temperament", "Just C", "Just C2", "Just C minor", "Just C 3", "Valotti", "19 Tone", "Gamelan", "Werkmeister III", "Kirnberger", "Scarlatti", "Repeating Octave",
                                                       "User 1", "User 2", "User 3", "User 4", "User 5", "User 6", "User 7", "User 8", "User 9", "User 10", "User 11", "User 12" };
 
@@ -137,23 +137,23 @@ public class EmuProteus2000 extends Synth
     public static final String[] LFO_SHAPES = { "Random", "Triangle", "Sine", "Sawtooth", "Square", "33% Pulse", "25% Pulse", "16% Pulse", "12% Pulse", "Pat: Octaves", "Pat: 5th + Oct", "Pat: Sus4Trip", "Pat: Neener", "Sine 1, 2", "Sine 1, 3, 5", "Sine + Noise", "Hemiquaver" };
     public static final int[] LFO_INDICES = { -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15 };
 
-    public static final String[] VOL_ENV_MODES = { "Factory", "ABS Time", "Tempo" };
-    public static final String[] ENV_MODES = { "ABS Time", "Tempo" };
+    public static final String[] VOL_ENV_MODES = { "Factory", "Time", "Tempo" };
+    public static final String[] ENV_MODES = { "Time", "Tempo" };
     public static final int[] ENV_INDICES = { 1, 2 };           // This is only for ENV_MODES, not VOL_ENV_MODES
 
     public static final String[] LAYER_PATCHCORD_SOURCES = { "Off", "Crossfade Random", "Key +", "Key +/-", "Velocity +", "Velocity +/-", "Velocity <", "Release Velocity", "Gate", "Pitch Wheel", "Mod Wheel", "Pressure", "Pedal", "MIDI A", "MIDI B", "Foot Switch 1", "Foot Switch 2", "Flip-Flop Foot Switch 1", "Flip-Flop Foot Switch 2", "MIDI Volume Controller (7)", 
-                                                             "MIDI Pan Controller (10)", "MIDI C", "MIDI D", "MIDI E", "MIDI F", "MIDI G", "MIDI H", "Thumb", "ThmFF", "MIDI I", "MIDI J", "MIDI K", "MIDI L", "Key Glide", "Volume Envelope +", "Volume Envelope +/-", "Volume Envelope <", "Filter Envelope +", "Filter Envelope +/-", "Filter Envelope <", "Auxiliary Envelope +", 
-                                                             "Auxiliary Envelope +/-", "Auxiliary Envelope <", "LFO 1 +/-", "LFO 1 +", "White Noise", "Pink Noise", "K Random 1", "K Random 2", "LFO 2 +/-", "LFO 2 +", "Lag 0 In", "Lag 0", "Lag 1 In", "Lag 1", "PLag Out", "PRamp Out", "Clock Double Whole Note", "Clock Whole Note", "Clock Half Note", "Clock Quarter Note", 
+                                                             "MIDI Pan Controller (10)", "MIDI C", "MIDI D", "MIDI E", "MIDI F", "MIDI G", "MIDI H", "Foot Switch 3", "Flip-Flop Foot Switch 3", "MIDI I", "MIDI J", "MIDI K", "MIDI L", "Key Glide", "Volume Envelope +", "Volume Envelope +/-", "Volume Envelope <", "Filter Envelope +", "Filter Envelope +/-", "Filter Envelope <", "Auxiliary Envelope +", 
+                                                             "Auxiliary Envelope +/-", "Auxiliary Envelope <", "LFO 1 +/-", "LFO 1 +", "White Noise", "Pink Noise", "Key Random 1", "Key Random 2", "LFO 2 +/-", "LFO 2 +", "Lag 0 Summing Amp", "Lag 0", "Lag 1 Summing Amp", "Lag 1", "Preset Lag Out", "Preset Ramp Out", "Clock Double Whole Note", "Clock Whole Note", "Clock Half Note", "Clock Quarter Note", 
                                                              "Clock Eighth Note", "Clock Sixteenth Note", "Clock Octal Whole Note", "Clock Quad Whole Note", "DC Offset", "Summing Amp", "Switch", "Absolute Value", "Diode", "Flip Flop", "Quantizer", "Gain 4X" };
     public static final int[] LAYER_PATCHCORD_SOURCE_INDICES = { 0, 4, 8, 9, 10, 11, 12, 13, 14, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 48, 72, 73, 74, 80, 81, 82, 88, 89, 90, 96, 97, 98, 99, 100, 101, 104, 105, 106, 107, 108, 109, 128, 129, 144, 145, 146, 147, 148, 149, 150, 151, 160, 161, 162, 163, 164, 165, 166, 167 };
 
         
     // The documentation is wrong in several places here: it's missing envelope sustains, has retriggers for envelopes other than volume, and has "chorus poition ITD" which doesn't exist.
     // I think Amplifier Crossfade is RTXFade (for "Real Time XFade")
-    public static final String[] LAYER_PATCHCORD_DESTINATIONS = { "Off", "Key Sustain", "Fine Pitch", "Pitch", "Glide", "Chorus Amount", "Sample Start", "Sample Loop", "Sample Retrigger", "Filter Frequency", "Filter Resonance", "Amplifier Volume", "Amplifier Pan", "Amplifier Crossfade", "Volume Envelope Rates", "Volume Envelope Attack", 
+    public static final String[] LAYER_PATCHCORD_DESTINATIONS = { "Off", "Key Sustain", "Fine Pitch", "Pitch", "Glide", "Chorus Amount", "Sample Start", "Sample Loop", "Sample Retrigger", "Filter Frequency", "Filter Resonance", "Amplifier Volume", "Amplifier Pan", "Real-Time Crossfade", "Volume Envelope Rates", "Volume Envelope Attack", 
                                                                   "Volume Envelope Decay", "Volume Envelope Sustain", "Volume Envelope Release", "Filter Envelope Rates", "Filter Envelope Attack", "Filter Envelope Decay", "Filter Envelope Sustain", "Filter Envelope Release", "Auxiliary Envelope Rates", "Auxiliary Envelope Attack", "Auxiliary Envelope Decay", "Auxiliary Envelope Sustain", "Auxiliary Envelope Release", 
-                                                                  "Auxiliary Envelope [Re]Trigger", "LFO 1 Rate", "LFO 1 [Re]Trigger", "LFO 2 Rate", "LFO 2 [Re]Trigger", "Lag 0 In", "Lag 1 In", "Summing Amp", "Switch", "Absolute Value", "Diode", "Flip Flop", "Quantize", "Gain 4X", "Cord 0 Amount", "Cord 1 Amount", "Cord 2 Amount", "Cord 3 Amount", "Cord 4 Amount", "Cord 5 Amount", 
-                                                                  "Cord 6 Amount", "Cord 7 Amount", "Cord 8 Amount", "Cord 9 Amount", "Cord 10 Amount", "Cord 11 Amount", "Cord 12 Amount", "Cord 13 Amount", "Cord 14 Amount", "Cord 15 Amount", "Cord 16 Amount", "Cord 17 Amount", "Cord 18 Amount", "Cord 19 Amount", "Cord 20 Amount", "Cord 21 Amount", "Cord 22 Amount", "Cord 23 Amount" };
+                                                                  "Auxiliary Envelope Trigger", "LFO 1 Rate", "LFO 1 Trigger", "LFO 2 Rate", "LFO 2 Trigger", "Lag 0 In", "Lag 1 In", "Summing Amp", "Switch", "Absolute Value", "Diode", "Flip Flop", "Quantize", "Gain 4X", "Cord 1 Amount", "Cord 2 Amount", "Cord 3 Amount", "Cord 4 Amount", "Cord 5 Amount", 
+                                                                  "Cord 6 Amount", "Cord 7 Amount", "Cord 8 Amount", "Cord 9 Amount", "Cord 10 Amount", "Cord 11 Amount", "Cord 12 Amount", "Cord 13 Amount", "Cord 14 Amount", "Cord 15 Amount", "Cord 16 Amount", "Cord 17 Amount", "Cord 18 Amount", "Cord 19 Amount", "Cord 20 Amount", "Cord 21 Amount", "Cord 22 Amount", "Cord 23 Amount", "Cord 24 Amount",  };
     public static final int[] LAYER_PATCHCORD_DESTINATION_INDICES = { 0, 8, 47, 48, 49, 50, 52, 53, 54, 56, 57, 64, 65, 66, 72, 73, 74, 76, 75, 80, 81, 82, 84, 83, 88, 89, 90, 92, 91, 94, 96, 97, 104, 105, 106, 108, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175, 176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189 , 190, 191 };
 
     public static final String[] TEMPO_BASED_ENV_RATES = {
@@ -627,7 +627,7 @@ public class EmuProteus2000 extends Synth
  
         vbox.add(hbox);
         
-        comp = new StringComponent("Patch Name", this, "name", 16, "Name must be up to 16 ASCII characters.")
+        comp = new StringComponent("Patch Name", this, "name", 16, "Name must be up to 16 ASCII characters\nand the fourth character MUST be a colon.")
             {
             public String replace(String val)
                 {
@@ -649,7 +649,7 @@ public class EmuProteus2000 extends Synth
 
     public JComponent addCommonControl(Color color)
         {
-        Category category = new Category(this, "MIDI Controllers", color);
+        Category category = new Category(this, "Initial Controller Amounts", color);
         category.makeDistributable("ctrl");
 
         JComponent comp;
@@ -663,7 +663,7 @@ public class EmuProteus2000 extends Synth
                 {
                 public String map(int val)
                     {
-                    if (val == -1) return "Cur";
+                    if (val == -1) return "Off";		// The sysex docs say "Current", but the machine says "off"
                     else return "" + val;
                     }
                 };
@@ -723,15 +723,18 @@ public class EmuProteus2000 extends Synth
         /// I have no idea what that is.  But I can say that the riff values appear to be
         /// just just -1...maxriff-1, corresponding to the values in the text files.  
         //  -1 means "off" it appears.
+        
+        //// NOTE: It appears that RIFFs cannot be turned on or off on the unit.  So I'm
+        //// disabling "On" -- note I did this in parse(), emitAll(String), and emitAll(...) as well.
                 
         params = new String[] { "Nada" };       // for the moment, this will be changed soon
         comp = new Chooser("Riff", this, "riff", params);
         riffChooser = (Chooser)comp;
 
         HBox riffbox = new HBox();
-        comp = new CheckBox("On", this, "riffon");
+        //comp = new CheckBox("On", this, "riffon");
         riffbox.add(riffChooser);
-        riffbox.add(comp);
+        //riffbox.add(comp);
         vbox.add(riffbox);
         
         updateRiffs(defaultRiff);
@@ -856,7 +859,16 @@ public class EmuProteus2000 extends Synth
             };
         hbox.add(comp);
 
-        comp = new LabelledDial("Pan", this, "link" + link + "pan", color, -64, +64);
+        comp = new LabelledDial("Pan", this, "link" + link + "pan", color, -64, +63)		// the docs say -64 ... +64 but nope.  Weirdly this is a different range from layer pan (-63 ... +63)
+        	{
+        	public boolean isSymmetric() { return true; }
+            public String map(int val)
+                {
+                if (val == 0) return "--";
+                else if (val > 0) return "" + val + " >";
+                else return "< " + (-val);
+                }
+            };
         hbox.add(comp);
                         
         comp = new LabelledDial("Transpose", this, "link" + link + "transpose", color, -24, 24);
@@ -926,7 +938,7 @@ public class EmuProteus2000 extends Synth
             ((LabelledDial)comp).addAdditionalLabel("Dampening");
             hbox.add(comp);
 
-            comp = new LabelledDial("FX A -> B", this, "fx" + fx + "ab", color, 0, 127);
+            comp = new LabelledDial("FX B -> A", this, "fx" + fx + "ab", color, 0, 127);
             hbox.add(comp);
             }
         else
@@ -1072,7 +1084,7 @@ public class EmuProteus2000 extends Synth
             public String map(int val)
                 {
                 if (val == 0) return "Played";
-                else return "" + val + "%";
+                else return "" + val;
                 }
             };
                 
@@ -1188,6 +1200,10 @@ public class EmuProteus2000 extends Synth
         ((LabelledDial)comp).addAdditionalLabel("Low");
         hbox.add(comp);
 
+        comp = new LabelledDial("Key", this, "layer" + layer + "keylowfade", color, 0, 127);
+        ((LabelledDial)comp).addAdditionalLabel("Low Fade");
+        hbox.add(comp);
+
         comp = new LabelledDial("Key", this, "layer" + layer + "keyhigh", color, 0, 127)
             {
             public String map(int value)
@@ -1198,10 +1214,6 @@ public class EmuProteus2000 extends Synth
         ((LabelledDial)comp).addAdditionalLabel("High");
         hbox.add(comp);
 
-        comp = new LabelledDial("Key", this, "layer" + layer + "keylowfade", color, 0, 127);
-        ((LabelledDial)comp).addAdditionalLabel("Low Fade");
-        hbox.add(comp);
-
         comp = new LabelledDial("Key", this, "layer" + layer + "keyhighfade", color, 0, 127);
         ((LabelledDial)comp).addAdditionalLabel("High Fade");
         hbox.add(comp);
@@ -1210,12 +1222,12 @@ public class EmuProteus2000 extends Synth
         ((LabelledDial)comp).addAdditionalLabel("Low");
         hbox.add(comp);
 
-        comp = new LabelledDial("Velocity", this, "layer" + layer + "velhigh", color, 0, 127);
-        ((LabelledDial)comp).addAdditionalLabel("High");
-        hbox.add(comp);
-
         comp = new LabelledDial("Velocity", this, "layer" + layer + "vellowfade", color, 0, 127);
         ((LabelledDial)comp).addAdditionalLabel("Low Fade");
+        hbox.add(comp);
+
+        comp = new LabelledDial("Velocity", this, "layer" + layer + "velhigh", color, 0, 127);
+        ((LabelledDial)comp).addAdditionalLabel("High");
         hbox.add(comp);
 
         comp = new LabelledDial("Velocity", this, "layer" + layer + "velhighfade", color, 0, 127);
@@ -1226,12 +1238,12 @@ public class EmuProteus2000 extends Synth
         ((LabelledDial)comp).addAdditionalLabel("Low");
         hbox.add(comp);
 
-        comp = new LabelledDial("Real-Time", this, "layer" + layer + "rthigh", color, 0, 127);
-        ((LabelledDial)comp).addAdditionalLabel("High");
-        hbox.add(comp);
-
         comp = new LabelledDial("Real-Time", this, "layer" + layer + "rtlowfade", color, 0, 127);
         ((LabelledDial)comp).addAdditionalLabel("Low Fade");
+        hbox.add(comp);
+
+        comp = new LabelledDial("Real-Time", this, "layer" + layer + "rthigh", color, 0, 127);
+        ((LabelledDial)comp).addAdditionalLabel("High");
         hbox.add(comp);
 
         comp = new LabelledDial("Real-Time", this, "layer" + layer + "rthighfade", color, 0, 127);
@@ -1259,7 +1271,7 @@ public class EmuProteus2000 extends Synth
         vbox = new VBox();
 
         params = GROUPS;
-        comp = new Chooser("Group", this, "layer" + layer + "group", params);
+        comp = new Chooser("Assign Group", this, "layer" + layer + "group", params);
         vbox.add(comp);
 
         params = GLIDE_CURVES;
@@ -1280,14 +1292,23 @@ public class EmuProteus2000 extends Synth
         hbox.add(comp);
         
 
-        comp = new LabelledDial("Pan", this, "layer" + layer + "pan", color, -64, 63);
+        comp = new LabelledDial("Pan", this, "layer" + layer + "pan", color, -64, 63)
+        	{
+        	public boolean isSymmetric() { return true; }
+            public String map(int val)
+                {
+                if (val == 0) return "--";
+                else if (val > 0) return "" + val + " >";
+                else return "< " + (-val);
+                }
+        	};
         hbox.add(comp);
                 
 
         comp = new LabelledDial("Coarse Tune", this, "layer" + layer + "ctune", color, -36, 36);
         hbox.add(comp);
 
-        comp = new LabelledDial("Fine Tune", this, "layer" + layer + "ftune", color, -64, 64);
+        comp = new LabelledDial("Fine Tune", this, "layer" + layer + "ftune", color, -63, 63);		// docs say -64 to +64 but that's wrong
         hbox.add(comp);
 
         comp = new LabelledDial("Chorus", this, "layer" + layer + "ldetune", color, 0, 100)
@@ -1318,7 +1339,10 @@ public class EmuProteus2000 extends Synth
             };
         hbox.add(comp);
 
-        comp = new LabelledDial("Start Delay", this, "layer" + layer + "startdelay", color, -25, 127)
+        comp = new LabelledDial("Sound Start", this, "layer" + layer + "startoffset", color, 0, 127);
+        hbox.add(comp);
+
+        comp = new LabelledDial("Sound Delay ", this, "layer" + layer + "startdelay", color, -25, 127)
             {
             public String map(int val)
                 {
@@ -1328,8 +1352,6 @@ public class EmuProteus2000 extends Synth
             };
         hbox.add(comp);
 
-        comp = new LabelledDial("Start Offset", this, "layer" + layer + "startoffset", color, 0, 127);
-        hbox.add(comp);
                 
         outer.add(hbox);
 
@@ -2238,7 +2260,8 @@ public class EmuProteus2000 extends Synth
                         // range is wrong in documentation, it actually goes 1...19, go figure
                         v -= 1;
                         }
-                    else if (p.equals("riff") || p.equals("link1preset") || p.equals("link2preset"))
+//                    else if (p.equals("riff") || p.equals("link1preset") || p.equals("link2preset"))
+                    else if (p.equals("link1preset") || p.equals("link2preset"))
                         {
                         // have to handle "on"
                         if (v < 0)
@@ -2286,10 +2309,16 @@ public class EmuProteus2000 extends Synth
                         {
                         v = findValue(v, LAYER_PATCHCORD_DESTINATION_INDICES, p);
                         }
+					else if (p.equals("tempooffset"))
+						{
+						// The range -1...+1 needs to be converted to 0 ... 2
+						v = v + 1;
+						}
                     else
                         {
                         // nothing
                         }
+                        
                     if (!p.equals("layer1fakeparam") && !p.equals("layer2fakeparam") && !p.equals("layer3fakeparam") && !p.equals("layer4fakeparam"))
                         {
                         model.set(p, v);
@@ -2448,7 +2477,7 @@ public class EmuProteus2000 extends Synth
             int id = 0;
             try { id = ((Integer)(parametersToID.get(key))).intValue(); }
             catch (NullPointerException ex) { } // riffon, link1preseton, link2preseton are not there
-
+            
             Object[] ret = new Object[3];
             ret[0] = buildParameterBytes(PRESET_SELECT, -1);              // edit buffer
             ret[1] = (layer >= 0 ? buildParameterBytes(LAYER_SELECT, layer) : new Object[0]);
@@ -2463,11 +2492,11 @@ public class EmuProteus2000 extends Synth
                 // range is wrong in documentation, it actually goes 1...19, go figure
                 v += 1;
                 }
-            else if (p.equals("riff") || p.equals("riffon"))
-                {
-                id = ((Integer)(parametersToID.get("riff"))).intValue();
-                v = (model.get("riffon") == 0 ? -1 : model.get("riff"));
-                }
+//            else if (p.equals("riff") || p.equals("riffon"))
+//                {
+//                id = ((Integer)(parametersToID.get("riff"))).intValue();
+//                v = (model.get("riffon") == 0 ? -1 : model.get("riff"));
+//                }
             else if (p.equals("link1preset") || p.equals("link1preseton"))
                 {
                 id = ((Integer)(parametersToID.get("link1preset"))).intValue();
@@ -2513,6 +2542,11 @@ public class EmuProteus2000 extends Synth
                 {
                 v = LAYER_PATCHCORD_DESTINATION_INDICES[v];
                 }
+            else if (p.equals("tempooffset"))
+            	{
+            	// The range 0...2 needs to be converted to -1 ... +1
+            	v = v - 1;
+            	}
             else
                 {
                 // nothing
@@ -2643,9 +2677,7 @@ public class EmuProteus2000 extends Synth
                 
             if (p.equals("ctrl13") || p.equals("ctrl14") || p.equals("ctrl15") || p.equals("ctrl16"))
                 continue;       // these are not included in the final dump
-                
-            //System.err.println("" + offset + " " + i + " " + parameters[i]);
-                
+                                
             // we're going to just upload ctrl12 ... ctrl15 as they are, since they're not used
             int v = model.get(p, 0);                            // "---" will be 0        -- this includes layer1fakeparam, layer2fakeparam, layer3fakeparam, layer4fakeparam
 
@@ -2658,10 +2690,10 @@ public class EmuProteus2000 extends Synth
                 // range is wrong in documentation, it actually goes 1...19, go figure
                 v += 1;
                 }
-            else if (p.equals("riff") || p.equals("riffon"))
-                {
-                v = (model.get("riffon") == 0 ? -1 : model.get("riff"));
-                }
+//            else if (p.equals("riff") || p.equals("riffon"))
+//                {
+//                v = (model.get("riffon") == 0 ? -1 : model.get("riff"));
+//                }
             else if (p.equals("link1preset") || p.equals("link1preseton"))
                 {
                 v = (model.get("link1preseton") == 0 ? -1 : model.get("link1preset"));
@@ -2705,6 +2737,11 @@ public class EmuProteus2000 extends Synth
                 {
                 v = LAYER_PATCHCORD_DESTINATION_INDICES[v];
                 }
+            else if (p.equals("tempooffset"))
+            	{
+            	// The range 0...2 needs to be converted to -1 ... +1
+            	v = v - 1;
+            	}
             else
                 {
                 // nothing
@@ -2924,19 +2961,25 @@ public class EmuProteus2000 extends Synth
     public static final int MAXIMUM_NAME_LENGTH = 16;
     public String revisePatchName(String name)
         {
-        name = super.revisePatchName(name);  // trim first time
-        if (name.length() > MAXIMUM_NAME_LENGTH)
-            name = name.substring(0, MAXIMUM_NAME_LENGTH);
+        //// Proteus 2000 names are weird: the fourth character MUST be a colon :
+        
+        name = super.revisePatchName(name) + "                ";  // buffer it to max so we for sure have space for the colon
+        name.substring(0, MAXIMUM_NAME_LENGTH);
         
         StringBuffer nameb = new StringBuffer(name);                            
         for(int i = 0 ; i < nameb.length(); i++)
             {
-            char c = nameb.charAt(i);
-            if (c < 32 || c > 127)
-                nameb.setCharAt(i, ' ');
+            if (i == 3) 
+            	nameb.setCharAt(i, ':');
+            else
+            	{
+				char c = nameb.charAt(i);
+				if (c < 32 || c > 127)
+					nameb.setCharAt(i, ' ');
+				}
             }
         name = nameb.toString();
-        return super.revisePatchName(name);  // trim again
+        return super.revisePatchName(name);  // trim again I guess
         }
 
     /** Verify that all the parameters are within valid values, and tweak them if not. */
@@ -3938,16 +3981,16 @@ public class EmuProteus2000 extends Synth
             
 
         // Handle layer parameters
-        for(int i = 130; i < 292; i++)
+        for(int i = 130; i < 293; i++)
             {
             parametersToIndex.put(parameters[i], i);
-            parametersToIndex.put(parameters[i + 162], i + 162);
-            parametersToIndex.put(parameters[i + 162 * 2], i + 162 * 2);
-            parametersToIndex.put(parameters[i + 162 * 3], i + 162 * 3);
+            parametersToIndex.put(parameters[i + 163], i + 163);
+            parametersToIndex.put(parameters[i + 163 * 2], i + 163 * 2);
+            parametersToIndex.put(parameters[i + 163 * 3], i + 163 * 3);
             parametersToID.put(parameters[i], parameterIDs[i]);
-            parametersToID.put(parameters[i + 162], parameterIDs[i]);
-            parametersToID.put(parameters[i + 162 * 2], parameterIDs[i]);
-            parametersToID.put(parameters[i + 162 * 3], parameterIDs[i]);
+            parametersToID.put(parameters[i + 163], parameterIDs[i]);
+            parametersToID.put(parameters[i + 163 * 2], parameterIDs[i]);
+            parametersToID.put(parameters[i + 163 * 3], parameterIDs[i]);
             idToIndex.put(parameterIDs[i], i);
             }
         }
@@ -3988,10 +4031,6 @@ public class EmuProteus2000 extends Synth
     925,            // ctrl10
     926,            // ctrl11
     927,            // ctrl12
-    967,            // ctrl13
-    968,            // ctrl14
-    969,            // ctrl15
-    970,            // ctrl16
     928,            // riff
     929,            // riffromid
     930,            // tempooffset
@@ -4031,6 +4070,10 @@ public class EmuProteus2000 extends Synth
     964,            // cord11source
     965,            // cord11dest
     966,            // cord11amount
+    967,            // ctrl13
+    968,            // ctrl14
+    969,            // ctrl15
+    970,            // ctrl16
     /// ARPEGGIATOR
     1024,           // ---
     1025,           // arpstatus
@@ -4272,7 +4315,7 @@ public class EmuProteus2000 extends Synth
         return str;
         }
 
-    public String[] getBankNames() { return ROMS_AND_USER; }
+    public String[] getBankNames() { return ROMS_AND_USER_SHORT; }
 
     public boolean[] getWriteableBanks() { return new boolean[] { true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false }; }
 
@@ -4331,6 +4374,12 @@ public class EmuProteus2000 extends Synth
         
         // remove all columns
         int len = table.getColumnModel().getColumnCount();
+        
+        for(int i = 0; i < len; i++)
+        	{
+        	TableColumn c = table.getColumnModel().getColumn(i);
+        	}
+        	
         for(int i = 2; i < len; i++)
             {
             TableColumn column = table.getColumn(i);
@@ -4347,7 +4396,8 @@ public class EmuProteus2000 extends Synth
                     {
                     if (((Integer)(columns.get(j).getIdentifier())).intValue() == simms[i] + 1)     // got it ( + 1 compensates for User in the columns)
                         {
-                        table.addColumn(columns.remove(j));
+                        TableColumn column = columns.remove(j);
+                        table.addColumn(column);
                         break;
                         }
                     }
@@ -4355,9 +4405,10 @@ public class EmuProteus2000 extends Synth
             }
 
         // reinsert remainder
-        for(int j = 0; j < columns.size(); j++)
+        int size = columns.size();
+        for(int j = 0; j < size; j++)
             {
-            table.addColumn(columns.remove(j));
+            table.addColumn(columns.remove(0));
             }
         }
                 

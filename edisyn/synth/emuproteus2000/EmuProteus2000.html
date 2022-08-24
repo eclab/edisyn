@@ -72,13 +72,21 @@ Edisyn doesn't support multisetups at present.  The reason for this is simple: t
 <br><br><h3>Gotchas</h3>
 
 <ul>
-<li>Unfortunately changing individual parameters does not affect the current sound, only future notes played.
+<li>The fourth character of your patch name <i>must</i> be a colon.
+
+<p><li>The maximum value for each "Fade" parameter (such as Key Low Fade) varies depending on the setting of its corresponding primary parameter (such as Key Low).  I have elected not to attempt to deal with this rat's nest: Edisyn simply lets each value range from 0 to 127.
+
+<p><li>Unfortunately changing individual parameters does not affect the current sound, only future notes played.
 
 <p><li>If Edisyn is selecting the wrong patch, you might check to see if you have modified your synth's Program Map.  If so, you'll need to reset it to its defaults.
 
-<p><li>The Proteus 2000 can't handle a long stream of individual parameters sent to it, even if done so slowly.  You might encounter the error "Error! Code = 000. Sysex too fast".
+<p><li>The Proteus 2000 can't handle a long stream of individual parameters sent to it, even if done so slowly.  You might encounter the error "Error! Code = 000. Sysex too fast".  One place where this often happens is in the Arpeggiator Key Range settings.
 <!--  In practice, this really means: don't use Trickle to change parameters in the Morpher: you'll get a the error "Error! Code = 000. Sysex too fast".
 -->
+
+<p><li>In each layer there is a checkbox called "Loop" (look in the General category).  This corresponds to a parameter called LAYER_LOOP in the sysex documentation (page 60).  But this doesn't seem to correspond to anything available on the unit itself: it may have been deleted.  I'm keeping it in the editor anyway, just in case. 
+
+<p><li>Effects B has a "Delay" parameter.  Some effects algorithms use this parameter, and some do not.  Additionally, the parameter is <i>supposed</i> to permit synced delays like 1/2 eighth note: but it just states "err" on-screen when you set them from Edisyn -- or from the unit itself!  Try it!  Set it to the smallest value you can directly on the unit, for Panning Delay say, and see what happens.
 
 </ul>
 

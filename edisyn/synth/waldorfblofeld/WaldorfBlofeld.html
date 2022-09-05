@@ -57,7 +57,10 @@ The Blofeld doesn't support MPE.  But we can fake it by setting up one of its mu
 <br><br><h3>Gotchas</h3>
 
 <ul>
-<li>If you randomize or hill-climb a patch, the wavetable will never change to any of the Reserved or User wavetables.  This was done on purpose because often these wavetables are blank.
+
+<li>Edisyn cannot tell the Blofeld to switch to Multimode or to Single-Mode.  If you are in Multimode, and you request or write a patch, Edisyn will do so but you won't see the results on the Blofeld's screen. 
+
+<p><li>If you randomize or hill-climb a patch, the wavetable will never change to any of the Reserved or User wavetables.  This was done on purpose because often these wavetables are blank.
 
 <p><li>
 If you load the current patch, the Blofeld does not tell Edisyn what bank or number the patch is.

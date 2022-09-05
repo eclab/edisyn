@@ -66,6 +66,7 @@ import java.io.*;
   LL**            Location Low Byte       [Number]
     
   --- CHECKSUM STARTS HERE ---
+  
   name            [16 bytes]
   00              [reserved]
   0-127           Multi Volume
@@ -113,6 +114,16 @@ import java.io.*;
   **** These values are defined by the GOFTER patch editor, but I don't know what 
   purpose they serve if any.  Also GOFTER has an option for the Free Button, but it 
   doesn't seem to do anything.
+  
+  ABOUT THE CHECKSUM.  Waldorf's checksum is straightforward: you add up all the bytes
+  which form the checksum.  Then you mod it by 128.  Done and done.  So you could
+  just say:
+  
+  int check = 0;
+  for(int i = checksumData.start; i < checksumData.end; i++)
+  	check += checksumData[i];
+  return (byte)(check % 127);
+  		
 */
 
 
@@ -361,7 +372,7 @@ public class WaldorfBlofeldMulti extends Synth
                                 Model tempModel = buildModel();
                                 tempModel.set("bank", WaldorfBlofeldMulti.this.model.get("inst" + inst + "bank"));
                                 tempModel.set("number", WaldorfBlofeldMulti.this.model.get("inst" + inst + "number"));
-                                synth.performRequestDump(tempModel, false);
+                                synth.performRequestDump(tempModel, true);
                                 }
                             });
                     }

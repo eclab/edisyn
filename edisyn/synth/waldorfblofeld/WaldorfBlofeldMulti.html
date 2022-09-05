@@ -30,7 +30,9 @@ Multimode on the Blofeld is a mess.
 <li>
 The Blofeld's Multimode sysex is entirely undocumented, and this patch editor is the result of reverse engineering.  There may be errors: please report them.  
 
-<p><li>Edisyn cannot tell the Blofeld to switch to a given multi patch number.  As a result, *Send Patch* and *Send Patch To...* are disabled.  To send a patch, set the patch location manually on your synthesizer, then use *Send Current Patch*.  To get a patch, manually switch to the desired patch number, then call *Request Current Patch* (or dump the patch manually to Edisyn).  
+<li>Edisyn cannot tell the Blofeld to switch to Multimode or to Single-Mode.  If you press the "Show" button for a part, Edisyn will load the patch but cannot switch to it on the Blofeld.  To switch, you must <i>first</i> put the Blofeld in Single mode, then press Edisyn's "Show" button. 
+
+<p><li>Edisyn cannot tell the Blofeld to switch to a given multi patch number.   If you request a patch or write one to the Blofeld, it'll do as you asked but the synthesizer will not switch to that patch: you will have to do so manually if you want to see the result on the Blofeld's screen.
 
 <p><li>The Blofeld doesn't send or receive sysex for updating individual Multimode parameters, so you won't see changes on the Blofeld (or Edisyn) when tweaking a parameter on the other.
 

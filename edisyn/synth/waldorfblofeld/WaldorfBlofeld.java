@@ -2392,7 +2392,9 @@ public class WaldorfBlofeld extends Synth
         byte BB = (byte)tempModel.get("bank");
         byte NN = (byte)tempModel.get("number");
         try {
-            // Bank change is CC 32
+            // Bank change is CC 32 or 0, both work
+            // Bank change on the Blofeld is not documented and the manual says it's not implemented,
+            // but in fact it is.  See "WALDORF'S OWN NOTES" in WaldorfBlofeldMulti.java
             tryToSendMIDI(new ShortMessage(ShortMessage.CONTROL_CHANGE, getChannelOut(), 32, BB));
             // Number change is PC
             tryToSendMIDI(new ShortMessage(ShortMessage.PROGRAM_CHANGE, getChannelOut(), NN, 0));

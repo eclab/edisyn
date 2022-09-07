@@ -14,6 +14,7 @@ import javax.swing.*;
 import java.awt.event.*;
 import java.util.*;
 import java.io.*;
+import javax.sound.midi.*;
 
 /**
    A patch editor for the Waldorf Blofeld in Multimode.
@@ -27,12 +28,31 @@ import java.io.*;
   well in Edisyn (https://github.com/eclab/edisyn/)
         
   -- Sean Luke sean@cs.gmu.edu
-        
+  
+  
+  CHANGE MULTIMODE PATCH
+  
+  This is not documented but was added later.  See WALDORF'S OWN NOTES below.
+  
+  1. Send Bank Change (CC 0) with a value of 127 on the Global channel
+  2. Wait at least 10ms
+  3. Send Program Change (PC) with the desired patch number on the Global channel
+  
+  
+  CHANGE SINGLE PATCH CORRESPONDING TO A PART
+  
+  This is not documented but was added later.  See WALDORF'S OWN NOTES below.
+
+  1. Send Bank Change (CC 0) with the single patch's bank (0...7) on the Part's channel
+  2. Send Program Change (PC) with the single patch's number on the Part's channel
+  
+  
   PARAMETER CHANGE
 
   There is no parameter change in Multimode so far as I can tell.  If in multimode you
   have set certain patches to receive parameter changes via (for example) CC, then that
   will occur to their individual programs. 
+        
         
   MULTI DUMP REQUEST
 
@@ -123,7 +143,30 @@ import java.io.*;
   for(int i = checksumData.start; i < checksumData.end; i++)
   	check += checksumData[i];
   return (byte)(check % 127);
-  		
+  
+  
+  
+  WALDORF'S OWN NOTES ABOUT PATCH CHANGES
+  This was originally from the Waldorf website long ago, but is now missing and undocumented.
+  
+  "Some notes on how to change programs in V1.15:
+
+  Bank MSB (CC#0) and Bank LSB (CC#32) are currently interchangeable, 
+  this may change in the future.
+
+  Banks 0-7 correspond to banks A-H in the Blofeld (global channel in 
+  sound mode, multi part channel otherwise).  You can switch up to 16 
+  programs back-to-back without problems (in other words, set up a full 
+  multi).  Some controller surfaces might send more program changes in a 
+  shorter time than the Blofeld needs to fetch the new program from 
+  memory, so you should slow down a bit as you approach the final 
+  destination (or rate limit the controller data if that is possible).
+
+  Bank 127 is for switching between multi programs on the global channel 
+  (although it currently works on all channels).  After switching to a 
+  new multi you need to leave some time before you can switch the 
+  programs in that multi (about 30 MIDI bytes over USB) so that Blofeld 
+  can finish loading the multi before it gets new program changes."	
 */
 
 
@@ -192,9 +235,20 @@ public class WaldorfBlofeldMulti extends Synth
                 
     public void changePatch(Model tempModel)
         {
-        // Not possible in Multi Mode
+        byte BB = (byte)127;			// 127 is the multimode's "Bank"
+        byte NN = (byte)tempModel.get("number");
+        try {
+            // Bank change is CC 32 or 0, both work
+            tryToSendMIDI(new ShortMessage(ShortMessage.CONTROL_CHANGE, getChannelOut(), 32, BB));
+            // Though Waldorf's notes indicate that there should be a pause here, it doesn't seem to be necessary
+            // Number change is PC
+            tryToSendMIDI(new ShortMessage(ShortMessage.PROGRAM_CHANGE, getChannelOut(), NN, 0));
+            }
+        catch (Exception e) { Synth.handleException(e); }
         }
 
+	public int getPauseAfterChangePatch() { return 800; }	// this appears to be the minimum amount
+	
     public String getDefaultResourceFileName() { return "WaldorfBlofeldMulti.init"; }
     public String getHTMLResourceFileName() { return "WaldorfBlofeldMulti.html"; }
 
@@ -1087,7 +1141,6 @@ public class WaldorfBlofeldMulti extends Synth
             model.set("name", newnm);
         }
         
-    public int getPauseAfterChangePatch() { return 200; }
     public int getPauseAfterWritePatch() { return 75; }
 
 
@@ -1251,6 +1304,8 @@ public class WaldorfBlofeldMulti extends Synth
     public boolean getSupportsPatchWrites() { return true; }
 
     public int getPatchNameLength() { return 16; }
+
+    public int getBatchDownloadWaitTime() { return 2000; }
 
     public byte[] requestAllDump() 
         {

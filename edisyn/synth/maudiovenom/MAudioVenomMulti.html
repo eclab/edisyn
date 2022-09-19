@@ -52,9 +52,9 @@ Edisyn is a general-purpose patch editor tool and so its approach is designed to
 
 <br><br><h3>Librarian Support</h3>
 
-The Venom has very, very slow sysex.  This will manifest itself in very slow lib
-rarian uploads and downloads.  I would suggest downloading the entire machine, t
-hen saving it to a file and mostly uploading from there.
+The Venom has very, very slow sysex.  This will manifest itself in very slow librarian uploads and downloads.  I would suggest downloading the entire machine, then saving it to a file and mostly uploading from there.
+
+<p>There is a very serious bug (among many) in the Venom regarding Multimode patches: it does not properly handle commands to write a given patch to permanent memory.  Instead Edisyn must send the patch to curent memory, then instruct the Venom to write the patch from current memory to permanent memory.  The upshot of this is that when reading patches from a file, Edisyn cannot determine what bank or number they are, so it will simply start loading at bank 0 number 0.
 
 <br><br><h3>Thanks</h3>
 

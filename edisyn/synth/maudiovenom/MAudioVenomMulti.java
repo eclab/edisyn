@@ -275,7 +275,6 @@ public class MAudioVenomMulti extends Synth
                 super.update(key, model);
                 int bank = model.get("part" + part + "bank");
                 int program = model.get("part" + part + "program");
-                //System.err.println("part " + part + " bank = " + bank + " program = " + program);
                 if (bank >= 0 && program >= 0)
                     category.setName("Part " + part + " (" + DEFAULT_SINGLE_PATCH_NAMES[bank][program] + ")");
                 }
@@ -1139,8 +1138,6 @@ public class MAudioVenomMulti extends Synth
 
     public Object[] emitAll(String key)
         {
-        System.err.println(key);
-                
         if (key.equals("number")) return new Object[0];  // this is not emittable
         if (key.equals("bank")) return new Object[0];
         
@@ -1255,7 +1252,6 @@ public class MAudioVenomMulti extends Synth
             
             byte paramMSB = (byte)0x00;
             byte paramLSB = (byte)(part - 1);   // 00 ... 04
-            System.err.println("PART " + part);
             
             int val = (model.get("part" + part + "channelsingle") << 0) |
                 (model.get("part" + part + "voicesingle") << 1) |
@@ -1340,7 +1336,6 @@ public class MAudioVenomMulti extends Synth
                     val = 127;
                 }
 
-            //System.err.println(key);
             int param = ((Integer)(parametersToIndex.get(key))).intValue();
             byte paramMSB = (byte)(param >>> 7);
             byte paramLSB = (byte)(param & 127);
@@ -1370,11 +1365,9 @@ public class MAudioVenomMulti extends Synth
 
     public int processArpOctave(byte val)
         {
-        //System.err.println("arp octave val " + val);
         int o = val;
         if (o >= 60 && o <= 68) // we're good
             return o;
-        //System.err.println("Unusual arp octave value " + o);
         if (o >= -4 && o <= 4)
             return 64 + o;
         else if (o >= 124 && o <= 127)          // (-4 ... -1)
@@ -1598,7 +1591,6 @@ public class MAudioVenomMulti extends Synth
                 d[i] = (byte)(model.get(key));
                 }
                 
-            //System.err.println("" + i + " " + key + " " + d[i]);
             }
                                 
         // Load name
@@ -1618,7 +1610,7 @@ public class MAudioVenomMulti extends Synth
         Object[] result = new Object[] { data };
 
         // Now we need to write properly
-        if (!toWorkingMemory)
+        if (!toWorkingMemory && !toFile)
             {
             result = new Object[] 
                 { 
@@ -1633,7 +1625,7 @@ public class MAudioVenomMulti extends Synth
                     0x21, 
                     (byte)DEFAULT_ID, //getID(), 
                     0x06,                       // Store Patch
-                    0x02,                                           // Multi Patch Dump
+                    0x02,                       // Multi Patch Dump
                     (byte)(BB + 1),
                     (byte)NN,
                     (byte)0xF7 
@@ -1665,7 +1657,7 @@ public class MAudioVenomMulti extends Synth
     public int parse(byte[] data, boolean fromFile)
         {
         // Since we're issuing a store patch command to get around Multi bugs,
-        // it's likely that we'll be receiving one too via the librian.
+        // it's likely that we'll be receiving one too via the librarian.
         // So we handle that here:
                 
         if (data[6] == 0x06)            // Store Patch
@@ -1678,7 +1670,7 @@ public class MAudioVenomMulti extends Synth
                 int number = data[9];
                 model.set("number", number);
                 }
-            return PARSE_SUCCEEDED;                 // should this be PARSE_INCOMPLETE?
+            return PARSE_SUCCEEDED;                 // probably shouldn't be PARSE_SUCCEEDED....
             }
                         
                         
@@ -1832,7 +1824,6 @@ public class MAudioVenomMulti extends Synth
                 model.set(key, d[i]);
                 }
                 
-            //System.err.println("" + i + " " + key + " " + d[i]);
             }
                         
         // we must now let the venom know to shut up or else it'll keep sending us junk
@@ -2289,4 +2280,13 @@ public class MAudioVenomMulti extends Synth
     public int getPatchNameLength() { return 10; }
 
     public boolean librarianTested() { return true; }
+    
+    public boolean testVerify(byte[] message)
+		{
+		// Store Patch messages are okay
+		return ( message.length == 11 && 
+			message[0] == (byte)0xF0 && message[1] == (byte)0x00 && message[2] == (byte)0x01 && 
+			message[3] == (byte)0x05 && message[4] == (byte)0x21 && message[6]== (byte)0x06 && 
+			message[7] == (byte)0x02 && message[10] == (byte)0xF7 );
+		}
     }

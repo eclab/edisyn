@@ -199,15 +199,21 @@ public class SanityCheck
                 
             synth.doMutate(1.0);
             data = synth.flatten(synth.emitAll((Model)null, false, true));
-            if (!synth2.recognizeLocal(data))
-                {
-                System.err.println("\t [FAIL] Not Recognized");
-                for(int i = 0; i < data.length; i++)
-                    {
-                    System.err.println("" + i + " " + StringUtility.toHex(data[i]));
-                    }
-                failed = true;
-                }
+            
+            byte[][] d = Synth.cutUpSysex(data);
+			for(int i = 0; i < d.length; i++)
+				{
+				if (!synth2.recognizeLocal(d[i]) &&
+					!synth2.testVerify(d[i]))
+					{
+					System.err.println("\t [FAIL] Not Recognized Message " + i);
+					for(int j = 0; j < d[i].length; j++)
+						{
+						System.err.println("" + j + " " + StringUtility.toHex(d[i][j]));
+						}
+					failed = true;
+					}
+				}
             synth2.parse(data, true);
             String[] keys = synth.getModel().getKeys();
             for(int i = 0; i < keys.length; i++)

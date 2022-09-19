@@ -1180,6 +1180,9 @@ public abstract class Synth extends JComponent implements Updatable
         key than you hold (namely obj1).  Return true if this is acceptable. */
     public boolean testVerify(Synth synth2, String key, Object obj1, Object obj2) { return false; }
 
+    /** Called when, during Sanity Check testing, an unrecognized message is received.  Return true if this is acceptable. */
+    public boolean testVerify(byte[] message) { return false; }
+
     /** Return an extra pause (beyond the pause after sending all parameters) after playing a test sound while hill-climbing or morphing. */
     public int getPauseBetweenHillClimbPlays() { return 0; }
         

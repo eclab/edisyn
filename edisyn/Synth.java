@@ -6734,7 +6734,6 @@ public abstract class Synth extends JComponent implements Updatable
                     }
                 }
             }
-                
         return p;
         }
 

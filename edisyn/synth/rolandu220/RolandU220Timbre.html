@@ -1,0 +1,38 @@
+<html><head></head>
+<body>
+
+<h1>Roland U-20 / U-220</h1> 
+<h2>Timbre Patch Editor</h2>
+
+<p>This patch editor ought to work properly with both the U-20 and the U-220.  However it has only been tested with the U-220. Please let me know of any discrepancies you discover.
+
+<br><br><h3>Communicating with Edisyn</h3>
+
+Set Edisyn's MIDI channel to the same as your desired part's Channel (typically 1...6).  Set Edisyn's Synth ID to the same as the Roland Device ID (typically 17).  Set the unit's Part Change to "On" or "Dir". On the U-220, set the Timbre Change, Rhythm Change, and Rhythm Ins. Assign all to "Dir".  Turn on Sysex receive.
+
+<br><br><h3>About the Menu</h3>
+
+Edisyn's MIDI channel is set to the Control Channel of your part so Edisyn can change timbres and play sounds on it.  You can however send to the timbre of any part by setting the Part number in the menu: and in fact you need to have this set up as well.  By default, you'd send to Part 1.
+
+<p>You can set up your synthesizer's Multimode patch to nicely audition Part 1 by selecting "Set up Test Patch for Part 1 Only".  This sets Part 1 to be on Channel 1, with all voices, and shuts off all other parts and the rhythm channel.  Alternatively you can set up each Part to be on the same numbered channel (Part 2 is channel 2, etc.), and the Rhythm part to be Channel 10, and distribute voices among all of them, by selecting "Set Up Test Patch for All Parts".  
+
+<p>You can also call up the current Multimode patch with "Show Current Patch".
+
+<br><br><h3>Gotchas</h3>
+
+<ul>
+<li>Roland breaks its patch sysex into multiple messages, each 138 bytes long.  But Roland stupidly made it very difficult to distinguish between sysex for a single patch and sysex for a bulk dump of patches.  As a result, Edisyn must assume that the sysex is for a single patch.  In short: you can't do a bulk dump of patches from the synthesizer; Edisyn won't understand them.
+</ul>
+
+<br><br><h3>Thanks</h3>
+Thanks to Keith (llamamusic@hotmail.com) for his extraordinary service in loaning a machine in a pinch, providing materials, and debugging.  If you are a U-220 owner, <a href="llamamusic.com">llamamusic.com</a> is a fantastic resource.  
+
+<p><table border=0 cellpadding=0 cellspacing=5>
+<tr>
+<td align=right>By&nbsp;&nbsp;&nbsp;
+<td><b>Sean Luke</b>
+<tr>
+<td align=right>Date&nbsp;&nbsp;&nbsp;
+<td>April 2019
+</table>
+

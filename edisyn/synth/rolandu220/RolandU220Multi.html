@@ -1,0 +1,40 @@
+<html><head></head>
+<body>
+
+<h1>Roland U-20 / U-220</h1> 
+<h2>Multi Patch Editor</h2>
+
+<p>This patch editor ought to work properly with both the U-20 and the U-220.  However it has only been tested with the U-220. Please let me know of any discrepancies you discover.
+
+<br><br><h3>Communicating with Edisyn</h3>
+
+Set Edisyn's MIDI channel to the same as the RX Control Channel (typically 16).  Set Edisyn's Synth ID to the same as the Roland Device ID (typically 17).  Set the unit's Part Change to "On" or "Dir". On the U-220, set the Timbre Change, Rhythm Change, and Rhythm Ins. Assign all to "Dir".  Turn on Sysex receive.
+
+<br><br><h3>About the Menu</h3>
+
+Edisyn's MIDI channel is set to the RX Control Channel so Edisyn can change multimode patches.  To play a sound in a given part, you'll need Edisyn to send note data out the appropriate Part channel.  To do this, just use the menu to set the Part you'd like Edisyn to play, and it will use the Receive Channel of that Part as you have set it in Edisyn.  If you use the menu to set the channel to the "default" channel, it'll use Edisyn's default MIDI output instead.
+
+<br><br><h3>Notes</h3>
+
+<ul>
+<li>For Edisyn's purposes, the U-20 and U-220 largely differ based on the "Velocity Low" and "Velocity High" parameters.  The U-220 repurposes the "Velocity Low" parameter to "Velocity Level", which can only be two values: "Above" and "Below": all other values are invalid.  Similarly the U-220 repurposes the "Velocity High" parameter for its "Velocity Threshold": all values are still legal.
+</ul>
+
+<br><br><h3>Gotchas</h3>
+
+<ul>
+<li>Roland breaks its patch sysex into multiple messages, each 138 bytes long.  But Roland stupidly made it very difficult to distinguish between sysex for a single patch and sysex for a bulk dump of patches.  As a result, Edisyn must assume that the sysex is for a single patch.  In short: you can't do a bulk dump of patches from the synthesizer; Edisyn won't understand them.
+</ul>
+
+<br><br><h3>Thanks</h3>
+Thanks to Keith (llamamusic@hotmail.com) for his extraordinary service in loaning a machine in a pinch, providing materials, and debugging.  If you are a U-220 owner, <a href="llamamusic.com">llamamusic.com</a> is a fantastic resource.  
+
+<p><table border=0 cellpadding=0 cellspacing=5>
+<tr>
+<td align=right>By&nbsp;&nbsp;&nbsp;
+<td><b>Sean Luke</b>
+<tr>
+<td align=right>Date&nbsp;&nbsp;&nbsp;
+<td>April 2019
+</table>
+

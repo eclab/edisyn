@@ -63,7 +63,7 @@ public class RolandJV880Drum extends Synth
         HBox hbox = new HBox();
         hbox.add(addNameGlobal(Style.COLOR_GLOBAL()));
         //hbox.add(addGlobal(Style.COLOR_A()));
-        hbox.add(addKeys(Style.COLOR_B()));
+        hbox.addLast(addKeys(Style.COLOR_B()));
         vbox.add(hbox);
         vbox.add(drumDisplay);
         soundPanel.add(vbox);
@@ -382,7 +382,7 @@ public class RolandJV880Drum extends Synth
             new String[] { null, "note" + note + "tvfenvlevel1", "note" + note + "tvfenvlevel2", "note" + note + "tvfenvlevel3", "note" + note + "tvfenvlevel3", "note" + note + "tvfenvlevel4" },
             new double[] { 0, 0.2 / 127.0, 0.2 / 127.0, 0.2 / 127.0, 0.2, 0.2 / 127.0 },
             new double[] { 0, 1.0 / 127.0, 1.0 / 127.0, 1.0 / 127.0, 1.0 / 127.0, 1.0 / 127.0 });
-        hbox.add(comp);
+        hbox.addLast(comp);
 
         category.add(hbox, BorderLayout.CENTER);
         return category;
@@ -486,7 +486,7 @@ public class RolandJV880Drum extends Synth
             new String[] { null, "note" + note + "tvaenvlevel1", "note" + note + "tvaenvlevel2", "note" + note + "tvaenvlevel3", "note" + note + "tvaenvlevel3", null },
             new double[] { 0, 0.2 / 127.0, 0.2 / 127.0, 0.2 / 127.0, 0.2, 0.2 / 127.0 },
             new double[] { 0, 1.0 / 127.0, 1.0 / 127.0, 1.0 / 127.0, 1.0 / 127.0, 0 });
-        hbox.add(comp);
+        hbox.addLast(comp);
 
         category.add(hbox, BorderLayout.CENTER);
         return category;
@@ -557,7 +557,7 @@ public class RolandJV880Drum extends Synth
             };
         ((KeyDisplay)comp).setDynamicUpdate(true);
         ((KeyDisplay)comp).setOctavesBelowZero(KeyDisplay.OCTAVES_BELOW_ZERO_SPN);
-        hbox.addLast(comp);
+        hbox.add(comp);
                                 
         model.register("note", new Updatable()
             {

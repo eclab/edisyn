@@ -61,8 +61,11 @@ edisyn.synth.redsounddarkstar.RedSoundDarkStar	Red Sound	Red Sound DarkStar
 edisyn.synth.rolandd110.RolandD110Tone	Roland	Roland D-110 [Tone]
 edisyn.synth.rolandd110.RolandD110Multi	Roland	Roland D-110 [Multi]
 edisyn.synth.rolandjv880.RolandJV880	Roland	Roland JV-80 / 880
-edisyn.synth.rolandjv880.RolandJV880Drum	Roland	Roland JV-80 / 880 [Drum]
 edisyn.synth.rolandjv880.RolandJV880Multi	Roland	Roland JV-80 / 880 [Multi]
+edisyn.synth.rolandjv880.RolandJV880Drum	Roland	Roland JV-80 / 880 [Drum]
+edisyn.synth.rolandu220.RolandU220Timbre	Roland	Roland U-20 / 220 [Timbre]
+edisyn.synth.rolandu220.RolandU220Multi	Roland	Roland U-20 / 220 [Multi]
+edisyn.synth.rolandu220.RolandU220Drum	Roland	Roland U-20 / 220 [Drum]
 edisyn.synth.sequentialprophetrev2.SequentialProphetRev2	DSI/Sequential	Sequential Prophet Rev2
 edisyn.synth.waldorfblofeld.WaldorfBlofeld	Waldorf	Waldorf Blofeld
 edisyn.synth.waldorfblofeld.WaldorfBlofeldMulti	Waldorf	Waldorf Blofeld [Multi]

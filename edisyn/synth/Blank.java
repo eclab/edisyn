@@ -954,6 +954,15 @@ public class Blank extends Synth
         return false;
         }
 
+    public boolean testVerify(byte[] message)
+        {
+        // The edisyn.test.SanityCheck class performs sanity-checks on synthesizer classes
+        // by randomizing a synth instance, then writing it out, then reading it back in in a new synth, 
+        // and comparing the two.  When the receiving synth instance gets a sysex message it doesn't
+        // recognize, this method is called to determine if that's okay and it shoud be ignored.
+        // Return TRUE if the message is acceptable and should be ignored, else false.  
+        return false;
+        }
 
 
 

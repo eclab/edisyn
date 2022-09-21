@@ -141,7 +141,7 @@ import javax.sound.midi.*;
   
   int check = 0;
   for(int i = checksumData.start; i < checksumData.end; i++)
-  	check += checksumData[i];
+  check += checksumData[i];
   return (byte)(check % 127);
   
   
@@ -166,7 +166,7 @@ import javax.sound.midi.*;
   (although it currently works on all channels).  After switching to a 
   new multi you need to leave some time before you can switch the 
   programs in that multi (about 30 MIDI bytes over USB) so that Blofeld 
-  can finish loading the multi before it gets new program changes."	
+  can finish loading the multi before it gets new program changes."     
 */
 
 
@@ -235,7 +235,7 @@ public class WaldorfBlofeldMulti extends Synth
                 
     public void changePatch(Model tempModel)
         {
-        byte BB = (byte)127;			// 127 is the multimode's "Bank"
+        byte BB = (byte)127;                    // 127 is the multimode's "Bank"
         byte NN = (byte)tempModel.get("number");
         try {
             // Bank change is CC 32 or 0, both work
@@ -247,8 +247,8 @@ public class WaldorfBlofeldMulti extends Synth
         catch (Exception e) { Synth.handleException(e); }
         }
 
-	public int getPauseAfterChangePatch() { return 800; }	// this appears to be the minimum amount
-	
+    public int getPauseAfterChangePatch() { return 800; }   // this appears to be the minimum amount
+        
     public String getDefaultResourceFileName() { return "WaldorfBlofeldMulti.init"; }
     public String getHTMLResourceFileName() { return "WaldorfBlofeldMulti.html"; }
 

@@ -201,19 +201,19 @@ public class SanityCheck
             data = synth.flatten(synth.emitAll((Model)null, false, true));
             
             byte[][] d = Synth.cutUpSysex(data);
-			for(int i = 0; i < d.length; i++)
-				{
-				if (!synth2.recognizeLocal(d[i]) &&
-					!synth2.testVerify(d[i]))
-					{
-					System.err.println("\t [FAIL] Not Recognized Message " + i);
-					for(int j = 0; j < d[i].length; j++)
-						{
-						System.err.println("" + j + " " + StringUtility.toHex(d[i][j]));
-						}
-					failed = true;
-					}
-				}
+            for(int i = 0; i < d.length; i++)
+                {
+                if (!synth2.recognizeLocal(d[i]) &&
+                    !synth2.testVerify(d[i]))
+                    {
+                    System.err.println("\t [FAIL] Not Recognized Message " + i);
+                    for(int j = 0; j < d[i].length; j++)
+                        {
+                        System.err.println("" + j + " " + StringUtility.toHex(d[i][j]));
+                        }
+                    failed = true;
+                    }
+                }
             synth2.parse(data, true);
             String[] keys = synth.getModel().getKeys();
             for(int i = 0; i < keys.length; i++)

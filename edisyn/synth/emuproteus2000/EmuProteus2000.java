@@ -663,7 +663,7 @@ public class EmuProteus2000 extends Synth
                 {
                 public String map(int val)
                     {
-                    if (val == -1) return "Off";		// The sysex docs say "Current", but the machine says "off"
+                    if (val == -1) return "Off";                // The sysex docs say "Current", but the machine says "off"
                     else return "" + val;
                     }
                 };
@@ -859,9 +859,9 @@ public class EmuProteus2000 extends Synth
             };
         hbox.add(comp);
 
-        comp = new LabelledDial("Pan", this, "link" + link + "pan", color, -64, +63)		// the docs say -64 ... +64 but nope.  Weirdly this is a different range from layer pan (-63 ... +63)
-        	{
-        	public boolean isSymmetric() { return true; }
+        comp = new LabelledDial("Pan", this, "link" + link + "pan", color, -64, +63)            // the docs say -64 ... +64 but nope.  Weirdly this is a different range from layer pan (-63 ... +63)
+            {
+            public boolean isSymmetric() { return true; }
             public String map(int val)
                 {
                 if (val == 0) return "--";
@@ -1293,22 +1293,22 @@ public class EmuProteus2000 extends Synth
         
 
         comp = new LabelledDial("Pan", this, "layer" + layer + "pan", color, -64, 63)
-        	{
-        	public boolean isSymmetric() { return true; }
+            {
+            public boolean isSymmetric() { return true; }
             public String map(int val)
                 {
                 if (val == 0) return "--";
                 else if (val > 0) return "" + val + " >";
                 else return "< " + (-val);
                 }
-        	};
+            };
         hbox.add(comp);
                 
 
         comp = new LabelledDial("Coarse Tune", this, "layer" + layer + "ctune", color, -36, 36);
         hbox.add(comp);
 
-        comp = new LabelledDial("Fine Tune", this, "layer" + layer + "ftune", color, -63, 63);		// docs say -64 to +64 but that's wrong
+        comp = new LabelledDial("Fine Tune", this, "layer" + layer + "ftune", color, -63, 63);          // docs say -64 to +64 but that's wrong
         hbox.add(comp);
 
         comp = new LabelledDial("Chorus", this, "layer" + layer + "ldetune", color, 0, 100)
@@ -2309,11 +2309,11 @@ public class EmuProteus2000 extends Synth
                         {
                         v = findValue(v, LAYER_PATCHCORD_DESTINATION_INDICES, p);
                         }
-					else if (p.equals("tempooffset"))
-						{
-						// The range -1...+1 needs to be converted to 0 ... 2
-						v = v + 1;
-						}
+                    else if (p.equals("tempooffset"))
+                        {
+                        // The range -1...+1 needs to be converted to 0 ... 2
+                        v = v + 1;
+                        }
                     else
                         {
                         // nothing
@@ -2543,10 +2543,10 @@ public class EmuProteus2000 extends Synth
                 v = LAYER_PATCHCORD_DESTINATION_INDICES[v];
                 }
             else if (p.equals("tempooffset"))
-            	{
-            	// The range 0...2 needs to be converted to -1 ... +1
-            	v = v - 1;
-            	}
+                {
+                // The range 0...2 needs to be converted to -1 ... +1
+                v = v - 1;
+                }
             else
                 {
                 // nothing
@@ -2738,10 +2738,10 @@ public class EmuProteus2000 extends Synth
                 v = LAYER_PATCHCORD_DESTINATION_INDICES[v];
                 }
             else if (p.equals("tempooffset"))
-            	{
-            	// The range 0...2 needs to be converted to -1 ... +1
-            	v = v - 1;
-            	}
+                {
+                // The range 0...2 needs to be converted to -1 ... +1
+                v = v - 1;
+                }
             else
                 {
                 // nothing
@@ -2970,13 +2970,13 @@ public class EmuProteus2000 extends Synth
         for(int i = 0 ; i < nameb.length(); i++)
             {
             if (i == 3) 
-            	nameb.setCharAt(i, ':');
+                nameb.setCharAt(i, ':');
             else
-            	{
-				char c = nameb.charAt(i);
-				if (c < 32 || c > 127)
-					nameb.setCharAt(i, ' ');
-				}
+                {
+                char c = nameb.charAt(i);
+                if (c < 32 || c > 127)
+                    nameb.setCharAt(i, ' ');
+                }
             }
         name = nameb.toString();
         return super.revisePatchName(name);  // trim again I guess
@@ -4376,10 +4376,10 @@ public class EmuProteus2000 extends Synth
         int len = table.getColumnModel().getColumnCount();
         
         for(int i = 0; i < len; i++)
-        	{
-        	TableColumn c = table.getColumnModel().getColumn(i);
-        	}
-        	
+            {
+            TableColumn c = table.getColumnModel().getColumn(i);
+            }
+                
         for(int i = 2; i < len; i++)
             {
             TableColumn column = table.getColumn(i);

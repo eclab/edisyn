@@ -5871,14 +5871,14 @@ public abstract class Synth extends JComponent implements Updatable
     /** Return whether notes should have a NOTE OFF sent after their NOTE ON */
     public boolean getClearsTestNotes() { return true; }
     
-    void playChord(int testNote)
+    void playChord(int testNote, boolean allowChords)
         {
         if (testNoteChord != null)
             {
-            int[] chord = new int[testNoteChord.length];
+            int[] chord = new int[allowChords ? testNoteChord.length : 1];
             try
                 {
-                for(int i = 0; i < testNoteChord.length; i++)
+                for(int i = 0; i < (allowChords ? testNoteChord.length : 1); i++)
                     {
                     chord[i] = testNoteChord[i] + testNote;
                     tryToSendMIDI(new ShortMessage(ShortMessage.NOTE_ON, getTestNoteChannel(), chord[i], getTestNoteVelocity()));
@@ -5920,12 +5920,14 @@ public abstract class Synth extends JComponent implements Updatable
     
     javax.swing.Timer noteTimer = null;
     
+    /** Send a test note, permitting chords to be played. */
     public void doSendTestNote()
         {
-        doSendTestNote(getTestNotePitch());
+        doSendTestNote(getTestNotePitch(), true);
         }
 
-    public void doSendTestNote(int testNote)
+    /** Send a test note, optionally permitting chords to be played. */
+    public void doSendTestNote(int testNote, boolean allowChords)
         {
         // possibly clear all notes
         if (getClearsTestNotes())
@@ -5938,7 +5940,7 @@ public abstract class Synth extends JComponent implements Updatable
             clearChord();
             }
             
-        playChord(testNote);
+        playChord(testNote, allowChords);
                                                          
         // schedule a note off
         if (noteTimer != null) noteTimer.stop();

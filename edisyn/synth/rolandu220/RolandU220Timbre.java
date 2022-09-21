@@ -19,254 +19,254 @@ import javax.sound.midi.*;
 
 /**
    A patch editor for Roland U-220 Timbres
-   */
+*/
 
 public class RolandU220Timbre extends Synth
     {
 
-public static final String[] PCM_NAMES = 
-	{
-	"Internal",
-	"01 Pipe Organ & Harpsichord",
-	"02 Latin & FX Percussion",
-	"03 Ethnic",
-	"04 Electric Grand and Clavi",
-	"05 Orchestral Strings",
-	"06 Orchestral Winds",
-	"07 Electric Guitar",
-	"08 Synthesizer",
-	"09 Guitar & Keyboards",
-	"10 Rock Drums",
-	"11 Sound Effects",
-	"12 Sax & Trombone",
-	"13 Super Strings",
-	"14 Super Ac Guitar",
-	"15 Super Brass"
-	};
+    public static final String[] PCM_NAMES = 
+        {
+        "Internal",
+        "01 Pipe Organ & Harpsichord",
+        "02 Latin & FX Percussion",
+        "03 Ethnic",
+        "04 Electric Grand and Clavi",
+        "05 Orchestral Strings",
+        "06 Orchestral Winds",
+        "07 Electric Guitar",
+        "08 Synthesizer",
+        "09 Guitar & Keyboards",
+        "10 Rock Drums",
+        "11 Sound Effects",
+        "12 Sax & Trombone",
+        "13 Super Strings",
+        "14 Super Ac Guitar",
+        "15 Super Brass"
+        };
 
-public static final String[][] PCM =
-	{
-		{
-		// U-220 INTERNAL
-		"A. Piano 1", "A. Piano 2", "A. Piano 3", "A. Piano 4", "A. Piano 5", 
-		"A. Piano 6", "A. Piano 7", "A. Piano 8", "A. Piano 9", "A. Piano 10", 
-		"E. Piano 1", "E. Piano 2", "E. Piano 3", "E. Piano 4", "E. Piano 5", 
-		"Bright EP 1", "Bright EP 2", "Vib 1", "Vib 2", "Vib 3", "Bell 1", "Bell 2", "Marimba", 
-		"A. Guitar 1", "A. Guitar 2", "A. Guitar 3", "A. Guitar 4", "A. Guitar 5", 
-		"E. Guitar 1", "E. Guitar 2", "E. Guitar 3", "E. Guitar 4", "Heavy EG 1", "Heavy EG 2", 
-		"Slap 1", "Slap 2", "Slap 3", "Slap 4", "Slap 5", "Slap 6", 
-		"Slap 7", "Slap 8", "Slap 9", "Slap 10", "Slap 11", "Slap 12", 
-		"Fingered 1", "Fingered 2", "Picked 1", "Picked 2", "Fretless 1", "Fretless 2", "AC. Bass", 
-		"Syn. Bass 1", "Syn. Bass 2", "Syn. Bass 3", "Syn. Bass 4", 
-		"Syn. Bass 5", "Syn. Bass 6", "Syn. Bass 7", "Syn. Bass 8", 
-		"Choir 1", "Choir 2", "Choir 3", "Choir 4", "Strings 1", "Strings 2", "Strings 3", "Strings 4", 
-		"E. Organ 1", "E. Organ 2", "E. Organ 3", "E. Organ 4", "E. Organ 5", 
-		"E. Organ 6", "E. Organ 7", "E. Organ 8", "E. Organ 9", "R. Organ 1", "R. Organ 2", 
-		"Soft TP 1", "Soft TP 2", "TP / TRB 1", "TP / TRB 2", "TP / TRB 3", 
-		"Sax 1", "Sax 2", "Sax 3", "Sax 4", "Sax 5", "Brass 1", "Flute 1", 
-		"Shaku 1", "Shaku 2", "Fantasia", "Bell Pad", "Syn Choir", 
-		"Breath Vox", "Syn. Vox 1", "Syn. Vox 2", "L. Calliope", "Calliope", 
-		"Metal Hit", "Rich Brass", "JP. Brass 1", "JP. Brass 2", "Brass Strings", 
-		"String Pad 1", "String Pad 2", "JP. Strings", "Pizzagogo", "Fanta Bell", 
-		"Spect Bell", "Bell Drum", "Synth Harp", "Pulse Wave 1", "Pulse Wave 2", "Pulse Wave 3", 
-		"Saw Wave 1", "Saw Wave 2", "Pizz", "Metal", "Breath", "Nails", "Spectrum 1", "Spectrum 2", "N. Dance", "Drums"
-		},
-		{ 
-		// SN-U110-01 - Pipe Organ and Harpsichord
-		"Harpsichord 1", "Harpsichord 2", "Harpsichord 3", "Harpsichord 4", "Harpsichord 5", "Harpsichord 6",
-		"Positive 1", "Positive 2", "Positive 3", "Positive 4", "Positive 5", "Positive 6", 
-		"Church 1", "Church 2", "Church 3", "Church 4", "Church 5", "Church 6", "Church 7", "Church 8", "Church Reverb", 
-		},
-		{ 
-		// SN-U110-02 - Latin and FX Percussion
-		"Latin 1", "Latin 2", "Latin 3", "FX 1", "FX 2", "FX 3", "FX 4", 
-		"Conga 1", "Conga 2", "Conga 3", "Bongo", "Claves", "Timbale", 
-		"Tambourine", "Wood Block", "Whistle", "Triangle", "Belltree", 
-		"Jingle Bell", "Vibraslap", "Castanet", "Maracas", "Agogo 1", "Agogo 2", 
-		"Cuica 1", "Cuica 2", "Guiro 1", "Guiro 2", "Guiro 3", "Berimbau", 
-		"Shekele", "Steel Drum", "Log Drum", "Orch Hit", "Siren", 
-		"Type 1", "Type 2", "Clock", "Pinball", "Telephone", "Smsh Glass", 
-		"Rezno", "Eerie", "Ambia Jr", "Templ Blk", "Zing!", "Boing!", 
-		"Mod Zap", "Interface", "Scratch", "Stake", "Zappu"
-		},
-		{
-		// SN-U110-03 - Ethnic
-		"Tabla", "Tabla-Ga", "Tabla-Te", "Tabla-Na", "Tabla-Trkt", "Tabla-Tun", 
-		"Tsuzumi 1", "Tsuzumi 2", "Tsuzumi 3", "Hyosigi", "Gender 1", "Gender 2", 
-		"Sanza 1", "Sanza 2", "Barafon 1", "Barafon 2", "Barafon 3", "Barafon 4", 
-		"Sitar 1", "Sitar 2", "Sitar 3", "Santur 1", "Santur 2", "Santur 3", 
-		"Koto 1", "Koto 2", "Koto 3", "Koto 4", "Koto 5", "Koto 6", "Koto 7", "Koto 8", "Koto Tremo", 
-		"Sicu 1", "Sicu 2", "Shanai 1", "Shanai 2", "Shanai 3"
-		},
-		{
-		// SN-U110-04 - Electric Grand and Clavi
-		"Electric Grand 1", "Electric Grand 2", "Electric Grand 3", "Electric Grand 4", 
-		"Electric Grand 5", "Electric Grand 6", "Electric Grand 7", "Electric Grand 8", 
-		"Clavichord 1", "Clavichord 2", "Clavichord 3", "Clavichord 4", 
-		},
-		{
-		// SN-U110-05 - Orchestral Strings
-		"Violin 1", "Violin 2", "Violin 3",
-		"Cello 1", "Cello 2", "Cello 3", "Cello 4", "Cello / Violin", "Contrabass / Cello", "Pizzicato", 
-		"Harp 1", "Harp 2", 
-		},
-		{
-		// SN-U110-06 - Orchestral Winds
-		"Oboe 1", "Oboe 2", "Oboe 3", "Oboe 4", "Oboe 5", "Oboe 6", 
-		"Bassoon 1", "Bassoon 2", "Bassoon 3", "Bassoon 4", "Bassoon 5", 
-		"Clarinet 1", "Clarinet 2", "Clarinet 3", "Clarinet 4", "Clarinet 5", "Clarinet 6", 
-		"Bass Clarinet 1", "Bass Clarinet 2", "Bass Clarinet 3", "Bass Clarinet 4", "Bass Clarinet 5", 
-		"French Horn 1", "French Horn 2", "French Horn 3", "French Horn 4", "French Horn 5", "French Horn 6", 
-		"Tuba 1", "Tuba 2", "Tuba 3", "Tuba 4", "Tuba 5", 
-		"Timpani 1", "Timpani 2"
-		},
-		{
-		// SN-U110-07 - Electric Guitar
-		"Jazz Guitar SW 1", "Jazz Guitar SW 2", "Jazz Guitar SW 3", "Jazz Guitar P", "Jazz Guitar F", 
-		"Jazz Guitar DT P", "Jazz Guitar DT F", "Jazz Guitar OCT P1", "Jazz Guitar OCT P2", "Jazz Guitar OCT F1", 
-		"Jazz Guitar OCT F2", "Jazz Guitar SW S/F", "Jazz Guitar COMP 1", "Jazz Guitar COMP 1", "Jazz Guitar COMP 1", 
-		"Overdrive Guitar SW 1", "Overdrive Guitar SW 2", "Overdrive Guitar SW 3", "Overdrive Guitar SW 4", 
-		"Overdrive Guitar SW 5", "Overdrive Guitar SW HM", "Overdrive Guitar P", "Overdrive Guitar F", 
-		"Overdrive Guitar DT P", "Overdrive Guitar DT F", "Overdrive Guitar OCT P1", "Overdrive Guitar OCT P2", 
-		"Overdrive Guitar OCT F1", "Overdrive Guitar OCT F2", "Overdrive Guitar SW S/F", "Overdrive Guitar FB 1", 
-		"Overdrive Guitar FB 2", "Overdrive Guitar FB 3", "Overdrive Guitar FB 4", "Overdrive Guitar FB 5", 
-		"Overdrive Guitar FB 6", "Overdrive Guitar FB 7", "Overdrive Guitar FB 8", "Overdrive Guitar FB 9", 
-		"Overdrive Guitar FB 10", "Overdrive Guitar FB 11", "Overdrive Guitar FB 12", 
-		"Distortion Guitar SW 1", "Distortion Guitar SW 2", "Distortion Guitar SW 3", "Distortion Guitar SW 4", 
-		"Distortion Guitar SW 5", "Distortion Guitar SW HM", "Distortion Guitar P", "Distortion Guitar F", 
-		"Distortion Guitar DT", "Distortion Guitar +4TH 1", "Distortion Guitar +4TH 2", "Distortion Guitar -5TH 1", 
-		"Distortion Guitar -5TH 2", "Distortion Guitar OCT 1", "Distortion Guitar OCT 2", "Distortion Guitar SW S/F", 
-		"Distortion Guitar FB 1", "Distortion Guitar FB 2", "Distortion Guitar FB 3", "Distortion Guitar FB 4", 
-		"Distortion Guitar FB 5", "Distortion Guitar FB 6", "Distortion Guitar FB 7", "Distortion Guitar FB 8", 
-		"Distortion Guitar FB 9", "Distortion Guitar FB 10", "Distortion Guitar FB 11", "Distortion Guitar FB 12", 
-		"Picking Harmonics"
-		},
-		{
-		// SN-U110-08 - Synthesizer
-		// NOTE -- already available on the U-220 internal
-		"Fantasia", "Bell Pad", "Syn Choir", "Breath Vox", "L. Calliope", "Calliope", 
-		"Metal Hit", "Rich Brass", "Brass Strings", "String Pad 1", "String Pad 2", 
-		"Pizzagogo", "Fanta Bell", "Spect Bell", "Bell Drum", "Synth Harp", 
-		"Pulse Wave 1", "Pulse Wave 2", "Pulse Wave 3", "Saw Wave 1", "Saw Wave 2", 
-		"Pizz", "Metal", "Breath", "Nails", "Spectrum 1", "Spectrum 2", "N. Dance"
-		},
-		{
-		// SN-U110-09 - Guitar & Keyboards
-		// NOTE -- already available on the U-220 internal
-		"Bright EP 1", "Bright EP 2", "Syn. Vox 1", "Syn. Vox 2", 
-		"Syn. Bass 4", "Syn. Bass 5", "Syn. Bass 6", "Syn. Bass 7", "Syn. Bass 8", 
-		"Heavy EG 1", "Heavy EG 2", "JP. Strings", "JP. Brass 1", "JP. Brass 2", 
-		"R. Organ 1", "R. Organ 2"
-		},
-		{
-		// SN-U110-10 - Rock Drums
-		// NOTE -- I assume these are 0 and 1 respectively but am not sure
-		// In fact this might be properly "[Nothing]" instead
-		"Rock Drums",
-		"Electronic Drums"
-		},
-		{
-		// SN-U110-11 - Sound Effects
-		"Creaking", "Door", "Footsteps", "Waterphone", "S-Strings", 
-		"Screaming", "Laughing", "Dog", "Wave", "Stream", "Bird", 
-		"Drop", "Rain", "Thunder", "Car Door", "Car Stop", "Car Crash", 
-		"Train", "Pistol", "Machine Gun", "Missile", "Explosion", 
-		"Big Foot", "Godzilla", "Telephone Call", "Chime", "Applause", 
-		"From Radio", "Bubble 1", "Bubble 2", "Toy", "Fantasy Hit", 
-		"S-Set", "C-Set",
-		},
-		{
-		// SN-U110-12 - Sax and Trombone
-		// NOTE -- The tones labelled Trumpet/Trombone were originally labelled "TP/TRB",
-		// which I *assume* is Trumpet and Trombone
-		"Saxophone SW 1", "Saxophone SW 2", "Saxophone SW 3", "Saxophone SW 4", "Saxophone P 1", 
-		"Saxophone P 2", "Saxophone P 3", "Saxophone MF 1", "Saxophone MF 2", "Saxophone FF", 
-		"Trombone SW 1", "Trombone SW 2", "Trombone P", "Trombone MF", "Trombone FF", 
-		"Trumpet/Trombone SW 1", "Trumpet/Trombone SW 2", "Trumpet/Trombone P", "Trumpet/Trombone MF", "Trumpet/Trombone FF",
-		},
-		{
-		// SN-U110-13 - Super Strings (From JV-80)
-		"Super Strings 1", "Super Strings 1L", "Super Strings 1R", 
-		"Super Strings 2", "Super Strings 2L", "Super Strings 2R", 
-		"Super Strings 3", "Super Strings 3L", "Super Strings 3R", 
-		"Super Strings 4", "Super Strings 4L", "Super Strings 4R",
-		},
-		{
-		// SN-U110-14 - Super Acoustic Guitar (From JV-80)
-		"Steel Guitar 1", "Steel Soft", "Steel Hard", "Steel Guitar 2", "Steel (L)", "Steel (R)", 
-		"Nylon Guitar 1", "Nylon Soft", "Nylon Hard", "Nylon Guitar 2", "Nylon (L)", "Nylon (R)", 
-		"12-String Guitar 1", "12-String Guitar 2", "12-String Guitar 3", "12-String Guitar 4", "12-String Guitar 5", 
-		"Harmonics", "Squeak",
-		},
-		{
-		// SN-U110-15 - Super Brass (From JV-80)
-		"High Brass 1", "High Brass 2", "High Brass SF", 
-		"Low Brass 1", "Low Brass 2", "Low Brass SF", 
-		"Brass Combo 1", "Brass Combo 1L", "Brass Combo 1R", 
-		"Brass Combo 2", "Brass Combo 2L", "Brass Combo 2R", 
-		"Brass Combo SF",
-		},
-	};
-	
-	public static final String[] LFO_WAVEFORMS = { "Triangle", "Sine", "Square", "Saw Up", "Saw Down", "Trill 1", "Trill 2", "Random 1", "Random 2", "Random 3", "Random 4" };
-	public static final int[] LOWER_BEND_RANGES = { -36, -24, -12, -11, -10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 0 };         
-	public static final int[] SENSITIVITY_RANGES = { -36, -24, -12, -11, -10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };         
+    public static final String[][] PCM =
+        {
+            {
+            // U-220 INTERNAL
+            "A. Piano 1", "A. Piano 2", "A. Piano 3", "A. Piano 4", "A. Piano 5", 
+            "A. Piano 6", "A. Piano 7", "A. Piano 8", "A. Piano 9", "A. Piano 10", 
+            "E. Piano 1", "E. Piano 2", "E. Piano 3", "E. Piano 4", "E. Piano 5", 
+            "Bright EP 1", "Bright EP 2", "Vib 1", "Vib 2", "Vib 3", "Bell 1", "Bell 2", "Marimba", 
+            "A. Guitar 1", "A. Guitar 2", "A. Guitar 3", "A. Guitar 4", "A. Guitar 5", 
+            "E. Guitar 1", "E. Guitar 2", "E. Guitar 3", "E. Guitar 4", "Heavy EG 1", "Heavy EG 2", 
+            "Slap 1", "Slap 2", "Slap 3", "Slap 4", "Slap 5", "Slap 6", 
+            "Slap 7", "Slap 8", "Slap 9", "Slap 10", "Slap 11", "Slap 12", 
+            "Fingered 1", "Fingered 2", "Picked 1", "Picked 2", "Fretless 1", "Fretless 2", "AC. Bass", 
+            "Syn. Bass 1", "Syn. Bass 2", "Syn. Bass 3", "Syn. Bass 4", 
+            "Syn. Bass 5", "Syn. Bass 6", "Syn. Bass 7", "Syn. Bass 8", 
+            "Choir 1", "Choir 2", "Choir 3", "Choir 4", "Strings 1", "Strings 2", "Strings 3", "Strings 4", 
+            "E. Organ 1", "E. Organ 2", "E. Organ 3", "E. Organ 4", "E. Organ 5", 
+            "E. Organ 6", "E. Organ 7", "E. Organ 8", "E. Organ 9", "R. Organ 1", "R. Organ 2", 
+            "Soft TP 1", "Soft TP 2", "TP / TRB 1", "TP / TRB 2", "TP / TRB 3", 
+            "Sax 1", "Sax 2", "Sax 3", "Sax 4", "Sax 5", "Brass 1", "Flute 1", 
+            "Shaku 1", "Shaku 2", "Fantasia", "Bell Pad", "Syn Choir", 
+            "Breath Vox", "Syn. Vox 1", "Syn. Vox 2", "L. Calliope", "Calliope", 
+            "Metal Hit", "Rich Brass", "JP. Brass 1", "JP. Brass 2", "Brass Strings", 
+            "String Pad 1", "String Pad 2", "JP. Strings", "Pizzagogo", "Fanta Bell", 
+            "Spect Bell", "Bell Drum", "Synth Harp", "Pulse Wave 1", "Pulse Wave 2", "Pulse Wave 3", 
+            "Saw Wave 1", "Saw Wave 2", "Pizz", "Metal", "Breath", "Nails", "Spectrum 1", "Spectrum 2", "N. Dance", "Drums"
+            },
+            { 
+            // SN-U110-01 - Pipe Organ and Harpsichord
+            "Harpsichord 1", "Harpsichord 2", "Harpsichord 3", "Harpsichord 4", "Harpsichord 5", "Harpsichord 6",
+            "Positive 1", "Positive 2", "Positive 3", "Positive 4", "Positive 5", "Positive 6", 
+            "Church 1", "Church 2", "Church 3", "Church 4", "Church 5", "Church 6", "Church 7", "Church 8", "Church Reverb", 
+            },
+            { 
+            // SN-U110-02 - Latin and FX Percussion
+            "Latin 1", "Latin 2", "Latin 3", "FX 1", "FX 2", "FX 3", "FX 4", 
+            "Conga 1", "Conga 2", "Conga 3", "Bongo", "Claves", "Timbale", 
+            "Tambourine", "Wood Block", "Whistle", "Triangle", "Belltree", 
+            "Jingle Bell", "Vibraslap", "Castanet", "Maracas", "Agogo 1", "Agogo 2", 
+            "Cuica 1", "Cuica 2", "Guiro 1", "Guiro 2", "Guiro 3", "Berimbau", 
+            "Shekele", "Steel Drum", "Log Drum", "Orch Hit", "Siren", 
+            "Type 1", "Type 2", "Clock", "Pinball", "Telephone", "Smsh Glass", 
+            "Rezno", "Eerie", "Ambia Jr", "Templ Blk", "Zing!", "Boing!", 
+            "Mod Zap", "Interface", "Scratch", "Stake", "Zappu"
+            },
+            {
+            // SN-U110-03 - Ethnic
+            "Tabla", "Tabla-Ga", "Tabla-Te", "Tabla-Na", "Tabla-Trkt", "Tabla-Tun", 
+            "Tsuzumi 1", "Tsuzumi 2", "Tsuzumi 3", "Hyosigi", "Gender 1", "Gender 2", 
+            "Sanza 1", "Sanza 2", "Barafon 1", "Barafon 2", "Barafon 3", "Barafon 4", 
+            "Sitar 1", "Sitar 2", "Sitar 3", "Santur 1", "Santur 2", "Santur 3", 
+            "Koto 1", "Koto 2", "Koto 3", "Koto 4", "Koto 5", "Koto 6", "Koto 7", "Koto 8", "Koto Tremo", 
+            "Sicu 1", "Sicu 2", "Shanai 1", "Shanai 2", "Shanai 3"
+            },
+            {
+            // SN-U110-04 - Electric Grand and Clavi
+            "Electric Grand 1", "Electric Grand 2", "Electric Grand 3", "Electric Grand 4", 
+            "Electric Grand 5", "Electric Grand 6", "Electric Grand 7", "Electric Grand 8", 
+            "Clavichord 1", "Clavichord 2", "Clavichord 3", "Clavichord 4", 
+            },
+            {
+            // SN-U110-05 - Orchestral Strings
+            "Violin 1", "Violin 2", "Violin 3",
+            "Cello 1", "Cello 2", "Cello 3", "Cello 4", "Cello / Violin", "Contrabass / Cello", "Pizzicato", 
+            "Harp 1", "Harp 2", 
+            },
+            {
+            // SN-U110-06 - Orchestral Winds
+            "Oboe 1", "Oboe 2", "Oboe 3", "Oboe 4", "Oboe 5", "Oboe 6", 
+            "Bassoon 1", "Bassoon 2", "Bassoon 3", "Bassoon 4", "Bassoon 5", 
+            "Clarinet 1", "Clarinet 2", "Clarinet 3", "Clarinet 4", "Clarinet 5", "Clarinet 6", 
+            "Bass Clarinet 1", "Bass Clarinet 2", "Bass Clarinet 3", "Bass Clarinet 4", "Bass Clarinet 5", 
+            "French Horn 1", "French Horn 2", "French Horn 3", "French Horn 4", "French Horn 5", "French Horn 6", 
+            "Tuba 1", "Tuba 2", "Tuba 3", "Tuba 4", "Tuba 5", 
+            "Timpani 1", "Timpani 2"
+            },
+            {
+            // SN-U110-07 - Electric Guitar
+            "Jazz Guitar SW 1", "Jazz Guitar SW 2", "Jazz Guitar SW 3", "Jazz Guitar P", "Jazz Guitar F", 
+            "Jazz Guitar DT P", "Jazz Guitar DT F", "Jazz Guitar OCT P1", "Jazz Guitar OCT P2", "Jazz Guitar OCT F1", 
+            "Jazz Guitar OCT F2", "Jazz Guitar SW S/F", "Jazz Guitar COMP 1", "Jazz Guitar COMP 1", "Jazz Guitar COMP 1", 
+            "Overdrive Guitar SW 1", "Overdrive Guitar SW 2", "Overdrive Guitar SW 3", "Overdrive Guitar SW 4", 
+            "Overdrive Guitar SW 5", "Overdrive Guitar SW HM", "Overdrive Guitar P", "Overdrive Guitar F", 
+            "Overdrive Guitar DT P", "Overdrive Guitar DT F", "Overdrive Guitar OCT P1", "Overdrive Guitar OCT P2", 
+            "Overdrive Guitar OCT F1", "Overdrive Guitar OCT F2", "Overdrive Guitar SW S/F", "Overdrive Guitar FB 1", 
+            "Overdrive Guitar FB 2", "Overdrive Guitar FB 3", "Overdrive Guitar FB 4", "Overdrive Guitar FB 5", 
+            "Overdrive Guitar FB 6", "Overdrive Guitar FB 7", "Overdrive Guitar FB 8", "Overdrive Guitar FB 9", 
+            "Overdrive Guitar FB 10", "Overdrive Guitar FB 11", "Overdrive Guitar FB 12", 
+            "Distortion Guitar SW 1", "Distortion Guitar SW 2", "Distortion Guitar SW 3", "Distortion Guitar SW 4", 
+            "Distortion Guitar SW 5", "Distortion Guitar SW HM", "Distortion Guitar P", "Distortion Guitar F", 
+            "Distortion Guitar DT", "Distortion Guitar +4TH 1", "Distortion Guitar +4TH 2", "Distortion Guitar -5TH 1", 
+            "Distortion Guitar -5TH 2", "Distortion Guitar OCT 1", "Distortion Guitar OCT 2", "Distortion Guitar SW S/F", 
+            "Distortion Guitar FB 1", "Distortion Guitar FB 2", "Distortion Guitar FB 3", "Distortion Guitar FB 4", 
+            "Distortion Guitar FB 5", "Distortion Guitar FB 6", "Distortion Guitar FB 7", "Distortion Guitar FB 8", 
+            "Distortion Guitar FB 9", "Distortion Guitar FB 10", "Distortion Guitar FB 11", "Distortion Guitar FB 12", 
+            "Picking Harmonics"
+            },
+            {
+            // SN-U110-08 - Synthesizer
+            // NOTE -- already available on the U-220 internal
+            "Fantasia", "Bell Pad", "Syn Choir", "Breath Vox", "L. Calliope", "Calliope", 
+            "Metal Hit", "Rich Brass", "Brass Strings", "String Pad 1", "String Pad 2", 
+            "Pizzagogo", "Fanta Bell", "Spect Bell", "Bell Drum", "Synth Harp", 
+            "Pulse Wave 1", "Pulse Wave 2", "Pulse Wave 3", "Saw Wave 1", "Saw Wave 2", 
+            "Pizz", "Metal", "Breath", "Nails", "Spectrum 1", "Spectrum 2", "N. Dance"
+            },
+            {
+            // SN-U110-09 - Guitar & Keyboards
+            // NOTE -- already available on the U-220 internal
+            "Bright EP 1", "Bright EP 2", "Syn. Vox 1", "Syn. Vox 2", 
+            "Syn. Bass 4", "Syn. Bass 5", "Syn. Bass 6", "Syn. Bass 7", "Syn. Bass 8", 
+            "Heavy EG 1", "Heavy EG 2", "JP. Strings", "JP. Brass 1", "JP. Brass 2", 
+            "R. Organ 1", "R. Organ 2"
+            },
+            {
+            // SN-U110-10 - Rock Drums
+            // NOTE -- I assume these are 0 and 1 respectively but am not sure
+            // In fact this might be properly "[Nothing]" instead
+            "Rock Drums",
+            "Electronic Drums"
+            },
+            {
+            // SN-U110-11 - Sound Effects
+            "Creaking", "Door", "Footsteps", "Waterphone", "S-Strings", 
+            "Screaming", "Laughing", "Dog", "Wave", "Stream", "Bird", 
+            "Drop", "Rain", "Thunder", "Car Door", "Car Stop", "Car Crash", 
+            "Train", "Pistol", "Machine Gun", "Missile", "Explosion", 
+            "Big Foot", "Godzilla", "Telephone Call", "Chime", "Applause", 
+            "From Radio", "Bubble 1", "Bubble 2", "Toy", "Fantasy Hit", 
+            "S-Set", "C-Set",
+            },
+            {
+            // SN-U110-12 - Sax and Trombone
+            // NOTE -- The tones labelled Trumpet/Trombone were originally labelled "TP/TRB",
+            // which I *assume* is Trumpet and Trombone
+            "Saxophone SW 1", "Saxophone SW 2", "Saxophone SW 3", "Saxophone SW 4", "Saxophone P 1", 
+            "Saxophone P 2", "Saxophone P 3", "Saxophone MF 1", "Saxophone MF 2", "Saxophone FF", 
+            "Trombone SW 1", "Trombone SW 2", "Trombone P", "Trombone MF", "Trombone FF", 
+            "Trumpet/Trombone SW 1", "Trumpet/Trombone SW 2", "Trumpet/Trombone P", "Trumpet/Trombone MF", "Trumpet/Trombone FF",
+            },
+            {
+            // SN-U110-13 - Super Strings (From JV-80)
+            "Super Strings 1", "Super Strings 1L", "Super Strings 1R", 
+            "Super Strings 2", "Super Strings 2L", "Super Strings 2R", 
+            "Super Strings 3", "Super Strings 3L", "Super Strings 3R", 
+            "Super Strings 4", "Super Strings 4L", "Super Strings 4R",
+            },
+            {
+            // SN-U110-14 - Super Acoustic Guitar (From JV-80)
+            "Steel Guitar 1", "Steel Soft", "Steel Hard", "Steel Guitar 2", "Steel (L)", "Steel (R)", 
+            "Nylon Guitar 1", "Nylon Soft", "Nylon Hard", "Nylon Guitar 2", "Nylon (L)", "Nylon (R)", 
+            "12-String Guitar 1", "12-String Guitar 2", "12-String Guitar 3", "12-String Guitar 4", "12-String Guitar 5", 
+            "Harmonics", "Squeak",
+            },
+            {
+            // SN-U110-15 - Super Brass (From JV-80)
+            "High Brass 1", "High Brass 2", "High Brass SF", 
+            "Low Brass 1", "Low Brass 2", "Low Brass SF", 
+            "Brass Combo 1", "Brass Combo 1L", "Brass Combo 1R", 
+            "Brass Combo 2", "Brass Combo 2L", "Brass Combo 2R", 
+            "Brass Combo SF",
+            },
+        };
+        
+    public static final String[] LFO_WAVEFORMS = { "Triangle", "Sine", "Square", "Saw Up", "Saw Down", "Trill 1", "Trill 2", "Random 1", "Random 2", "Random 3", "Random 4" };
+    public static final int[] LOWER_BEND_RANGES = { -36, -24, -12, -11, -10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 0 };         
+    public static final int[] SENSITIVITY_RANGES = { -36, -24, -12, -11, -10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };         
 
     HashMap allParametersToIndex = new HashMap();
         
     final static String[] allParameters = new String[]
     {
     // Name is 12 bytes but they're broken into two nibbles each
-"-",
-"-",
-"-",
-"-",
-"-",
-"-",
-"-",
-"-",
-"-",
-"-",
-"-",
-"-",
-"-",
-"-",
-"-",
-"-",
-"-",
-"-",
-"-",
-"-",
-"-",
-"-",
-"-",
-"-",
-"tonemedia",
-"tonenumber",
-"timbrelevel",
-"levelvelocitysens",
-"levelchannelpresssens",
-"envattackrate",
-"envdecayrate",
-"envsustainlevel",
-"envreleaserate",
-"pitchshiftcoarse",
-"pitchshiftfine",
-"bendrangelower",
-"bendrangeupper",
-"pitchpressuresens",
-"pitchpolysens",
-"autobenddepth",
-"autobendrate",
-"detunedepth",
-"lforate",
-"lfowaveform",
-"lfodepth",
-"lfodelay",
-"lforisetime",
-"lfomodulationdepth",
-"lfopressuresens",
-"lfopolysens",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "-",
+    "tonemedia",
+    "tonenumber",
+    "timbrelevel",
+    "levelvelocitysens",
+    "levelchannelpresssens",
+    "envattackrate",
+    "envdecayrate",
+    "envsustainlevel",
+    "envreleaserate",
+    "pitchshiftcoarse",
+    "pitchshiftfine",
+    "bendrangelower",
+    "bendrangeupper",
+    "pitchpressuresens",
+    "pitchpolysens",
+    "autobenddepth",
+    "autobendrate",
+    "detunedepth",
+    "lforate",
+    "lfowaveform",
+    "lfodepth",
+    "lfodelay",
+    "lforisetime",
+    "lfomodulationdepth",
+    "lfopressuresens",
+    "lfopolysens",
     };
 
     ///// LOCATIONS
@@ -284,18 +284,18 @@ public static final String[][] PCM =
             allParametersToIndex.put(allParameters[i], Integer.valueOf(i));
             }
 
-            JComponent sourcePanel = new SynthPanel(this);
-            VBox vbox = new VBox();
-            HBox hbox = new HBox();
-            hbox.add(addNameGlobal(Style.COLOR_GLOBAL()));
-            hbox.addLast(addTone(Style.COLOR_A()));
-            vbox.add(hbox);
+        JComponent sourcePanel = new SynthPanel(this);
+        VBox vbox = new VBox();
+        HBox hbox = new HBox();
+        hbox.add(addNameGlobal(Style.COLOR_GLOBAL()));
+        hbox.addLast(addTone(Style.COLOR_A()));
+        vbox.add(hbox);
 
-            vbox.add(addAmplifier(Style.COLOR_A()));
-            vbox.add(addPitch(Style.COLOR_B()));
-            vbox.add(addLFO(Style.COLOR_C()));
-            sourcePanel.add(vbox, BorderLayout.CENTER);
-            addTab("General", sourcePanel);                
+        vbox.add(addAmplifier(Style.COLOR_A()));
+        vbox.add(addPitch(Style.COLOR_B()));
+        vbox.add(addLFO(Style.COLOR_C()));
+        sourcePanel.add(vbox, BorderLayout.CENTER);
+        addTab("General", sourcePanel);                
 
         model.set("name", "Init Patch");  // has to be 10 long
         model.set("number", 0);
@@ -310,13 +310,13 @@ public static final String[][] PCM =
         return frame;
         }         
 
-	JRadioButtonMenuItem[] parts = new JRadioButtonMenuItem[6];
-	
-	public void setPart(int p)
-		{
-		part = p - 1;
-		parts[part].setSelected(true);	// this won't trigger tha actionPerfored, and thus won't get saved
-		}
+    JRadioButtonMenuItem[] parts = new JRadioButtonMenuItem[6];
+        
+    public void setPart(int p)
+        {
+        part = p - 1;
+        parts[part].setSelected(true);  // this won't trigger tha actionPerfored, and thus won't get saved
+        }
 
 
     public void addU220TimbreMenu()
@@ -384,24 +384,24 @@ public static final String[][] PCM =
         menu.add(setupTestPatchMenu2);
 
         ButtonGroup g = new ButtonGroup();
-		for(int i = 1; i <= 6; i++)
-			{
-			int _i = i;
-			parts[_i - 1] = new JRadioButtonMenuItem("Part " + i);
-			g.add(parts[_i - 1] );
-			parts[_i - 1].setSelected(part == i);
-			parts[_i - 1].addActionListener(new ActionListener()
-				{
-				public void actionPerformed(ActionEvent e)
-					{
-					part = _i;
-					setLastX("" + _i, PART_KEY, getSynthClassName(), true);
-					}
-				});
-			menu.add(parts[_i - 1]);
-			}
-		}
-		
+        for(int i = 1; i <= 6; i++)
+            {
+            int _i = i;
+            parts[_i - 1] = new JRadioButtonMenuItem("Part " + i);
+            g.add(parts[_i - 1] );
+            parts[_i - 1].setSelected(part == i);
+            parts[_i - 1].addActionListener(new ActionListener()
+                {
+                public void actionPerformed(ActionEvent e)
+                    {
+                    part = _i;
+                    setLastX("" + _i, PART_KEY, getSynthClassName(), true);
+                    }
+                });
+            menu.add(parts[_i - 1]);
+            }
+        }
+                
     // Prepare a Patch whose slot N has the current MIDI channel, and has all the partials in reserve.
     // N is defined as the current emit location.  All other slots have zero partials and MIDI channel OFF.
         
@@ -420,39 +420,39 @@ public static final String[][] PCM =
                 synth.loadDefaults();
                 
                 if (timbre1)
-					{
-					for(int i = 1; i <= 6; i++)
-						{
-						synth.getModel().set("p" + i + "outputlevel", 100);
-					
-						// turn off everybody
-						synth.getModel().set("p" + i + "receivechannel", RolandU220Multi.MIDI_CHANNEL_OFF);
-						synth.getModel().set("p" + i + "voicereserve", 0);
-						}
-				
-					// turn off rhythm
-					synth.getModel().set("rhythmmidichannel", RolandU220Multi.MIDI_CHANNEL_OFF);
-					synth.getModel().set("rhythmoutputlevel", 0);
-			
-					// turn on part
-					synth.getModel().set("p" + (part + 1) + "rhythmreceivechannel", getChannelOut());
-					synth.getModel().set("p" + (part + 1) + "rhythmvoicereserve", 30);
-					}
+                    {
+                    for(int i = 1; i <= 6; i++)
+                        {
+                        synth.getModel().set("p" + i + "outputlevel", 100);
+                                        
+                        // turn off everybody
+                        synth.getModel().set("p" + i + "receivechannel", RolandU220Multi.MIDI_CHANNEL_OFF);
+                        synth.getModel().set("p" + i + "voicereserve", 0);
+                        }
+                                
+                    // turn off rhythm
+                    synth.getModel().set("rhythmmidichannel", RolandU220Multi.MIDI_CHANNEL_OFF);
+                    synth.getModel().set("rhythmoutputlevel", 0);
+                        
+                    // turn on part
+                    synth.getModel().set("p" + (part + 1) + "rhythmreceivechannel", getChannelOut());
+                    synth.getModel().set("p" + (part + 1) + "rhythmvoicereserve", 30);
+                    }
                 else
-                	{
-					for(int i = 1; i <= 6; i++)
-						{
-						synth.getModel().set("p" + i + "outputlevel", 100);
-					
-						// turn on everybody, sharing equally
-						synth.getModel().set("p" + i + "receivechannel", i - 1);
-						synth.getModel().set("p" + i + "voicereserve", 4);
-						}
-						
-					// turn on rhythm					
-					synth.getModel().set("rhythmmidichannel", 9);		// channel 10
-					synth.getModel().set("rhythmoutputlevel", 6);       // remaining voices 
-					}
+                    {
+                    for(int i = 1; i <= 6; i++)
+                        {
+                        synth.getModel().set("p" + i + "outputlevel", 100);
+                                        
+                        // turn on everybody, sharing equally
+                        synth.getModel().set("p" + i + "receivechannel", i - 1);
+                        synth.getModel().set("p" + i + "voicereserve", 4);
+                        }
+                                                
+                    // turn on rhythm                                       
+                    synth.getModel().set("rhythmmidichannel", 9);           // channel 10
+                    synth.getModel().set("rhythmoutputlevel", 6);       // remaining voices 
+                    }
 
                 synth.sendAllParameters();
                 sendAllParameters();
@@ -549,7 +549,7 @@ public static final String[][] PCM =
         VBox vbox = new VBox();
         params = PCM_NAMES;
         comp = new Chooser("Tone Medium", this, "tonemedia", params)
-        	{
+            {
             public void update(String key, Model model)
                 {
                 super.update(key, model);
@@ -557,9 +557,9 @@ public static final String[][] PCM =
                 int cur = model.get("tonenumber", 0);
                 pcm.setElements(PCM[val]);
                 if (cur >= PCM[val].length)
-                	model.set("tonenumber", 0);
+                    model.set("tonenumber", 0);
                 }
-        	};
+            };
         vbox.add(comp);
         
         vbox.add(pcm);
@@ -581,89 +581,89 @@ public static final String[][] PCM =
         hbox.add(comp);
         
         comp = new LabelledDial("Velocity", this, "levelvelocitysens", color, 1, 15)
-        	{
-        	public boolean isSymmetric() { return true; }
-        	public String map(int val)
-        		{
-        		return "" + (val - 8);
-        		}
-        	};
+            {
+            public boolean isSymmetric() { return true; }
+            public String map(int val)
+                {
+                return "" + (val - 8);
+                }
+            };
         ((LabelledDial)comp).addAdditionalLabel("Sensitivity");
         hbox.add(comp);
 
         comp = new LabelledDial("Aftertouch", this, "levelchannelpresssens", color, 1, 15)
-        	{
-        	public boolean isSymmetric() { return true; }
-        	public String map(int val)
-        		{
-        		return "" + (val - 8);
-        		}
-        	};
+            {
+            public boolean isSymmetric() { return true; }
+            public String map(int val)
+                {
+                return "" + (val - 8);
+                }
+            };
         ((LabelledDial)comp).addAdditionalLabel("Sensitivity");
         hbox.add(comp);
         
         comp = new LabelledDial("Attack", this, "envattackrate", color, 1, 15)
-        	{
-        	public boolean isSymmetric() { return true; }
-        	public String map(int val)
-        		{
-        		return "" + (val - 8);
-        		}
-        	};
+            {
+            public boolean isSymmetric() { return true; }
+            public String map(int val)
+                {
+                return "" + (val - 8);
+                }
+            };
         hbox.add(comp);
         
         comp = new LabelledDial("Decay", this, "envdecayrate", color, 1, 15)
-        	{
-        	public boolean isSymmetric() { return true; }
-        	public String map(int val)
-        		{
-        		return "" + (val - 8);
-        		}
-        	};
+            {
+            public boolean isSymmetric() { return true; }
+            public String map(int val)
+                {
+                return "" + (val - 8);
+                }
+            };
         hbox.add(comp);
         
         comp = new LabelledDial("Sustain", this, "envsustainlevel", color, 1, 15)
-        	{
-        	public boolean isSymmetric() { return true; }
-        	public String map(int val)
-        		{
-        		return "" + (val - 8);
-        		}
-        	};
+            {
+            public boolean isSymmetric() { return true; }
+            public String map(int val)
+                {
+                return "" + (val - 8);
+                }
+            };
         hbox.add(comp);
         
         comp = new LabelledDial("Release", this, "envreleaserate", color, 1, 15)
-        	{
-        	public boolean isSymmetric() { return true; }
-        	public String map(int val)
-        		{
-        		return "" + (val - 8);
-        		}
-        	};
+            {
+            public boolean isSymmetric() { return true; }
+            public String map(int val)
+                {
+                return "" + (val - 8);
+                }
+            };
         hbox.add(comp);
         
         comp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
-            new String[] { null, "envattackrate", "envdecayrate", 	 null, 			    "envreleaserate" },
-            new String[] { null, null, 			  "envsustainlevel", "envsustainlevel", null },
+            new String[] { null, "envattackrate", "envdecayrate",        null,                      "envreleaserate" },
+            new String[] { null, null,                    "envsustainlevel", "envsustainlevel", null },
             new double[] { 0, 0.25 / 14, 0.25 / 14, 0.25, 0.25 / 14 },
-            new double[] { 0.5, 1.0, 1.0 / 14, 1.0 / 14, 0.5})
-            	{
-				public void postProcess(double[] xVals, double[] yVals)
-					 {
-					 xVals[1] -= 0.25 / 14;
-					 xVals[2] -= 0.25 / 14;
-					 xVals[4] -= 0.25 / 14;
-					 yVals[2] -= 1.0 / 14;
-					 yVals[3] -= 1.0 / 14;
+            new double[] { 0, 1.0, 1.0 / 14, 1.0 / 14, 0})
+            {
+            public void postProcess(double[] xVals, double[] yVals)
+                {
+                xVals[1] -= 0.25 / 14;
+                xVals[2] -= 0.25 / 14;
+                xVals[4] -= 0.25 / 14;
+                yVals[2] -= 1.0 / 14;
+                yVals[3] -= 1.0 / 14;
 
-					 // attack, decay, and release are BACKWARDS -- lower values are SLOWER
-					 xVals[1] = 0.25 - xVals[1];
-					 xVals[2] = 0.25 - xVals[2];
-					 xVals[4] = 0.25 - xVals[4];
-					 }
-            	};
-		((EnvelopeDisplay)comp).setAxis(0.5);
-		hbox.add(comp);
+                // attack, decay, and release are BACKWARDS -- lower values are SLOWER
+                xVals[1] = 0.25 - xVals[1];
+                xVals[2] = 0.25 - xVals[2];
+                xVals[4] = 0.25 - xVals[4];
+                }
+            };
+        //((EnvelopeDisplay)comp).setAxis(0.5);
+        hbox.add(comp);
             
         category.add(hbox, BorderLayout.CENTER);
         return category;
@@ -679,35 +679,35 @@ public static final String[][] PCM =
         HBox hbox = new HBox();
         
         comp = new LabelledDial("Coarse", this, "pitchshiftcoarse", color, 8, 56)
-        	{
-        	public boolean isSymmetric() { return true; }
-        	public String map(int val)
-        		{
-        		return "" + (val - 32);
-        		}
-        	};
+            {
+            public boolean isSymmetric() { return true; }
+            public String map(int val)
+                {
+                return "" + (val - 32);
+                }
+            };
         hbox.add(comp);
 
         comp = new LabelledDial("Fine", this, "pitchshiftfine", color, 14, 114)
-        	{
-        	public boolean isSymmetric() { return true; }
-        	public String map(int val)
-        		{
-        		return "" + (val - 64);
-        		}
-        	};
+            {
+            public boolean isSymmetric() { return true; }
+            public String map(int val)
+                {
+                return "" + (val - 64);
+                }
+            };
         hbox.add(comp);
         
         // FIXME: docs say the range is 0...15 but there are only 15 elements
         comp = new LabelledDial("Bend Range", this, "bendrangelower", color, 0, 14)
-        	{
-        	public int getDefaultValue() { return 14; }
+            {
+            public int getDefaultValue() { return 14; }
             public double getStartAngle() { return 180; }
-        	public String map(int val)
-        		{
-        		return "" + LOWER_BEND_RANGES[val];
-        		}
-        	};
+            public String map(int val)
+                {
+                return "" + LOWER_BEND_RANGES[val];
+                }
+            };
         ((LabelledDial)comp).addAdditionalLabel("Lower");
         hbox.add(comp);
         
@@ -717,40 +717,40 @@ public static final String[][] PCM =
         
         // FIXME: docs say the range is 0...27 but there are only 27 elements
         comp = new LabelledDial("Channel", this, "pitchpressuresens", color, 0, 26)
-        	{
-        	public int getDefaultValue() { return 14; }		// FIXME: test this
+            {
+            public int getDefaultValue() { return 14; }             // FIXME: test this
             public double getStartAngle() { return 240; }
-        	public String map(int val)
-        		{
-				return "" + SENSITIVITY_RANGES[val];
-        		}
-        	};
+            public String map(int val)
+                {
+                return "" + SENSITIVITY_RANGES[val];
+                }
+            };
         ((LabelledDial)comp).addAdditionalLabel("Aftertouch");
         hbox.add(comp);
 
         // FIXME: docs say the range is 0...27 but there are only 27 elements
         comp = new LabelledDial("Polyphonic", this, "pitchpolysens", color, 0, 26)
-        	{
-        	public int getDefaultValue() { return 14; }		// FIXME: test this
+            {
+            public int getDefaultValue() { return 14; }             // FIXME: test this
             public double getStartAngle() { return 240; }
-        	public String map(int val)
-        		{
-				return "" + SENSITIVITY_RANGES[val];
-        		}
-        	};
+            public String map(int val)
+                {
+                return "" + SENSITIVITY_RANGES[val];
+                }
+            };
         ((LabelledDial)comp).addAdditionalLabel("Aftertouch");
         hbox.add(comp);
         
         // FIXME: docs say the range is 0...27 but there are only 27 elements
         comp = new LabelledDial("Auto Bend", this, "autobenddepth", color, 0, 26)
-        	{
-        	public int getDefaultValue() { return 14; }		// FIXME: test this
+            {
+            public int getDefaultValue() { return 14; }             // FIXME: test this
             public double getStartAngle() { return 240; }
-        	public String map(int val)
-        		{
-				return "" + SENSITIVITY_RANGES[val];
-        		}
-        	};
+            public String map(int val)
+                {
+                return "" + SENSITIVITY_RANGES[val];
+                }
+            };
         ((LabelledDial)comp).addAdditionalLabel("Depth");
         hbox.add(comp);
         
@@ -873,46 +873,46 @@ public static final String[][] PCM =
         if (key.equals("number")) return new byte[0];  // this is not emittable
         
         if (key.equals("name"))
-        	{
-        	byte[] data = new byte[10 + 24];
-        	data[0] = (byte) 0xF0;
-        	data[1] = (byte) 0x41;
-        	data[2] = (byte) getID();
-        	data[3] = (byte) 0x2B;
-        	data[4] = (byte) 0x12;
-        	data[5] = (byte) 0x10;
-        	data[6] = (byte) (0x10 + part - 1);
-        	data[7] = (byte) 0x00;
-        	
-        	char[] name = (model.get("name", "") + "            ").toCharArray();
-        	for(int i = 0; i < 12; i++)
-        		{
-        		data[i * 2 + 8]= (byte)(name[i] & 15);
-        		data[i * 2 + 8 + 1] = (byte)((name[i] >>> 4) & 15);
-        		}
-			data[data.length - 2] = produceChecksum(data, 5, data.length - 2);
-        	data[data.length - 1] = (byte)0xF7;
-        	return data;
-        	}
+            {
+            byte[] data = new byte[10 + 24];
+            data[0] = (byte) 0xF0;
+            data[1] = (byte) 0x41;
+            data[2] = (byte) getID();
+            data[3] = (byte) 0x2B;
+            data[4] = (byte) 0x12;
+            data[5] = (byte) 0x10;
+            data[6] = (byte) (0x10 + part - 1);
+            data[7] = (byte) 0x00;
+                
+            char[] name = (model.get("name", "") + "            ").toCharArray();
+            for(int i = 0; i < 12; i++)
+                {
+                data[i * 2 + 8]= (byte)(name[i] & 15);
+                data[i * 2 + 8 + 1] = (byte)((name[i] >>> 4) & 15);
+                }
+            data[data.length - 2] = produceChecksum(data, 5, data.length - 2);
+            data[data.length - 1] = (byte)0xF7;
+            return data;
+            }
         else
-        	{
-			byte AA = (byte)(0x10);
-			byte BB = (byte)(0x10 + part - 1);
-			byte CC = (byte)((Integer)(allParametersToIndex.get(key))).intValue();
-			byte val = (byte)(model.get(key));
-        	
-        	byte checksum = produceChecksum(new byte[] { AA, BB, CC, val });
-        	return new byte[] { (byte)0xF0, 0x41, getID(), 0x2B, 0x12, AA, BB, CC, val, checksum, (byte)0xF7 };
-        	}
+            {
+            byte AA = (byte)(0x10);
+            byte BB = (byte)(0x10 + part - 1);
+            byte CC = (byte)((Integer)(allParametersToIndex.get(key))).intValue();
+            byte val = (byte)(model.get(key));
+                
+            byte checksum = produceChecksum(new byte[] { AA, BB, CC, val });
+            return new byte[] { (byte)0xF0, 0x41, getID(), 0x2B, 0x12, AA, BB, CC, val, checksum, (byte)0xF7 };
+            }
         }
    
-   /*
+    /*
     // We send parameters after a parse because you can't do a program change to change
     // to a different tone.
     public boolean getSendsParametersAfterNonMergeParse()
-        {
-        return true;
-        } 
+    {
+    return true;
+    } 
     */
     
     public int parse(byte[] data, boolean fromFile)
@@ -922,12 +922,12 @@ public static final String[][] PCM =
         int BB = data[6];
         int CC = data[7];
         
-        if (AA == 0x02)		// Write to Timbre banks
+        if (AA == 0x02)         // Write to Timbre banks
             {
             model.set("number", (BB * 128 + CC) / 64);
             }
         
-		// The U-220 is entirely byte-packed :-(  So we have to do this by hand.
+        // The U-220 is entirely byte-packed :-(  So we have to do this by hand.
 
         int pos = 8;
         String name = "";
@@ -939,85 +939,85 @@ public static final String[][] PCM =
             }
         model.set("name", name);
 
-		int lsb1 = data[pos++];
-		int msb1 = data[pos++];
-		int lsb2 = data[pos++];
-		int msb2 = data[pos++];
-		int val = lsb1 | (msb1 << 4) | (lsb2 << 8) | (msb2 << 12);
-		model.set("detunedepth", (val >>> 0xC) & 15);	// C D E F
-		model.set("tonemedia", (val >>> 0x7) & 31);		// 7 8 9 A B
-		model.set("tonenumber", (val >>> 0x0) & 127);	// 0 1 2 3 4 5 6
+        int lsb1 = data[pos++];
+        int msb1 = data[pos++];
+        int lsb2 = data[pos++];
+        int msb2 = data[pos++];
+        int val = lsb1 | (msb1 << 4) | (lsb2 << 8) | (msb2 << 12);
+        model.set("detunedepth", (val >>> 0xC) & 15);   // C D E F
+        model.set("tonemedia", (val >>> 0x7) & 31);             // 7 8 9 A B
+        model.set("tonenumber", (val >>> 0x0) & 127);   // 0 1 2 3 4 5 6
 
-		lsb1 = data[pos++];
-		msb1 = data[pos++];
-		lsb2 = data[pos++];
-		msb2 = data[pos++];
-		val = lsb1 | (msb1 << 4) | (lsb2 << 8) | (msb2 << 12);
-		model.set("timbrelevel", (val >>> 0x8) & 127);			// 8 9 A B C D E
-		model.set("levelchannelpresssens", (val >>> 0x4) & 15);	// 4 5 6 7
-		model.set("levelvelocitysens", (val >>> 0x0) & 15);		// 0 1 2 3
+        lsb1 = data[pos++];
+        msb1 = data[pos++];
+        lsb2 = data[pos++];
+        msb2 = data[pos++];
+        val = lsb1 | (msb1 << 4) | (lsb2 << 8) | (msb2 << 12);
+        model.set("timbrelevel", (val >>> 0x8) & 127);                  // 8 9 A B C D E
+        model.set("levelchannelpresssens", (val >>> 0x4) & 15); // 4 5 6 7
+        model.set("levelvelocitysens", (val >>> 0x0) & 15);             // 0 1 2 3
 
-		lsb1 = data[pos++];
-		msb1 = data[pos++];
-		lsb2 = data[pos++];
-		msb2 = data[pos++];
-		val = lsb1 | (msb1 << 4) | (lsb2 << 8) | (msb2 << 12);
-		model.set("envreleaserate", (val >>> 0xC) & 15);		// C D E F
-		model.set("envsustainlevel", (val >>> 0x8) & 15);	// 8 9 A B
-		model.set("envdecayrate", (val >>> 0x4) & 15);		// 4 5 6 7
-		model.set("envattackrate", (val >>> 0x0) & 15);		// 0 1 2 3
+        lsb1 = data[pos++];
+        msb1 = data[pos++];
+        lsb2 = data[pos++];
+        msb2 = data[pos++];
+        val = lsb1 | (msb1 << 4) | (lsb2 << 8) | (msb2 << 12);
+        model.set("envreleaserate", (val >>> 0xC) & 15);                // C D E F
+        model.set("envsustainlevel", (val >>> 0x8) & 15);       // 8 9 A B
+        model.set("envdecayrate", (val >>> 0x4) & 15);          // 4 5 6 7
+        model.set("envattackrate", (val >>> 0x0) & 15);         // 0 1 2 3
 
-		lsb1 = data[pos++];
-		msb1 = data[pos++];
-		lsb2 = data[pos++];
-		msb2 = data[pos++];
-		val = lsb1 | (msb1 << 4) | (lsb2 << 8) | (msb2 << 12);
-		model.set("pitchshiftcoarse", (val >>> 0x8) & 63);		// 8 9 A B C D
-		model.set("pitchshiftfine", (val >>> 0x0) & 127);		// 0 1 2 3 4 5 6
+        lsb1 = data[pos++];
+        msb1 = data[pos++];
+        lsb2 = data[pos++];
+        msb2 = data[pos++];
+        val = lsb1 | (msb1 << 4) | (lsb2 << 8) | (msb2 << 12);
+        model.set("pitchshiftcoarse", (val >>> 0x8) & 63);              // 8 9 A B C D
+        model.set("pitchshiftfine", (val >>> 0x0) & 127);               // 0 1 2 3 4 5 6
 
-		lsb1 = data[pos++];
-		msb1 = data[pos++];
-		lsb2 = data[pos++];
-		msb2 = data[pos++];
-		val = lsb1 | (msb1 << 4) | (lsb2 << 8) | (msb2 << 12);
-		model.set("autobenddepth", (val >>> 0x9) & 31);		// 9 A B C D
-		model.set("bendrangeupper", (val >>> 0x5) & 15);		// 5 6 7 8
-		model.set("bendrangelower", (val >>> 0x0) & 31);		// 0 1 2 3 4	-- not sure why we have 5 bits
+        lsb1 = data[pos++];
+        msb1 = data[pos++];
+        lsb2 = data[pos++];
+        msb2 = data[pos++];
+        val = lsb1 | (msb1 << 4) | (lsb2 << 8) | (msb2 << 12);
+        model.set("autobenddepth", (val >>> 0x9) & 31);         // 9 A B C D
+        model.set("bendrangeupper", (val >>> 0x5) & 15);                // 5 6 7 8
+        model.set("bendrangelower", (val >>> 0x0) & 31);                // 0 1 2 3 4    -- not sure why we have 5 bits
 
-		lsb1 = data[pos++];
-		msb1 = data[pos++];
-		lsb2 = data[pos++];
-		msb2 = data[pos++];
-		val = lsb1 | (msb1 << 4) | (lsb2 << 8) | (msb2 << 12);
-		model.set("autobendrate", (val >>> 0xA) & 15);		// A B C D
-		model.set("pitchpressuresens", (val >>> 0x5) & 31);	// 5 6 7 8 9
-		model.set("pitchpolysens", (val >>> 0x0) & 31);		// 0 1 2 3 4
+        lsb1 = data[pos++];
+        msb1 = data[pos++];
+        lsb2 = data[pos++];
+        msb2 = data[pos++];
+        val = lsb1 | (msb1 << 4) | (lsb2 << 8) | (msb2 << 12);
+        model.set("autobendrate", (val >>> 0xA) & 15);          // A B C D
+        model.set("pitchpressuresens", (val >>> 0x5) & 31);     // 5 6 7 8 9
+        model.set("pitchpolysens", (val >>> 0x0) & 31);         // 0 1 2 3 4
 
-		lsb1 = data[pos++];
-		msb1 = data[pos++];
-		lsb2 = data[pos++];
-		msb2 = data[pos++];
-		val = lsb1 | (msb1 << 4) | (lsb2 << 8) | (msb2 << 12);
-		model.set("lfodepth", (val >>> 0xC) & 15);				// C D E F
-		model.set("lfodelay", (val >>> 0x8) & 15);				// 8 9 A B
-		model.set("lfomodulationdepth", (val >>> 0x4) & 15);		// 0 1 2 3
+        lsb1 = data[pos++];
+        msb1 = data[pos++];
+        lsb2 = data[pos++];
+        msb2 = data[pos++];
+        val = lsb1 | (msb1 << 4) | (lsb2 << 8) | (msb2 << 12);
+        model.set("lfodepth", (val >>> 0xC) & 15);                              // C D E F
+        model.set("lfodelay", (val >>> 0x8) & 15);                              // 8 9 A B
+        model.set("lfomodulationdepth", (val >>> 0x4) & 15);            // 0 1 2 3
 
-		lsb1 = data[pos++];
-		msb1 = data[pos++];
-		lsb2 = data[pos++];
-		msb2 = data[pos++];
-		val = lsb1 | (msb1 << 4) | (lsb2 << 8) | (msb2 << 12);
-		model.set("lfowaveform", (val >>> 0x8) & 15);	// 8 9 A B
-		model.set("lforate", (val >>> 0x0) & 63);		// 0 1 2 3 4 5
+        lsb1 = data[pos++];
+        msb1 = data[pos++];
+        lsb2 = data[pos++];
+        msb2 = data[pos++];
+        val = lsb1 | (msb1 << 4) | (lsb2 << 8) | (msb2 << 12);
+        model.set("lfowaveform", (val >>> 0x8) & 15);   // 8 9 A B
+        model.set("lforate", (val >>> 0x0) & 63);               // 0 1 2 3 4 5
 
-		lsb1 = data[pos++];
-		msb1 = data[pos++];
-		lsb2 = data[pos++];
-		msb2 = data[pos++];
-		val = lsb1 | (msb1 << 4) | (lsb2 << 8) | (msb2 << 12);
-		model.set("lfopolysens", (val >>> 0xC) & 15);		// C D E F
-		model.set("lfopressuresens", (val >>> 0x8) & 15);	// 8 9 A B
-		model.set("lforisetime", (val >>> 0x0) & 15);		// 0 1 2 3
+        lsb1 = data[pos++];
+        msb1 = data[pos++];
+        lsb2 = data[pos++];
+        msb2 = data[pos++];
+        val = lsb1 | (msb1 << 4) | (lsb2 << 8) | (msb2 << 12);
+        model.set("lfopolysens", (val >>> 0xC) & 15);           // C D E F
+        model.set("lfopressuresens", (val >>> 0x8) & 15);       // 8 9 A B
+        model.set("lforisetime", (val >>> 0x0) & 15);           // 0 1 2 3
 
         revise();
         return PARSE_SUCCEEDED;
@@ -1029,115 +1029,115 @@ public static final String[][] PCM =
         if (tempModel == null)
             tempModel = getModel();
 
-		int start = tempModel.get("number") * 64;
-		int AA = (toWorkingMemory ? 0x00 : 0x02);
-		int BB = (toWorkingMemory ? 0x10 + (part - 1) : start / 128 );
-		int CC = (toWorkingMemory ? 0x00 : start % 128 );
-		
-		// The U-220 is entirely byte-packed :-(  So we have to do this by hand.
-		
-		byte[] buf = new byte[74];
-		buf[0] = (byte)0xF0;
-		buf[1] = (byte)0x41;
-		buf[2] = (byte)getID();
-		buf[3] = (byte)0x2B;
-		buf[4] = (byte)0x12;
-		buf[5] = (byte) AA;
-		buf[6] = (byte) BB;
-		buf[7] = (byte) CC;
+        int start = tempModel.get("number") * 64;
+        int AA = (toWorkingMemory ? 0x00 : 0x02);
+        int BB = (toWorkingMemory ? 0x10 + (part - 1) : start / 128 );
+        int CC = (toWorkingMemory ? 0x00 : start % 128 );
+                
+        // The U-220 is entirely byte-packed :-(  So we have to do this by hand.
+                
+        byte[] buf = new byte[74];
+        buf[0] = (byte)0xF0;
+        buf[1] = (byte)0x41;
+        buf[2] = (byte)getID();
+        buf[3] = (byte)0x2B;
+        buf[4] = (byte)0x12;
+        buf[5] = (byte) AA;
+        buf[6] = (byte) BB;
+        buf[7] = (byte) CC;
 
-		int pos = 8;
-		
+        int pos = 8;
+                
         String name = model.get("name", "Untitled") + "            ";
-		for(int i = 0; i < 12; i++)
-			{
-			char c = name.charAt(i);
-			buf[pos++] = (byte)(c & 15);
-			buf[pos++] = (byte)((c >>> 4) & 15);
-			}
-	
-		int d = 
-			(model.get("detunedepth") << 0xC) |
-			(model.get("tonemedia") << 0x7) |
-			(model.get("tonenumber") << 0x0);
-			buf[pos++] = (byte)(d & 15);
-			buf[pos++] = (byte)((d >>> 4) & 15);
-			buf[pos++] = (byte)((d >>> 8) & 15);
-			buf[pos++] = (byte)((d >>> 12) & 15);
+        for(int i = 0; i < 12; i++)
+            {
+            char c = name.charAt(i);
+            buf[pos++] = (byte)(c & 15);
+            buf[pos++] = (byte)((c >>> 4) & 15);
+            }
         
-		d = 
-			(model.get("timbrelevel") << 0x8) |
-			(model.get("levelchannelpresssens") << 0x4) |
-			(model.get("levelvelocitysens") << 0x0);
-			buf[pos++] = (byte)(d & 15);
-			buf[pos++] = (byte)((d >>> 4) & 15);
-			buf[pos++] = (byte)((d >>> 8) & 15);
-			buf[pos++] = (byte)((d >>> 12) & 15);
+        int d = 
+            (model.get("detunedepth") << 0xC) |
+            (model.get("tonemedia") << 0x7) |
+            (model.get("tonenumber") << 0x0);
+        buf[pos++] = (byte)(d & 15);
+        buf[pos++] = (byte)((d >>> 4) & 15);
+        buf[pos++] = (byte)((d >>> 8) & 15);
+        buf[pos++] = (byte)((d >>> 12) & 15);
         
-		d = 
-			(model.get("envreleaserate") << 0xC) |
-			(model.get("envsustainlevel") << 0x8) |
-			(model.get("envdecayrate") << 0x4) |
-			(model.get("envattackrate") << 0x0);
-			buf[pos++] = (byte)(d & 15);
-			buf[pos++] = (byte)((d >>> 4) & 15);
-			buf[pos++] = (byte)((d >>> 8) & 15);
-			buf[pos++] = (byte)((d >>> 12) & 15);
+        d = 
+            (model.get("timbrelevel") << 0x8) |
+            (model.get("levelchannelpresssens") << 0x4) |
+            (model.get("levelvelocitysens") << 0x0);
+        buf[pos++] = (byte)(d & 15);
+        buf[pos++] = (byte)((d >>> 4) & 15);
+        buf[pos++] = (byte)((d >>> 8) & 15);
+        buf[pos++] = (byte)((d >>> 12) & 15);
+        
+        d = 
+            (model.get("envreleaserate") << 0xC) |
+            (model.get("envsustainlevel") << 0x8) |
+            (model.get("envdecayrate") << 0x4) |
+            (model.get("envattackrate") << 0x0);
+        buf[pos++] = (byte)(d & 15);
+        buf[pos++] = (byte)((d >>> 4) & 15);
+        buf[pos++] = (byte)((d >>> 8) & 15);
+        buf[pos++] = (byte)((d >>> 12) & 15);
 
-		d = 
-			(model.get("pitchshiftcoarse") << 0x8) |
-			(model.get("pitchshiftfine") << 0x0);
-			buf[pos++] = (byte)(d & 15);
-			buf[pos++] = (byte)((d >>> 4) & 15);
-			buf[pos++] = (byte)((d >>> 8) & 15);
-			buf[pos++] = (byte)((d >>> 12) & 15);
+        d = 
+            (model.get("pitchshiftcoarse") << 0x8) |
+            (model.get("pitchshiftfine") << 0x0);
+        buf[pos++] = (byte)(d & 15);
+        buf[pos++] = (byte)((d >>> 4) & 15);
+        buf[pos++] = (byte)((d >>> 8) & 15);
+        buf[pos++] = (byte)((d >>> 12) & 15);
 
-		d = 
-			(model.get("autobenddepth") << 0x9) |
-			(model.get("bendrangeupper") << 0x5) |
-			(model.get("bendrangelower") << 0x0);
-			buf[pos++] = (byte)(d & 15);
-			buf[pos++] = (byte)((d >>> 4) & 15);
-			buf[pos++] = (byte)((d >>> 8) & 15);
-			buf[pos++] = (byte)((d >>> 12) & 15);
+        d = 
+            (model.get("autobenddepth") << 0x9) |
+            (model.get("bendrangeupper") << 0x5) |
+            (model.get("bendrangelower") << 0x0);
+        buf[pos++] = (byte)(d & 15);
+        buf[pos++] = (byte)((d >>> 4) & 15);
+        buf[pos++] = (byte)((d >>> 8) & 15);
+        buf[pos++] = (byte)((d >>> 12) & 15);
 
-		d = 
-			(model.get("autobendrate") << 0xA) |
-			(model.get("pitchpressuresens") << 0x5) |
-			(model.get("pitchpolysens") << 0x0);
-			buf[pos++] = (byte)(d & 15);
-			buf[pos++] = (byte)((d >>> 4) & 15);
-			buf[pos++] = (byte)((d >>> 8) & 15);
-			buf[pos++] = (byte)((d >>> 12) & 15);
+        d = 
+            (model.get("autobendrate") << 0xA) |
+            (model.get("pitchpressuresens") << 0x5) |
+            (model.get("pitchpolysens") << 0x0);
+        buf[pos++] = (byte)(d & 15);
+        buf[pos++] = (byte)((d >>> 4) & 15);
+        buf[pos++] = (byte)((d >>> 8) & 15);
+        buf[pos++] = (byte)((d >>> 12) & 15);
 
-		d = 
-			(model.get("lfodepth") << 0xC) |
-			(model.get("lfodelay") << 0x8) |
-			(model.get("lfomodulationdepth") << 0x4);
-			buf[pos++] = (byte)(d & 15);
-			buf[pos++] = (byte)((d >>> 4) & 15);
-			buf[pos++] = (byte)((d >>> 8) & 15);
-			buf[pos++] = (byte)((d >>> 12) & 15);
+        d = 
+            (model.get("lfodepth") << 0xC) |
+            (model.get("lfodelay") << 0x8) |
+            (model.get("lfomodulationdepth") << 0x4);
+        buf[pos++] = (byte)(d & 15);
+        buf[pos++] = (byte)((d >>> 4) & 15);
+        buf[pos++] = (byte)((d >>> 8) & 15);
+        buf[pos++] = (byte)((d >>> 12) & 15);
 
-		d = 
-			(model.get("lfowaveform") << 0x8) |
-			(model.get("lforate") << 0x0);
-			buf[pos++] = (byte)(d & 15);
-			buf[pos++] = (byte)((d >>> 4) & 15);
-			buf[pos++] = (byte)((d >>> 8) & 15);
-			buf[pos++] = (byte)((d >>> 12) & 15);
+        d = 
+            (model.get("lfowaveform") << 0x8) |
+            (model.get("lforate") << 0x0);
+        buf[pos++] = (byte)(d & 15);
+        buf[pos++] = (byte)((d >>> 4) & 15);
+        buf[pos++] = (byte)((d >>> 8) & 15);
+        buf[pos++] = (byte)((d >>> 12) & 15);
 
-		d = 
-			(model.get("lfopolysens") << 0xC) |
-			(model.get("lfopressuresens") << 0x8) |
-			(model.get("lforisetime") << 0x0);
-			buf[pos++] = (byte)(d & 15);
-			buf[pos++] = (byte)((d >>> 4) & 15);
-			buf[pos++] = (byte)((d >>> 8) & 15);
-			buf[pos++] = (byte)((d >>> 12) & 15);
+        d = 
+            (model.get("lfopolysens") << 0xC) |
+            (model.get("lfopressuresens") << 0x8) |
+            (model.get("lforisetime") << 0x0);
+        buf[pos++] = (byte)(d & 15);
+        buf[pos++] = (byte)((d >>> 4) & 15);
+        buf[pos++] = (byte)((d >>> 8) & 15);
+        buf[pos++] = (byte)((d >>> 12) & 15);
 
-		// there are two extra nybblized bytes left over
-		
+        // there are two extra nybblized bytes left over
+                
         buf[buf.length - 2] = produceChecksum(buf, 5, buf.length - 2);
         buf[buf.length - 1] = (byte)0xF7;
         return buf;
@@ -1148,51 +1148,51 @@ public static final String[][] PCM =
         if (tempModel == null)
             tempModel = getModel();
 
-		// We do a PC to the Timbre's Rx Channel (patch/part/midi/rx ch),
-		// which we assume to be the same as the existing channel
-		
-		tryToSendMIDI(buildPC(getChannelOut(), tempModel.get("number")));
+        // We do a PC to the Timbre's Rx Channel (patch/part/midi/rx ch),
+        // which we assume to be the same as the existing channel
+                
+        tryToSendMIDI(buildPC(getChannelOut(), tempModel.get("number")));
         }
 
 
-	// Requests a Timbre from a specific RAM slot (1...128)
-	public byte[] requestDump(Model tempModel)
-		{
-		if (tempModel == null)
-		tempModel = getModel();
+    // Requests a Timbre from a specific RAM slot (1...128)
+    public byte[] requestDump(Model tempModel)
+        {
+        if (tempModel == null)
+            tempModel = getModel();
 
-		int number = tempModel.get("number");
-		
-		// We do a PC to the Timbre's Rx Channel (patch/part/midi/rx ch),
-		// which we assume to be the same as the existing channel
-		
-		buildPC(getChannelOut(), number);
-		byte AA = (byte)(0x02);
-		int num = 0x40 * number;
-		byte BB = (byte)(num / 128);
-		byte CC = (byte)(num % 128);
-		byte LSB = (byte)0x40;
-		byte MSB = (byte)0x00; 
-		
-		byte checksum = produceChecksum(new byte[] { AA, BB, CC, (byte)0x00, LSB, MSB });
-		byte[] b = new byte[] { (byte)0xF0, (byte)0x41, getID(), (byte)0x2B, (byte)0x11, 
-								AA, BB, CC, (byte)0x00, MSB, LSB, checksum, (byte)0xF7 }; 
-		return b;
-		}
+        int number = tempModel.get("number");
+                
+        // We do a PC to the Timbre's Rx Channel (patch/part/midi/rx ch),
+        // which we assume to be the same as the existing channel
+                
+        buildPC(getChannelOut(), number);
+        byte AA = (byte)(0x02);
+        int num = 0x40 * number;
+        byte BB = (byte)(num / 128);
+        byte CC = (byte)(num % 128);
+        byte LSB = (byte)0x40;
+        byte MSB = (byte)0x00; 
+                
+        byte checksum = produceChecksum(new byte[] { AA, BB, CC, (byte)0x00, LSB, MSB });
+        byte[] b = new byte[] { (byte)0xF0, (byte)0x41, getID(), (byte)0x2B, (byte)0x11, 
+            AA, BB, CC, (byte)0x00, MSB, LSB, checksum, (byte)0xF7 }; 
+        return b;
+        }
   
-	public byte[] requestCurrentDump()
-		{
-		byte AA = (byte)(0x00);
-		byte BB = (byte)(0x10 + (part - 1));
-		byte CC = (byte)(0x00);
-		byte LSB = (byte)0x40;
-		byte MSB = (byte)0x00; 
-		
-		byte checksum = produceChecksum(new byte[] { AA, BB, CC, (byte)0x00, LSB, MSB });
-		byte[] b = new byte[] { (byte)0xF0, (byte)0x41, getID(), (byte)0x2B, (byte)0x11, 
-								AA, BB, CC, (byte)0x00, MSB, LSB, checksum, (byte)0xF7 }; 
-		return b;
-		}
+    public byte[] requestCurrentDump()
+        {
+        byte AA = (byte)(0x00);
+        byte BB = (byte)(0x10 + (part - 1));
+        byte CC = (byte)(0x00);
+        byte LSB = (byte)0x40;
+        byte MSB = (byte)0x00; 
+                
+        byte checksum = produceChecksum(new byte[] { AA, BB, CC, (byte)0x00, LSB, MSB });
+        byte[] b = new byte[] { (byte)0xF0, (byte)0x41, getID(), (byte)0x2B, (byte)0x11, 
+            AA, BB, CC, (byte)0x00, MSB, LSB, checksum, (byte)0xF7 }; 
+        return b;
+        }
   
     
     public static final int MAXIMUM_NAME_LENGTH = 12;
@@ -1284,24 +1284,24 @@ public static final String[][] PCM =
     }
 
 /*** 
-	ROLAND U-220 SYSEX SUMMARY
+     ROLAND U-220 SYSEX SUMMARY
 
-	EMIT PARAMETER
-	F0 41 ID 2B 12 PARAM PARAM PARAM VALUE CHECKSUM F7
-	
-	See Tables 10 through 15 (P. 149) for the values of the params.  Note that
-	the name parameters are split into nybbles.  This is essentially a special case
-	of DUMP DATA.
-	
-	REQUEST DATA
-	F0 41 ID 2B 11 ADDR ADDR ADDR SIZE SIZE SIZE CHECKSUM F7
-	
-	Note that the data returned is nybblized, so the SIZE will be twice what you expect.
-	
-	DUMP DATA
-	F0 41 ID 2B 12 ADDR ADDR ADDR DATA... CHECKSUM F7
-	
-	No length is provided -- you have to give an entire region, such as a single patch
-	or a single rhythm map etc.
-	
+     EMIT PARAMETER
+     F0 41 ID 2B 12 PARAM PARAM PARAM VALUE CHECKSUM F7
+        
+     See Tables 10 through 15 (P. 149) for the values of the params.  Note that
+     the name parameters are split into nybbles.  This is essentially a special case
+     of DUMP DATA.
+        
+     REQUEST DATA
+     F0 41 ID 2B 11 ADDR ADDR ADDR SIZE SIZE SIZE CHECKSUM F7
+        
+     Note that the data returned is nybblized, so the SIZE will be twice what you expect.
+        
+     DUMP DATA
+     F0 41 ID 2B 12 ADDR ADDR ADDR DATA... CHECKSUM F7
+        
+     No length is provided -- you have to give an entire region, such as a single patch
+     or a single rhythm map etc.
+        
 */

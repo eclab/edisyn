@@ -2282,11 +2282,11 @@ public class MAudioVenomMulti extends Synth
     public boolean librarianTested() { return true; }
     
     public boolean testVerify(byte[] message)
-		{
-		// Store Patch messages are okay
-		return ( message.length == 11 && 
-			message[0] == (byte)0xF0 && message[1] == (byte)0x00 && message[2] == (byte)0x01 && 
-			message[3] == (byte)0x05 && message[4] == (byte)0x21 && message[6]== (byte)0x06 && 
-			message[7] == (byte)0x02 && message[10] == (byte)0xF7 );
-		}
+        {
+        // Store Patch messages are okay
+        return ( message.length == 11 && 
+            message[0] == (byte)0xF0 && message[1] == (byte)0x00 && message[2] == (byte)0x01 && 
+            message[3] == (byte)0x05 && message[4] == (byte)0x21 && message[6]== (byte)0x06 && 
+            message[7] == (byte)0x02 && message[10] == (byte)0xF7 );
+        }
     }

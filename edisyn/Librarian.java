@@ -170,7 +170,7 @@ public class Librarian extends JPanel
                                 
                 // Are we a drop location?
                 JTable.DropLocation drop = table.getDropLocation();
-                if (drop != null && row == drop.getRow() && column == drop.getColumn())	// col(table, drop.getColumn()))
+                if (drop != null && row == drop.getRow() && column == drop.getColumn()) // col(table, drop.getColumn()))
                     {
                     comp.setBackground(DROP_COLOR);
                     }

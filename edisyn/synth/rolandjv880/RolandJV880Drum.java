@@ -552,7 +552,7 @@ public class RolandJV880Drum extends Synth
             {
             public void userPressed(int key)
                 {
-                doSendTestNote(key);
+                doSendTestNote(key, false);
                 }
             };
         ((KeyDisplay)comp).setDynamicUpdate(true);

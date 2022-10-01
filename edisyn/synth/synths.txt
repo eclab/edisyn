@@ -28,6 +28,7 @@ edisyn.synth.emumorpheus.EmuMorpheusMap	E-Mu	E-Mu Morpheus / Ultra Proteus [Midi
 edisyn.synth.emuproteus.EmuProteus	E-Mu	E-Mu Proteus
 edisyn.synth.emuplanetphatt.EmuPlanetPhatt	E-Mu	E-Mu Planet Phatt / Orbit / Carnaval / Vintage Keys
 edisyn.synth.emuproteus2000.EmuProteus2000	E-Mu	E-Mu Proteus 2000 Series
+edisyn.synth.jlcoopermsbplusrev2.JLCooperMSBPlusRev2	JL Cooper	JL Cooper MSB Plus / Rev 2
 edisyn.synth.kawaik1.KawaiK1	Kawai	Kawai K1 / K1r / K1m
 edisyn.synth.kawaik1.KawaiK1Multi	Kawai	Kawai K1 / K1r / K1m [Multi]
 #edisyn.synth.kawaik3.KawaiK3	Kawai	Kawai K3 / K3m
@@ -63,6 +64,7 @@ edisyn.synth.rolandd110.RolandD110Multi	Roland	Roland D-110 [Multi]
 edisyn.synth.rolandjv880.RolandJV880	Roland	Roland JV-80 / 880
 edisyn.synth.rolandjv880.RolandJV880Multi	Roland	Roland JV-80 / 880 [Multi]
 edisyn.synth.rolandjv880.RolandJV880Drum	Roland	Roland JV-80 / 880 [Drum]
+edisyn.synth.rolandu110.RolandU110	Roland	Roland U-110
 edisyn.synth.rolandu220.RolandU220Timbre	Roland	Roland U-20 / 220 [Timbre]
 edisyn.synth.rolandu220.RolandU220Multi	Roland	Roland U-20 / 220 [Multi]
 edisyn.synth.rolandu220.RolandU220Drum	Roland	Roland U-20 / 220 [Drum]

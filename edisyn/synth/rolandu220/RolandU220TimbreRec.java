@@ -17,8 +17,9 @@ public class RolandU220TimbreRec extends Recognize
             (data[3] == (byte)0x2B) &&
             (data[4] == (byte)0x12) &&
             // Timbre Temporary
-                ((data[5] == (byte)0x00) && (data[6] == (byte)0x11 || data[6] == (byte)0x12 || data[6] == (byte)0x13 ||
-                    data[6] == (byte)0x14 || data[6] == (byte)0x15 || data[6] == (byte)0x16) ||
+                ((data[5] == (byte)0x00) && 
+                	(data[6] == (byte)0x10 || data[6] == (byte)0x11 || data[6] == (byte)0x12 ||
+                     data[6] == (byte)0x13 || data[6] == (byte)0x14 || data[6] == (byte)0x15) ||
                 // Timbre Permanent
                 (data[5] == (byte)0x02)));
         }

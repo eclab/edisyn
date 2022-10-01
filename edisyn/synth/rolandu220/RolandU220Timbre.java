@@ -160,8 +160,6 @@ public class RolandU220Timbre extends Synth
             },
             {
             // SN-U110-10 - Rock Drums
-            // NOTE -- I assume these are 0 and 1 respectively but am not sure
-            // In fact this might be properly "[Nothing]" instead
             "Rock Drums",
             "Electronic Drums"
             },
@@ -467,7 +465,9 @@ public class RolandU220Timbre extends Synth
     // There are no banks
     public boolean gatherPatchInfo(String title, Model change, boolean writing)
         {
-        JTextField number = new SelectedTextField("" + (model.get("number") + 1), 3);
+        int original = model.get("number");
+                
+        JTextField number = new SelectedTextField("" + (original + 1), 3);
 
         while(true)
             {
@@ -481,12 +481,12 @@ public class RolandU220Timbre extends Synth
             try { n = Integer.parseInt(number.getText()); }
             catch (NumberFormatException e)
                 {
-                showSimpleError(title, "The Timbre Number must be an integer 1...64");
+                showSimpleError(title, "The Timbre Number must be an integer 1...128");
                 continue;
                 }
             if (n < 1 || n > 64)
                 {
-                showSimpleError(title, "The Timbre Number must be an integer 1...64");
+                showSimpleError(title, "The Timbre Number must be an integer 1...128");
                 continue;
                 }
                 
@@ -577,7 +577,10 @@ public class RolandU220Timbre extends Synth
         String[] params;
         HBox hbox = new HBox();
         
-        comp = new LabelledDial("Level", this, "timbrelevel", color, 0, 127);
+        comp = new LabelledDial("Level", this, "timbrelevel", color, 0, 127)
+        	{
+            public int getDefaultValue() { return 127; }
+        	};
         hbox.add(comp);
         
         comp = new LabelledDial("Velocity", this, "levelvelocitysens", color, 1, 15)
@@ -906,14 +909,10 @@ public class RolandU220Timbre extends Synth
             }
         }
    
-    /*
-    // We send parameters after a parse because you can't do a program change to change
-    // to a different tone.
-    public boolean getSendsParametersAfterNonMergeParse()
-    {
-    return true;
-    } 
-    */
+    /** If the user is editing the patch on the synth, the U-220 won't change patches!
+    	So just in case we send this. */
+    public boolean getSendsParametersAfterNonMergeParse() { return true; }
+
     
     public int parse(byte[] data, boolean fromFile)
         {

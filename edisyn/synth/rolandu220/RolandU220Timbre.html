@@ -23,6 +23,9 @@ Edisyn's MIDI channel is set to the Control Channel of your part so Edisyn can c
 <ul>
 <li>Roland breaks its patch sysex into multiple messages, each 138 bytes long.  But Roland stupidly made it very difficult to distinguish between sysex for a single patch and sysex for a bulk dump of patches.  As a result, Edisyn must assume that the sysex is for a single patch.  In short: you can't do a bulk dump of patches from the synthesizer; Edisyn won't understand them.
 <p><li>No, honestly, positive values mean <i>shorter</i> attack, decay, and release, and negative values mean <i>longer</i/> ones.  Yes, this makes no sense at all.  Also making no sense: sustain going -7 to +7 instead of just 0 to 14.
+<p><li>If you are presently editing a timbre patch, the U-220 refuses to change patches, so Edisyn can load a new one but it can't get the U-220 to switch to it.  Thus Edisyn is forced to send the patch back to the U-220 to change its parameters.  This means that loading a patch will tak
+e twice as long as it needs to.
+
 </ul>
 
 <br><br><h3>Thanks</h3>

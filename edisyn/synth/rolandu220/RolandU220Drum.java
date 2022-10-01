@@ -18,8 +18,7 @@ import javax.sound.midi.*;
 import edisyn.util.*;
 
 /**
-   A patch editor for the Roland U-220 (Drums)
-        
+   A patch editor for the Roland U-220 (Drums).
    @author Sean Luke
 */
 
@@ -70,7 +69,7 @@ public class RolandU220Drum extends Synth
             "Metal Hit", "Rich Brass", "JP. Brass 1", "JP. Brass 2", "Brass Strings", 
             "String Pad 1", "String Pad 2", "JP. Strings", "Pizzagogo", "Fanta Bell", 
             "Spect Bell", "Bell Drum", "Synth Harp", "Pulse Wave 1", "Pulse Wave 2", "Pulse Wave 3", 
-            "Saw Wave 1", "Saw Wave 2", "Pizz", "Metal", "Breath", "Nails", "Spectrum 1", "Spectrum 2", "N. Dance", "Drums [DRUM SETUP]"
+            "Saw Wave 1", "Saw Wave 2", "Pizz", "Metal", "Breath", "Nails", "Spectrum 1", "Spectrum 2", "N. Dance", "Drums [SETUP]"
             },
             { 
             // SN-U110-01 - Pipe Organ and Harpsichord
@@ -80,7 +79,7 @@ public class RolandU220Drum extends Synth
             },
             { 
             // SN-U110-02 - Latin and FX Percussion
-            "Latin 1 [DRUM SETUP]", "Latin 2 [DRUM SETUP]", "Latin 3 [DRUM SETUP]", "FX 1 [DRUM SETUP]", "FX 2 [DRUM SETUP]", "FX 3 [DRUM SETUP]", "FX 4 [DRUM SETUP]", 
+            "Latin 1 [SETUP]", "Latin 2 [SETUP]", "Latin 3 [SETUP]", "FX 1 [SETUP]", "FX 2 [SETUP]", "FX 3 [SETUP]", "FX 4 [SETUP]", 
             "Conga 1", "Conga 2", "Conga 3", "Bongo", "Claves", "Timbale", 
             "Tambourine", "Wood Block", "Whistle", "Triangle", "Belltree", 
             "Jingle Bell", "Vibraslap", "Castanet", "Maracas", "Agogo 1", "Agogo 2", 
@@ -161,10 +160,8 @@ public class RolandU220Drum extends Synth
             },
             {
             // SN-U110-10 - Rock Drums
-            // NOTE -- I assume these are 0 and 1 respectively but am not sure
-            // In fact this might be properly "[Nothing]" instead
-            "Rock Drums [DRUM SETUP]",
-            "Electronic Drums [DRUM SETUP]"
+            "Rock Drums [SETUP]",
+            "Electronic Drums [SETUP]"
             },
             {
             // SN-U110-11 - Sound Effects
@@ -215,15 +212,15 @@ public class RolandU220Drum extends Synth
         "Snare Drum 2", "Low Tom Tom 1", "Closed High Hat 1", "Low Tom Tom 2", 
         "Open High Hat 2", "Mid Tom Tom 1", "Open High Hat 1", "Mid Tom Tom 2", 
         "Hi Tom Tom 1", "Crash Cymbal", "Hi Tom Tom 2", "Ride Cymbal", "China Cymbal", 
-        "Cup (Mute)", "Tambourine", "Splash Cymbal", "Cowbell", "Crash Cymbal", 
-        "Snare Drum 3", "Ride Cymbal", "Bongo High", "Bongo Low", "Conga (Mute)", 
-        "Conga High", "Conga Low", "Timable High", "Timable Low", "Agaogo High", 
-        "Agaogo Low", "Cabasa", "Maracas", "Short Whistle", "Long Whistle", 
-        "Vibra - Slap", "Bell Tree", "Claves", "Guiro 2", "Guiro 1", "Castanets", 
-        "Hi Pitch Tom 2", "Triangle", "Hi Pitch Tom 1", "Wood Block", "Jingle Bell", 
+        "Cup (Mute)", "Tambourine [L]", "Splash Cymbal", "Cowbell", "Crash Cymbal", 
+        "Snare Drum 3", "Ride Cymbal", "Bongo High [L]", "Bongo Low [L]", "Conga (Mute) [L]", 
+        "Conga High [L]", "Conga Low [L]", "Timable High [L]", "Timable Low [L]", "Agaogo High [L]", 
+        "Agaogo Low [L]", "Cabasa", "Maracas [L]", "Short Whistle [L]", "Long Whistle [L]", 
+        "Vibra - Slap [L]", "Bell Tree [L]", "Claves [L]", "Guiro 2 [L]", "Guiro 1 [L]", "Castanets [L]", 
+        "Hi Pitch Tom 2", "Triangle [L]", "Hi Pitch Tom 1", "Wood Block [L]", "Jingle Bell [L]", 
         "Bass Drum 3", "Bass Drum 4", "Snare Drum 4", "Snare Drum 5", "Snare Drum 6", 
         "Low Tom Tom 3", "Closed High Hat 2", "Mid Tom Tom 3", "China Cymbal", 
-        "High Tom Tom 3", "Ride Cymbal", "Native Drum - 1", "Native Drum - 2", "Native Drum - 3", 
+        "High Tom Tom 3", "Ride Cymbal", "Native Drum 1 [L]", "Native Drum 2 [L]", "Native Drum 3 [L]", 
         "--"
         };
         
@@ -300,6 +297,25 @@ public class RolandU220Drum extends Synth
             "--", "--", "Native Drum-1", "Native Drum-2", "Native Drum-3",
             // This one is not part of the card but I need it to round out to 98
             "--",
+            },
+            {
+            // Latin 3
+			"--", "--", "--", "--", "--", 
+			"--", "--", "--", "--", "--", 
+			"--", "--", "--", "--", "--", 
+			"--", "--", "--", "Berimbau", 
+			"--", "5th Agogo", "--", "Guiro Short", 
+			"Shekele", "Guiro Long", "--", 
+			"--", "--", "--", "--", "--", 
+			"--", "--", "--", "--", "--", 
+			"--", "--", "--", "--", "--", 
+			"Cuica-H", "Cuica-L", "--", 
+			"Slit Drum-H", "--", "Slit Drum-L", 
+			"--", "--", "Steel Drum-H", 
+			"Steel Drum-L", "--", "--", 
+			"--", "--", "--", "--", "--", 
+			"--", "--", "--", "--", "--",
+			"--"            
             },
             {
             // FX 1
@@ -583,7 +599,6 @@ public class RolandU220Drum extends Synth
         return category;
         }
 
-
     public JComponent addDrum(int note, Color color)
         {
         Category category = new Category(this, NOTES[(note + 35) % 12] + ((note + 35) / 12 - 1), color);
@@ -598,47 +613,89 @@ public class RolandU220Drum extends Synth
         final JLabel[] rhythmKey = new JLabel[1];
         final LabelledDial keyDial = new LabelledDial("            Source            ", this, "drum" + note + "sourcekey", color, 0, 127)
             {
+            public int getDefaultValue() 
+            	{
+				int media = model.get("drum" + note + "media");
+				int n = model.get("drum" + note + "number", 0);
+
+            	// For Benjamin Wild (dj@benjaminwild.com): double-clicking the source should jump to the lowest drum note
+            	if (media == 0) // internal
+            		{
+            		if (n == 127)	// Drum set
+            			return 35;
+            		else return 0;
+            		}
+            	else if (media == 2)	// Latin and FX
+            		{
+            		if (n == 0)	// Latin 1
+            			return 35;
+            		else if (n == 1) // Latin 2
+            			return 54;
+            		else if (n == 2) // Latin 3
+            			return 53;
+            		else if (n == 3) // FX 1
+            			return 35;
+            		else if (n == 4) // FX 2
+            			return 54;
+            		else if (n == 5) // FX 3
+            			return 54;
+            		else if (n == 6) // FX 4
+            			return 54;
+            		else return 0;
+            		}
+            	else if (media == 10)	// Rock Drums
+            		{
+            		return 35;
+            		}
+            	else
+            		{
+            		return 0;
+            		}
+            	}
+
+            public String map(int val)
+            	{
+				return "<html><center>" + val + "<br><font size=-2>" + NOTES[val % 12] + ((val / 12) - 1) + "</font></center></html>";
+            	}
+            	
             public void update(String key, Model model)
                 {
                 super.update(key, model);
                 if (rhythmKey[0] != null) 
                     {
                     int media = model.get("drum" + note + "media");
-                    if (media == 0) // internal 
+                    int n = model.get("drum" + note + "number", 0);
+                   	if (media == 0) // internal 
                         {
                         int k = model.get(key, 0);
-                        if (k >= 35 && k <= 98)
+                        if (k >= 35 && k <= 98 && n == 127)
                             rhythmKey[0].setText(INTERNAL_DRUMS[k - 35]);
                         else 
                             rhythmKey[0].setText("--");
                         }
-                    else if (media == 2)    // Latin and Percussion
+                    else if (media == 2)    // Latin and FX
                         {
                         int k = model.get(key, 0);
-                        if (k >= 35 && k <= 98)
+						// FIXME: here we have a problem similar to the proteus 2000 -- I think the drum
+						// note number can be a value outside of 0 or 1 because the media has changed
+						// but the number has not yet. This happens sometimes when randomizing.
+						// I have a hack here but we need to revisit if this will be a problem for mutation 
+                        if (k >= 35 && k <= 98 && (n >= 0 && n <= 6))
                             {
-                            // FIXME: here we have a problem similar to the proteus 2000 -- I think the drum
-                            // note number can be a value outside of 0 or 1 because the media has changed
-                            // but the number has not yet. This happens sometimes when randomizing.
-                            // I have a hack here but we need to revisit if this will be a problem for mutation 
-                            int n = model.get("drum" + note + "number", 0);
-                            if (n < 0 || n > 4) n = 0;
                             rhythmKey[0].setText(LATIN_DRUMS[n][k - 35]);
                             }
                         else 
                             rhythmKey[0].setText("--");
                         }
-                    else if (media == 10)   // internal 
+                    else if (media == 10)   // Rock Drums 
                         {
                         int k = model.get(key, 0);
-                        if (k >= 35 && k <= 98)
+						// FIXME: here we have a problem similar to the proteus 2000 -- I think the drum
+						// note number can be a value outside of 0 or 1 because the media has changed
+						// but the number has not yet. This happens sometimes when randomizing.
+						// I have a hack here but we need to revisit if this will be a problem for mutation 
+                        if (k >= 35 && k <= 98 & (n >= 0 && n <= 1))
                             {
-                            // FIXME: here we have a problem similar to the proteus 2000 -- I think the drum
-                            // note number can be a value outside of 0 or 1 because the media has changed
-                            // but the number has not yet. This happens sometimes when randomizing.
-                            // I have a hack here but we need to revisit if this will be a problem for mutation 
-                            int n = model.get("drum" + note + "number", 0);
-                            if (n < 0 || n > 1) n = 0;
                             rhythmKey[0].setText(ROCK_DRUMS[n][k - 35]);
                             }
                         else 
@@ -659,6 +716,7 @@ public class RolandU220Drum extends Synth
                 {
                 super.update(key, model);
                 keyDial.update("drum" + note + "sourcekey", model);
+                model.setLastKey(key);		// we set it again so that it's the last thing updated, so we can distribute it
                 }
             };
         
@@ -675,6 +733,7 @@ public class RolandU220Drum extends Synth
                 if (cur >= PCM[val].length)
                     model.set("drum" + note + "number", 0);
                 keyDial.update("drum" + note + "sourcekey", model);
+                model.setLastKey(key);		// we set it again so that it's the last thing updated, so we can distribute it
                 }
             };
         vbox.add(comp);        
@@ -705,7 +764,10 @@ public class RolandU220Drum extends Synth
         ((LabelledDial)comp).addAdditionalLabel("Note");
         inner.add(comp);
 
-        comp = new LabelledDial("Level", this, "drum" + note + "instlevel", color, 0, 31);
+        comp = new LabelledDial("Level", this, "drum" + note + "instlevel", color, 0, 31)
+			{
+            public int getDefaultValue() { return 31; }
+			};
         inner.add(comp);
 
         // FIXME: This is backwards!  0...6 are RIGHT and 8...14 are LEFT, and 15 is RND
@@ -857,7 +919,7 @@ public class RolandU220Drum extends Synth
         {
         int original = model.get("number");
                 
-        JTextField number = new SelectedTextField("" + original + 1, 3);
+        JTextField number = new SelectedTextField("" + (original + 1), 3);
 
         while(true)
             {
@@ -958,7 +1020,10 @@ public class RolandU220Drum extends Synth
                 val = lsb1 | (msb1 << 4) | (lsb2 << 8) | (msb2 << 12);
                 model.set("drum" + i + "detunedepth", (val >>> 0xC) & 15);      // C D E F
                 model.set("drum" + i + "media", (val >>> 0x7) & 31);                    // 7 8 9 A B
+                //System.err.println("Updated Media " + i + " to " + model.get("drum" + i + "media"));
+                // we need to make sure we load the number AFTER the medium
                 model.set("drum" + i + "number", (val >>> 0x0) & 127);          // 0 1 2 3 4 5 6
+                //System.err.println("Updated Number " + i + " to " + model.get("drum" + i + "number"));
 
                 lsb1 = parseData[pos++];
                 msb1 = parseData[pos++];
@@ -1162,9 +1227,9 @@ public class RolandU220Drum extends Synth
 
 
 
-    /** When we load Internal, the U220 doesn't change the patch because there's no notion
-        of "changing the patch".  So we have to explicitly send the information back.  */
-//    public boolean getSendsParametersAfterNonMergeParse() { return true; }
+    /** If the user is editing the patch on the synth, the U-220 won't change patches!
+    	So just in case we send this. */
+    public boolean getSendsParametersAfterNonMergeParse() { return true; }
 
     public byte produceChecksum(byte[] data)
         {
@@ -1342,11 +1407,7 @@ public class RolandU220Drum extends Synth
     
     
 
-
-    ////// YOU MAY WANT TO IMPLEMENT SOME OF THE FOLLOWING
-
     public int getTestNotePitch() { return model.get("note"); }
-//    public int getTestNoteChannel() { return model.get("channel"); }
 
     
     public JFrame sprout()
@@ -1420,8 +1481,47 @@ public class RolandU220Drum extends Synth
                 }
             });
         menu.add(setupTestPatchMenu2);
+        JMenuItem distributeMenu = new JMenuItem("Distribute Last Parameter to All Drums");
+        distributeMenu.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                distributeLastParameter();
+                }
+            });
+        menu.add(distributeMenu);
         }
-                
+    
+    public void distributeLastParameter()
+    	{
+    	String key = getModel().getLastKey();
+    	if (key == null) 
+    		{
+            showSimpleError("No Parameter", "No parameter has been set yet.");
+    		}
+    	else if (allCommonParametersToIndex.containsKey(key))
+    		{
+            showSimpleError("No Parameter", "To distribute, the last set parameter must be for a drum note.");
+    		}
+    	else
+    		{
+    		int val = getModel().get(key);
+			String stripped = StringUtility.removePreambleAndFirstDigits(key, "drum");
+			if (stripped.equals(key)) // uh oh
+				{
+				new RuntimeException("Couldn't remove premable 'drum' from " + key).printStackTrace();
+				}
+   			else
+   				{
+   				for(int i = 0; i < 63; i++)
+    				{
+    				getModel().set("drum" + i + stripped, val);
+    				}
+    			}
+    		}
+    	}  
+              
+          
     // Prepare a Patch whose slot N has the current MIDI channel, and has all the partials in reserve.
     // N is defined as the current emit location.  All other slots have zero partials and MIDI channel OFF.
         
@@ -1510,14 +1610,6 @@ public class RolandU220Drum extends Synth
             model.set("name", newnm);
         }
 
-
-    // The problem with this is that if we pick a sound that's not a drum sound,
-    // like an organ or whatnot, it will play forever
-//      public boolean getClearsTestNotes() { return false; }
-        
-//    public int getPauseAfterChangePatch() { return 100; }
-
-//    public int getPauseAfterSendAllParameters() { return 300; }         // works at 100 in 1.01 but I want to be careful 
  
     public void changePatch(Model tempModel) 
         {
@@ -1571,62 +1663,6 @@ public class RolandU220Drum extends Synth
         return "R-" + (model.get("number") + 1 < 100 ? (model.get("number") + 1 < 10 ? "00" : "0") : "") + ((model.get("number") + 1));
         }
         
-    public static final String[] drumParameters =
-        {
-        "wavegroup",
-        "wavenumber",
-        "-",                            // also wavenumber
-        "toneswitch",
-        "coarsetune",
-        "mutegroup",
-        "envelopemode",
-        "pitchfine",
-        "randompitchdepth",
-        "pitchbendrange",
-        "penvvelocitylevelsense",
-        "penvvelocitytimesense",
-        "penvdepth",
-        "penvtime1",
-        "penvlevel1",
-        "penvtime2",
-        "penvlevel2",
-        "penvtime3",
-        "penvlevel3",
-        "penvtime4",
-        "penvlevel4",
-        "filtermode",
-        "cutoff",
-        "resonance",
-        "resonancemode",
-        "tvfenvvelocitylevelsense",
-        "tvfenvvelocitytimesense",
-        "tvfenvdepth",
-        "tvfenvtime1",
-        "tvfenvlevel1",
-        "tvfenvtime2",
-        "tvfenvlevel2",
-        "tvfenvtime3",
-        "tvfenvlevel3",
-        "tvfenvtime4",
-        "tvfenvlevel4",
-        "level",
-        "pan",
-        "-",                            // also pan
-        "tvaenvvelocitylevelsense",
-        "tvaenvvelocitytimesense",
-        "tvaenvtime1",
-        "tvaenvlevel1",
-        "tvaenvtime2",
-        "tvaenvlevel2",
-        "tvaenvtime3",
-        "tvaenvlevel3",
-        "tvaenvtime4",
-        "drylevel",
-        "reverbsendlevel",
-        "chorussendlevel",
-        "outputselect"
-        };
-
     public int getBatchDownloadWaitTime() { return 2200; }
 
     /** Return a list of all patch number names, such as "1", "2", "3", etc.

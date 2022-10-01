@@ -192,7 +192,7 @@ public class RolandU220Multi extends Synth
         {
         int original = model.get("number");
                 
-        JTextField number = new SelectedTextField("" + original + 1, 3);
+        JTextField number = new SelectedTextField("" + (original + 1), 3);
 
         while(true)
             {
@@ -564,12 +564,12 @@ public class RolandU220Multi extends Synth
         comp = new CheckBox("Receive Volume", this, "part" + part + "rxvolume");
         vbox.add(comp);
         
-        comp = new CheckBox("Receive Hold", this, "part" + part + "rxhold");
-        vbox.add(comp);
-
         comp = new CheckBox("Receive Pan", this, "part" + part + "rxpan");
         vbox.add(comp);
         hbox.add(vbox);
+
+        comp = new CheckBox("Receive Hold", this, "part" + part + "rxhold");
+        vbox.add(comp);
 
         final JLabel[] timbreLabel = new JLabel[1];
         comp = new LabelledDial("      Timbre      ", this, "part" + part + "timbrenumber", color, 0, 127)
@@ -768,6 +768,11 @@ public class RolandU220Multi extends Synth
         return (byte)16;                // IDs start at 17
         }
         
+
+    /** If the user is editing the patch on the synth, the U-220 won't change patches!
+    	So just in case we send this. */
+    public boolean getSendsParametersAfterNonMergeParse() { return true; }
+
         
     public byte produceChecksum(byte[] data)
         {
@@ -838,8 +843,8 @@ public class RolandU220Multi extends Synth
             int part = StringUtility.getFirstInt(key);
             String rest = key.substring(5);
             byte AA = (byte) 0x10;
-            byte BB = (byte) (0x05 + part - 1);
-            byte CC = (byte) ((Integer)(allPartParametersToIndex.get(rest))).intValue();
+            byte BB = (byte) 0x05;
+            byte CC = (byte) (((Integer)(allPartParametersToIndex.get(rest))).intValue() + (part - 1) * 0x10);
             byte val = (byte)(model.get(key));
                 
             byte checksum = produceChecksum(new byte[] { AA, BB, CC, val });

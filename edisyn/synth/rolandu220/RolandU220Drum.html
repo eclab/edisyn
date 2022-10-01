@@ -16,14 +16,24 @@ Set Edisyn's MIDI channel to the same as your rhythm part's Channel (typically 1
 
 <p>You can also call up the current Multimode patch with "Show Current Patch".
 
+<p>It's often the case that you want to all drums to have the same value for a given parameter.  Set the parameter in one drum, then call "Distribute Last Parameter to All Drums", which will, well, distribute the last parameter you set to all drums.  If you want to distribute the Drum Tone, you should first distribute the Drum Media, then the Drum Tone.
+
+<br><br><h3>Hints</h3>
+
+<ul>
+<li>If you double-click on the Drum Source dial, it'll go to the lowest valid drum source.
+<p><li>Some drum sources in the Internal Drum drumset are missing unless the Latin/FX card is installed (I believe).  These have been labelled with a "[L]".
+</ul>
+
 <br><br><h3>Gotchas</h3>
 
 <ul>
 <li>Roland breaks its patch sysex into multiple messages, each 138 bytes long.  But Roland stupidly made it very difficult to distinguish between sysex for a single patch and sysex for a bulk dump of patches.  As a result, Edisyn must assume that the sysex is for a single patch.  In short: you can't do a bulk dump of patches from the synthesizer; Edisyn won't understand them.
+<p><li>If you are presently editing a drum patch, the U-220 refuses to change patches, so Edisyn can load a new one but it can't get the U-220 to switch to it.  Thus Edisyn is forced to send the patch back to the U-220 to change its parameters.  This means that loading a patch will take twice as long as it needs to.
 </ul>
 
 <br><br><h3>Thanks</h3>
-Thanks to Keith (llamamusic@hotmail.com) for his extraordinary service in loaning stuff, providing materials, and debugging.  If you are a U-220 owner, <a href="llamamusic.com">llamamusic.com</a> is a fantastic resource.  
+Thanks to Keith (llamamusic@hotmail.com) for his extraordinary service in loaning stuff, providing materials, and debugging.  If you are a U-220 owner, <a href="llamamusic.com">llamamusic.com</a> is a fantastic resource.  Thanks also to Benjamin Wild (dj@benjaminwild.com) for bug reports and suggestions.
 
 <p><table border=0 cellpadding=0 cellspacing=5>
 <tr>

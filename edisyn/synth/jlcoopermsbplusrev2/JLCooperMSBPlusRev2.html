@@ -3,9 +3,9 @@
 <h1>JL Cooper MSB Plus and MSB Plus Rev 2</h1> 
 <h2>Patch Editor</h2>
 
-<p>This editor should work with both the <b>MSB Plus</b> and the <b>MSB Plus Rev 2</b> but has only been tested with the MSB Plus Rev 2.  If you are using the Rev 2, make certain that the <b>Rev 2</b> checkbox is checked: otherwise make sure that it is unchecked.
+<p>This editor should work with both the <b>MSB Plus</b> and the <b>MSB Plus Rev 2</b> MIDI Router devices, but has only been tested with the MSB Plus Rev 2.  If you are using the Rev 2, make certain that the <b>Rev 2</b> checkbox is checked: otherwise make sure that it is unchecked.
 
-<p><b>Communicating with Edisyn</b>&nbsp;&nbsp;&nbsp;&nbsp;You first need to connect to the right input and output MIDI ports.  This is a mess because the MSB Plus stupidly stores these ports and channel on a patch-by-patch basis rather than globally, and the input and output ports can even vary from one another!  To get around this, whenever Edisyn sends a patch to current memory, the <b>Sysex/PC Input</b> port and <b>Sysex Output</b> port should be <i>both set</i> to Edisyn's Device ID.  So for example, if you want to use port 8, set the Device ID to 8.  
+<p><b>Communicating with Edisyn</b>&nbsp;&nbsp;&nbsp;&nbsp;You first need to connect to the right input and output MIDI ports and channel.  This is a mess because the MSB Plus stupidly stores the ports and channel on a patch-by-patch basis rather than globally, and the input and output ports can even vary from one another!  To get around this, whenever Edisyn sends a patch to current memory, the <b>Sysex/PC Input</b> port and <b>Sysex Output</b> port should be <i>both set</i> to Edisyn's Device ID.  So for example, if you want to use port 8, set the Device ID to 8.  Furthermore the <b>PC MIDI Channel</b> should be set to Edisyn's MIDI channel.
 
 <p>To change the Sysex/PC Input, Sysex Output, and PC MIDI Channel on your MSB, do the following:
 
@@ -18,13 +18,20 @@
 
 </ol>
 
-<p>For more warnings on how the ports are written and read, see the <b>Gotchas</b> section below.
+<p>For more warnings on how the ports are written and read, see the <b>Menu</b> section below.
 
-<p><b>Gotchas</b> 
+<p><b>About the Menu</b>
+
+<ul>
+<li><b>Overwrite Ports on Patch Write</b>&nbsp;&nbsp;&nbsp;&nbsp;The <b>Sysex/PC Input</b> and <b>Sysex Output</b> ports can vary from one another and vary from patch to patch; and so can the <b>PC MIDI Channel</b>. Don't ask why: it's insane.  If you are writing a patch to the unit, or saving a patch to disk, Edisyn will overwrite the port values with its Device ID, and the PC MIDI Channel with Edisyn's channel, unless you have deselected <b>Overwrite Ports on Patch Write</b> (which would be an unusual need).
+<p><li><b>Send Two-Way Setups to Librarian</b>&nbsp;&nbsp;&nbsp;&nbsp;This will configure all the patches in the librarian as follows.  All the patches will be identical to the current patch in the editor, except that patch "XX" (such as "22") will have all outputs set to X, except output X will be set to OFF.  Furthermore, a patch of the form "XY" (such "29") will have all outputs set to OFF, except output X will be set to Y, and output Y will be set to X.  The idea here is that if you want controller X to send to any instrument, you type XX, and if you want controller X and synthesizer Y to talk to each other, you type XY (or I suppose YX).  Make sure that you didn't modify the Sysex input/output ports or the input channel.
+<p><li><b>Send Merge Setups to Librarian</b>&nbsp;&nbsp;&nbsp;&nbsp;This will configure all the patches in the librarian as follows.  All the patches will be identical to the current patch in the editor, except that patch "XX" (such as "22") will have all outputs set to PROC A, with the input of PROC A being X, and output X will be set to OFF.  Furthermore, a patch of the form "XY" (such "29") will have all outputs set to MERGE, with the input of PROC A being set to X and the input of PROC B set to to Y, and the outputs of X and Y set to OFF.  The idea here is that if you want controller X to send to any instrument, but first be pushed through PROC A you type XX, and if you want controller X and controller Y to both go to everyone (pushed through PROC A and PROC B respectively), you type XY.
+</ul>
+
+<p><b>Gotchas</b>
 
 <ul>
 <li>Sending to current patch on the MSB will hang the unit.  It appears to be a serious bug on the MSB.  Unfortunately this is an important feature for Edisyn, allowing undo/redo and all of its mutation features.  But that's the way it is: you cannot send to current patch: you will have to manually write to patches.
-<p><li>The <b>Sysex/PC Input</b> and <b>Sysex Output</b> ports can vary from one another and vary from patch to patch.  Don't ask why: it's insane.  If you are writing a patch to the unit, or saving a patch to disk, Edisyn will overwrite these port values with its device ID, unless you have deselected <b>Overwrite Ports on Patch Write</b> (which would be an unusual need).
 <p><li>Sometimes the memory for certain patches on the MSB gets totally borked and returns bad data to Edisyn and on the front screen.  You can still ovewrite them however.
 </ul>
 

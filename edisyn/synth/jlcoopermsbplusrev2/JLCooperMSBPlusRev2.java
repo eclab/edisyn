@@ -93,7 +93,7 @@ public class JLCooperMSBPlusRev2 extends Synth
         }
                 
     
-    //public String getDefaultResourceFileName() { return "JLCooperMSBPlusRev2.init"; }
+    public String getDefaultResourceFileName() { return "JLCooperMSBPlusRev2.init"; }
     public String getHTMLResourceFileName() { return "JLCooperMSBPlusRev2.html"; }
                 
                 
@@ -114,17 +114,22 @@ public class JLCooperMSBPlusRev2 extends Synth
 			{
 			int first = (i / 8);
 			int second = (i % 8);
-			for (int j = 0; j < 8; j++)
-				{
-				model.set("output" + (j + 1) + "assignment", first);
-				}
 			if (first == second)
 				{
-				model.set("output" + (first + 1) + "assignment", 11);	// off
+				for (int j = 0; j < 8; j++)
+					{
+					model.set("output" + (j + 1) + "assignment", first);
+					}
+				model.set("output" + (first + 1) + "assignment", 11);		// off
 				}
 			else
 				{
+				for (int j = 0; j < 8; j++)
+					{
+					model.set("output" + (j + 1) + "assignment", 11);		// off
+					}
 				model.set("output" + (first + 1) + "assignment", second);
+				model.set("output" + (second + 1) + "assignment", first);
 				}
 			model.set("number", i);
 			sendToLibrarian(model);
@@ -549,6 +554,7 @@ public class JLCooperMSBPlusRev2 extends Synth
 			{
 			inputport = getID() - 1;
 			outputport = getID() - 1;
+			channel = getChannelOut();
 			}
 		
 		for(int proc = 1; proc <= 2; proc++)
@@ -697,6 +703,7 @@ public class JLCooperMSBPlusRev2 extends Synth
 
     public void changePatch(Model tempModel)
         {
+        /*
         int num = tempModel.get("number");
         try
         	{
@@ -706,6 +713,7 @@ public class JLCooperMSBPlusRev2 extends Synth
             { 
             e.printStackTrace(); 
             }
+        */
         }
 
     public byte[] requestDump(Model tempModel)
@@ -832,6 +840,7 @@ public class JLCooperMSBPlusRev2 extends Synth
     */
 
 	public int getPauseAfterReceivePatch() { return 200; }
+	public int getPauseAfterWritePatch() { return 200; }
 
     public int getBatchDownloadWaitTime() { return 200; }
         

@@ -21,6 +21,9 @@ I have received a report that sending real-time parameter changes can crash the 
 
 Edisyn must have its output channel set to the same as the D-110 Control Channel or else you can't change patches.  But this inconvenient if you want to hear instruments on various parts.  To get around this, Edisyn lets you stipulate that test notes should be played through the channel specified by a selected part.  If this channel is "OFF", or if you have selected the Default Channel in the menu, then Edisyn will use the standard output channel again.  Beware that if you change the part's channel while playing a test note, the note could get stuck as its NOTE OFF got sent to the wrong channel.  In this case, just select Send All Sounds Off.
 
+<br><br><h3>Where's the Drum Editor?</h3>
+
+The D-110 doesn't save its drum patches when you power cycle the machine: they're reset.  As a result, it doesn't make much sense to write an editor for somethin the machine won't save in its memory.  Sorry about that.
 
 <br><br><h3>Gotchas</h3>
 

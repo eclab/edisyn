@@ -14,7 +14,6 @@ import java.awt.event.*;
 import java.net.*;
 import javax.swing.text.*;
 import javax.swing.text.html.*;
-import java.awt.*;
 
 /**
    HTMLBrowser is a simple web browser which lets the user click on links and which provides
@@ -28,6 +27,7 @@ public class HTMLBrowser extends JPanel
     java.util.Stack stack = new java.util.Stack();
     JEditorPane infoPane;
     JScrollPane scroll;
+    public boolean loadSubsidiaryHTML = false;		// set this to TRUE to load in the browser
         
     public void setText(Object HTMLTextOrURL)
         {
@@ -148,7 +148,6 @@ public class HTMLBrowser extends JPanel
             {
             public void hyperlinkUpdate( HyperlinkEvent he ) 
                 {
-
                 HyperlinkEvent.EventType type = he.getEventType();
                 if (type == HyperlinkEvent.EventType.ENTERED) 
                     {
@@ -161,11 +160,9 @@ public class HTMLBrowser extends JPanel
                 else // clicked on it!
                     {
                     java.net.URL url = he.getURL();
-                    if((url.getProtocol().equals("http") ||
-                            url.getProtocol().equals("https")))
+                    if (!loadSubsidiaryHTML && (url.getProtocol().equals("http") || url.getProtocol().equals("https")))
                         {
-                        if(Desktop.isDesktopSupported() &&
-                            Desktop.getDesktop().isSupported(Desktop.Action.BROWSE))
+                        if (Desktop.isDesktopSupported() && Desktop.getDesktop().isSupported(Desktop.Action.BROWSE))
                             {
                             try
                                 {
@@ -178,10 +175,7 @@ public class HTMLBrowser extends JPanel
                             }
                         else
                             {
-                            JOptionPane.showMessageDialog(
-                                null,
-                                new JTextArea("Opening link in external browser not supported on this computer. The URL was "  + url.toString()));
-
+                            JOptionPane.showMessageDialog(null, new JTextArea("Opening link in external browser not supported on this computer. The URL was "  + url.toString()));
                             }
                         }
                     else

@@ -260,6 +260,45 @@ public class StringUtility
         return sb.toString();
         }
 
+	static final int STATE_START = 0;
+	static final int STATE_INT = 1;
+	static final int STATE_ADD = 2;
+	
+	/** Removes the preamble and initial number (the number must be present), leaving the remainder. */
+	public static String removePreambleAndFirstDigits(String name, String preamble)
+		{
+        char[] n = name.toCharArray();
+        char[] p = preamble.toCharArray();
+        StringBuilder sb = new StringBuilder();
+        int state = STATE_START;
+        for(int i = 0; i < n.length; i++)
+        	{
+        	if (state == STATE_START)
+        		{
+        		if (i >= p.length) return name; // uh oh, didn't transition to a digit
+        		if (n[i] != p[i]) return name;
+        		if (i == p.length - 1 && i >= n.length - 1) return name;// no digit
+        		if (i == p.length - 1 && i < n.length - 1 && Character.isDigit(n[i + 1]))
+        			{
+        			state = STATE_INT;
+        			}
+        		}
+        	else if (state == STATE_INT)
+        		{
+        		if (!Character.isDigit(n[i]))
+        			{
+        			sb.append(n[i]);
+        			state = STATE_ADD;
+        			}
+        		}
+        	else
+        		{
+        		sb.append(n[i]);
+        		}
+        	}
+        return sb.toString();
+		}
+        
     public static String rightTrim(String str)
         {
         int i = str.length() - 1;

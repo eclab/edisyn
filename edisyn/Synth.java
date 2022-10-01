@@ -8570,6 +8570,42 @@ public abstract class Synth extends JComponent implements Updatable
             }
         }
         
+    
+    
+	public void sendToLibrarian(Model model)
+		{
+		Model backup = getModel();
+		this.model = model;
+		boolean didUndo = undo.getWillPush();
+		boolean didMIDI = getSendMIDI();
+		undo.setWillPush(false);
+		setSendMIDI(false);
+		byte[] data = flatten(emitAll((Model) null, false, true));
+		if (data != null && data.length > 0)
+			{
+			sendToLibrarian(data, model.get("number", Patch.NUMBER_NOT_SET),
+				 model.get("bank", 0), 	model.get("name", "" + getPatchLocationName(getModel())));
+			}
+		this.model = backup;
+		setSendMIDI(didMIDI);
+		undo.setWillPush(didUndo);
+		}
+	
+
+	public void sendToLibrarian(byte[] data, int number, int bank, String name)
+		{
+		Patch patch = new Patch(recognizeSynthForSysex(data), data, false);     // is this right?  Are we sure it's not bank sysex?
+		patch.number = number;
+		patch.bank = bank;
+		patch.name = name;
+		if (!librarianOpen)
+			{
+			doLibrarian();          // open and move to it
+			}
+		librarian.getLibrary().receivePatch(patch);
+		librarian.updateUndoRedo();             
+		}
+	
     /** This tells Edisyn whether your synthesizer sends patches to Edisyn via a sysex patch dump
         (as opposed to individual CC or NRPN messages as is done in synths such as the PreenFM2).
         The default is TRUE, which is nearly always the case. */
@@ -8585,16 +8621,8 @@ public abstract class Synth extends JComponent implements Updatable
             
             if (toLibrarian)
                 {
-                Patch patch = new Patch(recognizeSynthForSysex(data), data, false);     // is this right?  Are we sure it's not bank sysex?
-                patch.number = model.get("number", Patch.NUMBER_NOT_SET);
-                patch.bank = model.get("bank", 0);
-                patch.name = model.get("name", "" + getPatchLocationName(getModel()));
-                if (!librarianOpen)
-                    {
-                    doLibrarian();          // open and move to it
-                    }
-                librarian.getLibrary().receivePatch(patch);
-                librarian.updateUndoRedo();             
+                sendToLibrarian(data, model.get("number", Patch.NUMBER_NOT_SET),
+                	 model.get("bank", 0), 	model.get("name", "" + getPatchLocationName(getModel())));
                 }
             else if (batchPatches != null)
                 {
@@ -8895,7 +8923,7 @@ public abstract class Synth extends JComponent implements Updatable
     /** Sends a single parameter if the synthesizer is capable of doing this. */
     public void sendOneParameter(String key)
         {
-        if (allowsTransmitsParameters && getSendMIDI())
+        if (getAllowsTransmitsParameters() && getSendMIDI())
             {
             Object[] output = emitAll(key, STATUS_UPDATING_ONE_PARAMETER);
             if (output == null)

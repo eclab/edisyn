@@ -1,0 +1,47 @@
+<html><head></head><body bgcolor='black'>
+<font color='white'>
+<h1>JL Cooper MSB Plus and MSB Plus Rev 2</h1> 
+<h2>Patch Editor</h2>
+
+<p>This editor should work with both the <b>MSB Plus</b> and the <b>MSB Plus Rev 2</b> but has only been tested with the MSB Plus Rev 2.  If you are using the Rev 2, make certain that the <b>Rev 2</b> checkbox is checked: otherwise make sure that it is unchecked.
+
+<p><b>Communicating with Edisyn</b>&nbsp;&nbsp;&nbsp;&nbsp;You first need to connect to the right input and output MIDI ports.  This is a mess because the MSB Plus stupidly stores these ports and channel on a patch-by-patch basis rather than globally, and the input and output ports can even vary from one another!  To get around this, whenever Edisyn sends a patch to current memory, the <b>Sysex/PC Input</b> port and <b>Sysex Output</b> port should be <i>both set</i> to Edisyn's Device ID.  So for example, if you want to use port 8, set the Device ID to 8.  
+
+<p>To change the Sysex/PC Input, Sysex Output, and PC MIDI Channel on your MSB, do the following:
+
+<ol>
+<li>Press the MODE button repeatedly until the PG 2 light is lit and either the Proc A or Proc B lights are lit (it doesn't matter which one).
+<p><li>Button 6 sets the PC MIDI Channel.  You ought to set this to Edisyn's MIDI channel.  Channels 1-9 are as you expect, then Channel 10 is A, 11 is B, 12 is C, 13 is D, 14 is E, 15 is F, and 16 is 0.
+<p><li>Button 7 sets the Sysex/PC Input Port, one of 1 to 8.  Set this to Edisyn's Device ID and make sure to connect the incoming MIDI cable to this port.
+<p><li>Button 8 sets the Sysex Output Port, one of 1 to 8.  Set this to Edisyn's Device ID and make sre to connect the outgoing MIDI cable to this port.
+<p><li>Press Write to save.  For good measure you can save this configuration to every single patch by holding down Write and pressing Panic.
+
+</ol>
+
+<p>For more warnings on how the ports are written and read, see the <b>Gotchas</b> section below.
+
+<p><b>Gotchas</b> 
+
+<ul>
+<li>Sending to current patch on the MSB will hang the unit.  It appears to be a serious bug on the MSB.  Unfortunately this is an important feature for Edisyn, allowing undo/redo and all of its mutation features.  But that's the way it is: you cannot send to current patch: you will have to manually write to patches.
+<p><li>The <b>Sysex/PC Input</b> and <b>Sysex Output</b> ports can vary from one another and vary from patch to patch.  Don't ask why: it's insane.  If you are writing a patch to the unit, or saving a patch to disk, Edisyn will overwrite these port values with its device ID, unless you have deselected <b>Overwrite Ports on Patch Write</b> (which would be an unusual need).
+<p><li>Sometimes the memory for certain patches on the MSB gets totally borked and returns bad data to Edisyn and on the front screen.  You can still ovewrite them however.
+</ul>
+
+
+
+
+<br><br><h3>Librarian Support</h3>
+
+<p>The MSB Plus and MSB Plus Rev 2 do not have patch names.  The initial patch locations will be used instead.
+
+
+<p><table border=0 cellpadding=0 cellspacing=5>
+<tr>
+<td align=right>By&nbsp;&nbsp;&nbsp;
+<td><b>Sean Luke</b>
+<tr>
+<td align=right>Date&nbsp;&nbsp;&nbsp;
+<td>October 2022
+</table>
+

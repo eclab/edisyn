@@ -152,6 +152,19 @@ public class SanityCheck
                     System.err.println(c[j] + " (V50)");
                     test(synth, synth2);
                     }
+                else if (synth instanceof edisyn.synth.jlcoopermsbplusrev2.JLCooperMSBPlusRev2)
+                    {
+                    ((edisyn.synth.jlcoopermsbplusrev2.JLCooperMSBPlusRev2)synth).setRev2(false, false);
+                    ((edisyn.synth.jlcoopermsbplusrev2.JLCooperMSBPlusRev2)synth2).setRev2(false, false);
+                    System.err.println(c[j]);
+                    test(synth, synth2);
+                    synth = Synth.instantiate(c[j], true, false, null);
+                    synth2 = Synth.instantiate(c[j], true, false, null);
+                    ((edisyn.synth.jlcoopermsbplusrev2.JLCooperMSBPlusRev2)synth).setRev2(true, false);
+                    ((edisyn.synth.jlcoopermsbplusrev2.JLCooperMSBPlusRev2)synth2).setRev2(true, false);
+                    System.err.println(c[j] + " (Rev2)");
+                    test(synth, synth2);
+                    }
                 else if (synth instanceof edisyn.synth.maudiovenom.MAudioVenomArp)
                     {
                     edisyn.synth.maudiovenom.MAudioVenomArp.truncateAndSortOnEmit = false;

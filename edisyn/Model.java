@@ -222,8 +222,7 @@ public class Model implements Cloneable
         n.stringValue = null;
         n.intValue = value;
         
-        lastKey = key;
-        recentlySet = true;
+        setLastKey(key);
         updateListenersForKey(key);
         }
 
@@ -250,8 +249,7 @@ public class Model implements Cloneable
         if (n == null) { n = new Node(); storage.put(key, n); }
         n.stringValue = value;
 
-        lastKey = key;
-        recentlySet = true;
+        setLastKey(key);
         updateListenersForKey(key);
         }
     
@@ -299,6 +297,14 @@ public class Model implements Cloneable
     public String getLastKey()
         {
         return lastKey;
+        }
+        
+    /** Sets the last key set and sets recentlySet to true.  
+    	This should only be done in unusual circumstances. */
+    public void setLastKey(String key)
+        {
+        lastKey = key;
+        recentlySet = true;
         }
         
     /** Sets the minimum for a given key. */        

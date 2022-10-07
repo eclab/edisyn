@@ -300,7 +300,7 @@ public class Model implements Cloneable
         }
         
     /** Sets the last key set and sets recentlySet to true.  
-    	This should only be done in unusual circumstances. */
+        This should only be done in unusual circumstances. */
     public void setLastKey(String key)
         {
         lastKey = key;

@@ -64,7 +64,7 @@ edisyn.synth.rolandd110.RolandD110Multi	Roland	Roland D-110 [Multi]
 edisyn.synth.rolandjv880.RolandJV880	Roland	Roland JV-80 / 880
 edisyn.synth.rolandjv880.RolandJV880Multi	Roland	Roland JV-80 / 880 [Multi]
 edisyn.synth.rolandjv880.RolandJV880Drum	Roland	Roland JV-80 / 880 [Drum]
-edisyn.synth.rolandu110.RolandU110	Roland	Roland U-110
+#edisyn.synth.rolandu110.RolandU110	Roland	Roland U-110
 edisyn.synth.rolandu220.RolandU220Timbre	Roland	Roland U-20 / 220 [Timbre]
 edisyn.synth.rolandu220.RolandU220Multi	Roland	Roland U-20 / 220 [Multi]
 edisyn.synth.rolandu220.RolandU220Drum	Roland	Roland U-20 / 220 [Drum]

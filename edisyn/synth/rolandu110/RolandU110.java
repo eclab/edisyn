@@ -1439,12 +1439,12 @@ REQUEST A DATA DUMP
 	DV	Device ID
 	23	U-110
 	11	Request Data
-	LL	Address LSB 	Address is of the form NNMMLL
+	LL	Address MSB 	Address is of the form LLMMNN
 	MM	...
-	NN	Address MSB
-	XX	Data Size LSB 	Size is of the form ZZYYXX
+	NN	Address LSB
+	XX	Data Size MSB 	Size is of the form XXYYZZ
 	YY	...
-	ZZ	Data Size MSB
+	ZZ	Data Size LSB
 	CH	Checksum		Checksum is on the ADDRESS and DATA SIZE.  See CHECKSUM below.
 	F7
 	
@@ -1454,7 +1454,7 @@ DATA DUMP
 	DV	Device ID
 	23	U-110
 	11	Request Data
-	LL	Address LSB 	Address is of the form NNMMLL
+	LL	Address LSB 	Address is of the form LLMMNN
 	MM	...
 	NN	Address MSB
 	DATA....			DATA can be arbitrarily long

@@ -51,7 +51,7 @@ By Sean Luke\qquad sean@cs.gmu.edu}\\[0.2em]
 %\vspace{0.5em}
 \section{About Edisyn}
 
-Edisyn is a no-nonsense synthesizer patch editor and librarian for the editing and parameter exploration of a variety of synthesizers.  It is not skeuomorphic or skinnable: its design is plain and consistent, though you can change the colors.  Edisyn is free open source.  Edisyn currently supports the following devices: 
+Edisyn is a no-nonsense synthesizer patch editor and librarian for the editing and parameter exploration of a wide variety of synthesizers.  It is not skeuomorphic or skinnable: its design is plain and consistent, though you can change the colors.  Edisyn is free open source.  Edisyn currently supports the following devices: 
 
 {
 \small
@@ -61,7 +61,7 @@ Edisyn is a no-nonsense synthesizer patch editor and librarian for the editing a
 %\item Futuresonus Parva
 \item Alesis D4 and DM5 (Single)
 \item Casio CZ-1, CZ-101, CZ-1000, CZ-3000, CZ-5000, and CZ-230S (Single)
-\item Dave Smith Instruments Prophet '08 and '08 Desktop, Tetra, Mopho, Mopho Keyboard, Mopho SE, and Mopho X4 (Single and (for Tetra) Combo Modes)
+\item Dave Smith Instruments Prophet '08 and '08 Desktop, Tetra, Mopho, Mopho Keyboard, Mopho SE, and Mopho X4 (Single and (for Tetra) Combo)
 \item E-Mu Morpheus and Ultraproteus (Single, Hyperpreset, and MidiMap)
 \item E-Mu Proteus 1, 1 XR, 2, 2 XR, 3, 3 XR, and 1+Orchestral (Single)
 \item E-Mu Planet Phatt, Orbit and Orbit V2, Carnaval, Vintage Keys, and Vintage Keys Plus (Single)
@@ -72,8 +72,10 @@ Edisyn is a no-nonsense synthesizer patch editor and librarian for the editing a
 \item Korg SG Rack and SG Pro X (Single and (for SG Rack) Multimode)
 \item Korg Microkorg (Single)
 \item Korg Microsampler
-\item Korg Volca Series (Bass, Beats, Drum Single, Drum Split, FM, Keys, Kick, NuBass, Sample/Sample2 Multi, Sample2 Single, /u/pajen firmware)
+\item Korg Volca Series: Bass, Beats, Drum, FM, Keys, Kick, NuBass, and Sample2 (Single); Drum (Split); Sample/Sample2 (Multimode), /u/pajen FM
+
 \item Korg Wavestation SR (Performance, Patch, and Wave Sequence)
+\item JL Cooper MSB Plus and MSB Plus Rev 2
 \item M-Audio Venom (Single, Multimode, Arp, and Global)
 \item Novation Drumstation and D Station
 \item Novation SL, SL MKii, and SL Compact Series
@@ -82,14 +84,15 @@ Edisyn is a no-nonsense synthesizer patch editor and librarian for the editing a
 \item Red Sound DarkStar and DarkStar XP2 (Single and Per-Part)
 \item Roland D-110 (Tone and Multimode)
 \item Roland JV-80 and JV-880 (Single, Multimode, Drum)
+\item Roland U-20 and U-220 (Timbre, Multimode, Drum)
 \item Sequential Prophet Rev2 (Single)
-\item Waldorf Blofeld Desktop, Blofeld Desktop SL, and Blofeld Keyboard (Single and Multimode, plus wavetable uploading in Single)
+\item Waldorf Blofeld Desktop, Blofeld Desktop SL, and Blofeld Keyboard (Single and Multimode, plus wavetable uploading)
 \item Waldorf Kyra (Single and Multimode)
 \item Waldorf Microwave II, Microwave XT, and Microwave XTk (Single and Multimode)
 \item Waldorf Pulse 2
 \item Waldorf Rocket
-\item Yamaha DX7 Family (DX7, TX7, TX216/TX816, Korg Volca FM, Dexed, DX200, DX9, etc.) (Single)
-\item Yamaha 4-Op FM Family (DX21, DX27, DX100, TX81Z, DX11, TQ5, YS100, YS200, B200, V50, etc.) (Single and  (for TX81Z and DX11) Multimode)
+\item Yamaha DX7 Family: DX7, TX7, TX216/TX816, Korg Volca FM, Dexed, DX200, DX9, etc. (Single)
+\item Yamaha 4-Op FM Family: DX21, DX27, DX100, TX81Z, DX11, TQ5, YS100, YS200, B200, V50, etc. (Single and  (for TX81Z and DX11) Multimode)
 \item Yamaha FB-01 (Single and Multimode)
 \item Yamaha FS1R (Voice, Performance, and Fseq Modes)
 \item Yamaha TG33, SY22, and SY35 (Single and (for TG33) Multimode)
@@ -153,12 +156,13 @@ If you are not connected to MIDI, or if you cancel, then Edisyn will inform you 
 
 \section{Edisyn Patch Editors}
 
-An Edisyn patch editor is a single window with multiple tabbed panes.  You can switch tabs by clicking on them or via shortcuts (see the {\bf Tabs Menu}).  The far-right tab is the {\bf About Tab}.  It gives you information about the eccentricities of the synthesizer that require custom behavior in Edisyn (they all do!).  {\bf \color{red} You should read the About Tab for your synth's editor \textit{carefully} to understand how to get Edisyn to work properly with your synthesizer.}
+\paragraph{What exactly is a Patch?}  You probably think you know, but you might not.  From Edisyn's perspective, a {\bf patch} is something that Edisyn can store and retrieve on your synthesizer through MIDI commands; and usually there is a collection of patches each of which can be called up individually.  Some synthesizers (like the Yamaha DX7) are simple: they have 32 patches that you can upload and download and that's it.  Others are more complex: they may have {\it different kinds of patches}.  For example, many synthesizers have a set of patches which represent {\bf single sounds} and also a different set of {\bf multimode} patches which represent {\it multitimbral collections} of sounds defined by the single patches.  The multimode patches do not hold the single patches: they point to them.  Thus if you change a single patch, it's changed for every multimode patch which references it.  Some synthesizers might also have separate {\bf drum patches}, or {\bf effects patches}, etc.
 
-\paragraph{Categories}
-At right is a typical tab pane.  You'll note that various widgets are grouped together in regions (called {\bf Categories}).  There are four categories shown here.  Three are arbitrary categories for this synthesizer: ``Global'', ``LFO'', and ``Controllers''.  They're in various colors to differentiate them.  Other categories will be found in other tab panes.  But one category is special: the {\bf Synthesizer Category}, always shown in white, here named ``Yamaha TX81Z''.  It normally contains the patch name and bank/patch number.
+Edisyn generally has one patch editor for each kind of patch in a synthesizer.\footnote{In some cases Edisyn doesn't implement an editor for a certain patch type.  Sometimes this is for patch types that are too arcane.  In other cases, certain patch types may not have adequate facilities to access easily via sysex: for example Korg Wavestation SR's multimode patches stupidly must {\it all} be uploaded and downloaded as a blob, rather than individually.  Edisyn also usually doesn't make editors for global parameters, except in certain rare cases.}
 
-If you right-click, or Shift-click, on a category name, you'll get a pop-up menu with certain cut, paste, distribution, and reset options.  See Section~\ref{editing} for information about them.
+Most synthesizer manufacturers sensibly refer to their single patches as single patches and their multitimbral patches as multitimbral (or multimode) patches.  But other manufacturers\,---\,notably Roland\,---\,insist on a bizarre vocabulary for their different patch types.  For example, single patches on the Roland U-220 are called {\it timbres}, while the multimode patches are called {\it patches}, of all things.  This causes many Edisyn users to get confused, with questions such as ``Why does Edisyn say `upload patch' when it should say `upload timbre'?''  The answer is: Edisyn must be consistent in the face of some manufacturers' stupid naming decisions: every different patch type is always referred to as a {\bf patch}.
+
+Other synthesizers (such as the Yamaha FS1R and the Roland D-110) try to hide the fact that they have different kinds of patches by pretending their single-mode and multimode patches are all one blob, presenting them to the user in a single convoluted unified interface, even if they're different patches over MIDI. This also confuses users, who wonder why Edisyn has multiple editors for a given synth.  But from Edisyn's perspective, they're separate patch types.  Edisyn will try to make it easy to navigate from one patch type to another through custom buttons or menu options as appropriate.
 
 \begin{wrapfigure}{r}{3in}
 \vspace{-2em}\includegraphics[scale=0.3]{2.png}
@@ -166,6 +170,21 @@ If you right-click, or Shift-click, on a category name, you'll get a pop-up menu
 \vspace{-2em}
 \end{wrapfigure}
 
+\paragraph{Edisyn's Patch Editors.}  An Edisyn patch editor is a single window with multiple tabbed panes.  You can switch tabs by clicking on them or via shortcuts (see the {\bf Tabs Menu}).  The far-right tab is the {\bf About Tab}.  It gives you information about the eccentricities of the synthesizer that require custom behavior in Edisyn (they all do!).  {\bf \color{red} You should read the About Tab for your synth's editor \textit{carefully} to understand how to get Edisyn to work properly with your synthesizer.}
+
+\definecolor{darkpastelgreen}{rgb}{0.01, 0.75, 0.24}
+\definecolor{limegreen}{rgb}{0.2, 0.8, 0.2}
+\definecolor{hanpurple}{rgb}{0.32, 0.09, 0.98}
+\definecolor{mustard}{rgb}{1.0, 0.86, 0.35}
+\definecolor{goldenyellow}{rgb}{1.0, 0.87, 0.0}
+\definecolor{goldenrod}{rgb}{0.85, 0.65, 0.13}
+
+\paragraph{Categories}
+At right is a typical tab pane.  You'll note that various widgets are grouped together in regions (called {\bf Categories}).  There are four categories shown here.  Three are arbitrary categories for this synthesizer: ``{\bf {\color{limegreen}Global}}'', ``{\bf {\color{hanpurple}LFO}}'', and ``{\bf {\color{goldenrod}Controllers}}''.  They're in various colors to differentiate them.  Other categories will be found in other tab panes.  But one category is special: the {\bf Synthesizer Category}, always shown in white, here named ``Yamaha TX81Z''.  It normally contains the patch name and bank/patch number.
+
+If you right-click, or Shift-click, on a category name, you'll get a pop-up menu with certain cut, paste, distribution, and reset options.  See Section~\ref{editing} for information about them.
+
+\bump
 
 \paragraph{Widgets}  Edisyn has a number of widgets.  Here are a few of them:
 
@@ -190,6 +209,14 @@ You change values in a Dial by clicking on the dial and dragging vertically.  Yo
 
 \item Various {\bf Pictorial Displays}.  Here, changing the ``Algorithm'' dial will modify the Algorithm Display immediately to the right of it.
 
+\begin{figure}[t]
+\begin{center}
+\includegraphics[scale=0.6]{4.png}
+\end{center}
+\caption{Envelope Displays of the Waldorf Microwave II, XT, and XTk.}
+\label{envelopedisplays}
+\end{figure}
+
 \item Various {\bf Envelope Displays}.  Edisyn can draw envelopes using a variety of procedures.  Consider the Waldorf Microwave envelopes in Figure \ref{envelopedisplays} above, for example.  The first two envelopes are ADSR envelopes, but the third is the Microwave's famous ``Wave Envelope'', an eight-stage envelope with two different looping intervals (shown below it), and with two special end times marked with vertical lines (here, the dashed line is where optional sustain occurs, and the solid line is the end of the wave).    The last envelope is the Microwave's ``Free Envelope'', a four-stage envelope unusual in that it can have both positive and negative values: the dashed line is the axis.
 
 Mose Edisyn envelope displays are read-only -- you can't draw the dots.  But that's not always the case: for example the Kawai K5 harmonics display can be extensively edited by mouse.
@@ -201,14 +228,6 @@ Mose Edisyn envelope displays are read-only -- you can't draw the dots.  But tha
 If you are connected to a synthesizer over MIDI, then changing a widget will modify the underlying patch parameter in real time, if the synthesizer supports this.  Also, if you modify a parameter on the synthesizer, then Edisyn will update the corresponding widget or widgets (again, if the synthesizer supports this).
 
 \paragraph{Changing Edisyn's Color Scheme}  If you find Edisyn ugly, you can change the colors with {\bf Change Color Scheme} in the {\bf Options} menu (or reset them with {\bf Reset Color Scheme}.  Note that not all widgets will change their colors until you have restarted Edisyn: until then, you'll get a weird mishmash of colors.
-
-\begin{figure}[t]
-\begin{center}
-\includegraphics[scale=0.6]{4.png}
-\end{center}
-\caption{Envelope Displays of the Waldorf Microwave II, XT, and XTk.}
-\label{envelopedisplays}
-\end{figure}
 
 \section{Creating and Setting Up Additional Patch Editors}
 
@@ -263,7 +282,7 @@ It's entirely possible that a bulk sysex file might itself contain multiple bank
 Edisyn cannot presently construct (and thus save or upload) new bank or bulk sysex messages or files.
 
 \subsection{Batch Downloads}
-Edisyn also has limited support for batch-downloading patches, one by one, and saving them to your disk as separate files or as one bulk sysex file.  To do this, choose {\bf Batch Download...} from the {\bf File} menu.  You'll be asked to specify the directory in which to save patch files, or the bulk sysex file to save as, and also first patch and the final patch, and then downloading will commence.  Note that if your final patch is ``before'' the first patch, then Edisyn will wrap all the away around to get to the final patch.  For example, if your synth has ten patches 1....10, and you choose 8 as your first patch and 2 as your last patch, then Edisyn will download in this order: 8, 9, 10, 1, 2.
+Edisyn also has limited support for batch-downloading patches, one by one, and saving them to your disk as separate files or as one bulk sysex file; or to load them in Edisyn's {\bf Librarian} (see Section~\ref{librarian}).  To do this, choose {\bf Batch Download...} from the {\bf File} menu.  You'll be asked to specify the directory in which to save patch files, or the bulk sysex file to save as, and also first patch and the final patch, and then downloading will commence.  Note that if your final patch is ``before'' the first patch, then Edisyn will wrap all the away around to get to the final patch.  For example, if your synth has ten patches 1....10, and you choose 8 as your first patch and 2 as your last patch, then Edisyn will download in this order: 8, 9, 10, 1, 2.
 
 If Edisyn can't download a particular patch (the synth isn't responding), it'll try again and again until successful.  So if it gets stuck, 
 you can always stop batch-downloading at any time by choosing {\bf Stop Downloading Batch} from the {\bf File} menu.  Note that you can still screw with knobs, etc. while Edisyn is busy downloading batches: but don't do that.  You're just messing up the batches getting saved.%\footnote{I may change this in the future to something less fragile.}
@@ -424,7 +443,7 @@ This procedure will create a bunch of of virtual devices with names like {\tt Vi
 \section{Editing and Exploratory Patch Creation}
 \label{editing}
 
-Edisyn has a large number of facilities to help you program your synthesizer, including tools to help you wander through the  space of possible patches to hunt for the sound you want.  Here's what you can do.
+Edisyn has a large number of facilities to help you program your synthesizer, including tools to help you wander through the  space of possible patches to hunt for the sound you want.  The most powerful are its Hill-climber and Morpher.   Here's an overview.
 
 \subsection{Editing Tools} 
 
@@ -489,7 +508,7 @@ A hint.  It's a good idea to select target patches which don't have some radical
 
 \paragraph{Morph}  Morphing interpolates in real-time between four different patches.  It's similar to nudge in certain respects, but is more interactive.  The big difference is that Nudge always moves the patch directly towards or away from a single patch (of four); but Morph changes the patch based on its relative distance to up to four patches in combination.   For more on the Morph tool, see Section \ref{morph}.
 
-\subsection{Restricting Mutation and Recombination to Only Certain Parameters}
+\subsection{Restricting Exporation to Only Certain Parameters}
 \label{restriction} 
 
 \begin{wrapfigure}{r}{3in}
@@ -497,7 +516,7 @@ A hint.  It's a good idea to select target patches which don't have some radical
 \vspace{-3em}\caption{Editing Mutation Parameters}\label{mutationparameters}
 \end{wrapfigure}
 
-You can restrict Mutation and Recombination (used in Randomize, Nudge, Merge, Blend, Hill-Climb/Constrict, and Morph) to only affect a subset of parameters.  To do this, choose {\bf Edit Mutation Parameters} in the {\bf Edit} menu.  This will turn on {\it Mutation Parameters} mode (you'll see it in the window's title bar).  You'll note that various widgets have now been surrounded with red frames.  These widgets control synth parameters which are presently are being updated when you mutate a patch. 
+You can restrict the Mutation and Recombination portions of exploration (used in Randomize, Nudge, Merge, Blend, Hill-Climb/Constrict, and Morph) to only affect a subset of parameters.  To do this, choose {\bf Edit Mutation Parameters} in the {\bf Edit} menu.  This will turn on {\it Mutation Parameters} mode (you'll see it in the window's title bar).  You'll note that various widgets have now been surrounded with red frames.  These widgets control synth parameters which are presently are being updated when you mutate a patch. 
 
 You can change these of course: just click on them and you can remove them from being updated (or add them back).\footnote{Note that due to an error in Java's design, you can't click directly on a Combo Box (a pop-up menu) such as the ``Wave'' combo box in Figure \ref{mutationparameters}.  But you can click on its title (the text ``Wave'').}  You can also turn on (or turn off) all of the parameters in a category by double-clicking on the category title.  The categories in Figure \ref{mutationparameters} are {\it Yamaha TX81Z}, {\it Global}, {\it LFO}, and {\it Controllers}.  Finally, you can turn on all the parameters in the entire patch editor by selecting {\bf Set All Mutation Parameters} in the {\bf Edit} menu, or conversely turn them all of by selecting {\bf Clear All Mutation Parameters}.
 
@@ -507,8 +526,6 @@ Some parameters, such as the patch name or certain other parameters, can't be mu
 The parameters you have selected will be the only ones changed when you mutate (randomize) a patch.  But if you turn on {\bf Use Parameters for Nudge/Merge} in the {\bf Edit} menu, then recombination (nudging, merging) will be restricted to these parameters as well.
 
 Once you're done choosing parameters to mutate or recombine, just select {\bf Stop Editing Mutation Parameters} in the {\bf Edit} menu.  Note that your parameter choices, as well as using them for recombination, are persistent: they're saved in the preferences.
-
-\bump
 
 \subsection{Morphing}
 \label{morph}
@@ -873,6 +890,8 @@ The other reason is because you have recently moved from \(S\) to \(P\), and now
 }
 
 
+\bump
+
 \subsection{Deep Learned Neural Hill-Climbing and Randomization}
 
 The Yamaha DX7 editor has a special feature thanks to research done here at George Mason University by V.~Hoyle and myself.  Using approximately 30,000 unique DX7 patches found around the internet, we trained a special kind of deep-learned neural network called a {\it variational autoencoder}.  Using this network, we can improve both hill-climbing and patch randomization.
@@ -890,6 +909,8 @@ Once we have trained the autoencoder, we can break it into two pieces: the compr
 \paragraph{Can you do it on anything but the DX7?} Training an autoencoder requires a great many patches.  Most synths just don't have enough unique patches available online.  One obvious target in the future might be the Yamaha TX81Z: but it's only got around 5000 unique patches, which might not be enough.  We'll see.
  
 \paragraph{About those 30,000 patches...} In Edisyn's \texttt{resources} directory, we have included a text file containing, one to a line, the DX7 parameters of each of those patches as numbers. Perhaps it might be useful to other researchers. 
+
+\bump
 
 \section{The Libriarian}
 \label{librarian}
@@ -1063,10 +1084,12 @@ Figure~\ref{patcheditorcapabilities} is a little table of the current patch edit
 %Futuresonus Parva&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}&&&\\
 Alesis D4/DM5&{\cm}*&&{\cm}&&{\cm}&{\cm}& & &{\cm}            \\
 Casio CZ&&&{\cm}&{\cm}&{\cm}&{\cm}& & &{\cm}*            \\
-DSI Prophet '08/ Mopho / Tetra&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}& & &{\cm}            \\
-E-Mu Morpheus / UltraProteus&{\cm}& &{\cm}& & &{\cm}& & &{\cm}            \\
+DSI Prophet '08/Mopho/Tetra&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}& & &{\cm}            \\
+E-Mu Morpheus/UltraProteus&{\cm}& &{\cm}& & &{\cm}& & &{\cm}            \\
 E-Mu Proteus&{\cm}& &{\cm}& & &{\cm}& & &{\cm}            \\
+E-Mu Proteus 2000&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}& &{\cm}&{\cm}            \\
 E-Mu Planet Phatt/Orbit/Carnaval/Vintage Keys&{\cm}& &{\cm}& & &{\cm}& & &{\cm}            \\
+JL Cooper MSB Plus/Plus Rev2& & &{\cm}&{\cm}& &{\cm}& &&{\cm}            \\
 Kawai K1/K1r/K1m&{\cm}*& &{\cm}& & &{\cm}& &{\cm}&{\cm}            \\
 Kawai K4/K4r&{\cm}*& &{\cm}& &{\cm}&{\cm}& &{\cm}&{\cm}            \\
 Kawai K5/K5m&{\cm}&{\cm}&{\cm}& & &{\cm}& &{\cm}&{\cm}            \\
@@ -1082,6 +1105,7 @@ PreenFM2&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}& & & &\\
 Red Sound DarkStar/DarkStar XP2&&&&&{\cm}&{\cm}& & & {\cm}           \\
 Roland D-110&{\cm}& &{\cm}*&{\cm}*&{\cm}*&{\cm}*& & &{\cm}          \\
 Roland JV-80/880&{\cm}& &{\cm}&{\cm}&{\cm}&{\cm}& & &{\cm}*          \\
+Roland U-220&{\cm}& &{\cm}&{\cm}&{\cm}&{\cm}& & &{\cm}          \\
 Sequential Prophet Rev2&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}& & &{\cm}            \\
 Waldorf Microwave II/XT/XTk&{\cm}&{\cm}&{\cm}&{\cm}*&{\cm}&{\cm}&{\cm}& &{\cm}            \\
 Waldorf Blofeld&{\cm}*&{\cm}*&{\cm}&{\cm}*&{\cm}&{\cm}& & & {\cm}            \\
@@ -1101,7 +1125,7 @@ Yamaha TG33/SY22/SY35&{\cm}*& &{\cm}&{\cm}&{\cm}& &  & &{\cm}            \\
 \vspace{-1em}
 \caption{Patch Editor Capabilities}
 \label{patcheditorcapabilities}
-\vspace{5em}
+\vspace{1em}
 \end{table}
 
 \subsection{Setting Up the Development Environment}

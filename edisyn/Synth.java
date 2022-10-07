@@ -591,7 +591,6 @@ public abstract class Synth extends JComponent implements Updatable
                     {
                     if (firstTime) System.err.println("synth/Synths.txt has no synth name or make for certain synths:");
                     firstTime = false;
-                    System.err.print(str);
                     continue;
                     }
                 // grab the first one
@@ -1082,17 +1081,17 @@ public abstract class Synth extends JComponent implements Updatable
                 int val = model.get(key);
                 if (val < model.getMin(key) || val > model.getMax(key))
                     {
-                    int min = model.getMin(key);
-                    int max = model.getMax(key);
-                    int top = max + 1;
+                    int min = model.getMin(key);                                // 1
+                    int max = model.getMax(key);                                // 63
+                    int top = max + 1;                                                  // 64
                     // shift everything so that min = 0;
-                    int newTop = top - min;
-                    int newVal = val - min;
+                    int newTop = top - min;                                             // 63
+                    int newVal = val - min;                                             // -1
                     // Now our range is [0...newTop)
                     // and newVal is a value that NEEDS to be in that range.
                     // We do a double mod
-                    newVal = newVal % newTop;
-                    if (newVal < 0) newVal = val + newTop;  
+                    newVal = newVal % newTop;                                   // -1
+                    if (newVal < 0) newVal = newVal + newTop;   // 63
                     // Now newVal is within the range [0...newTop)
                     // So we now shift back to [min...top), that is, [min...max]
                     newVal += min;
@@ -2594,7 +2593,10 @@ public abstract class Synth extends JComponent implements Updatable
 
     /** Returns the position just after the end of the sysex group, starting at start,
         which represents a single patch for the synthesizer of the given class.  
-        If there is no such patch, returns start.  */
+        If there is no such patch, returns start.  In rare cases, such as the Roland U-220, there may be more than one
+        patch embedded in a single sysex message, or an unusual number embedded in several messages (such as 20 embedeed
+        in 10 messages). In this case, you should return  0 - N, where N is the number of messages to skip.
+    */
     public static int getNextSysexPatchGroup(String synthClassName, byte[][] sysex, int start)
         {
         Class recognizer = getRecognizer(synthClassName);
@@ -2603,7 +2605,6 @@ public abstract class Synth extends JComponent implements Updatable
             System.err.println("Synth.getNextSysexPatchGroup() WARNING: No recognizer for " + synthClassName); 
             return start;
             }
-
         try
             {
             Method method = recognizer.getMethod("getNextSysexPatchGroup", new Class[] { byte[][].class, Integer.TYPE });
@@ -2622,8 +2623,35 @@ public abstract class Synth extends JComponent implements Updatable
         return getNextSysexPatchGroup(getSynthClassName(), sysex, start);
         }
         
-  
-    
+    public static byte[][][] breakSysexMessageIntoPatches(String synthClassName, byte[][] messages, int start, int expectedPatches)
+        {
+        Class recognizer = getRecognizer(synthClassName);
+        if (recognizer == null) 
+            { 
+            System.err.println("Synth.breakSysexMessageIntoPatches() WARNING: No recognizer for " + synthClassName); 
+            return new byte[][][] { messages };
+            }
+        try
+            {
+            Method method = recognizer.getMethod("breakSysexMessageIntoPatches", new Class[] { byte[][].class, Integer.TYPE, Integer.TYPE });
+            Object obj = method.invoke(null, messages, start, expectedPatches);
+            return (byte[][][])obj;
+            }
+        catch (Exception e)
+            {
+            e.printStackTrace();
+            // There is no breakSysexMessageIntoPatches(...) method for this recognizer, so we assume that it's a single patch
+            return new byte[][][] { messages };
+            }
+        }
+
+    public final byte[][][] breakSysexMessageIntoPatchesLocal(byte[][] messages, int start, int expectedPatches)
+        {
+        return breakSysexMessageIntoPatches(getSynthClassName(), messages, start, expectedPatches);
+        }
+        
+
+
     // Bank Name
 
     /** Returns the name of the bank for a given synth.  This is pretty rare -- it only exists in the FB-01. */
@@ -6670,7 +6698,19 @@ public abstract class Synth extends JComponent implements Updatable
                 {
                 // How many sysex messages per patch?
                 int next = getNextSysexPatchGroup(getClassNames()[rec], sysex, pos);
-                if (next > pos)
+
+                // Roland really screws things up: the U-220 can have multiple patches PER SYSEX MESSAGE.  No, really.
+                if (next < 0)
+                    {
+                    byte[][][] groups = breakSysexMessageIntoPatches(getClassNames()[rec], sysex, pos, 0 - next);
+                    for(int i = 0; i < groups.length; i++)
+                        {
+                        Patch p = new Patch(rec, groups[i], false);
+                        patches.add(p);
+                        }
+                    pos += (0 - next);
+                    }
+                else if (next > pos)
                     {
                     byte[][] groups = new byte[next - pos][];
                     for(int i = 0; i < groups.length; i++)
@@ -6682,6 +6722,7 @@ public abstract class Synth extends JComponent implements Updatable
                     }
                 else
                     {
+                    // Skip the message -- it's bad?
                     pos++;          // I *think* this should work?
                     }
                 }
@@ -7406,7 +7447,7 @@ public abstract class Synth extends JComponent implements Updatable
                                 }
                             else if (result == BULK_DIALOG_RESULT_LOCAL_LIBRARIAN)
                                 {
-                                Class synthType = getSynth(pat[primary][secondary].synth);
+                                Class synthType = getSynth(pat[primary][0].synth);
                                 int synthNum = getSynthNum(synthType);
                                 
                                 if (this.getClass() != synthType)
@@ -7417,7 +7458,7 @@ public abstract class Synth extends JComponent implements Updatable
                                             ".\nLoad for the " + synthNames[synthNum] + " instead?"))
                                         {
                                         Synth otherSynth = instantiate(synthType, false, true, null);
-                                        otherSynth.loadLibrarian(patches);
+                                        otherSynth.loadLibrarian(pat[primary]);
                                         return true;
                                         }
                                     else
@@ -7427,15 +7468,15 @@ public abstract class Synth extends JComponent implements Updatable
                                     }
                                 else
                                     {
-                                    loadLibrarian(patches);
+                                    loadLibrarian(pat[primary]);
                                     return true;
                                     }
                                 }
                             else if (result == BULK_DIALOG_RESULT_NEW_LIBRARIAN)
                                 {
-                                Class synthType = getSynth(pat[primary][secondary].synth);
+                                Class synthType = getSynth(pat[primary][0].synth);
                                 Synth otherSynth = instantiate(synthType, false, true, null);
-                                otherSynth.loadLibrarian(patches);
+                                otherSynth.loadLibrarian(pat[primary]);
                                 return true;
                                 }
                             }
@@ -7485,7 +7526,7 @@ public abstract class Synth extends JComponent implements Updatable
         // automatically load them into the librarian without bugging the user.
         setAlwaysLoadInLibrarian(true);
 
-        // now we need to load the appropriate locations and names
+        // now we need to load the appropriate locations and names, assuming we don't have them
         boolean send = getSendMIDI();
         setSendMIDI(false);
         undo.setWillPush(false);
@@ -8572,40 +8613,40 @@ public abstract class Synth extends JComponent implements Updatable
         
     
     
-	public void sendToLibrarian(Model model)
-		{
-		Model backup = getModel();
-		this.model = model;
-		boolean didUndo = undo.getWillPush();
-		boolean didMIDI = getSendMIDI();
-		undo.setWillPush(false);
-		setSendMIDI(false);
-		byte[] data = flatten(emitAll((Model) null, false, true));
-		if (data != null && data.length > 0)
-			{
-			sendToLibrarian(data, model.get("number", Patch.NUMBER_NOT_SET),
-				 model.get("bank", 0), 	model.get("name", "" + getPatchLocationName(getModel())));
-			}
-		this.model = backup;
-		setSendMIDI(didMIDI);
-		undo.setWillPush(didUndo);
-		}
-	
+    public void sendToLibrarian(Model model)
+        {
+        Model backup = getModel();
+        this.model = model;
+        boolean didUndo = undo.getWillPush();
+        boolean didMIDI = getSendMIDI();
+        undo.setWillPush(false);
+        setSendMIDI(false);
+        byte[] data = flatten(emitAll((Model) null, false, true));
+        if (data != null && data.length > 0)
+            {
+            sendToLibrarian(data, model.get("number", Patch.NUMBER_NOT_SET),
+                model.get("bank", 0),  model.get("name", "" + getPatchLocationName(getModel())));
+            }
+        this.model = backup;
+        setSendMIDI(didMIDI);
+        undo.setWillPush(didUndo);
+        }
+        
 
-	public void sendToLibrarian(byte[] data, int number, int bank, String name)
-		{
-		Patch patch = new Patch(recognizeSynthForSysex(data), data, false);     // is this right?  Are we sure it's not bank sysex?
-		patch.number = number;
-		patch.bank = bank;
-		patch.name = name;
-		if (!librarianOpen)
-			{
-			doLibrarian();          // open and move to it
-			}
-		librarian.getLibrary().receivePatch(patch);
-		librarian.updateUndoRedo();             
-		}
-	
+    public void sendToLibrarian(byte[] data, int number, int bank, String name)
+        {
+        Patch patch = new Patch(recognizeSynthForSysex(data), data, false);     // is this right?  Are we sure it's not bank sysex?
+        patch.number = number;
+        patch.bank = bank;
+        patch.name = name;
+        if (!librarianOpen)
+            {
+            doLibrarian();          // open and move to it
+            }
+        librarian.getLibrary().receivePatch(patch);
+        librarian.updateUndoRedo();             
+        }
+        
     /** This tells Edisyn whether your synthesizer sends patches to Edisyn via a sysex patch dump
         (as opposed to individual CC or NRPN messages as is done in synths such as the PreenFM2).
         The default is TRUE, which is nearly always the case. */
@@ -8622,7 +8663,7 @@ public abstract class Synth extends JComponent implements Updatable
             if (toLibrarian)
                 {
                 sendToLibrarian(data, model.get("number", Patch.NUMBER_NOT_SET),
-                	 model.get("bank", 0), 	model.get("name", "" + getPatchLocationName(getModel())));
+                    model.get("bank", 0),  model.get("name", "" + getPatchLocationName(getModel())));
                 }
             else if (batchPatches != null)
                 {

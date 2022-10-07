@@ -34,9 +34,26 @@ public class BlankRec
         If there are no such messages, return start. */
     public static int getNextSysexPatchGroup(byte[][] sysex, int start)
         {
+        // Starting with sysex[start], return the start of the NEXT patch.
+        // For example, if your synthesizer uses three sysex messages for a patch,
+        // and the the messages may be found in sysex[start], sysex[start+1],
+        // and sysex[start+2], then return start+3  If no patch for your synthesizer
+        // begins at sysex[start], or if it is incomplete before the sysex
+        // messages are finished then return start.   In rare cases, such as 
+        // the Roland U-220, there may be more than one patch embedded in a single 
+        // sysex message, or an unusual number embedded in several messages (such as 20 embedeed
+        // in 10 messages). In this case, you should return  0 - N, where N is the number of messages to skip.
         return start;
         }
 
+    public byte[][][] breakSysexMessageIntoPatches(byte[][] messages, int start, int expectedMessagesToSkip)
+        {
+        // In bulk dumps, the U-220 can embed multiple (non-bank) patches into
+        // the same sysex message.  This method is called to break those patches
+        // into separate sysex messages.
+        return new byte[][][] { messages }; // a reasonable default, but shouldn't be used
+        }
+                
     /** Create your own Synth-specific class version of this static method.
         It will be called when the system wants to know what the name is for a patch bank
         stored as bank sysex. This is quite rare -- only the Yamaha FB-01 has names for its

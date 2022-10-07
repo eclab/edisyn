@@ -6514,7 +6514,7 @@ public class SequentialProphetRev2 extends Synth
 
         LAYER B:
         Same as above, just add 1024 to the index value.
-        Last four bytes (2044-2047) does not exist in SysEx dump.
+        Last four bytes (2044-2047) does not exist in SysEx dump (it's a bug).
 
 
 

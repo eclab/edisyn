@@ -14,9 +14,9 @@ public class JLCooperMSBPlusRev2Rec extends Recognize
         if (!(data[0] == (byte)0xF0 && data[1] == 0x15 && data[2] == 0x0b)) return false;
         
         return
-        	(data.length == 45 && data[3] == 0x14) ||
-        	(data.length == 46 && data[3] == 0x12) ||
-        	(data.length == 21 && data[3] == 0x04) ||
-        	(data.length == 22 && data[3] == 0x02);
+            (data.length == 45 && data[3] == 0x14) ||
+            (data.length == 46 && data[3] == 0x12) ||
+            (data.length == 21 && data[3] == 0x04) ||
+            (data.length == 22 && data[3] == 0x02);
         }
     }

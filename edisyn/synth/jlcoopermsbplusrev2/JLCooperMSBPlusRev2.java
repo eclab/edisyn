@@ -25,7 +25,7 @@ import javax.sound.midi.*;
 
 public class JLCooperMSBPlusRev2 extends Synth
     {
-    boolean overwrite = true;	// for the moment
+    boolean overwrite = true;   // for the moment
     public static final String OVERWRITE_KEY = "rev2";
     
     JCheckBox rev2Check;
@@ -88,7 +88,7 @@ public class JLCooperMSBPlusRev2 extends Synth
         addTab("MSB", soundPanel);
                 
         boolean r = isRev2();
-        loadDefaults();   		// may reset isRev2()     
+        loadDefaults();                 // may reset isRev2()     
         setRev2(r, false);
         }
                 
@@ -102,76 +102,76 @@ public class JLCooperMSBPlusRev2 extends Synth
         JFrame frame = super.sprout();
         transmitParameters.setEnabled(false);
         transmitParameters.setSelected(false);
-		transmitCurrent.setEnabled(false);
+        transmitCurrent.setEnabled(false);
         addMSBPlusRev2Menu();
         return frame;
         }         
 
-	public void setupLibrarianTwoWay()
-		{
-		int num = model.get("number");
-		for(int i = 0; i < 64; i++)
-			{
-			int first = (i / 8);
-			int second = (i % 8);
-			if (first == second)
-				{
-				for (int j = 0; j < 8; j++)
-					{
-					model.set("output" + (j + 1) + "assignment", first);
-					}
-				model.set("output" + (first + 1) + "assignment", 11);		// off
-				}
-			else
-				{
-				for (int j = 0; j < 8; j++)
-					{
-					model.set("output" + (j + 1) + "assignment", 11);		// off
-					}
-				model.set("output" + (first + 1) + "assignment", second);
-				model.set("output" + (second + 1) + "assignment", first);
-				}
-			model.set("number", i);
-			sendToLibrarian(model);
-			}
-		model.set("number", num);
-		}
+    public void setupLibrarianTwoWay()
+        {
+        int num = model.get("number");
+        for(int i = 0; i < 64; i++)
+            {
+            int first = (i / 8);
+            int second = (i % 8);
+            if (first == second)
+                {
+                for (int j = 0; j < 8; j++)
+                    {
+                    model.set("output" + (j + 1) + "assignment", first);
+                    }
+                model.set("output" + (first + 1) + "assignment", 11);           // off
+                }
+            else
+                {
+                for (int j = 0; j < 8; j++)
+                    {
+                    model.set("output" + (j + 1) + "assignment", 11);               // off
+                    }
+                model.set("output" + (first + 1) + "assignment", second);
+                model.set("output" + (second + 1) + "assignment", first);
+                }
+            model.set("number", i);
+            sendToLibrarian(model);
+            }
+        model.set("number", num);
+        }
 
-	public void setupLibrarianMerge()
-		{
-		int num = model.get("number");
-		for(int i = 0; i < 64; i++)
-			{
-			int first = (i / 8);
-			int second = (i % 8);
-			if (first == second)
-				{
-				for (int j = 0; j < 8; j++)
-					{
-					model.set("output" + (j + 1) + "assignment", 8);		// PROC A
-					}
-				model.set("output" + (first + 1) + "assignment", 11);		// off
-				model.set("proc" + 1 + "inputport", first);			// first -> PROC A
-				}
-			else
-				{
-				for (int j = 0; j < 8; j++)
-					{
-					model.set("output" + (j + 1) + "assignment", 10);		// MERGE
-					}
-				model.set("output" + (first + 1) + "assignment", 11);		// off
-				model.set("output" + (second + 1) + "assignment", 11);	// off
-				model.set("proc" + 1 + "inputport", first);			// first -> PROC A
-				model.set("proc" + 2 + "inputport", second);		// first -> PROC B
-				}
-			model.set("number", i);
-			sendToLibrarian(model);
-			}
-		model.set("number", num);
-		}
+    public void setupLibrarianMerge()
+        {
+        int num = model.get("number");
+        for(int i = 0; i < 64; i++)
+            {
+            int first = (i / 8);
+            int second = (i % 8);
+            if (first == second)
+                {
+                for (int j = 0; j < 8; j++)
+                    {
+                    model.set("output" + (j + 1) + "assignment", 8);                // PROC A
+                    }
+                model.set("output" + (first + 1) + "assignment", 11);           // off
+                model.set("proc" + 1 + "inputport", first);                     // first -> PROC A
+                }
+            else
+                {
+                for (int j = 0; j < 8; j++)
+                    {
+                    model.set("output" + (j + 1) + "assignment", 10);               // MERGE
+                    }
+                model.set("output" + (first + 1) + "assignment", 11);           // off
+                model.set("output" + (second + 1) + "assignment", 11);  // off
+                model.set("proc" + 1 + "inputport", first);                     // first -> PROC A
+                model.set("proc" + 2 + "inputport", second);            // first -> PROC B
+                }
+            model.set("number", i);
+            sendToLibrarian(model);
+            }
+        model.set("number", num);
+        }
 
-	public void addMSBPlusRev2Menu()
-		{
+    public void addMSBPlusRev2Menu()
+        {
         JMenu menu = new JMenu("MSB Plus");
         menubar.add(menu);
 
@@ -180,33 +180,33 @@ public class JLCooperMSBPlusRev2 extends Synth
         overwriteMenu.addActionListener(new ActionListener()
             {
             public void actionPerformed(ActionEvent e)
-            	{
-	            setOverwrite(overwriteMenu.isSelected());
-	            }
+                {
+                setOverwrite(overwriteMenu.isSelected());
+                }
             });
         menu.add(overwriteMenu);
         final JMenuItem twoWay = new JMenuItem("Send Two-Way Setups to Librarian");
         twoWay.addActionListener(new ActionListener()
             {
             public void actionPerformed(ActionEvent e)
-            	{
-            	if (showSimpleConfirm("Send Two-Way Setups to Librarian", "Overwrite all patches in the librarian?"))
-    	        	setupLibrarianTwoWay();
-	            }
+                {
+                if (showSimpleConfirm("Send Two-Way Setups to Librarian", "Overwrite all patches in the librarian?"))
+                    setupLibrarianTwoWay();
+                }
             });
         menu.add(twoWay);
         final JMenuItem merge = new JMenuItem("Send Merge Setups to Librarian");
         merge.addActionListener(new ActionListener()
             {
             public void actionPerformed(ActionEvent e)
-            	{
-            	if (showSimpleConfirm("Send Merge Setups to Librarian", "Overwrite all patches in the librarian?"))
-    	        	setupLibrarianMerge();
-	            }
+                {
+                if (showSimpleConfirm("Send Merge Setups to Librarian", "Overwrite all patches in the librarian?"))
+                    setupLibrarianMerge();
+                }
             });
         menu.add(merge);
         menubar.add(menu);
-		}
+        }
         
     public JComponent addNameGlobal(Color color)
         {
@@ -217,7 +217,7 @@ public class JLCooperMSBPlusRev2 extends Synth
         HBox hbox = new HBox();
                 
         VBox vbox = new VBox();
-		HBox inner = new HBox();
+        HBox inner = new HBox();
         comp = new PatchDisplay(this, 4, false);
         inner.add(comp);
         inner.addLast(Strut.makeHorizontalStrut(20));
@@ -258,37 +258,37 @@ public class JLCooperMSBPlusRev2 extends Synth
         HBox hbox = new HBox();
         VBox vbox = new VBox();
 
-        comp = new LabelledDial("Sysex / PC", this, "processorinputport", color, 0, 7)	
-        	{
-        	public String map(int val)
-        		{
-        		return "" + (val + 1);
-        		}
-        	};
+        comp = new LabelledDial("Sysex / PC", this, "processorinputport", color, 0, 7)  
+            {
+            public String map(int val)
+                {
+                return "" + (val + 1);
+                }
+            };
         ((LabelledDial)comp).addAdditionalLabel("Input");
         hbox.add(comp);
                 
-		comp = new LabelledDial("Sysex", this, "sysexoutputport", color, 0, 7)	
-			{
-			public String map(int val)
-				{
-				return "" + (val + 1);
-				}
-			};
+        comp = new LabelledDial("Sysex", this, "sysexoutputport", color, 0, 7)  
+            {
+            public String map(int val)
+                {
+                return "" + (val + 1);
+                }
+            };
         ((LabelledDial)comp).addAdditionalLabel("Output");
-		hbox.add(comp);
+        hbox.add(comp);
         
-         comp = new LabelledDial("PC MIDI", this, "processorinputchannel", color, 0, 15)	
-        	{
-        	public String map(int val)
-        		{
-        		return "" + (val + 1);
-        		}
-        	};
+        comp = new LabelledDial("PC MIDI", this, "processorinputchannel", color, 0, 15)        
+            {
+            public String map(int val)
+                {
+                return "" + (val + 1);
+                }
+            };
         hbox.add(comp);
         ((LabelledDial)comp).addAdditionalLabel("Channel");
             
-       category.add(hbox, BorderLayout.WEST);
+        category.add(hbox, BorderLayout.WEST);
         return category;
         }
 
@@ -302,64 +302,64 @@ public class JLCooperMSBPlusRev2 extends Synth
         HBox hbox = new HBox();
         VBox vbox = new VBox();
 
-		comp = new CheckBox("Filter Notes", this, "proc" + proc + "filternotes");
-		vbox.add(comp); 
+        comp = new CheckBox("Filter Notes", this, "proc" + proc + "filternotes");
+        vbox.add(comp); 
 
-		comp = new CheckBox("Filter Bend", this, "proc" + proc + "filterbend");
-		vbox.add(comp); 
+        comp = new CheckBox("Filter Bend", this, "proc" + proc + "filterbend");
+        vbox.add(comp); 
 
-		comp = new CheckBox("Filter CC", this, "proc" + proc + "filtercc");
-		vbox.add(comp); 
-		hbox.add(vbox);
+        comp = new CheckBox("Filter CC", this, "proc" + proc + "filtercc");
+        vbox.add(comp); 
+        hbox.add(vbox);
 
-		vbox = new VBox();
-		comp = new CheckBox("Filter Aftertouch", this, "proc" + proc + "filteraftertouch");
-		vbox.add(comp); 
+        vbox = new VBox();
+        comp = new CheckBox("Filter Aftertouch", this, "proc" + proc + "filteraftertouch");
+        vbox.add(comp); 
 
-		comp = new CheckBox("Filter Real-time", this, "proc" + proc + "filterrealtime");
-		vbox.add(comp); 
+        comp = new CheckBox("Filter Real-time", this, "proc" + proc + "filterrealtime");
+        vbox.add(comp); 
 
-		comp = new CheckBox("Filter Sysex", this, "proc" + proc + "filtersysex");
-		vbox.add(comp); 
-		hbox.add(vbox);
+        comp = new CheckBox("Filter Sysex", this, "proc" + proc + "filtersysex");
+        vbox.add(comp); 
+        hbox.add(vbox);
 
-		vbox = new VBox();
-		comp = new CheckBox("Filter PC", this, "proc" + proc + "filterpc");
-		vbox.add(comp); 
-		hbox.add(vbox);
+        vbox = new VBox();
+        comp = new CheckBox("Filter PC", this, "proc" + proc + "filterpc");
+        vbox.add(comp); 
+        hbox.add(vbox);
 
         comp = new LabelledDial("Input", this, "proc" + proc + "inputport", color, 0, 7)
-        	{
-        	public String map(int val)
-        		{
-        		return "" + (val + 1);
-        		}
-        	};
+            {
+            public String map(int val)
+                {
+                return "" + (val + 1);
+                }
+            };
         hbox.add(comp);
                 
-		/// FIXME: This will have to be modified since positive and negative are reversed
+        /// FIXME: This will have to be modified since positive and negative are reversed
         comp = new LabelledDial("Channel Bump", this, "proc" + proc + "channelbump", color, -7, 8)
-        	{
+            {
             public int getDefaultValue() { return 0; }
             public double getStartAngle() { return 216; }
-        	public String map(int val)
-        		{
-        		if (val == 0) return "--";
-        		else return "" + val;
-        		}
-        	};
+            public String map(int val)
+                {
+                if (val == 0) return "--";
+                else return "" + val;
+                }
+            };
         hbox.add(comp);
                 
         comp = new LabelledDial("Transpose", this, "proc" + proc + "transpose", color, -59, 59)
-        	{
-        	public boolean isSymmetric() { return true; }
-        	public String map(int val)
-        		{
-        		if (val == 0) return "--";
-        		else if (val % 12 == 0) return ("" + (val / 12) + " Oct");
-        		else return "" + val;
-        		}
-        	};
+            {
+            public boolean isSymmetric() { return true; }
+            public String map(int val)
+                {
+                if (val == 0) return "--";
+                else if (val % 12 == 0) return ("" + (val / 12) + " Oct");
+                else return "" + val;
+                }
+            };
         hbox.add(comp);
         
         category.add(hbox, BorderLayout.WEST);
@@ -375,21 +375,21 @@ public class JLCooperMSBPlusRev2 extends Synth
         HBox hbox = new HBox();
         VBox vbox = new VBox();
 
-		for(int i = 1; i <= 8; i++)
-			{
-			comp = new LabelledDial("Output " + i, this, "output" + i + "assignment", color, 0, 11)	
-				{
-				public String map(int val)
-					{
-					if (val < 8) return "" + (val + 1);
-					else if (val == 8) return "A";
-					else if (val == 9) return "B";
-					else if (val == 10) return "Merge";
-					else return "Off";
-					}
-				};
-			hbox.add(comp);
-			}
+        for(int i = 1; i <= 8; i++)
+            {
+            comp = new LabelledDial("Output " + i, this, "output" + i + "assignment", color, 0, 11) 
+                {
+                public String map(int val)
+                    {
+                    if (val < 8) return "" + (val + 1);
+                    else if (val == 8) return "A";
+                    else if (val == 9) return "B";
+                    else if (val == 10) return "Merge";
+                    else return "Off";
+                    }
+                };
+            hbox.add(comp);
+            }
         category.add(hbox, BorderLayout.WEST);
         return category;
         }
@@ -403,38 +403,38 @@ public class JLCooperMSBPlusRev2 extends Synth
         HBox hbox = new HBox();
         VBox vbox = new VBox();
 
-		for(int i = 1; i <= 8; i++)
-			{
-			/// FIXME: It appears that the unit can go from 0 to 129!  Dunno what's up with that,
-			/// nor how that translates here.
-			comp = new LabelledDial("PC " + i, this, "port" + i + "pc", color, -1, 127)	
-				{
-            	public int getDefaultValue() { return -1; }
-				public String map(int val)
-					{
-					if (val == -1) return "Off";
-					else return "" + val;
-					}
-				};
-			hbox.add(comp);
-			}
+        for(int i = 1; i <= 8; i++)
+            {
+            /// FIXME: It appears that the unit can go from 0 to 129!  Dunno what's up with that,
+            /// nor how that translates here.
+            comp = new LabelledDial("PC " + i, this, "port" + i + "pc", color, -1, 127)     
+                {
+                public int getDefaultValue() { return -1; }
+                public String map(int val)
+                    {
+                    if (val == -1) return "Off";
+                    else return "" + val;
+                    }
+                };
+            hbox.add(comp);
+            }
         vbox.add(hbox);
           
         hbox = new HBox();
-		for(int i = 1; i <= 8; i++)
-			{
-			comp = new LabelledDial("Channel " + i, this, "port" + i + "pcchannel", color, 1, 16);
-			hbox.add(comp);
-			}
-    	vbox.add(hbox);
+        for(int i = 1; i <= 8; i++)
+            {
+            comp = new LabelledDial("Channel " + i, this, "port" + i + "pcchannel", color, 1, 16);
+            hbox.add(comp);
+            }
+        vbox.add(hbox);
 
         category.add(vbox, BorderLayout.WEST);
         return category;
         }
     
     
-	/// NOTE: We don't actually use this parameter list, but out of tradition
-	/// we'll load it here anyway.
+    /// NOTE: We don't actually use this parameter list, but out of tradition
+    /// we'll load it here anyway.
 
     /** Map of parameter -> index in the allParameters array. */
     HashMap allParametersToIndex = new HashMap();
@@ -451,7 +451,7 @@ public class JLCooperMSBPlusRev2 extends Synth
     "proc1filterrealtime",
     "proc1channelbump",
     "proc1inputport",
-    "proc1transpose",		// needs to be both semitones and direction
+    "proc1transpose",           // needs to be both semitones and direction
     "proc2filternotes",
     "proc2filterbend",
     "proc2filtercc",
@@ -461,9 +461,9 @@ public class JLCooperMSBPlusRev2 extends Synth
     "proc2filterrealtime",
     "proc2channelbump",
     "proc2inputport",
-    "proc2transpose",		// needs to be both semitones and direction
-	"processorinputport",
-	"processorinputchannel",
+    "proc2transpose",           // needs to be both semitones and direction
+    "processorinputport",
+    "processorinputchannel",
     "output1assignment",
     "output2assignment",
     "output3assignment",
@@ -473,22 +473,22 @@ public class JLCooperMSBPlusRev2 extends Synth
     "output7assignment",
     "output8assignment",
     "sysexoutputport",
-	"port1program",
-	"port1channel",
-	"port2program",
-	"port2channel",
-	"port3program",
-	"port3channel",
-	"port4program",
-	"port4channel",
-	"port5program",
-	"port5channel",
-	"port6program",
-	"port6channel",
-	"port7program",
-	"port7channel",
-	"port8program",
-	"port8channel",
+    "port1program",
+    "port1channel",
+    "port2program",
+    "port2channel",
+    "port3program",
+    "port3channel",
+    "port4program",
+    "port4channel",
+    "port5program",
+    "port5channel",
+    "port6program",
+    "port6channel",
+    "port7program",
+    "port7channel",
+    "port8program",
+    "port8channel",
     };
 
 
@@ -533,7 +533,7 @@ public class JLCooperMSBPlusRev2 extends Synth
         /// valuable; and there's no independent parameter setting available.  So we will 
         /// simply return an empty byte string.  Very sad.
         
-        if (toWorkingMemory) return new Object[0];		// ARGH
+        if (toWorkingMemory) return new Object[0];              // ARGH
 
         byte[] bytes = new byte[toWorkingMemory ? (isRev2() ? 45 : 21) : (isRev2() ? 46 : 22)];
         
@@ -542,76 +542,76 @@ public class JLCooperMSBPlusRev2 extends Synth
         bytes[2] = (byte)0x0b;
         bytes[3] = (byte)(toWorkingMemory ? (isRev2() ? 0x14 : 0x04) : (isRev2() ? 0x12 : 0x02));
         if (!toWorkingMemory) bytes[4] = (byte)num;
-		int pos = (toWorkingMemory ? 4 : 5);
-		
-		
-		int inputport = model.get("processorinputport");
-		int outputport = model.get("sysexoutputport");
-		int channel = model.get("processorinputchannel");
-		
-		// We're always changing these 
-		if (toWorkingMemory || !overwrite)
-			{
-			inputport = getID() - 1;
-			outputport = getID() - 1;
-			channel = getChannelOut();
-			}
-		
-		for(int proc = 1; proc <= 2; proc++)
-			{
-			// Filter bits
-			bytes[pos++] = (byte)((model.get("proc" + proc + "filternotes") << 0) | 
-							(model.get("proc" + proc + "filterbend") << 1) | 
-								(model.get("proc" + proc + "filtercc") << 2) | 
-								(model.get("proc" + proc + "filteraftertouch") << 3) | 
-								(model.get("proc" + proc + "filterpc") << 4) | 
-								(model.get("proc" + proc + "filtersysex") << 5) | 
-								(model.get("proc" + proc + "filterrealtime") << 6));
-							
-			// channel bump and input port
-			int channelbump = model.get("proc" + proc + "channelbump");
-			if (channelbump < 0) channelbump += 16;
-			bytes[pos++] = (byte)((channelbump << 0) | 
-								  (model.get("proc" + proc + "inputport") << 4));
-							  
-			// transposition
-			int transpose = model.get("proc" + proc + "transpose");
-			int negative = (transpose < 0 ? 1 : 0);
-			transpose = Math.abs(transpose);
-			bytes[pos++] = (byte)((transpose << 0) | 
-									(negative << 6));
-			}
-		
-		// processor input port and channel
-		bytes[pos++] = (byte)((channel << 0) | 
-							 (inputport << 4));
-					
-		// output ports
-		for(int port = 1; port <= 8; port++)
-			{
-			bytes[pos++] = (byte)model.get("output" + port + "assignment");
-			}
-						
-		// sysex output
-		bytes[pos++] = (byte)outputport;
+        int pos = (toWorkingMemory ? 4 : 5);
+                
+                
+        int inputport = model.get("processorinputport");
+        int outputport = model.get("sysexoutputport");
+        int channel = model.get("processorinputchannel");
+                
+        // We're always changing these 
+        if (toWorkingMemory || !overwrite)
+            {
+            inputport = getID() - 1;
+            outputport = getID() - 1;
+            channel = getChannelOut();
+            }
+                
+        for(int proc = 1; proc <= 2; proc++)
+            {
+            // Filter bits
+            bytes[pos++] = (byte)((model.get("proc" + proc + "filternotes") << 0) | 
+                (model.get("proc" + proc + "filterbend") << 1) | 
+                (model.get("proc" + proc + "filtercc") << 2) | 
+                (model.get("proc" + proc + "filteraftertouch") << 3) | 
+                (model.get("proc" + proc + "filterpc") << 4) | 
+                (model.get("proc" + proc + "filtersysex") << 5) | 
+                (model.get("proc" + proc + "filterrealtime") << 6));
+                                                        
+            // channel bump and input port
+            int channelbump = model.get("proc" + proc + "channelbump");
+            if (channelbump < 0) channelbump += 16;
+            bytes[pos++] = (byte)((channelbump << 0) | 
+                (model.get("proc" + proc + "inputport") << 4));
+                                                          
+            // transposition
+            int transpose = model.get("proc" + proc + "transpose");
+            int negative = (transpose < 0 ? 1 : 0);
+            transpose = Math.abs(transpose);
+            bytes[pos++] = (byte)((transpose << 0) | 
+                (negative << 6));
+            }
+                
+        // processor input port and channel
+        bytes[pos++] = (byte)((channel << 0) | 
+            (inputport << 4));
+                                        
+        // output ports
+        for(int port = 1; port <= 8; port++)
+            {
+            bytes[pos++] = (byte)model.get("output" + port + "assignment");
+            }
+                                                
+        // sysex output
+        bytes[pos++] = (byte)outputport;
 
-		if (isRev2())
-			{
-			// program numbers and channels
-			for(int port = 1; port <= 8; port++)
-				{
-				int prog = model.get("port" + port + "pc");
-				if (prog < 0) prog = 255;		// unset
-				bytes[pos++] = (byte)((prog >> 0) & 15);
-				bytes[pos++] = (byte)((prog >> 4) & 15);
-				int chan = model.get("port" + port + "pcchannel");
-				if (chan == 16) chan = 0;	// channel 16 is represented by 0
-				bytes[pos++] = (byte)chan;
-				}
-			}
-		
-		bytes[pos++] = (byte)0xF7;
-		return new Object[] { bytes };
+        if (isRev2())
+            {
+            // program numbers and channels
+            for(int port = 1; port <= 8; port++)
+                {
+                int prog = model.get("port" + port + "pc");
+                if (prog < 0) prog = 255;               // unset
+                bytes[pos++] = (byte)((prog >> 0) & 15);
+                bytes[pos++] = (byte)((prog >> 4) & 15);
+                int chan = model.get("port" + port + "pcchannel");
+                if (chan == 16) chan = 0;       // channel 16 is represented by 0
+                bytes[pos++] = (byte)chan;
+                }
+            }
+                
+        bytes[pos++] = (byte)0xF7;
+        return new Object[] { bytes };
         }
 
     //public boolean getSendsParametersAfterNonMergeParse() { return true; }
@@ -626,76 +626,76 @@ public class JLCooperMSBPlusRev2 extends Synth
             pos = 5;
             }
         
-		for(int proc = 1; proc <= 2; proc++)
-			{
-			// Filter bits
-			model.set("proc" + proc + "filternotes", (data[pos] >>> 0) & 1);
-			model.set("proc" + proc + "filterbend", (data[pos] >>> 1) & 1);
-			model.set("proc" + proc + "filtercc", (data[pos] >>> 2) & 1);
-			model.set("proc" + proc + "filteraftertouch", (data[pos] >>> 3) & 1);
-			model.set("proc" + proc + "filterpc", (data[pos] >>> 4) & 1);
-			model.set("proc" + proc + "filtersysex", (data[pos] >>> 5) & 1);
-			model.set("proc" + proc + "filterrealtime", (data[pos] >>> 6) & 1);
-			pos++;
-			
-			// channel bump and input port
-			int channelbump = ((data[pos] >>> 0) & 15);
-			if (channelbump > 8) channelbump -= 16;
-			model.set("proc" + proc + "channelbump", channelbump);
-			model.set("proc" + proc + "inputport", (data[pos] >>> 4) & 7);
-			pos++;
+        for(int proc = 1; proc <= 2; proc++)
+            {
+            // Filter bits
+            model.set("proc" + proc + "filternotes", (data[pos] >>> 0) & 1);
+            model.set("proc" + proc + "filterbend", (data[pos] >>> 1) & 1);
+            model.set("proc" + proc + "filtercc", (data[pos] >>> 2) & 1);
+            model.set("proc" + proc + "filteraftertouch", (data[pos] >>> 3) & 1);
+            model.set("proc" + proc + "filterpc", (data[pos] >>> 4) & 1);
+            model.set("proc" + proc + "filtersysex", (data[pos] >>> 5) & 1);
+            model.set("proc" + proc + "filterrealtime", (data[pos] >>> 6) & 1);
+            pos++;
+                        
+            // channel bump and input port
+            int channelbump = ((data[pos] >>> 0) & 15);
+            if (channelbump > 8) channelbump -= 16;
+            model.set("proc" + proc + "channelbump", channelbump);
+            model.set("proc" + proc + "inputport", (data[pos] >>> 4) & 7);
+            pos++;
 
-			// transposition
-			int transpose = (data[pos] & 63);
-			int negative = ((data[pos] >>> 6) & 1);
-			if (negative == 1) transpose = 0 - transpose;
-			model.set("proc" + proc + "transpose", transpose);
-			pos++;
-			}
-			
-		// processor input port and channel
-			model.set("processorinputchannel", (data[pos] >>> 0) & 15);
-			model.set("processorinputport", (data[pos] >>> 4) & 7);
-			pos++;
-		
-		// output ports
-		for(int port = 1; port <= 8; port++)
-			{
-			model.set("output" + port + "assignment", data[pos]);
-			pos++;
-			}
+            // transposition
+            int transpose = (data[pos] & 63);
+            int negative = ((data[pos] >>> 6) & 1);
+            if (negative == 1) transpose = 0 - transpose;
+            model.set("proc" + proc + "transpose", transpose);
+            pos++;
+            }
+                        
+        // processor input port and channel
+        model.set("processorinputchannel", (data[pos] >>> 0) & 15);
+        model.set("processorinputport", (data[pos] >>> 4) & 7);
+        pos++;
+                
+        // output ports
+        for(int port = 1; port <= 8; port++)
+            {
+            model.set("output" + port + "assignment", data[pos]);
+            pos++;
+            }
 
-		// sysex output	-- it appears there is junk on the higher bits
-		model.set("sysexoutputport", data[pos] & 7);
-		pos++;
-		
-		if (data.length == 45 || data.length == 46)
-			{
-			for(int port = 1; port <= 8; port++)
-				{
-				int pc = (data[pos] & 15) | ((data[pos + 1] & 15) << 4);
-				if (pc > 127) pc = -1;
-				model.set("port" + port + "pc", pc);
-				pos += 2;
-				// channel 16 is represented by 0
-				model.set("port" + port + "pcchannel", data[pos] == 0 ? 16 : data[pos]);
-				pos++;
-				}
-			setRev2(true, false);
-			}
-		else
-			{
-			for(int port = 1; port <= 8; port++)
-				{
-				model.set("port" + port + "pc", -1);
-				model.set("port" + port + "pcchannel", 1);
-				}
-			setRev2(false, false);
-			}
-			
-		// revise the output and input ports
-		//model.set("sysexoutputport", getID() - 1);
-		//model.set("processorinputport", getID() - 1);
+        // sysex output -- it appears there is junk on the higher bits
+        model.set("sysexoutputport", data[pos] & 7);
+        pos++;
+                
+        if (data.length == 45 || data.length == 46)
+            {
+            for(int port = 1; port <= 8; port++)
+                {
+                int pc = (data[pos] & 15) | ((data[pos + 1] & 15) << 4);
+                if (pc > 127) pc = -1;
+                model.set("port" + port + "pc", pc);
+                pos += 2;
+                // channel 16 is represented by 0
+                model.set("port" + port + "pcchannel", data[pos] == 0 ? 16 : data[pos]);
+                pos++;
+                }
+            setRev2(true, false);
+            }
+        else
+            {
+            for(int port = 1; port <= 8; port++)
+                {
+                model.set("port" + port + "pc", -1);
+                model.set("port" + port + "pcchannel", 1);
+                }
+            setRev2(false, false);
+            }
+                        
+        // revise the output and input ports
+        //model.set("sysexoutputport", getID() - 1);
+        //model.set("processorinputport", getID() - 1);
 
         revise();       
         return PARSE_SUCCEEDED;     
@@ -704,15 +704,15 @@ public class JLCooperMSBPlusRev2 extends Synth
     public void changePatch(Model tempModel)
         {
         /*
-        int num = tempModel.get("number");
-        try
-        	{
-            tryToSendMIDI(new ShortMessage(ShortMessage.PROGRAM_CHANGE, getChannelOut(), num, 0));
-            }
-        catch (Exception e) 
-            { 
-            e.printStackTrace(); 
-            }
+          int num = tempModel.get("number");
+          try
+          {
+          tryToSendMIDI(new ShortMessage(ShortMessage.PROGRAM_CHANGE, getChannelOut(), num, 0));
+          }
+          catch (Exception e) 
+          { 
+          e.printStackTrace(); 
+          }
         */
         }
 
@@ -722,25 +722,25 @@ public class JLCooperMSBPlusRev2 extends Synth
             tempModel = getModel();
         int num = tempModel.get("number");
         if (isRev2())
-        	{
-        	return new byte[] { (byte)0xF0, 0x15, 0x0B, 0x13, (byte)num, (byte)0xF7 };
-        	}
+            {
+            return new byte[] { (byte)0xF0, 0x15, 0x0B, 0x13, (byte)num, (byte)0xF7 };
+            }
         else
-        	{
-        	return new byte[] { (byte)0xF0, 0x15, 0x0B, 0x03, (byte)num, (byte)0xF7 };
-        	}
+            {
+            return new byte[] { (byte)0xF0, 0x15, 0x0B, 0x03, (byte)num, (byte)0xF7 };
+            }
         }
     
     public byte[] requestCurrentDump()
         {
         if (isRev2())
-        	{
-	        return new byte[] { (byte)0xF0, 0x15, 0x0B, 0x15, (byte)0xF7 };
-	        }
-	    else
-	    	{
-	        return new byte[] { (byte)0xF0, 0x15, 0x0B, 0x05, (byte)0xF7 };
-	    	}
+            {
+            return new byte[] { (byte)0xF0, 0x15, 0x0B, 0x15, (byte)0xF7 };
+            }
+        else
+            {
+            return new byte[] { (byte)0xF0, 0x15, 0x0B, 0x05, (byte)0xF7 };
+            }
         }
     
         
@@ -812,44 +812,44 @@ public class JLCooperMSBPlusRev2 extends Synth
         if (!model.exists("number")) return null;
         
         int num = model.get("number", 0);
-		return "" + (num / 8 + 1) + (num % 8 + 1);
+        return "" + (num / 8 + 1) + (num % 8 + 1);
         }
 
 
     /** Return a list of all patch number names.  Default is { "Main" } */
     public String[] getPatchNumberNames()  
-    	{ 
-    	String[] names = new String[64];
-    	for(int i = 0; i < 64; i++)
-    		{
-    		names[i] = "" + (i / 8 + 1) + (i % 8 + 1);
-    		}
-    	return names;
-    	}	
-    	
+        { 
+        String[] names = new String[64];
+        for(int i = 0; i < 64; i++)
+            {
+            names[i] = "" + (i / 8 + 1) + (i % 8 + 1);
+            }
+        return names;
+        }       
+        
     /** Return a list whether individual patches can be written.  Default is FALSE. */
     public boolean getSupportsPatchWrites() { return true; }
 
-    public int getPatchNameLength() { return 9; }		// FIXME: what should I put here?
+    public int getPatchNameLength() { return 9; }               // FIXME: what should I put here?
 
     /*
-    public byte[] requestAllDump() 
-        {
-        return new byte[] { (byte)0xF0, 0x15, 0x0B, 0x11, (byte)0xF7 };
-        }
+      public byte[] requestAllDump() 
+      {
+      return new byte[] { (byte)0xF0, 0x15, 0x0B, 0x11, (byte)0xF7 };
+      }
     */
 
-	public int getPauseAfterReceivePatch() { return 200; }
-	public int getPauseAfterWritePatch() { return 200; }
+    public int getPauseAfterReceivePatch() { return 200; }
+    public int getPauseAfterWritePatch() { return 200; }
 
     public int getBatchDownloadWaitTime() { return 200; }
         
     public boolean librarianTested() { return true; }
     
     public boolean testVerify(Synth other, String key, Object obj1, Object obj2)
-    	{
-    	if (!isRev2() && key.startsWith("port")) return true;
-    	else return false;
-    	}
+        {
+        if (!isRev2() && key.startsWith("port")) return true;
+        else return false;
+        }
     }
     

@@ -27,7 +27,7 @@ public class HTMLBrowser extends JPanel
     java.util.Stack stack = new java.util.Stack();
     JEditorPane infoPane;
     JScrollPane scroll;
-    public boolean loadSubsidiaryHTML = false;		// set this to TRUE to load in the browser
+    public boolean loadSubsidiaryHTML = false;          // set this to TRUE to load in the browser
         
     public void setText(Object HTMLTextOrURL)
         {

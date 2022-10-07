@@ -25,17 +25,18 @@ import javax.sound.midi.*;
 
 public class RolandU220Multi extends Synth
     {
-    /*
     // I'm not using these anywhere, they're just here for posterity
-    public String[] MULTI_PRESETS_220 = {
-    "Acoust Piano", "Chorus Piano", "E.Piano", "Bright EP", "Vibraphone", "Marimba", "Bell", "Fanta Bell", "A.Guitar", "E.Guitar", 
-    "Heavy Guitar", "E.Organ 1", "E.Organ 3", "E.Organ 7", "E.Organ 9", "Mad Organ", "Strings", "Syn.Strings", "JP8.Strings", 
-    "Choir", "Syn.Vox 1", "Syn.Vox 2", "Syn.Choir 1", "Syn.Choir 2", "FlangingSlap", "FretlessBass", "Synth Bass 7", 
-    "SynB-BellPad", "A.Bass-Piano", "SingingPiano", "Splits", "Velo Trumpet", "Soft Trumpet", "Tromborn", "BrassSection", 
-    "Saxophone", "JP8.Brass", "Power Brass", "Flute", "Shakuhachi", "Fantasia", "Calliope", "Soundtrack", "Atmosphere", 
-    "Future Pad", "Pomona", "Melodigan", "Photogene", "Endymion", "Prelusion", "Jupiters", "Selene", "Sacred Tree", 
-    "Macho Lead", "Lunar Lead", "HarmonicLead", "Native Dance", "Percs Hit", "Velo Combi", "Split Combi", "Rotor Craft", 
-    "Emergency", "Deepsea", "Catastrophe" };
+    
+    /*
+      public String[] MULTI_PRESETS_220 = {
+      "Acoust Piano", "Chorus Piano", "E.Piano", "Bright EP", "Vibraphone", "Marimba", "Bell", "Fanta Bell", "A.Guitar", "E.Guitar", 
+      "Heavy Guitar", "E.Organ 1", "E.Organ 3", "E.Organ 7", "E.Organ 9", "Mad Organ", "Strings", "Syn.Strings", "JP8.Strings", 
+      "Choir", "Syn.Vox 1", "Syn.Vox 2", "Syn.Choir 1", "Syn.Choir 2", "FlangingSlap", "FretlessBass", "Synth Bass 7", 
+      "SynB-BellPad", "A.Bass-Piano", "SingingPiano", "Splits", "Velo Trumpet", "Soft Trumpet", "Tromborn", "BrassSection", 
+      "Saxophone", "JP8.Brass", "Power Brass", "Flute", "Shakuhachi", "Fantasia", "Calliope", "Soundtrack", "Atmosphere", 
+      "Future Pad", "Pomona", "Melodigan", "Photogene", "Endymion", "Prelusion", "Jupiters", "Selene", "Sacred Tree", 
+      "Macho Lead", "Lunar Lead", "HarmonicLead", "Native Dance", "Percs Hit", "Velo Combi", "Split Combi", "Rotor Craft", 
+      "Emergency", "Deepsea", "Catastrophe" };
     */
         
     public String[] TIMBRE_PRESETS = {
@@ -770,7 +771,7 @@ public class RolandU220Multi extends Synth
         
 
     /** If the user is editing the patch on the synth, the U-220 won't change patches!
-    	So just in case we send this. */
+        So just in case we send this. */
     public boolean getSendsParametersAfterNonMergeParse() { return true; }
 
         
@@ -861,6 +862,7 @@ public class RolandU220Multi extends Synth
             return new byte[] { (byte)0xF0, 0x41, getID(), 0x2B, 0x12, AA, BB, CC, val, checksum, (byte)0xF7 };
             }
         }
+
 
     byte[] parseData = new byte[160];
 
@@ -1268,6 +1270,13 @@ public class RolandU220Multi extends Synth
     /** Verify that all the parameters are within valid values, and tweak them if not. */
     public void revise()
         {
+        // Chorus Feedback and Velo Threshold can be wrong.
+        if (model.get("chorusfeedback") == 0) 
+            model.set("chorusfeedback", 1);
+        for(int i = 1; i <= 6; i++)
+            if (model.get("part" + i + "velothreshold") == 0) 
+                model.set("part" + i + "velothreshold", 127);
+        
         // check the easy stuff -- out of range parameters
         super.revise();
 

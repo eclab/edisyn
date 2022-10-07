@@ -206,24 +206,46 @@ public class RolandU220Drum extends Synth
             },
         };
 
+/*
+  public static final String[] INTERNAL_DRUMS = 
+  {
+  "Bass Drum 1", "Bass Drum 2", "Rim Shot", "Snare Drum 1", "Hand Clap", 
+  "Snare Drum 2", "Low Tom Tom 1", "Closed High Hat 1", "Low Tom Tom 2", 
+  "Open High Hat 2", "Mid Tom Tom 1", "Open High Hat 1", "Mid Tom Tom 2", 
+  "Hi Tom Tom 1", "Crash Cymbal", "Hi Tom Tom 2", "Ride Cymbal", "China Cymbal", 
+  "Cup (Mute)", "Tambourine [L]", "Splash Cymbal", "Cowbell", "Crash Cymbal", 
+  "Snare Drum 3", "Ride Cymbal", "Bongo High [L]", "Bongo Low [L]", "Conga (Mute) [L]", 
+  "Conga High [L]", "Conga Low [L]", "Timable High [L]", "Timable Low [L]", "Agaogo High [L]", 
+  "Agaogo Low [L]", "Cabasa", "Maracas [L]", "Short Whistle [L]", "Long Whistle [L]", 
+  "Vibra - Slap [L]", "Bell Tree [L]", "Claves [L]", "Guiro 2 [L]", "Guiro 1 [L]", "Castanets [L]", 
+  "Hi Pitch Tom 2", "Triangle [L]", "Hi Pitch Tom 1", "Wood Block [L]", "Jingle Bell [L]", 
+  "Bass Drum 3", "Bass Drum 4", "Snare Drum 4", "Snare Drum 5", "Snare Drum 6", 
+  "Low Tom Tom 3", "Closed High Hat 2", "Mid Tom Tom 3", "China Cymbal", 
+  "High Tom Tom 3", "Ride Cymbal", "Native Drum 1 [L]", "Native Drum 2 [L]", "Native Drum 3 [L]", 
+  "--"
+  };
+*/
+
+    // Latin entries removed -- they don't exist as sounds on the machine even if you insert the Latin Percussion & FX card
+
     public static final String[] INTERNAL_DRUMS = 
         {
         "Bass Drum 1", "Bass Drum 2", "Rim Shot", "Snare Drum 1", "Hand Clap", 
         "Snare Drum 2", "Low Tom Tom 1", "Closed High Hat 1", "Low Tom Tom 2", 
         "Open High Hat 2", "Mid Tom Tom 1", "Open High Hat 1", "Mid Tom Tom 2", 
         "Hi Tom Tom 1", "Crash Cymbal", "Hi Tom Tom 2", "Ride Cymbal", "China Cymbal", 
-        "Cup (Mute)", "Tambourine [L]", "Splash Cymbal", "Cowbell", "Crash Cymbal", 
-        "Snare Drum 3", "Ride Cymbal", "Bongo High [L]", "Bongo Low [L]", "Conga (Mute) [L]", 
-        "Conga High [L]", "Conga Low [L]", "Timable High [L]", "Timable Low [L]", "Agaogo High [L]", 
-        "Agaogo Low [L]", "Cabasa", "Maracas [L]", "Short Whistle [L]", "Long Whistle [L]", 
-        "Vibra - Slap [L]", "Bell Tree [L]", "Claves [L]", "Guiro 2 [L]", "Guiro 1 [L]", "Castanets [L]", 
-        "Hi Pitch Tom 2", "Triangle [L]", "Hi Pitch Tom 1", "Wood Block [L]", "Jingle Bell [L]", 
+        "Cup (Mute)", "--", "Splash Cymbal", "Cowbell", "Crash Cymbal", 
+        "Snare Drum 3", "Ride Cymbal", "--", "--", "--", 
+        "--", "--", "--", "--", "--", 
+        "--", "Cabasa", "--", "--", "--", 
+        "--", "--", "--", "--", "--", "--", 
+        "Hi Pitch Tom 2", "--", "Hi Pitch Tom 1", "--", "--", 
         "Bass Drum 3", "Bass Drum 4", "Snare Drum 4", "Snare Drum 5", "Snare Drum 6", 
         "Low Tom Tom 3", "Closed High Hat 2", "Mid Tom Tom 3", "China Cymbal", 
-        "High Tom Tom 3", "Ride Cymbal", "Native Drum 1 [L]", "Native Drum 2 [L]", "Native Drum 3 [L]", 
+        "High Tom Tom 3", "Ride Cymbal", "--", "--", "--", 
         "--"
         };
-        
+       
     public static final String[][] ROCK_DRUMS =
         {
         // SN-U110-10 - Rock Drums
@@ -300,22 +322,22 @@ public class RolandU220Drum extends Synth
             },
             {
             // Latin 3
-			"--", "--", "--", "--", "--", 
-			"--", "--", "--", "--", "--", 
-			"--", "--", "--", "--", "--", 
-			"--", "--", "--", "Berimbau", 
-			"--", "5th Agogo", "--", "Guiro Short", 
-			"Shekele", "Guiro Long", "--", 
-			"--", "--", "--", "--", "--", 
-			"--", "--", "--", "--", "--", 
-			"--", "--", "--", "--", "--", 
-			"Cuica-H", "Cuica-L", "--", 
-			"Slit Drum-H", "--", "Slit Drum-L", 
-			"--", "--", "Steel Drum-H", 
-			"Steel Drum-L", "--", "--", 
-			"--", "--", "--", "--", "--", 
-			"--", "--", "--", "--", "--",
-			"--"            
+            "--", "--", "--", "--", "--", 
+            "--", "--", "--", "--", "--", 
+            "--", "--", "--", "--", "--", 
+            "--", "--", "--", "Berimbau", 
+            "--", "5th Agogo", "--", "Guiro Short", 
+            "Shekele", "Guiro Long", "--", 
+            "--", "--", "--", "--", "--", 
+            "--", "--", "--", "--", "--", 
+            "--", "--", "--", "--", "--", 
+            "Cuica-H", "Cuica-L", "--", 
+            "Slit Drum-H", "--", "Slit Drum-L", 
+            "--", "--", "Steel Drum-H", 
+            "Steel Drum-L", "--", "--", 
+            "--", "--", "--", "--", "--", 
+            "--", "--", "--", "--", "--",
+            "--"            
             },
             {
             // FX 1
@@ -614,50 +636,50 @@ public class RolandU220Drum extends Synth
         final LabelledDial keyDial = new LabelledDial("            Source            ", this, "drum" + note + "sourcekey", color, 0, 127)
             {
             public int getDefaultValue() 
-            	{
-				int media = model.get("drum" + note + "media");
-				int n = model.get("drum" + note + "number", 0);
+                {
+                int media = model.get("drum" + note + "media");
+                int n = model.get("drum" + note + "number", 0);
 
-            	// For Benjamin Wild (dj@benjaminwild.com): double-clicking the source should jump to the lowest drum note
-            	if (media == 0) // internal
-            		{
-            		if (n == 127)	// Drum set
-            			return 35;
-            		else return 0;
-            		}
-            	else if (media == 2)	// Latin and FX
-            		{
-            		if (n == 0)	// Latin 1
-            			return 35;
-            		else if (n == 1) // Latin 2
-            			return 54;
-            		else if (n == 2) // Latin 3
-            			return 53;
-            		else if (n == 3) // FX 1
-            			return 35;
-            		else if (n == 4) // FX 2
-            			return 54;
-            		else if (n == 5) // FX 3
-            			return 54;
-            		else if (n == 6) // FX 4
-            			return 54;
-            		else return 0;
-            		}
-            	else if (media == 10)	// Rock Drums
-            		{
-            		return 35;
-            		}
-            	else
-            		{
-            		return 0;
-            		}
-            	}
+                // For Benjamin Wild (dj@benjaminwild.com): double-clicking the source should jump to the lowest drum note
+                if (media == 0) // internal
+                    {
+                    if (n == 127)   // Drum set
+                        return 35;
+                    else return 0;
+                    }
+                else if (media == 2)    // Latin and FX
+                    {
+                    if (n == 0)     // Latin 1
+                        return 35;
+                    else if (n == 1) // Latin 2
+                        return 54;
+                    else if (n == 2) // Latin 3
+                        return 53;
+                    else if (n == 3) // FX 1
+                        return 35;
+                    else if (n == 4) // FX 2
+                        return 54;
+                    else if (n == 5) // FX 3
+                        return 54;
+                    else if (n == 6) // FX 4
+                        return 54;
+                    else return 0;
+                    }
+                else if (media == 10)   // Rock Drums
+                    {
+                    return 35;
+                    }
+                else
+                    {
+                    return 0;
+                    }
+                }
 
             public String map(int val)
-            	{
-				return "<html><center>" + val + "<br><font size=-2>" + NOTES[val % 12] + ((val / 12) - 1) + "</font></center></html>";
-            	}
-            	
+                {
+                return "<html><center>" + val + "<br><font size=-2>" + NOTES[val % 12] + ((val / 12) - 1) + "</font></center></html>";
+                }
+                
             public void update(String key, Model model)
                 {
                 super.update(key, model);
@@ -665,7 +687,7 @@ public class RolandU220Drum extends Synth
                     {
                     int media = model.get("drum" + note + "media");
                     int n = model.get("drum" + note + "number", 0);
-                   	if (media == 0) // internal 
+                    if (media == 0) // internal 
                         {
                         int k = model.get(key, 0);
                         if (k >= 35 && k <= 98 && n == 127)
@@ -676,10 +698,10 @@ public class RolandU220Drum extends Synth
                     else if (media == 2)    // Latin and FX
                         {
                         int k = model.get(key, 0);
-						// FIXME: here we have a problem similar to the proteus 2000 -- I think the drum
-						// note number can be a value outside of 0 or 1 because the media has changed
-						// but the number has not yet. This happens sometimes when randomizing.
-						// I have a hack here but we need to revisit if this will be a problem for mutation 
+                        // FIXME: here we have a problem similar to the proteus 2000 -- I think the drum
+                        // note number can be a value outside of 0 or 1 because the media has changed
+                        // but the number has not yet. This happens sometimes when randomizing.
+                        // I have a hack here but we need to revisit if this will be a problem for mutation 
                         if (k >= 35 && k <= 98 && (n >= 0 && n <= 6))
                             {
                             rhythmKey[0].setText(LATIN_DRUMS[n][k - 35]);
@@ -690,10 +712,10 @@ public class RolandU220Drum extends Synth
                     else if (media == 10)   // Rock Drums 
                         {
                         int k = model.get(key, 0);
-						// FIXME: here we have a problem similar to the proteus 2000 -- I think the drum
-						// note number can be a value outside of 0 or 1 because the media has changed
-						// but the number has not yet. This happens sometimes when randomizing.
-						// I have a hack here but we need to revisit if this will be a problem for mutation 
+                        // FIXME: here we have a problem similar to the proteus 2000 -- I think the drum
+                        // note number can be a value outside of 0 or 1 because the media has changed
+                        // but the number has not yet. This happens sometimes when randomizing.
+                        // I have a hack here but we need to revisit if this will be a problem for mutation 
                         if (k >= 35 && k <= 98 & (n >= 0 && n <= 1))
                             {
                             rhythmKey[0].setText(ROCK_DRUMS[n][k - 35]);
@@ -716,7 +738,7 @@ public class RolandU220Drum extends Synth
                 {
                 super.update(key, model);
                 keyDial.update("drum" + note + "sourcekey", model);
-                model.setLastKey(key);		// we set it again so that it's the last thing updated, so we can distribute it
+                model.setLastKey(key);          // we set it again so that it's the last thing updated, so we can distribute it
                 }
             };
         
@@ -733,7 +755,7 @@ public class RolandU220Drum extends Synth
                 if (cur >= PCM[val].length)
                     model.set("drum" + note + "number", 0);
                 keyDial.update("drum" + note + "sourcekey", model);
-                model.setLastKey(key);		// we set it again so that it's the last thing updated, so we can distribute it
+                model.setLastKey(key);          // we set it again so that it's the last thing updated, so we can distribute it
                 }
             };
         vbox.add(comp);        
@@ -765,9 +787,9 @@ public class RolandU220Drum extends Synth
         inner.add(comp);
 
         comp = new LabelledDial("Level", this, "drum" + note + "instlevel", color, 0, 31)
-			{
+            {
             public int getDefaultValue() { return 31; }
-			};
+            };
         inner.add(comp);
 
         // FIXME: This is backwards!  0...6 are RIGHT and 8...14 are LEFT, and 15 is RND
@@ -1228,7 +1250,7 @@ public class RolandU220Drum extends Synth
 
 
     /** If the user is editing the patch on the synth, the U-220 won't change patches!
-    	So just in case we send this. */
+        So just in case we send this. */
     public boolean getSendsParametersAfterNonMergeParse() { return true; }
 
     public byte produceChecksum(byte[] data)
@@ -1493,33 +1515,33 @@ public class RolandU220Drum extends Synth
         }
     
     public void distributeLastParameter()
-    	{
-    	String key = getModel().getLastKey();
-    	if (key == null) 
-    		{
+        {
+        String key = getModel().getLastKey();
+        if (key == null) 
+            {
             showSimpleError("No Parameter", "No parameter has been set yet.");
-    		}
-    	else if (allCommonParametersToIndex.containsKey(key))
-    		{
+            }
+        else if (allCommonParametersToIndex.containsKey(key))
+            {
             showSimpleError("No Parameter", "To distribute, the last set parameter must be for a drum note.");
-    		}
-    	else
-    		{
-    		int val = getModel().get(key);
-			String stripped = StringUtility.removePreambleAndFirstDigits(key, "drum");
-			if (stripped.equals(key)) // uh oh
-				{
-				new RuntimeException("Couldn't remove premable 'drum' from " + key).printStackTrace();
-				}
-   			else
-   				{
-   				for(int i = 0; i < 63; i++)
-    				{
-    				getModel().set("drum" + i + stripped, val);
-    				}
-    			}
-    		}
-    	}  
+            }
+        else
+            {
+            int val = getModel().get(key);
+            String stripped = StringUtility.removePreambleAndFirstDigits(key, "drum");
+            if (stripped.equals(key)) // uh oh
+                {
+                new RuntimeException("Couldn't remove premable 'drum' from " + key).printStackTrace();
+                }
+            else
+                {
+                for(int i = 0; i < 64; i++)
+                    {
+                    getModel().set("drum" + i + stripped, val);
+                    }
+                }
+            }
+        }  
               
           
     // Prepare a Patch whose slot N has the current MIDI channel, and has all the partials in reserve.

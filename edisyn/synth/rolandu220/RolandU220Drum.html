@@ -28,8 +28,9 @@ Set Edisyn's MIDI channel to the same as your rhythm part's Channel (typically 1
 <br><br><h3>Gotchas</h3>
 
 <ul>
-<li>Roland breaks its patch sysex into multiple messages, each 138 bytes long.  But Roland stupidly made it very difficult to distinguish between sysex for a single patch and sysex for a bulk dump of patches.  As a result, Edisyn must assume that the sysex is for a single patch.  In short: you can't do a bulk dump of patches from the synthesizer; Edisyn won't understand them.
+<li>Bulk downloads from the U-220 will not be understood by Edisyn.  Here's why.  Roland breaks its patch sysex into multiple messages, each 138 bytes long.  But Roland stupidly made it very difficult to distinguish between sysex for a single patch and sysex for a message that's part of a bulk dump of patches.  Edisyn must assume that the sysex is for a single patch.  However while Edisyn can't figure out bulk downloads sent from the synthesizer, it <i>can</i> figure out bulk files loaded from disk (because it gets all of them at once and realized what's happening).
 <p><li>If you are presently editing a drum patch, the U-220 refuses to change patches, so Edisyn can load a new one but it can't get the U-220 to switch to it.  Thus Edisyn is forced to send the patch back to the U-220 to change its parameters.  This means that loading a patch will take twice as long as it needs to.
+<p><li>In the manual (page 132), the Internal Drumset is listed as initialized to a number of Latin-2 sounds.  These sounds do not exist in the U-220 and are not part of the Internal Drumset even if the Latin Percussion &amp; FX card is inserted: it appears to simply be a mistake.  Edisyn does not list these sounds.
 </ul>
 
 <br><br><h3>Thanks</h3>

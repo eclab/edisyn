@@ -578,9 +578,9 @@ public class RolandU220Timbre extends Synth
         HBox hbox = new HBox();
         
         comp = new LabelledDial("Level", this, "timbrelevel", color, 0, 127)
-        	{
+            {
             public int getDefaultValue() { return 127; }
-        	};
+            };
         hbox.add(comp);
         
         comp = new LabelledDial("Velocity", this, "levelvelocitysens", color, 1, 15)
@@ -910,10 +910,9 @@ public class RolandU220Timbre extends Synth
         }
    
     /** If the user is editing the patch on the synth, the U-220 won't change patches!
-    	So just in case we send this. */
+        So just in case we send this. */
     public boolean getSendsParametersAfterNonMergeParse() { return true; }
 
-    
     public int parse(byte[] data, boolean fromFile)
         {
         // What is the tone patch number?

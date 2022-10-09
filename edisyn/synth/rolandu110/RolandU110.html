@@ -1,0 +1,29 @@
+<html><head></head>
+<body>
+
+<h1>Roland U-110</h1> 
+<h2>Patch Editor</h2>
+
+<br><br><h3>Communicating with Edisyn</h3>
+
+Set Edisyn's MIDI channel to the same as the synth's Control Channel.  Turn ON Program Change and Exclusive. 
+
+<br><br><h3>Gotchas</h3>
+
+<ul>
+<li>The U-110 doesn't seem to respond to requests to download individual patches: so Edisyn must change the patch to the given patch (loading it into current memory) and then request the patch from current memory.
+<li>Incredibly, Roland's sysex specification is missing almost everything needed to write the editor, so much had to be reverse engineered.  If you'd like to see a working specification, see the comments at the end of Edisyn's RolandU110.java file.
+</ul>
+
+<br><br><h3>Thanks</h3>
+Thanks to Keith (llamamusic@hotmail.com) for his extraordinary service in loaning stuff, providing materials, and debugging.
+
+<p><table border=0 cellpadding=0 cellspacing=5>
+<tr>
+<td align=right>By&nbsp;&nbsp;&nbsp;
+<td><b>Sean Luke</b>
+<tr>
+<td align=right>Date&nbsp;&nbsp;&nbsp;
+<td>October 2020
+</table>
+

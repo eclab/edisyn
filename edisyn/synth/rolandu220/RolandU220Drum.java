@@ -969,7 +969,7 @@ public class RolandU220Drum extends Synth
             }
         }
         
-    byte[] parseData = new byte[1568];
+    byte[] parseData = null;
 
     public int parse(byte[] data, boolean fromFile)
         {
@@ -994,11 +994,15 @@ public class RolandU220Drum extends Synth
         
         if (parseDataPosition == 0)
             {
+            parseData = new byte[1568];
             for(int x = 0; x < parseData.length; x++)
                 parseData[x] = 0;
             }
-                
+        else if (parseData == null) 
+        	return PARSE_FAILED;				// bad initial data
+
         System.arraycopy(data, 8, parseData, parseDataPosition, Math.min(parseData.length - parseDataPosition, 128));
+
         if (parseDataPosition + 128 >= 1568)    // last position
             {
             /*
@@ -1095,6 +1099,7 @@ public class RolandU220Drum extends Synth
                 model.set("drum" + i + "pan", (val >>> 0x0) & 15);                                      // 0 1 2 3
                 }
             revise();
+            parseData = null;
             return PARSE_SUCCEEDED;
             }
         else return PARSE_INCOMPLETE;

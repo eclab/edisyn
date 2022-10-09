@@ -864,7 +864,7 @@ public class RolandU220Multi extends Synth
         }
 
 
-    byte[] parseData = new byte[160];
+    byte[] parseData = null;
 
     public int parse(byte[] data, boolean fromFile)
         {
@@ -889,9 +889,12 @@ public class RolandU220Multi extends Synth
 
         if (parseDataPosition == 0)
             {
+            parseData = new byte[160];
             for(int x = 0; x < parseData.length; x++)
                 parseData[x] = 0;
             }
+        else if (parseData == null) 
+        	return PARSE_FAILED;				// bad initial data
         
         System.arraycopy(data, 8, parseData, parseDataPosition, Math.min(parseData.length - parseDataPosition, 128));
         
@@ -1040,6 +1043,7 @@ public class RolandU220Multi extends Synth
                 model.set("part" + i + "velolevel", (val >>> 0x0) & 127);               // 0 1 2 3 4 5 6 in U-20, 0 in U-220
                 }
             revise();
+            parseData = null;
             return PARSE_SUCCEEDED;
             }
         else return PARSE_INCOMPLETE;

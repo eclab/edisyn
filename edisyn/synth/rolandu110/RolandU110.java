@@ -196,7 +196,7 @@ public class RolandU110 extends Synth
             },
         };
         
-    public static final int[] POLY_MOD_RANGES = { -24, -12, -16, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };      		// FIXME This is wrong   
+    public static final int[] POLY_MOD_RANGES = { -24, -12, -7, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 7, 12 }; 
     public static final String[] NOTES = new String[] { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
 	
 	public static final String[] OUTPUT_MODES = 
@@ -263,6 +263,34 @@ public class RolandU110 extends Synth
     "termolorate",
     "tremolodepth",
     
+    "outputassign",
+    "receivechannel",
+    "tonemedia",
+    "tonenumber",
+    "bendrange",
+    "keyrangelo",
+    "keyrangehi",
+    "partlevel",
+    "velocitysens",
+    "levelpresssens",
+    "envattackrate",
+    "envreleaserate",
+    "pitchshiftcoarse",
+    "pitchshiftfine",
+    "lforate",
+    "lfoautodelaytime",
+    "lfoautorisetime",
+    "lfoautodepth",
+    "lfomanrisetime",
+    "lfomandepth",
+    "lfochpresssens",
+    "pgmchange",
+    "pgmchangemap",
+    "detunedepth",
+    "pitchpolypresssens",
+    "lfopolypresssens",
+    
+/*
     "part1outputassign",
     "part1receivechannel",
     "part1tonemedia",
@@ -424,7 +452,7 @@ public class RolandU110 extends Synth
     "part6detunedepth",
     "part6pitchpolypresssens",
     "part6lfopolypresssens",
-    
+    */
     };
 
     public RolandU110()
@@ -562,43 +590,19 @@ public class RolandU110 extends Synth
         vbox.add(comp);
         hbox.add(vbox);
 
-        comp = new LabelledDial("Chorus", this, "chorusrate", color, 0, 15)
-        	{
-        	public String map(int val)
-        		{
-        		return "" + (val + 1);
-        		}
-        	};
+        comp = new LabelledDial("Chorus", this, "chorusrate", color, 0, 15);
         ((LabelledDial)comp).addAdditionalLabel("Rate");
         hbox.add(comp);
         
-        comp = new LabelledDial("Chorus", this, "chorusdepth", color, 0, 15)
-        	{
-        	public String map(int val)
-        		{
-        		return "" + (val + 1);
-        		}
-        	};
+        comp = new LabelledDial("Chorus", this, "chorusdepth", color, 0, 15);
         ((LabelledDial)comp).addAdditionalLabel("Depth");
         hbox.add(comp);
         
-        comp = new LabelledDial("Tremolo", this, "tremolorate", color, 0, 15)
-        	{
-        	public String map(int val)
-        		{
-        		return "" + (val + 1);
-        		}
-        	};
+        comp = new LabelledDial("Tremolo", this, "tremolorate", color, 0, 15);
         ((LabelledDial)comp).addAdditionalLabel("Rate");
         hbox.add(comp);
         
-        comp = new LabelledDial("Tremolo", this, "tremolodepth", color, 0, 15)
-        	{
-        	public String map(int val)
-        		{
-        		return "" + (val + 1);
-        		}
-        	};
+        comp = new LabelledDial("Tremolo", this, "tremolodepth", color, 0, 15);
         ((LabelledDial)comp).addAdditionalLabel("Depth");
         hbox.add(comp);
         
@@ -746,8 +750,8 @@ public class RolandU110 extends Synth
         		{
  				return "" + POLY_MOD_RANGES[val];
         		}
-            public int getDefaultValue() { return 3; }
-            public double getStartAngle() { return 150; }
+            public int getDefaultValue() { return 8; }
+            public double getStartAngle() { return 237; }
         	};
         ((LabelledDial)comp).addAdditionalLabel("Pressure Sens");
         hbox.add(comp);
@@ -943,9 +947,12 @@ public class RolandU110 extends Synth
             }
         else if (key.startsWith("part"))
         	{
+        	int part = StringUtility.getFirstInt(key);
+        	String param = key.substring(5);	// remove partN
+        	
             byte AA = (byte)(0x00);
-            byte BB = (byte)(0x01);
-            byte CC = (byte)(0x18 + ((Integer)(allParametersToIndex.get(key))).intValue());
+            byte BB = (byte)(0x10 + (part - 1));
+            byte CC = (byte)(((Integer)(allParametersToIndex.get(param))).intValue() - 5);
             byte val = (byte)(model.get(key));
                 
             byte checksum = produceChecksum(new byte[] { AA, BB, CC, val });
@@ -953,13 +960,11 @@ public class RolandU110 extends Synth
         	}
         else
             {
-            int pos = ((Integer)(allParametersToIndex.get(key))).intValue() - 5;
-            int part = (pos / 0x20);
-            int num = (pos % 0x20);
+            int pos = ((Integer)(allParametersToIndex.get(key))).intValue();
             
             byte AA = (byte)(0x00);
-            byte BB = (byte)(0x10 + part);
-            byte CC = (byte)(num);
+            byte BB = (byte)(0x01);
+            byte CC = (byte)(pos);
             byte val = (byte)(model.get(key));
                 
             byte checksum = produceChecksum(new byte[] { AA, BB, CC, val });
@@ -973,148 +978,193 @@ public class RolandU110 extends Synth
     public boolean getSendsParametersAfterNonMergeParse() { return true; }
 
     
-    byte[] parseData = new byte[256];
+    byte[] parseData = null;
     
     public int parse(byte[] data, boolean fromFile)
         {
+        if (numSysexMessages(data) > 1)
+            {
+            int result = PARSE_FAILED;
+            byte[][] d = cutUpSysex(data);
+            for(int i = 0; i < d.length; i++)
+                {
+                result = parse(d[i], fromFile);
+                if (result != PARSE_INCOMPLETE) break;
+                }
+            return result;
+            }
+                
         // What is the patch number?
         int AA = data[5];
         int BB = data[6];
         int CC = data[7];
+
+     	int parseDataPosition = (AA == 0x01 ? (BB == 0x01 ? 0 : 128) : (BB % 2 == 0 ? 0 : 128));
+
+        if (parseDataPosition == 0)
+            {
+            parseData = new byte[256];
+            for(int x = 0; x < parseData.length; x++)
+                parseData[x] = 0;
+            }
+        else if (parseData == null) 
+        	return PARSE_FAILED;				// bad initial data
+
+        System.arraycopy(data, 8, parseData, parseDataPosition, Math.min(parseData.length - parseDataPosition, 128));
+
+        if (parseDataPosition + 128 >= 232)    // last position, may only go to 232, not sure
+            {
+        // are we offset?
         
         if (AA == 0x02)         // Write to Patch Banks
             {
-            model.set("number", (BB * 128 + CC) / 128);
+            model.set("number", BB / 2);
             }
         
         // The U-110 is entirely byte-packed :-(  So we have to do this by hand.
 
-        int pos = 8;
+        int pos = 0;
+
+        pos += 8;	// padding
+                
         String name = "";
         for(int i = 0; i < 10; i++)
             {
-            int lsb = data[pos++];
-            int msb = data[pos++];
+            int lsb = parseData[pos++];
+            int msb = parseData[pos++];
             name = name + (char)(lsb | (msb << 4));
             }
         model.set("name", name);
 
-        int lsb = data[pos++];
-        int msb = data[pos++];
+        int lsb = parseData[pos++];
+        int msb = parseData[pos++];
         int val = lsb | (msb << 4);
         model.set("outputmode", val & 63);
 
-        lsb = data[pos++];
-        msb = data[pos++];
+        lsb = parseData[pos++];
+        msb = parseData[pos++];
         val = lsb | (msb << 4);
         model.set("chorusrate", val & 15);
-        model.set("chorusdepth", (val >>> 4) & 15);
 
-        lsb = data[pos++];
-        msb = data[pos++];
+        lsb = parseData[pos++];
+        msb = parseData[pos++];
+        val = lsb | (msb << 4);
+        model.set("chorusdepth", val & 15);
+
+        lsb = parseData[pos++];
+        msb = parseData[pos++];
         val = lsb | (msb << 4);
         model.set("tremolorate", val & 15);
-        model.set("tremolodepth", (val >>> 4) & 15);
 
+        lsb = parseData[pos++];
+        msb = parseData[pos++];
+        val = lsb | (msb << 4);
+        model.set("tremolodepth", val & 15);
+
+        pos += 2;	// padding
+                
 		for(int i = 1 ; i <= 6; i++)
 			{
-			lsb = data[pos++];
-			msb = data[pos++];
+			lsb = parseData[pos++];
+			msb = parseData[pos++];
 			val = lsb | (msb << 4);
 			model.set("part" + i + "tonemedia", val & 31);
 			model.set("part" + i + "lfopolypresssens", (val >>> 5) & 7);
 
-			lsb = data[pos++];
-			msb = data[pos++];
+			lsb = parseData[pos++];
+			msb = parseData[pos++];
 			val = lsb | (msb << 4);
 			model.set("part" + i + "tonenumber", val & 127);
 
-			lsb = data[pos++];
-			msb = data[pos++];
+			lsb = parseData[pos++];
+			msb = parseData[pos++];
 			val = lsb | (msb << 4);
 			model.set("part" + i + "receivechannel", val & 15);
 			model.set("part" + i + "bendrange", (val >>> 4) & 15);
 
-			lsb = data[pos++];
-			msb = data[pos++];
+			lsb = parseData[pos++];
+			msb = parseData[pos++];
 			val = lsb | (msb << 4);
 			model.set("part" + i + "keyrangelo", val);
 
-			lsb = data[pos++];
-			msb = data[pos++];
+			lsb = parseData[pos++];
+			msb = parseData[pos++];
 			val = lsb | (msb << 4);
 			model.set("part" + i + "keyrangehi", val);
 
-			lsb = data[pos++];
-			msb = data[pos++];
+			lsb = parseData[pos++];
+			msb = parseData[pos++];
 			val = lsb | (msb << 4);
 			model.set("part" + i + "partlevel", val);
 
-			lsb = data[pos++];
-			msb = data[pos++];
+			lsb = parseData[pos++];
+			msb = parseData[pos++];
 			val = lsb | (msb << 4);
 			model.set("part" + i + "velocitysens", val & 15);
-			model.set("part" + i + "chpresssens", (val >>> 4) & 15);
+			model.set("part" + i + "levelpresssens", (val >>> 4) & 15);
 
-			lsb = data[pos++];
-			msb = data[pos++];
+			lsb = parseData[pos++];
+			msb = parseData[pos++];
 			val = lsb | (msb << 4);
-			model.set("part" + i + "attackrate", val & 15);
-			model.set("part" + i + "releaserate", (val >>> 4) & 15);
+			model.set("part" + i + "envattackrate", val & 15);
+			model.set("part" + i + "envreleaserate", (val >>> 4) & 15);
 
-			lsb = data[pos++];
-			msb = data[pos++];
+			lsb = parseData[pos++];
+			msb = parseData[pos++];
 			val = lsb | (msb << 4);
 			model.set("part" + i + "pitchshiftcoarse", val);
 
-			lsb = data[pos++];
-			msb = data[pos++];
+			lsb = parseData[pos++];
+			msb = parseData[pos++];
 			val = lsb | (msb << 4);
 			model.set("part" + i + "pitchshiftfine", val);
 
-			lsb = data[pos++];
-			msb = data[pos++];
+			lsb = parseData[pos++];
+			msb = parseData[pos++];
 			val = lsb | (msb << 4);
 			model.set("part" + i + "detunedepth", val & 15);
 			model.set("part" + i + "pitchpolypresssens", (val >>> 4) & 15);
 
-			lsb = data[pos++];
-			msb = data[pos++];
+			lsb = parseData[pos++];
+			msb = parseData[pos++];
 			val = lsb | (msb << 4);
 			model.set("part" + i + "pgmchangemap", val & 7);
 			model.set("part" + i + "pgmchange", (val >>> 3) & 1);
-			model.set("part" + i + "outputassign", (val >>> 4) & 7);
+			model.set("part" + i + "outputassign", (val >>> 5) & 7);
 
-			lsb = data[pos++];
-			msb = data[pos++];
+			lsb = parseData[pos++];
+			msb = parseData[pos++];
 			val = lsb | (msb << 4);
-			model.set("part" + i + "lforate", val);
+			model.set("part" + i + "lforate", val & 15);
 
-			lsb = data[pos++];
-			msb = data[pos++];
+			lsb = parseData[pos++];
+			msb = parseData[pos++];
 			val = lsb | (msb << 4);
 			model.set("part" + i + "lfoautodepth", val & 15);
 			model.set("part" + i + "lfomandepth", (val >>> 4) & 15);
 
-			lsb = data[pos++];
-			msb = data[pos++];
+			lsb = parseData[pos++];
+			msb = parseData[pos++];
 			val = lsb | (msb << 4);
 			model.set("part" + i + "lfoautorisetime", val & 15);
-			model.set("part" + i + "lomanrisetime", (val >>> 4) & 15);
+			model.set("part" + i + "lfomanrisetime", (val >>> 4) & 15);
 
-			lsb = data[pos++];
-			msb = data[pos++];
+			lsb = parseData[pos++];
+			msb = parseData[pos++];
 			val = lsb | (msb << 4);
 			model.set("part" + i + "lfochpresssens", val & 15);
 			model.set("part" + i + "lfoautodelaytime", (val >>> 4) & 15);
 			}
 
 		revise();
+		parseData = null;
         return PARSE_SUCCEEDED;
+        }
+        else return PARSE_INCOMPLETE;
         }
     
 
-    public byte[] emit(Model tempModel, boolean toWorkingMemory, boolean toFile)
+    public Object[] emitAll(Model tempModel, boolean toWorkingMemory, boolean toFile)
         {             
         if (tempModel == null)
             tempModel = getModel();
@@ -1124,6 +1174,8 @@ public class RolandU110 extends Synth
         byte[] buf = new byte[256];
 
         int pos = 0;
+        
+        pos += 8;	// padding
                 
         String name = model.get("name", "Untitled") + "          ";
         for(int i = 0; i < 10; i++)
@@ -1139,16 +1191,27 @@ public class RolandU110 extends Synth
         buf[pos++] = (byte)((d >>> 4) & 15);
         
         d = 
-            (model.get("chorusrate") << 0) |
-            (model.get("chorusdepth") << 4);
+            (model.get("chorusrate") << 0);
         buf[pos++] = (byte)(d & 15);
         buf[pos++] = (byte)((d >>> 4) & 15);
         
         d = 
-            (model.get("tremolorate") << 0) |
-            (model.get("tremolodepth") << 4);
+            (model.get("chorusdepth") << 0);
         buf[pos++] = (byte)(d & 15);
         buf[pos++] = (byte)((d >>> 4) & 15);
+        
+        d = 
+            (model.get("tremolorate") << 0);
+        buf[pos++] = (byte)(d & 15);
+        buf[pos++] = (byte)((d >>> 4) & 15);
+
+        d = 
+            (model.get("tremolodepth") << 0);
+        buf[pos++] = (byte)(d & 15);
+        buf[pos++] = (byte)((d >>> 4) & 15);
+
+        pos += 2;	// padding
+                
 
 		for(int i = 1 ; i <= 6; i++)
 			{
@@ -1186,13 +1249,13 @@ public class RolandU110 extends Synth
         
 			d = 
 				(model.get("part" + i + "velocitysens") << 0) |
-				(model.get("part" + i + "chpresssens") << 4);
+				(model.get("part" + i + "levelpresssens") << 4);
 			buf[pos++] = (byte)(d & 15);
 			buf[pos++] = (byte)((d >>> 4) & 15);
 			
 			d = 
-				(model.get("part" + i + "attackrate") << 0) |
-				(model.get("part" + i + "releaserate") << 4);
+				(model.get("part" + i + "envattackrate") << 0) |
+				(model.get("part" + i + "envreleaserate") << 4);
 			buf[pos++] = (byte)(d & 15);
 			buf[pos++] = (byte)((d >>> 4) & 15);
 
@@ -1215,7 +1278,7 @@ public class RolandU110 extends Synth
 			d = 
 				(model.get("part" + i + "pgmchangemap") << 0) |			// 3 bits
 				(model.get("part" + i + "pgmchange") << 3) |			// 1 bit
-				(model.get("part" + i + "outputassign") << 4);	// 3 bits
+				(model.get("part" + i + "outputassign") << 5);			// 3 bits
 			buf[pos++] = (byte)(d & 15);
 			buf[pos++] = (byte)((d >>> 4) & 15);
 
@@ -1232,7 +1295,7 @@ public class RolandU110 extends Synth
 
 			d = 
 				(model.get("part" + i + "lfoautorisetime") << 0) |
-				(model.get("part" + i + "lomanrisetime") << 4);
+				(model.get("part" + i + "lfomanrisetime") << 4);
 			buf[pos++] = (byte)(d & 15);
 			buf[pos++] = (byte)((d >>> 4) & 15);
 
@@ -1246,14 +1309,14 @@ public class RolandU110 extends Synth
 		// There should be 24 bytes remaining
 		// FIXME: This appears to be gibberish but I'm not sure!  I'm assuming it's zeros
 		
-        int num = tempModel.get("number") * 128;
+        int num = tempModel.get("number") * 2;
         int AA = (toWorkingMemory ? 0x01 : 0x02);
-        int BB = (toWorkingMemory ? 0x01 : num / 128 );
-        int CC = (toWorkingMemory ? 0x00 : num % 128 );
+        int BB = (toWorkingMemory ? 0x01 : num );
+        int CC = (toWorkingMemory ? 0x00 : 0x00 );
 
         int AA2 = (toWorkingMemory ? 0x01 : 0x02);
-        int BB2 = (toWorkingMemory ? 0x01 : (num + 64) / 128 );
-        int CC2 = (toWorkingMemory ? 0x00 : (num + 64) % 128 );
+        int BB2 = (toWorkingMemory ? 0x02 : num + 1 );
+        int CC2 = (toWorkingMemory ? 0x00 : 0x00 );
                 
 		byte[][] data = new byte[2][138];
 
@@ -1288,22 +1351,27 @@ public class RolandU110 extends Synth
         {
         if (tempModel == null)
             tempModel = getModel();
-
+		
+		// we'll assume we got it
+		model.set("number", tempModel.get("number"));
+		
         tryToSendMIDI(buildPC((byte)getChannelOut(), tempModel.get("number")));
         }
 
 
+/// NOTE: Request Dump does NOT WORK if the user has pressed the EDIT button.
+
     public byte[] requestDump(Model tempModel)
         {
+        /*
         if (tempModel == null)
             tempModel = getModel();
 
         int number = tempModel.get("number");
                 
         byte AA = (byte)(0x02);
-        int pos = (number * 256);
-        byte BB = (byte)(pos / 128);
-        byte CC = (byte)(pos % 128);
+        byte BB = (byte)(number * 2);
+        byte CC = (byte)0x00;
         byte LSB = (byte)0x00;
         byte MSB = (byte)0x02; 		// 256 bytes I believe
                 
@@ -1311,6 +1379,8 @@ public class RolandU110 extends Synth
         byte[] b = new byte[] { (byte)0xF0, (byte)0x41, (byte)getChannelOut(), (byte)0x23, (byte)0x11, 
             AA, BB, CC, (byte)0x00, MSB, LSB, checksum, (byte)0xF7 }; 
         return b;
+        */
+        return requestCurrentDump();
         }
   
     public byte[] requestCurrentDump()
@@ -1368,6 +1438,8 @@ public class RolandU110 extends Synth
  
     public int getPauseAfterSendOneParameter() { return 25; }       // In the 1.07 firmware notes it says "at least 20ms" (http://llamamusic.com/d110/ROM_IC_Bug_Fixes.html).  In my firmware (1.10) the D-110 can handle changes thrown at it full blast, but earlier firmware (1.07) cannot.
         
+	public int getPauseAfterChangePatch() { return 500; }
+	
     public Model getNextPatchLocation(Model model)
         {
         int number = model.get("number");
@@ -1393,7 +1465,7 @@ public class RolandU110 extends Synth
         return "P-" + (model.get("number") + 1 < 10 ? "0" : "") + ((model.get("number") + 1));
         }
 
-    public int getBatchDownloadWaitTime() { return 275; }
+    public int getBatchDownloadWaitTime() { return 1000; }
 
     /** Default is null, which indicates that the patch editor does not support librarians.  */
     public String[] getPatchNumberNames() { return buildIntegerNames(64, 1); }
@@ -1412,7 +1484,7 @@ public class RolandU110 extends Synth
         in the right place. */
     public boolean getPatchContainsLocation() { return true; }
 
-    public boolean librarianTested() { return false; }
+    public boolean librarianTested() { return true; }
     }
 
 
@@ -1439,10 +1511,10 @@ REQUEST A DATA DUMP
 	DV	Device ID
 	23	U-110
 	11	Request Data
-	LL	Address MSB 	Address is of the form LLMMNN
+	LL	Address MSB 	Address is of the form LLMMNN.  Remember that these are 7-bit values.
 	MM	...
 	NN	Address LSB
-	XX	Data Size MSB 	Size is of the form XXYYZZ
+	XX	Data Size MSB 	Size is of the form XXYYZZ.   Remember that these are 7-bit values.
 	YY	...
 	ZZ	Data Size LSB
 	CH	Checksum		Checksum is on the ADDRESS and DATA SIZE.  See CHECKSUM below.
@@ -1453,11 +1525,11 @@ DATA DUMP
 	41 	Roland
 	DV	Device ID
 	23	U-110
-	11	Request Data
-	LL	Address LSB 	Address is of the form LLMMNN
+	12	Data Dump
+	LL	Address LSB 	Address is of the form LLMMNN.   Remember that these are 7-bit values.
 	MM	...
 	NN	Address MSB
-	DATA....			DATA can be arbitrarily long
+	DATA				DATA can be up to 128 bytes long
 	CH	Checksum		Checksum is on the ADDRESS and DATA.  See CHECKSUM below.
 	F7
 
@@ -1468,6 +1540,14 @@ The checksum applies to all messages:
 3. Subtract from 128
 4. If the result is 128, return 0
 5. Else return the result
+
+NOTE ON MULTI-SYSEX-MESSAGE DUMPS
+If a dump needs to send more than 128 bytes of DATA -- which is very often the case --
+then the dump takes the form of multiple DATA DUMP messages, each with its own starting
+address.  For example, to send out the current working patch memory (located at position 010100),
+the unit would send  F0 41 DV 23 12 01 01 00 ...First 128 bytes... CH F7 followed by
+F0 41 DV 23 12 01 02 00 ..Second 128 bytes.... CH F7.
+
 
 
 
@@ -1538,7 +1618,7 @@ Then for each Part n = 0 ... 5 for Parts 1...6
 	001n15	Program Change		0-1		(shown as OFF, ON)
 	001n16	Program Change Map	0-5		(shown as 1-6)
 	001n17	Detune Depth		0-15	(shown as 0-15)
-	001n18	Pitch Poly Press Sens	0-15(shown as -24 ... +24)
+	001n18	Pitch Poly Press Sens	0-15(shown as [-24, -12, -7 -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 7, 12])
 	001n19	LFO Poly Press Sens	0-7		(shown as 0-7)
 
 
@@ -1550,78 +1630,85 @@ REQUESTING AND DUMPING PATCHES
 To access a full patch in current working memory the address is 010100 and the
 size is 000100. 
 
-There are 64 patches.  To access a full patch in permanent storage the address 
-is 020000 + 128 * patchnum and the size is 000100. 
+There are 64 patches.  To write a full patch in permanent storage the address 
+is 020000 + 128 * patchnum and the size is 000100.   You cannot request a patch;
+the U-110 doesn't seem to respond to this properly.  Instead you must request
+all 64 patches.  You can, however, do a program change to load the patch into
+memory, then request from the current memory.
 
 Data is bit-packed into entire 8-bit bytes.  Then each byte is then split into 
 two nybbles, which hold the LSB and the MSB of the byte respectively (LSB first). 
-The stream of these nybbles forms the MIDI data.   Thus below we only list 
-the EVEN (LSB) nybble addresses here as the MSB follows in the ODD address.
+The stream of these nybbles forms the sysex payload.  Finally, the sysex payload
+(256 bytes all told) is broken into two 128-byte-long chunks. These are the 
+"DATA..." chunks in two DATA DUMP sysex messages respectively.
 
-Finally, the Data stream (256 bytes) is broken into two 128-byte-long chunks.
-These bytes form the "DATA..." chunks in two DATA DUMP sysex messages respectively.
+Below are the data elements, listed with "POS", which is the position of the 
+element in the data byte array before being nybblized, and "SYSEX", which is
+the position of the LSB nybble of the byte in the final sysex messages one 
+after another.  The MSB for each byte is not listed, but it is the odd 
+numbered position immediately after the LSB.
 
 The value ranges for each of the items is the same as for the individual
 parameters above.
 
-POSITION ITEM				"POSITION " is the byte position data stream				
+SYSEX	POS	 ITEM								
 ------------------------------------------------------------------------------
-0		00 00	[Padding?]
-2		00 00	[Padding?]
-4		00 00	[Padding?]
-6		00 00	[Padding?]
-8		Name[0] LSB
-10		Name[1] LSB
-12		Name[2] LSB
-14		Name[3] LSB
-16		Name[4] LSB
-18		Name[5] LSB
-20		Name[6] LSB
-22		Name[7] LSB
-24		Name[8] LSB
-26		Name[9] LSB
-28  	Output Mode
-30		Chorus Rate LSB
-32		Chorus Depth LSB
-34		Tremolo Rate LSB
-36		Tremolo Depth LSB
-38		00 00	[Padding?]
+8		0		00	[Padding?]
+10		1		00	[Padding?]
+12		2		00	[Padding?]
+14		3		00	[Padding?]
+16		4		Name[0]
+18		5		Name[1]
+20		6		Name[2]
+22		7		Name[3]
+24		8		Name[4]
+26		9		Name[5]
+28		10		Name[6]
+30		11		Name[7]
+32		12		Name[8]
+34		13		Name[9]
+36		14  	Output Mode
+38		15		Chorus Rate
+40		16		Chorus Depth
+42		17		Tremolo Rate
+44		18		Tremolo Depth
+46		19		00	[Padding?]
 
-PART 1
+PART 1 (32 sysex bytes, 16 positions)
 
-40      Tone Media (bits 0 1 2 3 4)   
-		LFO Poly Press Sens (bits 5 6 7)
-42      Tone Number
-44      Receive Channel (bits 0 1 2 3)
-		Bend Range (bits 4 5 6 7)
-46      Key Range Lo 
-48      Key Range Hi
-50      Level
-52      Velocity Sens (bits 0 1 2 3)
-		Ch Press Sens (bits 4 5 6 7)
-54      Attack Rate (bits 0 1 2 3)
-		Release Rate (bits 4 5 6 7)
-56      Pitch Shift Coarse
-58      Pitch Shift Fine
-60      Detune Depth (bits 0 1 2 3)
-		Poly Press Sens (bits 4 5 6 7)
-62      Program Tone Map (bits 0 1 2)
-		Program Change (bit 3)
-		[Unused, set to 0] (bit 4)
-		Output Assign (bits 5 6 7)
-64      LFO Rate
-66      Auto Depth (bits 0 1 2 3)
- 		Man Depth (bits 4 5 6 7)
-68      Auto Rise Time (bits 0 1 2 3)
- 		Man Rise Time (bits 4 5 6 7)
-70      LFO Channel Depth (bits 0 1 2 3)
-		Auto Delay Time (bits 4 5 6 7)
+48		20      Tone Media (bits 0 1 2 3 4)   
+				LFO Poly Press Sens (bits 5 6 7)
+50		21      Tone Number
+52		22      Receive Channel (bits 0 1 2 3)
+				Bend Range (bits 4 5 6 7)
+54		23      Key Range Lo 
+56		24      Key Range Hi
+58		25      Level
+60		26      Velocity Sens (bits 0 1 2 3)
+				Level Ch Press Sens (bits 4 5 6 7)
+62		27      Attack Rate (bits 0 1 2 3)
+				Release Rate (bits 4 5 6 7)
+64		28      Pitch Shift Coarse
+66		29      Pitch Shift Fine
+68		30      Detune Depth (bits 0 1 2 3)
+				Poly Press Sens (bits 4 5 6 7)
+70		31      Program Tone Map (bits 0 1 2)
+				Program Change (bit 3)
+				[Unused, set to 0] (bit 4)
+				Output Assign (bits 5 6 7)
+72		32      LFO Rate (bits 0 1 2 3)
+74		33		Auto Depth (bits 0 1 2 3)
+		 		Man Depth (bits 4 5 6 7)
+76		34      Auto Rise Time (bits 0 1 2 3)
+ 				Man Rise Time (bits 4 5 6 7)
+78		35      LFO Channel Depth (bits 0 1 2 3)
+				Auto Delay Time (bits 4 5 6 7)
 
-PART 2 is similar and starts at POSITION 72
-PART 3 is similar and starts at POSITION 104
-PART 4 is similar and starts at POSITION 136
-PART 5 is similar and starts at POSITION 168
-PART 6 is similar and starts at POSITION 200
+PART 2 is similar for the next 32 sysex bytes, starting at byte 80, position 36
+PART 3 is similar for the next 32 sysex bytes
+PART 4 is similar for the next 32 sysex bytes
+PART 5 is similar for the next 32 sysex bytes
+PART 6 is similar for the next 32 sysex bytes
 
 That totals 232 bytes.  Then come 24 bytes of unknown data, seemingly gibberish.
 
@@ -1653,7 +1740,7 @@ that 31 voices are assigned to them.
 7   1:19  2:4  3:4  4:4
 8   1:15  2:16
 9   1:15  2:12  3:4
-10   1:15  2:8  3:8             Note: documentation is wrong
+10   1:15  2:8  3:8             Note: U-110 documentation is wrong
 11   1:15  2:8  3:4  4:4
 12   1:15  2:4  3:4  4:4  5:4
 13   1:11  2:12  3:8

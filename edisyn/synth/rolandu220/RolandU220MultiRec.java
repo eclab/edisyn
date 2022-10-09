@@ -91,7 +91,7 @@ public class RolandU220MultiRec extends Recognize
     public static boolean recognize(byte[] data)
         {
         return (
-            (data.length >= 138 || data.length == 42 && data.length == 138+42) &&
+            (data.length >= 138 || data.length == 42) &&
             (data[0] == (byte)0xF0) &&
             (data[1] == (byte)0x41) &&
             (data[3] == (byte)0x2B) &&

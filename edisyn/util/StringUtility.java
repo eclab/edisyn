@@ -364,6 +364,15 @@ public class StringUtility
         return str;
         }
 
+    /** Returns the byte as a hex number with indices */
+    public static String toHexWithIndices(byte[] vals)
+        {
+        String str = "";
+        for(int i = 0; i < vals.length; i++)
+            str += ("" + i + "\t" + toHex(vals[i]) + "\n");
+        return str;
+        }
+
     /** Returns the integer as a hex number */
     public static String toHexInt(int val)
         {

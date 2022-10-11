@@ -90,6 +90,14 @@ public class RolandU220MultiRec extends Recognize
 
     public static boolean recognize(byte[] data)
         {
+        if (Synth.numSysexMessages(data) > 1)
+        	{
+        	byte[][] d = Synth.cutUpSysex(data);
+        	for(int i = 0; i < d.length; i++)
+        		if (!recognize(d[i])) return false;
+        	return true;
+        	}
+
         return (
             (data.length >= 138 || data.length == 42) &&
             (data[0] == (byte)0xF0) &&

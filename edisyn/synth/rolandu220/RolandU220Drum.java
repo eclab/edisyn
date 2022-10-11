@@ -633,7 +633,7 @@ public class RolandU220Drum extends Synth
         VBox vbox = new VBox();
         
         final JLabel[] rhythmKey = new JLabel[1];
-        final LabelledDial keyDial = new LabelledDial("            Source            ", this, "drum" + note + "sourcekey", color, 0, 127)
+        final LabelledDial keyDial = new LabelledDial("             Source             ", this, "drum" + note + "sourcekey", color, 0, 127)
             {
             public int getDefaultValue() 
                 {
@@ -1628,6 +1628,20 @@ public class RolandU220Drum extends Synth
     /** Verify that all the parameters are within valid values, and tweak them if not. */
     public void revise()
         {
+        // Drum Number, Drum Media, and PitchShiftFine can be invalid in certain dumps.
+        for(int i = 0; i < 64; i++)
+        	{
+            if (model.get("drum" + i + "media") >= PCM_NAMES.length)
+            	model.set("drum" + i + "media", 0);
+            if (model.get("drum" + i + "pitchshiftfine") > 114 ||
+            	model.get("drum" + i + "pitchshiftfine") < 14)
+            	model.set("drum" + i + "pitchshiftfine", 64);
+            // Note that Drum Number can vary in max, so we have to explicitly check for that
+            if (model.maxExists("drum" + i + "number") &&
+            	model.get("drum" + i + "number") > model.getMax("drum" + i + "number"))
+            	model.set("drum" + i + "number", 0); 
+            }
+
         // check the easy stuff -- out of range parameters
         super.revise();
 

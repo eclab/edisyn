@@ -5,11 +5,20 @@
 
 package edisyn.synth.rolandu220;
 import edisyn.*;
+import edisyn.util.*;
 
 public class RolandU220DrumRec extends Recognize
     {
     public static boolean recognize(byte[] data)
         {
+        if (Synth.numSysexMessages(data) > 1)
+        	{
+        	byte[][] d = Synth.cutUpSysex(data);
+        	for(int i = 0; i < d.length; i++)
+        		if (!recognize(d[i])) return false;
+        	return true;
+        	}
+
         return ((data[0] == (byte)0xF0) &&
             (data[1] == (byte)0x41) &&
             (data[3] == (byte)0x2B) &&
@@ -18,7 +27,7 @@ public class RolandU220DrumRec extends Recognize
                 ((data[5] == (byte)0x00 && data[6] >= (byte)0x20 && data[6] <= 0x2C) ||
                 // Patch Permanent
                 (data[5] == (byte)0x05)) &&
-            data.length <= 138 || data.length == 6272);
+            data.length <= 138 || data.length == 6272 || data.length == 1698);
         }
 
 
@@ -117,7 +126,7 @@ public class RolandU220DrumRec extends Recognize
             patches[i][12][2] = (byte)0x00;         // don't care
             patches[i][12][3] = (byte)0x2B;
             patches[i][12][4] = (byte)0x12;
-            patches[i][12][5] = (byte)0x03;
+            patches[i][12][5] = (byte)0x05;
             patches[i][12][6] = (byte)(pos / 128);
             patches[i][12][7] = (byte)(pos % 128);
             patches[i][12][40] = (byte)0x00;                // don't care

@@ -71,7 +71,7 @@ public class RolandU220Multi extends Synth
     public String[] CHORUS_TYPES = { "Chorus 1", "Chorus 2", "FB-Chorus", "Flanger", "Short Delay" };
     public String[] CHORUS_OUT_MODES = { "Pre-Reverb", "Post-Reverb" };
     public String[] REVERB_TYPES = { "Room 1", "Room 2", "Room 3", "Hall 1", "Hall 2", "Gate", "Delay", "Cross-Delay" };
-    public String[] PARAMETERS = { "Timbre Level", "Env Attack", "Env Decay", "Env Sustain", "Env Release", "Auto Bend Depth", "Auto Bend Rate", "Detune Depth", "Vib Rate", "Vib Waveform", "Vib Depth", "Vib Delay", "Vib Rise Time", "Vib Mod Depth", "Choru Level", "Chorus Rate", "Chorus Feedback", "Reverb Level", "Delay Feedback" };
+    public String[] PARAMETERS = { "Timbre Level", "Env Attack", "Env Decay", "Env Sustain", "Env Release", "Auto Bend Depth", "Auto Bend Rate", "Detune Depth", "Vib Rate", "Vib Waveform", "Vib Depth", "Vib Delay", "Vib Rise Time", "Vib Mod Depth", "Chorus Level", "Chorus Rate", "Chorus Feedback", "Reverb Level", "Delay Feedback" };
     public String[] OUTPUT_ASSIGNS = { "Dry", "Reverb", "Chorus", "Dir 1", "Dir 2 [220]" };
     //public String[] VELOCITY_LEVELS = { "Above", "Below" };               // Not using at present, we've hard-coded in the dial
     public static final String[] NOTES = new String[] { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
@@ -1052,8 +1052,6 @@ public class RolandU220Multi extends Synth
     
     public Object[] emitAll(Model tempModel, boolean toWorkingMemory, boolean toFile)
         { 
-        if (!toFile) return new Object[0];
-        
         if (tempModel == null)
             tempModel = getModel();
 
@@ -1274,12 +1272,16 @@ public class RolandU220Multi extends Synth
     /** Verify that all the parameters are within valid values, and tweak them if not. */
     public void revise()
         {
-        // Chorus Feedback and Velo Threshold can be wrong.
+        // Chorus Feedback, Output Assign, and Velo Threshold can be wrong.
         if (model.get("chorusfeedback") == 0) 
             model.set("chorusfeedback", 1);
         for(int i = 1; i <= 6; i++)
+        	{
             if (model.get("part" + i + "velothreshold") == 0) 
                 model.set("part" + i + "velothreshold", 127);
+            if (model.get("part" + i + "outputassign") >= OUTPUT_ASSIGNS.length) 
+                model.set("part" + i + "outputassign", 0);
+            }
         
         // check the easy stuff -- out of range parameters
         super.revise();

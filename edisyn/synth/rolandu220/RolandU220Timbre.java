@@ -69,7 +69,7 @@ public class RolandU220Timbre extends Synth
             "Metal Hit", "Rich Brass", "JP. Brass 1", "JP. Brass 2", "Brass Strings", 
             "String Pad 1", "String Pad 2", "JP. Strings", "Pizzagogo", "Fanta Bell", 
             "Spect Bell", "Bell Drum", "Synth Harp", "Pulse Wave 1", "Pulse Wave 2", "Pulse Wave 3", 
-            "Saw Wave 1", "Saw Wave 2", "Pizz", "Metal", "Breath", "Nails", "Spectrum 1", "Spectrum 2", "N. Dance", "Drums"
+            "Saw Wave 1", "Saw Wave 2", "Pizz", "Metal", "Breath", "Nails", "Spectrum 1", "Spectrum 2", "N. Dance", "Drums [SETUP]"
             },
             { 
             // SN-U110-01 - Pipe Organ and Harpsichord
@@ -79,7 +79,7 @@ public class RolandU220Timbre extends Synth
             },
             { 
             // SN-U110-02 - Latin and FX Percussion
-            "Latin 1", "Latin 2", "Latin 3", "FX 1", "FX 2", "FX 3", "FX 4", 
+            "Latin 1 [SETUP]", "Latin 2 [SETUP]", "Latin 3 [SETUP]", "FX 1 [SETUP]", "FX 2 [SETUP]", "FX 3 [SETUP]", "FX 4 [SETUP]", 
             "Conga 1", "Conga 2", "Conga 3", "Bongo", "Claves", "Timbale", 
             "Tambourine", "Wood Block", "Whistle", "Triangle", "Belltree", 
             "Jingle Bell", "Vibraslap", "Castanet", "Maracas", "Agogo 1", "Agogo 2", 
@@ -160,8 +160,8 @@ public class RolandU220Timbre extends Synth
             },
             {
             // SN-U110-10 - Rock Drums
-            "Rock Drums",
-            "Electronic Drums"
+            "Rock Drums [SETUP]",
+            "Electronic Drums [SETUP]"
             },
             {
             // SN-U110-11 - Sound Effects
@@ -484,7 +484,7 @@ public class RolandU220Timbre extends Synth
                 showSimpleError(title, "The Timbre Number must be an integer 1...128");
                 continue;
                 }
-            if (n < 1 || n > 64)
+            if (n < 1 || n > 128)
                 {
                 showSimpleError(title, "The Timbre Number must be an integer 1...128");
                 continue;

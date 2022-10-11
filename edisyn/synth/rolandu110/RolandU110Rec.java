@@ -29,7 +29,15 @@ public class RolandU110Rec extends Recognize
 
     public static boolean recognize(byte[] data)
         {
-        return (data.length <= 138 &&			// data.length >= 114 && 
+        if (Synth.numSysexMessages(data) > 1)
+        	{
+        	byte[][] d = Synth.cutUpSysex(data);
+        	for(int i = 0; i < d.length; i++)
+        		if (!recognize(d[i])) return false;
+        	return true;
+        	}
+
+       return (data.length <= 138 &&			// data.length >= 114 && 
             (data[0] == (byte)0xF0) &&
             (data[1] == (byte)0x41) &&
             (data[3] == (byte)0x23) &&

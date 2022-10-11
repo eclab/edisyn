@@ -47,19 +47,29 @@ public class RolandU110 extends Synth
     public static final String[][] PCM =
         {
             {
-            // U-110 INTERNAL
-"A. Piano 1", "A. Piano 2", "A. Piano 3", "A. Piano 4", "A. Piano 5", "A. Piano 6", "A. Piano 7", "A. Piano 8", 
-"A. Piano 9", "A. Piano 10", "E. Piano 1", "E. Piano 2", "E. Piano 3", "E. Piano 4", "E. Piano 5", "Vib 1", 
-"Vib 2", "Vib 3", "Bell 1", "Bell 2", "Bell 3", "Bell 4", "Marimba", "A. Guitar 1", "A. Guitar 2", 
-"A. Guitar 3", "A. Guitar 4", "A. Guitar 5", "E. Guitar 1", "E. Guitar 2", "E. Guitar 3", "E. Guitar 4", 
-"Slap 1", "Slap 2", "Slap 3", "Slap 4", "Slap 5", "Slap 6", "Slap 7", "Slap 8", "Slap 9", "Slap 10", 
-"Slap 11", "Slap 12", "Fingered 1", "Fingered 2", "Picked 1", "Picked 2", "Fretless 1", "Fretless 2", 
-"AC. Bass", "Syn. Bass 1", "Syn. Bass 2", "Syn. Bass 3", "Choir 1", "Choir 2", "Choir 3", "Choir 4", 
-"Strings 1", "Strings 2", "Strings 3", "Strings 4", "E. Organ 1", "E. Organ 2", "E. Organ 3", "E. Organ 4", 
-"E. Organ 5", "E. Organ 6", "E. Organ 7", "E. Organ 8", "E. Organ 9", "E. Organ 10", "E. Organ 11", 
-"E. Organ 12", "E. Organ 13", "Soft TP 1", "Soft TP 2", "Soft TP 3", "TP / TRB 1", "TP / TRB 2", 
-"TP / TRB 3", "TP / TRB 4", "TP / TRB 5", "TP / TRB 6", "Sax 1", "Sax 2", "Sax 3", "Sax 4", "Sax 5", 
-"Brass 1", "Brass 2", "Brass 3", "Brass 4", "Brass 5", "Flute 1", "Flute 2", "Shaku 1", "Shaku 2", "Drums"
+            // U-220 INTERNAL
+            "A. Piano 1", "A. Piano 2", "A. Piano 3", "A. Piano 4", "A. Piano 5", 
+            "A. Piano 6", "A. Piano 7", "A. Piano 8", "A. Piano 9", "A. Piano 10", 
+            "E. Piano 1", "E. Piano 2", "E. Piano 3", "E. Piano 4", "E. Piano 5", 
+            "Bright EP 1", "Bright EP 2", "Vib 1", "Vib 2", "Vib 3", "Bell 1", "Bell 2", "Marimba", 
+            "A. Guitar 1", "A. Guitar 2", "A. Guitar 3", "A. Guitar 4", "A. Guitar 5", 
+            "E. Guitar 1", "E. Guitar 2", "E. Guitar 3", "E. Guitar 4", "Heavy EG 1", "Heavy EG 2", 
+            "Slap 1", "Slap 2", "Slap 3", "Slap 4", "Slap 5", "Slap 6", 
+            "Slap 7", "Slap 8", "Slap 9", "Slap 10", "Slap 11", "Slap 12", 
+            "Fingered 1", "Fingered 2", "Picked 1", "Picked 2", "Fretless 1", "Fretless 2", "AC. Bass", 
+            "Syn. Bass 1", "Syn. Bass 2", "Syn. Bass 3", "Syn. Bass 4", 
+            "Syn. Bass 5", "Syn. Bass 6", "Syn. Bass 7", "Syn. Bass 8", 
+            "Choir 1", "Choir 2", "Choir 3", "Choir 4", "Strings 1", "Strings 2", "Strings 3", "Strings 4", 
+            "E. Organ 1", "E. Organ 2", "E. Organ 3", "E. Organ 4", "E. Organ 5", 
+            "E. Organ 6", "E. Organ 7", "E. Organ 8", "E. Organ 9", "R. Organ 1", "R. Organ 2", 
+            "Soft TP 1", "Soft TP 2", "TP / TRB 1", "TP / TRB 2", "TP / TRB 3", 
+            "Sax 1", "Sax 2", "Sax 3", "Sax 4", "Sax 5", "Brass 1", "Flute 1", 
+            "Shaku 1", "Shaku 2", "Fantasia", "Bell Pad", "Syn Choir", 
+            "Breath Vox", "Syn. Vox 1", "Syn. Vox 2", "L. Calliope", "Calliope", 
+            "Metal Hit", "Rich Brass", "JP. Brass 1", "JP. Brass 2", "Brass Strings", 
+            "String Pad 1", "String Pad 2", "JP. Strings", "Pizzagogo", "Fanta Bell", 
+            "Spect Bell", "Bell Drum", "Synth Harp", "Pulse Wave 1", "Pulse Wave 2", "Pulse Wave 3", 
+            "Saw Wave 1", "Saw Wave 2", "Pizz", "Metal", "Breath", "Nails", "Spectrum 1", "Spectrum 2", "N. Dance", "Drums [SETUP]"
             },
             { 
             // SN-U110-01 - Pipe Organ and Harpsichord
@@ -69,7 +79,7 @@ public class RolandU110 extends Synth
             },
             { 
             // SN-U110-02 - Latin and FX Percussion
-            "Latin 1", "Latin 2", "Latin 3", "FX 1", "FX 2", "FX 3", "FX 4", 
+            "Latin 1 [SETUP]", "Latin 2 [SETUP]", "Latin 3 [SETUP]", "FX 1 [SETUP]", "FX 2 [SETUP]", "FX 3 [SETUP]", "FX 4 [SETUP]", 
             "Conga 1", "Conga 2", "Conga 3", "Bongo", "Claves", "Timbale", 
             "Tambourine", "Wood Block", "Whistle", "Triangle", "Belltree", 
             "Jingle Bell", "Vibraslap", "Castanet", "Maracas", "Agogo 1", "Agogo 2", 
@@ -133,7 +143,7 @@ public class RolandU110 extends Synth
             },
             {
             // SN-U110-08 - Synthesizer
-            // NOTE -- already available on the U-110 internal
+            // NOTE -- already available on the U-220 internal
             "Fantasia", "Bell Pad", "Syn Choir", "Breath Vox", "L. Calliope", "Calliope", 
             "Metal Hit", "Rich Brass", "Brass Strings", "String Pad 1", "String Pad 2", 
             "Pizzagogo", "Fanta Bell", "Spect Bell", "Bell Drum", "Synth Harp", 
@@ -142,7 +152,7 @@ public class RolandU110 extends Synth
             },
             {
             // SN-U110-09 - Guitar & Keyboards
-            // NOTE -- already available on the U-110 internal
+            // NOTE -- already available on the U-220 internal
             "Bright EP 1", "Bright EP 2", "Syn. Vox 1", "Syn. Vox 2", 
             "Syn. Bass 4", "Syn. Bass 5", "Syn. Bass 6", "Syn. Bass 7", "Syn. Bass 8", 
             "Heavy EG 1", "Heavy EG 2", "JP. Strings", "JP. Brass 1", "JP. Brass 2", 
@@ -150,8 +160,8 @@ public class RolandU110 extends Synth
             },
             {
             // SN-U110-10 - Rock Drums
-            "Rock Drums",
-            "Electronic Drums"
+            "Rock Drums [SETUP]",
+            "Electronic Drums [SETUP]"
             },
             {
             // SN-U110-11 - Sound Effects
@@ -255,6 +265,7 @@ public class RolandU110 extends Synth
 
     HashMap allParametersToIndex = new HashMap();
         
+    // This just contains the unique parameters, not the individal part parameters 
     final static String[] allParameters = new String[]
     {
     "outputmode",
@@ -494,12 +505,6 @@ public class RolandU110 extends Synth
         }
                 
                 
-    public JFrame sprout()
-        {
-        JFrame frame = super.sprout();
-        return frame;
-        }         
-               
     public String getDefaultResourceFileName() { return "RolandU110.init"; }
     public String getHTMLResourceFileName() { return "RolandU110.html"; }
 
@@ -1322,7 +1327,7 @@ public class RolandU110 extends Synth
 
         data[0][0] = (byte)0xF0;
         data[0][1] = (byte)0x41;
-        data[0][2] = (byte)(byte)getChannelOut();
+        data[0][2] = (byte)getChannelOut();
         data[0][3] = (byte)0x23;
         data[0][4] = (byte)0x12;
         data[0][5] = (byte) AA;
@@ -1334,7 +1339,7 @@ public class RolandU110 extends Synth
 
         data[1][0] = (byte)0xF0;
         data[1][1] = (byte)0x41;
-        data[1][2] = (byte)(byte)getChannelOut();
+        data[1][2] = (byte)getChannelOut();
         data[1][3] = (byte)0x23;
         data[1][4] = (byte)0x12;
         data[1][5] = (byte) AA2;
@@ -1438,7 +1443,7 @@ public class RolandU110 extends Synth
  
     public int getPauseAfterSendOneParameter() { return 25; }       // In the 1.07 firmware notes it says "at least 20ms" (http://llamamusic.com/d110/ROM_IC_Bug_Fixes.html).  In my firmware (1.10) the D-110 can handle changes thrown at it full blast, but earlier firmware (1.07) cannot.
         
-	public int getPauseAfterChangePatch() { return 500; }
+	public int getPauseAfterChangePatch() { return 0; }
 	
     public Model getNextPatchLocation(Model model)
         {
@@ -1465,7 +1470,7 @@ public class RolandU110 extends Synth
         return "P-" + (model.get("number") + 1 < 10 ? "0" : "") + ((model.get("number") + 1));
         }
 
-    public int getBatchDownloadWaitTime() { return 1000; }
+    public int getBatchDownloadWaitTime() { return 300; }
 
     /** Default is null, which indicates that the patch editor does not support librarians.  */
     public String[] getPatchNumberNames() { return buildIntegerNames(64, 1); }
@@ -1483,6 +1488,11 @@ public class RolandU110 extends Synth
         This will matter when reading patches from disk, rather than loading them from the synth, so as to put them
         in the right place. */
     public boolean getPatchContainsLocation() { return true; }
+
+    public byte[] requestBankDump(int bank) 
+        { 
+        return new byte[] { (byte)0xF0, 0x41, (byte)getChannelOut(), 0x23, 0x11, 0x02, 0x00, 0x00, 0x01, 0x00, 0x00, 0x7D, (byte)0xF7 }; 
+        }
 
     public boolean librarianTested() { return true; }
     }

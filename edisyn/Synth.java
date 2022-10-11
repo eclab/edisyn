@@ -3668,6 +3668,7 @@ public abstract class Synth extends JComponent implements Updatable
             });
                 
         JMenuItem saveAs = new JMenuItem("Save As...");
+        save.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()  | InputEvent.SHIFT_MASK));
         menu.add(saveAs);
         saveAs.addActionListener(new ActionListener()
             {
@@ -5696,10 +5697,9 @@ public abstract class Synth extends JComponent implements Updatable
         
     public void writeAllParameters(Model model)
         {
-        // performChangePatch(model);     // we need to be at the start for the Oberheim Matrix 1000
         tryToSendMIDI(emitAll(model, false, false));
         simplePause(getPauseAfterWritePatch());
-        performChangePatch(model);     // do it at the end AND start here, as opposed to doSendtoPatch, which does it first.  We need to be at the end for the Kawai K4.
+        performChangePatch(model);
         if (getSendsParametersAfterWrite())
             sendAllParameters();
         }
@@ -7459,7 +7459,7 @@ public abstract class Synth extends JComponent implements Updatable
                                         {
                                         Synth otherSynth = instantiate(synthType, false, true, null);
                                         otherSynth.loadLibrarian(pat[primary]);
-                                        return true;
+                                        return false;	// NOT TRUE!  See docs for doOpen(...)
                                         }
                                     else
                                         {
@@ -7469,7 +7469,7 @@ public abstract class Synth extends JComponent implements Updatable
                                 else
                                     {
                                     loadLibrarian(pat[primary]);
-                                    return true;
+                                    return false;  	// NOT TRUE!  See docs for doOpen(...)
                                     }
                                 }
                             else if (result == BULK_DIALOG_RESULT_NEW_LIBRARIAN)
@@ -7477,7 +7477,7 @@ public abstract class Synth extends JComponent implements Updatable
                                 Class synthType = getSynth(pat[primary][0].synth);
                                 Synth otherSynth = instantiate(synthType, false, true, null);
                                 otherSynth.loadLibrarian(pat[primary]);
-                                return true;
+                                return false; 	// NOT TRUE!  See docs for doOpen(...)
                                 }
                             }
                         }
@@ -7517,7 +7517,7 @@ public abstract class Synth extends JComponent implements Updatable
         // I think we should clear the librarian first
         int res = showMultiOption(this, new String[0], new JComponent[0], 
             new String[] { "Clear", "Overwrite", "Cancel" }, 0, "Load Patches", 
-            new JLabel("Clear all existing patches, or overwrite them as needed with new ones?"));
+            new JLabel("Clear all existing patches and write new ones, or overwrite then only with non-empty new patches?"));
         if (res < 0 || res == 2) return;
         
         if (res == 0) librarian.clearAll(false);
@@ -7531,12 +7531,11 @@ public abstract class Synth extends JComponent implements Updatable
         setSendMIDI(false);
         undo.setWillPush(false);
         Model backup = (Model)(model.clone());  
-        model.setUpdateListeners(false);                        // otherwise we GC badly  
+        model.setUpdateListeners(false);                        // otherwise we GC badly 
         for(int i = 0; i < patches.length; i++)
             {
             byte[] flat = flatten(patches[i].sysex);
             if (!recognizeLocal(flat)) { patches[i] = null; continue; }
-            
             res = parse(flat, true);
             if (res == PARSE_SUCCEEDED || res == PARSE_SUCCEEDED_UNTITLED)
                 {
@@ -8052,7 +8051,7 @@ public abstract class Synth extends JComponent implements Updatable
 
         otherSynth.updateTitle();       // so it shows the right filename
                 
-        // we don't want this to look like it's succeeded
+        // we don't want this to look like it's succeeded -- see docs for doOpen(...)
         return false;  // (result == PARSE_SUCCEEDED || result == PARSE_SUCCEEDED_UNTITLED);
         }
                 

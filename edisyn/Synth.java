@@ -3668,7 +3668,7 @@ public abstract class Synth extends JComponent implements Updatable
             });
                 
         JMenuItem saveAs = new JMenuItem("Save As...");
-        save.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()  | InputEvent.SHIFT_MASK));
+        saveAs.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_S, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()  | InputEvent.SHIFT_MASK));
         menu.add(saveAs);
         saveAs.addActionListener(new ActionListener()
             {

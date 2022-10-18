@@ -6293,7 +6293,7 @@ public abstract class Synth extends JComponent implements Updatable
             }
                 
         FileDialog fd = new FileDialog((Frame)(SwingUtilities.getRoot(this)), "Save Patch to Sysex File...", FileDialog.SAVE);
-                
+        
         if (filename != null)
             {
             fd.setFile(StringUtility.reviseFileName(filename));
@@ -6301,17 +6301,28 @@ public abstract class Synth extends JComponent implements Updatable
             if (path != null)
                 fd.setDirectory(path);
             }
-        else if (file != null)
-            {
-            fd.setFile(StringUtility.reviseFileName(file.getName()));
-            fd.setDirectory(file.getParentFile().getPath());
-            }
         else
             {
-            if (getPatchName(getModel()) != null && getPatchName(getModel()).trim().length() > 0)
-                fd.setFile(StringUtility.reviseFileName(getPatchName(getModel()).trim() + ".syx"));
+            if (getPatchName(getModel()) != null)
+            	{
+            	if (getPatchName(getModel()).trim().length() > 0)
+					{
+					fd.setFile(StringUtility.reviseFileName(getPatchName(getModel()).trim() + ".syx"));
+					}
+				else
+					{
+            		fd.setFile(StringUtility.reviseFileName("Untitled.syx"));
+					}
+				}
+            else if (file != null)
+            	{
+            	fd.setFile(StringUtility.reviseFileName(file.getName()));
+            	fd.setDirectory(file.getParentFile().getPath());
+            	}
             else
-                fd.setFile(StringUtility.reviseFileName("Untitled.syx"));
+            	{
+            	fd.setFile(StringUtility.reviseFileName("Untitled.syx"));
+            	}
             String path = getLastDirectory();
             if (path != null)
                 fd.setDirectory(path);

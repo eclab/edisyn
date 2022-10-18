@@ -47,30 +47,27 @@ public class RolandU110 extends Synth
     public static final String[][] PCM =
         {
             {
-            // U-220 INTERNAL
-            "A. Piano 1", "A. Piano 2", "A. Piano 3", "A. Piano 4", "A. Piano 5", 
-            "A. Piano 6", "A. Piano 7", "A. Piano 8", "A. Piano 9", "A. Piano 10", 
-            "E. Piano 1", "E. Piano 2", "E. Piano 3", "E. Piano 4", "E. Piano 5", 
-            "Bright EP 1", "Bright EP 2", "Vib 1", "Vib 2", "Vib 3", "Bell 1", "Bell 2", "Marimba", 
-            "A. Guitar 1", "A. Guitar 2", "A. Guitar 3", "A. Guitar 4", "A. Guitar 5", 
-            "E. Guitar 1", "E. Guitar 2", "E. Guitar 3", "E. Guitar 4", "Heavy EG 1", "Heavy EG 2", 
-            "Slap 1", "Slap 2", "Slap 3", "Slap 4", "Slap 5", "Slap 6", 
-            "Slap 7", "Slap 8", "Slap 9", "Slap 10", "Slap 11", "Slap 12", 
-            "Fingered 1", "Fingered 2", "Picked 1", "Picked 2", "Fretless 1", "Fretless 2", "AC. Bass", 
-            "Syn. Bass 1", "Syn. Bass 2", "Syn. Bass 3", "Syn. Bass 4", 
-            "Syn. Bass 5", "Syn. Bass 6", "Syn. Bass 7", "Syn. Bass 8", 
-            "Choir 1", "Choir 2", "Choir 3", "Choir 4", "Strings 1", "Strings 2", "Strings 3", "Strings 4", 
-            "E. Organ 1", "E. Organ 2", "E. Organ 3", "E. Organ 4", "E. Organ 5", 
-            "E. Organ 6", "E. Organ 7", "E. Organ 8", "E. Organ 9", "R. Organ 1", "R. Organ 2", 
-            "Soft TP 1", "Soft TP 2", "TP / TRB 1", "TP / TRB 2", "TP / TRB 3", 
-            "Sax 1", "Sax 2", "Sax 3", "Sax 4", "Sax 5", "Brass 1", "Flute 1", 
-            "Shaku 1", "Shaku 2", "Fantasia", "Bell Pad", "Syn Choir", 
-            "Breath Vox", "Syn. Vox 1", "Syn. Vox 2", "L. Calliope", "Calliope", 
-            "Metal Hit", "Rich Brass", "JP. Brass 1", "JP. Brass 2", "Brass Strings", 
-            "String Pad 1", "String Pad 2", "JP. Strings", "Pizzagogo", "Fanta Bell", 
-            "Spect Bell", "Bell Drum", "Synth Harp", "Pulse Wave 1", "Pulse Wave 2", "Pulse Wave 3", 
-            "Saw Wave 1", "Saw Wave 2", "Pizz", "Metal", "Breath", "Nails", "Spectrum 1", "Spectrum 2", "N. Dance", "Drums [SETUP]"
-            },
+            // U-110 INTERNAL
+			"A. Piano 1", "A. Piano 2", "A. Piano 3", "A. Piano 4", "A. Piano 5", 
+			"A. Piano 6", "A. Piano 7", "A. Piano 8", "A. Piano 9", "A. Piano 10", 
+			"E. Piano 1", "E. Piano 2", "E. Piano 3", "E. Piano 4", "E. Piano 5", 
+			"Vib 1", "Vib 2", "Vib 3", "Bell 1", "Bell 2", "Bell 3", "Bell 4", "Marimba", 
+			"A. Guitar 1", "A. Guitar 2", "A. Guitar 3", "A. Guitar 4", "A. Guitar 5", 
+			"E. Guitar 1", "E. Guitar 2", "E. Guitar 3", "E. Guitar 4", 
+			"Slap 1", "Slap 2", "Slap 3", "Slap 4", "Slap 5", "Slap 6", 
+			"Slap 7", "Slap 8", "Slap 9", "Slap 10", "Slap 11", "Slap 12", 
+			"Fingered 1", "Fingered 2", "Picked 1", "Picked 2", "Fretless 1", "Fretless 2",
+			 "AC. Bass", "Syn. Bass 1", "Syn. Bass 2", "Syn. Bass 3", 
+			 "Choir 1", "Choir 2", "Choir 3", "Choir 4", 
+			 "Strings 1", "Strings 2", "Strings 3", "Strings 4", 
+			 "E. Organ 1", "E. Organ 2", "E. Organ 3", "E. Organ 4", "E. Organ 5", 
+			 "E. Organ 6", "E. Organ 7", "E. Organ 8", "E. Organ 9", "E. Organ 10", 
+			 "E. Organ 11", "E. Organ 12", "E. Organ 13", 
+			 "Soft TP 1", "Soft TP 2", "Soft TP 3", 
+			 "TP / TRB 1", "TP / TRB 2", "TP / TRB 3", "TP / TRB 4", "TP / TRB 5", "TP / TRB 6", 
+			 "Sax 1", "Sax 2", "Sax 3", "Sax 4", "Sax 5", 
+			 "Brass 1", "Brass 2", "Brass 3", "Brass 4", "Brass 5", 
+			 "Flute 1", "Flute 2", "Shaku 1", "Shaku 2", "Drums [SETUP]"            },
             { 
             // SN-U110-01 - Pipe Organ and Harpsichord
             "Harpsichord 1", "Harpsichord 2", "Harpsichord 3", "Harpsichord 4", "Harpsichord 5", "Harpsichord 6",
@@ -271,7 +268,7 @@ public class RolandU110 extends Synth
     "outputmode",
     "chorusrate",
     "chorusdepth",
-    "termolorate",
+    "tremolorate",
     "tremolodepth",
     
     "outputassign",
@@ -300,170 +297,6 @@ public class RolandU110 extends Synth
     "detunedepth",
     "pitchpolypresssens",
     "lfopolypresssens",
-    
-/*
-    "part1outputassign",
-    "part1receivechannel",
-    "part1tonemedia",
-    "part1tonenumber",
-    "part1bendrange",
-    "part1keyrangelo",
-    "part1keyrangehi",
-    "part1partlevel",
-    "part1velocitysens",
-    "part1levelpresssens",
-    "part1envattackrate",
-    "part1envreleaserate",
-    "part1pitchshiftcoarse",
-    "part1pitchshiftfine",
-    "part1lforate",
-    "part1lfoautodelaytime",
-    "part1lfoautorisetime",
-    "part1lfoautodepth",
-    "part1lfomanrisetime",
-    "part1lfomandepth",
-    "part1lfochpresssens",
-    "part1pgmchange",
-    "part1pgmchangemap",
-    "part1detunedepth",
-    "part1pitchpolypresssens",
-    "part1lfopolypresssens",
-    
-    "part2outputassign",
-    "part2receivechannel",
-    "part2tonemedia",
-    "part2tonenumber",
-    "part2bendrange",
-    "part2keyrangelo",
-    "part2keyrangehi",
-    "part2partlevel",
-    "part2velocitysens",
-    "part2levelpresssens",
-    "part2envattackrate",
-    "part2envreleaserate",
-    "part2pitchshiftcoarse",
-    "part2pitchshiftfine",
-    "part2lforate",
-    "part2lfoautodelaytime",
-    "part2lfoautorisetime",
-    "part2lfoautodepth",
-    "part2lfomanrisetime",
-    "part2lfomandepth",
-    "part2lfochpresssens",
-    "part2pgmchange",
-    "part2pgmchangemap",
-    "part2detunedepth",
-    "part2pitchpolypresssens",
-    "part2lfopolypresssens",
-    
-    "part3outputassign",
-    "part3receivechannel",
-    "part3tonemedia",
-    "part3tonenumber",
-    "part3bendrange",
-    "part3keyrangelo",
-    "part3keyrangehi",
-    "part3partlevel",
-    "part3velocitysens",
-    "part3levelpresssens",
-    "part3envattackrate",
-    "part3envreleaserate",
-    "part3pitchshiftcoarse",
-    "part3pitchshiftfine",
-    "part3lforate",
-    "part3lfoautodelaytime",
-    "part3lfoautorisetime",
-    "part3lfoautodepth",
-    "part3lfomanrisetime",
-    "part3lfomandepth",
-    "part3lfochpresssens",
-    "part3pgmchange",
-    "part3pgmchangemap",
-    "part3detunedepth",
-    "part3pitchpolypresssens",
-    "part3lfopolypresssens",
-
-    "part4outputassign",
-    "part4receivechannel",
-    "part4tonemedia",
-    "part4tonenumber",
-    "part4bendrange",
-    "part4keyrangelo",
-    "part4keyrangehi",
-    "part4partlevel",
-    "part4velocitysens",
-    "part4levelpresssens",
-    "part4envattackrate",
-    "part4envreleaserate",
-    "part4pitchshiftcoarse",
-    "part4pitchshiftfine",
-    "part4lforate",
-    "part4lfoautodelaytime",
-    "part4lfoautorisetime",
-    "part4lfoautodepth",
-    "part4lfomanrisetime",
-    "part4lfomandepth",
-    "part4lfochpresssens",
-    "part4pgmchange",
-    "part4pgmchangemap",
-    "part4detunedepth",
-    "part4pitchpolypresssens",
-    "part4lfopolypresssens",
-
-    "part5outputassign",
-    "part5receivechannel",
-    "part5tonemedia",
-    "part5tonenumber",
-    "part5bendrange",
-    "part5keyrangelo",
-    "part5keyrangehi",
-    "part5partlevel",
-    "part5velocitysens",
-    "part5levelpresssens",
-    "part5envattackrate",
-    "part5envreleaserate",
-    "part5pitchshiftcoarse",
-    "part5pitchshiftfine",
-    "part5lforate",
-    "part5lfoautodelaytime",
-    "part5lfoautorisetime",
-    "part5lfoautodepth",
-    "part5lfomanrisetime",
-    "part5lfomandepth",
-    "part5lfochpresssens",
-    "part5pgmchange",
-    "part5pgmchangemap",
-    "part5detunedepth",
-    "part5pitchpolypresssens",
-    "part5lfopolypresssens",
-
-    "part6outputassign",
-    "part6receivechannel",
-    "part6tonemedia",
-    "part6tonenumber",
-    "part6bendrange",
-    "part6keyrangelo",
-    "part6keyrangehi",
-    "part6partlevel",
-    "part6velocitysens",
-    "part6levelpresssens",
-    "part6envattackrate",
-    "part6envreleaserate",
-    "part6pitchshiftcoarse",
-    "part6pitchshiftfine",
-    "part6lforate",
-    "part6lfoautodelaytime",
-    "part6lfoautorisetime",
-    "part6lfoautodepth",
-    "part6lfomanrisetime",
-    "part6lfomandepth",
-    "part6lfochpresssens",
-    "part6pgmchange",
-    "part6pgmchangemap",
-    "part6detunedepth",
-    "part6pitchpolypresssens",
-    "part6lfopolypresssens",
-    */
     };
 
     public RolandU110()
@@ -674,63 +507,6 @@ public class RolandU110 extends Synth
         ((LabelledDial)comp).addAdditionalLabel("Channel");
         hbox.add(comp);
 
-        comp = new LabelledDial("Level", this, "part" + part + "partlevel", color, 0, 127);
-        hbox.add(comp);
-
-        comp = new LabelledDial("Bend", this, "part" + part + "bendrange", color, 0, 12);
-        ((LabelledDial)comp).addAdditionalLabel("Range");
-        hbox.add(comp);
-
-        comp = new LabelledDial("Key Range", this, "part" + part + "keyrangelo", color, 0, 127)
-            {
-            public String map(int value)
-                {
-                return NOTES[value % 12] + (value / 12 - 1);
-                }
-            };
-        ((LabelledDial)comp).addAdditionalLabel("Low");
-        hbox.add(comp);
-
-        comp = new LabelledDial("Key Range", this, "part" + part + "keyrangehi", color, 0, 127)
-            {
-            public String map(int value)
-                {
-                return NOTES[value % 12] + (value / 12 - 1);
-                }
-            };
-        ((LabelledDial)comp).addAdditionalLabel("High");
-        hbox.add(comp);
-        
-          comp = new LabelledDial("Pitch Shift", this, "part" + part + "pitchshiftcoarse", color, 52, 76)
-            {
-            public boolean isSymmetric() { return true; }
-            public String map(int val)
-                {
-                return "" + (val - 64);
-                }
-            };
-        ((LabelledDial)comp).addAdditionalLabel("Coarse");
-        hbox.add(comp);
-        
-        comp = new LabelledDial("Pitch Shift", this, "part" + part + "pitchshiftfine", color, 14, 114)
-            {
-            public boolean isSymmetric() { return true; }
-            public String map(int val)
-                {
-                return "" + (val - 64);
-                }
-            };
-        ((LabelledDial)comp).addAdditionalLabel("Fine");
-        hbox.add(comp);
-
-        comp = new LabelledDial("Detune", this, "part" + part + "detunedepth", color, 0, 15);
-        ((LabelledDial)comp).addAdditionalLabel("Depth");
-        hbox.add(comp);
-
-		outer.add(hbox);
-		hbox = new HBox();
-		vbox = new VBox();
-		
         comp = new LabelledDial("Program", this, "part" + part + "pgmchangemap", color, 0, 5)
             {
             public String map(int val)
@@ -741,33 +517,17 @@ public class RolandU110 extends Synth
         ((LabelledDial)comp).addAdditionalLabel("Tone Map");
         hbox.add(comp);
 
-        comp = new LabelledDial("Velocity", this, "part" + part + "velocitysens", color, 0, 15);
-        ((LabelledDial)comp).addAdditionalLabel("Sensitivity");
-        hbox.add(comp);
-        
-        comp = new LabelledDial("Level", this, "part" + part + "levelpresssens", color, 0, 15);
-        ((LabelledDial)comp).addAdditionalLabel("Pressure Sens");
-        hbox.add(comp);
-        
-        comp = new LabelledDial("Pitch Poly", this, "part" + part + "pitchpolypresssens", color, 0, 15)
-        	{
-        	public String map(int val)
-        		{
- 				return "" + POLY_MOD_RANGES[val];
-        		}
-            public int getDefaultValue() { return 8; }
-            public double getStartAngle() { return 237; }
-        	};
-        ((LabelledDial)comp).addAdditionalLabel("Pressure Sens");
+        comp = new LabelledDial("Level", this, "part" + part + "partlevel", color, 0, 127);
         hbox.add(comp);
 
-        comp = new LabelledDial("LFO", this, "part" + part + "lfochpresssens", color, 0, 15);
-        ((LabelledDial)comp).addAdditionalLabel("Pressure Sens");
+        comp = new LabelledDial("Level", this, "part" + part + "velocitysens", color, 0, 15);
+        ((LabelledDial)comp).addAdditionalLabel("Vel Sens");
         hbox.add(comp);
-
-	     comp = new LabelledDial("LFO Poly", this, "part" + part + "lfopolypresssens", color, 0, 7);
-        ((LabelledDial)comp).addAdditionalLabel("Pressure Sens");
+        
+        comp = new LabelledDial("Level Ch", this, "part" + part + "levelpresssens", color, 0, 15);
+        ((LabelledDial)comp).addAdditionalLabel("Press Sens");
         hbox.add(comp);
+        
 
       comp = new LabelledDial("Attack", this, "part" + part + "envattackrate", color, 1, 15)
             {
@@ -805,14 +565,90 @@ public class RolandU110 extends Synth
                 xVals[3] = 0.3333 - xVals[3];
                 }
             };
-        //((EnvelopeDisplay)comp).setAxis(0.5);
         hbox.addLast(comp);
             
+		outer.add(hbox);
+		hbox = new HBox();
+
+
+
+
+
+        comp = new LabelledDial("Bend", this, "part" + part + "bendrange", color, 0, 12);
+        ((LabelledDial)comp).addAdditionalLabel("Range");
+        hbox.add(comp);
+
+        comp = new LabelledDial("Key Range", this, "part" + part + "keyrangelo", color, 0, 127)
+            {
+            public String map(int value)
+                {
+                return NOTES[value % 12] + (value / 12 - 1);
+                }
+            };
+        ((LabelledDial)comp).addAdditionalLabel("Low");
+        hbox.add(comp);
+
+
+
+
+        comp = new LabelledDial("Key Range", this, "part" + part + "keyrangehi", color, 0, 127)
+            {
+            public String map(int value)
+                {
+                return NOTES[value % 12] + (value / 12 - 1);
+                }
+            };
+        ((LabelledDial)comp).addAdditionalLabel("High");
+        hbox.add(comp);
+        
+          comp = new LabelledDial("Pitch Shift", this, "part" + part + "pitchshiftcoarse", color, 52, 76)
+            {
+            public boolean isSymmetric() { return true; }
+            public String map(int val)
+                {
+                return "" + (val - 64);
+                }
+            };
+        ((LabelledDial)comp).addAdditionalLabel("Coarse");
+        hbox.add(comp);
+        
+        comp = new LabelledDial("Pitch Shift", this, "part" + part + "pitchshiftfine", color, 14, 114)
+            {
+            public boolean isSymmetric() { return true; }
+            public String map(int val)
+                {
+                return "" + (val - 64);
+                }
+            };
+        ((LabelledDial)comp).addAdditionalLabel("Fine");
+        hbox.add(comp);
+
+        comp = new LabelledDial("Detune", this, "part" + part + "detunedepth", color, 0, 15);
+        ((LabelledDial)comp).addAdditionalLabel("Depth");
+        hbox.add(comp);
+
+        comp = new LabelledDial("Pitch Poly", this, "part" + part + "pitchpolypresssens", color, 0, 15)
+        	{
+        	public String map(int val)
+        		{
+ 				return "" + POLY_MOD_RANGES[val];
+        		}
+            public int getDefaultValue() { return 8; }
+            public double getStartAngle() { return 237; }
+        	};
+        ((LabelledDial)comp).addAdditionalLabel("Press Sens");
+        hbox.add(comp);
+
+        comp = new LabelledDial("LFO", this, "part" + part + "lfochpresssens", color, 0, 15);
+        ((LabelledDial)comp).addAdditionalLabel("Press Sens");
+        hbox.add(comp);
+
+	     comp = new LabelledDial("LFO Poly", this, "part" + part + "lfopolypresssens", color, 0, 7);
+        ((LabelledDial)comp).addAdditionalLabel("Press Sens");
+        hbox.add(comp);
 
 		outer.add(hbox);
 		hbox = new HBox();
-		vbox = new VBox();
-		
 
 	    comp = new LabelledDial("LFO Rate", this, "part" + part + "lforate", color, 0, 15);
         hbox.add(comp);
@@ -860,42 +696,6 @@ public class RolandU110 extends Synth
         return category;
         }
         
-        
-        
-        
-        
-        /*
-    // IDs are 17 and up
-    public byte getID() 
-        { 
-        try 
-            { 
-            byte b = (byte)(Byte.parseByte(tuple.id));
-            if (b >= 17) return (byte)(b - 1);
-            }
-        catch (NullPointerException e) { } // expected.  Happens when tuple's not built yet
-        catch (NumberFormatException e) { Synth.handleException(e); }
-        return (byte)16;                // IDs start at 17
-        }
-    */
-    
-    /** Roland only allows IDs from 17...32.  Don't ask. */
-    /*
-    public String reviseID(String id)
-        {
-        try
-            {
-            int val = Integer.parseInt(id);
-            if (val < 17) val = 17;
-            if (val > 32) val = 32;
-            return "" + val;
-            }
-        catch (NumberFormatException ex)
-            {
-            return "" + (getID() + 1);
-            }
-        }
-        */
 
     public byte produceChecksum(byte[] data)
         {
@@ -930,7 +730,7 @@ public class RolandU110 extends Synth
         
         if (key.equals("name"))
             {
-            byte[] data = new byte[28];
+            byte[] data = new byte[30];
             data[0] = (byte) 0xF0;
             data[1] = (byte) 0x41;
             data[2] = (byte) (byte)getChannelOut();
@@ -965,7 +765,7 @@ public class RolandU110 extends Synth
         	}
         else
             {
-            int pos = ((Integer)(allParametersToIndex.get(key))).intValue();
+            int pos = ((Integer)(allParametersToIndex.get(key))).intValue() + 24;
             
             byte AA = (byte)(0x00);
             byte BB = (byte)(0x01);

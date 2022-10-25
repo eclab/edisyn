@@ -1701,9 +1701,9 @@ public class WaldorfMicrowave extends Synth
                 // verify
                 int val = model.get(key);
                 if (val < model.getMin(key))
-                    { model.set(key, 0); if (printRevised) System.err.println("Warning (WaldorfMicrowaveMulti): Revised " + key + " from " + val + " to " + model.get(key));}
+                    { model.set(key, 0); if (getPrintRevised()) System.err.println("Warning (WaldorfMicrowaveMulti): Revised " + key + " from " + val + " to " + model.get(key));}
                 if (val > model.getMax(key))
-                    { model.set(key, 0); if (printRevised) System.err.println("Warning (WaldorfMicrowaveMulti): Revised " + key + " from " + val + " to " + model.get(key));}
+                    { model.set(key, 0); if (getPrintRevised()) System.err.println("Warning (WaldorfMicrowaveMulti): Revised " + key + " from " + val + " to " + model.get(key));}
                 }
             }
             

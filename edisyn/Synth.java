@@ -1059,7 +1059,9 @@ public abstract class Synth extends JComponent implements Updatable
         revise(model);
         }
         
-    public boolean printRevised = true;
+    boolean printRevised = true;
+    public boolean getPrintRevised() { return printRevised; }
+    public void setPrintRevised(boolean val) { printRevised = val; }
     
     /** Only revises / issues warnings on out-of-bounds numerical parameters, bounding them to the nearest legal value.
         You probably want to override this to check more stuff. */
@@ -1096,13 +1098,13 @@ public abstract class Synth extends JComponent implements Updatable
                     // So we now shift back to [min...top), that is, [min...max]
                     newVal += min;
                     model.set(key, newVal);
-                    if (printRevised) System.err.println("Warning (Synth): Revised " + key + " from " + val + " to " + newVal);             
+                    if (getPrintRevised()) System.err.println("Warning (Synth): Revised " + key + " from " + val + " to " + newVal);             
                     }
                 /*
                   if (val < model.getMin(key))
-                  { model.set(key, model.getMin(key)); if (printRevised) System.err.println("Warning (Synth): Revised " + key + " from " + val + " to " + model.get(key));}
+                  { model.set(key, model.getMin(key)); if (getPrintRevised()) System.err.println("Warning (Synth): Revised " + key + " from " + val + " to " + model.get(key));}
                   if (val > model.getMax(key))
-                  { model.set(key, model.getMax(key)); if (printRevised) System.err.println("Warning (Synth): Revised " + key + " from " + val + " to " + model.get(key));}
+                  { model.set(key, model.getMax(key)); if (getPrintRevised()) System.err.println("Warning (Synth): Revised " + key + " from " + val + " to " + model.get(key));}
                 */
                 }
             }
@@ -1343,6 +1345,62 @@ public abstract class Synth extends JComponent implements Updatable
         return val;
         }
         
+    public int performParseNoMIDI(byte[] data, boolean fromFile)
+    	{
+		boolean sendMIDI = getSendMIDI();
+		int ret = performParse(data, fromFile);
+		setSendMIDI(sendMIDI);
+		return ret;
+    	}
+
+	int lastTemporaryModelResult = PARSE_SUCCEEDED;
+	int getLastParseTemporaryModelResult() { return lastTemporaryModelResult; }
+	
+	public Model parseTemporaryModel(byte[] data, boolean fromFile)
+		{
+		return parseTemporaryModel(data, fromFile, true);
+		}
+		
+	public Model parseTemporaryModel(byte[] data, boolean fromFile, boolean cloneModel)
+		{
+		boolean updateListeners = model.getUpdateListeners();
+		boolean sendMIDI = getSendMIDI();
+		boolean willPush = undo.getWillPush();
+		boolean avoidUpdating = getAvoidUpdating();
+		boolean printRevised = getPrintRevised();
+
+		setSendMIDI(false);
+		undo.setWillPush(false);
+		model.setUpdateListeners(false);
+		setAvoidUpdating(true);
+		setPrintRevised(false);
+
+		Model backup = (cloneModel ? (Model)(model.clone()) : model);
+		Model ret = model;
+		model.clearListeners();
+		try
+			{
+			lastTemporaryModelResult = parse(data, fromFile);
+			}
+		catch (Exception ex)
+			{
+			Synth.handleException(ex);
+			lastTemporaryModelResult = PARSE_FAILED;
+			}
+		model = backup;
+
+		undo.setWillPush(willPush);
+		setSendMIDI(sendMIDI);
+		model.setUpdateListeners(updateListeners);
+		setAvoidUpdating(avoidUpdating);
+		setPrintRevised(printRevised);
+
+		if (lastTemporaryModelResult == PARSE_SUCCEEDED ||
+			lastTemporaryModelResult == PARSE_SUCCEEDED_UNTITLED)
+				return ret;
+		else return null;
+		}
+        
 
 
 
@@ -1435,11 +1493,10 @@ public abstract class Synth extends JComponent implements Updatable
                                         if ((result == PARSE_SUCCEEDED || result == PARSE_SUCCEEDED_UNTITLED) &&
                                             patchTimer == null && tabs.getSelectedComponent() == librarianPane)              // if we're in the librarian and not doing downloading, handle it specially
                                             {
-                                            Patch patch = new Patch(recognizeSynthForSysex(data), data, false);     // is this right?  Are we sure it's not bank sysex?
+                                            Patch patch = librarian.getLibrary().getPatch(model);
                                             patch.number = model.get("number", Patch.NUMBER_NOT_SET);
                                             patch.bank = model.get("bank", 0);
-                                            patch.name = model.get("name", "" + getPatchLocationName(getModel()));
-                                            librarian.getLibrary().receivePatch(patch);
+	                                        librarian.getLibrary().receivePatch(patch);
                                             librarian.updateUndoRedo();             
                                             backup.copyValuesTo(model);             // restore the old model, but don't push an undo
                                             undo.setWillPush(true);
@@ -2854,6 +2911,36 @@ public abstract class Synth extends JComponent implements Updatable
         inSimpleError = false;
         }
 
+    /** Display a simple error message. */
+    public void showSimpleError(JComponent parent, String title, String message, JComponent extra)
+        {
+        // A Bug in OS X (perhaps others?) Java causes multiple copies of the same Menu event to be issued
+        // if we're popping up a dialog box in response, and if the Menu event is caused by command-key which includes
+        // a modifier such as shift.  To get around it, we're just blocking multiple recursive message dialogs here.
+        
+        if (inSimpleError) return;
+        inSimpleError = true;
+        disableMenuBar();
+
+		JPanel panel = new JPanel();        
+        panel.setLayout(new BorderLayout());
+        panel.add(new JLabel(message), BorderLayout.NORTH);
+
+		JPanel inside = new JPanel();        
+        inside.setLayout(new BorderLayout());
+        inside.add(extra, BorderLayout.NORTH);
+        
+        JScrollPane pane = new JScrollPane(inside);
+        pane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        pane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_AS_NEEDED);
+        pane.setPreferredSize(new Dimension(30, 64));
+        panel.add(pane, BorderLayout.CENTER);
+        
+        JOptionPane.showMessageDialog(parent, panel, title, JOptionPane.ERROR_MESSAGE);
+        enableMenuBar();
+        inSimpleError = false;
+        }
+
 
     /** Display a simple error message. */
     public static void showErrorWithStackTraceUnsafe(Throwable error, String message, String title)
@@ -3012,7 +3099,7 @@ public abstract class Synth extends JComponent implements Updatable
                     "        (" + auxFile.getName() + ")") :
                 "        " + file.getName());
             String disconnectedWarning = ((tuple == null || tuple.outReceiver == null) ? "   DISCONNECTED" : "");
-            String downloadingWarning = (patchTimer != null ? "   DOWNLOADING" : "");
+            String downloadingWarning = (isBatchDownloading() ? "   DOWNLOADING" : "");
             String learningWarning = (learning ? "   LEARNING" +
                     (model.getLastKey() != null ? " " + model.getLastKey() + 
                     (model.getRange(model.getLastKey()) > 0 ? "[" + model.getRange(model.getLastKey()) + "]" : "") + 
@@ -3065,6 +3152,7 @@ public abstract class Synth extends JComponent implements Updatable
     
     
     boolean parsingDefaults;
+    public void setParsingDefaults(boolean val) { parsingDefaults = val; }
     // You can query this to see if your parse() is just a defaults/init load or reset
     public boolean isParsingDefaults() { return parsingDefaults; }
         
@@ -3095,13 +3183,10 @@ public abstract class Synth extends JComponent implements Updatable
                 byte[] data = new byte[size];
                 System.arraycopy(buffer, 0, data, 0, size);
 
-                // parse                        
-                setSendMIDI(false);
-                parsingDefaults = true;
-                performParse(data, true);
-                parsingDefaults = false;
-                setSendMIDI(true);
-                model.setUndoListener(undo);    // okay, redundant, but that way the pattern stays the same
+                // parse   
+                setParsingDefaults(true);    
+                performParseNoMIDI(data, true);            
+                // model.setUndoListener(undo);    // okay, redundant, but that way the pattern stays the same
                 }
             catch (Exception e)
                 {
@@ -3109,6 +3194,7 @@ public abstract class Synth extends JComponent implements Updatable
                 }
             finally
                 {
+                setParsingDefaults(false);
                 try { stream.close(); }
                 catch (IOException e) { }
                 }
@@ -6288,7 +6374,7 @@ public abstract class Synth extends JComponent implements Updatable
         {
         if (tabs.getSelectedComponent() == librarianPane)
             {
-            librarian.saveAll();
+            saveLibrarian();
             return;
             }
                 
@@ -6360,13 +6446,31 @@ public abstract class Synth extends JComponent implements Updatable
         }
 
 
+	void saveLibrarian()
+		{
+		int res = showMultiOption(this, new String[0], new JComponent[0], 
+			new String[] { "Selected Patches", "Bank", "All Files", "Cancel" },
+			0, "Save...", 
+			new JLabel("Save What Range of Patches?"));
+		if (res == 0)
+			librarian.save();
+		else if (res == 1)
+			librarian.saveBank();
+		else if (res == 2)
+			librarian.saveAll();
+		else
+			{
+			// do nothing
+			}
+		}
+
     /** Goes through the process of saving to an existing sysex file associated with
         the editor, else it calls doSaveAs(). */
     void doSave()
         {
         if (tabs.getSelectedComponent() == librarianPane)
             {
-            librarian.saveAll();
+            saveLibrarian();
             return;
             }
                 
@@ -6417,7 +6521,7 @@ public abstract class Synth extends JComponent implements Updatable
                 {
                 sendTestNotesTimer.stop();  // notice we don't set it to null
                 }
-            if (patchTimer != null)
+            if (isBatchDownloading())
                 {
                 patchTimer.stop();
                 saveBatchPatches();
@@ -6774,13 +6878,26 @@ public abstract class Synth extends JComponent implements Updatable
                     {
                     if (temp == null || temp.getClass() != getSynth(p[i].synth))
                         temp = (Synth)(instantiate(getClassNames()[p[i].synth], true, false, null));
-                    temp.printRevised = false;
+                    Model ret = temp.parseTemporaryModel(flatten(p[i].sysex), true, false);
+                    if (ret == null)
+                    	{
+	                    p[i].name = "<<Bad Patch>>";
+	                    p[i].location = "";
+                    	}
+                    else
+                    	{
+	                    p[i].name = temp.getPatchName(temp.model);
+	                    p[i].location = temp.getPatchLocationName(temp.model);
+                    	}
+                    /*
+                    temp.setAvoidUpdating(getAvoidUpdating());
+                    temp.setPrintRevised(false);
                     temp.setSendMIDI(false);
                     temp.undo.setWillPush(false);
                     temp.getModel().clearListeners();         // otherwise we GC horribly.....
                     temp.performParse(flatten(p[i].sysex), true);
-                    p[i].name = temp.getPatchName(temp.model);
-                    p[i].location = temp.getPatchLocationName(temp.model);
+                    */
+                    
                     }
                 catch (Exception ex)
                     {
@@ -7202,6 +7319,20 @@ public abstract class Synth extends JComponent implements Updatable
         }
                 
 
+	boolean avoidUpdating = false;
+	/** Returns whether the synth should avoid updating its various widgets manually because
+		it's just being used to create a temporary model (for loading into a library for example).
+		This method is primarily used by the Proteus 2000's revise() method to avoid manually
+		updating certain choosers, which is very slow when bulk loading from file or loading
+		into a librarian. */
+	public boolean getAvoidUpdating() { return avoidUpdating; }
+	/** Sets whether the synth should avoid updating its various widgets manually because
+		it's just being used to create a temporary model (for loading into a library for example).
+		This method is primarily used by the Proteus 2000's revise() method to avoid manually
+		updating certain choosers, which is very slow when bulk loading from file or loading
+		into a librarian. */
+	public void setAvoidUpdating(boolean val) { avoidUpdating = val; }
+	
     boolean doOpen(boolean merge)
         {
         parsingForMerge = merge;
@@ -7282,8 +7413,13 @@ public abstract class Synth extends JComponent implements Updatable
                     else 
                         {
                         //// FOURTH we break the sysex into patches we can work with
-
-                        Patch[] patches = gatherPatchSysex(data);
+                        Patch[] patches = null;
+setAvoidUpdating(true);
+try
+	{
+                        patches = gatherPatchSysex(data);
+                    }
+finally { setAvoidUpdating(false); }
                         if (merge) patches = reducePatchesToLocal(patches);                     // this will reduce us to just our own kind of patches
                                                 
                         //// FIFTH if we can't find any usable patches, inform the user
@@ -7458,6 +7594,9 @@ public abstract class Synth extends JComponent implements Updatable
                                 }
                             else if (result == BULK_DIALOG_RESULT_LOCAL_LIBRARIAN)
                                 {
+                                setAvoidUpdating(true);
+                                try
+                                	{
                                 Class synthType = getSynth(pat[primary][0].synth);
                                 int synthNum = getSynthNum(synthType);
                                 
@@ -7482,13 +7621,20 @@ public abstract class Synth extends JComponent implements Updatable
                                     loadLibrarian(pat[primary]);
                                     return false;  	// NOT TRUE!  See docs for doOpen(...)
                                     }
+                                    }
+                                finally { setAvoidUpdating(false); }
                                 }
                             else if (result == BULK_DIALOG_RESULT_NEW_LIBRARIAN)
                                 {
                                 Class synthType = getSynth(pat[primary][0].synth);
                                 Synth otherSynth = instantiate(synthType, false, true, null);
-                                otherSynth.loadLibrarian(pat[primary]);
-                                return false; 	// NOT TRUE!  See docs for doOpen(...)
+                                otherSynth.setAvoidUpdating(true);
+                                try
+                                	{
+									otherSynth.loadLibrarian(pat[primary]);
+									return false; 	// NOT TRUE!  See docs for doOpen(...)
+                                    }
+                                finally { otherSynth.setAvoidUpdating(false); }
                                 }
                             }
                         }
@@ -7528,7 +7674,7 @@ public abstract class Synth extends JComponent implements Updatable
         // I think we should clear the librarian first
         int res = showMultiOption(this, new String[0], new JComponent[0], 
             new String[] { "Clear", "Overwrite", "Cancel" }, 0, "Load Patches", 
-            new JLabel("Clear all existing patches and write new ones, or overwrite then only with non-empty new patches?"));
+            new JLabel("<html>Clear all existing patches and write new ones,<br>or overwrite them only with non-empty new patches?<html>"));
         if (res < 0 || res == 2) return;
         
         if (res == 0) librarian.clearAll(false);
@@ -7536,6 +7682,9 @@ public abstract class Synth extends JComponent implements Updatable
         // We inform the loading system that if it comes across any bank patches, it should
         // automatically load them into the librarian without bugging the user.
         setAlwaysLoadInLibrarian(true);
+
+		// build init model to compare against.  We don't care about the number and bank
+		//Model initModel = librarian.getLibrary().getModel(librarian.getLibrary().getInitPatch(), 0, 0);
 
         // now we need to load the appropriate locations and names, assuming we don't have them
         boolean send = getSendMIDI();
@@ -7552,7 +7701,14 @@ public abstract class Synth extends JComponent implements Updatable
                 {
                 patches[i].number = model.get("number", Patch.NUMBER_NOT_SET);
                 patches[i].bank = model.get("bank", 0);
-                patches[i].name = model.get("name", null);
+                /*if (model.keyEquals(initModel, true))
+                	{
+                	patches[i].name = "";
+                	}
+                else*/
+                	{
+                	patches[i].name = model.get("name", null);
+                	}
                 }
             else patches[i] = null;                 // failed to parse
             }
@@ -8269,6 +8425,7 @@ public abstract class Synth extends JComponent implements Updatable
     int patchCounter = 0;
     Model currentPatch = null;
     Model finalPatch = null;
+    Model firstPatch = null;
     File patchFileOrDirectory = null;
     FileOutputStream batchPatches = null;
     javax.swing.Timer patchTimer = null;
@@ -8330,7 +8487,7 @@ public abstract class Synth extends JComponent implements Updatable
     
     public void doGetAllPatches()
         {
-        if (patchTimer != null)
+        if (isBatchDownloading())
             {
             stopBatchDownload();
             }
@@ -8426,10 +8583,12 @@ public abstract class Synth extends JComponent implements Updatable
             
             currentPatch = buildModel();
             finalPatch = buildModel();
+            firstPatch = buildModel();
             if (!setupBatchStartingAndEndingPatches(currentPatch, finalPatch))
                 {
                 currentPatch = null;
                 finalPatch = null;
+                firstPatch = null;
                 return;
                 }
 
@@ -8441,7 +8600,7 @@ public abstract class Synth extends JComponent implements Updatable
 
     void doGetPatchesForLibrarian(int startbank, int startnum, int endbank, int endnum)
         {
-        if (patchTimer != null)
+        if (isBatchDownloading())
             {
             stopBatchDownload();
             }
@@ -8464,12 +8623,18 @@ public abstract class Synth extends JComponent implements Updatable
             toLibrarian = true;
             librarian.pushUndo();
             
-            //System.err.println(startnum);
             currentPatch = buildModel();
             if (startbank != PatchLocation.NO_BANK)
                 currentPatch.set("bank", startbank);
             if (startnum != PatchLocation.NO_NUMBER)
                 currentPatch.set("number", startnum);
+
+			// same as currentPatch
+            firstPatch = buildModel();
+            if (startbank != PatchLocation.NO_BANK)
+                firstPatch.set("bank", startbank);
+            if (startnum != PatchLocation.NO_NUMBER)
+                firstPatch.set("number", startnum);
 
             finalPatch = buildModel();
             if (endbank != PatchLocation.NO_BANK)
@@ -8485,11 +8650,11 @@ public abstract class Synth extends JComponent implements Updatable
         {
         stopBatchDownload(true);
         }
-
+        
     // we'll only show a success dialog if successful; else we fail silently.
     void stopBatchDownload(boolean success)
         {
-        if (patchTimer != null)                 // we can sometimes call this even though we're not stopping anything
+        if (isBatchDownloading())                 // we can sometimes call this even though we're not stopping anything
             {
             patchTimer.stop();
             patchTimer = null;
@@ -8587,7 +8752,7 @@ public abstract class Synth extends JComponent implements Updatable
                             }
                         else
                             {
-                            System.err.println("Warning (Synth): Download of " + getPatchLocationName(currentPatch) + " failed.  Waiting: " + (batchDownloadFailureCountdown + 1));
+                            System.err.println("Warning (Synth): Download of " + getPatchLocationName(currentPatch) + " is tardy.  Waiting: " + (batchDownloadFailureCountdown + 1));
                             }
                         }
                     }
@@ -8605,10 +8770,21 @@ public abstract class Synth extends JComponent implements Updatable
 
     void requestNextPatch()
         {
+        //System.err.println(getNextPatchLocation(currentPatch).get("bank") + " " + getNextPatchLocation(currentPatch).get("number"));
+        //System.err.println(getNextPatchLocation(firstPatch).get("bank") + " " + getNextPatchLocation(firstPatch).get("number"));
         if (patchLocationEquals(currentPatch, finalPatch))     // we're done
             {
             stopBatchDownload();
             }
+        // we prematurely wrapped all the away around.  This can happen if we have banks which
+        // are different lengths, or we have fewer than expected number of banks, 
+        // the total number of patches turns out to be less than getBankSize() * getNumBanks().
+        // Both getBankSize() is too large AND getNumBanks() is too large in the case
+        // of the Proteus 2000 editor, for example.
+        else if (patchLocationEquals(firstPatch, getNextPatchLocation(currentPatch)))
+        	{
+        	stopBatchDownload();
+        	}
         else
             {
             undo.setWillPush2(false);
@@ -8663,7 +8839,7 @@ public abstract class Synth extends JComponent implements Updatable
     public boolean getReceivesPatchesAsDumps() { return true; }
                 
     void processCurrentPatch()
-        {                       
+        {                 
         // process current patch
         byte[] data = flatten(emitAll((Model)null, false, true));
         if (data != null && data.length > 0)
@@ -9040,7 +9216,6 @@ public abstract class Synth extends JComponent implements Updatable
             librarian.getLibrary().readBanks(data, librarian);       
             // we don't update undo because this is called from
             // loadLibrarian, which does it for us.
-            //librarian.updateUndoRedo();           
             return BANK_LIBRARIAN;          // done and done
             }
         
@@ -9466,9 +9641,12 @@ public abstract class Synth extends JComponent implements Updatable
         method normally returns true. */
     public boolean isValidPatchLocation(int bank, int num) { return true; }
 
-    /** Some synthesizers have patches which might not be good choices to read/write; for example,
+    /** Some synthesizers have patches which might not be good choices to read/write to disk; for example,
         the Proteus 2000 has ROMs which might not be installed.  This indicates these patches,
-        and is primarily used to color them, not to prevent the user from using them as he sees fit. */
+        and is primarily used to color them, not to prevent the user from using them as he sees fit. 
+        If WRITING is true, then this method is being called because Edisyn is deciding whether to
+        write the patches to a file as part of Save All Patches.  If WRITING is false, then 
+        this method is being called for other reasons, such as coloring the tables. */
     public boolean isAppropriatePatchLocation(int bank, int num) { return true; }
 
     /** Some synthesizers have ragged banks -- different banks have different lengths.  Edisyn stretches

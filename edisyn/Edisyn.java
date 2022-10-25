@@ -22,10 +22,20 @@ public class Edisyn
     {
     public static final int VERSION = 31;
     
+    static boolean isMacOSMonterey()
+    	{
+    	return System.getProperty("os.name").equals("Mac OS X") &&
+    		   (System.getProperty("os.version").startsWith("12."));
+    	}
+    
     public static void main(String[] args)
         {
         try {
-            System.setProperty("apple.awt.graphics.EnableQ2DX", "true");
+			if (isMacOSMonterey())		// Monterey has a broken tab bug :-(
+				{
+				UIManager.put("TabbedPane.foreground", java.awt.Color.BLACK);
+				}
+			System.setProperty("apple.awt.graphics.EnableQ2DX", "true");
             System.setProperty("apple.laf.useScreenMenuBar", "true");
             
             // This no longer works as of Java 7

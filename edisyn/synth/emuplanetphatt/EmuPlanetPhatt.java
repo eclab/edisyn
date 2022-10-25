@@ -3878,4 +3878,6 @@ tryToSendMIDI(buildPC(getChannelOut(), 0));
     public int getBatchDownloadWaitTime() { return 400; }
 
     public boolean getSendsParametersAfterNonMergeParse() { return true; }
+
+    public boolean librarianTested() { return true; }
     }

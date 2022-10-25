@@ -55,7 +55,7 @@ public class Patch
         {
         return name;
         }
-        
+    
     public Patch(Patch patch)
         {
         isBankSysex = patch.isBankSysex;

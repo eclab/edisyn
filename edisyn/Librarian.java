@@ -943,7 +943,7 @@ public class Librarian extends JPanel
         }
 
 
-    /* JTable says that it maintains the proper column values even if the columns are rearranged,
+    /** JTable says that it maintains the proper column values even if the columns are rearranged,
        but this is a lie.  You have to do it manually.  This function does the proper conversion model -> table. */
     static int antiCol(JTable table, int index)
         {
@@ -1011,7 +1011,9 @@ public class Librarian extends JPanel
             return;
             }
 
-        performDownload(column - 1, 0, column - 1, getLibrary().getBankSize() - 1 );
+		int bankSize = getLibrary().synth.getValidBankSize(column - 1);
+		if (bankSize == -1) bankSize = getLibrary().getBankSize();
+        performDownload(column - 1, 0, column - 1, bankSize - 1 );
         }
 
     public void toNudgeTargets()
@@ -1420,7 +1422,8 @@ public class Librarian extends JPanel
                 return;
                 }
             }
-                                
+
+		// we clear all the bank column even if some of it is invalid...                                
         fill(table, column, 0, getLibrary().getBankSize(), null);               // getLibrary().getInitPatch());
         }
 
@@ -1477,7 +1480,7 @@ public class Librarian extends JPanel
         
         int antiFrom = antiCol(fromTable, fromCol);
         int antiTo = antiCol(toTable, toCol);
-        
+
         Patch p = null;
         for(int i = 0; i < len; i++)
             {
@@ -1493,8 +1496,17 @@ public class Librarian extends JPanel
         
             if (!isPatchWell(fromTable) && p != null)
                 {
-                int bank = (antiFrom - 1);
-                int number = fromRow;
+                // assign to the new location
+                int bank = (toCol - 1);
+                int number = toRow;
+                
+                // but if we're transferring out, use the from location
+                if (isPatchWell(toTable))
+                	{
+                	bank = (fromCol - 1);
+                	number = fromRow;
+                	}
+                	
                 if (bank != -1)                 // don't revise the patch location if it's the scratch bank
                     {
                     // revise the patch location to where it came from in the librarian

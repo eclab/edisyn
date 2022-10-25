@@ -148,7 +148,7 @@ public class EmuProteus2000 extends Synth
     public static final int[] LAYER_PATCHCORD_SOURCE_INDICES = { 0, 4, 8, 9, 10, 11, 12, 13, 14, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 48, 72, 73, 74, 80, 81, 82, 88, 89, 90, 96, 97, 98, 99, 100, 101, 104, 105, 106, 107, 108, 109, 128, 129, 144, 145, 146, 147, 148, 149, 150, 151, 160, 161, 162, 163, 164, 165, 166, 167 };
 
         
-    // The documentation is wrong in several places here: it's missing envelope sustains, has retriggers for envelopes other than volume, and has "chorus poition ITD" which doesn't exist.
+    // The documentation is wrong in several places here: it's missing envelope sustains, has retriggers for envelopes other than volume, and has "chorus position ITD" which doesn't exist.
     // I think Amplifier Crossfade is RTXFade (for "Real Time XFade")
     public static final String[] LAYER_PATCHCORD_DESTINATIONS = { "Off", "Key Sustain", "Fine Pitch", "Pitch", "Glide", "Chorus Amount", "Sample Start", "Sample Loop", "Sample Retrigger", "Filter Frequency", "Filter Resonance", "Amplifier Volume", "Amplifier Pan", "Real-Time Crossfade", "Volume Envelope Rates", "Volume Envelope Attack", 
                                                                   "Volume Envelope Decay", "Volume Envelope Sustain", "Volume Envelope Release", "Filter Envelope Rates", "Filter Envelope Attack", "Filter Envelope Decay", "Filter Envelope Sustain", "Filter Envelope Release", "Auxiliary Envelope Rates", "Auxiliary Envelope Attack", "Auxiliary Envelope Decay", "Auxiliary Envelope Sustain", "Auxiliary Envelope Release", 
@@ -2156,7 +2156,7 @@ public class EmuProteus2000 extends Synth
                 {
                 System.err.println("EmuProteus2000.processParse WARNING: incoming sysex with fewer than 4 layers.");
                 }
-        
+                
             // If we're loading from current memory, the preset number and rom will be UNINFORMATIVE.
             // The preset will be 16383 ("Current Memory" 7F 7F) and the rom will be 0, unfortunately.
             // The best we can do is reset the number
@@ -2385,14 +2385,19 @@ public class EmuProteus2000 extends Synth
         // otherwise crazy things could happen I imagine...
         if (model == getModel())
             {
-            updateRiffChooser("riffromid", model);
-            updateArpChooser("arppatternromid", model);
-            updatePresetChooser(1, "link1presetromid", model);
-            updatePresetChooser(2, "link2presetromid", model);
-            updateInstrumentChooser(1, "layer1instrumentromid", model);
-            updateInstrumentChooser(2, "layer2instrumentromid", model);
-            updateInstrumentChooser(3, "layer3instrumentromid", model);
-            updateInstrumentChooser(4, "layer4instrumentromid", model);
+            // Updating the choosers is very slow.  So we only update them
+            // if we're likely to actually use the choosers at all
+            if (!getAvoidUpdating())
+            	{
+				updateRiffChooser("riffromid", model);
+				updateArpChooser("arppatternromid", model);
+				updatePresetChooser(1, "link1presetromid", model);
+				updatePresetChooser(2, "link2presetromid", model);
+				updateInstrumentChooser(1, "layer1instrumentromid", model);
+				updateInstrumentChooser(2, "layer2instrumentromid", model);
+				updateInstrumentChooser(3, "layer3instrumentromid", model);
+				updateInstrumentChooser(4, "layer4instrumentromid", model);
+				}
 
             // Now we set the values, and these should stick because they're within
             // the proper min/max ranges
@@ -2586,11 +2591,16 @@ public class EmuProteus2000 extends Synth
         if (tempModel == null)
             tempModel = getModel();
 
-        int NN = tempModel.get("number", 0) ;
-        int BB = 0;                     // has to be it's going to RAM
-
+        int NN = tempModel.get("number", 0);
+        int BB = ROM_AND_USER_IDS[tempModel.get("bank", 0)];
+        /*
+        if (!toFile)
+        	BB = 0;                     // has to be it's going to RAM
+		*/
+		
         if (toWorkingMemory)
             {
+            BB = 0;							// has to be if it's going to RAM
             NN = 16383;                     // 7F 7F
             }
 
@@ -3050,7 +3060,7 @@ public class EmuProteus2000 extends Synth
                     {
                     boolean found = false;
                     // Hunt for next valid ROM
-                    user: for(int i = 0; i < simms.length; i++)
+                    for(int i = 0; i < simms.length; i++)
                         {
                         if (simms[i] > 0)       // Something other than "No ROM"
                             {
@@ -3058,7 +3068,7 @@ public class EmuProteus2000 extends Synth
                             bank = 0;
                             number = 0;
                             found = true;
-                            break user;
+                            break;
                             }
                         }
                     if (!found)     // No SIMMs at all!
@@ -3072,12 +3082,12 @@ public class EmuProteus2000 extends Synth
                 else            // we're at a current ROM
                     {
                     // Find the ROM
-                    boolean found = false;
                     int romID = ROM_AND_USER_IDS[rom];
                     nonuser: for(int i = 0; i < simms.length; i++)
                         {
                         if (simms[i] == rom)    // got it
                             {
+                            // find the next rom
                             for(int k = i + 1; k < simms.length; k++)
                                 {
                                 if (simms[k] > 0)       // Something other than "No ROM"
@@ -3085,19 +3095,15 @@ public class EmuProteus2000 extends Synth
                                     rom = simms[k];
                                     bank = 0;
                                     number = 0;
-                                    found = true;
                                     break nonuser;
                                     }
                                 }
-                            // if we're here we had an invalid ROM
-                            System.err.println("getNextPatchLocation ERROR [2]: Invalid ROM ID found " + simms[i] + " in SIMM slot " + i);
+                            // at this point we don't have any more ROM SIMMS, so we're gonna do USER
+							rom = 0;
+							bank = 0;
+							number = 0;
+							break nonuser;
                             }
-                        }
-                    if (!found)     // No SIMMs left
-                        {
-                        rom = 0;
-                        bank = 0;
-                        number = 0;
                         }
                     }
                 }
@@ -4325,13 +4331,14 @@ public class EmuProteus2000 extends Synth
 
     public boolean isValidPatchLocation(int bank, int num) 
         { 
-        return (num < getValidBankSize(bank) * 128);
+        return (num < getValidBankSize(bank));
         }
         
-    public int getValidBankSize(int bank) { return NUM_BANKS[bank]; }
+    public int getValidBankSize(int bank) { return NUM_BANKS[bank] * 128; }
 
     public int getBatchDownloadWaitTime() { return 100; }
 
+	// we'll fail about 5 times or so, it's okay
     public int getBatchDownloadFailureCountdown() { return 50; }
 
     public boolean testVerify(Synth synth2, String key, Object obj1, Object obj2)
@@ -4412,7 +4419,8 @@ public class EmuProteus2000 extends Synth
             }
         }
                 
-    }
+     public boolean librarianTested() { return true; }
+   }
 
 
 

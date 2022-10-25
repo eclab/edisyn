@@ -16,10 +16,16 @@ public class EmuProteus2000Rec extends Recognize
         for(int i = start + 1; i < sysex.length; i++)
             {
             if (EmuProteus2000Rec.recognizeHeader(sysex[i]))                // this might vary?  What a mess
-                { System.err.println("Next Header at " + i); return i; }
+                { 
+                // System.err.println("Next Header at " + i); 
+                return i; 
+                }
                         
             else if (!EmuProteus2000Rec.recognizeData(sysex[i]))    // ugh
-                { System.err.println("not data at " + i); return start; }
+                { 
+                //System.err.println("not data at " + i); 
+                return start; 
+                }
             }
                 
         // maybe we're done?    

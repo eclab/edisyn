@@ -607,7 +607,6 @@ public class Library extends AbstractTableModel
             {
             return concatenate(emitAllAsBankSysex(toFile));
             }
-
         else
             {
             // If we have nothing to emit, and we're trying to write to the synth, we return empty
@@ -708,8 +707,13 @@ public class Library extends AbstractTableModel
     // or the synth does not support bank writes, or because the bank is not ALL_PATCHES), then
     // the synth MUST be capable of writing independent patches, which is checked for via
     // synth.getSupportsPatchWrites()
-    Object[][] emitRange(int bank, int start, int len, boolean toFile, boolean forceIndependent)
+	//ProgressMonitor pm = null;
+	Object[][] emitRange(int bank, int start, int len, boolean toFile, boolean forceIndependent)
         {
+        // This won't work
+    	//pm = new ProgressMonitor(synth, "Yo", "Hey", 0, 100);
+    	try
+    		{
         ArrayList<Object[]> data = new ArrayList();
         
         if (bank == ALL_PATCHES && synth.getSupportsBankWrites() && !forceIndependent)
@@ -747,21 +751,21 @@ public class Library extends AbstractTableModel
             
         synth.getModel().setUpdateListeners(false);
         boolean failed = false;
+        String failures = "";
         for(int i = start; i < start + len; i++)
             {
+            //if (pm.isCanceled()) return null;
+			//pm.setProgress(((i - start) * 100) / len);
+			//pm.setNote("hey");
+			//pm.repaint();
+			
             int b = (bank == ALL_PATCHES ? i / getBankSize() : bank);
             int n = (bank == ALL_PATCHES ? i % getBankSize() : i);
             
-            if (synth.isValidPatchLocation(b, n))               // only write if it's a real spot (remember we can be ragged)
-                {
-                if (isWriteableBank(b) || toFile)
+            if (synth.isValidPatchLocation(b, n) &&               // only write if it's a real spot (remember we can be ragged)
+				(isWriteableBank(b) || 							  // write only if it's writeable OR
+				(toFile && (!saveAll || synth.isAppropriatePatchLocation(b, n)))))   // write to files but only if we're not saving everything or if the patch is "appropriate"
                     {
-                    if (hasBanks)
-                        {
-                        location.set("bank", b);
-                        }
-                    location.set("number", n);
-
                     // parse
                     boolean localFailed = false;
                     Patch p = getPatch(b, n);
@@ -775,6 +779,7 @@ public class Library extends AbstractTableModel
                             (result == Synth.PARSE_INCOMPLETE && j == p.sysex.length - 1))  // last one
                             {
                             failed = true;
+                            failures = failures + p.location + "    " + p.name + "<br>";
                             localFailed = true;
                             break;
                             }
@@ -782,9 +787,15 @@ public class Library extends AbstractTableModel
                                                                                 
                     if (localFailed) continue;
                                                                                                                                                                 
+                    if (hasBanks)
+                        {
+                        location.set("bank", b);
+                        }
+                    location.set("number", n);
+
                     // now emit
                     Object[] objs = synth.emitAll(location, false, toFile);
-                                                                                
+
                     if (!toFile)
                         {
                         int pause = synth.getPauseAfterWritePatch();
@@ -798,7 +809,6 @@ public class Library extends AbstractTableModel
                         }
                     data.add(objs);                    
                     }
-                }
             }
                 
         // restore
@@ -810,9 +820,16 @@ public class Library extends AbstractTableModel
             
         // should I do a change patch?
         if (failed) 
-            synth.showSimpleError("Incomplete Patch Write", "Some patches were malformed and could not be written.");
+            //synth.showSimpleError("Incomplete Patch Write", "Some patches were malformed and could not be written.");
+            synth.showSimpleError(synth, "Incomplete Patch Write", "Some patches were malformed and could not be written.", new JLabel("<html>" + failures + "</html>"));
  
         return data.toArray(new Object[0][0]);
+        }
+        finally
+        	{
+        	//pm.close();
+        	//pm = null;
+        	}
         }
 
 
@@ -820,6 +837,12 @@ public class Library extends AbstractTableModel
         If bank == ALL_PATCHES, then writes the entire library, possibly using bank sysex. */
     public void writeRange(int bank, int start, int len)
         {
+        if (synth.tuple == null || synth.tuple.outReceiver == null)
+            {
+            if (!synth.setupMIDI())
+                return;
+            }
+                
         Librarian librarian = synth.librarian;
         
         // We can write all patches using bank writes
@@ -967,54 +990,60 @@ public class Library extends AbstractTableModel
             new String[] { "As Separate Files", "To Bulk File", "Cancel" },
             0, title, query);
                         
-        if (result == 2 || result == -1) return;
-        else if (result == 1)                   // To Bulk File
-            {
-            Object[][] d = emitRange(bank, start, len, true, (combo != null && combo.getSelectedIndex() == 1));
+            saveAll = true;
+            try 
+            	{
+				if (result == 2 || result == -1) return;
+				else if (result == 1)                   // To Bulk File
+					{
+					Object[][] d = emitRange(bank, start, len, true, (combo != null && combo.getSelectedIndex() == 1));
 
-            if (d != null)
-                {
-                byte[] data = Synth.flatten(concatenate(d));
+					if (d != null)
+						{
+						byte[] data = Synth.flatten(concatenate(d));
 
-                FileDialog fd = new FileDialog((Frame)(SwingUtilities.getRoot(synth)), "Save to Bulk Sysex File...", FileDialog.SAVE);
+						FileDialog fd = new FileDialog((Frame)(SwingUtilities.getRoot(synth)), "Save to Bulk Sysex File...", FileDialog.SAVE);
 
-                fd.setFile(StringUtility.reviseFileName(synth.getSynthNameLocal() + ".bulk.syx"));
-                String path = synth.getLastDirectory();
-                if (path != null)
-                    fd.setDirectory(path);
-                                                                                                                                        
-                synth.disableMenuBar();
-                fd.setVisible(true);
-                synth.enableMenuBar();
-        
-                File f = null; // make compiler happy
-                FileOutputStream os = null;
-                if (fd.getFile() != null)
-                    {
-                    synth.setLastDirectory(fd.getDirectory());
-                    File patchFileOrDirectory = new File(fd.getDirectory(), StringUtility.ensureFileEndsWith(fd.getFile(), ".syx"));
-                    FileOutputStream batchPatches = null;
-                    try 
-                        {
-                        batchPatches = new FileOutputStream(patchFileOrDirectory);
-                        batchPatches.write(data);
-                        } 
-                    catch (IOException e) // fail
-                        {
-                        synth.showErrorWithStackTrace(e, "File Error", "An error occurred while saving to the bulk file " + (patchFileOrDirectory == null ? " " : patchFileOrDirectory.getName()));
-                        Synth.handleException(e);
-                        if (batchPatches != null)
-                            try { batchPatches.close(); }
-                            catch (IOException ex) { }
-                        }
-                    }
-                else return;
-                }
-            }
-        else            // As Separate Files
-            {
-            saveRangeSeparately(bank, start, len, (combo == null || combo.getSelectedIndex() == 1));
-            }
+						fd.setFile(StringUtility.reviseFileName(synth.getSynthNameLocal() + ".bulk.syx"));
+						String path = synth.getLastDirectory();
+						if (path != null)
+							fd.setDirectory(path);
+																																		
+						synth.disableMenuBar();
+						fd.setVisible(true);
+						synth.enableMenuBar();
+		
+						File f = null; // make compiler happy
+						FileOutputStream os = null;
+						if (fd.getFile() != null)
+							{
+							synth.setLastDirectory(fd.getDirectory());
+							File patchFileOrDirectory = new File(fd.getDirectory(), StringUtility.ensureFileEndsWith(fd.getFile(), ".syx"));
+							FileOutputStream batchPatches = null;
+							try 
+								{
+								batchPatches = new FileOutputStream(patchFileOrDirectory);
+								batchPatches.write(data);
+								} 
+							catch (IOException e) // fail
+								{
+								synth.showErrorWithStackTrace(e, "File Error", "An error occurred while saving to the bulk file " + (patchFileOrDirectory == null ? " " : patchFileOrDirectory.getName()));
+								Synth.handleException(e);
+								if (batchPatches != null)
+									try { batchPatches.close(); }
+									catch (IOException ex) { }
+								}
+							}
+						else return;
+						}
+					}
+				else            // As Separate Files
+					{
+					saveRangeSeparately(bank, start, len, (combo == null || combo.getSelectedIndex() == 1));
+					}
+            	}
+            finally { saveAll = false; }
+            
         }
         
 
@@ -1123,42 +1152,51 @@ public class Library extends AbstractTableModel
         }
 
 
-
+	boolean saveAll = false;
+	
     /** Writes to the synthesizer all the patches in the given bank,
         either using bank-write functions or individual patch writing functions. 
         If bank == ALL_PATCHES, then writes the entire library. */
     public void writeBank(int bank)
         {
-        if (synth.getSupportsBankWrites())
-            {
-            if (bank != ALL_PATCHES && !isWriteableBank(bank))
-                {
-                synth.showSimpleError("Not Supported", "This bank cannot be written to the synthesizer.");
-                return;
-                }
-                                                                        
-            Object[] data = null;
-            data = emitBank(bank, false);
-            if (data != null)
-                {
-                if (synth.tuple == null || synth.tuple.outReceiver == null)
-                    {
-                    if (!synth.setupMIDI())
-                        return;
-                    }
-                synth.tryToSendMIDI(data);
-                synth.sendAllParameters();
-                }
-            }
-        else if (synth.getSupportsPatchWrites())
-            {
-            writeRange(bank, 0, getBankSize());
-            }
-        else
-            {
-            // this should never happen
-            synth.showSimpleError("Not Supported", "Edisyn cannot write banks to this synthesizer.");
-            }
+        try
+        	{
+			if (synth.getSupportsBankWrites())
+				{
+				if (bank != ALL_PATCHES && !isWriteableBank(bank))
+					{
+					synth.showSimpleError("Not Supported", "This bank cannot be written to the synthesizer.");
+					return;
+					}
+																		
+				Object[] data = null;
+				saveAll = (bank == ALL_PATCHES);
+				data = emitBank(bank, false);
+				if (data != null)
+					{
+					if (synth.tuple == null || synth.tuple.outReceiver == null)
+						{
+						if (!synth.setupMIDI())
+							return;
+						}
+					synth.tryToSendMIDI(data);
+					synth.sendAllParameters();
+					}
+				}
+			else if (synth.getSupportsPatchWrites())
+				{
+				saveAll = (bank == ALL_PATCHES);
+				int bankSize = synth.getValidBankSize(bank);
+				if (bankSize == -1) bankSize = getBankSize();
+				writeRange(bank, 0, bankSize);
+				}
+			else
+				{
+				// this should never happen
+				synth.showSimpleError("Not Supported", "Edisyn cannot write banks to this synthesizer.");
+				}
+			}
+		finally { saveAll = false; }
         }
 
 
@@ -1214,7 +1252,9 @@ public class Library extends AbstractTableModel
             }
         else if (synth.getSupportsPatchWrites())
             {
-            saveRange(bank, 0, getBankSize());
+			int bankSize = synth.getValidBankSize(bank);
+			if (bankSize == -1) bankSize = getBankSize();
+            saveRange(bank, 0, bankSize);
             }
         else
             {
@@ -1259,7 +1299,12 @@ public class Library extends AbstractTableModel
                 patch = new Patch(getInitPatch());              // Make a copy
                 }
             }
+        return getModel(patch, bank, number);
+        }
                         
+    /** Generates a model from the Patch, with the given bank and number */
+    public Model getModel(Patch patch, int bank, int number)
+        {                        
         Synth synth = getSynth();
                  
         // do we need to modify the bank and number?

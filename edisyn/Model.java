@@ -764,8 +764,32 @@ public class Model implements Cloneable
         return true;
         }
 
+    public boolean keyEquals(Model other, boolean exceptBankAndNumber)
+        {
+        if (other == null)
+            return false;
+        if (!storage.keySet().equals(other.storage.keySet()))
+            return false;
+                
+        String[] keys = getKeys();
+        for(int i = 0; i < keys.length; i++)
+            {
+            if (exceptBankAndNumber &&
+            	(keys[i].equals("bank") | keys[i].equals("number"))) continue;
+            Node n = storage.get(keys[i]);
+            Node n2 = other.storage.get(keys[i]);
+            if (n2 == null)         // I can't be null, just the other one
+                return false;
+            if (!storage.get(keys[i]).keyEquals(other.storage.get(keys[i])))
+                return false;
+            }
+        return true;
+        }
+
     public boolean keyEquals(Model other)
         {
+        return keyEquals(other, false);
+        /*
         if (other == null)
             return false;
         if (!storage.keySet().equals(other.storage.keySet()))
@@ -782,6 +806,7 @@ public class Model implements Cloneable
                 return false;
             }
         return true;
+        */
         }
     
         

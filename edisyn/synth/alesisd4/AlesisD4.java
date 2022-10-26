@@ -1878,5 +1878,7 @@ public class AlesisD4 extends Synth
 
     public int getPatchNameLength() { return 15; }
 
+    public int getBatchDownloadWaitTime() { return 1500; }
+
     public boolean librarianTested() { return true; }
     }

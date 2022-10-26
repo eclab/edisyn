@@ -593,6 +593,12 @@ public class YamahaFS1RMulti extends Synth
                 model.set("fseqstartstepoflooppoint", FSEQ_PARAMETER_SETTINGS[val][FSEQ_DEFAULT_LOOP_START_I]);
                 model.set("fseqendstepoflooppoint", FSEQ_PARAMETER_SETTINGS[val][FSEQ_DEFAULT_LOOP_END_I]);
                 
+                
+                //// I no longer modify min/max.  It breaks a lot of mutation methods and doesn't
+                //// really help anyone.  Maybe we might print some info about what the legal settings
+                //// are or something...
+                
+                /*
                 // Update upper limits
                 int maxLen = FSEQ_PARAMETER_SETTINGS[val][FSEQ_MAX_LENGTH_I];
                 
@@ -613,6 +619,7 @@ public class YamahaFS1RMulti extends Synth
                 if (model.get("fseqendstepoflooppoint") > maxLen)
                     model.set("fseqendstepoflooppoint", maxLen);
                 model.updateListenersForKey("fseqendstepoflooppoint");
+                */
                 }
             };
         vbox.add(comp);

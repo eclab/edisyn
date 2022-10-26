@@ -3004,5 +3004,13 @@ System.err.println("" + i + "  " + PATCH_NAMES[i]);
 
     public boolean getSupportsPatchWrites() { return true; }
 
+    public byte[] requestBankDump(int bank) 
+    	{
+    	Model temp = new Model();
+    	temp.set("bank", bank);
+    	temp.set("number", 0);	// or something
+    	performChangePatch(temp);
+    	return new byte[] { (byte)0xF0, 0x10, 0x06, 0x04, 0x00, 0x00, (byte)0xF7 }; 
+    	}
     public boolean librarianTested() { return true; }
     }

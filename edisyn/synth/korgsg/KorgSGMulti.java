@@ -726,7 +726,7 @@ public class KorgSGMulti extends Synth
             tempModel = getModel();
 
         // we always change the patch no matter what
-        //performChangePatch(tempModel);
+        performChangePatch(tempModel);
 
         // enter performance edit mode, which loads the patch into edit buffer memory
         tryToSendSysex(new byte[] { (byte)0xF0, 0x42, (byte)(48 + getChannelOut()), 0x4A, 0x4E, 0x01, 0x0, (byte)0xF7 });
@@ -850,6 +850,7 @@ public class KorgSGMulti extends Synth
     public boolean[] getWriteableBanks() { return new boolean[] { true, true, true, true }; }
     public int getPatchNameLength() { return 10; }
     public boolean getSupportsPatchWrites() { return true; }
+    public int getBatchDownloadWaitTime() { return 550; }			// 500 doesn't cut it
 
     public boolean librarianTested() { return true; }
     }

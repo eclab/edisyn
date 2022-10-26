@@ -17,7 +17,7 @@ import java.io.*;
 import javax.sound.midi.*;
 
 /**
-   A patch editor for the Korg SG RACK and the Korg SG X PRO.
+   A patch editor for the Korg SG RACK and maybe the Korg SG X PRO.
         
    @author Sean Luke
 */
@@ -1414,7 +1414,7 @@ public class KorgSG extends Synth
             tempModel = getModel();
 
         // we always change the patch no matter what
-        // performChangePatch(tempModel);
+        performChangePatch(tempModel);
 
         // enter program edit mode, which loads the patch into edit buffer memory
         tryToSendSysex(new byte[] { (byte)0xF0, 0x42, (byte)(48 + getChannelOut()), 0x4A, 0x4E, 0x03, 0x0, (byte)0xF7 });

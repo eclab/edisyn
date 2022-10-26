@@ -16,7 +16,9 @@ Set your SR to receive sysex parameters, and also to receive program change and 
 <br><br><h3>Gotchas</h3>
 
 <ul>
-<li>The Wavestation doesn't have an option to allow Edisyn to send parameters in bulk to its current working memory, but this is an important Edisyn feature.  Edisyn instead sends bulk parameters by writing them to the first performance in the current bank, overwriting any existing performance there.  
+<li>Changing patches is grotesquely expensive, requiring six sysex messages to be reliable, and so is really, really slow.  As a result, downloading patches one by one is also extremely slow.  In the libary, I'd strongly suggest <b>Request Bank from Synth</b>.
+
+<p><li>The Wavestation doesn't have an option to allow Edisyn to send parameters in bulk to its current working memory, but this is an important Edisyn feature.  Edisyn instead sends bulk parameters by writing them to the first performance in the current bank, overwriting any existing performance there.  
 
 <p><li>Changes to parameters aren't displayed on the Wavestation unless that parameter is currently specifically selected on the Wavestation's screen.
 

@@ -44,7 +44,8 @@ This checkbox, located on the Global page, controls the behavior of the Joystick
 <br><br><h3>Gotchas</h3>
 
 <ul>
-<li>The Wavestation doesn't have an option to allow Edisyn to send parameters in bulk to its current working memory.  Instead, Edisyn will always bulk-send the parameters to the patch's declared bank and number.  You will change this bank and number when you <b>Send to Patch...</b>, <b>Request Patch...</b>, or <b>Load...</b>.
+<li>Changing patches is grotesquely expensive, requiring six sysex messages to be reliable, and so is really, really slow.  As a result, downloading patches one by one is also extremely slow.  In the libary, I'd strongly suggest <b>Request Bank from Synth</b>.
+<p><li>The Wavestation doesn't have an option to allow Edisyn to send parameters in bulk to its current working memory.  Instead, Edisyn will always bulk-send the parameters to the patch's declared bank and number.  You will change this bank and number when you <b>Send to Patch...</b>, <b>Request Patch...</b>, or <b>Load...</b>.
 <p><li>Due to an unfortunate SR bug, the Wavestation SR cannot write patches in reponse to a MIDI command from Edisyn.  Instead, you will have to write the patch yourself.  To do this, first <b>Send to Patch...</b> to the desired bank and patch number.  Then press the <b>Edit Button</b> on the SR twice, which should get you to this patch.  Finally, press the <b>Write/Compare</b> button (which should be lit).  When it asks you if you want to write to the patch, press the <b>Write Compare</b> button again.
 <p><li>Changes to parameters aren't displayed on the Wavestation SR unless that parameter is currently specifically selected on the Wavestation's screen.
 <p><li>Updating individual parameters is a little pokey.  This is because Edisyn must insert a significant delay between successive parameter updates or they'll get dropped by the SR.

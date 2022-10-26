@@ -2665,11 +2665,11 @@ public class YamahaFS1RFseq extends Synth
         int number = model.get("number");
         
         number++;
-        if (number >= 128)
+        if (number >= (bank == 0 ? 6 : 90))
             {
             bank++;
             number = 0;
-            if (bank >= 13)             // K = 12, Internal = 0
+            if (bank >= 2) 
                 bank = 0;
             }
                 

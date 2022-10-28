@@ -29,16 +29,24 @@ public class Library extends AbstractTableModel
     ArrayList<Patch[][]> undo = new ArrayList<>();
     ArrayList<Patch[][]> redo = new ArrayList<>();
     
+    // The patches in the library by [bank][number]
     Patch[][] patches;                                      // Note that patches[0] is the "scratch bank"
+    // The names of numbers along the left side of the library
     String[] numberNames;
+    // The names of banks along the top of the library
     String[] bankNames;                                     // Note that bankNames[0] is the scratch bank name
+    // Which banks are writeable
     boolean[] writeableBanks;                               // Note that writeableBanks[0] is true (for the scratch bank)
+    // The names the user has set for banks along the top of the library.  If a user name is null, then the standard bankNames[] is used.
     String[] userNames;
+    // The default "empty" patch
     private Patch initPatch;
+    // The synth that owns this library
     Synth synth;
+    // The synth number (the same thing as synth.getSynthNum())
     int synthNum;  
-    
-    int nameCounter = 1;                                                                                     // integer referring to the synth class from Synth.getSynthNum()
+    // A counter which lets us provide unique patch names in the library slots when a synthesizer provides no patch names
+    int nameCounter = 1;
         
     /** Builds a library model, including undo/redo, given a set of bank names,
         the size (length) of a bank, a default init patch, and a list of names
@@ -212,14 +220,17 @@ public class Library extends AbstractTableModel
         fireTableDataChanged();
         }
         
-          
+    /** Returns the synth that owns this Library */
     public Synth getSynth() { return synth; }
+    
+    /** Returns the synth number of the synth that owns this library. Equivalent to getSynth().getSynthNum() but a bit faster (it's cached). */
     public int getSynthNum() { return synthNum; }      
                 
                 
                 
     //// UNDO/REDO
         
+    // Make a shallow copy of the patches
     Patch[][] copy()
         {
         Patch[][] np = new Patch[patches.length][patches[0].length];
@@ -283,7 +294,7 @@ public class Library extends AbstractTableModel
         
     ///// ABSTRACT TABLE MODEL METHOD JUNK
 
-        
+    
     public Class<?> getColumnClass(int columnIndex)
         {
         return Patch.class;
@@ -329,7 +340,8 @@ public class Library extends AbstractTableModel
 
 
     /////  RECEIVING
-        
+    
+    /** Accepts a patch and places it in the appropriate slot by calling setPatch(incoming)  */
     public void receivePatch(Patch incoming)
         {
         pushUndo();
@@ -338,33 +350,10 @@ public class Library extends AbstractTableModel
         setPatch(incoming);
         }
 
-
-    public void receivePatch(Patch incoming, int bank, int number)
-        {
-        pushUndo();
-        incoming = new Patch(incoming);         // deep copy
-        // synth.setNumberAndBank(incoming, number, bank);
-        setPatch(incoming);
-        }
-
-    public void receiveBank(Patch[] incoming, int bank)
-        {
-        pushUndo();
-
-        // deep copy
-        Patch[] in = new Patch[incoming.length];
-        for(int i = 0; i < in.length; i++)
-            in[i] = new Patch(incoming[i]);
-        incoming = in;
-
-        for(int i = 0; i < incoming.length; i++)
-            {
-            // synth.updateNumberAndBank(incoming[i]);
-            // synth.setNumberAndBank(incoming[i], incoming[i].number, bank);
-            setPatch(incoming[i]);
-            }
-        }
-
+    /** Accepts a collection of patches and adds them to the library.  Attempts to place
+    	the patches in the slots specified by their banks and numbers, but if there are
+    	other patches in the same batch with the same bank and number, then places them
+    	somewhere else. */
     public void receivePatches(Patch[] incoming)
         {
         // These patches could be null because they've already been processed earlier as banks
@@ -469,8 +458,9 @@ public class Library extends AbstractTableModel
             }
         }
                 
-    // reads a sysex bank message holding one or (rarely) more than one bank,
-    // and loads the patches in that bank or those banks
+    /** Reads a sysex bank message holding one or (rarely) more than one bank, 
+    	and loads the patches in that bank or those banks
+    */
     public void readBanks(byte[] incoming, Librarian librarian)
         {
         pushUndo();
@@ -547,6 +537,7 @@ public class Library extends AbstractTableModel
 
     /////  EMITTING
 
+    // A utility function: flattens the separate data[] elements into one large array
     public static final int ALL_PATCHES = -1;
         
     // A utility function: flattens the separate data[] elements into one large array
@@ -566,7 +557,6 @@ public class Library extends AbstractTableModel
         }
 
     // Emits all the patches in the synthesizer, using bank-write functions only.
-    //
     Object[][] emitAllAsBankSysex(boolean toFile)
         {
         // This function only works if we support bank writes.  We should emit an error here.
@@ -591,7 +581,6 @@ public class Library extends AbstractTableModel
     // If bank == ALL_PATCHES, then emits the entire library, but note that
     // the library is emitted as one flattened Object[] rather than an Object[][],
     // which you want.  In this case you should call emitAllAsBankSysex(...) instead.
-    
     Object[] emitBank(int bank, boolean toFile)
         {
         // This function only works if we support bank writes.  We should emit an error here.
@@ -696,8 +685,6 @@ public class Library extends AbstractTableModel
         }
         
         
-
-
     // Emits MIDI representing all the patches from start to start+len-1 in bank.
     // If bank == ALL_PATCHES, then emits the entire library.
     // If bank == ALL_PATCHES, and the synthesizer is capable of emitting bank-patch dumps, 
@@ -720,14 +707,6 @@ public class Library extends AbstractTableModel
             {
             return emitAllAsBankSysex(toFile);
             }
-// We may not support writes, but we always support saves...
-/*
-  else if (!synth.getSupportsPatchWrites())
-  {
-  System.err.println("Library.emitRange Error: emitRange() called on synthesizer " + synth.getSynthClassName() + ", which does not support independent patch sysex writes.");
-  return new Object[0][0];
-  } 
-*/
 
         // backup
         boolean originalMIDI = synth.getSendMIDI();
@@ -832,6 +811,7 @@ public class Library extends AbstractTableModel
         	}
         }
 
+	public static final int MINIMUM_PATCHES_FOR_PROGRESS_DIALOG = 2;
 
     /** Writes to the synthesizer all the patches from start to start+len-1 in bank.
         If bank == ALL_PATCHES, then writes the entire library, possibly using bank sysex. */
@@ -869,8 +849,18 @@ public class Library extends AbstractTableModel
                         return;
                         }                               
                     }
-
-                synth.tryToSendMIDI(concatenate(data), librarian.writeProgress);
+				if (bank == ALL_PATCHES)
+					{
+	                synth.tryToSendMIDI(concatenate(data), "Writing", "Writing All Patches to Synth");
+	                }
+	            else if (len < MINIMUM_PATCHES_FOR_PROGRESS_DIALOG)
+	            	{
+					synth.tryToSendMIDI(concatenate(data));
+	            	}
+	            else
+	            	{
+	                synth.tryToSendMIDI(concatenate(data), "Writing", "Writing Patches to Synth");
+	            	}
                 synth.sendAllParameters();
                 }
             }           
@@ -881,7 +871,8 @@ public class Library extends AbstractTableModel
         }
 
 
-    public void changeName(int bank, int start, int len)
+    /** Prompts the user to change the name of a patch at a given location.  */
+    public void changeName(int bank, int start)
         {
         Patch patch = getPatch(bank, start);
         if (patch == null) patch = initPatch;
@@ -1152,6 +1143,7 @@ public class Library extends AbstractTableModel
         }
 
 
+	// Indicates that we are presently saving *all* patches
 	boolean saveAll = false;
 	
     /** Writes to the synthesizer all the patches in the given bank,
@@ -1179,7 +1171,14 @@ public class Library extends AbstractTableModel
 						if (!synth.setupMIDI())
 							return;
 						}
-					synth.tryToSendMIDI(data);
+					if (bank == ALL_PATCHES)
+						{
+						synth.tryToSendMIDI(data, "Writing", "Writing All Patches to Synth");
+						}
+					else
+						{
+						synth.tryToSendMIDI(data, "Writing", "Writing Bank to Synth");
+						}
 					synth.sendAllParameters();
 					}
 				}
@@ -1264,6 +1263,7 @@ public class Library extends AbstractTableModel
         }    
 
 
+	/** A Utility method.  Given a model, produces a Patch filled out with model data. */
     public Patch getPatch(Model model)
         {
         Synth synth = getSynth();

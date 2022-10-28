@@ -1415,8 +1415,28 @@ public abstract class Synth extends JComponent implements Updatable
     // flag for whether sending MIDI is temporarily turned off or not
     boolean sendMIDI = true;  // we can send MIDI 
 
+	boolean receiveMIDI = true;	// we can receive MIDI
+	static final boolean bufferNonReceivedMIDI = false;		// are we buffering or ignoring?
 
-
+	static class StampedMessage { public MidiMessage message; public long timeStamp; }
+	
+	ArrayList<StampedMessage> inBuffer = new ArrayList<>();
+	ArrayList<StampedMessage> keyBuffer = new ArrayList<>();
+	ArrayList<StampedMessage> key2Buffer = new ArrayList<>();
+	
+	void processBufferedMessages(Receiver receiver, ArrayList<StampedMessage> buffer)
+		{
+		if (receiver != null && !buffer.isEmpty())
+			{
+			ArrayList<StampedMessage> buf2 = new ArrayList<StampedMessage>(buffer);
+			buffer.clear();
+			for(StampedMessage sm : buf2)
+				{
+				receiver.send(sm.message, sm.timeStamp);
+				}
+			}
+		}
+	
     /** Builds a receiver to attach to the current IN transmitter.  The receiver
         can handle merging and patch reception. */
     public Receiver buildInReceiver()
@@ -1429,6 +1449,20 @@ public abstract class Synth extends JComponent implements Updatable
                                 
             public void send(final MidiMessage message, final long timeStamp)
                 {
+                if (!receiveMIDI)
+                	{
+                	if (bufferNonReceivedMIDI)
+                		{
+	                	StampedMessage sm = new StampedMessage();
+	                	sm.message = message;
+	                	sm.timeStamp = timeStamp;
+	                	inBuffer.add(sm);
+	                	}
+                	return;
+                	}
+
+				if (tuple != null) processBufferedMessages(tuple.inReceiver, inBuffer);
+
                 // I'm doing this in the Swing event thread because I figure it's multithreaded
                 SwingUtilities.invokeLater(new Runnable()
                     {
@@ -1631,9 +1665,23 @@ public abstract class Synth extends JComponent implements Updatable
                                 
             public void send(final MidiMessage message, final long timeStamp)
                 {
+					if (!receiveMIDI)
+						{
+	                	if (bufferNonReceivedMIDI)
+	                		{
+							StampedMessage sm = new StampedMessage();
+							sm.message = message;
+							sm.timeStamp = timeStamp;
+							keyBuffer.add(sm);
+							}
+						return;
+						}
+
+						if (tuple != null) processBufferedMessages(tuple.keyReceiver, keyBuffer);
+
                 // I'm doing this in the Swing event thread because I figure it's multithreaded
                 SwingUtilities.invokeLater(new Runnable()
-                    {
+                    {	
                     public void run()
                         {
                         if (amActiveSynth())
@@ -1739,6 +1787,20 @@ public abstract class Synth extends JComponent implements Updatable
                     {
                     public void run()
                         {
+						if (!receiveMIDI)
+							{
+		                	if (bufferNonReceivedMIDI)
+		                		{
+								StampedMessage sm = new StampedMessage();
+								sm.message = message;
+								sm.timeStamp = timeStamp;
+								key2Buffer.add(sm);
+								}
+							return;
+							}
+
+						if (tuple != null) processBufferedMessages(tuple.key2Receiver, key2Buffer);
+	
                         if (amActiveSynth())
                             {
                             if (message instanceof ShortMessage)
@@ -1829,12 +1891,27 @@ public abstract class Synth extends JComponent implements Updatable
 
     public int getVoiceMessageRoutedChannel(int incomingChannel, int synthChannel) { return synthChannel; }
 
-    /** Sets whether sysex parameter changes should be sent in response to changes to the model.
+    /** Sets whether the synth can send MIDI out.
         You can set this to temporarily paralleize your editor when updating parameters. */
     public void setSendMIDI(boolean val) { sendMIDI = val; }
 
-    /** Gets whether sysex parameter changes should be sent in response to changes to the model. */
+    /** Sets whether the synth can send MIDI out. */
     public boolean getSendMIDI() { return sendMIDI; }
+
+    /** Sets whether the synth can receive MIDI from any source. */
+    public void setReceiveMIDI(boolean val) 
+    	{ 
+    	receiveMIDI = val; 
+    	if (val && tuple != null)
+    		{
+			processBufferedMessages(tuple.inReceiver, inBuffer);
+			processBufferedMessages(tuple.keyReceiver, keyBuffer);
+			processBufferedMessages(tuple.key2Receiver, key2Buffer);
+			}
+		}
+
+    /** Returns whether the synth can receive MIDI from any source. */
+    public boolean getReceiveMIDI() { return receiveMIDI; }
         
     /** Same as setupMIDI(message, null), with a default "you are disconnected" message. */
     public boolean setupMIDI() { return setupMIDI("You are disconnected. Choose MIDI devices to send to and receive from.", null, false); }
@@ -2097,27 +2174,11 @@ public abstract class Synth extends JComponent implements Updatable
     */
     public boolean tryToSendMIDI(Object[] data)
         {
-        return tryToSendMIDI(data, null);
-        }
-        
-    public boolean tryToSendMIDI(Object[] data, JProgressBar progress)
-        {
         if (data == null) return false;
         if (data.length == 0) return false;
-        if (progress != null) 
-            {
-            progress.setMinimum(0);
-            progress.setMaximum(data.length - 1);
-            }
                 
         for(int i = 0; i < data.length; i++)
             {
-            if (progress != null)
-                {
-                progress.setValue(i);
-                progress.paintImmediately(progress.getBounds());        
-                }
-
             if (data[i] == null)
                 {
                 continue;
@@ -2145,6 +2206,99 @@ public abstract class Synth extends JComponent implements Updatable
         sentMIDI(null, 0, 0);
         return true;
         }
+
+	boolean midiCanceled = false;
+	
+	/**
+	 Sends MIDI data using a progress bar and dialog box with a given
+	 title and note.  Returns true if the data was entirely sent, or
+	 false if the user canceled the operation.
+	 */
+    public boolean tryToSendMIDI(final Object[] data, String title, String note)
+    	{
+    	// To pull this trick off, we have to set up a thread to run in the background and then
+    	// have the JDialog wait for it to complete.  This is nontrivial because in the meantime
+    	// MIDI data could arrive via our Receivers.  Thus we have to first shut them off and have
+    	// them buffer up any incoming data, then when we're done, process that data via setReceiveMIDI(true).
+    	
+    	midiCanceled = false;
+    	final boolean receive = getReceiveMIDI();
+        disableMenuBar();
+    	setReceiveMIDI(false);
+		// We can't use a ProgressMonitor because it's not modal.  So we have to build
+		// it manually.
+		
+        Object f = SwingUtilities.getRoot(this);
+       	JFrame frame = null;
+       	if (f instanceof JFrame) frame = (JFrame)f;
+		final JDialog dialog = new JDialog(frame, title, true);
+		JPanel outer = new JPanel();
+		outer.setLayout(new BorderLayout());
+        outer.setBorder(new EmptyBorder(20, 20, 20, 20));
+        dialog.add(outer);
+        
+		JProgressBar bar = new JProgressBar(0, 100);
+		JPanel inner = new JPanel();
+		inner.setLayout(new BorderLayout());
+		inner.add(bar, BorderLayout.CENTER);
+		inner.setBorder(new EmptyBorder(8, 0, 8, 0));
+		outer.add(new JLabel(note), BorderLayout.NORTH);
+		outer.add(inner, BorderLayout.CENTER);
+		JButton cancelButton = new JButton("Stop");
+		cancelButton.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                midiCanceled = true;
+                }
+            });
+        JPanel panel = new JPanel();
+        panel.setLayout(new BorderLayout());
+        panel.add(cancelButton, BorderLayout.EAST);
+        outer.add(panel, BorderLayout.SOUTH);
+            
+		final Thread thread = new Thread(new Runnable()
+    		{
+    		public void run()
+    			{
+    			for(int i = 0; i < data.length; i++)
+    				{
+    				if (midiCanceled)
+    					{
+						break;
+    					}
+    				tryToSendMIDI(new Object[] { data[i] });
+    				bar.setValue((i * 100) / data.length);
+    				}
+				setReceiveMIDI(receive);
+    			SwingUtilities.invokeLater(new Runnable() { public void run() { dialog.setVisible(false); }  });
+    			}
+    		});
+    		
+    	dialog.addWindowListener(new WindowAdapter()
+    		{
+    		public void windowOpened(WindowEvent e)
+    			{
+		    	thread.start();
+    			}
+    			
+			// windowClosed() isn't called by JDialog -- a Java bug I think
+			// but windowClosing() is called.
+    		public void windowClosing(WindowEvent e)
+    			{
+		    	midiCanceled = true;
+    			}
+    		});
+    		
+    	dialog.pack();
+		dialog.setLocationRelativeTo(this);
+    	dialog.setVisible(true);
+			
+		enableMenuBar();
+		return midiCanceled;
+    	}
+        
+
 
 
 
@@ -6449,7 +6603,7 @@ public abstract class Synth extends JComponent implements Updatable
 	void saveLibrarian()
 		{
 		int res = showMultiOption(this, new String[0], new JComponent[0], 
-			new String[] { "Selected Patches", "Bank", "All Files", "Cancel" },
+			new String[] { "Selected Patches", "Bank", "All Patches", "Cancel" },
 			0, "Save...", 
 			new JLabel("Save What Range of Patches?"));
 		if (res == 0)
@@ -7948,20 +8102,7 @@ finally { setAvoidUpdating(false); }
         if (!fixCorruptSysex(data))
             return false;
                     
-        final boolean[] writeBulkCancelled = new boolean[] { false };
-        final JProgressBar bar = new JProgressBar(0, data.length - 1);
-        final JLabel patchName = new JLabel("");
-        SwingUtilities.invokeLater(new Runnable()
-            {
-            public void run()
-                {
-                showMultiOption(Synth.this, (names == null ? new String[] { "Progress " } : new String[] { "Progress ", "Original Location/Name " }), 
-                    (names == null ? new JComponent[] { bar } : new JComponent[] { bar, patchName }), 
-                    new String[] { "Cancel" }, 0, "Bulk Write", "Writing patches to synthesizer...");
-                writeBulkCancelled[0] = true;
-                }
-            });
-                
+        final boolean[] writeBulkCancelled = new boolean[] { false };                
         final byte[][] dat = data;
         final int[] index = new int[] { 0 };
         final boolean[] invalid = new boolean[] { false };
@@ -7975,10 +8116,6 @@ finally { setAvoidUpdating(false); }
                 {
                 if (index[0] >= data.length || writeBulkCancelled[0])   // finished
                     {
-                    Window win = SwingUtilities.getWindowAncestor(bar);
-                    if (win != null) win.dispose();                 // force close, though it may already be closed
-                    if (timer[0] != null) timer[0].stop();
-                                        
                     long time2 = System.currentTimeMillis();
                     if (time2 > time && time2 - time < 1000)
                         simplePause((int)(1000L - (time2 - time)));             // this is a decorative pause to give the user time to spot the window in case it appears and disappears rapidly
@@ -7991,9 +8128,6 @@ finally { setAvoidUpdating(false); }
                     if (!tryToSendSysex(dat[index[0]])) invalid[0] = true;  // we ignore the return value because we'll try 
                     simplePause(pause);
                     index[0]++;
-                    bar.setValue(index[0] + 1);
-                    if (names != null && index[0] < names.length)
-                        patchName.setText(names[index[0]]);
                     }
                 }
             });

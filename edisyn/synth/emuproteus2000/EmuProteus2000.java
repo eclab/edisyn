@@ -2418,6 +2418,7 @@ public class EmuProteus2000 extends Synth
         }
 
 
+	public int getPauseAfterWritePatch() { return 0; }
 
     //public int getPauseAfterReceivePatch() { return 1000; }         // 150 appears to be too fast
                 
@@ -2806,7 +2807,16 @@ public class EmuProteus2000 extends Synth
             (toFile ? new byte[0] :
             new byte[] { (byte)0xF0, 0x18, 0x0F, 0x00, 0x55, 0x01, 0x02, 0x0A, 0x01, 0x00, 0x00, (byte)0xF7 });
         result[8] = footer;
-        return result;
+        
+        // Intersperse pauses
+        Object[] result2 = new Object[17];
+        for(int i = 0; i < 9; i++)
+        	{
+        	result2[i * 2] = result[i];
+        	if (i != 8) result2[i * 2 + 1] = Integer.valueOf(150);		// 150 seems to be okay but 100 is too fast
+        	}
+        	        
+        return result2;
         }
         
 

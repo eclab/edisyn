@@ -19,13 +19,14 @@ import javax.swing.table.*;
 
 public class Librarian extends JPanel
     {
+    // The current patch 
     JTable patchWell;
+    // The librarian patch table
     JTable table;
+    // Scroll pane holding the table
     JScrollPane scrollPane;
-    JButton undo = new JButton("Undo");
-    JButton redo = new JButton("Redo");
+    // The "Stop Download" button
     PushButton stopAction;
-    JProgressBar writeProgress = new JProgressBar();
     JPanel bottomPanel;
     
     /** Returns the current library (which is the table's model) */    
@@ -48,8 +49,6 @@ public class Librarian extends JPanel
         
     public void updateUndoRedo()
         {
-        undo.setEnabled(getLibrary().hasUndo());
-        redo.setEnabled(getLibrary().hasRedo());
         getLibrary().synth.updateUndoMenus();
         }
         
@@ -137,7 +136,13 @@ public class Librarian extends JPanel
                         return;
                         }
                         
-                    getLibrary().changeName(column - 1, row, len);
+                    if (len > 1)
+                    	{
+                        getLibrary().synth.showSimpleError("Cannot Change Name", "Please select only a single patch.");
+                        return;
+                    	}
+                        
+                    getLibrary().changeName(column - 1, row);
                     }
                 }
                         
@@ -502,10 +507,6 @@ public class Librarian extends JPanel
             //bottomPanel.add(stopAction.getButton(), BorderLayout.WEST);
             stopAction.getButton().setEnabled(true);
             }
-                   
-        writeProgress.setStringPainted(false);
-        writeProgress.setEnabled(true);
-        // bottomPanel.add(writeProgress, BorderLayout.EAST);                           // Not working right now :-(
         }
         
         
@@ -1237,7 +1238,7 @@ public class Librarian extends JPanel
         {
         Synth synth = getLibrary().getSynth();
         
-        if (synth.showSimpleConfirm("Write All", "Write All Patches to Synthesizer?\nThis operation cannot be canceled.\nWriting all patches may take a very long time.", "Write"))
+        if (synth.showSimpleConfirm("Write All", "Write All Patches to Synthesizer?", "Write"))
             {
             getLibrary().writeRange(Library.ALL_PATCHES, 0, 0);
             }
@@ -1271,7 +1272,7 @@ public class Librarian extends JPanel
             return;
             }
                         
-        if (synth.showSimpleConfirm("Write Bank", "Write Bank to Synthesizer?\nThis operation cannot be canceled.\nWriting a bank may take a long time.", "Write"))
+        if (synth.showSimpleConfirm("Write Bank", "Write Bank to Synthesizer?", "Write"))
             {
             getLibrary().writeBank(column - 1);
             }
@@ -1317,7 +1318,7 @@ public class Librarian extends JPanel
             }
         else
             {
-            if (synth.showSimpleConfirm("Write Selected Region", "Write Selected Region to Synthesizer?\nThis operation cannot be canceled.\nWriting a large region can take a long time.", "Write"))
+            if (synth.showSimpleConfirm("Write Selected Region", "Write Selected Region to Synthesizer?", "Write"))
                 getLibrary().writeRange(column - 1, row, len);
             }
         }

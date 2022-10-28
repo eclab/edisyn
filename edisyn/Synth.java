@@ -3016,7 +3016,20 @@ public abstract class Synth extends JComponent implements Updatable
                 
     public JComponent insertTab(String title, JComponent component, int index)
         {
-        JScrollPane pane = new JScrollPane(component, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+        JPanel panel = new JPanel()
+/*        	{
+        	protected void paintChildren(Graphics g)
+        		{
+        		Graphics2D gg = (Graphics2D) g;
+        		AffineTransform at = gg.getTransform();
+        		at.scale(2.0f, 2.0f);
+        		gg.setTransform(at);
+        		super.paintChildren(g);
+        		}
+        	} */   ;
+        panel.setLayout(new BorderLayout());
+        panel.add(component, BorderLayout.CENTER);
+        JScrollPane pane = new JScrollPane(panel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
             JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         pane.setViewportBorder(null);
         pane.setBorder(null);
@@ -3026,7 +3039,20 @@ public abstract class Synth extends JComponent implements Updatable
 
     public JComponent addTab(String title, JComponent component)
         {
-        JScrollPane pane = new JScrollPane(component, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+        JPanel panel = new JPanel()
+        /*	{
+        	protected void paintChildren(Graphics g)
+        		{
+        		Graphics2D gg = (Graphics2D) g;
+        		AffineTransform at = gg.getTransform();
+        		at.scale(2.0f, 2.0f);
+        		gg.setTransform(at);
+        		super.paintChildren(g);
+        		}
+        	} */    ;
+        panel.setLayout(new BorderLayout());
+        panel.add(component, BorderLayout.CENTER);
+        JScrollPane pane = new JScrollPane(panel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
             JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         pane.setViewportBorder(null);
         pane.setBorder(null);

@@ -81,6 +81,8 @@ public abstract class Synth extends JComponent implements Updatable
     public JMenuItem receiveNextPatch;
     /** The "Request Next Patch" menu */
     public JCheckBoxMenuItem transmitParameters;
+    /** The "Allows Auto Send" menu */
+    public JCheckBoxMenuItem autoSendPatches;
     /** The "Request Merge" menu */
     public JMenu merge;
     /** The "Edit Mutation Parameters" menu */
@@ -2557,25 +2559,6 @@ public abstract class Synth extends JComponent implements Updatable
         
         sendAllParameters();
         simplePause(getPauseAfterSendAllParameters());
-
-        /*
-          if (sendAllParametersTimer == null)
-          {
-          sendAllParametersTimer = new javax.swing.Timer(getPauseAfterSendAllParameters(), new ActionListener()
-          {
-          public void actionPerformed(ActionEvent e)
-          {
-          sendAllParametersTimer.stop();
-          sendAllParametersTimer = null;
-          sendAllParameters();
-          // FIXME
-          // This should emit the pause because getSendsAllParametersAsDump() needs to be true for this synth.
-          // If it's not, we've got an issue
-          }
-          });
-          sendAllParametersTimer.start();
-          }
-        */
         }
         
         
@@ -4783,19 +4766,21 @@ public abstract class Synth extends JComponent implements Updatable
         allowsTransmitsParameters = Boolean.parseBoolean(sendInRealTime);
         transmitParameters.setSelected(allowsTransmitsParameters);
 
-                
-        /*
-          repeatCurrentPatch = new JCheckBoxMenuItem("Repeatedly Send to Current Patch");
-          //repeatCurrentPatch.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_U, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()  |  InputEvent.SHIFT_MASK));
-          menu.add(repeatCurrentPatch);
-          repeatCurrentPatch.addActionListener(new ActionListener()
-          {
-          public void actionPerformed( ActionEvent e)
-          {
-          doRepeatCurrentPatch();
-          }
-          });
-        */
+        autoSendPatches = new JCheckBoxMenuItem("Auto-Sends Patches");
+        menu.add(autoSendPatches);
+        autoSendPatches.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                doAllowAutoSend();
+                }
+            });
+
+        String autoSend = getLastX("AllowAutoSend", getSynthClassName(), false);
+        if (autoSend == null) autoSend = "false";
+        allowsAutoSend = Boolean.parseBoolean(autoSend);
+        autoSendPatches.setSelected(allowsAutoSend);
+
 
         menu.addSeparator();
 
@@ -6117,6 +6102,19 @@ public abstract class Synth extends JComponent implements Updatable
         {
         allowsTransmitsParameters = transmitParameters.isSelected();
         setLastX("" + allowsTransmitsParameters, "AllowTransmitParameters", getSynthClassName(), false);
+        }
+
+	boolean allowsAutoSend;
+	
+    public boolean getAllowsAutoSend()
+        {
+        return allowsAutoSend;
+        }
+
+    void doAllowAutoSend()
+        {
+        allowsAutoSend = autoSendPatches.isSelected();
+        setLastX("" + allowsAutoSend, "AllowAutoSend", getSynthClassName(), false);
         }
         
     boolean sendsAllSoundsOffBetweenNotes;
@@ -8859,7 +8857,7 @@ finally { setAvoidUpdating(false); }
             }
         resetBlend();
         setMergeProbability(0.0);
-        performRequestDump(currentPatch, true);
+        performRequestDump(currentPatch, false);
         incomingPatch = false;
             
         batchDownloadFailureCountdown = getBatchDownloadFailureCountdown();
@@ -8892,7 +8890,7 @@ finally { setAvoidUpdating(false); }
                                 }
                             resetBlend();
                             setMergeProbability(0.0);
-                            performRequestDump(currentPatch, true);
+                            performRequestDump(currentPatch, false);
                             }
                         }
                     else 
@@ -8908,7 +8906,7 @@ finally { setAvoidUpdating(false); }
                             System.err.println("Warning (Synth): Download of " + getPatchLocationName(currentPatch) + " failed.  Requesting again.");
                             resetBlend();
                             setMergeProbability(0.0);
-                            performRequestDump(currentPatch, true);
+                            performRequestDump(currentPatch, false);
                             }
                         else
                             {
@@ -8930,8 +8928,6 @@ finally { setAvoidUpdating(false); }
 
     void requestNextPatch()
         {
-        //System.err.println(getNextPatchLocation(currentPatch).get("bank") + " " + getNextPatchLocation(currentPatch).get("number"));
-        //System.err.println(getNextPatchLocation(firstPatch).get("bank") + " " + getNextPatchLocation(firstPatch).get("number"));
         if (patchLocationEquals(currentPatch, finalPatch))     // we're done
             {
             stopBatchDownload();
@@ -8952,7 +8948,7 @@ finally { setAvoidUpdating(false); }
             currentPatch = getNextPatchLocation(currentPatch);
             resetBlend();
             setMergeProbability(0.0);
-            performRequestDump(currentPatch, true);
+            performRequestDump(currentPatch, false);
             incomingPatch = false;
             }
         }
@@ -9314,8 +9310,11 @@ finally { setAvoidUpdating(false); }
             {
             Object[] output = emitAll(key, STATUS_UPDATING_ONE_PARAMETER);
             if (output == null)
-                {
-                scheduleSendAllParameters();
+            	{
+            	if (!key.equals("bank") && !key.equals("number") && getAllowsAutoSend())	// never send for bank or number
+                	{
+                	scheduleSendAllParameters();
+                	}
                 }
             else if (output.length != 0)
                 {

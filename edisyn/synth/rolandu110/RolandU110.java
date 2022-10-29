@@ -1167,7 +1167,10 @@ public class RolandU110 extends Synth
 /// NOTE: Request Dump does NOT WORK if the user has pressed the EDIT button.
 
     public byte[] requestDump(Model tempModel)
-        {
+        {        
+        // This doesn't appear to work at all.  :-(
+        // We have to change the patch and do a current patch request
+        
         /*
         if (tempModel == null)
             tempModel = getModel();
@@ -1184,7 +1187,9 @@ public class RolandU110 extends Synth
         byte[] b = new byte[] { (byte)0xF0, (byte)0x41, (byte)getChannelOut(), (byte)0x23, (byte)0x11, 
             AA, BB, CC, (byte)0x00, MSB, LSB, checksum, (byte)0xF7 }; 
         return b;
-        */
+		*/
+		
+		changePatch(tempModel);
         return requestCurrentDump();
         }
   

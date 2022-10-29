@@ -753,8 +753,6 @@ public class MAudioVenomArp extends Synth
         return newd;
         }
 
-
-
     // this is only changed for testing
     public static boolean truncateAndSortOnEmit = true;
         

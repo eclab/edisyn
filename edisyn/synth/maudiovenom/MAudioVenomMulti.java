@@ -2279,6 +2279,8 @@ public class MAudioVenomMulti extends Synth
 
     public int getPatchNameLength() { return 10; }
 
+    public int getBatchDownloadWaitTime() { return 150; }
+
     public boolean librarianTested() { return true; }
     
     public boolean testVerify(byte[] message)

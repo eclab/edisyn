@@ -694,13 +694,9 @@ public class Library extends AbstractTableModel
     // or the synth does not support bank writes, or because the bank is not ALL_PATCHES), then
     // the synth MUST be capable of writing independent patches, which is checked for via
     // synth.getSupportsPatchWrites()
-	//ProgressMonitor pm = null;
+
 	Object[][] emitRange(int bank, int start, int len, boolean toFile, boolean forceIndependent)
         {
-        // This won't work
-    	//pm = new ProgressMonitor(synth, "Yo", "Hey", 0, 100);
-    	try
-    		{
         ArrayList<Object[]> data = new ArrayList();
         
         if (bank == ALL_PATCHES && synth.getSupportsBankWrites() && !forceIndependent)
@@ -733,11 +729,6 @@ public class Library extends AbstractTableModel
         String failures = "";
         for(int i = start; i < start + len; i++)
             {
-            //if (pm.isCanceled()) return null;
-			//pm.setProgress(((i - start) * 100) / len);
-			//pm.setNote("hey");
-			//pm.repaint();
-			
             int b = (bank == ALL_PATCHES ? i / getBankSize() : bank);
             int n = (bank == ALL_PATCHES ? i % getBankSize() : i);
             
@@ -799,16 +790,9 @@ public class Library extends AbstractTableModel
             
         // should I do a change patch?
         if (failed) 
-            //synth.showSimpleError("Incomplete Patch Write", "Some patches were malformed and could not be written.");
             synth.showSimpleError(synth, "Incomplete Patch Write", "Some patches were malformed and could not be written.", new JLabel("<html>" + failures + "</html>"));
  
         return data.toArray(new Object[0][0]);
-        }
-        finally
-        	{
-        	//pm.close();
-        	//pm = null;
-        	}
         }
 
 	public static final int MINIMUM_PATCHES_FOR_PROGRESS_DIALOG = 2;

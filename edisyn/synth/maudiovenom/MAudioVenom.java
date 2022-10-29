@@ -2368,14 +2368,14 @@ public class MAudioVenom extends Synth
 
     public void performRequestDump(Model tempModel, boolean changePatch)
         {
-        performChangePatch(tempModel);
-        tryToSendSysex(requestDump(tempModel));
+        super.performRequestDump(tempModel, changePatch);
         model.set("number", tempModel.get("number"));
         model.set("bank", tempModel.get("bank"));
         }
 
     public int getPauseAfterChangePatch() { return 500; }                               // quite a long time
     public int getPauseAfterSendAllParameters() { return 750; } 
+    public int getBatchDownloadWaitTime() { return 150; }
 
     // This is how you'd request a patch, but we're not using it because we have
     // overridden performRequestDump above.

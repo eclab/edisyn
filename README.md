@@ -1,7 +1,7 @@
 ![Edisyn Splash Banner](https://raw.githubusercontent.com/eclab/edisyn/master/pics/Banner.png)
 
 # Edisyn
-Synthesizer Patch Editor (Version 31)
+Synthesizer Patch Editor (Version 32)
 
 By Sean Luke (sean@cs.gmu.edu)
 
@@ -38,28 +38,12 @@ Donations are welcome via Paypal to my email address (sean@cs.gmu.edu).
 
 ## What's New
 
-Version 31 has various bug fixes and two new editors:
+Version 32 sports lots of updates, but the big four are:
 
-* E-Mu Planet Phatt, Orbit v1 and Orbit v2, Carnaval, Vintage Keys, and Vintage Keys Plus
-* E-Mu Proteus 2000 Series 
-
-Version 30 has lots of improvements, but one big one in particular:
-
-* Edisyn now has a Librarian!  
-* The Librarian should work with a large number of Edisyn's editors, though has been tested only on about 2/3 of them.  The ones for which it has not been tested will issue a warning.  I need help testing them.  To see the current Librarian status, or to get involved testing, see the [Librarian Page](LIBRARIAN.md).
-* Bug fixes to the Roland JV-880 Editor
-
-Version 29 has two changes:
-
-* New Sequential Prophet Rev2 Editor, courtesy of Wim Verheyen
-* Bug fixes to the Roland D-110 Editor
-
-Version 28 has many improvements, but the big ones are:
-
-* New Korg Volca Series Editor
-* New Waldorf Pulse 2 Editor
-* Fixes to M-Audio Venom Editor
-* Deep-Learned Variational Autoencoder, which compresses the parameter space for the Yamaha DX7 and thus improves randomization and hill-climbing.  See the manual.
+* Roland U-20/U-220 Editors
+* Roland U-110 Editor
+* JL Cooper MSB+ Rev2 Editor
+* Significant improvements to the Librarian and to bulk uploads/downloads
 
 ## About Edisyn
 
@@ -77,11 +61,12 @@ Edisyn presently supports:
 * E-Mu Morpheus and Ultraproteus (Single, Hyperpreset, and MidiMap modes)
 * E-Mu Planet Phatt, Orbit and Orbit v2, Carnaval, Vintage Keys, and Vintage Keys Plus
 * E-Mu Proteus 1, 1XR, 2, 2XR, 3, 3XR, and 1+Orchestral
-* E-Mu Proteus 2000 series (Proteus 1000/2000/2500, Audity 2000, Virtuoso 2000, Xtreme Lead-1, Mo'Phatt, B-3, Planet Earth, Orbit-3, Proteus Custom, XL-1 Turbo, Turbo Phatt, Vintage Pro, XL-7, MP-7, PX-7, PK-6, XK-6, MK-6, Halo, and Vintage Keys Keyboard).
+* E-Mu Proteus 2000 series (Proteus 1000/2000/2500, (late model) Audity 2000, Virtuoso 2000, Xtreme Lead-1, Mo'Phatt, B-3, Planet Earth, Orbit-3, Proteus Custom, XL-1 Turbo, Turbo Phatt, Vintage Pro, XL-7, MP-7, PX-7, PK-6, XK-6, MK-6, Halo, and Vintage Keys Keyboard).
+* JL Cooper MSB+ Rev2
 * Kawai K1, Kawai K1m, and Kawai K1r (Single and Multi Modes)
 * Kawai K4 and Kawai K4r (Single, Multi, Drum, and Effect Modes)
 * Kawai K5 and K5m (Single and Multi Modes, plus single-cycle wave uploading)
-* Korg SG Rack (Single and Multi Modes) and Korg SG Pro X
+* Korg SG Rack and SG Pro X (Single (for SG Rack) and Multi Modes)
 * Korg MicroKorg (Single and Vocoder Modes)
 * Korg Microsampler
 * Korg Wavestation SR (Performance, Patch, and Wave Sequence Modes)
@@ -94,6 +79,8 @@ Edisyn presently supports:
 * Red Sound DarkStar and DarkStar XP2
 * Roland D-110 (Tone and Multi Modes)
 * Roland JV-80 and JV-880 (Single, Multi, and Drum Modes)
+* Roland U-110
+* Roland U-20/U-220 (Single, Multi, and Drum Modes)
 * Sequential Prophet Rev2
 * Waldorf Blofeld and Waldorf Blofeld Keyboard (Single and Multi Modes, plus Wavetable uploading)
 * Waldorf Kyra (Single and Multi Modes)
@@ -197,7 +184,7 @@ I have reports of Java crashing on Windows if you set Edisyn's "Receive From" or
 
 I have had at least one report that Java 8 on Windows has serious problems with some Edisyn patch editors (probably memory).  Install something newer.
 
-#### Dealing with High-Resolution Displays
+#### Dealing with High-Resolution Displays in Windows
 
 Java doesn't handle high-resolution displays properly in Windows, especially Windows 10.  Be sure to have installed at least Java 11 (otherwise you'll have teeny tiny displays).  You'll still have font issues on 4K monitors.  I am told this can help dealing with it:
 
@@ -220,13 +207,24 @@ When you double-click on a jar file, Windows may not launch Java properly becaus
 
 ### Installation and Running on Linux
 
-I'm told that Edisyn works fine if you have installed at least Java 8.  After this:
+I'm told that Edisyn works if you have installed at least Java 8.  After this:
 
 1. Download [Edisyn's jar file](https://cs.gmu.edu/~eclab/projects/edisyn/edisyn.jar).
 2. You'll need to figure out how to make it so that double-clicking on the jar file launches it in java.  In Ubuntu, here's what you do: right-click on the jar file icon and choose "Properties".  Then select the "Open With" tab, and select your Java VM (for example "Open JDK Java 8 Runtime").  The press "Set as Default".  This makes the Java VM the default application to launch jar files.
 3. Thereafter you should be able to just double-click on the file to launch Edisyn.
 
 If you want to use Edisyn in combination with a DAW, see the manual's section on building a MIDI Loopback.
+
+#### Dealing with High-Resolution Displays in Linux
+
+Java doesn't work properly with high-resolution displays, even recent default versions (like JDK 11).  On Edisyn, some widgets are properly sized and others are teeny tiny.  While I'm trying to figure out how to work around this, the best you can do is scale the interface, though some widgets will be too large. On GNOME machines (such as Ubuntu) you could first set the GTK_SCALE parameter, such as:
+
+    GTK_SCALE=2 ; java edisyn.jar
+
+... or you could run java with internal scaling, such as:
+
+    java -Dsun.java2d.uiScale=2.0 edisyn.jar
+
 
 #### Problems with Jack
 

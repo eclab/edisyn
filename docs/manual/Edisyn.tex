@@ -39,7 +39,7 @@
 \begin{document}
 
 \noindent {\Huge\bf Edisyn}\\[0.5em]
-{\large \bf A Java-based Synthesizer Patch Editor and Librarian, Version 31\\[0.2em]
+{\large \bf A Java-based Synthesizer Patch Editor and Librarian, Version 32\\[0.2em]
 By Sean Luke\qquad sean@cs.gmu.edu}\\[0.2em]
 
 \vspace{-1em}
@@ -84,6 +84,7 @@ Edisyn is a no-nonsense synthesizer patch editor and librarian for the editing a
 \item Red Sound DarkStar and DarkStar XP2 (Single and Per-Part)
 \item Roland D-110 (Tone and Multimode)
 \item Roland JV-80 and JV-880 (Single, Multimode, Drum)
+\item Roland U-110 (Multi)
 \item Roland U-20 and U-220 (Timbre, Multimode, Drum)
 \item Sequential Prophet Rev2 (Single)
 \item Waldorf Blofeld Desktop, Blofeld Desktop SL, and Blofeld Keyboard (Single and Multimode, plus wavetable uploading)
@@ -325,7 +326,11 @@ This might not increment in the way you expect.  Edisyn will increment its own d
 \paragraph{Sending and Receiving Parameters in Real-time}
 On many but not all synthesizers, if you change widgets in the patch editor, the synth will automatically update itself.   The opposite sometimes happens as well: changing a parameter on the synthesizer will update it in Edisyn.  See the About pane to determine if your synthesizer can do this or not.
 
-For synthesizers which do not respond to individual parameter changes, Edisyn by default dumps the entire set of parameters to them when you change a parameter value.  However this will require a pause in-between dumps which you may not want.  In this case, you can turn this feature off by unchecking {\bf Sends Real Time Changes} (your selection is stored in Edisyn per-synthesizer, so different synth editors will check or not check this menu option).  You can always manually update your synthesizer by selecting {\bf Send to Current Patch}.
+If you don't want your synthesizer to update itself in real-time as you change parameters, just uncheck {\bf Sends Real Time Changes} (your selection is stored in Edisyn per-synthesizer, so different synth editors will check or not check this menu option).
+
+Some synthesizers cannot respond to individual parameter changes at all.  You still have a workaround however.  If your synth isn't capable of sending real-time changes, {\it and} you check  {\bf Sends Real Time Changes}, {\it and} you check  {\bf Auto-Sends Patches}, then Edisyn will Send to Current Memory as soon as you make the change or soon thereafter (thus sending the entire patch).  This might work in a pinch for synths like the Korg MicroKorg, but it'll be a bad option for, say, the M-Audio Venom Arpeggiator, where sending a patch takes a long time.  So this is off by default.  Like Sends Real Time Changes, your Auto-Sends Patches preference is stored per-synthesizer.
+
+ You can always manually update your synthesizer by selecting {\bf Send to Current Patch}.
 
 \vspace{1em}
 

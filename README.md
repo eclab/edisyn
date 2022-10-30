@@ -228,7 +228,7 @@ Java doesn't work properly with high-resolution displays, even recent default ve
 
 #### Problems with Jack
 
-Edisyn (or more likely Java) seems to have compatibility problems with Jack; disabling Jack will often allow Edisyn to communicate with MIDI devies.  See issues #33 and #52.
+Java has compatibility problems with Jack; disabling Jack will often allow Edisyn to communicate with MIDI devies.  See issues #33 and #52.
 
 
 ### Running from the command line (OS X, Windows, Linux)

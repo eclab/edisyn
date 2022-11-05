@@ -894,7 +894,7 @@ public class RolandU220Multi extends Synth
                 parseData[x] = 0;
             }
         else if (parseData == null) 
-        	return PARSE_FAILED;				// bad initial data
+            return PARSE_FAILED;                            // bad initial data
         
         System.arraycopy(data, 8, parseData, parseDataPosition, Math.min(parseData.length - parseDataPosition, 128));
         
@@ -1276,7 +1276,7 @@ public class RolandU220Multi extends Synth
         if (model.get("chorusfeedback") == 0) 
             model.set("chorusfeedback", 1);
         for(int i = 1; i <= 6; i++)
-        	{
+            {
             if (model.get("part" + i + "velothreshold") == 0) 
                 model.set("part" + i + "velothreshold", 127);
             if (model.get("part" + i + "outputassign") >= OUTPUT_ASSIGNS.length) 

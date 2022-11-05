@@ -388,38 +388,38 @@ public class Midi
     static ArrayList key2Devices;
     
     static void sortDevices()
-    	{
-    	Comparator c = new Comparator()
-    		{
-    		public boolean equals(Object obj) { return false; }
-    		public int compare(Object o1, Object o2) 
-    			{
-    			// this shouldn't happen but just to be safe....
-    			if (o1 == null) return -1;
-    			if (o2 == null) return 1;
-    			
-				// Deal with "None".  It should appear first.
-				if (o1 instanceof String && o2 instanceof String) // uh...
-					return ((String)o1).compareTo((String)o2);
-    			if (o1 instanceof String) return -1;
-    			if (o2 instanceof String) return 1;
-    			
-    			// Else we have two non-strings
-    			String str1 = ((MidiDeviceWrapper)o1).toString();
-    			String str2 = ((MidiDeviceWrapper)o2).toString();
-    			
-    			return str1.compareTo(str2);
-    			}
-    		};
-    		
-    	allDevices.sort(c);
-    	inDevices.sort(c);
-    	outDevices.sort(c);
-    	keyDevices.sort(c);
-    	key2Devices.sort(c);
-    	}
-    	
-    	
+        {
+        Comparator c = new Comparator()
+            {
+            public boolean equals(Object obj) { return false; }
+            public int compare(Object o1, Object o2) 
+                {
+                // this shouldn't happen but just to be safe....
+                if (o1 == null) return -1;
+                if (o2 == null) return 1;
+                        
+                // Deal with "None".  It should appear first.
+                if (o1 instanceof String && o2 instanceof String) // uh...
+                    return ((String)o1).compareTo((String)o2);
+                if (o1 instanceof String) return -1;
+                if (o2 instanceof String) return 1;
+                        
+                // Else we have two non-strings
+                String str1 = ((MidiDeviceWrapper)o1).toString();
+                String str2 = ((MidiDeviceWrapper)o2).toString();
+                        
+                return str1.compareTo(str2);
+                }
+            };
+                
+        allDevices.sort(c);
+        inDevices.sort(c);
+        outDevices.sort(c);
+        keyDevices.sort(c);
+        key2Devices.sort(c);
+        }
+        
+        
     static
         {
         updateDevices();

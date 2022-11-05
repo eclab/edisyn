@@ -999,7 +999,7 @@ public class Blank extends Synth
         // then you should return { true } or { false } as appropriate.  The default form
         // returns an array that is all true.
         //
-        // Synth.buildBankBooleans(...) is a useful utility method for uilding this array
+        // Synth.buildBankBooleans(...) is a useful utility method for building this array
         // for you if you don't want to implement it by hand.
         return super.getWriteableBanks(); 
         }
@@ -1061,28 +1061,38 @@ public class Blank extends Synth
     
     public boolean isValidPatchLocation(int bank, int num) 
         {
-        // Returns if the given bank and patch number define a valid patch location.  The
-        // bank values passed in will always be between 0 and the number of banks (minus 1) inclusive.
-        // Similarly the patch numbers passed in will always be between 0 and getPatchNumberNames() - 1
-        // inclusive.  By default this method always returns true, which is in most cases correct.
+        // Returns TRUE if the given bank and patch number define a valid patch location.  A valid
+        // location is one that actually exists.
+        //
         // The reason for this method is that some synthesizers have banks with different lengths.
         // For example, the Casio CZ-230s has fewer patches (4) in its final bank than in others (8).
-        // In other cases, certain synthsizers permit more patches in banks than others of the same
-        // family, but must share the same sysex files.  In these cases, Edisyn permits patches to be
-        // loaded into "invalid" slots (defined by this method), and saved to files from them, but not
-        // written to synthesizers from those locations.
+        // Similarly, the Proteus 2000 has ragged banks -- some have 128 patches, some have 512 patches,
+        // some have 1024 patches, and so on. In other cases, certain kinds of synthsizers permit more 
+        // patches in banks than other synthesizers of the same family, but must share the same sysex 
+        // files.  In these cases, Edisyn permits patches to be placed into "invalid" slots (defined by
+        // this method), and saved to files from them, but not written to synthesizers from those locations.
+ 		//
+ 		// The bank values passed in will always be between 0 and the number of banks (minus 1) inclusive.
+        // Similarly the patch numbers passed in will always be between 0 and getPatchNumberNames() - 1
+        // inclusive.  By default this method always returns true, which is in most cases correct.
         return true; 
         }
         
     public boolean isAppropriatePatchLocation(int bank, int num) 
         {
-        // Returns if the given bank and patch number define an "appropriate" patch location, meaning
-        // one that the user is encouraged to upload and download from.  For example, the Proteus 2000
-        // has many ROMs as "banks", and the user is free to save and load those "banks" even if he
-        // does not have them installed on his machine -- he can even attempt to upload/download from 
-        // them but it would be stupid to do so.  In this case we merely want to color the patches as
-        // a warning, not prevent the user from doing what he wants to do.  That is the purpose of this
-        // method.  The bank values passed in will always be between 0 and the number of banks (minus 1) 
+        // Returns TRUE if the given bank and patch number define an "appropriate" patch location.  An
+        // "appropriate" location is one from which the the user is encouraged to upload and download from.
+        //
+        // For example, the Proteus 2000 has many "banks" corresponding to ROM SIMM Cards -- almost 20 of
+        // them -- but only our cards can exist in a machine at a time.  Edisyn allows the user to load
+        // and save those "banks" to/from disk even if he oes not have them installed on his machine -- 
+        // he can even attempt to upload/download from them but it would be stupid to do so.  In this case
+        // we merely want to color the patches as warning, not prevent the user from doing what he wants
+        // The difference beween "appropriate" locaations and "valid" locations is that whether a location
+        // is "appropriate" may depend on the particular configuration of the synth (among many possible
+        // configurations), where as "invalid" locations are *always* invalid.  
+        //
+        /// The bank values passed in will always be between 0 and the number of banks (minus 1) 
         // inclusive. Similarly the patch numbers passed in will always be between 0 and 
         // getPatchNumberNames() - 1 inclusive.  By default this method always returns true, which is 
         // in most cases correct.

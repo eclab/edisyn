@@ -2388,16 +2388,16 @@ public class EmuProteus2000 extends Synth
             // Updating the choosers is very slow.  So we only update them
             // if we're likely to actually use the choosers at all
             if (!getAvoidUpdating())
-            	{
-				updateRiffChooser("riffromid", model);
-				updateArpChooser("arppatternromid", model);
-				updatePresetChooser(1, "link1presetromid", model);
-				updatePresetChooser(2, "link2presetromid", model);
-				updateInstrumentChooser(1, "layer1instrumentromid", model);
-				updateInstrumentChooser(2, "layer2instrumentromid", model);
-				updateInstrumentChooser(3, "layer3instrumentromid", model);
-				updateInstrumentChooser(4, "layer4instrumentromid", model);
-				}
+                {
+                updateRiffChooser("riffromid", model);
+                updateArpChooser("arppatternromid", model);
+                updatePresetChooser(1, "link1presetromid", model);
+                updatePresetChooser(2, "link2presetromid", model);
+                updateInstrumentChooser(1, "layer1instrumentromid", model);
+                updateInstrumentChooser(2, "layer2instrumentromid", model);
+                updateInstrumentChooser(3, "layer3instrumentromid", model);
+                updateInstrumentChooser(4, "layer4instrumentromid", model);
+                }
 
             // Now we set the values, and these should stick because they're within
             // the proper min/max ranges
@@ -2418,7 +2418,7 @@ public class EmuProteus2000 extends Synth
         }
 
 
-	public int getPauseAfterWritePatch() { return 0; }
+    public int getPauseAfterWritePatch() { return 0; }
 
     //public int getPauseAfterReceivePatch() { return 1000; }         // 150 appears to be too fast
                 
@@ -2595,13 +2595,13 @@ public class EmuProteus2000 extends Synth
         int NN = tempModel.get("number", 0);
         int BB = ROM_AND_USER_IDS[tempModel.get("bank", 0)];
         /*
-        if (!toFile)
-        	BB = 0;                     // has to be it's going to RAM
-		*/
-		
+          if (!toFile)
+          BB = 0;                     // has to be it's going to RAM
+        */
+                
         if (toWorkingMemory)
             {
-            BB = 0;							// has to be if it's going to RAM
+            BB = 0;                                                     // has to be if it's going to RAM
             NN = 16383;                     // 7F 7F
             }
 
@@ -2811,11 +2811,11 @@ public class EmuProteus2000 extends Synth
         // Intersperse pauses
         Object[] result2 = new Object[17];
         for(int i = 0; i < 9; i++)
-        	{
-        	result2[i * 2] = result[i];
-        	if (i != 8) result2[i * 2 + 1] = Integer.valueOf(150);		// 150 seems to be okay but 100 is too fast
-        	}
-        	        
+            {
+            result2[i * 2] = result[i];
+            if (i != 8) result2[i * 2 + 1] = Integer.valueOf(150);          // 150 seems to be okay but 100 is too fast
+            }
+                        
         return result2;
         }
         
@@ -3109,10 +3109,10 @@ public class EmuProteus2000 extends Synth
                                     }
                                 }
                             // at this point we don't have any more ROM SIMMS, so we're gonna do USER
-							rom = 0;
-							bank = 0;
-							number = 0;
-							break nonuser;
+                            rom = 0;
+                            bank = 0;
+                            number = 0;
+                            break nonuser;
                             }
                         }
                     }
@@ -4348,7 +4348,7 @@ public class EmuProteus2000 extends Synth
 
     public int getBatchDownloadWaitTime() { return 100; }
 
-	// we'll fail about 5 times or so, it's okay
+    // we'll fail about 5 times or so, it's okay
     public int getBatchDownloadFailureCountdown() { return 50; }
 
     public boolean testVerify(Synth synth2, String key, Object obj1, Object obj2)
@@ -4429,8 +4429,8 @@ public class EmuProteus2000 extends Synth
             }
         }
                 
-     public boolean librarianTested() { return true; }
-   }
+    public boolean librarianTested() { return true; }
+    }
 
 
 

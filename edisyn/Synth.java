@@ -1348,60 +1348,60 @@ public abstract class Synth extends JComponent implements Updatable
         }
         
     public int performParseNoMIDI(byte[] data, boolean fromFile)
-    	{
-		boolean sendMIDI = getSendMIDI();
-		int ret = performParse(data, fromFile);
-		setSendMIDI(sendMIDI);
-		return ret;
-    	}
+        {
+        boolean sendMIDI = getSendMIDI();
+        int ret = performParse(data, fromFile);
+        setSendMIDI(sendMIDI);
+        return ret;
+        }
 
-	int lastTemporaryModelResult = PARSE_SUCCEEDED;
-	int getLastParseTemporaryModelResult() { return lastTemporaryModelResult; }
-	
-	public Model parseTemporaryModel(byte[] data, boolean fromFile)
-		{
-		return parseTemporaryModel(data, fromFile, true);
-		}
-		
-	public Model parseTemporaryModel(byte[] data, boolean fromFile, boolean cloneModel)
-		{
-		boolean updateListeners = model.getUpdateListeners();
-		boolean sendMIDI = getSendMIDI();
-		boolean willPush = undo.getWillPush();
-		boolean avoidUpdating = getAvoidUpdating();
-		boolean printRevised = getPrintRevised();
+    int lastTemporaryModelResult = PARSE_SUCCEEDED;
+    int getLastParseTemporaryModelResult() { return lastTemporaryModelResult; }
+        
+    public Model parseTemporaryModel(byte[] data, boolean fromFile)
+        {
+        return parseTemporaryModel(data, fromFile, true);
+        }
+                
+    public Model parseTemporaryModel(byte[] data, boolean fromFile, boolean cloneModel)
+        {
+        boolean updateListeners = model.getUpdateListeners();
+        boolean sendMIDI = getSendMIDI();
+        boolean willPush = undo.getWillPush();
+        boolean avoidUpdating = getAvoidUpdating();
+        boolean printRevised = getPrintRevised();
 
-		setSendMIDI(false);
-		undo.setWillPush(false);
-		model.setUpdateListeners(false);
-		setAvoidUpdating(true);
-		setPrintRevised(false);
+        setSendMIDI(false);
+        undo.setWillPush(false);
+        model.setUpdateListeners(false);
+        setAvoidUpdating(true);
+        setPrintRevised(false);
 
-		Model backup = (cloneModel ? (Model)(model.clone()) : model);
-		Model ret = model;
-		model.clearListeners();
-		try
-			{
-			lastTemporaryModelResult = parse(data, fromFile);
-			}
-		catch (Exception ex)
-			{
-			Synth.handleException(ex);
-			lastTemporaryModelResult = PARSE_FAILED;
-			}
-		model = backup;
+        Model backup = (cloneModel ? (Model)(model.clone()) : model);
+        Model ret = model;
+        model.clearListeners();
+        try
+            {
+            lastTemporaryModelResult = parse(data, fromFile);
+            }
+        catch (Exception ex)
+            {
+            Synth.handleException(ex);
+            lastTemporaryModelResult = PARSE_FAILED;
+            }
+        model = backup;
 
-		undo.setWillPush(willPush);
-		setSendMIDI(sendMIDI);
-		model.setUpdateListeners(updateListeners);
-		setAvoidUpdating(avoidUpdating);
-		setPrintRevised(printRevised);
+        undo.setWillPush(willPush);
+        setSendMIDI(sendMIDI);
+        model.setUpdateListeners(updateListeners);
+        setAvoidUpdating(avoidUpdating);
+        setPrintRevised(printRevised);
 
-		if (lastTemporaryModelResult == PARSE_SUCCEEDED ||
-			lastTemporaryModelResult == PARSE_SUCCEEDED_UNTITLED)
-				return ret;
-		else return null;
-		}
+        if (lastTemporaryModelResult == PARSE_SUCCEEDED ||
+            lastTemporaryModelResult == PARSE_SUCCEEDED_UNTITLED)
+            return ret;
+        else return null;
+        }
         
 
 
@@ -1417,28 +1417,28 @@ public abstract class Synth extends JComponent implements Updatable
     // flag for whether sending MIDI is temporarily turned off or not
     boolean sendMIDI = true;  // we can send MIDI 
 
-	boolean receiveMIDI = true;	// we can receive MIDI
-	static final boolean bufferNonReceivedMIDI = false;		// are we buffering or ignoring?
+    boolean receiveMIDI = true;     // we can receive MIDI
+    static final boolean bufferNonReceivedMIDI = false;             // are we buffering or ignoring?
 
-	static class StampedMessage { public MidiMessage message; public long timeStamp; }
-	
-	ArrayList<StampedMessage> inBuffer = new ArrayList<>();
-	ArrayList<StampedMessage> keyBuffer = new ArrayList<>();
-	ArrayList<StampedMessage> key2Buffer = new ArrayList<>();
-	
-	void processBufferedMessages(Receiver receiver, ArrayList<StampedMessage> buffer)
-		{
-		if (receiver != null && !buffer.isEmpty())
-			{
-			ArrayList<StampedMessage> buf2 = new ArrayList<StampedMessage>(buffer);
-			buffer.clear();
-			for(StampedMessage sm : buf2)
-				{
-				receiver.send(sm.message, sm.timeStamp);
-				}
-			}
-		}
-	
+    static class StampedMessage { public MidiMessage message; public long timeStamp; }
+        
+    ArrayList<StampedMessage> inBuffer = new ArrayList<>();
+    ArrayList<StampedMessage> keyBuffer = new ArrayList<>();
+    ArrayList<StampedMessage> key2Buffer = new ArrayList<>();
+        
+    void processBufferedMessages(Receiver receiver, ArrayList<StampedMessage> buffer)
+        {
+        if (receiver != null && !buffer.isEmpty())
+            {
+            ArrayList<StampedMessage> buf2 = new ArrayList<StampedMessage>(buffer);
+            buffer.clear();
+            for(StampedMessage sm : buf2)
+                {
+                receiver.send(sm.message, sm.timeStamp);
+                }
+            }
+        }
+        
     /** Builds a receiver to attach to the current IN transmitter.  The receiver
         can handle merging and patch reception. */
     public Receiver buildInReceiver()
@@ -1452,18 +1452,18 @@ public abstract class Synth extends JComponent implements Updatable
             public void send(final MidiMessage message, final long timeStamp)
                 {
                 if (!receiveMIDI)
-                	{
-                	if (bufferNonReceivedMIDI)
-                		{
-	                	StampedMessage sm = new StampedMessage();
-	                	sm.message = message;
-	                	sm.timeStamp = timeStamp;
-	                	inBuffer.add(sm);
-	                	}
-                	return;
-                	}
+                    {
+                    if (bufferNonReceivedMIDI)
+                        {
+                        StampedMessage sm = new StampedMessage();
+                        sm.message = message;
+                        sm.timeStamp = timeStamp;
+                        inBuffer.add(sm);
+                        }
+                    return;
+                    }
 
-				if (tuple != null) processBufferedMessages(tuple.inReceiver, inBuffer);
+                if (tuple != null) processBufferedMessages(tuple.inReceiver, inBuffer);
 
                 // I'm doing this in the Swing event thread because I figure it's multithreaded
                 SwingUtilities.invokeLater(new Runnable()
@@ -1532,7 +1532,7 @@ public abstract class Synth extends JComponent implements Updatable
                                             Patch patch = librarian.getLibrary().getPatch(model);
                                             patch.number = model.get("number", Patch.NUMBER_NOT_SET);
                                             patch.bank = model.get("bank", 0);
-	                                        librarian.getLibrary().receivePatch(patch);
+                                            librarian.getLibrary().receivePatch(patch);
                                             librarian.updateUndoRedo();             
                                             backup.copyValuesTo(model);             // restore the old model, but don't push an undo
                                             undo.setWillPush(true);
@@ -1667,23 +1667,23 @@ public abstract class Synth extends JComponent implements Updatable
                                 
             public void send(final MidiMessage message, final long timeStamp)
                 {
-					if (!receiveMIDI)
-						{
-	                	if (bufferNonReceivedMIDI)
-	                		{
-							StampedMessage sm = new StampedMessage();
-							sm.message = message;
-							sm.timeStamp = timeStamp;
-							keyBuffer.add(sm);
-							}
-						return;
-						}
+                if (!receiveMIDI)
+                    {
+                    if (bufferNonReceivedMIDI)
+                        {
+                        StampedMessage sm = new StampedMessage();
+                        sm.message = message;
+                        sm.timeStamp = timeStamp;
+                        keyBuffer.add(sm);
+                        }
+                    return;
+                    }
 
-						if (tuple != null) processBufferedMessages(tuple.keyReceiver, keyBuffer);
+                if (tuple != null) processBufferedMessages(tuple.keyReceiver, keyBuffer);
 
                 // I'm doing this in the Swing event thread because I figure it's multithreaded
                 SwingUtilities.invokeLater(new Runnable()
-                    {	
+                    {   
                     public void run()
                         {
                         if (amActiveSynth())
@@ -1789,20 +1789,20 @@ public abstract class Synth extends JComponent implements Updatable
                     {
                     public void run()
                         {
-						if (!receiveMIDI)
-							{
-		                	if (bufferNonReceivedMIDI)
-		                		{
-								StampedMessage sm = new StampedMessage();
-								sm.message = message;
-								sm.timeStamp = timeStamp;
-								key2Buffer.add(sm);
-								}
-							return;
-							}
+                        if (!receiveMIDI)
+                            {
+                            if (bufferNonReceivedMIDI)
+                                {
+                                StampedMessage sm = new StampedMessage();
+                                sm.message = message;
+                                sm.timeStamp = timeStamp;
+                                key2Buffer.add(sm);
+                                }
+                            return;
+                            }
 
-						if (tuple != null) processBufferedMessages(tuple.key2Receiver, key2Buffer);
-	
+                        if (tuple != null) processBufferedMessages(tuple.key2Receiver, key2Buffer);
+        
                         if (amActiveSynth())
                             {
                             if (message instanceof ShortMessage)
@@ -1902,15 +1902,15 @@ public abstract class Synth extends JComponent implements Updatable
 
     /** Sets whether the synth can receive MIDI from any source. */
     public void setReceiveMIDI(boolean val) 
-    	{ 
-    	receiveMIDI = val; 
-    	if (val && tuple != null)
-    		{
-			processBufferedMessages(tuple.inReceiver, inBuffer);
-			processBufferedMessages(tuple.keyReceiver, keyBuffer);
-			processBufferedMessages(tuple.key2Receiver, key2Buffer);
-			}
-		}
+        { 
+        receiveMIDI = val; 
+        if (val && tuple != null)
+            {
+            processBufferedMessages(tuple.inReceiver, inBuffer);
+            processBufferedMessages(tuple.keyReceiver, keyBuffer);
+            processBufferedMessages(tuple.key2Receiver, key2Buffer);
+            }
+        }
 
     /** Returns whether the synth can receive MIDI from any source. */
     public boolean getReceiveMIDI() { return receiveMIDI; }
@@ -2209,45 +2209,45 @@ public abstract class Synth extends JComponent implements Updatable
         return true;
         }
 
-	boolean midiCanceled = false;
-	
-	/**
-	 Sends MIDI data using a progress bar and dialog box with a given
-	 title and note.  Returns true if the data was entirely sent, or
-	 false if the user canceled the operation.
-	 */
+    boolean midiCanceled = false;
+        
+    /**
+       Sends MIDI data using a progress bar and dialog box with a given
+       title and note.  Returns true if the data was entirely sent, or
+       false if the user canceled the operation.
+    */
     public boolean tryToSendMIDI(final Object[] data, String title, String note)
-    	{
-    	// To pull this trick off, we have to set up a thread to run in the background and then
-    	// have the JDialog wait for it to complete.  This is nontrivial because in the meantime
-    	// MIDI data could arrive via our Receivers.  Thus we have to first shut them off and have
-    	// them buffer up any incoming data, then when we're done, process that data via setReceiveMIDI(true).
-    	
-    	midiCanceled = false;
-    	final boolean receive = getReceiveMIDI();
+        {
+        // To pull this trick off, we have to set up a thread to run in the background and then
+        // have the JDialog wait for it to complete.  This is nontrivial because in the meantime
+        // MIDI data could arrive via our Receivers.  Thus we have to first shut them off and have
+        // them buffer up any incoming data, then when we're done, process that data via setReceiveMIDI(true).
+        
+        midiCanceled = false;
+        final boolean receive = getReceiveMIDI();
         disableMenuBar();
-    	setReceiveMIDI(false);
-		// We can't use a ProgressMonitor because it's not modal.  So we have to build
-		// it manually.
-		
+        setReceiveMIDI(false);
+        // We can't use a ProgressMonitor because it's not modal.  So we have to build
+        // it manually.
+                
         Object f = SwingUtilities.getRoot(this);
-       	JFrame frame = null;
-       	if (f instanceof JFrame) frame = (JFrame)f;
-		final JDialog dialog = new JDialog(frame, title, true);
-		JPanel outer = new JPanel();
-		outer.setLayout(new BorderLayout());
+        JFrame frame = null;
+        if (f instanceof JFrame) frame = (JFrame)f;
+        final JDialog dialog = new JDialog(frame, title, true);
+        JPanel outer = new JPanel();
+        outer.setLayout(new BorderLayout());
         outer.setBorder(new EmptyBorder(20, 20, 20, 20));
         dialog.add(outer);
         
-		JProgressBar bar = new JProgressBar(0, 100);
-		JPanel inner = new JPanel();
-		inner.setLayout(new BorderLayout());
-		inner.add(bar, BorderLayout.CENTER);
-		inner.setBorder(new EmptyBorder(8, 0, 8, 0));
-		outer.add(new JLabel(note), BorderLayout.NORTH);
-		outer.add(inner, BorderLayout.CENTER);
-		JButton cancelButton = new JButton("Stop");
-		cancelButton.addActionListener(new ActionListener()
+        JProgressBar bar = new JProgressBar(0, 100);
+        JPanel inner = new JPanel();
+        inner.setLayout(new BorderLayout());
+        inner.add(bar, BorderLayout.CENTER);
+        inner.setBorder(new EmptyBorder(8, 0, 8, 0));
+        outer.add(new JLabel(note), BorderLayout.NORTH);
+        outer.add(inner, BorderLayout.CENTER);
+        JButton cancelButton = new JButton("Stop");
+        cancelButton.addActionListener(new ActionListener()
             {
             public void actionPerformed(ActionEvent e)
                 {
@@ -2259,46 +2259,46 @@ public abstract class Synth extends JComponent implements Updatable
         panel.add(cancelButton, BorderLayout.EAST);
         outer.add(panel, BorderLayout.SOUTH);
             
-		final Thread thread = new Thread(new Runnable()
-    		{
-    		public void run()
-    			{
-    			for(int i = 0; i < data.length; i++)
-    				{
-    				if (midiCanceled)
-    					{
-						break;
-    					}
-    				tryToSendMIDI(new Object[] { data[i] });
-    				bar.setValue((i * 100) / data.length);
-    				}
-				setReceiveMIDI(receive);
-    			SwingUtilities.invokeLater(new Runnable() { public void run() { dialog.setVisible(false); }  });
-    			}
-    		});
-    		
-    	dialog.addWindowListener(new WindowAdapter()
-    		{
-    		public void windowOpened(WindowEvent e)
-    			{
-		    	thread.start();
-    			}
-    			
-			// windowClosed() isn't called by JDialog -- a Java bug I think
-			// but windowClosing() is called.
-    		public void windowClosing(WindowEvent e)
-    			{
-		    	midiCanceled = true;
-    			}
-    		});
-    		
-    	dialog.pack();
-		dialog.setLocationRelativeTo(this);
-    	dialog.setVisible(true);
-			
-		enableMenuBar();
-		return midiCanceled;
-    	}
+        final Thread thread = new Thread(new Runnable()
+            {
+            public void run()
+                {
+                for(int i = 0; i < data.length; i++)
+                    {
+                    if (midiCanceled)
+                        {
+                        break;
+                        }
+                    tryToSendMIDI(new Object[] { data[i] });
+                    bar.setValue((i * 100) / data.length);
+                    }
+                setReceiveMIDI(receive);
+                SwingUtilities.invokeLater(new Runnable() { public void run() { dialog.setVisible(false); }  });
+                }
+            });
+                
+        dialog.addWindowListener(new WindowAdapter()
+            {
+            public void windowOpened(WindowEvent e)
+                {
+                thread.start();
+                }
+                        
+            // windowClosed() isn't called by JDialog -- a Java bug I think
+            // but windowClosing() is called.
+            public void windowClosing(WindowEvent e)
+                {
+                midiCanceled = true;
+                }
+            });
+                
+        dialog.pack();
+        dialog.setLocationRelativeTo(this);
+        dialog.setVisible(true);
+                        
+        enableMenuBar();
+        return midiCanceled;
+        }
         
 
 
@@ -2999,17 +2999,7 @@ public abstract class Synth extends JComponent implements Updatable
                 
     public JComponent insertTab(String title, JComponent component, int index)
         {
-        JPanel panel = new JPanel()
-/*        	{
-        	protected void paintChildren(Graphics g)
-        		{
-        		Graphics2D gg = (Graphics2D) g;
-        		AffineTransform at = gg.getTransform();
-        		at.scale(2.0f, 2.0f);
-        		gg.setTransform(at);
-        		super.paintChildren(g);
-        		}
-        	} */   ;
+        JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
         panel.add(component, BorderLayout.CENTER);
         JScrollPane pane = new JScrollPane(panel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
@@ -3022,17 +3012,7 @@ public abstract class Synth extends JComponent implements Updatable
 
     public JComponent addTab(String title, JComponent component)
         {
-        JPanel panel = new JPanel()
-        /*	{
-        	protected void paintChildren(Graphics g)
-        		{
-        		Graphics2D gg = (Graphics2D) g;
-        		AffineTransform at = gg.getTransform();
-        		at.scale(2.0f, 2.0f);
-        		gg.setTransform(at);
-        		super.paintChildren(g);
-        		}
-        	} */    ;
+        JPanel panel = new JPanel();
         panel.setLayout(new BorderLayout());
         panel.add(component, BorderLayout.CENTER);
         JScrollPane pane = new JScrollPane(panel, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
@@ -3085,11 +3065,11 @@ public abstract class Synth extends JComponent implements Updatable
         inSimpleError = true;
         disableMenuBar();
 
-		JPanel panel = new JPanel();        
+        JPanel panel = new JPanel();        
         panel.setLayout(new BorderLayout());
         panel.add(new JLabel(message), BorderLayout.NORTH);
 
-		JPanel inside = new JPanel();        
+        JPanel inside = new JPanel();        
         inside.setLayout(new BorderLayout());
         inside.add(extra, BorderLayout.NORTH);
         
@@ -6104,8 +6084,8 @@ public abstract class Synth extends JComponent implements Updatable
         setLastX("" + allowsTransmitsParameters, "AllowTransmitParameters", getSynthClassName(), false);
         }
 
-	boolean allowsAutoSend;
-	
+    boolean allowsAutoSend;
+        
     public boolean getAllowsAutoSend()
         {
         return allowsAutoSend;
@@ -6568,25 +6548,25 @@ public abstract class Synth extends JComponent implements Updatable
         else
             {
             if (getPatchName(getModel()) != null)
-            	{
-            	if (getPatchName(getModel()).trim().length() > 0)
-					{
-					fd.setFile(StringUtility.reviseFileName(getPatchName(getModel()).trim() + ".syx"));
-					}
-				else
-					{
-            		fd.setFile(StringUtility.reviseFileName("Untitled.syx"));
-					}
-				}
+                {
+                if (getPatchName(getModel()).trim().length() > 0)
+                    {
+                    fd.setFile(StringUtility.reviseFileName(getPatchName(getModel()).trim() + ".syx"));
+                    }
+                else
+                    {
+                    fd.setFile(StringUtility.reviseFileName("Untitled.syx"));
+                    }
+                }
             else if (file != null)
-            	{
-            	fd.setFile(StringUtility.reviseFileName(file.getName()));
-            	fd.setDirectory(file.getParentFile().getPath());
-            	}
+                {
+                fd.setFile(StringUtility.reviseFileName(file.getName()));
+                fd.setDirectory(file.getParentFile().getPath());
+                }
             else
-            	{
-            	fd.setFile(StringUtility.reviseFileName("Untitled.syx"));
-            	}
+                {
+                fd.setFile(StringUtility.reviseFileName("Untitled.syx"));
+                }
             String path = getLastDirectory();
             if (path != null)
                 fd.setDirectory(path);
@@ -6624,23 +6604,23 @@ public abstract class Synth extends JComponent implements Updatable
         }
 
 
-	void saveLibrarian()
-		{
-		int res = showMultiOption(this, new String[0], new JComponent[0], 
-			new String[] { "Selected Patches", "Bank", "All Patches", "Cancel" },
-			0, "Save...", 
-			new JLabel("Save What Range of Patches?"));
-		if (res == 0)
-			librarian.save();
-		else if (res == 1)
-			librarian.saveBank();
-		else if (res == 2)
-			librarian.saveAll();
-		else
-			{
-			// do nothing
-			}
-		}
+    void saveLibrarian()
+        {
+        int res = showMultiOption(this, new String[0], new JComponent[0], 
+            new String[] { "Selected Patches", "Bank", "All Patches", "Cancel" },
+            0, "Save...", 
+            new JLabel("Save What Range of Patches?"));
+        if (res == 0)
+            librarian.save();
+        else if (res == 1)
+            librarian.saveBank();
+        else if (res == 2)
+            librarian.saveAll();
+        else
+            {
+            // do nothing
+            }
+        }
 
     /** Goes through the process of saving to an existing sysex file associated with
         the editor, else it calls doSaveAs(). */
@@ -7058,22 +7038,22 @@ public abstract class Synth extends JComponent implements Updatable
                         temp = (Synth)(instantiate(getClassNames()[p[i].synth], true, false, null));
                     Model ret = temp.parseTemporaryModel(flatten(p[i].sysex), true, false);
                     if (ret == null)
-                    	{
-	                    p[i].name = "<<Bad Patch>>";
-	                    p[i].location = "";
-                    	}
+                        {
+                        p[i].name = "<<Bad Patch>>";
+                        p[i].location = "";
+                        }
                     else
-                    	{
-	                    p[i].name = temp.getPatchName(temp.model);
-	                    p[i].location = temp.getPatchLocationName(temp.model);
-                    	}
+                        {
+                        p[i].name = temp.getPatchName(temp.model);
+                        p[i].location = temp.getPatchLocationName(temp.model);
+                        }
                     /*
-                    temp.setAvoidUpdating(getAvoidUpdating());
-                    temp.setPrintRevised(false);
-                    temp.setSendMIDI(false);
-                    temp.undo.setWillPush(false);
-                    temp.getModel().clearListeners();         // otherwise we GC horribly.....
-                    temp.performParse(flatten(p[i].sysex), true);
+                      temp.setAvoidUpdating(getAvoidUpdating());
+                      temp.setPrintRevised(false);
+                      temp.setSendMIDI(false);
+                      temp.undo.setWillPush(false);
+                      temp.getModel().clearListeners();         // otherwise we GC horribly.....
+                      temp.performParse(flatten(p[i].sysex), true);
                     */
                     
                     }
@@ -7497,20 +7477,20 @@ public abstract class Synth extends JComponent implements Updatable
         }
                 
 
-	boolean avoidUpdating = false;
-	/** Returns whether the synth should avoid updating its various widgets manually because
-		it's just being used to create a temporary model (for loading into a library for example).
-		This method is primarily used by the Proteus 2000's revise() method to avoid manually
-		updating certain choosers, which is very slow when bulk loading from file or loading
-		into a librarian. */
-	public boolean getAvoidUpdating() { return avoidUpdating; }
-	/** Sets whether the synth should avoid updating its various widgets manually because
-		it's just being used to create a temporary model (for loading into a library for example).
-		This method is primarily used by the Proteus 2000's revise() method to avoid manually
-		updating certain choosers, which is very slow when bulk loading from file or loading
-		into a librarian. */
-	public void setAvoidUpdating(boolean val) { avoidUpdating = val; }
-	
+    boolean avoidUpdating = false;
+    /** Returns whether the synth should avoid updating its various widgets manually because
+        it's just being used to create a temporary model (for loading into a library for example).
+        This method is primarily used by the Proteus 2000's revise() method to avoid manually
+        updating certain choosers, which is very slow when bulk loading from file or loading
+        into a librarian. */
+    public boolean getAvoidUpdating() { return avoidUpdating; }
+    /** Sets whether the synth should avoid updating its various widgets manually because
+        it's just being used to create a temporary model (for loading into a library for example).
+        This method is primarily used by the Proteus 2000's revise() method to avoid manually
+        updating certain choosers, which is very slow when bulk loading from file or loading
+        into a librarian. */
+    public void setAvoidUpdating(boolean val) { avoidUpdating = val; }
+        
     boolean doOpen(boolean merge)
         {
         parsingForMerge = merge;
@@ -7592,12 +7572,12 @@ public abstract class Synth extends JComponent implements Updatable
                         {
                         //// FOURTH we break the sysex into patches we can work with
                         Patch[] patches = null;
-setAvoidUpdating(true);
-try
-	{
-                        patches = gatherPatchSysex(data);
-                    }
-finally { setAvoidUpdating(false); }
+                        setAvoidUpdating(true);
+                        try
+                            {
+                            patches = gatherPatchSysex(data);
+                            }
+                        finally { setAvoidUpdating(false); }
                         if (merge) patches = reducePatchesToLocal(patches);                     // this will reduce us to just our own kind of patches
                                                 
                         //// FIFTH if we can't find any usable patches, inform the user
@@ -7774,31 +7754,31 @@ finally { setAvoidUpdating(false); }
                                 {
                                 setAvoidUpdating(true);
                                 try
-                                	{
-                                Class synthType = getSynth(pat[primary][0].synth);
-                                int synthNum = getSynthNum(synthType);
-                                
-                                if (this.getClass() != synthType)
                                     {
-                                    if (showSimpleConfirm("Load Other Synth Patch Librarian",
-                                            "File doesn't contain sysex data for the " + getSynthNameLocal() + 
-                                            ".\nIt appears to contain data for the " + synthNames[synthNum] + 
-                                            ".\nLoad for the " + synthNames[synthNum] + " instead?"))
+                                    Class synthType = getSynth(pat[primary][0].synth);
+                                    int synthNum = getSynthNum(synthType);
+                                
+                                    if (this.getClass() != synthType)
                                         {
-                                        Synth otherSynth = instantiate(synthType, false, true, null);
-                                        otherSynth.loadLibrarian(pat[primary]);
-                                        return false;	// NOT TRUE!  See docs for doOpen(...)
+                                        if (showSimpleConfirm("Load Other Synth Patch Librarian",
+                                                "File doesn't contain sysex data for the " + getSynthNameLocal() + 
+                                                ".\nIt appears to contain data for the " + synthNames[synthNum] + 
+                                                ".\nLoad for the " + synthNames[synthNum] + " instead?"))
+                                            {
+                                            Synth otherSynth = instantiate(synthType, false, true, null);
+                                            otherSynth.loadLibrarian(pat[primary]);
+                                            return false;   // NOT TRUE!  See docs for doOpen(...)
+                                            }
+                                        else
+                                            {
+                                            return false;
+                                            }                                               
                                         }
                                     else
                                         {
-                                        return false;
-                                        }                                               
-                                    }
-                                else
-                                    {
-                                    loadLibrarian(pat[primary]);
-                                    return false;  	// NOT TRUE!  See docs for doOpen(...)
-                                    }
+                                        loadLibrarian(pat[primary]);
+                                        return false;       // NOT TRUE!  See docs for doOpen(...)
+                                        }
                                     }
                                 finally { setAvoidUpdating(false); }
                                 }
@@ -7808,9 +7788,9 @@ finally { setAvoidUpdating(false); }
                                 Synth otherSynth = instantiate(synthType, false, true, null);
                                 otherSynth.setAvoidUpdating(true);
                                 try
-                                	{
-									otherSynth.loadLibrarian(pat[primary]);
-									return false; 	// NOT TRUE!  See docs for doOpen(...)
+                                    {
+                                    otherSynth.loadLibrarian(pat[primary]);
+                                    return false;   // NOT TRUE!  See docs for doOpen(...)
                                     }
                                 finally { otherSynth.setAvoidUpdating(false); }
                                 }
@@ -7861,8 +7841,8 @@ finally { setAvoidUpdating(false); }
         // automatically load them into the librarian without bugging the user.
         setAlwaysLoadInLibrarian(true);
 
-		// build init model to compare against.  We don't care about the number and bank
-		//Model initModel = librarian.getLibrary().getModel(librarian.getLibrary().getInitPatch(), 0, 0);
+        // build init model to compare against.  We don't care about the number and bank
+        //Model initModel = librarian.getLibrary().getModel(librarian.getLibrary().getInitPatch(), 0, 0);
 
         // now we need to load the appropriate locations and names, assuming we don't have them
         boolean send = getSendMIDI();
@@ -7880,13 +7860,13 @@ finally { setAvoidUpdating(false); }
                 patches[i].number = model.get("number", Patch.NUMBER_NOT_SET);
                 patches[i].bank = model.get("bank", 0);
                 /*if (model.keyEquals(initModel, true))
-                	{
-                	patches[i].name = "";
-                	}
-                else*/
-                	{
-                	patches[i].name = model.get("name", null);
-                	}
+                  {
+                  patches[i].name = "";
+                  }
+                  else*/
+                    {
+                    patches[i].name = model.get("name", null);
+                    }
                 }
             else patches[i] = null;                 // failed to parse
             }
@@ -8399,11 +8379,6 @@ finally { setAvoidUpdating(false); }
             }
         }
 
-    void doPrefs()
-        {
-        // do nothing
-        }
-    
     void doAbout()
         {
         ImageIcon icon = new ImageIcon(Synth.class.getResource("gui/About.jpg"));
@@ -8787,7 +8762,7 @@ finally { setAvoidUpdating(false); }
             if (startnum != PatchLocation.NO_NUMBER)
                 currentPatch.set("number", startnum);
 
-			// same as currentPatch
+            // same as currentPatch
             firstPatch = buildModel();
             if (startbank != PatchLocation.NO_BANK)
                 firstPatch.set("bank", startbank);
@@ -8938,9 +8913,9 @@ finally { setAvoidUpdating(false); }
         // Both getBankSize() is too large AND getNumBanks() is too large in the case
         // of the Proteus 2000 editor, for example.
         else if (patchLocationEquals(firstPatch, getNextPatchLocation(currentPatch)))
-        	{
-        	stopBatchDownload();
-        	}
+            {
+            stopBatchDownload();
+            }
         else
             {
             undo.setWillPush2(false);
@@ -9310,11 +9285,11 @@ finally { setAvoidUpdating(false); }
             {
             Object[] output = emitAll(key, STATUS_UPDATING_ONE_PARAMETER);
             if (output == null)
-            	{
-            	if (!key.equals("bank") && !key.equals("number") && getAllowsAutoSend())	// never send for bank or number
-                	{
-                	scheduleSendAllParameters();
-                	}
+                {
+                if (!key.equals("bank") && !key.equals("number") && getAllowsAutoSend())        // never send for bank or number
+                    {
+                    scheduleSendAllParameters();
+                    }
                 }
             else if (output.length != 0)
                 {

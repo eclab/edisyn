@@ -903,13 +903,13 @@ The Yamaha DX7 editor has a special feature thanks to research done here at Geor
 
 If you're editing a DX7, you can use the neural network in hill-climbing by selecting {\bf NN Hill-Climber} in the Hill-Climber's ``Method'' chooser.  Thereafter instead of creating children patches via recombination and mutation, Edisyn will produce them using the autoencoder.  Similarly, if (when editing a DX7) you select {\bf Edit \(\rightarrow\) Randomize \(\rightarrow\) Randomizes Using NN}, then randomization options will use the autoencoder rather than the standard mutator.
 
-\paragraph{What's the point?}  As anyone who programs synthesizer patches knows, the space of synthesizer patches consists of small useful regions surrounded by lots of patches which are garbage, even total silence.  The hill-climber tries many strategies to avoid presenting garbage and silence to the user, but is only partly successful   The goal of the autoencoder is to eliminate as much garbage and silence as possible, thus improving the chances that you'll get decent patch results.  We'd appreciate feedback as to how successful you think we were.
+\paragraph{What's the point?}  As anyone who programs synthesizer patches knows, the space of synthesizer patches consists of small regions of good patches surrounded by lots of garbage patch regions, even ones of total silence.  The hill-climber tries many strategies to avoid presenting garbage and silence to the user, but is only partly successful   The goal of the autoencoder is to eliminate as much garbage and silence as possible, thus improving the chances that you'll get decent patch results.  We'd appreciate feedback as to how successful you think we were.
  
-\paragraph{How does it work?}  A variational autoencoder is a special kind of neural network trained to take an incoming patch and then output the same exact patch.  The trick, however, is that it has to get it through a narrow neck much smaller than the size of a standard patch: it must squeeze the patch down to a much smaller space, called the {\it latent space} of the autoencoder, in order to get it through.  The autoencoder must learn how to compress all the 30,000 patches fed to it such that when they are decompressed after passing through the narrow neck, they're more or less the same as they were originally.  
+\paragraph{How does it work?}  A variational autoencoder is a special kind of neural network trained to take an incoming patch and then output the same exact patch.  The trick, however, is that it has to first squeeze the patch through a narrow data channel much smaller than the size of a standard patch.  And it must successfully do this for all 30,000 training patches fed to it: thy all must be able to be squeezed down and then reconstituted at the other end as best as it can.
 
-In order to compress those 30,000 patches, the neural network has to learn the features more or less common to them.  In short, it tightly squeezes the regions of the patch space that contain those 30,000 patches into the latent space, and in doing so it ignores the features of the regions of the patch space that {\it didn't} contain those 30,000 patches.  What regions of the patch space were that?  Ideally, the useless garbage and silence!  Now the ``compressed'' space, with luck, contains only useful patch regions.
+In order to compress all 30,000 patches, the neural network has to learn the features common to them, then just squeeze those features through the narrow neck.  This subspace of the patch space is called the {\it latent space} of the autoencoder.  Ideally the latent space just contains the stuff that makes the patches good patches in the first place: it has eliminated the features of the patch space common to garbage patches or silence. 
 
-Once we have trained the autoencoder, we can break it into two pieces: the compression portion and the decompression portion.  If we hand a random ``compressed'' vector to the decompression portion, it will decompress it into a patch somewhere in the vicinity of the 30,000 patches\,---\,and {\it not}, ideally, in garbage regions of the space.  So now we can mutate a patch by compressing it into the smaller space, then making some random mutations to its {\it compressed} form, then decompressing it.  And we can hill-climb by wandering around not in the patch space but in the compressed space, decompressing results as needed to audition them.
+Once we have trained the autoencoder, we can break it into two pieces: the {\it compression} portion, which squeezed the patch down to its bare essential features to get it through the narrow neck, and the {\it decompression} portion, which reconstituted it at the other end.  Now, what happens if we feed random ``compressed'' values into the decompression portion rather than an original patch?  It'll decompress it into a random patch somewhere in the vicinity of the trained patches (the good stuff)!  We could use this to make random patches with a high probability that they won't be garbage.  The hill-climber could also hill-climb in the space of compressed data rather than the original patch space, and so only wander around in the ``good'' regions (with luck).  And to seed the hill-climber with initial patches, we just feed them to the compression portion to get their compressed versions.
 
 \paragraph{Can you do it on anything but the DX7?} Training an autoencoder requires a great many patches.  Most synths just don't have enough unique patches available online.  One obvious target in the future might be the Yamaha TX81Z: but it's only got around 5000 unique patches, which might not be enough.  We'll see.
  
@@ -1028,17 +1028,15 @@ To save a patch or a range of selected patches to a single file or collection of
 
 To save a bank of patches to a single file, select the a patch in the bank and choose {\bf Save Bank} from the {\bf Librarian} menu.  Some synthesizers can save out banks with a single bank sysex message: Edisyn will use this if it's available. Otherwise, it'll just write each patch separately to the file.
 
-To save all patches in the Librarian  to a single file or collection of files, choose {\bf Save All Patches} from the {\bf Librarian} menu.  Some synthesizers can save out banks either with a single bank sysex message or as individual patch sysex messages.  Edisyn will give you the option if it can.  Note that if you select {\bf Save} or {\bf Save As...} from the {\bf File} menu while in the Librarian, it'll do the same thing as {\bf Save All Patches}.
+To save all patches in the Librarian  to a single file or collection of files, choose {\bf Save All Patches} from the {\bf Librarian} menu.  Many synthesizers can save out banks either with a single bank sysex message or as individual patch sysex messages.  Edisyn will give you the option if it can.  Note that saving out patches first involves building their sysex, and for some synthesizers this may take several seconds if you're saving {\it all} the patches.  Be patient: Edisyn isn't hung.
 
 \paragraph{Writing Patches to your Synthesizer}
 
-First note that a big weakness in the Librarian (for the time being) is that while you can {\it download} patches in the background, when you {\it write} them to the synthesizer you must wait until they have completed: there's no warning and no way to cancel.  So if you're writing a lot of stuff that's slow and takes time, be prepared.  Maybe this will change in the future.
+To write a patch or a range of selected patches to your synthesizer, select the patch or range and choose {\bf Write Selected Patches to Synth} from the {\bf Librarian} menu.  This writes the patches as if you had loaded each one in the editor and chosen {\bf Write to Patch...}.  
 
-To write a patch or a range of selected patches to your synthesizer, select the range and choose {\bf Write Selected Patches to Synth} from the {\bf Librarian} menu.  This writes the patches as if you had loaded each one in the editor and chosen {\bf Write to Patch...}.  Note that some synthesizers (such as the Yamaha DX7) cannot do this: you can only write whole banks to them.  So....
+Note that some synthesizers (such as the Yamaha DX7) cannot do this: you can only write whole banks to them.  So, to write a bank of patches to your synthesizer, select the a patch in the bank and choose {\bf Write Bank} from the {\bf Librarian} menu.  This writes the whole bank of patches to the synthesizer.  On some synthesizers (like the Yamaha DX7) this will use a special bank-writing sysex message. For other synthesizers, it'll just write each patch separately.
 
-To write a bank of patches to your synthesizer, select the a patch in the bank and choose {\bf Write Bank} from the {\bf Librarian} menu.  This writes the whole bank of patches to the synthesizer.  On some synthesizers (like the Yamaha DX7) this will use a special bank-writing sysex message. For most synthesizers, it'll just write each patch separately.
-
-To write all patches to your synthesizer, choose {\bf Write All Patches} from the {\bf Librarian} menu.  On some synthesizers (like the Yamaha DX7) this will employ a special bank-writing sysex message. For most synthesizers, it'll just write each patch separately.
+To write all patches to your synthesizer, choose {\bf Write All Patches} from the {\bf Librarian} menu.  On some synthesizers (like the Yamaha DX7) this will employ a special bank-writing sysex message. For most synthesizers, it'll just write each patch separately.  
 
 Keep in mind that if you choose the {\bf Write to Patch...} or {\bf Send to Current Patch} menu options from the {\bf MIDI} menu, this will write the current patch in the {\it editor}, not in the Librarian, even if you have selected a single patch.  It probably isn't what you wanted to do.
 
@@ -1073,7 +1071,7 @@ Figure~\ref{patcheditorcapabilities} is a little table of the current patch edit
 \begin{table}[t!]
 \vspace{5em}
 \begin{center}
-{\small
+{\footnotesize
 \begin{tabular}{rllllllllll}
 &
 \begin{sideways}Send Parameter\end{sideways}&
@@ -1110,7 +1108,8 @@ PreenFM2&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}& & & &\\
 Red Sound DarkStar/DarkStar XP2&&&&&{\cm}&{\cm}& & & {\cm}           \\
 Roland D-110&{\cm}& &{\cm}*&{\cm}*&{\cm}*&{\cm}*& & &{\cm}          \\
 Roland JV-80/880&{\cm}& &{\cm}&{\cm}&{\cm}&{\cm}& & &{\cm}*          \\
-Roland U-220&{\cm}& &{\cm}&{\cm}&{\cm}&{\cm}& & &{\cm}          \\
+Roland U-110&{\cm}& & &{\cm}&{\cm}&{\cm}& & &{\cm}*          \\
+Roland U-220&{\cm}& &{\cm}&{\cm}&{\cm}&{\cm}& & &{\cm}*          \\
 Sequential Prophet Rev2&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}& & &{\cm}            \\
 Waldorf Microwave II/XT/XTk&{\cm}&{\cm}&{\cm}&{\cm}*&{\cm}&{\cm}&{\cm}& &{\cm}            \\
 Waldorf Blofeld&{\cm}*&{\cm}*&{\cm}&{\cm}*&{\cm}&{\cm}& & & {\cm}            \\
@@ -1130,7 +1129,7 @@ Yamaha TG33/SY22/SY35&{\cm}*& &{\cm}&{\cm}&{\cm}& &  & &{\cm}            \\
 \vspace{-1em}
 \caption{Patch Editor Capabilities}
 \label{patcheditorcapabilities}
-\vspace{1em}
+\vspace{7em}
 \end{table}
 
 \subsection{Setting Up the Development Environment}

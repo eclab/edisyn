@@ -12,12 +12,12 @@ public class RolandU220DrumRec extends Recognize
     public static boolean recognize(byte[] data)
         {
         if (Synth.numSysexMessages(data) > 1)
-        	{
-        	byte[][] d = Synth.cutUpSysex(data);
-        	for(int i = 0; i < d.length; i++)
-        		if (!recognize(d[i])) return false;
-        	return true;
-        	}
+            {
+            byte[][] d = Synth.cutUpSysex(data);
+            for(int i = 0; i < d.length; i++)
+                if (!recognize(d[i])) return false;
+            return true;
+            }
 
         return ((data[0] == (byte)0xF0) &&
             (data[1] == (byte)0x41) &&

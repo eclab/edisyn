@@ -137,10 +137,10 @@ public class Librarian extends JPanel
                         }
                         
                     if (len > 1)
-                    	{
+                        {
                         getLibrary().synth.showSimpleError("Cannot Change Name", "Please select only a single patch.");
                         return;
-                    	}
+                        }
                         
                     getLibrary().changeName(column - 1, row);
                     }
@@ -945,7 +945,7 @@ public class Librarian extends JPanel
 
 
     /** JTable says that it maintains the proper column values even if the columns are rearranged,
-       but this is a lie.  You have to do it manually.  This function does the proper conversion model -> table. */
+        but this is a lie.  You have to do it manually.  This function does the proper conversion model -> table. */
     static int antiCol(JTable table, int index)
         {
         if (index < 0) return index;
@@ -1012,8 +1012,8 @@ public class Librarian extends JPanel
             return;
             }
 
-		int bankSize = getLibrary().synth.getValidBankSize(column - 1);
-		if (bankSize == -1) bankSize = getLibrary().getBankSize();
+        int bankSize = getLibrary().synth.getValidBankSize(column - 1);
+        if (bankSize == -1) bankSize = getLibrary().getBankSize();
         performDownload(column - 1, 0, column - 1, bankSize - 1 );
         }
 
@@ -1424,7 +1424,7 @@ public class Librarian extends JPanel
                 }
             }
 
-		// we clear all the bank column even if some of it is invalid...                                
+        // we clear all the bank column even if some of it is invalid...                                
         fill(table, column, 0, getLibrary().getBankSize(), null);               // getLibrary().getInitPatch());
         }
 
@@ -1503,11 +1503,11 @@ public class Librarian extends JPanel
                 
                 // but if we're transferring out, use the from location
                 if (isPatchWell(toTable))
-                	{
-                	bank = (fromCol - 1);
-                	number = fromRow;
-                	}
-                	
+                    {
+                    bank = (fromCol - 1);
+                    number = fromRow;
+                    }
+                        
                 if (bank != -1)                 // don't revise the patch location if it's the scratch bank
                     {
                     // revise the patch location to where it came from in the librarian

@@ -50,12 +50,12 @@ public class RolandU220TimbreRec extends Recognize
     public static boolean recognize(byte[] data)
         {
         if (Synth.numSysexMessages(data) > 1)
-        	{
-        	byte[][] d = Synth.cutUpSysex(data);
-        	for(int i = 0; i < d.length; i++)
-        		if (!recognize(d[i])) return false;
-        	return true;
-        	}
+            {
+            byte[][] d = Synth.cutUpSysex(data);
+            for(int i = 0; i < d.length; i++)
+                if (!recognize(d[i])) return false;
+            return true;
+            }
 
         boolean b = (
             (data.length == 138 || data.length == 74 || data.length == 138 + 74) && // && data.length >= 74 &&

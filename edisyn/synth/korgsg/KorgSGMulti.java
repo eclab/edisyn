@@ -850,7 +850,7 @@ public class KorgSGMulti extends Synth
     public boolean[] getWriteableBanks() { return new boolean[] { true, true, true, true }; }
     public int getPatchNameLength() { return 10; }
     public boolean getSupportsPatchWrites() { return true; }
-    public int getBatchDownloadWaitTime() { return 550; }			// 500 doesn't cut it
+    public int getBatchDownloadWaitTime() { return 550; }                       // 500 doesn't cut it
 
     public boolean librarianTested() { return true; }
     }

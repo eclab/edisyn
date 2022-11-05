@@ -605,19 +605,19 @@ public class YamahaFS1RMulti extends Synth
                 model.setMax("fseqstartstepoffset", maxLen);
                 model.setMetricMax("fseqstartstepoffset", maxLen);
                 if (model.get("fseqstartstepoffset") > maxLen)
-                    model.set("fseqstartstepoffset", maxLen);
+                model.set("fseqstartstepoffset", maxLen);
                 model.updateListenersForKey("fseqstartstepoffset");
 
                 model.setMax("fseqstartstepoflooppoint", FSEQ_PARAMETER_SETTINGS[val][FSEQ_MAX_LENGTH_I]);
                 model.setMetricMax("fseqstartstepoflooppoint", FSEQ_PARAMETER_SETTINGS[val][FSEQ_MAX_LENGTH_I]);
                 if (model.get("fseqstartstepoflooppoint") > maxLen)
-                    model.set("fseqstartstepoflooppoint", maxLen);
+                model.set("fseqstartstepoflooppoint", maxLen);
                 model.updateListenersForKey("fseqstartstepoflooppoint");
 
                 model.setMax("fseqendstepoflooppoint", FSEQ_PARAMETER_SETTINGS[val][FSEQ_MAX_LENGTH_I]);
                 model.setMetricMax("fseqendstepoflooppoint", FSEQ_PARAMETER_SETTINGS[val][FSEQ_MAX_LENGTH_I]);
                 if (model.get("fseqendstepoflooppoint") > maxLen)
-                    model.set("fseqendstepoflooppoint", maxLen);
+                model.set("fseqendstepoflooppoint", maxLen);
                 model.updateListenersForKey("fseqendstepoflooppoint");
                 */
                 }

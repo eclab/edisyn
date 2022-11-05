@@ -775,7 +775,7 @@ public class Model implements Cloneable
         for(int i = 0; i < keys.length; i++)
             {
             if (exceptBankAndNumber &&
-            	(keys[i].equals("bank") | keys[i].equals("number"))) continue;
+                (keys[i].equals("bank") | keys[i].equals("number"))) continue;
             Node n = storage.get(keys[i]);
             Node n2 = other.storage.get(keys[i]);
             if (n2 == null)         // I can't be null, just the other one
@@ -790,22 +790,22 @@ public class Model implements Cloneable
         {
         return keyEquals(other, false);
         /*
-        if (other == null)
-            return false;
-        if (!storage.keySet().equals(other.storage.keySet()))
-            return false;
+          if (other == null)
+          return false;
+          if (!storage.keySet().equals(other.storage.keySet()))
+          return false;
                 
-        String[] keys = getKeys();
-        for(int i = 0; i < keys.length; i++)
-            {
-            Node n = storage.get(keys[i]);
-            Node n2 = other.storage.get(keys[i]);
-            if (n2 == null)         // I can't be null, just the other one
-                return false;
-            if (!storage.get(keys[i]).keyEquals(other.storage.get(keys[i])))
-                return false;
-            }
-        return true;
+          String[] keys = getKeys();
+          for(int i = 0; i < keys.length; i++)
+          {
+          Node n = storage.get(keys[i]);
+          Node n2 = other.storage.get(keys[i]);
+          if (n2 == null)         // I can't be null, just the other one
+          return false;
+          if (!storage.get(keys[i]).keyEquals(other.storage.get(keys[i])))
+          return false;
+          }
+          return true;
         */
         }
     

@@ -281,7 +281,9 @@ public class Chooser extends NumericalComponent
         
     public void setLabel(String _label)
         {
-        label.setText("  " + _label);
+        if (Style.isUnix()) 
+		label.setText(_label);
+	else label.setText("  " + _label);
         }
         
     public void setElements(String[] elements)
@@ -310,7 +312,9 @@ public class Chooser extends NumericalComponent
     public void setElements(String _label, String[] elements, int[] values)
         {
         setCallActionListener(false);
-        label.setText("  " + _label);
+        if (Style.isUnix())
+		label.setText(_label);
+	else label.setText("  " + _label);
         combo.removeAllItems();
         
         for(int i = 0; i < elements.length; i++)

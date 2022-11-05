@@ -22,16 +22,14 @@ public class Edisyn
     {
     public static final int VERSION = 32;
     
-    static boolean isMacOSMonterey()
-    	{
-    	return System.getProperty("os.name").equals("Mac OS X") &&
-    		   (System.getProperty("os.version").startsWith("12."));
-    	}
-    
-    public static void main(String[] args)
+     public static void main(String[] args)
         {
         try {
-			if (isMacOSMonterey())		// Monterey has a broken tab bug :-(
+	    if (Style.isUnix())
+		{
+		    System.setProperty("useSystemAAFontSettings", "lcd");  // see https://wiki.archlinux.org/title/Java_Runtime_Environment_fonts#Basic_settings
+		}
+			if (Style.isMacOSMonterey())		// Monterey has a broken tab bug :-(
 				{
 				UIManager.put("TabbedPane.foreground", java.awt.Color.BLACK);
 				}
@@ -44,7 +42,7 @@ public class Edisyn
             // System.setProperty("apple.awt.application.name", "Edisyn");
             
             // This makes sure that windows uses the default windows look and feel, not the old Sun one
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+            //UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
             }
         catch(Exception e) { }
         

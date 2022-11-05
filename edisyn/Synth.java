@@ -526,7 +526,7 @@ public abstract class Synth extends JComponent implements Updatable
     ////        getClassNames()
     ////
     //// There are presently TWO sources of a synthesizer's textual name in Edisyn:
-    //// The synth/Synths.txt file
+    //// The synth/synths.txt file
     ////    This is the source of the information found in numSynths(), getClassNames(), and getSynthNames()
     ////
     //// Individual synth classes
@@ -581,7 +581,7 @@ public abstract class Synth extends JComponent implements Updatable
         ArrayList<String> classes = new ArrayList<String>();
         ArrayList<String> names = new ArrayList<String>();
         ArrayList<String> makes = new ArrayList<String>();
-        Scanner scan = new java.util.Scanner(edisyn.Synth.class.getResourceAsStream("synth/Synths.txt"));
+        Scanner scan = new java.util.Scanner(edisyn.Synth.class.getResourceAsStream("synth/synths.txt"));
         boolean firstTime = true;
         while(scan.hasNextLine())
             {
@@ -591,7 +591,7 @@ public abstract class Synth extends JComponent implements Updatable
                 String[] strs = str.trim().split("\t");
                 if (strs.length < 3) 
                     {
-                    if (firstTime) System.err.println("synth/Synths.txt has no synth name or make for certain synths:");
+                    if (firstTime) System.err.println("synth/Synths.txt has no synth name or make for certain synths: " + str.trim());
                     firstTime = false;
                     continue;
                     }

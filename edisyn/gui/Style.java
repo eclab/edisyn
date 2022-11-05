@@ -208,6 +208,13 @@ public class Style
         return (OS().indexOf("mac") >= 0 || System.getProperty("mrj.version") != null);
         }
 
+   public static boolean isMacOSMonterey()
+    	{
+    	return System.getProperty("os.name").equals("Mac OS X") &&
+    		   (System.getProperty("os.version").startsWith("12."));
+    	}
+
+
     public static boolean isUnix() 
         {
         return (OS().indexOf("nix") >= 0 || OS().indexOf("nux") >= 0 || OS().indexOf("aix") > 0 );

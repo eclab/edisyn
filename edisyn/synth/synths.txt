@@ -93,4 +93,3 @@ edisyn.synth.yamahatg33.YamahaTG33	Yamaha	Yamaha TG33 / SY22 / SY35
 edisyn.synth.yamahatg33.YamahaTG33Multi	Yamaha	Yamaha TG33 [Multi]
 edisyn.synth.generic.Generic	General	MIDI Parameters
 edisyn.synth.tuning.Tuning	General	Tuning
-

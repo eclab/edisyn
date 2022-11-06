@@ -10,6 +10,8 @@ import java.awt.*;
 import java.awt.geom.*;
 import javax.swing.border.*;
 import javax.swing.*;
+import java.util.*;
+import java.awt.font.*;
 
 /**** 
       Constants which determine the look and feel of the software.
@@ -28,7 +30,12 @@ public class Style
     static Color TEXT_COLOR = DEFAULT_TEXT_COLOR;
     public static Color TEXT_COLOR() { return TEXT_COLOR; }
     /** Small font, primarily for labels, button and combo box text. */
-    public static Font SMALL_FONT() { return new Font(Font.SANS_SERIF, Font.PLAIN, isUnix() ? 9 : 10); }
+    public static Font SMALL_FONT() 
+    	{ 
+    	Hashtable hash = new Hashtable();
+    	hash.put(TextAttribute.KERNING, TextAttribute.KERNING_ON);
+    	return new Font(Font.SANS_SERIF, Font.PLAIN, isUnix() ? 9 : 10).deriveFont(hash);
+    	}
     /** Medium-sized font, used primarily in the center of a Dial. */
     public static Font SEMI_MEDIUM_FONT() { return new Font(Font.SANS_SERIF, Font.PLAIN, 12); }
     /** Medium-sized font, used primarily in the center of a Dial. */

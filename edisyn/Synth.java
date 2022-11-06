@@ -591,7 +591,7 @@ public abstract class Synth extends JComponent implements Updatable
                 String[] strs = str.trim().split("\t");
                 if (strs.length < 3) 
                     {
-                    if (firstTime) System.err.println("synth/Synths.txt has no synth name or make for certain synths: " + str.trim());
+                    if (firstTime) System.err.println("synth/synths.txt has no synth name or make for certain synths: " + str.trim());
                     firstTime = false;
                     continue;
                     }
@@ -614,19 +614,19 @@ public abstract class Synth extends JComponent implements Updatable
         return synthNames.length;
         }
 
-    /** All synthesizer classes in Edisyn.  These are loaded from synth/Synths.txt */
+    /** All synthesizer classes in Edisyn.  These are loaded from synth/synths.txt */
     public static String[] getClassNames()
         {
         return synthClassNames;
         }
 
-    /** All synthesizer names in Edisyn, one per class in synths.  These are loaded from synth/Synths.txt */
+    /** All synthesizer names in Edisyn, one per class in synths.  These are loaded from synth/synths.txt */
     public static String[] getSynthNames()
         {
         return synthNames;
         }
                 
-    /** All synthesizer makes in Edisyn, one per class in synths.  These are loaded from synth/Synths.txt */
+    /** All synthesizer makes in Edisyn, one per class in synths.  These are loaded from synth/synths.txt */
     public static String[] getSynthMakes()
         {
         return synthMakes;
@@ -646,7 +646,7 @@ public abstract class Synth extends JComponent implements Updatable
             }
         }
                 
-    /** Return the synth name for a given class, or null if an error occurred.  This is not loaded from synth/Synths.txt, but rather from the getSynthName() */
+    /** Return the synth name for a given class, or null if an error occurred.  This is not loaded from synth/synths.txt, but rather from the getSynthName() */
     public static String getSynthNameForClass(Class synth)
         {
         try

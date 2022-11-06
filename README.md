@@ -217,14 +217,17 @@ If you want to use Edisyn in combination with a DAW, see the manual's section on
 
 #### Dealing with High-Resolution Displays in Linux
 
-Java doesn't work properly with high-resolution displays, even recent default versions (like JDK 11).  On Edisyn, some widgets are properly sized and others are teeny tiny.  While I'm trying to figure out how to work around this, the best you can do is scale the interface, though some widgets will be too large. On GNOME machines (such as Ubuntu) you could first set the GTK_SCALE parameter, such as:
+Java doesn't work properly with high-resolution displays in Linux, even recent default versions (like JDK 11).  On GNOME machines (such as Ubuntu) you can get around this by first setting the GTK_SCALE parameter, such as:
 
-    GTK_SCALE=2 ; java edisyn.jar
+    GTK_SCALE=2 ; java -jar edisyn.jar
 
-... or you could run java with internal scaling, such as:
+... or you can (for the moment) run Java with internal scaling, such as:
 
-    java -Dsun.java2d.uiScale=2.0 edisyn.jar
+    java -Dsun.java2d.uiScale=2.0 -jar edisyn.jar
 
+#### Unkerned Fonts
+
+My copy of OpenJDK (Ubuntu) doesn't kern the SansSerif font used by UI widgets, so it looks quite ugly.  I've not found a workaround for this.
 
 #### Problems with Jack
 
@@ -236,5 +239,4 @@ Java has compatibility problems with Jack; disabling Jack will often allow Edisy
 1. Make sure Java is installed.
 2. Download [Edisyn's jar file](https://cs.gmu.edu/~eclab/projects/edisyn/edisyn.jar).
 3. Run Edisyn as:   `java -jar edisyn.jar`
-
 

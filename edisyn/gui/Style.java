@@ -30,18 +30,21 @@ public class Style
     static Color TEXT_COLOR = DEFAULT_TEXT_COLOR;
     public static Color TEXT_COLOR() { return TEXT_COLOR; }
     /** Small font, primarily for labels, button and combo box text. */
-    public static Font SMALL_FONT() 
-    	{ 
+    
+    static Font addKerning(Font font)
+    	{
     	Hashtable hash = new Hashtable();
     	hash.put(TextAttribute.KERNING, TextAttribute.KERNING_ON);
-    	return new Font(Font.SANS_SERIF, Font.PLAIN, isUnix() ? 9 : 10).deriveFont(hash);
+    	return font.deriveFont(hash);
     	}
+    
+    public static Font SMALL_FONT() { return addKerning(new Font(Font.SANS_SERIF, Font.PLAIN, isUnix() ? 10 : 10)); }
     /** Medium-sized font, used primarily in the center of a Dial. */
-    public static Font SEMI_MEDIUM_FONT() { return new Font(Font.SANS_SERIF, Font.PLAIN, 12); }
+    public static Font SEMI_MEDIUM_FONT() { return addKerning(new Font(Font.SANS_SERIF, Font.PLAIN, 12)); }
     /** Medium-sized font, used primarily in the center of a Dial. */
-    public static Font MEDIUM_FONT() { return new Font(Font.SANS_SERIF, Font.PLAIN, 14); }
+    public static Font MEDIUM_FONT() { return addKerning(new Font(Font.SANS_SERIF, Font.PLAIN, 14)); }
     /** Large Font, primarily for category headers. */
-    public static Font LARGE_FONT() { return new Font(Font.SANS_SERIF, Font.PLAIN, 17); }
+    public static Font LARGE_FONT() { return addKerning(new Font(Font.SANS_SERIF, Font.PLAIN, 17)); }
     public static Color DEFAULT_DYNAMIC_COLOR = Color.RED;
     static Color DYNAMIC_COLOR = DEFAULT_DYNAMIC_COLOR;
     public static Color DYNAMIC_COLOR() { return DYNAMIC_COLOR; }

@@ -31,6 +31,7 @@ public class Style
     public static Color TEXT_COLOR() { return TEXT_COLOR; }
     /** Small font, primarily for labels, button and combo box text. */
     
+    // Ubuntu's default SansSerif font doesn't have kerning and looks terrible as a result.
     static Font addKerning(Font font)
     	{
     	Hashtable hash = new Hashtable();
@@ -38,6 +39,7 @@ public class Style
     	return font.deriveFont(hash);
     	}
     
+    // For the moment we're sticking with point size 10 for ubuntu
     public static Font SMALL_FONT() { return addKerning(new Font(Font.SANS_SERIF, Font.PLAIN, isUnix() ? 10 : 10)); }
     /** Medium-sized font, used primarily in the center of a Dial. */
     public static Font SEMI_MEDIUM_FONT() { return addKerning(new Font(Font.SANS_SERIF, Font.PLAIN, 12)); }

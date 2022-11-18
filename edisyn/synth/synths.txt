@@ -19,9 +19,10 @@
 ### In this file, blank lines and lines starting with a # are ignored.
 
 edisyn.synth.alesisd4.AlesisD4	Alesis	Alesis D4 / DM5
+edisyn.synth.audiothingiesmicromonsta.AudiothingiesMicroMonsta	Audiothingies	Audiothingies MicroMonsta
 edisyn.synth.casiocz.CasioCZ	Casio	Casio CZ
-edisyn.synth.dsiprophet08.DSIProphet08	DSI/Sequential	DSI Prophet '08 / Tetra / Mopho
-edisyn.synth.dsiprophet08.DSITetraCombo	DSI/Sequential	DSI Tetra [Combo]
+edisyn.synth.dsiprophet08.DSIProphet08	DSI / Sequential	DSI Prophet '08 / Tetra / Mopho
+edisyn.synth.dsiprophet08.DSITetraCombo	DSI / Sequential	DSI Tetra [Combo]
 edisyn.synth.emumorpheus.EmuMorpheus	E-Mu	E-Mu Morpheus / Ultra Proteus
 edisyn.synth.emumorpheus.EmuMorpheusHyper	E-Mu	E-Mu Morpheus / Ultra Proteus [Hyper]
 edisyn.synth.emumorpheus.EmuMorpheusMap	E-Mu	E-Mu Morpheus / Ultra Proteus [MidiMap]
@@ -68,7 +69,7 @@ edisyn.synth.rolandu110.RolandU110	Roland	Roland U-110
 edisyn.synth.rolandu220.RolandU220Timbre	Roland	Roland U-20 / 220 [Timbre]
 edisyn.synth.rolandu220.RolandU220Multi	Roland	Roland U-20 / 220 [Multi]
 edisyn.synth.rolandu220.RolandU220Drum	Roland	Roland U-20 / 220 [Drum]
-edisyn.synth.sequentialprophetrev2.SequentialProphetRev2	DSI/Sequential	Sequential Prophet Rev2
+edisyn.synth.sequentialprophetrev2.SequentialProphetRev2	DSI / Sequential	Sequential Prophet Rev2
 edisyn.synth.waldorfblofeld.WaldorfBlofeld	Waldorf	Waldorf Blofeld
 edisyn.synth.waldorfblofeld.WaldorfBlofeldMulti	Waldorf	Waldorf Blofeld [Multi]
 edisyn.synth.waldorfkyra.WaldorfKyra	Waldorf	Waldorf Kyra

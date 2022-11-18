@@ -4456,38 +4456,37 @@ public class EmuProteus2000 extends Synth
    "Common General" parameters, even though they're listed as Common General parameters.  The only 
    way to discover these unfortunate misfeatures is to reverse engineer the spec by hand.  Oh yeah,
    and there are myriad range errors in the documentation and user manual: effects delays go -12...127,
-   not 0...127; arp notes are offset by 1; several patchcoord destinations are missing; others are
+   not 0...127; arp notes are offset by 1; several patchcord destinations are missing; others are
    listed as there, but they actually aren't.  Did I mention that the number of parameters reported
    in dumps is wrong?  There's one fewer envelope parameter than the machine indicates.  Also wrong:
    LFO shapes, tempo offsets, ...
      
 
    On top of it, the Proteus 2000's sysex is needlessly broken into many 255-byte chunks: it cannot 
-   receive its entire patch format at one time.  And like all other E-Mu machines, it's impossible 
-   to request the current working patch in memory; and furthermore there is no command to dump to the 
-   current working patch in memory.  In other E-Mu machines I as a developer have two options to get
-   around this significant failing, at least when it comes to dumping to memory (there's no way to
-   request, full stop): either to submit each parameter one at a time to current memory, or to write 
-   a patch to some "scratch" location (say, user patch 255) and then switch to tht patch, which would 
-   load it into current memory.  But unlike all other E-Mu machines, the second option is not reasonable 
-   because the memory is in flash, and so writing to a scratch location over and over again will burn 
-   it out.  However unlike all other E-Mu machines, the first option is very **slow** because on the 
-   Proteus 2000 there are 800 or so parameters!  But the first option is the only real choice.
+   receive its entire patch format at one time.  Thankfully unlike all other E-Mu machines, it's now
+   possible to request the current working patch in memory, but of course E-Mu forgot to document
+   just how that's done: Prodatum figured out that you request patch 16383.  They also forgot to
+   indicate how to send to the current working patch: this was almost a disaster for me, since sending
+   is really critical, and there would be only two possible workarounds: either send each parameter
+   independently (very slow) or write to a "scratch" location in patch RAM, which is not advisable
+   on the Proteus 2000 because its scratch RAM is in Flash, rather than battery-backed, and so this
+   would burn out the machine in short order  
+   
 
    SIMMS AND "BANKS".
    E-Mu must have thought they were really smart by allowing each of these machines to have up to four
    SIMMs.  But it's just a nightmare for a patch editor because nowhere did they document the presets,
    instruments, arpeggios, and riffs on these SIMMs, nor did they even keep the same number of each
-   on each SIMM.  Instead they assumed you'd query a machine's SIMMs for information.  Now Edisyn uses
-   patch editors for many things and they can't all query your current machine; thus Edisyn doesn't
-   engage in synchronous back-and-forth with synthesizers.  But even if it **did**, this still wouldn't
-   work because patches are permitted to link to, refer to riffs and arps of, and even use instruments
-   from SIMMs that aren't present on the machine, under the asumption that later they might be loaded
-   onto a machine which does have those SIMMs.  This makes querying completely useless.  The only
-   alternative is to compile a big list of all this information.  Fortunately someone has largely done
-   this for me already (thanks Jan).  Unfortunately this list is incomplete: there are at least four
-   ROMs out there with no known information.  And on top of it you can create your own "ROM" SIMMs out 
-   of Flash.
+   on each SIMM.  Instead they assumed you'd query a machine's SIMMs for information.  Now Edisyn has
+   patch editors for many synthesizers and other stuff and they can't all query your current machine; 
+   thus Edisyn doesn't engage in synchronous back-and-forth with synthesizers.  But even if it **did**, 
+   this still wouldn't work because patches are permitted to link to, refer to riffs and arps of, and 
+   even use instruments from SIMMs that aren't present on the machine, under the asumption that later 
+   they might be loaded onto a machine which does have those SIMMs.  This makes querying completely 
+   useless.  The only alternative is to compile a big list of all this information.  Fortunately 
+   someone has largely done this for me already (thanks Jan).  Unfortunately this list is incomplete: 
+   there are at least four ROMs out there with no known information.  And on top of it you can create 
+   your own "ROM" SIMMs out of Flash.
 
    And then there's the problem of banks.  From the perspective of a sysex writer, a SIMM is a bank.
    Everywhere in Proteus 2000 sysex, addresses are referred to as tuples, <SIMM or User Memory, number>.  

@@ -1232,6 +1232,39 @@ public abstract class Synth extends JComponent implements Updatable
             }
         }
 
+    /** Builds a sequence of CCs for an NRPN message, where the MSB is set to the value and the LSB
+    	is not sent at all. This is a workaround for a bug in the Micromonsta, which borks on some items 
+    	if the data MSB is sent first and then the LSB. */
+    public Object[] buildNRPNMSBOnly(int channel, int parameter, int value)
+        {
+        try
+            {
+            int p_msb = (parameter >>> 7);
+            int p_lsb = (parameter & 127);
+            int v_msb = value;
+            if (v_msb > 127) 
+                {
+                System.err.println("Synth.java NRPN(int, int, int) ERROR.  Problem with value " + value + " at parameter " + parameter);
+                }
+        
+            return new Object[]
+                {
+                new ShortMessage(ShortMessage.CONTROL_CHANGE, channel, 99, (byte)p_msb),
+                new ShortMessage(ShortMessage.CONTROL_CHANGE, channel, 98, (byte)p_lsb),
+                new ShortMessage(ShortMessage.CONTROL_CHANGE, channel, 6, (byte)v_msb),		// BLEAH
+
+                // can't have these right now, it freaks out the PreenFM2
+                //new ShortMessage(ShortMessage.CONTROL_CHANGE, channel, 101, (byte)127),
+                //new ShortMessage(ShortMessage.CONTROL_CHANGE, channel, 100, (byte)127),
+                };
+            }
+        catch (InvalidMidiDataException e)
+            {
+            Synth.handleException(e);
+            return new Object[0];
+            }
+        }
+
     /** Builds a short (7-bit) CC. */
     public Object[] buildCC(int channel, int parameter, int value)
         {
@@ -3604,7 +3637,7 @@ public abstract class Synth extends JComponent implements Updatable
         
         disableMenuBar();
         boolean result = Synth.showMultiOption(this, 
-            new String[] { "Background  ", "Text  ", "Color A  ", "Color B  ", "Color C  ", "Highlights  ",  "Dials  ", "Envelopes  " },  
+            new String[] { "Background  ", "Text / Global ", "Color A  ", "Color B  ", "Color C  ", "Highlights  ",  "Dials  ", "Envelopes  " },  
             new JComponent[] { background, text, a, b, c, dynamic, dial, envelope }, 
             "Update Colors", 
             "<html><font size='-1'>Note: after changing colors, currently<br>open windows may look scrambled,<br>but new windows will look correct.</font></html>");

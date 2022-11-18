@@ -7,7 +7,7 @@ Set Edisyn's MIDI channel to the same as the synth's MIDI channel.  Set the unit
 
 
 <p><b>Reading and Writing Patches</b><br>
-The MicroMonsta has very limited sysex.  At present Edisyn can send a patch to current memory, and it can send individual parameters, but it cannot read or write patches without you manually setting up the unit. 
+The MicroMonsta has very limited sysex.  At present Edisyn can send a patch to current memory, and it can send individual parameters, but in order to read or write patches to permanent memory, you must manually set up the unit.  Edisyn cannot request patches from the MicroMonsta.
 
 <ul>
 <li><b>Writing Patches</b>&nbsp;&nbsp;To have Edisyn write a patch to the synthesizer, you have to place your MicroMonsta into Batch Sysex MIDI Receive mode.  To do this, hold down LOAD and power-cycle the unit.  When asked "Write Bank->Mem?", use the third encoder to select the location of the first patch to be written, then press LOAD (button 9).  Write the patch or patches from Edisyn.  Then press HOME to reset the unit.  This means that regardless of where Edisyn's patch editor or librarian thinks they're sending patches, they will go to the range you specified on the unit.

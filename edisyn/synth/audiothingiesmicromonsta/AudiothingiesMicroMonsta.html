@@ -1,0 +1,45 @@
+<html><head></head><body>
+<h1>Audiothingies MicroMonsta</h1> 
+<h2>Single Patch Editor</h2>
+
+<p><b>Communicating with Edisyn</b><br> 
+Set Edisyn's MIDI channel to the same as the synth's MIDI channel.  Set the unit to output USB or 5-pin MIDI DIN depending on how you're connecting it to your computer.  If you're connecting directly via USB, be sure to set Edisyn's incoming and outgoing MIDI Device to "MicroMonsta".  Set MIDI Out Mode to "cc".  
+
+
+<p><b>Reading and Writing Patches</b><br>
+The MicroMonsta has very limited sysex.  At present Edisyn can send a patch to current memory, and it can send individual parameters, but it cannot read or write patches without you manually setting up the unit. 
+
+<ul>
+<li><b>Writing Patches</b>&nbsp;&nbsp;To have Edisyn write a patch to the synthesizer, you have to place your MicroMonsta into Batch Sysex MIDI Receive mode.  To do this, hold down LOAD and power-cycle the unit.  When asked "Write Bank->Mem?", use the third encoder to select the location of the first patch to be written, then press LOAD (button 9).  Write the patch or patches from Edisyn.  Then press HOME to reset the unit.  This means that regardless of where Edisyn's patch editor or librarian thinks they're sending patches, they will go to the range you specified on the unit.
+
+<p><li><b>Receiving Patches</b>&nbsp;&nbsp;Edisyn cannot request patches.  To send a patch to Edisyn, you have to place your MicroMonsta into Batch Sysex MIDI Send mode.  To do this, hold down SAVE (SHIFT-LOAD) and power-cycle the unit.  When asked "Send Sysex Bank?", use the third encoder to select the location of the first patch to be sent to Edisyn, use the fourth encoder to select the location of the final patch to be sent to Edisyn, and then press LOAD (button 9).  The unit will send patches to Edisyn, but Edisyn will not know what patch numbers they are.  This means that the librarian will place them willy-nilly.
+
+<p><li><b>Merging Patches</b>&nbsp;&nbsp;It's difficult (and not worth it) but not impossible to request patch merges.  Have Edisyn request a merge, and then manually place the unit into Batch Sysex MIDI Send Mode as described above and send two patches to Edisyn.
+</ul>
+
+
+<p><b>Gotchas</b><br>
+
+<ul>
+<li>The MicroMonsta's patch sysex does not indicate the patch number, and Edisyn can't request patches.  This means that Edisyn has no idea what patch number a patch is.  It still displays the patch number to be consistent with patches received from the Librarian.
+
+<p><li>The MicroMonsta's patch name characters are odd: you can have any ASCII character except for <tt>{ | } ~</tt> (the final four) for no apparent reason.  Also, for some reason the <tt> \ </tt> character is displayed as <tt>&u00A2;</tt>.
+
+<p><li>The MicroMonsta's sysex specification is not documented.  I have reverse engineered it, and detail the specification at the end of Edisyn's AudioThingiesMicromonsta.java file in case you're interested.
+</ul>
+
+
+<!--
+<br><br><h3>Thanks</h3>
+-->
+
+
+<p><table border=0 cellpadding=0 cellspacing=5>
+<tr>
+<td align=right>By&nbsp;&nbsp;&nbsp;
+<td><b>Sean Luke</b>
+<tr>
+<td align=right>Date&nbsp;&nbsp;&nbsp;
+<td>November 15, 2022
+</table>
+

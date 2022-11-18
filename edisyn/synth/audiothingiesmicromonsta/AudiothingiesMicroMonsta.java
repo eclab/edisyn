@@ -489,7 +489,7 @@ public class AudiothingiesMicroMonsta extends Synth
         receiveCurrent.setEnabled(false);
         receivePatch.setEnabled(false);
         receiveNextPatch.setEnabled(false);
-        writeTo.setEnabled(false);
+        //writeTo.setEnabled(false);
         getAll.setEnabled(false);
         
         addMicroMonstaMenu();

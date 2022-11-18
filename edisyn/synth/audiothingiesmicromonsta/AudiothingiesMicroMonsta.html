@@ -12,6 +12,8 @@ The MicroMonsta has very limited sysex.  At present Edisyn can send a patch to c
 <ul>
 <li><b>Writing Patches</b>&nbsp;&nbsp;To have Edisyn write a patch to the synthesizer, you have to place your MicroMonsta into Batch Sysex MIDI Receive mode.  To do this, hold down LOAD and power-cycle the unit.  When asked "Write Bank->Mem?", use the third encoder to select the location of the first patch to be written, then press LOAD (button 9).  Write the patch or patches from Edisyn.  Then press HOME to reset the unit.  This means that regardless of where Edisyn's patch editor or librarian thinks they're sending patches, they will go to the range you specified on the unit.
 
+<p>If you're writing a single patch from the editor, you'll find it more convenient instead to Send to Current Patch, then save the patch on the MicroMonsta itself, rather than reboot the synthesizer into Batch Sysex MIDI Receive mode.
+
 <p><li><b>Receiving Patches</b>&nbsp;&nbsp;Edisyn cannot request patches.  To send a patch to Edisyn, you have to place your MicroMonsta into Batch Sysex MIDI Send mode.  To do this, hold down SAVE (SHIFT-LOAD) and power-cycle the unit.  When asked "Send Sysex Bank?", use the third encoder to select the location of the first patch to be sent to Edisyn, use the fourth encoder to select the location of the final patch to be sent to Edisyn, and then press LOAD (button 9).  The unit will send patches to Edisyn, but Edisyn will not know what patch numbers they are.  This means that the librarian will place them willy-nilly.
 
 <p><li><b>Merging Patches</b>&nbsp;&nbsp;It's difficult (and not worth it) but not impossible to request patch merges.  Have Edisyn request a merge, and then manually place the unit into Batch Sysex MIDI Send Mode as described above and send two patches to Edisyn.
@@ -34,6 +36,8 @@ The MicroMonsta has very limited sysex.  At present Edisyn can send a patch to c
 The MicroMonsta's limited sysex makes using Librarian a challenge.  The MicroMonsta sends patches to Edisyn one at a time, but these patches do not indicate which patch number they are; and furthermore Edisyn can't <i>request</i> patches from the MicroMonsta, so it can't prepare a patch number in advance.  In short, when the patches show up, Edisyn's librarian has no idea where to put them.
 
 <p>To deal with this, the MicroMonsta editor has a special menu option: <b>Set Librarian Download Point</b>.  It works like this.  You open the Librarian and select a patch location.  Then you select Set Librarian Download Point.  Now when a patch comes in, Edisyn will place it in this patch location, and then increment the download point to the next patch location, wrapping around if need be.  
+
+<p>Also when you load from disk, Edisyn will load starting at the set download point.
 
 <p>If you don't set a download point, Edisyn will assume you're loading from patch number 0.
 

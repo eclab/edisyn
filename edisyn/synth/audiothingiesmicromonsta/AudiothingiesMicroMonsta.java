@@ -490,8 +490,46 @@ public class AudiothingiesMicroMonsta extends Synth
         receivePatch.setEnabled(false);
         receiveNextPatch.setEnabled(false);
         writeTo.setEnabled(false);
+        getAll.setEnabled(false);
+        
+        addMicroMonstaMenu();
         return frame;
-        }         
+        }      
+        
+    JMenuItem download = new JMenuItem("Set Librarian Download Point (Now 1)" );
+
+    public void addMicroMonstaMenu()
+    	{
+        JMenu menu = new JMenu("MicroMonsta");
+        menubar.add(menu);
+        menu.add(download);
+
+        download.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent evt)
+                {
+                if (isLibrarianOpen())
+                	{
+                	int col = getLibrarian().getCurrentColumn();
+                	int row = getLibrarian().getCurrentRow();
+                	
+                	if (col == 1 && row >= 0 && row < 384)
+                		{
+                		nextPatchPosition = row;
+                		download.setText("Set Librarian Download Point (Now " + (row + 1) + ")");
+                		}
+                	else
+                		{
+                     	showSimpleError("Invalid Selection", "Please select a patch in the Micromonsta's Bank in the Librarian first." );
+                		}
+                	}
+                else
+                	{
+                    showSimpleError("Librarian Closed", "Please open the Librarian and select a patch in the Micromonsta's Bank first." );
+                	}
+                }
+            });
+    	}   
     
     /** Add the global patch category (name, id, number, etc.) */
     public JComponent addNameGlobal(Color color)
@@ -1600,14 +1638,6 @@ public static final int[] NRPN = {
 
 public static final String[] SYSEX_PARAMETERS =
 	{
-"patchname0",
-"patchname1",
-"patchname2",
-"patchname3",
-"patchname4",
-"patchname5",
-"patchname6",
-"patchname7",
 "oscstranspose",
 "osc1algorithm",
 "osc1finetune",
@@ -1674,7 +1704,7 @@ public static final String[] SYSEX_PARAMETERS =
 "--",	// LSB
 "lfo3phase",
 "lfo3attack",
-"lfo2keysync",
+"lfo3keysync",
 "lfostep1",
 "lfostep2",
 "lfostep3",
@@ -1797,7 +1827,7 @@ public static final String[] SYSEX_PARAMETERS =
             if (c < ' ' || c >= 'z') c = ' ';
             nameb.setCharAt(i, c);
             }
-        name = nameb.toString();
+        name = nameb.toString().trim();
         return super.revisePatchName(name);  // trim again
         }
 
@@ -1807,7 +1837,7 @@ public static final String[] SYSEX_PARAMETERS =
         // check the easy stuff -- out of range parameters
         super.revise();
         
-        String nm = model.get("name", "InitPtch");
+        String nm = model.get("name", "InitPgm");
         String newnm = revisePatchName(nm);
         if (!nm.equals(newnm))
             model.set("name", newnm);
@@ -1823,7 +1853,7 @@ public static final String[] SYSEX_PARAMETERS =
 
         if (key.equals("name"))
         	{
-        	char[] name = (model.get("name", "InitPtch") + "        ").toCharArray();
+        	char[] name = (model.get("name", "InitPgm") + "        ").toCharArray();
         	Object[] obj = buildNRPNMSBOnly(getChannelOut(), 1, 'A');		// sacrificial
         	Object[] objs = new Object[obj.length * 8];
         	for(int i = 1; i <= 8; i++)
@@ -1847,6 +1877,7 @@ public static final String[] SYSEX_PARAMETERS =
 			if (k != null)
 				{
 				int param = k.intValue();
+				// globalstempo, lfo1delay, lfo1rate, lfo2delay, lfo2rate, lfo3delay, lfo3rate
 				if (key.equals("globalstempo") || 
 					(key.startsWith("lfo") && (key.endsWith("delay") || key.endsWith("rate"))))
 					{	// MSB+LSB
@@ -1873,6 +1904,8 @@ public static final String[] SYSEX_PARAMETERS =
 
     public byte[] emit(Model tempModel, boolean toWorkingMemory, boolean toFile)
         {
+        if (toWorkingMemory) return new byte[0];		// can't do it
+        
         if (tempModel == null)
             tempModel = getModel();		// I won't use this though, as I can't extract the patch number
 
@@ -1890,7 +1923,7 @@ public static final String[] SYSEX_PARAMETERS =
         data[190] = (byte)0xF7;
         
         // Load Name
-        String name = model.get("name", "InitPtch") + "        ";
+        String name = model.get("name", "InitPgm") + "        ";
         for(int i = 0; i < 8; i++)
         	{
         	data[7 + i] = (byte)(name.charAt(i));
@@ -1899,17 +1932,13 @@ public static final String[] SYSEX_PARAMETERS =
         // Load Params
         for(int i = 0; i < SYSEX_PARAMETERS.length; i++)
         	{
-        	if (SYSEX_PARAMETERS[i].equals("--"))
+        	if (i < SYSEX_PARAMETERS.length - 1 && SYSEX_PARAMETERS[i + 1].equals("--"))
         		{
-				// I am LSB
-	        	String key = SYSEX_PARAMETERS[i-1];
-        		data[15 + i] = (byte)(model.get(key) & 127);
-        		}
-        	else if (i < SYSEX_PARAMETERS.length - 2 && SYSEX_PARAMETERS[i + 1].equals("--"))
-        		{
-				// I am MSB
-        		String key = SYSEX_PARAMETERS[i];
-        		data[15 + i] = (byte)((model.get(key) >>> 7) & 127);
+				// MSB + LSB
+        		int val = model.get(SYSEX_PARAMETERS[i]);
+        		data[15 + i] = (byte)((val >>> 7) & 127);
+        		data[15 + i + 1] = (byte)(val & 127);
+				i++;	// skip LSB
         		}
         	else
         		{
@@ -1934,9 +1963,9 @@ public static final String[] SYSEX_PARAMETERS =
         // Load Params
         for(int i = 0; i < SYSEX_PARAMETERS.length; i++)
         	{
-        	if (i < SYSEX_PARAMETERS.length - 2 && SYSEX_PARAMETERS[i + 1].equals("--"))
+        	if (i < SYSEX_PARAMETERS.length - 1 && SYSEX_PARAMETERS[i + 1].equals("--"))
         		{
-				// I am MSB
+				// MSB + LSB
 				model.set(SYSEX_PARAMETERS[i], (data[15 + i] << 7) | data[15 + i + 1]);
 				i++;	// skip LSB
         		}
@@ -1947,6 +1976,7 @@ public static final String[] SYSEX_PARAMETERS =
         		}
         	}
         	
+        revise();
         return PARSE_SUCCEEDED;      
 		}
 
@@ -1962,7 +1992,7 @@ public static final String[] SYSEX_PARAMETERS =
             	// The value is only provided as MSB
             	int val = data.value / 128;
             	
-                char[] name = (model.get("name", "InitPtch") + "        ").toCharArray();
+                char[] name = (model.get("name", "InitPgm") + "        ").toCharArray();
                 name[data.number - 1] = (char)(val);
                 model.set("name", new String(name).substring(0, 8));
             	}
@@ -1971,8 +2001,8 @@ public static final String[] SYSEX_PARAMETERS =
 				String key = nrpnToArg.get(data.number);
 
             	int val = data.value;
-            	if (!
-            		(key.equals("globalstempo") || 
+				// globalstempo, lfo1delay, lfo1rate, lfo2delay, lfo2rate, lfo3delay, lfo3rate
+            	if (!(key.equals("globalstempo") || 
 						(key.startsWith("lfo") && (key.endsWith("delay") || key.endsWith("rate")))))
             		{
 	            	// The value is only provided as MSB
@@ -2006,9 +2036,7 @@ public static final String[] SYSEX_PARAMETERS =
     
 	
 
-//    public int getPauseAfterSendOneParameter() { return 75; }
-    
-    public String getPatchName(Model model) { return model.get("name", "InitPtch"); }
+    public String getPatchName(Model model) { return model.get("name", "InitPgm"); }
         
     public Model getNextPatchLocation(Model model)
         {
@@ -2034,6 +2062,32 @@ public static final String[] SYSEX_PARAMETERS =
         
         return "" + (model.get("number") + 1);
         }
+
+
+        
+    public String[] getPatchNumberNames()  
+        { 
+        return buildIntegerNames(384, 1);
+        }
+
+    public boolean getSupportsPatchWrites() { return true; }
+    public boolean getSupportsDownloads() { return false; }
+
+    public int getPatchNameLength() { return 8; }
+
+    public boolean librarianTested() { return true; }
+
+	int nextPatchPosition = 0;
+	
+	public void updateNumberAndBank(edisyn.Patch incoming)
+		{
+		incoming.number = nextPatchPosition;
+		nextPatchPosition++;
+		if (nextPatchPosition >= 384) 
+			nextPatchPosition = 0;
+		}
+
+    public int getPauseAfterWritePatch() { return 325; }		// The MicroMonsta sends them out at about 325 wait-time
      }
 
 

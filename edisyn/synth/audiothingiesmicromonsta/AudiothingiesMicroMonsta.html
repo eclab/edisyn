@@ -29,6 +29,16 @@ The MicroMonsta has very limited sysex.  At present Edisyn can send a patch to c
 </ul>
 
 
+<p><b>Using the Librarian</b><br>
+
+The MicroMonsta's limited sysex makes using Librarian a challenge.  The MicroMonsta sends patches to Edisyn one at a time, but these patches do not indicate which patch number they are; and furthermore Edisyn can't <i>request</i> patches from the MicroMonsta, so it can't prepare a patch number in advance.  In short, when the patches show up, Edisyn's librarian has no idea where to put them.
+
+<p>To deal with this, the MicroMonsta editor has a special menu option: <b>Set Librarian Download Point</b>.  It works like this.  You open the Librarian and select a patch location.  Then you select Set Librarian Download Point.  Now when a patch comes in, Edisyn will place it in this patch location, and then increment the download point to the next patch location, wrapping around if need be.  
+
+<p>If you don't set a download point, Edisyn will assume you're loading from patch number 0.
+
+<p>Note that setting the Download point has no effect on what happens if you load a patch directly into the editor: in this case, Edisyn still has no idea what number to use, so it'll just set it to 0.
+
 <!--
 <br><br><h3>Thanks</h3>
 -->

@@ -489,7 +489,6 @@ public class AudiothingiesMicroMonsta extends Synth
         receiveCurrent.setEnabled(false);
         receivePatch.setEnabled(false);
         receiveNextPatch.setEnabled(false);
-        //writeTo.setEnabled(false);
         getAll.setEnabled(false);
         
         addMicroMonstaMenu();
@@ -698,13 +697,14 @@ public class AudiothingiesMicroMonsta extends Synth
         comp = new LabelledDial("LFO 2 Mod", this, "filterlfoamount", color, 0, 127);
         hbox.add(comp);
                 
-        comp = new LabelledDial("Tracking", this, "filterkbdtracking", color, 0, 4)
+        comp = new LabelledDial("Keybord", this, "filterkbdtracking", color, 0, 4)
             {
             public String map(int val)
                 {
                 return ("" + (val * 25) + "%");
                 }
             };
+        ((LabelledDial)comp).addAdditionalLabel("Tracking");
         hbox.add(comp);
                 
         category.add(hbox, BorderLayout.WEST);
@@ -985,7 +985,7 @@ public class AudiothingiesMicroMonsta extends Synth
         fxParam[3] = new LabelledDial("Filter Cutoff", this, "fxcutoff", color, 0, 127, 64);
         fxParam[4] = new LabelledDial("LFO Speed", this, "fxspeed", color, 0, 127);
         fxParam[5] = new LabelledDial("LFO Depth", this, "fxdepth", color, 0, 127);
-        fxParam[6] = new LabelledDial("Level", this, "fxmix", color, 0, 127);           // or "Mix" ?
+        fxParam[6] = new LabelledDial("Mix", this, "fxmix", color, 0, 127);           // or "Mix" ?
         
         HBox paramBox = new HBox();
         
@@ -998,12 +998,12 @@ public class AudiothingiesMicroMonsta extends Synth
                 super.update(key, model);
                 int val = model.get(key);
                 paramBox.removeAll();
-                if (val == 1)   // stereoizer
+                if (val == 0)   // stereoizer
                     {
                     paramBox.add(fxParam[3]);       // cut
                     paramBox.add(fxParam[6]);       // mix
                     }
-                else if (val == 2)      // ping pong
+                else if (val == 1)      // ping pong
                     {
                     paramBox.add(fxParam[0]);       // time
                     paramBox.add(fxParam[1]);       // feedback
@@ -1011,14 +1011,14 @@ public class AudiothingiesMicroMonsta extends Synth
                     paramBox.add(fxParam[3]);       // cut
                     paramBox.add(fxParam[6]);       // mix
                     }
-                else if (val == 3)      // filtered delay
+                else if (val == 2)      // filtered delay
                     {
                     paramBox.add(fxParam[0]);       // time
                     paramBox.add(fxParam[1]);       // feedback
                     paramBox.add(fxParam[3]);       // cut
                     paramBox.add(fxParam[6]);       // mix
                     }
-                else if (val == 4)      // modulated delay
+                else if (val == 3)      // modulated delay
                     {
                     paramBox.add(fxParam[0]);       // time
                     paramBox.add(fxParam[1]);       // feedback
@@ -1026,7 +1026,7 @@ public class AudiothingiesMicroMonsta extends Synth
                     paramBox.add(fxParam[5]);       // depth
                     paramBox.add(fxParam[6]);       // mix
                     }
-                else if (val == 5)      // chorus/flanger
+                else if (val == 4)      // chorus/flanger
                     {
                     paramBox.add(fxParam[0]);       // time
                     paramBox.add(fxParam[1]);       // feedback

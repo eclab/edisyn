@@ -44,7 +44,6 @@ public class LabelledDial extends NumericalComponent
 
     public void update(String key, Model model) 
         {
-        //        dial.field.setText(map(getState()));
         dial.repaint(); 
         }
         
@@ -478,11 +477,13 @@ public class LabelledDial extends NumericalComponent
                 return 270;
                 }
             }
+       
+       public static final boolean showRaw = false;
                 
         public void paintComponent(Graphics g)
             {
             // revise label if needed
-            String val = map(getState());
+            String val = (showRaw ? ("" + getState()) : map(getState()));
             if (!(val.equals(dial.field.getText())))
                 dial.field.setText(val);
 

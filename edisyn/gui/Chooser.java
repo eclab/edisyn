@@ -309,8 +309,17 @@ public class Chooser extends NumericalComponent
         setCallActionListener(true);
         }
 
+	public static final boolean showRaw = false;
+	
     public void setElements(String _label, String[] elements, int[] values)
         {
+        if (showRaw)
+        	{
+        	elements = (String[])(elements.clone());
+        	for(int i = 0; i < elements.length; i++)
+        		elements[i] = "" + i + ": " + elements[i];
+        	}
+        	
         setCallActionListener(false);
         if (Style.isUnix())
 		label.setText(_label);

@@ -346,7 +346,7 @@ public class Library extends AbstractTableModel
         {
         pushUndo();
         incoming = new Patch(incoming);         // deep copy
-        // synth.updateNumberAndBank(incoming);
+        synth.updateNumberAndBank(incoming);
         setPatch(incoming);
         }
 
@@ -386,7 +386,13 @@ public class Library extends AbstractTableModel
             synth.showSimpleError("Too Many Patches", "This file has more patches than can be loaded into the library.\nSome patches may not be loaded.");
             len = maxlen;
             }
-            
+        
+        // preprocess
+        for(int i = 0; i < incoming.length; i++)
+        	{
+	        synth.updateNumberAndBank(incoming[i]);
+        	}
+        
         // Break out the known and unknown patches
         ArrayList<Patch> unknown = new ArrayList<Patch>();
         Patch[][] patch = new Patch[getNumBanks()][getBankSize()];
@@ -769,6 +775,7 @@ public class Library extends AbstractTableModel
                 if (!toFile)
                     {
                     int pause = synth.getPauseAfterWritePatch();
+                    System.err.println("PAUSE " + pause);
                     if (pause > 0) 
                         {
                         Object[] newObjs = new Object[objs.length + 1];

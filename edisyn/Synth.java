@@ -8581,7 +8581,9 @@ public abstract class Synth extends JComponent implements Updatable
             librarianCreated(librarian);
             }
         }  
-        
+    
+    public Librarian getLibrarian() { return librarian; }
+    public boolean isLibrarianOpen() { return librarianOpen; }
         
         
         
@@ -9844,6 +9846,12 @@ public abstract class Synth extends JComponent implements Updatable
     /** This is potentially called by a model to fix some errors in the model regardless of
         the setting of updateListeners.  See Proteus 2000. */
     public void fix(String key, Model model) { }
+    
+    /** This is called when we receive a *single* patch without a number or bank and we need to know
+    	where to put it. By default this method does nothing. This largely exists for situations such
+    	as in the MicroMonsta where we receive single patches with no context from the synth and cannot
+    	request patches (so we can't preset the patch number). */
+    public void updateNumberAndBank(Patch patch) { }
     
     /** Notifies the Synth that its librarian has been created. */
     public void librarianCreated(Librarian librarian) { }

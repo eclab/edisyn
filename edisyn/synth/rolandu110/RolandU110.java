@@ -453,6 +453,7 @@ public class RolandU110 extends Synth
     public JComponent addPart(final int part, Color color)
         {
         Category category = new Category(this, "Part " + part, color);
+		category.makePasteable("part");
                 
         JComponent comp;
         String[] params;
@@ -1313,7 +1314,7 @@ public class RolandU110 extends Synth
       Roland 1997 reprint manual and it's just as illegible, like a bad xerox copy -- it appears
       even Roland didn't have a copy of the *original* original).  Here I'm going to try to remedy 
       this to some degree.  Below I describe the sysex involving patch and parameter requests and 
-      dumps. Note that this just deals with patches and individual parameters, not the global 
+      dumps.  Note that this just deals with patches and individual parameters, not the global 
       setup region, nor program change maps.
 
 
@@ -1373,6 +1374,10 @@ public class RolandU110 extends Synth
       Parameters are typically written as single bytes: in this case the data would
       be one byte long and the size would be 000001.  You can write a chunk of the
       parameter address space (for the name, say) if you like.  
+      
+      The NAME characters are broken into 4-byte nybbles.  Thus NAME LSB contains
+      the lower 4 bits of the character and the NAME MSB contains the upper, well,
+      3 bits (since it's ASCII).
 
       To request or dump an individual parameter, the address is:
 
@@ -1566,7 +1571,7 @@ public class RolandU110 extends Synth
       7   1:19  2:4  3:4  4:4
       8   1:15  2:16
       9   1:15  2:12  3:4
-      10   1:15  2:8  3:8             Note: U-110 documentation is wrong
+      10   1:15  2:8  3:8             Note: U-110 documentation is wrong here
       11   1:15  2:8  3:4  4:4
       12   1:15  2:4  3:4  4:4  5:4
       13   1:11  2:12  3:8

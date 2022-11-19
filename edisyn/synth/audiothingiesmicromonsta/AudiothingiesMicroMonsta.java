@@ -562,7 +562,7 @@ public class AudiothingiesMicroMonsta extends Synth
         vbox.add(comp);
         hbox.add(vbox);
         
-        hbox.add(Strut.makeHorizontalStrut(130));
+        hbox.add(Strut.makeHorizontalStrut(140));
                 
         globalCategory.add(hbox, BorderLayout.WEST);
         return globalCategory;
@@ -573,6 +573,7 @@ public class AudiothingiesMicroMonsta extends Synth
     public JComponent addOscillator(int osc, Color color)
         {
         Category category = new Category(this, "Oscillator " + osc, color);
+		category.makePasteable("osc");
 
         JComponent comp;
         String[] params;
@@ -787,6 +788,7 @@ public class AudiothingiesMicroMonsta extends Synth
     public JComponent addEncoders(Color color)
         {
         Category category = new Category(this, "Encoders", color);
+		category.makePasteable("encoderassign");
 
         JComponent comp;
         String[] params;
@@ -820,6 +822,7 @@ public class AudiothingiesMicroMonsta extends Synth
     public JComponent addMatrix(Color color)
         {
         Category category = new Category(this, "Patch Matrix", color);
+		category.makeDistributable("patch");
 
         JComponent comp;
         String[] params;
@@ -860,6 +863,7 @@ public class AudiothingiesMicroMonsta extends Synth
     public JComponent addScaler(Color color)
         {
         Category category = new Category(this, "Scaler", color);
+		category.makeDistributable("scaler");
 
         JComponent comp;
         String[] params;
@@ -921,6 +925,7 @@ public class AudiothingiesMicroMonsta extends Synth
     public JComponent addChorder(Color color)
         {
         Category category = new Category(this, "Chorder", color);
+		category.makePasteable("chorder");
                 
         JComponent comp;
         String[] params;
@@ -1058,6 +1063,7 @@ public class AudiothingiesMicroMonsta extends Synth
     public JComponent addLFO(int lfo, Color color)
         {
         Category category = new Category(this, "LFO " + lfo, color);
+		category.makePasteable("lfo");
 
         JComponent comp;
         String[] params;
@@ -1112,6 +1118,7 @@ public class AudiothingiesMicroMonsta extends Synth
     public JComponent addLFOSteps(Color color)
         {
         Category category = new Category(this, "LFO Stepped Sequence", color);
+		category.makeDistributable("lfostep");
 
         JComponent comp;
         String[] params;
@@ -1140,6 +1147,7 @@ public class AudiothingiesMicroMonsta extends Synth
     public JComponent addEnvelope(int env, Color color)
         {
         Category category = new Category(this, "Envelope " + env, color);
+		category.makePasteable("env");
 
         JComponent comp;
         String[] params;
@@ -1181,6 +1189,7 @@ public class AudiothingiesMicroMonsta extends Synth
     public JComponent addArpeggiator(Color color)
         {
         Category category = new Category(this, "Arpeggiator", color);
+		category.makeDistributable("arptn");
 
         JComponent comp;
         String[] params;
@@ -2104,8 +2113,11 @@ public class AudiothingiesMicroMonsta extends Synth
      The Micromonsta's CC and NRPN values are documented and available online here...
 
      https://www.audiothingies.com/dl/micromonsta/docs/old/micromonsta_midi_map_1.0.pdf
+     
+     [Note that there is an NRPN PARSING BUG in the Micromonsta, see the end of this spec.]
+     [Also note that a few values are both CC *and* NRPN]
         
-     ... however the sysex is not documented at all.  Below is a reverse-engineered specification
+     The sysex however is not documented at all.  Below is a reverse-engineered specification
      for the sysex packet structure.  Note that the packet does not contain a checksum, nor does
      it (unfortunately) contain the patch number nor the ability to store the patch in current
      memory.  It is simply a dump of all the parameters.
@@ -2125,14 +2137,14 @@ public class AudiothingiesMicroMonsta extends Synth
      4        0x4D
      5        0x4D
      6        0x03
-     7        name0  [ASCII 32 -- ASCII 125]
-     8        name1  [ASCII 32 -- ASCII 125]
-     9        name2  [ASCII 32 -- ASCII 125]
-     10       name3  [ASCII 32 -- ASCII 125]
-     11       name4  [ASCII 32 -- ASCII 125]
-     12       name5  [ASCII 32 -- ASCII 125]
-     13       name6  [ASCII 32 -- ASCII 125]
-     14       name7  [ASCII 32 -- ASCII 125]
+     7        name0  [ASCII 32 -- ASCII 123]
+     8        name1  [ASCII 32 -- ASCII 123]
+     9        name2  [ASCII 32 -- ASCII 123]
+     10       name3  [ASCII 32 -- ASCII 123]
+     11       name4  [ASCII 32 -- ASCII 123]
+     12       name5  [ASCII 32 -- ASCII 123]
+     13       name6  [ASCII 32 -- ASCII 123]
+     14       name7  [ASCII 32 -- ASCII 123]
      15       oscstranspose  [40 - 88 as -24 - +24]
      16       osc1type       [See Table 1]
      17       osc1finetune   [0 - 127 as -64 - +63]
@@ -2757,5 +2769,60 @@ public class AudiothingiesMicroMonsta extends Synth
      48 FX Level 
      49 Glide Time 
      50 Patch Tempo 
+
+
+
+NRPN PARSING BUG
+
+The Micromonsta has an NRPN parsing bug you will have to work around.  The MIDI 1.0
+Specification is irritatingly vague and imprecise when it comes to NRPN, but there
+are two items that the MicroMonsta deviates from.  The first deviation is a weird
+oddity, but the second deviation is a serious bug you need to be aware of.
+
+First, in NRPN, you send data packets as MSB (CC 6) and LSB (CC 38).  It is not made 
+clear what the interpretation of these two packets should be: is the data to be 
+interpreted as the integer MSB * 128 + LSB?  Or is it to be interpreted essentially 
+as a "fine tuned" floating-point number MSB + LSB/128.0 ?  This is relevant because
+it changes the integer meaning of *only* sending an MSB or only an LSB.  Some 
+manufacturers (like DSI/Sequential) use the first interpretation -- which I prefer
+as well -- while the spec hints at the second interpretation.
+
+The MicroMonsta uses *both* interpretations.  If the range of the parameter is less
+than 128, then it expects and sends *just the MSB* to hold the parameter.  If the 
+range of the parameter is >= 128, then it expects and sends *both the LSB and MSB* 
+and the number is now interpreted as MSB * 128 + LSB.  So you'll have to handle the 
+parsing of the parameterbased on its range.
+
+Second -- the bug -- the NRPN spec allows you to send the MSB and LSB in either order
+and to emit either one of them (it should be then intepreted initially as zero, and
+thereafter as its previous value until the parameter number is resent).
+
+However the MicroMonsta's parsing is in violation of the spec because it varies 
+depending on the order in which you send the LSB and MSB.  
+
+- If you omit the LSB, the MicroMonsta will assume the parameter value is the MSB.
+
+- If you send the LSB *before* the MSB, it will be ignored regardless of its value
+and the MicroMonsta will again assume the parameter value is the MSB.
+
+- If you send the LSB *after* the MSB, the MicroMonsta will assume that the
+parameter value is MSB * 128 + LSB.
+
+- The MicroMonsta will emit MSB, then the LSB for ranges >= 128 and will emit MSB 
+only for ranges < 128.
+
+You'll be fine if you do the following:
+
+- For ranges < 128, send the value as a single MSB.
+
+- For ranges >= 128, send the value as MSB = val % 128 followed by LSB = val / 128.
+
+- If you receive an MSB, wait for the LSB only if the range is >= 128.  
+
+- For ranges >= 128, interpret the received value as MSB * 128 + LSB
+
+- For ranges < 128, interpret the received value as MSB.
+
+- For CC in all cases, interpret the value as the CC
 
 */

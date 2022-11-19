@@ -60,12 +60,13 @@ Edisyn is a no-nonsense synthesizer patch editor and librarian for the editing a
 \begin{itemize}
 %\item Futuresonus Parva
 \item Alesis D4 and DM5 (Single)
+\item Audiothingies MicroMonsta (Single)
 \item Casio CZ-1, CZ-101, CZ-1000, CZ-3000, CZ-5000, and CZ-230S (Single)
 \item Dave Smith Instruments Prophet '08 and '08 Desktop, Tetra, Mopho, Mopho Keyboard, Mopho SE, and Mopho X4 (Single and (for Tetra) Combo)
 \item E-Mu Morpheus and Ultraproteus (Single, Hyperpreset, and MidiMap)
 \item E-Mu Proteus 1, 1 XR, 2, 2 XR, 3, 3 XR, and 1+Orchestral (Single)
 \item E-Mu Planet Phatt, Orbit and Orbit V2, Carnaval, Vintage Keys, and Vintage Keys Plus (Single)
-\item E-Mu Proteus 1000/2000/2500, Audity 2000, Virtuoso 2000, Xtreme Lead-1, Mo'Phatt, B-3, Planet Earth, Orbit-3, Proteus Custom, XL-1 Turbo, Turbo Phatt, Vintage Pro, XL-7, MP-7, PX-7, PK-6, XK-6, MK-6, Halo, and Vintage Keys Keyboard (Single)
+\item E-Mu Proteus 1000/2000/2500, Audity 2000 v2.x, Virtuoso 2000, Xtreme Lead-1, Mo'Phatt, B-3, Planet Earth, Orbit-3, Proteus Custom, XL-1 Turbo, Turbo Phatt, Vintage Pro, XL-7, MP-7, PX-7, PK-6, XK-6, MK-6, Halo, and Vintage Keys Keyboard (Single)
 \item Kawai K1, K1m, and K1r (Single and Multimode)
 \item Kawai K4 and K4r (Single, Multimode, Drum, Effects)
 \item Kawai K5 and K5m (Single and Multimode)
@@ -894,16 +895,13 @@ This is used to find a new patch \(Q\) which is on the {\it other side} of patch
 The other reason is because you have recently moved from \(S\) to \(P\), and now you'd like to move \(P\) even {\it further} in that direction.  This is the ``minus'' operation  done the Hill-Climbing procedure (see Figure~\ref{hcfigure}).  You'll note from Figure \ref{recombine} that the Opposite procedure takes a {\it flee} argument to distinguish between your two reasons.   This largely influences what will happen if the two parameter values are the same.\footnote{Note that we assume that all metric parameters are integers, not real-valued}.
 }
 
-
-\bump
-
 \subsection{Deep Learned Neural Hill-Climbing and Randomization}
 
 The Yamaha DX7 editor has a special feature thanks to research done here at George Mason University by V.~Hoyle and myself.  Using approximately 30,000 unique DX7 patches found around the internet, we trained a special kind of deep-learned neural network called a {\it variational autoencoder}.  Using this network, we can improve both hill-climbing and patch randomization.
 
 If you're editing a DX7, you can use the neural network in hill-climbing by selecting {\bf NN Hill-Climber} in the Hill-Climber's ``Method'' chooser.  Thereafter instead of creating children patches via recombination and mutation, Edisyn will produce them using the autoencoder.  Similarly, if (when editing a DX7) you select {\bf Edit \(\rightarrow\) Randomize \(\rightarrow\) Randomizes Using NN}, then randomization options will use the autoencoder rather than the standard mutator.
 
-\paragraph{What's the point?}  As anyone who programs synthesizer patches knows, the space of synthesizer patches consists of small regions of good patches surrounded by lots of garbage patch regions, even ones of total silence.  The hill-climber tries many strategies to avoid presenting garbage and silence to the user, but is only partly successful   The goal of the autoencoder is to eliminate as much garbage and silence as possible, thus improving the chances that you'll get decent patch results.  We'd appreciate feedback as to how successful you think we were.
+\paragraph{What's the point?}  As anyone who programs synthesizer patches knows, the space of synthesizer patches consists of small regions of good patches surrounded by lots of garbage patch regions, even ones of total silence.  The hill-climber tries many strategies to avoid presenting garbage and silence to the user, but is only partly successful.   The goal of the autoencoder is to eliminate as much garbage and silence as possible, thus improving the chances that you'll get decent patch results.  We'd appreciate feedback as to how successful you think we were.
  
 \paragraph{How does it work?}  A variational autoencoder is a special kind of neural network trained to take an incoming patch and then output the same exact patch.  The trick, however, is that it has to first squeeze the patch through a narrow data channel much smaller than the size of a standard patch.  And it must successfully do this for all 30,000 training patches fed to it: thy all must be able to be squeezed down and then reconstituted at the other end as best as it can.
 
@@ -941,8 +939,9 @@ Patch slots come in different colors depending on the situation:
 \begin{itemize}
 \item {\it Pale Green: the \textbf{Scratch Bank}}\quad The first column is special.  This isn't a bank in your synthesizer: it's just some extra room for you to temporarily stash stuff as you move things around via drag-and-drop.  It's not written to the synthesizer nor saved to disk.
 \item {\it White}\quad Patches in locations which can be written to your synthesizer.
-\item {\it Pale Magenta}\quad Paatches in locations which cannot be written to your synthesizer because they're {\bf read-only} on your machine.  However you can save them to disk, and can load them from the disk or from your synth.
+\item {\it Pale Magenta}\quad Patches in locations which cannot be written to your synthesizer because they're {\bf read-only} on your machine.  However you can save them to disk, and can load them from the disk or from your synth.
 \item {\it Light Gray with Red Lettering}\quad Patches in locations which cannot be written to your synthesizer because they're {\bf invalid patch locations.}  Why does Edisyn provide them then?  Because some synths have banks with varying lengths or present other unusual situations which violate the rectangular table structure used by Edisyn.  You can treat them as scratch locations.
+\item {\it Light Gray with Black Lettering}\quad Patches in locations which ought not be written to or read from your synthesizer because they're {\bf inappropriate patch locations.}  You could still save these out to disk, however.  For example, the Proteus 2000 has four card slots which can be populated with any of 17 different cards.  If a card is populating a slot, its ``bank'' is displayed in Pale Magenta as normal.  If a card is not populating a slot, its ``bank'' is shown as Inappropriate: it's a real card with legitimate patch locations, so reading its patches from disk is reasonable, but reading them from the synthesizer won't do anything (because it's not installed).  You can treat these spots as scratch locations if you like.
 \item {\it Dark Gray}\quad Patches you have selected.
 \item {\it Pale Violet}\quad The drop location for drag-and-drop.
 \end{itemize}
@@ -994,7 +993,7 @@ Drag and Drop isn't restricted to just one Librarian: if you have two Librarians
 
 Java's table facility is weird about selecting and dragging table cells, but the general rule is this: you must first select a patch or patch range, then {\it let go of the mouse,} before you can go back and drag it. Additionally, when you drag a region, Java is particular about where the dragged region will get dropped.  For example, if you selected a region of ten cells, then clicked on the third cell in the region and dragged it, Java will highlight a drop cell location in pale violet.  This location will be where the third cell will go; and this in turn will determine where the rest of the region will be dropped.   If the region can't fit in that position, then the drop cell won't get highlighted.  If this is confusing to you, I suggest always dragging from the first cell in the selected region: then the drop location will be where the beginning of the region will get dropped.
 
-\paragraph{Renaming Patches}  Select a patch and press Return.  If the patch can be renamed in place, the patch's name editor will pop up.
+\paragraph{Renaming Patches}  Select a patch and press Return.  If the patch can be renamed in place, the patch's name editor will pop up.  Note that you can't name empty slots in the Librarian.
 
 \paragraph{Moving Patches to and from the Editor}
 
@@ -1044,7 +1043,7 @@ In order to receive patches from Edisyn, your synthesizer may need to be set up 
 
 \paragraph{Closing the Librarian}
 
-You can close the Librarian by selecting {\bf Close Librarian} in the {\bf Edit} menu.  The data doesn't go away: if you reopen it, you'll be right back to where you left off.
+You can close the Librarian by selecting {\bf Close Librarian} in the {\bf Edit} menu.  The data doesn't go away: if you reopen it, you'll be right back where you left off.
 
 
 
@@ -1086,6 +1085,7 @@ Figure~\ref{patcheditorcapabilities} is a little table of the current patch edit
 \hline\\[-0.5em]
 %Futuresonus Parva&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}&&&\\
 Alesis D4/DM5&{\cm}*&&{\cm}&&{\cm}&{\cm}& & &{\cm}            \\
+Audiothingies Micromonsta&{\cm}&{\cm}&&&&{\cm}*& & &{\cm}            \\
 Casio CZ&&&{\cm}&{\cm}&{\cm}&{\cm}& & &{\cm}*            \\
 DSI Prophet '08/Mopho/Tetra&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}& & &{\cm}            \\
 E-Mu Morpheus/UltraProteus&{\cm}& &{\cm}& & &{\cm}& & &{\cm}            \\
@@ -1789,13 +1789,21 @@ Both of these methods take a Model called {\bf tempModel} which will hold inform
 
 Finally, you will also probably need to implement {\bf changePatch(...)} to issue a patch change (it'll be called as part of performRequestDump(...)).    It's possible that your synthesizer must pause for a bit after a patch change (the Blofeld, for example, requires almost 200ms).  You may want to implement the {\bf getPauseAfterChangePatch()} method to slow Edisyn down.  If your synth can't change patches to whatever you're editing, that's okay, but you'll need to handle the right behavior later on when you emit a patch to it.
 
-If your synth cannot load the current patch you can avoid implementing some of these methods by saying the following:
+Patch requests often are complicated:
+
+\begin{itemize}
+\item Some synthesizers dump patches from patch memory but do not automatically put them into current working memory.  Others do.  This probably won't matter because Edisyn will update the current working memory when the patch is received. 
+\item Some synthesizers do not include the patch bank and number in their patch dumps.  Thus you will have to call changePatch(...) from within requestDump(...) to preemptively update Edisyn's belief about the current patch in anticipation of the patch coming in.
+\item Some synthesizers cannot dump patches from patch memory at all: you have to ask them to load the patch into current working memory, and then request a dump of current working memory.  This would have to be done inside requestDump(...), commonly as a request to move the patch to current working memory, and then a call to requestCurrentDump(...).
+\item Some synthesizers cannot dump patches from current working memory at all.  If your synth cannot dump the current patch you can avoid implementing some of these methods by saying the following:
 
 \begin{verbatim}
 receiveCurrent.setEnabled(false);  // turns of the "Request Current Patch" menu option
 \end{verbatim}
 
-You should do this in an overridden version of the  {\bf sprout()} method (be absolutely sure to call super.sprout() first).
+You should do this in an overridden version of the  {\bf sprout()} method (be absolutely certain to call \mbox{super.sprout()} first).
+\item There are more weird gotchas than just these\,---\,you might peruse Edisyn's existing editors for strategies to deal with them.
+\end{itemize}
 
 You will also want to override some other methods.  First {\bf getPatchName(model)} should extract the patch name from the provided model (probably via {\tt model.get("name", "foo")}\ ).  Second, you also will want to override the {\bf revisePatchName(...)} method if you've not already done so for the StringComponent widget.  This method modifies a provided name and returns a corrected version.  The default version, which you might call first (via super), removes trailing whitespace.  You can then revise incorrect characters, length, and so on.  Third, if your synthesizer uses an ID to distinguish itself from other synthesizers of the same type (the Waldorf synths do this for example), you should override the {\bf reviseID(...)} method to correct provided IDs.  If this method returns {\tt null} (the default), the  ID won't even appear as an option.
 

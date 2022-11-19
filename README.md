@@ -186,7 +186,7 @@ I have had at least one report that Java 8 on Windows has serious problems with 
 
 #### Dealing with High-Resolution Displays in Windows
 
-Java doesn't handle high-resolution displays properly in Windows, especially Windows 10.  Be sure to have installed at least Java 11 (otherwise you'll have teeny tiny displays).  You'll still have font issues on 4K monitors.  I am told this can help dealing with it:
+Java doesn't handle high-resolution displays properly in Windows, especially Windows 10.  Be sure to have installed at least Java 11 (otherwise you'll have teeny tiny Edisyn windows).  You'll still have font issues on 4K monitors.  I am told this can help dealing with it:
 
 1. Find the java.exe file you installed.
 2. Right-click and select "Properties"

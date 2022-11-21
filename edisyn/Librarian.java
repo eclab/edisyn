@@ -589,7 +589,8 @@ public class Librarian extends JPanel
                 if ((m[i] == synth.writeMenu) && !synth.getSupportsPatchWrites())
                     continue;
                                         
-                if (((JMenuItem)m[i]) != synth.mixAgainMenu)
+                if (((JMenuItem)m[i]) != synth.mixAgainMenu &&
+                	((JMenuItem)m[i]) != synth.hideLibrarianMenu)
                     ((JMenuItem)m[i]).setEnabled(val);
                 }
             }
@@ -929,6 +930,21 @@ public class Librarian extends JPanel
         synth.mixAgainMenu = item;
         item.setEnabled(true);
         item.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_M, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.SHIFT_MASK));
+
+        menu.addSeparator();            
+
+        item = new JMenuItem("Hide Librarian");
+        item.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent evt) 
+                { 
+                synth.hideLibrarian();
+                }
+            });
+        menu.add(item);
+        synth.hideLibrarianMenu = item;
+        item.setEnabled(true);
+        item.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.SHIFT_MASK));
         return menu;
         }
         

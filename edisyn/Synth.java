@@ -93,8 +93,10 @@ public abstract class Synth extends JComponent implements Updatable
     public JMenuItem hillClimbMenu;
     /** The "Morph" menu */
     public JMenuItem morphMenu;
-    /** The "Librarian" menu */
-    public JMenuItem openLibrarianMenu;
+    /** The "Show Librarian" menu */
+    public JMenuItem showLibrarianMenu;
+    /** The "Hide Librarian" menu */
+    public JMenuItem hideLibrarianMenu;
     /** The "Report Next Controller MIDI" menu */
     public JCheckBoxMenuItem testNotes;
     /** The "Repeatedly Send Current Patch" menu */
@@ -3968,19 +3970,19 @@ public abstract class Synth extends JComponent implements Updatable
                 }
             });
  
-        openLibrarianMenu = new JMenuItem("Open Librarian");
-        menu.add(openLibrarianMenu);
-        openLibrarianMenu.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
-        openLibrarianMenu.addActionListener(new ActionListener()
+        showLibrarianMenu = new JMenuItem("Show Librarian");
+        menu.add(showLibrarianMenu);
+        showLibrarianMenu.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_L, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+        showLibrarianMenu.addActionListener(new ActionListener()
             {
             public void actionPerformed( ActionEvent e)
                 {
-                doLibrarian();
+                showLibrarian();
                 }
             });
         if (getPatchNumberNames() == null)           // does not support librarians
             {
-            openLibrarianMenu.setEnabled(false);
+            showLibrarianMenu.setEnabled(false);
             }
 
            
@@ -7858,7 +7860,7 @@ public abstract class Synth extends JComponent implements Updatable
         {
         if (!librarianOpen)
             {
-            doLibrarian();          // open and move to it
+            showLibrarian();          // open and move to it
             }
         librarian.pushUndo();
                                                         
@@ -8554,17 +8556,11 @@ public abstract class Synth extends JComponent implements Updatable
     Librarian librarian;
     boolean librarianOpen = false;
         
-    void doLibrarian()
+    void showLibrarian()
         {
         if (librarianOpen)
             {
-            Component selected = tabs.getSelectedComponent();
-            tabs.remove(librarianPane);
-            openLibrarianMenu.setText("Open Librarian");
-            if (selected == librarianPane)  // we were in the morph pane when this menu was selected
-                tabs.setSelectedIndex(0);
-            librarianOpen = false;
-            menubar.remove(librarianMenu);
+            tabs.setSelectedComponent(librarianPane);
             }
         else
             {
@@ -8574,13 +8570,29 @@ public abstract class Synth extends JComponent implements Updatable
                 }
             librarianPane = addTab("Librarian", librarian);
             tabs.setSelectedComponent(librarianPane);
-            openLibrarianMenu.setText("Close Librarian");
             librarianOpen = true;
             Librarian.setLibrarianMenuSelected(librarianMenu, true, this);
             menubar.add(librarianMenu);
             librarianCreated(librarian);
             }
         }  
+        
+    void hideLibrarian()
+    	{
+        if (librarianOpen)
+            {
+            Component selected = tabs.getSelectedComponent();
+            tabs.remove(librarianPane);
+            if (selected == librarianPane)  // we were in the morph pane when this menu was selected
+                tabs.setSelectedIndex(0);
+            librarianOpen = false;
+            menubar.remove(librarianMenu);
+            }
+        else
+            {
+            // do nothing
+            }
+    	}
     
     public Librarian getLibrarian() { return librarian; }
     public boolean isLibrarianOpen() { return librarianOpen; }
@@ -8681,7 +8693,7 @@ public abstract class Synth extends JComponent implements Updatable
                 {
                 // turn ON librarian
                 if (!librarianOpen)
-                    doLibrarian();
+                    showLibrarian();
 
                 toLibrarian = true;
                 librarian.pushUndo();
@@ -8690,7 +8702,7 @@ public abstract class Synth extends JComponent implements Updatable
                 {
                 // turn off librarian
                 if (librarianOpen)
-                    doLibrarian();
+                    hideLibrarian();
 
                 FileDialog fd = new FileDialog((Frame)(SwingUtilities.getRoot(this)), "Save to Bulk Sysex File...", FileDialog.SAVE);
 
@@ -8730,7 +8742,7 @@ public abstract class Synth extends JComponent implements Updatable
                 {       
                 // turn off librarian
                 if (librarianOpen)
-                    doLibrarian();
+                    hideLibrarian();
 
                 File dir = selectDirectory("Select Directory for Patches",
                     file == null ? null : new File(file.getParentFile().getPath()), 
@@ -8777,7 +8789,7 @@ public abstract class Synth extends JComponent implements Updatable
             // This will never be the case but just in case...
             if (!librarianOpen)
                 {
-                doLibrarian();          // open and move to it
+                showLibrarian();          // open and move to it
                 }
 
             // turn off hill-climbing
@@ -8993,7 +9005,7 @@ public abstract class Synth extends JComponent implements Updatable
         patch.name = name;
         if (!librarianOpen)
             {
-            doLibrarian();          // open and move to it
+            showLibrarian();          // open and move to it
             }
         librarian.getLibrary().receivePatch(patch);
         librarian.updateUndoRedo();             
@@ -9472,7 +9484,7 @@ public abstract class Synth extends JComponent implements Updatable
                     // send it on!
                     if (!otherSynth.librarianOpen)
                         {
-                        otherSynth.doLibrarian();               // open and move to it
+                        otherSynth.showLibrarian();               // open and move to it
                         }
                     otherSynth.librarian.getLibrary().readBanks(data, otherSynth.librarian); 
                     otherSynth.librarian.updateUndoRedo();          
@@ -9483,7 +9495,7 @@ public abstract class Synth extends JComponent implements Updatable
                     // send it on!
                     if (!librarianOpen)
                         {
-                        doLibrarian();          // open and move to it
+                        showLibrarian();          // open and move to it
                         }
                     librarian.getLibrary().readBanks(data, librarian);       
                     librarian.updateUndoRedo();             

@@ -6618,7 +6618,6 @@ public abstract class Synth extends JComponent implements Updatable
                 f = new File(fd.getDirectory(), StringUtility.ensureFileEndsWith(fd.getFile(), ".syx"));
                 os = new FileOutputStream(f);
                 os.write(flatten(emitAll((Model)null, false, true)));
-                os.close();
                 file = f;
                 auxFile = null;
                 setLastDirectory(fd.getDirectory());
@@ -6678,7 +6677,6 @@ public abstract class Synth extends JComponent implements Updatable
                 {
                 os = new FileOutputStream(file);
                 os.write(flatten(emitAll((Model)null, false, true)));
-                os.close();
                 }
             catch (Exception e) // fail
                 {

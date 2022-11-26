@@ -105,7 +105,7 @@ Edisyn is a no-nonsense synthesizer patch editor and librarian for the editing a
 \end{multicols}
 }
 
-You'll note a pattern among these synthesizers: many are very difficult to program.\footnote{So why are the Prophet '08, Blofeld, Kyra, and Microwave XT there then?  Because these synthesizers are all ones I own or have had access to: that's another reason a synth might be in this list.}  That's one of my interests.  
+You'll note a pattern among these synthesizers: many are very difficult to program.\footnote{So why are the Prophet '08, Blofeld, Kyra, and Microwave XT there then?  Because these synthesizers are all ones I own or have had access to: that's another reason a synth might be in this list.  When I come into possession of an interesting synth, I build an editor for it.}  That's one of my interests.  
 
 Edisyn's patch editors try to cover the most common needs, and so in most cases it does not support patches for global parameters, nor for wave, sample, or wavetable editing\footnote{The Blofeld patch editor only supports wavetable {\it uploading}, not {\it editing}: this is because there's an excellent free wavetable-editing tool available at https:/\!/synthtech.com/waveedit which is better than anything I could possibly write.} etc.  
 %Additionally, though it can handle bulk downloads and files and manipulate them in a variety of ways, Edisyn is {\bf not at present a librarian tool}.  You should use a good free librarian software program, such as SysEx Librarian on the Mac.
@@ -265,8 +265,8 @@ When Edisyn loads a bulk sysex file, it will present you a couple of options:
 \begin{itemize}
 \item {\it Select and edit} a single patch from that file, either in the current editor or in a new editor.  Note that if this is a bank patch, you'll be given bank options as discussed next.
 \item {\it Write} (upload) all of the patches in the file, or patches matching a current synth type, to your synthesizer.
-\item {\it Save} all of the patches in the file, or patches matching a current synth type, to bulk files (one bulk file per synth type).
-\item {\it Save} all of the patches in the file, or patches matching a current synth type, to individual patch files.  If there are multiple synth types, the individual patch files will be placed in separate directories by synth type.
+\item {\it Save} all of the patches in the file, or patches matching a current synth type, to one or more bulk files (one bulk file per synth type). You'll select the directory to save in.
+\item {\it Save} all of the patches in the file, or patches matching a current synth type, to individual patch files.  If there are multiple synth types, the individual patch files will be placed in separate directories by synth type.   You'll select the directory to save in.
 \item {\it Load} all of the patches matching a current synth type into the this editor's librarian or into a new librarian.  Note that if these are bank patches, their individual patches will be loaded into the librarian: and they may overwrite other bank patches also being loaded.  See Section~\ref{librarian} for more information about the librarian.
 \end{itemize}
 
@@ -532,6 +532,8 @@ Some parameters, such as the patch name or certain other parameters, can't be mu
 The parameters you have selected will be the only ones changed when you mutate (randomize) a patch.  But if you turn on {\bf Use Parameters for Nudge/Merge} in the {\bf Edit} menu, then recombination (nudging, merging) will be restricted to these parameters as well.
 
 Once you're done choosing parameters to mutate or recombine, just select {\bf Stop Editing Mutation Parameters} in the {\bf Edit} menu.  Note that your parameter choices, as well as using them for recombination, are persistent: they're saved in the preferences.
+
+\bump
 
 \subsection{Morphing}
 \label{morph}
@@ -911,9 +913,7 @@ Once we have trained the autoencoder, we can break it into two pieces: the {\it 
 
 \paragraph{Can you do it on anything but the DX7?} Training an autoencoder requires a great many patches.  Most synths just don't have enough unique patches available online.  One obvious target in the future might be the Yamaha TX81Z: but it's only got around 5000 unique patches, which might not be enough.  We'll see.
  
-\paragraph{About those 30,000 patches...} In Edisyn's \texttt{resources} directory, we have included a text file containing, one to a line, the DX7 parameters of each of those patches as numbers. Perhaps it might be useful to other researchers. 
-
-\bump
+\paragraph{About those 30,000 patches...} In Edisyn's \texttt{resources} directory, we have included a text file containing the DX7 parameters of each of those patches as numbers. Perhaps it might be useful to other researchers. 
 
 \section{The Libriarian}
 \label{librarian}
@@ -928,7 +928,7 @@ Once we have trained the autoencoder, we can break it into two pieces: the {\it 
 
 %\hspace{0em}{\color{red}\bf Warning: The Librarian has only been tested n synthesizers, and is subject to radical change.  You may not  even have it on your version of Edisyn yet.}
 
-Most patch editors in Edisyn sport a simple librarian.  You can call up the librarian (or close it again) by choosing {\bf Open Librarian} from the {\bf File} menu.  The Librarian pops up as its own tab, and looks something like what's shown in Figure~\ref{librarianpanel}, thought the particular layout will vary depending on your synthesizer. The purpose of a librarian is to allow you to load and save, rearrange, and upload or download patches in bulk.  %Edisyn's libarians are rudimentary but they should get the job done.  
+Most patch editors in Edisyn sport a simple librarian.  You can call up the librarian by choosing {\bf Show Librarian} from the {\bf File} menu.  The Librarian pops up as its own tab, and looks something like what's shown in Figure~\ref{librarianpanel}, thought the particular layout will vary depending on your synthesizer. The purpose of a librarian is to allow you to load and save, rearrange, and upload or download patches in bulk.  %Edisyn's libarians are rudimentary but they should get the job done.  
 
 The Librarian presents itself as a table with columns and rows.  Each column is a {\it bank} in your synthesizer, and each row is a {\it patch number} across all banks.  Edisyn tries to label the banks and the patch numbers like your synthesizer does.  You can rearrange and resize the bank columns.  
 
@@ -941,15 +941,20 @@ Patch slots come in different colors depending on the situation:
 \item {\it White}\quad Patches in locations which can be written to your synthesizer.
 \item {\it Pale Magenta}\quad Patches in locations which cannot be written to your synthesizer because they're {\bf read-only} on your machine.  However you can save them to disk, and can load them from the disk or from your synth.
 \item {\it Light Gray with Red Lettering}\quad Patches in locations which cannot be written to your synthesizer because they're {\bf invalid patch locations.}  Why does Edisyn provide them then?  Because some synths have banks with varying lengths or present other unusual situations which violate the rectangular table structure used by Edisyn.  You can treat them as scratch locations.
-\item {\it Light Gray with Black Lettering}\quad Patches in locations which ought not be written to or read from your synthesizer because they're {\bf inappropriate patch locations.}  You could still save these out to disk, however.  For example, the Proteus 2000 has four card slots which can be populated with any of 17 different cards.  If a card is populating a slot, its ``bank'' is displayed in Pale Magenta as normal.  If a card is not populating a slot, its ``bank'' is shown as Inappropriate: it's a real card with legitimate patch locations, so reading its patches from disk is reasonable, but reading them from the synthesizer won't do anything (because it's not installed).  You can treat these spots as scratch locations if you like.
+\item {\it Light Gray with Black Lettering}\quad Patches in locations which ought not be written to or read from your synthesizer because they're {\bf inappropriate patch locations.}  You could still save these out to disk, but the synthesizer likely will not respond them if you try to request or write them.  For example, the Proteus 2000 has four card slots which can be populated with any of 20 different read-only cards.  If a card is populating a slot, its ``bank'' is displayed in Pale Magenta as normal.  If a card is not populating a slot, its ``bank'' is shown as Inappropriate: it's a real card type with legitimate patch locations, and which {\it could} be installed on a synth, so reading/writing its patches to the disk is reasonable, but accessing them on your synthesizer won't do anything (because it's not installed on your machine).  You can treat these spots as scratch locations if you like.
 \item {\it Dark Gray}\quad Patches you have selected.
-\item {\it Pale Violet}\quad The drop location for drag-and-drop.
+\item {\it Violet}\quad The drop location for drag-and-drop.
 \end{itemize}
 
 \paragraph{Relationship with the Editor} 
 
 Many editor/librarian GUIs out there organize themselves so that you're presented with a librarian first, and can only edit patches once you have selected them in the librarian.  Edisyn doesn't do this: it is first and foremost an editor.  The Librarian is entirely separate from the editor and works independently of it.  For example, if you select a patch in the Librarian and arrange for it to be edited in the editor, the editor is editing a {\it copy} of the patch, not the original patch in the librarian. They're not linked.  You'll have to copy it back to the librarian once you have finished editing it.
 
+\paragraph{Jumping to and Hiding the Librarian}
+ 
+Some other software packages display the librarian and the editor at the same time, so you can select a patch in the librarian list and immediately see it displayed in the editor.  Edisyn doesn't do this.  However, if you double-click on a patch to see it in the editor, you can go back to the librarian very quickly by choosing {\bf Show Librarian} again (or better yet, pressing Command-L on the Mac or Control-L on Windows/Linux).
+
+You can hide the Librarian by selecting {\bf Hide Librarian} in the {\bf Librarian} menu.  The data doesn't go away: if you reopen it, you'll be right back where you left off.
 
 
 \subsection{Loading and Downloading} 
@@ -1019,7 +1024,7 @@ If you drag patches from one Librarian into another, you have affected {\it two 
 
 \paragraph{Exploration Tools} If you have selected a group of patches, you can route them to be Nudge targets, Morph targets, or the initial values of the Hill-Climber by choosing {\bf To Nudge Targets}, {\bf To Morph Targets}, or {\bf To Hill-Climber} respectively.   The Librarian also has its own unique exploration tool, {\bf mixing}, which lets you blend a potentially large number of patches into one single patch.  See the {\bf Mix} paragraph in Section~\ref{explorationtools} for discussion of this.
 
-\subsection{Writing and Saving} 
+\subsection{Saving to Disk and Writing to Your Synthesizer} 
 
 \paragraph{Saving Patches to a File}
 
@@ -1040,10 +1045,6 @@ To write all patches to your synthesizer, choose {\bf Write All Patches} from th
 Keep in mind that if you choose the {\bf Write to Patch...} or {\bf Send to Current Patch} menu options from the {\bf MIDI} menu, this will write the current patch in the {\it editor}, not in the Librarian, even if you have selected a single patch.  It probably isn't what you wanted to do.
 
 In order to receive patches from Edisyn, your synthesizer may need to be set up properly, such as turning off memory protection. See your patch editor's About Panel for instructions.
-
-\paragraph{Closing the Librarian}
-
-You can close the Librarian by selecting {\bf Close Librarian} in the {\bf Edit} menu.  The data doesn't go away: if you reopen it, you'll be right back where you left off.
 
 
 

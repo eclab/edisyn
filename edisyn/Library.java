@@ -965,7 +965,7 @@ public class Library extends AbstractTableModel
             {
             // we're gonna attempt individual patch writes for the whole synth so we should make that clear to the user
             title = "Save All Patches";
-            query = "Save all Patches...";
+            query = "Save All Patches...";
             }
 
         int result = Synth.showMultiOption(synth, str, comp, 
@@ -1041,9 +1041,8 @@ public class Library extends AbstractTableModel
 
         if (d != null)
             {
-            File dir = synth.selectDirectory("Select Directory for Patches",
-                synth.getFile() == null ? null : new File(synth.getFile().getParentFile().getPath()), 
-                true);
+            File dir = synth.selectDirectory(Style.isMac() ? "Select a Directory to Save Patches..." : "Select Directory to Save Patches",
+                synth.getFile() == null ? null : new File(synth.getFile().getParentFile().getPath()));
                                 
             if (dir != null)
                 {

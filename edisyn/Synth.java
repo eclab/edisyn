@@ -7653,8 +7653,8 @@ public abstract class Synth extends JComponent implements Updatable
                                 merge ? "Merge" : (isShowingLimitedBankSysex() ? "Load" : "Load In This Editor"), 
                                 "Load in New Editor", 
                                 "Write All Patches to Synth...", 
-                                "Save All Patches as Bulk...", 
-                                "Save All Patches Individually...", 
+                                "Save All Patches as Per-Synth Bulk Files...", 
+                                "Save All Patches as Individual Files...", 
                                 "Load All Patches into This Librarian",
                                 "Load All Patches into New Librarian",
                                 "Cancel", 
@@ -7920,32 +7920,39 @@ public abstract class Synth extends JComponent implements Updatable
         This method uses Mac-specific features to display a better file chooser
         than the JFileChooser.
     */ 
-    public File selectDirectory(String title, File initialParentDirectory, boolean save)
+    public File selectDirectory(String title, File initialParentDirectory)
         {
         Frame parent = (Frame)(SwingUtilities.getRoot(this));
         
         if (Style.isMac())
             {
-            // MacOS's SAVE dialog is broken for directories.  We're forced to use the LOAD version
-            // Thanks to samstaton on github
-            
-            FileDialog fd = new FileDialog(parent, title, FileDialog.LOAD);
-            if (initialParentDirectory != null)
-                fd.setDirectory(initialParentDirectory.getAbsolutePath());
-            disableMenuBar();
-            System.setProperty("apple.awt.fileDialogForDirectories", "true");
-            fd.setVisible(true);
-            System.setProperty("apple.awt.fileDialogForDirectories", "false");
-            enableMenuBar();
-            
-            if (fd.getDirectory() == null)
-                {
-                return null;
-                }
-            else 
-                {
-                return new File(fd.getDirectory(), fd.getFile());
-                }
+            if (showSimpleConfirm("Select Directory", title, "Select..."))
+            	{
+				// MacOS's SAVE dialog is broken for directories.  We're forced to use the LOAD version
+				// Thanks to samstaton on github
+			
+				FileDialog fd = new FileDialog(parent, title, FileDialog.LOAD);
+				if (initialParentDirectory != null)
+					fd.setDirectory(initialParentDirectory.getAbsolutePath());
+				disableMenuBar();
+				System.setProperty("apple.awt.fileDialogForDirectories", "true");
+				fd.setVisible(true);
+				System.setProperty("apple.awt.fileDialogForDirectories", "false");
+				enableMenuBar();
+			
+				if (fd.getDirectory() == null)
+					{
+					return null;
+					}
+				else 
+					{
+					return new File(fd.getDirectory(), fd.getFile());
+					}
+				}
+			else
+				{
+				return null;
+				}
             }
         else
             {
@@ -7979,9 +7986,11 @@ public abstract class Synth extends JComponent implements Updatable
         
     boolean saveAllPatches(Patch[][] patches, int patchType, boolean groupByType)
         {
-        File dir = selectDirectory(groupByType ? "Select Directory to Save Patch Groups" : "Select Directory to Save Patches",
-            file != null ? new File(file.getParentFile().getPath()) : (getLastDirectory() == null ? new File(getLastDirectory()) : null), 
-            true);
+        File dir = selectDirectory(
+        	Style.isMac() ? 
+        		(groupByType ? "Select a Directory to Save Bulk Patch Files..." : "Select a Directory to Save Patches...") :
+        		(groupByType ? "Select Directory to Save Bulk Patch Files" : "Select Directory to Save Patches"),
+            file != null ? new File(file.getParentFile().getPath()) : (getLastDirectory() == null ? new File(getLastDirectory()) : null));
         if (dir != null) setLastDirectory(dir.getParent());
         
         /*
@@ -8085,6 +8094,7 @@ public abstract class Synth extends JComponent implements Updatable
                     for(int j = 0; j < patches[i].length; j++)
                         {
                         String name = ("" + (count++) + (patches[i][j].name == null ? "" : "." + patches[i][j].name));
+                        name = StringUtility.makeValidFilename(name);
                         File f = new File(subdir, name + ".syx");
                         try
                             {
@@ -8744,9 +8754,8 @@ public abstract class Synth extends JComponent implements Updatable
                 if (librarianOpen)
                     hideLibrarian();
 
-                File dir = selectDirectory("Select Directory for Patches",
-                    file == null ? null : new File(file.getParentFile().getPath()), 
-                    true);
+                File dir = selectDirectory(Style.isMac() ? "Select a Directory to Save Patches..." : "Select Directory to Save Patches",
+                    file == null ? null : new File(file.getParentFile().getPath()));
                 if (dir != null) setLastDirectory(dir.getParent());
                 
                 if (dir == null)

@@ -24,8 +24,6 @@ import javax.sound.midi.*;
 
 public class AudiothingiesMicroMonsta extends Synth
     {
-    /// Various collections of parameter names for pop-up menus
-        
     public static final String[] OSCILLATOR_WAVEFORMS = new String[] 
     {
     /*
@@ -2128,7 +2126,7 @@ public class AudiothingiesMicroMonsta extends Synth
 
 
 
-     BYTE PARAMETER
+     BYTE     PARAMETER
 
      0        0xF0
      1        0x00   (Audiothingies)
@@ -2776,10 +2774,10 @@ NRPN PARSING BUG
 
 The Micromonsta has an NRPN parsing bug you will have to work around.  The MIDI 1.0
 Specification is irritatingly vague and imprecise when it comes to NRPN, but there
-are two items that the MicroMonsta deviates from.  The first deviation is a weird
-oddity, but the second deviation is a serious bug you need to be aware of.
+are two items that the MicroMonsta deviates from.  The first deviation is just a 
+strange oddity, but the second deviation is a serious bug you need to be aware of.
 
-First, in NRPN, you send data packets as MSB (CC 6) and LSB (CC 38).  It is not made 
+In NRPN, you send data packets as MSB (CC 6) and LSB (CC 38).  It is not made 
 clear what the interpretation of these two packets should be: is the data to be 
 interpreted as the integer MSB * 128 + LSB?  Or is it to be interpreted essentially 
 as a "fine tuned" floating-point number MSB + LSB/128.0 ?  This is relevant because
@@ -2791,14 +2789,15 @@ The MicroMonsta uses *both* interpretations.  If the range of the parameter is l
 than 128, then it expects and sends *just the MSB* to hold the parameter.  If the 
 range of the parameter is >= 128, then it expects and sends *both the LSB and MSB* 
 and the number is now interpreted as MSB * 128 + LSB.  So you'll have to handle the 
-parsing of the parameterbased on its range.
+parsing of the parameter based on its range.
 
 Second -- the bug -- the NRPN spec allows you to send the MSB and LSB in either order
 and to emit either one of them (it should be then intepreted initially as zero, and
-thereafter as its previous value until the parameter number is resent).
+thereafter as its previous value until the parameter number is resent, at which time
+it should be interpreted as zero again).
 
-However the MicroMonsta's parsing is in violation of the spec because it varies 
-depending on the order in which you send the LSB and MSB.  
+However the MicroMonsta's parsing varies depending on the order in which you send 
+the LSB and MSB.  
 
 - If you omit the LSB, the MicroMonsta will assume the parameter value is the MSB.
 

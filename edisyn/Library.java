@@ -20,7 +20,7 @@ import edisyn.gui.*;
    temporarily while moving things around.  Banks can be writeable, and both banks and
    patch numbers have names which resemble the names used by the synthesier in question.
    The library has a backpointer to an existing Synth.  The Library also has full support
-   for its own internal undo and redo.
+   for its own internal undo and redo.   
         
 **/
 

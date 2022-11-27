@@ -231,6 +231,8 @@ public class Library extends AbstractTableModel
     //// UNDO/REDO
         
     // Make a shallow copy of the patches
+    // A shallow copy is okay because when we modify a patch we make a copy, modify it,
+    // and replace the original.  [I hope]
     Patch[][] copy()
         {
         Patch[][] np = new Patch[patches.length][patches[0].length];

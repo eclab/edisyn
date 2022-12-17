@@ -22,6 +22,7 @@
 \usepackage{ragged2e}
 \usepackage[svgnames]{xcolor}
 \usepackage[hyperfootnotes=false,linktocpage=true,linkbordercolor={0.5 0 0}]{hyperref}
+\usepackage{tocloft}
 \hypersetup{
     colorlinks,
     linkcolor={red!50!black},
@@ -44,6 +45,10 @@ By Sean Luke\qquad sean@cs.gmu.edu}\\[0.2em]
 
 \vspace{-1em}
 \setcounter{tocdepth}{2}
+%%% This is why we included tocloft.  See https://tex.stackexchange.com/questions/436063/spacing-between-number-and-text-in-toc
+\advance\cftsecnumwidth 0.25em\relax
+\advance\cftsubsecindent 0.25em\relax
+\advance\cftsubsecnumwidth 0.25em\relax
 \tableofcontents
 
 \clearpage
@@ -256,7 +261,7 @@ Most patch editor files are sysex dumps ending in the extension {\tt .syx}.  The
 Some patch editor files have encoded the sysex dumps as MIDI files (typically ending with the extension {\tt .mid}.  Edisyn can extract sysex from these files as well.
 
 \subsection{Loading or Receiving a Bulk- or Bank-Sysex File}
-Edisyn tends to work with files which contain a single patch each.   However many patch files on the internet contain multiple patches.  There are two kinds of files of this type: what I call {\bf bulk sysex} files, and {\bf bank sysex} files. 
+Edisyn often works with files which contain a single patch each.   However many patch files on the internet contain multiple patches.  There are two kinds of files of this type: what I call {\bf bulk sysex} files, and {\bf bank sysex} files. 
 
 A {\bf bulk sysex} file is just a bunch of individual patch sysex messages concatenated together\,---\,you could just cut it up into separate single-patch files if you liked.\footnote{This is harder than it sounds: some synthesizer patches consist of not one but several sysex messages as a group, and the number isn't consistent.  Edisyn does its best to sort out what the patches are in the file, but if you get something which looks wrong, send the file to me and let me look at it.}    Bulk sysex files are found in many synthesizers, such as the DSI Prophet '08 or the Yamaha FS1R or the Waldorf Blofeld.  It is possible that a bulk sysex file contains patch entries for several different kinds of editor types or even entirely different kinds of synthesizers.  For example, a bulk sysex file might contain entries for both single patches and multi patches for a given synthesizer, and these are loaded into different editors.  Edisyn will inform you when there are patches for different editors involved, and let you first select which editor you're interested in, then select which patch you want to edit. 
 
@@ -267,7 +272,7 @@ When Edisyn loads a bulk sysex file, it will present you a couple of options:
 \item {\it Write} (upload) all of the patches in the file, or patches matching a current synth type, to your synthesizer.
 \item {\it Save} all of the patches in the file, or patches matching a current synth type, to one or more bulk files (one bulk file per synth type). You'll select the directory to save in.
 \item {\it Save} all of the patches in the file, or patches matching a current synth type, to individual patch files.  If there are multiple synth types, the individual patch files will be placed in separate directories by synth type.   You'll select the directory to save in.
-\item {\it Load} all of the patches matching a current synth type into the this editor's librarian or into a new librarian.  Note that if these are bank patches, their individual patches will be loaded into the librarian: and they may overwrite other bank patches also being loaded.  See Section~\ref{librarian} for more information about the librarian.
+\item {\it Load} all of the patches matching a current synth type into the this editor's {\bf Librarian} (Section~\ref{librarian}) or into a new librarian.  Note that if these are bank patches, their individual patches will be loaded into the librarian: and they may overwrite other bank patches also being loaded.s
 \end{itemize}
 
 Other synthesizers have special {\bf bank sysex} messages.  Here, an entire bank (or in some cases, an entire synthesizer's memory's worth) of patches are stored in a single special sysex message.  For example, most files on the internet for the Yamaha DX7 synthesizer are bank sysex files.   Edisyn might find a message like this when loading a file, or it might receive the message from the synth over MIDI.   When Edisyn has received a bank sysex message or has loaded one from a file, you can:
@@ -276,12 +281,9 @@ Other synthesizers have special {\bf bank sysex} messages.  Here, an entire bank
 \item {\it Select and edit} a single patch from that file, either in the current editor or in a new editor
 \item {\it Write} (upload) all of the patches in the bank to your synthesizer.
 \item {\it Save} the whole bank to a single bank sysex file.
-\item {\it Load} all of the patches in the bank into the this editor's librarian or into a new librarian.    See Section~\ref{librarian} for more information about the librarian.
-\end{itemize}
+\item {\it Load} all of the patches in the bank into the this editor's {\bf Librarian} (Section~\ref{librarian}) or into a new librarian.    \end{itemize}
 
 It's entirely possible that a bulk sysex file might itself contain multiple bank sysex messages (or a mixture of bank and standard messages).  These sysex messages will typically be labelled ``Bank Sysex'', since Edisyn usually has no other patch name for them (with the exception of the Yamaha FB-01).  If from the Bulk Sysex window you select a bank sysex message to edit, Edisyn will then present you with the Bank Sysex window for that bank. 
-
-Edisyn cannot presently construct (and thus save or upload) new bank or bulk sysex messages or files.
 
 \subsection{Batch Downloads}
 Edisyn also has limited support for batch-downloading patches, one by one, and saving them to your disk as separate files or as one bulk sysex file; or to load them in Edisyn's {\bf Librarian} (see Section~\ref{librarian}).  To do this, choose {\bf Batch Download...} from the {\bf File} menu.  You'll be asked to specify the directory in which to save patch files, or the bulk sysex file to save as, and also first patch and the final patch, and then downloading will commence.  Note that if your final patch is ``before'' the first patch, then Edisyn will wrap all the away around to get to the final patch.  For example, if your synth has ten patches 1....10, and you choose 8 as your first patch and 2 as your last patch, then Edisyn will download in this order: 8, 9, 10, 1, 2.
@@ -451,7 +453,7 @@ This procedure will create a bunch of of virtual devices with names like {\tt Vi
 
 Edisyn has a large number of facilities to help you program your synthesizer, including tools to help you wander through the  space of possible patches to hunt for the sound you want.  The most powerful are its Hill-climber and Morpher.   Here's an overview.
 
-\subsection{Editing Tools} 
+\subsection{Editing Tools: Undo/Redo, Cut and Paste, Distribution, and Resetting} 
 
 \paragraph{Undo and Redo}  Edisyn has infinite levels of undo and redo.  When you change a parameter or do a wholesale modification, this can be undone, as can patch dumps and merges from the synthesizer.  Individual parameter changes made manually on the synthesizer are not undoable even if they're reflected in Edisyn (it'd be too many).  Loading and saving patches is not undoable.  See the {\bf Edit} menu.
 
@@ -465,6 +467,7 @@ Edisyn has a large number of facilities to help you program your synthesizer, in
 \item {\bf Distribute}\quad  Copies the last-modified parameter to all similar parameters in the category.  For example, if you modified a step sequencer step, this might copy its value to all 15 other steps.  {\bf Note} that you won't be able to select this option until you have actually {\it modified}, even slightly, some parameter inside the Category\,---\,perhaps a dial, say.
 \item You can also restrict your {\bf Copy, Paste,} or {\bf Distribute} to mutation parameters only.
 \item {\bf Reset} \quad  This resets all the parameters in the category to their defaults.
+\item {\bf Randomize...}\quad Randomize the parameters in the category.  See {\it Randomize} in Section~\label{explorationtools} below.
 \end{itemize}
 
 \paragraph{Tab Cut/Paste and Reset}  For some synths, you can also cut/paste entire tabs.  Choose these menu options under the {\bf Edit} menu:
@@ -477,10 +480,10 @@ Edisyn has a large number of facilities to help you program your synthesizer, in
 \item {\bf Reset} \quad  This resets all the parameters in the tab to their defaults.
 \end{itemize}
 
-\subsection{Exploration Tools} 
+\subsection{Basic Exploration: Randomization, Merging, Blending, Nudging, and Mixing} 
 \label{explorationtools} 
 
-\paragraph{Randomize (by some amount)}  You can add some randomness your patch parameters.  Try a small value: values \(\geq 50\%\) are essentially full randomization.  See the {\bf Randomize} submenu in the {\bf Edit} menu.   Because it's so common to randomize, then undo and try again, you can also do undo-and-randomize-again as a single task: select {\bf Undo and Randomize Again} in the {\bf Randomize} submenu of the {\bf MIDI} menu.  %See below for a discussion of how randomization (called {\bf mutation}) works in Edisyn.
+\paragraph{Randomize (by some amount)}  You can add some randomness your patch parameters.  See the {\bf Randomize} submenu in the {\bf Edit} menu.   Because it's so common to randomize, then undo and try again, you can also do undo-and-randomize-again as a single task: select {\bf Undo and Randomize Again} in the {\bf Randomize} submenu of the {\bf MIDI} menu.    You can also randomize individual categories: just click on the category name to get options.
 
 \paragraph{Merge (by some amount)}  This causes Edisyn to directly {\bf recombine}  with your current patch with another patch to form a randomly merged patch.  You specify the degree of recombination as a percentage: see the options in the {\bf Request Merge} submenu of the {\bf MIDI} menu.
 
@@ -500,13 +503,15 @@ When you chose any of {\bf Towards 1:...} through {\bf Towards 4:...}, your curr
 
 A hint.  It's a good idea to select target patches which don't have some radical difference creating a nonlinearity in the space between them: for example, if you were doing FM, I'd pick patches which all used the same operator Algorithm.  See below for a discussion of how recombination works in Edisyn.
 
+Nudge is a slow and fine-grained process.  If you'd like something more real-time that operates similarly, see the Morpher (Section~\ref{morph}).
+
 \paragraph{Mix}  This option is available in the Librarian (Section~\ref{librarian}).  Here, you select several patches as parents, and Edisyn will use {\it cross them over} to form a new child patch.  Unlike recombination, crossover doesn't interpolate parameters between parents: instead the child is some {\it combination} of the parents' parameters.  You have four options depending on how much you want to bias the result to favor the earlier (topmost) patch or patches.
 
 \begin{itemize}
 \item Mix Uniformly.  The child patch is a uniform combination of all the parent patches.
-\item Mix Light Bias.  The child patch consists of 1/3 of the first (topmost) parent patch, with the remainder being 1/3 of the next parent, and so on.  The last two parents split their remainder fifty-fifty.
-\item Mix Medium Bias.  The child patch consists of 1/2 of the first (topmost) parent patch, with the remainder being 1/2 of the next parent, and so on.  The last two parents split their remainder fifty-fifty.
-\item Mix Heavy Bias.  The final patch consists of 2/3 of the first (topmost) parent patch, with the remainder being 2/3 of the next parent, and so on.  The last two parents split their remainder fifty-fifty.
+\item Mix Light Bias.  1/3 of the child patch consists of elements from the first (topmost) parent patch; 1/3 of the remainder is drawn from the next parent, and so on.  The last two parents split their contribution of the remainder fifty-fifty.
+\item Mix Medium Bias.  1/2 of the child patch consists of elements from the first (topmost) parent patch; 1/2 of the remainder is drawn from the next parent, and so on.  The last two parents split their contribution of the remainder fifty-fifty.
+\item Mix Heavy Bias.  2/3 of the child patch consists of elements from the first (topmost) parent patch; 2/3 of the remainder is drawn from the next parent, and so on.  The last two parents split their contribution of the remainder fifty-fifty.
 \item Do Mix Again.  Perform the same random mix as last time.  You can choose this (it has a menu shortcut) from any panel in the editor, not just the Librarian.  This allows you to try a mix, then repeatedly try new ones with the shortcut until you find one you like.
 \end{itemize}
 
@@ -514,7 +519,7 @@ A hint.  It's a good idea to select target patches which don't have some radical
 
 \paragraph{Morph}  Morphing interpolates in real-time between four different patches.  It's similar to nudge in certain respects, but is more interactive.  The big difference is that Nudge always moves the patch directly towards or away from a single patch (of four); but Morph changes the patch based on its relative distance to up to four patches in combination.   For more on the Morph tool, see Section \ref{morph}.
 
-\subsection{Restricting Exporation to Only Certain Parameters}
+\subsection{Restricting Exploration to Only Certain Parameters}
 \label{restriction} 
 
 \begin{wrapfigure}{r}{3in}
@@ -524,7 +529,7 @@ A hint.  It's a good idea to select target patches which don't have some radical
 
 You can restrict the Mutation and Recombination portions of exploration (used in Randomize, Nudge, Merge, Blend, Hill-Climb/Constrict, and Morph) to only affect a subset of parameters.  To do this, choose {\bf Edit Mutation Parameters} in the {\bf Edit} menu.  This will turn on {\it Mutation Parameters} mode (you'll see it in the window's title bar).  You'll note that various widgets have now been surrounded with red frames.  These widgets control synth parameters which are presently are being updated when you mutate a patch. 
 
-You can change these of course: just click on them and you can remove them from being updated (or add them back).\footnote{Note that due to an error in Java's design, you can't click directly on a Combo Box (a pop-up menu) such as the ``Wave'' combo box in Figure \ref{mutationparameters}.  But you can click on its title (the text ``Wave'').}  You can also turn on (or turn off) all of the parameters in a category by double-clicking on the category title.  The categories in Figure \ref{mutationparameters} are {\it Yamaha TX81Z}, {\it Global}, {\it LFO}, and {\it Controllers}.  Finally, you can turn on all the parameters in the entire patch editor by selecting {\bf Set All Mutation Parameters} in the {\bf Edit} menu, or conversely turn them all of by selecting {\bf Clear All Mutation Parameters}.
+You can change these of course: just click on them and you can remove them from being updated (or add them back).\footnote{Note that due to an error in Java's design, you can't click directly on a Combo Box (a pop-up menu) such as the ``Wave'' combo box in Figure \ref{mutationparameters}.  But you can click on its title (the text ``Wave'').}  You can also turn on (or turn off) all of the parameters in a category by double-clicking on the category title while in Edit Mutation Parameters mode (the categories in Figure \ref{mutationparameters} are {\it Yamaha TX81Z}, {\it Global}, {\it LFO}, and {\it Controllers}).  Finally, you can turn on all the parameters in the entire patch editor by selecting {\bf Set All Mutation Parameters} in the {\bf Edit} menu, or conversely turn them all of by selecting {\bf Clear All Mutation Parameters}.
 
 
 Some parameters, such as the patch name or certain other parameters, can't be mutated no matter what: these have been declared {\it immutable} by the patch editor.  They will never have a red frame no matter how much you click them.
@@ -566,11 +571,11 @@ Patches are updated on your synthesizer in real time as you change the joystick 
 
 If your synth does not support patch requests, you can go back to the current patch editor, manually request the current patch, then go back to the Morpher and initialize a corner with {\it Set to Editor Patch}.
 
-If you don't initialize a corner, it is set to ``[Empty]''.  Empty corners do not participate in affecting the sound at the Joystick cursor position.  
+If you don't initialize a corner, it is set to ``[Empty]''.  Empty corners do not participate in morphing.
 
-\paragraph{Morphing} Once your corners are set up, drag the joystick cursor and listen to the result.  Here's how morphing is done.  Edisyn first computes the {\it distance} from each corner to the Joystick cursor: it's not what you think.  Think of the grid as a perfect square.  The distance is the maximum of the X distance and the Y distance.  The patch's metric (numerical) parameters, such as, say, Filter Cutoff, are based on the average of the four corners, each weighted by its distance.  The further the distance, the less important the corner.
+\paragraph{Morphing} Once your corners are set up, drag the joystick cursor and listen to the result.  Here's how morphing is done.  Edisyn first computes the {\it distance} from each corner to the Joystick cursor: it's not what you think.  Think of the grid as a perfect square.  The distance is the maximum of the X distance and the Y distance from the Joystick to the corner.  The patch's metric (numerical) parameters, such as, say, Filter Cutoff, are based on the average of the four corners, each weighted by its distance.  The further the distance, the less impact the patch in that corner has on that parameter.
 
-Non-metric parameters, such as (say) choice of filter or the PCM sampled sound played, are a different matter.  The value for a non-metric parameter is based on a strategy of your choice.  You can force the sound to draw its non-metric parameters entirely from  the current patch, from any of the four corners, or from the closest corner.  Or you can {\it Morph} the non-metric parameter.  This means that as you approach a corner, the probability that the metric parameter will change to match the patch in that corner increases.  
+Non-metric parameters, such as (say) choice of filter or the PCM sampled sound played, are a different matter.  The value for a non-metric parameter is based on a strategy of your choice.  You can force the sound to draw its non-metric parameters entirely from  the current patch, from any of the four corners, or from the closest corner.  Or you can {\it Morph} the non-metric parameter.  This means that as you approach a corner, the {\it probability} that the metric parameter will be set to match the patch in that corner increases.  
 
 \paragraph{Auditioning} As you are morphing, you'll want to hear the sound in real time: that's the whole point.  The Morpher turns repeatedly sends test notes just as the Hill-Climber does.   But the big issue is when and how often the morphed patch is sent to the synthesizer.  You have several options here, under the {\it Send to Synth} chooser:
 
@@ -593,6 +598,8 @@ You can turn off automatic test notes by turning off {\bf Send Test Notes} or by
 \paragraph{Exporting a Patch} When you are satisfied with the current sound at your Joystick cursor, you can save it by pressing the {\it Export...} button.  Your three options are to {\it Keep Patch}, which loads the cursor patch into the current editor, {\it Edit Patch}, which loads it into a new patch editor, and {\it Save to File}, which, well, saves it to a file.
 
 \paragraph{Quitting} Quitting the Morpher works much like quitting the Hill-Climber: choose {\bf  Stop Morphing} in the {\bf Edit} menu.
+
+\paragraph{\color{red}Hint} Often different patches vary in pitch: for example one patch may be pitched down an octave from another.  If yo morph between these two patches, the pitch will get interpolated between them well, and it's likely you don't want a G\# when you're playing a C.  To fix this, you should turn {\it off} the parameters related to pitch: see Section~\ref{restriction} (Restricting Exploration to Only Certain Parameters) to understand how to do that.
 
 
 
@@ -640,11 +647,13 @@ The amount of mutation noise used when generating new patches is specified by th
 
 All the patches can be played by pressing their associated letter.  But additionally you can (at present) {\bf Climb} by pressing the Space Bar, {\bf Retry} by pressing the Return/Enter key, and {\bf Back Up} by pressing Backspace.
 
+\paragraph{\color{red}Hint} Some parameters dominate how a patch sounds, and not in a good way.  On the Yamaha DX7, mutating the Pitch Envelope, per-operator Fixed Frequency, and per-operator Detune will have bad effects on a sound.  On the Oberheim Matrix 6/6R/1000, it makes no sense to allow mutation to change the overall VCA1 Volume of the sound.   Pruning certain parameters so that they cannot be mutated by the Hill-Climber will reduce the amount of junk you have to listen to, and greatly improve your hill-climbing experience. See Section~\ref{restriction} (Restricting Exploration to Only Certain Parameters) to understand how to do this.
+
 \begin{wrapfigure}{r}{3.6in}
-\vspace{-3em}\includegraphics[scale=0.27]{ConstrictorPanel.png}
+\vspace{-4.5em}\includegraphics[scale=0.27]{ConstrictorPanel.png}
 \vspace{-3em}
 \caption{The Hill-Climber Panel converted for Constricting.}
-\vspace{-1em}
+\vspace{-2em}
 \label{constrictorpanel}
 \end{wrapfigure}
 
@@ -665,7 +674,6 @@ The {\it Mutation Rate} dial controls the degree of mutation rate for the constr
 %The smooth constrictor recombines candidates by interpolating between their metric parameters.  The unsmooth constrictor recombines them by simply picking one parameter or the other from the parents.  The unsmooth constrictor makes a more noisy set of patches.  Tests have found that people like the smooth constrictor better, so I might get rid of Unsmooth in the future.
 
 \paragraph{Using the Constrictor Along with the Hill-Climber} It's not a bad idea to start with a constrictor, constrict down to a single patch or so, and then switch over to the hill-climber and hill-climb from there.  It is a {\bf bad} idea to go from the hill-climber to the constrictor because the hill-climber restricts the candidates to a small space and the constrictor will constrict that small space almost immediately.
-
 
 
 \ignore{
@@ -903,11 +911,11 @@ The Yamaha DX7 editor has a special feature thanks to research done here at Geor
 
 If you're editing a DX7, you can use the neural network in hill-climbing by selecting {\bf NN Hill-Climber} in the Hill-Climber's ``Method'' chooser.  Thereafter instead of creating children patches via recombination and mutation, Edisyn will produce them using the autoencoder.  Similarly, if (when editing a DX7) you select {\bf Edit \(\rightarrow\) Randomize \(\rightarrow\) Randomizes Using NN}, then randomization options will use the autoencoder rather than the standard mutator.
 
-\paragraph{What's the point?}  As anyone who programs synthesizer patches knows, the space of synthesizer patches consists of small regions of good patches surrounded by lots of garbage patch regions, even ones of total silence.  The hill-climber tries many strategies to avoid presenting garbage and silence to the user, but is only partly successful.   The goal of the autoencoder is to eliminate as much garbage and silence as possible, thus improving the chances that you'll get decent patch results.  We'd appreciate feedback as to how successful you think we were.
+\paragraph{What's the point?}  As anyone who programs synthesizer patches knows, the space of synthesizer patches consists of small regions of good patches surrounded by lots of garbage, even regions of total silence.  The hill-climber tries many strategies to avoid presenting garbage to the user, but is only partly successful.   The goal of the autoencoder is to eliminate as much garbage and silence as possible, thus improving the chances that you'll get decent patch results.  We'd appreciate feedback as to how successful you think we were.
  
-\paragraph{How does it work?}  A variational autoencoder is a special kind of neural network trained to take an incoming patch and then output the same exact patch.  The trick, however, is that it has to first squeeze the patch through a narrow data channel much smaller than the size of a standard patch.  And it must successfully do this for all 30,000 training patches fed to it: thy all must be able to be squeezed down and then reconstituted at the other end as best as it can.
+\paragraph{How does it work?}  A variational autoencoder is a special kind of neural network trained to take an incoming patch and then output the same exact patch.  The trick, however, is that it has to first squeeze the patch through a narrow data channel much smaller than the size of a standard patch.  And it must successfully do this for all 30,000 training patches fed to it: they all must be able to be squeezed down and then reconstituted at the other end as best as it can.
 
-In order to compress all 30,000 patches, the neural network has to learn the features common to them, then just squeeze those features through the narrow neck.  This subspace of the patch space is called the {\it latent space} of the autoencoder.  Ideally the latent space just contains the stuff that makes the patches good patches in the first place: it has eliminated the features of the patch space common to garbage patches or silence. 
+In order to compress all 30,000 patches, the neural network has to learn the relationships common to them, then just squeeze those relationships through the narrow neck.  This subspace of the patch space is called the {\it latent space} of the autoencoder.  Ideally the latent space just contains the stuff that makes the patches good patches in the first place: it has eliminated the features of the patch space common to garbage patches or silence.  In short, it must learn a {\it manifold}, that is, lower dimensional space folded up into the subregion of the higher-dimensional patch space where the good patches seem to reside.
 
 Once we have trained the autoencoder, we can break it into two pieces: the {\it compression} portion, which squeezed the patch down to its bare essential features to get it through the narrow neck, and the {\it decompression} portion, which reconstituted it at the other end.  Now, what happens if we feed random ``compressed'' values into the decompression portion rather than an original patch?  It'll decompress it into a random patch somewhere in the vicinity of the trained patches (the good stuff)!  We could use this to make random patches with a high probability that they won't be garbage.  The hill-climber could also hill-climb in the space of compressed data rather than the original patch space, and so only wander around in the ``good'' regions (with luck).  And to seed the hill-climber with initial patches, we just feed them to the compression portion to get their compressed versions.
 
@@ -992,7 +1000,7 @@ If you load one or more entire banks, either from disk or because your synthesiz
 
 Once you have patches loaded into your Librarian, you can select a range of patches in a given bank by dragging the mouse over them, or by using the up/down cursor keys in combination with Shift.  Alternatively you can double-click on the bank name (the column header) and all the patches in the bank will be selected.
 
-After you have selected a patch range, you can drag it from one column to another.  By default, dragging will {\bf move} the patches to the new location, overwriting the patches you dropped them on top of.  If you instead hold down the Control key while dragging (on the Mac you can also hold down the Option key), the you will instead {\bf copy} the patches: copies will move to the new location but the originals will stay put.  Finally if you hold down the Control and Shift keys while dragging, the drag cursor changes to Java's ``link'' cursor:   Edisyn uses this final mode to indicate that you will {\bf swap} the patches with the ones they're being dragged on top of.
+After you have selected a patch range, you can drag it from one column to another.  Dragging will {\bf move} the patches to the new location, overriding the patches you dropped them on top of.  If you hold down the Control key while dragging (on the Mac you can also hold down the Option key), the you will instead {\bf copy} the patches: copies will move to the new location but the originals will stay put.  Finally if you hold down the Control and Shift keys while dragging, the drag cursor changes to Java's ``link'' cursor:   Edisyn uses this final mode to indicate that you will {\bf swap} the patches with the ones they're being dragged on top of.
 
 Drag and Drop isn't restricted to just one Librarian: if you have two Librarians open for the same synthesizer, you can drag patches from one to the other. 
 
@@ -1048,27 +1056,12 @@ In order to receive patches from Edisyn, your synthesizer may need to be set up 
 
 
 
-\section{Building a Patch Editor}
-
-So you want to write a patch editor?  They're not easy.  But they're fun!  Here are some hints. 
-
-\subsection{Understand What You're Getting Into}
-\label{inconsistent}
-
-Make sure you understand that Edisyn can only go so far to help you in writing a patch editor: but synthesizer sysex world is an inconsistent, buggy mess.
-
-For example, the Waldorf Blofeld's multimode sysex is undocumented and must be reverse engineered.  The PreenFM2 bombs when it receives out-of-range values over NRPN, but happily sends them to you.  The PreenFM2 has sysex files for its patches, but they are undocumented and are basically unusable memory dumps  of IEEE 754 floating-point arrays.  The Yamaha TX81Z requires not one but {\it two} separate sysex patch dumps in a row, in order to be backward compatible with an earlier synth family nobody cares about: it also is incapable of writing a patch (likewise the PreenFM2).   And it too bombs if you send it invalid data.  The Kawai K4's sysex documentation is riddled with incredible numbers of errors.    The Matrix 1000 accepts patch names but doesn't store or emit them: it just ignores them.  The Red Sound DarkStar has extremely, {\it extremely} limited sysex.  Synths often pack multiple parameters into the same byte, making it impossible to update just a single parameter: you have to update five at a time.  There are multiple different strategies for packing data of size 8 bits and up.  Some synths, like the Futuresonus Parva, DSI Prophet '08, and Yamaha DX7, are highly regular in their format, while others, like the infamous Korg Microsampler, require custom tables for nearly every parameter.
-
-Figure~\ref{patcheditorcapabilities} is a little table of the current patch editors for Edisyn, and various Edisyn capabilities that they can or cannot take advantage of.  I particularly love how the Korg Microsampler and the Korg SG are disjoint in their abilities; yet they're from the same company.   Long story short, you'll probably have to do a lot of customization.  I've tried to provide many customization options in Edisyn.  If you need something Edisyn doesn't provide, contact me.
-
-
-
 
 \newcommand\samefootnote{\addtocounter{footnote}{-1}\footnotemark}
 \newcommand\backfootnote[1]{\addtocounter{footnote}{-#1}\footnotemark\addtocounter{footnote}{#1}\addtocounter{footnote}{-1}}
 \newcommand\cm{\checkmark}
 
-\begin{table}[t!]
+\begin{table}[p]
 \vspace{5em}
 \begin{center}
 {\footnotesize
@@ -1130,8 +1123,23 @@ Yamaha TG33/SY22/SY35&{\cm}*& &{\cm}&{\cm}&{\cm}& &  & &{\cm}            \\
 \vspace{-1em}
 \caption{Patch Editor Capabilities}
 \label{patcheditorcapabilities}
-\vspace{7em}
 \end{table}
+
+\bump 
+
+\section{Building a Patch Editor}
+
+So you want to write a patch editor?  They're not easy.  But they're fun!  Here are some hints. 
+
+\subsection{Understand What You're Getting Into}
+\label{inconsistent}
+
+Understand that Edisyn can only go so far to help you in writing a patch editor: the synthesizer sysex world is an inconsistent, buggy mess.
+
+For example, the Waldorf Blofeld's multimode sysex is undocumented and must be reverse engineered.  The PreenFM2 bombs when it receives out-of-range values over NRPN, but happily sends them to you.  The PreenFM2 has sysex files for its patches, but they are undocumented and are basically unusable memory dumps  of IEEE 754 floating-point arrays.  The Yamaha 4-Op family (such as the TX81Z) requires not one but up to {\it four} separate sysex patch dumps in a row, in order to be backward compatible with an earlier synth family nobody cares about: they are also incapable of writing a patch (likewise the PreenFM2).    The Kawai K4's sysex documentation is riddled with incredible numbers of errors.    The Matrix 1000 accepts patch names but doesn't store or emit them: it just ignores them.  The Red Sound DarkStar has extremely, {\it extremely} limited sysex.  The  AudioThingies Micromonsta can only read or write patches when rebooted into a special mode.  The Korg Wavestation SR incredibly sends parameters as {\it text strings} embedded in sysex.  Synths often pack multiple parameters into the same byte, making it impossible to update just a single parameter: you have to update five at a time.  There are multiple different strategies for packing data of size 8 bits and up.  Some synths, like the Futuresonus Parva, DSI Prophet '08, and Yamaha DX7, are highly regular in their format, while others, like the infamous Korg Microsampler, require custom tables for nearly every parameter.
+
+Figure~\ref{patcheditorcapabilities} is a little table of the current patch editors for Edisyn, and various Edisyn capabilities that they can or cannot take advantage of.  I particularly love how the Korg Microsampler and the Korg SG are disjoint in their abilities; yet they're from the same company.   Long story short, you'll probably have to do a lot of customization.  I've tried to provide many customization options in Edisyn.  If you need something Edisyn doesn't provide, contact me.
+
 
 \subsection{Setting Up the Development Environment}
 
@@ -1897,7 +1905,42 @@ Edisyn can download many patches at once.  To support this, you need to implemen
 A few synthesizers (notably the PreenFM2) don't send individual patches as single sysex patch dumps, but rather send them as multiple separate NRPN or CC messages.  Edisyn needs to know this so it can make a better guess at whether a patch dump has arrived and is ready to be saved.  To let Edisyn know that your patch editor is for a synthesizer of this type, override the method {\bf getReceivesPatchesInBulk()} to return false.
 
 Compared to the other stuff, this step is easy.\footnote{Note that lots of synthesizers have sysex facilities to dump the entire patch memory, or dump an entire bank, etc.  Edisyn doesn't use these; it requests patches one by one.  This is slower but saves you a lot of coding and is consistent across synthesizers.  So you're welcome.}
-  
+
+\subsection{Building the Librarian}
+
+Getting the Librarian working largely involves implementing certain hook functions.  
+
+\paragraph{Bank Layout}
+
+First you need to define the bank structure of the synthesizer.  This can be as simple as a single bank, or as complex as dynamically-changing banks of different sizes and structures (see the nightmare that is the Proteus 2000).  Implement {\bf getBankNames()} to indicate the names of the banks, unless you have only one bank, and {\bf getWriteableBanks()} to indicate which banks are read/write and which are read-only (you might use the utility method {\bf buildBankBooleans()} to help out).  The names of the patch locations are stated via {\bf getPatchNumberNames()} (you might use the utility method {\bf buildIntegerNames()} to help out).  
+
+Edisyn uses {\bf getBankNames()} to determine the number of banks, and {\bf getPatchNumberNames()} to determine the typical number of patches per bank (and if {\bf getPatchNumberNames()} returns null, Edisyn doesn't provide a Librarian at all).  But some banks may vary in size relative to one another or have certain invalid patch number locations compared to other banks.  Others have banks that are appropriate only in some circumstances (such as when a certain card is installed).  You can specify this via {\bf isValidPatchLocation(...)}, {\bf isAppropriatePatchLocation(...)}, and possibly {\bf getValidBankSize(...)}.
+
+You specify the size of a cell with {\bf getPatchNameLength()}.  Some rare synthesizers (notably the Yamaha FB-01) allow you to change the name of a bank in addition to a patch.  This is done with {\bf reviseBankName(...)}.
+
+\paragraph{Individual Patch Sysex versus Bank Sysex}  Generally speaking there are three kinds of synthesizers:
+
+\begin{itemize}
+\item Ones that read and write individual patches (the Oberheim Matrix 1000 for example)
+\item Ones that can only read and write whole banks at a time (the Yamaha DX7 for example)
+\item Ones that can read and write both individual patches and whole banks (the Kawai K4 for example).  In this case Edisyn will request both banks and individual patches, but typically will only write individual patches to keep things simple.  
+\item Ones that can't use a librarian at all (the MicroSampler for example).
+\end{itemize}
+
+You can indicate which of the above types your synthesizer is by overriding the {\bf getSupportsDownloads()}, {\bf getSupportsPatchWrites()}, {\bf getSupportsBankReads()}, and {\bf getSupportsBankWrites()} methods.  
+
+If your synthesizer only supports individual patch request and writes, this may be all you need to do (other than {\bf librarianTested()} below).  But if your synthesizer deals with whole banks at a time, you will need to override some additional methods.
+
+First, you'll need to determine which bank a given sysex message represents, with {\bf getBank(...)} or (if need be {\bf getBanks(...)}).  Next, you need to be able to extract and parse an individual patch from a bank sysex message with {\bf parseFromBank(...)}, to convert a bank of models into a bank-sysex message with {\bf emitBank(...)}, and to specify the pause afterwards with {\bf getPauseAfterWriteBank()}.  Edisyn will need to know how to request a bank (as opposed to an individual patch).  This is done with {\bf requestBankDump(...)}.  Some synthesizers have a bank-request message only for a single bank (the others must be requested per-patch): you can specify this with {\bf getRequestableBank()}. 
+
+\paragraph{Final Touches}
+
+Certain synthesizers have special sysex messages which trigger them to dump all their patches rapidly. You can provide this sysex with {\bf requestAllDump()}.  Others have a special sysex message to request the dump of an individual bank.  This can be triggered with {\bf requestBankDump(...)}.
+
+Very large patch editors are slow and costly, and may have memory leaks, if you update their listeners on downloading a patch into a Librarian.  You can prevent this by overriding {\bf getUpdatesListenersOnDownload}.
+
+Once you've verified your librarian works, override {\bf librarianTested()}.
+
 \subsection{Other Stuff}
 You're almost done!  Some other items you might want to do.  First, you may need to tweak the mutability of parameters.  No string parameters are mutable, but by default all numerical ones are (including checkboxes and choosers).  Occasionally you'd want to make some of those immutable so they will not be modified during merge, hill-climbing, etc.  To do this, you can call {\bf setStatus(..., Model.STATUS\_IMMUTABLE)} on the model.
 
@@ -1916,13 +1959,17 @@ There are many more methods available in {\tt Synth.java} which customize how lo
 \item Send the whole directory to me!  I'd love to include it.
 \end{itemize}
 
+\vbox
+{
 \paragraph{Some Testing Resources}
-
 \begin{itemize}
 \item Make sure you have tools for examining files and watching the MIDI device. I develop on the Mac, so make extensive use of {\tt hexdump} to examine sysex files, as well as the enormously valuable {\tt MIDI Monitor} to spy on sysex and other messages as they come and go.
 \item You can sanity-check your patch editor with {\tt java edisyn.test.SanityCheck -h} which will build an instance of your synth, randomize it, write it to a stream, read it in from the same stream again, and compare the two models to see if they're the same.  In some cases the models {\it cannot} be the same and that's okay: in this case it will call {\tt testVerify(...)} on your synth class with the problematic keys in question, and if you return true, it'll ignore those keys.  Otherwise it'll report an error.
 \item There is a static final variable called {\tt Model.debug}.  If you set it to true, then all reads and writes to the model are logged so you can watch them happening.
+\item There is a static final variable called {\tt Style.showRaw}.  If you set it to true, then both the Choosers and LabelledDials will show the actual integer values of their underlying model parameters rather than (or in addition to) their mapped Strings.
 \item {\tt StringUtility.toHex(...)} is useful for printing things out, as is {\tt Synth.printSysex(...)}.
+\item The method {\tt edisyn.util.SyxSplit.main(...)} can be run run with a sysex file as its sole argument. It will split the file into separate files, one per sysex message in the original file.
 \end{itemize}
+}
 
 \end{document}

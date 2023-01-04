@@ -82,6 +82,9 @@ public class HBox extends JComponent implements Gatherable
     public void removeAll()
         {
         box.removeAll();
+        if (lastComponent != null) 
+            panel.remove(lastComponent);
+        lastComponent = null;
         }       
 
     public int getCount()

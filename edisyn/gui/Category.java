@@ -41,11 +41,22 @@ public class Category extends JComponent implements Gatherable
     MenuItem pasteToMutable = new MenuItem("Paste Category (Mutation Parameters Only)");
     MenuItem distributeToMutable = new MenuItem("Distribute (Mutation Parameters Only)");
     MenuItem reset = new MenuItem("Reset Category");
+    MenuItem rand25 = new MenuItem("Randomize by 25%");
+    MenuItem rand50 = new MenuItem("Randomize by 50%");
+    MenuItem rand75 = new MenuItem("Randomize by 75%");
+    MenuItem rand100 = new MenuItem("Randomize by 100%");
     
     public void makePasteable(String preamble) { pasteable = true; this.preamble = preamble; }
     public void makePasteable(String preamble, String preamble2) { pasteable = true; this.preamble = preamble; }
     public void makeDistributable(String preamble) { distributable = true; this.distributePreamble = preamble; }
-    public void makeUnresettable() { reset.setEnabled(false); }
+    public void makeUnresettable() 
+        { 
+        reset.setEnabled(false); 
+        rand25.setEnabled(false);
+        rand50.setEnabled(false);
+        rand75.setEnabled(false);
+        rand100.setEnabled(false);
+        }
     public void setSendsAllParameters(boolean val) { sendsAllParameters = val; }
     public boolean getSendsAllParameters() { return sendsAllParameters; }
     
@@ -95,10 +106,7 @@ public class Category extends JComponent implements Gatherable
     void resetCategory()
         {
         boolean currentMIDI = synth.getSendMIDI();
-        if (sendsAllParameters)
-            {
-            synth.setSendMIDI(false);
-            }
+        synth.setSendMIDI(false);
                 
         Synth other = Synth.instantiate(synth.getClass(), true, true, synth.tuple);
         ArrayList components = new ArrayList();
@@ -125,14 +133,62 @@ public class Category extends JComponent implements Gatherable
                 }
             }               
 
+        synth.setSendMIDI(currentMIDI);
         if (sendsAllParameters)
             {
-            synth.setSendMIDI(currentMIDI);
             synth.sendAllParameters();
             }
         // so we don't have independent updates in OS X
         repaint();
         }
+        
+
+    void randomizeCategory(double weight)
+        {
+        boolean currentMIDI = synth.getSendMIDI();
+        synth.setSendMIDI(false);
+        
+        ArrayList keys = new ArrayList();
+        
+        // get all the components
+        ArrayList components = new ArrayList();
+        gatherAllComponents(components);
+        for(int i = 0; i < components.size(); i++)
+            {
+            if (components.get(i) instanceof HasKey)
+                {
+                HasKey nc = (HasKey)(components.get(i));
+                String key = nc.getKey();
+                if (synth.getModel().exists(key))
+                    {
+                    if (synth.getModel().isString(key))
+                        {
+                        // do nothing
+                        }
+                    else
+                        {
+                        keys.add(key);
+                        }
+                    }
+                else
+                    System.err.println("Key missing in model : " + key);
+                }
+            }               
+
+        // mutate 
+        String[] k = (String[])(keys.toArray(new String[0]));
+        synth.setModel(synth.getModel().mutate(synth.getRandom(), k, weight));
+                
+        // emit
+        synth.setSendMIDI(currentMIDI);
+        if (sendsAllParameters)
+            {
+            synth.sendAllParameters();
+            }
+        // so we don't have independent updates in OS X
+        repaint();
+        }
+        
         
     void copyCategory(boolean includeImmutable)
         {
@@ -317,24 +373,27 @@ public class Category extends JComponent implements Gatherable
                 {
                 public void mousePressed(MouseEvent e)
                     {
-                    if (e.getY() < 20 &&
-                        (stringWidth == 0 || e.getX() < stringWidth)
-                        // && (((e.getModifiers() & InputEvent.BUTTON3_MASK) == InputEvent.BUTTON3_MASK) || 
-                        //     ((e.getModifiers() & InputEvent.SHIFT_MASK) == InputEvent.SHIFT_MASK))
-                        )
+                    if (!synth.isShowingMutation())
                         {
-                        copy.setEnabled(pasteable);
-                        copyFromMutable.setEnabled(pasteable);
-                        paste.setEnabled(pasteable && isPasteCompatible(preamble));
-                        pasteToMutable.setEnabled(pasteable && isPasteCompatible(preamble));
-                        distribute.setEnabled(distributable && canDistributeKey());
-                        distributeToMutable.setEnabled(distributable && canDistributeKey());
-                        
-                        // we add, then remove the popup because I've discovered (in the Korg Wavestation SR Sequence Editor)
-                        // that if the popup is pre-added, then it takes quite a while to dynamically add or remove categories.
-                        Category.this.add(pop);
-                        pop.show(e.getComponent(), e.getX(), e.getY());
-                        Category.this.remove(pop);
+                        if (e.getY() < 20 &&
+                            (stringWidth == 0 || e.getX() < stringWidth)
+                            // && (((e.getModifiers() & InputEvent.BUTTON3_MASK) == InputEvent.BUTTON3_MASK) || 
+                            //     ((e.getModifiers() & InputEvent.SHIFT_MASK) == InputEvent.SHIFT_MASK))
+                            )
+                            {
+                            copy.setEnabled(pasteable);
+                            copyFromMutable.setEnabled(pasteable);
+                            paste.setEnabled(pasteable && isPasteCompatible(preamble));
+                            pasteToMutable.setEnabled(pasteable && isPasteCompatible(preamble));
+                            distribute.setEnabled(distributable && canDistributeKey());
+                            distributeToMutable.setEnabled(distributable && canDistributeKey());
+                                                
+                            // we add, then remove the popup because I've discovered (in the Korg Wavestation SR Sequence Editor)
+                            // that if the popup is pre-added, then it takes quite a while to dynamically add or remove categories.
+                            Category.this.add(pop);
+                            pop.show(e.getComponent(), e.getX(), e.getY());
+                            Category.this.remove(pop);
+                            }
                         }
                     }
                 public void mouseClicked(MouseEvent e)
@@ -468,6 +527,40 @@ public class Category extends JComponent implements Gatherable
                 synth.getUndo().setWillPush(true);
                 }
             });
+        
+        pop.addSeparator();
+        pop.add(rand25);
+        rand25.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                randomizeCategory(0.5);             // sqrt(0.25)
+                }
+            });
+        pop.add(rand50);
+        rand50.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                randomizeCategory(0.7);     // ~sqrt(0.5)
+                }
+            });
+        pop.add(rand75);
+        rand75.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                randomizeCategory(0.85);    // ~sqrt(0.75)
+                }
+            });
+        pop.add(rand100);
+        rand100.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                randomizeCategory(1.0);
+                }
+            });
                 
         copy.setEnabled(false);
         copyFromMutable.setEnabled(false);
@@ -476,6 +569,10 @@ public class Category extends JComponent implements Gatherable
         distribute.setEnabled(false);
         distributeToMutable.setEnabled(false);
         reset.setEnabled(true);
+        rand25.setEnabled(true);
+        rand50.setEnabled(true);
+        rand75.setEnabled(true);
+        rand100.setEnabled(true);
                 
         //Category.this.add(pop);
         }

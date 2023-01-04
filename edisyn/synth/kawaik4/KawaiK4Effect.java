@@ -46,9 +46,13 @@ public class KawaiK4Effect extends Synth
     
     public KawaiK4Effect()
         {
-        for(int i = 0; i < allParameters.length; i++)
+        if (allParametersToIndex == null)
             {
-            allParametersToIndex.put(allParameters[i], Integer.valueOf(i));
+            allParametersToIndex = new HashMap();
+            for(int i = 0; i < allParameters.length; i++)
+                {
+                allParametersToIndex.put(allParameters[i], Integer.valueOf(i));
+                }
             }
 
         JComponent soundPanel = new SynthPanel(this);
@@ -321,7 +325,7 @@ public class KawaiK4Effect extends Synth
 
 
     /** Map of parameter -> index in the allParameters array. */
-    HashMap allParametersToIndex = new HashMap();
+    static HashMap allParametersToIndex = null;
 
     /** List of all parameters in order.  "-" is a reserved (unused and thus unnamed) parameter. */
 

@@ -98,11 +98,23 @@ public class SequentialProphetRev2 extends Synth
         
         int panel = 0;
                 
-        for(int i = 0; i < nrpnparameters.length; i++)
+        if (nrpnparametersToIndex == null)
             {
-            nrpnparametersToIndex.put(nrpnparameters[i], Integer.valueOf(i));
-            }
+            nrpnparametersToIndex = new HashMap();
+            for(int i = 0; i < nrpnparameters.length; i++)
+                {
+                nrpnparametersToIndex.put(nrpnparameters[i], Integer.valueOf(i));
+                }
+            
+            // do we need this one? It appears not to be used -- Sean
         
+            parametersToIndex = new HashMap();
+            for(int i = 0; i < parameters.length; i++)
+                {
+                parametersToIndex.put(parameters[i], Integer.valueOf(i));
+                }
+            }
+                
         // Oscillators, Filter, Amp Panel A
         
         SynthPanel oscFiltAmpPanel = new SynthPanel(this);
@@ -1431,7 +1443,7 @@ public class SequentialProphetRev2 extends Synth
         }
 
     /** Map of parameter -> index in the allParameters array. */
-    HashMap parametersToIndex = new HashMap();
+    static HashMap parametersToIndex = null;
 
     final static String[] parameters = new String[]
     {
@@ -3573,7 +3585,7 @@ public class SequentialProphetRev2 extends Synth
     };
  
     /** Map of parameter -> index in the allParameters array. */
-    HashMap nrpnparametersToIndex = new HashMap();
+    static HashMap nrpnparametersToIndex = null;
     
     final static String[] nrpnparameters = new String[]
     {

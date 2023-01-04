@@ -30,9 +30,13 @@ public class WaldorfKyraMulti extends Synth
     
     public WaldorfKyraMulti()
         {
-        for(int i = 0; i < parameters.length; i++)
+        if (parametersToIndex == null)
             {
-            parametersToIndex.put(parameters[i], Integer.valueOf(i));
+            parametersToIndex = new HashMap();
+            for(int i = 0; i < parameters.length; i++)
+                {
+                parametersToIndex.put(parameters[i], Integer.valueOf(i));
+                }
             }
 
         /// SOUND PANEL
@@ -696,7 +700,7 @@ public class WaldorfKyraMulti extends Synth
     "enablereverb",
     };
 
-    HashMap parametersToIndex = new HashMap();
+    static HashMap parametersToIndex = null;
     public static final String[] parameters = new String[] 
     {
     "part1outputchannel",
@@ -852,6 +856,8 @@ public class WaldorfKyraMulti extends Synth
         This will matter when reading patches from disk, rather than loading them from the synth, so as to put them
         in the right place. */
     public boolean getPatchContainsLocation() { return true; }
+
+    public boolean librarianTested() { return true; }
     }
     
     
@@ -874,7 +880,7 @@ public class WaldorfKyraMulti extends Synth
      Do a Program Change with MIDI Channel = Kyra's "Multi Channel", typically channel 16
         
      NOTE: "Multi Program Change" must be ON
-     NOTE: A multimode patch change requires at least 200ms pause afterwards
+     NOTE: A multimode patch change requires at least a 200ms pause afterwards
      NOTE: There exists a sysex command (0x14) which notionally sets the current Multi patch.
      However it does not appear to work.
         
@@ -883,7 +889,7 @@ public class WaldorfKyraMulti extends Synth
      3E              Waldorf 
      22              Kyra
      [ID]            Synth ID, typically 17 (11 hex)
-     24              Request which Part Number is Current
+     24              Request which Multi Patch Number is Current
      00              
      00              
      00              
@@ -897,11 +903,11 @@ public class WaldorfKyraMulti extends Synth
      3E              Waldorf 
      22              Kyra
      [ID]            Synth ID, typically 17 (11 hex)
-     44              Request which Part Number is Current
+     44              Respond which Multi Patch Number is Current
      00              
      00              
      00
-     [PART]          Current Part Number
+     [MULTI]         Current Multi Patch Number
      F7
                 
      REQUEST MULTIMODE PATCH DUMP 

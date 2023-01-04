@@ -58,9 +58,13 @@ public class NovationDStation extends Synth
         {
         // model.set("number", 0);
                 
-        for(int i = 0; i < ccParameters.length; i++)
+        if (ccParametersToIndex == null)
             {
-            ccParametersToIndex.put(ccParameters[i], Integer.valueOf(i + 20));          // CC values start at 20
+            ccParametersToIndex = new HashMap();
+            for(int i = 0; i < ccParameters.length; i++)
+                {
+                ccParametersToIndex.put(ccParameters[i], Integer.valueOf(i + 20));          // CC values start at 20
+                }
             }
 
         /// SOUND PANEL
@@ -777,7 +781,7 @@ public class NovationDStation extends Synth
         return data;
         }
 
-    HashMap ccParametersToIndex = new HashMap();
+    static HashMap ccParametersToIndex = null;
 
     public static final String[] ccParameters = new String[] 
     {

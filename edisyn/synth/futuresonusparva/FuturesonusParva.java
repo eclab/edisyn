@@ -49,9 +49,13 @@ public class FuturesonusParva extends Synth
 
     public FuturesonusParva()
         {
-        for(int i = 0; i < allParameters.length; i++)
+        if (parametersToIndex == null)
             {
-            allParametersToIndex.put(allParameters[i], Integer.valueOf(i));
+            parametersToIndex = new HashMap();
+            for(int i = 0; i < parameters.length; i++)
+                {
+                parametersToIndex.put(parameters[i], Integer.valueOf(i));
+                }
             }
         
         JComponent soundPanel = new SynthPanel(this);
@@ -511,11 +515,11 @@ public class FuturesonusParva extends Synth
         }
 
 
-    /** Map of parameter -> index in the allParameters array. */
-    HashMap allParametersToIndex = new HashMap();
+    /** Map of parameter -> index in the parameters array. */
+    static HashMap parametersToIndex = null;
 
 
-    final static String[] allParameters = new String[/*217 or so*/] 
+    final static String[] parameters = new String[/*217 or so*/] 
     {
     "-",                // bank
     "-",                // mod wheel
@@ -736,7 +740,7 @@ public class FuturesonusParva extends Synth
     "-",
     };
 
-    public boolean getSendsAllParametersAsDump() { return false; }
+    public boolean getSendsparametersAsDump() { return false; }
 
     // this is MSB first
     public byte[] nybblize(byte[] val)
@@ -783,13 +787,13 @@ public class FuturesonusParva extends Synth
         name = nybblize(name);
                   
         // LOAD DATA
-        byte[] data = new byte[allParameters.length];
-        for(int i = 0; i < allParameters.length; i++)
+        byte[] data = new byte[parameters.length];
+        for(int i = 0; i < parameters.length; i++)
             {
-            if (allParameters[i].equals("-"))
+            if (parameters[i].equals("-"))
                 data[i] = 0;
             else
-                data[i] = (byte)model.get(allParameters[i], 0);
+                data[i] = (byte)model.get(parameters[i], 0);
             }
         data = nybblize(data);
 
@@ -820,11 +824,11 @@ public class FuturesonusParva extends Synth
                 
         // LOAD DATA
         d = unnybblize(d);
-        for(int i = 0; i < d.length; i++)       // we use d.length because we might have something shorter than allParameters.length
+        for(int i = 0; i < d.length; i++)       // we use d.length because we might have something shorter than parameters.length
             {
-            if (!allParameters[i].equals("-"))
+            if (!parameters[i].equals("-"))
                 {
-                model.set(allParameters[i], d[i]);
+                model.set(parameters[i], d[i]);
                 }
             }
                         
@@ -846,7 +850,7 @@ public class FuturesonusParva extends Synth
         if (key.equals("number")) return new Object[0];  // this is not emittable
         if (key.equals("name")) return new Object[0];  // this is not emittable
 
-        int index = ((Integer)(allParametersToIndex.get(key))).intValue();
+        int index = ((Integer)(parametersToIndex.get(key))).intValue();
         int value = model.get(key);
         
         if (index < 128)  // it's a CC
@@ -859,7 +863,7 @@ public class FuturesonusParva extends Synth
 
     public void handleSynthCCOrNRPN(Midi.CCData data)
         {
-        final int LAST_MERGE_NUMBER = allParameters.length - 1;
+        final int LAST_MERGE_NUMBER = parameters.length - 1;
         
         if (data.type == Midi.CCDATA_TYPE_RAW_CC)
             {
@@ -871,18 +875,18 @@ public class FuturesonusParva extends Synth
                         
                 // Load the key, they come in one at a time
                 setSendMIDI(false);
-                if (!(allParameters[data.number].equals("-")))
+                if (!(parameters[data.number].equals("-")))
                     {
-                    mergeModel.set(allParameters[data.number], data.value);
+                    mergeModel.set(parameters[data.number], data.value);
                     }
                 setSendMIDI(true);
                 }
             else
                 {
-                if (!(allParameters[data.number].equals("-")))
+                if (!(parameters[data.number].equals("-")))
                     {
                     setSendMIDI(false);
-                    model.set(allParameters[data.number], data.value);
+                    model.set(parameters[data.number], data.value);
                     setSendMIDI(true);
                     }
                 }
@@ -897,9 +901,9 @@ public class FuturesonusParva extends Synth
                         
                 // Load the key, they come in one at a time
                 setSendMIDI(false);
-                if (!(allParameters[data.number + 128].equals("-")))
+                if (!(parameters[data.number + 128].equals("-")))
                     {
-                    mergeModel.set(allParameters[data.number + 128], data.value);
+                    mergeModel.set(parameters[data.number + 128], data.value);
                     }
                 setSendMIDI(true);
 
@@ -919,10 +923,10 @@ public class FuturesonusParva extends Synth
                 }
             else
                 {
-                if (!(allParameters[data.number + 128].equals("-")))
+                if (!(parameters[data.number + 128].equals("-")))
                     {
                     setSendMIDI(false);
-                    model.set(allParameters[data.number + 128], data.value);
+                    model.set(parameters[data.number + 128], data.value);
                     setSendMIDI(true);
                     }
                 }

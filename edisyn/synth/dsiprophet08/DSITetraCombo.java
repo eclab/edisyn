@@ -69,9 +69,13 @@ public class DSITetraCombo extends Synth
         {
         int panel = 0;
         
-        for(int i = 0; i < parameters.length; i++)
+        if (parametersToIndex == null)
             {
-            parametersToIndex.put(parameters[i], Integer.valueOf(i));
+            parametersToIndex = new HashMap();
+            for(int i = 0; i < parameters.length; i++)
+                {
+                parametersToIndex.put(parameters[i], Integer.valueOf(i));
+                }
             }
                         
         /// SOUND PANEL
@@ -1163,7 +1167,7 @@ public class DSITetraCombo extends Synth
 
 
     /** Map of parameter -> index in the allParameters array. */
-    HashMap parametersToIndex = new HashMap();
+    static HashMap parametersToIndex = null;
 
 
     /** List of all Tetra- parameters mapped in the the appropriate location given their NRPN values. */

@@ -61,9 +61,13 @@ public class WaldorfMicrowave extends Synth
     
     public WaldorfMicrowave()
         {
-        for(int i = 0; i < allParameters.length; i++)
+        if (allParametersToIndex == null)
             {
-            allParametersToIndex.put(allParameters[i], Integer.valueOf(i));
+            allParametersToIndex = new HashMap();
+            for(int i = 0; i < allParameters.length; i++)
+                {
+                allParametersToIndex.put(allParameters[i], Integer.valueOf(i));
+                }
             }
         
         /// SOUND PANEL
@@ -968,7 +972,7 @@ public class WaldorfMicrowave extends Synth
 
 
     /** Map of parameter -> index in the allParameters array. */
-    HashMap allParametersToIndex = new HashMap();
+    static HashMap allParametersToIndex = null;
 
 
     /** List of all Waldorf parameters in order.  "-" is a reserved (unused and thus unnamed) parameter. */

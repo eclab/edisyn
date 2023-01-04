@@ -210,7 +210,7 @@ public class RolandU220Timbre extends Synth
     public static final int[] LOWER_BEND_RANGES = { -36, -24, -12, -11, -10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 0 };         
     public static final int[] SENSITIVITY_RANGES = { -36, -24, -12, -11, -10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12 };         
 
-    HashMap allParametersToIndex = new HashMap();
+    static HashMap allParametersToIndex = null;
         
     final static String[] allParameters = new String[]
     {
@@ -277,11 +277,16 @@ public class RolandU220Timbre extends Synth
     public RolandU220Timbre()
         {
         part = getLastXAsInt(PART_KEY, getSynthClassName(), 1, true);
-        for(int i = 0; i < allParameters.length; i++)
+        
+        if (allParametersToIndex == null)
             {
-            allParametersToIndex.put(allParameters[i], Integer.valueOf(i));
+            allParametersToIndex = new HashMap();
+            for(int i = 0; i < allParameters.length; i++)
+                {
+                allParametersToIndex.put(allParameters[i], Integer.valueOf(i));
+                }
             }
-
+                        
         JComponent sourcePanel = new SynthPanel(this);
         VBox vbox = new VBox();
         HBox hbox = new HBox();

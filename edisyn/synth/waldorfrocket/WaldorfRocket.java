@@ -43,9 +43,13 @@ public class WaldorfRocket extends Synth
         {
         // altMap = getLastXAsBoolean("altMap", getSynthClassName(), false, true);
 
-        for(int i = 0; i < parameters.length; i++)
+        if (parametersToIndex == null)
             {
-            parametersToIndex.put(parameters[i], Integer.valueOf(i));
+            parametersToIndex = new HashMap();
+            for(int i = 0; i < parameters.length; i++)
+                {
+                parametersToIndex.put(parameters[i], Integer.valueOf(i));
+                }
             }
                                 
 
@@ -717,7 +721,7 @@ public class WaldorfRocket extends Synth
 
     public static String getSynthName() { return "Waldorf Rocket"; }
     
-    HashMap parametersToIndex = new HashMap();
+    static HashMap parametersToIndex = null;
     public static final String[] parameters = new String[] 
     {
     "oscwave",

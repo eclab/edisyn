@@ -1976,7 +1976,25 @@ public class EmuProteus2000 extends Synth
     int expectBytes = 0;
     public int parse(byte[] data, boolean fromFile)
         {
-        if (data[5] == 0x09)    // Configuration response
+        if (data[5] == 0x0B)    // Generic Name Response
+            {
+            if (scribble != null)
+                {
+                try
+                    {
+                    scribble.write(data);
+                    scribble.flush();               // we have to because we don't know when to close
+                    }
+                catch (IOException ex) { try { scribble.close(); } catch (IOException ex2) { } scribble = null;}
+                number++;
+                tryToSendSysex(new byte[] 
+                    { (byte)0xF0, 0x18, 0x0F, getID(), 0x55, 0x0C, (byte) type, 
+                    (byte)(number & 127), (byte)(number >>> 7), 
+                    (byte)(romid & 127), (byte)(romid >>> 7), (byte)0xF7 });
+                }
+            return PARSE_FAILED;            // I guess?
+            }
+        else if (data[5] == 0x09)    // Configuration response
             {
             return processConfiguration(data);
             }
@@ -2944,9 +2962,168 @@ public class EmuProteus2000 extends Synth
                 }
             menu.add(simmMenu[i]);
             }
+        
+        JMenuItem getDataMenu = new JMenuItem("Get Presets for SIMM");
+        menu.add(getDataMenu);
+        getDataMenu.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                type = 1;
+                number = 0;
+                int id = -1;
+                String hex = JOptionPane.showInputDialog(EmuProteus2000.this, "Enter a SIMM ID", "");
+                if (hex != null)
+                    {
+                    java.util.Scanner scanner = new java.util.Scanner(hex);
+                    if (scanner.hasNextInt(16))
+                        {
+                        romid = scanner.nextInt(16);
+                        FileDialog fd = new FileDialog((Frame)(SwingUtilities.getRoot(EmuProteus2000.this)), "Save to File...", FileDialog.SAVE);
+                        disableMenuBar();
+                        fd.setVisible(true);
+                        enableMenuBar();
+                        if (fd.getFile() != null)
+                            {
+                            if (scribble != null)
+                                try { scribble.close(); }
+                                catch (IOException ex) { }
+                            try {
+                                scribble = new FileOutputStream(new File(fd.getDirectory(), StringUtility.ensureFileEndsWith(fd.getFile(), ".syx")));
+                                tryToSendSysex(new byte[] 
+                                    { (byte)0xF0, 0x18, 0x0F, getID(), 0x55, 0x0C, (byte) type, 
+                                    (byte)(number & 127), (byte)(number >>> 7), 
+                                    (byte)(romid & 127), (byte)(romid >>> 7), (byte)0xF7 });
+                                }
+                            catch (IOException ex) { }
+                            }
+                        }
+                    }
+                }
+            });
+
+        JMenuItem getDataMenu1 = new JMenuItem("Get Instruments for SIMM");
+        menu.add(getDataMenu1);
+        getDataMenu1.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                type = 2;
+                number = 0;
+                int id = -1;
+                String hex = JOptionPane.showInputDialog(EmuProteus2000.this, "Enter a SIMM ID", "");
+                if (hex != null)
+                    {
+                    java.util.Scanner scanner = new java.util.Scanner(hex);
+                    if (scanner.hasNextInt(16))
+                        {
+                        romid = scanner.nextInt(16);
+                        FileDialog fd = new FileDialog((Frame)(SwingUtilities.getRoot(EmuProteus2000.this)), "Save to File...", FileDialog.SAVE);
+                        disableMenuBar();
+                        fd.setVisible(true);
+                        enableMenuBar();
+                        if (fd.getFile() != null)
+                            {
+                            if (scribble != null)
+                                try { scribble.close(); }
+                                catch (IOException ex) { }
+                            try {
+                                scribble = new FileOutputStream(new File(fd.getDirectory(), StringUtility.ensureFileEndsWith(fd.getFile(), ".syx")));
+                                tryToSendSysex(new byte[] 
+                                    { (byte)0xF0, 0x18, 0x0F, getID(), 0x55, 0x0C, (byte) type, 
+                                    (byte)(number & 127), (byte)(number >>> 7), 
+                                    (byte)(romid & 127), (byte)(romid >>> 7), (byte)0xF7 });
+                                }
+                            catch (IOException ex) { }
+                            }
+                        }
+                    }
+                }
+            });
+
+        JMenuItem getDataMenu2 = new JMenuItem("Get Arps for SIMM");
+        menu.add(getDataMenu2);
+        getDataMenu2.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                type = 3;
+                number = 0;
+                int id = -1;
+                String hex = JOptionPane.showInputDialog(EmuProteus2000.this, "Enter a SIMM ID", "");
+                if (hex != null)
+                    {
+                    java.util.Scanner scanner = new java.util.Scanner(hex);
+                    if (scanner.hasNextInt(16))
+                        {
+                        romid = scanner.nextInt(16);
+                        FileDialog fd = new FileDialog((Frame)(SwingUtilities.getRoot(EmuProteus2000.this)), "Save to File...", FileDialog.SAVE);
+                        disableMenuBar();
+                        fd.setVisible(true);
+                        enableMenuBar();
+                        if (fd.getFile() != null)
+                            {
+                            if (scribble != null)
+                                try { scribble.close(); }
+                                catch (IOException ex) { }
+                            try {
+                                scribble = new FileOutputStream(new File(fd.getDirectory(), StringUtility.ensureFileEndsWith(fd.getFile(), ".syx")));
+                                tryToSendSysex(new byte[] 
+                                    { (byte)0xF0, 0x18, 0x0F, getID(), 0x55, 0x0C, (byte) type, 
+                                    (byte)(number & 127), (byte)(number >>> 7), 
+                                    (byte)(romid & 127), (byte)(romid >>> 7), (byte)0xF7 });
+                                }
+                            catch (IOException ex) { }
+                            }
+                        }
+                    }
+                }
+            });
+
+        JMenuItem getDataMenu3 = new JMenuItem("Get Riffs for SIMM");
+        menu.add(getDataMenu3);
+        getDataMenu3.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                type = 6;
+                number = 0;
+                int id = -1;
+                String hex = JOptionPane.showInputDialog(EmuProteus2000.this, "Enter a SIMM ID", "");
+                if (hex != null)
+                    {
+                    java.util.Scanner scanner = new java.util.Scanner(hex);
+                    if (scanner.hasNextInt(16))
+                        {
+                        romid = scanner.nextInt(16);
+                        FileDialog fd = new FileDialog((Frame)(SwingUtilities.getRoot(EmuProteus2000.this)), "Save to File...", FileDialog.SAVE);
+                        disableMenuBar();
+                        fd.setVisible(true);
+                        enableMenuBar();
+                        if (fd.getFile() != null)
+                            {
+                            if (scribble != null)
+                                try { scribble.close(); }
+                                catch (IOException ex) { }
+                            try {
+                                scribble = new FileOutputStream(new File(fd.getDirectory(), StringUtility.ensureFileEndsWith(fd.getFile(), ".syx")));
+                                tryToSendSysex(new byte[] 
+                                    { (byte)0xF0, 0x18, 0x0F, getID(), 0x55, 0x0C, (byte) type, 
+                                    (byte)(number & 127), (byte)(number >>> 7), 
+                                    (byte)(romid & 127), (byte)(romid >>> 7), (byte)0xF7 });
+                                }
+                            catch (IOException ex) { }
+                            }
+                        }
+                    }
+                }
+            });
         }
 
-
+    int number;
+    int romid;
+    int type = 0;
+    OutputStream scribble = null;
 
     public JFrame sprout()
         {
@@ -3964,12 +4141,12 @@ public class EmuProteus2000 extends Synth
 
 
 // This maps ALL parameters, for all four layers, to the indexes in the parameters array
-    static HashMap<String, Integer> parametersToIndex = new HashMap<>();
+    static HashMap<String, Integer> parametersToIndex = null;
 // This maps ALL parameters, for all four layers, to the ID associated with them.  You can
 // use the parameterToLayer(...) function to get the layer for the parameter, if they are layer params
-    static HashMap<String, Integer> parametersToID = new HashMap<>();
+    static HashMap<String, Integer> parametersToID = null;
 // This maps the parameterIDs to the indexes in the parameterIDs array
-    static HashMap<Integer, Integer> idToIndex = new HashMap<>();
+    static HashMap<Integer, Integer> idToIndex = null;
 
     public int parameterToLayer(String param)
         {
@@ -3985,29 +4162,36 @@ public class EmuProteus2000 extends Synth
 
     static void buildParameters()
         {
-        if (!parametersToIndex.isEmpty()) return;               // already built
-        
-        // Handle global parameters first
-        for(int i = 0; i < 130; i++)
+        if (parametersToIndex == null)
             {
-            parametersToIndex.put(parameters[i], i);
-            idToIndex.put(parameterIDs[i], i);
-            parametersToID.put(parameters[i], parameterIDs[i]);
-            }
-            
+            parametersToIndex = new HashMap<String, Integer>();
+            parametersToID = new HashMap<String, Integer>();
+            idToIndex = new HashMap<Integer, Integer>();
+                
+            if (!parametersToIndex.isEmpty()) return;               // already built
+                
+            // Handle global parameters first
+            for(int i = 0; i < 130; i++)
+                {
+                parametersToIndex.put(parameters[i], i);
+                idToIndex.put(parameterIDs[i], i);
+                parametersToID.put(parameters[i], parameterIDs[i]);
+                }
+                        
 
-        // Handle layer parameters
-        for(int i = 130; i < 293; i++)
-            {
-            parametersToIndex.put(parameters[i], i);
-            parametersToIndex.put(parameters[i + 163], i + 163);
-            parametersToIndex.put(parameters[i + 163 * 2], i + 163 * 2);
-            parametersToIndex.put(parameters[i + 163 * 3], i + 163 * 3);
-            parametersToID.put(parameters[i], parameterIDs[i]);
-            parametersToID.put(parameters[i + 163], parameterIDs[i]);
-            parametersToID.put(parameters[i + 163 * 2], parameterIDs[i]);
-            parametersToID.put(parameters[i + 163 * 3], parameterIDs[i]);
-            idToIndex.put(parameterIDs[i], i);
+            // Handle layer parameters
+            for(int i = 130; i < 293; i++)
+                {
+                parametersToIndex.put(parameters[i], i);
+                parametersToIndex.put(parameters[i + 163], i + 163);
+                parametersToIndex.put(parameters[i + 163 * 2], i + 163 * 2);
+                parametersToIndex.put(parameters[i + 163 * 3], i + 163 * 3);
+                parametersToID.put(parameters[i], parameterIDs[i]);
+                parametersToID.put(parameters[i + 163], parameterIDs[i]);
+                parametersToID.put(parameters[i + 163 * 2], parameterIDs[i]);
+                parametersToID.put(parameters[i + 163 * 3], parameterIDs[i]);
+                idToIndex.put(parameterIDs[i], i);
+                }
             }
         }
 

@@ -80,9 +80,13 @@ public class KawaiK5 extends Synth
     
     public KawaiK5()
         {
-        for(int i = 0; i < parameters.length; i++)
+        if (parametersToIndex == null)
             {
-            parametersToIndex.put(parameters[i], Integer.valueOf(paramNumbers[i]));
+            parametersToIndex = new HashMap();
+            for(int i = 0; i < parameters.length; i++)
+                {
+                parametersToIndex.put(parameters[i], Integer.valueOf(paramNumbers[i]));
+                }
             }
 
         /// SOUND PANEL
@@ -2502,7 +2506,7 @@ public class KawaiK5 extends Synth
         }
         
 
-    HashMap parametersToIndex = new HashMap();
+    static HashMap parametersToIndex = null;
 
     public static final String[] parameters = new String[]
     {

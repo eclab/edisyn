@@ -77,14 +77,19 @@ public class OberheimMatrix1000 extends Synth
         m1000 = (m == null ? true : !Boolean.parseBoolean(m));
         setM1000(m1000, false);  // so we set the menu
 
-        for(int i = 0; i < allParameters.length; i++)
+        if (allParametersToIndex == null)
             {
-            allParametersToIndex.put(allParameters[i], Integer.valueOf(i));
-            }
+            allParametersToIndex = new HashMap();
+            for(int i = 0; i < allParameters.length; i++)
+                {
+                allParametersToIndex.put(allParameters[i], Integer.valueOf(i));
+                }
 
-        for(int i = 0; i < internalParameters.length; i++)
-            {
-            internalParametersToIndex.put(internalParameters[i], Integer.valueOf(i));
+            internalParametersToIndex = new HashMap();
+            for(int i = 0; i < internalParameters.length; i++)
+                {
+                internalParametersToIndex.put(internalParameters[i], Integer.valueOf(i));
+                }
             }
                         
         /// SOUND PANEL
@@ -794,7 +799,7 @@ public class OberheimMatrix1000 extends Synth
 
 
     /** Map of parameter -> index in the allParameters array. */
-    HashMap internalParametersToIndex = new HashMap();
+    static HashMap internalParametersToIndex = null;
 
 
     /** List of all 100 internal Oberheim numerical parameters in order.  Note that this is DIFFERENT, ugh,
@@ -909,7 +914,7 @@ public class OberheimMatrix1000 extends Synth
 
 
     /** Map of parameter -> index in the allParameters array. */
-    HashMap allParametersToIndex = new HashMap();
+    static HashMap allParametersToIndex = null;
 
 
     /** The Matrix 1000 sign-extends into its 7th bit.  Basically this means 

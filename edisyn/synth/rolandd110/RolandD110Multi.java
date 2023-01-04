@@ -57,14 +57,19 @@ public class RolandD110Multi extends Synth
         
     public RolandD110Multi()
         {
-        for(int i = 0; i < allPartParameters.length; i++)
+        if (allPartParametersToIndex == null)
             {
-            allPartParametersToIndex.put(allPartParameters[i], Integer.valueOf(i));
-            }
+            allPartParametersToIndex = new HashMap();
+            for(int i = 0; i < allPartParameters.length; i++)
+                {
+                allPartParametersToIndex.put(allPartParameters[i], Integer.valueOf(i));
+                }
 
-        for(int i = 0; i < allCommonParameters.length; i++)
-            {
-            allCommonParametersToIndex.put(allCommonParameters[i], Integer.valueOf(i));
+            allCommonParametersToIndex = new HashMap();
+            for(int i = 0; i < allCommonParameters.length; i++)
+                {
+                allCommonParametersToIndex.put(allCommonParameters[i], Integer.valueOf(i));
+                }
             }
 
                 
@@ -531,7 +536,7 @@ public class RolandD110Multi extends Synth
 
 
 
-    HashMap allPartParametersToIndex = new HashMap();
+    static HashMap allPartParametersToIndex = null;
         
     final static String[] allPartParameters = new String[]
     {
@@ -550,7 +555,7 @@ public class RolandD110Multi extends Synth
     };
     
     
-    HashMap allCommonParametersToIndex = new HashMap();
+    static HashMap allCommonParametersToIndex = null;
         
     final static String[] allCommonParameters = new String[]
     {

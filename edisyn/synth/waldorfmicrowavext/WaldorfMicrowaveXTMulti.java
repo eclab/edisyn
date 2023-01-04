@@ -45,16 +45,21 @@ public class WaldorfMicrowaveXTMulti extends Synth
         
     public WaldorfMicrowaveXTMulti()
         {
-        for(int i = 0; i < allParameters.length; i++)
+        if (allParametersToIndex == null)
             {
-            allParametersToIndex.put(allParameters[i], Integer.valueOf(i));
-            }
-
-        for(int j = 1; j < 9; j++)
-            {
-            for(int i = 0; i < allInstrumentParameters.length; i++)
+            allParametersToIndex = new HashMap();
+            for(int i = 0; i < allParameters.length; i++)
                 {
-                allInstrumentParametersToIndex.put("inst" + j + allInstrumentParameters[i], Integer.valueOf(i));
+                allParametersToIndex.put(allParameters[i], Integer.valueOf(i));
+                }
+
+            allInstrumentParametersToIndex = new HashMap();
+            for(int j = 1; j < 9; j++)
+                {
+                for(int i = 0; i < allInstrumentParameters.length; i++)
+                    {
+                    allInstrumentParametersToIndex.put("inst" + j + allInstrumentParameters[i], Integer.valueOf(i));
+                    }
                 }
             }
         
@@ -492,7 +497,7 @@ public class WaldorfMicrowaveXTMulti extends Synth
 
 
     /** Map of parameter -> index in the allInstrumentParameters array. */
-    HashMap allInstrumentParametersToIndex = new HashMap();
+    static HashMap allInstrumentParametersToIndex = null;
 
     final static String[] allInstrumentParameters = new String[]
     {
@@ -530,7 +535,7 @@ public class WaldorfMicrowaveXTMulti extends Synth
 
 
     /** Map of parameter -> index in the allParameters array. */
-    HashMap allParametersToIndex = new HashMap();
+    static HashMap allParametersToIndex = null;
 
 
     /** List of all Waldorf parameters in order.  "-" is a reserved (unused and thus unnamed) parameter. */

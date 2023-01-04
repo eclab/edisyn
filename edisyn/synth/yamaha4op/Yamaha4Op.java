@@ -228,29 +228,37 @@ public class Yamaha4Op extends Synth
         model.set("bank", 0);
         model.set("number", 0);
                 
-        for(int i = 0; i < vcedParameters.length; i++)
+        if (vcedParametersToIndex == null)
             {
-            vcedParametersToIndex.put(vcedParameters[i], Integer.valueOf(i));
-            }
+            vcedParametersToIndex = new HashMap();
+            for(int i = 0; i < vcedParameters.length; i++)
+                {
+                vcedParametersToIndex.put(vcedParameters[i], Integer.valueOf(i));
+                }
                 
-        for(int i = 0; i < acedParameters.length; i++)
-            {
-            acedParametersToIndex.put(acedParameters[i], Integer.valueOf(i));
-            }
+            acedParametersToIndex = new HashMap();
+            for(int i = 0; i < acedParameters.length; i++)
+                {
+                acedParametersToIndex.put(acedParameters[i], Integer.valueOf(i));
+                }
                 
-        for(int i = 0; i < aced2Parameters.length; i++)
-            {
-            aced2ParametersToIndex.put(aced2Parameters[i], Integer.valueOf(i));
-            }
+            aced2ParametersToIndex = new HashMap();
+            for(int i = 0; i < aced2Parameters.length; i++)
+                {
+                aced2ParametersToIndex.put(aced2Parameters[i], Integer.valueOf(i));
+                }
                 
-        for(int i = 0; i < aced3Parameters.length; i++)
-            {
-            aced3ParametersToIndex.put(aced3Parameters[i], Integer.valueOf(i));
-            }
+            aced3ParametersToIndex = new HashMap();
+            for(int i = 0; i < aced3Parameters.length; i++)
+                {
+                aced3ParametersToIndex.put(aced3Parameters[i], Integer.valueOf(i));
+                }
                 
-        for(int i = 0; i < efedsParameters.length; i++)
-            {
-            efedsParametersToIndex.put(efedsParameters[i], Integer.valueOf(i));
+            efedsParametersToIndex = new HashMap();
+            for(int i = 0; i < efedsParameters.length; i++)
+                {
+                efedsParametersToIndex.put(efedsParameters[i], Integer.valueOf(i));
+                }
             }
                 
         /// SOUND PANEL
@@ -1295,7 +1303,7 @@ public class Yamaha4Op extends Synth
 
 
     /** Map of parameter -> index in the vcedParameters array. */
-    HashMap vcedParametersToIndex = new HashMap();
+    static HashMap vcedParametersToIndex = null;
 
 
     /** List of all Sysex parameters in order.  "-" is a reserved (unused and thus unnamed) parameter. */
@@ -1408,7 +1416,7 @@ public class Yamaha4Op extends Synth
 
 
     /** Map of parameter -> index in the acedParameters array. */
-    HashMap acedParametersToIndex = new HashMap();
+    static HashMap acedParametersToIndex = null;
 
     final static String[] acedParameters = new String[] 
     {
@@ -1443,7 +1451,7 @@ public class Yamaha4Op extends Synth
     
 
     /** Map of parameter -> index in the aced2Parameters array. */
-    HashMap aced2ParametersToIndex = new HashMap();
+    static HashMap aced2ParametersToIndex = null;
 
     final static String[] aced2Parameters = new String[] 
     {
@@ -1461,7 +1469,7 @@ public class Yamaha4Op extends Synth
 
 
     /** Map of parameter -> index in the aced3Parameters array. */
-    HashMap aced3ParametersToIndex = new HashMap();
+    static HashMap aced3ParametersToIndex = null;
 
     final static String[] aced3Parameters = new String[] 
     {
@@ -1489,7 +1497,7 @@ public class Yamaha4Op extends Synth
 
 
     /** Map of parameter -> index in the efedsParameters array. */
-    HashMap efedsParametersToIndex = new HashMap();
+    static HashMap efedsParametersToIndex = null;
 
     final static String[] efedsParameters = new String[] 
     {

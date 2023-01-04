@@ -49,9 +49,13 @@ public class KawaiK1Multi extends Synth
 
     public KawaiK1Multi()
         {
-        for(int i = 0; i < allParameters.length; i++)
+        if (allParametersToIndex == null)
             {
-            allParametersToIndex.put(allParameters[i], Integer.valueOf(i));
+            allParametersToIndex = new HashMap();
+            for(int i = 0; i < allParameters.length; i++)
+                {
+                allParametersToIndex.put(allParameters[i], Integer.valueOf(i));
+                }
             }
                         
         /// SOUND PANEL
@@ -343,7 +347,7 @@ public class KawaiK1Multi extends Synth
         }
 
 
-    HashMap allParametersToIndex = new HashMap();
+    static HashMap allParametersToIndex = null;
         
     // The K1r multimode sysex description is dead wrong.  It states that
     // the parameters are:

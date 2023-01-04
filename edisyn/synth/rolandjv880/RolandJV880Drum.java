@@ -53,9 +53,13 @@ public class RolandJV880Drum extends Synth
     
     public RolandJV880Drum()
         {
-        for(int i = 0; i < drumParameters.length; i++)
+        if (drumParametersToIndex == null)
             {
-            drumParametersToIndex.put(drumParameters[i], Integer.valueOf(i));
+            drumParametersToIndex = new HashMap();
+            for(int i = 0; i < drumParameters.length; i++)
+                {
+                drumParametersToIndex.put(drumParameters[i], Integer.valueOf(i));
+                }
             }
 
         JComponent soundPanel = new SynthPanel(this);
@@ -685,7 +689,7 @@ public class RolandJV880Drum extends Synth
         }
         
     /** Map of parameter -> index in the drumParameters array. */
-    HashMap drumParametersToIndex = new HashMap();
+    static HashMap drumParametersToIndex = null;
 
     public byte[] emit(String key) 
         { 

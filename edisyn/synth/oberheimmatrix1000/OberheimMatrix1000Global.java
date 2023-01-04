@@ -32,9 +32,13 @@ public class OberheimMatrix1000Global extends Synth
     
     public OberheimMatrix1000Global()
         {
-        for(int i = 0; i < allParameters.length; i++)
+        if (allParametersToIndex == null)
             {
-            allParametersToIndex.put(allParameters[i], Integer.valueOf(i));
+            allParametersToIndex = new HashMap();
+            for(int i = 0; i < allParameters.length; i++)
+                {
+                allParametersToIndex.put(allParameters[i], Integer.valueOf(i));
+                }
             }
 
         /// SOUND PANEL
@@ -362,7 +366,7 @@ public class OberheimMatrix1000Global extends Synth
 
 
     /** Map of parameter -> index in the allParameters array. */
-    HashMap allParametersToIndex = new HashMap();
+    static HashMap allParametersToIndex = null;
                 
     final static String[] allParameters = new String[/*100 or so*/] 
     {

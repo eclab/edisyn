@@ -260,7 +260,7 @@ public class RolandU110 extends Synth
         "50.   1-2:M8  3:7  4:8  5:4  6:4"
         };
 
-    HashMap allParametersToIndex = new HashMap();
+    static HashMap allParametersToIndex = null;
         
     // This just contains the unique parameters, not the individal part parameters 
     final static String[] allParameters = new String[]
@@ -301,9 +301,13 @@ public class RolandU110 extends Synth
 
     public RolandU110()
         {
-        for(int i = 0; i < allParameters.length; i++)
+        if (allParametersToIndex == null)
             {
-            allParametersToIndex.put(allParameters[i], Integer.valueOf(i));
+            allParametersToIndex = new HashMap();
+            for(int i = 0; i < allParameters.length; i++)
+                {
+                allParametersToIndex.put(allParameters[i], Integer.valueOf(i));
+                }
             }
 
         JComponent panel = new SynthPanel(this);
@@ -453,7 +457,7 @@ public class RolandU110 extends Synth
     public JComponent addPart(final int part, Color color)
         {
         Category category = new Category(this, "Part " + part, color);
-		category.makePasteable("part");
+        category.makePasteable("part");
                 
         JComponent comp;
         String[] params;
@@ -1482,10 +1486,10 @@ public class RolandU110 extends Synth
 
       SYSEX           POS     ITEM                                                           
       ------------------------------------------------------------------------------
-      8               0       00      						[Padding?]
-      10              1       00      						[Padding?]
-      12              2       00      						[Padding?]
-      14              3       00      						[Padding?]
+      8               0       00                                                [Padding?]
+      10              1       00                                                [Padding?]
+      12              2       00                                                [Padding?]
+      14              3       00                                                [Padding?]
       16              4       Name[0]
       18              5       Name[1]
       20              6       Name[2]
@@ -1496,18 +1500,18 @@ public class RolandU110 extends Synth
       30              11      Name[7]
       32              12      Name[8]
       34              13      Name[9]
-      36              14      Output Mode					[TABLE 1]
+      36              14      Output Mode                                       [TABLE 1]
       38              15      Chorus Rate
       40              16      Chorus Depth
       42              17      Tremolo Rate
       44              18      Tremolo Depth
-      46              19      00      						[Padding?]
+      46              19      00                                                [Padding?]
 
       PART 1 (16 bytes nybblized into 32 sysex bytes)
 
-      48              20      Tone Media (bits 0 1 2 3 4)	[TABLE 2]
+      48              20      Tone Media (bits 0 1 2 3 4)       [TABLE 2]
       ...                     LFO Poly Press Sens (bits 5 6 7)
-      50              21      Tone Number					[TABLE 3]
+      50              21      Tone Number                                       [TABLE 3]
       52              22      Receive Channel (bits 0 1 2 3)
       ...                     Bend Range (bits 4 5 6 7)
       54              23      Key Range Lo 

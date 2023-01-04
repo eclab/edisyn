@@ -82,19 +82,25 @@ public class RolandU220Multi extends Synth
         /// SOUND PANEL
                 
 
-        for(int i = 0; i < allCommonParameters.length; i++)
+        if (allCommonParametersToIndex == null)
             {
-            allCommonParametersToIndex.put(allCommonParameters[i], Integer.valueOf(i));
-            }
+            allCommonParametersToIndex = new HashMap();
+            for(int i = 0; i < allCommonParameters.length; i++)
+                {
+                allCommonParametersToIndex.put(allCommonParameters[i], Integer.valueOf(i));
+                }
 
-        for(int i = 0; i < allDrumParameters.length; i++)
-            {
-            allDrumParametersToIndex.put(allDrumParameters[i], Integer.valueOf(i));
-            }
+            allDrumParametersToIndex = new HashMap();
+            for(int i = 0; i < allDrumParameters.length; i++)
+                {
+                allDrumParametersToIndex.put(allDrumParameters[i], Integer.valueOf(i));
+                }
 
-        for(int i = 0; i < allPartParameters.length; i++)
-            {
-            allPartParametersToIndex.put(allPartParameters[i], Integer.valueOf(i));
+            allPartParametersToIndex = new HashMap();
+            for(int i = 0; i < allPartParameters.length; i++)
+                {
+                allPartParametersToIndex.put(allPartParameters[i], Integer.valueOf(i));
+                }
             }
 
         JComponent sourcePanel = new SynthPanel(this);
@@ -669,7 +675,7 @@ public class RolandU220Multi extends Synth
         }
 
 
-    HashMap allCommonParametersToIndex = new HashMap();
+    static HashMap allCommonParametersToIndex = null;
         
     final static String[] allCommonParameters = new String[]
     {
@@ -719,7 +725,7 @@ public class RolandU220Multi extends Synth
     };
 
 
-    HashMap allDrumParametersToIndex = new HashMap();
+    static HashMap allDrumParametersToIndex = null;
         
     final static String[] allDrumParameters = new String[]
     {
@@ -733,7 +739,7 @@ public class RolandU220Multi extends Synth
     };
 
 
-    HashMap allPartParametersToIndex = new HashMap();
+    static HashMap allPartParametersToIndex = null;
         
     final static String[] allPartParameters = new String[]
     {

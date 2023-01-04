@@ -60,9 +60,13 @@ public class JLCooperMSBPlusRev2 extends Synth
 
     public JLCooperMSBPlusRev2()
         {
-        for(int i = 0; i < allParameters.length; i++)
+        if (parametersToIndex == null)
             {
-            allParametersToIndex.put(allParameters[i], Integer.valueOf(i));
+            parametersToIndex = new HashMap();
+            for(int i = 0; i < parameters.length; i++)
+                {
+                parametersToIndex.put(parameters[i], Integer.valueOf(i));
+                }
             }
                                 
         String m = getLastX(REV2_KEY, getSynthClassName());
@@ -436,11 +440,11 @@ public class JLCooperMSBPlusRev2 extends Synth
     /// NOTE: We don't actually use this parameter list, but out of tradition
     /// we'll load it here anyway.
 
-    /** Map of parameter -> index in the allParameters array. */
-    HashMap allParametersToIndex = new HashMap();
+    /** Map of parameter -> index in the parameters array. */
+    static HashMap parametersToIndex = null;
 
 
-    final static String[] allParameters = new String[] 
+    final static String[] parameters = new String[] 
     {
     "proc1filternotes",
     "proc1filterbend",

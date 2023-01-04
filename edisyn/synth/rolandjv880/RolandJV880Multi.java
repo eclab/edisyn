@@ -37,14 +37,19 @@ public class RolandJV880Multi extends Synth
 
     public RolandJV880Multi()
         {
-        for(int i = 0; i < allGlobalParameters.length; i++)
+        if (allGlobalParametersToIndex == null)
             {
-            allGlobalParametersToIndex.put(allGlobalParameters[i], Integer.valueOf(i));
-            }
+            allGlobalParametersToIndex = new HashMap();
+            for(int i = 0; i < allGlobalParameters.length; i++)
+                {
+                allGlobalParametersToIndex.put(allGlobalParameters[i], Integer.valueOf(i));
+                }
 
-        for(int i = 0; i < allToneParameters.length; i++)
-            {
-            allToneParametersToIndex.put(allToneParameters[i], Integer.valueOf(i));
+            allToneParametersToIndex = new HashMap();
+            for(int i = 0; i < allToneParameters.length; i++)
+                {
+                allToneParametersToIndex.put(allToneParameters[i], Integer.valueOf(i));
+                }
             }
 
                 
@@ -719,7 +724,7 @@ public class RolandJV880Multi extends Synth
         }
 
 
-    HashMap allGlobalParametersToIndex = new HashMap();
+    static HashMap allGlobalParametersToIndex = null;
         
     final static String[] allGlobalParameters = new String[]
     {
@@ -757,7 +762,7 @@ public class RolandJV880Multi extends Synth
     };
     
     
-    HashMap allToneParametersToIndex = new HashMap();
+    static HashMap allToneParametersToIndex = null;
         
     final static String[] allToneParameters = new String[]
     {

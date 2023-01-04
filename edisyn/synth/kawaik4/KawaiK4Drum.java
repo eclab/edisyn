@@ -66,14 +66,19 @@ public class KawaiK4Drum extends Synth
     
     public KawaiK4Drum()
         {
-        for(int i = 0; i < allParameters.length; i++)
+        if (allParametersToIndex == null)
             {
-            allParametersToIndex.put(allParameters[i], Integer.valueOf(i));
-            }
+            allParametersToIndex = new HashMap();
+            for(int i = 0; i < allParameters.length; i++)
+                {
+                allParametersToIndex.put(allParameters[i], Integer.valueOf(i));
+                }
 
-        for(int i = 0; i < internalParameters.length; i++)
-            {
-            internalParametersToIndex.put(internalParameters[i], Integer.valueOf(i));
+            internalParametersToIndex = new HashMap();
+            for(int i = 0; i < internalParameters.length; i++)
+                {
+                internalParametersToIndex.put(internalParameters[i], Integer.valueOf(i));
+                }
             }
 
         JComponent soundPanel = new SynthPanel(this);
@@ -410,8 +415,8 @@ public class KawaiK4Drum extends Synth
 
 
     /** Map of parameter -> index in the allParameters array. */
-    HashMap allParametersToIndex = new HashMap();
-    HashMap internalParametersToIndex = new HashMap();
+    static HashMap allParametersToIndex = null;
+    static HashMap internalParametersToIndex = null;
 
     /** List of all parameters in order.  "-" is a reserved (unused and thus unnamed) parameter. */
 

@@ -153,9 +153,13 @@ public class DSIProphet08 extends Synth
             Synth.handleException(ex); 
             }
         
-        for(int i = 0; i < parameters.length; i++)
+        if (parametersToIndex == null)
             {
-            parametersToIndex.put(parameters[i], Integer.valueOf(i));
+            parametersToIndex = new HashMap();
+            for(int i = 0; i < parameters.length; i++)
+                {
+                parametersToIndex.put(parameters[i], Integer.valueOf(i));
+                }
             }
                         
         /// SOUND PANEL
@@ -1112,7 +1116,7 @@ public class DSIProphet08 extends Synth
 
 
     /** Map of parameter -> index in the allParameters array. */
-    HashMap parametersToIndex = new HashMap();
+    static HashMap parametersToIndex = null;
 
 
     /** List of all DSI Prophet 08 parameters in order,
@@ -1698,7 +1702,9 @@ public class DSIProphet08 extends Synth
                     }
                 }
             j += 8;
+//            System.err.println(j);
             }
+//            System.err.println(size);
         return newd;
         }
 

@@ -144,14 +144,19 @@ public class RolandD110Tone extends Synth
         String m = getLastX(ALT_LAYOUT_KEY, getSynthClassName());
         altLayout = (m == null ? false : Boolean.parseBoolean(m));
         
-        for(int i = 0; i < allPartialParameters.length; i++)
+        if (allPartialParametersToIndex == null)
             {
-            allPartialParametersToIndex.put(allPartialParameters[i], Integer.valueOf(i));
-            }
+            allPartialParametersToIndex = new HashMap();
+            for(int i = 0; i < allPartialParameters.length; i++)
+                {
+                allPartialParametersToIndex.put(allPartialParameters[i], Integer.valueOf(i));
+                }
 
-        for(int i = 0; i < allCommonParameters.length; i++)
-            {
-            allCommonParametersToIndex.put(allCommonParameters[i], Integer.valueOf(i));
+            allCommonParametersToIndex = new HashMap();
+            for(int i = 0; i < allCommonParameters.length; i++)
+                {
+                allCommonParametersToIndex.put(allCommonParameters[i], Integer.valueOf(i));
+                }
             }
 
         if (altLayout)
@@ -1095,7 +1100,7 @@ public class RolandD110Tone extends Synth
 
 
     // these don't have their "p1..." etc. attached
-    HashMap allPartialParametersToIndex = new HashMap();
+    static HashMap allPartialParametersToIndex = null;
     final static String[] allPartialParameters = new String[]
     {
     "wgpitchcoarse",
@@ -1163,7 +1168,7 @@ public class RolandD110Tone extends Synth
     };
     
     
-    HashMap allCommonParametersToIndex = new HashMap();
+    static HashMap allCommonParametersToIndex = null;
         
     final static String[] allCommonParameters = new String[]
     {

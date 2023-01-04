@@ -1406,7 +1406,7 @@ tryToSendMIDI(buildPC(getChannelOut(), 0));
         
     
     /** Map of parameter -> index in the allParameters array. */
-    public static HashMap parametersToIndex;
+    public static HashMap parametersToIndex = null;
 
 
     /** List of all Emu Morpheus parameters in order. */

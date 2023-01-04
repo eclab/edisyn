@@ -279,9 +279,13 @@ public class WaldorfKyra extends Synth
         {
         buildLFOShapes();        
         
-        for(int i = 0; i < parameters.length; i++)
+        if (parametersToIndex == null)
             {
-            parametersToIndex.put(parameters[i], Integer.valueOf(i));
+            parametersToIndex = new HashMap();
+            for(int i = 0; i < parameters.length; i++)
+                {
+                parametersToIndex.put(parameters[i], Integer.valueOf(i));
+                }
             }
 
         /// SOUND PANEL
@@ -2070,8 +2074,10 @@ public class WaldorfKyra extends Synth
     // The Kyra doesn't load into memory when you do a write I believe
     public boolean getSendsParametersAfterWrite() { return true; }
 
+    public boolean librarianTested() { return true; }
 
-    HashMap parametersToIndex = new HashMap();
+    static HashMap parametersToIndex = null;
+    
     public static final String[] parameters = new String[] 
     {
     "magic",
@@ -2354,8 +2360,8 @@ public class WaldorfKyra extends Synth
      Do a Program Change with MIDI Channel = the channel for the part number.
         
      NOTE: This channel may not be the Kyra's "Multi Channel"
-     NOTE: Banks and Patches start at 0
-     NOTE: A patch change requires at least 200ms pause afterwards
+     NOTE: Banks and Patches start at 0.  Banks are 0...25 for A...Z.
+     NOTE: A patch change requires at least a 200ms pause afterwards
         
      REQUEST SINGLE PATCH DUMP 
      F0
@@ -2369,7 +2375,7 @@ public class WaldorfKyra extends Synth
      -->             (Patch in Memory): MSB = 0 ... 25          (represents banks A ... Z)           
      [LSB]           Patch number as follows:
      -->             (Current Working Patch): LSB = part, or 0x7F (current part)
-     -->             (Patch in Memory): MSB = patch number          
+     -->             (Patch in Memory): LSB = patch number          
      F7
 
      SEND ONE PARAMETER TO EDIT BUFFER

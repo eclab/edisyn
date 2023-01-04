@@ -571,7 +571,7 @@ public class AudiothingiesMicroMonsta extends Synth
     public JComponent addOscillator(int osc, Color color)
         {
         Category category = new Category(this, "Oscillator " + osc, color);
-		category.makePasteable("osc");
+        category.makePasteable("osc");
 
         JComponent comp;
         String[] params;
@@ -786,7 +786,7 @@ public class AudiothingiesMicroMonsta extends Synth
     public JComponent addEncoders(Color color)
         {
         Category category = new Category(this, "Encoders", color);
-		category.makePasteable("encoderassign");
+        category.makePasteable("encoderassign");
 
         JComponent comp;
         String[] params;
@@ -820,7 +820,7 @@ public class AudiothingiesMicroMonsta extends Synth
     public JComponent addMatrix(Color color)
         {
         Category category = new Category(this, "Patch Matrix", color);
-		category.makeDistributable("patch");
+        category.makeDistributable("patch");
 
         JComponent comp;
         String[] params;
@@ -861,7 +861,7 @@ public class AudiothingiesMicroMonsta extends Synth
     public JComponent addScaler(Color color)
         {
         Category category = new Category(this, "Scaler", color);
-		category.makeDistributable("scaler");
+        category.makeDistributable("scaler");
 
         JComponent comp;
         String[] params;
@@ -923,7 +923,7 @@ public class AudiothingiesMicroMonsta extends Synth
     public JComponent addChorder(Color color)
         {
         Category category = new Category(this, "Chorder", color);
-		category.makePasteable("chorder");
+        category.makePasteable("chorder");
                 
         JComponent comp;
         String[] params;
@@ -1061,7 +1061,7 @@ public class AudiothingiesMicroMonsta extends Synth
     public JComponent addLFO(int lfo, Color color)
         {
         Category category = new Category(this, "LFO " + lfo, color);
-		category.makePasteable("lfo");
+        category.makePasteable("lfo");
 
         JComponent comp;
         String[] params;
@@ -1116,7 +1116,7 @@ public class AudiothingiesMicroMonsta extends Synth
     public JComponent addLFOSteps(Color color)
         {
         Category category = new Category(this, "LFO Stepped Sequence", color);
-		category.makeDistributable("lfostep");
+        category.makeDistributable("lfostep");
 
         JComponent comp;
         String[] params;
@@ -1145,7 +1145,7 @@ public class AudiothingiesMicroMonsta extends Synth
     public JComponent addEnvelope(int env, Color color)
         {
         Category category = new Category(this, "Envelope " + env, color);
-		category.makePasteable("env");
+        category.makePasteable("env");
 
         JComponent comp;
         String[] params;
@@ -1187,7 +1187,7 @@ public class AudiothingiesMicroMonsta extends Synth
     public JComponent addArpeggiator(Color color)
         {
         Category category = new Category(this, "Arpeggiator", color);
-		category.makeDistributable("arptn");
+        category.makeDistributable("arptn");
 
         JComponent comp;
         String[] params;
@@ -2092,6 +2092,13 @@ public class AudiothingiesMicroMonsta extends Synth
         nextPatchPosition++;
         if (nextPatchPosition >= 384) 
             nextPatchPosition = 0;
+        SwingUtilities.invokeLater(new Runnable()
+            { 
+            public void run() 
+                { 
+                download.setText("Set Librarian Download Point (Now " + nextPatchPosition +")" );
+                }
+            });
         }
 
     public int getPauseAfterWritePatch() { return 325; }                // The MicroMonsta sends them out at about 325 wait-time
@@ -2770,58 +2777,58 @@ public class AudiothingiesMicroMonsta extends Synth
 
 
 
-NRPN PARSING BUG
+     NRPN PARSING BUG
 
-The Micromonsta has an NRPN parsing bug you will have to work around.  The MIDI 1.0
-Specification is irritatingly vague and imprecise when it comes to NRPN, but there
-are two items that the MicroMonsta deviates from.  The first deviation is just a 
-strange oddity, but the second deviation is a serious bug you need to be aware of.
+     The Micromonsta has an NRPN parsing bug you will have to work around.  The MIDI 1.0
+     Specification is irritatingly vague and imprecise when it comes to NRPN, but there
+     are two items that the MicroMonsta deviates from.  The first deviation is just a 
+     strange oddity, but the second deviation is a serious bug you need to be aware of.
 
-In NRPN, you send data packets as MSB (CC 6) and LSB (CC 38).  It is not made 
-clear what the interpretation of these two packets should be: is the data to be 
-interpreted as the integer MSB * 128 + LSB?  Or is it to be interpreted essentially 
-as a "fine tuned" floating-point number MSB + LSB/128.0 ?  This is relevant because
-it changes the integer meaning of *only* sending an MSB or only an LSB.  Some 
-manufacturers (like DSI/Sequential) use the first interpretation -- which I prefer
-as well -- while the spec hints at the second interpretation.
+     In NRPN, you send data packets as MSB (CC 6) and LSB (CC 38).  It is not made 
+     clear what the interpretation of these two packets should be: is the data to be 
+     interpreted as the integer MSB * 128 + LSB?  Or is it to be interpreted essentially 
+     as a "fine tuned" floating-point number MSB + LSB/128.0 ?  This is relevant because
+     it changes the integer meaning of *only* sending an MSB or only an LSB.  Some 
+     manufacturers (like DSI/Sequential) use the first interpretation -- which I prefer
+     as well -- while the spec hints at the second interpretation.
 
-The MicroMonsta uses *both* interpretations.  If the range of the parameter is less
-than 128, then it expects and sends *just the MSB* to hold the parameter.  If the 
-range of the parameter is >= 128, then it expects and sends *both the LSB and MSB* 
-and the number is now interpreted as MSB * 128 + LSB.  So you'll have to handle the 
-parsing of the parameter based on its range.
+     The MicroMonsta uses *both* interpretations.  If the range of the parameter is less
+     than 128, then it expects and sends *just the MSB* to hold the parameter.  If the 
+     range of the parameter is >= 128, then it expects and sends *both the LSB and MSB* 
+     and the number is now interpreted as MSB * 128 + LSB.  So you'll have to handle the 
+     parsing of the parameter based on its range.
 
-Second -- the bug -- the NRPN spec allows you to send the MSB and LSB in either order
-and to emit either one of them (it should be then intepreted initially as zero, and
-thereafter as its previous value until the parameter number is resent, at which time
-it should be interpreted as zero again).
+     Second -- the bug -- the NRPN spec allows you to send the MSB and LSB in either order
+     and to emit either one of them (it should be then intepreted initially as zero, and
+     thereafter as its previous value until the parameter number is resent, at which time
+     it should be interpreted as zero again).
 
-However the MicroMonsta's parsing varies depending on the order in which you send 
-the LSB and MSB.  
+     However the MicroMonsta's parsing varies depending on the order in which you send 
+     the LSB and MSB.  
 
-- If you omit the LSB, the MicroMonsta will assume the parameter value is the MSB.
+     - If you omit the LSB, the MicroMonsta will assume the parameter value is the MSB.
 
-- If you send the LSB *before* the MSB, it will be ignored regardless of its value
-and the MicroMonsta will again assume the parameter value is the MSB.
+     - If you send the LSB *before* the MSB, it will be ignored regardless of its value
+     and the MicroMonsta will again assume the parameter value is the MSB.
 
-- If you send the LSB *after* the MSB, the MicroMonsta will assume that the
-parameter value is MSB * 128 + LSB.
+     - If you send the LSB *after* the MSB, the MicroMonsta will assume that the
+     parameter value is MSB * 128 + LSB.
 
-- The MicroMonsta will emit MSB, then the LSB for ranges >= 128 and will emit MSB 
-only for ranges < 128.
+     - The MicroMonsta will emit MSB, then the LSB for ranges >= 128 and will emit MSB 
+     only for ranges < 128.
 
-You'll be fine if you do the following:
+     You'll be fine if you do the following:
 
-- For ranges < 128, send the value as a single MSB.
+     - For ranges < 128, send the value as a single MSB.
 
-- For ranges >= 128, send the value as MSB = val % 128 followed by LSB = val / 128.
+     - For ranges >= 128, send the value as MSB = val % 128 followed by LSB = val / 128.
 
-- If you receive an MSB, wait for the LSB only if the range is >= 128.  
+     - If you receive an MSB, wait for the LSB only if the range is >= 128.  
 
-- For ranges >= 128, interpret the received value as MSB * 128 + LSB
+     - For ranges >= 128, interpret the received value as MSB * 128 + LSB
 
-- For ranges < 128, interpret the received value as MSB.
+     - For ranges < 128, interpret the received value as MSB.
 
-- For CC in all cases, interpret the value as the CC
+     - For CC in all cases, interpret the value as the CC
 
 */

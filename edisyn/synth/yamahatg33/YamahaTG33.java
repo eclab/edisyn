@@ -1146,7 +1146,7 @@ public class YamahaTG33 extends Synth
     { 0x7E, 0x7F, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x7f, 0x3f, 0x5f, 0x6f, 0x7d, 0x7e, 0x7f, 0x7f, 0x7f, 0x7f },
     };
                 
-    static HashMap voiceCommonParametersToIndex;
+    static HashMap voiceCommonParametersToIndex = null;
 
     public static final String[] voiceCommonParameters = new String[]
     {
@@ -1184,7 +1184,7 @@ public class YamahaTG33 extends Synth
     { 0x7f, 0x7f, 0x0f, 0x70, 0x1f, 0x60, 0x7f, 0x7f, 0x70, 0x60, 0x78, 0x7f },
     };
         
-    static HashMap voiceToneACParametersToIndex;
+    static HashMap voiceToneACParametersToIndex = null;
 
     // these will start with tone0 or tone2
     public static final String[] voiceToneACParameters = new String[]
@@ -1214,7 +1214,7 @@ public class YamahaTG33 extends Synth
     { 0x7F, 0x7F, 0x0F, 0x70, 0x1F, 0x60, 0x7F, 0x7F, 0x70, 0x60, 0x78, 0x78, 0x7F, 0x7F },
     };
          
-    static HashMap voiceToneBDParametersToIndex;
+    static HashMap voiceToneBDParametersToIndex = null;
 
     // these will start with tone1 or tone3
     public static final String[] voiceToneBDParameters = new String[]
@@ -1246,7 +1246,7 @@ public class YamahaTG33 extends Synth
     { 0x0F, 0x0F, 0x78, 0x7F, 0x40, 0x40, 0x40, 0x40, 0x00, 0x00, 0x00, 0x00 },
     };
         
-    static HashMap voiceEnvelopeACParametersToIndex;
+    static HashMap voiceEnvelopeACParametersToIndex = null;
 
     // these will start with tone0 or tone2
     public static final String[] voiceEnvelopeACParameters = new String[]
@@ -1275,7 +1275,7 @@ public class YamahaTG33 extends Synth
     { 0x0F, 0x0F, 0x78, 0x7F, 0x40, 0x40, 0x40, 0x40, 0x00, 0x00, 0x00, 0x00 },
     };
          
-    static HashMap voiceEnvelopeBDParametersToIndex = voiceEnvelopeACParametersToIndex;
+    static HashMap voiceEnvelopeBDParametersToIndex = null;             // will look the same as voiceEnvelopeACParametersToIndex;
 
     // these will start with tone10, tone11, tone30, or tone31
     public static final String[] voiceEnvelopeBDParameters = voiceEnvelopeACParameters;
@@ -1290,7 +1290,7 @@ public class YamahaTG33 extends Synth
     { 0x7f, 0x7f },
     };
 
-    static HashMap voiceVectorInitialParametersToIndex;
+    static HashMap voiceVectorInitialParametersToIndex = null;
     public static final String[] voiceVectorInitialParameters = new String[]
     {
     "levelspeed",
@@ -1298,7 +1298,7 @@ public class YamahaTG33 extends Synth
     };
 
     public static final int[][] voiceVector = new int[300][5];
-    static HashMap voiceVectorParametersToIndex;
+    static HashMap voiceVectorParametersToIndex = null;
     public static final String[] voiceVectorParameters = new String[300];
 
     static

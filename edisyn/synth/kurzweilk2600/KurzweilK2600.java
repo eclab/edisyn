@@ -847,9 +847,13 @@ public class KurzweilK2600 extends Synth
         System.out.println("KurzweilK2600");
         model.setUpdateListeners(false);
         
-        for(int i = 0; i < parameters.length; i++)
+        if (parametersToIndex == null)
             {
-            parametersToIndex.put(parameters[i], Integer.valueOf(i));
+            parametersToIndex = new HashMap();
+            for(int i = 0; i < parameters.length; i++)
+                {
+                parametersToIndex.put(parameters[i], Integer.valueOf(i));
+                }
             }
         
         Instant previous, current;
@@ -4696,7 +4700,7 @@ public class KurzweilK2600 extends Synth
     public int getPatchNameLength() { return MAXIMUM_NAME_LENGTH; }
     
     /** Map of parameter -> index in the allParameters array. */
-    HashMap parametersToIndex = new HashMap();
+    static HashMap parametersToIndex = null;
     
     final static String[] parameters = new String[]
     {

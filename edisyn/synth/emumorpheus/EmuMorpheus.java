@@ -37,10 +37,10 @@ public class EmuMorpheus extends Synth
         
     
     Chooser[] instrumentChoosers = new Chooser[2];
-    public HashMap ultraproteusInstrumentOffsetsToIndex = new HashMap();
-    public HashMap ultraproteusFilterOffsetsToIndex = new HashMap();
-    public HashMap morpheusInstrumentOffsetsToIndex = new HashMap();
-    public HashMap morpheusFilterOffsetsToIndex = new HashMap();
+    public static HashMap ultraproteusInstrumentOffsetsToIndex = null;
+    public static HashMap ultraproteusFilterOffsetsToIndex = null;
+    public static HashMap morpheusInstrumentOffsetsToIndex = null;
+    public static HashMap morpheusFilterOffsetsToIndex = null;
     
     JCheckBox ultraProteusCheck;
     
@@ -84,29 +84,37 @@ public class EmuMorpheus extends Synth
         String m = getLastX(ULTRAPROTEUS_KEY, getSynthClassName());
         morpheus = (m == null ? false : !Boolean.parseBoolean(m));
         
-        for(int i = 0; i < parameters.length; i++)
+        if (parametersToIndex == null)
             {
-            parametersToIndex.put(parameters[i], Integer.valueOf(i));
-            }
+            parametersToIndex = new HashMap();
+            for(int i = 0; i < parameters.length; i++)
+                {
+                parametersToIndex.put(parameters[i], Integer.valueOf(i));
+                }
             
-        for(int i = 0; i < ULTRAPROTEUS_INSTRUMENT_OFFSETS.length; i++)
-            {
-            ultraproteusInstrumentOffsetsToIndex.put(Integer.valueOf(ULTRAPROTEUS_INSTRUMENT_OFFSETS[i]), Integer.valueOf(i));
-            }
+            ultraproteusInstrumentOffsetsToIndex = new HashMap();
+            for(int i = 0; i < ULTRAPROTEUS_INSTRUMENT_OFFSETS.length; i++)
+                {
+                ultraproteusInstrumentOffsetsToIndex.put(Integer.valueOf(ULTRAPROTEUS_INSTRUMENT_OFFSETS[i]), Integer.valueOf(i));
+                }
 
-        for(int i = 0; i < ULTRAPROTEUS_FILTER_OFFSETS.length; i++)
-            {
-            ultraproteusFilterOffsetsToIndex.put(Integer.valueOf(ULTRAPROTEUS_FILTER_OFFSETS[i]), Integer.valueOf(i));
-            }
+            ultraproteusFilterOffsetsToIndex = new HashMap();
+            for(int i = 0; i < ULTRAPROTEUS_FILTER_OFFSETS.length; i++)
+                {
+                ultraproteusFilterOffsetsToIndex.put(Integer.valueOf(ULTRAPROTEUS_FILTER_OFFSETS[i]), Integer.valueOf(i));
+                }
                         
-        for(int i = 0; i < MORPHEUS_INSTRUMENT_OFFSETS.length; i++)
-            {
-            morpheusInstrumentOffsetsToIndex.put(Integer.valueOf(MORPHEUS_INSTRUMENT_OFFSETS[i]), Integer.valueOf(i));
-            }
+            morpheusInstrumentOffsetsToIndex = new HashMap();
+            for(int i = 0; i < MORPHEUS_INSTRUMENT_OFFSETS.length; i++)
+                {
+                morpheusInstrumentOffsetsToIndex.put(Integer.valueOf(MORPHEUS_INSTRUMENT_OFFSETS[i]), Integer.valueOf(i));
+                }
 
-        for(int i = 0; i < MORPHEUS_FILTER_OFFSETS.length; i++)
-            {
-            morpheusFilterOffsetsToIndex.put(Integer.valueOf(MORPHEUS_FILTER_OFFSETS[i]), Integer.valueOf(i));
+            morpheusFilterOffsetsToIndex = new HashMap();
+            for(int i = 0; i < MORPHEUS_FILTER_OFFSETS.length; i++)
+                {
+                morpheusFilterOffsetsToIndex.put(Integer.valueOf(MORPHEUS_FILTER_OFFSETS[i]), Integer.valueOf(i));
+                }
             }
                         
                         
@@ -1443,7 +1451,7 @@ public class EmuMorpheus extends Synth
 
 
     /** Map of parameter -> index in the allParameters array. */
-    HashMap parametersToIndex = new HashMap();
+    static HashMap parametersToIndex = null;
 
 
     /** List of all Emu Morpheus parameters in order. */

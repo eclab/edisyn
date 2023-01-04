@@ -162,7 +162,11 @@ public class WaldorfBlofeld extends Synth
         {
         for(int i = 0; i < allParameters.length; i++)
             {
-            allParametersToIndex.put(allParameters[i], Integer.valueOf(i));
+            if (allParametersToIndex == null)
+                {
+                allParametersToIndex = new HashMap();
+                allParametersToIndex.put(allParameters[i], Integer.valueOf(i));
+                }
             }
                                 
         /// SOUND PANEL
@@ -1618,7 +1622,7 @@ public class WaldorfBlofeld extends Synth
 
 
     /** Map of parameter -> index in the allParameters array. */
-    HashMap allParametersToIndex = new HashMap();
+    static HashMap allParametersToIndex = null;
 
 
     /** List of all Waldorf parameters in order.  "-" is a reserved (unused and thus unnamed) parameter. */

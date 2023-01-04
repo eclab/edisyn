@@ -50,9 +50,13 @@ public class KawaiK4Multi extends Synth
 
     public KawaiK4Multi()
         {
-        for(int i = 0; i < allParameters.length; i++)
+        if (allParametersToIndex == null)
             {
-            allParametersToIndex.put(allParameters[i], Integer.valueOf(i));
+            allParametersToIndex = new HashMap();
+            for(int i = 0; i < allParameters.length; i++)
+                {
+                allParametersToIndex.put(allParameters[i], Integer.valueOf(i));
+                }
             }
                         
         /// SOUND PANEL
@@ -398,7 +402,7 @@ public class KawaiK4Multi extends Synth
         }
 
 
-    HashMap allParametersToIndex = new HashMap();
+    static HashMap allParametersToIndex = null;
         
     final static String[] allParameters = new String[]
     {

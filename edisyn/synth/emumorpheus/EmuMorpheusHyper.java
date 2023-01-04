@@ -27,9 +27,13 @@ public class EmuMorpheusHyper extends Synth
     {
     public EmuMorpheusHyper()
         {
-        for(int i = 0; i < parameters.length; i++)
+        if (parametersToIndex == null)
             {
-            parametersToIndex.put(parameters[i], Integer.valueOf(i));
+            parametersToIndex = new HashMap();
+            for(int i = 0; i < parameters.length; i++)
+                {
+                parametersToIndex.put(parameters[i], Integer.valueOf(i));
+                }
             }
             
         /// SOUND PANEL
@@ -742,7 +746,7 @@ public class EmuMorpheusHyper extends Synth
 
 
     /** Map of parameter -> index in the allParameters array. */
-    HashMap parametersToIndex = new HashMap();
+    static HashMap parametersToIndex = null;
 
 
     /** List of all Emu Morpheus parameters in order. */

@@ -544,6 +544,11 @@ public class Blank extends Synth
 
     ////// YOU MAY WANT TO IMPLEMENT SOME OF THE FOLLOWING
 
+    public boolean isUsingPreferencesForMutationMap() 
+        { 
+        return false; 
+        }
+
     public boolean getAlwaysChangesPatchesOnRequestDump() 
         { 
         // This is called by performRequestDump() to determine if it should changePatch() first.
@@ -1071,8 +1076,8 @@ public class Blank extends Synth
         // patches in banks than other synthesizers of the same family, but must share the same sysex 
         // files.  In these cases, Edisyn permits patches to be placed into "invalid" slots (defined by
         // this method), and saved to files from them, but not written to synthesizers from those locations.
- 		//
- 		// The bank values passed in will always be between 0 and the number of banks (minus 1) inclusive.
+        //
+        // The bank values passed in will always be between 0 and the number of banks (minus 1) inclusive.
         // Similarly the patch numbers passed in will always be between 0 and getPatchNumberNames() - 1
         // inclusive.  By default this method always returns true, which is in most cases correct.
         return true; 

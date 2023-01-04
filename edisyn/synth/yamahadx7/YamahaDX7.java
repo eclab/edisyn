@@ -147,9 +147,13 @@ public class YamahaDX7 extends Synth implements ProvidesNN
         {
         model.set("number", 0);
                 
-        for(int i = 0; i < allParameters.length; i++)
+        if (allParametersToIndex == null)
             {
-            allParametersToIndex.put(allParameters[i], Integer.valueOf(i));
+            allParametersToIndex = new HashMap();
+            for(int i = 0; i < allParameters.length; i++)
+                {
+                allParametersToIndex.put(allParameters[i], Integer.valueOf(i));
+                }
             }
 
         /// SOUND PANEL
@@ -710,7 +714,7 @@ public class YamahaDX7 extends Synth implements ProvidesNN
 
 
     /** Map of parameter -> index in the allParameters array. */
-    HashMap allParametersToIndex = new HashMap();
+    static HashMap allParametersToIndex = null;
 
 
     /** List of all Sysex parameters in order.  "-" is a reserved (unused and thus unnamed) parameter. */
@@ -1292,11 +1296,12 @@ public class YamahaDX7 extends Synth implements ProvidesNN
         for(int i = 0; i < allParameters.length- 10; i++)
             {
             String parameter = allParameters[i];
+            // if it's metric in ANY WAY
             if (model.metricMinExists(parameter))
                 {
                 index = Network.encodeScaled(vector,index,model.get(parameter), model.getMin(parameter), model.getMax(parameter));
                 } 
-            else 
+            else        // it's fully categorical
                 {
                 index = Network.encodeOneHot(vector,index,model.get(parameter), model.getMin(parameter), model.getMax(parameter));
                 }
@@ -1317,7 +1322,7 @@ public class YamahaDX7 extends Synth implements ProvidesNN
             {
             // for each parameter
             String parameter = allParameters[i];
-            // check if it's metric
+            // check if it's metric in any way
             if (model.metricMinExists(parameter))
                 {
                 // if it is, decode the value as a scaled value
@@ -1327,7 +1332,7 @@ public class YamahaDX7 extends Synth implements ProvidesNN
                 } 
             else 
                 {
-                // Otherwise, it's categorical: decode it as a one-hot encoded value
+                // Otherwise, it's fully categorical: decode it as a one-hot encoded value
                 int[] v = Network.decodeOneHot(vector, index, model.getMin(parameter), model.getMax(parameter));
                 index = v[0];
                 newModel.set(parameter, v[1]);

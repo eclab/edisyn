@@ -463,7 +463,9 @@ public class LabelledDial extends NumericalComponent
         
         public boolean getCanonicalSymmetric() 
             { 
-            return subtractForDisplay == 64 || subtractForDisplay == 50 || getMax() == (0 - getMin()) || (getMax() == 127 && getMin() == -128);              
+            return subtractForDisplay == 64 || subtractForDisplay == 50 || 
+                getMax() == (0 - getMin()) || 
+                (getMax() == 127 && getMin() == -128) || (getMax() == 63 && getMin() == -64);              
             }
         
         public double getCanonicalStartAngle()
@@ -477,13 +479,11 @@ public class LabelledDial extends NumericalComponent
                 return 270;
                 }
             }
-       
-       public static final boolean showRaw = false;
-                
+                       
         public void paintComponent(Graphics g)
             {
             // revise label if needed
-            String val = (showRaw ? ("" + getState()) : map(getState()));
+            String val = (Style.showRaw ? ("" + getState()) : map(getState()));
             if (!(val.equals(dial.field.getText())))
                 dial.field.setText(val);
 

@@ -22,38 +22,38 @@ public class Edisyn
     {
     public static final int VERSION = 32;
     
-     public static void main(String[] args)
+    public static void main(String[] args)
         {
         try 
-        	{
-			if (Style.isUnix())
-				{
-				System.setProperty("useSystemAAFontSettings", "lcd");  // see https://wiki.archlinux.org/title/Java_Runtime_Environment_fonts#Basic_settings
-				}
-			
-			if (Style.isMac())
-				{
-				System.setProperty("apple.awt.graphics.EnableQ2DX", "true");
-				System.setProperty("apple.laf.useScreenMenuBar", "true");
-			
-				if (Style.isMacOSMonterey())		// Monterey has a broken tab bug :-(
-					{
-					UIManager.put("TabbedPane.foreground", java.awt.Color.BLACK);
-					}
+            {
+            if (Style.isUnix())
+                {
+                System.setProperty("useSystemAAFontSettings", "lcd");  // see https://wiki.archlinux.org/title/Java_Runtime_Environment_fonts#Basic_settings
+                }
+                        
+            if (Style.isMac())
+                {
+                System.setProperty("apple.awt.graphics.EnableQ2DX", "true");
+                System.setProperty("apple.laf.useScreenMenuBar", "true");
+                        
+                if (Style.isMacOSMonterey())            // Monterey has a broken tab bug :-(
+                    {
+                    UIManager.put("TabbedPane.foreground", java.awt.Color.BLACK);
+                    }
 
-				// This no longer works as of Java 7
-				//System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Edisyn");
-				// This DOES work, but it's not necessary as the menu says "Edisyn" anyway
-				// System.setProperty("apple.awt.application.name", "Edisyn");
-				}            
-		
-			if (Style.isWindows())
-				{
-				// This makes sure that windows uses the default windows look and feel, not the old Sun one
-				// NOTE: this will seriously break Java on Linux
-				UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-				}
-			}
+                // This no longer works as of Java 7
+                //System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Edisyn");
+                // This DOES work, but it's not necessary as the menu says "Edisyn" anyway
+                // System.setProperty("apple.awt.application.name", "Edisyn");
+                }            
+                
+            if (Style.isWindows())
+                {
+                // This makes sure that windows uses the default windows look and feel, not the old Sun one
+                // NOTE: this will seriously break Java on Linux
+                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+                }
+            }
         catch(Exception e) { }
         
         

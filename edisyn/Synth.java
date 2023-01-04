@@ -242,6 +242,7 @@ public abstract class Synth extends JComponent implements Updatable
         updateTitle(); 
         repaint(); 
         }
+        
     public MutationMap mutationMap;
     public String[] getMutationKeys()
         {
@@ -269,7 +270,6 @@ public abstract class Synth extends JComponent implements Updatable
 
 
 
-
     /////// CREATION AND CONSTRUCTION
 
     public Synth() 
@@ -279,7 +279,7 @@ public abstract class Synth extends JComponent implements Updatable
         model.setUndoListener(undo);
         ccmap = new CCMap(Prefs.getAppPreferences(getSynthClassName(), "CCKey"),
             Prefs.getAppPreferences(getSynthClassName(), "CCType"));
-        mutationMap = new MutationMap(Prefs.getAppPreferences(getSynthClassName(), "Mutation"));
+        mutationMap = new MutationMap((java.util.prefs.Preferences)null);  // Prefs.getAppPreferences(getSynthClassName(), "Mutation"));
 
         undo.setWillPush(false);  // instantiate undoes this
         random = new Random(System.currentTimeMillis());
@@ -970,9 +970,6 @@ public abstract class Synth extends JComponent implements Updatable
         wants to pop up a single patch to display it. */    
     public void performRequestDump(Model tempModel, boolean changePatch)
         {
-        // We'll ALWAYS change the patch, because some editors MUST have the
-        // patch changed, and then they do a requestCurrentDump internally
-        
         if (changePatch || getAlwaysChangesPatchesOnRequestDump())
             performChangePatch(tempModel);
             
@@ -1235,8 +1232,8 @@ public abstract class Synth extends JComponent implements Updatable
         }
 
     /** Builds a sequence of CCs for an NRPN message, where the MSB is set to the value and the LSB
-    	is not sent at all. This is a workaround for a bug in the Micromonsta, which borks on some items 
-    	if the data MSB is sent first and then the LSB. */
+        is not sent at all. This is a workaround for a bug in the Micromonsta, which borks on some items 
+        if the data MSB is sent first and then the LSB. */
     public Object[] buildNRPNMSBOnly(int channel, int parameter, int value)
         {
         try
@@ -1253,7 +1250,7 @@ public abstract class Synth extends JComponent implements Updatable
                 {
                 new ShortMessage(ShortMessage.CONTROL_CHANGE, channel, 99, (byte)p_msb),
                 new ShortMessage(ShortMessage.CONTROL_CHANGE, channel, 98, (byte)p_lsb),
-                new ShortMessage(ShortMessage.CONTROL_CHANGE, channel, 6, (byte)v_msb),		// BLEAH
+                new ShortMessage(ShortMessage.CONTROL_CHANGE, channel, 6, (byte)v_msb),         // BLEAH
 
                 // can't have these right now, it freaks out the PreenFM2
                 //new ShortMessage(ShortMessage.CONTROL_CHANGE, channel, 101, (byte)127),
@@ -3132,13 +3129,14 @@ public abstract class Synth extends JComponent implements Updatable
         }
 
 
-    /** Display a simple error message. */
+    /** Display a simple error message. If ExceptionDump.lastThrowableExists() then it will be used as the error.
+        Otherwise if error is null, new RuntimeException(message) will be used.  Otherwise the error itself will be used. */
     public void showErrorWithStackTrace(Throwable error, String title, String message)
         {
         if (!ExceptionDump.lastThrowableExists())
             {
             System.err.println("WARNING: error with stack trace requested but there's no Throwable");
-            Synth.handleException(error);
+            Synth.handleException(error == null ? new RuntimeException("" + message) : error);
             showSimpleError(title, message);
             }
         else
@@ -4092,7 +4090,7 @@ public abstract class Synth extends JComponent implements Updatable
             {
             public void actionPerformed( ActionEvent e)
                 {
-                doMutate(0.01);
+                doMutate(0.1);          // sqrt(0.01)
                 }
             });
 
@@ -4100,7 +4098,7 @@ public abstract class Synth extends JComponent implements Updatable
             {
             public void actionPerformed( ActionEvent e)
                 {
-                doMutate(0.02);
+                doMutate(0.15);         // ~sqrt(0.02)
                 }
             });
 
@@ -4108,7 +4106,7 @@ public abstract class Synth extends JComponent implements Updatable
             {
             public void actionPerformed( ActionEvent e)
                 {
-                doMutate(0.05);
+                doMutate(0.2);  // ~sqrt(0.05)
                 }
             });
 
@@ -4116,7 +4114,7 @@ public abstract class Synth extends JComponent implements Updatable
             {
             public void actionPerformed( ActionEvent e)
                 {
-                doMutate(0.1);
+                doMutate(0.3);          // ~sqrt(0.1)
                 }
             });
 
@@ -4124,7 +4122,7 @@ public abstract class Synth extends JComponent implements Updatable
             {
             public void actionPerformed( ActionEvent e)
                 {
-                doMutate(0.25);
+                doMutate(0.5);          // sqrt(0.25)
                 }
             });
 
@@ -4132,7 +4130,7 @@ public abstract class Synth extends JComponent implements Updatable
             {
             public void actionPerformed( ActionEvent e)
                 {
-                doMutate(0.5);
+                doMutate(0.7);          // ~sqrt(0.5)
                 }
             });
 
@@ -4657,6 +4655,26 @@ public abstract class Synth extends JComponent implements Updatable
             public void actionPerformed( ActionEvent e)
                 {
                 doSetAllMutationMap(true);
+                }
+            });
+
+        JMenuItem loadMutationParameters = new JMenuItem("Load Mutation Parameters...");
+        menu.add(loadMutationParameters);
+        loadMutationParameters.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                doLoadMutationParameters();
+                }
+            });
+
+        JMenuItem saveMutationParameters = new JMenuItem("Save Mutation Parameters...");
+        menu.add(saveMutationParameters);
+        saveMutationParameters.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                doSaveMutationParameters();
                 }
             });
 
@@ -6385,13 +6403,14 @@ public abstract class Synth extends JComponent implements Updatable
         boolean currentPush = newSynth.undo.getWillPush();
         newSynth.undo.setWillPush(false);
         model.copyValuesTo(newSynth.model);
+        newSynth.mutationMap = new MutationMap(mutationMap);
         newSynth.undo.setWillPush(currentPush);
         newSynth.setSendMIDI(true);
         return newSynth;
         }
                 
     void doUndo() { doUndo(true); }
-    void doUndo(boolean send)
+    void doUndo(boolean updateAndSend)
         {
         setSendMIDI(false);
         if (model.equals(undo.top()))
@@ -6400,10 +6419,10 @@ public abstract class Synth extends JComponent implements Updatable
             model = undo.undo(model);
         boolean currentPush = undo.getWillPush();
         undo.setWillPush(false);
-        model.updateAllListeners();
+        if (updateAndSend) model.updateAllListeners();
         undo.setWillPush(currentPush);
         setSendMIDI(true);
-        if (send) sendAllParameters();
+        if (updateAndSend) sendAllParameters();
         }
                 
     void doRedo()
@@ -6524,6 +6543,8 @@ public abstract class Synth extends JComponent implements Updatable
         setSendMIDI(false);
         undo.setWillPush(false);
         Model backup = (Model)(model.clone());
+        boolean previous = model.getUpdateListeners();
+        model.setUpdateListeners(false);
         
         if (nnRandomize != null && nnRandomize.isSelected())
             {
@@ -6538,8 +6559,9 @@ public abstract class Synth extends JComponent implements Updatable
         undo.setWillPush(true);
         if (!backup.keyEquals(getModel()))  // it's changed, do an undo push
             undo.push(backup);
+        model.setUpdateListeners(previous);
+        model.updateAllListeners();
         setSendMIDI(true);
-        
         sendAllParameters();
         lastMutate = probability;
         }
@@ -7925,32 +7947,32 @@ public abstract class Synth extends JComponent implements Updatable
         if (Style.isMac())
             {
             if (showSimpleConfirm("Select Directory", title, "Select..."))
-            	{
-				// MacOS's SAVE dialog is broken for directories.  We're forced to use the LOAD version
-				// Thanks to samstaton on github
-			
-				FileDialog fd = new FileDialog(parent, title, FileDialog.LOAD);
-				if (initialParentDirectory != null)
-					fd.setDirectory(initialParentDirectory.getAbsolutePath());
-				disableMenuBar();
-				System.setProperty("apple.awt.fileDialogForDirectories", "true");
-				fd.setVisible(true);
-				System.setProperty("apple.awt.fileDialogForDirectories", "false");
-				enableMenuBar();
-			
-				if (fd.getDirectory() == null)
-					{
-					return null;
-					}
-				else 
-					{
-					return new File(fd.getDirectory(), fd.getFile());
-					}
-				}
-			else
-				{
-				return null;
-				}
+                {
+                // MacOS's SAVE dialog is broken for directories.  We're forced to use the LOAD version
+                // Thanks to samstaton on github
+                        
+                FileDialog fd = new FileDialog(parent, title, FileDialog.LOAD);
+                if (initialParentDirectory != null)
+                    fd.setDirectory(initialParentDirectory.getAbsolutePath());
+                disableMenuBar();
+                System.setProperty("apple.awt.fileDialogForDirectories", "true");
+                fd.setVisible(true);
+                System.setProperty("apple.awt.fileDialogForDirectories", "false");
+                enableMenuBar();
+                        
+                if (fd.getDirectory() == null)
+                    {
+                    return null;
+                    }
+                else 
+                    {
+                    return new File(fd.getDirectory(), fd.getFile());
+                    }
+                }
+            else
+                {
+                return null;
+                }
             }
         else
             {
@@ -7985,9 +8007,9 @@ public abstract class Synth extends JComponent implements Updatable
     boolean saveAllPatches(Patch[][] patches, int patchType, boolean groupByType)
         {
         File dir = selectDirectory(
-        	Style.isMac() ? 
-        		(groupByType ? "Select a Directory to Save Bulk Patch Files..." : "Select a Directory to Save Patches...") :
-        		(groupByType ? "Select Directory to Save Bulk Patch Files" : "Select Directory to Save Patches"),
+            Style.isMac() ? 
+            (groupByType ? "Select a Directory to Save Bulk Patch Files..." : "Select a Directory to Save Patches...") :
+            (groupByType ? "Select Directory to Save Bulk Patch Files" : "Select Directory to Save Patches"),
             file != null ? new File(file.getParentFile().getPath()) : (getLastDirectory() == null ? new File(getLastDirectory()) : null));
         if (dir != null) setLastDirectory(dir.getParent());
         
@@ -8480,14 +8502,24 @@ public abstract class Synth extends JComponent implements Updatable
             String[] keys = getModel().getKeys();
             for(int i = 0; i < keys.length; i++)
                 {
-                mutationMap.setFree(keys[i], val);
+                mutationMap.setFree(keys[i], val, false);
                 }
+            mutationMap.sync();                    
+            repaint();
             }
-                        
+        }     
+
+    void doLoadMutationParameters()
+        {
+        mutationMap.loadParameters(this);
         repaint();
         }     
     
-    
+    void doSaveMutationParameters()
+        {
+        mutationMap.saveParameters(this);
+        repaint();
+        }     
     
     
     
@@ -8586,7 +8618,7 @@ public abstract class Synth extends JComponent implements Updatable
         }  
         
     void hideLibrarian()
-    	{
+        {
         if (librarianOpen)
             {
             Component selected = tabs.getSelectedComponent();
@@ -8600,7 +8632,7 @@ public abstract class Synth extends JComponent implements Updatable
             {
             // do nothing
             }
-    	}
+        }
     
     public Librarian getLibrarian() { return librarian; }
     public boolean isLibrarianOpen() { return librarianOpen; }
@@ -9281,8 +9313,9 @@ public abstract class Synth extends JComponent implements Updatable
                 
             if (blendLocations != null)
                 {
-                doUndo(false);          // no reason to send it
-                doUndo(false);          // no reason to send it         // yes, twice
+                doUndo(false);          // no reason to send or update it
+                doUndo(false);          // yes, twice
+                model.updateAllListeners();	// because doUndo() didn't do it, and performBlend may not succeed
                 performBlend();
                 }
             else
@@ -9667,7 +9700,7 @@ public abstract class Synth extends JComponent implements Updatable
     /** Call this to log exceptions.  By default this method just prints the exception to the
         command line, but it can be modified to open a file and log the exception that way
         so a user can mail the developer a debug file. */
-    public static void handleException(Throwable ex) { ex.printStackTrace(); }    
+    public static void handleException(Throwable ex) { if (ex != null) ex.printStackTrace(); }    
     
     
     public static void printSysex(byte[] data)
@@ -9728,6 +9761,11 @@ public abstract class Synth extends JComponent implements Updatable
     public String getSynthClassName()
         {
         return getClass().getName();
+        }
+        
+    public Random getRandom() 
+        { 
+        return random; 
         }
     
     
@@ -9867,9 +9905,9 @@ public abstract class Synth extends JComponent implements Updatable
     public void fix(String key, Model model) { }
     
     /** This is called when we receive a *single* patch without a number or bank and we need to know
-    	where to put it. By default this method does nothing. This largely exists for situations such
-    	as in the MicroMonsta where we receive single patches with no context from the synth and cannot
-    	request patches (so we can't preset the patch number). */
+        where to put it. By default this method does nothing. This largely exists for situations such
+        as in the MicroMonsta where we receive single patches with no context from the synth and cannot
+        request patches (so we can't preset the patch number). */
     public void updateNumberAndBank(Patch patch) { }
     
     /** Notifies the Synth that its librarian has been created. */

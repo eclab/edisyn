@@ -391,9 +391,9 @@ public class Library extends AbstractTableModel
         
         // preprocess
         for(int i = 0; i < incoming.length; i++)
-        	{
-	        synth.updateNumberAndBank(incoming[i]);
-        	}
+            {
+            synth.updateNumberAndBank(incoming[i]);
+            }
         
         // Break out the known and unknown patches
         ArrayList<Patch> unknown = new ArrayList<Patch>();
@@ -929,46 +929,46 @@ public class Library extends AbstractTableModel
             }
         }
 
-	/** Saves a single patch */
-	public void saveOne(int bank, int number, Object[] d, String fileName)
-		{
-		fileName = StringUtility.ensureFileEndsWith(fileName, ".syx");
-		byte[] data = Synth.flatten(d);
-		FileDialog fd = new FileDialog((Frame)(SwingUtilities.getRoot(synth)), "Save to Sysex File...", FileDialog.SAVE);
+    /** Saves a single patch */
+    public void saveOne(int bank, int number, Object[] d, String fileName)
+        {
+        fileName = StringUtility.ensureFileEndsWith(fileName, ".syx");
+        byte[] data = Synth.flatten(d);
+        FileDialog fd = new FileDialog((Frame)(SwingUtilities.getRoot(synth)), "Save to Sysex File...", FileDialog.SAVE);
 
-		fd.setFile(fileName);
-		String path = synth.getLastDirectory();
-		if (path != null)
-			fd.setDirectory(path);
-																																																																	
-		synth.disableMenuBar();
-		fd.setVisible(true);
-		synth.enableMenuBar();
-	
-		File f = null; // make compiler happy
-		FileOutputStream os = null;
-		if (fd.getFile() != null)
-			{
-			synth.setLastDirectory(fd.getDirectory());
-			File patchFileOrDirectory = new File(fd.getDirectory(), StringUtility.ensureFileEndsWith(fd.getFile(), ".syx"));
-			FileOutputStream patch = null;
-			try 
-				{
-				patch = new FileOutputStream(patchFileOrDirectory);
-				patch.write(data);
-				patch.close();
-				} 
-			catch (IOException e) // fail
-				{
-				synth.showErrorWithStackTrace(e, "File Error", "An error occurred while saving to bulk file " + (patchFileOrDirectory == null ? " " : patchFileOrDirectory.getName()));
-				Synth.handleException(e);
-				if (patch != null)
-					try { patch.close(); }
-					catch (IOException ex) { }
-				}
-			}
-		else return;
-		}
+        fd.setFile(fileName);
+        String path = synth.getLastDirectory();
+        if (path != null)
+            fd.setDirectory(path);
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        
+        synth.disableMenuBar();
+        fd.setVisible(true);
+        synth.enableMenuBar();
+        
+        File f = null; // make compiler happy
+        FileOutputStream os = null;
+        if (fd.getFile() != null)
+            {
+            synth.setLastDirectory(fd.getDirectory());
+            File patchFileOrDirectory = new File(fd.getDirectory(), StringUtility.ensureFileEndsWith(fd.getFile(), ".syx"));
+            FileOutputStream patch = null;
+            try 
+                {
+                patch = new FileOutputStream(patchFileOrDirectory);
+                patch.write(data);
+                patch.close();
+                } 
+            catch (IOException e) // fail
+                {
+                synth.showErrorWithStackTrace(e, "File Error", "An error occurred while saving to bulk file " + (patchFileOrDirectory == null ? " " : patchFileOrDirectory.getName()));
+                Synth.handleException(e);
+                if (patch != null)
+                    try { patch.close(); }
+                    catch (IOException ex) { }
+                }
+            }
+        else return;
+        }
 
     /** Saves to disk all the patches from start to start+len-1 in bank.
         If bank == ALL_PATCHES, then writes the entire library; in this
@@ -977,104 +977,104 @@ public class Library extends AbstractTableModel
     public void saveRange(int bank, int start, int len)
         {
         if (bank != ALL_PATCHES && len == 1)
-        	{
+            {
             saveRangeSeparately(bank, start, len, true);
-        	}    	
+            }       
         else
-        	{
-			JComboBox combo = null;
-			JComponent[] comp = new JComponent[0];
-			String[] str = new String[0];
+            {
+            JComboBox combo = null;
+            JComponent[] comp = new JComponent[0];
+            String[] str = new String[0];
 
-			String title = "Save Patches";
-			String query = "Save the Patches...";
-		
-			// do we have to choose between bank and patch writes?
-			// I commented things out because I only want the user to choose banks vs. patches
-			// if he's saving everything.
-			if (synth.getSupportsBankWrites() /* && synth.getSupportsPatchWrites()*/ &&
-				(/* (start == 0 && len == getBankSize()) || */ bank == ALL_PATCHES))
-				{
-				combo = new JComboBox(new String[] { "Bank Sysex", "Individual Patch Sysex" });
-				comp = new JComponent[] { combo };
-				str = new String[] { "Format" };
-				title = "Save All Patches";
-				query = "Save all Patches...";
-				}
-			/*
-			  else if (bank == ALL_PATCHES && synth.getSupportsBankWrites())
-			  {
-			  // we're gonna attempt bank writes for the whole synth so we should make that clear to the user
-			  title = "Save All Banks";
-			  query = "Save the Banks...";
-			  }
-			*/
-			else if (bank == ALL_PATCHES)
-				{
-				// we're gonna attempt individual patch writes for the whole synth so we should make that clear to the user
-				title = "Save All Patches";
-				query = "Save All Patches...";
-				}
+            String title = "Save Patches";
+            String query = "Save the Patches...";
+                
+            // do we have to choose between bank and patch writes?
+            // I commented things out because I only want the user to choose banks vs. patches
+            // if he's saving everything.
+            if (synth.getSupportsBankWrites() /* && synth.getSupportsPatchWrites()*/ &&
+                (/* (start == 0 && len == getBankSize()) || */ bank == ALL_PATCHES))
+                {
+                combo = new JComboBox(new String[] { "Bank Sysex", "Individual Patch Sysex" });
+                comp = new JComponent[] { combo };
+                str = new String[] { "Format" };
+                title = "Save All Patches";
+                query = "Save all Patches...";
+                }
+            /*
+              else if (bank == ALL_PATCHES && synth.getSupportsBankWrites())
+              {
+              // we're gonna attempt bank writes for the whole synth so we should make that clear to the user
+              title = "Save All Banks";
+              query = "Save the Banks...";
+              }
+            */
+            else if (bank == ALL_PATCHES)
+                {
+                // we're gonna attempt individual patch writes for the whole synth so we should make that clear to the user
+                title = "Save All Patches";
+                query = "Save All Patches...";
+                }
 
-			int result = Synth.showMultiOption(synth, str, comp, 
-				new String[] { "As Separate Files", "To Bulk File", "Cancel" },
-				0, title, query);
-						
-			saveAll = true;
-			try 
-				{
-				if (result == 2 || result == -1) return;
-				else if (result == 1)                   // To Bulk File
-					{
-					Object[][] d = emitRange(bank, start, len, true, (combo != null && combo.getSelectedIndex() == 1));
+            int result = Synth.showMultiOption(synth, str, comp, 
+                new String[] { "As Separate Files", "To Bulk File", "Cancel" },
+                0, title, query);
+                                                
+            saveAll = true;
+            try 
+                {
+                if (result == 2 || result == -1) return;
+                else if (result == 1)                   // To Bulk File
+                    {
+                    Object[][] d = emitRange(bank, start, len, true, (combo != null && combo.getSelectedIndex() == 1));
 
-					if (d != null)
-						{
-						byte[] data = Synth.flatten(concatenate(d));
+                    if (d != null)
+                        {
+                        byte[] data = Synth.flatten(concatenate(d));
 
-						FileDialog fd = new FileDialog((Frame)(SwingUtilities.getRoot(synth)), "Save to Bulk Sysex File...", FileDialog.SAVE);
+                        FileDialog fd = new FileDialog((Frame)(SwingUtilities.getRoot(synth)), "Save to Bulk Sysex File...", FileDialog.SAVE);
 
-						fd.setFile(StringUtility.reviseFileName(synth.getSynthNameLocal() + ".bulk.syx"));
-						String path = synth.getLastDirectory();
-						if (path != null)
-							fd.setDirectory(path);
-																																																																				
-						synth.disableMenuBar();
-						fd.setVisible(true);
-						synth.enableMenuBar();
-				
-						File f = null; // make compiler happy
-						FileOutputStream os = null;
-						if (fd.getFile() != null)
-							{
-							synth.setLastDirectory(fd.getDirectory());
-							File patchFileOrDirectory = new File(fd.getDirectory(), StringUtility.ensureFileEndsWith(fd.getFile(), ".syx"));
-							FileOutputStream batchPatches = null;
-							try 
-								{
-								batchPatches = new FileOutputStream(patchFileOrDirectory);
-								batchPatches.write(data);
-								batchPatches.close();
-								} 
-							catch (IOException e) // fail
-								{
-								synth.showErrorWithStackTrace(e, "File Error", "An error occurred while saving to the bulk file " + (patchFileOrDirectory == null ? " " : patchFileOrDirectory.getName()));
-								Synth.handleException(e);
-								if (batchPatches != null)
-									try { batchPatches.close(); }
-									catch (IOException ex) { }
-								}
-							}
-						else return;
-						}
-					}
-				else            // As Separate Files
-					{
-					saveRangeSeparately(bank, start, len, (combo == null || combo.getSelectedIndex() == 1));
-					}
-				}
-			finally { saveAll = false; }
-			}
+                        fd.setFile(StringUtility.reviseFileName(synth.getSynthNameLocal() + ".bulk.syx"));
+                        String path = synth.getLastDirectory();
+                        if (path != null)
+                            fd.setDirectory(path);
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+                        synth.disableMenuBar();
+                        fd.setVisible(true);
+                        synth.enableMenuBar();
+                                
+                        File f = null; // make compiler happy
+                        FileOutputStream os = null;
+                        if (fd.getFile() != null)
+                            {
+                            synth.setLastDirectory(fd.getDirectory());
+                            File patchFileOrDirectory = new File(fd.getDirectory(), StringUtility.ensureFileEndsWith(fd.getFile(), ".syx"));
+                            FileOutputStream batchPatches = null;
+                            try 
+                                {
+                                batchPatches = new FileOutputStream(patchFileOrDirectory);
+                                batchPatches.write(data);
+                                batchPatches.close();
+                                } 
+                            catch (IOException e) // fail
+                                {
+                                synth.showErrorWithStackTrace(e, "File Error", "An error occurred while saving to the bulk file " + (patchFileOrDirectory == null ? " " : patchFileOrDirectory.getName()));
+                                Synth.handleException(e);
+                                if (batchPatches != null)
+                                    try { batchPatches.close(); }
+                                    catch (IOException ex) { }
+                                }
+                            }
+                        else return;
+                        }
+                    }
+                else            // As Separate Files
+                    {
+                    saveRangeSeparately(bank, start, len, (combo == null || combo.getSelectedIndex() == 1));
+                    }
+                }
+            finally { saveAll = false; }
+            }
         }
         
 
@@ -1091,108 +1091,108 @@ public class Library extends AbstractTableModel
         if (d != null)
             {
             if (len == 1)
-            	{
-				Patch patch = getPatch(bank, start);
-				if (patch == null) patch = initPatch;
-				String filename = ((getNumBanks() > 1 ? (getBankName(bank) + ".") : "") + 
-					getPatchNumberNames()[start] + "." + 
-					(patch.name == null ? "Untitled" : patch.name.trim()));
-				filename = StringUtility.makeValidFilename(filename);
-            	saveOne(bank, start, d[0], filename);
-            	}
+                {
+                Patch patch = getPatch(bank, start);
+                if (patch == null) patch = initPatch;
+                String filename = ((getNumBanks() > 1 ? (getBankName(bank) + ".") : "") + 
+                    getPatchNumberNames()[start] + "." + 
+                    (patch.name == null ? "Untitled" : patch.name.trim()));
+                filename = StringUtility.makeValidFilename(filename);
+                saveOne(bank, start, d[0], filename);
+                }
             else
-            	{
-				File dir = synth.selectDirectory(Style.isMac() ? "Select a Directory to Save Patches..." : "Select Directory to Save Patches",
-					synth.getFile() == null ? null : new File(synth.getFile().getParentFile().getPath()));
-								
-				if (dir != null)
-					{
-					synth.setLastDirectory(dir.getParent());
-					if (bank == ALL_PATCHES)
-						{
-						start = 0;
-						len = getBankSize();
-						}
-								
-					// Basic form: single bank, range within the bank
-					int startbank = bank;
-					int endbank = bank + 1;
-					int startnum = start;
-					int endnum = start + len;
-								
-					if (bank == ALL_PATCHES)
-						{
-						if (synth.getSupportsBankWrites() && !forceIndependent)
-							{
-							// All patches, thus all banks but since we're saving per-bank we only do the first "number"
-							startbank = 0;
-							endbank = getNumBanks();
-							startnum = 0;
-							endnum = 1;
-							}
-						else
-							{
-							// All patches, thus all banks and all numbers
-							startbank = 0;
-							endbank = getNumBanks();
-							startnum = 0;
-							endnum = getBankSize();
-							}
-						}
-					else
-						{
-						if (synth.getSupportsBankWrites() &&                                        // we can write banks
-							!forceIndependent &&                                                    // we have the option of writing banks (which we will take)
-							start == 0 && len == getBankSize())                                     // Our range is one entire bank
-							{
-							// Single bank as before, but since we're saving per-bank we only do the first "number"
-							startnum = 0;
-							endnum = 1;
-							}
-						else
-							{
-							// do the default
-							}
-						}
+                {
+                File dir = synth.selectDirectory(Style.isMac() ? "Select a Directory to Save Patches..." : "Select Directory to Save Patches",
+                    synth.getFile() == null ? null : new File(synth.getFile().getParentFile().getPath()));
+                                                                
+                if (dir != null)
+                    {
+                    synth.setLastDirectory(dir.getParent());
+                    if (bank == ALL_PATCHES)
+                        {
+                        start = 0;
+                        len = getBankSize();
+                        }
+                                                                
+                    // Basic form: single bank, range within the bank
+                    int startbank = bank;
+                    int endbank = bank + 1;
+                    int startnum = start;
+                    int endnum = start + len;
+                                                                
+                    if (bank == ALL_PATCHES)
+                        {
+                        if (synth.getSupportsBankWrites() && !forceIndependent)
+                            {
+                            // All patches, thus all banks but since we're saving per-bank we only do the first "number"
+                            startbank = 0;
+                            endbank = getNumBanks();
+                            startnum = 0;
+                            endnum = 1;
+                            }
+                        else
+                            {
+                            // All patches, thus all banks and all numbers
+                            startbank = 0;
+                            endbank = getNumBanks();
+                            startnum = 0;
+                            endnum = getBankSize();
+                            }
+                        }
+                    else
+                        {
+                        if (synth.getSupportsBankWrites() &&                                        // we can write banks
+                            !forceIndependent &&                                                    // we have the option of writing banks (which we will take)
+                            start == 0 && len == getBankSize())                                     // Our range is one entire bank
+                            {
+                            // Single bank as before, but since we're saving per-bank we only do the first "number"
+                            startnum = 0;
+                            endnum = 1;
+                            }
+                        else
+                            {
+                            // do the default
+                            }
+                        }
 
-					for(int b = startbank; b < endbank; b++)
-						{
-						for(int i = startnum; i < endnum; i++)
-							{
-							FileOutputStream os = null;
-							Patch patch = getPatch(b, i);
-							if (patch == null) patch = initPatch;
-							String filename = ((getNumBanks() > 1 ? (getBankName(b) + ".") : "") + 
-								getPatchNumberNames()[i] + "." + 
-								(patch.name == null ? "Untitled" : patch.name.trim()));
-							if (synth.getSupportsBankWrites() && !forceIndependent)
-								filename = (getNumBanks() > 1 ? getBankName(b) : "Bank");
-							filename = StringUtility.makeValidFilename(filename);
-							File f = new File(dir, filename + ".syx");
+                    for(int b = startbank; b < endbank; b++)
+                        {
+                        for(int i = startnum; i < endnum; i++)
+                            {
+                            FileOutputStream os = null;
+                            Patch patch = getPatch(b, i);
+                            if (patch == null) patch = initPatch;
+                            String filename = ((getNumBanks() > 1 ? (getBankName(b) + ".") : "") + 
+                                getPatchNumberNames()[i] + "." + 
+                                (patch.name == null ? "Untitled" : patch.name.trim()));
+                            if (synth.getSupportsBankWrites() && !forceIndependent)
+                                filename = (getNumBanks() > 1 ? getBankName(b) : "Bank");
+                            filename = StringUtility.makeValidFilename(filename);
+                            File f = new File(dir, filename + ".syx");
 
-							try
-								{
-								os = new FileOutputStream(f);
-								os.write(Synth.flatten(d[offset++]));
-								os.close();
-								}
-							catch (IOException e) // fail
-								{
-								synth.showErrorWithStackTrace(e, "Patch Save Error.", "An error occurred while saving to the file " + (f == null ? " " : f.getName()));
-								Synth.handleException(e);
-								}
-							finally
-								{
-								if (os != null)
-									try { os.close(); }
-									catch (IOException e) { }
-								}
-							}
-						}
-					}
-				}
-			}
-		}
+                            try
+                                {
+                                os = new FileOutputStream(f);
+                                os.write(Synth.flatten(d[offset++]));
+                                os.close();
+                                }
+                            catch (IOException e) // fail
+                                {
+                                synth.showErrorWithStackTrace(e, "Patch Save Error.", "An error occurred while saving to the file " + (f == null ? " " : f.getName()));
+                                Synth.handleException(e);
+                                }
+                            finally
+                                {
+                                if (os != null)
+                                    try { os.close(); }
+                                    catch (IOException e) { }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
 
 
     // Indicates that we are presently saving *all* patches

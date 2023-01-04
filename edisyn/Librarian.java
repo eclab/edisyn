@@ -590,7 +590,7 @@ public class Librarian extends JPanel
                     continue;
                                         
                 if (((JMenuItem)m[i]) != synth.mixAgainMenu &&
-                	((JMenuItem)m[i]) != synth.hideLibrarianMenu)
+                    ((JMenuItem)m[i]) != synth.hideLibrarianMenu)
                     ((JMenuItem)m[i]).setEnabled(val);
                 }
             }

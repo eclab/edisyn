@@ -158,7 +158,7 @@ public class Network implements Layer
         }
 
     /**
-       Decode a double value in the range 0-1 in the vector at the index given to an
+       Decode a double value in the range 0...1 in the vector at the index given to an
        integer in the range from min to max, inclusive.
 
        <p><tt>
@@ -171,7 +171,7 @@ public class Network implements Layer
     */
     public static int[] decodeScaled(double[] vector, int index, int min, int max)
         {
-        int val = (int)Math.round(vector[index]*(max-min) + min);
+        int val = (int)Math.round(vector[index] * (max - min) + min);
         if (val > max)
             {
             val = max;
@@ -198,13 +198,13 @@ public class Network implements Layer
        }
 
        example:
-       vector: 0.1 0.8 2.6 -0.5 0.76
-       index:  1
-       min: 11
-       max: 13
+       vector: 0.1 0.8 2.6 -0.5 0.76            [with current subvector 0.8 2.6 -0.5]
+       index:  1                                                        [start of the subvector]
+       min: 11                                                          [class at position 0 (where the 0.8 is)]
+       max: 13                                                          [class at position 2 (where the 0.8 is)]
        would return
        {
-       4 (which is the index of 0.76),
+       4 (which is the index of 0.76, the start of the next feature),
        12 (class id 12, which means the highest value was the index 1 element of the subvector 0.8 2.6 -0.5)
        }
        </tt>
@@ -213,7 +213,7 @@ public class Network implements Layer
         {
         double maxVal = vector[index];
         int maxInd = index;
-        for(int i = index; i < index + (max-min) + 1; i++)
+        for(int i = index; i < index + (max - min) + 1; i++)
             {
             if (vector[i] > maxVal)
                 {
@@ -222,7 +222,7 @@ public class Network implements Layer
                 }
             }
         int val = (maxInd - index) + min;
-        return new int[] {index + (max-min) + 1, val};
+        return new int[] {index + (max - min) + 1, val};
         }
 
     /**

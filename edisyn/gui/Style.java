@@ -19,6 +19,9 @@ import java.awt.font.*;
 
 public class Style
     {
+    /////// DEBUGGING
+    public static final boolean showRaw = false;
+    
     /////// GLOBAL CONSTANTS
     
     /** Background color */
@@ -33,11 +36,11 @@ public class Style
     
     // Ubuntu's default SansSerif font doesn't have kerning and looks terrible as a result.
     static Font addKerning(Font font)
-    	{
-    	Hashtable hash = new Hashtable();
-    	hash.put(TextAttribute.KERNING, TextAttribute.KERNING_ON);
-    	return font.deriveFont(hash);
-    	}
+        {
+        Hashtable hash = new Hashtable();
+        hash.put(TextAttribute.KERNING, TextAttribute.KERNING_ON);
+        return font.deriveFont(hash);
+        }
     
     // For the moment we're sticking with point size 10 for ubuntu
     public static Font SMALL_FONT() { return addKerning(new Font(Font.SANS_SERIF, Font.PLAIN, isUnix() ? 10 : 10)); }
@@ -220,11 +223,11 @@ public class Style
         return (OS().indexOf("mac") >= 0 || System.getProperty("mrj.version") != null);
         }
 
-   public static boolean isMacOSMonterey()
-    	{
-    	return System.getProperty("os.name").equals("Mac OS X") &&
-    		   (System.getProperty("os.version").startsWith("12."));
-    	}
+    public static boolean isMacOSMonterey()
+        {
+        return System.getProperty("os.name").equals("Mac OS X") &&
+            (System.getProperty("os.version").startsWith("12."));
+        }
 
 
     public static boolean isUnix() 

@@ -282,8 +282,8 @@ public class Chooser extends NumericalComponent
     public void setLabel(String _label)
         {
         if (Style.isUnix()) 
-		label.setText(_label);
-	else label.setText("  " + _label);
+            label.setText(_label);
+        else label.setText("  " + _label);
         }
         
     public void setElements(String[] elements)
@@ -309,21 +309,25 @@ public class Chooser extends NumericalComponent
         setCallActionListener(true);
         }
 
-	public static final boolean showRaw = false;
-	
+        
     public void setElements(String _label, String[] elements, int[] values)
         {
-        if (showRaw)
-        	{
-        	elements = (String[])(elements.clone());
-        	for(int i = 0; i < elements.length; i++)
-        		elements[i] = "" + i + ": " + elements[i];
-        	}
-        	
+        if (Style.showRaw)
+            {
+            elements = (String[])(elements.clone());
+            for(int i = 0; i < elements.length; i++)
+                elements[i] = "" + i + ": " + elements[i];
+            }
+                
         setCallActionListener(false);
         if (Style.isUnix())
-		label.setText(_label);
-	else label.setText("  " + _label);
+            {
+            label.setText(_label);
+            }
+        else 
+            {
+            label.setText("  " + _label);
+            }
         combo.removeAllItems();
         
         for(int i = 0; i < elements.length; i++)

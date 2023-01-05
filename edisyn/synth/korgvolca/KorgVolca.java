@@ -2355,7 +2355,7 @@ public class KorgVolca extends Synth
         }, 
     };
 
-    static HashMap allParametersToCC;
+    static HashMap allParametersToCC = null;
 
     final static String[][] allParameters = new String[][]
     {

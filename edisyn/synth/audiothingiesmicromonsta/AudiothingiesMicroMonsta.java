@@ -347,10 +347,10 @@ public class AudiothingiesMicroMonsta extends Synth
     // public static final String[] SUB_OCTAVES = new String[] { "One Octave Down", "Two Octaves Down" };
 
 
-    public static HashMap<Integer, String> ccToArg;
-    public static HashMap<String, Integer> argToCC;
-    public static HashMap<Integer, String> nrpnToArg;
-    public static HashMap<String, Integer> argToNRPN;
+    public static HashMap<Integer, String> ccToArg = null;
+    public static HashMap<String, Integer> argToCC = null;
+    public static HashMap<Integer, String> nrpnToArg = null;
+    public static HashMap<String, Integer> argToNRPN = null;
         
     public AudiothingiesMicroMonsta()
         {

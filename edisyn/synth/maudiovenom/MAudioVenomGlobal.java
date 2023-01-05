@@ -34,9 +34,7 @@ public class MAudioVenomGlobal extends Synth
     public static final String[] EXTRA_CC = new String[] { "PB Sens", "F Tune", "C Tune", "AT" };
 
     /// Various collections of parameter names for pop-up menus
-        
-    static HashMap parametersToIndex = null;
-        
+                
     public MAudioVenomGlobal()
         {
         if (parametersToIndex == null)
@@ -254,7 +252,7 @@ public class MAudioVenomGlobal extends Synth
 
 
     /** Map of parameter -> index in the parameters array. */
-    HashMap parametersTopIndex = new HashMap();
+    static HashMap parametersToIndex = null;
                 
                 
     /// BUG IN DOCUMENTATION

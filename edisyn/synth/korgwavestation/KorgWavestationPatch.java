@@ -38,8 +38,8 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
     
     public SynthPanel[] panels = new SynthPanel[4];
 
-    public static HashMap keysToParameters = null;  // new HashMap();
-    public static HashMap subkeysToSubparameters = null;  // new HashMap();
+    public static HashMap keysToParameters = null;  
+    public static HashMap subkeysToSubparameters = null; 
 
     KorgWavestationJoystick joy;
 

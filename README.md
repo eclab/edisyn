@@ -56,6 +56,7 @@ Edisyn is particularly good at exploring the space of patches.  It has to my kno
 Edisyn presently supports:
 
 * Alesis D4 and DM5 
+* Audiothingies Micromonsta
 * Casio CZ Series (CZ101, CZ1000, CZ3000, CZ5000, CZ-1, CZ-230S)
 * DSI Prophet '08, Tetra, Mopho, Mopho Keyboard, Mopho SE, and Mopho x4 (Single and (for Tetra) Combo modes)
 * E-Mu Morpheus and Ultraproteus (Single, Hyperpreset, and MidiMap modes)
@@ -103,9 +104,8 @@ Edisyn has infinite levels of undo, CC and NRPN mapping and learning, offline mo
 * *Blending:* Random recombination of two randomly-chosen patches on your synth
 * *Nudging:* Pushing the patch to sound a bit more (or a bit less) like one of four other patches of your choice
 * *Morphing:* Real-time interpolation of four patches to form a new patch
-* *Hill-Climbing and Constriction:* evolutionary techniques for guided randomized search through the space of parameters, where Edisyn iteratively offers patch possibilities for you to grade, then looks for new ones based on your assessments.
-* *Deep-Learned Models:* improvements to Randomization and Hill-Climbing using a deep-learned Variational Autoencoder neural network (DX7 Family only)
-* *Mixing:* recombining large numbers of patches to form one blended patch
+* *Hill-Climbing and Constriction:* Evolutionary techniques for guided randomized search through the space of parameters, where Edisyn iteratively offers patch possibilities for you to grade, then looks for new ones based on your assessments.
+* *Deep-Learned Models:* Improvements to Randomization and Hill-Climbing using a deep-learned Variational Autoencoder neural network (DX7 Family only)
 
 #### "Could You Develop a Patch Editor for Synth X for Me?"
 
@@ -182,6 +182,8 @@ These editors require an unusual quirk of MIDI sysex which is not properly suppo
 
 I have reports of Java crashing on Windows if you set Edisyn's "Receive From" or "Send To" devices to the same device as the "Controller" or "Controller 2" devices.  So don't do that: there is never a need to do so.  If you don't have a dedicated controller, you should leave the "Controller" and "Controller 2" devices blank.
 
+I have occasionally seen hard crashing/hanging on Windows if the USB MIDI device is disconnected while Edisyn is attempting to communicateover MIDI.  It appears to be a Windows driver issue.  So don't do that.
+
 I have had at least one report that Java 8 on Windows has serious problems with some Edisyn patch editors (probably memory).  Install something newer.
 
 #### Dealing with High-Resolution Displays in Windows
@@ -229,7 +231,7 @@ Java doesn't work properly with high-resolution displays in Linux, even recent d
 
 #### Problems with Jack
 
-Java has compatibility problems with Jack; disabling Jack will often allow Edisyn to communicate with MIDI devies.  See issues #33 and #52.
+Java has compatibility problems with Jack; disabling Jack will often allow Edisyn to communicate with MIDI devices.  See issues #33 and #52.
 
 
 ### Running from the command line (OS X, Windows, Linux)

@@ -218,8 +218,8 @@ public abstract class Synth extends JComponent implements Updatable
 
     public JMenuItem copyTab = new JMenuItem("Copy Tab");
     public JMenuItem pasteTab = new JMenuItem("Paste Tab");
-    public JMenuItem copyMutableTab = new JMenuItem("Copy Tab (Mutation Parameters Only)");
-    public JMenuItem pasteMutableTab = new JMenuItem("Paste Tab (Mutation Parameters Only)");
+    public JMenuItem copyMutableTab = new JMenuItem("Copy Tab (Mutable Parameters Only)");
+    public JMenuItem pasteMutableTab = new JMenuItem("Paste Tab (Mutable Parameters Only)");
     public JMenuItem resetTab = new JMenuItem("Reset Tab");
     
     //boolean useMapForRecombination = true;
@@ -233,11 +233,11 @@ public abstract class Synth extends JComponent implements Updatable
             setLearningCC(false); 
         if (isShowingMutation())
             {
-            editMutationMenu.setText("Stop Editing Mutation Parameters");
+            editMutationMenu.setText("Stop Editing Mutable Parameters");
             }
         else
             {
-            editMutationMenu.setText("Edit Mutation Parameters");
+            editMutationMenu.setText("Edit Mutable Parameters");
             }
         updateTitle(); 
         repaint(); 
@@ -3282,7 +3282,7 @@ public abstract class Synth extends JComponent implements Updatable
                         (ccmap.getCCForKey(model.getLastKey()) >= 0 ? "=" + nameForCC(ccmap.getCCForKey(model.getLastKey()),
                             ccmap.getPaneForKey(model.getLastKey())) : "")
                     : "") : "");
-            String restrictingWarning = (isShowingMutation() ? "   MUTATION PARAMETERS" : "");
+            String restrictingWarning = (isShowingMutation() ? "   MUTABLE PARAMETERS" : "");
         
             frame.setTitle(synthName + fileName + " " + titleBarAux + "        " + disconnectedWarning + downloadingWarning + learningWarning + restrictingWarning);
             }
@@ -4628,7 +4628,7 @@ public abstract class Synth extends JComponent implements Updatable
 
         menu.addSeparator();
         
-        editMutationMenu = new JMenuItem("Edit Mutation Parameters");
+        editMutationMenu = new JMenuItem("Edit Mutable Parameters");
         menu.add(editMutationMenu);
         editMutationMenu.addActionListener(new ActionListener()
             {
@@ -4638,7 +4638,7 @@ public abstract class Synth extends JComponent implements Updatable
                 }
             });
 
-        JMenuItem clearAllMutationRestrictions = new JMenuItem("Clear All Mutation Parameters");
+        JMenuItem clearAllMutationRestrictions = new JMenuItem("Make All Parameters Immutable");
         menu.add(clearAllMutationRestrictions);
         clearAllMutationRestrictions.addActionListener(new ActionListener()
             {
@@ -4648,7 +4648,7 @@ public abstract class Synth extends JComponent implements Updatable
                 }
             });
                 
-        JMenuItem setAllMutationRestrictions = new JMenuItem("Set All Mutation Parameters");
+        JMenuItem setAllMutationRestrictions = new JMenuItem("Make All Parameters Mutable");
         menu.add(setAllMutationRestrictions);
         setAllMutationRestrictions.addActionListener(new ActionListener()
             {
@@ -4658,7 +4658,7 @@ public abstract class Synth extends JComponent implements Updatable
                 }
             });
 
-        JMenuItem loadMutationParameters = new JMenuItem("Load Mutation Parameters...");
+        JMenuItem loadMutationParameters = new JMenuItem("Load Mutable Parameters...");
         menu.add(loadMutationParameters);
         loadMutationParameters.addActionListener(new ActionListener()
             {
@@ -4668,7 +4668,7 @@ public abstract class Synth extends JComponent implements Updatable
                 }
             });
 
-        JMenuItem saveMutationParameters = new JMenuItem("Save Mutation Parameters...");
+        JMenuItem saveMutationParameters = new JMenuItem("Save Mutable Parameters...");
         menu.add(saveMutationParameters);
         saveMutationParameters.addActionListener(new ActionListener()
             {
@@ -8488,12 +8488,12 @@ public abstract class Synth extends JComponent implements Updatable
         
     void doSetAllMutationMap(boolean val)
         {
-        String title = "Clear All Mutation Parameters";
+        String title = "Make all Parameters Immutable";
         String message = "Are you sure you want to make all parameters immutable?";
                         
         if (val)
             {
-            title = "Set All Mutation Parameters";
+            title = "Make All Parameters Mutable";
             message = "Are you sure you want to make all parameters mutable?";
             }
                 

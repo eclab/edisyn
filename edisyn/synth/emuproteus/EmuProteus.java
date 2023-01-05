@@ -88,13 +88,13 @@ public class EmuProteus extends Synth
         if (parametersToIndex == null)
             {
             parametersToIndex = new HashMap();
-            proteus2MappingToIndex = new HashMap();
                 
             for(int i = 0; i < parameters.length; i++)
                 {
                 parametersToIndex.put(parameters[i], Integer.valueOf(i));
                 }
 
+            proteus2MappingToIndex = new HashMap();
             for(int i = 0; i < PROTEUS_2_MAPPING.length; i++)
                 {
                 proteus2MappingToIndex.put(Integer.valueOf(PROTEUS_2_MAPPING[i]), Integer.valueOf(i));

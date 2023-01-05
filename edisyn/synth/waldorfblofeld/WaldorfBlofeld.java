@@ -160,13 +160,13 @@ public class WaldorfBlofeld extends Synth
     
     public WaldorfBlofeld()
         {
-        for(int i = 0; i < allParameters.length; i++)
-            {
-            if (allParametersToIndex == null)
-                {
-                allParametersToIndex = new HashMap();
-                allParametersToIndex.put(allParameters[i], Integer.valueOf(i));
-                }
+		if (allParametersToIndex == null)
+			{
+			allParametersToIndex = new HashMap();
+			for(int i = 0; i < allParameters.length; i++)
+				{
+				allParametersToIndex.put(allParameters[i], Integer.valueOf(i));
+				}
             }
                                 
         /// SOUND PANEL

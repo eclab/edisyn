@@ -129,10 +129,12 @@ public class MAudioVenom extends Synth
     public MAudioVenom()
         {
         if (parametersToIndex == null)
-            parametersToIndex = new HashMap();
-        for(int i = 0; i < parameters.length; i++)
             {
-            parametersToIndex.put(parameters[i], Integer.valueOf(i));
+            parametersToIndex = new HashMap();
+			for(int i = 0; i < parameters.length; i++)
+				{
+				parametersToIndex.put(parameters[i], Integer.valueOf(i));
+				}
             }
 
         /// SOUND PANEL

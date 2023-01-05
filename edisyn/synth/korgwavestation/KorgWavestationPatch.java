@@ -38,22 +38,27 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
     
     public SynthPanel[] panels = new SynthPanel[4];
 
-    public HashMap subkeysToSubparameters = new HashMap();
-    public HashMap keysToParameters = new HashMap();
+    public static HashMap keysToParameters = null;  // new HashMap();
+    public static HashMap subkeysToSubparameters = null;  // new HashMap();
 
     KorgWavestationJoystick joy;
 
     public KorgWavestationPatch()
         {
-        for(int i = 0; i < keys.length; i++)
-            {
-            keysToParameters.put(keys[i], parameters[i]);
-            }
-                        
-        for(int i = 0; i < subkeys.length; i++)
-            {
-            subkeysToSubparameters.put(subkeys[i], Integer.valueOf(subparameters[i]));
-            }
+        if (keysToParameters == null)
+        	{
+        	keysToParameters = new HashMap();
+			for(int i = 0; i < keys.length; i++)
+				{
+				keysToParameters.put(keys[i], parameters[i]);
+				}
+               
+			subkeysToSubparameters = new HashMap();         
+			for(int i = 0; i < subkeys.length; i++)
+				{
+				subkeysToSubparameters.put(subkeys[i], Integer.valueOf(subparameters[i]));
+				}
+       		}
 
         JComponent soundPanel = new SynthPanel(this);
         VBox vbox = new VBox();

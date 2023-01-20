@@ -3639,7 +3639,7 @@ public abstract class Synth extends JComponent implements Updatable
         boolean result = Synth.showMultiOption(this, 
             new String[] { "Background  ", "Text / Global ", "Color A  ", "Color B  ", "Color C  ", "Highlights  ",  "Dials  ", "Envelopes  " },  
             new JComponent[] { background, text, a, b, c, dynamic, dial, envelope }, 
-            "Update Colors", 
+            "Change Colors", 
             "<html><font size='-1'>Note: after changing colors, currently<br>open windows may look scrambled,<br>but new windows will look correct.</font></html>");
         enableMenuBar();
                              
@@ -6012,26 +6012,30 @@ public abstract class Synth extends JComponent implements Updatable
         }
         
         
+    public static final boolean sendsAllSoundsOff = true;
     void sendAllSoundsOff()
         {
-        noMIDIPause = true;
-        try
-            {
-            // do an all sounds off (some synths don't properly respond to all notes off)
-            for(int i = 0; i < 16; i++)
-                tryToSendMIDI(new ShortMessage(ShortMessage.CONTROL_CHANGE, i, 120, 0));
-            // do an all notes off (some synths don't properly respond to all sounds off)
-            for(int i = 0; i < 16; i++)
-                tryToSendMIDI(new ShortMessage(ShortMessage.CONTROL_CHANGE, i, 123, 0));
-            // Plus, for some synths that respond to neither <ahem Korg Wavestation>, maybe we can turn off the current note,
-            // assuming the user hasn't changed it.   
-            clearChord();
-            }
-        catch (InvalidMidiDataException e2)
-            {
-            Synth.handleException(e2);
-            }
-        noMIDIPause = false;
+        if (sendsAllSoundsOff)
+        	{
+			noMIDIPause = true;
+			try
+				{
+				// do an all sounds off (some synths don't properly respond to all notes off)
+				for(int i = 0; i < 16; i++)
+					tryToSendMIDI(new ShortMessage(ShortMessage.CONTROL_CHANGE, i, 120, 0));
+				// do an all notes off (some synths don't properly respond to all sounds off)
+				for(int i = 0; i < 16; i++)
+					tryToSendMIDI(new ShortMessage(ShortMessage.CONTROL_CHANGE, i, 123, 0));
+				// Plus, for some synths that respond to neither <ahem Korg Wavestation>, maybe we can turn off the current note,
+				// assuming the user hasn't changed it.   
+				clearChord();
+				}
+			catch (InvalidMidiDataException e2)
+				{
+				Synth.handleException(e2);
+				}
+			noMIDIPause = false;
+			}
         }
 
 

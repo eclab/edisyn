@@ -211,7 +211,7 @@ public class WaldorfBlofeld extends Synth
         vbox.add(addEnvelope(4, Style.COLOR_B()));
                 
         lfoEnvelopePanel.add(vbox, BorderLayout.CENTER);
-        addTab("LFOs and Envelopes", lfoEnvelopePanel);
+        addTab("LFOs, Amplifier, and Envelopes", lfoEnvelopePanel);
                 
         // MODULATION PANEL
                 

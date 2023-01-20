@@ -185,13 +185,25 @@ public class Generic extends Synth
         //vbox.add(hbox);
         vbox.add(addRawController(0, Style.COLOR_A()));
         soundPanel.add(vbox, BorderLayout.CENTER);
-        tabs.addTab("CC 0-63", soundPanel);
+        tabs.addTab("CC 0-31", soundPanel);
 
+        vbox = new VBox();
+        vbox.add(addRawController(32, Style.COLOR_A()));
+        soundPanel = new SynthPanel(this);
+        soundPanel.add(vbox, BorderLayout.CENTER);
+        tabs.addTab("32-63", soundPanel);
+        
         vbox = new VBox();
         vbox.add(addRawController(64, Style.COLOR_A()));
         soundPanel = new SynthPanel(this);
         soundPanel.add(vbox, BorderLayout.CENTER);
-        tabs.addTab("CC 64-127", soundPanel);
+        tabs.addTab("64-95", soundPanel);
+        
+        vbox = new VBox();
+        vbox.add(addRawController(96, Style.COLOR_A()));
+        soundPanel = new SynthPanel(this);
+        soundPanel.add(vbox, BorderLayout.CENTER);
+        tabs.addTab("96-127", soundPanel);
         
         vbox = new VBox();
         vbox.add(addCustomController(Style.COLOR_B()));
@@ -290,7 +302,9 @@ public class Generic extends Synth
                 on.setMax(127);
                 on.setState(on.getState());
  
-                final CheckBox lsb = new CheckBox("+LSB", this, "cust-cc-lsb-" + i)
+                 final CheckBox realtime = new CheckBox("Real-Time", this, "cust-cc-realtime-" + i);
+ 
+               final CheckBox lsb = new CheckBox("+LSB", this, "cust-cc-lsb-" + i)
                     {
                     public void update(String key, Model model)
                         {
@@ -319,6 +333,7 @@ public class Generic extends Synth
                     public void update(String key, Model model)     
                         {
                         super.update(key, model);
+						changingParam = true;
                         lsb.setEnabled(model.get("cust-cc-param-" + _i) < 32);
 
                         if (model.get("cust-cc-lsb-" + _i) > 0 && model.get("cust-cc-param-" + _i) < 32)
@@ -335,6 +350,7 @@ public class Generic extends Synth
                             msb.setMax(127);
                             msbalt.setMax(127);
                             }
+						changingParam = false;
                         }
                     };
                                         
@@ -349,6 +365,7 @@ public class Generic extends Synth
                 
                 comp = on;
                 vbox2.add(comp);
+                vbox2.add(realtime);
                 hbox2.add(vbox2);
                 vbox.add(hbox2);
                                 
@@ -373,7 +390,9 @@ public class Generic extends Synth
                     { 
                     public void perform() 
                         { 
+                        send = true;
                         getModel().set("cust-cc-value-" + _i, getModel().get("cust-cc-value-" + _i)); 
+                        send = false;
                         } 
                     };
                 vbox.add(comp);
@@ -387,7 +406,9 @@ public class Generic extends Synth
                     { 
                     public void perform() 
                         { 
+                        send = true;
                         getModel().set("cust-cc-value-alt-" + _i, getModel().get("cust-cc-value-alt-" + _i)); 
+                        send = false;
                         } 
                     };
                 vbox.add(comp);
@@ -403,6 +424,9 @@ public class Generic extends Synth
         }
 
 
+	boolean send = false;
+	boolean changingParam = false;
+	
     public JComponent addNRPN(Color color)
         {
         Category category = new Category(this, "NRPN", color);
@@ -447,6 +471,8 @@ public class Generic extends Synth
                     };
                 on.setMax(127);
                 on.setState(on.getState());
+
+                final CheckBox realtime = new CheckBox("Real-Time", this, "cust-nrpn-realtime-" + i);
  
                 final CheckBox lsb = new CheckBox("+LSB", this, "cust-nrpn-lsb-" + i)
                     {
@@ -477,7 +503,8 @@ public class Generic extends Synth
                     public void update(String key, Model model)     
                         {
                         super.update(key, model);
-
+						
+						changingParam = true;
                         if (model.get("cust-nrpn-lsb-" + _i) > 0)
                             {
                             msb.setLabel("MSB+LSB");
@@ -492,6 +519,7 @@ public class Generic extends Synth
                             msb.setMax(127);
                             msbalt.setMax(127);
                             }
+                        changingParam = false;
                         }
                     };
                                         
@@ -506,6 +534,7 @@ public class Generic extends Synth
                 
                 comp = on;
                 vbox2.add(comp);
+                vbox2.add(realtime);
                 hbox2.add(vbox2);
                 vbox.add(hbox2);
                                 
@@ -530,7 +559,9 @@ public class Generic extends Synth
                     { 
                     public void perform() 
                         { 
+                        send = true;
                         getModel().set("cust-nrpn-value-" + _i, getModel().get("cust-nrpn-value-" + _i)); 
+                        send = false;
                         } 
                     };
                 vbox.add(comp);
@@ -544,7 +575,9 @@ public class Generic extends Synth
                     { 
                     public void perform() 
                         { 
+                        send = true;
                         getModel().set("cust-nrpn-value-alt-" + _i, getModel().get("cust-nrpn-value-alt-" + _i)); 
+                        send = false;
                         } 
                     };
                 vbox.add(comp);
@@ -605,6 +638,8 @@ public class Generic extends Synth
                 on.setMax(127);
                 on.setState(on.getState());
  
+                final CheckBox realtime = new CheckBox("Real-Time", this, "cust-rpn-realtime-" + i);
+
                 final CheckBox lsb = new CheckBox("+LSB", this, "cust-rpn-lsb-" + i)
                     {
                     public void update(String key, Model model)
@@ -635,6 +670,7 @@ public class Generic extends Synth
                         {
                         super.update(key, model);
 
+						changingParam = true;
                         if (model.get("cust-rpn-lsb-" + _i) > 0)
                             {
                             msb.setLabel("MSB+LSB");
@@ -649,6 +685,7 @@ public class Generic extends Synth
                             msb.setMax(127);
                             msbalt.setMax(127);
                             }
+						changingParam = false;
                         }
                     };
                                         
@@ -663,6 +700,7 @@ public class Generic extends Synth
                 
                 comp = on;
                 vbox2.add(comp);
+                vbox2.add(realtime);
                 hbox2.add(vbox2);
                 vbox.add(hbox2);
                                 
@@ -687,7 +725,9 @@ public class Generic extends Synth
                     { 
                     public void perform() 
                         { 
+                        send = true;
                         getModel().set("cust-rpn-value-" + _i, getModel().get("cust-rpn-value-" + _i)); 
+                        send = false;
                         } 
                     };
                 vbox.add(comp);
@@ -701,7 +741,9 @@ public class Generic extends Synth
                     { 
                     public void perform() 
                         { 
+                        send = true;
                         getModel().set("cust-rpn-value-alt-" + _i, getModel().get("cust-rpn-value-alt-" + _i)); 
+                        send = false;
                         } 
                     };
                 vbox.add(comp);
@@ -719,7 +761,7 @@ public class Generic extends Synth
 
     public JComponent addRawController(final int offset, Color color)
         {
-        Category category = new Category(this, (offset == 0 ? "CC 0-63" : "CC 64-127"), color);
+        Category category = new Category(this, "CC " + offset + "-" + (offset + 31), color);
                 
         JComponent comp;
         String[] params;
@@ -727,23 +769,30 @@ public class Generic extends Synth
         VBox main = new VBox();
         HBox hbox = new HBox();
         
-        for(int j = 0; j < 64; j+=8)
+        for(int j = 0; j < 32; j+=4)
             {
             hbox = new HBox();
-            for(int i = j; i < j+8; i++)
+            for(int i = j; i < j+4; i++)
                 {
                 final int _i = i;
                 VBox vbox = new VBox();
                         
                 VBox v = new VBox();
                 HBox h = new HBox();
+                HBox inner = new HBox();
                 comp = new CheckBox("On", this, "cc-" + (i + offset))
                     {
                     public void update(String key, Model model) { getCheckBox().setSelected(getState() > 64); }
                     };
                 ((CheckBox)comp).setMax(127);
                 ((CheckBox)comp).setState(((CheckBox)comp).getState());
-                v.add(comp);
+                inner.add(comp);
+                
+                comp = new CheckBox("Real-Time", this, "cc-realtime" + (i + offset));
+                ((CheckBox)comp).addToWidth(1);
+                inner.add(comp);
+
+                v.add(inner);
                 comp = new PushButton("Send") 
                     { 
                     public void perform() 
@@ -776,6 +825,11 @@ public class Generic extends Synth
                     model.set("cc-name-" + (i + offset), "CC " + (i + offset));
                 else
                     model.set("cc-name-" + (i + offset), "CC " +  (i + offset) + " " + CC_NAMES[i + offset]);
+                
+                if (i < j+3)
+                	{
+                	hbox.add(Strut.makeHorizontalStrut(40));
+                	}
                 }
             main.add(hbox);
             }
@@ -1119,6 +1173,11 @@ public class Generic extends Synth
 
     public Object[] emitAll(String key)
         {
+        if (key.startsWith("cust-nrpn-realtime-")) return new Object[0];
+        if (key.startsWith("cust-rpn-realtime-")) return new Object[0];
+        if (key.startsWith("cust-cc-realtime-")) return new Object[0];
+        if (key.startsWith("cc-realtime-")) return new Object[0];
+        
         if (key.equals("pitchbend"))
             {
             int val = model.get("pitchbend", 0);
@@ -1150,12 +1209,14 @@ public class Generic extends Synth
         else if (key.startsWith("cc-") && !(key.startsWith("cc-name-")))
             {
             int cc = StringUtility.getInt(key);
+            if (!send && model.get("cc-realtime-" + cc) == 0) return new Object[0]; 
             return buildCC(getChannelOut(), cc, model.get(key));
             }
         else if (key.startsWith("cust-cc-value-alt-"))
             {
             int param = StringUtility.getInt(key);
             int val = model.get(key);
+            if (changingParam || (!send && model.get("cust-cc-realtime-" + param) == 0)) return new Object[0]; 
             if (model.get("cust-cc-param-" + param) > 32 ||
                 model.get("cust-cc-lsb-" + param) == 0)  // just 127
                 {
@@ -1170,6 +1231,7 @@ public class Generic extends Synth
             {
             int param = StringUtility.getInt(key);
             int val = model.get(key);
+            if (changingParam || (!send && model.get("cust-cc-realtime-" + param) == 0)) return new Object[0]; 
             if (model.get("cust-cc-param-" + param) > 32 ||
                 model.get("cust-cc-lsb-" + param) == 0)  // just 127
                 {
@@ -1184,6 +1246,7 @@ public class Generic extends Synth
             {
             int param = StringUtility.getInt(key);
             int val = model.get(key);
+            if (changingParam || (!send && model.get("cust-nrpn-realtime-" + param) == 0)) return new Object[0]; 
             if (model.get("cust-nrpn-lsb-" + param) == 0)  // just 127
                 {
                 return buildNRPN(getChannelOut(), model.get("cust-nrpn-param-" + param), val * 128);
@@ -1197,6 +1260,7 @@ public class Generic extends Synth
             {
             int param = StringUtility.getInt(key);
             int val = model.get(key);
+            if (changingParam || (!send && model.get("cust-nrpn-realtime-" + param) == 0)) return new Object[0]; 
             if (model.get("cust-nrpn-lsb-" + param) == 0)  // just 127
                 {
                 return buildNRPN(getChannelOut(), model.get("cust-nrpn-param-" + param), val * 128);
@@ -1210,6 +1274,7 @@ public class Generic extends Synth
             {
             int param = StringUtility.getInt(key);
             int val = model.get(key);
+            if (changingParam || (!send && model.get("cust-rpn-realtime-" + param) == 0)) return new Object[0]; 
             if (model.get("cust-rpn-lsb-" + param) == 0)  // just 127
                 {
                 return buildNRPN(getChannelOut(), model.get("cust-rpn-param-" + param), val * 128);
@@ -1223,6 +1288,7 @@ public class Generic extends Synth
             {
             int param = StringUtility.getInt(key);
             int val = model.get(key);
+            if (changingParam || (!send && model.get("cust-rpn-realtime-" + param) == 0)) return new Object[0]; 
             if (model.get("cust-rpn-lsb-" + param) == 0)  // just 127
                 {
                 return buildNRPN(getChannelOut(), model.get("cust-rpn-param-" + param), val * 128);

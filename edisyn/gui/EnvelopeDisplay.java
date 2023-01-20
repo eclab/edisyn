@@ -164,6 +164,10 @@ public class EnvelopeDisplay extends JComponent implements Updatable
     public void setHorizontalBorder(boolean val) { horizontalBorder = val; }
     public boolean getHorizontalBorder() { return horizontalBorder; }
     
+    boolean stepping = false;
+    public void setStepping(boolean val) { stepping = val; }
+    public boolean isStepping() { return stepping; }
+    
     public EnvelopeDisplay(Synth synth, Color color, String[] xKeys, String[] yKeys, double xConstants[], double yConstants[])
         {
         this(synth, color, xKeys, yKeys, xConstants, yConstants, null);
@@ -424,6 +428,7 @@ public class EnvelopeDisplay extends JComponent implements Updatable
 
         if (horizontalBorder) rect.x += Style.ENVELOPE_DISPLAY_BORDER_THICKNESS();
         rect.y += Style.ENVELOPE_DISPLAY_TOP_BORDER_THICKNESS();
+
         Line2D.Double line = new Line2D.Double(rect.x, rect.y, rect.x + rect.width, rect.y);
         if (!asLink)
             graphics.draw(line);
@@ -459,6 +464,41 @@ public class EnvelopeDisplay extends JComponent implements Updatable
         Path2D.Double p = new Path2D.Double();
         Ellipse2D.Double marker[] = new Ellipse2D.Double[xs.length];
 
+	if (stepping)
+		{
+		double centering = rect.width / xs.length / 2.0;
+		
+        fillp.moveTo(rect.x + xs[0], rect.y + startHeight); 
+        
+        p.moveTo(rect.x + xs[0], rect.y + rect.height - ys[0]);
+        fillp.lineTo(rect.x + xs[0], rect.y + rect.height - ys[0]);
+        marker[0] = new Ellipse2D.Double((rect.x + xs[0] + centering - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0),
+            (rect.y + rect.height - ys[0] - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0),
+            Style.ENVELOPE_DISPLAY_MARKER_WIDTH(), Style.ENVELOPE_DISPLAY_MARKER_WIDTH());
+        
+        for(int i = 1; i < xs.length; i++)
+            {
+            p.lineTo(rect.x + xs[i], rect.y + rect.height - ys[i-1]);
+            fillp.lineTo(rect.x + xs[i], rect.y + rect.height - ys[i-1]);
+            p.moveTo(rect.x + xs[i], rect.y + rect.height - ys[i]);
+            fillp.lineTo(rect.x + xs[i], rect.y + rect.height - ys[i]);
+            marker[i] = new Ellipse2D.Double((rect.x + xs[i]  + centering - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0),
+                (rect.y + rect.height - ys[i] - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0),
+                Style.ENVELOPE_DISPLAY_MARKER_WIDTH(), Style.ENVELOPE_DISPLAY_MARKER_WIDTH());
+            } 
+        
+        int end = xs.length - 1;
+
+		p.lineTo(rect.x + rect.width, rect.y + rect.height - ys[end]);
+		fillp.lineTo(rect.x + rect.width, rect.y + rect.height - ys[end]);
+		p.moveTo(rect.x + rect.width, rect.y + startHeight);
+		fillp.lineTo(rect.x + rect.width, rect.y + startHeight);
+        
+        fillp.lineTo(rect.x + xs[0], rect.y + startHeight); 
+        fillp.closePath();
+		}
+	else 
+	{
         fillp.moveTo(rect.x + xs[0], rect.y + startHeight); 
         
         p.moveTo(rect.x + xs[0], rect.y + rect.height - ys[0]);
@@ -481,7 +521,8 @@ public class EnvelopeDisplay extends JComponent implements Updatable
         fillp.lineTo(rect.x + xs[end], rect.y + startHeight);
         fillp.lineTo(rect.x + xs[0], rect.y + startHeight); 
         fillp.closePath();
-        
+        }
+
         graphics.setColor(semiTransparent);
         if (!asLink && filled)
             graphics.fill(fillp);

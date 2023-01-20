@@ -2962,7 +2962,10 @@ public class EmuProteus2000 extends Synth
                 }
             menu.add(simmMenu[i]);
             }
-        
+            
+        // This is for testing new SIMMs only
+            
+        /*
         JMenuItem getDataMenu = new JMenuItem("Get Presets for SIMM");
         menu.add(getDataMenu);
         getDataMenu.addActionListener(new ActionListener()
@@ -3118,6 +3121,8 @@ public class EmuProteus2000 extends Synth
                     }
                 }
             });
+        	*/
+        	
         }
 
     int number;

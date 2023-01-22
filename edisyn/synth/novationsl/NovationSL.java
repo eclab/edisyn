@@ -4051,14 +4051,14 @@ public class NovationSL extends Synth
       -----------            ----------                  --------------   ------------------
                                 
       MISC/UNUSED            ENCODERS D
-      3617 e21  Unused       Encoder 24  [41 bytes]                       [See ENCOCDER DATA]
-      3658 e4a  Unused       Encoder 25  [41 bytes]                       [See ENCOCDER DATA]
-      3699 e73  Unused       Encoder 26  [41 bytes]                       [See ENCOCDER DATA]
-      3740 e9c  Unused       Encoder 27  [41 bytes]                       [See ENCOCDER DATA]
-      3781 ec5  Unused       Encoder 28  [41 bytes]                       [See ENCOCDER DATA]
-      3822 eee  Unused       Encoder 29  [41 bytes]                       [See ENCOCDER DATA]
-      3863 f17  Unused       Encoder 30  [41 bytes]                       [See ENCOCDER DATA]
-      3904 f40  CROSS-FADER  Encoder 31  [41 bytes]     [See POT DATA]    [See ENCOCDER DATA]
+      3617 e21  Unused       Encoder 24  [41 bytes]                       [See ENCODER DATA]
+      3658 e4a  Unused       Encoder 25  [41 bytes]                       [See ENCODER DATA]
+      3699 e73  Unused       Encoder 26  [41 bytes]                       [See ENCODER DATA]
+      3740 e9c  Unused       Encoder 27  [41 bytes]                       [See ENCODER DATA]
+      3781 ec5  Unused       Encoder 28  [41 bytes]                       [See ENCODER DATA]
+      3822 eee  Unused       Encoder 29  [41 bytes]                       [See ENCODER DATA]
+      3863 f17  Unused       Encoder 30  [41 bytes]                       [See ENCODER DATA]
+      3904 f40  CROSS-FADER  Encoder 31  [41 bytes]     [See POT DATA]    [See ENCODER DATA]
       *** NOTE that the Cross-fader is only available on the Zero
       *** NOTE that Novation's editor has no ability to edit the Zero's cross fader at all, but you
       *** can edit it on the unit proper.

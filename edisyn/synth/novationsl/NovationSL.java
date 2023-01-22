@@ -4121,7 +4121,7 @@ public class NovationSL extends Synth
       27  1b  Sysex Length            0...12  (9...12 for Roland Sysex)
       28  1c  DV position                     0 = no DV, 1 = position 0, 2 = position 1, etc.
       *** NOTE: If the Sysex DV Type is 0, then the DV position is undefined and can be anything
-      *** NOTE: There are serious errors in Novation's editor, which et the Sysex DV Type and
+      *** NOTE: There are serious errors in Novation's editor, which set the Sysex DV Type and
       *** the DV position to unexpected values.
       *** NOTE: For Roland Sysex, the data position is fixed to Sysex Length - 1
       29  1d  Sysex String            [12 bytes, padded with 0x00]
@@ -4165,7 +4165,7 @@ public class NovationSL extends Synth
       27  1b  Sysex Length            0...12  (9...12 for Roland Sysex)
       28  1c  DV position                     0 = no DV, 1 = position 0, 2 = position 1, etc.
       *** NOTE: If the Sysex DV Type is 0, then the DV position is undefined and can be anything
-      *** NOTE: There are serious errors in Novation's editor, which et the Sysex DV Type and
+      *** NOTE: There are serious errors in Novation's editor, which set the Sysex DV Type and
       *** the DV position to unexpected values.
       *** NOTE: For Roland Sysex, the data position is fixed to Sysex Length - 1
       29  1d  Sysex String            [12 bytes, padded with 0x00]
@@ -4214,7 +4214,7 @@ public class NovationSL extends Synth
       27  1b  Sysex Length            0...12  (9...12 for Roland Sysex)
       28  1c  DV position                     0 = no DV, 1 = position 0, 2 = position 1, etc.
       *** NOTE: If the Sysex DV Type is 0, then the DV position is undefined and can be anything
-      *** NOTE: There are serious errors in Novation's editor, which et the Sysex DV Type and
+      *** NOTE: There are serious errors in Novation's editor, which set the Sysex DV Type and
       *** the DV position to unexpected values.
       *** NOTE: For Roland Sysex, the data position is fixed to Sysex Length - 1
       29  1d  Sysex String            [12 bytes, padded with 0x00]
@@ -4263,7 +4263,7 @@ public class NovationSL extends Synth
       27  1b  Sysex Length            0...12  (9...12 for Roland Sysex)
       28  1c  DV position                     0 = no DV, 1 = position 0, 2 = position 1, etc.
       *** NOTE: If the Sysex DV Type is 0, then the DV position is undefined and can be anything
-      *** NOTE: There are serious errors in Novation's editor, which et the Sysex DV Type and
+      *** NOTE: There are serious errors in Novation's editor, which set the Sysex DV Type and
       *** the DV position to unexpected values.
       *** NOTE: For Roland Sysex, the data position is fixed to Sysex Length - 1
       29  1d  Sysex String            [12 bytes, padded with 0x00]
@@ -4306,7 +4306,7 @@ public class NovationSL extends Synth
       27  1b  Sysex Length            0...12  (9...12 for Roland Sysex)
       28  1c  DV position                     0 = no DV, 1 = position 0, 2 = position 1, etc.
       *** NOTE: If the Sysex DV Type is 0, then the DV position is undefined and can be anything
-      *** NOTE: There are serious errors in Novation's editor, which et the Sysex DV Type and
+      *** NOTE: There are serious errors in Novation's editor, which set the Sysex DV Type and
       *** the DV position to unexpected values.
       *** NOTE: For Roland Sysex, the data position is fixed to Sysex Length - 1
       29  1d  Sysex String            [12 bytes, padded with 0x00]
@@ -4353,7 +4353,7 @@ public class NovationSL extends Synth
       27  1b  Sysex length            0...12
       28  1c  DV position                     0 = no DV, 1 = position 0, 2 = position 1, etc.
       *** NOTE: If the Sysex DV Type is 0, then the DV position is undefined and can be anything
-      *** NOTE: There are serious errors in Novation's editor, which et the Sysex DV Type and
+      *** NOTE: There are serious errors in Novation's editor, which set the Sysex DV Type and
       *** the DV position to unexpected values.
       *** NOTE: For Roland Sysex, the data position is fixed to Sysex Length - 1
       29  1d  Sysex                           [12 bytes, padded with 0x00]

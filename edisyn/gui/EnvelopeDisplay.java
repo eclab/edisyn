@@ -464,64 +464,64 @@ public class EnvelopeDisplay extends JComponent implements Updatable
         Path2D.Double p = new Path2D.Double();
         Ellipse2D.Double marker[] = new Ellipse2D.Double[xs.length];
 
-	if (stepping)
-		{
-		double centering = rect.width / xs.length / 2.0;
-		
-        fillp.moveTo(rect.x + xs[0], rect.y + startHeight); 
-        
-        p.moveTo(rect.x + xs[0], rect.y + rect.height - ys[0]);
-        fillp.lineTo(rect.x + xs[0], rect.y + rect.height - ys[0]);
-        marker[0] = new Ellipse2D.Double((rect.x + xs[0] + centering - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0),
-            (rect.y + rect.height - ys[0] - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0),
-            Style.ENVELOPE_DISPLAY_MARKER_WIDTH(), Style.ENVELOPE_DISPLAY_MARKER_WIDTH());
-        
-        for(int i = 1; i < xs.length; i++)
+        if (stepping)
             {
-            p.lineTo(rect.x + xs[i], rect.y + rect.height - ys[i-1]);
-            fillp.lineTo(rect.x + xs[i], rect.y + rect.height - ys[i-1]);
-            p.moveTo(rect.x + xs[i], rect.y + rect.height - ys[i]);
-            fillp.lineTo(rect.x + xs[i], rect.y + rect.height - ys[i]);
-            marker[i] = new Ellipse2D.Double((rect.x + xs[i]  + centering - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0),
-                (rect.y + rect.height - ys[i] - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0),
-                Style.ENVELOPE_DISPLAY_MARKER_WIDTH(), Style.ENVELOPE_DISPLAY_MARKER_WIDTH());
-            } 
+            double centering = rect.width / xs.length / 2.0;
+                
+            fillp.moveTo(rect.x + xs[0], rect.y + startHeight); 
         
-        int end = xs.length - 1;
+            p.moveTo(rect.x + xs[0], rect.y + rect.height - ys[0]);
+            fillp.lineTo(rect.x + xs[0], rect.y + rect.height - ys[0]);
+            marker[0] = new Ellipse2D.Double((rect.x + xs[0] + centering - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0),
+                (rect.y + rect.height - ys[0] - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0),
+                Style.ENVELOPE_DISPLAY_MARKER_WIDTH(), Style.ENVELOPE_DISPLAY_MARKER_WIDTH());
+        
+            for(int i = 1; i < xs.length; i++)
+                {
+                p.lineTo(rect.x + xs[i], rect.y + rect.height - ys[i-1]);
+                fillp.lineTo(rect.x + xs[i], rect.y + rect.height - ys[i-1]);
+                p.moveTo(rect.x + xs[i], rect.y + rect.height - ys[i]);
+                fillp.lineTo(rect.x + xs[i], rect.y + rect.height - ys[i]);
+                marker[i] = new Ellipse2D.Double((rect.x + xs[i]  + centering - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0),
+                    (rect.y + rect.height - ys[i] - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0),
+                    Style.ENVELOPE_DISPLAY_MARKER_WIDTH(), Style.ENVELOPE_DISPLAY_MARKER_WIDTH());
+                } 
+        
+            int end = xs.length - 1;
 
-		p.lineTo(rect.x + rect.width, rect.y + rect.height - ys[end]);
-		fillp.lineTo(rect.x + rect.width, rect.y + rect.height - ys[end]);
-		p.moveTo(rect.x + rect.width, rect.y + startHeight);
-		fillp.lineTo(rect.x + rect.width, rect.y + startHeight);
+            p.lineTo(rect.x + rect.width, rect.y + rect.height - ys[end]);
+            fillp.lineTo(rect.x + rect.width, rect.y + rect.height - ys[end]);
+            p.moveTo(rect.x + rect.width, rect.y + startHeight);
+            fillp.lineTo(rect.x + rect.width, rect.y + startHeight);
         
-        fillp.lineTo(rect.x + xs[0], rect.y + startHeight); 
-        fillp.closePath();
-		}
-	else 
-	{
-        fillp.moveTo(rect.x + xs[0], rect.y + startHeight); 
-        
-        p.moveTo(rect.x + xs[0], rect.y + rect.height - ys[0]);
-        fillp.lineTo(rect.x + xs[0], rect.y + rect.height - ys[0]);
-        marker[0] = new Ellipse2D.Double((rect.x + xs[0] - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0),
-            (rect.y + rect.height - ys[0] - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0),
-            Style.ENVELOPE_DISPLAY_MARKER_WIDTH(), Style.ENVELOPE_DISPLAY_MARKER_WIDTH());
-        
-        for(int i = 1; i < xs.length; i++)
+            fillp.lineTo(rect.x + xs[0], rect.y + startHeight); 
+            fillp.closePath();
+            }
+        else 
             {
-            p.lineTo(rect.x + xs[i], rect.y + rect.height - ys[i]);
-            fillp.lineTo(rect.x + xs[i], rect.y + rect.height - ys[i]);
-            marker[i] = new Ellipse2D.Double((rect.x + xs[i] - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0),
-                (rect.y + rect.height - ys[i] - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0),
+            fillp.moveTo(rect.x + xs[0], rect.y + startHeight); 
+        
+            p.moveTo(rect.x + xs[0], rect.y + rect.height - ys[0]);
+            fillp.lineTo(rect.x + xs[0], rect.y + rect.height - ys[0]);
+            marker[0] = new Ellipse2D.Double((rect.x + xs[0] - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0),
+                (rect.y + rect.height - ys[0] - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0),
                 Style.ENVELOPE_DISPLAY_MARKER_WIDTH(), Style.ENVELOPE_DISPLAY_MARKER_WIDTH());
-            } 
         
-        int end = xs.length - 1;
+            for(int i = 1; i < xs.length; i++)
+                {
+                p.lineTo(rect.x + xs[i], rect.y + rect.height - ys[i]);
+                fillp.lineTo(rect.x + xs[i], rect.y + rect.height - ys[i]);
+                marker[i] = new Ellipse2D.Double((rect.x + xs[i] - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0),
+                    (rect.y + rect.height - ys[i] - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0),
+                    Style.ENVELOPE_DISPLAY_MARKER_WIDTH(), Style.ENVELOPE_DISPLAY_MARKER_WIDTH());
+                } 
         
-        fillp.lineTo(rect.x + xs[end], rect.y + startHeight);
-        fillp.lineTo(rect.x + xs[0], rect.y + startHeight); 
-        fillp.closePath();
-        }
+            int end = xs.length - 1;
+        
+            fillp.lineTo(rect.x + xs[end], rect.y + startHeight);
+            fillp.lineTo(rect.x + xs[0], rect.y + startHeight); 
+            fillp.closePath();
+            }
 
         graphics.setColor(semiTransparent);
         if (!asLink && filled)

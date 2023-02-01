@@ -928,6 +928,18 @@ public class Blank extends Synth
         // current editors.
         return DEFAULT_PASTES; 
         }
+        
+    public void sendAllSoundsOff()
+        {
+        // By default this method sends All Notes Off and All Sounds Off to every single
+        // channel.  You might want to override this because
+        // this behavior causes problems for your synthesizer (ahem Hydrasynth), or because
+        // your synthesizer has some nonstandard approach to clearing sounds.  Note that if you
+        // are trying to prevent Edisyn from sending all sounds off / all notes off temporarily,
+        // often because it's hard to debug with it, you can instead just set the static final
+        // boolean sendsAllSoundsOff = false; in Synth.java.
+        super.sendAllSoundsOff();
+        }
 
     public boolean testVerify(Synth synth2, String key, Object obj1, Object obj2)
         {
@@ -1071,8 +1083,8 @@ public class Blank extends Synth
         // patches in banks than other synthesizers of the same family, but must share the same sysex 
         // files.  In these cases, Edisyn permits patches to be placed into "invalid" slots (defined by
         // this method), and saved to files from them, but not written to synthesizers from those locations.
- 		//
- 		// The bank values passed in will always be between 0 and the number of banks (minus 1) inclusive.
+        //
+        // The bank values passed in will always be between 0 and the number of banks (minus 1) inclusive.
         // Similarly the patch numbers passed in will always be between 0 and getPatchNumberNames() - 1
         // inclusive.  By default this method always returns true, which is in most cases correct.
         return true; 

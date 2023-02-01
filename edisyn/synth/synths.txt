@@ -19,6 +19,7 @@
 ### In this file, blank lines and lines starting with a # are ignored.
 
 edisyn.synth.alesisd4.AlesisD4	Alesis	Alesis D4 / DM5
+edisyn.synth.asmhydrasynth.ASMHydrasynth	ASM	ASM Hydrasynth
 edisyn.synth.audiothingiesmicromonsta.AudiothingiesMicroMonsta	Audiothingies	Audiothingies MicroMonsta
 edisyn.synth.casiocz.CasioCZ	Casio	Casio CZ
 edisyn.synth.dsiprophet08.DSIProphet08	DSI / Sequential	DSI Prophet '08 / Tetra / Mopho
@@ -95,4 +96,4 @@ edisyn.synth.yamahafs1r.YamahaFS1RFseq	Yamaha	Yamaha FS1R [Fseq]
 edisyn.synth.yamahatg33.YamahaTG33	Yamaha	Yamaha TG33 / SY22 / SY35
 edisyn.synth.yamahatg33.YamahaTG33Multi	Yamaha	Yamaha TG33 [Multi]
 edisyn.synth.generic.Generic	General	MIDI Parameters
-edisyn.synth.tuning.Tuning	General	Tuning
+edisyn.synth.tuning.Tuning	General	MIDI Tuning Standard

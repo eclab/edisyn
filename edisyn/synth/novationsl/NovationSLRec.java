@@ -18,6 +18,7 @@ public class NovationSLRec extends Recognize
             data[4] == (byte)0x02 &&
             data[5] == (byte)0x03 &&
             data[6] == (byte)0x7F &&
+            data[12] < 32 &&                            // A valid template number
             
             // There are three possibilities at this point:
             // WRITE:               F0 00 20 29 02 03 7F 01/00 00 09 06 00 PATCHNUM <DATA...> 12 34 F7

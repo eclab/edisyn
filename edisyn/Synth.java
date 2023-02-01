@@ -365,7 +365,7 @@ public abstract class Synth extends JComponent implements Updatable
                 // a MIDI sysex message in response to the window becoming front.
                 if (clearNotes && synth.sendAllSoundsOffWhenWindowChanges())
                     {
-                    synth.sendAllSoundsOff(); // not doSendAllSoundsOff(false) because we don't want to turn off the test notes
+                    synth.sendAllSoundsOffInternal(); // not doSendAllSoundsOff(false) because we don't want to turn off the test notes
                     }
                 synth.windowCreated();
                 synth.windowBecameFront();                            
@@ -5789,7 +5789,7 @@ public abstract class Synth extends JComponent implements Updatable
                 {
                 if (clearNotes && sendAllSoundsOffWhenWindowChanges())
                     {
-                    sendAllSoundsOff(); // not doSendAllSoundsOff(false) because we don't want to turn off the test notes
+                    sendAllSoundsOffInternal(); // not doSendAllSoundsOff(false) because we don't want to turn off the test notes
                     }
                 updateMenu();
                 windowBecameFront();
@@ -6007,35 +6007,48 @@ public abstract class Synth extends JComponent implements Updatable
         
         if (!sendingAllSoundsOff)
             {
-            sendAllSoundsOff();
+            sendAllSoundsOffInternal();
             }
         }
         
-        
-    public static final boolean sendsAllSoundsOff = true;
-    void sendAllSoundsOff()
+    /** Sends All Sounds Off and All Notes Off to every channel.  
+        Override this if it would behave badly on your synthesizer.  Note that if you
+        are trying to prevent Edisyn from sending all sounds off / all notes off temporarily,
+        often because it's hard to debug with it, you can instead just set the static final
+        boolean sendsAllSoundsOff = false; in Synth.java. */
+    public void sendAllSoundsOff()
+        {
+        try
+            {
+            // do an all sounds off (some synths don't properly respond to all notes off)
+            for(int i = 0; i < 16; i++)
+                tryToSendMIDI(new ShortMessage(ShortMessage.CONTROL_CHANGE, i, 120, 0));
+            // do an all notes off (some synths don't properly respond to all sounds off)
+            for(int i = 0; i < 16; i++)
+                tryToSendMIDI(new ShortMessage(ShortMessage.CONTROL_CHANGE, i, 123, 0));
+            }
+        catch (InvalidMidiDataException ex)
+            {
+            Synth.handleException(ex);
+            }
+        }
+    
+    
+    /** Set this to FALSE to prevent Edisyn from sending all sounds off or all notes off messages,
+        perhaps to debug more easily. */
+    public static final boolean sendsAllSoundsOff = false;
+    
+    void sendAllSoundsOffInternal()
         {
         if (sendsAllSoundsOff)
-        	{
-			noMIDIPause = true;
-			try
-				{
-				// do an all sounds off (some synths don't properly respond to all notes off)
-				for(int i = 0; i < 16; i++)
-					tryToSendMIDI(new ShortMessage(ShortMessage.CONTROL_CHANGE, i, 120, 0));
-				// do an all notes off (some synths don't properly respond to all sounds off)
-				for(int i = 0; i < 16; i++)
-					tryToSendMIDI(new ShortMessage(ShortMessage.CONTROL_CHANGE, i, 123, 0));
-				// Plus, for some synths that respond to neither <ahem Korg Wavestation>, maybe we can turn off the current note,
-				// assuming the user hasn't changed it.   
-				clearChord();
-				}
-			catch (InvalidMidiDataException e2)
-				{
-				Synth.handleException(e2);
-				}
-			noMIDIPause = false;
-			}
+            {
+            noMIDIPause = true;
+            sendAllSoundsOff();
+            // Plus, for some synths that respond to neither <ahem Korg Wavestation>, maybe we can turn off the current note,
+            // assuming the user hasn't changed it.   
+            clearChord();
+            noMIDIPause = false;
+            }
         }
 
 
@@ -6221,6 +6234,7 @@ public abstract class Synth extends JComponent implements Updatable
             }
         }       
 
+    /** Sends NoteOff messages to clear the last chord played by Edisyn, if not already cleared. */
     public void clearChord()
         {
         if (lastChord != null)
@@ -6263,7 +6277,7 @@ public abstract class Synth extends JComponent implements Updatable
             {
             if (getSendsAllSoundsOffBetweenNotes())
                 {
-                sendAllSoundsOff();
+                sendAllSoundsOffInternal();
                 }
                 
             clearChord();
@@ -6445,7 +6459,7 @@ public abstract class Synth extends JComponent implements Updatable
         {
         if (clearNotes && sendAllSoundsOffWhenWindowChanges())
             {
-            sendAllSoundsOff(); // not doSendAllSoundsOff(false) because we don't want to turn off the test notes
+            sendAllSoundsOffInternal(); // not doSendAllSoundsOff(false) because we don't want to turn off the test notes
             }
         simplePause(50);        // maybe enough time to flush out the all sounds off notes?  dunno
         System.exit(0);
@@ -6730,7 +6744,7 @@ public abstract class Synth extends JComponent implements Updatable
             {
             if (clearNotes && sendAllSoundsOffWhenWindowChanges())
                 {
-                sendAllSoundsOff(); // not doSendAllSoundsOff(false) because we don't want to turn off the test notes
+                sendAllSoundsOffInternal(); // not doSendAllSoundsOff(false) because we don't want to turn off the test notes
                 }
                 
             // Kill the timers
@@ -8608,6 +8622,7 @@ public abstract class Synth extends JComponent implements Updatable
             }
         else
             {
+            // showLibrarianMenu.setEnabled(false);
             if (librarian == null)      
                 {
                 librarian = new Librarian(this);
@@ -8625,6 +8640,7 @@ public abstract class Synth extends JComponent implements Updatable
         {
         if (librarianOpen)
             {
+            showLibrarianMenu.setEnabled(getPatchNumberNames() != null);  // show menu if supports librarians
             Component selected = tabs.getSelectedComponent();
             tabs.remove(librarianPane);
             if (selected == librarianPane)  // we were in the morph pane when this menu was selected
@@ -9319,7 +9335,7 @@ public abstract class Synth extends JComponent implements Updatable
                 {
                 doUndo(false);          // no reason to send or update it
                 doUndo(false);          // yes, twice
-                model.updateAllListeners();	// because doUndo() didn't do it, and performBlend may not succeed
+                model.updateAllListeners();     // because doUndo() didn't do it, and performBlend may not succeed
                 performBlend();
                 }
             else

@@ -302,9 +302,9 @@ public class Generic extends Synth
                 on.setMax(127);
                 on.setState(on.getState());
  
-                 final CheckBox realtime = new CheckBox("Real-Time", this, "cust-cc-realtime-" + i);
+                final CheckBox realtime = new CheckBox("Real-Time", this, "cust-cc-realtime-" + i);
  
-               final CheckBox lsb = new CheckBox("+LSB", this, "cust-cc-lsb-" + i)
+                final CheckBox lsb = new CheckBox("+LSB", this, "cust-cc-lsb-" + i)
                     {
                     public void update(String key, Model model)
                         {
@@ -333,7 +333,7 @@ public class Generic extends Synth
                     public void update(String key, Model model)     
                         {
                         super.update(key, model);
-						changingParam = true;
+                        changingParam = true;
                         lsb.setEnabled(model.get("cust-cc-param-" + _i) < 32);
 
                         if (model.get("cust-cc-lsb-" + _i) > 0 && model.get("cust-cc-param-" + _i) < 32)
@@ -350,7 +350,7 @@ public class Generic extends Synth
                             msb.setMax(127);
                             msbalt.setMax(127);
                             }
-						changingParam = false;
+                        changingParam = false;
                         }
                     };
                                         
@@ -424,9 +424,9 @@ public class Generic extends Synth
         }
 
 
-	boolean send = false;
-	boolean changingParam = false;
-	
+    boolean send = false;
+    boolean changingParam = false;
+        
     public JComponent addNRPN(Color color)
         {
         Category category = new Category(this, "NRPN", color);
@@ -503,8 +503,8 @@ public class Generic extends Synth
                     public void update(String key, Model model)     
                         {
                         super.update(key, model);
-						
-						changingParam = true;
+                                                
+                        changingParam = true;
                         if (model.get("cust-nrpn-lsb-" + _i) > 0)
                             {
                             msb.setLabel("MSB+LSB");
@@ -670,7 +670,7 @@ public class Generic extends Synth
                         {
                         super.update(key, model);
 
-						changingParam = true;
+                        changingParam = true;
                         if (model.get("cust-rpn-lsb-" + _i) > 0)
                             {
                             msb.setLabel("MSB+LSB");
@@ -685,7 +685,7 @@ public class Generic extends Synth
                             msb.setMax(127);
                             msbalt.setMax(127);
                             }
-						changingParam = false;
+                        changingParam = false;
                         }
                     };
                                         
@@ -827,9 +827,9 @@ public class Generic extends Synth
                     model.set("cc-name-" + (i + offset), "CC " +  (i + offset) + " " + CC_NAMES[i + offset]);
                 
                 if (i < j+3)
-                	{
-                	hbox.add(Strut.makeHorizontalStrut(40));
-                	}
+                    {
+                    hbox.add(Strut.makeHorizontalStrut(40));
+                    }
                 }
             main.add(hbox);
             }

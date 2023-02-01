@@ -62,10 +62,19 @@ public class PushButton extends JPanel
         this(text, options, null);
         }
 
-    public PushButton(String text, String[] options, boolean[] enabled)
+    public void setName(String text)
         {
-        this(text);
-        pop = new JPopupMenu();
+        button.setText(text);
+        }
+
+    public void setOptions(String[] options)
+        {
+        setOptions(options, null);
+        }
+
+    public void setOptions(String[] options, boolean[] enabled)
+        {
+        pop.removeAll();
         for(int i = 0; i < options.length; i++)
             {
             if (options[i] == null)
@@ -91,11 +100,10 @@ public class PushButton extends JPanel
                 }
             }
         }
-    
-    public PushButton(String text, JMenuItem[] menuItems)
+
+    public void setOptions(JMenuItem[] menuItems)
         {
-        this(text);
-        pop = new JPopupMenu();
+        pop.removeAll();
         for(int i = 0; i < menuItems.length; i++)
             {
             if (menuItems[i] == null)
@@ -103,6 +111,20 @@ public class PushButton extends JPanel
             else
                 pop.add(menuItems[i]);
             }
+        }
+
+    public PushButton(String text, String[] options, boolean[] enabled)
+        {
+        this(text);
+        pop = new JPopupMenu();
+        setOptions(options, enabled);
+        }
+    
+    public PushButton(String text, JMenuItem[] menuItems)
+        {
+        this(text);
+        pop = new JPopupMenu();
+        setOptions(menuItems);
         }
     
     void _perform()

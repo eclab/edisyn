@@ -2966,163 +2966,163 @@ public class EmuProteus2000 extends Synth
         // This is for testing new SIMMs only
             
         /*
-        JMenuItem getDataMenu = new JMenuItem("Get Presets for SIMM");
-        menu.add(getDataMenu);
-        getDataMenu.addActionListener(new ActionListener()
-            {
-            public void actionPerformed( ActionEvent e)
-                {
-                type = 1;
-                number = 0;
-                int id = -1;
-                String hex = JOptionPane.showInputDialog(EmuProteus2000.this, "Enter a SIMM ID", "");
-                if (hex != null)
-                    {
-                    java.util.Scanner scanner = new java.util.Scanner(hex);
-                    if (scanner.hasNextInt(16))
-                        {
-                        romid = scanner.nextInt(16);
-                        FileDialog fd = new FileDialog((Frame)(SwingUtilities.getRoot(EmuProteus2000.this)), "Save to File...", FileDialog.SAVE);
-                        disableMenuBar();
-                        fd.setVisible(true);
-                        enableMenuBar();
-                        if (fd.getFile() != null)
-                            {
-                            if (scribble != null)
-                                try { scribble.close(); }
-                                catch (IOException ex) { }
-                            try {
-                                scribble = new FileOutputStream(new File(fd.getDirectory(), StringUtility.ensureFileEndsWith(fd.getFile(), ".syx")));
-                                tryToSendSysex(new byte[] 
-                                    { (byte)0xF0, 0x18, 0x0F, getID(), 0x55, 0x0C, (byte) type, 
-                                    (byte)(number & 127), (byte)(number >>> 7), 
-                                    (byte)(romid & 127), (byte)(romid >>> 7), (byte)0xF7 });
-                                }
-                            catch (IOException ex) { }
-                            }
-                        }
-                    }
-                }
-            });
+          JMenuItem getDataMenu = new JMenuItem("Get Presets for SIMM");
+          menu.add(getDataMenu);
+          getDataMenu.addActionListener(new ActionListener()
+          {
+          public void actionPerformed( ActionEvent e)
+          {
+          type = 1;
+          number = 0;
+          int id = -1;
+          String hex = JOptionPane.showInputDialog(EmuProteus2000.this, "Enter a SIMM ID", "");
+          if (hex != null)
+          {
+          java.util.Scanner scanner = new java.util.Scanner(hex);
+          if (scanner.hasNextInt(16))
+          {
+          romid = scanner.nextInt(16);
+          FileDialog fd = new FileDialog((Frame)(SwingUtilities.getRoot(EmuProteus2000.this)), "Save to File...", FileDialog.SAVE);
+          disableMenuBar();
+          fd.setVisible(true);
+          enableMenuBar();
+          if (fd.getFile() != null)
+          {
+          if (scribble != null)
+          try { scribble.close(); }
+          catch (IOException ex) { }
+          try {
+          scribble = new FileOutputStream(new File(fd.getDirectory(), StringUtility.ensureFileEndsWith(fd.getFile(), ".syx")));
+          tryToSendSysex(new byte[] 
+          { (byte)0xF0, 0x18, 0x0F, getID(), 0x55, 0x0C, (byte) type, 
+          (byte)(number & 127), (byte)(number >>> 7), 
+          (byte)(romid & 127), (byte)(romid >>> 7), (byte)0xF7 });
+          }
+          catch (IOException ex) { }
+          }
+          }
+          }
+          }
+          });
 
-        JMenuItem getDataMenu1 = new JMenuItem("Get Instruments for SIMM");
-        menu.add(getDataMenu1);
-        getDataMenu1.addActionListener(new ActionListener()
-            {
-            public void actionPerformed( ActionEvent e)
-                {
-                type = 2;
-                number = 0;
-                int id = -1;
-                String hex = JOptionPane.showInputDialog(EmuProteus2000.this, "Enter a SIMM ID", "");
-                if (hex != null)
-                    {
-                    java.util.Scanner scanner = new java.util.Scanner(hex);
-                    if (scanner.hasNextInt(16))
-                        {
-                        romid = scanner.nextInt(16);
-                        FileDialog fd = new FileDialog((Frame)(SwingUtilities.getRoot(EmuProteus2000.this)), "Save to File...", FileDialog.SAVE);
-                        disableMenuBar();
-                        fd.setVisible(true);
-                        enableMenuBar();
-                        if (fd.getFile() != null)
-                            {
-                            if (scribble != null)
-                                try { scribble.close(); }
-                                catch (IOException ex) { }
-                            try {
-                                scribble = new FileOutputStream(new File(fd.getDirectory(), StringUtility.ensureFileEndsWith(fd.getFile(), ".syx")));
-                                tryToSendSysex(new byte[] 
-                                    { (byte)0xF0, 0x18, 0x0F, getID(), 0x55, 0x0C, (byte) type, 
-                                    (byte)(number & 127), (byte)(number >>> 7), 
-                                    (byte)(romid & 127), (byte)(romid >>> 7), (byte)0xF7 });
-                                }
-                            catch (IOException ex) { }
-                            }
-                        }
-                    }
-                }
-            });
+          JMenuItem getDataMenu1 = new JMenuItem("Get Instruments for SIMM");
+          menu.add(getDataMenu1);
+          getDataMenu1.addActionListener(new ActionListener()
+          {
+          public void actionPerformed( ActionEvent e)
+          {
+          type = 2;
+          number = 0;
+          int id = -1;
+          String hex = JOptionPane.showInputDialog(EmuProteus2000.this, "Enter a SIMM ID", "");
+          if (hex != null)
+          {
+          java.util.Scanner scanner = new java.util.Scanner(hex);
+          if (scanner.hasNextInt(16))
+          {
+          romid = scanner.nextInt(16);
+          FileDialog fd = new FileDialog((Frame)(SwingUtilities.getRoot(EmuProteus2000.this)), "Save to File...", FileDialog.SAVE);
+          disableMenuBar();
+          fd.setVisible(true);
+          enableMenuBar();
+          if (fd.getFile() != null)
+          {
+          if (scribble != null)
+          try { scribble.close(); }
+          catch (IOException ex) { }
+          try {
+          scribble = new FileOutputStream(new File(fd.getDirectory(), StringUtility.ensureFileEndsWith(fd.getFile(), ".syx")));
+          tryToSendSysex(new byte[] 
+          { (byte)0xF0, 0x18, 0x0F, getID(), 0x55, 0x0C, (byte) type, 
+          (byte)(number & 127), (byte)(number >>> 7), 
+          (byte)(romid & 127), (byte)(romid >>> 7), (byte)0xF7 });
+          }
+          catch (IOException ex) { }
+          }
+          }
+          }
+          }
+          });
 
-        JMenuItem getDataMenu2 = new JMenuItem("Get Arps for SIMM");
-        menu.add(getDataMenu2);
-        getDataMenu2.addActionListener(new ActionListener()
-            {
-            public void actionPerformed( ActionEvent e)
-                {
-                type = 3;
-                number = 0;
-                int id = -1;
-                String hex = JOptionPane.showInputDialog(EmuProteus2000.this, "Enter a SIMM ID", "");
-                if (hex != null)
-                    {
-                    java.util.Scanner scanner = new java.util.Scanner(hex);
-                    if (scanner.hasNextInt(16))
-                        {
-                        romid = scanner.nextInt(16);
-                        FileDialog fd = new FileDialog((Frame)(SwingUtilities.getRoot(EmuProteus2000.this)), "Save to File...", FileDialog.SAVE);
-                        disableMenuBar();
-                        fd.setVisible(true);
-                        enableMenuBar();
-                        if (fd.getFile() != null)
-                            {
-                            if (scribble != null)
-                                try { scribble.close(); }
-                                catch (IOException ex) { }
-                            try {
-                                scribble = new FileOutputStream(new File(fd.getDirectory(), StringUtility.ensureFileEndsWith(fd.getFile(), ".syx")));
-                                tryToSendSysex(new byte[] 
-                                    { (byte)0xF0, 0x18, 0x0F, getID(), 0x55, 0x0C, (byte) type, 
-                                    (byte)(number & 127), (byte)(number >>> 7), 
-                                    (byte)(romid & 127), (byte)(romid >>> 7), (byte)0xF7 });
-                                }
-                            catch (IOException ex) { }
-                            }
-                        }
-                    }
-                }
-            });
+          JMenuItem getDataMenu2 = new JMenuItem("Get Arps for SIMM");
+          menu.add(getDataMenu2);
+          getDataMenu2.addActionListener(new ActionListener()
+          {
+          public void actionPerformed( ActionEvent e)
+          {
+          type = 3;
+          number = 0;
+          int id = -1;
+          String hex = JOptionPane.showInputDialog(EmuProteus2000.this, "Enter a SIMM ID", "");
+          if (hex != null)
+          {
+          java.util.Scanner scanner = new java.util.Scanner(hex);
+          if (scanner.hasNextInt(16))
+          {
+          romid = scanner.nextInt(16);
+          FileDialog fd = new FileDialog((Frame)(SwingUtilities.getRoot(EmuProteus2000.this)), "Save to File...", FileDialog.SAVE);
+          disableMenuBar();
+          fd.setVisible(true);
+          enableMenuBar();
+          if (fd.getFile() != null)
+          {
+          if (scribble != null)
+          try { scribble.close(); }
+          catch (IOException ex) { }
+          try {
+          scribble = new FileOutputStream(new File(fd.getDirectory(), StringUtility.ensureFileEndsWith(fd.getFile(), ".syx")));
+          tryToSendSysex(new byte[] 
+          { (byte)0xF0, 0x18, 0x0F, getID(), 0x55, 0x0C, (byte) type, 
+          (byte)(number & 127), (byte)(number >>> 7), 
+          (byte)(romid & 127), (byte)(romid >>> 7), (byte)0xF7 });
+          }
+          catch (IOException ex) { }
+          }
+          }
+          }
+          }
+          });
 
-        JMenuItem getDataMenu3 = new JMenuItem("Get Riffs for SIMM");
-        menu.add(getDataMenu3);
-        getDataMenu3.addActionListener(new ActionListener()
-            {
-            public void actionPerformed( ActionEvent e)
-                {
-                type = 6;
-                number = 0;
-                int id = -1;
-                String hex = JOptionPane.showInputDialog(EmuProteus2000.this, "Enter a SIMM ID", "");
-                if (hex != null)
-                    {
-                    java.util.Scanner scanner = new java.util.Scanner(hex);
-                    if (scanner.hasNextInt(16))
-                        {
-                        romid = scanner.nextInt(16);
-                        FileDialog fd = new FileDialog((Frame)(SwingUtilities.getRoot(EmuProteus2000.this)), "Save to File...", FileDialog.SAVE);
-                        disableMenuBar();
-                        fd.setVisible(true);
-                        enableMenuBar();
-                        if (fd.getFile() != null)
-                            {
-                            if (scribble != null)
-                                try { scribble.close(); }
-                                catch (IOException ex) { }
-                            try {
-                                scribble = new FileOutputStream(new File(fd.getDirectory(), StringUtility.ensureFileEndsWith(fd.getFile(), ".syx")));
-                                tryToSendSysex(new byte[] 
-                                    { (byte)0xF0, 0x18, 0x0F, getID(), 0x55, 0x0C, (byte) type, 
-                                    (byte)(number & 127), (byte)(number >>> 7), 
-                                    (byte)(romid & 127), (byte)(romid >>> 7), (byte)0xF7 });
-                                }
-                            catch (IOException ex) { }
-                            }
-                        }
-                    }
-                }
-            });
-        	*/
-        	
+          JMenuItem getDataMenu3 = new JMenuItem("Get Riffs for SIMM");
+          menu.add(getDataMenu3);
+          getDataMenu3.addActionListener(new ActionListener()
+          {
+          public void actionPerformed( ActionEvent e)
+          {
+          type = 6;
+          number = 0;
+          int id = -1;
+          String hex = JOptionPane.showInputDialog(EmuProteus2000.this, "Enter a SIMM ID", "");
+          if (hex != null)
+          {
+          java.util.Scanner scanner = new java.util.Scanner(hex);
+          if (scanner.hasNextInt(16))
+          {
+          romid = scanner.nextInt(16);
+          FileDialog fd = new FileDialog((Frame)(SwingUtilities.getRoot(EmuProteus2000.this)), "Save to File...", FileDialog.SAVE);
+          disableMenuBar();
+          fd.setVisible(true);
+          enableMenuBar();
+          if (fd.getFile() != null)
+          {
+          if (scribble != null)
+          try { scribble.close(); }
+          catch (IOException ex) { }
+          try {
+          scribble = new FileOutputStream(new File(fd.getDirectory(), StringUtility.ensureFileEndsWith(fd.getFile(), ".syx")));
+          tryToSendSysex(new byte[] 
+          { (byte)0xF0, 0x18, 0x0F, getID(), 0x55, 0x0C, (byte) type, 
+          (byte)(number & 127), (byte)(number >>> 7), 
+          (byte)(romid & 127), (byte)(romid >>> 7), (byte)0xF7 });
+          }
+          catch (IOException ex) { }
+          }
+          }
+          }
+          }
+          });
+        */
+                
         }
 
     int number;

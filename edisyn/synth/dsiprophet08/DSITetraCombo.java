@@ -67,6 +67,22 @@ public class DSITetraCombo extends Synth
     
     public DSITetraCombo()
         {
+        String str = getLastX("SendAssignableParams", getSynthClassName(), true);
+        if (str == null)
+            sendAssignableParams = true;            // default is true
+        else if (str.equalsIgnoreCase("true"))
+            sendAssignableParams = true;
+        else
+            sendAssignableParams = false;
+
+        str = getLastX("Multimode", getSynthClassName(), true);
+        if (str == null)
+            multimode = false;
+        else if (str.equalsIgnoreCase("true"))
+            multimode = true;
+        else
+            multimode = false;
+                
         int panel = 0;
         
         if (parametersToIndex == null)
@@ -2079,6 +2095,8 @@ public class DSITetraCombo extends Synth
 
     };
     
+    boolean multimode;
+
     
     public final int LAYER_OFFSET = 256;
     public final int BASE_OFFSET = 512;
@@ -2088,22 +2106,29 @@ public class DSITetraCombo extends Synth
         {
         if (key.equals("bank")) return new Object[0];  // this is not emittable
         if (key.equals("number")) return new Object[0];  // this is not emittable
-
+        if (key.equals("---")) return new Object[0];
+                
         int index;
         int value;
         
-        if (key.startsWith("name"))
+        if (key.equals("name"))
             {
-            int pos = (key.equals("name") ? 0 : (key.equals("name2") ? 1 : (key.equals("name3") ? 2 : 3))) * LAYER_OFFSET + BASE_OFFSET + 184;
+            int pos = (multimode ? 184 : BASE_OFFSET + 184);
+            int channel = getChannelOut();
             Object[] ret = new Object[4 * 16];
             char[] name = (model.get(key, "Untitled") + "                ").toCharArray();
             for(int i = 0; i < 16; i++)
                 {
-                Object[] nrpn = buildNRPN(getChannelOut(), i + pos, name[i]);
+                Object[] nrpn = buildNRPN(channel, i + pos, name[i]);
                 System.arraycopy(nrpn, 0, ret, i * 4, 4);
                 }
             return ret;
             }
+        else if (key.startsWith("name"))	// like name2, name3, name4
+        	{
+        	// cannot be emitted
+        	return new Object[0];
+        	}
         else 
             {
             int val = model.get(key, 0);
@@ -2123,9 +2148,23 @@ public class DSITetraCombo extends Synth
                     }
                 }               
 
+            int channel = getChannelOut();
+            int baseOffset = BASE_OFFSET;
+            int layerOffset = LAYER_OFFSET;
+            
+            if (multimode)
+                {
+                int layer = (key.charAt(5) - '1');              // 0 ... 3
+                baseOffset = 0;
+                layerOffset = 0;
+                channel += layer;
+                if (channel > 15) channel = getChannelOut();
+                }
+            
             int pos = (((Integer)(parametersToIndex.get(key))).intValue());
-            int revisedpos = (pos / LAYER_SIZE) * LAYER_OFFSET + (pos % LAYER_SIZE) + BASE_OFFSET;
-            return buildNRPN(getChannelOut(), revisedpos, val);
+            int revisedpos = (pos / LAYER_SIZE) * layerOffset + (pos % LAYER_SIZE) + baseOffset;
+
+            return buildNRPN(channel, revisedpos, val);
             }
         }
 
@@ -2143,28 +2182,45 @@ public class DSITetraCombo extends Synth
         {
         if (data.type == Midi.CCDATA_TYPE_NRPN && data.number <= 1719)
             {
-            if (data.number >= 696 && data.number <= 712)  // Name
+            if (data.number >= 696 && data.number < 712)  // Name
                 {
                 char[] name = (model.get("name", "Untitled") + "                ").toCharArray();
                 name[data.number - 696] = (char)(data.value);
                 model.set("name", new String(name).substring(0, 16));
                 }
+            else if (data.number >= 184 && data.number < 200)  // Multimode Name
+                {
+                char[] name = (model.get("name", "Untitled") + "                ").toCharArray();
+                name[data.number - 184] = (char)(data.value);
+                model.set("name", new String(name).substring(0, 16));
+                }
             else
                 {
-                int layer = (data.number - BASE_OFFSET) / LAYER_OFFSET;
-                int num = (data.number - BASE_OFFSET) % LAYER_OFFSET;
-                
-                if (layer == 4) // Quad
-                    {
-                    setParamByNRPN(0, num, data.value);
-                    setParamByNRPN(1, num, data.value);
-                    setParamByNRPN(2, num, data.value);
-                    setParamByNRPN(3, num, data.value);
-                    }
+                if (data.number < BASE_OFFSET)		// it's probably multimode?
+                	{
+                	// Single
+                	int layer = data.channel - getChannelOut();
+                	if (layer < 0 || layer > 3) layer = 0;
+                	int num = data.number;
+					setParamByNRPN(layer, num, data.value);
+                	}
                 else
-                    {
-                    setParamByNRPN(layer, num, data.value);
-                    }
+                	{
+					int layer = (data.number - BASE_OFFSET) / LAYER_OFFSET;
+					int num = (data.number - BASE_OFFSET) % LAYER_OFFSET;
+				
+					if (layer == 4) // Quad
+						{
+						setParamByNRPN(0, num, data.value);
+						setParamByNRPN(1, num, data.value);
+						setParamByNRPN(2, num, data.value);
+						setParamByNRPN(3, num, data.value);
+						}
+					else
+						{
+						setParamByNRPN(layer, num, data.value);
+						}
+					}
                 } 
             }               
         }
@@ -2523,6 +2579,21 @@ public class DSITetraCombo extends Synth
         JMenu menu = new JMenu("DSI");
         menubar.add(menu);
 
+        final JCheckBoxMenuItem multi = new JCheckBoxMenuItem("Multimode");
+        multi.setSelected(multimode);
+        menu.add(multi);
+        
+        multi.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent evt)
+                {
+                multimode = multi.isSelected();
+                setLastX("" + multimode, "Multimode", getSynthClassName(), true);
+                }
+            });
+
+        menu.addSeparator();
+
         JMenuItem a2b = new JMenuItem("Copy Voice To...");
         menu.add(a2b);
         a2b.addActionListener(new ActionListener()
@@ -2735,14 +2806,6 @@ public class DSITetraCombo extends Synth
                 }
             });
 
-        String str = getLastX("SendAssignableParams", getSynthClassName(), true);
-        if (str == null)
-            sendAssignableParams = true;            // default is true
-        else if (str.equalsIgnoreCase("true"))
-            sendAssignableParams = true;
-        else
-            sendAssignableParams = false;
-                
         final JCheckBoxMenuItem beta = new JCheckBoxMenuItem("Send Assignable Params");
         beta.setSelected(sendAssignableParams);
         menu.add(beta);

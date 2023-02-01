@@ -19,12 +19,15 @@ Combos require many tabs; I apologize for the names, it was needed to fit them a
 
 In a combo, all four voices have (more or less) exactly the same set of parameters: however some parameters in voices 2, 3, and 4 have no functionality at all and exist only to make it easy to swap or copy voices.  These non-functional parameters are marked with a <b>[-]</b>.
 
-
 <br><br><h3>About the Menu</h3>
 
 The menu has several options that are useful for Tetra owners.
 
 <ul>
+<li> <b>Multimode</b>&nbsp;&nbsp;
+By default, the editor works in standard combo mode.  In this mode, all voices share the same MIDI channel.  You can change this to <b>Multimode</b>, where each voice has its own MIDI channel and its parameter changes are sent out on that channel.  To use multimode, make sure you have set y
+our Tetra to Multimode.  Then select <b>Multimode</b> in Edisyn's DSI menu.
+
 <li> <b>Copy Voice To...</b> and <b>Swap Voices...</b> allow you to copy and swap different voices.
 
 <p><li> <b>Load All Voices</b>, <b>Load Only Voice 1</>, etc.  When you load a sysex file, receive a dump or merge from your Tetra, or reset your combo patch, your setting here will dictate whether this will effect all voices, or just a single voice (keeping the others intact).  This way, for example, you can just clear out Voice 1.  Or you could make a combo patch consisting of different voices from different combo pthes, by loading the first patch, the restricting to a specific voice and loading the next patch (which would slot it into that voice).  You may need to swap or copy voices to do that.
@@ -57,7 +60,7 @@ The menu has several options that are useful for Tetra owners.
 <p><li>Even if MIDIParamLCD is set to ON, any real-time changes you make won't be reflected on the LCD unless you first twiddle a knob so the synth is in its edit mode.
 </ul>
 
-<p>Thanks to Will Taylor for his considerable help in motivating and debugging this editor.
+<p>Thanks to Will Taylor for his considerable help in motivating and debugging this editor.  Thanks also to John Hodgson <mrjohnhodgson@gmail.com> for suggestions and testing for Multimode.
 
 
 <p><table border=0 cellpadding=0 cellspacing=5>

@@ -46,19 +46,19 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
     public KorgWavestationPatch()
         {
         if (keysToParameters == null)
-        	{
-        	keysToParameters = new HashMap();
-			for(int i = 0; i < keys.length; i++)
-				{
-				keysToParameters.put(keys[i], parameters[i]);
-				}
+            {
+            keysToParameters = new HashMap();
+            for(int i = 0; i < keys.length; i++)
+                {
+                keysToParameters.put(keys[i], parameters[i]);
+                }
                
-			subkeysToSubparameters = new HashMap();         
-			for(int i = 0; i < subkeys.length; i++)
-				{
-				subkeysToSubparameters.put(subkeys[i], Integer.valueOf(subparameters[i]));
-				}
-       		}
+            subkeysToSubparameters = new HashMap();         
+            for(int i = 0; i < subkeys.length; i++)
+                {
+                subkeysToSubparameters.put(subkeys[i], Integer.valueOf(subparameters[i]));
+                }
+            }
 
         JComponent soundPanel = new SynthPanel(this);
         VBox vbox = new VBox();

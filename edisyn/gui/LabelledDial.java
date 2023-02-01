@@ -217,7 +217,7 @@ public class LabelledDial extends NumericalComponent
         Color staticColor;
 
         // The largest vertical range that a dial ought to go.
-        public static final int MAX_EXTENT = 512;
+        public static final int MAX_EXTENT = 256;
         // The typical vertical range that the dial goes.  128 is reasonable
         public static final int MIN_EXTENT = 128;
         

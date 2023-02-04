@@ -4064,14 +4064,14 @@ box.add(Box.createHorizontalGlue());
         if (obj == null) return 0;
         return nrpn[((Integer)obj).intValue()];
         }
+    
                 
                 
-                
-    /// The Hydrasynth's NRPN is a total mess, requiring a very high degree of customization
+    /// The Hydrasynth NRPN is a mess, requiring a very high degree of customization
     /// per-parameter to emit NRPN values.  This is *extremely* unfortunate -- it is so highly
-    /// customized that I can't do a table lookup of range informaton per-parameter and have
-    /// to resort to a giant if-tree, which is gonna be slow.  :-(  :-(  It's also gonna be
-    /// a mess parsing these back in from the Hydrasynth...
+    /// customized and arbitrary that I can't do a table lookup of range informaton per-parameter 
+    /// and have to resort to a giant if-tree, which is gonna be slow.  :-(  :-(  It's also 
+    /// gonna be a mess parsing these back in from the Hydrasynth...
     public Object[] emitAll(String key)
         {
         if (key.equals("bank") || key.equals("number") || key.equals("name") || key.equals("--"))
@@ -4101,7 +4101,7 @@ box.add(Box.createHorizontalGlue());
                 val = v * 128 + w;
                 }
             /// NOTE: This parameter doesn't exist (osc3 doesn't have a mode)
-            /// But we're keeping it here for consistency with ASM's buggy documentation
+            /// But we're keeping it here for consistency with the buggy documentation
             else if (key.equals("osc3mode"))
                 {
                 p = p("osc1mode");
@@ -4684,7 +4684,7 @@ box.add(Box.createHorizontalGlue());
 				if (key.equals("osc1mode"))
 					{
 					if (v == 1) key = "osc2mode";
-					else if (v == 2) key = "osc3mode";		// NOTE: does not exist, but we're keeping it here for consistency with ASM's buggy documentation
+					else if (v == 2) key = "osc3mode";		// NOTE: does not exist, but we're keeping it here for consistency with the buggy documentation
 					val = w;
 					}
 				else if (key.equals("osc1semi"))
@@ -5010,8 +5010,8 @@ box.add(Box.createHorizontalGlue());
 		}
 
 
-    /** This is overridden because the Hydrasynth stupidly uses CC 120 as ARP OCTAVE
-        rather than All Sounds Off (no, really).  So we can't send that or we'll break
+    /** This is overridden because the Hydrasynth foolishly uses CC 120 as ARP OCTAVE
+        rather than All Sounds Off.  So we can't send that or we'll break
         things on the Hydrasynth!  It has its own weird version of All Sounds Off sent 
         as an NRPN message. */
     public void sendAllSoundsOff()
@@ -5021,7 +5021,7 @@ box.add(Box.createHorizontalGlue());
             // do an all notes off
             for(int i = 0; i < 16; i++)
                 tryToSendMIDI(new ShortMessage(ShortMessage.CONTROL_CHANGE, i, 123, 0));
-            // Send the Hydrasynth's special NRPN message for all sounds off (ugh)
+            // Send the Hydrasynth's special NRPN message for all sounds off
             for(int i = 0; i < 16; i++)
                 tryToSendMIDI(buildNRPN(i, 0x3F * 128 + 0x57, 0));
             }

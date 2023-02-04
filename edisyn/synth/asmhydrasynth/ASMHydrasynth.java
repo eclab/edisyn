@@ -3924,8 +3924,9 @@ box.add(Box.createHorizontalGlue());
         return category;
         }
 
-	void doSave() { showSimpleConfirm("Cannot Save", "This Patch Editor cannot save to a file at present."); }
-	void doOpen() { showSimpleConfirm("Cannot Open", "This Patch Editor cannot open a file at present."); }
+	protected void doSave() { showSimpleMessage("Cannot Save", "This Patch Editor cannot save to a file at present."); }
+	protected void doSaveAs() { showSimpleMessage("Cannot Save", "This Patch Editor cannot save to a file at present."); }
+	protected boolean doOpen(boolean merge) { showSimpleMessage("Cannot Open", "This Patch Editor cannot open a file at present."); return false; }
 	
     public JFrame sprout()
         {

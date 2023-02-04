@@ -2336,8 +2336,23 @@ public abstract class Synth extends JComponent implements Updatable
 
 
 
+	/** Returns true if this synth will always provide the MSB in all NRPN messages.
+		When an NRPN message comes in, it may come in with just an LSB, just an MSB, or with an LSB and MSB in either order. 
+		Since normally don't know, the NRPN parser must assume that an incoming LSB may be all there is to the message
+		and update edisyn with just the LSB and the MSB set to 0 (or correspondingly with just the MSB and the LSB set to 0),
+		and only update a second time when the other part arrives.  This in turn can cause a variety of revise() problems.
+		To deal with this, if you know the synth will always produce an MSB in every NRPN message, you can override this to
+		return TRUE (it returns FALSE by default). */
+	public boolean getRequiresNRPNMSB() { return false; }
 
-
+	/** Returns true if this synth will always provide the LSB in all NRPN messages.
+		When an NRPN message comes in, it may come in with just an LSB, just an MSB, or with an LSB and MSB in either order. 
+		Since normally don't know, the NRPN parser must assume that an incoming LSB may be all there is to the message
+		and update edisyn with just the LSB and the MSB set to 0 (or correspondingly with just the MSB and the LSB set to 0),
+		and only update a second time when the other part arrives.  This in turn can cause a variety of revise() problems.
+		To deal with this, if you know the synth will always produce an LSB in every NRPN message, you can override this to
+		return TRUE (it returns FALSE by default). */
+	public boolean getRequiresNRPNLSB() { return false; }
 
     void handleInRawCC(ShortMessage message)
         {
@@ -2347,7 +2362,7 @@ public abstract class Synth extends JComponent implements Updatable
             }
         else
             {
-            Midi.CCData ccdata = midi.synthParser.processCC(message, false, false);
+            Midi.CCData ccdata = midi.synthParser.processCC(message, getRequiresNRPNLSB(), getRequiresNRPNMSB() );
             if (ccdata != null)
                 {
                 handleSynthCCOrNRPN(ccdata);

@@ -4004,7 +4004,7 @@ box.add(Box.createHorizontalGlue());
 
   public void changePatch(Model tempModel)
   {
-  // I believe that the Kyra changes *single* patches using Bank Select *LSB* (32) (?!?), 
+  // I believe that the  changes *single* patches using Bank Select *LSB* (32) (?!?), 
   // followed by Program Change.  This has to be on a channel that's not the multi channel.
         
   int bank = tempModel.get("bank", 0);
@@ -4574,7 +4574,7 @@ box.add(Box.createHorizontalGlue());
             String subkey = key.substring(6);
             if (subkey.startsWith("target"))
                 {
-                // Documentation is insane.  Actually the values are all over the place. 
+                // Documentation is very wrong.  Actually the values are all over the place. 
                 val = MOD_DESTINATION_NRPN_VALUES[val];
                 }
             else if (subkey.startsWith("buttonvalue"))
@@ -4591,12 +4591,12 @@ box.add(Box.createHorizontalGlue());
             String subkey = StringUtility.removePreambleAndFirstDigits(key, "modmatrix");
             if (subkey.startsWith("modsource"))
                 {
-                // Documentation is insane.  Actually the values are all over the place. 
+                // Documentation is very wrong.  Actually the values are all over the place. 
                 val = MOD_SOURCE_NRPN_VALUES[val];
                 }
             else if (subkey.startsWith("modtarget"))
                 {
-                // Documentation is insane.  Actually the values are all over the place. 
+                // Documentation is very wrong.  Actually the values are all over the place. 
                 val = MOD_DESTINATION_NRPN_VALUES[val];
                 }
             else if (subkey.startsWith("depth"))
@@ -4943,7 +4943,7 @@ box.add(Box.createHorizontalGlue());
 				String subkey = key.substring(6);
 				if (subkey.startsWith("target"))
 					{
-					// Documentation is insane.  Actually the values are all over the place. 
+					// Documentation is very wrong.  Actually the values are all over the place. 
 					Object index = MOD_DESTINATION_NRPN_VALUES_TO_INDEX.get(val);
 					if (index == null) val = 0;
 					else val = ((Integer)index).intValue();
@@ -4969,7 +4969,7 @@ box.add(Box.createHorizontalGlue());
 					int matrix = StringUtility.getFirstInt(key);
 					if (v == 1 || v == 3)	// modsource
 						{
-						// Documentation is insane.  Actually the values are all over the place. 
+						// Documentation is very wrong.  Actually the values are all over the place. 
 						key = "modmatrix" + matrix + "modsource";
 						Object index = MOD_SOURCE_NRPN_VALUES_TO_INDEX.get(val);
 						if (index == null) val = 0;
@@ -4977,7 +4977,7 @@ box.add(Box.createHorizontalGlue());
 						}
 					else  // modtarget
 						{
-						// Documentation is insane.  Actually the values are all over the place. 
+						// Documentation is very wrong.  Actually the values are all over the place. 
 						Object index = MOD_DESTINATION_NRPN_VALUES_TO_INDEX.get(val);
 							key = "modmatrix" + matrix + "modtarget";
 						if (index == null) val = 0;
@@ -5038,7 +5038,7 @@ box.add(Box.createHorizontalGlue());
     // Change Patch can get stomped if we do a request immediately afterwards
     public int getPauseAfterChangePatch() { return 200; }
     
-    // The Kyra doesn't load into memory when you do a write I believe
+    // The  doesn't load into memory when you do a write I believe
     public boolean getSendsParametersAfterWrite() { return true; }
 
 /*

@@ -1,0 +1,53 @@
+<html><head></head><body>
+<h1>ASM Hydrasynth</h1> 
+<h2>Single Patch Editor</h2>
+
+<p><b>Communicating with Edisyn</b><br> 
+
+<!- Set Edisyn's MIDI channel to the same as the synth's MIDI channel.  Set the unit to output USB or 5-pin MIDI DIN depending on how you're connecting it to your computer.  Note that you can send to current patch via USB, but you cannot read or write patches to permanent memory via USB: it must be via 5-pin DIN.  If you're connecting directly via USB, be sure to set Edisyn's incoming and outgoing MIDI Device to "MicroMonsta".  Set MIDI Out Mode to "cc".  
+-->
+
+
+<p><b>Current Editor Status</b><br>
+ASM does not have a public sysex spec.  I may yet attempt to reverse engineer this spec, but at present I have not.  This means that this editor cannot request the current patch, write to a patch, read an incoming patch, nor load or save patches.  Obviously this means it cannot provide a Librarian at present.  What it can do is:
+
+<ul>
+<li>It can send (most) individual parameters.
+<p><li>It can read individual parameter changes.
+<p><li>It can (mostly) send an entire patch, albeit slowly, by sending all the individual parameters.  Note that it you cannot change the category, patch name, macro names, nor color this way.
+</ul>
+
+<p><b>Hydrasynth Deluxe Multimode</b><br>
+Edisyn does not yet support multimode, though I intend to ultimately.
+
+<p><b>Gotchas and Hydrasynth Bugs to Be Aware of</b><br>
+<ul>
+<li>The Envelope's Attack Curve labeling is incorrect: negative values should are actually LOG and positive values are actually EXP.  I do not know if ASM mislabeled the attack knob by accident or intentionally because they imagined people wouldn't understand exponential curves: but it is wrong.  An exponential envelope curve doesn't mean it's increasing with an exponential rate of speed. It means that there is an <i>exponential dropoff</i> in the absolute rate of change.  For the decay/release, we start by moving very fast, and then as we approach the target we exponentially slow down (go horizontal).  Similarly for attack, we start by moving very fast (this time upwards), then as we approach the target we again slow down (go horizontal).  The Attack Curve knob behavior is identical to the Decay and Release knobs and should have been labelled the same. 
+<p><li>You cannot update the patch name, color, category, or macro names individually.
+<p><li>Certain individual parameter changes will cause the Hydrasynth to foolishly respond with its current settings for a set of parameters.  This in turn will cause Edisyn to update those parameters, erasing any changes you may have made but not yet sent. This is unlikely to bite you, but you should be aware of it.  This happens, for example, when changing the ribbon mode to Theremin; changing the LFO, or Delay BPM Sync; or changing the Arpeggiator mode and various other Arpeggiator parameters or Delay BPM Sync
+<p><li>When you change the Arpeggiator Tap Trig value on/off via Edisyn, it will also turn the Arpeggiator on/off. This is a Hydrasynth bug: it does not happen if you change the Tap Trig value directly on the unit. 
+<p><li>Sometimes when the Hydrasynth wakes up from going to sleep, sending it parameter values from Edisyn will cause it to update those values with an offset (and thus incorrectly).
+<p><li>The Hydrasynth repurposed the <i>very important</i> CC 120 (All Sounds Off) to be used as Arp Octave.
+<p><li>When you update the Mod Matrix or any Macro Assignments in Edisyn, the Hydrasynth does not update its
+display to reflect this.  You have to page away and come back to see the updates properly displayed.
+<p><li>The first WaveScan wave goes Sin...Harmon23.  The other waves go Off,Silence,Sin...Harmon23.  This means that when you use the Category's distribute procedure to distribute waves, it won't work right for the first wave.
+</ul>
+
+<p><b>About the ASM Hydrasynth Manager</b><br>
+ASM provides a librarian called the ASM Hydrasynth Manager.  This software saves patches in proprietary bank file formats with the extension "hydra" or "hydramulti".  If Edisyn gets to the point of saving and loading files, they will be standard sysex files, not the proprietary ones.  This means that if you want to convert these files, you will need to load them into your Hydrasynth using the Hydrasynth Manager, then dump them to Edisyn as sysex and save them as sysex files.  Eventually.
+
+<p><b>About the NRPN Spec</b><br>
+The Hydrasynth has an extremely complex and baroque NRPN spec and the formatting and ranges of individual parameters are not provided, or not correctly provided, via ASM's "MIDI Spec" file (v1.5.0).  The ranges and formatting of these parameters had to be entirely reverse engineered: and there are a number of bugs.  
+
+<br><br><h3>Thanks</h3>
+Thanks to Thierry Rochebois Zic for making his stunning Hydrasynth wave and harmonics figures available under Creative Commons CC-BY.  Thanks to Robin Chard for going above and beyond in identifying preset values, and in testing assistance.
+
+<p><table border=0 cellpadding=0 cellspacing=5>
+<tr>
+<td align=right>By&nbsp;&nbsp;&nbsp;
+<td><b>Sean Luke</b>
+<tr>
+<td align=right>Date&nbsp;&nbsp;&nbsp;
+<td>January 31, 2023
+</table>
+

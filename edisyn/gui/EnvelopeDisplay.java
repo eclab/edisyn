@@ -62,6 +62,7 @@ public class EnvelopeDisplay extends JComponent implements Updatable
     double angles[];
     String xKeys[];
     String yKeys[];
+    String curves[];
     Color color;
     Color semiTransparent;
     Synth synth;
@@ -86,7 +87,7 @@ public class EnvelopeDisplay extends JComponent implements Updatable
         }
     
     public static final double TIME = -1;
-        
+    public static final double CURVE_RATIO = 1.0 / 3.0;
     public static final int NUM_INTERVALS = 2;
     String[] startKey = new String[NUM_INTERVALS];
     String[] endKey = new String[NUM_INTERVALS];
@@ -352,6 +353,94 @@ public class EnvelopeDisplay extends JComponent implements Updatable
         return value;
         }
 
+	public void setCurveKeys(String[] keys)
+		{
+		if (curves != null)
+			{
+			for(int i = 0; i < curves.length; i++)
+				{
+				if (curves[i] != null)
+					{
+					synth.getModel().unregister(curves[i], this);
+					}
+				}
+			}
+			
+		curves = keys; 
+
+		if (curves != null)
+			{
+			for(int i = 0; i < curves.length; i++)
+				{
+				if (curves[i] != null)
+					{
+					synth.getModel().register(curves[i], this);
+					}
+				}
+			}
+		}
+
+	public double getControlValue(double x1, double x2, double y1, double y2, String key, int value)
+		{
+		return 0;
+		}
+
+	public double getCurveControlPointX1(double x1, double x2, double y1, double y2, String key, int value)
+		{
+		double amt = getControlValue(x1, x2, y1, y2, key, value);
+		if (amt < 0)
+			{
+			amt = 0 - amt;
+			return (x2 * CURVE_RATIO + x1 * (1 - CURVE_RATIO)) * amt +  x1 * (1-amt);
+			}
+		else
+			{
+			return x1;
+			}
+		}
+
+	/** Returns the Y coordinate (between y1 and y2) of the curve control point. */
+	public double getCurveControlPointY1(double x1, double x2, double y1, double y2, String key, int value)
+		{
+		double amt = getControlValue(x1, x2, y1, y2, key, value);
+		if (amt < 0)
+			{
+			return y1;
+			}
+		else
+			{
+			return (y1 * (1-amt) + y2 * amt);
+			}
+		}
+		
+	public double getCurveControlPointX2(double x1, double x2, double y1, double y2, String key, int value)
+		{
+		double amt = getControlValue(x1, x2, y1, y2, key, value);
+		if (amt < 0)
+			{
+			return x2;
+			}
+		else
+			{
+			return (x1 * CURVE_RATIO + x2 * (1 - CURVE_RATIO)) * amt +  x2 * (1-amt);
+			}
+		}
+
+	/** Returns the Y coordinate (between y1 and y2) of the curve control point. */
+	public double getCurveControlPointY2(double x1, double x2, double y1, double y2, String key, int value)
+		{
+		double amt = getControlValue(x1, x2, y1, y2, key, value);
+		if (amt < 0)
+			{
+			amt = 0 - amt;
+			return (y2 * (1-amt) + y1 * amt);
+			}
+		else
+			{
+			return y2;
+			}
+		}
+
     /** Mostly fills the background appropriately. */
     public void paintComponent(Graphics g)
         {
@@ -497,20 +586,32 @@ public class EnvelopeDisplay extends JComponent implements Updatable
             fillp.lineTo(rect.x + xs[0], rect.y + startHeight); 
             fillp.closePath();
             }
-        else 
+        else
             {
             fillp.moveTo(rect.x + xs[0], rect.y + startHeight); 
-        
             p.moveTo(rect.x + xs[0], rect.y + rect.height - ys[0]);
-            fillp.lineTo(rect.x + xs[0], rect.y + rect.height - ys[0]);
+	        fillp.lineTo(rect.x + xs[0], rect.y + rect.height - ys[0]);
+
             marker[0] = new Ellipse2D.Double((rect.x + xs[0] - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0),
                 (rect.y + rect.height - ys[0] - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0),
                 Style.ENVELOPE_DISPLAY_MARKER_WIDTH(), Style.ENVELOPE_DISPLAY_MARKER_WIDTH());
         
             for(int i = 1; i < xs.length; i++)
                 {
-                p.lineTo(rect.x + xs[i], rect.y + rect.height - ys[i]);
-                fillp.lineTo(rect.x + xs[i], rect.y + rect.height - ys[i]);
+	            if (curves == null || curves[i] == null)
+	            	{
+	                p.lineTo(rect.x + xs[i], rect.y + rect.height - ys[i]);
+	                fillp.lineTo(rect.x + xs[i], rect.y + rect.height - ys[i]);
+	                }
+	            else
+	            	{
+	            	double xx1 = getCurveControlPointX1(rect.x + xs[i-1], rect.x + xs[i], rect.y + rect.height - ys[i-1], rect.y + rect.height - ys[i], curves[i], synth.getModel().get(curves[i]));
+	            	double yy1 = getCurveControlPointY1(rect.x + xs[i-1], rect.x + xs[i], rect.y + rect.height - ys[i-1], rect.y + rect.height - ys[i], curves[i], synth.getModel().get(curves[i]));
+	            	double xx2 = getCurveControlPointX2(rect.x + xs[i-1], rect.x + xs[i], rect.y + rect.height - ys[i-1], rect.y + rect.height - ys[i], curves[i], synth.getModel().get(curves[i]));
+	            	double yy2 = getCurveControlPointY2(rect.x + xs[i-1], rect.x + xs[i], rect.y + rect.height - ys[i-1], rect.y + rect.height - ys[i], curves[i], synth.getModel().get(curves[i]));
+					p.curveTo(xx1, yy1, xx2, yy2, rect.x + xs[i], rect.y + rect.height - ys[i]);
+					fillp.curveTo(xx1, yy1, xx2, yy2, rect.x + xs[i], rect.y + rect.height - ys[i]);
+	            	}
                 marker[i] = new Ellipse2D.Double((rect.x + xs[i] - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0),
                     (rect.y + rect.height - ys[i] - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0),
                     Style.ENVELOPE_DISPLAY_MARKER_WIDTH(), Style.ENVELOPE_DISPLAY_MARKER_WIDTH());
@@ -577,8 +678,8 @@ public class EnvelopeDisplay extends JComponent implements Updatable
         if (sustainStageKey != null)
             {
             int sustainStage = postProcessLoopOrStageKey(sustainStageKey, synth.getModel().get(sustainStageKey, 0));
-            line = new Line2D.Double(rect.x + xs[sustainStage], rect.y,
-                rect.x + xs[sustainStage], rect.y + rect.height);
+            double xpos = rect.x + (sustainStage == xs.length ? rect.width : xs[sustainStage]);
+            line = new Line2D.Double(xpos, rect.y, xpos, rect.y + rect.height);
             graphics.setStroke(Style.ENVELOPE_AXIS_STROKE());
             if (!asLink)
                 graphics.draw(line);
@@ -588,8 +689,8 @@ public class EnvelopeDisplay extends JComponent implements Updatable
         if (finalStageKey != null)
             {
             int finalStage = postProcessLoopOrStageKey(finalStageKey, synth.getModel().get(finalStageKey, 0));
-            line = new Line2D.Double(rect.x + xs[finalStage], rect.y,
-                rect.x + xs[finalStage], rect.y + rect.height);
+            double xpos = rect.x + (finalStage == xs.length ? rect.width : xs[finalStage]);
+            line = new Line2D.Double(xpos, rect.y, xpos, rect.y + rect.height);
             graphics.setStroke(new BasicStroke(1.0f));
             if (!asLink)
                 graphics.draw(line);

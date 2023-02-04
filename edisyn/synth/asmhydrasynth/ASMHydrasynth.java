@@ -3410,7 +3410,7 @@ box.add(Box.createHorizontalGlue());
         hbox.add(comp);
         
         //// BUG: An apparent Hydrasynth bug mislabels EXP values as LOG for Attack and vice versa.  
-        //// I do not know if this was intentional or a boneheaded misunderstanding of exponential dropoff.
+        //// I do not know if this was intentional or a misunderstanding of exponential dropoff.
         comp = new LabelledDial("Attack", this, "env" + env + "atkcurve", color, 0, 128)
             {
             public boolean isSymmetric() { return true; }
@@ -3622,7 +3622,7 @@ box.add(Box.createHorizontalGlue());
 			public double getControlValue(double x1, double x2, double y1, double y2, String key, int value)
 				{
 				//// NOTE: An apparent Hydrasynth bug mislabels EXP values as LOG for Attack and vice versa.  
-				//// I do not know if this was intentional or a boneheaded misunderstanding of exponential dropoff.
+				//// I do not know if this was intentional or a misunderstanding of exponential dropoff.
 				//// However the control values should be identical for attack, decay, and release.
 
 				return (value - 64) / 64.0;

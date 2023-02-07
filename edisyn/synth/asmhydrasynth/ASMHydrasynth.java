@@ -135,7 +135,7 @@ public class ASMHydrasynth extends Synth
         "2.88s", "2.89s", "2.90s", "2.91s", "2.93s", "2.94s", "2.95s", "2.96s", "2.98s", "2.99s", "3.00s"
         };
                 
-    // The delay time pattern is extremely convoluted.  It's 0...1024, with:
+    // The delay time pattern is very convoluted.  It's 0...1024, with:
     // 0-72 being 1.0...10ms in 0.125 increments, displayed as "x.xms" rounded 0.5 towards even
     // 72-183 being drawn from SOME_DELAY_TIMES in ms
     // 184-344 being 50-150ms in the following pattern every multiple of 10: 
@@ -984,10 +984,68 @@ public class ASMHydrasynth extends Synth
         };
 
 
+// This is an array of preset values in the order   [type][preset group][value in the format MSB * 128 + LSB]
+// The first values are FX TYPE and FX PRESET, the remainder are the five PRESET VALUES
+	public int[][][] FX_PRESET_VALUES =   
+{
+{ 
+},
+{
+{0x00 * 128 + 0x08, 0x00 * 128 + 0x00, 0x10 * 128 + 0x18, 0x0E * 128 + 0x00, 0x0B * 128 + 0x20, 0x04 * 128 + 0x00, 0x00 * 128 + 0x08, 0x20 * 128 + 0x00},
+{0x00 * 128 + 0x08, 0x00 * 128 + 0x08, 0x14 * 128 + 0x10, 0x11 * 128 + 0x40, 0x0B * 128 + 0x20, 0x04 * 128 + 0x00, 0x00 * 128 + 0x08, 0x20 * 128 + 0x00},
+{0x00 * 128 + 0x08, 0x00 * 128 + 0x10, 0x21 * 128 + 0x40, 0x09 * 128 + 0x00, 0x0B * 128 + 0x20, 0x04 * 128 + 0x00, 0x00 * 128 + 0x08, 0x20 * 128 + 0x00},
+},
+{
+{0x00 * 128 + 0x10, 0x00 * 128 + 0x00, 0x07 * 128 + 0x58, 0x36 * 128 + 0x40, 0x00 * 128 + 0x00, 0x06 * 128 + 0x68, 0x00 * 128 + 0x08, 0x20 * 128 + 0x00},
+{0x00 * 128 + 0x10, 0x00 * 128 + 0x08, 0x10 * 128 + 0x18, 0x06 * 128 + 0x40, 0x00 * 128 + 0x00, 0x07 * 128 + 0x30, 0x00 * 128 + 0x08, 0x20 * 128 + 0x00},
+{0x00 * 128 + 0x10, 0x00 * 128 + 0x10, 0x07 * 128 + 0x58, 0x1E * 128 + 0x00, 0x00 * 128 + 0x00, 0x00 * 128 + 0x48, 0x00 * 128 + 0x08, 0x20 * 128 + 0x00},
+},
+{
+{0x00 * 128 + 0x18, 0x00 * 128 + 0x00, 0x1A * 128 + 0x18, 0x23 * 128 + 0x20, 0x01 * 128 + 0x50, 0x02 * 128 + 0x18, 0x04 * 128 + 0x30, 0x20 * 128 + 0x00},
+{0x00 * 128 + 0x18, 0x00 * 128 + 0x08, 0x0C * 128 + 0x18, 0x1E * 128 + 0x60, 0x01 * 128 + 0x58, 0x01 * 128 + 0x69, 0x04 * 128 + 0x00, 0x20 * 128 + 0x00},
+{0x00 * 128 + 0x18, 0x00 * 128 + 0x10, 0x1A * 128 + 0x10, 0x1C * 128 + 0x60, 0x04 * 128 + 0x30, 0x04 * 128 + 0x30, 0x04 * 128 + 0x20, 0x20 * 128 + 0x00},
+},
+{
+{0x00 * 128 + 0x20, 0x00 * 128 + 0x00, 0x10 * 128 + 0x18, 0x25 * 128 + 0x00, 0x06 * 128 + 0x78, 0x04 * 128 + 0x50, 0x0B * 128 + 0x20, 0x20 * 128 + 0x00},
+{0x00 * 128 + 0x20, 0x00 * 128 + 0x08, 0x10 * 128 + 0x18, 0x36 * 128 + 0x00, 0x06 * 128 + 0x78, 0x04 * 128 + 0x50, 0x00 * 128 + 0x00, 0x20 * 128 + 0x00},
+{0x00 * 128 + 0x20, 0x00 * 128 + 0x10, 0x05 * 128 + 0x58, 0x30 * 128 + 0x00, 0x06 * 128 + 0x00, 0x04 * 128 + 0x00, 0x00 * 128 + 0x00, 0x20 * 128 + 0x00},
+},
+{
+{0x00 * 128 + 0x28, 0x00 * 128 + 0x00, 0x13 * 128 + 0x58, 0x11 * 128 + 0x28, 0x00 * 128 + 0x18, 0x04 * 128 + 0x18, 0x00 * 128 + 0x40, 0x20 * 128 + 0x00},
+{0x00 * 128 + 0x28, 0x00 * 128 + 0x08, 0x13 * 128 + 0x58, 0x0A * 128 + 0x40, 0x00 * 128 + 0x20, 0x04 * 128 + 0x18, 0x00 * 128 + 0x28, 0x20 * 128 + 0x00},
+},
+{
+{0x00 * 128 + 0x30, 0x00 * 128 + 0x00, 0x39 * 128 + 0x18, 0x18 * 128 + 0x40, 0x00 * 128 + 0x00, 0x0D * 128 + 0x58, 0x00 * 128 + 0x00, 0x20 * 128 + 0x00},
+{0x00 * 128 + 0x30, 0x00 * 128 + 0x08, 0x39 * 128 + 0x18, 0x1A * 128 + 0x00, 0x00 * 128 + 0x00, 0x0D * 128 + 0x58, 0x00 * 128 + 0x18, 0x20 * 128 + 0x00},
+{0x00 * 128 + 0x30, 0x00 * 128 + 0x10, 0x30 * 128 + 0x58, 0x32 * 128 + 0x00, 0x00 * 128 + 0x00, 0x05 * 128 + 0x50, 0x01 * 128 + 0x40, 0x20 * 128 + 0x00},
+},
+{
+{0x00 * 128 + 0x38, 0x00 * 128 + 0x00, 0x26 * 128 + 0x00, 0x26 * 128 + 0x00, 0x16 * 128 + 0x40, 0x0F * 128 + 0x50, 0x0F * 128 + 0x50, 0x20 * 128 + 0x00},
+{0x00 * 128 + 0x38, 0x00 * 128 + 0x08, 0x29 * 128 + 0x20, 0x23 * 128 + 0x50, 0x15 * 128 + 0x20, 0x0B * 128 + 0x70, 0x0F * 128 + 0x50, 0x20 * 128 + 0x00},
+{0x00 * 128 + 0x38, 0x00 * 128 + 0x10, 0x1E * 128 + 0x20, 0x26 * 128 + 0x38, 0x17 * 128 + 0x10, 0x1C * 128 + 0x10, 0x0F * 128 + 0x50, 0x20 * 128 + 0x00},
+{0x00 * 128 + 0x38, 0x00 * 128 + 0x18, 0x26 * 128 + 0x00, 0x1B * 128 + 0x50, 0x17 * 128 + 0x10, 0x0F * 128 + 0x50, 0x13 * 128 + 0x48, 0x20 * 128 + 0x00},
+{0x00 * 128 + 0x38, 0x00 * 128 + 0x20, 0x29 * 128 + 0x38, 0x29 * 128 + 0x38, 0x16 * 128 + 0x40, 0x0F * 128 + 0x50, 0x1E * 128 + 0x28, 0x20 * 128 + 0x00},
+{0x00 * 128 + 0x38, 0x00 * 128 + 0x28, 0x0A * 128 + 0x10, 0x00 * 128 + 0x00, 0x19 * 128 + 0x50, 0x1C * 128 + 0x60, 0x0F * 128 + 0x50, 0x20 * 128 + 0x00},
+{0x00 * 128 + 0x38, 0x00 * 128 + 0x30, 0x27 * 128 + 0x70, 0x1F * 128 + 0x28, 0x17 * 128 + 0x10, 0x18 * 128 + 0x00, 0x1D * 128 + 0x58, 0x20 * 128 + 0x00},
+},
+{
+{0x00 * 128 + 0x40, 0x00 * 128 + 0x00, 0x3F * 128 + 0x60, 0x20 * 128 + 0x00, 0x00 * 128 + 0x08, 0x11 * 128 + 0x68, 0x08 * 128 + 0x00, 0x20 * 128 + 0x00},
+{0x00 * 128 + 0x40, 0x00 * 128 + 0x08, 0x3F * 128 + 0x60, 0x20 * 128 + 0x00, 0x00 * 128 + 0x08, 0x11 * 128 + 0x68, 0x08 * 128 + 0x00, 0x20 * 128 + 0x00},
+{0x00 * 128 + 0x40, 0x00 * 128 + 0x10, 0x3F * 128 + 0x60, 0x20 * 128 + 0x00, 0x00 * 128 + 0x08, 0x11 * 128 + 0x68, 0x08 * 128 + 0x00, 0x20 * 128 + 0x00},
+{0x00 * 128 + 0x40, 0x00 * 128 + 0x18, 0x3F * 128 + 0x60, 0x20 * 128 + 0x00, 0x00 * 128 + 0x08, 0x11 * 128 + 0x68, 0x08 * 128 + 0x00, 0x20 * 128 + 0x00},
+{0x00 * 128 + 0x40, 0x00 * 128 + 0x20, 0x3F * 128 + 0x60, 0x20 * 128 + 0x00, 0x00 * 128 + 0x08, 0x11 * 128 + 0x68, 0x08 * 128 + 0x00, 0x20 * 128 + 0x00},
+},
+{
+{0x00 * 128 + 0x48, 0x00 * 128 + 0x00, 0x1D * 128 + 0x00, 0x12 * 128 + 0x60, 0x00 * 128 + 0x00, 0x08 * 128 + 0x00, 0x11 * 128 + 0x58, 0x20 * 128 + 0x00},
+{0x00 * 128 + 0x48, 0x00 * 128 + 0x08, 0x1F * 128 + 0x40, 0x33 * 128 + 0x30, 0x01 * 128 + 0x40, 0x00 * 128 + 0x68, 0x13 * 128 + 0x50, 0x20 * 128 + 0x00},
+{0x00 * 128 + 0x48, 0x00 * 128 + 0x10, 0x18 * 128 + 0x58, 0x28 * 128 + 0x50, 0x00 * 128 + 0x00, 0x00 * 128 + 0x00, 0x0F * 128 + 0x70, 0x20 * 128 + 0x00}		
+},
+};
+
     // A close mapping of val (0...1024) to LFO rate values (0.02 ... 150.00 Hz).
     // The LFO rate appears to be nearly a perfect exponential increase, except
     // at the very low end where it's off in the 0.03 Hz area.  Would be nice to 
-    // know what the REAL mapping is...
+    // know what the real mapping is...
     public double lfoRate(int x)
         {
         return Math.pow(2.0, (1 + 0.012571 * x)) / 100.0;
@@ -1037,21 +1095,6 @@ public class ASMHydrasynth extends Synth
         hbox.addLast(addVibrato(Style.COLOR_C()));
         vbox.add(hbox);
 
-/*
-        hbox = new HBox();
-        hbox.add(addOscillator(1, Style.COLOR_A()));
-        vbox.add(hbox);
-        
-        hbox = new HBox();
-        hbox.add(addOscillator(2, Style.COLOR_A()));
-        vbox.add(hbox);
-        
-        hbox = new HBox();
-        hbox.add(addOscillator(3, Style.COLOR_A()));
-        hbox.add(addGlide(Style.COLOR_C()));
-        hbox.addLast(addRibbon(Style.COLOR_C()));
-        vbox.add(hbox);
-*/
 		vbox.add(addOscillator(1, Style.COLOR_A()));
 		vbox.add(addOscillator(2, Style.COLOR_A()));
 		
@@ -1420,7 +1463,7 @@ box.add(Box.createHorizontalGlue());
     public static int roundEven(double d) 
         {
         // Garbage like https://stackoverflow.com/questions/32971262/how-to-round-a-double-to-closest-even-number
-        // is wrong.  This will do below for ints
+        // is wrong.  This will do below for ints:
                 
         int i = (int) d;
         double rem = (d - i);
@@ -2076,7 +2119,7 @@ box.add(Box.createHorizontalGlue());
         HBox hbox = new HBox();
         
         /// FIXME: Setting this to THEREMIN will cause the Hydrasynth to respond via NRPN
-        /// with all the theremin values, thereby erasing your current settings.  AAAIGH.
+        /// with all the theremin values, thereby erasing your current settings.  :-(  :-(
         VBox vbox = new VBox(); 
         params = RIBBON_MODES;
         comp = new Chooser("Mode", this, "ribbonmode", params);
@@ -2327,7 +2370,10 @@ box.add(Box.createHorizontalGlue());
         return category;
         }
         
-    public JComponent addFX(boolean pre, Color color)
+        
+        
+        
+    public JComponent addFX(final boolean pre, Color color)
         {
         Category category = new Category(this, (pre ? "Pre-FX" : "Post-FX"), color);
 
@@ -2836,7 +2882,14 @@ box.add(Box.createHorizontalGlue());
             {
             public void perform(int i)
                 {
-                // FIXME TO DO LATER
+				int type = model.get((pre ? "pre" : "post") + "fxtype");
+				if (type != 0 && type < 10)		// just in case
+					{
+					for(int j = 0; j < 5; j++)
+						{
+						parseNRPN((pre ? "pre" : "post") + "fxparam" + (j + 1), FX_PRESET_VALUES[type][i][j + 2]);
+						}
+					}
                 }
             };
 
@@ -3924,9 +3977,9 @@ box.add(Box.createHorizontalGlue());
         return category;
         }
 
-	protected void doSave() { showSimpleMessage("Cannot Save", "This Patch Editor cannot save to a file at present."); }
-	protected void doSaveAs() { showSimpleMessage("Cannot Save", "This Patch Editor cannot save to a file at present."); }
-	protected boolean doOpen(boolean merge) { showSimpleMessage("Cannot Open", "This Patch Editor cannot open a file at present."); return false; }
+	//protected void doSave() { showSimpleMessage("Cannot Save", "This Patch Editor cannot save to a file at present."); }
+	//protected void doSaveAs() { showSimpleMessage("Cannot Save", "This Patch Editor cannot save to a file at present."); }
+	//protected boolean doOpen(boolean merge) { showSimpleMessage("Cannot Open", "This Patch Editor cannot open a file at present."); return false; }
 	
     public JFrame sprout()
         {
@@ -3938,7 +3991,7 @@ box.add(Box.createHorizontalGlue());
         getAll.setEnabled(false);
         blend.setEnabled(false);
         writeTo.setEnabled(false);
-        transmitCurrent.setEnabled(false);
+//        transmitCurrent.setEnabled(false);
         return frame;
         }         
 
@@ -4057,6 +4110,26 @@ box.add(Box.createHorizontalGlue());
   }
 */
 
+    public boolean getSendsAllParametersAsDump() 
+        {
+        return false;
+        }
+
+	public int getPauseAfterSendHeaderParameter()
+		{
+		return 0;
+		}
+
+	public int getPauseAfterSendOneParameter()
+		{
+		return 0;
+		}
+
+	public int getPauseAfterSendAllParameters()
+		{
+		return 0;
+		}
+
     // A small syntatic shortening function for emitAll(...) to return the parameter value.
     int p(String key)
         {
@@ -4064,7 +4137,6 @@ box.add(Box.createHorizontalGlue());
         if (obj == null) return 0;
         return nrpn[((Integer)obj).intValue()];
         }
-    
                 
                 
     /// The Hydrasynth NRPN is a mess, requiring a very high degree of customization
@@ -4074,10 +4146,16 @@ box.add(Box.createHorizontalGlue());
     /// gonna be a mess parsing these back in from the Hydrasynth...
     public Object[] emitAll(String key)
         {
-        if (key.equals("bank") || key.equals("number") || key.equals("name") || key.equals("--"))
+        if (key.equals("bank") || key.equals("number") || key.equals("--"))
             {
             return new Object[0];
             }
+        
+        // There is no NRPN for these items
+        if (key.equals("color") || key.equals("category") || (key.startsWith("macro") && key.endsWith("name")) || key.equals("name"))
+        	{
+        	return new Object[0];
+        	}
                         
         int p = p(key);
         int v = 0;
@@ -4659,6 +4737,212 @@ box.add(Box.createHorizontalGlue());
         }
 
 
+    /** The Hydrasynth doesn't have a useful sysex emit mechanism, so we're inventing one here solely for
+        the purposes of writing to a file. */
+    public byte[] emit(Model tempModel, boolean toWorkingMemory, boolean toFile)
+        {
+        if (tempModel == null)
+            tempModel = getModel();
+
+        // load all the data, including the name
+
+        byte[] vals = new byte[
+        	modeParameters.length * 2 + 
+        	typeParameters.length * 2 + 
+        	waveParameters.length * 2 + 
+        	syncParameters.length * 2 + 
+        	wavescanParameters.length * 2 + 
+        	remainingParameters.length * 2 + 
+        	16 + 	// name
+        	4 + 	// category, color
+        	8 * 8  	// macros
+        	];
+        
+        int val;
+        int pos = 0;
+        for(int i = 0; i < modeParameters.length; i++)
+            {
+            val = (modeParameters[i].equals("--") ? 0 : model.get(modeParameters[i])) + 8192;
+            vals[pos++] = (byte)((val >>> 7) & 127);
+            vals[pos++] = (byte)(val & 127);
+            }
+
+        for(int i = 0; i < typeParameters.length; i++)
+            {
+            val = (typeParameters[i].equals("--") ? 0 : model.get(typeParameters[i])) + 8192;
+            vals[pos++] = (byte)((val >>> 7) & 127);
+            vals[pos++] = (byte)(val & 127);
+            }
+
+        for(int i = 0; i < waveParameters.length; i++)
+            {
+            val = (waveParameters[i].equals("--") ? 0 : model.get(waveParameters[i])) + 8192;
+            vals[pos++] = (byte)((val >>> 7) & 127);
+            vals[pos++] = (byte)(val & 127);
+            }
+
+        for(int i = 0; i < syncParameters.length; i++)
+            {
+            val = (syncParameters[i].equals("--") ? 0 : model.get(syncParameters[i])) + 8192;
+            vals[pos++] = (byte)((val >>> 7) & 127);
+            vals[pos++] = (byte)(val & 127);
+            }
+
+        for(int i = 0; i < wavescanParameters.length; i++)
+            {
+            val = (wavescanParameters[i].equals("--") ? 0 : model.get(wavescanParameters[i])) + 8192;
+            vals[pos++] = (byte)((val >>> 7) & 127);
+            vals[pos++] = (byte)(val & 127);
+            }
+        
+        for(int i = 0; i < remainingParameters.length; i++)
+            {
+            val = (remainingParameters[i].equals("--") ? 0 : model.get(remainingParameters[i])) + 8192;
+            vals[pos++] = (byte)((val >>> 7) & 127);
+            vals[pos++] = (byte)(val & 127);
+            }
+        
+        val = model.get("category") + 8192;
+		vals[pos++] = (byte)((val >>> 7) & 127);
+		vals[pos++] = (byte)(val & 127);
+
+        val = model.get("color") + 8192;
+		vals[pos++] = (byte)((val >>> 7) & 127);
+		vals[pos++] = (byte)(val & 127);
+        
+        char[] name = (model.get("name", "Untitled") + "                ").toCharArray();
+        for(int i = 0; i < 16; i++)
+        	{
+        	System.err.println("" + name[i]);
+            val = (int)(name[i]);
+            vals[pos++] = (byte)(val & 127);
+        	}
+
+		for(int m = 1; m <= 8; m++)
+			{
+			name = (model.get("macro" + m + "name", "        ") + "        ").toCharArray();
+			for(int i = 0; i < 8; i++)
+				{
+				val = (int)(name[i]);
+				vals[pos++] = (byte)(val & 127);
+				}
+			}
+
+        final int HEADER = 20;
+
+        byte[] sysex = new byte[vals.length + HEADER + 1];
+        sysex[0] = (byte)0xF0;
+        sysex[1] = (byte)0x7D;
+        sysex[2] = (byte)'E';
+        sysex[3] = (byte)'D';
+        sysex[4] = (byte)'I';
+        sysex[5] = (byte)'S';
+        sysex[6] = (byte)'Y';
+        sysex[7] = (byte)'N';
+        sysex[8] = (byte)'-';
+        sysex[9] = (byte)'H';
+        sysex[10] = (byte)'Y';
+        sysex[11] = (byte)'D';
+        sysex[12] = (byte)'R';
+        sysex[13] = (byte)'A';
+        sysex[14] = (byte)'S';
+        sysex[15] = (byte)'Y';
+        sysex[16] = (byte)'N';
+        sysex[17] = (byte)'T';
+        sysex[18] = (byte)'H';
+        sysex[19] = (byte)0;            // sysex version
+        
+        System.arraycopy(vals, 0, sysex, HEADER, vals.length);
+        sysex[sysex.length - 1] = (byte)0xF7;
+        return sysex;
+        }
+
+
+    /** The Hydrasynth doesn't have a useful sysex emit mechanism, so we're inventing one here solely for
+        the purposes of writing to a file. */
+    public int parse(byte[] data, boolean fromFile)
+        {
+        int HEADER = 20;
+
+        byte[] vals = new byte[
+        	modeParameters.length * 2 + 
+        	typeParameters.length * 2 + 
+        	waveParameters.length * 2 + 
+        	syncParameters.length * 2 + 
+        	wavescanParameters.length * 2 + 
+        	remainingParameters.length * 2 + 
+        	16 + 	// name
+        	4 + 	// category, color
+        	8 * 8  	// macros
+        	];
+        
+        System.arraycopy(data, HEADER, vals, 0, vals.length);
+
+        int pos = 0;
+        int val = 0;
+        for(int i = 0; i < modeParameters.length; i++)
+            {
+            val = ((vals[pos++] << 7) | vals[pos++]) - 8192;
+            model.set(modeParameters[i], val);
+            }
+
+        for(int i = 0; i < typeParameters.length; i++)
+            {
+            val = ((vals[pos++] << 7) | vals[pos++]) - 8192;
+            model.set(typeParameters[i], val);
+            }
+
+        for(int i = 0; i < waveParameters.length; i++)
+            {
+            val = ((vals[pos++] << 7) | vals[pos++]) - 8192;
+            model.set(waveParameters[i], val);
+            }
+
+        for(int i = 0; i < syncParameters.length; i++)
+            {
+            val = ((vals[pos++] << 7) | vals[pos++]) - 8192;
+            model.set(syncParameters[i], val);
+            }
+
+        for(int i = 0; i < wavescanParameters.length; i++)
+            {
+            val = ((vals[pos++] << 7) | vals[pos++]) - 8192;
+            model.set(wavescanParameters[i], val);
+            }
+
+        for(int i = 0; i < remainingParameters.length; i++)
+            {
+            val = ((vals[pos++] << 7) | vals[pos++]) - 8192;
+            model.set(remainingParameters[i], val);
+            }
+        
+		val = ((vals[pos++] << 7) | vals[pos++]) - 8192;
+		model.set("category", val);
+
+		val = ((vals[pos++] << 7) | vals[pos++]) - 8192;
+		model.set("color", val);
+
+        char[] name = new char[16];
+        for(int i = 0; i < 16; i++)
+        	{
+            name[i] = (char)(vals[pos++] & 127);
+        	}
+        model.set("name", String.valueOf(name));
+
+		for(int m = 1; m <= 8; m++)
+			{
+			name = new char[8];
+			for(int i = 0; i < 8; i++)
+				{
+            	name[i] = (char)(vals[pos++] & 127);
+				}
+			model.set("macro" + m + "name", String.valueOf(name));
+			}
+
+        return PARSE_SUCCEEDED;
+        }
+
+
 
 	// The Hydrasynth always sends both the MSB and LSB
 
@@ -4669,13 +4953,91 @@ box.add(Box.createHorizontalGlue());
         {
         if (data.type == Midi.CCDATA_TYPE_NRPN)
             {
-            Object obj = nrpnToIndex.get(Integer.valueOf(data.number));
+			parseNRPN(data.number, data.value);
+			}
+		else if (data.type == Midi.CCDATA_TYPE_RAW_CC)
+			{
+			parseCC(data.number, data.value);
+			}
+		}
+
+	void parseCC(int number, int val)
+		{
+		// For the time being we're not going to implement this
+		
+		/*
+			String key = CC[number];
+			if (key.equals("--"))
+				return;
+                        
+			if (key.startsWith("osc"))
+				{
+				}
+			else if (key.startsWith("mutant"))
+				{
+				}
+			else if (key.equals("ringmoddepth"))
+				{
+				}
+			else if (key.startsWith("mix"))
+				{
+				}
+			else if (key.startsWith("filter"))
+				{
+				}
+			else if (key.equals("amplfo2amount"))
+				{
+				}
+			else if (key.startsWith("pre"))
+				{
+				}
+			else if (key.startsWith("delay"))
+				{
+				}
+			else if (key.startsWith("reverb"))
+				{
+				}
+			else if (key.startsWith("post"))
+				{
+				}
+			else if (key.startsWith("lfo"))
+				{
+				}
+			else if (key.startsWith("env"))
+				{
+				}
+			else if (key.startsWith("arp"))
+				{
+				}
+			else if (key.startsWith("macro"))
+				{
+				// These are panel values.  We probably can't handle this
+				}
+			else if (key.startsWith("voice"))
+				{
+				}
+			else
+				{
+				// do nothing
+				}
+				
+			model.set(key, val);
+			revise();
+			*/
+			}
+
+    void parseNRPN(int number, int val)
+    	{
+            Object obj = nrpnToIndex.get(Integer.valueOf(number));
             if (obj == null) return;
             String key = parameters[((Integer)obj).intValue()];
 			if (key.equals("bank") || key.equals("number") || key.equals("name") || key.equals("--"))
 				return;
+			parseNRPN(key, val);
+		}
                         
-			int val = data.value;
+    void parseNRPN(String key, int val)
+    		{
 			int v = ((val >>> 7) & 127);
 			int w = (val & 127);
         	
@@ -5007,7 +5369,6 @@ box.add(Box.createHorizontalGlue());
 			model.set(key, val);
 			revise();
 			}
-		}
 
 
     /** This is overridden because the Hydrasynth foolishly uses CC 120 as ARP OCTAVE
@@ -5021,7 +5382,7 @@ box.add(Box.createHorizontalGlue());
             // do an all notes off
             for(int i = 0; i < 16; i++)
                 tryToSendMIDI(new ShortMessage(ShortMessage.CONTROL_CHANGE, i, 123, 0));
-            // Send the Hydrasynth's special NRPN message for all sounds off
+            // Send the Hydrasynth's special NRPN message for all sounds off *sort of*
             for(int i = 0; i < 16; i++)
                 tryToSendMIDI(buildNRPN(i, 0x3F * 128 + 0x57, 0));
             }
@@ -5066,32 +5427,123 @@ box.add(Box.createHorizontalGlue());
 */
 
 
+	public static final int MODE_PAUSE = 0;
+	public static final int TYPE_PAUSE = 0;
+	public static final int WAVE_PAUSE = 0;
+	public static final int BPM_SYNC_PAUSE = 0;
+	public static final int WAVESCAN_WAVE_PAUSE = 0;
+	
+    protected boolean sendAllParametersInternal()
+        {
+        if (!getSendMIDI())
+            return false;  // don't bother!  MIDI is off
 
-    static HashMap parametersToIndex = null;
-    public static final String[] parameters = new String[] 
-    {
-    // Missing parameters that can't be changed in real-time:
-    // name, category, color
+for(int j = 0; j < 3; j++)
+	{
+		// we do a specific order
+		//System.err.println("Sending Modes");
+		for(int i = 0; i < modeParameters.length; i++)
+			{
+			simplePause(getPauseAfterSendHeaderParameter());
+			tryToSendMIDI(emitAll(modeParameters[i], STATUS_SENDING_ALL_PARAMETERS));
+			}
+		simplePause(MODE_PAUSE);
+		//System.err.println("Sending Types");
+		for(int i = 0; i < typeParameters.length; i++)
+			{
+			simplePause(getPauseAfterSendHeaderParameter());
+			tryToSendMIDI(emitAll(typeParameters[i], STATUS_SENDING_ALL_PARAMETERS));
+			}
+		simplePause(TYPE_PAUSE);
+		//System.err.println("Sending Waves");
+		for(int i = 0; i < waveParameters.length; i++)
+			{
+			simplePause(getPauseAfterSendHeaderParameter());
+			tryToSendMIDI(emitAll(waveParameters[i], STATUS_SENDING_ALL_PARAMETERS));
+			}
+		simplePause(WAVE_PAUSE);
+		//System.err.println("Sending BPM Syncs");
+		for(int i = 0; i < syncParameters.length; i++)
+			{
+			simplePause(getPauseAfterSendHeaderParameter());
+			tryToSendMIDI(emitAll(syncParameters[i], STATUS_SENDING_ALL_PARAMETERS));
+			}
+		simplePause(BPM_SYNC_PAUSE);
+		//System.err.println("Sending Wavescan Waves");
+		for(int i = 0; i < wavescanParameters.length; i++)
+			{
+			simplePause(getPauseAfterSendHeaderParameter());
+			tryToSendMIDI(emitAll(wavescanParameters[i], STATUS_SENDING_ALL_PARAMETERS));
+			}
+		simplePause(WAVESCAN_WAVE_PAUSE);
+		//System.err.println("Sending Remainder");
+		for(int i = 0; i < remainingParameters.length; i++)
+			{
+			simplePause(getPauseAfterSendOneParameter());
+			tryToSendMIDI(emitAll(remainingParameters[i], STATUS_SENDING_ALL_PARAMETERS));
+			}
+	}
+		simplePause(getPauseAfterSendAllParameters());
+		//System.err.println("Sent");
+		return true;
+        }
 
-    "allosccent",                                       /// This isn't a real parameter
-    "osc1mode",
-    "osc2mode",
-    "osc3mode",                     /// This parameter shouldn't exist (osc3 doesn't have a mode)
-    "osc1semi",
-    "osc2semi",
-    "osc3semi",
-    "osc1type",
-    "osc1cent",
-    "osc1keytrack",
-    "osc1wavscan",
-    "osc1solowavscan1",            /// This parameter shouldn't exist (it appears to do nothing)
-    "osc1solowavscan2",            /// This parameter shouldn't exist (it appears to do nothing)
-    "osc1solowavscan3",            /// This parameter shouldn't exist (it appears to do nothing)
-    "osc1solowavscan4",            /// This parameter shouldn't exist (it appears to do nothing)
-    "osc1solowavscan5",            /// This parameter shouldn't exist (it appears to do nothing)
-    "osc1solowavscan6",            /// This parameter shouldn't exist (it appears to do nothing)
-    "osc1solowavscan7",            /// This parameter shouldn't exist (it appears to do nothing)
-    "osc1solowavscan8",            /// This parameter shouldn't exist (it appears to do nothing)
+	public static final String[] modeParameters = 
+	{
+    // First the modes
+		"osc1mode",				
+		"osc2mode",				
+		"mutant1mode",                
+		"mutant2mode",					
+		"mutant3mode",					
+		"mutant4mode",					
+		"ribbonmode",	
+	};
+
+				
+	public static final String[] typeParameters = 
+	{
+	// Next the types (osc1...2type need to be after osc1...osc2mode)
+		"osc1type",					
+		"osc2type",					
+		"osc3type",					
+		"filter1type",					
+		"filter2type",					
+		"prefxtype",					
+		"delaytype",					
+		"reverbtype",					
+	};
+
+	public static final String[] waveParameters = 
+	{
+	// Next the waves
+		"lfo1wave",					
+		"lfo2wave",					
+		"lfo3wave",					
+		"lfo4wave",					
+		"lfo5wave",					
+	};
+	
+	public static final String[] syncParameters = 
+	{
+	// Next the BPM Sync toggles (not sure if delaybpmsync needs to be after delaytype)
+		"delaybpmsync",					
+		"lfo1bpmsync",					
+		"lfo2bpmsync",					
+		"lfo3bpmsync",					
+		"lfo4bpmsync",					
+		"lfo5bpmsync",					
+		"env1bpmsync",					
+		"env2bpmsync",					
+		"env3bpmsync",					
+		"env4bpmsync",					
+		"env5bpmsync",					
+		"voicevibratobpm",	
+	};
+	
+	public static final String[] wavescanParameters = 
+	{
+	// Next the wavescanwaves, just in case they need to be set before wavscan can be used (probably it's okay)			
     "osc1wavscanwave1",
     "osc1wavscanwave2",
     "osc1wavscanwave3",
@@ -5100,18 +5552,6 @@ box.add(Box.createHorizontalGlue());
     "osc1wavscanwave6",
     "osc1wavscanwave7",
     "osc1wavscanwave8",
-    "osc2type",
-    "osc2cent",
-    "osc2keytrack",
-    "osc2wavscan",
-    "osc2solowavscan1",            /// This parameter shouldn't exist (it appears to do nothing)
-    "osc2solowavscan2",            /// This parameter shouldn't exist (it appears to do nothing)
-    "osc2solowavscan3",            /// This parameter shouldn't exist (it appears to do nothing)
-    "osc2solowavscan4",            /// This parameter shouldn't exist (it appears to do nothing)
-    "osc2solowavscan5",            /// This parameter shouldn't exist (it appears to do nothing)
-    "osc2solowavscan6",            /// This parameter shouldn't exist (it appears to do nothing)
-    "osc2solowavscan7",            /// This parameter shouldn't exist (it appears to do nothing)
-    "osc2solowavscan8",            /// This parameter shouldn't exist (it appears to do nothing)
     "osc2wavscanwave1",
     "osc2wavscanwave2",
     "osc2wavscanwave3",
@@ -5120,13 +5560,22 @@ box.add(Box.createHorizontalGlue());
     "osc2wavscanwave6",
     "osc2wavscanwave7",
     "osc2wavscanwave8",
-    "osc3type",
+	};
+
+    public static final String[] remainingParameters = new String[] 
+    {
+	// Now all the dependent parameters
+    "osc1semi",
+    "osc2semi",
+    "osc3semi",
+    "osc1cent",
+    "osc1keytrack",
+    "osc1wavscan",
+    "osc2cent",
+    "osc2keytrack",
+    "osc2wavscan",
     "osc3cent",
     "osc3keytrack",
-    "mutant1mode",                 // These are all called "mutator" in the NRPN docs but "mutant" in the manual and on the machine
-    "mutant2mode",
-    "mutant3mode",
-    "mutant4mode",
     "mutant1sourcefmlin",
     "mutant2sourcefmlin",
     "mutant3sourcefmlin",
@@ -5191,7 +5640,6 @@ box.add(Box.createHorizontalGlue());
     "ringmoddepth",
     "ringmodsource1",
     "ringmodsource2",
-    "mixersolo",                              /// This isn't a real parameter
     "mixerosc1vol",
     "mixerosc1pan",
     "mixerosc1filterratio",
@@ -5216,10 +5664,8 @@ box.add(Box.createHorizontalGlue());
     "filter1keytrack",
     "filter1lfo1amount",
     "filter1vowelorder",
-    "filter1type",
     "filter1velenv",
     "filter1env1amount",
-    "filter2positionofdrive",                 // This parameter does not exist
     "filter2cutoff",
     "filter2resonance",
     "filter2morph",
@@ -5227,26 +5673,68 @@ box.add(Box.createHorizontalGlue());
     "filter2lfo1amount",
     "filter2velenv",
     "filter2env1amount",
-    "filter2type",
     "amplevel",
     "ampvelenv",
     "amplfo2amount",
-    "prefxtype",
-    "prefxpreset",
     "prefxwet",
-    "prefxparam1",
-    "prefxparam2",
-    "prefxparam3",
-    "prefxparam4",
-    "prefxparam5",
+    
+    /// Note that the prefx params have been broken out
+    "prefx1param1",
+    "prefx1param2",
+    "prefx1param3",
+    "prefx1param4",
+    "prefx1param5",
+    "prefx2param1",
+    "prefx2param2",
+    "prefx2param3",
+    "prefx2param4",
+    "prefx2param5",
+    "prefx3param1",
+    "prefx3param2",
+    "prefx3param3",
+    "prefx3param4",
+    "prefx3param5",
+    "prefx4param1",
+    "prefx4param2",
+    "prefx4param3",
+    "prefx4param4",
+    "prefx4param5",
+    "prefx5param1",
+    "prefx5param2",
+    "prefx5param3",
+    "prefx5param4",
+    "prefx5param5",
+    "prefx6param1",
+    "prefx6param2",
+    "prefx6param3",
+    "prefx6param4",
+    "prefx6param5",
+    "prefx7param1",
+    "prefx7param2",
+    "prefx7param3",
+    "prefx7param4",
+    "prefx7param5",
+    "prefx8param1",
+    "prefx8param2",
+    "prefx8param3",
+    "prefx8param4",
+    "prefx8param5",
+    "prefx9param1",
+    "prefx9param2",
+    "prefx9param3",
+    "prefx9param4",
+    "prefx9param5",
+    "prefx10param1",
+    "prefx10param2",
+    "prefx10param3",
+    "prefx10param4",
+    "prefx10param5",
     "prefxsidechain",
-    "delaybpmsync",
     "delaywet",
     "delayfeedback",
     "delayfeedtone",
     "delaytimesyncoff",
     "delaytimesyncon",
-    "delaytype",
     "delaywettone",
     "reverbwet",
     "reverbhidamp",
@@ -5254,19 +5742,63 @@ box.add(Box.createHorizontalGlue());
     "reverbpredelay",
     "reverbtime",
     "reverbtone",
-    "reverbtype",
     "postfxtype",
-    "postfxpreset",
     "postfxwet",
-    "postfxparam1",
-    "postfxparam2",
-    "postfxparam3",
-    "postfxparam4",
-    "postfxparam5",
+
+
+    /// Note that the postfx params have been broken out
+    "postfx1param1",
+    "postfx1param2",
+    "postfx1param3",
+    "postfx1param4",
+    "postfx1param5",
+    "postfx2param1",
+    "postfx2param2",
+    "postfx2param3",
+    "postfx2param4",
+    "postfx2param5",
+    "postfx3param1",
+    "postfx3param2",
+    "postfx3param3",
+    "postfx3param4",
+    "postfx3param5",
+    "postfx4param1",
+    "postfx4param2",
+    "postfx4param3",
+    "postfx4param4",
+    "postfx4param5",
+    "postfx5param1",
+    "postfx5param2",
+    "postfx5param3",
+    "postfx5param4",
+    "postfx5param5",
+    "postfx6param1",
+    "postfx6param2",
+    "postfx6param3",
+    "postfx6param4",
+    "postfx6param5",
+    "postfx7param1",
+    "postfx7param2",
+    "postfx7param3",
+    "postfx7param4",
+    "postfx7param5",
+    "postfx8param1",
+    "postfx8param2",
+    "postfx8param3",
+    "postfx8param4",
+    "postfx8param5",
+    "postfx9param1",
+    "postfx9param2",
+    "postfx9param3",
+    "postfx9param4",
+    "postfx9param5",
+    "postfx10param1",
+    "postfx10param2",
+    "postfx10param3",
+    "postfx10param4",
+    "postfx10param5",
     "postfxsidechain",
     "lfo1level",
-    "lfo1wave",
-    "lfo1bpmsync",
     "lfo1trigsync",
     "lfo1smooth",
     "lfo1steps",
@@ -5343,8 +5875,6 @@ box.add(Box.createHorizontalGlue());
     "lfo1step63",
     "lfo1step64",
     "lfo2level",
-    "lfo2wave",
-    "lfo2bpmsync",
     "lfo2trigsync",
     "lfo2smooth",
     "lfo2steps",
@@ -5421,8 +5951,6 @@ box.add(Box.createHorizontalGlue());
     "lfo2step63",
     "lfo2step64",
     "lfo3level",
-    "lfo3wave",
-    "lfo3bpmsync",
     "lfo3trigsync",
     "lfo3smooth",
     "lfo3steps",
@@ -5499,8 +6027,6 @@ box.add(Box.createHorizontalGlue());
     "lfo3step63",
     "lfo3step64",
     "lfo4level",
-    "lfo4wave",
-    "lfo4bpmsync",
     "lfo4trigsync",
     "lfo4smooth",
     "lfo4steps",
@@ -5577,8 +6103,6 @@ box.add(Box.createHorizontalGlue());
     "lfo4step63",
     "lfo4step64",
     "lfo5level",
-    "lfo5wave",
-    "lfo5bpmsync",
     "lfo5trigsync",
     "lfo5smooth",
     "lfo5steps",
@@ -5669,7 +6193,6 @@ box.add(Box.createHorizontalGlue());
     "env1deccurve",
     "env1loop",
     "env1legato",
-    "env1bpmsync",
     "env1freerun",
     "env1reset",
     "env1relcurve",
@@ -5692,7 +6215,6 @@ box.add(Box.createHorizontalGlue());
     "env2deccurve",
     "env2loop",
     "env2legato",
-    "env2bpmsync",
     "env2freerun",
     "env2reset",
     "env2relcurve",
@@ -5715,7 +6237,6 @@ box.add(Box.createHorizontalGlue());
     "env3deccurve",
     "env3loop",
     "env3legato",
-    "env3bpmsync",
     "env3freerun",
     "env3reset",
     "env3relcurve",
@@ -5738,7 +6259,6 @@ box.add(Box.createHorizontalGlue());
     "env4deccurve",
     "env4loop",
     "env4legato",
-    "env4bpmsync",
     "env4freerun",
     "env4reset",
     "env4relcurve",
@@ -5761,7 +6281,6 @@ box.add(Box.createHorizontalGlue());
     "env5deccurve",
     "env5loop",
     "env5legato",
-    "env5bpmsync",
     "env5freerun",
     "env5reset",
     "env5relcurve",
@@ -6076,7 +6595,6 @@ box.add(Box.createHorizontalGlue());
     "modmatrix30depth",
     "modmatrix31depth",
     "modmatrix32depth",
-    "ribbonmode",
     "ribbonkeyspan",
     "ribbonoctave",
     "ribbonquantize",
@@ -6098,7 +6616,1044 @@ box.add(Box.createHorizontalGlue());
     "voicevibratoratesyncon",
     "voicerandomphase",
     "voicewarmmode",
-    "voicevibratobpm",
+    };
+    
+    
+    
+    
+    		
+    static HashMap parametersToIndex = null;
+    public static final String[] parameters = new String[] 
+    {
+    // Missing parameters that can't be changed in real-time:
+    // name, category, color
+
+    "--", 							// "allosccent",                                       /// This isn't a real parameter
+    "osc1mode",					
+    "osc2mode",					
+    "--", 							// "osc3mode",                     /// This parameter shouldn't exist (osc3 doesn't have a mode)
+    "osc1semi",
+    "osc2semi",
+    "osc3semi",
+    "osc1type",					
+    "osc1cent",
+    "osc1keytrack",
+    "osc1wavscan",
+    "--", 							// "osc1solowavscan1",            /// This parameter shouldn't exist (it appears to do nothing)
+    "--", 							// "osc1solowavscan2",            /// This parameter shouldn't exist (it appears to do nothing)
+    "--", 							// "osc1solowavscan3",            /// This parameter shouldn't exist (it appears to do nothing)
+    "--", 							// "osc1solowavscan4",            /// This parameter shouldn't exist (it appears to do nothing)
+    "--", 							// "osc1solowavscan5",            /// This parameter shouldn't exist (it appears to do nothing)
+    "--", 							// "osc1solowavscan6",            /// This parameter shouldn't exist (it appears to do nothing)
+    "--", 							// "osc1solowavscan7",            /// This parameter shouldn't exist (it appears to do nothing)
+    "--", 							// "osc1solowavscan8",            /// This parameter shouldn't exist (it appears to do nothing)
+    "osc1wavscanwave1",
+    "osc1wavscanwave2",
+    "osc1wavscanwave3",
+    "osc1wavscanwave4",
+    "osc1wavscanwave5",
+    "osc1wavscanwave6",
+    "osc1wavscanwave7",
+    "osc1wavscanwave8",
+    "osc2type",					
+    "osc2cent",
+    "osc2keytrack",
+    "osc2wavscan",
+    "--", 							// "osc2solowavscan1",            /// This parameter shouldn't exist (it appears to do nothing)
+    "--", 							// "osc2solowavscan2",            /// This parameter shouldn't exist (it appears to do nothing)
+    "--", 							// "osc2solowavscan3",            /// This parameter shouldn't exist (it appears to do nothing)
+    "--", 							// "osc2solowavscan4",            /// This parameter shouldn't exist (it appears to do nothing)
+    "--", 							// "osc2solowavscan5",            /// This parameter shouldn't exist (it appears to do nothing)
+    "--", 							// "osc2solowavscan6",            /// This parameter shouldn't exist (it appears to do nothing)
+    "--", 							// "osc2solowavscan7",            /// This parameter shouldn't exist (it appears to do nothing)
+    "--", 							// "osc2solowavscan8",            /// This parameter shouldn't exist (it appears to do nothing)
+    "osc2wavscanwave1",
+    "osc2wavscanwave2",
+    "osc2wavscanwave3",
+    "osc2wavscanwave4",
+    "osc2wavscanwave5",
+    "osc2wavscanwave6",
+    "osc2wavscanwave7",
+    "osc2wavscanwave8",
+    "osc3type",					
+    "osc3cent",
+    "osc3keytrack",
+    "mutant1mode",                					  // These are all called "mutator" in the NRPN docs but "mutant" in the manual and on the machine
+    "mutant2mode",					
+    "mutant3mode",					
+    "mutant4mode",					
+    "mutant1sourcefmlin",
+    "mutant2sourcefmlin",
+    "mutant3sourcefmlin",
+    "mutant4sourcefmlin",
+    "mutant1sourceoscsync",
+    "mutant2sourceoscsync",
+    "mutant3sourceoscsync",
+    "mutant4sourceoscsync",
+    "mutant1ratio",
+    "mutant1depth",
+    "mutant1wet",
+    "mutant1feedback",
+    "mutant1window",
+    "mutant1warp1",
+    "mutant1warp2",
+    "mutant1warp3",
+    "mutant1warp4",
+    "mutant1warp5",
+    "mutant1warp6",
+    "mutant1warp7",
+    "mutant1warp8",
+    "mutant2ratio",
+    "mutant2depth",
+    "mutant2wet",
+    "mutant2feedback",
+    "mutant2window",
+    "mutant2warp1",
+    "mutant2warp2",
+    "mutant2warp3",
+    "mutant2warp4",
+    "mutant2warp5",
+    "mutant2warp6",
+    "mutant2warp7",
+    "mutant2warp8",
+    "mutant3ratio",
+    "mutant3depth",
+    "mutant3wet",
+    "mutant3feedback",
+    "mutant3window",
+    "mutant3warp1",
+    "mutant3warp2",
+    "mutant3warp3",
+    "mutant3warp4",
+    "mutant3warp5",
+    "mutant3warp6",
+    "mutant3warp7",
+    "mutant3warp8",
+    "mutant4ratio",
+    "mutant4depth",
+    "mutant4wet",
+    "mutant4feedback",
+    "mutant4window",
+    "mutant4warp1",
+    "mutant4warp2",
+    "mutant4warp3",
+    "mutant4warp4",
+    "mutant4warp5",
+    "mutant4warp6",
+    "mutant4warp7",
+    "mutant4warp8",
+    "noisetype",
+    "ringmoddepth",
+    "ringmodsource1",
+    "ringmodsource2",
+    "--", 							// "mixersolo",                              /// This isn't a real parameter
+    "mixerosc1vol",
+    "mixerosc1pan",
+    "mixerosc1filterratio",
+    "mixerosc2vol",
+    "mixerosc2pan",
+    "mixerosc2filterratio",
+    "mixerosc3vol",
+    "mixerosc3pan",
+    "mixerosc3filterratio",
+    "mixernoisevol",
+    "mixernoisepan",
+    "mixernoisefilterratio",
+    "mixerringmodvol",
+    "mixerringmodpan",
+    "mixerringmodfilterratio",
+    "mixerfilterrouting",
+    "filter1positionofdrive",
+    "filter1cutoff",
+    "filter1drive",
+    "filter1resonance",
+    "filter1special",
+    "filter1keytrack",
+    "filter1lfo1amount",
+    "filter1vowelorder",
+    "filter1type",					
+    "filter1velenv",
+    "filter1env1amount",
+    "--", 									//"filter2positionofdrive",                 // This parameter does not exist
+    "filter2cutoff",
+    "filter2resonance",
+    "filter2morph",
+    "filter2keytrack",
+    "filter2lfo1amount",
+    "filter2velenv",
+    "filter2env1amount",
+    "filter2type",					
+    "amplevel",
+    "ampvelenv",
+    "amplfo2amount",
+    "prefxtype",					
+    "--",										// "prefxpreset",
+    "prefxwet",
+    "prefxparam1",
+    "prefxparam2",
+    "prefxparam3",
+    "prefxparam4",
+    "prefxparam5",
+    "prefxsidechain",
+    "delaybpmsync",					
+    "delaywet",
+    "delayfeedback",
+    "delayfeedtone",
+    "delaytimesyncoff",
+    "delaytimesyncon",
+    "delaytype",					
+    "delaywettone",
+    "reverbwet",
+    "reverbhidamp",
+    "reverblodamp",
+    "reverbpredelay",
+    "reverbtime",
+    "reverbtone",
+    "reverbtype",					
+    "postfxtype",
+    "--",								// postfxpreset
+    "postfxwet",
+    "postfxparam1",
+    "postfxparam2",
+    "postfxparam3",
+    "postfxparam4",
+    "postfxparam5",
+    "postfxsidechain",
+    "lfo1level",
+    "lfo1wave",					
+    "lfo1bpmsync",					
+    "lfo1trigsync",
+    "lfo1smooth",
+    "lfo1steps",
+    "lfo1delaysyncoff",
+    "lfo1fadeinsyncoff",
+    "lfo1delaysyncon",
+    "lfo1fadeinsyncon",
+    "lfo1oneshot",
+    "lfo1phase",
+    "lfo1ratesyncoff",
+    "lfo1ratesyncon",
+    "lfo1step1",
+    "lfo1step2",
+    "lfo1step3",
+    "lfo1step4",
+    "lfo1step5",
+    "lfo1step6",
+    "lfo1step7",
+    "lfo1step8",
+    "lfo1step9",
+    "lfo1step10",
+    "lfo1step11",
+    "lfo1step12",
+    "lfo1step13",
+    "lfo1step14",
+    "lfo1step15",
+    "lfo1step16",
+    "lfo1step17",
+    "lfo1step18",
+    "lfo1step19",
+    "lfo1step20",
+    "lfo1step21",
+    "lfo1step22",
+    "lfo1step23",
+    "lfo1step24",
+    "lfo1step25",
+    "lfo1step26",
+    "lfo1step27",
+    "lfo1step28",
+    "lfo1step29",
+    "lfo1step30",
+    "lfo1step31",
+    "lfo1step32",
+    "lfo1step33",
+    "lfo1step34",
+    "lfo1step35",
+    "lfo1step36",
+    "lfo1step37",
+    "lfo1step38",
+    "lfo1step39",
+    "lfo1step40",
+    "lfo1step41",
+    "lfo1step42",
+    "lfo1step43",
+    "lfo1step44",
+    "lfo1step45",
+    "lfo1step46",
+    "lfo1step47",
+    "lfo1step48",
+    "lfo1step49",
+    "lfo1step50",
+    "lfo1step51",
+    "lfo1step52",
+    "lfo1step53",
+    "lfo1step54",
+    "lfo1step55",
+    "lfo1step56",
+    "lfo1step57",
+    "lfo1step58",
+    "lfo1step59",
+    "lfo1step60",
+    "lfo1step61",
+    "lfo1step62",
+    "lfo1step63",
+    "lfo1step64",
+    "lfo2level",
+    "lfo2wave",					
+    "lfo2bpmsync",					
+    "lfo2trigsync",
+    "lfo2smooth",
+    "lfo2steps",
+    "lfo2delaysyncoff",
+    "lfo2fadeinsyncoff",
+    "lfo2delaysyncon",
+    "lfo2fadeinsyncon",
+    "lfo2oneshot",
+    "lfo2phase",
+    "lfo2ratesyncoff",
+    "lfo2ratesyncon",
+    "lfo2step1",
+    "lfo2step2",
+    "lfo2step3",
+    "lfo2step4",
+    "lfo2step5",
+    "lfo2step6",
+    "lfo2step7",
+    "lfo2step8",
+    "lfo2step9",
+    "lfo2step10",
+    "lfo2step11",
+    "lfo2step12",
+    "lfo2step13",
+    "lfo2step14",
+    "lfo2step15",
+    "lfo2step16",
+    "lfo2step17",
+    "lfo2step18",
+    "lfo2step19",
+    "lfo2step20",
+    "lfo2step21",
+    "lfo2step22",
+    "lfo2step23",
+    "lfo2step24",
+    "lfo2step25",
+    "lfo2step26",
+    "lfo2step27",
+    "lfo2step28",
+    "lfo2step29",
+    "lfo2step30",
+    "lfo2step31",
+    "lfo2step32",
+    "lfo2step33",
+    "lfo2step34",
+    "lfo2step35",
+    "lfo2step36",
+    "lfo2step37",
+    "lfo2step38",
+    "lfo2step39",
+    "lfo2step40",
+    "lfo2step41",
+    "lfo2step42",
+    "lfo2step43",
+    "lfo2step44",
+    "lfo2step45",
+    "lfo2step46",
+    "lfo2step47",
+    "lfo2step48",
+    "lfo2step49",
+    "lfo2step50",
+    "lfo2step51",
+    "lfo2step52",
+    "lfo2step53",
+    "lfo2step54",
+    "lfo2step55",
+    "lfo2step56",
+    "lfo2step57",
+    "lfo2step58",
+    "lfo2step59",
+    "lfo2step60",
+    "lfo2step61",
+    "lfo2step62",
+    "lfo2step63",
+    "lfo2step64",
+    "lfo3level",
+    "lfo3wave",					
+    "lfo3bpmsync",					
+    "lfo3trigsync",
+    "lfo3smooth",
+    "lfo3steps",
+    "lfo3delaysyncoff",
+    "lfo3fadeinsyncoff",
+    "lfo3delaysyncon",
+    "lfo3fadeinsyncon",
+    "lfo3oneshot",
+    "lfo3phase",
+    "lfo3ratesyncoff",
+    "lfo3ratesyncon",
+    "lfo3step1",
+    "lfo3step2",
+    "lfo3step3",
+    "lfo3step4",
+    "lfo3step5",
+    "lfo3step6",
+    "lfo3step7",
+    "lfo3step8",
+    "lfo3step9",
+    "lfo3step10",
+    "lfo3step11",
+    "lfo3step12",
+    "lfo3step13",
+    "lfo3step14",
+    "lfo3step15",
+    "lfo3step16",
+    "lfo3step17",
+    "lfo3step18",
+    "lfo3step19",
+    "lfo3step20",
+    "lfo3step21",
+    "lfo3step22",
+    "lfo3step23",
+    "lfo3step24",
+    "lfo3step25",
+    "lfo3step26",
+    "lfo3step27",
+    "lfo3step28",
+    "lfo3step29",
+    "lfo3step30",
+    "lfo3step31",
+    "lfo3step32",
+    "lfo3step33",
+    "lfo3step34",
+    "lfo3step35",
+    "lfo3step36",
+    "lfo3step37",
+    "lfo3step38",
+    "lfo3step39",
+    "lfo3step40",
+    "lfo3step41",
+    "lfo3step42",
+    "lfo3step43",
+    "lfo3step44",
+    "lfo3step45",
+    "lfo3step46",
+    "lfo3step47",
+    "lfo3step48",
+    "lfo3step49",
+    "lfo3step50",
+    "lfo3step51",
+    "lfo3step52",
+    "lfo3step53",
+    "lfo3step54",
+    "lfo3step55",
+    "lfo3step56",
+    "lfo3step57",
+    "lfo3step58",
+    "lfo3step59",
+    "lfo3step60",
+    "lfo3step61",
+    "lfo3step62",
+    "lfo3step63",
+    "lfo3step64",
+    "lfo4level",
+    "lfo4wave",					
+    "lfo4bpmsync",					
+    "lfo4trigsync",
+    "lfo4smooth",
+    "lfo4steps",
+    "lfo4delaysyncoff",
+    "lfo4fadeinsyncoff",
+    "lfo4delaysyncon",
+    "lfo4fadeinsyncon",
+    "lfo4oneshot",
+    "lfo4phase",
+    "lfo4ratesyncoff",
+    "lfo4ratesyncon",
+    "lfo3step1",
+    "lfo3step2",
+    "lfo3step3",
+    "lfo3step4",
+    "lfo3step5",
+    "lfo3step6",
+    "lfo3step7",
+    "lfo3step8",
+    "lfo4step9",
+    "lfo4step10",
+    "lfo4step11",
+    "lfo4step12",
+    "lfo4step13",
+    "lfo4step14",
+    "lfo4step15",
+    "lfo4step16",
+    "lfo4step17",
+    "lfo4step18",
+    "lfo4step19",
+    "lfo4step20",
+    "lfo4step21",
+    "lfo4step22",
+    "lfo4step23",
+    "lfo4step24",
+    "lfo4step25",
+    "lfo4step26",
+    "lfo4step27",
+    "lfo4step28",
+    "lfo4step29",
+    "lfo4step30",
+    "lfo4step31",
+    "lfo4step32",
+    "lfo4step33",
+    "lfo4step34",
+    "lfo4step35",
+    "lfo4step36",
+    "lfo4step37",
+    "lfo4step38",
+    "lfo4step39",
+    "lfo4step40",
+    "lfo4step41",
+    "lfo4step42",
+    "lfo4step43",
+    "lfo4step44",
+    "lfo4step45",
+    "lfo4step46",
+    "lfo4step47",
+    "lfo4step48",
+    "lfo4step49",
+    "lfo4step50",
+    "lfo4step51",
+    "lfo4step52",
+    "lfo4step53",
+    "lfo4step54",
+    "lfo4step55",
+    "lfo4step56",
+    "lfo4step57",
+    "lfo4step58",
+    "lfo4step59",
+    "lfo4step60",
+    "lfo4step61",
+    "lfo4step62",
+    "lfo4step63",
+    "lfo4step64",
+    "lfo5level",
+    "lfo5wave",					
+    "lfo5bpmsync",					
+    "lfo5trigsync",
+    "lfo5smooth",
+    "lfo5steps",
+    "lfo5delaysyncoff",
+    "lfo5fadeinsyncoff",
+    "lfo5delaysyncon",
+    "lfo5fadeinsyncon",
+    "lfo5oneshot",
+    "lfo5phase",
+    "lfo5ratesyncoff",
+    "lfo5ratesyncon",
+    "lfo5step1",
+    "lfo5step2",
+    "lfo5step3",
+    "lfo5step4",
+    "lfo5step5",
+    "lfo5step6",
+    "lfo5step7",
+    "lfo5step8",
+    "lfo5step9",
+    "lfo5step10",
+    "lfo5step11",
+    "lfo5step12",
+    "lfo5step13",
+    "lfo5step14",
+    "lfo5step15",
+    "lfo5step16",
+    "lfo5step17",
+    "lfo5step18",
+    "lfo5step19",
+    "lfo5step20",
+    "lfo5step21",
+    "lfo5step22",
+    "lfo5step23",
+    "lfo5step24",
+    "lfo5step25",
+    "lfo5step26",
+    "lfo5step27",
+    "lfo5step28",
+    "lfo5step29",
+    "lfo5step30",
+    "lfo5step31",
+    "lfo5step32",
+    "lfo5step33",
+    "lfo5step34",
+    "lfo5step35",
+    "lfo5step36",
+    "lfo5step37",
+    "lfo5step38",
+    "lfo5step39",
+    "lfo5step40",
+    "lfo5step41",
+    "lfo5step42",
+    "lfo5step43",
+    "lfo5step44",
+    "lfo5step45",
+    "lfo5step46",
+    "lfo5step47",
+    "lfo5step48",
+    "lfo5step49",
+    "lfo5step50",
+    "lfo5step51",
+    "lfo5step52",
+    "lfo5step53",
+    "lfo5step54",
+    "lfo5step55",
+    "lfo5step56",
+    "lfo5step57",
+    "lfo5step58",
+    "lfo5step59",
+    "lfo5step60",
+    "lfo5step61",
+    "lfo5step62",
+    "lfo5step63",
+    "lfo5step64",
+    "env1delaysyncoff",
+    "env1attacksyncoff",
+    "env1holdsyncoff",
+    "env1decaysyncoff",
+    "env1sustain",
+    "env1releasesyncoff",
+    "env1delaysyncon",
+    "env1attacksyncon",
+    "env1decaysyncon",
+    "env1holdsyncon",
+    "env1releasesyncon",
+    "env1atkcurve",
+    "env1deccurve",
+    "env1loop",
+    "env1legato",
+    "env1bpmsync",					
+    "env1freerun",
+    "env1reset",
+    "env1relcurve",
+    "env1trigsrc1",
+    "env1trigsrc2",
+    "env1trigsrc3",
+    "env1trigsrc4",
+    "env2delaysyncoff",
+    "env2attacksyncoff",
+    "env2holdsyncoff",
+    "env2decaysyncoff",
+    "env2sustain",
+    "env2releasesyncoff",
+    "env2delaysyncon",
+    "env2attacksyncon",
+    "env2decaysyncon",
+    "env2holdsyncon",
+    "env2releasesyncon",
+    "env2atkcurve",
+    "env2deccurve",
+    "env2loop",
+    "env2legato",
+    "env2bpmsync",					
+    "env2freerun",
+    "env2reset",
+    "env2relcurve",
+    "env2trigsrc1",
+    "env2trigsrc2",
+    "env2trigsrc3",
+    "env2trigsrc4",
+    "env3delaysyncoff",
+    "env3attacksyncoff",
+    "env3holdsyncoff",
+    "env3decaysyncoff",
+    "env3sustain",
+    "env3releasesyncoff",
+    "env3delaysyncon",
+    "env3attacksyncon",
+    "env3decaysyncon",
+    "env3holdsyncon",
+    "env3releasesyncon",
+    "env3atkcurve",
+    "env3deccurve",
+    "env3loop",
+    "env3legato",
+    "env3bpmsync",					
+    "env3freerun",
+    "env3reset",
+    "env3relcurve",
+    "env3trigsrc1",
+    "env3trigsrc2",
+    "env3trigsrc3",
+    "env3trigsrc4",
+    "env4delaysyncoff",
+    "env4attacksyncoff",
+    "env4holdsyncoff",
+    "env4decaysyncoff",
+    "env4sustain",
+    "env4releasesyncoff",
+    "env4delaysyncon",
+    "env4attacksyncon",
+    "env4decaysyncon",
+    "env4holdsyncon",
+    "env4releasesyncon",
+    "env4atkcurve",
+    "env4deccurve",
+    "env4loop",
+    "env4legato",
+    "env4bpmsync",					
+    "env4freerun",
+    "env4reset",
+    "env4relcurve",
+    "env4trigsrc1",
+    "env4trigsrc2",
+    "env4trigsrc3",
+    "env4trigsrc4",
+    "env5delaysyncoff",
+    "env5attacksyncoff",
+    "env5holdsyncoff",
+    "env5decaysyncoff",
+    "env5sustain",
+    "env5releasesyncoff",
+    "env5delaysyncon",
+    "env5attacksyncon",
+    "env5decaysyncon",
+    "env5holdsyncon",
+    "env5releasesyncon",
+    "env5atkcurve",
+    "env5deccurve",
+    "env5loop",
+    "env5legato",
+    "env5bpmsync",					
+    "env5freerun",
+    "env5reset",
+    "env5relcurve",
+    "env5trigsrc1",
+    "env5trigsrc2",
+    "env5trigsrc3",
+    "env5trigsrc4",
+    "arpdivision",
+    "arpswing",
+    "arpgate",
+    "arpoctmode",
+    "arpoctave",
+    "arpmode",
+    "arplength",
+    "arptaptrig",
+    "arpphrase",
+    "arpratchet",
+    "arpchance",
+    "macro1target1",
+    "macro1target2",
+    "macro1target3",
+    "macro1target4",
+    "macro1target5",
+    "macro1target6",
+    "macro1target7",
+    "macro1target8",
+    "macro1buttonvalue1",
+    "macro1buttonvalue2",
+    "macro1buttonvalue3",
+    "macro1buttonvalue4",
+    "macro1buttonvalue5",
+    "macro1buttonvalue6",
+    "macro1buttonvalue7",
+    "macro1buttonvalue8",
+    "macro1depth1",
+    "macro1depth2",
+    "macro1depth3",
+    "macro1depth4",
+    "macro1depth5",
+    "macro1depth6",
+    "macro1depth7",
+    "macro1depth8",
+    "macro2target1",
+    "macro2target2",
+    "macro2target3",
+    "macro2target4",
+    "macro2target5",
+    "macro2target6",
+    "macro2target7",
+    "macro2target8",
+    "macro2buttonvalue1",
+    "macro2buttonvalue2",
+    "macro2buttonvalue3",
+    "macro2buttonvalue4",
+    "macro2buttonvalue5",
+    "macro2buttonvalue6",
+    "macro2buttonvalue7",
+    "macro2buttonvalue8",
+    "macro2depth1",
+    "macro2depth2",
+    "macro2depth3",
+    "macro2depth4",
+    "macro2depth5",
+    "macro2depth6",
+    "macro2depth7",
+    "macro2depth8",
+    "macro3target1",
+    "macro3target2",
+    "macro3target3",
+    "macro3target4",
+    "macro3target5",
+    "macro3target6",
+    "macro3target7",
+    "macro3target8",
+    "macro3buttonvalue1",
+    "macro3buttonvalue2",
+    "macro3buttonvalue3",
+    "macro3buttonvalue4",
+    "macro3buttonvalue5",
+    "macro3buttonvalue6",
+    "macro3buttonvalue7",
+    "macro3buttonvalue8",
+    "macro3depth1",
+    "macro3depth2",
+    "macro3depth3",
+    "macro3depth4",
+    "macro3depth5",
+    "macro3depth6",
+    "macro3depth7",
+    "macro3depth8",
+    "macro4target1",
+    "macro4target2",
+    "macro4target3",
+    "macro4target4",
+    "macro4target5",
+    "macro4target6",
+    "macro4target7",
+    "macro4target8",
+    "macro4buttonvalue1",
+    "macro4buttonvalue2",
+    "macro4buttonvalue3",
+    "macro4buttonvalue4",
+    "macro4buttonvalue5",
+    "macro4buttonvalue6",
+    "macro4buttonvalue7",
+    "macro4buttonvalue8",
+    "macro4depth1",
+    "macro4depth2",
+    "macro4depth3",
+    "macro4depth4",
+    "macro4depth5",
+    "macro4depth6",
+    "macro4depth7",
+    "macro4depth8",
+    "macro5target1",
+    "macro5target2",
+    "macro5target3",
+    "macro5target4",
+    "macro5target5",
+    "macro5target6",
+    "macro5target7",
+    "macro5target8",
+    "macro5buttonvalue1",
+    "macro5buttonvalue2",
+    "macro5buttonvalue3",
+    "macro5buttonvalue4",
+    "macro5buttonvalue5",
+    "macro5buttonvalue6",
+    "macro5buttonvalue7",
+    "macro5buttonvalue8",
+    "macro5depth1",
+    "macro5depth2",
+    "macro5depth3",
+    "macro5depth4",
+    "macro5depth5",
+    "macro5depth6",
+    "macro5depth7",
+    "macro5depth8",
+    "macro5target1",
+    "macro5target2",
+    "macro5target3",
+    "macro5target4",
+    "macro5target5",
+    "macro5target6",
+    "macro5target7",
+    "macro5target8",
+    "macro6buttonvalue1",
+    "macro6buttonvalue2",
+    "macro6buttonvalue3",
+    "macro6buttonvalue4",
+    "macro6buttonvalue5",
+    "macro6buttonvalue6",
+    "macro6buttonvalue7",
+    "macro6buttonvalue8",
+    "macro6depth1",
+    "macro6depth2",
+    "macro6depth3",
+    "macro6depth4",
+    "macro6depth5",
+    "macro6depth6",
+    "macro6depth7",
+    "macro6depth8",
+    "macro7target1",
+    "macro7target2",
+    "macro7target3",
+    "macro7target4",
+    "macro7target5",
+    "macro7target6",
+    "macro7target7",
+    "macro7target8",
+    "macro7buttonvalue1",
+    "macro7buttonvalue2",
+    "macro7buttonvalue3",
+    "macro7buttonvalue4",
+    "macro7buttonvalue5",
+    "macro7buttonvalue6",
+    "macro7buttonvalue7",
+    "macro7buttonvalue8",
+    "macro7depth1",
+    "macro7depth2",
+    "macro7depth3",
+    "macro7depth4",
+    "macro7depth5",
+    "macro7depth6",
+    "macro7depth7",
+    "macro7depth8",
+    "macro8target1",
+    "macro8target2",
+    "macro8target3",
+    "macro8target4",
+    "macro8target5",
+    "macro8target6",
+    "macro8target7",
+    "macro8target8",
+    "macro8buttonvalue1",
+    "macro8buttonvalue2",
+    "macro8buttonvalue3",
+    "macro8buttonvalue4",
+    "macro8buttonvalue5",
+    "macro8buttonvalue6",
+    "macro8buttonvalue7",
+    "macro8buttonvalue8",
+    "macro8depth1",
+    "macro8depth2",
+    "macro8depth3",
+    "macro8depth4",
+    "macro8depth5",
+    "macro8depth6",
+    "macro8depth7",
+    "macro8depth8",
+    "macro1panelvalue",
+    "macro2panelvalue",
+    "macro3panelvalue",
+    "macro4panelvalue",
+    "macro5panelvalue",
+    "macro6panelvalue",
+    "macro7panelvalue",
+    "macro8panelvalue",
+    "modmatrix1modsource",
+    "modmatrix2modsource",
+    "modmatrix3modsource",
+    "modmatrix4modsource",
+    "modmatrix5modsource",
+    "modmatrix6modsource",
+    "modmatrix7modsource",
+    "modmatrix8modsource",
+    "modmatrix9modsource",
+    "modmatrix10modsource",
+    "modmatrix11modsource",
+    "modmatrix12modsource",
+    "modmatrix13modsource",
+    "modmatrix14modsource",
+    "modmatrix15modsource",
+    "modmatrix16modsource",
+    "modmatrix17modsource",
+    "modmatrix18modsource",
+    "modmatrix19modsource",
+    "modmatrix20modsource",
+    "modmatrix21modsource",
+    "modmatrix22modsource",
+    "modmatrix23modsource",
+    "modmatrix24modsource",
+    "modmatrix25modsource",
+    "modmatrix26modsource",
+    "modmatrix27modsource",
+    "modmatrix28modsource",
+    "modmatrix29modsource",
+    "modmatrix30modsource",
+    "modmatrix31modsource",
+    "modmatrix32modsource",
+    "modmatrix1modtarget",
+    "modmatrix2modtarget",
+    "modmatrix3modtarget",
+    "modmatrix4modtarget",
+    "modmatrix5modtarget",
+    "modmatrix6modtarget",
+    "modmatrix7modtarget",
+    "modmatrix8modtarget",
+    "modmatrix9modtarget",
+    "modmatrix10modtarget",
+    "modmatrix11modtarget",
+    "modmatrix12modtarget",
+    "modmatrix13modtarget",
+    "modmatrix14modtarget",
+    "modmatrix15modtarget",
+    "modmatrix16modtarget",
+    "modmatrix17modtarget",
+    "modmatrix18modtarget",
+    "modmatrix19modtarget",
+    "modmatrix20modtarget",
+    "modmatrix21modtarget",
+    "modmatrix22modtarget",
+    "modmatrix23modtarget",
+    "modmatrix24modtarget",
+    "modmatrix25modtarget",
+    "modmatrix26modtarget",
+    "modmatrix27modtarget",
+    "modmatrix28modtarget",
+    "modmatrix29modtarget",
+    "modmatrix30modtarget",
+    "modmatrix31modtarget",
+    "modmatrix32modtarget",
+    "modmatrix1depth",
+    "modmatrix2depth",
+    "modmatrix3depth",
+    "modmatrix4depth",
+    "modmatrix5depth",
+    "modmatrix6depth",
+    "modmatrix7depth",
+    "modmatrix8depth",
+    "modmatrix9depth",
+    "modmatrix10depth",
+    "modmatrix11depth",
+    "modmatrix12depth",
+    "modmatrix13depth",
+    "modmatrix14depth",
+    "modmatrix15depth",
+    "modmatrix16depth",
+    "modmatrix17depth",
+    "modmatrix18depth",
+    "modmatrix19depth",
+    "modmatrix20depth",
+    "modmatrix21depth",
+    "modmatrix22depth",
+    "modmatrix23depth",
+    "modmatrix24depth",
+    "modmatrix25depth",
+    "modmatrix26depth",
+    "modmatrix27depth",
+    "modmatrix28depth",
+    "modmatrix29depth",
+    "modmatrix30depth",
+    "modmatrix31depth",
+    "modmatrix32depth",
+    "ribbonmode",					
+    "ribbonkeyspan",
+    "ribbonoctave",
+    "ribbonquantize",
+    "ribbonmodcontrol",
+    "ribbonglide",
+    "voicedetune",
+    "voicestereowidth",
+    "voicevibratoamount",
+    "voiceanalogfeel",
+    "voicedensity",
+    "voiceglidecurve",
+    "voiceglide",
+    "voiceglidelegato",
+    "voiceglidetime",
+    "voicestereomode",
+    "voicepolyphony",
+    "voicepitchbend",
+    "voicevibratoratesyncoff",
+    "voicevibratoratesyncon",
+    "voicerandomphase",
+    "voicewarmmode",
+    "voicevibratobpm",					
     };
     
     static HashMap nrpnToIndex = null;
@@ -7133,8 +8688,8 @@ box.add(Box.createHorizontalGlue());
     };
         
     // This is a list of each parameter that corresponds to a CC, for all 128 CC values.
-    // We'll use it to parse incoming CC values but not to emit them, so there's no need for
-    // a corresponding hashmap.
+    // We'll use it to maybe parse incoming CC values but not to emit them, so there's 
+    // no need for a corresponding hashmap.
     public static final String[] CC = new String[]
     {
     "--",                           // 0x00         (Bank Select MSB)

@@ -4,9 +4,7 @@
 
 <p><b>Communicating with Edisyn</b><br> 
 
-<!- Set Edisyn's MIDI channel to the same as the synth's MIDI channel.  Set the unit to output USB or 5-pin MIDI DIN depending on how you're connecting it to your computer.  Note that you can send to current patch via USB, but you cannot read or write patches to permanent memory via USB: it must be via 5-pin DIN.  If you're connecting directly via USB, be sure to set Edisyn's incoming and outgoing MIDI Device to "MicroMonsta".  Set MIDI Out Mode to "cc".  
--->
-
+If you're connecting via USB, set Edisyn's incoming and outgoing MIDI devices to HYDRASYNTH KB.  Set Edisyn's MIDI channel to the same as the synth's RX and TX MIDI channels.  You can set the synth's RX MIDI channel to OMNI if you liked.   Set up Parameter RX and TX both to be NRPN.  
 
 <p><b>Current Editor Status</b><br>
 ASM does not have a public sysex spec.  I may yet attempt to reverse engineer this spec, but at present I have not.  This means that this editor cannot request the current patch, write to a patch, read an incoming patch, nor load or save patches.  Obviously this means it cannot provide a Librarian at present.  What it can do is:
@@ -15,7 +13,10 @@ ASM does not have a public sysex spec.  I may yet attempt to reverse engineer th
 <li>It can send (most) individual parameters.
 <p><li>It can read individual parameter changes.
 <p><li>It can (mostly) send an entire patch, albeit slowly, by sending all the individual parameters.  Note that it you cannot change the category, patch name, macro names, nor color this way.
+<p><li>It can load and save patches to isk, but to a proprietary and TEMPORARY sysex format.
 </ul>
+
+
 
 <p><b>Hydrasynth Deluxe Multimode</b><br>
 Edisyn does not yet support multimode, though I intend to ultimately.
@@ -31,6 +32,7 @@ Edisyn does not yet support multimode, though I intend to ultimately.
 <p><li>When you update the Mod Matrix or any Macro Assignments in Edisyn, the Hydrasynth does not update its
 display to reflect this.  You have to page away and come back to see the updates properly displayed.
 <p><li>The first WaveScan wave goes Sin...Harmon23.  The other waves go Off,Silence,Sin...Harmon23.  This means that when you use the Category's distribute procedure to distribute waves, it won't work right for the first wave.
+<p><li>Lacking proper sysex, Edisyn for the moment has a proprietary sysex format for storing patches as files on your disk (obviously not for uploading them to the Hydrasynth).  But at least you can save them now!
 </ul>
 
 <p><b>About the ASM Hydrasynth Manager</b><br>

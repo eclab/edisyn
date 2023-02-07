@@ -3792,16 +3792,16 @@ public class ASMHydrasynth extends Synth
         vbox.add(comp);
         
         /****
-        FIXME
-        	comp = new LabelledDial("Depth " + i, this, "macro" + macro + "panelvalue", color, 0, 1024)
-			{
-			public String map(int value)
-				{
-				int v = value * 8;
-				// dividing 8192 by 3.2 cuts into 2560 pieces
-				return String.format("%4.1f", ((roundEven(v / 3.2) / 10.0) - 128));
-				}
-			};
+             FIXME
+             comp = new LabelledDial("Depth " + i, this, "macro" + macro + "panelvalue", color, 0, 1024)
+             {
+             public String map(int value)
+             {
+             int v = value * 8;
+             // dividing 8192 by 3.2 cuts into 2560 pieces
+             return String.format("%4.1f", ((roundEven(v / 3.2) / 10.0) - 128));
+             }
+             };
         *****/
         
         
@@ -6813,7 +6813,7 @@ public class ASMHydrasynth extends Synth
     "reverbtone",
     "reverbtype",                                       
     "postfxtype",
-    "--",                                                  	// postfxpreset                    /// This isn't a patch parameter
+    "--",                                                       // postfxpreset                    /// This isn't a patch parameter
     "postfxwet",
     "postfxparam1",
     "postfxparam2",
@@ -7529,14 +7529,14 @@ public class ASMHydrasynth extends Synth
     "macro8depth6",
     "macro8depth7",
     "macro8depth8",
-    "--",							// "macro1panelvalue",                    /// This isn't a patch parameter
-    "--",							// "macro2panelvalue",                    /// This isn't a patch parameter
-    "--",							// "macro3panelvalue",                    /// This isn't a patch parameter
-    "--",							// "macro4panelvalue",                    /// This isn't a patch parameter
-    "--",							// "macro5panelvalue",                    /// This isn't a patch parameter
-    "--",							// "macro6panelvalue",                    /// This isn't a patch parameter
-    "--",							// "macro7panelvalue",                    /// This isn't a patch parameter
-    "--",							// "macro8panelvalue",                    /// This isn't a patch parameter
+    "--",                                                       // "macro1panelvalue",                    /// This isn't a patch parameter
+    "--",                                                       // "macro2panelvalue",                    /// This isn't a patch parameter
+    "--",                                                       // "macro3panelvalue",                    /// This isn't a patch parameter
+    "--",                                                       // "macro4panelvalue",                    /// This isn't a patch parameter
+    "--",                                                       // "macro5panelvalue",                    /// This isn't a patch parameter
+    "--",                                                       // "macro6panelvalue",                    /// This isn't a patch parameter
+    "--",                                                       // "macro7panelvalue",                    /// This isn't a patch parameter
+    "--",                                                       // "macro8panelvalue",                    /// This isn't a patch parameter
     "modmatrix1modsource",
     "modmatrix2modsource",
     "modmatrix3modsource",

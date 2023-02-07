@@ -3789,7 +3789,22 @@ public class ASMHydrasynth extends Synth
                 return reviseMacroName(val);
                 }
             };
-        vbox.add(comp);  // doesn't work right :-(
+        vbox.add(comp);
+        
+        /****
+        FIXME
+        	comp = new LabelledDial("Depth " + i, this, "macro" + macro + "panelvalue", color, 0, 1024)
+			{
+			public String map(int value)
+				{
+				int v = value * 8;
+				// dividing 8192 by 3.2 cuts into 2560 pieces
+				return String.format("%4.1f", ((roundEven(v / 3.2) / 10.0) - 128));
+				}
+			};
+        *****/
+        
+        
         hbox.add(vbox);
         
         vbox = new VBox();
@@ -4813,7 +4828,6 @@ public class ASMHydrasynth extends Synth
         char[] name = (model.get("name", "Untitled") + "                ").toCharArray();
         for(int i = 0; i < 16; i++)
             {
-            System.err.println("" + name[i]);
             val = (int)(name[i]);
             vals[pos++] = (byte)(val & 127);
             }
@@ -5445,6 +5459,7 @@ public class ASMHydrasynth extends Synth
             for(int i = 0; i < modeParameters.length; i++)
                 {
                 simplePause(getPauseAfterSendHeaderParameter());
+                //System.err.println(modeParameters[i]);
                 tryToSendMIDI(emitAll(modeParameters[i], STATUS_SENDING_ALL_PARAMETERS));
                 }
             simplePause(MODE_PAUSE);
@@ -5452,6 +5467,7 @@ public class ASMHydrasynth extends Synth
             for(int i = 0; i < typeParameters.length; i++)
                 {
                 simplePause(getPauseAfterSendHeaderParameter());
+                //System.err.println(typeParameters[i]);
                 tryToSendMIDI(emitAll(typeParameters[i], STATUS_SENDING_ALL_PARAMETERS));
                 }
             simplePause(TYPE_PAUSE);
@@ -5459,6 +5475,7 @@ public class ASMHydrasynth extends Synth
             for(int i = 0; i < waveParameters.length; i++)
                 {
                 simplePause(getPauseAfterSendHeaderParameter());
+                //System.err.println(waveParameters[i]);
                 tryToSendMIDI(emitAll(waveParameters[i], STATUS_SENDING_ALL_PARAMETERS));
                 }
             simplePause(WAVE_PAUSE);
@@ -5466,6 +5483,7 @@ public class ASMHydrasynth extends Synth
             for(int i = 0; i < syncParameters.length; i++)
                 {
                 simplePause(getPauseAfterSendHeaderParameter());
+                //System.err.println(syncParameters[i]);
                 tryToSendMIDI(emitAll(syncParameters[i], STATUS_SENDING_ALL_PARAMETERS));
                 }
             simplePause(BPM_SYNC_PAUSE);
@@ -5473,6 +5491,7 @@ public class ASMHydrasynth extends Synth
             for(int i = 0; i < wavescanParameters.length; i++)
                 {
                 simplePause(getPauseAfterSendHeaderParameter());
+                //System.err.println(wavescanParameters[i]);
                 tryToSendMIDI(emitAll(wavescanParameters[i], STATUS_SENDING_ALL_PARAMETERS));
                 }
             simplePause(WAVESCAN_WAVE_PAUSE);
@@ -5480,6 +5499,7 @@ public class ASMHydrasynth extends Synth
             for(int i = 0; i < remainingParameters.length; i++)
                 {
                 simplePause(getPauseAfterSendOneParameter());
+                //System.err.println(remainingParameters[i]);
                 tryToSendMIDI(emitAll(remainingParameters[i], STATUS_SENDING_ALL_PARAMETERS));
                 }
             }
@@ -5724,11 +5744,6 @@ public class ASMHydrasynth extends Synth
     "prefx9param3",
     "prefx9param4",
     "prefx9param5",
-    "prefx10param1",
-    "prefx10param2",
-    "prefx10param3",
-    "prefx10param4",
-    "prefx10param5",
     "prefxsidechain",
     "delaywet",
     "delayfeedback",
@@ -5792,11 +5807,6 @@ public class ASMHydrasynth extends Synth
     "postfx9param3",
     "postfx9param4",
     "postfx9param5",
-    "postfx10param1",
-    "postfx10param2",
-    "postfx10param3",
-    "postfx10param4",
-    "postfx10param5",
     "postfxsidechain",
     "lfo1level",
     "lfo1trigsync",
@@ -6491,14 +6501,6 @@ public class ASMHydrasynth extends Synth
     "macro8depth6",
     "macro8depth7",
     "macro8depth8",
-    "macro1panelvalue",
-    "macro2panelvalue",
-    "macro3panelvalue",
-    "macro4panelvalue",
-    "macro5panelvalue",
-    "macro6panelvalue",
-    "macro7panelvalue",
-    "macro8panelvalue",
     "modmatrix1modsource",
     "modmatrix2modsource",
     "modmatrix3modsource",
@@ -6628,7 +6630,7 @@ public class ASMHydrasynth extends Synth
     // Missing parameters that can't be changed in real-time:
     // name, category, color
 
-    "--",                                                       // "allosccent",                                       /// This isn't a real parameter
+    "--",                                                       // "allosccent",                    /// This isn't a patch parameter
     "osc1mode",                                 
     "osc2mode",                                 
     "--",                                                       // "osc3mode",                     /// This parameter shouldn't exist (osc3 doesn't have a mode)
@@ -6678,7 +6680,7 @@ public class ASMHydrasynth extends Synth
     "osc3type",                                 
     "osc3cent",
     "osc3keytrack",
-    "mutant1mode",                                                        // These are all called "mutator" in the NRPN docs but "mutant" in the manual and on the machine
+    "mutant1mode",                                          // These are all called "mutator" in the NRPN docs but "mutant" in the manual and on the machine
     "mutant2mode",                                      
     "mutant3mode",                                      
     "mutant4mode",                                      
@@ -6746,7 +6748,7 @@ public class ASMHydrasynth extends Synth
     "ringmoddepth",
     "ringmodsource1",
     "ringmodsource2",
-    "--",                                                       // "mixersolo",                              /// This isn't a real parameter
+    "--",                                                       // "mixersolo",                    /// This isn't a patch parameter
     "mixerosc1vol",
     "mixerosc1pan",
     "mixerosc1filterratio",
@@ -6774,7 +6776,7 @@ public class ASMHydrasynth extends Synth
     "filter1type",                                      
     "filter1velenv",
     "filter1env1amount",
-    "--",                                                                       //"filter2positionofdrive",                 // This parameter does not exist
+    "--",                                                    //"filter2positionofdrive",                 // This parameter does not exist
     "filter2cutoff",
     "filter2resonance",
     "filter2morph",
@@ -6787,7 +6789,7 @@ public class ASMHydrasynth extends Synth
     "ampvelenv",
     "amplfo2amount",
     "prefxtype",                                        
-    "--",                                                                               // "prefxpreset",
+    "--",                                                      // "prefxpreset",                    /// This isn't a patch parameter
     "prefxwet",
     "prefxparam1",
     "prefxparam2",
@@ -6811,7 +6813,7 @@ public class ASMHydrasynth extends Synth
     "reverbtone",
     "reverbtype",                                       
     "postfxtype",
-    "--",                                                               // postfxpreset
+    "--",                                                  	// postfxpreset                    /// This isn't a patch parameter
     "postfxwet",
     "postfxparam1",
     "postfxparam2",
@@ -7527,14 +7529,14 @@ public class ASMHydrasynth extends Synth
     "macro8depth6",
     "macro8depth7",
     "macro8depth8",
-    "macro1panelvalue",
-    "macro2panelvalue",
-    "macro3panelvalue",
-    "macro4panelvalue",
-    "macro5panelvalue",
-    "macro6panelvalue",
-    "macro7panelvalue",
-    "macro8panelvalue",
+    "--",							// "macro1panelvalue",                    /// This isn't a patch parameter
+    "--",							// "macro2panelvalue",                    /// This isn't a patch parameter
+    "--",							// "macro3panelvalue",                    /// This isn't a patch parameter
+    "--",							// "macro4panelvalue",                    /// This isn't a patch parameter
+    "--",							// "macro5panelvalue",                    /// This isn't a patch parameter
+    "--",							// "macro6panelvalue",                    /// This isn't a patch parameter
+    "--",							// "macro7panelvalue",                    /// This isn't a patch parameter
+    "--",							// "macro8panelvalue",                    /// This isn't a patch parameter
     "modmatrix1modsource",
     "modmatrix2modsource",
     "modmatrix3modsource",

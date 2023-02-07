@@ -10,7 +10,7 @@ public class ASMHydrasynthRec extends Recognize
     {
     public static boolean recognize(byte[] data)
         {
-        boolean val = (data.length == 2293 &&
+        boolean val = (data.length == 2257 &&
             data[0] == (byte)0xF0 &&
             data[1] == (byte)0x7D &&
             data[2] == (byte)'E' &&

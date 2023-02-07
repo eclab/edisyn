@@ -91,12 +91,12 @@ public class ASMHydrasynth extends Synth
         
     public static ImageIcon[] waves = new ImageIcon[219];
     static
-    	{
-    	for(int i = 0; i < waves.length; i++)
-    		{
-    		waves[i] = new ImageIcon(ASMHydrasynth.class.getResource("waves/" + i + ".png"));
-    		}
-    	}
+        {
+        for(int i = 0; i < waves.length; i++)
+            {
+            waves[i] = new ImageIcon(ASMHydrasynth.class.getResource("waves/" + i + ".png"));
+            }
+        }
         
     public static final int[] DELAY_TIME_PATTERN_1 = { 0, 0, 0, 1, 2, 2, 3, 3, 5, 6, 6, 7, 8, 8, 9, 9 };
     public static final int[] DELAY_TIME_PATTERN_2 = { 0, 0, 2, 3, 5, 6, 8, 9 };
@@ -986,61 +986,61 @@ public class ASMHydrasynth extends Synth
 
 // This is an array of preset values in the order   [type][preset group][value in the format MSB * 128 + LSB]
 // The first values are FX TYPE and FX PRESET, the remainder are the five PRESET VALUES
-	public int[][][] FX_PRESET_VALUES =   
-{
-{ 
-},
-{
-{0x00 * 128 + 0x08, 0x00 * 128 + 0x00, 0x10 * 128 + 0x18, 0x0E * 128 + 0x00, 0x0B * 128 + 0x20, 0x04 * 128 + 0x00, 0x00 * 128 + 0x08, 0x20 * 128 + 0x00},
-{0x00 * 128 + 0x08, 0x00 * 128 + 0x08, 0x14 * 128 + 0x10, 0x11 * 128 + 0x40, 0x0B * 128 + 0x20, 0x04 * 128 + 0x00, 0x00 * 128 + 0x08, 0x20 * 128 + 0x00},
-{0x00 * 128 + 0x08, 0x00 * 128 + 0x10, 0x21 * 128 + 0x40, 0x09 * 128 + 0x00, 0x0B * 128 + 0x20, 0x04 * 128 + 0x00, 0x00 * 128 + 0x08, 0x20 * 128 + 0x00},
-},
-{
-{0x00 * 128 + 0x10, 0x00 * 128 + 0x00, 0x07 * 128 + 0x58, 0x36 * 128 + 0x40, 0x00 * 128 + 0x00, 0x06 * 128 + 0x68, 0x00 * 128 + 0x08, 0x20 * 128 + 0x00},
-{0x00 * 128 + 0x10, 0x00 * 128 + 0x08, 0x10 * 128 + 0x18, 0x06 * 128 + 0x40, 0x00 * 128 + 0x00, 0x07 * 128 + 0x30, 0x00 * 128 + 0x08, 0x20 * 128 + 0x00},
-{0x00 * 128 + 0x10, 0x00 * 128 + 0x10, 0x07 * 128 + 0x58, 0x1E * 128 + 0x00, 0x00 * 128 + 0x00, 0x00 * 128 + 0x48, 0x00 * 128 + 0x08, 0x20 * 128 + 0x00},
-},
-{
-{0x00 * 128 + 0x18, 0x00 * 128 + 0x00, 0x1A * 128 + 0x18, 0x23 * 128 + 0x20, 0x01 * 128 + 0x50, 0x02 * 128 + 0x18, 0x04 * 128 + 0x30, 0x20 * 128 + 0x00},
-{0x00 * 128 + 0x18, 0x00 * 128 + 0x08, 0x0C * 128 + 0x18, 0x1E * 128 + 0x60, 0x01 * 128 + 0x58, 0x01 * 128 + 0x69, 0x04 * 128 + 0x00, 0x20 * 128 + 0x00},
-{0x00 * 128 + 0x18, 0x00 * 128 + 0x10, 0x1A * 128 + 0x10, 0x1C * 128 + 0x60, 0x04 * 128 + 0x30, 0x04 * 128 + 0x30, 0x04 * 128 + 0x20, 0x20 * 128 + 0x00},
-},
-{
-{0x00 * 128 + 0x20, 0x00 * 128 + 0x00, 0x10 * 128 + 0x18, 0x25 * 128 + 0x00, 0x06 * 128 + 0x78, 0x04 * 128 + 0x50, 0x0B * 128 + 0x20, 0x20 * 128 + 0x00},
-{0x00 * 128 + 0x20, 0x00 * 128 + 0x08, 0x10 * 128 + 0x18, 0x36 * 128 + 0x00, 0x06 * 128 + 0x78, 0x04 * 128 + 0x50, 0x00 * 128 + 0x00, 0x20 * 128 + 0x00},
-{0x00 * 128 + 0x20, 0x00 * 128 + 0x10, 0x05 * 128 + 0x58, 0x30 * 128 + 0x00, 0x06 * 128 + 0x00, 0x04 * 128 + 0x00, 0x00 * 128 + 0x00, 0x20 * 128 + 0x00},
-},
-{
-{0x00 * 128 + 0x28, 0x00 * 128 + 0x00, 0x13 * 128 + 0x58, 0x11 * 128 + 0x28, 0x00 * 128 + 0x18, 0x04 * 128 + 0x18, 0x00 * 128 + 0x40, 0x20 * 128 + 0x00},
-{0x00 * 128 + 0x28, 0x00 * 128 + 0x08, 0x13 * 128 + 0x58, 0x0A * 128 + 0x40, 0x00 * 128 + 0x20, 0x04 * 128 + 0x18, 0x00 * 128 + 0x28, 0x20 * 128 + 0x00},
-},
-{
-{0x00 * 128 + 0x30, 0x00 * 128 + 0x00, 0x39 * 128 + 0x18, 0x18 * 128 + 0x40, 0x00 * 128 + 0x00, 0x0D * 128 + 0x58, 0x00 * 128 + 0x00, 0x20 * 128 + 0x00},
-{0x00 * 128 + 0x30, 0x00 * 128 + 0x08, 0x39 * 128 + 0x18, 0x1A * 128 + 0x00, 0x00 * 128 + 0x00, 0x0D * 128 + 0x58, 0x00 * 128 + 0x18, 0x20 * 128 + 0x00},
-{0x00 * 128 + 0x30, 0x00 * 128 + 0x10, 0x30 * 128 + 0x58, 0x32 * 128 + 0x00, 0x00 * 128 + 0x00, 0x05 * 128 + 0x50, 0x01 * 128 + 0x40, 0x20 * 128 + 0x00},
-},
-{
-{0x00 * 128 + 0x38, 0x00 * 128 + 0x00, 0x26 * 128 + 0x00, 0x26 * 128 + 0x00, 0x16 * 128 + 0x40, 0x0F * 128 + 0x50, 0x0F * 128 + 0x50, 0x20 * 128 + 0x00},
-{0x00 * 128 + 0x38, 0x00 * 128 + 0x08, 0x29 * 128 + 0x20, 0x23 * 128 + 0x50, 0x15 * 128 + 0x20, 0x0B * 128 + 0x70, 0x0F * 128 + 0x50, 0x20 * 128 + 0x00},
-{0x00 * 128 + 0x38, 0x00 * 128 + 0x10, 0x1E * 128 + 0x20, 0x26 * 128 + 0x38, 0x17 * 128 + 0x10, 0x1C * 128 + 0x10, 0x0F * 128 + 0x50, 0x20 * 128 + 0x00},
-{0x00 * 128 + 0x38, 0x00 * 128 + 0x18, 0x26 * 128 + 0x00, 0x1B * 128 + 0x50, 0x17 * 128 + 0x10, 0x0F * 128 + 0x50, 0x13 * 128 + 0x48, 0x20 * 128 + 0x00},
-{0x00 * 128 + 0x38, 0x00 * 128 + 0x20, 0x29 * 128 + 0x38, 0x29 * 128 + 0x38, 0x16 * 128 + 0x40, 0x0F * 128 + 0x50, 0x1E * 128 + 0x28, 0x20 * 128 + 0x00},
-{0x00 * 128 + 0x38, 0x00 * 128 + 0x28, 0x0A * 128 + 0x10, 0x00 * 128 + 0x00, 0x19 * 128 + 0x50, 0x1C * 128 + 0x60, 0x0F * 128 + 0x50, 0x20 * 128 + 0x00},
-{0x00 * 128 + 0x38, 0x00 * 128 + 0x30, 0x27 * 128 + 0x70, 0x1F * 128 + 0x28, 0x17 * 128 + 0x10, 0x18 * 128 + 0x00, 0x1D * 128 + 0x58, 0x20 * 128 + 0x00},
-},
-{
-{0x00 * 128 + 0x40, 0x00 * 128 + 0x00, 0x3F * 128 + 0x60, 0x20 * 128 + 0x00, 0x00 * 128 + 0x08, 0x11 * 128 + 0x68, 0x08 * 128 + 0x00, 0x20 * 128 + 0x00},
-{0x00 * 128 + 0x40, 0x00 * 128 + 0x08, 0x3F * 128 + 0x60, 0x20 * 128 + 0x00, 0x00 * 128 + 0x08, 0x11 * 128 + 0x68, 0x08 * 128 + 0x00, 0x20 * 128 + 0x00},
-{0x00 * 128 + 0x40, 0x00 * 128 + 0x10, 0x3F * 128 + 0x60, 0x20 * 128 + 0x00, 0x00 * 128 + 0x08, 0x11 * 128 + 0x68, 0x08 * 128 + 0x00, 0x20 * 128 + 0x00},
-{0x00 * 128 + 0x40, 0x00 * 128 + 0x18, 0x3F * 128 + 0x60, 0x20 * 128 + 0x00, 0x00 * 128 + 0x08, 0x11 * 128 + 0x68, 0x08 * 128 + 0x00, 0x20 * 128 + 0x00},
-{0x00 * 128 + 0x40, 0x00 * 128 + 0x20, 0x3F * 128 + 0x60, 0x20 * 128 + 0x00, 0x00 * 128 + 0x08, 0x11 * 128 + 0x68, 0x08 * 128 + 0x00, 0x20 * 128 + 0x00},
-},
-{
-{0x00 * 128 + 0x48, 0x00 * 128 + 0x00, 0x1D * 128 + 0x00, 0x12 * 128 + 0x60, 0x00 * 128 + 0x00, 0x08 * 128 + 0x00, 0x11 * 128 + 0x58, 0x20 * 128 + 0x00},
-{0x00 * 128 + 0x48, 0x00 * 128 + 0x08, 0x1F * 128 + 0x40, 0x33 * 128 + 0x30, 0x01 * 128 + 0x40, 0x00 * 128 + 0x68, 0x13 * 128 + 0x50, 0x20 * 128 + 0x00},
-{0x00 * 128 + 0x48, 0x00 * 128 + 0x10, 0x18 * 128 + 0x58, 0x28 * 128 + 0x50, 0x00 * 128 + 0x00, 0x00 * 128 + 0x00, 0x0F * 128 + 0x70, 0x20 * 128 + 0x00}		
-},
-};
+    public int[][][] FX_PRESET_VALUES =   
+        {
+            { 
+            },
+            {
+            {0x00 * 128 + 0x08, 0x00 * 128 + 0x00, 0x10 * 128 + 0x18, 0x0E * 128 + 0x00, 0x0B * 128 + 0x20, 0x04 * 128 + 0x00, 0x00 * 128 + 0x08, 0x20 * 128 + 0x00},
+            {0x00 * 128 + 0x08, 0x00 * 128 + 0x08, 0x14 * 128 + 0x10, 0x11 * 128 + 0x40, 0x0B * 128 + 0x20, 0x04 * 128 + 0x00, 0x00 * 128 + 0x08, 0x20 * 128 + 0x00},
+            {0x00 * 128 + 0x08, 0x00 * 128 + 0x10, 0x21 * 128 + 0x40, 0x09 * 128 + 0x00, 0x0B * 128 + 0x20, 0x04 * 128 + 0x00, 0x00 * 128 + 0x08, 0x20 * 128 + 0x00},
+            },
+            {
+            {0x00 * 128 + 0x10, 0x00 * 128 + 0x00, 0x07 * 128 + 0x58, 0x36 * 128 + 0x40, 0x00 * 128 + 0x00, 0x06 * 128 + 0x68, 0x00 * 128 + 0x08, 0x20 * 128 + 0x00},
+            {0x00 * 128 + 0x10, 0x00 * 128 + 0x08, 0x10 * 128 + 0x18, 0x06 * 128 + 0x40, 0x00 * 128 + 0x00, 0x07 * 128 + 0x30, 0x00 * 128 + 0x08, 0x20 * 128 + 0x00},
+            {0x00 * 128 + 0x10, 0x00 * 128 + 0x10, 0x07 * 128 + 0x58, 0x1E * 128 + 0x00, 0x00 * 128 + 0x00, 0x00 * 128 + 0x48, 0x00 * 128 + 0x08, 0x20 * 128 + 0x00},
+            },
+            {
+            {0x00 * 128 + 0x18, 0x00 * 128 + 0x00, 0x1A * 128 + 0x18, 0x23 * 128 + 0x20, 0x01 * 128 + 0x50, 0x02 * 128 + 0x18, 0x04 * 128 + 0x30, 0x20 * 128 + 0x00},
+            {0x00 * 128 + 0x18, 0x00 * 128 + 0x08, 0x0C * 128 + 0x18, 0x1E * 128 + 0x60, 0x01 * 128 + 0x58, 0x01 * 128 + 0x69, 0x04 * 128 + 0x00, 0x20 * 128 + 0x00},
+            {0x00 * 128 + 0x18, 0x00 * 128 + 0x10, 0x1A * 128 + 0x10, 0x1C * 128 + 0x60, 0x04 * 128 + 0x30, 0x04 * 128 + 0x30, 0x04 * 128 + 0x20, 0x20 * 128 + 0x00},
+            },
+            {
+            {0x00 * 128 + 0x20, 0x00 * 128 + 0x00, 0x10 * 128 + 0x18, 0x25 * 128 + 0x00, 0x06 * 128 + 0x78, 0x04 * 128 + 0x50, 0x0B * 128 + 0x20, 0x20 * 128 + 0x00},
+            {0x00 * 128 + 0x20, 0x00 * 128 + 0x08, 0x10 * 128 + 0x18, 0x36 * 128 + 0x00, 0x06 * 128 + 0x78, 0x04 * 128 + 0x50, 0x00 * 128 + 0x00, 0x20 * 128 + 0x00},
+            {0x00 * 128 + 0x20, 0x00 * 128 + 0x10, 0x05 * 128 + 0x58, 0x30 * 128 + 0x00, 0x06 * 128 + 0x00, 0x04 * 128 + 0x00, 0x00 * 128 + 0x00, 0x20 * 128 + 0x00},
+            },
+            {
+            {0x00 * 128 + 0x28, 0x00 * 128 + 0x00, 0x13 * 128 + 0x58, 0x11 * 128 + 0x28, 0x00 * 128 + 0x18, 0x04 * 128 + 0x18, 0x00 * 128 + 0x40, 0x20 * 128 + 0x00},
+            {0x00 * 128 + 0x28, 0x00 * 128 + 0x08, 0x13 * 128 + 0x58, 0x0A * 128 + 0x40, 0x00 * 128 + 0x20, 0x04 * 128 + 0x18, 0x00 * 128 + 0x28, 0x20 * 128 + 0x00},
+            },
+            {
+            {0x00 * 128 + 0x30, 0x00 * 128 + 0x00, 0x39 * 128 + 0x18, 0x18 * 128 + 0x40, 0x00 * 128 + 0x00, 0x0D * 128 + 0x58, 0x00 * 128 + 0x00, 0x20 * 128 + 0x00},
+            {0x00 * 128 + 0x30, 0x00 * 128 + 0x08, 0x39 * 128 + 0x18, 0x1A * 128 + 0x00, 0x00 * 128 + 0x00, 0x0D * 128 + 0x58, 0x00 * 128 + 0x18, 0x20 * 128 + 0x00},
+            {0x00 * 128 + 0x30, 0x00 * 128 + 0x10, 0x30 * 128 + 0x58, 0x32 * 128 + 0x00, 0x00 * 128 + 0x00, 0x05 * 128 + 0x50, 0x01 * 128 + 0x40, 0x20 * 128 + 0x00},
+            },
+            {
+            {0x00 * 128 + 0x38, 0x00 * 128 + 0x00, 0x26 * 128 + 0x00, 0x26 * 128 + 0x00, 0x16 * 128 + 0x40, 0x0F * 128 + 0x50, 0x0F * 128 + 0x50, 0x20 * 128 + 0x00},
+            {0x00 * 128 + 0x38, 0x00 * 128 + 0x08, 0x29 * 128 + 0x20, 0x23 * 128 + 0x50, 0x15 * 128 + 0x20, 0x0B * 128 + 0x70, 0x0F * 128 + 0x50, 0x20 * 128 + 0x00},
+            {0x00 * 128 + 0x38, 0x00 * 128 + 0x10, 0x1E * 128 + 0x20, 0x26 * 128 + 0x38, 0x17 * 128 + 0x10, 0x1C * 128 + 0x10, 0x0F * 128 + 0x50, 0x20 * 128 + 0x00},
+            {0x00 * 128 + 0x38, 0x00 * 128 + 0x18, 0x26 * 128 + 0x00, 0x1B * 128 + 0x50, 0x17 * 128 + 0x10, 0x0F * 128 + 0x50, 0x13 * 128 + 0x48, 0x20 * 128 + 0x00},
+            {0x00 * 128 + 0x38, 0x00 * 128 + 0x20, 0x29 * 128 + 0x38, 0x29 * 128 + 0x38, 0x16 * 128 + 0x40, 0x0F * 128 + 0x50, 0x1E * 128 + 0x28, 0x20 * 128 + 0x00},
+            {0x00 * 128 + 0x38, 0x00 * 128 + 0x28, 0x0A * 128 + 0x10, 0x00 * 128 + 0x00, 0x19 * 128 + 0x50, 0x1C * 128 + 0x60, 0x0F * 128 + 0x50, 0x20 * 128 + 0x00},
+            {0x00 * 128 + 0x38, 0x00 * 128 + 0x30, 0x27 * 128 + 0x70, 0x1F * 128 + 0x28, 0x17 * 128 + 0x10, 0x18 * 128 + 0x00, 0x1D * 128 + 0x58, 0x20 * 128 + 0x00},
+            },
+            {
+            {0x00 * 128 + 0x40, 0x00 * 128 + 0x00, 0x3F * 128 + 0x60, 0x20 * 128 + 0x00, 0x00 * 128 + 0x08, 0x11 * 128 + 0x68, 0x08 * 128 + 0x00, 0x20 * 128 + 0x00},
+            {0x00 * 128 + 0x40, 0x00 * 128 + 0x08, 0x3F * 128 + 0x60, 0x20 * 128 + 0x00, 0x00 * 128 + 0x08, 0x11 * 128 + 0x68, 0x08 * 128 + 0x00, 0x20 * 128 + 0x00},
+            {0x00 * 128 + 0x40, 0x00 * 128 + 0x10, 0x3F * 128 + 0x60, 0x20 * 128 + 0x00, 0x00 * 128 + 0x08, 0x11 * 128 + 0x68, 0x08 * 128 + 0x00, 0x20 * 128 + 0x00},
+            {0x00 * 128 + 0x40, 0x00 * 128 + 0x18, 0x3F * 128 + 0x60, 0x20 * 128 + 0x00, 0x00 * 128 + 0x08, 0x11 * 128 + 0x68, 0x08 * 128 + 0x00, 0x20 * 128 + 0x00},
+            {0x00 * 128 + 0x40, 0x00 * 128 + 0x20, 0x3F * 128 + 0x60, 0x20 * 128 + 0x00, 0x00 * 128 + 0x08, 0x11 * 128 + 0x68, 0x08 * 128 + 0x00, 0x20 * 128 + 0x00},
+            },
+            {
+            {0x00 * 128 + 0x48, 0x00 * 128 + 0x00, 0x1D * 128 + 0x00, 0x12 * 128 + 0x60, 0x00 * 128 + 0x00, 0x08 * 128 + 0x00, 0x11 * 128 + 0x58, 0x20 * 128 + 0x00},
+            {0x00 * 128 + 0x48, 0x00 * 128 + 0x08, 0x1F * 128 + 0x40, 0x33 * 128 + 0x30, 0x01 * 128 + 0x40, 0x00 * 128 + 0x68, 0x13 * 128 + 0x50, 0x20 * 128 + 0x00},
+            {0x00 * 128 + 0x48, 0x00 * 128 + 0x10, 0x18 * 128 + 0x58, 0x28 * 128 + 0x50, 0x00 * 128 + 0x00, 0x00 * 128 + 0x00, 0x0F * 128 + 0x70, 0x20 * 128 + 0x00}                
+            },
+        };
 
     // A close mapping of val (0...1024) to LFO rate values (0.02 ... 150.00 Hz).
     // The LFO rate appears to be nearly a perfect exponential increase, except
@@ -1065,10 +1065,10 @@ public class ASMHydrasynth extends Synth
             nrpnToIndex = new HashMap();
             for(int i = 0; i < nrpn.length; i++)
                 {
-                if (nrpnToIndex.get(nrpn[i]) == null)	// it's not already there; we want the first one
-                	{
-	                nrpnToIndex.put(nrpn[i], Integer.valueOf(i));
-	                }
+                if (nrpnToIndex.get(nrpn[i]) == null)   // it's not already there; we want the first one
+                    {
+                    nrpnToIndex.put(nrpn[i], Integer.valueOf(i));
+                    }
                 }
 
             MOD_DESTINATION_NRPN_VALUES_TO_INDEX = new HashMap();
@@ -1095,23 +1095,23 @@ public class ASMHydrasynth extends Synth
         hbox.addLast(addVibrato(Style.COLOR_C()));
         vbox.add(hbox);
 
-		vbox.add(addOscillator(1, Style.COLOR_A()));
-		vbox.add(addOscillator(2, Style.COLOR_A()));
-		
+        vbox.add(addOscillator(1, Style.COLOR_A()));
+        vbox.add(addOscillator(2, Style.COLOR_A()));
+                
         hbox = new HBox();
         hbox.add(addOscillator(3, Style.COLOR_A()));
         hbox.add(addRingMod(Style.COLOR_B()));
         hbox.add(addNoise(Style.COLOR_B()));
         hbox.addLast(addGlide(Style.COLOR_C()));
-       	vbox.add(hbox);
-		
+        vbox.add(hbox);
+                
         vbox.add(addMixer(Style.COLOR_B()));
         
         hbox = new HBox();
         hbox.add(addRibbon(Style.COLOR_C()));
         hbox.addLast(addArp(Style.COLOR_C()));
-		vbox.add(hbox);
-		
+        vbox.add(hbox);
+                
         soundPanel.add(vbox, BorderLayout.CENTER);
         addTab("Osc", soundPanel);
                 
@@ -1363,8 +1363,8 @@ public class ASMHydrasynth extends Synth
     public JComponent addOscillator(int osc, Color color)
         {
         Category category = new Category(this, "Oscillator " + osc, color);
-		category.makePasteable("osc");
-		category.makeDistributable("osc");
+        category.makePasteable("osc");
+        category.makeDistributable("osc");
 
         JComponent comp;
         String[] params;
@@ -1388,26 +1388,26 @@ public class ASMHydrasynth extends Synth
         comp = new LabelledDial("Wave", this, "osc" + osc + "type", color, 0, OSC_WAVES.length - 1, -1);
         hbox.add(comp);
 
-		vbox = new VBox();
+        vbox = new VBox();
         IconDisplay icons = new IconDisplay(null, waves, this, "osc" + osc + "type", 110, 52)
-        	{
-	public Dimension getPreferredSize()
-		{
-		Dimension d = super.getPreferredSize();
-		return new Dimension(d.width, d.height+2);		// compensate for border
-		}
-        	};
+            {
+            public Dimension getPreferredSize()
+                {
+                Dimension d = super.getPreferredSize();
+                return new Dimension(d.width, d.height+2);              // compensate for border
+                }
+            };
         icons.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 
 
-		Box box = new Box(BoxLayout.Y_AXIS);
-box.add(Box.createHorizontalGlue());
-box.add(icons);
-box.add(Box.createHorizontalGlue());
-		
-		hbox.add(Strut.makeHorizontalStrut(8));
-		hbox.add(box);
-		hbox.add(Strut.makeHorizontalStrut(8));
+        Box box = new Box(BoxLayout.Y_AXIS);
+        box.add(Box.createHorizontalGlue());
+        box.add(icons);
+        box.add(Box.createHorizontalGlue());
+                
+        hbox.add(Strut.makeHorizontalStrut(8));
+        hbox.add(box);
+        hbox.add(Strut.makeHorizontalStrut(8));
 
         comp = new LabelledDial("Semitones", this, "osc" + osc + "semi", color, -36, 36);
         hbox.add(comp);
@@ -1680,7 +1680,7 @@ box.add(Box.createHorizontalGlue());
     public JComponent addMixer(Color color)
         {
         Category category = new Category(this, "Mixer", color);
-		category.makePasteable("mixer");
+        category.makePasteable("mixer");
 
         JComponent comp;
         String[] params;
@@ -1918,7 +1918,7 @@ box.add(Box.createHorizontalGlue());
     public JComponent addMutant(int mut, Color color)
         {
         Category category = new Category(this, "Mutant " + mut, color);
-		category.makePasteable("mutant");
+        category.makePasteable("mutant");
 
         JComponent comp;
         String[] params;
@@ -2161,7 +2161,7 @@ box.add(Box.createHorizontalGlue());
     public JComponent addFilter(int filter, Color color)
         {
         Category category = new Category(this, "Filter " + filter, color);
-		category.makePasteable("filter");
+        category.makePasteable("filter");
 
         JComponent comp;
         String[] params;
@@ -2882,14 +2882,14 @@ box.add(Box.createHorizontalGlue());
             {
             public void perform(int i)
                 {
-				int type = model.get((pre ? "pre" : "post") + "fxtype");
-				if (type != 0 && type < 10)		// just in case
-					{
-					for(int j = 0; j < 5; j++)
-						{
-						parseNRPN((pre ? "pre" : "post") + "fxparam" + (j + 1), FX_PRESET_VALUES[type][i][j + 2]);
-						}
-					}
+                int type = model.get((pre ? "pre" : "post") + "fxtype");
+                if (type != 0 && type < 10)             // just in case
+                    {
+                    for(int j = 0; j < 5; j++)
+                        {
+                        parseNRPN((pre ? "pre" : "post") + "fxparam" + (j + 1), FX_PRESET_VALUES[type][i][j + 2]);
+                        }
+                    }
                 }
             };
 
@@ -3144,7 +3144,7 @@ box.add(Box.createHorizontalGlue());
     public JComponent addLFO(int lfo, Color color)
         {
         Category category = new Category(this, "LFO " + lfo + (lfo == 1 ? " (Filter)" : (lfo == 2 ? " (Amplifier)" : "")), color);
-		category.makePasteable("lfo");
+        category.makePasteable("lfo");
 
         JComponent comp;
         String[] params;
@@ -3290,8 +3290,8 @@ box.add(Box.createHorizontalGlue());
     public JComponent addLFOSteps(int lfo, Color color)
         {
         Category category = new Category(this, "LFO " + lfo + " Steps", color);
-		category.makePasteable("lfo");
-		category.makeDistributable("lfo");
+        category.makePasteable("lfo");
+        category.makeDistributable("lfo");
 
         JComponent comp;
         String[] params;
@@ -3387,8 +3387,8 @@ box.add(Box.createHorizontalGlue());
     public JComponent addEnvelope(int env, Color color)
         {
         Category category = new Category(this, "Envelope " + env + (env == 1 ? " (Filter)" : (env == 2 ? " (Amplifier)" : "")), color);
-		category.makePasteable("env");
-		category.makeDistributable("env");
+        category.makePasteable("env");
+        category.makeDistributable("env");
 
         JComponent comp;
         String[] params;
@@ -3672,14 +3672,14 @@ box.add(Box.createHorizontalGlue());
             new double[] { 0.0, 0.1666666 / 127, 0.1666666 / 1024, 0.1666666 / 1024, 0.1666666 / 1024, 0.1666666, 0.1666666 / 1024 },
             new double[] { 0.0, 0.0, 1.0, 1.0, 1.0 / 1024, 1.0 / 1024, 0.0 })
             {
-			public double getControlValue(double x1, double x2, double y1, double y2, String key, int value)
-				{
-				//// NOTE: An apparent Hydrasynth bug mislabels EXP values as LOG for Attack and vice versa.  
-				//// I do not know if this was intentional or a misunderstanding of exponential dropoff.
-				//// However the control values should be identical for attack, decay, and release.
+            public double getControlValue(double x1, double x2, double y1, double y2, String key, int value)
+                {
+                //// NOTE: An apparent Hydrasynth bug mislabels EXP values as LOG for Attack and vice versa.  
+                //// I do not know if this was intentional or a misunderstanding of exponential dropoff.
+                //// However the control values should be identical for attack, decay, and release.
 
-				return (value - 64) / 64.0;
-				}
+                return (value - 64) / 64.0;
+                }
             };
         disp.setCurveKeys(new String[] { null, null, "env" + env + "atkcurve", null, "env" + env + "deccurve", null, "env" + env + "relcurve" });
         bpmOff.addLast(disp);
@@ -3774,8 +3774,8 @@ box.add(Box.createHorizontalGlue());
     public JComponent addMacro(int macro, Color color)
         {
         Category category = new Category(this, "Macro " + macro, color);
-		category.makePasteable("macro");
-		category.makeDistributable("macro");
+        category.makePasteable("macro");
+        category.makeDistributable("macro");
 
         JComponent comp;
         String[] params;
@@ -3935,7 +3935,7 @@ box.add(Box.createHorizontalGlue());
     public JComponent addMatrix(Color color)
         {
         Category category = new Category(this, "Mod Matrix", color);
-		category.makeDistributable("modmatrix");
+        category.makeDistributable("modmatrix");
 
         JComponent comp;
         String[] params;
@@ -3977,10 +3977,10 @@ box.add(Box.createHorizontalGlue());
         return category;
         }
 
-	//protected void doSave() { showSimpleMessage("Cannot Save", "This Patch Editor cannot save to a file at present."); }
-	//protected void doSaveAs() { showSimpleMessage("Cannot Save", "This Patch Editor cannot save to a file at present."); }
-	//protected boolean doOpen(boolean merge) { showSimpleMessage("Cannot Open", "This Patch Editor cannot open a file at present."); return false; }
-	
+    //protected void doSave() { showSimpleMessage("Cannot Save", "This Patch Editor cannot save to a file at present."); }
+    //protected void doSaveAs() { showSimpleMessage("Cannot Save", "This Patch Editor cannot save to a file at present."); }
+    //protected boolean doOpen(boolean merge) { showSimpleMessage("Cannot Open", "This Patch Editor cannot open a file at present."); return false; }
+        
     public JFrame sprout()
         {
         JFrame frame = super.sprout();
@@ -4115,20 +4115,20 @@ box.add(Box.createHorizontalGlue());
         return false;
         }
 
-	public int getPauseAfterSendHeaderParameter()
-		{
-		return 0;
-		}
+    public int getPauseAfterSendHeaderParameter()
+        {
+        return 0;
+        }
 
-	public int getPauseAfterSendOneParameter()
-		{
-		return 0;
-		}
+    public int getPauseAfterSendOneParameter()
+        {
+        return 0;
+        }
 
-	public int getPauseAfterSendAllParameters()
-		{
-		return 0;
-		}
+    public int getPauseAfterSendAllParameters()
+        {
+        return 0;
+        }
 
     // A small syntatic shortening function for emitAll(...) to return the parameter value.
     int p(String key)
@@ -4153,9 +4153,9 @@ box.add(Box.createHorizontalGlue());
         
         // There is no NRPN for these items
         if (key.equals("color") || key.equals("category") || (key.startsWith("macro") && key.endsWith("name")) || key.equals("name"))
-        	{
-        	return new Object[0];
-        	}
+            {
+            return new Object[0];
+            }
                         
         int p = p(key);
         int v = 0;
@@ -4425,9 +4425,9 @@ box.add(Box.createHorizontalGlue());
         else if (key.startsWith("mix"))
             {
             if (!key.equals("mixerfilterrouting"))
-            	{
-	            val = val * 8;
-	            }
+                {
+                val = val * 8;
+                }
             }
         else if (key.startsWith("filter"))
             {
@@ -4747,16 +4747,16 @@ box.add(Box.createHorizontalGlue());
         // load all the data, including the name
 
         byte[] vals = new byte[
-        	modeParameters.length * 2 + 
-        	typeParameters.length * 2 + 
-        	waveParameters.length * 2 + 
-        	syncParameters.length * 2 + 
-        	wavescanParameters.length * 2 + 
-        	remainingParameters.length * 2 + 
-        	16 + 	// name
-        	4 + 	// category, color
-        	8 * 8  	// macros
-        	];
+            modeParameters.length * 2 + 
+            typeParameters.length * 2 + 
+            waveParameters.length * 2 + 
+            syncParameters.length * 2 + 
+            wavescanParameters.length * 2 + 
+            remainingParameters.length * 2 + 
+            16 +    // name
+            4 +     // category, color
+            8 * 8   // macros
+            ];
         
         int val;
         int pos = 0;
@@ -4803,30 +4803,30 @@ box.add(Box.createHorizontalGlue());
             }
         
         val = model.get("category") + 8192;
-		vals[pos++] = (byte)((val >>> 7) & 127);
-		vals[pos++] = (byte)(val & 127);
+        vals[pos++] = (byte)((val >>> 7) & 127);
+        vals[pos++] = (byte)(val & 127);
 
         val = model.get("color") + 8192;
-		vals[pos++] = (byte)((val >>> 7) & 127);
-		vals[pos++] = (byte)(val & 127);
+        vals[pos++] = (byte)((val >>> 7) & 127);
+        vals[pos++] = (byte)(val & 127);
         
         char[] name = (model.get("name", "Untitled") + "                ").toCharArray();
         for(int i = 0; i < 16; i++)
-        	{
-        	System.err.println("" + name[i]);
+            {
+            System.err.println("" + name[i]);
             val = (int)(name[i]);
             vals[pos++] = (byte)(val & 127);
-        	}
+            }
 
-		for(int m = 1; m <= 8; m++)
-			{
-			name = (model.get("macro" + m + "name", "        ") + "        ").toCharArray();
-			for(int i = 0; i < 8; i++)
-				{
-				val = (int)(name[i]);
-				vals[pos++] = (byte)(val & 127);
-				}
-			}
+        for(int m = 1; m <= 8; m++)
+            {
+            name = (model.get("macro" + m + "name", "        ") + "        ").toCharArray();
+            for(int i = 0; i < 8; i++)
+                {
+                val = (int)(name[i]);
+                vals[pos++] = (byte)(val & 127);
+                }
+            }
 
         final int HEADER = 20;
 
@@ -4865,16 +4865,16 @@ box.add(Box.createHorizontalGlue());
         int HEADER = 20;
 
         byte[] vals = new byte[
-        	modeParameters.length * 2 + 
-        	typeParameters.length * 2 + 
-        	waveParameters.length * 2 + 
-        	syncParameters.length * 2 + 
-        	wavescanParameters.length * 2 + 
-        	remainingParameters.length * 2 + 
-        	16 + 	// name
-        	4 + 	// category, color
-        	8 * 8  	// macros
-        	];
+            modeParameters.length * 2 + 
+            typeParameters.length * 2 + 
+            waveParameters.length * 2 + 
+            syncParameters.length * 2 + 
+            wavescanParameters.length * 2 + 
+            remainingParameters.length * 2 + 
+            16 +    // name
+            4 +     // category, color
+            8 * 8   // macros
+            ];
         
         System.arraycopy(data, HEADER, vals, 0, vals.length);
 
@@ -4916,459 +4916,459 @@ box.add(Box.createHorizontalGlue());
             model.set(remainingParameters[i], val);
             }
         
-		val = ((vals[pos++] << 7) | vals[pos++]) - 8192;
-		model.set("category", val);
+        val = ((vals[pos++] << 7) | vals[pos++]) - 8192;
+        model.set("category", val);
 
-		val = ((vals[pos++] << 7) | vals[pos++]) - 8192;
-		model.set("color", val);
+        val = ((vals[pos++] << 7) | vals[pos++]) - 8192;
+        model.set("color", val);
 
         char[] name = new char[16];
         for(int i = 0; i < 16; i++)
-        	{
+            {
             name[i] = (char)(vals[pos++] & 127);
-        	}
+            }
         model.set("name", String.valueOf(name));
 
-		for(int m = 1; m <= 8; m++)
-			{
-			name = new char[8];
-			for(int i = 0; i < 8; i++)
-				{
-            	name[i] = (char)(vals[pos++] & 127);
-				}
-			model.set("macro" + m + "name", String.valueOf(name));
-			}
+        for(int m = 1; m <= 8; m++)
+            {
+            name = new char[8];
+            for(int i = 0; i < 8; i++)
+                {
+                name[i] = (char)(vals[pos++] & 127);
+                }
+            model.set("macro" + m + "name", String.valueOf(name));
+            }
 
         return PARSE_SUCCEEDED;
         }
 
 
 
-	// The Hydrasynth always sends both the MSB and LSB
+    // The Hydrasynth always sends both the MSB and LSB
 
-	public boolean getRequiresNRPNMSB() { return true; }
-	public boolean getRequiresNRPNLSB() { return true; }
+    public boolean getRequiresNRPNMSB() { return true; }
+    public boolean getRequiresNRPNLSB() { return true; }
 
     public void handleSynthCCOrNRPN(Midi.CCData data)
         {
         if (data.type == Midi.CCDATA_TYPE_NRPN)
             {
-			parseNRPN(data.number, data.value);
-			}
-		else if (data.type == Midi.CCDATA_TYPE_RAW_CC)
-			{
-			parseCC(data.number, data.value);
-			}
-		}
+            parseNRPN(data.number, data.value);
+            }
+        else if (data.type == Midi.CCDATA_TYPE_RAW_CC)
+            {
+            parseCC(data.number, data.value);
+            }
+        }
 
-	void parseCC(int number, int val)
-		{
-		// For the time being we're not going to implement this
-		
-		/*
-			String key = CC[number];
-			if (key.equals("--"))
-				return;
+    void parseCC(int number, int val)
+        {
+        // For the time being we're not going to implement this
+                
+        /*
+          String key = CC[number];
+          if (key.equals("--"))
+          return;
                         
-			if (key.startsWith("osc"))
-				{
-				}
-			else if (key.startsWith("mutant"))
-				{
-				}
-			else if (key.equals("ringmoddepth"))
-				{
-				}
-			else if (key.startsWith("mix"))
-				{
-				}
-			else if (key.startsWith("filter"))
-				{
-				}
-			else if (key.equals("amplfo2amount"))
-				{
-				}
-			else if (key.startsWith("pre"))
-				{
-				}
-			else if (key.startsWith("delay"))
-				{
-				}
-			else if (key.startsWith("reverb"))
-				{
-				}
-			else if (key.startsWith("post"))
-				{
-				}
-			else if (key.startsWith("lfo"))
-				{
-				}
-			else if (key.startsWith("env"))
-				{
-				}
-			else if (key.startsWith("arp"))
-				{
-				}
-			else if (key.startsWith("macro"))
-				{
-				// These are panel values.  We probably can't handle this
-				}
-			else if (key.startsWith("voice"))
-				{
-				}
-			else
-				{
-				// do nothing
-				}
-				
-			model.set(key, val);
-			revise();
-			*/
-			}
+          if (key.startsWith("osc"))
+          {
+          }
+          else if (key.startsWith("mutant"))
+          {
+          }
+          else if (key.equals("ringmoddepth"))
+          {
+          }
+          else if (key.startsWith("mix"))
+          {
+          }
+          else if (key.startsWith("filter"))
+          {
+          }
+          else if (key.equals("amplfo2amount"))
+          {
+          }
+          else if (key.startsWith("pre"))
+          {
+          }
+          else if (key.startsWith("delay"))
+          {
+          }
+          else if (key.startsWith("reverb"))
+          {
+          }
+          else if (key.startsWith("post"))
+          {
+          }
+          else if (key.startsWith("lfo"))
+          {
+          }
+          else if (key.startsWith("env"))
+          {
+          }
+          else if (key.startsWith("arp"))
+          {
+          }
+          else if (key.startsWith("macro"))
+          {
+          // These are panel values.  We probably can't handle this
+          }
+          else if (key.startsWith("voice"))
+          {
+          }
+          else
+          {
+          // do nothing
+          }
+                                
+          model.set(key, val);
+          revise();
+        */
+        }
 
     void parseNRPN(int number, int val)
-    	{
-            Object obj = nrpnToIndex.get(Integer.valueOf(number));
-            if (obj == null) return;
-            String key = parameters[((Integer)obj).intValue()];
-			if (key.equals("bank") || key.equals("number") || key.equals("name") || key.equals("--"))
-				return;
-			parseNRPN(key, val);
-		}
+        {
+        Object obj = nrpnToIndex.get(Integer.valueOf(number));
+        if (obj == null) return;
+        String key = parameters[((Integer)obj).intValue()];
+        if (key.equals("bank") || key.equals("number") || key.equals("name") || key.equals("--"))
+            return;
+        parseNRPN(key, val);
+        }
                         
     void parseNRPN(String key, int val)
-    		{
-			int v = ((val >>> 7) & 127);
-			int w = (val & 127);
-        	
-			if (key.startsWith("osc"))
-				{
-				if (key.equals("osc1mode"))
-					{
-					if (v == 1) key = "osc2mode";
-					else if (v == 2) key = "osc3mode";		// NOTE: does not exist, but we're keeping it here for consistency with the buggy documentation
-					val = w;
-					}
-				else if (key.equals("osc1semi"))
-					{
-					if (v == 1) key = "osc2semi";
-					else if (v == 2) key = "osc3semi";
-					val = w;
-					if (val >= 64) val -= 128; // two's complement :-(
-					}
-				else if (key.equals("osc1wavscan") || 
-					key.equals("osc2wavscan") || 
-					key.equals("osc3wavscan"))
-					{
-					val = val / 8;
-					}
-				else if (key.equals("osc1cent") || 
-					key.equals("osc2cent") || 
-					key.equals("osc3cent"))
-					{
-					if (val >= 4096) val -= 8192;
-					}
-				/// FIXME: It is likely that osc1solowavscan1 etc. don't do anything at all.
-				else if (key.equals("osc1solowavscan1"))
-					{
-					key = "osc1solowavscan" + (v + 1);
-					val = w;
-					}
-				else if (key.equals("osc2solowavscan1"))
-					{
-					key = "osc2solowavscan" + (v + 1);
-					val = w;
-					}
-				}
-			else if (key.startsWith("mutant"))
-				{
-				if (key.equals("mutant1mode"))
-					{
-					if (v == 1) key = "mutant2mode";
-					else if (v == 2) key = "mutant3mode";
-					else if (v == 3) key = "mutant4mode";
-					val = w;
-					}
-				else if (key.equals("mutant1sourcefmlin"))
-					{
-					if (v == 1) key = "mutant2sourcefmlin";
-					else if (v == 2) key = "mutant3sourcefmlin";
-					else if (v == 3) key = "mutant4sourcefmlin";
-					val = w;
-					}
-				else if (key.equals("mutant1sourceoscsync"))
-					{
-					if (v == 1) key = "mutant2sourceoscsync";
-					else if (v == 2) key = "mutant3sourceoscsync";
-					else if (v == 3) key = "mutant4sourceoscsync";
-					val = w;
-					}
-				else
-					{
-					String subkey = key.substring(7);
-					if (subkey.equals("ratio") || 
-						subkey.equals("depth") || 
-						subkey.equals("feedback") || 
-						subkey.equals("wet") || 
-						subkey.equals("window") || 
-						subkey.startsWith("warp"))
-						{
-						val = val / 8;
-						}
-					}
-				}
-			else if (key.startsWith("ring"))
-				{
-				if (key.equals("ringmoddepth"))
-					{
-					val = val / 8;
-					}
-				if (key.equals("ringmodsource1"))
-					{
-					if (v == 1) key = "ringmodsource2";
-					val = w;
-					}
-				}
-			else if (key.startsWith("mix"))
-				{
-				if (!key.equals("mixerfilterrouting"))
-					{
-					val = val / 8;
-					}
-				}
-			else if (key.startsWith("filter"))
-				{
-				String subkey = key.substring(7);
-				if (subkey.equals("cutoff") ||
-					subkey.equals("drive") ||
-					subkey.equals("resonance") ||
-					subkey.equals("special") || 
-					subkey.equals("morph") ||
-					subkey.equals("lfo1amount") ||
-					subkey.equals("velenv") ||
-					subkey.equals("env1amount") || 
-					subkey.equals("keytrack") ||
-					subkey.equals("morph"))
-					{
-					val = val / 8;
-					}
-				}
-			else if (key.startsWith("amp"))
-				{
-				val = val / 8;
-				}
-			else if (key.startsWith("pre"))
-				{
-				int type = model.get("prefxtype");
-				if (type > 0)
-					{ 
-					if (key.equals("prefxparam1"))
-						{
-						key = "prefx" + type + "param1";
-						}
-					else if (key.equals("prefxparam2"))
-						{
-						key = "prefx" + type + "param2";
-						}
-					else if (key.equals("prefxparam3"))
-						{
-						key = "prefx" + type + "param3";
-						}
-					else if (key.equals("prefxparam4"))
-						{
-						key = "prefx" + type + "param4";
-						}
-					else if (key.equals("prefxparam5"))
-						{
-						key = "prefx" + type + "param5";
-						}
-					}
-				val = val / 8;
-				}
-			else if (key.startsWith("delay"))
-				{
-				val = val / 8;
-				}
-			else if (key.startsWith("reverb"))
-				{
-				val = val / 8;
-				}
-			else if (key.startsWith("post"))
-				{
-				int type = model.get("postfxtype");
-				if (type > 0)
-					{ 
-					if (key.equals("postfxparam1"))
-						{
-						key = "postfx" + type + "param1";
-						}
-					else if (key.equals("postfxparam2"))
-						{
-						key = "postfx" + type + "param2";
-						}
-					else if (key.equals("postfxparam3"))
-						{
-						key = "postfx" + type + "param3";
-						}
-					else if (key.equals("postfxparam4"))
-						{
-						key = "postfx" + type + "param4";
-						}
-					else if (key.equals("postfxparam5"))
-						{
-						key = "postfx" + type + "param5";
-						}
-					}
-				val = val / 8;
-				}
-			else if (key.startsWith("lfo"))
-				{
-				String subkey = key.substring(4);
-				if (subkey.startsWith("wave"))
-					{
-					int lfo = StringUtility.getFirstInt(key);
-					if (v == 0x01) key = "lfo" + lfo + "bpmsync";
-					else if (v == 0x03) key = "lfo" + lfo + "trigsync";
-					else if (v == 0x06) key = "lfo" + lfo + "smooth";
-					else if (v == 0x07) key = "lfo" + lfo + "steps";
-					else if (v == 0x11) key = "lfo" + lfo + "delaysyncoff";
-					else if (v == 0x12) key = "lfo" + lfo + "fadeinsyncoff";
-					else if (v == 0x21) key = "lfo" + lfo + "delaysyncon";
-					else if (v == 0x13) key = "lfo" + lfo + "fadeinsyncon";
-					else if (v == 0x14) key = "lfo" + lfo + "oneshot";
-					val = w;
-					}
-				else if (subkey.startsWith("step"))
-					{
-					val = val / 8;
-					}
-				else if (subkey.startsWith("rate"))             // both ratesyncon and ratesyncoff
-					{
-					val = val / 8;
-					}
-				else if (subkey.startsWith("level"))
-					{
-					val = val / 8;
-					}
-				}
-			else if (key.startsWith("env"))
-				{
-				String subkey = key.substring(4);
-				if (subkey.startsWith("delaysyncoff"))
-					{
-					int env = StringUtility.getFirstInt(key);
-					if (v == 0x06) key = "env" + env + "loop";
-					else if (v == 0x07) key = "env" + env + "legato";
-					else if (v == 0x0C) key = "env" + env + "bpmsync";
-					else if (v == 0x0D) key = "env" + env + "freerun";
-					else if (v == 0x0F) key = "env" + env + "reset";
-					// else v = 0x08, key = delaysyncoff
-					val = w;
-					}
-				else if (subkey.startsWith("delaysyncon"))
-					{
-					val = w;                       // MSB is 0x18 for some reason
-					}
-				else if (subkey.startsWith("attacksyncoff") ||
-					subkey.startsWith("holdsyncoff") ||
-					subkey.startsWith("decaysyncoff") ||
-					subkey.startsWith("sustain") ||
-					subkey.startsWith("releasesyncoff") || 
-					subkey.startsWith("attacksyncon") ||
-					subkey.startsWith("holdsyncon") ||
-					subkey.startsWith("decaysyncon") ||
-					subkey.startsWith("releasesyncon") ||
-					subkey.startsWith("trigsrc"))
-					{
-					val = val / 8;
-					}
-				}
-			else if (key.startsWith("arp"))
-				{
-				// interesting that v doesn't start with 0.  Not sure why
-				if (key.equals("arpdivision"))
-					{
-					if (v == 2) key = "arpswing";
-					else if (v == 3) key = "arpgate";
-					else if (v == 4) key = "arpoctmode";
-					else if (v == 5) key = "arpoctave";
-					else if (v == 6) key = "arpmode";
-					else if (v == 7) key = "arplength";
-					else if (v == 8) key = "arptaptrig";
-					else if (v == 9) key = "arpphrase";
-					else if (v == 10) key = "arpratchet";
-					else if (v == 11) key = "arpchance";
-					val = w;
-					}
-				}
-			else if (key.startsWith("macro"))
-				{
-				String subkey = key.substring(6);
-				if (subkey.startsWith("target"))
-					{
-					// Documentation is very wrong.  Actually the values are all over the place. 
-					Object index = MOD_DESTINATION_NRPN_VALUES_TO_INDEX.get(val);
-					if (index == null) val = 0;
-					else val = ((Integer)index).intValue();
-					}
-				else if (subkey.startsWith("buttonvalue"))
-					{
-					val = val / 8;
-					}
-				else if (subkey.startsWith("depth"))
-					{
-					val = val / 8;
-					}
-				}
-			else if (key.startsWith("modmatrix"))
-				{
-				String subkey = StringUtility.removePreambleAndFirstDigits(key, "modmatrix");
-				if (subkey.startsWith("depth"))
-					{
-					val = val / 8;
-					}
-				else
-					{
-					int matrix = StringUtility.getFirstInt(key);
-					if (v == 1 || v == 3)	// modsource
-						{
-						// Documentation is very wrong.  Actually the values are all over the place. 
-						key = "modmatrix" + matrix + "modsource";
-						Object index = MOD_SOURCE_NRPN_VALUES_TO_INDEX.get(val);
-						if (index == null) val = 0;
-						else val = ((Integer)index).intValue();
-						}
-					else  // modtarget
-						{
-						// Documentation is very wrong.  Actually the values are all over the place. 
-						Object index = MOD_DESTINATION_NRPN_VALUES_TO_INDEX.get(val);
-							key = "modmatrix" + matrix + "modtarget";
-						if (index == null) val = 0;
-						else val = ((Integer)index).intValue();
-						}
-					}
-				}
-			else if (key.startsWith("ribbon"))
-				{
-				// interesting that v doesn't start with 0.  Not sure why
-				if (key.equals("ribbonmode"))
-					{
-					if (v == 1) key = "ribbonkeyspan";
-					else if (v == 2) key = "ribbonoctave";
-					else if (v == 3) key = "ribbonquantize";
-					else if (v == 16) key = "ribbonmodcontrol";
-					else if (v == 17) key = "ribbonglide";
-					val = w;
-					}
-				}
-			else
-				{
-				// do nothing
-				}
-				
-			model.set(key, val);
-			revise();
-			}
+        {
+        int v = ((val >>> 7) & 127);
+        int w = (val & 127);
+                
+        if (key.startsWith("osc"))
+            {
+            if (key.equals("osc1mode"))
+                {
+                if (v == 1) key = "osc2mode";
+                else if (v == 2) key = "osc3mode";              // NOTE: does not exist, but we're keeping it here for consistency with the buggy documentation
+                val = w;
+                }
+            else if (key.equals("osc1semi"))
+                {
+                if (v == 1) key = "osc2semi";
+                else if (v == 2) key = "osc3semi";
+                val = w;
+                if (val >= 64) val -= 128; // two's complement :-(
+                }
+            else if (key.equals("osc1wavscan") || 
+                key.equals("osc2wavscan") || 
+                key.equals("osc3wavscan"))
+                {
+                val = val / 8;
+                }
+            else if (key.equals("osc1cent") || 
+                key.equals("osc2cent") || 
+                key.equals("osc3cent"))
+                {
+                if (val >= 4096) val -= 8192;
+                }
+            /// FIXME: It is likely that osc1solowavscan1 etc. don't do anything at all.
+            else if (key.equals("osc1solowavscan1"))
+                {
+                key = "osc1solowavscan" + (v + 1);
+                val = w;
+                }
+            else if (key.equals("osc2solowavscan1"))
+                {
+                key = "osc2solowavscan" + (v + 1);
+                val = w;
+                }
+            }
+        else if (key.startsWith("mutant"))
+            {
+            if (key.equals("mutant1mode"))
+                {
+                if (v == 1) key = "mutant2mode";
+                else if (v == 2) key = "mutant3mode";
+                else if (v == 3) key = "mutant4mode";
+                val = w;
+                }
+            else if (key.equals("mutant1sourcefmlin"))
+                {
+                if (v == 1) key = "mutant2sourcefmlin";
+                else if (v == 2) key = "mutant3sourcefmlin";
+                else if (v == 3) key = "mutant4sourcefmlin";
+                val = w;
+                }
+            else if (key.equals("mutant1sourceoscsync"))
+                {
+                if (v == 1) key = "mutant2sourceoscsync";
+                else if (v == 2) key = "mutant3sourceoscsync";
+                else if (v == 3) key = "mutant4sourceoscsync";
+                val = w;
+                }
+            else
+                {
+                String subkey = key.substring(7);
+                if (subkey.equals("ratio") || 
+                    subkey.equals("depth") || 
+                    subkey.equals("feedback") || 
+                    subkey.equals("wet") || 
+                    subkey.equals("window") || 
+                    subkey.startsWith("warp"))
+                    {
+                    val = val / 8;
+                    }
+                }
+            }
+        else if (key.startsWith("ring"))
+            {
+            if (key.equals("ringmoddepth"))
+                {
+                val = val / 8;
+                }
+            if (key.equals("ringmodsource1"))
+                {
+                if (v == 1) key = "ringmodsource2";
+                val = w;
+                }
+            }
+        else if (key.startsWith("mix"))
+            {
+            if (!key.equals("mixerfilterrouting"))
+                {
+                val = val / 8;
+                }
+            }
+        else if (key.startsWith("filter"))
+            {
+            String subkey = key.substring(7);
+            if (subkey.equals("cutoff") ||
+                subkey.equals("drive") ||
+                subkey.equals("resonance") ||
+                subkey.equals("special") || 
+                subkey.equals("morph") ||
+                subkey.equals("lfo1amount") ||
+                subkey.equals("velenv") ||
+                subkey.equals("env1amount") || 
+                subkey.equals("keytrack") ||
+                subkey.equals("morph"))
+                {
+                val = val / 8;
+                }
+            }
+        else if (key.startsWith("amp"))
+            {
+            val = val / 8;
+            }
+        else if (key.startsWith("pre"))
+            {
+            int type = model.get("prefxtype");
+            if (type > 0)
+                { 
+                if (key.equals("prefxparam1"))
+                    {
+                    key = "prefx" + type + "param1";
+                    }
+                else if (key.equals("prefxparam2"))
+                    {
+                    key = "prefx" + type + "param2";
+                    }
+                else if (key.equals("prefxparam3"))
+                    {
+                    key = "prefx" + type + "param3";
+                    }
+                else if (key.equals("prefxparam4"))
+                    {
+                    key = "prefx" + type + "param4";
+                    }
+                else if (key.equals("prefxparam5"))
+                    {
+                    key = "prefx" + type + "param5";
+                    }
+                }
+            val = val / 8;
+            }
+        else if (key.startsWith("delay"))
+            {
+            val = val / 8;
+            }
+        else if (key.startsWith("reverb"))
+            {
+            val = val / 8;
+            }
+        else if (key.startsWith("post"))
+            {
+            int type = model.get("postfxtype");
+            if (type > 0)
+                { 
+                if (key.equals("postfxparam1"))
+                    {
+                    key = "postfx" + type + "param1";
+                    }
+                else if (key.equals("postfxparam2"))
+                    {
+                    key = "postfx" + type + "param2";
+                    }
+                else if (key.equals("postfxparam3"))
+                    {
+                    key = "postfx" + type + "param3";
+                    }
+                else if (key.equals("postfxparam4"))
+                    {
+                    key = "postfx" + type + "param4";
+                    }
+                else if (key.equals("postfxparam5"))
+                    {
+                    key = "postfx" + type + "param5";
+                    }
+                }
+            val = val / 8;
+            }
+        else if (key.startsWith("lfo"))
+            {
+            String subkey = key.substring(4);
+            if (subkey.startsWith("wave"))
+                {
+                int lfo = StringUtility.getFirstInt(key);
+                if (v == 0x01) key = "lfo" + lfo + "bpmsync";
+                else if (v == 0x03) key = "lfo" + lfo + "trigsync";
+                else if (v == 0x06) key = "lfo" + lfo + "smooth";
+                else if (v == 0x07) key = "lfo" + lfo + "steps";
+                else if (v == 0x11) key = "lfo" + lfo + "delaysyncoff";
+                else if (v == 0x12) key = "lfo" + lfo + "fadeinsyncoff";
+                else if (v == 0x21) key = "lfo" + lfo + "delaysyncon";
+                else if (v == 0x13) key = "lfo" + lfo + "fadeinsyncon";
+                else if (v == 0x14) key = "lfo" + lfo + "oneshot";
+                val = w;
+                }
+            else if (subkey.startsWith("step"))
+                {
+                val = val / 8;
+                }
+            else if (subkey.startsWith("rate"))             // both ratesyncon and ratesyncoff
+                {
+                val = val / 8;
+                }
+            else if (subkey.startsWith("level"))
+                {
+                val = val / 8;
+                }
+            }
+        else if (key.startsWith("env"))
+            {
+            String subkey = key.substring(4);
+            if (subkey.startsWith("delaysyncoff"))
+                {
+                int env = StringUtility.getFirstInt(key);
+                if (v == 0x06) key = "env" + env + "loop";
+                else if (v == 0x07) key = "env" + env + "legato";
+                else if (v == 0x0C) key = "env" + env + "bpmsync";
+                else if (v == 0x0D) key = "env" + env + "freerun";
+                else if (v == 0x0F) key = "env" + env + "reset";
+                // else v = 0x08, key = delaysyncoff
+                val = w;
+                }
+            else if (subkey.startsWith("delaysyncon"))
+                {
+                val = w;                       // MSB is 0x18 for some reason
+                }
+            else if (subkey.startsWith("attacksyncoff") ||
+                subkey.startsWith("holdsyncoff") ||
+                subkey.startsWith("decaysyncoff") ||
+                subkey.startsWith("sustain") ||
+                subkey.startsWith("releasesyncoff") || 
+                subkey.startsWith("attacksyncon") ||
+                subkey.startsWith("holdsyncon") ||
+                subkey.startsWith("decaysyncon") ||
+                subkey.startsWith("releasesyncon") ||
+                subkey.startsWith("trigsrc"))
+                {
+                val = val / 8;
+                }
+            }
+        else if (key.startsWith("arp"))
+            {
+            // interesting that v doesn't start with 0.  Not sure why
+            if (key.equals("arpdivision"))
+                {
+                if (v == 2) key = "arpswing";
+                else if (v == 3) key = "arpgate";
+                else if (v == 4) key = "arpoctmode";
+                else if (v == 5) key = "arpoctave";
+                else if (v == 6) key = "arpmode";
+                else if (v == 7) key = "arplength";
+                else if (v == 8) key = "arptaptrig";
+                else if (v == 9) key = "arpphrase";
+                else if (v == 10) key = "arpratchet";
+                else if (v == 11) key = "arpchance";
+                val = w;
+                }
+            }
+        else if (key.startsWith("macro"))
+            {
+            String subkey = key.substring(6);
+            if (subkey.startsWith("target"))
+                {
+                // Documentation is very wrong.  Actually the values are all over the place. 
+                Object index = MOD_DESTINATION_NRPN_VALUES_TO_INDEX.get(val);
+                if (index == null) val = 0;
+                else val = ((Integer)index).intValue();
+                }
+            else if (subkey.startsWith("buttonvalue"))
+                {
+                val = val / 8;
+                }
+            else if (subkey.startsWith("depth"))
+                {
+                val = val / 8;
+                }
+            }
+        else if (key.startsWith("modmatrix"))
+            {
+            String subkey = StringUtility.removePreambleAndFirstDigits(key, "modmatrix");
+            if (subkey.startsWith("depth"))
+                {
+                val = val / 8;
+                }
+            else
+                {
+                int matrix = StringUtility.getFirstInt(key);
+                if (v == 1 || v == 3)   // modsource
+                    {
+                    // Documentation is very wrong.  Actually the values are all over the place. 
+                    key = "modmatrix" + matrix + "modsource";
+                    Object index = MOD_SOURCE_NRPN_VALUES_TO_INDEX.get(val);
+                    if (index == null) val = 0;
+                    else val = ((Integer)index).intValue();
+                    }
+                else  // modtarget
+                    {
+                    // Documentation is very wrong.  Actually the values are all over the place. 
+                    Object index = MOD_DESTINATION_NRPN_VALUES_TO_INDEX.get(val);
+                    key = "modmatrix" + matrix + "modtarget";
+                    if (index == null) val = 0;
+                    else val = ((Integer)index).intValue();
+                    }
+                }
+            }
+        else if (key.startsWith("ribbon"))
+            {
+            // interesting that v doesn't start with 0.  Not sure why
+            if (key.equals("ribbonmode"))
+                {
+                if (v == 1) key = "ribbonkeyspan";
+                else if (v == 2) key = "ribbonoctave";
+                else if (v == 3) key = "ribbonquantize";
+                else if (v == 16) key = "ribbonmodcontrol";
+                else if (v == 17) key = "ribbonglide";
+                val = w;
+                }
+            }
+        else
+            {
+            // do nothing
+            }
+                                
+        model.set(key, val);
+        revise();
+        }
 
 
     /** This is overridden because the Hydrasynth foolishly uses CC 120 as ARP OCTAVE
@@ -5404,167 +5404,167 @@ box.add(Box.createHorizontalGlue());
     public boolean getSendsParametersAfterWrite() { return true; }
 
 /*
-    public boolean librarianTested() { return true; }
+  public boolean librarianTested() { return true; }
 
     
-    public String[] getPatchNumberNames()  
-        { 
-        return buildIntegerNames(128, 0);
-        }
+  public String[] getPatchNumberNames()  
+  { 
+  return buildIntegerNames(128, 0);
+  }
 
-    public boolean[] getWriteableBanks() 
-        { 
-        return buildBankBooleans(7, 19, 0);             // first 7 banks are writeable, remaining 19 are not
-        }
+  public boolean[] getWriteableBanks() 
+  { 
+  return buildBankBooleans(7, 19, 0);             // first 7 banks are writeable, remaining 19 are not
+  }
 
-    public String[] getBankNames() { return BANKS; }
+  public String[] getBankNames() { return BANKS; }
 
-    public boolean getSupportsPatchWrites() { return true; }
+  public boolean getSupportsPatchWrites() { return true; }
 
-    public int getPatchNameLength() { return 22; }
+  public int getPatchNameLength() { return 22; }
 
-    public boolean getPatchContainsLocation() { return true; }
+  public boolean getPatchContainsLocation() { return true; }
 */
 
 
-	public static final int MODE_PAUSE = 0;
-	public static final int TYPE_PAUSE = 0;
-	public static final int WAVE_PAUSE = 0;
-	public static final int BPM_SYNC_PAUSE = 0;
-	public static final int WAVESCAN_WAVE_PAUSE = 0;
-	
+    public static final int MODE_PAUSE = 0;
+    public static final int TYPE_PAUSE = 0;
+    public static final int WAVE_PAUSE = 0;
+    public static final int BPM_SYNC_PAUSE = 0;
+    public static final int WAVESCAN_WAVE_PAUSE = 0;
+        
     protected boolean sendAllParametersInternal()
         {
         if (!getSendMIDI())
             return false;  // don't bother!  MIDI is off
 
-for(int j = 0; j < 3; j++)
-	{
-		// we do a specific order
-		//System.err.println("Sending Modes");
-		for(int i = 0; i < modeParameters.length; i++)
-			{
-			simplePause(getPauseAfterSendHeaderParameter());
-			tryToSendMIDI(emitAll(modeParameters[i], STATUS_SENDING_ALL_PARAMETERS));
-			}
-		simplePause(MODE_PAUSE);
-		//System.err.println("Sending Types");
-		for(int i = 0; i < typeParameters.length; i++)
-			{
-			simplePause(getPauseAfterSendHeaderParameter());
-			tryToSendMIDI(emitAll(typeParameters[i], STATUS_SENDING_ALL_PARAMETERS));
-			}
-		simplePause(TYPE_PAUSE);
-		//System.err.println("Sending Waves");
-		for(int i = 0; i < waveParameters.length; i++)
-			{
-			simplePause(getPauseAfterSendHeaderParameter());
-			tryToSendMIDI(emitAll(waveParameters[i], STATUS_SENDING_ALL_PARAMETERS));
-			}
-		simplePause(WAVE_PAUSE);
-		//System.err.println("Sending BPM Syncs");
-		for(int i = 0; i < syncParameters.length; i++)
-			{
-			simplePause(getPauseAfterSendHeaderParameter());
-			tryToSendMIDI(emitAll(syncParameters[i], STATUS_SENDING_ALL_PARAMETERS));
-			}
-		simplePause(BPM_SYNC_PAUSE);
-		//System.err.println("Sending Wavescan Waves");
-		for(int i = 0; i < wavescanParameters.length; i++)
-			{
-			simplePause(getPauseAfterSendHeaderParameter());
-			tryToSendMIDI(emitAll(wavescanParameters[i], STATUS_SENDING_ALL_PARAMETERS));
-			}
-		simplePause(WAVESCAN_WAVE_PAUSE);
-		//System.err.println("Sending Remainder");
-		for(int i = 0; i < remainingParameters.length; i++)
-			{
-			simplePause(getPauseAfterSendOneParameter());
-			tryToSendMIDI(emitAll(remainingParameters[i], STATUS_SENDING_ALL_PARAMETERS));
-			}
-	}
-		simplePause(getPauseAfterSendAllParameters());
-		//System.err.println("Sent");
-		return true;
+        for(int j = 0; j < 3; j++)
+            {
+            // we do a specific order
+            //System.err.println("Sending Modes");
+            for(int i = 0; i < modeParameters.length; i++)
+                {
+                simplePause(getPauseAfterSendHeaderParameter());
+                tryToSendMIDI(emitAll(modeParameters[i], STATUS_SENDING_ALL_PARAMETERS));
+                }
+            simplePause(MODE_PAUSE);
+            //System.err.println("Sending Types");
+            for(int i = 0; i < typeParameters.length; i++)
+                {
+                simplePause(getPauseAfterSendHeaderParameter());
+                tryToSendMIDI(emitAll(typeParameters[i], STATUS_SENDING_ALL_PARAMETERS));
+                }
+            simplePause(TYPE_PAUSE);
+            //System.err.println("Sending Waves");
+            for(int i = 0; i < waveParameters.length; i++)
+                {
+                simplePause(getPauseAfterSendHeaderParameter());
+                tryToSendMIDI(emitAll(waveParameters[i], STATUS_SENDING_ALL_PARAMETERS));
+                }
+            simplePause(WAVE_PAUSE);
+            //System.err.println("Sending BPM Syncs");
+            for(int i = 0; i < syncParameters.length; i++)
+                {
+                simplePause(getPauseAfterSendHeaderParameter());
+                tryToSendMIDI(emitAll(syncParameters[i], STATUS_SENDING_ALL_PARAMETERS));
+                }
+            simplePause(BPM_SYNC_PAUSE);
+            //System.err.println("Sending Wavescan Waves");
+            for(int i = 0; i < wavescanParameters.length; i++)
+                {
+                simplePause(getPauseAfterSendHeaderParameter());
+                tryToSendMIDI(emitAll(wavescanParameters[i], STATUS_SENDING_ALL_PARAMETERS));
+                }
+            simplePause(WAVESCAN_WAVE_PAUSE);
+            //System.err.println("Sending Remainder");
+            for(int i = 0; i < remainingParameters.length; i++)
+                {
+                simplePause(getPauseAfterSendOneParameter());
+                tryToSendMIDI(emitAll(remainingParameters[i], STATUS_SENDING_ALL_PARAMETERS));
+                }
+            }
+        simplePause(getPauseAfterSendAllParameters());
+        //System.err.println("Sent");
+        return true;
         }
 
-	public static final String[] modeParameters = 
-	{
-    // First the modes
-		"osc1mode",				
-		"osc2mode",				
-		"mutant1mode",                
-		"mutant2mode",					
-		"mutant3mode",					
-		"mutant4mode",					
-		"ribbonmode",	
-	};
+    public static final String[] modeParameters = 
+        {
+        // First the modes
+        "osc1mode",                             
+        "osc2mode",                             
+        "mutant1mode",                
+        "mutant2mode",                                  
+        "mutant3mode",                                  
+        "mutant4mode",                                  
+        "ribbonmode",   
+        };
 
-				
-	public static final String[] typeParameters = 
-	{
-	// Next the types (osc1...2type need to be after osc1...osc2mode)
-		"osc1type",					
-		"osc2type",					
-		"osc3type",					
-		"filter1type",					
-		"filter2type",					
-		"prefxtype",					
-		"delaytype",					
-		"reverbtype",					
-	};
+                                
+    public static final String[] typeParameters = 
+        {
+        // Next the types (osc1...2type need to be after osc1...osc2mode)
+        "osc1type",                                     
+        "osc2type",                                     
+        "osc3type",                                     
+        "filter1type",                                  
+        "filter2type",                                  
+        "prefxtype",                                    
+        "delaytype",                                    
+        "reverbtype",                                   
+        };
 
-	public static final String[] waveParameters = 
-	{
-	// Next the waves
-		"lfo1wave",					
-		"lfo2wave",					
-		"lfo3wave",					
-		"lfo4wave",					
-		"lfo5wave",					
-	};
-	
-	public static final String[] syncParameters = 
-	{
-	// Next the BPM Sync toggles (not sure if delaybpmsync needs to be after delaytype)
-		"delaybpmsync",					
-		"lfo1bpmsync",					
-		"lfo2bpmsync",					
-		"lfo3bpmsync",					
-		"lfo4bpmsync",					
-		"lfo5bpmsync",					
-		"env1bpmsync",					
-		"env2bpmsync",					
-		"env3bpmsync",					
-		"env4bpmsync",					
-		"env5bpmsync",					
-		"voicevibratobpm",	
-	};
-	
-	public static final String[] wavescanParameters = 
-	{
-	// Next the wavescanwaves, just in case they need to be set before wavscan can be used (probably it's okay)			
-    "osc1wavscanwave1",
-    "osc1wavscanwave2",
-    "osc1wavscanwave3",
-    "osc1wavscanwave4",
-    "osc1wavscanwave5",
-    "osc1wavscanwave6",
-    "osc1wavscanwave7",
-    "osc1wavscanwave8",
-    "osc2wavscanwave1",
-    "osc2wavscanwave2",
-    "osc2wavscanwave3",
-    "osc2wavscanwave4",
-    "osc2wavscanwave5",
-    "osc2wavscanwave6",
-    "osc2wavscanwave7",
-    "osc2wavscanwave8",
-	};
+    public static final String[] waveParameters = 
+        {
+        // Next the waves
+        "lfo1wave",                                     
+        "lfo2wave",                                     
+        "lfo3wave",                                     
+        "lfo4wave",                                     
+        "lfo5wave",                                     
+        };
+        
+    public static final String[] syncParameters = 
+        {
+        // Next the BPM Sync toggles (not sure if delaybpmsync needs to be after delaytype)
+        "delaybpmsync",                                 
+        "lfo1bpmsync",                                  
+        "lfo2bpmsync",                                  
+        "lfo3bpmsync",                                  
+        "lfo4bpmsync",                                  
+        "lfo5bpmsync",                                  
+        "env1bpmsync",                                  
+        "env2bpmsync",                                  
+        "env3bpmsync",                                  
+        "env4bpmsync",                                  
+        "env5bpmsync",                                  
+        "voicevibratobpm",      
+        };
+        
+    public static final String[] wavescanParameters = 
+        {
+        // Next the wavescanwaves, just in case they need to be set before wavscan can be used (probably it's okay)                     
+        "osc1wavscanwave1",
+        "osc1wavscanwave2",
+        "osc1wavscanwave3",
+        "osc1wavscanwave4",
+        "osc1wavscanwave5",
+        "osc1wavscanwave6",
+        "osc1wavscanwave7",
+        "osc1wavscanwave8",
+        "osc2wavscanwave1",
+        "osc2wavscanwave2",
+        "osc2wavscanwave3",
+        "osc2wavscanwave4",
+        "osc2wavscanwave5",
+        "osc2wavscanwave6",
+        "osc2wavscanwave7",
+        "osc2wavscanwave8",
+        };
 
     public static final String[] remainingParameters = new String[] 
     {
-	// Now all the dependent parameters
+    // Now all the dependent parameters
     "osc1semi",
     "osc2semi",
     "osc3semi",
@@ -6621,32 +6621,32 @@ for(int j = 0; j < 3; j++)
     
     
     
-    		
+                
     static HashMap parametersToIndex = null;
     public static final String[] parameters = new String[] 
     {
     // Missing parameters that can't be changed in real-time:
     // name, category, color
 
-    "--", 							// "allosccent",                                       /// This isn't a real parameter
-    "osc1mode",					
-    "osc2mode",					
-    "--", 							// "osc3mode",                     /// This parameter shouldn't exist (osc3 doesn't have a mode)
+    "--",                                                       // "allosccent",                                       /// This isn't a real parameter
+    "osc1mode",                                 
+    "osc2mode",                                 
+    "--",                                                       // "osc3mode",                     /// This parameter shouldn't exist (osc3 doesn't have a mode)
     "osc1semi",
     "osc2semi",
     "osc3semi",
-    "osc1type",					
+    "osc1type",                                 
     "osc1cent",
     "osc1keytrack",
     "osc1wavscan",
-    "--", 							// "osc1solowavscan1",            /// This parameter shouldn't exist (it appears to do nothing)
-    "--", 							// "osc1solowavscan2",            /// This parameter shouldn't exist (it appears to do nothing)
-    "--", 							// "osc1solowavscan3",            /// This parameter shouldn't exist (it appears to do nothing)
-    "--", 							// "osc1solowavscan4",            /// This parameter shouldn't exist (it appears to do nothing)
-    "--", 							// "osc1solowavscan5",            /// This parameter shouldn't exist (it appears to do nothing)
-    "--", 							// "osc1solowavscan6",            /// This parameter shouldn't exist (it appears to do nothing)
-    "--", 							// "osc1solowavscan7",            /// This parameter shouldn't exist (it appears to do nothing)
-    "--", 							// "osc1solowavscan8",            /// This parameter shouldn't exist (it appears to do nothing)
+    "--",                                                       // "osc1solowavscan1",            /// This parameter shouldn't exist (it appears to do nothing)
+    "--",                                                       // "osc1solowavscan2",            /// This parameter shouldn't exist (it appears to do nothing)
+    "--",                                                       // "osc1solowavscan3",            /// This parameter shouldn't exist (it appears to do nothing)
+    "--",                                                       // "osc1solowavscan4",            /// This parameter shouldn't exist (it appears to do nothing)
+    "--",                                                       // "osc1solowavscan5",            /// This parameter shouldn't exist (it appears to do nothing)
+    "--",                                                       // "osc1solowavscan6",            /// This parameter shouldn't exist (it appears to do nothing)
+    "--",                                                       // "osc1solowavscan7",            /// This parameter shouldn't exist (it appears to do nothing)
+    "--",                                                       // "osc1solowavscan8",            /// This parameter shouldn't exist (it appears to do nothing)
     "osc1wavscanwave1",
     "osc1wavscanwave2",
     "osc1wavscanwave3",
@@ -6655,18 +6655,18 @@ for(int j = 0; j < 3; j++)
     "osc1wavscanwave6",
     "osc1wavscanwave7",
     "osc1wavscanwave8",
-    "osc2type",					
+    "osc2type",                                 
     "osc2cent",
     "osc2keytrack",
     "osc2wavscan",
-    "--", 							// "osc2solowavscan1",            /// This parameter shouldn't exist (it appears to do nothing)
-    "--", 							// "osc2solowavscan2",            /// This parameter shouldn't exist (it appears to do nothing)
-    "--", 							// "osc2solowavscan3",            /// This parameter shouldn't exist (it appears to do nothing)
-    "--", 							// "osc2solowavscan4",            /// This parameter shouldn't exist (it appears to do nothing)
-    "--", 							// "osc2solowavscan5",            /// This parameter shouldn't exist (it appears to do nothing)
-    "--", 							// "osc2solowavscan6",            /// This parameter shouldn't exist (it appears to do nothing)
-    "--", 							// "osc2solowavscan7",            /// This parameter shouldn't exist (it appears to do nothing)
-    "--", 							// "osc2solowavscan8",            /// This parameter shouldn't exist (it appears to do nothing)
+    "--",                                                       // "osc2solowavscan1",            /// This parameter shouldn't exist (it appears to do nothing)
+    "--",                                                       // "osc2solowavscan2",            /// This parameter shouldn't exist (it appears to do nothing)
+    "--",                                                       // "osc2solowavscan3",            /// This parameter shouldn't exist (it appears to do nothing)
+    "--",                                                       // "osc2solowavscan4",            /// This parameter shouldn't exist (it appears to do nothing)
+    "--",                                                       // "osc2solowavscan5",            /// This parameter shouldn't exist (it appears to do nothing)
+    "--",                                                       // "osc2solowavscan6",            /// This parameter shouldn't exist (it appears to do nothing)
+    "--",                                                       // "osc2solowavscan7",            /// This parameter shouldn't exist (it appears to do nothing)
+    "--",                                                       // "osc2solowavscan8",            /// This parameter shouldn't exist (it appears to do nothing)
     "osc2wavscanwave1",
     "osc2wavscanwave2",
     "osc2wavscanwave3",
@@ -6675,13 +6675,13 @@ for(int j = 0; j < 3; j++)
     "osc2wavscanwave6",
     "osc2wavscanwave7",
     "osc2wavscanwave8",
-    "osc3type",					
+    "osc3type",                                 
     "osc3cent",
     "osc3keytrack",
-    "mutant1mode",                					  // These are all called "mutator" in the NRPN docs but "mutant" in the manual and on the machine
-    "mutant2mode",					
-    "mutant3mode",					
-    "mutant4mode",					
+    "mutant1mode",                                                        // These are all called "mutator" in the NRPN docs but "mutant" in the manual and on the machine
+    "mutant2mode",                                      
+    "mutant3mode",                                      
+    "mutant4mode",                                      
     "mutant1sourcefmlin",
     "mutant2sourcefmlin",
     "mutant3sourcefmlin",
@@ -6746,7 +6746,7 @@ for(int j = 0; j < 3; j++)
     "ringmoddepth",
     "ringmodsource1",
     "ringmodsource2",
-    "--", 							// "mixersolo",                              /// This isn't a real parameter
+    "--",                                                       // "mixersolo",                              /// This isn't a real parameter
     "mixerosc1vol",
     "mixerosc1pan",
     "mixerosc1filterratio",
@@ -6771,10 +6771,10 @@ for(int j = 0; j < 3; j++)
     "filter1keytrack",
     "filter1lfo1amount",
     "filter1vowelorder",
-    "filter1type",					
+    "filter1type",                                      
     "filter1velenv",
     "filter1env1amount",
-    "--", 									//"filter2positionofdrive",                 // This parameter does not exist
+    "--",                                                                       //"filter2positionofdrive",                 // This parameter does not exist
     "filter2cutoff",
     "filter2resonance",
     "filter2morph",
@@ -6782,12 +6782,12 @@ for(int j = 0; j < 3; j++)
     "filter2lfo1amount",
     "filter2velenv",
     "filter2env1amount",
-    "filter2type",					
+    "filter2type",                                      
     "amplevel",
     "ampvelenv",
     "amplfo2amount",
-    "prefxtype",					
-    "--",										// "prefxpreset",
+    "prefxtype",                                        
+    "--",                                                                               // "prefxpreset",
     "prefxwet",
     "prefxparam1",
     "prefxparam2",
@@ -6795,13 +6795,13 @@ for(int j = 0; j < 3; j++)
     "prefxparam4",
     "prefxparam5",
     "prefxsidechain",
-    "delaybpmsync",					
+    "delaybpmsync",                                     
     "delaywet",
     "delayfeedback",
     "delayfeedtone",
     "delaytimesyncoff",
     "delaytimesyncon",
-    "delaytype",					
+    "delaytype",                                        
     "delaywettone",
     "reverbwet",
     "reverbhidamp",
@@ -6809,9 +6809,9 @@ for(int j = 0; j < 3; j++)
     "reverbpredelay",
     "reverbtime",
     "reverbtone",
-    "reverbtype",					
+    "reverbtype",                                       
     "postfxtype",
-    "--",								// postfxpreset
+    "--",                                                               // postfxpreset
     "postfxwet",
     "postfxparam1",
     "postfxparam2",
@@ -6820,8 +6820,8 @@ for(int j = 0; j < 3; j++)
     "postfxparam5",
     "postfxsidechain",
     "lfo1level",
-    "lfo1wave",					
-    "lfo1bpmsync",					
+    "lfo1wave",                                 
+    "lfo1bpmsync",                                      
     "lfo1trigsync",
     "lfo1smooth",
     "lfo1steps",
@@ -6898,8 +6898,8 @@ for(int j = 0; j < 3; j++)
     "lfo1step63",
     "lfo1step64",
     "lfo2level",
-    "lfo2wave",					
-    "lfo2bpmsync",					
+    "lfo2wave",                                 
+    "lfo2bpmsync",                                      
     "lfo2trigsync",
     "lfo2smooth",
     "lfo2steps",
@@ -6976,8 +6976,8 @@ for(int j = 0; j < 3; j++)
     "lfo2step63",
     "lfo2step64",
     "lfo3level",
-    "lfo3wave",					
-    "lfo3bpmsync",					
+    "lfo3wave",                                 
+    "lfo3bpmsync",                                      
     "lfo3trigsync",
     "lfo3smooth",
     "lfo3steps",
@@ -7054,8 +7054,8 @@ for(int j = 0; j < 3; j++)
     "lfo3step63",
     "lfo3step64",
     "lfo4level",
-    "lfo4wave",					
-    "lfo4bpmsync",					
+    "lfo4wave",                                 
+    "lfo4bpmsync",                                      
     "lfo4trigsync",
     "lfo4smooth",
     "lfo4steps",
@@ -7132,8 +7132,8 @@ for(int j = 0; j < 3; j++)
     "lfo4step63",
     "lfo4step64",
     "lfo5level",
-    "lfo5wave",					
-    "lfo5bpmsync",					
+    "lfo5wave",                                 
+    "lfo5bpmsync",                                      
     "lfo5trigsync",
     "lfo5smooth",
     "lfo5steps",
@@ -7224,7 +7224,7 @@ for(int j = 0; j < 3; j++)
     "env1deccurve",
     "env1loop",
     "env1legato",
-    "env1bpmsync",					
+    "env1bpmsync",                                      
     "env1freerun",
     "env1reset",
     "env1relcurve",
@@ -7247,7 +7247,7 @@ for(int j = 0; j < 3; j++)
     "env2deccurve",
     "env2loop",
     "env2legato",
-    "env2bpmsync",					
+    "env2bpmsync",                                      
     "env2freerun",
     "env2reset",
     "env2relcurve",
@@ -7270,7 +7270,7 @@ for(int j = 0; j < 3; j++)
     "env3deccurve",
     "env3loop",
     "env3legato",
-    "env3bpmsync",					
+    "env3bpmsync",                                      
     "env3freerun",
     "env3reset",
     "env3relcurve",
@@ -7293,7 +7293,7 @@ for(int j = 0; j < 3; j++)
     "env4deccurve",
     "env4loop",
     "env4legato",
-    "env4bpmsync",					
+    "env4bpmsync",                                      
     "env4freerun",
     "env4reset",
     "env4relcurve",
@@ -7316,7 +7316,7 @@ for(int j = 0; j < 3; j++)
     "env5deccurve",
     "env5loop",
     "env5legato",
-    "env5bpmsync",					
+    "env5bpmsync",                                      
     "env5freerun",
     "env5reset",
     "env5relcurve",
@@ -7631,7 +7631,7 @@ for(int j = 0; j < 3; j++)
     "modmatrix30depth",
     "modmatrix31depth",
     "modmatrix32depth",
-    "ribbonmode",					
+    "ribbonmode",                                       
     "ribbonkeyspan",
     "ribbonoctave",
     "ribbonquantize",
@@ -7653,7 +7653,7 @@ for(int j = 0; j < 3; j++)
     "voicevibratoratesyncon",
     "voicerandomphase",
     "voicewarmmode",
-    "voicevibratobpm",					
+    "voicevibratobpm",                                  
     };
     
     static HashMap nrpnToIndex = null;

@@ -148,7 +148,7 @@ unhelpfully trying to reset all of the changes he made in his editor.
 This happens for a number of other parameters as well: changing one 
 parameter causes the Hydrasynth to respond with NRPN messages that serve 
 no function except to unhelpfully reset parameters on one's editor.  The 
-Hydrasynth should *never* respond with an NRPN message via another NRPN 
+Hydrasynth should *never* respond to an NRPN message with another NRPN 
 message.
 
 

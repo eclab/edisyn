@@ -1,0 +1,119 @@
+    public static final String[] RING_MOD_SOURCES = { "Osc 1", "Osc 2", "Osc 3", "Noise", "Mutant 1", "Mutant 2", "Mutant 3", "Mutant 4", "Mod In 1", "Mod In 2" };
+
+    public static final String[] FILTER_1_TYPES = { "LP Ladder 12", "LP Ladder 24", "LP Fat 12", "LP Fat 24", "LP Gate", "LP MS20", "HP MS20", "LP 3-Ler", "BP 3-Ler", "HP 3-Ler",  "Vowel", "LP Stn 12", "BP Stn 12", "HP Stn 12", "LP 1 Pole", "LP 8 Pole" };
+
+    public static final String[] LFO_WAVES = { "Sine", "Triangle", "Saw Up", "Saw Down", "Square", "Pulse 27%", "Pulse 13%", "S & H", "Noise", "Random", "Step" };
+
+    public static final String[] FX_DELAYS_SYNC_ON = { "1/64 T", "1/64", "1/32 T", "1/64 D", "1/32", "1/16 T", "1/32 D", "1/16", "1/8 T", "1/16 D", "1/8", "1/4 T", "1/8 D", "1/4", "1/2 T", "1/4 D", "1/2", "1/1 T", "1/2 D", "1/1", "1/1 D" };
+
+    public static final String[] ENV_LFO_RATES_SYNC_ON = { "0", "1/64 T", "1/64", "1/32 T", "1/64 D", "1/32", "1/16 T", "1/32 D", "1/16", "1/8 T", "1/16 D", "1/8", "1/4 T", "1/8 D", "1/4", "1/2 T", "1/4 D", "1/2", "1/1 T", "1/2 D", "1/1", "1/1 D", "8", "12", "16", "24", "32", "64" };
+
+    public static final String[] LFO_RATES_SYNC_ON = { "64", "32", "24", "16", "12", "8", "1/1 D", "1/1", "1/2 D", "1/1 T", "1/2", "1/4 D", "1/2 T", "1/4", "1/8 D", "1/4 T", "1/8", "1/16 D", "1/8 T", "1/16", "1/32 D", "1/16 T", "1/32", "1/64 D", "1/32 T", "1/64", "1/64 T" };
+
+    public static final String[] ENV_TRIG_SOURCES = { "Off", "Note On", "LFO1", "LFO2", "LFO3", "LFO4", "LFO5", "Ribbon On", "Ribbon Rel", "Sustain Ped", "Mod In 1", "Mod In 2" };
+
+    public static final String[] ARP_DIVISIONS = { "1/1", "1/2", "1/4", "1/8", "1/16", "1/32", "1/1 T", "1/2 T", "1/4 T", "1/8 T", "1/16 T", "1/32 T" };
+
+    public static final String[] VIBRATO_RATES_SYNC_ON = { "1/4", "1/8", "1/16", "1/32", "1/1 T", "1/2 T", "1/4 T", "1/8 T", "1/16 T", "1/32 T", "1/1 D", "1/2 D", "1/4 D", "1/8 D", "1/16 D", "1/32 D" };
+
+    public static final String[] OSC_WAVES = 
+        {
+        "Sine", "Triangle", "TriSaw", "Saw", "Square", 
+        "Pulse 1", "Pulse 2", "Pulse 3", "Pulse 4", "Pulse 5", "Pulse 6", 
+        "Horizon 1", "Horizon 2", "Horizon 3", "Horizon 4", "Horizon 5", "Horizon 6", "Horizon 7", "Horizon 8", 
+        "SyncLav 1", "SyncLav 2", "SyncLav 3", "SyncLav 4", "SyncLav 5", 
+        "Esquire 1", "Esquire 2", "Esquire 3", "Esquire 4", 
+        "ChriMey 1", "ChriMey 2", "ChriMey 3", "ChriMey 4", "ChriMey 5", "ChriMey 6", 
+        "Spect A 1", "Spect A 2", "Spect A 3", "Spect A 4", "Spect A 5", "Spect A 6", "Spect A 7", 
+        "Spect X 1", "Spect X 2", "Spect X 3", "Spect X 4", "Spect X 5", "Spect X 6", "Spect X 7", 
+        "Klangor 1", "Klangor 2", "Klangor 3", "Klangor 4", "Klangor 5", 
+        "Induct 1", "Induct 2", "Induct 3", 
+        "Scorpio 1", "Scorpio 2", "Scorpio 3", "Scorpio 4", "Scorpio 5", "Scorpio 6", "Scorpio 7", "Scorpio 8", "Scorpio 9", 
+        "Belview 1", "Belview 2", "Belview 3", "Belview 4", "Belview 5", 
+        "Chendom 1", "Chendom 2", "Chendom 3", "Chendom 4", "Chendom 5", "Chendom 6", "Chendom 7", "Chendom 8", 
+        "Glefan 1", "Glefan 2", "Glefan 3", "Glefan 4", "Glefan 5", "Glefan 6", "Glefan 7", 
+        "Sqarbel 1", "Sqarbel 2", 
+        "Obob 1", "Obob 2", "Obob 3", 
+        "Ingvay 1", "Ingvay 2", "Ingvay 3", 
+        "Particl 1", "Particl 2", "Particl 3", 
+        "Vokz 1", "Vokz 2", "Vokz 3", "Vokz 4", "Vokz 5", "Vokz 6", 
+        "Flux 1", "Flux 2", "Flux 3", "Flux 4", "Flux 5", 
+        "Alweg 1", "Alweg 2", "Alweg 3", "Alweg 4", "Alweg 5", "Alweg 6", "Alweg 7", "Alweg 8", 
+        "Tronic 1", "Tronic 2", "Tronic 3", "Tronic 4", "Tronic 5", "Tronic 6", 
+        "Duotone 1", "Duotone 2", "Duotone 3", "Duotone 4", "Duotone 5", "Duotone 6", 
+        "Bobanab 1", "Bobanab 2", "Bobanab 3", "Bobanab 4", 
+        "Melotic 1", "Melotic 2", "Melotic 3", "Melotic 4", "Melotic 5", "Melotic 6", "Melotic 7", 
+        "Cluster 1", "Cluster 2", "Cluster 3", "Cluster 4", "Cluster 5", "Cluster 6", "Cluster 7", "Cluster 8", 
+        "Micoten 1", "Micoten 2", "Micoten 3", "Micoten 4", "Micoten 5", 
+        "Orland 1", "Orland 2", "Orland 3", "Orland 4", "Orland 5", "Orland 6", "Orland 7", "Orland 8", 
+        "Neuton 1", "Neuton 2", "Neuton 3", "Neuton 4", "Neuton 5", "Neuton 6", "Neuton 7", 
+        "Xfer 1", "Xfer 2", "Xfer 3", "Xfer 4", "Xfer 5", "Xfer 6", "Xfer 7", 
+        "Resyn 1", "Resyn 2", "Resyn 3", "Resyn 4", 
+        "Sano 1", "Sano 2", "Sano 3", "Sano 4", 
+        "SquRoo 1", "SquRoo 2", "SquRoo 3", "SquRoo 4", "SquRoo 5", "SquRoo 6", "SquRoo 7", "SquRoo 8", "SquRoo 9", "SquRoo 10", "SquRoo 11", "SquRoo 12", "SquRoo 13", "SquRoo 14", "SquRoo 15", 
+        "Harmon 1", "Harmon 2", "Harmon 3", "Harmon 4", "Harmon 5", "Harmon 6", "Harmon 7", "Harmon 8", "Harmon 9", "Harmon 10", "Harmon 11", "Harmon 12", 
+        "Harmon 13", "Harmon 14", "Harmon 15", "Harmon 16", "Harmon 17", "Harmon 18", "Harmon 19", "Harmon 20", "Harmon 21", "Harmon 22", "Harmon 23" 
+        };
+        
+	public static final String[] SOME_MORE_DELAY_TIMES =
+		{
+		"1.00s", "1.00s", "1.01s", "1.01s", "1.02s", "1.02s", "1.02s", "1.03s", "1.03s", "1.03s", 
+		"1.04s", "1.04s", "1.05s", "1.05s", "1.06s", "1.06s", "1.06s", "1.07s", "1.07s", "1.07s", 
+		"1.08s", "1.08s", "1.08s", "1.09s", "1.09s", "1.10s", "1.11s", "1.11s", "1.12s", "1.13s", 
+		"1.14s", "1.14s", "1.15s", "1.16s", "1.16s", "1.17s", "1.18s", "1.18s", "1.19s", "1.19s", 
+		"1.20s", "1.21s", "1.21s", "1.22s", "1.23s", "1.23s", "1.24s", "1.24s", "1.25s", "1.26s", 
+		"1.26s", "1.27s", "1.28s", "1.28s", "1.29s", "1.29s", "1.30s", "1.31s", "1.31s", "1.32s", 
+		"1.33s", "1.33s", "1.34s", "1.34s", "1.35s", "1.36s", "1.36s", "1.37s", "1.38s", "1.38s", 
+		"1.39s", "1.39s", "1.40s", "1.41s", "1.41s", "1.42s", "1.43s", "1.43s", "1.44s", "1.44s", 
+		"1.45s", "1.46s", "1.46s", "1.47s", "1.48s", "1.48s", "1.49s", "1.49s", "1.50s", "1.51s", 
+		"1.51s", "1.52s", "1.53s", "1.53s", "1.54s", "1.54s", "1.55s", "1.56s", "1.56s", "1.57s", 
+		"1.58s", "1.58s", "1.59s", "1.59s", "1.60s", "1.61s", "1.61s", "1.62s", "1.63s", "1.63s", 
+		"1.64s", "1.64s", "1.65s", "1.66s", "1.66s", "1.67s", "1.68s", "1.68s", "1.69s", "1.69s", 
+		"1.70s", "1.71s", "1.71s", "1.72s", "1.73s", "1.73s", "1.74s", "1.74s", "1.75s", "1.76s", 
+		"1.76s", "1.77s", "1.78s", "1.78s", "1.79s", "1.79s", "1.80s", "1.81s", "1.81s", "1.82s", 
+		"1.83s", "1.83s", "1.84s", "1.84s", "1.85s", "1.86s", "1.86s", "1.87s", "1.88s", "1.88s", 
+		"1.89s", "1.89s", "1.90s", "1.91s", "1.91s", "1.92s", "1.93s", "1.93s", "1.94s", "1.94s", 
+		"1.95s", "1.96s", "1.96s", "1.97s", "1.98s", "1.98s", "1.99s", "1.99s", "2.00s", "2.01s", 
+		"2.01s", "2.02s", "2.03s", "2.03s", "2.04s", "2.04s", "2.05s", "2.06s", "2.06s", "2.07s", 
+		"2.08s", "2.08s", "2.09s", "2.09s", "2.10s", "2.11s", "2.11s", "2.12s", "2.13s", "2.13s", 
+		"2.14s", "2.14s", "2.15s", "2.16s", "2.16s", "2.17s", "2.18s", "2.18s", "2.19s", "2.19s", 
+		"2.20s", "2.21s", "2.21s", "2.22s", "2.23s", "2.23s", "2.24s", "2.24s", "2.25s", "2.26s", 
+		"2.26s", "2.27s", "2.28s", "2.28s", "2.29s", "2.29s", "2.30s", "2.31s", "2.31s", "2.32s", 
+		"2.33s", "2.33s", "2.34s", "2.34s", "2.35s", "2.36s", "2.36s", "2.37s", "2.38s", "2.38s", 
+		"2.39s", "2.39s", "2.40s", "2.41s", "2.43s", "2.44s", "2.45s", "2.46s", "2.48s", "2.49s", 
+		"2.50s", "2.51s", "2.53s", "2.54s", "2.55s", "2.56s", "2.58s", "2.59s", "2.60s", "2.61s", 
+		"2.63s", "2.64s", "2.65s", "2.66s", "2.68s", "2.69s", "2.70s", "2.71s", "2.73s", "2.74s", 
+		"2.75s", "2.76s", "2.78s", "2.79s", "2.80s", "2.81s", "2.83s", "2.84s", "2.85s", "2.86s", 
+		"2.88s", "2.89s", "2.90s", "2.91s", "2.93s", "2.94s", "2.95s", "2.96s", "2.98s", "2.99s", "3.00s"
+		};
+
+	public static final String[] REVERB_TIMES = 
+		{
+		"120ms", "130ms", "140ms", "155ms", "170ms", "185ms", "200ms", "215ms", "230ms", "245ms", 
+		"260ms", "280ms", "300ms", "320ms", "345ms", "370ms", "400ms", "420ms", "440ms", "460ms", 
+		"480ms", "500ms", "520ms", "540ms", "560ms", "570ms", "600ms", "630ms", "660ms", "700ms", 
+		"730ms", "765ms", "800ms", "860ms", "930ms", "1.00s", "1.02s", "1.04s", "1.06s", "1.08s", 
+		"1.10s", "1.15s", "1.20s", "1.25s", "1.30s", "1.35s", "1.40s", "1.45s", "1.50s", "1.55s", 
+		"1.60s", "1.67s", "1.75s", "1.80s", "1.90s", "2.00s", "2.05s", "2.10s", "2.15s", "2.20s", 
+		"2.25s", "2.30s", "2.36s", "2.43s", "2.50s", "2.60s", "2.70s", "2.80s", "2.90s", "3.00s", 
+		"3.10s", "3.20s", "3.30s", "3.40s", "3.50s", "3.60s", "3.70s", "3.80s", "3.90s", "3.95s", 
+		"4.00s", "4.10s", "4.20s", "4.40s", "4.60s", "4.80s", "5.00s", "5.20s", "5.40s", "5.60s", 
+		"5.90s", "6.20s", "6.50s", "6.80s", "7.20s", "7.60s", "8.00s", "8.80s", "9.60s", "10.4s", 
+		"11.0s", "12.0s", "13.0s", "14.0s", "15.0s", "16.0s", "17.0s", "18.0s", "19.0s", "20.0s", 
+		"21.0s", "22.0s", "23.0s", "24.0s", "25.0s", "27.0s", "29.0s", "31.0s", "33.0s", "35.0s", 
+		"38.0s", "42.0s", "45.0s", "51.0s", "58.0s", "65.0s", "75.0s", "90.0s", "Freeze"
+		};
+
+
+    public static final int[] LFO_FADE_INS_SYNC_ON =
+        {
+        0, 22, 45, 68, 91, 115, 138, 161, 184, 207, 231, 254, 277, 300, 324, 346, 
+        370, 395, 416, 439, 465, 484, 510, 533, 558, 578, 601, 624, 650, 668, 698, 719, 
+        742, 766, 791, 805, 833, 863, 879, 896, 931, 950, 969, 989, 1010, 1032, 1055, 1079, 
+        1104, 1131, 1158, 1187, 1218, 1218, 1250, 1284, 1284, 1320, 1357, 1357, 1397, 1397, 1440, 1440, 
+        1485, 1485, 1533, 1533, 1533, 1584, 1584, 1638, 1638, 1638, 1697, 1697, 1697, 1760, 1760, 1828, 
+        1828, 1828, 1901, 1901, 1901, 1980, 1980, 2066, 2066, 2066, 2160, 2160, 2160, 2263, 2263, 2376, 
+        2376, 2376, 2501, 2501, 2501, 2640, 2640, 2796, 2796, 2796, 2971, 2971, 2971, 3169, 3169, 3395, 
+        3395, 3395, 3657, 3657, 3657, 3691, 3691, 4322, 4322, 4322, 4754, 4754, 4754, 5282, 5282, 5943,
+        };
+

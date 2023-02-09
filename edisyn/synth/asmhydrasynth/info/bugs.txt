@@ -206,8 +206,9 @@ the LSB of the value being the *actual* value of the parameter.  As far
 as I know, this unfortunate behavior is unique in the synth world.  This 
 is one of several problems which force editors to highly customize 
 parameter emitting and parsing, rather than just use a simple table as 
-is the case for other synthesizers.
-
+is the case for other synthesizers.  [At least the Hydrasynth doesn't do
+bit-packing -- requiring you to send multiple parameters at the same
+time crammed into the same NRPN message -- for which I am grateful].
 
 
 14. INCONSISTENT WAVE RANGES.  The osc1type parameter is [0-218] 

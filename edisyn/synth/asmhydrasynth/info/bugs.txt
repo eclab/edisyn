@@ -60,9 +60,8 @@ force the Delay Time parameter down to zero, which appears to reset it.
 	- The following NRPN message (0x3F 0x57) is emitted when Tap Trig is 
 	  turned ON but not OFF on the panel.  Its purpose is unknown.  It is 
 	  missing from the NRPN Documentation.
-	- It is not clear if CC 0x0F is Delay Time BPM Sync OFF or 
-	  Delay Time BPM Sync ON
-
+	- CC 0x0F is just labelled "Delay Time" but it is actually
+	  Delay Time BPM Sync OFF
 
 4. BROKEN ALL SOUNDS OFF HANDLING.  The Hydrasynth does not properly 
 handle CC 120, All Sounds Off.  To start with, it has reallocated that 

@@ -178,13 +178,13 @@ public class YamahaDX7 extends Synth implements ProvidesNN
         
         hbox = new HBox();
         hbox.add(addOperator(1, Style.COLOR_A()));
-        hbox.add(addKeyScaling(1, Style.COLOR_A()));
+        hbox.addLast(addKeyScaling(1, Style.COLOR_A()));
         vbox.add(hbox);
         vbox.add(addEnvelope(1, Style.COLOR_B()));
 
         hbox = new HBox();
         hbox.add(addOperator(2, Style.COLOR_A()));
-        hbox.add(addKeyScaling(2, Style.COLOR_A()));
+        hbox.addLast(addKeyScaling(2, Style.COLOR_A()));
         vbox.add(hbox);
         vbox.add(addEnvelope(2, Style.COLOR_B()));
 
@@ -196,13 +196,13 @@ public class YamahaDX7 extends Synth implements ProvidesNN
         
         hbox = new HBox();
         hbox.add(addOperator(3, Style.COLOR_A()));
-        hbox.add(addKeyScaling(3, Style.COLOR_A()));
+        hbox.addLast(addKeyScaling(3, Style.COLOR_A()));
         vbox.add(hbox);
         vbox.add(addEnvelope(3, Style.COLOR_B()));
 
         hbox = new HBox();
         hbox.add(addOperator(4, Style.COLOR_A()));
-        hbox.add(addKeyScaling(4, Style.COLOR_A()));
+        hbox.addLast(addKeyScaling(4, Style.COLOR_A()));
         vbox.add(hbox);
         vbox.add(addEnvelope(4, Style.COLOR_B()));
 
@@ -214,13 +214,13 @@ public class YamahaDX7 extends Synth implements ProvidesNN
         
         hbox = new HBox();
         hbox.add(addOperator(5, Style.COLOR_A()));
-        hbox.add(addKeyScaling(5, Style.COLOR_A()));
+        hbox.addLast(addKeyScaling(5, Style.COLOR_A()));
         vbox.add(hbox);
         vbox.add(addEnvelope(5, Style.COLOR_B()));
 
         hbox = new HBox();
         hbox.add(addOperator(6, Style.COLOR_A()));
-        hbox.add(addKeyScaling(6, Style.COLOR_A()));
+        hbox.addLast(addKeyScaling(6, Style.COLOR_A()));
         vbox.add(hbox);
         vbox.add(addEnvelope(6, Style.COLOR_B()));
 
@@ -543,7 +543,7 @@ public class YamahaDX7 extends Synth implements ProvidesNN
         comp = new LabelledDial("Right Depth", this, "operator" + src + "keyboardlevelscalingrightdepth", color, 0, 99);
         hbox.add(comp);
         
-        hbox.add(new YamahaDX7Curve(this, 
+        hbox.addLast(new YamahaDX7Curve(this, 
                 "operator" + src + "keyboardlevelscalingbreakpoint",
                 "operator" + src + "keyboardlevelscalingleftcurve",
                 "operator" + src + "keyboardlevelscalingrightcurve",

@@ -391,6 +391,33 @@ public class ASMHydrasynth extends Synth
         "Harmon 13", "Harmon 14", "Harmon 15", "Harmon 16", "Harmon 17", "Harmon 18", "Harmon 19", "Harmon 20", "Harmon 21", "Harmon 22", "Harmon 23" 
         };
 
+
+	// For the time being we can't use this -- the JPopupMenu doesn't scroll
+	public static final String[] MACRO_NAME_PRESETS = 
+		{
+		"2nd", "3rd", "4th", "5th", "6th", "7th", 
+		"Air", "Amp", "ArpMode", "Attack", 
+		"Bacon", "Bark", "BassDrop", "Beef", "Bend", "Bite", "Bleed", "Breath", "Brighten", "Buildup", 
+		"CV 1", "CV 2", "Chance", "Chord", "Chorus", "Compres", "Crunch", "Crystal", "Cutoff", 
+		"Darken", "Decay", "Delay", "Depth", "Distort", "Dry/Wet", 
+		"EQ - Hi", "EQ - Low", "EQ - Mid", "Env Amt", 
+		"FM", "Fast", "Feedback", "Filter", "Flanger", "Force", "Funk", 
+		"GateTime", "Glide", "Go",
+		"Harmonic", "Harmony", "Hurt", 
+		"Itch", 
+		"Jianbing", 
+		"LFO Amt", "Level", 
+		"MIDI CC", "MaiTai", "Major", "MakeHuge", "Mangle", "Massage", "Minor", "Mod 1", "Mod 2", "Mod Amt", "Morph", 
+		"Noise", 
+		"Oct +", "Oct -", "Oh", "Ouch", "Overdriv", 
+		"PWM", "Pan", "Phase", "Phrase", "Pitch", "Pressure", "PulsWdth", "Purr", 
+		"Range", "Ratchet", "Rate", "Ratio", "Release", "Reso", "Reverb", "RingMod", "Rotary", "Rumble", 
+		"Scratch", "Slow", "Snarl", "Space", "Speed", "Spin", "Spread", "Stank", "Stop", "Stretch", "Sub", "Swing", 
+		"Teardown", "Thicken", "Thin", "Time", "TimeDiv", "Twist", 
+		"Velocity", "Vowel", 
+		"Warp", "WavStack", "Wavescan", "Width", "Wobble", "Woof", "Wow"
+		};
+
     public static final Color[] COLORS =
         {
         // The first 30 colors appear to move around HSB starting at 0 degrees (full Red) in increases of about 11,
@@ -1912,7 +1939,7 @@ public class ASMHydrasynth extends Synth
 
     public JComponent addMutant(int mut, Color color)
         {
-        Category category = new Category(this, "Mutant " + mut, color);
+        Category category = new Category(this, "Mutant " + mut + "   (Oscillator " + (mut < 3 ? "1)" : "2)"), color);
         category.makePasteable("mutant");
 
         JComponent comp;
@@ -1989,6 +2016,15 @@ public class ASMHydrasynth extends Synth
                 return String.format("%4.1f", (roundEven(v / 6.4) / 10.0));
                 }
             };
+            
+        final EnvelopeDisplay disp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
+            new String[] { null, null,  null,  null,  null,  null,  null,  null },
+            new String[] { "mutant" + mut + "warp1", "mutant" + mut + "warp2", "mutant" + mut + "warp3", "mutant" + mut + "warp4",
+            					"mutant" + mut + "warp5", "mutant" + mut + "warp6", "mutant" + mut + "warp7", "mutant" + mut + "warp8" },
+            new double[] { 0, 1.0 / 8, 1.0 / 8, 1.0 / 8, 1.0 / 8, 1.0 / 8, 1.0 / 8, 1.0 / 8 },
+            new double[] { 1.0 / 1024.0, 1.0 / 1024.0, 1.0 / 1024.0, 1.0 / 1024.0, 1.0 / 1024.0, 1.0 / 1024.0, 1.0 / 1024.0, 1.0 / 1024.0 });
+        disp.setStepping(true);
+
 
         final HBox warp = new HBox();
                 
@@ -2027,11 +2063,13 @@ public class ASMHydrasynth extends Synth
                         knobBox.add(depth);
                         knobBox.add(feedback);
                         knobBox.add(wet);
+                    	knobBox.addLast(Strut.makeStrut(disp, true));
                         break;
                     case 1:         // WavStack
                         sourceBox.add(sourceStrut);
                         knobBox.add(depth);
                         knobBox.add(wet);
+                    	knobBox.addLast(Strut.makeStrut(disp, true));
                         break;
                     case 2:         // OSC Sync
                         sourceBox.add(sourcesOscSync);
@@ -2040,6 +2078,7 @@ public class ASMHydrasynth extends Synth
                         knobBox.add(window);
                         knobBox.add(feedback);
                         knobBox.add(wet);
+                    	knobBox.addLast(Strut.makeStrut(disp, true));
                         break;
                     case 3:         // PW-Orig
                         sourceBox.add(sourceStrut);
@@ -2047,6 +2086,7 @@ public class ASMHydrasynth extends Synth
                         knobBox.add(depth);
                         knobBox.add(feedback);
                         knobBox.add(wet);
+                    	knobBox.addLast(Strut.makeStrut(disp, true));
                         break;
                     case 4:         // PW-Squeez
                         sourceBox.add(sourceStrut);
@@ -2054,6 +2094,7 @@ public class ASMHydrasynth extends Synth
                         knobBox.add(depth);
                         knobBox.add(feedback);
                         knobBox.add(wet);
+                    	knobBox.addLast(Strut.makeStrut(disp, true));
                         break;
                     case 5:         // PW-ASM
                         sourceBox.add(sourceStrut);
@@ -2062,6 +2103,7 @@ public class ASMHydrasynth extends Synth
                         knobBox.add(feedback);
                         knobBox.add(wet);
                         knobBox.add(warp);
+                        knobBox.addLast(disp);
                         break;
                     case 6:         // Harmonic
                         sourceBox.add(sourceStrut);
@@ -2069,12 +2111,14 @@ public class ASMHydrasynth extends Synth
                         knobBox.add(depth);
                         knobBox.add(feedback);
                         knobBox.add(wet);
+                    	knobBox.addLast(Strut.makeStrut(disp, true));
                         break;
                     case 7:         // PhazDiff
                         sourceBox.add(sourceStrut);
                         knobBox.add(depth);
                         knobBox.add(feedback);
                         knobBox.add(wet);
+                    	knobBox.addLast(Strut.makeStrut(disp, true));
                         break;
                     default:
                         System.err.println("ERROR: (Mutant Mode) bad mutant " + model.get(key));
@@ -2090,7 +2134,7 @@ public class ASMHydrasynth extends Synth
         
         vbox.add(sourceBox);
         hbox.add(vbox);
-        hbox.add(knobBox);
+        hbox.addLast(knobBox);
 
 
         // set up FM-Lin
@@ -3785,7 +3829,7 @@ public class ASMHydrasynth extends Synth
                 }
             };
         vbox.add(comp);
-        
+                
         /****
              FIXME
              comp = new LabelledDial("Depth " + i, this, "macro" + macro + "panelvalue", color, 0, 1024)

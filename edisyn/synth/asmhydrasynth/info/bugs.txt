@@ -159,7 +159,7 @@ mislabelled "Log 64".  This is wrong.  Similarly, if you turn the knob
 to -64, the curve is, just like the decay and release curves, 
 logarithmic.  However the knob is mislabelled "Exp -64".
 
-Some musicians may not be aware of what an exponential attack curve 
+Some people may not be aware of what an exponential attack curve 
 actually looks like.  One might assume that, being "exponential", the 
 curve starts off slowly and then shoots up vertically.  But this is not 
 correct.  On a synthesizer, an exponential curve describes an 

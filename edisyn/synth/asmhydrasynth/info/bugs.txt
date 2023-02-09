@@ -247,21 +247,23 @@ parameters are in *two's* complement, that is, 0 ... +N is stored as
 worse, three of these parameters are *one byte* two's complement, and 
 three are *two byte* two's complement.
 
-Many parameters (lfo rates, etc.) are displayed with pseudologarithmic 
+Many parameters (lfo rates, etc.) are displayed with pseudoexponential 
 or other arbitrary values, but the mapping of the underlying parameter 
 values to the displayed values is not based on any function, but rather 
 requires an undocumented table lookup.  These tables are completely 
-different from one another: in some cases they're 128 in length, in 
-other cases, 129, 130, 131, or 132 in length. In one case -- the awful 
-"delaytime" parameter -- it's 1025 in length.  These require elaborate 
-and detailed combinations of functions and tables to reproduce 
-faithfully, which are entirely undocumented.
+different from one another: in some cases they're 127 in length, in 
+other cases, 128, 1024, or 1025.  Only in the case of the 
+lfoXratesyncoff parameters does the mapping appear to follow an
+actual computable function.  The others require elaborate and detailed 
+combinations of functions and tables to reproduce faithfully, which are 
+entirely undocumented.  The "delay time BPM sync off" parameter is 
+particularly bad in this respect. 
 
-Metric parameter ranges are all over the map.  Some ranges are 0...100, 
-others 0...127, others 0...128, others 0...1020, others 0...1023, others 
-0...1024, and still others ranges such as [464...800] by 8, [0...2880] 
-by 8, [128...8000] by 8, [0...4800] by 8, [408...8160], [1...400], 
-[5...560], etc.  Again, none of this is documented.
+Metric NRPN parameter ranges are all over the map.  Some ranges are 
+0...100, others 0...127, others 0...128, others 0...1020, others 
+0...1023, others 0...1024, and still others ranges such as [464...800]
+by 8, [0...2880] by 8, [128...8000] by 8, [0...4800] by 8, [408...8160], 
+[1...400], [5...560], etc.  None of this is documented.
 
 
 

@@ -241,9 +241,9 @@ parameters are not emitted as NRPN values 0...1024, but rather are
 emitted as 8...8192 in steps of 8.
 
 The vast majority of signed parameters are in one's complement, that is, 
--N ... +N is stored in order as 0...2N.  But for some reason, six 
-parameters are in *two's* complement, that is, 0 ... +N is stored as 
-0...N, and then -N ... -1 are stored as N+1 ... 2N.  To make matters 
+-N ... +N are emitted in order as 0...2N.  But for some reason, six 
+parameters are in *two's* complement, that is, 0 ... +N are emitted as 
+0...N, and then -N ... -1 are emitted as N+1 ... 2N.  To make matters 
 worse, three of these parameters are *one byte* two's complement, and 
 three are *two byte* two's complement.
 

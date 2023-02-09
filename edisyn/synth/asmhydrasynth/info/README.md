@@ -16,3 +16,6 @@ of working on the Edisyn Hydrasynth editor.  It includes:
 	- nrpn.tables.txt: The nrpn.xlsx/nrpn.pdf files often refer to
 	  tables in ALL_CAPS_WITH_UNDERSCORES.  These can be found in the
 	  ASMHydrasynth.java file but they can also be found here.
+
+	- presets.txt: these are our best guesses as to the NRPN values
+	  corresponding to five parameters for each preset for each FX.

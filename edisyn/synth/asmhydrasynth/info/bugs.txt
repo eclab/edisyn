@@ -254,10 +254,10 @@ requires an undocumented table lookup.  These tables are completely
 different from one another: in some cases they're 127 in length, in 
 other cases, 128, 1024, or 1025.  Only in the case of the 
 lfoXratesyncoff parameters does the mapping appear to follow an
-actual computable function.  The others require elaborate and detailed 
-combinations of functions and tables to reproduce faithfully, which are 
-entirely undocumented.  The "delay time BPM sync off" parameter is 
-particularly bad in this respect. 
+actual computable function, but its range (1281) is unusually large.
+The others require elaborate and detailed combinations of functions 
+and tables to reproduce faithfully, which are entirely undocumented.  
+The "delay time BPM sync off" parameter is particularly bad. 
 
 Metric NRPN parameter ranges are all over the map.  Some ranges are 
 0...100, others 0...127, others 0...128, others 0...1020, others 

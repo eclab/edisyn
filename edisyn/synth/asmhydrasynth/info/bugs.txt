@@ -139,7 +139,7 @@ Hydrasynth.
 
 
 
-9. UNHELPFUL NRPN RESPONSES.  Wheny you set the ribbon mode to THEREMIN 
+9. UNHELPFUL NRPN RESPONSES.  When you set the ribbon mode to THEREMIN 
 on the Hydrasynth via NRPN, it responds by dumping all the theremin 
 values back via NRPN.  As a result, if the musician is using a patch 
 editor to change to theremin mode, the Hydrasynth responds by 

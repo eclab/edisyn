@@ -5,7 +5,7 @@ reported to ASM as of February, 2023, Hydrasynth firmware version 1.5.5.
 I am not aware of any of them having been fixed.
 
 Note that many of these errors concern NRPN, parameter display, and 
-NRPN.  This is because I am building a patch editor, so I have triggered 
+sysex.  This is because I am building a patch editor, so I have triggered 
 these errors.  But not all: see the touch strip functionality missteps 
 below for example.
 

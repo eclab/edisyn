@@ -77,9 +77,9 @@ public abstract class Synth extends JComponent implements Updatable
     public JMenuItem receiveCurrent;
     /** The "Request Patch..." menu */
     public JMenuItem receivePatch;
-    /** The "Sends Real Time Changes" menu */
-    public JMenuItem receiveNextPatch;
     /** The "Request Next Patch" menu */
+    public JMenuItem receiveNextPatch;
+    /** The "Sends Real Time Changes" menu */
     public JCheckBoxMenuItem transmitParameters;
     /** The "Allows Auto Send" menu */
     public JCheckBoxMenuItem autoSendPatches;
@@ -6611,14 +6611,14 @@ public abstract class Synth extends JComponent implements Updatable
 
     /** Goes through the process of saving to a new sysex file and associating it with
         the editor. */
-    void doSaveAs()
+    protected void doSaveAs()
         {
         doSaveAs(null);
         }
         
     /** Goes through the process of saving to a new sysex file and associating it with
         the editor. */
-    void doSaveAs(String filename)
+    protected void doSaveAs(String filename)
         {
         if (tabs.getSelectedComponent() == librarianPane)
             {
@@ -6713,7 +6713,7 @@ public abstract class Synth extends JComponent implements Updatable
 
     /** Goes through the process of saving to an existing sysex file associated with
         the editor, else it calls doSaveAs(). */
-    void doSave()
+    protected void doSave()
         {
         if (tabs.getSelectedComponent() == librarianPane)
             {
@@ -7579,7 +7579,7 @@ public abstract class Synth extends JComponent implements Updatable
         into a librarian. */
     public void setAvoidUpdating(boolean val) { avoidUpdating = val; }
         
-    boolean doOpen(boolean merge)
+    protected boolean doOpen(boolean merge)
         {
         parsingForMerge = merge;
         mergeSynth = null;

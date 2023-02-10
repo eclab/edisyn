@@ -1212,7 +1212,7 @@ public class Midi
         if (data[0 + offset] == (byte)0x7D)             // educational use
             {
             return (String)(map.get(new Integer(data[0 + offset]))) + 
-                "\n\nNote that unregistered manufacturers or developers typically\n use this system exclusive region.";
+                "<br><br>Note that unregistered manufacturers or developers typically<br>use this system exclusive region.";
             }
         else if (data[0 + offset] == (byte)0x00)
             {

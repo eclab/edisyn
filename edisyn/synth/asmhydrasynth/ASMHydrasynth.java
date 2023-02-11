@@ -1106,6 +1106,14 @@ public class ASMHydrasynth extends Synth
                 }
             }
 
+         String str = getLastX("SendArpTapTrig", getSynthClassName(), true);
+        if (str == null)
+            sendArpTapTrig = false;            // default is false
+        else if (str.equalsIgnoreCase("true"))
+            sendArpTapTrig = true;
+        else
+            sendArpTapTrig = false;
+
         /// SOUND PANEL
                 
         JComponent soundPanel = new SynthPanel(this);
@@ -4031,13 +4039,37 @@ public class ASMHydrasynth extends Synth
         return category;
         }
 
+	
+
     //protected void doSave() { showSimpleMessage("Cannot Save", "This Patch Editor cannot save to a file at present."); }
     //protected void doSaveAs() { showSimpleMessage("Cannot Save", "This Patch Editor cannot save to a file at present."); }
     //protected boolean doOpen(boolean merge) { showSimpleMessage("Cannot Open", "This Patch Editor cannot open a file at present."); return false; }
         
+        
+    boolean sendArpTapTrig;
+
+    public void addHydrasynthMenu()
+        {
+        JMenu menu = new JMenu("Hydrasynth");
+        menubar.add(menu);
+
+        JCheckBoxMenuItem sendArpTapTrigMenu = new JCheckBoxMenuItem("Send Arp Tap Trig");
+        sendArpTapTrigMenu.setSelected(sendArpTapTrig);
+        menu.add(sendArpTapTrigMenu);
+        sendArpTapTrigMenu.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent evt)
+                {
+                sendArpTapTrig = sendArpTapTrigMenu.isSelected();
+                setLastX("" + sendArpTapTrig, "SendArpTapTrig", getSynthClassName(), true);
+				}
+			});
+		}
+			
     public JFrame sprout()
         {
         JFrame frame = super.sprout();
+        addHydrasynthMenu();
         receiveCurrent.setEnabled(false);
         receivePatch.setEnabled(false);
         receiveNextPatch.setEnabled(false);
@@ -4675,10 +4707,14 @@ public class ASMHydrasynth extends Synth
                 }
             else if (key.equals("arptaptrig"))
                 {
-                p = p("arpdivision");
-                v = 8;
-                w = val;
-                val = v * 128 + w;
+                if (!sendArpTapTrig) return new Object[0];		// don't send it
+				else
+					{
+					p = p("arpdivision");
+					v = 8;
+					w = val;
+					val = v * 128 + w;
+					}
                 }
             else if (key.equals("arpphrase"))
                 {

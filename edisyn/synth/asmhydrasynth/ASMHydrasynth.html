@@ -7,7 +7,7 @@
 If you're connecting via USB, set Edisyn's incoming and outgoing MIDI devices to HYDRASYNTH KB.  Set Edisyn's MIDI channel to the same as the synth's RX and TX MIDI channels.  You can set the synth's RX MIDI channel to OMNI if you liked.   Set up Parameter RX and TX both to be NRPN.  
 
 <p><b>Current Editor Status</b><br>
-ASM does not have a public sysex spec.  I may yet attempt to reverse engineer this spec, but at present I have not.  This means that this editor cannot request the current patch, write to a patch, read an incoming patch, nor load or save patches.  Obviously this means it cannot provide a Librarian at present.  What it can do is:
+ASM does not have a public sysex spec.  I may yet attempt to reverse engineer this spec, but at present I have not.  This means that this editor cannot request the current patch, write to a patch, read an incoming patch, nor load or save patches in ASM sysex format.  Obviously this means it cannot provide a Librarian at present.  What it can do is:
 
 <ul>
 <li>It can send (most) individual parameters.
@@ -20,6 +20,9 @@ ASM does not have a public sysex spec.  I may yet attempt to reverse engineer th
 
 <p><b>Hydrasynth Deluxe Multimode</b><br>
 Edisyn does not yet support multimode, though I intend to ultimately.
+
+<p><b>About the Menu</b><br>
+The Hydrasynth has a bug regarding the Arp Tap Trig option.  If you turn on or off this option via NRPN, the Hydrasynth will <i>also</i> turn on/off the Arpeggiator.  This doesn't happen if you turn Arp Tap Trig on or off on the front panel.  As a result, if you send a patch that has Arp Tap Trig turned on, it could turn the arpeggiator on, which you probably didn't intend.  By default Edisyn does not send Arp Tap Trig at all.  If you would like to send it (to send a final version of a patch in order to save it, say), and realize that you'll have to keep an eye on the Arpeggiator switch, you can check the <b>Send Arp Tap Trig</b> menu option. 
 
 <p><b>Gotchas and Hydrasynth Bugs to Be Aware of</b><br>
 <ul>

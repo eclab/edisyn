@@ -2460,6 +2460,7 @@ public class ASMHydrasynth extends Synth
                     }
                 }
             };
+        ((LabelledDial)comp).addAdditionalLabel("(Param 1)");
         chorus.add(comp);
         comp = new LabelledDial("Depth", this, (pre ? "pre" : "post") + "fx1param2", color, 0, 1024)
             {
@@ -2470,19 +2471,22 @@ public class ASMHydrasynth extends Synth
                 return String.format("%4.1f", (roundEven(v / 6.4) / 10.0));
                 }
             };
+        ((LabelledDial)comp).addAdditionalLabel("(Param 2)");
         chorus.add(comp);
         comp = new LabelledDial("Offset", this, (pre ? "pre" : "post") + "fx1param3", color, 0, 360, 180)
             {
             public boolean isSymmetric() { return true; }
             };
+        ((LabelledDial)comp).addAdditionalLabel("(Param 3)");
         chorus.add(comp);
         comp = new LabelledDial("Feedback", this, (pre ? "pre" : "post") + "fx1param4", color, 1, 127, 64)
             {
             public boolean isSymmetric() { return true; }
             };
+        ((LabelledDial)comp).addAdditionalLabel("(Param 4)");
         chorus.add(comp);
         VBox vbox = new VBox();
-        comp = new CheckBox("Stereo", this, (pre ? "pre" : "post") + "fx1param5");
+        comp = new CheckBox("Stereo    (Param 5)", this, (pre ? "pre" : "post") + "fx1param5");
         vbox.add(comp);
         chorus.addLast(vbox);
 
@@ -2519,6 +2523,7 @@ public class ASMHydrasynth extends Synth
                 }
             };
         flanger.add(comp);
+        ((LabelledDial)comp).addAdditionalLabel("(Param 1)");
         comp = new LabelledDial("Depth", this, (pre ? "pre" : "post") + "fx2param2", color, 0, 1024)
             {
             public String map(int value)
@@ -2529,18 +2534,21 @@ public class ASMHydrasynth extends Synth
                 }
             };
         flanger.add(comp);
+        ((LabelledDial)comp).addAdditionalLabel("(Param 2)");
         comp = new LabelledDial("Offset", this, (pre ? "pre" : "post") + "fx2param3", color, 0, 360, 180)
             {
             public boolean isSymmetric() { return true; }
             };
         flanger.add(comp);
+        ((LabelledDial)comp).addAdditionalLabel("(Param 3)");
         comp = new LabelledDial("Feedback", this, (pre ? "pre" : "post") + "fx2param4", color, 1, 127, 64)
             {
             public boolean isSymmetric() { return true; }
             };
+        ((LabelledDial)comp).addAdditionalLabel("(Param 4)");
         flanger.add(comp);
         vbox = new VBox();
-        comp = new CheckBox("Stereo", this, (pre ? "pre" : "post") + "fx2param5");
+        comp = new CheckBox("Stereo    (Param 5)", this, (pre ? "pre" : "post") + "fx2param5");
         vbox.add(comp);
         flanger.addLast(vbox);
 
@@ -2576,6 +2584,7 @@ public class ASMHydrasynth extends Synth
                     }
                 }
             };
+        ((LabelledDial)comp).addAdditionalLabel("(Param 1)");
         rotary.add(comp);
         comp = new LabelledDial("Hi-Speed", this, (pre ? "pre" : "post") + "fx3param2", color, 0, 1024)
             {
@@ -2608,15 +2617,19 @@ public class ASMHydrasynth extends Synth
                     }
                 }
             };
+        ((LabelledDial)comp).addAdditionalLabel("(Param 2)");
         rotary.add(comp);
         comp = new LabelledDial("Low-Depth", this, (pre ? "pre" : "post") + "fx3param3", color, 0, 127);
+        ((LabelledDial)comp).addAdditionalLabel("(Param 3)");
         rotary.add(comp);
         comp = new LabelledDial("Hi-Depth", this, (pre ? "pre" : "post") + "fx3param4", color, 0, 127);
+        ((LabelledDial)comp).addAdditionalLabel("(Param 4)");
         rotary.add(comp);
         comp = new LabelledDial("Low/High", this, (pre ? "pre" : "post") + "fx3param5", color,1, 127, 64)
             {
             public boolean isSymmetric() { return true; }
             };
+        ((LabelledDial)comp).addAdditionalLabel("(Param 5)");
         rotary.addLast(comp);
         
         final HBox phaser = new HBox();
@@ -2651,6 +2664,7 @@ public class ASMHydrasynth extends Synth
                     }
                 }
             };
+        ((LabelledDial)comp).addAdditionalLabel("(Param 1)");
         phaser.add(comp);
         comp = new LabelledDial("Feedback", this, (pre ? "pre" : "post") + "fx4param2", color, 0, 1024)
             {
@@ -2662,15 +2676,19 @@ public class ASMHydrasynth extends Synth
                 return String.format("%4.1f", (roundEven(v / 6.4) / 10.0) - 64);
                 }
             };
+        ((LabelledDial)comp).addAdditionalLabel("(Param 2)");
         phaser.add(comp);
         comp = new LabelledDial("Depth", this, (pre ? "pre" : "post") + "fx4param3", color, 0, 127);
+        ((LabelledDial)comp).addAdditionalLabel("(Param 3)");
         phaser.add(comp);
         comp = new LabelledDial("Phase", this, (pre ? "pre" : "post") + "fx4param4", color, 0, 127);
+        ((LabelledDial)comp).addAdditionalLabel("(Param 4)");
         phaser.add(comp);
         comp = new LabelledDial("Offset", this, (pre ? "pre" : "post") + "fx4param5", color, 0, 360, 180)
             {
             public boolean isSymmetric() { return true; }
             };
+        ((LabelledDial)comp).addAdditionalLabel("(Param 5)");
         phaser.addLast(comp);
         
         final HBox lofi = new HBox();
@@ -2711,6 +2729,7 @@ public class ASMHydrasynth extends Synth
                     }
                 }
             };
+        ((LabelledDial)comp).addAdditionalLabel("(Param 1)");
         lofi.add(comp);
         comp = new LabelledDial("Resonance", this, (pre ? "pre" : "post") + "fx5param2", color, 0, 1023)
             {
@@ -2721,10 +2740,11 @@ public class ASMHydrasynth extends Synth
                 return String.format("%4.1f", (roundEven(v / 74.4) / 10.0 + 1.0));
                 }
             };
+        ((LabelledDial)comp).addAdditionalLabel("(Param 2)");
         lofi.add(comp);
         vbox = new VBox(); 
         params = LO_FI_FILTER_TYPES;
-        comp = new Chooser("Filter Type", this, (pre ? "pre" : "post") + "fx5param3", params);
+        comp = new Chooser("Filter Type    (Param 3) ", this, (pre ? "pre" : "post") + "fx5param3", params);
         vbox.add(comp);
         lofi.add(vbox);
         comp = new LabelledDial("Output", this, (pre ? "pre" : "post") + "fx5param4", color, 58, 100)
@@ -2735,6 +2755,7 @@ public class ASMHydrasynth extends Synth
                 return "" + (value - 64) + "dB";
                 }
             };
+        ((LabelledDial)comp).addAdditionalLabel("(Param 4)");
         lofi.add(comp);
         comp = new LabelledDial("Sampling", this, (pre ? "pre" : "post") + "fx5param5", color, 1, 16)
             {
@@ -2744,7 +2765,8 @@ public class ASMHydrasynth extends Synth
                 }
             };
         lofi.addLast(comp);
-        
+         ((LabelledDial)comp).addAdditionalLabel("(Param 5)");
+       
         final HBox tremolo = new HBox();
         comp = new LabelledDial("Rate", this, (pre ? "pre" : "post") + "fx6param1", color, 0, 1024)
             {
@@ -2777,6 +2799,7 @@ public class ASMHydrasynth extends Synth
                     }
                 }
             };
+        ((LabelledDial)comp).addAdditionalLabel("(Param 1)");
         tremolo.add(comp);
         comp = new LabelledDial("Depth", this, (pre ? "pre" : "post") + "fx6param2", color, 0, 1024)
             {
@@ -2787,18 +2810,21 @@ public class ASMHydrasynth extends Synth
                 return String.format("%4.1f", (roundEven(v / 6.4) / 10.0));
                 }
             };
+        ((LabelledDial)comp).addAdditionalLabel("(Param 2)");
         tremolo.add(comp);
         vbox = new VBox(); 
         params = TREMOLO_LFO_SHAPES;
-        comp = new Chooser("LFO Shape", this, (pre ? "pre" : "post") + "fx6param3", params);
+        comp = new Chooser("LFO Shape     (Param 3) ", this, (pre ? "pre" : "post") + "fx6param3", params);
         vbox.add(comp);
         tremolo.add(vbox);
         comp = new LabelledDial("Phase", this, (pre ? "pre" : "post") + "fx6param4", color, 0, 360, 180)
             {
             public boolean isSymmetric() { return true; }
             };
+        ((LabelledDial)comp).addAdditionalLabel("(Param 4)");
         tremolo.add(comp);
         comp = new LabelledDial("Pitch Mod", this, (pre ? "pre" : "post") + "fx6param5", color, 0, 127);
+        ((LabelledDial)comp).addAdditionalLabel("(Param 5)");
         tremolo.addLast(comp);
 
         final HBox eq = new HBox();
@@ -2810,6 +2836,7 @@ public class ASMHydrasynth extends Synth
                 return "" + ((roundEven(value / 1.7) - 360) / 10.0);
                 }
             };
+        ((LabelledDial)comp).addAdditionalLabel("(Param 1)");
         eq.add(comp);
         comp = new LabelledDial("Mid Gain", this, (pre ? "pre" : "post") + "fx7param3", color, 0, 600)
             {
@@ -2819,6 +2846,7 @@ public class ASMHydrasynth extends Synth
                 return "" + ((value - 360) / 10.0);
                 }
             };
+        ((LabelledDial)comp).addAdditionalLabel("(Param 2)");
         eq.add(comp);
         
         comp = new LabelledDial("High Gain", this, (pre ? "pre" : "post") + "fx7param2", color, 0, 1020)
@@ -2829,6 +2857,7 @@ public class ASMHydrasynth extends Synth
                 return "" + ((roundEven(value / 1.7) - 360) / 10.0);
                 }
             };
+        ((LabelledDial)comp).addAdditionalLabel("(Param 3)");
         eq.add(comp);
         comp = new LabelledDial("Xover Lo", this, (pre ? "pre" : "post") + "fx7param4", color, 16, 1000)
             {
@@ -2837,6 +2866,7 @@ public class ASMHydrasynth extends Synth
                 return "" + (value * 2);
                 }
             };
+        ((LabelledDial)comp).addAdditionalLabel("(Param 4)");
         eq.add(comp);
         comp = new LabelledDial("Xover Hi", this, (pre ? "pre" : "post") + "fx7param5", color, 32, 1000)
             {
@@ -2845,6 +2875,7 @@ public class ASMHydrasynth extends Synth
                 return "" + (value * 16);
                 }
             };
+        ((LabelledDial)comp).addAdditionalLabel("(Param 5)");
         eq.addLast(comp);
 
         final HBox compressor = new HBox();
@@ -2857,6 +2888,7 @@ public class ASMHydrasynth extends Synth
                 return String.format("%4.1f", roundEven((v - 408) / 40.8) / 10.0 + 1.0) + ":1";
                 }
             };
+        ((LabelledDial)comp).addAdditionalLabel("(Param 1)");
         compressor.add(comp);
         comp = new LabelledDial("Threshold", this, (pre ? "pre" : "post") + "fx8param2", color, 0, 1024)
             {
@@ -2868,19 +2900,23 @@ public class ASMHydrasynth extends Synth
                 return String.format("%4.1f", (roundEven(v / 12.8) / 10.0 - 64.0));
                 }
             };
+        ((LabelledDial)comp).addAdditionalLabel("(Param 2)");
         compressor.add(comp);
         comp = new LabelledDial("Attack", this, (pre ? "pre" : "post") + "fx8param3", color, 1, 400);
+        ((LabelledDial)comp).addAdditionalLabel("(Param 3)");
         compressor.add(comp);
         comp = new LabelledDial("Release", this, (pre ? "pre" : "post") + "fx8param4", color, 5, 560);
+        ((LabelledDial)comp).addAdditionalLabel("(Param 4)");
         compressor.add(comp);
         comp = new LabelledDial("Output", this, (pre ? "pre" : "post") + "fx8param5", color, 0, 512);
-        compressor.addLast(comp);
+        ((LabelledDial)comp).addAdditionalLabel("(Param 5)");
+        compressor.add(comp);
         
         VBox sidechainbox = new VBox();
         params = SIDECHAINS;
         comp = new Chooser("Sidechain", this, (pre ? "pre" : "post") + "fxsidechain", params);
         sidechainbox.add(comp);
-        compressor.add(sidechainbox);
+        compressor.addLast(sidechainbox);
         
         final HBox distort = new HBox();
         comp = new LabelledDial("Drive", this, (pre ? "pre" : "post") + "fx9param1", color, 0, 1024)
@@ -2892,6 +2928,7 @@ public class ASMHydrasynth extends Synth
                 return String.format("%4.1f", (roundEven(v / 6.4) / 10.0));
                 }
             };
+        ((LabelledDial)comp).addAdditionalLabel("(Param 1)");
         distort.add(comp);
         comp = new LabelledDial("Tone", this, (pre ? "pre" : "post") + "fx9param2", color, 0, 1024)
             {
@@ -2903,10 +2940,13 @@ public class ASMHydrasynth extends Synth
                 return String.format("%4.1f", (roundEven(v / 6.4) / 10.0) - 64);
                 }
             };
+        ((LabelledDial)comp).addAdditionalLabel("(Param 2)");
         distort.add(comp);
         comp = new LabelledDial("Asym", this, (pre ? "pre" : "post") + "fx9param3", color, 0, 128);
+        ((LabelledDial)comp).addAdditionalLabel("(Param 3)");
         distort.add(comp);
         comp = new LabelledDial("Curve", this, (pre ? "pre" : "post") + "fx9param4", color, 0, 128);
+        ((LabelledDial)comp).addAdditionalLabel("(Param 4)");
         distort.add(comp);
         comp = new LabelledDial("Output", this, (pre ? "pre" : "post") + "fx9param5", color, 0, 600)
             {
@@ -2916,6 +2956,7 @@ public class ASMHydrasynth extends Synth
                 return "" + ((value - 360) / 10.0);
                 }
             };
+        ((LabelledDial)comp).addAdditionalLabel("(Param 5)");
         distort.addLast(comp);
         
         HBox bypass = new HBox();
@@ -2949,6 +2990,7 @@ public class ASMHydrasynth extends Synth
                 return "" + (roundEven(v / 8.192) / 10.0) + "%";
                 }
             };
+        drywet.addAdditionalLabel(" ");		// so Bypass is the right height
 
         params = FX_TYPES;
         comp = new Chooser("Type", this, (pre ? "pre" : "post") + "fxtype", params)     

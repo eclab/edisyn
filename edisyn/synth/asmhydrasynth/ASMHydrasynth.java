@@ -1114,6 +1114,15 @@ public class ASMHydrasynth extends Synth
         else
             sendArpTapTrig = false;
 
+    	str = getLastX("LockUserLFOSteps", getSynthClassName(), true);
+        if (str == null)
+            lockUserLFOSteps = false;            // default is false
+        else if (str.equalsIgnoreCase("true"))
+            lockUserLFOSteps = true;
+        else
+            lockUserLFOSteps = false;
+
+
         /// SOUND PANEL
                 
         JComponent soundPanel = new SynthPanel(this);
@@ -1387,6 +1396,18 @@ public class ASMHydrasynth extends Synth
         String newnm = revisePatchName(nm);
         if (!nm.equals(newnm))
             model.set("name", newnm);
+            
+		if (lockAllLFOSteps)
+			{
+			for(int lfo = 1; lfo <= 5; lfo++)
+				{
+				for(int step = 1; step <= 64; step++)
+					{
+					String key = "lfo" + lfo + "step" + step;
+					model.set(key, lockLFOStep(model.get(key)));
+					}
+				}
+			}        
         }
         
                 
@@ -3376,6 +3397,21 @@ public class ASMHydrasynth extends Synth
         }
                 
 
+	int lockLFOStep(int proposedState)
+		{
+		double v = proposedState * 8;
+		v = (int)(roundEven(v / 6.4) / 10.0) - 64.0;
+		
+		v = roundEven(v / 5.0) * 5;
+		if (v > 60) v = 60;
+		if (v < -60) v = -60;
+		
+		v = v + 64;
+		v = v * 64;
+		v = v / 8;
+		return (int) v;
+		}
+
     public JComponent addLFOSteps(int lfo, Color color)
         {
         Category category = new Category(this, "LFO " + lfo + " Steps", color);
@@ -3396,6 +3432,19 @@ public class ASMHydrasynth extends Synth
                 comp = new LabelledDial("Step " + j, this, "lfo" + lfo + "step" + j, color, 0, 1024)
                     {
                     public boolean isSymmetric() { return true; }
+
+					// We want to override mouse movements, not setting the state in general,
+					// so we override getProposedState(MouseEvent e) rather than setState(...)
+					
+        			public int updateProposedState(int proposedState)
+        				{
+        				if (lockUserLFOSteps || lockAllLFOSteps)
+        					{
+        					proposedState = lockLFOStep(proposedState);
+        					}
+        				return proposedState;
+        				}
+
                     public String map(int value)
                         {
                         double v = value * 8;
@@ -4089,7 +4138,9 @@ public class ASMHydrasynth extends Synth
         
         
     boolean sendArpTapTrig;
-
+    boolean lockUserLFOSteps;
+	boolean lockAllLFOSteps;
+	
     public void addHydrasynthMenu()
         {
         JMenu menu = new JMenu("Hydrasynth");
@@ -4104,6 +4155,29 @@ public class ASMHydrasynth extends Synth
                 {
                 sendArpTapTrig = sendArpTapTrigMenu.isSelected();
                 setLastX("" + sendArpTapTrig, "SendArpTapTrig", getSynthClassName(), true);
+				}
+			});
+
+        JCheckBoxMenuItem lockUserLFOStepsMenu = new JCheckBoxMenuItem("Lock User LFO Steps to Notes");
+        lockUserLFOStepsMenu.setSelected(lockUserLFOSteps);
+        menu.add(lockUserLFOStepsMenu);
+        lockUserLFOStepsMenu.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent evt)
+                {
+                lockUserLFOSteps = lockUserLFOStepsMenu.isSelected();
+                setLastX("" + lockUserLFOSteps, "LockUserLFOSteps", getSynthClassName(), true);
+				}
+			});
+
+        JCheckBoxMenuItem lockAllLFOStepsMenu = new JCheckBoxMenuItem("Lock All LFO Steps to Notes");
+        lockAllLFOStepsMenu.setSelected(lockAllLFOSteps);
+        menu.add(lockAllLFOStepsMenu);
+        lockAllLFOStepsMenu.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent evt)
+                {
+                lockAllLFOSteps = lockAllLFOStepsMenu.isSelected();
 				}
 			});
 		}

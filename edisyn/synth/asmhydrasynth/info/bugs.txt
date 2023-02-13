@@ -266,4 +266,9 @@ by 8, [0...2880] by 8, [128...8000] by 8, [0...4800] by 8, [408...8160],
 [1...400], [5...560], etc.  None of this is documented.
 
 
+16. RIBBON MOD HOLD MISSING NRPN
+
+I have been informed that Ribbon Mod Hold is stored per-patch.
+However it does not appear to have an NRPN assigned to it.
+
 

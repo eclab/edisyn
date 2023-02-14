@@ -1,0 +1,677 @@
+February 14, 2023 Hydrasynth sysex reverse engineering notes.  This is divided
+into sections:
+
+	0. INTRO
+	1. HIGH-LEVEL DESCRIPTION
+	2. A SAMPLE
+	3. GUESSES
+	
+
+0. INTRO
+
+The Hydrasynth seems to download the following elements to the Librarian:
+
+	- Lists of patch names in a bank
+	- Whole stored banks at a time
+	- Individual stored patches 
+	
+Sigabort's editor seems to be able to the same, but has a lot of notes
+that state that it's not possible to download the patch in current working
+memory.  That's pretty unfortunate.  But how does the Sigabort developer 
+know this?  I have not contacted the editor for information -- it seems
+crass to ask a commercial developer to assist in building an open source
+editor that would put his efforts out to pasture -- but I am guessing that
+the Sigabort editor was not reverse engineered, but rather that ASM provided
+information.  I have my reasons for guessing this; but the upshot of this is
+that if it wasn't reverse engineered, the Sigabort claim about the Hydrasynth
+lacking the ability to request and download from current memory (!!!) may
+be based on direct knowledge of the spec.
+
+
+
+1. HIGH-LEVEL DESCRIPTION
+
+To download a patch from a specific slot in memory, the Librarian engages
+with the Hydrasynth in (unfortunately) a synchronous dance.  First the 
+Librarian sends out a short header message, and the Hydrasynth responds
+with a different short header message.  Then, 21 times, the Librarian 
+sends out a request message and gets a 191 byte response.  The Librarian
+then sends out a final request message and gets a truncated 155 byte
+response. The Librarian then sends out a message which is similar to 
+another request message, but gets no response.  It then sends out
+a footer message and the Hydrasynth responds with a footer message.
+
+All of these messages have the same pattern:
+
+	F0 00 20 2B 00 6F DATA... ENDING F7
+	
+The ENDING of the header and footer messages is 41
+
+The ENDING of the first request messages is 41 3D
+
+The ENDING of the remaining request messages is 59 3D
+
+The ENDING of the response messages is 3D 3D except the last, which is 41 3D
+
+00 20 2B is Medeli Electronics's sysex ID, so the only thing left is 00 6F
+prior to the DATA.  Every single command appears to have this same pattern,
+but there is little rhyme or reason to the DATA.  I am guessing this is because
+the DATA is encoded.  My initial guess is that every 3 8-bit bytes are encoded
+as 4 7-bit sysex bytes, but I'm not sure.  The randomness of the encoding for
+the patch name, even with a patch name like "0000000000000000", suggests
+something as irritating as a block cypher; but the large number of "41" 
+(decimal 65, perhaps representing 0?) suggests that it might be something else.
+ASM went through a lot of trouble to make this as hard as possible on developers.
+
+It appears that once I have sent the header, I can send the first request message
+but not the second one (initially) -- they have to be in order.  But I can resubmit
+the second one after sending it once.  
+
+The Hydrasynth has two on-panel options: "Send Patch" and "Send Bank".  These 
+are supposed to send patches and banks over USB and 5-Pin DIN to other
+Hydrasynths, but they only work over 5-Pin DIN.  The sysex format is invalid:
+for example, "Send Patch" sends packets of the form F0 01 03 05 07 DATA ... F7, 
+which is Sequential's namespace.  "Send Bank" sends packets of the form 
+F0 02 04 06 08 DATA ... F7 which is Big Briar's namespace. I think ASM messed up 
+here.  But importantly these two options are *ASYNCHRONOUS* -- you don't have to 
+engage in a synchronous dance with them.  My cursory examination suggests that 
+this data is the same, or nearly the same, as the data being sent using the 
+sysex transfers initiated by the librarian, albeit with a different header.
+
+
+
+2. A SAMPLE
+
+Below is the output of "Sawexpressive GD", the first patch in the Hydrasynth.
+
+    
+    -> F0 00 20 2B 00 6F 57 58  55 39 50 42 67 41 F7 
+    
+    <- F0 00 20 2B 00 6F 47 45  51 6D 4A 52 6B 41 F7 
+    
+    
+    -> 
+    00  F0 00 20 2B 00 6F 74 4C  66 5A 55 51 51 41 41 41  |   + otLfZUQQAAA|
+    10  41 3D F7                                          |A= |
+    
+    
+    <- 
+    00  F0 00 20 2B 00 6F 43 43  65 43 74 78 59 41 41 42  |   + oCCeCtxYAAB|
+    10  59 46 41 41 41 41 6D 77  41 41 41 41 31 54 59 58  |YFAAAAmwAAAA1TYX|
+    20  64 77 63 6D 56 7A 63 32  6C 32 5A 53 42 48 52 41  |dwcmVzc2l2ZSBHRA|
+    30  41 67 41 43 41 41 73 41  51 41 41 41 51 41 49 41  |AgACAAsAQAAAQAIA|
+    40  41 41 41 41 41 41 41 41  41 41 41 41 49 41 41 51  |AAAAAAAAAAAAIAAQ|
+    50  42 7A 41 41 41 41 41 41  41 41 41 41 41 41 41 41  |BzAAAAAAAAAAAAAA|
+    60  41 42 41 41 45 41 41 41  41 41 41 41 41 41 41 41  |ABAAEAAAAAAAAAAA|
+    70  41 41 41 41 41 41 41 41  41 41 41 41 41 41 41 77  |AAAAAAAAAAAAAAAw|
+    80  41 41 41 41 41 41 5A 41  41 41 41 41 4D 41 41 41  |AAAAAAZAAAAAMAAA|
+    90  41 41 41 41 41 41 41 41  41 41 41 41 41 41 41 41  |AAAAAAAAAAAAAAAA|
+    A0  41 41 41 41 4D 41 41 41  41 41 41 47 51 41 41 41  |AAAAMAAAAAAGQAAA|
+    B0  41 44 41 41 41 41 41 41  41 41 41 41 3D 3D F7     |ADAAAAAAAAAA== |
+    
+    
+    -> 
+    00  F0 00 20 2B 00 6F 6C 50  71 68 35 78 63 41 41 42  |   + olPqh5xcAAB|
+    10  59 3D F7                                          |Y= |
+    
+    
+    <- 
+    00  F0 00 20 2B 00 6F 56 68  67 74 58 78 59 41 41 52  |   + oVhgtXxYAAR|
+    10  59 41 41 41 41 41 41 41  41 41 41 41 4D 41 39 50  |YAAAAAAAAAAAMA9P|
+    20  38 41 41 47 51 41 41 41  41 42 41 45 41 43 41 41  |8AAGQAAAABAEACAA|
+    30  51 41 41 41 41 41 41 41  41 43 41 41 41 41 41 41  |QAAAAAAAACAAAAAA|
+    40  49 41 41 41 41 41 41 41  41 41 42 41 41 41 41 41  |IAAAAAAAAABAAAAA|
+    50  41 41 41 41 41 41 41 41  41 41 41 41 41 41 41 41  |AAAAAAAAAAAAAAAA|
+    60  41 41 41 41 41 41 41 41  41 41 41 41 41 41 41 41  |AAAAAAAAAAAAAAAA|
+    70  41 41 41 41 41 41 41 41  41 42 41 45 41 43 41 41  |AAAAAAAAABAEACAA|
+    80  51 41 41 41 41 41 41 41  41 43 41 41 45 41 41 41  |QAAAAAAAACAAEAAA|
+    90  49 41 41 41 41 41 41 41  41 41 42 41 41 41 41 41  |IAAAAAAAAABAAAAA|
+    A0  41 41 41 41 41 41 41 41  41 41 41 41 41 41 41 41  |AAAAAAAAAAAAAAAA|
+    B0  41 41 41 41 41 41 41 41  41 41 41 41 3D 3D F7     |AAAAAAAAAAAA== |
+    
+    
+    -> 
+    00  F0 00 20 2B 00 6F 31 63  75 36 2F 68 63 41 41 52  |   + o1cu6/hcAAR|
+    10  59 3D F7                                          |Y= |
+    
+    
+    <- 
+    00  F0 00 20 2B 00 6F 66 58  34 37 52 42 59 41 41 68  |   + ofX47RBYAAh|
+    10  59 41 41 41 41 41 41 41  41 41 41 41 41 41 41 51  |YAAAAAAAAAAAAAAQ|
+    20  41 41 41 67 41 41 41 41  41 41 42 41 41 41 41 41  |AAAgAAAAAABAAAAA|
+    30  41 41 41 41 41 41 41 41  41 41 41 67 41 43 41 41  |AAAAAAAAAAAgACAA|
+    40  49 41 41 41 41 41 44 41  41 41 41 67 41 43 41 41  |IAAAAADAAAAgACAA|
+    50  41 41 41 41 41 41 42 77  42 73 41 64 73 41 41 41  |AAAAAABwBsAdsAAA|
+    60  41 41 41 67 41 43 41 41  49 41 41 77 41 41 41 41  |AAAgACAAIAAwAAAA|
+    70  41 41 41 41 41 41 41 41  51 41 41 41 41 41 41 41  |AAAAAAAAQAAAAAAA|
+    80  49 41 41 67 41 43 41 41  49 41 41 67 41 43 78 77  |IAAgACAAIAAgACxw|
+    90  45 42 41 41 49 41 47 41  49 2B 41 57 67 42 4C 67  |EBAAIAGAI+AWgBLg|
+    A0  41 42 41 41 41 41 41 67  41 41 41 46 55 43 78 41  |ABAAAAAgAAAFUCxA|
+    B0  47 52 41 45 49 42 41 41  41 41 41 41 3D 3D F7     |GRAEIBAAAAAA== |
+    
+    
+    -> 
+    00  F0 00 20 2B 00 6F 46 70  69 58 31 52 63 41 41 68  |   + oFpiX1RcAAh|
+    10  59 3D F7                                          |Y= |
+    
+    
+    <- 
+    00  F0 00 20 2B 00 6F 6A 6A  74 79 52 52 59 41 41 78  |   + ojjtyRRYAAx|
+    10  59 43 41 41 41 41 39 77  49 49 41 58 34 41 58 51  |YCAAAA9wIIAX4AXQ|
+    20  47 30 41 51 41 41 41 77  41 41 41 41 41 41 67 67  |G0AQAAAwAAAAAAgg|
+    30  49 41 41 48 38 41 51 51  41 41 41 41 41 42 41 41  |IAAH8AQQAAAAABAA|
+    40  45 41 41 51 41 42 41 41  45 41 41 51 41 42 41 41  |EAAQABAAEAAQABAA|
+    50  45 41 41 41 41 41 41 41  41 42 41 41 51 41 41 41  |EAAAAAAAABAAQAAA|
+    60  41 41 41 41 41 41 41 51  41 42 41 41 45 41 41 41  |AAAAAAAQABAAEAAA|
+    70  41 41 41 41 41 41 41 41  41 41 41 41 41 41 41 41  |AAAAAAAAAAAAAAAA|
+    80  41 41 41 41 41 41 41 41  42 2F 41 48 38 41 41 41  |AAAAAAAAB/AH8AAA|
+    90  41 41 41 41 41 45 41 41  41 41 41 41 41 41 41 41  |AAAAAEAAAAAAAAAA|
+    A0  42 41 41 45 41 41 51 41  41 41 41 41 41 41 41 41  |BAAEAAQAAAAAAAAA|
+    B0  41 41 41 44 41 43 41 41  41 41 42 41 3D 3D F7     |AAADACAAAABA== |
+    
+    
+    -> 
+    00  F0 00 20 2B 00 6F 56 36  6D 4D 7A 42 63 41 41 78  |   + oV6mMzBcAAx|
+    10  59 3D F7                                          |Y= |
+    
+    
+    <- 
+    00  F0 00 20 2B 00 6F 50 73  6B 6A 43 52 59 41 42 42  |   + oPskjCRYABB|
+    10  59 72 41 51 41 41 41 41  41 41 41 45 41 41 51 41  |YrAQAAAAAAAEAAQA|
+    20  42 41 41 41 41 41 41 41  41 41 41 41 41 41 41 41  |BAAAAAAAAAAAAAAA|
+    30  41 41 41 41 41 45 41 41  41 41 41 41 41 41 41 41  |AAAAAEAAAAAAAAAA|
+    40  42 41 41 45 41 41 51 41  41 41 41 41 41 41 41 41  |BAAEAAQAAAAAAAAA|
+    50  41 41 41 41 41 41 41 41  41 41 42 41 41 41 41 41  |AAAAAAAAAABAAAAA|
+    60  41 41 41 41 41 41 51 41  42 41 41 45 41 41 41 41  |AAAAAAQABAAEAAAA|
+    70  41 41 41 41 41 41 41 41  41 41 41 41 41 41 41 41  |AAAAAAAAAAAAAAAA|
+    80  51 41 41 41 41 41 41 41  41 41 41 45 41 41 51 41  |QAAAAAAAAAAEAAQA|
+    90  42 41 41 41 41 41 41 41  41 41 41 41 41 41 41 41  |BAAAAAAAAAAAAAAA|
+    A0  42 66 41 67 41 41 41 41  41 41 41 41 41 41 41 41  |BfAgAAAAAAAAAAAA|
+    B0  41 41 42 41 41 41 41 41  41 41 41 41 3D 3D F7     |AABAAAAAAAAA== |
+    
+    
+    -> 
+    00  F0 00 20 2B 00 6F 6B 44  2F 4E 67 78 63 41 42 42  |   + okD/NgxcABB|
+    10  59 3D F7                                          |Y= |
+    
+    
+    <- 
+    00  F0 00 20 2B 00 6F 68 66  49 70 59 68 59 41 42 52  |   + ohfIpYhYABR|
+    10  59 41 42 41 41 41 41 41  49 41 41 67 41 43 41 41  |YABAAAAAIAAgACAA|
+    20  49 41 41 67 41 43 41 41  44 42 41 51 41 41 41 41  |IAAgACAADBAQAAAA|
+    30  41 41 41 41 41 41 41 41  41 41 42 41 41 41 41 41  |AAAAAAAAAABAAAAA|
+    40  41 41 41 41 41 45 41 41  41 41 41 67 41 43 41 41  |AAAAAEAAAAAgACAA|
+    50  49 41 41 67 41 43 41 41  49 41 41 4D 45 42 41 41  |IAAgACAAIAAMEBAA|
+    60  41 41 41 41 41 41 41 41  41 41 41 41 41 45 41 41  |AAAAAAAAAAAAAEAA|
+    70  41 41 41 41 41 41 41 41  51 41 41 41 41 43 41 41  |AAAAAAAAQAAAACAA|
+    80  49 41 41 67 41 43 41 41  49 41 41 67 41 41 77 51  |IAAgACAAIAAgAAwQ|
+    90  45 41 41 41 41 41 41 41  41 41 41 41 41 41 41 41  |EAAAAAAAAAAAAAAA|
+    A0  51 41 41 41 41 41 41 41  41 41 42 41 41 41 41 41  |QAAAAAAAAABAAAAA|
+    B0  49 41 41 67 41 43 41 41  49 41 41 67 3D 3D F7     |IAAgACAAIAAg== |
+    
+    
+    -> 
+    00  F0 00 20 2B 00 6F 30 51  37 57 6D 68 63 41 42 52  |   + o0Q7WmhcABR|
+    10  59 3D F7                                          |Y= |
+    
+    
+    <- 
+    00  F0 00 20 2B 00 6F 50 65  58 2F 48 78 59 41 42 68  |   + oPeX/HxYABh|
+    10  59 41 41 67 41 41 77 51  45 41 41 41 41 41 41 41  |YAAgAAwQEAAAAAAA|
+    20  41 41 41 41 41 41 41 41  51 41 41 41 41 41 41 41  |AAAAAAAAQAAAAAAA|
+    30  41 41 42 41 41 41 41 41  49 41 41 67 41 43 41 41  |AABAAAAAIAAgACAA|
+    40  49 41 41 67 41 43 73 41  51 45 41 44 49 41 4D 67  |IAAgACsAQEADIAMg|
+    50  41 41 41 41 45 41 41 41  41 41 41 41 41 41 41 51  |AAAAEAAAAAAAAAAQ|
+    60  41 41 41 41 41 41 41 41  41 41 41 41 55 41 59 51  |AAAAAAAAAAAAUAYQ|
+    70  4B 4B 41 67 41 43 42 77  49 55 41 72 45 41 4B 77  |KKAgACBwIUArEAKw|
+    80  4E 2F 41 67 4D 41 41 41  41 41 41 41 41 41 41 41  |N/AgMAAAAAAAAAAA|
+    90  41 41 41 41 41 41 41 41  41 41 41 41 41 41 41 41  |AAAAAAAAAAAAAAAA|
+    A0  41 41 41 41 41 41 41 41  41 41 41 41 41 41 41 41  |AAAAAAAAAAAAAAAA|
+    B0  41 41 41 41 41 41 41 41  41 41 41 41 3D 3D F7     |AAAAAAAAAAAA== |
+    
+    
+    -> 
+    00  F0 00 20 2B 00 6F 45 6C  33 37 73 52 63 41 42 68  |   + oEl37sRcABh|
+    10  59 3D F7                                          |Y= |
+    
+    
+    <- 
+    00  F0 00 20 2B 00 6F 2B 47  56 6C 69 42 59 41 42 78  |   + o+GVliBYABx|
+    10  59 41 41 41 41 41 41 41  41 52 41 42 45 41 42 67  |YAAAAAAAARABEABg|
+    20  41 52 41 42 45 41 45 77  41 5A 41 42 6B 41 41 41  |ARABEAEwAZABkAAA|
+    30  41 41 41 41 41 41 41 41  41 41 41 41 41 41 41 41  |AAAAAAAAAAAAAAAA|
+    40  41 41 41 41 41 41 41 41  41 41 41 41 41 41 41 41  |AAAAAAAAAAAAAAAA|
+    50  41 41 41 41 41 41 41 41  41 41 41 41 41 41 41 41  |AAAAAAAAAAAAAAAA|
+    60  41 41 41 41 41 41 41 41  41 41 41 41 41 41 57 41  |AAAAAAAAAAAAAAWA|
+    70  42 6D 41 42 4D 41 6E 41  43 51 41 48 77 41 46 51  |BmABMAnACQAHwAFQ|
+    80  42 59 41 41 41 41 41 41  41 41 41 41 41 41 41 41  |BYAAAAAAAAAAAAAA|
+    90  41 41 41 41 41 41 41 41  41 41 41 41 41 41 41 41  |AAAAAAAAAAAAAAAA|
+    A0  41 41 41 41 41 41 41 41  41 41 41 41 41 41 41 41  |AAAAAAAAAAAAAAAA|
+    B0  41 41 41 41 41 41 41 41  41 41 41 41 3D 3D F7     |AAAAAAAAAAAA== |
+    
+    
+    -> 
+    00  F0 00 20 2B 00 6F 55 32  7A 67 71 42 63 41 42 78  |   + oU2zgqBcABx|
+    10  59 3D F7                                          |Y= |
+    
+    
+    <- 
+    00  F0 00 20 2B 00 6F 42 74  41 36 4B 52 59 41 43 42  |   + oBtA6KRYACB|
+    10  59 41 41 41 41 41 41 41  41 4D 41 41 34 41 42 51  |YAAAAAAAAMAA4ABQ|
+    20  41 64 41 42 67 41 46 41  41 47 41 41 77 41 41 41  |AdABgAFAAGAAwAAA|
+    30  41 41 41 41 41 41 41 41  41 41 41 41 41 41 41 41  |AAAAAAAAAAAAAAAA|
+    40  41 41 41 41 41 41 41 41  41 41 41 41 41 41 41 41  |AAAAAAAAAAAAAAAA|
+    50  41 41 41 41 41 41 41 41  41 41 41 41 41 41 41 41  |AAAAAAAAAAAAAAAA|
+    60  41 41 41 41 41 41 41 41  41 41 41 41 41 41 56 77  |AAAAAAAAAAAAAAVw|
+    70  49 41 41 41 41 41 41 41  41 41 41 41 41 41 41 41  |IAAAAAAAAAAAAAAA|
+    80  41 41 41 41 41 45 41 41  49 41 41 67 41 41 41 41  |AAAAAEAAIAAgAAAA|
+    90  41 41 41 41 41 41 41 41  41 41 42 41 41 41 41 41  |AAAAAAAAAABAAAAA|
+    A0  41 41 41 41 41 41 41 41  41 41 41 41 41 41 41 41  |AAAAAAAAAAAAAAAA|
+    B0  52 44 41 68 41 43 41 41  41 41 41 41 3D 3D F7     |RDAhACAAAAAA== |
+    
+    
+    -> 
+    00  F0 00 20 2B 00 6F 6E 48  42 34 4C 78 63 41 43 42  |   + onHB4LxcACB|
+    10  59 3D F7                                          |Y= |
+    
+    
+    <- 
+    00  F0 00 20 2B 00 6F 7A 4E  30 73 4B 42 59 41 43 52  |   + ozN0sKBYACR|
+    10  59 41 41 41 41 41 41 41  42 6B 41 31 51 44 68 41  |YAAAAAAABkA1QDhA|
+    20  45 41 41 41 41 41 41 41  41 41 41 41 41 41 41 41  |EAAAAAAAAAAAAAAA|
+    30  51 41 42 41 41 41 41 41  41 41 41 41 41 41 41 41  |QABAAAAAAAAAAAAA|
+    40  41 41 41 41 41 41 41 41  41 41 41 41 41 45 41 41  |AAAAAAAAAAAAAEAA|
+    50  41 41 41 41 41 41 41 41  41 41 42 41 41 41 41 41  |AAAAAAAAAABAAAAA|
+    60  41 41 41 41 41 41 41 41  41 41 41 41 41 41 44 41  |AAAAAAAAAAAAAADA|
+    70  41 41 41 41 41 41 41 41  41 41 41 41 41 41 41 41  |AAAAAAAAAAAAAAAA|
+    80  41 41 41 45 30 41 57 41  41 41 41 41 41 41 41 41  |AAAE0AWAAAAAAAAA|
+    90  41 41 41 41 41 41 41 41  42 70 41 41 41 41 41 41  |AAAAAAAABpAAAAAA|
+    A0  41 41 41 41 41 41 41 41  41 41 41 41 41 41 64 67  |AAAAAAAAAAAAAAdg|
+    B0  42 6D 41 46 67 41 41 41  41 41 41 41 3D 3D F7     |BmAFgAAAAAAA== |
+    
+    
+    -> 
+    00  F0 00 20 2B 00 6F 33 55  46 6A 4E 68 63 41 43 52  |   + o3UFjNhcACR|
+    10  59 3D F7                                          |Y= |
+    
+    
+    <- 
+    00  F0 00 20 2B 00 6F 58 68  31 4E 54 52 59 41 43 68  |   + oXh1NTRYACh|
+    10  59 41 41 41 41 41 41 41  42 4B 41 45 73 41 53 77  |YAAAAAAABKAEsASw|
+    20  41 41 41 41 41 41 41 41  41 41 41 41 41 41 47 41  |AAAAAAAAAAAAAAGA|
+    30  41 79 41 41 41 41 41 41  41 41 41 41 41 41 41 41  |AyAAAAAAAAAAAAAA|
+    40  41 41 41 41 41 41 41 41  41 41 41 47 34 41 41 41  |AAAAAAAAAAAG4AAA|
+    50  41 41 41 41 41 41 41 41  42 7A 41 41 41 41 41 41  |AAAAAAAABzAAAAAA|
+    60  41 41 41 41 41 41 41 41  41 41 41 41 41 41 4D 67  |AAAAAAAAAAAAAAMg|
+    70  49 41 41 41 41 41 41 41  41 41 41 41 41 41 41 41  |IAAAAAAAAAAAAAAA|
+    80  41 41 41 41 41 43 41 41  49 41 41 67 41 41 41 41  |AAAAACAAIAAgAAAA|
+    90  41 41 41 41 41 41 41 41  41 41 41 67 41 41 41 41  |AAAAAAAAAAAgAAAA|
+    A0  41 41 41 41 41 41 41 41  41 41 41 41 41 41 41 41  |AAAAAAAAAAAAAAAA|
+    B0  49 41 41 67 41 43 41 41  41 41 41 41 3D 3D F7     |IAAgACAAAAAA== |
+    
+    
+    -> 
+    00  F0 00 20 2B 00 6F 48 68  4A 4F 48 52 63 41 43 68  |   + oHhJOHRcACh|
+    10  59 3D F7                                          |Y= |
+    
+    
+    <- 
+    00  F0 00 20 2B 00 6F 57 74  55 4B 78 68 59 41 43 78  |   + oWtUKxhYACx|
+    10  59 41 41 41 41 41 41 41  41 41 41 67 41 43 41 41  |YAAAAAAAAAAgACAA|
+    20  49 41 41 41 41 41 41 41  41 41 41 41 41 41 41 41  |IAAAAAAAAAAAAAAA|
+    30  49 41 41 67 41 41 41 41  41 41 41 41 41 41 41 41  |IAAgAAAAAAAAAAAA|
+    40  41 41 41 41 41 41 41 41  41 41 41 41 41 43 41 41  |AAAAAAAAAAAAACAA|
+    50  41 41 41 41 41 41 41 41  41 41 41 67 41 41 41 41  |AAAAAAAAAAAgAAAA|
+    60  41 41 41 41 41 41 41 41  41 41 41 41 41 41 41 67  |AAAAAAAAAAAAAAAg|
+    70  41 41 41 41 41 41 41 41  41 41 41 41 41 41 41 41  |AAAAAAAAAAAAAAAA|
+    80  41 41 41 41 73 41 44 41  41 41 41 41 41 41 41 41  |AAAAsADAAAAAAAAA|
+    90  41 41 41 41 41 41 41 41  41 50 41 41 41 41 41 41  |AAAAAAAAAPAAAAAA|
+    A0  41 41 41 41 41 41 41 41  41 41 41 41 41 41 45 67  |AAAAAAAAAAAAAAEg|
+    B0  41 4F 41 41 77 41 41 41  41 41 41 41 3D 3D F7     |AOAAwAAAAAAA== |
+    
+    
+    -> 
+    00  F0 00 20 2B 00 6F 58 79  4E 56 42 42 63 41 43 78  |   + oXyNVBBcACx|
+    10  59 3D F7                                          |Y= |
+    
+    
+    <- 
+    00  F0 00 20 2B 00 6F 54 66  4C 4F 33 78 59 41 44 42  |   + oTfLO3xYADB|
+    10  59 41 41 41 41 41 41 41  41 4C 41 41 73 41 43 77  |YAAAAAAAALAAsACw|
+    20  41 41 41 41 41 41 41 41  41 41 41 41 41 41 42 67  |AAAAAAAAAAAAAABg|
+    30  41 49 41 41 41 41 41 41  41 41 41 41 41 41 41 41  |AIAAAAAAAAAAAAAA|
+    40  41 41 41 41 41 41 41 41  41 41 41 42 41 41 41 41  |AAAAAAAAAAABAAAA|
+    50  41 41 41 41 41 41 41 41  41 52 41 41 41 41 41 41  |AAAAAAAAARAAAAAA|
+    60  41 41 41 41 41 41 41 41  41 41 41 41 41 41 41 41  |AAAAAAAAAAAAAAAA|
+    70  41 41 41 41 41 41 41 41  41 41 41 41 41 41 53 67  |AAAAAAAAAAAAAASg|
+    80  47 4B 41 51 41 41 41 41  41 41 41 41 41 41 56 32  |GKAQAAAAAAAAAAV2|
+    90  46 32 5A 51 41 41 41 41  41 41 41 41 41 41 51 32  |F2ZQAAAAAAAAAAQ2|
+    A0  78 6C 59 51 42 4F 62 32  6C 7A 5A 51 41 41 41 46  |xlYQBOb2lzZQAAAF|
+    B0  4A 6C 64 6D 56 79 63 32  55 41 41 41 3D 3D F7     |JldmVyc2UAAA== |
+    
+    
+    -> 
+    00  F0 00 20 2B 00 6F 6D 4C  55 55 53 78 63 41 44 42  |   + omLUUSxcADB|
+    10  59 3D F7                                          |Y= |
+    
+    
+    <- 
+    00  F0 00 20 2B 00 6F 39 4A  52 39 4A 42 59 41 44 52  |   + o9JR9JBYADR|
+    10  5A 44 61 47 39 79 64 58  4D 41 41 45 4A 68 63 32  |ZDaG9ydXMAAEJhc2|
+    20  6C 6A 55 33 51 41 41 45  68 47 4C 56 4E 77 61 57  |ljU3QAAEhGLVNwaW|
+    30  34 41 41 47 46 7A 64 41  41 41 41 41 41 41 56 47  |4AAGFzdAAAAAAAVG|
+    40  68 70 59 32 74 6C 62 67  42 45 59 58 4A 72 5A 57  |hpY2tlbgBEYXJrZW|
+    50  34 41 41 41 42 47 54 51  41 41 55 6B 30 41 41 46  |4AAABGTQAAUk0AAF|
+    60  42 58 4C 55 46 54 54 51  41 41 41 45 52 6C 62 47  |BXLUFTTQAAAERlbG|
+    70  46 35 41 41 41 41 53 32  56 35 41 45 31 76 5A 43  |F5AAAAS2V5AE1vZC|
+    80  41 41 55 6D 56 32 5A 58  4A 69 41 41 42 54 64 57  |AAUmV2ZXJiAABTdW|
+    90  49 41 4D 54 41 75 4D 41  42 46 56 45 4E 45 41 41  |IAMTAuMABFVENEAA|
+    A0  49 41 41 67 41 43 41 41  49 41 41 67 41 43 41 41  |IAAgACAAIAAgACAA|
+    B0  49 41 41 67 41 43 41 41  49 41 41 67 3D 3D F7     |IAAgACAAIAAg== |
+    
+    
+    -> 
+    00  F0 00 20 2B 00 6F 32 59  51 50 55 68 63 41 44 52  |   + o2YQPUhcADR|
+    10  59 3D F7                                          |Y= |
+    
+    
+    <- 
+    00  F0 00 20 2B 00 6F 6B 62  62 51 5A 68 59 41 44 68  |   + okbbQZhYADh|
+    10  59 41 41 67 41 43 41 41  49 41 41 67 41 43 41 41  |YAAgACAAIAAgACAA|
+    20  49 41 41 67 41 43 41 41  49 41 41 67 41 43 41 41  |IAAgACAAIAAgACAA|
+    30  49 41 41 67 41 43 41 41  49 41 41 67 41 43 41 41  |IAAgACAAIAAgACAA|
+    40  49 41 41 67 41 43 41 41  49 41 41 67 41 43 41 41  |IAAgACAAIAAgACAA|
+    50  49 41 41 67 41 43 41 41  49 41 41 67 41 43 41 41  |IAAgACAAIAAgACAA|
+    60  49 41 41 67 41 43 41 41  49 41 41 67 41 43 41 41  |IAAgACAAIAAgACAA|
+    70  49 41 41 67 41 43 41 41  49 41 41 67 41 43 41 41  |IAAgACAAIAAgACAA|
+    80  49 41 41 67 41 43 41 41  49 41 41 67 41 43 41 41  |IAAgACAAIAAgACAA|
+    90  49 41 41 67 41 43 41 41  49 41 41 67 41 43 41 41  |IAAgACAAIAAgACAA|
+    A0  49 41 41 67 41 43 41 41  49 41 41 67 41 43 41 41  |IAAgACAAIAAgACAA|
+    B0  49 41 41 67 41 43 41 41  49 41 41 67 3D 3D F7     |IAAgACAAIAAg== |
+    
+    
+    -> 
+    00  F0 00 20 2B 00 6F 47 74  63 69 65 52 63 41 44 68  |   + oGtcieRcADh|
+    10  59 3D F7                                          |Y= |
+    
+    
+    <- 
+    00  F0 00 20 2B 00 6F 7A 65  5A 73 58 78 59 41 44 78  |   + ozeZsXxYADx|
+    10  59 41 41 67 41 43 41 41  49 41 41 67 41 43 41 41  |YAAgACAAIAAgACAA|
+    20  49 41 41 67 41 43 41 41  49 41 41 67 41 43 41 41  |IAAgACAAIAAgACAA|
+    30  49 41 41 67 41 43 41 41  49 41 41 67 41 43 41 41  |IAAgACAAIAAgACAA|
+    40  49 41 41 67 41 43 41 41  49 41 41 67 41 43 41 41  |IAAgACAAIAAgACAA|
+    50  49 41 41 67 41 43 41 41  49 41 41 67 41 43 41 41  |IAAgACAAIAAgACAA|
+    60  49 41 41 67 41 43 41 41  49 41 41 67 41 43 41 41  |IAAgACAAIAAgACAA|
+    70  49 41 41 67 41 43 41 41  49 41 41 67 41 43 41 41  |IAAgACAAIAAgACAA|
+    80  49 41 41 67 41 43 41 41  49 41 41 67 41 43 41 41  |IAAgACAAIAAgACAA|
+    90  49 41 41 67 41 43 41 41  49 41 41 67 41 43 41 41  |IAAgACAAIAAgACAA|
+    A0  49 41 41 67 41 43 41 41  49 41 41 67 41 43 41 41  |IAAgACAAIAAgACAA|
+    B0  49 41 41 67 41 43 41 41  49 41 41 67 3D 3D F7     |IAAgACAAIAAg== |
+    
+    
+    -> 
+    00  F0 00 20 2B 00 6F 57 2B  59 35 59 42 63 41 44 78  |   + oW+Y5YBcADx|
+    10  59 3D F7                                          |Y= |
+    
+    
+    <- 
+    00  F0 00 20 2B 00 6F 75 74  72 74 79 42 59 41 45 42  |   + outrtyBYAEB|
+    10  59 41 41 67 41 43 41 41  49 41 41 67 41 43 41 41  |YAAgACAAIAAgACAA|
+    20  49 41 41 67 41 43 41 41  49 41 41 67 41 43 41 41  |IAAgACAAIAAgACAA|
+    30  49 41 41 67 41 43 41 41  49 41 41 67 41 43 41 41  |IAAgACAAIAAgACAA|
+    40  49 41 41 67 41 43 41 41  49 41 41 67 41 43 41 41  |IAAgACAAIAAgACAA|
+    50  49 41 41 67 41 43 41 41  49 41 41 67 41 43 41 41  |IAAgACAAIAAgACAA|
+    60  49 41 41 67 41 43 41 41  49 41 41 67 41 43 41 41  |IAAgACAAIAAgACAA|
+    70  49 41 41 67 41 43 41 41  49 41 41 67 41 43 41 41  |IAAgACAAIAAgACAA|
+    80  49 41 41 67 41 43 41 41  49 41 41 67 41 43 41 41  |IAAgACAAIAAgACAA|
+    90  49 41 41 67 41 43 41 41  49 41 41 67 41 43 41 41  |IAAgACAAIAAgACAA|
+    A0  49 41 41 67 41 43 41 41  49 41 41 67 41 43 41 41  |IAAgACAAIAAgACAA|
+    B0  49 41 41 67 41 43 41 41  49 41 41 67 3D 3D F7     |IAAgACAAIAAg== |
+    
+    
+    -> 
+    00  F0 00 20 2B 00 6F 78 65  68 6A 72 52 63 41 45 42  |   + oxehjrRcAEB|
+    10  59 3D F7                                          |Y= |
+    
+    
+    <- 
+    00  F0 00 20 2B 00 6F 35 6F  70 52 38 52 59 41 45 52  |   + o5opR8RYAER|
+    10  59 41 41 67 41 43 41 41  49 41 41 67 41 43 41 41  |YAAgACAAIAAgACAA|
+    20  49 41 41 67 41 43 41 41  49 41 41 67 41 43 41 41  |IAAgACAAIAAgACAA|
+    30  49 41 41 67 41 43 41 41  49 41 41 67 41 43 41 41  |IAAgACAAIAAgACAA|
+    40  49 41 41 67 41 43 41 41  49 41 41 67 41 43 41 41  |IAAgACAAIAAgACAA|
+    50  49 41 41 67 41 43 41 41  49 41 41 67 41 43 41 41  |IAAgACAAIAAgACAA|
+    60  49 41 41 67 41 43 41 41  49 41 41 67 41 43 41 41  |IAAgACAAIAAgACAA|
+    70  49 41 41 67 41 43 41 41  49 41 41 67 41 43 41 41  |IAAgACAAIAAgACAA|
+    80  49 41 41 67 41 43 41 41  49 41 41 67 41 43 41 41  |IAAgACAAIAAgACAA|
+    90  49 41 41 67 41 43 41 41  49 41 41 67 41 43 41 41  |IAAgACAAIAAgACAA|
+    A0  49 41 41 67 41 43 41 41  49 41 41 67 41 43 41 41  |IAAgACAAIAAgACAA|
+    B0  49 41 41 67 41 43 41 41  49 41 41 67 3D 3D F7     |IAAgACAAIAAg== |
+    
+    
+    -> 
+    00  F0 00 20 2B 00 6F 68 4E  6C 34 74 42 63 41 45 52  |   + ohNl4tBcAER|
+    10  59 3D F7                                          |Y= |
+    
+    
+    <- 
+    00  F0 00 20 2B 00 6F 57 76  73 64 30 52 59 41 45 68  |   + oWvsd0RYAEh|
+    10  59 41 41 67 41 43 41 41  49 41 41 67 41 43 41 41  |YAAgACAAIAAgACAA|
+    20  49 41 41 67 41 43 41 41  49 41 41 67 41 43 41 41  |IAAgACAAIAAgACAA|
+    30  49 41 41 67 41 41 41 41  41 41 41 41 41 41 41 41  |IAAgAAAAAAAAAAAA|
+    40  41 42 41 41 41 41 41 41  41 41 41 41 41 41 41 51  |ABAAAAAAAAAAAAAQ|
+    50  41 41 41 41 41 41 41 41  41 41 41 41 45 41 41 41  |AAAAAAAAAAAAEAAA|
+    60  41 41 41 41 41 41 41 41  41 42 41 41 41 41 41 41  |AAAAAAAAABAAAAAA|
+    70  41 41 41 41 41 41 41 51  41 41 41 41 41 41 41 41  |AAAAAAAQAAAAAAAA|
+    80  41 41 41 4A 7A 2F 6E 50  2B 63 2F 35 7A 2F 6E 50  |AAAJz/nP+c/5z/nP|
+    90  38 41 41 41 41 41 41 41  41 41 41 41 41 41 41 41  |8AAAAAAAAAAAAAAA|
+    A0  41 41 41 41 41 41 41 41  41 41 41 41 41 41 41 41  |AAAAAAAAAAAAAAAA|
+    B0  41 41 41 41 41 41 41 41  41 41 41 41 3D 3D F7     |AAAAAAAAAAAA== |
+    
+    
+    -> 
+    00  F0 00 20 2B 00 6F 52 34  70 56 6E 78 63 41 45 68  |   + oR4pVnxcAEh|
+    10  59 3D F7                                          |Y= |
+    
+    
+    <- 
+    00  F0 00 20 2B 00 6F 56 61  52 6C 49 52 59 41 45 78  |   + oVaRlIRYAEx|
+    10  59 41 41 41 41 41 41 41  41 41 41 41 41 41 41 41  |YAAAAAAAAAAAAAAA|
+    20  41 41 41 41 41 41 41 41  41 41 41 41 41 41 41 41  |AAAAAAAAAAAAAAAA|
+    30  41 41 41 41 41 41 41 41  41 41 41 41 41 41 41 41  |AAAAAAAAAAAAAAAA|
+    40  41 41 41 41 41 41 41 41  41 41 41 41 41 41 41 41  |AAAAAAAAAAAAAAAA|
+    50  41 41 41 41 41 41 41 41  41 41 41 41 41 41 41 41  |AAAAAAAAAAAAAAAA|
+    60  41 41 41 41 41 41 41 41  41 41 41 41 41 41 41 41  |AAAAAAAAAAAAAAAA|
+    70  41 41 41 41 41 41 41 41  41 41 41 41 41 41 41 41  |AAAAAAAAAAAAAAAA|
+    80  41 41 41 41 41 41 41 41  41 41 41 41 41 41 41 41  |AAAAAAAAAAAAAAAA|
+    90  41 41 41 41 41 41 41 41  41 41 41 41 41 41 41 41  |AAAAAAAAAAAAAAAA|
+    A0  41 41 41 41 41 41 41 41  41 41 41 41 41 41 41 41  |AAAAAAAAAAAAAAAA|
+    B0  41 41 41 41 41 41 41 41  41 41 41 41 3D 3D F7     |AAAAAAAAAAAA== |
+    
+    
+    -> 
+    00  F0 00 20 2B 00 6F 42 72  74 4F 68 68 63 41 45 78  |   + oBrtOhhcAEx|
+    10  59 3D F7                                          |Y= |
+    
+    
+    <- 
+    00  F0 00 20 2B 00 6F 77 52  56 51 6A 52 59 41 46 42  |   + owRVQjRYAFB|
+    10  59 41 41 41 41 41 41 41  41 41 41 41 41 41 41 41  |YAAAAAAAAAAAAAAA|
+    20  41 41 41 41 41 41 41 41  41 41 41 41 41 41 41 41  |AAAAAAAAAAAAAAAA|
+    30  41 41 41 41 41 41 41 41  41 41 41 41 41 41 41 41  |AAAAAAAAAAAAAAAA|
+    40  41 41 41 41 41 41 41 41  41 41 41 41 41 41 41 41  |AAAAAAAAAAAAAAAA|
+    50  41 41 41 41 41 41 41 41  41 41 41 41 41 41 41 41  |AAAAAAAAAAAAAAAA|
+    60  41 41 41 41 41 41 41 41  41 41 41 41 41 41 41 41  |AAAAAAAAAAAAAAAA|
+    70  41 41 41 41 41 41 41 41  41 41 41 41 41 41 41 41  |AAAAAAAAAAAAAAAA|
+    80  41 41 41 41 41 41 41 41  41 41 41 41 41 41 41 41  |AAAAAAAAAAAAAAAA|
+    90  41 41 41 41 41 41 41 41  41 41 41 41 41 41 41 41  |AAAAAAAAAAAAAAAA|
+    A0  41 41 41 41 41 41 41 41  41 41 41 41 41 41 41 41  |AAAAAAAAAAAAAAAA|
+    B0  41 41 41 41 41 41 41 41  41 41 41 41 3D 3D F7     |AAAAAAAAAAAA== |
+    
+    
+    -> 
+    00  F0 00 20 2B 00 6F 77 53  30 50 79 52 63 41 46 42  |   + owS0PyRcAFB|
+    10  59 3D F7                                          |Y= |
+    
+    
+    <- 
+    00  F0 00 20 2B 00 6F 69 71  4B 77 6C 68 59 41 46 52  |   + oiqKwlhYAFR|
+    10  59 41 41 41 41 41 41 41  41 41 41 41 41 41 41 41  |YAAAAAAAAAAAAAAA|
+    20  41 41 41 41 41 41 41 41  41 41 41 41 41 41 41 41  |AAAAAAAAAAAAAAAA|
+    30  41 41 41 41 41 41 41 41  41 41 41 41 41 41 41 41  |AAAAAAAAAAAAAAAA|
+    40  41 41 41 41 41 41 41 41  41 41 41 41 41 41 41 41  |AAAAAAAAAAAAAAAA|
+    50  41 41 41 41 41 41 41 41  41 41 41 41 41 41 41 41  |AAAAAAAAAAAAAAAA|
+    60  41 41 41 41 41 41 41 41  41 41 41 41 41 41 41 41  |AAAAAAAAAAAAAAAA|
+    70  41 41 41 41 41 41 41 41  41 41 41 41 41 41 41 41  |AAAAAAAAAAAAAAAA|
+    80  41 41 41 41 41 41 41 41  41 41 41 41 41 41 41 41  |AAAAAAAAAAAAAAAA|
+    90  41 41 41 41 41 41 41 41  41 3D F7                 |AAAAAAAAA= |
+    
+    
+    -> 
+    00  F0 00 20 2B 00 6F 67 42  77 55 30 42 63 41 46 52  |   + ogBwU0BcAFR|
+    10  59 3D F7                                          |Y= |
+    
+    
+    -> F0 00 20 2B 00 6F 32 78  63 4C 44 68 6F 41 F7
+    
+    <- F0 00 20 2B 00 6F 6D 69  59 51 46 78 73 41 F7
+
+
+
+3. GUESSES
+
+The lowest possible character for a patch name is ' ' (space).
+
+If you create a default patch at slot E128 named "                ",  you get
+the following back as the first response message:
+
+    00  F0 00 20 2B 00 6F 6F 4E  67 31 4C 42 59 41 41 42  |   + ooNg1LBYAAB|
+    10  59 46 41 41 52 2F 6D 77  42 2F 41 67 63 67 49 43  |YFAAR/mwB/AgcgIC|
+    20  41 67 49 43 41 67 49 43  41 67 49 43 41 67 49 43  |AgICAgICAgICAgIC|
+    30  41 67 41 41 45 41 73 41  51 41 41 41 51 41 49 41  |AgAAEAsAQAAAQAIA|
+    40  41 41 41 41 41 41 41 41  41 41 41 41 49 41 41 67  |AAAAAAAAAAAAIAAg|
+    50  42 6D 41 41 41 41 41 41  41 41 41 41 41 41 41 41  |BmAAAAAAAAAAAAAA|
+    60  41 42 41 41 45 41 41 41  41 41 41 41 41 41 41 41  |ABAAEAAAAAAAAAAA|
+    70  41 41 41 41 41 41 41 41  41 41 41 41 41 41 41 77  |AAAAAAAAAAAAAAAw|
+    80  41 41 41 41 41 41 5A 41  41 41 41 41 4D 41 41 41  |AAAAAAZAAAAAMAAA|
+    90  41 41 41 41 41 41 41 41  41 41 41 41 41 41 41 41  |AAAAAAAAAAAAAAAA|
+    A0  41 41 41 41 4D 41 41 41  41 41 41 47 51 41 41 41  |AAAAMAAAAAAGQAAA|
+    B0  41 44 41 41 41 41 41 41  41 41 41 41 3D 3D F7     |ADAAAAAAAAAA== |
+
+The second lowest possible character for a patch name is '0'.
+
+If you create a default patch at slot E128 named "0000000000000000",  you get
+the following back as the first response message:
+
+    00  F0 00 20 2B 00 6F 48 5A  68 7A 39 42 59 41 41 42  |   + oHZhz9BYAAB|
+    10  59 46 41 41 52 2F 6D 77  42 2F 41 67 63 77 4D 44  |YFAAR/mwB/AgcwMD|
+    20  41 77 4D 44 41 77 4D 44  41 77 4D 44 41 77 4D 44  |AwMDAwMDAwMDAwMD|
+    30  41 77 41 41 45 41 73 41  51 41 41 41 51 41 49 41  |AwAAEAsAQAAAQAIA|
+    40  41 41 41 41 41 41 41 41  41 41 41 41 49 41 41 67  |AAAAAAAAAAAAIAAg|
+    50  42 6D 41 41 41 41 41 41  41 41 41 41 41 41 41 41  |BmAAAAAAAAAAAAAA|
+    60  41 42 41 41 45 41 41 41  41 41 41 41 41 41 41 41  |ABAAEAAAAAAAAAAA|
+    70  41 41 41 41 41 41 41 41  41 41 41 41 41 41 41 77  |AAAAAAAAAAAAAAAw|
+    80  41 41 41 41 41 41 5A 41  41 41 41 41 4D 41 41 41  |AAAAAAZAAAAAMAAA|
+    90  41 41 41 41 41 41 41 41  41 41 41 41 41 41 41 41  |AAAAAAAAAAAAAAAA|
+    A0  41 41 41 41 4D 41 41 41  41 41 41 47 51 41 41 41  |AAAAMAAAAAAGQAAA|
+    B0  41 44 41 41 41 41 41 41  41 41 41 41 3D 3D F7     |ADAAAAAAAAAA== |
+
+This suggests (1) that there is no checksum, at least at the end, and that
+(2) the patch name string is encoded in the 21 bytes starting at position
+1D and ending at position 32 inclusive.  For "                " this string is
+
+    67 49 43 41 67 49 43 41 67 49 43 41 67 49 43 41 67 49 43 41 67
+    
+Note the constant repetition of 67 49 43 41.
+
+For "0000000000000000" the string is
+
+    77 4D 44 41 77 4D 44 41 77 4D 44 41 77 4D 44 41 77 4D 44 41 77
+    
+Note the constant repetition of 77 4D 44 41.  It's worth noting the
+relationships between 67 and 77 in the two strings, and also 43 and 44.
+'0' is the next available character after ' ' on the Hydrasynth; but it's
+also the case that '0' is 20 and ' ' is 30 in ASCII.
+
+I was guessing that this was a 3-into-4 byte packing, possibly offset (that is,
+the first 67 isn't the first byte in its 4-byte sequence) but it doesn't make
+much sense.  Let's imagine that 67 is the first byte.  Then the two repeating
+strings are (stripping off the high bit of course):
+
+    67 49 43 41    1100111 1001001 1000011 1000001
+    77 4D 44 41    1110111 1001101 1000100 1000001
+
+Some guesses.  I note that every one of these bytes has a 1 at the top.  Let's
+remove that:
+
+    67 49 43 41    100111001001000011000001
+    77 4D 44 41    110111001101000100000001
+
+Next let's rotate them by 6
+
+    41 67 49 43    000001100111001001000011
+    41 77 4D 44    000001110111001101000100
+
+Now let's break them into bytes and name them:
+
+    41 67 49 43    A 00000110  B 01110010  C 01000011
+    41 77 4D 44    D 00000111  E 01110011  F 01000100
+
+Note that D = A + 1, E = B + 1 and F = C + 1.  This would be consistent
+with three characters "000" each one larger than "   ".
+
+Alternatively we might add 0x10, since that's the difference between ' ' and '0'
+in ascii.  To do this, let's rotate by 4 more and break them up:
+
+    34 16 74 94    U 00110000  V 01100111  W 00100100
+    44 17 74 D4    X 01000000  Y 01110111  Z 00110100
+
+Now U = X + 10 hex, V = Y + 10 hex, W = Z + 10 hex
+
+The problem is that though this is consistent with '0' being 10 hex more than ' '
+(or 1 more depending on whether you're using the internal Hydrasynth ordering or
+ASCII) U, V, and W are *different numbers*, as are X, Y, and Z !!!  Are ASM
+embedding/packing other data in here as well?  Or XORing with some kind of pattern?
+
+This is about as far as I've gotten on patch names.  I'll work on individual
+parameters in a while.  I also grabbed the pattern ' 0123456789ABCDE' here:
+
+    00  F0 00 20 2B 00 6F 63 48  39 66 6E 78 59 41 41 42  |   + ocH9fnxYAAB|
+    10  59 46 41 41 52 2F 6D 77  42 2F 41 67 63 77 4D 54  |YFAAR/mwB/AgcwMT|
+    20  49 7A 4E 44 55 32 4E 7A  67 35 51 55 4A 44 52 45  |IzNDU2Nzg5QUJDRE|
+    30  56 47 41 41 45 41 73 41  51 41 41 41 51 41 49 41  |VGAAEAsAQAAAQAIA|
+    40  41 41 41 41 41 41 41 41  41 41 41 41 49 41 41 67  |AAAAAAAAAAAAIAAg|
+    50  42 6D 41 41 41 41 41 41  41 41 41 41 41 41 41 41  |BmAAAAAAAAAAAAAA|
+    60  41 42 41 41 45 41 41 41  41 41 41 41 41 41 41 41  |ABAAEAAAAAAAAAAA|
+    70  41 41 41 41 41 41 41 41  41 41 41 41 41 41 41 77  |AAAAAAAAAAAAAAAw|
+    80  41 41 41 41 41 41 5A 41  41 41 41 41 4D 41 41 41  |AAAAAAZAAAAAMAAA|
+    90  41 41 41 41 41 41 41 41  41 41 41 41 41 41 41 41  |AAAAAAAAAAAAAAAA|
+    A0  41 41 41 41 4D 41 41 41  41 41 41 47 51 41 41 41  |AAAAMAAAAAAGQAAA|
+    B0  41 44 41 41 41 41 41 41  41 41 41 41 3D 3D F7     |ADAAAAAAAAAA== |
+
+The patch name string is:
+
+    77 4D 54 49 7A 4E 44 55 32 4E 7A 67 35 51 55 4A 44 52 45 56 47
+
+I also grabbed the pattern '0123456789ABCDEF' here:
+
+    00  F0 00 20 2B 00 6F 77 42  31 64 69 52 59 41 41 42  |   + owB1diRYAAB|
+    10  59 46 41 41 52 2F 6D 77  42 2F 41 67 63 67 4D 44  |YFAAR/mwB/AgcgMD|
+    20  45 79 4D 7A 51 31 4E 6A  63 34 4F 55 46 43 51 30  |EyMzQ1Njc4OUFCQ0|
+    30  52 46 41 41 45 41 73 41  51 41 41 41 51 41 49 41  |RFAAEAsAQAAAQAIA|
+    40  41 41 41 41 41 41 41 41  41 41 41 41 49 41 41 67  |AAAAAAAAAAAAIAAg|
+    50  42 6D 41 41 41 41 41 41  41 41 41 41 41 41 41 41  |BmAAAAAAAAAAAAAA|
+    60  41 42 41 41 45 41 41 41  41 41 41 41 41 41 41 41  |ABAAEAAAAAAAAAAA|
+    70  41 41 41 41 41 41 41 41  41 41 41 41 41 41 41 77  |AAAAAAAAAAAAAAAw|
+    80  41 41 41 41 41 41 5A 41  41 41 41 41 4D 41 41 41  |AAAAAAZAAAAAMAAA|
+    90  41 41 41 41 41 41 41 41  41 41 41 41 41 41 41 41  |AAAAAAAAAAAAAAAA|
+    A0  41 41 41 41 4D 41 41 41  41 41 41 47 51 41 41 41  |AAAAMAAAAAAGQAAA|
+    B0  41 44 41 41 41 41 41 41  41 41 41 41 3D 3D F7     |ADAAAAAAAAAA== |
+
+The patch name string is:
+
+    67 4D 44 45 79 4D 7A 51 31 4E 6A 63 34 4F 55 46 43 51 30 52 46
+
+There are similar patterns here too.
+

@@ -541,7 +541,25 @@ Below is the output of "Sawexpressive GD", the first patch in the Hydrasynth.
 
 3. GUESSES
 
-The lowest possible character for a patch name is ' ' (space).
+I figured I'd start with the patch name.  Patch names can only consist of the 
+following characters (in order)
+
+SPACE 
+0 1 2 3 4 5 6 7 8 9 
+A B C D E F G H I J K L M N O P Q R S T U V W X Y Z
+a b c d e f g h i j k l m n o p q r s t u v w x y z 
+! # $ % & ' ( ) + , - . : = @ [ ] ^ _ ` { }
+
+The symbols are *partly* in ASCII order but they skip
+stuff.  Notable characters missing:  " * / ; < > ? \ | ~
+
+So it's not yet clear if this is just a front panel restriction.  The ASM
+librarian won't let you set any of these characters but weirdly it has a 
+messsage indicating fewer disallowed characters: \ / * ? " < > |  This
+corresponds roughly to the "illegal" characters in Windows filenames (ugh).
+So yeah, seriously, you can't make a patch called "Good Enough?"
+
+So anyway, the lowest possible character for a patch name is ' ' (space).
 
 If you create a default patch at slot E128 named "                ",  you get
 the following back as the first response message:

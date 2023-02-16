@@ -272,3 +272,10 @@ I have been informed that Ribbon Mod Hold is stored per-patch.
 However it does not appear to have an NRPN assigned to it.
 
 
+17. MISSING VOICE PARAMETERS
+
+It appears that Voice Snap is a per-patch parameter, and its NRPN is 0x3F 0x35.  But this is not documented.
+
+Additionally, Voice Scale and Voice Key Lock also appear to be per-patch parameters (I think?) but they do not emit an NRPN message that indicates their status: instead they emit a single NRPN message 0x3 0x45, always fixed to 1, and then emit 0x3F 0x52 with an MSB of X and an LSB of Y indicating that note X will be mapped to note Y.  This doesn't help nail down which scale it is, and doesn't help at all for microtuned scales.
+
+

@@ -10,6 +10,8 @@ of working on the Edisyn Hydrasynth editor.  It includes:
 	  places and does not provide any display information at all.  Mine
 	  attempts to remedy that.
 
+	- nrpn.numbers: The same spreadsheet in Apple's Numbers format
+
 	- nrpn.pdf: a PDF printout of the spreadsheet for people who can't
 	  open xlsx files.
 

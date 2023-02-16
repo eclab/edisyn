@@ -1704,6 +1704,9 @@ public class ASMHydrasynth extends Synth
 
         comp = new CheckBox("Warm Mode", this, "voicewarmmode");
         vbox.add(comp);
+
+        comp = new CheckBox("Snap", this, "voicesnap");
+        vbox.add(comp);
         hbox.add(vbox);
 
         comp = new LabelledDial("Pitch", this, "voicepitchbend", color, 0, 24);
@@ -6809,6 +6812,7 @@ public class ASMHydrasynth extends Synth
     "voicevibratoratesyncon",
     "voicerandomphase",
     "voicewarmmode",
+    "voicesnap",
     };
     
     
@@ -7846,7 +7850,8 @@ public class ASMHydrasynth extends Synth
     "voicevibratoratesyncon",
     "voicerandomphase",
     "voicewarmmode",
-    "voicevibratobpm",                                  
+    "voicevibratobpm",     
+    "voicesnap",        													// Not Documented                     
     };
     
     static HashMap nrpnToIndex = null;
@@ -8878,6 +8883,7 @@ public class ASMHydrasynth extends Synth
     8094,           // 3f 1e            "voicerandomphase",
     8143,           // 3f 4f            "voicewarmmode",
     8137,           // 3f 49            "voicevibratobpm",
+    8117,			// 3f 35			"voicesnap",
     };
         
     // This is a list of each parameter that corresponds to a CC, for all 128 CC values.

@@ -1,20 +1,20 @@
 February 14, 2023 Hydrasynth sysex reverse engineering notes.  This is divided
 into sections:
 
-	0. INTRO
-	1. HIGH-LEVEL DESCRIPTION
-	2. A SAMPLE
-	3. GUESSES
-	
+        0. INTRO
+        1. HIGH-LEVEL DESCRIPTION
+        2. A SAMPLE
+        3. GUESSES
+        
 
 0. INTRO
 
 The Hydrasynth seems to download the following elements to the Librarian:
 
-	- Lists of patch names in a bank
-	- Whole stored banks at a time
-	- Individual stored patches 
-	
+        - Lists of patch names in a bank
+        - Whole stored banks at a time
+        - Individual stored patches 
+        
 Sigabort's editor seems to be able to the same, but has a lot of notes
 that state that it's not possible to download the patch in current working
 memory.  That's pretty unfortunate.  But how does the Sigabort developer 
@@ -43,8 +43,8 @@ a footer message and the Hydrasynth responds with a footer message.
 
 All of these messages have the same pattern:
 
-	F0 00 20 2B 00 6F DATA... ENDING F7
-	
+        F0 00 20 2B 00 6F DATA... ENDING F7
+        
 The ENDING of the header and footer messages is 41
 
 The ENDING of the first request messages is 41 3D

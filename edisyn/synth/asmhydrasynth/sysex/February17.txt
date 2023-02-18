@@ -1,0 +1,76 @@
+February 17, 2023 Hydrasynth sysex reverse engineering notes.  
+
+Been starting working on numbers -- ideally single bytes -- with large ranges
+in an attempt to rainbow table the first, second, and third byte individually.
+Then we'll look to see if what interactions they have.  Also would like something
+likely in the first sysex message.  The obvious choice of parameter is Wave or
+Wavescan Wave.  Most of these go 0...218 or 0...220 which is a fair chunk of the
+total byte range. 
+
+Examples from OSC1 WAVE [at 7E or so]
+
+0       41414141        1000001 1000001 1000001
+1       41514141        1000001 1010001 1000001
+2       41674141        1000001 1100111 1000001
+3       41774141        1000001 1110111 1000001
+4       42414141        1000010 1000001 1000001
+5       42514141
+6       42674141
+11      43774141
+19      45774141
+200     79414141        1111001 1000001 1000001
+
+I don't understand this one at all.  Not sure where
+it's appearing year and it's really strange.
+
+
+Example from OSC1 WAVESCAN WAVE 1 [at 8A]
+0       41414141
+1       41414541
+2       41414941
+11      41417341
+19      41424D41
+22      41425941
+
+// This looks like a second byte, just a guess
+
+Example from OSC1 WAVESCAN WAVE 2 [at 8E]
+1       41514141
+13      44514141
+
+// I think this is a first byte, just a guess
+
+Example from OSC1 WAVESCAN WAVE 3 [also at 8E]
+1       41414141        1000001 1000001 1000001 1000001
+1       41414142        1000001 1000001 1000001 1000010
+2       41414143
+3       41414144
+4       41414145
+5       41414146
+6       41414147
+7       41414148
+8       41414149
+9       4141414A
+10      4141414B
+15      41414150
+30      41414165
+40      4141416F
+50      41414179
+51      41414241        // skip 2?
+52      41414130        // uh...
+55      41414133
+59      41414137
+60      41414138
+61      41414139
+62      4141412B
+63      4141412F        // uh....
+64      41414241        // uh....
+70      41414247
+71      41414248
+80      41414251
+100     4141426B
+200     41414449        1000001 1000001 1000100 1001001
+220     41414463
+
+// I think this is a third byte.  It's got weird jumps but is largely contiguous,
+// so we might be able to make guesses as to values beyond 220

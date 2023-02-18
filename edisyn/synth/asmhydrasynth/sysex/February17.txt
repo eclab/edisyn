@@ -72,5 +72,5 @@ Example from OSC1 WAVESCAN WAVE 3 [also at 8E]
 200     41414449        1000001 1000001 1000100 1001001
 220     41414463
 
-// I think this is a third byte.  It's got weird jumps but is largely contiguous,
+// I think this is a third byte.  It's got weird jumps but is somewhat contiguous,
 // so we might be able to make guesses as to values beyond 220

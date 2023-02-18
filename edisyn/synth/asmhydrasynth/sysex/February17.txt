@@ -53,7 +53,7 @@ Example from OSC1 WAVESCAN WAVE 3 [also at 8E]
 9       4141414A
 10      4141414B
 15      41414150
-30      41414165
+30      41414165		// There was an unexpected jump prior to this, it should be 5F
 40      4141416F
 50      41414179
 51      41414241        // skip 2?

@@ -1,4 +1,4 @@
-February 18, 2023 Hydrasynth sysex reverse engineering notes.  Completing the rainbow table for the third byte of the triplet
+February 18, 2023 Hydrasynth sysex reverse engineering notes.  Completing the rainbow table for the third byte of the triplet.
 
 
 Filling out OSC1 WAVESCAN WAVE 3 [also at 8E]
@@ -122,6 +122,7 @@ Assuming that BYTE 1 and BYTE 2 are both ZERO.
 25      4141415A
 26      41414161		// Discontinuity
 27      41414162
+28      41414163
 29      41414164
 30      41414165
 31      41414166

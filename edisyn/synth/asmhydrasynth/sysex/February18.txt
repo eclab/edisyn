@@ -1,0 +1,165 @@
+February 18, 2023 Hydrasynth sysex reverse engineering notes.  Completing the rainbow table for the third byte of the triplet
+
+
+Filling out OSC1 WAVESCAN WAVE 3 [also at 8E]
+0       41414141        1000001 1000001 1000001 1000001
+1       41414142        1000001 1000001 1000001 1000010
+2       41414143
+3       41414144
+4       41414145
+5       41414146
+6       41414147
+7       41414148
+8       41414149
+9       4141414A
+10      4141414B
+15      41414150
+20		41414155
+25		4141415A		1000001 1000001 1000001 1011010
+26		41414161		1000001 1000001 1000001 1100001	// uh...
+27		41414162
+29		41414164
+30      41414165
+40      4141416F
+50      41414179
+51      4141417A
+52      41414130        // uh...
+55      41414133
+59      41414137
+60      41414138
+61      41414139
+62      4141412B		// uh....
+63      4141412F        // uh....
+64      41414241        // uh....		... MAYBE we're now repeating?
+65		41414242
+70      41414247
+71      41414248
+80      41414251
+89		4141425A
+90		41414261		// uh... it does look like we're repeating...
+100     4141426B
+125		41414239
+126		4141422B		// uh... yep, repeating weirdness
+127		4141422F		// uh... yep again
+128		41414341		// repeating again?
+152		41414359
+153		4141435A
+154		41414361		// more repeating weirdness
+190		4141432B
+191		4141432F
+192		41414441		// repeating....
+200     41414449        1000001 1000001 1000100 1001001
+217		4141445A
+218		41414461		// more repeating weirdness
+220     41414463
+
+I'm willing to guess that the pattern 0...63 repeats, just with 41, 42, 43, 44.
+
+Now the question is: is this pattern due to WaveScan waves being out of order?
+
+Character "008" ends in 4178.  I think that's 49.  And that's '1'.
+Character "00A" ends in 4242.  I think that's 65.  And that's 'A'.
+Character "00{" ends in 4237.  I think that's 59.  And that's ';'.
+	Alternatively it's 59 + 64 = 128.  And that's '{' looking good.
+
+Let's go through some more characters for the last byte, including some of the weird numbering:
+	
+4D 44 41 77 (000)	[ASCII 49]
+4D 44 41 78	(001)	[ASCII 50]
+4D 44 41 79	(002)	[ASCII 51]
+4D 44 41 7A	(003)	[ASCII 51]
+4D 44 41 30	(004)	[ASCII 52]		// expected jump
+4D 44 41 31	(005)	[ASCII 53]
+4D 44 41 35	(009)	[ASCII 57]
+4D 44 41 39	(00=)	[ASCII 61]
+4D 44 42 41	(00@)	[ASCII 64]
+4D 44 42 42	(00A)	[ASCII 65]
+4D 44 42 5A	(00Y)	[ASCII 89]
+4D 44 42 61 (00Z)	[ASCII 90]
+4D 44 42 68	(00a)	[ASCII 97]
+4D 44 42 37	(00{)	[ASCII 123]
+4D 44 42 39	(00})	[ASCII 125]
+
+It lines up. 
+
+Also note: it appears that Osc1 Keytrack is byte 1 of the packet starting at 86.  
+
+Okay here we go.
+
+
+--------------------
+BYTE 3 RAINBOW TABLE
+--------------------
+
+So here's what appears to be the rainbow table for BYTE 3 of the packet,
+Assuming that BYTE 1 and BYTE 2 are both ZERO.
+
+0       41414141		// Discontinuity from wraparound previous value
+1       41414142
+2       41414143
+3       41414144
+4       41414145
+5       41414146
+6       41414147
+7       41414148
+8       41414149
+9       4141414A
+10      4141414B
+11      4141414C
+12      4141414D
+13      4141414E
+14      4141414F
+15      41414150
+16      41414151
+17      41414152
+18      41414153
+19      41414154
+20      41414155
+21      41414156
+22      41414157
+23      41414158
+24      41414159
+25      4141415A
+26      41414161		// Discontinuity
+27      41414162
+29      41414164
+30      41414165
+31      41414166
+32      41414167
+33      41414168
+34      41414169
+35      4141416A
+36      4141416B
+37      4141416C
+38      4141416D
+39      4141416E
+40      4141416F
+41      41414170
+42      41414171
+43      41414172
+44      41414173
+45      41414174
+46      41414175
+47      41414176
+48      41414177
+49      41414178
+50      41414179
+51      4141417A
+52      41414130		// Discontinuity
+53      41414131
+54      41414132
+55      41414133
+56      41414134
+57      41414135
+58      41414136
+59      41414137
+60      41414138
+61      41414139
+62      4141412B		// Discontinuity
+63      4141412F		// Discontinuity
+
+64 - 127:	414142XX
+128 - 191:	414143XX
+192 - 255:	414144XX
+	Where XX is the last two values in the equivalent row (mod 64) of the table above
+

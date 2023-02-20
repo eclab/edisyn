@@ -1,0 +1,90 @@
+February 18, 2023 Hydrasynth sysex reverse engineering notes.  Completing the rainbow table for the first byte of the triplet.
+
+Setting values for OSC 1 WAVESCAN 3	[which appears to start at 8E, thus is first byte], I get:
+
+0	41 41 41 41		1000001 1000001 1000001 1000001
+1	41 51 41 41		1000001 1010001 1000001 1000001
+2	41 67 41 41		1000001 1100111 1000001 1000001
+3	41 77 41 41		1000001 1110111 1000001 1000001
+4	42 41 41 41		1000010 1000001 1000001 1000001
+5	42 51 41 41
+6	42 67 41 41
+7	42 77 41 41
+8	43 41 41 41
+9	43 51 41 41
+10	43 67 41 41
+30	48 67 41 41
+50	4D 67 41 41
+70	52 67 41 41
+90	57 67 41 41
+110	62 67 41 41
+130	67 67 41 41
+150	6C 67 41 41
+170	71 67 41 41
+190	76 67 41 41
+200	79 41 41 41
+205	7A 51 41 41
+207 7A 77 41 41
+208	30 41 41 41		0110000 1000001 1000001 1000001
+209	30 51 41 41
+210	30 67 41 41
+214	31 67 41 41
+218	32 67 41 41
+220	33 41 41 41
+
+From this I surmise that the bits used to represent the number in the first byte are:
+
+	0110000 1000001 1000001 1000001
+    ABCDEFG  HI XX
+
+Where XX is 
+	00 if int(N / 4) == 0 or == 1
+	11 if int(N / 4) == 2 or == 3
+
+One would imagine that the XX is XOred on top of the second byte
+
+I note that the third byte uses these bits:
+
+	0110000 1000001 1000001 1000001
+                        ABC DEFGHIJ
+
+Thus there's not enough room for the middle byte unless it is overlaid on the XXs of the first byte.
+
+The same results work for 0...200 (that's all it can go to) for OSC1 KEYTRACK, which is also a first byte, starting at position 86.  Unfortunately the LSB of OSC1 WAVESCAN appears to be a third byte (it starts at 88).  Though happily it seems to correspond with the previous rainbow table.  Unfortunately OSC2 WAVESCAN is not in the first sysex packet.  May have to search for it later.
+
+So at present I don't have verification for values greater than 220, and can only surmise that they just continue from 220 in the same pattern.  Given that assumption, we have:
+
+
+
+--------------------
+BYTE 1 RAINBOW TABLE
+--------------------
+
+If N = 0...207		-->	XX YY
+	where XX is int(N/4) + 41
+	where YY is 
+		41	if N % 4 = 0
+		51	if N % 4 = 1
+		67	if N % 4 = 2
+		77 	if N % 4 = 3
+
+If N = 208...220	-->	XX YY
+	where XX is int(N/4) + 30
+	where YY is 
+		41	if N % 4 = 0
+		51	if N % 4 = 1
+		67	if N % 4 = 2
+		77 	if N % 4 = 3
+
+UNTESTED HYPOTHESIS: 220...256 same as 208...220
+If N = 220...256	--> XX YY
+	where XX is int(N/4) + 30
+	where YY is 
+		41	if N % 4 = 0
+		51	if N % 4 = 1
+		67	if N % 4 = 2
+		77 	if N % 4 = 3
+
+
+
+

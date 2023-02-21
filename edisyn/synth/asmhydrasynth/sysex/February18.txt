@@ -94,7 +94,7 @@ BYTE 3 RAINBOW TABLE
 So here's what appears to be the rainbow table for BYTE 3 of the packet,
 Assuming that BYTE 1 and BYTE 2 are both ZERO.
 
-0       41414141		// Discontinuity from wraparound previous value
+0       41414141		// Discontinuity from previous value
 1       41414142
 2       41414143
 3       41414144

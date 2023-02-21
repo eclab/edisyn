@@ -130,7 +130,7 @@ For all N 0...239	--> 41 4X YY 41
 	
 	    YY
 ------------
-0	414X4141		// Discontinuity
+0	414X4141		// Discontinuity from previous
 1	414X4541
 2	414X4941
 3	414X4D41
@@ -150,4 +150,9 @@ For all N 0...239	--> 41 4X YY 41
 Hypothesis: this pattern continues for 240...255
 
 
+At this point I need to look at the actual bits to determine:
+
+	- Where are they overlapping? [So I can start testing *how* they
+	  are overlapping...]
+	- Is there some consistent pattern?
 

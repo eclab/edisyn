@@ -59,28 +59,28 @@ So at present I don't have verification for values greater than 220, and can onl
 
 
 -------------------------------------------
-BYTE 1 RAINBOW TABLE [220...256 UNVERIFIED]
+BYTE 1 RAINBOW TABLE [221...256 UNVERIFIED]
 -------------------------------------------
 
-If N = 0...207		-->	XX YY
-	where XX is int(N/4) + 41
+If N = 0...207		-->	XX YY 41 41
+	where XX is int(N/4) + 0x41
 	where YY is 
 		0x41	if N % 4 = 0
 		0x51	if N % 4 = 1
 		0x67	if N % 4 = 2
 		0x77 	if N % 4 = 3
 
-If N = 208...220	-->	XX YY
-	where XX is int(N/4) + 30
+If N = 208...220	-->	XX YY 41 41
+	where XX is int(N/4) + 0x30
 	where YY is 
 		0x41	if N % 4 = 0
 		0x51	if N % 4 = 1
 		0x67	if N % 4 = 2
 		0x77 	if N % 4 = 3
 
-UNTESTED HYPOTHESIS: 220...256 same as 208...220
-If N = 220...256	--> XX YY
-	where XX is int(N/4) + 30
+UNTESTED HYPOTHESIS: 221...256 same as 208...220
+If N = 221...256	--> XX YY 41 41
+	where XX is int(N/4) + 0x30
 	where YY is 
 		0x41	if N % 4 = 0
 		0x51	if N % 4 = 1

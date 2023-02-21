@@ -1,0 +1,153 @@
+February 20, 2023 Hydrasynth sysex reverse engineering notes.  Working on the second rainbow table.
+
+
+0	41414141		// Discontinuity
+1	41414541
+2	41414941
+3	41414D41
+4	41415141
+5	41415541
+6	41415941
+7	41416341		// Discontinuity
+8	41416741
+9	41416B41
+10	41416F41
+11	41417341
+12	41417741
+13	41413041		// Discontinuity
+14	41413441
+15	41413841
+
+16	41424141		// Discontinuity
+17	41424541
+18	41424941
+19	41424D41
+20	41425141
+21	41425541
+22	41425941
+23	41426341		// Discontinuity
+24	41426741
+25	41426B41
+26	41426F41
+27	41427341
+28	41427741
+29	41423041		// Discontinuity
+30	41423441
+31	41423841
+
+32	41434141		// Discontinuity
+33	41434541
+34	41434941
+35	41434D41
+36	41435141
+37	41435541
+38	41435941
+39	41436341		// Discontinuity
+40	41436741
+41	41436B41
+42	41436F41
+43	41437341
+44	41437741
+45	41433041		// Discontinuity
+46	41433441
+47	41433841
+
+48	41444141		// Discontinuity
+49	41444541
+50	41444941
+51	41444D41
+52	41445141
+53	41445541
+54	41445941
+55	41436341		// Discontinuity
+56	41446741
+57	41446B41
+58	41446F41
+59	41447341
+60	41447741
+61	41443041		// Discontinuity
+62	41443441
+63	41443841
+
+64	41454141		// Discontinuity
+49	41454541
+50	41454941
+51	41454D41
+52	41455141
+53	41455541
+54	41455941
+55	41456341		// Discontinuity
+56	41456741
+57	41456B41
+58	41456F41
+59	41457341
+60	41457741
+61	41453041		// Discontinuity
+62	41453441
+63	41453841
+
+...
+Seems to be consistent the whole way through 218
+216	414E6741
+217	414E6B41
+218	414E6F41
+
+
+I cannot test through 255 though.  But I'm going to presume it's consistent at least through 4F:
+
+219	414E7341
+220	414E7741
+221	414E3041		// Discontinuity
+222	414E3441
+223	414E3841
+224	414F4141		// Discontinuity
+225	414F4541
+226	414F4941
+227	414F4D41
+228	414F5141
+229	414F5541
+230	414F5941
+231	414F6341		// Discontinuity
+232	414F6741
+233	414F6B41
+234	414F6F41
+235	414F7341
+236	414F7741
+237	414F3041		// Discontinuity
+238	414F3441
+239	414F3841
+
+... But where does it go from there? Is it 41504141?  Is it 41304141?
+I'm guessing 41504141.
+
+----------------------------------------------------------------
+BYTE 2 RAINBOW TABLE [219...239 UNVERIFIED, 240 ... 255 UNKNOWN]
+----------------------------------------------------------------
+
+For all N 0...239	--> 41 4X YY 41
+	where X is int(N/16) + 0x41
+	where YY is shown in the table below for N MOD 16:
+	
+	    YY
+------------
+0	414X4141		// Discontinuity
+1	414X4541
+2	414X4941
+3	414X4D41
+4	414X5141
+5	414X5541
+6	414X5941
+7	414X6341		// Discontinuity
+8	414X6741
+9	414X6B41
+10	414X6F41
+11	414X7341
+12	414X7741
+13	414X3041		// Discontinuity
+14	414X3441
+15	414X3841
+
+Hypothesis: this pattern continues for 240...255
+
+
+

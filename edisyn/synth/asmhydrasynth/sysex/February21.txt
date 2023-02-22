@@ -1,0 +1,195 @@
+February 21, 2023 Hydrasynth sysex reverse engineering notes.  Working on overlaps. 
+
+As noted on Feb 15, here are strings of three of the same character. 
+ 
+    4D 54 45 78         1001101 1010100 1000101 1111000 (   )
+    4D 44 41 77         1001101 1000100 1000001 1110111 (000)	0x30
+    4D 54 45 78         1001101 1010100 1000101 1111000 (111)	0x31
+    4D 6A 49 79         1001101 1101010 1001001 1111001 (222)	0x32
+    4D 7A 4D 7A         1001101 1111010 1001101 1111010 (333)	0x33
+    4E 44 51 30         1001110 1000100 1010001 0110000 (444)	0x34
+    4E 54 55 31         1001110 1010100 1010101 0110001 (555)	0x35
+    4E 6A 59 32         1001110 1101010 1011001 0110010 (666)	0x36
+    4E 7A 63 33         1001110 1111010 1100011 0110011 (777)	0x37
+    4F 44 67 34         1001111 1000100 1100111 0110100 (888)	0x38
+    4F 54 6B 35         1001111 1010100 1101011 0110101 (999)	0x39
+    51 55 46 42         1010001 1010101 1000110 1000010 (AAA)	0x41
+    51 6B 4A 43         1010001 1101011 1001010 1000011 (BBB)	0x42
+    51 30 4E 44         1010001 0110000 1001110 1000100 (CCC)	0x43
+    52 45 52 45         1010010 1000101 1010010 1000101 (DDD)	0x44
+    52 55 56 46         1010010 1010101 1010110 1000110 (EEE)	0x45
+    52 6B 5A 47         1010010 1101011 1011010 1000111 (FFF)	0x46
+    52 30 64 48         1010010 0110000 1100100 1001000 (GGG)	0x47
+    53 45 68 49         1010011 1000101 1101000 1001001 (HHH)	0x48
+
+Lets do 0x30 (48, '0') first:
+
+					SBYTE 1 SBYTE 2 SBYTE 3 SBYTE 4
+Byte 1: 4D414141	1001101 1000001 1000001 1000001
+Byte 2: 41454141	1000001 1000101 1000001 1000001
+Byte 3: 41414177	1000001 1000001 1000001 1110111
+                	ABCDEFG HIJKLMN OPQRSTU VWXYZ@#
+
+
+
+
+FIRST GUESS:  to combine these:
+
+Take SBYTE 1 from Byte 1
+
+4D
+
+Take bits HIJK from Byte 1.
+XOR bits LMN from Bytes 1 and 2
+
+  44			1000100   
+
+Take bits OPQRS from Byte 2
+Take bits TU from Byte 3
+
+    41			1000001
+
+Take bits SBYTE 4 from Byte 3
+
+      77
+
+Yielding: 4D 44 41 77	CORRECT
+
+
+
+
+
+
+Let's try again with GGG 0x47, 71
+
+					SBYTE 1 SBYTE 2 SBYTE 3 SBYTE 4
+Byte 1: 52674141	1010010 1100111 1000001 1000001
+Byte 2: 41464941	1000001 1000110 1001001 1000001
+Byte 3: 41414153	1000001 1000001 1000001 1010011
+                	ABCDEFG HIJKLMN OPQRSTU VWXYZ@#
+
+Take SBYTE 1 from Byte 1
+
+52				1010010
+
+Take bits HIJK from Byte 1.
+XOR bits LMN from Bytes 1 and 2
+
+  61			1100001   
+
+Take bits OPQRS from Byte 2
+Take bits TU from Byte 3
+
+    49			1001001
+
+Take bits SBYTE 4 from Byte 3
+
+      53		1010011
+
+Yielding: 4D 44 41 77	INCORRECT
+
+GOT:      1010010 1100001 1001001 1010011
+EXPECTED: 1010010 0110000 1100100 1001000
+SHIFTED?: 1010010  110000 1100100 11010011
+          ABCDEFG HIJKLMN OPQRSTU VWXYZ@#
+
+Bytes 2, 3, and 4 are largely shifted by 1
+
+
+
+
+
+
+Let's try again with 777 0x37, 55
+
+					SBYTE 1 SBYTE 2 SBYTE 3 SBYTE 4
+Byte 1: 4E774141	1001110 1110111 1000001 1000001
+Byte 2: 41446341	1000001 1000100 1100011 1000001
+Byte 3: 41414133	1000001 1000001 1000001 0110011
+                	ABCDEFG HIJKLMN OPQRSTU VWXYZ@#
+
+Take SBYTE 1 from Byte 1
+
+4E				1001110
+
+Take bits HIJK from Byte 1.
+XOR bits LMN from Bytes 1 and 2
+
+  73			1110011
+
+Take bits OPQRS from Byte 2
+Take bits TU from Byte 3
+
+    61			1100001
+
+Take bits SBYTE 4 from Byte 3
+
+      33		0110011
+
+Yielding: 4D 44 41 77	INCORRECT
+
+GOT:      1001110 1110011 1100001 0110011
+EXPECTED: 1001110 1111010 1100011 0110011
+          ABCDEFG HIJKLMN OPQRSTU VWXYZ@#
+          
+I note that bit K goes 11 00 11 00 in the number chars, and might
+go 10001000 in the letter chars.  Why?  And what about bit N?
+
+
+What if we XORed bit T?
+
+Take bits OPQRS from Byte 2
+XOR bit T from Bytes 2 and 3
+Take bit U from Byte 3
+
+	1100011
+
+
+
+
+
+
+Let's try with AAA 0x41, 65
+
+					SBYTE 1 SBYTE 2 SBYTE 3 SBYTE 4
+Byte 1: 51514141	1010001 1010001 1000001 1000001
+Byte 2: 41454541	1000001 1000101 1000101 1000001
+Byte 3: 41414142	1000001 1000001 1000001 1000010
+                	ABCDEFG HIJKLMN OPQRSTU VWXYZ@#
+
+
+Take SBYTE 1 from Byte 1
+
+51				1010001
+
+Take bits HIJK from Byte 1.
+XOR bits LMN from Bytes 1 and 2
+
+  54			1010100
+
+Take bits OPQRS from Byte 2
+Take bits TU from Byte 3
+
+    45			1000101
+
+Take bits SBYTE 4 from Byte 3
+
+      42		1000010
+
+Yielding: 51 54 45 42	INCORRECT
+
+GOT:      1010001 1010100 1000101 1000010
+EXPECTED: 1010001 1010101 1000110 1000010
+          ABCDEFG HIJKLMN OPQRSTU VWXYZ@#
+
+Problem here is we can't XOR bit T -- we'd need to XOR U also, and we can't
+do that for 777.  Also whats going on with Bit N now?
+
+
+
+So where do we stand at this point?  It appears that the first byte is correct.
+I'm getting correct values for the fourth byte except for 'GGG', where things
+are weirdly shifted.  The middle bytes are mixed still.  :-(
+
+
+

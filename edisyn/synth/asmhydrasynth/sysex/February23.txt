@@ -1,0 +1,66 @@
+February 23, 2023 Hydrasynth sysex reverse engineering notes.  Working on overlaps. 
+
+The bytes are organized as:
+
+First byte X
+Second byte Y
+Third byte Z
+XXXXXX- XX--YYY- YYYYYZZ ZZZZZZ-
+
+... or something thereabouts.
+
+So the question is: does changing the third byte have an effect on the second byte's bits (except for possible overlap)?  How about the first byte's bits?
+
+Let's take
+
+        51 57 67 37             (Ah5)
+        51 57 67 32             (Ah6)
+        51 57 68 6A             (Ahc)
+        51 57 67 74             (Ah-)
+        51 57 68 65             (Ah^)
+        51 57 68 39             (Ah))
+
+So it looks like changing the last byte does not change the others.
+
+Next the middle byte:
+
+        51 57 67 31             (Ah5)
+        51 53 59 31             (A&5)
+        51 55 6B 31             (AI5)
+        51 54 51 31             (A45)
+        51 54 55 31             (A+5)
+
+Again, it looks like the first and last bytes are spared?
+
+How about the first byte:
+
+        51 57 67 31             (Ah5)
+        4D 32 67 31             (3h5)
+        4D 32 67 31             (ch5)
+        59 32 67 31             (ch5)
+
+This looks independent as well.  How about the first and second bytes?
+
+        51 57 67 31             (Ah5)
+        59 30 30 31             (cM5)
+        51 55 6B 31             (AI5)
+        59 30 6B 31             (cI5)
+
+So I'm stumped.  It had looked before like there was more influence of earlier bytes on later ones.  Let's try:
+
+        52 30 64 48             (GGG)
+        4D 44 42 48             (00G)
+        56 54 42 48             (U0G)
+
+The rainbow table had told us that the last G should be
+		41 41 41 48				for 0x00 0x00 G
+		
+What's happening with the last bit in the third byte?
+How about the first byte?
+
+        51 45 63 41            	0x00 G 0x00 
+        56 55 63 67				(UG )
+        56 55 64 39				(UG))
+
+So very maybe the first byte doesn't have that big of an impact?  Dunno yet.
+

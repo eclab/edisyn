@@ -69,8 +69,8 @@ import javax.sound.midi.*;
 
   00 00 .. 00 7F          Locations M1 ... M128
   40 00                   All Multis
-  7F 00                   Multi Mode Edit Buffer?  On the Microwave it's 20 FF
-
+  7F 00                   Multi Mode Edit Buffer [I believe]
+  
   I think there is no checksum, since there's no checksum on a single sound request.
   However on the Microwave II/XT/XTk's Multi Request, there *is* a checksum, so go figure.
 
@@ -126,9 +126,9 @@ import javax.sound.midi.*;
 
   * All bits are 0=ignore, 1=receive, except Status, which is 0=play, 1=mute
 
-  ** Multi Instrument Buffer is HH=7F LL = 00.  I don't know about other
-  stuff, since there's no bank.  Maybe HH=00 LL=n?
-
+  ** Multi Instrument Buffer is HH=7F LL = 00.  I believe direct patch requests
+  are HH=00 LL=number but I am not certain.
+  
   *** In GOFTER I don't know what this is, it's not in the manual.
 
   **** These values are defined by the GOFTER patch editor, but I don't know what 

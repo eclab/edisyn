@@ -52,6 +52,13 @@ these values rather than just consider them individually
 with 0x0 neighbors, the tables change.  :-(  Need
 to revisit.
 
+Note that the bytes are not contiguous.  That is,
+though byte A uses eight bits -AAAAAA -AA---- 
+This does not mean that it goes -000000 -00----
+through -111111 -11---- in order.  Similarly for
+B and C: there are strange discontinuities and 
+reordering of the numbers.
+
 
 
 BYTE A

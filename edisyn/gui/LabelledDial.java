@@ -206,6 +206,12 @@ public class LabelledDial extends NumericalComponent
                 
         return (a[lo] - value) < (value - a[hi]) ? a[lo] : a[hi];
         }
+        
+    // a hook for ASMHydrasynth
+    public int updateProposedState(int proposedState)
+    	{
+    	return proposedState;
+    	}
 
 
     class Dial extends JPanel
@@ -264,7 +270,7 @@ public class LabelledDial extends NumericalComponent
                 }
             }
  
-        int getProposedState(MouseEvent e)
+        public int getProposedState(MouseEvent e)
             {
             int y = -(e.getY() - startY);
             int min = getMin();
@@ -304,7 +310,7 @@ public class LabelledDial extends NumericalComponent
                 proposedState = min;
             else if (proposedState > max)
                 proposedState = max;
-            return proposedState;
+            return updateProposedState(proposedState);
             }
                 
                 

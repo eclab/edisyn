@@ -2368,7 +2368,7 @@ public class NovationSL extends Synth
             }
         else if (type == 9)     // Template
             {
-            int lowval = model.get(prefix + "template");
+            int lowval = model.get(prefix + "templatenumber");
             data[pos+10] = (byte)(lowval & 127);
             }
         else if (type == 10)    // Realtime
@@ -2481,7 +2481,7 @@ public class NovationSL extends Synth
             }
         else if (type == 9)     // Template
             {
-            int lowval = model.get(prefix + "template");
+            int lowval = model.get(prefix + "templatenumber");
             data[pos+10] = (byte)(lowval & 127);
             }
         else if (type == 10)    // Realtime
@@ -2999,7 +2999,7 @@ public class NovationSL extends Synth
             }
         else if (type == 9)     // Template
             {
-            model.set(prefix + "template", data[pos+10]);
+            model.set(prefix + "templatenumber", data[pos+10]);
             }
         else if (type == 10)    // Realtime
             {
@@ -3094,7 +3094,7 @@ public class NovationSL extends Synth
             }
         else if (type == 9)     // Template
             {
-            model.set(prefix + "template", data[pos+10]);
+            model.set(prefix + "templatenumber", data[pos+10]);
             }
         else if (type == 10)    // Realtime
             {

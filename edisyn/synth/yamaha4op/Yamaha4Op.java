@@ -3033,7 +3033,7 @@ public class Yamaha4Op extends Synth
         {
         if (getSynthType() == TYPE_DX21)
             {
-            return new String[] { "Bank" };
+            return new String[] { "A and B" };
             }
         else if (getSynthType() == TYPE_DX27_DX100 ||
             getSynthType() == TYPE_TX81Z ||
@@ -3058,7 +3058,17 @@ public class Yamaha4Op extends Synth
     /** Return a list of all patch number names.  Default is { "Main" } */
     public String[] getPatchNumberNames()  
         {
-        if (getSynthType() == TYPE_DX21 || 
+        if (getSynthType() == TYPE_DX21)
+        	{
+        	String[] names = new String[32];
+        	for(int i = 0; i < 16; i++)
+        		{
+        		names[i] = "A " + (i + 1);
+        		names[i + 16] = "B " + (i + 1);
+        		}
+        	return names;
+        	}
+        else if (getSynthType() == TYPE_DX21 || 
             getSynthType() == TYPE_DX27_DX100 || 
             getSynthType() == TYPE_TX81Z || 
             getSynthType() == TYPE_DX11 )

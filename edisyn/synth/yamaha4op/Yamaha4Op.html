@@ -56,8 +56,8 @@ If you mutate or recombine patches (using randomize, merge, hill-climb, or nudge
 Different 4-Op synths have different organizations of memory, and so differ in the banks and patch numbers you can access.  Specifically:
 
 <ul>
-<li> <b>DX21</b>&nbsp;&nbsp;&nbsp;&nbsp;Single internal bank, 32 patches, plus 128 voice ROM memory.  The ROM cannot be accessed without loading it into internal memory, erasing an existing internal patch (or all of them), so I have elected not to do that automatically.  You will have to manually load a ROM patch into internal memory in order for Edisyn to access it.
-<p><li> <b>DX27, DX100</b>&nbsp;&nbsp;&nbsp;&nbsp;Single internal bank + 4 "banks" (A B C D), 24 patches each.  The "banks" are just links to either internal patches or to a set of 192 presets in ROM.  Edisyn can't directly access a ROM patch: you'd have to manually set up a ROM patch in a "bank" which points to it. 
+<li> <b>DX21</b>&nbsp;&nbsp;&nbsp;&nbsp;Single internal bank, 32 patches, plus 128 voice ROM memory.  The bank is divided on the front panel into "Bank A" and "Bank B", but it's really just one bank.  The ROM cannot be accessed without loading it into internal memory, erasing an existing internal patch (or all of them), so I have elected not to do that automatically.  You will have to manually load a ROM patch into internal memory in order for Edisyn to access it.
+<p><li> <b>DX27, DX100</b>&nbsp;&nbsp;&nbsp;&nbsp;Single internal bank + 4 "banks" (A B C D), 24 patches each.  The "banks" are just links to either internal patches or to a set of 192 presets in ROM.  Edisyn can't directly access a ROM patch: to download a ROM patch, you'll have to manually set up slot in a "bank" which points to it. 
 <p><li> <b>DX11, TX81Z</b>&nbsp;&nbsp;&nbsp;&nbsp;Single internal bank + 4 ROM preset banks, 32 patches each.
 <p><li> <b>TQ5, YS100, YS200, B200</b>&nbsp;&nbsp;&nbsp;&nbsp;Single internal bank + preset bank + card bank, 100 patches each.
 <p><li> <b>V50</b>&nbsp;&nbsp;&nbsp;&nbsp;Single internal bank + preset bank + card bank, 100 patches each.

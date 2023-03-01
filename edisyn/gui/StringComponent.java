@@ -85,6 +85,9 @@ public class StringComponent extends JComponent implements Updatable, HasKey
     public String getTitle() { return label.getText().trim(); }
     public String getCommand() { return "Enter " + getTitle(); }
     
+    /** Override this method to convert the text field to a combo box and provide a drop-down list of items for it. */
+    public String[] getList() { return new String[0]; }
+    
     public StringComponent(final String _label, final Synth synth, final String key, int maxLength, String instructions)
         {
         super();
@@ -133,29 +136,62 @@ public class StringComponent extends JComponent implements Updatable, HasKey
         while(true)
             {
             String val = synth.getModel().get(key, "").trim();
-            VBox vbox = new VBox();
-            vbox.add(new JLabel(getCommand()));
-            final JTextField text = new JTextField(maxLength);
-            text.setText(currentText);
-                    
-            // The following hack is inspired by https://tips4java.wordpress.com/2010/03/14/dialog-focus/
-            // and results in the text field being selected (which is what should have happened in the first place) 
-                    
-            text.addAncestorListener(new javax.swing.event.AncestorListener()
-                {
-                public void ancestorAdded(javax.swing.event.AncestorEvent e)    
-                    { 
-                    JComponent component = e.getComponent();
-                    component.requestFocusInWindow();
-                    text.selectAll(); 
-                    }
-                public void ancestorMoved(javax.swing.event.AncestorEvent e) {}
-                public void ancestorRemoved(javax.swing.event.AncestorEvent e) {}
-                });
-            vbox.add(text);
+            
+            JPanel panel = new JPanel();
+            panel.setLayout(new BorderLayout());
+            JPanel panel1 = new JPanel();
+            panel1.setLayout(new BorderLayout());
+            panel1.add(new JLabel(getCommand()), BorderLayout.WEST);
+            panel.add(panel1, BorderLayout.NORTH);
+            
+            JComponent textComponent = null;
+			if (getList().length == 0)
+				{
+				final JTextField text = new JTextField(maxLength);
+				text.setText(currentText);        
+				// The following hack is inspired by https://tips4java.wordpress.com/2010/03/14/dialog-focus/
+				// and results in the text field being selected (which is what should have happened in the first place) 
+					
+				text.addAncestorListener(new javax.swing.event.AncestorListener()
+					{
+					public void ancestorAdded(javax.swing.event.AncestorEvent e)    
+						{ 
+						JComponent component = e.getComponent();
+						component.requestFocusInWindow();
+						text.selectAll(); 
+						}
+					public void ancestorMoved(javax.swing.event.AncestorEvent e) {}
+					public void ancestorRemoved(javax.swing.event.AncestorEvent e) {}
+					});
+				textComponent = text;
+				}
+			else
+				{
+				String[] list = getList();
+				String[] listPlus = new String[list.length + 1];
+				System.arraycopy(list, 0, listPlus, 1, list.length);
+				listPlus[0] = currentText;
+				final JComboBox text = new JComboBox(listPlus);
+				text.setSelectedItem(currentText);
+				text.addAncestorListener(new javax.swing.event.AncestorListener()
+					{
+					public void ancestorAdded(javax.swing.event.AncestorEvent e)    
+						{ 
+						JComponent component = e.getComponent();
+						component.requestFocusInWindow();
+						text.getEditor().selectAll(); 
+						}
+					public void ancestorMoved(javax.swing.event.AncestorEvent e) {}
+					public void ancestorRemoved(javax.swing.event.AncestorEvent e) {}
+					});
+				text.setEditable(true);
+				textComponent = text;
+				}
+				
+            panel.add(textComponent, BorderLayout.CENTER);
                     
             synth.disableMenuBar();
-            int opt = JOptionPane.showOptionDialog(parent, vbox, getTitle(),
+            int opt = JOptionPane.showOptionDialog(parent, panel, getTitle(),
                 JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE, null, new String[] { "Enter", "Cancel", "Rand", "Rules" }, "Enter");
             synth.enableMenuBar();
                                         
@@ -178,7 +214,6 @@ public class StringComponent extends JComponent implements Updatable, HasKey
                     {
                     String word = wordList[rand.nextInt(wordList.length)];
                     currentText = word.substring(0, 1).toUpperCase() + word.substring(1);
-                    //currentText = wordList[rand.nextInt(wordList.length)].toUpperCase();
                     }
                 else
                     {
@@ -191,7 +226,9 @@ public class StringComponent extends JComponent implements Updatable, HasKey
                 }
             else                                // This is "Enter"
                 {
-                String result = convert(text.getText());
+                String result = convert("" + (textComponent instanceof JTextField ? 
+                								((JTextField)textComponent).getText() :
+                								((JComboBox)textComponent).getSelectedItem()));
                 if (result == null) return;
                 String str = replace(result);
                 if (str == null)

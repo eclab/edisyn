@@ -64,7 +64,7 @@ Novation's editor has a lot of bugs and missing features.  Edisyn tries to be co
 <p><li>Sysex data (DV) position doesn't work properly for 16-bit encoders -- only one DV is inserted instead of two.
 <p><li>Novation's editor is missing Roland, MSB-LSB, and LSB-MSB options for sysex.
 <p><li>Novation's editor allows template (patch) positions to go to 40 when they should only go to 32.
-<p><li>Novation's editor is missing Realtime, Template, and Bank Change options for buttons.
+<p><li>Novation's editor is missing Realtime, Template, and Bank Change options for buttons.  In fact, if the editor reads a patch with a button set to Template, it will incorrectly interpret this as Aftertouch and will misbehave.
 <p><li>Novation's editor shows default values, but the unit does not (this might be a bug on the unit, it's not clear).
 <p><li>Novation's editor is missing the crossfader.
 </ul>
@@ -113,7 +113,7 @@ You can't request patches from the SL, thus you can't request banks or ranges of
 
 
 <br><br><h3>Thanks</h3>
-Thanks to Focusrite PLC (Novation) for their assistance in gathering certain information helpful in development of this editor.
+Thanks to Focusrite PLC (Novation) for their assistance in gathering certain information helpful in development of this editor.  Thank you to Zsolt Szabo (zsolt.szabo.000@gmail.com) for bug reports.
 
 
 

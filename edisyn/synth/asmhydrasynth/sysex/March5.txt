@@ -1,0 +1,37 @@
+March 5, 2023 Hydrasynth sysex reverse engineering notes.
+
+The first four bytes of the payload appear to be an
+obfuscated CRC32 checksum of the rest of the payload.
+
+Take for example the payload  	19 DB 63 91 04 00 00 7F
+
+0. Separate the 4 bytes from the rest of the string
+
+	19 DB 63 91
+	(vs) 04 00 00 7F
+
+1. Compute the standard CRC-32 checksum on the string.
+
+	CRC232(04 00 00 7F) --> 6E 9C 24 E6
+
+2. Reverse it (perhaps it's different-endian?)
+
+	E6 24 9C 6E
+
+3. Subtract each value from FF
+
+	FF-E6 = 19
+	FF-24 = DB
+	FF-9C = 63
+	FF-6E = 91
+
+4. That's the 4 bytes: 19 DB 63 91
+
+BTW the remaining payload string in this example is, I think:
+
+	04	Request Dump Command [I believe]
+	00	Unknown
+	00	Bank number 
+	7F	Patch number
+
+This works for the small messages. I haven't yet tested on the big ones.

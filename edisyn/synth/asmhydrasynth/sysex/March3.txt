@@ -1,0 +1,5 @@
+March 3, 2023 Hydrasynth sysex reverse engineering notes.  
+
+
+It's Base64!
+

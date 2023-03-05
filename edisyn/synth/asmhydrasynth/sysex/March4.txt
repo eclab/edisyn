@@ -1,0 +1,352 @@
+March 4, 2023 Hydrasynth sysex reverse engineering notes.  
+
+We need to start by decoding the patch request sysex messages in order to request
+appropriate patches from the synth.
+
+
+
+PATCH REQUEST EXAMPLES
+
+A Patch Request starts with a 15-byte header sysex, then a series of 19-byte 
+sysex messages to request each of the chunks, followed by a 15-byte footer
+message.
+
+Below are some examples with a header, the first few chunk requests, and then a footer.
+See also the February14.txt log entry for the complete series of messages
+for Bank A Patch 1.
+
+
+
+Bank A Patch 2
+00  F0 00 20 2B 00 6F 57 58  55 39 50 42 67 41 F7     |   + oWXU9PBgA |
+
+00  F0 00 20 2B 00 6F 49 6F  66 65 4A 67 51 41 41 41  |   + oIofeJgQAAA|
+10  45 3D F7                                          |E= |
+
+00  F0 00 20 2B 00 6F 6C 50  71 68 35 78 63 41 41 42  |   + olPqh5xcAAB|
+10  59 3D F7                                          |Y= |
+
+00  F0 00 20 2B 00 6F 31 63  75 36 2F 68 63 41 41 52  |   + o1cu6/hcAAR|
+10  59 3D F7                                          |Y= |
+
+00  F0 00 20 2B 00 6F 46 70  69 58 31 52 63 41 41 68  |   + oFpiX1RcAAh|
+10  59 3D F7                                          |Y= |
+
+00  F0 00 20 2B 00 6F 56 36  6D 4D 7A 42 63 41 41 78  |   + oV6mMzBcAAx|
+10  59 3D F7                                          |Y= |
+
+00  F0 00 20 2B 00 6F 6B 44  2F 4E 67 78 63 41 42 42  |   + okD/NgxcABB|
+10  59 3D F7                                          |Y= |
+
+00  F0 00 20 2B 00 6F 30 51  37 57 6D 68 63 41 42 52  |   + o0Q7WmhcABR|
+10  59 3D F7                                          |Y= |
+
+00  F0 00 20 2B 00 6F 6B 44  2F 4E 67 78 63 41 42 42  |   + okD/NgxcABB|
+10  59 3D F7                                          |Y= |
+
+....
+
+00  F0 00 20 2B 00 6F 32 78  63 4C 44 68 6F 41 F7     |   + o2xcLDhoA |
+
+
+Bank A Patch 3
+
+00  F0 00 20 2B 00 6F 57 58  55 39 50 42 67 41 F7     |   + oWXU9PBgA |
+
+00  F0 00 20 2B 00 6F 6D 4E  62 58 76 77 51 41 41 41  |   + omNbXvwQAAA|
+10  49 3D F7                                          |I= |
+
+00  F0 00 20 2B 00 6F 6C 50  71 68 35 78 63 41 41 42  |   + olPqh5xcAAB|
+10  59 3D F7                                          |Y= |
+
+00  F0 00 20 2B 00 6F 31 63  75 36 2F 68 63 41 41 52  |   + o1cu6/hcAAR|
+10  59 3D F7                                          |Y= |
+
+00  F0 00 20 2B 00 6F 46 70  69 58 31 52 63 41 41 68  |   + oFpiX1RcAAh|
+10  59 3D F7                                          |Y= |
+
+00  F0 00 20 2B 00 6F 56 36  6D 4D 7A 42 63 41 41 78  |   + oV6mMzBcAAx|
+10  59 3D F7                                          |Y= |
+
+00  F0 00 20 2B 00 6F 6B 44  2F 4E 67 78 63 41 42 42  |   + okD/NgxcABB|
+10  59 3D F7                                          |Y= |
+
+00  F0 00 20 2B 00 6F 30 51  37 57 6D 68 63 41 42 52  |   + o0Q7WmhcABR|
+10  59 3D F7                                          |Y= |
+
+00  F0 00 20 2B 00 6F 45 6C  33 37 73 52 63 41 42 68  |   + oEl37sRcABh|
+10  59 3D F7                                          |Y= |
+
+...
+
+00  F0 00 20 2B 00 6F 32 78  63 4C 44 68 6F 41 F7     |   + o2xcLDhoA |
+
+
+Bank A Patch 128
+
+00  F0 00 20 2B 00 6F 57 58  55 39 50 42 67 41 F7     |   + oWXU9PBgA |
+
+00  F0 00 20 2B 00 6F 47 64  74 6A 6B 51 51 41 41 48  |   + oGdtjkQQAAH|
+10  38 3D F7                                          |8= |
+
+00  F0 00 20 2B 00 6F 6C 50  71 68 35 78 63 41 41 42  |   + olPqh5xcAAB|
+10  59 3D F7                                          |Y= |
+
+00  F0 00 20 2B 00 6F 31 63  75 36 2F 68 63 41 41 52  |   + o1cu6/hcAAR|
+10  59 3D F7                                          |Y= |
+
+00  F0 00 20 2B 00 6F 46 70  69 58 31 52 63 41 41 68  |   + oFpiX1RcAAh|
+10  59 3D F7                                          |Y= |
+
+00  F0 00 20 2B 00 6F 56 36  6D 4D 7A 42 63 41 41 78  |   + oV6mMzBcAAx|
+10  59 3D F7                                          |Y= |
+
+00  F0 00 20 2B 00 6F 6B 44  2F 4E 67 78 63 41 42 42  |   + okD/NgxcABB|
+10  59 3D F7                                          |Y= |
+
+00  F0 00 20 2B 00 6F 30 51  37 57 6D 68 63 41 42 52  |   + o0Q7WmhcABR|
+10  59 3D F7                                          |Y= |
+
+...
+
+00  F0 00 20 2B 00 6F 32 78  63 4C 44 68 6F 41 F7     |   + o2xcLDhoA |
+
+
+
+
+Bank B Patch 1
+
+00  F0 00 20 2B 00 6F 57 58  55 39 50 42 67 41 F7     |   + oWXU9PBgA |
+
+00  F0 00 20 2B 00 6F 39 59  62 43 53 41 51 41 41 51  |   + o9YbCSAQAAQ|
+10  41 3D F7                                          |A= |
+
+00  F0 00 20 2B 00 6F 6C 50  71 68 35 78 63 41 41 42  |   + olPqh5xcAAB|
+10  59 3D F7                                          |Y= |
+
+00  F0 00 20 2B 00 6F 31 63  75 36 2F 68 63 41 41 52  |   + o1cu6/hcAAR|
+10  59 3D F7                                          |Y= |
+
+00  F0 00 20 2B 00 6F 46 70  69 58 31 52 63 41 41 68  |   + oFpiX1RcAAh|
+10  59 3D F7                                          |Y= |
+
+00  F0 00 20 2B 00 6F 56 36  6D 4D 7A 42 63 41 41 78  |   + oV6mMzBcAAx|
+10  59 3D F7                                          |Y= |
+
+00  F0 00 20 2B 00 6F 6B 44  2F 4E 67 78 63 41 42 42  |   + okD/NgxcABB|
+10  59 3D F7                                          |Y= |
+
+00  F0 00 20 2B 00 6F 30 51  37 57 6D 68 63 41 42 52  |   + o0Q7WmhcABR|
+10  59 3D F7                                          |Y= |
+
+....
+
+00  F0 00 20 2B 00 6F 32 78  63 4C 44 68 6F 41 F7     |   + o2xcLDhoA |
+
+
+
+Bank C Patch 1
+
+00  F0 00 20 2B 00 6F 57 58  55 39 50 42 67 41 F7     |   + oWXU9PBgA |
+
+00  F0 00 20 2B 00 6F 4E 74  58 76 59 77 51 41 41 67  |   + oNtXvYwQAAg|
+10  41 3D F7                                          |A= |
+
+00  F0 00 20 2B 00 6F 6C 50  71 68 35 78 63 41 41 42  |   + olPqh5xcAAB|
+10  59 3D F7                                          |Y= |
+
+00  F0 00 20 2B 00 6F 31 63  75 36 2F 68 63 41 41 52  |   + o1cu6/hcAAR|
+10  59 3D F7                                          |Y= |
+
+00  F0 00 20 2B 00 6F 46 70  69 58 31 52 63 41 41 68  |   + oFpiX1RcAAh|
+10  59 3D F7                                          |Y= |
+
+00  F0 00 20 2B 00 6F 56 36  6D 4D 7A 42 63 41 41 78  |   + oV6mMzBcAAx|
+10  59 3D F7                                          |Y= |
+
+00  F0 00 20 2B 00 6F 6B 44  2F 4E 67 78 63 41 42 42  |   + okD/NgxcABB|
+10  59 3D F7                                          |Y= |
+
+...
+
+00  F0 00 20 2B 00 6F 32 78  63 4C 44 68 6F 41 F7     |   + o2xcLDhoA |
+
+
+
+
+
+Processing....
+
+Below are the sysex commands and their Base64-decoded payloads.
+
+
+Patch A1
+
+java B64 F0 00 20 2B 00 6F 57 58  55 39 50 42 67 41 F7
+java B64 F0 00 20 2B 00 6F 74 4C  66 5A 55 51 51 41 41 41 41 3D F7
+java B64 F0 00 20 2B 00 6F 6C 50  71 68 35 78 63 41 41 42 59 3D F7
+java B64 F0 00 20 2B 00 6F 31 63  75 36 2F 68 63 41 41 52 59 3D F7
+java B64 F0 00 20 2B 00 6F 46 70  69 58 31 52 63 41 41 68 59 3D F7
+java B64 F0 00 20 2B 00 6F 56 36  6D 4D 7A 42 63 41 41 78 59 3D F7
+java B64 F0 00 20 2B 00 6F 6B 44  2F 4E 67 78 63 41 42 42 59 3D F7
+java B64 F0 00 20 2B 00 6F 30 51  37 57 6D 68 63 41 42 52 59 3D F7
+java B64 F0 00 20 2B 00 6F 45 6C  33 37 73 52 63 41 42 68 59 3D F7
+java B64 F0 00 20 2B 00 6F 55 32  7A 67 71 42 63 41 42 78 59 3D F7
+java B64 F0 00 20 2B 00 6F 6E 48  42 34 4C 78 63 41 43 42 59 3D F7
+java B64 F0 00 20 2B 00 6F 33 55  46 6A 4E 68 63 41 43 52 59 3D F7
+java B64 F0 00 20 2B 00 6F 48 68  4A 4F 48 52 63 41 43 68 59 3D F7
+java B64 F0 00 20 2B 00 6F 58 79  4E 56 42 42 63 41 43 78 59 3D F7
+java B64 F0 00 20 2B 00 6F 6D 4C  55 55 53 78 63 41 44 42 59 3D F7
+java B64 F0 00 20 2B 00 6F 32 59  51 50 55 68 63 41 44 52 59 3D F7
+java B64 F0 00 20 2B 00 6F 47 74  63 69 65 52 63 41 44 68 59 3D F7
+java B64 F0 00 20 2B 00 6F 57 2B  59 35 59 42 63 41 44 78 59 3D F7
+java B64 F0 00 20 2B 00 6F 78 65  68 6A 72 52 63 41 45 42 59 3D F7
+java B64 F0 00 20 2B 00 6F 68 4E  6C 34 74 42 63 41 45 52 59 3D F7
+java B64 F0 00 20 2B 00 6F 52 34  70 56 6E 78 63 41 45 68 59 3D F7
+java B64 F0 00 20 2B 00 6F 42 72  74 4F 68 68 63 41 45 78 59 3D F7
+java B64 F0 00 20 2B 00 6F 77 53  30 50 79 52 63 41 46 42 59 3D F7
+java B64 F0 00 20 2B 00 6F 67 42  77 55 30 42 63 41 46 52 59 3D F7
+java B64 F0 00 20 2B 00 6F 32 78  63 4C 44 68 6F 41 F7
+
+59 75 3D 3C 18 00 
+B4 B7 D9 51 04 00 00 00 
+94 FA A1 E7 17 00 00 16 
+D5 CB BA FE 17 00 01 16 
+16 98 97 D5 17 00 02 16 
+57 A9 8C CC 17 00 03 16 
+90 3F CD 83 17 00 04 16 
+D1 0E D6 9A 17 00 05 16 
+12 5D FB B1 17 00 06 16 
+53 6C E0 A8 17 00 07 16 
+9C 70 78 2F 17 00 08 16 
+DD 41 63 36 17 00 09 16 
+1E 12 4E 1D 17 00 0A 16 
+5F 23 55 04 17 00 0B 16 
+98 B5 14 4B 17 00 0C 16 
+D9 84 0F 52 17 00 0D 16 
+1A D7 22 79 17 00 0E 16 
+5B E6 39 60 17 00 0F 16 
+C5 E8 63 AD 17 00 10 16 
+84 D9 78 B4 17 00 11 16 
+47 8A 55 9F 17 00 12 16 
+06 BB 4E 86 17 00 13 16 
+C1 2D 0F C9 17 00 14 16 
+80 1C 14 D0 17 00 15 16 	<--- Not sure why to bother with this one after the last chunk
+DB 17 0B 0E 1A 00 
+
+
+
+Patch A2
+
+java B64 F0 00 20 2B 00 6F 57 58  55 39 50 42 67 41 F7
+java B64 F0 00 20 2B 00 6F 49 6F  66 65 4A 67 51 41 41 41 45 3D F7
+java B64 F0 00 20 2B 00 6F 6C 50  71 68 35 78 63 41 41 42 59 3D F7
+java B64 F0 00 20 2B 00 6F 31 63  75 36 2F 68 63 41 41 52 59 3D F7
+java B64 F0 00 20 2B 00 6F 46 70  69 58 31 52 63 41 41 68 59 3D F7
+java B64 F0 00 20 2B 00 6F 32 78  63 4C 44 68 6F 41 F7
+
+59 75 3D 3C 18 00 
+22 87 DE 26 04 00 00 01 
+94 FA A1 E7 17 00 00 16 
+D5 CB BA FE 17 00 01 16 
+16 98 97 D5 17 00 02 16 
+DB 17 0B 0E 1A 00 
+
+
+Patch A3
+
+java B64 F0 00 20 2B 00 6F 57 58  55 39 50 42 67 41 F7
+java B64 F0 00 20 2B 00 6F 6D 4E  62 58 76 77 51 41 41 41 49 3D F7
+java B64 F0 00 20 2B 00 6F 6C 50  71 68 35 78 63 41 41 42 59 3D F7
+java B64 F0 00 20 2B 00 6F 31 63  75 36 2F 68 63 41 41 52 59 3D F7
+java B64 F0 00 20 2B 00 6F 46 70  69 58 31 52 63 41 41 68 59 3D F7
+java B64 F0 00 20 2B 00 6F 32 78  63 4C 44 68 6F 41 F7
+
+59 75 3D 3C 18 00 
+98 D6 D7 BF 04 00 00 02 
+94 FA A1 E7 17 00 00 16 
+D5 CB BA FE 17 00 01 16 
+16 98 97 D5 17 00 02 16 
+DB 17 0B 0E 1A 00 
+
+
+Patch A128
+
+java B64 F0 00 20 2B 00 6F 57 58  55 39 50 42 67 41 F7
+java B64 F0 00 20 2B 00 6F 47 64  74 6A 6B 51 51 41 41 48 38 3D F7
+java B64 F0 00 20 2B 00 6F 6C 50  71 68 35 78 63 41 41 42 59 3D F7
+java B64 F0 00 20 2B 00 6F 31 63  75 36 2F 68 63 41 41 52 59 3D F7
+java B64 F0 00 20 2B 00 6F 46 70  69 58 31 52 63 41 41 68 59 3D F7
+java B64 F0 00 20 2B 00 6F 32 78  63 4C 44 68 6F 41 F7
+
+59 75 3D 3C 18 00 
+19 DB 63 91 04 00 00 7F 
+94 FA A1 E7 17 00 00 16 
+D5 CB BA FE 17 00 01 16 
+16 98 97 D5 17 00 02 16 
+DB 17 0B 0E 1A 00 
+
+
+Patch B1
+
+java B64 F0 00 20 2B 00 6F 57 58  55 39 50 42 67 41 F7
+java B64 F0 00 20 2B 00 6F 39 59  62 43 53 41 51 41 41 51 41 3D F7
+java B64 F0 00 20 2B 00 6F 6C 50  71 68 35 78 63 41 41 42 59 3D F7
+java B64 F0 00 20 2B 00 6F 31 63  75 36 2F 68 63 41 41 52 59 3D F7
+java B64 F0 00 20 2B 00 6F 46 70  69 58 31 52 63 41 41 68 59 3D F7
+java B64 F0 00 20 2B 00 6F 32 78  63 4C 44 68 6F 41 F7
+
+59 75 3D 3C 18 00 
+F5 86 C2 48 04 00 01 00 
+94 FA A1 E7 17 00 00 16 
+D5 CB BA FE 17 00 01 16 
+16 98 97 D5 17 00 02 16 
+DB 17 0B 0E 1A 00 
+
+
+Patch C1
+
+java B64 F0 00 20 2B 00 6F 57 58  55 39 50 42 67 41 F7
+java B64 F0 00 20 2B 00 6F 4E 74  58 76 59 77 51 41 41 67 41 3D F7
+java B64 F0 00 20 2B 00 6F 6C 50  71 68 35 78 63 41 41 42 59 3D F7
+java B64 F0 00 20 2B 00 6F 31 63  75 36 2F 68 63 41 41 52 59 3D F7
+java B64 F0 00 20 2B 00 6F 46 70  69 58 31 52 63 41 41 68 59 3D F7
+java B64 F0 00 20 2B 00 6F 32 78  63 4C 44 68 6F 41 F7
+
+59 75 3D 3C 18 00 
+36 D5 EF 63 04 00 02 00 
+94 FA A1 E7 17 00 00 16 
+D5 CB BA FE 17 00 01 16 
+16 98 97 D5 17 00 02 16 
+DB 17 0B 0E 1A 00 
+
+
+
+
+From this it appears that we have:
+
+1. A consistent header
+2. A semiconsistent patch request command
+3. A consistent series of chunk request commands
+4. A consistent footer
+
+
+The patch request commands look like this:
+
+A1:	  B4 B7 D9 51 04 00 00 00 
+A2:	  22 87 DE 26 04 00 00 01
+A3:	  98 D6 D7 BF 04 00 00 02 
+A128: 19 DB 63 91 04 00 00 7F 
+B1:	  F5 86 C2 48 04 00 01 00 
+C1:	  36 D5 EF 63 04 00 02 00  
+
+So it's clear that the last two bytes are the bank and the patch number.  It's possible that
+the fourth to last byte is the command, that is, 0x04 = "request patch dump".  But WHAT IN
+THE WORLD are the first four bytes?  Why do they even exist?
+	
+It doesn't appear that the first four bytes are a CRC-32 check of an kind over the 
+remaining string.  See 
+	https://www.scadacore.com/tools/programming-calculators/online-checksum-calculator/
+
+It's not a timestamp either: the strings are always the same.
+

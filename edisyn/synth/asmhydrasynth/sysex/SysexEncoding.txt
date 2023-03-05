@@ -20,10 +20,13 @@ the actual INFO bytes of arbitrary length.  To compute the checksum,
 
 An example INFO string is:	04 00 00 7F
 
-This means "Request Dump of Bank A Patch 128".  Following the instructions
-above, this converts into a PAYLOAD of: 19 DB 63 91 04 00 00 7F.
+I believe this means "Request Dump of Bank A Patch 128".  Following t
+he instructions above, this converts into a PAYLOAD of
+
+	19 DB 63 91 04 00 00 7F
 
 The Base-64 encoded version of this PAYLOAD is 
+	
 	47 64 74 6A 6B 51 51 41 41 48 38 3D
 or 	"GdtjkQQAAH8="
 

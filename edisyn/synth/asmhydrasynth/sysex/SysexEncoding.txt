@@ -18,6 +18,10 @@ the actual INFO bytes of arbitrary length.  To compute the checksum,
 3. Subtract each value from 0xFF.  That is, 0xFF-DD, 0xFF-CC, 0xFF-BB, 0xFF-AA
 4. The resulting four bytes will be the CHECKSUM
 
+The CRC-32 encoding is Little Endian, using the Reversed 0xEDB88320 
+CRC32 generator polynomial. It seems that java.util.zip.CRC32 will 
+encode into Big Endian (network order) and then you have to reverse it.
+
 An example INFO string is:	04 00 00 7F
 
 I believe this means "Request Dump of Bank A Patch 128".  Following the 

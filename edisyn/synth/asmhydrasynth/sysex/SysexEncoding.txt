@@ -1,207 +1,32 @@
 HYDRASYNTH SYSEX ENCODING	
-[Incomplete Reverse Engineering as of February 20]
-
-Hydrasynth patches are downloaded by issuing a HEADER MESSAGE, which elicits
-a HEADER RESPONSE.  Then the patch itself is downloaded in chunks stored in
-21 191-byte messages and one final 155-byte message.  Each chunk is reqested
-via a unique CHUNK REQUEST MESSAGE and the chunk is then provided in a 
-CHUNK RESPONSE MESSAGE.  Finally we issue a FOOTER MESSAGE, which elicits
-a FOOTER RESPONSE.
+[Incomplete Reverse Engineering as of March 5]
 
 All Hydrasynth sysex messages have the same basic format:
 
 	F0 00 20 2B 00 6F DATA... F7
 
-The DATA is a payload of N 8-bit bytes encoded three at a time into four 
-7-bit sysex bytes.  If N is not a multiple of four, I presume the 8-bit
-bytes are padded out with zeros, but I do not know.
+00 20 2B are the namespace for Medeli, aka ASM.  00 6F are unknown but
+I presume they're the ID for the Hydrasynth.
 
-The encoding is extremely strange, seemingly deliberately obsfucated.
-First note that three zero bytes is encoded as (hex) 41 41 41 41.
+The DATA contains a PAYLOAD of 8-bit bytes encoded as Base64.
 
-The three bytes appear to largely, but not entirely, occupy separate regions
-of the four-sysex-byte space.  Their encoding is described below.
+Each PAYLOAD appears to consist of four CHECKSUM BYTES followed by
+the actual INFO bytes of arbitrary length.  To compute the checksum,
 
+1. Compute the CRC-32 checksum on the INFO bytes
+2. The checksum is of the form AABBCCDD.  Reverse it as DD CC BB AA.
+3. Subtract each value from 0xFF.  That is, 0xFF-DD, 0xFF-CC, 0xFF-BB, 0xFF-AA
+4. The resulting four bytes will be the CHECKSUM
 
+An example INFO string is:	04 00 00 7F
 
+This means "Request Dump of Bank A Patch 128".  Following the instructions
+above, this converts into a PAYLOAD of: 19 DB 63 91 04 00 00 7F.
 
-FIRST BYTE
+The Base-64 encoded version of this PAYLOAD is 
+	47 64 74 6A 6B 51 51 41 41 48 38 3D
+or 	"GdtjkQQAAH8="
 
-The first byte starts at the first sysex byte, but consumes the first two 
-sysex bytes because two extra bits seem to have a repeating pattern.  
-Specifically, the second sysex byte is always a repeating sequence of:
+Inserting into the final sysex message, we have:
 
-6543210
--------
-1000001
-1010001
-1100111
-1110111
-
-Notice that bits 2 and 1 are extraneous: they are 00 when bits 5 and 4 are 
-00 or 01, and they are 11 when bits 5 and 4 are 10 or 11.  Bits 2 and 1 
-appear to overlap with the space of the SECOND BYTE.  I do not yet know if
-the overlap is addition or XOR or whatnot.
-
--------------------------------------------
-BYTE 1 RAINBOW TABLE [221...255 UNVERIFIED]
-(assuming Bytes 2 and 3 are Zero)
--------------------------------------------
-
-If N = 0...207		-->		XXYY4141
-	where XX is int(N/4) + 0x41
-	where YY is 
-		0x41	if N % 4 = 0
-		0x51	if N % 4 = 1
-		0x67	if N % 4 = 2
-		0x77 	if N % 4 = 3
-
-If N = 208...220	-->		XXYY4141
-	where XX is int(N/4) + 0x30
-	where YY is 
-		0x41	if N % 4 = 0
-		0x51	if N % 4 = 1
-		0x67	if N % 4 = 2
-		0x77 	if N % 4 = 3
-
-UNTESTED HYPOTHESIS: 221...255 same as 208...220
-If N = 221...255	-->		XXYY4141
-	where XX is int(N/4) + 0x30
-	where YY is 
-		0x41	if N % 4 = 0
-		0x51	if N % 4 = 1
-		0x67	if N % 4 = 2
-		0x77 	if N % 4 = 3
-
-
-
-
-
-SECOND BYTE
-
-The second byte starts midway through the second sysex byte and continues through all
-but the last two bits of the third sysex byte (though it could be considered overlapping 
-with the last two bits).  It overlaps with the extraneous bits in the first byte in an
-unknown way, and it overlaps slightly with the third byte.  
-
-
-----------------------------------------------------------------
-BYTE 2 RAINBOW TABLE [219...239 UNVERIFIED, 240 ... 255 UNKNOWN]
-(assuming Bytes 1 and 3 are Zero)
-----------------------------------------------------------------
-
-For all N 0...218	--> 41 4X YY 41
-	where X is int(N/16) + 0x41
-	where YY is shown in the table below for N MOD 16:
-	
-UNTESTED HYPOTHESIS: this pattern continues for 219...255 as well
-
-	    YY
-------------
-0	414X4141		// Discontinuity from previous
-1	414X4541
-2	414X4941
-3	414X4D41
-4	414X5141
-5	414X5541
-6	414X5941
-7	414X6341		// Discontinuity
-8	414X6741
-9	414X6B41
-10	414X6F41
-11	414X7341
-12	414X7741
-13	414X3041		// Discontinuity
-14	414X3441
-15	414X3841
-
-
-
-
-
-
-THIRD BYTE
-
-The third byte starts at the last two bits of the third sysex byte and continues 
-to the end of the fourth sysex byte.  It slightly overlaps with the second byte in
-the last two bits of the third sysex byte.
-
-
--------------------------------------------
-BYTE 3 RAINBOW TABLE [221...255 UNVERIFIED]
-(assuming Bytes 1 and 2 are Zero)
--------------------------------------------
-
-0       41414141		// Discontinuity from previous value
-1       41414142
-2       41414143
-3       41414144
-4       41414145
-5       41414146
-6       41414147
-7       41414148
-8       41414149
-9       4141414A
-10      4141414B
-11      4141414C
-12      4141414D
-13      4141414E
-14      4141414F
-15      41414150
-16      41414151
-17      41414152
-18      41414153
-19      41414154
-20      41414155
-21      41414156
-22      41414157
-23      41414158
-24      41414159
-25      4141415A
-26      41414161		// Discontinuity
-27      41414162
-28      41414163
-29      41414164
-30      41414165
-31      41414166
-32      41414167
-33      41414168
-34      41414169
-35      4141416A
-36      4141416B
-37      4141416C
-38      4141416D
-39      4141416E
-40      4141416F
-41      41414170
-42      41414171
-43      41414172
-44      41414173
-45      41414174
-46      41414175
-47      41414176
-48      41414177
-49      41414178
-50      41414179
-51      4141417A
-52      41414130		// Discontinuity
-53      41414131
-54      41414132
-55      41414133
-56      41414134
-57      41414135
-58      41414136
-59      41414137
-60      41414138
-61      41414139
-62      4141412B		// Discontinuity
-63      4141412F		// Discontinuity
-
-64 - 127:	414142XX
-128 - 191:	414143XX
-192 - 255:	414144XX
-	Where XX is the last two values in the equivalent row (mod 64) of the table above
-
-
-
-
+	F0 00 20 2B 00 6F 47 64 74 6A 6B 51 51 41 41 48 38 3D F7

@@ -1,5 +1,6 @@
 package edisyn.synth.asmhydrasynth;
 import edisyn.util.*;
+import java.util.*;
 
 public class Decode
 	{
@@ -30,6 +31,14 @@ public class Decode
 		// Remove the first four bytes, they're the modified CRC32 checksum
 		if (payload0.length <= 4) // uh oh
 			throw new RuntimeException("Invalid or too empty Base64 Decoding for data: " + StringUtility.toHex(data) + "\nDecoded into " + payload0);
+
+		/*
+		System.err.println("CRC Bytes: " 
+		+ StringUtility.toHex(payload0[0]) + " " 
+		+ StringUtility.toHex(payload0[1]) + " " 
+		+ StringUtility.toHex(payload0[2]) + " " 
+		+ StringUtility.toHex(payload0[3])); 
+		*/
 
 		byte[] payload = new byte[payload0.length - 4];
 		System.arraycopy(payload0, 4, payload, 0, payload.length);
@@ -70,7 +79,11 @@ public class Decode
 		return patch;
 		}
 
-
+	public static byte[] base64Decode(byte[] chars)
+		{
+		return Base64.getDecoder().decode(chars);
+		}
+/*
 	static byte[] base64DecodeChunk(byte[] chars, int start)
 		{
 		int result = 0;
@@ -173,7 +186,7 @@ public class Decode
 		System.arraycopy(data, 0, result, 0, pos);
 		return result;
 		}
-	
+*/
 
 	public static void main(String[] args)
 		{

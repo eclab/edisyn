@@ -26,6 +26,10 @@ import javax.sound.midi.*;
 
 public class ASMHydrasynth extends Synth
     {
+public static final byte[] OUT1 = { (byte)0xF0, (byte)0x00, (byte)0x20, (byte)0x2B, (byte)0x00, (byte)0x6F, (byte)0x57, (byte)0x58, (byte)0x55, (byte)0x39, (byte)0x50, (byte)0x42, (byte)0x67, (byte)0x41, (byte)0xF7 };
+
+public static final byte[] OUT2 = { (byte)0xF0, (byte)0x00, (byte)0x20, (byte)0x2B, (byte)0x00, (byte)0x6F, (byte)0x48, (byte)0x52, (byte)0x34, (byte)0x50, (byte)0x39, (byte)0x51, (byte)0x51, (byte)0x41, (byte)0x42, (byte)0x48, (byte)0x38, (byte)0x3D, (byte)0xF7 };    
+    
     public static final String[] BANKS = { "A", "B", "C", "D", "E", "F" };
     public static final String[] BANKS_DELUXE = { "A", "B", "C", "D", "E", "F", "G", "H" };
     public static final String[] OSC_MODES = { "Single", "WaveScan" };
@@ -64,7 +68,8 @@ public class ASMHydrasynth extends Synth
     public static final String[][] FX_PRESETS = { { }, { "Chorus 1", "Chorus 2", "Chorus 3" }, { "Flanger 1", "Flanger 2", "Flanger 3" }, { "Rotary 1", "Rotary 2", "Rotary 3" }, { "Phaser 1", "Phaser 2", "Phaser 3" }, { "Lo-Fi 1", "Lo-Fi 2" }, { "Tremolo 1", "Tremolo 2", "Tremolo 3" },  { "Flat", "Low Boost", "High Boost", "Bass Cut", "Smile", "Lo-Fi", "Warm" }, { }, { "Drive 1", "Drive 2", "Drive 3" } }; 
     public static final String[] LO_FI_SAMPLES = { "44100", "22050", "14700", "11025", "8820", "7350", "6300", "5513", "4900", "4410", "4009", "3675", "3392", "3150", "2940", "2756" }; 
     public static final String[] SIDECHAINS = { "Off", "BPM Duck", "Tap", "Mod In 1", "Mod In 2" };
-        
+    public static final char[] INVALID_PATCH_NAME_CHARS = { '"', '*', '\\', '|', '/', '<', '>', '?',  ';', '~' };
+    
     // These are the delay times (in ms) corresonding to delaytime values 72 ... 183.
     // See getDelayTimeSyncOff(...) to get all delay times
     public static final int[] SOME_DELAY_TIMES = 
@@ -1011,8 +1016,8 @@ public class ASMHydrasynth extends Synth
         };
 
 
-// This is an array of preset values in the order   [type][preset group][value in the format MSB * 128 + LSB]
-// The first values are FX TYPE and FX PRESET, the remainder are the five PRESET VALUES
+// This is an array of FX preset values in the order   [type][preset group][value in the format MSB * 128 + LSB]
+// The first values are FX TYPE and FX PRESET, the remainder are the five FX PRESET VALUES
     public int[][][] FX_PRESET_VALUES =   
         {
             { 
@@ -1337,7 +1342,7 @@ public class ASMHydrasynth extends Synth
 
         vbox.add(hbox);
 
-        comp = new StringComponent("Patch Name", this, "name", 16, "Name must be up to 16 ASCII characters.")
+        comp = new StringComponent("Patch Name", this, "name", 16, "Patch name must be up to 16 ASCII characters,\nnot including control characters, DELETE,\nor any of the following:  \" * \\ | / < > ? ; | ~")
             {
             public String replace(String val)
                 {
@@ -1368,6 +1373,15 @@ public class ASMHydrasynth extends Synth
         return globalCategory;
         }
 
+	boolean invalidChar(char c)
+		{
+		for(int i = 0; i < INVALID_PATCH_NAME_CHARS.length; i++)
+			{
+			if (c == INVALID_PATCH_NAME_CHARS[i]) return true;
+			}
+		return false;
+		}
+		
     public static final int MAXIMUM_NAME_LENGTH = 16;
     public String revisePatchName(String name)
         {
@@ -1379,7 +1393,7 @@ public class ASMHydrasynth extends Synth
         for(int i = 0 ; i < nameb.length(); i++)
             {
             char c = nameb.charAt(i);
-            if (c < ' ' || c > 126)             // It appears that 127 (DEL) is not permitted
+            if (c < ' ' || c > 126 || invalidChar(c))
                 nameb.setCharAt(i, ' ');
             }
         name = nameb.toString();
@@ -1454,6 +1468,17 @@ public class ASMHydrasynth extends Synth
         Box box = new Box(BoxLayout.Y_AXIS);
         box.add(Box.createHorizontalGlue());
         box.add(icons);
+
+        final PushButton foo = new PushButton("Foo")
+            {
+            public void perform()
+                {
+                tryToSendSysex(OUT1);
+                tryToSendSysex(OUT2);
+                }
+            };
+		box.add(foo);
+
         box.add(Box.createHorizontalGlue());
                 
         hbox.add(Strut.makeHorizontalStrut(8));
@@ -1468,6 +1493,7 @@ public class ASMHydrasynth extends Synth
 
         comp = new LabelledDial("Keytrack", this, "osc" + osc + "keytrack", color, 0, 200)      
             {
+            public boolean isSymmetric() { return true; }
             public String map(int value)
                 {
                 return "" + value + "%";
@@ -1511,14 +1537,16 @@ public class ASMHydrasynth extends Synth
         }
 
 
+	/** Rounds d as usual to the nearest int, but with 0.5 rounded 
+		towards the nearest even number rather than towards zero.  */
     public static int roundEven(double d) 
         {
         // Garbage like https://stackoverflow.com/questions/32971262/how-to-round-a-double-to-closest-even-number
-        // is wrong.  This will do below for ints:
+        // is wrong.  I think below works for both positive and negative values
                 
         int i = (int) d;
         double rem = (d - i);
-        if (rem == 0.5)
+        if (rem == 0.5 || rem == -0.5)
             {
             if ((i & 1) == 0)       // even
                 return i;
@@ -3904,7 +3932,7 @@ public class ASMHydrasynth extends Synth
         for(int i = 0 ; i < nameb.length(); i++)
             {
             char c = nameb.charAt(i);
-            if (c < ' ' || c > 126)             // FIXME: I presume DEL is not permitted
+            if (c < ' ' || c > 126 || invalidChar(c))
                 nameb.setCharAt(i, ' ');
             }
         name = nameb.toString();
@@ -3923,12 +3951,16 @@ public class ASMHydrasynth extends Synth
         HBox hbox = new HBox();
 
         VBox vbox = new VBox();
-        comp = new StringComponent("Name", this, "macro" + macro + "name", 8, "Macro name must be up to 8 ASCII characters.")
+        comp = new StringComponent("Name", this, "macro" + macro + "name", 8, "Macro name must be up to 8 ASCII characters,\nnot including control characters, DELETE,\nor any of the following:  \" * \\ | / < > ? ; | ~")
             {
             public String replace(String val)
                 {
                 return reviseMacroName(val);
                 }
+            public String[] getList()
+            	{
+            	return MACRO_NAME_PRESETS;
+            	}
             };
         vbox.add(comp);
                 
@@ -5065,10 +5097,69 @@ public class ASMHydrasynth extends Synth
         return sysex;
         }
 
+    	public void performRequestDump(Model tempModel, boolean changePatch)
+		  {
+		  if (changePatch)	 // dunno if we should bother with this yet
+		  	{
+		  	// Nada
+		  	}
+		  	
+		  if (tempModel == null)
+		  tempModel = getModel();
+
+			incoming = new byte[22][];
+			incomingPos = 0;
+
+		  int NN = tempModel.get("number", 0);
+		  int BB = tempModel.get("bank", 0);
+		  
+		  tryToSendSysex(Encode.encodePayload(new byte[] { 0x18, 000 }));
+		  tryToSendSysex(Encode.encodePayload(new byte[] { 0x04, 0x00, (byte)BB, (byte)NN }));
+		  }
+
+	int incomingPos;
+	byte[][] incoming = new byte[22][];
+	
+    public int parse(byte[] data, boolean fromFile)
+    	{
+    	if (data[1] == 0x7D) 
+    		return parseFake(data, fromFile);
+    	else
+    		{
+    		if (data.length > 19)	// probably valid
+    			{
+				incoming[incomingPos] = data;
+				tryToSendSysex(Encode.encodePayload(new byte[] { 0x17, 0x00, (byte)incomingPos, 0x16 }));
+				if (incomingPos == 21)
+					{
+					tryToSendSysex(Encode.encodePayload(new byte[] { 0x1A, 0x00 }));
+					try
+						{
+						Decode.decodePatch(incoming);
+						incoming = new byte[22][];
+						incomingPos = 0;
+						return PARSE_SUCCEEDED;
+						}
+					catch (RuntimeException ex)
+						{
+						Synth.handleException(ex);
+						incoming = new byte[22][];
+						incomingPos = 0;
+						return PARSE_FAILED;
+						}
+					}
+				else
+					{
+					return PARSE_INCOMPLETE;
+					}
+    			}
+    		else return PARSE_INCOMPLETE;		// maybe parse failed or something else?  Probably not parse failed
+    		}
+    	}
 
     /** The Hydrasynth doesn't have a useful sysex emit mechanism, so we're inventing one here solely for
         the purposes of writing to a file. */
-    public int parse(byte[] data, boolean fromFile)
+    public int parseFake(byte[] data, boolean fromFile)
         {
         int HEADER = 20;
 

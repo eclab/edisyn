@@ -1,5 +1,10 @@
 March 8, 2023 Hydrasynth sysex reverse engineering notes.
 
+I have created patch and individual sysex message encoders and 
+decoders via Encode.java and Decode.java. Decode.java appears
+to properly decode, and encode(decode(data))==data, so I think
+Encode.java is working too.
+
 Base64 decoded and stripped of the CRC checksum (see March 7 notes), 
 the full process for a dump request and dump appear to consist of
 the following messages:

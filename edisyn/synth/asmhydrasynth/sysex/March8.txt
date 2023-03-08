@@ -1,8 +1,10 @@
 March 8, 2023 Hydrasynth sysex reverse engineering notes.
 
 
-Bas64 decoded and stripped of the CRC checksum, a the full process for a 
-dump request and dump appear to consist of the following messages:
+Bas64 decoded and stripped of the CRC checksum (see March 7 notes), 
+a the full process for a dump request and dump appear to consist of
+the following messages:
+
 
 ->	1. A Header
 		18 00 
@@ -256,6 +258,7 @@ Here is an example for the first patch, "Sawexpressive GD"
 
 If we remove the first four bytes from each chunk and concatenate them, then
 all told the patch data appears to be the following 2790 bytes:
+
 
 ADDR    00 01 02 03 04 05 06 07    08 09 0A 0B 0C 0D 0E 0F          ASCII
 ----    -----------------------    -----------------------    +----------------+

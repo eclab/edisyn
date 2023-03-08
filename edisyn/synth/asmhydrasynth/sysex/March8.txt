@@ -15,7 +15,7 @@ the following messages:
 ->	3. A Patch Request
 		04 00 BANK NUMBER
 
-	4. Then 21 times for CHUNK = 0 ... 20 
+	4. Then 21 times for CHUNK = 0 ... 20 (hex 0 ... 14)
 
 <-		- A Chunk Dump
 			16 00 CHUNK 16 DATA...
@@ -24,7 +24,7 @@ the following messages:
 ->		- A Chunk Acknowledgment 
 			17 00 CHUNK 16
 
-	5. Then 1 time for CHUNK = 21 
+	5. Then 1 time for CHUNK = 21 (hex 15)
 
 <-		- A Chunk Dump
 			16 00 CHUNK 16 DATA...

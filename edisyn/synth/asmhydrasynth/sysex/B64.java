@@ -3,37 +3,7 @@ import java.io.*;
 
 public class B64
 	{
-	/*
-	public static byte[] encodeChunk(byte[] data, int pos)
-		{
-		// load up
-		int chunk = 0;
-		int numBytes = 0;
-		for(int i = pos; i < Math.min(pos + 4, data.length); i++)
-			{
-			chunk = ((chunk << 8) | data[pos];
-			numBytes++;
-			}
-		
-		// 
-		}
-	
-	public static byte[] encode(byte[] data)
-		{
-		int pos = 0;
-		byte[] chars = new byte[data.length * 2];	// will be enough
-		for(int i = 0; i < data.length; i+=4)
-			{
-			for(int j = i; j < i + 4; j++)
-				{
-				System.arraycopy(encodeChunk(data, pos), 0, data, pos, 4);
-				pos++;
-				}
-			}
-		}
-	*/
-		
-	static byte[] decodeChunk(byte[] chars, int start)
+	static byte[] base64DecodeChunk(byte[] chars, int start)
 		{
 		int result = 0;
 		int equals = 0;
@@ -106,12 +76,12 @@ public class B64
 			}
 		}
 
-	public static byte[] decode(byte[] chars)
+	public static byte[] base64Decode(byte[] chars)
 		{
 		int pos = 0;
 		byte[] data = new byte[chars.length];	// should be enough
 		
-		outer: for(int i = 0; i < chars.length - 4; i++)
+		outer: for(int i = 0; i < chars.length; i+=4)
 			{
 			for(int j = i; j < i + 4; j++)
 				{
@@ -125,8 +95,9 @@ public class B64
 					continue outer;
 				}
 			// at this point we have a legal 4-byte chunk
-			System.arraycopy(decodeChunk(chars, i), 0, data, pos, 4);
-			pos += 4;
+			byte[] vals = base64DecodeChunk(chars, i);
+			System.arraycopy(vals, 0, data, pos, vals.length);
+			pos += vals.length;
 			}
 			
 		// Now reduce to the right size
@@ -134,6 +105,7 @@ public class B64
 		System.arraycopy(data, 0, result, 0, pos);
 		return result;
 		}
+	
 	
 	
 	public static void main(String[] args) throws IOException

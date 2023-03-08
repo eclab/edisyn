@@ -1,6 +1,5 @@
 March 8, 2023 Hydrasynth sysex reverse engineering notes.
 
-
 Base64 decoded and stripped of the CRC checksum (see March 7 notes), 
 the full process for a dump request and dump appear to consist of
 the following messages:
@@ -255,6 +254,8 @@ Here is an example for the first patch, "Sawexpressive GD"
 
 
 
+See edisyn/synth/asmhydrasynth/Decode.java  which does a full test decode of 
+the patch example below.
 
 If we remove the first four bytes from each chunk and concatenate them, then
 all told the patch data appears to be the following 2790 bytes:

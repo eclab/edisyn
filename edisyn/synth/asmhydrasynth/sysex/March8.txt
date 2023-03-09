@@ -46,6 +46,11 @@ the following messages:
 		1B 00
 	
 
+I note that if you don't send the Footer, then the Hydrasynth is very sluggish
+to respond to new changes on the front panel.  From this I gather that the
+Header and Footer are really soft locks, seizing and then releasing control of
+the machine.  So be sure to send the Footer.
+
 
 
 

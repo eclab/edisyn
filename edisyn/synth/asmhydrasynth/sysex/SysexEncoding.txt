@@ -1,5 +1,9 @@
 HYDRASYNTH SYSEX ENCODING	
-[Incomplete Reverse Engineering as of March 5]
+[Incomplete Reverse Engineering as of March 8]
+
+
+
+ENCODING
 
 All Hydrasynth sysex messages have the same basic format:
 
@@ -37,3 +41,100 @@ or 	"GdtjkQQAAH8="
 Inserting into the final sysex message, we have:
 
 	F0 00 20 2B 00 6F 47 64 74 6A 6B 51 51 41 41 48 38 3D F7
+
+
+
+WHAT CAN BE DONE
+
+The following can definitely be done over sysex:
+
+	- Request and download a patch from patch memory
+	- Request and download a bank from patch memory
+	- Request and download the names of patches in a bank
+	
+I presume the following can also be done but have not seen it in action:
+
+	- Write patch to patch memory
+	- Write a bank from patch memory
+	
+It is my understanding that the following CANNOT be done, which is
+pretty foolish of ASM:
+
+	- Request and download patch from current working memory
+	- Send a patch to current working memory
+
+The last one is a serious problem.  If a patch editor cannot send a patch
+to current working memory, it has only two other options for auditioning
+patches:
+
+	1. Write the patch to a scratch location in patch memory, then do
+	   a Program Change to that patch
+	   
+	2. Send all patch parameters separately as NRPN messages
+
+#1 is not feasible on the Hydrasynth because its patch memory is in 
+Flash RAM, and so writing too often to it will burn it out.  Auditioning
+is done constantly, so this would be a disservice to Hydrasynth users.
+
+#2 is problematic because it seems the Hydrasynth cannot handle a stream
+of NRPN messages sent to it in rapid succession.  It seems to drop
+some messages on the floor.  I am presently sending the NRPN stream three
+times in a row in order to increase the likelihood that everything gets
+there.
+
+
+
+REQUESTING A PATCH
+
+To request a patch, you send a HEADER, which elicits a HEADER RESPONSE,
+then you send a PATCH REQUEST.  The Hydrasynth will then send you the
+PATCH DATA in 22 CHUNKS.  After each CHUNK you must send a CHUNK 
+ACKNOWLEDGMENT and then you will receive the next CHUNK.  After you
+hae send the last CHUNK ACKNOLWEDGMENT you then send a FOOTER which
+elicits a FOOTER RESPONSE.
+
+The raw values for these messages are below. You must take each value
+and encode it as described earlier in order to produce the proper
+sysex message.
+
+
+->	1. A Header
+		18 00 
+		
+<-	2. A Header Response
+		19 00
+
+->	3. A Patch Request
+		04 00 BANK NUMBER
+
+	4. Then 21 times for CHUNK = 0 ... 20 (hex 0 ... 14)
+
+<-		- A Chunk Dump
+			16 00 CHUNK 16 DATA...
+			Where DATA... is 128 bytes long
+
+->		- A Chunk Acknowledgment 
+			17 00 CHUNK 16
+
+	5. Then 1 time for CHUNK = 21 (hex 15)
+
+<-		- A Chunk Dump
+			16 00 CHUNK 16 DATA...
+			Where DATA... is 102 bytes long		[truncated]
+
+->		- A Chunk Acknowledgment 
+			17 00 CHUNK 16
+		
+->	6. A Footer
+		1A 00
+		
+<-	6. A Footer Response
+		1B 00
+	
+
+I note that if you don't send the Footer, then the Hydrasynth is very 
+sluggish to respond to new changes on the front panel.  From this I 
+gather that the Header and Footer are really soft mutex locks, seizing 
+and then releasing control of the machine.  So be sure to send the Footer.
+
+

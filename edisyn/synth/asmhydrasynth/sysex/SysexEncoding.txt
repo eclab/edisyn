@@ -90,7 +90,7 @@ To request a patch, you send a HEADER, which elicits a HEADER RESPONSE,
 then you send a PATCH REQUEST.  The Hydrasynth will then send you the
 PATCH DATA in 22 CHUNKS.  After each CHUNK you must send a CHUNK 
 ACKNOWLEDGMENT and then you will receive the next CHUNK.  After you
-hae send the last CHUNK ACKNOLWEDGMENT you then send a FOOTER which
+have sent the last CHUNK ACKNOLWEDGMENT you then send a FOOTER which
 elicits a FOOTER RESPONSE.
 
 The raw values for these messages are below. You must take each value

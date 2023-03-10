@@ -1,0 +1,38 @@
+March 9, 2023 Hydrasynth sysex reverse engineering notes.
+
+Now that we know how to download a patch, I've modified Edisyn as follows.
+When you choose "Request Patch" and select a patch, Edisyn will request it,
+decode the results, and then store the byte array in the variable INITIAL.
+Then when you subsequently select "Request Patch", it will do the same, but
+instead of storing it in INITIAL, it will compare it to INITIAL and print out
+the diffs.
+
+To use this, we can first set up INITIAL, then make a modification in one
+patch parameter, save it on the Hydrasynth, and download it and compare to
+INITIAL.  The diff will tell use where the Hydrasynth is storing the parameter.
+
+From this I've begun a text file spreadsheet of apparent parameter locations.
+It'll be a slow and tedious process but we'll get it done.
+
+Some initial notes:
+
+	- It seems that all the numerical and bitwise  parameters I've 
+	  tried are stored in EVEN bytes. I wonder what's stored in the
+	  ODD bytes.  Hydrasynth deluxe data?
+
+	- Warm Mode and Snap are packed into the same byte.  Bitpacking
+	  is always bad. :-(
+
+	- The eight macro name regions are separated with nine-byte
+	  "junk" regions filled with arbitrary words and fragments of
+	  ASCII text.  It's almost as if there were additional macro
+	  names available.  It's not clear what this junk is.  Again,
+	  possibly Hydrasynth deluxe data?
+
+	- Turning on Random Phase seemed to turn on a bunch of other stuff.
+	  So does Vibrato BPM Sync.
+
+	- Very shocking: Vibrato Rate BPM Sync ON and BPM Sync OFF seem
+	  to be the same byte!  This makes no sense, as they're expressly
+	  separate parameters in NRPN.
+

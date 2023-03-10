@@ -12,7 +12,7 @@ BYTE    HEX     INFO
 5       5       
 6       6       
 7       7       
-8       8       
+8       8       Category
 9       9       Patch Name Start
 10      A       
 11      B       
@@ -30,31 +30,31 @@ BYTE    HEX     INFO
 23      17      
 24      18      Patch Name End?
 25      19      
-26      1A      
+26      1A      Color
 27      1B      
 28      1C      
 29      1D      
-30      1E      
+30      1E      Polyphony
 31      1F      
-32      20      
+32      20      Density
 33      21      
-34      22      
+34      22      Detune
 35      23      
-36      24      
+36      24      Analog Feel
 37      25      
-38      26      
+38      26      Random Phase?	[Note, this seems to turn on other stuff too]
 39      27      
-40      28      
+40      28      Stereo Mode
 41      29      
-42      2A      
+42      2A      Stereo Width
 43      2B      
-44      2C      
+44      2C      Pitch Bend Range
 45      2D      
-46      2E      
+46      2E      Vibrato Amount
 47      2F      
-48      30      
+48      30      Vibrato Rate [BPM Sync ON or OFF, surprising]
 49      31      
-50      32      
+50      32      Vibrato BPM Sync	[Note seems to turn on other stuff too]
 51      33      
 52      34      
 53      35      
@@ -474,7 +474,7 @@ BYTE    HEX     INFO
 467     1D3     
 468     1D4     
 469     1D5     
-470     1D6     
+470     1D6     Warm Mode bit 0		Snap bit 1
 471     1D7     
 472     1D8     
 473     1D9     

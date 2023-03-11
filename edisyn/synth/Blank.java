@@ -191,6 +191,16 @@ public class Blank extends Synth
         // return PARSE_INCOMPLETE, and only return PARSE_SUCCEEDED when all the messages have
         // arrived sufficient to declare the model finished.
         //
+        // IMPORTANT NOTE.  While parse(...) has been called, sendMIDI has been switched
+        // OFF so you can update widgets without them sending out MIDI updates.  However it
+        // is occasionally the case that you are required to send a MIDI message to the synth
+        // to get it to send the next chunk of data to you (and also in this case you'd return
+        // PARSE_INCOMPLETE probably).  To do this, you can:
+        //             boolean sendMIDI = getSendMIDI();
+        //             setSendMIDI(true);
+        //             *** send your message here ***
+        //             setSendMIDI(sendMIDI);
+        //
         return PARSE_FAILED; 
         }
         

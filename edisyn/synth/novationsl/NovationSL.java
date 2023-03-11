@@ -724,7 +724,20 @@ public class NovationSL extends Synth
         comp = new LabelledDial("Common Channel", this, "commonchannel", color, 0, 15, -1);
         hbox.add(comp);
 
-        comp = new LabelledDial("Program Channel", this, "progchannel", color, 0, 15, -1);
+        comp = new LabelledDial("Program Channel", this, "progchannel", color, 0, 16)
+        	{
+        	public String map(int value)
+        		{
+        		if (value == 16)
+        			{
+        			return "Comm";
+        			}
+        		else
+        			{
+        			return "" + (value + 1);
+        			}
+        		}
+        	};
         hbox.add(comp);
 
         category.add(hbox, BorderLayout.CENTER);
@@ -910,7 +923,7 @@ public class NovationSL extends Synth
             public String map(int val)
                 {
                 if (val == 0) return "Comm";
-                if (val == 1) return "Key";
+                if (val == 1) return "Prog";
                 return "" + (val - 1);
                 }
             };
@@ -1078,7 +1091,7 @@ public class NovationSL extends Synth
             public String map(int val)
                 {
                 if (val == 0) return "Comm";
-                if (val == 1) return "Key";
+                if (val == 1) return "Prog";
                 return "" + (val - 1);
                 }
             };
@@ -1363,7 +1376,7 @@ public class NovationSL extends Synth
             public String map(int val)
                 {
                 if (val == 0) return "Comm";
-                if (val == 1) return "Key";
+                if (val == 1) return "Prog";
                 return "" + (val - 1);
                 }
             };
@@ -1647,7 +1660,7 @@ public class NovationSL extends Synth
             public String map(int val)
                 {
                 if (val == 0) return "Comm";
-                if (val == 1) return "Key";
+                if (val == 1) return "Prog";
                 return "" + (val - 1);
                 }
             };
@@ -1906,7 +1919,7 @@ public class NovationSL extends Synth
             public String map(int val)
                 {
                 if (val == 0) return "Comm";
-                if (val == 1) return "Key";
+                if (val == 1) return "Prog";
                 return "" + (val - 1);
                 }
             };
@@ -2839,6 +2852,14 @@ public class NovationSL extends Synth
         return 0;
         }
 
+	// This function handles the special case for ports having special spurious data < 0x40
+    int portAt(int pos, byte[] stuff, byte val)
+        {
+        if (val < 0x20) return 0;		// 0x0
+        else if (val < 0x40) return 1;	// 0x20
+        else return at(pos, stuff, val);
+        }
+
                 
     void parseName(String prefix, int index, int pos, byte[] data)
         {
@@ -2859,7 +2880,7 @@ public class NovationSL extends Synth
         int display = at(pos + 15, TO_ENCODER_DISPLAY, data[pos + 15]);
         model.set(prefix + "display", display);
         // ports will often have bad data
-        model.set(prefix + "ports", at(pos + 18, TO_CONTROL_PORTS, data[pos + 18]));
+        model.set(prefix + "ports", portAt(pos + 18, TO_CONTROL_PORTS, data[pos + 18]));
         model.set(prefix + "channel", at(pos + 19, TO_CONTROL_CHANNELS, data[pos + 19]));
                 
         if (display == 5) // 16K
@@ -2925,7 +2946,7 @@ public class NovationSL extends Synth
         int display = at(pos + 15, TO_ENCODER_DISPLAY, data[pos + 15]);
         model.set(prefix + "display", display);
         // ports will often have bad data
-        model.set(prefix + "ports", at(pos + 18, TO_CONTROL_PORTS, data[pos + 18]));
+        model.set(prefix + "ports", portAt(pos + 18, TO_CONTROL_PORTS, data[pos + 18]));
         model.set(prefix + "channel", at(pos + 19, TO_CONTROL_CHANNELS, data[pos + 19]));
                 
         model.set(prefix + "lowval", data[pos+10]);
@@ -2965,7 +2986,7 @@ public class NovationSL extends Synth
         int display = at(pos + 15, TO_BUTTON_DISPLAYS, data[pos + 15]);
         model.set(prefix + "display", display);
         // ports will often have bad data
-        model.set(prefix + "ports", at(pos + 18, TO_CONTROL_PORTS, data[pos + 18]));
+        model.set(prefix + "ports", portAt(pos + 18, TO_CONTROL_PORTS, data[pos + 18]));
 
         if (type == 5)          // MMC
             {
@@ -3060,7 +3081,7 @@ public class NovationSL extends Synth
         int display = at(pos + 15, TO_BUTTON_DISPLAYS, data[pos + 15]);
         model.set(prefix + "display", display);
         // ports will often have bad data
-        model.set(prefix + "ports", at(pos + 18, TO_CONTROL_PORTS, data[pos + 18]));
+        model.set(prefix + "ports", portAt(pos + 18, TO_CONTROL_PORTS, data[pos + 18]));
 
         if (type == 5)          // MMC
             {
@@ -3155,7 +3176,7 @@ public class NovationSL extends Synth
         int display = at(pos + 15, TO_PITCH_BEND_DISPLAY, data[pos + 15]);
         model.set(prefix + "display", display);
         // ports will often have bad data
-        model.set(prefix + "ports", at(pos + 18, TO_CONTROL_PORTS, data[pos + 18]));
+        model.set(prefix + "ports", portAt(pos + 18, TO_CONTROL_PORTS, data[pos + 18]));
         model.set(prefix + "channel", at(pos + 19, TO_CONTROL_CHANNELS, data[pos + 19]));
                 
         model.set(prefix + "lowval", data[pos+10]);
@@ -4470,9 +4491,10 @@ public class NovationSL extends Synth
 
       TABLE 5: CONTROL PORTS
       *** NOTE: On the SL Compact Editor, MIDI 2 is not supported
+      *** NOTE from the SL editor we often see 7, and from the SL MkII editor we often see 5
+      *** which appears to mean 0, and 37 which appears to mean 20.  I think it's probably best
+      *** to interpret all values 20...3F as 20 and all values 0...1F as 0.
       0       Use Common Ports
-      *** NOTE from the SL editor we often see 7, and from the SL MkII editor we often see 5.
-      *** This appears to be spurious data, and should be interpreted as 0.
       20      Use Program Ports
       40      Off
       41      MIDI 1

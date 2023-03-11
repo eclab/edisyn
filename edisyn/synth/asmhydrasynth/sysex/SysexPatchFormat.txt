@@ -622,8 +622,8 @@ BYTE    HEX     INFO
 615     267     
 616     268     
 617     269     
-618     26A     
-619     26B     
+618     26A     LFO 1 Wave value range 0 - 10; waveforms are Sine, Triangle, Saw Up, Saw Down, Square, Pulse27%, Pulse13%, S&H, Noise, Random, Step (same for all LFO's)    )          
+619     26B      
 620     26C     
 621     26D     
 622     26E     
@@ -660,7 +660,7 @@ BYTE    HEX     INFO
 653     28D     
 654     28E     
 655     28F     
-656     290     
+656     290     LFO 2 Wave value range 0 - 10; waveforms are Sine, Triangle, Saw Up, Saw Down, Square, Pulse27%, Pulse13%, S&H, Noise, Random, Step (same for all LFO's)      
 657     291     
 658     292     
 659     293     
@@ -698,7 +698,7 @@ BYTE    HEX     INFO
 691     2B3     
 692     2B4     
 693     2B5     
-694     2B6     
+694     2B6     LFO 3 Wave value range 0 - 10; waveforms are Sine, Triangle, Saw Up, Saw Down, Square, Pulse27%, Pulse13%, S&H, Noise, Random, Step (same for all LFO's)   
 695     2B7     
 696     2B8     
 697     2B9     
@@ -736,8 +736,8 @@ BYTE    HEX     INFO
 729     2D9     
 730     2DA     
 731     2DB     
-732     2DC     LFO 4 Wave(stays on 00- second value in difference output changes so that is byte 733 I presume)     
-733     2DD     LFO 4 Wave value range 0 - 10; waveforms are Sine, Triangle, Saw Up, Saw Down, Square, Pulse27%, Pulse13%, S&H, Noise, Random, Step (same for all LFO's)     
+732     2DC     LFO 4 Wave value range 0 - 10; waveforms are Sine, Triangle, Saw Up, Saw Down, Square, Pulse27%, Pulse13%, S&H, Noise, Random, Step (same for all LFO's)     
+733     2DD          
 734     2DE     
 735     2DF     
 736     2E0     
@@ -774,8 +774,8 @@ BYTE    HEX     INFO
 767     2FF     
 768     300     
 769     301     
-770     302     LFO 5 Wave(stays on 00- second value in difference output changes so that is byte 771 I presume)      
-771     303     LFO 5 Wave value range 0 - 10; waveforms are Sine, Triangle, Saw Up, Saw Down, Square, Pulse27%, Pulse13%, S&H, Noise, Random, Step (same for all LFO's)
+770     302     LFO 5 Wave value range 0 - 10; waveforms are Sine, Triangle, Saw Up, Saw Down, Square, Pulse27%, Pulse13%, S&H, Noise, Random, Step (same for all LFO's)      
+771     303     
 772     304     
 773     305     
 774     306     

@@ -835,13 +835,26 @@ public abstract class Synth extends JComponent implements Updatable
         - PARSE_FAILED indicates that the parse was not successful and the editor data was not changed.
         - PARSE_INCOMPLETE indicates that the parse was not fully performed -- for example,
         the Yamaha TX81Z needs two separate dumps before it has a full patch, so we return 
-        PARSE_INCOMPLETE on the first one, and PARSE_SUCCEEDED only on the last one).
+        PARSE_INCOMPLETE on the first one, and PARSE_SUCCEEDED only on the last one).  The editor data ought not yet have been changed.
         - PARSE_SUCCEEDED indicates that the parse was completed and the patch is fully modified.
         - PARSE SUCCEEDED_UNTITLED indicates the same, except that assuming the patch was read
         from a file, an alternative version of the patch has been substituted, and so the patch
-        filename should be untitled.  For example, the DX7 can alternatively load bank-sysex
+        filename (not patch name, *filename*) should be untitled.  For example, the DX7 can alternatively load bank-sysex
         patches and extract a patch from the bank; in this case the patch filename should not
-        be the bank sysex filename.*/
+        be the bank sysex filename.
+
+        IMPORTANT NOTE.  While parse(...) has been called, sendMIDI has been switched
+        OFF so you can update widgets without them sending out MIDI updates.  However it
+        is occasionally the case that you are required to send a MIDI message to the synth
+        to get it to send the next chunk of data to you (and also in this case you'd return
+        PARSE_INCOMPLETE probably).  To do this, you can:
+        <pre>
+                    boolean sendMIDI = getSendMIDI();
+                    setSendMIDI(true);
+                    *** send your message here ***
+                    setSendMIDI(sendMIDI);
+        </pre>
+        */
     // don't return PARSE_ERROR, that's used internally
     public int parse(byte[] data, boolean fromFile) { return PARSE_FAILED; }
     
@@ -1356,7 +1369,7 @@ public abstract class Synth extends JComponent implements Updatable
             }
         finally
             {
-            if (val != PARSE_CANCELLED)
+            if (val != PARSE_CANCELLED && val != PARSE_INCOMPLETE)
                 {
                 model.setUpdateListeners(previous);
                 boolean send = getSendMIDI();
@@ -2114,7 +2127,6 @@ public abstract class Synth extends JComponent implements Updatable
             {
             return false;
             }
-        
         boolean foundHighByte = false;
         for(int i = 1; i < data.length - 1; i++)
             {

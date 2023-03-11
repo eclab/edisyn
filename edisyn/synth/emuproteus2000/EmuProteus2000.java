@@ -1987,10 +1987,13 @@ public class EmuProteus2000 extends Synth
                     }
                 catch (IOException ex) { try { scribble.close(); } catch (IOException ex2) { } scribble = null;}
                 number++;
+            boolean sendMIDI = getSendMIDI();
+            setSendMIDI(true);
                 tryToSendSysex(new byte[] 
                     { (byte)0xF0, 0x18, 0x0F, getID(), 0x55, 0x0C, (byte) type, 
                     (byte)(number & 127), (byte)(number >>> 7), 
                     (byte)(romid & 127), (byte)(romid >>> 7), (byte)0xF7 });
+            setSendMIDI(sendMIDI);
                 }
             return PARSE_FAILED;            // I guess?
             }

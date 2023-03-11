@@ -588,6 +588,22 @@ public class Model implements Cloneable
         else return node.status;
         }
                 
+    /** Returns whether there is a minimum for a given key. */
+    public boolean hasMin(String key)
+        {
+        Node d = storage.get(key);
+        if (d == null) { Synth.handleException(new Throwable("Warning (Model): " + "Nonexistent node extracted for min for " + key)); return false; }
+        else return d.hasMin;
+        }
+                
+    /** Returns whether there is a maximum for a given key. */
+    public boolean hasMax(String key)
+        {
+        Node d = storage.get(key);
+        if (d == null) { Synth.handleException(new Throwable("Warning (Model): " + "Nonexistent node extracted for max for " + key)); return false; }
+        else return d.hasMax;
+        }
+
     /** Returns the minimum for a given key, or 0 if no minimum is declared. */        
     public int getMin(String key)
         {
@@ -604,6 +620,22 @@ public class Model implements Cloneable
         if (d == null) { Synth.handleException(new Throwable("Warning (Model): " + "Nonexistent node extracted for max for " + key)); return 0; }
         if (!d.hasMax) { Synth.handleException(new Throwable("Warning (Model): " + "Nonexistent max extracted for " + key)); return 0; }
         else return d.max;
+        }
+
+    /** Returns whether there is a metric minimum for a given key. */
+    public boolean hasMetricMin(String key)
+        {
+        Node d = storage.get(key);
+        if (d == null) { Synth.handleException(new Throwable("Warning (Model): " + "Nonexistent node extracted for metric min for " + key)); return false; }
+        else return d.hasMetricMin;
+        }
+                
+    /** Returns whether there is a metric maximum for a given key. */
+    public boolean hasMetricMax(String key)
+        {
+        Node d = storage.get(key);
+        if (d == null) { Synth.handleException(new Throwable("Warning (Model): " + "Nonexistent node extracted for metric max for " + key)); return false; }
+        else return d.hasMetricMax;
         }
 
     /** Returns the metric minimum for a given key, or 0 if no minimum is declared. */        

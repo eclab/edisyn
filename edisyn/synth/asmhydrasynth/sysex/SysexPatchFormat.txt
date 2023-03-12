@@ -26,7 +26,7 @@ BYTE    HEX     INFO
 19      13      
 20      14      
 21      15      
-22      16      End of "Sawpessive GD"
+22      16      End of "Sawpressive GD"
 23      17      
 24      18      Patch Name End?
 25      19      
@@ -56,13 +56,13 @@ BYTE    HEX     INFO
 49      31      
 50      32      Vibrato BPM Sync	[Note seems to turn on other stuff too]
 51      33      
-52      34      
+52      34      Glide
 53      35      
-54      36      
+54      36      Glide Time
 55      37      
-56      38      
+56      38      Glide Curve 
 57      39      
-58      3A      
+58      3A      Legato
 59      3B      
 60      3C      
 61      3D      
@@ -84,19 +84,19 @@ BYTE    HEX     INFO
 77      4D      
 78      4E      
 79      4F      
-80      50      
+80      50      Osc 1 Mode [0: single 1:wavescan]?
 81      51      
-82      52      
+82      52      Osc 1 Wave
 83      53      
-84      54      
+84      54      Osc1 Semitones
 85      55      
-86      56      
+86      56      Osc1 Cents
 87      57      
-88      58      
+88      58      Osc1 Keytrack
 89      59      
-90      5A      
-91      5B      
-92      5C      
+90      5A      Osc 1 Wavescan Low Byte
+91      5B      Osc 1 Wavescan High Byte
+92      5C      Osc 1 Wavescan Wave 1
 93      5D      
 94      5E      
 95      5F      
@@ -110,11 +110,11 @@ BYTE    HEX     INFO
 103     67      
 104     68      
 105     69      
-106     6A      
+106     6A      Osc1 Wavescan Wave 8
 107     6B      
 108     6C      
 109     6D      
-110     6E      
+110     6E      Osc2 Wave
 111     6F      
 112     70      
 113     71      
@@ -140,7 +140,7 @@ BYTE    HEX     INFO
 133     85      
 134     86      
 135     87      
-136     88      
+136     88      Osc3 Wave
 137     89      
 138     8A      
 139     8B      
@@ -268,15 +268,15 @@ BYTE    HEX     INFO
 261     105     
 262     106     
 263     107     
-264     108     
+264     108     Ring Mod Source 1
 265     109     
-266     10A     
+266     10A     Ring Mod Source 2
 267     10B     
-268     10C     
-269     10D     
+268     10C     Ring Mod Depth Low Byte
+269     10D     Ring Mod Depth High Byte
 270     10E     
 271     10F     
-272     110     
+272     110     Noise Type
 273     111     
 274     112     
 275     113     
@@ -842,10 +842,10 @@ BYTE    HEX     INFO
 835     343     
 836     344     
 837     345     
-838     346     
-839     347     
-840     348     
-841     349     
+838     346    	Mod Matrix 1 Amount Low Byte?
+839     347     Mod Matrix 1 Amount High Byte?
+840     348     Mod Matrix 2 Amount Low Byte?
+841     349     Mod Matrix 2 Amount High Byte?
 842     34A     
 843     34B     
 844     34C     
@@ -906,9 +906,9 @@ BYTE    HEX     INFO
 899     383     
 900     384     
 901     385     
-902     386     
+902     386     Mod Matrix 1 Src	[Off = 0]
 903     387     
-904     388     
+904     388     Mod Matrix 2 Src
 905     389     
 906     38A     
 907     38B     
@@ -968,11 +968,11 @@ BYTE    HEX     INFO
 961     3C1     
 962     3C2     
 963     3C3     
-964     3C4     
+964     3C4     Mod Matrix 32 Sc
 965     3C5     
-966     3C6     
+966     3C6     Mod Matrix 1 Dest [Off = 0]
 967     3C7     
-968     3C8     
+968     3C8     Mod Matrix 2 Dest
 969     3C9     
 970     3CA     
 971     3CB     
@@ -1032,11 +1032,11 @@ BYTE    HEX     INFO
 1025    401     
 1026    402     
 1027    403     
-1028    404     
+1028    404     Mod Matrix 32 Dest?
 1029    405     
 1030    406     
 1031    407     
-1032    408     
+1032    408     Mod Matrix 32 Something?
 1033    409     
 1034    40A     
 1035    40B     
@@ -1096,12 +1096,12 @@ BYTE    HEX     INFO
 1089    441     
 1090    442     
 1091    443     
-1092    444     
+1092    444     Mod Matrix 2 Something?
 1093    445     
-1094    446     
-1095    447     
-1096    448     
-1097    449     
+1094    446     Macro 1 Depth 1 Low Byte
+1095    447     Macro 1 Depth 1 High Byte
+1096    448     Macro 1 Depth 2 Low Byte
+1097    449     Macro 1 Depth 2 High Byte
 1098    44A     
 1099    44B     
 1100    44C     
@@ -1112,8 +1112,8 @@ BYTE    HEX     INFO
 1105    451     
 1106    452     
 1107    453     
-1108    454     
-1109    455     
+1108    454     Macro 1 Depth 8 Low Byte
+1109    455     Macro 1 Depth 8 High Byte
 1110    456     
 1111    457     
 1112    458     
@@ -1210,8 +1210,8 @@ BYTE    HEX     INFO
 1203    4B3     
 1204    4B4     
 1205    4B5     
-1206    4B6     
-1207    4B7     
+1206    4B6     Macro 8 Depth 1 Low Byte
+1207    4B7     Macro 8 Depth 1 High Byte?
 1208    4B8     
 1209    4B9     
 1210    4BA     
@@ -1226,7 +1226,7 @@ BYTE    HEX     INFO
 1219    4C3     
 1220    4C4     
 1221    4C5     
-1222    4C6     
+1222    4C6     Macro 1 Dest 1
 1223    4C7     
 1224    4C8     
 1225    4C9     
@@ -1242,7 +1242,7 @@ BYTE    HEX     INFO
 1235    4D3     
 1236    4D4     
 1237    4D5     
-1238    4D6     
+1238    4D6     Macro 2 Dest 1
 1239    4D7     
 1240    4D8     
 1241    4D9     
@@ -1338,7 +1338,7 @@ BYTE    HEX     INFO
 1331    533     
 1332    534     
 1333    535     
-1334    536     
+1334    536     Macro 8 Dest
 1335    537     
 1336    538     
 1337    539     
@@ -1354,10 +1354,10 @@ BYTE    HEX     INFO
 1347    543     
 1348    544     
 1349    545     
-1350    546     
-1351    547     
-1352    548     
-1353    549     
+1350    546     Macro 1 Button 1 Low Byte
+1351    547     Macro 1 Button 1 High Byte
+1352    548     Macro 1 Button 2 Low Byte
+1353    549     Macro 1 Button 2 High Byte
 1354    54A     
 1355    54B     
 1356    54C     
@@ -1368,8 +1368,8 @@ BYTE    HEX     INFO
 1361    551     
 1362    552     
 1363    553     
-1364    554     
-1365    555     
+1364    554     Macro 1 Button 8 Low Byte
+1365    555     Macro 1 Button 8 High Byte
 1366    556     
 1367    557     
 1368    558     
@@ -1466,8 +1466,8 @@ BYTE    HEX     INFO
 1459    5B3     
 1460    5B4     
 1461    5B5     
-1462    5B6     
-1463    5B7     
+1462    5B6     Macro 8 Button 1 Low Byte
+1463    5B7     Macro 8 Button 1 High Byte
 1464    5B8     
 1465    5B9     
 1466    5BA     
@@ -1482,7 +1482,7 @@ BYTE    HEX     INFO
 1475    5C3     
 1476    5C4     
 1477    5C5     
-1478    5C6     
+1478    5C6     Macro 1 ENABLED
 1479    5C7     
 1480    5C8     
 1481    5C9     
@@ -1498,7 +1498,7 @@ BYTE    HEX     INFO
 1491    5D3     
 1492    5D4     
 1493    5D5     
-1494    5D6     
+1494    5D6     Macro 2 ENABLED?  Strange
 1495    5D7     
 1496    5D8     
 1497    5D9     
@@ -1594,7 +1594,7 @@ BYTE    HEX     INFO
 1587    633     
 1588    634     
 1589    635     
-1590    636     
+1590    636     Mcro 8 ENABLED ?
 1591    637     
 1592    638     
 1593    639     

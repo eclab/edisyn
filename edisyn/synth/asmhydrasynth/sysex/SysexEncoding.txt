@@ -124,7 +124,7 @@ To request a patch, you send a HEADER, which elicits a HEADER RESPONSE,
 then you send a PATCH REQUEST.  The Hydrasynth will then send you the
 PATCH DATA in 22 CHUNKS.  After each CHUNK you must send a CHUNK 
 ACKNOWLEDGMENT and then you will receive the next CHUNK.  After you
-have sent the last CHUNK ACKNOLWEDGMENT you then send a FOOTER which
+have sent the last CHUNK ACKNOWLEDGMENT you then send a FOOTER which
 elicits a FOOTER RESPONSE.
 
 The raw values for these messages are below. You must take each value
@@ -165,6 +165,13 @@ sysex message.
 <-	7. A Footer Response
 		1B 00
 	
+
+The Patch itself appears to be all 22 DATA... parts concatenated
+together.  Note that the first eight bytes are metadata such as
+patch bank number, and possibly Hydrasynth firmware version number.
+See here for patch data:
+
+https://github.com/eclab/edisyn/blob/master/edisyn/synth/asmhydrasynth/sysex/SysexPatchFormat.txt
 
 I note that if you don't send the Footer, then the Hydrasynth is very 
 sluggish to respond to new changes on the front panel.  From this I 

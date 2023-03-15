@@ -160,8 +160,8 @@ BYTE    HEX     INFO
 153     99      
 154     9A      
 155     9B      
-156     9C      
-157     9D      
+156     9C      Mutant 1 Dry/Wet. Mutant dry/wet values are integer but still using two bytes (a different scheme than FX dry/wet)
+157     9D      Mutant 1 Dry/Wet. 
 158     9E      
 159     9F      
 160     A0      
@@ -174,8 +174,8 @@ BYTE    HEX     INFO
 167     A7      
 168     A8      
 169     A9      
-170     AA      
-171     AB      
+170     AA      Mutant 2 Dry/Wet.   
+171     AB      Mutant 2 Dry/Wet.  
 172     AC      
 173     AD      
 174     AE      
@@ -220,8 +220,8 @@ BYTE    HEX     INFO
 213     D5      
 214     D6      
 215     D7      
-216     D8      
-217     D9      
+216     D8      Mutant 3 Dry/Wet.
+217     D9      Mutant 3 Dry/Wet.  
 218     DA      
 219     DB      
 220     DC      
@@ -234,8 +234,8 @@ BYTE    HEX     INFO
 227     E3      
 228     E4      
 229     E5      
-230     E6      
-231     E7      
+230     E6      Mutant 4 Dry/Wet.
+231     E7      Mutant 4 Dry/Wet.  
 232     E8      
 233     E9      
 234     EA      
@@ -370,8 +370,8 @@ BYTE    HEX     INFO
 363     16B     
 364     16C     
 365     16D     
-366     16E     
-367     16F     
+366     16E     Pre-Fx Dry/Wet.  Same mapping for in-between values as desribed at offset 414 for Post-Fx. 
+367     16F     Pre-Fx Dry/Wet.  0% = 0. 25% = 1. 50% = 2. 75% =3. 100% = 4 
 368     170     
 369     171     
 370     172     
@@ -386,8 +386,8 @@ BYTE    HEX     INFO
 379     17B     
 380     17C     
 381     17D     
-382     17E     
-383     17F     
+382     17E     Delay Dry/Wet.  Same mapping for in-between values as desribed at offset 414 for Post-Fx.  
+383     17F     Delay Dry/Wet.  0% = 0. 25% = 1. 50% = 2. 75% =3. 100% = 4  
 384     180     
 385     181     
 386     182     
@@ -402,8 +402,8 @@ BYTE    HEX     INFO
 395     18B     
 396     18C     
 397     18D     
-398     18E     
-399     18F     
+398     18E     Reverb Dry/Wet.  Same mapping for in-between values as desribed at offset 414 for Post-Fx.   
+399     18F     Reverb Dry/Wet.  0% = 0. 25% = 1. 50% = 2. 75% =3. 100% = 4   
 400     190     
 401     191     
 402     192     
@@ -418,8 +418,19 @@ BYTE    HEX     INFO
 411     19B     
 412     19C     
 413     19D     
-414     19E     
-415     19F     
+414     19E     Post-FX Dry/Wet. 12.5% = -128 30% = 51. 60% = 102. 80% = 51 87.5 = -128. 98% = -20.
+
+For the values other than 0, 25, 50, 75, 100 there is a non-linear and discontinuous mapping of values for the offset from the quartiles as follows (hopefully this same technique is used everywhere so that mapping identified once):
+0.1 = 1
+5 = 51
+10 = 102
+12.4 = 127
+12.5 = -128
+24.9 = -1
+
+so 75 + 12.4 = 87.4. that produces a 3 in offset 415 and a 127 in offset 414.
+
+415     19F     Post-FX Dry/Wet. 0% = 0. 25% = 1. 50% = 2. 75% =3. 100% = 4  (Note: all FXtypes share same dry/wet value in these two bytes)
 416     1A0     
 417     1A1     
 418     1A2     

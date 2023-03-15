@@ -1,5 +1,5 @@
 HYDRASYNTH SYSEX ENCODING	
-[Incomplete Reverse Engineering as of March 8]
+[Incomplete Reverse Engineering as of March 14]
 
 
 

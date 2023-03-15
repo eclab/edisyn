@@ -84,6 +84,40 @@ there.
 
 
 
+
+
+HANDSHAKING
+
+It appears that the Hydrasynth Manager engages in the following handshake
+with the Hydrasynth.  
+
+The raw values for these messages are below. You must take each value
+and encode it as described earlier in order to produce the proper
+sysex message.
+
+
+
+->	A Handshake?
+		00 00
+
+<-	Handshake Response Data?
+		01 00 41 3A 42 3A 43 3A 44 3A 45 00
+
+->	Version Request?
+		28 00
+
+<-	Version Response Data?
+		29 00 9B 00 01
+		[Note that 9B is 155: the Hydrasynth is version 1.5.5]
+
+->  An Unknown Sysex String Not in Hydrasynth Encoding
+		(F0 00 20 2B 00 6F 01 F7)
+
+
+
+
+
+
 REQUESTING A PATCH
 
 To request a patch, you send a HEADER, which elicits a HEADER RESPONSE,
@@ -128,7 +162,7 @@ sysex message.
 ->	6. A Footer
 		1A 00
 		
-<-	6. A Footer Response
+<-	7. A Footer Response
 		1B 00
 	
 
@@ -186,4 +220,266 @@ Here is an example for the first patch, "Sawexpressive GD"
 
 1A 00			Footer
 1B 00			Footer response
+
+
+
+
+
+
+WRITING A PATCH
+
+To write a patch, you send a HEADER, which elicits a HEADER RESPONSE.
+You then send the patch in 22 CHUNKS.  After each CHUNK you will receive
+a CHUNK ACKNOWLEDGMENT.  Note that the start of the first CHUNK contains
+eight bytes of metadata which includes the bank and patch number to write to.
+Before the final CHUNK ACKNOWLEDGMENT you will first receive a SAVED
+ACKNOWLEDGMENT. 
+
+The Hydrasynth Manager then sends an unknown command, perhaps a RESET,
+which causes the Hydrasynth to issue a BANK CHANGE, PROGRAM CHANGE,
+RESET ACKNOWLEGMENT, and for some reason a SUSTAIN PEDAL RELEASE.
+
+You then send a FOOTER which elicits a FOOTER RESPONSE.
+
+The raw values for these messages are below. You must take each value
+and encode it as described earlier in order to produce the proper
+sysex message.
+
+
+
+
+->	1. A Header
+		18 00 
+		
+<-	2. A Header Response
+		19 00
+
+	3. Then 21 times for CHUNK = 0 ... 20 (hex 0 ... 14)
+
+<-		- A Chunk Dump
+			16 00 CHUNK 16 DATA...
+			Where DATA... is 128 bytes long
+
+->		- A Chunk Acknowledgment 
+			17 00 CHUNK 16
+
+	5. Then 1 time for CHUNK = 21 (hex 15)
+
+<-		- A Chunk Dump
+			16 00 CHUNK 16 DATA...
+			Where DATA... is 102 bytes long		[truncated]
+
+->		- A Patch Saved Acknowledgment 
+			07 00 BANK NUMBER
+			
+->		- A Chunk Acknowledgment 
+			17 00 CHUNK 16
+		
+->	6. A Reset Request?
+		14 00
+		
+<-	7. A Bank Change In Response
+		Control Change 0
+		Control Change 32
+
+->	8. A Program Change In Response
+		Program Change 
+		
+<-	9. A Reset Response?
+		15 00
+
+<-	10. A Sustain Pedal Release
+		Control Change 64
+
+->	11. A Footer
+		1A 00
+		
+<-	12. A Footer Response
+		1B 00
+	
+
+
+For example, writing Sawpressive GD to Bank E Patch 128:
+
+
+->	18 00
+
+<-	19 00
+
+->	16 00 00 16 06 00 04 7F 9B 00 00 00 0D 53 61 77 70 72 65 73 73 69 
+	76 65 20 47 44 00 20 00 20 00 B0 04 00 00 04 00 20 00 00 00 00 00 
+	00 00 00 00 02 00 01 00 73 00 00 00 00 00 00 00 00 00 00 00 01 00 
+	01 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 03 00 
+	00 00 00 00 64 00 00 00 03 00 00 00 00 00 00 00 00 00 00 00 00 00 
+	00 00 00 00 03 00 00 00 00 00 64 00 00 00 03 00 00 00 00 00 00 00
+	|            Sawpressive GD                         s           |
+	|                            d                           d      |
+	|                                                               |
+	[Note: I think the 06 00 04 7F means "Dump to Bank E Patch 128"]
+	
+<-	17 00 00 16
+
+... then eventually ...
+
+<-	17 00 14 16
+
+->	16 00 15 16 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+	00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+	00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+	00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 
+	00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
+	|                                                                |
+	|                                                                |
+
+<-	07 00 04 7F
+
+<- 	17 00 15 16                                          
+
+-> 	14 00		
+
+<- 	CC 0  (Bank Change MSB)=0
+
+<- 	CC 32 (Bank Change LSB)=0
+
+<- 	PC 2
+
+<- 	15 00
+
+<- 	CC 64 (Sustain Pedal) = 2 [off, but why 2?]
+
+->	1A 00
+
+<-	1B 00
+
+
+
+
+
+
+REQUESTING BANK PATCH NAMES
+
+To request patch names, the Manager first engages in HANDSHAKE,
+with a HANDSHAKE DATA RESPONSE, then sends a HEADER with a HEADER
+RESPONSE, then sends a PATCH NAMES REQUEST.  The Hydrasynth then
+responds with a PATCH NAMES CHUNK.  After a PATCH NAMES CHUNK
+ACKNOWLEDGMENT, another PATCH NAMES CHUNK is sent and so on. 
+This happens 18 times total.  Finally a FOOTER is sent with a
+FOOTER RESPONSE.
+
+If you concatenate all the DATA, I believe you wind up with the following:
+
+03 00 BANK [NAME... 00 3A]*(127 times) NAME... 00
+Where NAME... is a 16-byte long string.  
+
+The raw values for these messages are below. You must take each value
+and encode it as described earlier in order to produce the proper
+sysex message.
+
+
+
+->	1. A Header
+		18 00 
+		
+<-	2. A Header Response
+		19 00
+
+->	3. A Patch Names Request
+		02 00 BANK
+
+	4. Then 17 times for CHUNK = 0 ... 16 (hex 0 ... 10)
+
+<-		- A Chunk Dump
+			16 00 CHUNK 13 DATA...
+			Where DATA... is 128 bytes long
+
+->		- A Chunk Acknowledgment 
+			17 00 CHUNK 13
+
+	5. Then 1 time for CHUNK = 17 (hex 11)
+
+<-		- A Chunk Dump
+			16 00 CHUNK 16 DATA...
+			Where DATA... is 2 bytes long		[truncated]
+
+->		- A Chunk Acknowledgment 
+			17 00 CHUNK 13
+		
+->	6. A Footer
+		1A 00
+		
+<-	7. A Footer Response
+		1B 00
+
+
+Here is an Example for Bank "A":
+
+->	00 00
+
+<-	01 00 41 3A 42 3A 43 3A 44 3A 45 00
+
+->	18 00
+
+<-	19 00
+
+-> 	02 00 00	
+
+<-	16 00 00 13 03 00 00 53 61 77 70 72 65 73 73 69 76 65 20 47 44 00 
+	20 00 3A 47 58 20 55 6C 74 72 61 50 61 64 20 50 53 00 20 00 3A 56 
+	65 6E 75 73 20 50 6C 75 63 6B 20 45 54 00 20 00 3A 42 6C 61 64 65 
+	54 69 74 6C 65 73 20 50 53 00 20 00 3A 43 68 6F 77 27 73 20 41 72 
+	70 20 47 44 00 20 20 00 3A 44 6F 70 70 6C 65 72 20 42 61 73 73 20 
+	4D 50 00 00 3A 43 6C 65 61 6E 20 46 4D 20 50 61 64 20 4D 50 00 00
+	|       Sawpressive GD   :GX UltraPad PS   :Venus Pluck ET   :Bla|
+	|deTitles PS   :Chow's Arp GD    :Doppler Bass MP  :Clean FM Pad |
+	|MP  |
+
+	Note: 128 bytes beyond the 16 00 00 13
+	Note: I am guessing that the 03 00 00 is metadata for
+	      SENTPATCHNAMES 0x00 BANK
+	Note: It appears that after the 03 00 00 the names start, one at
+	      a time, 16 bytes each, followed by a terminating 00 and then
+	      a separating 3A (":").  I note that ":" is not a legal
+	      patch name character, grrr.  There is no final 3A at the end
+	      of the full sequence.
+
+->	17 00 00 13
+
+<-	16 00 01 13 3A 54 68 65 20 52 65 61 6C 20 4F 77 6C 20 4D 46 00 00 
+	3A 43 6F 72 79 27 73 20 4C 65 61 64 20 47 44 00 20 00 3A 50 6F 6C 
+	79 20 52 69 73 65 72 73 20 4D 50 00 20 00 3A 46 72 61 6E 74 61 73 
+	69 61 20 46 50 00 20 20 20 00 3A 42 65 79 6F 6E 64 20 42 6F 62 20 
+	53 43 44 00 20 00 3A 53 70 69 72 61 6C 42 61 6C 6C 61 64 20 50 53 
+	00 00 3A 46 4D 20 53 69 6D 70 6C 65 20 42 61 73 73 00 20 00 3A 52
+	|    :The Real Owl MF  :Cory's Lead GD   :Poly Risers MP   :Frant|
+	|asia FP     :Beyond Bob SCD   :SpiralBallad PS  :FM Simple Bass |
+	|  :R|
+
+->	17 00 01 13
+
+... and so on 17 times in total, then ...
+
+<-	16 00 11 13 00 20 20 00 3A 43 6F 6D 70 54 68 61 74 46 75 6E 6B 20
+	50 53 00 00 3A 4E 5A 20 46 75 6E 6B 20 42 61 73 73 20 4D 50 00 00 
+	3A 50 6C 61 79 20 77 20 20 4A 65 6E 20 4B 46 50 00 00 3A 46 75 74 
+	75 72 65 20 50 57 4D 20 4D 50 00 20 20 00 3A 42 55 47 53 20 49 4E 
+	20 4C 4F 56 45 20 64 66 00 00 3A 43 61 6C 69 65 73 20 4C 65 61 64 
+	20 47 44 00 20 00 3A 46 4D 20 50 69 61 6E 6F 20 46 50 00 20 20 20
+	|        :CompThatFunk PS  :NZ Funk Bass MP  :Play w  Jen KFP  :F|
+	|uture PWM MP    :BUGS IN LOVE df  :Calies Lead GD   :FM Piano FP|
+	|    |
+
+->	17 00 11 13
+
+<-	16 00 12 13 20 00
+	|  |
+	Note: a space, followed by 0x00
+	
+->	17 00 12 13
+
+->	1A 00
+
+<-	1B 00
+
+
+
 

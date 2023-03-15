@@ -1,17 +1,20 @@
 Below is a little spreadsheet of sorts to be used as a record for
 reverse engineering the locations of parameters in a Hydrasynth
 patch sysex dump.
+
+NOTE: it appears that the first eight bytes are NOT
+part of the patch rather are metadata.
  
 
 BYTE    HEX     INFO
-0       0       
-1       1       
-2       2       
-3       3       
-4       4       
-5       5       
-6       6       
-7       7       
+0       0       06 = "Save to RAM"  05 = "Receive from RAM" maybe
+1       1       00
+2       2       Bank
+3       3       Patch Number
+4       4       9B Hydrasynth Version Number? 	1.5.5	(0x9B = 155)
+5       5       00?
+6       6       00?
+7       7       00?
 8       8       Category
 9       9       Patch Name Start
 10      A       

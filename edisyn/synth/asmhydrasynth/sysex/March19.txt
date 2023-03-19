@@ -1,0 +1,10 @@
+March 19, 2023 Hydrasynth sysex reverse engineering notes.
+
+Envelope, Ribbon, Mixer, Mutant, and Arpeggiator parameters determined.
+Identified two oddities or bugs to report to ASM:
+
+	- Ribbon Hold is a patch parameter in sysex but is ignored when 
+	  loaded, and there's no NRPN
+
+	- Envelope 2 Trigger Source 1 is fixed to Note On, but there's
+	  still an NRPN (which is ignored) and a slot in the sysex.

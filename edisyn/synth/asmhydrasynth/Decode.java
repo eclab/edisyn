@@ -1,6 +1,7 @@
 package edisyn.synth.asmhydrasynth;
 import edisyn.util.*;
 import java.util.*;
+import java.io.*;
 
 public class Decode
 	{
@@ -188,12 +189,71 @@ public class Decode
 		}
 */
 
-	public static void main(String[] args)
+	public static void main(String[] args) throws IOException
 		{
+		/*
 		System.err.println("Testing \"Sawexpressive GD\"");
 		byte[] patch = decodePatch(SAWEXPRESSIVE);
 		System.err.println("Patch Length " + patch.length + "\nExpected 2790");
 		System.err.println("Patch:\n" + StringUtility.toHex(patch));
+		*/
+		if (args.length == 1)
+			{
+			// Taken from https://www.baeldung.com/convert-input-stream-to-array-of-bytes
+			ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+			InputStream is = new FileInputStream(new File(args[0]));
+
+			int nRead;
+			byte[] data = new byte[16];
+
+			while ((nRead = is.read(data, 0, data.length)) != -1) 
+				{
+				buffer.write(data, 0, nRead);
+				}
+
+			buffer.flush();
+			byte[] bytes = buffer.toByteArray();
+    		byte[] payload = decodePayload(bytes);
+    		System.out.println(StringUtility.toHex(payload));
+			for(int i = 0; i < payload.length; i+=64)
+				{
+				System.out.print("|");
+				for(int j = i; j < i + 64; j++)
+					{
+					if (j < payload.length && payload[j] > 32 && payload[j] < 128)
+						System.out.print((char)payload[j]);
+					else System.out.print(" ");
+					}
+				System.out.println("|");
+				}
+			}
+		else if (args.length == 0)
+			{
+			ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+			InputStream is = System.in;
+
+			int nRead;
+			byte[] data = new byte[16];
+
+			while ((nRead = is.read(data, 0, data.length)) != -1) 
+				{
+				buffer.write(data, 0, nRead);
+				}
+
+			buffer.flush();
+			byte[] bytes = buffer.toByteArray();
+    
+    		System.out.println(StringUtility.toHex(decodePayload(bytes)));
+			}
+		else
+			{
+			byte[] c = new byte[args.length];
+			for(int i = 0; i < args.length; i++)
+				{
+				c[i] = (byte)(Integer.parseInt(args[i], 16));
+				}
+			System.out.println(StringUtility.toHex(decodePayload(c)));
+			}
 		}
 	
 	public static final byte[][] SAWEXPRESSIVE = 

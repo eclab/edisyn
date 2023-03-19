@@ -26,11 +26,7 @@ import javax.sound.midi.*;
 
 public class ASMHydrasynth extends Synth
     {
-public static final byte[] OUT1 = { (byte)0xF0, (byte)0x00, (byte)0x20, (byte)0x2B, (byte)0x00, (byte)0x6F, (byte)0x57, (byte)0x58, (byte)0x55, (byte)0x39, (byte)0x50, (byte)0x42, (byte)0x67, (byte)0x41, (byte)0xF7 };
-
-public static final byte[] OUT2 = { (byte)0xF0, (byte)0x00, (byte)0x20, (byte)0x2B, (byte)0x00, (byte)0x6F, (byte)0x48, (byte)0x52, (byte)0x34, (byte)0x50, (byte)0x39, (byte)0x51, (byte)0x51, (byte)0x41, (byte)0x42, (byte)0x48, (byte)0x38, (byte)0x3D, (byte)0xF7 };    
-    
-    public static final String[] BANKS = { "A", "B", "C", "D", "E", "F" };
+    public static final String[] BANKS = { "A", "B", "C", "D", "E" };
     public static final String[] BANKS_DELUXE = { "A", "B", "C", "D", "E", "F", "G", "H" };
     public static final String[] OSC_MODES = { "Single", "WaveScan" };
     public static final String[] MUTANT_MODES = { "FM-Linear", "WavStack", "Osc Sync", "PW-Orig", "PW-Sqeez", "PW-ASM", "Harmonic", "PhazDiff" };
@@ -70,157 +66,6 @@ public static final byte[] OUT2 = { (byte)0xF0, (byte)0x00, (byte)0x20, (byte)0x
     public static final String[] SIDECHAINS = { "Off", "BPM Duck", "Tap", "Mod In 1", "Mod In 2" };
     public static final char[] INVALID_PATCH_NAME_CHARS = { '"', '*', '\\', '|', '/', '<', '>', '?',  ';', '~' };
     
-    // These are the delay times (in ms) corresonding to delaytime values 72 ... 183.
-    // See getDelayTimeSyncOff(...) to get all delay times
-    public static final int[] SOME_DELAY_TIMES = 
-        {
-        10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10,
-        11, 11, 11, 11, 11, 11, 11, 11, 
-        12, 12, 12, 12, 12, 12, 
-        13, 13, 15, 15, 15, 
-        16, 16, 16, 17, 17, 
-        18, 18, 18, 19, 19, 19, 
-        20, 20, 20, 20, 20, 21, 21, 21, 
-        22, 22, 23, 23, 23, 
-        25, 25, 25, 26, 26, 
-        27, 27, 27, 28, 28, 28, 
-        29, 29, 30, 30, 30, 30, 30, 30, 
-        31, 31, 32, 32, 32, 
-        33, 33, 33, 35, 35, 
-        36, 36, 36, 37, 37, 37, 
-        38, 38, 39, 39, 39, 
-        40, 40, 40, 40, 41, 
-        42, 42, 43, 43, 
-        45, 46, 46, 47, 48, 48, 49, 49
-        };
-        
-    public static ImageIcon[] waves = new ImageIcon[219];
-    static
-        {
-        for(int i = 0; i < waves.length; i++)
-            {
-            waves[i] = new ImageIcon(ASMHydrasynth.class.getResource("waves/" + i + ".png"));
-            }
-        }
-        
-    public static final int[] DELAY_TIME_PATTERN_1 = { 0, 0, 0, 1, 2, 2, 3, 3, 5, 6, 6, 7, 8, 8, 9, 9 };
-    public static final int[] DELAY_TIME_PATTERN_2 = { 0, 0, 2, 3, 5, 6, 8, 9 };
-    public static final int[] DELAY_TIME_PATTERN_3 = { 0, 2, 5, 8 };
-    public static final int[] DELAY_TIME_PATTERN_4 = { 0, 3, 8, 10, 15, 19, 22, 26 };
-
-    public static final String[] SOME_MORE_DELAY_TIMES =
-        {
-        "1.00s", "1.00s", "1.01s", "1.01s", "1.02s", "1.02s", "1.02s", "1.03s", "1.03s", "1.03s", 
-        "1.04s", "1.04s", "1.05s", "1.05s", "1.06s", "1.06s", "1.06s", "1.07s", "1.07s", "1.07s", 
-        "1.08s", "1.08s", "1.08s", "1.09s", "1.09s", "1.10s", "1.11s", "1.11s", "1.12s", "1.13s", 
-        "1.14s", "1.14s", "1.15s", "1.16s", "1.16s", "1.17s", "1.18s", "1.18s", "1.19s", "1.19s", 
-        "1.20s", "1.21s", "1.21s", "1.22s", "1.23s", "1.23s", "1.24s", "1.24s", "1.25s", "1.26s", 
-        "1.26s", "1.27s", "1.28s", "1.28s", "1.29s", "1.29s", "1.30s", "1.31s", "1.31s", "1.32s", 
-        "1.33s", "1.33s", "1.34s", "1.34s", "1.35s", "1.36s", "1.36s", "1.37s", "1.38s", "1.38s", 
-        "1.39s", "1.39s", "1.40s", "1.41s", "1.41s", "1.42s", "1.43s", "1.43s", "1.44s", "1.44s", 
-        "1.45s", "1.46s", "1.46s", "1.47s", "1.48s", "1.48s", "1.49s", "1.49s", "1.50s", "1.51s", 
-        "1.51s", "1.52s", "1.53s", "1.53s", "1.54s", "1.54s", "1.55s", "1.56s", "1.56s", "1.57s", 
-        "1.58s", "1.58s", "1.59s", "1.59s", "1.60s", "1.61s", "1.61s", "1.62s", "1.63s", "1.63s", 
-        "1.64s", "1.64s", "1.65s", "1.66s", "1.66s", "1.67s", "1.68s", "1.68s", "1.69s", "1.69s", 
-        "1.70s", "1.71s", "1.71s", "1.72s", "1.73s", "1.73s", "1.74s", "1.74s", "1.75s", "1.76s", 
-        "1.76s", "1.77s", "1.78s", "1.78s", "1.79s", "1.79s", "1.80s", "1.81s", "1.81s", "1.82s", 
-        "1.83s", "1.83s", "1.84s", "1.84s", "1.85s", "1.86s", "1.86s", "1.87s", "1.88s", "1.88s", 
-        "1.89s", "1.89s", "1.90s", "1.91s", "1.91s", "1.92s", "1.93s", "1.93s", "1.94s", "1.94s", 
-        "1.95s", "1.96s", "1.96s", "1.97s", "1.98s", "1.98s", "1.99s", "1.99s", "2.00s", "2.01s", 
-        "2.01s", "2.02s", "2.03s", "2.03s", "2.04s", "2.04s", "2.05s", "2.06s", "2.06s", "2.07s", 
-        "2.08s", "2.08s", "2.09s", "2.09s", "2.10s", "2.11s", "2.11s", "2.12s", "2.13s", "2.13s", 
-        "2.14s", "2.14s", "2.15s", "2.16s", "2.16s", "2.17s", "2.18s", "2.18s", "2.19s", "2.19s", 
-        "2.20s", "2.21s", "2.21s", "2.22s", "2.23s", "2.23s", "2.24s", "2.24s", "2.25s", "2.26s", 
-        "2.26s", "2.27s", "2.28s", "2.28s", "2.29s", "2.29s", "2.30s", "2.31s", "2.31s", "2.32s", 
-        "2.33s", "2.33s", "2.34s", "2.34s", "2.35s", "2.36s", "2.36s", "2.37s", "2.38s", "2.38s", 
-        "2.39s", "2.39s", "2.40s", "2.41s", "2.43s", "2.44s", "2.45s", "2.46s", "2.48s", "2.49s", 
-        "2.50s", "2.51s", "2.53s", "2.54s", "2.55s", "2.56s", "2.58s", "2.59s", "2.60s", "2.61s", 
-        "2.63s", "2.64s", "2.65s", "2.66s", "2.68s", "2.69s", "2.70s", "2.71s", "2.73s", "2.74s", 
-        "2.75s", "2.76s", "2.78s", "2.79s", "2.80s", "2.81s", "2.83s", "2.84s", "2.85s", "2.86s", 
-        "2.88s", "2.89s", "2.90s", "2.91s", "2.93s", "2.94s", "2.95s", "2.96s", "2.98s", "2.99s", "3.00s"
-        };
-                
-    // The delay time pattern is very convoluted.  It's 0...1024, with:
-    // 0-72 being 1.0...10ms in 0.125 increments, displayed as "x.xms" rounded 0.5 towards even
-    // 72-183 being drawn from SOME_DELAY_TIMES in ms
-    // 184-344 being 50-150ms in the following pattern every multiple of 10: 
-    //              x0 x0 x0 x1 x1 x2 x2 x3 x3 x5 x6 x6 x7 x7 x8 x8 x9 x9 
-    // 344-544 being 150-400ms in the following pattern every multiple of 10: 
-    //              x0 x0 x2 x3 x5 x6 x8 x9
-    // 544-664 being 400-700ms in the following pattern every multiple of 10:
-    //              x0 x2 x5 x8
-    // 664-744 being 700-1000ms (1.00 sec) in the following pattern every  multiple of 30:
-    //              x0 x3 x8 (x+1)0 (x+1)5 (x+1)9 (x+2)2 (x+2)6
-    // 744-1024     being drawn from SOME_MORE_DELAY_TIMES 
-    //
-    // The following function computes it based on the five tables above.
-        
-    public static String getDelayTimeSyncOff(int val)
-        {
-        if (val < 72)
-            {
-            int v = (int)Math.round((val * 0.125 + 1.0) * 10);
-            return "" + (v / 10) + "." + (v % 10) + "ms";
-            }
-        else if (val < 184)
-            {
-            return "" + SOME_DELAY_TIMES[val-72] + "ms";
-            }
-        else if (val < 344)
-            {
-            int tens = (val - 184) / DELAY_TIME_PATTERN_1.length;
-            int ones = (val - 184) % DELAY_TIME_PATTERN_1.length;
-            return "" + ((tens * 10 + 50) + DELAY_TIME_PATTERN_1[ones]) + "ms";
-            }
-        else if (val < 544)
-            {
-            int tens = (val - 344) / DELAY_TIME_PATTERN_2.length;
-            int ones = (val - 344) % DELAY_TIME_PATTERN_2.length;
-            return "" + ((tens * 10 + 150) + DELAY_TIME_PATTERN_2[ones]) + "ms";
-            }
-        else if (val < 664)
-            {
-            int tens = (val - 544) / DELAY_TIME_PATTERN_3.length;
-            int ones = (val - 544) % DELAY_TIME_PATTERN_3.length;
-            return "" + ((tens * 10 + 400) + DELAY_TIME_PATTERN_3[ones]) + "ms";
-            }
-        else if (val < 744)
-            {
-            int tens = (val - 664) / DELAY_TIME_PATTERN_4.length;
-            int ones = (val - 664) % DELAY_TIME_PATTERN_4.length;
-            return "" + ((tens * 3 * 10 + 700) + DELAY_TIME_PATTERN_4[ones]) + "ms";
-            }
-        else
-            {
-            return SOME_MORE_DELAY_TIMES[val - 744];
-            }
-        }
-                
-    // These are the reverb times corresonding to reverbtime values 0...1024 in intervals of 8.
-    public static final String[] REVERB_TIMES = 
-        {
-        "120ms", "130ms", "140ms", "155ms", "170ms", "185ms", "200ms", "215ms", "230ms", "245ms", 
-        "260ms", "280ms", "300ms", "320ms", "345ms", "370ms", "400ms", "420ms", "440ms", "460ms", 
-        "480ms", "500ms", "520ms", "540ms", "560ms", "570ms", "600ms", "630ms", "660ms", "700ms", 
-        "730ms", "765ms", "800ms", "860ms", "930ms", "1.00s", "1.02s", "1.04s", "1.06s", "1.08s", 
-        "1.10s", "1.15s", "1.20s", "1.25s", "1.30s", "1.35s", "1.40s", "1.45s", "1.50s", "1.55s", 
-        "1.60s", "1.67s", "1.75s", "1.80s", "1.90s", "2.00s", "2.05s", "2.10s", "2.15s", "2.20s", 
-        "2.25s", "2.30s", "2.36s", "2.43s", "2.50s", "2.60s", "2.70s", "2.80s", "2.90s", "3.00s", 
-        "3.10s", "3.20s", "3.30s", "3.40s", "3.50s", "3.60s", "3.70s", "3.80s", "3.90s", "3.95s", 
-        "4.00s", "4.10s", "4.20s", "4.40s", "4.60s", "4.80s", "5.00s", "5.20s", "5.40s", "5.60s", 
-        "5.90s", "6.20s", "6.50s", "6.80s", "7.20s", "7.60s", "8.00s", "8.80s", "9.60s", "10.4s", 
-        "11.0s", "12.0s", "13.0s", "14.0s", "15.0s", "16.0s", "17.0s", "18.0s", "19.0s", "20.0s", 
-        "21.0s", "22.0s", "23.0s", "24.0s", "25.0s", "27.0s", "29.0s", "31.0s", "33.0s", "35.0s", 
-        "38.0s", "42.0s", "45.0s", "51.0s", "58.0s", "65.0s", "75.0s", "90.0s", "Freeze"
-        };
-
-    public static String getReverbTime(int val)
-        {
-        return REVERB_TIMES[val / 8];
-        }
-
-
-
     public static final int[] LFO_FADE_INS_SYNC_ON =            // all the repetition here is just nuts
         {
         0, 22, 45, 68, 91, 115, 138, 161, 184, 207, 231, 254, 277, 300, 324, 346, 
@@ -1069,6 +914,171 @@ public static final byte[] OUT2 = { (byte)0xF0, (byte)0x00, (byte)0x20, (byte)0x
             },
         };
 
+
+	/// WAVE IMAGES
+
+    public static ImageIcon[] waves = new ImageIcon[219];
+    static
+        {
+        for(int i = 0; i < waves.length; i++)
+            {
+            waves[i] = new ImageIcon(ASMHydrasynth.class.getResource("waves/" + i + ".png"));
+            }
+        }
+
+
+
+	/// DELAY TIME DISPLAY COMPUTATION  (what a mess)
+        
+    // These are the delay times (in ms) corresonding to delaytime values 72 ... 183.
+    // See getDelayTimeSyncOff(...) to get all delay times
+    public static final int[] SOME_DELAY_TIMES = 
+        {
+        10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10,
+        11, 11, 11, 11, 11, 11, 11, 11, 
+        12, 12, 12, 12, 12, 12, 
+        13, 13, 15, 15, 15, 
+        16, 16, 16, 17, 17, 
+        18, 18, 18, 19, 19, 19, 
+        20, 20, 20, 20, 20, 21, 21, 21, 
+        22, 22, 23, 23, 23, 
+        25, 25, 25, 26, 26, 
+        27, 27, 27, 28, 28, 28, 
+        29, 29, 30, 30, 30, 30, 30, 30, 
+        31, 31, 32, 32, 32, 
+        33, 33, 33, 35, 35, 
+        36, 36, 36, 37, 37, 37, 
+        38, 38, 39, 39, 39, 
+        40, 40, 40, 40, 41, 
+        42, 42, 43, 43, 
+        45, 46, 46, 47, 48, 48, 49, 49
+        };
+        
+    public static final int[] DELAY_TIME_PATTERN_1 = { 0, 0, 0, 1, 2, 2, 3, 3, 5, 6, 6, 7, 8, 8, 9, 9 };
+    public static final int[] DELAY_TIME_PATTERN_2 = { 0, 0, 2, 3, 5, 6, 8, 9 };
+    public static final int[] DELAY_TIME_PATTERN_3 = { 0, 2, 5, 8 };
+    public static final int[] DELAY_TIME_PATTERN_4 = { 0, 3, 8, 10, 15, 19, 22, 26 };
+
+    public static final String[] SOME_MORE_DELAY_TIMES =
+        {
+        "1.00s", "1.00s", "1.01s", "1.01s", "1.02s", "1.02s", "1.02s", "1.03s", "1.03s", "1.03s", 
+        "1.04s", "1.04s", "1.05s", "1.05s", "1.06s", "1.06s", "1.06s", "1.07s", "1.07s", "1.07s", 
+        "1.08s", "1.08s", "1.08s", "1.09s", "1.09s", "1.10s", "1.11s", "1.11s", "1.12s", "1.13s", 
+        "1.14s", "1.14s", "1.15s", "1.16s", "1.16s", "1.17s", "1.18s", "1.18s", "1.19s", "1.19s", 
+        "1.20s", "1.21s", "1.21s", "1.22s", "1.23s", "1.23s", "1.24s", "1.24s", "1.25s", "1.26s", 
+        "1.26s", "1.27s", "1.28s", "1.28s", "1.29s", "1.29s", "1.30s", "1.31s", "1.31s", "1.32s", 
+        "1.33s", "1.33s", "1.34s", "1.34s", "1.35s", "1.36s", "1.36s", "1.37s", "1.38s", "1.38s", 
+        "1.39s", "1.39s", "1.40s", "1.41s", "1.41s", "1.42s", "1.43s", "1.43s", "1.44s", "1.44s", 
+        "1.45s", "1.46s", "1.46s", "1.47s", "1.48s", "1.48s", "1.49s", "1.49s", "1.50s", "1.51s", 
+        "1.51s", "1.52s", "1.53s", "1.53s", "1.54s", "1.54s", "1.55s", "1.56s", "1.56s", "1.57s", 
+        "1.58s", "1.58s", "1.59s", "1.59s", "1.60s", "1.61s", "1.61s", "1.62s", "1.63s", "1.63s", 
+        "1.64s", "1.64s", "1.65s", "1.66s", "1.66s", "1.67s", "1.68s", "1.68s", "1.69s", "1.69s", 
+        "1.70s", "1.71s", "1.71s", "1.72s", "1.73s", "1.73s", "1.74s", "1.74s", "1.75s", "1.76s", 
+        "1.76s", "1.77s", "1.78s", "1.78s", "1.79s", "1.79s", "1.80s", "1.81s", "1.81s", "1.82s", 
+        "1.83s", "1.83s", "1.84s", "1.84s", "1.85s", "1.86s", "1.86s", "1.87s", "1.88s", "1.88s", 
+        "1.89s", "1.89s", "1.90s", "1.91s", "1.91s", "1.92s", "1.93s", "1.93s", "1.94s", "1.94s", 
+        "1.95s", "1.96s", "1.96s", "1.97s", "1.98s", "1.98s", "1.99s", "1.99s", "2.00s", "2.01s", 
+        "2.01s", "2.02s", "2.03s", "2.03s", "2.04s", "2.04s", "2.05s", "2.06s", "2.06s", "2.07s", 
+        "2.08s", "2.08s", "2.09s", "2.09s", "2.10s", "2.11s", "2.11s", "2.12s", "2.13s", "2.13s", 
+        "2.14s", "2.14s", "2.15s", "2.16s", "2.16s", "2.17s", "2.18s", "2.18s", "2.19s", "2.19s", 
+        "2.20s", "2.21s", "2.21s", "2.22s", "2.23s", "2.23s", "2.24s", "2.24s", "2.25s", "2.26s", 
+        "2.26s", "2.27s", "2.28s", "2.28s", "2.29s", "2.29s", "2.30s", "2.31s", "2.31s", "2.32s", 
+        "2.33s", "2.33s", "2.34s", "2.34s", "2.35s", "2.36s", "2.36s", "2.37s", "2.38s", "2.38s", 
+        "2.39s", "2.39s", "2.40s", "2.41s", "2.43s", "2.44s", "2.45s", "2.46s", "2.48s", "2.49s", 
+        "2.50s", "2.51s", "2.53s", "2.54s", "2.55s", "2.56s", "2.58s", "2.59s", "2.60s", "2.61s", 
+        "2.63s", "2.64s", "2.65s", "2.66s", "2.68s", "2.69s", "2.70s", "2.71s", "2.73s", "2.74s", 
+        "2.75s", "2.76s", "2.78s", "2.79s", "2.80s", "2.81s", "2.83s", "2.84s", "2.85s", "2.86s", 
+        "2.88s", "2.89s", "2.90s", "2.91s", "2.93s", "2.94s", "2.95s", "2.96s", "2.98s", "2.99s", "3.00s"
+        };
+                
+    // The delay time pattern is very convoluted.  It's 0...1024, with:
+    // 0-72 being 1.0...10ms in 0.125 increments, displayed as "x.xms" rounded 0.5 towards even
+    // 72-183 being drawn from SOME_DELAY_TIMES in ms
+    // 184-344 being 50-150ms in the following pattern every multiple of 10: 
+    //              x0 x0 x0 x1 x1 x2 x2 x3 x3 x5 x6 x6 x7 x7 x8 x8 x9 x9 
+    // 344-544 being 150-400ms in the following pattern every multiple of 10: 
+    //              x0 x0 x2 x3 x5 x6 x8 x9
+    // 544-664 being 400-700ms in the following pattern every multiple of 10:
+    //              x0 x2 x5 x8
+    // 664-744 being 700-1000ms (1.00 sec) in the following pattern every  multiple of 30:
+    //              x0 x3 x8 (x+1)0 (x+1)5 (x+1)9 (x+2)2 (x+2)6
+    // 744-1024     being drawn from SOME_MORE_DELAY_TIMES 
+    //
+    // The following function computes it based on the five tables above.
+        
+    public static String getDelayTimeSyncOff(int val)
+        {
+        if (val < 72)
+            {
+            int v = (int)Math.round((val * 0.125 + 1.0) * 10);
+            return "" + (v / 10) + "." + (v % 10) + "ms";
+            }
+        else if (val < 184)
+            {
+            return "" + SOME_DELAY_TIMES[val-72] + "ms";
+            }
+        else if (val < 344)
+            {
+            int tens = (val - 184) / DELAY_TIME_PATTERN_1.length;
+            int ones = (val - 184) % DELAY_TIME_PATTERN_1.length;
+            return "" + ((tens * 10 + 50) + DELAY_TIME_PATTERN_1[ones]) + "ms";
+            }
+        else if (val < 544)
+            {
+            int tens = (val - 344) / DELAY_TIME_PATTERN_2.length;
+            int ones = (val - 344) % DELAY_TIME_PATTERN_2.length;
+            return "" + ((tens * 10 + 150) + DELAY_TIME_PATTERN_2[ones]) + "ms";
+            }
+        else if (val < 664)
+            {
+            int tens = (val - 544) / DELAY_TIME_PATTERN_3.length;
+            int ones = (val - 544) % DELAY_TIME_PATTERN_3.length;
+            return "" + ((tens * 10 + 400) + DELAY_TIME_PATTERN_3[ones]) + "ms";
+            }
+        else if (val < 744)
+            {
+            int tens = (val - 664) / DELAY_TIME_PATTERN_4.length;
+            int ones = (val - 664) % DELAY_TIME_PATTERN_4.length;
+            return "" + ((tens * 3 * 10 + 700) + DELAY_TIME_PATTERN_4[ones]) + "ms";
+            }
+        else
+            {
+            return SOME_MORE_DELAY_TIMES[val - 744];
+            }
+        }
+
+
+
+                
+	/// REVERB TIME DISPLAY COMPUTATION
+
+    // These are the reverb times corresonding to reverbtime values 0...1024 in intervals of 8.
+    public static final String[] REVERB_TIMES = 
+        {
+        "120ms", "130ms", "140ms", "155ms", "170ms", "185ms", "200ms", "215ms", "230ms", "245ms", 
+        "260ms", "280ms", "300ms", "320ms", "345ms", "370ms", "400ms", "420ms", "440ms", "460ms", 
+        "480ms", "500ms", "520ms", "540ms", "560ms", "570ms", "600ms", "630ms", "660ms", "700ms", 
+        "730ms", "765ms", "800ms", "860ms", "930ms", "1.00s", "1.02s", "1.04s", "1.06s", "1.08s", 
+        "1.10s", "1.15s", "1.20s", "1.25s", "1.30s", "1.35s", "1.40s", "1.45s", "1.50s", "1.55s", 
+        "1.60s", "1.67s", "1.75s", "1.80s", "1.90s", "2.00s", "2.05s", "2.10s", "2.15s", "2.20s", 
+        "2.25s", "2.30s", "2.36s", "2.43s", "2.50s", "2.60s", "2.70s", "2.80s", "2.90s", "3.00s", 
+        "3.10s", "3.20s", "3.30s", "3.40s", "3.50s", "3.60s", "3.70s", "3.80s", "3.90s", "3.95s", 
+        "4.00s", "4.10s", "4.20s", "4.40s", "4.60s", "4.80s", "5.00s", "5.20s", "5.40s", "5.60s", 
+        "5.90s", "6.20s", "6.50s", "6.80s", "7.20s", "7.60s", "8.00s", "8.80s", "9.60s", "10.4s", 
+        "11.0s", "12.0s", "13.0s", "14.0s", "15.0s", "16.0s", "17.0s", "18.0s", "19.0s", "20.0s", 
+        "21.0s", "22.0s", "23.0s", "24.0s", "25.0s", "27.0s", "29.0s", "31.0s", "33.0s", "35.0s", 
+        "38.0s", "42.0s", "45.0s", "51.0s", "58.0s", "65.0s", "75.0s", "90.0s", "Freeze"
+        };
+
+    public static String getReverbTime(int val)
+        {
+        return REVERB_TIMES[val / 8];
+        }
+
+
+
+	//// LFO RATE COMPUTATION
+
     // A close mapping of val (0...1024) to LFO rate values (0.02 ... 150.00 Hz).
     // The LFO rate appears to be nearly a perfect exponential increase, except
     // at the very low end where it's off in the 0.03 Hz area.  Would be nice to 
@@ -1077,6 +1087,9 @@ public static final byte[] OUT2 = { (byte)0xF0, (byte)0x00, (byte)0x20, (byte)0x
         {
         return Math.pow(2.0, (1 + 0.012571 * x)) / 100.0;
         }
+
+
+
 
 
     public ASMHydrasynth()
@@ -1291,7 +1304,7 @@ public static final byte[] OUT2 = { (byte)0xF0, (byte)0x00, (byte)0x20, (byte)0x
         bank.setMaximumRowCount(32);
         bank.setSelectedIndex(model.get("bank"));
                 
-        JTextField number = new SelectedTextField("" + model.get("number"), 3);
+        JTextField number = new SelectedTextField("" + (model.get("number") + 1), 3);
                 
         while(true)
             {
@@ -1305,17 +1318,17 @@ public static final byte[] OUT2 = { (byte)0xF0, (byte)0x00, (byte)0x20, (byte)0x
             try { n = Integer.parseInt(number.getText()); }
             catch (NumberFormatException e)
                 {
-                showSimpleError(title, "The Patch Number must be an integer 0 ... 127");
+                showSimpleError(title, "The Patch Number must be an integer 1 ... 128");
                 continue;
                 }
-            if (n < 0 || n > 127)
+            if (n < 1 || n > 128)
                 {
-                showSimpleError(title, "The Patch Number must be an integer 0 ... 127");
+                showSimpleError(title, "The Patch Number must be an integer 1 ... 128");
                 continue;
                 }
                                 
             change.set("bank", bank.getSelectedIndex());
-            change.set("number", n);
+            change.set("number", n - 1);
                         
             return true;
             }
@@ -1468,16 +1481,6 @@ public static final byte[] OUT2 = { (byte)0xF0, (byte)0x00, (byte)0x20, (byte)0x
         Box box = new Box(BoxLayout.Y_AXIS);
         box.add(Box.createHorizontalGlue());
         box.add(icons);
-
-        final PushButton foo = new PushButton("Foo")
-            {
-            public void perform()
-                {
-                tryToSendSysex(OUT1);
-                tryToSendSysex(OUT2);
-                }
-            };
-		box.add(foo);
 
         box.add(Box.createHorizontalGlue());
                 
@@ -1737,8 +1740,8 @@ public static final byte[] OUT2 = { (byte)0xF0, (byte)0x00, (byte)0x20, (byte)0x
         vbox.add(comp);
         hbox.add(vbox);
 
-        comp = new LabelledDial("Pitch", this, "voicepitchbend", color, 0, 24);
-        ((LabelledDial)comp).addAdditionalLabel("Bend");
+        comp = new LabelledDial("Pitch Bend", this, "voicepitchbend", color, 0, 24);
+        ((LabelledDial)comp).addAdditionalLabel("Range");
         hbox.add(comp);
 
         comp = new LabelledDial("Detune", this, "voicedetune", color, 0, 127);
@@ -2234,6 +2237,10 @@ public static final byte[] OUT2 = { (byte)0xF0, (byte)0x00, (byte)0x20, (byte)0x
         vbox.add(comp);
 
         comp = new CheckBox("Theremin Wheel Volume", this, "ribbonmodcontrol");
+        vbox.add(comp);
+        hbox.add(vbox);
+
+        comp = new CheckBox("Ribbon Mod Hold", this, "ribbonhold");
         vbox.add(comp);
         hbox.add(vbox);
 
@@ -3564,13 +3571,29 @@ public static final byte[] OUT2 = { (byte)0xF0, (byte)0x00, (byte)0x20, (byte)0x
         HBox hbox = new HBox();
         
         VBox vbox = new VBox();
-        params = ENV_TRIG_SOURCES;
-        comp = new Chooser("Trigger Source " + 1, this, "env" + env + "trigsrc" + 1, params);
-        vbox.add(comp);
-                
-        params = ENV_TRIG_SOURCES;
-        comp = new Chooser("Trigger Source " + 2, this, "env" + env + "trigsrc" + 2, params);
-        vbox.add(comp);
+        
+        if (env == 2)  // No Trigger Source 1, but it's still a parameter!  Hydrasynth is weird
+        	{
+        	model.set("env" + env + "trigsrc" + 1, 1);
+        	model.setMin("env" + env + "trigsrc" + 1, 1);  
+        	model.setMax("env" + env + "trigsrc" + 1, 1);  
+
+			params = ENV_TRIG_SOURCES;
+			comp = new Chooser("Trigger Source " + 2, this, "env" + env + "trigsrc" + 2, params);
+
+			vbox.add(Strut.makeStrut(comp));		// for Trigger Source 1
+			vbox.add(comp);
+        	}
+        else
+        	{
+	        params = ENV_TRIG_SOURCES;
+	        comp = new Chooser("Trigger Source " + 1, this, "env" + env + "trigsrc" + 1, params);
+	        vbox.add(comp);
+
+	        params = ENV_TRIG_SOURCES;
+	        comp = new Chooser("Trigger Source " + 2, this, "env" + env + "trigsrc" + 2, params);
+	        vbox.add(comp);
+	        }
                 
         final HBox bpmOn = new HBox();
         final HBox bpmOff = new HBox();
@@ -3608,13 +3631,29 @@ public static final byte[] OUT2 = { (byte)0xF0, (byte)0x00, (byte)0x20, (byte)0x
         
         hbox.add(vbox);
         vbox = new VBox();
-        
+        final VBox resetBox = vbox;
 
-        comp = new CheckBox("Legato", this, "env" + env + "legato");
+		final CheckBox reset = new CheckBox("Reset", this, "env" + env + "reset");
+
+        comp = new CheckBox("Legato", this, "env" + env + "legato")
+        	{
+            public void update(String key, Model model)
+                {
+                super.update(key, model);
+                if (model.get(key) == 0)
+                	{
+	                resetBox.add(reset);
+	                }
+	            else
+	            	{
+	                resetBox.remove(reset);
+	            	}
+				resetBox.revalidate();
+				resetBox.repaint();
+                }
+        	};
         vbox.add(comp);
 
-        comp = new CheckBox("Reset", this, "env" + env + "reset");
-        vbox.add(comp);
 
         hbox.add(vbox);
         vbox = new VBox();
@@ -4222,7 +4261,7 @@ public static final byte[] OUT2 = { (byte)0xF0, (byte)0x00, (byte)0x20, (byte)0x
         JFrame frame = super.sprout();
         addHydrasynthMenu();
         receiveCurrent.setEnabled(false);
-        receivePatch.setEnabled(false);
+        //receivePatch.setEnabled(false);
         receiveNextPatch.setEnabled(false);
         merge.setEnabled(false);
         getAll.setEnabled(false);
@@ -4232,6 +4271,18 @@ public static final byte[] OUT2 = { (byte)0xF0, (byte)0x00, (byte)0x20, (byte)0x
         return frame;
         }         
 
+
+  public String getPatchLocationName(Model model)
+	  {
+	  // getPatchLocationName() is called from sprout() as a test to see if we should enable
+	  // batch downloading.  If we haven't yet created an .init file, then parameters won't exist
+	  // yet and this method will bomb badly.  So we return null in this case.
+	  if (!model.exists("number")) return null;
+		
+	  int number = (model.get("number") + 1);
+	  int bank = (model.get("bank"));
+	  return BANKS[bank] + " " + ((number > 99 ? "" : (number > 9 ? "0" : "00")) + number);
+	  }
 
 
 /*
@@ -5113,9 +5164,15 @@ public static final byte[] OUT2 = { (byte)0xF0, (byte)0x00, (byte)0x20, (byte)0x
 		  int NN = tempModel.get("number", 0);
 		  int BB = tempModel.get("bank", 0);
 		  
+		  // for the moment...
+		  model.set("number", NN);
+		  model.set("bank", BB);
+		  
 		  tryToSendSysex(Encode.encodePayload(new byte[] { 0x18, 000 }));
 		  tryToSendSysex(Encode.encodePayload(new byte[] { 0x04, 0x00, (byte)BB, (byte)NN }));
 		  }
+
+	byte[] firstPatch = null;
 
 	int incomingPos;
 	byte[][] incoming = new byte[22][];
@@ -5129,13 +5186,30 @@ public static final byte[] OUT2 = { (byte)0xF0, (byte)0x00, (byte)0x20, (byte)0x
     		if (data.length > 19)	// probably valid
     			{
 				incoming[incomingPos] = data;
-				tryToSendSysex(Encode.encodePayload(new byte[] { 0x17, 0x00, (byte)incomingPos, 0x16 }));
+            boolean sendMIDI = getSendMIDI();
+            setSendMIDI(true);
+				byte[] d = Encode.encodePayload(new byte[] { 0x17, 0x00, (byte)incomingPos, 0x16 });
+				tryToSendSysex(d);
+            setSendMIDI(sendMIDI);
 				if (incomingPos == 21)
 					{
+             sendMIDI = getSendMIDI();
+            setSendMIDI(true);
 					tryToSendSysex(Encode.encodePayload(new byte[] { 0x1A, 0x00 }));
+            setSendMIDI(sendMIDI);
 					try
 						{
-						Decode.decodePatch(incoming);
+						byte[] result = Decode.decodePatch(incoming);
+						if (firstPatch == null)
+							{
+							System.err.println("INITIAL PATCH LOADED");
+							firstPatch = result;
+							}
+						else 
+							{
+    						System.err.println("DIFFERENCES");
+							diff(firstPatch, result);
+							}
 						incoming = new byte[22][];
 						incomingPos = 0;
 						return PARSE_SUCCEEDED;
@@ -5150,10 +5224,20 @@ public static final byte[] OUT2 = { (byte)0xF0, (byte)0x00, (byte)0x20, (byte)0x
 					}
 				else
 					{
+					incomingPos++;
 					return PARSE_INCOMPLETE;
 					}
     			}
     		else return PARSE_INCOMPLETE;		// maybe parse failed or something else?  Probably not parse failed
+    		}
+    	}
+    	
+    public void diff(byte[] a, byte[] b)
+    	{
+    	for(int i = 0; i < a.length; i++)
+    		{
+    		if (a[i] != b[i])
+    			System.err.println("" + i + " " + StringUtility.toHex(a[i]) + " " + StringUtility.toHex(b[i]) + " (" + a[i] + " " + b[i] + ")");
     		}
     	}
 

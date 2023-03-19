@@ -10,6 +10,13 @@ public class ASMHydrasynthRec extends Recognize
     {
     public static boolean recognize(byte[] data)
         {
+        if (data[0] == (byte)0xF0 &&
+        	data[1] == (byte)0x00 &&
+        	data[2] == (byte)0x20 &&
+        	data[3] == (byte)0x2B &&
+        	data[4] == (byte)0x00 &&
+        	data[5] == (byte)0x6F) return true;
+        	
         boolean val = (data.length == 2259 &&
             data[0] == (byte)0xF0 &&
             data[1] == (byte)0x7D &&

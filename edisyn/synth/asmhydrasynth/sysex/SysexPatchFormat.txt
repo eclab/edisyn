@@ -115,7 +115,7 @@ BYTE    HEX     INFO
 105     69      
 106     6A      Osc1 Wavescan Wave 8
 107     6B      
-108     6C      
+108     6C      Osc 2 Mode
 109     6D      
 110     6E      Osc2 Wave
 111     6F      
@@ -151,21 +151,21 @@ BYTE    HEX     INFO
 141     8D      
 142     8E      
 143     8F      
-144     90      
+144     90      Mutant 1 Mode
 145     91      
-146     92      
+146     92      Mutant 1 FM Linear Source / Osc Sync Source		[Appear to be Shared]
 147     93      
-148     94      
-149     95      
-150     96      
-151     97      
-152     98      
-153     99      
-154     9A      
-155     9B      
-156     9C      Mutant 1 Dry/Wet. Mutant dry/wet values are integer but still using two bytes (a different scheme than FX dry/wet)
-157     9D      Mutant 1 Dry/Wet. 
-158     9E      
+148     94      Mutant 1 Ratio Low Byte
+149     95      Mutant 1 Ratio High Byte
+150     96      Mutant 1 Depth Low Byte
+151     97      Mutant 1 Depth High Byte
+152     98      Mutant 1 Window Low Byte
+153     99      Mutant 1 Window High Byte
+154     9A      Mutant 1 Feedback Low Byte
+155     9B      Mutant 1 Feedback High Byte
+156     9C      Mutant 1 Dry/Wet Low Byte.  
+157     9D      Mutant 1 Dry/Wet High Byte
+158     9E      Mutant 2 Mode
 159     9F      
 160     A0      
 161     A1      
@@ -179,24 +179,24 @@ BYTE    HEX     INFO
 169     A9      
 170     AA      Mutant 2 Dry/Wet.   
 171     AB      Mutant 2 Dry/Wet.  
-172     AC      
-173     AD      
-174     AE      
-175     AF      
-176     B0      
-177     B1      
-178     B2      
-179     B3      
+172     AC      Mutant 1 ASM Warp 1 Low Byte
+173     AD      Mutant 1 ASM Warp 1 High Byte
+174     AE      Mutant 1 ASM Warp 2 Low Byte
+175     AF      Mutant 1 ASM Warp 2 High Byte
+176     B0      Mutant 1 ASM Warp 3 Low Byte
+177     B1      Mutant 1 ASM Warp 3 High Byte
+178     B2      Mutant 1 ASM Warp 4 Low Byte
+179     B3      Mutant 1 ASM Warp 4 High Byte
 180     B4      
 181     B5      
 182     B6      
 183     B7      
 184     B8      
 185     B9      
-186     BA      
-187     BB      
-188     BC      
-189     BD      
+186     BA      Mutant 1 ASM Warp 8 Low Byte
+187     BB      Mutant 1 ASM Warp 8 High Byte
+188     BC      Mutant 2 ASM Warp 1 Low Byte
+189     BD      Mutant 2 ASM Warp 1 High Byte
 190     BE      
 191     BF      
 192     C0      
@@ -209,9 +209,9 @@ BYTE    HEX     INFO
 199     C7      
 200     C8      
 201     C9      
-202     CA      
-203     CB      
-204     CC      
+202     CA      Mutant 2 ASM Warp 8 Low Byte
+203     CB      Mutant 2 ASM Warp 8 High Byte
+204     CC      Mutant 3 Mode
 205     CD      
 206     CE      
 207     CF      
@@ -225,7 +225,7 @@ BYTE    HEX     INFO
 215     D7      
 216     D8      Mutant 3 Dry/Wet.
 217     D9      Mutant 3 Dry/Wet.  
-218     DA      
+218     DA      Mutant 4 Mode
 219     DB      
 220     DC      
 221     DD      
@@ -239,8 +239,8 @@ BYTE    HEX     INFO
 229     E5      
 230     E6      Mutant 4 Dry/Wet.
 231     E7      Mutant 4 Dry/Wet.  
-232     E8      
-233     E9      
+232     E8      Mutant 3 ASM Warp 1 Low Byte
+233     E9      Mutant 3 ASM Warp 1 High Byte
 234     EA      
 235     EB      
 236     EC      
@@ -253,10 +253,10 @@ BYTE    HEX     INFO
 243     F3      
 244     F4      
 245     F5      
-246     F6      
-247     F7      
-248     F8      
-249     F9      
+246     F6      Mutant 3 ASM Warp 8 Low Byte
+247     F7      Mutant 3 ASM Warp 8 High Byte
+248     F8      Mutant 4 ASM Warp 1 Low Byte
+249     F9      Mutant 4 ASM Warp 1 High Byte
 250     FA      
 251     FB      
 252     FC      
@@ -269,8 +269,8 @@ BYTE    HEX     INFO
 259     103     
 260     104     
 261     105     
-262     106     
-263     107     
+262     106     Mutant 4 ASM Warp 8 Low Byte
+263     107     Mutant 4 ASM Warp 8 High Byte
 264     108     Ring Mod Source 1
 265     109     
 266     10A     Ring Mod Source 2
@@ -281,40 +281,40 @@ BYTE    HEX     INFO
 271     10F     
 272     110     Noise Type
 273     111     
-274     112     
-275     113     
-276     114     
-277     115     
-278     116     
-279     117     
-280     118     
-281     119     
-282     11A     
-283     11B     
+274     112     Mixer Osc 1 Volume Low Byte
+275     113     Mixer Osc 1 Volume High Byte
+276     114     Mixer Osc 2 Volume Low Byte
+277     115     Mixer Osc 2 Volume High Byte
+278     116     Mixer Osc 3 Volume Low Byte
+279     117     Mixer Osc 3 Volume High Byte
+280     118     Mixer Ringmod Volume Low Byte
+281     119     Mixer Ringmod Volume High Byte
+282     11A     Mixer Noise Volume Low Byte
+283     11B     Mixer Noise Volume High Byte
 284     11C     
 285     11D     
-286     11E     
-287     11F     
-288     120     
-289     121     
-290     122     
-291     123     
-292     124     
-293     125     
-294     126     
-295     127     
-296     128     
-297     129     
-298     12A     
-299     12B     
-300     12C     
-301     12D     
+286     11E     Mixer Osc 1 Pan Low Byte
+287     11F     Mixer Osc 1 Pan High Byte
+288     120     Mixer Osc 2 Pan Low Byte
+289     121     Mixer Osc 2 Pan High Byte
+290     122     Mixer Osc 3 Pan Low Byte
+291     123     Mixer Osc 3 Pan High Byte
+292     124     Mixer Osc 1 Filter Ratio Low Byte
+293     125     Mixer Osc 1 Filter Ratio High Byte
+294     126     Mixer Osc 2 Filter Ratio Low Byte
+295     127     Mixer Osc 2 Filter Ratio High Byte
+296     128     Mixer Osc 3 Filter Ratio Low Byte
+297     129     Mixer Osc 3 Filter Ratio High Byte
+298     12A     Mixer Ringmod Pan Low Byte
+299     12B     Mixer Ringmod Pan High Byte
+300     12C     Mixer Noise Pan Low Byte
+301     12D     Mixer Noise Pan High Byte
 302     12E     
 303     12F     
-304     130     
-305     131     
-306     132     
-307     133     
+304     130     Mixer Ringmod Filter Ratio Low Byte
+305     131     Mixer Ringmod Filter Ratio High Byte
+306     132     Mixer Noise Filter Ratio Low Byte
+307     133     Mixer Noise Filter Ratio High Byte
 308     134     
 309     135     
 310     136     
@@ -454,19 +454,19 @@ so 75 + 12.4 = 87.4. that produces a 3 in offset 415 and a 127 in offset 414.
 433     1B1     
 434     1B2     
 435     1B3     
-436     1B4     
+436     1B4     Ribbon Mode
 437     1B5     
-438     1B6     
+438     1B6     Theremin Keyspan
 439     1B7     
-440     1B8     
+440     1B8     Theremin Octave Shift
 441     1B9     
-442     1BA     
+442     1BA     Ribbon Mod Hold					BUG: it appears that this is not loaded when a patch is changed.
 443     1BB     
-444     1BC     
+444     1BC     Theremin Quantize
 445     1BD     
-446     1BE     
+446     1BE     Theremin Glide
 447     1BF     
-448     1C0     
+448     1C0     Theremin Wheel Volume
 449     1C1     
 450     1C2     
 451     1C3     
@@ -496,35 +496,35 @@ so 75 + 12.4 = 87.4. that produces a 3 in offset 415 and a 127 in offset 414.
 475     1DB     
 476     1DC     
 477     1DD     
-478     1DE     
-479     1DF     
-480     1E0     
-481     1E1     
-482     1E2     
-483     1E3     
-484     1E4     
-485     1E5     
-486     1E6     
+478     1DE     Env 1 Attack Low Byte		[All appear shared with BPM/No-BPM]
+479     1DF     Env 1 Attack High Byte
+480     1E0     Env 1 Decay Low Byte
+481     1E1     Env 1 Decay High Byte
+482     1E2     Env 1 Sustain Low Byte
+483     1E3     Env 1 Sustain High Byte
+484     1E4     Env 1 Release Low Byte
+485     1E5     Env 1 Release High Byte
+486     1E6     Env 1 BPM Sync
 487     1E7     
-488     1E8     
-489     1E9     
-490     1EA     
-491     1EB     
-492     1EC     
+488     1E8     Env 1 Delay Low Byte
+489     1E9     Env 1 Delay High Byte?
+490     1EA     Env 1 Hold Low Byte
+491     1EB     Env 1 Hold High Byte
+492     1EC     Env 1 Attack Curve
 493     1ED     
-494     1EE     
+494     1EE     Env 1 Decay Curve
 495     1EF     
-496     1F0     
+496     1F0     Env 1 Release Curve
 497     1F1     
-498     1F2     
+498     1F2     Env 1 Legato
 499     1F3     
-500     1F4     
+500     1F4     Env 1 Reset		[Note: Can only be set if Legato is off...]
 501     1F5     
-502     1F6     
+502     1F6     Env 1 Free Run
 503     1F7     
-504     1F8     
+504     1F8     Env 1 Loop Curve 
 505     1F9     
-506     1FA     
+506     1FA     Env 2 Attack Low Byte
 507     1FB     
 508     1FC     
 509     1FD     
@@ -552,7 +552,7 @@ so 75 + 12.4 = 87.4. that produces a 3 in offset 415 and a 127 in offset 414.
 531     213     
 532     214     
 533     215     
-534     216     
+534     216     Env 3 Attack Low Byte
 535     217     
 536     218     
 537     219     
@@ -580,7 +580,7 @@ so 75 + 12.4 = 87.4. that produces a 3 in offset 415 and a 127 in offset 414.
 559     22F     
 560     230     
 561     231     
-562     232     
+562     232     Env 4 Attack Low Byte
 563     233     
 564     234     
 565     235     
@@ -608,7 +608,7 @@ so 75 + 12.4 = 87.4. that produces a 3 in offset 415 and a 127 in offset 414.
 587     24B     
 588     24C     
 589     24D     
-590     24E     
+590     24E     Env 5 Attack Low Byte
 591     24F     
 592     250     
 593     251     
@@ -828,27 +828,27 @@ so 75 + 12.4 = 87.4. that produces a 3 in offset 415 and a 127 in offset 414.
 807     327     
 808     328     
 809     329     
-810     32A     
+810     32A     Arpeggiator Division
 811     32B     
-812     32C     
+812     32C     Arpeggiator Swing
 813     32D     
-814     32E     
+814     32E     Arpeggiator Gate
 815     32F     
-816     330     
+816     330     Arpeggiator Octave Mode
 817     331     
-818     332     
+818     332     Arpeggiator Octaves
 819     333     
-820     334     
+820     334     Arpeggiator Mode
 821     335     
-822     336     
+822     336     Arpeggiator Length
 823     337     
-824     338     
+824     338     Arpeggiator Tap Trig
 825     339     
-826     33A     
+826     33A     Arpeggiator Phrase
 827     33B     
-828     33C     
+828     33C     Arpeggiator Ratchet
 829     33D     
-830     33E     
+830     33E     Arpeggiator Chance
 831     33F     
 832     340     
 833     341     
@@ -2358,53 +2358,53 @@ so 75 + 12.4 = 87.4. that produces a 3 in offset 415 and a 127 in offset 414.
 2337    921     
 2338    922     
 2339    923     
-2340    924     
+2340    924     Env 1 Trig Source 1
 2341    925     
-2342    926     
+2342    926     Env 1 Trig Source 2
 2343    927     
-2344    928     
+2344    928     Env 1 Trig Source 3
 2345    929     
-2346    92A     
+2346    92A     Env 1 Trig Source 4
 2347    92B     
 2348    92C     
 2349    92D     
-2350    92E     
+2350    92E     Env 2 Trig Source 1?   NOTE: This cannot be changed per manual
 2351    92F     
-2352    930     
+2352    930     Env 2 Trig Source 2
 2353    931     
-2354    932     
+2354    932     Env 2 Trig Source 3
 2355    933     
-2356    934     
+2356    934     Env 2 Trig Source 4
 2357    935     
 2358    936     
 2359    937     
-2360    938     
+2360    938     Env 3 Trig Source 1
 2361    939     
-2362    93A     
+2362    93A     Env 3 Trig Source 2
 2363    93B     
-2364    93C     
+2364    93C     Env 3 Trig Source 3
 2365    93D     
-2366    93E     
+2366    93E     Env 3 Trig Source 4
 2367    93F     
 2368    940     
 2369    941     
-2370    942     
+2370    942     Env 4 Trig Source 1
 2371    943     
-2372    944     
+2372    944     Env 4 Trig Source 2
 2373    945     
-2374    946     
+2374    946     Env 4 Trig Source 3
 2375    947     
-2376    948     
+2376    948     Env 4 Trig Source 4
 2377    949     
 2378    94A     
 2379    94B     
-2380    94C     
+2380    94C     Env 5 Trig Source 1
 2381    94D     
-2382    94E     
+2382    94E     Env 5 Trig Source 2
 2383    94F     
-2384    950     
+2384    950     Env 5 Trig Source 3
 2385    951     
-2386    952     
+2386    952     Env 5 Trig Source 4
 2387    953     
 2388    954     
 2389    955     

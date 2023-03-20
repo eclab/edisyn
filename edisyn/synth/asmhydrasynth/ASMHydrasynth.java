@@ -1165,8 +1165,8 @@ public class ASMHydrasynth extends Synth
         vbox.add(addMixer(Style.COLOR_B()));
         
         hbox = new HBox();
-        hbox.add(addRibbon(Style.COLOR_C()));
-        hbox.addLast(addArp(Style.COLOR_C()));
+        hbox.add(addArp(Style.COLOR_C()));
+        hbox.addLast(addRibbon(Style.COLOR_C()));
         vbox.add(hbox);
                 
         soundPanel.add(vbox, BorderLayout.CENTER);
@@ -2218,31 +2218,25 @@ public class ASMHydrasynth extends Synth
 
         JComponent comp;
         String[] params;
-        HBox hbox = new HBox();
-        
-        /// FIXME: Setting this to THEREMIN will cause the Hydrasynth to respond via NRPN
-        /// with all the theremin values, thereby erasing your current settings.  :-(  :-(
-        VBox vbox = new VBox(); 
-        params = RIBBON_MODES;
-        comp = new Chooser("Mode", this, "ribbonmode", params);
-        vbox.add(comp);
+        final HBox hbox = new HBox();
         
         params = RIBBON_KEYSPANS;
-        comp = new Chooser("Theremin Keyspan", this, "ribbonkeyspan", params);
-        vbox.add(comp);
-        hbox.add(vbox);
-        
-        vbox = new VBox(); 
+        final Chooser keyspan = new Chooser("Theremin Keyspan", this, "ribbonkeyspan", params);
+ 
+          HBox thereminBox = new HBox();
+       	VBox vbox = new VBox(); 
         comp = new CheckBox("Theremin Quantize", this, "ribbonquantize");
         vbox.add(comp);
 
         comp = new CheckBox("Theremin Wheel Volume", this, "ribbonmodcontrol");
         vbox.add(comp);
-        hbox.add(vbox);
+        thereminBox.add(vbox);
 
+/*
         comp = new CheckBox("Ribbon Mod Hold", this, "ribbonhold");
         vbox.add(comp);
         hbox.add(vbox);
+*/
 
         comp = new LabelledDial("Theremin", this, "ribbonoctave", color, 0, 8)
             {
@@ -2253,11 +2247,41 @@ public class ASMHydrasynth extends Synth
                 }
             };
         ((LabelledDial)comp).addAdditionalLabel("Octave Shift");
-        hbox.add(comp);
+        thereminBox.add(comp);
 
         comp = new LabelledDial("Theremin", this, "ribbonglide", color, 0, 127);
         ((LabelledDial)comp).addAdditionalLabel("Glide");
-        hbox.add(comp);
+        thereminBox.add(comp);
+        
+
+       
+        /// FIXME: Setting this to THEREMIN will cause the Hydrasynth to respond via NRPN
+        /// with all the theremin values, thereby erasing your current settings.  :-(  :-(
+        final VBox modeBox = new VBox(); 
+        params = RIBBON_MODES;
+        comp = new Chooser("Mode", this, "ribbonmode", params)
+        	{
+            public void update(String key, Model model)
+                {
+                super.update(key, model);
+                if (model.get(key) == 1)		// Theremin
+                	{
+                	modeBox.add(keyspan);
+                	hbox.addLast(thereminBox);
+                	}
+                else
+                	{
+                	modeBox.remove(keyspan);
+                	hbox.remove(thereminBox);
+                	}
+                modeBox.revalidate();
+                hbox.revalidate();
+                modeBox.repaint();
+                hbox.repaint();
+                }
+        	};
+        modeBox.add(comp);
+        hbox.add(modeBox);
 
         category.add(hbox, BorderLayout.CENTER);
         return category;
@@ -3296,11 +3320,29 @@ public class ASMHydrasynth extends Synth
 
         JComponent comp;
         String[] params;
-        HBox hbox = new HBox();
+        final HBox hbox = new HBox();
         
+        final LabelledDial steps = new LabelledDial("Steps", this, "lfo" + lfo + "steps", color, 2, 64);
+
         VBox vbox = new VBox();
         params = LFO_WAVES;
-        comp = new Chooser("Wave", this, "lfo" + lfo + "wave", params);
+        comp = new Chooser("Wave", this, "lfo" + lfo + "wave", params)	
+        	{
+            public void update(String key, Model model)
+                {
+                super.update(key, model);
+                if (model.get(key) == 0) // no steps
+                	{
+                	hbox.remove(steps);
+                	}
+                else
+                	{
+                	hbox.add(steps);
+                	}
+                hbox.revalidate();
+                hbox.repaint();
+                }
+        	};
         vbox.add(comp);
 
         params = LFO_TRIG_SYNCS;
@@ -3424,11 +3466,7 @@ public class ASMHydrasynth extends Synth
         hbox.add(comp);
 
         comp = new LabelledDial("Smooth", this, "lfo" + lfo + "smooth", color, 0, 127);
-        hbox.add(comp);
-
-        comp = new LabelledDial("Steps", this, "lfo" + lfo + "steps", color, 2, 64);
-        hbox.add(comp);
-        
+        hbox.add(comp);        
 
         category.add(hbox, BorderLayout.CENTER);
         return category;
@@ -3572,7 +3610,7 @@ public class ASMHydrasynth extends Synth
         
         VBox vbox = new VBox();
         
-        if (env == 2)  // No Trigger Source 1, but it's still a parameter!  Hydrasynth is weird
+        if (env == 2)  // No Env 2 Trigger Source 1, but it's still a parameter!  Hydrasynth is weird
         	{
         	model.set("env" + env + "trigsrc" + 1, 1);
         	model.setMin("env" + env + "trigsrc" + 1, 1);  
@@ -5905,7 +5943,7 @@ public class ASMHydrasynth extends Synth
 
     public static final String[] waveParameters = 
         {
-        // Next the waves
+        // Next the waves.  These have to be set (to "Step") before you can set lfo1steps etc.
         "lfo1wave",                                     
         "lfo2wave",                                     
         "lfo3wave",                                     

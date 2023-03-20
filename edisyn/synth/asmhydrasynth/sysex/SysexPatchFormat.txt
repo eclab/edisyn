@@ -11,7 +11,7 @@ BYTE    HEX     INFO
 1       1       00
 2       2       Bank
 3       3       Patch Number
-4       4       9B Hydrasynth Version Number? 	1.5.5	(0x9B = 155)
+4       4       9B Hydrasynth Version Number? 	1.5.5	(0x9B = 155)  Prediction: 2.0.0 will be 0xC8
 5       5       00?
 6       6       00?
 7       7       00?
@@ -1608,7 +1608,7 @@ so 75 + 12.4 = 87.4. that produces a 3 in offset 415 and a 127 in offset 414.
 1587    633     
 1588    634     
 1589    635     
-1590    636     Mcro 8 ENABLED ?
+1590    636     Macro 8 ENABLED ?
 1591    637     
 1592    638     
 1593    639     

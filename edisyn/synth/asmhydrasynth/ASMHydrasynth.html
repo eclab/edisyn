@@ -7,7 +7,7 @@
 If you're connecting via USB, set Edisyn's incoming and outgoing MIDI devices to HYDRASYNTH KB.  Set Edisyn's MIDI channel to the same as the synth's RX and TX MIDI channels.  You can set the synth's RX MIDI channel to OMNI if you liked.   Set up Parameter RX and TX both to be NRPN.  
 
 <p><b>Current Editor Status</b><br>
-ASM does not have a public sysex spec.  I may yet attempt to reverse engineer this spec, but at present I have not.  This means that this editor cannot request the current patch, write to a patch, read an incoming patch, nor load or save patches in ASM sysex format.  Obviously this means it cannot provide a Librarian at present.  What it can do is:
+ASM refuses to release their sysex spec.  I may yet attempt to reverse engineer this spec, but at present I have not.  This means that this editor cannot request the current patch, write to a patch, read an incoming patch, nor load or save patches in ASM sysex format.  Obviously this means it cannot provide a Librarian at present.  What it can do is:
 
 <ul>
 <li>It can send (most) individual parameters.
@@ -31,7 +31,8 @@ Edisyn does not yet support multimode, though I intend to ultimately.
 
 <p><b>Gotchas and Hydrasynth Bugs to Be Aware of</b><br>
 <ul>
-<li>The Envelope's Attack Curve labeling is incorrect: negative values should are actually LOG and positive values are actually EXP.  Edisyn follows the Hydrasynth's incorrect labelling.  I do not know if ASM mislabeled the attack knob by accident or intentionally because they imagined people wouldn't understand exponential curves: but it is wrong.  An exponential envelope curve doesn't mean it's increasing with an exponential rate of speed. It means that there is an <i>exponential dropoff</i> in the absolute rate of change.  For the decay/release, we start by moving very fast, and then as we approach the target we exponentially slow down (go horizontal).  Similarly for attack, we start by moving very fast (this time upwards), then as we approach the target we again slow down (go horizontal).  The Attack Curve knob behavior is identical to the Decay and Release knobs and should have been labelled the same. 
+<li>Yes, Envelope 2 really doesn't have modifiable a Trigger Source 1.
+<p><li>The Envelope's Attack Curve labeling is incorrect: negative values should are actually LOG and positive values are actually EXP.  Edisyn follows the Hydrasynth's incorrect labelling.  I do not know if ASM mislabeled the attack knob by accident or intentionally because they imagined people wouldn't understand exponential curves: but it is wrong.  An exponential envelope curve doesn't mean it's increasing with an exponential rate of speed. It means that there is an <i>exponential dropoff</i> in the absolute rate of change.  For the decay/release, we start by moving very fast, and then as we approach the target we exponentially slow down (go horizontal).  Similarly for attack, we start by moving very fast (this time upwards), then as we approach the target we again slow down (go horizontal).  The Attack Curve knob behavior is identical to the Decay and Release knobs and should have been labelled the same. 
 <p><li>You cannot update the patch name, color, category, or macro names individually.
 <p><li>Certain individual parameter changes will cause the Hydrasynth to foolishly respond with its current settings for a set of parameters.  This in turn will cause Edisyn to update those parameters, erasing any changes you may have made but not yet sent. This is unlikely to bite you, but you should be aware of it.  This happens, for example, when changing the ribbon mode to Theremin; changing the LFO, or Delay BPM Sync; or changing the Arpeggiator mode and various other Arpeggiator parameters or Delay BPM Sync
 <p><li>When you change the Arpeggiator Tap Trig value on/off via Edisyn, it will also turn the Arpeggiator on/off. This is a Hydrasynth bug: it does not happen if you change the Tap Trig value directly on the unit. 
@@ -41,6 +42,8 @@ Edisyn does not yet support multimode, though I intend to ultimately.
 display to reflect this.  You have to page away and come back to see the updates properly displayed.
 <p><li>The first WaveScan wave goes Sin...Harmon23.  The other waves go Off,Silence,Sin...Harmon23.  This means that when you use the Category's distribute procedure to distribute waves, it won't work right for the first wave.
 <p><li>Lacking proper sysex, Edisyn for the moment has a proprietary sysex format for storing patches as files on your disk (obviously not for uploading them to the Hydrasynth).  But at least you can save them now!
+<p><li>The Hydrasynth has a Ribbon Mod Hold parameter and the sysex format has a slot for it.  However it does not appear to be set in the synth when you load a patch, and it has no NRPN.  This looks like a bug: but it means that Edisyn does not display this parameter either.
+<p><li>You can't set the LFO Steps parameter unless the corresponding LFO Wave parameter has been first set to "Step".  You <i>can</i> set the individual steps themselves. Go figure.
 </ul>
 
 <p><b>Hints</b><br>

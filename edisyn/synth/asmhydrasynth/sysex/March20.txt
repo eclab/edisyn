@@ -1,0 +1,8 @@
+March 19, 2023 Hydrasynth sysex reverse engineering notes.
+
+LFO parameters determined.
+
+Identified oddities:
+
+	- NRPN for LFO Steps is ignored unless LFO Wave is set to "Step" (10).
+	  However, NRPN for LFO Step 1 ... LFO Step 64 is accepted.

@@ -2223,7 +2223,7 @@ public class ASMHydrasynth extends Synth
         params = RIBBON_KEYSPANS;
         final Chooser keyspan = new Chooser("Theremin Keyspan", this, "ribbonkeyspan", params);
  
-          HBox thereminBox = new HBox();
+        final HBox thereminBox = new HBox();
        	VBox vbox = new VBox(); 
         comp = new CheckBox("Theremin Quantize", this, "ribbonquantize");
         vbox.add(comp);
@@ -2231,12 +2231,6 @@ public class ASMHydrasynth extends Synth
         comp = new CheckBox("Theremin Wheel Volume", this, "ribbonmodcontrol");
         vbox.add(comp);
         thereminBox.add(vbox);
-
-/*
-        comp = new CheckBox("Ribbon Mod Hold", this, "ribbonhold");
-        vbox.add(comp);
-        hbox.add(vbox);
-*/
 
         comp = new LabelledDial("Theremin", this, "ribbonoctave", color, 0, 8)
             {
@@ -2253,8 +2247,9 @@ public class ASMHydrasynth extends Synth
         ((LabelledDial)comp).addAdditionalLabel("Glide");
         thereminBox.add(comp);
         
+        final CheckBox ribbonHold = new CheckBox("Hold", this, "ribbonhold");
 
-       
+      
         /// FIXME: Setting this to THEREMIN will cause the Hydrasynth to respond via NRPN
         /// with all the theremin values, thereby erasing your current settings.  :-(  :-(
         final VBox modeBox = new VBox(); 
@@ -2267,11 +2262,19 @@ public class ASMHydrasynth extends Synth
                 if (model.get(key) == 1)		// Theremin
                 	{
                 	modeBox.add(keyspan);
+                	modeBox.remove(ribbonHold);
                 	hbox.addLast(thereminBox);
                 	}
-                else
+                else if (model.get(key) == 2) 	// Mod
                 	{
                 	modeBox.remove(keyspan);
+                	modeBox.add(ribbonHold);
+                	hbox.remove(thereminBox);
+                	}
+                else		// Pitch Bend
+                	{
+                	modeBox.remove(keyspan);
+                	modeBox.remove(ribbonHold);
                 	hbox.remove(thereminBox);
                 	}
                 modeBox.revalidate();
@@ -4040,23 +4043,12 @@ public class ASMHydrasynth extends Synth
             	}
             };
         vbox.add(comp);
-                
-        /****
-             FIXME
-             comp = new LabelledDial("Depth " + i, this, "macro" + macro + "panelvalue", color, 0, 1024)
-             {
-             public String map(int value)
-             {
-             int v = value * 8;
-             // dividing 8192 by 3.2 cuts into 2560 pieces
-             return String.format("%4.1f", ((roundEven(v / 3.2) / 10.0) - 128));
-             }
-             };
-        *****/
         
+        comp = new CheckBox("Enabled", this, "macro" + macro + "enabled");
+        vbox.add(comp);
         
         hbox.add(vbox);
-        
+                
         vbox = new VBox();
         for(int i = 1; i <= 8; i+= 2)
             {
@@ -4478,7 +4470,10 @@ public class ASMHydrasynth extends Synth
             }
         
         // There is no NRPN for these items
-        if (key.equals("color") || key.equals("category") || (key.startsWith("macro") && key.endsWith("name")) || key.equals("name"))
+        if (key.equals("color") || 
+        	key.equals("category") || 
+        	(key.startsWith("macro") && (key.endsWith("name") || key.endsWith("enabled"))) || 
+        	key.equals("name"))
             {
             return new Object[0];
             }

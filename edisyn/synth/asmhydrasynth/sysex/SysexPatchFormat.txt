@@ -309,56 +309,56 @@ BYTE    HEX     INFO
 299     12B     Mixer Ringmod Pan High Byte
 300     12C     Mixer Noise Pan Low Byte
 301     12D     Mixer Noise Pan High Byte
-302     12E     
+302     12E     Filter Routing
 303     12F     
 304     130     Mixer Ringmod Filter Ratio Low Byte
 305     131     Mixer Ringmod Filter Ratio High Byte
 306     132     Mixer Noise Filter Ratio Low Byte
 307     133     Mixer Noise Filter Ratio High Byte
-308     134     
+308     134     Filter 1 Type	[Remember, values are out of order]
 309     135     
-310     136     
-311     137     
-312     138     
-313     139     
-314     13A     
-315     13B     
-316     13C     
-317     13D     
-318     13E     
-319     13F     
-320     140     
-321     141     
-322     142     
-323     143     
-324     144     
+310     136     Filter 1 Cutoff Low Byte
+311     137     Filter 1 Cutoff High Byte
+312     138     Filter 1 Resonance Low Byte
+313     139     Filter 1 Resonance High Byte
+314     13A     Filter 1 Formant Control Low Byte
+315     13B     Filter 1 Formant Control High Byte
+316     13C     Filter 1 Env 1 Amount Low Byte
+317     13D     Filter 1 Env 1 Amount High Byte
+318     13E     Filter 1 LFO 1 Amount Low Byte
+319     13F     Filter 1 LFO 1 Amount High Byte
+320     140     Filter 1 Vel Env Low Byte
+321     141     Filter 1 Vel Env High Byte
+322     142     Filter 1 Keytrack Low Byte
+323     143     Filter 1 Keytrack High Byte?
+324     144     Filter 1 Vowel Order?  					[FIXME: Need to test]
 325     145     
-326     146     
-327     147     
-328     148     
+326     146     Filter 1 Drive Low Byte
+327     147     Filter 1 Drive High Byte
+328     148     Filter 1 Drive Route
 329     149     
 330     14A     
 331     14B     
-332     14C     
-333     14D     
-334     14E     
-335     14F     
-336     150     
-337     151     
-338     152     
-339     153     
-340     154     
-341     155     
-342     156     
-343     157     
-344     158     
-345     159     
-346     15A     
-347     15B     
-348     15C     
-349     15D     
-350     15E     
-351     15F     
+332     14C     Filter 2 Morph Low Byte
+333     14D     Filter 2 Morph High Byte
+334     14E     Filter 2 Cutoff Low Byte
+335     14F     Filter 2 Cutoff High Byte
+336     150     Filter 2 Resonance Low Byte
+337     151     Filter 2 Resonance High Byte
+338     152     Filter 2 Env 1 Amount Low Byte
+339     153     Filter 2 Env 1 Amount High Byte
+340     154     Filter 2 LFO 1 Amount Low Byte
+341     155     Filter 2 LFO 1 Amount High Byte
+342     156     Filter 2 Vel Env Low Byte
+343     157     Filter 2 Vel Env High Byte
+344     158     Filter 2 Keytrack Low Byte
+345     159     Filter 2 Keytrack High Byte
+346     15A     Amplifier LFO 2 Amount Low Byte
+347     15B     Amplifier LFO 2 Amount High Byte
+348     15C     Amplifier Vel Env Low Byte
+349     15D     Amplifier Vel Env High Byte
+350     15E     Amplifier Level Low Byte
+351     15F     Amplifier Level High Byte
 352     160     
 353     161     
 354     162     
@@ -375,36 +375,36 @@ BYTE    HEX     INFO
 365     16D     
 366     16E     Pre-Fx Dry/Wet.  Same mapping for in-between values as desribed at offset 414 for Post-Fx. 
 367     16F     Pre-Fx Dry/Wet.  0% = 0. 25% = 1. 50% = 2. 75% =3. 100% = 4 
-368     170     
+368     170     Delay Type
 369     171     
-370     172     
+370     172     Delay BPM Sync
 371     173     
-372     174     
-373     175     
-374     176     
-375     177     
-376     178     
-377     179     
-378     17A     
-379     17B     
+372     174     Delay Time Low Byte
+373     175     Delay Time High Byte
+374     176     Delay Feedback Low Byte
+375     177     Delay Feedback High Byte
+376     178     Delay Feed Tone Low Byte
+377     179     Delay Feed Tone High Byte
+378     17A     Delay Wet Tone Low Byte
+379     17B     Delay Wet Tone High Byte
 380     17C     
 381     17D     
 382     17E     Delay Dry/Wet.  Same mapping for in-between values as desribed at offset 414 for Post-Fx.  
 383     17F     Delay Dry/Wet.  0% = 0. 25% = 1. 50% = 2. 75% =3. 100% = 4  
-384     180     
+384     180     Reverb Type
 385     181     
 386     182     
 387     183     
-388     184     
-389     185     
-390     186     
-391     187     
-392     188     
-393     189     
-394     18A     
-395     18B     
-396     18C     
-397     18D     
+388     184     Reverb Time Low Byte
+389     185     Reverb Time High Byte
+390     186     Reverb Tone Low Byte
+391     187     Reverb Tone High Byte
+392     188     Reverb High Damp Low Byte
+393     189     Reverb High Damp High Byte
+394     18A     Reverb Low Damp Low Byte
+395     18B     Reverb Low Damp High Byte
+396     18C     Reverb Predelay Low Byte
+397     18D     Reverb Predelay High Byte
 398     18E     Reverb Dry/Wet.  Same mapping for in-between values as desribed at offset 414 for Post-Fx.   
 399     18F     Reverb Dry/Wet.  0% = 0. 25% = 1. 50% = 2. 75% =3. 100% = 4   
 400     190     
@@ -490,7 +490,7 @@ so 75 + 12.4 = 87.4. that produces a 3 in offset 415 and a 127 in offset 414.
 469     1D5     
 470     1D6     Warm Mode bit 0		Snap bit 1
 471     1D7     
-472     1D8     
+472     1D8     Filter 2 Type
 473     1D9     
 474     1DA     
 475     1DB     
@@ -636,32 +636,32 @@ so 75 + 12.4 = 87.4. that produces a 3 in offset 415 and a 127 in offset 414.
 615     267     
 616     268     
 617     269     
-618     26A     LFO 1 Wave value range 0 - 10; waveforms are Sine, Triangle, Saw Up, Saw Down, Square, Pulse27%, Pulse13%, S&H, Noise, Random, Step (same for all LFO's)    )          
+618     26A     LFO 1 Wave
 619     26B      
-620     26C     
-621     26D     
-622     26E     
+620     26C     LFO 1 Rate Low Byte?   [Unknown, turned on with BPM Sync]
+621     26D     LFO 1 Rate High Byte?   [Unknown, turned on with BPM Sync]
+622     26E     LFO 1 BPM Sync
 623     26F     
-624     270     
+624     270     LFO 1 Trig Sync
 625     271     
-626     272     
+626     272     LFO 1 Delay
 627     273     
-628     274     
+628     274     LFO 1 Fade In
 629     275     
-630     276     
+630     276     LFO 1 Phase
 631     277     
-632     278     
-633     279     
-634     27A     
+632     278     LFO 1 Level Low Byte
+633     279     LFO 1 Level High Byte Byte
+634     27A     LFO 1 Steps
 635     27B     
-636     27C     
+636     27C     LFO 1 Smooth
 637     27D     
-638     27E     
+638     27E     LFo 1 One Shot
 639     27F     
-640     280     
-641     281     
-642     282     
-643     283     
+640     280     LFO Step 1 Low Byte
+641     281     LFO Step 1 High Byte
+642     282     LFO Step 2 Low Byte
+643     283     LFO Step 2 High Byte
 644     284     
 645     285     
 646     286     
@@ -672,9 +672,9 @@ so 75 + 12.4 = 87.4. that produces a 3 in offset 415 and a 127 in offset 414.
 651     28B     
 652     28C     
 653     28D     
-654     28E     
-655     28F     
-656     290     LFO 2 Wave value range 0 - 10; waveforms are Sine, Triangle, Saw Up, Saw Down, Square, Pulse27%, Pulse13%, S&H, Noise, Random, Step (same for all LFO's)      
+654     28E     LFO Step 8 Low Byte
+655     28F     LFO Step 8 High Byte
+656     290     LFO 2 Wave      
 657     291     
 658     292     
 659     293     
@@ -712,7 +712,7 @@ so 75 + 12.4 = 87.4. that produces a 3 in offset 415 and a 127 in offset 414.
 691     2B3     
 692     2B4     
 693     2B5     
-694     2B6     LFO 3 Wave value range 0 - 10; waveforms are Sine, Triangle, Saw Up, Saw Down, Square, Pulse27%, Pulse13%, S&H, Noise, Random, Step (same for all LFO's)   
+694     2B6     LFO 3 Wave   
 695     2B7     
 696     2B8     
 697     2B9     
@@ -750,7 +750,7 @@ so 75 + 12.4 = 87.4. that produces a 3 in offset 415 and a 127 in offset 414.
 729     2D9     
 730     2DA     
 731     2DB     
-732     2DC     LFO 4 Wave value range 0 - 10; waveforms are Sine, Triangle, Saw Up, Saw Down, Square, Pulse27%, Pulse13%, S&H, Noise, Random, Step (same for all LFO's)     
+732     2DC     LFO 4 Wave     
 733     2DD          
 734     2DE     
 735     2DF     
@@ -788,7 +788,7 @@ so 75 + 12.4 = 87.4. that produces a 3 in offset 415 and a 127 in offset 414.
 767     2FF     
 768     300     
 769     301     
-770     302     LFO 5 Wave value range 0 - 10; waveforms are Sine, Triangle, Saw Up, Saw Down, Square, Pulse27%, Pulse13%, S&H, Noise, Random, Step (same for all LFO's)      
+770     302     LFO 5 Wave      
 771     303     
 772     304     
 773     305     
@@ -1898,8 +1898,8 @@ so 75 + 12.4 = 87.4. that produces a 3 in offset 415 and a 127 in offset 414.
 1877    755     
 1878    756     
 1879    757     
-1880    758     
-1881    759     
+1880    758     LFO 1 Step 64 Low Byte
+1881    759     LFO 1 Step 64 High Byte
 1882    75A     
 1883    75B     
 1884    75C     

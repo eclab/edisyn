@@ -1,0 +1,3 @@
+March 21, 2023 Hydrasynth sysex reverse engineering notes.
+
+Filter, Amplifier, Delay, and Reverb parameters determine.  The only thing left is PreFX and PostFX.

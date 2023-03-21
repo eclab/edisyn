@@ -1,4 +1,4 @@
-March 19, 2023 Hydrasynth sysex reverse engineering notes.
+March 20, 2023 Hydrasynth sysex reverse engineering notes.
 
 LFO parameters determined.
 

@@ -32,10 +32,10 @@ BYTE    HEX     INFO
 22      16      End of "Sawpressive GD"
 23      17      
 24      18      Patch Name End?
-25      19      
+25      19      UNNOWN
 26      1A      Color
 27      1B      
-28      1C      
+28      1C      UNNOWN
 29      1D      
 30      1E      Polyphony
 31      1F      
@@ -67,7 +67,7 @@ BYTE    HEX     INFO
 57      39      
 58      3A      Legato
 59      3B      
-60      3C      
+60      3C      UNNOWN START
 61      3D      
 62      3E      
 63      3F      
@@ -86,7 +86,7 @@ BYTE    HEX     INFO
 76      4C      
 77      4D      
 78      4E      
-79      4F      
+79      4F      UNNOWN END
 80      50      Osc 1 Mode [0: single 1:wavescan]?
 81      51      
 82      52      Osc 1 Wave
@@ -331,13 +331,13 @@ BYTE    HEX     INFO
 321     141     Filter 1 Vel Env High Byte
 322     142     Filter 1 Keytrack Low Byte
 323     143     Filter 1 Keytrack High Byte?
-324     144     Filter 1 Vowel Order?  					[FIXME: Need to test]
+324     144     UNKNOWN
 325     145     
 326     146     Filter 1 Drive Low Byte
 327     147     Filter 1 Drive High Byte
 328     148     Filter 1 Drive Route
 329     149     
-330     14A     
+330     14A     Filter 1 Vowel Order
 331     14B     
 332     14C     Filter 2 Morph Low Byte
 333     14D     Filter 2 Morph High Byte
@@ -359,22 +359,22 @@ BYTE    HEX     INFO
 349     15D     Amplifier Vel Env High Byte
 350     15E     Amplifier Level Low Byte
 351     15F     Amplifier Level High Byte
-352     160     
+352     160     Pre-FX Type
 353     161     
-354     162     
+354     162     Pre Fx Compressor Side Chain
 355     163     
-356     164     
-357     165     
-358     166     
-359     167     
-360     168     
-361     169     
-362     16A     
-363     16B     
-364     16C     
-365     16D     
-366     16E     Pre-Fx Dry/Wet.  Same mapping for in-between values as desribed at offset 414 for Post-Fx. 
-367     16F     Pre-Fx Dry/Wet.  0% = 0. 25% = 1. 50% = 2. 75% =3. 100% = 4 
+356     164     Pre FX Param 1 Low Byte
+357     165     Pre FX Param 1 High Byte
+358     166     Pre FX Param 2 Low Byte
+359     167     Pre FX Param 2 High Byte
+360     168     Pre FX Param 3 Low Byte
+361     169     Pre FX Param 3 High Byte
+362     16A     Pre FX Param 4 Low Byte
+363     16B     Pre FX Param 4 High Byte
+364     16C     Pre FX Param 5 Low Byte
+365     16D     Pre FX Param 5 High Byte
+366     16E     Pre-Fx Dry/Wet Low Byte 
+367     16F     Pre-Fx Dry/Wet High Byte 
 368     170     Delay Type
 369     171     
 370     172     Delay BPM Sync
@@ -389,8 +389,8 @@ BYTE    HEX     INFO
 379     17B     Delay Wet Tone High Byte
 380     17C     
 381     17D     
-382     17E     Delay Dry/Wet.  Same mapping for in-between values as desribed at offset 414 for Post-Fx.  
-383     17F     Delay Dry/Wet.  0% = 0. 25% = 1. 50% = 2. 75% =3. 100% = 4  
+382     17E     Delay Dry/Wet Low Byte  
+383     17F     Delay Dry/Wet High Byte  
 384     180     Reverb Type
 385     181     
 386     182     
@@ -405,36 +405,25 @@ BYTE    HEX     INFO
 395     18B     Reverb Low Damp High Byte
 396     18C     Reverb Predelay Low Byte
 397     18D     Reverb Predelay High Byte
-398     18E     Reverb Dry/Wet.  Same mapping for in-between values as desribed at offset 414 for Post-Fx.   
-399     18F     Reverb Dry/Wet.  0% = 0. 25% = 1. 50% = 2. 75% =3. 100% = 4   
-400     190     
+398     18E     Reverb Dry/Wet Low Byte   
+399     18F     Reverb Dry/Wet High Byte   
+400     190     Post FX Type
 401     191     
-402     192     
+402     192     Post FX Sidechain?
 403     193     
-404     194     
-405     195     
-406     196     
-407     197     
-408     198     
-409     199     
-410     19A     
-411     19B     
-412     19C     
-413     19D     
-414     19E     Post-FX Dry/Wet. 12.5% = -128 30% = 51. 60% = 102. 80% = 51 87.5 = -128. 98% = -20.
-
-For the values other than 0, 25, 50, 75, 100 there is a non-linear and discontinuous mapping of values for the offset from the quartiles as follows (hopefully this same technique is used everywhere so that mapping identified once):
-0.1 = 1
-5 = 51
-10 = 102
-12.4 = 127
-12.5 = -128
-24.9 = -1
-
-so 75 + 12.4 = 87.4. that produces a 3 in offset 415 and a 127 in offset 414.
-
-415     19F     Post-FX Dry/Wet. 0% = 0. 25% = 1. 50% = 2. 75% =3. 100% = 4  (Note: all FXtypes share same dry/wet value in these two bytes)
-416     1A0     
+404     194     Post FX Param 1 Low Byte?
+405     195     Post FX Param 1 High Byte?
+406     196     Post FX Param 2 Low Byte?
+407     197     Post FX Param 2 High Byte?
+408     198     Post FX Param 3 Low Byte?
+409     199     Post FX Param 3 High Byte?
+410     19A     Post FX Param 4 Low Byte?
+411     19B     Post FX Param 4 High Byte?
+412     19C     Post FX Param 5 Low Byte?
+413     19D     Post FX Param 5 High Byte?
+414     19E     Post-FX Dry/Wet Low Byte
+415     19F     Post-FX Dry/Wet High Byte
+416     1A0     UNKNOWN START
 417     1A1     
 418     1A2     
 419     1A3     
@@ -453,7 +442,7 @@ so 75 + 12.4 = 87.4. that produces a 3 in offset 415 and a 127 in offset 414.
 432     1B0     
 433     1B1     
 434     1B2     
-435     1B3     
+435     1B3     UNKNOWN END
 436     1B4     Ribbon Mode
 437     1B5     
 438     1B6     Theremin Keyspan
@@ -468,7 +457,7 @@ so 75 + 12.4 = 87.4. that produces a 3 in offset 415 and a 127 in offset 414.
 447     1BF     
 448     1C0     Theremin Wheel Volume
 449     1C1     
-450     1C2     
+450     1C2     UNKNOWN START
 451     1C3     
 452     1C4     
 453     1C5     
@@ -487,15 +476,15 @@ so 75 + 12.4 = 87.4. that produces a 3 in offset 415 and a 127 in offset 414.
 466     1D2     
 467     1D3     
 468     1D4     
-469     1D5     
+469     1D5     UNKNOWN END
 470     1D6     Warm Mode bit 0		Snap bit 1
 471     1D7     
-472     1D8     Filter 2 Type
+472     1D8     Filter 2 Type		[An odd location: perhaps added later]
 473     1D9     
-474     1DA     
+474     1DA     UNKNOWN START
 475     1DB     
 476     1DC     
-477     1DD     
+477     1DD     UNKNOWN END
 478     1DE     Env 1 Attack Low Byte		[All appear shared with BPM/No-BPM]
 479     1DF     Env 1 Attack High Byte
 480     1E0     Env 1 Decay Low Byte
@@ -850,11 +839,11 @@ so 75 + 12.4 = 87.4. that produces a 3 in offset 415 and a 127 in offset 414.
 829     33D     
 830     33E     Arpeggiator Chance
 831     33F     
-832     340     
+832     340     UNKNOWN
 833     341     
-834     342     
+834     342     UNKNOWN
 835     343     
-836     344     
+836     344     UNKNOWN
 837     345     
 838     346    	Mod Matrix 1 Amount Low Byte?
 839     347     Mod Matrix 1 Amount High Byte?
@@ -1496,9 +1485,9 @@ so 75 + 12.4 = 87.4. that produces a 3 in offset 415 and a 127 in offset 414.
 1475    5C3     
 1476    5C4     
 1477    5C5     
-1478    5C6     Macro 1 ENABLED
+1478    5C6     Macro 1 ENABLED			[ NOTE There is no NRPN for this.]
 1479    5C7     
-1480    5C8     
+1480    5C8     UNKNOWN START
 1481    5C9     
 1482    5CA     
 1483    5CB     
@@ -1510,7 +1499,7 @@ so 75 + 12.4 = 87.4. that produces a 3 in offset 415 and a 127 in offset 414.
 1489    5D1     
 1490    5D2     
 1491    5D3     
-1492    5D4     
+1492    5D4     UNKNOWN END ETC.
 1493    5D5     
 1494    5D6     Macro 2 ENABLED?  Strange
 1495    5D7     
@@ -1788,8 +1777,8 @@ so 75 + 12.4 = 87.4. that produces a 3 in offset 415 and a 127 in offset 414.
 1767    6E7     
 1768    6E8     
 1769    6E9     
-1770    6EA     
-1771    6EB     
+1770    6EA     LFO 1 Step 9 Low Byte
+1771    6EB     LFO 1 Step 9 High Byte
 1772    6EC     
 1773    6ED     
 1774    6EE     
@@ -1900,8 +1889,8 @@ so 75 + 12.4 = 87.4. that produces a 3 in offset 415 and a 127 in offset 414.
 1879    757     
 1880    758     LFO 1 Step 64 Low Byte
 1881    759     LFO 1 Step 64 High Byte
-1882    75A     
-1883    75B     
+1882    75A     LFO 2 Step 9 Low Byte
+1883    75B     LFO 2 Step 9 High Byte
 1884    75C     
 1885    75D     
 1886    75E     
@@ -2356,8 +2345,8 @@ so 75 + 12.4 = 87.4. that produces a 3 in offset 415 and a 127 in offset 414.
 2335    91F     
 2336    920     
 2337    921     
-2338    922     
-2339    923     
+2338    922     LFO 5 Step 64 Low Byte
+2339    923     LFO 5 Step 64 High Byte
 2340    924     Env 1 Trig Source 1
 2341    925     
 2342    926     Env 1 Trig Source 2
@@ -2366,7 +2355,7 @@ so 75 + 12.4 = 87.4. that produces a 3 in offset 415 and a 127 in offset 414.
 2345    929     
 2346    92A     Env 1 Trig Source 4
 2347    92B     
-2348    92C     
+2348    92C     UNKNOWN
 2349    92D     
 2350    92E     Env 2 Trig Source 1?   NOTE: This cannot be changed per manual
 2351    92F     
@@ -2376,7 +2365,7 @@ so 75 + 12.4 = 87.4. that produces a 3 in offset 415 and a 127 in offset 414.
 2355    933     
 2356    934     Env 2 Trig Source 4
 2357    935     
-2358    936     
+2358    936     UNKNOWN
 2359    937     
 2360    938     Env 3 Trig Source 1
 2361    939     
@@ -2386,7 +2375,7 @@ so 75 + 12.4 = 87.4. that produces a 3 in offset 415 and a 127 in offset 414.
 2365    93D     
 2366    93E     Env 3 Trig Source 4
 2367    93F     
-2368    940     
+2368    940     UNKNOWN
 2369    941     
 2370    942     Env 4 Trig Source 1
 2371    943     
@@ -2406,7 +2395,7 @@ so 75 + 12.4 = 87.4. that produces a 3 in offset 415 and a 127 in offset 414.
 2385    951     
 2386    952     Env 5 Trig Source 4
 2387    953     
-2388    954     
+2388    954     UNKNOWN START
 2389    955     
 2390    956     
 2391    957     
@@ -2807,4 +2796,4 @@ so 75 + 12.4 = 87.4. that produces a 3 in offset 415 and a 127 in offset 414.
 2786    AE2     
 2787    AE3     
 2788    AE4     
-2789    AE5     
+2789    AE5     UNKNOWN END

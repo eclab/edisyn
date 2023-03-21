@@ -1,3 +1,8 @@
 March 21, 2023 Hydrasynth sysex reverse engineering notes.
 
-Filter, Amplifier, Delay, and Reverb parameters determine.  The only thing left is PreFX and PostFX.
+All remaining parameters determined.
+
+Curiosity: it appears that there is a bit for enabling macros in the sysex; but
+due to a seeming bug or interface error there is no way to disable or delete a
+macro on the front panel of the machine, nor any way to delete a destination 
+slot.

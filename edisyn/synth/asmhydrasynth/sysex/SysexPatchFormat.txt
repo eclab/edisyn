@@ -2,8 +2,40 @@ Below is a little spreadsheet of sorts to be used as a record for
 reverse engineering the locations of parameters in a Hydrasynth
 patch sysex dump.
 
-NOTE: it appears that the first eight bytes are NOT
-part of the patch rather are metadata.
+It appears that the first eight bytes are NOT part of the patch, but
+rather are metadata.
+
+Most parameters are set up to consume two bytes.  When the parameter
+is less than 8 bits, it uses the even byte position.  When the parameter
+requires more than 8 bits, the even byte position defines the 8-bit LSB
+of the parameter and the (following) odd byte position defines the 8-bit
+MSB of the parameter.
+
+Strings are one byte per character, and may take up odd space (see the
+apparently 17-byte Macro Name space for example).  A few parameters seem
+to be crammed into single byte, such as Category (byte 8), whose "MSB"
+space is used by the Patch Name Start.  Also see byte 470, which uses 
+bitpacking to stuff both Warm Mode and Snap into the same byte.
+
+For the ranges of these parameters, see the NRPN spreadsheet (not ASM's
+tables).
+
+There are regions whose purpose or value is unknown an are marked either
+as UNKNOWN or as UNKNOWN START ... UNKNOWN END.
+
+The documentation in this table is sparse: there are after all over 1000
+parameters in the Hydraynth.  If data repeats, then only the first data
+elements are indicated, plus a few boundary examples so you can get a
+handle on how the repeating data works.
+
+The Hydrasynth appears to be very unusual in that in many cases two versions 
+of a parameter fill the current working memory, but only one is written to 
+the patch.  Specifically, the Hydrasynth has BPM Sync ON and BPM Sync Off
+versions for a number of parameters.  In current working memory these are
+two SEPARATE parameters with their own NRPN addresses.  But when writing the
+patch to storage or dumping it, the two parameters are collapsed to a
+single parameter depending on whether BPM Sync is on or off.  It's kind of
+like Schrodinger's Cat.
  
 
 BYTE    HEX     INFO
@@ -29,7 +61,7 @@ BYTE    HEX     INFO
 19      13      
 20      14      
 21      15      
-22      16      End of "Sawpressive GD"
+22      16      						[End of "Sawpressive GD"]
 23      17      
 24      18      Patch Name End?
 25      19      UNNOWN
@@ -45,7 +77,7 @@ BYTE    HEX     INFO
 35      23      
 36      24      Analog Feel
 37      25      
-38      26      Random Phase?	[Note, this seems to turn on other stuff too]
+38      26      Random Phase?			[Note, this seems to turn on other stuff too]
 39      27      
 40      28      Stereo Mode
 41      29      
@@ -55,9 +87,9 @@ BYTE    HEX     INFO
 45      2D      
 46      2E      Vibrato Amount
 47      2F      
-48      30      Vibrato Rate [BPM Sync ON or OFF, surprising]
+48      30      Vibrato Rate
 49      31      
-50      32      Vibrato BPM Sync	[Note seems to turn on other stuff too]
+50      32      Vibrato BPM Sync		[Note seems to turn on other stuff too]
 51      33      
 52      34      Glide
 53      35      
@@ -87,7 +119,7 @@ BYTE    HEX     INFO
 77      4D      
 78      4E      
 79      4F      UNNOWN END
-80      50      Osc 1 Mode [0: single 1:wavescan]?
+80      50      Osc 1 Mode
 81      51      
 82      52      Osc 1 Wave
 83      53      
@@ -153,7 +185,7 @@ BYTE    HEX     INFO
 143     8F      
 144     90      Mutant 1 Mode
 145     91      
-146     92      Mutant 1 FM Linear Source / Osc Sync Source		[Appear to be Shared]
+146     92      Mutant 1 FM Linear Source / Osc Sync Source			[Appear to be Shared]
 147     93      
 148     94      Mutant 1 Ratio Low Byte
 149     95      Mutant 1 Ratio High Byte
@@ -163,8 +195,8 @@ BYTE    HEX     INFO
 153     99      Mutant 1 Window High Byte
 154     9A      Mutant 1 Feedback Low Byte
 155     9B      Mutant 1 Feedback High Byte
-156     9C      Mutant 1 Dry/Wet Low Byte.  
-157     9D      Mutant 1 Dry/Wet High Byte
+156     9C      Mutant 1 Dry/WetLow Byte.  
+157     9D      Mutant 1 Dry/WetHigh Byte
 158     9E      Mutant 2 Mode
 159     9F      
 160     A0      
@@ -177,8 +209,8 @@ BYTE    HEX     INFO
 167     A7      
 168     A8      
 169     A9      
-170     AA      Mutant 2 Dry/Wet.   
-171     AB      Mutant 2 Dry/Wet.  
+170     AA      Mutant 2 Dry/Wet   
+171     AB      Mutant 2 Dry/Wet  
 172     AC      Mutant 1 ASM Warp 1 Low Byte
 173     AD      Mutant 1 ASM Warp 1 High Byte
 174     AE      Mutant 1 ASM Warp 2 Low Byte
@@ -223,8 +255,8 @@ BYTE    HEX     INFO
 213     D5      
 214     D6      
 215     D7      
-216     D8      Mutant 3 Dry/Wet.
-217     D9      Mutant 3 Dry/Wet.  
+216     D8      Mutant 3 Dry/Wet
+217     D9      Mutant 3 Dry/Wet  
 218     DA      Mutant 4 Mode
 219     DB      
 220     DC      
@@ -237,8 +269,8 @@ BYTE    HEX     INFO
 227     E3      
 228     E4      
 229     E5      
-230     E6      Mutant 4 Dry/Wet.
-231     E7      Mutant 4 Dry/Wet.  
+230     E6      Mutant 4 Dry/Wet
+231     E7      Mutant 4 Dry/Wet  
 232     E8      Mutant 3 ASM Warp 1 Low Byte
 233     E9      Mutant 3 ASM Warp 1 High Byte
 234     EA      
@@ -315,7 +347,7 @@ BYTE    HEX     INFO
 305     131     Mixer Ringmod Filter Ratio High Byte
 306     132     Mixer Noise Filter Ratio Low Byte
 307     133     Mixer Noise Filter Ratio High Byte
-308     134     Filter 1 Type	[Remember, values are out of order]
+308     134     Filter 1 Type						[Remember, values are out of order, see NRPN spreadsheet]
 309     135     
 310     136     Filter 1 Cutoff Low Byte
 311     137     Filter 1 Cutoff High Byte
@@ -335,7 +367,7 @@ BYTE    HEX     INFO
 325     145     
 326     146     Filter 1 Drive Low Byte
 327     147     Filter 1 Drive High Byte
-328     148     Filter 1 Drive Route
+328     148     Filter 1 Drive Route				["position of drive"]
 329     149     
 330     14A     Filter 1 Vowel Order
 331     14B     
@@ -373,8 +405,8 @@ BYTE    HEX     INFO
 363     16B     Pre FX Param 4 High Byte
 364     16C     Pre FX Param 5 Low Byte
 365     16D     Pre FX Param 5 High Byte
-366     16E     Pre-Fx Dry/Wet Low Byte 
-367     16F     Pre-Fx Dry/Wet High Byte 
+366     16E     Pre-Fx Dry/WetLow Byte 
+367     16F     Pre-Fx Dry/WetHigh Byte 
 368     170     Delay Type
 369     171     
 370     172     Delay BPM Sync
@@ -389,8 +421,8 @@ BYTE    HEX     INFO
 379     17B     Delay Wet Tone High Byte
 380     17C     
 381     17D     
-382     17E     Delay Dry/Wet Low Byte  
-383     17F     Delay Dry/Wet High Byte  
+382     17E     Delay Dry/WetLow Byte  
+383     17F     Delay Dry/WetHigh Byte  
 384     180     Reverb Type
 385     181     
 386     182     
@@ -405,8 +437,8 @@ BYTE    HEX     INFO
 395     18B     Reverb Low Damp High Byte
 396     18C     Reverb Predelay Low Byte
 397     18D     Reverb Predelay High Byte
-398     18E     Reverb Dry/Wet Low Byte   
-399     18F     Reverb Dry/Wet High Byte   
+398     18E     Reverb Dry/WetLow Byte   
+399     18F     Reverb Dry/WetHigh Byte   
 400     190     Post FX Type
 401     191     
 402     192     Post FX Sidechain?
@@ -421,8 +453,8 @@ BYTE    HEX     INFO
 411     19B     Post FX Param 4 High Byte?
 412     19C     Post FX Param 5 Low Byte?
 413     19D     Post FX Param 5 High Byte?
-414     19E     Post-FX Dry/Wet Low Byte
-415     19F     Post-FX Dry/Wet High Byte
+414     19E     Post-FX Dry/WetLow Byte
+415     19F     Post-FX Dry/WetHigh Byte
 416     1A0     UNKNOWN START
 417     1A1     
 418     1A2     
@@ -449,13 +481,13 @@ BYTE    HEX     INFO
 439     1B7     
 440     1B8     Theremin Octave Shift
 441     1B9     
-442     1BA     Ribbon Mod Hold					BUG: it appears that this is not loaded when a patch is changed.
+442     1BA     Ribbon Mod Hold
 443     1BB     
 444     1BC     Theremin Quantize
 445     1BD     
 446     1BE     Theremin Glide
 447     1BF     
-448     1C0     Theremin Wheel Volume
+448     1C0     Theremin Wheel Volume			["Mod Control"]
 449     1C1     
 450     1C2     UNKNOWN START
 451     1C3     
@@ -479,13 +511,13 @@ BYTE    HEX     INFO
 469     1D5     UNKNOWN END
 470     1D6     Warm Mode bit 0		Snap bit 1
 471     1D7     
-472     1D8     Filter 2 Type		[An odd location: perhaps added later]
+472     1D8     Filter 2 Type					[An odd location: perhaps wasadded later]
 473     1D9     
 474     1DA     UNKNOWN START
 475     1DB     
 476     1DC     
 477     1DD     UNKNOWN END
-478     1DE     Env 1 Attack Low Byte		[All appear shared with BPM/No-BPM]
+478     1DE     Env 1 Attack Low Byte
 479     1DF     Env 1 Attack High Byte
 480     1E0     Env 1 Decay Low Byte
 481     1E1     Env 1 Decay High Byte
@@ -507,7 +539,7 @@ BYTE    HEX     INFO
 497     1F1     
 498     1F2     Env 1 Legato
 499     1F3     
-500     1F4     Env 1 Reset		[Note: Can only be set if Legato is off...]
+500     1F4     Env 1 Reset		[				Note: Can only be set if Legato is off...]
 501     1F5     
 502     1F6     Env 1 Free Run
 503     1F7     
@@ -627,8 +659,8 @@ BYTE    HEX     INFO
 617     269     
 618     26A     LFO 1 Wave
 619     26B      
-620     26C     LFO 1 Rate Low Byte?   [Unknown, turned on with BPM Sync]
-621     26D     LFO 1 Rate High Byte?   [Unknown, turned on with BPM Sync]
+620     26C     LFO 1 Rate Low Byte?   [Not positive, turned on with BPM Sync]
+621     26D     LFO 1 Rate High Byte?   [Not positive, turned on with BPM Sync]
 622     26E     LFO 1 BPM Sync
 623     26F     
 624     270     LFO 1 Trig Sync
@@ -645,7 +677,7 @@ BYTE    HEX     INFO
 635     27B     
 636     27C     LFO 1 Smooth
 637     27D     
-638     27E     LFo 1 One Shot
+638     27E     LFO 1 One Shot
 639     27F     
 640     280     LFO Step 1 Low Byte
 641     281     LFO Step 1 High Byte
@@ -971,7 +1003,7 @@ BYTE    HEX     INFO
 961     3C1     
 962     3C2     
 963     3C3     
-964     3C4     Mod Matrix 32 Sc
+964     3C4     Mod Matrix 32 Src
 965     3C5     
 966     3C6     Mod Matrix 1 Dest [Off = 0]
 967     3C7     
@@ -2357,7 +2389,7 @@ BYTE    HEX     INFO
 2347    92B     
 2348    92C     UNKNOWN
 2349    92D     
-2350    92E     Env 2 Trig Source 1?   NOTE: This cannot be changed per manual
+2350    92E     Env 2 Trig Source 1?   	[NOTE: This cannot be changed per manual]
 2351    92F     
 2352    930     Env 2 Trig Source 2
 2353    931     

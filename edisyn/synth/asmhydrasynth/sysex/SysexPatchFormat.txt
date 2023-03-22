@@ -47,7 +47,7 @@ BYTE    HEX     INFO
 5       5       00?
 6       6       00?
 7       7       00?
-8       8       Category
+8       8       Category				[goes 1-32, not 0-31]
 9       9       Patch Name Start
 10      A       
 11      B       
@@ -673,7 +673,7 @@ BYTE    HEX     INFO
 631     277     
 632     278     LFO 1 Level Low Byte
 633     279     LFO 1 Level High Byte Byte
-634     27A     LFO 1 Steps
+634     27A     LFO 1 Steps					[These normally only go 2...64, but the Hydrasynth sets this to 0 when LFO Wave is not STEP]
 635     27B     
 636     27C     LFO 1 Smooth
 637     27D     

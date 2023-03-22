@@ -1372,11 +1372,11 @@ public class ASMHydrasynth extends Synth
         outer.add(vbox);
         
         // we use a special dial color here so as not to overwhelm the colored text
-        comp = new LabelledDial("Color", this, "color", Style.DIAL_UNSET_COLOR(), 0, 31)
+        comp = new LabelledDial("Color", this, "color", Style.DIAL_UNSET_COLOR(), 1, 32)
             {
             public String map(int value)
                 {
-                return "<html><font color=" + COLORS_HTML[value] + ">" + value + "</font></html>";
+                return "<html><font color=" + COLORS_HTML[value - 1] + ">" + value + "</font></html>";
                 }
             };
         outer.add(comp);
@@ -1416,6 +1416,17 @@ public class ASMHydrasynth extends Synth
     /** Verify that all the parameters are within valid values, and tweak them if not. */
     public void revise()
         {
+    	if (model.get("lfo1steps") < 2) // set by the Hydrasynth when disabled
+    		model.set("lfo1steps", 2);
+    	if (model.get("lfo2steps") < 2) // set by the Hydrasynth when disabled
+    		model.set("lfo2steps", 2);
+    	if (model.get("lfo3steps") < 2) // set by the Hydrasynth when disabled
+    		model.set("lfo3steps", 2);
+    	if (model.get("lfo4steps") < 2) // set by the Hydrasynth when disabled
+    		model.set("lfo4steps", 2);
+    	if (model.get("lfo5steps") < 2) // set by the Hydrasynth when disabled
+    		model.set("lfo5steps", 2);
+    		
         // check the easy stuff -- out of range parameters
         super.revise();
         
@@ -1682,7 +1693,7 @@ public class ASMHydrasynth extends Synth
             };
 
         VBox vbox = new VBox();
-        comp = new CheckBox("BPM Sync", this, "voicevibratobpm")
+        comp = new CheckBox("BPM Sync", this, "voicevibratobpmsync")
             {
             public void update(String key, Model model)
                 {
@@ -5210,6 +5221,8 @@ public class ASMHydrasynth extends Synth
 	int incomingPos;
 	byte[][] incoming = new byte[22][];
 	
+	public static final boolean REVERSE_ENGINEER = false;
+	
     public int parse(byte[] data, boolean fromFile)
     	{
     	if (data[1] == 0x7D) 
@@ -5233,19 +5246,28 @@ public class ASMHydrasynth extends Synth
 					try
 						{
 						byte[] result = Decode.decodePatch(incoming);
-						if (firstPatch == null)
+						if (REVERSE_ENGINEER)
 							{
-							System.err.println("INITIAL PATCH LOADED");
-							firstPatch = result;
+							if (firstPatch == null)
+								{
+								System.err.println("INITIAL PATCH LOADED");
+								firstPatch = result;
+								}
+							else 
+								{
+								System.err.println("DIFFERENCES");
+								diff(firstPatch, result);
+								}
+							incoming = new byte[22][];
+							incomingPos = 0;
+							return PARSE_SUCCEEDED;
 							}
-						else 
+						else
 							{
-    						System.err.println("DIFFERENCES");
-							diff(firstPatch, result);
+							incoming = new byte[22][];
+							incomingPos = 0;
+							return parseReal(result, fromFile);
 							}
-						incoming = new byte[22][];
-						incomingPos = 0;
-						return PARSE_SUCCEEDED;
 						}
 					catch (RuntimeException ex)
 						{
@@ -5355,13 +5377,391 @@ public class ASMHydrasynth extends Synth
             model.set("macro" + m + "name", String.valueOf(name));
             }
 
+        revise();
         return PARSE_SUCCEEDED;
         }
 
+	void set(String key, byte data)
+		{
+		if (!model.exists(key)) System.err.println("KEY NOT FOUND: " + key);
+		if (key.equals("prefxtype"))
+			{
+			System.err.println(key + " " + model.getMin(key) + " " + model.getMax(key) + " " + data);
+			}
+		if (model.getMin(key) < 0)	// signed two's complement
+			{
+			model.set(key, data);
+			}
+		else
+			{
+			model.set(key, data & 0xFF);
+			}
+		}
 
+	void set(String key, byte data, byte data1)
+		{
+		if (!model.exists(key)) System.err.println("KEY NOT FOUND: " + key);
+		if (key.equals("prefx1param5"))
+			{
+			System.err.println(key + " " + model.getMin(key) + " " + model.getMax(key) + " " + data + " " + data1);
+			}
+		if (model.getMin(key) < 0)	// signed two's complement
+			{
+			model.set(key, (short)((data & 0xFF) | ((data1 & 0xFF) << 8)));
+			}
+		else
+			{
+			model.set(key, ((data & 0xFF) | ((data1 & 0xFF) << 8)));
+			}
+		}
+
+    public int parseReal(byte[] data, boolean fromFile)
+        {
+        // BASICS
+		set("category", data[8]);
+        char[] name = new char[16];
+        for(int i = 0; i < 16; i++)
+            {
+            name[i] = (char)(data[9 + i]);
+            }
+        model.set("name", String.valueOf(name));
+		set("color", data[26]);
+		
+		// VOICE
+		set("voicepolyphony", data[30]);
+		set("voicedensity", data[32]);
+		set("voicedetune", data[34]);
+		set("voiceanalogfeel", data[36]);
+		set("voicerandomphase", data[38]);
+		set("voicestereomode", data[40]);
+		set("voicestereowidth", data[42]);
+		set("voicepitchbend", data[44]);
+		set("voicevibratoamount", data[46]);
+		set("voicevibratobpmsync", data[50]);
+		if (model.get("voicevibratobpmsync") == 0)
+			set("voicevibratoratesyncoff", data[48]);
+		else
+			set("voicevibratoratesyncon", data[48]);
+		set("voiceglide", data[52]);
+		set("voiceglidetime", data[54]);
+		set("voiceglidecurve", data[56]);
+		set("voiceglidelegato", data[58]);
+
+		// OSCS
+		for(int i = 1; i < 3; i++)
+			{
+			int p = (i == 1 ? 80 : 108);
+			set("osc" + i + "mode", data[p + 0]);
+			set("osc" + i + "type", data[p + 2], data[p + 2 + 1]);	// the wave
+			set("osc" + i + "semi", data[p + 4]);
+			set("osc" + i + "cent", data[p + 6]);
+			set("osc" + i + "keytrack", data[p + 8]);
+			set("osc" + i + "wavscan", data[p + 10], data[p + 10 + 1]);
+			for(int j = 0; j < 8; j++)
+				{
+				set("osc" + i + "wavscanwave" + (j + 1), data[p + 12 + j * 2], data[p + 12 + j * 2 + 1]);
+				}
+			}
+		set("osc3type", data[136], data[136 + 1]);	// the wave
+		set("osc3semi", data[138]);
+		set("osc3cent", data[140]);
+		set("osc3keytrack", data[142]);
+		
+		// MUTANTS
+		
+		for(int i = 1; i < 5; i++)
+			{
+			int p = (i == 1 ? 144 : (i == 2 ? 158 : (i == 3 ? 204 : 218)));
+			set("mutant" + i + "mode", data[p + 0]);
+			if (model.get("mutant" + i + "mode") == 2) // osc sync
+				set("mutant" + i + "sourceoscsync", data[p + 2]);
+			else	// we assume FM Linear or other
+				set("mutant" + i + "sourcefmlin", data[p + 2]);
+			set("mutant" + i + "ratio", data[p + 4], data[p + 4 + 1]);
+			set("mutant" + i + "depth", data[p + 6], data[p + 6 + 1]);
+			set("mutant" + i + "window", data[p + 8], data[p + 8 + 1]);
+			set("mutant" + i + "feedback", data[p + 10], data[p + 10 + 1]);
+			set("mutant" + i + "wet", data[p + 12], data[p + 12 + 1]);
+			}
+
+		// MUTANT WARPS
+		for(int i = 1; i < 5; i++)
+			{
+			int p = (i == 1 ? 172 : (i == 2 ? 188 : (i == 3 ? 232 : 248)));
+			for(int j = 0; j < 8; j++)
+				{
+				set("mutant" + i + "warp" + (j + 1), data[p + j * 2], data[p + j * 2 + 1]);
+				}
+			}
+			
+		// RING MOD NOISE
+		set("ringmodsource1", data[264]);
+		set("ringmodsource2", data[266]);
+		set("ringmoddepth", data[268], data[269]);
+		set("noisetype", data[272]);
+		
+		// MIXER
+		for(int i = 0; i < 3; i++)
+			{
+			set("mixerosc" + (i + 1) + "vol", data[274 + i * 2], data[274 + i * 2 + 1]);
+			set("mixerosc" + (i + 1) + "pan", data[286 + i * 2], data[286 + i * 2 + 1]);
+			set("mixerosc" + (i + 1) + "filterratio", data[292 + i * 2], data[292 + i * 2 + 1]);
+			}		
+		set("mixerringmodvol", data[280], data[280 + 1]);
+		set("mixernoisevol", data[282], data[282 + 1]);
+		set("mixerringmodpan", data[298], data[298 + 1]);
+		set("mixernoisepan", data[300], data[300 + 1]);
+		set("mixerringmodfilterratio", data[304], data[304 + 1]);
+		set("mixernoisefilterratio", data[306], data[306 + 1]);
+
+		// FILTERS
+		set("mixerfilterrouting", data[302]);
+		set("filter1type", data[308]);						// FIXME: Values are out of order, will this affect us?
+		set("filter1cutoff", data[310], data[310 + 1]);
+		set("filter1resonance", data[312], data[312 + 1]);
+		set("filter1special", data[314], data[314 + 1]);
+		set("filter1env1amount", data[316], data[316 + 1]);
+		set("filter1lfo1amount", data[318], data[318 + 1]);
+		set("filter1velenv", data[320], data[320 + 1]);
+		set("filter1keytrack", data[322], data[322 + 1]);
+		set("filter1drive", data[326], data[326 + 1]);
+		set("filter1positionofdrive", data[328]);
+		set("filter1vowelorder", data[330]);
+
+		set("filter2morph", data[332], data[332 + 1]);
+		set("filter1cutoff", data[334], data[334 + 1]);
+		set("filter1resonance", data[336], data[336 + 1]);
+		set("filter1env1amount", data[338], data[338 + 1]);
+		set("filter1lfo1amount", data[340], data[340 + 1]);
+		set("filter1velenv", data[342], data[342 + 1]);
+		set("filter1keytrack", data[344], data[344 + 1]);
+		
+		// AMPLIFIER
+		set("amplfo2amount", data[346], data[346 + 1]);
+		set("ampvelenv", data[348], data[348 + 1]);
+		set("amplevel", data[350], data[350 + 1]);
+
+		// PRE-FX
+		set("prefxtype", data[352]);
+		set("prefxsidechain", data[354]);
+		int prefxtype = Math.max(0, Math.min(data[352], 8)); 	// bound to 0 ... 8
+		if (prefxtype != 0) // skip bypass
+			{
+			for(int i = 0; i < 5; i++)
+				{
+				int p = 356;
+				set("prefx" + prefxtype + "param" + (i + 1), data[p + i * 2], data[p + i * 2 + 1]);
+				}
+			}
+		set("prefxwet", data[366], data[366 + 1]);
+
+		// DELAY
+		set("delaytype", data[368], data[368 + 1]);
+		set("delaybpmsync", data[370], data[370 + 1]);
+		if (model.get("delaybpmsync") == 0)
+			set("delaytimesyncoff", data[372], data[372 + 1]);
+		else
+			set("delaytimesyncon", data[372], data[372 + 1]);
+		set("delayfeedback", data[374], data[374 + 1]);
+		set("delayfeedtone", data[376], data[376 + 1]);
+		set("delaywettone", data[378], data[378 + 1]);
+		
+		// REVERB
+		set("reverbtype", data[384], data[384 + 1]);
+		set("reverbtime", data[388], data[388 + 1]);
+		set("reverbtone", data[390], data[390 + 1]);
+		set("reverbhidamp", data[392], data[392 + 1]);
+		set("reverblodamp", data[394], data[394 + 1]);
+		set("reverbpredelay", data[396], data[396 + 1]);
+		set("reverbwet", data[398], data[398 + 1]);
+
+		// POST-FX
+		set("postfxtype", data[400]);
+		set("postfxsidechain", data[402]);
+		int postfxtype = Math.max(0, Math.min(data[400], 8)); 	// bound to 0 ... 8
+		if (postfxtype != 0) // skip bypass
+			{
+			for(int i = 0; i < 5; i++)
+				{
+				int p = 404;
+				set("postfx" + postfxtype + "param" + (i + 1), data[p + i * 2], data[p + i * 2 + 1]);
+				}
+			}
+		set("postfxwet", data[414], data[414 + 1]);
+
+		// RIBBON
+		set("ribbonmode", data[436]);
+		set("ribbonkeyspan", data[438]);
+		set("ribbonoctave", data[440]);
+		set("ribbonhold", data[442]);					// Not in the standard list
+		set("ribbonquantize", data[444]);
+		set("ribbonglide", data[446]);
+		set("ribbonmodcontrol", data[448]);				// theremin wheel volume
+
+		// MISC
+		set("voicewarmmode", (byte)(data[470] & 0x1));
+		set("voicesnap", (byte)((data[470] >>> 1) & 0x1));
+		set("filter2type", data[472]);
+		
+		// ENVELOPES
+		for(int i = 0; i < 5; i++)
+			{
+			int p = (i == 0 ? 478 : (i == 1 ? 506 : (i == 2 ? 534 : (i == 3 ? 562 : 590))));
+			set("env" + (i + 1) + "bpmsync", data[p + 8]);
+			if (model.get("env" + (i + 1) + "bpmsync") == 0) // off
+				{
+				set("env" + (i + 1) + "delaysyncoff", data[p + 10], data[p + 10 + 1]);
+				set("env" + (i + 1) + "attacksyncoff", data[p + 0], data[p + 0 + 1]);
+				set("env" + (i + 1) + "holdsyncoff", data[p + 12], data[p + 12 + 1]);
+				set("env" + (i + 1) + "decaysyncoff", data[p + 2], data[p + 2 + 1]);
+				set("env" + (i + 1) + "releasesyncoff", data[p + 6], data[p + 6 + 1]);
+				}
+			else
+				{
+				set("env" + (i + 1) + "delaysyncon", data[p + 10], data[p + 10 + 1]);
+				set("env" + (i + 1) + "attacksyncon", data[p + 0], data[p + 0 + 1]);
+				set("env" + (i + 1) + "holdsyncon", data[p + 12], data[p + 12 + 1]);
+				set("env" + (i + 1) + "decaysyncon", data[p + 2], data[p + 2 + 1]);
+				set("env" + (i + 1) + "releasesyncon", data[p + 6], data[p + 6 + 1]);
+				}
+			set("env" + (i + 1) + "sustain", data[p + 4], data[p + 4 + 1]);
+			set("env" + (i + 1) + "atkcurve", data[p + 14], data[p + 14 + 1]);
+			set("env" + (i + 1) + "deccurve", data[p + 16], data[p + 16 + 1]);
+			set("env" + (i + 1) + "relcurve", data[p + 18], data[p + 18 + 1]);
+			set("env" + (i + 1) + "legato", data[p + 20]);
+			set("env" + (i + 1) + "reset", data[p + 22]);		// can only be set if legato is unset, hope this is okay
+			set("env" + (i + 1) + "freerun", data[p + 24]);		// can only be set if legato is unset, hope this is okay
+			}
+			
+		// LFOS
+		for(int i = 0; i < 5; i++)
+			{
+			int p = (i == 0 ? 618 : (i == 1 ? 656 : (i == 2 ? 694 : (i == 3 ? 732 : 770))));
+			set("lfo" + (i + 1) + "wave", data[p + 0]);
+			set("lfo" + (i + 1) + "bpmsync", data[p + 4]);
+			set("lfo" + (i + 1) + "trigsync", data[p + 6]);
+			if (model.get("lfo" + (i + 1) + "bpmsync") == 0) // off
+				{
+				set("lfo" + (i + 1) + "ratesyncoff", data[p + 2], data[p + 2 + 1]);
+				set("lfo" + (i + 1) + "delaysyncoff", data[p + 8]);
+				set("lfo" + (i + 1) + "fadeinsyncoff", data[p + 10]);
+				}
+			else
+				{
+				set("lfo" + (i + 1) + "ratesyncon", data[p + 2], data[p + 2 + 1]);
+				set("lfo" + (i + 1) + "delaysyncon", data[p + 8]);
+				set("lfo" + (i + 1) + "fadeinsyncon", data[p + 10]);
+				}
+			set("lfo" + (i + 1) + "phase", data[p + 12], data[p + 12 + 1]);
+			set("lfo" + (i + 1) + "level", data[p + 14], data[p + 14 + 1]);
+			set("lfo" + (i + 1) + "steps", data[p + 16]);
+			set("lfo" + (i + 1) + "smooth", data[p + 18]);
+			set("lfo" + (i + 1) + "oneshot", data[p + 20]);
+			// First 8 steps
+			for(int j = 0; j < 8; j++)
+				{
+				set("lfo" + (i + 1) + "step" + (j + 1), data[p + 22 + j * 2], data[p + 22 + j * 2 + 1]);
+				}
+			}
+			
+		// ARPEGGIATOR
+		set("arpdivision", data[810]);
+		set("arpswing", data[812]);
+		set("arpgate", data[814]);
+		set("arpoctmode", data[816]);
+		set("arpoctave", data[818]);
+		set("arpmode", data[820]);
+		set("arplength", data[822]);
+		set("arptaptrig", data[824]);
+		set("arpphrase", data[826]);
+		set("arpratchet", data[828]);
+		set("arpchance", data[830]);
+
+		// MOD MATRIX
+		for(int i = 0; i < 32; i++)
+			{
+			set("modmatrix" + (i + 1) + "depth", data[838 + i * 2], data[838 + i * 2 + 1]);
+			}
+		for(int i = 0; i < 32; i++)
+			{
+			set("modmatrix" + (i + 1) + "modsource", data[902 + i * 2]);
+			}
+		for(int i = 0; i < 32; i++)
+			{
+			set("modmatrix" + (i + 1) + "modtarget", data[966 + i * 2]);
+			}
+			
+		// FIXME: Starting at 1032, there may be a fourth mod matrix thingamabob
+			
+		// MACRO
+		for(int i = 0; i < 8; i++)
+			{
+			int p = 1094 + i * 16;
+			for(int j = 0; j < 8; j++)
+				{
+				set("macro" + (i + 1) + "depth" + (j + 1), data[p + j * 2], data[p + j * 2 + 1]);
+				}
+			}
+		for(int i = 0; i < 8; i++)
+			{
+			int p = 1222 + i * 16;
+			for(int j = 0; j < 8; j++)
+				{
+				set("macro" + (i + 1) + "target" + (j + 1), data[p + j * 2]);
+				}
+			}
+		for(int i = 0; i < 8; i++)
+			{
+			int p = 1350 + i * 16;
+			for(int j = 0; j < 8; j++)
+				{
+				set("macro" + (i + 1) + "buttonvalue" + (j + 1), data[p + j * 2], data[p + j * 2 + 1]);
+				}
+			}
+		for(int i = 0; i < 8; i++)
+			{
+			set("macro" + (i + 1) + "enabled", data[1478 + 16 * i]);
+			}
+		int offset = 1630;
+		for(int i = 0; i < 8; i++)
+			{
+			char[] macroname = new char[8];
+			for(int j = 0; j < 8; j++)
+				{
+				macroname[j] = (char)(data[offset + j]);
+				}
+			model.set("macro" + (i + 1) + "name", String.valueOf(macroname));
+			offset += 17;			// NO REALLY, it's *17*.  Something strange going on here.
+			}
+
+
+		// LFO STEPS
+		
+		// Steps 9 to 64
+		for(int i = 0; i < 5; i++)
+			{
+			for(int j = 0; j < 56; j++)  // FIXME: is this right?
+				{
+				set("lfo" + (i + 1) + "step" + (j + 9), data[1770 + i * 56 * 2 + j * 2], data[1770 + i * 56 * 2 + j * 2 + 1]);
+				}
+			}
+
+		
+		// ENV TRIG SOURCES
+		// FIXME: Env 2 Trig Source 1 ought not be set
+		for(int i = 0; i < 5; i++)
+			{
+			set("env" + (i + 1) + "trigsrc1", data[2340 + i * 10], data[2340 + i * 10 + 1]);
+			set("env" + (i + 1) + "trigsrc2", data[2342 + i * 10], data[2342 + i * 10 + 1]);
+			set("env" + (i + 1) + "trigsrc3", data[2344 + i * 10], data[2344 + i * 10 + 1]);
+			set("env" + (i + 1) + "trigsrc4", data[2346 + i * 10], data[2346 + i * 10 + 1]);
+			}
+		
+        revise();
+        return PARSE_SUCCEEDED;
+		}
 
     // The Hydrasynth always sends both the MSB and LSB
-
     public boolean getRequiresNRPNMSB() { return true; }
     public boolean getRequiresNRPNLSB() { return true; }
 
@@ -5960,7 +6360,7 @@ public class ASMHydrasynth extends Synth
         "env3bpmsync",                                  
         "env4bpmsync",                                  
         "env5bpmsync",                                  
-        "voicevibratobpm",      
+        "voicevibratobpmsync",      
         };
         
     public static final String[] wavescanParameters = 
@@ -8058,7 +8458,7 @@ public class ASMHydrasynth extends Synth
     "voicevibratoratesyncon",
     "voicerandomphase",
     "voicewarmmode",
-    "voicevibratobpm",     
+    "voicevibratobpmsync",     
     "voicesnap",        													// Not Documented                     
     };
     
@@ -9090,7 +9490,7 @@ public class ASMHydrasynth extends Synth
     8127,           // 3f 3f            "voicevibratoratesyncon",
     8094,           // 3f 1e            "voicerandomphase",
     8143,           // 3f 4f            "voicewarmmode",
-    8137,           // 3f 49            "voicevibratobpm",
+    8137,           // 3f 49            "voicevibratobpmsync",
     8117,			// 3f 35			"voicesnap",
     };
         

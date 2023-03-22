@@ -11,9 +11,9 @@ requires more than 8 bits, the even byte position defines the 8-bit LSB
 of the parameter and the (following) odd byte position defines the 8-bit
 MSB of the parameter.
 
-Strings are one byte per character, and may take up odd space (see the
-apparently 17-byte Macro Name space for example).  A few parameters seem
-to be crammed into single byte, such as Category (byte 8), whose "MSB"
+Strings are one byte per character, and may take up and odd amount of space 
+(see the apparently 17-byte Macro Name space for example).  A few parameters 
+seem to be crammed into single byte, such as Category (byte 8), whose "MSB"
 space is used by the Patch Name Start.  Also see byte 470, which uses 
 bitpacking to stuff both Warm Mode and Snap into the same byte.
 

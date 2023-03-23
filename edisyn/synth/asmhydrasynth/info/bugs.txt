@@ -266,16 +266,44 @@ by 8, [0...2880] by 8, [128...8000] by 8, [0...4800] by 8, [408...8160],
 [1...400], [5...560], etc.  None of this is documented.
 
 
-16. RIBBON MOD HOLD MISSING NRPN
+16. RIBBON MOD HOLD IS ABSOLUTE
 
-I have been informed that Ribbon Mod Hold is stored per-patch.
-However it does not appear to have an NRPN assigned to it.
+Ribbon Hold should apply to BOTH Pitch Bend and to Mod Wheel.  And it 
+should be *relative*, but .  That is, if you let go of the ribbon, it 
+should stay where it is (that's happening now), AND if you press AGAIN, 
+it should be changed relative to your new finger position, NOT jump to 
+that position (that's NOT happening now).  
+
+For example, if you have Hold on, and you slide your finger down the 
+strip to the bottom, it should bend down to the bottom.  When you let 
+go, it stays bent down.  When you reapply your finger to (say) the 
+middle of the strip, it should NOT pop up to  the finger position.  
+If you bend down from the middle of the strip, it should continue to 
+bend down FURTHER than from where you had left it (subject to bounds 
+you have defined of course).
 
 
 17. MISSING VOICE PARAMETERS
 
-It appears that Voice Snap is a per-patch parameter, and its NRPN is 0x3F 0x35.  But this is not documented.
+It appears that Voice Snap is a per-patch parameter, and its NRPN is 
+0x3F 0x35.  But this is not documented.
 
-Additionally, Voice Scale and Voice Key Lock also appear to be per-patch parameters (I think?) but they do not emit an NRPN message that indicates their status: instead they emit a single NRPN message 0x3 0x45, always fixed to 1, and then emit 0x3F 0x52 with an MSB of X and an LSB of Y indicating that note X will be mapped to note Y.  This doesn't help nail down which scale it is, and doesn't help at all for microtuned scales.
+Additionally, Voice Scale and Voice Key Lock also appear to be per-patch 
+parameters (I think?) but they do not emit an NRPN message that indicates 
+their status: instead they emit a single NRPN message 0x3 0x45, always 
+fixed to 1, and then emit 0x3F 0x52 with an MSB of X and an LSB of Y 
+indicating that note X will be mapped to note Y.  This doesn't help nail 
+down which scale it is, and doesn't help at all for microtuned scales.
 
+
+18. INVALID NRPN PARAMETER
+
+Envelope 2 Trigger Source 1 has an NRPN parameter (0x3A 0x64), even 
+though it cannot be changed per the manual.
+
+
+19. VOWEL ORDER IGNORED
+
+The Hydrasynth emits NRPN for Filter 1 Vowel Order (0x3F 0x2E), but 
+ignores it if it receives it.
 

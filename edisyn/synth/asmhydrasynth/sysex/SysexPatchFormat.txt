@@ -2,6 +2,14 @@ Below is a little spreadsheet of sorts to be used as a record for
 reverse engineering the locations of parameters in a Hydrasynth
 patch sysex dump.
 
+The patch sysex data is exposed by decoding a series of patch dump
+sysex messages.  This procedure is described here:
+
+https://github.com/eclab/edisyn/blob/master/edisyn/synth/asmhydrasynth/sysex/SysexEncoding.txt
+
+
+OVERVIEW AND EXPLANATION OF TABLE
+
 It appears that the first eight bytes are NOT part of the patch, but
 rather are metadata.
 

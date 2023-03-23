@@ -1,8 +1,10 @@
 KNOWN BUGS
 
 These are bugs, errors, and misfeatures that I have identified and 
-reported to ASM as of February, 2023, Hydrasynth firmware version 1.5.5.  
-I am not aware of any of them having been fixed.
+reported to ASM as of March, 2023, Hydrasynth firmware version 1.5.5.  
+I am not aware of any of them having been fixed in 1.5.5.  I do not
+know if any have been fixed in 2.0.0.
+
 
 Note that many of these errors concern NRPN, parameter display, and 
 sysex.  This is because I am building a patch editor, so I have triggered 

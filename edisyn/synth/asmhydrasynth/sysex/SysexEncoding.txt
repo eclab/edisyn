@@ -1,5 +1,5 @@
 HYDRASYNTH SYSEX ENCODING	
-[Incomplete but Usable Reverse Engineering as of March 21]
+[Incomplete but Usable Reverse Engineering as of March 23]
 
 
 
@@ -73,7 +73,7 @@ WHAT CAN BE DONE
 
 The following can definitely be done over sysex:
 
-	- Handshaking (though this doesn't seem very important)
+	- Handshaking
 	- Request and download a patch from patch memory
 	- Request and download the names of patches in a bank
 	- Write patch to patch memory

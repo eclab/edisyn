@@ -420,7 +420,9 @@ The raw values for these messages are below. You must take each value
 and encode it as described earlier in order to produce the proper
 sysex message.
 
-
+<->	0. HANDSHAKE, consisting of Handshake and Handshake Response
+	[See first two sysex commands in "HANDSHAKING" above]
+	[Optional, but it's what the Manager does]
 
 ->	1. A Header
 		18 00 

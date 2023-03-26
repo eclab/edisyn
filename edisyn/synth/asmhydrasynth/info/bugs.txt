@@ -309,3 +309,18 @@ though it cannot be changed per the manual.
 The Hydrasynth emits NRPN for Filter 1 Vowel Order (0x3F 0x2E), but 
 ignores it if it receives it.
 
+
+20. GLOBAL VS PATCH PARAMETERS
+
+Unlike other synthesizers, the Hydrasynth does not distinguish between
+options which set global parameters, options which perform functions,
+and options which set patch parameters.  Thus you cannot at first glance
+determine which of the changes you've made will be saved when you save
+out a patch.  In most synthesizers, global options are sequestered
+in a submenu or area called "Global" or "System" or whatnot.  On the
+Hydrasynth a great many of them are mixed in with patch parameters in
+some kind of unholy bouillabaisse.  It can be very frustrating to set
+a parameter only to discover later that it wasn't saved with your patch.
+There's an easy fix to this: just add some little indication in the
+OLED screens that a given parameter is global, or is some kind of
+function, rather than is a patch parameter proper.

@@ -107,26 +107,26 @@ BYTE    HEX     INFO
 57      39      
 58      3A      Legato
 59      3B      
-60      3C      UNNOWN START
+60      3C      Scale Key Lock
 61      3D      
-62      3E      
+62      3E      Scale Type 		[0=custom, 1=Chromatic, 2...38=standard, 39-70?=Microtonal]
 63      3F      
-64      40      
+64      40      Scale Note 2  	[1...12, semitones Relative to Sale Key Lock, which is Scale Note 1]
 65      41      
-66      42      
+66      42      Scale Note 3
 67      43      
-68      44      
+68      44      Scale Note 4
 69      45      
-70      46      
+70      46      Scale Note 5
 71      47      
-72      48      
+72      48      Scale Note 6
 73      49      
-74      4A      
+74      4A      Scale Note 7
 75      4B      
-76      4C      
+76      4C      UNKNOWN
 77      4D      
-78      4E      
-79      4F      UNNOWN END
+78      4E      UNKNNOWN
+79      4F      
 80      50      Osc 1 Mode
 81      51      
 82      52      Osc 1 Wave
@@ -514,9 +514,9 @@ BYTE    HEX     INFO
 464     1D0     
 465     1D1     
 466     1D2     
-467     1D3     
-468     1D4     
-469     1D5     UNKNOWN END
+467     1D3     UNKNOWN END
+468     1D4     Arp Clock Lock
+469     1D5     
 470     1D6     Warm Mode bit 0		Snap bit 1
 471     1D7     
 472     1D8     Filter 2 Type					[An odd location: perhaps wasadded later]
@@ -879,9 +879,9 @@ BYTE    HEX     INFO
 829     33D     
 830     33E     Arpeggiator Chance
 831     33F     
-832     340     UNKNOWN
+832     340     Arp Enable
 833     341     
-834     342     UNKNOWN
+834     342     Arp Latch
 835     343     
 836     344     UNKNOWN
 837     345     
@@ -1525,9 +1525,9 @@ BYTE    HEX     INFO
 1475    5C3     
 1476    5C4     
 1477    5C5     
-1478    5C6     Macro 1 ENABLED			[ NOTE There is no NRPN for this.]
+1478    5C6     Macro 1 Destination Category 1 [0=0ff]		// Note: it's not clear this is particularly useful?
 1479    5C7     
-1480    5C8     UNKNOWN START
+1480    5C8     Macro 1 Destination Category 2
 1481    5C9     
 1482    5CA     
 1483    5CB     
@@ -1539,9 +1539,9 @@ BYTE    HEX     INFO
 1489    5D1     
 1490    5D2     
 1491    5D3     
-1492    5D4     UNKNOWN END ETC.
+1492    5D4     Macro 1 Destination Category 8
 1493    5D5     
-1494    5D6     Macro 2 ENABLED?  Strange
+1494    5D6     Macro 2 Destination Category 1
 1495    5D7     
 1496    5D8     
 1497    5D9     
@@ -1637,7 +1637,7 @@ BYTE    HEX     INFO
 1587    633     
 1588    634     
 1589    635     
-1590    636     Macro 8 ENABLED ?
+1590    636     Macro 8 Destination Category 1
 1591    637     
 1592    638     
 1593    639     
@@ -1651,7 +1651,7 @@ BYTE    HEX     INFO
 1601    641     
 1602    642     
 1603    643     
-1604    644     
+1604    644     Macro 8 Destination Category 8
 1605    645     
 1606    646     
 1607    647     

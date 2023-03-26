@@ -1,0 +1,13 @@
+March 25, 2023 Hydrasynth sysex reverse engineering notes.
+
+Looks like we had forgotten a few parameters, or more correctly, didn't realize
+they were part of the patch (assumed they were global):
+
+Arp Clock Lock (clcklock)
+Arp Enable
+Arp Latch
+Scale Key Lock
+Scale Type
+Scale Notes 2...7
+
+These don't have NRPN parameters but do appear to have slots in the patch sysex.

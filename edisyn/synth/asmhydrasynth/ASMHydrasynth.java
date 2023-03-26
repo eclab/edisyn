@@ -65,7 +65,20 @@ public class ASMHydrasynth extends Synth
     public static final String[] LO_FI_SAMPLES = { "44100", "22050", "14700", "11025", "8820", "7350", "6300", "5513", "4900", "4410", "4009", "3675", "3392", "3150", "2940", "2756" }; 
     public static final String[] SIDECHAINS = { "Off", "BPM Duck", "Tap", "Mod In 1", "Mod In 2" };
     public static final char[] INVALID_PATCH_NAME_CHARS = { '"', '*', '\\', '|', '/', '<', '>', '?',  ';', '~' };
-    
+    public static final String[] NOTES = { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
+
+    public static final String[] SCALES = 
+    	{ 	
+    	"Custom Edit",
+		"Chromatic", 
+		//// STANDARD SCALES START HERE
+		"S Major", "S BeBop Major", "S BeBop", "S Mixolydian", "S Harmonic Major", "S Lydian", "S Lydian Augmented", "S Acoustic", "S Pentatonic Major", "S Locrian Major", "S Prometheus", "S Whole Tone", "S Melodic Minor", "S Half Diminished", "S Aeolian", "S Dorian", "S Harmonic Minor",
+		"S Algerian", "S Gypsy", "S Hungarian", "S Ukranian", "S Diminished Whole Tone", "S Locrian", "S Neapolitan Major", "S Neapolitan Minor", "S Phrygian", "S Flamenco", "S Persian", "S Phrygian Dominant", "S Enigmatic", "S Tritone", "S In", "S Insen", "S Augmented", "S Blues", "S Pentatonic Minor", "S Hirajoshi",
+		//// MICROTUNE SCALES START HERE
+		"M 1/4 Tone", "M 19 Tone", "M 31 Tone", "M Al-Farabi SynChrom", "M Arabic 12-Tone", "M Archytas Chromatic", "M Archytas Enharmonic", "M Belafon Singapore", "M Belafon West Africa", "M Bohlen 11-Tone", "M Chinese 300 B.C.", "M Chinese DiziFlute", "M Crysanthos Byzantine", "M Dekany 1 3 5 11-3", "M Dekany 1 3 5 7 11",
+		"M Diaphonic 12-Tone", "M Eikosany 1 3-11", "M Greeg Aeolic", "M H. Partch 43-Note", "M Harmonic A 1-60", "M Hexany 1 3 5 9", "M Hexany 1 3 7 11", "M Hexany 13 11 13", "M Indian Raga", "M Japanese Koto", "M Just Major C", "M Just Minor C", "M Mean Tone C", "M Pelog / Slendro", "M Sk8board 17-65 Tun", "M W. Carlos Harmonic" 
+		};
+
     public static final int[] LFO_FADE_INS_SYNC_ON =            // all the repetition here is just nuts
         {
         0, 22, 45, 68, 91, 115, 138, 161, 184, 207, 231, 254, 277, 300, 324, 346, 
@@ -1165,7 +1178,7 @@ public class ASMHydrasynth extends Synth
         vbox.add(addMixer(Style.COLOR_B()));
         
         hbox = new HBox();
-        hbox.add(addArp(Style.COLOR_C()));
+        hbox.add(addScale(Style.COLOR_C()));
         hbox.addLast(addRibbon(Style.COLOR_C()));
         vbox.add(hbox);
                 
@@ -1178,9 +1191,10 @@ public class ASMHydrasynth extends Synth
         vbox.add(addMutant(2, Style.COLOR_A()));
         vbox.add(addMutant(3, Style.COLOR_B()));
         vbox.add(addMutant(4, Style.COLOR_B()));
-
+		vbox.add(addArp(Style.COLOR_C()));
+		
         soundPanel.add(vbox, BorderLayout.CENTER);
-        addTab("Mutant", soundPanel);
+        addTab("Mutant Arp", soundPanel);
         
         soundPanel = new SynthPanel(this);
         vbox = new VBox();
@@ -2002,6 +2016,88 @@ public class ASMHydrasynth extends Synth
         }
 
 
+    public JComponent addScale(Color color)
+    	{
+        Category category = new Category(this, "Scale", color);
+
+        JComponent comp;
+        String[] params;
+        final HBox hbox = new HBox();
+
+		final HBox scaleEditBox = new HBox();
+		
+		for(int i = 2; i <= 8; i++)
+			{
+			comp = new LabelledDial("Note " + i, this, "scalenote" + i, color, 0, 12)
+				{
+				public String map(int value)
+					{
+					if (value == 0) return "Off";
+					else return NOTES[(model.get("scalekeylock") + value - 1) % 12];
+					}
+				};
+			scaleEditBox.add(comp);
+			}
+		
+		final JComponent scaleEditBoxStrut = Strut.makeStrut(scaleEditBox);
+			
+		LabelledDial keyLock = new LabelledDial("Key Lock", this, "scalekeylock", color, 1, 12)
+			{
+			public String map(int value)
+				{
+				return NOTES[value];
+				}
+				
+			public void update(String key, Model model)
+                {
+                super.update(key, model);
+                scaleEditBox.repaint();
+				}
+			};
+			
+		final JComponent keyLockStrut = Strut.makeStrut(keyLock);
+
+        VBox vbox = new VBox();
+        params = SCALES;
+        comp = new Chooser("Type", this, "scaletype", params)	
+        	{
+			public void update(String key, Model model)
+                {
+                super.update(key, model);
+                int val = model.get(key);
+                hbox.remove(keyLock);
+                hbox.remove(scaleEditBox);
+                hbox.remove(keyLockStrut);
+                hbox.remove(scaleEditBoxStrut);
+                
+                if (val != 1 && val <= 38)	// not chromatic or microtonal
+                	{
+                	hbox.add(keyLock);
+                	if (val == 0)		// scale edit
+                		{
+                		hbox.addLast(scaleEditBox);
+                		}
+                	else
+                		{
+                		hbox.addLast(scaleEditBoxStrut);
+                		}
+                	}
+                else
+                	{
+                	hbox.add(keyLockStrut);
+                	hbox.addLast(scaleEditBoxStrut);
+                	}
+                hbox.revalidate();
+                hbox.repaint();
+				}
+        	};
+        vbox.add(comp);
+        hbox.add(vbox);
+
+	    category.add(hbox, BorderLayout.CENTER);
+        return category;
+    	}
+
     String formatRatio(double val)
         {
         val = roundEven(val * 1000);
@@ -2010,7 +2106,7 @@ public class ASMHydrasynth extends Synth
         String s = null;
         return "" + (v / 1000) + "." + String.format("%03d", (v % 1000));
         }
-
+        
     public JComponent addMutant(int mut, Color color)
         {
         Category category = new Category(this, "Mutant " + mut + "   (Oscillator " + (mut < 3 ? "1)" : "2)"), color);
@@ -2236,14 +2332,14 @@ public class ASMHydrasynth extends Synth
  
         final HBox thereminBox = new HBox();
        	VBox vbox = new VBox(); 
-        comp = new CheckBox("Theremin Quantize", this, "ribbonquantize");
+        comp = new CheckBox("Quantize", this, "ribbonquantize");
         vbox.add(comp);
 
-        comp = new CheckBox("Theremin Wheel Volume", this, "ribbonmodcontrol");
+        comp = new CheckBox("Wheel Volume", this, "ribbonmodcontrol");
         vbox.add(comp);
         thereminBox.add(vbox);
 
-        comp = new LabelledDial("Theremin", this, "ribbonoctave", color, 0, 8)
+        comp = new LabelledDial("Octave Shift", this, "ribbonoctave", color, 0, 8)
             {
             public boolean isSymmetric() { return true; }
             public String map(int value)
@@ -2251,11 +2347,9 @@ public class ASMHydrasynth extends Synth
                 return "" + (value - 4);
                 }
             };
-        ((LabelledDial)comp).addAdditionalLabel("Octave Shift");
         thereminBox.add(comp);
 
-        comp = new LabelledDial("Theremin", this, "ribbonglide", color, 0, 127);
-        ((LabelledDial)comp).addAdditionalLabel("Glide");
+        comp = new LabelledDial("Glide", this, "ribbonglide", color, 0, 127);
         thereminBox.add(comp);
         
         final CheckBox ribbonHold = new CheckBox("Hold", this, "ribbonhold");
@@ -4054,11 +4148,7 @@ public class ASMHydrasynth extends Synth
             	}
             };
         vbox.add(comp);
-        
-        comp = new CheckBox("Enabled", this, "macro" + macro + "enabled");
-        vbox.add(comp);
-        
-        hbox.add(vbox);
+                hbox.add(vbox);
                 
         vbox = new VBox();
         for(int i = 1; i <= 8; i+= 2)
@@ -4140,7 +4230,28 @@ public class ASMHydrasynth extends Synth
         HBox hbox = new HBox();
         
         VBox vbox = new VBox(); 
-        params = ARP_MODES;
+
+        comp = new CheckBox("Enable", this, "arpenable");
+        vbox.add(comp);
+
+        comp = new CheckBox("Tap Trig", this, "arptaptrig");
+        ((CheckBox)comp).addToWidth(1);
+        vbox.add(comp);
+
+        hbox.add(vbox);
+        vbox = new VBox();
+
+        comp = new CheckBox("Clock Lock", this, "arpclklock");
+        ((CheckBox)comp).addToWidth(1);
+        vbox.add(comp);
+
+        comp = new CheckBox("Latch", this, "arplatch");
+        vbox.add(comp);
+
+        hbox.add(vbox);
+        vbox = new VBox();
+
+       	params = ARP_MODES;
         comp = new Chooser("Mode", this, "arpmode", params);
         vbox.add(comp);
 
@@ -4150,14 +4261,13 @@ public class ASMHydrasynth extends Synth
                 
         hbox.add(vbox);
         vbox = new VBox();
-                
+
         params = ARP_DIVISIONS;
         comp = new Chooser("Division", this, "arpdivision", params);
         vbox.add(comp);
 
-        comp = new CheckBox("Tap Trig", this, "arptaptrig");
-        vbox.add(comp);
         hbox.add(vbox);
+                
         
         comp = new LabelledDial("Octave", this, "arpoctave", color, 1, 4);
         hbox.add(comp);
@@ -4483,7 +4593,7 @@ public class ASMHydrasynth extends Synth
         // There is no NRPN for these items
         if (key.equals("color") || 
         	key.equals("category") || 
-        	(key.startsWith("macro") && (key.endsWith("name") || key.endsWith("enabled"))) || 
+        	(key.startsWith("macro") && (key.endsWith("name"))) || 
         	key.equals("name"))
             {
             return new Object[0];
@@ -4901,8 +5011,14 @@ public class ASMHydrasynth extends Synth
             }
         else if (key.startsWith("arp"))
             {
-            // interesting that v doesn't start with 0.  Not sure why
-            if (key.equals("arpdivision"))
+            if (key.equals("arpenable"))
+                {
+                p = p("arpdivision");
+                v = 0;
+                w = val;
+                val = v * 128 + w;
+                }
+            else if (key.equals("arpdivision"))
                 {
                 p = p("arpdivision");
                 v = 1;
@@ -5221,7 +5337,7 @@ public class ASMHydrasynth extends Synth
 	int incomingPos;
 	byte[][] incoming = new byte[22][];
 	
-	public static final boolean REVERSE_ENGINEER = false;
+	public static final boolean REVERSE_ENGINEER = true;
 	
     public int parse(byte[] data, boolean fromFile)
     	{
@@ -5381,6 +5497,7 @@ public class ASMHydrasynth extends Synth
         return PARSE_SUCCEEDED;
         }
 
+/*
 	void set(String key, byte data)
 		{
 		if (!model.exists(key)) System.err.println("KEY NOT FOUND: " + key);
@@ -5414,74 +5531,127 @@ public class ASMHydrasynth extends Synth
 			model.set(key, ((data & 0xFF) | ((data1 & 0xFF) << 8)));
 			}
 		}
+*/
+
+	void set1(String key, byte[] data, int pos, int bit)
+		{
+		if (!model.exists(key)) System.err.println("KEY NOT FOUND: " + key);
+		model.set(key, (data[pos] >>> bit) & 0x01);
+		}
+
+	void set1(String key, byte[] data, int pos)
+		{
+		if (!model.exists(key)) System.err.println("KEY NOT FOUND: " + key);
+		if (key.equals("prefxtype"))
+			{
+			System.err.println(key + " " + model.getMin(key) + " " + model.getMax(key) + " " + data[pos]);
+			}
+		if (model.getMin(key) < 0)	// signed two's complement
+			{
+			model.set(key, data[pos]);
+			}
+		else
+			{
+			model.set(key, data[pos] & 0xFF);
+			}
+		}
+
+	void set2(String key, byte[] data, int pos)
+		{
+		if (!model.exists(key)) System.err.println("KEY NOT FOUND: " + key);
+		if (key.equals("prefx1param5"))
+			{
+			System.err.println(key + " " + model.getMin(key) + " " + model.getMax(key) + " " + data[pos] + " " + data[pos + 1]);
+			}
+		if (model.getMin(key) < 0)	// signed two's complement
+			{
+			model.set(key, (short)((data[pos] & 0xFF) | ((data[pos + 1] & 0xFF) << 8)));
+			}
+		else
+			{
+			model.set(key, ((data[pos] & 0xFF) | ((data[pos + 1] & 0xFF) << 8)));
+			}
+		}
 
     public int parseReal(byte[] data, boolean fromFile)
         {
         // BASICS
-		set("category", data[8]);
+		set1("category", data, 8);
         char[] name = new char[16];
         for(int i = 0; i < 16; i++)
             {
             name[i] = (char)(data[9 + i]);
             }
         model.set("name", String.valueOf(name));
-		set("color", data[26]);
+		set1("color", data, 26);
 		
 		// VOICE
-		set("voicepolyphony", data[30]);
-		set("voicedensity", data[32]);
-		set("voicedetune", data[34]);
-		set("voiceanalogfeel", data[36]);
-		set("voicerandomphase", data[38]);
-		set("voicestereomode", data[40]);
-		set("voicestereowidth", data[42]);
-		set("voicepitchbend", data[44]);
-		set("voicevibratoamount", data[46]);
-		set("voicevibratobpmsync", data[50]);
+		set1("voicepolyphony", data, 30);
+		set1("voicedensity", data, 32);
+		set1("voicedetune", data, 34);
+		set1("voiceanalogfeel", data, 36);
+		set1("voicerandomphase", data, 38);
+		set1("voicestereomode", data, 40);
+		set1("voicestereowidth", data, 42);
+		set1("voicepitchbend", data, 44);
+		set1("voicevibratoamount", data, 46);
+		set1("voicevibratobpmsync", data, 50);
 		if (model.get("voicevibratobpmsync") == 0)
-			set("voicevibratoratesyncoff", data[48]);
+			{
+			set1("voicevibratoratesyncoff", data, 48);
+			}
 		else
-			set("voicevibratoratesyncon", data[48]);
-		set("voiceglide", data[52]);
-		set("voiceglidetime", data[54]);
-		set("voiceglidecurve", data[56]);
-		set("voiceglidelegato", data[58]);
+			{
+			set1("voicevibratoratesyncon", data, 48);
+			}
+		set1("voiceglide", data, 52);
+		set1("voiceglidetime", data, 54);
+		set1("voiceglidecurve", data, 56);
+		set1("voiceglidelegato", data, 58);
+
+		// SCALES
+		
+		set1("scalekeylock", data, 60);
+		set1("scaletype", data, 62);
+		for(int i = 2; i < 8; i++)
+			{
+			set1("scalenote" + i, data, 66 - 2 + i);
+			}		
 
 		// OSCS
 		for(int i = 1; i < 3; i++)
 			{
 			int p = (i == 1 ? 80 : 108);
-			set("osc" + i + "mode", data[p + 0]);
-			set("osc" + i + "type", data[p + 2], data[p + 2 + 1]);	// the wave
-			set("osc" + i + "semi", data[p + 4]);
-			set("osc" + i + "cent", data[p + 6]);
-			set("osc" + i + "keytrack", data[p + 8]);
-			set("osc" + i + "wavscan", data[p + 10], data[p + 10 + 1]);
+			set1("osc" + i + "mode", data, p + 0);
+			set2("osc" + i + "type", data, p + 2);	// the wave
+			set1("osc" + i + "semi", data, p + 4);
+			set1("osc" + i + "cent", data, p + 6);
+			set1("osc" + i + "keytrack", data, p + 8);
+			set2("osc" + i + "wavscan", data, p + 10);
 			for(int j = 0; j < 8; j++)
 				{
-				set("osc" + i + "wavscanwave" + (j + 1), data[p + 12 + j * 2], data[p + 12 + j * 2 + 1]);
+				set2("osc" + i + "wavscanwave" + (j + 1), data, p + 12 + j * 2);
 				}
 			}
-		set("osc3type", data[136], data[136 + 1]);	// the wave
-		set("osc3semi", data[138]);
-		set("osc3cent", data[140]);
-		set("osc3keytrack", data[142]);
+		set2("osc3type", data, 136);	// the wave
+		set1("osc3semi", data, 138);
+		set1("osc3cent", data, 140);
+		set1("osc3keytrack", data, 142);
 		
 		// MUTANTS
-		
 		for(int i = 1; i < 5; i++)
 			{
 			int p = (i == 1 ? 144 : (i == 2 ? 158 : (i == 3 ? 204 : 218)));
-			set("mutant" + i + "mode", data[p + 0]);
+			set1("mutant" + i + "mode", data, p + 0);
 			if (model.get("mutant" + i + "mode") == 2) // osc sync
-				set("mutant" + i + "sourceoscsync", data[p + 2]);
+				set1("mutant" + i + "sourceoscsync", data, p + 2);
 			else	// we assume FM Linear or other
-				set("mutant" + i + "sourcefmlin", data[p + 2]);
-			set("mutant" + i + "ratio", data[p + 4], data[p + 4 + 1]);
-			set("mutant" + i + "depth", data[p + 6], data[p + 6 + 1]);
-			set("mutant" + i + "window", data[p + 8], data[p + 8 + 1]);
-			set("mutant" + i + "feedback", data[p + 10], data[p + 10 + 1]);
-			set("mutant" + i + "wet", data[p + 12], data[p + 12 + 1]);
+				set1("mutant" + i + "sourcefmlin", data, p + 2);
+			set2("mutant" + i + "ratio", data, p + 4);
+			set2("mutant" + i + "depth", data, p + 6);
+			set2("mutant" + i + "window", data, p + 8);
+			set2("mutant" + i + "feedback", data, p + 10);
+			set2("mutant" + i + "wet", data, p + 12);
 			}
 
 		// MUTANT WARPS
@@ -5490,205 +5660,213 @@ public class ASMHydrasynth extends Synth
 			int p = (i == 1 ? 172 : (i == 2 ? 188 : (i == 3 ? 232 : 248)));
 			for(int j = 0; j < 8; j++)
 				{
-				set("mutant" + i + "warp" + (j + 1), data[p + j * 2], data[p + j * 2 + 1]);
+				set2("mutant" + i + "warp" + (j + 1), data, p + j * 2);
 				}
 			}
 			
 		// RING MOD NOISE
-		set("ringmodsource1", data[264]);
-		set("ringmodsource2", data[266]);
-		set("ringmoddepth", data[268], data[269]);
-		set("noisetype", data[272]);
+		set1("ringmodsource1", data, 264);
+		set1("ringmodsource2", data, 266);
+		set2("ringmoddepth", data, 268);
+		set1("noisetype", data, 272);
 		
 		// MIXER
 		for(int i = 0; i < 3; i++)
 			{
-			set("mixerosc" + (i + 1) + "vol", data[274 + i * 2], data[274 + i * 2 + 1]);
-			set("mixerosc" + (i + 1) + "pan", data[286 + i * 2], data[286 + i * 2 + 1]);
-			set("mixerosc" + (i + 1) + "filterratio", data[292 + i * 2], data[292 + i * 2 + 1]);
+			set2("mixerosc" + (i + 1) + "vol", data, 274 + i * 2);
+			set2("mixerosc" + (i + 1) + "pan", data, 286 + i * 2);
+			set2("mixerosc" + (i + 1) + "filterratio", data, 292 + i * 2);
 			}		
-		set("mixerringmodvol", data[280], data[280 + 1]);
-		set("mixernoisevol", data[282], data[282 + 1]);
-		set("mixerringmodpan", data[298], data[298 + 1]);
-		set("mixernoisepan", data[300], data[300 + 1]);
-		set("mixerringmodfilterratio", data[304], data[304 + 1]);
-		set("mixernoisefilterratio", data[306], data[306 + 1]);
+		set2("mixerringmodvol", data, 280);
+		set2("mixernoisevol", data, 282);
+		set2("mixerringmodpan", data, 298);
+		set2("mixernoisepan", data, 300);
+		set2("mixerringmodfilterratio", data, 304);
+		set2("mixernoisefilterratio", data, 306);
 
 		// FILTERS
-		set("mixerfilterrouting", data[302]);
-		set("filter1type", data[308]);						// FIXME: Values are out of order, will this affect us?
-		set("filter1cutoff", data[310], data[310 + 1]);
-		set("filter1resonance", data[312], data[312 + 1]);
-		set("filter1special", data[314], data[314 + 1]);
-		set("filter1env1amount", data[316], data[316 + 1]);
-		set("filter1lfo1amount", data[318], data[318 + 1]);
-		set("filter1velenv", data[320], data[320 + 1]);
-		set("filter1keytrack", data[322], data[322 + 1]);
-		set("filter1drive", data[326], data[326 + 1]);
-		set("filter1positionofdrive", data[328]);
-		set("filter1vowelorder", data[330]);
+		set1("mixerfilterrouting", data, 302);
+		set1("filter1type", data, 308);						// FIXME: Values are out of order, will this affect us?
+		set2("filter1cutoff", data, 310);
+		set2("filter1resonance", data, 312);
+		set2("filter1special", data, 314);
+		set2("filter1env1amount", data, 316);
+		set2("filter1lfo1amount", data, 318);
+		set2("filter1velenv", data, 320);
+		set2("filter1keytrack", data, 322);
+		set2("filter1drive", data, 326);
+		set1("filter1positionofdrive", data, 328);
+		set1("filter1vowelorder", data, 330);
 
-		set("filter2morph", data[332], data[332 + 1]);
-		set("filter1cutoff", data[334], data[334 + 1]);
-		set("filter1resonance", data[336], data[336 + 1]);
-		set("filter1env1amount", data[338], data[338 + 1]);
-		set("filter1lfo1amount", data[340], data[340 + 1]);
-		set("filter1velenv", data[342], data[342 + 1]);
-		set("filter1keytrack", data[344], data[344 + 1]);
+		set2("filter2morph", data, 332);
+		set2("filter1cutoff", data, 334);
+		set2("filter1resonance", data, 336);
+		set2("filter1env1amount", data, 338);
+		set2("filter1lfo1amount", data, 340);
+		set2("filter1velenv", data, 342);
+		set2("filter1keytrack", data, 344);
 		
 		// AMPLIFIER
-		set("amplfo2amount", data[346], data[346 + 1]);
-		set("ampvelenv", data[348], data[348 + 1]);
-		set("amplevel", data[350], data[350 + 1]);
+		set2("amplfo2amount", data, 346);
+		set2("ampvelenv", data, 348);
+		set2("amplevel", data, 350);
 
 		// PRE-FX
-		set("prefxtype", data[352]);
-		set("prefxsidechain", data[354]);
+		set1("prefxtype", data, 352);
+		set1("prefxsidechain", data, 354);
 		int prefxtype = Math.max(0, Math.min(data[352], 8)); 	// bound to 0 ... 8
 		if (prefxtype != 0) // skip bypass
 			{
 			for(int i = 0; i < 5; i++)
 				{
 				int p = 356;
-				set("prefx" + prefxtype + "param" + (i + 1), data[p + i * 2], data[p + i * 2 + 1]);
+				set2("prefx" + prefxtype + "param" + (i + 1), data, p + i * 2);
 				}
 			}
-		set("prefxwet", data[366], data[366 + 1]);
+		set2("prefxwet", data, 366);
 
 		// DELAY
-		set("delaytype", data[368], data[368 + 1]);
-		set("delaybpmsync", data[370], data[370 + 1]);
+		set2("delaytype", data, 368);
+		set2("delaybpmsync", data, 370);
 		if (model.get("delaybpmsync") == 0)
-			set("delaytimesyncoff", data[372], data[372 + 1]);
+			{
+			set2("delaytimesyncoff", data, 372);
+			}
 		else
-			set("delaytimesyncon", data[372], data[372 + 1]);
-		set("delayfeedback", data[374], data[374 + 1]);
-		set("delayfeedtone", data[376], data[376 + 1]);
-		set("delaywettone", data[378], data[378 + 1]);
+			{
+			set2("delaytimesyncon", data, 372);
+			}
+		set2("delayfeedback", data, 374);
+		set2("delayfeedtone", data, 376);
+		set2("delaywettone", data, 378);
 		
 		// REVERB
-		set("reverbtype", data[384], data[384 + 1]);
-		set("reverbtime", data[388], data[388 + 1]);
-		set("reverbtone", data[390], data[390 + 1]);
-		set("reverbhidamp", data[392], data[392 + 1]);
-		set("reverblodamp", data[394], data[394 + 1]);
-		set("reverbpredelay", data[396], data[396 + 1]);
-		set("reverbwet", data[398], data[398 + 1]);
+		set2("reverbtype", data, 384);
+		set2("reverbtime", data, 388);
+		set2("reverbtone", data, 390);
+		set2("reverbhidamp", data, 392);
+		set2("reverblodamp", data, 394);
+		set2("reverbpredelay", data, 396);
+		set2("reverbwet", data, 398);
 
 		// POST-FX
-		set("postfxtype", data[400]);
-		set("postfxsidechain", data[402]);
+		set1("postfxtype", data, 400);
+		set1("postfxsidechain", data, 402);
 		int postfxtype = Math.max(0, Math.min(data[400], 8)); 	// bound to 0 ... 8
 		if (postfxtype != 0) // skip bypass
 			{
 			for(int i = 0; i < 5; i++)
 				{
 				int p = 404;
-				set("postfx" + postfxtype + "param" + (i + 1), data[p + i * 2], data[p + i * 2 + 1]);
+				set2("postfx" + postfxtype + "param" + (i + 1), data, p + i * 2);
 				}
 			}
-		set("postfxwet", data[414], data[414 + 1]);
+		set2("postfxwet", data, 414);
 
 		// RIBBON
-		set("ribbonmode", data[436]);
-		set("ribbonkeyspan", data[438]);
-		set("ribbonoctave", data[440]);
-		set("ribbonhold", data[442]);					// Not in the standard list
-		set("ribbonquantize", data[444]);
-		set("ribbonglide", data[446]);
-		set("ribbonmodcontrol", data[448]);				// theremin wheel volume
+		set1("ribbonmode", data, 436);
+		set1("ribbonkeyspan", data, 438);
+		set1("ribbonoctave", data, 440);
+		set1("ribbonhold", data, 442);					// Not in the standard list
+		set1("ribbonquantize", data, 444);
+		set1("ribbonglide", data, 446);
+		set1("ribbonmodcontrol", data, 448);				// theremin wheel volume
 
 		// MISC
-		set("voicewarmmode", (byte)(data[470] & 0x1));
-		set("voicesnap", (byte)((data[470] >>> 1) & 0x1));
-		set("filter2type", data[472]);
+		set1("arpclklock", data, 468);		
+		set1("voicewarmmode", data, 470, 0);				// Note Bitpacked
+		set1("voicesnap", data, 470, 1);					// Note Bitpacked
+		set1("filter2type", data, 472);
 		
 		// ENVELOPES
 		for(int i = 0; i < 5; i++)
 			{
 			int p = (i == 0 ? 478 : (i == 1 ? 506 : (i == 2 ? 534 : (i == 3 ? 562 : 590))));
-			set("env" + (i + 1) + "bpmsync", data[p + 8]);
+			set1("env" + (i + 1) + "bpmsync", data, p + 8);
 			if (model.get("env" + (i + 1) + "bpmsync") == 0) // off
 				{
-				set("env" + (i + 1) + "delaysyncoff", data[p + 10], data[p + 10 + 1]);
-				set("env" + (i + 1) + "attacksyncoff", data[p + 0], data[p + 0 + 1]);
-				set("env" + (i + 1) + "holdsyncoff", data[p + 12], data[p + 12 + 1]);
-				set("env" + (i + 1) + "decaysyncoff", data[p + 2], data[p + 2 + 1]);
-				set("env" + (i + 1) + "releasesyncoff", data[p + 6], data[p + 6 + 1]);
+				set2("env" + (i + 1) + "delaysyncoff", data, p + 10);
+				set2("env" + (i + 1) + "attacksyncoff", data, p + 0);
+				set2("env" + (i + 1) + "holdsyncoff", data, p + 12);
+				set2("env" + (i + 1) + "decaysyncoff", data, p + 2);
+				set2("env" + (i + 1) + "releasesyncoff", data, p + 6);
 				}
 			else
 				{
-				set("env" + (i + 1) + "delaysyncon", data[p + 10], data[p + 10 + 1]);
-				set("env" + (i + 1) + "attacksyncon", data[p + 0], data[p + 0 + 1]);
-				set("env" + (i + 1) + "holdsyncon", data[p + 12], data[p + 12 + 1]);
-				set("env" + (i + 1) + "decaysyncon", data[p + 2], data[p + 2 + 1]);
-				set("env" + (i + 1) + "releasesyncon", data[p + 6], data[p + 6 + 1]);
+				set2("env" + (i + 1) + "delaysyncon", data, p + 10);
+				set2("env" + (i + 1) + "attacksyncon", data, p + 0);
+				set2("env" + (i + 1) + "holdsyncon", data, p + 12);
+				set2("env" + (i + 1) + "decaysyncon", data, p + 2);
+				set2("env" + (i + 1) + "releasesyncon", data, p + 6);
 				}
-			set("env" + (i + 1) + "sustain", data[p + 4], data[p + 4 + 1]);
-			set("env" + (i + 1) + "atkcurve", data[p + 14], data[p + 14 + 1]);
-			set("env" + (i + 1) + "deccurve", data[p + 16], data[p + 16 + 1]);
-			set("env" + (i + 1) + "relcurve", data[p + 18], data[p + 18 + 1]);
-			set("env" + (i + 1) + "legato", data[p + 20]);
-			set("env" + (i + 1) + "reset", data[p + 22]);		// can only be set if legato is unset, hope this is okay
-			set("env" + (i + 1) + "freerun", data[p + 24]);		// can only be set if legato is unset, hope this is okay
+			set2("env" + (i + 1) + "sustain", data, p + 4);
+			set2("env" + (i + 1) + "atkcurve", data, p + 14);
+			set2("env" + (i + 1) + "deccurve", data, p + 16);
+			set2("env" + (i + 1) + "relcurve", data, p + 18);
+			set1("env" + (i + 1) + "legato", data, p + 20);
+			set1("env" + (i + 1) + "reset", data, p + 22);		// can only be set if legato is unset, hope this is okay
+			set1("env" + (i + 1) + "freerun", data, p + 24);		// can only be set if legato is unset, hope this is okay
 			}
 			
 		// LFOS
 		for(int i = 0; i < 5; i++)
 			{
 			int p = (i == 0 ? 618 : (i == 1 ? 656 : (i == 2 ? 694 : (i == 3 ? 732 : 770))));
-			set("lfo" + (i + 1) + "wave", data[p + 0]);
-			set("lfo" + (i + 1) + "bpmsync", data[p + 4]);
-			set("lfo" + (i + 1) + "trigsync", data[p + 6]);
+			set1("lfo" + (i + 1) + "wave", data, p + 0);
+			set1("lfo" + (i + 1) + "bpmsync", data, p + 4);
+			set1("lfo" + (i + 1) + "trigsync", data, p + 6);
 			if (model.get("lfo" + (i + 1) + "bpmsync") == 0) // off
 				{
-				set("lfo" + (i + 1) + "ratesyncoff", data[p + 2], data[p + 2 + 1]);
-				set("lfo" + (i + 1) + "delaysyncoff", data[p + 8]);
-				set("lfo" + (i + 1) + "fadeinsyncoff", data[p + 10]);
+				set2("lfo" + (i + 1) + "ratesyncoff", data, p + 2);
+				set1("lfo" + (i + 1) + "delaysyncoff", data, p + 8);
+				set1("lfo" + (i + 1) + "fadeinsyncoff", data, p + 10);
 				}
 			else
 				{
-				set("lfo" + (i + 1) + "ratesyncon", data[p + 2], data[p + 2 + 1]);
-				set("lfo" + (i + 1) + "delaysyncon", data[p + 8]);
-				set("lfo" + (i + 1) + "fadeinsyncon", data[p + 10]);
+				set2("lfo" + (i + 1) + "ratesyncon", data, p + 2);
+				set1("lfo" + (i + 1) + "delaysyncon", data, p + 8);
+				set1("lfo" + (i + 1) + "fadeinsyncon", data, p + 10);
 				}
-			set("lfo" + (i + 1) + "phase", data[p + 12], data[p + 12 + 1]);
-			set("lfo" + (i + 1) + "level", data[p + 14], data[p + 14 + 1]);
-			set("lfo" + (i + 1) + "steps", data[p + 16]);
-			set("lfo" + (i + 1) + "smooth", data[p + 18]);
-			set("lfo" + (i + 1) + "oneshot", data[p + 20]);
+			set2("lfo" + (i + 1) + "phase", data, p + 12);
+			set2("lfo" + (i + 1) + "level", data, p + 14);
+			set1("lfo" + (i + 1) + "steps", data, p + 16);
+			set1("lfo" + (i + 1) + "smooth", data, p + 18);
+			set1("lfo" + (i + 1) + "oneshot", data, p + 20);
 			// First 8 steps
 			for(int j = 0; j < 8; j++)
 				{
-				set("lfo" + (i + 1) + "step" + (j + 1), data[p + 22 + j * 2], data[p + 22 + j * 2 + 1]);
+				set2("lfo" + (i + 1) + "step" + (j + 1), data, p + 22 + j * 2);
 				}
 			}
 			
 		// ARPEGGIATOR
-		set("arpdivision", data[810]);
-		set("arpswing", data[812]);
-		set("arpgate", data[814]);
-		set("arpoctmode", data[816]);
-		set("arpoctave", data[818]);
-		set("arpmode", data[820]);
-		set("arplength", data[822]);
-		set("arptaptrig", data[824]);
-		set("arpphrase", data[826]);
-		set("arpratchet", data[828]);
-		set("arpchance", data[830]);
+		
+		set1("arpdivision", data, 810);
+		set1("arpswing", data, 812);
+		set1("arpgate", data, 814);
+		set1("arpoctmode", data, 816);
+		set1("arpoctave", data, 818);
+		set1("arpmode", data, 820);
+		set1("arplength", data, 822);
+		set1("arptaptrig", data, 824);
+		set1("arpphrase", data, 826);
+		set1("arpratchet", data, 828);
+		set1("arpchance", data, 830);
+		set1("arpenable", data, 832);		
+		set1("arplatch", data, 834);		
 
 		// MOD MATRIX
 		for(int i = 0; i < 32; i++)
 			{
-			set("modmatrix" + (i + 1) + "depth", data[838 + i * 2], data[838 + i * 2 + 1]);
+			set2("modmatrix" + (i + 1) + "depth", data, 838 + i * 2);
 			}
 		for(int i = 0; i < 32; i++)
 			{
-			set("modmatrix" + (i + 1) + "modsource", data[902 + i * 2]);
+			set1("modmatrix" + (i + 1) + "modsource", data, 902 + i * 2);
 			}
 		for(int i = 0; i < 32; i++)
 			{
-			set("modmatrix" + (i + 1) + "modtarget", data[966 + i * 2]);
+			set1("modmatrix" + (i + 1) + "modtarget", data, 966 + i * 2);
 			}
 			
 		// FIXME: Starting at 1032, there may be a fourth mod matrix thingamabob
@@ -5699,7 +5877,7 @@ public class ASMHydrasynth extends Synth
 			int p = 1094 + i * 16;
 			for(int j = 0; j < 8; j++)
 				{
-				set("macro" + (i + 1) + "depth" + (j + 1), data[p + j * 2], data[p + j * 2 + 1]);
+				set2("macro" + (i + 1) + "depth" + (j + 1), data, p + j * 2);
 				}
 			}
 		for(int i = 0; i < 8; i++)
@@ -5707,7 +5885,7 @@ public class ASMHydrasynth extends Synth
 			int p = 1222 + i * 16;
 			for(int j = 0; j < 8; j++)
 				{
-				set("macro" + (i + 1) + "target" + (j + 1), data[p + j * 2]);
+				set1("macro" + (i + 1) + "target" + (j + 1), data, p + j * 2);
 				}
 			}
 		for(int i = 0; i < 8; i++)
@@ -5715,12 +5893,8 @@ public class ASMHydrasynth extends Synth
 			int p = 1350 + i * 16;
 			for(int j = 0; j < 8; j++)
 				{
-				set("macro" + (i + 1) + "buttonvalue" + (j + 1), data[p + j * 2], data[p + j * 2 + 1]);
+				set2("macro" + (i + 1) + "buttonvalue" + (j + 1), data, p + j * 2);
 				}
-			}
-		for(int i = 0; i < 8; i++)
-			{
-			set("macro" + (i + 1) + "enabled", data[1478 + 16 * i]);
 			}
 		int offset = 1630;
 		for(int i = 0; i < 8; i++)
@@ -5735,26 +5909,31 @@ public class ASMHydrasynth extends Synth
 			}
 
 
-		// LFO STEPS
-		
-		// Steps 9 to 64
+		// LFO STEPS 9 to 64
 		for(int i = 0; i < 5; i++)
 			{
 			for(int j = 0; j < 56; j++)  // FIXME: is this right?
 				{
-				set("lfo" + (i + 1) + "step" + (j + 9), data[1770 + i * 56 * 2 + j * 2], data[1770 + i * 56 * 2 + j * 2 + 1]);
+				set2("lfo" + (i + 1) + "step" + (j + 9), data, 1770 + i * 56 * 2 + j * 2);
 				}
 			}
 
 		
 		// ENV TRIG SOURCES
-		// FIXME: Env 2 Trig Source 1 ought not be set
 		for(int i = 0; i < 5; i++)
 			{
-			set("env" + (i + 1) + "trigsrc1", data[2340 + i * 10], data[2340 + i * 10 + 1]);
-			set("env" + (i + 1) + "trigsrc2", data[2342 + i * 10], data[2342 + i * 10 + 1]);
-			set("env" + (i + 1) + "trigsrc3", data[2344 + i * 10], data[2344 + i * 10 + 1]);
-			set("env" + (i + 1) + "trigsrc4", data[2346 + i * 10], data[2346 + i * 10 + 1]);
+			// Env 2 Trig Source 1 ought not be set
+			if (i == 1)	// Env 2
+				{
+				model.set("env" + (i + 1) + "trigsrc1", 1);
+				}
+			else
+				{
+				set2("env" + (i + 1) + "trigsrc1", data, 2340 + i * 10);
+				}
+			set2("env" + (i + 1) + "trigsrc2", data, 2342 + i * 10);
+			set2("env" + (i + 1) + "trigsrc3", data, 2344 + i * 10);
+			set2("env" + (i + 1) + "trigsrc4", data, 2346 + i * 10);
 			}
 		
         revise();
@@ -6101,10 +6280,10 @@ public class ASMHydrasynth extends Synth
             }
         else if (key.startsWith("arp"))
             {
-            // interesting that v doesn't start with 0.  Not sure why
-            if (key.equals("arpdivision"))
+            if (key.equals("arpenable"))
                 {
-                if (v == 2) key = "arpswing";
+                if (v == 1) key = "arpdivision";
+                else if (v == 2) key = "arpswing";
                 else if (v == 3) key = "arpgate";
                 else if (v == 4) key = "arpoctmode";
                 else if (v == 5) key = "arpoctave";
@@ -7100,6 +7279,7 @@ public class ASMHydrasynth extends Synth
     "env5trigsrc2",
     "env5trigsrc3",
     "env5trigsrc4",
+    "arpenable",
     "arpdivision",
     "arpswing",
     "arpgate",
@@ -8129,6 +8309,7 @@ public class ASMHydrasynth extends Synth
     "env5trigsrc2",
     "env5trigsrc3",
     "env5trigsrc4",
+    "arpenable",
     "arpdivision",
     "arpswing",
     "arpgate",
@@ -9161,6 +9342,7 @@ public class ASMHydrasynth extends Synth
     7537,           // 3a 71            "env5trigsrc2",
     7538,           // 3a 72            "env5trigsrc3",
     7539,           // 3a 73            "env5trigsrc4",
+    7299,			// 39 3				"arpenable"
     7299,           // 39 3             "arpdivision",
     7299,           // 39 3             "arpswing",
     7299,           // 39 3             "arpgate",

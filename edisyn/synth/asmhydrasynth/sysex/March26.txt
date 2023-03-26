@@ -1,0 +1,13 @@
+March 26, 2023 Hydrasynth sysex reverse engineering notes.
+
+Additional arp and scale parametes verified, more or less.  The custom-edit
+scale notes will be a problem because the Hydrasynth internally sorts them by
+note value (which makes sense) but appears to retain them out of order even
+after multiple edits.  That's going to be a mess.  At present Edisyn just keeps
+them out of order, which will be inconsistent with the Hydrasynth for the time
+being.
+
+Also determined that what I had thought might be "Enabled" flags for the Macros
+actually are categories for the destinations (like "Arp" or "Filter 1").
+Edisyn doesn't need these, but it's not clear yet if the Hydrasynth will require
+them to be set properly.  We'll find out soon enough.

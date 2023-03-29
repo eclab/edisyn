@@ -29,6 +29,16 @@ Edisyn does not yet support multimode, though I intend to ultimately.
 <p><li><b>Lock All LFO Steps to Notes</b>&nbsp;&nbsp;If you would like to restrict LFO steps to notes only in all cases, you can check this.  This will restrict to notes when you change dials, randomize, morph, hill-climb, blend, nudge, merge, load files, and even receive parameters from the Hydrasynth.  Additionally if the Hydrasynth sends you a new patch, and this is turned on, then the steps will be modified so that they are restricted.  You probably only want to set this temporarily prior to a mutation operation such as randomization, morphing, hill-climbing, nudging, blending, and merging, so you can restrict mutation to just notes: you can then then turn it off again.  You almost certainly don't want it on when you load or save a patch.  For this reason, this option is not retained and is always reset when you create a new patch editor window.
 </ul>
 
+<p><b>Parameters that Can't Be Sent to Current Memory</b><br>
+
+There are a number of parameters that can't be sent via NRPN to the Hydrasynth, and likewise cannot be sent to current memory.  They can be written to a patch in RAM however. They are:
+
+<ul>
+<li>Patch Name, Category, and Color
+<p><li>Scale Type, Keyboard Lock, and Custom Notes
+<p><li>All Macro Names, Destinations, Depths, and Button Values
+</ul>
+
 <p><b>Gotchas and Hydrasynth Bugs to Be Aware of</b><br>
 <ul>
 <li>Yes, Envelope 2 really doesn't have modifiable a Trigger Source 1.
@@ -48,7 +58,7 @@ display to reflect this.  You have to page away and come back to see the updates
 </ul>
 
 <p><b>Hints</b><br>
-Not that it matters much right now, but if you edit a macro name, notice that the text field is actually a drop-down combo-box: it has all the default Hydrasynth macro names available.
+When you edit a macro name, notice that the text field is actually a drop-down combo-box: it has all the default Hydrasynth macro names available.
 
 <p><b>About the ASM Hydrasynth Manager</b><br>
 ASM provides a librarian called the ASM Hydrasynth Manager.  This software saves patches in proprietary bank file formats with the extension "hydra" or "hydramulti".  If Edisyn gets to the point of saving and loading files, they will be standard sysex files, not the proprietary ones.  This means that if you want to convert these files, you will need to load them into your Hydrasynth using the Hydrasynth Manager, then dump them to Edisyn as sysex and save them as sysex files.  Eventually.
@@ -57,7 +67,8 @@ ASM provides a librarian called the ASM Hydrasynth Manager.  This software saves
 The Hydrasynth has an extremely complex and baroque NRPN spec and the formatting and ranges of individual parameters are not provided, or not correctly provided, via ASM's "MIDI Spec" file (v1.5.0).  The ranges and formatting of these parameters had to be entirely reverse engineered: and there are a number of bugs.  
 
 <br><br><h3>Thanks</h3>
-Thanks to Thierry Rochebois Zic for making his stunning Hydrasynth wave and harmonics figures available under Creative Commons CC-BY.  Thanks to Robin Chard for going above and beyond in identifying preset values, and in testing assistance.  Also, thanks to Herbert Boland <hboland@ziggo.nl> for testing assistance and suggestions.
+Thanks to Thierry Rochebois Zic for making his stunning Hydrasynth wave and harmonics figures available under Creative Commons CC-BY.  Thanks to Robin Chard for going above and beyond in identifying preset values, and in testing assistance.  Thanks to Herbert Boland <hboland@ziggo.nl> for testing assistance and suggestions.  Thanks to Erich Izdepski <mogrifier@gmail.com>, Adrian Croft <adriancroft@msn.com>, Tim Burgess <tim@raisedbar.net>, and many others for help in reverse engineering.
+
 
 <p><table border=0 cellpadding=0 cellspacing=5>
 <tr>

@@ -53,8 +53,8 @@ BYTE    HEX     INFO
 3       3       Patch Number
 4       4       9B Hydrasynth Version Number? 	1.5.5	(0x9B = 155)  Prediction: 2.0.0 will be 0xC8
 5       5       00?
-6       6       00?
-7       7       00?
+6       6       Also Patch Number?  Not clear
+7       7       00?  02?
 8       8       Category				[goes 1-32, not 0-31]
 9       9       Patch Name Start
 10      A       
@@ -75,8 +75,8 @@ BYTE    HEX     INFO
 25      19      UNNOWN
 26      1A      Color
 27      1B      
-28      1C      UNNOWN
-29      1D      
+28      1C      UNNOWN		[ -80 in Sawpressive ]
+29      1D      			[ 4 in Sawpressive ]
 30      1E      Polyphony
 31      1F      
 32      20      Density
@@ -463,8 +463,8 @@ BYTE    HEX     INFO
 413     19D     Post FX Param 5 High Byte?
 414     19E     Post-FX Dry/WetLow Byte
 415     19F     Post-FX Dry/WetHigh Byte
-416     1A0     UNKNOWN START
-417     1A1     
+416     1A0     Macro 1 List Name
+417     1A1     Macro 1 Uses Custom Name [0=list, 1=custom]
 418     1A2     
 419     1A3     
 420     1A4     
@@ -477,8 +477,8 @@ BYTE    HEX     INFO
 427     1AB     
 428     1AC     
 429     1AD     
-430     1AE     
-431     1AF     
+430     1AE     Macro 8 List Name
+431     1AF     Macro 8 Uses Custom Name [0=custom, 1=list]
 432     1B0     
 433     1B1     
 434     1B2     
@@ -497,9 +497,9 @@ BYTE    HEX     INFO
 447     1BF     
 448     1C0     Theremin Wheel Volume			["Mod Control"]
 449     1C1     
-450     1C2     UNKNOWN START
+450     1C2     UNKNOWN START		[ 1 in Sawpressive ]
 451     1C3     
-452     1C4     
+452     1C4     [ 1 in Sawpressive ]
 453     1C5     
 454     1C6     
 455     1C7     
@@ -521,9 +521,9 @@ BYTE    HEX     INFO
 471     1D7     
 472     1D8     Filter 2 Type					[An odd location: perhaps wasadded later]
 473     1D9     
-474     1DA     UNKNOWN START
+474     1DA     UNKNOWN START		[ 127 in Sawpressive ]
 475     1DB     
-476     1DC     
+476     1DC     [ 127 in Sawpressive ]
 477     1DD     UNKNOWN END
 478     1DE     Env 1 Attack Low Byte
 479     1DF     Env 1 Attack High Byte
@@ -681,7 +681,7 @@ BYTE    HEX     INFO
 631     277     
 632     278     LFO 1 Level Low Byte
 633     279     LFO 1 Level High Byte Byte
-634     27A     LFO 1 Steps					[These normally only go 2...64, but the Hydrasynth sets this to 0 when LFO Wave is not STEP]
+634     27A     LFO 1 Steps					[These normally only go 2...64, but the Hydrasynth sets this to 0 when LFO Wave is not STEP]		[ 0 in Sawpressive ]
 635     27B     
 636     27C     LFO 1 Smooth
 637     27D     
@@ -719,7 +719,7 @@ BYTE    HEX     INFO
 669     29D     
 670     29E     
 671     29F     
-672     2A0     
+672     2A0     [ 2 in Sawpressive ]
 673     2A1     
 674     2A2     
 675     2A3     
@@ -757,7 +757,7 @@ BYTE    HEX     INFO
 707     2C3     
 708     2C4     
 709     2C5     
-710     2C6     
+710     2C6     [ 2 in Sawpressive ]
 711     2C7     
 712     2C8     
 713     2C9     
@@ -795,7 +795,7 @@ BYTE    HEX     INFO
 745     2E9     
 746     2EA     
 747     2EB     
-748     2EC     
+748     2EC     [ 2 in Sawpressive ]
 749     2ED     
 750     2EE     
 751     2EF     
@@ -833,7 +833,7 @@ BYTE    HEX     INFO
 783     30F     
 784     310     
 785     311     
-786     312     
+786     312     [ 2 in Sawpressive ]
 787     313     
 788     314     
 789     315     
@@ -855,8 +855,8 @@ BYTE    HEX     INFO
 805     325     
 806     326     
 807     327     
-808     328     
-809     329     
+808     328     [ -80 in Sawpressive ]
+809     329     [ 4 in Sawpressive ]
 810     32A     Arpeggiator Division
 811     32B     
 812     32C     Arpeggiator Swing
@@ -883,7 +883,7 @@ BYTE    HEX     INFO
 833     341     
 834     342     Arp Latch
 835     343     
-836     344     UNKNOWN
+836     344     UNKNOWN		[ 5 in Sawpressive ]
 837     345     
 838     346    	Mod Matrix 1 Amount Low Byte?
 839     347     Mod Matrix 1 Amount High Byte?
@@ -1077,21 +1077,21 @@ BYTE    HEX     INFO
 1027    403     
 1028    404     Mod Matrix 32 Dest?
 1029    405     
-1030    406     
+1030    406     [ 12 in Sawpressive ]
 1031    407     
-1032    408     Mod Matrix 32 Something?
+1032    408     Mod Matrix 32 Something?	 [ 14 in Sawpressive ]
 1033    409     
-1034    40A     
+1034    40A     [ 5 in Sawpressive ]
 1035    40B     
-1036    40C     
+1036    40C     [ 29 in Sawpressive ]
 1037    40D     
-1038    40E     
+1038    40E     [ 24 in Sawpressive ]
 1039    40F     
-1040    410     
+1040    410     [ 20 in Sawpressive ]
 1041    411     
-1042    412     
+1042    412     [ 14 in Sawpressive ]
 1043    413     
-1044    414     
+1044    414     [ 12 in Sawpressive ]
 1045    415     
 1046    416     
 1047    417     
@@ -1125,7 +1125,7 @@ BYTE    HEX     INFO
 1075    433     
 1076    434     
 1077    435     
-1078    436     
+1078    436     [ 2 in Sawpressive ]
 1079    437     
 1080    438     
 1081    439     
@@ -1525,7 +1525,7 @@ BYTE    HEX     INFO
 1475    5C3     
 1476    5C4     
 1477    5C5     
-1478    5C6     Macro 1 Destination Category 1 [0=0ff]		// Note: it's not clear this is particularly useful?
+1478    5C6     Macro 1 Destination Category 1 [0=0ff]
 1479    5C7     
 1480    5C8     Macro 1 Destination Category 2
 1481    5C9     
@@ -1653,8 +1653,8 @@ BYTE    HEX     INFO
 1603    643     
 1604    644     Macro 8 Destination Category 8
 1605    645     
-1606    646     
-1607    647     
+1606    646     Macro 1 Panel Value Low Byte
+1607    647     Macro 1 Panel Value High Byte
 1608    648     
 1609    649     
 1610    64A     
@@ -1667,8 +1667,8 @@ BYTE    HEX     INFO
 1617    651     
 1618    652     
 1619    653     
-1620    654     
-1621    655     
+1620    654     Macro 8 Panel Value Low Byte
+1621    655     Macro 8 Panel Value High Byte
 1622    656     
 1623    657     
 1624    658     

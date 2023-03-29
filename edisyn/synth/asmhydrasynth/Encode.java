@@ -28,7 +28,7 @@ public class Encode
 			}
 		return patch;
 		}
-		
+
 	public static byte[] encodePayload(byte[] data)
 		{
 		// Compute the checksum
@@ -46,13 +46,6 @@ public class Encode
 		payload[1] = c;
 		payload[2] = b;
 		payload[3] = a;
-		/*
-		System.err.println("Encoded CRC Bytes: " 
-		+ StringUtility.toHex(payload[0]) + " " 
-		+ StringUtility.toHex(payload[1]) + " " 
-		+ StringUtility.toHex(payload[2]) + " " 
-		+ StringUtility.toHex(payload[3])); 
-		*/
 		System.arraycopy(data, 0, payload, 4, data.length);
 		
 		// Base64 encode the payload

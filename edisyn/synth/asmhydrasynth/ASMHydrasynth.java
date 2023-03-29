@@ -37,7 +37,6 @@ public class ASMHydrasynth extends Synth
     public static final String[] FILTER_ROUTES = { "Series", "Parallel" };
     public static final String[] FILTER_POSITIONS = { "Pre", "Post" };
     public static final String[] VOWEL_ORDERS = { "AEIOU", "AIUEO", "AUIOE", "AOUIE", "IOUAE", "UEAOI", "IOEAU", "UIEAO" };
-    // FIXME: Note that the NRPN docs are missing some filter types
     public static final String[] FILTER_1_TYPES = { "LP Ladder 12", "LP Ladder 24", "LP Fat 12", "LP Fat 24", "LP Gate", "LP MS20", "HP MS20", "LP 3-Ler", "BP 3-Ler", "HP 3-Ler",  "Vowel", "LP Stn 12", "BP Stn 12", "HP Stn 12", "LP 1 Pole", "LP 8 Pole" };
     public static final String[] FILTER_2_TYPES = { "LP-BP-HP", "LP-Notch-HP" };
     public static final String[] DELAY_TYPES = { "Basic Mono", "Basic Stereo", "Pan Delay", "LRC Delay", "Reverse" };
@@ -121,9 +120,56 @@ public class ASMHydrasynth extends Synth
         "CC 120", "CC 121", "CC 122", "CC 123", "CC 124", "CC 125", "CC 126", "CC 127" 
         };
 
+	public static final int[] MOD_DESTINATION_CATEGORIES = 
+		{
+		0,												// OFF
+		1,1,1,1,1,1,1,1,1,1,							// Arp
+		2,2,2,											// OSC 1
+		3,3,3,											// OSC 2
+		4,4,											// OSC 3
+		5,												// ALL OSC
+		6,6,6,6,6,6,6,6,6,6,6,6,6,						// Mutant 1
+		7,7,7,7,7,7,7,7,7,7,7,7,7,						// Mutant 2
+		8,8,8,8,8,8,8,8,8,8,8,8,8,						// Mutant 3
+		9,9,9,9,9,9,9,9,9,9,9,9,9,						// Mutant 4
+		10,												// Ring Mod
+		11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,	// Mixer
+		12,12,12,12,12,12,12,							// Filter 1
+		13,13,13,13,13,13,								// Filter 2
+		14,14,											// Amp
+		15,15,15,										// Pre-FX
+		16,16,16,16,16,									// Delay
+		17,17,17,17,17,									// Reverb
+		18,18,18,										// Post-FX
+		19,19,19,19,19,									// ENV 1
+		20,20,20,20,20,									// ENV 2
+		21,21,21,21,21,									// ENV 3
+		22,22,22,22,22,									// ENV 4
+		23,23,23,23,23,									// ENV 5
+		24,24,											// LFO 1
+		25,25,											// LFO 2
+		26,26,											// LFO 3
+		27,27,											// LFO 4
+		28,28,											// LFO 5
+		29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,// Mod Matrix
+		29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,// Mod Matrix
+		30,30,30,30,30,30,30,30,						// Macro
+		31,31,31,31,31,31,								// Voice
+		32,32,											// CV
+		33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,// MIDI
+		33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,// MIDI
+		33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,// MIDI
+		33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,// MIDI
+		33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,// MIDI
+		33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,// MIDI
+		33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,// MIDI
+		33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,// MIDI
+		};
+		
     public static final String[] MOD_DESTINATIONS = 
         {
-        "Off", "Arp Mode", "Arp Division", "Arp Swing", "Arp Gate", "Arp Octave", "Arp Oct Mode", "Arp Length", "Arp Phrase", "Arp Ratchet", "Arp Chance",
+        "Off", 
+        "Arp Mode", "Arp Division", "Arp Swing", "Arp Gate", "Arp Octave", "Arp Oct Mode", "Arp Length", "Arp Phrase", "Arp Ratchet", "Arp Chance",
         "Osc 1 Pitch", "Osc 1 Wave", "Osc 1 WaveScan",
         "Osc 2 Pitch", "Osc 2 Wave", "Osc 2 WaveScan",
         "Osc 3 Pitch", "Osc 3 Wave",
@@ -1296,6 +1342,34 @@ public class ASMHydrasynth extends Synth
         soundPanel.add(hbox, BorderLayout.CENTER);
         
         addTab("5-8", soundPanel);
+
+/*
+        soundPanel = new SynthPanel(this);
+        hbox = new HBox();
+        hbox.add(addMacro(1, Style.COLOR_A()));
+        hbox.add(addMacro(2, Style.COLOR_B()));
+        hbox.addLast(addMacro(3, Style.COLOR_A()));
+        
+        soundPanel.add(hbox, BorderLayout.CENTER);        
+        addTab("Macro 1-3", soundPanel);
+        
+        soundPanel = new SynthPanel(this);
+        hbox = new HBox();
+        hbox.add(addMacro(4, Style.COLOR_B()));
+        hbox.add(addMacro(5, Style.COLOR_A()));
+        hbox.addLast(addMacro(6, Style.COLOR_B()));
+        
+        soundPanel.add(hbox, BorderLayout.CENTER);        
+        addTab("4-6", soundPanel);
+        
+        soundPanel = new SynthPanel(this);
+        hbox = new HBox();
+        hbox.add(addMacro(7, Style.COLOR_A()));
+        hbox.addLast(addMacro(8, Style.COLOR_B()));
+        
+        soundPanel.add(hbox, BorderLayout.CENTER);        
+        addTab("7-8", soundPanel);
+*/
         
         soundPanel = new SynthPanel(this);
         vbox = new VBox();
@@ -1539,7 +1613,7 @@ public class ASMHydrasynth extends Synth
                     {
                     int v = value * 8;
                     // dividing 8192 by 117.03 roughly cuts into 70 pieces
-                    return String.format("%4.1f", ((roundEven(v / 117.03) + 10) / 10.0));
+                    return String.format("%1.1f", ((roundEven(v / 117.03) + 10) / 10.0));
                     }
                 };
             hbox.add(comp);
@@ -1611,7 +1685,7 @@ public class ASMHydrasynth extends Synth
                 {
                 int v = value * 8;
                 // dividing 8192 by 6.4 cuts into 128 pieces
-                return String.format("%4.1f", (roundEven(v / 6.4) / 10.0));
+                return String.format("%1.1f", (roundEven(v / 6.4) / 10.0));
                 }
             };
         hbox.add(comp);
@@ -1802,7 +1876,7 @@ public class ASMHydrasynth extends Synth
                 {
                 int v = value * 8;
                 // dividing 8192 by 6.4 cuts into 128 pieces
-                return String.format("%4.1f", (roundEven(v / 6.4) / 10.0));
+                return String.format("%1.1f", (roundEven(v / 6.4) / 10.0));
                 }
             };
         ((LabelledDial)comp).addAdditionalLabel("Volume");
@@ -1814,7 +1888,7 @@ public class ASMHydrasynth extends Synth
                 {
                 int v = value * 8;
                 // dividing 8192 by 6.4 cuts into 128 pieces
-                return String.format("%4.1f", (roundEven(v / 6.4) / 10.0));
+                return String.format("%1.1f", (roundEven(v / 6.4) / 10.0));
                 }
             };
         ((LabelledDial)comp).addAdditionalLabel("Volume");
@@ -1826,7 +1900,7 @@ public class ASMHydrasynth extends Synth
                 {
                 int v = value * 8;
                 // dividing 8192 by 6.4 cuts into 128 pieces
-                return String.format("%4.1f", (roundEven(v / 6.4) / 10.0));
+                return String.format("%1.1f", (roundEven(v / 6.4) / 10.0));
                 }
             };
         ((LabelledDial)comp).addAdditionalLabel("Volume");
@@ -1850,7 +1924,7 @@ public class ASMHydrasynth extends Synth
                 {
                 int v = value * 8;
                 // dividing 8192 by 6.4 cuts into 128 pieces
-                return String.format("%4.1f", (roundEven(v / 6.4) / 10.0));
+                return String.format("%1.1f", (roundEven(v / 6.4) / 10.0));
                 }
             };
         ((LabelledDial)comp).addAdditionalLabel("Volume");
@@ -1866,8 +1940,8 @@ public class ASMHydrasynth extends Synth
                 double v = value * 8;
                 // dividing 8192 by 6.4 cuts into 128 pieces
                 v = (roundEven(v / 6.4) / 10.0);
-                if (v < 64) return "<" + String.format("%4.1f", (64 - v));
-                else if (v > 64) return "" + String.format("%4.1f", (v - 64)) + ">";
+                if (v < 64) return "<" + String.format("%1.1f", (64 - v));
+                else if (v > 64) return "" + String.format("%1.1f", (v - 64)) + ">";
                 else return "--";
                 }
             };
@@ -1882,8 +1956,8 @@ public class ASMHydrasynth extends Synth
                 double v = value * 8;
                 // dividing 8192 by 6.4 cuts into 128 pieces
                 v = (roundEven(v / 6.4) / 10.0);
-                if (v < 64) return "<" + String.format("%4.1f", (64 - v));
-                else if (v > 64) return "" + String.format("%4.1f", (v - 64)) + ">";
+                if (v < 64) return "<" + String.format("%1.1f", (64 - v));
+                else if (v > 64) return "" + String.format("%1.1f", (v - 64)) + ">";
                 else return "--";
                 }
             };
@@ -1898,8 +1972,8 @@ public class ASMHydrasynth extends Synth
                 double v = value * 8;
                 // dividing 8192 by 6.4 cuts into 128 pieces
                 v = (roundEven(v / 6.4) / 10.0);
-                if (v < 64) return "<" + String.format("%4.1f", (64 - v));
-                else if (v > 64) return "" + String.format("%4.1f", (v - 64)) + ">";
+                if (v < 64) return "<" + String.format("%1.1f", (64 - v));
+                else if (v > 64) return "" + String.format("%1.1f", (v - 64)) + ">";
                 else return "--";
                 }
             };
@@ -1914,8 +1988,8 @@ public class ASMHydrasynth extends Synth
                 double v = value * 8;
                 // dividing 8192 by 6.4 cuts into 128 pieces
                 v = (roundEven(v / 6.4) / 10.0);
-                if (v < 64) return "<" + String.format("%4.1f", (64 - v));
-                else if (v > 64) return "" + String.format("%4.1f", (v - 64)) + ">";
+                if (v < 64) return "<" + String.format("%1.1f", (64 - v));
+                else if (v > 64) return "" + String.format("%1.1f", (v - 64)) + ">";
                 else return "--";
                 }
             };
@@ -1930,8 +2004,8 @@ public class ASMHydrasynth extends Synth
                 double v = value * 8;
                 // dividing 8192 by 6.4 cuts into 128 pieces
                 v = (roundEven(v / 6.4) / 10.0);
-                if (v < 64) return "<" + String.format("%4.1f", (64 - v));
-                else if (v > 64) return "" + String.format("%4.1f", (v - 64)) + ">";
+                if (v < 64) return "<" + String.format("%1.1f", (64 - v));
+                else if (v > 64) return "" + String.format("%.1f", (v - 64)) + ">";
                 else return "--";
                 }
             };
@@ -2026,7 +2100,7 @@ public class ASMHydrasynth extends Synth
 
 		final HBox scaleEditBox = new HBox();
 		
-		for(int i = 2; i <= 8; i++)
+		for(int i = 2; i <= 7; i++)
 			{
 			comp = new LabelledDial("Note " + i, this, "scalenote" + i, color, 0, 12)
 				{
@@ -2045,7 +2119,7 @@ public class ASMHydrasynth extends Synth
 			{
 			public String map(int value)
 				{
-				return NOTES[value];
+				return NOTES[value - 1];
 				}
 				
 			public void update(String key, Model model)
@@ -2153,7 +2227,7 @@ public class ASMHydrasynth extends Synth
                 {
                 int v = value * 8;
                 // dividing 8192 by 6.4 cuts into 128 pieces
-                return String.format("%4.1f", (roundEven(v / 6.4) / 10.0));
+                return String.format("%1.1f", (roundEven(v / 6.4) / 10.0));
                 }
             };
 
@@ -2183,7 +2257,7 @@ public class ASMHydrasynth extends Synth
                 {
                 int v = value * 8;
                 // dividing 8192 by 6.4 cuts into 128 pieces
-                return String.format("%4.1f", (roundEven(v / 6.4) / 10.0));
+                return String.format("%1.1f", (roundEven(v / 6.4) / 10.0));
                 }
             };
             
@@ -2207,7 +2281,7 @@ public class ASMHydrasynth extends Synth
                     {
                     int v = value * 8;
                     // dividing 8192 by 6.4 cuts into 128 pieces
-                    return String.format("%4.1f", (roundEven(v / 6.4) / 10.0));
+                    return String.format("%1.1f", (roundEven(v / 6.4) / 10.0));
                     }
                 };
             warp.add(comp);
@@ -2441,7 +2515,7 @@ public class ASMHydrasynth extends Synth
                 {
                 int v = value * 8;
                 // dividing 8192 by 6.4 roughly cuts into 1280 pieces
-                return String.format("%4.1f", (roundEven(v / 6.4) / 10.0));
+                return String.format("%1.1f", (roundEven(v / 6.4) / 10.0));
                 }
             };
                 
@@ -2453,7 +2527,7 @@ public class ASMHydrasynth extends Synth
                 {
                 int v = value * 8;
                 // dividing 8192 by 6.4 roughly cuts into 1280 pieces
-                return String.format("%4.1f", (roundEven(v / 6.4) / 10.0));
+                return String.format("%1.1f", (roundEven(v / 6.4) / 10.0));
                 }
             };
         hbox.add(comp);
@@ -2465,7 +2539,7 @@ public class ASMHydrasynth extends Synth
                 {
                 int v = value * 8;
                 // dividing 8192 by 6.4 roughly cuts into 1280 pieces
-                return String.format("%4.1f", (roundEven(v / 6.4) / 10.0) - 64);
+                return String.format("%1.1f", (roundEven(v / 6.4) / 10.0) - 64);
                 }
             };
         hbox.add(comp);
@@ -2478,7 +2552,7 @@ public class ASMHydrasynth extends Synth
                 {
                 int v = value * 8;
                 // dividing 8192 by 6.4 roughly cuts into 1280 pieces
-                return String.format("%4.1f", (roundEven(v / 6.4) / 10.0) - 64);
+                return String.format("%1.1f", (roundEven(v / 6.4) / 10.0) - 64);
                 }
             };
         ((LabelledDial)comp).addAdditionalLabel("Amount");
@@ -2491,7 +2565,7 @@ public class ASMHydrasynth extends Synth
                 {
                 int v = value * 8;
                 // dividing 8192 by 6.4 roughly cuts into 1280 pieces
-                return String.format("%4.1f", (roundEven(v / 6.4) / 10.0) - 64);
+                return String.format("%1.1f", (roundEven(v / 6.4) / 10.0) - 64);
                 }
             };
         hbox.add(comp);
@@ -2516,7 +2590,7 @@ public class ASMHydrasynth extends Synth
                     {
                     int v = value * 8;
                     // dividing 8192 by 6.4 roughly cuts into 1280 pieces
-                    return String.format("%4.1f", (roundEven(v / 6.4) / 10.0));
+                    return String.format("%1.1f", (roundEven(v / 6.4) / 10.0));
                     }
                 };
             hbox.add(comp);
@@ -2528,7 +2602,7 @@ public class ASMHydrasynth extends Synth
                     {
                     int v = value * 8;
                     // dividing 8192 by 6.4 roughly cuts into 1280 pieces
-                    return String.format("%4.1f", (roundEven(v / 6.4) / 10.0));
+                    return String.format("%1.1f", (roundEven(v / 6.4) / 10.0));
                     }
                 };
             ((LabelledDial)comp).addAdditionalLabel("Control");
@@ -2550,7 +2624,7 @@ public class ASMHydrasynth extends Synth
                     {
                     int v = value * 8;
                     // dividing 8192 by 6.4 roughly cuts into 1280 pieces
-                    return String.format("%4.1f", (roundEven(v / 6.4) / 10.0));
+                    return String.format("%1.1f", (roundEven(v / 6.4) / 10.0));
                     }
                 };
             hbox.add(comp);
@@ -2574,7 +2648,7 @@ public class ASMHydrasynth extends Synth
                 {
                 int v = value * 8;
                 // dividing 8192 by 6.4 roughly cuts into 1280 pieces
-                return String.format("%4.1f", (roundEven(v / 6.4) / 10.0));
+                return String.format("%1.1f", (roundEven(v / 6.4) / 10.0));
                 }
             };
         hbox.add(comp);
@@ -2586,7 +2660,7 @@ public class ASMHydrasynth extends Synth
                 {
                 int v = value * 8;
                 // dividing 8192 by 6.4 roughly cuts into 1280 pieces
-                return String.format("%4.1f", (roundEven(v / 6.4) / 10.0) - 64);
+                return String.format("%1.1f", (roundEven(v / 6.4) / 10.0) - 64);
                 }
             };
         hbox.add(comp);
@@ -2598,7 +2672,7 @@ public class ASMHydrasynth extends Synth
                 {
                 int v = value * 8;
                 // dividing 8192 by 6.4 roughly cuts into 1280 pieces
-                return String.format("%4.1f", (roundEven(v / 6.4) / 10.0) - 64);
+                return String.format("%1.1f", (roundEven(v / 6.4) / 10.0) - 64);
                 }
             };
         ((LabelledDial)comp).addAdditionalLabel("Amount");
@@ -2659,7 +2733,7 @@ public class ASMHydrasynth extends Synth
                 {
                 int v = value * 8;
                 // dividing 8192 by 6.4 roughly cuts into 1280 pieces
-                return String.format("%4.1f", (roundEven(v / 6.4) / 10.0));
+                return String.format("%1.1f", (roundEven(v / 6.4) / 10.0));
                 }
             };
         ((LabelledDial)comp).addAdditionalLabel("(Param 2)");
@@ -2721,7 +2795,7 @@ public class ASMHydrasynth extends Synth
                 {
                 int v = value * 8;
                 // dividing 8192 by 6.4 roughly cuts into 1280 pieces
-                return String.format("%4.1f", (roundEven(v / 6.4) / 10.0));
+                return String.format("%1.1f", (roundEven(v / 6.4) / 10.0));
                 }
             };
         flanger.add(comp);
@@ -2864,7 +2938,7 @@ public class ASMHydrasynth extends Synth
                 {
                 int v = value * 8;
                 // dividing 8192 by 6.4 roughly cuts into 1280 pieces
-                return String.format("%4.1f", (roundEven(v / 6.4) / 10.0) - 64);
+                return String.format("%1.1f", (roundEven(v / 6.4) / 10.0) - 64);
                 }
             };
         ((LabelledDial)comp).addAdditionalLabel("(Param 2)");
@@ -2928,7 +3002,7 @@ public class ASMHydrasynth extends Synth
                 {
                 int v = value * 8;
                 // dividing 8184 by 74.4 roughly cuts into 110 pieces
-                return String.format("%4.1f", (roundEven(v / 74.4) / 10.0 + 1.0));
+                return String.format("%1.1f", (roundEven(v / 74.4) / 10.0 + 1.0));
                 }
             };
         ((LabelledDial)comp).addAdditionalLabel("(Param 2)");
@@ -2998,7 +3072,7 @@ public class ASMHydrasynth extends Synth
                 {
                 int v = value * 8;
                 // dividing 8192 by 6.4 roughly cuts into 1280 pieces
-                return String.format("%4.1f", (roundEven(v / 6.4) / 10.0));
+                return String.format("%1.1f", (roundEven(v / 6.4) / 10.0));
                 }
             };
         ((LabelledDial)comp).addAdditionalLabel("(Param 2)");
@@ -3076,7 +3150,7 @@ public class ASMHydrasynth extends Synth
                 {
                 int v = value * 8;
                 // dividing 7752  (8160 - 408) by 40.8 roughly cuts into 190 pieces                             
-                return String.format("%4.1f", roundEven((v - 408) / 40.8) / 10.0 + 1.0) + ":1";
+                return String.format("%1.1f", roundEven((v - 408) / 40.8) / 10.0 + 1.0) + ":1";
                 }
             };
         ((LabelledDial)comp).addAdditionalLabel("(Param 1)");
@@ -3088,7 +3162,7 @@ public class ASMHydrasynth extends Synth
                 {
                 int v = value * 8;
                 // dividing 8192 by 12.8 roughly cuts into 640 pieces
-                return String.format("%4.1f", (roundEven(v / 12.8) / 10.0 - 64.0));
+                return String.format("%1.1f", (roundEven(v / 12.8) / 10.0 - 64.0));
                 }
             };
         ((LabelledDial)comp).addAdditionalLabel("(Param 2)");
@@ -3116,7 +3190,7 @@ public class ASMHydrasynth extends Synth
                 {
                 int v = value * 8;
                 // dividing 8192 by 6.4 roughly cuts into 1280 pieces
-                return String.format("%4.1f", (roundEven(v / 6.4) / 10.0));
+                return String.format("%1.1f", (roundEven(v / 6.4) / 10.0));
                 }
             };
         ((LabelledDial)comp).addAdditionalLabel("(Param 1)");
@@ -3128,7 +3202,7 @@ public class ASMHydrasynth extends Synth
                 {
                 int v = value * 8;
                 // dividing 8192 by 6.4 roughly cuts into 1280 pieces
-                return String.format("%4.1f", (roundEven(v / 6.4) / 10.0) - 64);
+                return String.format("%1.1f", (roundEven(v / 6.4) / 10.0) - 64);
                 }
             };
         ((LabelledDial)comp).addAdditionalLabel("(Param 2)");
@@ -3292,7 +3366,7 @@ public class ASMHydrasynth extends Synth
                 {
                 int v = value * 8;
                 // dividing 8192 by 6.4 cuts into 128 pieces
-                return String.format("%4.1f", (roundEven(v / 6.4) / 10.0));
+                return String.format("%1.1f", (roundEven(v / 6.4) / 10.0));
                 }
             };
         hbox.add(comp);
@@ -3303,7 +3377,7 @@ public class ASMHydrasynth extends Synth
                 {
                 int v = value * 8;
                 // dividing 8192 by 6.4 cuts into 128 pieces
-                return String.format("%4.1f", (roundEven(v / 6.4) / 10.0) - 64.0);
+                return String.format("%1.1f", (roundEven(v / 6.4) / 10.0) - 64.0);
                 }
             };
         hbox.add(comp);
@@ -3313,7 +3387,7 @@ public class ASMHydrasynth extends Synth
                 {
                 int v = value * 8;
                 // dividing 8192 by 6.4 cuts into 128 pieces
-                return String.format("%4.1f", (roundEven(v / 6.4) / 10.0));
+                return String.format("%1.1f", (roundEven(v / 6.4) / 10.0));
                 }
             };
         hbox.add(comp);
@@ -3352,7 +3426,7 @@ public class ASMHydrasynth extends Synth
             public String map(int value)
                 {
                                 
-                return String.format("%4.1f", roundEven(value * 10.0 / 4.1042084168) / 10.0 + 0.5);
+                return String.format("%1.1f", roundEven(value * 10.0 / 4.1042084168) / 10.0 + 0.5);
                 }
             };
         hbox.add(comp);
@@ -3372,7 +3446,7 @@ public class ASMHydrasynth extends Synth
                 {
                 int v = value * 8;
                 // dividing 8192 by 6.4 cuts into 128 pieces
-                return String.format("%4.1f", (roundEven(v / 6.4) / 10.0) - 64.0);
+                return String.format("%1.1f", (roundEven(v / 6.4) / 10.0) - 64.0);
                 }
             };
         hbox.add(comp);
@@ -3382,7 +3456,7 @@ public class ASMHydrasynth extends Synth
                 {
                 int v = value * 8;
                 // dividing 8192 by 6.4 cuts into 128 pieces
-                return String.format("%4.1f", (roundEven(v / 6.4) / 10.0));
+                return String.format("%1.1f", (roundEven(v / 6.4) / 10.0));
                 }
             };
         hbox.add(comp);
@@ -3392,7 +3466,7 @@ public class ASMHydrasynth extends Synth
                 {
                 int v = value * 8;
                 // dividing 8192 by 6.4 cuts into 128 pieces
-                return String.format("%4.1f", (roundEven(v / 6.4) / 10.0));
+                return String.format("%1.1f", (roundEven(v / 6.4) / 10.0));
                 }
             };
         hbox.add(comp);
@@ -3490,7 +3564,7 @@ public class ASMHydrasynth extends Synth
                 {
                 int v = value * 8;
                 // dividing 8192 by 6.4 roughly cuts into 1280 pieces
-                return String.format("%4.1f", (roundEven(v / 6.4) / 10.0));
+                return String.format("%1.1f", (roundEven(v / 6.4) / 10.0));
                 }
             };
         hbox.add(comp);
@@ -3636,8 +3710,8 @@ public class ASMHydrasynth extends Synth
                         v = (roundEven(v / 6.4) / 10.0);
                         String str = null;
                                                 
-                        if (v < 64) str= String.format("-%4.1f", (64 - v));
-                        else if (v > 64) str= "" + String.format("%4.1f", (v - 64));
+                        if (v < 64) str= String.format("-%1.1f", (64 - v));
+                        else if (v > 64) str= "" + String.format("%1.1f", (v - 64));
                         else str = "--";
 
                         if (v == 0)
@@ -3988,7 +4062,7 @@ public class ASMHydrasynth extends Synth
                 {
                 int v = value * 8;
                 // dividing 8192 by 6.4 roughly cuts into 1280 pieces
-                return String.format("%4.1f", (roundEven(v / 6.4) / 10.0));
+                return String.format("%1.1f", (roundEven(v / 6.4) / 10.0));
                 }
             };
         bpmOff.add(comp);
@@ -4081,7 +4155,7 @@ public class ASMHydrasynth extends Synth
                 {
                 int v = value * 8;
                 // dividing 8192 by 6.4 roughly cuts into 1280 pieces
-                return String.format("%4.1f", (roundEven(v / 6.4) / 10.0));
+                return String.format("%1.1f", (roundEven(v / 6.4) / 10.0));
                 }
             };
         bpmOn.add(comp);
@@ -4148,7 +4222,19 @@ public class ASMHydrasynth extends Synth
             	}
             };
         vbox.add(comp);
-                hbox.add(vbox);
+        
+		comp = new LabelledDial("Panel Value", this, "macro" + macro + "panelvalue", color, 0, 1024)
+			{
+			public String map(int value)
+				{
+				int v = value * 8;
+				// dividing 8192 by 6.4 cuts into 2560 pieces
+				return String.format("%1.1f", ((roundEven(v / 6.4) / 10.0)));
+				}
+			};
+		vbox.add(comp);
+
+        hbox.add(vbox);
                 
         vbox = new VBox();
         for(int i = 1; i <= 8; i+= 2)
@@ -4172,7 +4258,7 @@ public class ASMHydrasynth extends Synth
                     {
                     int v = value * 8;
                     // dividing 8192 by 3.2 cuts into 2560 pieces
-                    return String.format("%4.1f", ((roundEven(v / 3.2) / 10.0) - 128));
+                    return String.format("%1.1f", ((roundEven(v / 3.2) / 10.0) - 128));
                     }
                 };
             outer.add(comp);
@@ -4184,7 +4270,7 @@ public class ASMHydrasynth extends Synth
                     {
                     int v = value * 8;
                     // dividing 8192 by 3.2 cuts into 2560 pieces
-                    return String.format("%4.1f", ((roundEven(v / 3.2) / 10.0) - 128));
+                    return String.format("%1.1f", ((roundEven(v / 3.2) / 10.0) - 128));
                     }
                 };
             outer.add(comp);
@@ -4196,7 +4282,7 @@ public class ASMHydrasynth extends Synth
                     {
                     int v = value * 8;
                     // dividing 8192 by 3.2 cuts into 2560 pieces
-                    return String.format("%4.1f", ((roundEven(v / 3.2) / 10.0) - 128));
+                    return String.format("%1.1f", ((roundEven(v / 3.2) / 10.0) - 128));
                     }
                 };
             outer.add(comp);
@@ -4208,7 +4294,7 @@ public class ASMHydrasynth extends Synth
                     {
                     int v = value * 8;
                     // dividing 8192 by 3.2 cuts into 2560 pieces
-                    return String.format("%4.1f", ((roundEven(v / 3.2) / 10.0) - 128));
+                    return String.format("%1.1f", ((roundEven(v / 3.2) / 10.0) - 128));
                     }
                 };
             outer.add(comp);
@@ -4221,6 +4307,206 @@ public class ASMHydrasynth extends Synth
         }
 
 
+/*
+    public JComponent addMacro(int macro, Color color)
+        {
+        Category category = new Category(this, "Macro " + macro, color);
+        category.makePasteable("macro");
+        category.makeDistributable("macro");
+
+        JComponent comp;
+        String[] params;
+        HBox hbox = new HBox();
+
+        VBox vbox = new VBox();
+        comp = new StringComponent("Name", this, "macro" + macro + "name", 8, "Macro name must be up to 8 ASCII characters,\nnot including control characters, DELETE,\nor any of the following:  \" * \\ | / < > ? ; | ~")
+            {
+            public String replace(String val)
+                {
+                return reviseMacroName(val);
+                }
+            public String[] getList()
+            	{
+            	return MACRO_NAME_PRESETS;
+            	}
+            };
+        hbox.add(comp);
+        vbox.add(hbox);
+                
+        for(int i = 1; i <= 8; i+= 2)
+            {
+            VBox inner = new VBox();
+            HBox outer = new HBox();
+                        
+            params = MOD_DESTINATIONS;
+            comp = new Chooser("Destination " + i, this, "macro" + macro + "target" + i, params);
+            inner.add(comp);
+                
+            params = MOD_DESTINATIONS;
+            comp = new Chooser("Destination " + (i + 1), this, "macro" + macro + "target" + (i + 1), params);
+            inner.add(comp);
+            outer.add(inner);
+                        
+            comp = new LabelledDial("Depth " + i, this, "macro" + macro + "depth" + i, color, 0, 1024)
+                {
+                public boolean isSymmetric() { return true; }
+                public String map(int value)
+                    {
+                    int v = value * 8;
+                    // dividing 8192 by 3.2 cuts into 2560 pieces
+                    return String.format("%1.1f", ((roundEven(v / 3.2) / 10.0) - 128));
+                    }
+                };
+            outer.add(comp);
+
+            comp = new LabelledDial("Button " + i, this, "macro" + macro + "buttonvalue" + i, color, 0, 1024)
+                {
+                public boolean isSymmetric() { return true; }
+                public String map(int value)
+                    {
+                    int v = value * 8;
+                    // dividing 8192 by 3.2 cuts into 2560 pieces
+                    return String.format("%1.1f", ((roundEven(v / 3.2) / 10.0) - 128));
+                    }
+                };
+            outer.add(comp);
+
+            comp = new LabelledDial("Panel " + i, this, "macro" + macro + "panelvalue", color, 0, 1024)
+                {
+                public boolean isSymmetric() { return true; }
+                public String map(int value)
+                    {
+                    int v = value * 8;
+                    // dividing 8192 by 3.2 cuts into 2560 pieces
+                    return String.format("%1.1f", ((roundEven(v / 3.2) / 10.0) - 128));
+                    }
+                };
+            outer.add(comp);
+
+            comp = new LabelledDial("Depth " + (i+1), this, "macro" + macro + "depth" + (i+1), color, 0, 1024)
+                {
+                public boolean isSymmetric() { return true; }
+                public String map(int value)
+                    {
+                    int v = value * 8;
+                    // dividing 8192 by 3.2 cuts into 2560 pieces
+                    return String.format("%1.1f", ((roundEven(v / 3.2) / 10.0) - 128));
+                    }
+                };
+            outer.add(comp);
+
+            comp = new LabelledDial("Button " + (i+1), this, "macro" + macro + "buttonvalue" + (i+1), color, 0, 1024)
+                {
+                public boolean isSymmetric() { return true; }
+                public String map(int value)
+                    {
+                    int v = value * 8;
+                    // dividing 8192 by 3.2 cuts into 2560 pieces
+                    return String.format("%1.1f", ((roundEven(v / 3.2) / 10.0) - 128));
+                    }
+                };
+            outer.add(comp);
+ 
+             comp = new LabelledDial("Panel " + (i+1), this, "macro" + macro + "panelvalue", color, 0, 1024)
+                {
+                public boolean isSymmetric() { return true; }
+                public String map(int value)
+                    {
+                    int v = value * 8;
+                    // dividing 8192 by 3.2 cuts into 2560 pieces
+                    return String.format("%1.1f", ((roundEven(v / 3.2) / 10.0) - 128));
+                    }
+                };
+            outer.add(comp);
+
+           vbox.add(outer);
+            }
+                        
+        category.add(vbox, BorderLayout.CENTER);
+        return category;
+        }
+*/
+
+/*
+    public JComponent addMacro(int macro, Color color)
+        {
+        Category category = new Category(this, "Macro " + macro, color);
+        category.makePasteable("macro");
+        category.makeDistributable("macro");
+
+        JComponent comp;
+        String[] params;
+        HBox hbox = new HBox();
+
+        VBox vbox = new VBox();
+        comp = new StringComponent("Name", this, "macro" + macro + "name", 8, "Macro name must be up to 8 ASCII characters,\nnot including control characters, DELETE,\nor any of the following:  \" * \\ | / < > ? ; | ~")
+            {
+            public String replace(String val)
+                {
+                return reviseMacroName(val);
+                }
+            public String[] getList()
+            	{
+            	return MACRO_NAME_PRESETS;
+            	}
+            };
+        hbox.add(comp);
+        vbox.add(hbox);
+                
+        for(int i = 1; i <= 8; i++)
+            {
+            HBox row = new HBox();
+                        
+            VBox inner = new VBox();
+            params = MOD_DESTINATIONS;
+            comp = new Chooser("Destination " + i, this, "macro" + macro + "target" + i, params);
+            inner.add(comp);
+            row.add(inner);
+            
+            comp = new LabelledDial("Depth " + i, this, "macro" + macro + "depth" + i, color, 0, 1024)
+                {
+                public boolean isSymmetric() { return true; }
+                public String map(int value)
+                    {
+                    int v = value * 8;
+                    // dividing 8192 by 3.2 cuts into 2560 pieces
+                    return String.format("%1.1f", ((roundEven(v / 3.2) / 10.0) - 128));
+                    }
+                };
+            row.add(comp);
+
+            comp = new LabelledDial("Button " + i, this, "macro" + macro + "buttonvalue" + i, color, 0, 1024)
+                {
+                public boolean isSymmetric() { return true; }
+                public String map(int value)
+                    {
+                    int v = value * 8;
+                    // dividing 8192 by 3.2 cuts into 2560 pieces
+                    return String.format("%1.1f", ((roundEven(v / 3.2) / 10.0) - 128));
+                    }
+                };
+            row.add(comp);
+
+            comp = new LabelledDial("Panel " + i, this, "macro" + macro + "panelvalue", color, 0, 1024)
+                {
+                public boolean isSymmetric() { return true; }
+                public String map(int value)
+                    {
+                    int v = value * 8;
+                    // dividing 8192 by 3.2 cuts into 2560 pieces
+                    return String.format("%1.1f", ((roundEven(v / 3.2) / 10.0) - 128));
+                    }
+                };
+            row.add(comp);
+            
+           	vbox.add(row);
+            }
+                        
+        category.add(vbox, BorderLayout.CENTER);
+        return category;
+        }
+ */
+        
     public JComponent addArp(Color color)
         {
         Category category = new Category(this, "Arpeggiator", color);
@@ -4234,8 +4520,7 @@ public class ASMHydrasynth extends Synth
         comp = new CheckBox("Enable", this, "arpenable");
         vbox.add(comp);
 
-        comp = new CheckBox("Tap Trig", this, "arptaptrig");
-        ((CheckBox)comp).addToWidth(1);
+         comp = new CheckBox("Latch", this, "arplatch");
         vbox.add(comp);
 
         hbox.add(vbox);
@@ -4245,7 +4530,8 @@ public class ASMHydrasynth extends Synth
         ((CheckBox)comp).addToWidth(1);
         vbox.add(comp);
 
-        comp = new CheckBox("Latch", this, "arplatch");
+       comp = new CheckBox("Tap Trig", this, "arptaptrig");
+        ((CheckBox)comp).addToWidth(1);
         vbox.add(comp);
 
         hbox.add(vbox);
@@ -4341,7 +4627,7 @@ public class ASMHydrasynth extends Synth
                         {
                         int v = value * 8;
                         // dividing 8192 by 3.2 cuts into 2560 pieces
-                        return String.format("%4.1f", ((roundEven(v / 3.2) / 10.0) - 128));
+                        return String.format("%1.1f", ((roundEven(v / 3.2) / 10.0) - 128));
                         }
                     };
                 hbox.add(comp);
@@ -4413,11 +4699,11 @@ public class ASMHydrasynth extends Synth
         addHydrasynthMenu();
         receiveCurrent.setEnabled(false);
         //receivePatch.setEnabled(false);
-        receiveNextPatch.setEnabled(false);
-        merge.setEnabled(false);
-        getAll.setEnabled(false);
-        blend.setEnabled(false);
-        writeTo.setEnabled(false);
+        //receiveNextPatch.setEnabled(false);
+        //merge.setEnabled(false);
+        //getAll.setEnabled(false);
+        //blend.setEnabled(false);
+//        writeTo.setEnabled(false);
 //        transmitCurrent.setEnabled(false);
         return frame;
         }         
@@ -4494,20 +4780,6 @@ public class ASMHydrasynth extends Synth
   }
         
 
-
-  public void changePatch(Model tempModel)
-  {
-  // I believe that the  changes *single* patches using Bank Select *LSB* (32) (?!?), 
-  // followed by Program Change.  This has to be on a channel that's not the multi channel.
-        
-  int bank = tempModel.get("bank", 0);
-  int number = tempModel.get("number", 0);
-        
-  tryToSendMIDI(buildCC(getChannelOut(), 32, bank));
-  tryToSendMIDI(buildPC(getChannelOut(), number));
-  }
-
-
   public String getPatchName(Model model) { return model.get("name", "Untitled"); }
 
   public byte[] requestCurrentDump()
@@ -4577,7 +4849,7 @@ public class ASMHydrasynth extends Synth
         return nrpn[((Integer)obj).intValue()];
         }
                 
-                
+		
     /// The Hydrasynth NRPN is a mess, requiring a very high degree of customization
     /// per-parameter to emit NRPN values.  This is *extremely* unfortunate -- it is so highly
     /// customized and arbitrary that I can't do a table lookup of range informaton per-parameter 
@@ -5188,11 +5460,9 @@ public class ASMHydrasynth extends Synth
         return buildNRPN(getChannelOut(), p, val);
         }
 
-
-    /** The Hydrasynth doesn't have a useful sysex emit mechanism, so we're inventing one here solely for
-        the purposes of writing to a file. */
-    public byte[] emit(Model tempModel, boolean toWorkingMemory, boolean toFile)
-        {
+		/*
+	public Object[] emitFake(Model tempModel, boolean toWorkingMemory, boolean toFile)
+		{
         if (tempModel == null)
             tempModel = getModel();
 
@@ -5306,13 +5576,471 @@ public class ASMHydrasynth extends Synth
         System.arraycopy(vals, 0, sysex, HEADER, vals.length);
         sysex[sysex.length - 1] = (byte)0xF7;
         return sysex;
-        }
+		}
+*/
+
+
+	void get1(String key, byte[] data, int pos)
+		{
+		/*
+		if (model.getMin(key) < 0)	// signed two's complement doesn't matter
+			{
+			data[pos] = (byte)model.get(key);
+			}
+		else
+			{
+			data[pos] = (byte)model.get(key);
+			}
+		*/
+		get2(key, data, pos);
+		}
+
+	void get2(String key, byte[] data, int pos)
+		{
+		int val = model.get(key);
+		if (model.getMin(key) < 0)	// signed two's complement
+			{
+			data[pos] = (byte)(val & 0xFF);
+			data[pos+1] = (byte)((val >>> 8) & 0xFF);
+			}
+		else
+			{
+			data[pos] = (byte)(val & 0xFF);
+			data[pos+1] = (byte)((val >>> 8) & 0xFF);
+			}
+		}
+
+
+	public boolean getSendsParametersAfterLoad() { return false; }
+			
+    /** The Hydrasynth doesn't have a useful sysex emit mechanism, so we're inventing one here solely for
+        the purposes of writing to a file. */
+    public Object[] emitAll(Model tempModel, boolean toWorkingMemory, boolean toFile)
+        {
+        if (tempModel == null)
+            tempModel = getModel();
+            
+        if (toWorkingMemory) // uh oh
+        	{
+        	System.err.println("emitReal: cannot emit to working memory");
+        	return new Object[0][0];
+        	}
+
+		byte[] data = new byte[2790];
+
+		// Fill in header
+		data[0] = (byte) 0x06;		// save to RAM
+		data[1] = (byte) 0x00;
+		data[2] = (byte) model.get("bank");
+		data[3] = (byte) model.get("number");
+		data[4] = (byte) 0x9B;		// 1.5.5.  Change to 0xC8 for 2.0.0
+		data[5] = (byte) 0x00;
+		data[6] = (byte) 0x00;
+		data[7] = (byte) 0x00;
+		
+
+        // BASICS
+		get1("category", data, 8);
+		char[] name = (model.get("name", "Untitled") + "                ").toCharArray();
+		System.err.println(name.length);
+        for(int i = 0; i < 16; i++)
+            {
+            data[9 + i] = (byte)name[i];
+            }
+		get1("color", data, 26);
+		
+		// VOICE
+		get1("voicepolyphony", data, 30);
+		get1("voicedensity", data, 32);
+		get1("voicedetune", data, 34);
+		get1("voiceanalogfeel", data, 36);
+		get1("voicerandomphase", data, 38);
+		get1("voicestereomode", data, 40);
+		get1("voicestereowidth", data, 42);
+		get1("voicepitchbend", data, 44);
+		get1("voicevibratoamount", data, 46);
+		get1("voicevibratobpmsync", data, 50);
+		if (model.get("voicevibratobpmsync") == 0)
+			{
+			get1("voicevibratoratesyncoff", data, 48);
+			}
+		else
+			{
+			get1("voicevibratoratesyncon", data, 48);
+			}
+		get1("voiceglide", data, 52);
+		get1("voiceglidetime", data, 54);
+		get1("voiceglidecurve", data, 56);
+		get1("voiceglidelegato", data, 58);
+
+		// SCALES
+		
+		get1("scalekeylock", data, 60);
+		get1("scaletype", data, 62);
+		for(int i = 2; i < 8; i++)
+			{
+			get1("scalenote" + i, data, 66 - 2 + i);
+			}		
+
+		// OSCS
+		for(int i = 1; i < 3; i++)
+			{
+			int p = (i == 1 ? 80 : 108);
+			get1("osc" + i + "mode", data, p + 0);
+			get2("osc" + i + "type", data, p + 2);	// the wave
+			get1("osc" + i + "semi", data, p + 4);
+			get1("osc" + i + "cent", data, p + 6);
+			get1("osc" + i + "keytrack", data, p + 8);
+			get2("osc" + i + "wavscan", data, p + 10);
+			for(int j = 0; j < 8; j++)
+				{
+				get2("osc" + i + "wavscanwave" + (j + 1), data, p + 12 + j * 2);
+				}
+			}
+		get2("osc3type", data, 136);	// the wave
+		get1("osc3semi", data, 138);
+		get1("osc3cent", data, 140);
+		get1("osc3keytrack", data, 142);
+		
+		// MUTANTS
+		for(int i = 1; i < 5; i++)
+			{
+			int p = (i == 1 ? 144 : (i == 2 ? 158 : (i == 3 ? 204 : 218)));
+			get1("mutant" + i + "mode", data, p + 0);
+			if (model.get("mutant" + i + "mode") == 2) // osc sync
+				get1("mutant" + i + "sourceoscsync", data, p + 2);
+			else	// we assume FM Linear or other
+				get1("mutant" + i + "sourcefmlin", data, p + 2);
+			get2("mutant" + i + "ratio", data, p + 4);
+			get2("mutant" + i + "depth", data, p + 6);
+			get2("mutant" + i + "window", data, p + 8);
+			get2("mutant" + i + "feedback", data, p + 10);
+			get2("mutant" + i + "wet", data, p + 12);
+			}
+
+		// MUTANT WARPS
+		for(int i = 1; i < 5; i++)
+			{
+			int p = (i == 1 ? 172 : (i == 2 ? 188 : (i == 3 ? 232 : 248)));
+			for(int j = 0; j < 8; j++)
+				{
+				get2("mutant" + i + "warp" + (j + 1), data, p + j * 2);
+				}
+			}
+			
+		// RING MOD NOISE
+		get1("ringmodsource1", data, 264);
+		get1("ringmodsource2", data, 266);
+		get2("ringmoddepth", data, 268);
+		get1("noisetype", data, 272);
+		
+		// MIXER
+		for(int i = 0; i < 3; i++)
+			{
+			get2("mixerosc" + (i + 1) + "vol", data, 274 + i * 2);
+			get2("mixerosc" + (i + 1) + "pan", data, 286 + i * 2);
+			get2("mixerosc" + (i + 1) + "filterratio", data, 292 + i * 2);
+			}		
+		get2("mixerringmodvol", data, 280);
+		get2("mixernoisevol", data, 282);
+		get2("mixerringmodpan", data, 298);
+		get2("mixernoisepan", data, 300);
+		get2("mixerringmodfilterratio", data, 304);
+		get2("mixernoisefilterratio", data, 306);
+
+		// FILTERS
+		get1("mixerfilterrouting", data, 302);
+		get1("filter1type", data, 308);						// FIXME: Values are out of order, will this affect us?
+		get2("filter1cutoff", data, 310);
+		get2("filter1resonance", data, 312);
+		get2("filter1special", data, 314);
+		get2("filter1env1amount", data, 316);
+		get2("filter1lfo1amount", data, 318);
+		get2("filter1velenv", data, 320);
+		get2("filter1keytrack", data, 322);
+		get2("filter1drive", data, 326);
+		get1("filter1positionofdrive", data, 328);
+		get1("filter1vowelorder", data, 330);
+
+		get2("filter2morph", data, 332);
+		get2("filter2cutoff", data, 334);
+		get2("filter2resonance", data, 336);
+		get2("filter2env1amount", data, 338);
+		get2("filter2lfo1amount", data, 340);
+		get2("filter2velenv", data, 342);
+		get2("filter2keytrack", data, 344);
+		
+		// AMPLIFIER
+		get2("amplfo2amount", data, 346);
+		get2("ampvelenv", data, 348);
+		get2("amplevel", data, 350);
+
+		// PRE-FX
+		get1("prefxtype", data, 352);
+		get1("prefxsidechain", data, 354);
+		int prefxtype = Math.max(0, Math.min(data[352], 8)); 	// bound to 0 ... 8
+		if (prefxtype != 0) // skip bypass
+			{
+			for(int i = 0; i < 5; i++)
+				{
+				int p = 356;
+				get2("prefx" + prefxtype + "param" + (i + 1), data, p + i * 2);
+				}
+			}
+		get2("prefxwet", data, 366);
+
+		// DELAY
+		get2("delaytype", data, 368);
+		get2("delaybpmsync", data, 370);
+		if (model.get("delaybpmsync") == 0)
+			{
+			get2("delaytimesyncoff", data, 372);
+			}
+		else
+			{
+			get2("delaytimesyncon", data, 372);
+			}
+		get2("delayfeedback", data, 374);
+		get2("delayfeedtone", data, 376);
+		get2("delaywettone", data, 378);
+		get2("delaywet", data, 382);
+		
+		// REVERB
+		get2("reverbtype", data, 384);
+		get2("reverbtime", data, 388);
+		get2("reverbtone", data, 390);
+		get2("reverbhidamp", data, 392);
+		get2("reverblodamp", data, 394);
+		get2("reverbpredelay", data, 396);
+		get2("reverbwet", data, 398);
+
+		// POST-FX
+		get1("postfxtype", data, 400);
+		get1("postfxsidechain", data, 402);
+		int postfxtype = Math.max(0, Math.min(data[400], 8)); 	// bound to 0 ... 8
+		if (postfxtype != 0) // skip bypass
+			{
+			for(int i = 0; i < 5; i++)
+				{
+				int p = 404;
+				get2("postfx" + postfxtype + "param" + (i + 1), data, p + i * 2);
+				}
+			}
+		get2("postfxwet", data, 414);
+
+		// RIBBON
+		get1("ribbonmode", data, 436);
+		get1("ribbonkeyspan", data, 438);
+		get1("ribbonoctave", data, 440);
+		get1("ribbonhold", data, 442);					// Not in the standard list
+		get1("ribbonquantize", data, 444);
+		get1("ribbonglide", data, 446);
+		get1("ribbonmodcontrol", data, 448);				// theremin wheel volume
+
+		// MISC
+		get1("arpclklock", data, 468);	
+		data[470] = (byte)(model.get("voicewarmmode") | (model.get("voicesnap") << 1));
+		// get1("voicewarmmode", data, 470, 0);				// Note Bitpacked
+		// get1("voicesnap", data, 470, 1);					// Note Bitpacked
+		get1("filter2type", data, 472);
+		
+		// ENVELOPES
+		for(int i = 0; i < 5; i++)
+			{
+			int p = (i == 0 ? 478 : (i == 1 ? 506 : (i == 2 ? 534 : (i == 3 ? 562 : 590))));
+			get1("env" + (i + 1) + "bpmsync", data, p + 8);
+			if (model.get("env" + (i + 1) + "bpmsync") == 0) // off
+				{
+				get2("env" + (i + 1) + "delaysyncoff", data, p + 10);
+				get2("env" + (i + 1) + "attacksyncoff", data, p + 0);
+				get2("env" + (i + 1) + "holdsyncoff", data, p + 12);
+				get2("env" + (i + 1) + "decaysyncoff", data, p + 2);
+				get2("env" + (i + 1) + "releasesyncoff", data, p + 6);
+				}
+			else
+				{
+				get2("env" + (i + 1) + "delaysyncon", data, p + 10);
+				get2("env" + (i + 1) + "attacksyncon", data, p + 0);
+				get2("env" + (i + 1) + "holdsyncon", data, p + 12);
+				get2("env" + (i + 1) + "decaysyncon", data, p + 2);
+				get2("env" + (i + 1) + "releasesyncon", data, p + 6);
+				}
+			get2("env" + (i + 1) + "sustain", data, p + 4);
+			get2("env" + (i + 1) + "atkcurve", data, p + 14);
+			get2("env" + (i + 1) + "deccurve", data, p + 16);
+			get2("env" + (i + 1) + "relcurve", data, p + 18);
+			get1("env" + (i + 1) + "legato", data, p + 20);
+			get1("env" + (i + 1) + "reset", data, p + 22);		// can only be set if legato is unset, hope this is okay
+			get1("env" + (i + 1) + "freerun", data, p + 24);		// can only be set if legato is unset, hope this is okay
+			}
+			
+		// LFOS
+		for(int i = 0; i < 5; i++)
+			{
+			int p = (i == 0 ? 618 : (i == 1 ? 656 : (i == 2 ? 694 : (i == 3 ? 732 : 770))));
+			get1("lfo" + (i + 1) + "wave", data, p + 0);
+			get1("lfo" + (i + 1) + "bpmsync", data, p + 4);
+			get1("lfo" + (i + 1) + "trigsync", data, p + 6);
+			if (model.get("lfo" + (i + 1) + "bpmsync") == 0) // off
+				{
+				get2("lfo" + (i + 1) + "ratesyncoff", data, p + 2);
+				get1("lfo" + (i + 1) + "delaysyncoff", data, p + 8);
+				get1("lfo" + (i + 1) + "fadeinsyncoff", data, p + 10);
+				}
+			else
+				{
+				get2("lfo" + (i + 1) + "ratesyncon", data, p + 2);
+				get1("lfo" + (i + 1) + "delaysyncon", data, p + 8);
+				get1("lfo" + (i + 1) + "fadeinsyncon", data, p + 10);
+				}
+			get2("lfo" + (i + 1) + "phase", data, p + 12);
+			get2("lfo" + (i + 1) + "level", data, p + 14);
+			get1("lfo" + (i + 1) + "steps", data, p + 16);
+			get1("lfo" + (i + 1) + "smooth", data, p + 18);
+			get1("lfo" + (i + 1) + "oneshot", data, p + 20);
+			// First 8 steps
+			for(int j = 0; j < 8; j++)
+				{
+				get2("lfo" + (i + 1) + "step" + (j + 1), data, p + 22 + j * 2);
+				}
+			}
+			
+		// ARPEGGIATOR
+		
+		get1("arpdivision", data, 810);
+		get1("arpswing", data, 812);
+		get1("arpgate", data, 814);
+		get1("arpoctmode", data, 816);
+		get1("arpoctave", data, 818);
+		get1("arpmode", data, 820);
+		get1("arplength", data, 822);
+		get1("arptaptrig", data, 824);
+		get1("arpphrase", data, 826);
+		get1("arpratchet", data, 828);
+		get1("arpchance", data, 830);
+		get1("arpenable", data, 832);		
+		get1("arplatch", data, 834);		
+
+		// MOD MATRIX
+		for(int i = 0; i < 32; i++)
+			{
+			get2("modmatrix" + (i + 1) + "depth", data, 838 + i * 2);
+			}
+		for(int i = 0; i < 32; i++)
+			{
+			get1("modmatrix" + (i + 1) + "modsource", data, 902 + i * 2);
+			}
+		for(int i = 0; i < 32; i++)
+			{
+			get2("modmatrix" + (i + 1) + "modtarget", data, 966 + i * 2);
+			}
+			
+		// FIXME: Starting at 1032, there may be a fourth mod matrix thingamabob
+			
+		// MACRO
+		for(int i = 0; i < 8; i++)
+			{
+			int p = 1094 + i * 16;
+			for(int j = 0; j < 8; j++)
+				{
+				get2("macro" + (i + 1) + "depth" + (j + 1), data, p + j * 2);
+				}
+			}
+		for(int i = 0; i < 8; i++)
+			{
+			int p = 1222 + i * 16;
+			for(int j = 0; j < 8; j++)
+				{
+				get2("macro" + (i + 1) + "target" + (j + 1), data, p + j * 2);
+				}
+			}
+		for(int i = 0; i < 8; i++)
+			{
+			int p = 1350 + i * 16;
+			for(int j = 0; j < 8; j++)
+				{
+				get2("macro" + (i + 1) + "buttonvalue" + (j + 1), data, p + j * 2);
+				}
+			}
+		for(int i = 0; i < 8; i++)
+			{
+			get2("macro" + (i + 1) + "panelvalue", data, 1606 + i * 2);
+			}
+		// Set the target categories
+		for(int i = 0; i < 8; i++)
+			{
+			int p = 1478 + i * 16;
+			for(int j = 0; j < 8; j++)
+				{
+				int category = MOD_DESTINATION_CATEGORIES[model.get("macro" + (i + 1) + "target" + (j + 1))];
+				data[p + j * 2] = (byte)category;
+				}
+			}
+		int offset = 1630;
+		for(int i = 0; i < 8; i++)
+			{
+			char[] macroname = (model.get("macro" + (i + 1) + "name", "Untitled") + "        ").toCharArray();
+			for(int j = 0; j < 8; j++)
+				{
+				data[offset + j] = (byte)macroname[j];
+				}
+			offset += 17;			// NO REALLY, it's *17*.  Something strange going on here.
+			}
+		// For the time being, macros always emit custom names
+		for(int i = 0; i < 8; i++)
+			{
+			data[416 + i * 2] = 0;
+			data[416 + i * 2 + 1] = 1;
+			}
+
+		// LFO STEPS 9 to 64
+		for(int i = 0; i < 5; i++)
+			{
+			for(int j = 0; j < 56; j++)  // FIXME: is this right?
+				{
+				get2("lfo" + (i + 1) + "step" + (j + 9), data, 1770 + i * 56 * 2 + j * 2);
+				}
+			}
+
+		
+		// ENV TRIG SOURCES
+		for(int i = 0; i < 5; i++)
+			{
+			// Env 2 Trig Source 1 ought not be set
+			if (i == 1)	// Env 2
+				{
+				model.set("env" + (i + 1) + "trigsrc1", 1);
+				}
+			else
+				{
+				get2("env" + (i + 1) + "trigsrc1", data, 2340 + i * 10);
+				}
+			get2("env" + (i + 1) + "trigsrc2", data, 2342 + i * 10);
+			get2("env" + (i + 1) + "trigsrc3", data, 2344 + i * 10);
+			get2("env" + (i + 1) + "trigsrc4", data, 2346 + i * 10);
+			}
+		
+		byte[][] outgoing = Encode.encodePatch(data);
+		
+		Object[] sysex = new byte[outgoing.length + 2][];
+		sysex[0] = Encode.encodePayload(new byte[] { (byte)0x18, (byte)0x00 });		// header
+		for(int i = 0; i < outgoing.length; i++)		// patch chunks
+			{
+			sysex[i + 1] = outgoing[i];
+			}
+		sysex[sysex.length - 1] = Encode.encodePayload(new byte[] { (byte)0x1A, (byte)0x00 });		// footer
+			
+		//// FIXME Don't know if we need to add the Reset Requests,
+		//// at the moment, just adding the header and footer
+		
+		return sysex;
+		        }
 
     	public void performRequestDump(Model tempModel, boolean changePatch)
 		  {
-		  if (changePatch)	 // dunno if we should bother with this yet
+		  if (changePatch)
 		  	{
-		  	// Nada
+		  	performChangePatch(tempModel);
 		  	}
 		  	
 		  if (tempModel == null)
@@ -5338,69 +6066,114 @@ public class ASMHydrasynth extends Synth
 	byte[][] incoming = new byte[22][];
 	
 	public static final boolean REVERSE_ENGINEER = true;
-	
+
     public int parse(byte[] data, boolean fromFile)
     	{
-    	if (data[1] == 0x7D) 
-    		return parseFake(data, fromFile);
-    	else
+    	if (fromFile)
     		{
-    		if (data.length > 19)	// probably valid
-    			{
-				incoming[incomingPos] = data;
-            boolean sendMIDI = getSendMIDI();
-            setSendMIDI(true);
-				byte[] d = Encode.encodePayload(new byte[] { 0x17, 0x00, (byte)incomingPos, 0x16 });
-				tryToSendSysex(d);
-            setSendMIDI(sendMIDI);
-				if (incomingPos == 21)
+			byte[][] cut = cutUpSysex(data);
+			incomingPos = 0;
+			incoming = new byte[22][];
+			for(int i = 0; i < cut.length; i++)
+				{
+				int val = parseSub(cut[i], fromFile);
+				if (val == PARSE_SUCCEEDED)
+					return PARSE_SUCCEEDED;
+				else if (val != PARSE_INCOMPLETE)
+					return PARSE_FAILED;
+				}
+			return PARSE_FAILED;
+			}
+		else
+			{
+			return parseSub(data, fromFile);
+			}
+    	}
+	
+    public int parseSub(byte[] data, boolean fromFile)
+    	{
+		if (data.length == 191 || data.length == 155)	// hopefully a patch chunk
+			{
+			// Send request for next chunk if appropriate
+			if (!fromFile)
+				{
+				boolean sendMIDI = getSendMIDI();
+				setSendMIDI(true);
+				tryToSendSysex(Encode.encodePayload(new byte[] { 0x17, 0x00, (byte)incomingPos, 0x16 }));
+			
+				setSendMIDI(sendMIDI);
+				}
+
+			// double check
+			if (data.length == 191 && incomingPos == 21) // uh oh
+				{
+				System.err.println("A");
+				return PARSE_FAILED;
+				}
+			else if (data.length == 155 && incomingPos != 21) // uh oh
+				{
+				System.err.println("B");
+				return PARSE_FAILED;
+				}
+
+			// Load chunk
+			incoming[incomingPos] = data;
+
+			// Process if we have 21 chunks
+			if (incomingPos == 21)
+				{
+				// Send footer if appropriate
+				if (!fromFile)
 					{
-             sendMIDI = getSendMIDI();
-            setSendMIDI(true);
+					boolean sendMIDI = getSendMIDI();
+					setSendMIDI(true);
 					tryToSendSysex(Encode.encodePayload(new byte[] { 0x1A, 0x00 }));
-            setSendMIDI(sendMIDI);
-					try
+					setSendMIDI(sendMIDI);
+					}
+					
+				// Decode and process!
+				try
+					{
+					byte[] result = Decode.decodePatch(incoming);
+					if (REVERSE_ENGINEER)
 						{
-						byte[] result = Decode.decodePatch(incoming);
-						if (REVERSE_ENGINEER)
+						if (firstPatch == null)
 							{
-							if (firstPatch == null)
-								{
-								System.err.println("INITIAL PATCH LOADED");
-								firstPatch = result;
-								}
-							else 
-								{
-								System.err.println("DIFFERENCES");
-								diff(firstPatch, result);
-								}
-							incoming = new byte[22][];
-							incomingPos = 0;
-							return PARSE_SUCCEEDED;
+							System.err.println("INITIAL PATCH LOADED");
+							firstPatch = result;
 							}
-						else
+						else 
 							{
-							incoming = new byte[22][];
-							incomingPos = 0;
-							return parseReal(result, fromFile);
+							System.err.println("DIFFERENCES");
+							diff(firstPatch, result);
 							}
-						}
-					catch (RuntimeException ex)
-						{
-						Synth.handleException(ex);
 						incoming = new byte[22][];
 						incomingPos = 0;
-						return PARSE_FAILED;
+						return PARSE_SUCCEEDED;
+						}
+					else
+						{
+						incoming = new byte[22][];
+						incomingPos = 0;
+						return parseReal(result, fromFile);
 						}
 					}
-				else
+				catch (RuntimeException ex)
 					{
-					incomingPos++;
-					return PARSE_INCOMPLETE;
+					Synth.handleException(ex);
+					incoming = new byte[22][];
+					incomingPos = 0;
+					return PARSE_FAILED;
 					}
-    			}
-    		else return PARSE_INCOMPLETE;		// maybe parse failed or something else?  Probably not parse failed
-    		}
+				}
+			else
+				{
+				// Let's wait for the next chunk
+				incomingPos++;
+				return PARSE_INCOMPLETE;
+				}
+			}
+		else return PARSE_INCOMPLETE;		// maybe some other message got in the way
     	}
     	
     public void diff(byte[] a, byte[] b)
@@ -5414,6 +6187,7 @@ public class ASMHydrasynth extends Synth
 
     /** The Hydrasynth doesn't have a useful sysex emit mechanism, so we're inventing one here solely for
         the purposes of writing to a file. */
+    /*
     public int parseFake(byte[] data, boolean fromFile)
         {
         int HEADER = 20;
@@ -5496,6 +6270,7 @@ public class ASMHydrasynth extends Synth
         revise();
         return PARSE_SUCCEEDED;
         }
+    */
 
 /*
 	void set(String key, byte data)
@@ -5542,6 +6317,7 @@ public class ASMHydrasynth extends Synth
 	void set1(String key, byte[] data, int pos)
 		{
 		if (!model.exists(key)) System.err.println("KEY NOT FOUND: " + key);
+		System.err.println(key + "   " + data[pos+5]);
 		if (key.equals("prefxtype"))
 			{
 			System.err.println(key + " " + model.getMin(key) + " " + model.getMax(key) + " " + data[pos]);
@@ -5559,9 +6335,9 @@ public class ASMHydrasynth extends Synth
 	void set2(String key, byte[] data, int pos)
 		{
 		if (!model.exists(key)) System.err.println("KEY NOT FOUND: " + key);
-		if (key.equals("prefx1param5"))
+		if (key.equals("macro1panelvalue"))
 			{
-			System.err.println(key + " " + model.getMin(key) + " " + model.getMax(key) + " " + data[pos] + " " + data[pos + 1]);
+			System.err.println(key + " " + model.getMin(key) + " " + model.getMax(key) + " " + pos + " " + data[pos] + " " + data[pos + 1]);
 			}
 		if (model.getMin(key) < 0)	// signed two's complement
 			{
@@ -5575,6 +6351,11 @@ public class ASMHydrasynth extends Synth
 
     public int parseReal(byte[] data, boolean fromFile)
         {
+        // VERIFY VERSION
+        int version = data[4] & 0xFF;
+        if (version != 0x9B) 	// 1.5.5
+        	return PARSE_FAILED;
+        
         // BASICS
 		set1("category", data, 8);
         char[] name = new char[16];
@@ -5699,12 +6480,12 @@ public class ASMHydrasynth extends Synth
 		set1("filter1vowelorder", data, 330);
 
 		set2("filter2morph", data, 332);
-		set2("filter1cutoff", data, 334);
-		set2("filter1resonance", data, 336);
-		set2("filter1env1amount", data, 338);
-		set2("filter1lfo1amount", data, 340);
-		set2("filter1velenv", data, 342);
-		set2("filter1keytrack", data, 344);
+		set2("filter2cutoff", data, 334);
+		set2("filter2resonance", data, 336);
+		set2("filter2env1amount", data, 338);
+		set2("filter2lfo1amount", data, 340);
+		set2("filter2velenv", data, 342);
+		set2("filter2keytrack", data, 344);
 		
 		// AMPLIFIER
 		set2("amplfo2amount", data, 346);
@@ -5739,6 +6520,7 @@ public class ASMHydrasynth extends Synth
 		set2("delayfeedback", data, 374);
 		set2("delayfeedtone", data, 376);
 		set2("delaywettone", data, 378);
+		set2("delaywet", data, 382);
 		
 		// REVERB
 		set2("reverbtype", data, 384);
@@ -5806,6 +6588,7 @@ public class ASMHydrasynth extends Synth
 			set1("env" + (i + 1) + "legato", data, p + 20);
 			set1("env" + (i + 1) + "reset", data, p + 22);		// can only be set if legato is unset, hope this is okay
 			set1("env" + (i + 1) + "freerun", data, p + 24);		// can only be set if legato is unset, hope this is okay
+			set1("env" + (i + 1) + "loop", data, p + 26);
 			}
 			
 		// LFOS
@@ -5866,7 +6649,7 @@ public class ASMHydrasynth extends Synth
 			}
 		for(int i = 0; i < 32; i++)
 			{
-			set1("modmatrix" + (i + 1) + "modtarget", data, 966 + i * 2);
+			set2("modmatrix" + (i + 1) + "modtarget", data, 966 + i * 2);
 			}
 			
 		// FIXME: Starting at 1032, there may be a fourth mod matrix thingamabob
@@ -5885,7 +6668,7 @@ public class ASMHydrasynth extends Synth
 			int p = 1222 + i * 16;
 			for(int j = 0; j < 8; j++)
 				{
-				set1("macro" + (i + 1) + "target" + (j + 1), data, p + j * 2);
+				set2("macro" + (i + 1) + "target" + (j + 1), data, p + j * 2);
 				}
 			}
 		for(int i = 0; i < 8; i++)
@@ -5895,6 +6678,10 @@ public class ASMHydrasynth extends Synth
 				{
 				set2("macro" + (i + 1) + "buttonvalue" + (j + 1), data, p + j * 2);
 				}
+			}
+		for(int i = 0; i < 8; i++)
+			{
+			set2("macro" + (i + 1) + "panelvalue", data, 1606 + i * 2);
 			}
 		int offset = 1630;
 		for(int i = 0; i < 8; i++)
@@ -6394,9 +7181,6 @@ public class ASMHydrasynth extends Synth
 
     // Change Patch can get stomped if we do a request immediately afterwards
     public int getPauseAfterChangePatch() { return 200; }
-    
-    // The  doesn't load into memory when you do a write I believe
-    public boolean getSendsParametersAfterWrite() { return true; }
 
 /*
   public boolean librarianTested() { return true; }
@@ -6421,6 +7205,18 @@ public class ASMHydrasynth extends Synth
   public boolean getPatchContainsLocation() { return true; }
 */
 
+
+  public void changePatch(Model tempModel)
+  {
+  // I believe that the  changes *single* patches using Bank Select *LSB* (32), 
+  // followed by Program Change.  
+        
+  int bank = tempModel.get("bank", 0);
+  int number = tempModel.get("number", 0);
+        
+  tryToSendMIDI(buildCC(getChannelOut(), 32, bank));
+  tryToSendMIDI(buildPC(getChannelOut(), number));
+  }
 
     public static final int MODE_PAUSE = 0;
     public static final int TYPE_PAUSE = 0;
@@ -8513,14 +9309,14 @@ public class ASMHydrasynth extends Synth
     "macro8depth6",
     "macro8depth7",
     "macro8depth8",
-    "--",                                                       // "macro1panelvalue",                    /// This isn't a patch parameter
-    "--",                                                       // "macro2panelvalue",                    /// This isn't a patch parameter
-    "--",                                                       // "macro3panelvalue",                    /// This isn't a patch parameter
-    "--",                                                       // "macro4panelvalue",                    /// This isn't a patch parameter
-    "--",                                                       // "macro5panelvalue",                    /// This isn't a patch parameter
-    "--",                                                       // "macro6panelvalue",                    /// This isn't a patch parameter
-    "--",                                                       // "macro7panelvalue",                    /// This isn't a patch parameter
-    "--",                                                       // "macro8panelvalue",                    /// This isn't a patch parameter
+    "macro1panelvalue",
+    "macro2panelvalue",
+    "macro3panelvalue",
+    "macro4panelvalue",
+    "macro5panelvalue",
+    "macro6panelvalue",
+    "macro7panelvalue",
+    "macro8panelvalue",
     "modmatrix1modsource",
     "modmatrix2modsource",
     "modmatrix3modsource",

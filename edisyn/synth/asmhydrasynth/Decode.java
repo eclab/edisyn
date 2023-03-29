@@ -38,17 +38,27 @@ public class Decode
 		if (payload0.length <= 4) // uh oh
 			throw new RuntimeException("Invalid or too empty Base64 Decoding for data: " + StringUtility.toHex(data) + "\nDecoded into " + payload0);
 
-		/*
-		System.err.println("CRC Bytes: " 
-		+ StringUtility.toHex(payload0[0]) + " " 
-		+ StringUtility.toHex(payload0[1]) + " " 
-		+ StringUtility.toHex(payload0[2]) + " " 
-		+ StringUtility.toHex(payload0[3])); 
-		*/
-
 		byte[] payload = new byte[payload0.length - 4];
 		System.arraycopy(payload0, 4, payload, 0, payload.length);
 		return payload;
+		}
+
+
+	public static byte[] buildPatch(byte[][] payloads) throws RuntimeException
+		{
+		// Concatenate payloads
+		int size = 0;
+		for(int i = 0; i < payloads.length; i++)
+			size += (payloads[i].length - 4);
+
+		byte[] patch = new byte[size];
+		int pos = 0;
+		for(int i = 0; i < payloads.length; i++)
+			{
+			System.arraycopy(payloads[i], 4, patch, pos, payloads[i].length - 4);
+			pos += (payloads[i].length - 4);
+			}
+		return patch;
 		}
 
 	public static byte[] decodePatch(byte[][] data) throws RuntimeException
@@ -57,32 +67,19 @@ public class Decode
 		if (data.length != 22) throw new RuntimeException("Number of data chunks not 21 (was " + data.length + ")");
 
 		// decode and verify payloads
-		byte[][] payload = new byte[data.length][];
+		byte[][] payloads = new byte[data.length][];
 		for(int i = 0; i < data.length; i++)
 			{
 			if (data[i] == null) throw new RuntimeException("Null data chunk #" + i);
-			payload[i] = decodePayload(data[i]);
-			if ((payload[i].length != 128 + 4 && i < 21) || 
-				(payload[i].length != 102 + 4 && i == 21))
-				throw new RuntimeException("Invalid length for chunk #" + i + " (was " + payload[i].length + ")\n" + payload[i].length + "\n" + StringUtility.toHex(payload[i]));
-			if (payload[i][0] != 0x16 || payload[i][1] != 0x00 || payload[i][2] != i || payload[i][3] != 0x16)
-				throw new RuntimeException("Payload " + i + " did not start with 0x16 0x00 PAYLOADNUM 0x16: " + StringUtility.toHex(payload[i]));
+			payloads[i] = decodePayload(data[i]);
+			if ((payloads[i].length != 128 + 4 && i < 21) || 
+				(payloads[i].length != 102 + 4 && i == 21))
+				throw new RuntimeException("Invalid length for chunk #" + i + " (was " + payloads[i].length + ")\n" + payloads[i].length + "\n" + StringUtility.toHex(payloads[i]));
+			if (payloads[i][0] != 0x16 || payloads[i][1] != 0x00 || payloads[i][2] != i || payloads[i][3] != 0x16)
+				throw new RuntimeException("Payload " + i + " did not start with 0x16 0x00 PAYLOADNUM 0x16: " + StringUtility.toHex(payloads[i]));
 			}
-			
-		// Concatenate payloads
-		int size = 0;
-		for(int i = 0; i < payload.length; i++)
-			size += (payload[i].length - 4);
-		//System.err.println("Size " + size);
-		byte[] patch = new byte[size];
-		int pos = 0;
-		for(int i = 0; i < payload.length; i++)
-			{
-			//System.err.println("" + i + "\n" + StringUtility.toHex(payload[i]));
-			System.arraycopy(payload[i], 4, patch, pos, payload[i].length - 4);
-			pos += (payload[i].length - 4);
-			}
-		return patch;
+		
+		return buildPatch(payloads);
 		}
 
 	public static byte[] base64Decode(byte[] chars)

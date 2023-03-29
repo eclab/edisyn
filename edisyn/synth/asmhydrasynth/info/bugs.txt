@@ -324,3 +324,8 @@ a parameter only to discover later that it wasn't saved with your patch.
 There's an easy fix to this: just add some little indication in the
 OLED screens that a given parameter is global, or is some kind of
 function, rather than is a patch parameter proper.
+
+21. MACRO INITIALIZATION
+
+If you attempt to initialize a macro slot which is already initialized and empty, initializing will instead mistakenly try to initialize the entire patch.
+

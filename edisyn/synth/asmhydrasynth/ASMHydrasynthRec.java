@@ -16,7 +16,10 @@ public class ASMHydrasynthRec extends Recognize
         	data[3] == (byte)0x2B &&
         	data[4] == (byte)0x00 &&
         	data[5] == (byte)0x6F) return true;
-        	
+        else
+        	return false;
+
+        	/*
         boolean val = (data.length == 2259 &&
             data[0] == (byte)0xF0 &&
             data[1] == (byte)0x7D &&
@@ -39,5 +42,42 @@ public class ASMHydrasynthRec extends Recognize
             data[18] == (byte)'H' &&
             data[19] == (byte)0);            // sysex version
         return val;
+        */
+        }
+
+    public static int getNextSysexPatchGroup(byte[][] sysex, int start)
+        {
+        // Look for the next valid message which is exactly 155 bytes in length
+        for(int i = start; i < sysex.length; i++)
+        	{
+        	if (recognize(sysex[i]))
+        		{
+        		if (sysex[i].length == 155)  // probably right
+        			{
+        			// Now look for the next message that's exactly 191 bytes in length
+        			for(int j = i + 1; j < sysex.length; j++)
+        				{
+        				if (recognize(sysex[j]))
+        					{
+        					if (sysex[j].length == 191)	// probably right
+        						{
+        						return j;
+        						}
+        					}
+        				else 
+        					{
+        					return start;
+        					}
+        				}
+        			}
+           		}
+        	else 
+        		{
+        		return start;
+        		}
+        	}
+        
+        // Looks like we are out?
+        return sysex.length;
         }
     }

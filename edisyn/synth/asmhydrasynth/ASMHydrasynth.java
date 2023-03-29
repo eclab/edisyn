@@ -1342,34 +1342,6 @@ public class ASMHydrasynth extends Synth
         soundPanel.add(hbox, BorderLayout.CENTER);
         
         addTab("5-8", soundPanel);
-
-/*
-        soundPanel = new SynthPanel(this);
-        hbox = new HBox();
-        hbox.add(addMacro(1, Style.COLOR_A()));
-        hbox.add(addMacro(2, Style.COLOR_B()));
-        hbox.addLast(addMacro(3, Style.COLOR_A()));
-        
-        soundPanel.add(hbox, BorderLayout.CENTER);        
-        addTab("Macro 1-3", soundPanel);
-        
-        soundPanel = new SynthPanel(this);
-        hbox = new HBox();
-        hbox.add(addMacro(4, Style.COLOR_B()));
-        hbox.add(addMacro(5, Style.COLOR_A()));
-        hbox.addLast(addMacro(6, Style.COLOR_B()));
-        
-        soundPanel.add(hbox, BorderLayout.CENTER);        
-        addTab("4-6", soundPanel);
-        
-        soundPanel = new SynthPanel(this);
-        hbox = new HBox();
-        hbox.add(addMacro(7, Style.COLOR_A()));
-        hbox.addLast(addMacro(8, Style.COLOR_B()));
-        
-        soundPanel.add(hbox, BorderLayout.CENTER);        
-        addTab("7-8", soundPanel);
-*/
         
         soundPanel = new SynthPanel(this);
         vbox = new VBox();
@@ -4307,206 +4279,6 @@ public class ASMHydrasynth extends Synth
         }
 
 
-/*
-    public JComponent addMacro(int macro, Color color)
-        {
-        Category category = new Category(this, "Macro " + macro, color);
-        category.makePasteable("macro");
-        category.makeDistributable("macro");
-
-        JComponent comp;
-        String[] params;
-        HBox hbox = new HBox();
-
-        VBox vbox = new VBox();
-        comp = new StringComponent("Name", this, "macro" + macro + "name", 8, "Macro name must be up to 8 ASCII characters,\nnot including control characters, DELETE,\nor any of the following:  \" * \\ | / < > ? ; | ~")
-            {
-            public String replace(String val)
-                {
-                return reviseMacroName(val);
-                }
-            public String[] getList()
-            	{
-            	return MACRO_NAME_PRESETS;
-            	}
-            };
-        hbox.add(comp);
-        vbox.add(hbox);
-                
-        for(int i = 1; i <= 8; i+= 2)
-            {
-            VBox inner = new VBox();
-            HBox outer = new HBox();
-                        
-            params = MOD_DESTINATIONS;
-            comp = new Chooser("Destination " + i, this, "macro" + macro + "target" + i, params);
-            inner.add(comp);
-                
-            params = MOD_DESTINATIONS;
-            comp = new Chooser("Destination " + (i + 1), this, "macro" + macro + "target" + (i + 1), params);
-            inner.add(comp);
-            outer.add(inner);
-                        
-            comp = new LabelledDial("Depth " + i, this, "macro" + macro + "depth" + i, color, 0, 1024)
-                {
-                public boolean isSymmetric() { return true; }
-                public String map(int value)
-                    {
-                    int v = value * 8;
-                    // dividing 8192 by 3.2 cuts into 2560 pieces
-                    return String.format("%1.1f", ((roundEven(v / 3.2) / 10.0) - 128));
-                    }
-                };
-            outer.add(comp);
-
-            comp = new LabelledDial("Button " + i, this, "macro" + macro + "buttonvalue" + i, color, 0, 1024)
-                {
-                public boolean isSymmetric() { return true; }
-                public String map(int value)
-                    {
-                    int v = value * 8;
-                    // dividing 8192 by 3.2 cuts into 2560 pieces
-                    return String.format("%1.1f", ((roundEven(v / 3.2) / 10.0) - 128));
-                    }
-                };
-            outer.add(comp);
-
-            comp = new LabelledDial("Panel " + i, this, "macro" + macro + "panelvalue", color, 0, 1024)
-                {
-                public boolean isSymmetric() { return true; }
-                public String map(int value)
-                    {
-                    int v = value * 8;
-                    // dividing 8192 by 3.2 cuts into 2560 pieces
-                    return String.format("%1.1f", ((roundEven(v / 3.2) / 10.0) - 128));
-                    }
-                };
-            outer.add(comp);
-
-            comp = new LabelledDial("Depth " + (i+1), this, "macro" + macro + "depth" + (i+1), color, 0, 1024)
-                {
-                public boolean isSymmetric() { return true; }
-                public String map(int value)
-                    {
-                    int v = value * 8;
-                    // dividing 8192 by 3.2 cuts into 2560 pieces
-                    return String.format("%1.1f", ((roundEven(v / 3.2) / 10.0) - 128));
-                    }
-                };
-            outer.add(comp);
-
-            comp = new LabelledDial("Button " + (i+1), this, "macro" + macro + "buttonvalue" + (i+1), color, 0, 1024)
-                {
-                public boolean isSymmetric() { return true; }
-                public String map(int value)
-                    {
-                    int v = value * 8;
-                    // dividing 8192 by 3.2 cuts into 2560 pieces
-                    return String.format("%1.1f", ((roundEven(v / 3.2) / 10.0) - 128));
-                    }
-                };
-            outer.add(comp);
- 
-             comp = new LabelledDial("Panel " + (i+1), this, "macro" + macro + "panelvalue", color, 0, 1024)
-                {
-                public boolean isSymmetric() { return true; }
-                public String map(int value)
-                    {
-                    int v = value * 8;
-                    // dividing 8192 by 3.2 cuts into 2560 pieces
-                    return String.format("%1.1f", ((roundEven(v / 3.2) / 10.0) - 128));
-                    }
-                };
-            outer.add(comp);
-
-           vbox.add(outer);
-            }
-                        
-        category.add(vbox, BorderLayout.CENTER);
-        return category;
-        }
-*/
-
-/*
-    public JComponent addMacro(int macro, Color color)
-        {
-        Category category = new Category(this, "Macro " + macro, color);
-        category.makePasteable("macro");
-        category.makeDistributable("macro");
-
-        JComponent comp;
-        String[] params;
-        HBox hbox = new HBox();
-
-        VBox vbox = new VBox();
-        comp = new StringComponent("Name", this, "macro" + macro + "name", 8, "Macro name must be up to 8 ASCII characters,\nnot including control characters, DELETE,\nor any of the following:  \" * \\ | / < > ? ; | ~")
-            {
-            public String replace(String val)
-                {
-                return reviseMacroName(val);
-                }
-            public String[] getList()
-            	{
-            	return MACRO_NAME_PRESETS;
-            	}
-            };
-        hbox.add(comp);
-        vbox.add(hbox);
-                
-        for(int i = 1; i <= 8; i++)
-            {
-            HBox row = new HBox();
-                        
-            VBox inner = new VBox();
-            params = MOD_DESTINATIONS;
-            comp = new Chooser("Destination " + i, this, "macro" + macro + "target" + i, params);
-            inner.add(comp);
-            row.add(inner);
-            
-            comp = new LabelledDial("Depth " + i, this, "macro" + macro + "depth" + i, color, 0, 1024)
-                {
-                public boolean isSymmetric() { return true; }
-                public String map(int value)
-                    {
-                    int v = value * 8;
-                    // dividing 8192 by 3.2 cuts into 2560 pieces
-                    return String.format("%1.1f", ((roundEven(v / 3.2) / 10.0) - 128));
-                    }
-                };
-            row.add(comp);
-
-            comp = new LabelledDial("Button " + i, this, "macro" + macro + "buttonvalue" + i, color, 0, 1024)
-                {
-                public boolean isSymmetric() { return true; }
-                public String map(int value)
-                    {
-                    int v = value * 8;
-                    // dividing 8192 by 3.2 cuts into 2560 pieces
-                    return String.format("%1.1f", ((roundEven(v / 3.2) / 10.0) - 128));
-                    }
-                };
-            row.add(comp);
-
-            comp = new LabelledDial("Panel " + i, this, "macro" + macro + "panelvalue", color, 0, 1024)
-                {
-                public boolean isSymmetric() { return true; }
-                public String map(int value)
-                    {
-                    int v = value * 8;
-                    // dividing 8192 by 3.2 cuts into 2560 pieces
-                    return String.format("%1.1f", ((roundEven(v / 3.2) / 10.0) - 128));
-                    }
-                };
-            row.add(comp);
-            
-           	vbox.add(row);
-            }
-                        
-        category.add(vbox, BorderLayout.CENTER);
-        return category;
-        }
- */
-        
     public JComponent addArp(Color color)
         {
         Category category = new Category(this, "Arpeggiator", color);
@@ -4698,13 +4470,6 @@ public class ASMHydrasynth extends Synth
         JFrame frame = super.sprout();
         addHydrasynthMenu();
         receiveCurrent.setEnabled(false);
-        //receivePatch.setEnabled(false);
-        //receiveNextPatch.setEnabled(false);
-        //merge.setEnabled(false);
-        //getAll.setEnabled(false);
-        //blend.setEnabled(false);
-//        writeTo.setEnabled(false);
-//        transmitCurrent.setEnabled(false);
         return frame;
         }         
 
@@ -4721,105 +4486,6 @@ public class ASMHydrasynth extends Synth
 	  return BANKS[bank] + " " + ((number > 99 ? "" : (number > 9 ? "0" : "00")) + number);
 	  }
 
-
-/*
-  public byte getID() 
-  { 
-  try 
-  { 
-  byte b = (byte)(Byte.parseByte(tuple.id));
-  if (b >= 0) return b;
-  }
-  catch (NullPointerException e) { } // expected.  Happens when tuple's not built yet
-  catch (NumberFormatException e) { Synth.handleException(e); }
-  return 17;
-  }
-        
-  public String reviseID(String id)
-  {
-  try 
-  { 
-  byte b =(byte)(Byte.parseByte(id)); 
-  if (b >= 0) return "" + b;
-  } 
-  catch (NumberFormatException e) { }             // expected
-  return "" + getID();
-  }
-
-
-  public Model getNextPatchLocation(Model model)
-  {
-  int number = model.get("number");
-  int bank = model.get("bank");
-        
-  number++;
-  if (number >= 128)
-  {
-  number = 0;
-  bank++;
-  if (bank >= 26)
-  bank = 0;
-  }
-                
-  Model newModel = buildModel();
-  newModel.set("number", number);
-  newModel.set("bank", bank);
-  return newModel;
-  }
-
-  public String getPatchLocationName(Model model)
-  {
-  // getPatchLocationName() is called from sprout() as a test to see if we should enable
-  // batch downloading.  If we haven't yet created an .init file, then parameters won't exist
-  // yet and this method will bomb badly.  So we return null in this case.
-  if (!model.exists("number")) return null;
-        
-  int number = (model.get("number"));
-  int bank = (model.get("bank"));
-  return BANKS[bank] + " " + ((number > 99 ? "" : (number > 9 ? "0" : "00")) + number);
-  }
-        
-
-  public String getPatchName(Model model) { return model.get("name", "Untitled"); }
-
-  public byte[] requestCurrentDump()
-  {
-  // The documentation is not clear on this.  But I think it should be:
-        
-  byte[] data = new byte[9];
-  data[0] = (byte)0xF0;
-  data[1] = (byte)0x3e;
-  data[2] = (byte)0x22;
-  data[3] = (byte)getID();
-  data[4] = (byte)0x20;                   // Request Patch
-  data[5] = (byte)0x01;                   // Current Version
-  data[6] = (byte)0x7f;           // Current Bank -- perhaps we should do 0x7E "curent configured bank in the Config menu"?
-  data[7] = (byte)0x7f;           // Current Part -- or should we force it to part 0, or maybe we should have a menu option to request different parts?
-  data[8] = (byte)0xF7;
-  return data;
-  }
-
-  public byte[] requestDump(Model tempModel)
-  {
-  if (tempModel == null)
-  tempModel = getModel();
-
-  int NN = tempModel.get("number", 0);
-  int BB = tempModel.get("bank", 0);
-        
-  byte[] data = new byte[9];
-  data[0] = (byte)0xF0;
-  data[1] = (byte)0x3e;
-  data[2] = (byte)0x22;
-  data[3] = (byte)getID();
-  data[4] = (byte)0x20;                   // Request Patch
-  data[5] = (byte)0x01;                   // Current Version
-  data[6] = (byte)BB;
-  data[7] = (byte)NN;
-  data[8] = (byte)0xF7;
-  return data;
-  }
-*/
 
     public boolean getSendsAllParametersAsDump() 
         {
@@ -6185,128 +5851,7 @@ public class ASMHydrasynth extends Synth
     		}
     	}
 
-    /** The Hydrasynth doesn't have a useful sysex emit mechanism, so we're inventing one here solely for
-        the purposes of writing to a file. */
-    /*
-    public int parseFake(byte[] data, boolean fromFile)
-        {
-        int HEADER = 20;
 
-        byte[] vals = new byte[
-            modeParameters.length * 2 + 
-            typeParameters.length * 2 + 
-            waveParameters.length * 2 + 
-            syncParameters.length * 2 + 
-            wavescanParameters.length * 2 + 
-            remainingParameters.length * 2 + 
-            16 +    // name
-            4 +     // category, color
-            8 * 8   // macros
-            ];
-        
-        System.arraycopy(data, HEADER, vals, 0, vals.length);
-
-        int pos = 0;
-        int val = 0;
-        for(int i = 0; i < modeParameters.length; i++)
-            {
-            val = ((vals[pos++] << 7) | vals[pos++]) - 8192;
-            model.set(modeParameters[i], val);
-            }
-
-        for(int i = 0; i < typeParameters.length; i++)
-            {
-            val = ((vals[pos++] << 7) | vals[pos++]) - 8192;
-            model.set(typeParameters[i], val);
-            }
-
-        for(int i = 0; i < waveParameters.length; i++)
-            {
-            val = ((vals[pos++] << 7) | vals[pos++]) - 8192;
-            model.set(waveParameters[i], val);
-            }
-
-        for(int i = 0; i < syncParameters.length; i++)
-            {
-            val = ((vals[pos++] << 7) | vals[pos++]) - 8192;
-            model.set(syncParameters[i], val);
-            }
-
-        for(int i = 0; i < wavescanParameters.length; i++)
-            {
-            val = ((vals[pos++] << 7) | vals[pos++]) - 8192;
-            model.set(wavescanParameters[i], val);
-            }
-
-        for(int i = 0; i < remainingParameters.length; i++)
-            {
-            val = ((vals[pos++] << 7) | vals[pos++]) - 8192;
-            model.set(remainingParameters[i], val);
-            }
-        
-        val = ((vals[pos++] << 7) | vals[pos++]) - 8192;
-        model.set("category", val);
-
-        val = ((vals[pos++] << 7) | vals[pos++]) - 8192;
-        model.set("color", val);
-
-        char[] name = new char[16];
-        for(int i = 0; i < 16; i++)
-            {
-            name[i] = (char)(vals[pos++] & 127);
-            }
-        model.set("name", String.valueOf(name));
-
-        for(int m = 1; m <= 8; m++)
-            {
-            name = new char[8];
-            for(int i = 0; i < 8; i++)
-                {
-                name[i] = (char)(vals[pos++] & 127);
-                }
-            model.set("macro" + m + "name", String.valueOf(name));
-            }
-
-        revise();
-        return PARSE_SUCCEEDED;
-        }
-    */
-
-/*
-	void set(String key, byte data)
-		{
-		if (!model.exists(key)) System.err.println("KEY NOT FOUND: " + key);
-		if (key.equals("prefxtype"))
-			{
-			System.err.println(key + " " + model.getMin(key) + " " + model.getMax(key) + " " + data);
-			}
-		if (model.getMin(key) < 0)	// signed two's complement
-			{
-			model.set(key, data);
-			}
-		else
-			{
-			model.set(key, data & 0xFF);
-			}
-		}
-
-	void set(String key, byte data, byte data1)
-		{
-		if (!model.exists(key)) System.err.println("KEY NOT FOUND: " + key);
-		if (key.equals("prefx1param5"))
-			{
-			System.err.println(key + " " + model.getMin(key) + " " + model.getMax(key) + " " + data + " " + data1);
-			}
-		if (model.getMin(key) < 0)	// signed two's complement
-			{
-			model.set(key, (short)((data & 0xFF) | ((data1 & 0xFF) << 8)));
-			}
-		else
-			{
-			model.set(key, ((data & 0xFF) | ((data1 & 0xFF) << 8)));
-			}
-		}
-*/
 
 	void set1(String key, byte[] data, int pos, int bit)
 		{
@@ -6353,8 +5898,8 @@ public class ASMHydrasynth extends Synth
         {
         // VERIFY VERSION
         int version = data[4] & 0xFF;
-        if (version != 0x9B) 	// 1.5.5
-        	return PARSE_FAILED;
+//        if (version != 0x9B) 	// 1.5.5
+//        	return PARSE_FAILED;
         
         // BASICS
 		set1("category", data, 8);
@@ -6746,66 +6291,6 @@ public class ASMHydrasynth extends Synth
     void parseCC(int number, int val)
         {
         // For the time being we're not going to implement this
-                
-        /*
-          String key = CC[number];
-          if (key.equals("--"))
-          return;
-                        
-          if (key.startsWith("osc"))
-          {
-          }
-          else if (key.startsWith("mutant"))
-          {
-          }
-          else if (key.equals("ringmoddepth"))
-          {
-          }
-          else if (key.startsWith("mix"))
-          {
-          }
-          else if (key.startsWith("filter"))
-          {
-          }
-          else if (key.equals("amplfo2amount"))
-          {
-          }
-          else if (key.startsWith("pre"))
-          {
-          }
-          else if (key.startsWith("delay"))
-          {
-          }
-          else if (key.startsWith("reverb"))
-          {
-          }
-          else if (key.startsWith("post"))
-          {
-          }
-          else if (key.startsWith("lfo"))
-          {
-          }
-          else if (key.startsWith("env"))
-          {
-          }
-          else if (key.startsWith("arp"))
-          {
-          }
-          else if (key.startsWith("macro"))
-          {
-          // These are panel values.  We probably can't handle this
-          }
-          else if (key.startsWith("voice"))
-          {
-          }
-          else
-          {
-          // do nothing
-          }
-                                
-          model.set(key, val);
-          revise();
-        */
         }
 
     void parseNRPN(int number, int val)
@@ -7177,33 +6662,8 @@ public class ASMHydrasynth extends Synth
 
     public static String getSynthName() { return "ASM Hydrasynth"; }
     
-    //    public boolean getSendsParametersAfterNonMergeParse() { return true; }
-
     // Change Patch can get stomped if we do a request immediately afterwards
     public int getPauseAfterChangePatch() { return 200; }
-
-/*
-  public boolean librarianTested() { return true; }
-
-    
-  public String[] getPatchNumberNames()  
-  { 
-  return buildIntegerNames(128, 0);
-  }
-
-  public boolean[] getWriteableBanks() 
-  { 
-  return buildBankBooleans(7, 19, 0);             // first 7 banks are writeable, remaining 19 are not
-  }
-
-  public String[] getBankNames() { return BANKS; }
-
-  public boolean getSupportsPatchWrites() { return true; }
-
-  public int getPatchNameLength() { return 22; }
-
-  public boolean getPatchContainsLocation() { return true; }
-*/
 
 
   public void changePatch(Model tempModel)
@@ -7232,43 +6692,33 @@ public class ASMHydrasynth extends Synth
         for(int j = 0; j < 3; j++)
             {
             // we do a specific order
-            //System.err.println("Sending Modes");
             for(int i = 0; i < modeParameters.length; i++)
                 {
                 simplePause(getPauseAfterSendHeaderParameter());
-                //System.err.println(modeParameters[i]);
                 tryToSendMIDI(emitAll(modeParameters[i], STATUS_SENDING_ALL_PARAMETERS));
                 }
             simplePause(MODE_PAUSE);
-            //System.err.println("Sending Types");
             for(int i = 0; i < typeParameters.length; i++)
                 {
                 simplePause(getPauseAfterSendHeaderParameter());
-                //System.err.println(typeParameters[i]);
                 tryToSendMIDI(emitAll(typeParameters[i], STATUS_SENDING_ALL_PARAMETERS));
                 }
             simplePause(TYPE_PAUSE);
-            //System.err.println("Sending Waves");
             for(int i = 0; i < waveParameters.length; i++)
                 {
                 simplePause(getPauseAfterSendHeaderParameter());
-                //System.err.println(waveParameters[i]);
                 tryToSendMIDI(emitAll(waveParameters[i], STATUS_SENDING_ALL_PARAMETERS));
                 }
             simplePause(WAVE_PAUSE);
-            //System.err.println("Sending BPM Syncs");
             for(int i = 0; i < syncParameters.length; i++)
                 {
                 simplePause(getPauseAfterSendHeaderParameter());
-                //System.err.println(syncParameters[i]);
                 tryToSendMIDI(emitAll(syncParameters[i], STATUS_SENDING_ALL_PARAMETERS));
                 }
             simplePause(BPM_SYNC_PAUSE);
-            //System.err.println("Sending Wavescan Waves");
             for(int i = 0; i < wavescanParameters.length; i++)
                 {
                 simplePause(getPauseAfterSendHeaderParameter());
-                //System.err.println(wavescanParameters[i]);
                 tryToSendMIDI(emitAll(wavescanParameters[i], STATUS_SENDING_ALL_PARAMETERS));
                 }
             simplePause(WAVESCAN_WAVE_PAUSE);
@@ -7276,14 +6726,71 @@ public class ASMHydrasynth extends Synth
             for(int i = 0; i < remainingParameters.length; i++)
                 {
                 simplePause(getPauseAfterSendOneParameter());
-                //System.err.println(remainingParameters[i]);
                 tryToSendMIDI(emitAll(remainingParameters[i], STATUS_SENDING_ALL_PARAMETERS));
                 }
             }
         simplePause(getPauseAfterSendAllParameters());
-        //System.err.println("Sent");
         return true;
         }
+
+
+/*
+  public Model getNextPatchLocation(Model model)
+  {
+  int number = model.get("number");
+  int bank = model.get("bank");
+        
+  number++;
+  if (number >= 128)
+  {
+  number = 0;
+  bank++;
+  if (bank >= 26)
+  bank = 0;
+  }
+                
+  Model newModel = buildModel();
+  newModel.set("number", number);
+  newModel.set("bank", bank);
+  return newModel;
+  }
+
+  public String getPatchLocationName(Model model)
+  {
+  // getPatchLocationName() is called from sprout() as a test to see if we should enable
+  // batch downloading.  If we haven't yet created an .init file, then parameters won't exist
+  // yet and this method will bomb badly.  So we return null in this case.
+  if (!model.exists("number")) return null;
+        
+  int number = (model.get("number"));
+  int bank = (model.get("bank"));
+  return BANKS[bank] + " " + ((number > 99 ? "" : (number > 9 ? "0" : "00")) + number);
+  }
+
+  public String getPatchName(Model model) { return model.get("name", "Untitled"); }
+
+  public boolean librarianTested() { return true; }
+    
+  public String[] getPatchNumberNames()  
+  { 
+  return buildIntegerNames(128, 0);
+  }
+
+  public boolean[] getWriteableBanks() 
+  { 
+  return buildBankBooleans(7, 19, 0);             // first 7 banks are writeable, remaining 19 are not
+  }
+
+  public String[] getBankNames() { return BANKS; }
+
+  public boolean getSupportsPatchWrites() { return true; }
+
+  public int getPatchNameLength() { return 22; }
+
+  public boolean getPatchContainsLocation() { return true; }
+*/
+
+
 
     public static final String[] modeParameters = 
         {

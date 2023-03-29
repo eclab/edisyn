@@ -100,6 +100,8 @@ public class HBox extends JComponent implements Gatherable
     public void remove(Component component)
         {
         box.remove(component);
+        if (lastComponent == component)
+        	panel.remove(lastComponent);
         }        
         
     public Component add(Component component)

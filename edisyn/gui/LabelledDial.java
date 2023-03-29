@@ -44,14 +44,14 @@ public class LabelledDial extends NumericalComponent
 
     public void update(String key, Model model) 
         {
-        dial.repaint(); 
+        if (dial.isVisible()) dial.repaint(); 
         }
         
     public LabelledDial setLabel(String text)
         {
         label.setText(text);
         label.revalidate();
-        label.repaint();
+        if (label.isVisible()) label.repaint();
         return this;
         }
         
@@ -61,7 +61,7 @@ public class LabelledDial extends NumericalComponent
         }
     
     public Color getTextColor() { return dial.field.getForeground(); }
-    public void setTextColor(Color color) { dial.field.setForeground(color); dial.repaint(); }
+    public void setTextColor(Color color) { dial.field.setForeground(color); if (dial.isVisible()) dial.repaint(); }
     
     public boolean getUpdatesDyamically() { return updatesDynamically; }
     public void setUpdatesDynamically(boolean val) { updatesDynamically = val; }
@@ -93,7 +93,7 @@ public class LabelledDial extends NumericalComponent
         labelBox.add(glue = Box.createGlue());
 
         revalidate();
-        repaint();
+        if (isVisible()) repaint();
         return label2;
         }
     
@@ -101,7 +101,7 @@ public class LabelledDial extends NumericalComponent
         {
         dial.field.setFont(font);
         dial.revalidate();
-        dial.repaint();
+        if (dial.isVisible()) dial.repaint();
         }
     
     public Font getLabelFont()
@@ -118,7 +118,7 @@ public class LabelledDial extends NumericalComponent
         this(_label, synth, key, staticColor, min, max);
         dial.subtractForDisplay = subtractForDisplay;
         update(key, synth.getModel());
-        repaint();
+        if (isVisible()) repaint();
         }
 
     /** Makes a labelled dial for the given key parameter on the given synth, and with the given color and
@@ -254,7 +254,7 @@ public class LabelledDial extends NumericalComponent
             {
             enabled = val;
             field.setEnabled(val);
-            repaint();
+            if (isVisible()) repaint();
             }
         
         void mouseReleased(MouseEvent e)
@@ -263,7 +263,7 @@ public class LabelledDial extends NumericalComponent
             if (mouseDown)
                 {
                 status = STATUS_STATIC;
-                repaint();
+                if (isVisible()) repaint();
                 mouseDown = false;
                 if (releaseListener != null)
                     Toolkit.getDefaultToolkit().removeAWTEventListener(releaseListener);
@@ -348,7 +348,7 @@ public class LabelledDial extends NumericalComponent
                     startY = e.getY();
                     startState = getState();
                     status = STATUS_DIAL_DYNAMIC;
-                    repaint();
+                    if (isVisible()) repaint();
 
                     if (releaseListener != null)
                         Toolkit.getDefaultToolkit().removeAWTEventListener(releaseListener);
@@ -389,7 +389,7 @@ public class LabelledDial extends NumericalComponent
                         }
                         
                     status = STATUS_STATIC;
-                    repaint();
+                    if (isVisible()) repaint();
                     if (releaseListener != null)
                         Toolkit.getDefaultToolkit().removeAWTEventListener(releaseListener);
                     lastRelease = e;
@@ -400,7 +400,7 @@ public class LabelledDial extends NumericalComponent
                     if (synth.isShowingMutation())
                         {
                         synth.mutationMap.setFree(key, !synth.mutationMap.isFree(key));
-                        LabelledDial.this.repaint();
+                        if (LabelledDial.this.isVisible()) LabelledDial.this.repaint();
                         }
                     else if (e.getClickCount() == 2)
                         {
@@ -432,7 +432,7 @@ public class LabelledDial extends NumericalComponent
 
             setLayout(new BorderLayout());
             add(field, BorderLayout.CENTER);
-            repaint();
+            if (isVisible()) repaint();
             }
         
         AWTEventListener releaseListener = null;

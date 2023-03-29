@@ -91,14 +91,17 @@ public class Chooser extends NumericalComponent
             {
             if (vals[i] == state)
                 {
-                // This is due to a Java bug.
-                // Unlike other widgets (like JCheckBox), JComboBox calls
-                // the actionlistener even when you programmatically change
-                // its value.  OOPS.
-                setCallActionListener(false);
-                combo.setSelectedIndex(i);
-                setCallActionListener(true);
-                return;
+                if (combo.getSelectedIndex() != i)
+                	{
+					// This is due to a Java bug.
+					// Unlike other widgets (like JCheckBox), JComboBox calls
+					// the actionlistener even when you programmatically change
+					// its value.  OOPS.
+					setCallActionListener(false);
+						combo.setSelectedIndex(i);
+					setCallActionListener(true);
+					}
+				return;
                 }
             }
         }
@@ -353,7 +356,7 @@ public class Chooser extends NumericalComponent
             setState(0);
             }
         revalidate();
-        repaint();
+        if (isVisible()) repaint();
         }
         
     class ComboBoxRenderer extends JLabel implements ListCellRenderer 

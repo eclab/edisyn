@@ -189,25 +189,34 @@ public class Library extends AbstractTableModel
             }
         }
                 
-    /** Places a patch in the library according to its current bank and number. */
-    // protected because it should be called by other methods which do an undo/redo
-    protected void setPatch(Patch patch)
+    /** Places a patch in the library according to its current bank and number. 
+    	You should have done an undo/redo prior to using this method. */
+    public void setPatch(Patch patch)
         {
         patches[patch.bank + 1][patch.number] = patch;
         fireTableCellUpdated(patch.number, patch.bank + 1);
         }
         
-    /** Places a bank of patch in the library at the given bank number.  To place the scratch bank, pass in SCRATCH_BANK. */
-    // protected because it should be called by other methods which do an undo/redo
-    protected void setBank(Patch[] bank, int bankNumber)
+    /** Places a patch in the library at the given bank and number. 
+    	To place in the scratch bank, pass in SCRATCH_BANK.
+    	You should have done an undo/redo prior to using this method. */
+    public void setPatch(Patch patch, int bank, int number)
+        {
+        patches[bank + 1][number] = patch;
+        fireTableCellUpdated(number, bank + 1);
+        }
+        
+    /** Places a bank of patch in the library at the given bank number.  To place the scratch bank, pass in SCRATCH_BANK.
+    	You should have done an undo/redo prior to using this method. */
+    public void setBank(Patch[] bank, int bankNumber)
         {
         patches[bankNumber + 1] = bank;                                                 // disregard the scratch bank
         fireTableDataChanged();
         }
         
-    /** Sets all patches, possibly including the scratch bank */
-    // protected because it should be called by other methods which do an undo/redo
-    protected void setAll(Patch[][] all, boolean includeScratch)
+    /** Sets all patches, possibly including the scratch bank.
+    	You should have done an undo/redo prior to using this method. */    
+ 	public void setAll(Patch[][] all, boolean includeScratch)
         {
         if (includeScratch) patches = all;
         else
@@ -520,7 +529,6 @@ public class Library extends AbstractTableModel
                         }
                     location.set("number", i);
                     String name = synth.getModel().get("name","" + synth.getPatchLocationName(synth.getModel()));
-                    //byte[][] data = synth.cutUpSysex(synth.flatten(synth.emitAll(location, false, true)));          // I guess to a file so it doesn't try NRPN?
                     byte[][] data = synth.extractSysex(synth.emitAll(location, false, true));          // I guess to a file so it doesn't try NRPN?
                     Patch patch = new Patch(synthNum, data, false);
                     patch.name = name;
@@ -777,7 +785,6 @@ public class Library extends AbstractTableModel
                 if (!toFile)
                     {
                     int pause = synth.getPauseAfterWritePatch();
-                    System.err.println("PAUSE " + pause);
                     if (pause > 0) 
                         {
                         Object[] newObjs = new Object[objs.length + 1];
@@ -1324,11 +1331,27 @@ public class Library extends AbstractTableModel
         String name = model.get("name","" + synth.getPatchLocationName(synth.getModel()));
         int number = model.get("number", -1);
         int bank = model.get("bank", -1);
-        byte[][] data = synth.cutUpSysex(synth.flatten(synth.emitAll(model, false, true)));                  // we're pretending we're writing to a file here
+        
+		synth.undo.setWillPush(false);
+		boolean send = synth.getSendMIDI();
+		synth.setSendMIDI(false);
+		boolean shouldUpdate = synth.model.getUpdateListeners();
+		synth.model.setUpdateListeners(false);
+		Model backup = synth.model;
+
+		synth.model = model;		
+        byte[][] data = synth.cutUpSysex(synth.flatten(synth.emitAll(model, false, true)));  
+        
+        synth.model = backup;
+		synth.model.setUpdateListeners(shouldUpdate);
+		synth.setSendMIDI(send);
+		synth.undo.setWillPush(true);
+        
         Patch patch = new Patch(synthNum, data, false);
         patch.name = name;
         patch.bank = (bank == -1 ? 0 : bank);
         patch.number = (number == -1 ? Patch.NUMBER_NOT_SET : number);          // FIXME: should I use NUMBER_NOT_SET?
+        
         return patch;
         }
                 

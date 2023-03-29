@@ -975,8 +975,6 @@ public class Blank extends Synth
 		return false; 
 		}
 
-
-
     public boolean testVerify(Synth synth2, String key, Object obj1, Object obj2)
         {
         // The edisyn.test.SanityCheck class performs sanity-checks on synthesizer classes

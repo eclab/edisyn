@@ -6065,7 +6065,7 @@ public class ASMHydrasynth extends Synth
 	int incomingPos;
 	byte[][] incoming = new byte[22][];
 	
-	public static final boolean REVERSE_ENGINEER = true;
+	public static final boolean REVERSE_ENGINEER = false;
 
     public int parse(byte[] data, boolean fromFile)
     	{

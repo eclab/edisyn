@@ -1376,6 +1376,14 @@ public abstract class Synth extends JComponent implements Updatable
                 setSendMIDI(false);
                 model.updateAllListeners();
                 setSendMIDI(send);
+
+				// this last statement fixes a mystery.  When I call Randomize or Reset on
+				// a Blofeld or on a Microwave, all of the widgets update simultaneously.
+				// But on a Blofeld Multi or Microwave Multi they update one at a time.
+				// I've tried a zillion things, even moving all the widgets from the Blofeld Multi
+				// into the Blofeld, and it makes no difference!  For some reason the OS X
+				// repaint manager is refusing to coallesce their repaint requests.  So I do it here.
+				repaint();                                                                                                
                 }
             else model.setUpdateListeners(true);
             }
@@ -1527,14 +1535,6 @@ public abstract class Synth extends JComponent implements Updatable
                                     }
                                 else if (recognizeLocal(data))
                                     {
-                                    // this last statement fixes a mystery.  When I call Randomize or Reset on
-                                    // a Blofeld or on a Microwave, all of the widgets update simultaneously.
-                                    // But on a Blofeld Multi or Microwave Multi they update one at a time.
-                                    // I've tried a zillion things, even moving all the widgets from the Blofeld Multi
-                                    // into the Blofeld, and it makes no difference!  For some reason the OS X
-                                    // repaint manager is refusing to coallesce their repaint requests.  So I do it here.
-                                    repaint();
-                                                                                                
                                     if (merging != 0.0)
                                         {
                                         if (merge(data, merging) == PARSE_INCOMPLETE)
@@ -1679,7 +1679,6 @@ public abstract class Synth extends JComponent implements Updatable
                             } 
                         }
                     });
-                
                 }
             };
         }

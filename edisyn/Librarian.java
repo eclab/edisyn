@@ -931,7 +931,19 @@ public class Librarian extends JPanel
         item.setEnabled(true);
         item.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_M, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.SHIFT_MASK));
 
-        menu.addSeparator();            
+              
+        item = new JMenuItem("Remix Bank");
+        item.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent evt) 
+                { 
+                synth.librarian.mixBank(Librarian.MIX_TYPE_ONE_HALF); 
+                }
+            });
+        menu.add(item);
+        item.setEnabled(false);
+
+        menu.addSeparator();      
 
         item = new JMenuItem("Hide Librarian");
         item.addActionListener(new ActionListener()
@@ -1147,48 +1159,18 @@ public class Librarian extends JPanel
             synth.showSimpleError("Cannot Mix", "Mixing a single patch does nothing.  Mix two or more!");
             return;
             }
-        
-        Model model = null;
-        String[] mutationKeys = synth.getMutationKeys();
-        double probability = 1.0;
-        
-        // Recombination is odd: we pick a weighted point p between the original a and the new b, and
-        // then pick a random point BETWEEN a and p.  Thus if we weight ALL the way to b, we're still
-        // only doing 50% recombination.  But below I want to have specific probabilities of "recombination",
-        // so I'm using crossover instead, passing in 'false' so it uses the true crossover probability and not
-        // halving it.
-        
-        if (mixType == MIX_TYPE_UNIFORM)
-            {
-            // descending -- we start with the top patch
-            model = getLibrary().getModel(column - 1, row).copy();          // we don't want the listeners etc.
-            for(int i = 1; i < len; i++)
-                {
-                if (i == len - 1) // last one, mix half/half
-                    probability /= 2.0; 
-                else            // 1/2 -> 1/3 -> 1/4 -> 1/5 etc.
-                    probability = 1.0 / ((1.0 / probability) + 1);
-                model = model.crossover(synth.random, getLibrary().getModel(column - 1, row + i), mutationKeys, probability, false);
-                }
-            }
-        else
-            {
-            // ascending -- start with the bottom patch and recombine till we get to the big patch up top
-            model = getLibrary().getModel(column - 1, row + len - 1).copy();                // we don't want the listeners etc.
-            for(int i = len - 2; i >= 0; i--)
-                {
-                if (i == len - 2) // first one, mix half/half
-                    probability = 1.0 / 2.0;
-                else if (mixType == MIX_TYPE_ONE_THIRD)
-                    probability = 1.0 / 3.0;
-                else if (mixType == MIX_TYPE_ONE_HALF)
-                    probability = 1.0 / 2.0;
-                else if (mixType == MIX_TYPE_TWO_THIRDS)
-                    probability = 2.0 / 3.0;
-                model = model.crossover(synth.random, getLibrary().getModel(column - 1, row + i), mutationKeys, probability, false);
-                }
-            }
-                
+ 
+ 		// which cells do we use?
+ 		int[] rows = new int[len];
+ 		int[] columns = new int[len];
+ 		for(int i = 0; i < rows.length; i++)
+ 			{
+ 			rows[i] = row + i;
+ 			columns[i] = column;
+ 			}
+ 			
+        Model model = performMix(synth, mixType, columns, rows);
+                 
         // Load model
         synth.getUndo().push(synth.getModel());
         synth.undo.setWillPush(false);
@@ -1202,6 +1184,132 @@ public class Librarian extends JPanel
         // Switch to patch editor
         getLibrary().getSynth().setCurrentTab(0);
         lastMixType = mixType;
+        }
+    
+    public static final int NUM_MIX_ROWS = 8;
+    
+    public void mixBank(int mixType)
+    	{
+        int column = col(table, table.getSelectedColumn());
+        int row = table.getSelectedRow();
+        int len = table.getSelectedRowCount();
+        Library library = getLibrary();
+        Synth synth = library.synth;
+
+       if (column < 0 || row < 0 || len == 0)
+        	{
+            synth.showSimpleError("Cannot Remix Bank", "Please select a patch in a bank (except the Scratch bank).");
+            return;
+        	}
+        else if (column < 1)
+        	{
+            synth.showSimpleError("Select Another Bank", "Please select a patch in a bank (except the Scratch bank).");
+            return;
+        	}
+        
+        library.pushUndo();
+        int banksize = library.patches[0].length;
+        String[] names = library.getPatchNumberNames();
+        for(int i = 0; i < banksize; i++)
+        	{
+        	int[] columns = new int[banksize < NUM_MIX_ROWS ? banksize : NUM_MIX_ROWS];
+        	int[] rows = new int[columns.length];
+        	for(int j = 0; j < columns.length; j++)
+        		{
+        		columns[j] = column;
+        		while(true)
+        			{
+        			rows[j] = synth.random.nextInt(banksize);
+        			
+        			// make sure it's not the same as past rows
+        			boolean passed = true;
+        			for(int k = 0; k < j; k++)
+        				{
+        				if (rows[j] == rows[k])
+        					{
+        					passed = false;
+        					break;
+        					}
+        				}
+        			if (passed)
+        				{
+        				break;
+        				}
+        			}
+        		}
+        	
+        	Model result = performMix(synth, mixType, columns, rows);
+        	
+        	// can we set a name even if the synth doesn't support it?
+        	if (result.exists("name"))
+        		{
+        		result.set("name", "" + names[i] + "Remix"); 
+        		
+        		// revise name
+                synth.undo.setWillPush(false);
+                boolean send = synth.getSendMIDI();
+                synth.setSendMIDI(false);
+       			boolean shouldUpdate = synth.model.getUpdateListeners();
+        		synth.model.setUpdateListeners(false);
+        		Model backup = synth.model;
+        		
+        		synth.model = result;
+                synth.revise();
+                
+                synth.model = backup;
+        		synth.model.setUpdateListeners(shouldUpdate);
+                synth.setSendMIDI(send);
+                synth.undo.setWillPush(true);
+        		}
+        		
+        	library.setPatch(library.getPatch(result), Library.SCRATCH_BANK, i);
+        	}
+    	}
+   
+    public Model performMix(Synth synth, int mixType, int[] columns, int[] rows)
+    	{
+        Model model = null;
+        String[] mutationKeys = synth.getMutationKeys();
+        double probability = 1.0;
+        
+        // Recombination is odd: we pick a weighted point p between the original a and the new b, and
+        // then pick a random point BETWEEN a and p.  Thus if we weight ALL the way to b, we're still
+        // only doing 50% recombination.  But below I want to have specific probabilities of "recombination",
+        // so I'm using crossover instead, passing in 'false' so it uses the true crossover probability and not
+        // halving it.
+        
+        if (mixType == MIX_TYPE_UNIFORM)
+            {
+            // descending -- we start with the top patch
+            int elt = 0;
+            model = getLibrary().getModel(columns[0] - 1, rows[0]).copy();          // we don't want the listeners etc.
+            for(int i = 1; i < rows.length; i++)
+                {
+                if (i == rows.length - 1) // last one, mix half/half
+                    probability /= 2.0; 
+                else            // 1/2 -> 1/3 -> 1/4 -> 1/5 etc.
+                    probability = 1.0 / ((1.0 / probability) + 1);
+                model = model.crossover(synth.random, getLibrary().getModel(columns[i] - 1, rows[i]), mutationKeys, probability, false);
+                }
+            }
+        else
+            {
+            // ascending -- start with the bottom patch and recombine till we get to the big patch up top
+            model = getLibrary().getModel(columns[rows.length - 1] - 1, rows[rows.length - 1]).copy();                // we don't want the listeners etc.
+            for(int i = rows.length - 2; i >= 0; i--)
+                {
+                if (i == rows.length - 2) // first one, mix half/half
+                    probability = 1.0 / 2.0;
+                else if (mixType == MIX_TYPE_ONE_THIRD)
+                    probability = 1.0 / 3.0;
+                else if (mixType == MIX_TYPE_ONE_HALF)
+                    probability = 1.0 / 2.0;
+                else if (mixType == MIX_TYPE_TWO_THIRDS)
+                    probability = 2.0 / 3.0;
+                model = model.crossover(synth.random, getLibrary().getModel(columns[i] - 1, rows[i]), mutationKeys, probability, false);
+                }
+            }
+        return model;
         }
 
 

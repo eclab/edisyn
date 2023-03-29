@@ -1,0 +1,10 @@
+March 29, 2023 Hydrasynth sysex reverse engineering notes.
+
+Identified:
+	- Macro custom name vs list name
+	- Macro list name number
+	- Macro panel value
+
+Successfully read and write to patches on the Hydrasynth now.
+
+Things are looking pretty stable.

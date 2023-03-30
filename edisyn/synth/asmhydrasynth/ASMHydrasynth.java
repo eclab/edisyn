@@ -4595,6 +4595,9 @@ public class ASMHydrasynth extends Synth
         return 0;
         }
 
+	public int getBatchDownloadWaitTime() { return 400; }
+    public int getBatchDownloadFailureCountdown() { return 20; }
+
     // A small syntatic shortening function for emitAll(...) to return the parameter value.
     int p(String key)
         {
@@ -5843,6 +5846,10 @@ public class ASMHydrasynth extends Synth
         	{
 	        get1("lfo" + (i + 1) + "quantize", data, 2442 + i * 2);
 	        }
+        for(int i = 0; i < 8; i++)
+        	{
+	        get1("voice" + (i + 1) + "modulation", data, 2400 + i * 2);
+	        }
         
         byte[][] outgoing = Encode.encodePatch(data);
                 
@@ -5899,13 +5906,14 @@ public class ASMHydrasynth extends Synth
                 int val = parseSub(cut[i], fromFile);
                 if (val == PARSE_SUCCEEDED)
                     return PARSE_SUCCEEDED;
-                else if (val != PARSE_INCOMPLETE)
+                else if (val != PARSE_INCOMPLETE && val != PARSE_IGNORE)
                     return PARSE_FAILED;
                 }
             return PARSE_FAILED;
             }
         else
             {
+//            new Throwable().printStackTrace();
             return parseSub(data, fromFile);
             }
         }
@@ -5991,7 +5999,7 @@ public class ASMHydrasynth extends Synth
                 return PARSE_INCOMPLETE;
                 }
             }
-        else return PARSE_INCOMPLETE;           // maybe some other message got in the way
+        else return PARSE_IGNORE;           // maybe some other message got in the way
         }
         
     public void diff(byte[] a, byte[] b)
@@ -6442,6 +6450,10 @@ public class ASMHydrasynth extends Synth
         for(int i = 0; i < 5; i++)
         	{
 	        set1("lfo" + (i + 1) + "quantize", data, 2442 + i * 2);
+	        }
+        for(int i = 0; i < 8; i++)
+        	{
+	        set1("voice" + (i + 1) + "modulation", data, 2400 + i * 2);
 	        }
         
         revise();

@@ -26,9 +26,14 @@ import javax.sound.midi.*;
 
 public class ASMHydrasynth extends Synth
     {
-    public static final String[] BANKS = { "A", "B", "C", "D", "E" };
-    public static final String[] BANKS_DELUXE = { "A", "B", "C", "D", "E", "F", "G", "H" };
+    public static final int VERSION_1_5_5 = 0x9B;
+    public static final int VERSION_2_0_0 = 0xC8;
+    
+    public static final String[] BANKS = { "A", "B", "C", "D", "E", "F", "G", "H" };
     public static final String[] OSC_MODES = { "Single", "WaveScan" };
+    public static final String[] SUSTAIN_PEDAL_MODES = { "Sustain", "Sostenuto", "Mod Only" };
+    public static final String[] LFO_ONE_SHOT_OPTIONS = { "Off", "On", "Step" };
+    public static final String[] GLIDE_MODES = { "Off", "Glide", "Glissando" };
     public static final String[] MUTANT_MODES = { "FM-Linear", "WavStack", "Osc Sync", "PW-Orig", "PW-Sqeez", "PW-ASM", "Harmonic", "PhazDiff" };
     public static final String[] MUTANT_SOURCES_FM_LIN = { "Sine", "Triangle", "Osc 1", "Osc 2", "Osc 3", "Ring Mod", "Noise", "Mutant 1", "Mutant 2", "Mutant 3", "Mutant 4", "Mod in 1", "Mod in 2" };
     public static final String[] MUTANT_SOURCES_OSC_SYNC = { "Osc 1", "Osc 2", "Osc 3" };
@@ -41,7 +46,7 @@ public class ASMHydrasynth extends Synth
     public static final String[] FILTER_2_TYPES = { "LP-BP-HP", "LP-Notch-HP" };
     public static final String[] DELAY_TYPES = { "Basic Mono", "Basic Stereo", "Pan Delay", "LRC Delay", "Reverse" };
     public static final String[] REVERB_TYPES = { "Hall", "Room", "Plate", "Cloud" };
-    public static final String[] ENV_TRIG_SOURCES = { "Off", "Note On", "LFO1", "LFO2", "LFO3", "LFO4", "LFO5", "Ribbon On", "Ribbon Rel", "Sustain Ped", "Mod In 1", "Mod In 2" };
+    public static final String[] ENV_TRIG_SOURCES = { "Off", "Note On", "LFO1", "LFO2", "LFO3", "LFO4", "LFO5", "Ribbon On", "Ribbon Rel", "Sustain", "Mod In 1", "Mod In 2" };
     public static final String[] ARP_DIVISIONS = { "1/1", "1/2", "1/4", "1/8", "1/16", "1/32", "1/1 T", "1/2 T", "1/4 T", "1/8 T", "1/16 T", "1/32 T" };
     public static final String[] ARP_MODES = { "Up", "Down", "Up/Down", "Up & Down", "Order", "Random", "Chord", "Phrase" };
     public static final String[] ARP_OCTAVE_MODES = { "Up", "Down", "Up/Down", "Alt", "Alt 2" };
@@ -65,18 +70,19 @@ public class ASMHydrasynth extends Synth
     public static final String[] SIDECHAINS = { "Off", "BPM Duck", "Tap", "Mod In 1", "Mod In 2" };
     public static final char[] INVALID_PATCH_NAME_CHARS = { '"', '*', '\\', '|', '/', '<', '>', '?',  ';', '~' };
     public static final String[] NOTES = { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
-
+    public static final String[] OSC_BIT_REDUCTIONS = { "Off", "16", "12", "10", "9", "8", "7", "6", "5", "4", "3", "2" };
+    public static final String[] QUANTIZATIONS = { "Off", "257", "129", "65", "33", "17", "9", "5", "3" };
     public static final String[] SCALES = 
-    	{ 	
-    	"Custom Edit",
-		"Chromatic", 
-		//// STANDARD SCALES START HERE
-		"S Major", "S BeBop Major", "S BeBop", "S Mixolydian", "S Harmonic Major", "S Lydian", "S Lydian Augmented", "S Acoustic", "S Pentatonic Major", "S Locrian Major", "S Prometheus", "S Whole Tone", "S Melodic Minor", "S Half Diminished", "S Aeolian", "S Dorian", "S Harmonic Minor",
-		"S Algerian", "S Gypsy", "S Hungarian", "S Ukranian", "S Diminished Whole Tone", "S Locrian", "S Neapolitan Major", "S Neapolitan Minor", "S Phrygian", "S Flamenco", "S Persian", "S Phrygian Dominant", "S Enigmatic", "S Tritone", "S In", "S Insen", "S Augmented", "S Blues", "S Pentatonic Minor", "S Hirajoshi",
-		//// MICROTUNE SCALES START HERE
-		"M 1/4 Tone", "M 19 Tone", "M 31 Tone", "M Al-Farabi SynChrom", "M Arabic 12-Tone", "M Archytas Chromatic", "M Archytas Enharmonic", "M Belafon Singapore", "M Belafon West Africa", "M Bohlen 11-Tone", "M Chinese 300 B.C.", "M Chinese DiziFlute", "M Crysanthos Byzantine", "M Dekany 1 3 5 11-3", "M Dekany 1 3 5 7 11",
-		"M Diaphonic 12-Tone", "M Eikosany 1 3-11", "M Greeg Aeolic", "M H. Partch 43-Note", "M Harmonic A 1-60", "M Hexany 1 3 5 9", "M Hexany 1 3 7 11", "M Hexany 13 11 13", "M Indian Raga", "M Japanese Koto", "M Just Major C", "M Just Minor C", "M Mean Tone C", "M Pelog / Slendro", "M Sk8board 17-65 Tun", "M W. Carlos Harmonic" 
-		};
+        {       
+        "Custom Edit",
+        "Chromatic", 
+        //// STANDARD SCALES START HERE
+        "S Major", "S BeBop Major", "S BeBop", "S Mixolydian", "S Harmonic Major", "S Lydian", "S Lydian Augmented", "S Acoustic", "S Pentatonic Major", "S Locrian Major", "S Prometheus", "S Whole Tone", "S Melodic Minor", "S Half Diminished", "S Aeolian", "S Dorian", "S Harmonic Minor",
+        "S Algerian", "S Gypsy", "S Hungarian", "S Ukranian", "S Diminished Whole Tone", "S Locrian", "S Neapolitan Major", "S Neapolitan Minor", "S Phrygian", "S Flamenco", "S Persian", "S Phrygian Dominant", "S Enigmatic", "S Tritone", "S In", "S Insen", "S Augmented", "S Blues", "S Pentatonic Minor", "S Hirajoshi",
+        //// MICROTUNE SCALES START HERE
+        "M 1/4 Tone", "M 19 Tone", "M 31 Tone", "M Al-Farabi SynChrom", "M Arabic 12-Tone", "M Archytas Chromatic", "M Archytas Enharmonic", "M Belafon Singapore", "M Belafon West Africa", "M Bohlen 11-Tone", "M Chinese 300 B.C.", "M Chinese DiziFlute", "M Crysanthos Byzantine", "M Dekany 1 3 5 11-3", "M Dekany 1 3 5 7 11",
+        "M Diaphonic 12-Tone", "M Eikosany 1 3-11", "M Greeg Aeolic", "M H. Partch 43-Note", "M Harmonic A 1-60", "M Hexany 1 3 5 9", "M Hexany 1 3 7 11", "M Hexany 13 11 13", "M Indian Raga", "M Japanese Koto", "M Just Major C", "M Just Minor C", "M Mean Tone C", "M Pelog / Slendro", "M Sk8board 17-65 Tun", "M W. Carlos Harmonic" 
+        };
 
     public static final int[] LFO_FADE_INS_SYNC_ON =            // all the repetition here is just nuts
         {
@@ -99,9 +105,10 @@ public class ASMHydrasynth extends Synth
         "Note-On Vel", "Note-Off Vel",
         "Pitch Wheel", "Mod Wheel",
         "Ribbon Absolute", "Ribbon Unipolar", "Ribbon Relative",
-        "Expression Ped", "Sustain Ped",
+        "Expression Ped", "CC 64 / Sustain",
         "Mod In 1", "Mod In 2",
         "MPE-X", "MPE-Y Absolute", "MPE-Y Relative",
+        "Voice Mod", "Voice Mod+",
         "CC 0", "CC 1", "CC 2", "CC 3", "CC 4", "CC 5", "CC 6", "CC 7", 
         "CC 8", "CC 9", "CC 10", "CC 11", "CC 12", "CC 13", "CC 14", "CC 15", 
         "CC 16", "CC 17", "CC 18", "CC 19", "CC 20", "CC 21", "CC 22", "CC 23", 
@@ -110,7 +117,7 @@ public class ASMHydrasynth extends Synth
         "CC 40", "CC 41", "CC 42", "CC 43", "CC 44", "CC 45", "CC 46", "CC 47", 
         "CC 48", "CC 49", "CC 50", "CC 51", "CC 52", "CC 53", "CC 54", "CC 55", 
         "CC 56", "CC 57", "CC 58", "CC 59", "CC 60", "CC 61", "CC 62", "CC 63", 
-        "CC 64", "CC 65", "CC 66", "CC 67", "CC 68", "CC 69", "CC 70", "CC 71", 
+        "CC 64 / Sustain", "CC 65", "CC 66", "CC 67", "CC 68", "CC 69", "CC 70", "CC 71", 
         "CC 72", "CC 73", "CC 74", "CC 75", "CC 76", "CC 77", "CC 78", "CC 79", 
         "CC 80", "CC 81", "CC 82", "CC 83", "CC 84", "CC 85", "CC 86", "CC 87", 
         "CC 88", "CC 89", "CC 90", "CC 91", "CC 92", "CC 93", "CC 94", "CC 95", 
@@ -120,52 +127,52 @@ public class ASMHydrasynth extends Synth
         "CC 120", "CC 121", "CC 122", "CC 123", "CC 124", "CC 125", "CC 126", "CC 127" 
         };
 
-	public static final int[] MOD_DESTINATION_CATEGORIES = 
-		{
-		0,												// OFF
-		1,1,1,1,1,1,1,1,1,1,							// Arp
-		2,2,2,											// OSC 1
-		3,3,3,											// OSC 2
-		4,4,											// OSC 3
-		5,												// ALL OSC
-		6,6,6,6,6,6,6,6,6,6,6,6,6,						// Mutant 1
-		7,7,7,7,7,7,7,7,7,7,7,7,7,						// Mutant 2
-		8,8,8,8,8,8,8,8,8,8,8,8,8,						// Mutant 3
-		9,9,9,9,9,9,9,9,9,9,9,9,9,						// Mutant 4
-		10,												// Ring Mod
-		11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,	// Mixer
-		12,12,12,12,12,12,12,							// Filter 1
-		13,13,13,13,13,13,								// Filter 2
-		14,14,											// Amp
-		15,15,15,										// Pre-FX
-		16,16,16,16,16,									// Delay
-		17,17,17,17,17,									// Reverb
-		18,18,18,										// Post-FX
-		19,19,19,19,19,									// ENV 1
-		20,20,20,20,20,									// ENV 2
-		21,21,21,21,21,									// ENV 3
-		22,22,22,22,22,									// ENV 4
-		23,23,23,23,23,									// ENV 5
-		24,24,											// LFO 1
-		25,25,											// LFO 2
-		26,26,											// LFO 3
-		27,27,											// LFO 4
-		28,28,											// LFO 5
-		29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,// Mod Matrix
-		29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,// Mod Matrix
-		30,30,30,30,30,30,30,30,						// Macro
-		31,31,31,31,31,31,								// Voice
-		32,32,											// CV
-		33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,// MIDI
-		33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,// MIDI
-		33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,// MIDI
-		33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,// MIDI
-		33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,// MIDI
-		33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,// MIDI
-		33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,// MIDI
-		33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,// MIDI
-		};
-		
+    public static final int[] MOD_DESTINATION_CATEGORIES = 
+        {
+        0,                                                                                              // OFF
+        1,1,1,1,1,1,1,1,1,1,                                                    // Arp
+        2,2,2,                                                                                  // OSC 1
+        3,3,3,                                                                                  // OSC 2
+        4,4,                                                                                    // OSC 3
+        5,                                                                                              // ALL OSC
+        6,6,6,6,6,6,6,6,6,6,6,6,6,                                              // Mutant 1
+        7,7,7,7,7,7,7,7,7,7,7,7,7,                                              // Mutant 2
+        8,8,8,8,8,8,8,8,8,8,8,8,8,                                              // Mutant 3
+        9,9,9,9,9,9,9,9,9,9,9,9,9,                                              // Mutant 4
+        10,                                                                                             // Ring Mod
+        11,11,11,11,11,11,11,11,11,11,11,11,11,11,11,   // Mixer
+        12,12,12,12,12,12,12,                                                   // Filter 1
+        13,13,13,13,13,13,                                                              // Filter 2
+        14,14,                                                                                  // Amp
+        15,15,15,                                                                               // Pre-FX
+        16,16,16,16,16,                                                                 // Delay
+        17,17,17,17,17,                                                                 // Reverb
+        18,18,18,                                                                               // Post-FX
+        19,19,19,19,19,                                                                 // ENV 1
+        20,20,20,20,20,                                                                 // ENV 2
+        21,21,21,21,21,                                                                 // ENV 3
+        22,22,22,22,22,                                                                 // ENV 4
+        23,23,23,23,23,                                                                 // ENV 5
+        24,24,                                                                                  // LFO 1
+        25,25,                                                                                  // LFO 2
+        26,26,                                                                                  // LFO 3
+        27,27,                                                                                  // LFO 4
+        28,28,                                                                                  // LFO 5
+        29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,// Mod Matrix
+        29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,29,// Mod Matrix
+        30,30,30,30,30,30,30,30,                                                // Macro
+        31,31,31,31,31,31,                                                              // Voice
+        32,32,                                                                                  // CV
+        33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,// MIDI
+        33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,// MIDI
+        33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,// MIDI
+        33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,// MIDI
+        33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,// MIDI
+        33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,// MIDI
+        33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,// MIDI
+        33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,33,// MIDI
+        };
+                
     public static final String[] MOD_DESTINATIONS = 
         {
         "Off", 
@@ -301,31 +308,31 @@ public class ASMHydrasynth extends Synth
         };
 
 
-	// For the time being we can't use this -- the JPopupMenu doesn't scroll
-	public static final String[] MACRO_NAME_PRESETS = 
-		{
-		"2nd", "3rd", "4th", "5th", "6th", "7th", 
-		"Air", "Amp", "ArpMode", "Attack", 
-		"Bacon", "Bark", "BassDrop", "Beef", "Bend", "Bite", "Bleed", "Breath", "Brighten", "Buildup", 
-		"CV 1", "CV 2", "Chance", "Chord", "Chorus", "Compres", "Crunch", "Crystal", "Cutoff", 
-		"Darken", "Decay", "Delay", "Depth", "Distort", "Dry/Wet", 
-		"EQ - Hi", "EQ - Low", "EQ - Mid", "Env Amt", 
-		"FM", "Fast", "Feedback", "Filter", "Flanger", "Force", "Funk", 
-		"GateTime", "Glide", "Go",
-		"Harmonic", "Harmony", "Hurt", 
-		"Itch", 
-		"Jianbing", 
-		"LFO Amt", "Level", 
-		"MIDI CC", "MaiTai", "Major", "MakeHuge", "Mangle", "Massage", "Minor", "Mod 1", "Mod 2", "Mod Amt", "Morph", 
-		"Noise", 
-		"Oct +", "Oct -", "Oh", "Ouch", "Overdriv", 
-		"PWM", "Pan", "Phase", "Phrase", "Pitch", "Pressure", "PulsWdth", "Purr", 
-		"Range", "Ratchet", "Rate", "Ratio", "Release", "Reso", "Reverb", "RingMod", "Rotary", "Rumble", 
-		"Scratch", "Slow", "Snarl", "Space", "Speed", "Spin", "Spread", "Stank", "Stop", "Stretch", "Sub", "Swing", 
-		"Teardown", "Thicken", "Thin", "Time", "TimeDiv", "Twist", 
-		"Velocity", "Vowel", 
-		"Warp", "WavStack", "Wavescan", "Width", "Wobble", "Woof", "Wow"
-		};
+    // For the time being we can't use this -- the JPopupMenu doesn't scroll
+    public static final String[] MACRO_NAME_PRESETS = 
+        {
+        "2nd", "3rd", "4th", "5th", "6th", "7th", 
+        "Air", "Amp", "ArpMode", "Attack", 
+        "Bacon", "Bark", "BassDrop", "Beef", "Bend", "Bite", "Bleed", "Breath", "Brighten", "Buildup", 
+        "CV 1", "CV 2", "Chance", "Chord", "Chorus", "Compres", "Crunch", "Crystal", "Cutoff", 
+        "Darken", "Decay", "Delay", "Depth", "Distort", "Dry/Wet", 
+        "EQ - Hi", "EQ - Low", "EQ - Mid", "Env Amt", 
+        "FM", "Fast", "Feedback", "Filter", "Flanger", "Force", "Funk", 
+        "GateTime", "Glide", "Go",
+        "Harmonic", "Harmony", "Hurt", 
+        "Itch", 
+        "Jianbing", 
+        "LFO Amt", "Level", 
+        "MIDI CC", "MaiTai", "Major", "MakeHuge", "Mangle", "Massage", "Minor", "Mod 1", "Mod 2", "Mod Amt", "Morph", 
+        "Noise", 
+        "Oct +", "Oct -", "Oh", "Ouch", "Overdriv", 
+        "PWM", "Pan", "Phase", "Phrase", "Pitch", "Pressure", "PulsWdth", "Purr", 
+        "Range", "Ratchet", "Rate", "Ratio", "Release", "Reso", "Reverb", "RingMod", "Rotary", "Rumble", 
+        "Scratch", "Slow", "Snarl", "Space", "Speed", "Spin", "Spread", "Stank", "Stop", "Stretch", "Sub", "Swing", 
+        "Teardown", "Thicken", "Thin", "Time", "TimeDiv", "Twist", 
+        "Velocity", "Vowel", 
+        "Warp", "WavStack", "Wavescan", "Width", "Wobble", "Woof", "Wow"
+        };
 
     public static final Color[] COLORS =
         {
@@ -789,6 +796,8 @@ public class ASMHydrasynth extends Synth
         0x03 * 128 + 0x28,              //MPE-X
         0x03 * 128 + 0x2A,              //MPE-Y Absolute
         0x03 * 128 + 0x2E,              //MPE-Y Relative
+        0x03 * 128 + 0x2F,              //Voice Mod
+        0x03 * 128 + 0x30,              //Voice Mod +
         0x01 * 128 + 0x28,              //CC 0
         0x01 * 128 + 0x29,              //CC 1
         0x01 * 128 + 0x2A,              //CC 2
@@ -974,7 +983,7 @@ public class ASMHydrasynth extends Synth
         };
 
 
-	/// WAVE IMAGES
+    /// WAVE IMAGES
 
     public static ImageIcon[] waves = new ImageIcon[219];
     static
@@ -987,7 +996,7 @@ public class ASMHydrasynth extends Synth
 
 
 
-	/// DELAY TIME DISPLAY COMPUTATION  (what a mess)
+    /// DELAY TIME DISPLAY COMPUTATION  (what a mess)
         
     // These are the delay times (in ms) corresonding to delaytime values 72 ... 183.
     // See getDelayTimeSyncOff(...) to get all delay times
@@ -1109,7 +1118,7 @@ public class ASMHydrasynth extends Synth
 
 
                 
-	/// REVERB TIME DISPLAY COMPUTATION
+    /// REVERB TIME DISPLAY COMPUTATION
 
     // These are the reverb times corresonding to reverbtime values 0...1024 in intervals of 8.
     public static final String[] REVERB_TIMES = 
@@ -1136,7 +1145,7 @@ public class ASMHydrasynth extends Synth
 
 
 
-	//// LFO RATE COMPUTATION
+    //// LFO RATE COMPUTATION
 
     // A close mapping of val (0...1024) to LFO rate values (0.02 ... 150.00 Hz).
     // The LFO rate appears to be nearly a perfect exponential increase, except
@@ -1183,7 +1192,7 @@ public class ASMHydrasynth extends Synth
                 }
             }
 
-         String str = getLastX("SendArpTapTrig", getSynthClassName(), true);
+        String str = getLastX("SendArpTapTrig", getSynthClassName(), true);
         if (str == null)
             sendArpTapTrig = false;            // default is false
         else if (str.equalsIgnoreCase("true"))
@@ -1191,7 +1200,7 @@ public class ASMHydrasynth extends Synth
         else
             sendArpTapTrig = false;
 
-    	str = getLastX("LockUserLFOSteps", getSynthClassName(), true);
+        str = getLastX("LockUserLFOSteps", getSynthClassName(), true);
         if (str == null)
             lockUserLFOSteps = false;            // default is false
         else if (str.equalsIgnoreCase("true"))
@@ -1237,8 +1246,9 @@ public class ASMHydrasynth extends Synth
         vbox.add(addMutant(2, Style.COLOR_A()));
         vbox.add(addMutant(3, Style.COLOR_B()));
         vbox.add(addMutant(4, Style.COLOR_B()));
-		vbox.add(addArp(Style.COLOR_C()));
-		
+        vbox.add(addArp(Style.COLOR_C()));
+        vbox.add(addVoiceModulation(Style.COLOR_A()));
+                
         soundPanel.add(vbox, BorderLayout.CENTER);
         addTab("Mutant Arp", soundPanel);
         
@@ -1446,15 +1456,15 @@ public class ASMHydrasynth extends Synth
         return globalCategory;
         }
 
-	boolean invalidChar(char c)
-		{
-		for(int i = 0; i < INVALID_PATCH_NAME_CHARS.length; i++)
-			{
-			if (c == INVALID_PATCH_NAME_CHARS[i]) return true;
-			}
-		return false;
-		}
-		
+    boolean invalidChar(char c)
+        {
+        for(int i = 0; i < INVALID_PATCH_NAME_CHARS.length; i++)
+            {
+            if (c == INVALID_PATCH_NAME_CHARS[i]) return true;
+            }
+        return false;
+        }
+                
     public static final int MAXIMUM_NAME_LENGTH = 16;
     public String revisePatchName(String name)
         {
@@ -1476,17 +1486,17 @@ public class ASMHydrasynth extends Synth
     /** Verify that all the parameters are within valid values, and tweak them if not. */
     public void revise()
         {
-    	if (model.get("lfo1steps") < 2) // set by the Hydrasynth when disabled
-    		model.set("lfo1steps", 2);
-    	if (model.get("lfo2steps") < 2) // set by the Hydrasynth when disabled
-    		model.set("lfo2steps", 2);
-    	if (model.get("lfo3steps") < 2) // set by the Hydrasynth when disabled
-    		model.set("lfo3steps", 2);
-    	if (model.get("lfo4steps") < 2) // set by the Hydrasynth when disabled
-    		model.set("lfo4steps", 2);
-    	if (model.get("lfo5steps") < 2) // set by the Hydrasynth when disabled
-    		model.set("lfo5steps", 2);
-    		
+        if (model.get("lfo1steps") < 2) // set by the Hydrasynth when disabled
+            model.set("lfo1steps", 2);
+        if (model.get("lfo2steps") < 2) // set by the Hydrasynth when disabled
+            model.set("lfo2steps", 2);
+        if (model.get("lfo3steps") < 2) // set by the Hydrasynth when disabled
+            model.set("lfo3steps", 2);
+        if (model.get("lfo4steps") < 2) // set by the Hydrasynth when disabled
+            model.set("lfo4steps", 2);
+        if (model.get("lfo5steps") < 2) // set by the Hydrasynth when disabled
+            model.set("lfo5steps", 2);
+                
         // check the easy stuff -- out of range parameters
         super.revise();
         
@@ -1495,20 +1505,46 @@ public class ASMHydrasynth extends Synth
         if (!nm.equals(newnm))
             model.set("name", newnm);
             
-		if (lockAllLFOSteps)
-			{
-			for(int lfo = 1; lfo <= 5; lfo++)
-				{
-				for(int step = 1; step <= 64; step++)
-					{
-					String key = "lfo" + lfo + "step" + step;
-					model.set(key, lockLFOStep(model.get(key)));
-					}
-				}
-			}        
+        if (lockAllLFOSteps)
+            {
+            for(int lfo = 1; lfo <= 5; lfo++)
+                {
+                for(int step = 1; step <= 64; step++)
+                    {
+                    String key = "lfo" + lfo + "step" + step;
+                    model.set(key, lockLFOStep(model.get(key)));
+                    }
+                }
+            }        
+        }
+
+    public JComponent addVoiceModulation(Color color)
+        {
+        Category category = new Category(this, "Voice Modulation", color);
+
+        JComponent comp;
+        String[] params;
+        HBox hbox = new HBox();
+        VBox vbox = new VBox();
+ 
+        for(int i = 1; i <= 8; i++)
+            {
+            comp = new LabelledDial("Voice " + i, this, "voice" + i + "modulation", color, 0, 256)
+            	{
+            	public boolean isSymmetric() { return true; }
+            	public String map(int value)
+            		{
+            		return "" + (value - 128);
+            		}
+            	};
+            hbox.add(comp);
+            }
+                        
+        category.add(hbox, BorderLayout.CENTER);
+        return category;
         }
         
-                
+        
     public JComponent addOscillator(int osc, Color color)
         {
         Category category = new Category(this, "Oscillator " + osc, color);
@@ -1524,14 +1560,11 @@ public class ASMHydrasynth extends Synth
         params = OSC_WAVES;
         comp = new Chooser("Wave", this, "osc" + osc + "type", params);
         vbox.add(comp);
- 
-        if (osc != 3)           // FIXME: Verify that in fact OSC 3 doesn't *have* a mode
-            {
-            params = OSC_MODES;
-            comp = new Chooser("Mode", this, "osc" + osc + "mode", params);
-            vbox.add(comp);
-            }
 
+        params = OSC_BIT_REDUCTIONS;
+        comp = new Chooser("Bit Reduction", this, "osc" + osc + "bitreduction", params);
+        model.setMetricMinMax("osc" + osc + "bitreduction", 0, OSC_BIT_REDUCTIONS.length - 1);
+        vbox.add(comp);
         hbox.add(vbox);
 
         comp = new LabelledDial("Wave", this, "osc" + osc + "type", color, 0, OSC_WAVES.length - 1, -1);
@@ -1548,15 +1581,32 @@ public class ASMHydrasynth extends Synth
             };
         icons.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 
+/*
+  Box box = new Box(BoxLayout.Y_AXIS);
+  box.add(Box.createHorizontalGlue());
+  box.add(icons);
 
-        Box box = new Box(BoxLayout.Y_AXIS);
-        box.add(Box.createHorizontalGlue());
-        box.add(icons);
-
-        box.add(Box.createHorizontalGlue());
+  box.add(Box.createHorizontalGlue());
+                     
+  hbox.add(Strut.makeHorizontalStrut(8));
+  hbox.add(box);
+  hbox.add(Strut.makeHorizontalStrut(8));
+*/
+        vbox = new VBox();
+        vbox.add(icons);
                 
+        if (osc != 3)           // FIXME: Verify that in fact OSC 3 doesn't *have* a mode
+            {
+            comp = new CheckBox("Wavescan Mode", this, "osc" + osc + "mode");
+            vbox.add(comp);
+            /*
+              params = OSC_MODES;
+              comp = new Chooser("Mode", this, "osc" + osc + "mode", params);
+              vbox.add(comp);
+            */
+            }
         hbox.add(Strut.makeHorizontalStrut(8));
-        hbox.add(box);
+        hbox.add(vbox);
         hbox.add(Strut.makeHorizontalStrut(8));
 
         comp = new LabelledDial("Semitones", this, "osc" + osc + "semi", color, -36, 36);
@@ -1575,7 +1625,6 @@ public class ASMHydrasynth extends Synth
             };
         hbox.add(comp);
         
-
         if (osc < 3)
             {
             // The value actually goes 0...8192 but in increments of 8
@@ -1611,8 +1660,8 @@ public class ASMHydrasynth extends Synth
         }
 
 
-	/** Rounds d as usual to the nearest int, but with 0.5 rounded 
-		towards the nearest even number rather than towards zero.  */
+    /** Rounds d as usual to the nearest int, but with 0.5 rounded 
+        towards the nearest even number rather than towards zero.  */
     public static int roundEven(double d) 
         {
         // Garbage like https://stackoverflow.com/questions/32971262/how-to-round-a-double-to-closest-even-number
@@ -1693,7 +1742,8 @@ public class ASMHydrasynth extends Synth
         HBox hbox = new HBox();
         
         VBox vbox = new VBox();
-        comp = new CheckBox("On", this, "voiceglide");
+        params = GLIDE_MODES;
+        comp = new Chooser("Mode", this, "voiceglide", params);
         vbox.add(comp);
 
         comp = new CheckBox("Legato", this, "voiceglidelegato");
@@ -1771,7 +1821,13 @@ public class ASMHydrasynth extends Synth
         vbox.add(comp);
         hbox.add(vbox);
 
-        comp = new LabelledDial("Amount", this, "voicevibratoamount", color, 0, 12);
+        comp = new LabelledDial("Amount", this, "voicevibratoamount", color, 0, 120)
+            {
+            public String map(int value)
+                {
+                return ("" + (value / 10.0));
+                }
+            };
         hbox.add(comp);
 
         hbox.add(off);
@@ -1798,17 +1854,21 @@ public class ASMHydrasynth extends Synth
         comp = new Chooser("Polyphony", this, "voicepolyphony", params);
         vbox.add(comp);
         hbox.add(vbox);
+
+         comp = new CheckBox("Snap", this, "voicesnap");
+        vbox.add(comp);
+       vbox = new VBox();
         
-        vbox = new VBox();
+         params = SUSTAIN_PEDAL_MODES;
+        comp = new Chooser("Sustain Pedal", this, "voicesustain", params);
+        vbox.add(comp);
         
-        comp = new CheckBox("Random Phase", this, "voicerandomphase");
+       comp = new CheckBox("Random Phase", this, "voicerandomphase");
         vbox.add(comp);
 
         comp = new CheckBox("Warm Mode", this, "voicewarmmode");
         vbox.add(comp);
 
-        comp = new CheckBox("Snap", this, "voicesnap");
-        vbox.add(comp);
         hbox.add(vbox);
 
         comp = new LabelledDial("Pitch Bend", this, "voicepitchbend", color, 0, 24);
@@ -2063,51 +2123,51 @@ public class ASMHydrasynth extends Synth
 
 
     public JComponent addScale(Color color)
-    	{
+        {
         Category category = new Category(this, "Scale", color);
 
         JComponent comp;
         String[] params;
         final HBox hbox = new HBox();
 
-		final HBox scaleEditBox = new HBox();
-		
-		for(int i = 2; i <= 7; i++)
-			{
-			comp = new LabelledDial("Note " + i, this, "scalenote" + i, color, 0, 12)
-				{
-				public String map(int value)
-					{
-					if (value == 0) return "Off";
-					else return NOTES[(model.get("scalekeylock") + value - 1) % 12];
-					}
-				};
-			scaleEditBox.add(comp);
-			}
-		
-		final JComponent scaleEditBoxStrut = Strut.makeStrut(scaleEditBox);
-			
-		LabelledDial keyLock = new LabelledDial("Key Lock", this, "scalekeylock", color, 1, 12)
-			{
-			public String map(int value)
-				{
-				return NOTES[value - 1];
-				}
-				
-			public void update(String key, Model model)
+        final HBox scaleEditBox = new HBox();
+                
+        for(int i = 2; i <= 7; i++)
+            {
+            comp = new LabelledDial("Note " + i, this, "scalenote" + i, color, 0, 12)
+                {
+                public String map(int value)
+                    {
+                    if (value == 0) return "Off";
+                    else return NOTES[(model.get("scalekeylock") + value - 1) % 12];
+                    }
+                };
+            scaleEditBox.add(comp);
+            }
+                
+        final JComponent scaleEditBoxStrut = Strut.makeStrut(scaleEditBox);
+                        
+        LabelledDial keyLock = new LabelledDial("Key Lock", this, "scalekeylock", color, 1, 12)
+            {
+            public String map(int value)
+                {
+                return NOTES[value - 1];
+                }
+                                
+            public void update(String key, Model model)
                 {
                 super.update(key, model);
                 scaleEditBox.repaint();
-				}
-			};
-			
-		final JComponent keyLockStrut = Strut.makeStrut(keyLock);
+                }
+            };
+                        
+        final JComponent keyLockStrut = Strut.makeStrut(keyLock);
 
         VBox vbox = new VBox();
         params = SCALES;
-        comp = new Chooser("Type", this, "scaletype", params)	
-        	{
-			public void update(String key, Model model)
+        comp = new Chooser("Type", this, "scaletype", params)   
+            {
+            public void update(String key, Model model)
                 {
                 super.update(key, model);
                 int val = model.get(key);
@@ -2116,33 +2176,38 @@ public class ASMHydrasynth extends Synth
                 hbox.remove(keyLockStrut);
                 hbox.remove(scaleEditBoxStrut);
                 
-                if (val != 1 && val <= 38)	// not chromatic or microtonal
-                	{
-                	hbox.add(keyLock);
-                	if (val == 0)		// scale edit
-                		{
-                		hbox.addLast(scaleEditBox);
-                		}
-                	else
-                		{
-                		hbox.addLast(scaleEditBoxStrut);
-                		}
-                	}
+                if (val != 1 && val <= 38)      // not chromatic or microtonal
+                    {
+                    hbox.add(keyLock);
+                    if (val == 0)           // scale edit
+                        {
+                        hbox.addLast(scaleEditBox);
+                        }
+                    else
+                        {
+                        hbox.addLast(scaleEditBoxStrut);
+                        }
+                    }
                 else
-                	{
-                	hbox.add(keyLockStrut);
-                	hbox.addLast(scaleEditBoxStrut);
-                	}
+                    {
+                    hbox.add(keyLockStrut);
+                    hbox.addLast(scaleEditBoxStrut);
+                    }
                 hbox.revalidate();
                 hbox.repaint();
-				}
-        	};
+                }
+            };
         vbox.add(comp);
         hbox.add(vbox);
+        // At this point the scaletype has added the keylock in the wrong place.
+        // This is because we updated the chooser before we added the chooser.
+        // We need to remove it and re-add it
+        hbox.remove(keyLock);
+        hbox.add(keyLock);
 
-	    category.add(hbox, BorderLayout.CENTER);
+        category.add(hbox, BorderLayout.CENTER);
         return category;
-    	}
+        }
 
     String formatRatio(double val)
         {
@@ -2236,7 +2301,7 @@ public class ASMHydrasynth extends Synth
         final EnvelopeDisplay disp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
             new String[] { null, null,  null,  null,  null,  null,  null,  null },
             new String[] { "mutant" + mut + "warp1", "mutant" + mut + "warp2", "mutant" + mut + "warp3", "mutant" + mut + "warp4",
-            					"mutant" + mut + "warp5", "mutant" + mut + "warp6", "mutant" + mut + "warp7", "mutant" + mut + "warp8" },
+                           "mutant" + mut + "warp5", "mutant" + mut + "warp6", "mutant" + mut + "warp7", "mutant" + mut + "warp8" },
             new double[] { 0, 1.0 / 8, 1.0 / 8, 1.0 / 8, 1.0 / 8, 1.0 / 8, 1.0 / 8, 1.0 / 8 },
             new double[] { 1.0 / 1024.0, 1.0 / 1024.0, 1.0 / 1024.0, 1.0 / 1024.0, 1.0 / 1024.0, 1.0 / 1024.0, 1.0 / 1024.0, 1.0 / 1024.0 });
         disp.setStepping(true);
@@ -2279,13 +2344,13 @@ public class ASMHydrasynth extends Synth
                         knobBox.add(depth);
                         knobBox.add(feedback);
                         knobBox.add(wet);
-                    	knobBox.addLast(Strut.makeStrut(disp, true));
+                        knobBox.addLast(Strut.makeStrut(disp, true));
                         break;
                     case 1:         // WavStack
                         sourceBox.add(sourceStrut);
                         knobBox.add(depth);
                         knobBox.add(wet);
-                    	knobBox.addLast(Strut.makeStrut(disp, true));
+                        knobBox.addLast(Strut.makeStrut(disp, true));
                         break;
                     case 2:         // OSC Sync
                         sourceBox.add(sourcesOscSync);
@@ -2294,7 +2359,7 @@ public class ASMHydrasynth extends Synth
                         knobBox.add(window);
                         knobBox.add(feedback);
                         knobBox.add(wet);
-                    	knobBox.addLast(Strut.makeStrut(disp, true));
+                        knobBox.addLast(Strut.makeStrut(disp, true));
                         break;
                     case 3:         // PW-Orig
                         sourceBox.add(sourceStrut);
@@ -2302,7 +2367,7 @@ public class ASMHydrasynth extends Synth
                         knobBox.add(depth);
                         knobBox.add(feedback);
                         knobBox.add(wet);
-                    	knobBox.addLast(Strut.makeStrut(disp, true));
+                        knobBox.addLast(Strut.makeStrut(disp, true));
                         break;
                     case 4:         // PW-Squeez
                         sourceBox.add(sourceStrut);
@@ -2310,7 +2375,7 @@ public class ASMHydrasynth extends Synth
                         knobBox.add(depth);
                         knobBox.add(feedback);
                         knobBox.add(wet);
-                    	knobBox.addLast(Strut.makeStrut(disp, true));
+                        knobBox.addLast(Strut.makeStrut(disp, true));
                         break;
                     case 5:         // PW-ASM
                         sourceBox.add(sourceStrut);
@@ -2327,14 +2392,14 @@ public class ASMHydrasynth extends Synth
                         knobBox.add(depth);
                         knobBox.add(feedback);
                         knobBox.add(wet);
-                    	knobBox.addLast(Strut.makeStrut(disp, true));
+                        knobBox.addLast(Strut.makeStrut(disp, true));
                         break;
                     case 7:         // PhazDiff
                         sourceBox.add(sourceStrut);
                         knobBox.add(depth);
                         knobBox.add(feedback);
                         knobBox.add(wet);
-                    	knobBox.addLast(Strut.makeStrut(disp, true));
+                        knobBox.addLast(Strut.makeStrut(disp, true));
                         break;
                     default:
                         System.err.println("ERROR: (Mutant Mode) bad mutant " + model.get(key));
@@ -2377,7 +2442,7 @@ public class ASMHydrasynth extends Synth
         final Chooser keyspan = new Chooser("Theremin Keyspan", this, "ribbonkeyspan", params);
  
         final HBox thereminBox = new HBox();
-       	VBox vbox = new VBox(); 
+        VBox vbox = new VBox(); 
         comp = new CheckBox("Quantize", this, "ribbonquantize");
         vbox.add(comp);
 
@@ -2406,34 +2471,34 @@ public class ASMHydrasynth extends Synth
         final VBox modeBox = new VBox(); 
         params = RIBBON_MODES;
         comp = new Chooser("Mode", this, "ribbonmode", params)
-        	{
+            {
             public void update(String key, Model model)
                 {
                 super.update(key, model);
-                if (model.get(key) == 1)		// Theremin
-                	{
-                	modeBox.add(keyspan);
-                	modeBox.remove(ribbonHold);
-                	hbox.addLast(thereminBox);
-                	}
-                else if (model.get(key) == 2) 	// Mod
-                	{
-                	modeBox.remove(keyspan);
-                	modeBox.add(ribbonHold);
-                	hbox.remove(thereminBox);
-                	}
-                else		// Pitch Bend
-                	{
-                	modeBox.remove(keyspan);
-                	modeBox.remove(ribbonHold);
-                	hbox.remove(thereminBox);
-                	}
+                if (model.get(key) == 1)                // Theremin
+                    {
+                    modeBox.add(keyspan);
+                    modeBox.remove(ribbonHold);
+                    hbox.addLast(thereminBox);
+                    }
+                else if (model.get(key) == 2)   // Mod
+                    {
+                    modeBox.remove(keyspan);
+                    modeBox.add(ribbonHold);
+                    hbox.remove(thereminBox);
+                    }
+                else            // Pitch Bend
+                    {
+                    modeBox.remove(keyspan);
+                    modeBox.remove(ribbonHold);
+                    hbox.remove(thereminBox);
+                    }
                 modeBox.revalidate();
                 hbox.revalidate();
                 modeBox.repaint();
                 hbox.repaint();
                 }
-        	};
+            };
         modeBox.add(comp);
         hbox.add(modeBox);
 
@@ -3002,7 +3067,7 @@ public class ASMHydrasynth extends Synth
                 }
             };
         lofi.addLast(comp);
-         // ((LabelledDial)comp).addAdditionalLabel("(Param 5)");
+        // ((LabelledDial)comp).addAdditionalLabel("(Param 5)");
        
         final HBox tremolo = new HBox();
         comp = new LabelledDial("Rate", this, (pre ? "pre" : "post") + "fx6param1", color, 0, 1024)
@@ -3227,7 +3292,7 @@ public class ASMHydrasynth extends Synth
                 return "" + (roundEven(v / 8.192) / 10.0) + "%";
                 }
             };
-        drywet.addAdditionalLabel(" ");		// so Bypass is the right height
+        drywet.addAdditionalLabel(" ");         // so Bypass is the right height
 
         params = FX_TYPES;
         comp = new Chooser("Type", this, (pre ? "pre" : "post") + "fxtype", params)     
@@ -3480,23 +3545,23 @@ public class ASMHydrasynth extends Synth
 
         VBox vbox = new VBox();
         params = LFO_WAVES;
-        comp = new Chooser("Wave", this, "lfo" + lfo + "wave", params)	
-        	{
+        comp = new Chooser("Wave", this, "lfo" + lfo + "wave", params)  
+            {
             public void update(String key, Model model)
                 {
                 super.update(key, model);
                 if (model.get(key) == 0) // no steps
-                	{
-                	hbox.remove(steps);
-                	}
+                    {
+                    hbox.remove(steps);
+                    }
                 else
-                	{
-                	hbox.add(steps);
-                	}
+                    {
+                    hbox.add(steps);
+                    }
                 hbox.revalidate();
                 hbox.repaint();
                 }
-        	};
+            };
         vbox.add(comp);
 
         params = LFO_TRIG_SYNCS;
@@ -3506,6 +3571,15 @@ public class ASMHydrasynth extends Synth
         
         vbox = new VBox();
         
+        params = LFO_ONE_SHOT_OPTIONS;
+        comp = new Chooser("One-Shot", this, "lfo" + lfo + "oneshot", params);
+        vbox.add(comp);
+
+        params = QUANTIZATIONS;
+        comp = new Chooser("Quantize", this, "lfo" + lfo + "quantize", params);
+        model.setMetricMinMax("lfo" + lfo + "quantize", 0, QUANTIZATIONS.length - 1);
+        vbox.add(comp);
+
         final HBox bpmOn = new HBox();
         final HBox bpmOff = new HBox();
         final HBox bpm = new HBox();
@@ -3524,9 +3598,6 @@ public class ASMHydrasynth extends Synth
                 bpm.repaint();
                 }
             };
-        vbox.add(comp);
-
-        comp = new CheckBox("One-Shot", this, "lfo" + lfo + "oneshot");
         vbox.add(comp);
         hbox.add(vbox);
 
@@ -3627,20 +3698,20 @@ public class ASMHydrasynth extends Synth
         }
                 
 
-	int lockLFOStep(int proposedState)
-		{
-		double v = proposedState * 8;
-		v = (int)(roundEven(v / 6.4) / 10.0) - 64.0;
-		
-		v = roundEven(v / 5.0) * 5;
-		if (v > 60) v = 60;
-		if (v < -60) v = -60;
-		
-		v = v + 64;
-		v = v * 64;
-		v = v / 8;
-		return (int) v;
-		}
+    int lockLFOStep(int proposedState)
+        {
+        double v = proposedState * 8;
+        v = (int)(roundEven(v / 6.4) / 10.0) - 64.0;
+                
+        v = roundEven(v / 5.0) * 5;
+        if (v > 60) v = 60;
+        if (v < -60) v = -60;
+                
+        v = v + 64;
+        v = v * 64;
+        v = v / 8;
+        return (int) v;
+        }
 
     public JComponent addLFOSteps(int lfo, Color color)
         {
@@ -3663,17 +3734,17 @@ public class ASMHydrasynth extends Synth
                     {
                     public boolean isSymmetric() { return true; }
 
-					// We want to override mouse movements, not setting the state in general,
-					// so we override getProposedState(MouseEvent e) rather than setState(...)
-					
-        			public int updateProposedState(int proposedState)
-        				{
-        				if (lockUserLFOSteps || lockAllLFOSteps)
-        					{
-        					proposedState = lockLFOStep(proposedState);
-        					}
-        				return proposedState;
-        				}
+                    // We want to override mouse movements, not setting the state in general,
+                    // so we override getProposedState(MouseEvent e) rather than setState(...)
+                                        
+                    public int updateProposedState(int proposedState)
+                        {
+                        if (lockUserLFOSteps || lockAllLFOSteps)
+                            {
+                            proposedState = lockLFOStep(proposedState);
+                            }
+                        return proposedState;
+                        }
 
                     public String map(int value)
                         {
@@ -3765,28 +3836,28 @@ public class ASMHydrasynth extends Synth
         VBox vbox = new VBox();
         
         if (env == 2)  // No Env 2 Trigger Source 1, but it's still a parameter!  Hydrasynth is weird
-        	{
-        	model.set("env" + env + "trigsrc" + 1, 1);
-        	model.setMin("env" + env + "trigsrc" + 1, 1);  
-        	model.setMax("env" + env + "trigsrc" + 1, 1);  
+            {
+            model.set("env" + env + "trigsrc" + 1, 1);
+            model.setMin("env" + env + "trigsrc" + 1, 1);  
+            model.setMax("env" + env + "trigsrc" + 1, 1);  
 
-			params = ENV_TRIG_SOURCES;
-			comp = new Chooser("Trigger Source " + 2, this, "env" + env + "trigsrc" + 2, params);
+            params = ENV_TRIG_SOURCES;
+            comp = new Chooser("Trigger Source " + 2, this, "env" + env + "trigsrc" + 2, params);
 
-			vbox.add(Strut.makeStrut(comp));		// for Trigger Source 1
-			vbox.add(comp);
-        	}
+            vbox.add(Strut.makeStrut(comp));                // for Trigger Source 1
+            vbox.add(comp);
+            }
         else
-        	{
-	        params = ENV_TRIG_SOURCES;
-	        comp = new Chooser("Trigger Source " + 1, this, "env" + env + "trigsrc" + 1, params);
-	        vbox.add(comp);
+            {
+            params = ENV_TRIG_SOURCES;
+            comp = new Chooser("Trigger Source " + 1, this, "env" + env + "trigsrc" + 1, params);
+            vbox.add(comp);
 
-	        params = ENV_TRIG_SOURCES;
-	        comp = new Chooser("Trigger Source " + 2, this, "env" + env + "trigsrc" + 2, params);
-	        vbox.add(comp);
-	        }
-                
+            params = ENV_TRIG_SOURCES;
+            comp = new Chooser("Trigger Source " + 2, this, "env" + env + "trigsrc" + 2, params);
+            vbox.add(comp);
+            }
+         
         final HBox bpmOn = new HBox();
         final HBox bpmOff = new HBox();
         final HBox bpm = new HBox();
@@ -3818,35 +3889,40 @@ public class ASMHydrasynth extends Synth
         comp = new Chooser("Trigger Source " + 4, this, "env" + env + "trigsrc" + 4, params);
         vbox.add(comp);
                 
-        comp = new CheckBox("Free Run", this, "env" + env + "freerun");
+         comp = new CheckBox("Free Run", this, "env" + env + "freerun");
         vbox.add(comp);
-        
-        hbox.add(vbox);
-        vbox = new VBox();
-        final VBox resetBox = vbox;
 
-		final CheckBox reset = new CheckBox("Reset", this, "env" + env + "reset");
+       hbox.add(vbox);
+        vbox = new VBox();
+
+        params = QUANTIZATIONS;
+        comp = new Chooser("Quantize", this, "env" + env + "quantize", params);
+        model.setMetricMinMax("env" + env + "quantize", 0, QUANTIZATIONS.length - 1);
+        vbox.add(comp);
+                
+        final VBox resetBox = new VBox();
+        final CheckBox reset = new CheckBox("Reset", this, "env" + env + "reset");
 
         comp = new CheckBox("Legato", this, "env" + env + "legato")
-        	{
+            {
             public void update(String key, Model model)
                 {
                 super.update(key, model);
                 if (model.get(key) == 0)
-                	{
-	                resetBox.add(reset);
-	                }
-	            else
-	            	{
-	                resetBox.remove(reset);
-	            	}
-				resetBox.revalidate();
-				resetBox.repaint();
+                    {
+                    resetBox.add(reset);
+                    }
+                else
+                    {
+                    resetBox.remove(reset);
+                    }
+                resetBox.revalidate();
+                resetBox.repaint();
                 }
-        	};
+            };
         vbox.add(comp);
-
-
+        vbox.add(resetBox);
+                
         hbox.add(vbox);
         vbox = new VBox();
         
@@ -4189,22 +4265,22 @@ public class ASMHydrasynth extends Synth
                 return reviseMacroName(val);
                 }
             public String[] getList()
-            	{
-            	return MACRO_NAME_PRESETS;
-            	}
+                {
+                return MACRO_NAME_PRESETS;
+                }
             };
         vbox.add(comp);
         
-		comp = new LabelledDial("Panel Value", this, "macro" + macro + "panelvalue", color, 0, 1024)
-			{
-			public String map(int value)
-				{
-				int v = value * 8;
-				// dividing 8192 by 6.4 cuts into 2560 pieces
-				return String.format("%1.1f", ((roundEven(v / 6.4) / 10.0)));
-				}
-			};
-		vbox.add(comp);
+        comp = new LabelledDial("Panel Value", this, "macro" + macro + "panelvalue", color, 0, 1024)
+            {
+            public String map(int value)
+                {
+                int v = value * 8;
+                // dividing 8192 by 6.4 cuts into 2560 pieces
+                return String.format("%1.1f", ((roundEven(v / 6.4) / 10.0)));
+                }
+            };
+        vbox.add(comp);
 
         hbox.add(vbox);
                 
@@ -4292,7 +4368,7 @@ public class ASMHydrasynth extends Synth
         comp = new CheckBox("Enable", this, "arpenable");
         vbox.add(comp);
 
-         comp = new CheckBox("Latch", this, "arplatch");
+        comp = new CheckBox("Latch", this, "arplatch");
         vbox.add(comp);
 
         hbox.add(vbox);
@@ -4302,14 +4378,14 @@ public class ASMHydrasynth extends Synth
         ((CheckBox)comp).addToWidth(1);
         vbox.add(comp);
 
-       comp = new CheckBox("Tap Trig", this, "arptaptrig");
+        comp = new CheckBox("Tap Trig", this, "arptaptrig");
         ((CheckBox)comp).addToWidth(1);
         vbox.add(comp);
 
         hbox.add(vbox);
         vbox = new VBox();
 
-       	params = ARP_MODES;
+        params = ARP_MODES;
         comp = new Chooser("Mode", this, "arpmode", params);
         vbox.add(comp);
 
@@ -4327,7 +4403,7 @@ public class ASMHydrasynth extends Synth
         hbox.add(vbox);
                 
         
-        comp = new LabelledDial("Octave", this, "arpoctave", color, 1, 4);
+        comp = new LabelledDial("Octave", this, "arpoctave", color, 1, 6);
         hbox.add(comp);
 
         comp = new LabelledDial("Gate", this, "arpgate", color, 5, 100);
@@ -4361,6 +4437,18 @@ public class ASMHydrasynth extends Synth
                 }
             };
         hbox.add(comp);
+
+        comp = new LabelledDial("Step", this, "arpstepoffset", color, 0, 64)
+            {
+            public boolean isSymmetric() { return true; }
+            public String map(int value)
+                {
+                return "" + (value - 32);
+                }
+            };
+        ((LabelledDial)comp).addAdditionalLabel("Offset");
+        hbox.add(comp);
+
 
         category.add(hbox, BorderLayout.CENTER);
         return category;
@@ -4413,7 +4501,7 @@ public class ASMHydrasynth extends Synth
         return category;
         }
 
-	
+        
 
     //protected void doSave() { showSimpleMessage("Cannot Save", "This Patch Editor cannot save to a file at present."); }
     //protected void doSaveAs() { showSimpleMessage("Cannot Save", "This Patch Editor cannot save to a file at present."); }
@@ -4422,8 +4510,8 @@ public class ASMHydrasynth extends Synth
         
     boolean sendArpTapTrig;
     boolean lockUserLFOSteps;
-	boolean lockAllLFOSteps;
-	
+    boolean lockAllLFOSteps;
+        
     public void addHydrasynthMenu()
         {
         JMenu menu = new JMenu("Hydrasynth");
@@ -4438,8 +4526,8 @@ public class ASMHydrasynth extends Synth
                 {
                 sendArpTapTrig = sendArpTapTrigMenu.isSelected();
                 setLastX("" + sendArpTapTrig, "SendArpTapTrig", getSynthClassName(), true);
-				}
-			});
+                }
+            });
 
         JCheckBoxMenuItem lockUserLFOStepsMenu = new JCheckBoxMenuItem("Lock User LFO Steps to Notes");
         lockUserLFOStepsMenu.setSelected(lockUserLFOSteps);
@@ -4450,8 +4538,8 @@ public class ASMHydrasynth extends Synth
                 {
                 lockUserLFOSteps = lockUserLFOStepsMenu.isSelected();
                 setLastX("" + lockUserLFOSteps, "LockUserLFOSteps", getSynthClassName(), true);
-				}
-			});
+                }
+            });
 
         JCheckBoxMenuItem lockAllLFOStepsMenu = new JCheckBoxMenuItem("Lock All LFO Steps to Notes");
         lockAllLFOStepsMenu.setSelected(lockAllLFOSteps);
@@ -4461,10 +4549,10 @@ public class ASMHydrasynth extends Synth
             public void actionPerformed(ActionEvent evt)
                 {
                 lockAllLFOSteps = lockAllLFOStepsMenu.isSelected();
-				}
-			});
-		}
-			
+                }
+            });
+        }
+                        
     public JFrame sprout()
         {
         JFrame frame = super.sprout();
@@ -4474,17 +4562,17 @@ public class ASMHydrasynth extends Synth
         }         
 
 
-  public String getPatchLocationName(Model model)
-	  {
-	  // getPatchLocationName() is called from sprout() as a test to see if we should enable
-	  // batch downloading.  If we haven't yet created an .init file, then parameters won't exist
-	  // yet and this method will bomb badly.  So we return null in this case.
-	  if (!model.exists("number")) return null;
-		
-	  int number = (model.get("number") + 1);
-	  int bank = (model.get("bank"));
-	  return BANKS[bank] + " " + ((number > 99 ? "" : (number > 9 ? "0" : "00")) + number);
-	  }
+    public String getPatchLocationName(Model model)
+        {
+        // getPatchLocationName() is called from sprout() as a test to see if we should enable
+        // batch downloading.  If we haven't yet created an .init file, then parameters won't exist
+        // yet and this method will bomb badly.  So we return null in this case.
+        if (!model.exists("number")) return null;
+                
+        int number = (model.get("number") + 1);
+        int bank = (model.get("bank"));
+        return BANKS[bank] + " " + ((number > 99 ? "" : (number > 9 ? "0" : "00")) + number);
+        }
 
 
     public boolean getSendsAllParametersAsDump() 
@@ -4515,7 +4603,7 @@ public class ASMHydrasynth extends Synth
         return nrpn[((Integer)obj).intValue()];
         }
                 
-		
+                
     /// The Hydrasynth NRPN is a mess, requiring a very high degree of customization
     /// per-parameter to emit NRPN values.  This is *extremely* unfortunate -- it is so highly
     /// customized and arbitrary that I can't do a table lookup of range informaton per-parameter 
@@ -4530,9 +4618,9 @@ public class ASMHydrasynth extends Synth
         
         // There is no NRPN for these items
         if (key.equals("color") || 
-        	key.equals("category") || 
-        	(key.startsWith("macro") && (key.endsWith("name"))) || 
-        	key.equals("name"))
+            key.equals("category") || 
+            (key.startsWith("macro") && (key.endsWith("name"))) || 
+            key.equals("name"))
             {
             return new Object[0];
             }
@@ -4679,6 +4767,30 @@ public class ASMHydrasynth extends Synth
                     v = 7;
                     }
                 val = v * 128 + w;
+                }
+            else if (key.endsWith("bitreduction"))
+                {
+                if (key.equals("osc1bitreduction"))
+					{
+					p = p("osc1bitreduction");
+					v = 0;
+					w = val;
+					val = v * 128 + w;
+					}
+                else if (key.equals("osc2bitreduction"))
+					{
+					p = p("osc1bitreduction");
+					v = 1;
+					w = val;
+					val = v * 128 + w;
+					}
+                else 	// if (key.equals("osc3bitreduction"))
+					{
+					p = p("osc1bitreduction");
+					v = 2;
+					w = val;
+					val = v * 128 + w;
+					}
                 }
             }
         else if (key.startsWith("mutant"))
@@ -4903,6 +5015,14 @@ public class ASMHydrasynth extends Synth
                 {
                 val = val * 8;
                 }
+			/// THIS IS A BUG -- THE HYDRASYNTH PROPERLY MULTPLIES BY 8
+			/// ON OUTPUT BUT DOES NOT DIVIDE BY 8 ON INPUT (2.0.0)
+            /*
+            else if (subkey.endsWith("quantize"))
+                {
+                val = val * 8;
+                }
+            */
             }
         else if (key.startsWith("env"))
             {
@@ -4946,6 +5066,14 @@ public class ASMHydrasynth extends Synth
                 w = val;
                 val = v * 128 + w;
                 }
+			/// THIS IS A BUG -- THE HYDRASYNTH PROPERLY MULTPLIES BY 8
+			/// ON OUTPUT BUT DOES NOT DIVIDE BY 8 ON INPUT (2.0.0)
+            /*
+            else if (subkey.endsWith("quantize"))
+                {
+                val = val * 8;
+                }
+            */
             }
         else if (key.startsWith("arp"))
             {
@@ -5007,14 +5135,14 @@ public class ASMHydrasynth extends Synth
                 }
             else if (key.equals("arptaptrig"))
                 {
-                if (!sendArpTapTrig) return new Object[0];		// don't send it
-				else
-					{
-					p = p("arpdivision");
-					v = 8;
-					w = val;
-					val = v * 128 + w;
-					}
+                if (!sendArpTapTrig) return new Object[0];              // don't send it
+                else
+                    {
+                    p = p("arpdivision");
+                    v = 8;
+                    w = val;
+                    val = v * 128 + w;
+                    }
                 }
             else if (key.equals("arpphrase"))
                 {
@@ -5119,6 +5247,21 @@ public class ASMHydrasynth extends Synth
                 val = v * 128 + w;
                 }
             }
+        else if (key.startsWith("voice"))
+        	{
+        	if (key.equals("voicesustain"))
+				{
+				val = val * 8;
+				}
+			/// THIS IS A BUG -- THE HYDRASYNTH PROPERLY MULTPLIES BY 8
+			/// ON OUTPUT BUT DOES NOT DIVIDE BY 8 ON INPUT (2.0.0)
+			/*
+			else if (key.endsWith("modulation"))
+				{
+				val = val * 8;
+				}
+			*/
+			}
         else
             {
             val = model.get(key);
@@ -5126,159 +5269,159 @@ public class ASMHydrasynth extends Synth
         return buildNRPN(getChannelOut(), p, val);
         }
 
-		/*
-	public Object[] emitFake(Model tempModel, boolean toWorkingMemory, boolean toFile)
-		{
-        if (tempModel == null)
-            tempModel = getModel();
+    /*
+      public Object[] emitFake(Model tempModel, boolean toWorkingMemory, boolean toFile)
+      {
+      if (tempModel == null)
+      tempModel = getModel();
 
-        // load all the data, including the name
+      // load all the data, including the name
 
-        byte[] vals = new byte[
-            modeParameters.length * 2 + 
-            typeParameters.length * 2 + 
-            waveParameters.length * 2 + 
-            syncParameters.length * 2 + 
-            wavescanParameters.length * 2 + 
-            remainingParameters.length * 2 + 
-            16 +    // name
-            4 +     // category, color
-            8 * 8   // macros
-            ];
+      byte[] vals = new byte[
+      modeParameters.length * 2 + 
+      typeParameters.length * 2 + 
+      waveParameters.length * 2 + 
+      syncParameters.length * 2 + 
+      wavescanParameters.length * 2 + 
+      remainingParameters.length * 2 + 
+      16 +    // name
+      4 +     // category, color
+      8 * 8   // macros
+      ];
         
-        int val;
-        int pos = 0;
-        for(int i = 0; i < modeParameters.length; i++)
-            {
-            val = (modeParameters[i].equals("--") ? 0 : model.get(modeParameters[i])) + 8192;
-            vals[pos++] = (byte)((val >>> 7) & 127);
-            vals[pos++] = (byte)(val & 127);
-            }
+      int val;
+      int pos = 0;
+      for(int i = 0; i < modeParameters.length; i++)
+      {
+      val = (modeParameters[i].equals("--") ? 0 : model.get(modeParameters[i])) + 8192;
+      vals[pos++] = (byte)((val >>> 7) & 127);
+      vals[pos++] = (byte)(val & 127);
+      }
 
-        for(int i = 0; i < typeParameters.length; i++)
-            {
-            val = (typeParameters[i].equals("--") ? 0 : model.get(typeParameters[i])) + 8192;
-            vals[pos++] = (byte)((val >>> 7) & 127);
-            vals[pos++] = (byte)(val & 127);
-            }
+      for(int i = 0; i < typeParameters.length; i++)
+      {
+      val = (typeParameters[i].equals("--") ? 0 : model.get(typeParameters[i])) + 8192;
+      vals[pos++] = (byte)((val >>> 7) & 127);
+      vals[pos++] = (byte)(val & 127);
+      }
 
-        for(int i = 0; i < waveParameters.length; i++)
-            {
-            val = (waveParameters[i].equals("--") ? 0 : model.get(waveParameters[i])) + 8192;
-            vals[pos++] = (byte)((val >>> 7) & 127);
-            vals[pos++] = (byte)(val & 127);
-            }
+      for(int i = 0; i < waveParameters.length; i++)
+      {
+      val = (waveParameters[i].equals("--") ? 0 : model.get(waveParameters[i])) + 8192;
+      vals[pos++] = (byte)((val >>> 7) & 127);
+      vals[pos++] = (byte)(val & 127);
+      }
 
-        for(int i = 0; i < syncParameters.length; i++)
-            {
-            val = (syncParameters[i].equals("--") ? 0 : model.get(syncParameters[i])) + 8192;
-            vals[pos++] = (byte)((val >>> 7) & 127);
-            vals[pos++] = (byte)(val & 127);
-            }
+      for(int i = 0; i < syncParameters.length; i++)
+      {
+      val = (syncParameters[i].equals("--") ? 0 : model.get(syncParameters[i])) + 8192;
+      vals[pos++] = (byte)((val >>> 7) & 127);
+      vals[pos++] = (byte)(val & 127);
+      }
 
-        for(int i = 0; i < wavescanParameters.length; i++)
-            {
-            val = (wavescanParameters[i].equals("--") ? 0 : model.get(wavescanParameters[i])) + 8192;
-            vals[pos++] = (byte)((val >>> 7) & 127);
-            vals[pos++] = (byte)(val & 127);
-            }
+      for(int i = 0; i < wavescanParameters.length; i++)
+      {
+      val = (wavescanParameters[i].equals("--") ? 0 : model.get(wavescanParameters[i])) + 8192;
+      vals[pos++] = (byte)((val >>> 7) & 127);
+      vals[pos++] = (byte)(val & 127);
+      }
         
-        for(int i = 0; i < remainingParameters.length; i++)
-            {
-            val = (remainingParameters[i].equals("--") ? 0 : model.get(remainingParameters[i])) + 8192;
-            vals[pos++] = (byte)((val >>> 7) & 127);
-            vals[pos++] = (byte)(val & 127);
-            }
+      for(int i = 0; i < remainingParameters.length; i++)
+      {
+      val = (remainingParameters[i].equals("--") ? 0 : model.get(remainingParameters[i])) + 8192;
+      vals[pos++] = (byte)((val >>> 7) & 127);
+      vals[pos++] = (byte)(val & 127);
+      }
         
-        val = model.get("category") + 8192;
-        vals[pos++] = (byte)((val >>> 7) & 127);
-        vals[pos++] = (byte)(val & 127);
+      val = model.get("category") + 8192;
+      vals[pos++] = (byte)((val >>> 7) & 127);
+      vals[pos++] = (byte)(val & 127);
 
-        val = model.get("color") + 8192;
-        vals[pos++] = (byte)((val >>> 7) & 127);
-        vals[pos++] = (byte)(val & 127);
+      val = model.get("color") + 8192;
+      vals[pos++] = (byte)((val >>> 7) & 127);
+      vals[pos++] = (byte)(val & 127);
         
-        char[] name = (model.get("name", "Untitled") + "                ").toCharArray();
-        for(int i = 0; i < 16; i++)
-            {
-            val = (int)(name[i]);
-            vals[pos++] = (byte)(val & 127);
-            }
+      char[] name = (model.get("name", "Untitled") + "                ").toCharArray();
+      for(int i = 0; i < 16; i++)
+      {
+      val = (int)(name[i]);
+      vals[pos++] = (byte)(val & 127);
+      }
 
-        for(int m = 1; m <= 8; m++)
-            {
-            name = (model.get("macro" + m + "name", "        ") + "        ").toCharArray();
-            for(int i = 0; i < 8; i++)
-                {
-                val = (int)(name[i]);
-                vals[pos++] = (byte)(val & 127);
-                }
-            }
+      for(int m = 1; m <= 8; m++)
+      {
+      name = (model.get("macro" + m + "name", "        ") + "        ").toCharArray();
+      for(int i = 0; i < 8; i++)
+      {
+      val = (int)(name[i]);
+      vals[pos++] = (byte)(val & 127);
+      }
+      }
 
-        final int HEADER = 20;
+      final int HEADER = 20;
 
-        byte[] sysex = new byte[vals.length + HEADER + 1];
-        sysex[0] = (byte)0xF0;
-        sysex[1] = (byte)0x7D;
-        sysex[2] = (byte)'E';
-        sysex[3] = (byte)'D';
-        sysex[4] = (byte)'I';
-        sysex[5] = (byte)'S';
-        sysex[6] = (byte)'Y';
-        sysex[7] = (byte)'N';
-        sysex[8] = (byte)'-';
-        sysex[9] = (byte)'H';
-        sysex[10] = (byte)'Y';
-        sysex[11] = (byte)'D';
-        sysex[12] = (byte)'R';
-        sysex[13] = (byte)'A';
-        sysex[14] = (byte)'S';
-        sysex[15] = (byte)'Y';
-        sysex[16] = (byte)'N';
-        sysex[17] = (byte)'T';
-        sysex[18] = (byte)'H';
-        sysex[19] = (byte)0;            // sysex version
+      byte[] sysex = new byte[vals.length + HEADER + 1];
+      sysex[0] = (byte)0xF0;
+      sysex[1] = (byte)0x7D;
+      sysex[2] = (byte)'E';
+      sysex[3] = (byte)'D';
+      sysex[4] = (byte)'I';
+      sysex[5] = (byte)'S';
+      sysex[6] = (byte)'Y';
+      sysex[7] = (byte)'N';
+      sysex[8] = (byte)'-';
+      sysex[9] = (byte)'H';
+      sysex[10] = (byte)'Y';
+      sysex[11] = (byte)'D';
+      sysex[12] = (byte)'R';
+      sysex[13] = (byte)'A';
+      sysex[14] = (byte)'S';
+      sysex[15] = (byte)'Y';
+      sysex[16] = (byte)'N';
+      sysex[17] = (byte)'T';
+      sysex[18] = (byte)'H';
+      sysex[19] = (byte)0;            // sysex version
         
-        System.arraycopy(vals, 0, sysex, HEADER, vals.length);
-        sysex[sysex.length - 1] = (byte)0xF7;
-        return sysex;
-		}
-*/
+      System.arraycopy(vals, 0, sysex, HEADER, vals.length);
+      sysex[sysex.length - 1] = (byte)0xF7;
+      return sysex;
+      }
+    */
 
 
-	void get1(String key, byte[] data, int pos)
-		{
-		/*
-		if (model.getMin(key) < 0)	// signed two's complement doesn't matter
-			{
-			data[pos] = (byte)model.get(key);
-			}
-		else
-			{
-			data[pos] = (byte)model.get(key);
-			}
-		*/
-		get2(key, data, pos);
-		}
+    void get1(String key, byte[] data, int pos)
+        {
+        /*
+          if (model.getMin(key) < 0)      // signed two's complement doesn't matter
+          {
+          data[pos] = (byte)model.get(key);
+          }
+          else
+          {
+          data[pos] = (byte)model.get(key);
+          }
+        */
+        get2(key, data, pos);
+        }
 
-	void get2(String key, byte[] data, int pos)
-		{
-		int val = model.get(key);
-		if (model.getMin(key) < 0)	// signed two's complement
-			{
-			data[pos] = (byte)(val & 0xFF);
-			data[pos+1] = (byte)((val >>> 8) & 0xFF);
-			}
-		else
-			{
-			data[pos] = (byte)(val & 0xFF);
-			data[pos+1] = (byte)((val >>> 8) & 0xFF);
-			}
-		}
+    void get2(String key, byte[] data, int pos)
+        {
+        int val = model.get(key);
+        if (model.getMin(key) < 0)      // signed two's complement
+            {
+            data[pos] = (byte)(val & 0xFF);
+            data[pos+1] = (byte)((val >>> 8) & 0xFF);
+            }
+        else
+            {
+            data[pos] = (byte)(val & 0xFF);
+            data[pos+1] = (byte)((val >>> 8) & 0xFF);
+            }
+        }
 
 
-	public boolean getSendsParametersAfterLoad() { return false; }
-			
+    public boolean getSendsParametersAfterLoad() { return false; }
+                        
     /** The Hydrasynth doesn't have a useful sysex emit mechanism, so we're inventing one here solely for
         the purposes of writing to a file. */
     public Object[] emitAll(Model tempModel, boolean toWorkingMemory, boolean toFile)
@@ -5287,990 +5430,1023 @@ public class ASMHydrasynth extends Synth
             tempModel = getModel();
             
         if (toWorkingMemory) // uh oh
-        	{
-        	System.err.println("emitReal: cannot emit to working memory");
-        	return new Object[0][0];
-        	}
+            {
+            System.err.println("emitReal: cannot emit to working memory");
+            return new Object[0][0];
+            }
 
-		byte[] data = new byte[2790];
+        byte[] data = new byte[2790];
 
-		// Fill in header
-		data[0] = (byte) 0x06;		// save to RAM
-		data[1] = (byte) 0x00;
-		data[2] = (byte) model.get("bank");
-		data[3] = (byte) model.get("number");
-		data[4] = (byte) 0x9B;		// 1.5.5.  Change to 0xC8 for 2.0.0
-		data[5] = (byte) 0x00;
-		data[6] = (byte) 0x00;
-		data[7] = (byte) 0x00;
-		
-
+        // Fill in header
+        data[0] = (byte) 0x06;          // save to RAM
+        data[1] = (byte) 0x00;
+        data[2] = (byte) model.get("bank");
+        data[3] = (byte) model.get("number");
+        data[4] = (byte) VERSION_1_5_5;         // 1.5.5.  Change to 0xC8 for 2.0.0
+        data[5] = (byte) 0x00;
+        data[6] = (byte) 0x00;
+        data[7] = (byte) 0x00;
+        // may be only 1 byte
+        data[8] = (byte) model.get("category");
+                
         // BASICS
-		get1("category", data, 8);
-		char[] name = (model.get("name", "Untitled") + "                ").toCharArray();
-		System.err.println(name.length);
+        char[] name = (model.get("name", "Untitled") + "                ").toCharArray();
         for(int i = 0; i < 16; i++)
             {
             data[9 + i] = (byte)name[i];
             }
-		get1("color", data, 26);
-		
-		// VOICE
-		get1("voicepolyphony", data, 30);
-		get1("voicedensity", data, 32);
-		get1("voicedetune", data, 34);
-		get1("voiceanalogfeel", data, 36);
-		get1("voicerandomphase", data, 38);
-		get1("voicestereomode", data, 40);
-		get1("voicestereowidth", data, 42);
-		get1("voicepitchbend", data, 44);
-		get1("voicevibratoamount", data, 46);
-		get1("voicevibratobpmsync", data, 50);
-		if (model.get("voicevibratobpmsync") == 0)
-			{
-			get1("voicevibratoratesyncoff", data, 48);
-			}
-		else
-			{
-			get1("voicevibratoratesyncon", data, 48);
-			}
-		get1("voiceglide", data, 52);
-		get1("voiceglidetime", data, 54);
-		get1("voiceglidecurve", data, 56);
-		get1("voiceglidelegato", data, 58);
+        // may be only 1 byte
+        data[26] = (byte) model.get("color");
 
-		// SCALES
-		
-		get1("scalekeylock", data, 60);
-		get1("scaletype", data, 62);
-		for(int i = 2; i < 8; i++)
-			{
-			get1("scalenote" + i, data, 66 - 2 + i);
-			}		
+        // VOICE
+        get1("voicepolyphony", data, 30);
+        get1("voicedensity", data, 32);
+        get1("voicedetune", data, 34);
+        get1("voiceanalogfeel", data, 36);
+        get1("voicerandomphase", data, 38);
+        get1("voicestereomode", data, 40);
+        get1("voicestereowidth", data, 42);
+        get1("voicepitchbend", data, 44);
+        get1("voicevibratoamount", data, 46);
+        get1("voicevibratobpmsync", data, 50);
+        if (model.get("voicevibratobpmsync") == 0)
+            {
+            get1("voicevibratoratesyncoff", data, 48);
+            }
+        else
+            {
+            get1("voicevibratoratesyncon", data, 48);
+            }
+        get1("voiceglide", data, 52);
+        get1("voiceglidetime", data, 54);
+        get1("voiceglidecurve", data, 56);
+        get1("voiceglidelegato", data, 58);
 
-		// OSCS
-		for(int i = 1; i < 3; i++)
-			{
-			int p = (i == 1 ? 80 : 108);
-			get1("osc" + i + "mode", data, p + 0);
-			get2("osc" + i + "type", data, p + 2);	// the wave
-			get1("osc" + i + "semi", data, p + 4);
-			get1("osc" + i + "cent", data, p + 6);
-			get1("osc" + i + "keytrack", data, p + 8);
-			get2("osc" + i + "wavscan", data, p + 10);
-			for(int j = 0; j < 8; j++)
-				{
-				get2("osc" + i + "wavscanwave" + (j + 1), data, p + 12 + j * 2);
-				}
-			}
-		get2("osc3type", data, 136);	// the wave
-		get1("osc3semi", data, 138);
-		get1("osc3cent", data, 140);
-		get1("osc3keytrack", data, 142);
-		
-		// MUTANTS
-		for(int i = 1; i < 5; i++)
-			{
-			int p = (i == 1 ? 144 : (i == 2 ? 158 : (i == 3 ? 204 : 218)));
-			get1("mutant" + i + "mode", data, p + 0);
-			if (model.get("mutant" + i + "mode") == 2) // osc sync
-				get1("mutant" + i + "sourceoscsync", data, p + 2);
-			else	// we assume FM Linear or other
-				get1("mutant" + i + "sourcefmlin", data, p + 2);
-			get2("mutant" + i + "ratio", data, p + 4);
-			get2("mutant" + i + "depth", data, p + 6);
-			get2("mutant" + i + "window", data, p + 8);
-			get2("mutant" + i + "feedback", data, p + 10);
-			get2("mutant" + i + "wet", data, p + 12);
-			}
+        // SCALES
+                
+        get1("scalekeylock", data, 60);
+        get1("scaletype", data, 62);
+        for(int i = 2; i < 8; i++)
+            {
+            get1("scalenote" + i, data, 66 - 2 + i);
+            }               
 
-		// MUTANT WARPS
-		for(int i = 1; i < 5; i++)
-			{
-			int p = (i == 1 ? 172 : (i == 2 ? 188 : (i == 3 ? 232 : 248)));
-			for(int j = 0; j < 8; j++)
-				{
-				get2("mutant" + i + "warp" + (j + 1), data, p + j * 2);
-				}
-			}
-			
-		// RING MOD NOISE
-		get1("ringmodsource1", data, 264);
-		get1("ringmodsource2", data, 266);
-		get2("ringmoddepth", data, 268);
-		get1("noisetype", data, 272);
-		
-		// MIXER
-		for(int i = 0; i < 3; i++)
-			{
-			get2("mixerosc" + (i + 1) + "vol", data, 274 + i * 2);
-			get2("mixerosc" + (i + 1) + "pan", data, 286 + i * 2);
-			get2("mixerosc" + (i + 1) + "filterratio", data, 292 + i * 2);
-			}		
-		get2("mixerringmodvol", data, 280);
-		get2("mixernoisevol", data, 282);
-		get2("mixerringmodpan", data, 298);
-		get2("mixernoisepan", data, 300);
-		get2("mixerringmodfilterratio", data, 304);
-		get2("mixernoisefilterratio", data, 306);
+        // OSCS
+        for(int i = 1; i < 3; i++)
+            {
+            int p = (i == 1 ? 80 : 108);
+            get1("osc" + i + "mode", data, p + 0);
+            get2("osc" + i + "type", data, p + 2);  // the wave
+            get1("osc" + i + "semi", data, p + 4);
+            get1("osc" + i + "cent", data, p + 6);
+            get1("osc" + i + "keytrack", data, p + 8);
+            get2("osc" + i + "wavscan", data, p + 10);
+            for(int j = 0; j < 8; j++)
+                {
+                get2("osc" + i + "wavscanwave" + (j + 1), data, p + 12 + j * 2);
+                }
+            }
+        get2("osc3type", data, 136);    // the wave
+        get1("osc3semi", data, 138);
+        get1("osc3cent", data, 140);
+        get1("osc3keytrack", data, 142);
+                
+        // MUTANTS
+        for(int i = 1; i < 5; i++)
+            {
+            int p = (i == 1 ? 144 : (i == 2 ? 158 : (i == 3 ? 204 : 218)));
+            get1("mutant" + i + "mode", data, p + 0);
+            if (model.get("mutant" + i + "mode") == 2) // osc sync
+                get1("mutant" + i + "sourceoscsync", data, p + 2);
+            else    // we assume FM Linear or other
+                get1("mutant" + i + "sourcefmlin", data, p + 2);
+            get2("mutant" + i + "ratio", data, p + 4);
+            get2("mutant" + i + "depth", data, p + 6);
+            get2("mutant" + i + "window", data, p + 8);
+            get2("mutant" + i + "feedback", data, p + 10);
+            get2("mutant" + i + "wet", data, p + 12);
+            }
 
-		// FILTERS
-		get1("mixerfilterrouting", data, 302);
-		get1("filter1type", data, 308);						// FIXME: Values are out of order, will this affect us?
-		get2("filter1cutoff", data, 310);
-		get2("filter1resonance", data, 312);
-		get2("filter1special", data, 314);
-		get2("filter1env1amount", data, 316);
-		get2("filter1lfo1amount", data, 318);
-		get2("filter1velenv", data, 320);
-		get2("filter1keytrack", data, 322);
-		get2("filter1drive", data, 326);
-		get1("filter1positionofdrive", data, 328);
-		get1("filter1vowelorder", data, 330);
+        // MUTANT WARPS
+        for(int i = 1; i < 5; i++)
+            {
+            int p = (i == 1 ? 172 : (i == 2 ? 188 : (i == 3 ? 232 : 248)));
+            for(int j = 0; j < 8; j++)
+                {
+                get2("mutant" + i + "warp" + (j + 1), data, p + j * 2);
+                }
+            }
+                        
+        // RING MOD NOISE
+        get1("ringmodsource1", data, 264);
+        get1("ringmodsource2", data, 266);
+        get2("ringmoddepth", data, 268);
+        get1("noisetype", data, 272);
+                
+        // MIXER
+        for(int i = 0; i < 3; i++)
+            {
+            get2("mixerosc" + (i + 1) + "vol", data, 274 + i * 2);
+            get2("mixerosc" + (i + 1) + "pan", data, 286 + i * 2);
+            get2("mixerosc" + (i + 1) + "filterratio", data, 292 + i * 2);
+            }               
+        get2("mixerringmodvol", data, 280);
+        get2("mixernoisevol", data, 282);
+        get2("mixerringmodpan", data, 298);
+        get2("mixernoisepan", data, 300);
+        get2("mixerringmodfilterratio", data, 304);
+        get2("mixernoisefilterratio", data, 306);
 
-		get2("filter2morph", data, 332);
-		get2("filter2cutoff", data, 334);
-		get2("filter2resonance", data, 336);
-		get2("filter2env1amount", data, 338);
-		get2("filter2lfo1amount", data, 340);
-		get2("filter2velenv", data, 342);
-		get2("filter2keytrack", data, 344);
-		
-		// AMPLIFIER
-		get2("amplfo2amount", data, 346);
-		get2("ampvelenv", data, 348);
-		get2("amplevel", data, 350);
+        // FILTERS
+        get1("mixerfilterrouting", data, 302);
+        get1("filter1type", data, 308);                                         // FIXME: Values are out of order, will this affect us?
+        get2("filter1cutoff", data, 310);
+        get2("filter1resonance", data, 312);
+        get2("filter1special", data, 314);
+        get2("filter1env1amount", data, 316);
+        get2("filter1lfo1amount", data, 318);
+        get2("filter1velenv", data, 320);
+        get2("filter1keytrack", data, 322);
+        get2("filter1drive", data, 326);
+        get1("filter1positionofdrive", data, 328);
+        get1("filter1vowelorder", data, 330);
 
-		// PRE-FX
-		get1("prefxtype", data, 352);
-		get1("prefxsidechain", data, 354);
-		int prefxtype = Math.max(0, Math.min(data[352], 8)); 	// bound to 0 ... 8
-		if (prefxtype != 0) // skip bypass
-			{
-			for(int i = 0; i < 5; i++)
-				{
-				int p = 356;
-				get2("prefx" + prefxtype + "param" + (i + 1), data, p + i * 2);
-				}
-			}
-		get2("prefxwet", data, 366);
+        get2("filter2morph", data, 332);
+        get2("filter2cutoff", data, 334);
+        get2("filter2resonance", data, 336);
+        get2("filter2env1amount", data, 338);
+        get2("filter2lfo1amount", data, 340);
+        get2("filter2velenv", data, 342);
+        get2("filter2keytrack", data, 344);
+                
+        // AMPLIFIER
+        get2("amplfo2amount", data, 346);
+        get2("ampvelenv", data, 348);
+        get2("amplevel", data, 350);
 
-		// DELAY
-		get2("delaytype", data, 368);
-		get2("delaybpmsync", data, 370);
-		if (model.get("delaybpmsync") == 0)
-			{
-			get2("delaytimesyncoff", data, 372);
-			}
-		else
-			{
-			get2("delaytimesyncon", data, 372);
-			}
-		get2("delayfeedback", data, 374);
-		get2("delayfeedtone", data, 376);
-		get2("delaywettone", data, 378);
-		get2("delaywet", data, 382);
-		
-		// REVERB
-		get2("reverbtype", data, 384);
-		get2("reverbtime", data, 388);
-		get2("reverbtone", data, 390);
-		get2("reverbhidamp", data, 392);
-		get2("reverblodamp", data, 394);
-		get2("reverbpredelay", data, 396);
-		get2("reverbwet", data, 398);
+        // PRE-FX
+        get1("prefxtype", data, 352);
+        get1("prefxsidechain", data, 354);
+        int prefxtype = Math.max(0, Math.min(data[352], 8));    // bound to 0 ... 8
+        if (prefxtype != 0) // skip bypass
+            {
+            for(int i = 0; i < 5; i++)
+                {
+                int p = 356;
+                get2("prefx" + prefxtype + "param" + (i + 1), data, p + i * 2);
+                }
+            }
+        get2("prefxwet", data, 366);
 
-		// POST-FX
-		get1("postfxtype", data, 400);
-		get1("postfxsidechain", data, 402);
-		int postfxtype = Math.max(0, Math.min(data[400], 8)); 	// bound to 0 ... 8
-		if (postfxtype != 0) // skip bypass
-			{
-			for(int i = 0; i < 5; i++)
-				{
-				int p = 404;
-				get2("postfx" + postfxtype + "param" + (i + 1), data, p + i * 2);
-				}
-			}
-		get2("postfxwet", data, 414);
+        // DELAY
+        get2("delaytype", data, 368);
+        get2("delaybpmsync", data, 370);
+        if (model.get("delaybpmsync") == 0)
+            {
+            get2("delaytimesyncoff", data, 372);
+            }
+        else
+            {
+            get2("delaytimesyncon", data, 372);
+            }
+        get2("delayfeedback", data, 374);
+        get2("delayfeedtone", data, 376);
+        get2("delaywettone", data, 378);
+        get2("delaywet", data, 382);
+                
+        // REVERB
+        get2("reverbtype", data, 384);
+        get2("reverbtime", data, 388);
+        get2("reverbtone", data, 390);
+        get2("reverbhidamp", data, 392);
+        get2("reverblodamp", data, 394);
+        get2("reverbpredelay", data, 396);
+        get2("reverbwet", data, 398);
 
-		// RIBBON
-		get1("ribbonmode", data, 436);
-		get1("ribbonkeyspan", data, 438);
-		get1("ribbonoctave", data, 440);
-		get1("ribbonhold", data, 442);					// Not in the standard list
-		get1("ribbonquantize", data, 444);
-		get1("ribbonglide", data, 446);
-		get1("ribbonmodcontrol", data, 448);				// theremin wheel volume
+        // POST-FX
+        get1("postfxtype", data, 400);
+        get1("postfxsidechain", data, 402);
+        int postfxtype = Math.max(0, Math.min(data[400], 8));   // bound to 0 ... 8
+        if (postfxtype != 0) // skip bypass
+            {
+            for(int i = 0; i < 5; i++)
+                {
+                int p = 404;
+                get2("postfx" + postfxtype + "param" + (i + 1), data, p + i * 2);
+                }
+            }
+        get2("postfxwet", data, 414);
 
-		// MISC
-		get1("arpclklock", data, 468);	
-		data[470] = (byte)(model.get("voicewarmmode") | (model.get("voicesnap") << 1));
-		// get1("voicewarmmode", data, 470, 0);				// Note Bitpacked
-		// get1("voicesnap", data, 470, 1);					// Note Bitpacked
-		get1("filter2type", data, 472);
-		
-		// ENVELOPES
-		for(int i = 0; i < 5; i++)
-			{
-			int p = (i == 0 ? 478 : (i == 1 ? 506 : (i == 2 ? 534 : (i == 3 ? 562 : 590))));
-			get1("env" + (i + 1) + "bpmsync", data, p + 8);
-			if (model.get("env" + (i + 1) + "bpmsync") == 0) // off
-				{
-				get2("env" + (i + 1) + "delaysyncoff", data, p + 10);
-				get2("env" + (i + 1) + "attacksyncoff", data, p + 0);
-				get2("env" + (i + 1) + "holdsyncoff", data, p + 12);
-				get2("env" + (i + 1) + "decaysyncoff", data, p + 2);
-				get2("env" + (i + 1) + "releasesyncoff", data, p + 6);
-				}
-			else
-				{
-				get2("env" + (i + 1) + "delaysyncon", data, p + 10);
-				get2("env" + (i + 1) + "attacksyncon", data, p + 0);
-				get2("env" + (i + 1) + "holdsyncon", data, p + 12);
-				get2("env" + (i + 1) + "decaysyncon", data, p + 2);
-				get2("env" + (i + 1) + "releasesyncon", data, p + 6);
-				}
-			get2("env" + (i + 1) + "sustain", data, p + 4);
-			get2("env" + (i + 1) + "atkcurve", data, p + 14);
-			get2("env" + (i + 1) + "deccurve", data, p + 16);
-			get2("env" + (i + 1) + "relcurve", data, p + 18);
-			get1("env" + (i + 1) + "legato", data, p + 20);
-			get1("env" + (i + 1) + "reset", data, p + 22);		// can only be set if legato is unset, hope this is okay
-			get1("env" + (i + 1) + "freerun", data, p + 24);		// can only be set if legato is unset, hope this is okay
-			}
-			
-		// LFOS
-		for(int i = 0; i < 5; i++)
-			{
-			int p = (i == 0 ? 618 : (i == 1 ? 656 : (i == 2 ? 694 : (i == 3 ? 732 : 770))));
-			get1("lfo" + (i + 1) + "wave", data, p + 0);
-			get1("lfo" + (i + 1) + "bpmsync", data, p + 4);
-			get1("lfo" + (i + 1) + "trigsync", data, p + 6);
-			if (model.get("lfo" + (i + 1) + "bpmsync") == 0) // off
-				{
-				get2("lfo" + (i + 1) + "ratesyncoff", data, p + 2);
-				get1("lfo" + (i + 1) + "delaysyncoff", data, p + 8);
-				get1("lfo" + (i + 1) + "fadeinsyncoff", data, p + 10);
-				}
-			else
-				{
-				get2("lfo" + (i + 1) + "ratesyncon", data, p + 2);
-				get1("lfo" + (i + 1) + "delaysyncon", data, p + 8);
-				get1("lfo" + (i + 1) + "fadeinsyncon", data, p + 10);
-				}
-			get2("lfo" + (i + 1) + "phase", data, p + 12);
-			get2("lfo" + (i + 1) + "level", data, p + 14);
-			get1("lfo" + (i + 1) + "steps", data, p + 16);
-			get1("lfo" + (i + 1) + "smooth", data, p + 18);
-			get1("lfo" + (i + 1) + "oneshot", data, p + 20);
-			// First 8 steps
-			for(int j = 0; j < 8; j++)
-				{
-				get2("lfo" + (i + 1) + "step" + (j + 1), data, p + 22 + j * 2);
-				}
-			}
-			
-		// ARPEGGIATOR
-		
-		get1("arpdivision", data, 810);
-		get1("arpswing", data, 812);
-		get1("arpgate", data, 814);
-		get1("arpoctmode", data, 816);
-		get1("arpoctave", data, 818);
-		get1("arpmode", data, 820);
-		get1("arplength", data, 822);
-		get1("arptaptrig", data, 824);
-		get1("arpphrase", data, 826);
-		get1("arpratchet", data, 828);
-		get1("arpchance", data, 830);
-		get1("arpenable", data, 832);		
-		get1("arplatch", data, 834);		
+        // RIBBON
+        get1("ribbonmode", data, 436);
+        get1("ribbonkeyspan", data, 438);
+        get1("ribbonoctave", data, 440);
+        get1("ribbonhold", data, 442);                                  // Not in the standard list
+        get1("ribbonquantize", data, 444);
+        get1("ribbonglide", data, 446);
+        get1("ribbonmodcontrol", data, 448);                            // theremin wheel volume
 
-		// MOD MATRIX
-		for(int i = 0; i < 32; i++)
-			{
-			get2("modmatrix" + (i + 1) + "depth", data, 838 + i * 2);
-			}
-		for(int i = 0; i < 32; i++)
-			{
-			get1("modmatrix" + (i + 1) + "modsource", data, 902 + i * 2);
-			}
-		for(int i = 0; i < 32; i++)
-			{
-			get2("modmatrix" + (i + 1) + "modtarget", data, 966 + i * 2);
-			}
-			
-		// FIXME: Starting at 1032, there may be a fourth mod matrix thingamabob
-			
-		// MACRO
-		for(int i = 0; i < 8; i++)
-			{
-			int p = 1094 + i * 16;
-			for(int j = 0; j < 8; j++)
-				{
-				get2("macro" + (i + 1) + "depth" + (j + 1), data, p + j * 2);
-				}
-			}
-		for(int i = 0; i < 8; i++)
-			{
-			int p = 1222 + i * 16;
-			for(int j = 0; j < 8; j++)
-				{
-				get2("macro" + (i + 1) + "target" + (j + 1), data, p + j * 2);
-				}
-			}
-		for(int i = 0; i < 8; i++)
-			{
-			int p = 1350 + i * 16;
-			for(int j = 0; j < 8; j++)
-				{
-				get2("macro" + (i + 1) + "buttonvalue" + (j + 1), data, p + j * 2);
-				}
-			}
-		for(int i = 0; i < 8; i++)
-			{
-			get2("macro" + (i + 1) + "panelvalue", data, 1606 + i * 2);
-			}
-		// Set the target categories
-		for(int i = 0; i < 8; i++)
-			{
-			int p = 1478 + i * 16;
-			for(int j = 0; j < 8; j++)
-				{
-				int category = MOD_DESTINATION_CATEGORIES[model.get("macro" + (i + 1) + "target" + (j + 1))];
-				data[p + j * 2] = (byte)category;
-				}
-			}
-		int offset = 1630;
-		for(int i = 0; i < 8; i++)
-			{
-			char[] macroname = (model.get("macro" + (i + 1) + "name", "Untitled") + "        ").toCharArray();
-			for(int j = 0; j < 8; j++)
-				{
-				data[offset + j] = (byte)macroname[j];
-				}
-			offset += 17;			// NO REALLY, it's *17*.  Something strange going on here.
-			}
-		// For the time being, macros always emit custom names
-		for(int i = 0; i < 8; i++)
-			{
-			data[416 + i * 2] = 0;
-			data[416 + i * 2 + 1] = 1;
-			}
+        // MISC
+        get1("arpclklock", data, 468);  
+        data[470] = (byte)(model.get("voicewarmmode") | (model.get("voicesnap") << 1));
+        // get1("voicewarmmode", data, 470, 0);                         // Note Bitpacked
+        // get1("voicesnap", data, 470, 1);                                     // Note Bitpacked
+        get1("filter2type", data, 472);
+                
+        // ENVELOPES
+        for(int i = 0; i < 5; i++)
+            {
+            int p = (i == 0 ? 478 : (i == 1 ? 506 : (i == 2 ? 534 : (i == 3 ? 562 : 590))));
+            get1("env" + (i + 1) + "bpmsync", data, p + 8);
+            if (model.get("env" + (i + 1) + "bpmsync") == 0) // off
+                {
+                get2("env" + (i + 1) + "delaysyncoff", data, p + 10);
+                get2("env" + (i + 1) + "attacksyncoff", data, p + 0);
+                get2("env" + (i + 1) + "holdsyncoff", data, p + 12);
+                get2("env" + (i + 1) + "decaysyncoff", data, p + 2);
+                get2("env" + (i + 1) + "releasesyncoff", data, p + 6);
+                }
+            else
+                {
+                get2("env" + (i + 1) + "delaysyncon", data, p + 10);
+                get2("env" + (i + 1) + "attacksyncon", data, p + 0);
+                get2("env" + (i + 1) + "holdsyncon", data, p + 12);
+                get2("env" + (i + 1) + "decaysyncon", data, p + 2);
+                get2("env" + (i + 1) + "releasesyncon", data, p + 6);
+                }
+            get2("env" + (i + 1) + "sustain", data, p + 4);
+            get2("env" + (i + 1) + "atkcurve", data, p + 14);
+            get2("env" + (i + 1) + "deccurve", data, p + 16);
+            get2("env" + (i + 1) + "relcurve", data, p + 18);
+            get1("env" + (i + 1) + "legato", data, p + 20);
+            get1("env" + (i + 1) + "reset", data, p + 22);          // can only be set if legato is unset, hope this is okay
+            get1("env" + (i + 1) + "freerun", data, p + 24);                // can only be set if legato is unset, hope this is okay
+            }
+                        
+        // LFOS
+        for(int i = 0; i < 5; i++)
+            {
+            int p = (i == 0 ? 618 : (i == 1 ? 656 : (i == 2 ? 694 : (i == 3 ? 732 : 770))));
+            get1("lfo" + (i + 1) + "wave", data, p + 0);
+            get1("lfo" + (i + 1) + "bpmsync", data, p + 4);
+            get1("lfo" + (i + 1) + "trigsync", data, p + 6);
+            if (model.get("lfo" + (i + 1) + "bpmsync") == 0) // off
+                {
+                get2("lfo" + (i + 1) + "ratesyncoff", data, p + 2);
+                get1("lfo" + (i + 1) + "delaysyncoff", data, p + 8);
+                get1("lfo" + (i + 1) + "fadeinsyncoff", data, p + 10);
+                }
+            else
+                {
+                get2("lfo" + (i + 1) + "ratesyncon", data, p + 2);
+                get1("lfo" + (i + 1) + "delaysyncon", data, p + 8);
+                get1("lfo" + (i + 1) + "fadeinsyncon", data, p + 10);
+                }
+            get2("lfo" + (i + 1) + "phase", data, p + 12);
+            get2("lfo" + (i + 1) + "level", data, p + 14);
+            get1("lfo" + (i + 1) + "steps", data, p + 16);
+            get1("lfo" + (i + 1) + "smooth", data, p + 18);
+            get1("lfo" + (i + 1) + "oneshot", data, p + 20);
+            // First 8 steps
+            for(int j = 0; j < 8; j++)
+                {
+                get2("lfo" + (i + 1) + "step" + (j + 1), data, p + 22 + j * 2);
+                }
+            }
+                        
+        // ARPEGGIATOR
+                
+        get1("arpdivision", data, 810);
+        get1("arpswing", data, 812);
+        get1("arpgate", data, 814);
+        get1("arpoctmode", data, 816);
+        get1("arpoctave", data, 818);
+        get1("arpmode", data, 820);
+        get1("arplength", data, 822);
+        get1("arptaptrig", data, 824);
+        get1("arpphrase", data, 826);
+        get1("arpratchet", data, 828);
+        get1("arpchance", data, 830);
+        get1("arpenable", data, 832);           
+        get1("arplatch", data, 834);            
 
-		// LFO STEPS 9 to 64
-		for(int i = 0; i < 5; i++)
-			{
-			for(int j = 0; j < 56; j++)  // FIXME: is this right?
-				{
-				get2("lfo" + (i + 1) + "step" + (j + 9), data, 1770 + i * 56 * 2 + j * 2);
-				}
-			}
+        // MOD MATRIX
+        for(int i = 0; i < 32; i++)
+            {
+            get2("modmatrix" + (i + 1) + "depth", data, 838 + i * 2);
+            }
+        for(int i = 0; i < 32; i++)
+            {
+            get1("modmatrix" + (i + 1) + "modsource", data, 902 + i * 2);
+            }
+        for(int i = 0; i < 32; i++)
+            {
+            get2("modmatrix" + (i + 1) + "modtarget", data, 966 + i * 2);
+            }
+                        
+        // FIXME: Starting at 1032, there may be a fourth mod matrix thingamabob
+                        
+        // MACRO
+        for(int i = 0; i < 8; i++)
+            {
+            int p = 1094 + i * 16;
+            for(int j = 0; j < 8; j++)
+                {
+                get2("macro" + (i + 1) + "depth" + (j + 1), data, p + j * 2);
+                }
+            }
+        for(int i = 0; i < 8; i++)
+            {
+            int p = 1222 + i * 16;
+            for(int j = 0; j < 8; j++)
+                {
+                get2("macro" + (i + 1) + "target" + (j + 1), data, p + j * 2);
+                }
+            }
+        for(int i = 0; i < 8; i++)
+            {
+            int p = 1350 + i * 16;
+            for(int j = 0; j < 8; j++)
+                {
+                get2("macro" + (i + 1) + "buttonvalue" + (j + 1), data, p + j * 2);
+                }
+            }
+        for(int i = 0; i < 8; i++)
+            {
+            get2("macro" + (i + 1) + "panelvalue", data, 1606 + i * 2);
+            }
+        // Set the target categories
+        for(int i = 0; i < 8; i++)
+            {
+            int p = 1478 + i * 16;
+            for(int j = 0; j < 8; j++)
+                {
+                int category = MOD_DESTINATION_CATEGORIES[model.get("macro" + (i + 1) + "target" + (j + 1))];
+                data[p + j * 2] = (byte)category;
+                }
+            }
+        int offset = 1630;
+        for(int i = 0; i < 8; i++)
+            {
+            char[] macroname = (model.get("macro" + (i + 1) + "name", "Untitled") + "        ").toCharArray();
+            for(int j = 0; j < 8; j++)
+                {
+                data[offset + j] = (byte)macroname[j];
+                }
+            offset += 17;                   // NO REALLY, it's *17*.  Something strange going on here.
+            }
+        // For the time being, macros always emit custom names
+        for(int i = 0; i < 8; i++)
+            {
+            data[416 + i * 2] = 0;
+            data[416 + i * 2 + 1] = 1;
+            }
 
-		
-		// ENV TRIG SOURCES
-		for(int i = 0; i < 5; i++)
-			{
-			// Env 2 Trig Source 1 ought not be set
-			if (i == 1)	// Env 2
-				{
-				model.set("env" + (i + 1) + "trigsrc1", 1);
-				}
-			else
-				{
-				get2("env" + (i + 1) + "trigsrc1", data, 2340 + i * 10);
-				}
-			get2("env" + (i + 1) + "trigsrc2", data, 2342 + i * 10);
-			get2("env" + (i + 1) + "trigsrc3", data, 2344 + i * 10);
-			get2("env" + (i + 1) + "trigsrc4", data, 2346 + i * 10);
-			}
-		
-		byte[][] outgoing = Encode.encodePatch(data);
-		
-		Object[] sysex = new byte[outgoing.length + 2][];
-		sysex[0] = Encode.encodePayload(new byte[] { (byte)0x18, (byte)0x00 });		// header
-		for(int i = 0; i < outgoing.length; i++)		// patch chunks
-			{
-			sysex[i + 1] = outgoing[i];
-			}
-		sysex[sysex.length - 1] = Encode.encodePayload(new byte[] { (byte)0x1A, (byte)0x00 });		// footer
-			
-		//// FIXME Don't know if we need to add the Reset Requests,
-		//// at the moment, just adding the header and footer
-		
-		return sysex;
-		        }
+        // LFO STEPS 9 to 64
+        for(int i = 0; i < 5; i++)
+            {
+            for(int j = 0; j < 56; j++)  // FIXME: is this right?
+                {
+                get2("lfo" + (i + 1) + "step" + (j + 9), data, 1770 + i * 56 * 2 + j * 2);
+                }
+            }
 
-    	public void performRequestDump(Model tempModel, boolean changePatch)
-		  {
-		  if (changePatch)
-		  	{
-		  	performChangePatch(tempModel);
-		  	}
-		  	
-		  if (tempModel == null)
-		  tempModel = getModel();
+                
+        // ENV TRIG SOURCES
+        for(int i = 0; i < 5; i++)
+            {
+            // Env 2 Trig Source 1 ought not be set
+            if (i == 1)     // Env 2
+                {
+                model.set("env" + (i + 1) + "trigsrc1", 1);
+                }
+            else
+                {
+                get2("env" + (i + 1) + "trigsrc1", data, 2340 + i * 10);
+                }
+            get2("env" + (i + 1) + "trigsrc2", data, 2342 + i * 10);
+            get2("env" + (i + 1) + "trigsrc3", data, 2344 + i * 10);
+            get2("env" + (i + 1) + "trigsrc4", data, 2346 + i * 10);
+            }
+                
+        //// 2.0.0. FEATURES
+        get1("voicesustain", data, 2458);
+        get1("arpstepoffset", data, 2460);
+        get1("osc1bitreduction", data, 2452);
+        get1("osc2bitreduction", data, 2454);
+        get1("osc3bitreduction", data, 2456);
+        for(int i = 0; i < 5; i++)
+        	{
+	        get1("env" + (i + 1) + "quantize", data, 2432 + i * 2);
+	        }
+        for(int i = 0; i < 5; i++)
+        	{
+	        get1("lfo" + (i + 1) + "quantize", data, 2442 + i * 2);
+	        }
+        
+        byte[][] outgoing = Encode.encodePatch(data);
+                
+        Object[] sysex = new byte[outgoing.length + 2][];
+        sysex[0] = Encode.encodePayload(new byte[] { (byte)0x18, (byte)0x00 });         // header
+        for(int i = 0; i < outgoing.length; i++)                // patch chunks
+            {
+            sysex[i + 1] = outgoing[i];
+            }
+        sysex[sysex.length - 1] = Encode.encodePayload(new byte[] { (byte)0x1A, (byte)0x00 });          // footer
+                        
+        //// FIXME Don't know if we need to add the Reset Requests,
+        //// at the moment, just adding the header and footer
+                
+        return sysex;
+        }
 
-			incoming = new byte[22][];
-			incomingPos = 0;
+    public void performRequestDump(Model tempModel, boolean changePatch)
+        {
+        if (changePatch)
+            {
+            performChangePatch(tempModel);
+            }
+                        
+        if (tempModel == null)
+            tempModel = getModel();
 
-		  int NN = tempModel.get("number", 0);
-		  int BB = tempModel.get("bank", 0);
-		  
-		  // for the moment...
-		  model.set("number", NN);
-		  model.set("bank", BB);
-		  
-		  tryToSendSysex(Encode.encodePayload(new byte[] { 0x18, 000 }));
-		  tryToSendSysex(Encode.encodePayload(new byte[] { 0x04, 0x00, (byte)BB, (byte)NN }));
-		  }
+        incoming = new byte[22][];
+        incomingPos = 0;
 
-	byte[] firstPatch = null;
+        int NN = tempModel.get("number", 0);
+        int BB = tempModel.get("bank", 0);
+                  
+        tryToSendSysex(Encode.encodePayload(new byte[] { 0x18, 000 }));
+        tryToSendSysex(Encode.encodePayload(new byte[] { 0x04, 0x00, (byte)BB, (byte)NN }));
+        }
 
-	int incomingPos;
-	byte[][] incoming = new byte[22][];
-	
-	public static final boolean REVERSE_ENGINEER = false;
+    byte[] firstPatch = null;
+
+    int incomingPos;
+    byte[][] incoming = new byte[22][];
+        
+    public static final boolean REVERSE_ENGINEER = false;
 
     public int parse(byte[] data, boolean fromFile)
-    	{
-    	if (fromFile)
-    		{
-			byte[][] cut = cutUpSysex(data);
-			incomingPos = 0;
-			incoming = new byte[22][];
-			for(int i = 0; i < cut.length; i++)
-				{
-				int val = parseSub(cut[i], fromFile);
-				if (val == PARSE_SUCCEEDED)
-					return PARSE_SUCCEEDED;
-				else if (val != PARSE_INCOMPLETE)
-					return PARSE_FAILED;
-				}
-			return PARSE_FAILED;
-			}
-		else
-			{
-			return parseSub(data, fromFile);
-			}
-    	}
-	
+        {
+        if (fromFile)
+            {
+            byte[][] cut = cutUpSysex(data);
+            incomingPos = 0;
+            incoming = new byte[22][];
+            for(int i = 0; i < cut.length; i++)
+                {
+                int val = parseSub(cut[i], fromFile);
+                if (val == PARSE_SUCCEEDED)
+                    return PARSE_SUCCEEDED;
+                else if (val != PARSE_INCOMPLETE)
+                    return PARSE_FAILED;
+                }
+            return PARSE_FAILED;
+            }
+        else
+            {
+            return parseSub(data, fromFile);
+            }
+        }
+        
     public int parseSub(byte[] data, boolean fromFile)
-    	{
-		if (data.length == 191 || data.length == 155)	// hopefully a patch chunk
-			{
-			// Send request for next chunk if appropriate
-			if (!fromFile)
-				{
-				boolean sendMIDI = getSendMIDI();
-				setSendMIDI(true);
-				tryToSendSysex(Encode.encodePayload(new byte[] { 0x17, 0x00, (byte)incomingPos, 0x16 }));
-			
-				setSendMIDI(sendMIDI);
-				}
+        {
+        if (data.length == 191 || data.length == 155)   // hopefully a patch chunk
+            {
+            // Send request for next chunk if appropriate
+            if (!fromFile)
+                {
+                boolean sendMIDI = getSendMIDI();
+                setSendMIDI(true);
+                tryToSendSysex(Encode.encodePayload(new byte[] { 0x17, 0x00, (byte)incomingPos, 0x16 }));
+                        
+                setSendMIDI(sendMIDI);
+                }
 
-			// double check
-			if (data.length == 191 && incomingPos == 21) // uh oh
-				{
-				System.err.println("A");
-				return PARSE_FAILED;
-				}
-			else if (data.length == 155 && incomingPos != 21) // uh oh
-				{
-				System.err.println("B");
-				return PARSE_FAILED;
-				}
+            // double check
+            if (data.length == 191 && incomingPos == 21) // uh oh
+                {
+                return PARSE_FAILED;
+                }
+            else if (data.length == 155 && incomingPos != 21) // uh oh
+                {
+                return PARSE_FAILED;
+                }
 
-			// Load chunk
-			incoming[incomingPos] = data;
+            // Load chunk
+            incoming[incomingPos] = data;
 
-			// Process if we have 21 chunks
-			if (incomingPos == 21)
-				{
-				// Send footer if appropriate
-				if (!fromFile)
-					{
-					boolean sendMIDI = getSendMIDI();
-					setSendMIDI(true);
-					tryToSendSysex(Encode.encodePayload(new byte[] { 0x1A, 0x00 }));
-					setSendMIDI(sendMIDI);
-					}
-					
-				// Decode and process!
-				try
-					{
-					byte[] result = Decode.decodePatch(incoming);
-					if (REVERSE_ENGINEER)
-						{
-						if (firstPatch == null)
-							{
-							System.err.println("INITIAL PATCH LOADED");
-							firstPatch = result;
-							}
-						else 
-							{
-							System.err.println("DIFFERENCES");
-							diff(firstPatch, result);
-							}
-						incoming = new byte[22][];
-						incomingPos = 0;
-						return PARSE_SUCCEEDED;
-						}
-					else
-						{
-						incoming = new byte[22][];
-						incomingPos = 0;
-						return parseReal(result, fromFile);
-						}
-					}
-				catch (RuntimeException ex)
-					{
-					Synth.handleException(ex);
-					incoming = new byte[22][];
-					incomingPos = 0;
-					return PARSE_FAILED;
-					}
-				}
-			else
-				{
-				// Let's wait for the next chunk
-				incomingPos++;
-				return PARSE_INCOMPLETE;
-				}
-			}
-		else return PARSE_INCOMPLETE;		// maybe some other message got in the way
-    	}
-    	
+            // Process if we have 21 chunks
+            if (incomingPos == 21)
+                {
+                // Send footer if appropriate
+                if (!fromFile)
+                    {
+                    boolean sendMIDI = getSendMIDI();
+                    setSendMIDI(true);
+                    tryToSendSysex(Encode.encodePayload(new byte[] { 0x1A, 0x00 }));
+                    setSendMIDI(sendMIDI);
+                    }
+                                        
+                // Decode and process!
+                try
+                    {
+                    byte[] result = Decode.decodePatch(incoming);
+                    if (REVERSE_ENGINEER)
+                        {
+                        if (firstPatch == null)
+                            {
+                            System.err.println("INITIAL PATCH LOADED");
+                            firstPatch = result;
+                            }
+                        else 
+                            {
+                            System.err.println("DIFFERENCES");
+                            diff(firstPatch, result);
+                            }
+                        incoming = new byte[22][];
+                        incomingPos = 0;
+                        return PARSE_SUCCEEDED;
+                        }
+                    else
+                        {
+                        incoming = new byte[22][];
+                        incomingPos = 0;
+                        return parseReal(result, fromFile);
+                        }
+                    }
+                catch (RuntimeException ex)
+                    {
+                    Synth.handleException(ex);
+                    incoming = new byte[22][];
+                    incomingPos = 0;
+                    return PARSE_FAILED;
+                    }
+                }
+            else
+                {
+                // Let's wait for the next chunk
+                incomingPos++;
+                return PARSE_INCOMPLETE;
+                }
+            }
+        else return PARSE_INCOMPLETE;           // maybe some other message got in the way
+        }
+        
     public void diff(byte[] a, byte[] b)
-    	{
-    	for(int i = 0; i < a.length; i++)
-    		{
-    		if (a[i] != b[i])
-    			System.err.println("" + i + " " + StringUtility.toHex(a[i]) + " " + StringUtility.toHex(b[i]) + " (" + a[i] + " " + b[i] + ")");
-    		}
-    	}
+        {
+        for(int i = 0; i < a.length; i++)
+            {
+            if (a[i] != b[i])
+                System.err.println("" + i + " " + StringUtility.toHex(a[i]) + " " + StringUtility.toHex(b[i]) + " (" + a[i] + " " + b[i] + ")");
+            }
+        }
 
 
 
-	void set1(String key, byte[] data, int pos, int bit)
-		{
-		if (!model.exists(key)) System.err.println("KEY NOT FOUND: " + key);
-		model.set(key, (data[pos] >>> bit) & 0x01);
-		}
+    void set1(String key, byte[] data, int pos, int bit)
+        {
+        if (!model.exists(key)) System.err.println("KEY NOT FOUND: " + key);
+        model.set(key, (data[pos] >>> bit) & 0x01);
+        }
 
-	void set1(String key, byte[] data, int pos)
-		{
-		if (!model.exists(key)) System.err.println("KEY NOT FOUND: " + key);
-		System.err.println(key + "   " + data[pos+5]);
-		if (key.equals("prefxtype"))
-			{
-			System.err.println(key + " " + model.getMin(key) + " " + model.getMax(key) + " " + data[pos]);
-			}
-		if (model.getMin(key) < 0)	// signed two's complement
-			{
-			model.set(key, data[pos]);
-			}
-		else
-			{
-			model.set(key, data[pos] & 0xFF);
-			}
-		}
+    void set1(String key, byte[] data, int pos)
+        {
+        if (!model.exists(key)) System.err.println("KEY NOT FOUND: " + key);
+        //System.err.println(key + "   " + data[pos+5]);
+        //if (key.equals("prefxtype"))
+        //      {
+        //      System.err.println(key + " " + model.getMin(key) + " " + model.getMax(key) + " " + data[pos]);
+        //      }
+        if (key.equals("bank") || key.equals("number"))
+        	{
+            model.set(key, data[pos] & 0xFF);
+        	}
+        else if (model.getMin(key) < 0)      // signed two's complement
+            {
+            model.set(key, data[pos]);
+            }
+        else
+            {
+            model.set(key, data[pos] & 0xFF);
+            }
+        }
 
-	void set2(String key, byte[] data, int pos)
-		{
-		if (!model.exists(key)) System.err.println("KEY NOT FOUND: " + key);
-		if (key.equals("macro1panelvalue"))
-			{
-			System.err.println(key + " " + model.getMin(key) + " " + model.getMax(key) + " " + pos + " " + data[pos] + " " + data[pos + 1]);
-			}
-		if (model.getMin(key) < 0)	// signed two's complement
-			{
-			model.set(key, (short)((data[pos] & 0xFF) | ((data[pos + 1] & 0xFF) << 8)));
-			}
-		else
-			{
-			model.set(key, ((data[pos] & 0xFF) | ((data[pos + 1] & 0xFF) << 8)));
-			}
-		}
+    void set2(String key, byte[] data, int pos)
+        {
+        if (!model.exists(key)) System.err.println("KEY NOT FOUND: " + key);
+        //if (key.equals("macro1panelvalue"))
+        //      {
+        //      System.err.println(key + " " + model.getMin(key) + " " + model.getMax(key) + " " + pos + " " + data[pos] + " " + data[pos + 1]);
+        //      }
+        if (model.getMin(key) < 0)      // signed two's complement
+            {
+            model.set(key, (short)((data[pos] & 0xFF) | ((data[pos + 1] & 0xFF) << 8)));
+            }
+        else
+            {
+            model.set(key, ((data[pos] & 0xFF) | ((data[pos + 1] & 0xFF) << 8)));
+            }
+        }
 
     public int parseReal(byte[] data, boolean fromFile)
         {
         // VERIFY VERSION
         int version = data[4] & 0xFF;
-//        if (version != 0x9B) 	// 1.5.5
-//        	return PARSE_FAILED;
+        if (version != VERSION_1_5_5 && version != VERSION_2_0_0)
+            return PARSE_FAILED;
+                
+        // PATCH BANK AND NAME
+        set1("bank", data, 2);
+        set1("number", data, 3);
         
         // BASICS
-		set1("category", data, 8);
+        set1("category", data, 8);
         char[] name = new char[16];
         for(int i = 0; i < 16; i++)
             {
             name[i] = (char)(data[9 + i]);
             }
         model.set("name", String.valueOf(name));
-		set1("color", data, 26);
-		
-		// VOICE
-		set1("voicepolyphony", data, 30);
-		set1("voicedensity", data, 32);
-		set1("voicedetune", data, 34);
-		set1("voiceanalogfeel", data, 36);
-		set1("voicerandomphase", data, 38);
-		set1("voicestereomode", data, 40);
-		set1("voicestereowidth", data, 42);
-		set1("voicepitchbend", data, 44);
-		set1("voicevibratoamount", data, 46);
-		set1("voicevibratobpmsync", data, 50);
-		if (model.get("voicevibratobpmsync") == 0)
-			{
-			set1("voicevibratoratesyncoff", data, 48);
-			}
-		else
-			{
-			set1("voicevibratoratesyncon", data, 48);
-			}
-		set1("voiceglide", data, 52);
-		set1("voiceglidetime", data, 54);
-		set1("voiceglidecurve", data, 56);
-		set1("voiceglidelegato", data, 58);
+        set1("color", data, 26);
+                
+        // VOICE
+        set1("voicepolyphony", data, 30);
+        set1("voicedensity", data, 32);
+        set1("voicedetune", data, 34);
+        set1("voiceanalogfeel", data, 36);
+        set1("voicerandomphase", data, 38);
+        set1("voicestereomode", data, 40);
+        set1("voicestereowidth", data, 42);
+        set1("voicepitchbend", data, 44);
+        set1("voicevibratoamount", data, 46);
+        set1("voicevibratobpmsync", data, 50);
+        if (model.get("voicevibratobpmsync") == 0)
+            {
+            set1("voicevibratoratesyncoff", data, 48);
+            }
+        else
+            {
+            set1("voicevibratoratesyncon", data, 48);
+            }
+        set1("voiceglide", data, 52);
+        set1("voiceglidetime", data, 54);
+        set1("voiceglidecurve", data, 56);
+        set1("voiceglidelegato", data, 58);
 
-		// SCALES
-		
-		set1("scalekeylock", data, 60);
-		set1("scaletype", data, 62);
-		for(int i = 2; i < 8; i++)
-			{
-			set1("scalenote" + i, data, 66 - 2 + i);
-			}		
+        // SCALES
+                
+        set1("scalekeylock", data, 60);
+        set1("scaletype", data, 62);
+        for(int i = 2; i < 8; i++)
+            {
+            set1("scalenote" + i, data, 66 - 2 + i);
+            }               
 
-		// OSCS
-		for(int i = 1; i < 3; i++)
-			{
-			int p = (i == 1 ? 80 : 108);
-			set1("osc" + i + "mode", data, p + 0);
-			set2("osc" + i + "type", data, p + 2);	// the wave
-			set1("osc" + i + "semi", data, p + 4);
-			set1("osc" + i + "cent", data, p + 6);
-			set1("osc" + i + "keytrack", data, p + 8);
-			set2("osc" + i + "wavscan", data, p + 10);
-			for(int j = 0; j < 8; j++)
-				{
-				set2("osc" + i + "wavscanwave" + (j + 1), data, p + 12 + j * 2);
-				}
-			}
-		set2("osc3type", data, 136);	// the wave
-		set1("osc3semi", data, 138);
-		set1("osc3cent", data, 140);
-		set1("osc3keytrack", data, 142);
-		
-		// MUTANTS
-		for(int i = 1; i < 5; i++)
-			{
-			int p = (i == 1 ? 144 : (i == 2 ? 158 : (i == 3 ? 204 : 218)));
-			set1("mutant" + i + "mode", data, p + 0);
-			if (model.get("mutant" + i + "mode") == 2) // osc sync
-				set1("mutant" + i + "sourceoscsync", data, p + 2);
-			else	// we assume FM Linear or other
-				set1("mutant" + i + "sourcefmlin", data, p + 2);
-			set2("mutant" + i + "ratio", data, p + 4);
-			set2("mutant" + i + "depth", data, p + 6);
-			set2("mutant" + i + "window", data, p + 8);
-			set2("mutant" + i + "feedback", data, p + 10);
-			set2("mutant" + i + "wet", data, p + 12);
-			}
+        // OSCS
+        for(int i = 1; i < 3; i++)
+            {
+            int p = (i == 1 ? 80 : 108);
+            set1("osc" + i + "mode", data, p + 0);
+            set2("osc" + i + "type", data, p + 2);  // the wave
+            set1("osc" + i + "semi", data, p + 4);
+            set1("osc" + i + "cent", data, p + 6);
+            set1("osc" + i + "keytrack", data, p + 8);
+            set2("osc" + i + "wavscan", data, p + 10);
+            for(int j = 0; j < 8; j++)
+                {
+                set2("osc" + i + "wavscanwave" + (j + 1), data, p + 12 + j * 2);
+                }
+            }
+        set2("osc3type", data, 136);    // the wave
+        set1("osc3semi", data, 138);
+        set1("osc3cent", data, 140);
+        set1("osc3keytrack", data, 142);
+                
+        // MUTANTS
+        for(int i = 1; i < 5; i++)
+            {
+            int p = (i == 1 ? 144 : (i == 2 ? 158 : (i == 3 ? 204 : 218)));
+            set1("mutant" + i + "mode", data, p + 0);
+            if (model.get("mutant" + i + "mode") == 2) // osc sync
+                set1("mutant" + i + "sourceoscsync", data, p + 2);
+            else    // we assume FM Linear or other
+                set1("mutant" + i + "sourcefmlin", data, p + 2);
+            set2("mutant" + i + "ratio", data, p + 4);
+            set2("mutant" + i + "depth", data, p + 6);
+            set2("mutant" + i + "window", data, p + 8);
+            set2("mutant" + i + "feedback", data, p + 10);
+            set2("mutant" + i + "wet", data, p + 12);
+            }
 
-		// MUTANT WARPS
-		for(int i = 1; i < 5; i++)
-			{
-			int p = (i == 1 ? 172 : (i == 2 ? 188 : (i == 3 ? 232 : 248)));
-			for(int j = 0; j < 8; j++)
-				{
-				set2("mutant" + i + "warp" + (j + 1), data, p + j * 2);
-				}
-			}
-			
-		// RING MOD NOISE
-		set1("ringmodsource1", data, 264);
-		set1("ringmodsource2", data, 266);
-		set2("ringmoddepth", data, 268);
-		set1("noisetype", data, 272);
-		
-		// MIXER
-		for(int i = 0; i < 3; i++)
-			{
-			set2("mixerosc" + (i + 1) + "vol", data, 274 + i * 2);
-			set2("mixerosc" + (i + 1) + "pan", data, 286 + i * 2);
-			set2("mixerosc" + (i + 1) + "filterratio", data, 292 + i * 2);
-			}		
-		set2("mixerringmodvol", data, 280);
-		set2("mixernoisevol", data, 282);
-		set2("mixerringmodpan", data, 298);
-		set2("mixernoisepan", data, 300);
-		set2("mixerringmodfilterratio", data, 304);
-		set2("mixernoisefilterratio", data, 306);
+        // MUTANT WARPS
+        for(int i = 1; i < 5; i++)
+            {
+            int p = (i == 1 ? 172 : (i == 2 ? 188 : (i == 3 ? 232 : 248)));
+            for(int j = 0; j < 8; j++)
+                {
+                set2("mutant" + i + "warp" + (j + 1), data, p + j * 2);
+                }
+            }
+                        
+        // RING MOD NOISE
+        set1("ringmodsource1", data, 264);
+        set1("ringmodsource2", data, 266);
+        set2("ringmoddepth", data, 268);
+        set1("noisetype", data, 272);
+                
+        // MIXER
+        for(int i = 0; i < 3; i++)
+            {
+            set2("mixerosc" + (i + 1) + "vol", data, 274 + i * 2);
+            set2("mixerosc" + (i + 1) + "pan", data, 286 + i * 2);
+            set2("mixerosc" + (i + 1) + "filterratio", data, 292 + i * 2);
+            }               
+        set2("mixerringmodvol", data, 280);
+        set2("mixernoisevol", data, 282);
+        set2("mixerringmodpan", data, 298);
+        set2("mixernoisepan", data, 300);
+        set2("mixerringmodfilterratio", data, 304);
+        set2("mixernoisefilterratio", data, 306);
 
-		// FILTERS
-		set1("mixerfilterrouting", data, 302);
-		set1("filter1type", data, 308);						// FIXME: Values are out of order, will this affect us?
-		set2("filter1cutoff", data, 310);
-		set2("filter1resonance", data, 312);
-		set2("filter1special", data, 314);
-		set2("filter1env1amount", data, 316);
-		set2("filter1lfo1amount", data, 318);
-		set2("filter1velenv", data, 320);
-		set2("filter1keytrack", data, 322);
-		set2("filter1drive", data, 326);
-		set1("filter1positionofdrive", data, 328);
-		set1("filter1vowelorder", data, 330);
+        // FILTERS
+        set1("mixerfilterrouting", data, 302);
+        set1("filter1type", data, 308);                                         // FIXME: Values are out of order, will this affect us?
+        set2("filter1cutoff", data, 310);
+        set2("filter1resonance", data, 312);
+        set2("filter1special", data, 314);
+        set2("filter1env1amount", data, 316);
+        set2("filter1lfo1amount", data, 318);
+        set2("filter1velenv", data, 320);
+        set2("filter1keytrack", data, 322);
+        set2("filter1drive", data, 326);
+        set1("filter1positionofdrive", data, 328);
+        set1("filter1vowelorder", data, 330);
 
-		set2("filter2morph", data, 332);
-		set2("filter2cutoff", data, 334);
-		set2("filter2resonance", data, 336);
-		set2("filter2env1amount", data, 338);
-		set2("filter2lfo1amount", data, 340);
-		set2("filter2velenv", data, 342);
-		set2("filter2keytrack", data, 344);
-		
-		// AMPLIFIER
-		set2("amplfo2amount", data, 346);
-		set2("ampvelenv", data, 348);
-		set2("amplevel", data, 350);
+        set2("filter2morph", data, 332);
+        set2("filter2cutoff", data, 334);
+        set2("filter2resonance", data, 336);
+        set2("filter2env1amount", data, 338);
+        set2("filter2lfo1amount", data, 340);
+        set2("filter2velenv", data, 342);
+        set2("filter2keytrack", data, 344);
+                
+        // AMPLIFIER
+        set2("amplfo2amount", data, 346);
+        set2("ampvelenv", data, 348);
+        set2("amplevel", data, 350);
 
-		// PRE-FX
-		set1("prefxtype", data, 352);
-		set1("prefxsidechain", data, 354);
-		int prefxtype = Math.max(0, Math.min(data[352], 8)); 	// bound to 0 ... 8
-		if (prefxtype != 0) // skip bypass
-			{
-			for(int i = 0; i < 5; i++)
-				{
-				int p = 356;
-				set2("prefx" + prefxtype + "param" + (i + 1), data, p + i * 2);
-				}
-			}
-		set2("prefxwet", data, 366);
+        // PRE-FX
+        set1("prefxtype", data, 352);
+        set1("prefxsidechain", data, 354);
+        int prefxtype = Math.max(0, Math.min(data[352], 8));    // bound to 0 ... 8
+        if (prefxtype != 0) // skip bypass
+            {
+            for(int i = 0; i < 5; i++)
+                {
+                int p = 356;
+                set2("prefx" + prefxtype + "param" + (i + 1), data, p + i * 2);
+                }
+            }
+        set2("prefxwet", data, 366);
 
-		// DELAY
-		set2("delaytype", data, 368);
-		set2("delaybpmsync", data, 370);
-		if (model.get("delaybpmsync") == 0)
-			{
-			set2("delaytimesyncoff", data, 372);
-			}
-		else
-			{
-			set2("delaytimesyncon", data, 372);
-			}
-		set2("delayfeedback", data, 374);
-		set2("delayfeedtone", data, 376);
-		set2("delaywettone", data, 378);
-		set2("delaywet", data, 382);
-		
-		// REVERB
-		set2("reverbtype", data, 384);
-		set2("reverbtime", data, 388);
-		set2("reverbtone", data, 390);
-		set2("reverbhidamp", data, 392);
-		set2("reverblodamp", data, 394);
-		set2("reverbpredelay", data, 396);
-		set2("reverbwet", data, 398);
+        // DELAY
+        set2("delaytype", data, 368);
+        set2("delaybpmsync", data, 370);
+        if (model.get("delaybpmsync") == 0)
+            {
+            set2("delaytimesyncoff", data, 372);
+            }
+        else
+            {
+            set2("delaytimesyncon", data, 372);
+            }
+        set2("delayfeedback", data, 374);
+        set2("delayfeedtone", data, 376);
+        set2("delaywettone", data, 378);
+        set2("delaywet", data, 382);
+                
+        // REVERB
+        set2("reverbtype", data, 384);
+        set2("reverbtime", data, 388);
+        set2("reverbtone", data, 390);
+        set2("reverbhidamp", data, 392);
+        set2("reverblodamp", data, 394);
+        set2("reverbpredelay", data, 396);
+        set2("reverbwet", data, 398);
 
-		// POST-FX
-		set1("postfxtype", data, 400);
-		set1("postfxsidechain", data, 402);
-		int postfxtype = Math.max(0, Math.min(data[400], 8)); 	// bound to 0 ... 8
-		if (postfxtype != 0) // skip bypass
-			{
-			for(int i = 0; i < 5; i++)
-				{
-				int p = 404;
-				set2("postfx" + postfxtype + "param" + (i + 1), data, p + i * 2);
-				}
-			}
-		set2("postfxwet", data, 414);
+        // POST-FX
+        set1("postfxtype", data, 400);
+        set1("postfxsidechain", data, 402);
+        int postfxtype = Math.max(0, Math.min(data[400], 8));   // bound to 0 ... 8
+        if (postfxtype != 0) // skip bypass
+            {
+            for(int i = 0; i < 5; i++)
+                {
+                int p = 404;
+                set2("postfx" + postfxtype + "param" + (i + 1), data, p + i * 2);
+                }
+            }
+        set2("postfxwet", data, 414);
 
-		// RIBBON
-		set1("ribbonmode", data, 436);
-		set1("ribbonkeyspan", data, 438);
-		set1("ribbonoctave", data, 440);
-		set1("ribbonhold", data, 442);					// Not in the standard list
-		set1("ribbonquantize", data, 444);
-		set1("ribbonglide", data, 446);
-		set1("ribbonmodcontrol", data, 448);				// theremin wheel volume
+        // RIBBON
+        set1("ribbonmode", data, 436);
+        set1("ribbonkeyspan", data, 438);
+        set1("ribbonoctave", data, 440);
+        set1("ribbonhold", data, 442);                                  // Not in the standard list
+        set1("ribbonquantize", data, 444);
+        set1("ribbonglide", data, 446);
+        set1("ribbonmodcontrol", data, 448);                            // theremin wheel volume
 
-		// MISC
-		set1("arpclklock", data, 468);		
-		set1("voicewarmmode", data, 470, 0);				// Note Bitpacked
-		set1("voicesnap", data, 470, 1);					// Note Bitpacked
-		set1("filter2type", data, 472);
-		
-		// ENVELOPES
-		for(int i = 0; i < 5; i++)
-			{
-			int p = (i == 0 ? 478 : (i == 1 ? 506 : (i == 2 ? 534 : (i == 3 ? 562 : 590))));
-			set1("env" + (i + 1) + "bpmsync", data, p + 8);
-			if (model.get("env" + (i + 1) + "bpmsync") == 0) // off
-				{
-				set2("env" + (i + 1) + "delaysyncoff", data, p + 10);
-				set2("env" + (i + 1) + "attacksyncoff", data, p + 0);
-				set2("env" + (i + 1) + "holdsyncoff", data, p + 12);
-				set2("env" + (i + 1) + "decaysyncoff", data, p + 2);
-				set2("env" + (i + 1) + "releasesyncoff", data, p + 6);
-				}
-			else
-				{
-				set2("env" + (i + 1) + "delaysyncon", data, p + 10);
-				set2("env" + (i + 1) + "attacksyncon", data, p + 0);
-				set2("env" + (i + 1) + "holdsyncon", data, p + 12);
-				set2("env" + (i + 1) + "decaysyncon", data, p + 2);
-				set2("env" + (i + 1) + "releasesyncon", data, p + 6);
-				}
-			set2("env" + (i + 1) + "sustain", data, p + 4);
-			set2("env" + (i + 1) + "atkcurve", data, p + 14);
-			set2("env" + (i + 1) + "deccurve", data, p + 16);
-			set2("env" + (i + 1) + "relcurve", data, p + 18);
-			set1("env" + (i + 1) + "legato", data, p + 20);
-			set1("env" + (i + 1) + "reset", data, p + 22);		// can only be set if legato is unset, hope this is okay
-			set1("env" + (i + 1) + "freerun", data, p + 24);		// can only be set if legato is unset, hope this is okay
-			set1("env" + (i + 1) + "loop", data, p + 26);
-			}
-			
-		// LFOS
-		for(int i = 0; i < 5; i++)
-			{
-			int p = (i == 0 ? 618 : (i == 1 ? 656 : (i == 2 ? 694 : (i == 3 ? 732 : 770))));
-			set1("lfo" + (i + 1) + "wave", data, p + 0);
-			set1("lfo" + (i + 1) + "bpmsync", data, p + 4);
-			set1("lfo" + (i + 1) + "trigsync", data, p + 6);
-			if (model.get("lfo" + (i + 1) + "bpmsync") == 0) // off
-				{
-				set2("lfo" + (i + 1) + "ratesyncoff", data, p + 2);
-				set1("lfo" + (i + 1) + "delaysyncoff", data, p + 8);
-				set1("lfo" + (i + 1) + "fadeinsyncoff", data, p + 10);
-				}
-			else
-				{
-				set2("lfo" + (i + 1) + "ratesyncon", data, p + 2);
-				set1("lfo" + (i + 1) + "delaysyncon", data, p + 8);
-				set1("lfo" + (i + 1) + "fadeinsyncon", data, p + 10);
-				}
-			set2("lfo" + (i + 1) + "phase", data, p + 12);
-			set2("lfo" + (i + 1) + "level", data, p + 14);
-			set1("lfo" + (i + 1) + "steps", data, p + 16);
-			set1("lfo" + (i + 1) + "smooth", data, p + 18);
-			set1("lfo" + (i + 1) + "oneshot", data, p + 20);
-			// First 8 steps
-			for(int j = 0; j < 8; j++)
-				{
-				set2("lfo" + (i + 1) + "step" + (j + 1), data, p + 22 + j * 2);
-				}
-			}
-			
-		// ARPEGGIATOR
-		
-		set1("arpdivision", data, 810);
-		set1("arpswing", data, 812);
-		set1("arpgate", data, 814);
-		set1("arpoctmode", data, 816);
-		set1("arpoctave", data, 818);
-		set1("arpmode", data, 820);
-		set1("arplength", data, 822);
-		set1("arptaptrig", data, 824);
-		set1("arpphrase", data, 826);
-		set1("arpratchet", data, 828);
-		set1("arpchance", data, 830);
-		set1("arpenable", data, 832);		
-		set1("arplatch", data, 834);		
+        // MISC
+        set1("arpclklock", data, 468);          
+        set1("voicewarmmode", data, 470, 0);                            // Note Bitpacked
+        set1("voicesnap", data, 470, 1);                                        // Note Bitpacked
+        set1("filter2type", data, 472);
+                
+        // ENVELOPES
+        for(int i = 0; i < 5; i++)
+            {
+            int p = (i == 0 ? 478 : (i == 1 ? 506 : (i == 2 ? 534 : (i == 3 ? 562 : 590))));
+            set1("env" + (i + 1) + "bpmsync", data, p + 8);
+            if (model.get("env" + (i + 1) + "bpmsync") == 0) // off
+                {
+                set2("env" + (i + 1) + "delaysyncoff", data, p + 10);
+                set2("env" + (i + 1) + "attacksyncoff", data, p + 0);
+                set2("env" + (i + 1) + "holdsyncoff", data, p + 12);
+                set2("env" + (i + 1) + "decaysyncoff", data, p + 2);
+                set2("env" + (i + 1) + "releasesyncoff", data, p + 6);
+                }
+            else
+                {
+                set2("env" + (i + 1) + "delaysyncon", data, p + 10);
+                set2("env" + (i + 1) + "attacksyncon", data, p + 0);
+                set2("env" + (i + 1) + "holdsyncon", data, p + 12);
+                set2("env" + (i + 1) + "decaysyncon", data, p + 2);
+                set2("env" + (i + 1) + "releasesyncon", data, p + 6);
+                }
+            set2("env" + (i + 1) + "sustain", data, p + 4);
+            set2("env" + (i + 1) + "atkcurve", data, p + 14);
+            set2("env" + (i + 1) + "deccurve", data, p + 16);
+            set2("env" + (i + 1) + "relcurve", data, p + 18);
+            set1("env" + (i + 1) + "legato", data, p + 20);
+            set1("env" + (i + 1) + "reset", data, p + 22);          // can only be set if legato is unset, hope this is okay
+            set1("env" + (i + 1) + "freerun", data, p + 24);                // can only be set if legato is unset, hope this is okay
+            set1("env" + (i + 1) + "loop", data, p + 26);
+            }
+                        
+        // LFOS
+        for(int i = 0; i < 5; i++)
+            {
+            int p = (i == 0 ? 618 : (i == 1 ? 656 : (i == 2 ? 694 : (i == 3 ? 732 : 770))));
+            set1("lfo" + (i + 1) + "wave", data, p + 0);
+            set1("lfo" + (i + 1) + "bpmsync", data, p + 4);
+            set1("lfo" + (i + 1) + "trigsync", data, p + 6);
+            if (model.get("lfo" + (i + 1) + "bpmsync") == 0) // off
+                {
+                set2("lfo" + (i + 1) + "ratesyncoff", data, p + 2);
+                set1("lfo" + (i + 1) + "delaysyncoff", data, p + 8);
+                set1("lfo" + (i + 1) + "fadeinsyncoff", data, p + 10);
+                }
+            else
+                {
+                set2("lfo" + (i + 1) + "ratesyncon", data, p + 2);
+                set1("lfo" + (i + 1) + "delaysyncon", data, p + 8);
+                set1("lfo" + (i + 1) + "fadeinsyncon", data, p + 10);
+                }
+            set2("lfo" + (i + 1) + "phase", data, p + 12);
+            set2("lfo" + (i + 1) + "level", data, p + 14);
+            set1("lfo" + (i + 1) + "steps", data, p + 16);
+            set1("lfo" + (i + 1) + "smooth", data, p + 18);
+            set1("lfo" + (i + 1) + "oneshot", data, p + 20);
+            // First 8 steps
+            for(int j = 0; j < 8; j++)
+                {
+                set2("lfo" + (i + 1) + "step" + (j + 1), data, p + 22 + j * 2);
+                }
+            }
+                        
+        // ARPEGGIATOR
+                
+        set1("arpdivision", data, 810);
+        set1("arpswing", data, 812);
+        set1("arpgate", data, 814);
+        set1("arpoctmode", data, 816);
+        set1("arpoctave", data, 818);
+        set1("arpmode", data, 820);
+        set1("arplength", data, 822);
+        set1("arptaptrig", data, 824);
+        set1("arpphrase", data, 826);
+        set1("arpratchet", data, 828);
+        set1("arpchance", data, 830);
+        set1("arpenable", data, 832);           
+        set1("arplatch", data, 834);            
 
-		// MOD MATRIX
-		for(int i = 0; i < 32; i++)
-			{
-			set2("modmatrix" + (i + 1) + "depth", data, 838 + i * 2);
-			}
-		for(int i = 0; i < 32; i++)
-			{
-			set1("modmatrix" + (i + 1) + "modsource", data, 902 + i * 2);
-			}
-		for(int i = 0; i < 32; i++)
-			{
-			set2("modmatrix" + (i + 1) + "modtarget", data, 966 + i * 2);
-			}
-			
-		// FIXME: Starting at 1032, there may be a fourth mod matrix thingamabob
-			
-		// MACRO
-		for(int i = 0; i < 8; i++)
-			{
-			int p = 1094 + i * 16;
-			for(int j = 0; j < 8; j++)
-				{
-				set2("macro" + (i + 1) + "depth" + (j + 1), data, p + j * 2);
-				}
-			}
-		for(int i = 0; i < 8; i++)
-			{
-			int p = 1222 + i * 16;
-			for(int j = 0; j < 8; j++)
-				{
-				set2("macro" + (i + 1) + "target" + (j + 1), data, p + j * 2);
-				}
-			}
-		for(int i = 0; i < 8; i++)
-			{
-			int p = 1350 + i * 16;
-			for(int j = 0; j < 8; j++)
-				{
-				set2("macro" + (i + 1) + "buttonvalue" + (j + 1), data, p + j * 2);
-				}
-			}
-		for(int i = 0; i < 8; i++)
-			{
-			set2("macro" + (i + 1) + "panelvalue", data, 1606 + i * 2);
-			}
-		int offset = 1630;
-		for(int i = 0; i < 8; i++)
-			{
-			char[] macroname = new char[8];
-			for(int j = 0; j < 8; j++)
-				{
-				macroname[j] = (char)(data[offset + j]);
-				}
-			model.set("macro" + (i + 1) + "name", String.valueOf(macroname));
-			offset += 17;			// NO REALLY, it's *17*.  Something strange going on here.
-			}
+        // MOD MATRIX
+        for(int i = 0; i < 32; i++)
+            {
+            set2("modmatrix" + (i + 1) + "depth", data, 838 + i * 2);
+            }
+        /// FIXME: VERSION 1.5.5 HAS DIFFERENT MOD SOURCES UNFORTUNATELY
+        for(int i = 0; i < 32; i++)
+            {
+            set1("modmatrix" + (i + 1) + "modsource", data, 902 + i * 2);
+            }
+        for(int i = 0; i < 32; i++)
+            {
+            set2("modmatrix" + (i + 1) + "modtarget", data, 966 + i * 2);
+            }
+                        
+        // FIXME: Starting at 1032, there may be a fourth mod matrix thingamabob
+                        
+        // MACRO
+        for(int i = 0; i < 8; i++)
+            {
+            int p = 1094 + i * 16;
+            for(int j = 0; j < 8; j++)
+                {
+                set2("macro" + (i + 1) + "depth" + (j + 1), data, p + j * 2);
+                }
+            }
+        for(int i = 0; i < 8; i++)
+            {
+            int p = 1222 + i * 16;
+            for(int j = 0; j < 8; j++)
+                {
+                set2("macro" + (i + 1) + "target" + (j + 1), data, p + j * 2);
+                }
+            }
+        for(int i = 0; i < 8; i++)
+            {
+            int p = 1350 + i * 16;
+            for(int j = 0; j < 8; j++)
+                {
+                set2("macro" + (i + 1) + "buttonvalue" + (j + 1), data, p + j * 2);
+                }
+            }
+        for(int i = 0; i < 8; i++)
+            {
+            set2("macro" + (i + 1) + "panelvalue", data, 1606 + i * 2);
+            }
+        int offset = 1630;
+        for(int i = 0; i < 8; i++)
+            {
+            char[] macroname = new char[8];
+            for(int j = 0; j < 8; j++)
+                {
+                macroname[j] = (char)(data[offset + j]);
+                }
+            model.set("macro" + (i + 1) + "name", String.valueOf(macroname));
+            offset += 17;                   // NO REALLY, it's *17*.  Something strange going on here.
+            }
 
 
-		// LFO STEPS 9 to 64
-		for(int i = 0; i < 5; i++)
-			{
-			for(int j = 0; j < 56; j++)  // FIXME: is this right?
-				{
-				set2("lfo" + (i + 1) + "step" + (j + 9), data, 1770 + i * 56 * 2 + j * 2);
-				}
-			}
+        // LFO STEPS 9 to 64
+        for(int i = 0; i < 5; i++)
+            {
+            for(int j = 0; j < 56; j++)  // FIXME: is this right?
+                {
+                set2("lfo" + (i + 1) + "step" + (j + 9), data, 1770 + i * 56 * 2 + j * 2);
+                }
+            }
 
-		
-		// ENV TRIG SOURCES
-		for(int i = 0; i < 5; i++)
-			{
-			// Env 2 Trig Source 1 ought not be set
-			if (i == 1)	// Env 2
-				{
-				model.set("env" + (i + 1) + "trigsrc1", 1);
-				}
-			else
-				{
-				set2("env" + (i + 1) + "trigsrc1", data, 2340 + i * 10);
-				}
-			set2("env" + (i + 1) + "trigsrc2", data, 2342 + i * 10);
-			set2("env" + (i + 1) + "trigsrc3", data, 2344 + i * 10);
-			set2("env" + (i + 1) + "trigsrc4", data, 2346 + i * 10);
-			}
-		
+                
+        // ENV TRIG SOURCES
+        for(int i = 0; i < 5; i++)
+            {
+            // Env 2 Trig Source 1 ought not be set
+            if (i == 1)     // Env 2
+                {
+                model.set("env" + (i + 1) + "trigsrc1", 1);
+                }
+            else
+                {
+                set2("env" + (i + 1) + "trigsrc1", data, 2340 + i * 10);
+                }
+            set2("env" + (i + 1) + "trigsrc2", data, 2342 + i * 10);
+            set2("env" + (i + 1) + "trigsrc3", data, 2344 + i * 10);
+            set2("env" + (i + 1) + "trigsrc4", data, 2346 + i * 10);
+            }
+                
+        //// 2.0.0. FEATURES
+        set1("voicesustain", data, 2458);
+        set1("arpstepoffset", data, 2460);
+        set1("osc1bitreduction", data, 2452);
+        set1("osc2bitreduction", data, 2454);
+        set1("osc3bitreduction", data, 2456);
+        for(int i = 0; i < 5; i++)
+        	{
+	        set1("env" + (i + 1) + "quantize", data, 2432 + i * 2);
+	        }
+        for(int i = 0; i < 5; i++)
+        	{
+	        set1("lfo" + (i + 1) + "quantize", data, 2442 + i * 2);
+	        }
+        
         revise();
         return PARSE_SUCCEEDED;
-		}
+        }
 
     // The Hydrasynth always sends both the MSB and LSB
     public boolean getRequiresNRPNMSB() { return true; }
@@ -6344,6 +6520,14 @@ public class ASMHydrasynth extends Synth
             else if (key.equals("osc2solowavscan1"))
                 {
                 key = "osc2solowavscan" + (v + 1);
+                val = w;
+                }
+            else if (key.equals("osc1bitreduction"))
+                {
+                if (v == 1)
+                	key = "osc2bitreduction";
+                else if (v == 1)
+                	key = "osc3bitreduction";
                 val = w;
                 }
             }
@@ -6517,6 +6701,10 @@ public class ASMHydrasynth extends Synth
                 {
                 val = val / 8;
                 }
+            else if (subkey.endsWith("quantize"))
+                {
+                val = val / 8;
+                }
             }
         else if (key.startsWith("env"))
             {
@@ -6546,6 +6734,10 @@ public class ASMHydrasynth extends Synth
                 subkey.startsWith("decaysyncon") ||
                 subkey.startsWith("releasesyncon") ||
                 subkey.startsWith("trigsrc"))
+                {
+                val = val / 8;
+                }
+            else if (subkey.endsWith("quantize"))
                 {
                 val = val / 8;
                 }
@@ -6628,6 +6820,17 @@ public class ASMHydrasynth extends Synth
                 val = w;
                 }
             }
+        else if (key.startsWith("voice"))
+        	{
+        	if (key.equals("voicesustain"))
+				{
+				val = val / 8;
+				}
+			else if (key.endsWith("modulation"))
+				{
+				val = val / 8;
+				}
+			}
         else
             {
             // do nothing
@@ -6666,17 +6869,17 @@ public class ASMHydrasynth extends Synth
     public int getPauseAfterChangePatch() { return 200; }
 
 
-  public void changePatch(Model tempModel)
-  {
-  // I believe that the  changes *single* patches using Bank Select *LSB* (32), 
-  // followed by Program Change.  
+    public void changePatch(Model tempModel)
+        {
+        // I believe that the  changes *single* patches using Bank Select *LSB* (32), 
+        // followed by Program Change.  
         
-  int bank = tempModel.get("bank", 0);
-  int number = tempModel.get("number", 0);
+        int bank = tempModel.get("bank", 0);
+        int number = tempModel.get("number", 0);
         
-  tryToSendMIDI(buildCC(getChannelOut(), 32, bank));
-  tryToSendMIDI(buildPC(getChannelOut(), number));
-  }
+        tryToSendMIDI(buildCC(getChannelOut(), 32, bank));
+        tryToSendMIDI(buildPC(getChannelOut(), number));
+        }
 
     public static final int MODE_PAUSE = 0;
     public static final int TYPE_PAUSE = 0;
@@ -6722,7 +6925,6 @@ public class ASMHydrasynth extends Synth
                 tryToSendMIDI(emitAll(wavescanParameters[i], STATUS_SENDING_ALL_PARAMETERS));
                 }
             simplePause(WAVESCAN_WAVE_PAUSE);
-            //System.err.println("Sending Remainder");
             for(int i = 0; i < remainingParameters.length; i++)
                 {
                 simplePause(getPauseAfterSendOneParameter());
@@ -6733,62 +6935,49 @@ public class ASMHydrasynth extends Synth
         return true;
         }
 
-
-/*
-  public Model getNextPatchLocation(Model model)
-  {
-  int number = model.get("number");
-  int bank = model.get("bank");
-        
-  number++;
-  if (number >= 128)
-  {
-  number = 0;
-  bank++;
-  if (bank >= 26)
-  bank = 0;
-  }
+    // This is 8 banks, appropriate for 2.0.0 and the Deluxe 1.5.5
+    public Model getNextPatchLocation(Model model)
+        {
+        int number = model.get("number");
+        int bank = model.get("bank");
                 
-  Model newModel = buildModel();
-  newModel.set("number", number);
-  newModel.set("bank", bank);
-  return newModel;
-  }
+        number++;
+        if (number >= 128)
+            {
+            number = 0;
+            bank++;
+            if (bank >= 8)
+                bank = 0;
+            }
+                                
+        Model newModel = buildModel();
+        newModel.set("number", number);
+        newModel.set("bank", bank);
+        return newModel;
+        }
+          
+    public String getPatchName(Model model) { return model.get("name", "Untitled"); }
 
-  public String getPatchLocationName(Model model)
-  {
-  // getPatchLocationName() is called from sprout() as a test to see if we should enable
-  // batch downloading.  If we haven't yet created an .init file, then parameters won't exist
-  // yet and this method will bomb badly.  So we return null in this case.
-  if (!model.exists("number")) return null;
+
+    public String[] getPatchNumberNames()  
+        { 
+        return buildIntegerNames(128, 1);
+        }
+
+    public boolean[] getWriteableBanks() 
+        { 
+        return new boolean[] { true, true, true, true, true, true, true, true };
+        }
+          
+    public String[] getBankNames() { return BANKS; }
+
+    public boolean getSupportsPatchWrites() { return true; }
+
+    public int getPatchNameLength() { return 16; }
+
+    public boolean getPatchContainsLocation() { return true; }
         
-  int number = (model.get("number"));
-  int bank = (model.get("bank"));
-  return BANKS[bank] + " " + ((number > 99 ? "" : (number > 9 ? "0" : "00")) + number);
-  }
-
-  public String getPatchName(Model model) { return model.get("name", "Untitled"); }
-
-  public boolean librarianTested() { return true; }
-    
-  public String[] getPatchNumberNames()  
-  { 
-  return buildIntegerNames(128, 0);
-  }
-
-  public boolean[] getWriteableBanks() 
-  { 
-  return buildBankBooleans(7, 19, 0);             // first 7 banks are writeable, remaining 19 are not
-  }
-
-  public String[] getBankNames() { return BANKS; }
-
-  public boolean getSupportsPatchWrites() { return true; }
-
-  public int getPatchNameLength() { return 22; }
-
-  public boolean getPatchContainsLocation() { return true; }
-*/
+    public boolean librarianTested() { return true; }
 
 
 
@@ -7904,6 +8093,22 @@ public class ASMHydrasynth extends Synth
     "voicerandomphase",
     "voicewarmmode",
     "voicesnap",
+     
+    /// New 2.0.0 Parameters
+    "voicesustain",
+    "osc1bitreduction",                  
+    "osc2bitreduction",                  
+    "osc3bitreduction",                  
+    "env1quantize",                  
+    "env2quantize",                  
+    "env3quantize",                  
+    "env4quantize",                  
+    "env5quantize",                  
+    "lfo1quantize",                  
+    "lfo2quantize",                  
+    "lfo3quantize",                  
+    "lfo4quantize",                  
+    "lfo5quantize",                  
     };
     
     
@@ -8943,7 +9148,31 @@ public class ASMHydrasynth extends Synth
     "voicerandomphase",
     "voicewarmmode",
     "voicevibratobpmsync",     
-    "voicesnap",        													// Not Documented                     
+    "voicesnap",                                                                                                                // Not Documented   
+    
+    /// New 2.0.0 Parameters
+    "voicesustain",
+    "osc1bitreduction",                  
+    "osc2bitreduction",                  
+    "osc3bitreduction",                  
+    "voice1modulation",                  
+    "voice2modulation",                  
+    "voice3modulation",                  
+    "voice4modulation",                  
+    "voice5modulation",                  
+    "voice6modulation",                  
+    "voice7modulation",                  
+    "voice8modulation",                  
+    "env1quantize",                  
+    "env2quantize",                  
+    "env3quantize",                  
+    "env4quantize",                  
+    "env5quantize",                  
+    "lfo1quantize",                  
+    "lfo2quantize",                  
+    "lfo3quantize",                  
+    "lfo4quantize",                  
+    "lfo5quantize",                  
     };
     
     static HashMap nrpnToIndex = null;
@@ -9645,7 +9874,7 @@ public class ASMHydrasynth extends Synth
     7537,           // 3a 71            "env5trigsrc2",
     7538,           // 3a 72            "env5trigsrc3",
     7539,           // 3a 73            "env5trigsrc4",
-    7299,			// 39 3				"arpenable"
+    7299,                       // 39 3                         "arpenable"
     7299,           // 39 3             "arpdivision",
     7299,           // 39 3             "arpswing",
     7299,           // 39 3             "arpgate",
@@ -9976,7 +10205,31 @@ public class ASMHydrasynth extends Synth
     8094,           // 3f 1e            "voicerandomphase",
     8143,           // 3f 4f            "voicewarmmode",
     8137,           // 3f 49            "voicevibratobpmsync",
-    8117,			// 3f 35			"voicesnap",
+    8117,                       // 3f 35                        "voicesnap",
+    
+    /// New 2.0.0 Parameters
+    14464,           // 71 00                    "voicesustain",
+    8128,            // 3f 40                    "osc1bitreduction",                  
+    8128,            // 3f 40                    "osc2bitreduction",                  
+    8128,            // 3f 40                    "osc3bitreduction",                  
+    14465,           // 71 01                   "voice1modulation",                  
+    14466,           // 71 02                       "voice2modulation",                  
+    14467,           // 71 03                       "voice3modulation",                  
+    14468,           // 71 04                       "voice4modulation",                  
+    14469,           // 71 05                       "voice5modulation",                  
+    14470,           // 71 05                       "voice6modulation",                  
+    14471,           // 71 06                       "voice7modulation",                  
+    14472,           // 71 06                       "voice8modulation",                  
+    14481,           // 71 11                   "env1quantize",                  
+    14482,           // 71 12                   "env2quantize",                  
+    14483,           // 71 13                   "env3quantize",                  
+    14484,           // 71 14                   "env4quantize",                  
+    14485,           // 71 15                   "env5quantize",                  
+    14486,           // 71 16                   "lfo1quantize",                  
+    14487,           // 71 17                   "lfo2quantize",                  
+    14488,           // 71 18                   "lfo3quantize",                  
+    14489,           // 71 19                   "lfo4quantize",                  
+    14490,           // 71 1a                   "lfo5quantize",                  
     };
         
     // This is a list of each parameter that corresponds to a CC, for all 128 CC values.
@@ -10114,6 +10367,23 @@ public class ASMHydrasynth extends Synth
     "--",                           // 0x7F         (Poly Mode)
     };
     
+    public boolean testVerify(Synth synth2, String key, Object obj1, Object obj2)
+        {
+        // Lots of parameters are stuffed into the same space and so will fail verification.
+        
+        return (key.endsWith("oscsync") ||      
+            key.endsWith("fmlin") ||
+            key.endsWith("param1") ||
+            key.endsWith("param2") ||
+            key.endsWith("param3") ||
+            key.endsWith("param4") ||
+            key.endsWith("param5") ||
+            key.endsWith("loop") ||
+            key.endsWith("syncon") ||
+            key.endsWith("syncoff") ||
+            key.endsWith("name"));
+        }
+
     }
     
     

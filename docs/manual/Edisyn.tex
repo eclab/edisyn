@@ -516,7 +516,9 @@ Nudge is a slow and fine-grained process.  If you'd like something more real-tim
 \item Do Mix Again.  Perform the same random mix as last time.  You can choose this (it has a menu shortcut) from any panel in the editor, not just the Librarian.  This allows you to try a mix, then repeatedly try new ones with the shortcut until you find one you like.
 \end{itemize}
 
-\paragraph{Hill-Climb}  Hill-Climbing repeatedly presents you with sixteen sounds and asks you to choose your top three preferred ones.  Once you have selected the three best, it performs various recombinations and mutations on those sounds to prefer sixteen new ones and the process repeats again.  The idea is for your preferences to guide the hill-climber as it wanders through the space of synth parameters until it lands on something you really like.\footnote{If you're technically inclined, this is basically an evolution strategy (ES) with an elitism of 1 and a biased mutation procedure.  If you'd like to learn more about evolutionary computation methods, google for the free online book {\it Essentials of Metaheuristics} by me.}  For more on the Hill-Climber, see Section \ref{hillclimb}.
+\paragraph{Remix Bank}  This option is available in the Librarian (Section~\ref{librarian}): it does bulk remixing.  Here, you select a bank (by selecting a patch or patch range in it).  Then Edisyn will fill the entire Scratch Bank with remixes built from the bank you have selected.  Each remix is built by selecting four patches at random from your selected bank, and then performing Mix Medium Bias on them in an arbitrary order.
+
+\paragraph{Hill-Climb and Constrict}  The {\it Hill-Climber} repeatedly presents you with sixteen sounds and asks you to choose your top one, two, or three preferred ones.  Once you have selected up to the three best, it performs various recombinations and mutations on those sounds to prefer sixteen new ones and the process repeats again.  The idea is for your preferences to guide the hill-climber as it wanders through the space of patches until it lands on something you really like.\footnote{If you're technically inclined, this is basically an evolution strategy (ES) with an elitism of 1 and a biased mutation procedure.  If you'd like to learn more about evolutionary computation methods, google for the free online book {\it Essentials of Metaheuristics} by me.}  A variation called the {\it Constrictor} starts with high-quality patches of your choosing, mixes and matches them, asks you to weed out the ones you don't like, then repeats.  Little by little it whittles down the region of patches until it constricts to a single patch. For more on the Hill-Climber and Constrictor, see Section \ref{hillclimb}.
 
 \paragraph{Morph}  Morphing interpolates in real-time between four different patches.  It's similar to nudge in certain respects, but is more interactive.  The big difference is that Nudge always moves the patch directly towards or away from a single patch (of four); but Morph changes the patch based on its relative distance to up to four patches in combination.   For more on the Morph tool, see Section \ref{morph}.
 
@@ -541,8 +543,6 @@ A very few parameters, such as the patch name, can't be mutated no matter what: 
 Once you're done choosing parameters to mutate or recombine, just select {\bf Stop Editing Mutable Parameters} in the {\bf Edit} menu.  You can save your mutable parameter choices to a file: select {\bf Save Mutable Parameters...} in the {\bf Edit} menu.  You can also reload previously-saved choices with {\bf Load Mutable Parameters...}.
 
 If you make a new patch editor with one of the {\bf New...} menu options, it will not have the same mutable parameter choices as your current editor: rather the parameters will all be reset to mutable.\footnote{It used to be that mutable parameter choices were stored in preferences and thus were persistent even if you quit and restarted Edisyn.  Unfortunately saving many things into preferences can be {\it extremely slow} in Java, particularly on the Mac.  It just isn't feasible any more.  Instead you can load and save choices, which I realize is inconvenient, though it does let you store many different options.} However if you instead select {\bf Duplicate Synth}, the current parameter choices will be copied.
-
-\bump
 
 \subsection{Morphing}
 \label{morph}
@@ -608,6 +608,14 @@ You can turn off automatic test notes by turning off {\bf Send Test Notes} or by
 
 
 
+\begin{wrapfigure}{r}{3.6in}
+\vspace{-2em}\includegraphics[scale=0.27]{HillClimbPanel.png}
+\vspace{-3em}
+\caption{The Hill-Climber Panel}
+\vspace{-2em}
+\label{hcpanel}
+\end{wrapfigure}
+
 \subsection{Hill-Climbing}
 \label{hillclimb}
 
@@ -616,14 +624,6 @@ Edisyn's {\it Hill-Climber} is another of its patch-exploration tools.  You sele
 In the Hill-Climber tab, make sure that the ``Method'' combobox is set to {\it Hill-Climb}: for other methods, see the Constrictor Section~(\ref{constrict}).
 
 Edisyn's Hill-Climber repeatedly offers you sixteen new versions of patches and asks you to choose your top three preferences.  After you have chosen them, the Hill-Climber will try to build a new set of sounds whose parameters are similar to your choices in various ways.  The Hill-Climber builds new sounds by recombining your top three sound choices in certain ways and adding some degree of noise (mutation) to them.   If you're lucky, Edisyn will head towards regions of the synthesizer's parameter space which make sounds you like.  {\bf Hint:  You will have more success with the hill-climber if you restrict the parameters being mutated to just those you want to explore.}  Different kinds of synthesizers will also benefit from different amounts of exploration (mutation and recombination) rates.  You'll need to tweak those as necessary.
-
-\begin{wrapfigure}{r}{3.6in}
-\vspace{-2em}\includegraphics[scale=0.27]{HillClimbPanel.png}
-\vspace{-3em}
-\caption{The Hill-Climber Panel}
-\vspace{-2em}
-\label{hcpanel}
-\end{wrapfigure}
 
 \paragraph{Candidates} This region holds the current candidate patches. When you start up the Hill-Climber, it will begin playing each candidate patch in turn.  If you don't want Edisyn to play automatically, you can turn it off by choosing {\bf Send Test Notes...} in the {\bf MIDI} menu.  (And you can prevent Edisyn from always starting automatic play when you enter the Hill-Climber by deselecting {\bf Morph/Hill-Climb Send Test Notes} in the {\bf Options} menu).  Either way, you can manually play a patch by pressing its {\bf Play} button, or by typing the key located on that button.   You can also choose which three patches you like best (in order).
 
@@ -653,20 +653,20 @@ All the patches can be played by pressing their associated letter.  But addition
 
 \paragraph{\color{red}Hint} Some parameters dominate how a patch sounds, and not in a good way.  On the Yamaha DX7, mutating the Pitch Envelope, per-operator Fixed Frequency, and per-operator Detune will have bad effects on a sound.  On the Oberheim Matrix 6/6R/1000, it makes no sense to allow mutation to change the overall VCA1 Volume of the sound.   Pruning certain parameters so that they cannot be mutated by the Hill-Climber will reduce the amount of junk you have to listen to, and greatly improve your hill-climbing experience. See Section~\ref{restriction} (Restricting Exploration to Only Certain Parameters) to understand how to do this.
 
-\begin{wrapfigure}{r}{3.6in}
-\vspace{-4.5em}\includegraphics[scale=0.27]{ConstrictorPanel.png}
-\vspace{-3em}
-\caption{The Hill-Climber Panel converted for Constricting.}
-\vspace{-2em}
-\label{constrictorpanel}
-\end{wrapfigure}
-
 \subsection{Constricting}
 \label{constrict}
 
 The {\it Constrictor} is similar to the Hill-Climber in many ways, yet its dynamics and behavior are quite different.   You choose the Constrictor in the same way as the Hill-Climber: by choosing {\bf Hill-Climb} in the {\bf Edit} menu.  But then in the Hill-Climb tab, change the ``Method'' combobox to {\it Constrictor}.    
 
 The Constrictor auditions patches to you in exactly the same way was the Hill-Climber.  But you're not given the option of choosing your top three choices.  Instead, you're asked to choose which patches you {\it don't like}.  This is done by deselecting their checkboxes.  Afterwards, you click on the {\bf Constrict} button and those patches will be replaced with recombined and mutated versions of the remaining patches.  The newly recombined replacements will be moved to the front of the Candidates so you hear them first.
+
+\begin{wrapfigure}{r}{3.6in}
+\vspace{-1em}\includegraphics[scale=0.27]{ConstrictorPanel.png}
+\vspace{-3em}
+\caption{The Hill-Climber Panel converted for Constricting.}
+\vspace{-2em}
+\label{constrictorpanel}
+\end{wrapfigure}
 
 The idea behind the Constrictor is to start with a set of varied but high-quality patches\,---\,derived from well-vetted factory patches for example.  Think of these patches as the outer boundaries of a large region of the space.  As you delete patch sounds you don't like, this region slowly begins to collapse, until ultimately it converges to a single patch.
 
@@ -981,7 +981,7 @@ Usually you do this by selecting one of the {\bf Download...} options in the Lib
 
 While the patches are loading, the window will say {DOWNLOADING}.  If you need to prematurely stop downloading, just click on the {\bf Stop Download} button in the Librarian.  Alternatively you can select {\bf Stop Downloading Batch} from the {\bf File} menu.
 
-{\color{red}\bf Downloading from a Synthesizer is often quite slow.}  I'd suggest downloading your whole synthesizer once and saving it as a file, which would make things easier to edit in the future.
+{\color{red}\bf Individual downloading from a synthesizer is often quite slow} because many synths take a long time to switch to new patches and download them one at a time.  I'd suggest downloading your whole synthesizer once and saving it as a file, which would make things easier to edit in the future.
 
 \paragraph{Fast Downloading}
 
@@ -1034,7 +1034,7 @@ If you drag patches from one Librarian into another, you have affected {\it two 
 
 \paragraph{Setting Bank Names}  A very small set of synthesizers (currently just the Yamaha FB-01) allow you to change the name of the bank.  You can do this by triple-clicking on the current bank name (the column header).
 
-\paragraph{Exploration Tools} If you have selected a group of patches, you can route them to be Nudge targets, Morph targets, or the initial values of the Hill-Climber by choosing {\bf To Nudge Targets}, {\bf To Morph Targets}, or {\bf To Hill-Climber} respectively.   The Librarian also has its own unique exploration tool, {\bf mixing}, which lets you blend a potentially large number of patches into one single patch.  See the {\bf Mix} paragraph in Section~\ref{explorationtools} for discussion of this.
+\paragraph{Exploration Tools} If you have selected a group of patches, you can route them to be Nudge targets, Morph targets, or the initial values of the Hill-Climber by choosing {\bf To Nudge Targets}, {\bf To Morph Targets}, or {\bf To Hill-Climber} respectively.     Sending a set of patches to the Hill-Climber is particularly useful as a start for the Constrictor variation.  The Librarian also has its own unique exploration tool, {\bf mixing}, which lets you blend a potentially large number of patches into one single patch or a bank of patches.  See the {\bf Mix} and {\bf Remix Banks} paragraphs in Section~\ref{explorationtools} for discussion of this.
 
 \subsection{Saving to Disk and Writing to Your Synthesizer} 
 
@@ -1114,8 +1114,8 @@ Waldorf Blofeld&{\cm}*&{\cm}*&{\cm}&{\cm}*&{\cm}&{\cm}& & & {\cm}            \\
 Waldorf Kyra&{\cm}&{\cm}&{\cm}*&{\cm}*&{\cm}*&{\cm*}& & & {\cm}*            \\
 Waldorf Pulse 2&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}& & &{\cm}\\
 Waldorf Rocket&{\cm}&{\cm}& &{\cm}*&{\cm}*& & & &           \\
-Yamaha DX7&{\cm}&{\cm}& & & & &  & &{\cm}            \\
-Yamaha 4-Op&{\cm}*& &{\cm}&{\cm}&{\cm} & &  & &{\cm}*            \\
+Yamaha DX7 Family&{\cm}&{\cm}&{\cm}*&{\cm} & & &  & &{\cm}            \\
+Yamaha 4-Op Family&{\cm}*& &{\cm}&{\cm}&{\cm} & &  & &{\cm}*            \\
 Yamaha FB-01&{\cm}*& &{\cm}&{\cm}&{\cm}&{\cm}*&  & {\cm}&{\cm}*            \\
 Yamaha FS1R&{\cm}&{\cm}&{\cm}&{\cm}& &{\cm}& & &{\cm}            \\
 Yamaha TG33/SY22/SY35&{\cm}*& &{\cm}&{\cm}&{\cm}& &  & &{\cm}            \\
@@ -1128,8 +1128,6 @@ Yamaha TG33/SY22/SY35&{\cm}*& &{\cm}&{\cm}&{\cm}& &  & &{\cm}            \\
 \caption{Patch Editor Capabilities}
 \label{patcheditorcapabilities}
 \end{table}
-
-\bump 
 
 \section{Building a Patch Editor}
 

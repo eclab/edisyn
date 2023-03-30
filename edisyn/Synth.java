@@ -6816,11 +6816,16 @@ public abstract class Synth extends JComponent implements Updatable
     void doSaveText()
         {
         FileDialog fd = new FileDialog((Frame)(SwingUtilities.getRoot(this)), "Write Patch to Text File...", FileDialog.SAVE);
-                
+    	
+    	String str = "Untitled.txt";
         if (getPatchName(getModel()) != null)
-            fd.setFile(StringUtility.reviseFileName(getPatchName(getModel()).trim() + ".txt"));
-        else
-            fd.setFile(StringUtility.reviseFileName("Untitled.txt"));
+        	{
+        	str = getPatchName(getModel()).trim() + ".txt";
+        	if (str.equals(".txt")) str = "Untitled.txt";
+        	}
+
+			fd.setFile(StringUtility.reviseFileName(str));
+
         String path = getLastDirectory();
         if (path != null)
             fd.setDirectory(path);

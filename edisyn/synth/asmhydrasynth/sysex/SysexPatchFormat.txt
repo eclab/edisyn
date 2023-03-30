@@ -28,8 +28,8 @@ Category (byte 8), whose "MSB" space is used by the Patch Name Start.  Color
 may be a similar parameter, it's not quite clear.  Also see byte 470, 
 which uses bitpacking to stuff both Warm Mode and Snap into the same byte.
 
-For the ranges of these parameters, see the NRPN spreadsheet (not ASM's
-tables).
+For the ranges of parameters, see the NRPN spreadsheet (not ASM's table).  
+https://github.com/eclab/edisyn/tree/master/edisyn/synth/asmhydrasynth/info
 
 There are regions whose purpose or value is unknown an are marked either
 as UNKNOWN or as UNKNOWN START ... UNKNOWN END.

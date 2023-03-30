@@ -48,6 +48,7 @@ ALTERNATIVE INVALID ENCODINGS
 
 The Hydrasynth appears to have an additional sysex encoding scheme emitted
 when you select "Send Patch" or "Send Bank" on the Hydrasynth front panel.
+The message is a single large message rather than a stream of smaller ones.
 They are meant, I think, to dump data from one Hydrasynth to another over
 5-Pin DIN MIDI and that's it.  I think it is possible that "Send Patch" 
 may send to current memory rather than to a patch slot, which would be nice 

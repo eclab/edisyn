@@ -2428,7 +2428,7 @@ BYTE    HEX     INFO
 2375    947     
 2376    948     Env 4 Trig Source 4
 2377    949     
-2378    94A     
+2378    94A     UNKNOWN 
 2379    94B     
 2380    94C     Env 5 Trig Source 1
 2381    94D     

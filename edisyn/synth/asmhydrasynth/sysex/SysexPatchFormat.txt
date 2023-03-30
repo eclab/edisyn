@@ -14,16 +14,19 @@ It appears that the first eight bytes are NOT part of the patch, but
 rather are metadata.
 
 Most parameters are set up to consume two bytes.  When the parameter
-is less than 8 bits, it uses the even byte position.  When the parameter
-requires more than 8 bits, the even byte position defines the 8-bit LSB
-of the parameter and the (following) odd byte position defines the 8-bit
-MSB of the parameter.
+is less than 8 bits, it uses the even byte position.  However if such a
+parameter represents a negative value, then it is sign-extended into the
+second byte (that is, it should be treated as a two-byte negative number).
+When the parameter requires more than 8 bits, the even byte position 
+defines the 8-bit LSB of the parameter and the (following) odd byte 
+position defines the 8-bit MSB of the parameter.
 
 Strings are one byte per character, and may take up and odd amount of space 
 (see the apparently 17-byte Macro Name space for example).  A few parameters 
-seem to be crammed into single byte, such as Category (byte 8), whose "MSB"
-space is used by the Patch Name Start.  Also see byte 470, which uses 
-bitpacking to stuff both Warm Mode and Snap into the same byte.
+seem to be crammed into single byte with no additional byte, such as 
+Category (byte 8), whose "MSB" space is used by the Patch Name Start.  Color
+may be a similar parameter, it's not quite clear.  Also see byte 470, 
+which uses bitpacking to stuff both Warm Mode and Snap into the same byte.
 
 For the ranges of these parameters, see the NRPN spreadsheet (not ASM's
 tables).

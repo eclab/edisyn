@@ -182,7 +182,7 @@ These editors require an unusual quirk of MIDI sysex which is not properly suppo
 
 I have reports of Java crashing on Windows if you set Edisyn's "Receive From" or "Send To" devices to the same device as the "Controller" or "Controller 2" devices.  So don't do that: there is never a need to do so.  If you don't have a dedicated controller, you should leave the "Controller" and "Controller 2" devices blank.
 
-I have occasionally seen hard crashing/hanging on Windows if the USB MIDI device is disconnected while Edisyn is attempting to communicateover MIDI.  It appears to be a Windows driver issue.  So don't do that.
+I have occasionally seen hard crashing/hanging on Windows if the USB MIDI device is disconnected while Edisyn is attempting to communicate over MIDI.  It appears to be a Windows driver issue.  So don't do that.
 
 I have had at least one report that Java 8 on Windows has serious problems with some Edisyn patch editors (probably memory).  Install something newer.
 
@@ -199,7 +199,7 @@ Java doesn't handle high-resolution displays properly in Windows, especially Win
 
 #### Java Preference Problems
 
-Edisyn makes heavy use of Java preferences to store persistence information: what menu option you chose last time, what should be the default synth editor to pop up, and so on.  However there is a longstanding Java/Windows bug which makes Java preferences not work out of the box in Windows for earlier versions of Java.  I think this is fixed as of Java 11 but you should check and let me know.
+Edisyn makes heavy use of Java preferences to store persistant information: what menu option you chose last time, what should be the default synth editor to pop up, and so on.  However there is a longstanding Java/Windows bug which makes Java preferences not work out of the box in Windows for earlier versions of Java.  I think this is fixed as of Java 11 but you should check and let me know.
 
 #### Incorrect Jar Linkage to Java
 

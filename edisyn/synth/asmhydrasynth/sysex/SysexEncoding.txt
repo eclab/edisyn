@@ -65,7 +65,9 @@ And "Send Bank" looks like this:
 These are impermissable because F0 01 is Sequential's sysex namespace,
 and F0 02 is Big Briar's sysex namespace (I believe that this namespace
 is now controlled by Moog but I'm not certain).  I have not investigated
-the DATA... further for these kinds of messages.
+the DATA... further for these kinds of messages except to say that they do
+not appear to contain the patch string and seem to be an entirely different
+encoding at first glance.
 
 
 

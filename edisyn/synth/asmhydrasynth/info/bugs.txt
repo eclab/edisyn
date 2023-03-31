@@ -2,8 +2,8 @@ KNOWN BUGS
 
 These are bugs, errors, and misfeatures that I have identified and 
 reported to ASM as of March, 2023, Hydrasynth firmware version 1.5.5.  
-I am not aware of any of them having been fixed in 1.5.5.  I do not
-know if any have been fixed in 2.0.0.
+Some 2.0.0-specific bugs are noted as well.  I am not aware of any 
+of them having been fixed yet, but am not certain.
 
 
 Note that many of these errors concern NRPN, parameter display, and 
@@ -329,17 +329,18 @@ function, rather than is a patch parameter proper.
 
 If you attempt to initialize a macro slot which is already initialized and empty, initializing will instead mistakenly try to initialize the entire patch.
 
-22. NO BACKSTOP
+22. NO BACKSTOP (2.0.0)
 
 Vibrato amount is supposed to emit NRPN values from 0 to 120: but it only
 emits values from 13 to 120.
 
-23. BROKEN VOICE MODULATION NRPN
+23. BROKEN VOICE MODULATION, LFO QUANTIZE, AND ENV QUANTIZE NRPN (2.0.0)
 
 The Hydrasynth multiplies values by 8 when outputting voice modulation NRPN, but
-does not divide them by 8 when inputting them from NRPN.
+does not divide them by 8 when inputting them from NRPN.  The exact same
+goes for LFO Quantize and ENV Quantize.
 
-24. BROKEN SUSTAIN NRPN
+24. BROKEN SUSTAIN NRPN (2.0.0)
 
 Sustain NRPN is outputted but ignored on input by the Hydrasynth.
 

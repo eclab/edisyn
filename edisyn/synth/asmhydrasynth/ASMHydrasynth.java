@@ -5443,9 +5443,9 @@ public class ASMHydrasynth extends Synth
         // Fill in header
         data[0] = (byte) 0x06;          // save to RAM
         data[1] = (byte) 0x00;
-        data[2] = (byte) model.get("bank");
-        data[3] = (byte) model.get("number");
-        data[4] = (byte) VERSION_1_5_5;         // 1.5.5.  Change to 0xC8 for 2.0.0
+        data[2] = (byte) tempModel.get("bank");
+        data[3] = (byte) tempModel.get("number");
+        data[4] = (byte) VERSION_2_0_0;         // 1.5.5.  Change to 0xC8 for 2.0.0
         data[5] = (byte) 0x00;
         data[6] = (byte) 0x00;
         data[7] = (byte) 0x00;
@@ -5853,17 +5853,14 @@ public class ASMHydrasynth extends Synth
         
         byte[][] outgoing = Encode.encodePatch(data);
                 
-        Object[] sysex = new byte[outgoing.length + 2][];
+        Object[] sysex = new byte[outgoing.length + 3][];
         sysex[0] = Encode.encodePayload(new byte[] { (byte)0x18, (byte)0x00 });         // header
         for(int i = 0; i < outgoing.length; i++)                // patch chunks
             {
             sysex[i + 1] = outgoing[i];
             }
+        sysex[sysex.length - 2] = Encode.encodePayload(new byte[] { (byte)0x14, (byte)0x00 });          // save request
         sysex[sysex.length - 1] = Encode.encodePayload(new byte[] { (byte)0x1A, (byte)0x00 });          // footer
-                        
-        //// FIXME Don't know if we need to add the Reset Requests,
-        //// at the moment, just adding the header and footer
-                
         return sysex;
         }
 
@@ -5896,9 +5893,13 @@ public class ASMHydrasynth extends Synth
 
     public int parse(byte[] data, boolean fromFile)
         {
-        if (fromFile)
+        byte[][] cut = cutUpSysex(data);
+		if (cut.length == 1)
+			{
+            return parseSub(data, fromFile);
+			}
+		else
             {
-            byte[][] cut = cutUpSysex(data);
             incomingPos = 0;
             incoming = new byte[22][];
             for(int i = 0; i < cut.length; i++)
@@ -5910,11 +5911,6 @@ public class ASMHydrasynth extends Synth
                     return PARSE_FAILED;
                 }
             return PARSE_FAILED;
-            }
-        else
-            {
-//            new Throwable().printStackTrace();
-            return parseSub(data, fromFile);
             }
         }
         
@@ -6880,6 +6876,9 @@ public class ASMHydrasynth extends Synth
     // Change Patch can get stomped if we do a request immediately afterwards
     public int getPauseAfterChangePatch() { return 200; }
 
+	public int getPauseAfterWritePatch() { return 2700; }	// this is an incredible number
+
+	public int getPauseBetweenPatchWrites() { return 1500; }	// also very bad
 
     public void changePatch(Model tempModel)
         {

@@ -320,7 +320,7 @@ https://github.com/eclab/edisyn/blob/master/edisyn/synth/asmhydrasynth/sysex/Sys
 ->		- A Chunk Acknowledgment 
 			17 00 CHUNK 16
 		
-->	6. A Reset Request?
+->	6. A Write Request?
 		14 00
 		
 <-	7. A Bank Change In Response
@@ -330,7 +330,7 @@ https://github.com/eclab/edisyn/blob/master/edisyn/synth/asmhydrasynth/sysex/Sys
 ->	8. A Program Change In Response
 		Program Change 
 		
-<-	9. A Reset Response?
+<-	9. A Write Request Response?
 		15 00
 
 <-	10. A Sustain Pedal Release
@@ -342,6 +342,8 @@ https://github.com/eclab/edisyn/blob/master/edisyn/synth/asmhydrasynth/sysex/Sys
 <-	12. A Footer Response
 		1B 00
 	
+	
+It seems that without the Write Request, the patch isn't written to RAM.
 
 
 For example, writing Sawpressive GD to Bank E Patch 128:

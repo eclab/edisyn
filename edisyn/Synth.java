@@ -826,7 +826,8 @@ public abstract class Synth extends JComponent implements Updatable
     public static int PARSE_SUCCEEDED = 2;
     public static int PARSE_SUCCEEDED_UNTITLED = 3;
     public static int PARSE_CANCELLED = 4;
-    static int PARSE_ERROR = 5;         // note not public
+    public static int PARSE_IGNORE = 5;
+    static int PARSE_ERROR = 6;         // Internal error.  Note not public
     
     /** Updates the model to reflect the following sysex patch dump for your synthesizer type.
         FROMFILE indicates that the parse is from a sysex file.
@@ -842,6 +843,7 @@ public abstract class Synth extends JComponent implements Updatable
         filename (not patch name, *filename*) should be untitled.  For example, the DX7 can alternatively load bank-sysex
         patches and extract a patch from the bank; in this case the patch filename should not
         be the bank sysex filename.
+        - PARSE_IGNORE indicates that the message was useless and should have been ignored
 
         IMPORTANT NOTE.  While parse(...) has been called, sendMIDI has been switched
         OFF so you can update widgets without them sending out MIDI updates.  However it
@@ -1141,6 +1143,11 @@ public abstract class Synth extends JComponent implements Updatable
         The default is to be the same as getPauseAfterSendAllParameters(); */
     public int getPauseAfterWritePatch() { return getPauseAfterSendAllParameters(); }
 
+    /** Override this to make sure that the given additional time (in ms) has transpired after writing a patch when emitting a series
+    	of patches with no following change patch.  The default is the same as getPauseAfterWritePatch(),
+    	that is, the same as getPauseAfterSendAllParameters(); */
+    public int getPauseBetweenPatchWrites() { return getPauseAfterWritePatch(); }
+
     /** Override this to make sure that the given additional time (in ms) has transpired after receiving a 
         requested patch before we request a second patch (without a change patch command).  
         The default is to be the same as getPauseAfterChangePatch(); */
@@ -1369,6 +1376,8 @@ public abstract class Synth extends JComponent implements Updatable
             }
         finally
             {
+            /// FIXME: we're updating listeners and repainting even if we're doing batch downloads 
+            
             if (val != PARSE_CANCELLED && val != PARSE_INCOMPLETE)
                 {
                 model.setUpdateListeners(previous);
@@ -1566,7 +1575,7 @@ public abstract class Synth extends JComponent implements Updatable
                                             Synth.handleException(ex);
                                             // result is now PARSE_ERROR
                                             }
-                        
+                                                                    
                                         // If we're in the librarian, and we're not auto-downloading the patch, and we received a patch,
                                         // we want to just load it into the librarian. For example, if the synth is engaged in a multi-patch
                                         // patch dump to us, we want to load it properly.  So we need to handle it here. One item we need to make
@@ -1591,29 +1600,37 @@ public abstract class Synth extends JComponent implements Updatable
                                                 if (!backupDoneForParse) { undo.push(backup); backupDoneForParse = true; } 
                                                 }
 
-                                            incomingPatch = (result == PARSE_SUCCEEDED || result == PARSE_SUCCEEDED_UNTITLED);
-                                            if (incomingPatch)
+                                            incomingPatch = (incomingPatch || result == PARSE_SUCCEEDED || result == PARSE_SUCCEEDED_UNTITLED);
+                                           	if (result == PARSE_CANCELLED)
                                                 {
-                                                backupDoneForParse = false;         // reset
-                                                }
-                                            else if (result == PARSE_CANCELLED)
-                                                {
+												incomingPatch = false;
                                                 backupDoneForParse = false;         // reset
                                                 // nothing
                                                 }
                                             else if (result == PARSE_FAILED)
                                                 {
+												incomingPatch = false;
                                                 backupDoneForParse = false;         // reset
                                                 showSimpleError("Receive Error", "Could not read the patch.");
                                                 }
                                             else if (result == PARSE_ERROR)
                                                 {
+												incomingPatch = false;
                                                 backupDoneForParse = false;         // reset
                                                 showSimpleError("Receive Error", "An error occurred on reading the patch.");
                                                 }
+                                            else if (result == PARSE_IGNORE)
+                                                {
+                                                backupDoneForParse = false;         // reset
+                                                // nothing
+                                                }
+ 											else if (incomingPatch)
+                                                {
+                                                backupDoneForParse = false;         // reset
+                                                }
 
                                             setSendMIDI(originalMIDI);
-                                            if (getSendsParametersAfterNonMergeParse() && !isBatchDownloading() && incomingPatch)
+                                            if (getSendsParametersAfterNonMergeParse() && !isBatchDownloading() && incomingPatch && !(result != PARSE_IGNORE))
                                                 {
                                                 simplePause(getPauseAfterReceivePatch());
                                                 sendAllParameters();
@@ -8225,7 +8242,7 @@ public abstract class Synth extends JComponent implements Updatable
         final int[] index = new int[] { 0 };
         final boolean[] invalid = new boolean[] { false };
         final javax.swing.Timer[] timer = new javax.swing.Timer[1];
-        final int pause = (synth == null ? DEFAULT_BULK_WRITE_PAUSE : synth.getPauseAfterWritePatch() + 1);
+        final int pause = (synth == null ? DEFAULT_BULK_WRITE_PAUSE : synth.getPauseBetweenPatchWrites() + 1);
                 
         final long time = System.currentTimeMillis();
         timer[0] = new javax.swing.Timer(pause, new ActionListener()
@@ -8983,6 +9000,8 @@ public abstract class Synth extends JComponent implements Updatable
                     {
                     if (incomingPatch)
                         {
+                        incomingPatch = false;
+                        
                         if (patchLocationEquals(getModel(), currentPatch))
                             {
                             batchDownloadFailureCountdown = getBatchDownloadFailureCountdown();

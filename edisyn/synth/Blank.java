@@ -190,6 +190,9 @@ public class Blank extends Synth
         // and you may not have received all of them in this data dump.  You should in this case
         // return PARSE_INCOMPLETE, and only return PARSE_SUCCEEDED when all the messages have
         // arrived sufficient to declare the model finished.
+        // - PARSE_IGNORE if the data wholely contains sysex messages that serve no purpose.
+        // In some cases (such as the ASM Hydrasynth) these messages cannot be easily filtered
+        // out at the recognition stage.
         //
         // IMPORTANT NOTE.  While parse(...) has been called, sendMIDI has been switched
         // OFF so you can update widgets without them sending out MIDI updates.  However it
@@ -656,9 +659,18 @@ public class Blank extends Synth
     public int getPauseAfterWritePatch()
         {
         // Some synths need extra time to process a write-patch before 
-        // anything else, notably a follow-up change-patch request.  
+        // a follow-up change-patch request.  
         // The default is to return getPauseAfterSendAllParameters();
         return super.getPauseAfterWritePatch();
+        }
+        
+    public int getPauseBetweenPatchWrites()
+        {
+        // Some synths need extra time to process a write-patch before 
+        // writing a second patch (with no change patch request).  
+        // The default is to return getPauseAfterWritePatch()
+        // which in turn has a default of getPauseAfterSendAllParameters()
+        return super.getPauseBetweenPatchWrites();
         }
         
     public int getPauseAfterSendAllParameters() 

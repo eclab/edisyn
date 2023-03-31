@@ -784,7 +784,7 @@ public class Library extends AbstractTableModel
 
                 if (!toFile)
                     {
-                    int pause = synth.getPauseAfterWritePatch();
+                    int pause = synth.getPauseBetweenPatchWrites();
                     if (pause > 0) 
                         {
                         Object[] newObjs = new Object[objs.length + 1];

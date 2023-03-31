@@ -327,7 +327,8 @@ function, rather than is a patch parameter proper.
 
 21. MACRO INITIALIZATION
 
-If you attempt to initialize a macro slot which is already initialized and empty, initializing will instead mistakenly try to initialize the entire patch.
+If you attempt to initialize a macro slot which is already initialized and 
+empty, initializing will instead mistakenly try to initialize the entire patch.
 
 22. NO BACKSTOP (2.0.0)
 
@@ -344,3 +345,9 @@ goes for LFO Quantize and ENV Quantize.
 
 Sustain NRPN is outputted but ignored on input by the Hydrasynth.
 
+25. ASSORTED NRPN BUGS
+
+Many additional NRPN parameters have errors.  Search for "BUG:" or "Bug:" or
+whatnot here:
+
+https://github.com/eclab/edisyn/blob/master/edisyn/synth/asmhydrasynth/info/nrpn.pdf

@@ -1217,24 +1217,29 @@ public class ASMHydrasynth extends Synth
         HBox hbox = new HBox();
         hbox.add(addNameGlobal(Style.COLOR_GLOBAL()));
         hbox.add(addVoice(Style.COLOR_B()));
-        hbox.addLast(addVibrato(Style.COLOR_C()));
+        hbox.addLast(addGlide(Style.COLOR_C()));
         vbox.add(hbox);
 
-        vbox.add(addOscillator(1, Style.COLOR_A()));
-        vbox.add(addOscillator(2, Style.COLOR_A()));
+        hbox = new HBox();
+        hbox.add(addOscillator(1, Style.COLOR_A()));
+        hbox.addLast(addRingMod(Style.COLOR_B()));
+        vbox.add(hbox);
+        
+        hbox = new HBox();
+        hbox.add(addOscillator(2, Style.COLOR_A()));
+        hbox.addLast(addNoise(Style.COLOR_B()));
+        vbox.add(hbox);
                 
         hbox = new HBox();
         hbox.add(addOscillator(3, Style.COLOR_A()));
-        hbox.add(addRingMod(Style.COLOR_B()));
-        hbox.add(addNoise(Style.COLOR_B()));
-        hbox.addLast(addGlide(Style.COLOR_C()));
+        hbox.addLast(addVibrato(Style.COLOR_B()));
         vbox.add(hbox);
                 
         vbox.add(addMixer(Style.COLOR_B()));
         
         hbox = new HBox();
-        hbox.add(addScale(Style.COLOR_C()));
-        hbox.addLast(addRibbon(Style.COLOR_C()));
+    	hbox.add(addVoiceModulation(Style.COLOR_A()));
+	    hbox.addLast(addRibbon(Style.COLOR_C()));
         vbox.add(hbox);
                 
         soundPanel.add(vbox, BorderLayout.CENTER);
@@ -1247,10 +1252,10 @@ public class ASMHydrasynth extends Synth
         vbox.add(addMutant(3, Style.COLOR_B()));
         vbox.add(addMutant(4, Style.COLOR_B()));
         vbox.add(addArp(Style.COLOR_C()));
-        vbox.add(addVoiceModulation(Style.COLOR_A()));
+        vbox.add(addScale(Style.COLOR_C()));
                 
         soundPanel.add(vbox, BorderLayout.CENTER);
-        addTab("Mutant Arp", soundPanel);
+        addTab("Mutant Arp Scale", soundPanel);
         
         soundPanel = new SynthPanel(this);
         vbox = new VBox();
@@ -1544,7 +1549,7 @@ public class ASMHydrasynth extends Synth
         return category;
         }
         
-        
+/*        
     public JComponent addOscillator(int osc, Color color)
         {
         Category category = new Category(this, "Oscillator " + osc, color);
@@ -1581,17 +1586,6 @@ public class ASMHydrasynth extends Synth
             };
         icons.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 
-/*
-  Box box = new Box(BoxLayout.Y_AXIS);
-  box.add(Box.createHorizontalGlue());
-  box.add(icons);
-
-  box.add(Box.createHorizontalGlue());
-                     
-  hbox.add(Strut.makeHorizontalStrut(8));
-  hbox.add(box);
-  hbox.add(Strut.makeHorizontalStrut(8));
-*/
         vbox = new VBox();
         vbox.add(icons);
                 
@@ -1599,11 +1593,6 @@ public class ASMHydrasynth extends Synth
             {
             comp = new CheckBox("Wavescan Mode", this, "osc" + osc + "mode");
             vbox.add(comp);
-            /*
-              params = OSC_MODES;
-              comp = new Chooser("Mode", this, "osc" + osc + "mode", params);
-              vbox.add(comp);
-            */
             }
         hbox.add(Strut.makeHorizontalStrut(8));
         hbox.add(vbox);
@@ -1658,7 +1647,141 @@ public class ASMHydrasynth extends Synth
         category.add(hbox, BorderLayout.CENTER);
         return category;
         }
+    */
 
+
+	JComponent pastMode = null;
+	
+    public JComponent addOscillator(final int osc, Color color)
+        {
+        Category category = new Category(this, "Oscillator " + osc, color);
+        category.makePasteable("osc");
+        category.makeDistributable("osc");
+
+        JComponent comp;
+        String[] params;
+        HBox hbox = new HBox();
+        
+        VBox vbox = new VBox();
+        
+        final HBox waveScanBox = new HBox();
+		comp = new LabelledDial("WaveScan", this, "osc" + osc + "wavscan", color, 0, 1024)
+			{
+			public String map(int value)
+				{
+				int v = value * 8;
+				// dividing 8192 by 117.03 roughly cuts into 70 pieces
+				return String.format("%1.1f", ((roundEven(v / 117.03) + 10) / 10.0));
+				}
+			};
+		waveScanBox.add(comp);
+		for(int i = 1; i <= 4; i++)
+			{
+			vbox = new VBox();
+			params = (i == 1 ? OSC_WAVES : OSC_WAVES_OFF_SILENCE);
+			comp = new Chooser("WaveScan Wave " + i, this, "osc" + osc + "wavscanwave" + i, params);
+			vbox.add(comp);
+
+			params = OSC_WAVES_OFF_SILENCE;
+			comp = new Chooser("WaveScan Wave " + (i + 4), this, "osc" + osc + "wavscanwave" + (i + 4), params);
+			vbox.add(comp);
+			waveScanBox.add(vbox);
+			}
+		
+
+        final HBox waveBox = new HBox();
+        comp = new LabelledDial("Wave", this, "osc" + osc + "type", color, 0, OSC_WAVES.length - 1, -1);
+        waveBox.add(comp);
+        vbox = new VBox();
+        params = OSC_WAVES;
+        comp = new Chooser("Wave", this, "osc" + osc + "type", params);
+        vbox.add(comp);
+        waveBox.add(vbox);
+        waveBox.add(Strut.makeHorizontalStrut(8));
+        vbox = new VBox();
+        IconDisplay icons = new IconDisplay(null, waves, this, "osc" + osc + "type", 110, 52)
+            {
+            public Dimension getPreferredSize()
+                {
+                Dimension d = super.getPreferredSize();
+                return new Dimension(d.width, d.height+2);              // compensate for border
+                }
+            };
+        icons.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+        vbox.add(icons);
+        waveBox.add(vbox);
+        waveBox.add(Strut.makeHorizontalStrut(8));
+        final VBox outerWaveBox = new VBox();
+        outerWaveBox.add(waveBox);
+        //if (osc != 3)
+        	{
+        	outerWaveBox.add(Strut.makeStrut(waveScanBox, false, true));
+        	}
+        
+        
+        
+        vbox = new VBox();
+        if (osc != 3)
+        	{
+        	params = OSC_MODES;
+			comp = new Chooser("Mode", this, "osc" + osc + "mode", params)
+				{
+				public void update(String key, Model model)
+					{
+					super.update(key, model);
+					if (osc != 3)
+						{
+						hbox.remove(outerWaveBox);
+						hbox.remove(waveScanBox);
+						if (model.get(key) == 0)	// wave
+							{
+							hbox.addLast(outerWaveBox);
+							}
+						else
+							{
+							hbox.addLast(waveScanBox);
+							}
+						hbox.revalidate();
+						hbox.repaint();
+						}
+					}
+				};
+        	pastMode = comp;
+			vbox.add(comp);
+			}
+
+		if (osc == 3)
+			{
+			vbox.add(Strut.makeStrut(pastMode, false, true));
+			}
+			
+        params = OSC_BIT_REDUCTIONS;
+        comp = new Chooser("Bit Reduction", this, "osc" + osc + "bitreduction", params);
+        model.setMetricMinMax("osc" + osc + "bitreduction", 0, OSC_BIT_REDUCTIONS.length - 1);
+        vbox.add(comp);
+        hbox.add(vbox);
+
+        comp = new LabelledDial("Semitones", this, "osc" + osc + "semi", color, -36, 36);
+        hbox.add(comp);
+
+        comp = new LabelledDial("Cents", this, "osc" + osc + "cent", color, -50, 50);
+        hbox.add(comp);
+
+        comp = new LabelledDial("Keytrack", this, "osc" + osc + "keytrack", color, 0, 200)      
+            {
+            public boolean isSymmetric() { return true; }
+            public String map(int value)
+                {
+                return "" + value + "%";
+                }
+            };
+        hbox.add(comp);
+        
+        hbox.add(outerWaveBox);
+        
+        category.add(hbox, BorderLayout.CENTER);
+        return category;
+        }
 
     /** Rounds d as usual to the nearest int, but with 0.5 rounded 
         towards the nearest even number rather than towards zero.  */
@@ -5272,139 +5395,11 @@ public class ASMHydrasynth extends Synth
         return buildNRPN(getChannelOut(), p, val);
         }
 
-    /*
-      public Object[] emitFake(Model tempModel, boolean toWorkingMemory, boolean toFile)
-      {
-      if (tempModel == null)
-      tempModel = getModel();
-
-      // load all the data, including the name
-
-      byte[] vals = new byte[
-      modeParameters.length * 2 + 
-      typeParameters.length * 2 + 
-      waveParameters.length * 2 + 
-      syncParameters.length * 2 + 
-      wavescanParameters.length * 2 + 
-      remainingParameters.length * 2 + 
-      16 +    // name
-      4 +     // category, color
-      8 * 8   // macros
-      ];
-        
-      int val;
-      int pos = 0;
-      for(int i = 0; i < modeParameters.length; i++)
-      {
-      val = (modeParameters[i].equals("--") ? 0 : model.get(modeParameters[i])) + 8192;
-      vals[pos++] = (byte)((val >>> 7) & 127);
-      vals[pos++] = (byte)(val & 127);
-      }
-
-      for(int i = 0; i < typeParameters.length; i++)
-      {
-      val = (typeParameters[i].equals("--") ? 0 : model.get(typeParameters[i])) + 8192;
-      vals[pos++] = (byte)((val >>> 7) & 127);
-      vals[pos++] = (byte)(val & 127);
-      }
-
-      for(int i = 0; i < waveParameters.length; i++)
-      {
-      val = (waveParameters[i].equals("--") ? 0 : model.get(waveParameters[i])) + 8192;
-      vals[pos++] = (byte)((val >>> 7) & 127);
-      vals[pos++] = (byte)(val & 127);
-      }
-
-      for(int i = 0; i < syncParameters.length; i++)
-      {
-      val = (syncParameters[i].equals("--") ? 0 : model.get(syncParameters[i])) + 8192;
-      vals[pos++] = (byte)((val >>> 7) & 127);
-      vals[pos++] = (byte)(val & 127);
-      }
-
-      for(int i = 0; i < wavescanParameters.length; i++)
-      {
-      val = (wavescanParameters[i].equals("--") ? 0 : model.get(wavescanParameters[i])) + 8192;
-      vals[pos++] = (byte)((val >>> 7) & 127);
-      vals[pos++] = (byte)(val & 127);
-      }
-        
-      for(int i = 0; i < remainingParameters.length; i++)
-      {
-      val = (remainingParameters[i].equals("--") ? 0 : model.get(remainingParameters[i])) + 8192;
-      vals[pos++] = (byte)((val >>> 7) & 127);
-      vals[pos++] = (byte)(val & 127);
-      }
-        
-      val = model.get("category") + 8192;
-      vals[pos++] = (byte)((val >>> 7) & 127);
-      vals[pos++] = (byte)(val & 127);
-
-      val = model.get("color") + 8192;
-      vals[pos++] = (byte)((val >>> 7) & 127);
-      vals[pos++] = (byte)(val & 127);
-        
-      char[] name = (model.get("name", "Untitled") + "                ").toCharArray();
-      for(int i = 0; i < 16; i++)
-      {
-      val = (int)(name[i]);
-      vals[pos++] = (byte)(val & 127);
-      }
-
-      for(int m = 1; m <= 8; m++)
-      {
-      name = (model.get("macro" + m + "name", "        ") + "        ").toCharArray();
-      for(int i = 0; i < 8; i++)
-      {
-      val = (int)(name[i]);
-      vals[pos++] = (byte)(val & 127);
-      }
-      }
-
-      final int HEADER = 20;
-
-      byte[] sysex = new byte[vals.length + HEADER + 1];
-      sysex[0] = (byte)0xF0;
-      sysex[1] = (byte)0x7D;
-      sysex[2] = (byte)'E';
-      sysex[3] = (byte)'D';
-      sysex[4] = (byte)'I';
-      sysex[5] = (byte)'S';
-      sysex[6] = (byte)'Y';
-      sysex[7] = (byte)'N';
-      sysex[8] = (byte)'-';
-      sysex[9] = (byte)'H';
-      sysex[10] = (byte)'Y';
-      sysex[11] = (byte)'D';
-      sysex[12] = (byte)'R';
-      sysex[13] = (byte)'A';
-      sysex[14] = (byte)'S';
-      sysex[15] = (byte)'Y';
-      sysex[16] = (byte)'N';
-      sysex[17] = (byte)'T';
-      sysex[18] = (byte)'H';
-      sysex[19] = (byte)0;            // sysex version
-        
-      System.arraycopy(vals, 0, sysex, HEADER, vals.length);
-      sysex[sysex.length - 1] = (byte)0xF7;
-      return sysex;
-      }
-    */
 
 
     void get1(String key, byte[] data, int pos)
         {
-        /*
-          if (model.getMin(key) < 0)      // signed two's complement doesn't matter
-          {
-          data[pos] = (byte)model.get(key);
-          }
-          else
-          {
-          data[pos] = (byte)model.get(key);
-          }
-        */
-        get2(key, data, pos);
+        get2(key, data, pos);		// gotta consider negative values with extension
         }
 
     void get2(String key, byte[] data, int pos)
@@ -6008,7 +6003,6 @@ public class ASMHydrasynth extends Synth
         }
 
 
-
     void set1(String key, byte[] data, int pos, int bit)
         {
         if (!model.exists(key)) System.err.println("KEY NOT FOUND: " + key);
@@ -6018,11 +6012,7 @@ public class ASMHydrasynth extends Synth
     void set1(String key, byte[] data, int pos)
         {
         if (!model.exists(key)) System.err.println("KEY NOT FOUND: " + key);
-        //System.err.println(key + "   " + data[pos+5]);
-        //if (key.equals("prefxtype"))
-        //      {
-        //      System.err.println(key + " " + model.getMin(key) + " " + model.getMax(key) + " " + data[pos]);
-        //      }
+
         if (key.equals("bank") || key.equals("number"))
         	{
             model.set(key, data[pos] & 0xFF);
@@ -6040,10 +6030,7 @@ public class ASMHydrasynth extends Synth
     void set2(String key, byte[] data, int pos)
         {
         if (!model.exists(key)) System.err.println("KEY NOT FOUND: " + key);
-        //if (key.equals("macro1panelvalue"))
-        //      {
-        //      System.err.println(key + " " + model.getMin(key) + " " + model.getMax(key) + " " + pos + " " + data[pos] + " " + data[pos + 1]);
-        //      }
+
         if (model.getMin(key) < 0)      // signed two's complement
             {
             model.set(key, (short)((data[pos] & 0xFF) | ((data[pos + 1] & 0xFF) << 8)));

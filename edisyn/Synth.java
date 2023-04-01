@@ -7952,8 +7952,8 @@ public abstract class Synth extends JComponent implements Updatable
                                                         
         // I think we should clear the librarian first
         int res = showMultiOption(this, new String[0], new JComponent[0], 
-            new String[] { "Clear", "Overwrite", "Cancel" }, 0, "Load Patches", 
-            new JLabel("<html>Clear all existing patches and write new ones,<br>or overwrite them only with non-empty new patches?<html>"));
+            new String[] { "Clear", "Fill", "Cancel" }, 0, "Load Patches", 
+            new JLabel("<html>Clear all existing patches and overwrite with new ones,<br>or only fill empty slots with new patches?<html>"));
         if (res < 0 || res == 2) return;
         
         if (res == 0) librarian.clearAll(false);
@@ -7980,11 +7980,6 @@ public abstract class Synth extends JComponent implements Updatable
                 {
                 patches[i].number = model.get("number", Patch.NUMBER_NOT_SET);
                 patches[i].bank = model.get("bank", 0);
-                /*if (model.keyEquals(initModel, true))
-                  {
-                  patches[i].name = "";
-                  }
-                  else*/
                     {
                     patches[i].name = model.get("name", null);
                     }
@@ -7996,7 +7991,7 @@ public abstract class Synth extends JComponent implements Updatable
         setSendMIDI(send);
                 
         // send it on!
-        librarian.getLibrary().receivePatches(patches);
+        librarian.getLibrary().receivePatches(patches, false);
         librarian.updateUndoRedo();     
         setAlwaysLoadInLibrarian(false);
         }                                

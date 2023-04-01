@@ -23,6 +23,8 @@ public class Patch
     public String name = null;
     // Patch location
     public String location = null;
+    // Does this represent an empty patch?
+    public boolean empty = true;
     
     // Indicates no number at all
     public static final int NUMBER_NOT_SET = -1;
@@ -44,6 +46,7 @@ public class Patch
         this.synth = synth;
         this.sysex = sysex;
         this.isBankSysex = isBankSysex;
+        this.empty = false;
         } 
     
     public String getName()
@@ -66,6 +69,7 @@ public class Patch
         bank = patch.bank;
         arbitrary = patch.arbitrary;
         sysex = new byte[patch.sysex.length][];
+        empty = patch.empty;
         for(int i = 0; i < patch.sysex.length; i++)
             {
             sysex[i] = new byte[patch.sysex[i].length];

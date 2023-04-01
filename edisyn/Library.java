@@ -67,6 +67,7 @@ public class Library extends AbstractTableModel
         synth.loadDefaults();
         byte[][] data = synth.cutUpSysex(synth.flatten(synth.emitAll(synth.getModel(), false, true)));          // we're pretending we're writing to a file here
         initPatch = new Patch(synthNum, data, false);
+        initPatch.empty = true;
         synth.setModel(backup);                                 // restore
         synth.undo.setWillPush(true);
         synth.setSendMIDI(originalMIDI);
@@ -121,7 +122,18 @@ public class Library extends AbstractTableModel
         {
         return numberNames.length;
         }
-                
+    
+    /** Tests if a patch is empty or initialized.  To get a scratch bank patch, pass in SCRATCH_BANK.  */
+    public boolean isEmptyOrInit(int bankNumber, int patchNumber)
+    	{
+    	Patch patch = getPatch(bankNumber, patchNumber);
+    	if (patch == null) return true;
+    	if (patch.sysex == null) return true;	// uh...
+    	if (patch.sysex.length == 0) return true; 	// uh...
+    	if (patch.empty) return true;
+    	return false;
+    	}
+    
     /** Returns the init patch */
     public Patch getInitPatch() 
         { 
@@ -365,8 +377,9 @@ public class Library extends AbstractTableModel
         the patches in the slots specified by their banks and numbers, but if there are
         other patches in the same batch with the same bank and number, then places them
         somewhere else. */
-    public void receivePatches(Patch[] incoming)
+    public void receivePatches(Patch[] incoming, boolean overwrite)
         {
+        System.err.println("Receive Patches");
         // These patches could be null because they've already been processed earlier as banks
         // and this sets the patch to null.  So let's check to see how many there are.
         int count = 0;
@@ -405,75 +418,127 @@ public class Library extends AbstractTableModel
             }
         
         // Break out the known and unknown patches
+        // "Known" patches are patches which have legitimate and unique locations which aren't taken up by
+        // other patches already in the library (unless we're overwriting)
+        // "Unknown" patches are all other patches, and they must fill in empty slots in the library 
         ArrayList<Patch> unknown = new ArrayList<Patch>();
-        Patch[][] patch = new Patch[getNumBanks()][getBankSize()];
+        Patch[][] known = new Patch[getNumBanks()][getBankSize()];
         
         for(int i = 0; i < len; i++)
             {
-            /// NOTE: in fact incoming patches from a file all will have their numbers set,
-            /// even if just to zero, because they've been parsed into models first.  :-(  But I think
-            /// that's okay?
-            if (incoming[i].number == Patch.NUMBER_NOT_SET || 
-                patch[incoming[i].bank][incoming[i].number] != null)            // someone is already there
+            if (incoming[i].number == Patch.NUMBER_NOT_SET || 					// The patch number is unknown
+                incoming[i].bank < 0 ||											// The bank is not legal
+                incoming[i].bank >= getNumBanks() ||							// The bank is not legal
+                incoming[i].number < 0 ||										// The patch number is not legal
+                incoming[i].number >= patches[incoming[i].bank + 1].length ||	// The patch number is not legal
+                !synth.isValidPatchLocation(incoming[i].bank, incoming[i].number) ||		// The patch location is not valid
+                (!isEmptyOrInit(incoming[i].bank, incoming[i].number) && !overwrite) ||	// There is a patch already in the library at that location and we're not overwriting it
+                known[incoming[i].bank][incoming[i].number] != null) 			// Another incoming patch has already taken that spot
                 {
+//                System.err.println("Unknown " + incoming[i]);
                 unknown.add(incoming[i]);
                 }
             else
                 {
-                patch[incoming[i].bank][incoming[i].number] = incoming[i];
+//                System.err.println("Known " + incoming[i] + " " + incoming[i].bank + " " + incoming[i].number);
+                known[incoming[i].bank][incoming[i].number] = incoming[i];
                 }
             }
-        
-        // Fill in the empty spaces
-        int b = 0;
-        int n = 0;
-        for(Patch p : unknown)
+                
+        // Put known patches in their positions
+        for(int b = 0; b < known.length; b++)
             {
-            while(true)
+            for(int n = 0; n < known[0].length; n++)
                 {
-                if (patch[b][n] == null)
-                    {
-                    patch[b][n] = p;
-                    p.number = n;
-                    p.bank = b;
-                    break;
-                    }
-                else
-                    {
-                    n++;
-                    if (n >= getBankSize())
-                        {
-                        n = 0;
-                        b++;
-                        if (b >= getNumBanks())         // uh....
-                            break;
-                        }
-                    }
-                }
-                                
-            if (b >= getNumBanks())     // uh....
-                {
-                break;
-                }
-            }
-                        
-        // Put in positions
-        for(b = 0; b < patch.length; b++)
-            {
-            for(n = 0; n < patch[0].length; n++)
-                {
-                if (patch[b][n] != null)
+                if (known[b][n] != null)
                     {
                     // fix name if it's null
-                    if (patch[b][n].name == null)
+                    if (known[b][n].name == null)
                         {
-                        patch[b][n].name = "" + (getNumBanks() == 1 ? "" : (getBankName(b) + "-")) + getPatchNumberNames()[n] + " (" + (nameCounter++) + ")";
+                        known[b][n].name = "" + (getNumBanks() == 1 ? "" : (getBankName(b) + "-")) + getPatchNumberNames()[n];
                         }
-                    setPatch(patch[b][n]);
+                    setPatch(known[b][n]);
                     }
                 }
             }
-        }
+
+		// Fill Remaining slots with unknown patches
+		
+        int emptyBank = 1;		// The bank of the current patch location we're considering.  Bank 1 should be the FIRST BANK, not the SCRATCH BANK
+        int emptyNumber = -1;	// The number of the current patch location we're considering.
+        
+        for(Patch un : unknown)
+        	{ 
+        	boolean success = false;		// Whether we were able to set the patch, or failed because we ran out of room and must stop
+        	while(true)
+        		{
+	        	emptyNumber++;				// Go to the next possible location
+
+				// Handle SCRATCH BANK
+        		if (emptyBank >= patches.length)	// If we're beyond the legal banks, we assume we're filling the scratch bank
+        			{
+                	if (emptyNumber >= patches[0].length)	// If we have exceeded the number of patches in the SCRATCH bank (0) we have FAILED
+						{
+						break;			// failure
+						}
+					else if (!isEmptyOrInit(SCRATCH_BANK, emptyNumber))		// If there is a patch in that slot, look for another
+						{
+						continue;
+						}
+					else 				// Found a slot!  Fill it.
+						{
+						// fix name if it's null
+						if (un.name == null)
+							{
+                        	un.name = "Scratch-" + getPatchNumberNames()[emptyNumber];
+							}
+						un.number = emptyNumber;
+						un.bank = SCRATCH_BANK;		// what else should we do?  Set it to bank 0 I guess
+						setPatch(un);
+						un.bank = 0;				// reset to 0?
+						success = true;
+						break;			// success
+						}
+        			} 
+        		else
+        			{
+					if (emptyNumber >= patches[emptyBank].length)		// if we're beyond the legal patches for this bank, go to next bank and reset
+						{
+						emptyBank++;
+						emptyNumber = -1;
+						continue;
+						}
+					else if (!synth.isValidPatchLocation(emptyBank - 1, emptyNumber))		// If we're not at a legitimate patch location, continue
+						{
+						continue;		// increment to next location
+						}
+					if (!isEmptyOrInit(emptyBank - 1, emptyNumber))		// If there is a patch in that slot, look for another
+						{
+						continue;
+						}
+					else				// Found a slot!  Fill it.
+						{
+						// fix name if it's null
+						if (un.name == null)
+							{
+                        	un.name = "" + (getNumBanks() == 1 ? "" : (getBankName(emptyBank - 1) + "-")) + getPatchNumberNames()[emptyNumber];
+							}
+						un.number = emptyNumber;
+						un.bank = emptyBank - 1;
+						setPatch(un);
+						success = true;
+						break;			// success
+						}
+					}
+				}
+				
+			if (!success)
+				{
+                synth.showSimpleError("Out of Space", "There weren't enough empty slots in the Librarian to fill with all the new patches.");
+				break;
+				}
+			}
+		}
                 
     /** Reads a sysex bank message holding one or (rarely) more than one bank, 
         and loads the patches in that bank or those banks

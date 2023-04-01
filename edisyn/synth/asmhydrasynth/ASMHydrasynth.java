@@ -1277,11 +1277,11 @@ public class ASMHydrasynth extends Synth
         
         soundPanel = new SynthPanel(this);
         vbox = new VBox();
-        vbox.add(addEnvelope(1, Style.COLOR_B()));
+        vbox.add(addEnvelope(1, Style.COLOR_A()));
         vbox.add(addEnvelope(2, Style.COLOR_B()));
-        vbox.add(addEnvelope(3, Style.COLOR_B()));
+        vbox.add(addEnvelope(3, Style.COLOR_A()));
         vbox.add(addEnvelope(4, Style.COLOR_B()));
-        vbox.add(addEnvelope(5, Style.COLOR_B()));
+        vbox.add(addEnvelope(5, Style.COLOR_A()));
 
         soundPanel.add(vbox, BorderLayout.CENTER);
         addTab("Env", soundPanel);
@@ -5375,10 +5375,14 @@ public class ASMHydrasynth extends Synth
             }
         else if (key.startsWith("voice"))
         	{
+			/// THIS IS A BUG -- THE HYDRASYNTH PROPERLY MULTPLIES BY 8
+			/// ON OUTPUT BUT DOES NOT DIVIDE BY 8 ON INPUT (2.0.0)
+			/*
         	if (key.equals("voicesustain"))
 				{
 				val = val * 8;
 				}
+			*/
 			/// THIS IS A BUG -- THE HYDRASYNTH PROPERLY MULTPLIES BY 8
 			/// ON OUTPUT BUT DOES NOT DIVIDE BY 8 ON INPUT (2.0.0)
 			/*

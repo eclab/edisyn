@@ -343,7 +343,8 @@ goes for LFO Quantize and ENV Quantize.
 
 24. BROKEN SUSTAIN NRPN (2.0.0)
 
-Sustain NRPN is outputted but ignored on input by the Hydrasynth.
+Sustain NRPN is has the same problem as #23 above: it's outputted in 
+multiples of 8 but inputted in multiples of 1.
 
 25. ASSORTED NRPN BUGS
 

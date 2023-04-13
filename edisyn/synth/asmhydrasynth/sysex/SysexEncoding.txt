@@ -77,14 +77,9 @@ WHAT CAN BE DONE
 The following can definitely be done over sysex:
 
 	- Handshaking
-	- Request and download a patch from patch memory
+	- Request and download one or more patches from patch memory
 	- Request and download the names of patches in a bank
-	- Write patch to patch memory
-	
-The following can also be done but are not documented here:
-
-	- Request and download a bank from patch memory
-	- Write a bank from patch memory
+	- Write one or more patches to patch memory
 	
 It is my understanding that the following CANNOT be done, which is
 pretty foolish of ASM
@@ -150,7 +145,7 @@ sysex message.
 
 
 
-REQUESTING A PATCH
+REQUESTING A SINGLE PATCH
 
 To request a patch, you send a HEADER, which elicits a HEADER RESPONSE,
 then you send a PATCH REQUEST.  The Hydrasynth will then send you the
@@ -264,6 +259,50 @@ Here is an example for the first patch, "Sawexpressive GD"
 
 
 
+REQUESTING A SERIES OF PATCHES
+
+This is just like requesting a single patch, except the header and footer
+are only sent once, as in:
+
+->	1. A Header
+		18 00 
+		
+<-	2. A Header Response
+		19 00
+
+	3.	[Now repeat once for each patch requested:]
+
+->		3a. A Patch Request
+			04 00 BANK NUMBER
+	
+		3b. Then 21 times for CHUNK = 0 ... 20 (hex 0 ... 14)
+	
+<-			- A Chunk Dump
+				16 00 CHUNK 16 DATA...
+				Where DATA... is 128 bytes long
+
+->			- A Chunk Acknowledgment 
+				17 00 CHUNK 16
+
+		3c. Then 1 time for CHUNK = 21 (hex 15)
+
+<-			- A Chunk Dump
+				16 00 CHUNK 16 DATA...
+				Where DATA... is 102 bytes long		[truncated]
+
+->			- A Chunk Acknowledgment 
+				17 00 CHUNK 16
+	
+[Then finally]	
+		
+->	4. A Footer
+		1A 00
+		
+<-	5. A Footer Response
+		1B 00
+
+
+
 
 WRITING A PATCH
 
@@ -274,11 +313,15 @@ eight bytes of metadata which includes the bank and patch number to write to.
 Before the final CHUNK ACKNOWLEDGMENT you will first receive a SAVED
 ACKNOWLEDGMENT. 
 
-The Hydrasynth Manager then sends an unknown command, perhaps a RESET,
-which causes the Hydrasynth to issue a BANK CHANGE, PROGRAM CHANGE,
-RESET ACKNOWLEGMENT, and for some reason a SUSTAIN PEDAL RELEASE.
+You the send a WRITE REQUEST which elicits a WRITE REQUEST REPONSE.
+This will cause the Hydrasynth to spend a fair amount of time (3 seconds
+or more) writing to its memory. 
 
 You then send a FOOTER which elicits a FOOTER RESPONSE.
+
+The Hydrasynth Manager then gets the Hydrasynth to issue a BANK CHANGE, 
+PROGRAM CHANGE, for some reason a SUSTAIN PEDAL RELEASE, but I do not
+believe these things are part of the protocol.
 
 The raw values for these messages are below. You must take each value
 and encode it as described earlier in order to produce the proper
@@ -301,40 +344,32 @@ https://github.com/eclab/edisyn/blob/master/edisyn/synth/asmhydrasynth/sysex/Sys
 
 	3. Then 21 times for CHUNK = 0 ... 20 (hex 0 ... 14)
 
-<-		- A Chunk Dump
+->		- A Chunk Dump
 			16 00 CHUNK 16 DATA...
 			Where DATA... is 128 bytes long
 
-->		- A Chunk Acknowledgment 
+<-		- A Chunk Acknowledgment 
 			17 00 CHUNK 16
 
 	5. Then 1 time for CHUNK = 21 (hex 15)
 
-<-		- A Chunk Dump
+->		- A Chunk Dump
 			16 00 CHUNK 16 DATA...
 			Where DATA... is 102 bytes long		[truncated]
 
-->		- A Patch Saved Acknowledgment 
+<-		- An Patch Saved Acknowledgment 
 			07 00 BANK NUMBER
 			
-->		- A Chunk Acknowledgment 
+<-		- A Chunk Acknowledgment 
 			17 00 CHUNK 16
 		
-->	6. A Write Request?
+[Then finally]	
+
+->	6. A Write Request
 		14 00
 		
-<-	7. A Bank Change In Response
-		Control Change 0
-		Control Change 32
-
-->	8. A Program Change In Response
-		Program Change 
-		
-<-	9. A Write Request Response?
+<-	9. A Write Request Response
 		15 00
-
-<-	10. A Sustain Pedal Release
-		Control Change 64
 
 ->	11. A Footer
 		1A 00
@@ -401,7 +436,54 @@ For example, writing Sawpressive GD to Bank E Patch 128:
 
 
 
+WRITING A SERIES OF PATCHES
 
+This is just like writing a single patch, except the header, footer, 
+and write request are only sent once, as in:
+
+
+
+->	1. A Header
+		18 00 
+		
+<-	2. A Header Response
+		19 00
+
+	3.	[Now repeat once for each patch requested:]
+
+		3a. Then 21 times for CHUNK = 0 ... 20 (hex 0 ... 14)
+
+->			- A Chunk Dump
+				16 00 CHUNK 16 DATA...
+				Where DATA... is 128 bytes long
+
+<-			- A Chunk Acknowledgment 
+				17 00 CHUNK 16
+	
+		3b. Then 1 time for CHUNK = 21 (hex 15)
+
+->			- A Chunk Dump
+				16 00 CHUNK 16 DATA...
+				Where DATA... is 102 bytes long		[truncated]
+
+<-			- An Patch Saved Acknowledgment 
+				07 00 BANK NUMBER
+			
+<-			- A Chunk Acknowledgment 
+				17 00 CHUNK 16
+		
+->	4. A Write Request			[This will take some time]
+		14 00
+		
+<-	5. A Write Request Response
+		15 00
+
+->	6. A Footer
+		1A 00
+		
+<-	7. A Footer Response
+		1B 00
+	
 
 
 

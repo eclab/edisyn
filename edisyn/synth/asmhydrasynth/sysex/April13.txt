@@ -1,0 +1,4 @@
+April 13, 2023 Hydrasynth sysex reverse engineering notes.
+
+Successfully read and write to *series* of patches on the Hydrasynth now,
+and reasonably rapidly.

@@ -3757,7 +3757,7 @@ public class NovationSL extends Synth
 
       DATA
       ====
-      The 4096 bytes of DATA is as follows (starting at byte 0D):
+      The 4096 bytes of DATA are as follows (starting at byte 0D):
 
       ADDRESS
       DEC  HEX  DESCRIPTION                   

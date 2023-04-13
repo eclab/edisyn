@@ -129,13 +129,13 @@ public class ASMHydrasynth extends Synth
 
     public static final int[] MOD_DESTINATION_CATEGORIES = 
         {
-        0,                                                                                              // OFF
-        1,1,1,1,1,1,1,1,1,1,                                                    // Arp
-        2,2,2,                                                                                  // OSC 1
-        3,3,3,                                                                                  // OSC 2
-        4,4,                                                                                    // OSC 3
-        5,                                                                                              // ALL OSC
-        6,6,6,6,6,6,6,6,6,6,6,6,6,                                              // Mutant 1
+        0,                                              // OFF
+        1,1,1,1,1,1,1,1,1,1,                            // Arp
+        2,2,2,                                          // OSC 1
+        3,3,3,                                          // OSC 2
+        4,4,                                            // OSC 3
+        5,                                              // ALL OSC
+        6,6,6,6,6,6,6,6,6,6,6,6,6,                      // Mutant 1
         7,7,7,7,7,7,7,7,7,7,7,7,7,                                              // Mutant 2
         8,8,8,8,8,8,8,8,8,8,8,8,8,                                              // Mutant 3
         9,9,9,9,9,9,9,9,9,9,9,9,9,                                              // Mutant 4
@@ -339,7 +339,7 @@ public class ASMHydrasynth extends Synth
         // The first 30 colors appear to move around HSB starting at 0 degrees (full Red) in increases of about 11,
         // This could be tweaked to move up to 11.5, but 12 seems too much.
         // Each even color is "light" (I have it at 50% saturation 100% brightness)
-        // Each odd color is "dark" (i have it at 100% saturation 100% brightness)
+        // Each odd color is "dark" (I have it at 100% saturation 100% brightness)
         // But note that the light/dark colors aren't really *paired* -- they're still offset in hue
         // You could of course make the dark colors lower brightness, but it seems that they
         // really largely differ in terms of saturation.
@@ -1238,8 +1238,8 @@ public class ASMHydrasynth extends Synth
         vbox.add(addMixer(Style.COLOR_B()));
         
         hbox = new HBox();
-    	hbox.add(addVoiceModulation(Style.COLOR_A()));
-	    hbox.addLast(addRibbon(Style.COLOR_C()));
+        hbox.add(addVoiceModulation(Style.COLOR_A()));
+        hbox.addLast(addRibbon(Style.COLOR_C()));
         vbox.add(hbox);
                 
         soundPanel.add(vbox, BorderLayout.CENTER);
@@ -1535,13 +1535,13 @@ public class ASMHydrasynth extends Synth
         for(int i = 1; i <= 8; i++)
             {
             comp = new LabelledDial("Voice " + i, this, "voice" + i + "modulation", color, 0, 256)
-            	{
-            	public boolean isSymmetric() { return true; }
-            	public String map(int value)
-            		{
-            		return "" + (value - 128);
-            		}
-            	};
+                {
+                public boolean isSymmetric() { return true; }
+                public String map(int value)
+                    {
+                    return "" + (value - 128);
+                    }
+                };
             hbox.add(comp);
             }
                         
@@ -1550,108 +1550,108 @@ public class ASMHydrasynth extends Synth
         }
         
 /*        
-    public JComponent addOscillator(int osc, Color color)
-        {
-        Category category = new Category(this, "Oscillator " + osc, color);
-        category.makePasteable("osc");
-        category.makeDistributable("osc");
+          public JComponent addOscillator(int osc, Color color)
+          {
+          Category category = new Category(this, "Oscillator " + osc, color);
+          category.makePasteable("osc");
+          category.makeDistributable("osc");
 
-        JComponent comp;
-        String[] params;
-        HBox hbox = new HBox();
+          JComponent comp;
+          String[] params;
+          HBox hbox = new HBox();
         
-        VBox vbox = new VBox();
-        // FIXME: is this the right list for all the oscillators?  For any of them?
-        params = OSC_WAVES;
-        comp = new Chooser("Wave", this, "osc" + osc + "type", params);
-        vbox.add(comp);
+          VBox vbox = new VBox();
+          // FIXME: is this the right list for all the oscillators?  For any of them?
+          params = OSC_WAVES;
+          comp = new Chooser("Wave", this, "osc" + osc + "type", params);
+          vbox.add(comp);
 
-        params = OSC_BIT_REDUCTIONS;
-        comp = new Chooser("Bit Reduction", this, "osc" + osc + "bitreduction", params);
-        model.setMetricMinMax("osc" + osc + "bitreduction", 0, OSC_BIT_REDUCTIONS.length - 1);
-        vbox.add(comp);
-        hbox.add(vbox);
+          params = OSC_BIT_REDUCTIONS;
+          comp = new Chooser("Bit Reduction", this, "osc" + osc + "bitreduction", params);
+          model.setMetricMinMax("osc" + osc + "bitreduction", 0, OSC_BIT_REDUCTIONS.length - 1);
+          vbox.add(comp);
+          hbox.add(vbox);
 
-        comp = new LabelledDial("Wave", this, "osc" + osc + "type", color, 0, OSC_WAVES.length - 1, -1);
-        hbox.add(comp);
+          comp = new LabelledDial("Wave", this, "osc" + osc + "type", color, 0, OSC_WAVES.length - 1, -1);
+          hbox.add(comp);
 
-        vbox = new VBox();
-        IconDisplay icons = new IconDisplay(null, waves, this, "osc" + osc + "type", 110, 52)
-            {
-            public Dimension getPreferredSize()
-                {
-                Dimension d = super.getPreferredSize();
-                return new Dimension(d.width, d.height+2);              // compensate for border
-                }
-            };
-        icons.setBorder(BorderFactory.createLineBorder(Color.GRAY));
+          vbox = new VBox();
+          IconDisplay icons = new IconDisplay(null, waves, this, "osc" + osc + "type", 110, 52)
+          {
+          public Dimension getPreferredSize()
+          {
+          Dimension d = super.getPreferredSize();
+          return new Dimension(d.width, d.height+2);              // compensate for border
+          }
+          };
+          icons.setBorder(BorderFactory.createLineBorder(Color.GRAY));
 
-        vbox = new VBox();
-        vbox.add(icons);
+          vbox = new VBox();
+          vbox.add(icons);
                 
-        if (osc != 3)           // FIXME: Verify that in fact OSC 3 doesn't *have* a mode
-            {
-            comp = new CheckBox("Wavescan Mode", this, "osc" + osc + "mode");
-            vbox.add(comp);
-            }
-        hbox.add(Strut.makeHorizontalStrut(8));
-        hbox.add(vbox);
-        hbox.add(Strut.makeHorizontalStrut(8));
+          if (osc != 3)           // FIXME: Verify that in fact OSC 3 doesn't *have* a mode
+          {
+          comp = new CheckBox("Wavescan Mode", this, "osc" + osc + "mode");
+          vbox.add(comp);
+          }
+          hbox.add(Strut.makeHorizontalStrut(8));
+          hbox.add(vbox);
+          hbox.add(Strut.makeHorizontalStrut(8));
 
-        comp = new LabelledDial("Semitones", this, "osc" + osc + "semi", color, -36, 36);
-        hbox.add(comp);
+          comp = new LabelledDial("Semitones", this, "osc" + osc + "semi", color, -36, 36);
+          hbox.add(comp);
 
-        comp = new LabelledDial("Cents", this, "osc" + osc + "cent", color, -50, 50);
-        hbox.add(comp);
+          comp = new LabelledDial("Cents", this, "osc" + osc + "cent", color, -50, 50);
+          hbox.add(comp);
 
-        comp = new LabelledDial("Keytrack", this, "osc" + osc + "keytrack", color, 0, 200)      
-            {
-            public boolean isSymmetric() { return true; }
-            public String map(int value)
-                {
-                return "" + value + "%";
-                }
-            };
-        hbox.add(comp);
+          comp = new LabelledDial("Keytrack", this, "osc" + osc + "keytrack", color, 0, 200)      
+          {
+          public boolean isSymmetric() { return true; }
+          public String map(int value)
+          {
+          return "" + value + "%";
+          }
+          };
+          hbox.add(comp);
         
-        if (osc < 3)
-            {
-            // The value actually goes 0...8192 but in increments of 8
-            comp = new LabelledDial("WaveScan", this, "osc" + osc + "wavscan", color, 0, 1024)
-                {
-                public String map(int value)
-                    {
-                    int v = value * 8;
-                    // dividing 8192 by 117.03 roughly cuts into 70 pieces
-                    return String.format("%1.1f", ((roundEven(v / 117.03) + 10) / 10.0));
-                    }
-                };
-            hbox.add(comp);
+          if (osc < 3)
+          {
+          // The value actually goes 0...8192 but in increments of 8
+          comp = new LabelledDial("WaveScan", this, "osc" + osc + "wavscan", color, 0, 1024)
+          {
+          public String map(int value)
+          {
+          int v = value * 8;
+          // dividing 8192 by 117.03 roughly cuts into 70 pieces
+          return String.format("%1.1f", ((roundEven(v / 117.03) + 10) / 10.0));
+          }
+          };
+          hbox.add(comp);
         
-            // FIXME: I am omitting solowavscan because I think it doesn't do anything
+          // FIXME: I am omitting solowavscan because I think it doesn't do anything
         
-            for(int i = 1; i <= 4; i++)
-                {
-                vbox = new VBox();
-                params = (i == 1 ? OSC_WAVES : OSC_WAVES_OFF_SILENCE);
-                comp = new Chooser("WaveScan Wave " + i, this, "osc" + osc + "wavscanwave" + i, params);
-                vbox.add(comp);
+          for(int i = 1; i <= 4; i++)
+          {
+          vbox = new VBox();
+          params = (i == 1 ? OSC_WAVES : OSC_WAVES_OFF_SILENCE);
+          comp = new Chooser("WaveScan Wave " + i, this, "osc" + osc + "wavscanwave" + i, params);
+          vbox.add(comp);
 
-                params = OSC_WAVES_OFF_SILENCE;
-                comp = new Chooser("WaveScan Wave " + (i + 4), this, "osc" + osc + "wavscanwave" + (i + 4), params);
-                vbox.add(comp);
-                hbox.add(vbox);
-                }
-            }
+          params = OSC_WAVES_OFF_SILENCE;
+          comp = new Chooser("WaveScan Wave " + (i + 4), this, "osc" + osc + "wavscanwave" + (i + 4), params);
+          vbox.add(comp);
+          hbox.add(vbox);
+          }
+          }
  
-        category.add(hbox, BorderLayout.CENTER);
-        return category;
-        }
-    */
+          category.add(hbox, BorderLayout.CENTER);
+          return category;
+          }
+*/
 
 
-	JComponent pastMode = null;
-	
+    JComponent pastMode = null;
+        
     public JComponent addOscillator(final int osc, Color color)
         {
         Category category = new Category(this, "Oscillator " + osc, color);
@@ -1665,29 +1665,29 @@ public class ASMHydrasynth extends Synth
         VBox vbox = new VBox();
         
         final HBox waveScanBox = new HBox();
-		comp = new LabelledDial("WaveScan", this, "osc" + osc + "wavscan", color, 0, 1024)
-			{
-			public String map(int value)
-				{
-				int v = value * 8;
-				// dividing 8192 by 117.03 roughly cuts into 70 pieces
-				return String.format("%1.1f", ((roundEven(v / 117.03) + 10) / 10.0));
-				}
-			};
-		waveScanBox.add(comp);
-		for(int i = 1; i <= 4; i++)
-			{
-			vbox = new VBox();
-			params = (i == 1 ? OSC_WAVES : OSC_WAVES_OFF_SILENCE);
-			comp = new Chooser("WaveScan Wave " + i, this, "osc" + osc + "wavscanwave" + i, params);
-			vbox.add(comp);
+        comp = new LabelledDial("WaveScan", this, "osc" + osc + "wavscan", color, 0, 1024)
+            {
+            public String map(int value)
+                {
+                int v = value * 8;
+                // dividing 8192 by 117.03 roughly cuts into 70 pieces
+                return String.format("%1.1f", ((roundEven(v / 117.03) + 10) / 10.0));
+                }
+            };
+        waveScanBox.add(comp);
+        for(int i = 1; i <= 4; i++)
+            {
+            vbox = new VBox();
+            params = (i == 1 ? OSC_WAVES : OSC_WAVES_OFF_SILENCE);
+            comp = new Chooser("WaveScan Wave " + i, this, "osc" + osc + "wavscanwave" + i, params);
+            vbox.add(comp);
 
-			params = OSC_WAVES_OFF_SILENCE;
-			comp = new Chooser("WaveScan Wave " + (i + 4), this, "osc" + osc + "wavscanwave" + (i + 4), params);
-			vbox.add(comp);
-			waveScanBox.add(vbox);
-			}
-		
+            params = OSC_WAVES_OFF_SILENCE;
+            comp = new Chooser("WaveScan Wave " + (i + 4), this, "osc" + osc + "wavscanwave" + (i + 4), params);
+            vbox.add(comp);
+            waveScanBox.add(vbox);
+            }
+                
 
         final HBox waveBox = new HBox();
         comp = new LabelledDial("Wave", this, "osc" + osc + "type", color, 0, OSC_WAVES.length - 1, -1);
@@ -1714,47 +1714,47 @@ public class ASMHydrasynth extends Synth
         final VBox outerWaveBox = new VBox();
         outerWaveBox.add(waveBox);
         //if (osc != 3)
-        	{
-        	outerWaveBox.add(Strut.makeStrut(waveScanBox, false, true));
-        	}
+            {
+            outerWaveBox.add(Strut.makeStrut(waveScanBox, false, true));
+            }
         
         
         
         vbox = new VBox();
         if (osc != 3)
-        	{
-        	params = OSC_MODES;
-			comp = new Chooser("Mode", this, "osc" + osc + "mode", params)
-				{
-				public void update(String key, Model model)
-					{
-					super.update(key, model);
-					if (osc != 3)
-						{
-						hbox.remove(outerWaveBox);
-						hbox.remove(waveScanBox);
-						if (model.get(key) == 0)	// wave
-							{
-							hbox.addLast(outerWaveBox);
-							}
-						else
-							{
-							hbox.addLast(waveScanBox);
-							}
-						hbox.revalidate();
-						hbox.repaint();
-						}
-					}
-				};
-        	pastMode = comp;
-			vbox.add(comp);
-			}
+            {
+            params = OSC_MODES;
+            comp = new Chooser("Mode", this, "osc" + osc + "mode", params)
+                {
+                public void update(String key, Model model)
+                    {
+                    super.update(key, model);
+                    if (osc != 3)
+                        {
+                        hbox.remove(outerWaveBox);
+                        hbox.remove(waveScanBox);
+                        if (model.get(key) == 0)        // wave
+                            {
+                            hbox.addLast(outerWaveBox);
+                            }
+                        else
+                            {
+                            hbox.addLast(waveScanBox);
+                            }
+                        hbox.revalidate();
+                        hbox.repaint();
+                        }
+                    }
+                };
+            pastMode = comp;
+            vbox.add(comp);
+            }
 
-		if (osc == 3)
-			{
-			vbox.add(Strut.makeStrut(pastMode, false, true));
-			}
-			
+        if (osc == 3)
+            {
+            vbox.add(Strut.makeStrut(pastMode, false, true));
+            }
+                        
         params = OSC_BIT_REDUCTIONS;
         comp = new Chooser("Bit Reduction", this, "osc" + osc + "bitreduction", params);
         model.setMetricMinMax("osc" + osc + "bitreduction", 0, OSC_BIT_REDUCTIONS.length - 1);
@@ -1978,15 +1978,15 @@ public class ASMHydrasynth extends Synth
         vbox.add(comp);
         hbox.add(vbox);
 
-         comp = new CheckBox("Snap", this, "voicesnap");
+        comp = new CheckBox("Snap", this, "voicesnap");
         vbox.add(comp);
-       vbox = new VBox();
+        vbox = new VBox();
         
-         params = SUSTAIN_PEDAL_MODES;
+        params = SUSTAIN_PEDAL_MODES;
         comp = new Chooser("Sustain Pedal", this, "voicesustain", params);
         vbox.add(comp);
         
-       comp = new CheckBox("Random Phase", this, "voicerandomphase");
+        comp = new CheckBox("Random Phase", this, "voicerandomphase");
         vbox.add(comp);
 
         comp = new CheckBox("Warm Mode", this, "voicewarmmode");
@@ -4012,10 +4012,10 @@ public class ASMHydrasynth extends Synth
         comp = new Chooser("Trigger Source " + 4, this, "env" + env + "trigsrc" + 4, params);
         vbox.add(comp);
                 
-         comp = new CheckBox("Free Run", this, "env" + env + "freerun");
+        comp = new CheckBox("Free Run", this, "env" + env + "freerun");
         vbox.add(comp);
 
-       hbox.add(vbox);
+        hbox.add(vbox);
         vbox = new VBox();
 
         params = QUANTIZATIONS;
@@ -4718,8 +4718,8 @@ public class ASMHydrasynth extends Synth
         return 0;
         }
 
-	public int getBatchDownloadWaitTime() { return 400; }
-    public int getBatchDownloadFailureCountdown() { return 20; }
+    public int getBatchDownloadWaitTime() { return 50; }				// this will make a lot of "tardy" messages but it's a tiny bit faster than 400
+    public int getBatchDownloadFailureCountdown() { return 100; }
 
     // A small syntatic shortening function for emitAll(...) to return the parameter value.
     int p(String key)
@@ -4897,26 +4897,26 @@ public class ASMHydrasynth extends Synth
             else if (key.endsWith("bitreduction"))
                 {
                 if (key.equals("osc1bitreduction"))
-					{
-					p = p("osc1bitreduction");
-					v = 0;
-					w = val;
-					val = v * 128 + w;
-					}
+                    {
+                    p = p("osc1bitreduction");
+                    v = 0;
+                    w = val;
+                    val = v * 128 + w;
+                    }
                 else if (key.equals("osc2bitreduction"))
-					{
-					p = p("osc1bitreduction");
-					v = 1;
-					w = val;
-					val = v * 128 + w;
-					}
-                else 	// if (key.equals("osc3bitreduction"))
-					{
-					p = p("osc1bitreduction");
-					v = 2;
-					w = val;
-					val = v * 128 + w;
-					}
+                    {
+                    p = p("osc1bitreduction");
+                    v = 1;
+                    w = val;
+                    val = v * 128 + w;
+                    }
+                else    // if (key.equals("osc3bitreduction"))
+                    {
+                    p = p("osc1bitreduction");
+                    v = 2;
+                    w = val;
+                    val = v * 128 + w;
+                    }
                 }
             }
         else if (key.startsWith("mutant"))
@@ -5141,13 +5141,13 @@ public class ASMHydrasynth extends Synth
                 {
                 val = val * 8;
                 }
-			/// THIS IS A BUG -- THE HYDRASYNTH PROPERLY MULTPLIES BY 8
-			/// ON OUTPUT BUT DOES NOT DIVIDE BY 8 ON INPUT (2.0.0)
+            /// THIS IS A BUG -- THE HYDRASYNTH PROPERLY MULTPLIES BY 8
+            /// ON OUTPUT BUT DOES NOT DIVIDE BY 8 ON INPUT (2.0.0)
             /*
-            else if (subkey.endsWith("quantize"))
-                {
-                val = val * 8;
-                }
+              else if (subkey.endsWith("quantize"))
+              {
+              val = val * 8;
+              }
             */
             }
         else if (key.startsWith("env"))
@@ -5192,13 +5192,13 @@ public class ASMHydrasynth extends Synth
                 w = val;
                 val = v * 128 + w;
                 }
-			/// THIS IS A BUG -- THE HYDRASYNTH PROPERLY MULTPLIES BY 8
-			/// ON OUTPUT BUT DOES NOT DIVIDE BY 8 ON INPUT (2.0.0)
+            /// THIS IS A BUG -- THE HYDRASYNTH PROPERLY MULTPLIES BY 8
+            /// ON OUTPUT BUT DOES NOT DIVIDE BY 8 ON INPUT (2.0.0)
             /*
-            else if (subkey.endsWith("quantize"))
-                {
-                val = val * 8;
-                }
+              else if (subkey.endsWith("quantize"))
+              {
+              val = val * 8;
+              }
             */
             }
         else if (key.startsWith("arp"))
@@ -5374,24 +5374,24 @@ public class ASMHydrasynth extends Synth
                 }
             }
         else if (key.startsWith("voice"))
-        	{
-			/// THIS IS A BUG -- THE HYDRASYNTH PROPERLY MULTPLIES BY 8
-			/// ON OUTPUT BUT DOES NOT DIVIDE BY 8 ON INPUT (2.0.0)
-			/*
-        	if (key.equals("voicesustain"))
-				{
-				val = val * 8;
-				}
-			*/
-			/// THIS IS A BUG -- THE HYDRASYNTH PROPERLY MULTPLIES BY 8
-			/// ON OUTPUT BUT DOES NOT DIVIDE BY 8 ON INPUT (2.0.0)
-			/*
-			else if (key.endsWith("modulation"))
-				{
-				val = val * 8;
-				}
-			*/
-			}
+            {
+            /// THIS IS A BUG -- THE HYDRASYNTH PROPERLY MULTPLIES BY 8
+            /// ON OUTPUT BUT DOES NOT DIVIDE BY 8 ON INPUT (2.0.0)
+            /*
+              if (key.equals("voicesustain"))
+              {
+              val = val * 8;
+              }
+            */
+            /// THIS IS A BUG -- THE HYDRASYNTH PROPERLY MULTPLIES BY 8
+            /// ON OUTPUT BUT DOES NOT DIVIDE BY 8 ON INPUT (2.0.0)
+            /*
+              else if (key.endsWith("modulation"))
+              {
+              val = val * 8;
+              }
+            */
+            }
         else
             {
             val = model.get(key);
@@ -5403,7 +5403,7 @@ public class ASMHydrasynth extends Synth
 
     void get1(String key, byte[] data, int pos)
         {
-        get2(key, data, pos);		// gotta consider negative values with extension
+        get2(key, data, pos);           // gotta consider negative values with extension
         }
 
     void get2(String key, byte[] data, int pos)
@@ -5838,28 +5838,29 @@ public class ASMHydrasynth extends Synth
         get1("osc2bitreduction", data, 2454);
         get1("osc3bitreduction", data, 2456);
         for(int i = 0; i < 5; i++)
-        	{
-	        get1("env" + (i + 1) + "quantize", data, 2432 + i * 2);
-	        }
+            {
+            get1("env" + (i + 1) + "quantize", data, 2432 + i * 2);
+            }
         for(int i = 0; i < 5; i++)
-        	{
-	        get1("lfo" + (i + 1) + "quantize", data, 2442 + i * 2);
-	        }
+            {
+            get1("lfo" + (i + 1) + "quantize", data, 2442 + i * 2);
+            }
         for(int i = 0; i < 8; i++)
-        	{
-	        get1("voice" + (i + 1) + "modulation", data, 2400 + i * 2);
-	        }
+            {
+            get1("voice" + (i + 1) + "modulation", data, 2400 + i * 2);
+            }
         
         byte[][] outgoing = Encode.encodePatch(data);
                 
         Object[] sysex = new byte[outgoing.length + 3][];
-        sysex[0] = Encode.encodePayload(new byte[] { (byte)0x18, (byte)0x00 });         // header
-        for(int i = 0; i < outgoing.length; i++)                // patch chunks
+        sysex[0] = (isEmittingBatch() ? null : Encode.encodePayload(new byte[] { (byte)0x18, (byte)0x00 }));         // header
+        for(int i = 0; i < outgoing.length; i++)                                                                // patch chunks
             {
             sysex[i + 1] = outgoing[i];
             }
-        sysex[sysex.length - 2] = Encode.encodePayload(new byte[] { (byte)0x14, (byte)0x00 });          // save request
-        sysex[sysex.length - 1] = Encode.encodePayload(new byte[] { (byte)0x1A, (byte)0x00 });          // footer
+        //// FIXME: Do we include the save request?
+        sysex[sysex.length - 2] = (isEmittingBatch() ? null : Encode.encodePayload(new byte[] { (byte)0x14, (byte)0x00 }));          // save request
+        sysex[sysex.length - 1] = (isEmittingBatch() ? null : Encode.encodePayload(new byte[] { (byte)0x1A, (byte)0x00 }));          // footer
         return sysex;
         }
 
@@ -5879,9 +5880,61 @@ public class ASMHydrasynth extends Synth
         int NN = tempModel.get("number", 0);
         int BB = tempModel.get("bank", 0);
                   
-        tryToSendSysex(Encode.encodePayload(new byte[] { 0x18, 000 }));
-        tryToSendSysex(Encode.encodePayload(new byte[] { 0x04, 0x00, (byte)BB, (byte)NN }));
+        if (!isBatchDownloading())  // we already did it
+        	{
+        	// time("Sending Header");
+        	tryToSendSysex(Encode.encodePayload(new byte[] { 0x18, 0x00 }));                                                 // header
+        	}
+        	// time("Sending Dump Request");
+        tryToSendSysex(Encode.encodePayload(new byte[] { 0x04, 0x00, (byte)BB, (byte)NN }));    // dump request
+        /// After negotiation and downloading chunks, parse() will emit the footer
         }
+
+	void sendHeader()
+		{
+		boolean sendMIDI = getSendMIDI();
+		setSendMIDI(true);
+		tryToSendSysex(Encode.encodePayload(new byte[] { 0x18, 000 }));
+		setSendMIDI(sendMIDI);
+		}
+	void sendFooter()
+		{
+		boolean sendMIDI = getSendMIDI();
+		setSendMIDI(true);
+		tryToSendSysex(Encode.encodePayload(new byte[] { 0x1A, 0x00 }));
+		setSendMIDI(sendMIDI);
+		}
+				
+	public void startingBatchDownload(Model firstPatch, Model finalPatch) 
+		{ 
+		sendHeader();
+		}
+
+	public void stoppingBatchDownload(Model firstPatch, Model finalPatch) 
+		{ 
+		sendFooter();
+		}
+
+	public Object[] startingBatchEmit(int bank, int start, int end, boolean toFile) 
+		{ 
+		return new Object[]
+			{
+		// Header 
+				Encode.encodePayload(new byte[] { 0x18, 000 })
+			 };
+		}
+
+	public Object[] stoppingBatchEmit(int bank, int start, int end, boolean toFile) 
+		{ 
+		return new Object[]
+			{
+		// Save 
+			 Encode.encodePayload(new byte[] { (byte)0x14, (byte)0x00 }) ,
+		// Footer 
+			 Encode.encodePayload(new byte[] { 0x1A, 0x00 })
+			 };
+		}
+		
 
     byte[] firstPatch = null;
 
@@ -5893,11 +5946,11 @@ public class ASMHydrasynth extends Synth
     public int parse(byte[] data, boolean fromFile)
         {
         byte[][] cut = cutUpSysex(data);
-		if (cut.length == 1)
-			{
+        if (cut.length == 1)
+            {
             return parseSub(data, fromFile);
-			}
-		else
+            }
+        else
             {
             incomingPos = 0;
             incoming = new byte[22][];
@@ -5906,9 +5959,14 @@ public class ASMHydrasynth extends Synth
                 int val = parseSub(cut[i], fromFile);
                 if (val == PARSE_SUCCEEDED)
                     return PARSE_SUCCEEDED;
-                else if (val != PARSE_INCOMPLETE && val != PARSE_IGNORE)
+                else if (val != PARSE_INCOMPLETE && val != PARSE_IGNORE)                // Footer already emitted
                     return PARSE_FAILED;
                 }
+            
+            if (!fromFile && !isBatchDownloading())
+            	{
+            	sendFooter();
+            	}
             return PARSE_FAILED;
             }
         }
@@ -5922,7 +5980,8 @@ public class ASMHydrasynth extends Synth
                 {
                 boolean sendMIDI = getSendMIDI();
                 setSendMIDI(true);
-                tryToSendSysex(Encode.encodePayload(new byte[] { 0x17, 0x00, (byte)incomingPos, 0x16 }));
+         	// time("Sending Acknowledgment for " + incomingPos);
+               tryToSendSysex(Encode.encodePayload(new byte[] { 0x17, 0x00, (byte)incomingPos, 0x16 }));
                         
                 setSendMIDI(sendMIDI);
                 }
@@ -5930,10 +5989,20 @@ public class ASMHydrasynth extends Synth
             // double check
             if (data.length == 191 && incomingPos == 21) // uh oh
                 {
+				if (!fromFile && !isBatchDownloading())
+					{
+        	// time("Sending Footer D");
+					sendFooter();
+					}
                 return PARSE_FAILED;
                 }
             else if (data.length == 155 && incomingPos != 21) // uh oh
                 {
+				if (!fromFile && !isBatchDownloading())
+					{
+        	// time("Sending Footer C");
+					sendFooter();
+					}
                 return PARSE_FAILED;
                 }
 
@@ -5944,17 +6013,16 @@ public class ASMHydrasynth extends Synth
             if (incomingPos == 21)
                 {
                 // Send footer if appropriate
-                if (!fromFile)
+                if (!fromFile && !isBatchDownloading())
                     {
-                    boolean sendMIDI = getSendMIDI();
-                    setSendMIDI(true);
-                    tryToSendSysex(Encode.encodePayload(new byte[] { 0x1A, 0x00 }));
-                    setSendMIDI(sendMIDI);
+        	// time("Sending Footer A");
+                    sendFooter();
                     }
                                         
                 // Decode and process!
                 try
                     {
+         	// time("Parsing " + incomingPos);
                     byte[] result = Decode.decodePatch(incoming);
                     if (REVERSE_ENGINEER)
                         {
@@ -5984,6 +6052,12 @@ public class ASMHydrasynth extends Synth
                     Synth.handleException(ex);
                     incoming = new byte[22][];
                     incomingPos = 0;
+
+					if (!fromFile && !isBatchDownloading())
+						{
+        	// time("Sending Footer B");
+						sendFooter();
+						}
                     return PARSE_FAILED;
                     }
                 }
@@ -6018,9 +6092,9 @@ public class ASMHydrasynth extends Synth
         if (!model.exists(key)) System.err.println("KEY NOT FOUND: " + key);
 
         if (key.equals("bank") || key.equals("number"))
-        	{
+            {
             model.set(key, data[pos] & 0xFF);
-        	}
+            }
         else if (model.getMin(key) < 0)      // signed two's complement
             {
             model.set(key, data[pos]);
@@ -6431,17 +6505,17 @@ public class ASMHydrasynth extends Synth
         set1("osc2bitreduction", data, 2454);
         set1("osc3bitreduction", data, 2456);
         for(int i = 0; i < 5; i++)
-        	{
-	        set1("env" + (i + 1) + "quantize", data, 2432 + i * 2);
-	        }
+            {
+            set1("env" + (i + 1) + "quantize", data, 2432 + i * 2);
+            }
         for(int i = 0; i < 5; i++)
-        	{
-	        set1("lfo" + (i + 1) + "quantize", data, 2442 + i * 2);
-	        }
+            {
+            set1("lfo" + (i + 1) + "quantize", data, 2442 + i * 2);
+            }
         for(int i = 0; i < 8; i++)
-        	{
-	        set1("voice" + (i + 1) + "modulation", data, 2400 + i * 2);
-	        }
+            {
+            set1("voice" + (i + 1) + "modulation", data, 2400 + i * 2);
+            }
         
         revise();
         return PARSE_SUCCEEDED;
@@ -6524,9 +6598,9 @@ public class ASMHydrasynth extends Synth
             else if (key.equals("osc1bitreduction"))
                 {
                 if (v == 1)
-                	key = "osc2bitreduction";
+                    key = "osc2bitreduction";
                 else if (v == 1)
-                	key = "osc3bitreduction";
+                    key = "osc3bitreduction";
                 val = w;
                 }
             }
@@ -6820,16 +6894,16 @@ public class ASMHydrasynth extends Synth
                 }
             }
         else if (key.startsWith("voice"))
-        	{
-        	if (key.equals("voicesustain"))
-				{
-				val = val / 8;
-				}
-			else if (key.endsWith("modulation"))
-				{
-				val = val / 8;
-				}
-			}
+            {
+            if (key.equals("voicesustain"))
+                {
+                val = val / 8;
+                }
+            else if (key.endsWith("modulation"))
+                {
+                val = val / 8;
+                }
+            }
         else
             {
             // do nothing
@@ -6864,12 +6938,14 @@ public class ASMHydrasynth extends Synth
 
     public static String getSynthName() { return "ASM Hydrasynth"; }
     
+    public int getPauseAfterReceivePatch() { return 0; }
+
     // Change Patch can get stomped if we do a request immediately afterwards
     public int getPauseAfterChangePatch() { return 200; }
 
-	public int getPauseAfterWritePatch() { return 2700; }	// this is an incredible number
+    public int getPauseAfterWritePatch() { return 2700; }   // this is an incredible number
 
-	public int getPauseBetweenPatchWrites() { return 1500; }	// also very bad
+    public int getPauseBetweenPatchWrites() { return 100; } // { return 1500; }        // also very bad
 
     public void changePatch(Model tempModel)
         {
@@ -6880,7 +6956,9 @@ public class ASMHydrasynth extends Synth
         int number = tempModel.get("number", 0);
         
         tryToSendMIDI(buildCC(getChannelOut(), 32, bank));
+//        simplePause(1000);
         tryToSendMIDI(buildPC(getChannelOut(), number));
+//        simplePause(1000);
         }
 
     public static final int MODE_PAUSE = 0;

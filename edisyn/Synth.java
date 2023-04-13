@@ -1500,7 +1500,19 @@ public abstract class Synth extends JComponent implements Updatable
                 }
             }
         }
-        
+
+	long lastTime = 0;
+	Object timeLock = new Object[0];
+	public void time(String val)
+		{
+		synchronized(timeLock)
+			{
+			long time = System.currentTimeMillis();
+			System.err.println("" + (time - lastTime) + "\t" + val);
+			lastTime = time;
+			}
+		}
+
     /** Builds a receiver to attach to the current IN transmitter.  The receiver
         can handle merging and patch reception. */
     public Receiver buildInReceiver()
@@ -1525,6 +1537,7 @@ public abstract class Synth extends JComponent implements Updatable
                     return;
                     }
 
+		// time("Received " + message);
                 if (tuple != null) processBufferedMessages(tuple.inReceiver, inBuffer);
 
                 // I'm doing this in the Swing event thread because I figure it's multithreaded
@@ -1563,10 +1576,12 @@ public abstract class Synth extends JComponent implements Updatable
                                         boolean originalMIDI = getSendMIDI();
                                         setSendMIDI(false);
                                         undo.setWillPush(false);
+		// time("Backing Up for " + message);
                                         Model backup = (Model)(model.clone());
                                         int result = PARSE_ERROR;
                                         try 
                                             {
+		// time("Parsing " + message);
                                             result = performParse(data, false);
                                             }
                                         catch (Exception ex)
@@ -1636,8 +1651,11 @@ public abstract class Synth extends JComponent implements Updatable
                                                 sendAllParameters();
                                                 }
                                             file = null;
+                                            		// time("Update Blend " + message);
+
                                             updateBlend();
                                             }
+                                            		// time("Update Title " + message);
 
                                         updateTitle();
                                         }
@@ -1685,6 +1703,7 @@ public abstract class Synth extends JComponent implements Updatable
                                     undo.setWillPush(willPush);
                                     }
                                 }
+                                            		// time("Done " + message);
                             }
                         if (testIncomingSynthMIDI) 
                             {
@@ -8240,6 +8259,8 @@ public abstract class Synth extends JComponent implements Updatable
         final int pause = (synth == null ? DEFAULT_BULK_WRITE_PAUSE : synth.getPauseBetweenPatchWrites() + 1);
                 
         final long time = System.currentTimeMillis();
+        
+        System.err.println("Build timer for " + pause);
         timer[0] = new javax.swing.Timer(pause, new ActionListener()
             {
             public void actionPerformed(ActionEvent e)
@@ -8248,14 +8269,18 @@ public abstract class Synth extends JComponent implements Updatable
                     {
                     long time2 = System.currentTimeMillis();
                     if (time2 > time && time2 - time < 1000)
+                    	{
+                    	System.err.println("Decorative Pause for " + ((int)(1000L - (time2 - time))));
                         simplePause((int)(1000L - (time2 - time)));             // this is a decorative pause to give the user time to spot the window in case it appears and disappears rapidly
-                                        
+                        }
+                        
                     if (invalid[0])
                         showSimpleError("Write Error", "Some patches could not be written.");
                     }
                 else
                     {
                     if (!tryToSendSysex(dat[index[0]])) invalid[0] = true;  // we ignore the return value because we'll try 
+                    System.err.println("Simple Pause for " + pause);
                     simplePause(pause);
                     index[0]++;
                     }
@@ -8968,11 +8993,56 @@ public abstract class Synth extends JComponent implements Updatable
             // done his own undo asynchronously and we'd be messing things up.
             // Nonetheless here we go...
             undo.undo(model);
+            stoppingBatchDownload(firstPatch, finalPatch);
             }
         }
         
+    /** Called when a batch download is starting.  This might give your editor
+    	a chance to emit something at the beginning of the batch download.  For
+    	example, the ASM Hydrasynth requires that a header sysex command be
+    	sent before a stream of batch downloads.  You can determine if 
+    	a batch download is occurring during parse() by calling isBatchDownloading() */
+	public void startingBatchDownload(Model firstPatch, Model finalPatch) { }
+
+    /** Called when a batch download is stopping.  This might give your editor
+    	a chance to emit something at the end of the batch download.  For
+    	example, the ASM Hydrasynth requires that a header sysex command be
+    	sent before a stream of patch downloads.  You can determine if 
+    	a batch download is occurring during parse() by calling isBatchDownloading() */
+	public void stoppingBatchDownload(Model firstPatch, Model finalPatch) { }
+
+    /** Called before a series of patches are being emitted from the librarian 
+    	(as opposed to a single patch from the Editor).  This might give your editor
+    	a chance to add something to the beginning of the data.  For
+    	example, the ASM Hydrasynth requires that a header sysex command be
+    	sent before a stream of batch dumps.  You can determine if 
+    	a series of patches is being emitted during emit() by calling isEmittingBatch(). 
+    	Note that this method is NOT called if a bank is being emitted via a bank sysex message. */
+	public Object[] startingBatchEmit(int bank, int start, int end, boolean toFile) { return new Object[0]; }
+
+    /** Called after a series of patches are being emitted from the librarian 
+    	(as opposed to a single patch from the Editor).  This might give your editor
+    	a chance to add something to the beginning of the data.  For
+    	example, the ASM Hydrasynth requires that a header sysex command be
+    	sent before a stream of batch dumps.  You can determine if 
+    	a series of patches is being emitted during emit() by calling isEmittingBatch(). 
+    	Note that this method is NOT called if a bank is being emitted via a bank sysex message. */
+	public Object[] stoppingBatchEmit(int bank, int start, int end, boolean toFile) { return new Object[0]; }
+
+    /** Returns true if the librarian is currently engagedin emitting
+    	a series of patches.  Note that this method returns FALSE if a bank 
+    	is being emitted via a bank sysex message.  */
+	public boolean isEmittingBatch() 
+		{ 
+		if (librarian == null) return false;
+		Library library = librarian.getLibrary();
+		if (library == null) return false;
+		else return library.emittingBatch;
+	 	}
+
     void startBatchDownload()
         {
+        startingBatchDownload(firstPatch, finalPatch);
         getAll.setText("Stop Downloading Batch");
         if (librarian != null)
             {

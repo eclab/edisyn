@@ -765,7 +765,9 @@ public class Library extends AbstractTableModel
             }   
         }
         
-        
+
+	boolean emittingBatch = false;
+	        
     // Emits MIDI representing all the patches from start to start+len-1 in bank.
     // If bank == ALL_PATCHES, then emits the entire library.
     // If bank == ALL_PATCHES, and the synthesizer is capable of emitting bank-patch dumps, 
@@ -808,6 +810,9 @@ public class Library extends AbstractTableModel
         synth.getModel().setUpdateListeners(false);
         boolean failed = false;
         String failures = "";
+        
+        emittingBatch = true;
+        data.add(synth.startingBatchEmit(bank, start, start + len - 1, toFile));
         for(int i = start; i < start + len; i++)
             {
             int b = (bank == ALL_PATCHES ? i / getBankSize() : bank);
@@ -861,7 +866,9 @@ public class Library extends AbstractTableModel
                 data.add(objs);                    
                 }
             }
-                
+        data.add(synth.stoppingBatchEmit(bank, start, start + len - 1, toFile));
+        emittingBatch = false;
+
         // restore
         synth.setModel(original);
         synth.setSendMIDI(originalMIDI);

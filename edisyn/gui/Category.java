@@ -357,6 +357,24 @@ public class Category extends JComponent implements Gatherable
         // so we don't have independent updates in OS X
         repaint();
         }
+
+	public int MIN_EXTRA_LINE = 20;
+	    
+    public Dimension getMinimumSize() 
+    	{
+    	Dimension d = super.getMinimumSize();
+    	
+    	Graphics2D graphics = (Graphics2D)getGraphics();
+    	if (graphics == null) return d;
+    	
+        if (stringWidth == 0)
+            stringWidth = STRING_WIDTH_COMPENSATION + graphics.getFontMetrics(Style.CATEGORY_FONT()).stringWidth(name);
+
+		d.width = ((int)Math.max(d.width, stringWidth + MIN_EXTRA_LINE));
+		return d;
+    	}
+    
+    public Dimension getPreferredSize() { return getMinimumSize(); } 
     
     /** If synth is non-null, then double-clicking on the category will select or deselect all the
         components inside it for mutation purposes. */

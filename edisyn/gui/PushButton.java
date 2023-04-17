@@ -55,6 +55,12 @@ public class PushButton extends JPanel
         setBackground(Style.BACKGROUND_COLOR());
         setLayout(new BorderLayout());
         add(button, BorderLayout.CENTER);
+
+        if (Style.isNimbus())
+        	{
+        	//add(Strut.makeHorizontalStrut(3), BorderLayout.WEST);
+        	add(Strut.makeVerticalStrut(3), BorderLayout.SOUTH);
+			}
         }
     
     public PushButton(String text, String[] options)

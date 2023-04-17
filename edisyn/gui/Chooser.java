@@ -36,6 +36,7 @@ public class Chooser extends NumericalComponent
     String[] labels;
     ImageIcon[] icons;
 
+
     JLabel label = new JLabel("888", SwingConstants.LEFT)
         {
         public Insets getInsets() { return new Insets(0, 0, 0, 0); }
@@ -110,10 +111,7 @@ public class Chooser extends NumericalComponent
         { 
         if (Style.CHOOSER_INSETS() == null)
             return super.getInsets();
-        else if (Style.isWindows())
-            return Style.CHOOSER_WINDOWS_INSETS();
-        else
-            return Style.CHOOSER_INSETS(); 
+        else return Style.CHOOSER_INSETS();
         }
         
     static int[] buildDefaultValues(String[] elements)
@@ -146,6 +144,9 @@ public class Chooser extends NumericalComponent
         {
         this(_label, synth, key, elements, buildDefaultValues(elements), icons);
         }
+    
+    // Nimbus unfortunately varies the height of its combo boxes
+    public static final int MIN_NIMBUS_HEIGHT = 23;
 
     public Chooser(String _label, final Synth synth, final String key, String[] elements, int[] values, ImageIcon[] icons)
         {
@@ -174,6 +175,10 @@ public class Chooser extends NumericalComponent
                 {
                 Dimension d = super.getPreferredSize();
                 d.width += addToWidth;
+                if (Style.isNimbus())
+                	{
+                	d.height = (int)Math.max(d.height, MIN_NIMBUS_HEIGHT);
+                	}
                 return d;
                 }                       
 
@@ -218,10 +223,27 @@ public class Chooser extends NumericalComponent
                 
         setLayout(new BorderLayout());
         add(combo, BorderLayout.CENTER);
+        
+        JPanel label2 = new JPanel();
+        label2.setLayout(new BorderLayout());
+        label2.add(label, BorderLayout.CENTER);
+        label2.setBackground(Style.BACKGROUND_COLOR());
         if (isLabelToLeft())
-            add(label, BorderLayout.WEST);
+            add(label2, BorderLayout.WEST);
         else
-            add(label, BorderLayout.NORTH);
+            add(label2, BorderLayout.NORTH);
+
+        if (Style.isNimbus())
+        	{
+        	//add(Strut.makeVerticalStrut(4), BorderLayout.SOUTH);
+        	label2.add(Strut.makeHorizontalStrut(3), BorderLayout.EAST);
+ 
+			UIDefaults defaults = new UIDefaults();
+			defaults.put("ComboBox.contentMargins", new Insets(0,0,0,0)); // the default for Nimbus is 0, 6, 0, 3
+			defaults.put("ComboBox:\"ComboBox.textField\".contentMargins", new Insets(0,100,0,0)); // the default for Nimbus is 0, 6, 0, 3
+			combo.putClientProperty("Nimbus.Overrides", defaults);
+			combo.putClientProperty("Nimbus.Overrides.InheritDefaults", true);
+			}
         
         /// Apparent OS X Java bug: sometimes after you programmatically change
         /// the value of a JComboBox, it no longer sends ActionListener events.  :-(   
@@ -284,9 +306,12 @@ public class Chooser extends NumericalComponent
         
     public void setLabel(String _label)
         {
-        if (Style.isUnix()) 
-            label.setText(_label);
-        else label.setText("  " + _label);
+        if (Style.isNimbus())
+            label.setText(" " + _label);        
+        else if (Style.isMac()) 
+            label.setText("  " + _label);
+        else
+        	label.setText(_label);
         }
         
     public void setElements(String[] elements)
@@ -323,14 +348,12 @@ public class Chooser extends NumericalComponent
             }
                 
         setCallActionListener(false);
-        if (Style.isUnix())
-            {
-            label.setText(_label);
-            }
-        else 
-            {
+        if (Style.isNimbus())
+            label.setText(" " + _label);        
+        else if (Style.isMac()) 
             label.setText("  " + _label);
-            }
+        else
+        	label.setText(_label);
         combo.removeAllItems();
         
         for(int i = 0; i < elements.length; i++)

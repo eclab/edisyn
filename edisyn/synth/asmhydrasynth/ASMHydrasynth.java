@@ -1224,16 +1224,27 @@ public class ASMHydrasynth extends Synth
         JComponent soundPanel = new SynthPanel(this);
         VBox vbox = new VBox();
         
+        // This little dance allows the Glide category
+        // to line up with the categories below it, at least on the Mac.  
+        // It was driving Andrew Macaulay nuts.
+        
         HBox hbox = new HBox();
-        hbox.add(addNameGlobal(Style.COLOR_GLOBAL()));
-        hbox.add(addVoice(Style.COLOR_B()));
+        HBox inner = new HBox();
+        inner.add(addNameGlobal(Style.COLOR_GLOBAL()));
+        inner.addLast(addVoice(Style.COLOR_B()));
+        VBox innerV = new VBox();
+        innerV.add(inner);
+		hbox.add(innerV);
         hbox.addLast(addGlide(Style.COLOR_C()));
         vbox.add(hbox);
 
+		JComponent comp = null;
         hbox = new HBox();
-        hbox.add(addOscillator(1, Style.COLOR_A()));
+        hbox.add(comp = addOscillator(1, Style.COLOR_A()));
         hbox.addLast(addRingMod(Style.COLOR_B()));
         vbox.add(hbox);
+        
+        innerV.add(Strut.makeHorizontalStrut(comp));
         
         hbox = new HBox();
         hbox.add(addOscillator(2, Style.COLOR_A()));

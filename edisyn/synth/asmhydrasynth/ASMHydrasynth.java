@@ -2489,13 +2489,13 @@ public class ASMHydrasynth extends Synth
                         knobBox.add(depth);
                         knobBox.add(feedback);
                         knobBox.add(wet);
-                        knobBox.addLast(Strut.makeStrut(disp, true));
+                        //knobBox.addLast(Strut.makeStrut(disp, true));
                         break;
                     case 1:         // WavStack
                         sourceBox.add(sourceStrut);
                         knobBox.add(depth);
                         knobBox.add(wet);
-                        knobBox.addLast(Strut.makeStrut(disp, true));
+                        //knobBox.addLast(Strut.makeStrut(disp, true));
                         break;
                     case 2:         // OSC Sync
                         sourceBox.add(sourcesOscSync);
@@ -2504,7 +2504,7 @@ public class ASMHydrasynth extends Synth
                         knobBox.add(window);
                         knobBox.add(feedback);
                         knobBox.add(wet);
-                        knobBox.addLast(Strut.makeStrut(disp, true));
+                        //knobBox.addLast(Strut.makeStrut(disp, true));
                         break;
                     case 3:         // PW-Orig
                         sourceBox.add(sourceStrut);
@@ -2512,7 +2512,7 @@ public class ASMHydrasynth extends Synth
                         knobBox.add(depth);
                         knobBox.add(feedback);
                         knobBox.add(wet);
-                        knobBox.addLast(Strut.makeStrut(disp, true));
+                        //knobBox.addLast(Strut.makeStrut(disp, true));
                         break;
                     case 4:         // PW-Squeez
                         sourceBox.add(sourceStrut);
@@ -2520,7 +2520,7 @@ public class ASMHydrasynth extends Synth
                         knobBox.add(depth);
                         knobBox.add(feedback);
                         knobBox.add(wet);
-                        knobBox.addLast(Strut.makeStrut(disp, true));
+                        //knobBox.addLast(Strut.makeStrut(disp, true));
                         break;
                     case 5:         // PW-ASM
                         sourceBox.add(sourceStrut);
@@ -2537,14 +2537,14 @@ public class ASMHydrasynth extends Synth
                         knobBox.add(depth);
                         knobBox.add(feedback);
                         knobBox.add(wet);
-                        knobBox.addLast(Strut.makeStrut(disp, true));
+                        //knobBox.addLast(Strut.makeStrut(disp, true));
                         break;
                     case 7:         // PhazDiff
                         sourceBox.add(sourceStrut);
                         knobBox.add(depth);
                         knobBox.add(feedback);
                         knobBox.add(wet);
-                        knobBox.addLast(Strut.makeStrut(disp, true));
+                        //knobBox.addLast(Strut.makeStrut(disp, true));
                         break;
                     default:
                         System.err.println("ERROR: (Mutant Mode) bad mutant " + model.get(key));
@@ -2583,6 +2583,8 @@ public class ASMHydrasynth extends Synth
         String[] params;
         final HBox hbox = new HBox();
         
+		model.set("ribbonmode", 0);		// the purpose of this is to make sure that mode is FIRST in the mutation list
+
         params = RIBBON_KEYSPANS;
         final Chooser keyspan = new Chooser("Theremin Keyspan", this, "ribbonkeyspan", params);
  

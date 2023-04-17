@@ -1665,6 +1665,7 @@ public class ASMHydrasynth extends Synth
 
     JComponent pastMode = null;
         
+	HBox _waveScanBox = null;
     public JComponent addOscillator(final int osc, Color color)
         {
         Category category = new Category(this, "Oscillator " + osc, color);
@@ -1677,29 +1678,33 @@ public class ASMHydrasynth extends Synth
         
         VBox vbox = new VBox();
         
-        final HBox waveScanBox = new HBox();
-        comp = new LabelledDial("WaveScan", this, "osc" + osc + "wavscan", color, 0, 1024)
-            {
-            public String map(int value)
-                {
-                int v = value * 8;
-                // dividing 8192 by 117.03 roughly cuts into 70 pieces
-                return String.format("%1.1f", ((roundEven(v / 117.03) + 10) / 10.0));
-                }
-            };
-        waveScanBox.add(comp);
-        for(int i = 1; i <= 4; i++)
-            {
-            vbox = new VBox();
-            params = (i == 1 ? OSC_WAVES : OSC_WAVES_OFF_SILENCE);
-            comp = new Chooser("WaveScan Wave " + i, this, "osc" + osc + "wavscanwave" + i, params);
-            vbox.add(comp);
+		final HBox waveScanBox = new HBox();
+        if (osc < 3)
+        	{
+			_waveScanBox = waveScanBox;
+			comp = new LabelledDial("WaveScan", this, "osc" + osc + "wavscan", color, 0, 1024)
+				{
+				public String map(int value)
+					{
+					int v = value * 8;
+					// dividing 8192 by 117.03 roughly cuts into 70 pieces
+					return String.format("%1.1f", ((roundEven(v / 117.03) + 10) / 10.0));
+					}
+				};
+			waveScanBox.add(comp);
+			for(int i = 1; i <= 4; i++)
+				{
+				vbox = new VBox();
+				params = (i == 1 ? OSC_WAVES : OSC_WAVES_OFF_SILENCE);
+				comp = new Chooser("WaveScan Wave " + i, this, "osc" + osc + "wavscanwave" + i, params);
+				vbox.add(comp);
 
-            params = OSC_WAVES_OFF_SILENCE;
-            comp = new Chooser("WaveScan Wave " + (i + 4), this, "osc" + osc + "wavscanwave" + (i + 4), params);
-            vbox.add(comp);
-            waveScanBox.add(vbox);
-            }
+				params = OSC_WAVES_OFF_SILENCE;
+				comp = new Chooser("WaveScan Wave " + (i + 4), this, "osc" + osc + "wavscanwave" + (i + 4), params);
+				vbox.add(comp);
+				waveScanBox.add(vbox);
+				}
+			}
                 
 
         final HBox waveBox = new HBox();
@@ -1728,7 +1733,7 @@ public class ASMHydrasynth extends Synth
         outerWaveBox.add(waveBox);
         //if (osc != 3)
             {
-            outerWaveBox.add(Strut.makeStrut(waveScanBox, false, true));
+            outerWaveBox.add(Strut.makeStrut(_waveScanBox, false, true));
             }
         
         
@@ -4845,8 +4850,7 @@ public class ASMHydrasynth extends Synth
                 val = v * 128 + w;
                 }
             else if (key.equals("osc1wavscan") || 
-                key.equals("osc2wavscan") || 
-                key.equals("osc3wavscan"))
+                key.equals("osc2wavscan"))
                 {
                 val = val * 8;
                 }
@@ -6662,8 +6666,7 @@ public class ASMHydrasynth extends Synth
                 if (val >= 64) val -= 128; // two's complement :-(
                 }
             else if (key.equals("osc1wavscan") || 
-                key.equals("osc2wavscan") || 
-                key.equals("osc3wavscan"))
+                key.equals("osc2wavscan"))
                 {
                 val = val / 8;
                 }

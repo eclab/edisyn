@@ -4048,6 +4048,17 @@ public abstract class Synth extends JComponent implements Updatable
            
         if (!Style.isMac())
             {
+            JMenuItem aboutMenuItem = new JMenuItem("About Edisyn");
+            aboutMenuItem.addActionListener(new ActionListener()
+                {
+                public void actionPerformed( ActionEvent e)
+                    {
+                    doAbout();
+                    }
+                });
+            menu.addSeparator();
+            menu.add(aboutMenuItem);
+
             JMenuItem exit = new JMenuItem("Exit");
             menu.addSeparator();
             menu.add(exit);
@@ -5610,7 +5621,8 @@ public abstract class Synth extends JComponent implements Updatable
         menubar.add(menu);
                         
         persistentChooserMenu  = new JCheckBoxMenuItem("Keep Next Popup Open");
-        persistentChooserMenu.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Y, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+        // We used to be VK_Y but that doesn't work in Nimbus, probably set to Redo?  Or a bug?
+        persistentChooserMenu.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_B, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
         menu.add(persistentChooserMenu);
         
         launchMenu = new JCheckBoxMenuItem("Launch with Last Editor");
@@ -5817,6 +5829,7 @@ public abstract class Synth extends JComponent implements Updatable
         if (Style.isMac())
             Mac.setup(this);
         
+/*
         // Handle About menu for non-Macs
         if (Style.isWindows() || Style.isUnix())
             {
@@ -5835,6 +5848,7 @@ public abstract class Synth extends JComponent implements Updatable
             helpMenu.add(aboutMenuItem);
             menubar.add(helpMenu);
             }
+*/
 
         frame.getContentPane().setLayout(new BorderLayout());
         frame.getContentPane().add(this, BorderLayout.CENTER);
@@ -6098,11 +6112,11 @@ public abstract class Synth extends JComponent implements Updatable
     
     /** Set this to FALSE to prevent Edisyn from sending all sounds off or all notes off messages,
         perhaps to debug more easily. */
-    public static final boolean sendsAllSoundsOff = false;
+    public static final boolean SEND_ALL_SOUNDS_OFF= true;
     
     void sendAllSoundsOffInternal()
         {
-        if (sendsAllSoundsOff)
+        if (SEND_ALL_SOUNDS_OFF)
             {
             noMIDIPause = true;
             sendAllSoundsOff();

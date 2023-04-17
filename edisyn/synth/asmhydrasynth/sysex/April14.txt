@@ -1,0 +1,5 @@
+April 14, 2023 Hydrasynth sysex reverse engineering notes.
+
+Looks like 2.0.0 has an unusual new encoding for its Vibrato Amount parameter.
+The number before the decimal point is stored as usual, and the number after
+the decimal point is stored in a remote location.

@@ -19,7 +19,35 @@ import javax.sound.midi.*;
 
 
 /**
-   A patch editor for the ASM Hydrasynth.
+   A patch editor for the ASM Hydrasynth.  It can read 1.5.5 and 2.0.0 and can write 2.0.0.
+   
+   <p>The Hydrasynth is a big and complex machine with over 1000 patch parameters and very little guidance as to
+   how they are implemented.  As such it has three major problems which are expressed in this editor.
+   
+   <ul>
+   <li>
+   ASM will not release its sysex spec except sometimes under NDA (which I cannot agree to as I'm doing open source).  
+   Thus in order to do this editor I had to reverse engineer the entire spec.  It was not fun.  I'm sure there are errors 
+   or missing features.  Furthermore, the NRPN spec is incomplete.
+   
+   <p><li>
+   To the best of my knowledge, the Hydrasynth incredibly does not have a sysex command to request the current patch nor
+   to send to the current patch.  Furthermore, while most parameters can be sent to the Hydrasynth individually via NRPN,
+   a few (notably Macro parameters) cannot.  This means that there is no way to fully update the current working memory of
+   the machine except by saving a patch to a scratch location and doing a PC to that location, which I'm not willing to do as
+   (1) it's too slow and (2) it will burn flash RAM.  I can only partially update current working memory.  Importantly, I
+   cannot update macros and that's a BIG problem because most Hydrasynth patches rely on macros to initialize critical
+   parameters.
+   
+   <p><li>
+   The Hydrasynth has a LOT of bugs in its NRPN, sysex, and areas.  Working around these bugs is a large task.
+   </ul>
+   
+   <p>
+   In the edisyn/synth/asmhydrasynth/sysex directory is my best shot at a reverse engineered sysex and patch encoding spec,
+   along with an extensive log documenting the reverse engineering process.  Additionally in the edisyn/synth/asmhydrasynth/info
+   directory I have a list of known bugs, a heavily revised NRPN spec with proper display information, and reverse-engineered
+   FX Presets information.
         
    @author Sean Luke
 */

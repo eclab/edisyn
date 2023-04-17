@@ -1,0 +1,1576 @@
+"Patch Parameters with NRPN Values          NOTE: This does not include global / system parameters, which also have NRPN values",,,
+Name,CC,NRPN,"Range and NRPN Display Instructions
+
+IMPORTANT NOTE 1.  If a line is blank, look for the first numbered version of that parameter.  For example, lfo5step14 is blank: instead you should see lfo1step1.
+
+IMPORTANT NOTE 2.  Often this column refers to a table written in ALL_CAPS_WITH_UNDERSCORES: for example osc1type below (row 10) refers to OSC_WAVES.  You can find these tables in Edisyn's ASMHydrasynth.java file."
+osc1mode,,0x3F 0x18,"MSB = Osc [0,2]   LSB = [0,1]"
+osc2mode,,0x3F 0x18,
+osc3mode,,0x3F 0x18,
+osc1semi,,0x3F 0x11,"MSB = Osc [0,2]  LSB = [-36,+36] 1-byte 2's Complement.  Thus the LSB goes 0=0, 1=1, 2=2, ..., 36=36,  then 92=-36, 93=-35, ..., 127=-1"
+osc2semi,,0x3F 0x11,
+osc3semi,,0x3F 0x11,
+osc1type,,0x3F 0x19,[0-218] OSC_WAVES
+osc1cent,0x6F,0x41 0x01,"[-50,+50] 2-byte 2's Complement.  Thus it goes 
+0=0, 1=1, 2=2, ..., 50=50, then 8141 = -50, 8142 =-49, ..., 8191 = -1"
+osc1keytrack,,0x3F 0x54,"[0,200] Display as ""x%"""
+osc1wavscan,0x18,0x41 0x2A,"[0,8192] seemingly only output in increments of 8, and displayed as [1.0,8.0] in increments of 0.1.  To display: if 8192, display 8.0.  Else divide by 117.03 or so (cutting into 70 even pieces).  Then ROUND to nearest integer 0...70.  Then add 10 (10...80), then divide by 10.  The Hydrasynth seems to round 0.5 towards even."
+osc1wavescanwave1,,0x3F 0x60,[0-218] OSC_WAVES
+osc1wavescanwave2,,0x3F 0x61,"[0-220] ""Off"", ""Silence"", THEN OSC_WAVES"
+osc1wavescanwave3,,0x3F 0x62,"[0-220] ""Off"", ""Silence"", THEN OSC_WAVES"
+osc1wavescanwave4,,0x3F 0x63,"[0-220] ""Off"", ""Silence"", THEN OSC_WAVES"
+osc1wavescanwave5,,0x3F 0x64,"[0-220] ""Off"", ""Silence"", THEN OSC_WAVES"
+osc1wavescanwave6,,0x3F 0x65,"[0-220] ""Off"", ""Silence"", THEN OSC_WAVES"
+osc1wavescanwave7,,0x3F 0x66,"[0-220] ""Off"", ""Silence"", THEN OSC_WAVES"
+osc1wavescanwave8,,0x3F 0x67,"[0-220] ""Off"", ""Silence"", THEN OSC_WAVES"
+osc2type,,0x3F 0x1A,
+osc2cent,0x70,0x41 0x02,
+osc2keytrack,,0x3F 0x55,
+osc2wavscan,0x1A,0x41 0x2B,
+osc2wavescanwave1,,0x3F 0x68,
+osc2wavescanwave2,,0x3F 0x69,
+osc2wavescanwave3,,0x3F 0x6A,
+osc2wavescanwave4,,0x3F 0x6B,
+osc2wavescanwave5,,0x3F 0x6C,
+osc2wavescanwave6,,0x3F 0x6D,
+osc2wavescanwave7,,0x3F 0x6E,
+osc2wavescanwave8,,0x3F 0x6F,
+osc3type,,0x3F 0x0D,
+osc3cent,0x71,0x41 0x03,
+osc3keytrack,,0x3F 0x56,
+mutator1mode,,0x3F 0x21,"MSB = 0x0  LSB = [0, 7] ""FM-Linear"", ""WavStack"", ""Osc Sync"", ""PW-Orig"", ""PW-Sqeez"", ""PW-ASM"", ""Harmonic"", ""PhazDiff"""
+mutator2mode,,0x3F 0x21,
+mutator3mode,,0x3F 0x21,
+mutator4mode,,0x3F 0x21,
+mutator1sourcefmlin,,0x3F 0x24,"MSB = 0x0  LSB = [0, 12] Sine Triangle Osc1 Osc2 Osc3 RingMod Noise Mutant1 Mutant2 Mutant2 Mutant4 ModIn1 ModIn2"
+mutator2sourcefmlin,,0x3F 0x24,
+mutator3sourcefmlin,,0x3F 0x24,
+mutator4sourcefmlin,,0x3F 0x24,
+mutator1sourceoscsync,,0x3F 0x22,"MSB = 0x0 LSB = [0,2] Osc1 Osc2 Osc3"
+mutator2sourceoscsync,,0x3F 0x22,
+mutator3sourceoscsync,,0x3F 0x22,
+mutator4sourceoscsync,,0x3F 0x22,
+mutator1ratio,0x1D,0x41 0x2C,"[0,8192] seemingly only output in increments of 8, for a total of 1025 vals (0...1025).  Displayed as: 
+65	32-64	by 0.5
+64	16-32	by 0.25
+64	8-16 by 0.125
+128	4-8	by 0.03125
+192	1-4	by 0.015625
+64	0.8-1.0	by 0.00625
+64	0.75-0.8 by 0.0007812500 
+64	0.666-0.75 by 0.0013020843 
+64	0.6-0.666 by 0.0010416656  (0.066666 / 64)
+128	0.6-0.75 by 0.0011718750  (0.15 / 128)
+128	0.4-0.6 by 0.0015625000  (0.2 / 128)
+64	0.333-0.4 by 0.0010421875  (0.06666 / 64)
+64	0.250-0.333 by 0.0013015625 (.0833333 / 64)
+TOTAL: 1025 VALS
+
+Show as xx.xxxx   I think the values are ROUNDED, and the Hydrasynth rounds 0.5 towards even.  Even so some values are very slightly off.  It's not entirely clear what the Hydrasynth is doing.  But this is close."
+mutator1depth,0x1E,0x40 0x1F,"[0,8192] seemingly only output in increments of 8, and displayed as [0.0,128.0] in increments of 0.1. To display: if 8192, display 128.0.  Else divide by 6.4 (cutting into 1280 even pieces).  Then ROUND to nearest integer 0...1280.  Then divide by 10.  The Hydrasynth seems to round 0.5 towards even."
+mutator1wet,0x1F,0x40 0x22,"[0,8192] seemingly only output in increments of 8, and displayed as [0%,100%] in increments of 1. To display: if 8192, display 100.  Else divide by 81.92 (cutting into 100 even pieces). Then FLOOR to nearest integer 0...100."
+mutator1feedback,,0x40 0x25,"[0,8192] seemingly only output in increments of 8, and displayed as [0%,150%] in increments of 1. To display: if 8192, display 150.  Else divide by 54.613333 (cutting into 150 even pieces). Then FLOOR to nearest integer 0...150."
+mutator1window,,0x40 0x1C,"[0,8192] seemingly only output in increments of 8, and displayed as [0.0,128.0] in increments of 0.1. To display: if 8192, display 128.0.  Else divide by 6.4 (cutting into 1280 even pieces).  Then ROUND to nearest integer 0...1280.  Then divide by 10.  The Hydrasynth seems to round 0.5 towards even."
+mutator1warp1,,0x40 0x60,"[0,8192] seemingly only output in increments of 8, and displayed as [0.0,128.0] in increments of 0.1. To display: if 8192, display 128.0.  Else divide by 6.4 (cutting into 1280 even pieces).  Then ROUND to nearest integer 0...1280.  Then divide by 10.  The Hydrasynth seems to round 0.5 towards even."
+mutator1warp2,,0x40 0x61,
+mutator1warp3,,0x40 0x62,
+mutator1warp4,,0x40 0x63,
+mutator1warp5,,0x40 0x64,
+mutator1warp6,,0x40 0x65,
+mutator1warp7,,0x40 0x66,
+mutator1warp8,,0x40 0x67,
+mutator2ratio,0x21,0x41 0x2D,
+mutator2depth,0x22,0x40 0x20,
+mutator2wet,0x23,0x40 0x23,
+mutator2feedback,,0x40 0x26,
+mutator2window,,0x40 0x1D,
+mutator2warp1,,0x40 0x68,
+mutator2warp2,,0x40 0x69,
+mutator2warp3,,0x40 0x6A,
+mutator2warp4,,0x40 0x6B,
+mutator2warp5,,0x40 0x6C,
+mutator2warp6,,0x40 0x6D,
+mutator2warp7,,0x40 0x6E,
+mutator2warp8,,0x40 0x6F,
+mutator3ratio,0x24,0x41 0x2E,
+mutator3depth,0x25,0x40 0x21,
+mutator3wet,0x27,0x40 0x24,
+mutator3feedback,,0x40 0x27,
+mutator3window,,0x40 0x1E,
+mutator3warp1,,0x40 0x70,
+mutator3warp2,,0x40 0x71,
+mutator3warp3,,0x40 0x72,
+mutator3warp4,,0x40 0x73,
+mutator3warp5,,0x40 0x74,
+mutator3warp6,,0x40 0x75,
+mutator3warp7,,0x40 0x76,
+mutator3warp8,,0x40 0x77,
+mutator4ratio,0x28,0x41 0x2F,
+mutator4depth,0x29,0x40 0x16,
+mutator4wet,0x2A,0x40 0x17,
+mutator4feedback,,0x40 0x1B,
+mutator4window,,0x40 0x1A,
+mutator4warp1,,0x40 0x78,
+mutator4warp2,,0x40 0x79,
+mutator4warp3,,0x40 0x7A,
+mutator4warp4,,0x40 0x7B,
+mutator4warp5,,0x40 0x7C,
+mutator4warp6,,0x40 0x7D,
+mutator4warp7,,0x40 0x7E,
+mutator4warp8,,0x40 0x7F,
+noisetype,,0x3F 0x27,"[0,6] White Pink Brown Red Blue Violet Grey "
+ringmoddepth,0x2B,0x40 0x03,"[0,8192] seemingly only output in increments of 8, and displayed as [0.0,128.0] in increments of 0.1. To display: if 8192, display 128.0.  Else divide by 6.4 (cutting into 1280 even pieces).  Then ROUND to nearest integer 0...1280.  Then divide by 10.  The Hydrasynth seems to round 0.5 towards even."
+ringmodsource1,,0x3F 0x26,"MSB = Source Num [0, 1]    LSB = [0,9] RING_MOD_SOURCES"
+ringmodsource2,,0x3F 0x26,
+mixerosc1vol,0x2C,0x40 0x07,"[0,8192] seemingly only output in increments of 8, and displayed as [0.0,128.0] in increments of 0.1. To display: if 8192, display 128.0.  Else divide by 6.4 (cutting into 1280 even pieces).  Then ROUND to nearest integer 0...1280.  Then divide by 10.  The Hydrasynth seems to round 0.5 towards even."
+mixerosc1pan,0x2D,0x40 0x08,"[0,8192] seemingly only output in increments of 8, and displayed as [-64.0,64.0] in increments of 0.1. To display: if 8192, display 64.0.  Else divide by 6.4 (cutting into 1280 even pieces). Then subtract 640.  Then ROUND to nearest integer -640...640.  Then divide by 10. The Hydrasynth seems to round 0.5 towards even."
+mixerosc1filterratio,0x76,0x40 0x31,"[0,8192] seemingly only output in increments of 8, and displayed as [0:100, 100:0] in increments of 1. To display: if 8192, display 128.0.  Else divide by 81.92 (cutting into 100 even pieces).  Then FLOOR to nearest integer 0. Only the very highest value will be 100:0."
+mixerosc2vol,0x2E,0x40 0x09,
+mixerosc2pan,0x2F,0x40 0x0A,
+mixerosc2filterratio,0x77,0x40 0x32,
+mixerosc3vol,0x30,0x40 0x0B,
+mixerosc3pan,0x31,0x40 0x0C,
+mixerosc3filterratio,0x72,0x40 0x33,
+mixernoisevol,0x03,0x40 0x0D,
+mixernoisepan,0x08,0x40 0x0E,
+mixernoisefilterratio,0x73,0x40 0x34,
+mixerringmodvol,0x09,0x40 0x01,
+mixerringmodpan,0x0A,0x40 0x04,
+mixerringmodfilterratio,0x74,0x40 0x35,
+mixerfilterrouting,,0x3F 0x2C,"[0,1] ""Series"", ""Parallel"""
+filter1positionofdrive,,0x3F 0x29,"[0,1] ""Pre"", ""Post"""
+filter1cutoff,0x4A,0x40 0x28,"[0,8192] seemingly only output in increments of 8, and displayed as [0.0,128.0] in increments of 0.1. To display: if 8192, display 128.0.  Else divide by 6.4 (cutting into 1280 even pieces).  Then ROUND to nearest integer 0...1280.  Then divide by 10.  The Hydrasynth seems to round 0.5 towards even."
+filter1drive,0x32,0x40 0x2B,"[0,8192] seemingly only output in increments of 8, and displayed as [0.0,128.0] in increments of 0.1. To display: if 8192, display 128.0.  Else divide by 6.4 (cutting into 1280 even pieces).  Then ROUND to nearest integer 0...1280.  Then divide by 10.  The Hydrasynth seems to round 0.5 towards even."
+filter1resonance,0x47,0x40 0x29,"[0,8192] seemingly only output in increments of 8, and displayed as [0.0,128.0] in increments of 0.1. To display: if 8192, display 128.0.  Else divide by 6.4 (cutting into 1280 even pieces).  Then ROUND to nearest integer 0...1280.  Then divide by 10.  The Hydrasynth seems to round 0.5 towards even."
+filter1special,,0x40 0x2A,"[0,8192] seemingly only output in increments of 8, and displayed as [0.0,128.0] in increments of 0.1. To display: if 8192, display 128.0.  Else divide by 6.4 (cutting into 1280 even pieces).  Then ROUND to nearest integer 0...1280.  Then divide by 10.  The Hydrasynth seems to round 0.5 towards even.  This is Vowel Formant Control, labelled ""Control"" on the synth."
+filter1keytrack,0x33,0x41 0x66,"[0,8192] seemingly only output in increments of 8, and displayed as [-200%,200%] in increments of 1. To display: if 8192, display 200%.  Else divide by 20.48 (cutting into 400 even pieces).  Then FLOOR to integer 0...400.  Then subtract 200."
+filter1lfo1amount,0x34,0x41 0x60,"[0,8192] seemingly only output in increments of 8, and displayed as [-64.0,64.0] in increments of 0.1. To display: if 8192, display 64.0.  Else divide by 6.4 (cutting into 1280 even pieces). Then ROUND to nearest integer 0...1280.  Then divide by 10.  Then subtract 64. The Hydrasynth seems to round 0.5 towards even."
+filter1vowelorder,,0x3F 0x2E,"[0,7] ""AEIOU"", ""AIUEO"", ""AUIOE"", ""AOUIE"", ""IOUAE"", ""UEAOI"", ""IOEAU"", ""UIEAO"" BUG: This NRPN is emitted by the Hydrasynth but not read by it"
+filter1type,,0x3F 0x28,"[0-15]  FILTER_1_TYPES
+Note that ""vowel"" is in the wrong place.  It is in the middle of the range at position 10, but appears last in the Hydrasynth's menu.  This is likely because in an earlier incarnation, there were only 11 filter types (see ASM's NRPN comments), and then 4 more filter types were added afterwards."
+filter1velenv,0x35,0x41 0x69,"[0,8192] seemingly only output in increments of 8, and displayed as [-64.0,64.0] in increments of 0.1. To display: if 8192, display 64.0.  Else divide by 6.4 (cutting into 1280 even pieces). Then ROUND to nearest integer 0...1280.  Then divide by 10.  Then subtract 64. The Hydrasynth seems to round 0.5 towards even."
+filter1env1amount,0x36,0x41 0x61,"[0,8192] seemingly only output in increments of 8, and displayed as [-64.0,64.0] in increments of 0.1. To display: if 8192, display 64.0.  Else divide by 6.4 (cutting into 1280 even pieces). Then ROUND to nearest integer 0...1280.  Then divide by 10.  Then subtract 64. The Hydrasynth seems to round 0.5 towards even."
+filter2positionofdrive,,0x3F 0x2B,"[0,1]?  THIS PARAMETER DOES NOT EXIST.  Perhaps was removed?"
+filter2cutoff,0x37,0x40 0x2C,
+filter2resonance,0x38,0x40 0x2D,
+filter2morph,0x39,0x40 0x2E,"[0,8192] seemingly only output in increments of 8, and displayed as [0.0,128.0] in increments of 0.1. To display: if 8192, display 128.0.  Else divide by 6.4 (cutting into 1280 even pieces).  Then ROUND to nearest integer 0...1280.  Then divide by 10.  The Hydrasynth seems to round 0.5 towards even."
+filter2keytrack,0x3A,0x41 0x67,
+filter2lfo1amount,0x3B,0x41 0x62,
+filter2velenv,0x3C,0x41 0x6A,
+filter2env1amount,0x3D,0x41 0x63,
+filter2type,,0x3F 0x23,"[0,1] ""LP-BP-HP"", ""LP-Notch-HP"""
+amplevel,,0x40 0x02,"[0,8192] seemingly only output in increments of 8, and displayed as [0.0,128.0] in increments of 0.1. To display: if 8192, display 128.0.  Else divide by 6.4 (cutting into 1280 even pieces).  Then ROUND to nearest integer 0...1280.  Then divide by 10.  The Hydrasynth seems to round 0.5 towards even."
+ampvelenv,,0x41 0x6B,"[0,8192] seemingly only output in increments of 8, and displayed as [-64.0,64.0] in increments of 0.1. To display: if 8192, display 64.0.  Else divide by 6.4 (cutting into 1280 even pieces). Then ROUND to nearest integer 0...1280.  Then divide by 10.  Then subtract 64. The Hydrasynth seems to round 0.5 towards even."
+amplfo2amount,0x3E,0x41 0x64,"[0,8192] seemingly only output in increments of 8, and displayed as [-64.0,64.0] in increments of 0.1. To display: if 8192, display 64.0.  Else divide by 6.4 (cutting into 1280 even pieces). Then ROUND to nearest integer 0...1280.  Then divide by 10.  Then subtract 64. The Hydrasynth seems to round 0.5 towards even."
+prefxtype,,0x3B 0x7F,"[0,9] output as 0, 8, 16, 24, ...  representing ""Bypass"", ""Chorus"", ""Flanger"", ""Rotary"", ""Phaser"", ""Lo-Fi"", ""Tremolo"", ""EQ"", ""Compressor"", ""Distortion"""
+prefxpreset,,0x3B 0x00,"See ""FX Types and Custom Parameters"" below depending on prefxtype"
+prefxwet,0x5D,0x41 0x6E,"[0,8192] seemingly only output in increments of 8, and displayed as [0.0%,100.0%] in various increments. To display: if 8192, display 100.0.  Else divide by 8.192 (cutting into 1000 even pieces). Then FLOOR to nearest integer 0...100.  Then divide by 10."
+prefxparam1,0x0C,0x41 0x6F,"See ""FX Types and Custom Parameters"" below depending on prefxtype"
+prefxparam2,0x0D,0x41 0x70,
+prefxparam3,,0x3B 0x30,
+prefxparam4,,0x3B 0x40,
+prefxparam5,,0x3B 0x50,
+prefxsidechain,,0x3B 0x73,"See ""FX Types and Custom Parameters"" below depending on prefxtype"
+delaybpmsync,,0x3B 0x70,"[0,1] in steps of 8 (0, 8)"
+delaywet,0x5C,0x41 0x78,"[0,8192] seemingly only output in increments of 8, and displayed as [0.0%,100.0%] in various increments. To display: if 8192, display 100.0.  Else divide by 8.192 (cutting into 1000 even pieces). Then FLOOR to nearest integer 0...100.  Then divide by 10."
+delayfeedback,0x0E,0x41 0x75,"[0,8192] seemingly only output in increments of 8, and displayed as [0.0,128.0] in increments of 0.1. To display: if 8192, display 128.0.  Else divide by 6.4 (cutting into 1280 even pieces).  Then ROUND to nearest integer 0...1280.  Then divide by 10.  The Hydrasynth seems to round 0.5 towards even."
+delayfeedtone,,0x41 0x76,"[0,8192] seemingly only output in increments of 8, and displayed as [0.0,128.0] in increments of 0.1. To display: if 8192, display 128.0.  Else divide by 6.4 (cutting into 1280 even pieces).  Then ROUND to nearest integer 0...1280.  Then divide by 10.  The Hydrasynth seems to round 0.5 towards even."
+delaytimesyncoff,0x0F,0x41 0x74,"[0,8192] seemingly only output in increments of 8, representing the values [0,1024] using the following convoluted arrangement:
+
+0-72	1.0ms...10ms in 0.125 increments, displayed as x.x, ROUNDED.  In this case, rounding 0.5 is towards zero, NOT towards even as done elsewhere on the Hydrasynth.
+
+Next come multiples of the following values.  For example 10ms at 72 means 72, 73, ... 83 all display 10ms.
+
+72		10ms
+84		11
+92		12
+98		13
+100		15
+103		16
+106		17
+108		18
+111		19
+114		20
+119		21
+122		22
+124		23
+127		25
+130		26
+132		27
+135		28
+138		29
+140		30
+146		31
+148		32
+151		33
+154		35
+156		36
+159		37
+162		38
+164		39
+167		40
+171		41
+172		42
+174		43
+176		45
+177		46
+179		47
+180		48
+182		49
+
+Next come certain patterns.
+184-344	50-150 in the following pattern every multiple of 10: 
+		x0 x0 x0 x1 x1 x2 x2 x3 x3 x5 x6 x6 x7 x7 x8 x8 x9 x9 
+		(for example, 50 50 50 51 51 52 52 53 53 55 56 56 57 57 58 58 59 59)
+344-544	150-400 in the following pattern every multiple of 10: 
+		x0 x0 x2 x3 x5 x6 x8 x9
+		(for example, 150 150 152 153 155 156 158 159)
+544-664	400-700 in the following pattern every multiple of 10:
+		x0 x2 x5 x8
+		(for example, 400 402 405 408)
+664-744	700-1000 (1.00 sec) in the following pattern every 		multiple of 30:
+		x0 x3 x8 (x+1)0 (x+1)5 (x+1)9 (x+2)2 (x+2)6
+		(for example 700 703 708 710 715 719 722 726)
+744-1024	SOME_MORE_DELAY_TIMES
+
+BUG: When the Hydrasynth goes to sleep, if you wake it up, its delaytime screen is not in sync with values being sent in NRPN: it's offset. You have to push down to zero in order to reset it."
+delaytimesyncon,,0x43 0x74,"[0,20] FX_DELAYS_SYNC_ON
+
+BUG: This is not in ASM's documentation"
+delaytype,,0x3B 0x71,"[0,4] in steps of 8 (0, 8, 16, 24, 32) ""Basic Mono"", ""Basic Stereo"", ""Pan Delay"", ""LRC Delay"", ""Reverse"""
+delaywettone,0x3F,0x41 0x77,"[0,8192] seemingly only output in increments of 8, and displayed as [-64.0,64.0] in increments of 0.1. To display: if 8192, display 64.0.  Else divide by 6.4 (cutting into 1280 even pieces). Then ROUND to nearest integer 0...1280.  Then divide by 10.  Then subtract 64. The Hydrasynth seems to round 0.5 towards even."
+reverbwet,0x5B,0x41 0x7E,"[0,8192] seemingly only output in increments of 8, and displayed as [0.0%,100.0%] in various increments. To display: if 8192, display 100.0.  Else divide by 8.192 (cutting into 1000 even pieces). Then FLOOR to nearest integer 0...100.  Then divide by 10."
+reverbhidamp,,0x41 0x7B,"[0,8192] seemingly only output in increments of 8, and displayed as [0.0,128.0] in increments of 0.1. To display: if 8192, display 128.0.  Else divide by 6.4 (cutting into 1280 even pieces).  Then ROUND to nearest integer 0...1280.  Then divide by 10.  The Hydrasynth seems to round 0.5 towards even."
+reverblodamp,,0x41 0x7C,"[0,8192] seemingly only output in increments of 8, and displayed as [0.0,128.0] in increments of 0.1. To display: if 8192, display 128.0.  Else divide by 6.4 (cutting into 1280 even pieces).  Then ROUND to nearest integer 0...1280.  Then divide by 10.  The Hydrasynth seems to round 0.5 towards even."
+reverbpredelay,,0x41 0x7D,"[0,8192] seemingly only output in increments of 8, representing the values [0,1024] and displayed as follows.  Take that value, multiply by 10, divide by 4.1042084168 (cutting into 2495 even pieces), ROUND to the nearest integer, then divide by 10, and add 0.5.  This should get you to the range [0.5,250.0], which is displayed as ms."
+reverbtime,0x41,0x41 0x79,"[0,8192] seemingly only output in increments of 8, representing the values [0,1024], in intervals of 8 itself.  Take that value, divide by 8, FLOOR it, and look up in [0,128] REVERB_TIMES."
+reverbtone,0x43,0x41 0x7A,"[0,8192] seemingly only output in increments of 8, and displayed as [-64.0,64.0] in increments of 0.1. To display: if 8192, display 64.0.  Else divide by 6.4 (cutting into 1280 even pieces). Then ROUND to nearest integer 0...1280.  Then divide by 10.  Then subtract 64. The Hydrasynth seems to round 0.5 towards even."
+reverbtype,,0x3C 0x72,"[0,4] in steps of 8 (0, 8, 16, 24, 32)  ""Hall"", ""Room"", ""Plate"", ""Cloud"""
+postfxtype,,0x3C 0x7F,"[0,9] output as 0, 8, 16, 24, ...  representing ""Bypass"", ""Chorus"", ""Flanger"", ""Rotary"", ""Phaser"", ""Lo-Fi"", ""Tremolo"", ""EQ"", ""Compressor"", ""Distortion"""
+postfxpreset,,0x3C 0x00,"See ""FX Types and Custom Parameters"" below depending on postfxtype"
+postfxwet,0x5E,0x41 0x71,"[0,8192] seemingly only output in increments of 8, and displayed as [0.0%,100.0%] in various increments. To display: if 8192, display 100.0.  Else divide by 8.192 (cutting into 1000 even pieces). Then FLOOR to nearest integer 0...100.  Then divide by 10."
+postfxparam1,0x44,0x41 0x72,"See ""FX Types and Custom Parameters"" below depending on postfxtype"
+postfxparam2,0x45,0x41 0x73,
+postfxparam3,,0x3C 0x30,
+postfxparam4,,0x3C 0x40,
+postfxparam5,,0x3C 0x50,
+postfxsidechain,,0x3C 0x73,"See ""FX Types and Custom Parameters"" below depending on postfxtype"
+lfo1level,0x46,0x41 0x0B,"[0,8192] seemingly only output in increments of 8, and displayed as [0.0,128.0] in increments of 0.1. To display: if 8192, display 128.0.  Else divide by 6.4 (cutting into 1280 even pieces). Then ROUND to nearest integer 0...1280.  Then divide by 10.  The Hydrasynth seems to round 0.5 towards even.  Note that every 5 away from 0 (center) is one semitone."
+lfo1wave,,0x3F 0x04,"MSB = 0x00   LSB = [0,10] LFO_WAVES"
+lfo1bpmsync,,0x3F 0x04,"MSB = 0x01   LSB = [0,1]"
+lfo1trigsync,,0x3F 0x04,"MSB = 0x03   LSB = [0, 2] ""Poly"", ""Single"", ""Off"""
+lfo1smooth,,0x3F 0x04,"MSB = 0x06   LSB = [0,1]"
+lfo1steps,,0x3F 0x04,"MSB = 0x07   LSB = [2, 64]
+
+Note: this parameter is ignored if lfo1wave is not set to ""Step"" (10).  Note that this is NOT the case for the individual steps: they can be set regardless of the setting of lfo1wave."
+lfo1delaysyncoff,,0x3F 0x04,"MSB = 0x11   LSB = [0, 127] divided into the following chunks: 
+20	0-20ms	by 1
+10	20-40ms by 2
+10	40-80ms by 4
+10	80-160ms by 8
+10	160-320ms by 16
+10	320ms-640ms by 32
+10	640ms-1280ms by 64  (>1 sec display as x.xx floored)
+10	1280 - 2560 by 128 (display as x.xx floored)
+10	2560 - 5120 by 256 (display as x.xx floored)
+10	5120 - 9728 by 512 (display as x.xx floored)
+12	10 - 22 sec by 1 (display as xx.0)
+6	22 - 32 sec by 2  (display as xx.0)
+TOTAL: 128 VALS"
+lfo1fadeinsyncoff,,0x3F 0x04,"MSB = 0x12   LSB = [0,127] LFO_FADE_INS_SYNC_ON"
+lfo1delaysyncon,,0x3F 0x04,"MSB = 0x21   LSB = [0,28]  ENV_LFO_RATES_SYNC_ON"
+lfo1fadeinsyncon,,0x3F 0x04,"MSB = 0x13   LSB = [0,28]  ENV_LFO_RATES_SYNC_ON"
+lfo1oneshot,,0x3F 0x04,"MSB = 0x14   (1.5.5) LSB = [0,1]  (2.0.0) LSB=[0,2] Off, On, Step"
+lfo1phase,,0x3F 0x30,"[0,360] displayed as degrees"
+lfo1ratesyncoff,0x48,0x41 0x05,"[0,8192] seemingly only output in increments of 8, and displayed as [0.02 Hz ...150.00 Hz]. To display: if 8192, display 150.00Hz.  Else divide by 6.4 (cutting into 1280 even pieces).  Now we need to map to an exponential function to get the Hz value.  It seems the following function is a pretty close fit:  
+
+2^(1 + 0.012571 *  v) / 100  I would then display as x.xx, perhaps rounded down.  Would be nice to know what their exact function is."
+lfo1ratesyncon,,0x43 0x05,"[0,26]  LFO_RATES_SYNC_ON"
+lfo1step1,,0x3A 0x10,"[0,8192] seemingly only output in increments of 8, and displayed as [-64.0,64.0] in increments of 0.1. To display: if 8192, display 64.0.  Else divide by 6.4 (cutting into 1280 even pieces). Then ROUND to nearest integer 0...1280.  Then divide by 10.  Then subtract 64. The Hydrasynth seems to round 0.5 towards even.  Note that every 5 away from 0 (center) is one semitone.
+
+Note: you can set this and other LFO step parameters even if lfo1wave isn't currently set to ""Steps"" (10).  However, you CANNOT set lfo1steps unless lfo1wave is currently set to ""Steps""."
+lfo1step2,,0x3A 0x11,
+lfo1step3,,0x3A 0x12,
+lfo1step4,,0x3A 0x13,
+lfo1step5,,0x3A 0x14,
+lfo1step6,,0x3A 0x15,
+lfo1step7,,0x3A 0x16,
+lfo1step8,,0x3A 0x17,
+lfo1step9,,0x4A 0x00,
+lfo1step10,,0x4A 0x01,
+lfo1step11,,0x4A 0x02,
+lfo1step12,,0x4A 0x03,
+lfo1step13,,0x4A 0x04,
+lfo1step14,,0x4A 0x05,
+lfo1step15,,0x4A 0x06,
+lfo1step16,,0x4A 0x07,
+lfo1step17,,0x4A 0x08,
+lfo1step18,,0x4A 0x09,
+lfo1step19,,0x4A 0x0A,
+lfo1step20,,0x4A 0x0B,
+lfo1step21,,0x4A 0x0C,
+lfo1step22,,0x4A 0x0D,
+lfo1step23,,0x4A 0x0E,
+lfo1step24,,0x4A 0x0F,
+lfo1step25,,0x4A 0x10,
+lfo1step26,,0x4A 0x11,
+lfo1step27,,0x4A 0x12,
+lfo1step28,,0x4A 0x13,
+lfo1step29,,0x4A 0x14,
+lfo1step30,,0x4A 0x15,
+lfo1step31,,0x4A 0x16,
+lfo1step32,,0x4A 0x17,
+lfo1step33,,0x4A 0x18,
+lfo1step34,,0x4A 0x19,
+lfo1step35,,0x4A 0x1A,
+lfo1step36,,0x4A 0x1B,
+lfo1step37,,0x4A 0x1C,
+lfo1step38,,0x4A 0x1D,
+lfo1step39,,0x4A 0x1E,
+lfo1step40,,0x4A 0x1F,
+lfo1step41,,0x4A 0x20,
+lfo1step42,,0x4A 0x21,
+lfo1step43,,0x4A 0x22,
+lfo1step44,,0x4A 0x23,
+lfo1step45,,0x4A 0x24,
+lfo1step46,,0x4A 0x25,
+lfo1step47,,0x4A 0x26,
+lfo1step48,,0x4A 0x27,
+lfo1step49,,0x4A 0x28,
+lfo1step50,,0x4A 0x29,
+lfo1step51,,0x4A 0x2A,
+lfo1step52,,0x4A 0x2B,
+lfo1step53,,0x4A 0x2C,
+lfo1step54,,0x4A 0x2D,
+lfo1step55,,0x4A 0x2E,
+lfo1step56,,0x4A 0x2F,
+lfo1step57,,0x4A 0x30,
+lfo1step58,,0x4A 0x31,
+lfo1step59,,0x4A 0x32,
+lfo1step60,,0x4A 0x33,
+lfo1step61,,0x4A 0x34,
+lfo1step62,,0x4A 0x35,
+lfo1step63,,0x4A 0x36,
+lfo1step64,,0x4A 0x37,
+lfo2level,0x1C,0x41 0x0C,
+lfo2wave,,0x3F 0x05,
+lfo2bpmsync,,0x3F 0x05,
+lfo2trigsync,,0x3F 0x05,
+lfo2smooth,,0x3F 0x05,
+lfo2steps,,0x3F 0x05,
+lfo2delaysyncoff,,0x3F 0x05,
+lfo2fadeinsyncoff,,0x3F 0x05,
+lfo2delaysyncon,,0x3F 0x05,
+lfo2fadeinsyncon,,0x3F 0x05,
+lfo2oneshot,,0x3F 0x05,
+lfo2phase,,0x3F 0x31,
+lfo2ratesyncoff,0x49,0x41 0x06,
+lfo2ratesyncon,,0x43 0x06,
+lfo2step1,,0x3A 0x18,
+lfo2step2,,0x3A 0x19,
+lfo2step3,,0x3A 0x1A,
+lfo2step4,,0x3A 0x1B,
+lfo2step5,,0x3A 0x1C,
+lfo2step6,,0x3A 0x1D,
+lfo2step7,,0x3A 0x1E,
+lfo2step8,,0x3A 0x1F,
+lfo2step9,,0x4A 0x40,
+lfo2step10,,0x4A 0x41,
+lfo2step11,,0x4A 0x42,
+lfo2step12,,0x4A 0x43,
+lfo2step13,,0x4A 0x44,
+lfo2step14,,0x4A 0x45,
+lfo2step15,,0x4A 0x46,
+lfo2step16,,0x4A 0x47,
+lfo2step17,,0x4A 0x48,
+lfo2step18,,0x4A 0x49,
+lfo2step19,,0x4A 0x4A,
+lfo2step20,,0x4A 0x4B,
+lfo2step21,,0x4A 0x4C,
+lfo2step22,,0x4A 0x4D,
+lfo2step23,,0x4A 0x4E,
+lfo2step24,,0x4A 0x4F,
+lfo2step25,,0x4A 0x50,
+lfo2step26,,0x4A 0x51,
+lfo2step27,,0x4A 0x52,
+lfo2step28,,0x4A 0x53,
+lfo2step29,,0x4A 0x54,
+lfo2step30,,0x4A 0x55,
+lfo2step31,,0x4A 0x56,
+lfo2step32,,0x4A 0x57,
+lfo2step33,,0x4A 0x58,
+lfo2step34,,0x4A 0x59,
+lfo2step35,,0x4A 0x5A,
+lfo2step36,,0x4A 0x5B,
+lfo2step37,,0x4A 0x5C,
+lfo2step38,,0x4A 0x5D,
+lfo2step39,,0x4A 0x5E,
+lfo2step40,,0x4A 0x5F,
+lfo2step41,,0x4A 0x60,
+lfo2step42,,0x4A 0x61,
+lfo2step43,,0x4A 0x62,
+lfo2step44,,0x4A 0x63,
+lfo2step45,,0x4A 0x64,
+lfo2step46,,0x4A 0x65,
+lfo2step47,,0x4A 0x66,
+lfo2step48,,0x4A 0x67,
+lfo2step49,,0x4A 0x68,
+lfo2step50,,0x4A 0x69,
+lfo2step51,,0x4A 0x6A,
+lfo2step52,,0x4A 0x6B,
+lfo2step53,,0x4A 0x6C,
+lfo2step54,,0x4A 0x6D,
+lfo2step55,,0x4A 0x6E,
+lfo2step56,,0x4A 0x6F,
+lfo2step57,,0x4A 0x70,
+lfo2step58,,0x4A 0x71,
+lfo2step59,,0x4A 0x72,
+lfo2step60,,0x4A 0x73,
+lfo2step61,,0x4A 0x74,
+lfo2step62,,0x4A 0x75,
+lfo2step63,,0x4A 0x76,
+lfo2step64,,0x4A 0x77,
+lfo3level,0x4B,0x41 0x0D,
+lfo3wave,,0x3F 0x06,
+lfo3bpmsync,,0x3F 0x06,
+lfo3trigsync,,0x3F 0x06,
+lfo3smooth,,0x3F 0x06,
+lfo3steps,,0x3F 0x06,
+lfo3delaysyncoff,,0x3F 0x06,
+lfo3fadeinsyncoff,,0x3F 0x06,
+lfo3delaysyncon,,0x3F 0x06,
+lfo3fadeinsyncon,,0x3F 0x06,
+lfo3oneshot,,0x3F 0x06,
+lfo3phase,,0x3F 0x32,
+lfo3ratesyncoff,0x4C,0x41 0x07,
+lfo3ratesyncon,,0x43 0x07,
+lfo3step1,,0x3A 0x20,
+lfo3step2,,0x3A 0x21,
+lfo3step3,,0x3A 0x22,
+lfo3step4,,0x3A 0x23,
+lfo3step5,,0x3A 0x24,
+lfo3step6,,0x3A 0x25,
+lfo3step7,,0x3A 0x26,
+lfo3step8,,0x3A 0x27,
+lfo3step9,,0x4B 0x00,
+lfo3step10,,0x4B 0x01,
+lfo3step11,,0x4B 0x02,
+lfo3step12,,0x4B 0x03,
+lfo3step13,,0x4B 0x04,
+lfo3step14,,0x4B 0x05,
+lfo3step15,,0x4B 0x06,
+lfo3step16,,0x4B 0x07,
+lfo3step17,,0x4B 0x08,
+lfo3step18,,0x4B 0x09,
+lfo3step19,,0x4B 0x0A,
+lfo3step20,,0x4B 0x0B,
+lfo3step21,,0x4B 0x0C,
+lfo3step22,,0x4B 0x0D,
+lfo3step23,,0x4B 0x0E,
+lfo3step24,,0x4B 0x0F,
+lfo3step25,,0x4B 0x10,
+lfo3step26,,0x4B 0x11,
+lfo3step27,,0x4B 0x12,
+lfo3step28,,0x4B 0x13,
+lfo3step29,,0x4B 0x14,
+lfo3step30,,0x4B 0x15,
+lfo3step31,,0x4B 0x16,
+lfo3step32,,0x4B 0x17,
+lfo3step33,,0x4B 0x18,
+lfo3step34,,0x4B 0x19,
+lfo3step35,,0x4B 0x1A,
+lfo3step36,,0x4B 0x1B,
+lfo3step37,,0x4B 0x1C,
+lfo3step38,,0x4B 0x1D,
+lfo3step39,,0x4B 0x1E,
+lfo3step40,,0x4B 0x1F,
+lfo3step41,,0x4B 0x20,
+lfo3step42,,0x4B 0x21,
+lfo3step43,,0x4B 0x22,
+lfo3step44,,0x4B 0x23,
+lfo3step45,,0x4B 0x24,
+lfo3step46,,0x4B 0x25,
+lfo3step47,,0x4B 0x26,
+lfo3step48,,0x4B 0x27,
+lfo3step49,,0x4B 0x28,
+lfo3step50,,0x4B 0x29,
+lfo3step51,,0x4B 0x2A,
+lfo3step52,,0x4B 0x2B,
+lfo3step53,,0x4B 0x2C,
+lfo3step54,,0x4B 0x2D,
+lfo3step55,,0x4B 0x2E,
+lfo3step56,,0x4B 0x2F,
+lfo3step57,,0x4B 0x30,
+lfo3step58,,0x4B 0x31,
+lfo3step59,,0x4B 0x32,
+lfo3step60,,0x4B 0x33,
+lfo3step61,,0x4B 0x34,
+lfo3step62,,0x4B 0x35,
+lfo3step63,,0x4B 0x36,
+lfo3step64,,0x4B 0x37,
+lfo4level,0x4D,0x41 0x0E,
+lfo4wave,,0x3F 0x07,
+lfo4bpmsync,,0x3F 0x07,
+lfo4trigsync,,0x3F 0x07,
+lfo4smooth,,0x3F 0x07,
+lfo4steps,,0x3F 0x07,
+lfo4delaysyncoff,,0x3F 0x07,
+lfo4fadeinsyncoff,,0x3F 0x07,
+lfo4delaysyncon,,0x3F 0x07,
+lfo4fadeinsyncon,,0x3F 0x07,
+lfo4oneshot,,0x3F 0x07,
+lfo4phase,,0x3F 0x33,
+lfo4ratesyncoff,0x4E,0x41 0x08,
+lfo4ratesyncon,,0x43 0x08,
+lfo3step1,,0x3A 0x28,
+lfo3step2,,0x3A 0x29,
+lfo3step3,,0x3A 0x2A,
+lfo3step4,,0x3A 0x2B,
+lfo3step5,,0x3A 0x2C,
+lfo3step6,,0x3A 0x2D,
+lfo3step7,,0x3A 0x2E,
+lfo3step8,,0x3A 0x2F,
+lfo4step9,,0x4B 0x40,
+lfo4step10,,0x4B 0x41,
+lfo4step11,,0x4B 0x42,
+lfo4step12,,0x4B 0x43,
+lfo4step13,,0x4B 0x44,
+lfo4step14,,0x4B 0x45,
+lfo4step15,,0x4B 0x46,
+lfo4step16,,0x4B 0x47,
+lfo4step17,,0x4B 0x48,
+lfo4step18,,0x4B 0x49,
+lfo4step19,,0x4B 0x4A,
+lfo4step20,,0x4B 0x4B,
+lfo4step21,,0x4B 0x4C,
+lfo4step22,,0x4B 0x4D,
+lfo4step23,,0x4B 0x4E,
+lfo4step24,,0x4B 0x4F,
+lfo4step25,,0x4B 0x50,
+lfo4step26,,0x4B 0x51,
+lfo4step27,,0x4B 0x52,
+lfo4step28,,0x4B 0x53,
+lfo4step29,,0x4B 0x54,
+lfo4step30,,0x4B 0x55,
+lfo4step31,,0x4B 0x56,
+lfo4step32,,0x4B 0x57,
+lfo4step33,,0x4B 0x58,
+lfo4step34,,0x4B 0x59,
+lfo4step35,,0x4B 0x5A,
+lfo4step36,,0x4B 0x5B,
+lfo4step37,,0x4B 0x5C,
+lfo4step38,,0x4B 0x5D,
+lfo4step39,,0x4B 0x5E,
+lfo4step40,,0x4B 0x5F,
+lfo4step41,,0x4B 0x60,
+lfo4step42,,0x4B 0x61,
+lfo4step43,,0x4B 0x62,
+lfo4step44,,0x4B 0x63,
+lfo4step45,,0x4B 0x64,
+lfo4step46,,0x4B 0x65,
+lfo4step47,,0x4B 0x66,
+lfo4step48,,0x4B 0x67,
+lfo4step49,,0x4B 0x68,
+lfo4step50,,0x4B 0x69,
+lfo4step51,,0x4B 0x6A,
+lfo4step52,,0x4B 0x6B,
+lfo4step53,,0x4B 0x6C,
+lfo4step54,,0x4B 0x6D,
+lfo4step55,,0x4B 0x6E,
+lfo4step56,,0x4B 0x6F,
+lfo4step57,,0x4B 0x70,
+lfo4step58,,0x4B 0x71,
+lfo4step59,,0x4B 0x72,
+lfo4step60,,0x4B 0x73,
+lfo4step61,,0x4B 0x74,
+lfo4step62,,0x4B 0x75,
+lfo4step63,,0x4B 0x76,
+lfo4step64,,0x4B 0x77,
+lfo5level,0x4F,0x41 0x0F,
+lfo5wave,,0x3F 0x08,
+lfo5bpmsync,,0x3F 0x08,
+lfo5trigsync,,0x3F 0x08,
+lfo5smooth,,0x3F 0x08,
+lfo5steps,,0x3F 0x08,
+lfo5delaysyncoff,,0x3F 0x08,
+lfo5fadeinsyncoff,,0x3F 0x08,
+lfo5delaysyncon,,0x3F 0x08,
+lfo5fadeinsyncon,,0x3F 0x08,
+lfo5oneshot,,0x3F 0x08,
+lfo5phase,,0x3F 0x34,
+lfo5ratesyncoff,0x50,0x41 0x09,
+lfo5ratesyncon,,0x43 0x09,
+lfo5step1,,0x3A 0x30,
+lfo5step2,,0x3A 0x31,
+lfo5step3,,0x3A 0x32,
+lfo5step4,,0x3A 0x33,
+lfo5step5,,0x3A 0x34,
+lfo5step6,,0x3A 0x35,
+lfo5step7,,0x3A 0x36,
+lfo5step8,,0x3A 0x37,
+lfo5step9,,0x4C 0x00,
+lfo5step10,,0x4C 0x01,
+lfo5step11,,0x4C 0x02,
+lfo5step12,,0x4C 0x03,
+lfo5step13,,0x4C 0x04,
+lfo5step14,,0x4C 0x05,
+lfo5step15,,0x4C 0x06,
+lfo5step16,,0x4C 0x07,
+lfo5step17,,0x4C 0x08,
+lfo5step18,,0x4C 0x09,
+lfo5step19,,0x4C 0x0A,
+lfo5step20,,0x4C 0x0B,
+lfo5step21,,0x4C 0x0C,
+lfo5step22,,0x4C 0x0D,
+lfo5step23,,0x4C 0x0E,
+lfo5step24,,0x4C 0x0F,
+lfo5step25,,0x4C 0x10,
+lfo5step26,,0x4C 0x11,
+lfo5step27,,0x4C 0x12,
+lfo5step28,,0x4C 0x13,
+lfo5step29,,0x4C 0x14,
+lfo5step30,,0x4C 0x15,
+lfo5step31,,0x4C 0x16,
+lfo5step32,,0x4C 0x17,
+lfo5step33,,0x4C 0x18,
+lfo5step34,,0x4C 0x19,
+lfo5step35,,0x4C 0x1A,
+lfo5step36,,0x4C 0x1B,
+lfo5step37,,0x4C 0x1C,
+lfo5step38,,0x4C 0x1D,
+lfo5step39,,0x4C 0x1E,
+lfo5step40,,0x4C 0x1F,
+lfo5step41,,0x4C 0x20,
+lfo5step42,,0x4C 0x21,
+lfo5step43,,0x4C 0x22,
+lfo5step44,,0x4C 0x23,
+lfo5step45,,0x4C 0x24,
+lfo5step46,,0x4C 0x25,
+lfo5step47,,0x4C 0x26,
+lfo5step48,,0x4C 0x27,
+lfo5step49,,0x4C 0x28,
+lfo5step50,,0x4C 0x29,
+lfo5step51,,0x4C 0x2A,
+lfo5step52,,0x4C 0x2B,
+lfo5step53,,0x4C 0x2C,
+lfo5step54,,0x4C 0x2D,
+lfo5step55,,0x4C 0x2E,
+lfo5step56,,0x4C 0x2F,
+lfo5step57,,0x4C 0x30,
+lfo5step58,,0x4C 0x31,
+lfo5step59,,0x4C 0x32,
+lfo5step60,,0x4C 0x33,
+lfo5step61,,0x4C 0x34,
+lfo5step62,,0x4C 0x35,
+lfo5step63,,0x4C 0x36,
+lfo5step64,,0x4C 0x37,
+env1delaysyncoff,,0x3F 0x00,"MSB = 0x08,   LSB = [0, 127] divided into the following chunks and displayed as [0ms,32sec]: 
+20	0-20ms	by 1
+10	20-40ms by 2
+10	40-80ms by 4
+10	80-160ms by 8
+10	160-320ms by 16
+10	320ms-640ms by 32
+10	640ms-1280ms by 64  (>1 sec display as x.xx floored)
+10	1280 - 2560 by 128 (display as x.xx floored)
+10	2560 - 5120 by 256 (display as x.xx floored)
+10	5120 - 9728 by 512 (display as x.xx floored)
+12	10 - 22 sec by 1 (display as xx.0)
+6	22 - 32 sec by 2  (display as xx.0)
+TOTAL: 128 VALS"
+env1attacksyncoff,0x51,0x41 0x11,"[0,8192] seemingly only output in increments of 8, and displayed as [0ms,36sec].  To display: if 8192, display (36 sec).  Else divide by 64 (cutting into 128 even pieces).  Then ROUND to nearest integer 0...128. The Hydrasynth seems to round 0.5 towards even.  Then display as:
+
+20	0-20ms	by 1
+10	20-40ms by 2
+10	40-80ms by 4
+10	80-160ms by 8
+10	160-320ms by 16
+10	320ms-640ms by 32
+10	640ms-1280ms by 64  (>1 sec display as x.xx floored)
+10	1280 - 2560 by 128 (display as x.xx floored)
+10	2560 - 5120 by 256 (display as x.xx floored)
+10	5120 - 9728 by 512 (display as x.xx floored)
+10	10 - 20 sec by 1 (display as xx.0)
+9	20 - 36 sec by 2  (display as xx.0)
+TOTAL: 129 VALS"
+env1holdsyncoff,,0x41 0x16,"[0,8192] seemingly only output in increments of 8, and displayed as [0ms,36sec]  To display: if 8192, display (36 sec).  Else divide by 64 (cutting into 128 even pieces).  Then ROUND to nearest integer 0...128. The Hydrasynth seems to round 0.5 towards even.  Then display as:
+
+20	0-20ms	by 1
+10	20-40ms by 2
+10	40-80ms by 4
+10	80-160ms by 8
+10	160-320ms by 16
+10	320ms-640ms by 32
+10	640ms-1280ms by 64  (>1 sec display as x.xx floored)
+10	1280 - 2560 by 128 (display as x.xx floored)
+10	2560 - 5120 by 256 (display as x.xx floored)
+10	5120 - 9728 by 512 (display as x.xx floored)
+10	10 - 20 sec by 1 (display as xx.0)
+9	20 - 36 sec by 2  (display as xx.0)
+TOTAL: 129 VALS"
+env1decaysyncoff,0x52,0x41 0x1B,"[0,8192] seemingly only output in increments of 8, and displayed as [0ms,60sec].  To display: if 8192, display (60 sec).  Else divide by 63.02 or so (cutting into 130 even pieces).  Then ROUND to nearest integer 0...130. The Hydrasynth seems to round 0.5 towards even.  Then display as:
+
+20	0-40ms	by 2
+10	40-80ms by 4
+10	80-160ms by 8
+10	160-320ms by 16
+10	320-640ms by 32
+10	640-1280ms by 64  (>1 sec display as x.xx floored)
+10	1280-2560 by 128 (display as x.xx floored)
+10	2560-5120 by 256 (display as x.xx floored)
+10	5120 - 9728 by 512 (display as x.xx floored)
+6	10 - 16 sec by 1 (display as xx.0)
+22	16 - 60 sec by 2  (display as xx.0)
+TOTAL: 128 VALS"
+env1sustain,0x53,0x41 0x20,"[0,8192] seemingly only output in increments of 8, and displayed as [0.0,128.0] in increments of 0.1. To display: if 8192, display 128.0.  Else divide by 6.4 (cutting into 1280 even pieces).  Then ROUND to nearest integer 0...1280.  Then divide by 10.  The Hydrasynth seems to round 0.5 towards even."
+env1releasesyncoff,0x54,0x41 0x25,"[0,8192] seemingly only output in increments of 8, and displayed as [0ms,60sec].  To display: if 8192, display (60 sec).  Else divide by 63.02 or so (cutting into 130 even pieces).  Then ROUND to nearest integer 0...130. The Hydrasynth seems to round 0.5 towards even.  Then display as:
+
+20	0-40ms	by 2
+10	40-80ms by 4
+10	80-160ms by 8
+10	160-320ms by 16
+10	320-640ms by 32
+10	640-1280ms by 64  (>1 sec display as x.xx floored)
+10	1280-2560 by 128 (display as x.xx floored)
+10	2560-5120 by 256 (display as x.xx floored)
+10	5120 - 9728 by 512 (display as x.xx floored)
+6	10 - 16 sec by 1 (display as xx.0)
+22	16 - 60 sec by 2  (display as xx.0)
+TOTAL: 128 VALS"
+env1delaysyncon,,0x3F 0x00,"MSB = 0x18    LSB = [0,27]  ENV_LFO_RATES_SYNC_ON"
+env1attacksyncon,,0x43 0x11,"[0,27]  ENV_LFO_RATES_SYNC_ON emitted as multiples of 8 (0, 8, 16, 32, ...)"
+env1decaysyncon,,0x43 0x1B,"[0,27]  ENV_LFO_RATES_SYNC_ON emitted as multiples of 8 (0, 8, 16, 32, ...)"
+env1holdsyncon,,0x43 0x16,"[0,27]  ENV_LFO_RATES_SYNC_ON emitted as multiples of 8 (0, 8, 16, 32, ...)"
+env1releasesyncon,,0x43 0x25,"[0,27]  ENV_LFO_RATES_SYNC_ON emitted as multiples of 8 (0, 8, 16, 32, ...)"
+env1atkcurve,,0x3F 0x70,"[0...128] displayed as [Exp(-64)...0...Log(64)]  Note this is different from Decay Curve, Release Curve, and Voice Glide Curve"
+env1deccurve,,0x3F 0x75,[0...128] displayed as [Log(-64)...0...Exp(64)]
+env1loop,,0x3F 0x00,"MSB = 0x06   LSB=[0...50] displayed as Off, 2, ..., 50, Infinity"
+env1legato,,0x3F 0x00,"MSB = 0x07   LSB=[0,1]"
+env1bpmsync,,0x3F 0x00,"MSB = 0x0C   LSB=[0,1]"
+env1freerun,,0x3F 0x00,"MSB = 0x0D   LSB=[0,1]"
+env1reset,,0x3F 0x00,"MSB = 0x0F   LSB=[0,1]"
+env1relcurve,,0x3F 0x7A,[0...128] displayed as [Log(-64)...0...Exp(64)]
+env1trigsrc1,,0x3A 0x60,"[0,11]  ENV_TRIG_SOURCES"
+env1trigsrc2,,0x3A 0x61,
+env1trigsrc3,,0x3A 0x62,
+env1trigsrc4,,0x3A 0x63,
+env2delaysyncoff,,0x3F 0x01,
+env2attacksyncoff,0x55,0x41 0x12,
+env2holdsyncoff,,0x41 0x17,
+env2decaysyncoff,0x56,0x41 0x1C,
+env2sustain,0x57,0x41 0x21,
+env2releasesyncoff,0x58,0x41 0x26,
+env2delaysyncon,,0x3F 0x01,
+env2attacksyncon,,0x43 0x12,
+env2decaysyncon,,0x43 0x1C,
+env2holdsyncon,,0x43 0x17,
+env2releasesyncon,,0x43 0x26,
+env2atkcurve,,0x3F 0x71,
+env2deccurve,,0x3F 0x76,
+env2loop,,0x3F 0x01,
+env2legato,,0x3F 0x01,
+env2bpmsync,,0x3F 0x01,
+env2freerun,,0x3F 0x01,
+env2reset,,0x3F 0x01,
+env2relcurve,,0x3F 0x7B,
+env2trigsrc1,,0x3A 0x64,"Bug: This doesn't do anything. Env 2 (Amplitude) Trig Src 1 (properly) cannot be modified, see the manual. But there's still an NRPN parameter!"
+env2trigsrc2,,0x3A 0x65,
+env2trigsrc3,,0x3A 0x66,
+env2trigsrc4,,0x3A 0x67,
+env3delaysyncoff,,0x3F 0x02,
+env3attacksyncoff,0x59,0x41 0x13,
+env3holdsyncoff,,0x41 0x18,
+env3decaysyncoff,0x5A,0x41 0x1D,
+env3sustain,0x60,0x41 0x22,
+env3releasesyncoff,0x61,0x41 0x27,
+env3delaysyncon,,0x3F 0x02,
+env3attacksyncon,,0x43 0x13,
+env3decaysyncon,,0x43 0x1D,
+env3holdsyncon,,0x43 0x18,
+env3releasesyncon,,0x43 0x27,
+env3atkcurve,,0x3F 0x72,
+env3deccurve,,0x3F 0x77,
+env3loop,,0x3F 0x02,
+env3legato,,0x3F 0x02,
+env3bpmsync,,0x3F 0x02,
+env3freerun,,0x3F 0x02,
+env3reset,,0x3F 0x02,
+env3relcurve,,0x3F 0x7C,
+env3trigsrc1,,0x3A 0x68,
+env3trigsrc2,,0x3A 0x69,
+env3trigsrc3,,0x3A 0x6A,
+env3trigsrc4,,0x3A 0x6B,
+env4delaysyncoff,,0x3F 0x03,
+env4attacksyncoff,0x19,0x41 0x14,
+env4holdsyncoff,,0x41 0x19,
+env4decaysyncoff,0x1B,0x41 0x1E,
+env4sustain,0x7D,0x41 0x23,
+env4releasesyncoff,0x7C,0x41 0x28,
+env4delaysyncon,,0x3F 0x03,
+env4attacksyncon,,0x43 0x14,
+env4decaysyncon,,0x43 0x1E,
+env4holdsyncon,,0x43 0x19,
+env4releasesyncon,,0x43 0x28,
+env4atkcurve,,0x3F 0x73,
+env4deccurve,,0x3F 0x78,
+env4loop,,0x3F 0x03,
+env4legato,,0x3F 0x03,
+env4bpmsync,,0x3F 0x03,
+env4freerun,,0x3F 0x03,
+env4reset,,0x3F 0x03,
+env4relcurve,,0x3F 0x7D,
+env4trigsrc1,,0x3A 0x6C,
+env4trigsrc2,,0x3A 0x6D,
+env4trigsrc3,,0x3A 0x6E,
+env4trigsrc4,,0x3A 0x6F,
+env5delaysyncoff,,0x3F 0x0A,"Note: yes, 0x0A, not 0x04 like you'd expect"
+env5attacksyncoff,0x66,0x41 0x15,
+env5holdsyncoff,,0x41 0x1A,
+env5decaysyncoff,0x67,0x41 0x1F,
+env5sustain,0x68,0x41 0x24,
+env5releasesyncoff,0x69,0x41 0x29,
+env5delaysyncon,,0x3F 0x0A,"Note: yes, 0x0A, not 0x04 like you'd expect"
+env5attacksyncon,,0x43 0x15,
+env5decaysyncon,,0x43 0x1F,
+env5holdsyncon,,0x43 0x1A,
+env5releasesyncon,,0x43 0x29,
+env5atkcurve,,0x3F 0x74,
+env5deccurve,,0x3F 0x79,
+env5loop,,0x3F 0x0A,"Note: yes, 0x0A, not 0x04 like you'd expect"
+env5legato,,0x3F 0x0A,"Note: yes, 0x0A, not 0x04 like you'd expect"
+env5bpmsync,,0x3F 0x0A,"Note: yes, 0x0A, not 0x04 like you'd expect"
+env5freerun,,0x3F 0x0A,"Note: yes, 0x0A, not 0x04 like you'd expect"
+env5reset,,0x3F 0x0A,"Note: yes, 0x0A, not 0x04 like you'd expect"
+env5relcurve,,0x3F 0x7E,
+env5trigsrc1,,0x3A 0x70,
+env5trigsrc2,,0x3A 0x71,
+env5trigsrc3,,0x3A 0x72,
+env5trigsrc4,,0x3A 0x73,
+arpenable,,0x39 0x03,"[0,1]"
+arpdivision,0x6A,0x39 0x03,"MSB = 0x01 LSB = [0,11]  ARP_DIVISIONS"
+arpswing,,0x39 0x03,"MSB = 0x02  LSB = [50,75]"
+arpgate,0x6B,0x39 0x03,"MSB = 0x03   LSB=[5,100]"
+arpoctmode,,0x39 0x03,"MSB = 0x04 LSB = [0,4]   Up, Down, Up/Down, Alt, Alt 2"
+arpoctave,0x78,0x39 0x03,"MSB = 0x05  LSB = [1,4]"
+arpmode,0x6C,0x39 0x03,"MSB = 0x06  LSB = [0,7]  Up, Down, Up/Down, Up & Down, Order, Random, Chord, Phrase"
+arplength,0x7A,0x39 0x03,
+arptaptrig,,0x39 0x03,"MSB = 0x08, LSB = [0,1]
+
+BUG: Also turns Arp on/off.  This does NOT happen if Tap Trig is toggled on the front panel."
+arpphrase,,0x39 0x03,"MSB = 0x09   LSB = [1,64]"
+arpratchet,0x6D,0x39 0x03,"MSB = 0x0A   LSB = [0,127]   Manual implies that the only legal ratchets are 1, 2, 4, or 8.  This is not correct."
+arpchance,0x6E,0x39 0x03,"MSB = 0x0B  LSB = [0,100]"
+macro1target1,,0x3E 0x30,BUG: the Hydrasynth's display does not update to reflect changes from NRPN.  You have to page away and come back to see the changes displayed.
+macro1target2,,0x3E 0x31,
+macro1target3,,0x3E 0x32,
+macro1target4,,0x3E 0x33,
+macro1target5,,0x3E 0x34,
+macro1target6,,0x3E 0x35,
+macro1target7,,0x3E 0x36,
+macro1target8,,0x3E 0x37,
+macro1buttonvalue1,,0x3D 0x30,"[0,8192] seemingly only output in increments of 8, and displayed as [-128.0,128.0] in increments of 0.1. To display: if 8192, display 128.0.  Else divide by 3.2 (cutting into 2560 even pieces). Then ROUND to nearest integer 0...1280.  Then divide by 10.  Then subtract 128. The Hydrasynth seems to round 0.5 towards even.
+
+BUG: the Hydrasynth's display does not update to reflect changes from NRPN.  You have to page away and come back to see the changes displayed."
+macro1buttonvalue2,,0x3D 0x31,
+macro1buttonvalue3,,0x3D 0x32,
+macro1buttonvalue4,,0x3D 0x33,
+macro1buttonvalue5,,0x3D 0x34,
+macro1buttonvalue6,,0x3D 0x35,
+macro1buttonvalue7,,0x3D 0x36,
+macro1buttonvalue8,,0x3D 0x37,
+macro1depth1,,0x36 0x30,"[0,8192] seemingly only output in increments of 8, and displayed as [-128.0,128.0] in increments of 0.1. To display: if 8192, display 128.0.  Else divide by 3.2 (cutting into 2560 even pieces). Then ROUND to nearest integer 0...1280.  Then divide by 10.  Then subtract 128. The Hydrasynth seems to round 0.5 towards even.
+
+BUG: the Hydrasynth's display does not update to reflect changes from NRPN.  You have to page away and come back to see the changes displayed."
+macro1depth2,,0x36 0x31,
+macro1depth3,,0x36 0x32,
+macro1depth4,,0x36 0x33,
+macro1depth5,,0x36 0x34,
+macro1depth6,,0x36 0x35,
+macro1depth7,,0x36 0x36,
+macro1depth8,,0x36 0x37,
+macro2target1,,0x3E 0x38,
+macro2target2,,0x3E 0x39,
+macro2target3,,0x3E 0x3A,
+macro2target4,,0x3E 0x3B,
+macro2target5,,0x3E 0x3C,
+macro2target6,,0x3E 0x3D,
+macro2target7,,0x3E 0x3E,
+macro2target8,,0x3E 0x3F,
+macro2buttonvalue1,,0x3D 0x38,
+macro2buttonvalue2,,0x3D 0x39,
+macro2buttonvalue3,,0x3D 0x3A,
+macro2buttonvalue4,,0x3D 0x3B,
+macro2buttonvalue5,,0x3D 0x3C,
+macro2buttonvalue6,,0x3D 0x3D,
+macro2buttonvalue7,,0x3D 0x3E,
+macro2buttonvalue8,,0x3D 0x3F,
+macro2depth1,,0x36 0x38,
+macro2depth2,,0x36 0x39,
+macro2depth3,,0x36 0x3A,
+macro2depth4,,0x36 0x3B,
+macro2depth5,,0x36 0x3C,
+macro2depth6,,0x36 0x3D,
+macro2depth7,,0x36 0x3E,
+macro2depth8,,0x36 0x3F,
+macro3target1,,0x3E 0x40,
+macro3target2,,0x3E 0x41,
+macro3target3,,0x3E 0x42,
+macro3target4,,0x3E 0x43,
+macro3target5,,0x3E 0x44,
+macro3target6,,0x3E 0x45,
+macro3target7,,0x3E 0x46,
+macro3target8,,0x3E 0x47,
+macro3buttonvalue1,,0x3D 0x40,
+macro3buttonvalue2,,0x3D 0x41,
+macro3buttonvalue3,,0x3D 0x42,
+macro3buttonvalue4,,0x3D 0x43,
+macro3buttonvalue5,,0x3D 0x44,
+macro3buttonvalue6,,0x3D 0x45,
+macro3buttonvalue7,,0x3D 0x46,
+macro3buttonvalue8,,0x3D 0x47,
+macro3depth1,,0x36 0x40,
+macro3depth2,,0x36 0x41,
+macro3depth3,,0x36 0x42,
+macro3depth4,,0x36 0x43,
+macro3depth5,,0x36 0x44,
+macro3depth6,,0x36 0x45,
+macro3depth7,,0x36 0x46,
+macro3depth8,,0x36 0x47,
+macro4target1,,0x3E 0x48,
+macro4target2,,0x3E 0x49,
+macro4target3,,0x3E 0x4A,
+macro4target4,,0x3E 0x4B,
+macro4target5,,0x3E 0x4C,
+macro4target6,,0x3E 0x4D,
+macro4target7,,0x3E 0x4E,
+macro4target8,,0x3E 0x4F,
+macro4buttonvalue1,,0x3D 0x48,
+macro4buttonvalue2,,0x3D 0x49,
+macro4buttonvalue3,,0x3D 0x4A,
+macro4buttonvalue4,,0x3D 0x4B,
+macro4buttonvalue5,,0x3D 0x4C,
+macro4buttonvalue6,,0x3D 0x4D,
+macro4buttonvalue7,,0x3D 0x4E,
+macro4buttonvalue8,,0x3D 0x4F,
+macro4depth1,,0x36 0x48,
+macro4depth2,,0x36 0x49,
+macro4depth3,,0x36 0x4A,
+macro4depth4,,0x36 0x4B,
+macro4depth5,,0x36 0x4C,
+macro4depth6,,0x36 0x4D,
+macro4depth7,,0x36 0x4E,
+macro4depth8,,0x36 0x4F,
+macro5target1,,0x3E 0x50,
+macro5target2,,0x3E 0x51,
+macro5target3,,0x3E 0x52,
+macro5target4,,0x3E 0x53,
+macro5target5,,0x3E 0x54,
+macro5target6,,0x3E 0x55,
+macro5target7,,0x3E 0x56,
+macro5target8,,0x3E 0x57,
+macro5buttonvalue1,,0x3D 0x50,
+macro5buttonvalue2,,0x3D 0x51,
+macro5buttonvalue3,,0x3D 0x52,
+macro5buttonvalue4,,0x3D 0x53,
+macro5buttonvalue5,,0x3D 0x54,
+macro5buttonvalue6,,0x3D 0x55,
+macro5buttonvalue7,,0x3D 0x56,
+macro5buttonvalue8,,0x3D 0x57,
+macro5depth1,,0x36 0x50,
+macro5depth2,,0x36 0x51,
+macro5depth3,,0x36 0x52,
+macro5depth4,,0x36 0x53,
+macro5depth5,,0x36 0x54,
+macro5depth6,,0x36 0x55,
+macro5depth7,,0x36 0x56,
+macro5depth8,,0x36 0x57,
+macro5target1,,0x3E 0x50,
+macro5target2,,0x3E 0x51,
+macro5target3,,0x3E 0x52,
+macro5target4,,0x3E 0x53,
+macro5target5,,0x3E 0x54,
+macro5target6,,0x3E 0x55,
+macro5target7,,0x3E 0x56,
+macro5target8,,0x3E 0x57,
+macro6buttonvalue1,,0x3D 0x58,
+macro6buttonvalue2,,0x3D 0x59,
+macro6buttonvalue3,,0x3D 0x5A,
+macro6buttonvalue4,,0x3D 0x5B,
+macro6buttonvalue5,,0x3D 0x5C,
+macro6buttonvalue6,,0x3D 0x5D,
+macro6buttonvalue7,,0x3D 0x5E,
+macro6buttonvalue8,,0x3D 0x5F,
+macro6depth1,,0x36 0x58,
+macro6depth2,,0x36 0x59,
+macro6depth3,,0x36 0x5A,
+macro6depth4,,0x36 0x5B,
+macro6depth5,,0x36 0x5C,
+macro6depth6,,0x36 0x5D,
+macro6depth7,,0x36 0x5E,
+macro6depth8,,0x36 0x5F,
+macro7target1,,0x3E 0x60,
+macro7target2,,0x3E 0x61,
+macro7target3,,0x3E 0x62,
+macro7target4,,0x3E 0x63,
+macro7target5,,0x3E 0x64,
+macro7target6,,0x3E 0x65,
+macro7target7,,0x3E 0x66,
+macro7target8,,0x3E 0x67,
+macro7buttonvalue1,,0x3D 0x60,
+macro7buttonvalue2,,0x3D 0x61,
+macro7buttonvalue3,,0x3D 0x62,
+macro7buttonvalue4,,0x3D 0x63,
+macro7buttonvalue5,,0x3D 0x64,
+macro7buttonvalue6,,0x3D 0x65,
+macro7buttonvalue7,,0x3D 0x66,
+macro7buttonvalue8,,0x3D 0x67,
+macro7depth1,,0x36 0x60,
+macro7depth2,,0x36 0x61,
+macro7depth3,,0x36 0x62,
+macro7depth4,,0x36 0x63,
+macro7depth5,,0x36 0x64,
+macro7depth6,,0x36 0x65,
+macro7depth7,,0x36 0x66,
+macro7depth8,,0x36 0x67,
+macro8target1,,0x3E 0x68,
+macro8target2,,0x3E 0x69,
+macro8target3,,0x3E 0x6A,
+macro8target4,,0x3E 0x6B,
+macro8target5,,0x3E 0x6C,
+macro8target6,,0x3E 0x6D,
+macro8target7,,0x3E 0x6E,
+macro8target8,,0x3E 0x6F,
+macro8buttonvalue1,,0x3D 0x68,
+macro8buttonvalue2,,0x3D 0x69,
+macro8buttonvalue3,,0x3D 0x6A,
+macro8buttonvalue4,,0x3D 0x6B,
+macro8buttonvalue5,,0x3D 0x6C,
+macro8buttonvalue6,,0x3D 0x6D,
+macro8buttonvalue7,,0x3D 0x6E,
+macro8buttonvalue8,,0x3D 0x6F,
+macro8depth1,,0x36 0x68,
+macro8depth2,,0x36 0x69,
+macro8depth3,,0x36 0x6A,
+macro8depth4,,0x36 0x6B,
+macro8depth5,,0x36 0x6C,
+macro8depth6,,0x36 0x6D,
+macro8depth7,,0x36 0x6E,
+macro8depth8,,0x36 0x6F,
+modmatrix1modsource,,0x3E 0x00,BUG: the Hydrasynth's display does not update to reflect changes from NRPN.  You have to page away and come back to see the changes displayed.
+modmatrix2modsource,,0x3E 0x01,
+modmatrix3modsource,,0x3E 0x02,
+modmatrix4modsource,,0x3E 0x03,
+modmatrix5modsource,,0x3E 0x04,
+modmatrix6modsource,,0x3E 0x05,
+modmatrix7modsource,,0x3E 0x06,
+modmatrix8modsource,,0x3E 0x07,
+modmatrix9modsource,,0x3E 0x08,
+modmatrix10modsource,,0x3E 0x09,
+modmatrix11modsource,,0x3E 0x0A,
+modmatrix12modsource,,0x3E 0x0B,
+modmatrix13modsource,,0x3E 0x0C,
+modmatrix14modsource,,0x3E 0x0D,
+modmatrix15modsource,,0x3E 0x0E,
+modmatrix16modsource,,0x3E 0x0F,
+modmatrix17modsource,,0x3E 0x10,
+modmatrix18modsource,,0x3E 0x11,
+modmatrix19modsource,,0x3E 0x12,
+modmatrix20modsource,,0x3E 0x13,
+modmatrix21modsource,,0x3E 0x14,
+modmatrix22modsource,,0x3E 0x15,
+modmatrix23modsource,,0x3E 0x16,
+modmatrix24modsource,,0x3E 0x17,
+modmatrix25modsource,,0x3E 0x18,
+modmatrix26modsource,,0x3E 0x19,
+modmatrix27modsource,,0x3E 0x1A,
+modmatrix28modsource,,0x3E 0x1B,
+modmatrix29modsource,,0x3E 0x1C,
+modmatrix30modsource,,0x3E 0x1D,
+modmatrix31modsource,,0x3E 0x1E,
+modmatrix32modsource,,0x3E 0x1F,
+modmatrix1modtarget,,0x3E 0x00,BUG: the Hydrasynth's display does not update to reflect changes from NRPN.  You have to page away and come back to see the changes displayed.
+modmatrix2modtarget,,0x3E 0x01,
+modmatrix3modtarget,,0x3E 0x02,
+modmatrix4modtarget,,0x3E 0x03,
+modmatrix5modtarget,,0x3E 0x04,
+modmatrix6modtarget,,0x3E 0x05,
+modmatrix7modtarget,,0x3E 0x06,
+modmatrix8modtarget,,0x3E 0x07,
+modmatrix9modtarget,,0x3E 0x08,
+modmatrix10modtarget,,0x3E 0x09,
+modmatrix11modtarget,,0x3E 0x0A,
+modmatrix12modtarget,,0x3E 0x0B,
+modmatrix13modtarget,,0x3E 0x0C,
+modmatrix14modtarget,,0x3E 0x0D,
+modmatrix15modtarget,,0x3E 0x0E,
+modmatrix16modtarget,,0x3E 0x0F,
+modmatrix17modtarget,,0x3E 0x10,
+modmatrix18modtarget,,0x3E 0x11,
+modmatrix19modtarget,,0x3E 0x12,
+modmatrix20modtarget,,0x3E 0x13,
+modmatrix21modtarget,,0x3E 0x14,
+modmatrix22modtarget,,0x3E 0x15,
+modmatrix23modtarget,,0x3E 0x16,
+modmatrix24modtarget,,0x3E 0x17,
+modmatrix25modtarget,,0x3E 0x18,
+modmatrix26modtarget,,0x3E 0x19,
+modmatrix27modtarget,,0x3E 0x1A,
+modmatrix28modtarget,,0x3E 0x1B,
+modmatrix29modtarget,,0x3E 0x1C,
+modmatrix30modtarget,,0x3E 0x1D,
+modmatrix31modtarget,,0x3E 0x1E,
+modmatrix32modtarget,,0x3E 0x1F,
+modmatrix1depth,,0x41 0x40,"[0,8192] seemingly only output in increments of 8, and displayed as [-128.0 ... 128.0] in increments of 0.1. To display: if 8192, display 128.0.  Else divide by 3.199 (cutting into 2561 even pieces).  Then ROUND to nearest integer 0...2560.  Then divide by 10.  Then subtract 128.  The Hydrasynth seems to round 0.5 towards even.
+
+BUG: the Hydrasynth's display does not update to reflect changes from NRPN.  You have to page away and come back to see the changes displayed."
+modmatrix2depth,,0x41 0x41,
+modmatrix3depth,,0x41 0x42,
+modmatrix4depth,,0x41 0x43,
+modmatrix5depth,,0x41 0x44,
+modmatrix6depth,,0x41 0x45,
+modmatrix7depth,,0x41 0x46,
+modmatrix8depth,,0x41 0x47,
+modmatrix9depth,,0x41 0x48,
+modmatrix10depth,,0x41 0x49,
+modmatrix11depth,,0x41 0x4A,
+modmatrix12depth,,0x41 0x4B,
+modmatrix13depth,,0x41 0x4C,
+modmatrix14depth,,0x41 0x4D,
+modmatrix15depth,,0x41 0x4E,
+modmatrix16depth,,0x41 0x4F,
+modmatrix17depth,,0x41 0x50,
+modmatrix18depth,,0x41 0x51,
+modmatrix19depth,,0x41 0x52,
+modmatrix20depth,,0x41 0x53,
+modmatrix21depth,,0x41 0x54,
+modmatrix22depth,,0x41 0x55,
+modmatrix23depth,,0x41 0x56,
+modmatrix24depth,,0x41 0x57,
+modmatrix25depth,,0x41 0x58,
+modmatrix26depth,,0x41 0x59,
+modmatrix27depth,,0x41 0x5A,
+modmatrix28depth,,0x41 0x5B,
+modmatrix29depth,,0x41 0x5C,
+modmatrix30depth,,0x41 0x5D,
+modmatrix31depth,,0x41 0x5E,
+modmatrix32depth,,0x41 0x5F,
+ribbonmode,,0x3F 0x3B,"MSB=0 LSB=[0,2] Pitch Bend, Theremin, Mod Only"
+ribbonkeyspan,,0x3F 0x3B,"MSB=1 LSB=[0,2] 2 Octave, 4 Octave, 6 Octave"
+ribbonoctave,,0x3F 0x3B,"MSB=2 LSB=[0,2] 2 Octave, 4 Octave, 6 Octave"
+ribbonquantize,,0x3F 0x3B,"MSB=3 LSB=[0,1]"
+ribbonmodcontrol,,0x3F 0x3B,"MSB=16 LSB=[0,1]"
+ribbonglide,,0x3F 0x3B,"MSB=17 LSB=[0,127]"
+voicedetune,0x5F,0x3F 0x39,"[0,127]"
+voicestereowidth,0x75,0x3F 0x44,"[0,127]"
+voicevibratoamount,,0x3F 0x43,"[0,12] in 1.5.5,  [0,120] in 2.0.0.  In 2.0.0 this is displayed as 0.0 ... 120.0
+
+Bug in 2.0.0: the Hydrasynth will not emit values less than 13."
+voiceanalogfeel,,0x3F 0x46,"[0,127]"
+voicedensity,,0x3F 0x3C,"[1,8]"
+voiceglidecurve,,0x3F 0x14,"[0,128] only displayed if glide=1 displayed as [Log(-64)...0...Exp(64)]"
+voiceglide,0x42,0x3F 0x12,"[0,1]"
+voiceglidelegto,,0x3F 0x1F,"[0,1] only displayed if glide=1"
+voiceglidetime,0x05,0x3F 0x15,"[0,127] only displayed if glide=1"
+voicestereomode,,0x3F 0x48,"[0,2] Rotate, Alter, Random "
+voicepolyphony,,0x3F 0x13,"[0,1]"
+voicepitchbend,,0x3F 0x41,"[0,24]"
+voicevibratoratesyncoff,,0x3F 0x42,"[0-127] Displayed as the Hz values:
+0.3 - 0.6 by 0.01  [0-29]
+0.6 - 1.0 by 0.02  [30-49]
+1.0 - 1.8 by 0.04  [50-69]
+1.8 - 5.0 by 0.1    [70-101]
+5.0 - 10.0 by 0.2  [102-127]
+"
+voicevibratoratesyncon,,0x3F 0x3F,"[0,15] VIBRATO_RATES_SYNC_ON"
+voicerandomphase,,0x3F 0x1E,"[0,1]"
+voicewarmmode,,0x3F 0x4F,"[0,1]"
+voicevibratobpm,,0x3F 0x49,"[0,1]"
+voicesnap,,0x3F 0x35,"[0,1]"
+,,,
+,,,
+"FX Types and Custom Parameters          NOTE: This Excludes BYPASS which has no parameters, though it does have Dry/Wet",,,
+Name,CC,,Notes
+fx1preset  (Chorus),,0x3B 0x00,"[0,2] in increments of 8 (0, 8, 16), displayed as Chorus 1, Chorus 2, Chorus 3.  Presets are:
+
+0.  Rate: 0.34Hz  Depth 29.0 Offset 0  Feedback 0  Stereo  
+1.  Rate: 0.42Hz  Depth 35.0 Offset 0  Feedback 0  Stereo  
+2.  Rate: 1.20Hz Depth 18.0 Offset 0  Feedback 26  Mono  
+
+Note: I have not determined the five actual NRPN values for each preset, just their display values."
+fx1param1 (Rate),0x0C,0x41 0x6F,"[0,8192] seemingly only output in increments of 8, and displayed as [0.02,10.00].  All told there are 129 unique display values.   To display: if 8192, display 10.00.  Else divide by 64 (cutting into 128 even pieces).  Then display as follows:
+
+# vals	Range		Increment	Value Range 
+40	0.02 - 0.42	by 0.01		0-40 
+19	0.42 - 0.80 	by 0.02		40-59 
+24	0.80 - 2.00	by 0.05		59-83
+28	2.00 - 4.80	by 0.10		83-111
+11	4.80 - 7.00	by 0.20		111-122
+7	7.00 - 10.00	by 0.50		122-128
+129 TOTAL
+"
+fx1param2 (Depth),0x0D,0x41 0x70,"[0,8192] seemingly only output in increments of 8, and displayed as [0.0,128.0] in increments of 0.1. To display: if 8192, display 128.0.  Else divide by 6.4 (cutting into 1280 even pieces).  Then ROUND to nearest integer 0...1280.  Then divide by 10.  The Hydrasynth seems to round 0.5 towards even."
+fx1param3 (Offset),,0x3B 0x30,"[0,360] output in increments of 8 (0, 8, ..., 2880) and displayed as [-180,180]"
+fx1param4  (Feedback),,0x3B 0x40,"[1,127] output as 8, 16, 24, 32, ...,  and displayed as [-63,63]"
+fx1param5 (Mono/Stereo),,0x3B 0x50,"[0,1] output as 0 and 8 respectively for ""Mono"", ""Stereo"""
+fx2preset  (Flanger),,0x3B 0x00,"[0,2] in increments of 8 (0, 8, 16), displayed as Flanger 1, Flanger 2, Flanger 3.  Presets are:
+
+0.  Rate: 0.17Hz  Depth 109.0 Offset -180  Feedback 45  Stereo  
+1.  Rate: 0.34Hz  Depth 130 Offset -180  Feedback 54  Stereo  
+2.  Rate: 0.17Hz  Depth 60.0 Offset -180  Feedback -55  Stereo  
+
+Note: I have not determined the five actual NRPN values for each preset, just their display values."
+fx2param1 (Rate),0x0C,0x41 0x6F,"[0,8192] seemingly only output in increments of 8, and displayed as [0.02,10.00].  All told there are 129 unique display values.   To display: if 8192, display 10.00.  Else divide by 64 (cutting into 128 even pieces).  Then display as follows:
+
+# vals	Range		Increment	Value Range 
+40	0.02 - 0.42	by 0.01		0-40 
+19	0.42 - 0.80 	by 0.02		40-59 
+24	0.80 - 2.00	by 0.05		59-83
+28	2.00 - 4.80	by 0.10		83-111
+11	4.80 - 7.00	by 0.20		111-122
+7	7.00 - 10.00	by 0.50		122-128
+129 TOTAL"
+fx2param2 (Depth),0x0D,0x41 0x70,"[0,8192] seemingly only output in increments of 8, and displayed as [0.0,128.0] in increments of 0.1. To display: if 8192, display 128.0.  Else divide by 6.4 (cutting into 1280 even pieces).  Then ROUND to nearest integer 0...1280.  Then divide by 10.  The Hydrasynth seems to round 0.5 towards even."
+fx2param3 (Offset),,0x3B 0x30,"[0,360] output in increments of 8 (0, 8, ..., 2880) and displayed as [-180,180]"
+fx2param4  (Feedback),,0x3B 0x40,"[1,127] output as 8, 16, 24, 32, ...,  and displayed as [-63,63]"
+fx2param5  (Mono/Stereo),,0x3B 0x50,"[0,1] output as 0 and 8 respectively for ""Mono"", ""Stereo"""
+fx3preset  (Rotary),,0x3B 0x00,"[0,2] in increments of 8 (0, 8, 16), displayed as Rotary 1, Rotary 2, Rotary 3.  Presets are:
+
+0.  Low-Speed 0.66Hz  Hi-Speed 1.35Hz  Lo-Depth 26 Hi-Depth 35 Low/High 6
+1.  Low-Speed 0.26Hz  Hi-Speed 0.90Hz  Lo-Depth 27 Hi-Depth 29 Low/High 0
+2.  Low-Speed 0.66Hz  Hi-Speed 0.75Hz  Lo-Depth 70 Hi-Depth 70 Low/High 4
+
+Note: I have not determined the five actual NRPN values for each preset, just their display values."
+fx3param1 (Lo-Speed),0x0C,0x41 0x6F,"[0,8192] seemingly only output in increments of 8, and displayed as [0.02,10.00].  All told there are 129 unique display values.   To display: if 8192, display 10.00.  Else divide by 64 (cutting into 128 even pieces).  Then display as follows:
+
+# vals	Range		Increment	Value Range 
+40	0.02 - 0.42	by 0.01		0-40 
+19	0.42 - 0.80 	by 0.02		40-59 
+24	0.80 - 2.00	by 0.05		59-83
+28	2.00 - 4.80	by 0.10		83-111
+11	4.80 - 7.00	by 0.20		111-122
+7	7.00 - 10.00	by 0.50		122-128
+129 TOTAL"
+fx3param2 (Hi-Speed),0x0D,0x41 0x70,"[0,8192] seemingly only output in increments of 8, and displayed as [0.02,10.00].  All told there are 129 unique display values.   To display: if 8192, display 10.00.  Else divide by 64 (cutting into 128 even pieces).  Then display as follows:
+
+# vals	Range		Increment	Value Range 
+40	0.02 - 0.42	by 0.01		0-40 
+19	0.42 - 0.80 	by 0.02		40-59 
+24	0.80 - 2.00	by 0.05		59-83
+28	2.00 - 4.80	by 0.10		83-111
+11	4.80 - 7.00	by 0.20		111-122
+7	7.00 - 10.00	by 0.50		122-128
+129 TOTAL"
+fx3param3  (Lo-Depth),,0x3B 0x30,"[0,127] output as 0, 8, 16, 24, 32, ..."
+fx3param4  (Hi-Depth),,0x3B 0x40,"[0,127] output as 0, 8, 16, 24, 32, ..."
+fx3param5 (Low/High),,0x3B 0x50,"[1,127] output as 8, 16, 24, 32, ...,  and displayed as [-63,63]"
+fx4preset  (Phaser),,0x3B 0x00,"[0,2] in increments of 8 (0, 8, 16), displayed as Phaser 1, Phaser 2, Phaser 3.  Presets are:
+
+0.  Rate: 0.34Hz  Feedback 10.0 Depth 111 Phase 74  Offset 0  
+1.  Rate: 0.34Hz  Feedback 44.0 Depth 111 Phase 74  Offset -180  
+2.  Rate: 0.13Hz  Feedback 32.0 Depth 96 Phase 64  Offset -180  
+
+Note: I have not determined the five actual NRPN values for each preset, just their display values."
+fx4param1 (Rate),0x0C,0x41 0x6F,"[0,8192] seemingly only output in increments of 8, and displayed as [0.02,10.00].  All told there are 129 unique display values.   To display: if 8192, display 10.00.  Else divide by 64 (cutting into 128 even pieces).  Then display as follows:
+
+# vals	Range		Increment	Value Range 
+40	0.02 - 0.42	by 0.01		0-40 
+19	0.42 - 0.80 	by 0.02		40-59 
+24	0.80 - 2.00	by 0.05		59-83
+28	2.00 - 4.80	by 0.10		83-111
+11	4.80 - 7.00	by 0.20		111-122
+7	7.00 - 10.00	by 0.50		122-128
+129 TOTAL"
+fx4param2 (Feedback),0x0D,0x41 0x70,"[0,8192] seemingly only output in increments of 8, and displayed as [-64.0, 64.0] in increments of 0.1. To display: if 8192, display 64.0.  Else divide by 6.4 (cutting into 1280 even pieces).  Then ROUND to nearest integer 0...1280.  Then divide by 10.  Then subtract 64.0. The Hydrasynth seems to round 0.5 towards even."
+fx4param3  (Depth),,0x3B 0x30,"[0,127] output as 0, 8, 16, 24, 32, ..."
+fx4param4  (Phase),,0x3B 0x40,"[0,127] output as 0, 8, 16, 24, 32, ..."
+fx4param5  (Offset),,0x3B 0x50,"[0,360] output in increments of 8 (0, 8, ..., 2880) and displayed as [-180,180]"
+fx5preset  (Lo-Fi),,0x3B 0x00,"[0,1] in increments of 8 (0, 8), displayed as Lo-Fi 1, Lo-Fi 2.  Presets are:
+
+0. Cutoff 1600Hz  Resonance 4.0  Tele  Output 3dB  Sampling 5513Hz
+1. Cutoff 2000Hz  Resonance 2.8  Clean  Output 3dB  Sampling 8820Hz
+
+Note: I have not determined the five actual NRPN values for each preset, just their display values."
+fx5param1 (Cutoff),0x0C,0x41 0x6F,"[0,8192] seemingly only output in increments of 8, and displayed as [160Hz,20000Hz].  All told there are 128 unique display values.   To display: if 8192, display 20000Hz.  Else divide by 64 (cutting into 128 even pieces).  Then ROUND to nearest integer 0...130. The Hydrasynth seems to round 0.5 towards even.  Then display as follows:
+
+# vals	Range		Increment
+10	160 - 260	by 10
+5	260 - 360	by 20
+1	360
+23	400 - 1600	by 50
+54	1600 - 7000	by 100
+15	7000 - 10000	by 200
+20	10000 - 20000	by 500
+128 TOTAL"
+fx5param2 (Resonance),0x0D,0x41 0x70,"[0,8184] seemingly only output in increments of 8, and displayed as [1.0,12.0] in increments of 0.1. To display: if 8184, display 12.0.  Else divide by 74.4 (cutting into 110 even pieces).  Then ROUND to nearest integer 0...110.  Then divide by 10.  Then add 1.0.  The Hydrasynth seems to round 0.5 towards even."
+fx5param3 (Filter Type),,0x3B 0x30,"[0,5] output as 0, 8, 16, 24, ... representing ""Thru"", ""PWBass"", ""Radio"", ""Tele"", ""Clean"", ""Low"""
+fx5param4  (Output),,0x3B 0x40,"[-6, 36] output in multiples of 8 as 464, 472, ..., 792, 800"
+fx5param5 (Sampling),,0x3B 0x50,"[1, 16] output as 8, 16, 24, ... representing ""44100"", ""22050"", ""14700"", ""11025"", ""8820"", ""7350"", ""6300"", ""5513"", ""4900"", ""4410"", ""4009"", ""3675"", ""3392"", ""3150"", ""2940"", ""2756"".   Yes, the values go DOWN."
+fx6preset  (Tremolo),,0x3B 0x00,"[0,2] in increments of 8 (0, 8, 16), displayed as Tremolo 1, Tremolo 2, Tremolo 3.  Presets are:
+
+0.  Rate: 5.40Hz  Depth 49.0  Sine  Phase 39  PitchMod 0  
+1.  Rate: 5.40Hz  Depth 52.0  Sine  Phase 39  PitchMod 3  
+2.  Rate: 3.40Hz  Depth 100.0  Sine  Phase -90  PitchMod 24  
+
+Note: I have not determined the five actual NRPN values for each preset, just their display values."
+fx6param1 (Rate),0x0C,0x41 0x6F,"[0,8192] seemingly only output in increments of 8, and displayed as [0.02,10.00].  All told there are 129 unique display values.   To display: if 8192, display 10.00.  Else divide by 64 (cutting into 128 even pieces).  Then display as follows:
+
+# vals	Range		Increment	Value Range 
+40	0.02 - 0.42	by 0.01		0-40 
+19	0.42 - 0.80 	by 0.02		40-59 
+24	0.80 - 2.00	by 0.05		59-83
+28	2.00 - 4.80	by 0.10		83-111
+11	4.80 - 7.00	by 0.20		111-122
+7	7.00 - 10.00	by 0.50		122-128
+129 TOTAL"
+fx6param2 (Depth),0x0D,0x41 0x70,"[0,8192] seemingly only output in increments of 8, and displayed as [0.0,128.0] in increments of 0.1. To display: if 8192, display 128.0.  Else divide by 6.4 (cutting into 1280 even pieces).  Then ROUND to nearest integer 0...1280.  Then divide by 10.  The Hydrasynth seems to round 0.5 towards even."
+fx6param3 (LFO Shape),,0x3B 0x30,"[0,1] output as 0 and 8 respectively for ""Sine"", ""Square"""
+fx6param4 (Phase),,0x3B 0x40,"[0,360] output in increments of 8 (0, 8, ..., 2880) and displayed as [-180,180]"
+fx6param5 (Pitch Mod),,0x3B 0x50,"[0,127] output as 0, 8, 16, 24, 32, ..."
+fx7preset  (EQ),,0x3B 0x00,"[0,6] in increments of 8 (0, 8, 16, 24, 32, 40, 48), displayed as Flat, Low Boost, Bass Cut, High Cut, Smile, Lo-Fi, Warm.  Presets are:
+
+0.  Low Gain 0.0 dB  High Gain 0.0 dB  Mid Gain 0.0 dB  Xover Lo 500 Hz  Xover Hi 4000 Hz
+1.  Low Gain 2.8 dB  High Gain -2.5 dB  Mid Gain -20 dB  Xover Lo 380 Hz  Xover Hi 4000 Hz  2.  Low Gain -7.5 dB  High Gain 0.2 dB  Mid Gain 1.0 dB  Xover Lo 900 Hz  Xover Hi 4000 Hz 
+3.  Low Gain 0.0 dB  High Gain -10.0 dB  Mid Gain 1.0 dB  Xover Lo 500 Hz  Xover Hi 5008 Hz 
+4.  Low Gain 3.0 dB  High Gain 3.0 dB  Mid Gain 0.0 dB  Xover Lo 500 5Hz  Xover Hi 7760 Hz 
+5.  Low Gain -26.5 dB  High Gain -36.0 dB  Mid Gain 5.0 dB  Xover Lo 920 Hz  Xover Hi 4000 Hz
+6.  Low Gain 1.5 dB  High Gain -6.5 dB  Mid Gain 1.0 dB  Xover Lo 768 Hz  Xover Hi 7600 Hz
+
+Note: I have not determined the five actual NRPN values for each preset, just their display values."
+fx7param1 (Low Gain),0x0C,0x41 0x6F,"[0,1020] output in multiples of 8 as 0, 8, 16, ..., 8152, 8160.   Displayed as [-36.0,24.0 in increments of 0.1] as follows.  If 1020, display 24.0. Else divide by 1.7.  Then ROUND to nearest integer.  Then subtract 360.  Then divide by 10.0.  The Hydrasynth seems to round 0.5 towards even."
+fx7param2 (High Gain),0x0D,0x41 0x70,"[0,1020] output in multiples of 8 as 0, 8, 16, ..., 8152, 8160.   Displayed as [-36.0,24.0] in increments of 0.1 as follows.  If 1020, display 24.0. Else divide by 1.7.  Then ROUND to nearest integer.  Then subtract 360.  Then divide by 10.0.  The Hydrasynth seems to round 0.5 towards even."
+fx7param3  (Mid Gain),,0x3B 0x30,"[0, 600] output in multiples of 8 as 0, 8, 16, ..., 4792, 4800.   Displayed as [-36.0,24.0] in increments of 0.1 as follows.  Subtract 360.  Then divide by 10.0.
+
+BUG: While High and Low Gain go 0..1020, Mid Gain goes 0..600 but displays the same values.  This reeks of a likely bug."
+fx7param4 (Xover Low),,0x3B 0x40,"[16,1000] in increments of 1 output as multiples of 8 as 128, 136, ..., 8000 and displayed as multiples of 2 as 32, 34, ..., 2000."
+fx7param5 (Xover High),,0x3B 0x50,"[32,1000] in increments of 1 output as multiples of 8 as 256, 264, ..., 8000 and displayed as multiples of 16 as 512, 544, ..., 16000."
+fxsidechain  (Compressor),,0x3B 0x73,"[0,4] in steps of 8 (0, 8, 16, 24, 32) ""Off"", ""BPM Duck"", ""Tap"", ""Mod In 1"", ""Mod In 2"""
+fx8param1,0x0C,0x41 0x6F,
+fx8param2  (Ratio),0x0D,0x41 0x70,"[408,8160] seemingly only output in increments of 8, and displayed as [1.0:1,20.0:1] in increments of 0.1. To display: if 8160, display 20.0:1.  Else subtract 408, divide by 40.8 (cutting into 190 even pieces).  Then ROUND to nearest integer 0...190.  Then divide by 10.   Then add 1.0.  The Hydrasynth seems to round 0.5 towards even."
+fx8param3  (Attack),,0x3B 0x30,"[1, 400] ms in steps of 8 (8, 16, 24, ...) "
+fx8param4 (Release),,0x3B 0x40,"[5, 560] ms in steps of 8 (40, 48, 56, ...)"
+fx8param5 (Output),,0x3B 0x50,"[0,512] in steps of 8 (0, 8, 16, 24, ...)"
+fx9preset  (Distortion),,0x3B 0x00,"[0,2] in increments of 8 (0, 8, 16), displayed as Drive 1, Drive 2, Drive 3.   Note, not called ""Distortion 1...3"".  Presets are:
+
+0.  Drive 58.0  Tone -26.5  Asym 0  Curve 128  Output -7.7dB
+1.  Drive 63.0  Tone 38.8 Asym 24  Curve 13  Output -4.6dB
+2.  Drive 49.4  Tone 17.2 Asym 0  Curve 0  Output -10.6dB
+
+Note: I have not determined the five actual NRPN values for each preset, just their display values."
+fx9param1 (Drive),0x0C,0x41 0x6F,"[0,8192] seemingly only output in increments of 8, and displayed as [0.0,128.0] in increments of 0.1. To display: if 8192, display 128.0.  Else divide by 6.4 (cutting into 1280 even pieces).  Then ROUND to nearest integer 0...1280.  Then divide by 10.  The Hydrasynth seems to round 0.5 towards even."
+fx9param2  (Tone),0x0D,0x41 0x70,"[0,8192] seemingly only output in increments of 8, and displayed as [-64.0, 64.0] in increments of 0.1. To display: if 8192, display 64.0.  Else divide by 6.4 (cutting into 1280 even pieces).  Then ROUND to nearest integer 0...1280.  Then divide by 10.  Then subtract 64.0. The Hydrasynth seems to round 0.5 towards even."
+fx9param3 (Asym),,0x3B 0x30,"[0,128] in steps of 8 (0, 8, 16, 24, ...)"
+fx9param4,,0x3B 0x40,"[0,128] in steps of 8 (0, 8, 16, 24, ...)"
+fx9param5 (Output),,0x3B 0x50,"[-36.0,24.0] dB in increments of 0.1 output as in multiples of 8 as 0, 8, 16, ..., 4800"
+,,,
+,,,
+Patch Parameters without NRPN/CC Values,,,
+Name,,,Description
+name,,,16 ASCII bytes
+category,,,"[0,18] CATEGORIES"
+color,,,"[0,31] COLORS"
+macro1name,,,8 ASCII bytes
+macro2name,,,
+macro3name,,,
+macro4name,,,
+macro5name,,,
+macro6name,,,
+macro7name,,,
+macro8name,,,
+voicescale,,,"Instead of sending one message, Voice Scale sends many NRPN messages.  It starts with 0x3F 0x45 -> 1 (which is now voice sustain?).  It then sends 0x3F 0x52 -> MSB=[0...11] LSB=[0...12] where LSB = MSB + 1 is the standard for ""C"", and for C#/Db it's LSB = MSB + 2 Mod 12, then D is LSB = MSB + 3 Mod 12 and so on -- it appears to be mapping out a scale.  If the LSB is 0, then I believe this indicates that the key is not used."
+voicekeylock,,,Voice Key Lock seems to send out the same stuff as Voice Scale
+,,,
+,,,
+New 2.0.0 Parameters,,,"Note: there are some existing parameters with new 2.0.0 features, as noted earlier"
+Name,CC,Range,Notes
+voicesustain,,0x71 0x00,"[0, 2] emitted as [0, 8, 16] representing Sustain, Sostenuto, and Mod Only
+
+BUG: The Hydrasynth emits in multiples of 8, but expects inputs in multiples of 1"
+osc1bitreduction,,0x3F 0x40,"[0,11] emitted as MSB=0 LSB=val, representing OFF, 16, 12, 10, 9, 8, 7, 6, 5, 4, 3, 2"
+osc2bitreduction,,0x3F 0x40,"[0,11] emitted as MSB=1 LSB=val, representing OFF, 16, 12, 10, 9, 8, 7, 6, 5, 4, 3, 2"
+osc3bitreduction,,0x3F 0x40,"[0,11] emitted as MSB=2 LSB=val, representing OFF, 16, 12, 10, 9, 8, 7, 6, 5, 4, 3, 2"
+voice1modulation,,0x71 0x01,"[0,256] emitted in multiples of 8 as 0, 8, 16, ..., 2048, representing -128 ... + 128
+
+BUG: The Hydrasynth emits in multiples of 8, but expects inputs in multiples of 1"
+voice2modulation,,0x71 0x02,"[0,256] emitted in multiples of 8 as 0, 8, 16, ..., 2048, representing -128 ... + 128"
+voice3modulation,,0x71 0x03,"[0,256] emitted in multiples of 8 as 0, 8, 16, ..., 2048, representing -128 ... + 128"
+voice4modulation,,0x71 0x04,"[0,256] emitted in multiples of 8 as 0, 8, 16, ..., 2048, representing -128 ... + 128"
+voice5modulation,,0x71 0x05,"[0,256] emitted in multiples of 8 as 0, 8, 16, ..., 2048, representing -128 ... + 128"
+voice6modulation,,0x71 0x06,"[0,256] emitted in multiples of 8 as 0, 8, 16, ..., 2048, representing -128 ... + 128"
+voice7modulation,,0x71 0x07,"[0,256] emitted in multiples of 8 as 0, 8, 16, ..., 2048, representing -128 ... + 128"
+voice8modulation,,0x71 0x08,"[0,256] emitted in multiples of 8 as 0, 8, 16, ..., 2048, representing -128 ... + 128"
+env1quantize,,0x71 0x11,"[0,8] emitted in multiples of 8 as 0, 1, 16, ..., 64, representing Off, 257, 129, 65, 33, 17, 9, 5, 3
+
+BUG: The Hydrasynth emits in multiples of 8, but expects inputs in multiples of 1"
+env2quantize,,0x71 0x12,"[0,8] emitted in multiples of 8 as 0, 1, 16, ..., 64, representing Off, 257, 129, 65, 33, 17, 9, 5, 3"
+env3quantize,,0x71 0x13,"[0,8] emitted in multiples of 8 as 0, 1, 16, ..., 64, representing Off, 257, 129, 65, 33, 17, 9, 5, 3"
+env4quantize,,0x71 0x14,"[0,8] emitted in multiples of 8 as 0, 1, 16, ..., 64, representing Off, 257, 129, 65, 33, 17, 9, 5, 3"
+env5quantize,,0x71 0x15,"[0,8] emitted in multiples of 8 as 0, 1, 16, ..., 64, representing Off, 257, 129, 65, 33, 17, 9, 5, 3"
+lfo1quantize,,0x71 0x16,"[0,8] emitted in multiples of 8 as 0, 1, 16, ..., 64, representing Off, 257, 129, 65, 33, 17, 9, 5, 3
+
+BUG: The Hydrasynth emits in multiples of 8, but expects inputs in multiples of 1"
+lfo2quantize,,0x71 0x17,"[0,8] emitted in multiples of 8 as 0, 1, 16, ..., 64, representing Off, 257, 129, 65, 33, 17, 9, 5, 3"
+lfo3quantize,,0x71 0x18,"[0,8] emitted in multiples of 8 as 0, 1, 16, ..., 64, representing Off, 257, 129, 65, 33, 17, 9, 5, 3"
+lfo4quantize,,0x71 0x19,"[0,8] emitted in multiples of 8 as 0, 1, 16, ..., 64, representing Off, 257, 129, 65, 33, 17, 9, 5, 3"
+lfo5quantize,,0x71 0x1A,"[0,8] emitted in multiples of 8 as 0, 1, 16, ..., 64, representing Off, 257, 129, 65, 33, 17, 9, 5, 3"
+,,,
+,,,
+,,,
+Parameters with CC Values,,,
+Name,CC,Range,Notes
+osc1cent,0x6F,14-114,-50 ... +50
+osc1wavscan,0x18,0-127,
+osc2cent,0x70,,
+osc2wavscan,0x1A,,
+osc3cent,0x71,,
+mutator1ratio,0x1D,0-127,
+mutator1depth,0x1E,0-127,
+mutator1wet,0x1F,0-127,
+mutator2ratio,0x21,,
+mutator2depth,0x22,,
+mutator2wet,0x23,,
+mutator3ratio,0x24,,
+mutator3depth,0x25,,
+mutator3wet,0x27,,
+mutator4ratio,0x28,,
+mutator4depth,0x29,,
+mutator4wet,0x2A,,
+ringmoddepth,0x2B,,
+mixerosc1vol,0x2C,0-127,"It seems that 128.0 is CC 127, and <128.0 is 126.  Maybe rounded up?"
+mixerosc1pan,0x2D,0-127,-64 ... + 64  0 -> 64
+mixerosc1filterratio,0x76,0-127,100:0 to 0:100   50:50 -> 64
+mixerosc2vol,0x2E,,
+mixerosc2pan,0x2F,,
+mixerosc2filterratio,0x77,,
+mixerosc3vol,0x30,,
+mixerosc3pan,0x31,,
+mixerosc3filterratio,0x72,,
+mixernoisevol,0x03,,
+mixernoisepan,0x08,,
+mixernoisefilterratio,0x73,,
+mixerringmodvol,0x09,,
+mixerringmodpan,0x0A,,
+mixerringmodfilterratio,0x74,,
+filter1cutoff,0x4A,0-127,
+filter1drive,0x32,0-127,
+filter1resonance,0x47,0-127,
+filter1keytrack,0x33,0-127,100% -> 96   0% -> 64
+filter1lfo1amount,0x34,0-127,-64 ... + 64  0 -> 64
+filter1velenv,0x35,0-127,-64 ... + 64  0 -> 64
+filter1env1amount,0x36,0-127,-64 ... + 64  0 -> 64
+filter2cutoff,0x37,,
+filter2resonance,0x38,,
+filter2morph,0x39,0-127,
+filter2keytrack,0x3A,,
+filter2lfo1amount,0x3B,,
+filter2velenv,0x3C,,
+filter2env1amount,0x3D,,
+amplfo2amount,0x3E,0-127,-64 ... + 64  0 -> 64
+prefxwet,0x5D,0-127,0-100%   50% -> 64
+prefxparam1,0x0C,0-127,
+prefxparam2,0x0D,,
+delaywet,0x5C,0-127,0-100%   50% -> 64
+delayfeedback,0x0E,0-127,
+delaytimesyncoff,0x0F,0-127,
+delaywettone,0x3F,0-127,-64 ... + 64  0 -> 64
+reverbwet,0x5B,0-127,0-100%   50% -> 64
+reverbtime,0x41,0-127,Freeze -> 127
+reverbtone,0x43,0-127,-64 ... + 64  0 -> 64
+postfxwet,0x5E,0-127,0-100%   50% -> 64
+postfxparam1,0x44,0-127,
+postfxparam2,0x45,,
+lfo1level,0x46,0-127,
+lfo1ratesyncoff,0x48,0-127,
+lfo2level,0x1C,,
+lfo2ratesyncoff,0x49,,
+lfo3level,0x4B,,
+lfo3ratesyncoff,0x4C,,
+lfo4level,0x4D,,
+lfo4ratesyncoff,0x4E,,
+lfo5level,0x4F,,
+lfo5ratesyncoff,0x50,,
+env1attacksyncoff,0x51,0-127,
+env1decaysyncoff,0x52,0-127,
+env1sustain,0x53,0-127,
+env1releasesyncoff,0x54,0-127,
+env2attacksyncoff,0x55,,
+env2decaysyncoff,0x56,,
+env2sustain,0x57,,
+env2releasesyncoff,0x58,,
+env3attacksyncoff,0x59,,
+env3decaysyncoff,0x5A,,
+env3sustain,0x60,,
+env3releasesyncoff,0x61,,
+env4attacksyncoff,0x19,,
+env4decaysyncoff,0x1B,,
+env4sustain,0x7D,,
+env4releasesyncoff,0x7C,,
+env5attacksyncoff,0x66,,
+env5decaysyncoff,0x67,,
+env5sustain,0x68,,
+env5releasesyncoff,0x69,,
+arpdivision,0x6A,0-11,
+arpgate,0x6B,5-100,5%...100%
+arpoctave,0x78,1-4,
+arpmode,0x6C,0-7,
+arplength,0x7A,0-32,0 = Default
+arpratchet,0x6D,0-127,
+arpchance,0x6E,0-100,0% ... 100%
+macro1panelvalue,0x10,0-127,"[0,8192] seemingly only output in increments of 8, and displayed as [0, 128.0] in increments of 0.1. To display: if 8192, display 128.0.  Else divide by 6.4 (cutting into 1280 even pieces). Then ROUND to nearest integer 0...1280.  Then divide by 10. The Hydrasynth seems to round 0.5 towards even."
+macro2panelvalue,0x11,,
+macro3panelvalue,0x12,,
+macro4panelvalue,0x13,,
+macro5panelvalue,0x14,,
+macro6panelvalue,0x15,,
+macro7panelvalue,0x16,,
+macro8panelvalue,0x17,,
+voicedetune,0x5F,0-127,
+voicestereowidth,0x75,0-127,
+voiceglide,0x42,0-1,"Off, On"
+voiceglidetime,0x05,0-127,
+,,,
+,,,
+Some Undocumented NRPN Messages,,,
+Name,,NRPN,Notes
+Arpeggiator Tempo,,0x3F 0x38,"[300, 2400], displayed as 30.0...240.0.  Emitted irregularly, though probably any value is permitted.  Bug: this is only emitted. The Hydrasynth ignores incoming values."
+Chord Button Pressed,,0x3F 0x16,MSB = 0x00 LSB = 0x00
+Occasionally when patch select dial is turned.  Unknown Purpose.,,0x3F 0x38,MSB = 0x09 LSB = various
+Emitted when Tap Trig turned On on panel,,0x3F 0x57,MSB = 0x00 LSB = 0x00
+Emitted when ribbon strip used as pitch bend.  Unknown purpose.,,0x57 0x00,"Multiple message values sent in a sequence, such as [0x3 0x81], [0x4 0x55], and [0x4 0x38]
+
+Bug: this seriously screws with downstream synths and so NRPN must be turned off in order to use the Hydrasynth as a controller"
+,,,
+,,,
+Non-Patch NRPN Messages,,,
+Name,,NRPN,Notes
+allosccent,,0x41 0x04,"[-50,+50] 2-byte 2's Complement.  Thus it goes 
+0=0, 1=1, 2=2, ..., 50=50, then 8142 = -50, 8143 =-49, ..., 8191 = -1 "
+osc1solowavescan1,,0x3F 0x1b,"MSB = Wavescan [0,7]   LSB = [0,1]    
+NOTE: In fact it's not clear what these do if anything."
+osc1solowavescan2,,0x3F 0x1b,
+osc1solowavescan3,,0x3F 0x1b,
+osc1solowavescan4,,0x3F 0x1b,
+osc1solowavescan5,,0x3F 0x1b,
+osc1solowavescan6,,0x3F 0x1b,
+osc1solowavescan7,,0x3F 0x1b,
+osc1solowavescan8,,0x3F 0x1b,
+osc2solowavescan1,,0x3F 0x1c,
+osc2solowavescan2,,0x3F 0x1c,
+osc2solowavescan3,,0x3F 0x1c,
+osc2solowavescan4,,0x3F 0x1c,
+osc2solowavescan5,,0x3F 0x1c,
+osc2solowavescan6,,0x3F 0x1c,
+osc2solowavescan7,,0x3F 0x1c,
+osc2solowavescan8,,0x3F 0x1c,
+mixersolo,,0x3F 0x25,"[0, 1] "
+macro1panelvalue,0x10,0x3F 0x58,[Range and display not determined]
+macro2panelvalue,0x11,0x3F 0x59,
+macro3panelvalue,0x12,0x3F 0x5A,
+macro4panelvalue,0x13,0x3F 0x5B,
+macro5panelvalue,0x14,0x3F 0x5C,
+macro6panelvalue,0x15,0x3F 0x5D,
+macro7panelvalue,0x16,0x3F 0x5E,
+macro8panelvalue,0x17,0x3F 0x5F,
+,,,
+,,,
+,,,
+,,,

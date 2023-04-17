@@ -62,10 +62,10 @@ public class Librarian extends JPanel
     public static final Color SELECTED_COLOR = new Color(160, 160, 160);
     public static final Color DROP_COLOR = new Color(160, 160, 200);
     public static final Color BACKGROUND_COLOR = new JTabbedPane().getBackground(); // new Color(200, 200, 200);
-    public static final Color GRID_COLOR = Color.GRAY;
+    public static final Color GRID_COLOR = Style.isNimbus() ? new Color(192, 192, 192) : Color.GRAY;
     public static final Color READ_ONLY_BACKGROUND_COLOR = new Color(250, 245, 255);
     public static final Color SCRATCH_COLOR = new Color(240, 250, 250);
-    public static final Color INVALID_COLOR = BACKGROUND_COLOR; //= new Color(64, 64, 64);
+    public static final Color INVALID_COLOR = Style.isNimbus() ? new Color(230, 230, 230) : BACKGROUND_COLOR;
     public static final Color INVALID_TEXT_COLOR = new Color(255, 0, 0);
     public static final Color STANDARD_TEXT_COLOR = new Color(0, 0, 0);
 
@@ -507,8 +507,33 @@ public class Librarian extends JPanel
             //bottomPanel.add(stopAction.getButton(), BorderLayout.WEST);
             stopAction.getButton().setEnabled(true);
             }
-        }
-        
+            
+        /// Fix Nimbus, which doesn't display grid lines properly
+        /// See https://forums.oracle.com/ords/apexds/post/linux-nimbus-lookandfeel-table-grid-lines-are-not-coming-2197
+        if (Style.isNimbus())
+        	{
+			try 
+				{
+				for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) 
+					{
+					if (info.getName().equals("Nimbus")) 
+						{
+						UIManager.setLookAndFeel(info.getClassName());
+						UIDefaults defaults = UIManager.getLookAndFeelDefaults();
+						// This is supposed to work but doesn't
+						defaults.put("Table.gridColor", new javax.swing.plaf.ColorUIResource(GRID_COLOR));
+						// This seems to work okay
+						defaults.put("Table.background", new javax.swing.plaf.ColorUIResource(GRID_COLOR));
+						defaults.put("Table.disabled", false);
+						defaults.put("Table.showGrid", true);
+						defaults.put("Table.intercellSpacing", new Dimension(1, 1));
+						break;
+						}
+            		}
+        		} 
+        	catch (Exception e) { }
+			}    
+		}    
         
         
     public void loadOneInternal()

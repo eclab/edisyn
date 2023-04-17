@@ -66,6 +66,7 @@ Edisyn is a no-nonsense synthesizer patch editor and librarian for the editing a
 %\item Futuresonus Parva
 \item Alesis D4 and DM5 (Single)
 \item Audiothingies MicroMonsta (Single)
+\item Ashun Sound Machines Hydrasynth Family (Single)
 \item Casio CZ-1, CZ-101, CZ-1000, CZ-3000, CZ-5000, and CZ-230S (Single)
 \item Dave Smith Instruments Prophet '08 and '08 Desktop, Tetra, Mopho, Mopho Keyboard, Mopho SE, and Mopho X4 (Single and (for Tetra) Combo)
 \item E-Mu Morpheus and Ultraproteus (Single, Hyperpreset, and MidiMap)
@@ -273,7 +274,7 @@ When Edisyn loads a bulk sysex file, it will present you a couple of options:
 \item {\it Write} (upload) all of the patches in the file, or patches matching a current synth type, to your synthesizer.
 \item {\it Save} all of the patches in the file, or patches matching a current synth type, to one or more bulk files (one bulk file per synth type). You'll select the directory to save in.
 \item {\it Save} all of the patches in the file, or patches matching a current synth type, to individual patch files.  If there are multiple synth types, the individual patch files will be placed in separate directories by synth type.   You'll select the directory to save in.
-\item {\it Load} all of the patches matching a current synth type into the this editor's {\bf Librarian} (Section~\ref{librarian}) or into a new librarian.  Note that if these are bank patches, their individual patches will be loaded into the librarian: and they may overwrite other bank patches also being loaded.s
+\item {\it Load} all of the patches matching a current synth type into the this editor's {\bf Librarian} (Section~\ref{librarian}) or into a new librarian.  Note that if these are bank patches, their individual patches will be loaded into the librarian: and they may overwrite other bank patches also being loaded.
 \end{itemize}
 
 Other synthesizers have special {\bf bank sysex} messages.  Here, an entire bank (or in some cases, an entire synthesizer's memory's worth) of patches are stored in a single special sysex message.  For example, most files on the internet for the Yamaha DX7 synthesizer are bank sysex files.   Edisyn might find a message like this when loading a file, or it might receive the message from the synth over MIDI.   When Edisyn has received a bank sysex message or has loaded one from a file, you can:
@@ -1084,6 +1085,7 @@ In order to receive patches from Edisyn, your synthesizer may need to be set up 
 %Futuresonus Parva&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}&&&\\
 Alesis D4/DM5&{\cm}*&&{\cm}&&{\cm}&{\cm}& & &{\cm}            \\
 Audiothingies Micromonsta&{\cm}&{\cm}&&&&{\cm}*& & &{\cm}            \\
+ASM Hydrasynth&{\cm}&{\cm}*&&&&{\cm}& & &{\cm}            \\
 Casio CZ&&&{\cm}&{\cm}&{\cm}&{\cm}& & &{\cm}*            \\
 DSI Prophet '08/Mopho/Tetra&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}& & &{\cm}            \\
 E-Mu Morpheus/UltraProteus&{\cm}& &{\cm}& & &{\cm}& & &{\cm}            \\

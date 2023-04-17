@@ -90,13 +90,21 @@ public class Style
     
     public static Insets CHOOSER_INSETS() 
         { 
-        if (isUnix())
-            return new Insets(0, 0, 2, 4); 
+        if (isNimbus())
+        	{
+            return new Insets(0, 0, 2, 0); 
+        	}
+        else if (isWindows())
+        	{
+        	return new Insets(0, 0, 0, 0); 
+        	}
+        else if (isUnix())
+        	{
+        	return new Insets(0, 0, 2, 4); 
+        	}
         else
             return new Insets(-1, 0, -2, 0);  // no insets
-        }
-    public static Insets CHOOSER_WINDOWS_INSETS() { return new Insets(-1, 6, -2, 0); }  // no insets
-    
+        }    
 
     /////// VBOX AND HBOX CONSTANTS
 
@@ -221,6 +229,12 @@ public class Style
     public static boolean isMac() 
         {
         return (OS().indexOf("mac") >= 0 || System.getProperty("mrj.version") != null);
+        }
+        
+    public static boolean nimbus = false;
+    public static boolean isNimbus() 
+        {
+        return nimbus;
         }
 
     public static boolean isMacOSMonterey()

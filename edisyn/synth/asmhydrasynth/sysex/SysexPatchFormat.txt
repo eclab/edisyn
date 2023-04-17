@@ -1,11 +1,21 @@
+HYDRASYNTH PATCH FORMAT
+Sean Luke 
+sean@cs.gmu.edu
+April 16, 2023
+
+
 Below is a little spreadsheet of sorts to be used as a record for
 reverse engineering the locations of parameters in a Hydrasynth
-patch sysex dump.
+patch sysex dump.  This patch format is entirely reverse engineered
+(ASM has not been forthcoming) and may have errors, though it appears
+to be fairly complete for versions 1.5.5 and 2.0.0.
 
 The patch sysex data is exposed by decoding a series of patch dump
 sysex messages.  This procedure is described here:
 
 https://github.com/eclab/edisyn/blob/master/edisyn/synth/asmhydrasynth/sysex/SysexEncoding.txt
+
+This patch format was used to build Edisyn's Hydrasynth patch editor.
 
 
 OVERVIEW AND EXPLANATION OF TABLE
@@ -28,8 +38,12 @@ Category (byte 8), whose "MSB" space is used by the Patch Name Start.  Color
 may be a similar parameter, it's not quite clear.  Also see byte 470, 
 which uses bitpacking to stuff both Warm Mode and Snap into the same byte.
 
-For the ranges of parameters, see the NRPN spreadsheet (not ASM's table).  
+For the ranges of parameters, see the NRPN spreadsheet found here:
 https://github.com/eclab/edisyn/tree/master/edisyn/synth/asmhydrasynth/info
+
+It is not recommended to use ASM's provided NRPN file, 
+"Hydrasynth_KB_DR_MIDI_Spec_1.5.0.pdf", which is both incomplete and which
+entirely lacks display information.
 
 There are regions whose purpose or value is unknown an are marked either
 as UNKNOWN or as UNKNOWN START ... UNKNOWN END.

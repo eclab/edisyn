@@ -1,5 +1,22 @@
 HYDRASYNTH SYSEX ENCODING	
-[Incomplete but Usable Reverse Engineering as of April 1]
+Sean Luke
+sean@cs.gmu.edu
+April 16, 2023
+
+
+This encoding is entirely reverse engineered and is incomplete 
+(ASM has not been forthcoming).  But it is enough to build a fairly 
+complete patch editor.  The encoding works for both versions 1.5.5
+and 2.0.0.
+
+Once the sysex is decoded, the patch format is described in the
+accompanying text:
+	
+https://github.com/eclab/edisyn/blob/master/edisyn/synth/asmhydrasynth/sysex/SysexPatchFormat.txt
+
+This reverse engineered encoding was used to build Edisyn's 
+Hydrasynth patch editor.
+
 
 
 

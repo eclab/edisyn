@@ -374,8 +374,14 @@ public class Category extends JComponent implements Gatherable
 		return d;
     	}
     
-    public Dimension getPreferredSize() { return getMinimumSize(); } 
-    
+    public Dimension getPreferredSize() 
+    	{ 
+    	Dimension d = super.getPreferredSize();
+    	Dimension d2 = getMinimumSize();
+		d.width = ((int)Math.max(d.width, d2.width));
+    	return d;
+    	} 
+
     /** If synth is non-null, then double-clicking on the category will select or deselect all the
         components inside it for mutation purposes. */
     public Category(final Synth synth, String label, Color color)

@@ -26,11 +26,6 @@ public class Edisyn
         {
         try 
             {
-            if (Style.isUnix())
-                {
-                System.setProperty("useSystemAAFontSettings", "lcd");  // see https://wiki.archlinux.org/title/Java_Runtime_Environment_fonts#Basic_settings
-                }
-                        
             if (Style.isMac())
                 {
                 System.setProperty("apple.awt.graphics.EnableQ2DX", "true");
@@ -47,17 +42,48 @@ public class Edisyn
                 // System.setProperty("apple.awt.application.name", "Edisyn");
                 }            
                 
+            if (Style.isUnix())
+                {
+                System.setProperty("useSystemAAFontSettings", "lcd");  // see https://wiki.archlinux.org/title/Java_Runtime_Environment_fonts#Basic_settings
+ 
+ 				// Use Nimbus
+ 					for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) 
+					{
+						if ("Nimbus".equals(info.getName())) 
+						{
+							UIManager.setLookAndFeel(info.getClassName());
+							Style.nimbus = true;
+							break;
+						}
+					}
+
+                }
+                        
             if (Style.isWindows())
                 {
-                // This makes sure that windows uses the default windows look and feel, not the old Sun one
-                // NOTE: this will seriously break Java on Linux
-                UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+				try 
+				{
+ 				// Use Nimbus
+					for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) 
+					{
+						if ("Nimbus".equals(info.getName())) 
+						{
+							UIManager.setLookAndFeel(info.getClassName());
+							Style.nimbus = true;
+							break;
+						}
+					}
+				} 
+				catch (Exception e) 
+					{ 
+					// This makes sure that windows uses the default windows look and feel, not the old Sun one
+					// NOTE: this will seriously break Java on Linux
+				    UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+					}
                 }
             }
         catch(Exception e) { }
-        
-        
-        
+                
         String lastSynth = Synth.getLastSynth();
         boolean showSynth = Synth.getLastXAsBoolean("ShowSynth", null, true, false);
         Synth synth = null;

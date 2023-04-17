@@ -352,3 +352,18 @@ Many additional NRPN parameters have errors.  Search for "BUG:" or "Bug:" or
 whatnot here:
 
 https://github.com/eclab/edisyn/blob/master/edisyn/synth/asmhydrasynth/info/nrpn.pdf
+
+26. ARP TEMPO IGNORED
+
+The Hydrasynth will emit NRPN for Arp Temp, but will not accept it.
+
+27. ENV DELAY
+
+Both the delay sync on and delay sync off, when sent over NRPN, update the same
+parameter.  This is not the case for attack, decay, hold, or release.  This was
+a most annoying bug to track down.
+
+28. LFO BPM SYNC
+
+Sort of related to 27 above.  Sending LFO Delay BPM Sync On or LFO Fade In BPM Sync On over NRPN will change the Hydrasynth value regardless of whether BPM Sync is turned On or Off.  The opposite is not the case however (sending LFO Delay BPM Sync Off for example).  This is not the case for LFO Rate Sync On.
+

@@ -78,8 +78,8 @@ BYTE    HEX     INFO
 25      19      UNNOWN
 26      1A      Color
 27      1B      
-28      1C      UNNOWN		[ -80 in Sawpressive ]
-29      1D      			[ 4 in Sawpressive ]
+28      1C      Arp Tempo Low Byte [See also 808] 
+29      1D      Arp Tempo High Byte [See also 809]
 30      1E      Polyphony
 31      1F      
 32      20      Density
@@ -96,7 +96,7 @@ BYTE    HEX     INFO
 43      2B      
 44      2C      Pitch Bend Range
 45      2D      
-46      2E      Vibrato Amount
+46      2E      Vibrato Amount Value before decimal point	[to be compatible with 1.5.5.  See 2462]
 47      2F      
 48      30      Vibrato Rate
 49      31      
@@ -858,8 +858,8 @@ BYTE    HEX     INFO
 805     325     
 806     326     
 807     327     
-808     328     [ -80 in Sawpressive ]
-809     329     [ 4 in Sawpressive ]
+808     328     Arp Tempo Low Byte [see also 28]
+809     329     Arp Tempo High Byte [see also 29]
 810     32A     Arpeggiator Division
 811     32B     
 812     32C     Arpeggiator Swing
@@ -2512,7 +2512,7 @@ BYTE    HEX     INFO
 2459    99B     
 2460    99C     
 2461    99D     
-2462    99E     
+2462    99E     Vibrato Amount Value after decimal point		[See 46]
 2463    99F     
 2464    9A0     
 2465    9A1     

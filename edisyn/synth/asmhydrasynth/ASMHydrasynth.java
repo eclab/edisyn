@@ -1192,7 +1192,17 @@ public class ASMHydrasynth extends Synth
                 }
             }
 
-        String str = getLastX("SendArpTapTrig", getSynthClassName(), true);
+        String str = getLastX("IgnoreParametersFromSynth", getSynthClassName(), true);
+        if (str == null)
+            ignoreParametersFromSynth = true;            // default is true
+        else if (str.equalsIgnoreCase("true"))
+            ignoreParametersFromSynth = true;
+        else
+            ignoreParametersFromSynth = false;
+
+
+
+        str = getLastX("SendArpTapTrig", getSynthClassName(), true);
         if (str == null)
             sendArpTapTrig = false;            // default is false
         else if (str.equalsIgnoreCase("true"))
@@ -1262,9 +1272,9 @@ public class ASMHydrasynth extends Synth
         vbox.add(addFilter(1, Style.COLOR_B()));
         hbox = new HBox();
         hbox.add(addFilter(2, Style.COLOR_B()));
-        hbox.add(addFilters(Style.COLOR_B()));
-        hbox.addLast(addAmp(Style.COLOR_C()));
+        hbox.addLast(addFilters(Style.COLOR_B()));
         vbox.add(hbox);
+        vbox.add(addAmp(Style.COLOR_C()));
         vbox.add(addFX(true, Style.COLOR_A()));
         hbox = new HBox();
         hbox.add(addDelay(Style.COLOR_A()));
@@ -1501,7 +1511,10 @@ public class ASMHydrasynth extends Synth
             model.set("lfo4steps", 2);
         if (model.get("lfo5steps") < 2) // set by the Hydrasynth when disabled
             model.set("lfo5steps", 2);
-                
+        
+        if (model.get("filter1type") == 16) // vowel is sometimes returned as 16 incorrectly
+        	model.set("filter1type", 10);
+        
         // check the easy stuff -- out of range parameters
         super.revise();
         
@@ -1905,6 +1918,8 @@ public class ASMHydrasynth extends Synth
         String[] params;
         final HBox hbox = new HBox();
         
+		model.set("voicevibratobpmsync", 0);		// the purpose of this is to make sure that bpm sync is FIRST in the mutation list
+		
         final LabelledDial off = new LabelledDial("Rate", this, "voicevibratoratesyncoff", color, 0, 127)
             {
             public String map(int value)
@@ -2350,6 +2365,8 @@ public class ASMHydrasynth extends Synth
         String[] params;
         HBox hbox = new HBox();
         
+		model.set("mutant" + mut + "mode", 0);		// the purpose of this is to make sure that mode is FIRST in the mutation list
+
         params = MUTANT_SOURCES_FM_LIN;
         final Chooser sourcesFMLin = new Chooser("Source", this, "mutant" + mut + "sourcefmlin", params);
  
@@ -2852,8 +2869,17 @@ public class ASMHydrasynth extends Synth
         JComponent comp;
         String[] params;
         final HBox hbox = new HBox();
+
+		model.set((pre ? "pre" : "post") + "fxtype", 0);		// the purpose of this is to make sure that type is FIRST in the mutation list
         
-        final HBox chorus = new HBox();
+ 		// make it so mutation won't try to play with these
+		for(int i = 1; i <= 5; i++)
+			{
+			model.set((pre ? "pre" : "post") + "fxparam" + i, 0);
+			model.setStatus((pre ? "pre" : "post") + "fxparam" + i, Model.STATUS_IMMUTABLE);
+			}
+
+       final HBox chorus = new HBox();
         comp = new LabelledDial("Rate", this, (pre ? "pre" : "post") + "fx1param1", color, 0, 1024)
             {
             public String map(int value)
@@ -3458,6 +3484,8 @@ public class ASMHydrasynth extends Synth
         {
         Category category = new Category(this, "Delay", color);
 
+		model.set("delaybpmsync", 0);		// the purpose of this is to make sure that bpm sync is FIRST in the mutation list
+
         JComponent comp;
         String[] params;
         HBox hbox = new HBox();
@@ -3664,6 +3692,8 @@ public class ASMHydrasynth extends Synth
         String[] params;
         final HBox hbox = new HBox();
         
+		model.set("lfo" + lfo + "bpmsync", 0);		// the purpose of this is to make sure that bpm sync is FIRST in the mutation list
+
         final LabelledDial steps = new LabelledDial("Steps", this, "lfo" + lfo + "steps", color, 2, 64);
 
         VBox vbox = new VBox();
@@ -3958,6 +3988,8 @@ public class ASMHydrasynth extends Synth
         
         VBox vbox = new VBox();
         
+		model.set("env" + env + "bpmsync", 0);		// the purpose of this is to make sure that bpm sync is FIRST in the mutation list
+
         if (env == 2)  // No Env 2 Trigger Source 1, but it's still a parameter!  Hydrasynth is weird
             {
             model.set("env" + env + "trigsrc" + 1, 1);
@@ -4524,7 +4556,15 @@ public class ASMHydrasynth extends Synth
         vbox.add(comp);
 
         hbox.add(vbox);
-                
+
+        comp = new LabelledDial("Tempo", this, "arptempo", color, 300, 2400)
+        	{
+        	public String map(int val)
+        		{
+        		return "" + (val / 10) + "." + (val % 10);
+        		}
+        	};
+        hbox.add(comp);
         
         comp = new LabelledDial("Octave", this, "arpoctave", color, 1, 6);
         hbox.add(comp);
@@ -4634,11 +4674,24 @@ public class ASMHydrasynth extends Synth
     boolean sendArpTapTrig;
     boolean lockUserLFOSteps;
     boolean lockAllLFOSteps;
+    boolean ignoreParametersFromSynth;
         
     public void addHydrasynthMenu()
         {
         JMenu menu = new JMenu("Hydrasynth");
         menubar.add(menu);
+
+        JCheckBoxMenuItem ignoreParametersMenu = new JCheckBoxMenuItem("Ignore Parameters from Synth");
+        ignoreParametersMenu.setSelected(ignoreParametersFromSynth);
+        menu.add(ignoreParametersMenu);
+        ignoreParametersMenu.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent evt)
+                {
+                ignoreParametersFromSynth = ignoreParametersMenu.isSelected();
+                setLastX("" + ignoreParametersFromSynth, "IgnoreParametersFromSynth", getSynthClassName(), true);
+                }
+            });
 
         JCheckBoxMenuItem sendArpTapTrigMenu = new JCheckBoxMenuItem("Send Arp Tap Trig");
         sendArpTapTrigMenu.setSelected(sendArpTapTrig);
@@ -4703,20 +4756,6 @@ public class ASMHydrasynth extends Synth
         return false;
         }
 
-    public int getPauseAfterSendHeaderParameter()
-        {
-        return 0;
-        }
-
-    public int getPauseAfterSendOneParameter()
-        {
-        return 0;
-        }
-
-    public int getPauseAfterSendAllParameters()
-        {
-        return 0;
-        }
 
     public int getBatchDownloadWaitTime() { return 50; }				// this will make a lot of "tardy" messages but it's a tiny bit faster than 400
     public int getBatchDownloadFailureCountdown() { return 100; }
@@ -5073,7 +5112,9 @@ public class ASMHydrasynth extends Synth
             if (!key.equals("prefxwet") && !key.equals("prefxtype") && !key.equals("prefxpreset") && !key.equals("prefxsidechain"))
                 {
                 // It's one of the 5 parameters
-                int type = (int)(key.charAt(5) - '0');   // as in prefxN...                     // don't need this?s
+                int type = (int)(key.charAt(5) - '0');   // as in prefxN...                     // don't need this?
+                if (type != model.get("prefxtype"))	// it's not the right set
+                	return new Object[0];
                 int param = (int)(key.charAt(11) - '0');  // as in prefxNparamM
                 p = p("prefxparam" + param);
                 }
@@ -5092,7 +5133,9 @@ public class ASMHydrasynth extends Synth
             if (!key.equals("postfxwet") && !key.equals("postfxtype") && !key.equals("postfxpreset") && !key.equals("postfxsidechain"))
                 {
                 // It's one of the 5 parameters
-                int type = (int)(key.charAt(6) - '0');   // as in postfxN...                    // don't need this?s
+                int type = (int)(key.charAt(6) - '0');   // as in postfxN...                    // don't need this?
+                if (type != model.get("postfxtype"))	// it's not the right set
+                	return new Object[0];
                 int param = (int)(key.charAt(12) - '0');  // as in postfxNparamM
                 p = p("postfxparam" + param);
                 }
@@ -5112,6 +5155,26 @@ public class ASMHydrasynth extends Synth
                 subkey.startsWith("fadeinsyncon") ||
                 subkey.startsWith("oneshot"))
                 {
+                if (subkey.startsWith("delaysyncon") || subkey.startsWith("fadeinsyncon"))
+                	{
+					// This little stupidity is because a bug in the hydrasynth doesn't distinguish between
+					// delay/rate sync on and delay/rate sync off in NRPN
+					int type = (int)(key.charAt(3) - '0');   // as in envN...
+					if (model.get("lfo" + type + "bpmsync") == 0) // BPM is off, need to bail
+						return new Object[0];
+					}
+                if (subkey.startsWith("delaysyncoff") || subkey.startsWith("fadeinsyncoff"))
+                	{
+					// This little stupidity is because a bug in the hydrasynth doesn't distinguish between
+					// delay/rate sync on and delay/rate sync off in NRPN
+					// This one is probably not needed -- it's really syncon that's the problem,
+					// but just for good measure...
+					int type = (int)(key.charAt(3) - '0');   // as in envN...
+					if (model.get("lfo" + type + "bpmsync") == 1) // BPM is on, need to bail
+						return new Object[0];
+					}
+
+
                 int lfo = StringUtility.getFirstInt(key);
                 p = p("lfo1wave") + lfo - 1;
                 // ugh... is this faster than a hashtable lookup?  Gross.
@@ -5155,10 +5218,20 @@ public class ASMHydrasynth extends Synth
             String subkey = key.substring(4);
             if (subkey.startsWith("delaysyncoff"))
                 {
+                // This little stupidity is because a bug in the hydrasynth doesn't distinguish between
+                // delay sync on and delay sync off in NRPN
+                int type = (int)(key.charAt(3) - '0');   // as in envN...
+                if (model.get("env" + type + "bpmsync") == 1) // BPM is on, need to bail
+                	return new Object[0];
                 val = val + (0x08 * 128);                       // MSB is 0x08 for some reason
                 }
             else if (subkey.startsWith("delaysyncon"))
                 {
+                // This little stupidity is because a bug in the hydrasynth doesn't distinguish between
+                // delay sync on and delay sync off in NRPN
+                int type = (int)(key.charAt(3) - '0');   // as in envN...
+                if (model.get("env" + type + "bpmsync") == 0) // BPM is off, need to bail
+                	return new Object[0];
                 val = val + (0x18 * 128);                       // MSB is 0x18 for some reason
                 }
             else if (subkey.startsWith("attacksyncoff") ||
@@ -5182,6 +5255,8 @@ public class ASMHydrasynth extends Synth
                 {
                 int env = StringUtility.getFirstInt(key);
                 p = p("env1loop") + env - 1;    // 0x3F 0x00 ... 0x3F 0x04
+                if (env == 5)  // special case this, it's a weird hydrasynth thing
+                	p =  p("env1loop") + 0x0A;
                 // ugh... is this faster than a hashtable lookup?  Gross.
                 if (subkey.startsWith("loop")) v = 0x06;
                 else if (subkey.startsWith("legato")) v = 0x07;
@@ -5469,7 +5544,6 @@ public class ASMHydrasynth extends Synth
         get1("voicestereomode", data, 40);
         get1("voicestereowidth", data, 42);
         get1("voicepitchbend", data, 44);
-        get1("voicevibratoamount", data, 46);
         get1("voicevibratobpmsync", data, 50);
         if (model.get("voicevibratobpmsync") == 0)
             {
@@ -5483,6 +5557,10 @@ public class ASMHydrasynth extends Synth
         get1("voiceglidetime", data, 54);
         get1("voiceglidecurve", data, 56);
         get1("voiceglidelegato", data, 58);
+
+        /// CUSTOM VIBRATO AMOUNT FOR 2.0.0
+		data[46] = (byte)(model.get("voicevibratoamount") / 10);
+		data[2462] = (byte)(model.get("voicevibratoamount") % 10);
 
         // SCALES
                 
@@ -5718,6 +5796,7 @@ public class ASMHydrasynth extends Synth
                         
         // ARPEGGIATOR
                 
+        get2("arptempo", data, 808);
         get1("arpdivision", data, 810);
         get1("arpswing", data, 812);
         get1("arpgate", data, 814);
@@ -6149,7 +6228,6 @@ public class ASMHydrasynth extends Synth
         set1("voicestereomode", data, 40);
         set1("voicestereowidth", data, 42);
         set1("voicepitchbend", data, 44);
-        set1("voicevibratoamount", data, 46);
         set1("voicevibratobpmsync", data, 50);
         if (model.get("voicevibratobpmsync") == 0)
             {
@@ -6164,6 +6242,12 @@ public class ASMHydrasynth extends Synth
         set1("voiceglidecurve", data, 56);
         set1("voiceglidelegato", data, 58);
 
+        /// CUSTOM VIBRATO AMOUNT
+        if (version == VERSION_1_5_5)
+        	model.set("voicevibratoamount", data[46]);
+        else if (version == VERSION_2_0_0)
+        	model.set("voicevibratoamount", data[46] * 10 + data[2462]);
+        
         // SCALES
                 
         set1("scalekeylock", data, 60);
@@ -6398,6 +6482,7 @@ public class ASMHydrasynth extends Synth
                         
         // ARPEGGIATOR
                 
+        set2("arptempo", data, 808);
         set1("arpdivision", data, 810);
         set1("arpswing", data, 812);
         set1("arpgate", data, 814);
@@ -6527,6 +6612,10 @@ public class ASMHydrasynth extends Synth
 
     public void handleSynthCCOrNRPN(Midi.CCData data)
         {
+        // The hydrasynth unhelpfully tries to change parameters on us when we change
+        // parameters in bulk.  So we have to ignore it.
+        if (sendingAllParameters || ignoreParametersFromSynth) return;
+        
         if (data.type == Midi.CCDATA_TYPE_NRPN)
             {
             parseNRPN(data.number, data.value);
@@ -6943,9 +7032,9 @@ public class ASMHydrasynth extends Synth
     // Change Patch can get stomped if we do a request immediately afterwards
     public int getPauseAfterChangePatch() { return 200; }
 
-    public int getPauseAfterWritePatch() { return 2700; }   // this is an incredible number
+    public int getPauseAfterWritePatch() { return 3500; }   // this is an incredible number
 
-    public int getPauseBetweenPatchWrites() { return 100; } // { return 1500; }        // also very bad
+    public int getPauseBetweenPatchWrites() { return 100; } // { return 1500; }
 
     public void changePatch(Model tempModel)
         {
@@ -6954,25 +7043,41 @@ public class ASMHydrasynth extends Synth
         
         int bank = tempModel.get("bank", 0);
         int number = tempModel.get("number", 0);
-        
+
         tryToSendMIDI(buildCC(getChannelOut(), 32, bank));
-//        simplePause(1000);
         tryToSendMIDI(buildPC(getChannelOut(), number));
-//        simplePause(1000);
         }
 
+    public int getPauseAfterSendHeaderParameter()
+        {
+        return getPauseAfterSendOneParameter();
+        }
+
+    public int getPauseAfterSendOneParameter()
+        {
+        return 0;
+        }
+
+    public int getPauseAfterSendAllParameters()
+        {
+        return 0;
+        }
     public static final int MODE_PAUSE = 0;
     public static final int TYPE_PAUSE = 0;
     public static final int WAVE_PAUSE = 0;
     public static final int BPM_SYNC_PAUSE = 0;
     public static final int WAVESCAN_WAVE_PAUSE = 0;
         
+    boolean sendingAllParameters = false;
+    
     protected boolean sendAllParametersInternal()
         {
         if (!getSendMIDI())
             return false;  // don't bother!  MIDI is off
 
-        for(int j = 0; j < 3; j++)
+		sendingAllParameters = true;
+		
+        for(int j = 0; j < 1; j++)
             {
             // we do a specific order
             for(int i = 0; i < modeParameters.length; i++)
@@ -7012,6 +7117,8 @@ public class ASMHydrasynth extends Synth
                 }
             }
         simplePause(getPauseAfterSendAllParameters());
+
+		sendingAllParameters = false;
         return true;
         }
 
@@ -7851,6 +7958,7 @@ public class ASMHydrasynth extends Synth
     "env5trigsrc2",
     "env5trigsrc3",
     "env5trigsrc4",
+    "arptempo",
     "arpenable",
     "arpdivision",
     "arpswing",
@@ -8897,6 +9005,7 @@ public class ASMHydrasynth extends Synth
     "env5trigsrc2",
     "env5trigsrc3",
     "env5trigsrc4",
+    "arptempo",
     "arpenable",
     "arpdivision",
     "arpswing",
@@ -9931,30 +10040,31 @@ public class ASMHydrasynth extends Synth
     7533,           // 3a 6d            "env4trigsrc2",
     7534,           // 3a 6e            "env4trigsrc3",
     7535,           // 3a 6f            "env4trigsrc4",
-    8068,           // 3f 4             "env5delaysyncoff",
+    8074,           // 3f 4             "env5delaysyncoff",
     8341,           // 41 15            "env5attacksyncoff",
     8346,           // 41 1a            "env5holdsyncoff",
     8351,           // 41 1f            "env5decaysyncoff",
     8356,           // 41 24            "env5sustain",
     8361,           // 41 29            "env5releasesyncoff",
-    8068,           // 3f 4             "env5delaysyncon",
+    8074,           // 3f a             "env5delaysyncon",
     8597,           // 43 15            "env5attacksyncon",
     8607,           // 43 1f            "env5decaysyncon",
     8602,           // 43 1a            "env5holdsyncon",
     8617,           // 43 29            "env5releasesyncon",
     8180,           // 3f 74            "env5atkcurve",
     8185,           // 3f 79            "env5deccurve",
-    8068,           // 3f 4             "env5loop",
-    8068,           // 3f 4             "env5legato",
-    8068,           // 3f 4             "env5bpmsync",
-    8068,           // 3f 4             "env5freerun",
-    8068,           // 3f 4             "env5reset",
+    8074,           // 3f a             "env5loop",
+    8074,           // 3f a             "env5legato",
+    8074,           // 3f a             "env5bpmsync",
+    8074,           // 3f a             "env5freerun",
+    8074,           // 3f a             "env5reset",
     8190,           // 3f 7e            "env5relcurve",
     7536,           // 3a 70            "env5trigsrc1",
     7537,           // 3a 71            "env5trigsrc2",
     7538,           // 3a 72            "env5trigsrc3",
     7539,           // 3a 73            "env5trigsrc4",
-    7299,                       // 39 3                         "arpenable"
+    8120,           // 3f 38            "arptempo",
+    7299,           // 39 3             "arpenable"
     7299,           // 39 3             "arpdivision",
     7299,           // 39 3             "arpswing",
     7299,           // 39 3             "arpgate",

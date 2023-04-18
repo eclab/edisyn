@@ -1,0 +1,4 @@
+April 14, 2023 Hydrasynth sysex reverse engineering notes.
+
+Hadn't realized that the Macro Panel Button State was stored in the patch.
+Extracted that to the sysex patch format.

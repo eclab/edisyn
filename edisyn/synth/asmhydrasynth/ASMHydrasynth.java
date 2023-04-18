@@ -4483,6 +4483,9 @@ public class ASMHydrasynth extends Synth
             };
         vbox.add(comp);
 
+        comp = new CheckBox("Panel Button", this, "macro" + macro + "panelbuttonstate");
+        vbox.add(comp);
+
         hbox.add(vbox);
                 
         vbox = new VBox();
@@ -5901,6 +5904,11 @@ public class ASMHydrasynth extends Synth
             {
             get2("macro" + (i + 1) + "panelvalue", data, 1606 + i * 2);
             }
+        for(int i = 0; i < 8; i++)
+            {
+            get1("macro" + (i + 1) + "panelbuttonstate", data, 1622 + i);
+            }
+
         // Set the target categories
         for(int i = 0; i < 8; i++)
             {
@@ -6587,6 +6595,10 @@ public class ASMHydrasynth extends Synth
         for(int i = 0; i < 8; i++)
             {
             set2("macro" + (i + 1) + "panelvalue", data, 1606 + i * 2);
+            }
+        for(int i = 0; i < 8; i++)
+            {
+            set1("macro" + (i + 1) + "panelbuttonstate", data, 1622 + i);
             }
         int offset = 1630;
         for(int i = 0; i < 8; i++)
@@ -9262,6 +9274,14 @@ public class ASMHydrasynth extends Synth
     "macro6panelvalue",
     "macro7panelvalue",
     "macro8panelvalue",
+    "macro1panelbuttonvalue",
+    "macro2panelbuttonvalue",
+    "macro3panelbuttonvalue",
+    "macro4panelbuttonvalue",
+    "macro5panelbuttonvalue",
+    "macro6panelbuttonvalue",
+    "macro7panelbuttonvalue",
+    "macro8panelbuttonvalue",
     "modmatrix1modsource",
     "modmatrix2modsource",
     "modmatrix3modsource",
@@ -10320,6 +10340,8 @@ public class ASMHydrasynth extends Synth
     8157,           // 3f 5d            "macro6panelvalue",
     8158,           // 3f 5e            "macro7panelvalue",
     8159,           // 3f 5f            "macro8panelvalue",
+	// Macro Panel Button Triggers are not included here since they are,
+	// for some unknown reason, per-Macro item, per slot.  See NRPN spreadsheet.
     7936,           // 3e 0             "modmatrix1modsource",
     7937,           // 3e 1             "modmatrix2modsource",
     7938,           // 3e 2             "modmatrix3modsource",

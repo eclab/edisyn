@@ -1686,14 +1686,14 @@ BYTE    HEX     INFO
 1619    653     
 1620    654     Macro 8 Panel Value Low Byte
 1621    655     Macro 8 Panel Value High Byte
-1622    656     
-1623    657     
-1624    658     
-1625    659     
-1626    65A     
-1627    65B     
-1628    65C     
-1629    65D     
+1622    656     Macro 1 Panel Button Value (0, 1)
+1623    657     Macro 2 Panel Button Value (0, 1)
+1624    658     Macro 3 Panel Button Value (0, 1)
+1625    659     Macro 4 Panel Button Value (0, 1)
+1626    65A     Macro 5 Panel Button Value (0, 1)
+1627    65B     Macro 6 Panel Button Value (0, 1)
+1628    65C     Macro 7 Panel Button Value (0, 1)
+1629    65D     Macro 8 Panel Button Value (0, 1)
 1630    65E     Macro Name 1 Start
 1631    65F     
 1632    660     

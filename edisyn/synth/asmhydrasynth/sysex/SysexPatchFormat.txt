@@ -34,9 +34,12 @@ position defines the 8-bit MSB of the parameter.
 Strings are one byte per character, and may take up and odd amount of space 
 (see the apparently 17-byte Macro Name space for example).  A few parameters 
 seem to be crammed into single byte with no additional byte, such as 
-Category (byte 8), whose "MSB" space is used by the Patch Name Start.  Color
-may be a similar parameter, it's not quite clear.  Also see byte 470, 
-which uses bitpacking to stuff both Warm Mode and Snap into the same byte.
+Category (byte 8), whose "MSB" space is used by the Patch Name Start, and also
+the various Macro Panel Button Values.  Color may be a similar parameter, it's 
+not quite clear.  Also see byte 470, which uses bitpacking to stuff both Warm 
+Mode and Snap into the same byte. There's also a hack employed for Vibrato 
+Amount to enable higher resolution for 2.0.0: byte 46 has the integer value 
+as usual, but byte 2462 now holds the decimal value.
 
 For the ranges of parameters, see the NRPN spreadsheet found here:
 https://github.com/eclab/edisyn/tree/master/edisyn/synth/asmhydrasynth/info
@@ -110,7 +113,7 @@ BYTE    HEX     INFO
 43      2B      
 44      2C      Pitch Bend Range
 45      2D      
-46      2E      Vibrato Amount Value before decimal point	[to be compatible with 1.5.5.  See 2462]
+46      2E      Vibrato Amount Value before decimal point	[to be compatible with 1.5.5.  See Byte 2462]
 47      2F      
 48      30      Vibrato Rate
 49      31      
@@ -536,7 +539,7 @@ BYTE    HEX     INFO
 469     1D5     
 470     1D6     Warm Mode bit 0		Snap bit 1
 471     1D7     
-472     1D8     Filter 2 Type					[An odd location: perhaps wasadded later]
+472     1D8     Filter 2 Type		[An odd location: perhaps was added later]
 473     1D9     
 474     1DA     UNKNOWN START		[ 127 in Sawpressive ]
 475     1DB     
@@ -564,7 +567,7 @@ BYTE    HEX     INFO
 497     1F1     
 498     1F2     Env 1 Legato
 499     1F3     
-500     1F4     Env 1 Reset		[				Note: Can only be set if Legato is off...]
+500     1F4     Env 1 Reset		[Note: Can only be set if Legato is off...]
 501     1F5     
 502     1F6     Env 1 Free Run
 503     1F7     
@@ -2463,7 +2466,7 @@ BYTE    HEX     INFO
 2396    95C     
 2397    95D     
 2398    95E     
-2399    95F     
+2399    95F     UNKNOWN END
 2400    960     Voice 1 Mod (0...256)
 2401    961     
 2402    962     
@@ -2524,11 +2527,11 @@ BYTE    HEX     INFO
 2457    999     
 2458    99A     Sustain Pedal
 2459    99B     
-2460    99C     
+2460    99C     UNKNOWN
 2461    99D     
-2462    99E     Vibrato Amount Value after decimal point		[See 46]
+2462    99E     Vibrato Amount Value after decimal point		[See Byte 46]
 2463    99F     
-2464    9A0     
+2464    9A0     UNKNOWN START
 2465    9A1     
 2466    9A2     
 2467    9A3     

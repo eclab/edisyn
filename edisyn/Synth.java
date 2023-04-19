@@ -4152,6 +4152,7 @@ public abstract class Synth extends JComponent implements Updatable
         JMenuItem randomize50 = new JMenuItem("Randomize by 50%");
         randomize.add(randomize50);
         JMenuItem randomize100 = new JMenuItem("Randomize by 100%");
+        randomize100.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_BACK_SLASH, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
         randomize.add(randomize100);
 
         randomize.addSeparator();

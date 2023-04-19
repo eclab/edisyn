@@ -155,7 +155,7 @@ You can also run Edisyn from its jar file from the command line: see "Running fr
 
 #### Rosetta and the M1
 
-At present Edisyn only runs under Rosetta on the M1, because its package contains an Intel-only Java VM (because I only own an Intel Mac and am not running Big Sur).  Don't expect things to change until I get an M1.  If you have installed Java yourself, you can run Edisyn from the command line (see later below) and it'll probably run natively.
+At present Edisyn only runs under Rosetta on the M1, because its package contains an Intel-only Java VM (because I only own an Intel Mac and am not running Big Sur).  It'll work fine.  Don't expect things to change until I get an M1.  If you have installed Java yourself, you can run Edisyn from the command line (see later below) and it'll probably run natively.
 
 #### If Edisyn bombs in MacOS on selecting a patch editor...
 

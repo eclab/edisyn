@@ -99,4 +99,14 @@ public class Strut
         return makeStrut(new Component[] { component });
         }
 
+    public static JComponent makeHorizontalStrut(Component component)
+        {
+        return makeStrut(new Component[] { component }, false, true);
+        }
+
+    public static JComponent makeVerticalStrut(Component component)
+        {
+        return makeStrut(new Component[] { component }, true, false);
+        }
+
     }

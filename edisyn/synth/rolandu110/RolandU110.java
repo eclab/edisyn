@@ -1509,7 +1509,7 @@ public class RolandU110 extends Synth
 
       PART 1 (16 bytes nybblized into 32 sysex bytes)
 
-      48              20      Tone Media (bits 0 1 2 3 4)       [TABLE 2]
+      48              20      Tone Media (bits 0 1 2 3 4)                       [TABLE 2]
       ...                     LFO Poly Press Sens (bits 5 6 7)
       50              21      Tone Number                                       [TABLE 3]
       52              22      Receive Channel (bits 0 1 2 3)

@@ -628,8 +628,8 @@ public class ASMHydrasynth extends Synth
         0x04 * 128 + 0x55,              //Matrix 22 Depth
         0x04 * 128 + 0x56,              //Matrix 23 Depth
         0x04 * 128 + 0x57,              //Matrix 24 Depth 
-        0x04 * 128 + 0x68,              //Matrix 25 Depth
-        0x04 * 128 + 0x69,              //Matrix 26 Depth
+        0x04 * 128 + 0x58,              //Matrix 25 Depth
+        0x04 * 128 + 0x59,              //Matrix 26 Depth
         0x04 * 128 + 0x5A,              //Matrix 27 Depth
         0x04 * 128 + 0x5B,              //Matrix 28 Depth
         0x04 * 128 + 0x5C,              //Matrix 29 Depth
@@ -1919,18 +1919,14 @@ public class ASMHydrasynth extends Synth
 
         JComponent comp;
         String[] params;
-        HBox hbox = new HBox();
+        final HBox hbox = new HBox();
         
-        VBox vbox = new VBox();
-        params = GLIDE_MODES;
-        comp = new Chooser("Mode", this, "voiceglide", params);
-        vbox.add(comp);
+		model.set("voiceglidecurve", 0);		// the purpose of this is to make sure that voiceglidecurve sync is FIRST in the mutation list
 
-        comp = new CheckBox("Legato", this, "voiceglidelegato");
-        vbox.add(comp);
-        hbox.add(vbox);
+        final CheckBox legato = new CheckBox("Legato", this, "voiceglidelegato");
 
-        comp = new LabelledDial("Curve", this, "voiceglidecurve", color, 0, 128)
+		HBox curvetime = new HBox();
+         final LabelledDial curve = new LabelledDial("Curve", this, "voiceglidecurve", color, 0, 128)
             {
             public boolean isSymmetric() { return true; }
             public String map(int val)
@@ -1945,10 +1941,42 @@ public class ASMHydrasynth extends Synth
                 else return "Linear";
                 }
             };
-        hbox.add(comp);
+		curvetime.add(curve);
+        final LabelledDial time = new LabelledDial("Time", this, "voiceglidetime", color, 0, 127);
+		curvetime.add(time);
 
-        comp = new LabelledDial("Time", this, "voiceglidetime", color, 0, 127);
-        hbox.add(comp);
+       final VBox vbox = new VBox();
+        params = GLIDE_MODES;
+        comp = new Chooser("Mode", this, "voiceglide", params)
+        	{
+            public void update(String key, Model model)
+                {
+                super.update(key, model);
+                if (model.get(key) == 0)
+                	{
+                	vbox.remove(legato);
+                	curvetime.removeAll();
+                	curvetime.add(Strut.makeStrut(curve));
+                	curvetime.add(Strut.makeStrut(time));
+                	}
+                else
+                	{
+                	vbox.add(legato);
+                	curvetime.removeAll();
+                	curvetime.add(curve);
+                	curvetime.add(time);
+                	}
+                vbox.revalidate();
+                curvetime.revalidate();
+                vbox.repaint();
+                curvetime.repaint();
+                }
+        	};
+        vbox.add(comp);
+
+        vbox.add(legato);
+        hbox.add(vbox);
+        hbox.add(curvetime);
 
         category.add(hbox, BorderLayout.CENTER);
         return category;
@@ -4825,6 +4853,9 @@ public class ASMHydrasynth extends Synth
     /// gonna be a mess parsing these back in from the Hydrasynth...
     public Object[] emitAll(String key)
         {
+        // It seems that we need a little pause after the modmatrix values
+		if (key.startsWith("mod"))
+			simplePause(2);
         if (key.equals("bank") || key.equals("number") || key.equals("--"))
             {
             return new Object[0];
@@ -7234,6 +7265,7 @@ public class ASMHydrasynth extends Synth
         "mutant3mode",                                  
         "mutant4mode",                                  
         "ribbonmode",   
+    	"voiceglide",
         };
 
                                 
@@ -8219,6 +8251,14 @@ public class ASMHydrasynth extends Synth
     "macro8depth6",
     "macro8depth7",
     "macro8depth8",
+    "macro1panelvalue",
+    "macro2panelvalue",
+    "macro3panelvalue",
+    "macro4panelvalue",
+    "macro5panelvalue",
+    "macro6panelvalue",
+    "macro7panelvalue",
+    "macro8panelvalue",
     "modmatrix1modsource",
     "modmatrix2modsource",
     "modmatrix3modsource",
@@ -8326,7 +8366,6 @@ public class ASMHydrasynth extends Synth
     "voiceanalogfeel",
     "voicedensity",
     "voiceglidecurve",
-    "voiceglide",
     "voiceglidelegato",
     "voiceglidetime",
     "voicestereomode",
@@ -9274,14 +9313,6 @@ public class ASMHydrasynth extends Synth
     "macro6panelvalue",
     "macro7panelvalue",
     "macro8panelvalue",
-    "macro1panelbuttonvalue",
-    "macro2panelbuttonvalue",
-    "macro3panelbuttonvalue",
-    "macro4panelbuttonvalue",
-    "macro5panelbuttonvalue",
-    "macro6panelbuttonvalue",
-    "macro7panelbuttonvalue",
-    "macro8panelbuttonvalue",
     "modmatrix1modsource",
     "modmatrix2modsource",
     "modmatrix3modsource",
@@ -9425,7 +9456,19 @@ public class ASMHydrasynth extends Synth
     "lfo2quantize",                  
     "lfo3quantize",                  
     "lfo4quantize",                  
-    "lfo5quantize",                  
+    "lfo5quantize",  
+
+/*
+	// Panel Buton values (have no useful NRPN)
+    "macro1panelbuttonvalue",
+    "macro2panelbuttonvalue",
+    "macro3panelbuttonvalue",
+    "macro4panelbuttonvalue",
+    "macro5panelbuttonvalue",
+    "macro6panelbuttonvalue",
+    "macro7panelbuttonvalue",
+    "macro8panelbuttonvalue",
+*/                
     };
     
     static HashMap nrpnToIndex = null;
@@ -10461,7 +10504,7 @@ public class ASMHydrasynth extends Synth
     8094,           // 3f 1e            "voicerandomphase",
     8143,           // 3f 4f            "voicewarmmode",
     8137,           // 3f 49            "voicevibratobpmsync",
-    8117,                       // 3f 35                        "voicesnap",
+    8117,           // 3f 35            "voicesnap",
     
     /// New 2.0.0 Parameters
     14464,           // 71 00                    "voicesustain",

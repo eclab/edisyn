@@ -336,7 +336,6 @@ public class ASMHydrasynth extends Synth
         };
 
 
-    // For the time being we can't use this -- the JPopupMenu doesn't scroll
     public static final String[] MACRO_NAME_PRESETS = 
         {
         "2nd", "3rd", "4th", "5th", "6th", "7th", 
@@ -4853,9 +4852,6 @@ public class ASMHydrasynth extends Synth
     /// gonna be a mess parsing these back in from the Hydrasynth...
     public Object[] emitAll(String key)
         {
-        // It seems that we need a little pause after the modmatrix values
-		if (key.startsWith("mod"))
-			simplePause(2);
         if (key.equals("bank") || key.equals("number") || key.equals("--"))
             {
             return new Object[0];
@@ -7135,9 +7131,9 @@ public class ASMHydrasynth extends Synth
         tryToSendMIDI(buildPC(getChannelOut(), number));
         }
 
-    public int getPauseAfterSendHeaderParameter()
+    public int getPauseAfterModMatrixParameter()
         {
-        return getPauseAfterSendOneParameter();
+        return 2;
         }
 
     public int getPauseAfterSendOneParameter()
@@ -7149,65 +7145,34 @@ public class ASMHydrasynth extends Synth
         {
         return 0;
         }
-    public static final int MODE_PAUSE = 0;
-    public static final int TYPE_PAUSE = 0;
-    public static final int WAVE_PAUSE = 0;
-    public static final int BPM_SYNC_PAUSE = 0;
-    public static final int WAVESCAN_WAVE_PAUSE = 0;
-        
-    boolean sendingAllParameters = false;
     
+    /// We need a custom send-all-parameters so we can (1) prevent the
+    /// hydrasynth from sending US parameters in this period and (2)
+	/// order the parameters we send in a specific order and (3) 
+	/// add some pauses for the mod matrix parameters
+    boolean sendingAllParameters = false;
     protected boolean sendAllParametersInternal()
         {
         if (!getSendMIDI())
             return false;  // don't bother!  MIDI is off
 
 		sendingAllParameters = true;
-		
-        for(int j = 0; j < 1; j++)
-            {
-            // we do a specific order
-            for(int i = 0; i < modeParameters.length; i++)
-                {
-                simplePause(getPauseAfterSendHeaderParameter());
-                tryToSendMIDI(emitAll(modeParameters[i], STATUS_SENDING_ALL_PARAMETERS));
-                }
-            simplePause(MODE_PAUSE);
-            for(int i = 0; i < typeParameters.length; i++)
-                {
-                simplePause(getPauseAfterSendHeaderParameter());
-                tryToSendMIDI(emitAll(typeParameters[i], STATUS_SENDING_ALL_PARAMETERS));
-                }
-            simplePause(TYPE_PAUSE);
-            for(int i = 0; i < waveParameters.length; i++)
-                {
-                simplePause(getPauseAfterSendHeaderParameter());
-                tryToSendMIDI(emitAll(waveParameters[i], STATUS_SENDING_ALL_PARAMETERS));
-                }
-            simplePause(WAVE_PAUSE);
-            for(int i = 0; i < syncParameters.length; i++)
-                {
-                simplePause(getPauseAfterSendHeaderParameter());
-                tryToSendMIDI(emitAll(syncParameters[i], STATUS_SENDING_ALL_PARAMETERS));
-                }
-            simplePause(BPM_SYNC_PAUSE);
-            for(int i = 0; i < wavescanParameters.length; i++)
-                {
-                simplePause(getPauseAfterSendHeaderParameter());
-                tryToSendMIDI(emitAll(wavescanParameters[i], STATUS_SENDING_ALL_PARAMETERS));
-                }
-            simplePause(WAVESCAN_WAVE_PAUSE);
-            for(int i = 0; i < remainingParameters.length; i++)
-                {
-                simplePause(getPauseAfterSendOneParameter());
-                tryToSendMIDI(emitAll(remainingParameters[i], STATUS_SENDING_ALL_PARAMETERS));
-                }
-            }
+
+		for(int i = 0; i < orderedParameters.length; i++)
+			{
+			tryToSendMIDI(emitAll(orderedParameters[i], STATUS_SENDING_ALL_PARAMETERS));
+			// It seems that we need a little pause after the modmatrix values
+			if (orderedParameters[i].startsWith("mod"))
+				simplePause(2);
+			simplePause(getPauseAfterSendOneParameter());
+			}
+			
         simplePause(getPauseAfterSendAllParameters());
 
 		sendingAllParameters = false;
         return true;
         }
+        
 
     // This is 8 banks, appropriate for 2.0.0 and the Deluxe 1.5.5
     public Model getNextPatchLocation(Model model)
@@ -7255,22 +7220,27 @@ public class ASMHydrasynth extends Synth
 
 
 
-    public static final String[] modeParameters = 
+
+
+	//// ORDERED PARAMETERS
+	//// This list is more or less the same as the main parameters list but
+	//// is reordered in such a way so that we can guarantee certain parameters
+	//// are sent via NRPN before others are.  For example, we have to send out
+	//// changes to the modes before we can sent out parameters in those modes.
+
+    public static final String[] orderedParameters = 
         {
         // First the modes
         "osc1mode",                             
         "osc2mode",                             
+        "osc3mode",       			// technically doesn't need to be here by why not...                      
         "mutant1mode",                
         "mutant2mode",                                  
         "mutant3mode",                                  
         "mutant4mode",                                  
         "ribbonmode",   
     	"voiceglide",
-        };
 
-                                
-    public static final String[] typeParameters = 
-        {
         // Next the types (osc1...2type need to be after osc1...osc2mode)
         "osc1type",                                     
         "osc2type",                                     
@@ -7280,20 +7250,14 @@ public class ASMHydrasynth extends Synth
         "prefxtype",                                    
         "delaytype",                                    
         "reverbtype",                                   
-        };
 
-    public static final String[] waveParameters = 
-        {
         // Next the waves.  These have to be set (to "Step") before you can set lfo1steps etc.
         "lfo1wave",                                     
         "lfo2wave",                                     
         "lfo3wave",                                     
         "lfo4wave",                                     
         "lfo5wave",                                     
-        };
-        
-    public static final String[] syncParameters = 
-        {
+
         // Next the BPM Sync toggles (not sure if delaybpmsync needs to be after delaytype)
         "delaybpmsync",                                 
         "lfo1bpmsync",                                  
@@ -7307,10 +7271,7 @@ public class ASMHydrasynth extends Synth
         "env4bpmsync",                                  
         "env5bpmsync",                                  
         "voicevibratobpmsync",      
-        };
-        
-    public static final String[] wavescanParameters = 
-        {
+
         // Next the wavescanwaves, just in case they need to be set before wavscan can be used (probably it's okay)                     
         "osc1wavscanwave1",
         "osc1wavscanwave2",
@@ -7328,10 +7289,7 @@ public class ASMHydrasynth extends Synth
         "osc2wavscanwave6",
         "osc2wavscanwave7",
         "osc2wavscanwave8",
-        };
 
-    public static final String[] remainingParameters = new String[] 
-    {
     // Now all the dependent parameters
     "osc1semi",
     "osc2semi",
@@ -7507,7 +7465,6 @@ public class ASMHydrasynth extends Synth
     "reverbtone",
     "postfxtype",
     "postfxwet",
-
 
     /// Note that the postfx params have been broken out
     "postfx1param1",
@@ -9458,17 +9415,15 @@ public class ASMHydrasynth extends Synth
     "lfo4quantize",                  
     "lfo5quantize",  
 
-/*
 	// Panel Buton values (have no useful NRPN)
-    "macro1panelbuttonvalue",
-    "macro2panelbuttonvalue",
-    "macro3panelbuttonvalue",
-    "macro4panelbuttonvalue",
-    "macro5panelbuttonvalue",
-    "macro6panelbuttonvalue",
-    "macro7panelbuttonvalue",
-    "macro8panelbuttonvalue",
-*/                
+    // "macro1panelbuttonvalue",
+    // "macro2panelbuttonvalue",
+    // "macro3panelbuttonvalue",
+    // "macro4panelbuttonvalue",
+    // "macro5panelbuttonvalue",
+    // "macro6panelbuttonvalue",
+    // "macro7panelbuttonvalue",
+    // "macro8panelbuttonvalue",
     };
     
     static HashMap nrpnToIndex = null;
@@ -10534,6 +10489,7 @@ public class ASMHydrasynth extends Synth
     // This is a list of each parameter that corresponds to a CC, for all 128 CC values.
     // We'll use it to maybe parse incoming CC values but not to emit them, so there's 
     // no need for a corresponding hashmap.
+    // NOTE: This is unused in the code, it's just here for posterity
     public static final String[] CC = new String[]
     {
     "--",                           // 0x00         (Bank Select MSB)

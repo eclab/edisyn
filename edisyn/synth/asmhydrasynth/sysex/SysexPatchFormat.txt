@@ -1095,11 +1095,11 @@ BYTE    HEX     INFO
 1025    401     
 1026    402     
 1027    403     
-1028    404     Mod Matrix 32 Dest?
+1028    404     Mod Matrix 32 Dest
 1029    405     
-1030    406     [ 12 in Sawpressive ]
+1030    406     [ 12 in Sawpressive ]	Mod Matrix 1 Destination Category?
 1031    407     
-1032    408     Mod Matrix 32 Something?	 [ 14 in Sawpressive ]
+1032    408     [ 14 in Sawpressive ]
 1033    409     
 1034    40A     [ 5 in Sawpressive ]
 1035    40B     
@@ -1159,7 +1159,7 @@ BYTE    HEX     INFO
 1089    441     
 1090    442     
 1091    443     
-1092    444     Mod Matrix 2 Something?
+1092    444     Mod Matrix 32 Destination Category?
 1093    445     
 1094    446     Macro 1 Depth 1 Low Byte
 1095    447     Macro 1 Depth 1 High Byte

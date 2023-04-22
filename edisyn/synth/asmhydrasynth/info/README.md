@@ -4,6 +4,17 @@ of working on the Edisyn Hydrasynth editor.  It includes:
 	- bugs.txt:  A list of significant bugs, errors, and misfeatures
 	  I have discovered in the Hydrasynth and have reported.
 
+	- SysexEncoding.txt: A reverse engineered sysex encoding for known
+	  commands to control the Hydrasynth.  Does not include information
+	  for the Hydrasynth Deluxe's "multi" patches.
+
+	- SysexPatchFormat.txt: A reverse engineered description of the
+	  Hydrasynth's patch format, once decoded (see SysexEncoding.txt).
+	  Does not include information for the Hydrasynth Deluxe's "multi" 
+	  patches.
+
+	- log: A historical log of the reverse engineering process.
+
 	- nrpn.csv: A CSV table of many NRPN parameters with correct
 	  information on their NRPN ranges and how to display them properly.
 	  The existing PDF file provided by ASM is quite wrong in many

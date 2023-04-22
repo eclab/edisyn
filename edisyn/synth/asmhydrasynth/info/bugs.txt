@@ -365,5 +365,18 @@ a most annoying bug to track down.
 
 28. LFO BPM SYNC
 
-Sort of related to 27 above.  Sending LFO Delay BPM Sync On or LFO Fade In BPM Sync On over NRPN will change the Hydrasynth value regardless of whether BPM Sync is turned On or Off.  The opposite is not the case however (sending LFO Delay BPM Sync Off for example).  This is not the case for LFO Rate Sync On.
+Sort of related to 27 above.  Sending LFO Delay BPM Sync On or LFO Fade In BPM 
+Sync On over NRPN will change the Hydrasynth value regardless of whether BPM 
+Sync is turned On or Off.  The opposite is not the case however (sending LFO 
+Delay BPM Sync Off for example).  This is not the case for LFO Rate Sync On.
 
+29. MATRIX AND MACRO VALUES
+
+Sources, destinations, depths, and even destination categories can be set via 
+NRPN individually of one another even though they are connected.  For example, 
+if a source or destination is set to OFF, the depths and button depths can 
+still be set via NRPN.  This would ordinarily be just fine, except that this 
+isn't the case from the front panel: initializing them to OFF makes it 
+impossible to set the depths etc.  It's not consistent.  Additionally, you 
+can set a destination without setting its category: the category appears 
+to be entirely ornamental.

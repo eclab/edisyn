@@ -1186,6 +1186,28 @@ public class ASMHydrasynth extends Synth
 
 
 
+    /** Rounds d as usual to the nearest int, but with 0.5 rounded 
+        towards the nearest even number rather than towards zero.  */
+    // Large numbers of displayed values require rounding towards 0.5 on the Hydrasynth
+    public static int roundEven(double d) 
+        {
+        // Garbage like https://stackoverflow.com/questions/32971262/how-to-round-a-double-to-closest-even-number
+        // is wrong.  I think below works for both positive and negative values
+                
+        int i = (int) d;
+        double rem = (d - i);
+        if (rem == 0.5 || rem == -0.5)
+            {
+            if ((i & 1) == 0)       // even
+                return i;
+            else if (i < 0)
+                return i - 1;
+            else
+                return i + 1;
+            }
+        else return (int)Math.round(d);
+        }
+        
 
     public ASMHydrasynth()
         {
@@ -1599,110 +1621,8 @@ public class ASMHydrasynth extends Synth
         category.add(hbox, BorderLayout.CENTER);
         return category;
         }
-        
-/*        
-          public JComponent addOscillator(int osc, Color color)
-          {
-          Category category = new Category(this, "Oscillator " + osc, color);
-          category.makePasteable("osc");
-          category.makeDistributable("osc");
-
-          JComponent comp;
-          String[] params;
-          HBox hbox = new HBox();
-        
-          VBox vbox = new VBox();
-          // FIXME: is this the right list for all the oscillators?  For any of them?
-          params = OSC_WAVES;
-          comp = new Chooser("Wave", this, "osc" + osc + "type", params);
-          vbox.add(comp);
-
-          params = OSC_BIT_REDUCTIONS;
-          comp = new Chooser("Bit Reduction", this, "osc" + osc + "bitreduction", params);
-          model.setMetricMinMax("osc" + osc + "bitreduction", 0, OSC_BIT_REDUCTIONS.length - 1);
-          vbox.add(comp);
-          hbox.add(vbox);
-
-          comp = new LabelledDial("Wave", this, "osc" + osc + "type", color, 0, OSC_WAVES.length - 1, -1);
-          hbox.add(comp);
-
-          vbox = new VBox();
-          IconDisplay icons = new IconDisplay(null, waves, this, "osc" + osc + "type", 110, 52)
-          {
-          public Dimension getPreferredSize()
-          {
-          Dimension d = super.getPreferredSize();
-          return new Dimension(d.width, d.height+2);              // compensate for border
-          }
-          };
-          icons.setBorder(BorderFactory.createLineBorder(Color.GRAY));
-
-          vbox = new VBox();
-          vbox.add(icons);
-                
-          if (osc != 3)           // FIXME: Verify that in fact OSC 3 doesn't *have* a mode
-          {
-          comp = new CheckBox("Wavescan Mode", this, "osc" + osc + "mode");
-          vbox.add(comp);
-          }
-          hbox.add(Strut.makeHorizontalStrut(8));
-          hbox.add(vbox);
-          hbox.add(Strut.makeHorizontalStrut(8));
-
-          comp = new LabelledDial("Semitones", this, "osc" + osc + "semi", color, -36, 36);
-          hbox.add(comp);
-
-          comp = new LabelledDial("Cents", this, "osc" + osc + "cent", color, -50, 50);
-          hbox.add(comp);
-
-          comp = new LabelledDial("Keytrack", this, "osc" + osc + "keytrack", color, 0, 200)      
-          {
-          public boolean isSymmetric() { return true; }
-          public String map(int value)
-          {
-          return "" + value + "%";
-          }
-          };
-          hbox.add(comp);
-        
-          if (osc < 3)
-          {
-          // The value actually goes 0...8192 but in increments of 8
-          comp = new LabelledDial("WaveScan", this, "osc" + osc + "wavscan", color, 0, 1024)
-          {
-          public String map(int value)
-          {
-          int v = value * 8;
-          // dividing 8192 by 117.03 roughly cuts into 70 pieces
-          return String.format("%1.1f", ((roundEven(v / 117.03) + 10) / 10.0));
-          }
-          };
-          hbox.add(comp);
-        
-          // FIXME: I am omitting solowavscan because I think it doesn't do anything
-        
-          for(int i = 1; i <= 4; i++)
-          {
-          vbox = new VBox();
-          params = (i == 1 ? OSC_WAVES : OSC_WAVES_OFF_SILENCE);
-          comp = new Chooser("WaveScan Wave " + i, this, "osc" + osc + "wavscanwave" + i, params);
-          vbox.add(comp);
-
-          params = OSC_WAVES_OFF_SILENCE;
-          comp = new Chooser("WaveScan Wave " + (i + 4), this, "osc" + osc + "wavscanwave" + (i + 4), params);
-          vbox.add(comp);
-          hbox.add(vbox);
-          }
-          }
- 
-          category.add(hbox, BorderLayout.CENTER);
-          return category;
-          }
-*/
-
 
     JComponent pastMode = null;
-        
 	HBox _waveScanBox = null;
     public JComponent addOscillator(final int osc, Color color)
         {
@@ -1769,15 +1689,14 @@ public class ASMHydrasynth extends Synth
         waveBox.add(Strut.makeHorizontalStrut(8));
         final VBox outerWaveBox = new VBox();
         outerWaveBox.add(waveBox);
-        //if (osc != 3)
-            {
-            outerWaveBox.add(Strut.makeStrut(_waveScanBox, false, true));
-            }
-        
-        
+		outerWaveBox.add(Strut.makeStrut(_waveScanBox, false, true));
         
         vbox = new VBox();
-        if (osc != 3)
+         if (osc == 3)
+            {
+            vbox.add(Strut.makeStrut(pastMode, false, true));
+            }
+        else
             {
             params = OSC_MODES;
             comp = new Chooser("Mode", this, "osc" + osc + "mode", params)
@@ -1804,11 +1723,6 @@ public class ASMHydrasynth extends Synth
                 };
             pastMode = comp;
             vbox.add(comp);
-            }
-
-        if (osc == 3)
-            {
-            vbox.add(Strut.makeStrut(pastMode, false, true));
             }
                         
         params = OSC_BIT_REDUCTIONS;
@@ -1839,27 +1753,6 @@ public class ASMHydrasynth extends Synth
         return category;
         }
 
-    /** Rounds d as usual to the nearest int, but with 0.5 rounded 
-        towards the nearest even number rather than towards zero.  */
-    public static int roundEven(double d) 
-        {
-        // Garbage like https://stackoverflow.com/questions/32971262/how-to-round-a-double-to-closest-even-number
-        // is wrong.  I think below works for both positive and negative values
-                
-        int i = (int) d;
-        double rem = (d - i);
-        if (rem == 0.5 || rem == -0.5)
-            {
-            if ((i & 1) == 0)       // even
-                return i;
-            else if (i < 0)
-                return i - 1;
-            else
-                return i + 1;
-            }
-        else return (int)Math.round(d);
-        }
-        
     public JComponent addRingMod(Color color)
         {
         Category category = new Category(this, "Ring Modulation", color);
@@ -5870,7 +5763,6 @@ public class ASMHydrasynth extends Synth
             }
                         
         // ARPEGGIATOR
-                
         get2("arptempo", data, 808);
         get1("arpdivision", data, 810);
         get1("arpswing", data, 812);
@@ -5899,8 +5791,12 @@ public class ASMHydrasynth extends Synth
             {
             get2("modmatrix" + (i + 1) + "modtarget", data, 966 + i * 2);
             }
-                        
-        // FIXME: Starting at 1032, there may be a fourth mod matrix thingamabob
+        // Set the target categories
+        for(int i = 0; i < 32; i++)
+            {
+			int category = MOD_DESTINATION_CATEGORIES[model.get("modmatrix" + (i + 1) + "modtarget")];
+			data[1030 + i * 2] = (byte)category;
+            }
                         
         // MACRO
         for(int i = 0; i < 8; i++)
@@ -5935,7 +5831,6 @@ public class ASMHydrasynth extends Synth
             {
             get1("macro" + (i + 1) + "panelbuttonstate", data, 1622 + i);
             }
-
         // Set the target categories
         for(int i = 0; i < 8; i++)
             {
@@ -5962,6 +5857,7 @@ public class ASMHydrasynth extends Synth
             data[416 + i * 2] = 0;
             data[416 + i * 2 + 1] = 1;
             }
+
 
         // LFO STEPS 9 to 64
         for(int i = 0; i < 5; i++)
@@ -5990,6 +5886,7 @@ public class ASMHydrasynth extends Synth
             get2("env" + (i + 1) + "trigsrc4", data, 2346 + i * 10);
             }
                 
+                
         //// 2.0.0. FEATURES
         get1("voicesustain", data, 2458);
         get1("arpstepoffset", data, 2460);
@@ -6008,6 +5905,7 @@ public class ASMHydrasynth extends Synth
             {
             get1("voice" + (i + 1) + "modulation", data, 2400 + i * 2);
             }
+        
         
         byte[][] outgoing = Encode.encodePatch(data);
                 
@@ -6592,8 +6490,6 @@ public class ASMHydrasynth extends Synth
             set2("modmatrix" + (i + 1) + "modtarget", data, 966 + i * 2);
             }
                         
-        // FIXME: Starting at 1032, there may be a fourth mod matrix thingamabob
-                        
         // MACRO
         for(int i = 0; i < 8; i++)
             {
@@ -7162,8 +7058,13 @@ public class ASMHydrasynth extends Synth
 			{
 			tryToSendMIDI(emitAll(orderedParameters[i], STATUS_SENDING_ALL_PARAMETERS));
 			// It seems that we need a little pause after the modmatrix values
-			if (orderedParameters[i].startsWith("mod"))
+/*			if (orderedParameters[i].startsWith("mod"))
 				simplePause(2);
+*/
+			if (orderedParameters[i].startsWith("mod") || orderedParameters[i].startsWith("macro"))
+				{
+				simplePause(3);
+				}
 			simplePause(getPauseAfterSendOneParameter());
 			}
 			
@@ -8136,14 +8037,14 @@ public class ASMHydrasynth extends Synth
     "macro5depth6",
     "macro5depth7",
     "macro5depth8",
-    "macro5target1",
-    "macro5target2",
-    "macro5target3",
-    "macro5target4",
-    "macro5target5",
-    "macro5target6",
-    "macro5target7",
-    "macro5target8",
+    "macro6target1",
+    "macro6target2",
+    "macro6target3",
+    "macro6target4",
+    "macro6target5",
+    "macro6target6",
+    "macro6target7",
+    "macro6target8",
     "macro6buttonvalue1",
     "macro6buttonvalue2",
     "macro6buttonvalue3",

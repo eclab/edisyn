@@ -7,7 +7,7 @@
 If you're connecting via USB, set Edisyn's incoming and outgoing MIDI devices to HYDRASYNTH KB.  Set Edisyn's MIDI channel to the same as the synth's RX and TX MIDI channels.  You can set the synth's RX MIDI channel to OMNI if you liked.   Set up Parameter RX and TX both to be NRPN.  
 
 <p><b>Current Editor Status</b><br>
-ASM won't open their sysex spec, which has forced me to go through a very long process of <a href="https://github.com/eclab/edisyn/tree/master/edisyn/synth/asmhydrasynth/sysex">reverse engineering it.</a>  As such Edisyn can do most things you'd need, but a few items (such as requesting current memory) are still out of reach.
+ASM won't open their sysex spec: developing Edisyn required reverse engineering it.  As such Edisyn can do most things you'd need, but a few items (such as requesting current memory) are still out of reach.
 
 <p><b>Hydrasynth Deluxe Multimode</b><br>
 Edisyn does not yet support multimode, though I intend to ultimately.
@@ -61,13 +61,18 @@ The Hydrasynth has a great many bugs: but Edisyn tries to work around them and h
 
 <p><li>You can't set the LFO Steps parameter unless the corresponding LFO Wave parameter has been first set to "Step".  You <i>can</i> set the individual steps themselves. Go figure.
 
+<p><li>Even if you turn a macro destination, or a modmatrix destination or source OFF, you can still set its depth and button depth! Don't ask.
+
 </ul>
 
 <p><b>Hints</b><br>
 When you edit a macro name, notice that the text field is actually a drop-down combo-box: it has all the default Hydrasynth macro names available.
 
 <p><b>About Hydrasynth Manager Files</b><br>
-ASM provides a librarian called the ASM Hydrasynth Manager.  This software saves patches in proprietary bank file formats with the extension "hydra" or "hydramulti".  Edisyn instead saves as standard sysex files, and does not read these proprietary files.  To convert them to Edisyn, you'll have to load them into your Hydrasynth, then dump them out to Edityn.
+ASM provides a librarian called the ASM Hydrasynth Manager.  This software saves patches in proprietary bank file formats with the extension "hydra" or "hydramulti".  Edisyn instead saves as standard sysex files, and does not read these proprietary files.  To convert them to Edisyn, you'll have to load them into your Hydrasynth, then dump them out to Edisyn.
+
+<p><b>About the Sysex Spec</b><br>
+The Hydrasynth does not have a public sysex spec, and ASM has not been forthcoming: building Edisyn's editor necessitated completely reverse engineering it.  You can find the reverse engineered sysex protocol and the patch format <a href="https://github.com/eclab/edisyn/blob/master/edisyn/synth/asmhydrasynth/sysex/">in this directory</a>.
 
 <p><b>About the NRPN Spec</b><br>
 The Hydrasynth has an extraordinarily complex and baroque NRPN spec with a large number of errors.  You can find a heavily revised spec of my own making <a href="https://github.com/eclab/edisyn/tree/master/edisyn/synth/asmhydrasynth/info">in this directory</a>.

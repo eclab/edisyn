@@ -12,7 +12,7 @@ and 2.0.0.
 Once the sysex is decoded, the patch format is described in the
 accompanying text:
 	
-https://github.com/eclab/edisyn/blob/master/edisyn/synth/asmhydrasynth/sysex/SysexPatchFormat.txt
+https://github.com/eclab/edisyn/blob/master/edisyn/synth/asmhydrasynth/info/SysexPatchFormat.txt
 
 This reverse engineered encoding was used to build Edisyn's 
 Hydrasynth patch editor.
@@ -120,11 +120,10 @@ Flash RAM, and so writing too often to it will burn it out.  Auditioning
 is done constantly, so this would be a disservice to Hydrasynth users.
 
 #2 is problematic because it seems the Hydrasynth cannot handle a stream
-of NRPN messages sent to it in rapid succession.  It seems to drop
-some messages on the floor.  I am presently sending the NRPN stream three
-times in a row in order to increase the likelihood that everything gets
-there.  [Also there are several parameters which cannot be sent via NRPN,
-such as Macro data].
+of NRPN messages sent to it in rapid succession.  In particular it seems
+to require small pauses (2ms on the Keyboard, maybe more on the Deluxe) 
+after various Macro and Mod Matrix parameters.  [Also there are several 
+parameters which cannot be sent via NRPN, such as Macro data].
 
 
 
@@ -152,7 +151,8 @@ sysex message.
 
 <-	Version Response Data?
 		29 00 9B 00 01
-		[Note that 9B is 155: the Hydrasynth is version 1.5.5]
+		[Note that 9B is 155: the Hydrasynth is version 1.5.5
+		 in this example]
 
 ->  An Unknown Sysex String Not in Hydrasynth Encoding
 		(F0 00 20 2B 00 6F 01 F7)
@@ -215,7 +215,7 @@ together.  Note that the first eight bytes are metadata such as
 patch bank number, and possibly Hydrasynth firmware version number.
 See here for patch data:
 
-https://github.com/eclab/edisyn/blob/master/edisyn/synth/asmhydrasynth/sysex/SysexPatchFormat.txt
+https://github.com/eclab/edisyn/blob/master/edisyn/synth/asmhydrasynth/info/SysexPatchFormat.txt
 
 I note that if you don't send the Footer, then the Hydrasynth is very 
 sluggish to respond to new changes on the front panel.  From this I 
@@ -347,7 +347,7 @@ sysex message.
 Again, once the CHUNKS are concatenated to form the actual patch, the
 patch format is documented here:
 
-https://github.com/eclab/edisyn/blob/master/edisyn/synth/asmhydrasynth/sysex/SysexPatchFormat.txt
+https://github.com/eclab/edisyn/blob/master/edisyn/synth/asmhydrasynth/info/SysexPatchFormat.txt
 
 
 
@@ -589,9 +589,8 @@ Here is an Example for Bank "A":
 	      SENTPATCHNAMES 0x00 BANK
 	Note: It appears that after the 03 00 00 the names start, one at
 	      a time, 16 bytes each, followed by a terminating 00 and then
-	      a separating 3A (":").  I note that ":" is not a legal
-	      patch name character, grrr.  There is no final 3A at the end
-	      of the full sequence.
+	      a separating 3A (":").  There is no final 3A at the end of 
+	      the full sequence.
 
 ->	17 00 00 13
 

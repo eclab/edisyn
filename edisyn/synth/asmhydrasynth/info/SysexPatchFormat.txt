@@ -13,7 +13,7 @@ to be fairly complete for versions 1.5.5 and 2.0.0.
 The patch sysex data is exposed by decoding a series of patch dump
 sysex messages.  This procedure is described here:
 
-https://github.com/eclab/edisyn/blob/master/edisyn/synth/asmhydrasynth/sysex/SysexEncoding.txt
+https://github.com/eclab/edisyn/blob/master/edisyn/synth/asmhydrasynth/info/SysexEncoding.txt
 
 This patch format was used to build Edisyn's Hydrasynth patch editor.
 

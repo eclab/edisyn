@@ -12,6 +12,7 @@ import java.awt.event.*;
 import java.awt.dnd.*;
 import javax.swing.*;
 import javax.swing.table.*;
+import java.io.*;
 
 /**
    LIBRARIAN is a JComponent implementing a JTable backed by a LIBRARY as its model.
@@ -815,7 +816,7 @@ public class Librarian extends JPanel
                 
         menu.addSeparator();
         
-        item = new JMenuItem("Save Selected Patches");
+        item = new JMenuItem("Save Selected Patches...");
         item.addActionListener(new ActionListener()
             {
             public void actionPerformed(ActionEvent evt) { synth.librarian.save(); }
@@ -823,7 +824,7 @@ public class Librarian extends JPanel
         menu.add(item);
         item.setEnabled(false);
                 
-        item = new JMenuItem("Save Bank");
+        item = new JMenuItem("Save Bank...");
         item.addActionListener(new ActionListener()
             {
             public void actionPerformed(ActionEvent evt) { synth.librarian.saveBank(); }
@@ -831,7 +832,7 @@ public class Librarian extends JPanel
         menu.add(item);
         item.setEnabled(false);
                 
-        item = new JMenuItem("Save All Patches");
+        item = new JMenuItem("Save All Patches...");
         item.addActionListener(new ActionListener()
             {
             public void actionPerformed(ActionEvent evt) { synth.librarian.saveAll(); }
@@ -839,6 +840,17 @@ public class Librarian extends JPanel
         menu.add(item);
         item.setEnabled(false);
                 
+        item = new JMenuItem("Export Names to Text...");
+        item.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent evt) 
+                { 
+                doSaveNamesToText(synth);
+                }
+            });
+        menu.add(item);
+        item.setEnabled(false);
+
         menu.addSeparator();            
 
         item = new JMenuItem("Edit Patch in This Editor");
@@ -969,7 +981,7 @@ public class Librarian extends JPanel
         item.setEnabled(false);
 
         menu.addSeparator();      
-
+        
         item = new JMenuItem("Hide Librarian");
         item.addActionListener(new ActionListener()
             {
@@ -986,6 +998,50 @@ public class Librarian extends JPanel
         }
         
         
+    public static void doSaveNamesToText(Synth synth)
+        {
+        FileDialog fd = new FileDialog((Frame)(SwingUtilities.getRoot(synth)), "Write All Names to Text File...", FileDialog.SAVE);
+    	
+       	String str = synth.getSynthNameLocal();
+       	if (str == null) str = "Untitled.txt";
+       	else str = "PatchNames"  + str + ".txt";
+
+			fd.setFile(StringUtility.reviseFileName(str));
+
+        String path = synth.getLastDirectory();
+        if (path != null)
+            fd.setDirectory(path);
+                
+        synth.disableMenuBar();
+        fd.setVisible(true);
+        synth.enableMenuBar();
+        File f = null; // make compiler happy
+        PrintWriter os = null;
+        if (fd.getFile() != null)
+            try
+                {
+                f = new File(fd.getDirectory(), StringUtility.ensureFileEndsWith(fd.getFile(), ".txt"));
+                os = new PrintWriter(new FileOutputStream(f));
+				String[] names = synth.librarian.getLibrary().getNames(Library.ALL_PATCHES);
+				String[] locations = synth.librarian.getLibrary().getPatchLocationNames(Library.ALL_PATCHES);
+				for(int i = 0; i < names.length; i++)
+					{
+					os.println(locations[i] + "\t" + names[i]);
+					}
+                os.close();
+                synth.setLastDirectory(fd.getDirectory());
+                } 
+            catch (IOException e) // fail
+                {
+                synth.showErrorWithStackTrace(e, "File Error", "An error occurred while saving to the file " + (f == null ? " " : f.getName()));
+                Synth.handleException(e);
+                }
+            finally
+                {
+                if (os != null)
+                    os.close();
+                }
+        }
         
         
     /* JTable says that it maintains the proper column values even if the columns are rearranged,

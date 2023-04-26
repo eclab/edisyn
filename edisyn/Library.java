@@ -1482,6 +1482,72 @@ public class Library extends AbstractTableModel
         }
 
 
+
+	// Extracting Names
+	
+	
+	public String[] getNames(int bank)
+		{
+		if (bank == ALL_PATCHES)
+			{
+			String[] result = new String[numberNames.length * (bankNames.length - 1)];
+			for(int i = 0; i < bankNames.length - 1; i++)
+				{
+				String[] b = getNames(i);
+				System.arraycopy(b, 0, result, numberNames.length * i, numberNames.length);
+				}
+			return result;
+			}
+		else
+			{
+			String[] result = new String[numberNames.length];
+			for(int i = 0; i < numberNames.length; i++)
+				{
+				Patch patch = getPatch(bank, i);
+				if (patch == null || patch.name == null) 
+					{
+					result[i] = "";
+					}
+				else
+					{
+					result[i] = patch.name;
+					}
+				}
+			return result;
+			}
+		}
+		
+	public String[] getPatchLocationNames(int bank)
+		{
+		if (bank == ALL_PATCHES)
+			{
+			String[] result = new String[numberNames.length * (bankNames.length - 1)];
+			for(int i = 0; i < (bankNames.length - 1); i++)
+				{
+				String[] b = getPatchLocationNames(i);
+				System.arraycopy(b, 0, result, numberNames.length * i, numberNames.length);
+				}
+			return result;
+			}
+		else
+			{
+			Model model = new Model();
+			model.set("bank", bank);
+			String[] result = new String[numberNames.length];
+			for(int i = 0; i < numberNames.length; i++)
+				{
+				model.set("number", i);
+				result[i] = synth.getPatchLocationName(model);
+				if (result[i] == null) 
+					{
+					// make something up
+					result[i] = "" + bank + "/" + i;
+					}
+				}
+			return result;
+			}
+		}
+
     }
         
         

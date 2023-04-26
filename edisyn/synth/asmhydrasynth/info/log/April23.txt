@@ -1,0 +1,9 @@
+April 23, 2023 Hydrasynth sysex reverse engineering notes.
+
+Writing patches wasn't writing LFO step values 9...64, Env triggers, and
+Arp Step Offset among other things.  This was mystifying until it was
+discovered that four magic numbers must be set.  The bytes are numbers
+1766, 1767, 1768, and 1769, and in some patches they are set to 69 84 67 68,
+while in other patches they're set to 88 88 88 88.  It's not clear why.
+It appears that setting them to 69 84 67 68 will cause the hydrasynth to read
+all its parameters properly.

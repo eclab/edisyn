@@ -30,6 +30,7 @@ edisyn.synth.emumorpheus.EmuMorpheusMap	E-Mu	E-Mu Morpheus / Ultra Proteus [Midi
 edisyn.synth.emuproteus.EmuProteus	E-Mu	E-Mu Proteus
 edisyn.synth.emuplanetphatt.EmuPlanetPhatt	E-Mu	E-Mu Planet Phatt / Orbit / Carnaval / Vintage Keys
 edisyn.synth.emuproteus2000.EmuProteus2000	E-Mu	E-Mu Proteus 2000 Series
+#edisyn.synth.ikmultimediaunosynthpro.IKMultimediaUnoSynthPro	IK Multimedia	IK Multimedia Uno Synth Pro
 edisyn.synth.jlcoopermsbplusrev2.JLCooperMSBPlusRev2	JL Cooper	JL Cooper MSB Plus / Rev 2
 edisyn.synth.kawaik1.KawaiK1	Kawai	Kawai K1 / K1r / K1m
 edisyn.synth.kawaik1.KawaiK1Multi	Kawai	Kawai K1 / K1r / K1m [Multi]

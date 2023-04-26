@@ -44,10 +44,9 @@ import javax.sound.midi.*;
    </ul>
    
    <p>
-   In the edisyn/synth/asmhydrasynth/sysex directory is my best shot at a reverse engineered sysex and patch encoding spec,
-   along with an extensive log documenting the reverse engineering process.  Additionally in the edisyn/synth/asmhydrasynth/info
-   directory I have a list of known bugs, a heavily revised NRPN spec with proper display information, and reverse-engineered
-   FX Presets information.
+   In the edisyn/synth/asmhydrasynth/info directory is my best shot at a reverse engineered sysex and patch encoding spec,
+   along with an extensive log documenting the reverse engineering process.  Additionally I have a list of known bugs, a 
+   heavily revised NRPN spec with proper display information, and reverse-engineered FX Presets information.
         
    @author Sean Luke
 */
@@ -1209,8 +1208,28 @@ public class ASMHydrasynth extends Synth
         }
         
 
+    JCheckBox deluxeCheck;
+    boolean deluxe;
+    public static final String DELUXE_KEY = "Deluxe";
+    public boolean isDeluxe() { return deluxe; }
+    public void setDeluxe(boolean val, boolean save)
+        {
+        if (save)
+            {
+            setLastX("" + val, DELUXE_KEY, getSynthClassName(), true);
+            }
+        deluxe = val;
+        deluxeCheck.setSelected(val);  // hopefully this isn't recursive
+        updateTitle();
+        }
+        
     public ASMHydrasynth()
         {
+        model.setFixer(this);
+        
+        String m = getLastX(DELUXE_KEY, getSynthClassName());
+        deluxe = (m == null ? false : Boolean.parseBoolean(m));
+        
         if (parametersToIndex == null)
             {
             parametersToIndex = new HashMap();
@@ -1249,7 +1268,13 @@ public class ASMHydrasynth extends Synth
         else
             ignoreParametersFromSynth = false;
 
-
+        str = getLastX("DisallowCCMutation", getSynthClassName(), true);
+        if (str == null)
+            disallowCCMutation = true;            // default is true
+        else if (str.equalsIgnoreCase("true"))
+            disallowCCMutation = true;
+        else
+            disallowCCMutation = false;
 
         str = getLastX("SendArpTapTrig", getSynthClassName(), true);
         if (str == null)
@@ -1308,8 +1333,7 @@ public class ASMHydrasynth extends Synth
         vbox.add(addMixer(Style.COLOR_B()));
         
         hbox = new HBox();
-        hbox.add(addVoiceModulation(Style.COLOR_A()));
-        hbox.addLast(addRibbon(Style.COLOR_C()));
+        hbox.addLast(addArp(Style.COLOR_C()));
         vbox.add(hbox);
                 
         soundPanel.add(vbox, BorderLayout.CENTER);
@@ -1321,11 +1345,11 @@ public class ASMHydrasynth extends Synth
         vbox.add(addMutant(2, Style.COLOR_A()));
         vbox.add(addMutant(3, Style.COLOR_B()));
         vbox.add(addMutant(4, Style.COLOR_B()));
-        vbox.add(addArp(Style.COLOR_C()));
         vbox.add(addScale(Style.COLOR_C()));
+        vbox.add(addRibbon(Style.COLOR_C()));
                 
         soundPanel.add(vbox, BorderLayout.CENTER);
-        addTab("Mutant Arp Scale", soundPanel);
+        addTab("Mutant Ribbon Scale", soundPanel);
         
         soundPanel = new SynthPanel(this);
         vbox = new VBox();
@@ -1334,7 +1358,10 @@ public class ASMHydrasynth extends Synth
         hbox.add(addFilter(2, Style.COLOR_B()));
         hbox.addLast(addFilters(Style.COLOR_B()));
         vbox.add(hbox);
-        vbox.add(addAmp(Style.COLOR_C()));
+        hbox = new HBox();
+        hbox.add(addAmp(Style.COLOR_C()));
+        hbox.addLast(addVoiceModulation(Style.COLOR_A()));
+        vbox.add(hbox);
         vbox.add(addFX(true, Style.COLOR_A()));
         hbox = new HBox();
         hbox.add(addDelay(Style.COLOR_A()));
@@ -1513,7 +1540,24 @@ public class ASMHydrasynth extends Synth
                 updateTitle();
                 }
             };
-        vbox.add(comp);  // doesn't work right :-(
+        vbox.add(comp);
+        
+        deluxeCheck = new JCheckBox("Deluxe");		// "Hydrasynth Deluxe" produces ellipses which I can't get rid of, grrr
+        deluxeCheck.setSelected(deluxe);
+        deluxeCheck.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                setDeluxe(deluxeCheck.isSelected(), true);
+                }
+            });
+        deluxeCheck.setFont(Style.SMALL_FONT());
+        deluxeCheck.setOpaque(false);
+        deluxeCheck.setForeground(Style.TEXT_COLOR());
+        HBox inner = new HBox();
+        inner.add(deluxeCheck);
+        inner.addLast(Stretch.makeHorizontalStretch());
+        vbox.add(inner);
         outer.add(vbox);
         
         // we use a special dial color here so as not to overwhelm the colored text
@@ -2448,13 +2492,13 @@ public class ASMHydrasynth extends Synth
                         knobBox.add(depth);
                         knobBox.add(feedback);
                         knobBox.add(wet);
-                        //knobBox.addLast(Strut.makeStrut(disp, true));
+                        knobBox.addLast(Strut.makeVerticalStrut(disp));
                         break;
                     case 1:         // WavStack
                         sourceBox.add(sourceStrut);
                         knobBox.add(depth);
                         knobBox.add(wet);
-                        //knobBox.addLast(Strut.makeStrut(disp, true));
+                        knobBox.addLast(Strut.makeVerticalStrut(disp));
                         break;
                     case 2:         // OSC Sync
                         sourceBox.add(sourcesOscSync);
@@ -2463,7 +2507,7 @@ public class ASMHydrasynth extends Synth
                         knobBox.add(window);
                         knobBox.add(feedback);
                         knobBox.add(wet);
-                        //knobBox.addLast(Strut.makeStrut(disp, true));
+                        knobBox.addLast(Strut.makeVerticalStrut(disp));
                         break;
                     case 3:         // PW-Orig
                         sourceBox.add(sourceStrut);
@@ -2471,7 +2515,7 @@ public class ASMHydrasynth extends Synth
                         knobBox.add(depth);
                         knobBox.add(feedback);
                         knobBox.add(wet);
-                        //knobBox.addLast(Strut.makeStrut(disp, true));
+                        knobBox.addLast(Strut.makeVerticalStrut(disp));
                         break;
                     case 4:         // PW-Squeez
                         sourceBox.add(sourceStrut);
@@ -2479,7 +2523,7 @@ public class ASMHydrasynth extends Synth
                         knobBox.add(depth);
                         knobBox.add(feedback);
                         knobBox.add(wet);
-                        //knobBox.addLast(Strut.makeStrut(disp, true));
+                        knobBox.addLast(Strut.makeVerticalStrut(disp));
                         break;
                     case 5:         // PW-ASM
                         sourceBox.add(sourceStrut);
@@ -2496,14 +2540,14 @@ public class ASMHydrasynth extends Synth
                         knobBox.add(depth);
                         knobBox.add(feedback);
                         knobBox.add(wet);
-                        //knobBox.addLast(Strut.makeStrut(disp, true));
+                        knobBox.addLast(Strut.makeVerticalStrut(disp));
                         break;
                     case 7:         // PhazDiff
                         sourceBox.add(sourceStrut);
                         knobBox.add(depth);
                         knobBox.add(feedback);
                         knobBox.add(wet);
-                        //knobBox.addLast(Strut.makeStrut(disp, true));
+                        knobBox.addLast(Strut.makeVerticalStrut(disp));
                         break;
                     default:
                         System.err.println("ERROR: (Mutant Mode) bad mutant " + model.get(key));
@@ -2544,6 +2588,92 @@ public class ASMHydrasynth extends Synth
         
 		model.set("ribbonmode", 0);		// the purpose of this is to make sure that mode is FIRST in the mutation list
 
+
+
+		//// This is basically a duplicate of addScale()
+
+		HBox _hbox = new HBox();
+        final HBox scaleEditBox = new HBox();
+                
+        for(int i = 2; i <= 7; i++)
+            {
+            comp = new LabelledDial("Note " + i, this, "ribbonscalenote" + i, color, 0, 12)
+                {
+                public String map(int value)
+                    {
+                    if (value == 0) return "Off";
+                    else return NOTES[(model.get("ribbonscalekeylock") + value - 1) % 12];
+                    }
+                };
+            scaleEditBox.add(comp);
+            }
+                
+        final JComponent scaleEditBoxStrut = Strut.makeStrut(scaleEditBox);
+                        
+        LabelledDial keyLock = new LabelledDial("Key Lock", this, "ribbonscalekeylock", color, 1, 12)
+            {
+            public String map(int value)
+                {
+                return NOTES[value - 1];
+                }
+                                
+            public void update(String key, Model model)
+                {
+                super.update(key, model);
+                scaleEditBox.repaint();
+                }
+            };
+                        
+        final JComponent keyLockStrut = Strut.makeStrut(keyLock);
+
+        VBox _vbox = new VBox();
+        params = SCALES;
+        comp = new Chooser("Scale Type", this, "ribbonscaletype", params)   
+            {
+            public void update(String key, Model model)
+                {
+                super.update(key, model);
+                int val = model.get(key);
+                _hbox.remove(keyLock);
+                _hbox.remove(scaleEditBox);
+                _hbox.remove(keyLockStrut);
+                _hbox.remove(scaleEditBoxStrut);
+                
+                if (val != 1 && val <= 38)      // not chromatic or microtonal
+                    {
+                    _hbox.add(keyLock);
+                    if (val == 0)           // scale edit
+                        {
+                        _hbox.addLast(scaleEditBox);
+                        }
+                    else
+                        {
+                        _hbox.addLast(scaleEditBoxStrut);
+                        }
+                    }
+                else
+                    {
+                    _hbox.add(keyLockStrut);
+                    _hbox.addLast(scaleEditBoxStrut);
+                    }
+                _hbox.revalidate();
+                _hbox.repaint();
+                }
+            };
+        _vbox.add(comp);
+        _hbox.add(_vbox);
+        // At this point the scaletype has added the keylock in the wrong place.
+        // This is because we updated the chooser before we added the chooser.
+        // We need to remove it and re-add it
+        _hbox.remove(keyLock);
+        _hbox.add(keyLock);
+
+
+		/// End replication of addScale()
+		HBox scale = _hbox;
+
+
+
         params = RIBBON_KEYSPANS;
         final Chooser keyspan = new Chooser("Theremin Keyspan", this, "ribbonkeyspan", params);
  
@@ -2568,6 +2698,8 @@ public class ASMHydrasynth extends Synth
 
         comp = new LabelledDial("Glide", this, "ribbonglide", color, 0, 127);
         thereminBox.add(comp);
+        
+        thereminBox.addLast(scale);
         
         final CheckBox ribbonHold = new CheckBox("Hold", this, "ribbonhold");
 
@@ -2607,6 +2739,7 @@ public class ASMHydrasynth extends Synth
             };
         modeBox.add(comp);
         hbox.add(modeBox);
+
 
         category.add(hbox, BorderLayout.CENTER);
         return category;
@@ -3669,7 +3802,7 @@ public class ASMHydrasynth extends Synth
             public void update(String key, Model model)
                 {
                 super.update(key, model);
-                if (model.get(key) == 0) // no steps
+                if (model.get(key) < 10) // no steps
                     {
                     hbox.remove(steps);
                     }
@@ -3844,12 +3977,14 @@ public class ASMHydrasynth extends Synth
         
         VBox vbox = new VBox();
         
+        final LabelledDial[] dials = new LabelledDial[64];
+        
         for(int i = 1; i <= 64; i+= 16)
             {
             hbox = new HBox();
             for(int j = i; j < i + 16; j++)
                 {
-                comp = new LabelledDial("Step " + j, this, "lfo" + lfo + "step" + j, color, 0, 1024)
+                comp = dials[j - 1] = new LabelledDial("Step " + j, this, "lfo" + lfo + "step" + j, color, 0, 1024)
                     {
                     public boolean isSymmetric() { return true; }
 
@@ -3920,12 +4055,82 @@ public class ASMHydrasynth extends Synth
                         
         vbox.add(Strut.makeVerticalStrut(16));
                 
-        comp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), xs, ys, x, y);
+        comp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), xs, ys, x, y)
+        	{
+			int lastIndex = -1;
+			
+			// The mouseDown and mouseUp code here enables us to only do undo()
+			// ONCE.
+			public void mouseDown()
+				{
+				getUndo().push(getModel());
+				getUndo().setWillPush(false);
+				}
+			
+			public void mouseUp()
+				{
+				getUndo().setWillPush(true);
+				}
+					
+			public void updateFromMouse(double x, double y, boolean continuation)
+				{
+				if (x < 0.0)
+					x = 0.0;
+				else if (x > 1.0)
+					x = 1.0;
 
-        ((EnvelopeDisplay)comp).setStepping(true);
-        ((EnvelopeDisplay)comp).setAxis(0.5);
-        ((EnvelopeDisplay)comp).setFinalStageKey("lfo" + lfo + "steps");
+				if (y <= 0.0) 
+					y = 0.0;
+				else if (y >= 1.0) 
+					y = 1.0;
+					
+				int step = (int)(x * 64);
+				if (step >= 64) step = 63;
 
+				double val = (((int)(y * 1024)) / 8) * 8;
+				
+				int proposedState = (int) Math.round(val);
+				if (lockUserLFOSteps || lockAllLFOSteps)
+					{
+					proposedState = lockLFOStep(proposedState);
+					}
+				
+				model.set("lfo" + lfo + "step" + (step + 1), proposedState);
+				}
+
+			public void updateHighlightIndex(int index)
+				{
+				if (lastIndex >= 0)
+					{
+					dials[lastIndex].setTextColor(Style.TEXT_COLOR());
+					lastIndex = -1;
+					}
+									
+				if (index >= 0)
+					{
+					dials[index].setTextColor(Style.DYNAMIC_COLOR());
+					lastIndex = index;
+					}
+				}
+															
+			public int highlightIndex(double x, double y, boolean continuation)
+				{
+				if (x < 0) x = 0;
+				if (x > 1.0) x = 1.0;
+				int step = (int)(x * 64);
+				if (step >= 64) step = 63;
+				return step;
+				}
+
+//			public int verticalBorderThickness() { return 4; }
+        	};
+
+		EnvelopeDisplay disp = (EnvelopeDisplay)comp;
+       	disp.setStepping(true);
+        disp.setAxis(0.5);
+        disp.setFinalStageKey("lfo" + lfo + "steps");
+        disp.setPreferredHeight(disp.getPreferredHeight() * 2);
+        
         vbox.add(comp);
         
         category.add(vbox, BorderLayout.CENTER);
@@ -4644,6 +4849,7 @@ public class ASMHydrasynth extends Synth
     boolean lockUserLFOSteps;
     boolean lockAllLFOSteps;
     boolean ignoreParametersFromSynth;
+    boolean disallowCCMutation;
         
     public void addHydrasynthMenu()
         {
@@ -4659,6 +4865,18 @@ public class ASMHydrasynth extends Synth
                 {
                 ignoreParametersFromSynth = ignoreParametersMenu.isSelected();
                 setLastX("" + ignoreParametersFromSynth, "IgnoreParametersFromSynth", getSynthClassName(), true);
+                }
+            });
+
+        JCheckBoxMenuItem disallowCCMutationMenu = new JCheckBoxMenuItem("Disallow CC Mutation");
+        disallowCCMutationMenu.setSelected(disallowCCMutation);
+        menu.add(disallowCCMutationMenu);
+        disallowCCMutationMenu.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent evt)
+                {
+                disallowCCMutation = disallowCCMutationMenu.isSelected();
+                setLastX("" + disallowCCMutation, "DisallowCCMutation", getSynthClassName(), true);
                 }
             });
 
@@ -5451,6 +5669,7 @@ public class ASMHydrasynth extends Synth
 
     void get2(String key, byte[] data, int pos)
         {
+//        if (key.startsWith("env")) System.err.println(key + " " + model.get(key));
         int val = model.get(key);
         if (model.getMin(key) < 0)      // signed two's complement
             {
@@ -5466,7 +5685,10 @@ public class ASMHydrasynth extends Synth
 
 
     public boolean getSendsParametersAfterLoad() { return false; }
-                        
+       
+       
+    Integer PAUSE_AFTER_CHUNK = null;		//Integer.valueOf(0);
+                     
     /** The Hydrasynth doesn't have a useful sysex emit mechanism, so we're inventing one here solely for
         the purposes of writing to a file. */
     public Object[] emitAll(Model tempModel, boolean toWorkingMemory, boolean toFile)
@@ -5693,6 +5915,13 @@ public class ASMHydrasynth extends Synth
         get1("ribbonquantize", data, 444);
         get1("ribbonglide", data, 446);
         get1("ribbonmodcontrol", data, 448);                            // theremin wheel volume
+        get1("ribbonscalekeylock", data, 450);
+        get1("ribbonscaletype", data, 452);
+        for(int i = 2; i < 8; i++)
+            {
+            get1("ribbonscalenote" + i, data, 454 - 2 + i);
+            }               
+
 
         // MISC
         get1("arpclklock", data, 468);  
@@ -5729,6 +5958,7 @@ public class ASMHydrasynth extends Synth
             get1("env" + (i + 1) + "legato", data, p + 20);
             get1("env" + (i + 1) + "reset", data, p + 22);          // can only be set if legato is unset, hope this is okay
             get1("env" + (i + 1) + "freerun", data, p + 24);                // can only be set if legato is unset, hope this is okay
+            get1("env" + (i + 1) + "loop", data, p + 26);
             }
                         
         // LFOS
@@ -5763,6 +5993,8 @@ public class ASMHydrasynth extends Synth
             }
                         
         // ARPEGGIATOR
+        // It appears that 28 is the one that matters, but 808 is a copy of it?
+        get2("arptempo", data, 28);
         get2("arptempo", data, 808);
         get1("arpdivision", data, 810);
         get1("arpswing", data, 812);
@@ -5862,9 +6094,12 @@ public class ASMHydrasynth extends Synth
         // LFO STEPS 9 to 64
         for(int i = 0; i < 5; i++)
             {
-            for(int j = 0; j < 56; j++)  // FIXME: is this right?
+            for(int j = 0; j < 56; j++)
                 {
+//                System.err.println("lfo" + (i + 1) + "step" + (j + 9) + ": " + model.get(
+//                	"lfo" + (i + 1) + "step" + (j + 9)) + " -> " + (1770 + i * 56 * 2 + j * 2));
                 get2("lfo" + (i + 1) + "step" + (j + 9), data, 1770 + i * 56 * 2 + j * 2);
+//                System.err.println(data[1770 + i * 56 * 2 + j * 2]);
                 }
             }
 
@@ -5875,7 +6110,9 @@ public class ASMHydrasynth extends Synth
             // Env 2 Trig Source 1 ought not be set
             if (i == 1)     // Env 2
                 {
-                model.set("env" + (i + 1) + "trigsrc1", 1);
+                data[2340 + i * 10] = 1;
+                data[2340 + i * 10 + 1] = 0;
+//                model.set("env" + (i + 1) + "trigsrc1", 1);
                 }
             else
                 {
@@ -5905,19 +6142,62 @@ public class ASMHydrasynth extends Synth
             {
             get1("voice" + (i + 1) + "modulation", data, 2400 + i * 2);
             }
+            
+            
+        //// VARIOUS MYSTERY BYTES
+        
+        // Byte 6 appears to be the patch number [again].  It's not clear why
+        data[6] = data[3];
+        
+        // Byte 7 is unclear, sometimes 2, sometimes 3, etc.
+        data[7] = 3;
+        
+		// This appears to always be 5.  It's in the Arp region
+		data[836] = 5;
+		
+        // These are the (unknown) values for Sawspressive and other patches.
+        // It appears that if they are not set, then later data (such as 
+        // LFO steps 9-64, and arp triggers, and the Arp Step Offset) won't be
+        // set in the Hydrasynth on write.  So they're pretty important.  But
+        // what they do I have no idea.  Some patches have them as 88 88 88 88
+        // but most have 69 84 67 68
+		data[1766] = 69;
+		data[1767] = 84;
+		data[1768] = 67;
+		data[1769] = 68;
+
+        // These are always -100/-1
+        data[2390] = (byte) -100;
+        data[2391] = (byte) -1;
+        data[2392] = (byte) -100;
+        data[2393] = (byte) -1;
+        data[2394] = (byte) -100;
+        data[2395] = (byte) -1;
+        data[2396] = (byte) -100;
+        data[2397] = (byte) -1;
+        data[2398] = (byte) -100;
+        data[2399] = (byte) -1;
         
         
         byte[][] outgoing = Encode.encodePatch(data);
                 
-        Object[] sysex = new byte[outgoing.length + 3][];
+        Object[] sysex = new Object[outgoing.length * 2 + 3];
         sysex[0] = (isEmittingBatch() ? null : Encode.encodePayload(new byte[] { (byte)0x18, (byte)0x00 }));         // header
         for(int i = 0; i < outgoing.length; i++)                                                                // patch chunks
             {
-            sysex[i + 1] = outgoing[i];
+            sysex[i * 2 + 1] = outgoing[i];
+            sysex[i * 2 + 2] = PAUSE_AFTER_CHUNK;
             }
         //// FIXME: Do we include the save request?
         sysex[sysex.length - 2] = (isEmittingBatch() ? null : Encode.encodePayload(new byte[] { (byte)0x14, (byte)0x00 }));          // save request
         sysex[sysex.length - 1] = (isEmittingBatch() ? null : Encode.encodePayload(new byte[] { (byte)0x1A, (byte)0x00 }));          // footer
+
+		if (REVERSE_ENGINEER)
+			{
+				System.err.println("OUTGOING DIFFERENCES");
+				diff(firstPatch, data);
+			}
+
         return sysex;
         }
 
@@ -5998,7 +6278,7 @@ public class ASMHydrasynth extends Synth
     int incomingPos;
     byte[][] incoming = new byte[22][];
         
-    public static final boolean REVERSE_ENGINEER = false;
+    public static final boolean REVERSE_ENGINEER = true;
 
     public int parse(byte[] data, boolean fromFile)
         {
@@ -6093,11 +6373,12 @@ public class ASMHydrasynth extends Synth
                             System.err.println("DIFFERENCES");
                             diff(firstPatch, result);
                             }
-                        incoming = new byte[22][];
-                        incomingPos = 0;
-                        return PARSE_SUCCEEDED;
+//                        incoming = new byte[22][];
+//                        incomingPos = 0;
+//                        return PARSE_SUCCEEDED;
                         }
-                    else
+
+// at any rate
                         {
                         incoming = new byte[22][];
                         incomingPos = 0;
@@ -6178,6 +6459,8 @@ public class ASMHydrasynth extends Synth
 
     public int parseReal(byte[] data, boolean fromFile)
         {
+//        System.err.println("The Big Four " + data[1766] + " " + data[1767] + " " + data[1768] + " " + data[1769]);
+        
         // VERIFY VERSION
         int version = data[4] & 0xFF;
         if (version != VERSION_1_5_5 && version != VERSION_2_0_0)
@@ -6331,7 +6614,7 @@ public class ASMHydrasynth extends Synth
         // PRE-FX
         set1("prefxtype", data, 352);
         set1("prefxsidechain", data, 354);
-        int prefxtype = Math.max(0, Math.min(data[352], 8));    // bound to 0 ... 8
+        int prefxtype = Math.max(0, Math.min(data[352], 9));    // bound to 0 ... 9
         if (prefxtype != 0) // skip bypass
             {
             for(int i = 0; i < 5; i++)
@@ -6370,7 +6653,7 @@ public class ASMHydrasynth extends Synth
         // POST-FX
         set1("postfxtype", data, 400);
         set1("postfxsidechain", data, 402);
-        int postfxtype = Math.max(0, Math.min(data[400], 8));   // bound to 0 ... 8
+        int postfxtype = Math.max(0, Math.min(data[400], 9));   // bound to 0 ... 9
         if (postfxtype != 0) // skip bypass
             {
             for(int i = 0; i < 5; i++)
@@ -6389,6 +6672,12 @@ public class ASMHydrasynth extends Synth
         set1("ribbonquantize", data, 444);
         set1("ribbonglide", data, 446);
         set1("ribbonmodcontrol", data, 448);                            // theremin wheel volume
+        set1("ribbonscalekeylock", data, 450);
+        set1("ribbonscaletype", data, 452);
+        for(int i = 2; i < 8; i++)
+            {
+            set1("ribbonscalenote" + i, data, 454 - 2 + i);
+            }               
 
         // MISC
         set1("arpclklock", data, 468);          
@@ -6460,7 +6749,8 @@ public class ASMHydrasynth extends Synth
                         
         // ARPEGGIATOR
                 
-        set2("arptempo", data, 808);
+        set2("arptempo", data, 28);
+        // set2("arptempo", data, 808);
         set1("arpdivision", data, 810);
         set1("arpswing", data, 812);
         set1("arpgate", data, 814);
@@ -6539,8 +6829,9 @@ public class ASMHydrasynth extends Synth
         // LFO STEPS 9 to 64
         for(int i = 0; i < 5; i++)
             {
-            for(int j = 0; j < 56; j++)  // FIXME: is this right?
+            for(int j = 0; j < 56; j++)
                 {
+//                System.err.println("lfo" + (i + 1) + "step" + (j + 9) + " <- " + (1770 + i * 56 * 2 + j * 2));
                 set2("lfo" + (i + 1) + "step" + (j + 9), data, 1770 + i * 56 * 2 + j * 2);
                 }
             }
@@ -7057,14 +7348,21 @@ public class ASMHydrasynth extends Synth
 		for(int i = 0; i < orderedParameters.length; i++)
 			{
 			tryToSendMIDI(emitAll(orderedParameters[i], STATUS_SENDING_ALL_PARAMETERS));
-			// It seems that we need a little pause after the modmatrix values
-/*			if (orderedParameters[i].startsWith("mod"))
-				simplePause(2);
-*/
-			if (orderedParameters[i].startsWith("mod") || orderedParameters[i].startsWith("macro"))
+			// It seems that we need a little pause after the modmatrix values and maybe macro values
+			// and the amount depends on the type of synthesizer.
+			if (deluxe)
 				{
-				simplePause(3);
+				if (orderedParameters[i].startsWith("mod") || orderedParameters[i].startsWith("macro"))
+					{
+					simplePause(4);
+					}
 				}
+			else
+				{
+				if (orderedParameters[i].startsWith("mod"))
+				simplePause(2);
+				}
+
 			simplePause(getPauseAfterSendOneParameter());
 			}
 			
@@ -7119,6 +7417,39 @@ public class ASMHydrasynth extends Synth
         
     public boolean librarianTested() { return true; }
 
+    public int reviseMutatedValue(String key, int oldValue, int proposedValue,  Model model) 
+    	{
+		if (!key.startsWith("mod")) 
+    		{
+    		return proposedValue;  // it's fine
+    		}
+    	else
+    		{
+			if (!disallowCCMutation)	// everything is permitted
+				{
+				return proposedValue;
+				}
+			else if (key.endsWith("modsource"))
+				{
+				if (proposedValue < 35) // not mutating to a CC
+					return proposedValue;
+				else 
+					{
+					return random.nextInt(35);	// mutate to something not a CC
+					}
+				}
+			else if (key.endsWith("modtarget"))
+				{
+				if (proposedValue < 200)  // not mutating to a CC or CV
+					return proposedValue;
+				else 
+					{
+					return random.nextInt(200);	// mutate to something not a CC or CV
+					}
+				}
+			else return proposedValue;  // it's fine
+			}
+    	}    
 
 
 
@@ -7654,14 +7985,14 @@ public class ASMHydrasynth extends Synth
     "lfo4phase",
     "lfo4ratesyncoff",
     "lfo4ratesyncon",
-    "lfo3step1",
-    "lfo3step2",
-    "lfo3step3",
-    "lfo3step4",
-    "lfo3step5",
-    "lfo3step6",
-    "lfo3step7",
-    "lfo3step8",
+    "lfo4step1",
+    "lfo4step2",
+    "lfo4step3",
+    "lfo4step4",
+    "lfo4step5",
+    "lfo4step6",
+    "lfo4step7",
+    "lfo4step8",
     "lfo4step9",
     "lfo4step10",
     "lfo4step11",
@@ -8701,14 +9032,14 @@ public class ASMHydrasynth extends Synth
     "lfo4phase",
     "lfo4ratesyncoff",
     "lfo4ratesyncon",
-    "lfo3step1",
-    "lfo3step2",
-    "lfo3step3",
-    "lfo3step4",
-    "lfo3step5",
-    "lfo3step6",
-    "lfo3step7",
-    "lfo3step8",
+    "lfo4step1",
+    "lfo4step2",
+    "lfo4step3",
+    "lfo4step4",
+    "lfo4step5",
+    "lfo4step6",
+    "lfo4step7",
+    "lfo4step8",
     "lfo4step9",
     "lfo4step10",
     "lfo4step11",
@@ -9091,14 +9422,14 @@ public class ASMHydrasynth extends Synth
     "macro5depth6",
     "macro5depth7",
     "macro5depth8",
-    "macro5target1",
-    "macro5target2",
-    "macro5target3",
-    "macro5target4",
-    "macro5target5",
-    "macro5target6",
-    "macro5target7",
-    "macro5target8",
+    "macro6target1",
+    "macro6target2",
+    "macro6target3",
+    "macro6target4",
+    "macro6target5",
+    "macro6target6",
+    "macro6target7",
+    "macro6target8",
     "macro6buttonvalue1",
     "macro6buttonvalue2",
     "macro6buttonvalue3",
@@ -9769,14 +10100,14 @@ public class ASMHydrasynth extends Synth
     8115,           // 3f 33            "lfo4phase",
     8328,           // 41 8             "lfo4ratesyncoff",
     8584,           // 43 8             "lfo4ratesyncon",
-    7464,           // 3a 28            "lfo3step1",
-    7465,           // 3a 29            "lfo3step2",
-    7466,           // 3a 2a            "lfo3step3",
-    7467,           // 3a 2b            "lfo3step4",
-    7468,           // 3a 2c            "lfo3step5",
-    7469,           // 3a 2d            "lfo3step6",
-    7470,           // 3a 2e            "lfo3step7",
-    7471,           // 3a 2f            "lfo3step8",
+    7464,           // 3a 28            "lfo4step1",
+    7465,           // 3a 29            "lfo4step2",
+    7466,           // 3a 2a            "lfo4step3",
+    7467,           // 3a 2b            "lfo4step4",
+    7468,           // 3a 2c            "lfo4step5",
+    7469,           // 3a 2d            "lfo4step6",
+    7470,           // 3a 2e            "lfo4step7",
+    7471,           // 3a 2f            "lfo4step8",
     9664,           // 4b 40            "lfo4step9",
     9665,           // 4b 41            "lfo4step10",
     9666,           // 4b 42            "lfo4step11",
@@ -10159,15 +10490,15 @@ public class ASMHydrasynth extends Synth
     6997,           // 36 55            "macro5depth6",
     6998,           // 36 56            "macro5depth7",
     6999,           // 36 57            "macro5depth8",
-    8016,           // 3e 50            "macro5target1",
-    8017,           // 3e 51            "macro5target2",
-    8018,           // 3e 52            "macro5target3",
-    8019,           // 3e 53            "macro5target4",
-    8020,           // 3e 54            "macro5target5",
-    8021,           // 3e 55            "macro5target6",
-    8022,           // 3e 56            "macro5target7",
-    8023,           // 3e 57            "macro5target8",
-    7896,           // 3d 58            "macro6buttonvalue1",
+    8016,           // 3e 50            "macro6target1",
+    8017,           // 3e 51            "macro6target2",
+    8018,           // 3e 52            "macro6target3",
+    8019,           // 3e 53            "macro6target4",
+    8020,           // 3e 54            "macro6target5",
+    8021,           // 3e 55            "macro6target6",
+    8022,           // 3e 56            "macro6target7",
+    8023,           // 3e 57            "macro6target8",
+    7896,           // 3d 58            "macro66buttonvalue1",
     7897,           // 3d 59            "macro6buttonvalue2",
     7898,           // 3d 5a            "macro6buttonvalue3",
     7899,           // 3d 5b            "macro6buttonvalue4",
@@ -10343,6 +10674,14 @@ public class ASMHydrasynth extends Synth
     8123,           // 3f 3b            "ribbonquantize",
     8123,           // 3f 3b            "ribbonmodcontrol",
     8123,           // 3f 3b            "ribbonglide",
+    8123,			// 3f 3b			"ribbonscalekeylock",
+    8123,			// 3f 3b			"ribbonscale",
+    8123,			// 3f 3b			"ribbonscalenote2",
+    8123,			// 3f 3b			"ribbonscalenote3",
+    8123,			// 3f 3b			"ribbonscalenote4",
+    8123,			// 3f 3b			"ribbonscalenote5",
+    8123,			// 3f 3b			"ribbonscalenote6",
+    8123,			// 3f 3b			"ribbonscalenote7",
     8121,           // 3f 39            "voicedetune",
     8132,           // 3f 44            "voicestereowidth",
     8131,           // 3f 43            "voicevibratoamount",

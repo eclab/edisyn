@@ -10054,6 +10054,14 @@ public abstract class Synth extends JComponent implements Updatable
         the setting of updateListeners.  See Proteus 2000. */
     public void fix(String key, Model model) { }
     
+    /** This is potentially called by mutation mechanisms to deterine whether the model should
+    	be permitted to set the given key to the given value.  This is used to restrict mutation */
+    public int reviseMutatedValue(String key, int oldValue, int proposedValue,  Model model) { return proposedValue; }
+    
+    /** This is potentially called by mutation mechanisms to deterine whether the model should
+    	be permitted to set the given key to the given value.  This is used to restrict mutation */
+    public String reviseMutatedValue(String key, String oldValue, String proposedValue, Model model) { return proposedValue; }
+    
     /** This is called when we receive a *single* patch without a number or bank and we need to know
         where to put it. By default this method does nothing. This largely exists for situations such
         as in the MicroMonsta where we receive single patches with no context from the synth and cannot

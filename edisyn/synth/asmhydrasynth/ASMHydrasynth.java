@@ -1622,6 +1622,7 @@ public class ASMHydrasynth extends Synth
     public JComponent addVoiceModulation(Color color)
         {
         Category category = new Category(this, "Voice Modulation", color);
+        category.makeDistributable("voice");
 
         JComponent comp;
         String[] params;
@@ -1630,7 +1631,7 @@ public class ASMHydrasynth extends Synth
  
         for(int i = 1; i <= 8; i++)
             {
-            comp = new LabelledDial("Voice " + i, this, "voice" + i + "modulation", color, 0, 256)
+            comp = new LabelledDial("Voice " + i, this, "voicemodulation" + i, color, 0, 256)
                 {
                 public boolean isSymmetric() { return true; }
                 public String map(int value)
@@ -2250,6 +2251,7 @@ public class ASMHydrasynth extends Synth
     public JComponent addScale(Color color)
         {
         Category category = new Category(this, "Scale", color);
+        category.makeDistributable("scalenote");
 
         JComponent comp;
         String[] params;
@@ -2347,6 +2349,7 @@ public class ASMHydrasynth extends Synth
         {
         Category category = new Category(this, "Mutant " + mut + "   (Oscillator " + (mut < 3 ? "1)" : "2)"), color);
         category.makePasteable("mutant");
+        category.makeDistributable("mutant");
 
         JComponent comp;
         String[] params;
@@ -2560,6 +2563,7 @@ public class ASMHydrasynth extends Synth
     public JComponent addRibbon(Color color)
         {
         Category category = new Category(this, "Ribbon", color);
+        category.makeDistributable("ribbonscalenote");
 
         JComponent comp;
         String[] params;
@@ -5650,7 +5654,7 @@ public class ASMHydrasynth extends Synth
             /// THIS IS A BUG -- THE HYDRASYNTH PROPERLY MULTPLIES BY 8
             /// ON OUTPUT BUT DOES NOT DIVIDE BY 8 ON INPUT (2.0.0)
             /*
-              else if (key.endsWith("modulation"))
+              else if (key.startsWith("voicemodulation"))
               {
               val = val * 8;
               }
@@ -6143,7 +6147,7 @@ public class ASMHydrasynth extends Synth
             }
         for(int i = 0; i < 8; i++)
             {
-            get1("voice" + (i + 1) + "modulation", data, 2400 + i * 2);
+            get1("voicemodulation" + (i + 1), data, 2400 + i * 2);
             }
             
             
@@ -6873,7 +6877,7 @@ public class ASMHydrasynth extends Synth
             }
         for(int i = 0; i < 8; i++)
             {
-            set1("voice" + (i + 1) + "modulation", data, 2400 + i * 2);
+            set1("voicemodulation" + (i + 1), data, 2400 + i * 2);
             }
         
         revise();
@@ -7261,7 +7265,7 @@ public class ASMHydrasynth extends Synth
                 {
                 val = val / 8;
                 }
-            else if (key.endsWith("modulation"))
+            else if (key.startsWith("voicemodulation"))
                 {
                 val = val / 8;
                 }
@@ -8569,7 +8573,7 @@ public class ASMHydrasynth extends Synth
     "voicewarmmode",
     "voicesnap",
      
-    /// New 2.0.0 Parameters
+    /// New 2.0.0 Parameters that can be sent
     "voicesustain",
     "osc1bitreduction",                  
     "osc2bitreduction",                  
@@ -9631,14 +9635,14 @@ public class ASMHydrasynth extends Synth
     "osc1bitreduction",                  
     "osc2bitreduction",                  
     "osc3bitreduction",                  
-    "voice1modulation",                  
-    "voice2modulation",                  
-    "voice3modulation",                  
-    "voice4modulation",                  
-    "voice5modulation",                  
-    "voice6modulation",                  
-    "voice7modulation",                  
-    "voice8modulation",                  
+    "voicemodulation1",                  
+    "voicemodulation2",                  
+    "voicemodulation3",                  
+    "voicemodulation4",                  
+    "voicemodulation5",                  
+    "voicemodulation6",                  
+    "voicemodulation7",                  
+    "voicemodulation8",                  
     "env1quantize",                  
     "env2quantize",                  
     "env3quantize",                  
@@ -10709,14 +10713,14 @@ public class ASMHydrasynth extends Synth
     8128,            // 3f 40                    "osc1bitreduction",                  
     8128,            // 3f 40                    "osc2bitreduction",                  
     8128,            // 3f 40                    "osc3bitreduction",                  
-    14465,           // 71 01                   "voice1modulation",                  
-    14466,           // 71 02                       "voice2modulation",                  
-    14467,           // 71 03                       "voice3modulation",                  
-    14468,           // 71 04                       "voice4modulation",                  
-    14469,           // 71 05                       "voice5modulation",                  
-    14470,           // 71 05                       "voice6modulation",                  
-    14471,           // 71 06                       "voice7modulation",                  
-    14472,           // 71 06                       "voice8modulation",                  
+    14465,           // 71 01                   "voicemodulation1",                  
+    14466,           // 71 02                       "voicemodulation2",                  
+    14467,           // 71 03                       "voicemodulation3",                  
+    14468,           // 71 04                       "voicemodulation4",                  
+    14469,           // 71 05                       "voicemodulation5",                  
+    14470,           // 71 05                       "voicemodulation6",                  
+    14471,           // 71 06                       "voicemodulation7",                  
+    14472,           // 71 06                       "voicemodulation8",                  
     14481,           // 71 11                   "env1quantize",                  
     14482,           // 71 12                   "env2quantize",                  
     14483,           // 71 13                   "env3quantize",                  

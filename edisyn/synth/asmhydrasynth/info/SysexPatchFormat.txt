@@ -69,7 +69,7 @@ like Schrodinger's Cat.
 SPECIAL BYTES
 
 1. There are four magic bytes which, if left as 0, will cause writing to fail 
-for most parameter afterwards.  These are bytes 1766, 1767, 1768, and 1769.  
+for most parameters afterwards.  These are bytes 1766, 1767, 1768, and 1769.  
 Most standard Hydrasynth patches have these bytes set to 69, 84, 67, and 68 respectively, but some patches have them set to 88, 88, 88, and 88.  I do 
 not at present know the meaning of these bytes.  At present Edisyn sets 
 them to 69, 84, 67, 68.
@@ -89,7 +89,7 @@ BYTE    HEX     INFO
 1       1       00
 2       2       Bank
 3       3       Patch Number
-4       4       9B Hydrasynth Version Number? 	1.5.5	(0x9B = 155)  Prediction: 2.0.0 will be 0xC8
+4       4       9B Hydrasynth Version Number 	1.5.5: (0x9B = 155),  2.0.0: (0xC8 = 200)
 5       5       00?
 6       6       Also Patch Number?  Not clear
 7       7       00?  02?  03?

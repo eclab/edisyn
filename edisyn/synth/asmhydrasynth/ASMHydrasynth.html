@@ -2,6 +2,8 @@
 <h1>ASM Hydrasynth</h1> 
 <h2>Single Patch Editor</h2>
 
+<p>This editor should work properly with the Hydrasynth Keyboard, Deluxe (when set up right), Desktop, and Explorer.  It can read 1.5.5 and 2.0.0 sysex dumps and can write 2.0.0.
+
 <p><b>Communicating with Edisyn</b><br> 
 
 If you're connecting via USB, set Edisyn's incoming and outgoing MIDI devices to HYDRASYNTH KB.  Set Edisyn's MIDI channel to the same as the synth's RX and TX MIDI channels.  You can set the synth's RX MIDI channel to OMNI if you liked.   Set up Parameter RX and TX both to be NRPN.  
@@ -9,16 +11,17 @@ If you're connecting via USB, set Edisyn's incoming and outgoing MIDI devices to
 <p><b>Current Editor Status</b><br>
 ASM won't open their sysex spec: developing Edisyn required reverse engineering it.  As such Edisyn can do most things you'd need, but a few items (such as requesting current memory) are still out of reach.
 
-<p><b>Hydrasynth Deluxe</b><br>
-The Deluxe requires that NRPN be sent to it somewhat slower than the Keyboard.  So if you have a Deluxe, </b>be sure to check the "Deluxe" box.</b>
+<p><b>About the Hydrasynth Deluxe</b><br>
+The Deluxe requires that NRPN be sent to it somewhat slower than the Keyboard.  So if you have a Deluxe, </b>be sure to check the "Deluxe" menu option.</b>
 
 <p>Edisyn does not yet support the Deluxe's multimode, though I intend to ultimately.
 
 <p><b>About the Menu</b><br>
 
 <ul>
+<li><b>Hydrasynth Deluxe</b>&nbsp;&nbsp;This makes it possible for Edisyn to properly send NRPN to the Deluxe (which is a little pokey compared to other Hydrasynths) and thus Send to Current Patch.  Make sure to check it if you have a Deluxe.
 
-<li><b>Ignore Parameters from the Synth</b>&nbsp;&nbsp;When you set various parameters in Edisyn (such as BPM Sync), the Hydrasynth rather unhelpfully will send its current settings to Edisyn, changing the settings you had made.  To deal with this, by default Edisyn ignores all incoming NRPN messages from your Hydrasynth.  If you'd like to make real-time changes to Edisyn by ahcnging values on the Hydrasynth, uncheck this option.
+<p><li><b>Ignore Parameters from Synth</b>&nbsp;&nbsp;When you set various parameters in Edisyn (such as BPM Sync), the Hydrasynth rather unhelpfully will send its current settings to Edisyn, changing the settings you had made.  To deal with this, by default Edisyn ignores all incoming NRPN messages from your Hydrasynth.  If you'd like to make real-time changes to Edisyn by ahcnging values on the Hydrasynth, uncheck this option.
 
 <p><li><b>Disallow CC Mutation</b>&nbsp;&nbsp;CC (and CV) options dominate the Hydrasynth's Mod Matrix Source and Destination lists, so mutation will select a CC or CV with a good probability, and you probably don't want that.  Selecting this menu prevents CC and CV options from being randomly selected during mutation.  As an alternative, you could simply disable the entire Mod Matrix category's mutable parameters (see the manual).  You might do this for the Macros as well.
 
@@ -54,7 +57,7 @@ The Hydrasynth has a great many bugs: but Edisyn tries to work around them and h
 
 <p><li>The Envelope's Attack Curve labeling is incorrect: negative values should are actually LOG and positive values are actually EXP.  Edisyn follows the Hydrasynth's incorrect labelling.  I do not know if ASM mislabeled the attack knob by accident or intentionally because they imagined people wouldn't understand exponential curves: but it is wrong.  An exponential envelope curve doesn't mean it's increasing with an exponential rate of speed. It means that there is an <i>exponential dropoff</i> in the absolute rate of change.  For the decay/release, we start by moving very fast, and then as we approach the target we exponentially slow down (go horizontal).  Similarly for attack, we start by moving very fast (this time upwards), then as we approach the target we again slow down (go horizontal).  The Attack Curve knob behavior is identical to the Decay and Release knobs and should have been labelled the same. 
 
-<p><li>Certain individual parameter changes will cause the Hydrasynth to foolishly respond with its current settings for a set of parameters.  This in turn will cause Edisyn to update those parameters, erasing any changes you may have made but not yet sent. This is unlikely to bite you, but you should be aware of it.  This happens, for example, when changing the ribbon mode to Theremin; changing the LFO, or Delay BPM Sync; or changing the Arpeggiator mode and various other Arpeggiator parameters or Delay BPM Sync
+<p><li>Certain individual parameter changes will cause the Hydrasynth to foolishly respond with its current settings for a set of parameters.  This in turn will cause Edisyn to update those parameters, erasing any changes you may have made but not yet sent. This is unlikely to bite you, but you should be aware of it.   You can prevent this entirely by selecting <b>Ignore Parameters from Synth</b> in the Hydrasynth menu.
 
 <p><li>Sometimes when the Hydrasynth wakes up from going to sleep, sending it parameter values from Edisyn will cause it to update those values with an offset (and thus incorrectly).
 
@@ -90,6 +93,6 @@ Thanks to Thierry Rochebois Zic for making his stunning Hydrasynth wave and harm
 <td><b>Sean Luke</b>
 <tr>
 <td align=right>Date&nbsp;&nbsp;&nbsp;
-<td>April 19, 2023
+<td>April 27, 2023
 </table>
 

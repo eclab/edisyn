@@ -357,6 +357,8 @@ public abstract class Synth extends JComponent implements Updatable
                     }
 
                 frame.setVisible(true);
+                synth.windowCreated();
+
                 if (setupMIDI) 
                     synth.setupMIDI("Choose MIDI devices to send to and receive from.", tuple, false);
 
@@ -367,7 +369,6 @@ public abstract class Synth extends JComponent implements Updatable
                     {
                     synth.sendAllSoundsOffInternal(); // not doSendAllSoundsOff(false) because we don't want to turn off the test notes
                     }
-                synth.windowCreated();
                 synth.windowBecameFront();                            
                 }
             synth.undo.setWillPush(true);
@@ -3730,6 +3731,14 @@ public abstract class Synth extends JComponent implements Updatable
                 {
                 return (SynthPanel) inner;
                 }
+            else if (inner instanceof JPanel)
+            	{
+            	Component[] comps = ((JPanel)inner).getComponents();
+            	if (comps != null && comps.length > 0 && comps[0] instanceof SynthPanel)
+            		{
+            		return (SynthPanel) comps[0];
+            		}
+            	}
             }
         return null;
         }
@@ -10070,4 +10079,15 @@ public abstract class Synth extends JComponent implements Updatable
     
     /** Notifies the Synth that its librarian has been created. */
     public void librarianCreated(Librarian librarian) { }
+    
+    /** Issues a one-time warning with the given preferences key. */
+    public void oneTimeWarning(String key, String title, String message)
+    	{
+        String str = getLastX(key, getSynthClassName(), true);
+        if (str == null || !str.equalsIgnoreCase("true"))
+        	{
+            showSimpleMessage(title, message + "\n\nThis message will appear only once."); 
+        	setLastX("true", key, getSynthClassName(), true);
+        	}
+    	}
     }

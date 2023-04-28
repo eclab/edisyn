@@ -68,21 +68,21 @@ like Schrodinger's Cat.
 
 SPECIAL BYTES
 
-There are four bytes which, if left as 0, will cause writing to fail for most
-bytes afterwards.  These are bytes 1766, 1767, 1768, and 1769.  Most standard
-Hydrasynth patches have these bytes set to 69, 84, 67, and 68 respectively,
-but some patches have them set to 88, 88, 88, and 88.  I do not at present
-know the meaning of these bytes.  At present Edisyn sets them to 69, 84, 67, 68.
+1. There are four magic bytes which, if left as 0, will cause writing to fail 
+for most parameter afterwards.  These are bytes 1766, 1767, 1768, and 1769.  
+Most standard Hydrasynth patches have these bytes set to 69, 84, 67, and 68 respectively, but some patches have them set to 88, 88, 88, and 88.  I do 
+not at present know the meaning of these bytes.  At present Edisyn sets 
+them to 69, 84, 67, 68.
 
-The purpose of Byte 7 is not clear.  It is sometimes 00, 02, or 03.
+2. The purpose of Byte 7 is not clear.  It is sometimes 00, 02, or 03.
 
-Byte 836 appears to be always 5.  It is not clear what it is for.
+3. Byte 836 appears to be always 5.  It is not clear what it is for.
 
-Byte 6 appears to be a repeat of the patch number (which was in byte 3).
+4. Byte 6 appears to be a repeat of the patch number (which was in byte 3).
 
-Bytes 2390 through 2399 are always -100, -1, ..., -100, -1.
+5. Bytes 2390 through 2399 are always -100, -1, ..., -100, -1.
 
- 
+
 
 BYTE    HEX     INFO
 0       0       06 = "Save to RAM"  05 = "Receive from RAM" maybe

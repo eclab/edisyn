@@ -1208,27 +1208,9 @@ public class ASMHydrasynth extends Synth
         }
         
 
-    JCheckBox deluxeCheck;
-    boolean deluxe;
-    public static final String DELUXE_KEY = "Deluxe";
-    public boolean isDeluxe() { return deluxe; }
-    public void setDeluxe(boolean val, boolean save)
-        {
-        if (save)
-            {
-            setLastX("" + val, DELUXE_KEY, getSynthClassName(), true);
-            }
-        deluxe = val;
-        deluxeCheck.setSelected(val);  // hopefully this isn't recursive
-        updateTitle();
-        }
-        
     public ASMHydrasynth()
         {
         model.setFixer(this);
-        
-        String m = getLastX(DELUXE_KEY, getSynthClassName());
-        deluxe = (m == null ? false : Boolean.parseBoolean(m));
         
         if (parametersToIndex == null)
             {
@@ -1260,7 +1242,15 @@ public class ASMHydrasynth extends Synth
                 }
             }
 
-        String str = getLastX("IgnoreParametersFromSynth", getSynthClassName(), true);
+        String str = getLastX("Deluxe", getSynthClassName(), true);
+        if (str == null)
+            deluxe = false;            // default is false
+        else if (str.equalsIgnoreCase("true"))
+            deluxe = true;
+        else
+            deluxe = false;
+
+        str = getLastX("IgnoreParametersFromSynth", getSynthClassName(), true);
         if (str == null)
             ignoreParametersFromSynth = true;            // default is true
         else if (str.equalsIgnoreCase("true"))
@@ -1389,6 +1379,7 @@ public class ASMHydrasynth extends Synth
         vbox.add(addLFOSteps(1, Style.COLOR_B()));
 
         soundPanel.add(vbox, BorderLayout.CENTER);
+		((SynthPanel)soundPanel).makePasteable("lfo");
         addTab("LFO 1", soundPanel);
 
         soundPanel = new SynthPanel(this);
@@ -1397,6 +1388,7 @@ public class ASMHydrasynth extends Synth
         vbox.add(addLFOSteps(2, Style.COLOR_A()));
 
         soundPanel.add(vbox, BorderLayout.CENTER);
+		((SynthPanel)soundPanel).makePasteable("lfo");
         addTab("2", soundPanel);
 
         soundPanel = new SynthPanel(this);
@@ -1405,6 +1397,7 @@ public class ASMHydrasynth extends Synth
         vbox.add(addLFOSteps(3, Style.COLOR_B()));
 
         soundPanel.add(vbox, BorderLayout.CENTER);
+		((SynthPanel)soundPanel).makePasteable("lfo");
         addTab("3", soundPanel);
 
         soundPanel = new SynthPanel(this);
@@ -1413,6 +1406,7 @@ public class ASMHydrasynth extends Synth
         vbox.add(addLFOSteps(4, Style.COLOR_A()));
 
         soundPanel.add(vbox, BorderLayout.CENTER);
+		((SynthPanel)soundPanel).makePasteable("lfo");
         addTab("4", soundPanel);
 
         soundPanel = new SynthPanel(this);
@@ -1421,6 +1415,7 @@ public class ASMHydrasynth extends Synth
         vbox.add(addLFOSteps(5, Style.COLOR_B()));
 
         soundPanel.add(vbox, BorderLayout.CENTER);
+		((SynthPanel)soundPanel).makePasteable("lfo");
         addTab("5", soundPanel);
 
         soundPanel = new SynthPanel(this);
@@ -1542,22 +1537,6 @@ public class ASMHydrasynth extends Synth
             };
         vbox.add(comp);
         
-        deluxeCheck = new JCheckBox("Deluxe");		// "Hydrasynth Deluxe" produces ellipses which I can't get rid of, grrr
-        deluxeCheck.setSelected(deluxe);
-        deluxeCheck.addActionListener(new ActionListener()
-            {
-            public void actionPerformed(ActionEvent e)
-                {
-                setDeluxe(deluxeCheck.isSelected(), true);
-                }
-            });
-        deluxeCheck.setFont(Style.SMALL_FONT());
-        deluxeCheck.setOpaque(false);
-        deluxeCheck.setForeground(Style.TEXT_COLOR());
-        HBox inner = new HBox();
-        inner.add(deluxeCheck);
-        inner.addLast(Stretch.makeHorizontalStretch());
-        vbox.add(inner);
         outer.add(vbox);
         
         // we use a special dial color here so as not to overwhelm the colored text
@@ -4850,11 +4829,25 @@ public class ASMHydrasynth extends Synth
     boolean lockAllLFOSteps;
     boolean ignoreParametersFromSynth;
     boolean disallowCCMutation;
+    boolean deluxe;
         
     public void addHydrasynthMenu()
         {
         JMenu menu = new JMenu("Hydrasynth");
         menubar.add(menu);
+
+        JCheckBoxMenuItem deluxeCheck = new JCheckBoxMenuItem("Hydrasynth Deluxe");
+        deluxeCheck.setSelected(deluxe);
+        menu.add(deluxeCheck);
+        deluxeCheck.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent evt)
+                {
+                deluxe = deluxeCheck.isSelected();
+                setLastX("" + deluxe, "Deluxe", getSynthClassName(), true);
+                }
+            });
+
 
         JCheckBoxMenuItem ignoreParametersMenu = new JCheckBoxMenuItem("Ignore Parameters from Synth");
         ignoreParametersMenu.setSelected(ignoreParametersFromSynth);
@@ -4924,6 +4917,16 @@ public class ASMHydrasynth extends Synth
         return frame;
         }         
 
+	public void windowCreated()
+		{
+//		setLastX("false", "Warned", getSynthClassName(), true);
+        oneTimeWarning("Warned", "Read the About Tab", "The Hydrasynth has many MIDI eccentricities.\nBe certain to read the  \u2B06 About Tab \u2B06 before use.");
+        String str = getLastX("Warned", getSynthClassName(), true);
+		if (str == null || !str.equalsIgnoreCase("true"))
+			{
+			setSelectedTabIndex(getIndexOfTabTitle("About"));
+			}
+		}
 
     public String getPatchLocationName(Model model)
         {
@@ -5857,7 +5860,7 @@ public class ASMHydrasynth extends Synth
         // PRE-FX
         get1("prefxtype", data, 352);
         get1("prefxsidechain", data, 354);
-        int prefxtype = Math.max(0, Math.min(data[352], 8));    // bound to 0 ... 8
+        int prefxtype = Math.max(0, Math.min(data[352], 9));    // bound to 0 ... 9
         if (prefxtype != 0) // skip bypass
             {
             for(int i = 0; i < 5; i++)
@@ -5896,7 +5899,7 @@ public class ASMHydrasynth extends Synth
         // POST-FX
         get1("postfxtype", data, 400);
         get1("postfxsidechain", data, 402);
-        int postfxtype = Math.max(0, Math.min(data[400], 8));   // bound to 0 ... 8
+        int postfxtype = Math.max(0, Math.min(data[400], 9));   // bound to 0 ... 9
         if (postfxtype != 0) // skip bypass
             {
             for(int i = 0; i < 5; i++)
@@ -6278,7 +6281,7 @@ public class ASMHydrasynth extends Synth
     int incomingPos;
     byte[][] incoming = new byte[22][];
         
-    public static final boolean REVERSE_ENGINEER = true;
+    public static final boolean REVERSE_ENGINEER = false;
 
     public int parse(byte[] data, boolean fromFile)
         {

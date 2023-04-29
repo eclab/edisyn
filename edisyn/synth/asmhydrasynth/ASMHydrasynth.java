@@ -1266,6 +1266,7 @@ public class ASMHydrasynth extends Synth
         else
             disallowCCMutation = false;
 
+/*
         str = getLastX("SendArpTapTrig", getSynthClassName(), true);
         if (str == null)
             sendArpTapTrig = false;            // default is false
@@ -1273,6 +1274,7 @@ public class ASMHydrasynth extends Synth
             sendArpTapTrig = true;
         else
             sendArpTapTrig = false;
+*/
 
         str = getLastX("LockUserLFOSteps", getSynthClassName(), true);
         if (str == null)
@@ -4828,7 +4830,7 @@ public class ASMHydrasynth extends Synth
     //protected boolean doOpen(boolean merge) { showSimpleMessage("Cannot Open", "This Patch Editor cannot open a file at present."); return false; }
         
         
-    boolean sendArpTapTrig;
+//    boolean sendArpTapTrig;
     boolean lockUserLFOSteps;
     boolean lockAllLFOSteps;
     boolean ignoreParametersFromSynth;
@@ -4877,6 +4879,7 @@ public class ASMHydrasynth extends Synth
                 }
             });
 
+/*
         JCheckBoxMenuItem sendArpTapTrigMenu = new JCheckBoxMenuItem("Send Arp Tap Trig");
         sendArpTapTrigMenu.setSelected(sendArpTapTrig);
         menu.add(sendArpTapTrigMenu);
@@ -4888,6 +4891,7 @@ public class ASMHydrasynth extends Synth
                 setLastX("" + sendArpTapTrig, "SendArpTapTrig", getSynthClassName(), true);
                 }
             });
+*/
 
         JCheckBoxMenuItem lockUserLFOStepsMenu = new JCheckBoxMenuItem("Lock User LFO Steps to Notes");
         lockUserLFOStepsMenu.setSelected(lockUserLFOSteps);
@@ -4985,6 +4989,8 @@ public class ASMHydrasynth extends Synth
             }
                         
         int p = p(key);
+        if (p == 0) return new Object[0];
+        
         int v = 0;
         int w = 0;
         int val = model.get(key, 0);
@@ -5529,8 +5535,8 @@ public class ASMHydrasynth extends Synth
                 }
             else if (key.equals("arptaptrig"))
                 {
-                if (!sendArpTapTrig) return new Object[0];              // don't send it
-                else
+                //if (!sendArpTapTrig) return new Object[0];              // don't send it
+                //else
                     {
                     p = p("arpdivision");
                     v = 8;

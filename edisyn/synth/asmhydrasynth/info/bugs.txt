@@ -89,7 +89,8 @@ be set by NRPN:
 	Macro 8 Name
 
 
-6. BROKEN ARP TAP TRIG.  When you send the Arp Tap Trig NRPN, it ALSO 
+6. BROKEN ARP TAP TRIG.  ---- FIXED 2.0.0 ----
+When you send the Arp Tap Trig NRPN, it ALSO 
 turns the arpeggiator on/off.  This does not happen if you turn Arp Tap 
 Trig on/off from the front panel.  This is a *major* error, as it means 
 you can't update a patch via NRPN without accidentally turning the Arp 

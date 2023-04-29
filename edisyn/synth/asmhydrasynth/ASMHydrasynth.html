@@ -25,7 +25,9 @@ The Deluxe requires that NRPN be sent to it somewhat slower than the Keyboard.  
 
 <p><li><b>Disallow CC Mutation</b>&nbsp;&nbsp;CC (and CV) options dominate the Hydrasynth's Mod Matrix Source and Destination lists, so mutation will select a CC or CV with a good probability, and you probably don't want that.  Selecting this menu prevents CC and CV options from being randomly selected during mutation.  As an alternative, you could simply disable the entire Mod Matrix category's mutable parameters (see the manual).  You might do this for the Macros as well.
 
+<!--
 <p><li><b>Send Arp Tap Trig</b>&nbsp;&nbsp;The Hydrasynth has a bug regarding the Arp Tap Trig option.  If you turn on or off this option via NRPN, the Hydrasynth will <i>also</i> turn on/off the Arpeggiator.  This doesn't happen if you turn Arp Tap Trig on or off on the front panel.  As a result, if you send a patch that has Arp Tap Trig turned on, it could turn the arpeggiator on, which you probably didn't intend.  By default Edisyn does not send Arp Tap Trig at all.  If you would like to send it (to send a final version of a patch in order to save it, say), and realize that you'll have to keep an eye on the Arpeggiator switch, you can check the <b>Send Arp Tap Trig</b> menu option. 
+-->
 
 <p><li><b>Lock User LFO Steps to Notes</b>&nbsp;&nbsp;If you would like to restrict LFO steps to notes only when you change Edisyn's dials, you can check this.  This does not restrict LFO steps to notes in any other situation, even when receiving NRPN from the Hydrasynth.
 
@@ -42,7 +44,7 @@ There are a number of parameters that can't be sent via NRPN to the Hydrasynth, 
 <p><li>Ribbon Scale Type, Ribbon Keyboard Lock, and Ribbon Custom Notes
 <p><li>Ribbon Mod Hold
 <p><li>Filter 1 Vowel Order (though the Hydrasynth will emit this)
-<p><li>Arpeggiator Tempo (though the Hydrasynth will emit this) and Step Offset
+<p><li>Arpeggiator Tempo (though the Hydrasynth will emit this), Clock Lock, Latch, and Step Offset
 <p><li>All Macro Names and Macro Button States
 </ul>
 

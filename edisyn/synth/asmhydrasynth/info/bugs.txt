@@ -381,3 +381,21 @@ isn't the case from the front panel: initializing them to OFF makes it
 impossible to set the depths etc.  It's not consistent.  Additionally, you 
 can set a destination without setting its category: the category appears 
 to be entirely ornamental.
+
+30. NON-SANITIZE PARAMETER VALUES IN SYSEX
+
+There are many parameters on the Hydrasynth which are not double-checked 
+for bugs prior to dumping. 
+
+Examples:
+
+- When Patch C/011 (Dust Pad VG) is dumped to an editor over sysex, 
+the voice density parameter is sent as 9, which is not valid (it says 4 
+on-screen).  If you modify the parameter back to 4, then save it, and 
+dump again, it comes out as 4. 
+
+- Sometimes I'll get the Hydrasynth to send me 130 (13.0) for Vibrato 
+Amount in the patch sysex even though the maximum value is 120.
+
+
+

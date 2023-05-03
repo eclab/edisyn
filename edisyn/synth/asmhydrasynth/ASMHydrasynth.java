@@ -1352,7 +1352,7 @@ public class ASMHydrasynth extends Synth
         vbox.add(hbox);
         hbox = new HBox();
         hbox.add(addAmp(Style.COLOR_C()));
-        hbox.addLast(addVoiceModulation(Style.COLOR_A()));
+        hbox.addLast(addVoiceModulation(Style.COLOR_C()));
         vbox.add(hbox);
         vbox.add(addFX(true, Style.COLOR_A()));
         hbox = new HBox();
@@ -1377,16 +1377,27 @@ public class ASMHydrasynth extends Synth
 
         soundPanel = new SynthPanel(this);
         vbox = new VBox();
-        vbox.add(addLFO(1, Style.COLOR_A()));
+        vbox.add(addLFO(1, Style.COLOR_B()));
+        vbox.add(addLFO(2, Style.COLOR_A()));
+        vbox.add(addLFO(3, Style.COLOR_B()));
+        vbox.add(addLFO(4, Style.COLOR_A()));
+        vbox.add(addLFO(5, Style.COLOR_B()));
+
+        soundPanel.add(vbox, BorderLayout.CENTER);
+        addTab("LFO", soundPanel);
+
+        soundPanel = new SynthPanel(this);
+        vbox = new VBox();
+        //vbox.add(addLFO(1, Style.COLOR_A()));
         vbox.add(addLFOSteps(1, Style.COLOR_B()));
 
         soundPanel.add(vbox, BorderLayout.CENTER);
 		((SynthPanel)soundPanel).makePasteable("lfo");
-        addTab("LFO 1", soundPanel);
+        addTab("Steps 1", soundPanel);
 
         soundPanel = new SynthPanel(this);
         vbox = new VBox();
-        vbox.add(addLFO(2, Style.COLOR_B()));
+        //vbox.add(addLFO(2, Style.COLOR_B()));
         vbox.add(addLFOSteps(2, Style.COLOR_A()));
 
         soundPanel.add(vbox, BorderLayout.CENTER);
@@ -1395,7 +1406,7 @@ public class ASMHydrasynth extends Synth
 
         soundPanel = new SynthPanel(this);
         vbox = new VBox();
-        vbox.add(addLFO(3, Style.COLOR_A()));
+        //vbox.add(addLFO(3, Style.COLOR_A()));
         vbox.add(addLFOSteps(3, Style.COLOR_B()));
 
         soundPanel.add(vbox, BorderLayout.CENTER);
@@ -1404,7 +1415,7 @@ public class ASMHydrasynth extends Synth
 
         soundPanel = new SynthPanel(this);
         vbox = new VBox();
-        vbox.add(addLFO(4, Style.COLOR_B()));
+        //vbox.add(addLFO(4, Style.COLOR_B()));
         vbox.add(addLFOSteps(4, Style.COLOR_A()));
 
         soundPanel.add(vbox, BorderLayout.CENTER);
@@ -1413,7 +1424,7 @@ public class ASMHydrasynth extends Synth
 
         soundPanel = new SynthPanel(this);
         vbox = new VBox();
-        vbox.add(addLFO(5, Style.COLOR_A()));
+        //vbox.add(addLFO(5, Style.COLOR_A()));
         vbox.add(addLFOSteps(5, Style.COLOR_B()));
 
         soundPanel.add(vbox, BorderLayout.CENTER);
@@ -2261,7 +2272,7 @@ public class ASMHydrasynth extends Synth
 
         final HBox scaleEditBox = new HBox();
                 
-        for(int i = 2; i <= 7; i++)
+        for(int i = 2; i <= 8; i++)
             {
             comp = new LabelledDial("Note " + i, this, "scalenote" + i, color, 0, 12)
                 {
@@ -2580,7 +2591,7 @@ public class ASMHydrasynth extends Synth
 		HBox _hbox = new HBox();
         final HBox scaleEditBox = new HBox();
                 
-        for(int i = 2; i <= 7; i++)
+        for(int i = 2; i <= 8; i++)
             {
             comp = new LabelledDial("Note " + i, this, "ribbonscalenote" + i, color, 0, 12)
                 {
@@ -4023,6 +4034,7 @@ public class ASMHydrasynth extends Synth
                 hbox.add(comp);
                 }
             vbox.add(hbox);
+            vbox.add(Strut.makeVerticalStrut(10));
             }
 
         String[] xs = new String[64];
@@ -5769,7 +5781,7 @@ public class ASMHydrasynth extends Synth
                 
         get1("scalekeylock", data, 60);
         get1("scaletype", data, 62);
-        for(int i = 2; i < 8; i++)
+        for(int i = 2; i < 9; i++)
             {
             get1("scalenote" + i, data, 66 - 2 + i);
             }               
@@ -5930,7 +5942,7 @@ public class ASMHydrasynth extends Synth
         get1("ribbonmodcontrol", data, 448);                            // theremin wheel volume
         get1("ribbonscalekeylock", data, 450);
         get1("ribbonscaletype", data, 452);
-        for(int i = 2; i < 8; i++)
+        for(int i = 2; i < 9; i++)
             {
             get1("ribbonscalenote" + i, data, 454 - 2 + i);
             }               
@@ -6526,7 +6538,7 @@ public class ASMHydrasynth extends Synth
                 
         set1("scalekeylock", data, 60);
         set1("scaletype", data, 62);
-        for(int i = 2; i < 8; i++)
+        for(int i = 2; i < 9; i++)
             {
             set1("scalenote" + i, data, 66 - 2 + i);
             }               
@@ -6687,7 +6699,7 @@ public class ASMHydrasynth extends Synth
         set1("ribbonmodcontrol", data, 448);                            // theremin wheel volume
         set1("ribbonscalekeylock", data, 450);
         set1("ribbonscaletype", data, 452);
-        for(int i = 2; i < 8; i++)
+        for(int i = 2; i < 9; i++)
             {
             set1("ribbonscalenote" + i, data, 454 - 2 + i);
             }               
@@ -7260,6 +7272,15 @@ public class ASMHydrasynth extends Synth
                 if (v == 1) key = "ribbonkeyspan";
                 else if (v == 2) key = "ribbonoctave";
                 else if (v == 3) key = "ribbonquantize";
+                else if (v == 4) key = "ribbonscalekeylock";
+                else if (v == 5) key = "ribbonscalenote2";
+                else if (v == 6) key = "ribbonscalenote3";
+                else if (v == 7) key = "ribbonscalenote4";
+                else if (v == 8) key = "ribbonscalenote5";
+                else if (v == 9) key = "ribbonscalenote6";
+                else if (v == 10) key = "ribbonscalenote7";
+                else if (v == 11) key = "ribbonscalenote8";
+                else if (v < 16) return;		// extra scale notes for the future maybe?
                 else if (v == 16) key = "ribbonmodcontrol";
                 else if (v == 17) key = "ribbonglide";
                 val = w;

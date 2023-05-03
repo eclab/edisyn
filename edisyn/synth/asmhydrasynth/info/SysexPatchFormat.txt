@@ -1,7 +1,7 @@
 HYDRASYNTH PATCH FORMAT
 Sean Luke 
 sean@cs.gmu.edu
-April 26, 2023
+May 3, 2023
 
 
 Below is a little spreadsheet of sorts to be used as a record for
@@ -161,7 +161,7 @@ BYTE    HEX     INFO
 73      49      
 74      4A      Scale Note 7
 75      4B      
-76      4C      UNKNOWN
+76      4C      Scale Note 8
 77      4D      
 78      4E      UNKNNOWN
 79      4F      
@@ -551,8 +551,8 @@ BYTE    HEX     INFO
 463     1CF     
 464     1D0     Ribbon Scale Note 7
 465     1D1     
-466     1D2     UNKNOWN
-467     1D3     UNKNOWN
+466     1D2     Ribbon Scale Note 8
+467     1D3     
 468     1D4     Arp Clock Lock
 469     1D5     
 470     1D6     Warm Mode bit 0		Snap bit 1

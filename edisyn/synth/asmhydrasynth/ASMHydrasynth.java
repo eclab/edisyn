@@ -6934,14 +6934,14 @@ public class ASMHydrasynth extends Synth
         String key = parameters[((Integer)obj).intValue()];
         if (key.equals("bank") || key.equals("number") || key.equals("name") || key.equals("--"))
             return;
-        parseNRPN(key, val);
-        }
+        parseNRPN(key, val);        
+       }
                         
     void parseNRPN(String key, int val)
         {
         int v = ((val >>> 7) & 127);
         int w = (val & 127);
-                
+        
         if (key.startsWith("osc"))
             {
             if (key.equals("osc1mode"))
@@ -7273,16 +7273,18 @@ public class ASMHydrasynth extends Synth
                 else if (v == 2) key = "ribbonoctave";
                 else if (v == 3) key = "ribbonquantize";
                 else if (v == 4) key = "ribbonscalekeylock";
-                else if (v == 5) key = "ribbonscalenote2";
-                else if (v == 6) key = "ribbonscalenote3";
-                else if (v == 7) key = "ribbonscalenote4";
-                else if (v == 8) key = "ribbonscalenote5";
-                else if (v == 9) key = "ribbonscalenote6";
-                else if (v == 10) key = "ribbonscalenote7";
-                else if (v == 11) key = "ribbonscalenote8";
-                else if (v < 16) return;		// extra scale notes for the future maybe?
+                else if (v < 16) return;		// we don't handle emitted *chromatic* scale notes 
                 else if (v == 16) key = "ribbonmodcontrol";
                 else if (v == 17) key = "ribbonglide";
+                val = w;
+                }
+            }
+        else if (key.startsWith("scale"))
+            {
+            // interesting that v doesn't start with 0.  Not sure why
+            if (key.equals("scalekeylock"))
+                {
+                if (v != 0) return;		// we don't handle emitted *chromatic* scale notes 
                 val = w;
                 }
             }
@@ -9654,7 +9656,8 @@ public class ASMHydrasynth extends Synth
     "voicevibratoratesyncon",
     "voicerandomphase",
     "voicewarmmode",
-    "voicevibratobpmsync",     
+    "voicevibratobpmsync",  
+    "scalekeylock",   
     "voicesnap",                                                                                                                // Not Documented   
     
     /// New 2.0.0 Parameters
@@ -10702,7 +10705,7 @@ public class ASMHydrasynth extends Synth
     8413,           // 41 5d            "modmatrix30depth",
     8414,           // 41 5e            "modmatrix31depth",
     8415,           // 41 5f            "modmatrix32depth",
-    8123,           // 3f 3b            "ribbonmode",
+    8123,           // 3f 3b            "ribbonmode",		// also voicekeylock and various notes
     8123,           // 3f 3b            "ribbonkeyspan",
     8123,           // 3f 3b            "ribbonoctave",
     8123,           // 3f 3b            "ribbonquantize",
@@ -10725,6 +10728,7 @@ public class ASMHydrasynth extends Synth
     8094,           // 3f 1e            "voicerandomphase",
     8143,           // 3f 4f            "voicewarmmode",
     8137,           // 3f 49            "voicevibratobpmsync",
+    8146,           // 3f 52            "scalekeylock",		// also the various notes
     8117,           // 3f 35            "voicesnap",
     
     /// New 2.0.0 Parameters

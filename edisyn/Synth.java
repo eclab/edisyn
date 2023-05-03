@@ -10081,13 +10081,17 @@ public abstract class Synth extends JComponent implements Updatable
     public void librarianCreated(Librarian librarian) { }
     
     /** Issues a one-time warning with the given preferences key. */
-    public void oneTimeWarning(String key, String title, String message)
+    public void doOneTimeWarning(String key, String title, String message)
     	{
         String str = getLastX(key, getSynthClassName(), true);
         if (str == null || !str.equalsIgnoreCase("true"))
         	{
             showSimpleMessage(title, message + "\n\nThis message will appear only once."); 
+            didOneTimeWarning(key);
         	setLastX("true", key, getSynthClassName(), true);
         	}
     	}
+    	
+    /** Informs the synth that a one-time warning was issued.. */
+	public void didOneTimeWarning(String key)  { }
     }

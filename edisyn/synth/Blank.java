@@ -831,6 +831,13 @@ public class Blank extends Synth
         return super.sprout();
         }
         
+	public void didOneTimeWarning(String key)
+		{
+		// If you call doOneTimeWarning(...) to issue a one-time-only warning to the musician,
+		// after the warning is issued, this is called once so you can (for example, see
+		// ASMHydraSynth) switch to the About pane or something.
+		}
+		
     public void tabChanged()
         {
         // This method is called whenever the tabs are changed in case you need to do something

@@ -4927,13 +4927,13 @@ public class ASMHydrasynth extends Synth
 
 	public void windowCreated()
 		{
-//		setLastX("false", "Warned", getSynthClassName(), true);
-        oneTimeWarning("Warned", "Read the About Tab", "The Hydrasynth has many MIDI eccentricities.\nBe certain to read the  \u2B06 About Tab \u2B06 before use.");
-        String str = getLastX("Warned", getSynthClassName(), true);
-		if (str == null || !str.equalsIgnoreCase("true"))
-			{
-			setSelectedTabIndex(getIndexOfTabTitle("About"));
-			}
+		//setLastX("false", "Warned", getSynthClassName(), true);
+        doOneTimeWarning("Warned", "Read the About Tab", "The Hydrasynth has many eccentricities to be aware of.\nBe certain to fully read the \u2B06 About Tab \u2B06 before use,\nespecially if you have a Deluxe.");
+		}
+
+	public void didOneTimeWarning(String key)
+		{
+		setSelectedTabIndex(getIndexOfTabTitle("About"));
 		}
 
     public String getPatchLocationName(Model model)
@@ -7496,7 +7496,7 @@ public class ASMHydrasynth extends Synth
         "delaytype",                                    
         "reverbtype",                                   
 
-        // Next the waves.  These have to be set (to "Step") before you can set lfo1steps etc.
+        // Next the waves.  These have to be set (to "Step") before you can set One-shot to step, set the lfo1steps and step length, etc.
         "lfo1wave",                                     
         "lfo2wave",                                     
         "lfo3wave",                                     
@@ -10687,14 +10687,6 @@ public class ASMHydrasynth extends Synth
     8123,           // 3f 3b            "ribbonquantize",
     8123,           // 3f 3b            "ribbonmodcontrol",
     8123,           // 3f 3b            "ribbonglide",
-    8123,			// 3f 3b			"ribbonscalekeylock",
-    8123,			// 3f 3b			"ribbonscale",
-    8123,			// 3f 3b			"ribbonscalenote2",
-    8123,			// 3f 3b			"ribbonscalenote3",
-    8123,			// 3f 3b			"ribbonscalenote4",
-    8123,			// 3f 3b			"ribbonscalenote5",
-    8123,			// 3f 3b			"ribbonscalenote6",
-    8123,			// 3f 3b			"ribbonscalenote7",
     8121,           // 3f 39            "voicedetune",
     8132,           // 3f 44            "voicestereowidth",
     8131,           // 3f 43            "voicevibratoamount",

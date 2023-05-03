@@ -1,0 +1,42 @@
+<html><head></head><body>
+<h1>Waldorf M</h1> 
+<h2>Single Patch Editor</h2>
+
+<p>This editor is designed to work with at least Firmware 1.09.
+
+<p><b>Communicating with Edisyn</b><br> 
+Put your M in Single Mode.  Set Edisyn's MIDI channel to the same as the M's MIDI Channel.  At present the M does not use its ID in its messages, though that may change.  You may want Edisyn to update in real time to changes you make to knobs on the M.  To do this, if you are connected over USB, set the M's "CControls Send" to USB or DIN+USB.  If you are connected over DIN, set it to DIN or DIN+USB.  Make sure that Global Bank Change and Program Change are turned on.
+
+
+<br><br><h3>About the Menu: Updating the Screen</h3>
+
+By default the M doesn't update its screen when it receives changes to individual patches from Edisyn (it's slow to do so).  If you want it to update its screen, set <b>Update Screen When Changing Parameters</b>.
+
+<br><br><h3>About the Menu: Current Parts</h3>
+
+When you update a parameter, if the M is in Multi Mode, it can update the parameter in one of its four parts. You can specify which part with <b>Changing Parameters Updates Part ...</b>.  Note that if you Send to Current Patch or Request Current patch in Multi Mode, nothing happens.  (Obviously the Multi editor will work in this situation).
+
+<p>If the M is in Single Mode, updating parameters updates the Current Patch: individual parts are ignored.
+
+<p><b>Gotchas</b><br>
+
+<ul>
+
+<li>You cannot load Transitions in Edisyn, and Edisyn cannot display the filename of the Transition for a given number.
+
+<p><li>If you change a parameter in Edisyn, it will update the same parameter on the M.  However when changing a parameter on the M, it will only update Edisyn if the parameter is a knob (that is, if it is mapped to a CC.  See Page 84 of the manual).  Other parameters are not emitted by the M.
+
+</ul>
+
+<br><br><h3>Thanks</h3>
+Thanks to Vladimir Salnikov and Waldorf Music GmbH for their extraordinary help, well beyond the call of duty, in developing this patch editor.
+
+<p><table border=0 cellpadding=0 cellspacing=5>
+<tr>
+<td align=right>By&nbsp;&nbsp;&nbsp;
+<td><b>Sean Luke</b>
+<tr>
+<td align=right>Date&nbsp;&nbsp;&nbsp;
+<td>December 20, 2022
+</table>
+

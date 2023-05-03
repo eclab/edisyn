@@ -1,0 +1,42 @@
+<html><head></head><body>
+<h1>Waldorf M</h1> 
+<h2>Multimode Patch Editor</h2>
+
+<p>This editor is designed to work with at least Firmware 1.08.
+
+<p><b>Communicating with Edisyn</b><br> 
+Put your M in Multi Mode.  Set Edisyn's MIDI channel to the same as the M's MIDI Channel.  At present the M does not use its ID in its messages, though that may change.  You may want Edisyn to update in real time to changes you make to knobs on the M.  To do this, if you are connected over USB, set the M's "CControls Send" to USB or DIN+USB.  If you are connected over DIN, set it to DIN or DIN+USB.  Make sure that Global Bank Change and Program Change are turned on.
+
+<br><br><h3>About the Menu: Updating the Screen</h3>
+
+By default the M doesn't update its screen when it receives changes to individual patches from Edisyn (it's slow to do so).  If you want it to update its screen, set <b>Update Screen When Changing Parameters</b>.
+
+
+<p><b>Showing and Updating a Part</b><br>
+
+If you click the <b>Show Patch</b> button for a given Part, Edisyn will attempt to load the patch for that Part in a Single editor.  This will only work if you have first switched to Single Mode manually on the M -- Edisyn can't ask the M to do that.
+
+<p>If you click the <b>Update Part</b> button for a given Part, Edisyn will ask the M to load the Single patch into current Part memory for the given Part.  To do this you must first have set the Part's MIDI Channel, Bank, and Number.  In doing so, make sure you have not unchecked "Sends Real Time Changes" (because then they wouldn't have been updated on the unit).  Be sure that the Part's MIDI Channel isn't the same as your M's MIDI Channel.  Also be sure that your Part's Bank Change and Program Change filters are turned on.
+
+<p><b>Gotchas</b><br>
+
+<ul>
+
+<li>Edisyn does validate that the number of voices you have allocated across all parts sums to 8.
+
+<p><li>On the M you can pass through Multimode to directly edit the patches in each of its Parts.  This is not available over sysex, so Edisyn can't do this.
+
+</ul>
+
+<br><br><h3>Thanks</h3>
+Thanks to Vladimir Salnikov and Waldorf Music GmbH for their extraordinary help in developing this patch editor.
+
+<p><table border=0 cellpadding=0 cellspacing=5>
+<tr>
+<td align=right>By&nbsp;&nbsp;&nbsp;
+<td><b>Sean Luke</b>
+<tr>
+<td align=right>Date&nbsp;&nbsp;&nbsp;
+<td>December 20, 2022
+</table>
+

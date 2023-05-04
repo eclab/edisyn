@@ -41,6 +41,9 @@ The DX11 and TX81Z were introduced before the MIDI Tuning Standard, and so have 
 
 <p>It is possible that other Yamaha 4-op synthesizers provide microtuning options, but we are not aware of them.
 
+<br><br><h2>Gotchas</h2>
+The MIDI Tuning Standard allows writing to and requesting patches.  You cannot write to or request from current memory.  To do this, Edisyn simply writes to or reads from Patch 0.  If you have a synthesizer which saves to Flash RAM, you shouldn't do something like the Morpher or Hill-Climber etc. which would repeatedly write patches over and over and over again -- it'll stress your RAM.  Otherwise it's just fine.
+
 <p><table border=0 cellpadding=0 cellspacing=5>
 <tr>
 <td align=right>By&nbsp;&nbsp;&nbsp;

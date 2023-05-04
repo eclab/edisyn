@@ -53,7 +53,9 @@ There are a number of parameters that can't be sent via NRPN to the Hydrasynth, 
 The Hydrasynth has a great many bugs: but Edisyn tries to work around them and hide them as best it can.  A few are still exposed and mentioned here, plus some general gotchas.
 
 <ul>
-<li>Yes, Envelope 2 really doesn't have modifiable a Trigger Source 1.
+<li>Auditioning sounds via Hill-Climbing and Morphing doesn't always produce the right sound when played the first time, because the Hydrasynth is slow to update bulk NRPN changes before a note is played.  It seems to be a Hydrasynth bug.
+
+<p><li>Yes, Envelope 2 really doesn't have modifiable a Trigger Source 1.
 
 <p><li>If TempoLck is ON then the Hydrasynth will ignore all Arp Tempo changes made by Edisyn.  You might want to turn that OFF at least for editing.
 
@@ -74,6 +76,8 @@ The Hydrasynth has a great many bugs: but Edisyn tries to work around them and h
 <p><li>You can't set the LFO Steps parameter unless the corresponding LFO Wave parameter has been first set to "Step".  You <i>can</i> set the individual steps themselves. Also you can set the LFO One Shot to Step even though you're not in Step: but the Hydrasynth will ignore this and set it to On (when you get into Step you'll have to reset LFO One Shot back to Step again).  Go figure.
 
 <p><li>Even if you turn OFF a macro destination, a modmatrix destination, or a modmatrix source, you can still set its depth and button depth! Don't ask.
+
+<p><li>A bad misfeature in the Hydrasynth means that if you do a Program Change for patch X and you are already *at* patch X, the Hydrasynth doesn't reload patch X into current memory -- it just ignores you.  This means that if we're requesting patch X, Edisyn must do a Program Change *away* and then *back* again to force the reload.  However Edisyn doesn't know for sure if the Hydrasynth is currently *at* patch X.  It makes its best guess; but may be wrong.  So if you are at patch X on the Hydrasynth and reload it and it doesn't seem to want to, try loading something else manually and then coming back.
 
 </ul>
 

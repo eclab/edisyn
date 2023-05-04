@@ -429,4 +429,14 @@ Suggestion:
 
 	- The Hydrasynth is free to send a scale when in "Send Scale" mode.
 
+32. PROBLEMATIC PROGRAM CHANGE BEHAVIOR
+
+If you do a PC to a patch on the Hydrasynth, and the Hydrasynth is 
+already at that patch, the PC is entirely ignored.  This is very unusual 
+behavior, and it is bad because it means the only way for a musician to 
+guarantee that he's reloaded a patch from RAM via MIDI is to do a PC on 
+some OTHER patch, and then PC BACK to the patch he wants.  Obviously 
+this won't be supported by a number of tools, and is a significant
+problem for editors.  
+
 

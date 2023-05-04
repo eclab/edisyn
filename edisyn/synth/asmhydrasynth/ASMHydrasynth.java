@@ -1266,6 +1266,7 @@ public class ASMHydrasynth extends Synth
         else
             disallowCCMutation = false;
 
+// Looks like this was fixed in 2.0.0
 /*
         str = getLastX("SendArpTapTrig", getSynthClassName(), true);
         if (str == null)
@@ -7330,22 +7331,39 @@ public class ASMHydrasynth extends Synth
     public int getPauseAfterReceivePatch() { return 0; }
 
     // Change Patch can get stomped if we do a request immediately afterwards
-    public int getPauseAfterChangePatch() { return 200; }
+    public int getPauseAfterChangePatch() { return 150; }
 
     public int getPauseAfterWritePatch() { return 3500; }   // this is an incredible number
 
-    public int getPauseBetweenPatchWrites() { return 100; } // { return 1500; }
+    public int getPauseBetweenPatchWrites() { return 100; }
 
     public void changePatch(Model tempModel)
         {
-        // I believe that the  changes *single* patches using Bank Select *LSB* (32), 
+        // I believe that the Hydrasynth changes patches using Bank Select *LSB* (32), 
         // followed by Program Change.  
         
         int bank = tempModel.get("bank", 0);
         int number = tempModel.get("number", 0);
 
-        tryToSendMIDI(buildCC(getChannelOut(), 32, bank));
-        tryToSendMIDI(buildPC(getChannelOut(), number));
+		/// IRRITATINGLY, if you do a PC to your current patch, it doesn't reload the patch.
+		/// It just sits there and pretends it didn't happen (you still have your current patch
+		/// changes).  So I have to PC AWAY from the patch and then PC BACK to the patch if it's
+		/// different.
+
+        int currentBank = model.get("bank", 0);
+        int currentNumber = model.get("number", 0);
+		if (bank == currentBank && number == currentNumber)
+			{
+			tryToSendMIDI(buildCC(getChannelOut(), 32, bank));
+			tryToSendMIDI(buildPC(getChannelOut(), (number == 0 ? 1 : 0)));		// PC away
+			simplePause(getPauseAfterChangePatch());
+			tryToSendMIDI(buildPC(getChannelOut(), number));					// PC back
+			}
+		else
+			{
+			tryToSendMIDI(buildCC(getChannelOut(), 32, bank));
+			tryToSendMIDI(buildPC(getChannelOut(), number));
+			}
         }
 
     public int getPauseAfterModMatrixParameter()
@@ -7360,7 +7378,8 @@ public class ASMHydrasynth extends Synth
 
     public int getPauseAfterSendAllParameters()
         {
-        return 0;
+        if (isHillClimbing() || isMorphing()) return 400;		// If there's a pause less than than this, playing the sound will result in a weird short, clippped version, which ruins hill-climbing and morphing.
+		else return 0;
         }
     
     /// We need a custom send-all-parameters so we can (1) prevent the

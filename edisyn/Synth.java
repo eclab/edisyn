@@ -4069,11 +4069,15 @@ public abstract class Synth extends JComponent implements Updatable
             menu.add(aboutMenuItem);
 
             JMenuItem exit = new JMenuItem("Exit");
+	    if (!Style.isMac())
+		{
+		    exit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+		}
             menu.addSeparator();
             menu.add(exit);
-            exit.addActionListener(new ActionListener()
+	    exit.addActionListener(new ActionListener()
                 {
-                public void actionPerformed( ActionEvent e)
+		    public void actionPerformed( ActionEvent e)
                     {
                     doQuit();
                     }

@@ -382,7 +382,7 @@ impossible to set the depths etc.  It's not consistent.  Additionally, you
 can set a destination without setting its category: the category appears 
 to be entirely ornamental.
 
-30. NON-SANITIZE PARAMETER VALUES IN SYSEX
+30. NON-SANITIZED PARAMETER VALUES IN SYSEX
 
 There are many parameters on the Hydrasynth which are not double-checked 
 for bugs prior to dumping. 
@@ -397,5 +397,36 @@ dump again, it comes out as 4.
 - Sometimes I'll get the Hydrasynth to send me 130 (13.0) for Vibrato 
 Amount in the patch sysex even though the maximum value is 120.
 
+31. POOR IMPLEMENTATION OF MIDI TUNING STANDARD (MICROTUNING)
+
+The Hydrasynth has a poor implementation of the dump and dump-request 
+rules for the MIDI Tuning Standard.
+
+The MIDI Tuning standard allows editors to do either of the following:
+
+1. WRITE a scale to any of 128 scale patch slots
+2. REQUEST any of 128 scale patch slots
+
+However the Hydrasynth refuses the first message unless "Receive Scale" 
+has been pressed, and it disregards the specified scale slot.
+Furthermore it entirely refuses the second message in all cases.  You
+can only get the Hydrasynth to dump to you by manually pressing "Send
+Scale".  This makes librarians impossible for Microtuning scales on 
+the Hydrasynth.
+
+Suggestion:
+
+	- If the editor WRITES a scale to slot N (0...128), and the 
+	  Hydrasynth is not in "Receive Scale" mode, it is automatically 
+	  written to slot N mod 4.
+
+	- If the editor WRITES a scale to slot N (0...128), and the 
+	  Hydrasynth IS in "Receive Scale" mode, it is written to the 
+	  slot specified on the Hydrasynth.
+
+	- If the editor REQUESTS scale N (0...128), then the Hydrasynth 
+	  always provides slot N mod 4.
+
+	- The Hydrasynth is free to send a scale when in "Send Scale" mode.
 
 

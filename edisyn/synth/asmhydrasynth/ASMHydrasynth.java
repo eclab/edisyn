@@ -7272,8 +7272,7 @@ public class ASMHydrasynth extends Synth
                 if (v == 1) key = "ribbonkeyspan";
                 else if (v == 2) key = "ribbonoctave";
                 else if (v == 3) key = "ribbonquantize";
-                else if (v == 4) key = "ribbonscalekeylock";
-                else if (v < 16) return;		// we don't handle emitted *chromatic* scale notes 
+                else if (v > 3 && v < 16) return;		// we don't handle ribbonscalekeylock or emitted *chromatic* scale notes 
                 else if (v == 16) key = "ribbonmodcontrol";
                 else if (v == 17) key = "ribbonglide";
                 val = w;
@@ -7281,12 +7280,7 @@ public class ASMHydrasynth extends Synth
             }
         else if (key.startsWith("scale"))
             {
-            // interesting that v doesn't start with 0.  Not sure why
-            if (key.equals("scalekeylock"))
-                {
-                if (v != 0) return;		// we don't handle emitted *chromatic* scale notes 
-                val = w;
-                }
+        	return;		// we don't do any of it
             }
         else if (key.startsWith("voice"))
             {
@@ -9634,7 +9628,7 @@ public class ASMHydrasynth extends Synth
     "modmatrix30depth",
     "modmatrix31depth",
     "modmatrix32depth",
-    "ribbonmode",                                       
+    "ribbonmode",   				                                       
     "ribbonkeyspan",
     "ribbonoctave",
     "ribbonquantize",
@@ -9657,7 +9651,6 @@ public class ASMHydrasynth extends Synth
     "voicerandomphase",
     "voicewarmmode",
     "voicevibratobpmsync",  
-    "scalekeylock",   
     "voicesnap",                                                                                                                // Not Documented   
     
     /// New 2.0.0 Parameters
@@ -10705,7 +10698,7 @@ public class ASMHydrasynth extends Synth
     8413,           // 41 5d            "modmatrix30depth",
     8414,           // 41 5e            "modmatrix31depth",
     8415,           // 41 5f            "modmatrix32depth",
-    8123,           // 3f 3b            "ribbonmode",		// also voicekeylock and various notes
+    8123,           // 3f 3b            "ribbonmode",
     8123,           // 3f 3b            "ribbonkeyspan",
     8123,           // 3f 3b            "ribbonoctave",
     8123,           // 3f 3b            "ribbonquantize",
@@ -10728,7 +10721,6 @@ public class ASMHydrasynth extends Synth
     8094,           // 3f 1e            "voicerandomphase",
     8143,           // 3f 4f            "voicewarmmode",
     8137,           // 3f 49            "voicevibratobpmsync",
-    8146,           // 3f 52            "scalekeylock",		// also the various notes
     8117,           // 3f 35            "voicesnap",
     
     /// New 2.0.0 Parameters

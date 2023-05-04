@@ -47,14 +47,21 @@ public class PushButton extends JPanel
                 
         button.addActionListener(new ActionListener()
             {
-            public void actionPerformed(ActionEvent e)
+		public void actionPerformed(ActionEvent e)
                 {
                 _perform();
                 }
             });
         setBackground(Style.BACKGROUND_COLOR());
         setLayout(new BorderLayout());
-        add(button, BorderLayout.CENTER);
+	JPanel inner = new JPanel()
+	    {
+		public Insets getInsets() { return new Insets(0,0,0,0); }
+	    };
+	inner.setLayout(new BorderLayout());
+	inner.setBackground(Style.BACKGROUND_COLOR());
+	inner.add(button, BorderLayout.NORTH);
+        add(inner, BorderLayout.WEST);
 
         if (Style.isNimbus())
         	{

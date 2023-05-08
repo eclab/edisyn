@@ -430,7 +430,7 @@ public class WaldorfMMulti extends Synth
         if (!model.exists("number")) return null;
         
         int number = (model.get("number"));
-        return "A" + ((number > 99 ? "" : (number > 9 ? "0" : "00")) + number);
+        return "A" + ((number > 99 ? "" : (number > 9 ? "0" : "00")) + (number + 1));
         }
         
 
@@ -593,9 +593,12 @@ public int getPauseAfterChangePatch() { return 200; }
             {
             int lsb = data[pos];
             int msb = data[pos + 1];
+            System.err.println("Byte " + pos + " Param " + i + " " + parameters[i] + " " + (msb & 255) + " " + (lsb & 255) + " " + (((msb << 7) | lsb) - 8192));
             model.set(parameters[i], ((msb << 7) | lsb) - 8192);
             pos += 2;
             }
+            
+        revise();
                         
         return PARSE_SUCCEEDED;     
         }

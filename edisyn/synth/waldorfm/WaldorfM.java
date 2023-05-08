@@ -35,8 +35,8 @@ public class WaldorfM extends Synth
     public static final String[] DIGIVCF_FILTER_TYPES = { "LP 12", "BP 12", "HP 12", "[M] Notch 12", "[M] LP 24", "[M] BP 24", "[M] HP 24", "[M] Notch 24", "[M] Sin + LP", "[M] Dual LP/BP", "[M] Band Stop 12", "[M] S&H + LP 12", "[M] Waveshaper", "[M] FM + LP 12", "[M] S&H + HP 12", "[M] FM + HP 12", "Frequency Boost", "[M] M Waveshaper" };
     // public static final String[] DIGIVCF_FILTER_TYPES = { "LP 12", "BP 12", "HP 12", "Notch 12 [M]", "LP 24 [M]", "BP 24 [M]", "HP 24 [M]", "Notch 24 [M]", "Sin + LP [M]", "Dual LP/BP [M]", "Band Stop 12", "S&H + LP 12 [M]", "Waveshaper [M]", "FM + LP 12 [M]", "S&H + HP 12 [M]", "FM + HP 12 [M]", "Frequency Boost [M]", "M Waveshaper [M]" };
     public static final String[] ENGINE_PLAY_MODES = { "Mono Retrig", "Mono Legato", "Polyphonic" };
-    public static final String[] ENV_RATES = { "Fast", "Normal", "Slow" };
-    public static final String[] LFO_RANGE_TYPES = { "Fast", "Normal", "Slow" };
+    public static final String[] ENV_RATES = { "Slow", "Fast", "Normal" };		// Note M differs from docs, which say Fast, Normal, Slow
+    public static final String[] LFO_RANGE_TYPES = { "Normal", "Slow", "Fast" };		// Note M differs from docs, which say Fast, Normal, Slow
     public static final String[] LFO_SHAPES = { "Sine", "Triangle", "Pulse", "Random", "S&H" };
     public static final String[] LFO_MIDI_SYNC_VALUES = { "1024 Bars", "512 Bars", "256 Bars", "192 Bars", "128 Bars", "96 Bars", "64 Bars", "48 Bars", "32 Bars", "24 Bars", "16 Bars", "12 Bars", "8 Bars", "6 Bars", "4 Bars", "3 Bars", "2 Bars", "6/4", "4/4", "3/4", "1/2", "3/8", "1/4", "3/16", "1/8", "3/32", "1/16", "3/64", "1/32" };
     public static final String[] MOD_SOURCES = { "Off", "Mod Wheel", "Pitch Bend", "LFO 1", "LFO 2", "Amp Env", "Filter Env", "Wave Env", "Free Env", "LFO1 AD Env", "Sustain Pedal", "Volume Ctrl", "Pan Ctrl", "Breath Ctrl", "Foot Ctrl", "Expression Ctrl", "Ctrl A", "Ctrl B", "Ctrl C", "Ctrl D", "Ctrl W", "Ctrl X", "Ctrl Y", "Ctrl Z", "Key Tracking", "Velocity", "Release Vel", "Aftertouch", "Poly Pressure", "Global LFO", "min", "MAX", "Inverse", "Coin Flip", "Random", "Gate", "Noise" };
@@ -562,6 +562,13 @@ public class WaldorfM extends Synth
     /** Verify that all the parameters are within valid values, and tweak them if not. */
     public void revise()
         {
+        // Handle Global LFO Rate and ENV Timer Resolution
+        if (model.get("globallforate") < 1 || model.get("globallforate") > 127)
+        	model.set("globallforate", 1);
+        	
+        if (model.get("envtimeresolution") < 0 || model.get("envtimeresolution") >= ENV_RATES.length)
+        	model.set("envtimeresolution", 1);		// "Normal"
+        
         // check the easy stuff -- out of range parameters
         super.revise();
         
@@ -1763,7 +1770,7 @@ public class WaldorfM extends Synth
         }
 
     int part = 0;
-    boolean updateScreen = false;
+    boolean updateScreen = true;		// Always true, not available
     JCheckBoxMenuItem[] partMenu = new JCheckBoxMenuItem[4];
 
     public void setPart(int part)
@@ -1777,6 +1784,8 @@ public class WaldorfM extends Synth
         JMenu menu = new JMenu("M");
         menubar.add(menu);
         
+        // Not Available
+        /*
         final JCheckBoxMenuItem updateScreenMenu = new JCheckBoxMenuItem("Update Screen When Changing Parameters");
         updateScreenMenu.addActionListener(new ActionListener()
             {
@@ -1785,9 +1794,10 @@ public class WaldorfM extends Synth
                 updateScreen = updateScreenMenu.isSelected();
                 }
             });
-        menu.add(updateScreenMenu);
-                        
+        menu.add(updateScreenMenu);                
         menu.addSeparator();
+        */
+        
         ButtonGroup buttonGroup = new ButtonGroup();
         for(int i = 0; i < 4; i++)
             {
@@ -1893,12 +1903,24 @@ public class WaldorfM extends Synth
                 if (key.equals("--")) return;
                 int val = data.value;
 
-                // All positive-shifted according to p. 84 of manual
-                if (cc == 33 || cc == 34 || cc == 35 ||         // Osc 1 Octave, Semitone, Detune
-                    cc == 38 || cc == 39 || cc == 40 ||             // Osc 2 Octave, Semitone, Detune
+				// Docs are wrong about these, they go 0...4
+				if (cc == 33 ||  	// Osc 1 Octave
+					cc == 38)	// Osc 2 Octave
+					{
+					val -= 2;		// center on 0
+					}
+				// Docs are wrong about these, they go 0...12
+				else if (cc == 34 || 	// Osc 1 Semitone
+					cc == 39) 	// Osc 2 Semitone
+					{
+					val -= 12;		// center on 0
+					}
+                // All centered on 64 according to p. 84 of manual, need to re-center on 0
+                else if (cc == 35 ||         						// Detune
+                    cc == 40 ||             						// Detune
                     cc == 51 || cc == 52 || cc == 53 ||             // VCF Keytrack, VCF EG Amount, VCF EG Velocity
                     cc == 58 || cc == 59 ||                         // VCA EG Amount, VCA EG Velocity
-                    cc == 73 || cc == 79)                                   // Wave EG to Wave Osc 1, Wave EG to Wave Osc 2
+                    cc == 73 || cc == 79)                           // Wave EG to Wave Osc 1, Wave EG to Wave Osc 2
                     {
                     System.err.println("Changing " + val + " " + cc);
                     val -= 64;
@@ -1912,6 +1934,10 @@ public class WaldorfM extends Synth
         {
         int bank = tempModel.get("bank", 0);
         int number = tempModel.get("number", 0);
+        
+        // We have to set the patch ourselves
+        model.set("bank", bank);
+        model.set("number", number);
         
         // It's not clear if this will work
         tryToSendMIDI(buildCC(getChannelOut(), 32, bank));
@@ -1965,7 +1991,7 @@ public class WaldorfM extends Synth
 
 
 
-    public boolean getSendsAllParametersAsDump() { return false; }
+    //public boolean getSendsAllParametersAsDump() { return false; }
  
     public Object[] emitAll(Model tempModel, boolean toWorkingMemory, boolean toFile)
         {
@@ -1974,7 +2000,8 @@ public class WaldorfM extends Synth
                 
         byte BB = (byte) (tempModel.get("bank") + 1);           // yep, banks start at 1
         byte NN = (byte) tempModel.get("number");
-        if (toWorkingMemory) { BB = 0; NN = 0;}					// This doesn't work actually -- it WRITES to the current patch!
+        byte DO_NOT_SAVE = 0;
+        if (toWorkingMemory) { BB = 0; NN = 0; DO_NOT_SAVE = 1;}
 
         byte[] data = new byte[512];
         data[0] = (byte)0xF0;
@@ -1997,7 +2024,7 @@ public class WaldorfM extends Synth
         // Handle Bank and Number, which are after the name oddly
         data[32] = (byte)BB;
         data[33] = (byte)NN;
-        data[34] = 0x00;
+        data[34] = (byte)DO_NOT_SAVE;
         data[35] = 0x00;
 
         int pos = 36;
@@ -2434,8 +2461,8 @@ public class WaldorfM extends Synth
     -1,     // vcfresmodsource
     -1,     // vcfresmodamount
     57,     // instrumentvolume
-    58,     // vcaenvamount
-    59,     // vcaenvvelocity
+    59,     // vcaenvamount				// Manual says 58 but it is wrong
+    58,     // vcaenvvelocity			// Manual says 59 but it is wrong
     -1,     // vcakeytrack
     -1,     // vcamod1source
     -1,     // vcamod1control

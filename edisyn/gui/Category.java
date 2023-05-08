@@ -22,6 +22,11 @@ import edisyn.util.*;
 
 public class Category extends JComponent implements Gatherable
     {             
+    // even with modification for the insets, the text position value seems to be off by a bit
+    final static int STRING_WIDTH_COMPENSATION = 10;
+	// In Nimbus on Windows, the font widths are wrong
+    final static int EXTRA_WINDOWS_COMPENSATION = 15;
+
     Color color;
     Synth synth;
     String name = "";
@@ -368,7 +373,8 @@ public class Category extends JComponent implements Gatherable
     	if (graphics == null) return d;
     	
         if (stringWidth == 0)
-            stringWidth = STRING_WIDTH_COMPENSATION + graphics.getFontMetrics(Style.CATEGORY_FONT()).stringWidth(name);
+            stringWidth = STRING_WIDTH_COMPENSATION + (Style.isWindows() ? EXTRA_WINDOWS_COMPENSATION : 0) + 
+            	graphics.getFontMetrics(Style.CATEGORY_FONT()).stringWidth(name);
 
 		d.width = ((int)Math.max(d.width, stringWidth + MIN_EXTRA_LINE));
 		return d;
@@ -684,15 +690,13 @@ public class Category extends JComponent implements Gatherable
             }
         }
     
-    // even with modification for the insets, the text position value seems to be off by a bit
-    int STRING_WIDTH_COMPENSATION = 10;
-    
     public void paintComponent(Graphics g)
         {
         Graphics2D graphics = (Graphics2D) g;
  
         if (stringWidth == 0)
-            stringWidth = STRING_WIDTH_COMPENSATION + graphics.getFontMetrics(Style.CATEGORY_FONT()).stringWidth(name);
+            stringWidth = STRING_WIDTH_COMPENSATION + (Style.isWindows() ? EXTRA_WINDOWS_COMPENSATION : 0) + 
+            	graphics.getFontMetrics(Style.CATEGORY_FONT()).stringWidth(name);
 
         Style.prepareGraphics(g);
 

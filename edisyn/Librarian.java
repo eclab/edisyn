@@ -451,13 +451,12 @@ public class Librarian extends JPanel
                 // patch = getLibrary().getInitPatch();
                         
                 // do we need to modify the bank and number?
-                                
                 synth.undo.push(synth.model);
                 synth.undo.setWillPush(false);
                 boolean send = synth.getSendMIDI();
                 synth.setSendMIDI(false);
                 synth.performParse(synth.flatten(patch.sysex), false);  // is this from a file?  I'm saying false
-                                
+                
                 // revise the patch location to where it came from in the librarian
                 if (patch.number != Patch.NUMBER_NOT_SET)
                     {
@@ -1700,13 +1699,13 @@ public class Librarian extends JPanel
             Patch _from = (Patch)(fromTable.getValueAt(fromRow + i, antiFrom));
             if (duplicate)
                 {
-                toTable.setValueAt(p = (_from == null ? null : new Patch(_from)), toRow + i, antiTo);
+                p = (_from == null ? null : new Patch(_from));
                 }
             else
                 {
-                toTable.setValueAt((p = _from), toRow + i, antiTo);  
-                }             
-        
+                p = _from;  
+                }
+            
             if (!isPatchWell(fromTable) && p != null)
                 {
                 // assign to the new location
@@ -1719,7 +1718,7 @@ public class Librarian extends JPanel
                     bank = (fromCol - 1);
                     number = fromRow;
                     }
-                        
+                    
                 if (bank != -1)                 // don't revise the patch location if it's the scratch bank
                     {
                     // revise the patch location to where it came from in the librarian
@@ -1727,8 +1726,14 @@ public class Librarian extends JPanel
                     p.bank = bank;
                     }
                 }
+        
+			// Now that the patch number and bank are set, we can copy them over
+			// (We have to set them first or else they won't show up if we are double-clicking or
+			// dragging to the patch well).
+            toTable.setValueAt(p, toRow + i, antiTo);
             }
-            
+ 
+           
         // Change the selection
         fromTable.clearSelection();
         toTable.clearSelection();

@@ -933,7 +933,7 @@ public class Library extends AbstractTableModel
                     {
                     synth.tryToSendMIDI(concatenate(data), "Writing", "Writing Patches to Synth");
                     }
-                synth.sendAllParameters();
+                //synth.sendAllParameters();		// this will mess up synths that use a scratch patch.  Instead we're writing when we leave the librarian
                 }
             }           
         else

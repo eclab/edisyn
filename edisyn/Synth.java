@@ -1509,7 +1509,7 @@ public abstract class Synth extends JComponent implements Updatable
 		synchronized(timeLock)
 			{
 			long time = System.currentTimeMillis();
-			System.err.println("" + (time - lastTime) + "\t" + val);
+			//System.err.println("" + (time - lastTime) + "\t" + val);
 			lastTime = time;
 			}
 		}
@@ -3787,10 +3787,13 @@ public abstract class Synth extends JComponent implements Updatable
                 {
                 morph.shutdown();
                 hillClimb.shutdown();
+                Librarian.setLibrarianMenuSelected(librarianMenu, false, this);
                 // handle batch download
                 if (oldTab == librarianPane)    // gotta kill the librarian batch download if any
+                    {
                     stopBatchDownload();
-                Librarian.setLibrarianMenuSelected(librarianMenu, false, this);
+		            // sendAllParameters();        // get us back up to speed
+                    }
                 }
                         
             pasteTab.setEnabled(false);
@@ -4725,26 +4728,6 @@ public abstract class Synth extends JComponent implements Updatable
                 }
             });
 
-        JMenuItem clearAllMutationRestrictions = new JMenuItem("Make All Parameters Immutable");
-        menu.add(clearAllMutationRestrictions);
-        clearAllMutationRestrictions.addActionListener(new ActionListener()
-            {
-            public void actionPerformed( ActionEvent e)
-                {
-                doSetAllMutationMap(false);
-                }
-            });
-                
-        JMenuItem setAllMutationRestrictions = new JMenuItem("Make All Parameters Mutable");
-        menu.add(setAllMutationRestrictions);
-        setAllMutationRestrictions.addActionListener(new ActionListener()
-            {
-            public void actionPerformed( ActionEvent e)
-                {
-                doSetAllMutationMap(true);
-                }
-            });
-
         JMenuItem loadMutationParameters = new JMenuItem("Load Mutable Parameters...");
         menu.add(loadMutationParameters);
         loadMutationParameters.addActionListener(new ActionListener()
@@ -4764,6 +4747,37 @@ public abstract class Synth extends JComponent implements Updatable
                 doSaveMutationParameters();
                 }
             });
+
+        JMenuItem setAllMutationRestrictions = new JMenuItem("Make All Parameters Mutable");
+        menu.add(setAllMutationRestrictions);
+        setAllMutationRestrictions.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                doSetAllMutationMap(true);
+                }
+            });
+
+        JMenuItem clearAllMutationRestrictions = new JMenuItem("Make All Parameters Immutable");
+        menu.add(clearAllMutationRestrictions);
+        clearAllMutationRestrictions.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                doSetAllMutationMap(false);
+                }
+            });
+                
+        JMenuItem clearNonMetricMutationRestrictions = new JMenuItem("Make Non-Metric Params Immutable");
+        menu.add(clearNonMetricMutationRestrictions);
+        clearNonMetricMutationRestrictions.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                doSetNonMetricMutationMap(false);
+                }
+            });
+                
 
         menu = new JMenu("MIDI");
         menubar.add(menu);
@@ -8288,7 +8302,7 @@ public abstract class Synth extends JComponent implements Updatable
                 
         final long time = System.currentTimeMillis();
         
-        System.err.println("Build timer for " + pause);
+        //System.err.println("Build timer for " + pause);
         timer[0] = new javax.swing.Timer(pause, new ActionListener()
             {
             public void actionPerformed(ActionEvent e)
@@ -8298,7 +8312,7 @@ public abstract class Synth extends JComponent implements Updatable
                     long time2 = System.currentTimeMillis();
                     if (time2 > time && time2 - time < 1000)
                     	{
-                    	System.err.println("Decorative Pause for " + ((int)(1000L - (time2 - time))));
+                    	//System.err.println("Decorative Pause for " + ((int)(1000L - (time2 - time))));
                         simplePause((int)(1000L - (time2 - time)));             // this is a decorative pause to give the user time to spot the window in case it appears and disappears rapidly
                         }
                         
@@ -8308,7 +8322,7 @@ public abstract class Synth extends JComponent implements Updatable
                 else
                     {
                     if (!tryToSendSysex(dat[index[0]])) invalid[0] = true;  // we ignore the return value because we'll try 
-                    System.err.println("Simple Pause for " + pause);
+                    //System.err.println("Simple Pause for " + pause);
                     simplePause(pause);
                     index[0]++;
                     }
@@ -8600,7 +8614,7 @@ public abstract class Synth extends JComponent implements Updatable
         setShowingMutation(!isShowingMutation());
         }
         
-    void doSetAllMutationMap(boolean val)
+     void doSetNonMetricMutationMap(boolean val)
         {
         String title = "Make all Parameters Immutable";
         String message = "Are you sure you want to make all parameters immutable?";
@@ -8609,6 +8623,32 @@ public abstract class Synth extends JComponent implements Updatable
             {
             title = "Make All Parameters Mutable";
             message = "Are you sure you want to make all parameters mutable?";
+            }
+                
+        if (showSimpleConfirm(title, message))
+            {
+            String[] keys = getModel().getKeys();
+            for(int i = 0; i < keys.length; i++)
+                {
+                if (!getModel().metricMinExists(keys[i]))
+                	{
+	                mutationMap.setFree(keys[i], val, false);
+	                }
+                }
+            mutationMap.sync();                    
+            repaint();
+            }
+        }     
+
+   void doSetAllMutationMap(boolean val)
+        {
+        String title = "Make Non-Metric Parameters Immutable";
+        String message = "Are you sure you want to make all non-metric parameters immutable?";
+                        
+        if (val)
+            {
+            title = "Make Non-Metric Parameters Mutable";
+            message = "Are you sure you want to make all non-metric parameters mutable?";
             }
                 
         if (showSimpleConfirm(title, message))
@@ -8669,6 +8709,7 @@ public abstract class Synth extends JComponent implements Updatable
             }
         }  
         
+    public boolean isHillClimbing() { return hillClimbing; }
         
         
         
@@ -8704,6 +8745,8 @@ public abstract class Synth extends JComponent implements Updatable
             }
         }
 
+
+    public boolean isMorphing() { return morphing; }
         
     ////// LIBRARIAN
     
@@ -8772,10 +8815,7 @@ public abstract class Synth extends JComponent implements Updatable
     
     void saveBatchPatches()
         {
-        if (toLibrarian)
-            {
-            toLibrarian = false;
-            }
+        toLibrarian = false;
                 
         if (batchPatches != null)
             {
@@ -9012,7 +9052,7 @@ public abstract class Synth extends JComponent implements Updatable
             setSendMIDI(false);
             model.updateAllListeners();
             setSendMIDI(send);
-            sendAllParameters();        // get us back up to speed
+            if (!toLibrarian) sendAllParameters();        // get us back up to speed
 
             // at this point we have batch gunk in the model.  We have pushed
             // the previous model on the undo stack during startBatchDownload(),

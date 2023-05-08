@@ -29,6 +29,18 @@ also does not have sysex to upload a patch to its current working memory
 (!) and probably does not have the sysex to request the same (!), or at 
 least it is a closely guarded secret.
 
+** Correction: it appears that you can upload a patch to current working
+memory, but in a very strange way.  The Hydrasynth maintains all banks
+in current working memory at once, and when you issue a sysex write
+request (command 14 00) it actually writes a whole bank.  Thus you have
+to specify *where* you are uploading your patch in current working
+memory, and furthermore, when a write request occurs, it will get
+written even if you're trying to write another patch.  This makes
+uploading to current working memory close to useless -- at best an
+editor can just upload to a "scratch patch", knowing it will occasionally
+get written by accident.  You still *cannot* download a patch from
+curent working memory as far as I know.
+
 
 1. ILLEGAL SYSEX.  The Hydrasynth has the options to "Send Patch" or 
 "Send Bank" on its front panel.  These emit illegal sysex.  
@@ -439,4 +451,9 @@ some OTHER patch, and then PC BACK to the patch he wants.  Obviously
 this won't be supported by a number of tools, and is a significant
 problem for editors.  
 
+33. SENDING TO CURRENT PATCH
+
+If you update a patch via sysex but do not issue a Write (that is, 
+command 14 00), it does not get an asterisk ("*") next to its patch 
+number even though it has been modified in current working memory.
 

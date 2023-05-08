@@ -67,10 +67,10 @@ The Hydrasynth appears to have an additional sysex encoding scheme emitted
 when you select "Send Patch" or "Send Bank" on the Hydrasynth front panel.
 The message is a single large message rather than a stream of smaller ones.
 They are meant, I think, to dump data from one Hydrasynth to another over
-5-Pin DIN MIDI and that's it.  I think it is possible that "Send Patch" 
-may send to current memory rather than to a patch slot, which would be nice 
-to have, but I'm not certain.  Unfortunately these encoding schemes appear 
-to be illegal.
+5-Pin DIN MIDI (not USB) and that's it.  I think it is possible that 
+"Send Patch"  may send to current memory rather than to a patch slot, which 
+would be nice to have, but I'm not certain.  Unfortunately these encoding 
+schemes appear to be illegal.
 
 Specifically, "Send Patch" looks like something this:
 
@@ -97,34 +97,11 @@ The following can definitely be done over sysex:
 	- Request and download one or more patches from patch memory
 	- Request and download the names of patches in a bank
 	- Write one or more patches to patch memory
+	- Send a patch to current working memory [kinda]
 	
-It is my understanding that the following CANNOT be done, which is
-pretty foolish of ASM
+It is my understanding that the following CANNOT be done:
 
 	- Request and download patch from current working memory
-	- Send a patch to current working memory
-
-The last one is a serious problem.  Sending a patch to current working
-memory is Job #1 in most sysex protocols in order to have them work 
-effectively with an editor.  If a patch editor cannot send a patch
-to current working memory, it has only two other options for auditioning
-patches:
-
-	1. Write the patch to a scratch location in patch memory, then do
-	   a Program Change to that patch
-	   
-	2. Send all patch parameters separately as NRPN messages
-
-#1 is not feasible on the Hydrasynth because its patch memory is in 
-Flash RAM, and so writing too often to it will burn it out.  Auditioning
-is done constantly, so this would be a disservice to Hydrasynth users.
-
-#2 is problematic because it seems the Hydrasynth cannot handle a stream
-of NRPN messages sent to it in rapid succession.  In particular it seems
-to require small pauses (2ms on the Keyboard, maybe more on the Deluxe) 
-after various Macro and Mod Matrix parameters.  [Also there are several 
-parameters which cannot be sent via NRPN, such as Macro data].
-
 
 
 
@@ -132,7 +109,7 @@ parameters which cannot be sent via NRPN, such as Macro data].
 HANDSHAKING
 
 It appears that the Hydrasynth Manager engages in the following handshake
-with the Hydrasynth.  
+with the Hydrasynth when it starts up.
 
 The raw values for these messages are below. You must take each value
 and encode it as described earlier in order to produce the proper
@@ -218,7 +195,8 @@ See here for patch data:
 https://github.com/eclab/edisyn/blob/master/edisyn/synth/asmhydrasynth/info/SysexPatchFormat.txt
 
 I note that if you don't send the Footer, then the Hydrasynth is very 
-sluggish to respond to new changes on the front panel.  From this I 
+sluggish to respond to new changes on the front panel (it doesn't time out and
+release control to the front panel for about 20 seconds).  From this I 
 gather that the Header and Footer are really soft mutex locks, seizing 
 and then releasing control of the machine.  So be sure to send the Footer.
 
@@ -321,6 +299,9 @@ are only sent once, as in:
 
 
 
+
+
+
 WRITING A PATCH
 
 To write a patch, you send a HEADER, which elicits a HEADER RESPONSE.
@@ -338,7 +319,7 @@ You then send a FOOTER which elicits a FOOTER RESPONSE.
 
 The Hydrasynth Manager then gets the Hydrasynth to issue a BANK CHANGE, 
 PROGRAM CHANGE, for some reason a SUSTAIN PEDAL RELEASE, but I do not
-believe these things are part of the protocol.
+believe these things are necessary parts of the protocol.
 
 The raw values for these messages are below. You must take each value
 and encode it as described earlier in order to produce the proper
@@ -349,7 +330,9 @@ patch format is documented here:
 
 https://github.com/eclab/edisyn/blob/master/edisyn/synth/asmhydrasynth/info/SysexPatchFormat.txt
 
-
+NOTE: After performing this operation, you will need to pause for at
+least 3500ms (yes, you heard that right: *3.5 seconds*) before sending
+the Hydrasynth anything else, including notes.
 
 
 
@@ -385,13 +368,13 @@ https://github.com/eclab/edisyn/blob/master/edisyn/synth/asmhydrasynth/info/Syse
 ->	6. A Write Request
 		14 00
 		
-<-	9. A Write Request Response
+<-	7. A Write Request Response
 		15 00
 
-->	11. A Footer
+->	8. A Footer
 		1A 00
 		
-<-	12. A Footer Response
+<-	9. A Footer Response
 		1B 00
 	
 	
@@ -453,11 +436,14 @@ For example, writing Sawpressive GD to Bank E Patch 128:
 
 
 
+
 WRITING A SERIES OF PATCHES
 
 This is just like writing a single patch, except the header, footer, 
 and write request are only sent once, as in:
 
+NOTE: After performing this operation, you will need to pause for at
+least 3500ms (yes, you heard that right).
 
 
 ->	1. A Header
@@ -488,7 +474,9 @@ and write request are only sent once, as in:
 			
 <-			- A Chunk Acknowledgment 
 				17 00 CHUNK 16
-		
+
+->		3c. Then Pause for about 100ms
+
 ->	4. A Write Request			[This will take some time]
 		14 00
 		
@@ -633,3 +621,68 @@ Here is an Example for Bank "A":
 
 
 
+
+
+SENDING A PATCH TO CURRENT MEMORY
+
+This is the same as writing a single patch, except that there is no write request.
+The Hydrasynth is strange in that it appears to store an entire bank in current 
+working memory at a time.  This means that you have to specify which patch you 
+want to update (but not save).
+
+NOTE 0: Because the patch has been updated in the "whole bank current memory", if
+you do a write later on for some other patch in the same bank, it will write this 
+patch as well. If you do a write in a different bank, it won't write this patch 
+(but if you go back to the patch, it'll still be there, changed).  For this reason 
+it would be very confusing for a user to update this patch and then find it's been 
+permanently changed because you wrote another patch to RAM.  Thus your best strategy 
+is probably to use a "scratch patch", like H 127, and update it instead.
+
+NOTE 1: Whereas sending a single parameter update via NRPN causes the patch number 
+to get a little "*" next to it to indicate that it is has been edited, updating the
+whole patch by sending to current memory will NOT cause the "*" to appear. It appears 
+to be a Hydrasynth bug.
+
+NOTE 2: You will not hear the update unless you change to the patch via a PC.  Because 
+of a Hydrasynth bug, if you change to a patch that you're already at, or stay within
+your current bank, the change-patch request is entirely ignored.  Thus in general 
+you'll need to [A] Bank change to a DIFFERENT bank than the one you're updating [B] PC
+to a DIFFERENT patch than the one you're updating [C] Bank change back to the bank you're
+updating [D] PC back to the patch you're updating.  Note that you will need a pause of
+about 150ms between (B) and (C).  Finally, you'll need about a 200ms pause after (D) and
+before you start playing notes or doing other stuff.
+
+->	1. A Header
+		18 00 
+		
+<-	2. A Header Response
+		19 00
+
+	3. Then 21 times for CHUNK = 0 ... 20 (hex 0 ... 14)
+
+->		- A Chunk Dump
+			16 00 CHUNK 16 DATA...
+			Where DATA... is 128 bytes long
+
+<-		- A Chunk Acknowledgment 
+			17 00 CHUNK 16
+
+	5. Then 1 time for CHUNK = 21 (hex 15)
+
+->		- A Chunk Dump
+			16 00 CHUNK 16 DATA...
+			Where DATA... is 102 bytes long		[truncated]
+
+<-		- An Patch Saved Acknowledgment 
+			07 00 BANK NUMBER
+			
+<-		- A Chunk Acknowledgment 
+			17 00 CHUNK 16
+		
+[Then finally]	
+
+->	6. A Footer
+		1A 00
+		
+<-	7. A Footer Response
+		1B 00

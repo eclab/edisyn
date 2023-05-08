@@ -4961,12 +4961,12 @@ public class ASMHydrasynth extends Synth
         return BANKS[bank] + " " + ((number > 99 ? "" : (number > 9 ? "0" : "00")) + number);
         }
 
-
+/*
     public boolean getSendsAllParametersAsDump() 
         {
         return false;
         }
-
+*/
 
     public int getBatchDownloadWaitTime() { return 50; }				// this will make a lot of "tardy" messages but it's a tiny bit faster than 400
     public int getBatchDownloadFailureCountdown() { return 100; }
@@ -5722,19 +5722,33 @@ public class ASMHydrasynth extends Synth
         if (tempModel == null)
             tempModel = getModel();
             
+        /*
         if (toWorkingMemory) // uh oh
             {
             System.err.println("emitReal: cannot emit to working memory");
             return new Object[0][0];
             }
+        */
 
         byte[] data = new byte[2790];
 
         // Fill in header
         data[0] = (byte) 0x06;          // save to RAM
         data[1] = (byte) 0x00;
-        data[2] = (byte) tempModel.get("bank");
-        data[3] = (byte) tempModel.get("number");
+        if (toWorkingMemory)
+        	{
+        	// we update to our scratch patch.  Otherwise if the user later
+        	// writes a patch, he may write the changes to the updated patch
+        	// by accident because the Hydrasynth writes whole banks at a time
+        	data[2] = (byte) 7;							// H
+       		data[3] = (byte) 127;						// 128
+       		}
+       	else
+       		{
+        	data[2] = (byte) tempModel.get("bank");
+       		data[3] = (byte) tempModel.get("number");
+       		}
+       		
         data[4] = (byte) VERSION_2_0_0;         // 1.5.5.  Change to 0xC8 for 2.0.0
         data[5] = (byte) 0x00;
         data[6] = (byte) 0x00;
@@ -6207,17 +6221,31 @@ public class ASMHydrasynth extends Synth
         
         byte[][] outgoing = Encode.encodePatch(data);
                 
-        Object[] sysex = new Object[outgoing.length * 2 + 3];
+        Object[] sysex = new Object[outgoing.length * 2 + 1 + (toWorkingMemory ? 6 : 2)];
         sysex[0] = (isEmittingBatch() ? null : Encode.encodePayload(new byte[] { (byte)0x18, (byte)0x00 }));         // header
         for(int i = 0; i < outgoing.length; i++)                                                                // patch chunks
             {
             sysex[i * 2 + 1] = outgoing[i];
             sysex[i * 2 + 2] = PAUSE_AFTER_CHUNK;
             }
-        //// FIXME: Do we include the save request?
-        sysex[sysex.length - 2] = (isEmittingBatch() ? null : Encode.encodePayload(new byte[] { (byte)0x14, (byte)0x00 }));          // save request
-        sysex[sysex.length - 1] = (isEmittingBatch() ? null : Encode.encodePayload(new byte[] { (byte)0x1A, (byte)0x00 }));          // footer
-
+            
+        if (toWorkingMemory)
+        	{
+        	// Don't do save request
+			sysex[sysex.length - 6] = (isEmittingBatch() ? null : Encode.encodePayload(new byte[] { (byte)0x1A, (byte)0x00 }));          // footer
+			sysex[sysex.length - 5] = buildCC(getChannelOut(), 32, 0)[0];																// Bank Change Away
+			sysex[sysex.length - 4] = buildPC(getChannelOut(), 0)[0];																// PC Away
+			sysex[sysex.length - 3] = Integer.valueOf(getPauseAfterChangePatch());													// Wait
+			sysex[sysex.length - 2] = buildCC(getChannelOut(), 32, 7)[0];																// Bank Change Back
+			sysex[sysex.length - 1] = buildPC(getChannelOut(), 127)[0];																// PC Back
+			// 200ms afterwards
+			}
+		else
+			{
+			sysex[sysex.length - 2] = (isEmittingBatch() ? null : Encode.encodePayload(new byte[] { (byte)0x14, (byte)0x00 }));          // save request
+			sysex[sysex.length - 1] = (isEmittingBatch() ? null : Encode.encodePayload(new byte[] { (byte)0x1A, (byte)0x00 }));          // footer
+			}
+			
 		if (REVERSE_ENGINEER)
 			{
 				System.err.println("OUTGOING DIFFERENCES");
@@ -6911,7 +6939,7 @@ public class ASMHydrasynth extends Synth
         {
         // The hydrasynth unhelpfully tries to change parameters on us when we change
         // parameters in bulk.  So we have to ignore it.
-        if (sendingAllParameters || ignoreParametersFromSynth) return;
+        if (/* sendingAllParameters ||*/ ignoreParametersFromSynth) return;
         
         if (data.type == Midi.CCDATA_TYPE_NRPN)
             {
@@ -7337,6 +7365,16 @@ public class ASMHydrasynth extends Synth
 
     public int getPauseBetweenPatchWrites() { return 100; }
 
+    public int getPauseAfterSendAllParameters()
+        {
+        return 300;
+//        if (isHillClimbing() || isMorphing()) return 400;		// If there's a pause less than than this, playing the sound will result in a weird short, clippped version, which ruins hill-climbing and morphing.
+//        else return 200;
+        
+//        if (isHillClimbing() || isMorphing()) return 400;		// If there's a pause less than than this, playing the sound will result in a weird short, clippped version, which ruins hill-climbing and morphing.
+//		else return 0; 	// If we're not hill-climbing etc., then we'll not bother waiting.
+        }
+    
     public void changePatch(Model tempModel)
         {
         // I believe that the Hydrasynth changes patches using Bank Select *LSB* (32), 
@@ -7366,6 +7404,7 @@ public class ASMHydrasynth extends Synth
 			}
         }
 
+/*
     public int getPauseAfterModMatrixParameter()
         {
         return 2;
@@ -7375,12 +7414,7 @@ public class ASMHydrasynth extends Synth
         {
         return 0;
         }
-
-    public int getPauseAfterSendAllParameters()
-        {
-        if (isHillClimbing() || isMorphing()) return 400;		// If there's a pause less than than this, playing the sound will result in a weird short, clippped version, which ruins hill-climbing and morphing.
-		else return 0;
-        }
+        
     
     /// We need a custom send-all-parameters so we can (1) prevent the
     /// hydrasynth from sending US parameters in this period and (2)
@@ -7420,7 +7454,7 @@ public class ASMHydrasynth extends Synth
 		sendingAllParameters = false;
         return true;
         }
-        
+*/
 
     // This is 8 banks, appropriate for 2.0.0 and the Deluxe 1.5.5
     public Model getNextPatchLocation(Model model)
@@ -7531,6 +7565,7 @@ public class ASMHydrasynth extends Synth
         "prefxtype",                                    
         "delaytype",                                    
         "reverbtype",                                   
+    	"postfxtype",
 
         // Next the waves.  These have to be set (to "Step") before you can set One-shot to step, set the lfo1steps and step length, etc.
         "lfo1wave",                                     
@@ -7744,7 +7779,6 @@ public class ASMHydrasynth extends Synth
     "reverbpredelay",
     "reverbtime",
     "reverbtone",
-    "postfxtype",
     "postfxwet",
 
     /// Note that the postfx params have been broken out

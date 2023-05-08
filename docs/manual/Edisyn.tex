@@ -296,7 +296,7 @@ you can always stop batch-downloading at any time by choosing {\bf Stop Download
 Also note that as a failsafe Edisyn only allows the frontmost window to receive data over MIDI.  Thus while you're batch-downloading, you shouldn't switch to some other patch editor window: the downloading patch editor must stay in front.  You can go to another application though (read a web browser say).
 
 \subsection{Exporting to Text}
-Perhaps you might wish to describe your patch on you blog or your favorite forum.  if you choose {\bf Export to Text...} from the {\bf File} menu, Edisyn will write out all of its patch parameters to a text file.   Edisyn may occasionally break out parameters more than your synthesizer does: though usually it's pretty close to a one-to-one mapping.  The parameter names can be cryptic sometimes: Edisyn often (not always) names parameters in a manner fairly similar to how they're specified by the synthesizer manufacturer in its MIDI Sysex document, and synth manufacturers are not known for being consistent in their naming between the sysex document and the user manual.
+Perhaps you might wish to describe your patch on you blog or your favorite forum.  If you choose {\bf Export to Text...} from the {\bf File} menu, Edisyn will write out all of its patch parameters to a text file.   Edisyn may occasionally break out parameters more than your synthesizer does: though usually it's pretty close to a one-to-one mapping.  The parameter names can be cryptic sometimes: Edisyn often (not always) names parameters in a manner fairly similar to how they're specified by the synthesizer manufacturer in its MIDI Sysex document, and synth manufacturers are not known for being consistent in their naming between the sysex document and the user manual.
 
 
 \section{Communicating with a Synthesizer}
@@ -533,8 +533,7 @@ Nudge is a slow and fine-grained process.  If you'd like something more real-tim
 
 You can restrict the Mutation and Recombination portions of exploration (used in Randomize, Nudge, Merge, Blend, Hill-Climb/Constrict, and Morph) to only affect a subset of parameters.  To do this, choose {\bf Edit Mutable Parameters} in the {\bf Edit} menu.  This will turn on {\it Mutable Parameters} mode (you'll see it in the window's title bar).  You'll note that various widgets have now been surrounded with red frames.  These widgets control synth parameters which are presently are being updated when you mutate a patch. 
 
-You can change these of course: just click on them and you can remove them from being updated (or add them back).\footnote{Note that due to an error in Java's design, you can't click directly on a Combo Box (a pop-up menu) such as the ``Wave'' combo box in Figure \ref{mutationparameters}.  But you can click on its title (the text ``Wave'').}  You can also turn on (or turn off) all of the parameters in a category by double-clicking on the category title while in Mutable Parameters mode (the categories in Figure \ref{mutationparameters} are {\it Yamaha TX81Z}, {\it Global}, {\it LFO}, and {\it Controllers}).  Finally, you can turn on all the parameters in the entire patch editor by selecting {\bf Make All Parameters Mutable} in the {\bf Edit} menu, or conversely turn them all of by selecting {\bf Make All Parameters Immutable}.
-
+You can change these of course: just click on them and you can remove them from being updated (or add them back).\footnote{Note that due to an error in Java's design, you can't click directly on a Combo Box (a pop-up menu) such as the ``Wave'' combo box in Figure \ref{mutationparameters}.  But you can click on its title (the text ``Wave'').}  You can also turn on (or turn off) all of the parameters in a category by double-clicking on the category title while in Mutable Parameters mode (the categories in Figure \ref{mutationparameters} are {\it Yamaha TX81Z}, {\it Global}, {\it LFO}, and {\it Controllers}).  Finally, you can turn on all the parameters in the entire patch editor by selecting {\bf Make All Parameters Mutable} in the {\bf Edit} menu, or conversely turn them all of by selecting {\bf Make All Parameters Immutable}.  You can also just {\bf Make Non-Metric Parameters Immutable}.
 
 A very few parameters, such as the patch name, can't be mutated no matter what: these have been fixed to be immutable by the patch editor.  They will never have a red frame no matter how much you click them.
 
@@ -1041,11 +1040,11 @@ If you drag patches from one Librarian into another, you have affected {\it two 
 
 \paragraph{Saving Patches to a File}
 
-To save a patch or a range of selected patches to a single file or collection of files, select the range and choose {\bf Save Selected Patches} from the {\bf Librarian} menu.
+To save a patch or a range of selected patches to a single file or collection of files, select the range and choose {\bf Save Selected Patches...} from the {\bf Librarian} menu.
 
-To save a bank of patches to a single file, select the a patch in the bank and choose {\bf Save Bank} from the {\bf Librarian} menu.  Some synthesizers can save out banks with a single bank sysex message: Edisyn will use this if it's available. Otherwise, it'll just write each patch separately to the file.
+To save a bank of patches to a single file, select the a patch in the bank and choose {\bf Save Bank...} from the {\bf Librarian} menu.  Some synthesizers can save out banks with a single bank sysex message: Edisyn will use this if it's available. Otherwise, it'll just write each patch separately to the file.
 
-To save all patches in the Librarian  to a single file or collection of files, choose {\bf Save All Patches} from the {\bf Librarian} menu.  Many synthesizers can save out banks either with a single bank sysex message or as individual patch sysex messages.  Edisyn will give you the option if it can.  Note that saving out patches first involves building their sysex, and for some synthesizers this may take several seconds if you're saving {\it all} the patches.  Be patient: Edisyn isn't hung.
+To save all patches in the Librarian  to a single file or collection of files, choose {\bf Save All Patches...} from the {\bf Librarian} menu.  Many synthesizers can save out banks either with a single bank sysex message or as individual patch sysex messages.  Edisyn will give you the option if it can.  Note that saving out patches first involves building their sysex, and for some synthesizers this may take several seconds if you're saving {\it all} the patches.  Be patient: Edisyn isn't hung.
 
 \paragraph{Writing Patches to your Synthesizer}
 
@@ -1059,6 +1058,8 @@ Keep in mind that if you choose the {\bf Write to Patch...} or {\bf Send to Curr
 
 In order to receive patches from Edisyn, your synthesizer may need to be set up properly, such as turning off memory protection. See your patch editor's About Panel for instructions.
 
+\paragraph{Exporting to Text}
+Maybe you want to list your library in your blog?  Select {\bf Export Names to Text...} from the {\bf Librarian} menu, and Edisyn will dump out all the patch names, plus their patch locations, one per line, to a text file.
 
 
 

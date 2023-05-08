@@ -166,6 +166,12 @@ public class Librarian extends JPanel
                 {
                 Component comp = super.getTableCellRendererComponent(table,value,isSelected,hasFocus,row,column);
 
+				// Nimbus is broken grid-wise in JTables. On Linux, this is the only thing that fixes it: overriding completely
+				if (Style.isNimbus())
+					{
+					((JComponent)comp).setBorder(BorderFactory.createMatteBorder(0, 0, 1, 1, GRID_COLOR));
+					}
+
                 // Note to get the underlying column number, you have to get the column model and pull out the column.
                 // We have stored the original column number in the column's "identifier", so you can grab that as shown here.
                 // Note that you CANNOT use table.getColumn(), as this grabs the column by identifier, which is the number
@@ -511,6 +517,7 @@ public class Librarian extends JPanel
             
         /// Fix Nimbus, which doesn't display grid lines properly
         /// See https://forums.oracle.com/ords/apexds/post/linux-nimbus-lookandfeel-table-grid-lines-are-not-coming-2197
+        /// NOTE: This doesn't work on Linux.  I have to override the grid lines entirely, see elsewhere
         if (Style.isNimbus())
         	{
 			try 

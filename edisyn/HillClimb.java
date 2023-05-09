@@ -53,9 +53,9 @@ public class HillClimb extends SynthPanel
     public static final int OPERATION_SEED_FROM_SIX = 4;
     public static final int OPERATION_SEED_FROM_LIBRARIAN = 100;
 
-    public static final int OPERATION_CLIMB = 4;
-    public static final int OPERATION_CONSTRICT = 5;
-    public static final int OPERATION_CLIMB_NN = 6;
+    public static final int OPERATION_CLIMB = 5;
+    public static final int OPERATION_CONSTRICT = 6;
+    public static final int OPERATION_CLIMB_NN = 7;
 
     // HILL CLIMBING AND CONSTRICTION RATES
     // Note that the mutation rates go 0...100 inclusive, ints
@@ -1202,79 +1202,16 @@ public class HillClimb extends SynthPanel
             }
         else if (operation == OPERATION_CLIMB)
             {
-            /*
-            // reset
-            ratings[NUM_MODELS][0].setSelected(true);
-            ratings[NUM_MODELS][1].setSelected(true);
-            ratings[NUM_MODELS][2].setSelected(true);
-
-            State state = popStack();
-            System.arraycopy(state.children, 0, currentModels, 0, state.children.length);
-
-            for(int j = 0; j < state.parentIndices.length; j++)
-            {
-            if (state.parentIndices[j] != -1)
-            {
-            ratings[state.parentIndices[j]][j].setSelected(true);
-            }
-            }
-                
-            for(int j = 0; j < state.parentsSelected.length; j++)
-            {
-            selected[j].setSelected(state.parentsSelected[j]);
-            }
-            */
             pop();
             climb();
             }
         else if (operation == OPERATION_CONSTRICT)
             {
-            /*
-              State state = popStack();
-              System.arraycopy(state.children, 0, currentModels, 0, state.children.length);
-
-              ratings[NUM_MODELS][0].setSelected(true);
-              ratings[NUM_MODELS][1].setSelected(true);
-              ratings[NUM_MODELS][2].setSelected(true);
-
-              for(int j = 0; j < state.parentIndices.length; j++)
-              {
-              if (state.parentIndices[j] != -1)
-              ratings[state.parentIndices[j]][j].setSelected(true);
-              }
-                
-              for(int j = 0; j < state.parentsSelected.length; j++)
-              {
-              selected[j].setSelected(state.parentsSelected[j]);
-              }
-            */
             pop();
             constrict();
             }
         else if (operation == OPERATION_CLIMB_NN)
             {
-            /*
-            // reset
-            ratings[NUM_MODELS][0].setSelected(true);
-            ratings[NUM_MODELS][1].setSelected(true);
-            ratings[NUM_MODELS][2].setSelected(true);
-
-            State state = popStack();
-            System.arraycopy(state.children, 0, currentModels, 0, state.children.length);
-
-            for(int j = 0; j < state.parentIndices.length; j++)
-            {
-            if (state.parentIndices[j] != -1)
-            {
-            ratings[state.parentIndices[j]][j].setSelected(true);
-            }
-            }
-                
-            for(int j = 0; j < state.parentsSelected.length; j++)
-            {
-            selected[j].setSelected(state.parentsSelected[j]);
-            }
-            */
             pop();
             climbNN();
             }

@@ -286,10 +286,10 @@ public class KeyDisplay extends NumericalComponent
 
 
         public void paintComponent(Graphics g)
-            {
-            Style.prepareGraphics(g);
-                                
+            {                                
             Graphics2D graphics = (Graphics2D) g;
+            RenderingHints oldHints = graphics.getRenderingHints();
+            Style.prepareGraphics(graphics);
                                 
             Rectangle rect = getBounds();
             rect.x = 0;
@@ -382,6 +382,8 @@ public class KeyDisplay extends NumericalComponent
             // draw a border of white
             graphics.setPaint(Style.KEYBOARD_WHITE_COLOR());
             graphics.draw(rect);
+
+		    graphics.setRenderingHints(oldHints);
             }
         }
     

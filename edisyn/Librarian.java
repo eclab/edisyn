@@ -62,11 +62,11 @@ public class Librarian extends JPanel
     public static final Color STANDARD_BACKGROUND_COLOR = new Color(250, 250, 250);
     public static final Color SELECTED_COLOR = new Color(160, 160, 160);
     public static final Color DROP_COLOR = new Color(160, 160, 200);
-    public static final Color BACKGROUND_COLOR = new JTabbedPane().getBackground(); // new Color(200, 200, 200);
+    public static final Color BACKGROUND_COLOR = new Color(240, 240, 240);		// new JLabel().getBackground(); 
     public static final Color GRID_COLOR = Style.isNimbus() ? new Color(192, 192, 192) : Color.GRAY;
     public static final Color READ_ONLY_BACKGROUND_COLOR = new Color(250, 245, 255);
     public static final Color SCRATCH_COLOR = new Color(240, 250, 250);
-    public static final Color INVALID_COLOR = Style.isNimbus() ? new Color(230, 230, 230) : BACKGROUND_COLOR;
+    public static final Color INVALID_COLOR = new Color(220, 220, 220);
     public static final Color INVALID_TEXT_COLOR = new Color(255, 0, 0);
     public static final Color STANDARD_TEXT_COLOR = new Color(0, 0, 0);
 
@@ -159,9 +159,40 @@ public class Librarian extends JPanel
                     { e.consume(); }
                 }
             });
-                
+        
+        if (Style.isNimbus())
+        	{
+			table.getTableHeader().setDefaultRenderer(new DefaultTableCellRenderer()
+				{
+			    protected void setValue(Object value) 
+			    	{
+			    	if (value == null) super.setValue(value);
+			    	else if (getLibrary().getBankName(Library.SCRATCH_BANK) == value.toString()) super.setValue(value);  // can't put a space before <html>
+			    	else super.setValue((Style.isNimbus() ? " " : "") + value.toString());
+					}
+
+				public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) 
+					{
+					Component comp = super.getTableCellRendererComponent(table,value,isSelected,hasFocus,row,column);
+
+						((JComponent)comp).setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, GRID_COLOR));
+				
+					return comp;
+					}
+				});
+			}
+        	
         table.setDefaultRenderer(Object.class, new DefaultTableCellRenderer()
             {
+		    protected void setValue(Object value) 
+		    	{
+		    	if (value == null) 
+		    		super.setValue("");
+		    	else if (value instanceof Patch && ((Patch)value).getName() == null)
+		    		super.setValue("");
+		    	else super.setValue((Style.isNimbus() ? " " : "") + value.toString());
+				}
+
             public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) 
                 {
                 Component comp = super.getTableCellRendererComponent(table,value,isSelected,hasFocus,row,column);
@@ -228,13 +259,14 @@ public class Librarian extends JPanel
         table.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
         table.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         table.setDefaultEditor(Object.class, null);
-        //table.setSelectionBackground(Color.GRAY);
         table.setGridColor(GRID_COLOR);
         table.getTableHeader().setBackground(BACKGROUND_COLOR);
 
         // deterimine the width of the columns
         String nm = "";
         for(int i = 0; i < synth.getPatchNameLength(); i++) nm += "M";
+        if (Style.isNimbus())
+        	nm += " ";		// we're gonna pad at the beginning for Nimbus
         int w = table.getFontMetrics(table.getFont()).stringWidth(nm);
                 
         // Give the columns unique names
@@ -297,7 +329,7 @@ public class Librarian extends JPanel
                                 {
                                 bankName = getLibrary().synth.reviseBankName(field.getText());
                                 getLibrary().setUserName(c - 1, bankName);
-                                table.getColumnModel().getColumn(c).setHeaderValue(getLibrary().getColumnName(c));
+                                table.getColumnModel().getColumn(c).setHeaderValue((Style.isNimbus() ? " " : "") + getLibrary().getColumnName(c));
                                 }
                             }
                         }
@@ -337,14 +369,18 @@ public class Librarian extends JPanel
                 
                 
                               
-        JTable rowNames = new javax.swing.JTable()
+        JTable rowNames = new javax.swing.JTable();
+
+        rowNames.setDefaultRenderer(Object.class, new DefaultTableCellRenderer()
             {
-            public Component prepareRenderer(TableCellRenderer renderer, int row, int col) 
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) 
                 {
-                return this.getTableHeader().getDefaultRenderer().getTableCellRendererComponent(
-                    this, this.getValueAt(row, col), false, false, row, col);
+                JComponent comp = (JComponent)(super.getTableCellRendererComponent(table,value,isSelected,hasFocus,row,column));
+                comp.setBackground(BACKGROUND_COLOR);
+                comp.setBorder(BorderFactory.createMatteBorder(0, 0, 0, 1, GRID_COLOR));
+                return comp;
                 }
-            };
+            });
 
         rowNames.setAutoResizeMode(JTable.AUTO_RESIZE_OFF);
         rowNames.setColumnSelectionAllowed(false);
@@ -355,14 +391,15 @@ public class Librarian extends JPanel
         rowNames.getTableHeader().setReorderingAllowed(false);
         rowNames.getTableHeader().setResizingAllowed(false);
         rowNames.setDefaultEditor(Object.class, null);
-        rowNames.getTableHeader().setBackground(BACKGROUND_COLOR);      //BACKGROUND_COLOR);
+        rowNames.setShowGrid(true);
+        rowNames.setIntercellSpacing(new Dimension(0, 0));
         rowNames.setGridColor(GRID_COLOR);
 
         // transpose
         String[] numNames = getLibrary().getPatchNumberNames();
         String[][] numNames2 = new String[numNames.length][1];
         for(int i = 0; i < numNames.length; i++)
-            numNames2[i][0] = numNames[i];
+            numNames2[i][0] = " " + numNames[i];
         
         rowNames.setModel(new javax.swing.table.DefaultTableModel(
                 numNames2,
@@ -386,9 +423,6 @@ public class Librarian extends JPanel
         scrollPane.setBackground(BACKGROUND_COLOR);
         add(scrollPane, BorderLayout.CENTER);
 
-        bottomPanel = new JPanel();
-        bottomPanel.setLayout(new BorderLayout());
-        
         updateUndoRedo();
 
         patchWell = new JTable()
@@ -437,6 +471,7 @@ public class Librarian extends JPanel
             public int getRowCount() { return 1; }
             public int getColumnCount() { return 1; }
             public boolean isCellEditable(int row, int col) { return false; }
+
 
             public Object getValueAt(int row, int col) 
                 {
@@ -488,7 +523,8 @@ public class Librarian extends JPanel
         patchWellLabel.putClientProperty("JComponent.sizeVariant", "small");
         patchWellLabel.setFont(Style.SMALL_FONT());
 
-        Box box = new Box(BoxLayout.X_AXIS);
+        HBox box = new HBox();
+    	box.setBackground(getBackground());
                 
         stopAction = new PushButton("Stop Download")
             {
@@ -501,12 +537,20 @@ public class Librarian extends JPanel
         setupButton(stopAction.getButton());
         box.add(stopAction.getButton());
                         
-        box.add(patchWellLabel, BorderLayout.WEST);
-        box.add(patchWell, BorderLayout.CENTER);
-        box.add(box.createGlue());
-        bottomPanel.add(box, BorderLayout.CENTER);
-        
-        add(bottomPanel, BorderLayout.SOUTH);
+        box.add(patchWellLabel);
+    
+    	Box vbox = new Box(BoxLayout.Y_AXIS);
+    	vbox.setBackground(getBackground());
+    	JComponent glue1 = Stretch.makeStretch();
+    	glue1.setBackground(getBackground());
+    	JComponent glue2 = Stretch.makeStretch();
+    	glue2.setBackground(getBackground());
+		vbox.add(glue1);
+    	vbox.add(patchWell);
+		vbox.add(glue2);
+
+        box.addLast(vbox);
+        add(box, BorderLayout.SOUTH);
         
         if (getLibrary().getSynth().patchTimer != null)  // we're running!
             {
@@ -530,15 +574,24 @@ public class Librarian extends JPanel
 						// This is supposed to work but doesn't
 						defaults.put("Table.gridColor", new javax.swing.plaf.ColorUIResource(GRID_COLOR));
 						// This seems to work okay
-						defaults.put("Table.background", new javax.swing.plaf.ColorUIResource(GRID_COLOR));
+						defaults.put("Table.background", new javax.swing.plaf.ColorUIResource(BACKGROUND_COLOR));
 						defaults.put("Table.disabled", false);
-						defaults.put("Table.showGrid", true);
-						defaults.put("Table.intercellSpacing", new Dimension(1, 1));
+//						defaults.put("Table.showGrid", false);
+//						defaults.put("Table.intercellSpacing", new Dimension(1, 1));
+/*
+						defaults.put("TableHeader.background", new javax.swing.plaf.ColorUIResource(BACKGROUND_COLOR));
+						defaults.put("TableHeader.cellBorder", BorderFactory.createMatteBorder(0,0,1,0, GRID_COLOR));
+*/
 						break;
 						}
             		}
         		} 
         	catch (Exception e) { }
+			}
+		else
+			{
+			UIManager.put("TableHeader.cellBorder",
+				BorderFactory.createMatteBorder(0,0,1,0, GRID_COLOR));
 			}    
 		}    
         

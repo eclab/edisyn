@@ -33,18 +33,29 @@ public class PushButton extends JPanel
     {
     JButton button;
     JPopupMenu pop;
+    String text;
     
     public Insets getInsets() { return new Insets(0,0,0,0); }
     
     public JButton getButton() { return button; }
     
+    public String getText() { return text; }
+    public void setText(String val) { text = val; button.setText("<html>"+val+"</html>"); }
+    
+    public AWTEventListener releaseListener = null;
+	
     public PushButton(final String text)
         {
         button = new JButton(text);
+        setText(text);
         button.putClientProperty("JComponent.sizeVariant", "small");
         button.setFont(Style.SMALL_FONT());
         button.setHorizontalAlignment(SwingConstants.CENTER);
-                
+        final Color foreground = button.getForeground();
+        
+        if (Style.isMacOSMonterey() || Style.isMacOSVentura()) 
+	        button.addMouseListener(buildUnderliningMouseAdapter(button));
+	                	
         button.addActionListener(new ActionListener()
             {
 		public void actionPerformed(ActionEvent e)
@@ -171,4 +182,69 @@ public class PushButton extends JPanel
     public void perform(int i)
         {
         }
+    
+    
+    /// The purpose of this method is to make a custom Mouse Adapter which underlines the text in the button
+    /// when pressed as an additional cue that the button has been pressed due to the extremely muted button
+    /// shade change in MacOS Monterey and Ventura.  I'd like to instead change the background color to something
+    /// darker but this is very difficult to do in MacOS.
+    
+ 	MouseAdapter buildUnderliningMouseAdapter(final JButton button)
+    	{
+	    final AWTEventListener[] releaseListener = { null };
+	    
+		return new MouseAdapter()
+            {
+            public void mouseExited(MouseEvent e)
+            	{
+        			button.setText("<html>"+getText()+"</html>");
+                repaint();
+            	}
+
+            public void mouseEntered(MouseEvent e)
+            	{
+            	if (releaseListener[0] != null)
+            		{
+        			button.setText("<html><u>"+getText()+"</u></html>");
+                	repaint();
+                	}
+            	}
+            	
+            public void mousePressed(MouseEvent e) 
+                {
+        			button.setText("<html><u>"+getText()+"</u></html>");
+                
+                // This gunk fixes a BAD MISFEATURE in Java: mouseReleased isn't sent to the
+                // same component that received mouseClicked.  What the ... ? Asinine.
+                // So we create a global event listener which checks for mouseReleased and
+                // calls our own private function.  EVERYONE is going to do this.
+                                                        
+                Toolkit.getDefaultToolkit().addAWTEventListener( releaseListener[0] = new AWTEventListener()
+                    {
+                    public void eventDispatched(AWTEvent evt)
+                        {
+                        if (evt instanceof MouseEvent && evt.getID() == MouseEvent.MOUSE_RELEASED)
+                            {
+                            MouseEvent e = (MouseEvent) evt;
+                            if (releaseListener[0] != null)
+                                {
+                                Toolkit.getDefaultToolkit().removeAWTEventListener( releaseListener[0] );
+                                releaseListener[0] = null;
+        			button.setText("<html>"+getText()+"</html>");
+								repaint();
+                                }
+                            }
+                        }
+                    }, AWTEvent.MOUSE_EVENT_MASK);
+                }
+                
+            public void mouseReleased(MouseEvent e) 
+                {
+                Toolkit.getDefaultToolkit().removeAWTEventListener( releaseListener[0] );
+				releaseListener[0] = null;
+        			button.setText("<html>"+getText()+"</html>");
+                repaint();
+                }
+        	};
+    	}
     }

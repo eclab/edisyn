@@ -6,17 +6,12 @@
 
 <p><b>Communicating with Edisyn</b><br> 
 
-If you're connecting via USB, set Edisyn's incoming and outgoing MIDI devices to HYDRASYNTH KB.  Set Edisyn's MIDI channel to the same as the synth's RX and TX MIDI channels.  You can set the synth's RX MIDI channel to OMNI if you liked.   Set up Parameter RX and TX both to be NRPN.  
+If you're connecting via USB, set Edisyn's incoming and outgoing MIDI devices to HYDRASYNTH KB.  Set Edisyn's MIDI channel to the same as the synth's RX and TX MIDI channels.  You can set the synth's RX MIDI channel to OMNI if you liked.   Set up Parameter RX and TX both to be NRPN. Turn on Program Change RX.
 
 <p><b>Current Editor Status</b><br>
 ASM won't open their sysex spec: developing Edisyn required reverse engineering it.  As such Edisyn can do most things you'd need, but a few items (such as requesting current memory) are still out of reach.
 
-<p><b>About the Hydrasynth Deluxe</b><br>
-<!--
-The Deluxe requires that NRPN be sent to it slower than the Keyboard.  So if you have a Deluxe, </b>be sure to check the "Hydrasynth Deluxe" menu option.</b>
-<p>
--->
-Edisyn does not yet support the Deluxe's multimode, though I intend to ultimately.
+<p>Edisyn does not yet support the Deluxe's multimode, though I would like to ultimately.  But it may be quite a while.
 
 <p><b>Patch H 128 Cannot Be Used</b><br>
 The Hydrasynth doesn't have a standard procedure for Sending to Current Patch.  As a result, Edisyn is forced to instead send to Patch H 128, then switch to Patch H 128 to load your current patch into current memory.  As a result, you can't really edit Patch H 128, as Edisyn will overwrite it in current memory.  I hope that's okay.
@@ -26,9 +21,9 @@ The Hydrasynth doesn't have a standard procedure for Sending to Current Patch.  
 <ul>
 <!--
 <li><b>Hydrasynth Deluxe</b>&nbsp;&nbsp;This makes it possible for Edisyn to properly send NRPN to the Deluxe (which is a little pokey compared to other Hydrasynths) and thus Send to Current Patch.  Make sure to check it if you have a Deluxe.
-
 <p>
 -->
+
 <li><b>Ignore Parameters from Synth</b>&nbsp;&nbsp;When you set various parameters in Edisyn (such as BPM Sync), the Hydrasynth rather unhelpfully will send its current settings to Edisyn, changing the settings you had made.  To deal with this, by default Edisyn ignores all incoming NRPN messages from your Hydrasynth.  If you'd like to make real-time changes to Edisyn by ahcnging values on the Hydrasynth, uncheck this option.
 
 <p><li><b>Disallow CC Mutation</b>&nbsp;&nbsp;CC (and CV) options dominate the Hydrasynth's Mod Matrix Source and Destination lists, so mutation will select a CC or CV with a good probability, and you probably don't want that.  Selecting this menu prevents CC and CV options from being randomly selected during mutation.  As an alternative, you could simply disable the entire Mod Matrix category's mutable parameters (see the manual).  You might do this for the Macros as well.
@@ -44,7 +39,7 @@ The Hydrasynth doesn't have a standard procedure for Sending to Current Patch.  
 
 <p><b>Parameters that Can't Be Sent in Real-Time</b><br>
 
-There are a number of parameters that can't be sent via NRPN to the Hydrasynth in real-time.  You can always update the patch via Send to Current Patch.  They are:
+There are a number of parameters that can't be sent via NRPN to the Hydrasynth in real-time.  You can send them via Send to Current Patch however.  They are:
 
 <ul>
 <li>Patch Name, Category, and Color
@@ -63,9 +58,9 @@ The Hydrasynth has a great many bugs: but Edisyn tries to work around them and h
 <ul>
 <!--
 <li>Auditioning sounds via Hill-Climbing and Morphing doesn't always produce the right sound when played the first time, because the Hydrasynth is slow to update bulk NRPN changes before a note is played.  It seems to be a Hydrasynth bug.
-
 <p>
 -->
+
 <li>Yes, Envelope 2 really doesn't have modifiable a Trigger Source 1.
 
 <p><li>If TempoLck is ON then the Hydrasynth will ignore all Arp Tempo changes made by Edisyn.  You might want to turn that OFF at least for editing.

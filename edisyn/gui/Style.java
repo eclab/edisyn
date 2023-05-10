@@ -187,6 +187,7 @@ public class Style
     /////// BATCH DOWNLOAD WINDOW
     public static int BATCH_WINDOW_BORDER() { return 16; }
 
+	//public static Color MONTEREY_BUTTON_PRESSED_TEXT_COLOR() { return new Color(0, 0, 255); }
 
 
     /////// GRAPHICS PREPARATION
@@ -241,6 +242,12 @@ public class Style
         {
         return System.getProperty("os.name").equals("Mac OS X") &&
             (System.getProperty("os.version").startsWith("12."));
+        }
+
+    public static boolean isMacOSVentura()
+        {
+        return System.getProperty("os.name").equals("Mac OS X") &&
+            (System.getProperty("os.version").startsWith("13."));
         }
 
 

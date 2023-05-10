@@ -56,7 +56,7 @@ public class Patch
         
     public String toString()
         {
-		return getName();
+		return "" + getName();
         }
     
     public Patch(Patch patch)

@@ -71,7 +71,7 @@ public class IconDisplay extends JComponent implements Updatable
         {
         h = height;
         w = width;
-        retina = Style.isRetinaDisplay();
+        retina = (Style.isMac() && Style.isRetinaDisplay());
         this.icons = new ImageIcon[icons.length];
         originalIcons = (ImageIcon[])(icons.clone());
         buildIconDisplay(label, synth, key);

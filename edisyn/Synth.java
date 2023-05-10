@@ -3917,8 +3917,23 @@ public abstract class Synth extends JComponent implements Updatable
                 System.err.println("Error locating HTML file " + html);
                 }
             }
-
         final JFrame frame = new JFrame();
+
+/*
+		// Doesn't work.  :-(
+        final JFrame frame = new JFrame()
+        	{
+        	public void paint(Graphics g)
+        		{
+        		if (g != null && g instanceof Graphics2D)
+        			{
+        			Style.prepareGraphics(g);
+        			}
+        		super.paint(g);
+        		}
+        	};
+*/
+        	
         menubar = new JMenuBar();
         frame.setJMenuBar(menubar);
         JMenu menu = new JMenu("File");

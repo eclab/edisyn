@@ -20,7 +20,7 @@ import javax.swing.*;
 
 public class Edisyn 
     {
-    public static final int VERSION = 32;
+    public static final int VERSION = 33;
     
     public static void main(String[] args)
         {
@@ -34,6 +34,11 @@ public class Edisyn
                 if (Style.isMacOSMonterey())            // Monterey has a broken tab bug :-(
                     {
                     UIManager.put("TabbedPane.foreground", java.awt.Color.BLACK);
+
+
+//                    UIManager.put("TabbedPane.darkShadow", null);
+//                    UIManager.put("TabbedPane.highlight", null);
+//                    UIManager.put("TabbedPane.shadow", null);
                     }
 
                 // This no longer works as of Java 7

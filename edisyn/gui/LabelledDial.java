@@ -497,10 +497,11 @@ public class LabelledDial extends NumericalComponent
 
             int min = getMin();
             int max = getMax();
+
+            Graphics2D graphics = (Graphics2D) g;            
+            RenderingHints oldHints = graphics.getRenderingHints();
+            Style.prepareGraphics(graphics);
                 
-            Style.prepareGraphics(g);
-                
-            Graphics2D graphics = (Graphics2D) g;
                 
             Rectangle rect = getBounds();
             rect.x = 0;
@@ -519,7 +520,11 @@ public class LabelledDial extends NumericalComponent
 
             graphics.draw(arc);
 
-            if (!enabled) return;
+            if (!enabled) 
+            	{
+	            graphics.setRenderingHints(oldHints);
+            	return;
+            	}
 
             graphics.setStroke(Style.DIAL_THICK_STROKE());
             arc = new Arc2D.Double();
@@ -560,6 +565,8 @@ public class LabelledDial extends NumericalComponent
 
             arc.setArc(rect.getX() + Style.DIAL_STROKE_WIDTH() / 2, rect.getY() + Style.DIAL_STROKE_WIDTH()/2, rect.getWidth() - Style.DIAL_STROKE_WIDTH(), rect.getHeight() - Style.DIAL_STROKE_WIDTH(), startAngle, interval, Arc2D.OPEN);            
             graphics.draw(arc);
+
+	        graphics.setRenderingHints(oldHints);
             }
         }
     }

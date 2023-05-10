@@ -693,17 +693,20 @@ public class Category extends JComponent implements Gatherable
     public void paintComponent(Graphics g)
         {
         Graphics2D graphics = (Graphics2D) g;
+            RenderingHints oldHints = graphics.getRenderingHints();
+        Style.prepareGraphics(graphics);
  
         if (stringWidth == 0)
             stringWidth = STRING_WIDTH_COMPENSATION + (Style.isWindows() ? EXTRA_WINDOWS_COMPENSATION : 0) + 
             	graphics.getFontMetrics(Style.CATEGORY_FONT()).stringWidth(name);
 
-        Style.prepareGraphics(g);
 
         Rectangle rect = getBounds();
         rect.x = 0;
         rect.y = 0;
         graphics.setPaint(Style.BACKGROUND_COLOR());
         graphics.fill(rect);
+
+	    graphics.setRenderingHints(oldHints);
         }
     }

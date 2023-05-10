@@ -101,6 +101,7 @@ public class StringComponent extends JComponent implements Updatable, HasKey
         setLayout(new BorderLayout());
                 
         label = new JLabel("  " + _label);
+        	
         if (_label != null)
             {
             label.setFont(Style.SMALL_FONT());
@@ -112,12 +113,16 @@ public class StringComponent extends JComponent implements Updatable, HasKey
         String txt = "";
         for(int i = 0; i < maxLength; i++)
             txt = txt + "m";
-        change = new JButton(txt);
+        change = new JButton("<html>"+txt+"</html>");
         change.putClientProperty("JComponent.sizeVariant", "small");
         change.setFont(Style.SMALL_FONT());
         change.setPreferredSize(change.getPreferredSize());
         change.setHorizontalAlignment(SwingConstants.CENTER);
                 
+        final Color foreground = change.getForeground();
+        if (Style.isMacOSMonterey() || Style.isMacOSVentura()) 
+        	change.addMouseListener(buildUnderliningMouseAdapter(change));
+        	
         change.addActionListener(new ActionListener()
             {
             public void actionPerformed(ActionEvent e)
@@ -258,4 +263,70 @@ public class StringComponent extends JComponent implements Updatable, HasKey
         graphics.setPaint(Style.BACKGROUND_COLOR());
         graphics.fill(rect);
         }
+
+
+
+   /// The purpose of this method is to make a custom Mouse Adapter which underlines the text in the button
+    /// when pressed as an additional cue that the button has been pressed due to the extremely muted button
+    /// shade change in MacOS Monterey and Ventura.  I'd like to instead change the background color to something
+    /// darker but this is very difficult to do in MacOS.
+    
+ 	MouseAdapter buildUnderliningMouseAdapter(final JButton button)
+    	{
+	    final AWTEventListener[] releaseListener = { null };
+	    
+		return new MouseAdapter()
+            {
+            public void mouseExited(MouseEvent e)
+            	{
+        			button.setText("<html>"+getText()+"</html>");
+                repaint();
+            	}
+
+            public void mouseEntered(MouseEvent e)
+            	{
+            	if (releaseListener[0] != null)
+            		{
+        			button.setText("<html><u>"+getText()+"</u></html>");
+                	repaint();
+                	}
+            	}
+            	
+            public void mousePressed(MouseEvent e) 
+                {
+        			button.setText("<html><u>"+getText()+"</u></html>");
+                
+                // This gunk fixes a BAD MISFEATURE in Java: mouseReleased isn't sent to the
+                // same component that received mouseClicked.  What the ... ? Asinine.
+                // So we create a global event listener which checks for mouseReleased and
+                // calls our own private function.  EVERYONE is going to do this.
+                                                        
+                Toolkit.getDefaultToolkit().addAWTEventListener( releaseListener[0] = new AWTEventListener()
+                    {
+                    public void eventDispatched(AWTEvent evt)
+                        {
+                        if (evt instanceof MouseEvent && evt.getID() == MouseEvent.MOUSE_RELEASED)
+                            {
+                            MouseEvent e = (MouseEvent) evt;
+                            if (releaseListener[0] != null)
+                                {
+                                Toolkit.getDefaultToolkit().removeAWTEventListener( releaseListener[0] );
+                                releaseListener[0] = null;
+        			button.setText("<html>"+getText()+"</html>");
+								repaint();
+                                }
+                            }
+                        }
+                    }, AWTEvent.MOUSE_EVENT_MASK);
+                }
+                
+            public void mouseReleased(MouseEvent e) 
+                {
+                Toolkit.getDefaultToolkit().removeAWTEventListener( releaseListener[0] );
+				releaseListener[0] = null;
+        			button.setText("<html>"+getText()+"</html>");
+                repaint();
+                }
+        	};
+    	}
     }

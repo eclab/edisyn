@@ -1242,6 +1242,7 @@ public class ASMHydrasynth extends Synth
                 }
             }
 
+/*
         String str = getLastX("Deluxe", getSynthClassName(), true);
         if (str == null)
             deluxe = false;            // default is false
@@ -1249,8 +1250,9 @@ public class ASMHydrasynth extends Synth
             deluxe = true;
         else
             deluxe = false;
+*/
 
-        str = getLastX("IgnoreParametersFromSynth", getSynthClassName(), true);
+        String str = getLastX("IgnoreParametersFromSynth", getSynthClassName(), true);
         if (str == null)
             ignoreParametersFromSynth = true;            // default is true
         else if (str.equalsIgnoreCase("true"))
@@ -4848,13 +4850,14 @@ public class ASMHydrasynth extends Synth
     boolean lockAllLFOSteps;
     boolean ignoreParametersFromSynth;
     boolean disallowCCMutation;
-    boolean deluxe;
+//    boolean deluxe;
         
     public void addHydrasynthMenu()
         {
         JMenu menu = new JMenu("Hydrasynth");
         menubar.add(menu);
 
+/*
         JCheckBoxMenuItem deluxeCheck = new JCheckBoxMenuItem("Hydrasynth Deluxe");
         deluxeCheck.setSelected(deluxe);
         menu.add(deluxeCheck);
@@ -4866,7 +4869,7 @@ public class ASMHydrasynth extends Synth
                 setLastX("" + deluxe, "Deluxe", getSynthClassName(), true);
                 }
             });
-
+*/
 
         JCheckBoxMenuItem ignoreParametersMenu = new JCheckBoxMenuItem("Ignore Parameters from Synth");
         ignoreParametersMenu.setSelected(ignoreParametersFromSynth);
@@ -4941,7 +4944,7 @@ public class ASMHydrasynth extends Synth
 	public void windowCreated()
 		{
 		//setLastX("false", "Warned", getSynthClassName(), true);
-        doOneTimeWarning("Warned", "Read the About Tab", "The Hydrasynth has many eccentricities to be aware of.\nBe certain to fully read the \u2B06 About Tab \u2B06 before use,\nespecially if you have a Deluxe.");
+        doOneTimeWarning("Warned", "Read the About Tab", "The Hydrasynth has many eccentricities to be aware of.\nBe certain to fully read the \u2B06 About Tab \u2B06 before use.");	// ,\nespecially if you have a Deluxe.");
 		}
 
 	public void didOneTimeWarning(String key)

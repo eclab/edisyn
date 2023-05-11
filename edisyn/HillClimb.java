@@ -347,9 +347,9 @@ public class HillClimb extends SynthPanel
                         synth.undo.push(synth.getModel());
                                         
                     // Load into the current model
-			        synth.undo.setWillPush(false);
+                    synth.undo.setWillPush(false);
                     currentModels[_i].copyValuesTo(synth.getModel());
-			        synth.undo.setWillPush(true);
+                    synth.undo.setWillPush(true);
                     synth.setSendMIDI(true);
                     synth.sendAllParameters();
                     }
@@ -370,9 +370,9 @@ public class HillClimb extends SynthPanel
                 // with its model, so we can't just replace the model.
                 // But we can certainly replace currentModels[_i]!
                 newSynth.setSendMIDI(false);
-			        newSynth.undo.setWillPush(false);
+                newSynth.undo.setWillPush(false);
                 currentModels[_i].copyValuesTo(newSynth.getModel());
-			        newSynth.undo.setWillPush(true);
+                newSynth.undo.setWillPush(true);
                 newSynth.setSendMIDI(true);
                 currentModels[_i] = newSynth.getModel();
                 newSynth.sendAllParameters();
@@ -803,10 +803,10 @@ public class HillClimb extends SynthPanel
               
         reset = new PushButton("Reset...",
             new String[] { "From Original Patch",
-                           "From Morph",
-                           "From Nudge Targets", 
-                           "From First Four Candidates",
-                           "From First Six Candidates" })
+                                   "From Morph",
+                                   "From Nudge Targets", 
+                                   "From First Four Candidates",
+                                   "From First Six Candidates" })
             {
             public void perform(int val)
                 {

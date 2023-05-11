@@ -120,15 +120,15 @@ public class HTMLBrowser extends JPanel
         infoPane.setBackground(Style.BACKGROUND_COLOR());
         infoPane.setForeground(Style.TEXT_COLOR());
 
-		// Nimbus has a major bug which prevents JEditorPane from setting its background color properly.
-		// This fixes it. See https://forums.oracle.com/ords/apexds/post/changing-background-color-of-jeditorpane-in-nimbus-3840
-		if (Style.isNimbus())
-			{
-			UIDefaults defaults = new UIDefaults();
-			defaults.put("EditorPane[Enabled].backgroundPainter", Style.BACKGROUND_COLOR());
-			infoPane.putClientProperty("Nimbus.Overrides", defaults);
-			infoPane.putClientProperty("Nimbus.Overrides.InheritDefaults", true);
-			}
+        // Nimbus has a major bug which prevents JEditorPane from setting its background color properly.
+        // This fixes it. See https://forums.oracle.com/ords/apexds/post/changing-background-color-of-jeditorpane-in-nimbus-3840
+        if (Style.isNimbus())
+            {
+            UIDefaults defaults = new UIDefaults();
+            defaults.put("EditorPane[Enabled].backgroundPainter", Style.BACKGROUND_COLOR());
+            infoPane.putClientProperty("Nimbus.Overrides", defaults);
+            infoPane.putClientProperty("Nimbus.Overrides.InheritDefaults", true);
+            }
                 
         // Change the link color
         HTMLEditorKit kit = new HTMLEditorKit();

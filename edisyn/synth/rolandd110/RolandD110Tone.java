@@ -774,17 +774,17 @@ public class RolandD110Tone extends Synth
             new String[] { null, "p" + partial + "penvtime1", "p" + partial + "penvtime2", "p" + partial + "penvtime3", null, "p" + partial + "penvtime4" },
             new String[] { "p" + partial + "penvlevel0", "p" + partial + "penvlevel1", "p" + partial + "penvlevel2", 
 
-                           // The sysex docs say that this parameter (I believe like the D-10) is fixed to 50.
-                           // But the manual has this as an actual parameter.
-                           "p" + partial + "penvsustainlevel", "p" + partial + "penvsustainlevel",
-                           /*null , null,*/ "p" + partial + "endlevel" },
+                                       // The sysex docs say that this parameter (I believe like the D-10) is fixed to 50.
+                                       // But the manual has this as an actual parameter.
+                                       "p" + partial + "penvsustainlevel", "p" + partial + "penvsustainlevel",
+                                       /*null , null,*/ "p" + partial + "endlevel" },
             new double[] { 0, 0.2 / 100.0, 0.2 / 100.0, 0.2 / 100.0, 0.2, 0.2 / 100.0 },
             new double[] { 1.0 / 100.0, 1.0 / 100.0, 1.0 / 100.0, 
             
-                           // Similarly 
-                           1.0 / 100.0, 1.0 / 100.0,
-                           /* 0.5, 0.5, */ 
-                           1.0 / 100.0 });
+                                       // Similarly 
+                                       1.0 / 100.0, 1.0 / 100.0,
+                                       /* 0.5, 0.5, */ 
+                                       1.0 / 100.0 });
             
         ((EnvelopeDisplay)comp).setAxis(1.0 / 100.0 * 50.0);  // is this centered right?
         hbox.addLast(comp);

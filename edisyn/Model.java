@@ -1752,19 +1752,19 @@ public class Model implements Cloneable
 
     /** Override this method in the model produced by synth.buildModel() to revise mutated values if the mutator sets them to invalid things. */
     public int reviseMutatedValue(String key, int old, int current) 
-    	{
-    	if (old != current && fixer != null)
-    		current = fixer.reviseMutatedValue(key, old, current, this); 
-    	return current; 
-    	}    
+        {
+        if (old != current && fixer != null)
+            current = fixer.reviseMutatedValue(key, old, current, this); 
+        return current; 
+        }    
 
     /** Override this method in the model produced by synth.buildModel() to revise mutated values if the mutator sets them to invalid things. */
     public String reviseMutatedValue(String key, String old, String current) 
-    	{ 
-    	if (!old.equals(current) && fixer != null)
-    		current = fixer.reviseMutatedValue(key, old, current, this); 
-    	return current; 
-    	}    
+        { 
+        if (!old.equals(current) && fixer != null)
+            current = fixer.reviseMutatedValue(key, old, current, this); 
+        return current; 
+        }    
 
 
 

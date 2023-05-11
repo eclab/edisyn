@@ -91,17 +91,17 @@ public class Style
     public static Insets CHOOSER_INSETS() 
         { 
         if (isNimbus())
-        	{
+            {
             return new Insets(0, 0, 2, 0); 
-        	}
+            }
         else if (isWindows())
-        	{
-        	return new Insets(0, 0, 0, 0); 
-        	}
+            {
+            return new Insets(0, 0, 0, 0); 
+            }
         else if (isUnix())
-        	{
-        	return new Insets(0, 0, 2, 4); 
-        	}
+            {
+            return new Insets(0, 0, 2, 4); 
+            }
         else
             return new Insets(-1, 0, -2, 0);  // no insets
         }    
@@ -187,7 +187,7 @@ public class Style
     /////// BATCH DOWNLOAD WINDOW
     public static int BATCH_WINDOW_BORDER() { return 16; }
 
-	//public static Color MONTEREY_BUTTON_PRESSED_TEXT_COLOR() { return new Color(0, 0, 255); }
+    //public static Color MONTEREY_BUTTON_PRESSED_TEXT_COLOR() { return new Color(0, 0, 255); }
 
 
     /////// GRAPHICS PREPARATION

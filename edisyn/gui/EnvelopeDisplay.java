@@ -353,93 +353,93 @@ public class EnvelopeDisplay extends JComponent implements Updatable
         return value;
         }
 
-	public void setCurveKeys(String[] keys)
-		{
-		if (curves != null)
-			{
-			for(int i = 0; i < curves.length; i++)
-				{
-				if (curves[i] != null)
-					{
-					synth.getModel().unregister(curves[i], this);
-					}
-				}
-			}
-			
-		curves = keys; 
+    public void setCurveKeys(String[] keys)
+        {
+        if (curves != null)
+            {
+            for(int i = 0; i < curves.length; i++)
+                {
+                if (curves[i] != null)
+                    {
+                    synth.getModel().unregister(curves[i], this);
+                    }
+                }
+            }
+                        
+        curves = keys; 
 
-		if (curves != null)
-			{
-			for(int i = 0; i < curves.length; i++)
-				{
-				if (curves[i] != null)
-					{
-					synth.getModel().register(curves[i], this);
-					}
-				}
-			}
-		}
+        if (curves != null)
+            {
+            for(int i = 0; i < curves.length; i++)
+                {
+                if (curves[i] != null)
+                    {
+                    synth.getModel().register(curves[i], this);
+                    }
+                }
+            }
+        }
 
-	public double getControlValue(double x1, double x2, double y1, double y2, String key, int value)
-		{
-		return 0;
-		}
+    public double getControlValue(double x1, double x2, double y1, double y2, String key, int value)
+        {
+        return 0;
+        }
 
-	public double getCurveControlPointX1(double x1, double x2, double y1, double y2, String key, int value)
-		{
-		double amt = getControlValue(x1, x2, y1, y2, key, value);
-		if (amt < 0)
-			{
-			amt = 0 - amt;
-			return (x2 * CURVE_RATIO + x1 * (1 - CURVE_RATIO)) * amt +  x1 * (1-amt);
-			}
-		else
-			{
-			return x1;
-			}
-		}
+    public double getCurveControlPointX1(double x1, double x2, double y1, double y2, String key, int value)
+        {
+        double amt = getControlValue(x1, x2, y1, y2, key, value);
+        if (amt < 0)
+            {
+            amt = 0 - amt;
+            return (x2 * CURVE_RATIO + x1 * (1 - CURVE_RATIO)) * amt +  x1 * (1-amt);
+            }
+        else
+            {
+            return x1;
+            }
+        }
 
-	/** Returns the Y coordinate (between y1 and y2) of the curve control point. */
-	public double getCurveControlPointY1(double x1, double x2, double y1, double y2, String key, int value)
-		{
-		double amt = getControlValue(x1, x2, y1, y2, key, value);
-		if (amt < 0)
-			{
-			return y1;
-			}
-		else
-			{
-			return (y1 * (1-amt) + y2 * amt);
-			}
-		}
-		
-	public double getCurveControlPointX2(double x1, double x2, double y1, double y2, String key, int value)
-		{
-		double amt = getControlValue(x1, x2, y1, y2, key, value);
-		if (amt < 0)
-			{
-			return x2;
-			}
-		else
-			{
-			return (x1 * CURVE_RATIO + x2 * (1 - CURVE_RATIO)) * amt +  x2 * (1-amt);
-			}
-		}
+    /** Returns the Y coordinate (between y1 and y2) of the curve control point. */
+    public double getCurveControlPointY1(double x1, double x2, double y1, double y2, String key, int value)
+        {
+        double amt = getControlValue(x1, x2, y1, y2, key, value);
+        if (amt < 0)
+            {
+            return y1;
+            }
+        else
+            {
+            return (y1 * (1-amt) + y2 * amt);
+            }
+        }
+                
+    public double getCurveControlPointX2(double x1, double x2, double y1, double y2, String key, int value)
+        {
+        double amt = getControlValue(x1, x2, y1, y2, key, value);
+        if (amt < 0)
+            {
+            return x2;
+            }
+        else
+            {
+            return (x1 * CURVE_RATIO + x2 * (1 - CURVE_RATIO)) * amt +  x2 * (1-amt);
+            }
+        }
 
-	/** Returns the Y coordinate (between y1 and y2) of the curve control point. */
-	public double getCurveControlPointY2(double x1, double x2, double y1, double y2, String key, int value)
-		{
-		double amt = getControlValue(x1, x2, y1, y2, key, value);
-		if (amt < 0)
-			{
-			amt = 0 - amt;
-			return (y2 * (1-amt) + y1 * amt);
-			}
-		else
-			{
-			return y2;
-			}
-		}
+    /** Returns the Y coordinate (between y1 and y2) of the curve control point. */
+    public double getCurveControlPointY2(double x1, double x2, double y1, double y2, String key, int value)
+        {
+        double amt = getControlValue(x1, x2, y1, y2, key, value);
+        if (amt < 0)
+            {
+            amt = 0 - amt;
+            return (y2 * (1-amt) + y1 * amt);
+            }
+        else
+            {
+            return y2;
+            }
+        }
 
     /** Mostly fills the background appropriately. */
     public void paintComponent(Graphics g)
@@ -590,7 +590,7 @@ public class EnvelopeDisplay extends JComponent implements Updatable
             {
             fillp.moveTo(rect.x + xs[0], rect.y + startHeight); 
             p.moveTo(rect.x + xs[0], rect.y + rect.height - ys[0]);
-	        fillp.lineTo(rect.x + xs[0], rect.y + rect.height - ys[0]);
+            fillp.lineTo(rect.x + xs[0], rect.y + rect.height - ys[0]);
 
             marker[0] = new Ellipse2D.Double((rect.x + xs[0] - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0),
                 (rect.y + rect.height - ys[0] - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0),
@@ -598,20 +598,20 @@ public class EnvelopeDisplay extends JComponent implements Updatable
         
             for(int i = 1; i < xs.length; i++)
                 {
-	            if (curves == null || curves[i] == null)
-	            	{
-	                p.lineTo(rect.x + xs[i], rect.y + rect.height - ys[i]);
-	                fillp.lineTo(rect.x + xs[i], rect.y + rect.height - ys[i]);
-	                }
-	            else
-	            	{
-	            	double xx1 = getCurveControlPointX1(rect.x + xs[i-1], rect.x + xs[i], rect.y + rect.height - ys[i-1], rect.y + rect.height - ys[i], curves[i], synth.getModel().get(curves[i]));
-	            	double yy1 = getCurveControlPointY1(rect.x + xs[i-1], rect.x + xs[i], rect.y + rect.height - ys[i-1], rect.y + rect.height - ys[i], curves[i], synth.getModel().get(curves[i]));
-	            	double xx2 = getCurveControlPointX2(rect.x + xs[i-1], rect.x + xs[i], rect.y + rect.height - ys[i-1], rect.y + rect.height - ys[i], curves[i], synth.getModel().get(curves[i]));
-	            	double yy2 = getCurveControlPointY2(rect.x + xs[i-1], rect.x + xs[i], rect.y + rect.height - ys[i-1], rect.y + rect.height - ys[i], curves[i], synth.getModel().get(curves[i]));
-					p.curveTo(xx1, yy1, xx2, yy2, rect.x + xs[i], rect.y + rect.height - ys[i]);
-					fillp.curveTo(xx1, yy1, xx2, yy2, rect.x + xs[i], rect.y + rect.height - ys[i]);
-	            	}
+                if (curves == null || curves[i] == null)
+                    {
+                    p.lineTo(rect.x + xs[i], rect.y + rect.height - ys[i]);
+                    fillp.lineTo(rect.x + xs[i], rect.y + rect.height - ys[i]);
+                    }
+                else
+                    {
+                    double xx1 = getCurveControlPointX1(rect.x + xs[i-1], rect.x + xs[i], rect.y + rect.height - ys[i-1], rect.y + rect.height - ys[i], curves[i], synth.getModel().get(curves[i]));
+                    double yy1 = getCurveControlPointY1(rect.x + xs[i-1], rect.x + xs[i], rect.y + rect.height - ys[i-1], rect.y + rect.height - ys[i], curves[i], synth.getModel().get(curves[i]));
+                    double xx2 = getCurveControlPointX2(rect.x + xs[i-1], rect.x + xs[i], rect.y + rect.height - ys[i-1], rect.y + rect.height - ys[i], curves[i], synth.getModel().get(curves[i]));
+                    double yy2 = getCurveControlPointY2(rect.x + xs[i-1], rect.x + xs[i], rect.y + rect.height - ys[i-1], rect.y + rect.height - ys[i], curves[i], synth.getModel().get(curves[i]));
+                    p.curveTo(xx1, yy1, xx2, yy2, rect.x + xs[i], rect.y + rect.height - ys[i]);
+                    fillp.curveTo(xx1, yy1, xx2, yy2, rect.x + xs[i], rect.y + rect.height - ys[i]);
+                    }
                 marker[i] = new Ellipse2D.Double((rect.x + xs[i] - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0),
                     (rect.y + rect.height - ys[i] - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0),
                     Style.ENVELOPE_DISPLAY_MARKER_WIDTH(), Style.ENVELOPE_DISPLAY_MARKER_WIDTH());

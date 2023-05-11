@@ -125,14 +125,14 @@ public class Library extends AbstractTableModel
     
     /** Tests if a patch is empty or initialized.  To get a scratch bank patch, pass in SCRATCH_BANK.  */
     public boolean isEmptyOrInit(int bankNumber, int patchNumber)
-    	{
-    	Patch patch = getPatch(bankNumber, patchNumber);
-    	if (patch == null) return true;
-    	if (patch.sysex == null) return true;	// uh...
-    	if (patch.sysex.length == 0) return true; 	// uh...
-    	if (patch.empty) return true;
-    	return false;
-    	}
+        {
+        Patch patch = getPatch(bankNumber, patchNumber);
+        if (patch == null) return true;
+        if (patch.sysex == null) return true;   // uh...
+        if (patch.sysex.length == 0) return true;       // uh...
+        if (patch.empty) return true;
+        return false;
+        }
     
     /** Returns the init patch */
     public Patch getInitPatch() 
@@ -202,7 +202,7 @@ public class Library extends AbstractTableModel
         }
                 
     /** Places a patch in the library according to its current bank and number. 
-    	You should have done an undo/redo prior to using this method. */
+        You should have done an undo/redo prior to using this method. */
     public void setPatch(Patch patch)
         {
         patches[patch.bank + 1][patch.number] = patch;
@@ -210,8 +210,8 @@ public class Library extends AbstractTableModel
         }
         
     /** Places a patch in the library at the given bank and number. 
-    	To place in the scratch bank, pass in SCRATCH_BANK.
-    	You should have done an undo/redo prior to using this method. */
+        To place in the scratch bank, pass in SCRATCH_BANK.
+        You should have done an undo/redo prior to using this method. */
     public void setPatch(Patch patch, int bank, int number)
         {
         patches[bank + 1][number] = patch;
@@ -219,7 +219,7 @@ public class Library extends AbstractTableModel
         }
         
     /** Places a bank of patch in the library at the given bank number.  To place the scratch bank, pass in SCRATCH_BANK.
-    	You should have done an undo/redo prior to using this method. */
+        You should have done an undo/redo prior to using this method. */
     public void setBank(Patch[] bank, int bankNumber)
         {
         patches[bankNumber + 1] = bank;                                                 // disregard the scratch bank
@@ -227,8 +227,8 @@ public class Library extends AbstractTableModel
         }
         
     /** Sets all patches, possibly including the scratch bank.
-    	You should have done an undo/redo prior to using this method. */    
- 	public void setAll(Patch[][] all, boolean includeScratch)
+        You should have done an undo/redo prior to using this method. */    
+    public void setAll(Patch[][] all, boolean includeScratch)
         {
         if (includeScratch) patches = all;
         else
@@ -426,14 +426,14 @@ public class Library extends AbstractTableModel
         
         for(int i = 0; i < len; i++)
             {
-            if (incoming[i].number == Patch.NUMBER_NOT_SET || 					// The patch number is unknown
-                incoming[i].bank < 0 ||											// The bank is not legal
-                incoming[i].bank >= getNumBanks() ||							// The bank is not legal
-                incoming[i].number < 0 ||										// The patch number is not legal
-                incoming[i].number >= patches[incoming[i].bank + 1].length ||	// The patch number is not legal
-                !synth.isValidPatchLocation(incoming[i].bank, incoming[i].number) ||		// The patch location is not valid
-                (!isEmptyOrInit(incoming[i].bank, incoming[i].number) && !overwrite) ||	// There is a patch already in the library at that location and we're not overwriting it
-                known[incoming[i].bank][incoming[i].number] != null) 			// Another incoming patch has already taken that spot
+            if (incoming[i].number == Patch.NUMBER_NOT_SET ||                                   // The patch number is unknown
+                incoming[i].bank < 0 ||                                                                                 // The bank is not legal
+                incoming[i].bank >= getNumBanks() ||                                                    // The bank is not legal
+                incoming[i].number < 0 ||                                                                               // The patch number is not legal
+                incoming[i].number >= patches[incoming[i].bank + 1].length ||   // The patch number is not legal
+                !synth.isValidPatchLocation(incoming[i].bank, incoming[i].number) ||            // The patch location is not valid
+                (!isEmptyOrInit(incoming[i].bank, incoming[i].number) && !overwrite) || // There is a patch already in the library at that location and we're not overwriting it
+                known[incoming[i].bank][incoming[i].number] != null)                    // Another incoming patch has already taken that spot
                 {
 //                System.err.println("Unknown " + incoming[i]);
                 unknown.add(incoming[i]);
@@ -462,83 +462,83 @@ public class Library extends AbstractTableModel
                 }
             }
 
-		// Fill Remaining slots with unknown patches
-		
-        int emptyBank = 1;		// The bank of the current patch location we're considering.  Bank 1 should be the FIRST BANK, not the SCRATCH BANK
-        int emptyNumber = -1;	// The number of the current patch location we're considering.
+        // Fill Remaining slots with unknown patches
+                
+        int emptyBank = 1;              // The bank of the current patch location we're considering.  Bank 1 should be the FIRST BANK, not the SCRATCH BANK
+        int emptyNumber = -1;   // The number of the current patch location we're considering.
         
         for(Patch un : unknown)
-        	{ 
-        	boolean success = false;		// Whether we were able to set the patch, or failed because we ran out of room and must stop
-        	while(true)
-        		{
-	        	emptyNumber++;				// Go to the next possible location
+            { 
+            boolean success = false;                // Whether we were able to set the patch, or failed because we ran out of room and must stop
+            while(true)
+                {
+                emptyNumber++;                          // Go to the next possible location
 
-				// Handle SCRATCH BANK
-        		if (emptyBank >= patches.length)	// If we're beyond the legal banks, we assume we're filling the scratch bank
-        			{
-                	if (emptyNumber >= patches[0].length)	// If we have exceeded the number of patches in the SCRATCH bank (0) we have FAILED
-						{
-						break;			// failure
-						}
-					else if (!isEmptyOrInit(SCRATCH_BANK, emptyNumber))		// If there is a patch in that slot, look for another
-						{
-						continue;
-						}
-					else 				// Found a slot!  Fill it.
-						{
-						// fix name if it's null
-						if (un.name == null)
-							{
-                        	un.name = "Scratch-" + getPatchNumberNames()[emptyNumber];
-							}
-						un.number = emptyNumber;
-						un.bank = SCRATCH_BANK;		// what else should we do?  Set it to bank 0 I guess
-						setPatch(un);
-						un.bank = 0;				// reset to 0?
-						success = true;
-						break;			// success
-						}
-        			} 
-        		else
-        			{
-					if (emptyNumber >= patches[emptyBank].length)		// if we're beyond the legal patches for this bank, go to next bank and reset
-						{
-						emptyBank++;
-						emptyNumber = -1;
-						continue;
-						}
-					else if (!synth.isValidPatchLocation(emptyBank - 1, emptyNumber))		// If we're not at a legitimate patch location, continue
-						{
-						continue;		// increment to next location
-						}
-					if (!isEmptyOrInit(emptyBank - 1, emptyNumber))		// If there is a patch in that slot, look for another
-						{
-						continue;
-						}
-					else				// Found a slot!  Fill it.
-						{
-						// fix name if it's null
-						if (un.name == null)
-							{
-                        	un.name = "" + (getNumBanks() == 1 ? "" : (getBankName(emptyBank - 1) + "-")) + getPatchNumberNames()[emptyNumber];
-							}
-						un.number = emptyNumber;
-						un.bank = emptyBank - 1;
-						setPatch(un);
-						success = true;
-						break;			// success
-						}
-					}
-				}
-				
-			if (!success)
-				{
+                // Handle SCRATCH BANK
+                if (emptyBank >= patches.length)        // If we're beyond the legal banks, we assume we're filling the scratch bank
+                    {
+                    if (emptyNumber >= patches[0].length)   // If we have exceeded the number of patches in the SCRATCH bank (0) we have FAILED
+                        {
+                        break;                  // failure
+                        }
+                    else if (!isEmptyOrInit(SCRATCH_BANK, emptyNumber))             // If there is a patch in that slot, look for another
+                        {
+                        continue;
+                        }
+                    else                            // Found a slot!  Fill it.
+                        {
+                        // fix name if it's null
+                        if (un.name == null)
+                            {
+                            un.name = "Scratch-" + getPatchNumberNames()[emptyNumber];
+                            }
+                        un.number = emptyNumber;
+                        un.bank = SCRATCH_BANK;         // what else should we do?  Set it to bank 0 I guess
+                        setPatch(un);
+                        un.bank = 0;                            // reset to 0?
+                        success = true;
+                        break;                  // success
+                        }
+                    } 
+                else
+                    {
+                    if (emptyNumber >= patches[emptyBank].length)           // if we're beyond the legal patches for this bank, go to next bank and reset
+                        {
+                        emptyBank++;
+                        emptyNumber = -1;
+                        continue;
+                        }
+                    else if (!synth.isValidPatchLocation(emptyBank - 1, emptyNumber))               // If we're not at a legitimate patch location, continue
+                        {
+                        continue;               // increment to next location
+                        }
+                    if (!isEmptyOrInit(emptyBank - 1, emptyNumber))         // If there is a patch in that slot, look for another
+                        {
+                        continue;
+                        }
+                    else                            // Found a slot!  Fill it.
+                        {
+                        // fix name if it's null
+                        if (un.name == null)
+                            {
+                            un.name = "" + (getNumBanks() == 1 ? "" : (getBankName(emptyBank - 1) + "-")) + getPatchNumberNames()[emptyNumber];
+                            }
+                        un.number = emptyNumber;
+                        un.bank = emptyBank - 1;
+                        setPatch(un);
+                        success = true;
+                        break;                  // success
+                        }
+                    }
+                }
+                                
+            if (!success)
+                {
                 synth.showSimpleError("Out of Space", "There weren't enough empty slots in the Librarian to fill with all the new patches.");
-				break;
-				}
-			}
-		}
+                break;
+                }
+            }
+        }
                 
     /** Reads a sysex bank message holding one or (rarely) more than one bank, 
         and loads the patches in that bank or those banks
@@ -766,8 +766,8 @@ public class Library extends AbstractTableModel
         }
         
 
-	boolean emittingBatch = false;
-	        
+    boolean emittingBatch = false;
+                
     // Emits MIDI representing all the patches from start to start+len-1 in bank.
     // If bank == ALL_PATCHES, then emits the entire library.
     // If bank == ALL_PATCHES, and the synthesizer is capable of emitting bank-patch dumps, 
@@ -933,7 +933,7 @@ public class Library extends AbstractTableModel
                     {
                     synth.tryToSendMIDI(concatenate(data), "Writing", "Writing Patches to Synth");
                     }
-                //synth.sendAllParameters();		// this will mess up synths that use a scratch patch.  Instead we're writing when we leave the librarian
+                //synth.sendAllParameters();            // this will mess up synths that use a scratch patch.  Instead we're writing when we leave the librarian
                 }
             }           
         else
@@ -1404,20 +1404,20 @@ public class Library extends AbstractTableModel
         int number = model.get("number", -1);
         int bank = model.get("bank", -1);
         
-		synth.undo.setWillPush(false);
-		boolean send = synth.getSendMIDI();
-		synth.setSendMIDI(false);
-		boolean shouldUpdate = synth.model.getUpdateListeners();
-		synth.model.setUpdateListeners(false);
-		Model backup = synth.model;
+        synth.undo.setWillPush(false);
+        boolean send = synth.getSendMIDI();
+        synth.setSendMIDI(false);
+        boolean shouldUpdate = synth.model.getUpdateListeners();
+        synth.model.setUpdateListeners(false);
+        Model backup = synth.model;
 
-		synth.model = model;		
+        synth.model = model;            
         byte[][] data = synth.cutUpSysex(synth.flatten(synth.emitAll(model, false, true)));  
         
         synth.model = backup;
-		synth.model.setUpdateListeners(shouldUpdate);
-		synth.setSendMIDI(send);
-		synth.undo.setWillPush(true);
+        synth.model.setUpdateListeners(shouldUpdate);
+        synth.setSendMIDI(send);
+        synth.undo.setWillPush(true);
         
         Patch patch = new Patch(synthNum, data, false);
         patch.name = name;
@@ -1483,70 +1483,70 @@ public class Library extends AbstractTableModel
 
 
 
-	// Extracting Names
-	
-	
-	public String[] getNames(int bank)
-		{
-		if (bank == ALL_PATCHES)
-			{
-			String[] result = new String[numberNames.length * (bankNames.length - 1)];
-			for(int i = 0; i < bankNames.length - 1; i++)
-				{
-				String[] b = getNames(i);
-				System.arraycopy(b, 0, result, numberNames.length * i, numberNames.length);
-				}
-			return result;
-			}
-		else
-			{
-			String[] result = new String[numberNames.length];
-			for(int i = 0; i < numberNames.length; i++)
-				{
-				Patch patch = getPatch(bank, i);
-				if (patch == null || patch.name == null) 
-					{
-					result[i] = "";
-					}
-				else
-					{
-					result[i] = patch.name;
-					}
-				}
-			return result;
-			}
-		}
-		
-	public String[] getPatchLocationNames(int bank)
-		{
-		if (bank == ALL_PATCHES)
-			{
-			String[] result = new String[numberNames.length * (bankNames.length - 1)];
-			for(int i = 0; i < (bankNames.length - 1); i++)
-				{
-				String[] b = getPatchLocationNames(i);
-				System.arraycopy(b, 0, result, numberNames.length * i, numberNames.length);
-				}
-			return result;
-			}
-		else
-			{
-			Model model = new Model();
-			model.set("bank", bank);
-			String[] result = new String[numberNames.length];
-			for(int i = 0; i < numberNames.length; i++)
-				{
-				model.set("number", i);
-				result[i] = synth.getPatchLocationName(model);
-				if (result[i] == null) 
-					{
-					// make something up
-					result[i] = "" + bank + "/" + i;
-					}
-				}
-			return result;
-			}
-		}
+    // Extracting Names
+        
+        
+    public String[] getNames(int bank)
+        {
+        if (bank == ALL_PATCHES)
+            {
+            String[] result = new String[numberNames.length * (bankNames.length - 1)];
+            for(int i = 0; i < bankNames.length - 1; i++)
+                {
+                String[] b = getNames(i);
+                System.arraycopy(b, 0, result, numberNames.length * i, numberNames.length);
+                }
+            return result;
+            }
+        else
+            {
+            String[] result = new String[numberNames.length];
+            for(int i = 0; i < numberNames.length; i++)
+                {
+                Patch patch = getPatch(bank, i);
+                if (patch == null || patch.name == null) 
+                    {
+                    result[i] = "";
+                    }
+                else
+                    {
+                    result[i] = patch.name;
+                    }
+                }
+            return result;
+            }
+        }
+                
+    public String[] getPatchLocationNames(int bank)
+        {
+        if (bank == ALL_PATCHES)
+            {
+            String[] result = new String[numberNames.length * (bankNames.length - 1)];
+            for(int i = 0; i < (bankNames.length - 1); i++)
+                {
+                String[] b = getPatchLocationNames(i);
+                System.arraycopy(b, 0, result, numberNames.length * i, numberNames.length);
+                }
+            return result;
+            }
+        else
+            {
+            Model model = new Model();
+            model.set("bank", bank);
+            String[] result = new String[numberNames.length];
+            for(int i = 0; i < numberNames.length; i++)
+                {
+                model.set("number", i);
+                result[i] = synth.getPatchLocationName(model);
+                if (result[i] == null) 
+                    {
+                    // make something up
+                    result[i] = "" + bank + "/" + i;
+                    }
+                }
+            return result;
+            }
+        }
 
     }
         

@@ -1243,13 +1243,13 @@ public class ASMHydrasynth extends Synth
             }
 
 /*
-        String str = getLastX("Deluxe", getSynthClassName(), true);
-        if (str == null)
-            deluxe = false;            // default is false
-        else if (str.equalsIgnoreCase("true"))
-            deluxe = true;
-        else
-            deluxe = false;
+  String str = getLastX("Deluxe", getSynthClassName(), true);
+  if (str == null)
+  deluxe = false;            // default is false
+  else if (str.equalsIgnoreCase("true"))
+  deluxe = true;
+  else
+  deluxe = false;
 */
 
         String str = getLastX("IgnoreParametersFromSynth", getSynthClassName(), true);
@@ -1270,13 +1270,13 @@ public class ASMHydrasynth extends Synth
 
 // Looks like this was fixed in 2.0.0
 /*
-        str = getLastX("SendArpTapTrig", getSynthClassName(), true);
-        if (str == null)
-            sendArpTapTrig = false;            // default is false
-        else if (str.equalsIgnoreCase("true"))
-            sendArpTapTrig = true;
-        else
-            sendArpTapTrig = false;
+  str = getLastX("SendArpTapTrig", getSynthClassName(), true);
+  if (str == null)
+  sendArpTapTrig = false;            // default is false
+  else if (str.equalsIgnoreCase("true"))
+  sendArpTapTrig = true;
+  else
+  sendArpTapTrig = false;
 */
 
         str = getLastX("LockUserLFOSteps", getSynthClassName(), true);
@@ -1303,11 +1303,11 @@ public class ASMHydrasynth extends Synth
         inner.addLast(addVoice(Style.COLOR_B()));
         VBox innerV = new VBox();
         innerV.add(inner);
-		hbox.add(innerV);
+        hbox.add(innerV);
         hbox.addLast(addGlide(Style.COLOR_C()));
         vbox.add(hbox);
 
-		JComponent comp = null;
+        JComponent comp = null;
         hbox = new HBox();
         hbox.add(comp = addOscillator(1, Style.COLOR_A()));
         hbox.addLast(addRingMod(Style.COLOR_B()));
@@ -1395,7 +1395,7 @@ public class ASMHydrasynth extends Synth
         vbox.add(addLFOSteps(1, Style.COLOR_B()));
 
         soundPanel.add(vbox, BorderLayout.CENTER);
-		((SynthPanel)soundPanel).makePasteable("lfo");
+        ((SynthPanel)soundPanel).makePasteable("lfo");
         addTab("Steps 1", soundPanel);
 
         soundPanel = new SynthPanel(this);
@@ -1404,7 +1404,7 @@ public class ASMHydrasynth extends Synth
         vbox.add(addLFOSteps(2, Style.COLOR_A()));
 
         soundPanel.add(vbox, BorderLayout.CENTER);
-		((SynthPanel)soundPanel).makePasteable("lfo");
+        ((SynthPanel)soundPanel).makePasteable("lfo");
         addTab("2", soundPanel);
 
         soundPanel = new SynthPanel(this);
@@ -1413,7 +1413,7 @@ public class ASMHydrasynth extends Synth
         vbox.add(addLFOSteps(3, Style.COLOR_B()));
 
         soundPanel.add(vbox, BorderLayout.CENTER);
-		((SynthPanel)soundPanel).makePasteable("lfo");
+        ((SynthPanel)soundPanel).makePasteable("lfo");
         addTab("3", soundPanel);
 
         soundPanel = new SynthPanel(this);
@@ -1422,7 +1422,7 @@ public class ASMHydrasynth extends Synth
         vbox.add(addLFOSteps(4, Style.COLOR_A()));
 
         soundPanel.add(vbox, BorderLayout.CENTER);
-		((SynthPanel)soundPanel).makePasteable("lfo");
+        ((SynthPanel)soundPanel).makePasteable("lfo");
         addTab("4", soundPanel);
 
         soundPanel = new SynthPanel(this);
@@ -1431,7 +1431,7 @@ public class ASMHydrasynth extends Synth
         vbox.add(addLFOSteps(5, Style.COLOR_B()));
 
         soundPanel.add(vbox, BorderLayout.CENTER);
-		((SynthPanel)soundPanel).makePasteable("lfo");
+        ((SynthPanel)soundPanel).makePasteable("lfo");
         addTab("5", soundPanel);
 
         soundPanel = new SynthPanel(this);
@@ -1612,7 +1612,7 @@ public class ASMHydrasynth extends Synth
             model.set("lfo5steps", 2);
         
         if (model.get("filter1type") == 16) // vowel is sometimes returned as 16 incorrectly
-        	model.set("filter1type", 10);
+            model.set("filter1type", 10);
         
         // check the easy stuff -- out of range parameters
         super.revise();
@@ -1663,7 +1663,7 @@ public class ASMHydrasynth extends Synth
         }
 
     JComponent pastMode = null;
-	HBox _waveScanBox = null;
+    HBox _waveScanBox = null;
     public JComponent addOscillator(final int osc, Color color)
         {
         Category category = new Category(this, "Oscillator " + osc, color);
@@ -1676,33 +1676,33 @@ public class ASMHydrasynth extends Synth
         
         VBox vbox = new VBox();
         
-		final HBox waveScanBox = new HBox();
+        final HBox waveScanBox = new HBox();
         if (osc < 3)
-        	{
-			_waveScanBox = waveScanBox;
-			comp = new LabelledDial("WaveScan", this, "osc" + osc + "wavscan", color, 0, 1024)
-				{
-				public String map(int value)
-					{
-					int v = value * 8;
-					// dividing 8192 by 117.03 roughly cuts into 70 pieces
-					return String.format("%1.1f", ((roundEven(v / 117.03) + 10) / 10.0));
-					}
-				};
-			waveScanBox.add(comp);
-			for(int i = 1; i <= 4; i++)
-				{
-				vbox = new VBox();
-				params = (i == 1 ? OSC_WAVES : OSC_WAVES_OFF_SILENCE);
-				comp = new Chooser("WaveScan Wave " + i, this, "osc" + osc + "wavscanwave" + i, params);
-				vbox.add(comp);
+            {
+            _waveScanBox = waveScanBox;
+            comp = new LabelledDial("WaveScan", this, "osc" + osc + "wavscan", color, 0, 1024)
+                {
+                public String map(int value)
+                    {
+                    int v = value * 8;
+                    // dividing 8192 by 117.03 roughly cuts into 70 pieces
+                    return String.format("%1.1f", ((roundEven(v / 117.03) + 10) / 10.0));
+                    }
+                };
+            waveScanBox.add(comp);
+            for(int i = 1; i <= 4; i++)
+                {
+                vbox = new VBox();
+                params = (i == 1 ? OSC_WAVES : OSC_WAVES_OFF_SILENCE);
+                comp = new Chooser("WaveScan Wave " + i, this, "osc" + osc + "wavscanwave" + i, params);
+                vbox.add(comp);
 
-				params = OSC_WAVES_OFF_SILENCE;
-				comp = new Chooser("WaveScan Wave " + (i + 4), this, "osc" + osc + "wavscanwave" + (i + 4), params);
-				vbox.add(comp);
-				waveScanBox.add(vbox);
-				}
-			}
+                params = OSC_WAVES_OFF_SILENCE;
+                comp = new Chooser("WaveScan Wave " + (i + 4), this, "osc" + osc + "wavscanwave" + (i + 4), params);
+                vbox.add(comp);
+                waveScanBox.add(vbox);
+                }
+            }
                 
 
         final HBox waveBox = new HBox();
@@ -1729,10 +1729,10 @@ public class ASMHydrasynth extends Synth
         waveBox.add(Strut.makeHorizontalStrut(8));
         final VBox outerWaveBox = new VBox();
         outerWaveBox.add(waveBox);
-		outerWaveBox.add(Strut.makeStrut(_waveScanBox, false, true));
+        outerWaveBox.add(Strut.makeStrut(_waveScanBox, false, true));
         
         vbox = new VBox();
-         if (osc == 3)
+        if (osc == 3)
             {
             vbox.add(Strut.makeStrut(pastMode, false, true));
             }
@@ -1853,12 +1853,12 @@ public class ASMHydrasynth extends Synth
         String[] params;
         final HBox hbox = new HBox();
         
-		model.set("voiceglidecurve", 0);		// the purpose of this is to make sure that voiceglidecurve sync is FIRST in the mutation list
+        model.set("voiceglidecurve", 0);                // the purpose of this is to make sure that voiceglidecurve sync is FIRST in the mutation list
 
         final CheckBox legato = new CheckBox("Legato", this, "voiceglidelegato");
 
-		HBox curvetime = new HBox();
-         final LabelledDial curve = new LabelledDial("Curve", this, "voiceglidecurve", color, 0, 128)
+        HBox curvetime = new HBox();
+        final LabelledDial curve = new LabelledDial("Curve", this, "voiceglidecurve", color, 0, 128)
             {
             public boolean isSymmetric() { return true; }
             public String map(int val)
@@ -1873,37 +1873,37 @@ public class ASMHydrasynth extends Synth
                 else return "Linear";
                 }
             };
-		curvetime.add(curve);
+        curvetime.add(curve);
         final LabelledDial time = new LabelledDial("Time", this, "voiceglidetime", color, 0, 127);
-		curvetime.add(time);
+        curvetime.add(time);
 
-       final VBox vbox = new VBox();
+        final VBox vbox = new VBox();
         params = GLIDE_MODES;
         comp = new Chooser("Mode", this, "voiceglide", params)
-        	{
+            {
             public void update(String key, Model model)
                 {
                 super.update(key, model);
                 if (model.get(key) == 0)
-                	{
-                	vbox.remove(legato);
-                	curvetime.removeAll();
-                	curvetime.add(Strut.makeStrut(curve));
-                	curvetime.add(Strut.makeStrut(time));
-                	}
+                    {
+                    vbox.remove(legato);
+                    curvetime.removeAll();
+                    curvetime.add(Strut.makeStrut(curve));
+                    curvetime.add(Strut.makeStrut(time));
+                    }
                 else
-                	{
-                	vbox.add(legato);
-                	curvetime.removeAll();
-                	curvetime.add(curve);
-                	curvetime.add(time);
-                	}
+                    {
+                    vbox.add(legato);
+                    curvetime.removeAll();
+                    curvetime.add(curve);
+                    curvetime.add(time);
+                    }
                 vbox.revalidate();
                 curvetime.revalidate();
                 vbox.repaint();
                 curvetime.repaint();
                 }
-        	};
+            };
         vbox.add(comp);
 
         vbox.add(legato);
@@ -1922,8 +1922,8 @@ public class ASMHydrasynth extends Synth
         String[] params;
         final HBox hbox = new HBox();
         
-		model.set("voicevibratobpmsync", 0);		// the purpose of this is to make sure that bpm sync is FIRST in the mutation list
-		
+        model.set("voicevibratobpmsync", 0);            // the purpose of this is to make sure that bpm sync is FIRST in the mutation list
+                
         final LabelledDial off = new LabelledDial("Rate", this, "voicevibratoratesyncoff", color, 0, 127)
             {
             public String map(int value)
@@ -2371,7 +2371,7 @@ public class ASMHydrasynth extends Synth
         String[] params;
         HBox hbox = new HBox();
         
-		model.set("mutant" + mut + "mode", 0);		// the purpose of this is to make sure that mode is FIRST in the mutation list
+        model.set("mutant" + mut + "mode", 0);          // the purpose of this is to make sure that mode is FIRST in the mutation list
 
         params = MUTANT_SOURCES_FM_LIN;
         final Chooser sourcesFMLin = new Chooser("Source", this, "mutant" + mut + "sourcefmlin", params);
@@ -2447,7 +2447,7 @@ public class ASMHydrasynth extends Synth
         final EnvelopeDisplay disp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
             new String[] { null, null,  null,  null,  null,  null,  null,  null },
             new String[] { "mutant" + mut + "warp1", "mutant" + mut + "warp2", "mutant" + mut + "warp3", "mutant" + mut + "warp4",
-                           "mutant" + mut + "warp5", "mutant" + mut + "warp6", "mutant" + mut + "warp7", "mutant" + mut + "warp8" },
+                                                             "mutant" + mut + "warp5", "mutant" + mut + "warp6", "mutant" + mut + "warp7", "mutant" + mut + "warp8" },
             new double[] { 0, 1.0 / 8, 1.0 / 8, 1.0 / 8, 1.0 / 8, 1.0 / 8, 1.0 / 8, 1.0 / 8 },
             new double[] { 1.0 / 1024.0, 1.0 / 1024.0, 1.0 / 1024.0, 1.0 / 1024.0, 1.0 / 1024.0, 1.0 / 1024.0, 1.0 / 1024.0, 1.0 / 1024.0 });
         disp.setStepping(true);
@@ -2585,13 +2585,13 @@ public class ASMHydrasynth extends Synth
         String[] params;
         final HBox hbox = new HBox();
         
-		model.set("ribbonmode", 0);		// the purpose of this is to make sure that mode is FIRST in the mutation list
+        model.set("ribbonmode", 0);             // the purpose of this is to make sure that mode is FIRST in the mutation list
 
 
 
-		//// This is basically a duplicate of addScale()
+        //// This is basically a duplicate of addScale()
 
-		HBox _hbox = new HBox();
+        HBox _hbox = new HBox();
         final HBox scaleEditBox = new HBox();
                 
         for(int i = 2; i <= 8; i++)
@@ -2668,8 +2668,8 @@ public class ASMHydrasynth extends Synth
         _hbox.add(keyLock);
 
 
-		/// End replication of addScale()
-		HBox scale = _hbox;
+        /// End replication of addScale()
+        HBox scale = _hbox;
 
 
 
@@ -2968,16 +2968,16 @@ public class ASMHydrasynth extends Synth
         String[] params;
         final HBox hbox = new HBox();
 
-		model.set((pre ? "pre" : "post") + "fxtype", 0);		// the purpose of this is to make sure that type is FIRST in the mutation list
+        model.set((pre ? "pre" : "post") + "fxtype", 0);                // the purpose of this is to make sure that type is FIRST in the mutation list
         
- 		// make it so mutation won't try to play with these
-		for(int i = 1; i <= 5; i++)
-			{
-			model.set((pre ? "pre" : "post") + "fxparam" + i, 0);
-			model.setStatus((pre ? "pre" : "post") + "fxparam" + i, Model.STATUS_IMMUTABLE);
-			}
+        // make it so mutation won't try to play with these
+        for(int i = 1; i <= 5; i++)
+            {
+            model.set((pre ? "pre" : "post") + "fxparam" + i, 0);
+            model.setStatus((pre ? "pre" : "post") + "fxparam" + i, Model.STATUS_IMMUTABLE);
+            }
 
-       final HBox chorus = new HBox();
+        final HBox chorus = new HBox();
         comp = new LabelledDial("Rate", this, (pre ? "pre" : "post") + "fx1param1", color, 0, 1024)
             {
             public String map(int value)
@@ -3582,7 +3582,7 @@ public class ASMHydrasynth extends Synth
         {
         Category category = new Category(this, "Delay", color);
 
-		model.set("delaybpmsync", 0);		// the purpose of this is to make sure that bpm sync is FIRST in the mutation list
+        model.set("delaybpmsync", 0);           // the purpose of this is to make sure that bpm sync is FIRST in the mutation list
 
         JComponent comp;
         String[] params;
@@ -3790,7 +3790,7 @@ public class ASMHydrasynth extends Synth
         String[] params;
         final HBox hbox = new HBox();
         
-		model.set("lfo" + lfo + "bpmsync", 0);		// the purpose of this is to make sure that bpm sync is FIRST in the mutation list
+        model.set("lfo" + lfo + "bpmsync", 0);          // the purpose of this is to make sure that bpm sync is FIRST in the mutation list
 
         final LabelledDial steps = new LabelledDial("Steps", this, "lfo" + lfo + "steps", color, 2, 64);
 
@@ -4056,77 +4056,77 @@ public class ASMHydrasynth extends Synth
         vbox.add(Strut.makeVerticalStrut(16));
                 
         comp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), xs, ys, x, y)
-        	{
-			int lastIndex = -1;
-			
-			// The mouseDown and mouseUp code here enables us to only do undo()
-			// ONCE.
-			public void mouseDown()
-				{
-				getUndo().push(getModel());
-				getUndo().setWillPush(false);
-				}
-			
-			public void mouseUp()
-				{
-				getUndo().setWillPush(true);
-				}
-					
-			public void updateFromMouse(double x, double y, boolean continuation)
-				{
-				if (x < 0.0)
-					x = 0.0;
-				else if (x > 1.0)
-					x = 1.0;
+            {
+            int lastIndex = -1;
+                        
+            // The mouseDown and mouseUp code here enables us to only do undo()
+            // ONCE.
+            public void mouseDown()
+                {
+                getUndo().push(getModel());
+                getUndo().setWillPush(false);
+                }
+                        
+            public void mouseUp()
+                {
+                getUndo().setWillPush(true);
+                }
+                                        
+            public void updateFromMouse(double x, double y, boolean continuation)
+                {
+                if (x < 0.0)
+                    x = 0.0;
+                else if (x > 1.0)
+                    x = 1.0;
 
-				if (y <= 0.0) 
-					y = 0.0;
-				else if (y >= 1.0) 
-					y = 1.0;
-					
-				int step = (int)(x * 64);
-				if (step >= 64) step = 63;
+                if (y <= 0.0) 
+                    y = 0.0;
+                else if (y >= 1.0) 
+                    y = 1.0;
+                                        
+                int step = (int)(x * 64);
+                if (step >= 64) step = 63;
 
-				double val = (((int)(y * 1024)) / 8) * 8;
-				
-				int proposedState = (int) Math.round(val);
-				if (lockUserLFOSteps || lockAllLFOSteps)
-					{
-					proposedState = lockLFOStep(proposedState);
-					}
-				
-				model.set("lfo" + lfo + "step" + (step + 1), proposedState);
-				}
+                double val = (((int)(y * 1024)) / 8) * 8;
+                                
+                int proposedState = (int) Math.round(val);
+                if (lockUserLFOSteps || lockAllLFOSteps)
+                    {
+                    proposedState = lockLFOStep(proposedState);
+                    }
+                                
+                model.set("lfo" + lfo + "step" + (step + 1), proposedState);
+                }
 
-			public void updateHighlightIndex(int index)
-				{
-				if (lastIndex >= 0)
-					{
-					dials[lastIndex].setTextColor(Style.TEXT_COLOR());
-					lastIndex = -1;
-					}
-									
-				if (index >= 0)
-					{
-					dials[index].setTextColor(Style.DYNAMIC_COLOR());
-					lastIndex = index;
-					}
-				}
-															
-			public int highlightIndex(double x, double y, boolean continuation)
-				{
-				if (x < 0) x = 0;
-				if (x > 1.0) x = 1.0;
-				int step = (int)(x * 64);
-				if (step >= 64) step = 63;
-				return step;
-				}
+            public void updateHighlightIndex(int index)
+                {
+                if (lastIndex >= 0)
+                    {
+                    dials[lastIndex].setTextColor(Style.TEXT_COLOR());
+                    lastIndex = -1;
+                    }
+                                                                        
+                if (index >= 0)
+                    {
+                    dials[index].setTextColor(Style.DYNAMIC_COLOR());
+                    lastIndex = index;
+                    }
+                }
+                                                                                                                        
+            public int highlightIndex(double x, double y, boolean continuation)
+                {
+                if (x < 0) x = 0;
+                if (x > 1.0) x = 1.0;
+                int step = (int)(x * 64);
+                if (step >= 64) step = 63;
+                return step;
+                }
 
-//			public int verticalBorderThickness() { return 4; }
-        	};
+//                      public int verticalBorderThickness() { return 4; }
+            };
 
-		EnvelopeDisplay disp = (EnvelopeDisplay)comp;
-       	disp.setStepping(true);
+        EnvelopeDisplay disp = (EnvelopeDisplay)comp;
+        disp.setStepping(true);
         disp.setAxis(0.5);
         disp.setFinalStageKey("lfo" + lfo + "steps");
         disp.setPreferredHeight(disp.getPreferredHeight() * 2);
@@ -4159,7 +4159,7 @@ public class ASMHydrasynth extends Synth
         
         VBox vbox = new VBox();
         
-		model.set("env" + env + "bpmsync", 0);		// the purpose of this is to make sure that bpm sync is FIRST in the mutation list
+        model.set("env" + env + "bpmsync", 0);          // the purpose of this is to make sure that bpm sync is FIRST in the mutation list
 
         if (env == 2)  // No Env 2 Trigger Source 1, but it's still a parameter!  Hydrasynth is weird
             {
@@ -4732,12 +4732,12 @@ public class ASMHydrasynth extends Synth
         hbox.add(vbox);
 
         comp = new LabelledDial("Tempo", this, "arptempo", color, 300, 2400)
-        	{
-        	public String map(int val)
-        		{
-        		return "" + (val / 10) + "." + (val % 10);
-        		}
-        	};
+            {
+            public String map(int val)
+                {
+                return "" + (val / 10) + "." + (val % 10);
+                }
+            };
         hbox.add(comp);
         
         comp = new LabelledDial("Octave", this, "arpoctave", color, 1, 6);
@@ -4858,17 +4858,17 @@ public class ASMHydrasynth extends Synth
         menubar.add(menu);
 
 /*
-        JCheckBoxMenuItem deluxeCheck = new JCheckBoxMenuItem("Hydrasynth Deluxe");
-        deluxeCheck.setSelected(deluxe);
-        menu.add(deluxeCheck);
-        deluxeCheck.addActionListener(new ActionListener()
-            {
-            public void actionPerformed(ActionEvent evt)
-                {
-                deluxe = deluxeCheck.isSelected();
-                setLastX("" + deluxe, "Deluxe", getSynthClassName(), true);
-                }
-            });
+  JCheckBoxMenuItem deluxeCheck = new JCheckBoxMenuItem("Hydrasynth Deluxe");
+  deluxeCheck.setSelected(deluxe);
+  menu.add(deluxeCheck);
+  deluxeCheck.addActionListener(new ActionListener()
+  {
+  public void actionPerformed(ActionEvent evt)
+  {
+  deluxe = deluxeCheck.isSelected();
+  setLastX("" + deluxe, "Deluxe", getSynthClassName(), true);
+  }
+  });
 */
 
         JCheckBoxMenuItem ignoreParametersMenu = new JCheckBoxMenuItem("Ignore Parameters from Synth");
@@ -4896,17 +4896,17 @@ public class ASMHydrasynth extends Synth
             });
 
 /*
-        JCheckBoxMenuItem sendArpTapTrigMenu = new JCheckBoxMenuItem("Send Arp Tap Trig");
-        sendArpTapTrigMenu.setSelected(sendArpTapTrig);
-        menu.add(sendArpTapTrigMenu);
-        sendArpTapTrigMenu.addActionListener(new ActionListener()
-            {
-            public void actionPerformed(ActionEvent evt)
-                {
-                sendArpTapTrig = sendArpTapTrigMenu.isSelected();
-                setLastX("" + sendArpTapTrig, "SendArpTapTrig", getSynthClassName(), true);
-                }
-            });
+  JCheckBoxMenuItem sendArpTapTrigMenu = new JCheckBoxMenuItem("Send Arp Tap Trig");
+  sendArpTapTrigMenu.setSelected(sendArpTapTrig);
+  menu.add(sendArpTapTrigMenu);
+  sendArpTapTrigMenu.addActionListener(new ActionListener()
+  {
+  public void actionPerformed(ActionEvent evt)
+  {
+  sendArpTapTrig = sendArpTapTrigMenu.isSelected();
+  setLastX("" + sendArpTapTrig, "SendArpTapTrig", getSynthClassName(), true);
+  }
+  });
 */
 
         JCheckBoxMenuItem lockUserLFOStepsMenu = new JCheckBoxMenuItem("Lock User LFO Steps to Notes");
@@ -4941,16 +4941,16 @@ public class ASMHydrasynth extends Synth
         return frame;
         }         
 
-	public void windowCreated()
-		{
-		//setLastX("false", "Warned", getSynthClassName(), true);
-        doOneTimeWarning("Warned", "Read the About Tab", "The Hydrasynth has many eccentricities to be aware of.\nBe certain to fully read the \u2B06 About Tab \u2B06 before use.");	// ,\nespecially if you have a Deluxe.");
-		}
+    public void windowCreated()
+        {
+        //setLastX("false", "Warned", getSynthClassName(), true);
+        doOneTimeWarning("Warned", "Read the About Tab", "The Hydrasynth has many eccentricities to be aware of.\nBe certain to fully read the \u2B06 About Tab \u2B06 before use.");   // ,\nespecially if you have a Deluxe.");
+        }
 
-	public void didOneTimeWarning(String key)
-		{
-		setSelectedTabIndex(getIndexOfTabTitle("About"));
-		}
+    public void didOneTimeWarning(String key)
+        {
+        setSelectedTabIndex(getIndexOfTabTitle("About"));
+        }
 
     public String getPatchLocationName(Model model)
         {
@@ -4965,13 +4965,13 @@ public class ASMHydrasynth extends Synth
         }
 
 /*
-    public boolean getSendsAllParametersAsDump() 
-        {
-        return false;
-        }
+  public boolean getSendsAllParametersAsDump() 
+  {
+  return false;
+  }
 */
 
-    public int getBatchDownloadWaitTime() { return 50; }				// this will make a lot of "tardy" messages but it's a tiny bit faster than 400
+    public int getBatchDownloadWaitTime() { return 50; }                                // this will make a lot of "tardy" messages but it's a tiny bit faster than 400
     public int getBatchDownloadFailureCountdown() { return 100; }
 
     // A small syntatic shortening function for emitAll(...) to return the parameter value.
@@ -5328,8 +5328,8 @@ public class ASMHydrasynth extends Synth
                 {
                 // It's one of the 5 parameters
                 int type = (int)(key.charAt(5) - '0');   // as in prefxN...                     // don't need this?
-                if (type != model.get("prefxtype"))	// it's not the right set
-                	return new Object[0];
+                if (type != model.get("prefxtype"))     // it's not the right set
+                    return new Object[0];
                 int param = (int)(key.charAt(11) - '0');  // as in prefxNparamM
                 p = p("prefxparam" + param);
                 }
@@ -5349,8 +5349,8 @@ public class ASMHydrasynth extends Synth
                 {
                 // It's one of the 5 parameters
                 int type = (int)(key.charAt(6) - '0');   // as in postfxN...                    // don't need this?
-                if (type != model.get("postfxtype"))	// it's not the right set
-                	return new Object[0];
+                if (type != model.get("postfxtype"))    // it's not the right set
+                    return new Object[0];
                 int param = (int)(key.charAt(12) - '0');  // as in postfxNparamM
                 p = p("postfxparam" + param);
                 }
@@ -5371,23 +5371,23 @@ public class ASMHydrasynth extends Synth
                 subkey.startsWith("oneshot"))
                 {
                 if (subkey.startsWith("delaysyncon") || subkey.startsWith("fadeinsyncon"))
-                	{
-					// This little stupidity is because a bug in the hydrasynth doesn't distinguish between
-					// delay/rate sync on and delay/rate sync off in NRPN
-					int type = (int)(key.charAt(3) - '0');   // as in envN...
-					if (model.get("lfo" + type + "bpmsync") == 0) // BPM is off, need to bail
-						return new Object[0];
-					}
+                    {
+                    // This little stupidity is because a bug in the hydrasynth doesn't distinguish between
+                    // delay/rate sync on and delay/rate sync off in NRPN
+                    int type = (int)(key.charAt(3) - '0');   // as in envN...
+                    if (model.get("lfo" + type + "bpmsync") == 0) // BPM is off, need to bail
+                        return new Object[0];
+                    }
                 if (subkey.startsWith("delaysyncoff") || subkey.startsWith("fadeinsyncoff"))
-                	{
-					// This little stupidity is because a bug in the hydrasynth doesn't distinguish between
-					// delay/rate sync on and delay/rate sync off in NRPN
-					// This one is probably not needed -- it's really syncon that's the problem,
-					// but just for good measure...
-					int type = (int)(key.charAt(3) - '0');   // as in envN...
-					if (model.get("lfo" + type + "bpmsync") == 1) // BPM is on, need to bail
-						return new Object[0];
-					}
+                    {
+                    // This little stupidity is because a bug in the hydrasynth doesn't distinguish between
+                    // delay/rate sync on and delay/rate sync off in NRPN
+                    // This one is probably not needed -- it's really syncon that's the problem,
+                    // but just for good measure...
+                    int type = (int)(key.charAt(3) - '0');   // as in envN...
+                    if (model.get("lfo" + type + "bpmsync") == 1) // BPM is on, need to bail
+                        return new Object[0];
+                    }
 
 
                 int lfo = StringUtility.getFirstInt(key);
@@ -5437,7 +5437,7 @@ public class ASMHydrasynth extends Synth
                 // delay sync on and delay sync off in NRPN
                 int type = (int)(key.charAt(3) - '0');   // as in envN...
                 if (model.get("env" + type + "bpmsync") == 1) // BPM is on, need to bail
-                	return new Object[0];
+                    return new Object[0];
                 val = val + (0x08 * 128);                       // MSB is 0x08 for some reason
                 }
             else if (subkey.startsWith("delaysyncon"))
@@ -5446,7 +5446,7 @@ public class ASMHydrasynth extends Synth
                 // delay sync on and delay sync off in NRPN
                 int type = (int)(key.charAt(3) - '0');   // as in envN...
                 if (model.get("env" + type + "bpmsync") == 0) // BPM is off, need to bail
-                	return new Object[0];
+                    return new Object[0];
                 val = val + (0x18 * 128);                       // MSB is 0x18 for some reason
                 }
             else if (subkey.startsWith("attacksyncoff") ||
@@ -5471,7 +5471,7 @@ public class ASMHydrasynth extends Synth
                 int env = StringUtility.getFirstInt(key);
                 p = p("env1loop") + env - 1;    // 0x3F 0x00 ... 0x3F 0x04
                 if (env == 5)  // special case this, it's a weird hydrasynth thing
-                	p =  p("env1loop") + 0x0A;
+                    p =  p("env1loop") + 0x0A;
                 // ugh... is this faster than a hashtable lookup?  Gross.
                 if (subkey.startsWith("loop")) v = 0x06;
                 else if (subkey.startsWith("legato")) v = 0x07;
@@ -5716,7 +5716,7 @@ public class ASMHydrasynth extends Synth
     public boolean getSendsParametersAfterLoad() { return false; }
        
        
-    Integer PAUSE_AFTER_CHUNK = null;		//Integer.valueOf(0);
+    Integer PAUSE_AFTER_CHUNK = null;           //Integer.valueOf(0);
                      
     /** The Hydrasynth doesn't have a useful sysex emit mechanism, so we're inventing one here solely for
         the purposes of writing to a file. */
@@ -5726,11 +5726,11 @@ public class ASMHydrasynth extends Synth
             tempModel = getModel();
             
         /*
-        if (toWorkingMemory) // uh oh
-            {
-            System.err.println("emitReal: cannot emit to working memory");
-            return new Object[0][0];
-            }
+          if (toWorkingMemory) // uh oh
+          {
+          System.err.println("emitReal: cannot emit to working memory");
+          return new Object[0][0];
+          }
         */
 
         byte[] data = new byte[2790];
@@ -5739,19 +5739,19 @@ public class ASMHydrasynth extends Synth
         data[0] = (byte) 0x06;          // save to RAM
         data[1] = (byte) 0x00;
         if (toWorkingMemory)
-        	{
-        	// we update to our scratch patch.  Otherwise if the user later
-        	// writes a patch, he may write the changes to the updated patch
-        	// by accident because the Hydrasynth writes whole banks at a time
-        	data[2] = (byte) 7;							// H
-       		data[3] = (byte) 127;						// 128
-       		}
-       	else
-       		{
-        	data[2] = (byte) tempModel.get("bank");
-       		data[3] = (byte) tempModel.get("number");
-       		}
-       		
+            {
+            // we update to our scratch patch.  Otherwise if the user later
+            // writes a patch, he may write the changes to the updated patch
+            // by accident because the Hydrasynth writes whole banks at a time
+            data[2] = (byte) 7;                                                     // H
+            data[3] = (byte) 127;                                           // 128
+            }
+        else
+            {
+            data[2] = (byte) tempModel.get("bank");
+            data[3] = (byte) tempModel.get("number");
+            }
+                
         data[4] = (byte) VERSION_2_0_0;         // 1.5.5.  Change to 0xC8 for 2.0.0
         data[5] = (byte) 0x00;
         data[6] = (byte) 0x00;
@@ -5792,8 +5792,8 @@ public class ASMHydrasynth extends Synth
         get1("voiceglidelegato", data, 58);
 
         /// CUSTOM VIBRATO AMOUNT FOR 2.0.0
-		data[46] = (byte)(model.get("voicevibratoamount") / 10);
-		data[2462] = (byte)(model.get("voicevibratoamount") % 10);
+        data[46] = (byte)(model.get("voicevibratoamount") / 10);
+        data[2462] = (byte)(model.get("voicevibratoamount") % 10);
 
         // SCALES
                 
@@ -6069,8 +6069,8 @@ public class ASMHydrasynth extends Synth
         // Set the target categories
         for(int i = 0; i < 32; i++)
             {
-			int category = MOD_DESTINATION_CATEGORIES[model.get("modmatrix" + (i + 1) + "modtarget")];
-			data[1030 + i * 2] = (byte)category;
+            int category = MOD_DESTINATION_CATEGORIES[model.get("modmatrix" + (i + 1) + "modtarget")];
+            data[1030 + i * 2] = (byte)category;
             }
                         
         // MACRO
@@ -6140,7 +6140,7 @@ public class ASMHydrasynth extends Synth
             for(int j = 0; j < 56; j++)
                 {
 //                System.err.println("lfo" + (i + 1) + "step" + (j + 9) + ": " + model.get(
-//                	"lfo" + (i + 1) + "step" + (j + 9)) + " -> " + (1770 + i * 56 * 2 + j * 2));
+//                      "lfo" + (i + 1) + "step" + (j + 9)) + " -> " + (1770 + i * 56 * 2 + j * 2));
                 get2("lfo" + (i + 1) + "step" + (j + 9), data, 1770 + i * 56 * 2 + j * 2);
 //                System.err.println(data[1770 + i * 56 * 2 + j * 2]);
                 }
@@ -6195,19 +6195,19 @@ public class ASMHydrasynth extends Synth
         // Byte 7 is unclear, sometimes 2, sometimes 3, etc.
         data[7] = 3;
         
-		// This appears to always be 5.  It's in the Arp region
-		data[836] = 5;
-		
+        // This appears to always be 5.  It's in the Arp region
+        data[836] = 5;
+                
         // These are the (unknown) values for Sawspressive and other patches.
         // It appears that if they are not set, then later data (such as 
         // LFO steps 9-64, and arp triggers, and the Arp Step Offset) won't be
         // set in the Hydrasynth on write.  So they're pretty important.  But
         // what they do I have no idea.  Some patches have them as 88 88 88 88
         // but most have 69 84 67 68
-		data[1766] = 69;
-		data[1767] = 84;
-		data[1768] = 67;
-		data[1769] = 68;
+        data[1766] = 69;
+        data[1767] = 84;
+        data[1768] = 67;
+        data[1769] = 68;
 
         // These are always -100/-1
         data[2390] = (byte) -100;
@@ -6233,27 +6233,27 @@ public class ASMHydrasynth extends Synth
             }
             
         if (toWorkingMemory)
-        	{
-        	// Don't do save request
-			sysex[sysex.length - 6] = (isEmittingBatch() ? null : Encode.encodePayload(new byte[] { (byte)0x1A, (byte)0x00 }));          // footer
-			sysex[sysex.length - 5] = buildCC(getChannelOut(), 32, 0)[0];																// Bank Change Away
-			sysex[sysex.length - 4] = buildPC(getChannelOut(), 0)[0];																// PC Away
-			sysex[sysex.length - 3] = Integer.valueOf(getPauseAfterChangePatch());													// Wait
-			sysex[sysex.length - 2] = buildCC(getChannelOut(), 32, 7)[0];																// Bank Change Back
-			sysex[sysex.length - 1] = buildPC(getChannelOut(), 127)[0];																// PC Back
-			// 200ms afterwards
-			}
-		else
-			{
-			sysex[sysex.length - 2] = (isEmittingBatch() ? null : Encode.encodePayload(new byte[] { (byte)0x14, (byte)0x00 }));          // save request
-			sysex[sysex.length - 1] = (isEmittingBatch() ? null : Encode.encodePayload(new byte[] { (byte)0x1A, (byte)0x00 }));          // footer
-			}
-			
-		if (REVERSE_ENGINEER)
-			{
-				System.err.println("OUTGOING DIFFERENCES");
-				diff(firstPatch, data);
-			}
+            {
+            // Don't do save request
+            sysex[sysex.length - 6] = (isEmittingBatch() ? null : Encode.encodePayload(new byte[] { (byte)0x1A, (byte)0x00 }));          // footer
+            sysex[sysex.length - 5] = buildCC(getChannelOut(), 32, 0)[0];                                                                                                                           // Bank Change Away
+            sysex[sysex.length - 4] = buildPC(getChannelOut(), 0)[0];                                                                                                                               // PC Away
+            sysex[sysex.length - 3] = Integer.valueOf(getPauseAfterChangePatch());                                                                                                  // Wait
+            sysex[sysex.length - 2] = buildCC(getChannelOut(), 32, 7)[0];                                                                                                                           // Bank Change Back
+            sysex[sysex.length - 1] = buildPC(getChannelOut(), 127)[0];                                                                                                                             // PC Back
+            // 200ms afterwards
+            }
+        else
+            {
+            sysex[sysex.length - 2] = (isEmittingBatch() ? null : Encode.encodePayload(new byte[] { (byte)0x14, (byte)0x00 }));          // save request
+            sysex[sysex.length - 1] = (isEmittingBatch() ? null : Encode.encodePayload(new byte[] { (byte)0x1A, (byte)0x00 }));          // footer
+            }
+                        
+        if (REVERSE_ENGINEER)
+            {
+            System.err.println("OUTGOING DIFFERENCES");
+            diff(firstPatch, data);
+            }
 
         return sysex;
         }
@@ -6275,60 +6275,60 @@ public class ASMHydrasynth extends Synth
         int BB = tempModel.get("bank", 0);
                   
         if (!isBatchDownloading())  // we already did it
-        	{
-        	// time("Sending Header");
-        	tryToSendSysex(Encode.encodePayload(new byte[] { 0x18, 0x00 }));                                                 // header
-        	}
-        	// time("Sending Dump Request");
+            {
+            // time("Sending Header");
+            tryToSendSysex(Encode.encodePayload(new byte[] { 0x18, 0x00 }));                                                 // header
+            }
+        // time("Sending Dump Request");
         tryToSendSysex(Encode.encodePayload(new byte[] { 0x04, 0x00, (byte)BB, (byte)NN }));    // dump request
         /// After negotiation and downloading chunks, parse() will emit the footer
         }
 
-	void sendHeader()
-		{
-		boolean sendMIDI = getSendMIDI();
-		setSendMIDI(true);
-		tryToSendSysex(Encode.encodePayload(new byte[] { 0x18, 000 }));
-		setSendMIDI(sendMIDI);
-		}
-	void sendFooter()
-		{
-		boolean sendMIDI = getSendMIDI();
-		setSendMIDI(true);
-		tryToSendSysex(Encode.encodePayload(new byte[] { 0x1A, 0x00 }));
-		setSendMIDI(sendMIDI);
-		}
-				
-	public void startingBatchDownload(Model firstPatch, Model finalPatch) 
-		{ 
-		sendHeader();
-		}
+    void sendHeader()
+        {
+        boolean sendMIDI = getSendMIDI();
+        setSendMIDI(true);
+        tryToSendSysex(Encode.encodePayload(new byte[] { 0x18, 000 }));
+        setSendMIDI(sendMIDI);
+        }
+    void sendFooter()
+        {
+        boolean sendMIDI = getSendMIDI();
+        setSendMIDI(true);
+        tryToSendSysex(Encode.encodePayload(new byte[] { 0x1A, 0x00 }));
+        setSendMIDI(sendMIDI);
+        }
+                                
+    public void startingBatchDownload(Model firstPatch, Model finalPatch) 
+        { 
+        sendHeader();
+        }
 
-	public void stoppingBatchDownload(Model firstPatch, Model finalPatch) 
-		{ 
-		sendFooter();
-		}
+    public void stoppingBatchDownload(Model firstPatch, Model finalPatch) 
+        { 
+        sendFooter();
+        }
 
-	public Object[] startingBatchEmit(int bank, int start, int end, boolean toFile) 
-		{ 
-		return new Object[]
-			{
-		// Header 
-				Encode.encodePayload(new byte[] { 0x18, 000 })
-			 };
-		}
+    public Object[] startingBatchEmit(int bank, int start, int end, boolean toFile) 
+        { 
+        return new Object[]
+            {
+            // Header 
+            Encode.encodePayload(new byte[] { 0x18, 000 })
+            };
+        }
 
-	public Object[] stoppingBatchEmit(int bank, int start, int end, boolean toFile) 
-		{ 
-		return new Object[]
-			{
-		// Save 
-			 Encode.encodePayload(new byte[] { (byte)0x14, (byte)0x00 }) ,
-		// Footer 
-			 Encode.encodePayload(new byte[] { 0x1A, 0x00 })
-			 };
-		}
-		
+    public Object[] stoppingBatchEmit(int bank, int start, int end, boolean toFile) 
+        { 
+        return new Object[]
+            {
+            // Save 
+            Encode.encodePayload(new byte[] { (byte)0x14, (byte)0x00 }) ,
+            // Footer 
+            Encode.encodePayload(new byte[] { 0x1A, 0x00 })
+            };
+        }
+                
 
     byte[] firstPatch = null;
 
@@ -6358,9 +6358,9 @@ public class ASMHydrasynth extends Synth
                 }
             
             if (!fromFile && !isBatchDownloading())
-            	{
-            	sendFooter();
-            	}
+                {
+                sendFooter();
+                }
             return PARSE_FAILED;
             }
         }
@@ -6374,8 +6374,8 @@ public class ASMHydrasynth extends Synth
                 {
                 boolean sendMIDI = getSendMIDI();
                 setSendMIDI(true);
-         	// time("Sending Acknowledgment for " + incomingPos);
-               tryToSendSysex(Encode.encodePayload(new byte[] { 0x17, 0x00, (byte)incomingPos, 0x16 }));
+                // time("Sending Acknowledgment for " + incomingPos);
+                tryToSendSysex(Encode.encodePayload(new byte[] { 0x17, 0x00, (byte)incomingPos, 0x16 }));
                         
                 setSendMIDI(sendMIDI);
                 }
@@ -6383,20 +6383,20 @@ public class ASMHydrasynth extends Synth
             // double check
             if (data.length == 191 && incomingPos == 21) // uh oh
                 {
-				if (!fromFile && !isBatchDownloading())
-					{
-        	// time("Sending Footer D");
-					sendFooter();
-					}
+                if (!fromFile && !isBatchDownloading())
+                    {
+                    // time("Sending Footer D");
+                    sendFooter();
+                    }
                 return PARSE_FAILED;
                 }
             else if (data.length == 155 && incomingPos != 21) // uh oh
                 {
-				if (!fromFile && !isBatchDownloading())
-					{
-        	// time("Sending Footer C");
-					sendFooter();
-					}
+                if (!fromFile && !isBatchDownloading())
+                    {
+                    // time("Sending Footer C");
+                    sendFooter();
+                    }
                 return PARSE_FAILED;
                 }
 
@@ -6409,14 +6409,14 @@ public class ASMHydrasynth extends Synth
                 // Send footer if appropriate
                 if (!fromFile && !isBatchDownloading())
                     {
-        	// time("Sending Footer A");
+                    // time("Sending Footer A");
                     sendFooter();
                     }
                                         
                 // Decode and process!
                 try
                     {
-         	// time("Parsing " + incomingPos);
+                    // time("Parsing " + incomingPos);
                     byte[] result = Decode.decodePatch(incoming);
                     if (REVERSE_ENGINEER)
                         {
@@ -6448,11 +6448,11 @@ public class ASMHydrasynth extends Synth
                     incoming = new byte[22][];
                     incomingPos = 0;
 
-					if (!fromFile && !isBatchDownloading())
-						{
-        	// time("Sending Footer B");
-						sendFooter();
-						}
+                    if (!fromFile && !isBatchDownloading())
+                        {
+                        // time("Sending Footer B");
+                        sendFooter();
+                        }
                     return PARSE_FAILED;
                     }
                 }
@@ -6562,9 +6562,9 @@ public class ASMHydrasynth extends Synth
 
         /// CUSTOM VIBRATO AMOUNT
         if (version == VERSION_1_5_5)
-        	model.set("voicevibratoamount", data[46]);
+            model.set("voicevibratoamount", data[46]);
         else if (version == VERSION_2_0_0)
-        	model.set("voicevibratoamount", data[46] * 10 + data[2462]);
+            model.set("voicevibratoamount", data[46] * 10 + data[2462]);
         
         // SCALES
                 
@@ -6967,7 +6967,7 @@ public class ASMHydrasynth extends Synth
         if (key.equals("bank") || key.equals("number") || key.equals("name") || key.equals("--"))
             return;
         parseNRPN(key, val);        
-       }
+        }
                         
     void parseNRPN(String key, int val)
         {
@@ -7304,7 +7304,7 @@ public class ASMHydrasynth extends Synth
                 if (v == 1) key = "ribbonkeyspan";
                 else if (v == 2) key = "ribbonoctave";
                 else if (v == 3) key = "ribbonquantize";
-                else if (v > 3 && v < 16) return;		// we don't handle ribbonscalekeylock or emitted *chromatic* scale notes 
+                else if (v > 3 && v < 16) return;               // we don't handle ribbonscalekeylock or emitted *chromatic* scale notes 
                 else if (v == 16) key = "ribbonmodcontrol";
                 else if (v == 17) key = "ribbonglide";
                 val = w;
@@ -7312,7 +7312,7 @@ public class ASMHydrasynth extends Synth
             }
         else if (key.startsWith("scale"))
             {
-        	return;		// we don't do any of it
+            return;         // we don't do any of it
             }
         else if (key.startsWith("voice"))
             {
@@ -7371,11 +7371,11 @@ public class ASMHydrasynth extends Synth
     public int getPauseAfterSendAllParameters()
         {
         return 300;
-//        if (isHillClimbing() || isMorphing()) return 400;		// If there's a pause less than than this, playing the sound will result in a weird short, clippped version, which ruins hill-climbing and morphing.
+//        if (isHillClimbing() || isMorphing()) return 400;             // If there's a pause less than than this, playing the sound will result in a weird short, clippped version, which ruins hill-climbing and morphing.
 //        else return 200;
         
-//        if (isHillClimbing() || isMorphing()) return 400;		// If there's a pause less than than this, playing the sound will result in a weird short, clippped version, which ruins hill-climbing and morphing.
-//		else return 0; 	// If we're not hill-climbing etc., then we'll not bother waiting.
+//        if (isHillClimbing() || isMorphing()) return 400;             // If there's a pause less than than this, playing the sound will result in a weird short, clippped version, which ruins hill-climbing and morphing.
+//              else return 0;  // If we're not hill-climbing etc., then we'll not bother waiting.
         }
     
     public void changePatch(Model tempModel)
@@ -7386,77 +7386,77 @@ public class ASMHydrasynth extends Synth
         int bank = tempModel.get("bank", 0);
         int number = tempModel.get("number", 0);
 
-		/// IRRITATINGLY, if you do a PC to your current patch, it doesn't reload the patch.
-		/// It just sits there and pretends it didn't happen (you still have your current patch
-		/// changes).  So I have to PC AWAY from the patch and then PC BACK to the patch if it's
-		/// different.
+        /// IRRITATINGLY, if you do a PC to your current patch, it doesn't reload the patch.
+        /// It just sits there and pretends it didn't happen (you still have your current patch
+        /// changes).  So I have to PC AWAY from the patch and then PC BACK to the patch if it's
+        /// different.
 
         int currentBank = model.get("bank", 0);
         int currentNumber = model.get("number", 0);
-		if (bank == currentBank && number == currentNumber)
-			{
-			tryToSendMIDI(buildCC(getChannelOut(), 32, bank));
-			tryToSendMIDI(buildPC(getChannelOut(), (number == 0 ? 1 : 0)));		// PC away
-			simplePause(getPauseAfterChangePatch());
-			tryToSendMIDI(buildPC(getChannelOut(), number));					// PC back
-			}
-		else
-			{
-			tryToSendMIDI(buildCC(getChannelOut(), 32, bank));
-			tryToSendMIDI(buildPC(getChannelOut(), number));
-			}
+        if (bank == currentBank && number == currentNumber)
+            {
+            tryToSendMIDI(buildCC(getChannelOut(), 32, bank));
+            tryToSendMIDI(buildPC(getChannelOut(), (number == 0 ? 1 : 0)));         // PC away
+            simplePause(getPauseAfterChangePatch());
+            tryToSendMIDI(buildPC(getChannelOut(), number));                                        // PC back
+            }
+        else
+            {
+            tryToSendMIDI(buildCC(getChannelOut(), 32, bank));
+            tryToSendMIDI(buildPC(getChannelOut(), number));
+            }
         }
 
 /*
-    public int getPauseAfterModMatrixParameter()
-        {
-        return 2;
-        }
+  public int getPauseAfterModMatrixParameter()
+  {
+  return 2;
+  }
 
-    public int getPauseAfterSendOneParameter()
-        {
-        return 0;
-        }
+  public int getPauseAfterSendOneParameter()
+  {
+  return 0;
+  }
         
     
-    /// We need a custom send-all-parameters so we can (1) prevent the
-    /// hydrasynth from sending US parameters in this period and (2)
-	/// order the parameters we send in a specific order and (3) 
-	/// add some pauses for the mod matrix parameters
-    boolean sendingAllParameters = false;
-    protected boolean sendAllParametersInternal()
-        {
-        if (!getSendMIDI())
-            return false;  // don't bother!  MIDI is off
+  /// We need a custom send-all-parameters so we can (1) prevent the
+  /// hydrasynth from sending US parameters in this period and (2)
+  /// order the parameters we send in a specific order and (3) 
+  /// add some pauses for the mod matrix parameters
+  boolean sendingAllParameters = false;
+  protected boolean sendAllParametersInternal()
+  {
+  if (!getSendMIDI())
+  return false;  // don't bother!  MIDI is off
 
-		sendingAllParameters = true;
+  sendingAllParameters = true;
 
-		for(int i = 0; i < orderedParameters.length; i++)
-			{
-			tryToSendMIDI(emitAll(orderedParameters[i], STATUS_SENDING_ALL_PARAMETERS));
-			// It seems that we need a little pause after the modmatrix values and maybe macro values
-			// and the amount depends on the type of synthesizer.
-			if (deluxe)
-				{
-				if (orderedParameters[i].startsWith("mod") || orderedParameters[i].startsWith("macro"))
-					{
-					simplePause(4);
-					}
-				}
-			else
-				{
-				if (orderedParameters[i].startsWith("mod"))
-				simplePause(2);
-				}
+  for(int i = 0; i < orderedParameters.length; i++)
+  {
+  tryToSendMIDI(emitAll(orderedParameters[i], STATUS_SENDING_ALL_PARAMETERS));
+  // It seems that we need a little pause after the modmatrix values and maybe macro values
+  // and the amount depends on the type of synthesizer.
+  if (deluxe)
+  {
+  if (orderedParameters[i].startsWith("mod") || orderedParameters[i].startsWith("macro"))
+  {
+  simplePause(4);
+  }
+  }
+  else
+  {
+  if (orderedParameters[i].startsWith("mod"))
+  simplePause(2);
+  }
 
-			simplePause(getPauseAfterSendOneParameter());
-			}
-			
-        simplePause(getPauseAfterSendAllParameters());
+  simplePause(getPauseAfterSendOneParameter());
+  }
+                        
+  simplePause(getPauseAfterSendAllParameters());
 
-		sendingAllParameters = false;
-        return true;
-        }
+  sendingAllParameters = false;
+  return true;
+  }
 */
 
     // This is 8 banks, appropriate for 2.0.0 and the Deluxe 1.5.5
@@ -7504,60 +7504,60 @@ public class ASMHydrasynth extends Synth
     public boolean librarianTested() { return true; }
 
     public int reviseMutatedValue(String key, int oldValue, int proposedValue,  Model model) 
-    	{
-		if (!key.startsWith("mod")) 
-    		{
-    		return proposedValue;  // it's fine
-    		}
-    	else
-    		{
-			if (!disallowCCMutation)	// everything is permitted
-				{
-				return proposedValue;
-				}
-			else if (key.endsWith("modsource"))
-				{
-				if (proposedValue < 35) // not mutating to a CC
-					return proposedValue;
-				else 
-					{
-					return random.nextInt(35);	// mutate to something not a CC
-					}
-				}
-			else if (key.endsWith("modtarget"))
-				{
-				if (proposedValue < 200)  // not mutating to a CC or CV
-					return proposedValue;
-				else 
-					{
-					return random.nextInt(200);	// mutate to something not a CC or CV
-					}
-				}
-			else return proposedValue;  // it's fine
-			}
-    	}    
+        {
+        if (!key.startsWith("mod")) 
+            {
+            return proposedValue;  // it's fine
+            }
+        else
+            {
+            if (!disallowCCMutation)        // everything is permitted
+                {
+                return proposedValue;
+                }
+            else if (key.endsWith("modsource"))
+                {
+                if (proposedValue < 35) // not mutating to a CC
+                    return proposedValue;
+                else 
+                    {
+                    return random.nextInt(35);      // mutate to something not a CC
+                    }
+                }
+            else if (key.endsWith("modtarget"))
+                {
+                if (proposedValue < 200)  // not mutating to a CC or CV
+                    return proposedValue;
+                else 
+                    {
+                    return random.nextInt(200);     // mutate to something not a CC or CV
+                    }
+                }
+            else return proposedValue;  // it's fine
+            }
+        }    
 
 
 
 
-	//// ORDERED PARAMETERS
-	//// This list is more or less the same as the main parameters list but
-	//// is reordered in such a way so that we can guarantee certain parameters
-	//// are sent via NRPN before others are.  For example, we have to send out
-	//// changes to the modes before we can sent out parameters in those modes.
+    //// ORDERED PARAMETERS
+    //// This list is more or less the same as the main parameters list but
+    //// is reordered in such a way so that we can guarantee certain parameters
+    //// are sent via NRPN before others are.  For example, we have to send out
+    //// changes to the modes before we can sent out parameters in those modes.
 
     public static final String[] orderedParameters = 
         {
         // First the modes
         "osc1mode",                             
         "osc2mode",                             
-        "osc3mode",       			// technically doesn't need to be here by why not...                      
+        "osc3mode",                             // technically doesn't need to be here by why not...                      
         "mutant1mode",                
         "mutant2mode",                                  
         "mutant3mode",                                  
         "mutant4mode",                                  
         "ribbonmode",   
-    	"voiceglide",
+        "voiceglide",
 
         // Next the types (osc1...2type need to be after osc1...osc2mode)
         "osc1type",                                     
@@ -7568,7 +7568,7 @@ public class ASMHydrasynth extends Synth
         "prefxtype",                                    
         "delaytype",                                    
         "reverbtype",                                   
-    	"postfxtype",
+        "postfxtype",
 
         // Next the waves.  These have to be set (to "Step") before you can set One-shot to step, set the lfo1steps and step length, etc.
         "lfo1wave",                                     
@@ -7609,1065 +7609,1065 @@ public class ASMHydrasynth extends Synth
         "osc2wavscanwave7",
         "osc2wavscanwave8",
 
-    // Now all the dependent parameters
-    "osc1semi",
-    "osc2semi",
-    "osc3semi",
-    "osc1cent",
-    "osc1keytrack",
-    "osc1wavscan",
-    "osc2cent",
-    "osc2keytrack",
-    "osc2wavscan",
-    "osc3cent",
-    "osc3keytrack",
-    "mutant1sourcefmlin",
-    "mutant2sourcefmlin",
-    "mutant3sourcefmlin",
-    "mutant4sourcefmlin",
-    "mutant1sourceoscsync",
-    "mutant2sourceoscsync",
-    "mutant3sourceoscsync",
-    "mutant4sourceoscsync",
-    "mutant1ratio",
-    "mutant1depth",
-    "mutant1wet",
-    "mutant1feedback",
-    "mutant1window",
-    "mutant1warp1",
-    "mutant1warp2",
-    "mutant1warp3",
-    "mutant1warp4",
-    "mutant1warp5",
-    "mutant1warp6",
-    "mutant1warp7",
-    "mutant1warp8",
-    "mutant2ratio",
-    "mutant2depth",
-    "mutant2wet",
-    "mutant2feedback",
-    "mutant2window",
-    "mutant2warp1",
-    "mutant2warp2",
-    "mutant2warp3",
-    "mutant2warp4",
-    "mutant2warp5",
-    "mutant2warp6",
-    "mutant2warp7",
-    "mutant2warp8",
-    "mutant3ratio",
-    "mutant3depth",
-    "mutant3wet",
-    "mutant3feedback",
-    "mutant3window",
-    "mutant3warp1",
-    "mutant3warp2",
-    "mutant3warp3",
-    "mutant3warp4",
-    "mutant3warp5",
-    "mutant3warp6",
-    "mutant3warp7",
-    "mutant3warp8",
-    "mutant4ratio",
-    "mutant4depth",
-    "mutant4wet",
-    "mutant4feedback",
-    "mutant4window",
-    "mutant4warp1",
-    "mutant4warp2",
-    "mutant4warp3",
-    "mutant4warp4",
-    "mutant4warp5",
-    "mutant4warp6",
-    "mutant4warp7",
-    "mutant4warp8",
-    "noisetype",
-    "ringmoddepth",
-    "ringmodsource1",
-    "ringmodsource2",
-    "mixerosc1vol",
-    "mixerosc1pan",
-    "mixerosc1filterratio",
-    "mixerosc2vol",
-    "mixerosc2pan",
-    "mixerosc2filterratio",
-    "mixerosc3vol",
-    "mixerosc3pan",
-    "mixerosc3filterratio",
-    "mixernoisevol",
-    "mixernoisepan",
-    "mixernoisefilterratio",
-    "mixerringmodvol",
-    "mixerringmodpan",
-    "mixerringmodfilterratio",
-    "mixerfilterrouting",
-    "filter1positionofdrive",
-    "filter1cutoff",
-    "filter1drive",
-    "filter1resonance",
-    "filter1special",
-    "filter1keytrack",
-    "filter1lfo1amount",
-    "filter1vowelorder",
-    "filter1velenv",
-    "filter1env1amount",
-    "filter2cutoff",
-    "filter2resonance",
-    "filter2morph",
-    "filter2keytrack",
-    "filter2lfo1amount",
-    "filter2velenv",
-    "filter2env1amount",
-    "amplevel",
-    "ampvelenv",
-    "amplfo2amount",
-    "prefxwet",
+        // Now all the dependent parameters
+        "osc1semi",
+        "osc2semi",
+        "osc3semi",
+        "osc1cent",
+        "osc1keytrack",
+        "osc1wavscan",
+        "osc2cent",
+        "osc2keytrack",
+        "osc2wavscan",
+        "osc3cent",
+        "osc3keytrack",
+        "mutant1sourcefmlin",
+        "mutant2sourcefmlin",
+        "mutant3sourcefmlin",
+        "mutant4sourcefmlin",
+        "mutant1sourceoscsync",
+        "mutant2sourceoscsync",
+        "mutant3sourceoscsync",
+        "mutant4sourceoscsync",
+        "mutant1ratio",
+        "mutant1depth",
+        "mutant1wet",
+        "mutant1feedback",
+        "mutant1window",
+        "mutant1warp1",
+        "mutant1warp2",
+        "mutant1warp3",
+        "mutant1warp4",
+        "mutant1warp5",
+        "mutant1warp6",
+        "mutant1warp7",
+        "mutant1warp8",
+        "mutant2ratio",
+        "mutant2depth",
+        "mutant2wet",
+        "mutant2feedback",
+        "mutant2window",
+        "mutant2warp1",
+        "mutant2warp2",
+        "mutant2warp3",
+        "mutant2warp4",
+        "mutant2warp5",
+        "mutant2warp6",
+        "mutant2warp7",
+        "mutant2warp8",
+        "mutant3ratio",
+        "mutant3depth",
+        "mutant3wet",
+        "mutant3feedback",
+        "mutant3window",
+        "mutant3warp1",
+        "mutant3warp2",
+        "mutant3warp3",
+        "mutant3warp4",
+        "mutant3warp5",
+        "mutant3warp6",
+        "mutant3warp7",
+        "mutant3warp8",
+        "mutant4ratio",
+        "mutant4depth",
+        "mutant4wet",
+        "mutant4feedback",
+        "mutant4window",
+        "mutant4warp1",
+        "mutant4warp2",
+        "mutant4warp3",
+        "mutant4warp4",
+        "mutant4warp5",
+        "mutant4warp6",
+        "mutant4warp7",
+        "mutant4warp8",
+        "noisetype",
+        "ringmoddepth",
+        "ringmodsource1",
+        "ringmodsource2",
+        "mixerosc1vol",
+        "mixerosc1pan",
+        "mixerosc1filterratio",
+        "mixerosc2vol",
+        "mixerosc2pan",
+        "mixerosc2filterratio",
+        "mixerosc3vol",
+        "mixerosc3pan",
+        "mixerosc3filterratio",
+        "mixernoisevol",
+        "mixernoisepan",
+        "mixernoisefilterratio",
+        "mixerringmodvol",
+        "mixerringmodpan",
+        "mixerringmodfilterratio",
+        "mixerfilterrouting",
+        "filter1positionofdrive",
+        "filter1cutoff",
+        "filter1drive",
+        "filter1resonance",
+        "filter1special",
+        "filter1keytrack",
+        "filter1lfo1amount",
+        "filter1vowelorder",
+        "filter1velenv",
+        "filter1env1amount",
+        "filter2cutoff",
+        "filter2resonance",
+        "filter2morph",
+        "filter2keytrack",
+        "filter2lfo1amount",
+        "filter2velenv",
+        "filter2env1amount",
+        "amplevel",
+        "ampvelenv",
+        "amplfo2amount",
+        "prefxwet",
     
-    /// Note that the prefx params have been broken out
-    "prefx1param1",
-    "prefx1param2",
-    "prefx1param3",
-    "prefx1param4",
-    "prefx1param5",
-    "prefx2param1",
-    "prefx2param2",
-    "prefx2param3",
-    "prefx2param4",
-    "prefx2param5",
-    "prefx3param1",
-    "prefx3param2",
-    "prefx3param3",
-    "prefx3param4",
-    "prefx3param5",
-    "prefx4param1",
-    "prefx4param2",
-    "prefx4param3",
-    "prefx4param4",
-    "prefx4param5",
-    "prefx5param1",
-    "prefx5param2",
-    "prefx5param3",
-    "prefx5param4",
-    "prefx5param5",
-    "prefx6param1",
-    "prefx6param2",
-    "prefx6param3",
-    "prefx6param4",
-    "prefx6param5",
-    "prefx7param1",
-    "prefx7param2",
-    "prefx7param3",
-    "prefx7param4",
-    "prefx7param5",
-    "prefx8param1",
-    "prefx8param2",
-    "prefx8param3",
-    "prefx8param4",
-    "prefx8param5",
-    "prefx9param1",
-    "prefx9param2",
-    "prefx9param3",
-    "prefx9param4",
-    "prefx9param5",
-    "prefxsidechain",
-    "delaywet",
-    "delayfeedback",
-    "delayfeedtone",
-    "delaytimesyncoff",
-    "delaytimesyncon",
-    "delaywettone",
-    "reverbwet",
-    "reverbhidamp",
-    "reverblodamp",
-    "reverbpredelay",
-    "reverbtime",
-    "reverbtone",
-    "postfxwet",
+        /// Note that the prefx params have been broken out
+        "prefx1param1",
+        "prefx1param2",
+        "prefx1param3",
+        "prefx1param4",
+        "prefx1param5",
+        "prefx2param1",
+        "prefx2param2",
+        "prefx2param3",
+        "prefx2param4",
+        "prefx2param5",
+        "prefx3param1",
+        "prefx3param2",
+        "prefx3param3",
+        "prefx3param4",
+        "prefx3param5",
+        "prefx4param1",
+        "prefx4param2",
+        "prefx4param3",
+        "prefx4param4",
+        "prefx4param5",
+        "prefx5param1",
+        "prefx5param2",
+        "prefx5param3",
+        "prefx5param4",
+        "prefx5param5",
+        "prefx6param1",
+        "prefx6param2",
+        "prefx6param3",
+        "prefx6param4",
+        "prefx6param5",
+        "prefx7param1",
+        "prefx7param2",
+        "prefx7param3",
+        "prefx7param4",
+        "prefx7param5",
+        "prefx8param1",
+        "prefx8param2",
+        "prefx8param3",
+        "prefx8param4",
+        "prefx8param5",
+        "prefx9param1",
+        "prefx9param2",
+        "prefx9param3",
+        "prefx9param4",
+        "prefx9param5",
+        "prefxsidechain",
+        "delaywet",
+        "delayfeedback",
+        "delayfeedtone",
+        "delaytimesyncoff",
+        "delaytimesyncon",
+        "delaywettone",
+        "reverbwet",
+        "reverbhidamp",
+        "reverblodamp",
+        "reverbpredelay",
+        "reverbtime",
+        "reverbtone",
+        "postfxwet",
 
-    /// Note that the postfx params have been broken out
-    "postfx1param1",
-    "postfx1param2",
-    "postfx1param3",
-    "postfx1param4",
-    "postfx1param5",
-    "postfx2param1",
-    "postfx2param2",
-    "postfx2param3",
-    "postfx2param4",
-    "postfx2param5",
-    "postfx3param1",
-    "postfx3param2",
-    "postfx3param3",
-    "postfx3param4",
-    "postfx3param5",
-    "postfx4param1",
-    "postfx4param2",
-    "postfx4param3",
-    "postfx4param4",
-    "postfx4param5",
-    "postfx5param1",
-    "postfx5param2",
-    "postfx5param3",
-    "postfx5param4",
-    "postfx5param5",
-    "postfx6param1",
-    "postfx6param2",
-    "postfx6param3",
-    "postfx6param4",
-    "postfx6param5",
-    "postfx7param1",
-    "postfx7param2",
-    "postfx7param3",
-    "postfx7param4",
-    "postfx7param5",
-    "postfx8param1",
-    "postfx8param2",
-    "postfx8param3",
-    "postfx8param4",
-    "postfx8param5",
-    "postfx9param1",
-    "postfx9param2",
-    "postfx9param3",
-    "postfx9param4",
-    "postfx9param5",
-    "postfxsidechain",
-    "lfo1level",
-    "lfo1trigsync",
-    "lfo1smooth",
-    "lfo1steps",
-    "lfo1delaysyncoff",
-    "lfo1fadeinsyncoff",
-    "lfo1delaysyncon",
-    "lfo1fadeinsyncon",
-    "lfo1oneshot",
-    "lfo1phase",
-    "lfo1ratesyncoff",
-    "lfo1ratesyncon",
-    "lfo1step1",
-    "lfo1step2",
-    "lfo1step3",
-    "lfo1step4",
-    "lfo1step5",
-    "lfo1step6",
-    "lfo1step7",
-    "lfo1step8",
-    "lfo1step9",
-    "lfo1step10",
-    "lfo1step11",
-    "lfo1step12",
-    "lfo1step13",
-    "lfo1step14",
-    "lfo1step15",
-    "lfo1step16",
-    "lfo1step17",
-    "lfo1step18",
-    "lfo1step19",
-    "lfo1step20",
-    "lfo1step21",
-    "lfo1step22",
-    "lfo1step23",
-    "lfo1step24",
-    "lfo1step25",
-    "lfo1step26",
-    "lfo1step27",
-    "lfo1step28",
-    "lfo1step29",
-    "lfo1step30",
-    "lfo1step31",
-    "lfo1step32",
-    "lfo1step33",
-    "lfo1step34",
-    "lfo1step35",
-    "lfo1step36",
-    "lfo1step37",
-    "lfo1step38",
-    "lfo1step39",
-    "lfo1step40",
-    "lfo1step41",
-    "lfo1step42",
-    "lfo1step43",
-    "lfo1step44",
-    "lfo1step45",
-    "lfo1step46",
-    "lfo1step47",
-    "lfo1step48",
-    "lfo1step49",
-    "lfo1step50",
-    "lfo1step51",
-    "lfo1step52",
-    "lfo1step53",
-    "lfo1step54",
-    "lfo1step55",
-    "lfo1step56",
-    "lfo1step57",
-    "lfo1step58",
-    "lfo1step59",
-    "lfo1step60",
-    "lfo1step61",
-    "lfo1step62",
-    "lfo1step63",
-    "lfo1step64",
-    "lfo2level",
-    "lfo2trigsync",
-    "lfo2smooth",
-    "lfo2steps",
-    "lfo2delaysyncoff",
-    "lfo2fadeinsyncoff",
-    "lfo2delaysyncon",
-    "lfo2fadeinsyncon",
-    "lfo2oneshot",
-    "lfo2phase",
-    "lfo2ratesyncoff",
-    "lfo2ratesyncon",
-    "lfo2step1",
-    "lfo2step2",
-    "lfo2step3",
-    "lfo2step4",
-    "lfo2step5",
-    "lfo2step6",
-    "lfo2step7",
-    "lfo2step8",
-    "lfo2step9",
-    "lfo2step10",
-    "lfo2step11",
-    "lfo2step12",
-    "lfo2step13",
-    "lfo2step14",
-    "lfo2step15",
-    "lfo2step16",
-    "lfo2step17",
-    "lfo2step18",
-    "lfo2step19",
-    "lfo2step20",
-    "lfo2step21",
-    "lfo2step22",
-    "lfo2step23",
-    "lfo2step24",
-    "lfo2step25",
-    "lfo2step26",
-    "lfo2step27",
-    "lfo2step28",
-    "lfo2step29",
-    "lfo2step30",
-    "lfo2step31",
-    "lfo2step32",
-    "lfo2step33",
-    "lfo2step34",
-    "lfo2step35",
-    "lfo2step36",
-    "lfo2step37",
-    "lfo2step38",
-    "lfo2step39",
-    "lfo2step40",
-    "lfo2step41",
-    "lfo2step42",
-    "lfo2step43",
-    "lfo2step44",
-    "lfo2step45",
-    "lfo2step46",
-    "lfo2step47",
-    "lfo2step48",
-    "lfo2step49",
-    "lfo2step50",
-    "lfo2step51",
-    "lfo2step52",
-    "lfo2step53",
-    "lfo2step54",
-    "lfo2step55",
-    "lfo2step56",
-    "lfo2step57",
-    "lfo2step58",
-    "lfo2step59",
-    "lfo2step60",
-    "lfo2step61",
-    "lfo2step62",
-    "lfo2step63",
-    "lfo2step64",
-    "lfo3level",
-    "lfo3trigsync",
-    "lfo3smooth",
-    "lfo3steps",
-    "lfo3delaysyncoff",
-    "lfo3fadeinsyncoff",
-    "lfo3delaysyncon",
-    "lfo3fadeinsyncon",
-    "lfo3oneshot",
-    "lfo3phase",
-    "lfo3ratesyncoff",
-    "lfo3ratesyncon",
-    "lfo3step1",
-    "lfo3step2",
-    "lfo3step3",
-    "lfo3step4",
-    "lfo3step5",
-    "lfo3step6",
-    "lfo3step7",
-    "lfo3step8",
-    "lfo3step9",
-    "lfo3step10",
-    "lfo3step11",
-    "lfo3step12",
-    "lfo3step13",
-    "lfo3step14",
-    "lfo3step15",
-    "lfo3step16",
-    "lfo3step17",
-    "lfo3step18",
-    "lfo3step19",
-    "lfo3step20",
-    "lfo3step21",
-    "lfo3step22",
-    "lfo3step23",
-    "lfo3step24",
-    "lfo3step25",
-    "lfo3step26",
-    "lfo3step27",
-    "lfo3step28",
-    "lfo3step29",
-    "lfo3step30",
-    "lfo3step31",
-    "lfo3step32",
-    "lfo3step33",
-    "lfo3step34",
-    "lfo3step35",
-    "lfo3step36",
-    "lfo3step37",
-    "lfo3step38",
-    "lfo3step39",
-    "lfo3step40",
-    "lfo3step41",
-    "lfo3step42",
-    "lfo3step43",
-    "lfo3step44",
-    "lfo3step45",
-    "lfo3step46",
-    "lfo3step47",
-    "lfo3step48",
-    "lfo3step49",
-    "lfo3step50",
-    "lfo3step51",
-    "lfo3step52",
-    "lfo3step53",
-    "lfo3step54",
-    "lfo3step55",
-    "lfo3step56",
-    "lfo3step57",
-    "lfo3step58",
-    "lfo3step59",
-    "lfo3step60",
-    "lfo3step61",
-    "lfo3step62",
-    "lfo3step63",
-    "lfo3step64",
-    "lfo4level",
-    "lfo4trigsync",
-    "lfo4smooth",
-    "lfo4steps",
-    "lfo4delaysyncoff",
-    "lfo4fadeinsyncoff",
-    "lfo4delaysyncon",
-    "lfo4fadeinsyncon",
-    "lfo4oneshot",
-    "lfo4phase",
-    "lfo4ratesyncoff",
-    "lfo4ratesyncon",
-    "lfo4step1",
-    "lfo4step2",
-    "lfo4step3",
-    "lfo4step4",
-    "lfo4step5",
-    "lfo4step6",
-    "lfo4step7",
-    "lfo4step8",
-    "lfo4step9",
-    "lfo4step10",
-    "lfo4step11",
-    "lfo4step12",
-    "lfo4step13",
-    "lfo4step14",
-    "lfo4step15",
-    "lfo4step16",
-    "lfo4step17",
-    "lfo4step18",
-    "lfo4step19",
-    "lfo4step20",
-    "lfo4step21",
-    "lfo4step22",
-    "lfo4step23",
-    "lfo4step24",
-    "lfo4step25",
-    "lfo4step26",
-    "lfo4step27",
-    "lfo4step28",
-    "lfo4step29",
-    "lfo4step30",
-    "lfo4step31",
-    "lfo4step32",
-    "lfo4step33",
-    "lfo4step34",
-    "lfo4step35",
-    "lfo4step36",
-    "lfo4step37",
-    "lfo4step38",
-    "lfo4step39",
-    "lfo4step40",
-    "lfo4step41",
-    "lfo4step42",
-    "lfo4step43",
-    "lfo4step44",
-    "lfo4step45",
-    "lfo4step46",
-    "lfo4step47",
-    "lfo4step48",
-    "lfo4step49",
-    "lfo4step50",
-    "lfo4step51",
-    "lfo4step52",
-    "lfo4step53",
-    "lfo4step54",
-    "lfo4step55",
-    "lfo4step56",
-    "lfo4step57",
-    "lfo4step58",
-    "lfo4step59",
-    "lfo4step60",
-    "lfo4step61",
-    "lfo4step62",
-    "lfo4step63",
-    "lfo4step64",
-    "lfo5level",
-    "lfo5trigsync",
-    "lfo5smooth",
-    "lfo5steps",
-    "lfo5delaysyncoff",
-    "lfo5fadeinsyncoff",
-    "lfo5delaysyncon",
-    "lfo5fadeinsyncon",
-    "lfo5oneshot",
-    "lfo5phase",
-    "lfo5ratesyncoff",
-    "lfo5ratesyncon",
-    "lfo5step1",
-    "lfo5step2",
-    "lfo5step3",
-    "lfo5step4",
-    "lfo5step5",
-    "lfo5step6",
-    "lfo5step7",
-    "lfo5step8",
-    "lfo5step9",
-    "lfo5step10",
-    "lfo5step11",
-    "lfo5step12",
-    "lfo5step13",
-    "lfo5step14",
-    "lfo5step15",
-    "lfo5step16",
-    "lfo5step17",
-    "lfo5step18",
-    "lfo5step19",
-    "lfo5step20",
-    "lfo5step21",
-    "lfo5step22",
-    "lfo5step23",
-    "lfo5step24",
-    "lfo5step25",
-    "lfo5step26",
-    "lfo5step27",
-    "lfo5step28",
-    "lfo5step29",
-    "lfo5step30",
-    "lfo5step31",
-    "lfo5step32",
-    "lfo5step33",
-    "lfo5step34",
-    "lfo5step35",
-    "lfo5step36",
-    "lfo5step37",
-    "lfo5step38",
-    "lfo5step39",
-    "lfo5step40",
-    "lfo5step41",
-    "lfo5step42",
-    "lfo5step43",
-    "lfo5step44",
-    "lfo5step45",
-    "lfo5step46",
-    "lfo5step47",
-    "lfo5step48",
-    "lfo5step49",
-    "lfo5step50",
-    "lfo5step51",
-    "lfo5step52",
-    "lfo5step53",
-    "lfo5step54",
-    "lfo5step55",
-    "lfo5step56",
-    "lfo5step57",
-    "lfo5step58",
-    "lfo5step59",
-    "lfo5step60",
-    "lfo5step61",
-    "lfo5step62",
-    "lfo5step63",
-    "lfo5step64",
-    "env1delaysyncoff",
-    "env1attacksyncoff",
-    "env1holdsyncoff",
-    "env1decaysyncoff",
-    "env1sustain",
-    "env1releasesyncoff",
-    "env1delaysyncon",
-    "env1attacksyncon",
-    "env1decaysyncon",
-    "env1holdsyncon",
-    "env1releasesyncon",
-    "env1atkcurve",
-    "env1deccurve",
-    "env1loop",
-    "env1legato",
-    "env1freerun",
-    "env1reset",
-    "env1relcurve",
-    "env1trigsrc1",
-    "env1trigsrc2",
-    "env1trigsrc3",
-    "env1trigsrc4",
-    "env2delaysyncoff",
-    "env2attacksyncoff",
-    "env2holdsyncoff",
-    "env2decaysyncoff",
-    "env2sustain",
-    "env2releasesyncoff",
-    "env2delaysyncon",
-    "env2attacksyncon",
-    "env2decaysyncon",
-    "env2holdsyncon",
-    "env2releasesyncon",
-    "env2atkcurve",
-    "env2deccurve",
-    "env2loop",
-    "env2legato",
-    "env2freerun",
-    "env2reset",
-    "env2relcurve",
-    "env2trigsrc1",
-    "env2trigsrc2",
-    "env2trigsrc3",
-    "env2trigsrc4",
-    "env3delaysyncoff",
-    "env3attacksyncoff",
-    "env3holdsyncoff",
-    "env3decaysyncoff",
-    "env3sustain",
-    "env3releasesyncoff",
-    "env3delaysyncon",
-    "env3attacksyncon",
-    "env3decaysyncon",
-    "env3holdsyncon",
-    "env3releasesyncon",
-    "env3atkcurve",
-    "env3deccurve",
-    "env3loop",
-    "env3legato",
-    "env3freerun",
-    "env3reset",
-    "env3relcurve",
-    "env3trigsrc1",
-    "env3trigsrc2",
-    "env3trigsrc3",
-    "env3trigsrc4",
-    "env4delaysyncoff",
-    "env4attacksyncoff",
-    "env4holdsyncoff",
-    "env4decaysyncoff",
-    "env4sustain",
-    "env4releasesyncoff",
-    "env4delaysyncon",
-    "env4attacksyncon",
-    "env4decaysyncon",
-    "env4holdsyncon",
-    "env4releasesyncon",
-    "env4atkcurve",
-    "env4deccurve",
-    "env4loop",
-    "env4legato",
-    "env4freerun",
-    "env4reset",
-    "env4relcurve",
-    "env4trigsrc1",
-    "env4trigsrc2",
-    "env4trigsrc3",
-    "env4trigsrc4",
-    "env5delaysyncoff",
-    "env5attacksyncoff",
-    "env5holdsyncoff",
-    "env5decaysyncoff",
-    "env5sustain",
-    "env5releasesyncoff",
-    "env5delaysyncon",
-    "env5attacksyncon",
-    "env5decaysyncon",
-    "env5holdsyncon",
-    "env5releasesyncon",
-    "env5atkcurve",
-    "env5deccurve",
-    "env5loop",
-    "env5legato",
-    "env5freerun",
-    "env5reset",
-    "env5relcurve",
-    "env5trigsrc1",
-    "env5trigsrc2",
-    "env5trigsrc3",
-    "env5trigsrc4",
-    "arptempo",
-    "arpenable",
-    "arpdivision",
-    "arpswing",
-    "arpgate",
-    "arpoctmode",
-    "arpoctave",
-    "arpmode",
-    "arplength",
-    "arptaptrig",
-    "arpphrase",
-    "arpratchet",
-    "arpchance",
-    "macro1target1",
-    "macro1target2",
-    "macro1target3",
-    "macro1target4",
-    "macro1target5",
-    "macro1target6",
-    "macro1target7",
-    "macro1target8",
-    "macro1buttonvalue1",
-    "macro1buttonvalue2",
-    "macro1buttonvalue3",
-    "macro1buttonvalue4",
-    "macro1buttonvalue5",
-    "macro1buttonvalue6",
-    "macro1buttonvalue7",
-    "macro1buttonvalue8",
-    "macro1depth1",
-    "macro1depth2",
-    "macro1depth3",
-    "macro1depth4",
-    "macro1depth5",
-    "macro1depth6",
-    "macro1depth7",
-    "macro1depth8",
-    "macro2target1",
-    "macro2target2",
-    "macro2target3",
-    "macro2target4",
-    "macro2target5",
-    "macro2target6",
-    "macro2target7",
-    "macro2target8",
-    "macro2buttonvalue1",
-    "macro2buttonvalue2",
-    "macro2buttonvalue3",
-    "macro2buttonvalue4",
-    "macro2buttonvalue5",
-    "macro2buttonvalue6",
-    "macro2buttonvalue7",
-    "macro2buttonvalue8",
-    "macro2depth1",
-    "macro2depth2",
-    "macro2depth3",
-    "macro2depth4",
-    "macro2depth5",
-    "macro2depth6",
-    "macro2depth7",
-    "macro2depth8",
-    "macro3target1",
-    "macro3target2",
-    "macro3target3",
-    "macro3target4",
-    "macro3target5",
-    "macro3target6",
-    "macro3target7",
-    "macro3target8",
-    "macro3buttonvalue1",
-    "macro3buttonvalue2",
-    "macro3buttonvalue3",
-    "macro3buttonvalue4",
-    "macro3buttonvalue5",
-    "macro3buttonvalue6",
-    "macro3buttonvalue7",
-    "macro3buttonvalue8",
-    "macro3depth1",
-    "macro3depth2",
-    "macro3depth3",
-    "macro3depth4",
-    "macro3depth5",
-    "macro3depth6",
-    "macro3depth7",
-    "macro3depth8",
-    "macro4target1",
-    "macro4target2",
-    "macro4target3",
-    "macro4target4",
-    "macro4target5",
-    "macro4target6",
-    "macro4target7",
-    "macro4target8",
-    "macro4buttonvalue1",
-    "macro4buttonvalue2",
-    "macro4buttonvalue3",
-    "macro4buttonvalue4",
-    "macro4buttonvalue5",
-    "macro4buttonvalue6",
-    "macro4buttonvalue7",
-    "macro4buttonvalue8",
-    "macro4depth1",
-    "macro4depth2",
-    "macro4depth3",
-    "macro4depth4",
-    "macro4depth5",
-    "macro4depth6",
-    "macro4depth7",
-    "macro4depth8",
-    "macro5target1",
-    "macro5target2",
-    "macro5target3",
-    "macro5target4",
-    "macro5target5",
-    "macro5target6",
-    "macro5target7",
-    "macro5target8",
-    "macro5buttonvalue1",
-    "macro5buttonvalue2",
-    "macro5buttonvalue3",
-    "macro5buttonvalue4",
-    "macro5buttonvalue5",
-    "macro5buttonvalue6",
-    "macro5buttonvalue7",
-    "macro5buttonvalue8",
-    "macro5depth1",
-    "macro5depth2",
-    "macro5depth3",
-    "macro5depth4",
-    "macro5depth5",
-    "macro5depth6",
-    "macro5depth7",
-    "macro5depth8",
-    "macro6target1",
-    "macro6target2",
-    "macro6target3",
-    "macro6target4",
-    "macro6target5",
-    "macro6target6",
-    "macro6target7",
-    "macro6target8",
-    "macro6buttonvalue1",
-    "macro6buttonvalue2",
-    "macro6buttonvalue3",
-    "macro6buttonvalue4",
-    "macro6buttonvalue5",
-    "macro6buttonvalue6",
-    "macro6buttonvalue7",
-    "macro6buttonvalue8",
-    "macro6depth1",
-    "macro6depth2",
-    "macro6depth3",
-    "macro6depth4",
-    "macro6depth5",
-    "macro6depth6",
-    "macro6depth7",
-    "macro6depth8",
-    "macro7target1",
-    "macro7target2",
-    "macro7target3",
-    "macro7target4",
-    "macro7target5",
-    "macro7target6",
-    "macro7target7",
-    "macro7target8",
-    "macro7buttonvalue1",
-    "macro7buttonvalue2",
-    "macro7buttonvalue3",
-    "macro7buttonvalue4",
-    "macro7buttonvalue5",
-    "macro7buttonvalue6",
-    "macro7buttonvalue7",
-    "macro7buttonvalue8",
-    "macro7depth1",
-    "macro7depth2",
-    "macro7depth3",
-    "macro7depth4",
-    "macro7depth5",
-    "macro7depth6",
-    "macro7depth7",
-    "macro7depth8",
-    "macro8target1",
-    "macro8target2",
-    "macro8target3",
-    "macro8target4",
-    "macro8target5",
-    "macro8target6",
-    "macro8target7",
-    "macro8target8",
-    "macro8buttonvalue1",
-    "macro8buttonvalue2",
-    "macro8buttonvalue3",
-    "macro8buttonvalue4",
-    "macro8buttonvalue5",
-    "macro8buttonvalue6",
-    "macro8buttonvalue7",
-    "macro8buttonvalue8",
-    "macro8depth1",
-    "macro8depth2",
-    "macro8depth3",
-    "macro8depth4",
-    "macro8depth5",
-    "macro8depth6",
-    "macro8depth7",
-    "macro8depth8",
-    "macro1panelvalue",
-    "macro2panelvalue",
-    "macro3panelvalue",
-    "macro4panelvalue",
-    "macro5panelvalue",
-    "macro6panelvalue",
-    "macro7panelvalue",
-    "macro8panelvalue",
-    "modmatrix1modsource",
-    "modmatrix2modsource",
-    "modmatrix3modsource",
-    "modmatrix4modsource",
-    "modmatrix5modsource",
-    "modmatrix6modsource",
-    "modmatrix7modsource",
-    "modmatrix8modsource",
-    "modmatrix9modsource",
-    "modmatrix10modsource",
-    "modmatrix11modsource",
-    "modmatrix12modsource",
-    "modmatrix13modsource",
-    "modmatrix14modsource",
-    "modmatrix15modsource",
-    "modmatrix16modsource",
-    "modmatrix17modsource",
-    "modmatrix18modsource",
-    "modmatrix19modsource",
-    "modmatrix20modsource",
-    "modmatrix21modsource",
-    "modmatrix22modsource",
-    "modmatrix23modsource",
-    "modmatrix24modsource",
-    "modmatrix25modsource",
-    "modmatrix26modsource",
-    "modmatrix27modsource",
-    "modmatrix28modsource",
-    "modmatrix29modsource",
-    "modmatrix30modsource",
-    "modmatrix31modsource",
-    "modmatrix32modsource",
-    "modmatrix1modtarget",
-    "modmatrix2modtarget",
-    "modmatrix3modtarget",
-    "modmatrix4modtarget",
-    "modmatrix5modtarget",
-    "modmatrix6modtarget",
-    "modmatrix7modtarget",
-    "modmatrix8modtarget",
-    "modmatrix9modtarget",
-    "modmatrix10modtarget",
-    "modmatrix11modtarget",
-    "modmatrix12modtarget",
-    "modmatrix13modtarget",
-    "modmatrix14modtarget",
-    "modmatrix15modtarget",
-    "modmatrix16modtarget",
-    "modmatrix17modtarget",
-    "modmatrix18modtarget",
-    "modmatrix19modtarget",
-    "modmatrix20modtarget",
-    "modmatrix21modtarget",
-    "modmatrix22modtarget",
-    "modmatrix23modtarget",
-    "modmatrix24modtarget",
-    "modmatrix25modtarget",
-    "modmatrix26modtarget",
-    "modmatrix27modtarget",
-    "modmatrix28modtarget",
-    "modmatrix29modtarget",
-    "modmatrix30modtarget",
-    "modmatrix31modtarget",
-    "modmatrix32modtarget",
-    "modmatrix1depth",
-    "modmatrix2depth",
-    "modmatrix3depth",
-    "modmatrix4depth",
-    "modmatrix5depth",
-    "modmatrix6depth",
-    "modmatrix7depth",
-    "modmatrix8depth",
-    "modmatrix9depth",
-    "modmatrix10depth",
-    "modmatrix11depth",
-    "modmatrix12depth",
-    "modmatrix13depth",
-    "modmatrix14depth",
-    "modmatrix15depth",
-    "modmatrix16depth",
-    "modmatrix17depth",
-    "modmatrix18depth",
-    "modmatrix19depth",
-    "modmatrix20depth",
-    "modmatrix21depth",
-    "modmatrix22depth",
-    "modmatrix23depth",
-    "modmatrix24depth",
-    "modmatrix25depth",
-    "modmatrix26depth",
-    "modmatrix27depth",
-    "modmatrix28depth",
-    "modmatrix29depth",
-    "modmatrix30depth",
-    "modmatrix31depth",
-    "modmatrix32depth",
-    "ribbonkeyspan",
-    "ribbonoctave",
-    "ribbonquantize",
-    "ribbonmodcontrol",
-    "ribbonglide",
-    "voicedetune",
-    "voicestereowidth",
-    "voicevibratoamount",
-    "voiceanalogfeel",
-    "voicedensity",
-    "voiceglidecurve",
-    "voiceglidelegato",
-    "voiceglidetime",
-    "voicestereomode",
-    "voicepolyphony",
-    "voicepitchbend",
-    "voicevibratoratesyncoff",
-    "voicevibratoratesyncon",
-    "voicerandomphase",
-    "voicewarmmode",
-    "voicesnap",
+        /// Note that the postfx params have been broken out
+        "postfx1param1",
+        "postfx1param2",
+        "postfx1param3",
+        "postfx1param4",
+        "postfx1param5",
+        "postfx2param1",
+        "postfx2param2",
+        "postfx2param3",
+        "postfx2param4",
+        "postfx2param5",
+        "postfx3param1",
+        "postfx3param2",
+        "postfx3param3",
+        "postfx3param4",
+        "postfx3param5",
+        "postfx4param1",
+        "postfx4param2",
+        "postfx4param3",
+        "postfx4param4",
+        "postfx4param5",
+        "postfx5param1",
+        "postfx5param2",
+        "postfx5param3",
+        "postfx5param4",
+        "postfx5param5",
+        "postfx6param1",
+        "postfx6param2",
+        "postfx6param3",
+        "postfx6param4",
+        "postfx6param5",
+        "postfx7param1",
+        "postfx7param2",
+        "postfx7param3",
+        "postfx7param4",
+        "postfx7param5",
+        "postfx8param1",
+        "postfx8param2",
+        "postfx8param3",
+        "postfx8param4",
+        "postfx8param5",
+        "postfx9param1",
+        "postfx9param2",
+        "postfx9param3",
+        "postfx9param4",
+        "postfx9param5",
+        "postfxsidechain",
+        "lfo1level",
+        "lfo1trigsync",
+        "lfo1smooth",
+        "lfo1steps",
+        "lfo1delaysyncoff",
+        "lfo1fadeinsyncoff",
+        "lfo1delaysyncon",
+        "lfo1fadeinsyncon",
+        "lfo1oneshot",
+        "lfo1phase",
+        "lfo1ratesyncoff",
+        "lfo1ratesyncon",
+        "lfo1step1",
+        "lfo1step2",
+        "lfo1step3",
+        "lfo1step4",
+        "lfo1step5",
+        "lfo1step6",
+        "lfo1step7",
+        "lfo1step8",
+        "lfo1step9",
+        "lfo1step10",
+        "lfo1step11",
+        "lfo1step12",
+        "lfo1step13",
+        "lfo1step14",
+        "lfo1step15",
+        "lfo1step16",
+        "lfo1step17",
+        "lfo1step18",
+        "lfo1step19",
+        "lfo1step20",
+        "lfo1step21",
+        "lfo1step22",
+        "lfo1step23",
+        "lfo1step24",
+        "lfo1step25",
+        "lfo1step26",
+        "lfo1step27",
+        "lfo1step28",
+        "lfo1step29",
+        "lfo1step30",
+        "lfo1step31",
+        "lfo1step32",
+        "lfo1step33",
+        "lfo1step34",
+        "lfo1step35",
+        "lfo1step36",
+        "lfo1step37",
+        "lfo1step38",
+        "lfo1step39",
+        "lfo1step40",
+        "lfo1step41",
+        "lfo1step42",
+        "lfo1step43",
+        "lfo1step44",
+        "lfo1step45",
+        "lfo1step46",
+        "lfo1step47",
+        "lfo1step48",
+        "lfo1step49",
+        "lfo1step50",
+        "lfo1step51",
+        "lfo1step52",
+        "lfo1step53",
+        "lfo1step54",
+        "lfo1step55",
+        "lfo1step56",
+        "lfo1step57",
+        "lfo1step58",
+        "lfo1step59",
+        "lfo1step60",
+        "lfo1step61",
+        "lfo1step62",
+        "lfo1step63",
+        "lfo1step64",
+        "lfo2level",
+        "lfo2trigsync",
+        "lfo2smooth",
+        "lfo2steps",
+        "lfo2delaysyncoff",
+        "lfo2fadeinsyncoff",
+        "lfo2delaysyncon",
+        "lfo2fadeinsyncon",
+        "lfo2oneshot",
+        "lfo2phase",
+        "lfo2ratesyncoff",
+        "lfo2ratesyncon",
+        "lfo2step1",
+        "lfo2step2",
+        "lfo2step3",
+        "lfo2step4",
+        "lfo2step5",
+        "lfo2step6",
+        "lfo2step7",
+        "lfo2step8",
+        "lfo2step9",
+        "lfo2step10",
+        "lfo2step11",
+        "lfo2step12",
+        "lfo2step13",
+        "lfo2step14",
+        "lfo2step15",
+        "lfo2step16",
+        "lfo2step17",
+        "lfo2step18",
+        "lfo2step19",
+        "lfo2step20",
+        "lfo2step21",
+        "lfo2step22",
+        "lfo2step23",
+        "lfo2step24",
+        "lfo2step25",
+        "lfo2step26",
+        "lfo2step27",
+        "lfo2step28",
+        "lfo2step29",
+        "lfo2step30",
+        "lfo2step31",
+        "lfo2step32",
+        "lfo2step33",
+        "lfo2step34",
+        "lfo2step35",
+        "lfo2step36",
+        "lfo2step37",
+        "lfo2step38",
+        "lfo2step39",
+        "lfo2step40",
+        "lfo2step41",
+        "lfo2step42",
+        "lfo2step43",
+        "lfo2step44",
+        "lfo2step45",
+        "lfo2step46",
+        "lfo2step47",
+        "lfo2step48",
+        "lfo2step49",
+        "lfo2step50",
+        "lfo2step51",
+        "lfo2step52",
+        "lfo2step53",
+        "lfo2step54",
+        "lfo2step55",
+        "lfo2step56",
+        "lfo2step57",
+        "lfo2step58",
+        "lfo2step59",
+        "lfo2step60",
+        "lfo2step61",
+        "lfo2step62",
+        "lfo2step63",
+        "lfo2step64",
+        "lfo3level",
+        "lfo3trigsync",
+        "lfo3smooth",
+        "lfo3steps",
+        "lfo3delaysyncoff",
+        "lfo3fadeinsyncoff",
+        "lfo3delaysyncon",
+        "lfo3fadeinsyncon",
+        "lfo3oneshot",
+        "lfo3phase",
+        "lfo3ratesyncoff",
+        "lfo3ratesyncon",
+        "lfo3step1",
+        "lfo3step2",
+        "lfo3step3",
+        "lfo3step4",
+        "lfo3step5",
+        "lfo3step6",
+        "lfo3step7",
+        "lfo3step8",
+        "lfo3step9",
+        "lfo3step10",
+        "lfo3step11",
+        "lfo3step12",
+        "lfo3step13",
+        "lfo3step14",
+        "lfo3step15",
+        "lfo3step16",
+        "lfo3step17",
+        "lfo3step18",
+        "lfo3step19",
+        "lfo3step20",
+        "lfo3step21",
+        "lfo3step22",
+        "lfo3step23",
+        "lfo3step24",
+        "lfo3step25",
+        "lfo3step26",
+        "lfo3step27",
+        "lfo3step28",
+        "lfo3step29",
+        "lfo3step30",
+        "lfo3step31",
+        "lfo3step32",
+        "lfo3step33",
+        "lfo3step34",
+        "lfo3step35",
+        "lfo3step36",
+        "lfo3step37",
+        "lfo3step38",
+        "lfo3step39",
+        "lfo3step40",
+        "lfo3step41",
+        "lfo3step42",
+        "lfo3step43",
+        "lfo3step44",
+        "lfo3step45",
+        "lfo3step46",
+        "lfo3step47",
+        "lfo3step48",
+        "lfo3step49",
+        "lfo3step50",
+        "lfo3step51",
+        "lfo3step52",
+        "lfo3step53",
+        "lfo3step54",
+        "lfo3step55",
+        "lfo3step56",
+        "lfo3step57",
+        "lfo3step58",
+        "lfo3step59",
+        "lfo3step60",
+        "lfo3step61",
+        "lfo3step62",
+        "lfo3step63",
+        "lfo3step64",
+        "lfo4level",
+        "lfo4trigsync",
+        "lfo4smooth",
+        "lfo4steps",
+        "lfo4delaysyncoff",
+        "lfo4fadeinsyncoff",
+        "lfo4delaysyncon",
+        "lfo4fadeinsyncon",
+        "lfo4oneshot",
+        "lfo4phase",
+        "lfo4ratesyncoff",
+        "lfo4ratesyncon",
+        "lfo4step1",
+        "lfo4step2",
+        "lfo4step3",
+        "lfo4step4",
+        "lfo4step5",
+        "lfo4step6",
+        "lfo4step7",
+        "lfo4step8",
+        "lfo4step9",
+        "lfo4step10",
+        "lfo4step11",
+        "lfo4step12",
+        "lfo4step13",
+        "lfo4step14",
+        "lfo4step15",
+        "lfo4step16",
+        "lfo4step17",
+        "lfo4step18",
+        "lfo4step19",
+        "lfo4step20",
+        "lfo4step21",
+        "lfo4step22",
+        "lfo4step23",
+        "lfo4step24",
+        "lfo4step25",
+        "lfo4step26",
+        "lfo4step27",
+        "lfo4step28",
+        "lfo4step29",
+        "lfo4step30",
+        "lfo4step31",
+        "lfo4step32",
+        "lfo4step33",
+        "lfo4step34",
+        "lfo4step35",
+        "lfo4step36",
+        "lfo4step37",
+        "lfo4step38",
+        "lfo4step39",
+        "lfo4step40",
+        "lfo4step41",
+        "lfo4step42",
+        "lfo4step43",
+        "lfo4step44",
+        "lfo4step45",
+        "lfo4step46",
+        "lfo4step47",
+        "lfo4step48",
+        "lfo4step49",
+        "lfo4step50",
+        "lfo4step51",
+        "lfo4step52",
+        "lfo4step53",
+        "lfo4step54",
+        "lfo4step55",
+        "lfo4step56",
+        "lfo4step57",
+        "lfo4step58",
+        "lfo4step59",
+        "lfo4step60",
+        "lfo4step61",
+        "lfo4step62",
+        "lfo4step63",
+        "lfo4step64",
+        "lfo5level",
+        "lfo5trigsync",
+        "lfo5smooth",
+        "lfo5steps",
+        "lfo5delaysyncoff",
+        "lfo5fadeinsyncoff",
+        "lfo5delaysyncon",
+        "lfo5fadeinsyncon",
+        "lfo5oneshot",
+        "lfo5phase",
+        "lfo5ratesyncoff",
+        "lfo5ratesyncon",
+        "lfo5step1",
+        "lfo5step2",
+        "lfo5step3",
+        "lfo5step4",
+        "lfo5step5",
+        "lfo5step6",
+        "lfo5step7",
+        "lfo5step8",
+        "lfo5step9",
+        "lfo5step10",
+        "lfo5step11",
+        "lfo5step12",
+        "lfo5step13",
+        "lfo5step14",
+        "lfo5step15",
+        "lfo5step16",
+        "lfo5step17",
+        "lfo5step18",
+        "lfo5step19",
+        "lfo5step20",
+        "lfo5step21",
+        "lfo5step22",
+        "lfo5step23",
+        "lfo5step24",
+        "lfo5step25",
+        "lfo5step26",
+        "lfo5step27",
+        "lfo5step28",
+        "lfo5step29",
+        "lfo5step30",
+        "lfo5step31",
+        "lfo5step32",
+        "lfo5step33",
+        "lfo5step34",
+        "lfo5step35",
+        "lfo5step36",
+        "lfo5step37",
+        "lfo5step38",
+        "lfo5step39",
+        "lfo5step40",
+        "lfo5step41",
+        "lfo5step42",
+        "lfo5step43",
+        "lfo5step44",
+        "lfo5step45",
+        "lfo5step46",
+        "lfo5step47",
+        "lfo5step48",
+        "lfo5step49",
+        "lfo5step50",
+        "lfo5step51",
+        "lfo5step52",
+        "lfo5step53",
+        "lfo5step54",
+        "lfo5step55",
+        "lfo5step56",
+        "lfo5step57",
+        "lfo5step58",
+        "lfo5step59",
+        "lfo5step60",
+        "lfo5step61",
+        "lfo5step62",
+        "lfo5step63",
+        "lfo5step64",
+        "env1delaysyncoff",
+        "env1attacksyncoff",
+        "env1holdsyncoff",
+        "env1decaysyncoff",
+        "env1sustain",
+        "env1releasesyncoff",
+        "env1delaysyncon",
+        "env1attacksyncon",
+        "env1decaysyncon",
+        "env1holdsyncon",
+        "env1releasesyncon",
+        "env1atkcurve",
+        "env1deccurve",
+        "env1loop",
+        "env1legato",
+        "env1freerun",
+        "env1reset",
+        "env1relcurve",
+        "env1trigsrc1",
+        "env1trigsrc2",
+        "env1trigsrc3",
+        "env1trigsrc4",
+        "env2delaysyncoff",
+        "env2attacksyncoff",
+        "env2holdsyncoff",
+        "env2decaysyncoff",
+        "env2sustain",
+        "env2releasesyncoff",
+        "env2delaysyncon",
+        "env2attacksyncon",
+        "env2decaysyncon",
+        "env2holdsyncon",
+        "env2releasesyncon",
+        "env2atkcurve",
+        "env2deccurve",
+        "env2loop",
+        "env2legato",
+        "env2freerun",
+        "env2reset",
+        "env2relcurve",
+        "env2trigsrc1",
+        "env2trigsrc2",
+        "env2trigsrc3",
+        "env2trigsrc4",
+        "env3delaysyncoff",
+        "env3attacksyncoff",
+        "env3holdsyncoff",
+        "env3decaysyncoff",
+        "env3sustain",
+        "env3releasesyncoff",
+        "env3delaysyncon",
+        "env3attacksyncon",
+        "env3decaysyncon",
+        "env3holdsyncon",
+        "env3releasesyncon",
+        "env3atkcurve",
+        "env3deccurve",
+        "env3loop",
+        "env3legato",
+        "env3freerun",
+        "env3reset",
+        "env3relcurve",
+        "env3trigsrc1",
+        "env3trigsrc2",
+        "env3trigsrc3",
+        "env3trigsrc4",
+        "env4delaysyncoff",
+        "env4attacksyncoff",
+        "env4holdsyncoff",
+        "env4decaysyncoff",
+        "env4sustain",
+        "env4releasesyncoff",
+        "env4delaysyncon",
+        "env4attacksyncon",
+        "env4decaysyncon",
+        "env4holdsyncon",
+        "env4releasesyncon",
+        "env4atkcurve",
+        "env4deccurve",
+        "env4loop",
+        "env4legato",
+        "env4freerun",
+        "env4reset",
+        "env4relcurve",
+        "env4trigsrc1",
+        "env4trigsrc2",
+        "env4trigsrc3",
+        "env4trigsrc4",
+        "env5delaysyncoff",
+        "env5attacksyncoff",
+        "env5holdsyncoff",
+        "env5decaysyncoff",
+        "env5sustain",
+        "env5releasesyncoff",
+        "env5delaysyncon",
+        "env5attacksyncon",
+        "env5decaysyncon",
+        "env5holdsyncon",
+        "env5releasesyncon",
+        "env5atkcurve",
+        "env5deccurve",
+        "env5loop",
+        "env5legato",
+        "env5freerun",
+        "env5reset",
+        "env5relcurve",
+        "env5trigsrc1",
+        "env5trigsrc2",
+        "env5trigsrc3",
+        "env5trigsrc4",
+        "arptempo",
+        "arpenable",
+        "arpdivision",
+        "arpswing",
+        "arpgate",
+        "arpoctmode",
+        "arpoctave",
+        "arpmode",
+        "arplength",
+        "arptaptrig",
+        "arpphrase",
+        "arpratchet",
+        "arpchance",
+        "macro1target1",
+        "macro1target2",
+        "macro1target3",
+        "macro1target4",
+        "macro1target5",
+        "macro1target6",
+        "macro1target7",
+        "macro1target8",
+        "macro1buttonvalue1",
+        "macro1buttonvalue2",
+        "macro1buttonvalue3",
+        "macro1buttonvalue4",
+        "macro1buttonvalue5",
+        "macro1buttonvalue6",
+        "macro1buttonvalue7",
+        "macro1buttonvalue8",
+        "macro1depth1",
+        "macro1depth2",
+        "macro1depth3",
+        "macro1depth4",
+        "macro1depth5",
+        "macro1depth6",
+        "macro1depth7",
+        "macro1depth8",
+        "macro2target1",
+        "macro2target2",
+        "macro2target3",
+        "macro2target4",
+        "macro2target5",
+        "macro2target6",
+        "macro2target7",
+        "macro2target8",
+        "macro2buttonvalue1",
+        "macro2buttonvalue2",
+        "macro2buttonvalue3",
+        "macro2buttonvalue4",
+        "macro2buttonvalue5",
+        "macro2buttonvalue6",
+        "macro2buttonvalue7",
+        "macro2buttonvalue8",
+        "macro2depth1",
+        "macro2depth2",
+        "macro2depth3",
+        "macro2depth4",
+        "macro2depth5",
+        "macro2depth6",
+        "macro2depth7",
+        "macro2depth8",
+        "macro3target1",
+        "macro3target2",
+        "macro3target3",
+        "macro3target4",
+        "macro3target5",
+        "macro3target6",
+        "macro3target7",
+        "macro3target8",
+        "macro3buttonvalue1",
+        "macro3buttonvalue2",
+        "macro3buttonvalue3",
+        "macro3buttonvalue4",
+        "macro3buttonvalue5",
+        "macro3buttonvalue6",
+        "macro3buttonvalue7",
+        "macro3buttonvalue8",
+        "macro3depth1",
+        "macro3depth2",
+        "macro3depth3",
+        "macro3depth4",
+        "macro3depth5",
+        "macro3depth6",
+        "macro3depth7",
+        "macro3depth8",
+        "macro4target1",
+        "macro4target2",
+        "macro4target3",
+        "macro4target4",
+        "macro4target5",
+        "macro4target6",
+        "macro4target7",
+        "macro4target8",
+        "macro4buttonvalue1",
+        "macro4buttonvalue2",
+        "macro4buttonvalue3",
+        "macro4buttonvalue4",
+        "macro4buttonvalue5",
+        "macro4buttonvalue6",
+        "macro4buttonvalue7",
+        "macro4buttonvalue8",
+        "macro4depth1",
+        "macro4depth2",
+        "macro4depth3",
+        "macro4depth4",
+        "macro4depth5",
+        "macro4depth6",
+        "macro4depth7",
+        "macro4depth8",
+        "macro5target1",
+        "macro5target2",
+        "macro5target3",
+        "macro5target4",
+        "macro5target5",
+        "macro5target6",
+        "macro5target7",
+        "macro5target8",
+        "macro5buttonvalue1",
+        "macro5buttonvalue2",
+        "macro5buttonvalue3",
+        "macro5buttonvalue4",
+        "macro5buttonvalue5",
+        "macro5buttonvalue6",
+        "macro5buttonvalue7",
+        "macro5buttonvalue8",
+        "macro5depth1",
+        "macro5depth2",
+        "macro5depth3",
+        "macro5depth4",
+        "macro5depth5",
+        "macro5depth6",
+        "macro5depth7",
+        "macro5depth8",
+        "macro6target1",
+        "macro6target2",
+        "macro6target3",
+        "macro6target4",
+        "macro6target5",
+        "macro6target6",
+        "macro6target7",
+        "macro6target8",
+        "macro6buttonvalue1",
+        "macro6buttonvalue2",
+        "macro6buttonvalue3",
+        "macro6buttonvalue4",
+        "macro6buttonvalue5",
+        "macro6buttonvalue6",
+        "macro6buttonvalue7",
+        "macro6buttonvalue8",
+        "macro6depth1",
+        "macro6depth2",
+        "macro6depth3",
+        "macro6depth4",
+        "macro6depth5",
+        "macro6depth6",
+        "macro6depth7",
+        "macro6depth8",
+        "macro7target1",
+        "macro7target2",
+        "macro7target3",
+        "macro7target4",
+        "macro7target5",
+        "macro7target6",
+        "macro7target7",
+        "macro7target8",
+        "macro7buttonvalue1",
+        "macro7buttonvalue2",
+        "macro7buttonvalue3",
+        "macro7buttonvalue4",
+        "macro7buttonvalue5",
+        "macro7buttonvalue6",
+        "macro7buttonvalue7",
+        "macro7buttonvalue8",
+        "macro7depth1",
+        "macro7depth2",
+        "macro7depth3",
+        "macro7depth4",
+        "macro7depth5",
+        "macro7depth6",
+        "macro7depth7",
+        "macro7depth8",
+        "macro8target1",
+        "macro8target2",
+        "macro8target3",
+        "macro8target4",
+        "macro8target5",
+        "macro8target6",
+        "macro8target7",
+        "macro8target8",
+        "macro8buttonvalue1",
+        "macro8buttonvalue2",
+        "macro8buttonvalue3",
+        "macro8buttonvalue4",
+        "macro8buttonvalue5",
+        "macro8buttonvalue6",
+        "macro8buttonvalue7",
+        "macro8buttonvalue8",
+        "macro8depth1",
+        "macro8depth2",
+        "macro8depth3",
+        "macro8depth4",
+        "macro8depth5",
+        "macro8depth6",
+        "macro8depth7",
+        "macro8depth8",
+        "macro1panelvalue",
+        "macro2panelvalue",
+        "macro3panelvalue",
+        "macro4panelvalue",
+        "macro5panelvalue",
+        "macro6panelvalue",
+        "macro7panelvalue",
+        "macro8panelvalue",
+        "modmatrix1modsource",
+        "modmatrix2modsource",
+        "modmatrix3modsource",
+        "modmatrix4modsource",
+        "modmatrix5modsource",
+        "modmatrix6modsource",
+        "modmatrix7modsource",
+        "modmatrix8modsource",
+        "modmatrix9modsource",
+        "modmatrix10modsource",
+        "modmatrix11modsource",
+        "modmatrix12modsource",
+        "modmatrix13modsource",
+        "modmatrix14modsource",
+        "modmatrix15modsource",
+        "modmatrix16modsource",
+        "modmatrix17modsource",
+        "modmatrix18modsource",
+        "modmatrix19modsource",
+        "modmatrix20modsource",
+        "modmatrix21modsource",
+        "modmatrix22modsource",
+        "modmatrix23modsource",
+        "modmatrix24modsource",
+        "modmatrix25modsource",
+        "modmatrix26modsource",
+        "modmatrix27modsource",
+        "modmatrix28modsource",
+        "modmatrix29modsource",
+        "modmatrix30modsource",
+        "modmatrix31modsource",
+        "modmatrix32modsource",
+        "modmatrix1modtarget",
+        "modmatrix2modtarget",
+        "modmatrix3modtarget",
+        "modmatrix4modtarget",
+        "modmatrix5modtarget",
+        "modmatrix6modtarget",
+        "modmatrix7modtarget",
+        "modmatrix8modtarget",
+        "modmatrix9modtarget",
+        "modmatrix10modtarget",
+        "modmatrix11modtarget",
+        "modmatrix12modtarget",
+        "modmatrix13modtarget",
+        "modmatrix14modtarget",
+        "modmatrix15modtarget",
+        "modmatrix16modtarget",
+        "modmatrix17modtarget",
+        "modmatrix18modtarget",
+        "modmatrix19modtarget",
+        "modmatrix20modtarget",
+        "modmatrix21modtarget",
+        "modmatrix22modtarget",
+        "modmatrix23modtarget",
+        "modmatrix24modtarget",
+        "modmatrix25modtarget",
+        "modmatrix26modtarget",
+        "modmatrix27modtarget",
+        "modmatrix28modtarget",
+        "modmatrix29modtarget",
+        "modmatrix30modtarget",
+        "modmatrix31modtarget",
+        "modmatrix32modtarget",
+        "modmatrix1depth",
+        "modmatrix2depth",
+        "modmatrix3depth",
+        "modmatrix4depth",
+        "modmatrix5depth",
+        "modmatrix6depth",
+        "modmatrix7depth",
+        "modmatrix8depth",
+        "modmatrix9depth",
+        "modmatrix10depth",
+        "modmatrix11depth",
+        "modmatrix12depth",
+        "modmatrix13depth",
+        "modmatrix14depth",
+        "modmatrix15depth",
+        "modmatrix16depth",
+        "modmatrix17depth",
+        "modmatrix18depth",
+        "modmatrix19depth",
+        "modmatrix20depth",
+        "modmatrix21depth",
+        "modmatrix22depth",
+        "modmatrix23depth",
+        "modmatrix24depth",
+        "modmatrix25depth",
+        "modmatrix26depth",
+        "modmatrix27depth",
+        "modmatrix28depth",
+        "modmatrix29depth",
+        "modmatrix30depth",
+        "modmatrix31depth",
+        "modmatrix32depth",
+        "ribbonkeyspan",
+        "ribbonoctave",
+        "ribbonquantize",
+        "ribbonmodcontrol",
+        "ribbonglide",
+        "voicedetune",
+        "voicestereowidth",
+        "voicevibratoamount",
+        "voiceanalogfeel",
+        "voicedensity",
+        "voiceglidecurve",
+        "voiceglidelegato",
+        "voiceglidetime",
+        "voicestereomode",
+        "voicepolyphony",
+        "voicepitchbend",
+        "voicevibratoratesyncoff",
+        "voicevibratoratesyncon",
+        "voicerandomphase",
+        "voicewarmmode",
+        "voicesnap",
      
-    /// New 2.0.0 Parameters that can be sent
-    "voicesustain",
-    "osc1bitreduction",                  
-    "osc2bitreduction",                  
-    "osc3bitreduction",                  
-    "env1quantize",                  
-    "env2quantize",                  
-    "env3quantize",                  
-    "env4quantize",                  
-    "env5quantize",                  
-    "lfo1quantize",                  
-    "lfo2quantize",                  
-    "lfo3quantize",                  
-    "lfo4quantize",                  
-    "lfo5quantize",                  
-    };
+        /// New 2.0.0 Parameters that can be sent
+        "voicesustain",
+        "osc1bitreduction",                  
+        "osc2bitreduction",                  
+        "osc3bitreduction",                  
+        "env1quantize",                  
+        "env2quantize",                  
+        "env3quantize",                  
+        "env4quantize",                  
+        "env5quantize",                  
+        "lfo1quantize",                  
+        "lfo2quantize",                  
+        "lfo3quantize",                  
+        "lfo4quantize",                  
+        "lfo5quantize",                  
+        };
     
     
     
@@ -9684,7 +9684,7 @@ public class ASMHydrasynth extends Synth
     "modmatrix30depth",
     "modmatrix31depth",
     "modmatrix32depth",
-    "ribbonmode",   				                                       
+    "ribbonmode",                                                                      
     "ribbonkeyspan",
     "ribbonoctave",
     "ribbonquantize",
@@ -9733,7 +9733,7 @@ public class ASMHydrasynth extends Synth
     "lfo4quantize",                  
     "lfo5quantize",  
 
-	// Panel Buton values (have no useful NRPN)
+    // Panel Buton values (have no useful NRPN)
     // "macro1panelbuttonvalue",
     // "macro2panelbuttonvalue",
     // "macro3panelbuttonvalue",
@@ -10656,8 +10656,8 @@ public class ASMHydrasynth extends Synth
     8157,           // 3f 5d            "macro6panelvalue",
     8158,           // 3f 5e            "macro7panelvalue",
     8159,           // 3f 5f            "macro8panelvalue",
-	// Macro Panel Button Triggers are not included here since they are,
-	// for some unknown reason, per-Macro item, per slot.  See NRPN spreadsheet.
+    // Macro Panel Button Triggers are not included here since they are,
+    // for some unknown reason, per-Macro item, per slot.  See NRPN spreadsheet.
     7936,           // 3e 0             "modmatrix1modsource",
     7937,           // 3e 1             "modmatrix2modsource",
     7938,           // 3e 2             "modmatrix3modsource",

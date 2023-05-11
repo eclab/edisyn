@@ -58,7 +58,7 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
     public static final String[] FREQUENCIES = new String[] { "20Hz", "25Hz", "32Hz", "40Hz", "50Hz", "64Hz", "80Hz", "100Hz", "125Hz", "160Hz", "200Hz", "250Hz", "320Hz", "400Hz", "500Hz", "640Hz", "800Hz", "1KHz", "1.25KHz", "1.6KHz", "2KHz", "2.5KHz", "3.2KHz", "4KHz", "5KHz", "6.4Khz", "8KHz", "10KHz", "12.5KHz", "15KHz" };
 
     public static final String[] LFO_SHAPES = new String[] { "Tri 10", "Tri 9", "Tri 8", "Tri 7", "Tri 6", "Tri 5", "Tri 4", "Tri 3", "Tri 2", "Tri 1", "Tri 0", "Tri -1", "Tri -2", "Tri -3", "Tri -4", "Tri -5", "Tri -6", "Tri -7", "Tri -8", "Tri -9", "Tri -10",
-                                                             "Sin -10", "Sin -9", "Sin -8", "Sin -7", "Sin -6", "Sin -5", "Sin -4", "Sin -3", "Sin -2", "Sin -1", "Sin 0", "Sin 1", "Sin 2", "Sin 3", "Sin 4", "Sin 5", "Sin 6", "Sin 7", "Sin 8", "Sin 9", "Sin 10" };
+        "Sin -10", "Sin -9", "Sin -8", "Sin -7", "Sin -6", "Sin -5", "Sin -4", "Sin -3", "Sin -2", "Sin -1", "Sin 0", "Sin 1", "Sin 2", "Sin 3", "Sin 4", "Sin 5", "Sin 6", "Sin 7", "Sin 8", "Sin 9", "Sin 10" };
 
 
     //// EXPLANATION OF FX PARAMETER ARRAYS

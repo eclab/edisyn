@@ -454,7 +454,7 @@ public int getPauseAfterChangePatch() { return 200; }
         data[1] = (byte)0x3e;                   // Waldorf
         data[2] = (byte)0x30;                   // M
         data[3] = (byte)0x00;
-        data[4] = (byte)0x75;           		// Request Multi Arrangement
+        data[4] = (byte)0x75;                           // Request Multi Arrangement
         data[5] = (byte)0x01;                   // Request Current Arrangement
         data[6] = (byte)0x00;
         data[7] = (byte)0x00;
@@ -474,7 +474,7 @@ public int getPauseAfterChangePatch() { return 200; }
         data[1] = (byte)0x3e;                   // Waldorf
         data[2] = (byte)0x30;                   // M
         data[3] = (byte)0x00;
-        data[4] = (byte)0x75;           		// Request Multi Arrangement
+        data[4] = (byte)0x75;                           // Request Multi Arrangement
         data[5] = (byte)0x00;                   // Request a Specific Arrangement (anything but 0x01)
         data[6] = (byte)NN;
         data[7] = (byte)0x00;

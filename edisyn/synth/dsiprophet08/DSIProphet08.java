@@ -83,14 +83,14 @@ public class DSIProphet08 extends Synth
     public static final int[] PR_ARPEGGIATOR_MODES = { 0, 1, 2, 4, 3 };
     public static final int[] PR_KEY_MODES = { 0, 2, 4, 1, 3, 5 };
     public static final int[] PR_MODULATION_DESTINATIONS = { 0, 1, 2, 3, 4, 5, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 
-                                                             19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 0, 0, 0, 0, 52 };               // SEQ24 slew is last
+        19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 0, 0, 0, 0, 52 };               // SEQ24 slew is last
     public static final int[] PR_MODULATION_SOURCES = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 0, 0 }; 
     public static final int[] PR_LFO_SHAPES = { 0, 2, 1, 3, 4 };
     public static final int[] PR_SEQUENCER_TRIGGERS = { 0, 1, 2, 3, 4, 5, 0 };
     public static final String[] DESTINATION_TAGS = { "env3mod", "lfo1mod", "lfo2mod", "lfo3mod", "lfo4mod", 
-                                                      "mod1", "mod2", "mod3", "mod4", "mod5", "mod6", "mod7", "mod8", 
-                                                      "wheel", "pressure", "breath", "velocity", "foot",
-                                                      "track1", "track2", "track3", "track4" };
+        "mod1", "mod2", "mod3", "mod4", "mod5", "mod6", "mod7", "mod8", 
+        "wheel", "pressure", "breath", "velocity", "foot",
+        "track1", "track2", "track3", "track4" };
         
     // JComponents
     JComponent oscPanelB;

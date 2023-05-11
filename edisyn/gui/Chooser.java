@@ -93,16 +93,16 @@ public class Chooser extends NumericalComponent
             if (vals[i] == state)
                 {
                 if (combo.getSelectedIndex() != i)
-                	{
-					// This is due to a Java bug.
-					// Unlike other widgets (like JCheckBox), JComboBox calls
-					// the actionlistener even when you programmatically change
-					// its value.  OOPS.
-					setCallActionListener(false);
-						combo.setSelectedIndex(i);
-					setCallActionListener(true);
-					}
-				return;
+                    {
+                    // This is due to a Java bug.
+                    // Unlike other widgets (like JCheckBox), JComboBox calls
+                    // the actionlistener even when you programmatically change
+                    // its value.  OOPS.
+                    setCallActionListener(false);
+                    combo.setSelectedIndex(i);
+                    setCallActionListener(true);
+                    }
+                return;
                 }
             }
         }
@@ -176,9 +176,9 @@ public class Chooser extends NumericalComponent
                 Dimension d = super.getPreferredSize();
                 d.width += addToWidth;
                 if (Style.isNimbus())
-                	{
-                	d.height = (int)Math.max(d.height, MIN_NIMBUS_HEIGHT);
-                	}
+                    {
+                    d.height = (int)Math.max(d.height, MIN_NIMBUS_HEIGHT);
+                    }
                 return d;
                 }                       
 
@@ -234,16 +234,16 @@ public class Chooser extends NumericalComponent
             add(label2, BorderLayout.NORTH);
 
         if (Style.isNimbus())
-        	{
-        	//add(Strut.makeVerticalStrut(4), BorderLayout.SOUTH);
-        	label2.add(Strut.makeHorizontalStrut(3), BorderLayout.EAST);
+            {
+            //add(Strut.makeVerticalStrut(4), BorderLayout.SOUTH);
+            label2.add(Strut.makeHorizontalStrut(3), BorderLayout.EAST);
  
-			UIDefaults defaults = new UIDefaults();
-			defaults.put("ComboBox.contentMargins", new Insets(0,0,0,0)); // the default for Nimbus is 0, 6, 0, 3
-			defaults.put("ComboBox:\"ComboBox.textField\".contentMargins", new Insets(0,100,0,0)); // the default for Nimbus is 0, 6, 0, 3
-			combo.putClientProperty("Nimbus.Overrides", defaults);
-			combo.putClientProperty("Nimbus.Overrides.InheritDefaults", true);
-			}
+            UIDefaults defaults = new UIDefaults();
+            defaults.put("ComboBox.contentMargins", new Insets(0,0,0,0)); // the default for Nimbus is 0, 6, 0, 3
+            defaults.put("ComboBox:\"ComboBox.textField\".contentMargins", new Insets(0,100,0,0)); // the default for Nimbus is 0, 6, 0, 3
+            combo.putClientProperty("Nimbus.Overrides", defaults);
+            combo.putClientProperty("Nimbus.Overrides.InheritDefaults", true);
+            }
         
         /// Apparent OS X Java bug: sometimes after you programmatically change
         /// the value of a JComboBox, it no longer sends ActionListener events.  :-(   
@@ -311,7 +311,7 @@ public class Chooser extends NumericalComponent
         else if (Style.isMac()) 
             label.setText("  " + _label);
         else
-        	label.setText(_label);
+            label.setText(_label);
         }
         
     public void setElements(String[] elements)
@@ -353,7 +353,7 @@ public class Chooser extends NumericalComponent
         else if (Style.isMac()) 
             label.setText("  " + _label);
         else
-        	label.setText(_label);
+            label.setText(_label);
         combo.removeAllItems();
         
         for(int i = 0; i < elements.length; i++)

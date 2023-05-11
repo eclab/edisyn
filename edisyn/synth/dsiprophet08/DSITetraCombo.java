@@ -2124,11 +2124,11 @@ public class DSITetraCombo extends Synth
                 }
             return ret;
             }
-        else if (key.startsWith("name"))	// like name2, name3, name4
-        	{
-        	// cannot be emitted
-        	return new Object[0];
-        	}
+        else if (key.startsWith("name"))        // like name2, name3, name4
+            {
+            // cannot be emitted
+            return new Object[0];
+            }
         else 
             {
             int val = model.get(key, 0);
@@ -2196,31 +2196,31 @@ public class DSITetraCombo extends Synth
                 }
             else
                 {
-                if (data.number < BASE_OFFSET)		// it's probably multimode?
-                	{
-                	// Single
-                	int layer = data.channel - getChannelOut();
-                	if (layer < 0 || layer > 3) layer = 0;
-                	int num = data.number;
-					setParamByNRPN(layer, num, data.value);
-                	}
+                if (data.number < BASE_OFFSET)          // it's probably multimode?
+                    {
+                    // Single
+                    int layer = data.channel - getChannelOut();
+                    if (layer < 0 || layer > 3) layer = 0;
+                    int num = data.number;
+                    setParamByNRPN(layer, num, data.value);
+                    }
                 else
-                	{
-					int layer = (data.number - BASE_OFFSET) / LAYER_OFFSET;
-					int num = (data.number - BASE_OFFSET) % LAYER_OFFSET;
-				
-					if (layer == 4) // Quad
-						{
-						setParamByNRPN(0, num, data.value);
-						setParamByNRPN(1, num, data.value);
-						setParamByNRPN(2, num, data.value);
-						setParamByNRPN(3, num, data.value);
-						}
-					else
-						{
-						setParamByNRPN(layer, num, data.value);
-						}
-					}
+                    {
+                    int layer = (data.number - BASE_OFFSET) / LAYER_OFFSET;
+                    int num = (data.number - BASE_OFFSET) % LAYER_OFFSET;
+                                
+                    if (layer == 4) // Quad
+                        {
+                        setParamByNRPN(0, num, data.value);
+                        setParamByNRPN(1, num, data.value);
+                        setParamByNRPN(2, num, data.value);
+                        setParamByNRPN(3, num, data.value);
+                        }
+                    else
+                        {
+                        setParamByNRPN(layer, num, data.value);
+                        }
+                    }
                 } 
             }               
         }

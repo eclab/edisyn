@@ -35,8 +35,8 @@ public class WaldorfM extends Synth
     public static final String[] DIGIVCF_FILTER_TYPES = { "LP 12", "BP 12", "HP 12", "[M] Notch 12", "[M] LP 24", "[M] BP 24", "[M] HP 24", "[M] Notch 24", "[M] Sin + LP", "[M] Dual LP/BP", "[M] Band Stop 12", "[M] S&H + LP 12", "[M] Waveshaper", "[M] FM + LP 12", "[M] S&H + HP 12", "[M] FM + HP 12", "Frequency Boost", "[M] M Waveshaper" };
     // public static final String[] DIGIVCF_FILTER_TYPES = { "LP 12", "BP 12", "HP 12", "Notch 12 [M]", "LP 24 [M]", "BP 24 [M]", "HP 24 [M]", "Notch 24 [M]", "Sin + LP [M]", "Dual LP/BP [M]", "Band Stop 12", "S&H + LP 12 [M]", "Waveshaper [M]", "FM + LP 12 [M]", "S&H + HP 12 [M]", "FM + HP 12 [M]", "Frequency Boost [M]", "M Waveshaper [M]" };
     public static final String[] ENGINE_PLAY_MODES = { "Mono Retrig", "Mono Legato", "Polyphonic" };
-    public static final String[] ENV_RATES = { "Slow", "Fast", "Normal" };		// Note M differs from docs, which say Fast, Normal, Slow
-    public static final String[] LFO_RANGE_TYPES = { "Normal", "Slow", "Fast" };		// Note M differs from docs, which say Fast, Normal, Slow
+    public static final String[] ENV_RATES = { "Slow", "Fast", "Normal" };              // Note M differs from docs, which say Fast, Normal, Slow
+    public static final String[] LFO_RANGE_TYPES = { "Normal", "Slow", "Fast" };                // Note M differs from docs, which say Fast, Normal, Slow
     public static final String[] LFO_SHAPES = { "Sine", "Triangle", "Pulse", "Random", "S&H" };
     public static final String[] LFO_MIDI_SYNC_VALUES = { "1024 Bars", "512 Bars", "256 Bars", "192 Bars", "128 Bars", "96 Bars", "64 Bars", "48 Bars", "32 Bars", "24 Bars", "16 Bars", "12 Bars", "8 Bars", "6 Bars", "4 Bars", "3 Bars", "2 Bars", "6/4", "4/4", "3/4", "1/2", "3/8", "1/4", "3/16", "1/8", "3/32", "1/16", "3/64", "1/32" };
     public static final String[] MOD_SOURCES = { "Off", "Mod Wheel", "Pitch Bend", "LFO 1", "LFO 2", "Amp Env", "Filter Env", "Wave Env", "Free Env", "LFO1 AD Env", "Sustain Pedal", "Volume Ctrl", "Pan Ctrl", "Breath Ctrl", "Foot Ctrl", "Expression Ctrl", "Ctrl A", "Ctrl B", "Ctrl C", "Ctrl D", "Ctrl W", "Ctrl X", "Ctrl Y", "Ctrl Z", "Key Tracking", "Velocity", "Release Vel", "Aftertouch", "Poly Pressure", "Global LFO", "min", "MAX", "Inverse", "Coin Flip", "Random", "Gate", "Noise" };
@@ -46,21 +46,21 @@ public class WaldorfM extends Synth
     public static final String[] GLIDE_MODE_TYPES = { "Linear", "Exponential" };
     public static final String[] WAVE_TRAVEL_MODES = { "Analog On", "Analog Off", "Analog Only", "Circular" };
     public static final String[] WAVETABLES = {  "Resonant", "Resonant2 LP", "Mallet Synth", "Square Sweep", "Bell", "Pulse Sweep", "Saw Sweep", "Mellow Saw",
-                                                 "Feedback", "Add Harm", "Resonant3 HP", "Wind Synth", "High Harm", "Clipper", "Organ Synth", "Square Saw",
-                                                 "Formant1", "Polated", "Transient", "Elec Piano", "Robotic", "Strong Harm", "Perc Organ", "Clip'n'Sweep",
-                                                 "Reso Harm", "2 Echoes", "Formant2", "Formant Voc", "Micro Sync", "Micro PWM", "Glassy", "Square HP",
-                                                 "Saw Sync1", "Saw Sync2", "Saw Sync3", "Pulse Sync1", "Pulse Sync2", "Pulse Sync3", "Sine Sync1", "Sine Sync2",
-                                                 "Sine Sync3", "PWM Pulse", "PWM Saw", "Fuzz Wave", "Distorted", "Heavy Fuzz", "Fuzz Sync", "KarpStrong1",
-                                                 "KarpStrong2", "KarpStrong3", "1-2-3-4-5", "19/20", "Wavetrip1", "Wavetrip2", "Wavetrip3", "Wavetrip4",
-                                                 "Male Voice", "Low Piano", "Resonant Sweep", "Xmas Bell", "FM Piano", "FAT Organ", "Vibes", "Chorus2",
-                                                 "True PWM", "Wave23 SawSync", "Wave23 UpWaves", "Q Alt1", "Q Alt2", "Wave22 Clipper", "Wave22 PSax", "Wave23 PSax",
-                                                 "Mayschoss Wine", "Parks of Bonn", "Niederzissen", "Kripper Ferry", "Sinziger Organ", "La Palma's Sun", "Remagen Works", "Ahrtal Walks",
-                                                 "3V Multi Aah", "3V Clavinet", "3V Cncert Gtar", "3V Celeste", "3V Marimba", "3V Bell", "3V Grand Piano", "3V ElPiano",
-                                                 "3V Trombone", "3V Pluck Bass", "3V GL Bass", "3V Harp", "3V Sitar", "3V ElGitar TTR", "3V Y-Synth", "3V HausOrgan",
-                                                 "User WT 00", "User WT 01", "User WT 02", "User WT 03", "User WT 04", "User WT 05", "User WT 06", "User WT 07", 
-                                                 "User WT 08", "User WT 09", "User WT 10", "User WT 11", "User WT 12", "User WT 13", "User WT 14", "User WT 15", 
-                                                 "User WT 16", "User WT 17", "User WT 18", "User WT 19", "User WT 20", "User WT 21", "User WT 22", "User WT 23", 
-                                                 "User WT 24", "User WT 25", "User WT 26", "User WT 27", "User WT 28", "User WT 29", "User WT 30", "User WT 31" };
+        "Feedback", "Add Harm", "Resonant3 HP", "Wind Synth", "High Harm", "Clipper", "Organ Synth", "Square Saw",
+        "Formant1", "Polated", "Transient", "Elec Piano", "Robotic", "Strong Harm", "Perc Organ", "Clip'n'Sweep",
+        "Reso Harm", "2 Echoes", "Formant2", "Formant Voc", "Micro Sync", "Micro PWM", "Glassy", "Square HP",
+        "Saw Sync1", "Saw Sync2", "Saw Sync3", "Pulse Sync1", "Pulse Sync2", "Pulse Sync3", "Sine Sync1", "Sine Sync2",
+        "Sine Sync3", "PWM Pulse", "PWM Saw", "Fuzz Wave", "Distorted", "Heavy Fuzz", "Fuzz Sync", "KarpStrong1",
+        "KarpStrong2", "KarpStrong3", "1-2-3-4-5", "19/20", "Wavetrip1", "Wavetrip2", "Wavetrip3", "Wavetrip4",
+        "Male Voice", "Low Piano", "Resonant Sweep", "Xmas Bell", "FM Piano", "FAT Organ", "Vibes", "Chorus2",
+        "True PWM", "Wave23 SawSync", "Wave23 UpWaves", "Q Alt1", "Q Alt2", "Wave22 Clipper", "Wave22 PSax", "Wave23 PSax",
+        "Mayschoss Wine", "Parks of Bonn", "Niederzissen", "Kripper Ferry", "Sinziger Organ", "La Palma's Sun", "Remagen Works", "Ahrtal Walks",
+        "3V Multi Aah", "3V Clavinet", "3V Cncert Gtar", "3V Celeste", "3V Marimba", "3V Bell", "3V Grand Piano", "3V ElPiano",
+        "3V Trombone", "3V Pluck Bass", "3V GL Bass", "3V Harp", "3V Sitar", "3V ElGitar TTR", "3V Y-Synth", "3V HausOrgan",
+        "User WT 00", "User WT 01", "User WT 02", "User WT 03", "User WT 04", "User WT 05", "User WT 06", "User WT 07", 
+        "User WT 08", "User WT 09", "User WT 10", "User WT 11", "User WT 12", "User WT 13", "User WT 14", "User WT 15", 
+        "User WT 16", "User WT 17", "User WT 18", "User WT 19", "User WT 20", "User WT 21", "User WT 22", "User WT 23", 
+        "User WT 24", "User WT 25", "User WT 26", "User WT 27", "User WT 28", "User WT 29", "User WT 30", "User WT 31" };
     public static final String[] LFO_RATES = { 
         "0.121", "0.242", "0.363", "0.485", "0.606", "0.727", "0.848", "0.970", 
         "1.091", "1.212", "1.333", "1.455", "1.576", "1.697", "1.818", "1.940", 
@@ -564,10 +564,10 @@ public class WaldorfM extends Synth
         {
         // Handle Global LFO Rate and ENV Timer Resolution
         if (model.get("globallforate") < 1 || model.get("globallforate") > 127)
-        	model.set("globallforate", 1);
-        	
+            model.set("globallforate", 1);
+                
         if (model.get("envtimeresolution") < 0 || model.get("envtimeresolution") >= ENV_RATES.length)
-        	model.set("envtimeresolution", 1);		// "Normal"
+            model.set("envtimeresolution", 1);              // "Normal"
         
         // check the easy stuff -- out of range parameters
         super.revise();
@@ -714,7 +714,7 @@ public class WaldorfM extends Synth
  
         hbox.add(vbox);
 
-       comp = new LabelledDial("Octave", this, "osc" + osc + "octave", color, -2, 2);
+        comp = new LabelledDial("Octave", this, "osc" + osc + "octave", color, -2, 2);
         hbox.add(comp);
 
         comp = new LabelledDial("Semitone", this, "osc" + osc + "semitone", color, -12, 12);
@@ -1230,11 +1230,11 @@ public class WaldorfM extends Synth
         VBox vbox = new VBox();
         
         if (env == 2)
-        	{
-        	params = MOD_SOURCES;
-        	comp = new Chooser("Delay Mod Source", this, "env" + env + "delaymodsource", params);
-        	vbox.add(comp);
-        	}
+            {
+            params = MOD_SOURCES;
+            comp = new Chooser("Delay Mod Source", this, "env" + env + "delaymodsource", params);
+            vbox.add(comp);
+            }
 
         params = MOD_SOURCES;
         comp = new Chooser("Attack Mod Source", this, "env" + env + "attackmodsource", params);
@@ -1260,16 +1260,16 @@ public class WaldorfM extends Synth
         ((LabelledDial)decaymodamount).addAdditionalLabel("Amount");
 
 
-		if (env == 1)
-			{
-			hbox.add(Strut.makeStrut(decaymodamount));
-			}
-		else
-			{
-			comp = new LabelledDial("Delay Mod", this, "env" + env + "delaymodamount", color, -64, 63);
-			((LabelledDial)comp).addAdditionalLabel("Amount");
-			hbox.add(comp);
-			}
+        if (env == 1)
+            {
+            hbox.add(Strut.makeStrut(decaymodamount));
+            }
+        else
+            {
+            comp = new LabelledDial("Delay Mod", this, "env" + env + "delaymodamount", color, -64, 63);
+            ((LabelledDial)comp).addAdditionalLabel("Amount");
+            hbox.add(comp);
+            }
 
         comp = new LabelledDial("Attack Mod", this, "env" + env + "attackmodamount", color, -64, 63);
         ((LabelledDial)comp).addAdditionalLabel("Amount");
@@ -1770,7 +1770,7 @@ public class WaldorfM extends Synth
         }
 
     int part = 0;
-    boolean updateScreen = true;		// Always true, not available
+    boolean updateScreen = true;                // Always true, not available
     JCheckBoxMenuItem[] partMenu = new JCheckBoxMenuItem[4];
 
     public void setPart(int part)
@@ -1786,16 +1786,16 @@ public class WaldorfM extends Synth
         
         // Not Available
         /*
-        final JCheckBoxMenuItem updateScreenMenu = new JCheckBoxMenuItem("Update Screen When Changing Parameters");
-        updateScreenMenu.addActionListener(new ActionListener()
-            {
-            public void actionPerformed(ActionEvent e)
-                {
-                updateScreen = updateScreenMenu.isSelected();
-                }
-            });
-        menu.add(updateScreenMenu);                
-        menu.addSeparator();
+          final JCheckBoxMenuItem updateScreenMenu = new JCheckBoxMenuItem("Update Screen When Changing Parameters");
+          updateScreenMenu.addActionListener(new ActionListener()
+          {
+          public void actionPerformed(ActionEvent e)
+          {
+          updateScreen = updateScreenMenu.isSelected();
+          }
+          });
+          menu.add(updateScreenMenu);                
+          menu.addSeparator();
         */
         
         ButtonGroup buttonGroup = new ButtonGroup();
@@ -1860,18 +1860,18 @@ public class WaldorfM extends Synth
             }
         else
             {
-	        int _part = part;
+            int _part = part;
             int param = ((Integer)parametersToIndex.get(key)).intValue() + 8192;
             int val = model.get(key, 0) + 8192;
 
-	        if (key.equals("transitionstartsample") ||
-	        	key.equals("transitionendsample"))
-	        	{
-	        	param = ((Integer)parametersToIndex.get(key)).intValue();
-	        	int topBit = (param >>> 14) & 0x01;	// extract top bit
-	        	param = param & 16383;	// remove top bit
-	        	_part = _part | (topBit << 6);
-	        	}
+            if (key.equals("transitionstartsample") ||
+                key.equals("transitionendsample"))
+                {
+                param = ((Integer)parametersToIndex.get(key)).intValue();
+                int topBit = (param >>> 14) & 0x01;     // extract top bit
+                param = param & 16383;  // remove top bit
+                _part = _part | (topBit << 6);
+                }
         
             byte[] data = new byte[12];
             data[0] = (byte)0xF0;
@@ -1893,7 +1893,7 @@ public class WaldorfM extends Synth
     public void handleSynthCCOrNRPN(Midi.CCData data)
         {
         if (false)
-        //if (data.type == Midi.CCDATA_TYPE_RAW_CC)
+            //if (data.type == Midi.CCDATA_TYPE_RAW_CC)
             {
             int cc = data.number;
             Integer i = (Integer)(ccToIndex.get(cc));
@@ -1903,21 +1903,21 @@ public class WaldorfM extends Synth
                 if (key.equals("--")) return;
                 int val = data.value;
 
-				// Docs are wrong about these, they go 0...4
-				if (cc == 33 ||  	// Osc 1 Octave
-					cc == 38)	// Osc 2 Octave
-					{
-					val -= 2;		// center on 0
-					}
-				// Docs are wrong about these, they go 0...12
-				else if (cc == 34 || 	// Osc 1 Semitone
-					cc == 39) 	// Osc 2 Semitone
-					{
-					val -= 12;		// center on 0
-					}
+                // Docs are wrong about these, they go 0...4
+                if (cc == 33 ||         // Osc 1 Octave
+                    cc == 38)       // Osc 2 Octave
+                    {
+                    val -= 2;               // center on 0
+                    }
+                // Docs are wrong about these, they go 0...12
+                else if (cc == 34 ||    // Osc 1 Semitone
+                    cc == 39)       // Osc 2 Semitone
+                    {
+                    val -= 12;              // center on 0
+                    }
                 // All centered on 64 according to p. 84 of manual, need to re-center on 0
-                else if (cc == 35 ||         						// Detune
-                    cc == 40 ||             						// Detune
+                else if (cc == 35 ||                                                    // Detune
+                    cc == 40 ||                                                         // Detune
                     cc == 51 || cc == 52 || cc == 53 ||             // VCF Keytrack, VCF EG Amount, VCF EG Velocity
                     cc == 58 || cc == 59 ||                         // VCA EG Amount, VCA EG Velocity
                     cc == 73 || cc == 79)                           // Wave EG to Wave Osc 1, Wave EG to Wave Osc 2
@@ -2031,29 +2031,29 @@ public class WaldorfM extends Synth
         for(int i = 0; i < parameters.length; i++)
             {
             if (!parameters[i].equals("--"))
-            	{
-				int val = 0;
-				if (i == 233 || i == 234)
-					{
-					val = model.get(parameters[i]) & 16383;
-					}
-				else
-					{
-					val = model.get(parameters[i]) + 8192;
-					}
-				int lsb = (byte)(val & 0x7F);
-				int msb = (byte)((val >>> 7) & 0x7F);
-				data[pos] = (byte)lsb;
-				data[pos + 1] = (byte)msb;
-				}
+                {
+                int val = 0;
+                if (i == 233 || i == 234)
+                    {
+                    val = model.get(parameters[i]) & 16383;
+                    }
+                else
+                    {
+                    val = model.get(parameters[i]) + 8192;
+                    }
+                int lsb = (byte)(val & 0x7F);
+                int msb = (byte)((val >>> 7) & 0x7F);
+                data[pos] = (byte)lsb;
+                data[pos + 1] = (byte)msb;
+                }
             pos += 2;
             }
 
         // Handle special parameters
-		int smoothscanwt = (model.get("smoothscanwt") & 0x01);
-		int transitionstartsample = ((model.get("transitionstartsample") >>> 14) & 0x01);
-		int transitionendsample = ((model.get("transitionendsample") >>> 14) & 0x01);
-		data[35] = (byte)(smoothscanwt | (transitionstartsample << 1) | (transitionendsample << 2));
+        int smoothscanwt = (model.get("smoothscanwt") & 0x01);
+        int transitionstartsample = ((model.get("transitionstartsample") >>> 14) & 0x01);
+        int transitionendsample = ((model.get("transitionendsample") >>> 14) & 0x01);
+        data[35] = (byte)(smoothscanwt | (transitionstartsample << 1) | (transitionendsample << 2));
                 
         data[data.length - 2] = 0x7F;
         data[data.length - 1] = (byte)0xF7;
@@ -2074,16 +2074,16 @@ public class WaldorfM extends Synth
         /*
         // Handle Bank and Number, which are after the name oddly
         if (data[32] == 0)               // Edit Buffer
-            {
-            // Might as well set the patch to 1/00
-            model.set("bank", 0);
-            model.set("number", 0);
-            }
+        {
+        // Might as well set the patch to 1/00
+        model.set("bank", 0);
+        model.set("number", 0);
+        }
         else
-            {
-            model.set("bank", data[32] - 1);
-            model.set("number", data[33]);
-            }
+        {
+        model.set("bank", data[32] - 1);
+        model.set("number", data[33]);
+        }
         */
 
         // Remaining parameters
@@ -2091,29 +2091,29 @@ public class WaldorfM extends Synth
         for(int i = 0; i < parameters.length; i++)
             {
             if (!parameters[i].equals("--"))
-            	{
-				int lsb = data[pos];
-				int msb = data[pos + 1];
-				if (i == 233 || i == 234)
-					{
-					// System.err.println("" + i + " " + pos + " " + parameters[i] + " " + (msb & 255) + " " + (lsb & 255) + " -> " + ((msb << 7) | lsb));
-					model.set(parameters[i], (msb << 7) | lsb);
-					}
-				else
-					{
-					// System.err.println("" + i + " " + pos + " " + parameters[i] + " " + (msb & 255) + " " + (lsb & 255) + " -> " + (((msb << 7) | lsb) - 8192));
-					model.set(parameters[i], ((msb << 7) | lsb) - 8192);
-					}
-				}
+                {
+                int lsb = data[pos];
+                int msb = data[pos + 1];
+                if (i == 233 || i == 234)
+                    {
+                    // System.err.println("" + i + " " + pos + " " + parameters[i] + " " + (msb & 255) + " " + (lsb & 255) + " -> " + ((msb << 7) | lsb));
+                    model.set(parameters[i], (msb << 7) | lsb);
+                    }
+                else
+                    {
+                    // System.err.println("" + i + " " + pos + " " + parameters[i] + " " + (msb & 255) + " " + (lsb & 255) + " -> " + (((msb << 7) | lsb) - 8192));
+                    model.set(parameters[i], ((msb << 7) | lsb) - 8192);
+                    }
+                }
             pos += 2;
             }
             
         // Handle special parameters
         model.set("smoothscanwt", data[35] & 0x01);
         model.set("transitionstartsample", 
-        	model.get("transitionstartsample") | (((data[35] >>> 1) & 0x01) << 14));
+            model.get("transitionstartsample") | (((data[35] >>> 1) & 0x01) << 14));
         model.set("transitionendsample", 
-        	model.get("transitionendsample") | (((data[35] >>> 2) & 0x01) << 14));
+            model.get("transitionendsample") | (((data[35] >>> 2) & 0x01) << 14));
         
         revise();
         return PARSE_SUCCEEDED;     
@@ -2461,8 +2461,8 @@ public class WaldorfM extends Synth
     -1,     // vcfresmodsource
     -1,     // vcfresmodamount
     57,     // instrumentvolume
-    59,     // vcaenvamount				// Manual says 58 but it is wrong
-    58,     // vcaenvvelocity			// Manual says 59 but it is wrong
+    59,     // vcaenvamount                             // Manual says 58 but it is wrong
+    58,     // vcaenvvelocity                   // Manual says 59 but it is wrong
     -1,     // vcakeytrack
     -1,     // vcamod1source
     -1,     // vcamod1control

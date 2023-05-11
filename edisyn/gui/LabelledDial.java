@@ -209,9 +209,9 @@ public class LabelledDial extends NumericalComponent
         
     // a hook for ASMHydrasynth
     public int updateProposedState(int proposedState)
-    	{
-    	return proposedState;
-    	}
+        {
+        return proposedState;
+        }
 
 
     class Dial extends JPanel
@@ -521,10 +521,10 @@ public class LabelledDial extends NumericalComponent
             graphics.draw(arc);
 
             if (!enabled) 
-            	{
-	            graphics.setRenderingHints(oldHints);
-            	return;
-            	}
+                {
+                graphics.setRenderingHints(oldHints);
+                return;
+                }
 
             graphics.setStroke(Style.DIAL_THICK_STROKE());
             arc = new Arc2D.Double();
@@ -566,7 +566,7 @@ public class LabelledDial extends NumericalComponent
             arc.setArc(rect.getX() + Style.DIAL_STROKE_WIDTH() / 2, rect.getY() + Style.DIAL_STROKE_WIDTH()/2, rect.getWidth() - Style.DIAL_STROKE_WIDTH(), rect.getHeight() - Style.DIAL_STROKE_WIDTH(), startAngle, interval, Arc2D.OPEN);            
             graphics.draw(arc);
 
-	        graphics.setRenderingHints(oldHints);
+            graphics.setRenderingHints(oldHints);
             }
         }
     }

@@ -373,14 +373,14 @@ public class StringUtility
         return str;
         }
 
-     /** Returns the integer as a hex number, only the first four digits shown */
+    /** Returns the integer as a hex number, only the first four digits shown */
     public static String toHexFull(int val)
         {
         return String.format("%X", val);
         }
 
 
-   /** Returns the integer as a hex number, only the first four digits shown */
+    /** Returns the integer as a hex number, only the first four digits shown */
     public static String toHexShort(int val)
         {
         return String.format("%04X", val);

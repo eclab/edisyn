@@ -101,7 +101,7 @@ public class StringComponent extends JComponent implements Updatable, HasKey
         setLayout(new BorderLayout());
                 
         label = new JLabel("  " + _label);
-        	
+                
         if (_label != null)
             {
             label.setFont(Style.SMALL_FONT());
@@ -121,8 +121,8 @@ public class StringComponent extends JComponent implements Updatable, HasKey
                 
         final Color foreground = change.getForeground();
         if (Style.isMacOSMonterey() || Style.isMacOSVentura()) 
-        	change.addMouseListener(buildUnderliningMouseAdapter(change));
-        	
+            change.addMouseListener(buildUnderliningMouseAdapter(change));
+                
         change.addActionListener(new ActionListener()
             {
             public void actionPerformed(ActionEvent e)
@@ -150,49 +150,49 @@ public class StringComponent extends JComponent implements Updatable, HasKey
             panel.add(panel1, BorderLayout.NORTH);
             
             JComponent textComponent = null;
-			if (getList().length == 0)
-				{
-				final JTextField text = new JTextField(maxLength);
-				text.setText(currentText);        
-				// The following hack is inspired by https://tips4java.wordpress.com/2010/03/14/dialog-focus/
-				// and results in the text field being selected (which is what should have happened in the first place) 
-					
-				text.addAncestorListener(new javax.swing.event.AncestorListener()
-					{
-					public void ancestorAdded(javax.swing.event.AncestorEvent e)    
-						{ 
-						JComponent component = e.getComponent();
-						component.requestFocusInWindow();
-						text.selectAll(); 
-						}
-					public void ancestorMoved(javax.swing.event.AncestorEvent e) {}
-					public void ancestorRemoved(javax.swing.event.AncestorEvent e) {}
-					});
-				textComponent = text;
-				}
-			else
-				{
-				String[] list = getList();
-				String[] listPlus = new String[list.length + 1];
-				System.arraycopy(list, 0, listPlus, 1, list.length);
-				listPlus[0] = currentText;
-				final JComboBox text = new JComboBox(listPlus);
-				text.setSelectedItem(currentText);
-				text.addAncestorListener(new javax.swing.event.AncestorListener()
-					{
-					public void ancestorAdded(javax.swing.event.AncestorEvent e)    
-						{ 
-						JComponent component = e.getComponent();
-						component.requestFocusInWindow();
-						text.getEditor().selectAll(); 
-						}
-					public void ancestorMoved(javax.swing.event.AncestorEvent e) {}
-					public void ancestorRemoved(javax.swing.event.AncestorEvent e) {}
-					});
-				text.setEditable(true);
-				textComponent = text;
-				}
-				
+            if (getList().length == 0)
+                {
+                final JTextField text = new JTextField(maxLength);
+                text.setText(currentText);        
+                // The following hack is inspired by https://tips4java.wordpress.com/2010/03/14/dialog-focus/
+                // and results in the text field being selected (which is what should have happened in the first place) 
+                                        
+                text.addAncestorListener(new javax.swing.event.AncestorListener()
+                    {
+                    public void ancestorAdded(javax.swing.event.AncestorEvent e)    
+                        { 
+                        JComponent component = e.getComponent();
+                        component.requestFocusInWindow();
+                        text.selectAll(); 
+                        }
+                    public void ancestorMoved(javax.swing.event.AncestorEvent e) {}
+                    public void ancestorRemoved(javax.swing.event.AncestorEvent e) {}
+                    });
+                textComponent = text;
+                }
+            else
+                {
+                String[] list = getList();
+                String[] listPlus = new String[list.length + 1];
+                System.arraycopy(list, 0, listPlus, 1, list.length);
+                listPlus[0] = currentText;
+                final JComboBox text = new JComboBox(listPlus);
+                text.setSelectedItem(currentText);
+                text.addAncestorListener(new javax.swing.event.AncestorListener()
+                    {
+                    public void ancestorAdded(javax.swing.event.AncestorEvent e)    
+                        { 
+                        JComponent component = e.getComponent();
+                        component.requestFocusInWindow();
+                        text.getEditor().selectAll(); 
+                        }
+                    public void ancestorMoved(javax.swing.event.AncestorEvent e) {}
+                    public void ancestorRemoved(javax.swing.event.AncestorEvent e) {}
+                    });
+                text.setEditable(true);
+                textComponent = text;
+                }
+                                
             panel.add(textComponent, BorderLayout.CENTER);
                     
             synth.disableMenuBar();
@@ -232,8 +232,8 @@ public class StringComponent extends JComponent implements Updatable, HasKey
             else                                // This is "Enter"
                 {
                 String result = convert("" + (textComponent instanceof JTextField ? 
-                								((JTextField)textComponent).getText() :
-                								((JComboBox)textComponent).getSelectedItem()));
+                        ((JTextField)textComponent).getText() :
+                        ((JComboBox)textComponent).getSelectedItem()));
                 if (result == null) return;
                 String str = replace(result);
                 if (str == null)
@@ -266,35 +266,35 @@ public class StringComponent extends JComponent implements Updatable, HasKey
 
 
 
-   /// The purpose of this method is to make a custom Mouse Adapter which underlines the text in the button
+    /// The purpose of this method is to make a custom Mouse Adapter which underlines the text in the button
     /// when pressed as an additional cue that the button has been pressed due to the extremely muted button
     /// shade change in MacOS Monterey and Ventura.  I'd like to instead change the background color to something
     /// darker but this is very difficult to do in MacOS.
     
- 	MouseAdapter buildUnderliningMouseAdapter(final JButton button)
-    	{
-	    final AWTEventListener[] releaseListener = { null };
-	    
-		return new MouseAdapter()
+    MouseAdapter buildUnderliningMouseAdapter(final JButton button)
+        {
+        final AWTEventListener[] releaseListener = { null };
+            
+        return new MouseAdapter()
             {
             public void mouseExited(MouseEvent e)
-            	{
-        			button.setText("<html>"+getText()+"</html>");
+                {
+                button.setText("<html>"+getText()+"</html>");
                 repaint();
-            	}
+                }
 
             public void mouseEntered(MouseEvent e)
-            	{
-            	if (releaseListener[0] != null)
-            		{
-        			button.setText("<html><u>"+getText()+"</u></html>");
-                	repaint();
-                	}
-            	}
-            	
+                {
+                if (releaseListener[0] != null)
+                    {
+                    button.setText("<html><u>"+getText()+"</u></html>");
+                    repaint();
+                    }
+                }
+                
             public void mousePressed(MouseEvent e) 
                 {
-        			button.setText("<html><u>"+getText()+"</u></html>");
+                button.setText("<html><u>"+getText()+"</u></html>");
                 
                 // This gunk fixes a BAD MISFEATURE in Java: mouseReleased isn't sent to the
                 // same component that received mouseClicked.  What the ... ? Asinine.
@@ -312,8 +312,8 @@ public class StringComponent extends JComponent implements Updatable, HasKey
                                 {
                                 Toolkit.getDefaultToolkit().removeAWTEventListener( releaseListener[0] );
                                 releaseListener[0] = null;
-        			button.setText("<html>"+getText()+"</html>");
-								repaint();
+                                button.setText("<html>"+getText()+"</html>");
+                                repaint();
                                 }
                             }
                         }
@@ -323,10 +323,10 @@ public class StringComponent extends JComponent implements Updatable, HasKey
             public void mouseReleased(MouseEvent e) 
                 {
                 Toolkit.getDefaultToolkit().removeAWTEventListener( releaseListener[0] );
-				releaseListener[0] = null;
-        			button.setText("<html>"+getText()+"</html>");
+                releaseListener[0] = null;
+                button.setText("<html>"+getText()+"</html>");
                 repaint();
                 }
-        	};
-    	}
+            };
+        }
     }

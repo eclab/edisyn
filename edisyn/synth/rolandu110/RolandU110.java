@@ -1458,710 +1458,710 @@ public class RolandU110 extends Synth
 
       There are 64 patches.  To write a full patch in permanent storage the address 
       is 020000 + 128 * patchnum and the size is 000100 (assuming patches start
-      at 0).   You cannot request a patch; the U-110 doesn't seem to respond to this 
-      properly.  Instead you can only request all 64 patches (address 020000, size 
-      010000).  To get a single patch, you will have to do a program change to load 
-      the patch into current memory, then request from current memory.
+          at 0).   You cannot request a patch; the U-110 doesn't seem to respond to this 
+          properly.  Instead you can only request all 64 patches (address 020000, size 
+              010000).  To get a single patch, you will have to do a program change to load 
+              the patch into current memory, then request from current memory.
 
-      Data is bit-packed into entire 8-bit bytes.  Then each byte is then split into 
-      two nybbles, which hold the LSB and the MSB of the byte respectively (LSB first). 
-      The stream of these nybbles forms the sysex payload.  Finally, the sysex payload
-      (256 bytes all told) is broken into two 128-byte-long chunks. These are the 
-      "DATA..." chunks in two DATA DUMP sysex messages respectively.
+              Data is bit-packed into entire 8-bit bytes.  Then each byte is then split into 
+              two nybbles, which hold the LSB and the MSB of the byte respectively (LSB first). 
+              The stream of these nybbles forms the sysex payload.  Finally, the sysex payload
+              (256 bytes all told) is broken into two 128-byte-long chunks. These are the 
+              "DATA..." chunks in two DATA DUMP sysex messages respectively.
       
-      To dump a patch to current working memory, the address of the first messsage
-      is 010100, and the address of the second message is 010200 (it's the next 256 
-      bytes).  To dump a patch to a given patch slot, the address of the first message
-      is 020000 + 128 * patchnum (assuming the first patch is number 0), and the 
-      address of the second message is 020100 + 128 * patchnum (it's the next 256 bytes).
+              To dump a patch to current working memory, the address of the first messsage
+              is 010100, and the address of the second message is 010200 (it's the next 256 
+                  bytes).  To dump a patch to a given patch slot, the address of the first message
+                  is 020000 + 128 * patchnum (assuming the first patch is number 0), and the 
+                  address of the second message is 020100 + 128 * patchnum (it's the next 256 bytes).
 
-      Below are the data elements, listed with "POS", which is the position of the 
-      element in the data byte array before being nybblized, and "SYSEX", which is
-      the position of the LSB nybble of the byte in the final sysex messages one 
-      after another.  The MSB for each byte is not listed, but it is the odd 
-      numbered position immediately after the LSB.
+                  Below are the data elements, listed with "POS", which is the position of the 
+                  element in the data byte array before being nybblized, and "SYSEX", which is
+                  the position of the LSB nybble of the byte in the final sysex messages one 
+                  after another.  The MSB for each byte is not listed, but it is the odd 
+                  numbered position immediately after the LSB.
 
-      The value ranges for each of the items is the same as for the individual
-      parameters above.
+                  The value ranges for each of the items is the same as for the individual
+                  parameters above.
 
-      SYSEX           POS     ITEM                                                           
-      ------------------------------------------------------------------------------
-      8               0       00                                                [Padding?]
-      10              1       00                                                [Padding?]
-      12              2       00                                                [Padding?]
-      14              3       00                                                [Padding?]
-      16              4       Name[0]
-      18              5       Name[1]
-      20              6       Name[2]
-      22              7       Name[3]
-      24              8       Name[4]
-      26              9       Name[5]
-      28              10      Name[6]
-      30              11      Name[7]
-      32              12      Name[8]
-      34              13      Name[9]
-      36              14      Output Mode                                       [TABLE 1]
-      38              15      Chorus Rate
-      40              16      Chorus Depth
-      42              17      Tremolo Rate
-      44              18      Tremolo Depth
-      46              19      00                                                [Padding?]
+                  SYSEX           POS     ITEM                                                           
+                  ------------------------------------------------------------------------------
+                  8               0       00                                                [Padding?]
+                  10              1       00                                                [Padding?]
+                  12              2       00                                                [Padding?]
+                  14              3       00                                                [Padding?]
+                  16              4       Name[0]
+                  18              5       Name[1]
+                  20              6       Name[2]
+                  22              7       Name[3]
+                  24              8       Name[4]
+                  26              9       Name[5]
+                  28              10      Name[6]
+                  30              11      Name[7]
+                  32              12      Name[8]
+                  34              13      Name[9]
+                  36              14      Output Mode                                       [TABLE 1]
+                  38              15      Chorus Rate
+                  40              16      Chorus Depth
+                  42              17      Tremolo Rate
+                  44              18      Tremolo Depth
+                  46              19      00                                                [Padding?]
 
-      PART 1 (16 bytes nybblized into 32 sysex bytes)
+                  PART 1 (16 bytes nybblized into 32 sysex bytes)
 
-      48              20      Tone Media (bits 0 1 2 3 4)                       [TABLE 2]
-      ...                     LFO Poly Press Sens (bits 5 6 7)
-      50              21      Tone Number                                       [TABLE 3]
-      52              22      Receive Channel (bits 0 1 2 3)
-      ...                     Bend Range (bits 4 5 6 7)
-      54              23      Key Range Lo 
-      56              24      Key Range Hi
-      58              25      Level
-      60              26      Velocity Sens (bits 0 1 2 3)
-      ...                     Level Ch Press Sens (bits 4 5 6 7)
-      62              27      Attack Rate (bits 0 1 2 3)
-      ...                     Release Rate (bits 4 5 6 7)
-      64              28      Pitch Shift Coarse
-      66              29      Pitch Shift Fine
-      68              30      Detune Depth (bits 0 1 2 3)
-      ...                     Poly Press Sens (bits 4 5 6 7)
-      70              31      Program Tone Map (bits 0 1 2)
-      ...                     Program Change (bit 3)
-      ...                     [Unused, set to 0] (bit 4)
-      ...                     Output Assign (bits 5 6 7)
-      72              32      LFO Rate (bits 0 1 2 3)
-      74              33      Auto Depth (bits 0 1 2 3)
-      ...                     Man Depth (bits 4 5 6 7)
-      76              34      Auto Rise Time (bits 0 1 2 3)
-      ...                     Man Rise Time (bits 4 5 6 7)
-      78              35      LFO Channel Depth (bits 0 1 2 3)
-      ...                     Auto Delay Time (bits 4 5 6 7)
+                  48              20      Tone Media (bits 0 1 2 3 4)                       [TABLE 2]
+                  ...                     LFO Poly Press Sens (bits 5 6 7)
+                  50              21      Tone Number                                       [TABLE 3]
+                  52              22      Receive Channel (bits 0 1 2 3)
+                  ...                     Bend Range (bits 4 5 6 7)
+                  54              23      Key Range Lo 
+                  56              24      Key Range Hi
+                  58              25      Level
+                  60              26      Velocity Sens (bits 0 1 2 3)
+                  ...                     Level Ch Press Sens (bits 4 5 6 7)
+                  62              27      Attack Rate (bits 0 1 2 3)
+                  ...                     Release Rate (bits 4 5 6 7)
+                  64              28      Pitch Shift Coarse
+                  66              29      Pitch Shift Fine
+                  68              30      Detune Depth (bits 0 1 2 3)
+                  ...                     Poly Press Sens (bits 4 5 6 7)
+                  70              31      Program Tone Map (bits 0 1 2)
+                  ...                     Program Change (bit 3)
+                  ...                     [Unused, set to 0] (bit 4)
+                  ...                     Output Assign (bits 5 6 7)
+                  72              32      LFO Rate (bits 0 1 2 3)
+                  74              33      Auto Depth (bits 0 1 2 3)
+                  ...                     Man Depth (bits 4 5 6 7)
+                  76              34      Auto Rise Time (bits 0 1 2 3)
+                  ...                     Man Rise Time (bits 4 5 6 7)
+                  78              35      LFO Channel Depth (bits 0 1 2 3)
+                  ...                     Auto Delay Time (bits 4 5 6 7)
 
-      PART 2 is similar for the next 32 sysex bytes, starting at byte 80, position 36
-      PART 3 is similar for the next 32 sysex bytes
-      PART 4 is similar for the next 32 sysex bytes
-      PART 5 is similar for the next 32 sysex bytes
-      PART 6 is similar for the next 32 sysex bytes
+                  PART 2 is similar for the next 32 sysex bytes, starting at byte 80, position 36
+                  PART 3 is similar for the next 32 sysex bytes
+                  PART 4 is similar for the next 32 sysex bytes
+                  PART 5 is similar for the next 32 sysex bytes
+                  PART 6 is similar for the next 32 sysex bytes
 
-      This totals 232 bytes so far
+                  This totals 232 bytes so far
       
-      Finally then come 24 bytes of unknown data, seemingly gibberish.
+                  Finally then come 24 bytes of unknown data, seemingly gibberish.
 
-      256 bytes of data total
-
-
+                  256 bytes of data total
 
 
 
 
 
 
-      TABLE 1. OUTPUT MODES
-      Output modes describe how many voices are assigned to each part.
-      There are six parts 1...6.  An assignment of the form A:B means
-      that B voices are attached to part A.  You will also see stuff
-      like 1-2:S31.  This means that parts 1 and 2 are used as a single
-      stereo part, and that 31 voices are assigned to them.  Or 1-2:M31 means
-      that the  parts 1 and 2 are used as a single monophonic part (that is,
-      they output the same value, dunno why you'd want to do this) and 
-      that 31 voices are assigned to them.
-
-      1   1:31
-      2   1:27  2:4
-      3   1:23  2:8
-      4   1:23  2:4  3:4
-      5   1:19  2:12
-      6   1:19  2:8  3:4
-      7   1:19  2:4  3:4  4:4
-      8   1:15  2:16
-      9   1:15  2:12  3:4
-      10   1:15  2:8  3:8             Note: U-110 documentation is wrong here
-      11   1:15  2:8  3:4  4:4
-      12   1:15  2:4  3:4  4:4  5:4
-      13   1:11  2:12  3:8
-      14   1:11  2:12  3:4  4:4
-      15   1:11  2:8  3:8  4:4
-      16   1:11  2:8  3:4  4:4  5:4
-      17   1:11  2:4  3:4  4:4  5:4  6:4
-      18   1:7  2:8  3:8  4:8
-      19   1:7  2:8  3:8  4:4  5:4
-      20   1:7  2:8  3:4  4:4  5:4  6:4
-      21   1-2:S31
-      22   1-2:M31
-      23   1-2:S16  3:15
-      24   1-2:M16  3:15
-      25   1-2:S16  3:11  4:4
-      26   1-2:M16  3:11  4:4
-      27   1-2:S16  3:7  4:8
-      28   1-2:M16  3:7  4:8
-      29   1-2:S16  3:7  4:4  5:4
-      30   1-2:M16  3:7  4:4  5:4
-      31   1-2:S16  3:3  4:4  5:4  6:4
-      32   1-2:M16  3:3  4:4  5:4  6:4
-      33   1-2:S8  3:23
-      34   1-2:M8  3:23
-      35   1-2:S8  3:19  4:4
-      36   1-2:M8  3:19  4:4
-      37   1-2:S8  3:15  4:8
-      38   1-2:M8  3:15  4:8
-      39   1-2:S8  3:15  4:4  5:4
-      40   1-2:M8  3:15  4:4  5:4
-      41   1-2:S8  3:11  4:12
-      42   1-2:M8  3:11  4:12
-      43   1-2:S8  3:11  4:8  5:4
-      44   1-2:M8  3:11  4:8  5:4
-      45   1-2:S8  3:11  4:4  5:4  6:4
-      46   1-2:M8  3:11  4:4  5:4  6:4
-      47   1-2:S8  3:7  4:8  5:8
-      48   1-2:M8  3:7  4:8  5:8
-      49   1-2:S8  3:7  4:8  5:4  6:4
-      50   1-2:M8  3:7  4:8  5:4  6:4"
 
 
+                  TABLE 1. OUTPUT MODES
+                  Output modes describe how many voices are assigned to each part.
+                  There are six parts 1...6.  An assignment of the form A:B means
+                  that B voices are attached to part A.  You will also see stuff
+                  like 1-2:S31.  This means that parts 1 and 2 are used as a single
+                  stereo part, and that 31 voices are assigned to them.  Or 1-2:M31 means
+                  that the  parts 1 and 2 are used as a single monophonic part (that is,
+                      they output the same value, dunno why you'd want to do this) and 
+                      that 31 voices are assigned to them.
 
-      TABLE 2
-      TONE MEDIA.  These are the values indicating the internal sounds or
-      sounds from a given PCM ROM Card.  In theory there can be more than
-      this but it's unlikely to ever happen now.
-
-      0       Internal
-      1       Pipe Organ & Harpsichord
-      2       Latin & FX Percussion
-      3       Ethnic
-      4       Electric Grand and Clavi
-      5       Orchestral Strings
-      6       Orchestral Winds
-      7       Electric Guitar
-      8       Synthesizer
-      9       Guitar & Keyboards
-      10      Rock Drums
-      11      Sound Effects
-      12      Sax & Trombone
-      13      Super Strings
-      14      Super Ac Guitar
-      15      Super Brass
+                      1   1:31
+                      2   1:27  2:4
+                      3   1:23  2:8
+                      4   1:23  2:4  3:4
+                      5   1:19  2:12
+                      6   1:19  2:8  3:4
+                      7   1:19  2:4  3:4  4:4
+                      8   1:15  2:16
+                      9   1:15  2:12  3:4
+                      10   1:15  2:8  3:8             Note: U-110 documentation is wrong here
+                      11   1:15  2:8  3:4  4:4
+                      12   1:15  2:4  3:4  4:4  5:4
+                      13   1:11  2:12  3:8
+                      14   1:11  2:12  3:4  4:4
+                      15   1:11  2:8  3:8  4:4
+                      16   1:11  2:8  3:4  4:4  5:4
+                      17   1:11  2:4  3:4  4:4  5:4  6:4
+                      18   1:7  2:8  3:8  4:8
+                      19   1:7  2:8  3:8  4:4  5:4
+                      20   1:7  2:8  3:4  4:4  5:4  6:4
+                      21   1-2:S31
+                      22   1-2:M31
+                      23   1-2:S16  3:15
+                      24   1-2:M16  3:15
+                      25   1-2:S16  3:11  4:4
+                      26   1-2:M16  3:11  4:4
+                      27   1-2:S16  3:7  4:8
+                      28   1-2:M16  3:7  4:8
+                      29   1-2:S16  3:7  4:4  5:4
+                      30   1-2:M16  3:7  4:4  5:4
+                      31   1-2:S16  3:3  4:4  5:4  6:4
+                      32   1-2:M16  3:3  4:4  5:4  6:4
+                      33   1-2:S8  3:23
+                      34   1-2:M8  3:23
+                      35   1-2:S8  3:19  4:4
+                      36   1-2:M8  3:19  4:4
+                      37   1-2:S8  3:15  4:8
+                      38   1-2:M8  3:15  4:8
+                      39   1-2:S8  3:15  4:4  5:4
+                      40   1-2:M8  3:15  4:4  5:4
+                      41   1-2:S8  3:11  4:12
+                      42   1-2:M8  3:11  4:12
+                      43   1-2:S8  3:11  4:8  5:4
+                      44   1-2:M8  3:11  4:8  5:4
+                      45   1-2:S8  3:11  4:4  5:4  6:4
+                      46   1-2:M8  3:11  4:4  5:4  6:4
+                      47   1-2:S8  3:7  4:8  5:8
+                      48   1-2:M8  3:7  4:8  5:8
+                      49   1-2:S8  3:7  4:8  5:4  6:4
+                      50   1-2:M8  3:7  4:8  5:4  6:4"
 
 
 
-      TABLE 3
-      TONES.  These are the PCM waves on each card, along with a few notes.
-      Tones labelled "[Drumset]" are, in fact, drumsets rather than individual
-      tones.
+                      TABLE 2
+                      TONE MEDIA.  These are the values indicating the internal sounds or
+                      sounds from a given PCM ROM Card.  In theory there can be more than
+                      this but it's unlikely to ever happen now.
 
-      U-110 INTERNAL
-      0       A. Piano 1
-      1       A. Piano 2
-      2       A. Piano 3
-      3       A. Piano 4
-      4       A. Piano 5
-      5       A. Piano 6
-      6       A. Piano 7
-      7       A. Piano 8
-      8       A. Piano 9
-      9       A. Piano 10
-      10      E. Piano 1
-      11      E. Piano 2
-      12      E. Piano 3
-      13      E. Piano 4
-      14      E. Piano 5
-      15      Vib 1
-      16      Vib 2
-      17      Vib 3
-      18      Bell 1
-      19      Bell 2
-      20      Bell 3
-      21      Bell 4
-      22      Marimba
-      23      A. Guitar 1
-      24      A. Guitar 2
-      25      A. Guitar 3
-      26      A. Guitar 4
-      27      A. Guitar 5
-      28      E. Guitar 1
-      29      E. Guitar 2
-      30      E. Guitar 3
-      31      E. Guitar 4
-      32      Slap 1
-      33      Slap 2
-      34      Slap 3
-      35      Slap 4
-      36      Slap 5
-      37      Slap 6
-      38      Slap 7
-      39      Slap 8
-      40      Slap 9
-      41      Slap 10
-      42      Slap 11
-      43      Slap 12
-      44      Fingered 1
-      45      Fingered 2
-      46      Picked 1
-      47      Picked 2
-      48      Fretless 1
-      49      Fretless 2
-      50      AC. Bass
-      51      Syn. Bass 1
-      52      Syn. Bass 2
-      53      Syn. Bass 3
-      54      Choir 1
-      55      Choir 2
-      56      Choir 3
-      57      Choir 4
-      58      Strings 1
-      59      Strings 2
-      60      Strings 3
-      61      Strings 4
-      62      E. Organ 1
-      63      E. Organ 2
-      64      E. Organ 3
-      65      E. Organ 4
-      66      E. Organ 5
-      67      E. Organ 6
-      68      E. Organ 7
-      69      E. Organ 8
-      70      E. Organ 9
-      71      E. Organ 10
-      72      E. Organ 11
-      73      E. Organ 12
-      74      E. Organ 13
-      75      Soft TP 1
-      76      Soft TP 2
-      77      Soft TP 3
-      78      TP / TRB 1
-      79      TP / TRB 2
-      80      TP / TRB 3
-      81      TP / TRB 4
-      82      TP / TRB 5
-      83      TP / TRB 6
-      84      Sax 1
-      85      Sax 2
-      86      Sax 3
-      87      Sax 4
-      88      Sax 5
-      89      Brass 1
-      90      Brass 2
-      91      Brass 3
-      92      Brass 4
-      93      Brass 5
-      94      Flute 1
-      95      Flute 2
-      96      Shaku 1
-      97      Shaku 2
-      98      Drums                           [Drumset]
+                      0       Internal
+                      1       Pipe Organ & Harpsichord
+                      2       Latin & FX Percussion
+                      3       Ethnic
+                      4       Electric Grand and Clavi
+                      5       Orchestral Strings
+                      6       Orchestral Winds
+                      7       Electric Guitar
+                      8       Synthesizer
+                      9       Guitar & Keyboards
+                      10      Rock Drums
+                      11      Sound Effects
+                      12      Sax & Trombone
+                      13      Super Strings
+                      14      Super Ac Guitar
+                      15      Super Brass
 
-      SN-U110-01 - Pipe Organ and Harpsichord
-      0       Harpsichord 1
-      1       Harpsichord 2
-      2       Harpsichord 3
-      3       Harpsichord 4
-      4       Harpsichord 5
-      5       Harpsichord 6
-      6       Positive 1
-      7       Positive 2
-      8       Positive 3
-      9       Positive 4
-      10      Positive 5
-      11      Positive 6
-      12      Church 1
-      13      Church 2
-      14      Church 3
-      15      Church 4
-      16      Church 5
-      17      Church 6
-      18      Church 7
-      19      Church 8
-      20      Church Reverb            
 
-      SN-U110-02 - Latin and FX Percussion
-      0       Latin 1                         [Drumset]
-      1       Latin 2                         [Drumset]
-      2       Latin 3                         [Drumset]
-      3       FX 1                            [Drumset]
-      4       FX 2                            [Drumset]
-      5       FX 3                            [Drumset]
-      6       FX 4                            [Drumset]
-      7       Conga 1
-      8       Conga 2
-      9       Conga 3
-      10      Bongo
-      11      Claves
-      12      Timbale
-      13      Tambourine
-      14      Wood Block
-      15      Whistle
-      16      Triangle
-      17      Belltree
-      18      Jingle Bell
-      19      Vibraslap
-      20      Castanet
-      21      Maracas
-      22      Agogo 1
-      23      Agogo 2
-      24      Cuica 1
-      25      Cuica 2
-      26      Guiro 1
-      27      Guiro 2
-      28      Guiro 3
-      29      Berimbau
-      30      Shekele
-      31      Steel Drum
-      32      Log Drum
-      33      Orch Hit
-      34      Siren
-      35      Type 1
-      36      Type 2
-      37      Clock
-      38      Pinball
-      39      Telephone
-      40      Smsh Glass
-      41      Rezno
-      42      Eerie
-      43      Ambia Jr
-      44      Templ Blk
-      45      Zing!
-      46      Boing!
-      47      Mod Zap
-      48      Interface
-      49      Scratch
-      50      Stake
-      51      Zappu
 
-      SN-U110-03 - Ethnic
-      0       Tabla
-      1       Tabla-Ga
-      2       Tabla-Te
-      3       Tabla-Na
-      4       Tabla-Trkt
-      5       Tabla-Tun
-      6       Tsuzumi 1
-      7       Tsuzumi 2
-      8       Tsuzumi 3
-      9       Hyosigi
-      10      Gender 1
-      11      Gender 2
-      12      Sanza 1
-      13      Sanza 2
-      14      Barafon 1
-      15      Barafon 2
-      16      Barafon 3
-      17      Barafon 4
-      18      Sitar 1
-      19      Sitar 2
-      20      Sitar 3
-      21      Santur 1
-      22      Santur 2
-      23      Santur 3
-      24      Koto 1
-      25      Koto 2
-      26      Koto 3
-      27      Koto 4
-      28      Koto 5
-      29      Koto 6
-      30      Koto 7
-      31      Koto 8
-      32      Koto Tremo
-      33      Sicu 1
-      34      Sicu 2
-      35      Shanai 1
-      36      Shanai 2
-      37      Shanai 3
+                      TABLE 3
+                      TONES.  These are the PCM waves on each card, along with a few notes.
+                      Tones labelled "[Drumset]" are, in fact, drumsets rather than individual
+                      tones.
 
-      SN-U110-04 - Electric Grand and Clavi
-      0       Electric Grand 1
-      1       Electric Grand 2
-      2       Electric Grand 3
-      3       Electric Grand 4
-      4       Electric Grand 5
-      5       Electric Grand 6
-      6       Electric Grand 7
-      7       Electric Grand 8
-      8       Clavichord 1
-      9       Clavichord 2
-      10      Clavichord 3
-      11      Clavichord 4             
+                      U-110 INTERNAL
+                      0       A. Piano 1
+                      1       A. Piano 2
+                      2       A. Piano 3
+                      3       A. Piano 4
+                      4       A. Piano 5
+                      5       A. Piano 6
+                      6       A. Piano 7
+                      7       A. Piano 8
+                      8       A. Piano 9
+                      9       A. Piano 10
+                      10      E. Piano 1
+                      11      E. Piano 2
+                      12      E. Piano 3
+                      13      E. Piano 4
+                      14      E. Piano 5
+                      15      Vib 1
+                      16      Vib 2
+                      17      Vib 3
+                      18      Bell 1
+                      19      Bell 2
+                      20      Bell 3
+                      21      Bell 4
+                      22      Marimba
+                      23      A. Guitar 1
+                      24      A. Guitar 2
+                      25      A. Guitar 3
+                      26      A. Guitar 4
+                      27      A. Guitar 5
+                      28      E. Guitar 1
+                      29      E. Guitar 2
+                      30      E. Guitar 3
+                      31      E. Guitar 4
+                      32      Slap 1
+                      33      Slap 2
+                      34      Slap 3
+                      35      Slap 4
+                      36      Slap 5
+                      37      Slap 6
+                      38      Slap 7
+                      39      Slap 8
+                      40      Slap 9
+                      41      Slap 10
+                      42      Slap 11
+                      43      Slap 12
+                      44      Fingered 1
+                      45      Fingered 2
+                      46      Picked 1
+                      47      Picked 2
+                      48      Fretless 1
+                      49      Fretless 2
+                      50      AC. Bass
+                      51      Syn. Bass 1
+                      52      Syn. Bass 2
+                      53      Syn. Bass 3
+                      54      Choir 1
+                      55      Choir 2
+                      56      Choir 3
+                      57      Choir 4
+                      58      Strings 1
+                      59      Strings 2
+                      60      Strings 3
+                      61      Strings 4
+                      62      E. Organ 1
+                      63      E. Organ 2
+                      64      E. Organ 3
+                      65      E. Organ 4
+                      66      E. Organ 5
+                      67      E. Organ 6
+                      68      E. Organ 7
+                      69      E. Organ 8
+                      70      E. Organ 9
+                      71      E. Organ 10
+                      72      E. Organ 11
+                      73      E. Organ 12
+                      74      E. Organ 13
+                      75      Soft TP 1
+                      76      Soft TP 2
+                      77      Soft TP 3
+                      78      TP / TRB 1
+                      79      TP / TRB 2
+                      80      TP / TRB 3
+                      81      TP / TRB 4
+                      82      TP / TRB 5
+                      83      TP / TRB 6
+                      84      Sax 1
+                      85      Sax 2
+                      86      Sax 3
+                      87      Sax 4
+                      88      Sax 5
+                      89      Brass 1
+                      90      Brass 2
+                      91      Brass 3
+                      92      Brass 4
+                      93      Brass 5
+                      94      Flute 1
+                      95      Flute 2
+                      96      Shaku 1
+                      97      Shaku 2
+                      98      Drums                           [Drumset]
 
-      SN-U110-05 - Orchestral Strings
-      0       Violin 1
-      1       Violin 2
-      2       Violin 3
-      3       Cello 1
-      4       Cello 2
-      5       Cello 3
-      6       Cello 4
-      7       Cello / Violin
-      8       Contrabass / Cello
-      9       Pizzicato
-      10      Harp 1
-      11      Harp 2            
+                      SN-U110-01 - Pipe Organ and Harpsichord
+                      0       Harpsichord 1
+                      1       Harpsichord 2
+                      2       Harpsichord 3
+                      3       Harpsichord 4
+                      4       Harpsichord 5
+                      5       Harpsichord 6
+                      6       Positive 1
+                      7       Positive 2
+                      8       Positive 3
+                      9       Positive 4
+                      10      Positive 5
+                      11      Positive 6
+                      12      Church 1
+                      13      Church 2
+                      14      Church 3
+                      15      Church 4
+                      16      Church 5
+                      17      Church 6
+                      18      Church 7
+                      19      Church 8
+                      20      Church Reverb            
 
-      SN-U110-06 - Orchestral Winds
-      0       Oboe 1
-      1       Oboe 2
-      2       Oboe 3
-      3       Oboe 4
-      4       Oboe 5
-      5       Oboe 6
-      6       Bassoon 1
-      7       Bassoon 2
-      8       Bassoon 3
-      9       Bassoon 4
-      10      Bassoon 5
-      11      Clarinet 1
-      12      Clarinet 2
-      13      Clarinet 3
-      14      Clarinet 4
-      15      Clarinet 5
-      16      Clarinet 6
-      17      Bass Clarinet 1
-      18      Bass Clarinet 2
-      19      Bass Clarinet 3
-      20      Bass Clarinet 4
-      21      Bass Clarinet 5
-      22      French Horn 1
-      23      French Horn 2
-      24      French Horn 3
-      25      French Horn 4
-      26      French Horn 5
-      27      French Horn 6
-      28      Tuba 1
-      29      Tuba 2
-      30      Tuba 3
-      31      Tuba 4
-      32      Tuba 5
-      33      Timpani 1
-      34      Timpani 2
+                      SN-U110-02 - Latin and FX Percussion
+                      0       Latin 1                         [Drumset]
+                      1       Latin 2                         [Drumset]
+                      2       Latin 3                         [Drumset]
+                      3       FX 1                            [Drumset]
+                      4       FX 2                            [Drumset]
+                      5       FX 3                            [Drumset]
+                      6       FX 4                            [Drumset]
+                      7       Conga 1
+                      8       Conga 2
+                      9       Conga 3
+                      10      Bongo
+                      11      Claves
+                      12      Timbale
+                      13      Tambourine
+                      14      Wood Block
+                      15      Whistle
+                      16      Triangle
+                      17      Belltree
+                      18      Jingle Bell
+                      19      Vibraslap
+                      20      Castanet
+                      21      Maracas
+                      22      Agogo 1
+                      23      Agogo 2
+                      24      Cuica 1
+                      25      Cuica 2
+                      26      Guiro 1
+                      27      Guiro 2
+                      28      Guiro 3
+                      29      Berimbau
+                      30      Shekele
+                      31      Steel Drum
+                      32      Log Drum
+                      33      Orch Hit
+                      34      Siren
+                      35      Type 1
+                      36      Type 2
+                      37      Clock
+                      38      Pinball
+                      39      Telephone
+                      40      Smsh Glass
+                      41      Rezno
+                      42      Eerie
+                      43      Ambia Jr
+                      44      Templ Blk
+                      45      Zing!
+                      46      Boing!
+                      47      Mod Zap
+                      48      Interface
+                      49      Scratch
+                      50      Stake
+                      51      Zappu
 
-      SN-U110-07 - Electric Guitar
-      0       Jazz Guitar SW 1
-      1       Jazz Guitar SW 2
-      2       Jazz Guitar SW 3
-      3       Jazz Guitar P
-      4       Jazz Guitar F
-      5       Jazz Guitar DT P
-      6       Jazz Guitar DT F
-      7       Jazz Guitar OCT P1
-      8       Jazz Guitar OCT P2
-      9       Jazz Guitar OCT F1
-      10      Jazz Guitar OCT F2
-      11      Jazz Guitar SW S/F
-      12      Jazz Guitar COMP 1
-      13      Jazz Guitar COMP 1
-      14      Jazz Guitar COMP 1
-      15      Overdrive Guitar SW 1
-      16      Overdrive Guitar SW 2
-      17      Overdrive Guitar SW 3
-      18      Overdrive Guitar SW 4
-      19      Overdrive Guitar SW 5
-      20      Overdrive Guitar SW HM
-      21      Overdrive Guitar P
-      22      Overdrive Guitar F
-      23      Overdrive Guitar DT P
-      24      Overdrive Guitar DT F
-      25      Overdrive Guitar OCT P1
-      26      Overdrive Guitar OCT P2
-      27      Overdrive Guitar OCT F1
-      28      Overdrive Guitar OCT F2
-      29      Overdrive Guitar SW S/F
-      30      Overdrive Guitar FB 1
-      31      Overdrive Guitar FB 2
-      32      Overdrive Guitar FB 3
-      33      Overdrive Guitar FB 4
-      34      Overdrive Guitar FB 5
-      35      Overdrive Guitar FB 6
-      36      Overdrive Guitar FB 7
-      37      Overdrive Guitar FB 8
-      38      Overdrive Guitar FB 9
-      39      Overdrive Guitar FB 10
-      40      Overdrive Guitar FB 11
-      41      Overdrive Guitar FB 12
-      42      Distortion Guitar SW 1
-      43      Distortion Guitar SW 2
-      44      Distortion Guitar SW 3
-      45      Distortion Guitar SW 4
-      46      Distortion Guitar SW 5
-      47      Distortion Guitar SW HM
-      48      Distortion Guitar P
-      49      Distortion Guitar F
-      50      Distortion Guitar DT
-      51      Distortion Guitar +4TH 1
-      52      Distortion Guitar +4TH 2
-      53      Distortion Guitar -5TH 1
-      54      Distortion Guitar -5TH 2
-      55      Distortion Guitar OCT 1
-      56      Distortion Guitar OCT 2
-      57      Distortion Guitar SW S/F
-      58      Distortion Guitar FB 1
-      59      Distortion Guitar FB 2
-      60      Distortion Guitar FB 3
-      61      Distortion Guitar FB 4
-      62      Distortion Guitar FB 5
-      63      Distortion Guitar FB 6
-      64      Distortion Guitar FB 7
-      65      Distortion Guitar FB 8
-      66      Distortion Guitar FB 9
-      67      Distortion Guitar FB 10
-      68      Distortion Guitar FB 11
-      69      Distortion Guitar FB 12
-      70      Picking Harmonics
+                      SN-U110-03 - Ethnic
+                      0       Tabla
+                      1       Tabla-Ga
+                      2       Tabla-Te
+                      3       Tabla-Na
+                      4       Tabla-Trkt
+                      5       Tabla-Tun
+                      6       Tsuzumi 1
+                      7       Tsuzumi 2
+                      8       Tsuzumi 3
+                      9       Hyosigi
+                      10      Gender 1
+                      11      Gender 2
+                      12      Sanza 1
+                      13      Sanza 2
+                      14      Barafon 1
+                      15      Barafon 2
+                      16      Barafon 3
+                      17      Barafon 4
+                      18      Sitar 1
+                      19      Sitar 2
+                      20      Sitar 3
+                      21      Santur 1
+                      22      Santur 2
+                      23      Santur 3
+                      24      Koto 1
+                      25      Koto 2
+                      26      Koto 3
+                      27      Koto 4
+                      28      Koto 5
+                      29      Koto 6
+                      30      Koto 7
+                      31      Koto 8
+                      32      Koto Tremo
+                      33      Sicu 1
+                      34      Sicu 2
+                      35      Shanai 1
+                      36      Shanai 2
+                      37      Shanai 3
 
-      SN-U110-08 - Synthesizer                [NOTE -- already available on the U-110 internal]
-      0       Fantasia
-      1       Bell Pad
-      2       Syn Choir
-      3       Breath Vox
-      4       L. Calliope
-      5       Calliope
-      6       Metal Hit
-      7       Rich Brass
-      8       Brass Strings
-      9       String Pad 1
-      10      String Pad 2
-      11      Pizzagogo
-      12      Fanta Bell
-      13      Spect Bell
-      14      Bell Drum
-      15      Synth Harp
-      16      Pulse Wave 1
-      17      Pulse Wave 2
-      18      Pulse Wave 3
-      19      Saw Wave 1
-      20      Saw Wave 2
-      21      Pizz
-      22      Metal
-      23      Breath
-      24      Nails
-      25      Spectrum 1
-      26      Spectrum 2
-      27      N. Dance
+                      SN-U110-04 - Electric Grand and Clavi
+                      0       Electric Grand 1
+                      1       Electric Grand 2
+                      2       Electric Grand 3
+                      3       Electric Grand 4
+                      4       Electric Grand 5
+                      5       Electric Grand 6
+                      6       Electric Grand 7
+                      7       Electric Grand 8
+                      8       Clavichord 1
+                      9       Clavichord 2
+                      10      Clavichord 3
+                      11      Clavichord 4             
 
-      SN-U110-09 - Guitar & Keyboards [NOTE -- already available on the U-110 internal]
-      0       Bright EP 1
-      1       Bright EP 2
-      2       Syn. Vox 1
-      3       Syn. Vox 2
-      4       Syn. Bass 4
-      5       Syn. Bass 5
-      6       Syn. Bass 6
-      7       Syn. Bass 7
-      8       Syn. Bass 8
-      9       Heavy EG 1
-      10      Heavy EG 2
-      11      JP. Strings
-      12      JP. Brass 1
-      13      JP. Brass 2
-      14      R. Organ 1
-      15      R. Organ 2
+                      SN-U110-05 - Orchestral Strings
+                      0       Violin 1
+                      1       Violin 2
+                      2       Violin 3
+                      3       Cello 1
+                      4       Cello 2
+                      5       Cello 3
+                      6       Cello 4
+                      7       Cello / Violin
+                      8       Contrabass / Cello
+                      9       Pizzicato
+                      10      Harp 1
+                      11      Harp 2            
 
-      SN-U110-10 - Rock Drums
-      0       Rock Drums                      [Drumset]
-      1       Electronic Drums                [Drumset]
+                      SN-U110-06 - Orchestral Winds
+                      0       Oboe 1
+                      1       Oboe 2
+                      2       Oboe 3
+                      3       Oboe 4
+                      4       Oboe 5
+                      5       Oboe 6
+                      6       Bassoon 1
+                      7       Bassoon 2
+                      8       Bassoon 3
+                      9       Bassoon 4
+                      10      Bassoon 5
+                      11      Clarinet 1
+                      12      Clarinet 2
+                      13      Clarinet 3
+                      14      Clarinet 4
+                      15      Clarinet 5
+                      16      Clarinet 6
+                      17      Bass Clarinet 1
+                      18      Bass Clarinet 2
+                      19      Bass Clarinet 3
+                      20      Bass Clarinet 4
+                      21      Bass Clarinet 5
+                      22      French Horn 1
+                      23      French Horn 2
+                      24      French Horn 3
+                      25      French Horn 4
+                      26      French Horn 5
+                      27      French Horn 6
+                      28      Tuba 1
+                      29      Tuba 2
+                      30      Tuba 3
+                      31      Tuba 4
+                      32      Tuba 5
+                      33      Timpani 1
+                      34      Timpani 2
 
-      SN-U110-11 - Sound Effects
-      0       Creaking
-      1       Door
-      2       Footsteps
-      3       Waterphone
-      4       S-Strings
-      5       Screaming
-      6       Laughing
-      7       Dog
-      8       Wave
-      9       Stream
-      10      Bird
-      11      Drop
-      12      Rain
-      13      Thunder
-      14      Car Door
-      15      Car Stop
-      16      Car Crash
-      17      Train
-      18      Pistol
-      19      Machine Gun
-      20      Missile
-      21      Explosion
-      22      Big Foot
-      23      Godzilla
-      24      Telephone Call
-      25      Chime
-      26      Applause
-      27      From Radio
-      28      Bubble 1
-      29      Bubble 2
-      30      Toy
-      31      Fantasy Hit
-      32      S-Set
-      33      C-Set
+                      SN-U110-07 - Electric Guitar
+                      0       Jazz Guitar SW 1
+                      1       Jazz Guitar SW 2
+                      2       Jazz Guitar SW 3
+                      3       Jazz Guitar P
+                      4       Jazz Guitar F
+                      5       Jazz Guitar DT P
+                      6       Jazz Guitar DT F
+                      7       Jazz Guitar OCT P1
+                      8       Jazz Guitar OCT P2
+                      9       Jazz Guitar OCT F1
+                      10      Jazz Guitar OCT F2
+                      11      Jazz Guitar SW S/F
+                      12      Jazz Guitar COMP 1
+                      13      Jazz Guitar COMP 1
+                      14      Jazz Guitar COMP 1
+                      15      Overdrive Guitar SW 1
+                      16      Overdrive Guitar SW 2
+                      17      Overdrive Guitar SW 3
+                      18      Overdrive Guitar SW 4
+                      19      Overdrive Guitar SW 5
+                      20      Overdrive Guitar SW HM
+                      21      Overdrive Guitar P
+                      22      Overdrive Guitar F
+                      23      Overdrive Guitar DT P
+                      24      Overdrive Guitar DT F
+                      25      Overdrive Guitar OCT P1
+                      26      Overdrive Guitar OCT P2
+                      27      Overdrive Guitar OCT F1
+                      28      Overdrive Guitar OCT F2
+                      29      Overdrive Guitar SW S/F
+                      30      Overdrive Guitar FB 1
+                      31      Overdrive Guitar FB 2
+                      32      Overdrive Guitar FB 3
+                      33      Overdrive Guitar FB 4
+                      34      Overdrive Guitar FB 5
+                      35      Overdrive Guitar FB 6
+                      36      Overdrive Guitar FB 7
+                      37      Overdrive Guitar FB 8
+                      38      Overdrive Guitar FB 9
+                      39      Overdrive Guitar FB 10
+                      40      Overdrive Guitar FB 11
+                      41      Overdrive Guitar FB 12
+                      42      Distortion Guitar SW 1
+                      43      Distortion Guitar SW 2
+                      44      Distortion Guitar SW 3
+                      45      Distortion Guitar SW 4
+                      46      Distortion Guitar SW 5
+                      47      Distortion Guitar SW HM
+                      48      Distortion Guitar P
+                      49      Distortion Guitar F
+                      50      Distortion Guitar DT
+                      51      Distortion Guitar +4TH 1
+                      52      Distortion Guitar +4TH 2
+                      53      Distortion Guitar -5TH 1
+                      54      Distortion Guitar -5TH 2
+                      55      Distortion Guitar OCT 1
+                      56      Distortion Guitar OCT 2
+                      57      Distortion Guitar SW S/F
+                      58      Distortion Guitar FB 1
+                      59      Distortion Guitar FB 2
+                      60      Distortion Guitar FB 3
+                      61      Distortion Guitar FB 4
+                      62      Distortion Guitar FB 5
+                      63      Distortion Guitar FB 6
+                      64      Distortion Guitar FB 7
+                      65      Distortion Guitar FB 8
+                      66      Distortion Guitar FB 9
+                      67      Distortion Guitar FB 10
+                      68      Distortion Guitar FB 11
+                      69      Distortion Guitar FB 12
+                      70      Picking Harmonics
 
-      SN-U110-12 - Sax and Trombone
-      0       Saxophone SW 1
-      1       Saxophone SW 2
-      2       Saxophone SW 3
-      3       Saxophone SW 4
-      4       Saxophone P 1
-      5       Saxophone P 2
-      6       Saxophone P 3
-      7       Saxophone MF 1
-      8       Saxophone MF 2
-      9       Saxophone FF
-      10      Trombone SW 1
-      11      Trombone SW 2
-      12      Trombone P
-      13      Trombone MF
-      14      Trombone FF
-      15      TP/TRB SW 1                     [I presume this is "Trumpet/Trombone"]
-      16      TP/TRB SW 2                     [I presume this is "Trumpet/Trombone"]
-      17      TP/TRB P                        [I presume this is "Trumpet/Trombone"]
-      18      TP/TRB MF                       [I presume this is "Trumpet/Trombone"]
-      19      TP/TRB FF                       [I presume this is "Trumpet/Trombone"]
+                      SN-U110-08 - Synthesizer                [NOTE -- already available on the U-110 internal]
+                      0       Fantasia
+                      1       Bell Pad
+                      2       Syn Choir
+                      3       Breath Vox
+                      4       L. Calliope
+                      5       Calliope
+                      6       Metal Hit
+                      7       Rich Brass
+                      8       Brass Strings
+                      9       String Pad 1
+                      10      String Pad 2
+                      11      Pizzagogo
+                      12      Fanta Bell
+                      13      Spect Bell
+                      14      Bell Drum
+                      15      Synth Harp
+                      16      Pulse Wave 1
+                      17      Pulse Wave 2
+                      18      Pulse Wave 3
+                      19      Saw Wave 1
+                      20      Saw Wave 2
+                      21      Pizz
+                      22      Metal
+                      23      Breath
+                      24      Nails
+                      25      Spectrum 1
+                      26      Spectrum 2
+                      27      N. Dance
 
-      SN-U110-13 - Super Strings                      [From JV-80]
-      0       Super Strings 1
-      1       Super Strings 1L
-      2       Super Strings 1R
-      3       Super Strings 2
-      4       Super Strings 2L
-      5       Super Strings 2R
-      6       Super Strings 3
-      7       Super Strings 3L
-      8       Super Strings 3R
-      9       Super Strings 4
-      10      Super Strings 4L
-      11      Super Strings 4R
+                      SN-U110-09 - Guitar & Keyboards [NOTE -- already available on the U-110 internal]
+                      0       Bright EP 1
+                      1       Bright EP 2
+                      2       Syn. Vox 1
+                      3       Syn. Vox 2
+                      4       Syn. Bass 4
+                      5       Syn. Bass 5
+                      6       Syn. Bass 6
+                      7       Syn. Bass 7
+                      8       Syn. Bass 8
+                      9       Heavy EG 1
+                      10      Heavy EG 2
+                      11      JP. Strings
+                      12      JP. Brass 1
+                      13      JP. Brass 2
+                      14      R. Organ 1
+                      15      R. Organ 2
 
-      SN-U110-14 - Super Acoustic Guitar              [From JV-80]
-      0       Steel Guitar 1
-      1       Steel Soft
-      2       Steel Hard
-      3       Steel Guitar 2
-      4       Steel (L)
-      5       Steel (R)
-      6       Nylon Guitar 1
-      7       Nylon Soft
-      8       Nylon Hard
-      9       Nylon Guitar 2
-      10      Nylon (L)
-      11      Nylon (R)
-      12      12-String Guitar 1
-      13      12-String Guitar 2
-      14      12-String Guitar 3
-      15      12-String Guitar 4
-      16      12-String Guitar 5
-      17      Harmonics
-      18      Squeak
+                      SN-U110-10 - Rock Drums
+                      0       Rock Drums                      [Drumset]
+                      1       Electronic Drums                [Drumset]
 
-      SN-U110-15 - Super Brass                        [From JV-80]
-      0       High Brass 1
-      1       High Brass 2
-      2       High Brass SF
-      3       Low Brass 1
-      4       Low Brass 2
-      5       Low Brass SF
-      6       Brass Combo 1
-      7       Brass Combo 1L
-      8       Brass Combo 1R
-      9       Brass Combo 2
-      10      Brass Combo 2L
-      11      Brass Combo 2R
-      12      Brass Combo SF
+                      SN-U110-11 - Sound Effects
+                      0       Creaking
+                      1       Door
+                      2       Footsteps
+                      3       Waterphone
+                      4       S-Strings
+                      5       Screaming
+                      6       Laughing
+                      7       Dog
+                      8       Wave
+                      9       Stream
+                      10      Bird
+                      11      Drop
+                      12      Rain
+                      13      Thunder
+                      14      Car Door
+                      15      Car Stop
+                      16      Car Crash
+                      17      Train
+                      18      Pistol
+                      19      Machine Gun
+                      20      Missile
+                      21      Explosion
+                      22      Big Foot
+                      23      Godzilla
+                      24      Telephone Call
+                      25      Chime
+                      26      Applause
+                      27      From Radio
+                      28      Bubble 1
+                      29      Bubble 2
+                      30      Toy
+                      31      Fantasy Hit
+                      32      S-Set
+                      33      C-Set
+
+                      SN-U110-12 - Sax and Trombone
+                      0       Saxophone SW 1
+                      1       Saxophone SW 2
+                      2       Saxophone SW 3
+                      3       Saxophone SW 4
+                      4       Saxophone P 1
+                      5       Saxophone P 2
+                      6       Saxophone P 3
+                      7       Saxophone MF 1
+                      8       Saxophone MF 2
+                      9       Saxophone FF
+                      10      Trombone SW 1
+                      11      Trombone SW 2
+                      12      Trombone P
+                      13      Trombone MF
+                      14      Trombone FF
+                      15      TP/TRB SW 1                     [I presume this is "Trumpet/Trombone"]
+                      16      TP/TRB SW 2                     [I presume this is "Trumpet/Trombone"]
+                      17      TP/TRB P                        [I presume this is "Trumpet/Trombone"]
+                      18      TP/TRB MF                       [I presume this is "Trumpet/Trombone"]
+                      19      TP/TRB FF                       [I presume this is "Trumpet/Trombone"]
+
+                      SN-U110-13 - Super Strings                      [From JV-80]
+                      0       Super Strings 1
+                      1       Super Strings 1L
+                      2       Super Strings 1R
+                      3       Super Strings 2
+                      4       Super Strings 2L
+                      5       Super Strings 2R
+                      6       Super Strings 3
+                      7       Super Strings 3L
+                      8       Super Strings 3R
+                      9       Super Strings 4
+                      10      Super Strings 4L
+                      11      Super Strings 4R
+
+                      SN-U110-14 - Super Acoustic Guitar              [From JV-80]
+                      0       Steel Guitar 1
+                      1       Steel Soft
+                      2       Steel Hard
+                      3       Steel Guitar 2
+                      4       Steel (L)
+                      5       Steel (R)
+                      6       Nylon Guitar 1
+                      7       Nylon Soft
+                      8       Nylon Hard
+                      9       Nylon Guitar 2
+                      10      Nylon (L)
+                      11      Nylon (R)
+                      12      12-String Guitar 1
+                      13      12-String Guitar 2
+                      14      12-String Guitar 3
+                      15      12-String Guitar 4
+                      16      12-String Guitar 5
+                      17      Harmonics
+                      18      Squeak
+
+                      SN-U110-15 - Super Brass                        [From JV-80]
+                      0       High Brass 1
+                      1       High Brass 2
+                      2       High Brass SF
+                      3       Low Brass 1
+                      4       Low Brass 2
+                      5       Low Brass SF
+                      6       Brass Combo 1
+                      7       Brass Combo 1L
+                      8       Brass Combo 1R
+                      9       Brass Combo 2
+                      10      Brass Combo 2L
+                      11      Brass Combo 2R
+                      12      Brass Combo SF
 
 *****/

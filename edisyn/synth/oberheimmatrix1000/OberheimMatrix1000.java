@@ -3002,7 +3002,7 @@ System.err.println("" + i + "  " + PATCH_NAMES[i]);
     public boolean[] getWriteableBanks() 
         { 
         return isM1000() ? new boolean[] { true, true, false, false, false, false, false, false, false, false } :
-        new boolean[] { true };
+            new boolean[] { true };
         }
                         
     public int getPatchNameLength() { return 8; }

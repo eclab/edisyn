@@ -106,7 +106,7 @@ public class VBox extends JComponent implements Gatherable, Scrollable
         {
         box.remove(component);
         if (lastComponent == component)
-        	panel.remove(lastComponent);
+            panel.remove(lastComponent);
         }   
         
     public Component add(Component component)

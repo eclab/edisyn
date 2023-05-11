@@ -36,9 +36,9 @@ public class KorgSG extends Synth
     */
     
     static final String[] PROGRAMS = new String[] { "Concert", "Studio", "DancePiano", "Dyna-Stage", "Wurly EP", "FM EP 1", "Piano & EP", "Funkamatic", "SGX Organ", "R&B Organ", "Clav", "Vibraphone", "TheStrings", "WhisperVox", "SynthFlute", "Acoustic",
-                                                    "Bright", "Rock Piano", "Chorused", "Classic EP", "Dyno Bell", "Wave EP 1", "PF&Strings", "FM&Analog", "Velo \"B\"", "CX-3 Organ", "PhaserClav", "Bellphonic", "Symphonic", "Slow Waves", "SynthBrass", "Fretless",
-                                                    "Classic", "Jazz Piano", "Mix Piano", "Stage Bell", "FM EP 2", "Motion EP", "MIDI Grant", "EP&Strings", "Perc Organ", "Gospel Org", "Mutronics", "Crystaline", "PadStrings", "BreathyVox", "Synth Air", "FingerBass",
-                                                    "Dynamic", "Ballad", "StagePiano", "Stage Time", "FM EP 3", "Wave EP 2", "Power Keys", "EP Magic", "Full Organ", "Pipe Organ", "Clavitar", "BellString", "StringsL&R", "Voices", "Synth Horn", "Synth Bass" };
+        "Bright", "Rock Piano", "Chorused", "Classic EP", "Dyno Bell", "Wave EP 1", "PF&Strings", "FM&Analog", "Velo \"B\"", "CX-3 Organ", "PhaserClav", "Bellphonic", "Symphonic", "Slow Waves", "SynthBrass", "Fretless",
+        "Classic", "Jazz Piano", "Mix Piano", "Stage Bell", "FM EP 2", "Motion EP", "MIDI Grant", "EP&Strings", "Perc Organ", "Gospel Org", "Mutronics", "Crystaline", "PadStrings", "BreathyVox", "Synth Air", "FingerBass",
+        "Dynamic", "Ballad", "StagePiano", "Stage Time", "FM EP 3", "Wave EP 2", "Power Keys", "EP Magic", "Full Organ", "Pipe Organ", "Clavitar", "BellString", "StringsL&R", "Voices", "Synth Horn", "Synth Bass" };
     static final String[] BANKS = new String[] { "A", "B", "C", "D" };
     static final String[] SCALE_TYPES = new String[] { "Equal Temperment", "Pure Major", "Pure Minor", "Pythagoras", "Werckmeister", "Kirnberger", "Stretch" };
     static final String[] EFFECT_TYPES_1 = new String[] { "None", "Reverb", "Early Reflection", "Stereo Delay", "Stereo Chorus", "Stereo Flanger", "Overdrive", "Stereo Phaser", "Rotary Speaker", "Auto Pan", "Wah", "Flanger-Delay", "Hyper Enhancer" };

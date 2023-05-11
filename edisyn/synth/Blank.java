@@ -765,24 +765,24 @@ public class Blank extends Synth
         return 0; 
         }
 
-	public void startingBatchDownload(Model firstPatch, Model finalPatch) 
-		{
-    	// Called when a batch download is starting.  This might give your editor
-    	// a chance to emit something at the beginning of the batch download.  For
-    	// example, the ASM Hydrasynth requires that a header sysex command be
-    	// sent before a stream of batch downloads.  You can determine if 
-    	// a batch download is occurring during parse() by calling isBatchDownloading()
-	 	super.startingBatchDownload(firstPatch, finalPatch);
-		}
+    public void startingBatchDownload(Model firstPatch, Model finalPatch) 
+        {
+        // Called when a batch download is starting.  This might give your editor
+        // a chance to emit something at the beginning of the batch download.  For
+        // example, the ASM Hydrasynth requires that a header sysex command be
+        // sent before a stream of batch downloads.  You can determine if 
+        // a batch download is occurring during parse() by calling isBatchDownloading()
+        super.startingBatchDownload(firstPatch, finalPatch);
+        }
 
-	public void stoppingBatchDownload(Model firstPatch, Model finalPatch) 
-		{ 
-    	// Called when a batch download is stopping.  This might give your editor
-    	// a chance to emit something at the end of the batch download.  For
-    	// example, the ASM Hydrasynth requires that a header sysex command be
-    	// sent before a stream of patch downloads.  You can determine if 
-    	// a batch download is occurring during parse() by calling isBatchDownloading()
-		}
+    public void stoppingBatchDownload(Model firstPatch, Model finalPatch) 
+        { 
+        // Called when a batch download is stopping.  This might give your editor
+        // a chance to emit something at the end of the batch download.  For
+        // example, the ASM Hydrasynth requires that a header sysex command be
+        // sent before a stream of patch downloads.  You can determine if 
+        // a batch download is occurring during parse() by calling isBatchDownloading()
+        }
 
     public int getTestNoteChannel()
         {
@@ -831,13 +831,13 @@ public class Blank extends Synth
         return super.sprout();
         }
         
-	public void didOneTimeWarning(String key)
-		{
-		// If you call doOneTimeWarning(...) to issue a one-time-only warning to the musician,
-		// after the warning is issued, this is called once so you can (for example, see
-		// ASMHydraSynth) switch to the About pane or something.
-		}
-		
+    public void didOneTimeWarning(String key)
+        {
+        // If you call doOneTimeWarning(...) to issue a one-time-only warning to the musician,
+        // after the warning is issued, this is called once so you can (for example, see
+        // ASMHydraSynth) switch to the About pane or something.
+        }
+                
     public void tabChanged()
         {
         // This method is called whenever the tabs are changed in case you need to do something
@@ -989,29 +989,29 @@ public class Blank extends Synth
         super.sendAllSoundsOff();
         }
 
-	public boolean getRequiresNRPNMSB() 
-		{ 
-		// Returns true if this synth will always provide the MSB in all NRPN messages.
-		// When an NRPN message comes in, it may come in with just an LSB, just an MSB, or with an LSB and MSB in either order. 
-		// Since normally don't know, the NRPN parser must assume that an incoming LSB may be all there is to the message
-		// and update edisyn with just the LSB and the MSB set to 0 (or correspondingly with just the MSB and the LSB set to 0),
-		// and only update a second time when the other part arrives.  This in turn can cause a variety of revise() problems.
-		// To deal with this, if you know the synth will always produce an MSB in every NRPN message, you can override this to
-		// return TRUE (it returns FALSE by default).
-		return false; 
-		}
+    public boolean getRequiresNRPNMSB() 
+        { 
+        // Returns true if this synth will always provide the MSB in all NRPN messages.
+        // When an NRPN message comes in, it may come in with just an LSB, just an MSB, or with an LSB and MSB in either order. 
+        // Since normally don't know, the NRPN parser must assume that an incoming LSB may be all there is to the message
+        // and update edisyn with just the LSB and the MSB set to 0 (or correspondingly with just the MSB and the LSB set to 0),
+        // and only update a second time when the other part arrives.  This in turn can cause a variety of revise() problems.
+        // To deal with this, if you know the synth will always produce an MSB in every NRPN message, you can override this to
+        // return TRUE (it returns FALSE by default).
+        return false; 
+        }
 
-	public boolean getRequiresNRPNLSB() 
-		{ 
-		// Returns true if this synth will always provide the LSB in all NRPN messages.
-		// When an NRPN message comes in, it may come in with just an LSB, just an MSB, or with an LSB and MSB in either order. 
-		// Since normally don't know, the NRPN parser must assume that an incoming LSB may be all there is to the message
-		// and update edisyn with just the LSB and the MSB set to 0 (or correspondingly with just the MSB and the LSB set to 0),
-		// and only update a second time when the other part arrives.  This in turn can cause a variety of revise() problems.
-		// To deal with this, if you know the synth will always produce an LSB in every NRPN message, you can override this to
-		// return TRUE (it returns FALSE by default).
-		return false; 
-		}
+    public boolean getRequiresNRPNLSB() 
+        { 
+        // Returns true if this synth will always provide the LSB in all NRPN messages.
+        // When an NRPN message comes in, it may come in with just an LSB, just an MSB, or with an LSB and MSB in either order. 
+        // Since normally don't know, the NRPN parser must assume that an incoming LSB may be all there is to the message
+        // and update edisyn with just the LSB and the MSB set to 0 (or correspondingly with just the MSB and the LSB set to 0),
+        // and only update a second time when the other part arrives.  This in turn can cause a variety of revise() problems.
+        // To deal with this, if you know the synth will always produce an LSB in every NRPN message, you can override this to
+        // return TRUE (it returns FALSE by default).
+        return false; 
+        }
 
     public boolean testVerify(Synth synth2, String key, Object obj1, Object obj2)
         {
@@ -1326,31 +1326,31 @@ public class Blank extends Synth
         return -1; 
         }
 
-	public Object[] startingBatchEmit(int bank, int start, int end, boolean toFile) 
-		{ 
-   		// Called before a series of patches are being emitted from the librarian 
-    	// (as opposed to a single patch from the Editor).  This might give your editor
-    	// a chance to add something to the beginning of the data.  For
-    	// example, the ASM Hydrasynth requires that a header sysex command be
-    	// sent before a stream of batch dumps.  You can determine if 
-    	// a series of patches is being emitted during emit() by calling isEmittingBatch(). 
-    	// Note that this method is NOT called if a bank is being emitted via a bank sysex message.
-    	// See also stoppingBatchDownload() and startingBatchDownload()
-		return new Object[0]; 
-		}
+    public Object[] startingBatchEmit(int bank, int start, int end, boolean toFile) 
+        { 
+        // Called before a series of patches are being emitted from the librarian 
+        // (as opposed to a single patch from the Editor).  This might give your editor
+        // a chance to add something to the beginning of the data.  For
+        // example, the ASM Hydrasynth requires that a header sysex command be
+        // sent before a stream of batch dumps.  You can determine if 
+        // a series of patches is being emitted during emit() by calling isEmittingBatch(). 
+        // Note that this method is NOT called if a bank is being emitted via a bank sysex message.
+        // See also stoppingBatchDownload() and startingBatchDownload()
+        return new Object[0]; 
+        }
 
-	public Object[] stoppingBatchEmit(int bank, int start, int end, boolean toFile) 
-		{ 
-    	// Called after a series of patches are being emitted from the librarian 
-    	// (as opposed to a single patch from the Editor).  This might give your editor
-    	// a chance to add something to the beginning of the data.  For
-    	// example, the ASM Hydrasynth requires that a header sysex command be
-    	// sent before a stream of batch dumps.  You can determine if 
-    	// a series of patches is being emitted during emit() by calling isEmittingBatch(). 
-    	// Note that this method is NOT called if a bank is being emitted via a bank sysex message.
-    	// See also stoppingBatchDownload() and startingBatchDownload()
-		return new Object[0]; 
-		}
+    public Object[] stoppingBatchEmit(int bank, int start, int end, boolean toFile) 
+        { 
+        // Called after a series of patches are being emitted from the librarian 
+        // (as opposed to a single patch from the Editor).  This might give your editor
+        // a chance to add something to the beginning of the data.  For
+        // example, the ASM Hydrasynth requires that a header sysex command be
+        // sent before a stream of batch dumps.  You can determine if 
+        // a series of patches is being emitted during emit() by calling isEmittingBatch(). 
+        // Note that this method is NOT called if a bank is being emitted via a bank sysex message.
+        // See also stoppingBatchDownload() and startingBatchDownload()
+        return new Object[0]; 
+        }
 
     //// END BANK SYSEX SUPPORT
         

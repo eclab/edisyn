@@ -1,7 +1,7 @@
 HYDRASYNTH SYSEX ENCODING	
 Sean Luke
 sean@cs.gmu.edu
-April 16, 2023
+May 1, 2023
 
 
 This encoding is entirely reverse engineered and is incomplete 
@@ -686,3 +686,4 @@ before you start playing notes or doing other stuff.
 		
 <-	7. A Footer Response
 		1B 00
+

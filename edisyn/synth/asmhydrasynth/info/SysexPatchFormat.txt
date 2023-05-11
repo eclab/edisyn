@@ -45,8 +45,8 @@ For the ranges of parameters, see the NRPN spreadsheet found here:
 https://github.com/eclab/edisyn/tree/master/edisyn/synth/asmhydrasynth/info
 
 It is not recommended to use ASM's provided NRPN file, 
-"Hydrasynth_KB_DR_MIDI_Spec_1.5.0.pdf", which is both incomplete and which
-entirely lacks display information.
+"Hydrasynth_KB_DR_MIDI_Spec_1.5.0.pdf", which is incomplete, has errors,
+and which entirely lacks display information.
 
 There are regions whose purpose or value is unknown an are marked either
 as UNKNOWN or as UNKNOWN START ... UNKNOWN END.

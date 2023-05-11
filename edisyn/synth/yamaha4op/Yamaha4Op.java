@@ -3059,15 +3059,15 @@ public class Yamaha4Op extends Synth
     public String[] getPatchNumberNames()  
         {
         if (getSynthType() == TYPE_DX21)
-        	{
-        	String[] names = new String[32];
-        	for(int i = 0; i < 16; i++)
-        		{
-        		names[i] = "A " + (i + 1);
-        		names[i + 16] = "B " + (i + 1);
-        		}
-        	return names;
-        	}
+            {
+            String[] names = new String[32];
+            for(int i = 0; i < 16; i++)
+                {
+                names[i] = "A " + (i + 1);
+                names[i + 16] = "B " + (i + 1);
+                }
+            return names;
+            }
         else if (getSynthType() == TYPE_DX21 || 
             getSynthType() == TYPE_DX27_DX100 || 
             getSynthType() == TYPE_TX81Z || 

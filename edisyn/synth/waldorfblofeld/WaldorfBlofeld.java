@@ -44,13 +44,13 @@ public class WaldorfBlofeld extends Synth
     static final String[] ENVELOPE_TYPES = new String[] { "ADSR", "ADS1DS2R", "One Shot", "Loop S1S2", "Loop All" };
     static final String[] LFO_SHAPES = new String[] { "Sine", "Triangle", "Square", "Saw", "Random", "S&H" };
     static final String[] LFO_SPEEDS = new String[] {      "1280", "1152", "1024", "896", "768", "640", "576", "512", 
-                                                           "448", "384", "320", "288", "256", "224", "192",  "160", 
-                                                           "144", "128", "112", "96", "80", "72", "64", "56", 
-                                                           "48", "40", "36", "32", "28", "24", "20", "18", 
-                                                           "16", "14", "12", "10", "9", "8", "7", "6", 
-                                                           "5", "4", "3.5", "3", "2.5", "2", "1.5", "1", 
-                                                           "1/2 .", "1/1 T", "1/2", "1/4 .", "1/2 T", "1/4", "1/8 .", "1/4 T", 
-                                                           "1/8", "1/16 .", "1/8 T", "1/16", "1/32 .", "1/16 T", "1/32", "1/48" };
+        "448", "384", "320", "288", "256", "224", "192",  "160", 
+        "144", "128", "112", "96", "80", "72", "64", "56", 
+        "48", "40", "36", "32", "28", "24", "20", "18", 
+        "16", "14", "12", "10", "9", "8", "7", "6", 
+        "5", "4", "3.5", "3", "2.5", "2", "1.5", "1", 
+        "1/2 .", "1/1 T", "1/2", "1/4 .", "1/2 T", "1/4", "1/8 .", "1/4 T", 
+        "1/8", "1/16 .", "1/8 T", "1/16", "1/32 .", "1/16 T", "1/32", "1/48" };
     static final String[] CATEGORIES = new String[] { "Init", "Arp", "Atmo", "Bass", "Drum", "FX", "Keys", "Lead", "Mono", "Pad", "Perc", "Poly", "Seq" };
     static final String[] BANKS = new String[] { "A", "B", "C", "D", "E", "F", "G", "H" };
     static final String[] OSCILLATOR_GLIDE_MODES = new String[] { "Portamento", "Fingered P", "Glissando", "Fingered G" };
@@ -58,14 +58,14 @@ public class WaldorfBlofeld extends Synth
     // Note that there is space after "Off".  This is to make sure that WAVES_LONG
     // Produces a popup menu the same width as WAVES_SHORT
     static final String[] WAVES_LONG = new String[] {      "Off               ", "Pulse", "Saw", "Triangle", "Sine", "Alt 1", "Alt 2", "Resonant", "Resonant2", "MalletSyn", 
-                                                           "Sqr-Sweep", "Bellish", "Pul-Sweep", "Saw-Sweep", "MellowSaw", "Feedback", "Add Harm", "Reso 3 HP", 
-                                                           "Wind Syn", "HighHarm", "Clipper", "OrganSyn", "SquareSaw", "Format1", "Polated", "Transient", 
-                                                           "ElectricP", "Robotic", "StrongHrm", "PercOrgan", "ClipSweep", "ResoHarms", "2 Echoes", "Formant2", 
-                                                           "FmntVocal", "MicroSync", "MicroPWM", "Glassy", "SquareHP", "SawSync1", "SawSync2", "SawSync3", 
-                                                           "PulSync1", "PulSync2", "PulSync3", "SinSync1", "SinSync2", "SinSync3", "PWM Pulse", "PWM Saw", 
-                                                           "Fuzz Wave", "Distorted", "HeavyFuzz", "Fuzz Sync", "K+Strong1", "K+Strong2", "K+Strong3", "1-2-3-4-5", 
-                                                           "19/twenty", "Wavetrip1", "Wavetrip2", "Wavetrip3", "Wavetrip4", "MaleVoice", "Low Piano", "ResoSweep", 
-                                                           "Xmas Bell", "FM Piano", "Fat Organ", "Vibes", "Chorus 2", "True PWM", "UpperWaves", };
+        "Sqr-Sweep", "Bellish", "Pul-Sweep", "Saw-Sweep", "MellowSaw", "Feedback", "Add Harm", "Reso 3 HP", 
+        "Wind Syn", "HighHarm", "Clipper", "OrganSyn", "SquareSaw", "Format1", "Polated", "Transient", 
+        "ElectricP", "Robotic", "StrongHrm", "PercOrgan", "ClipSweep", "ResoHarms", "2 Echoes", "Formant2", 
+        "FmntVocal", "MicroSync", "MicroPWM", "Glassy", "SquareHP", "SawSync1", "SawSync2", "SawSync3", 
+        "PulSync1", "PulSync2", "PulSync3", "SinSync1", "SinSync2", "SinSync3", "PWM Pulse", "PWM Saw", 
+        "Fuzz Wave", "Distorted", "HeavyFuzz", "Fuzz Sync", "K+Strong1", "K+Strong2", "K+Strong3", "1-2-3-4-5", 
+        "19/twenty", "Wavetrip1", "Wavetrip2", "Wavetrip3", "Wavetrip4", "MaleVoice", "Low Piano", "ResoSweep", 
+        "Xmas Bell", "FM Piano", "Fat Organ", "Vibes", "Chorus 2", "True PWM", "UpperWaves", };
     // Note that there is space after "Off".  This is to make sure that WAVES_SHORT
     // Produces a popup menu the same width as WAVES_LONG
     static final String[] WAVES_SHORT = new String[] { "Off               ", "Pulse", "Saw", "Triangle", "Sine" };

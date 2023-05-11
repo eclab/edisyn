@@ -30,7 +30,7 @@ public class YamahaTG33Multi extends Synth
     public final byte MULTI_BUTTON = 0x07;
 
     public static final String[] CENTS = new String[] { "-50", "-47", "-44", "-41", "-38", "-34", "-31", "-28", "-25", "-22", "-19", "-16", "-12", "-9", "-6", "-3",
-                                                        "0", "3", "6", "9", "12", "16", "19", "22", "25", "28", "31", "34", "38", "41", "44", "47", "50" };
+        "0", "3", "6", "9", "12", "16", "19", "22", "25", "28", "31", "34", "38", "41", "44", "47", "50" };
     public static final String[] EFFECTS = new String[] 
     {
     "Reverb Hall", "Reverb Room", "Reverb Plate", "Reverb Club", 

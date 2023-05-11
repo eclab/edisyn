@@ -62,7 +62,7 @@ public class Librarian extends JPanel
     public static final Color STANDARD_BACKGROUND_COLOR = new Color(250, 250, 250);
     public static final Color SELECTED_COLOR = new Color(160, 160, 160);
     public static final Color DROP_COLOR = new Color(160, 160, 200);
-    public static final Color BACKGROUND_COLOR = new Color(240, 240, 240);		// new JLabel().getBackground(); 
+    public static final Color BACKGROUND_COLOR = new Color(240, 240, 240);              // new JLabel().getBackground(); 
     public static final Color GRID_COLOR = Style.isNimbus() ? new Color(192, 192, 192) : Color.GRAY;
     public static final Color READ_ONLY_BACKGROUND_COLOR = new Color(250, 245, 255);
     public static final Color SCRATCH_COLOR = new Color(240, 250, 250);
@@ -161,47 +161,47 @@ public class Librarian extends JPanel
             });
         
         if (Style.isNimbus())
-        	{
-			table.getTableHeader().setDefaultRenderer(new DefaultTableCellRenderer()
-				{
-			    protected void setValue(Object value) 
-			    	{
-			    	if (value == null) super.setValue(value);
-			    	else if (getLibrary().getBankName(Library.SCRATCH_BANK) == value.toString()) super.setValue(value);  // can't put a space before <html>
-			    	else super.setValue((Style.isNimbus() ? " " : "") + value.toString());
-					}
+            {
+            table.getTableHeader().setDefaultRenderer(new DefaultTableCellRenderer()
+                {
+                protected void setValue(Object value) 
+                    {
+                    if (value == null) super.setValue(value);
+                    else if (getLibrary().getBankName(Library.SCRATCH_BANK) == value.toString()) super.setValue(value);  // can't put a space before <html>
+                    else super.setValue((Style.isNimbus() ? " " : "") + value.toString());
+                    }
 
-				public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) 
-					{
-					Component comp = super.getTableCellRendererComponent(table,value,isSelected,hasFocus,row,column);
+                public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) 
+                    {
+                    Component comp = super.getTableCellRendererComponent(table,value,isSelected,hasFocus,row,column);
 
-						((JComponent)comp).setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, GRID_COLOR));
-				
-					return comp;
-					}
-				});
-			}
-        	
+                    ((JComponent)comp).setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, GRID_COLOR));
+                                
+                    return comp;
+                    }
+                });
+            }
+                
         table.setDefaultRenderer(Object.class, new DefaultTableCellRenderer()
             {
-		    protected void setValue(Object value) 
-		    	{
-		    	if (value == null) 
-		    		super.setValue("");
-		    	else if (value instanceof Patch && ((Patch)value).getName() == null)
-		    		super.setValue("");
-		    	else super.setValue((Style.isNimbus() ? " " : "") + value.toString());
-				}
+            protected void setValue(Object value) 
+                {
+                if (value == null) 
+                    super.setValue("");
+                else if (value instanceof Patch && ((Patch)value).getName() == null)
+                    super.setValue("");
+                else super.setValue((Style.isNimbus() ? " " : "") + value.toString());
+                }
 
             public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) 
                 {
                 Component comp = super.getTableCellRendererComponent(table,value,isSelected,hasFocus,row,column);
 
-				// Nimbus is broken grid-wise in JTables. On Linux, this is the only thing that fixes it: overriding completely
-				if (Style.isNimbus())
-					{
-					((JComponent)comp).setBorder(BorderFactory.createMatteBorder(0, 0, 1, 1, GRID_COLOR));
-					}
+                // Nimbus is broken grid-wise in JTables. On Linux, this is the only thing that fixes it: overriding completely
+                if (Style.isNimbus())
+                    {
+                    ((JComponent)comp).setBorder(BorderFactory.createMatteBorder(0, 0, 1, 1, GRID_COLOR));
+                    }
 
                 // Note to get the underlying column number, you have to get the column model and pull out the column.
                 // We have stored the original column number in the column's "identifier", so you can grab that as shown here.
@@ -266,7 +266,7 @@ public class Librarian extends JPanel
         String nm = "";
         for(int i = 0; i < synth.getPatchNameLength(); i++) nm += "M";
         if (Style.isNimbus())
-        	nm += " ";		// we're gonna pad at the beginning for Nimbus
+            nm += " ";              // we're gonna pad at the beginning for Nimbus
         int w = table.getFontMetrics(table.getFont()).stringWidth(nm);
                 
         // Give the columns unique names
@@ -524,7 +524,7 @@ public class Librarian extends JPanel
         patchWellLabel.setFont(Style.SMALL_FONT());
 
         HBox box = new HBox();
-    	box.setBackground(getBackground());
+        box.setBackground(getBackground());
                 
         stopAction = new PushButton("Stop Download")
             {
@@ -539,15 +539,15 @@ public class Librarian extends JPanel
                         
         box.add(patchWellLabel);
     
-    	Box vbox = new Box(BoxLayout.Y_AXIS);
-    	vbox.setBackground(getBackground());
-    	JComponent glue1 = Stretch.makeStretch();
-    	glue1.setBackground(getBackground());
-    	JComponent glue2 = Stretch.makeStretch();
-    	glue2.setBackground(getBackground());
-		vbox.add(glue1);
-    	vbox.add(patchWell);
-		vbox.add(glue2);
+        Box vbox = new Box(BoxLayout.Y_AXIS);
+        vbox.setBackground(getBackground());
+        JComponent glue1 = Stretch.makeStretch();
+        glue1.setBackground(getBackground());
+        JComponent glue2 = Stretch.makeStretch();
+        glue2.setBackground(getBackground());
+        vbox.add(glue1);
+        vbox.add(patchWell);
+        vbox.add(glue2);
 
         box.addLast(vbox);
         add(box, BorderLayout.SOUTH);
@@ -562,38 +562,38 @@ public class Librarian extends JPanel
         /// See https://forums.oracle.com/ords/apexds/post/linux-nimbus-lookandfeel-table-grid-lines-are-not-coming-2197
         /// NOTE: This doesn't work on Linux.  I have to override the grid lines entirely, see elsewhere
         if (Style.isNimbus())
-        	{
-			try 
-				{
-				for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) 
-					{
-					if (info.getName().equals("Nimbus")) 
-						{
-						UIManager.setLookAndFeel(info.getClassName());
-						UIDefaults defaults = UIManager.getLookAndFeelDefaults();
-						// This is supposed to work but doesn't
-						defaults.put("Table.gridColor", new javax.swing.plaf.ColorUIResource(GRID_COLOR));
-						// This seems to work okay
-						defaults.put("Table.background", new javax.swing.plaf.ColorUIResource(BACKGROUND_COLOR));
-						defaults.put("Table.disabled", false);
-//						defaults.put("Table.showGrid", false);
-//						defaults.put("Table.intercellSpacing", new Dimension(1, 1));
+            {
+            try 
+                {
+                for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) 
+                    {
+                    if (info.getName().equals("Nimbus")) 
+                        {
+                        UIManager.setLookAndFeel(info.getClassName());
+                        UIDefaults defaults = UIManager.getLookAndFeelDefaults();
+                        // This is supposed to work but doesn't
+                        defaults.put("Table.gridColor", new javax.swing.plaf.ColorUIResource(GRID_COLOR));
+                        // This seems to work okay
+                        defaults.put("Table.background", new javax.swing.plaf.ColorUIResource(BACKGROUND_COLOR));
+                        defaults.put("Table.disabled", false);
+//                                              defaults.put("Table.showGrid", false);
+//                                              defaults.put("Table.intercellSpacing", new Dimension(1, 1));
 /*
-						defaults.put("TableHeader.background", new javax.swing.plaf.ColorUIResource(BACKGROUND_COLOR));
-						defaults.put("TableHeader.cellBorder", BorderFactory.createMatteBorder(0,0,1,0, GRID_COLOR));
+  defaults.put("TableHeader.background", new javax.swing.plaf.ColorUIResource(BACKGROUND_COLOR));
+  defaults.put("TableHeader.cellBorder", BorderFactory.createMatteBorder(0,0,1,0, GRID_COLOR));
 */
-						break;
-						}
-            		}
-        		} 
-        	catch (Exception e) { }
-			}
-		else
-			{
-			UIManager.put("TableHeader.cellBorder",
-				BorderFactory.createMatteBorder(0,0,1,0, GRID_COLOR));
-			}    
-		}    
+                        break;
+                        }
+                    }
+                } 
+            catch (Exception e) { }
+            }
+        else
+            {
+            UIManager.put("TableHeader.cellBorder",
+                BorderFactory.createMatteBorder(0,0,1,0, GRID_COLOR));
+            }    
+        }    
         
         
     public void loadOneInternal()
@@ -1060,12 +1060,12 @@ public class Librarian extends JPanel
     public static void doSaveNamesToText(Synth synth)
         {
         FileDialog fd = new FileDialog((Frame)(SwingUtilities.getRoot(synth)), "Write All Names to Text File...", FileDialog.SAVE);
-    	
-       	String str = synth.getSynthNameLocal();
-       	if (str == null) str = "Untitled.txt";
-       	else str = "PatchNames"  + str + ".txt";
+        
+        String str = synth.getSynthNameLocal();
+        if (str == null) str = "Untitled.txt";
+        else str = "PatchNames"  + str + ".txt";
 
-			fd.setFile(StringUtility.reviseFileName(str));
+        fd.setFile(StringUtility.reviseFileName(str));
 
         String path = synth.getLastDirectory();
         if (path != null)
@@ -1081,12 +1081,12 @@ public class Librarian extends JPanel
                 {
                 f = new File(fd.getDirectory(), StringUtility.ensureFileEndsWith(fd.getFile(), ".txt"));
                 os = new PrintWriter(new FileOutputStream(f));
-				String[] names = synth.librarian.getLibrary().getNames(Library.ALL_PATCHES);
-				String[] locations = synth.librarian.getLibrary().getPatchLocationNames(Library.ALL_PATCHES);
-				for(int i = 0; i < names.length; i++)
-					{
-					os.println(locations[i] + "\t" + names[i]);
-					}
+                String[] names = synth.librarian.getLibrary().getNames(Library.ALL_PATCHES);
+                String[] locations = synth.librarian.getLibrary().getPatchLocationNames(Library.ALL_PATCHES);
+                for(int i = 0; i < names.length; i++)
+                    {
+                    os.println(locations[i] + "\t" + names[i]);
+                    }
                 os.close();
                 synth.setLastDirectory(fd.getDirectory());
                 } 
@@ -1300,15 +1300,15 @@ public class Librarian extends JPanel
             return;
             }
  
- 		// which cells do we use?
- 		int[] rows = new int[len];
- 		int[] columns = new int[len];
- 		for(int i = 0; i < rows.length; i++)
- 			{
- 			rows[i] = row + i;
- 			columns[i] = column;
- 			}
- 			
+        // which cells do we use?
+        int[] rows = new int[len];
+        int[] columns = new int[len];
+        for(int i = 0; i < rows.length; i++)
+            {
+            rows[i] = row + i;
+            columns[i] = column;
+            }
+                        
         Model model = performMix(synth, mixType, columns, rows);
                  
         // Load model
@@ -1329,85 +1329,85 @@ public class Librarian extends JPanel
     public static final int NUM_MIX_ROWS = 8;
     
     public void mixBank(int mixType)
-    	{
+        {
         int column = col(table, table.getSelectedColumn());
         int row = table.getSelectedRow();
         int len = table.getSelectedRowCount();
         Library library = getLibrary();
         Synth synth = library.synth;
 
-       if (column < 0 || row < 0 || len == 0)
-        	{
+        if (column < 0 || row < 0 || len == 0)
+            {
             synth.showSimpleError("Cannot Remix Bank", "Please select a patch in a bank (except the Scratch bank).");
             return;
-        	}
+            }
         else if (column < 1)
-        	{
+            {
             synth.showSimpleError("Select Another Bank", "Please select a patch in a bank (except the Scratch bank).");
             return;
-        	}
+            }
         
         library.pushUndo();
         int banksize = library.patches[0].length;
         String[] names = library.getPatchNumberNames();
         for(int i = 0; i < banksize; i++)
-        	{
-        	int[] columns = new int[banksize < NUM_MIX_ROWS ? banksize : NUM_MIX_ROWS];
-        	int[] rows = new int[columns.length];
-        	for(int j = 0; j < columns.length; j++)
-        		{
-        		columns[j] = column;
-        		while(true)
-        			{
-        			rows[j] = synth.random.nextInt(banksize);
-        			
-        			// make sure it's not the same as past rows
-        			boolean passed = true;
-        			for(int k = 0; k < j; k++)
-        				{
-        				if (rows[j] == rows[k])
-        					{
-        					passed = false;
-        					break;
-        					}
-        				}
-        			if (passed)
-        				{
-        				break;
-        				}
-        			}
-        		}
-        	
-        	Model result = performMix(synth, mixType, columns, rows);
-        	
-        	// can we set a name even if the synth doesn't support it?
-        	if (result.exists("name"))
-        		{
-        		result.set("name", "" + names[i] + "Remix"); 
-        		
-        		// revise name
+            {
+            int[] columns = new int[banksize < NUM_MIX_ROWS ? banksize : NUM_MIX_ROWS];
+            int[] rows = new int[columns.length];
+            for(int j = 0; j < columns.length; j++)
+                {
+                columns[j] = column;
+                while(true)
+                    {
+                    rows[j] = synth.random.nextInt(banksize);
+                                
+                    // make sure it's not the same as past rows
+                    boolean passed = true;
+                    for(int k = 0; k < j; k++)
+                        {
+                        if (rows[j] == rows[k])
+                            {
+                            passed = false;
+                            break;
+                            }
+                        }
+                    if (passed)
+                        {
+                        break;
+                        }
+                    }
+                }
+                
+            Model result = performMix(synth, mixType, columns, rows);
+                
+            // can we set a name even if the synth doesn't support it?
+            if (result.exists("name"))
+                {
+                result.set("name", "" + names[i] + "Remix"); 
+                        
+                // revise name
                 synth.undo.setWillPush(false);
                 boolean send = synth.getSendMIDI();
                 synth.setSendMIDI(false);
-       			boolean shouldUpdate = synth.model.getUpdateListeners();
-        		synth.model.setUpdateListeners(false);
-        		Model backup = synth.model;
-        		
-        		synth.model = result;
+                boolean shouldUpdate = synth.model.getUpdateListeners();
+                synth.model.setUpdateListeners(false);
+                Model backup = synth.model;
+                        
+                synth.model = result;
                 synth.revise();
                 
                 synth.model = backup;
-        		synth.model.setUpdateListeners(shouldUpdate);
+                synth.model.setUpdateListeners(shouldUpdate);
                 synth.setSendMIDI(send);
                 synth.undo.setWillPush(true);
-        		}
-        		
-        	library.setPatch(library.getPatch(result), Library.SCRATCH_BANK, i);
-        	}
-    	}
+                }
+                        
+            library.setPatch(library.getPatch(result), Library.SCRATCH_BANK, i);
+            }
+        }
    
     public Model performMix(Synth synth, int mixType, int[] columns, int[] rows)
-    	{
+        {
         Model model = null;
         String[] mutationKeys = synth.getMutationKeys();
         double probability = 1.0;
@@ -1780,9 +1780,9 @@ public class Librarian extends JPanel
                     }
                 }
         
-			// Now that the patch number and bank are set, we can copy them over
-			// (We have to set them first or else they won't show up if we are double-clicking or
-			// dragging to the patch well).
+            // Now that the patch number and bank are set, we can copy them over
+            // (We have to set them first or else they won't show up if we are double-clicking or
+            // dragging to the patch well).
             toTable.setValueAt(p, toRow + i, antiTo);
             }
  

@@ -40,8 +40,8 @@ public class WaldorfMicrowave extends Synth
         
     static final String[] BANKS = new String[] { "A", "B" };
     static final String[] MOD_SOURCES = new String[] {"LFO 1", "LFO 2", "Volume Envelope", "Filter Envelope", "Wave Envelope", "LFO 1 Envelope", "Keytrack", "Velocity", "Release Velocity", "Aftertouch", "Poly Pressure", 
-                                                      "Pitch Bend", "Modulation Wheel", "Sustain Pedal", "Volume Controller", "Panning Controller", "Breath Controller", "Controller W", "Controller X", "Controller Y", "Controller Z", 
-                                                      "Maximum", "Minimum", "MIDI Clock Rate" };
+        "Pitch Bend", "Modulation Wheel", "Sustain Pedal", "Volume Controller", "Panning Controller", "Breath Controller", "Controller W", "Controller X", "Controller Y", "Controller Z", 
+        "Maximum", "Minimum", "MIDI Clock Rate" };
     static final String[] WAVE_MODES = new String[] { "Stepped", "Smooth" };
     static final String[] PITCH_MODES = new String[] { "Normal", "Fixed" };
     static final String[] LFO_SHAPES = new String[] { "Sine", "Sawtooth", "Pulse", "Random", "Sample & Hold" };
@@ -49,14 +49,14 @@ public class WaldorfMicrowave extends Synth
     static final String[] GLIDE_MODES = new String[] { "Equal Time", "Equal Distance" };
     static final String[] TUNING_TABLES = new String[] { "Positive", "Negative", "Slight Detune", "Honky Tonk", "User Table 1", "User Table 2", "User Table 3", "User Table 4" };
     static final String[] WAVE_TABLES = new String[] {    "R01 Resonant", "R02 Resonant2", "R03 MalletSyn",  "R04 Sqr-Sweep", "R05 Bellish", "R06 Pul-Sweep", "R07 Saw-Sweep", "R08 MellowSaw", 
-                                                          "R09 Feedback", "R10 Add Harm", "R11 Reso 3 HP", "R12 Wind Syn", "R13 HighHarm", "R14 Clipper", "R15 OrganSyn", "R16 SquareSaw",
-                                                          "R17 Format1", "R18 Polated", "R19 Transient", "R20 ElectricP", "R21 Robotic", "R22 StrongHrm", "R23 PercOrgan", "R24 ClipSweep", 
-                                                          "R25 ResoHarms", "R26 2 Echoes", "R27 Formant2", "R28 FmntVocal", "R29 MicroSync", // Is this called MicroSync or just Sync?  on the PPG it's Sync
-                                                          "R30 MicroPWM", // Is this called MicroPWM or just PWM?  on the PPG it's PWM 
-                                                          "R31 Upper Wavetable",               // Is this right?
-                                                          "R32 Piano/Sax",
-                                                          "I33 User 1", "I34 User 2", "I35 User 3", "I36 User 4", "I37 User 5", "I38 User 6", "I39 User 7", "I40 User 8", "I41 User 9", "I42 User 10", "I43 User 11", "I44 User 12",
-                                                          "C45 Card 1", "C46 Card 2", "C47 Card 3", "C48 Card 4", "C49 Card 5", "C50 Card 6", "C51 Card 7", "C52 Card 8", "C53 Card 9", "C54 Card 10", "C55 Card 11", "C56 Card 12",
+        "R09 Feedback", "R10 Add Harm", "R11 Reso 3 HP", "R12 Wind Syn", "R13 HighHarm", "R14 Clipper", "R15 OrganSyn", "R16 SquareSaw",
+        "R17 Format1", "R18 Polated", "R19 Transient", "R20 ElectricP", "R21 Robotic", "R22 StrongHrm", "R23 PercOrgan", "R24 ClipSweep", 
+        "R25 ResoHarms", "R26 2 Echoes", "R27 Formant2", "R28 FmntVocal", "R29 MicroSync", // Is this called MicroSync or just Sync?  on the PPG it's Sync
+        "R30 MicroPWM", // Is this called MicroPWM or just PWM?  on the PPG it's PWM 
+        "R31 Upper Wavetable",               // Is this right?
+        "R32 Piano/Sax",
+        "I33 User 1", "I34 User 2", "I35 User 3", "I36 User 4", "I37 User 5", "I38 User 6", "I39 User 7", "I40 User 8", "I41 User 9", "I42 User 10", "I43 User 11", "I44 User 12",
+        "C45 Card 1", "C46 Card 2", "C47 Card 3", "C48 Card 4", "C49 Card 5", "C50 Card 6", "C51 Card 7", "C52 Card 8", "C53 Card 9", "C54 Card 10", "C55 Card 11", "C56 Card 12",
         }; 
     
     public WaldorfMicrowave()

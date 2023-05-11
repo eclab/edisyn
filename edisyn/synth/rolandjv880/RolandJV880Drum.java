@@ -29,16 +29,16 @@ public class RolandJV880Drum extends Synth
     public static final String[] DISPLAYABLE_BANKS = new String[] { "Internal", "Card", "Preset A", "Preset B" };
     public static final String[] WRITABLE_BANKS = new String[] { "Internal", "Card" };
     public static final String[] WAVE_NAMES = new String[] { "Ac Piano 1", "SA Rhodes 1", "SA Rhodes 2", "E. Piano 1", "E. Piano 2", "Clav 1", "Organ 1", "Jazz Organ", "Pipe Organ", "Nylon GTR", "6STR GTR", "GTR HARM", 
-                                                             "Mute GTR 1", "Pop Strat", "Stratus", "SYN GTR", "Harp 1", "SYN Bass", "Pick Bass", "E. Bass", "Fretless 1", "Upright BS", "Slap Bass 1", "Slap & Pop", 
-                                                             "Slap Bass 2", "Slap Bass 3", "Flute 1", "Trumpet 1", "Trombone 1", "Harmon Mute 1", "Alto Sax 1", "Tenor Sax 1", "French 1", "Blow Pipe", "Bottle", 
-                                                             "Trumpet SECT", "ST. Strings-R", "ST. Strings-L", "Mono Strings", "Pizz", "SYN VOX 1", "SYN VOX 2", "Male Ooh", "ORG VOX", "VOX Noise", "Soft Pad", 
-                                                             "JP Strings", "Pop Voice", "Fine Wine", "Fantasynth", "Fanta Bell", "ORG Bell", "Agogo", "Bottle Hit", "Vibes", "Marimba wave", "Log Drum", "DIGI Bell 1", "DIGI Chime", 
-                                                             "Steel Drums", "MMM VOX", "Spark VOX", "Wave Scan", "Wire String", "Lead Wave", "Synth Saw 1", "Synth Saw 2", "Synth Saw 3", "Synth Square", "Synth Pulse 2", "Synth Pulse 2", 
-                                                             "Triangle", "Sine", "ORG Click", "White Noise", "Wind Agogo", "Metal Wind", "Feedbackwave", "Anklungs", "Wind Chimes", "Rattles", "Tin Wave", "Spectrum 1", 
-                                                             "808 SNR 1", "90's Snare", "Piccolo SN", "LA Snare", "Whack Snare", "Rim Shot", "Bright Kick", "Verb Kick", "Round Kick", "808 Kick", "Closed HAT 1", "Closed HAT 2", 
-                                                             "Open HAT 1", "Crash 1", "Ride 1", "Ride Bell 1", "Power Tom Hi", "Power Tom Lo", "Cross Stick 1", "808 Claps", "Cowbell 1", "Tambourine", "Timbale", "CGA Mute Hi", 
-                                                             "CGA Mute Lo", "CGA Slap", "Conga Hi", "Conga Lo", "Maracas", "Cabasa Cut", "Cabasa Up", "Cabasa Down", "REV Steel DR", "REV Tin Wave", "REV SN 1", "REV SN 2", 
-                                                             "REV SN 3", "REV SN 4", "REV Kick 1", "REV Cup", "REV Tom", "REV Cow Bell", "REV TAMB", "REV Conga", "REV Maracas", "REV Crash 1" };
+        "Mute GTR 1", "Pop Strat", "Stratus", "SYN GTR", "Harp 1", "SYN Bass", "Pick Bass", "E. Bass", "Fretless 1", "Upright BS", "Slap Bass 1", "Slap & Pop", 
+        "Slap Bass 2", "Slap Bass 3", "Flute 1", "Trumpet 1", "Trombone 1", "Harmon Mute 1", "Alto Sax 1", "Tenor Sax 1", "French 1", "Blow Pipe", "Bottle", 
+        "Trumpet SECT", "ST. Strings-R", "ST. Strings-L", "Mono Strings", "Pizz", "SYN VOX 1", "SYN VOX 2", "Male Ooh", "ORG VOX", "VOX Noise", "Soft Pad", 
+        "JP Strings", "Pop Voice", "Fine Wine", "Fantasynth", "Fanta Bell", "ORG Bell", "Agogo", "Bottle Hit", "Vibes", "Marimba wave", "Log Drum", "DIGI Bell 1", "DIGI Chime", 
+        "Steel Drums", "MMM VOX", "Spark VOX", "Wave Scan", "Wire String", "Lead Wave", "Synth Saw 1", "Synth Saw 2", "Synth Saw 3", "Synth Square", "Synth Pulse 2", "Synth Pulse 2", 
+        "Triangle", "Sine", "ORG Click", "White Noise", "Wind Agogo", "Metal Wind", "Feedbackwave", "Anklungs", "Wind Chimes", "Rattles", "Tin Wave", "Spectrum 1", 
+        "808 SNR 1", "90's Snare", "Piccolo SN", "LA Snare", "Whack Snare", "Rim Shot", "Bright Kick", "Verb Kick", "Round Kick", "808 Kick", "Closed HAT 1", "Closed HAT 2", 
+        "Open HAT 1", "Crash 1", "Ride 1", "Ride Bell 1", "Power Tom Hi", "Power Tom Lo", "Cross Stick 1", "808 Claps", "Cowbell 1", "Tambourine", "Timbale", "CGA Mute Hi", 
+        "CGA Mute Lo", "CGA Slap", "Conga Hi", "Conga Lo", "Maracas", "Cabasa Cut", "Cabasa Up", "Cabasa Down", "REV Steel DR", "REV Tin Wave", "REV SN 1", "REV SN 2", 
+        "REV SN 3", "REV SN 4", "REV Kick 1", "REV Cup", "REV Tom", "REV Cow Bell", "REV TAMB", "REV Conga", "REV Maracas", "REV Crash 1" };
 
     public static final String[] KEYS = new String[] { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
     public static final String[] OUTPUT_SELECTS = new String[] { "Main", "Sub" };

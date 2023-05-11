@@ -38,17 +38,17 @@ public class WaldorfMicrowaveXT extends Synth
     static final String[] LFO_SHAPES = new String[] { "Sin", "Tri", "Sqr", "Saw", "Rand", "S&H" };
     static final String[] LFO_SYNC = new String[] { "Off", "On", "Clock" };
     static final String[] LFO_SPEEDS = new String[] {      "128", "96", "64", "48", "36", "32", "24", "18", 
-                                                           "16", "12",  "9", "8", "6", "4", "3", "2", "1", 
-                                                           "1/2 .", "1/2 T", "1/2", "1/4 .", "1/4 T", "1/4", "1/8 .", "1/8 T", 
-                                                           "1/8", "1/16 .", "1/16 T", "1/16", "1/32 .", "1/32", "1/64" };
+        "16", "12",  "9", "8", "6", "4", "3", "2", "1", 
+        "1/2 .", "1/2 T", "1/2", "1/4 .", "1/4 T", "1/4", "1/8 .", "1/8 T", 
+        "1/8", "1/16 .", "1/16 T", "1/16", "1/32 .", "1/32", "1/64" };
     static final String[] LFO_PHASES = new String[] {"Free", "3", "6", "8", "11", "14", "17", "20", "23", "25", "28", "31", "34", "37", "39", "42", "45", "48", 
-                                                     "51", "53", "56", "59", "62", "65", "68", "70", "73", "76", "79", "82", "84", "87", "90", "93", "96", "98", 
-                                                     "101", "104", "107", "110", "113", "115", "118", "121", "124", "127", "129", "132", "135", "138", "141", 
-                                                     "143", "146", "149", "152", "155", "158", "160", "163", "166", "169", "172", "174", "177", "180", "183", 
-                                                     "186", "188", "191", "194", "197", "200", "203", "205", "208", "211", "214", "217", "219", "222", "225", 
-                                                     "228", "231", "233", "236", "239", "242", "245", "248", "250", "253", "256", "259", "262", "264", "267", 
-                                                     "270", "273", "276", "278", "281", "284", "287", "290", "293", "295", "298", "301", "304", "307", "309", 
-                                                     "312", "315", "318", "321", "323", "326", "329", "332", "335", "338", "340", "343", "346", "349", "352", "354", "357"};
+        "51", "53", "56", "59", "62", "65", "68", "70", "73", "76", "79", "82", "84", "87", "90", "93", "96", "98", 
+        "101", "104", "107", "110", "113", "115", "118", "121", "124", "127", "129", "132", "135", "138", "141", 
+        "143", "146", "149", "152", "155", "158", "160", "163", "166", "169", "172", "174", "177", "180", "183", 
+        "186", "188", "191", "194", "197", "200", "203", "205", "208", "211", "214", "217", "219", "222", "225", 
+        "228", "231", "233", "236", "239", "242", "245", "248", "250", "253", "256", "259", "262", "264", "267", 
+        "270", "273", "276", "278", "281", "284", "287", "290", "293", "295", "298", "301", "304", "307", "309", 
+        "312", "315", "318", "321", "323", "326", "329", "332", "335", "338", "340", "343", "346", "349", "352", "354", "357"};
     static final String[] CLIPPING = new String[] { "Saturate", "Overflow" };
     static final String[] FILTER_2_TYPES = new String[] { "6dB LP", "6dB HP" };
     static final String[] EFFECT_TYPES = new String[] { "Off", "Chorus", "Flanger 1", "Flanger 2", "AutoWahLP", "AutoWahBP", "Overdrive", "Amp. Mod", "Delay [XT/Xtk]", "Pan Delay [XT/Xtk]", "Mod Delay [XT/Xtk]" };
@@ -62,14 +62,14 @@ public class WaldorfMicrowaveXT extends Synth
     static final String[] OSCILLATOR_OCTAVES = new String[] { "128'", "64'", "32'", "16'", "8'", "4'", "2'", "1'", "1/2'" };
     static final String[] AMPLIFIER_TYPES = new String[] { "Direct", "Combo", "Medium", "Stack" };
     static final String[] WAVES = new String[] {           "Resonant", "Resonant2", "MalletSyn", 
-                                                           "Sqr-Sweep", "Bellish", "Pul-Sweep", "Saw-Sweep", "MellowSaw", "Feedback", "Add Harm", "Reso 3 HP", 
-                                                           "Wind Syn", "HighHarm", "Clipper", "OrganSyn", "SquareSaw", "Format1", "Polated", "Transient", 
-                                                           "ElectricP", "Robotic", "StrongHrm", "PercOrgan", "ClipSweep", "ResoHarms", "2 Echoes", "Formant2", 
-                                                           "FmntVocal", "MicroSync", "MicroPWM", "Glassy", "SquareHP", "SawSync1", "SawSync2", "SawSync3", 
-                                                           "PulSync1", "PulSync2", "PulSync3", "SinSync1", "SinSync2", "SinSync3", "PWM Pulse", "PWM Saw", 
-                                                           "Fuzz Wave", "Distorted", "HeavyFuzz", "Fuzz Sync", "K+Strong1", "K+Strong2", "K+Strong3", "1-2-3-4-5", 
-                                                           "19/twenty", "Wavetrip1", "Wavetrip2", "Wavetrip3", "Wavetrip4", "MaleVoice", "Low Piano", "ResoSweep", 
-                                                           "Xmas Bell", "FM Piano", "Fat Organ", "Vibes", "Chorus 2", "True PWM" };
+        "Sqr-Sweep", "Bellish", "Pul-Sweep", "Saw-Sweep", "MellowSaw", "Feedback", "Add Harm", "Reso 3 HP", 
+        "Wind Syn", "HighHarm", "Clipper", "OrganSyn", "SquareSaw", "Format1", "Polated", "Transient", 
+        "ElectricP", "Robotic", "StrongHrm", "PercOrgan", "ClipSweep", "ResoHarms", "2 Echoes", "Formant2", 
+        "FmntVocal", "MicroSync", "MicroPWM", "Glassy", "SquareHP", "SawSync1", "SawSync2", "SawSync3", 
+        "PulSync1", "PulSync2", "PulSync3", "SinSync1", "SinSync2", "SinSync3", "PWM Pulse", "PWM Saw", 
+        "Fuzz Wave", "Distorted", "HeavyFuzz", "Fuzz Sync", "K+Strong1", "K+Strong2", "K+Strong3", "1-2-3-4-5", 
+        "19/twenty", "Wavetrip1", "Wavetrip2", "Wavetrip3", "Wavetrip4", "MaleVoice", "Low Piano", "ResoSweep", 
+        "Xmas Bell", "FM Piano", "Fat Organ", "Vibes", "Chorus 2", "True PWM" };
     // how to modify this?  Search for "notation" in manual
     static final String[] RATE = new String[] { "1/96", "1/48", "1/32", "1/16 T", "1/32 .", "1/16", "1/8T", "1/16 .", "1/8", "1/4 T", "1/8 .", "1/4", "1/2 T", "1/4 .", "1/2", "1/1 T", "1/2 .", "1", "1.5", "2", "2.5", "3", "3.5", "4", "5", "6", "7", "8", "9", "10", "12", "14", "16", "18", "20", "24", "28", "32", "36", "40", "48", "56", "64" };
     static final String[] ARP_CLOCK = new String[] { "1/1", "1/2 .", "1/2 T", "1/2", "1/4 .", "1/4 T", "1/4", "1/8 .", "1/8 T", "1/8", "1/16 .", "1/16 T", "1/16", "1/32 .", "1/32 T", "1/32"};

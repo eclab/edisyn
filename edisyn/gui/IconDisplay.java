@@ -35,21 +35,21 @@ public class IconDisplay extends JComponent implements Updatable
     int w;
     boolean retina;
 
-	public Dimension getPreferredSize()
-		{
-		return new Dimension(w,h);
-		}
-	
-	public Dimension getMaximumSize()
-		{
-		return getPreferredSize();
-		}
-		
-	public Dimension getMinimumSize()
-		{
-		return getPreferredSize();
-		}
-		
+    public Dimension getPreferredSize()
+        {
+        return new Dimension(w,h);
+        }
+        
+    public Dimension getMaximumSize()
+        {
+        return getPreferredSize();
+        }
+                
+    public Dimension getMinimumSize()
+        {
+        return getPreferredSize();
+        }
+                
     public void update(String key, Model model) 
         { 
         int v = model.get(key, 0);

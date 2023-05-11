@@ -43,7 +43,7 @@ public class PushButton extends JPanel
     public void setText(String val) { text = val; button.setText("<html>"+val+"</html>"); }
     
     public AWTEventListener releaseListener = null;
-	
+        
     public PushButton(final String text)
         {
         button = new JButton(text);
@@ -54,31 +54,31 @@ public class PushButton extends JPanel
         final Color foreground = button.getForeground();
         
         if (Style.isMacOSMonterey() || Style.isMacOSVentura()) 
-	        button.addMouseListener(buildUnderliningMouseAdapter(button));
-	                	
+            button.addMouseListener(buildUnderliningMouseAdapter(button));
+                                
         button.addActionListener(new ActionListener()
             {
-		public void actionPerformed(ActionEvent e)
+            public void actionPerformed(ActionEvent e)
                 {
                 _perform();
                 }
             });
         setBackground(Style.BACKGROUND_COLOR());
         setLayout(new BorderLayout());
-	JPanel inner = new JPanel()
-	    {
-		public Insets getInsets() { return new Insets(0,0,0,0); }
-	    };
-	inner.setLayout(new BorderLayout());
-	inner.setBackground(Style.BACKGROUND_COLOR());
-	inner.add(button, BorderLayout.NORTH);
+        JPanel inner = new JPanel()
+            {
+            public Insets getInsets() { return new Insets(0,0,0,0); }
+            };
+        inner.setLayout(new BorderLayout());
+        inner.setBackground(Style.BACKGROUND_COLOR());
+        inner.add(button, BorderLayout.NORTH);
         add(inner, BorderLayout.WEST);
 
         if (Style.isNimbus())
-        	{
-        	//add(Strut.makeHorizontalStrut(3), BorderLayout.WEST);
-        	add(Strut.makeVerticalStrut(3), BorderLayout.SOUTH);
-			}
+            {
+            //add(Strut.makeHorizontalStrut(3), BorderLayout.WEST);
+            add(Strut.makeVerticalStrut(3), BorderLayout.SOUTH);
+            }
         }
     
     public PushButton(String text, String[] options)
@@ -189,30 +189,30 @@ public class PushButton extends JPanel
     /// shade change in MacOS Monterey and Ventura.  I'd like to instead change the background color to something
     /// darker but this is very difficult to do in MacOS.
     
- 	MouseAdapter buildUnderliningMouseAdapter(final JButton button)
-    	{
-	    final AWTEventListener[] releaseListener = { null };
-	    
-		return new MouseAdapter()
+    MouseAdapter buildUnderliningMouseAdapter(final JButton button)
+        {
+        final AWTEventListener[] releaseListener = { null };
+            
+        return new MouseAdapter()
             {
             public void mouseExited(MouseEvent e)
-            	{
-        			button.setText("<html>"+getText()+"</html>");
+                {
+                button.setText("<html>"+getText()+"</html>");
                 repaint();
-            	}
+                }
 
             public void mouseEntered(MouseEvent e)
-            	{
-            	if (releaseListener[0] != null)
-            		{
-        			button.setText("<html><u>"+getText()+"</u></html>");
-                	repaint();
-                	}
-            	}
-            	
+                {
+                if (releaseListener[0] != null)
+                    {
+                    button.setText("<html><u>"+getText()+"</u></html>");
+                    repaint();
+                    }
+                }
+                
             public void mousePressed(MouseEvent e) 
                 {
-        			button.setText("<html><u>"+getText()+"</u></html>");
+                button.setText("<html><u>"+getText()+"</u></html>");
                 
                 // This gunk fixes a BAD MISFEATURE in Java: mouseReleased isn't sent to the
                 // same component that received mouseClicked.  What the ... ? Asinine.
@@ -230,8 +230,8 @@ public class PushButton extends JPanel
                                 {
                                 Toolkit.getDefaultToolkit().removeAWTEventListener( releaseListener[0] );
                                 releaseListener[0] = null;
-        			button.setText("<html>"+getText()+"</html>");
-								repaint();
+                                button.setText("<html>"+getText()+"</html>");
+                                repaint();
                                 }
                             }
                         }
@@ -241,10 +241,10 @@ public class PushButton extends JPanel
             public void mouseReleased(MouseEvent e) 
                 {
                 Toolkit.getDefaultToolkit().removeAWTEventListener( releaseListener[0] );
-				releaseListener[0] = null;
-        			button.setText("<html>"+getText()+"</html>");
+                releaseListener[0] = null;
+                button.setText("<html>"+getText()+"</html>");
                 repaint();
                 }
-        	};
-    	}
+            };
+        }
     }

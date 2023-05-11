@@ -383,7 +383,7 @@ public class KeyDisplay extends NumericalComponent
             graphics.setPaint(Style.KEYBOARD_WHITE_COLOR());
             graphics.draw(rect);
 
-		    graphics.setRenderingHints(oldHints);
+            graphics.setRenderingHints(oldHints);
             }
         }
     

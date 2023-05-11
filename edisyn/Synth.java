@@ -852,12 +852,12 @@ public abstract class Synth extends JComponent implements Updatable
         to get it to send the next chunk of data to you (and also in this case you'd return
         PARSE_INCOMPLETE probably).  To do this, you can:
         <pre>
-                    boolean sendMIDI = getSendMIDI();
-                    setSendMIDI(true);
-                    *** send your message here ***
-                    setSendMIDI(sendMIDI);
+        boolean sendMIDI = getSendMIDI();
+        setSendMIDI(true);
+        *** send your message here ***
+        setSendMIDI(sendMIDI);
         </pre>
-        */
+    */
     // don't return PARSE_ERROR, that's used internally
     public int parse(byte[] data, boolean fromFile) { return PARSE_FAILED; }
     
@@ -1145,8 +1145,8 @@ public abstract class Synth extends JComponent implements Updatable
     public int getPauseAfterWritePatch() { return getPauseAfterSendAllParameters(); }
 
     /** Override this to make sure that the given additional time (in ms) has transpired after writing a patch when emitting a series
-    	of patches with no following change patch.  The default is the same as getPauseAfterWritePatch(),
-    	that is, the same as getPauseAfterSendAllParameters(); */
+        of patches with no following change patch.  The default is the same as getPauseAfterWritePatch(),
+        that is, the same as getPauseAfterSendAllParameters(); */
     public int getPauseBetweenPatchWrites() { return getPauseAfterWritePatch(); }
 
     /** Override this to make sure that the given additional time (in ms) has transpired after receiving a 
@@ -1387,13 +1387,13 @@ public abstract class Synth extends JComponent implements Updatable
                 model.updateAllListeners();
                 setSendMIDI(send);
 
-				// this last statement fixes a mystery.  When I call Randomize or Reset on
-				// a Blofeld or on a Microwave, all of the widgets update simultaneously.
-				// But on a Blofeld Multi or Microwave Multi they update one at a time.
-				// I've tried a zillion things, even moving all the widgets from the Blofeld Multi
-				// into the Blofeld, and it makes no difference!  For some reason the OS X
-				// repaint manager is refusing to coallesce their repaint requests.  So I do it here.
-				repaint();                                                                                                
+                // this last statement fixes a mystery.  When I call Randomize or Reset on
+                // a Blofeld or on a Microwave, all of the widgets update simultaneously.
+                // But on a Blofeld Multi or Microwave Multi they update one at a time.
+                // I've tried a zillion things, even moving all the widgets from the Blofeld Multi
+                // into the Blofeld, and it makes no difference!  For some reason the OS X
+                // repaint manager is refusing to coallesce their repaint requests.  So I do it here.
+                repaint();                                                                                                
                 }
             else model.setUpdateListeners(true);
             }
@@ -1502,17 +1502,17 @@ public abstract class Synth extends JComponent implements Updatable
             }
         }
 
-	long lastTime = 0;
-	Object timeLock = new Object[0];
-	public void time(String val)
-		{
-		synchronized(timeLock)
-			{
-			long time = System.currentTimeMillis();
-			//System.err.println("" + (time - lastTime) + "\t" + val);
-			lastTime = time;
-			}
-		}
+    long lastTime = 0;
+    Object timeLock = new Object[0];
+    public void time(String val)
+        {
+        synchronized(timeLock)
+            {
+            long time = System.currentTimeMillis();
+            //System.err.println("" + (time - lastTime) + "\t" + val);
+            lastTime = time;
+            }
+        }
 
     /** Builds a receiver to attach to the current IN transmitter.  The receiver
         can handle merging and patch reception. */
@@ -1538,7 +1538,7 @@ public abstract class Synth extends JComponent implements Updatable
                     return;
                     }
 
-		// time("Received " + message);
+                // time("Received " + message);
                 if (tuple != null) processBufferedMessages(tuple.inReceiver, inBuffer);
 
                 // I'm doing this in the Swing event thread because I figure it's multithreaded
@@ -1577,12 +1577,12 @@ public abstract class Synth extends JComponent implements Updatable
                                         boolean originalMIDI = getSendMIDI();
                                         setSendMIDI(false);
                                         undo.setWillPush(false);
-		// time("Backing Up for " + message);
+                                        // time("Backing Up for " + message);
                                         Model backup = (Model)(model.clone());
                                         int result = PARSE_ERROR;
                                         try 
                                             {
-		// time("Parsing " + message);
+                                            // time("Parsing " + message);
                                             result = performParse(data, false);
                                             }
                                         catch (Exception ex)
@@ -1617,21 +1617,21 @@ public abstract class Synth extends JComponent implements Updatable
                                                 }
 
                                             incomingPatch = (incomingPatch || result == PARSE_SUCCEEDED || result == PARSE_SUCCEEDED_UNTITLED);
-                                           	if (result == PARSE_CANCELLED)
+                                            if (result == PARSE_CANCELLED)
                                                 {
-												incomingPatch = false;
+                                                incomingPatch = false;
                                                 backupDoneForParse = false;         // reset
                                                 // nothing
                                                 }
                                             else if (result == PARSE_FAILED)
                                                 {
-												incomingPatch = false;
+                                                incomingPatch = false;
                                                 backupDoneForParse = false;         // reset
                                                 showSimpleError("Receive Error", "Could not read the patch.");
                                                 }
                                             else if (result == PARSE_ERROR)
                                                 {
-												incomingPatch = false;
+                                                incomingPatch = false;
                                                 backupDoneForParse = false;         // reset
                                                 showSimpleError("Receive Error", "An error occurred on reading the patch.");
                                                 }
@@ -1640,7 +1640,7 @@ public abstract class Synth extends JComponent implements Updatable
                                                 backupDoneForParse = false;         // reset
                                                 // nothing
                                                 }
- 											else if (incomingPatch)
+                                            else if (incomingPatch)
                                                 {
                                                 backupDoneForParse = false;         // reset
                                                 }
@@ -1652,11 +1652,11 @@ public abstract class Synth extends JComponent implements Updatable
                                                 sendAllParameters();
                                                 }
                                             file = null;
-                                            		// time("Update Blend " + message);
+                                            // time("Update Blend " + message);
 
                                             updateBlend();
                                             }
-                                            		// time("Update Title " + message);
+                                        // time("Update Title " + message);
 
                                         updateTitle();
                                         }
@@ -1704,7 +1704,7 @@ public abstract class Synth extends JComponent implements Updatable
                                     undo.setWillPush(willPush);
                                     }
                                 }
-                                            		// time("Done " + message);
+                            // time("Done " + message);
                             }
                         if (testIncomingSynthMIDI) 
                             {
@@ -2384,23 +2384,23 @@ public abstract class Synth extends JComponent implements Updatable
 
 
 
-	/** Returns true if this synth will always provide the MSB in all NRPN messages.
-		When an NRPN message comes in, it may come in with just an LSB, just an MSB, or with an LSB and MSB in either order. 
-		Since normally don't know, the NRPN parser must assume that an incoming LSB may be all there is to the message
-		and update edisyn with just the LSB and the MSB set to 0 (or correspondingly with just the MSB and the LSB set to 0),
-		and only update a second time when the other part arrives.  This in turn can cause a variety of revise() problems.
-		To deal with this, if you know the synth will always produce an MSB in every NRPN message, you can override this to
-		return TRUE (it returns FALSE by default). */
-	public boolean getRequiresNRPNMSB() { return false; }
+    /** Returns true if this synth will always provide the MSB in all NRPN messages.
+        When an NRPN message comes in, it may come in with just an LSB, just an MSB, or with an LSB and MSB in either order. 
+        Since normally don't know, the NRPN parser must assume that an incoming LSB may be all there is to the message
+        and update edisyn with just the LSB and the MSB set to 0 (or correspondingly with just the MSB and the LSB set to 0),
+        and only update a second time when the other part arrives.  This in turn can cause a variety of revise() problems.
+        To deal with this, if you know the synth will always produce an MSB in every NRPN message, you can override this to
+        return TRUE (it returns FALSE by default). */
+    public boolean getRequiresNRPNMSB() { return false; }
 
-	/** Returns true if this synth will always provide the LSB in all NRPN messages.
-		When an NRPN message comes in, it may come in with just an LSB, just an MSB, or with an LSB and MSB in either order. 
-		Since normally don't know, the NRPN parser must assume that an incoming LSB may be all there is to the message
-		and update edisyn with just the LSB and the MSB set to 0 (or correspondingly with just the MSB and the LSB set to 0),
-		and only update a second time when the other part arrives.  This in turn can cause a variety of revise() problems.
-		To deal with this, if you know the synth will always produce an LSB in every NRPN message, you can override this to
-		return TRUE (it returns FALSE by default). */
-	public boolean getRequiresNRPNLSB() { return false; }
+    /** Returns true if this synth will always provide the LSB in all NRPN messages.
+        When an NRPN message comes in, it may come in with just an LSB, just an MSB, or with an LSB and MSB in either order. 
+        Since normally don't know, the NRPN parser must assume that an incoming LSB may be all there is to the message
+        and update edisyn with just the LSB and the MSB set to 0 (or correspondingly with just the MSB and the LSB set to 0),
+        and only update a second time when the other part arrives.  This in turn can cause a variety of revise() problems.
+        To deal with this, if you know the synth will always produce an LSB in every NRPN message, you can override this to
+        return TRUE (it returns FALSE by default). */
+    public boolean getRequiresNRPNLSB() { return false; }
 
     void handleInRawCC(ShortMessage message)
         {
@@ -3732,13 +3732,13 @@ public abstract class Synth extends JComponent implements Updatable
                 return (SynthPanel) inner;
                 }
             else if (inner instanceof JPanel)
-            	{
-            	Component[] comps = ((JPanel)inner).getComponents();
-            	if (comps != null && comps.length > 0 && comps[0] instanceof SynthPanel)
-            		{
-            		return (SynthPanel) comps[0];
-            		}
-            	}
+                {
+                Component[] comps = ((JPanel)inner).getComponents();
+                if (comps != null && comps.length > 0 && comps[0] instanceof SynthPanel)
+                    {
+                    return (SynthPanel) comps[0];
+                    }
+                }
             }
         return null;
         }
@@ -3792,7 +3792,7 @@ public abstract class Synth extends JComponent implements Updatable
                 if (oldTab == librarianPane)    // gotta kill the librarian batch download if any
                     {
                     stopBatchDownload();
-		            // sendAllParameters();        // get us back up to speed
+                    // sendAllParameters();        // get us back up to speed
                     }
                 }
                         
@@ -3920,20 +3920,20 @@ public abstract class Synth extends JComponent implements Updatable
         final JFrame frame = new JFrame();
 
 /*
-		// Doesn't work.  :-(
-        final JFrame frame = new JFrame()
-        	{
-        	public void paint(Graphics g)
-        		{
-        		if (g != null && g instanceof Graphics2D)
-        			{
-        			Style.prepareGraphics(g);
-        			}
-        		super.paint(g);
-        		}
-        	};
+// Doesn't work.  :-(
+final JFrame frame = new JFrame()
+{
+public void paint(Graphics g)
+{
+if (g != null && g instanceof Graphics2D)
+{
+Style.prepareGraphics(g);
+}
+super.paint(g);
+}
+};
 */
-        	
+                
         menubar = new JMenuBar();
         frame.setJMenuBar(menubar);
         JMenu menu = new JMenu("File");
@@ -4087,15 +4087,15 @@ public abstract class Synth extends JComponent implements Updatable
             menu.add(aboutMenuItem);
 
             JMenuItem exit = new JMenuItem("Exit");
-	    if (!Style.isMac())
-		{
-		    exit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
-		}
+            if (!Style.isMac())
+                {
+                exit.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_Q, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+                }
             menu.addSeparator();
             menu.add(exit);
-	    exit.addActionListener(new ActionListener()
+            exit.addActionListener(new ActionListener()
                 {
-		    public void actionPerformed( ActionEvent e)
+                public void actionPerformed( ActionEvent e)
                     {
                     doQuit();
                     }
@@ -5873,24 +5873,24 @@ public abstract class Synth extends JComponent implements Updatable
             Mac.setup(this);
         
 /*
-        // Handle About menu for non-Macs
-        if (Style.isWindows() || Style.isUnix())
-            {
-            // right now the only thing under "Help" is
-            // the About menu, so it doesn't exist on the Mac,
-            // where the About menu is elsewhere.
-            JMenu helpMenu = new JMenu("Help");
-            JMenuItem aboutMenuItem = new JMenuItem("About Edisyn");
-            aboutMenuItem.addActionListener(new ActionListener()
-                {
-                public void actionPerformed( ActionEvent e)
-                    {
-                    doAbout();
-                    }
-                });
-            helpMenu.add(aboutMenuItem);
-            menubar.add(helpMenu);
-            }
+// Handle About menu for non-Macs
+if (Style.isWindows() || Style.isUnix())
+{
+// right now the only thing under "Help" is
+// the About menu, so it doesn't exist on the Mac,
+// where the About menu is elsewhere.
+JMenu helpMenu = new JMenu("Help");
+JMenuItem aboutMenuItem = new JMenuItem("About Edisyn");
+aboutMenuItem.addActionListener(new ActionListener()
+{
+public void actionPerformed( ActionEvent e)
+{
+doAbout();
+}
+});
+helpMenu.add(aboutMenuItem);
+menubar.add(helpMenu);
+}
 */
 
         frame.getContentPane().setLayout(new BorderLayout());
@@ -6909,15 +6909,15 @@ public abstract class Synth extends JComponent implements Updatable
     void doSaveText()
         {
         FileDialog fd = new FileDialog((Frame)(SwingUtilities.getRoot(this)), "Write Patch to Text File...", FileDialog.SAVE);
-    	
-    	String str = "Untitled.txt";
+        
+        String str = "Untitled.txt";
         if (getPatchName(getModel()) != null)
-        	{
-        	str = getPatchName(getModel()).trim() + ".txt";
-        	if (str.equals(".txt")) str = "Untitled.txt";
-        	}
+            {
+            str = getPatchName(getModel()).trim() + ".txt";
+            if (str.equals(".txt")) str = "Untitled.txt";
+            }
 
-			fd.setFile(StringUtility.reviseFileName(str));
+        fd.setFile(StringUtility.reviseFileName(str));
 
         String path = getLastDirectory();
         if (path != null)
@@ -8326,8 +8326,8 @@ public abstract class Synth extends JComponent implements Updatable
                     {
                     long time2 = System.currentTimeMillis();
                     if (time2 > time && time2 - time < 1000)
-                    	{
-                    	//System.err.println("Decorative Pause for " + ((int)(1000L - (time2 - time))));
+                        {
+                        //System.err.println("Decorative Pause for " + ((int)(1000L - (time2 - time))));
                         simplePause((int)(1000L - (time2 - time)));             // this is a decorative pause to give the user time to spot the window in case it appears and disappears rapidly
                         }
                         
@@ -8629,7 +8629,7 @@ public abstract class Synth extends JComponent implements Updatable
         setShowingMutation(!isShowingMutation());
         }
         
-     void doSetNonMetricMutationMap(boolean val)
+    void doSetNonMetricMutationMap(boolean val)
         {
         String title = "Make all Parameters Immutable";
         String message = "Are you sure you want to make all parameters immutable?";
@@ -8646,16 +8646,16 @@ public abstract class Synth extends JComponent implements Updatable
             for(int i = 0; i < keys.length; i++)
                 {
                 if (!getModel().metricMinExists(keys[i]))
-                	{
-	                mutationMap.setFree(keys[i], val, false);
-	                }
+                    {
+                    mutationMap.setFree(keys[i], val, false);
+                    }
                 }
             mutationMap.sync();                    
             repaint();
             }
         }     
 
-   void doSetAllMutationMap(boolean val)
+    void doSetAllMutationMap(boolean val)
         {
         String title = "Make Non-Metric Parameters Immutable";
         String message = "Are you sure you want to make all non-metric parameters immutable?";
@@ -9081,47 +9081,47 @@ public abstract class Synth extends JComponent implements Updatable
         }
         
     /** Called when a batch download is starting.  This might give your editor
-    	a chance to emit something at the beginning of the batch download.  For
-    	example, the ASM Hydrasynth requires that a header sysex command be
-    	sent before a stream of batch downloads.  You can determine if 
-    	a batch download is occurring during parse() by calling isBatchDownloading() */
-	public void startingBatchDownload(Model firstPatch, Model finalPatch) { }
+        a chance to emit something at the beginning of the batch download.  For
+        example, the ASM Hydrasynth requires that a header sysex command be
+        sent before a stream of batch downloads.  You can determine if 
+        a batch download is occurring during parse() by calling isBatchDownloading() */
+    public void startingBatchDownload(Model firstPatch, Model finalPatch) { }
 
     /** Called when a batch download is stopping.  This might give your editor
-    	a chance to emit something at the end of the batch download.  For
-    	example, the ASM Hydrasynth requires that a header sysex command be
-    	sent before a stream of patch downloads.  You can determine if 
-    	a batch download is occurring during parse() by calling isBatchDownloading() */
-	public void stoppingBatchDownload(Model firstPatch, Model finalPatch) { }
+        a chance to emit something at the end of the batch download.  For
+        example, the ASM Hydrasynth requires that a header sysex command be
+        sent before a stream of patch downloads.  You can determine if 
+        a batch download is occurring during parse() by calling isBatchDownloading() */
+    public void stoppingBatchDownload(Model firstPatch, Model finalPatch) { }
 
     /** Called before a series of patches are being emitted from the librarian 
-    	(as opposed to a single patch from the Editor).  This might give your editor
-    	a chance to add something to the beginning of the data.  For
-    	example, the ASM Hydrasynth requires that a header sysex command be
-    	sent before a stream of batch dumps.  You can determine if 
-    	a series of patches is being emitted during emit() by calling isEmittingBatch(). 
-    	Note that this method is NOT called if a bank is being emitted via a bank sysex message. */
-	public Object[] startingBatchEmit(int bank, int start, int end, boolean toFile) { return new Object[0]; }
+        (as opposed to a single patch from the Editor).  This might give your editor
+        a chance to add something to the beginning of the data.  For
+        example, the ASM Hydrasynth requires that a header sysex command be
+        sent before a stream of batch dumps.  You can determine if 
+        a series of patches is being emitted during emit() by calling isEmittingBatch(). 
+        Note that this method is NOT called if a bank is being emitted via a bank sysex message. */
+    public Object[] startingBatchEmit(int bank, int start, int end, boolean toFile) { return new Object[0]; }
 
     /** Called after a series of patches are being emitted from the librarian 
-    	(as opposed to a single patch from the Editor).  This might give your editor
-    	a chance to add something to the beginning of the data.  For
-    	example, the ASM Hydrasynth requires that a header sysex command be
-    	sent before a stream of batch dumps.  You can determine if 
-    	a series of patches is being emitted during emit() by calling isEmittingBatch(). 
-    	Note that this method is NOT called if a bank is being emitted via a bank sysex message. */
-	public Object[] stoppingBatchEmit(int bank, int start, int end, boolean toFile) { return new Object[0]; }
+        (as opposed to a single patch from the Editor).  This might give your editor
+        a chance to add something to the beginning of the data.  For
+        example, the ASM Hydrasynth requires that a header sysex command be
+        sent before a stream of batch dumps.  You can determine if 
+        a series of patches is being emitted during emit() by calling isEmittingBatch(). 
+        Note that this method is NOT called if a bank is being emitted via a bank sysex message. */
+    public Object[] stoppingBatchEmit(int bank, int start, int end, boolean toFile) { return new Object[0]; }
 
     /** Returns true if the librarian is currently engagedin emitting
-    	a series of patches.  Note that this method returns FALSE if a bank 
-    	is being emitted via a bank sysex message.  */
-	public boolean isEmittingBatch() 
-		{ 
-		if (librarian == null) return false;
-		Library library = librarian.getLibrary();
-		if (library == null) return false;
-		else return library.emittingBatch;
-	 	}
+        a series of patches.  Note that this method returns FALSE if a bank 
+        is being emitted via a bank sysex message.  */
+    public boolean isEmittingBatch() 
+        { 
+        if (librarian == null) return false;
+        Library library = librarian.getLibrary();
+        if (library == null) return false;
+        else return library.emittingBatch;
+        }
 
     void startBatchDownload()
         {
@@ -10123,11 +10123,11 @@ public abstract class Synth extends JComponent implements Updatable
     public void fix(String key, Model model) { }
     
     /** This is potentially called by mutation mechanisms to deterine whether the model should
-    	be permitted to set the given key to the given value.  This is used to restrict mutation */
+        be permitted to set the given key to the given value.  This is used to restrict mutation */
     public int reviseMutatedValue(String key, int oldValue, int proposedValue,  Model model) { return proposedValue; }
     
     /** This is potentially called by mutation mechanisms to deterine whether the model should
-    	be permitted to set the given key to the given value.  This is used to restrict mutation */
+        be permitted to set the given key to the given value.  This is used to restrict mutation */
     public String reviseMutatedValue(String key, String oldValue, String proposedValue, Model model) { return proposedValue; }
     
     /** This is called when we receive a *single* patch without a number or bank and we need to know
@@ -10141,16 +10141,16 @@ public abstract class Synth extends JComponent implements Updatable
     
     /** Issues a one-time warning with the given preferences key. */
     public void doOneTimeWarning(String key, String title, String message)
-    	{
+        {
         String str = getLastX(key, getSynthClassName(), true);
         if (str == null || !str.equalsIgnoreCase("true"))
-        	{
+            {
             showSimpleMessage(title, message + "\n\nThis message will appear only once."); 
             didOneTimeWarning(key);
-        	setLastX("true", key, getSynthClassName(), true);
-        	}
-    	}
-    	
+            setLastX("true", key, getSynthClassName(), true);
+            }
+        }
+        
     /** Informs the synth that a one-time warning was issued.. */
-	public void didOneTimeWarning(String key)  { }
+    public void didOneTimeWarning(String key)  { }
     }

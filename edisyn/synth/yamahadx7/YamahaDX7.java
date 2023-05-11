@@ -237,48 +237,48 @@ public class YamahaDX7 extends Synth implements ProvidesNN
         /*
         // Dump Parameters
         for(int i = 0; i < allParameters.length; i++)
-        	{
-        	if (allParameters[i].startsWith("name")) continue;
-        	System.err.print(allParameters[i]);
-        	if (allParameters[i].equals("transpose")) System.err.println();
-        	else System.err.print(", ");
-        	}
+        {
+        if (allParameters[i].startsWith("name")) continue;
+        System.err.print(allParameters[i]);
+        if (allParameters[i].equals("transpose")) System.err.println();
+        else System.err.print(", ");
+        }
 
         for(int i = 0; i < allParameters.length; i++)
-        	{
-        	if (allParameters[i].startsWith("name")) continue;
-        	System.err.print(model.getMin(allParameters[i]));
-        	if (allParameters[i].equals("transpose")) System.err.println();
-        	else System.err.print(", ");
-        	}
+        {
+        if (allParameters[i].startsWith("name")) continue;
+        System.err.print(model.getMin(allParameters[i]));
+        if (allParameters[i].equals("transpose")) System.err.println();
+        else System.err.print(", ");
+        }
 
         for(int i = 0; i < allParameters.length; i++)
-        	{
-        	if (allParameters[i].startsWith("name")) continue;
-        	System.err.print(model.getMax(allParameters[i]));
-        	if (allParameters[i].equals("transpose")) System.err.println();
-        	else System.err.print(", ");
-        	}
+        {
+        if (allParameters[i].startsWith("name")) continue;
+        System.err.print(model.getMax(allParameters[i]));
+        if (allParameters[i].equals("transpose")) System.err.println();
+        else System.err.print(", ");
+        }
 
         for(int i = 0; i < allParameters.length; i++)
-        	{
-        	if (allParameters[i].startsWith("name")) continue;
-        	if (model.hasMetricMin(allParameters[i]))
-        	System.err.print(model.getMetricMin(allParameters[i]));
-        	else System.err.print(-1);
-        	if (allParameters[i].equals("transpose")) System.err.println();
-        	else System.err.print(", ");
-        	}
+        {
+        if (allParameters[i].startsWith("name")) continue;
+        if (model.hasMetricMin(allParameters[i]))
+        System.err.print(model.getMetricMin(allParameters[i]));
+        else System.err.print(-1);
+        if (allParameters[i].equals("transpose")) System.err.println();
+        else System.err.print(", ");
+        }
 
         for(int i = 0; i < allParameters.length; i++)
-        	{
-        	if (allParameters[i].startsWith("name")) continue;
-        	if (model.hasMetricMax(allParameters[i]))
-        	System.err.print(model.getMetricMax(allParameters[i]));
-        	else System.err.print(-1);
-        	if (allParameters[i].equals("transpose")) System.err.println();
-        	else System.err.print(", ");
-        	}
+        {
+        if (allParameters[i].startsWith("name")) continue;
+        if (model.hasMetricMax(allParameters[i]))
+        System.err.print(model.getMetricMax(allParameters[i]));
+        else System.err.print(-1);
+        if (allParameters[i].equals("transpose")) System.err.println();
+        else System.err.print(", ");
+        }
         */
         }
                 

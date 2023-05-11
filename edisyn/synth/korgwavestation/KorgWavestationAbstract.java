@@ -21,15 +21,15 @@ public abstract class KorgWavestationAbstract extends Synth
     public static final int[] MIDI_PROG_CHANGE_OFFSETS = new int[] { 0, 50, 0, 50, 0, 50, 0, 50, 0, 50, 0, 50 };
         
     public static final String[] FX = new String[] { "Off", "Small Hall", "Medium Hall", "Large Hall", "Small Room", "Large Room", "Live Stage", "Wet Plate", "Dry Plate", "Spring Reverb", 
-                                                     "Early Reflections 1", "Early Reflections 2", "Early Reflections 3", "Gated Reverb", "Reverse Gate", "Stereo Delay", "Ping-Pong Delay", "Dual Mono Delay", 
-                                                     "Multi-Tap Delay 1", "Multi-Tap Delay 2", "Multi-Tap Delay 3",
-                                                     "Stereo Chorus", "Quadrature Chorus", "Crossover Chorus", "Harmonic Chorus", "Stereo Flanger 1", "Stereo Flanger 2", "Crossover Flanger", 
-                                                     "Enhancer/Exciter", "Distortion-Filter", "Overdrive-Filter", "Stereo Phaser 1", "Stereo Phaser 2",
-                                                     "Rotary Speaker", "Stereo Mod-Pan", "Quadrature Mod-Pan",
-                                                     "Stereo Parametric EQ", "Chorus-Stereo Delay", "Flanger-Stereo Delay", "Dual Mono Delay/Hall Reverb", "Dual Mono Delay/Room Reverb", "Dual Mono Delay/Chorus",
-                                                     "Dual Mono Delay/Flanger", "Dual Mono Delay/Distortion",  "Dual Mono Delay/Overdrive", "Dual Mono Delay/Phaser", "Dual Mono Delay/Rotary Speaker",
-                                                     "Stereo Pitch Shifter", "Modulatable Pitch Shifter-Delay", "Stereo Compressor-Limiter/Gate", "Small Vocoder 1", "Small Vocoder 2",
-                                                     "Small Vocoder 3", "Small Vocoder 4", "Stereo Vocoder 1", "Stereo Vocoder 2" };
+        "Early Reflections 1", "Early Reflections 2", "Early Reflections 3", "Gated Reverb", "Reverse Gate", "Stereo Delay", "Ping-Pong Delay", "Dual Mono Delay", 
+        "Multi-Tap Delay 1", "Multi-Tap Delay 2", "Multi-Tap Delay 3",
+        "Stereo Chorus", "Quadrature Chorus", "Crossover Chorus", "Harmonic Chorus", "Stereo Flanger 1", "Stereo Flanger 2", "Crossover Flanger", 
+        "Enhancer/Exciter", "Distortion-Filter", "Overdrive-Filter", "Stereo Phaser 1", "Stereo Phaser 2",
+        "Rotary Speaker", "Stereo Mod-Pan", "Quadrature Mod-Pan",
+        "Stereo Parametric EQ", "Chorus-Stereo Delay", "Flanger-Stereo Delay", "Dual Mono Delay/Hall Reverb", "Dual Mono Delay/Room Reverb", "Dual Mono Delay/Chorus",
+        "Dual Mono Delay/Flanger", "Dual Mono Delay/Distortion",  "Dual Mono Delay/Overdrive", "Dual Mono Delay/Phaser", "Dual Mono Delay/Rotary Speaker",
+        "Stereo Pitch Shifter", "Modulatable Pitch Shifter-Delay", "Stereo Compressor-Limiter/Gate", "Small Vocoder 1", "Small Vocoder 2",
+        "Small Vocoder 3", "Small Vocoder 4", "Stereo Vocoder 1", "Stereo Vocoder 2" };
 
     public static final String[][] PERFORMANCES = new String[][]
     {

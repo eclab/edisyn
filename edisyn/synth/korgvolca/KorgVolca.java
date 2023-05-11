@@ -44,9 +44,9 @@ public class KorgVolca extends Synth
     public static final int NUM_EDITABLE_VOLCAS = TYPE_VOLCA_MODULAR;
 
     public static final String[] VOLCAS = { "Bass", "Beats", "Drum (Single)", "Drum (Split)", "FM", "Keys", "Kick", "NuBass", "Sample/Sample2 (Multi)", // "Sample (Pajen Ch 11)", 
-                                            "Sample2 (Single)" };
+        "Sample2 (Single)" };
     public static final String[] PREFIXES = { "bass", "beats", "drumsingle", "drumsplit", "fm", "keys", "kick", "nubass", "sample1", // "samplepajen", 
-                                              "sample2" };
+        "sample2" };
         
     // Minimum value corresponding to octaves 1-6
     public static final int[] BASS_OCTAVES = { 00, 22, 44, 66, 88, 110 };

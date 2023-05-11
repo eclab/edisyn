@@ -2800,35 +2800,35 @@ public class AudiothingiesMicroMonsta extends Synth
 
      Second -- the bug -- the NRPN spec allows you to send the MSB and LSB in either order
      and to emit either one of them (it should be then intepreted initially as zero, and
-     thereafter as its previous value until the parameter number is resent, at which time
-     it should be interpreted as zero again).
+         thereafter as its previous value until the parameter number is resent, at which time
+         it should be interpreted as zero again).
 
-     However the MicroMonsta's parsing varies depending on the order in which you send 
-     the LSB and MSB.  
+         However the MicroMonsta's parsing varies depending on the order in which you send 
+         the LSB and MSB.  
 
-     - If you omit the LSB, the MicroMonsta will assume the parameter value is the MSB.
+         - If you omit the LSB, the MicroMonsta will assume the parameter value is the MSB.
 
-     - If you send the LSB *before* the MSB, it will be ignored regardless of its value
-     and the MicroMonsta will again assume the parameter value is the MSB.
+         - If you send the LSB *before* the MSB, it will be ignored regardless of its value
+         and the MicroMonsta will again assume the parameter value is the MSB.
 
-     - If you send the LSB *after* the MSB, the MicroMonsta will assume that the
-     parameter value is MSB * 128 + LSB.
+         - If you send the LSB *after* the MSB, the MicroMonsta will assume that the
+         parameter value is MSB * 128 + LSB.
 
-     - The MicroMonsta will emit MSB, then the LSB for ranges >= 128 and will emit MSB 
-     only for ranges < 128.
+         - The MicroMonsta will emit MSB, then the LSB for ranges >= 128 and will emit MSB 
+         only for ranges < 128.
 
-     You'll be fine if you do the following:
+         You'll be fine if you do the following:
 
-     - For ranges < 128, send the value as a single MSB.
+         - For ranges < 128, send the value as a single MSB.
 
-     - For ranges >= 128, send the value as MSB = val % 128 followed by LSB = val / 128.
+         - For ranges >= 128, send the value as MSB = val % 128 followed by LSB = val / 128.
 
-     - If you receive an MSB, wait for the LSB only if the range is >= 128.  
+         - If you receive an MSB, wait for the LSB only if the range is >= 128.  
 
-     - For ranges >= 128, interpret the received value as MSB * 128 + LSB
+         - For ranges >= 128, interpret the received value as MSB * 128 + LSB
 
-     - For ranges < 128, interpret the received value as MSB.
+         - For ranges < 128, interpret the received value as MSB.
 
-     - For CC in all cases, interpret the value as the CC
+         - For CC in all cases, interpret the value as the CC
 
 */

@@ -24,7 +24,7 @@ public class Category extends JComponent implements Gatherable
     {             
     // even with modification for the insets, the text position value seems to be off by a bit
     final static int STRING_WIDTH_COMPENSATION = 10;
-	// In Nimbus on Windows, the font widths are wrong
+    // In Nimbus on Windows, the font widths are wrong
     final static int EXTRA_WINDOWS_COMPENSATION = 15;
 
     Color color;
@@ -363,30 +363,30 @@ public class Category extends JComponent implements Gatherable
         repaint();
         }
 
-	public int MIN_EXTRA_LINE = 20;
-	    
+    public int MIN_EXTRA_LINE = 20;
+            
     public Dimension getMinimumSize() 
-    	{
-    	Dimension d = super.getMinimumSize();
-    	
-    	Graphics2D graphics = (Graphics2D)getGraphics();
-    	if (graphics == null) return d;
-    	
+        {
+        Dimension d = super.getMinimumSize();
+        
+        Graphics2D graphics = (Graphics2D)getGraphics();
+        if (graphics == null) return d;
+        
         if (stringWidth == 0)
             stringWidth = STRING_WIDTH_COMPENSATION + (Style.isWindows() ? EXTRA_WINDOWS_COMPENSATION : 0) + 
-            	graphics.getFontMetrics(Style.CATEGORY_FONT()).stringWidth(name);
+                graphics.getFontMetrics(Style.CATEGORY_FONT()).stringWidth(name);
 
-		d.width = ((int)Math.max(d.width, stringWidth + MIN_EXTRA_LINE));
-		return d;
-    	}
+        d.width = ((int)Math.max(d.width, stringWidth + MIN_EXTRA_LINE));
+        return d;
+        }
     
     public Dimension getPreferredSize() 
-    	{ 
-    	Dimension d = super.getPreferredSize();
-    	Dimension d2 = getMinimumSize();
-		d.width = ((int)Math.max(d.width, d2.width));
-    	return d;
-    	} 
+        { 
+        Dimension d = super.getPreferredSize();
+        Dimension d2 = getMinimumSize();
+        d.width = ((int)Math.max(d.width, d2.width));
+        return d;
+        } 
 
     /** If synth is non-null, then double-clicking on the category will select or deselect all the
         components inside it for mutation purposes. */
@@ -693,12 +693,12 @@ public class Category extends JComponent implements Gatherable
     public void paintComponent(Graphics g)
         {
         Graphics2D graphics = (Graphics2D) g;
-            RenderingHints oldHints = graphics.getRenderingHints();
+        RenderingHints oldHints = graphics.getRenderingHints();
         Style.prepareGraphics(graphics);
  
         if (stringWidth == 0)
             stringWidth = STRING_WIDTH_COMPENSATION + (Style.isWindows() ? EXTRA_WINDOWS_COMPENSATION : 0) + 
-            	graphics.getFontMetrics(Style.CATEGORY_FONT()).stringWidth(name);
+                graphics.getFontMetrics(Style.CATEGORY_FONT()).stringWidth(name);
 
 
         Rectangle rect = getBounds();
@@ -707,6 +707,6 @@ public class Category extends JComponent implements Gatherable
         graphics.setPaint(Style.BACKGROUND_COLOR());
         graphics.fill(rect);
 
-	    graphics.setRenderingHints(oldHints);
+        graphics.setRenderingHints(oldHints);
         }
     }

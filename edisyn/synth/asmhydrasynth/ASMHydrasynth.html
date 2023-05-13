@@ -37,9 +37,9 @@ The Hydrasynth doesn't have a standard procedure for Sending to Current Patch.  
 <p><li><b>Lock All LFO Steps to Notes</b>&nbsp;&nbsp;If you would like to restrict LFO steps to notes only in all cases, you can check this.  This will restrict to notes when you change dials, randomize, morph, hill-climb, blend, nudge, merge, load files, and even receive parameters from the Hydrasynth.  Additionally if the Hydrasynth sends you a new patch, and this is turned on, then the steps will be modified so that they are restricted.  You probably only want to set this temporarily prior to a mutation operation such as randomization, morphing, hill-climbing, nudging, blending, and merging, so you can restrict mutation to just notes: you can then then turn it off again.  You almost certainly don't want it on when you load or save a patch.  For this reason, this option is not retained and is always reset when you create a new patch editor window.
 </ul>
 
-<p><b>Parameters that Can't Be Sent in Real-Time</b><br>
+<p><b>Parameters that are Alow to Send in Real-Time</b><br>
 
-There are a number of parameters that can't be sent via NRPN to the Hydrasynth in real-time.  You can send them via Send to Current Patch however.  They are:
+There are a number of parameters that can't be sent via NRPN to the Hydrasynth in real-time.   These are:
 
 <ul>
 <li>Patch Name, Category, and Color
@@ -50,6 +50,10 @@ There are a number of parameters that can't be sent via NRPN to the Hydrasynth i
 <p><li>Arpeggiator Tempo (though the Hydrasynth will emit this), Clock Lock, Latch, and Step Offset
 <p><li>All Macro Names and Macro Button States
 </ul>
+
+<p>By default Edisyn doesn't try to send these in real-time at all: you can manually send them with <b>Send to Current Patch</b>.  But if you turn on <b>Auto-Sends Patches</b> in the <b>MIDI</b> menu, then Edisyn will send the whole patch automatically exactly one second after you have made your most recent change to these parameters. 
+
+
 
 <p><b>Gotchas and Hydrasynth Bugs to Be Aware of</b><br>
 
@@ -64,6 +68,8 @@ The Hydrasynth has a great many bugs: but Edisyn tries to work around them and h
 <li>Yes, Envelope 2 really doesn't have modifiable a Trigger Source 1.
 
 <p><li>If TempoLck is ON then the Hydrasynth will ignore all Arp Tempo changes made by Edisyn.  You might want to turn that OFF at least for editing.
+
+<p><li>The Hydrasynth handles custom scale notes oddly.  If you create notes in Edisyn that are out of order, and write them to the Hydrasynth, the synth will store them internally as you wrote them, but will sort them before displaying them on-screen for you to modify.  Thus they will appear in different order on the front panel than in Edisyn.
 
 <p><li>In 2.0.0, the Hydrasynth does not emit Voice Vibrato Amount values less than 1.3 via NRPN.  It's a bug.
 

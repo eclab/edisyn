@@ -149,21 +149,21 @@ BYTE    HEX     INFO
 61      3D      
 62      3E      Scale Type 		[0=custom, 1=Chromatic, 2...38=standard, 39-70?=Microtonal]
 63      3F      
-64      40      Scale Note 2  	[1...12, semitones Relative to Sale Key Lock, which is Scale Note 1]
+64      40      UNKNOWN	[often stuff like -100 -1]
 65      41      
-66      42      Scale Note 3
+66      42      Scale Note 2  	[1...12, semitones Relative to Sale Key Lock, which is Scale Note 1]
 67      43      
-68      44      Scale Note 4
+68      44      Scale Note 3
 69      45      
-70      46      Scale Note 5
+70      46      Scale Note 4
 71      47      
-72      48      Scale Note 6
+72      48      Scale Note 5
 73      49      
-74      4A      Scale Note 7
+74      4A      Scale Note 6
 75      4B      
-76      4C      Scale Note 8
+76      4C      Scale Note 7
 77      4D      
-78      4E      UNKNNOWN
+78      4E      Scale Note 8
 79      4F      
 80      50      Osc 1 Mode
 81      51      

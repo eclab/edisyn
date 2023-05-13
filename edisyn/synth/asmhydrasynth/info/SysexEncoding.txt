@@ -378,7 +378,8 @@ the Hydrasynth anything else, including notes.
 		1B 00
 	
 	
-It seems that without the Write Request, the patch isn't written to RAM.
+It seems that without the Write Request, the patch isn't written to Flash.
+Instead it stays in RAM. See SENDING A PATCH TO CURRENT MEMORY below.
 
 
 For example, writing Sawpressive GD to Bank E Patch 128:

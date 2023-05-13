@@ -2282,7 +2282,7 @@ public class ASMHydrasynth extends Synth
                 public String map(int value)
                     {
                     if (value == 0) return "Off";
-                    else return NOTES[(model.get("scalekeylock") + value - 1) % 12];
+                    else return NOTES[(model.get("scalekeylock") + value - 2) % 12];
                     }
                 };
             scaleEditBox.add(comp);
@@ -2601,7 +2601,7 @@ public class ASMHydrasynth extends Synth
                 public String map(int value)
                     {
                     if (value == 0) return "Off";
-                    else return NOTES[(model.get("ribbonscalekeylock") + value - 1) % 12];
+                    else return NOTES[(model.get("ribbonscalekeylock") + value - 2) % 12];
                     }
                 };
             scaleEditBox.add(comp);
@@ -5001,11 +5001,11 @@ public class ASMHydrasynth extends Synth
             (key.startsWith("macro") && (key.endsWith("name"))) || 
             key.equals("name"))
             {
-            return new Object[0];
+            return null;
             }
                         
         int p = p(key);
-        if (p == 0) return new Object[0];
+        if (p == 0) return null;
         
         int v = 0;
         int w = 0;
@@ -5329,7 +5329,7 @@ public class ASMHydrasynth extends Synth
                 // It's one of the 5 parameters
                 int type = (int)(key.charAt(5) - '0');   // as in prefxN...                     // don't need this?
                 if (type != model.get("prefxtype"))     // it's not the right set
-                    return new Object[0];
+                    return null;
                 int param = (int)(key.charAt(11) - '0');  // as in prefxNparamM
                 p = p("prefxparam" + param);
                 }
@@ -5350,7 +5350,7 @@ public class ASMHydrasynth extends Synth
                 // It's one of the 5 parameters
                 int type = (int)(key.charAt(6) - '0');   // as in postfxN...                    // don't need this?
                 if (type != model.get("postfxtype"))    // it's not the right set
-                    return new Object[0];
+                    return null;
                 int param = (int)(key.charAt(12) - '0');  // as in postfxNparamM
                 p = p("postfxparam" + param);
                 }
@@ -5376,7 +5376,7 @@ public class ASMHydrasynth extends Synth
                     // delay/rate sync on and delay/rate sync off in NRPN
                     int type = (int)(key.charAt(3) - '0');   // as in envN...
                     if (model.get("lfo" + type + "bpmsync") == 0) // BPM is off, need to bail
-                        return new Object[0];
+                        return null;
                     }
                 if (subkey.startsWith("delaysyncoff") || subkey.startsWith("fadeinsyncoff"))
                     {
@@ -5386,7 +5386,7 @@ public class ASMHydrasynth extends Synth
                     // but just for good measure...
                     int type = (int)(key.charAt(3) - '0');   // as in envN...
                     if (model.get("lfo" + type + "bpmsync") == 1) // BPM is on, need to bail
-                        return new Object[0];
+                        return null;
                     }
 
 
@@ -5437,7 +5437,7 @@ public class ASMHydrasynth extends Synth
                 // delay sync on and delay sync off in NRPN
                 int type = (int)(key.charAt(3) - '0');   // as in envN...
                 if (model.get("env" + type + "bpmsync") == 1) // BPM is on, need to bail
-                    return new Object[0];
+                    return null;
                 val = val + (0x08 * 128);                       // MSB is 0x08 for some reason
                 }
             else if (subkey.startsWith("delaysyncon"))
@@ -5446,7 +5446,7 @@ public class ASMHydrasynth extends Synth
                 // delay sync on and delay sync off in NRPN
                 int type = (int)(key.charAt(3) - '0');   // as in envN...
                 if (model.get("env" + type + "bpmsync") == 0) // BPM is off, need to bail
-                    return new Object[0];
+                    return null;
                 val = val + (0x18 * 128);                       // MSB is 0x18 for some reason
                 }
             else if (subkey.startsWith("attacksyncoff") ||
@@ -5551,14 +5551,10 @@ public class ASMHydrasynth extends Synth
                 }
             else if (key.equals("arptaptrig"))
                 {
-                //if (!sendArpTapTrig) return new Object[0];              // don't send it
-                //else
-                    {
-                    p = p("arpdivision");
-                    v = 8;
-                    w = val;
-                    val = v * 128 + w;
-                    }
+				p = p("arpdivision");
+				v = 8;
+				w = val;
+				val = v * 128 + w;
                 }
             else if (key.equals("arpphrase"))
                 {
@@ -5716,8 +5712,8 @@ public class ASMHydrasynth extends Synth
     public boolean getSendsParametersAfterLoad() { return false; }
        
        
-    Integer PAUSE_AFTER_CHUNK = null;           //Integer.valueOf(0);
-                     
+    Integer PAUSE_AFTER_CHUNK = null; //Integer.valueOf(500);
+    
     /** The Hydrasynth doesn't have a useful sysex emit mechanism, so we're inventing one here solely for
         the purposes of writing to a file. */
     public Object[] emitAll(Model tempModel, boolean toWorkingMemory, boolean toFile)
@@ -5801,7 +5797,7 @@ public class ASMHydrasynth extends Synth
         get1("scaletype", data, 62);
         for(int i = 2; i < 9; i++)
             {
-            get1("scalenote" + i, data, 66 - 2 + i);
+            get1("scalenote" + i, data, 62 + i * 2);
             }               
 
         // OSCS
@@ -5962,7 +5958,7 @@ public class ASMHydrasynth extends Synth
         get1("ribbonscaletype", data, 452);
         for(int i = 2; i < 9; i++)
             {
-            get1("ribbonscalenote" + i, data, 454 - 2 + i);
+            get1("ribbonscalenote" + i, data, 450 + i * 2);
             }               
 
 
@@ -6246,6 +6242,7 @@ public class ASMHydrasynth extends Synth
         else
             {
             sysex[sysex.length - 2] = (isEmittingBatch() ? null : Encode.encodePayload(new byte[] { (byte)0x14, (byte)0x00 }));          // save request
+			//sysex[sysex.length - 2] = Integer.valueOf(3500);		// yep
             sysex[sysex.length - 1] = (isEmittingBatch() ? null : Encode.encodePayload(new byte[] { (byte)0x1A, (byte)0x00 }));          // footer
             }
                         
@@ -6367,7 +6364,7 @@ public class ASMHydrasynth extends Synth
         
     public int parseSub(byte[] data, boolean fromFile)
         {
-        if (data.length == 191 || data.length == 155)   // hopefully a patch chunk
+        if (data.length == 191 || data.length == 155 || data.length == 187)   // hopefully a patch chunk
             {
             // Send request for next chunk if appropriate
             if (!fromFile)
@@ -6381,7 +6378,7 @@ public class ASMHydrasynth extends Synth
                 }
 
             // double check
-            if (data.length == 191 && incomingPos == 21) // uh oh
+            if ((data.length == 191 || data.length == 187) && incomingPos == 21) // uh oh
                 {
                 if (!fromFile && !isBatchDownloading())
                     {
@@ -6403,7 +6400,7 @@ public class ASMHydrasynth extends Synth
             // Load chunk
             incoming[incomingPos] = data;
 
-            // Process if we have 21 chunks
+            // Process if we have 21 chunks so far
             if (incomingPos == 21)
                 {
                 // Send footer if appropriate
@@ -6418,6 +6415,7 @@ public class ASMHydrasynth extends Synth
                     {
                     // time("Parsing " + incomingPos);
                     byte[] result = Decode.decodePatch(incoming);
+                    //dump(result);
                     if (REVERSE_ENGINEER)
                         {
                         if (firstPatch == null)
@@ -6472,6 +6470,14 @@ public class ASMHydrasynth extends Synth
             {
             if (a[i] != b[i])
                 System.err.println("" + i + " " + StringUtility.toHex(a[i]) + " " + StringUtility.toHex(b[i]) + " (" + a[i] + " " + b[i] + ")");
+            }
+        }
+
+    public void dump(byte[] a)
+        {
+        for(int i = 0; i < a.length; i++)
+            {
+                System.err.println("" + i + " " + StringUtility.toHex(a[i]) +  " (" + a[i] + ") " + (a[i] >= 32 && a[i] < 127 ? (char)a[i] : "")) ;
             }
         }
 
@@ -6570,9 +6576,17 @@ public class ASMHydrasynth extends Synth
                 
         set1("scalekeylock", data, 60);
         set1("scaletype", data, 62);
+        
+        /*
+        for(int i = 60; i < 80; i++)
+        	{
+        	System.err.println("" + i + " " + data[i]);
+        	}
+        */
+        	
         for(int i = 2; i < 9; i++)
             {
-            set1("scalenote" + i, data, 66 - 2 + i);
+            set1("scalenote" + i, data, 62 + i * 2);
             }               
 
         // OSCS
@@ -6733,7 +6747,7 @@ public class ASMHydrasynth extends Synth
         set1("ribbonscaletype", data, 452);
         for(int i = 2; i < 9; i++)
             {
-            set1("ribbonscalenote" + i, data, 454 - 2 + i);
+            set1("ribbonscalenote" + i, data, 450 + i * 2);
             }               
 
         // MISC

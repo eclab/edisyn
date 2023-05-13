@@ -457,3 +457,14 @@ If you update a patch via sysex but do not issue a Write (that is,
 command 14 00), it does not get an asterisk ("*") next to its patch 
 number even though it has been modified in current working memory.
 
+34. [SERIOUS] WINDOWS + JAVA + USB DATA CORRUPTION
+
+When connecting to the ASM Hydrasynth over its USB port from 
+Windows, and using Java (Edisyn runs in Java), the sysex messages 
+sent are corrupted in some cases and lost in others.  It is not 
+yet clear if this is an ASM bug or a Windows bug.  However, 
+using a good USB MIDI interface (I am using a Tascam US 2x2) 
+works just fine, implying that this may be a Hydrasynth issue.  
+Additionally using Linux or MacOS works flawlessly connected 
+over USB to the Hydrasynth or over 5-pin DIN.
+

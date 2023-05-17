@@ -2099,7 +2099,7 @@ public abstract class Synth extends JComponent implements Updatable
         {
         if (midiDebug)
             {
-            System.err.println("MIDI " + (message == null ? "NULL" : Midi.format(message)));
+            System.err.println("MIDI DEBUG: MIDI " + (message == null ? "NULL" : Midi.format(message)));
             }
                 
         if (message == null) 
@@ -2125,7 +2125,7 @@ public abstract class Synth extends JComponent implements Updatable
                 try
                     {
                     long time = getMicrosecondPosition(tuple);
-        			if (midiDebug) System.err.println("Sent at " + time);
+        			if (midiDebug) System.err.println("MIDI DEBUG: Sent at " + time);
                     receiver.send(message, time);
                     }
                 catch (IllegalStateException e)
@@ -2215,7 +2215,7 @@ public abstract class Synth extends JComponent implements Updatable
                     if (fragmentSize <= NO_SYSEX_FRAGMENT_SIZE || message.getLength() <= fragmentSize)
                         {
                         long time = getMicrosecondPosition(tuple);
-        			if (midiDebug) System.err.println("Sysex sent at " + time);
+        			if (midiDebug) System.err.println("MIDI DEBUG: Sysex sent at " + time);
                         receiver.send(message, time); 
                         }
                     else
@@ -2225,7 +2225,7 @@ public abstract class Synth extends JComponent implements Updatable
                             {
                             if (i > 0) simplePause(getPauseBetweenSysexFragments());
                         long time = getMicrosecondPosition(tuple);
-        			if (midiDebug) System.err.println("Sysex fragment " + i + " sent at " + time);
+        			if (midiDebug) System.err.println("MIDI DEBUG: Sysex fragment " + i + " sent at " + time);
                             receiver.send(messages[i], time);
                             }
                         }

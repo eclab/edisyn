@@ -257,6 +257,7 @@ public class Style
         }
 
     // From https://stackoverflow.com/questions/12431148/swing-and-bitmaps-on-retina-displays
+    /*
     public static boolean isRetinaDisplay() 
         {
         GraphicsDevice graphicsDevice = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice();
@@ -266,11 +267,15 @@ public class Style
                 {
                 field.setAccessible(true);
                 Object scale = field.get(graphicsDevice);
-                if(scale instanceof Integer && ((Integer) scale).intValue() == 2) return true;
+                if(scale instanceof Integer && ((Integer) scale).intValue() == 2) 
+                	{
+                	return true;
+                	}
                 }
             } 
-        catch (Exception e) { }         // Synth.handleException(e); }
+        catch (Exception e) { System.err.println("Couldn't get Retina Display information\n" + e); }
         return false;
         }
+    */
 
     }

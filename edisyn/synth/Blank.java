@@ -831,7 +831,7 @@ public class Blank extends Synth
         return super.sprout();
         }
         
-    public void didOneTimeWarning(String key)
+    public void showedOneTimeWarning(String key)
         {
         // If you call doOneTimeWarning(...) to issue a one-time-only warning to the musician,
         // after the warning is issued, this is called once so you can (for example, see

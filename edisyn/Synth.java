@@ -123,6 +123,8 @@ public abstract class Synth extends JComponent implements Updatable
     public JCheckBoxMenuItem launchMenu;
     /** The "Morph/Hill-Climb Send Test Notes" menu */
     public JCheckBoxMenuItem morphTestNotesMenu;
+    /** The "High Resolution Display" menu */
+    public JCheckBoxMenuItem highResolutionDisplayMenu;
     /** The "Blend" menu */
     public JMenu blend;
     /** NN randomization checkbox, only appears if the Synth providesNN (such as a DX7) */
@@ -130,6 +132,7 @@ public abstract class Synth extends JComponent implements Updatable
     public JMenu librarianMenu;
     boolean sprouted = false;
     JMenuItem mixAgainMenu = null;
+    boolean highResolutionDisplay = true;
 
     /// Librarian menus that may not be turned on
     JMenuItem downloadMenu;
@@ -287,6 +290,7 @@ public abstract class Synth extends JComponent implements Updatable
         clearNotes = getLastXAsBoolean("SwitchingSendsAllSoundsOff", null, true, false);        
         morphTestNotes = getLastXAsBoolean("SendTestNotesMorph", null, true, false);        
         perChannelCCs = ("" + getLastX("PerChannelCC", getSynthClassName(), false)).equalsIgnoreCase("true");                  
+        highResolutionDisplay = getLastXAsBoolean("HighResolutionDisplay", null, true, false);
         }
         
         
@@ -1960,6 +1964,8 @@ public abstract class Synth extends JComponent implements Updatable
                 }
             };
         }    
+    
+    public boolean isHighResolutionDisplay() { return highResolutionDisplay; }
     
     public void messageFromController(MidiMessage message, boolean interceptedForInternalUse, boolean routedToSynth) { return; }
 
@@ -5726,6 +5732,18 @@ super.paint(g);
                 }
             });
 
+        highResolutionDisplayMenu = new JCheckBoxMenuItem("High Resolution Display");
+        menu.add(highResolutionDisplayMenu);
+        highResolutionDisplayMenu.setSelected(highResolutionDisplay);
+        highResolutionDisplayMenu.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                highResolutionDisplay = highResolutionDisplayMenu.isSelected();
+                setLastX("" + highResolutionDisplay, "HighResolutionDisplay", null);
+                }
+            });
+
         menu.addSeparator();
 
         JMenuItem colorMenu = new JMenuItem("Change Color Scheme...");
@@ -5957,6 +5975,7 @@ menubar.add(helpMenu);
         launchMenu.setSelected(getLastXAsBoolean("ShowSynth", null, true, false));
         clearNotesMenu.setSelected(getLastXAsBoolean("SendTestNotesMorph", null, true, false));
         morphTestNotesMenu.setSelected(morphTestNotes);
+		highResolutionDisplayMenu.setSelected(highResolutionDisplay);
         }
             
     void doPerChannelCCs(boolean val)

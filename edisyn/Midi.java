@@ -455,6 +455,12 @@ public class Midi
         public Receiver keyReceiver;
         public Receiver key2Receiver;
         
+        public long getMicrosecondPosition() 
+        	{ 
+        	if (outWrap == null || outWrap.device == null) return -1;  
+        	else return outWrap.device.getMicrosecondPosition(); 
+        	}
+        
         public Tuple() { }
         
         public Tuple(Tuple other, Receiver inReceiver, Receiver keyReceiver, Receiver key2Receiver)

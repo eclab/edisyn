@@ -136,7 +136,7 @@ public class WaldorfMMulti extends Synth
 
     public String getPatchName(Model model) { return model.get("name", "Default Multi"); }
 
-    public static final int MAXIMUM_NAME_LENGTH = 16;
+    public static final int MAXIMUM_NAME_LENGTH = 23;
     public String revisePatchName(String name)
         {
         name = super.revisePatchName(name);  // trim first time

@@ -562,7 +562,7 @@ public class WaldorfM extends Synth
     /** Verify that all the parameters are within valid values, and tweak them if not. */
     public void revise()
         {
-        // Handle Global LFO Rate and ENV Timer Resolution
+        // Handle Global LFO Rate and ENV Timer Resolution, which can be out of whack
         if (model.get("globallforate") < 1 || model.get("globallforate") > 127)
             model.set("globallforate", 1);
                 
@@ -1990,6 +1990,7 @@ public class WaldorfM extends Synth
         }
 
 
+	public int getPauseAfterSendAllParameters() { return 1000; }
 
     //public boolean getSendsAllParametersAsDump() { return false; }
  
@@ -2001,7 +2002,13 @@ public class WaldorfM extends Synth
         byte BB = (byte) (tempModel.get("bank") + 1);           // yep, banks start at 1
         byte NN = (byte) tempModel.get("number");
         byte DO_NOT_SAVE = 0;
+        
         if (toWorkingMemory) { BB = 0; NN = 0; DO_NOT_SAVE = 1;}
+        
+        System.err.println("BB " + BB + " NN " + NN + " DNS " + DO_NOT_SAVE);
+        
+        // Other options include:
+        // BB = 0 NN = 0 DO_NOT_SAVE = 1   *WRITE* to current patch, then reload from flash
 
         byte[] data = new byte[512];
         data[0] = (byte)0xF0;

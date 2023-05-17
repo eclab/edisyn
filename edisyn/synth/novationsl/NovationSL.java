@@ -3678,7 +3678,12 @@ public class NovationSL extends Synth
     public boolean getSupportsDownloads() { return false; }
     public boolean getSupportsPatchWrites() { return true; }
 
-    public boolean librarianTested() { return true; }
+    public void windowCreated()
+        {
+        showOneTimeWarning("Warned", "Windows USB", "The SL series does not play nicely with Windows Java\nwhen connecting over its USB port.\n\nWindows users should use a good USB MIDI interface.");
+        }
+
+	public boolean librarianTested() { return true; }
     }
 
 

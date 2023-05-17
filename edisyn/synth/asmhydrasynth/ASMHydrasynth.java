@@ -4943,12 +4943,12 @@ public class ASMHydrasynth extends Synth
 
     public void windowCreated()
         {
-        setLastX("false", "Warned", getSynthClassName(), true);
-        doOneTimeWarning("Warned", "Read the About Tab", "The Hydrasynth has many eccentricities to be aware of.\nBe certain to fully read the \u2B06 About Tab \u2B06 before use.\n\n"+
-        "Also: Windows Java MIDI data is corrupted when sent to\nthe Hydrasynth over its USB port. It may be a Windows Java\nbug or an ASM bug. Windows users should connect to the\nHydrasynth via a good USB MIDI Interface.");
+        //setLastX("false", "Warned", getSynthClassName(), true);
+        showOneTimeWarning("Warned", "Read the About Tab", "The Hydrasynth has many eccentricities to be aware of.\nBe certain to fully read the \u2B06 About Tab \u2B06 before use.\n\n"+
+        "Also: Windows Java MIDI data is corrupted when sent to\nthe Hydrasynth over its USB port. Windows users should\nconnect to the Hydrasynth via a good USB MIDI interface.");
         }
 
-    public void didOneTimeWarning(String key)
+    public void showedOneTimeWarning(String key)
         {
         setSelectedTabIndex(getIndexOfTabTitle("About"));
         }

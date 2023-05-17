@@ -631,6 +631,11 @@ The Hydrasynth is strange in that it appears to store an entire bank in current
 working memory at a time.  This means that you have to specify which patch you 
 want to update (but not save).
 
+It is BELIEVED that this procedure does not burn Flash (unlike writing a patch).
+The evidence for this is (1) it is far faster than writing and (2) the changes
+to the current memory do not surve power cycling.  However ASM will not verify 
+this publicly.
+
 NOTE 0: Because the patch has been updated in the "whole bank current memory", if
 you do a write later on for some other patch in the same bank, it will write this 
 patch as well. If you do a write in a different bank, it won't write this patch 

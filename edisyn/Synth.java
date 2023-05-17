@@ -1117,12 +1117,6 @@ public abstract class Synth extends JComponent implements Updatable
                     model.set(key, newVal);
                     if (getPrintRevised()) System.err.println("Warning (Synth): Revised " + key + " from " + val + " to " + newVal);             
                     }
-                /*
-                  if (val < model.getMin(key))
-                  { model.set(key, model.getMin(key)); if (getPrintRevised()) System.err.println("Warning (Synth): Revised " + key + " from " + val + " to " + model.get(key));}
-                  if (val > model.getMax(key))
-                  { model.set(key, model.getMax(key)); if (getPrintRevised()) System.err.println("Warning (Synth): Revised " + key + " from " + val + " to " + model.get(key));}
-                */
                 }
             }
         }
@@ -1509,7 +1503,6 @@ public abstract class Synth extends JComponent implements Updatable
         synchronized(timeLock)
             {
             long time = System.currentTimeMillis();
-            //System.err.println("" + (time - lastTime) + "\t" + val);
             lastTime = time;
             }
         }
@@ -1562,11 +1555,9 @@ public abstract class Synth extends JComponent implements Updatable
                                         {
                                         if (merge(data, merging) == PARSE_INCOMPLETE)
                                             {
-                                            //System.err.println("Still Merging");
                                             }
                                         else
                                             {
-                                            //System.err.println("Merging Done?");
                                             setMergeProbability(0.0);
                                             }
                                         }
@@ -2084,7 +2075,14 @@ public abstract class Synth extends JComponent implements Updatable
             }
         }
     
-    boolean midiDebug = false;
+    long getMicrosecondPosition(Midi.Tuple tuple)
+    	{
+    	return -1;
+//    	if (tuple == null) return -1;
+//   	else return tuple.getMicrosecondPosition();
+    	}
+    
+    boolean midiDebug = true;
     
     Object[] midiSendLock = new Object[0];
 
@@ -2120,7 +2118,9 @@ public abstract class Synth extends JComponent implements Updatable
                 {
                 try
                     {
-                    receiver.send(message, -1);
+                    long time = getMicrosecondPosition(tuple);
+        			if (midiDebug) System.err.println("Sent at " + time);
+                    receiver.send(message, time);
                     }
                 catch (IllegalStateException e)
                     {
@@ -2208,7 +2208,9 @@ public abstract class Synth extends JComponent implements Updatable
                     int fragmentSize = getSysexFragmentSize();
                     if (fragmentSize <= NO_SYSEX_FRAGMENT_SIZE || message.getLength() <= fragmentSize)
                         {
-                        receiver.send(message, -1); 
+                        long time = getMicrosecondPosition(tuple);
+        			if (midiDebug) System.err.println("Sysex sent at " + time);
+                        receiver.send(message, time); 
                         }
                     else
                         {
@@ -2216,7 +2218,9 @@ public abstract class Synth extends JComponent implements Updatable
                         for(int i = 0; i < messages.length; i++)
                             {
                             if (i > 0) simplePause(getPauseBetweenSysexFragments());
-                            receiver.send(messages[i], -1);
+                        long time = getMicrosecondPosition(tuple);
+        			if (midiDebug) System.err.println("Sysex fragment " + i + " sent at " + time);
+                            receiver.send(messages[i], time);
                             }
                         }
                     }      
@@ -2626,6 +2630,7 @@ public abstract class Synth extends JComponent implements Updatable
         The scheduling delay is set to sendAllTimerDelay;
     */     
     javax.swing.Timer sendAllParametersTimer = null;
+    int sendAllTimerDelay = 100;
     
     void scheduleSendAllParameters()
         {
@@ -2641,21 +2646,39 @@ public abstract class Synth extends JComponent implements Updatable
         // This is enough to stop us from trying to send parameters when we're sprouted;
         // but it's not enough to stop us from sending parameters when we're initialized.
         // To prevent that, we also check sprouted.
+
+		// Kill the timer if it exists
+		if (sendAllParametersTimer != null)
+			{
+			sendAllParametersTimer.stop();
+			sendAllParametersTimer = null;
+			}
+
         if (!sprouted || !getSendMIDI())
             {
-            // Kill the timer if it exists
-            if (sendAllParametersTimer != null)
-                {
-                sendAllParametersTimer.stop();
-                sendAllParametersTimer = null;
-                }
             return;
             }
-        
-        sendAllParameters();
-        simplePause(getPauseAfterSendAllParameters());
-        }
-        
+    	
+    	if (sendAllTimerDelay == 0)
+    		{
+	        sendAllParameters();
+    	    simplePause(getPauseAfterSendAllParameters());
+    		}
+
+		sendAllParametersTimer = new javax.swing.Timer(sendAllTimerDelay, 
+			new ActionListener()
+				{
+				public void actionPerformed(ActionEvent e)
+					{
+					sendAllParameters();
+					sendAllParametersTimer.stop();
+					sendAllParametersTimer = null;
+					simplePause(getPauseAfterSendAllParameters());
+					}
+				});
+		sendAllParametersTimer.setRepeats(false);
+		sendAllParametersTimer.start();
+		}
         
     //// FIXME This section should be revised, getting rid of the diff stuff, which is never used and is 
     ////       problematic for synths that can't send individual parameters anyway
@@ -6283,7 +6306,7 @@ menubar.add(helpMenu);
     void doAllowAutoSend()
         {
         allowsAutoSend = autoSendPatches.isSelected();
-        setLastX("" + allowsAutoSend, "AllowAutoSend", getSynthClassName(), false);
+        setLastX("" + allowsAutoSend, "AllowAutoSend", getSynthClassName(), true);
         }
         
     boolean sendsAllSoundsOffBetweenNotes;
@@ -8317,7 +8340,6 @@ menubar.add(helpMenu);
                 
         final long time = System.currentTimeMillis();
         
-        //System.err.println("Build timer for " + pause);
         timer[0] = new javax.swing.Timer(pause, new ActionListener()
             {
             public void actionPerformed(ActionEvent e)
@@ -8327,7 +8349,6 @@ menubar.add(helpMenu);
                     long time2 = System.currentTimeMillis();
                     if (time2 > time && time2 - time < 1000)
                         {
-                        //System.err.println("Decorative Pause for " + ((int)(1000L - (time2 - time))));
                         simplePause((int)(1000L - (time2 - time)));             // this is a decorative pause to give the user time to spot the window in case it appears and disappears rapidly
                         }
                         
@@ -8337,7 +8358,6 @@ menubar.add(helpMenu);
                 else
                     {
                     if (!tryToSendSysex(dat[index[0]])) invalid[0] = true;  // we ignore the return value because we'll try 
-                    //System.err.println("Simple Pause for " + pause);
                     simplePause(pause);
                     index[0]++;
                     }
@@ -9591,7 +9611,7 @@ menubar.add(helpMenu);
             Object[] output = emitAll(key, STATUS_UPDATING_ONE_PARAMETER);
             if (output == null)
                 {
-                if (!key.equals("bank") && !key.equals("number") && getAllowsAutoSend())        // never send for bank or number
+                if (!key.equals("bank") && !key.equals("number") && !key.equals("--") && getAllowsAutoSend())        // never send for bank or number
                     {
                     scheduleSendAllParameters();
                     }
@@ -10140,17 +10160,17 @@ menubar.add(helpMenu);
     public void librarianCreated(Librarian librarian) { }
     
     /** Issues a one-time warning with the given preferences key. */
-    public void doOneTimeWarning(String key, String title, String message)
+    public void showOneTimeWarning(String key, String title, String message)
         {
         String str = getLastX(key, getSynthClassName(), true);
         if (str == null || !str.equalsIgnoreCase("true"))
             {
             showSimpleMessage(title, message + "\n\nThis message will appear only once."); 
-            didOneTimeWarning(key);
+            showedOneTimeWarning(key);
             setLastX("true", key, getSynthClassName(), true);
             }
         }
         
     /** Informs the synth that a one-time warning was issued.. */
-    public void didOneTimeWarning(String key)  { }
+    public void showedOneTimeWarning(String key)  { }
     }

@@ -175,7 +175,7 @@ public class EnvelopeDisplay extends JComponent implements Updatable
         }
 
     public AWTEventListener releaseListener = null;
-    
+        
     public EnvelopeDisplay(Synth synth, Color color, String[] xKeys, String[] yKeys, double xConstants[], double yConstants[], double[] angles)
         {
         super();
@@ -658,7 +658,7 @@ public class EnvelopeDisplay extends JComponent implements Updatable
                     mouseToY(marker[i].y + marker[i].height / 2.0), false))
                 graphics.setColor(Style.TEXT_COLOR());
             else
-                graphics.setColor(color);
+                graphics.setColor(getMarkerColor(i, color));
             if (!asLink)
                 graphics.fill(marker[i]);
             }
@@ -722,7 +722,9 @@ public class EnvelopeDisplay extends JComponent implements Updatable
                 graphics.fill(loopStartMarker);
             }
         }
-        
+    
+    public Color getMarkerColor(int marker, Color defaultColor) { return defaultColor; }
+    
     double axis = 0.0;
     public void setAxis(double val) { if (val >= 0.0 && val < 1.0) axis = val; }
     public double getAxis() { return axis; } 

@@ -156,7 +156,7 @@ Edisyn will now build a patch editor for you and display it.  But unless you cho
 \item The USB MIDI Device and MIDI Channel for a {\bf second controller}.  You can use this just like the first controller: you can drive the synthesizer or control Edisyn  from two different controllers at once.
 \end{itemize}
 
-If you are not connected to MIDI, or if you cancel, then Edisyn will inform you that you must continue in {\bf Disconnected Mode}.
+If you are not connected to MIDI, or if you cancel, Edisyn will put you in {\bf Disconnected Mode}.  Also, in {\bf Linux or Windows}, Edisyn can only see USB MIDI Devices that were attached before Edisyn was run.
 
 \paragraph{Future Launches}  The next time you start up Edisyn, it won't show you the Initial Synthesizer Dialog.  Instead, it'll just pop up the last synthesizer editor type you had created.  If you'd prefer to see the Initial Synthesizer Dialog when launching, uncheck {\bf Launch with Last Editor} in the {\bf Options} menu.
 
@@ -216,7 +216,7 @@ You change values in a Dial by clicking on the dial and dragging vertically.  Yo
 
 \item {\bf Pop-Up Choosers} or Combo Boxes (such as ``Wave'', set to ``Sawtooth'').  Ordinarily these work exactly as you expect.  However they have one surprise.  If you select the menu option {\bf Keep Next Popup Open} from the {\bf Options} menu, then the next time you click on a popup-chooser, its menu will stay open even after you have made a selection.  This allows you to try a variety of selections out without having to always reopen the popup menu.  This is particularly useful for large popups, such as for PCM wave samples.  You can get rid of the menu by clicking outside the menu or typing {\it Escape}.  
 
-\item Various {\bf Pictorial Displays}.  Here, changing the ``Algorithm'' dial will modify the Algorithm Display immediately to the right of it.
+\item Various {\bf Pictorial Displays}.  Here, changing the ``Algorithm'' dial will modify the Algorithm Display immediately to the right of it.  These displays can show images in two resolutions depending on whether you have a high-resolution (or ``retina'') display.  By default they use the higher resolution, but if you have a lower resolution display, you can deselect {\bf High Resolution Display} in the {\bf Options} menu, and the next editor will use lower-resolution images (perhaps less blurry).
 
 \begin{figure}[t]
 \begin{center}
@@ -333,7 +333,7 @@ On many but not all synthesizers, if you change widgets in the patch editor, the
 
 If you don't want your synthesizer to update itself in real-time as you change parameters, just uncheck {\bf Sends Real Time Changes} (your selection is stored in Edisyn per-synthesizer, so different synth editors will check or not check this menu option).
 
-Some synthesizers cannot respond to individual parameter changes at all.  You still have a workaround however.  If your synth isn't capable of sending real-time changes, {\it and} you check  {\bf Sends Real Time Changes}, {\it and} you check  {\bf Auto-Sends Patches}, then Edisyn will Send to Current Memory as soon as you make the change or soon thereafter (thus sending the entire patch).  This might work in a pinch for synths like the Korg MicroKorg, but it'll be a bad option for, say, the M-Audio Venom Arpeggiator, where sending a patch takes a long time.  So this is off by default.  Like Sends Real Time Changes, your Auto-Sends Patches preference is stored per-synthesizer.
+Some synthesizers cannot respond to individual parameter changes at all.  You still have a workaround however.  If your synth isn't capable of sending real-time changes, {\it and} you check  {\bf Sends Real Time Changes}, {\it and} you check  {\bf Auto-Sends Patches}, then Edisyn will Send to Current Memory one second after you make the change (thus sending the entire patch).  This might work in a pinch for synths like the Korg MicroKorg, but it'd be a bad option for, say, the M-Audio Venom Arpeggiator, where sending a patch takes a long time.  So this is off by default.  Like Sends Real Time Changes, your Auto-Sends Patches preference is stored per-synthesizer.
 
  You can always manually update your synthesizer by selecting {\bf Send to Current Patch}.
 

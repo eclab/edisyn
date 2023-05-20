@@ -174,6 +174,11 @@ I believe that the following should work:
 
 If you want to use Edisyn in combination with a DAW, see the manual's section on building a MIDI Loopback.
 
+
+#### USB connections to synthesizers
+
+Windows USB MIDI Java is very flaky, unlike MacOS or Linux.  Many devices don't play nicely with it and may not work properly.  If a device doesn't respond, try quitting Edisyn, disconnecting and reconnecting the USB cable, and trying again (no, really).  In other cases, particularly with devices with non-class-compliant USB, you'll be out of luck (the Novation SL's USB may be a problem for example).  Try MacOS, it's bulletproof!
+
 #### Casio CZ, Yamaha FB01 and SY22/35/TG33 editors on Windows
 
 These editors require an unusual quirk of MIDI sysex which is not properly supported by Java under Windows.  I have failed to find a workaround for it, and so these editors may not work properly under Windows.  Notably the CZ editor will definitely not work right.  I'm sorry about that.
@@ -217,6 +222,10 @@ I'm told that Edisyn works if you have installed at least Java 8.  After this:
 
 If you want to use Edisyn in combination with a DAW, see the manual's section on building a MIDI Loopback.
 
+#### USB connections to synthesizers
+
+Some synthesizer devices, such as the Novation SL, have flaky USB which doesn't play nicely with Linux, and you may have problems working with them over their USB ports.  I've had much better success using a dedicated USB interface connected to them over 5-pin DIN [I have a Tascam US2x2].
+
 #### Dealing with High-Resolution Displays in Linux
 
 Java doesn't work properly with high-resolution displays in Linux, even recent default versions (like JDK 11).  On GNOME machines (such as Ubuntu) you can get around this by first setting the GDK_SCALE parameter, such as:
@@ -227,7 +236,8 @@ Java doesn't work properly with high-resolution displays in Linux, even recent d
 ... or you can (for the moment) run Java with internal scaling, such as:
 
     java -Dsun.java2d.uiScale=2.0 -jar edisyn.jar
-
+ 
+(though recent versions of Java are complaining that this is illegal)
 
 #### Problems with Jack
 

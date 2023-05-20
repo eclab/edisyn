@@ -464,6 +464,8 @@ public class Tuning extends Synth
         if (data.length == 274)
             return parseTX81Z(data);
         
+        model.set("number", data[5]);
+        
         char[] n = new char[16];
         for (int i = 0; i < 16; i++) 
             {

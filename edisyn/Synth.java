@@ -598,7 +598,7 @@ public abstract class Synth extends JComponent implements Updatable
                 String[] strs = str.trim().split("\t");
                 if (strs.length < 3) 
                     {
-                    if (firstTime) System.err.println("synth/synths.txt has no synth name or make for certain synths: " + str.trim());
+                    if (firstTime) System.out.println("synth/synths.txt has no synth name or make for certain synths: " + str.trim());
                     firstTime = false;
                     continue;
                     }
@@ -1119,7 +1119,7 @@ public abstract class Synth extends JComponent implements Updatable
                     // So we now shift back to [min...top), that is, [min...max]
                     newVal += min;
                     model.set(key, newVal);
-                    if (getPrintRevised()) System.err.println("Warning (Synth): Revised " + key + " from " + val + " to " + newVal);             
+                    if (getPrintRevised()) System.out.println("Warning (Synth): Revised " + key + " from " + val + " to " + newVal);             
                     }
                 }
             }
@@ -1228,7 +1228,7 @@ public abstract class Synth extends JComponent implements Updatable
             int v_lsb = (value & 127);
             if (v_msb > 127) 
                 {
-                System.err.println("Synth.java NRPN(int, int, int) ERROR.  Problem with value " + value + " at parameter " + parameter);
+                System.out.println("Synth.java NRPN(int, int, int) ERROR.  Problem with value " + value + " at parameter " + parameter);
                 }
         
             return new Object[]
@@ -1262,7 +1262,7 @@ public abstract class Synth extends JComponent implements Updatable
             int v_msb = value;
             if (v_msb > 127) 
                 {
-                System.err.println("Synth.java NRPN(int, int, int) ERROR.  Problem with value " + value + " at parameter " + parameter);
+                System.out.println("Synth.java NRPN(int, int, int) ERROR.  Problem with value " + value + " at parameter " + parameter);
                 }
         
             return new Object[]
@@ -1507,6 +1507,7 @@ public abstract class Synth extends JComponent implements Updatable
         synchronized(timeLock)
             {
             long time = System.currentTimeMillis();
+            System.out.println("TIME " + val + " " + time + "(+" + (time - lastTime) + ")");
             lastTime = time;
             }
         }
@@ -1522,7 +1523,14 @@ public abstract class Synth extends JComponent implements Updatable
                 }
                                 
             public void send(final MidiMessage message, final long timeStamp)
-                {
+                {                	
+                if (message instanceof ShortMessage)
+                	{
+                	if (((ShortMessage)message).getStatus() == ShortMessage.TIMING_CLOCK ||
+                		((ShortMessage)message).getStatus() == ShortMessage.ACTIVE_SENSING) 
+                		return; // ignore
+                	}
+                	
                 if (!receiveMIDI)
                     {
                     if (bufferNonReceivedMIDI)
@@ -1535,7 +1543,6 @@ public abstract class Synth extends JComponent implements Updatable
                     return;
                     }
 
-                // time("Received " + message);
                 if (tuple != null) processBufferedMessages(tuple.inReceiver, inBuffer);
 
                 // I'm doing this in the Swing event thread because I figure it's multithreaded
@@ -1582,7 +1589,7 @@ public abstract class Synth extends JComponent implements Updatable
                                             }
                                         catch (Exception ex)
                                             {
-                                            //System.err.println("The exception is " + ex);
+                                            //System.out.println("The exception is " + ex);
                                             Synth.handleException(ex);
                                             // result is now PARSE_ERROR
                                             }
@@ -1705,7 +1712,7 @@ public abstract class Synth extends JComponent implements Updatable
                             {
                             showSimpleMessage("Incoming MIDI from Synthesizer", "A MIDI message has arrived from the Synthesizer:\n" + Midi.format(message) + "\nTime: " + timeStamp); 
                             
-                            System.err.println(StringUtility.toHex(message.getMessage()));
+                            System.out.println(StringUtility.toHex(message.getMessage()));
                             testIncomingSynthMIDI = false; 
                             testIncomingSynth.setText("Report Next Synth MIDI");
                             } 
@@ -2041,7 +2048,7 @@ public abstract class Synth extends JComponent implements Updatable
         {
         if (tempModel == null) // uh oh
             {
-            System.err.println("Synth.performChangePatch() WARNING: No tempModel provided, so couldn't change patch.  This is likely a bug."); 
+            System.out.println("Synth.performChangePatch() WARNING: No tempModel provided, so couldn't change patch.  This is likely a bug."); 
             return;
             }
                 
@@ -2088,7 +2095,7 @@ public abstract class Synth extends JComponent implements Updatable
 //   	else return tuple.getMicrosecondPosition();
     	}
     
-    boolean midiDebug = true;
+    boolean midiDebug = false;
     
     Object[] midiSendLock = new Object[0];
 
@@ -2099,19 +2106,29 @@ public abstract class Synth extends JComponent implements Updatable
         {
         if (midiDebug)
             {
-            System.err.println("MIDI DEBUG: MIDI " + (message == null ? "NULL" : Midi.format(message)));
+            System.out.println("MIDI DEBUG: MIDI " + (message == null ? "NULL" : Midi.format(message)));
             }
                 
         if (message == null) 
-            { return false; }
+            {         	
+return false; 
+}
         else if (!amActiveSynth())
-            { return false; }
+            {         	
+return false; 
+}
         else if (getSendMIDI())
             {
-            if (tuple == null) return false;
+            if (tuple == null) 
+            	{
+           	return false;
+            	}
             
             Receiver receiver = tuple.outReceiver;
-            if (receiver == null) return false;
+            if (receiver == null) 
+            	{
+            	return false;
+            	}
             
             // compute pause
             try { if (!noMIDIPause) midiPause(getNanoPauseBetweenMIDISends()); }
@@ -2125,7 +2142,7 @@ public abstract class Synth extends JComponent implements Updatable
                 try
                     {
                     long time = getMicrosecondPosition(tuple);
-        			if (midiDebug) System.err.println("MIDI DEBUG: Sent at " + time);
+        			if (midiDebug) System.out.println("MIDI DEBUG: Sent at " + time);
                     receiver.send(message, time);
                     }
                 catch (IllegalStateException e)
@@ -2144,7 +2161,9 @@ public abstract class Synth extends JComponent implements Updatable
             return true;
             }
         else
+        	{
             return false;
+            }
         }
            
     /** If you are sending a sysex message as fragments with pauses in-between them,
@@ -2187,7 +2206,7 @@ public abstract class Synth extends JComponent implements Updatable
                     }
                 else
                     {
-                    System.err.println("Second high byte in sysex found.  Byte is #" + i);
+                    System.out.println("Second high byte in sysex found.  Byte is #" + i);
                     }
                                         
                 // try to fix things
@@ -2215,7 +2234,7 @@ public abstract class Synth extends JComponent implements Updatable
                     if (fragmentSize <= NO_SYSEX_FRAGMENT_SIZE || message.getLength() <= fragmentSize)
                         {
                         long time = getMicrosecondPosition(tuple);
-        			if (midiDebug) System.err.println("MIDI DEBUG: Sysex sent at " + time);
+        			if (midiDebug) System.out.println("MIDI DEBUG: Sysex sent at " + time);
                         receiver.send(message, time); 
                         }
                     else
@@ -2225,7 +2244,7 @@ public abstract class Synth extends JComponent implements Updatable
                             {
                             if (i > 0) simplePause(getPauseBetweenSysexFragments());
                         long time = getMicrosecondPosition(tuple);
-        			if (midiDebug) System.err.println("MIDI DEBUG: Sysex fragment " + i + " sent at " + time);
+        			if (midiDebug) System.out.println("MIDI DEBUG: Sysex fragment " + i + " sent at " + time);
                             receiver.send(messages[i], time);
                             }
                         }
@@ -2277,6 +2296,7 @@ public abstract class Synth extends JComponent implements Updatable
                 }
             else if (data[i] instanceof Integer)
                 {
+                if (midiDebug) System.out.println("MIDI DEBUG: Pausing for " + data[i]);
                 simplePause(((Integer)data[i]).intValue());
                 continue;
                 }
@@ -2728,7 +2748,7 @@ public abstract class Synth extends JComponent implements Updatable
 
         if (getSendsAllParametersAsDump())
             {
-            boolean sent = tryToSendMIDI(emitAll(getModel(), true, false));
+            boolean sent = tryToSendMIDI(emitAll(getModel(), true, false));            
             if (sent)
                 simplePause(getPauseAfterSendAllParameters());
             }
@@ -2838,7 +2858,7 @@ public abstract class Synth extends JComponent implements Updatable
         Class recognizer = getRecognizer(synthClassName);
         if (recognizer == null) 
             { 
-            System.err.println("Synth.recognize() WARNING: No recognizer for " + synthClassName); 
+            System.out.println("Synth.recognize() WARNING: No recognizer for " + synthClassName); 
             return false;
             }
 
@@ -2850,7 +2870,7 @@ public abstract class Synth extends JComponent implements Updatable
             }
         catch (Exception e)
             {
-            System.err.println("Synth.recognize(Class, byte[]) ERROR.  Could not obtain or invoke method for " + synthClassName); 
+            System.out.println("Synth.recognize(Class, byte[]) ERROR.  Could not obtain or invoke method for " + synthClassName); 
             Synth.handleException(e);
             return false;
             }
@@ -2880,7 +2900,7 @@ public abstract class Synth extends JComponent implements Updatable
         Class recognizer = getRecognizer(synthClassName);
         if (recognizer == null) 
             { 
-            System.err.println("Synth.recognizeBank() WARNING: No recognizer for " + synthClassName); 
+            System.out.println("Synth.recognizeBank() WARNING: No recognizer for " + synthClassName); 
             return false;
             }
 
@@ -2920,7 +2940,7 @@ public abstract class Synth extends JComponent implements Updatable
         Class recognizer = getRecognizer(synthClassName);
         if (recognizer == null) 
             { 
-            System.err.println("Synth.getNextSysexPatchGroup() WARNING: No recognizer for " + synthClassName); 
+            System.out.println("Synth.getNextSysexPatchGroup() WARNING: No recognizer for " + synthClassName); 
             return start;
             }
         try
@@ -2946,7 +2966,7 @@ public abstract class Synth extends JComponent implements Updatable
         Class recognizer = getRecognizer(synthClassName);
         if (recognizer == null) 
             { 
-            System.err.println("Synth.breakSysexMessageIntoPatches() WARNING: No recognizer for " + synthClassName); 
+            System.out.println("Synth.breakSysexMessageIntoPatches() WARNING: No recognizer for " + synthClassName); 
             return new byte[][][] { messages };
             }
         try
@@ -2978,7 +2998,7 @@ public abstract class Synth extends JComponent implements Updatable
         Class recognizer = getRecognizer(synthClassName);
         if (recognizer == null) 
             { 
-            System.err.println("Synth.getBankName() WARNING: No recognizer for " + synthClassName); 
+            System.out.println("Synth.getBankName() WARNING: No recognizer for " + synthClassName); 
             return "--Error--";
             }
 
@@ -3227,7 +3247,7 @@ public abstract class Synth extends JComponent implements Updatable
         {
         if (!ExceptionDump.lastThrowableExists())
             {
-            System.err.println("WARNING: error with stack trace requested but there's no Throwable");
+            System.out.println("WARNING: error with stack trace requested but there's no Throwable");
             Synth.handleException(error == null ? new RuntimeException("" + message) : error);
             showSimpleError(title, message);
             }
@@ -3469,7 +3489,7 @@ public abstract class Synth extends JComponent implements Updatable
             }
         else
             {
-            System.err.println("Warning (Synth): Didn't Parse");
+            System.out.println("Warning (Synth): Didn't Parse");
             }
         }  
 
@@ -3943,7 +3963,7 @@ public abstract class Synth extends JComponent implements Updatable
                 }
             catch (Exception ex)
                 {
-                System.err.println("Error locating HTML file " + html);
+                System.out.println("Error locating HTML file " + html);
                 }
             }
         final JFrame frame = new JFrame();
@@ -9199,7 +9219,7 @@ menubar.add(helpMenu);
                             }
                         else
                             {
-                            System.err.println("Warning (Synth): Download of " + getPatchLocationName(currentPatch) + " failed.  Received unexpected patch " + getPatchLocationName(getModel()));
+                            System.out.println("Warning (Synth): Download of " + getPatchLocationName(currentPatch) + " failed.  Received unexpected patch " + getPatchLocationName(getModel()));
                             batchDownloadFailureCountdown = getBatchDownloadFailureCountdown();
                             if (batchDownloadFailureGlobalCountdown-- <= 0)
                                 {
@@ -9221,14 +9241,14 @@ menubar.add(helpMenu);
                                 stopBatchDownload();
                                 showSimpleError("Batch Download Failed", "Stopping batch download after failing " + BATCH_DOWNLOAD_FAILURE_GLOBAL_COUNTDOWN + " times to download patch\n" + getPatchLocationName(currentPatch) + "\nNo response from the synthesizer." );
                                 }
-                            System.err.println("Warning (Synth): Download of " + getPatchLocationName(currentPatch) + " failed.  Requesting again.");
+                            System.out.println("Warning (Synth): Download of " + getPatchLocationName(currentPatch) + " failed.  Requesting again.");
                             resetBlend();
                             setMergeProbability(0.0);
                             performRequestDump(currentPatch, false);
                             }
                         else
                             {
-                            System.err.println("Warning (Synth): Download of " + getPatchLocationName(currentPatch) + " is tardy.  Waiting: " + (batchDownloadFailureCountdown + 1));
+                            System.out.println("Warning (Synth): Download of " + getPatchLocationName(currentPatch) + " is tardy.  Waiting: " + (batchDownloadFailureCountdown + 1));
                             }
                         }
                     }
@@ -9962,10 +9982,10 @@ menubar.add(helpMenu);
     
     public static void printSysex(byte[] data)
         {
-        System.err.print(Midi.getManufacturerForSysex(data) + " " + data.length + ":  ");
+        System.out.print(Midi.getManufacturerForSysex(data) + " " + data.length + ":  ");
         for(int i = 0; i < data.length; i++)
-            System.err.print(" " + StringUtility.toHex(data[i]));
-        System.err.println();
+            System.out.print(" " + StringUtility.toHex(data[i]));
+        System.out.println();
         }   
         
     // Makes a disabled version of the menu bar; this is used only internally for Mac code

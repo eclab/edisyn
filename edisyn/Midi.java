@@ -102,11 +102,25 @@ public class Midi
             { 
             String desc = device.getDeviceInfo().getDescription().trim();
             String name = device.getDeviceInfo().getName();
+            
+            
+            // System.err.println("Description: " + desc);
+            // System.err.println("Name: " + name);
+            
             if (name == null) 
                 name = "";
             if (desc == null || desc.equals("")) 
                 desc = "MIDI Device";
-            
+                
+            if (Style.isUnix())	// Linux names don't permit spaces, so we need the description instead, which is of the form A, B, A
+            	{
+            	String[] descs = desc.split(",");
+            	String[] names = name.split(" ");
+            	String d = (descs.length > 1 ? descs[0] : desc);
+            	String n = (names.length > 1 ? names[1] : "(" + names + ")");
+            	name = d + " " + n;
+            	}
+            	
             // All CoreMIDI4J names begin with "CoreMIDI4J - "
             if (name.startsWith("CoreMIDI4J - "))
                 name = name.substring(13).trim();
@@ -146,7 +160,7 @@ public class Midi
                 catch(Exception e) { Synth.handleException(e); return false; }
                 }
             
-            //System.err.println("Adding " + receiver + " to " + in);
+            //System.out.println("Adding " + receiver + " to " + in);
             in.addReceiver(receiver);
             return true;
             }
@@ -169,7 +183,7 @@ public class Midi
                 catch(Exception e) { Synth.handleException(e); return false; }
                 }
             
-            //System.err.println("Removing " + receiver + " from " + in);
+            //System.out.println("Removing " + receiver + " from " + in);
             in.removeReceiver(receiver);
             return true;
             }
@@ -289,7 +303,7 @@ public class Midi
                 }
             catch (Throwable ex)
                 {
-                System.err.println("WARNING (Midi.java): error on obtaining CoreMIDI4J, but we think we're a Mac.  This should never happen.");
+                System.out.println("WARNING (Midi.java): error on obtaining CoreMIDI4J, but we think we're a Mac.  This should never happen.");
                 Synth.handleException(ex);
                 midiDevices = MidiSystem.getMidiDeviceInfo();
                 }
@@ -715,7 +729,7 @@ public class Midi
                         synth.showErrorWithStackTrace("Cannot Connect", "An error occurred while connecting to the Controller 1 MIDI Device.");
                         tuple.keyWrap = null;
                         }
-                    //System.err.println(tuple.keyWrap);
+                    //System.out.println(tuple.keyWrap);
                     }
 
                 if (key2Combo.getSelectedItem() instanceof String)
@@ -1046,7 +1060,7 @@ public class Midi
         public CCData handleNRPN(int channel, int controllerNumber, int _controllerValueLSB, int _controllerValueMSB)
             {
             if (_controllerValueLSB < 0 || _controllerValueMSB < 0)
-                System.err.println("Warning (Midi): " + "LSB or MSB < 0.  RPN: " + controllerNumber + "   LSB: " + _controllerValueLSB + "  MSB: " + _controllerValueMSB);
+                System.out.println("Warning (Midi): " + "LSB or MSB < 0.  RPN: " + controllerNumber + "   LSB: " + _controllerValueLSB + "  MSB: " + _controllerValueMSB);
             return new CCData(CCDATA_TYPE_NRPN, controllerNumber, _controllerValueLSB | (_controllerValueMSB << 7), channel, false);
             }
         
@@ -1058,7 +1072,7 @@ public class Midi
         public CCData handleRPN(int channel, int controllerNumber, int _controllerValueLSB, int _controllerValueMSB)
             {
             if (_controllerValueLSB < 0 || _controllerValueMSB < 0)
-                System.err.println("Warning (Midi): " + "LSB or MSB < 0.  RPN: " + controllerNumber + "   LSB: " + _controllerValueLSB + "  MSB: " + _controllerValueMSB);
+                System.out.println("Warning (Midi): " + "LSB or MSB < 0.  RPN: " + controllerNumber + "   LSB: " + _controllerValueLSB + "  MSB: " + _controllerValueMSB);
             return new CCData(CCDATA_TYPE_RPN, controllerNumber, _controllerValueLSB | (_controllerValueMSB << 7), channel, false);
             }
         
@@ -1267,13 +1281,13 @@ public class Midi
                                 
         if (data[0] == (byte)0xF0)  // it's a new message
             {
-            //System.err.println("0xF0");
+            //System.out.println("0xF0");
             inSysex = new byte[messageLen];
             System.arraycopy(data, 0, inSysex, 0, messageLen);
             }
         else if (data[0] == (byte)0xF7)  // it's a continuation of a message
             {
-            //System.err.println("0xF7");
+            //System.out.println("0xF7");
             if (inSysex == null) // uh...
                 return null;
             byte[] temp = new byte[inSysex.length + messageLen - 1];
@@ -1296,12 +1310,12 @@ public class Midi
         */
         /*
           for(int i = 0; i < inSysex.length; i++)
-          System.err.print(" " + inSysex[i]);
-          System.err.println();
+          System.out.print(" " + inSysex[i]);
+          System.out.println();
         */
         if (inSysex != null && inSysex.length != 0 && inSysex[inSysex.length - 1] == (byte)0xF7)  // completed
             {
-            //System.err.println("0xF7 END");
+            //System.out.println("0xF7 END");
             byte[] temp = inSysex;
             inSysex = null;
             return temp;

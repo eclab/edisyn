@@ -76,7 +76,7 @@ public class Decode
                 ((payloads[i].length != 102 + 4 && payloads[i].length != 101 + 4) && i == 21))
                 throw new RuntimeException("Invalid length for chunk #" + i + " (was " + payloads[i].length + ")\n" + payloads[i].length + "\n" + StringUtility.toHex(payloads[i]));
             if (payloads[i][0] != 0x16 || payloads[i][1] != 0x00 || payloads[i][2] != i || payloads[i][3] != 0x16)
-                throw new RuntimeException("Payload " + i + " did not start with 0x16 0x00 PAYLOADNUM 0x16: " + StringUtility.toHex(payloads[i]));
+                throw new RuntimeException("Payload PAYLOADNUM=" + i + " did not start with 0x16 0x00 PAYLOADNUM 0x16: " + StringUtility.toHex(payloads[i]));
             }
                 
         return buildPatch(payloads);

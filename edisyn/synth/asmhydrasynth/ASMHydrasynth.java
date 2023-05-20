@@ -6219,7 +6219,7 @@ public class ASMHydrasynth extends Synth
         
         byte[][] outgoing = Encode.encodePatch(data);
                 
-        Object[] sysex = new Object[outgoing.length * 2 + 2 + (toWorkingMemory ? 6 : 4)];
+        Object[] sysex = new Object[outgoing.length * 2 + 2 + (toWorkingMemory ? 6 : 3)];
         sysex[0] = (isEmittingBatch() ? null : Encode.encodePayload(new byte[] { (byte)0x18, (byte)0x00 }));         // header
         sysex[1] = (isEmittingBatch() ? null : Encode.encodePayload(new byte[] { (byte)0x18, (byte)0x00 }));         // Java on Windows seems to bork unless we send the header twice.  Not Mac or Linux.
         for(int i = 0; i < outgoing.length; i++)                                                                	// patch chunks
@@ -6242,9 +6242,9 @@ public class ASMHydrasynth extends Synth
         else
             {
             sysex[sysex.length - 1] = (isEmittingBatch() ? null : Encode.encodePayload(new byte[] { (byte)0x14, (byte)0x00 }));          // save request
-            sysex[sysex.length - 2] = Integer.valueOf(PAUSE_AFTER_WRITE_REQUEST);
-            sysex[sysex.length - 3] = (isEmittingBatch() ? null : Encode.encodePayload(new byte[] { (byte)0x1A, (byte)0x00 }));          // footer
-            sysex[sysex.length - 4] = (isEmittingBatch() || !sendExtraHF() ? null : Encode.encodePayload(new byte[] { (byte)0x1A, (byte)0x00 }));          // Java on Windows seems to bork unless we send the footer twice.  Not Mac or Linux.
+            sysex[sysex.length - 2] = (isEmittingBatch() ? null : Encode.encodePayload(new byte[] { (byte)0x1A, (byte)0x00 }));          // footer
+            sysex[sysex.length - 3] = (isEmittingBatch() || !sendExtraHF() ? null : Encode.encodePayload(new byte[] { (byte)0x1A, (byte)0x00 }));          // Java on Windows seems to bork unless we send the footer twice.  Not Mac or Linux.
+			// 3500ms afterwards
             }
                         
         if (REVERSE_ENGINEER)
@@ -7456,6 +7456,8 @@ public class ASMHydrasynth extends Synth
 
     // Change Patch can get stomped if we do a request immediately afterwards
     public int getPauseAfterChangePatch() { return (Style.isWindows() ? 1000 : 150); }
+
+    public int getPauseAfterWritePatch() { return 3500; }	// an unbelievable number
 
     public int getPauseBetweenPatchWrites() { return 100; }
 

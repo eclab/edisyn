@@ -1600,6 +1600,15 @@ public class ASMHydrasynth extends Synth
     /** Verify that all the parameters are within valid values, and tweak them if not. */
     public void revise()
         {
+        if (model.get("arptempo") < 300)	// minimum value is 30.0, but it's often set to 0
+        	model.set("arptempo", 1200);	// set to 120, why not.
+
+        if (model.get("ribbonscalekeylock") == 0)
+        	model.set("ribbonscalekeylock", 1);	// seems reasonable
+        
+        if (model.get("scalekeylock") == 0)
+        	model.set("scalekeylock", 1);	// seems reasonable
+
         if (model.get("lfo1steps") < 2) // set by the Hydrasynth when disabled
             model.set("lfo1steps", 2);
         if (model.get("lfo2steps") < 2) // set by the Hydrasynth when disabled
@@ -2548,7 +2557,7 @@ public class ASMHydrasynth extends Synth
                         knobBox.addLast(Strut.makeVerticalStrut(disp));
                         break;
                     default:
-                        System.err.println("ERROR: (Mutant Mode) bad mutant " + model.get(key));
+                        System.out.println("ERROR: (Mutant Mode) bad mutant " + model.get(key));
                         break;
                     }
                 sourceBox.revalidate();
@@ -4945,7 +4954,7 @@ public class ASMHydrasynth extends Synth
         {
         //setLastX("false", "Warned", getSynthClassName(), true);
         showOneTimeWarning("Warned", "Read the About Tab", "The Hydrasynth has many eccentricities to be aware of.\nBe certain to fully read the \u2B06 About Tab \u2B06 before use.\n\n"+
-        "Also: Windows Java MIDI data is corrupted when sent to\nthe Hydrasynth over its USB port. Windows users should\nconnect to the Hydrasynth via a good USB MIDI interface.");
+        "Particularly note the warnings about Windows and Java MIDI.");
         }
 
     public void showedOneTimeWarning(String key)
@@ -5695,7 +5704,7 @@ public class ASMHydrasynth extends Synth
 
     void get2(String key, byte[] data, int pos)
         {
-//        if (key.startsWith("env")) System.err.println(key + " " + model.get(key));
+//        if (key.startsWith("env")) System.out.println(key + " " + model.get(key));
         int val = model.get(key);
         if (model.getMin(key) < 0)      // signed two's complement
             {
@@ -5713,7 +5722,9 @@ public class ASMHydrasynth extends Synth
     public boolean getSendsParametersAfterLoad() { return false; }
        
        
-    Integer PAUSE_AFTER_CHUNK = null; //Integer.valueOf(500);
+    Integer PAUSE_AFTER_CHUNK = null;		// At present we're not doing any pauses after each chunk.  It seems to be okay
+    
+    int PAUSE_AFTER_WRITE_REQUEST = 3500;	// A huge number
     
     /** The Hydrasynth doesn't have a useful sysex emit mechanism, so we're inventing one here solely for
         the purposes of writing to a file. */
@@ -5722,14 +5733,6 @@ public class ASMHydrasynth extends Synth
         if (tempModel == null)
             tempModel = getModel();
             
-        /*
-          if (toWorkingMemory) // uh oh
-          {
-          System.err.println("emitReal: cannot emit to working memory");
-          return new Object[0][0];
-          }
-        */
-
         byte[] data = new byte[2790];
 
         // Fill in header
@@ -6136,10 +6139,7 @@ public class ASMHydrasynth extends Synth
             {
             for(int j = 0; j < 56; j++)
                 {
-//                System.err.println("lfo" + (i + 1) + "step" + (j + 9) + ": " + model.get(
-//                      "lfo" + (i + 1) + "step" + (j + 9)) + " -> " + (1770 + i * 56 * 2 + j * 2));
                 get2("lfo" + (i + 1) + "step" + (j + 9), data, 1770 + i * 56 * 2 + j * 2);
-//                System.err.println(data[1770 + i * 56 * 2 + j * 2]);
                 }
             }
 
@@ -6152,7 +6152,6 @@ public class ASMHydrasynth extends Synth
                 {
                 data[2340 + i * 10] = 1;
                 data[2340 + i * 10 + 1] = 0;
-//                model.set("env" + (i + 1) + "trigsrc1", 1);
                 }
             else
                 {
@@ -6218,38 +6217,39 @@ public class ASMHydrasynth extends Synth
         data[2398] = (byte) -100;
         data[2399] = (byte) -1;
         
-        
         byte[][] outgoing = Encode.encodePatch(data);
                 
-        Object[] sysex = new Object[outgoing.length * 2 + 1 + (toWorkingMemory ? 6 : 2)];
+        Object[] sysex = new Object[outgoing.length * 2 + 2 + (toWorkingMemory ? 6 : 4)];
         sysex[0] = (isEmittingBatch() ? null : Encode.encodePayload(new byte[] { (byte)0x18, (byte)0x00 }));         // header
-        for(int i = 0; i < outgoing.length; i++)                                                                // patch chunks
+        sysex[1] = (isEmittingBatch() ? null : Encode.encodePayload(new byte[] { (byte)0x18, (byte)0x00 }));         // Java on Windows seems to bork unless we send the header twice.  Not Mac or Linux.
+        for(int i = 0; i < outgoing.length; i++)                                                                	// patch chunks
             {
-            sysex[i * 2 + 1] = outgoing[i];
-            sysex[i * 2 + 2] = PAUSE_AFTER_CHUNK;
+            sysex[i * 2 + 2] = outgoing[i];
+            sysex[i * 2 + 3] = PAUSE_AFTER_CHUNK;
             }
             
         if (toWorkingMemory)
             {
             // Don't do save request
             sysex[sysex.length - 6] = (isEmittingBatch() ? null : Encode.encodePayload(new byte[] { (byte)0x1A, (byte)0x00 }));          // footer
-            sysex[sysex.length - 5] = buildCC(getChannelOut(), 32, 0)[0];                                                                                                                           // Bank Change Away
-            sysex[sysex.length - 4] = buildPC(getChannelOut(), 0)[0];                                                                                                                               // PC Away
-            sysex[sysex.length - 3] = Integer.valueOf(getPauseAfterChangePatch());                                                                                                  // Wait
-            sysex[sysex.length - 2] = buildCC(getChannelOut(), 32, 7)[0];                                                                                                                           // Bank Change Back
-            sysex[sysex.length - 1] = buildPC(getChannelOut(), 127)[0];                                                                                                                             // PC Back
+            sysex[sysex.length - 5] = (isEmittingBatch() || !sendExtraHF() ? null : Encode.encodePayload(new byte[] { (byte)0x1A, (byte)0x00 }));          // Java on Windows seems to bork unless we send the footer twice.  Not Mac or Linux.
+            sysex[sysex.length - 4] = buildCC(getChannelOut(), 32, 7)[0];                                                                // Bank Change
+            sysex[sysex.length - 3] = buildPC(getChannelOut(), 0)[0];                                                                    // PC Away
+            sysex[sysex.length - 2] = Integer.valueOf(getPauseAfterChangePatch());
+            sysex[sysex.length - 1] = buildPC(getChannelOut(), 127)[0];                                                                  // PC Back
             // 200ms afterwards
             }
         else
             {
-            sysex[sysex.length - 2] = (isEmittingBatch() ? null : Encode.encodePayload(new byte[] { (byte)0x14, (byte)0x00 }));          // save request
-			//sysex[sysex.length - 2] = Integer.valueOf(3500);		// yep
-            sysex[sysex.length - 1] = (isEmittingBatch() ? null : Encode.encodePayload(new byte[] { (byte)0x1A, (byte)0x00 }));          // footer
+            sysex[sysex.length - 1] = (isEmittingBatch() ? null : Encode.encodePayload(new byte[] { (byte)0x14, (byte)0x00 }));          // save request
+            sysex[sysex.length - 2] = Integer.valueOf(PAUSE_AFTER_WRITE_REQUEST);
+            sysex[sysex.length - 3] = (isEmittingBatch() ? null : Encode.encodePayload(new byte[] { (byte)0x1A, (byte)0x00 }));          // footer
+            sysex[sysex.length - 4] = (isEmittingBatch() || !sendExtraHF() ? null : Encode.encodePayload(new byte[] { (byte)0x1A, (byte)0x00 }));          // Java on Windows seems to bork unless we send the footer twice.  Not Mac or Linux.
             }
                         
         if (REVERSE_ENGINEER)
             {
-            System.err.println("OUTGOING DIFFERENCES");
+            System.out.println("OUTGOING DIFFERENCES");
             diff(firstPatch, data);
             }
 
@@ -6271,13 +6271,11 @@ public class ASMHydrasynth extends Synth
 
         int NN = tempModel.get("number", 0);
         int BB = tempModel.get("bank", 0);
-                  
+
         if (!isBatchDownloading())  // we already did it
             {
-            // time("Sending Header");
-            tryToSendSysex(Encode.encodePayload(new byte[] { 0x18, 0x00 }));                                                 // header
+            sendHeader();
             }
-        // time("Sending Dump Request");
         tryToSendSysex(Encode.encodePayload(new byte[] { 0x04, 0x00, (byte)BB, (byte)NN }));    // dump request
         /// After negotiation and downloading chunks, parse() will emit the footer
         }
@@ -6287,13 +6285,16 @@ public class ASMHydrasynth extends Synth
         boolean sendMIDI = getSendMIDI();
         setSendMIDI(true);
         tryToSendSysex(Encode.encodePayload(new byte[] { 0x18, 000 }));
+        if (sendExtraHF()) tryToSendSysex(Encode.encodePayload(new byte[] { 0x18, 000 }));		// Java on Windows seems to bork unless we send the header twice.  Not Mac or Linux.
         setSendMIDI(sendMIDI);
         }
+        
     void sendFooter()
         {
         boolean sendMIDI = getSendMIDI();
         setSendMIDI(true);
         tryToSendSysex(Encode.encodePayload(new byte[] { 0x1A, 0x00 }));
+        if (sendExtraHF()) tryToSendSysex(Encode.encodePayload(new byte[] { 0x1A, 0x00 }));		// Java on Windows seems to bork unless we send the footer twice.  Not Mac or Linux.
         setSendMIDI(sendMIDI);
         }
                                 
@@ -6309,22 +6310,48 @@ public class ASMHydrasynth extends Synth
 
     public Object[] startingBatchEmit(int bank, int start, int end, boolean toFile) 
         { 
-        return new Object[]
-            {
-            // Header 
-            Encode.encodePayload(new byte[] { 0x18, 000 })
-            };
+        if (sendExtraHF())
+        	{
+			return new Object[]
+				{
+				// Header 
+				Encode.encodePayload(new byte[] { 0x18, 000 }),
+				Encode.encodePayload(new byte[] { 0x18, 000 })			// Java on Windows seems to bork unless we send the header twice.  Not Mac or Linux.
+				};
+			}
+		else
+			{
+			return new Object[]
+				{
+				// Header 
+				Encode.encodePayload(new byte[] { 0x18, 000 })
+				};
+			}
         }
 
     public Object[] stoppingBatchEmit(int bank, int start, int end, boolean toFile) 
         { 
-        return new Object[]
-            {
-            // Save 
-            Encode.encodePayload(new byte[] { (byte)0x14, (byte)0x00 }) ,
-            // Footer 
-            Encode.encodePayload(new byte[] { 0x1A, 0x00 })
-            };
+        if (sendExtraHF())
+        	{
+			return new Object[]
+				{
+				// Save 
+				Encode.encodePayload(new byte[] { (byte)0x14, (byte)0x00 }) ,
+				// Footer 
+				Encode.encodePayload(new byte[] { 0x1A, 0x00 }),
+				Encode.encodePayload(new byte[] { 0x1A, 0x00 })			// Java on Windows seems to bork unless we send the footer twice.  Not Mac or Linux.
+				};
+			}
+		else
+			{
+			return new Object[]
+				{
+				// Save 
+				Encode.encodePayload(new byte[] { (byte)0x14, (byte)0x00 }) ,
+				// Footer 
+				Encode.encodePayload(new byte[] { 0x1A, 0x00 })
+				};
+			}
         }
                 
 
@@ -6332,14 +6359,30 @@ public class ASMHydrasynth extends Synth
 
     int incomingPos;
     byte[][] incoming = new byte[22][];
+    
+    void printMessage(byte[] data)
+    	{
+    	try
+    		{
+	    	System.out.println("<-- " + StringUtility.toHex(Decode.decodePayload(data)));
+	    	}
+	    catch (Exception ex)
+	    	{
+	    	System.out.println("Exception " + ex + "\nFrom " + StringUtility.toHex(data));
+	    	}
+    	} 
         
     public static final boolean REVERSE_ENGINEER = false;
 
     public int parse(byte[] data, boolean fromFile)
         {
+        // Here we're simply breaking breaking up the data into messages and parsing each one.
+        // We have to be careful to send the footer at the end (the header was sent by performRequestDump)
+        
         byte[][] cut = cutUpSysex(data);
         if (cut.length == 1)
             {
+//        	printMessage(data);
             return parseSub(data, fromFile);
             }
         else
@@ -6362,9 +6405,17 @@ public class ASMHydrasynth extends Synth
             return PARSE_FAILED;
             }
         }
-        
+    
+    boolean sendExtraHF() { return Style.isWindows(); }
+    public static final int MAX_WINDOWS_TRIES = 5;
+    int tryAgainCount = 0;
+    
     public int parseSub(byte[] data, boolean fromFile)
         {
+        // Here we parse a single message and emit the right stuff to keep 
+        // additional messages coming
+
+		// First, do we have a message we're interested in?
         if (data.length == 191 || data.length == 155 || data.length == 187)   // hopefully a patch chunk
             {
             // Send request for next chunk if appropriate
@@ -6372,32 +6423,65 @@ public class ASMHydrasynth extends Synth
                 {
                 boolean sendMIDI = getSendMIDI();
                 setSendMIDI(true);
-                // time("Sending Acknowledgment for " + incomingPos);
+               //  time("Sending Acknowledgment for " + incomingPos);
                 tryToSendSysex(Encode.encodePayload(new byte[] { 0x17, 0x00, (byte)incomingPos, 0x16 }));
-                        
                 setSendMIDI(sendMIDI);
                 }
 
-            // double check
+            // double check -- do we have too many chunks?
             if ((data.length == 191 || data.length == 187) && incomingPos == 21) // uh oh
                 {
                 if (!fromFile && !isBatchDownloading())
                     {
-                    // time("Sending Footer D");
                     sendFooter();
                     }
+                tryAgainCount = 0;
                 return PARSE_FAILED;
                 }
+            // double check -- do we have too few chunks?                
             else if (data.length == 155 && incomingPos != 21) // uh oh
                 {
                 if (!fromFile && !isBatchDownloading())
                     {
-                    // time("Sending Footer C");
                     sendFooter();
                     }
+                tryAgainCount = 0;
                 return PARSE_FAILED;
                 }
 
+			// Is it the right chunk?  
+			byte[] decoded = Decode.decodePayload(data);
+			if (decoded[0] != 0x16 || decoded[1] != 0 || decoded[3] != 0x16) // something's wrong
+				{
+                if (!fromFile && !isBatchDownloading())
+					{
+					sendFooter();
+					}
+                tryAgainCount = 0;
+                	return PARSE_FAILED;
+				}
+				
+			// Windows often gets spurious initial chunks after a write, we need to check for them
+			if (decoded[2] != incomingPos)
+				{
+				// System.err.println("Invalid Position " + decoded[2] + " != " + incomingPos + ", trying again " + tryAgainCount);
+				if (tryAgainCount < MAX_WINDOWS_TRIES)
+					{
+	                // Let's try again
+	                tryAgainCount++;
+    	            return PARSE_INCOMPLETE;
+    	            }
+    	        else
+    	        	{
+                	tryAgainCount = 0;
+                	return PARSE_FAILED;
+    	        	}
+				}
+			else
+				{
+				tryAgainCount = 0;
+				}
+			
             // Load chunk
             incoming[incomingPos] = data;
 
@@ -6407,39 +6491,32 @@ public class ASMHydrasynth extends Synth
                 // Send footer if appropriate
                 if (!fromFile && !isBatchDownloading())
                     {
-                    // time("Sending Footer A");
                     sendFooter();
                     }
                                         
                 // Decode and process!
                 try
                     {
-                    // time("Parsing " + incomingPos);
                     byte[] result = Decode.decodePatch(incoming);
-                    //dump(result);
+                    
+                    // Maybe we're also doing some reverse engineering printouts?
                     if (REVERSE_ENGINEER)
                         {
                         if (firstPatch == null)
                             {
-                            System.err.println("INITIAL PATCH LOADED");
+                            System.out.println("INITIAL PATCH LOADED");
                             firstPatch = result;
                             }
                         else 
                             {
-                            System.err.println("DIFFERENCES");
+                            System.out.println("DIFFERENCES");
                             diff(firstPatch, result);
                             }
-//                        incoming = new byte[22][];
-//                        incomingPos = 0;
-//                        return PARSE_SUCCEEDED;
                         }
 
-// at any rate
-                        {
-                        incoming = new byte[22][];
-                        incomingPos = 0;
-                        return parseReal(result, fromFile);
-                        }
+					incoming = new byte[22][];
+					incomingPos = 0;
+					return parseReal(result, fromFile);
                     }
                 catch (RuntimeException ex)
                     {
@@ -6449,7 +6526,7 @@ public class ASMHydrasynth extends Synth
 
                     if (!fromFile && !isBatchDownloading())
                         {
-                        // time("Sending Footer B");
+                        // for good measure
                         sendFooter();
                         }
                     return PARSE_FAILED;
@@ -6462,7 +6539,10 @@ public class ASMHydrasynth extends Synth
                 return PARSE_INCOMPLETE;
                 }
             }
-        else return PARSE_IGNORE;           // maybe some other message got in the way
+        else 
+        	{
+        	return PARSE_IGNORE;           // maybe some other message got in the way
+        	}
         }
         
     public void diff(byte[] a, byte[] b)
@@ -6470,7 +6550,7 @@ public class ASMHydrasynth extends Synth
         for(int i = 0; i < a.length; i++)
             {
             if (a[i] != b[i])
-                System.err.println("" + i + " " + StringUtility.toHex(a[i]) + " " + StringUtility.toHex(b[i]) + " (" + a[i] + " " + b[i] + ")");
+                System.out.println("" + i + " " + StringUtility.toHex(a[i]) + " " + StringUtility.toHex(b[i]) + " (" + a[i] + " " + b[i] + ")");
             }
         }
 
@@ -6478,20 +6558,19 @@ public class ASMHydrasynth extends Synth
         {
         for(int i = 0; i < a.length; i++)
             {
-                System.err.println("" + i + " " + StringUtility.toHex(a[i]) +  " (" + a[i] + ") " + (a[i] >= 32 && a[i] < 127 ? (char)a[i] : "")) ;
+                System.out.println("" + i + " " + StringUtility.toHex(a[i]) +  " (" + a[i] + ") " + (a[i] >= 32 && a[i] < 127 ? (char)a[i] : "")) ;
             }
         }
 
-
     void set1(String key, byte[] data, int pos, int bit)
         {
-        if (!model.exists(key)) System.err.println("KEY NOT FOUND: " + key);
+        if (!model.exists(key)) System.out.println("KEY NOT FOUND: " + key);
         model.set(key, (data[pos] >>> bit) & 0x01);
         }
 
     void set1(String key, byte[] data, int pos)
         {
-        if (!model.exists(key)) System.err.println("KEY NOT FOUND: " + key);
+        if (!model.exists(key)) System.out.println("KEY NOT FOUND: " + key);
 
         if (key.equals("bank") || key.equals("number"))
             {
@@ -6509,7 +6588,7 @@ public class ASMHydrasynth extends Synth
 
     void set2(String key, byte[] data, int pos)
         {
-        if (!model.exists(key)) System.err.println("KEY NOT FOUND: " + key);
+        if (!model.exists(key)) System.out.println("KEY NOT FOUND: " + key);
 
         if (model.getMin(key) < 0)      // signed two's complement
             {
@@ -6523,8 +6602,6 @@ public class ASMHydrasynth extends Synth
 
     public int parseReal(byte[] data, boolean fromFile)
         {
-//        System.err.println("The Big Four " + data[1766] + " " + data[1767] + " " + data[1768] + " " + data[1769]);
-        
         // VERIFY VERSION
         int version = data[4] & 0xFF;
         if (version != VERSION_1_5_5 && version != VERSION_2_0_0)
@@ -6581,7 +6658,7 @@ public class ASMHydrasynth extends Synth
         /*
         for(int i = 60; i < 80; i++)
         	{
-        	System.err.println("" + i + " " + data[i]);
+        	System.out.println("" + i + " " + data[i]);
         	}
         */
         	
@@ -6903,7 +6980,7 @@ public class ASMHydrasynth extends Synth
             {
             for(int j = 0; j < 56; j++)
                 {
-//                System.err.println("lfo" + (i + 1) + "step" + (j + 9) + " <- " + (1770 + i * 56 * 2 + j * 2));
+//                System.out.println("lfo" + (i + 1) + "step" + (j + 9) + " <- " + (1770 + i * 56 * 2 + j * 2));
                 set2("lfo" + (i + 1) + "step" + (j + 9), data, 1770 + i * 56 * 2 + j * 2);
                 }
             }
@@ -7356,6 +7433,7 @@ public class ASMHydrasynth extends Synth
         as an NRPN message. */
     public void sendAllSoundsOff()
         {
+        //time("Sending All Sounds Off Hydrasynth-Style");
         try
             {
             // do an all notes off
@@ -7377,22 +7455,16 @@ public class ASMHydrasynth extends Synth
     public int getPauseAfterReceivePatch() { return 0; }
 
     // Change Patch can get stomped if we do a request immediately afterwards
-    public int getPauseAfterChangePatch() { return 150; }
-
-    public int getPauseAfterWritePatch() { return 3500; }   // this is an incredible number
+    public int getPauseAfterChangePatch() { return (Style.isWindows() ? 1000 : 150); }
 
     public int getPauseBetweenPatchWrites() { return 100; }
 
     public int getPauseAfterSendAllParameters()
         {
         return 300;
-//        if (isHillClimbing() || isMorphing()) return 400;             // If there's a pause less than than this, playing the sound will result in a weird short, clippped version, which ruins hill-climbing and morphing.
-//        else return 200;
-        
-//        if (isHillClimbing() || isMorphing()) return 400;             // If there's a pause less than than this, playing the sound will result in a weird short, clippped version, which ruins hill-climbing and morphing.
-//              else return 0;  // If we're not hill-climbing etc., then we'll not bother waiting.
         }
     
+
     public void changePatch(Model tempModel)
         {
         // I believe that the Hydrasynth changes patches using Bank Select *LSB* (32), 
@@ -7406,20 +7478,11 @@ public class ASMHydrasynth extends Synth
         /// changes).  So I have to PC AWAY from the patch and then PC BACK to the patch if it's
         /// different.
 
-        int currentBank = model.get("bank", 0);
-        int currentNumber = model.get("number", 0);
-        if (bank == currentBank && number == currentNumber)
-            {
-            tryToSendMIDI(buildCC(getChannelOut(), 32, bank));
-            tryToSendMIDI(buildPC(getChannelOut(), (number == 0 ? 1 : 0)));         // PC away
-            simplePause(getPauseAfterChangePatch());
-            tryToSendMIDI(buildPC(getChannelOut(), number));                                        // PC back
-            }
-        else
-            {
-            tryToSendMIDI(buildCC(getChannelOut(), 32, bank));
-            tryToSendMIDI(buildPC(getChannelOut(), number));
-            }
+		// if (Style.isWindows())		sendFooter();	// not sure we need this
+		tryToSendMIDI(buildCC(getChannelOut(), 32, bank));
+		tryToSendMIDI(buildPC(getChannelOut(), (number == 0 ? 1 : 0)));         // PC away
+		simplePause(getPauseAfterChangePatch());
+		tryToSendMIDI(buildPC(getChannelOut(), number));                        // PC back
         }
 
 /*
@@ -7474,6 +7537,29 @@ public class ASMHydrasynth extends Synth
   }
 */
 
+
+/*
+public boolean sendAllParametersInternal()
+	{
+	boolean val = super.sendAllParametersInternal();
+	if (val)
+		{
+		System.err.println("INVOKING CHANGE PATCH TO LAST");
+            // Windows thing here?
+            SwingUtilities.invokeLater(new Runnable()
+            	{
+            	public void run()
+            		{
+            		System.err.println("RUNNING CHANGE PATCH TO LAST");
+            		changePatchToLast();
+            		}
+            	});
+		}
+	return val;
+	}
+*/
+	
+	
     // This is 8 banks, appropriate for 2.0.0 and the Deluxe 1.5.5
     public Model getNextPatchLocation(Model model)
         {
@@ -7554,7 +7640,7 @@ public class ASMHydrasynth extends Synth
 
 
 
-
+/*
     //// ORDERED PARAMETERS
     //// This list is more or less the same as the main parameters list but
     //// is reordered in such a way so that we can guarantee certain parameters
@@ -8683,7 +8769,7 @@ public class ASMHydrasynth extends Synth
         "lfo4quantize",                  
         "lfo5quantize",                  
         };
-    
+    */
     
     
     

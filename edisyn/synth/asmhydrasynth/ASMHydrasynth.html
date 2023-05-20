@@ -6,7 +6,10 @@
 
 <p><b>Communicating with Edisyn</b><br> 
 
-If you're connecting via USB, set Edisyn's incoming and outgoing MIDI devices to HYDRASYNTH KB.  Set Edisyn's MIDI channel to the same as the synth's RX and TX MIDI channels.  You can set the synth's RX MIDI channel to OMNI if you liked.   Set up Parameter RX and TX both to be NRPN. Turn on Program Change RX (it's particularly important).  <font color=red><b>Windows Warning</b></font>&nbsp&nbsp;Java on Windows does not play nicely with the Hydrasynth's USB port, and data will be corrupted.  Instead, Windows users should use a good USB MIDI interface.
+If you're connecting via USB, set Edisyn's incoming and outgoing MIDI devices to HYDRASYNTH KB.  Set Edisyn's MIDI channel to the same as the synth's RX and TX MIDI channels.  You can set the synth's RX MIDI channel to OMNI if you liked.   Set up Parameter RX and TX both to be NRPN. Turn on Program Change RX (it's particularly important).  
+
+<p><font color=red><b>Windows Warning</b></font><br>
+Java MIDI on Windows does not play nicely with the Hydrasynth, either through its USB port or through another USB device.'s USB port.  MIDI and sysex messages often get lost.  Edisyn tries its best to compensate but you may run into issues.  In particular you may find that the first time you launch Edisyn, it won't work at all; but if you unplug your USB cable, quit Edisyn, plug in the cable again, and relaunch it, you may have more luck.  
 
 <p><b>Current Editor Status</b><br>
 The Hydrasynth's sysex spec is closed: developing Edisyn required reverse engineering it.  As such Edisyn can do most things you'd need, but a few items (such as requesting current memory) are still out of reach.

@@ -22,7 +22,7 @@ import javax.sound.midi.*;
    A patch editor for the ASM Hydrasynth.  It can read 1.5.5 and 2.0.0 and can write 2.0.0.
    
    <p>The Hydrasynth is a big and complex machine with over 1000 patch parameters and very little guidance as to
-   how they are implemented.  As such it has three major problems which are expressed in this editor.
+   how they are implemented.  As such it has four major problems which are expressed in this editor.
    
    <ul>
    <li>
@@ -33,14 +33,22 @@ import javax.sound.midi.*;
    <p><li>
    To the best of my knowledge, the Hydrasynth incredibly does not have a sysex command to request the current patch nor
    to send to the current patch.  Furthermore, while most parameters can be sent to the Hydrasynth individually via NRPN,
-   a few (notably Macro parameters) cannot.  This means that there is no way to fully update the current working memory of
-   the machine except by saving a patch to a scratch location and doing a PC to that location, which I'm not willing to do as
-   (1) it's too slow and (2) it will burn flash RAM.  I can only partially update current working memory.  Importantly, I
-   cannot update macros and that's a BIG problem because most Hydrasynth patches rely on macros to initialize critical
-   parameters.
+   a few (notably Macro parameters) cannot; and the Hydrasynth is buggy in accepting them.  The Hydrasynth weirdly doesn't
+   have memory for a *current patch* so much as a *current bank*, so you *can*, with some care (it's buggy), upload
+   to a *current named patch*.  You'd think this means you could just send to the patch number you want, but it's not
+   so easy.  If you send to patch X, then later abandon it and write patch Y, the Hydrasynth writes entire banks at a time, 
+   so it will unhelpfully write patch X as well.  That will cause a lot of heartache. As a result Edisyn is forced to treat 
+   H 128 as a scratch patch, and send to it instead of the desired patch.
    
    <p><li>
    The Hydrasynth has a LOT of bugs in its NRPN, sysex, and areas.  Working around these bugs is a large task.
+   </ul>
+
+   <p><li>
+   Windows+MIDI+USB+Java has a host of bugs and the Hydrasynth is right in the thick of it.  In Windows, we must send
+   specific sysex messages twice to the Hydrasynth, and the Hydrasynth unfortunately sends us multiple copies of certain
+   patch chunk dumps which we have to watch for.  And often when launching Edisyn it won't connect to the Hydrasynth
+   unless you quit Edisyn, disconnect USB, reconnect, and relaunch Edisyn. The Mac and Linux don't have these problems.
    </ul>
    
    <p>
@@ -1207,6 +1215,7 @@ public class ASMHydrasynth extends Synth
         else return (int)Math.round(d);
         }
         
+	public TextLabel sendLabel = new TextLabel("  ");
 
     public ASMHydrasynth()
         {
@@ -1529,8 +1538,16 @@ public class ASMHydrasynth extends Synth
         HBox hbox = new HBox();
 
         VBox vbox = new VBox();
+        
+        VBox inner = new VBox();
         comp = new PatchDisplay(this, 6);
-        hbox.add(comp);
+        inner.add(comp);
+        HBox inner2 = new HBox();
+        sendLabel.setBorder(Style.SEND_BORDER());
+        inner2.add(sendLabel);
+        inner2.addLast(Stretch.makeHorizontalStretch());
+        inner.add(inner2);
+        hbox.add(inner);
  
         params = CATEGORIES;
         comp = new Chooser("Category", this, "category", params);
@@ -6238,6 +6255,8 @@ public class ASMHydrasynth extends Synth
             sysex[sysex.length - 2] = Integer.valueOf(getPauseAfterChangePatch());
             sysex[sysex.length - 1] = buildPC(getChannelOut(), 127)[0];                                                                  // PC Back
             // 200ms afterwards
+            
+            sendLabel.setText("Sent -> H 128");
             }
         else
             {
@@ -7021,6 +7040,8 @@ public class ASMHydrasynth extends Synth
             {
             set1("voicemodulation" + (i + 1), data, 2400 + i * 2);
             }
+        
+        sendLabel.setText("        ");
         
         revise();
         return PARSE_SUCCEEDED;

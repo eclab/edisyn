@@ -1523,14 +1523,14 @@ public abstract class Synth extends JComponent implements Updatable
                 }
                                 
             public void send(final MidiMessage message, final long timeStamp)
-                {                	
+                {                       
                 if (message instanceof ShortMessage)
-                	{
-                	if (((ShortMessage)message).getStatus() == ShortMessage.TIMING_CLOCK ||
-                		((ShortMessage)message).getStatus() == ShortMessage.ACTIVE_SENSING) 
-                		return; // ignore
-                	}
-                	
+                    {
+                    if (((ShortMessage)message).getStatus() == ShortMessage.TIMING_CLOCK ||
+                        ((ShortMessage)message).getStatus() == ShortMessage.ACTIVE_SENSING) 
+                        return; // ignore
+                    }
+                        
                 if (!receiveMIDI)
                     {
                     if (bufferNonReceivedMIDI)
@@ -2089,11 +2089,11 @@ public abstract class Synth extends JComponent implements Updatable
         }
     
     long getMicrosecondPosition(Midi.Tuple tuple)
-    	{
-    	return -1;
-//    	if (tuple == null) return -1;
-//   	else return tuple.getMicrosecondPosition();
-    	}
+        {
+        return -1;
+//      if (tuple == null) return -1;
+//      else return tuple.getMicrosecondPosition();
+        }
     
     boolean midiDebug = false;
     
@@ -2110,25 +2110,25 @@ public abstract class Synth extends JComponent implements Updatable
             }
                 
         if (message == null) 
-            {         	
-return false; 
-}
+            {           
+            return false; 
+            }
         else if (!amActiveSynth())
-            {         	
-return false; 
-}
+            {           
+            return false; 
+            }
         else if (getSendMIDI())
             {
             if (tuple == null) 
-            	{
-           	return false;
-            	}
+                {
+                return false;
+                }
             
             Receiver receiver = tuple.outReceiver;
             if (receiver == null) 
-            	{
-            	return false;
-            	}
+                {
+                return false;
+                }
             
             // compute pause
             try { if (!noMIDIPause) midiPause(getNanoPauseBetweenMIDISends()); }
@@ -2142,7 +2142,7 @@ return false;
                 try
                     {
                     long time = getMicrosecondPosition(tuple);
-        			if (midiDebug) System.out.println("MIDI DEBUG: Sent at " + time);
+                    if (midiDebug) System.out.println("MIDI DEBUG: Sent at " + time);
                     receiver.send(message, time);
                     }
                 catch (IllegalStateException e)
@@ -2161,7 +2161,7 @@ return false;
             return true;
             }
         else
-        	{
+            {
             return false;
             }
         }
@@ -2234,7 +2234,7 @@ return false;
                     if (fragmentSize <= NO_SYSEX_FRAGMENT_SIZE || message.getLength() <= fragmentSize)
                         {
                         long time = getMicrosecondPosition(tuple);
-        			if (midiDebug) System.out.println("MIDI DEBUG: Sysex sent at " + time);
+                        if (midiDebug) System.out.println("MIDI DEBUG: Sysex sent at " + time);
                         receiver.send(message, time); 
                         }
                     else
@@ -2243,8 +2243,8 @@ return false;
                         for(int i = 0; i < messages.length; i++)
                             {
                             if (i > 0) simplePause(getPauseBetweenSysexFragments());
-                        long time = getMicrosecondPosition(tuple);
-        			if (midiDebug) System.out.println("MIDI DEBUG: Sysex fragment " + i + " sent at " + time);
+                            long time = getMicrosecondPosition(tuple);
+                            if (midiDebug) System.out.println("MIDI DEBUG: Sysex fragment " + i + " sent at " + time);
                             receiver.send(messages[i], time);
                             }
                         }
@@ -2673,38 +2673,38 @@ return false;
         // but it's not enough to stop us from sending parameters when we're initialized.
         // To prevent that, we also check sprouted.
 
-		// Kill the timer if it exists
-		if (sendAllParametersTimer != null)
-			{
-			sendAllParametersTimer.stop();
-			sendAllParametersTimer = null;
-			}
+        // Kill the timer if it exists
+        if (sendAllParametersTimer != null)
+            {
+            sendAllParametersTimer.stop();
+            sendAllParametersTimer = null;
+            }
 
         if (!sprouted || !getSendMIDI())
             {
             return;
             }
-    	
-    	if (sendAllTimerDelay == 0)
-    		{
-	        sendAllParameters();
-    	    simplePause(getPauseAfterSendAllParameters());
-    		}
+        
+        if (sendAllTimerDelay == 0)
+            {
+            sendAllParameters();
+            simplePause(getPauseAfterSendAllParameters());
+            }
 
-		sendAllParametersTimer = new javax.swing.Timer(sendAllTimerDelay, 
-			new ActionListener()
-				{
-				public void actionPerformed(ActionEvent e)
-					{
-					sendAllParameters();
-					sendAllParametersTimer.stop();
-					sendAllParametersTimer = null;
-					simplePause(getPauseAfterSendAllParameters());
-					}
-				});
-		sendAllParametersTimer.setRepeats(false);
-		sendAllParametersTimer.start();
-		}
+        sendAllParametersTimer = new javax.swing.Timer(sendAllTimerDelay, 
+            new ActionListener()
+                {
+                public void actionPerformed(ActionEvent e)
+                    {
+                    sendAllParameters();
+                    sendAllParametersTimer.stop();
+                    sendAllParametersTimer = null;
+                    simplePause(getPauseAfterSendAllParameters());
+                    }
+                });
+        sendAllParametersTimer.setRepeats(false);
+        sendAllParametersTimer.start();
+        }
         
     //// FIXME This section should be revised, getting rid of the diff stuff, which is never used and is 
     ////       problematic for synths that can't send individual parameters anyway
@@ -5995,7 +5995,7 @@ menubar.add(helpMenu);
         launchMenu.setSelected(getLastXAsBoolean("ShowSynth", null, true, false));
         clearNotesMenu.setSelected(getLastXAsBoolean("SendTestNotesMorph", null, true, false));
         morphTestNotesMenu.setSelected(morphTestNotes);
-		highResolutionDisplayMenu.setSelected(highResolutionDisplay);
+        highResolutionDisplayMenu.setSelected(highResolutionDisplay);
         }
             
     void doPerChannelCCs(boolean val)

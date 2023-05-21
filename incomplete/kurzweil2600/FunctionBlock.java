@@ -5,8 +5,8 @@ import static edisyn.synth.kurzweilk2600.KurzweilK2600.*;
 class FunctionBlock
     { // determine function block type from generic function
     static final String[] FB_STR = new String[] {"Off", "Amp", "Frequency", "Resonance",
-                                                 "Amount", "Drive", "Width", "Pitch", "Wrap", "Position", "Crossfade", "Even", "Odd",
-                                                 "Separation", "Depth", "Width (PWM)", "Pitch (LF)", "Off"};
+        "Amount", "Drive", "Width", "Pitch", "Wrap", "Position", "Crossfade", "Even", "Odd",
+        "Separation", "Depth", "Width (PWM)", "Pitch (LF)", "Off"};
         
     // 3 possible blocks per DSP function, triple function has all 3 != OFF, double function has last one OFF, etc.
     static final KurzweilK2600.FB_ENUM[][] FB_INT = new KurzweilK2600.FB_ENUM[][] 

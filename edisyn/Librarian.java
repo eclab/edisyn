@@ -406,10 +406,10 @@ public class Librarian extends JPanel
                 new String[] { "" }));
         
         // Give the columns widths
-		double maxWidth = 0;
+        double maxWidth = 0;
         for(int i = 0; i < numNames2.length; i++)
-        	maxWidth = Math.max(maxWidth, rowNames.getFontMetrics(rowNames.getFont()).stringWidth(numNames2[i][0]));
-		rowNames.getColumnModel().getColumn(0).setPreferredWidth(8 + (int)maxWidth);    // We'll do about 3/4 the maximum theoretical limit, which seems to be a good outer bound for most patch names, plus a tiny bit of slop.
+            maxWidth = Math.max(maxWidth, rowNames.getFontMetrics(rowNames.getFont()).stringWidth(numNames2[i][0]));
+        rowNames.getColumnModel().getColumn(0).setPreferredWidth(8 + (int)maxWidth);    // We'll do about 3/4 the maximum theoretical limit, which seems to be a good outer bound for most patch names, plus a tiny bit of slop.
 
         // this has to be after you set the rownames model
         rowNames.setPreferredScrollableViewportSize(rowNames.getPreferredSize());

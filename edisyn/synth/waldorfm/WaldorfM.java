@@ -1990,7 +1990,7 @@ public class WaldorfM extends Synth
         }
 
 
-	public int getPauseAfterSendAllParameters() { return 1000; }
+    public int getPauseAfterSendAllParameters() { return 1000; }
 
     //public boolean getSendsAllParametersAsDump() { return false; }
  

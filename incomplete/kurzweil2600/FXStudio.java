@@ -53,16 +53,16 @@ class FxStudio
     static final int MAX_NUM_FX_ALGS = 149;
         
     static final String[] FX_BUS = new String[] { "None", "InA", "InAR", "InB", "InBR", 
-                                                  "InC", "InCR", "InD", "InDR", "FX1", "FX2", "FX3", "FX4", "Aux", "Mix"};
+        "InC", "InCR", "InD", "InDR", "FX1", "FX2", "FX3", "FX4", "Aux", "Mix"};
     static int nopresreq = 0; // no of presets requested
     static int nopresgot = 0; // no of presets received
     static int presetno = 0;
     int presetid[] = new int[] {0, 0, 0, 0, 0};
     int algid[] = new int[] {FX_ALG_NONE, 
-                             FX_ALG_IN + 0, FX_ALG_IN + 1, FX_ALG_IN + 2, FX_ALG_IN + 3, 
-                             FX_ALG_IN + 4, FX_ALG_IN + 5, FX_ALG_IN + 6, FX_ALG_IN + 7,
-                             FX_ALG_FX_EMPTY, FX_ALG_FX_EMPTY, FX_ALG_FX_EMPTY, FX_ALG_FX_EMPTY, 
-                             FX_ALG_AUX_EMPTY, FX_ALG_MIX};
+        FX_ALG_IN + 0, FX_ALG_IN + 1, FX_ALG_IN + 2, FX_ALG_IN + 3, 
+        FX_ALG_IN + 4, FX_ALG_IN + 5, FX_ALG_IN + 6, FX_ALG_IN + 7,
+        FX_ALG_FX_EMPTY, FX_ALG_FX_EMPTY, FX_ALG_FX_EMPTY, FX_ALG_FX_EMPTY, 
+        FX_ALG_AUX_EMPTY, FX_ALG_MIX};
     ArrayList<Integer> parfxidxin[]; // variable lenght for inbus params, depend on studio
     ArrayList<Integer> parmapin[];
     ArrayList<Integer> busmap;

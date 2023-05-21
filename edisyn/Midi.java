@@ -112,15 +112,15 @@ public class Midi
             if (desc == null || desc.equals("")) 
                 desc = "MIDI Device";
                 
-            if (Style.isUnix())	// Linux names don't permit spaces, so we need the description instead, which is of the form A, B, A
-            	{
-            	String[] descs = desc.split(",");
-            	String[] names = name.split(" ");
-            	String d = (descs.length > 1 ? descs[0] : desc);
-            	String n = (names.length > 1 ? names[1] : "(" + names + ")");
-            	name = d + " " + n;
-            	}
-            	
+            if (Style.isUnix()) // Linux names don't permit spaces, so we need the description instead, which is of the form A, B, A
+                {
+                String[] descs = desc.split(",");
+                String[] names = name.split(" ");
+                String d = (descs.length > 1 ? descs[0] : desc);
+                String n = (names.length > 1 ? names[1] : "(" + names + ")");
+                name = d + " " + n;
+                }
+                
             // All CoreMIDI4J names begin with "CoreMIDI4J - "
             if (name.startsWith("CoreMIDI4J - "))
                 name = name.substring(13).trim();
@@ -470,10 +470,10 @@ public class Midi
         public Receiver key2Receiver;
         
         public long getMicrosecondPosition() 
-        	{ 
-        	if (outWrap == null || outWrap.device == null) return -1;  
-        	else return outWrap.device.getMicrosecondPosition(); 
-        	}
+            { 
+            if (outWrap == null || outWrap.device == null) return -1;  
+            else return outWrap.device.getMicrosecondPosition(); 
+            }
         
         public Tuple() { }
         

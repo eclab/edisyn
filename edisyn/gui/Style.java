@@ -245,6 +245,13 @@ public class Style
             (System.getProperty("os.version").startsWith("12."));
         }
 
+    public static boolean isMacOSBigSur()
+        {
+        return System.getProperty("os.name").equals("Mac OS X") &&
+            ((System.getProperty("os.version").startsWith("11.") ||
+            	System.getProperty("os.version").equals("10.16")));
+        }
+
     public static boolean isMacOSVentura()
         {
         return System.getProperty("os.name").equals("Mac OS X") &&

@@ -31,7 +31,9 @@ public class Edisyn
                 System.setProperty("apple.awt.graphics.EnableQ2DX", "true");
                 System.setProperty("apple.laf.useScreenMenuBar", "true");
                         
-                if (Style.isMacOSMonterey())            // Monterey has a broken tab bug :-(
+System.getProperties().list(System.out);                        
+                        
+                if (Style.isMacOSMonterey() || Style.isMacOSBigSur())            // Monterey has a broken tab bug :-(
                     {
                     UIManager.put("TabbedPane.foreground", java.awt.Color.BLACK);
 

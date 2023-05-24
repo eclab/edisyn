@@ -296,7 +296,7 @@ by 8, [0...2880] by 8, [128...8000] by 8, [0...4800] by 8, [408...8160],
 16. RIBBON MOD HOLD IS ABSOLUTE
 
 Ribbon Hold should apply to BOTH Pitch Bend and to Mod Wheel.  And it 
-should be *relative*, but .  That is, if you let go of the ribbon, it 
+should be *relative*.  That is, if you let go of the ribbon, it 
 should stay where it is (that's happening now), AND if you press AGAIN, 
 it should be changed relative to your new finger position, NOT jump to 
 that position (that's NOT happening now).  

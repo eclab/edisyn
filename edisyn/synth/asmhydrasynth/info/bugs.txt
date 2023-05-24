@@ -2,8 +2,8 @@ KNOWN BUGS
 
 These are bugs, errors, and misfeatures that I have identified and 
 reported to ASM as of March, 2023, Hydrasynth firmware version 1.5.5.  
-Some 2.0.0-specific bugs are noted as well.  I am not aware of any 
-of them having been fixed yet, but am not certain.
+Some 2.0.0-specific bugs are noted as well.  I am aware of only one
+or two having been fixed at this point, but am not certain.
 
 
 Note that many of these errors concern NRPN, parameter display, and 
@@ -17,29 +17,37 @@ below for example.
 not provided a sysex specification.  As a result, despite being a 
 popular machine, the Hydrasynth has only a (IMHO not great) proprietary 
 librarian and a single third-party editor which can upload and download 
-patches, and no open source software whatsoever.  Edisyn is the closest, 
-but it is severely hobbled in what it can do due to lack of sysex.
+patches, and prior to Edisyn no open source software whatsoever.  Edisyn
+required reverse engineering the spec.
 
-Furthermore, it is not clear what the Hydrasynth is actually capable of 
-doing.  I believe the sysex can (1) request to download all the names of 
-patches in a bank (2) request to download or upload a single patch from 
-a bank (3) request to download or upload an entire bank.  Because of 
-complaints from the Sigabort patch editor, I suspect that the Hydrasynth 
-also does not have sysex to upload a patch to its current working memory 
-(!) and probably does not have the sysex to request the same (!), or at 
-least it is a closely guarded secret.
+It is not clear what the Hydrasynth is actually capable of doing.  From
+reverse engineering I believe the sysex can (1) request to download all 
+the names of patches in a bank (2) request to download or upload a 
+single patch from a bank [uploading actually causes the Hydrasynth to 
+rewrite its entire Flash RAM!] (3) request to download or upload an 
+entire bank [again rewriting Flash].  Because of complaints from the 
+Sigabort patch editor documentation, I believe that the Hydrasynth 
+does not have any sysex command to download its current working memory 
+patch.  Furthermore it does not have a way to upload a patch to its 
+current working memory -- rather the Hydrasynth unfortunately keeps 
+*all patches* in current working memory and you are only permitted to 
+(4) upload a patch to a specific slot in current working memory.
 
-** Correction: it appears that you can upload a patch to current working
-memory, but in a very strange way.  The Hydrasynth maintains all banks
-in current working memory at once, and when you issue a sysex write
-request (command 14 00) it actually writes a whole bank.  Thus you have
-to specify *where* you are uploading your patch in current working
-memory, and furthermore, when a write request occurs, it will get
-written even if you're trying to write another patch.  This makes
-uploading to current working memory close to useless -- at best an
-editor can just upload to a "scratch patch", knowing it will occasionally
-get written by accident.  You still *cannot* download a patch from
-curent working memory as far as I know.
+#4 is a very, *very* bad design decision. Let's say you want to upload
+a patch to A30 in order to audition it (not write it to Flash).  Okay,
+you can do that.  But then you switch to B15 to edit it for a bit.  Then
+you decide to write B15.  The Hydrasynth does so, but it will ALSO write
+out your temporary audition changes to A30.  This is because the
+Hydrasynth weirdly keeps ALL patches in memory in Flash and writes ALL
+of them out when you ask it to write B15.
+
+This forces editors (Edisyn and Sigabort Midisynth I believe) to reserve
+a patch slot (in this case H128) as a "scratch patch" -- all auditions 
+are sent there, and we don't care if it's overwritten.  That's pretty 
+unfortunate.
+
+Any other capabilities of the machine are secret and proprietary to ASM
+at present as they will not release their sysex spec.
 
 
 1. ILLEGAL SYSEX.  The Hydrasynth has the options to "Send Patch" or 

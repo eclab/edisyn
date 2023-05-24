@@ -1,7 +1,7 @@
 ![Edisyn Splash Banner](https://raw.githubusercontent.com/eclab/edisyn/master/pics/Banner.png)
 
 # Edisyn
-Synthesizer Patch Editor (Version 32)
+Synthesizer Patch Editor (Version 33)
 
 By Sean Luke (sean@cs.gmu.edu)
 
@@ -38,12 +38,13 @@ Donations are welcome via Paypal to my email address (sean@cs.gmu.edu).
 
 ## What's New
 
-Version 32 sports lots of updates, but the big four are:
+Version 33 has a patch editor for the entire ASM Hydrasynth family
 
-* Roland U-20/U-220 Editors
-* Roland U-110 Editor
-* JL Cooper MSB+ Rev2 Editor
-* Significant improvements to the Librarian and to bulk uploads/downloads
+<p>This required reverse-engineering the Hydrasynth sysex specification and documenting its NRPN spec.  The resulting specifications can be found <a href="https://github.com/eclab/edisyn/tree/master/edisyn/synth/asmhydrasynth/info">here</a>.
+
+## Coming Up
+
+* Soon (I hope) we should have editors for the Waldorf M and the DSI Prophet 12.
 
 ## About Edisyn
 

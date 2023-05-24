@@ -130,7 +130,8 @@ encoder a fair bit, and remember what direction to turn it.
 the Yamaha CS80 served as the inspiration for the ribbon strip and 
 polyphonic aftertouch on the Hydrasynth.  But the ribbon strip on the 
 CS80 has considerable functionality that is missing from the Hydrasynth.  
-See here for a number of examples of important things that the 
+All of this functionality could be easily implemented with a software 
+update. See here for a number of examples of important things that the 
 Hydrasynth ribbon strip can't do that are very simple to implement, and 
 which the CS80 did easily:
 

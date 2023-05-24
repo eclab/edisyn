@@ -84,6 +84,9 @@ force the Delay Time parameter down to zero, which appears to reset it.
 	  missing from the NRPN Documentation.
 	- CC 0x0F is just labelled "Delay Time" but it is actually
 	  Delay Time BPM Sync OFF
+	- There are many, MANY more documentation errors.  See here for
+	  a table of proper NRPN messages, ranges, and display values:
+	  https://github.com/eclab/edisyn/tree/master/edisyn/synth/asmhydrasynth/info
 
 4. BROKEN ALL SOUNDS OFF HANDLING.  The Hydrasynth does not properly 
 handle CC 120, All Sounds Off.  To start with, it has reallocated that 

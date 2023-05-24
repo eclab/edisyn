@@ -381,7 +381,7 @@ public class HillClimb extends SynthPanel
         if (_i == NUM_CANDIDATES + ARCHIVE_SIZE)
             doItems[1].setEnabled(false);
 
-        doItems[2] = new JMenuItem("Save to File");
+        doItems[2] = new JMenuItem("Save to File...");
         doItems[2].addActionListener(new ActionListener()
             {
             public void actionPerformed(ActionEvent e)

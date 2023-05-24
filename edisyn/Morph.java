@@ -121,8 +121,8 @@ public class Morph extends SynthPanel
         margin.add(new PushButton("Export...", new String[]
             {
             "Keep Patch",
-            "Edit Patch",
-            "Save to File"
+            "Edit in New Editor",
+            "Save to File..."
             })
             {
             public void perform(int val)

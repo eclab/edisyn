@@ -4934,7 +4934,7 @@ public class ASMHydrasynth extends Synth
 
     public void windowCreated()
         {
-        setLastX("false", "Warned", getSynthClassName(), true);
+        //setLastX("false", "Warned", getSynthClassName(), true);
         showOneTimeWarning("Warned", "Read the About Tab", "The Hydrasynth has many eccentricities to be aware of.\nBe certain to fully read the About Tab before use.\n\n"+
             "Particularly read the warnings about Windows and Java MIDI,\nand about Send to Current Patch.");
         }

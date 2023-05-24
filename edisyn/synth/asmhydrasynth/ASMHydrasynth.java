@@ -4866,36 +4866,15 @@ public class ASMHydrasynth extends Synth
 
         
 
-    //protected void doSave() { showSimpleMessage("Cannot Save", "This Patch Editor cannot save to a file at present."); }
-    //protected void doSaveAs() { showSimpleMessage("Cannot Save", "This Patch Editor cannot save to a file at present."); }
-    //protected boolean doOpen(boolean merge) { showSimpleMessage("Cannot Open", "This Patch Editor cannot open a file at present."); return false; }
-        
-        
-//    boolean sendArpTapTrig;
     boolean lockUserLFOSteps;
     boolean lockAllLFOSteps;
     boolean ignoreParametersFromSynth;
     boolean disallowCCMutation;
-//    boolean deluxe;
         
     public void addHydrasynthMenu()
         {
         JMenu menu = new JMenu("Hydrasynth");
         menubar.add(menu);
-
-/*
-  JCheckBoxMenuItem deluxeCheck = new JCheckBoxMenuItem("Hydrasynth Deluxe");
-  deluxeCheck.setSelected(deluxe);
-  menu.add(deluxeCheck);
-  deluxeCheck.addActionListener(new ActionListener()
-  {
-  public void actionPerformed(ActionEvent evt)
-  {
-  deluxe = deluxeCheck.isSelected();
-  setLastX("" + deluxe, "Deluxe", getSynthClassName(), true);
-  }
-  });
-*/
 
         JCheckBoxMenuItem ignoreParametersMenu = new JCheckBoxMenuItem("Ignore Parameters from Synth");
         ignoreParametersMenu.setSelected(ignoreParametersFromSynth);
@@ -4920,20 +4899,6 @@ public class ASMHydrasynth extends Synth
                 setLastX("" + disallowCCMutation, "DisallowCCMutation", getSynthClassName(), true);
                 }
             });
-
-/*
-  JCheckBoxMenuItem sendArpTapTrigMenu = new JCheckBoxMenuItem("Send Arp Tap Trig");
-  sendArpTapTrigMenu.setSelected(sendArpTapTrig);
-  menu.add(sendArpTapTrigMenu);
-  sendArpTapTrigMenu.addActionListener(new ActionListener()
-  {
-  public void actionPerformed(ActionEvent evt)
-  {
-  sendArpTapTrig = sendArpTapTrigMenu.isSelected();
-  setLastX("" + sendArpTapTrig, "SendArpTapTrig", getSynthClassName(), true);
-  }
-  });
-*/
 
         JCheckBoxMenuItem lockUserLFOStepsMenu = new JCheckBoxMenuItem("Lock User LFO Steps to Notes");
         lockUserLFOStepsMenu.setSelected(lockUserLFOSteps);
@@ -4969,9 +4934,9 @@ public class ASMHydrasynth extends Synth
 
     public void windowCreated()
         {
-        //setLastX("false", "Warned", getSynthClassName(), true);
-        showOneTimeWarning("Warned", "Read the About Tab", "The Hydrasynth has many eccentricities to be aware of.\nBe certain to fully read the \u2B06 About Tab \u2B06 before use.\n\n"+
-            "Particularly note the warnings about Windows and Java MIDI.");
+        setLastX("false", "Warned", getSynthClassName(), true);
+        showOneTimeWarning("Warned", "Read the About Tab", "The Hydrasynth has many eccentricities to be aware of.\nBe certain to fully read the About Tab before use.\n\n"+
+            "Particularly read the warnings about Windows and Java MIDI,\nand about Send to Current Patch.");
         }
 
     public void showedOneTimeWarning(String key)
@@ -4990,13 +4955,6 @@ public class ASMHydrasynth extends Synth
         int bank = (model.get("bank"));
         return BANKS[bank] + " " + ((number > 99 ? "" : (number > 9 ? "0" : "00")) + number);
         }
-
-/*
-  public boolean getSendsAllParametersAsDump() 
-  {
-  return false;
-  }
-*/
 
     public int getBatchDownloadWaitTime() { return 50; }                                // this will make a lot of "tardy" messages but it's a tiny bit faster than 400
     public int getBatchDownloadFailureCountdown() { return 100; }
@@ -5721,7 +5679,6 @@ public class ASMHydrasynth extends Synth
 
     void get2(String key, byte[] data, int pos)
         {
-//        if (key.startsWith("env")) System.out.println(key + " " + model.get(key));
         int val = model.get(key);
         if (model.getMin(key) < 0)      // signed two's complement
             {
@@ -6999,7 +6956,6 @@ public class ASMHydrasynth extends Synth
             {
             for(int j = 0; j < 56; j++)
                 {
-//                System.out.println("lfo" + (i + 1) + "step" + (j + 9) + " <- " + (1770 + i * 56 * 2 + j * 2));
                 set2("lfo" + (i + 1) + "step" + (j + 9), data, 1770 + i * 56 * 2 + j * 2);
                 }
             }
@@ -7055,7 +7011,7 @@ public class ASMHydrasynth extends Synth
         {
         // The hydrasynth unhelpfully tries to change parameters on us when we change
         // parameters in bulk.  So we have to ignore it.
-        if (/* sendingAllParameters ||*/ ignoreParametersFromSynth) return;
+        if (ignoreParametersFromSynth) return;
         
         if (data.type == Midi.CCDATA_TYPE_NRPN)
             {
@@ -7610,10 +7566,10 @@ public class ASMHydrasynth extends Synth
     // Missing parameters that can't be changed in real-time:
     // name, category, color
 
-    "--",                                                       // "allosccent",                    /// This isn't a patch parameter
+    "--",                                                       // "allosccent",                  /// This isn't a patch parameter
     "osc1mode",                                 
     "osc2mode",                                 
-    "--",                                                       // "osc3mode",                     /// This parameter shouldn't exist (osc3 doesn't have a mode)
+    "--",                                                       // "osc3mode",                    /// This parameter shouldn't exist (osc3 doesn't have a mode)
     "osc1semi",
     "osc2semi",
     "osc3semi",
@@ -8638,7 +8594,7 @@ public class ASMHydrasynth extends Synth
     "voicerandomphase",
     "voicewarmmode",
     "voicevibratobpmsync",  
-    "voicesnap",                                                                                                                // Not Documented   
+    "voicesnap",                                  // Not Documented   
     
     /// New 2.0.0 Parameters
     "voicesustain",
@@ -8674,6 +8630,9 @@ public class ASMHydrasynth extends Synth
     // "macro7panelbuttonvalue",
     // "macro8panelbuttonvalue",
     };
+    
+    
+    
     
     static HashMap nrpnToIndex = null;
     public static final int[] nrpn = new int[]
@@ -9734,6 +9693,9 @@ public class ASMHydrasynth extends Synth
     14489,           // 71 19                   "lfo4quantize",                  
     14490,           // 71 1a                   "lfo5quantize",                  
     };
+        
+        
+        
         
     // This is a list of each parameter that corresponds to a CC, for all 128 CC values.
     // We'll use it to maybe parse incoming CC values but not to emit them, so there's 

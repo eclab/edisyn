@@ -2,24 +2,40 @@
 <h1>ASM Hydrasynth</h1> 
 <h2>Single Patch Editor</h2>
 
-<p>This editor should work properly with the Hydrasynth Keyboard, Deluxe (when set up right), Desktop, and Explorer.  It can read 1.5.5 and 2.0.0 sysex dumps and can write 2.0.0.
+<p>This editor should work properly with the Hydrasynth Keyboard, Deluxe, Desktop, and Explorer.  It can read 1.5.5 and 2.0.0 sysex dumps and can write 2.0.0.
 
 <p><b>Communicating with Edisyn</b><br> 
 
 If you're connecting via USB, set Edisyn's incoming and outgoing MIDI devices to HYDRASYNTH KB.  Set Edisyn's MIDI channel to the same as the synth's RX and TX MIDI channels.  You can set the synth's RX MIDI channel to OMNI if you liked.   Set up Parameter RX and TX both to be NRPN. Turn on Program Change RX (it's particularly important).  
 
-<p><font color=red><b>Windows Warning</b></font><br>
-Java MIDI on Windows does not play nicely with the Hydrasynth, either through its USB port or through another USB device.'s USB port.  MIDI and sysex messages often get lost.  Edisyn tries its best to compensate but you may run into issues.  In particular you may find that the first time you launch Edisyn, it won't work at all; but if you unplug your USB cable, quit Edisyn, plug in the cable again, and relaunch it, you may have more luck.  
-
 <p><b>Current Editor Status</b><br>
-The Hydrasynth's sysex spec is closed: developing Edisyn required reverse engineering it.  As such Edisyn can do most things you'd need, but a few items (such as requesting current memory) are still out of reach.
+The Hydrasynth's sysex spec is closed and ASM has not been forthcoming: developing Edisyn required reverse engineering it.  As such Edisyn can do most things you'd need, but a few items (such as requesting current memory) are still out of reach.
 
-<p>Edisyn does not yet support the Deluxe's multimode, though I would like to ultimately.  But it may be quite a while.
+<p>Edisyn does not yet support the Deluxe's multimode, though I would like to ultimately.  But it may be quite a while as I do not have access to a Deluxe.
 
-<p><b>Patch H 128 Cannot Be Used</b><br>
-The Hydrasynth doesn't have a standard procedure for Sending to Current Patch.  As a result, Edisyn is forced to instead send to Patch H 128, then switch to Patch H 128 to load your current patch into current memory.  As a result, you can't really edit Patch H 128, as Edisyn will overwrite it in current memory.  I hope that's okay.
+<p><font color=red><b>Warning about Send to Current Patch and Flash RAM</b></font><br>
+Edisyn performs Send to Current Patch, and Undo/Redo, and Hill-Climbing, and Morphing, etc. using a sysex command which writes to current working memory of the synth, but does not save the patch permanently.  This is the same strategy employed by Sigabort MIDISynth.  Because hill-climbing and morphing use this many times to audition sounds, it's important that this procedure not save to Flash RAM, which has a limited number of write cycles (perhaps 100,000) before it fails.  However ASM will not verify if this is the case!  I strongly believe it does not write to Flash, for several reasons.  (1) Writing to Flash generally takes a long time (see how long Write to Patch... takes), but this sysex command is fast.  (2) The operation is not permanent: reboot your Hydrasynth and the results are gone (that wouldn't happen with Flash of course, which is permanent).  Nonetheless, you have been warned.  Hopefully ASM will fess up soon.
 
-<p>Also note that though the patch has been sent to H 128, patch H 128 will display its original patch name, color, and category regardless (I can't change that).
+<p><font color=red><b>Windows Warning</b></font><br>
+Java MIDI on Windows does not play nicely with the Hydrasynth, either through its USB port or through another USB device's USB port:
+
+<ul>
+<li>MIDI and sysex messages often get lost or are duplicated.  Edisyn tries its best to compensate but you may run into issues.  It's also a bit slower than MacOS and Linux: but direct USB connection to the Hydrasynth is faster than going through 5-pin DIN MIDI.
+<p><li>You may find that the first time you launch Edisyn, it won't communicate with the Hydrasynth at all.  However if you unplug your USB cable, quit Edisyn, plug in the cable again, and relaunch Edisyn, you may have more luck (this really does seem to work often). 
+</ul>
+
+
+<p><b>Edisyn uses Patch H&nbsp;128 to Send to Current Patch</b><br>
+The Hydrasynth is a very strange syntheszier in that it doesn't have a patch in current memory: it has <b><i>all patches</i></b> stored in current memory.  When you write a patch to Flash RAM, what the Hydrasynth does is write <i>all</i> of them.  That's why it takes so long.
+
+<p>However the Hydrasynth has no way to Send to Current Patch: it can only send to a <i>specific</i> patch.  As a result, Edisyn is forced to use Patch H&nbsp;128 as a &ldquo;scratch pad&rdquo;.  When you Send to Current Patch (or undo/redo/nudge/randomize/hill-climb/morph/etc.), it actually gets sent to Patch H&nbsp;128, which is then loaded so you can hear the sound.  If you Write to Patch, it'll get written to the patch you expect.
+
+<p>This works but can be very confusing, for two reasons.  First, the patch name at H&nbsp;128 won't change: the Hydrasynth only shows the name of the patch that's currently written to Flash.  Second, that if you write a patch (say, A 32), it will <i>also</i> write H&nbsp;128 -- it writes everything, remember -- and so whatever had been sent to H128 in the past (including the name) will get written to Flash.  After that, H&nbsp;128 will show the newly written name.
+
+<p>It's probably best to just ignore the fact that the Hydrasynth is switching to Patch H&nbsp;128, and that it's sometimes seemingly displaying the wrong name.  Just trust that the sound is getting sent to the machine and you can now audition it.  Also this means that you can't really store things in Patch H&nbsp;128: Edisyn will eventually overwrite it.  Treat H&nbsp;128 as a scratch pad for Edisyn.
+
+<p>To make it clear that Edisyn is sending to H&nbsp;128, Edisyn will display a little &ldquo;<b>Sent -> H&nbsp;128</b>&rdquo; underneath its Patch Number.
+
 
 <p><b>About the Menu</b><br>
 
@@ -42,7 +58,7 @@ The Hydrasynth doesn't have a standard procedure for Sending to Current Patch.  
 <p><li><b>Lock All LFO Steps to Notes</b>&nbsp;&nbsp;If you would like to restrict LFO steps to notes only in all cases, you can check this.  This will restrict to notes when you change dials, randomize, morph, hill-climb, blend, nudge, merge, load files, and even receive parameters from the Hydrasynth.  Additionally if the Hydrasynth sends you a new patch, and this is turned on, then the steps will be modified so that they are restricted.  You probably only want to set this temporarily prior to a mutation operation such as randomization, morphing, hill-climbing, nudging, blending, and merging, so you can restrict mutation to just notes: you can then then turn it off again.  You almost certainly don't want it on when you load or save a patch.  For this reason, this option is not retained and is always reset when you create a new patch editor window.
 </ul>
 
-<p><b>Parameters that are Alow to Send in Real-Time</b><br>
+<p><b>Issues Sending Parameters in Real-Time</b><br>
 
 There are a number of parameters that can't be sent via NRPN to the Hydrasynth in real-time.   These are:
 
@@ -56,19 +72,13 @@ There are a number of parameters that can't be sent via NRPN to the Hydrasynth i
 <p><li>All Macro Names and Macro Button States
 </ul>
 
-<p>By default Edisyn doesn't try to send these in real-time at all: you can manually send them with <b>Send to Current Patch</b>.  But if you turn on <b>Auto-Sends Patches</b> in the <b>MIDI</b> menu, then Edisyn will send the whole patch automatically exactly one second after you have made your most recent change to these parameters. 
+<p>By default Edisyn doesn't try to send these in real-time at all: you can manually send them with <b>Send to Current Patch</b>.  But if you turn on <b>Auto-Sends Patches</b> in the <b>MIDI</b> menu, then Edisyn will send the whole patch automatically exactly one second after you have made your most recent change to reflect these parameters (except Name, Category, and Color, which can't be set unless you Write the patch). 
 
 
 
-<p><b>Gotchas and Hydrasynth Bugs to Be Aware of</b><br>
+<p><b>Gotchas and Hydrasynth Bugs to Be Aware Of</b><br>
 
-The Hydrasynth has a great many bugs: but Edisyn tries to work around them and hide them as best it can.  A few are still exposed and mentioned here, plus some general gotchas.
-
-<ul>
-<!--
-<li>Auditioning sounds via Hill-Climbing and Morphing doesn't always produce the right sound when played the first time, because the Hydrasynth is slow to update bulk NRPN changes before a note is played.  It seems to be a Hydrasynth bug.
-<p>
--->
+The Hydrasynth has a great many bugs and oddities: but Edisyn tries to work around them and hide them as best it can.  A few are still exposed and mentioned here, plus some general gotchas.
 
 <li>Yes, Envelope 2 really doesn't have modifiable a Trigger Source 1.
 
@@ -90,11 +100,13 @@ The Hydrasynth has a great many bugs: but Edisyn tries to work around them and h
 
 <p><li>The first WaveScan wave goes Sin...Harmon23.  The other waves go Off, Silence, Sin, ... Harmon23.  This means that when you use the Category's distribute procedure to distribute waves, it won't work right for the first wave.
 
-<p><li>You can't set the LFO Steps parameter unless the corresponding LFO Wave parameter has been first set to "Step".  You <i>can</i> set the individual steps themselves. Also you can set the LFO One Shot to Step even though you're not in Step: but the Hydrasynth will ignore this and set it to On (when you get into Step you'll have to reset LFO One Shot back to Step again).  Go figure.
+<p><li>You can't set the LFO Steps parameter unless the corresponding LFO Wave parameter has been first set to &ldquo;Step&rdquo;.  You <i>can</i> set the individual steps themselves. Also you can set the LFO One Shot to Step even though you're not in Step: but the Hydrasynth will ignore this and set it to On (when you get into Step you'll have to reset LFO One Shot back to Step again).  Go figure.
 
 <p><li>Even if you turn OFF a macro destination, a modmatrix destination, or a modmatrix source, you can still set its depth and button depth! Don't ask.
 
+<!--
 <p><li>A bad misfeature in the Hydrasynth means that if you do a Program Change for patch X and you are already <b>at</b> patch X, the Hydrasynth doesn't reload patch X into current memory &mdash; it just ignores you.  This means that if we're requesting patch X, Edisyn must do a Program Change <b>away</b> and then <b>back</b> again to force the reload.  However Edisyn doesn't know for sure if the Hydrasynth is currently <b>at</b> patch X.  It makes its best guess; but may be wrong.  So if you are at patch X on the Hydrasynth and reload it and it doesn't seem to want to, try loading something else manually and then coming back.
+-->
 
 </ul>
 
@@ -105,13 +117,13 @@ The Hydrasynth has a great many bugs: but Edisyn tries to work around them and h
 <li>When you edit a macro name, notice that the text field is actually a drop-down combo-box: it has all the default Hydrasynth macro names available.
 
 <p><li>
-Edisyn can send the Hydrasynth microtuning scales via Midi Tuning Standard (MTS) sysex.  Just use Edisyn's MIDI Tuning Standard editor (under "General"), which can also load Scala files as well as the microtonal .mid file provided on ASM's website.  Go to the Microtuning menu in the System Setup, choose the scale number you want to overwrite, and select "Receive Scale...".  Then in Edisyn you can either send the scale to current patch or write it: it doesn't matter because the scale patch number Edisyn sends is ignored by the Hydrasynth.
+Edisyn can send the Hydrasynth microtuning scales via Midi Tuning Standard (MTS) sysex.  Just use Edisyn's MIDI Tuning Standard editor (under &ldquo;General&rdquo;), which can also load Scala files as well as the microtonal .mid file provided on ASM's website.  Go to the Microtuning menu in the System Setup, choose the scale number you want to overwrite, and select &ldquo;Receive Scale...&rdquo;.  Then in Edisyn you can either send the scale to current patch or write it: it doesn't matter because the scale patch number Edisyn sends is ignored by the Hydrasynth.
 </li>
 
 </ul>
 
 <p><b>About Hydrasynth Manager Files</b><br>
-ASM provides a librarian called the ASM Hydrasynth Manager.  This software saves patches in proprietary bank file formats with the extension "hydra" or "hydramulti".  Edisyn instead saves as standard sysex files, and does not read these proprietary files.  To convert them to Edisyn, you'll have to load them into your Hydrasynth, then dump them out to Edisyn.
+ASM provides a librarian called the ASM Hydrasynth Manager.  This software saves patches in proprietary bank file formats with the extension &ldquo;hydra&rdquo; or &ldquo;hydramulti&rdquo;.  Edisyn instead saves as standard sysex files, and does not read these proprietary files.  To convert them to Edisyn, you'll have to load them into your Hydrasynth, then dump them out to Edisyn.
 
 <p><b>About the NRPN and Sysex Specs</b><br>
 The Hydrasynth does not have a public sysex spec, and so building Edisyn's editor necessitated completely reverse engineering it.  The Hydrasynth does have a public NRPN spec, but it is missing a lot of parameters, lacks a great deal of critical information, and has many errors.  You can find a reverse engineered sysex protocol and patch format, along with a heavily revised NRPN spec, <a href="https://github.com/eclab/edisyn/tree/master/edisyn/synth/asmhydrasynth/info">in this directory</a>.
@@ -127,6 +139,6 @@ Thanks to Thierry Rochebois Zic for making his stunning Hydrasynth wave and harm
 <td><b>Sean Luke</b>
 <tr>
 <td align=right>Date&nbsp;&nbsp;&nbsp;
-<td>May 5, 2023
+<td>May 22, 2023
 </table>
 

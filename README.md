@@ -56,6 +56,7 @@ Edisyn is particularly good at exploring the space of patches.  It has to my kno
 Edisyn presently supports:
 
 * Alesis D4 and DM5 
+* ASM Hydrasynth Family (Single mode only)
 * Audiothingies Micromonsta
 * Casio CZ Series (CZ101, CZ1000, CZ3000, CZ5000, CZ-1, CZ-230S)
 * DSI Prophet '08, Tetra, Mopho, Mopho Keyboard, Mopho SE, and Mopho x4 (Single and (for Tetra) Combo modes)

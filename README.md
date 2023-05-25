@@ -16,9 +16,9 @@ Related projects:
 
 * [Edisyn's Manual](#manual)
 * [Supported Synthesizers](#support)
-* [Installing on a Mac](#mac)
-* [Installing on Windows](#windows)
-* [Installing on Linux](#linux)
+* [Downloading and Installing on a Mac](#mac)
+* [Downloading and Installing on Windows](#windows)
+* [Downloading and Installing on Linux](#linux)
 
 
 ## Paper on Edisyn's Stochastic Patch Exploration Tools

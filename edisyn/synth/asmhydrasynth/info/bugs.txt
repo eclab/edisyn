@@ -139,30 +139,30 @@ which the CS80 did easily:
 
 For example:  
 
-[A] Play a chord, hold it down, and press your finger on the ribbon 
-strip.  Then drag the finger to another location.  Pitch bend occurs. 
-But then if you LET GO of the ribbon strip, on the CS80 the pitch bend 
-stays where you had last bent it.  Recentering only happens when you let 
-go of the notes.  On the Hydrasynth, the pitch bend unfortunately 
-recenters immediately when you release the ribbon strip.  This makes it 
-*very hard* to do Bladerunner-style pitch pulls on the Hydrasynth.  When 
-you let go of the ribbon strip, the value should stay where you left it 
-rather than resetting.  And when you newly press the ribbon strip, the 
-value should continue relative to there rather than resetting to that 
-position.
-
-[B] On the CS-80, if you bend up with the ribbon, the range is different 
+[A] On the CS-80, if you bend up with the ribbon, the range is different 
 than if you bend down.  On the Hydrasynth, they are the same.
 
-[C] There is no option to change the ribbon bend range.  You can only 
+[B] There is no option to change the ribbon bend range.  You can only 
 change the pitch wheel bend range.  I find the ribbon bend range to be 
 often much too small or much too big.
 
-[D] CS-80's "Sustain Mode II" allows you to play a chord, hold it down 
+[C] CS-80's "Sustain Mode II" allows you to play a chord, hold it down 
 with the SUSTAIN PEDAL, then play other notes and only the other notes 
 are affected by the ribbon strip.  This is a very useful playing feature 
 used heavily by Vangelis and others.  It is at present impossible on the 
 Hydrasynth.
+
+[D] Play a chord, hold it down, and press your finger on the ribbon
+strip.  Then drag the finger to another location.  Pitch bend occurs.
+But then if you LET GO of the ribbon strip, the Hydrasynth immediately
+recenters.  This makes it *very* hard to do long Bladerunner-style pitch
+pulls on the Hydrasynth.  If there was *one* feature I'd hope to see on
+the Hydrasynth, it'd be the option that when you let go of the ribbon
+strip, the pitch stays where your finger was last.  And if you again
+press the strip, the pitch bend is again relative to where the finger
+was last (rather than snapping to the new finger location on the strip). 
+The pitch is only reset for new notes played after all existing notes 
+are released.
 
 
 

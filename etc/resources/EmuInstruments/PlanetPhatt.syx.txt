@@ -1,0 +1,481 @@
+1	3329	SE Sub 1   
+2	3330	SE Sub 2   
+3	3331	SE Sub 3   
+4	3332	SE Sub 4   
+5	3333	SE Sub 5   
+6	3334	SE Sub 6   
+7	3335	SE Sub 7   
+8	3336	SE Sub 8   
+9	3337	SE Sub 9   
+10	3338	SE Sub 10  
+11	3339	SE Sub 11  
+12	3340	Subtle Bass
+13	3341	Bass Slap 1
+14	3342	Bass Slap 2
+15	3343	FingerBass1
+16	3344	FingerBass2
+17	3345	EP Bass 1  
+18	3346	EP Bass 2a 
+19	3347	EP Bass 2b 
+20	3348	UprightBass
+21	3349	Fretless 1 
+22	3350	Fretless 2 
+23	3351	Fretless 3 
+24	3352	Fretless 4 
+25	3353	Street Bass
+26	3354	TBazz      
+27	3355	Dope Bass 1
+28	3356	Dope Bass 2
+29	3357	DopeBassHit
+30	3358	Slider Bass
+31	3359	Saw Bass   
+32	3360	Moog Saw   
+33	3361	Ultimate 2a
+34	3362	Ultimate 2b
+35	3363	BigSaw Bass
+36	3364	BigMoogSaw1
+37	3365	BigMoogSaw2
+38	3366	Mini Moog  
+39	3367	Filter Bass
+40	3368	Fat SynBass
+41	3369	JupiterBass
+42	3370	Syn Tone   
+43	3371	BassBalls1 
+44	3372	BassBalls2 
+45	3373	Bas Boy Syn
+46	3374	All Purpose
+47	3375	Standard   
+48	3376	Buzz Bass  
+49	3377	Home Bass  
+50	3378	Gtr Mutes  
+51	3379	Sine Wave  
+52	3380	Saw Wave   
+53	3381	Synth Axe 1
+54	3382	Synth Axe 2
+55	3383	Zippy Lead 
+56	3384	Mini OD2   
+57	3385	Bell Synth 
+58	3386	BuzzSynth 1
+59	3387	BuzzSynth 2
+60	3388	Dance Lead 
+61	3389	Worm Lead 1
+62	3390	Worm Lead 2
+63	3391	Worm Lead 3
+64	3392	Worm Lead 4
+65	3393	Worm Lead 5
+66	3394	Worm Lead 6
+67	3395	ElectriWorm
+68	3396	Electron   
+69	3397	Tone Organ 
+70	3398	Disco Organ
+71	3399	DX Organ   
+72	3400	JX Organ   
+73	3401	Oddd Organ 
+74	3402	Clavinet   
+75	3403	Wurlitzer  
+76	3404	FM EP 1a   
+77	3405	FM EP 1b   
+78	3406	Tine EP    
+79	3407	Rhodes     
+80	3408	EP Fog     
+81	3409	EP Roll1 C 
+82	3410	EP Roll2 F6
+83	3411	EP Roll3Bbm
+84	3412	Harmon Tpt 
+85	3413	Harmon FX 1
+86	3414	Harmon FX 2
+87	3415	Bari Wave  
+88	3416	P5 Brass   
+89	3417	Spacy Tpt  
+90	3418	Sax Riff Eb
+91	3419	WackTptC#m7
+92	3420	Synth Flute
+93	3421	Boink      
+94	3422	Brass Bb   
+95	3423	Harmonica  
+96	3424	Gtr Wah Bm 
+97	3694	Alt Gtr Wah
+98	3425	DisTar Pad 
+99	3426	SynthHiStrg
+100	3427	SynthEnsble
+101	3428	Synth Vox  
+102	3429	Jupiter Syn
+103	3430	MoodStrings
+104	3431	Xylo Pad   
+105	3432	Jupiter    
+106	3433	Dreamyy C  
+107	3434	Phat Pad   
+108	3435	UnderPad Fm
+109	3436	Science    
+110	3437	MusiCrowd  
+111	3438	Crowd 2    
+112	3439	Crowd 2 NTP
+113	3440	Dirt 1     
+114	3441	Dirt 1  NTP
+115	3442	Dirt 2     
+116	3443	Dirt 2 NTP 
+117	3444	Dirt 3     
+118	3445	Dirt 3 NTP 
+119	3446	Oow        
+120	3447	Soul Oohs  
+121	3448	Dance Hits 
+122	3449	FX Hits    
+123	3450	Gtr Riffs  
+124	3451	Bass Hits 1
+125	3452	Bass Hits 2
+126	3453	Brass Hits 
+127	3454	Vox Hits 1 
+128	3455	Vox Hits 2 
+129	3456	Scratches  
+130	3798	ScrtchLoops
+131	3695	ScratchBits
+132	3457	Kicks      
+133	3458	Snares     
+134	3459	Toms       
+135	3460	Timbales   
+136	3461	CongasBngos
+137	3462	Hats       
+138	3463	Cymbals    
+139	3464	Shakers    
+140	3465	Bells      
+141	3466	Blocks     
+142	3467	Tams       
+143	3468	Claps      
+144	3469	Snaps      
+145	3470	Misc Perc  
+146	3496	DanceHit1 E
+147	3497	DanceHit2F#
+148	3498	DanceHit3G#
+149	3499	DanceHt4C#m
+150	3500	DanceHit5C#
+151	3501	DanceHit6 G
+152	3502	DanceHit7Gm
+153	3503	DanceHit8 A
+154	3504	DanceHit9D#
+155	3505	DanceHt10Cm
+156	3506	FX Hit1    
+157	3507	FX Hit2    
+158	3508	FX Hit3 F#m
+159	3509	FX Hit4 F# 
+160	3510	FX Hit5    
+161	3511	FX Hit6 E  
+162	3512	FX Hit7 B  
+163	3513	GtrHit1 D#s
+164	3514	GtrHit2 D  
+165	3515	GtrHit3 D  
+166	3516	GtrHit4 D  
+167	3517	GtrHit5 Bm 
+168	3518	GtrHit6 F  
+169	3519	GtrHit7 E  
+170	3520	GtrHit8 F# 
+171	3521	GtrHit9    
+172	3522	GtrHit10   
+173	3523	GtrHit11 D#
+174	3524	GtrHit12 Am
+175	3525	GtrHit13 E 
+176	3526	GtrHit14 G 
+177	3527	GtrHit15   
+178	3528	GtrHit16 D 
+179	3529	GtrHit17 G 
+180	3530	GtrHit18 A 
+181	3531	GtrHit19   
+182	3532	GtrHit20 D#
+183	3533	GtrHit21   
+184	3534	GtrHit22 F#
+185	3535	GtrHit23   
+186	3536	GtrHit24   
+187	3537	GtrHit25 A7
+188	3538	GtrHit26 D 
+189	3539	GtrHit27   
+190	3540	GtrHit28 A 
+191	3541	GtrHit29 F7
+192	3542	GtrHit30A#m
+193	3543	Bass Hit 1 
+194	3544	Bass Hit 2 
+195	3545	Bass Hit 3 
+196	3546	Bass Hit 4 
+197	3547	Bass Hit 5 
+198	3471	Tpt FX 1   
+199	3472	Tpt FX 2   
+200	3473	Tpt FX 3   
+201	3474	Tpt FX 4   
+202	3475	Tpt FX 5   
+203	3476	Sax FX 1   
+204	3477	Sax FX 2   
+205	3478	Brs Hit1Bbm
+206	3479	Brs Hit2   
+207	3480	Brs Hit3 F#
+208	3481	Brs Hit4 D#
+209	3482	Brs Hit5 D#
+210	3483	Brs Hit6   
+211	3484	Brs Hit7 C 
+212	3485	Brs Hit8 G 
+213	3486	Brs Hit9   
+214	3487	Brs Ht10 E7
+215	3488	Brs Hit11 B
+216	3489	Brs Ht12 G#
+217	3490	Brs Ht13A#m
+218	3491	Brs Hit14  
+219	3492	Brs Ht15 G#
+220	3493	Brs Ht16 G#
+221	3494	Brs Hit17 D
+222	3495	Brs Hit18 A
+223	3548	Vox Hit 1  
+224	3549	Vox Hit 2  
+225	3550	Vox Hit 3  
+226	3551	Vox Hit 4  
+227	3552	Vox Hit 5  
+228	3553	Vox Hit 6  
+229	3554	Scratch 1  
+230	3555	Scratch 2  
+231	3556	Scratch 3  
+232	3557	Scratch 4  
+233	3558	Scratch 5  
+234	3559	Scratch 6  
+235	3560	Scratch 7  
+236	3561	Scratch 8  
+237	3562	Scratch 9  
+238	3563	Scratch 10 
+239	3564	Scratch 11 
+240	3565	Scratch 12 
+241	3566	Scratch 13 
+242	3567	Scratch 14 
+243	3568	Scratch 15 
+244	3569	Scratch 16 
+245	3570	Scratch 17 
+246	3585	Kick 1     
+247	3586	Kick 2     
+248	3587	Kick 3     
+249	3588	Kick 4     
+250	3589	Kick 5     
+251	3590	Kick 6     
+252	3591	Kick 7     
+253	3592	Kick 8     
+254	3593	Kick 9     
+255	3594	Kick 10    
+256	3595	Kick 11    
+257	3596	Kick 12    
+258	3597	Kick 13    
+259	3598	Kick 14    
+260	3599	Kick 15    
+261	3600	Kick 16    
+262	3601	Kick 17    
+263	3602	Kick 18    
+264	3603	Kick 19    
+265	3604	Kick 20    
+266	3605	Kick 21    
+267	3606	Kick 22    
+268	3607	Kick 23    
+269	3608	Kick 24    
+270	3609	Kick 25    
+271	3610	Kick 26    
+272	3611	Kick 27    
+273	3612	Kick 28    
+274	3613	Kick 29    
+275	3614	Kick 30    
+276	3615	Snare 1    
+277	3616	Snare 2    
+278	3617	Snare 3    
+279	3618	Snare 4    
+280	3619	Snare 5    
+281	3620	Snare 6    
+282	3621	Snare 7    
+283	3622	Snare 8    
+284	3623	Snare 9    
+285	3624	Snare 10   
+286	3625	Snare 11   
+287	3626	Snare 12   
+288	3627	Snare 13   
+289	3628	Snare 14   
+290	3629	Snare 15   
+291	3630	Snare 16   
+292	3631	Snare 17   
+293	3632	Snare 18   
+294	3633	Snare 19   
+295	3634	Snare 20   
+296	3635	Snare 21   
+297	3636	Snare 22   
+298	3637	Snare 23   
+299	3638	Snare 24   
+300	3639	Snare 25   
+301	3640	Snare 26   
+302	3641	Snare 27   
+303	3642	Snare 28   
+304	3643	Snare 29   
+305	3644	Snare 30   
+306	3645	Snare 31   
+307	3646	Snare 32   
+308	3647	Snare 33   
+309	3761	Snare 33b  
+310	3648	Snare 34   
+311	3649	Snare 35   
+312	3650	Snare 36   
+313	3651	Snare 37   
+314	3652	Snare 38   
+315	3653	Snare 39   
+316	3654	Snare 40   
+317	3655	Snare 41   
+318	3656	Snare 42   
+319	3657	Snare 43   
+320	3658	Snare 44   
+321	3659	Snare 45   
+322	3660	Snare 46   
+323	3661	Snare 47   
+324	3662	Snare 48   
+325	3663	Snare 49   
+326	3664	Snare 50   
+327	3665	Snare 51   
+328	3666	Snare 52   
+329	3667	Snare 53   
+330	3668	Snare 54   
+331	3669	Snare 55   
+332	3670	Snare 56   
+333	3671	Snare 57   
+334	3672	Snare 58   
+335	3673	Snare 59   
+336	3674	Snare 60   
+337	3675	Snare 61   
+338	3700	Tom 1      
+339	3701	Tom 2      
+340	3702	Tom 3      
+341	3703	Tom 4      
+342	3704	Tom 5      
+343	3705	Tom 6      
+344	3706	Tom 7      
+345	3707	Tom 8      
+346	3708	Tom 9      
+347	3709	Timbale 1  
+348	3710	Timbale 2  
+349	3711	Conga 1    
+350	3712	Conga 2    
+351	3713	Conga 3    
+352	3714	Conga 4    
+353	3715	Conga 5    
+354	3716	Conga 6    
+355	3717	Conga 7    
+356	3718	Bongo 1    
+357	3719	Hat 1      
+358	3720	Hat 2      
+359	3721	Hat 3      
+360	3722	Hat 4      
+361	3723	Hat 5      
+362	3724	Hat 6      
+363	3725	Hat 7      
+364	3726	Hat 8      
+365	3727	Hat 9      
+366	3728	Hat 10     
+367	3729	Hat 11     
+368	3730	Hat 12     
+369	3731	Hat 13     
+370	3732	Hat 14     
+371	3733	Hat 15     
+372	3734	Hat 16     
+373	3735	Hat 17     
+374	3736	Hat 18     
+375	3737	Hat 19     
+376	3738	Hat 20     
+377	3739	Hat 21     
+378	3740	Hat 22     
+379	3741	Hat 23     
+380	3742	Hat 24     
+381	3743	Hat 25     
+382	3744	Hat 26     
+383	3745	Hat 27     
+384	3746	Hat 28     
+385	3747	Hat 29     
+386	3748	Hat 30     
+387	3749	Hat 31     
+388	3750	Hat 32     
+389	3751	Hat 33     
+390	3752	Cymbal 1   
+391	3753	Cymbal 2   
+392	3754	Cymbal 3   
+393	3755	Cymbal 4   
+394	3756	Cymbal 5   
+395	3676	Cymbal 6   
+396	3757	Cymbal 7   
+397	3758	Cymbal 8   
+398	3677	Cymbal 9   
+399	3759	Cymbal 10  
+400	3760	Cymbal 11  
+401	3692	Cymbal 12  
+402	3762	Shaker 1   
+403	3763	Shaker 2   
+404	3764	Shaker 3   
+405	3765	Shaker 4   
+406	3766	Shaker 5   
+407	3767	Shaker 6   
+408	3768	Shaker 7   
+409	3769	Shaker 8   
+410	3770	Shaker 9   
+411	3771	Shaker 10  
+412	3772	Shaker 11  
+413	3773	Shaker 12  
+414	3774	Shaker 13  
+415	3775	Shaker 14  
+416	3776	Shaker 15  
+417	3777	Shaker 16  
+418	3778	Shaker 17  
+419	3678	Bell 1     
+420	3679	Bell 2     
+421	3779	Bell 3     
+422	3780	Bell 4     
+423	3781	Bell 5     
+424	3782	Bell 6     
+425	3680	Bell 7     
+426	3681	Bell 8     
+427	3786	Bell 9     
+428	3783	Bell 10    
+429	3784	Bell 11    
+430	3785	Bell 12    
+431	3682	Bell 13    
+432	3787	Block 1    
+433	3788	Block 2    
+434	3789	Block 3    
+435	3790	Block 4    
+436	3791	Block 5    
+437	3792	Block 6    
+438	3793	Tam 1      
+439	3794	Tam 2      
+440	3795	Tam 3      
+441	3796	Tam 4      
+442	3797	Tam 5      
+443	3799	Clap 1     
+444	3800	Clap 2     
+445	3801	Clap 3     
+446	3802	Clap 4     
+447	3803	Clap 5     
+448	3804	Clap 6     
+449	3805	Clap 7     
+450	3806	Clap 8     
+451	3807	Clap 9     
+452	3808	Clap 10    
+453	3809	Clap 11    
+454	3810	Clap 12    
+455	3811	Scraa      
+456	3812	Snap 1     
+457	3813	Snap 2     
+458	3814	Snap 3     
+459	3815	Snap 4     
+460	3816	Snap 5     
+461	3817	Snap 6     
+462	3818	Misc Perc 1
+463	3683	Misc Perc 2
+464	3684	Misc Perc 3
+465	3819	Misc Perc 4
+466	3820	Misc Perc 5
+467	3685	Misc Perc 6
+468	3821	Misc Perc 7
+469	3822	Misc Perc 8
+470	3823	Misc Perc 9
+471	3686	Kit 1      
+472	3687	Kit 2      
+473	3688	Kit 3      
+474	3689	Kit 4      
+475	3690	Kit 5      
+476	3691	Kit 6      
+477	3693	Kit 7      
+478	3696	Kit 8      
+479	3697	Kit 9      
+480	3699	Kit 10     
+481	3698	Rom Play   

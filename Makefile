@@ -14,6 +14,7 @@ indent:
 	find . -name "*.java" -print -exec emacs --batch --load ~/.emacs --eval='(progn (find-file "{}") (mark-whole-buffer) (setq indent-tabs-mode nil) (untabify (point-min) (point-max)) (indent-region (point-min) (point-max) nil) (save-buffer))' \;
 
 jar:
+	- mkdir install 
 	rm -rf install/edisyn.jar uk META-INF
 	${JAVAC} edisyn/*.java edisyn/*/*.java edisyn/*/*/*.java 
 	touch /tmp/manifest.add

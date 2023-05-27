@@ -1,0 +1,434 @@
+1	1537	B3DistLwSlw
+2	1538	B3DistFast 
+3	1539	B3 Hi Slow 
+4	1540	B3 Hi Fast 
+5	1541	B3FullSlow 
+6	1542	B3FullFast 
+7	1543	B3 Perc 3rd
+8	1544	Male Choir 
+9	1545	Femme Choir
+10	1546	MalestoMix 
+11	1547	FemmestoMix
+12	1548	Violin Trio
+13	1549	Flute      
+14	1550	Bari Sax   
+15	1551	Tenor Sax  
+16	1552	Alto Sax   
+17	1553	Trumpet Sft
+18	1554	Trumpet Hrd
+19	1555	Trombone   
+20	1556	Trom / STpt
+21	1557	Trom / HTpt
+22	1558	Trom / Sax 
+23	1559	Farfisa    
+24	1560	CP-70      
+25	1561	CP-70Mellow
+26	1562	CP-70 Brite
+27	1563	Piano Bass 
+28	1564	Wurlitzer1 
+29	1565	Wurlitzer2 
+30	1566	DynoRhodes1
+31	1567	DynoRhodes2
+32	1568	FendrRhodes
+33	1569	Clavinet   
+34	1570	Brite Clav 
+35	1571	Mini Moog 1
+36	1572	Mini Moog 2
+37	1573	Mini Moog 3
+38	1574	Mini Moog 4
+39	1575	Mini Moog 5
+40	1576	Mini Moog 6
+41	1577	Micro Moog 
+42	1578	TaurusPedal
+43	1579	Jaco Bass  
+44	1580	M12 Lead 1 
+45	1581	M12 Lead 2 
+46	1582	ARP 2600   
+47	1583	RockDXman  
+48	1584	P5 SyncLead
+49	1585	Moog 55 Rez
+50	1586	Memory Moog
+51	1587	OBX Saws   
+52	1588	P5GuitarPad
+53	1589	Matrix Pad 
+54	1590	P5 Piper   
+55	1591	P5 Strings 
+56	1592	M12 Strings
+57	1593	ARP Strings
+58	1594	AAAHs      
+59	1595	Picked Bass
+60	1596	Finger Bass
+61	1597	Finger Tre 
+62	1598	Pickd 8 Top
+63	1599	Fingr 8 Top
+64	1600	Fingr 8 Tre
+65	1601	The Guitar 
+66	1602	Twelv Top 1
+67	1603	Twelv Top 2
+68	1604	Twelv Top 3
+69	1605	Drum Kit 1 
+70	1606	Drum Kit 2 
+71	1607	Drum Kit 3 
+72	1608	Drum Kit 4 
+73	1609	Drum Kit 5 
+74	1610	Drum Kit 6 
+75	1611	Drum Kit 7 
+76	1612	Large Hall 
+77	1613	Medium Room
+78	1614	Tiled Room 
+79	1615	Gated Short
+80	1616	Gated Long1
+81	1617	Gated Long2
+82	1618	Lush Reverb
+83	1619	BlushReverb
+84	1620	FullOn Verb
+85	1621	Dry Kick   
+86	1622	Kick Verb  
+87	1623	Dry Snare  
+88	1624	Snare Verb 
+89	1625	Dry Tom    
+90	1626	Wet Tom    
+91	1627	High Hat 1 
+92	1628	High Hat 2 
+93	1629	High Hat 3 
+94	1630	Ride Ping  
+95	1631	Ride Bell  
+96	1632	Crash      
+97	1633	Cowbell    
+98	1634	Tambourine 
+99	1635	Side Stick 
+100	1636	Clave      
+101	1637	Square     
+102	1638	Sawtooth   
+103	1639	Triangle   
+104	1640	Moog Saw 1 
+105	1641	Moog Saw 2 
+106	1642	Moog Saw 3 
+107	1643	Moog Saw 4 
+108	1644	Moog Sqr 1 
+109	1645	Moog Sqr 2 
+110	1646	Moog Sqr 3 
+111	1647	Moog Sqr 4 
+112	1648	Moog Sqr 5 
+113	1649	Moog Sqr 6 
+114	1650	Moog Rect 1
+115	1651	Moog Rect 2
+116	1652	Moog Rect 3
+117	1653	Moog Rect 4
+118	1654	Moog Rect 5
+119	1655	Moog Pulse1
+120	1656	Moog Pulse2
+121	1657	Moog Pulse3
+122	1658	Moog Pulse4
+123	1659	Moog Pulse5
+124	1660	OB Wave 1  
+125	1661	OB Wave 2  
+126	1662	OB Wave 3  
+127	1663	OB Wave 4  
+128	1664	OB Wave 5  
+129	1665	ARP 2600 1 
+130	1666	ARP 2600 2 
+131	1667	ARP 2600 3 
+132	1668	B3 Wave 1  
+133	1669	B3 Wave 2  
+134	1670	B3 Wave 3  
+135	1671	B3 Wave 4  
+136	1672	B3 Wave 5  
+137	1673	B3 Wave 6  
+138	1674	B3 Wave 7  
+139	1675	B3 Wave 8  
+140	1676	B3 Wave 9  
+141	1677	B3 Wave 10 
+142	1678	B3 Wave 11 
+143	1679	B3 Wave 12 
+144	1680	B3 Wave 13 
+145	1681	B3 Wave 14 
+146	1682	B3 Wave 15 
+147	1683	B3 Wave 16 
+148	1684	B3 Wave 17 
+149	1685	B3 Wave 18 
+150	1686	ARPClarinet
+151	1687	ARP Bassoon
+152	1688	P5 No-Tone 
+153	1689	Noise Non-X
+154	1690	Oct 1 Sine 
+155	1691	Oct 2 All  
+156	1692	Oct 3 All  
+157	1693	Oct 4 All  
+158	1694	Oct 5 All  
+159	1695	Oct 6 All  
+160	1696	Oct 7 All  
+161	1697	Oct 2 Odd  
+162	1698	Oct 3 Odd  
+163	1699	Oct 4 Odd  
+164	1700	Oct 5 Odd  
+165	1701	Oct 6 Odd  
+166	1702	Oct 7 Odd  
+167	1703	Oct 2 Even 
+168	1704	Oct 3 Even 
+169	1705	Oct 4 Even 
+170	1706	Oct 5 Even 
+171	1707	Oct 6 Even 
+172	1708	Oct 7 Even 
+173	1709	Low Odds   
+174	1710	Low Evens  
+175	1711	FourOctaves
+176	1712	Synth Cyc 1
+177	1713	Synth Cyc 2
+178	1714	Synth Cyc 3
+179	1715	Synth Cyc 4
+180	1716	Fund Gone 1
+181	1717	Fund Gone 2
+182	1718	Bite Cyc   
+183	1719	Buzzy Cyc  
+184	1720	Metlphone 1
+185	1721	Metlphone 2
+186	1722	Metlphone 3
+187	1723	Metlphone 4
+188	1724	Duck Cyc 1 
+189	1725	Duck Cyc 2 
+190	1726	Duck Cyc 3 
+191	1727	Wind Cyc 1 
+192	1728	Wind Cyc 2 
+193	1729	Wind Cyc 3 
+194	1730	Wind Cyc 4 
+195	1731	Organ Cyc 1
+196	1732	Organ Cyc 2
+197	1733	Vio Essence
+198	1734	Buzzoon    
+199	1735	Brassy Wave
+200	1736	Reedy Buzz 
+201	1737	Growl Wave 
+202	1738	HarpsiWave 
+203	1739	Fuzzy Gruzz
+204	1740	Power 5ths 
+205	1741	Filter Saw 
+206	1742	Ramp       
+207	1743	Evens Only 
+208	1744	Odds Gone  
+209	1745	Ice Bell   
+210	1746	Bronze Age 
+211	1747	Iron Plate 
+212	1748	Aluminum   
+213	1749	Lead Beam  
+214	1750	SteelXtract
+215	1751	WinterGlass
+216	1752	Town Bell  
+217	1753	Orch Bells 
+218	1754	Tubular SE 
+219	1755	Soft Bell  
+220	1756	Swirly     
+221	1757	Tack Attack
+222	1758	ShimmerWave
+223	1759	Mild Tone  
+224	1760	Ah Wave    
+225	1761	Vocal Wave 
+226	1762	Fuzzy Clav 
+227	1763	Electrhode 
+228	1764	Whine 1    
+229	1765	Filter Bass
+230	1766	Harmonics  
+231	1767	ElecPiano  
+232	1768	Marimba Atk
+233	1769	Vibe Attack
+234	1770	XposedNoise
+235	1771	MarimbaLoop
+236	1772	Vibes Loop 
+237	1773	Stick Loop 
+238	1774	CowbellLoop
+239	1775	Clave Loop 
+240	1776	Hi Hat Loop
+241	1777	Drum Pile  
+242	1778	CP-70 Pile 
+243	1779	PickBassPil
+244	1780	Guitar Pile
+245	1781	FingBassPil
+246	1782	Moog Loop  
+247	1783	OB Loop    
+248	1784	Frost Loop 
+249	1785	Memory Loop
+250	2049	Pulse 98   
+251	2050	Pulse 96   
+252	2051	Pulse 94   
+253	2052	Pulse 90   
+254	2053	Pulse 75   
+255	2054	Pulse 50   
+256	2055	Sync Wave 1
+257	2056	Sync Wave 2
+258	2057	Sync Wave 3
+259	2058	Sync Wave 4
+260	2059	Sync Wave 5
+261	2060	Multi Pulse
+262	2061	Multi Sync 
+263	2062	DrKick Wave
+264	2063	Cabasa Wave
+265	2064	Cow Wave   
+266	2065	Rumble Fish
+267	2066	Tape Hiss 1
+268	2067	Tape Hiss 2
+269	2068	NoiseTrack1
+270	2069	NoiseTrack2
+271	2070	Drum Energy
+272	2071	Madness 1  
+273	2072	Madness 2  
+274	2073	Compressor 
+275	2074	Tricorder  
+276	2075	Transporter
+277	2076	Weird Noise
+278	2077	Frenzy Loop
+279	2078	Sci-Fi 1   
+280	2079	Sci-Fi 2   
+281	2080	Sci-Fi 3   
+282	2081	SciFi Loop 
+283	2082	SwordA Loop
+284	2083	SwordB Loop
+285	2084	SwordC Loop
+286	2085	SwordFight1
+287	2086	SwordFight2
+288	2087	SwordFight3
+289	2088	RezFX1 Loop
+290	2089	RezFX2 Loop
+291	2090	RezFX3 Loop
+292	2091	RezFX4 Loop
+293	2092	RezFX5 Loop
+294	2093	ElDrum Loop
+295	2094	Jones Loop 
+296	2095	BallLoop1/s
+297	2096	BallLoop2/s
+298	2097	BallLoop3/s
+299	2098	BallLoop4/s
+300	2099	BallLoop5/s
+301	2100	LazerLoop 1
+302	2101	LazerLoop 2
+303	2102	Lazer Duo  
+304	2103	Tri Loop   
+305	2104	Dr Hat Loop
+306	2105	Rim Loop 1 
+307	2106	Rim Loop 2 
+308	2107	DrSnareLoop
+309	2108	DrKickLoop 
+310	2109	CrashLoop 1
+311	2110	CrashLoop 2
+312	2111	Ride Loop 1
+313	2112	Ride Loop 2
+314	2113	Cabasa Loop
+315	2114	Cabasave lp
+316	2115	Clave Loop1
+317	2116	Clave Loop2
+318	2117	Clap Loop 1
+319	2118	Clap Loop 2
+320	2119	Cowbeloop  
+321	2120	Stick Loop1
+322	2121	Stick Loop2
+323	2122	TR Hat Loop
+324	2123	Cl Hat Loop
+325	2124	Tom Loop   
+326	2125	TR Snare Lp
+327	2126	TR Kick Lp 
+328	2127	Music Loop 
+329	2128	Fwink Loop 
+330	2129	Hit Loop   
+331	2130	Hit String 
+332	2131	Sword A    
+333	2132	Sword B    
+334	2133	Sword C    
+335	2134	Rez FX 1   
+336	2135	Rez FX 2   
+337	2136	Rez FX 3   
+338	2137	Rez FX 4   
+339	2138	Rez FX 5   
+340	2139	Verb Clap  
+341	2140	Dub Claps  
+342	2141	Space Claps
+343	2142	ElectroDrum
+344	2143	BBall Jones
+345	2144	Lazer Snare
+346	2145	Lazer Kick 
+347	2146	Dr Hat     
+348	2147	Dr Rim     
+349	2148	Dr Snare   
+350	2149	Dr Kick    
+351	2150	TR CrashCym
+352	2151	TR RideCym 
+353	2152	TR Cabasa  
+354	2153	Cabasave   
+355	2154	TR Clave   
+356	2155	TR Claps   
+357	2156	TR Cowbell 
+358	2157	TR SideStik
+359	2158	TR Op Hat  
+360	2159	TR Cl Hat  
+361	2160	TR Tom     
+362	2161	TR Snare   
+363	2162	TR Kick    
+364	2163	Musical Box
+365	2164	Fwink      
+366	2165	Da Hits    
+367	2166	SP1200 Gtrs
+368	2167	Special FX 
+369	2168	Drum Kit 1 
+370	2169	Drum Kit 2 
+371	2170	Drum Kit 3 
+372	2171	Drum Kit 4 
+373	2172	Guitar Wave
+374	2173	Elec Sitar 
+375	2174	Slap P-Bass
+376	2175	Pop P-Bass 
+377	2176	Stick/Clean
+378	2177	Stick/DistB
+379	2178	Stick/DistT
+380	2179	Moog Lead 1
+381	2180	Moog Lead 2
+382	2181	Moog Lead 3
+383	2182	P5SyncLead2
+384	2183	FM BlueHarp
+385	2184	FM Harpsi  
+386	2185	FM Pong    
+387	2186	JP8 12Strng
+388	2187	PPG Aylius 
+389	2188	PPG Buzzy  
+390	2189	PPG Ringer 
+391	2190	PPG Zylo   
+392	2191	PPG Bang   
+393	2192	PPG Merge  
+394	2193	PPG Shapes 
+395	2194	PPG Heavy  
+396	2195	P5 Gong    
+397	2196	P5 Tablura 
+398	2197	D50 Pipes  
+399	2198	ARP FiltRez
+400	2199	ARP SyncSwp
+401	2200	ARP SyncMod
+402	2201	JP6 Filters
+403	2202	J1 Poly Syn
+404	2203	JP8 Pulse  
+405	2204	P5 PulseMod
+406	2205	JX3P Chimes
+407	2206	Taurus 2   
+408	2207	Taurus 3   
+409	2208	Taurus 4   
+410	2209	P5 Bass 1  
+411	2210	P5 Bass 2  
+412	2211	PPG Bass   
+413	2212	J1 Seq Bass
+414	2213	JX3P Brass 
+415	2214	Memry Brass
+416	2215	P5 Brass   
+417	2216	OBX Strings
+418	2217	J1 Strings 
+419	2218	Memry Strng
+420	2219	Chamberlin 
+421	2220	Vox Jaguar 
+422	2221	Tight Clav 
+423	2222	Slack Clav 
+424	2223	Clavinet 2 
+425	2224	FM Dyno    
+426	2225	FM Piano   
+427	2226	DynoRhodes3
+428	2227	MkI Hard   
+429	2228	MkI Soft   
+430	2229	KeyBass Hrd
+431	2230	KeyBass Sft
+432	2231	Tight Piano
+433	2232	Slack Piano
+434	2233	Grand Piano

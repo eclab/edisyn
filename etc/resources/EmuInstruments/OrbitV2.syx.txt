@@ -1,0 +1,384 @@
+1	2817	Super Sub  
+2	2818	Below Sub  
+3	2819	Bass Hum   
+4	2820	BassLowness
+5	2821	Bass Sonics
+6	2822	Bassss ic  
+7	2823	Sub Bass 1 
+8	2824	Sub Bass 2 
+9	2825	Sub Bass 3 
+10	2826	Juno Sub   
+11	2827	Sub Bass 4 
+12	2828	Sub Bass 5 
+13	2829	LoSnthBass1
+14	2830	LoSnthBass2
+15	2831	Moog Tri   
+16	2832	Analow Bass
+17	2833	Bass End   
+18	2834	SynthBass 3
+19	2835	SynthBass 4
+20	2836	SynthBass 5
+21	2837	SynthBass 6
+22	2838	Q Bass     
+23	2839	PPG Bass   
+24	2840	SynthBass 7
+25	2841	SynthBass 8
+26	2842	SynthBass 9
+27	2843	SynthBass10
+28	2844	SynthBass11
+29	2845	SynthBass12
+30	2846	SynthBass13
+31	2847	SynthBass14
+32	2848	SynthBass15
+33	2849	SynthBass16
+34	2850	TB303 1    
+35	2851	TB303 2    
+36	2852	TB303 3    
+37	2853	TB303 4    
+38	2854	Bass 2600  
+39	2855	CZ101 Bass 
+40	2856	DX Bass 1  
+41	2857	DX Bass 2  
+42	2858	DX Bass 3  
+43	2859	JP4 Bass   
+44	2860	Moog Bass  
+45	2861	DB9 Bass 1 
+46	2862	DB9 Bass 2 
+47	2863	Analog Bass
+48	2864	Organ Bass 
+49	2865	Tap Bass   
+50	2866	Bass 1     
+51	2867	Bass 2     
+52	2868	Fat Sunbass
+53	2869	Bass 3     
+54	2870	UprightBass
+55	2871	Perco      
+56	2872	Bass 4     
+57	2873	MemMoogBass
+58	2874	Bass Hit 1 
+59	2875	Bass Hit 2 
+60	2876	Syn Tone 1 
+61	2877	Syn Tone 2 
+62	2878	SynthBass17
+63	2879	SynthBass18
+64	2880	Micro Moog 
+65	2881	Funk Bass  
+66	2882	CZ101 Digi 
+67	2883	Farfisa Low
+68	2884	Farfisa    
+69	2885	Vox Org Low
+70	2886	CZSynstring
+71	2887	SynthCheeze
+72	2888	SynthCheezH
+73	2889	LeadSynth 2
+74	2890	Syn Tone 3 
+75	2891	Uroborus   
+76	2892	Hollow Deep
+77	2893	Pure H20   
+78	2894	Echo Synth 
+79	2895	SynthLead 1
+80	2896	SynthLead 2
+81	2897	SynthLead 3
+82	2898	SynthLd3Wkd
+83	2899	AnotherLead
+84	2900	Dance Blip 
+85	2901	Rast       
+86	2902	Sax Wave   
+87	2903	P5 Brass   
+88	2904	M12 Lead   
+89	2905	Arp 1      
+90	2906	Arp 2      
+91	2907	Synth Gtr 1
+92	2908	Synth Gtr 2
+93	2909	Synth Gtr 3
+94	2910	Whine      
+95	2911	DanceSynth1
+96	2912	DanceSynth2
+97	2913	Sine Wave  
+98	2914	CZ Saw     
+99	2915	SawnicTooth
+100	2916	Juno Saw   
+101	2917	OBX Saws   
+102	2918	SquareLead1
+103	2919	SquareLead2
+104	2920	SqrAttkLead
+105	2921	Juno Square
+106	2922	Square Chrs
+107	2923	CZ square  
+108	2924	Juno Pulse 
+109	2925	Sync Wave 1
+110	2926	Sync Wave1b
+111	2927	Sync Wave 2
+112	2928	Sync Wave 3
+113	2929	Sync Wave 4
+114	2930	Sync Wave 5
+115	2931	Spacey Key 
+116	2932	Log Hit    
+117	2933	Organ 1    
+118	2934	Organ 2    
+119	2935	Bass Organ 
+120	2936	BreathyOrgn
+121	2937	Pipe Organ 
+122	2938	Organ 3    
+123	2939	Organ 4    
+124	2940	Org Day    
+125	2941	Org Nod    
+126	2942	Tone Org   
+127	2943	Org Lite   
+128	2944	Piano Wave 
+129	2945	DanceSynth3
+130	2946	HiOct Synth
+131	2947	JP6 Pad    
+132	2948	Rezzy Wave 
+133	2949	Rez Synth  
+134	2950	Synth Brass
+135	2951	Brazz      
+136	2952	DanceSynth4
+137	2953	DanceSynth5
+138	2954	Synth Pad  
+139	2955	Pad Life   
+140	2956	Pad Classic
+141	2957	Dream Pad 1
+142	2958	Paddy      
+143	2959	Dream Pad 2
+144	2960	Sound Track
+145	2961	Zoom       
+146	2962	Heavy      
+147	2963	Keyngdom   
+148	2964	Dance Chord
+149	2965	CW Type    
+150	2966	Lawn Mower 
+151	2967	Riff Trip  
+152	2968	Cyber Pan  
+153	2969	GrooveThing
+154	2970	Sci Fi     
+155	2971	Synth Siren
+156	2972	Metal Noise
+157	2973	CMI Breath 
+158	2974	Breathy    
+159	2975	Vox Tarzana
+160	2976	Vox Gothic 
+161	2977	Slow Goth  
+162	2978	Vox Synth 1
+163	2979	Vox Synth 2
+164	2980	Jax Breath 
+165	2981	Crowd      
+166	2982	Crowd NTP  
+167	2983	Seq Delay  
+168	2984	CMI Hot Air
+169	2985	Dance Hits 
+170	2986	String Hits
+171	2987	Horn Hits  
+172	2988	StrHitBbmin
+173	2989	TechnoHitAm
+174	2990	StrHitAmin 
+175	2991	OrkHitCmin7
+176	2992	StringHit D
+177	2993	DanceStabC7
+178	2994	BrassHitAbM
+179	2995	HouseStabBm
+180	2996	Classic 7x9
+181	2997	BigHitAugb9
+182	2998	DanceStabb9
+183	2999	ScreamingDM
+184	3000	HitMe Csus7
+185	3001	ClusterGbm9
+186	3002	Honk Hit C 
+187	3003	PurpleDbm7 
+188	3004	Laser Hit C
+189	3005	OrganHitAm7
+190	3006	SyntHitDbM7
+191	3007	Warm Hit Em
+192	3008	HouseHit Am
+193	3009	DanzChrdCm7
+194	3010	Dance Hit G
+195	3011	Purple Amin
+196	3012	CarHorn Hit
+197	3013	Disco Horn 
+198	3014	Quack Ahhh 
+199	3015	BizarreGbm7
+200	3016	HowsHornDm7
+201	3017	Short Hit C
+202	3018	OrgChordDm7
+203	3019	OrgStab Dm7
+204	3020	OrgClassicD
+205	3021	KleanHit Em
+206	3022	KlangHit F7
+207	3023	Metal Hit  
+208	3024	Game Hit   
+209	3025	Buzz Blip  
+210	3026	Blamp Hit D
+211	3027	Short Quack
+212	3028	Space Whip 
+213	3029	SpaceWiggle
+214	3030	Sqweel Rev 
+215	3031	Comon Vox  
+216	3032	Odd Vox Am 
+217	3033	Drum Stall 
+218	3034	Wind Down  
+219	3035	Wind Down 2
+220	3036	Hip Hop Hit
+221	3037	Diss Hit   
+222	3038	Drum Stab  
+223	3039	Key FX     
+224	3040	L9000 Noise
+225	3041	Pink Noise 
+226	3042	Pink NTP   
+227	3043	White Noise
+228	3044	White NTP  
+229	3045	StringsDark
+230	3046	Horns Dark 
+231	3047	Short Hits 
+232	3048	Short Strgs
+233	3049	Dark Dance 
+234	3050	DrkrStrings
+235	3051	DrkrHorns  
+236	3052	DrkShrtHits
+237	3073	Scratches  
+238	3074	Kicks      
+239	3075	Snares     
+240	3076	Toms       
+241	3077	Timbales   
+242	3078	Congas etc 
+243	3079	Hats       
+244	3080	Cymbals etc
+245	3081	Claps      
+246	3082	Tambourine 
+247	3083	Clave      
+248	3084	Cowbell    
+249	3085	Maracas    
+250	3086	Agogos     
+251	3087	Vibraslap  
+252	3088	Guiro      
+253	3089	Blocks     
+254	3090	Bells      
+255	3091	Misc Perc  
+256	3092	Dance Kit 1
+257	3093	Dance Kit 2
+258	3094	BeatsGMStnd
+259	3095	BeatsFlava 
+260	3096	BeatsHipHop
+261	3097	BeatsHpHp 2
+262	3098	BeatsHpHp 3
+263	3099	BeatsJungle
+264	3100	BeatsJngl 2
+265	3101	BeatsJngl 3
+266	3102	BeatsHrdcre
+267	3103	BeatsHrdcr2
+268	3104	BeatsHrdcr3
+269	3105	BeatsHouse 
+270	3106	BeatsHouse2
+271	3107	BeatsHouse3
+272	3108	More Kits 1
+273	3109	More Kits 2
+274	3110	More Kits 3
+275	3111	More Kits 4
+276	3112	BeatsHrdFlr
+277	3113	Fun Scratch
+278	3114	MC Scratch 
+279	3115	FastScratch
+280	3116	SSSSystem 1
+281	3117	SSSSystem 2
+282	3118	ScratchHere
+283	3119	ScratchOnIt
+284	3120	ScratchDiss
+285	3121	Bow Wow    
+286	3122	DivaScratch
+287	3123	OrganBlippr
+288	3124	ClassicTape
+289	3125	ScratchOut!
+290	3126	Chiffin    
+291	3127	Bowser Bark
+292	3128	Stalled    
+293	3129	Punch It   
+294	3130	Vinyl      
+295	3131	Vinyl NTP  
+296	3132	Kick #1    
+297	3133	Kick #2    
+298	3134	Kick #3    
+299	3135	Kick #4    
+300	3136	Kick #5    
+301	3137	Kick #6    
+302	3138	Kick #7    
+303	3139	Kick #8    
+304	3140	Kick #9    
+305	3141	Kick #10   
+306	3142	Kick #11   
+307	3143	Kick #12   
+308	3144	Kick #13   
+309	3145	Kick #14   
+310	3146	Kick #15   
+311	3147	Kick #16   
+312	3148	Kick #17   
+313	3149	Kick #18   
+314	3150	Kick #19   
+315	3151	Kick #20   
+316	3152	Kick #21   
+317	3153	Kick #22   
+318	3154	Kick #23   
+319	3155	Kick #24   
+320	3156	Kick #25   
+321	3157	Kick #26   
+322	3158	Kick #27   
+323	3159	Snare #1   
+324	3160	Snare #2   
+325	3161	Snare #3   
+326	3162	Snare #4   
+327	3163	Snare #5   
+328	3164	Snare #6   
+329	3165	Snare #7   
+330	3166	Snare #8   
+331	3167	Snare #9   
+332	3168	Snare #10  
+333	3169	Snare #11  
+334	3170	Snare #12  
+335	3171	Snare #13  
+336	3172	Snare #14  
+337	3173	Snare #15  
+338	3174	Snare #16  
+339	3175	Snare #17  
+340	3176	Snare #18  
+341	3177	Snare #19  
+342	3178	Snare #20  
+343	3179	Snare #21  
+344	3180	Snare #22  
+345	3181	Snare #23  
+346	3182	Snare #24  
+347	3183	Snare #25  
+348	3184	Snare #26  
+349	3185	Snare #27  
+350	3186	Snare #28  
+351	3187	Snare #29  
+352	3188	Snare #30  
+353	3189	Snare #31  
+354	3190	Snare #32  
+355	3191	Snare #33  
+356	3192	Snare #34  
+357	3193	Snare #35  
+358	3194	Snare #36  
+359	3195	Snare #37  
+360	3196	Snare #38  
+361	3197	Snare #39  
+362	3198	Snare #40  
+363	3199	Snare #41  
+364	3200	Snare #42  
+365	3201	Snare #43  
+366	3202	Tom #1     
+367	3203	Tom #2     
+368	3204	Tom #3     
+369	3205	Tom #4     
+370	3206	Tom #5     
+371	3207	Tom #6     
+372	3208	Tom #7     
+373	3209	Tom #8     
+374	3210	Tom #9     
+375	3211	Tom #10    
+376	3212	Tom #11    
+377	3213	Tom #12    
+378	3214	Tom #13    
+379	3215	Tom #14    
+380	3216	Tom #15    
+381	3217	Tom #16    
+382	3218	Tom #17    
+383	3219	Snare Loops
+384	3220	Conga Loops

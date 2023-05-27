@@ -179,7 +179,7 @@ If you want to use Edisyn in combination with a DAW, see the manual's section on
 
 #### USB connections to synthesizers
 
-Windows USB MIDI Java is very flaky, unlike MacOS or Linux.  Many devices don't play nicely with it and may not work properly.  If a device doesn't respond, try quitting Edisyn, disconnecting and reconnecting the USB cable, and trying again (no, really).  In other cases, particularly with devices with non-class-compliant USB, you'll be out of luck (the Novation SL's USB may be a problem for example).  Try MacOS, it's bulletproof!
+Windows USB MIDI Java is very flaky, unlike MacOS or Linux.  Many devices don't play nicely with it and may not work properly.  If a device doesn't respond, try quitting Edisyn, disconnecting and reconnecting the USB cable, and trying again (no, really).  In other cases, particularly with devices with non-class-compliant USB, you'll be out of luck (the Novation SL's USB may be a problem for example).  Try Linux.
 
 #### Casio CZ, Yamaha FB01 and SY22/35/TG33 editors on Windows
 

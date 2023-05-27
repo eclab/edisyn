@@ -1,0 +1,297 @@
+1	3841	Accordion 1
+2	3842	Accordion 2
+3	3843	AcousticBs1
+4	3844	AcousticBs2
+5	3845	BabyBassMag
+6	3846	BabyBassBri
+7	3847	ElectBass  
+8	3848	ElecDampBs 
+9	3849	Slapbass   
+10	3850	Synbass1   
+11	3851	Synbass2   
+12	3852	Synbass3   
+13	3853	Synbass4   
+14	3854	Synbass5   
+15	3855	Synbass6   
+16	3856	Subbass1   
+17	3857	Subbass2   
+18	3858	Qupbass1   
+19	3859	Qupbass2   
+20	3860	BrassHitz  
+21	3861	BrassSFX   
+22	3862	Synth Brass
+23	3863	SoftTrumpet
+24	3864	MedTrumpet 
+25	3865	HardTrumpet
+26	3866	Trombone   
+27	3867	Tuba       
+28	3868	Alto Sax   
+29	3869	BaritoneSax
+30	3870	BariStaccat
+31	3871	Tenor Jaz  
+32	3872	Tenor Sax  
+33	3873	Flute Vib  
+34	3874	Pan Flute  
+35	3875	AcousticStl
+36	3876	FlamencoGtr
+37	3877	Strat Gtr  
+38	3878	Violin     
+39	3879	VoiceCutz1 
+40	3880	VoiceCutz2 
+41	3881	Piano      
+42	3882	Organ 1    
+43	3883	Organ 2    
+44	3884	Organ 3    
+45	3885	Farfisa    
+46	3886	Vox        
+47	3887	SpongyOrgan
+48	3888	Organ4O    
+49	3889	Organ B3 1 
+50	3890	Organ B3 2 
+51	3891	Organ B3 3 
+52	3892	Organ B3 Up
+53	3893	OrganWave1 
+54	3894	Pulse 50   
+55	3895	Sawtooth   
+56	3896	Triangle   
+57	3897	Sine Wave  
+58	3898	Square     
+59	3899	Brassy Wave
+60	3900	Silkveil   
+61	3901	kit:Traps  
+62	3902	kit:Salsa  
+63	3903	kit:Brazil 
+64	3904	kit:GMIDIsh
+65	3905	kit:GM Braz
+66	3906	prf:Congas 
+67	3907	prf:Bongos 
+68	3908	prf:Timbale
+69	3909	prf:Guiro  
+70	3910	prf:Shekere
+71	3911	prf:Tambora
+72	3912	prf:Agogos 
+73	3913	prf:Tmborim
+74	3914	prf:Surdo  
+75	3915	prf:Pndeiro
+76	3916	prf:Repique
+77	3917	prf:Ganza  
+78	3918	raw:Quinto 
+79	3919	raw:Conga  
+80	3920	raw:Congas 
+81	3921	raw:Bongos 
+82	3922	raw:Timbale
+83	3923	raw:Bells  
+84	3924	raw:Claves 
+85	3925	raw:Guiro  
+86	3926	raw:Shekere
+87	3927	raw:Tambora
+88	3928	raw:Agogos 
+89	3929	raw:Tmborim
+90	3930	raw:Surdo  
+91	3931	raw:Pndeiro
+92	3932	raw:Repique
+93	3933	raw:Ganza  
+94	3934	raw:Triangl
+95	3935	raw:Kicks  
+96	3936	raw:Snares 
+97	3937	raw:Toms   
+98	3938	raw:Hats   
+99	3939	raw:Cymbals
+100	3940	raw:Tambs  
+101	3941	raw:Shakers
+102	3942	Quinto Heel
+103	3943	Quinto Tip 
+104	3944	Quinto Slap
+105	3945	Quinto Open
+106	3946	Quinto Palm
+107	3947	Quinto Solo
+108	3948	Conga Heel 
+109	3949	Conga Tip  
+110	3950	Conga Slap 
+111	3951	Conga Open 
+112	3952	Conga Palm 
+113	3953	Conga Solo 
+114	3954	Conga Slide
+115	3955	Tumba Open 
+116	3956	BongoRim1 R
+117	3957	BongoFing L
+118	3958	BongoRim2 R
+119	3959	BongoThumbL
+120	3960	BongoLrgOpn
+121	3961	BongoFngSlp
+122	3962	Bongo Solo 
+123	3963	TimbHandCls
+124	3964	TimbHandOpn
+125	3965	TimbLrg Opn
+126	3966	TimbLrg Rim
+127	3967	Timb Sm Opn
+128	3968	Timb Sm Rim
+129	3969	TimbCascara
+130	3970	Mambo Bell 
+131	3971	ChaBell Opn
+132	3972	ChaBell Cls
+133	3973	Charanga Op
+134	3974	Charanga Cl
+135	3975	HandBell Op
+136	3976	HandBell Cl
+137	3977	Woodblock  
+138	3978	Cuban Clave
+139	3979	Son Clave  
+140	3980	Maracas    
+141	3981	Guiro Up   
+142	3982	Guiro Down 
+143	3983	ShekereDown
+144	3984	ShekereSlap
+145	3985	Shekere Up 
+146	3986	Tambora Rim
+147	3987	Tambora Opn
+148	3988	TamboraSlap
+149	3989	TamboraHand
+150	3990	Agogo Mute 
+151	3991	Agogo Low  
+152	3992	Agogo High 
+153	3993	TamborimTch
+154	3994	TamborimMid
+155	3995	TamborimEdg
+156	3996	Surdo Touch
+157	3997	Surdo Mute 
+158	3998	Surdo Rim  
+159	3999	Surdo RimCl
+160	4000	Surdo Open 
+161	4001	PandeiroSlp
+162	4002	PandeiroDmp
+163	4003	PandeiroOpn
+164	4004	PandeiroStr
+165	4005	Pand Shake1
+166	4006	Pand Shake2
+167	4007	RepiqueDrag
+168	4008	RepiqueTone
+169	4009	RepiqueRimL
+170	4010	RepiqueRimH
+171	4011	RepiqueSlap
+172	4012	Quica      
+173	4013	Caxixi     
+174	4014	SambaWhstle
+175	4015	Ganza Long 
+176	4016	Ganza Short
+177	4017	TriangleMte
+178	4018	TriangleOpn
+179	4019	Kick 1     
+180	4020	Kick 2     
+181	4021	Kick 3     
+182	4022	Kick 4     
+183	4023	Kick 5     
+184	4024	Kick 6     
+185	4025	Kick 7     
+186	4026	Kick 8     
+187	4027	Kick 9     
+188	4028	Snare 1    
+189	4029	Snare 2    
+190	4030	Snare 3    
+191	4031	Snare 4    
+192	4032	Snare 5    
+193	4033	Snare 6    
+194	4034	Snare 7    
+195	4035	Snare 8    
+196	4036	Snare RimCl
+197	4037	Snare Ruff 
+198	4038	Snare Roll 
+199	4039	Snare Brush
+200	4040	Tom Low    
+201	4041	Tom Med    
+202	4042	Tom High   
+203	4043	Tom Synth 1
+204	4044	Tom Synth 2
+205	4045	Hat Closed 
+206	4046	Hat 1/3 Op 
+207	4047	Hat 2/3 Op 
+208	4048	Hat Open   
+209	4049	Hat Stomp  
+210	4050	Hat Synth  
+211	4051	Ride Bell  
+212	4052	Ride Cymbal
+213	4053	Crash 14"  
+214	4054	Crash 17"  
+215	4055	CymbalSynth
+216	4056	Tambourine1
+217	4057	Tambourine2
+218	4058	Tamb Synth 
+219	4059	Cowbell 1  
+220	4060	Cowbell 2  
+221	4061	Castanets  
+222	4062	Fingersnap 
+223	4063	Claps      
+224	4097	Brass Hit 1
+225	4098	Brass Hit 2
+226	4099	Brass Hit 3
+227	4100	Brass Hit 4
+228	4101	Brass Hit 5
+229	4102	Brass Hit 6
+230	4103	Brass Hit 7
+231	4104	Trp FX 1   
+232	4105	Trp FX 2   
+233	4106	Trp FX 3   
+234	4107	Carnaval   
+235	4108	Cumbia     
+236	4109	A Gozar    
+237	4110	Laughing   
+238	4111	Que Rico   
+239	4112	A Bailar   
+240	4113	Merengue   
+241	4114	Cha Cu Cha 
+242	4115	Eh         
+243	4116	Como       
+244	4117	Loca       
+245	4118	Roar       
+246	4119	RRRRR      
+247	4120	Shout      
+248	4121	Chant      
+249	4122	Ahora Si   
+250	4123	Salsa      
+251	4124	Vaya       
+252	4125	bt:Banda   
+253	4126	bt:Tejano  
+254	4127	bt:Cumbia  
+255	4128	bt:Salsa 1 
+256	4129	bt:Salsa 2 
+257	4130	bt:Salsa 3 
+258	4131	bt:Salsa 4 
+259	4132	bt:Salsa 5 
+260	4133	bt:Salsa 6 
+261	4134	bt:Salsa 7 
+262	4135	bt:Mrngue 1
+263	4136	bt:Mrngue 2
+264	4137	bt:Songo   
+265	4138	bt:Brazil1 
+266	4139	bt:Brazil2 
+267	4140	bt:Techno1 
+268	4141	bt:Techno2 
+269	4142	bt:MacaTek 
+270	4143	bt:Weirdo1 
+271	4144	bt:Weirdo2 
+272	4145	bt:Klango1 
+273	4146	bt:Klango2 
+274	4147	bt:Klango3 
+275	4148	bt:Groove1 
+276	4149	bt:Groove2 
+277	4150	bt:Groove3 
+278	4151	bt:Groove4 
+279	4152	bt:Groove5 
+280	4153	bt:Groove6 
+281	4154	bt:Groove7 
+282	4155	bt:Groove8 
+283	4156	bt:Groove9 
+284	4157	bt:Folklore
+285	4158	bt:Songo2  
+286	4159	kat:Kit1   
+287	4160	kat:Kit2   
+288	4161	kat:Kit3   
+289	4162	kat:Kit4   
+290	4163	kat:Kit5   
+291	4164	kat:Kit6   
+292	4165	kat:Kit7   
+293	4166	kat:Kit8   
+294	4167	kat:Kit9   
+295	4168	kat:Kit0   
+296	4169	kat:congas 
+297	4170	kat:timbale

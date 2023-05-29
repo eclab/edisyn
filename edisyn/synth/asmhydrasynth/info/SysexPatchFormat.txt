@@ -70,7 +70,8 @@ SPECIAL BYTES
 
 1. There are four magic bytes which, if left as 0, will cause writing to fail 
 for most parameters afterwards.  These are bytes 1766, 1767, 1768, and 1769.  
-Most standard Hydrasynth patches have these bytes set to 69, 84, 67, and 68 respectively, but some patches have them set to 88, 88, 88, and 88.  I do 
+Most standard Hydrasynth patches have these bytes set to 69, 84, 67, and 68 
+respectively, but some patches have them set to 88, 88, 88, and 88.  I do 
 not at present know the meaning of these bytes.  At present Edisyn sets 
 them to 69, 84, 67, 68.
 

@@ -25,7 +25,7 @@ Related projects:
 
 [Stochastic Synthesizer Patch Exploration in Edisyn](https://cs.gmu.edu/~sean/papers/evomusart19.pdf).  Presented at EvoMUSART 2019.
 
-[Co-creative Music Synthesizer Patch Exploration](https://cs.gmu.edu/~sean/papers/iccc23patch.pdf). With Victoria Hoyle.  Presented at ICCC 2023.
+[Co-creative Music Synthesizer Patch Exploration](https://cs.gmu.edu/~sean/papers/iccc23patch.pdf). With V. Hoyle.  Presented at ICCC 2023.
 
 
 ## Contributors

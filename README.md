@@ -21,11 +21,13 @@ Related projects:
 * [Downloading and Installing on Linux](#linux)
 
 
-## Papers on Edisyn's Stochastic Patch Exploration Tools
+## Publications on Edisyn
 
 [Stochastic Synthesizer Patch Exploration in Edisyn](https://cs.gmu.edu/~sean/papers/evomusart19.pdf).  Presented at EvoMUSART 2019.
 
 [Co-creative Music Synthesizer Patch Exploration](https://cs.gmu.edu/~sean/papers/iccc23patch.pdf). With V. Hoyle.  Presented at ICCC 2023.
+
+[So You Want to Write a Patch Editor](https://cs.gmu.edu/~sean/papers/GMU-CS-TR-2023-1.pdf).  George Mason University Department of Computer Science Technical Report GMU-CS-TR-2023-1.
 
 
 ## Contributors

@@ -291,9 +291,7 @@ public class DSIProphet12 extends Synth
         loadDefaults();        
         }
          
-    /*       
-             public String getDefaultResourceFileName() { return "DSIProphet08.init"; }
-    */
+    public String getDefaultResourceFileName() { return "DSIProphet12.init"; }
     public String getHTMLResourceFileName() { return "DSIProphet12.html"; }
 
     public boolean gatherPatchInfo(String title, Model change, boolean writing)
@@ -469,19 +467,19 @@ public class DSIProphet12 extends Synth
         hbox.add(comp);
 
 /*
-        comp = new LabelledDial("Num Notes", this, "layer" + layer + "arpeggiatornumnotes", color, 0, 32);
-        hbox.add(comp);
+  comp = new LabelledDial("Num Notes", this, "layer" + layer + "arpeggiatornumnotes", color, 0, 32);
+  hbox.add(comp);
 */
         category.add(hbox, BorderLayout.CENTER);
         return category;
         }
 
-	public static final int EDISYN_REST = -1;
-	public static final int PROPHET_REST = 248;
-	/*
-	public static final int EDISYN_OFF = 129;
-	public static final int PROPHET_OFF = 255;
-*/
+    public static final int EDISYN_REST = -1;
+    public static final int PROPHET_REST = 248;
+    /*
+      public static final int EDISYN_OFF = 129;
+      public static final int PROPHET_OFF = 255;
+    */
     public JComponent addArpeggiatorNotes(int layer, Color color)
         {
         Category category = new Category(this, "Notes", color);
@@ -505,18 +503,18 @@ public class DSIProphet12 extends Synth
                     public String map(int value)
                         {
                         if (value == EDISYN_REST)
-                        	{
-                        	return "--";
-                        	}
+                            {
+                            return "--";
+                            }
 /*                        else if (value == EDISYN_OFF)
-                        	{
-                        	return "Off";
-                        	}
+                          {
+                          return "Off";
+                          }
 */
                         else
-                        	{
-	                        return NOTES[value % 12] + (value / 12);
-	                        }
+                            {
+                            return NOTES[value % 12] + (value / 12);
+                            }
                         }
                     };
                 hbox.add(comp);
@@ -624,9 +622,9 @@ public class DSIProphet12 extends Synth
                 {
                 int val = model.get("layer" + layer + "arpeggiatornote" + (marker + 1));
                 /*
-                if (val == EDISYN_OFF) 
-                    return Style.ENVELOPE_UNSET_COLOR();
-                else 
+                  if (val == EDISYN_OFF) 
+                  return Style.ENVELOPE_UNSET_COLOR();
+                  else 
                 */
                 if (val == EDISYN_REST) // 
                     return Style.ENVELOPE_UNSET_COLOR();
@@ -723,9 +721,9 @@ public class DSIProphet12 extends Synth
                 
                 int val = model.get("layer" + layer + "arpeggiatornote" + (marker + 1));
                 /*
-                if (val == EDISYN_OFF) 
-                    return Style.ENVELOPE_UNSET_COLOR();
-                else 
+                  if (val == EDISYN_OFF) 
+                  return Style.ENVELOPE_UNSET_COLOR();
+                  else 
                 */
                 if (val == EDISYN_REST) // 
                     return Style.ENVELOPE_UNSET_COLOR();
@@ -941,10 +939,10 @@ public class DSIProphet12 extends Synth
         HBox hbox = new HBox();
         VBox vbox = new VBox();
                
-               /*
-        comp = new CheckBox("Distortion Noise Gate", this, "layer" + layer + "distortionnoisegate");
-        vbox.add(comp);
-        hbox.add(vbox);
+        /*
+          comp = new CheckBox("Distortion Noise Gate", this, "layer" + layer + "distortionnoisegate");
+          vbox.add(comp);
+          hbox.add(vbox);
         */
 
         comp = new LabelledDial("Feedback", this, "layer" + layer + "feedbackamount", color, 0, 254, 127)
@@ -1346,7 +1344,7 @@ public class DSIProphet12 extends Synth
     "layer1voicevolume",
     "layer1panspread",
     "layer1distortionamount",
-    "--",						// layer1distortionnoisegate
+    "--",                                               // layer1distortionnoisegate
     "layer1env1amount",
     "layer1env1velocitytoamount",
     "layer1env1delay",
@@ -1858,7 +1856,7 @@ public class DSIProphet12 extends Synth
     "layer2voicevolume",
     "layer2panspread",
     "layer2distortionamount",
-    "--",							// layer2distortionnoisegate
+    "--",                                                       // layer2distortionnoisegate
     "layer2env1amount",
     "layer2env1velocitytoamount",
     "layer2env1delay",
@@ -2532,7 +2530,7 @@ public class DSIProphet12 extends Synth
         "layer1mod15destination",
         "layer1mod16destination",
         "layer1distortionamount",
-        "--",							// layer1distortionnoisegate
+        "--",                                                   // layer1distortionnoisegate
         "bpm",
         "layer1unison",
         "layer1unisondetune",
@@ -2570,7 +2568,7 @@ public class DSIProphet12 extends Synth
         "--",
         "--",
         "--",
-        "--",			// Sound Version, must be 0x03
+        "--",                   // Sound Version, must be 0x03
         "layer1arpeggiatormode",
         "layer1arpeggiatorrange",
         "layer1arpeggiator",
@@ -2578,7 +2576,7 @@ public class DSIProphet12 extends Synth
         "layer1arpeggiatorclockdivide",
         "layer1arpeggiatorrepeats",
         "layer1arpeggiatorlock",
-        "--", 								// layer1arpeggiatornumnotes
+        "--",                                                           // layer1arpeggiatornumnotes
         "--",
         "--",
         "--",
@@ -2699,11 +2697,11 @@ public class DSIProphet12 extends Synth
         "--",
         "--",
         "--",
-        "layer1slider1mode",				// NOTE: There is apparently no NRPN for this
-        "layer1slider2mode",				// NOTE: There is apparently no NRPN for this
+        "layer1slider1mode",                            // NOTE: There is apparently no NRPN for this
+        "layer1slider2mode",                            // NOTE: There is apparently no NRPN for this
         "splitpoint",
         "abmode",
-        "--",			// editor byte
+        "--",                   // editor byte
         "--",
         "--",
         "--",
@@ -3045,7 +3043,7 @@ public class DSIProphet12 extends Synth
         "layer2mod15destination",
         "layer2mod16destination",
         "layer2distortionamount",
-        "--",							// layer2distortionnoisegate
+        "--",                                                   // layer2distortionnoisegate
         "--",                   // bpm
         "layer2unison",
         "layer2unisondetune",
@@ -3083,7 +3081,7 @@ public class DSIProphet12 extends Synth
         "--",
         "--",
         "--",
-        "--",					// Sound Version, must be 0x03
+        "--",                                   // Sound Version, must be 0x03
         "layer2arpeggiatormode",
         "layer2arpeggiatorrange",
         "layer2arpeggiator",
@@ -3091,7 +3089,7 @@ public class DSIProphet12 extends Synth
         "layer2arpeggiatorclockdivide",
         "layer2arpeggiatorrepeats",
         "layer2arpeggiatorlock",
-        "--", 						// layer2arpeggiatornumnotes
+        "--",                                           // layer2arpeggiatornumnotes
         "--",
         "--",
         "--",
@@ -3212,11 +3210,11 @@ public class DSIProphet12 extends Synth
         "--",
         "--",
         "--",
-        "layer2slider1mode",				// NOTE: There is apparently no NRPN for this
-        "layer2slider2mode",				// NOTE: There is apparently no NRPN for this
+        "layer2slider1mode",                            // NOTE: There is apparently no NRPN for this
+        "layer2slider2mode",                            // NOTE: There is apparently no NRPN for this
         "--",           // splitpoint
         "--",           // abmode
-        "--",			// editor byte
+        "--",                   // editor byte
         "--",
         "--",
         "--",
@@ -3343,23 +3341,23 @@ public class DSIProphet12 extends Synth
             return ret;
             }
         else if (
-        		//key.equals("layer1arpeggiatornumnotes") ||
-        		//key.equals("layer2arpeggiatornumnotes") ||
-        		key.equals("layer1slider1mode") ||
-        		key.equals("layer2slider2mode") ||
-        		key.equals("layer1slider1mode") ||
-        		key.equals("layer2slider2mode"))	// no NRPN for these
-        	{
-        	return null;
-        	}
+            //key.equals("layer1arpeggiatornumnotes") ||
+            //key.equals("layer2arpeggiatornumnotes") ||
+            key.equals("layer1slider1mode") ||
+            key.equals("layer2slider2mode") ||
+            key.equals("layer1slider1mode") ||
+            key.equals("layer2slider2mode"))        // no NRPN for these
+            {
+            return null;
+            }
         else if (key.startsWith("layer1arpeggiatornote") ||
-        		key.startsWith("layer2arpeggiatornote"))
-        	{
+            key.startsWith("layer2arpeggiatornote"))
+            {
             int val = model.get(key, 0);
-        	if (val == EDISYN_REST) val = PROPHET_REST;
-        	//else if (val == EDISYN_OFF) val = PROPHET_OFF;
+            if (val == EDISYN_REST) val = PROPHET_REST;
+            //else if (val == EDISYN_OFF) val = PROPHET_OFF;
             return buildNRPN(getChannelOut(), ((Integer)(parametersToIndex.get(key))).intValue(), val);
-        	}
+            }
         else 
             {
             int val = model.get(key, 0);
@@ -3390,13 +3388,13 @@ public class DSIProphet12 extends Synth
                 String key = parameters[data.number];
                 if (key == "---")
                     return;
-				else if (key.startsWith("layer1arpeggiatornote") ||
-						key.startsWith("layer2arpeggiatornote"))
-					{
-					if (data.value > 127)	data.value = EDISYN_REST;
-					//else if (data.value == PROPHET_OFF) data.value = EDISYN_OFF;
+                else if (key.startsWith("layer1arpeggiatornote") ||
+                    key.startsWith("layer2arpeggiatornote"))
+                    {
+                    if (data.value > 127)   data.value = EDISYN_REST;
+                    //else if (data.value == PROPHET_OFF) data.value = EDISYN_OFF;
                     model.set(key, data.value);
-					}
+                    }
                 else
                     model.set(key, data.value);
                 } 
@@ -3509,80 +3507,80 @@ public class DSIProphet12 extends Synth
                 System.out.println("DIFFERENCES");
                 diff(firstPatch, d);
                 }
-			}
+            }
 
-            //dump(d);
-            for(int i = 0; i < 1024; i++)
-                {
-                if (load == LOAD_A && !(
-                        sysexParameters[i].startsWith("layer1") ||
-                        sysexParameters[i].equals("bpm") ||
-                        sysexParameters[i].equals("splitpoint") ||
-                        sysexParameters[i].equals("abmode")))
+        //dump(d);
+        for(int i = 0; i < 1024; i++)
+            {
+            if (load == LOAD_A && !(
+                    sysexParameters[i].startsWith("layer1") ||
+                    sysexParameters[i].equals("bpm") ||
+                    sysexParameters[i].equals("splitpoint") ||
+                    sysexParameters[i].equals("abmode")))
                                                 
-                    {
-                    // do nothing -- they're not layer 1 (A) parameters
-                    }
-                else if (load == LOAD_B && !(
-                        sysexParameters[i].startsWith("layer2") ||
-                        sysexParameters[i].equals("bpm") ||
-                        sysexParameters[i].equals("splitpoint") ||
-                        sysexParameters[i].equals("abmode")))
-                    {
-                    // do nothing -- they're not layer 2 (B) parameters
-                    }
-                else if (!sysexParameters[i].equals("--"))
-                    {
-                    // Note: DSI isn't 2's complement.  So everything in the model is being stored starting at 0
-                    int q = d[i];
-                    if (q < 0) q += 256;  // push to unsigned (not 2's complement)
+                {
+                // do nothing -- they're not layer 1 (A) parameters
+                }
+            else if (load == LOAD_B && !(
+                    sysexParameters[i].startsWith("layer2") ||
+                    sysexParameters[i].equals("bpm") ||
+                    sysexParameters[i].equals("splitpoint") ||
+                    sysexParameters[i].equals("abmode")))
+                {
+                // do nothing -- they're not layer 2 (B) parameters
+                }
+            else if (!sysexParameters[i].equals("--"))
+                {
+                // Note: DSI isn't 2's complement.  So everything in the model is being stored starting at 0
+                int q = d[i];
+                if (q < 0) q += 256;  // push to unsigned (not 2's complement)
 
-					if (sysexParameters[i].startsWith("layer1arpeggiatornote") ||
-						sysexParameters[i].startsWith("layer2arpeggiatornote"))
-						{
-						if (q > 127) q = EDISYN_REST;
+                if (sysexParameters[i].startsWith("layer1arpeggiatornote") ||
+                    sysexParameters[i].startsWith("layer2arpeggiatornote"))
+                    {
+                    if (q > 127) q = EDISYN_REST;
 /*
-						if (q == PROPHET_REST) q = EDISYN_REST;
-						else //if (q == PROPHET_OFF) q = EDISYN_OFF;
-							if (q > 127) q = EDISYN_OFF;
+  if (q == PROPHET_REST) q = EDISYN_REST;
+  else //if (q == PROPHET_OFF) q = EDISYN_OFF;
+  if (q > 127) q = EDISYN_OFF;
 */
-						}
+                    }
 
-                    model.set(sysexParameters[i], q);
-                    }
+                model.set(sysexParameters[i], q);
                 }
+            }
                                 
-            if (load == LOAD_BOTH || load == LOAD_A) 
+        if (load == LOAD_BOTH || load == LOAD_A) 
+            {
+            // handle name specially
+            byte[] name = new byte[20];
+            System.arraycopy(d, 402, name, 0, 20);
+            try
                 {
-                // handle name specially
-                byte[] name = new byte[20];
-                System.arraycopy(d, 402, name, 0, 20);
-                try
-                    {
-                    model.set("name", new String(name, "US-ASCII"));
-                    }
-                catch (UnsupportedEncodingException e)
-                    {
-                    Synth.handleException(e); 
-                    }
+                model.set("name", new String(name, "US-ASCII"));
                 }
+            catch (UnsupportedEncodingException e)
+                {
+                Synth.handleException(e); 
+                }
+            }
                 
-            if (load == LOAD_BOTH || load == LOAD_B)
+        if (load == LOAD_BOTH || load == LOAD_B)
+            {
+            // handle name specially
+            byte[] name = new byte[20];
+            System.arraycopy(d, 402 + 512, name, 0, 20);
+            try
                 {
-                // handle name specially
-                byte[] name = new byte[20];
-                System.arraycopy(d, 402 + 512, name, 0, 20);
-                try
-                    {
-                    model.set("nameb", new String(name, "US-ASCII"));
-                    }
-                catch (UnsupportedEncodingException e)
-                    {
-                    Synth.handleException(e); 
-                    }
+                model.set("nameb", new String(name, "US-ASCII"));
                 }
+            catch (UnsupportedEncodingException e)
+                {
+                Synth.handleException(e); 
+                }
+            }
                                 
-            revise();
+        revise();
 
         return PARSE_SUCCEEDED;
         }
@@ -3601,30 +3599,30 @@ public class DSIProphet12 extends Synth
             {
             // Make sure we're Version 3, else the prophet12 will misunderstand our data
             if (i == 293 || i == 293 + 512)
-            	d[i] = SYSEX_VERSION;	// not sure what that is
+                d[i] = SYSEX_VERSION;   // not sure what that is
 
-			// distribute AB Mode and BPM to layer 2 for good measure
+            // distribute AB Mode and BPM to layer 2 for good measure
             else if (i == 426 + 512)
-            	d[i] = d[i-512];	// abmode
+                d[i] = d[i-512];        // abmode
             else if (i == 256 + 512)
-            	d[i] = d[i-512];	// bpm
+                d[i] = d[i-512];        // bpm
             else if (i == 535 || i == 535 + 512)
-            	d[i] = 0x0A;
+                d[i] = 0x0A;
 
             else if (!sysexParameters[i].equals("--"))
                 {
                 // Note: DSI isn't 2's complement.  So everything in the model is being stored starting at 0
                 int q = model.get(sysexParameters[i], 0);
 
-				if (sysexParameters[i].startsWith("layer1arpeggiatornote") ||
-					sysexParameters[i].startsWith("layer2arpeggiatornote"))
-					{
-					if (q == EDISYN_REST) q = PROPHET_REST;
-					/*
-					else if (q == EDISYN_OFF) q = PROPHET_OFF;
-					*/
-					}
-				                                                                                                                                                                                                                                             
+                if (sysexParameters[i].startsWith("layer1arpeggiatornote") ||
+                    sysexParameters[i].startsWith("layer2arpeggiatornote"))
+                    {
+                    if (q == EDISYN_REST) q = PROPHET_REST;
+                    /*
+                      else if (q == EDISYN_OFF) q = PROPHET_OFF;
+                    */
+                    }
+                                                                                                                                                                                                                                                                             
                 if (q > 127) q -= 256;  // push to signed (not 2's complement)
                 d[i] = (byte)q;
                 }
@@ -3640,11 +3638,11 @@ public class DSIProphet12 extends Synth
         for(int i = 0; i < 20; i++)
             d[402 + 512 + i] = (byte)(name[i] & 127);
 
-		if (REVERSE_ENGINEER)
-			{
-			System.err.println("EMITTED DIFFERENCES");
-			//diff(firstPatch, d);
-			}
+        if (REVERSE_ENGINEER)
+            {
+            System.err.println("EMITTED DIFFERENCES");
+            //diff(firstPatch, d);
+            }
                                 
         data = convertTo7Bit(d);  
                 
@@ -4246,7 +4244,7 @@ public class DSIProphet12 extends Synth
     252     layer1mod15destination
     253     layer1mod16destination
     254     layer1distortionamount
-    255     --											// layer1distortionnoisegate
+    255     --                                                                                  // layer1distortionnoisegate
     256     bpm                                                             // NOT IN LAYER 2
     257     layer1unison
     258     layer1unisondetune
@@ -4393,31 +4391,31 @@ public class DSIProphet12 extends Synth
     399     --
     400     --
     401     --
-    402		layer1name1                         // Also serves as patch name.  In contrast,
-    403		layer1name2                         // Layer 2's name is only the name for Layer 2
-    404		layer1name3
-    405		layer1name4
-    406		layer1name5
-    407		layer1name6
-    408		layer1name7
-    409		layer1name8
-    410		layer1name9
-    411		layer1name10
-    412		layer1name11
-    413 	layer1name12
-    414		layer1name13
-    415		layer1name14
-    416		layer1name15
-    417		layer1name16
-    418		layer1name17
-    419		layer1name18
-    420		layer1name19
-    421		layer1name20
-    422     layer1slider1mode						// Latch
-    423     layer1slider2mode						// Latch
+    402         layer1name1                         // Also serves as patch name.  In contrast,
+    403         layer1name2                         // Layer 2's name is only the name for Layer 2
+    404         layer1name3
+    405         layer1name4
+    406         layer1name5
+    407         layer1name6
+    408         layer1name7
+    409         layer1name8
+    410         layer1name9
+    411         layer1name10
+    412         layer1name11
+    413         layer1name12
+    414         layer1name13
+    415         layer1name14
+    416         layer1name15
+    417         layer1name16
+    418         layer1name17
+    419         layer1name18
+    420         layer1name19
+    421         layer1name20
+    422     layer1slider1mode                                           // Latch
+    423     layer1slider2mode                                           // Latch
     424     splitpoint                                                      // NOT IN LAYER 2
     425     abmode                                                          // NOT IN LAYER 2
-    426     editorbyte								// This is a free stored byte that can be set by a patch editor for whatever purpose
+    426     editorbyte                                                          // This is a free stored byte that can be set by a patch editor for whatever purpose
     427     --
     428     --
     429     --

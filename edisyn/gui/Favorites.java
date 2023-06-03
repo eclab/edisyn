@@ -158,7 +158,14 @@ public class Favorites
                     break;
                     }
                 }
-            combo2.setModel(new DefaultComboBoxModel(new String[0]));
+            
+            // We have to guarantee that the window initially has enough width.
+            // To do this, we load all the names into the combo box, even though
+            // it's disabled, but it'll show name #0, so we make that one empty.
+            String[] namesPlus = new String[synthNames.length + 1];
+            namesPlus[0] = "";
+            System.arraycopy(synthNames, 0, namesPlus, 1, synthNames.length);
+            combo2.setModel(new DefaultComboBoxModel(namesPlus));
             combo2.setEnabled(false);  // it's select another synth
             }
         else

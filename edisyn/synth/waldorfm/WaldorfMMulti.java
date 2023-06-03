@@ -204,7 +204,7 @@ public class WaldorfMMulti extends Synth
                     JFrame frame = ((JFrame)(SwingUtilities.getRoot(synth)));
                     frame.setVisible(true);
 
-invokeLater(
+                    invokeLater(
                         new Runnable()
                             {
                             public void run() 
@@ -215,7 +215,7 @@ invokeLater(
                                 tempModel.set("number", WaldorfMMulti.this.model.get("part" + part + "sound") - 1);             // FIXME: is this offset right?
 
                                 // Change to Single Mode
-								synth.tryToSendSysex(new byte[] { (byte)0xF0, 0x3E, 0x00, 0x64, 0x00, 0x00, 0x00, (byte)0xF7 });
+                                synth.tryToSendSysex(new byte[] { (byte)0xF0, 0x3E, 0x00, 0x64, 0x00, 0x00, 0x00, (byte)0xF7 });
                                 // This will only aid the musician in updating individual parameters
                                 synth.setPart(part - 1);
                                 synth.performRequestDump(tempModel, false);
@@ -445,10 +445,10 @@ invokeLater(
         // We have to set the patch ourselves
         model.set("number", number);
 
-		// set mode to MULTI MODE
-		tryToSendSysex(new byte[] { (byte)0xF0, 0x3E, 0x30, 0x00, 0x64, 0x01, 0x00, 0x00, (byte)0xF7 });
-		
-		simplePause(PAUSE_AFTER_CHANGE_MODE);
+        // set mode to MULTI MODE
+        tryToSendSysex(new byte[] { (byte)0xF0, 0x3E, 0x30, 0x00, 0x64, 0x01, 0x00, 0x00, (byte)0xF7 });
+                
+        simplePause(PAUSE_AFTER_CHANGE_MODE);
 
         tryToSendMIDI(buildPC(getChannelOut(), number));
         }
@@ -457,9 +457,9 @@ invokeLater(
 // Change Patch can get stomped if we do a request immediately afterwards
 public int getPauseAfterChangePatch() { return 200; }
 */
-	public int getPauseAfterWritePatch() { return 2600; }
+    public int getPauseAfterWritePatch() { return 2600; }
 
-   // public int getPauseAfterSendAllParameters() { return 1000; }
+    // public int getPauseAfterSendAllParameters() { return 1000; }
 
     public byte[] requestCurrentDump()
         {
@@ -764,21 +764,21 @@ public int getPauseAfterChangePatch() { return 200; }
     */
 
 
-      public String[] getPatchNumberNames()  
-      { 
-      return buildIntegerNames(127, 0);
-      }
+    public String[] getPatchNumberNames()  
+        { 
+        return buildIntegerNames(127, 0);
+        }
 
-      public String[] getBankNames() { return new String[] { "Bank" }; }
+    public String[] getBankNames() { return new String[] { "Bank" }; }
 
-      public boolean getSupportsPatchWrites() { return true; }
+    public boolean getSupportsPatchWrites() { return true; }
 
-      public int getPatchNameLength() { return MAXIMUM_NAME_LENGTH; }
+    public int getPatchNameLength() { return MAXIMUM_NAME_LENGTH; }
 
-		public int getBatchDownloadWaitTime()
-			{
-			return 650;
-			}
+    public int getBatchDownloadWaitTime()
+        {
+        return 650;
+        }
 
     public boolean librarianTested() { return true; }
     }

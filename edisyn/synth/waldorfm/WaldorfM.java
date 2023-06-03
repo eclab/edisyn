@@ -564,7 +564,7 @@ public class WaldorfM extends Synth
         {
         // Handle Global LFO Rate and ENV Timer Resolution, which can be out of whack
         if (model.get("globallforate") < 1 || model.get("globallforate") > 127)
-            model.set("globallforate", 1);		// default
+            model.set("globallforate", 1);              // default
                 
         if (model.get("envtimeresolution") < 0 || model.get("envtimeresolution") >= ENV_RATES.length)
             model.set("envtimeresolution", 1);              // "Normal"
@@ -1940,10 +1940,10 @@ public class WaldorfM extends Synth
         model.set("bank", bank);
         model.set("number", number);
         
-		// set mode to SINGLE MODE
-		tryToSendSysex(new byte[] { (byte)0xF0, 0x3E, 0x30, 0x00, 0x064, 0x00, 0x00, 0x00, (byte)0xF7 });
+        // set mode to SINGLE MODE
+        tryToSendSysex(new byte[] { (byte)0xF0, 0x3E, 0x30, 0x00, 0x064, 0x00, 0x00, 0x00, (byte)0xF7 });
 
-		simplePause(PAUSE_AFTER_CHANGE_MODE);
+        simplePause(PAUSE_AFTER_CHANGE_MODE);
 
         // It's not clear if this will work
         tryToSendMIDI(buildCC(getChannelOut(), 32, bank));
@@ -1995,12 +1995,12 @@ public class WaldorfM extends Synth
         return data;
         }
 
-	public int getPauseAfterWritePatch() { return 2600; }
+    public int getPauseAfterWritePatch() { return 2600; }
 
     // Change Patch can get stomped if we do a request immediately afterwards
     // public int getPauseAfterChangePatch() { return 200; }
     
-   // public int getPauseAfterSendAllParameters() { return 1000; }
+    // public int getPauseAfterSendAllParameters() { return 1000; }
  
     public Object[] emitAll(Model tempModel, boolean toWorkingMemory, boolean toFile)
         {
@@ -2624,26 +2624,26 @@ public class WaldorfM extends Synth
 
     
     
-      public String[] getPatchNumberNames()  
-      { 
-      return buildIntegerNames(128, 0);
-      }
+    public String[] getPatchNumberNames()  
+        { 
+        return buildIntegerNames(128, 0);
+        }
 
-      public boolean[] getWriteableBanks() 
-      { 
-      return buildBankBooleans(16, 0, 0);
-      }
+    public boolean[] getWriteableBanks() 
+        { 
+        return buildBankBooleans(16, 0, 0);
+        }
 
-      public String[] getBankNames() { return BANKS; }
+    public String[] getBankNames() { return BANKS; }
 
-      public boolean getSupportsPatchWrites() { return true; }
+    public boolean getSupportsPatchWrites() { return true; }
 
-      public int getPatchNameLength() { return MAXIMUM_NAME_LENGTH; }
+    public int getPatchNameLength() { return MAXIMUM_NAME_LENGTH; }
 
-		public int getBatchDownloadWaitTime()
-			{
-			return 650;
-			}
+    public int getBatchDownloadWaitTime()
+        {
+        return 650;
+        }
 
     public boolean librarianTested() { return true; }
     }

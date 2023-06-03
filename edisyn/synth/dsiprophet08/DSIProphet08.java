@@ -384,9 +384,9 @@ public class DSIProphet08 extends Synth
         bank.setMaximumRowCount(32);
         int b = model.get("bank");
         if (b < banks.length)
-        	{
-        	bank.setSelectedIndex(model.get("bank"));
-        	}
+            {
+            bank.setSelectedIndex(model.get("bank"));
+            }
 
         int num = model.get("number") + 1;
         JTextField number = new SelectedTextField("" + (num < 10 ? "00" : (num < 100 ? "0" : "")) + num, 3);

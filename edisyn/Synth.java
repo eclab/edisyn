@@ -56,7 +56,7 @@ public abstract class Synth extends JComponent implements Updatable
     public JTabbedPane tabs = new JTabbedPane();
 
     /** The largest permitted sysex file. */
-    public static final int MAX_FILE_LENGTH = 512 * 1024;        // so we don't go on forever
+    public static final int MAX_FILE_LENGTH = 1024 * 1024 * 4;        // so we don't go on forever
 
     /** Used in emitAll(key...) to indicate that emitAll(...) is being used to send one of a stream of all the parameters. */
     public static final int STATUS_SENDING_ALL_PARAMETERS = 0;
@@ -3707,7 +3707,7 @@ public abstract class Synth extends JComponent implements Updatable
         if (synthWindow == null) return false;
         
         Window activeWindow = javax.swing.FocusManager.getCurrentManager().getActiveWindow();
-                                        
+
         // we want to be either the currently active window, the parent of a dialog box which is the active window, or the last active window if the user is doing something else
         return (synthWindow == activeWindow || (activeWindow != null && synthWindow == activeWindow.getOwner()) ||
             (activeWindow == null && lastActiveWindow == synthWindow));
@@ -10212,4 +10212,18 @@ menubar.add(helpMenu);
         
     /** Informs the synth that a one-time warning was issued.. */
     public void showedOneTimeWarning(String key)  { }
+    
+    /** It used to be that a single invokeLater was sufficient to get MIDI data to be performed
+        after a window popped up: but on the Mac that appears to be no longer the case as of 1.8.0_371.
+        So we need to do a double invokeLater, which seems to do the trick.
+    */
+    public void invokeLater(Runnable run)
+        {
+        SwingUtilities.invokeLater(
+            new Runnable() {
+                public void run()
+                    {
+                    SwingUtilities.invokeLater(run);
+                    }});
+        }
     }

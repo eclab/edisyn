@@ -249,7 +249,7 @@ public class Style
         {
         return System.getProperty("os.name").equals("Mac OS X") &&
             ((System.getProperty("os.version").startsWith("11.") ||
-            	System.getProperty("os.version").equals("10.16")));
+                System.getProperty("os.version").equals("10.16")));
         }
 
     public static boolean isMacOSVentura()

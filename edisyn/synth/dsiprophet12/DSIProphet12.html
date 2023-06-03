@@ -1,0 +1,40 @@
+<html><head></head><body>
+
+
+<h1>Dave Smith Instruments Prophet 12</h1> 
+<h2>Single Patch Editor</h2>
+
+<p>This editor is meant to work with the <b>Prophet 12</b> and <b>Prophet 12 Desktop</b>.
+
+<br><br><h3>Communicating with Edisyn</h3>
+
+Set the MIDI channel to the same as being used in Edisyn.  Set MParamSend to NRPN.  Set MParamRec to All or NRPN.  Set MIDI Program to ON.  Set MIDI Sysex to ON.  And set MIDIParamLCD to ON.
+
+<br><br><h3>About the Menu</h3>
+
+The menu has several options that are useful for Prophet 12 owners.
+
+<ul>
+<li> <b>Copy A->B</b>, <b>Copy A&lt;-B</b> and <b>Swap A&lt;->B</b>&nbsp;&nbsp; These menus allow you to move the A and B layers to each other.  
+
+<p><li> <b>Load Both Layers</b>, <b>Load Only A</>, and <b>Load Only B</b>&nbsp;&nbsp; When you load a sysex file, receive a dump or merge from your Prophet 12, or reset your patch, your setting here will dictate whether this will effect both layers, or just Layer A or Layer B (keeping the other one intact).  This way, for example, you can just clear out Layer A.  Or you could make a patch consisting of the Layer A of two different patches, by first loading one patch, then copying its Layer A to Layer B, then restricting loading to just Layer A, and then finally loading the second patch.
+
+<p>Note that BPM, Split Point, and A/B Mode are only associated with Layer A, and Patch Name is only loaded if you're loading both layers. 
+
+</ul>
+
+<br><br><h3>Thanks</h3>
+
+Thanks to Erich Izdepski (mogrifier@gmail.com) for his considerable help in debugging the editor.
+
+<p><table border=0 cellpadding=0 cellspacing=5>
+<tr>
+<td align=right>By&nbsp;&nbsp;&nbsp;
+<td><b>Sean Luke</b>
+<tr>
+<td align=right>Date&nbsp;&nbsp;&nbsp;
+<td>May 2023
+</table>
+
+
+

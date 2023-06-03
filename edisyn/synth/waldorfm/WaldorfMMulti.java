@@ -204,7 +204,7 @@ public class WaldorfMMulti extends Synth
                     JFrame frame = ((JFrame)(SwingUtilities.getRoot(synth)));
                     frame.setVisible(true);
 
-                    SwingUtilities.invokeLater(
+invokeLater(
                         new Runnable()
                             {
                             public void run() 
@@ -213,6 +213,9 @@ public class WaldorfMMulti extends Synth
                                 
                                 tempModel.set("bank", WaldorfMMulti.this.model.get("part" + part + "bank"));
                                 tempModel.set("number", WaldorfMMulti.this.model.get("part" + part + "sound") - 1);             // FIXME: is this offset right?
+
+                                // Change to Single Mode
+								synth.tryToSendSysex(new byte[] { (byte)0xF0, 0x3E, 0x00, 0x64, 0x00, 0x00, 0x00, (byte)0xF7 });
                                 // This will only aid the musician in updating individual parameters
                                 synth.setPart(part - 1);
                                 synth.performRequestDump(tempModel, false);
@@ -251,7 +254,7 @@ public class WaldorfMMulti extends Synth
 
         vbox = new VBox();
         params = OUTPUTS;
-        comp = new Chooser("Routing", this, "part" + part + "routing", params);
+        comp = new Chooser("Auxiliary Out", this, "part" + part + "routing", params);
         vbox.add(comp);
 
         params = VELOCITY_CURVES;
@@ -433,12 +436,20 @@ public class WaldorfMMulti extends Synth
         return "A" + ((number > 99 ? "" : (number > 9 ? "0" : "00")) + (number + 1));
         }
         
+    public static final int PAUSE_AFTER_CHANGE_MODE = 25;
 
     public void changePatch(Model tempModel)
         {
-        // FIXME: does this work?
-        
         int number = tempModel.get("number", 0);
+        
+        // We have to set the patch ourselves
+        model.set("number", number);
+
+		// set mode to MULTI MODE
+		tryToSendSysex(new byte[] { (byte)0xF0, 0x3E, 0x30, 0x00, 0x64, 0x01, 0x00, 0x00, (byte)0xF7 });
+		
+		simplePause(PAUSE_AFTER_CHANGE_MODE);
+
         tryToSendMIDI(buildPC(getChannelOut(), number));
         }
 
@@ -446,6 +457,9 @@ public class WaldorfMMulti extends Synth
 // Change Patch can get stomped if we do a request immediately afterwards
 public int getPauseAfterChangePatch() { return 200; }
 */
+	public int getPauseAfterWritePatch() { return 2600; }
+
+   // public int getPauseAfterSendAllParameters() { return 1000; }
 
     public byte[] requestCurrentDump()
         {
@@ -492,8 +506,8 @@ public int getPauseAfterChangePatch() { return 200; }
         else
             {
             int pos = ((Integer)parametersToIndex.get(key)).intValue();
-            int part = pos / 4;
-            int param = (pos % 4) + 8192;
+            int part = pos / (parameters.length / 4);
+            int param = (pos % (parameters.length / 4)) + 8192;
             int val = model.get(key, 0) + 8192;
         
             byte[] data = new byte[12];
@@ -747,6 +761,7 @@ public int getPauseAfterChangePatch() { return 200; }
       if (key.equals("name")) return true;            // the name gets padded with space
       else return false;
       }
+    */
 
 
       public String[] getPatchNumberNames()  
@@ -758,10 +773,14 @@ public int getPauseAfterChangePatch() { return 200; }
 
       public boolean getSupportsPatchWrites() { return true; }
 
-      public int getPatchNameLength() { return 16; }
+      public int getPatchNameLength() { return MAXIMUM_NAME_LENGTH; }
 
-      public boolean getPatchContainsLocation() { return true; }
-    */
+		public int getBatchDownloadWaitTime()
+			{
+			return 650;
+			}
+
+    public boolean librarianTested() { return true; }
     }
     
     

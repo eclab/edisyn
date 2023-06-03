@@ -2092,7 +2092,7 @@ public class AudiothingiesMicroMonsta extends Synth
         nextPatchPosition++;
         if (nextPatchPosition >= 384) 
             nextPatchPosition = 0;
-        SwingUtilities.invokeLater(new Runnable()
+        invokeLater(new Runnable()
             { 
             public void run() 
                 { 

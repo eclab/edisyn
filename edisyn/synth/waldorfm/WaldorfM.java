@@ -564,7 +564,7 @@ public class WaldorfM extends Synth
         {
         // Handle Global LFO Rate and ENV Timer Resolution, which can be out of whack
         if (model.get("globallforate") < 1 || model.get("globallforate") > 127)
-            model.set("globallforate", 1);
+            model.set("globallforate", 1);		// default
                 
         if (model.get("envtimeresolution") < 0 || model.get("envtimeresolution") >= ENV_RATES.length)
             model.set("envtimeresolution", 1);              // "Normal"
@@ -1922,7 +1922,6 @@ public class WaldorfM extends Synth
                     cc == 58 || cc == 59 ||                         // VCA EG Amount, VCA EG Velocity
                     cc == 73 || cc == 79)                           // Wave EG to Wave Osc 1, Wave EG to Wave Osc 2
                     {
-                    System.err.println("Changing " + val + " " + cc);
                     val -= 64;
                     }
                 model.set(key, val);
@@ -1930,6 +1929,8 @@ public class WaldorfM extends Synth
             }
         }
         
+    public static final int PAUSE_AFTER_CHANGE_MODE = 25;
+
     public void changePatch(Model tempModel)
         {
         int bank = tempModel.get("bank", 0);
@@ -1939,6 +1940,11 @@ public class WaldorfM extends Synth
         model.set("bank", bank);
         model.set("number", number);
         
+		// set mode to SINGLE MODE
+		tryToSendSysex(new byte[] { (byte)0xF0, 0x3E, 0x30, 0x00, 0x064, 0x00, 0x00, 0x00, (byte)0xF7 });
+
+		simplePause(PAUSE_AFTER_CHANGE_MODE);
+
         // It's not clear if this will work
         tryToSendMIDI(buildCC(getChannelOut(), 32, bank));
         tryToSendMIDI(buildPC(getChannelOut(), number));
@@ -1989,10 +1995,12 @@ public class WaldorfM extends Synth
         return data;
         }
 
+	public int getPauseAfterWritePatch() { return 2600; }
 
-    public int getPauseAfterSendAllParameters() { return 1000; }
-
-    //public boolean getSendsAllParametersAsDump() { return false; }
+    // Change Patch can get stomped if we do a request immediately afterwards
+    // public int getPauseAfterChangePatch() { return 200; }
+    
+   // public int getPauseAfterSendAllParameters() { return 1000; }
  
     public Object[] emitAll(Model tempModel, boolean toWorkingMemory, boolean toFile)
         {
@@ -2004,9 +2012,7 @@ public class WaldorfM extends Synth
         byte DO_NOT_SAVE = 0;
         
         if (toWorkingMemory) { BB = 0; NN = 0; DO_NOT_SAVE = 1;}
-        
-        System.err.println("BB " + BB + " NN " + NN + " DNS " + DO_NOT_SAVE);
-        
+                
         // Other options include:
         // BB = 0 NN = 0 DO_NOT_SAVE = 1   *WRITE* to current patch, then reload from flash
 
@@ -2103,12 +2109,10 @@ public class WaldorfM extends Synth
                 int msb = data[pos + 1];
                 if (i == 233 || i == 234)
                     {
-                    // System.err.println("" + i + " " + pos + " " + parameters[i] + " " + (msb & 255) + " " + (lsb & 255) + " -> " + ((msb << 7) | lsb));
                     model.set(parameters[i], (msb << 7) | lsb);
                     }
                 else
                     {
-                    // System.err.println("" + i + " " + pos + " " + parameters[i] + " " + (msb & 255) + " " + (lsb & 255) + " -> " + (((msb << 7) | lsb) - 8192));
                     model.set(parameters[i], ((msb << 7) | lsb) - 8192);
                     }
                 }
@@ -2129,13 +2133,6 @@ public class WaldorfM extends Synth
 
     public static String getSynthName() { return "Waldorf M"; }
     
-    //    public boolean getSendsParametersAfterNonMergeParse() { return true; }
-
-    // Change Patch can get stomped if we do a request immediately afterwards
-    // public int getPauseAfterChangePatch() { return 200; }
-    
-    // public boolean getSendsParametersAfterWrite() { return true; }
-
 
     public static HashMap parametersToIndex = null;
     public static final String[] parameters = new String[] 
@@ -2626,7 +2623,6 @@ public class WaldorfM extends Synth
     };
 
     
-    /*
     
       public String[] getPatchNumberNames()  
       { 
@@ -2635,15 +2631,19 @@ public class WaldorfM extends Synth
 
       public boolean[] getWriteableBanks() 
       { 
-      return buildBankBooleans(7, 19, 0);             // first 7 banks are writeable, remaining 19 are not
+      return buildBankBooleans(16, 0, 0);
       }
 
       public String[] getBankNames() { return BANKS; }
 
       public boolean getSupportsPatchWrites() { return true; }
 
-      public int getPatchNameLength() { return 22; }
+      public int getPatchNameLength() { return MAXIMUM_NAME_LENGTH; }
 
-      public boolean getPatchContainsLocation() { return true; }
-    */
+		public int getBatchDownloadWaitTime()
+			{
+			return 650;
+			}
+
+    public boolean librarianTested() { return true; }
     }

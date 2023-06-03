@@ -621,7 +621,7 @@ public class RolandJV880Multi extends Synth
                     // Change the CHANNEL of the synth tuple to be the channel used by the part.
                     // That way we're modifying the appropriate part when we do a change patch
                                         
-                    SwingUtilities.invokeLater(
+                    invokeLater(
                         new Runnable()
                             {
                             public void run() 

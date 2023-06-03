@@ -417,7 +417,7 @@ public class RolandU220Multi extends Synth
                     JFrame frame = ((JFrame)(SwingUtilities.getRoot(synth)));
                     frame.setVisible(true);
 
-                    SwingUtilities.invokeLater(
+                    invokeLater(
                         new Runnable()
                             {
                             public void run() 
@@ -532,7 +532,7 @@ public class RolandU220Multi extends Synth
                     JFrame frame = ((JFrame)(SwingUtilities.getRoot(synth)));
                     frame.setVisible(true);
 
-                    SwingUtilities.invokeLater(
+                    invokeLater(
                         new Runnable()
                             {
                             public void run() 

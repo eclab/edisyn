@@ -206,7 +206,7 @@ public class YamahaFS1RFseq extends Synth
                 JFrame frame = ((JFrame)(SwingUtilities.getRoot(synth)));
                 frame.setVisible(true);
 
-                SwingUtilities.invokeLater(
+                invokeLater(
                     new Runnable()
                         {
                         public void run() 
@@ -246,7 +246,7 @@ public class YamahaFS1RFseq extends Synth
                 
                 // we should be Voice 1 by default
 
-                SwingUtilities.invokeLater(
+                invokeLater(
                     new Runnable()
                         {
                         public void run() 

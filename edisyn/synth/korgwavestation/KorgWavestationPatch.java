@@ -579,7 +579,7 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
                     JFrame frame = ((JFrame)(SwingUtilities.getRoot(synth)));
                     frame.setVisible(true);
 
-                    SwingUtilities.invokeLater(
+                    invokeLater(
                         new Runnable()
                             {
                             public void run() 

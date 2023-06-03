@@ -6217,7 +6217,7 @@ public class SequentialProphetRev2 extends Synth
         synth.sprout();
         JFrame frame = ((JFrame)(SwingUtilities.getRoot(synth)));
         frame.setVisible(true);
-        SwingUtilities.invokeLater(new Runnable()
+        invokeLater(new Runnable()
             {
             public void run() 
                 { 

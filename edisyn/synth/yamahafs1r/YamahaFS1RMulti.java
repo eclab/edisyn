@@ -657,7 +657,7 @@ public class YamahaFS1RMulti extends Synth
                     int bank = (val < 6 ? 0 : 1);
                     int number = (val < 6 ? val : val - 6);
 
-                    SwingUtilities.invokeLater(
+                    invokeLater(
                         new Runnable()
                             {
                             public void run() 
@@ -911,7 +911,7 @@ public class YamahaFS1RMulti extends Synth
                     JFrame frame = ((JFrame)(SwingUtilities.getRoot(synth)));
                     frame.setVisible(true);
 
-                    SwingUtilities.invokeLater(
+                    invokeLater(
                         new Runnable()
                             {
                             public void run() 

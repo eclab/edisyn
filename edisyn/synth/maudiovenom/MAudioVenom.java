@@ -1346,7 +1346,7 @@ public class MAudioVenom extends Synth
                     JFrame frame = ((JFrame)(SwingUtilities.getRoot(synth)));
                     frame.setVisible(true);
 
-                    SwingUtilities.invokeLater(
+                    invokeLater(
                         new Runnable()
                             {
                             public void run() 

@@ -156,7 +156,7 @@ public class YamahaFS1R extends Synth
         if (sendToPart[val] != null)
             {
             // may not be in same thread
-            SwingUtilities.invokeLater(new Runnable()
+            invokeLater(new Runnable()
                 {
                 public void run()
                     {
@@ -294,7 +294,7 @@ public class YamahaFS1R extends Synth
                 JFrame frame = ((JFrame)(SwingUtilities.getRoot(synth)));
                 frame.setVisible(true);
 
-                SwingUtilities.invokeLater(
+                invokeLater(
                     new Runnable()
                         {
                         public void run() 

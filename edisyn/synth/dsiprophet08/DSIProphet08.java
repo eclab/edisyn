@@ -380,6 +380,14 @@ public class DSIProphet08 extends Synth
             banks = BANKS_MOPHO_X4;
                 
         JComboBox bank = new JComboBox(banks);
+        bank.setEditable(false);
+        bank.setMaximumRowCount(32);
+        int b = model.get("bank");
+        if (b < banks.length)
+        	{
+        	bank.setSelectedIndex(model.get("bank"));
+        	}
+
         int num = model.get("number") + 1;
         JTextField number = new SelectedTextField("" + (num < 10 ? "00" : (num < 100 ? "0" : "")) + num, 3);
         
@@ -2967,7 +2975,7 @@ public class DSIProphet08 extends Synth
         synth.sprout();
         JFrame frame = ((JFrame)(SwingUtilities.getRoot(synth)));
         frame.setVisible(true);
-        SwingUtilities.invokeLater(new Runnable()
+        invokeLater(new Runnable()
             {
             public void run() 
                 { 

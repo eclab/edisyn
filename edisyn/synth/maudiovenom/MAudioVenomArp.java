@@ -400,7 +400,7 @@ public class MAudioVenomArp extends Synth
                 public void update(String key, Model model)
                     {
                     super.update(key, model);
-                    SwingUtilities.invokeLater(new Runnable()
+                    invokeLater(new Runnable()
                         {
                         public void run()
                             {
@@ -438,7 +438,7 @@ public class MAudioVenomArp extends Synth
                 public void update(String key, Model model)
                     {
                     super.update(key, model);
-                    SwingUtilities.invokeLater(new Runnable()
+                    invokeLater(new Runnable()
                         {
                         public void run()
                             {
@@ -481,7 +481,7 @@ public class MAudioVenomArp extends Synth
                 public void update(String key, Model model)
                     {
                     super.update(key, model);
-                    SwingUtilities.invokeLater(new Runnable()
+                    invokeLater(new Runnable()
                         {
                         public void run()
                             {

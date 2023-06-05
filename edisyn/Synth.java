@@ -5967,13 +5967,19 @@ menubar.add(helpMenu);
 
             public void windowActivated(WindowEvent e)
                 {
-                if (clearNotes && sendAllSoundsOffWhenWindowChanges())
-                    {
-                    sendAllSoundsOffInternal(); // not doSendAllSoundsOff(false) because we don't want to turn off the test notes
-                    }
-                updateMenu();
-                windowBecameFront();
-                lastActiveWindow = frame;
+                // We don't want to update everything if it's just a small dialog, because windowBecameFront()
+                // can trigger MIDI information (see XT and M for example), and in the case of the M it will
+                // come too soon after a request for a patch, thus nullifying it.
+                if (e.getOppositeWindow() != null)	// it's likely another editor (or possible load/save panel), as opposed to a small dialog 
+					{
+					if (clearNotes && sendAllSoundsOffWhenWindowChanges())
+						{
+						sendAllSoundsOffInternal(); // not doSendAllSoundsOff(false) because we don't want to turn off the test notes
+						}
+					updateMenu();
+					windowBecameFront();
+					lastActiveWindow = frame;
+					}
                 }
 
             });

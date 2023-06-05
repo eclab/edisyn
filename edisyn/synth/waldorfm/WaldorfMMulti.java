@@ -626,8 +626,10 @@ public int getPauseAfterChangePatch() { return 200; }
             {
             int lsb = data[pos];
             int msb = data[pos + 1];
-//            System.err.println("Byte " + pos + " Param " + i + " " + sysexParameters[i] + " " + (msb & 255) + " " + (lsb & 255) + " " + (((msb << 7) | lsb) - 8192));
-            model.set(sysexParameters[i], ((msb << 7) | lsb) - 8192);
+            if (!sysexParameters[i].equals("--"))
+            	{
+	            model.set(sysexParameters[i], ((msb << 7) | lsb) - 8192);
+	            }
             pos += 2;
             }
             

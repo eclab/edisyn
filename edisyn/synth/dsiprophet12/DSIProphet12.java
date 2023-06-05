@@ -30,12 +30,12 @@ public class DSIProphet12 extends Synth
     public static final String[] OSC_SHAPES = { "Off", "Sawtooth", "Pulse", "Triangle", "Sine", "Tines", "Mellow", "Church", "Muted", "Nasal", "Boing", "Gothic", "Ahhh", "Shrill", "Ohhhh", "Buzzzz", "Meh", "Red Noise", "White Noise", "Violet Noise" };
     public static final String[] OSC_WAVES = { "Tines", "Mellow", "Church", "Muted", "Nasal", "Boing", "Gothic", "Ahhh", "Shrill", "Ohhhh", "Buzzzz", "Meh" };
     public static final String[] GLIDE_MODES = { "Fixed Rate", "Fixed Rate A", "Fixed Time", "Fixed Time A" };
-    public static final String[] LFO_SYNCS = { "32T", "32", "16T", "16", "8T", "8", "4T", "4", "4D", "2", "3 Q", "4 Q", "6 Q", "8 Q", "16 Q", "32 Q" };
+    public static final String[] LFO_SYNCS = { "32 Q", "16 Q", "8 Q", "6 Q", "4 Q", "3 Q", "Half", "Qtr D", "Qtr", "4 T", "8", "8 T", "16", "16 T", "32", "32 T" };
     public static final String[] LFO_SHAPES = { "Triangle", "Reverse Saw", "Saw", "Square", "Pulse 1", "Pulse 2", "Pulse 3", "Random" };
     public static final String[] UNISON_KEY_ASSIGNMENTS = { "Low Note", "Low Retrigger", "High Note", "High Retrigger", "Last Note", "Last Retrigger" };
     public static final String[] A_B_MODES = { "Normal", "Split", "Stack" };
     public static final String[] DELAY_FILTER_MODES = { "Low-Pass", "High-Pass" };
-    /// FIXME: Is this right?
+    public static final String[] DELAY_SYNCS = { "Whole", "3 Q", "Half", "Qtr", "8 D", "8", "16 D", "16", "32 D", "32", "64" };
     public static final String[] UNISON_MODES = { "1 Voice", "2 Voices", "3 Voices", "4 Voices", "5 Voices", "6 Voices", "7 Voices", "8 Voices", "9 Voices", "10 Voices", "11 Voices", "12 Voices" };
     public static final String[] ARPEGGIATOR_MODES = { "Up", "Down", "Up + Down", "Assign", "Random" };
     public static final String[] ARPEGGIATOR_RANGES = { "1 Octave", "2 Octaves", "3 Octaves" };
@@ -151,6 +151,7 @@ public class DSIProphet12 extends Synth
         vbox.add(addDelay(1, 2, Style.COLOR_A()));
         vbox.add(addDelay(1, 3, Style.COLOR_B()));
         vbox.add(addDelay(1, 4, Style.COLOR_A()));
+        vbox.add(addDelays(1, Style.COLOR_B()));
         hbox.addLast(vbox);
                 
         soundPanel.add(hbox, BorderLayout.CENTER);
@@ -250,6 +251,7 @@ public class DSIProphet12 extends Synth
         vbox.add(addDelay(2, 2, Style.COLOR_A()));
         vbox.add(addDelay(2, 3, Style.COLOR_B()));
         vbox.add(addDelay(2, 4, Style.COLOR_A()));
+        vbox.add(addDelays(2, Style.COLOR_B()));
         hbox.addLast(vbox);
                 
         soundPanel.add(hbox, BorderLayout.CENTER);
@@ -767,16 +769,6 @@ public class DSIProphet12 extends Synth
         hbox.add(vbox);
         vbox = new VBox();
 
-        params = DELAY_FILTER_MODES;
-        comp = new Chooser("Delay Feedback Mode", this, "layer" + layer + "delayfeedbackmode", params);
-        vbox.add(comp);
-
-        params = FM_MODES;
-        comp = new Chooser("FM Mode", this, "layer" + layer + "oscallfmmode", params);
-        vbox.add(comp);
-        hbox.add(vbox);
-        vbox = new VBox();
-   
         params = GLIDE_MODES;
         comp = new Chooser("Glide Mode", this, "layer" + layer + "glidemode", params);
         vbox.add(comp);
@@ -786,9 +778,16 @@ public class DSIProphet12 extends Synth
         hbox.add(vbox);
         vbox = new VBox();
  
+        params = FM_MODES;
+        comp = new Chooser("FM Mode", this, "layer" + layer + "oscallfmmode", params);
+        vbox.add(comp);
+
         comp = new CheckBox("Unison", this, "layer" + layer + "unison");
         vbox.add(comp);
 
+      	hbox.add(vbox);
+        vbox = new VBox();
+   
         comp = new CheckBox("Left Latch", this, "layer" + layer + "slider1mode");
         vbox.add(comp);
 
@@ -809,11 +808,8 @@ public class DSIProphet12 extends Synth
         ((LabelledDial)comp).addAdditionalLabel("Tempo");
         hbox.add(comp);
 
-        if (layer==1)
-            {
-            comp = new LabelledDial("BPM", this, "bpm", color, 30, 250);
-            hbox.add(comp);
-            }
+		comp = new LabelledDial("BPM", this, "layer" + layer + "bpm", color, 30, 250);
+		hbox.add(comp);
 
         category.add(hbox, BorderLayout.CENTER);
         return category;
@@ -861,7 +857,13 @@ public class DSIProphet12 extends Synth
         hbox.add(vbox);
 
       
-        comp = new LabelledDial("Pitch", this, "layer" + layer + "osc" + osc + "pitch", color, 0, 120);
+        comp = new LabelledDial("Pitch", this, "layer" + layer + "osc" + osc + "pitch", color, 0, 120)
+        	{
+        	public String map(int value)
+        		{
+        		return NOTES[value % 12] + (value / 12);
+        		}
+        	};
         hbox.add(comp);
 
         comp = new LabelledDial("Fine Tune", this, "layer" + layer + "osc" + osc + "finetune", color, 0, 100, 50)
@@ -1026,8 +1028,8 @@ public class DSIProphet12 extends Synth
     public JComponent addEnvelope(int layer, final int env, Color color)
         {
         Category category = new Category(this, 
-                (env == 1 ? "Filter Envelope" : 
-                (env == 2 ? "Amplifier Envelope" : "Envelope " + env)), color);
+                (env == 1 ? "Amplifier Envelope" : 
+                (env == 2 ? "Filter Envelope" : "Envelope " + env)), color);
         category.makePasteable("layer" + layer + "env");
                 
         JComponent comp;
@@ -1135,6 +1137,25 @@ public class DSIProphet12 extends Synth
         }
 
 
+    public JComponent addDelays(int layer, Color color)
+        {
+        Category category = new Category(this, "Delays", color);
+                
+        JComponent comp;
+        String[] params;
+        HBox hbox = new HBox();
+        VBox vbox = new VBox();
+
+        params = DELAY_FILTER_MODES;
+        comp = new Chooser("Delay Feedback Mode", this, "layer" + layer + "delayfeedbackmode", params);
+        vbox.add(comp);
+		hbox.add(vbox);
+
+        category.add(hbox, BorderLayout.WEST);
+        return category;
+        }
+
+
     public JComponent addDelay(int layer, final int delay, Color color)
         {
         Category category = new Category(this, "Delay " + delay, color);
@@ -1149,7 +1170,7 @@ public class DSIProphet12 extends Synth
         comp = new Chooser("Filter Mode", this, "layer" + layer + "delay" + delay + "filtermode", params);
         vbox.add(comp);
 
-        params = LFO_SYNCS;
+        params = DELAY_SYNCS;
         comp = new Chooser("Sync Setting", this, "layer" + layer + "delay" + delay + "syncsetting", params);
         vbox.add(comp);
 
@@ -1538,7 +1559,7 @@ public class DSIProphet12 extends Synth
     "layer1arpeggiatorrepeats",
     "layer1arpeggiatorautolatch",
     "layer1arpeggiatorlock",
-    "bpm",                                                          // Manual says 288, looks like an error?
+    "layer1bpm",                                                          // Manual says 288, looks like an error?
     "layer1delayfeedbackmode",
     "--",
     "--",
@@ -2050,7 +2071,7 @@ public class DSIProphet12 extends Synth
     "layer2arpeggiatorrepeats",
     "layer2arpeggiatorautolatch",
     "layer2arpeggiatorlock",
-    "--",                                                           // BPM is here in layer 1
+    "layer2bpm",
     "layer2delayfeedbackmode",
     "--",
     "--",
@@ -2531,7 +2552,7 @@ public class DSIProphet12 extends Synth
         "layer1mod16destination",
         "layer1distortionamount",
         "--",                                                   // layer1distortionnoisegate
-        "bpm",
+        "layer1bpm",
         "layer1unison",
         "layer1unisondetune",
         "layer1unisonmode",
@@ -3044,7 +3065,7 @@ public class DSIProphet12 extends Synth
         "layer2mod16destination",
         "layer2distortionamount",
         "--",                                                   // layer2distortionnoisegate
-        "--",                   // bpm
+        "layer2bpm",
         "layer2unison",
         "layer2unisondetune",
         "layer2unisonmode",
@@ -3514,7 +3535,6 @@ public class DSIProphet12 extends Synth
             {
             if (load == LOAD_A && !(
                     sysexParameters[i].startsWith("layer1") ||
-                    sysexParameters[i].equals("bpm") ||
                     sysexParameters[i].equals("splitpoint") ||
                     sysexParameters[i].equals("abmode")))
                                                 
@@ -3523,7 +3543,6 @@ public class DSIProphet12 extends Synth
                 }
             else if (load == LOAD_B && !(
                     sysexParameters[i].startsWith("layer2") ||
-                    sysexParameters[i].equals("bpm") ||
                     sysexParameters[i].equals("splitpoint") ||
                     sysexParameters[i].equals("abmode")))
                 {
@@ -3601,13 +3620,11 @@ public class DSIProphet12 extends Synth
             if (i == 293 || i == 293 + 512)
                 d[i] = SYSEX_VERSION;   // not sure what that is
 
-            // distribute AB Mode and BPM to layer 2 for good measure
+            // distribute AB Mode and SplitPoint to layer 2 for good measure
+            else if (i == 425 + 512)
+                d[i] = d[i-512];        // splitpoint
             else if (i == 426 + 512)
                 d[i] = d[i-512];        // abmode
-            else if (i == 256 + 512)
-                d[i] = d[i-512];        // bpm
-            else if (i == 535 || i == 535 + 512)
-                d[i] = 0x0A;
 
             else if (!sysexParameters[i].equals("--"))
                 {
@@ -3970,7 +3987,7 @@ public class DSIProphet12 extends Synth
     layer, then 512 bytes for the second layer.  The data is in the same
     order for both layers with the following exceptions:
 
-    - The first layer also contains the data for bpm, splitpoint, and abmode.
+    - The first layer also contains the data splitpoint and abmode.
     The second layer does NOT have this data -- it should be just zeros.
           
     - The first layer's name also serves as the patch name.
@@ -3985,7 +4002,7 @@ public class DSIProphet12 extends Synth
     on page 88 of the manual embed the 1171 byte, 7-bit converted data.
 
     Below is a listing of the first 512 bytes in the dump, that is, LAYER 1 ONLY.
-    Layer 2 is exactly the same except that bpm, splitpoint, and abmode are
+    Layer 2 is exactly the same except that splitpoint and abmode are
     ignored (set them to 0) and the name bytes are only for layer 2's name.
 
 
@@ -4244,8 +4261,8 @@ public class DSIProphet12 extends Synth
     252     layer1mod15destination
     253     layer1mod16destination
     254     layer1distortionamount
-    255     --                                                                                  // layer1distortionnoisegate
-    256     bpm                                                             // NOT IN LAYER 2
+    255     --                                     // layer1distortionnoisegate
+    256     layer1bpm                              // NOT IN LAYER 2
     257     layer1unison
     258     layer1unisondetune
     259     layer1unisonmode
@@ -4391,31 +4408,31 @@ public class DSIProphet12 extends Synth
     399     --
     400     --
     401     --
-    402         layer1name1                         // Also serves as patch name.  In contrast,
-    403         layer1name2                         // Layer 2's name is only the name for Layer 2
-    404         layer1name3
-    405         layer1name4
-    406         layer1name5
-    407         layer1name6
-    408         layer1name7
-    409         layer1name8
-    410         layer1name9
-    411         layer1name10
-    412         layer1name11
-    413         layer1name12
-    414         layer1name13
-    415         layer1name14
-    416         layer1name15
-    417         layer1name16
-    418         layer1name17
-    419         layer1name18
-    420         layer1name19
-    421         layer1name20
-    422     layer1slider1mode                                           // Latch
-    423     layer1slider2mode                                           // Latch
-    424     splitpoint                                                      // NOT IN LAYER 2
-    425     abmode                                                          // NOT IN LAYER 2
-    426     editorbyte                                                          // This is a free stored byte that can be set by a patch editor for whatever purpose
+    402     layer1name1                         // Also serves as patch name.  In contrast,
+    403     layer1name2                         // Layer 2's name is only the name for Layer 2
+    404     layer1name3
+    405     layer1name4
+    406     layer1name5
+    407     layer1name6
+    408     layer1name7
+    409     layer1name8
+    410     layer1name9
+    411     layer1name10
+    412     layer1name11
+    413     layer1name12
+    414     layer1name13
+    415     layer1name14
+    416     layer1name15
+    417     layer1name16
+    418     layer1name17
+    419     layer1name18
+    420     layer1name19
+    421     layer1name20
+    422     layer1slider1mode                   // Latch
+    423     layer1slider2mode                   // Latch
+    424     splitpoint                          // NOT IN LAYER 2
+    425     abmode                              // NOT IN LAYER 2
+    426     editorbyte                          // This is a free stored byte that can be used and set by a patch editor for whatever purpose
     427     --
     428     --
     429     --

@@ -61,6 +61,7 @@ public class Librarian extends JPanel
 
     public static final Color STANDARD_BACKGROUND_COLOR = new Color(250, 250, 250);
     public static final Color SELECTED_COLOR = new Color(160, 160, 160);
+    public static final Color SENT_COLOR = new Color(200, 160, 160);
     public static final Color DROP_COLOR = new Color(160, 160, 200);
     public static final Color BACKGROUND_COLOR = new Color(240, 240, 240);              // new JLabel().getBackground(); 
     public static final Color GRID_COLOR = Style.isNimbus() ? new Color(192, 192, 192) : Color.GRAY;
@@ -70,6 +71,8 @@ public class Librarian extends JPanel
     public static final Color INVALID_TEXT_COLOR = new Color(255, 0, 0);
     public static final Color STANDARD_TEXT_COLOR = new Color(0, 0, 0);
 
+	boolean sending = false;
+	
     public Librarian(Synth synth)
         {
         warnLibrarian(synth);
@@ -89,22 +92,32 @@ public class Librarian extends JPanel
                 if (column >= 0)
                     {
                     changeSelection(0, column, false, false);
-                    changeSelection(getLibrary().getBankSize() - 1, column, true, true);
+                    changeSelection(getLibrary().getBankSize() - 1, column, false, true);
                     }
                 else
                     {
                     changeSelection(0, 0, false, false);
-                    changeSelection(getLibrary().getBankSize() - 1, 0, true, true);
+                    changeSelection(getLibrary().getBankSize() - 1, 0, false, true);
                     }
                 }
             
             public void changeSelection(int rowIndex, int columnIndex, boolean toggle, boolean extend)
                 {
-                if (selectedColumn != columnIndex && extend)
+                if (toggle)			// command key
+                	{
+    				toggle = false;
+                	extend = false;
+                	selectedColumn = columnIndex;
+                	}
+                if (!extend)
+                	{
+	                selectedColumn = columnIndex;
+                	}
+                else if (selectedColumn != columnIndex)	// trying to extend to a different column
                     {
-                    columnIndex = selectedColumn;
+                    selectedColumn = columnIndex;
+					extend = false;
                     }
-                selectedColumn = columnIndex;
                 super.changeSelection(rowIndex, columnIndex, toggle, extend);
                 }
 
@@ -219,7 +232,7 @@ public class Librarian extends JPanel
                     }
                 else if (isSelected)
                     {
-                    comp.setBackground(SELECTED_COLOR);
+                    comp.setBackground(sending ? SENT_COLOR: SELECTED_COLOR);
                     }
                 else if (originalColumn == 0)                   // scratch
                     {
@@ -347,7 +360,26 @@ public class Librarian extends JPanel
             {
             public void mousePressed(MouseEvent mouseEvent) 
                 {
-                if (mouseEvent.getClickCount() == 2) 
+                if (mouseEvent.getClickCount() == 1)
+                	{
+					if (SwingUtilities.isRightMouseButton(mouseEvent) || 
+						((mouseEvent.getModifiers() & InputEvent.META_MASK) == InputEvent.META_MASK))
+						{
+						sending = true;
+						table.repaint();
+	                	// We want this to happen AFTER the cell is selected, because it may take a little time
+    	            	SwingUtilities.invokeLater(new Runnable()
+        	        		{
+            	    		public void run()
+                				{
+		                		sendPatch();
+		                		sending = false;
+		                		table.repaint();
+		                		}
+		                	});
+	                	}	
+                	}
+                else if (mouseEvent.getClickCount() == 2) 
                     {
                     loadOneInternal();
                     }
@@ -368,7 +400,6 @@ public class Librarian extends JPanel
             });
                 
                 
-                              
         JTable rowNames = new javax.swing.JTable();
 
         rowNames.setDefaultRenderer(Object.class, new DefaultTableCellRenderer()
@@ -491,13 +522,22 @@ public class Librarian extends JPanel
                 
                 if (patch == null) return;                      // I don't like the idea of dragging null to a patch, and it "transforms" into "UNTITLED"
                 // patch = getLibrary().getInitPatch();
+                
+                byte[] flattened = synth.flatten(patch.sysex);
+                if (flattened == null || flattened.length == 0)
+                	{
+                	patch = getLibrary().getInitPatch();
+              		flattened = synth.flatten(patch.sysex);
+              		System.err.println(flattened.length);
+              		}
                         
                 // do we need to modify the bank and number?
                 synth.undo.push(synth.model);
                 synth.undo.setWillPush(false);
                 boolean send = synth.getSendMIDI();
                 synth.setSendMIDI(false);
-                synth.performParse(synth.flatten(patch.sysex), false);  // is this from a file?  I'm saying false
+                
+                synth.performParse(flattened, false);  // is this from a file?  I'm saying false
                 
                 // revise the patch location to where it came from in the librarian
                 if (patch.number != Patch.NUMBER_NOT_SET)
@@ -602,7 +642,44 @@ public class Librarian extends JPanel
             }    
         }    
         
-        
+    public void sendPatch()
+    	{
+        int column = col(table, table.getSelectedColumn());
+        int row = table.getSelectedRow();
+        if (column >= 0 && row >= 0)
+            {
+            Synth synth = getLibrary().getSynth();
+            Patch patch = getLibrary().getPatch(column - 1, row);
+            
+            boolean sendMIDI = synth.getSendMIDI();
+	        boolean updateListeners = synth.getModel().getUpdateListeners();
+	        boolean willPush = synth.getUndo().getWillPush();
+        	boolean avoidUpdating = synth.getAvoidUpdating();
+	        boolean printRevised = synth.getPrintRevised();
+
+            synth.setSendMIDI(false);
+            synth.undo.setWillPush(false);
+	        synth.model.setUpdateListeners(false);
+			synth.setAvoidUpdating(true);
+			synth.setPrintRevised(false);
+			
+            Model backup = (Model)(synth.getModel().clone()); 
+            int result = synth.performParse(synth.flatten(patch.sysex), false);
+        	if (result == Synth.PARSE_SUCCEEDED || result == Synth.PARSE_SUCCEEDED_UNTITLED)
+            	{
+            	synth.setSendMIDI(true);
+            	synth.sendAllParameters();
+            	}
+            synth.setModel(backup);
+            
+            synth.setSendMIDI(sendMIDI);
+            synth.getUndo().setWillPush(willPush);
+	        synth.getModel().setUpdateListeners(updateListeners);
+			synth.setAvoidUpdating(avoidUpdating);
+			synth.setPrintRevised(printRevised);
+            }
+    	}
+    	 
     public void loadOneInternal()
         {
         int column = col(table, table.getSelectedColumn());

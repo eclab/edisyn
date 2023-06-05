@@ -216,9 +216,11 @@ public class WaldorfMMulti extends Synth
 
                                 // Change to Single Mode
                                 synth.tryToSendSysex(new byte[] { (byte)0xF0, 0x3E, 0x00, 0x64, 0x00, 0x00, 0x00, (byte)0xF7 });
+						        simplePause(PAUSE_AFTER_CHANGE_MODE);
+
                                 // This will only aid the musician in updating individual parameters
                                 synth.setPart(part - 1);
-                                synth.performRequestDump(tempModel, false);
+                                synth.performRequestDump(tempModel, true);
                                 }
                             });
                     }
@@ -358,7 +360,7 @@ public class WaldorfMMulti extends Synth
             {
             public String map(int value)
                 {
-                return NOTES[value % 12] + (value / 12 - 1);                    
+                return NOTES[value % 12] + (value / 12 - 2);                    
                 }
             };
         inner.add(comp);
@@ -367,7 +369,7 @@ public class WaldorfMMulti extends Synth
             {
             public String map(int value)
                 {
-                return NOTES[value % 12] + (value / 12 - 1);                    
+                return NOTES[value % 12] + (value / 12 - 2);                    
                 }
             };
         inner.add(comp);
@@ -385,6 +387,7 @@ public class WaldorfMMulti extends Synth
         }
 
 
+/*
     public JFrame sprout()     
         {
         JFrame frame = super.sprout();
@@ -409,6 +412,7 @@ public class WaldorfMMulti extends Synth
             });
         menu.add(updateScreenMenu);
         }
+*/
 
     public Model getNextPatchLocation(Model model)
         {
@@ -445,18 +449,16 @@ public class WaldorfMMulti extends Synth
         // We have to set the patch ourselves
         model.set("number", number);
 
-        // set mode to MULTI MODE
-        tryToSendSysex(new byte[] { (byte)0xF0, 0x3E, 0x30, 0x00, 0x64, 0x01, 0x00, 0x00, (byte)0xF7 });
-                
-        simplePause(PAUSE_AFTER_CHANGE_MODE);
-
-        tryToSendMIDI(buildPC(getChannelOut(), number));
+		updateMode();
+		
+        // change patch in MULTI MODE
+        // A simple Bank/PC would only change the single patch for a given part
+        tryToSendSysex(new byte[] { (byte)0xF0, 0x3E, 0x30, 0x00, 0x66, (byte)number, 0x00, 0x00, (byte)0xF7 });
         }
 
-/*
 // Change Patch can get stomped if we do a request immediately afterwards
 public int getPauseAfterChangePatch() { return 200; }
-*/
+
     public int getPauseAfterWritePatch() { return 2600; }
 
     // public int getPauseAfterSendAllParameters() { return 1000; }
@@ -496,6 +498,22 @@ public int getPauseAfterChangePatch() { return 200; }
         return data;
         }
 
+	public void updateMode()
+		{
+        // set mode to MULTI MODE
+        tryToSendSysex(new byte[] { (byte)0xF0, 0x3E, 0x30, 0x00, 0x64, 0x01, 0x00, 0x00, (byte)0xF7 });
+        simplePause(PAUSE_AFTER_CHANGE_MODE);
+		}
+		
+    public void windowBecameFront() 
+    	{ 
+    	updateMode(); 
+    	}
+
+    public void startingBatchDownload(Model firstPatch, Model finalPatch) 
+        { 
+    	updateMode(); 
+        }
 
     public Object[] emitAll(String key)
         {
@@ -521,7 +539,8 @@ public int getPauseAfterChangePatch() { return 200; }
             data[7] = (byte)((param >>> 7) & 127);
             data[8] = (byte)(val & 127);
             data[9] = (byte)((val >>> 7) & 127);
-            data[10] = (byte)(updateScreen ? 1 : 0);
+            //data[10] = (byte)(updateScreen ? 1 : 0);
+            data[10] = 1;		// screen is always updated
             data[11] = (byte)0xF7;
             return new Object[] { data };
             }
@@ -561,9 +580,9 @@ public int getPauseAfterChangePatch() { return 200; }
         data[35] = 0x00;
 
         int pos = 36;
-        for(int i = 0; i < parameters.length; i++)
+        for(int i = 0; i < sysexParameters.length; i++)
             {
-            int val = model.get(parameters[i]) + 8192;
+            int val = model.get(sysexParameters[i]) + 8192;
             int lsb = (byte)(val & 0x7F);
             int msb = (byte)((val >>> 7) & 0x7F);
             data[pos] = (byte)lsb;
@@ -573,7 +592,7 @@ public int getPauseAfterChangePatch() { return 200; }
                         
         // bytes 292 through 317 are 0x00
                 
-        data[data.length - 1] = 0x7F;
+        data[data.length - 1] = (byte)0xF7;
         return new Object[] { data };
         }
         
@@ -603,12 +622,12 @@ public int getPauseAfterChangePatch() { return 200; }
 
         // Remaining parameters
         int pos = 36;
-        for(int i = 0; i < parameters.length; i++)
+        for(int i = 0; i < sysexParameters.length; i++)
             {
             int lsb = data[pos];
             int msb = data[pos + 1];
-            System.err.println("Byte " + pos + " Param " + i + " " + parameters[i] + " " + (msb & 255) + " " + (lsb & 255) + " " + (((msb << 7) | lsb) - 8192));
-            model.set(parameters[i], ((msb << 7) | lsb) - 8192);
+//            System.err.println("Byte " + pos + " Param " + i + " " + sysexParameters[i] + " " + (msb & 255) + " " + (lsb & 255) + " " + (((msb << 7) | lsb) - 8192));
+            model.set(sysexParameters[i], ((msb << 7) | lsb) - 8192);
             pos += 2;
             }
             
@@ -755,14 +774,142 @@ public int getPauseAfterChangePatch() { return 200; }
     "--",                                       // RESERVED5
     };
 
-    /*
-      public boolean testVerify(Synth synth2, String key, Object obj1, Object obj2)
-      {
-      if (key.equals("name")) return true;            // the name gets padded with space
-      else return false;
-      }
-    */
 
+    
+	// The order of parameters in the sysex dump is not the 
+	// same as the order when changed individually
+    public static final String[] sysexParameters = new String[] 
+    {
+    "part1enable",
+    "part1midichannel",
+    "part1bank",
+    "part1sound",
+    "part1keylimitlow",
+    "part1keylimithigh",
+    "part1velolimitlow",
+    "part1velolimithigh",
+    "part1velocitycurve",
+    "part1transpose",
+    "part1detune",
+	"part1bchangefilter", 		// stored in tuning table slot 
+    "part1volume",
+    "part1panning",
+    "part1panningmodswitch",
+    "part1routing",
+    "part1prchangefilter",
+    "part1pwheelfilter",
+    "part1mwheelfilter",
+    "part1atouchfilter",
+    "part1ppressfilter",
+    "part1volccfilter",
+    "part1panccfilter",
+    "--",                                       //_____INSTRUMENT_SUSTAIN_FILTER, not used
+    "part1voicesteal",
+    "part1voicepool",
+    "part1lockvcfcontrol",
+    "--",                                       // RESERVED1
+    "--",                                       // RESERVED2
+    "--",                                       // RESERVED3
+    "--",                                       // RESERVED4
+    "--",                                       // RESERVED5
+    "part2enable",
+    "part2midichannel",
+    "part2bank",
+    "part2sound",
+    "part2keylimitlow",
+    "part2keylimithigh",
+    "part2velolimitlow",
+    "part2velolimithigh",
+    "part2velocitycurve",
+    "part2transpose",
+    "part2detune",
+	"part2bchangefilter", 		// stored in tuning table slot 
+    "part2volume",
+    "part2panning",
+    "part2panningmodswitch",
+    "part2routing",
+    "part2prchangefilter",
+    "part2pwheelfilter",
+    "part2mwheelfilter",
+    "part2atouchfilter",
+    "part2ppressfilter",
+    "part2volccfilter",
+    "part2panccfilter",
+    "--",                                       //_____INSTRUMENT_SUSTAIN_FILTER, not used
+    "part2voicesteal",
+    "part2voicepool",
+    "part2lockvcfcontrol",
+    "--",                                       // RESERVED1
+    "--",                                       // RESERVED2
+    "--",                                       // RESERVED3
+    "--",                                       // RESERVED4
+    "--",                                       // RESERVED5
+    "part3enable",
+    "part3midichannel",
+    "part3bank",
+    "part3sound",
+    "part3keylimitlow",
+    "part3keylimithigh",
+    "part3velolimitlow",
+    "part3velolimithigh",
+    "part3velocitycurve",
+    "part3transpose",
+    "part3detune",
+	"part3bchangefilter", 		// stored in tuning table slot 
+    "part3volume",
+    "part3panning",
+    "part3panningmodswitch",
+    "part3routing",
+    "part3prchangefilter",
+    "part3pwheelfilter",
+    "part3mwheelfilter",
+    "part3atouchfilter",
+    "part3ppressfilter",
+    "part3volccfilter",
+    "part3panccfilter",
+    "--",                                       //_____INSTRUMENT_SUSTAIN_FILTER, not used
+    "part3voicesteal",
+    "part3voicepool",
+    "part3lockvcfcontrol",
+    "--",                                       // RESERVED1
+    "--",                                       // RESERVED2
+    "--",                                       // RESERVED3
+    "--",                                       // RESERVED4
+    "--",                                       // RESERVED5
+    "part4enable",
+    "part4midichannel",
+    "part4bank",
+    "part4sound",
+    "part4keylimitlow",
+    "part4keylimithigh",
+    "part4velolimitlow",
+    "part4velolimithigh",
+    "part4velocitycurve",
+    "part4transpose",
+    "part4detune",
+	"part4bchangefilter", 		// stored in tuning table slot 
+    "part4volume",
+    "part4panning",
+    "part4panningmodswitch",
+    "part4routing",
+    "part4prchangefilter",
+    "part4pwheelfilter",
+    "part4mwheelfilter",
+    "part4atouchfilter",
+    "part4ppressfilter",
+    "part4volccfilter",
+    "part4panccfilter",
+    "--",                                       //_____INSTRUMENT_SUSTAIN_FILTER, not used
+    "part4voicesteal",
+    "part4voicepool",
+    "part4lockvcfcontrol",
+    "--",                                       // RESERVED1
+    "--",                                       // RESERVED2
+    "--",                                       // RESERVED3
+    "--",                                       // RESERVED4
+    "--",                                       // RESERVED5
+    };
+    
 
     public String[] getPatchNumberNames()  
         { 

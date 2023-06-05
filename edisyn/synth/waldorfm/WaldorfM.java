@@ -1940,10 +1940,7 @@ public class WaldorfM extends Synth
         model.set("bank", bank);
         model.set("number", number);
         
-        // set mode to SINGLE MODE
-        tryToSendSysex(new byte[] { (byte)0xF0, 0x3E, 0x30, 0x00, 0x064, 0x00, 0x00, 0x00, (byte)0xF7 });
-
-        simplePause(PAUSE_AFTER_CHANGE_MODE);
+    	updateMode(); 
 
         // It's not clear if this will work
         tryToSendMIDI(buildCC(getChannelOut(), 32, bank));
@@ -1993,6 +1990,23 @@ public class WaldorfM extends Synth
         data[7] = (byte)NN;
         data[8] = (byte)0xF7;
         return data;
+        }
+
+	public void updateMode()
+		{
+        // set mode to SINGLE MODE
+        tryToSendSysex(new byte[] { (byte)0xF0, 0x3E, 0x30, 0x00, 0x64, 0x00, 0x00, 0x00, (byte)0xF7 });
+        simplePause(PAUSE_AFTER_CHANGE_MODE);
+		}
+		
+    public void windowBecameFront() 
+    	{ 
+    	updateMode(); 
+    	}
+
+    public void startingBatchDownload(Model firstPatch, Model finalPatch) 
+        { 
+    	updateMode(); 
         }
 
     public int getPauseAfterWritePatch() { return 2600; }

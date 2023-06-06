@@ -2004,6 +2004,8 @@ public class WaldorfM extends Synth
     	updateMode(); 
     	}
 
+	// We need this because sometimes the unit isn't in the proper mode and so
+	// batch download just hangs
     public void startingBatchDownload(Model firstPatch, Model finalPatch) 
         { 
     	updateMode(); 
@@ -2012,7 +2014,7 @@ public class WaldorfM extends Synth
     public int getPauseAfterWritePatch() { return 2600; }
 
     // Change Patch can get stomped if we do a request immediately afterwards
-    // public int getPauseAfterChangePatch() { return 200; }
+    public int getPauseAfterChangePatch() { return 200; }
     
     // public int getPauseAfterSendAllParameters() { return 1000; }
  
@@ -2653,6 +2655,8 @@ public class WaldorfM extends Synth
     public boolean getSupportsPatchWrites() { return true; }
 
     public int getPatchNameLength() { return MAXIMUM_NAME_LENGTH; }
+
+	public int getBatchDownloadFailureCountdown() { return 10; }                 
 
     public int getBatchDownloadWaitTime()
         {

@@ -13,10 +13,19 @@ public class StringUtility
         return (System.getProperty("os.name").toLowerCase().indexOf("win") >= 0);
         }
 
+
     public static String makeValidFilename(String filename)
         {
         char[] f = filename.toCharArray();
         
+        for(int i = 0; i < f.length; i++)
+            {
+            if (f[i] <= 32 || f[i] >= 127 ||
+                f[i] == java.io.File.pathSeparatorChar ||
+                f[i] == java.io.File.separatorChar)
+                f[i] = '-';
+            }
+
         if (isWindows())
             {
             for(int i = 0; i < f.length; i++)
@@ -321,23 +330,6 @@ public class StringUtility
             keys[j] = temp;
             }
         return keys;
-        }
-
-    static final char DEFAULT_SEPARATOR_REPLACEMENT = '_';
-
-    /** Replace characters in a file name so that they don't include separator or path separator characters. */ 
-    public static String reviseFileName(String name)
-        {
-        if (name == null) name = "";
-        char[] chars = name.toCharArray();
-        for(int i = 0; i < chars.length; i++)
-            {
-            if (chars[i] <= 32 || chars[i] >= 127 ||
-                chars[i] == java.io.File.pathSeparatorChar ||
-                chars[i] == java.io.File.separatorChar)
-                chars[i] = DEFAULT_SEPARATOR_REPLACEMENT;
-            }
-        return new String(chars);
         }
 
     /** Guarantee that the given filename ends with the given ending.  */   

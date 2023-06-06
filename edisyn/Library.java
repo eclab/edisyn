@@ -1113,7 +1113,7 @@ public class Library extends AbstractTableModel
 
                         FileDialog fd = new FileDialog((Frame)(SwingUtilities.getRoot(synth)), "Save to Bulk Sysex File...", FileDialog.SAVE);
 
-                        fd.setFile(StringUtility.reviseFileName(synth.getSynthNameLocal() + ".bulk.syx"));
+                        fd.setFile(StringUtility.makeValidFilename(synth.getSynthNameLocal() + ".bulk.syx"));
                         String path = synth.getLastDirectory();
                         if (path != null)
                             fd.setDirectory(path);
@@ -1345,7 +1345,7 @@ public class Library extends AbstractTableModel
 
                 FileDialog fd = new FileDialog((Frame)(SwingUtilities.getRoot(synth)), "Save to Bulk Sysex File...", FileDialog.SAVE);
 
-                fd.setFile(StringUtility.reviseFileName(bank == ALL_PATCHES ? 
+                fd.setFile(StringUtility.makeValidFilename(bank == ALL_PATCHES ? 
                         synth.getSynthNameLocal() + ".bulk.syx" : 
                         synth.getSynthNameLocal() + "." + getBankName(bank) + ".syx"));
                 String path = synth.getLastDirectory();

@@ -510,6 +510,8 @@ public int getPauseAfterChangePatch() { return 200; }
     	updateMode(); 
     	}
 
+	// We need this because sometimes the unit isn't in the proper mode and so
+	// batch download just hangs
     public void startingBatchDownload(Model firstPatch, Model finalPatch) 
         { 
     	updateMode(); 

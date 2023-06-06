@@ -990,6 +990,8 @@ public abstract class Synth extends JComponent implements Updatable
         wants to pop up a single patch to display it. */    
     public void performRequestDump(Model tempModel, boolean changePatch)
         {
+        System.err.println("Perform Request Dump " + changePatch);
+        new Throwable().printStackTrace();
         if (changePatch || getAlwaysChangesPatchesOnRequestDump())
             performChangePatch(tempModel);
             
@@ -2064,6 +2066,7 @@ public abstract class Synth extends JComponent implements Updatable
     public void simplePause(int ms)
         {
         if (ms == 0) return;
+        if (midiDebug) System.out.println("Pause " + ms);
         try { long l = System.currentTimeMillis(); Thread.currentThread().sleep(ms);}
         catch (Exception e) { Synth.handleException(e); }
         }
@@ -2076,6 +2079,7 @@ public abstract class Synth extends JComponent implements Updatable
         {
         if (expectedPause <= 0) return;
         
+        if (midiDebug) System.out.println("Midi Pause " + expectedPause);
         long pauseSoFar = System.nanoTime() - lastMIDISend;
         if (pauseSoFar >= 0 && pauseSoFar < expectedPause)
             {
@@ -2095,7 +2099,12 @@ public abstract class Synth extends JComponent implements Updatable
 //      else return tuple.getMicrosecondPosition();
         }
     
-    boolean midiDebug = false;
+    public String debugMessage(MidiMessage message)
+    	{
+    	return Midi.format(message);
+    	}
+    
+    boolean midiDebug = true;
     
     Object[] midiSendLock = new Object[0];
 
@@ -2106,7 +2115,7 @@ public abstract class Synth extends JComponent implements Updatable
         {
         if (midiDebug)
             {
-            System.out.println("MIDI DEBUG: MIDI " + (message == null ? "NULL" : Midi.format(message)));
+            System.out.println("MIDI DEBUG: MIDI " + (message == null ? "NULL" : debugMessage(message)));
             }
                 
         if (message == null) 
@@ -2234,7 +2243,7 @@ public abstract class Synth extends JComponent implements Updatable
                     if (fragmentSize <= NO_SYSEX_FRAGMENT_SIZE || message.getLength() <= fragmentSize)
                         {
                         long time = getMicrosecondPosition(tuple);
-                        if (midiDebug) System.out.println("MIDI DEBUG: Sysex sent at " + time);
+                        if (midiDebug) System.out.println("MIDI DEBUG: Sysex sent at " + time + "\n\t" + Midi.format(message));
                         receiver.send(message, time); 
                         }
                     else
@@ -2296,7 +2305,6 @@ public abstract class Synth extends JComponent implements Updatable
                 }
             else if (data[i] instanceof Integer)
                 {
-                if (midiDebug) System.out.println("MIDI DEBUG: Pausing for " + data[i]);
                 simplePause(((Integer)data[i]).intValue());
                 continue;
                 }
@@ -5970,6 +5978,9 @@ menubar.add(helpMenu);
                 // We don't want to update everything if it's just a small dialog, because windowBecameFront()
                 // can trigger MIDI information (see XT and M for example), and in the case of the M it will
                 // come too soon after a request for a patch, thus nullifying it.
+                //
+                // getOppositeWindow() returns null when another window is closed.  This is USUALLY because it was
+                // a minor dialog box.  But not always!  So sometimes this will fail.
                 if (e.getOppositeWindow() != null)	// it's likely another editor (or possible load/save panel), as opposed to a small dialog 
 					{
 					if (clearNotes && sendAllSoundsOffWhenWindowChanges())
@@ -6802,7 +6813,7 @@ menubar.add(helpMenu);
         
         if (filename != null)
             {
-            fd.setFile(StringUtility.reviseFileName(filename));
+            fd.setFile(StringUtility.makeValidFilename(filename));
             String path = getLastDirectory();
             if (path != null)
                 fd.setDirectory(path);
@@ -6813,21 +6824,21 @@ menubar.add(helpMenu);
                 {
                 if (getPatchName(getModel()).trim().length() > 0)
                     {
-                    fd.setFile(StringUtility.reviseFileName(getPatchName(getModel()).trim() + ".syx"));
+                    fd.setFile(StringUtility.makeValidFilename(getPatchName(getModel()).trim() + ".syx"));
                     }
                 else
                     {
-                    fd.setFile(StringUtility.reviseFileName("Untitled.syx"));
+                    fd.setFile(StringUtility.makeValidFilename("Untitled.syx"));
                     }
                 }
             else if (file != null)
                 {
-                fd.setFile(StringUtility.reviseFileName(file.getName()));
+                fd.setFile(StringUtility.makeValidFilename(file.getName()));
                 fd.setDirectory(file.getParentFile().getPath());
                 }
             else
                 {
-                fd.setFile(StringUtility.reviseFileName("Untitled.syx"));
+                fd.setFile(StringUtility.makeValidFilename("Untitled.syx"));
                 }
             String path = getLastDirectory();
             if (path != null)
@@ -6985,7 +6996,7 @@ menubar.add(helpMenu);
             if (str.equals(".txt")) str = "Untitled.txt";
             }
 
-        fd.setFile(StringUtility.reviseFileName(str));
+        fd.setFile(StringUtility.makeValidFilename(str));
 
         String path = getLastDirectory();
         if (path != null)
@@ -8982,7 +8993,7 @@ menubar.add(helpMenu);
 
                 FileDialog fd = new FileDialog((Frame)(SwingUtilities.getRoot(this)), "Save to Bulk Sysex File...", FileDialog.SAVE);
 
-                fd.setFile(StringUtility.reviseFileName(getSynthNameLocal() + ".bulk.syx"));
+                fd.setFile(StringUtility.makeValidFilename(getSynthNameLocal() + ".bulk.syx"));
                 String path = getLastDirectory();
                 if (path != null)
                     fd.setDirectory(path);
@@ -9873,7 +9884,7 @@ menubar.add(helpMenu);
                     {
                     FileDialog fd = new FileDialog((Frame)(SwingUtilities.getRoot(this)), "Save Bank to Sysex File...", FileDialog.SAVE);
 
-                    fd.setFile(StringUtility.reviseFileName(getSynthNameLocal() + ".bank" + getBankNameLocal(data) + ".syx"));
+                    fd.setFile(StringUtility.makeValidFilename(getSynthNameLocal() + ".bank" + getBankNameLocal(data) + ".syx"));
                     String path = getLastDirectory();
                     if (path != null)
                         fd.setDirectory(path);
@@ -9961,7 +9972,7 @@ menubar.add(helpMenu);
     public static final int DEFAULT_PASTES = 3;
     /** Override this method to force Edisyn to paste multiple times to the same category or tab.
         The reason you might want to do this is because Edisyn uses the *receiving* category to 
-        determine the parameters to paste to, and if this category contains componets which dynamically
+        determine the parameters to paste to, and if this category contains components which dynamically
         appear or disappear, it might require multiple pastes to cause them to appear and eventually
         receive parameter changes.  The default returns DEFAULT_PASTES (3).  */
     public int getNumberOfPastes() { return DEFAULT_PASTES; }

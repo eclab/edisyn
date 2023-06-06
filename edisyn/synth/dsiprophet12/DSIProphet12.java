@@ -35,13 +35,15 @@ public class DSIProphet12 extends Synth
     public static final String[] UNISON_KEY_ASSIGNMENTS = { "Low Note", "Low Retrigger", "High Note", "High Retrigger", "Last Note", "Last Retrigger" };
     public static final String[] A_B_MODES = { "Normal", "Split", "Stack" };
     public static final String[] DELAY_FILTER_MODES = { "Low-Pass", "High-Pass" };
-    public static final String[] DELAY_SYNCS = { "Whole", "3 Q", "Half", "Qtr", "8 D", "8", "16 D", "16", "32 D", "32", "64" };
+	public static final String[] DELAY_FEEDBACK_MODES = { "High-Pass", "Low-Pass" };
+//    public static final String[] DELAY_SYNCS = { "Whole", "Half D", "Half", "Qtr D", "Qtr", "8 D", "8", "16 D", "16", "32 D", "32", "64" };
+    public static final String[] DELAY_SYNCS = { "64", "32", "32 D", "16", "16 D", "8", "8 D", "Qtr", "Qtr D", "Half", "Half D", "Whole" };
     public static final String[] UNISON_MODES = { "1 Voice", "2 Voices", "3 Voices", "4 Voices", "5 Voices", "6 Voices", "7 Voices", "8 Voices", "9 Voices", "10 Voices", "11 Voices", "12 Voices" };
     public static final String[] ARPEGGIATOR_MODES = { "Up", "Down", "Up + Down", "Assign", "Random" };
     public static final String[] ARPEGGIATOR_RANGES = { "1 Octave", "2 Octaves", "3 Octaves" };
     public static final String[] ARPEGGIATOR_CLOCK_DIVISIONS = { "1/2", "1/4", "1/8", "1/8 Half Swing", "1/8 Full Swing", "1/8 Triplet", "1/16", "1/16 Half Swing", "1/16 Full Swing", "1/16 Triplet", "1/32" };
     public static final String[] NOTES = new String[] { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
-    public static final String[] FM_MODES = new String[] { "Linear", "Exponential" };
+    public static final String[] FM_MODES = new String[] { "Exponential", "Linear" };
     public static final String[] MOD_SOURCES = { 
         "Off", "Osc 1", "Osc 2", "Osc 3", "Osc 4", "LFO 1", "LFO 2", "LFO 3", "LFO 4", "Lowpass Env", "VCA Env", "Env 3", "Env 4", 
         "Pitchbend", "Mod Wheel", "Slider 1 Position", "Slider 2 Position", "Slider 1 Pressure", "Slider 2 Pressure", "Aftertouch", 
@@ -1048,12 +1050,20 @@ public class DSIProphet12 extends Synth
         vbox.add(comp);
         hbox.add(vbox);
 
-        comp = new LabelledDial("Amount", this, "layer" + layer + "env" + env + "amount", color, 0, 254, 127)
-            {
-            public boolean isSymmetric() { return true; }
-            };              
-        hbox.add(comp);
-                
+		if (env == 1)
+			{
+			comp = new LabelledDial("Amount", this, "layer" + layer + "env" + env + "amount", color, 0, 127);
+			hbox.add(comp);
+        	}
+        else
+			{
+			comp = new LabelledDial("Amount", this, "layer" + layer + "env" + env + "amount", color, 0, 254, 127)
+				{
+				public boolean isSymmetric() { return true; }
+				};              
+			hbox.add(comp);
+        	}
+
         comp = new LabelledDial("Velocity", this, "layer" + layer + "env" + env + "velocitytoamount", color, 0, 127);
         ((LabelledDial)comp).addAdditionalLabel("to Amount");
         hbox.add(comp);
@@ -1146,7 +1156,7 @@ public class DSIProphet12 extends Synth
         HBox hbox = new HBox();
         VBox vbox = new VBox();
 
-        params = DELAY_FILTER_MODES;
+        params = DELAY_FEEDBACK_MODES;
         comp = new Chooser("Delay Feedback Mode", this, "layer" + layer + "delayfeedbackmode", params);
         vbox.add(comp);
 		hbox.add(vbox);

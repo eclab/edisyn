@@ -1121,9 +1121,11 @@ public class Midi
             }
         else if (message instanceof SysexMessage)
             {
-            if (((SysexMessage)message).getMessage()[0] == 0xF0)  // First one
+            //System.err.println("-->" + StringUtility.toHex(((SysexMessage)message).getMessage()));
+            if (((SysexMessage)message).getMessage()[0] == (byte)0xF0)  // First one
                 {
-                return "Sysex (" + getManufacturerForSysex(((SysexMessage)message).getData()) + ")";
+                return "Sysex (" + getManufacturerForSysex(((SysexMessage)message).getData()) + ")" + 
+            	"\n\t" + StringUtility.toHex(((SysexMessage)message).getMessage());
                 }
             else
                 {
@@ -1156,7 +1158,8 @@ public class Midi
                 case ShortMessage.TIMING_CLOCK: type = "Timing Clock"; c = -1; break;
                 case ShortMessage.TUNE_REQUEST: type = "Tune Request"; c = -1; break;
                 }
-            return type + (c == -1 ? "" : (" (Channel " + c + ")"));
+            return type + (c == -1 ? "" : (" (Channel " + c + ")" + 
+            	"\t" + (s.getData1() & 0xFF) + " " + (s.getData2() & 0xFF)));
             }
         }
 

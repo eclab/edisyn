@@ -1039,28 +1039,50 @@ public class ASMHydrasynth extends Synth
         10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10,
         11, 11, 11, 11, 11, 11, 11, 11, 
         12, 12, 12, 12, 12, 12, 
-        13, 13, 15, 15, 15, 
-        16, 16, 16, 17, 17, 
-        18, 18, 18, 19, 19, 19, 
-        20, 20, 20, 20, 20, 21, 21, 21, 
-        22, 22, 23, 23, 23, 
-        25, 25, 25, 26, 26, 
-        27, 27, 27, 28, 28, 28, 
-        29, 29, 30, 30, 30, 30, 30, 30, 
-        31, 31, 32, 32, 32, 
-        33, 33, 33, 35, 35, 
-        36, 36, 36, 37, 37, 37, 
-        38, 38, 39, 39, 39, 
-        40, 40, 40, 40, 41, 
-        42, 42, 43, 43, 
-        45, 46, 46, 47, 48, 48, 49, 49
+        13, 13, 
+        15, 15, 15, 
+        16, 16, 16, 
+        17, 17, 
+        18, 18, 18, 
+        19, 19, 19, 
+        20, 20, 20, 20, 20, 
+        21, 21, 21, 
+        22, 22, 
+        23, 23, 23, 
+        25, 25, 25, 
+        26, 26, 
+        27, 27, 27, 
+        28, 28, 28, 
+        29, 
+        29, 30, 30, 30, 30, 30, 30, 
+        31, 31, 
+        32, 32, 32, 
+        33, 33, 33, 
+        35, 35, 
+        36, 36, 36, 
+        37, 37, 37, 
+        38, 38, 
+        39, 39, 39, 
+        40, 40, 40, 40, 
+        41, 
+        42, 42, 
+        43, 43, 
+        45, 
+        46, 46, 
+        47, 
+        48, 48, 
+        49, 49
         };
         
+    // These patterns are used to compute delay times corresponding to values from 184...743.
+    // See getDelayTimeSyncOff(...) to get all delay times
     public static final int[] DELAY_TIME_PATTERN_1 = { 0, 0, 0, 1, 2, 2, 3, 3, 5, 6, 6, 7, 8, 8, 9, 9 };
     public static final int[] DELAY_TIME_PATTERN_2 = { 0, 0, 2, 3, 5, 6, 8, 9 };
     public static final int[] DELAY_TIME_PATTERN_3 = { 0, 2, 5, 8 };
     public static final int[] DELAY_TIME_PATTERN_4 = { 0, 3, 8, 10, 15, 19, 22, 26 };
 
+    // These patterns are used to compute delay times corresponding to values from 744...1024.
+    // See getDelayTimeSyncOff(...) to get all delay times
     public static final String[] SOME_MORE_DELAY_TIMES =
         {
         "1.00s", "1.00s", "1.01s", "1.01s", "1.02s", "1.02s", "1.02s", "1.03s", "1.03s", "1.03s", 
@@ -1090,7 +1112,8 @@ public class ASMHydrasynth extends Synth
         "2.50s", "2.51s", "2.53s", "2.54s", "2.55s", "2.56s", "2.58s", "2.59s", "2.60s", "2.61s", 
         "2.63s", "2.64s", "2.65s", "2.66s", "2.68s", "2.69s", "2.70s", "2.71s", "2.73s", "2.74s", 
         "2.75s", "2.76s", "2.78s", "2.79s", "2.80s", "2.81s", "2.83s", "2.84s", "2.85s", "2.86s", 
-        "2.88s", "2.89s", "2.90s", "2.91s", "2.93s", "2.94s", "2.95s", "2.96s", "2.98s", "2.99s", "3.00s"
+        "2.88s", "2.89s", "2.90s", "2.91s", "2.93s", "2.94s", "2.95s", "2.96s", "2.98s", "2.99s", 
+        "3.00s"
         };
                 
     // The delay time pattern is very convoluted.  It's 0...1024, with:
@@ -1183,8 +1206,8 @@ public class ASMHydrasynth extends Synth
 
     // A close mapping of val (0...1024) to LFO rate values (0.02 ... 150.00 Hz).
     // The LFO rate appears to be nearly a perfect exponential increase, except
-    // at the very low end where it's off in the 0.03 Hz area.  Would be nice to 
-    // know what the real mapping is...
+    // at the very low end where it's nonmonotonically off in the 0.03 Hz area.  
+    // Would be nice to know what the real mapping is...
     public double lfoRate(int x)
         {
         return Math.pow(2.0, (1 + 0.012571 * x)) / 100.0;
@@ -1198,7 +1221,7 @@ public class ASMHydrasynth extends Synth
     // Large numbers of displayed values require rounding towards 0.5 on the Hydrasynth
     public static int roundEven(double d) 
         {
-        // Garbage like https://stackoverflow.com/questions/32971262/how-to-round-a-double-to-closest-even-number
+        // https://stackoverflow.com/questions/32971262/how-to-round-a-double-to-closest-even-number
         // is wrong.  I think below works for both positive and negative values
                 
         int i = (int) d;

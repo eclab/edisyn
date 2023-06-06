@@ -61,7 +61,7 @@ public class Librarian extends JPanel
 
     public static final Color STANDARD_BACKGROUND_COLOR = new Color(250, 250, 250);
     public static final Color SELECTED_COLOR = new Color(160, 160, 160);
-    public static final Color SENT_COLOR = new Color(200, 160, 160);
+    public static final Color SENT_COLOR = new Color(200, 200, 0);
     public static final Color DROP_COLOR = new Color(160, 160, 200);
     public static final Color BACKGROUND_COLOR = new Color(240, 240, 240);              // new JLabel().getBackground(); 
     public static final Color GRID_COLOR = Style.isNimbus() ? new Color(192, 192, 192) : Color.GRAY;
@@ -73,7 +73,7 @@ public class Librarian extends JPanel
 
 	boolean sending = false;
 	
-    public Librarian(Synth synth)
+    public Librarian(final Synth synth)
         {
         warnLibrarian(synth);
         
@@ -373,6 +373,7 @@ public class Librarian extends JPanel
             	    		public void run()
                 				{
 		                		sendPatch();
+		                		synth.doSendTestNote();
 		                		sending = false;
 		                		table.repaint();
 		                		}
@@ -1149,7 +1150,7 @@ public class Librarian extends JPanel
         if (str == null) str = "Untitled.txt";
         else str = "PatchNames"  + str + ".txt";
 
-        fd.setFile(StringUtility.reviseFileName(str));
+        fd.setFile(StringUtility.makeValidFilename(str));
 
         String path = synth.getLastDirectory();
         if (path != null)

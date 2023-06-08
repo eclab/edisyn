@@ -41,6 +41,10 @@ Related projects:
 
 Donations are welcome via Paypal to my email address (sean@cs.gmu.edu).
 
+## Edisyn WALDORF M PUBLIC BETA
+
+We have a public beta for the Waldorf M ("Final" 1.09 firmware only).  If you'd like to try it out, the Edisyn.app and edisyn.jar files [can be found here](http://robo1.cs.gmu.edu/edisyn.m.beta6.zip).  Be sure to read the rest of this page to learn how to install those files.  Also be sure to read the README file which accompanies them.
+
 ## What's New
 
 Version 33 has a patch editor for the entire ASM Hydrasynth family

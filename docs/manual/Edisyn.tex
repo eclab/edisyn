@@ -668,7 +668,7 @@ The Constrictor auditions patches to you in exactly the same way was the Hill-Cl
 \label{constrictorpanel}
 \end{wrapfigure}
 
-The idea behind the Constrictor is to start with a set of varied but high-quality patches\,---\,derived from well-vetted factory patches for example.  Think of these patches as the outer boundaries of a large region of the space.  As you delete patch sounds you don't like, this region slowly begins to collapse, until ultimately it converges to a single patch.
+The idea behind the Constrictor is to start with a set of varied but high-quality patches\,---\,taken from well-vetted factory patches for example.  Think of these patches as the outer boundaries of a large region of the space.  As you delete patch sounds you don't like, this region slowly begins to collapse, until ultimately it converges to a single patch.
 
 The {\it Mutation Rate} dial controls the degree of mutation rate for the constrictor.  Note that this rate is {\it different from}, and stored apart from, the hill-climbing mutation rate.  By default there is no mutation. 
 
@@ -1033,6 +1033,12 @@ The Librarian has its own Undo and Redo stack independent of the editor.  You ca
 If you drag patches from one Librarian into another, you have affected {\it two different} Undo/Redo stacks.  Choosing Undo in one Librarian will undo the effect there, but the other Librarian's changes will stay as they are unless you also choose Undo in that Librarian as well.
 
 \paragraph{Setting Bank Names}  A very small set of synthesizers (currently just the Yamaha FB-01) allow you to change the name of the bank.  You can do this by triple-clicking on the current bank name (the column header).
+
+\subsection{Exploring and Auditioning Patches} 
+
+\paragraph{Auditioning a Patch}
+
+You can audition a patch directly from the Librarian without loading it into the Editor.  To do this, just Command-Click (on the Mac) or Right-Click on the patch.  Edisyn will send the patch directly to your synthesizer's current memory, then send a test note. The patch will briefly flash yellow until it is sent (not played).
 
 \paragraph{Exploration Tools} If you have selected a group of patches, you can route them to be Nudge targets, Morph targets, or the initial values of the Hill-Climber by choosing {\bf To Nudge Targets}, {\bf To Morph Targets}, or {\bf To Hill-Climber} respectively.     Sending a set of patches to the Hill-Climber is particularly useful as a start for the Constrictor variation.  The Librarian also has its own unique exploration tool, {\bf mixing}, which lets you blend a potentially large number of patches into one single patch or a bank of patches.  See the {\bf Mix} and {\bf Remix Banks} paragraphs in Section~\ref{explorationtools} for discussion of this.
 

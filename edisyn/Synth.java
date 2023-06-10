@@ -2036,6 +2036,7 @@ public abstract class Synth extends JComponent implements Updatable
             if (tuple != null)
                 tuple.dispose();            
             tuple = result;             // update
+            System.err.println("Make New Tuple " + tuple);
             setSendMIDI(true);
             updateTitle();
             retval = true;
@@ -2130,12 +2131,14 @@ public abstract class Synth extends JComponent implements Updatable
             {
             if (tuple == null) 
                 {
+                System.err.println("Tuple is NULL");
                 return false;
                 }
             
             Receiver receiver = tuple.outReceiver;
             if (receiver == null) 
                 {
+                System.err.println("Tuple OutReceiver is NULL");
                 return false;
                 }
             
@@ -2150,12 +2153,13 @@ public abstract class Synth extends JComponent implements Updatable
                 {
                 try
                     {
-                    long time = getMicrosecondPosition(tuple);
-                    if (midiDebug) System.out.println("MIDI DEBUG: Sent at " + time);
-                    receiver.send(message, time);
+//                    long time = getMicrosecondPosition(tuple);
+//                    if (midiDebug) System.out.println("MIDI DEBUG: Sent at " + time);
+                    receiver.send(message, -1);
                     }
                 catch (IllegalStateException e)
                     {
+                    System.err.println("Disconnecting?");
                     // This happens when the device has closed itself and we're still trying to send to it.
                     // For example if the user rips the USB cord for his device out of the laptop.  In this
                     // case we'll also disconnect
@@ -2242,9 +2246,10 @@ public abstract class Synth extends JComponent implements Updatable
                     int fragmentSize = getSysexFragmentSize();
                     if (fragmentSize <= NO_SYSEX_FRAGMENT_SIZE || message.getLength() <= fragmentSize)
                         {
-                        long time = getMicrosecondPosition(tuple);
+                        long time = -1; // getMicrosecondPosition(tuple);
                         if (midiDebug) System.out.println("MIDI DEBUG: Sysex sent at " + time + "\n\t" + Midi.format(message));
                         receiver.send(message, time); 
+                    	System.err.println("SENT");
                         }
                     else
                         {
@@ -2252,7 +2257,7 @@ public abstract class Synth extends JComponent implements Updatable
                         for(int i = 0; i < messages.length; i++)
                             {
                             if (i > 0) simplePause(getPauseBetweenSysexFragments());
-                            long time = getMicrosecondPosition(tuple);
+                            long time = -1; // getMicrosecondPosition(tuple);
                             if (midiDebug) System.out.println("MIDI DEBUG: Sysex fragment " + i + " sent at " + time);
                             receiver.send(messages[i], time);
                             }
@@ -2264,6 +2269,7 @@ public abstract class Synth extends JComponent implements Updatable
             catch (InvalidMidiDataException e) { Synth.handleException(e); return false; }
             catch (IllegalStateException e2)
                 {
+                    System.err.println("Disconnecting 1?");
                 // This happens when the device has closed itself and we're still trying to send to it.
                 // For example if the user rips the USB cord for his device out of the laptop.
                 SwingUtilities.invokeLater(new Runnable()
@@ -6666,6 +6672,7 @@ menubar.add(helpMenu);
     /** Removes the in/out/key devices. */
     void doDisconnectMIDI()
         {
+        System.err.println("Disconnect");
         if (tuple != null)
             tuple.dispose();
 
@@ -6967,6 +6974,7 @@ menubar.add(helpMenu);
             // get rid of MIDI connection
             if (tuple != null)
                 tuple.dispose();
+                System.err.println("Close Window");
             tuple = null;
             
             frame.setVisible(false);

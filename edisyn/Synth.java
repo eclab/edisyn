@@ -990,8 +990,6 @@ public abstract class Synth extends JComponent implements Updatable
         wants to pop up a single patch to display it. */    
     public void performRequestDump(Model tempModel, boolean changePatch)
         {
-        System.err.println("Perform Request Dump " + changePatch);
-        new Throwable().printStackTrace();
         if (changePatch || getAlwaysChangesPatchesOnRequestDump())
             performChangePatch(tempModel);
             
@@ -1525,14 +1523,14 @@ public abstract class Synth extends JComponent implements Updatable
                 }
                                 
             public void send(final MidiMessage message, final long timeStamp)
-                {                       
+                {                  
                 if (message instanceof ShortMessage)
                     {
                     if (((ShortMessage)message).getStatus() == ShortMessage.TIMING_CLOCK ||
                         ((ShortMessage)message).getStatus() == ShortMessage.ACTIVE_SENSING) 
                         return; // ignore
                     }
-                        
+                
                 if (!receiveMIDI)
                     {
                     if (bufferNonReceivedMIDI)
@@ -2036,7 +2034,6 @@ public abstract class Synth extends JComponent implements Updatable
             if (tuple != null)
                 tuple.dispose();            
             tuple = result;             // update
-            System.err.println("Make New Tuple " + tuple);
             setSendMIDI(true);
             updateTitle();
             retval = true;
@@ -2105,7 +2102,7 @@ public abstract class Synth extends JComponent implements Updatable
     	return Midi.format(message);
     	}
     
-    boolean midiDebug = true;
+    boolean midiDebug = false;
     
     Object[] midiSendLock = new Object[0];
 
@@ -2131,14 +2128,12 @@ public abstract class Synth extends JComponent implements Updatable
             {
             if (tuple == null) 
                 {
-                System.err.println("Tuple is NULL");
                 return false;
                 }
             
             Receiver receiver = tuple.outReceiver;
             if (receiver == null) 
                 {
-                System.err.println("Tuple OutReceiver is NULL");
                 return false;
                 }
             
@@ -2159,7 +2154,6 @@ public abstract class Synth extends JComponent implements Updatable
                     }
                 catch (IllegalStateException e)
                     {
-                    System.err.println("Disconnecting?");
                     // This happens when the device has closed itself and we're still trying to send to it.
                     // For example if the user rips the USB cord for his device out of the laptop.  In this
                     // case we'll also disconnect
@@ -2249,7 +2243,6 @@ public abstract class Synth extends JComponent implements Updatable
                         long time = -1; // getMicrosecondPosition(tuple);
                         if (midiDebug) System.out.println("MIDI DEBUG: Sysex sent at " + time + "\n\t" + Midi.format(message));
                         receiver.send(message, time); 
-                    	System.err.println("SENT");
                         }
                     else
                         {
@@ -2269,7 +2262,6 @@ public abstract class Synth extends JComponent implements Updatable
             catch (InvalidMidiDataException e) { Synth.handleException(e); return false; }
             catch (IllegalStateException e2)
                 {
-                    System.err.println("Disconnecting 1?");
                 // This happens when the device has closed itself and we're still trying to send to it.
                 // For example if the user rips the USB cord for his device out of the laptop.
                 SwingUtilities.invokeLater(new Runnable()
@@ -3706,11 +3698,10 @@ public abstract class Synth extends JComponent implements Updatable
 
 
 
-    public static Window lastActiveWindow = null;
-
     /** Temporarily sets me to be the active synth. */
     public void setActiveSynth(boolean val) { activeSynth = val; }
     boolean activeSynth = false;
+    static Window lastActiveWindow = null;
         
     /** Returns true if my synth panel is the frontmost and is active. */
     public boolean amActiveSynth()
@@ -3721,6 +3712,15 @@ public abstract class Synth extends JComponent implements Updatable
         if (synthWindow == null) return false;
         
         Window activeWindow = javax.swing.FocusManager.getCurrentManager().getActiveWindow();
+        
+        if (activeWindow == null)
+        	{
+        	activeWindow = lastActiveWindow;	// use the last window
+        	}
+        else
+        	{
+        	lastActiveWindow = activeWindow;	// update the last window for later use
+        	}
 
         // we want to be either the currently active window, the parent of a dialog box which is the active window, or the last active window if the user is doing something else
         return (synthWindow == activeWindow || (activeWindow != null && synthWindow == activeWindow.getOwner()) ||
@@ -5995,7 +5995,6 @@ menubar.add(helpMenu);
 						}
 					updateMenu();
 					windowBecameFront();
-					lastActiveWindow = frame;
 					}
                 }
 
@@ -6672,7 +6671,6 @@ menubar.add(helpMenu);
     /** Removes the in/out/key devices. */
     void doDisconnectMIDI()
         {
-        System.err.println("Disconnect");
         if (tuple != null)
             tuple.dispose();
 
@@ -6974,7 +6972,6 @@ menubar.add(helpMenu);
             // get rid of MIDI connection
             if (tuple != null)
                 tuple.dispose();
-                System.err.println("Close Window");
             tuple = null;
             
             frame.setVisible(false);

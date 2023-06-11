@@ -2642,7 +2642,7 @@ public class WaldorfM extends Synth
     
     public String[] getPatchNumberNames()  
         { 
-        return buildIntegerNames(128, 0);
+        return buildIntegerNames(128, 1);
         }
 
     public boolean[] getWriteableBanks() 

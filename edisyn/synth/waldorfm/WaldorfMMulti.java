@@ -917,7 +917,7 @@ public int getPauseAfterChangePatch() { return 200; }
 
     public String[] getPatchNumberNames()  
         { 
-        return buildIntegerNames(127, 0);
+        return buildIntegerNames(127, 1);
         }
 
     public String[] getBankNames() { return new String[] { "Bank" }; }

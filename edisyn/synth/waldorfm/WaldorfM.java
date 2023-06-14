@@ -2011,7 +2011,7 @@ public class WaldorfM extends Synth
     	updateMode(); 
         }
 
-    public int getPauseAfterWritePatch() { return 2600; }
+    public int getPauseAfterWritePatch() { return 7000; }
 
     // Change Patch can get stomped if we do a request immediately afterwards
     public int getPauseAfterChangePatch() { return 200; }

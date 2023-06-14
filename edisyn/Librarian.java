@@ -30,6 +30,8 @@ public class Librarian extends JPanel
     PushButton stopAction;
     JPanel bottomPanel;
     
+    String findString = null;
+    
     /** Returns the current library (which is the table's model) */    
     public Library getLibrary() { return (Library)(table.getModel()); }
         
@@ -1021,7 +1023,37 @@ public class Librarian extends JPanel
         
         menu.addSeparator();
         
-        item = new JMenuItem("To Nudge Targets");
+    	item = new JMenuItem("Find...");
+        item.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent evt) 
+                { 
+                synth.librarian.find();
+                }
+            });
+        menu.add(item);
+        item.setEnabled(false);
+        item.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+
+    	item = new JMenuItem("Find Next");
+        item.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent evt) 
+                { 
+                synth.librarian.findNext();
+                }
+            });
+        menu.add(item);
+        item.setEnabled(false);
+        item.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_G, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
+
+        menu.addSeparator();
+        
+		JMenu send = new JMenu("Send to");
+		send.setEnabled(false);
+		menu.add(send);
+		
+        item = new JMenuItem("Nudge Targets");
         item.addActionListener(new ActionListener()
             {
             public void actionPerformed(ActionEvent evt) 
@@ -1029,10 +1061,10 @@ public class Librarian extends JPanel
                 synth.librarian.toNudgeTargets(); 
                 }
             });
-        menu.add(item);
-        item.setEnabled(false);
+        send.add(item);
+//        item.setEnabled(false);
 
-        item = new JMenuItem("To Morph Targets");
+        item = new JMenuItem("Morph Targets");
         item.addActionListener(new ActionListener()
             {
             public void actionPerformed(ActionEvent evt) 
@@ -1040,10 +1072,10 @@ public class Librarian extends JPanel
                 synth.librarian.toMorphTargets(); 
                 }
             });
-        menu.add(item);
-        item.setEnabled(false);
+        send.add(item);
+//        item.setEnabled(false);
 
-        item = new JMenuItem("To Hill Climber");
+        item = new JMenuItem("Hill Climber");
         item.addActionListener(new ActionListener()
             {
             public void actionPerformed(ActionEvent evt) 
@@ -1051,11 +1083,16 @@ public class Librarian extends JPanel
                 synth.librarian.toHillClimber(); 
                 }
             });
-        menu.add(item);
-        item.setEnabled(false);
+        send.add(item);
+//        item.setEnabled(false);
 
-        menu.addSeparator();
-        item = new JMenuItem("Mix Uniformly");
+//        menu.addSeparator();
+
+		JMenu mix = new JMenu("Mix");
+		mix.setEnabled(false);
+		menu.add(mix);
+		
+        item = new JMenuItem("Uniformly");
         item.addActionListener(new ActionListener()
             {
             public void actionPerformed(ActionEvent evt) 
@@ -1063,10 +1100,10 @@ public class Librarian extends JPanel
                 synth.librarian.mix(Librarian.MIX_TYPE_UNIFORM); 
                 }
             });
-        menu.add(item);
-        item.setEnabled(false);
+        mix.add(item);
+        //item.setEnabled(false);
 
-        item = new JMenuItem("Mix Light Bias");
+        item = new JMenuItem("Light Bias");
         item.addActionListener(new ActionListener()
             {
             public void actionPerformed(ActionEvent evt) 
@@ -1074,10 +1111,10 @@ public class Librarian extends JPanel
                 synth.librarian.mix(Librarian.MIX_TYPE_ONE_THIRD); 
                 }
             });
-        menu.add(item);
-        item.setEnabled(false);
+        mix.add(item);
+        //item.setEnabled(false);
 
-        item = new JMenuItem("Mix Medium Bias");
+        item = new JMenuItem("Medium Bias");
         item.addActionListener(new ActionListener()
             {
             public void actionPerformed(ActionEvent evt) 
@@ -1085,10 +1122,10 @@ public class Librarian extends JPanel
                 synth.librarian.mix(Librarian.MIX_TYPE_ONE_HALF); 
                 }
             });
-        menu.add(item);
-        item.setEnabled(false);
+        mix.add(item);
+        //item.setEnabled(false);
 
-        item = new JMenuItem("Mix Heavy Bias");
+        item = new JMenuItem("Heavy Bias");
         item.addActionListener(new ActionListener()
             {
             public void actionPerformed(ActionEvent evt) 
@@ -1096,8 +1133,19 @@ public class Librarian extends JPanel
                 synth.librarian.mix(Librarian.MIX_TYPE_TWO_THIRDS); 
                 }
             });
-        menu.add(item);
-        item.setEnabled(false);
+        mix.add(item);
+        //item.setEnabled(false);
+
+        item = new JMenuItem("Remix Bank");
+        item.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent evt) 
+                { 
+                synth.librarian.mixBank(Librarian.MIX_TYPE_ONE_HALF); 
+                }
+            });
+        mix.add(item);
+//        item.setEnabled(false);
 
         item = new JMenuItem("Do Mix Again");
         item.addActionListener(new ActionListener()
@@ -1111,18 +1159,6 @@ public class Librarian extends JPanel
         synth.mixAgainMenu = item;
         item.setEnabled(true);
         item.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_M, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.SHIFT_MASK));
-
-              
-        item = new JMenuItem("Remix Bank");
-        item.addActionListener(new ActionListener()
-            {
-            public void actionPerformed(ActionEvent evt) 
-                { 
-                synth.librarian.mixBank(Librarian.MIX_TYPE_ONE_HALF); 
-                }
-            });
-        menu.add(item);
-        item.setEnabled(false);
 
         menu.addSeparator();      
         
@@ -2191,6 +2227,113 @@ public class Librarian extends JPanel
             ((JTable)c).setCursor(Cursor.getPredefinedCursor(Cursor.DEFAULT_CURSOR));
             }
         }
+        
+    public void scrollTo(int column, int row)
+    	{
+    	// derived from http://stackoverflow.com/questions/853020/jtable-scrolling-to-a-specified-row-index
+    	JViewport viewport = scrollPane.getViewport();
+    	Rectangle rect = table.getCellRect(row, column, true);
+    	Point pt = viewport.getViewPosition();
+    	rect.setLocation(rect.x - pt.x, rect.y - pt.y);
+        viewport.scrollRectToVisible(rect);
+    	}
+
+    public void select(int column, int row, int len)
+    	{
+    	if (len < 1) len = 1;
+		Library library = getLibrary();
+		int bankSize = library.getBankSize();
+
+		// bound
+    	if (row + len >= bankSize) 
+    		{
+    		len = bankSize - row;
+    		}
+    	
+        table.changeSelection(row, column, false, false);
+    	}
+        
+    public void find()
+    	{
+		Library library = getLibrary();
+		Synth synth = library.getSynth();
+        JTextField field = new SelectedTextField(findString == null ? "" : findString);
+
+    	if (synth.showMultiOption(synth, new String[] { "Text" }, new JComponent[] { field }, new String[] { "Find", "Cancel" }, 0, "Find Patch", "Enter Text to Search" ) == 0)
+    		{
+    		findString = field.getText();
+    		findNext();
+	    	}
+    	}
+    	
+    public void findNext()
+    	{
+    	if (findString == null) return;
+
+		int column = col(table, table.getSelectedColumn());
+		int row = table.getSelectedRow();
+		int len = table.getSelectedRowCount();
+		
+//		System.err.println("Selected " + column + " " + row);
+									
+		if (column < 0 || row < 0 || len == 0) // nope
+			{
+			column = 1;
+			row = 0;
+			}
+		
+		Library library = getLibrary();
+		Synth synth = library.getSynth();
+		int bankSize = library.getBankSize();
+		int numBanks = library.getNumBanks();
+		int originalColumn = column;
+		int originalRow = row;
+		String find = findString.toLowerCase();
+		
+		while(true)
+			{
+			row++;
+			if (row >= bankSize)
+				{
+				row = 0;
+				column++;
+				if (column >= numBanks - 1)
+					column = 0;
+				}
+			
+			if (row == originalRow && column == originalColumn)  // found nothing
+				{
+				synth.showSimpleMessage("Find", "Could not find any patch name matching:\n" + find);
+				return;
+				}
+				
+			// skip invalid
+			if (column > 0 && !synth.isValidPatchLocation(column - 1, row))
+				continue;
+				
+			Patch patch = library.getPatch(column - 1, row);
+			String name = "";
+			if (patch != null) 
+				{
+				name = patch.getName();
+				if (name == null) // uhm
+					{
+//					System.err.println("Librarian.findNext WARNING: null patch name " + column + " " + row);
+					name = "";
+					}
+				}
+
+			name = name.toLowerCase();
+			if (name.indexOf(find) >= 0)	// found one
+				{
+//				System.err.println("Found " + column + " " + row + " " + name);
+				select(column, row, 1);
+				scrollTo(column, row);
+				return;
+				}
+			// else continue...
+			}
+    	}
 
     void warnLibrarian(Synth synth)
         {

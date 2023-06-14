@@ -8581,6 +8581,11 @@ menubar.add(helpMenu);
         updateTitle();  // so I show the right filename -- this may not be necessary
 
         setSendMIDI(true);
+        
+        if (succeeded)
+        	{
+            tabs.setSelectedIndex(0);
+        	}
                                                                 
         return succeeded;       
         }

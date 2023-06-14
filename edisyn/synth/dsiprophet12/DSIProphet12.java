@@ -48,7 +48,7 @@ public class DSIProphet12 extends Synth
         "Off", "Osc 1", "Osc 2", "Osc 3", "Osc 4", "LFO 1", "LFO 2", "LFO 3", "LFO 4", "Lowpass Env", "VCA Env", "Env 3", "Env 4", 
         "Pitchbend", "Mod Wheel", "Slider 1 Position", "Slider 2 Position", "Slider 1 Pressure", "Slider 2 Pressure", "Aftertouch", 
         "CC#2: Breath", "CC#4: Foot Pedal", "CC#11: Expression", "Velocity", "Note Number", "Random", "DC", 
-        "Audio Out", "Max"   // NEW
+        "Audio Out"   // NEW
         };
     public static final String[] MOD_DESTINATIONS = { 
         "Off", "Osc 1 Freq", "Osc 2 Freq", "Osc 3 Freq", "Osc 4 Freq", "Osc All Freq", "Osc 1 Level", "Osc 2 Level", "Osc 3 Level", "Osc 4 Level", 
@@ -1241,15 +1241,15 @@ public class DSIProphet12 extends Synth
                 VBox vbox = new VBox();
 
                 params = MOD_SOURCES;
-                comp = new Chooser("Source", this, "layer" + layer + "mod" + mod + "source", params);
+                comp = new Chooser("Source " + mod, this, "layer" + layer + "mod" + mod + "source", params);
                 vbox.add(comp);
 
                 params = MOD_DESTINATIONS;
-                comp = new Chooser("Destination", this, "layer" + layer + "mod" + mod + "destination", params);
+                comp = new Chooser("Destination " + mod, this, "layer" + layer + "mod" + mod + "destination", params);
                 vbox.add(comp);
                 hbox.add(vbox);
 
-                comp = new LabelledDial("Amount", this, "layer" + layer + "mod" + mod + "amount", color, 0, 254, 127)
+                comp = new LabelledDial("Amount " + mod, this, "layer" + layer + "mod" + mod + "amount", color, 0, 254, 127)
                     {
                     public boolean isSymmetric() { return true; }
                     };              

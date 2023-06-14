@@ -379,7 +379,6 @@ public class Library extends AbstractTableModel
         somewhere else. */
     public void receivePatches(Patch[] incoming, boolean overwrite)
         {
-        System.err.println("Receive Patches");
         // These patches could be null because they've already been processed earlier as banks
         // and this sets the patch to null.  So let's check to see how many there are.
         int count = 0;

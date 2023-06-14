@@ -459,7 +459,7 @@ public class WaldorfMMulti extends Synth
 // Change Patch can get stomped if we do a request immediately afterwards
 public int getPauseAfterChangePatch() { return 200; }
 
-    public int getPauseAfterWritePatch() { return 2600; }
+    public int getPauseAfterWritePatch() { return 7000; }
 
     // public int getPauseAfterSendAllParameters() { return 1000; }
 
@@ -556,12 +556,15 @@ public int getPauseAfterChangePatch() { return 200; }
             tempModel = getModel();
                 
         byte NN = (byte) tempModel.get("number");
+        byte DO_NOT_SAVE = 0;
+
+        if (toWorkingMemory) { NN = 0; DO_NOT_SAVE = 1;}
 
         byte[] data = new byte[320];
         data[0] = (byte)0xF0;
         data[1] = (byte)0x3e;
         data[2] = (byte)0x30;
-        data[3] = (byte)0x00;                                   // maybe later getID();
+        data[3] = (byte)0x00;                   // maybe later getID();
         data[4] = (byte)0x73;                   // Dump Multi Arrangement
         data[5] = (byte)0x00;                   // FIXME: It's unknown what value this should be
 
@@ -578,7 +581,7 @@ public int getPauseAfterChangePatch() { return 200; }
         // Handle Bank and Number, which are after the name oddly
         data[32] = 0x00;                                // FIXME: this is the "exact" flag. What is that?
         data[33] = (byte)NN;
-        data[34] = 0x00;
+        data[34] = (byte)DO_NOT_SAVE;
         data[35] = 0x00;
 
         int pos = 36;

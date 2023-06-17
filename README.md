@@ -43,7 +43,7 @@ Donations are welcome via Paypal to my email address (sean@cs.gmu.edu).
 
 ## Edisyn WALDORF M PUBLIC BETA
 
-We have a public beta for the Waldorf M ("Final" 1.09 firmware only).  If you'd like to try it out, Beta 9 (Edisyn.app and edisyn.jar files) [can be found here](http://robo1.cs.gmu.edu/edisyn.m.beta9.zip).  Be sure to read the rest of this page to learn how to install those files.  Also be sure to read the README file which accompanies them.
+We have a public beta for the Waldorf M ("Final" 1.09 firmware only).  If you'd like to try it out, Beta 10 (Edisyn.app and edisyn.jar files) [can be found here](http://robo1.cs.gmu.edu/edisyn.m.beta10.zip).  Be sure to read the rest of this page to learn how to install those files.  Also be sure to read the README file which accompanies them.
 
 ## What's New
 

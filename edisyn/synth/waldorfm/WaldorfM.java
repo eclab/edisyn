@@ -2016,7 +2016,7 @@ public class WaldorfM extends Synth
     // Change Patch can get stomped if we do a request immediately afterwards
     public int getPauseAfterChangePatch() { return 200; }
     
-    // public int getPauseAfterSendAllParameters() { return 1000; }
+    public int getPauseAfterSendOneParameter() { return 1; }
  
     public Object[] emitAll(Model tempModel, boolean toWorkingMemory, boolean toFile)
         {

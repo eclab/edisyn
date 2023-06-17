@@ -387,33 +387,6 @@ public class WaldorfMMulti extends Synth
         }
 
 
-/*
-    public JFrame sprout()     
-        {
-        JFrame frame = super.sprout();
-        addMMenu();
-        return frame;
-        }
-
-    boolean updateScreen;
-
-    public void addMMenu()
-        {
-        JMenu menu = new JMenu("M");
-        menubar.add(menu);
-        
-        final JCheckBoxMenuItem updateScreenMenu = new JCheckBoxMenuItem("Update Screen When Changing Parameters");
-        updateScreenMenu.addActionListener(new ActionListener()
-            {
-            public void actionPerformed(ActionEvent e)
-                {
-                updateScreen = updateScreenMenu.isSelected();
-                }
-            });
-        menu.add(updateScreenMenu);
-        }
-*/
-
     public Model getNextPatchLocation(Model model)
         {
         int number = model.get("number");
@@ -462,6 +435,7 @@ public int getPauseAfterChangePatch() { return 200; }
     public int getPauseAfterWritePatch() { return 7000; }
 
     // public int getPauseAfterSendAllParameters() { return 1000; }
+    public int getPauseAfterSendOneParameter() { return 1; }
 
     public byte[] requestCurrentDump()
         {
@@ -519,7 +493,7 @@ public int getPauseAfterChangePatch() { return 200; }
 
     public Object[] emitAll(String key)
         {
-        if (key.equals("--") || key.equals("number") || key.equals("name"))
+        if (key.equals("--") || key.equals("number") || key.equals("name") || key.equals("bank"))
             {
             return new Object[0];           // do nothing
             }
@@ -558,6 +532,8 @@ public int getPauseAfterChangePatch() { return 200; }
         byte NN = (byte) tempModel.get("number");
         byte DO_NOT_SAVE = 0;
 
+		// At present this DOES NOT WORK.  We're sending as individual parameters.
+		// Vlad may update things however.
         if (toWorkingMemory) { NN = 0; DO_NOT_SAVE = 1;}
 
         byte[] data = new byte[320];
@@ -579,7 +555,7 @@ public int getPauseAfterChangePatch() { return 200; }
         data[31] = 0x00;        // Extra padded Name byte
         
         // Handle Bank and Number, which are after the name oddly
-        data[32] = 0x00;                                // FIXME: this is the "exact" flag. What is that?
+        data[32] = 0x01;                       // 0x01 = Use data[33] to determine slot.  0x00 = save into slot user has currently set on machine.
         data[33] = (byte)NN;
         data[34] = (byte)DO_NOT_SAVE;
         data[35] = 0x00;
@@ -616,12 +592,12 @@ public int getPauseAfterChangePatch() { return 200; }
         if (data[32] == 0)               // Edit Buffer
             {
             // Might as well set the patch to 1/00
-            model.set("bank", 0);
+            // model.set("bank", 0);				// there's only one bank
             model.set("number", 0);
             }
         else
             {
-            model.set("bank", data[32] - 1);
+            // model.set("bank", data[32] - 1);		// there's only one bank
             model.set("number", data[33]);
             }
 
@@ -917,6 +893,14 @@ public int getPauseAfterChangePatch() { return 200; }
     "--",                                       // RESERVED5
     };
     
+
+	/** For the time being, the M has no way to receive multi patches to
+		current working memory as a dump.  So we have to send them one at a time. */
+    public boolean getSendsAllParametersAsDump() 
+        {
+        return false; 
+        }
+
 
     public String[] getPatchNumberNames()  
         { 

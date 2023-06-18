@@ -51,7 +51,7 @@ public class WaldorfMicrowaveXT extends Synth
         "312", "315", "318", "321", "323", "326", "329", "332", "335", "338", "340", "343", "346", "349", "352", "354", "357"};
     static final String[] CLIPPING = new String[] { "Saturate", "Overflow" };
     static final String[] FILTER_2_TYPES = new String[] { "6dB LP", "6dB HP" };
-    static final String[] EFFECT_TYPES = new String[] { "Off", "Chorus", "Flanger 1", "Flanger 2", "AutoWahLP", "AutoWahBP", "Overdrive", "Amp. Mod", "Delay [XT/Xtk]", "Pan Delay [XT/Xtk]", "Mod Delay [XT/Xtk]" };
+    static final String[] EFFECT_TYPES = new String[] { "Off", "Chorus", "Flanger 1", "Flanger 2", "AutoWahLP", "AutoWahBP", "Overdrive", "Amp. Mod", "Delay [XT/XTk]", "Pan Delay [XT/XTk]", "Mod Delay [XT/XTk]" };
     static final String[] OSCILLATOR_GLIDE_TYPES = new String[] { "Portamento", "Glissando", "Fingered P", "Fingered G" };
     static final String[] OSCILLATOR_GLIDE_MODES = new String[] { "Exponential", "Linear" };
     static final String[] ARPEGGIATOR_ACTIVE = new String[] { "Off", "On", "Hold" };

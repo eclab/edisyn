@@ -434,7 +434,6 @@ public int getPauseAfterChangePatch() { return 200; }
 
     public int getPauseAfterWritePatch() { return 7000; }
 
-    // public int getPauseAfterSendAllParameters() { return 1000; }
     public int getPauseAfterSendOneParameter() { return 1; }
 
     public byte[] requestCurrentDump()

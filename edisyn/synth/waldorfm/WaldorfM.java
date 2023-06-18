@@ -34,7 +34,8 @@ public class WaldorfM extends Synth
     public static final String[] ARP_MODES = { "Off", "Normal", "One Shot", "Hold" };
     public static final String[] DIGIVCF_FILTER_TYPES = { "LP 12", "BP 12", "HP 12", "[M] Notch 12", "[M] LP 24", "[M] BP 24", "[M] HP 24", "[M] Notch 24", "[M] Sin + LP", "[M] Dual LP/BP", "[M] Band Stop 12", "[M] S&H + LP 12", "[M] Waveshaper", "[M] FM + LP 12", "[M] S&H + HP 12", "[M] FM + HP 12", "Frequency Boost", "[M] M Waveshaper" };
     // public static final String[] DIGIVCF_FILTER_TYPES = { "LP 12", "BP 12", "HP 12", "Notch 12 [M]", "LP 24 [M]", "BP 24 [M]", "HP 24 [M]", "Notch 24 [M]", "Sin + LP [M]", "Dual LP/BP [M]", "Band Stop 12", "S&H + LP 12 [M]", "Waveshaper [M]", "FM + LP 12 [M]", "S&H + HP 12 [M]", "FM + HP 12 [M]", "Frequency Boost [M]", "M Waveshaper [M]" };
-    public static final String[] ENGINE_PLAY_MODES = { "Mono Retrig", "Mono Legato", "Polyphonic" };
+    // public static final String[] ENGINE_PLAY_MODES = { "Mono Retrig", "Mono Legato", "Polyphonic" };
+    public static final String[] ENGINE_PLAY_MODES = { "Polyphonic", "Mono Retrig", "Mono Legato", };
     public static final String[] ENV_RATES = { "Slow", "Fast", "Normal" };              // Note M differs from docs, which say Fast, Normal, Slow
     public static final String[] LFO_RANGE_TYPES = { "Normal", "Slow", "Fast" };                // Note M differs from docs, which say Fast, Normal, Slow
     public static final String[] LFO_SHAPES = { "Sine", "Triangle", "Pulse", "Random", "S&H" };
@@ -700,7 +701,7 @@ public class WaldorfM extends Synth
         HBox hbox = new HBox();
         
         VBox vbox = new VBox();
-        comp = new CheckBox("Pitch Mode", this, "osc" + osc + "pitchmode");
+        comp = new CheckBox("Fixed Pitch", this, "osc" + osc + "pitchmode");
         vbox.add(comp);
 
         if (osc == 2)

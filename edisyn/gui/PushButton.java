@@ -40,7 +40,13 @@ public class PushButton extends JPanel
     public JButton getButton() { return button; }
     
     public String getText() { return text; }
-    public void setText(String val) { text = val; button.setText("<html>"+val+"</html>"); }
+    public void setText(String val) 
+        { 
+        text = val; 
+        button.setText("<html>"+val+"</html>"); 
+        // we need to de-htmlify the text for accessibility
+        button.getAccessibleContext().setAccessibleName(text.replaceAll("<.*?>", ""));
+        }
     
     public AWTEventListener releaseListener = null;
         

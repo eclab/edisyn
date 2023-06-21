@@ -83,6 +83,7 @@ public class CheckBox extends NumericalComponent
                 return d;
                 }                       
             };
+        check.getAccessibleContext().setAccessibleName(label);
             
         check.setFont(Style.SMALL_FONT());
         check.setOpaque(false);

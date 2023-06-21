@@ -20,8 +20,10 @@ import edisyn.util.*;
    @author Sean Luke
 */
 
-public class Category extends JComponent implements Gatherable
-    {             
+public class Category extends JPanel implements Gatherable
+    {        
+    // we used to be a JComponent but now we're a JPanel because JPanels have concrete AccessibleContexts
+         
     // even with modification for the insets, the text position value seems to be off by a bit
     final static int STRING_WIDTH_COMPENSATION = 10;
     // In Nimbus on Windows, the font widths are wrong
@@ -50,7 +52,7 @@ public class Category extends JComponent implements Gatherable
     MenuItem rand50 = new MenuItem("Randomize by 50%");
     MenuItem rand75 = new MenuItem("Randomize by 75%");
     MenuItem rand100 = new MenuItem("Randomize by 100%");
-    
+        
     public void makePasteable(String preamble) { pasteable = true; this.preamble = preamble; }
     public void makePasteable(String preamble, String preamble2) { pasteable = true; this.preamble = preamble; }
     public void makeDistributable(String preamble) { distributable = true; this.distributePreamble = preamble; }
@@ -614,9 +616,15 @@ public class Category extends JComponent implements Gatherable
         return insets;
         }
     
+    public String getName()
+        {
+        return name;
+        }
+        
     public void setName(String label)
         {
         if (label == null) label = "";
+        getAccessibleContext().setAccessibleName(label);
         this.name = label;
         stringWidth = 0;                // reset
         

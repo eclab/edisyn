@@ -58,6 +58,7 @@ public class StringComponent extends JComponent implements Updatable, HasKey
     public void update(String key, Model model)
         {
         change.setText(getText().trim());
+        change.getAccessibleContext().setAccessibleName(label.getText() + ": " + (getText().trim()));
         }
         
     /** Override this method to verify whether the string is a valid one to store. */
@@ -133,6 +134,8 @@ public class StringComponent extends JComponent implements Updatable, HasKey
                 
         add(change, BorderLayout.SOUTH);
         synth.getModel().set(key, "");          // gotta set it to something
+
+        change.getAccessibleContext().setAccessibleName(_label);
         }
         
     public void perform(Component parent)

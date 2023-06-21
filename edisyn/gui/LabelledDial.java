@@ -11,6 +11,8 @@ import java.awt.geom.*;
 import javax.swing.border.*;
 import javax.swing.*;
 import java.awt.event.*;
+import java.util.*;
+import javax.accessibility.*;
 
 /**
    A labelled dial which the user can modify with the mouse.
@@ -25,6 +27,7 @@ import java.awt.event.*;
 
 public class LabelledDial extends NumericalComponent
     {
+    ArrayList<String> labels = new ArrayList();
     Dial dial;
     JLabel label;
     Box labelBox;
@@ -49,6 +52,16 @@ public class LabelledDial extends NumericalComponent
         
     public LabelledDial setLabel(String text)
         {
+        if (labels.size() == 0) 
+            {
+            labels.add(text);
+            }
+        else
+            {
+            labels.set(0, text);
+            }
+        dial.updateAccessibleName();
+                
         label.setText(text);
         label.revalidate();
         if (label.isVisible()) label.repaint();
@@ -77,6 +90,13 @@ public class LabelledDial extends NumericalComponent
         for multiline labels. */
     public JLabel addAdditionalLabel(String _label)
         {
+        if (labels.size() == 0) 
+            {
+            labels.add("");
+            }
+        labels.add(_label);
+        dial.updateAccessibleName();
+
         JLabel label2 = new JLabel(_label);
                 
         label2.setFont(Style.SMALL_FONT());
@@ -108,7 +128,12 @@ public class LabelledDial extends NumericalComponent
         {
         return dial.field.getFont();
         }
-        
+
+
+
+
+
+
     /** Makes a labelled dial for the given key parameter on the given synth, and with the given color and
         minimum and maximum.  Prior to display, subtractForDisplay is 
         SUBTRACTED from the parameter value.  You can use this to convert 0...127 in the model
@@ -148,8 +173,10 @@ public class LabelledDial extends NumericalComponent
         panel.add(dial, BorderLayout.CENTER);
 
         label = new JLabel(_label);
+        
         if (_label != null)
             {
+            labels.add(_label);
             label.setFont(Style.SMALL_FONT());
             label.setBackground(Style.BACKGROUND_COLOR());  // TRANSPARENT);
             label.setForeground(Style.TEXT_COLOR());
@@ -163,7 +190,8 @@ public class LabelledDial extends NumericalComponent
             labelBox.add(glue = Box.createGlue());
             panel.add(labelBox, BorderLayout.SOUTH);
             }
-        
+        dial.updateAccessibleName();
+
         setLayout(new BorderLayout());
         add(panel, BorderLayout.NORTH);
         }
@@ -311,13 +339,71 @@ public class LabelledDial extends NumericalComponent
             else if (proposedState > max)
                 proposedState = max;
             return updateProposedState(proposedState);
-            }
-                
-                
- 
-        
+            }   
+      
         public Dial(Color staticColor)
             {
+            setFocusable(true);
+            setRequestFocusEnabled(false);
+            
+            addKeyListener(new KeyAdapter()
+                {
+                public void keyPressed(KeyEvent e)
+                    {
+                    int state = getState();
+                    int max = getMax();
+                    int min = getMin();
+
+                    int modifiers = e.getModifiersEx();
+                    boolean shift = (modifiers & KeyEvent.SHIFT_DOWN_MASK) == KeyEvent.SHIFT_DOWN_MASK;
+                    // boolean ctrl = (modifiers & KeyEvent.CTRL_DOWN_MASK) == KeyEvent.CTRL_DOWN_MASK;
+                    // Can't use alt, MacOS uses it already for moving around
+                    // boolean alt = (modifiers & KeyEvent.ALT_DOWN_MASK) == KeyEvent.ALT_DOWN_MASK;
+                        
+                    int multiplier = 1;
+                    if (shift) multiplier *= 16;
+                    // if (ctrl) multiplier *= 256;
+                    // if (alt) multiplier *= 256;
+
+                    if (e.getKeyCode() == KeyEvent.VK_UP)
+                        {
+                        state += multiplier;
+                        if (state > max) state = max;
+                        setState(state);
+                        }
+                    else if (e.getKeyCode() == KeyEvent.VK_DOWN)
+                        {
+                        state -= multiplier;
+                        if (state < min) state = min;
+                        setState(state);
+                        }
+                    else if (e.getKeyCode() == KeyEvent.VK_RIGHT)
+                        {
+                        state += multiplier * 256;
+                        if (state > max) state = max;
+                        setState(state);
+                        }
+                    else if (e.getKeyCode() == KeyEvent.VK_LEFT)
+                        {
+                        state -= multiplier * 256;
+                        if (state < min) state = min;
+                        setState(state);
+                        }
+                    else if (e.getKeyCode() == KeyEvent.VK_SPACE)
+                        {
+                        setState(getDefaultValue());
+                        }
+                    else if (e.getKeyCode() == KeyEvent.VK_HOME)
+                        {
+                        setState(getMin());
+                        }
+                    else if (e.getKeyCode() == KeyEvent.VK_END)
+                        {
+                        setState(getMax());
+                        }
+                    }
+                });
+            
             this.staticColor = staticColor;
 
             field.setFont(Style.DIAL_FONT());
@@ -568,5 +654,116 @@ public class LabelledDial extends NumericalComponent
 
             graphics.setRenderingHints(oldHints);
             }
+
+        //// ACCESSIBILITY FOR THE BLIND
+    
+        //// LabelledDial is a custom widget and must provide its own accessibility features.
+        //// Fortunately Java has good accessibility capabilities.  Unfortunately they're a little
+        //// broken in that they rely on the assumption that you're using standard Swing widgets.
+    
+        // First we must define a ROLE that our widget fulfills.  Notionally you're supposed to be
+        // be able to  can provide custom roles, but in reality, if you do so, Java accessibility
+        // will simply break for your widget.  So here we're borrowing the role from the closest 
+        // widget to our own: a JSlider.
+        final AccessibleRole ACCESSIBLE_DIAL_ROLE = AccessibleRole.SLIDER;
+        
+        // Next we need a function which updates the name of our widget.  It appears that accessible
+        // tools for the blind will announce the widget as "NAME ROLE" (as in "Envelope Attack Slider").
+        // Unfortunately we do not have an easy way to encorporate the enclosing Category into the name
+        // at this point.  We'll add that later below.
+        void updateAccessibleName()
+            {
+            String str = "";
+            for(String l : labels)
+                str += (l + " ");
+            dial.getAccessibleContext().setAccessibleName(str);
+            }
+        
+        // This is the top-level accessible context for the Dial.  It gives accessibility information.
+        class AccessibleDial extends AccessibleJComponent implements AccessibleValue
+            {               
+            // Here we try to tack the Category onto the END of the accessible name so
+            // the user can skip it if he knows what it is.
+            public String getAccessibleName()
+                {
+                String name = super.getAccessibleName();
+                // Find enclosing Category
+                Component obj = LabelledDial.this;
+                while(obj != null)
+                    {
+                    if (obj instanceof Category)
+                        {
+                        return name + " " + ((Category)obj).getName();
+                        }
+                    else obj = obj.getParent();
+                    }
+                return name;
+                }
+                
+            // Provide myself as the AccessibleValue (I implement that interface) so I don't
+            // need to have a separate object
+            public AccessibleValue getAccessibleValue()
+                {
+                return this;
+                }
+
+            // I pretend to be a Slider
+            public AccessibleRole getAccessibleRole() 
+                {
+                return ACCESSIBLE_DIAL_ROLE;
+                }
+
+            // Add whether the user is frobbing me to my current state
+            public AccessibleStateSet getAccessibleStateSet()
+                {
+                AccessibleStateSet states = super.getAccessibleStateSet();
+                if (dial.mouseDown)
+                    {
+                    states.add(AccessibleState.BUSY);
+                    }
+                return states;
+                }
+
+            // My current numerical value
+            public Number getCurrentAccessibleValue()
+                {
+                return Integer.valueOf(getState());
+                };
+                                
+            // You can't set my value
+            public boolean setCurrentAccessibleValue(Number n)
+                {
+                return false;
+                };
+                                
+            // My minimum numerical value
+            public Number getMinimumAccessibleValue()
+                {
+                return Integer.valueOf(getMin());
+                };
+                                
+            // My maximum numerical value
+            public Number getMaximumAccessibleValue()
+                {
+                return Integer.valueOf(getMax());
+                };
+            }
+
+        AccessibleContext accessibleContext = null;
+
+        // Generate and provide the context information when asked
+        public AccessibleContext getAccessibleContext()
+            {
+            if (accessibleContext == null)
+                {
+                accessibleContext = new AccessibleDial();
+                }
+            return accessibleContext;
+            }
+  
+        /// END ACCESSSIBILITY FOR THE BLIND        
+
+
+
         }
     }

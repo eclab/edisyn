@@ -312,6 +312,7 @@ public class Chooser extends NumericalComponent
             label.setText("  " + _label);
         else
             label.setText(_label);
+        combo.getAccessibleContext().setAccessibleName(_label);
         }
         
     public void setElements(String[] elements)
@@ -354,6 +355,8 @@ public class Chooser extends NumericalComponent
             label.setText("  " + _label);
         else
             label.setText(_label);
+        combo.getAccessibleContext().setAccessibleName(_label);
+
         combo.removeAllItems();
         
         for(int i = 0; i < elements.length; i++)

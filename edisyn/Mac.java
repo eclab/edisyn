@@ -70,7 +70,11 @@ class QuitListener implements InvocationHandler
                 
     public Object invoke(Object proxy, Method method, Object[] args) 
         {
-        synth.doQuit();
-        return null;
+        // WARNING BUG
+        // On the Mac, this method is only called once.  Even if you do nothing,
+        // perhaps because the user cancelled quitting, you can't quit again.
+        
+        synth.doQuit();        
+        return QuitListener.this;
         }
     }

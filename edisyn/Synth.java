@@ -2098,9 +2098,9 @@ public abstract class Synth extends JComponent implements Updatable
         }
     
     public String debugMessage(MidiMessage message)
-    	{
-    	return Midi.format(message);
-    	}
+        {
+        return Midi.format(message);
+        }
     
     boolean midiDebug = false;
     
@@ -3714,13 +3714,13 @@ public abstract class Synth extends JComponent implements Updatable
         Window activeWindow = javax.swing.FocusManager.getCurrentManager().getActiveWindow();
         
         if (activeWindow == null)
-        	{
-        	activeWindow = lastActiveWindow;	// use the last window
-        	}
+            {
+            activeWindow = lastActiveWindow;        // use the last window
+            }
         else
-        	{
-        	lastActiveWindow = activeWindow;	// update the last window for later use
-        	}
+            {
+            lastActiveWindow = activeWindow;        // update the last window for later use
+            }
 
         // we want to be either the currently active window, the parent of a dialog box which is the active window, or the last active window if the user is doing something else
         return (synthWindow == activeWindow || (activeWindow != null && synthWindow == activeWindow.getOwner()) ||
@@ -4160,6 +4160,13 @@ super.paint(g);
                 {
                 public void actionPerformed( ActionEvent e)
                     {
+                    // This code is here rather than in doQuit() because on the Mac you can
+                    // only call the Quit menu once, and then you're ignored after that.  :-(
+                    if (!showSimpleConfirm("Quit Edisyn?", "Quit Edisyn?  Patches and Librarians may not have been saved.", "Quit"))
+                        {
+                        return;
+                        }
+
                     doQuit();
                     }
                 });
@@ -5987,15 +5994,15 @@ menubar.add(helpMenu);
                 //
                 // getOppositeWindow() returns null when another window is closed.  This is USUALLY because it was
                 // a minor dialog box.  But not always!  So sometimes this will fail.
-                if (e.getOppositeWindow() != null)	// it's likely another editor (or possible load/save panel), as opposed to a small dialog 
-					{
-					if (clearNotes && sendAllSoundsOffWhenWindowChanges())
-						{
-						sendAllSoundsOffInternal(); // not doSendAllSoundsOff(false) because we don't want to turn off the test notes
-						}
-					updateMenu();
-					windowBecameFront();
-					}
+                if (e.getOppositeWindow() != null)      // it's likely another editor (or possible load/save panel), as opposed to a small dialog 
+                    {
+                    if (clearNotes && sendAllSoundsOffWhenWindowChanges())
+                        {
+                        sendAllSoundsOffInternal(); // not doSendAllSoundsOff(false) because we don't want to turn off the test notes
+                        }
+                    updateMenu();
+                    windowBecameFront();
+                    }
                 }
 
             });
@@ -6940,6 +6947,11 @@ menubar.add(helpMenu);
 
     void doCloseWindow()
         {
+        if (!showSimpleConfirm("Close Editor?", "Close Editor?  The Patch and Librarian may not have been saved.", "Close"))
+            {
+            return;
+            }
+
         JFrame frame = (JFrame)(SwingUtilities.getRoot(this));
         if (frame == null || !frame.isDisplayable()) return;  // we clicked multiple times on the close button
         
@@ -8583,9 +8595,9 @@ menubar.add(helpMenu);
         setSendMIDI(true);
         
         if (succeeded)
-        	{
+            {
             tabs.setSelectedIndex(0);
-        	}
+            }
                                                                 
         return succeeded;       
         }

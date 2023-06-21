@@ -1941,7 +1941,7 @@ public class WaldorfM extends Synth
         model.set("bank", bank);
         model.set("number", number);
         
-    	updateMode(); 
+        updateMode(); 
 
         // It's not clear if this will work
         tryToSendMIDI(buildCC(getChannelOut(), 32, bank));
@@ -1993,23 +1993,23 @@ public class WaldorfM extends Synth
         return data;
         }
 
-	public void updateMode()
-		{
+    public void updateMode()
+        {
         // set mode to SINGLE MODE
         tryToSendSysex(new byte[] { (byte)0xF0, 0x3E, 0x30, 0x00, 0x64, 0x00, 0x00, 0x00, (byte)0xF7 });
         simplePause(PAUSE_AFTER_CHANGE_MODE);
-		}
-		
+        }
+                
     public void windowBecameFront() 
-    	{ 
-    	updateMode(); 
-    	}
+        { 
+        updateMode(); 
+        }
 
-	// We need this because sometimes the unit isn't in the proper mode and so
-	// batch download just hangs
+    // We need this because sometimes the unit isn't in the proper mode and so
+    // batch download just hangs
     public void startingBatchDownload(Model firstPatch, Model finalPatch) 
         { 
-    	updateMode(); 
+        updateMode(); 
         }
 
     public int getPauseAfterWritePatch() { return 7000; }
@@ -2657,7 +2657,7 @@ public class WaldorfM extends Synth
 
     public int getPatchNameLength() { return MAXIMUM_NAME_LENGTH; }
 
-	public int getBatchDownloadFailureCountdown() { return 10; }                 
+    public int getBatchDownloadFailureCountdown() { return 10; }                 
 
     public int getBatchDownloadWaitTime()
         {

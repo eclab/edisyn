@@ -1125,7 +1125,7 @@ public class Midi
             if (((SysexMessage)message).getMessage()[0] == (byte)0xF0)  // First one
                 {
                 return "Sysex (" + getManufacturerForSysex(((SysexMessage)message).getData()) + ")" + 
-            	"\n\t" + StringUtility.toHex(((SysexMessage)message).getMessage());
+                    "\n\t" + StringUtility.toHex(((SysexMessage)message).getMessage());
                 }
             else
                 {
@@ -1159,7 +1159,7 @@ public class Midi
                 case ShortMessage.TUNE_REQUEST: type = "Tune Request"; c = -1; break;
                 }
             return type + (c == -1 ? "" : (" (Channel " + c + ")" + 
-            	"\t" + (s.getData1() & 0xFF) + " " + (s.getData2() & 0xFF)));
+                    "\t" + (s.getData1() & 0xFF) + " " + (s.getData2() & 0xFF)));
             }
         }
 

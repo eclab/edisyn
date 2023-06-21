@@ -73,8 +73,8 @@ public class Librarian extends JPanel
     public static final Color INVALID_TEXT_COLOR = new Color(255, 0, 0);
     public static final Color STANDARD_TEXT_COLOR = new Color(0, 0, 0);
 
-	boolean sending = false;
-	
+    boolean sending = false;
+        
     public Librarian(final Synth synth)
         {
         warnLibrarian(synth);
@@ -105,20 +105,20 @@ public class Librarian extends JPanel
             
             public void changeSelection(int rowIndex, int columnIndex, boolean toggle, boolean extend)
                 {
-                if (toggle)			// command key
-                	{
-    				toggle = false;
-                	extend = false;
-                	selectedColumn = columnIndex;
-                	}
+                if (toggle)                     // command key
+                    {
+                    toggle = false;
+                    extend = false;
+                    selectedColumn = columnIndex;
+                    }
                 if (!extend)
-                	{
-	                selectedColumn = columnIndex;
-                	}
-                else if (selectedColumn != columnIndex)	// trying to extend to a different column
                     {
                     selectedColumn = columnIndex;
-					extend = false;
+                    }
+                else if (selectedColumn != columnIndex) // trying to extend to a different column
+                    {
+                    selectedColumn = columnIndex;
+                    extend = false;
                     }
                 super.changeSelection(rowIndex, columnIndex, toggle, extend);
                 }
@@ -363,25 +363,25 @@ public class Librarian extends JPanel
             public void mousePressed(MouseEvent mouseEvent) 
                 {
                 if (mouseEvent.getClickCount() == 1)
-                	{
-					if (SwingUtilities.isRightMouseButton(mouseEvent) || 
-						((mouseEvent.getModifiers() & InputEvent.META_MASK) == InputEvent.META_MASK))
-						{
-						sending = true;
-						table.repaint();
-	                	// We want this to happen AFTER the cell is selected, because it may take a little time
-    	            	SwingUtilities.invokeLater(new Runnable()
-        	        		{
-            	    		public void run()
-                				{
-		                		sendPatch();
-		                		synth.doSendTestNote();
-		                		sending = false;
-		                		table.repaint();
-		                		}
-		                	});
-	                	}	
-                	}
+                    {
+                    if (SwingUtilities.isRightMouseButton(mouseEvent) || 
+                        ((mouseEvent.getModifiers() & InputEvent.META_MASK) == InputEvent.META_MASK))
+                        {
+                        sending = true;
+                        table.repaint();
+                        // We want this to happen AFTER the cell is selected, because it may take a little time
+                        SwingUtilities.invokeLater(new Runnable()
+                            {
+                            public void run()
+                                {
+                                sendPatch();
+                                synth.doSendTestNote();
+                                sending = false;
+                                table.repaint();
+                                }
+                            });
+                        }       
+                    }
                 else if (mouseEvent.getClickCount() == 2) 
                     {
                     loadOneInternal();
@@ -528,11 +528,11 @@ public class Librarian extends JPanel
                 
                 byte[] flattened = synth.flatten(patch.sysex);
                 if (flattened == null || flattened.length == 0)
-                	{
-                	patch = getLibrary().getInitPatch();
-              		flattened = synth.flatten(patch.sysex);
-              		System.err.println(flattened.length);
-              		}
+                    {
+                    patch = getLibrary().getInitPatch();
+                    flattened = synth.flatten(patch.sysex);
+                    System.err.println(flattened.length);
+                    }
                         
                 // do we need to modify the bank and number?
                 synth.undo.push(synth.model);
@@ -646,7 +646,7 @@ public class Librarian extends JPanel
         }    
         
     public void sendPatch()
-    	{
+        {
         int column = col(table, table.getSelectedColumn());
         int row = table.getSelectedRow();
         if (column >= 0 && row >= 0)
@@ -655,34 +655,34 @@ public class Librarian extends JPanel
             Patch patch = getLibrary().getPatch(column - 1, row);
             
             boolean sendMIDI = synth.getSendMIDI();
-	        boolean updateListeners = synth.getModel().getUpdateListeners();
-	        boolean willPush = synth.getUndo().getWillPush();
-        	boolean avoidUpdating = synth.getAvoidUpdating();
-	        boolean printRevised = synth.getPrintRevised();
+            boolean updateListeners = synth.getModel().getUpdateListeners();
+            boolean willPush = synth.getUndo().getWillPush();
+            boolean avoidUpdating = synth.getAvoidUpdating();
+            boolean printRevised = synth.getPrintRevised();
 
             synth.setSendMIDI(false);
             synth.undo.setWillPush(false);
-	        synth.model.setUpdateListeners(false);
-			synth.setAvoidUpdating(true);
-			synth.setPrintRevised(false);
-			
+            synth.model.setUpdateListeners(false);
+            synth.setAvoidUpdating(true);
+            synth.setPrintRevised(false);
+                        
             Model backup = (Model)(synth.getModel().clone()); 
             int result = synth.performParse(synth.flatten(patch.sysex), false);
-        	if (result == Synth.PARSE_SUCCEEDED || result == Synth.PARSE_SUCCEEDED_UNTITLED)
-            	{
-            	synth.setSendMIDI(true);
-            	synth.sendAllParameters();
-            	}
+            if (result == Synth.PARSE_SUCCEEDED || result == Synth.PARSE_SUCCEEDED_UNTITLED)
+                {
+                synth.setSendMIDI(true);
+                synth.sendAllParameters();
+                }
             synth.setModel(backup);
             
             synth.setSendMIDI(sendMIDI);
             synth.getUndo().setWillPush(willPush);
-	        synth.getModel().setUpdateListeners(updateListeners);
-			synth.setAvoidUpdating(avoidUpdating);
-			synth.setPrintRevised(printRevised);
+            synth.getModel().setUpdateListeners(updateListeners);
+            synth.setAvoidUpdating(avoidUpdating);
+            synth.setPrintRevised(printRevised);
             }
-    	}
-    	 
+        }
+         
     public void loadOneInternal()
         {
         int column = col(table, table.getSelectedColumn());
@@ -1023,7 +1023,7 @@ public class Librarian extends JPanel
         
         menu.addSeparator();
         
-    	item = new JMenuItem("Find...");
+        item = new JMenuItem("Find...");
         item.addActionListener(new ActionListener()
             {
             public void actionPerformed(ActionEvent evt) 
@@ -1035,7 +1035,7 @@ public class Librarian extends JPanel
         item.setEnabled(false);
         item.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_F, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask()));
 
-    	item = new JMenuItem("Find Next");
+        item = new JMenuItem("Find Next");
         item.addActionListener(new ActionListener()
             {
             public void actionPerformed(ActionEvent evt) 
@@ -1049,10 +1049,10 @@ public class Librarian extends JPanel
 
         menu.addSeparator();
         
-		JMenu send = new JMenu("Send to");
-		send.setEnabled(false);
-		menu.add(send);
-		
+        JMenu send = new JMenu("Send to");
+        send.setEnabled(false);
+        menu.add(send);
+                
         item = new JMenuItem("Nudge Targets");
         item.addActionListener(new ActionListener()
             {
@@ -1088,10 +1088,10 @@ public class Librarian extends JPanel
 
 //        menu.addSeparator();
 
-		JMenu mix = new JMenu("Mix");
-		mix.setEnabled(false);
-		menu.add(mix);
-		
+        JMenu mix = new JMenu("Mix");
+        mix.setEnabled(false);
+        menu.add(mix);
+                
         item = new JMenuItem("Uniformly");
         item.addActionListener(new ActionListener()
             {
@@ -2229,111 +2229,111 @@ public class Librarian extends JPanel
         }
         
     public void scrollTo(int column, int row)
-    	{
-    	// derived from http://stackoverflow.com/questions/853020/jtable-scrolling-to-a-specified-row-index
-    	JViewport viewport = scrollPane.getViewport();
-    	Rectangle rect = table.getCellRect(row, column, true);
-    	Point pt = viewport.getViewPosition();
-    	rect.setLocation(rect.x - pt.x, rect.y - pt.y);
+        {
+        // derived from http://stackoverflow.com/questions/853020/jtable-scrolling-to-a-specified-row-index
+        JViewport viewport = scrollPane.getViewport();
+        Rectangle rect = table.getCellRect(row, column, true);
+        Point pt = viewport.getViewPosition();
+        rect.setLocation(rect.x - pt.x, rect.y - pt.y);
         viewport.scrollRectToVisible(rect);
-    	}
+        }
 
     public void select(int column, int row, int len)
-    	{
-    	if (len < 1) len = 1;
-		Library library = getLibrary();
-		int bankSize = library.getBankSize();
+        {
+        if (len < 1) len = 1;
+        Library library = getLibrary();
+        int bankSize = library.getBankSize();
 
-		// bound
-    	if (row + len >= bankSize) 
-    		{
-    		len = bankSize - row;
-    		}
-    	
+        // bound
+        if (row + len >= bankSize) 
+            {
+            len = bankSize - row;
+            }
+        
         table.changeSelection(row, column, false, false);
-    	}
+        }
         
     public void find()
-    	{
-		Library library = getLibrary();
-		Synth synth = library.getSynth();
+        {
+        Library library = getLibrary();
+        Synth synth = library.getSynth();
         JTextField field = new SelectedTextField(findString == null ? "" : findString);
 
-    	if (synth.showMultiOption(synth, new String[] { "Text" }, new JComponent[] { field }, new String[] { "Find", "Cancel" }, 0, "Find Patch", "Enter Text to Search" ) == 0)
-    		{
-    		findString = field.getText();
-    		findNext();
-	    	}
-    	}
-    	
+        if (synth.showMultiOption(synth, new String[] { "Text" }, new JComponent[] { field }, new String[] { "Find", "Cancel" }, 0, "Find Patch", "Enter Text to Search" ) == 0)
+            {
+            findString = field.getText();
+            findNext();
+            }
+        }
+        
     public void findNext()
-    	{
-    	if (findString == null) return;
+        {
+        if (findString == null) return;
 
-		int column = col(table, table.getSelectedColumn());
-		int row = table.getSelectedRow();
-		int len = table.getSelectedRowCount();
-		
-//		System.err.println("Selected " + column + " " + row);
-									
-		if (column < 0 || row < 0 || len == 0) // nope
-			{
-			column = 1;
-			row = 0;
-			}
-		
-		Library library = getLibrary();
-		Synth synth = library.getSynth();
-		int bankSize = library.getBankSize();
-		int numBanks = library.getNumBanks();
-		int originalColumn = column;
-		int originalRow = row;
-		String find = findString.toLowerCase();
-		
-		while(true)
-			{
-			row++;
-			if (row >= bankSize)
-				{
-				row = 0;
-				column++;
-				if (column >= numBanks - 1)
-					column = 0;
-				}
-			
-			if (row == originalRow && column == originalColumn)  // found nothing
-				{
-				synth.showSimpleMessage("Find", "Could not find any patch name matching:\n" + find);
-				return;
-				}
-				
-			// skip invalid
-			if (column > 0 && !synth.isValidPatchLocation(column - 1, row))
-				continue;
-				
-			Patch patch = library.getPatch(column - 1, row);
-			String name = "";
-			if (patch != null) 
-				{
-				name = patch.getName();
-				if (name == null) // uhm
-					{
-//					System.err.println("Librarian.findNext WARNING: null patch name " + column + " " + row);
-					name = "";
-					}
-				}
+        int column = col(table, table.getSelectedColumn());
+        int row = table.getSelectedRow();
+        int len = table.getSelectedRowCount();
+                
+//              System.err.println("Selected " + column + " " + row);
+                                                                        
+        if (column < 0 || row < 0 || len == 0) // nope
+            {
+            column = 1;
+            row = 0;
+            }
+                
+        Library library = getLibrary();
+        Synth synth = library.getSynth();
+        int bankSize = library.getBankSize();
+        int numBanks = library.getNumBanks();
+        int originalColumn = column;
+        int originalRow = row;
+        String find = findString.toLowerCase();
+                
+        while(true)
+            {
+            row++;
+            if (row >= bankSize)
+                {
+                row = 0;
+                column++;
+                if (column >= numBanks - 1)
+                    column = 0;
+                }
+                        
+            if (row == originalRow && column == originalColumn)  // found nothing
+                {
+                synth.showSimpleMessage("Find", "Could not find any patch name matching:\n" + find);
+                return;
+                }
+                                
+            // skip invalid
+            if (column > 0 && !synth.isValidPatchLocation(column - 1, row))
+                continue;
+                                
+            Patch patch = library.getPatch(column - 1, row);
+            String name = "";
+            if (patch != null) 
+                {
+                name = patch.getName();
+                if (name == null) // uhm
+                    {
+//                                      System.err.println("Librarian.findNext WARNING: null patch name " + column + " " + row);
+                    name = "";
+                    }
+                }
 
-			name = name.toLowerCase();
-			if (name.indexOf(find) >= 0)	// found one
-				{
-//				System.err.println("Found " + column + " " + row + " " + name);
-				select(column, row, 1);
-				scrollTo(column, row);
-				return;
-				}
-			// else continue...
-			}
-    	}
+            name = name.toLowerCase();
+            if (name.indexOf(find) >= 0)    // found one
+                {
+//                              System.err.println("Found " + column + " " + row + " " + name);
+                select(column, row, 1);
+                scrollTo(column, row);
+                return;
+                }
+            // else continue...
+            }
+        }
 
     void warnLibrarian(Synth synth)
         {

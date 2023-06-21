@@ -216,7 +216,7 @@ public class WaldorfMMulti extends Synth
 
                                 // Change to Single Mode
                                 synth.tryToSendSysex(new byte[] { (byte)0xF0, 0x3E, 0x00, 0x64, 0x00, 0x00, 0x00, (byte)0xF7 });
-						        simplePause(PAUSE_AFTER_CHANGE_MODE);
+                                simplePause(PAUSE_AFTER_CHANGE_MODE);
 
                                 // This will only aid the musician in updating individual parameters
                                 synth.setPart(part - 1);
@@ -422,15 +422,15 @@ public class WaldorfMMulti extends Synth
         // We have to set the patch ourselves
         model.set("number", number);
 
-		updateMode();
-		
+        updateMode();
+                
         // change patch in MULTI MODE
         // A simple Bank/PC would only change the single patch for a given part
         tryToSendSysex(new byte[] { (byte)0xF0, 0x3E, 0x30, 0x00, 0x66, (byte)number, 0x00, 0x00, (byte)0xF7 });
         }
 
 // Change Patch can get stomped if we do a request immediately afterwards
-public int getPauseAfterChangePatch() { return 200; }
+    public int getPauseAfterChangePatch() { return 200; }
 
     public int getPauseAfterWritePatch() { return 7000; }
 
@@ -471,23 +471,23 @@ public int getPauseAfterChangePatch() { return 200; }
         return data;
         }
 
-	public void updateMode()
-		{
+    public void updateMode()
+        {
         // set mode to MULTI MODE
         tryToSendSysex(new byte[] { (byte)0xF0, 0x3E, 0x30, 0x00, 0x64, 0x01, 0x00, 0x00, (byte)0xF7 });
         simplePause(PAUSE_AFTER_CHANGE_MODE);
-		}
-		
+        }
+                
     public void windowBecameFront() 
-    	{ 
-    	updateMode(); 
-    	}
+        { 
+        updateMode(); 
+        }
 
-	// We need this because sometimes the unit isn't in the proper mode and so
-	// batch download just hangs
+    // We need this because sometimes the unit isn't in the proper mode and so
+    // batch download just hangs
     public void startingBatchDownload(Model firstPatch, Model finalPatch) 
         { 
-    	updateMode(); 
+        updateMode(); 
         }
 
     public Object[] emitAll(String key)
@@ -515,7 +515,7 @@ public int getPauseAfterChangePatch() { return 200; }
             data[8] = (byte)(val & 127);
             data[9] = (byte)((val >>> 7) & 127);
             //data[10] = (byte)(updateScreen ? 1 : 0);
-            data[10] = 1;		// screen is always updated
+            data[10] = 1;               // screen is always updated
             data[11] = (byte)0xF7;
             return new Object[] { data };
             }
@@ -531,8 +531,8 @@ public int getPauseAfterChangePatch() { return 200; }
         byte NN = (byte) tempModel.get("number");
         byte DO_NOT_SAVE = 0;
 
-		// At present this DOES NOT WORK.  We're sending as individual parameters.
-		// Vlad may update things however.
+        // At present this DOES NOT WORK.  We're sending as individual parameters.
+        // Vlad may update things however.
         if (toWorkingMemory) { NN = 0; DO_NOT_SAVE = 1;}
 
         byte[] data = new byte[320];
@@ -591,12 +591,12 @@ public int getPauseAfterChangePatch() { return 200; }
         if (data[32] == 0)               // Edit Buffer
             {
             // Might as well set the patch to 1/00
-            // model.set("bank", 0);				// there's only one bank
+            // model.set("bank", 0);                            // there's only one bank
             model.set("number", 0);
             }
         else
             {
-            // model.set("bank", data[32] - 1);		// there's only one bank
+            // model.set("bank", data[32] - 1);         // there's only one bank
             model.set("number", data[33]);
             }
 
@@ -607,9 +607,9 @@ public int getPauseAfterChangePatch() { return 200; }
             int lsb = data[pos];
             int msb = data[pos + 1];
             if (!sysexParameters[i].equals("--"))
-            	{
-	            model.set(sysexParameters[i], ((msb << 7) | lsb) - 8192);
-	            }
+                {
+                model.set(sysexParameters[i], ((msb << 7) | lsb) - 8192);
+                }
             pos += 2;
             }
             
@@ -758,8 +758,8 @@ public int getPauseAfterChangePatch() { return 200; }
 
 
     
-	// The order of parameters in the sysex dump is not the 
-	// same as the order when changed individually
+    // The order of parameters in the sysex dump is not the 
+    // same as the order when changed individually
     public static final String[] sysexParameters = new String[] 
     {
     "part1enable",
@@ -773,7 +773,7 @@ public int getPauseAfterChangePatch() { return 200; }
     "part1velocitycurve",
     "part1transpose",
     "part1detune",
-	"part1bchangefilter", 		// stored in tuning table slot 
+    "part1bchangefilter",           // stored in tuning table slot 
     "part1volume",
     "part1panning",
     "part1panningmodswitch",
@@ -805,7 +805,7 @@ public int getPauseAfterChangePatch() { return 200; }
     "part2velocitycurve",
     "part2transpose",
     "part2detune",
-	"part2bchangefilter", 		// stored in tuning table slot 
+    "part2bchangefilter",           // stored in tuning table slot 
     "part2volume",
     "part2panning",
     "part2panningmodswitch",
@@ -837,7 +837,7 @@ public int getPauseAfterChangePatch() { return 200; }
     "part3velocitycurve",
     "part3transpose",
     "part3detune",
-	"part3bchangefilter", 		// stored in tuning table slot 
+    "part3bchangefilter",           // stored in tuning table slot 
     "part3volume",
     "part3panning",
     "part3panningmodswitch",
@@ -869,7 +869,7 @@ public int getPauseAfterChangePatch() { return 200; }
     "part4velocitycurve",
     "part4transpose",
     "part4detune",
-	"part4bchangefilter", 		// stored in tuning table slot 
+    "part4bchangefilter",           // stored in tuning table slot 
     "part4volume",
     "part4panning",
     "part4panningmodswitch",
@@ -893,8 +893,8 @@ public int getPauseAfterChangePatch() { return 200; }
     };
     
 
-	/** For the time being, the M has no way to receive multi patches to
-		current working memory as a dump.  So we have to send them one at a time. */
+    /** For the time being, the M has no way to receive multi patches to
+        current working memory as a dump.  So we have to send them one at a time. */
     public boolean getSendsAllParametersAsDump() 
         {
         return false; 

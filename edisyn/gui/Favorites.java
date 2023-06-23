@@ -101,7 +101,8 @@ public class Favorites
         Favorites f = new Favorites();
                 
         final String[] synthNames = Synth.getSynthNames();
-        final JComboBox combo2 = new JComboBox(new String[0]);   
+        final JComboBox combo2 = new JComboBox(new String[0]);
+        combo2.getAccessibleContext().setAccessibleName("Recent");
         combo2.setMaximumRowCount(24);
         
         final ArrayList<String> sortedTop = (ArrayList<String>)(f.top.clone());
@@ -126,6 +127,7 @@ public class Favorites
                 }
             }
         final JComboBox combo1 = new JComboBox(synthFavs);
+        combo1.getAccessibleContext().setAccessibleName("All Synths");
         combo1.setMaximumRowCount(synthFavs.length);
         combo1.addItemListener(new ItemListener()
             {

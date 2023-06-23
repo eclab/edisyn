@@ -11,6 +11,7 @@ import java.awt.geom.*;
 import javax.swing.border.*;
 import javax.swing.*;
 import java.awt.event.*;
+import javax.accessibility.*;
 
 /**
    A wrapper for JCheckBox so that it updates itself in response to the model. 
@@ -72,6 +73,35 @@ public class CheckBox extends NumericalComponent
                 
         check = new JCheckBox(label)
             {
+			AccessibleContext accessibleContext = null;
+
+			// Generate and provide the context information when asked
+			public AccessibleContext getAccessibleContext()
+				{
+				if (accessibleContext == null)
+					{
+					accessibleContext = new AccessibleJCheckBox()
+						{
+						public String getAccessibleName()
+							{
+							String name = super.getAccessibleName();
+							// Find enclosing Category
+							Component obj = check;
+							while(obj != null)
+								{
+								if (obj instanceof Category)
+									{
+									return name + " " + ((Category)obj).getName();
+									}
+								else obj = obj.getParent();
+								}
+							return name;
+							}
+						};
+					}
+				return accessibleContext;
+				}
+
             public Dimension getMinimumSize() 
                 {
                 return getPreferredSize(); 

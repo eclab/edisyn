@@ -11,7 +11,7 @@ import java.awt.geom.*;
 import javax.swing.border.*;
 import javax.swing.*;
 import java.awt.event.*;
-
+import javax.accessibility.*;
 
 /**
    A simple button with some useful features.  
@@ -31,9 +31,9 @@ import java.awt.event.*;
 
 public class PushButton extends JPanel
     {
-    JButton button;
+    private JButton button;
     JPopupMenu pop;
-    String text;
+    private String text;
     
     public Insets getInsets() { return new Insets(0,0,0,0); }
     
@@ -41,9 +41,9 @@ public class PushButton extends JPanel
     
     public String getText() { return text; }
     public void setText(String val) 
-        { 
+        {
         text = val; 
-        button.setText("<html>"+val+"</html>"); 
+        button.setText("<html>"+text+"</html>"); 
         // we need to de-htmlify the text for accessibility
         button.getAccessibleContext().setAccessibleName(text.replaceAll("<.*?>", ""));
         }
@@ -52,7 +52,38 @@ public class PushButton extends JPanel
         
     public PushButton(final String text)
         {
-        button = new JButton(text);
+        button = new JButton(text)
+        	{
+			AccessibleContext accessibleContext = null;
+
+			// Generate and provide the context information when asked
+			public AccessibleContext getAccessibleContext()
+				{
+				if (accessibleContext == null)
+					{
+					accessibleContext = new AccessibleJButton()
+						{
+						public String getAccessibleName()
+							{
+							String name = super.getAccessibleName();
+							// Find enclosing Category
+							Component obj = button;
+							while(obj != null)
+								{
+								if (obj instanceof Category)
+									{
+									return name + " " + ((Category)obj).getName();
+									}
+								else obj = obj.getParent();
+								}
+							return name;
+							}
+						};
+					}
+				return accessibleContext;
+				}
+        	};
+
         setText(text);
         button.putClientProperty("JComponent.sizeVariant", "small");
         button.setFont(Style.SMALL_FONT());
@@ -92,10 +123,12 @@ public class PushButton extends JPanel
         this(text, options, null);
         }
 
+/*
     public void setName(String text)
         {
         button.setText(text);
         }
+*/
 
     public void setOptions(String[] options)
         {

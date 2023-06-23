@@ -391,13 +391,13 @@ public class Morph extends SynthPanel
     public void clear(int val)
         {
         sources[val] = null;
-        buttons[val].getButton().setText("[Empty]");
+        buttons[val].setText("[Empty]");
         }
 
     public void set(int val, Model model)
         {
         sources[val] = model;
-        buttons[val].getButton().setText(synth.getPatchName(model));
+        buttons[val].setText(synth.getPatchName(model));
         }
         
     void takeFromNudge(int val, int nudge)
@@ -406,12 +406,12 @@ public class Morph extends SynthPanel
         if (n == null)
             {
             sources[val] = null;
-            buttons[val].getButton().setText("[Empty]");
+            buttons[val].setText("[Empty]");
             }
         else
             {
             sources[val] = n.copy();
-            buttons[val].getButton().setText("Nudge " + (nudge + 1));
+            buttons[val].setText("Nudge " + (nudge + 1));
             }
         updateAgain();
         }
@@ -422,7 +422,7 @@ public class Morph extends SynthPanel
         if (climb == null)
             {
             sources[val] = null;
-            buttons[val].getButton().setText("[Empty]");
+            buttons[val].setText("[Empty]");
             }
         else
             {
@@ -430,12 +430,12 @@ public class Morph extends SynthPanel
             if (n == null)
                 {
                 sources[val] = null;
-                buttons[val].getButton().setText("[Empty]");
+                buttons[val].setText("[Empty]");
                 }
             else
                 {
                 sources[val] = n.copy();
-                buttons[val].getButton().setText("Archive " + (char)('q' + archive));
+                buttons[val].setText("Archive " + (char)('q' + archive));
                 }
             }
         updateAgain();
@@ -446,9 +446,9 @@ public class Morph extends SynthPanel
         Model temp = sources[a];
         sources[a] = sources[b];
         sources[b] = temp;
-        String tempString = buttons[a].getButton().getText();
-        buttons[a].getButton().setText(buttons[b].getButton().getText());
-        buttons[b].getButton().setText(tempString);
+        String tempString = buttons[a].getText();
+        buttons[a].setText(buttons[b].getText());
+        buttons[b].setText(tempString);
         repaint();
         updateAgain();
         }
@@ -505,7 +505,7 @@ public class Morph extends SynthPanel
             {
             sources[menuButton] = synth.getModel().copy();
             String currentPatchName = synth.getPatchName(synth.getModel());
-            buttons[menuButton].getButton().setText(currentPatchName == null ? "Current Patch" : "" + currentPatchName.trim());
+            buttons[menuButton].setText(currentPatchName == null ? "Current Patch" : "" + currentPatchName.trim());
             menuButton = NO_MENU_BUTTON;
             updateAgain();
 
@@ -571,7 +571,7 @@ public class Morph extends SynthPanel
         else if (reset == 3)
             {
             sources[button] = current.copy();
-            buttons[button].getButton().setText("Joystick " + (++joy));
+            buttons[button].setText("Joystick " + (++joy));
             updateAgain();
             }
         else if (reset == 4)
@@ -593,16 +593,16 @@ public class Morph extends SynthPanel
                     File filename = synth.getFile();
                     if (filename != null)
                         {
-                        buttons[button].getButton().setText(filename.getName().trim());
+                        buttons[button].setText(filename.getName().trim());
                         }
                     else
                         {
-                        buttons[button].getButton().setText(synth.getTitleBarSynthName().trim() + " " + (++joy));
+                        buttons[button].setText(synth.getTitleBarSynthName().trim() + " " + (++joy));
                         }
                     }
                 else
                     {
-                    buttons[button].getButton().setText(name.trim());
+                    buttons[button].setText(name.trim());
                     }
                 }
             else
@@ -614,7 +614,7 @@ public class Morph extends SynthPanel
         else if (reset == 5)
             {
             sources[button] = null;
-            buttons[button].getButton().setText("[Empty]");
+            buttons[button].setText("[Empty]");
             updateAgain();
             }
         }
@@ -805,10 +805,10 @@ public class Morph extends SynthPanel
         {
         current = synth.getModel().copy(); // load it up initially so it's not blank
         String currentPatchName = synth.getPatchName(synth.getModel());
-        buttons[0].getButton().setText(currentPatchName == null ? ("Untitled " + (untitled++)) : currentPatchName.trim());
-        buttons[1].getButton().setText("[Empty]");
-        buttons[2].getButton().setText("[Empty]");
-        buttons[3].getButton().setText("[Empty]");
+        buttons[0].setText(currentPatchName == null ? ("Untitled " + (untitled++)) : currentPatchName.trim());
+        buttons[1].setText("[Empty]");
+        buttons[2].setText("[Empty]");
+        buttons[3].setText("[Empty]");
         sources[0] = synth.getModel().copy();
         sources[1] = null;
         sources[2] = null;

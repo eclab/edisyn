@@ -2012,7 +2012,6 @@ public abstract class Synth extends JComponent implements Updatable
         Returns TRUE if a new tuple was set up. */
     public boolean setupMIDI(String message, Midi.Tuple oldTuple, boolean removeReceiversFromOldTuple)
         {
-//        new Throwable().printStackTrace();
         Midi.Tuple result = Midi.getNewTuple(oldTuple, this, message, buildInReceiver(), buildKeyReceiver(), buildKey2Receiver(), removeReceiversFromOldTuple);
         boolean retval = false;
                 
@@ -6531,6 +6530,7 @@ menubar.add(helpMenu);
     void doManualMapCC()
         {
         JComboBox type = new JComboBox( new String[] { "CC", "Relative CC", "NRPN" });
+        type.getAccessibleContext().setAccessibleName("Message Type");
         int num = model.get("number");
         JTextField number = new SelectedTextField("0", 5);
 
@@ -7714,6 +7714,7 @@ menubar.add(helpMenu);
         if (!reduced)
             {
             actions = new JComboBox(new String[] { localLoad, newLoad, writeAll, breakOut, individual, librarian, newLibrarian });
+        	actions.getAccessibleContext().setAccessibleName("Do Action");
             if (tabs.getSelectedComponent() == librarianPane)
                 actions.setSelectedIndex(5);                                    // LIBRARIAN
             vbox.add(new JSeparator());
@@ -8594,9 +8595,12 @@ menubar.add(helpMenu);
 
         setSendMIDI(true);
         
-        if (succeeded)
+        if (succeeded && 
+        	(tabs.getSelectedComponent() != librarianPane) && 
+        	(tabs.getSelectedComponent() != morphPane) &&
+        	(tabs.getSelectedComponent() != hillClimbPane))			// Don't switch if we're currently hill-climbing, morphing, or in the librarian?
             {
-            tabs.setSelectedIndex(0);
+            setCurrentTab(0);
             }
                                                                 
         return succeeded;       
@@ -8807,7 +8811,7 @@ menubar.add(helpMenu);
             tabs.remove(hillClimbPane);
             hillClimbMenu.setText("Hill-Climb");
             if (selected == hillClimbPane)  // we were in the hill-climb pane when this menu was selected
-                tabs.setSelectedIndex(0);
+                setCurrentTab(0);
             hillClimbing = false;
             }
         else
@@ -8843,7 +8847,7 @@ menubar.add(helpMenu);
             tabs.remove(morphPane);
             morphMenu.setText("Morph");
             if (selected == morphPane)  // we were in the morph pane when this menu was selected
-                tabs.setSelectedIndex(0);
+                setCurrentTab(0);
             morphing = false;
             }
         else
@@ -8896,7 +8900,7 @@ menubar.add(helpMenu);
             Component selected = tabs.getSelectedComponent();
             tabs.remove(librarianPane);
             if (selected == librarianPane)  // we were in the morph pane when this menu was selected
-                tabs.setSelectedIndex(0);
+                setCurrentTab(0);
             librarianOpen = false;
             menubar.remove(librarianMenu);
             }
@@ -9779,6 +9783,7 @@ menubar.add(helpMenu);
             vbox.add(hbox);
             JLabel boxLabel = new JLabel("Patch");
             JComboBox box = new JComboBox(makeUniqueStrings(names));
+       	 	box.getAccessibleContext().setAccessibleName("Patches");
             box.setMaximumRowCount(25);
             JPanel boxPanel = new JPanel();
             boxPanel.setLayout(new BorderLayout());
@@ -9815,6 +9820,7 @@ menubar.add(helpMenu);
                     {
                     actions = new JComboBox(new String[] {  "Edit Patch in Bank", "Save Bank...", "Write Bank to Synthesizer" });
                     }
+        		actions.getAccessibleContext().setAccessibleName("Actions");
                 vbox.add(new JLabel("   "));
                 vbox.add(new JSeparator());
                 JPanel actionsPanel = new JPanel();
@@ -9870,6 +9876,7 @@ menubar.add(helpMenu);
                     else
                         {
                         JComboBox combo = new JComboBox(banks);
+        				combo.getAccessibleContext().setAccessibleName("Bank");
                         combo.setSelectedIndex(getDefaultBankForBankSysex(data, getModel()));
                         choice = (showMultiOption(this, new String[] { "Write to Bank" }, new JComponent[] { combo },
                                 new String[] { "Write", "Cancel" }, 0, "Write Bank", "Write the whole bank to the synth?") == 0);

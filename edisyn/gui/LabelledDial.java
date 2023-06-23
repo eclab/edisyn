@@ -661,13 +661,7 @@ public class LabelledDial extends NumericalComponent
         //// Fortunately Java has good accessibility capabilities.  Unfortunately they're a little
         //// broken in that they rely on the assumption that you're using standard Swing widgets.
     
-        // First we must define a ROLE that our widget fulfills.  Notionally you're supposed to be
-        // be able to  can provide custom roles, but in reality, if you do so, Java accessibility
-        // will simply break for your widget.  So here we're borrowing the role from the closest 
-        // widget to our own: a JSlider.
-        final AccessibleRole ACCESSIBLE_DIAL_ROLE = AccessibleRole.SLIDER;
-        
-        // Next we need a function which updates the name of our widget.  It appears that accessible
+        // We need a function which updates the name of our widget.  It appears that accessible
         // tools for the blind will announce the widget as "NAME ROLE" (as in "Envelope Attack Slider").
         // Unfortunately we do not have an easy way to encorporate the enclosing Category into the name
         // at this point.  We'll add that later below.
@@ -707,10 +701,14 @@ public class LabelledDial extends NumericalComponent
                 return this;
                 }
 
-            // I pretend to be a Slider
+			// We must define a ROLE that our widget fulfills.  We can't be a JPanel because 
+			// that causes the system to freak.  Notionally you're supposed to be
+			// be able to  can provide custom roles, but in reality, if you do so, Java accessibility
+			// will simply break for your widget.  So here we're borrowing the role from the closest 
+			// widget to our own: a JSlider.
             public AccessibleRole getAccessibleRole() 
                 {
-                return ACCESSIBLE_DIAL_ROLE;
+                return AccessibleRole.SLIDER;
                 }
 
             // Add whether the user is frobbing me to my current state
@@ -762,8 +760,6 @@ public class LabelledDial extends NumericalComponent
             }
   
         /// END ACCESSSIBILITY FOR THE BLIND        
-
-
 
         }
     }

@@ -253,10 +253,10 @@ public class HillClimb extends SynthPanel
                     for(int j = 0; j < NUM_MODELS; j++)       
                         {
                         plays[j].getButton().setForeground(new JButton().getForeground());
-                        plays[j].getButton().setText(titleForButton(j));
+                        plays[j].setText(titleForButton(j));
                         }
                     plays[_i].getButton().setForeground(Color.RED);
-                    plays[_i].getButton().setText("<HTML><B>" + titleForButton(_i) + "</b></HTML>");
+                    plays[_i].setText("<HTML><B>" + titleForButton(_i) + "</b></HTML>");
 
                     // change the model, send all parameters, maybe play a note,
                     // and then restore the model.
@@ -582,6 +582,7 @@ public class HillClimb extends SynthPanel
         method = new JComboBox(synth instanceof ProvidesNN ?
             new String[] { "Hill-Climber", "Constrictor", "NN Hill-Climber" } :
             new String[] { "Hill-Climber", "Constrictor" });
+        method.getAccessibleContext().setAccessibleName("Method");
     
         blank = new Blank();
 
@@ -1066,12 +1067,12 @@ public class HillClimb extends SynthPanel
                 for(int i = 0; i < NUM_MODELS; i++)       
                     {
                     plays[i].getButton().setForeground(new JButton().getForeground());
-                    plays[i].getButton().setText(titleForButton(i));
+                    plays[i].setText(titleForButton(i));
                     }
                 if (temporaryPlay >= 0)
                     {
                     plays[temporaryPlay].getButton().setForeground(Color.RED);
-                    plays[temporaryPlay].getButton().setText("<HTML><B>" + titleForButton(temporaryPlay) + "</b></HTML>");
+                    plays[temporaryPlay].setText("<HTML><B>" + titleForButton(temporaryPlay) + "</b></HTML>");
                     backup = synth.model;
                     synth.model = currentModels[temporaryPlay];
                     synth.sendAllParameters();
@@ -1084,7 +1085,7 @@ public class HillClimb extends SynthPanel
                         currentPlay >= 16 && !bigger.isSelected())
                         currentPlay = 0;
                     plays[currentPlay].getButton().setForeground(Color.RED);
-                    plays[currentPlay].getButton().setText("<HTML><B>" + titleForButton(currentPlay) + "</b></HTML>");
+                    plays[currentPlay].setText("<HTML><B>" + titleForButton(currentPlay) + "</b></HTML>");
 
                     // change the model, send all parameters, maybe play a note,
                     // and then restore the model.

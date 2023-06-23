@@ -849,6 +849,7 @@ public class Librarian extends JPanel
                     else                    // multiple banks, must chooes
                         {
                         JComboBox bank = new JComboBox(bankNames); 
+        				bank.getAccessibleContext().setAccessibleName("Bank");
                         Librarian lib = synth.librarian;
                                 
                         // Let's make a good guess as to which bank he wants

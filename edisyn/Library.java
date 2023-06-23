@@ -1074,6 +1074,7 @@ public class Library extends AbstractTableModel
                 (/* (start == 0 && len == getBankSize()) || */ bank == ALL_PATCHES))
                 {
                 combo = new JComboBox(new String[] { "Bank Sysex", "Individual Patch Sysex" });
+        		combo.getAccessibleContext().setAccessibleName("Format");
                 comp = new JComponent[] { combo };
                 str = new String[] { "Format" };
                 title = "Save All Patches";

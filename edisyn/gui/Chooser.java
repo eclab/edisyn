@@ -12,6 +12,7 @@ import javax.swing.border.*;
 import javax.swing.*;
 import javax.swing.event.*;
 import java.awt.event.*;
+import javax.accessibility.*;
 
 
 /**
@@ -158,6 +159,35 @@ public class Chooser extends NumericalComponent
 
         combo = new JComboBox(elements)
             {
+			AccessibleContext accessibleContext = null;
+
+			// Generate and provide the context information when asked
+			public AccessibleContext getAccessibleContext()
+				{
+				if (accessibleContext == null)
+					{
+					accessibleContext = new AccessibleJComboBox()
+						{
+						public String getAccessibleName()
+							{
+							String name = super.getAccessibleName();
+							// Find enclosing Category
+							Component obj = combo;
+							while(obj != null)
+								{
+								if (obj instanceof Category)
+									{
+									return name + " " + ((Category)obj).getName();
+									}
+								else obj = obj.getParent();
+								}
+							return name;
+							}
+						};
+					}
+				return accessibleContext;
+				}
+            
             public void setPopupVisible(boolean val) 
                 {
                 if (val == true || 

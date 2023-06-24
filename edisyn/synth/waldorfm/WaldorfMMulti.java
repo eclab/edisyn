@@ -893,7 +893,7 @@ public class WaldorfMMulti extends Synth
     };
     
 
-    /** For the time being, the M has no way to receive multi patches to
+    /** The M has no way to receive multi patches to
         current working memory as a dump.  So we have to send them one at a time. */
     public boolean getSendsAllParametersAsDump() 
         {

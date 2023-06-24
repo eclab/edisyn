@@ -188,14 +188,12 @@ Other synthesizers (such as the Yamaha FS1R and the Roland D-110) try to hide th
 \definecolor{goldenyellow}{rgb}{1.0, 0.87, 0.0}
 \definecolor{goldenrod}{rgb}{0.85, 0.65, 0.13}
 
-\paragraph{Categories}
+\subsection{Categories}
 At right is a typical tab pane.  You'll note that various widgets are grouped together in regions (called {\bf Categories}).  There are four categories shown here.  Three are arbitrary categories for this synthesizer: ``{\bf {\color{limegreen}Global}}'', ``{\bf {\color{hanpurple}LFO}}'', and ``{\bf {\color{goldenrod}Controllers}}''.  They're in various colors to differentiate them.  Other categories will be found in other tab panes.  But one category is special: the {\bf Synthesizer Category}, always shown in white, here named ``Yamaha TX81Z''.  It normally contains the patch name and bank/patch number.
 
 If you right-click, or Shift-click, on a category name, you'll get a pop-up menu with certain cut, paste, distribution, and reset options.  See Section~\ref{editing} for information about them.
 
-\bump
-
-\paragraph{Widgets}  Edisyn has a number of widgets.  Here are a few of them:
+\subsection{Widgets}  Edisyn has a number of widgets.  Here are a few of them:
 
 \begin{itemize} 
 
@@ -236,7 +234,9 @@ Mose Edisyn envelope displays are read-only -- you can't draw the dots.  But tha
 
 If you are connected to a synthesizer over MIDI, then changing a widget will modify the underlying patch parameter in real time, if the synthesizer supports this.  Also, if you modify a parameter on the synthesizer, then Edisyn will update the corresponding widget or widgets (again, if the synthesizer supports this).
 
-\paragraph{Changing Edisyn's Color Scheme}  If you find Edisyn ugly, you can change the colors with {\bf Change Color Scheme} in the {\bf Options} menu (or reset them with {\bf Reset Color Scheme}.  Note that not all widgets will change their colors until you have restarted Edisyn: until then, you'll get a weird mishmash of colors.
+\subsection{Changing Edisyn's Color Scheme}  If you find Edisyn ugly, you can change the colors with {\bf Change Color Scheme} in the {\bf Options} menu (or reset them with {\bf Reset Color Scheme}.  Note that not all widgets will change their colors until you have restarted Edisyn: until then, you'll get a weird mishmash of colors.
+
+\subsection{Accessibility for the Blind} Edisyn's widgets and menus should be fully accessible.  When focused, the Dials are controlled as follows:  \(\uparrow \downarrow\) change by 1, Shift-\(\uparrow\) or Shift-\(\downarrow\) change by 16, \(\leftarrow \rightarrow\) change by 256, Shift-\(\leftarrow\) or Shift-\(\rightarrow\) change by 4096, and Home, End, and Space go the the start, end, and default value.  See Edisyn's webpage (~https:/\!/github.com/eclab/edisyn~) for more details on interaction with accessibility systems.
 
 \section{Creating and Setting Up Additional Patch Editors}
 
@@ -601,7 +601,7 @@ You can turn off automatic test notes by turning off {\bf Send Test Notes} or by
 
 \paragraph{Exporting a Patch} When you are satisfied with the current sound at your Joystick cursor, you can save it by pressing the {\it Export...} button.  Your three options are to {\it Keep Patch}, which loads the cursor patch into the current editor, {\it Edit Patch}, which loads it into a new patch editor, and {\it Save to File}, which, well, saves it to a file.
 
-\paragraph{Quitting} Quitting the Morpher works much like quitting the Hill-Climber: choose {\bf  Stop Morphing} in the {\bf Edit} menu.
+\paragraph{Quitting the Morpher} Quitting the Morpher works much like quitting the Hill-Climber: choose {\bf  Stop Morphing} in the {\bf Edit} menu.
 
 \paragraph{\color{red}Hint} Often different patches vary in pitch: for example one patch may be pitched down an octave from another.  If yo morph between these two patches, the pitch will get interpolated between them well, and it's likely you don't want a G\# when you're playing a C.  To fix this, you should turn {\it off} the parameters related to pitch: see Section~\ref{restriction} (Restricting Exploration to Only Certain Parameters) to understand how to do that.
 

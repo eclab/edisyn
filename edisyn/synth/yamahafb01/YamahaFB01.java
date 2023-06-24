@@ -40,7 +40,7 @@ public class YamahaFB01 extends Synth
     
     public static final String[] PITCH_MOD_CONTROLS = { "Off", "Aftertouch", "Pitch Wheel", "Breath Controller", "Foot Controller" };    
     public static final String[] LFO_WAVES = { "Sawtooth", "Square", "Triangle", "Sample and Hold" };
-    public static final String[] KEYBOARD_LEVEL_SCALING_TYPES = new String[] { "1", "2", "3", "4" };
+    public static final String[] KEYBOARD_LEVEL_SCALING_TYPES = new String[] { "- Linear", "+ Linear", "- Exponential", "+ Exponential" };
     public static final String[] AMPLITUDE_MODULATION = new String[] { "Modulator (Off)", "Carrier (On)" };
     public static final String[] WRITABLE_BANKS = { "1 (A)", "2 (B)" };
     public static final String[] BANKS = { "1 (A)", "2 (B)", "3 (ROM 1)", "4 (ROM 2)", "5 (ROM 3)", "6 (ROM 4)", "7 (ROM 5)" };
@@ -407,7 +407,18 @@ public class YamahaFB01 extends Synth
         
         hbox.add(vbox);
 
-        comp = new LabelledDial("Level", this, "op" + src + "level", color, 0, 127);
+        comp = new LabelledDial("Level", this, "op" + src + "level", color, 0, 127)
+            {
+            public String map(int value)
+                {
+                return String.valueOf(127-value);
+                }
+            };
+ 
+        hbox.add(comp);
+        
+        comp = new LabelledDial("Level", this, "op" + src + "adjustforlevel", color, 0, 15);
+        ((LabelledDial)comp).addAdditionalLabel("[Adjust]");
         hbox.add(comp);
         
         comp = new LabelledDial("Vel. Sensitivity", this, "op" + src + "velocitysensitivityforlevel", color, 0, 7);
@@ -416,10 +427,6 @@ public class YamahaFB01 extends Synth
         
         comp = new LabelledDial("Key Scaling", this, "op" + src + "keyboardlevelscalingdepth", color, 0, 15);
         ((LabelledDial)comp).addAdditionalLabel("[Level]");
-        hbox.add(comp);
-        
-        comp = new LabelledDial("Key Scaling", this, "op" + src + "keyboardscalingadjustforlevel", color, 0, 15);
-        ((LabelledDial)comp).addAdditionalLabel("[Level Adjust]");
         hbox.add(comp);
         
         comp = new LabelledDial("Key Scaling", this, "op" + src + "keyboardratescalingdepth", color, 0, 3);
@@ -438,7 +445,7 @@ public class YamahaFB01 extends Synth
                 
         hbox.add(comp);
         
-        // FIXME: PatchBase does this as 0.5 for 0.  Dunno if this is true.
+        // PatchBase does this as 0.5 for 0. This is true. 
         comp = new LabelledDial("Frequency", this, "op" + src + "frequency", color, 0, 15)
             {
             public String map(int value)
@@ -477,7 +484,14 @@ public class YamahaFB01 extends Synth
         ((LabelledDial)comp).addAdditionalLabel("Rate");
         hbox.add(comp);
 
-        comp = new LabelledDial("Sustain", this, "op" + envelope + "sustainlevel", color, 0, 15);
+        comp = new LabelledDial("Sustain", this, "op" + envelope + "sustainlevel", color, 0, 15)
+            {
+            public String map(int value)
+                {
+                return String.valueOf(15-value);
+                }
+            };
+ 
         ((LabelledDial)comp).addAdditionalLabel("Level");
         hbox.add(comp);
 
@@ -497,7 +511,7 @@ public class YamahaFB01 extends Synth
         comp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
             new String[] { null, "op" + envelope + "attackrate", "op" + envelope + "decay1rate", "op" + envelope + "decay2rate", "op" + envelope + "releaserate" },
             new String[] { null, null, "op" + envelope + "sustainlevel", "op" + envelope + "sustainlevel", null },
-            new double[] { 0, 1.0/2, 1.0/2, 1.0/2, 1.0/2 },
+            new double[] { 0, 1.0/3, 1.0/3, 1.0/3, 1.0/3 },
             new double[] { 0, 1.0, 1.0 / 15.0, 1.0 / 30.0, 0 },
             new double[] { 0, (Math.PI/4/31), (Math.PI/4/31), (Math.PI/4/31), (Math.PI/4/15) })
             {
@@ -521,6 +535,15 @@ public class YamahaFB01 extends Synth
                 else
                     {
                     return value;
+                    }
+                }
+
+            public void postProcess(double[] xVals, double[] yVals)
+                {
+                if (model.get("op" + envelope + "decay2rate") == 0)
+                    {
+                    yVals[3] = yVals[2];
+                    xVals[3] = 0.25;
                     }
                 }
             };
@@ -574,11 +597,11 @@ public class YamahaFB01 extends Synth
                 val = (((model.get("op" + op + "keyboardlevelscalingtype") >>> 0) & 1) << 7) | 
                     model.get("op" + op + "velocitysensitivityforlevel");
                 }
-            else if (k.equals("keyboardlevelscalingdepth") || k.equals("keyboardscalingadjustforlevel"))
+            else if (k.equals("keyboardlevelscalingdepth") || k.equals("adjustforlevel"))
                 {
                 param = 0x52;
                 val = (model.get("op" + op + "keyboardlevelscalingdepth") << 4) | 
-                    model.get("op" + op + "keyboardscalingadjustforlevel");
+                    model.get("op" + op + "adjustforlevel");
                 }
             else if (k.equals("detune") || k.equals("frequency"))
                 {
@@ -750,7 +773,7 @@ public class YamahaFB01 extends Synth
             model.set("op" + op + "velocitysensitivityforlevel", (d[pos] >>> 4) & 7);
             pos++;
             model.set("op" + op + "keyboardlevelscalingdepth", (d[pos] >>> 4) & 15);
-            model.set("op" + op + "keyboardscalingadjustforlevel", (d[pos] >>> 0) & 15);
+            model.set("op" + op + "adjustforlevel", (d[pos] >>> 0) & 15);
             pos++;
             model.set("op" + op + "detune", (d[pos] >>> 4) & 7);
             model.set("op" + op + "frequency", (d[pos] >>> 0) & 15);
@@ -960,7 +983,7 @@ public class YamahaFB01 extends Synth
             d[pos++] = (byte)((((model.get("op" + op + "keyboardlevelscalingtype") >>> 0) & 1) << 7) | 
                 (model.get("op" + op + "velocitysensitivityforlevel") << 4));
             d[pos++] = (byte)((model.get("op" + op + "keyboardlevelscalingdepth") << 4) | 
-                model.get("op" + op + "keyboardscalingadjustforlevel"));
+                model.get("op" + op + "adjustforlevel"));
             d[pos++] = (byte)((((model.get("op" + op + "keyboardlevelscalingtype") >>> 1) & 1) << 7) | 
                 (model.get("op" + op + "detune") << 4) | 
                 model.get("op" + op + "frequency"));
@@ -1205,13 +1228,13 @@ public class YamahaFB01 extends Synth
     ///// The FB01 is unusual in three respects when it comes to Bank Sysex.
     /////
     ///// 0. Bank sysex isn't for the whole synthesizer, but rather for just a single bank in
-    /////    the synthesizer.  Though there are 9 banks we can read from, there are only two
+    /////    the synthesizer.  Though there are 7 banks we can read from, there are only two
     /////    banks we can write to.  This means that we need to allow the user to select which
     /////    bank he wants, and modify the sysex file to reflect this.
     /////
     ///// 1. There are two different sysex commands for bank sysex.  One stipulates Voice Bank 0.
     /////    The other stipulates Voice Bank X (though there are really only two voice banks we can
-    /////    write to!  0 and 1.  Of course, we have 9 we can read from).
+    /////    write to!  0 and 1.  Of course, we have 7 we can read from).
     /////
     ///// 2. Banks can have names.  That's kind of weird.
     /////

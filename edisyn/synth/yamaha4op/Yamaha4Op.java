@@ -669,38 +669,38 @@ public class Yamaha4Op extends Synth
         HBox hbox = new HBox();
   
         comp = new LabelledDial("Attack Rate", this, "pitchattackrate", color, 0, 99);
-        ((LabelledDial)comp).addAdditionalLabel(" [21,11] ");
+        ((LabelledDial)comp).addAdditionalLabel("PR1 [21,11,V]");
         hbox.add(comp);
 
         comp = new LabelledDial("Attack Level", this, "pitchattacklevel", color, 0, 99);
-        ((LabelledDial)comp).addAdditionalLabel(" [21,11] ");
+        ((LabelledDial)comp).addAdditionalLabel("PL1 [21,11,V]");
         hbox.add(comp);
 
         comp = new LabelledDial("Decay Rate", this, "pitchdecayrate", color, 0, 99);
-        ((LabelledDial)comp).addAdditionalLabel(" [21,11] ");
+        ((LabelledDial)comp).addAdditionalLabel("PR2 [21,11,V]");
         hbox.add(comp);
 
         comp = new LabelledDial("Decay Level", this, "pitchdecaylevel", color, 0, 99);
-        ((LabelledDial)comp).addAdditionalLabel(" [21,11] ");
+        ((LabelledDial)comp).addAdditionalLabel("PL2 [21,11,V]");
         hbox.add(comp);
 
         comp = new LabelledDial("Release Rate", this, "pitchreleaserate", color, 0, 99);
-        ((LabelledDial)comp).addAdditionalLabel(" [21,11] ");
+        ((LabelledDial)comp).addAdditionalLabel("PR3 [21,11,V] ");
         hbox.add(comp);
         
         comp = new LabelledDial("Release Level", this, "pitchreleaselevel", color, 0, 99);
-        ((LabelledDial)comp).addAdditionalLabel(" [21,11] ");
+        ((LabelledDial)comp).addAdditionalLabel("PL3 [21,11,V]");
         hbox.add(comp);
         
         // ADSR
         // This will *more or less* work, though the release rate will be slightly short
         // for reasons beyond me.
         comp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
-            new String[] { null, "pitchattackrate", "pitchdecayrate", "pitchreleaserate" },
-            new String[] { "pitchreleaselevel", "pitchattacklevel", "pitchdecaylevel", "pitchreleaselevel" },
-            new double[] { 0, 1.0/2, 1.0/2, 1.0/2 },
-            new double[] { 1.0 / 99, 1.0 / 99, 1.0 / 99, 1.0 / 99},
-            new double[] { 0, (Math.PI/4/99), (Math.PI/4/99), (Math.PI/4/99) })
+            new String[] { null, "pitchattackrate", "pitchdecayrate", null, "pitchreleaserate" },
+            new String[] { "pitchreleaselevel", "pitchattacklevel", "pitchdecaylevel", "pitchdecaylevel", "pitchreleaselevel" },
+            new double[] { 0, 1.0/3, 1.0/3, 1.0/4, 1.0/3 },
+            new double[] { 1.0 / 99, 1.0 / 99, 1.0 / 99, 1.0/99 ,1.0 / 99},
+            new double[] { 0, (Math.PI/4/99), (Math.PI/4/99), (Math.PI/4/99), (Math.PI/4/99) })
             {
             public double preprocessXKey(int index, String key, double value)
                 {
@@ -737,7 +737,7 @@ public class Yamaha4Op extends Synth
         comp = new Chooser("Preset [>]", this, "effectpreset", params);
         vbox.add(comp);
                 
-        comp = new CheckBox("Chorus [21,11]", this, "chorus");
+        comp = new CheckBox("Chorus [21,27s]", this, "chorus");
         ((CheckBox)comp).addToWidth(3);
         vbox.add(comp);
         hbox.add(vbox);
@@ -977,20 +977,7 @@ public class Yamaha4Op extends Synth
 
     // based on http://cd.textfiles.com/fredfish/v1.6/FF_Disks/571-600/FF_598/TX81z/TX81z.doc
     // in combination with the manual.
-    public int computeCoarseFrequency(int range, int coarse)
-        {
-        // the others are just multiples of it
-        int base = 1;
-        for(int i = 0; i < range; i++)
-            base *= 2;
-
-        if (coarse < 4) return 8 * base;
-        else return 16 * (coarse / 4) * base;
-        }
-
-    // based on http://cd.textfiles.com/fredfish/v1.6/FF_Disks/571-600/FF_598/TX81z/TX81z.doc
-    // in combination with the manual.
-    public int computeFrequency(int range, int coarse, int fine)
+    public double computeCoarseFrequency(int range, int coarse, int vshift)
         {
         // the others are just multiples of it
         int base = 1;
@@ -998,12 +985,29 @@ public class Yamaha4Op extends Synth
             base *= 2;
 
         if (coarse < 4)
-            fine = Math.min(fine, 7);
-
-        if (coarse < 4) return (8 + fine) * base;
-        else return (16 * (coarse / 4) + fine) * base;
+            return 8 * base / Math.pow(300, vshift);
+        else 
+            return 16 * (coarse / 4) * base / Math.pow(300, vshift);
         }
 
+    // based on http://cd.textfiles.com/fredfish/v1.6/FF_Disks/571-600/FF_598/TX81z/TX81z.doc
+    // in combination with the manual.
+    public double computeFrequency(int range, int coarse, int fine, int vshift)
+        {
+        // the others are just multiples of it
+        int base = 1;
+
+        for(int i = 0; i < range; i++)
+            base *= 2;
+
+        if (coarse < 4)
+            fine = Math.min(fine, 7);
+      
+        if (coarse < 4) 
+            return (8 + fine) * base / Math.pow(300, vshift); // if V50 FIX RANGE MODE = LO divide by 300
+        else 
+            return (16 * (coarse / 4) + fine) * base / Math.pow(300, vshift);
+        }
 
     LabelledDial[] frequencyRanges = new LabelledDial[4];
     JLabel[] coarseFrequencyLabels = new JLabel[4];
@@ -1028,7 +1032,7 @@ public class Yamaha4Op extends Synth
         HBox hbox1 = new HBox();
         comp = new CheckBox("AM", this, "operator" + src + "amplitudemodulationenable");
         hbox1.add(comp);
-        comp = new CheckBox("Shift Hi [V]", this, "operator" + src + "vshift");
+        comp = new CheckBox("Shift Lo [V]", this, "operator" + src + "vshift");
         ((CheckBox)comp).addToWidth(2);
         hbox1.add(comp);
         vbox.add(hbox1);
@@ -1065,12 +1069,13 @@ public class Yamaha4Op extends Synth
             {
             public String map(int val)
                 {
-                return FIX_HI_RANGES[val];
+                if (model.get("operator" + src + "vshift") == 0)   
+                    return FIX_HI_RANGES[val];
+                else
+                    return FIX_LO_RANGES[val]; // V50 fix range lo
                 }               
             };
         frequencyRanges[src - 1].addAdditionalLabel("Range");
-
-
 
 
 
@@ -1103,8 +1108,6 @@ public class Yamaha4Op extends Synth
         ((CheckBox)fixcomp).addToWidth(2);
 
 
-
-
         comp = new LabelledDial("Frequency ", this, "operator" + src + "frequencycoarse", color, 0, 63)  // extra space because OS X cuts off the 'y'
             {
             public String map(int val)
@@ -1115,9 +1118,21 @@ public class Yamaha4Op extends Synth
                     }
                 else
                     {
-                    return "" + computeCoarseFrequency(
-                        model.get("operator" + src + "fixedfrequencyrange"),
-                        model.get("operator" + src + "frequencycoarse"));
+                    if (model.get("operator" + src + "vshift") == 0)
+                        {
+                        return String.format("%.0f", computeCoarseFrequency(
+                            model.get("operator" + src + "fixedfrequencyrange"),
+                            model.get("operator" + src + "frequencycoarse"),
+                            model.get("operator" + src + "vshift")));
+                        }
+                    else
+                        {
+                        return String.format("%.2f", computeCoarseFrequency(
+                            model.get("operator" + src + "fixedfrequencyrange"),
+                            model.get("operator" + src + "frequencycoarse"),
+                            model.get("operator" + src + "vshift")));
+
+                        }
                     }
                 }               
             };
@@ -1139,17 +1154,38 @@ public class Yamaha4Op extends Synth
                     }
                 else
                     {
-                    return "" + computeFrequency(
-                        model.get("operator" + src + "fixedfrequencyrange"),
-                        model.get("operator" + src + "frequencycoarse"),
-                        model.get("operator" + src + "frequencyfine"));
+                    String fixformat;
+                    double computedFrequency = computeFrequency(
+                           model.get("operator" + src + "fixedfrequencyrange"),
+                           model.get("operator" + src + "frequencycoarse"),
+                           model.get("operator" + src + "frequencyfine"),
+                           model.get("operator" + src + "vshift"));
+
+                    if (model.get("operator" + src + "vshift") == 1) //V50 FIX RANGE MODE (SHIFT LO)
+                        {
+                        if (computedFrequency < 100)
+                            {
+                                fixformat = "%.3f";
+                            }
+                        else
+                            {
+                                fixformat = "%.2f";
+                            }
+                        }
+                    else
+                        {
+                            fixformat = "%.0f";
+                        }
+                    return String.format(fixformat, computedFrequency);
                     }
-                }               
-            };
+                }
+            };               
+
         fineFrequencyLabels[src - 1] = ((LabelledDial)comp).addAdditionalLabel("Fixed Fine");
         model.register("operator" + src + "fixedfrequencyrange", (Updatable)comp);
         model.register("operator" + src + "frequencycoarse", (Updatable)comp);
         model.register("operator" + src + "fix", (Updatable)comp);
+        model.register("operator" + src + "vshift", (Updatable)comp);
         hbox.add(comp);
 
 
@@ -1178,15 +1214,15 @@ public class Yamaha4Op extends Synth
         HBox hbox = new HBox();
                
         comp = new LabelledDial("Attack", this, "operator" + envelope + "attackrate", color, 0, 31);
-        ((LabelledDial)comp).addAdditionalLabel("Rate");
+        ((LabelledDial)comp).addAdditionalLabel("Rate (AR)");
         hbox.add(comp);
 
         comp = new LabelledDial("Decay 1", this, "operator" + envelope + "decay1rate", color, 0, 31);
-        ((LabelledDial)comp).addAdditionalLabel("Rate");
+        ((LabelledDial)comp).addAdditionalLabel("Rate (D1R)");
         hbox.add(comp);
 
         comp = new LabelledDial("Decay 1", this, "operator" + envelope + "decay1level", color, 0, 15);
-        ((LabelledDial)comp).addAdditionalLabel("Level");
+        ((LabelledDial)comp).addAdditionalLabel("Level (D1L)");
         hbox.add(comp);
 
         comp = new LabelledDial("Decay 2", this, "operator" + envelope + "decay2rate", color, 0, 31)
@@ -1197,12 +1233,12 @@ public class Yamaha4Op extends Synth
                 else return "" + val;
                 }
             };
-        ((LabelledDial)comp).addAdditionalLabel("Rate");
+        ((LabelledDial)comp).addAdditionalLabel("Rate (D2R)");
         model.setMetricMin("operator" + envelope + "decay2rate", 1);
         hbox.add(comp);
 
         comp = new LabelledDial("Release", this, "operator" + envelope + "releaserate", color, 1, 15);
-        ((LabelledDial)comp).addAdditionalLabel("Rate");
+        ((LabelledDial)comp).addAdditionalLabel("Rate (RR)");
         hbox.add(comp);
         
         VBox vbox2 = new VBox();
@@ -2098,7 +2134,12 @@ public class Yamaha4Op extends Synth
         // Aftertouch Amplitude
         model.set(aced2Parameters[pos++], data[patch + 85 + 6] & 7);
         // Aftertouch Pitch Bias
-        model.set(aced2Parameters[pos++], data[patch + 86 + 6] & 7);
+        //model.set(aced2Parameters[pos++], data[patch + 86 + 6] & 7);
+        int ATPB = data[patch + 86 + 6] & 7;
+        if (ATPB > 50) 
+            model.set(aced2Parameters[pos++], ATPB - 51);
+        else
+            model.set(aced3Parameters[pos++], ATPB + 50);
         // Aftertouch EG BBias
         model.set(aced2Parameters[pos++], data[patch + 87 + 6] & 7);
 
@@ -2323,7 +2364,12 @@ public class Yamaha4Op extends Synth
             // Aftertouch Amplitude
             data[patch + 85 + 6] = (byte) (models[number].get(aced2Parameters[pos++]) & 7);
             // Aftertouch Pitch Bias
-            data[patch + 86 + 6] = (byte) (models[number].get(aced2Parameters[pos++]) & 7);
+            //data[patch + 86 + 6] = (byte) (models[number].get(aced2Parameters[pos++]) & 7);
+            int atpb = models[number].get(aced2Parameters[pos++]) & 7;
+            if (atpb < 50)
+                data[patch + 86 + 6] = (byte) (atpb + 51);
+            else
+                data[patch + 85 + 6] = (byte) (atpb - 50);
             // Aftertouch EG BBias
             data[patch + 87 + 6] = (byte) (models[number].get(aced2Parameters[pos++]) & 7);
 

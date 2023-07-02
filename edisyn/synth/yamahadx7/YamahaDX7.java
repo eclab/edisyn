@@ -529,18 +529,21 @@ public class YamahaDX7 extends Synth implements ProvidesNN
         ((LabelledDial)comp).addAdditionalLabel("(Start/End) ");
         hbox.add(comp);
 
-        // ADSR
+        // Pitch EG
         comp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
-            new String[] { null,   "pitchegrate1",   "pitchegrate2",   "pitchegrate3",   "pitchegrate4" },
-            new String[] {   "pitcheglevel4",   "pitcheglevel1",   "pitcheglevel2",   "pitcheglevel3",   "pitcheglevel4" },
-            new double[] { 0, 0.25/99, 0.25/99, 0.25/99, 0.25/99 },
-            new double[] { 1.0 / 99, 1.0 / 99, 1.0 / 99, 1.0 / 99, 1.0 / 99 })
+            new String[] { null, "pitchegrate1", "pitchegrate2", "pitchegrate3", null, "pitchegrate4" },
+            new String[] { "pitcheglevel4", "pitcheglevel1", "pitcheglevel2", "pitcheglevel3", "pitcheglevel3", "pitcheglevel4" },
+            new double[] { 0, 1.0/5, 1.0/5, 1.0/5, 1.0/5, 1.0/5 },
+            new double[] { 1.0 / 99, 1.0 / 99, 1.0 / 99, 1.0 / 99, 1.0 / 99, 1.0/99 },
+            new double[] { 0, (Math.PI/4/99), (Math.PI/4/99), (Math.PI/4/99), (Math.PI/4/99), (Math.PI/4/99) })
             {
+            public double preprocessXKey(int index, String key, double value)
+                {
+                return 99.0 - value;
+                }
+            
             public void postProcess(double[] xVals, double[] yVals)
                 {
-                // The DX7 uses 99 for SHORT and 0 for LONG, weird
-                for(int i = 1; i < 5; i++)
-                    xVals[i] = 0.25 - xVals[i];
                 }
             };
         ((EnvelopeDisplay)comp).setAxis(50.0 / 99.0);  // it seems 50 is the standard midpoint
@@ -722,7 +725,8 @@ public class YamahaDX7 extends Synth implements ProvidesNN
         comp = new LabelledDial("Level 4", this, "operator" + envelope + "level4", color, 0, 99);
         ((LabelledDial)comp).addAdditionalLabel("(Start/End) ");
         hbox.add(comp);
-        
+       
+        // EG
         comp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
             new String[] { null, "operator" + envelope + "rate1", "operator" + envelope + "rate2", "operator" + envelope + "rate3", null, "operator" + envelope + "rate4" },
             new String[] { "operator" + envelope + "level4", "operator" + envelope + "level1", "operator" + envelope + "level2", "operator" + envelope + "level3",  "operator" + envelope + "level3", "operator" + envelope + "level4" },
@@ -736,22 +740,6 @@ public class YamahaDX7 extends Synth implements ProvidesNN
                 }
             };
 
-        /*
-        // ADSR
-        comp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
-        new String[] { null, "operator" + envelope + "rate1", "operator" + envelope + "rate2", "operator" + envelope + "rate3", null, "operator" + envelope + "rate4" },
-        new String[] { "operator" + envelope + "level4", "operator" + envelope + "level1", "operator" + envelope + "level2", "operator" + envelope + "level3",  "operator" + envelope + "level3", "operator" + envelope + "level4" },
-        new double[] { 0, 0.2/99, 0.2/99, 0.2/99, 0.0, 0.2/99 },
-        new double[] { 1.0 / 99, 1.0 / 99, 1.0 / 99, 1.0 / 99, 1.0 / 99, 1.0 / 99 })
-        {
-        public void postProcess(double[] xVals, double[] yVals)
-        {
-        // The DX7 uses 99 for SHORT and 0 for LONG, weird
-        for(int i = 1; i < 6; i++)
-        xVals[i] = 0.2 - xVals[i];
-        }
-        };
-        */
         hbox.addLast(comp);
                 
         category.add(hbox, BorderLayout.CENTER);

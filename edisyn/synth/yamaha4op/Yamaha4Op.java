@@ -668,27 +668,27 @@ public class Yamaha4Op extends Synth
         String[] params;
         HBox hbox = new HBox();
   
-        comp = new LabelledDial("Attack Rate", this, "pitchattackrate", color, 0, 99);
+        comp = new LabelledDial("Rate 1", this, "pitchattackrate", color, 0, 99);
         ((LabelledDial)comp).addAdditionalLabel("PR1 [21,11,V]");
         hbox.add(comp);
 
-        comp = new LabelledDial("Attack Level", this, "pitchattacklevel", color, 0, 99);
+        comp = new LabelledDial("Level 1", this, "pitchattacklevel", color, 0, 99);
         ((LabelledDial)comp).addAdditionalLabel("PL1 [21,11,V]");
         hbox.add(comp);
 
-        comp = new LabelledDial("Decay Rate", this, "pitchdecayrate", color, 0, 99);
+        comp = new LabelledDial("Rate 2", this, "pitchdecayrate", color, 0, 99);
         ((LabelledDial)comp).addAdditionalLabel("PR2 [21,11,V]");
         hbox.add(comp);
 
-        comp = new LabelledDial("Decay Level", this, "pitchdecaylevel", color, 0, 99);
+        comp = new LabelledDial("Level 2", this, "pitchdecaylevel", color, 0, 99);
         ((LabelledDial)comp).addAdditionalLabel("PL2 [21,11,V]");
         hbox.add(comp);
 
-        comp = new LabelledDial("Release Rate", this, "pitchreleaserate", color, 0, 99);
+        comp = new LabelledDial("Rate 3", this, "pitchreleaserate", color, 0, 99);
         ((LabelledDial)comp).addAdditionalLabel("PR3 [21,11,V] ");
         hbox.add(comp);
         
-        comp = new LabelledDial("Release Level", this, "pitchreleaselevel", color, 0, 99);
+        comp = new LabelledDial("Level 3", this, "pitchreleaselevel", color, 0, 99);
         ((LabelledDial)comp).addAdditionalLabel("PL3 [21,11,V]");
         hbox.add(comp);
         

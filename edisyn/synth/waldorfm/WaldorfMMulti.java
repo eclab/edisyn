@@ -432,7 +432,7 @@ public class WaldorfMMulti extends Synth
 // Change Patch can get stomped if we do a request immediately afterwards
     public int getPauseAfterChangePatch() { return 200; }
 
-    public int getPauseAfterWritePatch() { return 7000; }
+    public int getPauseAfterWritePatch() { return 6000; }
 
     public int getPauseAfterSendOneParameter() { return 1; }
 

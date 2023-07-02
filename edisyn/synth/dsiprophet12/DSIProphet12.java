@@ -33,7 +33,7 @@ public class DSIProphet12 extends Synth
     public static final String[] LFO_SYNCS = { "32 Q", "16 Q", "8 Q", "6 Q", "4 Q", "3 Q", "Half", "Qtr D", "Qtr", "4 T", "8", "8 T", "16", "16 T", "32", "32 T" };
     public static final String[] LFO_SHAPES = { "Triangle", "Reverse Saw", "Saw", "Square", "Pulse 1", "Pulse 2", "Pulse 3", "Random" };
     public static final String[] UNISON_KEY_ASSIGNMENTS = { "Low Note", "Low Retrigger", "High Note", "High Retrigger", "Last Note", "Last Retrigger" };
-    public static final String[] A_B_MODES = { "Normal", "Split", "Stack" };
+    public static final String[] A_B_MODES = { "Normal", "Stack", "Split" }; 		// "Split", "Stack" };
     public static final String[] DELAY_FILTER_MODES = { "Low-Pass", "High-Pass" };
     public static final String[] DELAY_FEEDBACK_MODES = { "High-Pass", "Low-Pass" };
 //    public static final String[] DELAY_SYNCS = { "Whole", "Half D", "Half", "Qtr D", "Qtr", "8 D", "8", "16 D", "16", "32 D", "32", "64" };

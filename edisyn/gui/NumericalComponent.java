@@ -25,7 +25,7 @@ import java.awt.event.*;
    @author Sean Luke
 */
 
-public abstract class NumericalComponent extends JComponent implements Updatable, HasKey
+public abstract class NumericalComponent extends JPanel implements Updatable, HasKey
     {
     String key;
     Synth synth;
@@ -91,10 +91,16 @@ public abstract class NumericalComponent extends JComponent implements Updatable
         // we don't check for duplicates any more so LabelledDial can do non-dynamic updates
         //if (!synth.getModel().exists(key) || getState() != val)
             {
+            int old = synth.getModel().get(key);
             synth.getModel().set(key, val); 
             repaint();
+            stateSet(old, val);
             }
         }
+        
+    protected void stateSet(int oldVal, int newVal)
+    	{
+    	}
         
     /** Registers the NumericalComponent as a listener for changes to the key in the model. */
     // this is here so we can override it in LabelledDial

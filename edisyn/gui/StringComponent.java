@@ -24,7 +24,7 @@ import javax.accessibility.*;
    @author Sean Luke
 */
 
-public class StringComponent extends JComponent implements Updatable, HasKey
+public class StringComponent extends JPanel implements Updatable, HasKey
     {
     JLabel label;
     JButton change;

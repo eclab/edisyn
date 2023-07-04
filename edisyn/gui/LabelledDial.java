@@ -672,9 +672,9 @@ public class LabelledDial extends NumericalComponent
                 str += (l + " ");
             dial.getAccessibleContext().setAccessibleName(str);
             }
-        
+            
         // This is the top-level accessible context for the Dial.  It gives accessibility information.
-        class AccessibleDial extends AccessibleJComponent implements AccessibleValue
+        class AccessibleDial extends AccessibleJComponent implements AccessibleValue, AccessibleComponent
             {               
             // Here we try to tack the Category onto the END of the accessible name so
             // the user can skip it if he knows what it is.
@@ -687,11 +687,11 @@ public class LabelledDial extends NumericalComponent
                     {
                     if (obj instanceof Category)
                         {
-                        return name + " " + ((Category)obj).getName();
+                        return name + " " + ((Category)obj).getName() + ", " + map(getState());
                         }
                     else obj = obj.getParent();
                     }
-                return name;
+                return name + ", " + map(getState());
                 }
                 
             // Provide myself as the AccessibleValue (I implement that interface) so I don't
@@ -708,17 +708,19 @@ public class LabelledDial extends NumericalComponent
 			// widget to our own: a JSlider.
             public AccessibleRole getAccessibleRole() 
                 {
-                return AccessibleRole.SLIDER;
+                return ROLE;	//ccessibleRole.SLIDER; // AccessibleRole.SLIDER;
                 }
 
             // Add whether the user is frobbing me to my current state
             public AccessibleStateSet getAccessibleStateSet()
                 {
                 AccessibleStateSet states = super.getAccessibleStateSet();
+                /*
                 if (dial.mouseDown)
                     {
                     states.add(AccessibleState.BUSY);
                     }
+                */ 
                 return states;
                 }
 
@@ -759,7 +761,27 @@ public class LabelledDial extends NumericalComponent
             return accessibleContext;
             }
   
+	    protected void stateSet(int oldVal, int newVal)
+	    	{
+            AccessibleContext context = getAccessibleContext();
+            if (context != null)
+            	{
+            	context.firePropertyChange(AccessibleContext.ACCESSIBLE_VALUE_PROPERTY, Integer.valueOf(oldVal), Integer.valueOf(newVal));
+            	context.firePropertyChange(AccessibleContext.ACCESSIBLE_NAME_PROPERTY, "yo", "mama");
+            	}
+            }
+  
         /// END ACCESSSIBILITY FOR THE BLIND        
 
         }
+
+        public static class DialRole extends AccessibleRole
+        	{
+        	public DialRole(String key)
+        		{
+        		super(key);
+        		}
+        	}
+             public static final DialRole ROLE = new DialRole("dial");
+       
     }

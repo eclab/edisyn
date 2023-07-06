@@ -7714,7 +7714,7 @@ menubar.add(helpMenu);
         if (!reduced)
             {
             actions = new JComboBox(new String[] { localLoad, newLoad, writeAll, breakOut, individual, librarian, newLibrarian });
-        	actions.getAccessibleContext().setAccessibleName("Do Action");
+            actions.getAccessibleContext().setAccessibleName("Do Action");
             if (tabs.getSelectedComponent() == librarianPane)
                 actions.setSelectedIndex(5);                                    // LIBRARIAN
             vbox.add(new JSeparator());
@@ -8596,9 +8596,9 @@ menubar.add(helpMenu);
         setSendMIDI(true);
         
         if (succeeded && 
-        	(tabs.getSelectedComponent() != librarianPane) && 
-        	(tabs.getSelectedComponent() != morphPane) &&
-        	(tabs.getSelectedComponent() != hillClimbPane))			// Don't switch if we're currently hill-climbing, morphing, or in the librarian?
+            (tabs.getSelectedComponent() != librarianPane) && 
+            (tabs.getSelectedComponent() != morphPane) &&
+            (tabs.getSelectedComponent() != hillClimbPane))                 // Don't switch if we're currently hill-climbing, morphing, or in the librarian?
             {
             setCurrentTab(0);
             }
@@ -9783,7 +9783,7 @@ menubar.add(helpMenu);
             vbox.add(hbox);
             JLabel boxLabel = new JLabel("Patch");
             JComboBox box = new JComboBox(makeUniqueStrings(names));
-       	 	box.getAccessibleContext().setAccessibleName("Patches");
+            box.getAccessibleContext().setAccessibleName("Patches");
             box.setMaximumRowCount(25);
             JPanel boxPanel = new JPanel();
             boxPanel.setLayout(new BorderLayout());
@@ -9820,7 +9820,7 @@ menubar.add(helpMenu);
                     {
                     actions = new JComboBox(new String[] {  "Edit Patch in Bank", "Save Bank...", "Write Bank to Synthesizer" });
                     }
-        		actions.getAccessibleContext().setAccessibleName("Actions");
+                actions.getAccessibleContext().setAccessibleName("Actions");
                 vbox.add(new JLabel("   "));
                 vbox.add(new JSeparator());
                 JPanel actionsPanel = new JPanel();
@@ -9876,7 +9876,7 @@ menubar.add(helpMenu);
                     else
                         {
                         JComboBox combo = new JComboBox(banks);
-        				combo.getAccessibleContext().setAccessibleName("Bank");
+                        combo.getAccessibleContext().setAccessibleName("Bank");
                         combo.setSelectedIndex(getDefaultBankForBankSysex(data, getModel()));
                         choice = (showMultiOption(this, new String[] { "Write to Bank" }, new JComponent[] { combo },
                                 new String[] { "Write", "Cancel" }, 0, "Write Bank", "Write the whole bank to the synth?") == 0);

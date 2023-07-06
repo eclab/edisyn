@@ -53,36 +53,36 @@ public class PushButton extends JPanel
     public PushButton(final String text)
         {
         button = new JButton(text)
-        	{
-			AccessibleContext accessibleContext = null;
+            {
+            AccessibleContext accessibleContext = null;
 
-			// Generate and provide the context information when asked
-			public AccessibleContext getAccessibleContext()
-				{
-				if (accessibleContext == null)
-					{
-					accessibleContext = new AccessibleJButton()
-						{
-						public String getAccessibleName()
-							{
-							String name = super.getAccessibleName();
-							// Find enclosing Category
-							Component obj = button;
-							while(obj != null)
-								{
-								if (obj instanceof Category)
-									{
-									return name + " " + ((Category)obj).getName();
-									}
-								else obj = obj.getParent();
-								}
-							return name;
-							}
-						};
-					}
-				return accessibleContext;
-				}
-        	};
+            // Generate and provide the context information when asked
+            public AccessibleContext getAccessibleContext()
+                {
+                if (accessibleContext == null)
+                    {
+                    accessibleContext = new AccessibleJButton()
+                        {
+                        public String getAccessibleName()
+                            {
+                            String name = super.getAccessibleName();
+                            // Find enclosing Category
+                            Component obj = button;
+                            while(obj != null)
+                                {
+                                if (obj instanceof Category)
+                                    {
+                                    return name + " " + ((Category)obj).getName();
+                                    }
+                                else obj = obj.getParent();
+                                }
+                            return name;
+                            }
+                        };
+                    }
+                return accessibleContext;
+                }
+            };
 
         setText(text);
         button.putClientProperty("JComponent.sizeVariant", "small");
@@ -124,10 +124,10 @@ public class PushButton extends JPanel
         }
 
 /*
-    public void setName(String text)
-        {
-        button.setText(text);
-        }
+  public void setName(String text)
+  {
+  button.setText(text);
+  }
 */
 
     public void setOptions(String[] options)

@@ -40,7 +40,7 @@
 \begin{document}
 
 \noindent {\Huge\bf Edisyn}\\[0.5em]
-{\large \bf A Java-based Synthesizer Patch Editor and Librarian, Version 33\\[0.2em]
+{\large \bf A Java-based Synthesizer Patch Editor and Librarian, Version 34\\[0.2em]
 By Sean Luke\qquad sean@cs.gmu.edu}\\[0.2em]
 
 \vspace{-1em}
@@ -69,6 +69,7 @@ Edisyn is a no-nonsense synthesizer patch editor and librarian for the editing a
 \item Ashun Sound Machines Hydrasynth Family (Single)
 \item Casio CZ-1, CZ-101, CZ-1000, CZ-3000, CZ-5000, and CZ-230S (Single)
 \item Dave Smith Instruments Prophet '08 and '08 Desktop, Tetra, Mopho, Mopho Keyboard, Mopho SE, and Mopho X4 (Single and (for Tetra) Combo)
+\item Dave Smith Instruments Prophet 12
 \item E-Mu Morpheus and Ultraproteus (Single, Hyperpreset, and MidiMap)
 \item E-Mu Proteus 1, 1 XR, 2, 2 XR, 3, 3 XR, and 1+Orchestral (Single)
 \item E-Mu Planet Phatt, Orbit and Orbit V2, Carnaval, Vintage Keys, and Vintage Keys Plus (Single)
@@ -96,6 +97,7 @@ Edisyn is a no-nonsense synthesizer patch editor and librarian for the editing a
 \item Sequential Prophet Rev2 (Single)
 \item Waldorf Blofeld Desktop, Blofeld Desktop SL, and Blofeld Keyboard (Single and Multimode, plus wavetable uploading)
 \item Waldorf Kyra (Single and Multimode)
+\item Waldorf M
 \item Waldorf Microwave II, Microwave XT, and Microwave XTk (Single and Multimode)
 \item Waldorf Pulse 2
 \item Waldorf Rocket
@@ -111,7 +113,7 @@ Edisyn is a no-nonsense synthesizer patch editor and librarian for the editing a
 \end{multicols}
 }
 
-You'll note a pattern among these synthesizers: many are very difficult to program.\footnote{So why are the Prophet '08, Blofeld, Kyra, and Microwave XT there then?  Because these synthesizers are all ones I own or have had access to: that's another reason a synth might be in this list.  When I come into possession of an interesting synth, I build an editor for it.}  That's one of my interests.  
+You'll note a pattern: many of the synthesizers are very difficult to program.\footnote{So why are the Prophet '08, Blofeld, Kyra, and Microwave XT there then?  Because these synthesizers are all ones I own or have had access to: that's another reason a synth might be in this list.  When I come into possession of an interesting synth, I build an editor for it.}  That's one of my interests.  
 
 Edisyn's patch editors try to cover the most common needs, and so in most cases it does not support patches for global parameters, nor for wave, sample, or wavetable editing\footnote{The Blofeld patch editor only supports wavetable {\it uploading}, not {\it editing}: this is because there's an excellent free wavetable-editing tool available at https:/\!/synthtech.com/waveedit which is better than anything I could possibly write.} etc.  
 %Additionally, though it can handle bulk downloads and files and manipulate them in a variety of ways, Edisyn is {\bf not at present a librarian tool}.  You should use a good free librarian software program, such as SysEx Librarian on the Mac.
@@ -236,7 +238,7 @@ If you are connected to a synthesizer over MIDI, then changing a widget will mod
 
 \subsection{Changing Edisyn's Color Scheme}  If you find Edisyn ugly, you can change the colors with {\bf Change Color Scheme} in the {\bf Options} menu (or reset them with {\bf Reset Color Scheme}.  Note that not all widgets will change their colors until you have restarted Edisyn: until then, you'll get a weird mishmash of colors.
 
-\subsection{Accessibility for the Blind} We're working on getting Edisyn's widgets and menus fully accessible.  It's not there yet (Java is hard).  When focused, the Dials are controlled as follows:  \(\uparrow \downarrow\) change by 1, Shift-\(\uparrow\) or Shift-\(\downarrow\) change by 16, \(\leftarrow \rightarrow\) change by 256, Shift-\(\leftarrow\) or Shift-\(\rightarrow\) change by 4096, and Home, End, and Space go the the start, end, and default value.  See Edisyn's webpage (~https:/\!/github.com/eclab/edisyn~) for more details on interaction with accessibility systems.
+\subsection{Accessibility for the Blind} We're working on getting Edisyn's widgets and menus fully accessible.  It's not quite there yet, particularly on the Mac (Java is hard).  When focused, the Dials are controlled as follows:  \(\uparrow \downarrow\) change by 1, Shift-\(\uparrow\) or Shift-\(\downarrow\) change by 16, \(\leftarrow \rightarrow\) change by 256, Shift-\(\leftarrow\) or Shift-\(\rightarrow\) change by 4096, and Home, End, and Space go the the start, end, and default value.  %See Edisyn's webpage (~https:/\!/github.com/eclab/edisyn~) for more details on interaction with accessibility systems.
 
 \section{Creating and Setting Up Additional Patch Editors}
 
@@ -1095,6 +1097,7 @@ Audiothingies Micromonsta&{\cm}&{\cm}&&&&{\cm}*& & &{\cm}            \\
 ASM Hydrasynth&{\cm}&{\cm}*&\cm&&{\cm}*&{\cm}*& & &{\cm}            \\
 Casio CZ&&&{\cm}&{\cm}&{\cm}&{\cm}& & &{\cm}*            \\
 DSI Prophet '08/Mopho/Tetra&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}& & &{\cm}            \\
+DSI Prophet 12&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}& & &{\cm}            \\
 E-Mu Morpheus/UltraProteus&{\cm}& &{\cm}& & &{\cm}& & &{\cm}            \\
 E-Mu Proteus&{\cm}& &{\cm}& & &{\cm}& & &{\cm}            \\
 E-Mu Proteus 2000 Family&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}& &{\cm}&{\cm}            \\
@@ -1118,6 +1121,7 @@ Roland JV-80/880&{\cm}& &{\cm}&{\cm}&{\cm}&{\cm}& & &{\cm}*          \\
 Roland U-110&{\cm}& & &{\cm}&{\cm}&{\cm}& & &{\cm}*          \\
 Roland U-220&{\cm}& &{\cm}&{\cm}&{\cm}&{\cm}& & &{\cm}*          \\
 Sequential Prophet Rev2&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}& & &{\cm}            \\
+Waldorf M&{\cm}&&{\cm}&{\cm}&{\cm}*&{\cm}&{\cm}& &{\cm}            \\
 Waldorf Microwave II/XT/XTk&{\cm}&{\cm}&{\cm}&{\cm}*&{\cm}&{\cm}&{\cm}& &{\cm}            \\
 Waldorf Blofeld&{\cm}*&{\cm}*&{\cm}&{\cm}*&{\cm}&{\cm}& & & {\cm}            \\
 Waldorf Kyra&{\cm}&{\cm}&{\cm}*&{\cm}*&{\cm}*&{\cm*}& & & {\cm}*            \\

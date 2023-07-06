@@ -159,34 +159,34 @@ public class Chooser extends NumericalComponent
 
         combo = new JComboBox(elements)
             {
-			AccessibleContext accessibleContext = null;
+            AccessibleContext accessibleContext = null;
 
-			// Generate and provide the context information when asked
-			public AccessibleContext getAccessibleContext()
-				{
-				if (accessibleContext == null)
-					{
-					accessibleContext = new AccessibleJComboBox()
-						{
-						public String getAccessibleName()
-							{
-							String name = super.getAccessibleName();
-							// Find enclosing Category
-							Component obj = combo;
-							while(obj != null)
-								{
-								if (obj instanceof Category)
-									{
-									return name + " " + ((Category)obj).getName();
-									}
-								else obj = obj.getParent();
-								}
-							return name;
-							}
-						};
-					}
-				return accessibleContext;
-				}
+            // Generate and provide the context information when asked
+            public AccessibleContext getAccessibleContext()
+                {
+                if (accessibleContext == null)
+                    {
+                    accessibleContext = new AccessibleJComboBox()
+                        {
+                        public String getAccessibleName()
+                            {
+                            String name = super.getAccessibleName();
+                            // Find enclosing Category
+                            Component obj = combo;
+                            while(obj != null)
+                                {
+                                if (obj instanceof Category)
+                                    {
+                                    return name + " " + ((Category)obj).getName();
+                                    }
+                                else obj = obj.getParent();
+                                }
+                            return name;
+                            }
+                        };
+                    }
+                return accessibleContext;
+                }
             
             public void setPopupVisible(boolean val) 
                 {

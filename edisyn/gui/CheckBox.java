@@ -73,34 +73,34 @@ public class CheckBox extends NumericalComponent
                 
         check = new JCheckBox(label)
             {
-			AccessibleContext accessibleContext = null;
+            AccessibleContext accessibleContext = null;
 
-			// Generate and provide the context information when asked
-			public AccessibleContext getAccessibleContext()
-				{
-				if (accessibleContext == null)
-					{
-					accessibleContext = new AccessibleJCheckBox()
-						{
-						public String getAccessibleName()
-							{
-							String name = super.getAccessibleName();
-							// Find enclosing Category
-							Component obj = check;
-							while(obj != null)
-								{
-								if (obj instanceof Category)
-									{
-									return name + " " + ((Category)obj).getName();
-									}
-								else obj = obj.getParent();
-								}
-							return name;
-							}
-						};
-					}
-				return accessibleContext;
-				}
+            // Generate and provide the context information when asked
+            public AccessibleContext getAccessibleContext()
+                {
+                if (accessibleContext == null)
+                    {
+                    accessibleContext = new AccessibleJCheckBox()
+                        {
+                        public String getAccessibleName()
+                            {
+                            String name = super.getAccessibleName();
+                            // Find enclosing Category
+                            Component obj = check;
+                            while(obj != null)
+                                {
+                                if (obj instanceof Category)
+                                    {
+                                    return name + " " + ((Category)obj).getName();
+                                    }
+                                else obj = obj.getParent();
+                                }
+                            return name;
+                            }
+                        };
+                    }
+                return accessibleContext;
+                }
 
             public Dimension getMinimumSize() 
                 {

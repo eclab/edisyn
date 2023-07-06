@@ -588,7 +588,7 @@ public class Midi
         else
             {
             JComboBox inCombo = new JComboBox(inDevices.toArray());
-        	inCombo.getAccessibleContext().setAccessibleName("Receive From");
+            inCombo.getAccessibleContext().setAccessibleName("Receive From");
             inCombo.setMaximumRowCount(32);
             if (old != null && old.inWrap != null && inDevices.indexOf(old.inWrap) != -1)
                 inCombo.setSelectedIndex(inDevices.indexOf(old.inWrap));
@@ -596,7 +596,7 @@ public class Midi
                 inCombo.setSelectedItem(findDevice(getLastTupleIn(synth), inDevices));
 
             JComboBox outCombo = new JComboBox(outDevices.toArray());
-        	outCombo.getAccessibleContext().setAccessibleName("Send To");
+            outCombo.getAccessibleContext().setAccessibleName("Send To");
             outCombo.setMaximumRowCount(32);
             if (old != null && old.outWrap != null && outDevices.indexOf(old.outWrap) != -1)
                 outCombo.setSelectedIndex(outDevices.indexOf(old.outWrap));
@@ -604,7 +604,7 @@ public class Midi
                 outCombo.setSelectedItem(findDevice(getLastTupleOut(synth), outDevices));
 
             JComboBox keyCombo = new JComboBox(keyDevices.toArray());
-        	keyCombo.getAccessibleContext().setAccessibleName("Controller");
+            keyCombo.getAccessibleContext().setAccessibleName("Controller");
             keyCombo.setMaximumRowCount(32);
             keyCombo.setSelectedIndex(0);  // "none"
             if (old != null && old.keyWrap != null && keyDevices.indexOf(old.keyWrap) != -1)
@@ -613,7 +613,7 @@ public class Midi
                 keyCombo.setSelectedItem(findDevice(getLastTupleKey(synth), keyDevices));
 
             JComboBox key2Combo = new JComboBox(key2Devices.toArray());
-        	key2Combo.getAccessibleContext().setAccessibleName("Second Controller");
+            key2Combo.getAccessibleContext().setAccessibleName("Second Controller");
             key2Combo.setMaximumRowCount(32);
             key2Combo.setSelectedIndex(0);  // "none"
             if (old != null && old.key2Wrap != null && key2Devices.indexOf(old.key2Wrap) != -1)
@@ -627,7 +627,7 @@ public class Midi
                 outID = new JTextField(initialID);      // synth.reviseID(null));
 
             JComboBox outChannelsCombo = new JComboBox(rc);
-        	outChannelsCombo.getAccessibleContext().setAccessibleName("Send/Receive Channel");
+            outChannelsCombo.getAccessibleContext().setAccessibleName("Send/Receive Channel");
             outChannelsCombo.setMaximumRowCount(17);
             if (old != null)
                 outChannelsCombo.setSelectedIndex(old.outChannel - 1);
@@ -637,7 +637,7 @@ public class Midi
                 outChannelsCombo.setSelectedIndex(0);
                                 
             JComboBox keyChannelsCombo = new JComboBox(kc);
-        	keyChannelsCombo.getAccessibleContext().setAccessibleName("Controller Channel");
+            keyChannelsCombo.getAccessibleContext().setAccessibleName("Controller Channel");
             keyChannelsCombo.setMaximumRowCount(17);
             if (old != null)
                 keyChannelsCombo.setSelectedIndex(old.keyChannel);
@@ -647,7 +647,7 @@ public class Midi
                 keyChannelsCombo.setSelectedIndex(0);
 
             JComboBox key2ChannelsCombo = new JComboBox(kc);
-        	key2ChannelsCombo.getAccessibleContext().setAccessibleName("Second Controller Channel");
+            key2ChannelsCombo.getAccessibleContext().setAccessibleName("Second Controller Channel");
             key2ChannelsCombo.setMaximumRowCount(17);
             if (old != null)
                 key2ChannelsCombo.setSelectedIndex(old.key2Channel);

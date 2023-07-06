@@ -1121,16 +1121,16 @@ public class Yamaha4Op extends Synth
                     if (model.get("operator" + src + "vshift") == 0)
                         {
                         return String.format("%.0f", computeCoarseFrequency(
-                            model.get("operator" + src + "fixedfrequencyrange"),
-                            model.get("operator" + src + "frequencycoarse"),
-                            model.get("operator" + src + "vshift")));
+                                model.get("operator" + src + "fixedfrequencyrange"),
+                                model.get("operator" + src + "frequencycoarse"),
+                                model.get("operator" + src + "vshift")));
                         }
                     else
                         {
                         return String.format("%.2f", computeCoarseFrequency(
-                            model.get("operator" + src + "fixedfrequencyrange"),
-                            model.get("operator" + src + "frequencycoarse"),
-                            model.get("operator" + src + "vshift")));
+                                model.get("operator" + src + "fixedfrequencyrange"),
+                                model.get("operator" + src + "frequencycoarse"),
+                                model.get("operator" + src + "vshift")));
 
                         }
                     }
@@ -1156,25 +1156,25 @@ public class Yamaha4Op extends Synth
                     {
                     String fixformat;
                     double computedFrequency = computeFrequency(
-                           model.get("operator" + src + "fixedfrequencyrange"),
-                           model.get("operator" + src + "frequencycoarse"),
-                           model.get("operator" + src + "frequencyfine"),
-                           model.get("operator" + src + "vshift"));
+                        model.get("operator" + src + "fixedfrequencyrange"),
+                        model.get("operator" + src + "frequencycoarse"),
+                        model.get("operator" + src + "frequencyfine"),
+                        model.get("operator" + src + "vshift"));
 
                     if (model.get("operator" + src + "vshift") == 1) //V50 FIX RANGE MODE (SHIFT LO)
                         {
                         if (computedFrequency < 100)
                             {
-                                fixformat = "%.3f";
+                            fixformat = "%.3f";
                             }
                         else
                             {
-                                fixformat = "%.2f";
+                            fixformat = "%.2f";
                             }
                         }
                     else
                         {
-                            fixformat = "%.0f";
+                        fixformat = "%.0f";
                         }
                     return String.format(fixformat, computedFrequency);
                     }

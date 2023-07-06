@@ -99,8 +99,8 @@ public abstract class NumericalComponent extends JPanel implements Updatable, Ha
         }
         
     protected void stateSet(int oldVal, int newVal)
-    	{
-    	}
+        {
+        }
         
     /** Registers the NumericalComponent as a listener for changes to the key in the model. */
     // this is here so we can override it in LabelledDial

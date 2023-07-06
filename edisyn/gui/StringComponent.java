@@ -115,36 +115,36 @@ public class StringComponent extends JPanel implements Updatable, HasKey
         for(int i = 0; i < maxLength; i++)
             txt = txt + "m";
         change = new JButton("<html>"+txt+"</html>")
-        	{
-			AccessibleContext accessibleContext = null;
+            {
+            AccessibleContext accessibleContext = null;
 
-			// Generate and provide the context information when asked
-			public AccessibleContext getAccessibleContext()
-				{
-				if (accessibleContext == null)
-					{
-					accessibleContext = new AccessibleJButton()
-						{
-						public String getAccessibleName()
-							{
-							String name = super.getAccessibleName();
-							// Find enclosing Category
-							Component obj = change;
-							while(obj != null)
-								{
-								if (obj instanceof Category)
-									{
-									return name + " " + ((Category)obj).getName();
-									}
-								else obj = obj.getParent();
-								}
-							return name;
-							}
-						};
-					}
-				return accessibleContext;
-				}
-        	};
+            // Generate and provide the context information when asked
+            public AccessibleContext getAccessibleContext()
+                {
+                if (accessibleContext == null)
+                    {
+                    accessibleContext = new AccessibleJButton()
+                        {
+                        public String getAccessibleName()
+                            {
+                            String name = super.getAccessibleName();
+                            // Find enclosing Category
+                            Component obj = change;
+                            while(obj != null)
+                                {
+                                if (obj instanceof Category)
+                                    {
+                                    return name + " " + ((Category)obj).getName();
+                                    }
+                                else obj = obj.getParent();
+                                }
+                            return name;
+                            }
+                        };
+                    }
+                return accessibleContext;
+                }
+            };
         change.putClientProperty("JComponent.sizeVariant", "small");
         change.setFont(Style.SMALL_FONT());
         change.setPreferredSize(change.getPreferredSize());

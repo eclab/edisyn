@@ -1,7 +1,7 @@
 ![Edisyn Splash Banner](https://raw.githubusercontent.com/eclab/edisyn/master/resources/pics/Banner.png)
 
 # Edisyn
-Synthesizer Patch Editor (Version 33)
+Synthesizer Patch Editor (Version 34)
 
 By Sean Luke (sean@cs.gmu.edu)
 
@@ -41,19 +41,9 @@ Related projects:
 
 Donations are welcome via Paypal to my email address (sean@cs.gmu.edu).
 
-## Edisyn WALDORF M PUBLIC BETA
-
-We have a public beta for the Waldorf M ("Final" 1.09 firmware only).  If you'd like to try it out, Beta 12 (Edisyn.app and edisyn.jar files) [can be found here](http://robo1.cs.gmu.edu/edisyn.m.beta12.zip).  Be sure to read the rest of this page to learn how to install those files.  Also be sure to read the README file which accompanies them.
-
 ## What's New
 
-Version 33 has a patch editor for the entire ASM Hydrasynth family
-
-<p>This required reverse-engineering the Hydrasynth sysex specification and documenting its NRPN spec.  The resulting specifications can be found <a href="https://github.com/eclab/edisyn/tree/master/edisyn/synth/asmhydrasynth/info">here</a>.
-
-## Coming Up
-
-* Soon (I hope) we should have editors for the Waldorf M and the DSI Prophet 12.
+Version 34 has patch editors for the Waldorf M and Dave Smith Instruments Prophet 12, improvements for the Yamaha DX7 and 4-Op FM families, and improvements for accessibility for the blind.
 
 ## About Edisyn
 
@@ -70,6 +60,7 @@ Edisyn presently supports:
 * Audiothingies Micromonsta
 * Casio CZ Series (CZ101, CZ1000, CZ3000, CZ5000, CZ-1, CZ-230S)
 * DSI Prophet '08, Tetra, Mopho, Mopho Keyboard, Mopho SE, and Mopho x4 (Single and (for Tetra) Combo modes)
+* DSI Prophet 12
 * E-Mu Morpheus and Ultraproteus (Single, Hyperpreset, and MidiMap modes)
 * E-Mu Planet Phatt, Orbit and Orbit v2, Carnaval, Vintage Keys, and Vintage Keys Plus
 * E-Mu Proteus 1, 1XR, 2, 2XR, 3, 3XR, and 1+Orchestral
@@ -96,6 +87,7 @@ Edisyn presently supports:
 * Sequential Prophet Rev2
 * Waldorf Blofeld and Waldorf Blofeld Keyboard (Single and Multi Modes, plus Wavetable uploading)
 * Waldorf Kyra (Single and Multi Modes)
+* Waldorf M
 * Waldorf Microwave II, XT, and XTk (Single and Multi Modes)
 * Waldorf Pulse 2
 * Waldorf Rocket

@@ -701,14 +701,14 @@ public class LabelledDial extends NumericalComponent
                 return this;
                 }
 
-			// We must define a ROLE that our widget fulfills.  We can't be a JPanel because 
-			// that causes the system to freak.  Notionally you're supposed to be
-			// be able to  can provide custom roles, but in reality, if you do so, Java accessibility
-			// will simply break for your widget.  So here we're borrowing the role from the closest 
-			// widget to our own: a JSlider.
+            // We must define a ROLE that our widget fulfills.  We can't be a JPanel because 
+            // that causes the system to freak.  Notionally you're supposed to be
+            // be able to  can provide custom roles, but in reality, if you do so, Java accessibility
+            // will simply break for your widget.  So here we're borrowing the role from the closest 
+            // widget to our own: a JSlider.
             public AccessibleRole getAccessibleRole() 
                 {
-                return ROLE;	//ccessibleRole.SLIDER; // AccessibleRole.SLIDER;
+                return ROLE;    //ccessibleRole.SLIDER; // AccessibleRole.SLIDER;
                 }
 
             // Add whether the user is frobbing me to my current state
@@ -716,10 +716,10 @@ public class LabelledDial extends NumericalComponent
                 {
                 AccessibleStateSet states = super.getAccessibleStateSet();
                 /*
-                if (dial.mouseDown)
-                    {
-                    states.add(AccessibleState.BUSY);
-                    }
+                  if (dial.mouseDown)
+                  {
+                  states.add(AccessibleState.BUSY);
+                  }
                 */ 
                 return states;
                 }
@@ -761,27 +761,27 @@ public class LabelledDial extends NumericalComponent
             return accessibleContext;
             }
   
-	    protected void stateSet(int oldVal, int newVal)
-	    	{
+        protected void stateSet(int oldVal, int newVal)
+            {
             AccessibleContext context = getAccessibleContext();
             if (context != null)
-            	{
-            	context.firePropertyChange(AccessibleContext.ACCESSIBLE_VALUE_PROPERTY, Integer.valueOf(oldVal), Integer.valueOf(newVal));
-            	context.firePropertyChange(AccessibleContext.ACCESSIBLE_NAME_PROPERTY, "yo", "mama");
-            	}
+                {
+                context.firePropertyChange(AccessibleContext.ACCESSIBLE_VALUE_PROPERTY, Integer.valueOf(oldVal), Integer.valueOf(newVal));
+                context.firePropertyChange(AccessibleContext.ACCESSIBLE_NAME_PROPERTY, "yo", "mama");
+                }
             }
   
         /// END ACCESSSIBILITY FOR THE BLIND        
 
         }
 
-        public static class DialRole extends AccessibleRole
-        	{
-        	public DialRole(String key)
-        		{
-        		super(key);
-        		}
-        	}
-             public static final DialRole ROLE = new DialRole("dial");
+    public static class DialRole extends AccessibleRole
+        {
+        public DialRole(String key)
+            {
+            super(key);
+            }
+        }
+    public static final DialRole ROLE = new DialRole("dial");
        
     }

@@ -1893,8 +1893,7 @@ public class WaldorfM extends Synth
     
     public void handleSynthCCOrNRPN(Midi.CCData data)
         {
-        if (false)
-            //if (data.type == Midi.CCDATA_TYPE_RAW_CC)
+    	if (data.type == Midi.CCDATA_TYPE_RAW_CC)
             {
             int cc = data.number;
             Integer i = (Integer)(ccToIndex.get(cc));

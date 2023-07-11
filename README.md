@@ -21,6 +21,14 @@ Related projects:
 * [Downloading and Installing on Linux](#linux)
 
 
+## Donations
+
+Donations are welcome via Paypal to my email address (sean@cs.gmu.edu).
+
+## What's New
+
+Version 34 has patch editors for the Waldorf M and Dave Smith Instruments Prophet 12, improvements for the Yamaha DX7 and 4-Op FM families, and improvements for accessibility for the blind.
+
 ## Publications on Edisyn
 
 [Stochastic Synthesizer Patch Exploration in Edisyn](https://cs.gmu.edu/~sean/papers/evomusart19.pdf).  Presented at EvoMUSART 2019.
@@ -29,21 +37,13 @@ Related projects:
 
 [So You Want to Write a Patch Editor](https://cs.gmu.edu/~sean/papers/GMU-CS-TR-2023-1.pdf).  George Mason University Department of Computer Science Technical Report GMU-CS-TR-2023-1.
 
-
+x
 ## Contributors
 
 * V. Hoyle collaborated on the Red Sound DarkStar and Microtuning editors, and cooked the deep-learned variational autoencoder for the DX7
 * Wim Verheyen wrote the Prophet Rev2 editor
 * Special thanks to Derek Cook's [CoreMidi4J](https://github.com/DerekCook/CoreMidi4J), which Edisyn uses to fix critical bugs in MacOS's sysex handling.
 * Thanks to the many beta testers and bug report submitters for various editors.  Many of these people are thanked in the individual About panels for different synth editors.
-
-## Donations
-
-Donations are welcome via Paypal to my email address (sean@cs.gmu.edu).
-
-## What's New
-
-Version 34 has patch editors for the Waldorf M and Dave Smith Instruments Prophet 12, improvements for the Yamaha DX7 and 4-Op FM families, and improvements for accessibility for the blind.
 
 ## About Edisyn
 

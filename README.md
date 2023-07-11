@@ -37,7 +37,6 @@ Version 34 has patch editors for the Waldorf M and Dave Smith Instruments Prophe
 
 [So You Want to Write a Patch Editor](https://cs.gmu.edu/~sean/papers/GMU-CS-TR-2023-1.pdf).  George Mason University Department of Computer Science Technical Report GMU-CS-TR-2023-1.
 
-x
 ## Contributors
 
 * V. Hoyle collaborated on the Red Sound DarkStar and Microtuning editors, and cooked the deep-learned variational autoencoder for the DX7

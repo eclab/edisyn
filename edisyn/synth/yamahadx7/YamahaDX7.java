@@ -1379,7 +1379,7 @@ public class YamahaDX7 extends Synth implements ProvidesNN
 
 
 // Librarian Support
-    public String[] getPatchNumberNames() { return buildIntegerNames(32, 0); }
+    public String[] getPatchNumberNames() { return buildIntegerNames(32, 1); }
 
     public boolean getSupportsBankWrites() { return true; }
     

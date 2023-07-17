@@ -12,11 +12,11 @@
 <li><b>DX21</b>&nbsp;&nbsp;&nbsp;&nbsp; Should work, but untested.
 <li><b>DX27, DX100</b>&nbsp;&nbsp;&nbsp;&nbsp; Should work, but untested.
 <li><b>TX81Z</b>&nbsp;&nbsp;&nbsp;&nbsp; Works.
-<li><b>DX11</b>&nbsp;&nbsp;&nbsp;&nbsp; Works.
+<li><b>DX11/V2</b>&nbsp;&nbsp;&nbsp;&nbsp; Works.  (The V2 was the Japanese brand name of the DX11).
 <li><b>TQ5</b>&nbsp;&nbsp;&nbsp;&nbsp; Works.
 <li><b>YS100, YS200, B200</b>&nbsp;&nbsp;&nbsp;&nbsp; Should work, but untested.
-<li><b>V50</b>&nbsp;&nbsp;&nbsp;&nbsp; Works, mostly. Shifting to Hi doesn't change the displayed frequency values to Hi values (I don't have all the data for them yet), but moving the dials still does the right thing.
-<li><b>WT11, DS500</b>&nbsp;&nbsp;&nbsp;&nbsp; Unknown.  
+<li><b>V50</b>&nbsp;&nbsp;&nbsp;&nbsp; Works, mostly. Shifting to Lo doesn't change the displayed frequency values to LO values instantly, but moving the dials still does the right thing.
+<li><b>WT11, DS55</b>&nbsp;&nbsp;&nbsp;&nbsp; Unknown.  
 </ul>
 
 <br><br><h3>Communicating with Edisyn</h3>
@@ -37,11 +37,11 @@ These units have their own special effects units.  Some effects have legal time 
 
 <br><br><h3>About the V50</h3>
 
-The V50 editor is not completed yet, and is in a partial state.  In particular, if you Shift to Hi, the Frequency Ratio and Frequency Ratio Fine knobs won't display the proper frequencies (because I don't have that data yet).  However, if you change the knobs, they'll affect the Hi parameters appropriately.
+The V50 editor is not completed yet, and is in a partial state.  In particular, if you Shift to Lo, Fixed frequency mode needs to be selected too, and the proper frequencies are not shown instantly. However, if you change the knobs, they'll affect the Lo parameters appropriately.
 
 <br><br><h3>Per-Synthesizer Parameters</h3>
 
-Some 4-Op synthesizers have parameters and options that others do not.  Various parameters in this patch editor are labeled to indicate this.  You may see: <b>21</b> for the DX21, <b>27</b> for the DX27, <b>100</b> for the DX100, <b>11</b> for the DX11, <b>TX</b> for the TX81Z, the symbol <b>&gt;</b> which indicates a group of later synthesizers, notably the TQ5, YS100, YS200, and B200, and finally <b>V</b> for the V50.
+Some 4-Op synthesizers have parameters and options that others do not.  Various parameters in this patch editor are labeled to indicate this.  You may see: <b>21</b> for the DX21, <b>27</b> for the DX27, <b>100</b> for the DX100, <b>11</b> for the DX11/V2, <b>TX</b> for the TX81Z, the symbol <b>&gt;</b> which indicates a group of later synthesizers, notably the TQ5, YS100, YS200, and B200, and finally <b>V</b> for the V50.
 
 <br><br><h3>Bank Sysex</h3>
 
@@ -58,10 +58,10 @@ Different 4-Op synths have different organizations of memory, and so differ in t
 <ul>
 <li> <b>DX21</b>&nbsp;&nbsp;&nbsp;&nbsp;Single internal bank, 32 patches, plus 128 voice ROM memory.  The bank is divided on the front panel into "Bank A" and "Bank B", but it's really just one bank.  The ROM cannot be accessed without loading it into internal memory, erasing an existing internal patch (or all of them), so I have elected not to do that automatically.  You will have to manually load a ROM patch into internal memory in order for Edisyn to access it.
 <p><li> <b>DX27, DX100</b>&nbsp;&nbsp;&nbsp;&nbsp;Single internal bank + 4 "banks" (A B C D), 24 patches each.  The "banks" are just links to either internal patches or to a set of 192 presets in ROM.  Edisyn can't directly access a ROM patch: to download a ROM patch, you'll have to manually set up slot in a "bank" which points to it. 
-<p><li> <b>DX11, TX81Z</b>&nbsp;&nbsp;&nbsp;&nbsp;Single internal bank + 4 ROM preset banks, 32 patches each.
+<p><li> <b>DX11/V2, TX81Z</b>&nbsp;&nbsp;&nbsp;&nbsp;Single internal bank + 4 ROM preset banks, 32 patches each.
 <p><li> <b>TQ5, YS100, YS200, B200</b>&nbsp;&nbsp;&nbsp;&nbsp;Single internal bank + preset bank + card bank, 100 patches each.
 <p><li> <b>V50</b>&nbsp;&nbsp;&nbsp;&nbsp;Single internal bank + preset bank + card bank, 100 patches each.
-<p><li> <b>WT11, DS500</b>&nbsp;&nbsp;&nbsp;&nbsp;Unknown.
+<p><li> <b>WT11, DS55</b>&nbsp;&nbsp;&nbsp;&nbsp;Unknown.
 </ul>
 
 <br><br><h3>Gotchas</h3>
@@ -74,7 +74,7 @@ Most 4-op synthesizers have no way to write individual patches from sysex: you w
 
 <br><br>Additionally, if another editor has saved to a single file multiple single patches broken out as these sequences, Edisyn cannot read any more than the first one.  Thankfully this is unusual; normally groups of patches are saved to a file in "bank" (or "VMEM") format.  Edisyn can read files with multiple VMEM patches.
 
-<p><li>On the TX81Z and DX11 (but not other 4-op synths) changing patches has bugs.  I think I have a method which should work, but if strange things happen, let me know.
+<p><li>On the TX81Z and DX11/V2 (but not other 4-op synths) changing patches has bugs.  I think I have a method which should work, but if strange things happen, let me know.
 
 <p><li>When changing patches, the TX81Z will read "MIDI Buffer Full" and not change its display even if the patch has changed.  Press almost any button and it'll reset the display.
 
@@ -92,7 +92,7 @@ The bank structure in the librarian will depend on the kind of 4-op machine you 
 
 <br><br><h3>Microtuning</h3>
 
-The TX81Z can store microtuning information from the user, and it also has several preset tuning. Though it does not discuss this in the manual, it is my understanding that the DX11 also has the user tuning slot as well.  Edisyn's <b>MIDI Tuning Standard</b> editor has a special facility to send and receive tuning information to these synths.
+The TX81Z can store microtuning information from the user, and it also has several preset tuning. Though it does not discuss this in the manual, it is my understanding that the DX11/V2 also has the user tuning slot as well.  Edisyn's <b>MIDI Tuning Standard</b> editor has a special facility to send and receive tuning information to these synths.
 
 
 <br><br><h3>Thanks</h3>

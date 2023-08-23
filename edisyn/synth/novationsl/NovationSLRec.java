@@ -33,6 +33,12 @@ public class NovationSLRec extends Recognize
             // RECEIVED:    F0 00 20 29 02 03 7F 00 00 0B 0E 00 PATCHNUM <DATA...> 12 34 F7
             //      This message is received by the software editor from the SL.
 
+			/// HOWEVER it appears that other firmware versions send various stuff.
+			/// So I'm going to just accept any combination of those four bytes.
+			
+			true);
+
+            /*
             // WRITE
                 ((  //data[7] == (byte)0x01 &&
                     data[8] == (byte)0x00 &&
@@ -54,5 +60,6 @@ public class NovationSLRec extends Recognize
                     data[9] == (byte)0x0B &&
                     data[10] == (byte)0x0E &&
                     data[11] == (byte)0x00 )));
+                */
         }
     }

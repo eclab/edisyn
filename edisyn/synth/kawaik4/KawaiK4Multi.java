@@ -207,7 +207,7 @@ public class KawaiK4Multi extends Synth
 
 
         VBox vbox = new VBox();
-        comp = new PushButton("Show Effect/Ouput")
+        comp = new PushButton("Show Effect/Output")
             {
             public void perform()
                 {

@@ -5037,7 +5037,7 @@ super.paint(g);
                     ArrayList list = new ArrayList();
                     while(scanner.hasNextInt(16))
                         {
-                        list.add(new Integer(scanner.nextInt(16)));
+                        list.add(Integer.valueOf(scanner.nextInt(16)));
                         }
                     byte[] data = new byte[list.size()];
                     for(int i = 0; i < data.length; i++)
@@ -7029,7 +7029,7 @@ menubar.add(helpMenu);
                 {
                 f = new File(fd.getDirectory(), StringUtility.ensureFileEndsWith(fd.getFile(), ".txt"));
                 os = new PrintWriter(new FileOutputStream(f));
-                getModel().print(os);
+                getModel().print(os, true);
                 os.close();
                 setLastDirectory(fd.getDirectory());
                 } 
@@ -10164,7 +10164,7 @@ menubar.add(helpMenu);
     /** Parses the bank numbers from the provided bank sysex and returns them.  
         If the banks are unknown, returns null.  By default this calls getBank(...). 
         You can override this or getBank() but not both.    If you're choosing, you'll usually
-        need to chooes getBank(...) */
+        need to choose getBank(...) */
     public int[] getBanks(byte[] bankSysex) 
         {
         int val = getBank(bankSysex);

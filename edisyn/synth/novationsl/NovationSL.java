@@ -38,7 +38,7 @@ public class NovationSL extends Synth
     /// What's going on here?  The rearrangement is part of a desperate attempt to make it easy
     /// to cut and paste categories, much like they can be cut and pasted, or moved, in the
     /// Novation software.  Unfortunately, pots, encoders, buttons, drumpads, and pitch bend
-    /// units are different enough from another to make cut and paste challenging unless certain
+    /// units are different enough from one another to make cut and paste challenging unless certain
     /// things line up or are out of bounds so they can get cleaned up during revise().  
     /// This is why, for example, 0-16K is the *last* item in ENCODER_DISPLAYS.
     public static final String[] ENCODER_TYPES = { "Off", "CC", "NRPN", "RPN", "Sysex" };
@@ -3780,7 +3780,7 @@ public class NovationSL extends Synth
       48   30   Manufacturer          13 Bytes, ASCII, padded with 0x20
       *** NOTE: Name + Manufacturer essentially comprise one string 48 bytes long
       
-      61   3D   (0x00)
+      61   3D   (0x00)		;; Probably zero-termination for Name+Manufacturer string
       62   3E   (0x00)		;; "Template  Number"
       63   3F   (0x00)		;; "RemoteSL Version"
       64   40   (0x00)		;; I think this is the template type.  0x00 Normal 0x01 Reason3 0x02 Logic
@@ -3843,8 +3843,8 @@ public class NovationSL extends Synth
       *** NOTE: On the SL Compact Editor, MIDI 2 is not supported
 
       UNKNOWN      *** I do not know the meaning of these constants
-      103  67   (0x00)			;; From SLTemplate2.S20, it's suggested that this is "MIDI Bank Number"
-      104  68   (0x00)			;; From SLTemplate2.S20, it's suggested that this is "MIDI Program Number"
+      103  67   (0x00)			;; "MIDI Bank Number"
+      104  68   (0x00)			;; "MIDI Program Number"
 
       105  69   Velocity Curve                0-126   [representing 1-127]
       106  6A   Octave Setting                0-9     [representing -4 ... 5]
@@ -3853,8 +3853,8 @@ public class NovationSL extends Synth
       *** NOTE: the original SL and SL Compact do not have pot pickup
 
       UNKNOWN      *** I do not know the meaning of these constants
-      108  6C   (0x00)			;; From SLTemplate2.S20, it's suggested that this is "Template Attribute 2"
-      109  6D   (0x07)			;; From SLTemplate2.S20, it's suggested that this is "Template Upgrade Bits"
+      108  6C   (0x00)			;; "Template Attribute 2"
+      109  6D   (0x07)			;; "Template Upgrade Bits"
 
       KEYBOARD ZONES
       110  6E   Enable Keyboard Zones           0-1
@@ -3918,8 +3918,8 @@ public class NovationSL extends Synth
       152  98   Touchpad Y Type               0-3             { "No Spring/Hold" = 00, "Spring Up" = 03, "Spring Centre" = 02, "Spring Down" = 01 }
 
       UNKNOWN      *** I do not know the meaning of these constants
-      153  99   (0x00)			;; From SLTemplate2.S20, it's suggested that this is "Auto Off"
-      154  9A   (0x00)			;; From SLTemplate2.S20, it's suggested that this is "Off-Sync"
+      153  99   (0x00)			;; "Touchpad Attribute X2"
+      154  9A   (0x00)			;; "Touchpad Attribute Y2"
 
       DRUM NOTE DATA FOR THE EIGHT DRUM PADS -- I guess this couldn't fit in the standard slots
       155  9B   (0x00)

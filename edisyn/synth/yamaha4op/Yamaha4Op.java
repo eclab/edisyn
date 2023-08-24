@@ -1714,15 +1714,33 @@ public class Yamaha4Op extends Synth
             }
         }
     
-
+	int currentBlock = NO_BLOCK;
     public int parse(byte[] data, boolean fromFile)
         {
-        if (data.length == 4104)  // VMEM
+        if (data.length == 7 &&
+        	data[0] == (byte)0xF0 &&
+            data[1] == (byte)0x43 &&
+            // don't care about 2, it's the channel
+            data[3] == (byte)0x24 &&
+            data[4] == (byte)0x07)	// Block Header
             {
-            return parseVMEM(data, fromFile);
+            currentBlock = data[5];
+            if (currentBlock < 1 || currentBlock > 4) 
+            	{
+        		System.err.println("Warning (Yamaha4Op): Invalid block number in parse(): " + currentBlock);
+            	currentBlock = NO_BLOCK;	// failed
+            	}
+            return PARSE_INCOMPLETE;
+            }
+        else if (data.length == 4104)  // VMEM
+            {
+            int ret = parseVMEM(data, fromFile);
+            currentBlock = NO_BLOCK;
+            return ret;
             }
         else
             {
+            currentBlock = NO_BLOCK;
             int pos = 0;
             boolean foundSomething = false;
             boolean foundVCED = false;
@@ -1999,7 +2017,7 @@ public class Yamaha4Op extends Synth
             }
                         
         model.set("name", new String(name));
-        model.set("number", number);
+        model.set("number", number + (currentBlock == NO_BLOCK ? 0 : (currentBlock - 1) * 25));
         model.set("bank", 0);                   // we don't know what the bank is in reality
                 
 
@@ -2206,16 +2224,77 @@ public class Yamaha4Op extends Synth
 
         return parseFromBank(data, patchNum);
         }
+
+ 	public static final int NO_BLOCK = 0;
  
- 
- 
- 
+ 	// block goes 0...3
+ 	Model[] getModelSubset(Model[] models, int block)
+ 		{
+ 		Model[] m = new Model[32];
+ 		System.arraycopy(models, block * 25, m, 0, 25);
+ 		for(int i = 25; i < 32; i++)
+ 			m[i] = m[0];
+ 		return m;
+ 		}
+ 		
     public Object[] emitBank(Model[] models, int bank, boolean toFile)
+    	{
+        if (getSynthType() == TYPE_TQ5_YS100_YS200_B200)
+        	{
+        	Object[] data = new Object[12];
+        	for(int b = 0; b < 4; b++)
+        		{
+        		Object[] d = emitBank(getModelSubset(models, b));
+				byte[] header = { 
+	    			(byte)0xF0, 
+	    			0x43, 
+	    			(byte)(0x10 + (byte)getChannelOut()),
+	    			0x24,
+	    			0x07,
+	    			(byte)(b + 1),
+	    			(byte)0xF7
+	    			};
+
+        		data[b * 3] = d[0];
+        		data[b * 3 + 1] = header;
+        		data[b * 3 + 2] = Integer.valueOf(getPauseAfterSendAllParameters());
+        		}
+        	return data;
+        	}
+        else if (getSynthType() == TYPE_V50)
+        	{
+        	Object[] data = new Object[12];
+        	for(int b = 0; b < 4; b++)
+        		{
+        		Object[] d = emitBank(getModelSubset(models, b));
+				byte[] header = { 
+	    			(byte)0xF0, 
+	    			0x43, 
+	    			(byte)(0x10 + (byte)getChannelOut()),
+	    			0x24,
+	    			0x07,
+	    			(byte)(b + 1),
+	    			(byte)0xF7
+	    			};
+
+        		data[b * 3] = d[0];
+        		data[b * 3 + 1] = header;
+        		data[b * 3 + 2] = Integer.valueOf(getPauseAfterSendAllParameters());
+        		}
+        	return data;
+        	}
+        else
+        	{
+        	return emitBank(models);
+        	}
+    	}
+ 
+    public Object[] emitBank(Model[] models)
         {
         byte[] data = new byte[4104];
         data[0] = (byte)0xF0;
         data[1] = (byte)0x43;
-        data[2] = (byte)(getChannelOut());;
+        data[2] = (byte)(getChannelOut());
         data[3] = (byte)0x04;
         data[4] = (byte)0x20;                           // manual says 10 but this is wrong
         data[5] = (byte)0x00;
@@ -2404,7 +2483,8 @@ public class Yamaha4Op extends Synth
                         
         data[data.length - 2] = produceChecksum(data, 6);
         data[data.length - 1] = (byte)0xF7;
-        return new Object[] { data };
+        
+	    return new Object[] { data };
         }
         
         
@@ -2422,10 +2502,10 @@ public class Yamaha4Op extends Synth
   
   
         // we can only emit ACED3 *or* EFEDS because if we're emitting
-        // either of them, then we should only emit *4* sysex chunks 
+        // either of them, then we should only emit *4* sysex blocks 
         // (ACED3 + ACED2 + ACED + VCED, or EFEDS + ACED2 + ACED + VCED)
         // so that if we save them it makes sense to the loader when trying
-        // to guess how many sysex chunks are loaded for each patch.
+        // to guess how many sysex blocks are loaded for each patch.
         // Yamaha really screwed up here.
         
         byte[] data = null;
@@ -3121,9 +3201,9 @@ public class Yamaha4Op extends Synth
             {
             return buildIntegerNames(32, 1); 
             }
-        else
+        else	// TYPE_TQ5_YS100_YS200_B200, TYPE_V50
             {
-            return buildIntegerNames(32, 0); 
+            return buildIntegerNames(100, 0); 
             }
         }
                 
@@ -3184,7 +3264,8 @@ public class Yamaha4Op extends Synth
     
     public byte[] requestBankDump(int bank) 
         {
-        return new byte[] { (byte)0xF0, 0x43, (byte)(0x20 + getChannelOut()), 0x04, (byte)0xF7 }; 
+        if (getSynthType() == TYPE_TQ5_YS100_YS200_B200 && getSynthType() == TYPE_V50) return null;
+        else return new byte[] { (byte)0xF0, 0x43, (byte)(0x20 + getChannelOut()), 0x04, (byte)0xF7 }; 
         }
 
     public int getRequestableBank() 

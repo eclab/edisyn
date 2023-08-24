@@ -1155,7 +1155,7 @@ public class YamahaFB01 extends Synth
             };
         
         // dunno if this is gonna work.
-        tryToSendMIDI(new Object[] { bankData, new Integer(getPauseAfterChangePatch()), numberData });
+        tryToSendMIDI(new Object[] { bankData, Integer.valueOf(getPauseAfterChangePatch()), numberData });
         }
     
     /// FIXME -- don't know what this should be, let's say 150
@@ -1350,7 +1350,7 @@ public class YamahaFB01 extends Synth
             {
             obj[i * 2] = div[i];
             if (i < d.length - 1)           // we're not the last one
-                obj[i * 2 + 1] = new Integer(120);
+                obj[i * 2 + 1] = Integer.valueOf(120);
             }
 
         return obj; 

@@ -10,6 +10,13 @@ public class Yamaha4OpRec extends Recognize
     {
     public static int getNextSysexPatchGroup(byte[][] sysex, int start)
         {
+        if (recognizeBlockHeader(sysex[start]))
+			{
+			if (start + 1 >= sysex.length)	// failed
+				return start;
+			else return getNextSysexPatchGroup(sysex, start + 1);
+			}
+        
         if (recognizeBank(sysex[start]))
             return start + 1;
                 
@@ -31,7 +38,18 @@ public class Yamaha4OpRec extends Recognize
         }
 
 
-    public static boolean recognizeBank(byte[] data)
+     public static boolean recognizeBlockHeader(byte[] data)
+        {
+        boolean b = (data.length == 7 &&
+            data[0] == (byte)0xF0 &&
+            data[1] == (byte)0x43 &&
+            // don't care about 2, it's the channel
+            data[3] == (byte)0x24 &&
+            data[4] == (byte)0x07);
+        return b;
+        }
+
+   public static boolean recognizeBank(byte[] data)
         {
         // VMEM
         boolean b = (data.length == 4104 &&
@@ -155,6 +173,6 @@ public class Yamaha4OpRec extends Recognize
         
     public static boolean recognize(byte[] data)
         {
-        return (recognizeBasic(data) != RECOGNIZE_BASIC_NONE) || recognizeBank(data);
+        return (recognizeBasic(data) != RECOGNIZE_BASIC_NONE) || recognizeBank(data) || recognizeBlockHeader(data);
         }
     }

@@ -1745,7 +1745,7 @@ public class YamahaTG33 extends Synth
             {
             d[i * 2] = div[i];
             if (i != div.length - 1)
-                d[i * 2 + 1] = new Integer(BANK_PAUSE_INTERVAL);
+                d[i * 2 + 1] = Integer.valueOf(BANK_PAUSE_INTERVAL);
             }
         return d;
         }

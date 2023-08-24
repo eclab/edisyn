@@ -521,7 +521,7 @@ public class AlesisD4 extends Synth
             final int total = 68;
             Object[] nrpn = buildNRPN(getChannelOut(), NRPN_ROOT, (128 * map(model.get(key), total-1))); 
             for(int i = 0; i < nrpn.length; i++) data.add(nrpn[i]);
-            data.add(new Integer(PAUSE_NRPN));
+            data.add(Integer.valueOf(PAUSE_NRPN));
             return (Object[])(data.toArray(new Object[0]));
             }
         else if (key.startsWith("drum") && !key.equals("drumsetnoteroot"))
@@ -583,7 +583,7 @@ public class AlesisD4 extends Synth
             testNote = drum + model.get("drumsetnoteroot");
             nrpn = buildNRPN(getChannelOut(), NRPN_NOTE, 128 * map(drum, 60));
             for(int i = 0; i < nrpn.length; i++) data.add(nrpn[i]);
-            data.add(new Integer(PAUSE_NRPN));
+            data.add(Integer.valueOf(PAUSE_NRPN));
                         
 
             if (key.endsWith("voice"))
@@ -591,14 +591,14 @@ public class AlesisD4 extends Synth
                 int total = (isDM5() ? DM5_BANKS.length : D4_BANKS.length);
                 nrpn = buildNRPN(getChannelOut(), NRPN_BANK, (128 * ((bank + 1) * 127 / total)));  
                 for(int i = 0; i < nrpn.length; i++) data.add(nrpn[i]);
-                data.add(new Integer(PAUSE_NRPN));
+                data.add(Integer.valueOf(PAUSE_NRPN));
                         
                 total = (isDM5() ? DM5_BANKS[bank]: D4_BANKS[bank]);
                 //int math = ((number + 1) * 127) / total;
                 //int math = ((number + 1 - 1) * 127) / (total - 1);
                 nrpn = buildNRPN(getChannelOut(), NRPN_NUMBER, 128 * map(number, total-1)); 
                 for(int i = 0; i < nrpn.length; i++) data.add(nrpn[i]);
-                data.add(new Integer(PAUSE_NRPN));
+                data.add(Integer.valueOf(PAUSE_NRPN));
                 }
                                 
             else if (key.endsWith("coarse"))
@@ -608,7 +608,7 @@ public class AlesisD4 extends Synth
                 //                nrpn = buildNRPN(getChannelOut(), NRPN_COARSE, (128 * map(model.get(key), total-1)));         
                 nrpn = buildNRPN(getChannelOut(), NRPN_COARSE, (128 * ((model.get(key) + 1) * 127 / total)));           // this one works however
                 for(int i = 0; i < nrpn.length; i++) data.add(nrpn[i]);
-                data.add(new Integer(PAUSE_NRPN));
+                data.add(Integer.valueOf(PAUSE_NRPN));
                 }
                                 
             else if (key.endsWith("fine"))
@@ -616,7 +616,7 @@ public class AlesisD4 extends Synth
                 final int total = 100;
                 nrpn = buildNRPN(getChannelOut(), NRPN_FINE, (128 * map(model.get(key), total-1)));             // (128 * ((model.get(key) + 1) * 127 / total)));  
                 for(int i = 0; i < nrpn.length; i++) data.add(nrpn[i]);
-                data.add(new Integer(PAUSE_NRPN));
+                data.add(Integer.valueOf(PAUSE_NRPN));
                 }
 
             else if (key.endsWith("volume"))
@@ -624,7 +624,7 @@ public class AlesisD4 extends Synth
                 final int total = 100;
                 nrpn = buildNRPN(getChannelOut(), NRPN_VOLUME, (128 * map(model.get(key), total-1)));           // (128 * ((model.get(key) + 1) * 127 / total)));  
                 for(int i = 0; i < nrpn.length; i++) data.add(nrpn[i]);
-                data.add(new Integer(PAUSE_NRPN));
+                data.add(Integer.valueOf(PAUSE_NRPN));
                 }
 
             else if (key.endsWith("pan"))
@@ -632,7 +632,7 @@ public class AlesisD4 extends Synth
                 final int total = 7;
                 nrpn = buildNRPN(getChannelOut(), NRPN_PAN, (128 * map(model.get(key), total-1)));              // (128 * ((model.get(key) + 1) * 127 / total)));  
                 for(int i = 0; i < nrpn.length; i++) data.add(nrpn[i]);
-                data.add(new Integer(PAUSE_NRPN));
+                data.add(Integer.valueOf(PAUSE_NRPN));
                 }
 
             else if (key.endsWith("output"))
@@ -640,7 +640,7 @@ public class AlesisD4 extends Synth
                 final int total = 2;
                 nrpn = buildNRPN(getChannelOut(), NRPN_OUTPUT, (128 * map(model.get(key), total-1)));           // (128 * ((model.get(key) + 1) * 127 / total)));  
                 for(int i = 0; i < nrpn.length; i++) data.add(nrpn[i]);
-                data.add(new Integer(PAUSE_NRPN));
+                data.add(Integer.valueOf(PAUSE_NRPN));
                 }
 
             else if (key.endsWith("groups"))
@@ -648,7 +648,7 @@ public class AlesisD4 extends Synth
                 final int total = 4;
                 nrpn = buildNRPN(getChannelOut(), NRPN_GROUP, (128 * map(model.get(key), total-1)));            // (128 * ((model.get(key) + 1) * 127 / total)));  
                 for(int i = 0; i < nrpn.length; i++) data.add(nrpn[i]);
-                data.add(new Integer(PAUSE_NRPN));
+                data.add(Integer.valueOf(PAUSE_NRPN));
                 }
                 
             else

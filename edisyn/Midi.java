@@ -1196,7 +1196,7 @@ public class Midi
                 {
                 id = one;
                 }
-            manufacturers.put(new Integer(id), scan.nextLine().trim());
+            manufacturers.put(Integer.valueOf(id), scan.nextLine().trim());
             }
         return manufacturers;
         }
@@ -1241,19 +1241,19 @@ public class Midi
         HashMap map = getManufacturers();
         if (data[0 + offset] == (byte)0x7D)             // educational use
             {
-            return (String)(map.get(new Integer(data[0 + offset]))) + 
+            return (String)(map.get(Integer.valueOf(data[0 + offset]))) + 
                 "<br><br>Note that unregistered manufacturers or developers typically<br>use this system exclusive region.";
             }
         else if (data[0 + offset] == (byte)0x00)
             {
-            return (String)(map.get(new Integer(
+            return (String)(map.get(Integer.valueOf(
                         0x00 + 
                         ((data[1 + offset] < 0 ? data[1 + offset] + 256 : data[1 + offset]) << 8) + 
                         ((data[2 + offset] < 0 ? data[2 + offset] + 256 : data[2 + offset]) << 16))));
             }
         else
             {
-            return (String)(map.get(new Integer(data[0 + offset])));
+            return (String)(map.get(Integer.valueOf(data[0 + offset])));
             }
         }
     

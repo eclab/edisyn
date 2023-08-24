@@ -954,7 +954,7 @@ public class KawaiK4 extends Synth
 
             if (key.equals("s1mute") || key.equals("s2mute") || key.equals("s3mute") || key.equals("s4mute"))   // send all parameters
                 {
-                return new Object[] { emit(null, true, false), new Integer(getPauseAfterSendAllParameters()) };
+                return new Object[] { emit(null, true, false), Integer.valueOf(getPauseAfterSendAllParameters()) };
                 }
             else if (key.startsWith("s1") && !key.equals("s1ams1>s2"))
                 {
@@ -983,7 +983,7 @@ public class KawaiK4 extends Synth
                 }
             else if (key.startsWith("f2"))
                 {
-                source = 1;
+                source = 2;
                 newkey = "f:" + key.substring(2);
                 }
             

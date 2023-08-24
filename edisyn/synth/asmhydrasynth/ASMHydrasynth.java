@@ -1574,7 +1574,9 @@ public class ASMHydrasynth extends Synth
  
         params = CATEGORIES;
         comp = new Chooser("Category", this, "category", params);
-        hbox.add(comp);
+        VBox top = new VBox();
+        top.add(comp);
+        hbox.add(top);
 
         vbox.add(hbox);
 

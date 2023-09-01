@@ -1,3 +1,11 @@
+Using NRPN,"The Hydrasynth has extensive but rather buggy NRPN support.  
+0. You'll need to turn on NRPN RX at least.
+ 1. Be aware that if you send the full complement of NRPN parameters, in order to update most of a patch say, the Hydrasynth cannot process them fast enough and is likely to drop several of those parameters on the floor.  Inserting pauses to slow things down will be tricky.  If you attempt this, you should first update all the modes (osc, mutant, ribbon, and voice glide), then all the types (osc, filter, fx), then all the LFO waves, then all the BPM syncs (delay, lfo, env, vibrato), then all the wavescan waves, and finally the remaining parameters.  You'll need at least 2ms pauses after mod matrix and macro parameters (4ms on the Deluxe).  And even then it won't be enough.
+
+2. The Hydrasynth unhelpfully spits NRPN at you in response to many NRPN changes you make.  There's no way to shut it up short of turning off NRPN TX.
+
+3. The Hydrasynth is missing NRPN for a number of parameters, and its scale parameters (scale type, notes, lock, etc.) actually send individual scale notes rather than the scale etc., which is profoundly unhelpful to the point of useless and problematic.",,
+,,,
 "Patch Parameters with NRPN Values          NOTE: This does not include global / system parameters, which also have NRPN values",,,
 Name,CC,NRPN,"Range and NRPN Display Instructions
 
@@ -284,7 +292,9 @@ lfo1oneshot,,0x3F 0x04,"MSB = 0x14   (1.5.5) LSB = [0,1]  (2.0.0) LSB=[0,2] Off,
 lfo1phase,,0x3F 0x30,"[0,360] displayed as degrees"
 lfo1ratesyncoff,0x48,0x41 0x05,"[0,8192] seemingly only output in increments of 8, and displayed as [0.02 Hz ...150.00 Hz]. To display: if 8192, display 150.00Hz.  Else divide by 6.4 (cutting into 1280 even pieces).  Now we need to map to an exponential function to get the Hz value.  It seems the following function is a pretty close fit:  
 
-2^(1 + 0.012571 *  v) / 100  I would then display as x.xx, perhaps rounded down.  Would be nice to know what their exact function is."
+2^(1 + 0.012571 *  v) / 100  I would then display as x.xx, perhaps rounded down.  Would be nice to know what their exact function is.
+
+Edit: Benny Rönnhager manually went through the entire list, and reports the following values for all elements [0...8192] in multiples of 8, that is, [0...1024]:   LFO_RATES_SYNC_OFF    However I have not verified it yet."
 lfo1ratesyncon,,0x43 0x05,"[0,26]  LFO_RATES_SYNC_ON"
 lfo1step1,,0x3A 0x10,"[0,8192] seemingly only output in increments of 8, and displayed as [-64.0,64.0] in increments of 0.1. To display: if 8192, display 64.0.  Else divide by 6.4 (cutting into 1280 even pieces). Then ROUND to nearest integer 0...1280.  Then divide by 10.  Then subtract 64. The Hydrasynth seems to round 0.5 towards even.  Note that every 5 away from 0 (center) is one semitone.
 
@@ -1158,6 +1168,8 @@ ribbonmode,,0x3F 0x3B,"MSB=0 LSB=[0,2] Pitch Bend, Theremin, Mod Only"
 ribbonkeyspan,,0x3F 0x3B,"MSB=1 LSB=[0,2] 2 Octave, 4 Octave, 6 Octave"
 ribbonoctave,,0x3F 0x3B,"MSB=2 LSB=[0,2] 2 Octave, 4 Octave, 6 Octave"
 ribbonquantize,,0x3F 0x3B,"MSB=3 LSB=[0,1]"
+ribbonscale,,0x3F 0x3B,"MSB=[4,15] Instead of sending one message, ribbonscale sends many NRPN messages. It starts with 0x3F 0x3B MSB=[4...15] LSB=[0...12] where LSB = MSB + 1 - 4 is the standard for ""C"", and for C#/Db it's LSB = MSB + 2 - 4 Mod 12, then D is LSB = MSB + 3 - 4 Mod 12 and so on -- it appears to be mapping out a scale.  If the LSB is 0, then I believe this indicates that the key is not used."
+ribbonscalekeylock,,0x3F 0x3B,Same situation as ribbonscale
 ribbonmodcontrol,,0x3F 0x3B,"MSB=16 LSB=[0,1]"
 ribbonglide,,0x3F 0x3B,"MSB=17 LSB=[0,127]"
 voicedetune,0x5F,0x3F 0x39,"[0,127]"
@@ -1186,6 +1198,85 @@ voicerandomphase,,0x3F 0x1E,"[0,1]"
 voicewarmmode,,0x3F 0x4F,"[0,1]"
 voicevibratobpm,,0x3F 0x49,"[0,1]"
 voicesnap,,0x3F 0x35,"[0,1]"
+macro1panelvalue,0x10,0x3F 0x58,[Range and display not determined]
+macro2panelvalue,0x11,0x3F 0x59,
+macro3panelvalue,0x12,0x3F 0x5A,
+macro4panelvalue,0x13,0x3F 0x5B,
+macro5panelvalue,0x14,0x3F 0x5C,
+macro6panelvalue,0x15,0x3F 0x5D,
+macro7panelvalue,0x16,0x3F 0x5E,
+macro8panelvalue,0x17,0x3F 0x5F,
+,,,
+,,,
+,,,
+"Macro Panel Buttons        NOTE: when Macro Button X is lit or unlit for whatever reason, all eight macroXpanel... NRPN are sent",,,
+Name,,,Notes
+macro1trigger1,,0x3E 0x30,"MSB = 0x06  LSB = [0,1]"
+macro1trigger2,,0x3E 0x31,
+macro1trigger3,,0x3E 0x32,
+macro1trigger4,,0x3E 0x33,
+macro1trigger5,,0x3E 0x34,
+macro1trigger6,,0x3E 0x35,
+macro1trigger7,,0x3E 0x36,
+macro1trigger8,,0x3E 0x37,
+macro2trigger1,,0x3E 0x38,
+macro2trigger2,,0x3E 0x39,
+macro2trigger3,,0x3E 0x3A,
+macro2trigger4,,0x3E 0x3B,
+macro2trigger5,,0x3E 0x3C,
+macro2trigger6,,0x3E 0x3D,
+macro2trigger7,,0x3E 0x3E,
+macro2trigger8,,0x3E 0x3F,
+macro3trigger1,,0x3E 0x40,
+macro3trigger2,,0x3E 0x41,
+macro3trigger3,,0x3E 0x42,
+macro3trigger4,,0x3E 0x43,
+macro3trigger5,,0x3E 0x44,
+macro3trigger6,,0x3E 0x45,
+macro3trigger7,,0x3E 0x46,
+macro3trigger8,,0x3E 0x47,
+macro4trigger1,,0x3E 0x48,
+macro4trigger2,,0x3E 0x49,
+macro4trigger3,,0x3E 0x4A,
+macro4trigger4,,0x3E 0x4B,
+macro4trigger5,,0x3E 0x4C,
+macro4trigger6,,0x3E 0x4D,
+macro4trigger7,,0x3E 0x4E,
+macro4trigger8,,0x3E 0x4F,
+macro5trigger1,,0x3E 0x50,
+macro5trigger2,,0x3E 0x51,
+macro5trigger3,,0x3E 0x52,
+macro5trigger4,,0x3E 0x53,
+macro5trigger5,,0x3E 0x54,
+macro5trigger6,,0x3E 0x55,
+macro5trigger7,,0x3E 0x56,
+macro5trigger8,,0x3E 0x57,
+macro6trigger1,,0x3E 0x58,
+macro6trigger2,,0x3E 0x59,
+macro6trigger3,,0x3E 0x5A,
+macro6trigger4,,0x3E 0x5B,
+macro6trigger5,,0x3E 0x5C,
+macro6trigger6,,0x3E 0x5D,
+macro6trigger7,,0x3E 0x5E,
+macro6trigger8,,0x3E 0x5F,
+macro7trigger1,,0x3E 0x60,
+macro7trigger2,,0x3E 0x61,
+macro7trigger3,,0x3E 0x62,
+macro7trigger4,,0x3E 0x63,
+macro7trigger5,,0x3E 0x64,
+macro7trigger6,,0x3E 0x65,
+macro7trigger7,,0x3E 0x66,
+macro7trigger8,,0x3E 0x67,
+macro8trigger1,,0x3E 0x68,
+macro8trigger2,,0x3E 0x69,
+macro8trigger3,,0x3E 0x6A,
+macro8trigger4,,0x3E 0x6B,
+macro8trigger5,,0x3E 0x6C,
+macro8trigger6,,0x3E 0x6D,
+macro8trigger7,,0x3E 0x6E,
+macro8trigger8,,0x3E 0x6F,
+,,,
+,,,
 ,,,
 ,,,
 "FX Types and Custom Parameters          NOTE: This Excludes BYPASS which has no parameters, though it does have Dry/Wet",,,
@@ -1388,16 +1479,16 @@ BUG: The Hydrasynth emits in multiples of 8, but expects inputs in multiples of 
 osc1bitreduction,,0x3F 0x40,"[0,11] emitted as MSB=0 LSB=val, representing OFF, 16, 12, 10, 9, 8, 7, 6, 5, 4, 3, 2"
 osc2bitreduction,,0x3F 0x40,"[0,11] emitted as MSB=1 LSB=val, representing OFF, 16, 12, 10, 9, 8, 7, 6, 5, 4, 3, 2"
 osc3bitreduction,,0x3F 0x40,"[0,11] emitted as MSB=2 LSB=val, representing OFF, 16, 12, 10, 9, 8, 7, 6, 5, 4, 3, 2"
-voice1modulation,,0x71 0x01,"[0,256] emitted in multiples of 8 as 0, 8, 16, ..., 2048, representing -128 ... + 128
+voicemodulation1,,0x71 0x01,"[0,256] emitted in multiples of 8 as 0, 8, 16, ..., 2048, representing -128 ... + 128
 
 BUG: The Hydrasynth emits in multiples of 8, but expects inputs in multiples of 1"
-voice2modulation,,0x71 0x02,"[0,256] emitted in multiples of 8 as 0, 8, 16, ..., 2048, representing -128 ... + 128"
-voice3modulation,,0x71 0x03,"[0,256] emitted in multiples of 8 as 0, 8, 16, ..., 2048, representing -128 ... + 128"
-voice4modulation,,0x71 0x04,"[0,256] emitted in multiples of 8 as 0, 8, 16, ..., 2048, representing -128 ... + 128"
-voice5modulation,,0x71 0x05,"[0,256] emitted in multiples of 8 as 0, 8, 16, ..., 2048, representing -128 ... + 128"
-voice6modulation,,0x71 0x06,"[0,256] emitted in multiples of 8 as 0, 8, 16, ..., 2048, representing -128 ... + 128"
-voice7modulation,,0x71 0x07,"[0,256] emitted in multiples of 8 as 0, 8, 16, ..., 2048, representing -128 ... + 128"
-voice8modulation,,0x71 0x08,"[0,256] emitted in multiples of 8 as 0, 8, 16, ..., 2048, representing -128 ... + 128"
+voicemodulation2,,0x71 0x02,"[0,256] emitted in multiples of 8 as 0, 8, 16, ..., 2048, representing -128 ... + 128"
+voicemodulation3,,0x71 0x03,"[0,256] emitted in multiples of 8 as 0, 8, 16, ..., 2048, representing -128 ... + 128"
+voicemodulation4,,0x71 0x04,"[0,256] emitted in multiples of 8 as 0, 8, 16, ..., 2048, representing -128 ... + 128"
+voicemodulation5,,0x71 0x05,"[0,256] emitted in multiples of 8 as 0, 8, 16, ..., 2048, representing -128 ... + 128"
+voicemodulation6,,0x71 0x06,"[0,256] emitted in multiples of 8 as 0, 8, 16, ..., 2048, representing -128 ... + 128"
+voicemodulation7,,0x71 0x07,"[0,256] emitted in multiples of 8 as 0, 8, 16, ..., 2048, representing -128 ... + 128"
+voicemodulation8,,0x71 0x08,"[0,256] emitted in multiples of 8 as 0, 8, 16, ..., 2048, representing -128 ... + 128"
 env1quantize,,0x71 0x11,"[0,8] emitted in multiples of 8 as 0, 1, 16, ..., 64, representing Off, 257, 129, 65, 33, 17, 9, 5, 3
 
 BUG: The Hydrasynth emits in multiples of 8, but expects inputs in multiples of 1"
@@ -1562,15 +1653,3 @@ osc2solowavescan6,,0x3F 0x1c,
 osc2solowavescan7,,0x3F 0x1c,
 osc2solowavescan8,,0x3F 0x1c,
 mixersolo,,0x3F 0x25,"[0, 1] "
-macro1panelvalue,0x10,0x3F 0x58,[Range and display not determined]
-macro2panelvalue,0x11,0x3F 0x59,
-macro3panelvalue,0x12,0x3F 0x5A,
-macro4panelvalue,0x13,0x3F 0x5B,
-macro5panelvalue,0x14,0x3F 0x5C,
-macro6panelvalue,0x15,0x3F 0x5D,
-macro7panelvalue,0x16,0x3F 0x5E,
-macro8panelvalue,0x17,0x3F 0x5F,
-,,,
-,,,
-,,,
-,,,

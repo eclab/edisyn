@@ -151,8 +151,12 @@ public class StringComponent extends JPanel implements Updatable, HasKey
         change.setHorizontalAlignment(SwingConstants.CENTER);
                 
         final Color foreground = change.getForeground();
+        
+        // Java 20 screws up when we do this :-(
+        /*
         if (Style.isMacOSMonterey() || Style.isMacOSVentura()) 
             change.addMouseListener(buildUnderliningMouseAdapter(change));
+        */
                 
         change.addActionListener(new ActionListener()
             {

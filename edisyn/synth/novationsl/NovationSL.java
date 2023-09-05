@@ -4350,48 +4350,49 @@ public class NovationSL extends Synth
 
 
       IN GENERAL...   [ 41 bytes ]
+      Here I've included what appear to be Novation's names for the various bytes.
 
-      OFFSETS
-      DEC HEX
-      00  00  Name                            [8 bytes, padded with 0x20]
-      08  08  Type                            0=off, 1=CC, 2=NRPN, 3=RPN 4=Sysex 5=MMC 6=NoteOn/Off 8=Bank Change 9=PC  0A=Pitch Bend  0B=Drumnote 0C=Template 0D=Real Time 
-      *** NOTE: 0x7, 0xC, and 0xE are not used
-      09  09  Low Value MSB
-      10  0a  Low Value LSB / MMC Type / Drum note Number/ Template Number (1-32, not 0-31) / PC 
-      11  0b  High Value MSB
-      12  0c  High Value LSB / Drum note Velocity
-      13  0d  Button Type                     0x00 = Normal, 0x04 = Momentary, 0x08 = Toggle, 0x10 = Step
+      NOVATION    OFFSETS
+      NAME        DEC HEX
+      CNNAME      00  00  Name                            [8 bytes, padded with 0x20]
+      CNTYPE      08  08  Type                            0=off, 1=CC, 2=NRPN, 3=RPN 4=Sysex 5=MMC 6=NoteOn/Off 8=Bank Change 9=PC  0A=Pitch Bend  0B=Drumnote 0C=Template 0D=Real Time 
+      *** NOTE: 0x7 and 0xE are not used
+      ULOW        09  09  Low Value MSB
+      CNLOW       10  0a  Low Value LSB / MMC Type / Drum note Number/ Template Number (1-32, not 0-31) / PC 
+      UHIGH       11  0b  High Value MSB
+      CNHIGH      12  0c  High Value LSB / Drum note Velocity
+      CNATTR1     13  0d  Button Type                     0x00 = Normal, 0x04 = Momentary, 0x08 = Toggle, 0x10 = Step
       **** NOTE: it says +0x01 is SEND THE MS VALUE FIRST and +0x02 is SEND A 2BYTE VALUE
-      OR (Bank Change) 0x00 = LSB, 0x01 = MSB, 0x02 = MSB-LSB
-      OR (Prog Change) 0x00 = OFF, 0x01 = LSB, 0x02 = MSB, 0x03 = MSB-LSB 
-      14  0e  Real Time                       [See Table 6]
-      OR Pot Pickup           [See Table 7]
+      OR (Bank Change)                                    0x00 = LSB, 0x01 = MSB, 0x02 = MSB-LSB
+      OR (Prog Change)                                    0x00 = OFF, 0x01 = LSB, 0x02 = MSB, 0x03 = MSB-LSB 
+      CNATR2      14  0e  Real Time                       [See Table 6]
+      OR Pot Pickup                                       [See Table 7]
       OR (0x50) otherwise
       *** NOTE: The Expression pedal and Modwheel do not have pot pickups.  Set them to (0x50)
-      15  0f  Display Format          (0=0...127, 1=-64...63, 3=ON/OFF, REL = 0x06, REL2 = 0x07, 16-bit Values = 0x09, LED = 0x10, APOT = 0x11)
+      CNDISP      15  0f  Display Format                  (0=0...127, 1=-64...63, 3=ON/OFF, REL = 0x06, REL2 = 0x07, 16-bit Values = 0x09, LED = 0x10, APOT = 0x11)
       *** NOTE: Novation's editor does not give the Pitch Bend or Modulation wheels the options 0...127 or -64...+63.
       *** This may be an error, but I only have a Zero so I cannot confrm.
-      16  10  RPN/NRPN/Bank MSB
-      17  11  CC/RPN/NRPN/Bank LSB
-      18  12  Ports                           [See Table 5]
+      CNCNMSB     16  10  RPN/NRPN/Bank MSB
+      CNCNLSB     17  11  CC/RPN/NRPN/Bank LSB
+      CNPORTS     18  12  Ports                           [See Table 5]
       *** NOTE: I have seen this corrupted on the unit, where it returns 0x05 for "Common"
       *** NOTE: On the SL Compact Editor, MIDI 2 is not supported
-      19  13  Channel                 00: Common      20: Keyboard    40-4F:  [1-16]          // Note AFTER USB Port, which is different.  Also differnet from other "common" stuff
-      +-> [or] MMC Device                     0...127
-      20  14  Default Value MSB
-      21  15  Default Value LSB
-      22  16  Step Size                       0...63  [representing 1...64]
-      23  17  0x00                            
-      24  18  0x00                            ++CNSPARE,3++
-      25  19  0x00                            ++CNXATTR1++
-      26  1a  Sysex DV Type           0: no DV        1: Single       2: LSB-MSB      3: MSB-LSB 4: Roland  [See Table 9]
-      27  1b  Sysex length            0...12
-      28  1c  DV position                     0 = no DV, 1 = position 0, 2 = position 1, etc.
+      CNMCH       19  13  Channel                         00: Common      20: Keyboard    40-4F:  [1-16]          // Note AFTER USB Port, which is different.  Also differnet from other "common" stuff
+      +-> [or] MMC Device                                 0...127
+      CNSTMSB     20  14  Default Value MSB
+      CNSTLSB     21  15  Default Value LSB
+      CNSTEP      22  16  Step Size                       0...63  [representing 1...64]
+      SPAR1       23  17  0x00                            
+      SPAR2?      24  18  0x00                            ++CNSPARE,3++
+      SPAR3?      25  19  0x00                            ++CNXATTR1++
+      [SYSEX]     26  1a  Sysex DV Type                   0: no DV        1: Single       2: LSB-MSB      3: MSB-LSB 4: Roland  [See Table 9]
+      [SYSEX]     27  1b  Sysex length                    0...12
+      [SYSEX]     28  1c  DV position                     0 = no DV, 1 = position 0, 2 = position 1, etc.
       *** NOTE: If the Sysex DV Type is 0, then the DV position is undefined and can be anything
       *** NOTE: There are serious errors in Novation's editor, which set the Sysex DV Type and
       *** the DV position to unexpected values.
       *** NOTE: For Roland Sysex, the data position is fixed to Sysex Length - 1
-      29  1d  Sysex                           [12 bytes, padded with 0x00]
+      [SYSEX]     29  1d  Sysex                           [12 bytes, padded with 0x00]
       *** NOTE: it appears that for the DV position, 0x7F usually serves as a placeholder
 
 

@@ -1,7 +1,7 @@
 ![Edisyn Splash Banner](https://raw.githubusercontent.com/eclab/edisyn/master/resources/pics/Banner.png)
 
 # Edisyn
-Synthesizer Patch Editor (Version 34)
+Synthesizer Patch Editor and Librarian (Version 34)
 
 By Sean Luke (sean@cs.gmu.edu)
 

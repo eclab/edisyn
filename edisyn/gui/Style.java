@@ -242,18 +242,21 @@ public class Style
     public static boolean isMacOSMonterey()
         {
         return System.getProperty("os.name").equals("Mac OS X") &&
-            (System.getProperty("os.version").startsWith("12."));
+            (System.getProperty("os.version").startsWith("12.") ||
+                System.getProperty("os.version").equals("10.16"));		// Java 8 reports Monterey as 10.16  :-(
         }
 
     public static boolean isMacOSBigSur()
         {
         return System.getProperty("os.name").equals("Mac OS X") &&
             ((System.getProperty("os.version").startsWith("11.") ||
-                System.getProperty("os.version").equals("10.16")));
+                System.getProperty("os.version").equals("10.16")));		// Java 8 reports Big Sur as 10.16  :-(
         }
 
     public static boolean isMacOSVentura()
         {
+        System.err.println(System.getProperty("os.name"));
+        System.err.println(System.getProperty("os.version"));
         return System.getProperty("os.name").equals("Mac OS X") &&
             (System.getProperty("os.version").startsWith("13."));
         }

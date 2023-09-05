@@ -8,6 +8,7 @@ package edisyn;
 import java.util.*;
 import java.io.*;
 import edisyn.gui.*;
+import edisyn.util.*;
 
 /**
    Storage for the various synthesizer parameters.  The parameters are each associated
@@ -1821,9 +1822,9 @@ public class Model implements Cloneable
         
     /** Print the model parameters to stderr.   If diffsOnly, then only the model parameters which
         differ from the default will be printed. */
-    public void print()
+    public void print(boolean convertHTML)
         {
-        print(new PrintWriter(new OutputStreamWriter(System.err)));
+        print(new PrintWriter(new OutputStreamWriter(System.err)), convertHTML);
         }
     
     static final String FALSE_STRING = "<<<<false>>>>>";
@@ -1874,7 +1875,7 @@ public class Model implements Cloneable
 
 
     /** Print the model parameters to the given writer. */
-    public void print(PrintWriter out)
+    public void print(PrintWriter out, boolean convertHTML)
         {
         String[] keys = getKeys();
         Arrays.sort(keys);
@@ -1897,7 +1898,8 @@ public class Model implements Cloneable
                 else if (str.equals(str2))
                     out.println(keys[i] + ": " + str);
                 else
-                    out.println(keys[i] + ": " + str + " (" + str2 + ")");
+                    out.println(keys[i] + ": " + 
+                    	(convertHTML && StringUtility.testHTML(str) ? StringUtility.removeHTML(str) : str) + " (" + str2 + ")");
                 }
             else
                 out.println(keys[i] + ": UNKNOWN OBJECT " + get(keys[i]));

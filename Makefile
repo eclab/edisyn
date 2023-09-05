@@ -32,3 +32,9 @@ install: jar
 	- mv install/bundles/Edisyn-1.0.dmg install/Edisyn.dmg
 	rm -rf install/bundles install/Edisyn.dmg.html install/Edisyn.dmg.jnlp 
 
+clean:
+	find . -name "*.class" -exec rm -f {} \;
+	find . -name ".DS_Store" -exec rm -f {} \;
+	find . -name "*.java*~" -exec rm -f {} \;
+	find . -name ".#*" -exec rm -rf {} \;
+	find . -name "#*#" -exec rm -rf {} \;

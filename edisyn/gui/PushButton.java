@@ -90,8 +90,11 @@ public class PushButton extends JPanel
         button.setHorizontalAlignment(SwingConstants.CENTER);
         final Color foreground = button.getForeground();
         
+        // Java 20 screws up when we do this :-(
+        /*
         if (Style.isMacOSMonterey() || Style.isMacOSVentura()) 
             button.addMouseListener(buildUnderliningMouseAdapter(button));
+        */
                                 
         button.addActionListener(new ActionListener()
             {
@@ -236,7 +239,7 @@ public class PushButton extends JPanel
             {
             public void mouseExited(MouseEvent e)
                 {
-                button.setText("<html>"+getText()+"</html>");
+                button.setText("<html>"+getText().trim()+"</html>");
                 repaint();
                 }
 
@@ -244,14 +247,14 @@ public class PushButton extends JPanel
                 {
                 if (releaseListener[0] != null)
                     {
-                    button.setText("<html><u>"+getText()+"</u></html>");
+                    button.setText("<html><u>"+getText().trim()+"</u></html>");
                     repaint();
                     }
                 }
                 
             public void mousePressed(MouseEvent e) 
                 {
-                button.setText("<html><u>"+getText()+"</u></html>");
+                button.setText("<html><u>"+getText().trim()+"</u></html>");
                 
                 // This gunk fixes a BAD MISFEATURE in Java: mouseReleased isn't sent to the
                 // same component that received mouseClicked.  What the ... ? Asinine.
@@ -269,7 +272,7 @@ public class PushButton extends JPanel
                                 {
                                 Toolkit.getDefaultToolkit().removeAWTEventListener( releaseListener[0] );
                                 releaseListener[0] = null;
-                                button.setText("<html>"+getText()+"</html>");
+                                button.setText("<html>"+getText().trim()+"</html>");
                                 repaint();
                                 }
                             }
@@ -281,7 +284,7 @@ public class PushButton extends JPanel
                 {
                 Toolkit.getDefaultToolkit().removeAWTEventListener( releaseListener[0] );
                 releaseListener[0] = null;
-                button.setText("<html>"+getText()+"</html>");
+                button.setText("<html>"+getText().trim()+"</html>");
                 repaint();
                 }
             };

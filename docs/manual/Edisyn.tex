@@ -469,7 +469,7 @@ Edisyn has a large number of facilities to help you program your synthesizer, in
 \item {\bf Copy Category}\quad Marks the category to be pasted into other compatible categories.
 \item {\bf Paste Category}\quad   Copies over all the parameters from the ``copy'' category, if it is compatible.
 \item {\bf Distribute}\quad  Copies the last-modified parameter to all similar parameters in the category.  For example, if you modified a step sequencer step, this might copy its value to all 15 other steps.  {\bf Note} that you won't be able to select this option until you have actually {\it modified}, even slightly, some parameter inside the Category\,---\,perhaps a dial, say.
-\item You can also restrict your {\bf Copy, Paste,} or {\bf Distribute} to mutation parameters only.
+\item You can also restrict your {\bf Copy, Paste,} or {\bf Distribute} to {\bf mutation parameters} only (see Section~\ref{restriction}).
 \item {\bf Reset} \quad  This resets all the parameters in the category to their defaults.
 \item {\bf Randomize...}\quad Randomize the parameters in the category.  See {\it Randomize} in Section~\label{explorationtools} below.
 \end{itemize}
@@ -479,8 +479,7 @@ Edisyn has a large number of facilities to help you program your synthesizer, in
 \begin{itemize}
 \item {\bf Copy Tab}\quad Marks the tab to be pasted into other compatible categories.
 \item {\bf Paste Tab}\quad   Copies over all the parameters from the ``copy'' tab, if it is compatible.
-\item {\bf Copy Tab (Mutation Parameters only)}\quad Marks the tab to be pasted into other compatible tabs, but only from the mutation parameters you have set (see Section~\ref{restriction}).
-\item {\bf Paste Tab (Mutation Parameters only)}\quad   Copies over all the parameters from the ``copy'' tab, but only to the mutation parameters you have set (see Section~\ref{restriction}).
+\item You can also restrict {\bf Copy Tab} or {\bf Paste Tab} to {\bf mutation parameters} only (see Section~\ref{restriction}).
 \item {\bf Reset} \quad  This resets all the parameters in the tab to their defaults.
 \end{itemize}
 
@@ -489,16 +488,20 @@ Edisyn has a large number of facilities to help you program your synthesizer, in
 
 \paragraph{Randomize (by some amount)}  You can add some randomness your patch parameters.  See the {\bf Randomize} submenu in the {\bf Edit} menu.   Because it's so common to randomize, then undo and try again, you can also do undo-and-randomize-again as a single task: select {\bf Undo and Randomize Again} in the {\bf Randomize} submenu of the {\bf MIDI} menu.    You can also randomize individual categories: just click on the category name to get options.
 
+\vspace{-0.6em}
 \paragraph{Merge (by some amount)}  This causes Edisyn to directly {\bf recombine}  with your current patch with another patch to form a randomly merged patch.  You specify the degree of recombination as a percentage: see the options in the {\bf Request Merge} submenu of the {\bf MIDI} menu.
 
 Some patch editors may not be able to perform merges because the synthesizers can't load specific patches: if your synth can't do {\bf Request Patch...}, it probably can't do a merge either.  A few synthesizers (like the Red Sound Darkstar) can only do merges with some manual effort on your part: see their About panes.
 
+\vspace{-0.6em}
 \paragraph{Load and Merge}  This option, in the {\bf File} menu, lets you load a file and merge it with your current patch in more or less the same way that {\bf Merge} works.  The merge percentage is always 100\% (that is, half-half).
 
+\vspace{-0.6em}
 \paragraph{Blend}  The {\bf Blend} submenu in the {\bf Edit} menu will cause Edisyn to request two random patches from your synthesizer and merge them, with a merge percentage randomly ranging from 50\% to 100\%, producing an entirely new randomly combined patch.  You could do this manually of course: it's a convenience mechanism.  
 
 You can select two entirely random patches using {\bf Once}, or you can select the patches from a patch range using {\bf Once in Range...} (you'd likely do this to, say, only blend two drum patches or two orchestral patches).   Blend will then do its thing.  If you want to try again, select {\bf Undo and Blend Again}.\footnote{Note that because Blend loads the first patch, then merges the second, it effectively pushes {\it two} things onto the undo stack; so if you want to undo a Blend, you'll need to Undo {\it twice}.  Similarly, Undo and Blend Again will pop {\it two} things off before re-blending.}
 
+\vspace{-0.6em}
 \paragraph{Nudge}  The lets you push your patch to sound a bit more like one of four other target patches you have chosen.   Before you can nudge, you have to first select patches to nudge towards.  You can pick up to four patches by choosing one of the {\bf Setup 1} ... {\bf Setup 4} submenus under the {\bf Edit \(\rightarrow\) Nudge} menu.  These options will load nudge targets 1...4 with copies drawn from various sources.   Your options are: {\bf From Current Patch}, {\bf Load File...}, {\bf From Morph} (the current Morph value, see Section~\ref{morph} below), and {\bf From Hill-Climb Archive q} through {\bf v} (the six Hill-Climb archives, see Section~\ref{hillclimb} below). You don't have to set up all four targets.
 
 Above the {\bf Setup} options are four {\bf Towards} and four {\bf Away From} options, also in the {\bf Nudge} submenu of the {\bf MIDI} menu.  When you set up a patch, its name will appear in those Towards/Away From options.  The patch name is just a helpful reminder\,---\, different patches can have the same name.
@@ -509,8 +512,12 @@ A hint.  It's a good idea to select target patches which don't have some radical
 
 Nudge is a slow and fine-grained process.  If you'd like something more real-time that operates similarly, see the Morpher (Section~\ref{morph}).
 
+\vspace{-0.6em}
 \paragraph{Mix}  This option is available in the Librarian (Section~\ref{librarian}).  Here, you select several patches as parents, and Edisyn will use {\it cross them over} to form a new child patch.  Unlike recombination, crossover doesn't interpolate parameters between parents: instead the child is some {\it combination} of the parents' parameters.  You have four options depending on how much you want to bias the result to favor the earlier (topmost) patch or patches.
 
+\enlargethispage{1em}
+
+\vspace{-0.25em}
 \begin{itemize}
 \item Mix Uniformly.  The child patch is a uniform combination of all the parent patches.
 \item Mix Light Bias.  1/3 of the child patch consists of elements from the first (topmost) parent patch; 1/3 of the remainder is drawn from the next parent, and so on.  The last two parents split their contribution of the remainder fifty-fifty.
@@ -519,9 +526,10 @@ Nudge is a slow and fine-grained process.  If you'd like something more real-tim
 \item Do Mix Again.  Perform the same random mix as last time.  You can choose this (it has a menu shortcut) from any panel in the editor, not just the Librarian.  This allows you to try a mix, then repeatedly try new ones with the shortcut until you find one you like.
 \end{itemize}
 
+\vspace{-0.5em}
 \paragraph{Remix Bank}  This option is available in the Librarian (Section~\ref{librarian}): it does bulk remixing.  Here, you select a bank (by selecting a patch or patch range in it).  Then Edisyn will fill the entire Scratch Bank with remixes built from the bank you have selected.  Each remix is built by selecting four patches at random from your selected bank, and then performing Mix Medium Bias on them in an arbitrary order.
 
-\paragraph{Hill-Climb and Constrict}  The {\it Hill-Climber} repeatedly presents you with sixteen sounds and asks you to choose your top one, two, or three preferred ones.  Once you have selected up to the three best, it performs various recombinations and mutations on those sounds to prefer sixteen new ones and the process repeats again.  The idea is for your preferences to guide the hill-climber as it wanders through the space of patches until it lands on something you really like.\footnote{If you're technically inclined, this is basically an evolution strategy (ES) with an elitism of 1 and a biased mutation procedure.  If you'd like to learn more about evolutionary computation methods, google for the free online book {\it Essentials of Metaheuristics} by me.}  A variation called the {\it Constrictor} starts with high-quality patches of your choosing, mixes and matches them, asks you to weed out the ones you don't like, then repeats.  Little by little it whittles down the region of patches until it constricts to a single patch. For more on the Hill-Climber and Constrictor, see Section \ref{hillclimb}.
+\paragraph{Hill-Climb and Constrict}  The {\it Hill-Climber} repeatedly presents you with sixteen sounds and asks you to choose your top one, two, or three preferred ones.  Once you have selected up to the three best, it performs various recombinations and mutations on those sounds to prefer sixteen new ones and the process repeats again.  The idea is for your preferences to guide the hill-climber as it wanders through the space of patches until it lands on something you really like.\footnote{If you're technically inclined, this is basically an evolution strategy (ES) with an elitism of 1 and a biased mutation procedure.  If you'd like to learn more about evolutionary computation methods, google for the free online book {\it Essentials of Metaheuristics} by me.}  A variation called the {\it Constrictor} starts with high-quality patches of your choosing, mixes and matches them, asks you to weed out the ones you don't like, then repeats.  Little by little it whittles down the region of patches until it constricts to a single patch. For more on the Hill-Climber and Constrictor, see Sections \ref{hillclimb} and \ref{constrict}.
 
 \paragraph{Morph}  Morphing interpolates in real-time between four different patches.  It's similar to nudge in certain respects, but is more interactive.  The big difference is that Nudge always moves the patch directly towards or away from a single patch (of four); but Morph changes the patch based on its relative distance to up to four patches in combination.   For more on the Morph tool, see Section \ref{morph}.
 
@@ -530,7 +538,7 @@ Nudge is a slow and fine-grained process.  If you'd like something more real-tim
 
 \begin{wrapfigure}{r}{3in}
 \vspace{-2em}\includegraphics[scale=0.3]{5.png}
-\vspace{-3em}\caption{Editing Mutable Parameters}\label{mutationparameters}
+\vspace{-2em}\caption{Editing Mutable Parameters}\label{mutationparameters}
 \end{wrapfigure}
 
 You can restrict the Mutation and Recombination portions of exploration (used in Randomize, Nudge, Merge, Blend, Hill-Climb/Constrict, and Morph) to only affect a subset of parameters.  To do this, choose {\bf Edit Mutable Parameters} in the {\bf Edit} menu.  This will turn on {\it Mutable Parameters} mode (you'll see it in the window's title bar).  You'll note that various widgets have now been surrounded with red frames.  These widgets control synth parameters which are presently are being updated when you mutate a patch. 
@@ -557,7 +565,7 @@ If you make a new patch editor with one of the {\bf New...} menu options, it wil
 \label{morphpanel}
 \end{wrapfigure}
 
-The {\it Morpher} allows you to try out patches, in real time, that are a combination of four different patches. Shown in Figure~\ref{morphpanel}, the Morpher largely consists of a big rectangle with a different patch at each corner.  Once you have set up these patches, drag a joystick cursor (the blue circle) within this rectangle, and it will change the synthesizer's patch to reflect a combination of the four patches.  The closer the cursor is to a patch the more it will resemble it.
+The {\it Morpher} allows you to try out patches, in real time, that combine up to four different patches. Shown in Figure~\ref{morphpanel}, the Morpher largely consists of a big rectangle with a different patch at each corner.  Once you have set up these patches, drag a joystick cursor (the blue circle) within this rectangle, and it will change the synthesizer's patch to reflect a combination of the four patches.  The closer the cursor is to a patch the more it will resemble it.
 
 Patches are updated on your synthesizer in real time as you change the joystick cursor position.  To do this, Edisyn normally sends the entire patch to the synthesizer on the fly in the same way that ``Send to Current Patch'' is done.  Keep in mind that some synthesizers can take a bit of time to update themselves to a new patch, so depending on the synthesizer this can be either smooth or a bit jumpy.  There are other options as well.
 
@@ -565,7 +573,7 @@ Patches are updated on your synthesizer in real time as you change the joystick 
 
 \begin{itemize}
 \item {\it Set to Editor Patch}\quad Loads the current patch in the patch editor.
-\item {\it Request Current Patch}\quad Performs a {\it Request Current Patch} and, if the synthesizer responds, loads that.  This will also modify the current patch in the patch editor (you can undo it later).  If your synth is not capable of receiving current patch requests, Edisyn will tell you.\footnote{Yes, this is bad design: it ought to just disable out this option, but for irritating technical reasons this is not easy.}  Before requesting the current patch, you will probably want to temporarily turn off playing test notes because the Morpher may upload and change the patch each time it plays a new note, preventing you from changing the patch manually on your synth and then requesting it.  You can then turn modify test notes back on again to get the Morpher running.
+\item {\it Request Current Patch}\quad Performs a {\it Request Current Patch} and, if the synthesizer responds, loads that.  This will also modify the current patch in the patch editor (you can undo it later).  If your synth is not capable of receiving current patch requests, Edisyn will tell you.\footnote{Yes, this is bad design: it ought to just disable this option, but for irritating technical reasons this is not easy.}  Before requesting the current patch, you will probably want to temporarily turn off playing test notes because the Morpher may upload and change the patch each time it plays a new note, preventing you from changing the patch manually on your synth and then requesting it.  You can then turn modify test notes back on again to get the Morpher running.
 \item {\it Request Patch...}\quad Performs a {\it Request Patch...} and, if the synthesizer responds, loads that.  This will also modify the current patch in the patch editor (you can undo it later).If your synth is not capable of receiving current patch requests, Edisyn will tell you.\addtocounter{footnote}{-1}\footnotemark\ Before requesting a patch, you will probably want to temporarily turn off playing test notes because the Morpher may upload and change the patch each time it plays a new note, preventing you from changing the patch manually on your synth and then requesting it.  You can then turn modify test notes back on again to get the Morpher running.
 \item {\it Load from File ...}\quad Loads a patch from a file.
 \item {\it Set to Joystick Position}\quad Loads the corner with the current joystick morphed patch.
@@ -968,7 +976,7 @@ Many editor/librarian GUIs out there organize themselves so that you're presente
  
 Some other software packages display the librarian and the editor at the same time, so you can select a patch in the librarian list and immediately see it displayed in the editor.  Edisyn doesn't do this.  However, if you double-click on a patch to see it in the editor, you can go back to the librarian very quickly by choosing {\bf Show Librarian} again (or better yet, pressing Command-L on the Mac or Control-L on Windows/Linux).
 
-You can hide the Librarian by selecting {\bf Hide Librarian} in the {\bf Librarian} menu.  The data doesn't go away: if you reopen it, you'll be right back where you left off.
+You can hide the Librarian by selecting {\bf Hide Librarian} in the {\bf Librarian} menu.  The data doesn't go away: if you show it again, you'll be right back where you left off.
 
 
 \subsection{Loading from Disk and Downloading from Your Synthesizer} 
@@ -1030,7 +1038,7 @@ To clear a everything in the Librarian, select {\bf Clear All Patches} from the 
 
 \paragraph{Undo and Redo}
 
-The Librarian has its own Undo and Redo stack independent of the editor.  You can undo or redo actions by clicking the Undo and Redo buttons.  Alternatively you can just choose {\bf Undo Librarian Action} or {\bf Redo Librarian Action} in the {\bf Edit} menu.
+The Librarian has its own Undo and Redo stack independent of the editor.  You can undo or redo actions by choosing {\bf Undo Librarian Action} or {\bf Redo Librarian Action} in the {\bf Edit} menu.
 
 If you drag patches from one Librarian into another, you have affected {\it two different} Undo/Redo stacks.  Choosing Undo in one Librarian will undo the effect there, but the other Librarian's changes will stay as they are unless you also choose Undo in that Librarian as well.
 
@@ -1154,6 +1162,8 @@ Understand that Edisyn can only go so far to help you in writing a patch editor:
 For example, the Waldorf Blofeld's multimode sysex is undocumented and must be reverse engineered.  The PreenFM2 bombs when it receives out-of-range values over NRPN, but happily sends them to you.  The PreenFM2 has sysex files for its patches, but they are undocumented and are basically unusable memory dumps  of IEEE 754 floating-point arrays.  The Yamaha 4-Op family (such as the TX81Z) requires not one but up to {\it four} separate sysex patch dumps in a row, in order to be backward compatible with an earlier synth family nobody cares about: they are also incapable of writing a patch (likewise the PreenFM2).    The Kawai K4's sysex documentation is riddled with incredible numbers of errors.    The Matrix 1000 accepts patch names but doesn't store or emit them: it just ignores them.  The Red Sound DarkStar has extremely, {\it extremely} limited sysex.  The  AudioThingies Micromonsta can only read or write patches when rebooted into a special mode.  The Korg Wavestation SR incredibly sends parameters as {\it text strings} embedded in sysex.  Synths often pack multiple parameters into the same byte, making it impossible to update just a single parameter: you have to update five at a time.  There are multiple different strategies for packing data of size 8 bits and up.  Some synths, like the Futuresonus Parva, DSI Prophet '08, and Yamaha DX7, are highly regular in their format, while others, like the infamous Korg Microsampler, require custom tables for nearly every parameter.
 
 Figure~\ref{patcheditorcapabilities} is a little table of the current patch editors for Edisyn, and various Edisyn capabilities that they can or cannot take advantage of.  I particularly love how the Korg Microsampler and the Korg SG are disjoint in their abilities; yet they're from the same company.   Long story short, you'll probably have to do a lot of customization.  I've tried to provide many customization options in Edisyn.  If you need something Edisyn doesn't provide, contact me.
+
+First off, read my technical report {\it So You Want to Write a Patch Editor} (George Mason University Technical Report GMU-CS-TR-2023-1, available at https:/\!/cs.gmu.edu/media/techreports/patcheditor.pdf~).  It's got lots of useful information about the ins and outs, and irritations, of writing a patch editor.
 
 
 \subsection{Setting Up the Development Environment}

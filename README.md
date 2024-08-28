@@ -9,6 +9,7 @@ Related projects:
 
 * [Flow](https://github.com/eclab/flow), a fully-modular, polyphonic, additive software synthesizer.
 * [Gizmo](https://cs.gmu.edu/~sean/projects/gizmo/), an Arduino-based MIDI Swiss Army knife.
+* [Seq](https://github.com/eclab/seq), a very unusual hierarchical and modular music sequencer.
 * [Computational Music Synthesis](https://cs.gmu.edu/~sean/book/synthesis/), an open-content book on building software synthesizers.
 
 

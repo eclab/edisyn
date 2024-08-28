@@ -34,6 +34,12 @@ public class MutationMap
     
     public boolean isUsingPrefs() { return prefs != null; }
     
+    public void printKeys()
+    	{
+    	for(String s : map)
+    		System.err.println(s);
+    	}
+    
     /** Returns whether the parameter is free to be mutated. */
     public boolean isFree(String key)
         {
@@ -124,7 +130,72 @@ public class MutationMap
             }
         map = new HashSet<String>();
         }
+    
+    boolean loadParameters(Synth synth, File file, String error)
+    	{
+    	LineNumberReader is = null;
+    	try
+    		{
+			is = new LineNumberReader(new InputStreamReader(new FileInputStream(file)));
+						
+			HashSet<String> keysin = new HashSet<>();
+			while(true)
+				{
+				String line = is.readLine();
+				if (line == null) break;
+				line = line.trim();
+				if (line.length() == 0) continue;
+				keysin.add(line);
+				}
+						
+			clear();
+			String[] keys = synth.getModel().getKeys();
+			for(int i = 0; i < keys.length; i++)
+				{
+				setFree(keys[i], keysin.contains(keys[i]), false);              // don't sync yet
+				}
+			sync();
+			}
+		catch (Throwable e) // fail  -- could be an Error or an Exception
+			{
+			synth.showErrorWithStackTrace(e, "Error Auto-Loading Mutation Parameters", error);			/// "An error occurred while loading from the file.");
+			Synth.handleException(e);
+			return false;
+			}
+		finally
+			{
+			if (is != null)
+				try { is.close(); }
+				catch (IOException e) { }
+			}
+		return true;
+    	}
+    
+    public void autoLoadParameters(Synth synth)
+    	{
+    	String filename = synth.getLastX("MutationFile", synth.getSynthClassName());
+    	if (filename == null) return;
+    	filename = filename.trim();
+    	if (filename.length() == 0) return;
 
+    	// Okay, let's try it
+    	try
+    		{
+	    	boolean retval = loadParameters(synth, new File(filename), "For the synth editor " + synth.getSynthNameLocal() + 
+	    		"\nThere was an error auto-loading the mutation parameters file:\n        " + filename +
+	    		"\nEdisyn will no longer try to auto-load this file.");
+	    	if (!retval)
+	    		{
+				Synth.removeLastX("MutationFile", synth.getSynthClassName(), true);
+				}
+			}
+		catch (Exception ex)
+			{
+			System.err.println(ex);
+			Synth.handleException(ex);
+			}
+    	}
+    	    	
     public void loadParameters(Synth synth)
         {
         FileDialog fd = new FileDialog((Frame)(SwingUtilities.getRoot(synth)), "Load Mutation Parameters from File...", FileDialog.LOAD);
@@ -147,44 +218,27 @@ public class MutationMap
         synth.enableMenuBar();
         File f = null; // make compiler happy
         LineNumberReader is = null;
+        boolean retval = false;
         if (fd.getFile() != null)
             {
-            try
-                {
-                f = new File(fd.getDirectory(), fd.getFile());
-                is = new LineNumberReader(new InputStreamReader(new FileInputStream(f)));
-                                
-                HashSet<String> keysin = new HashSet<>();
-                while(true)
-                    {
-                    String line = is.readLine();
-                    if (line == null) break;
-                    line = line.trim();
-                    if (line.length() == 0) continue;
-                    keysin.add(line);
-                    }
-                                
-                clear();
-                String[] keys = synth.getModel().getKeys();
-                for(int i = 0; i < keys.length; i++)
-                    {
-                    setFree(keys[i], keysin.contains(keys[i]), false);              // don't sync yet
-                    }
-                sync();
-                }        
-            catch (Throwable e) // fail  -- could be an Error or an Exception
-                {
-                synth.showErrorWithStackTrace(e, "File Error", "An error occurred while loading from the file.");
-                Synth.handleException(e);
-                }
-            finally
-                {
-                if (is != null)
-                    try { is.close(); }
-                    catch (IOException e) { }
-                }
+            f = new File(fd.getDirectory(), StringUtility.ensureFileEndsWith(fd.getFile(), EXTENSION));
+            retval = loadParameters(synth, f, "An error occurred while loading from the file.");
             }
-                
+        if (retval)
+        	{
+			 if (synth.showSimpleConfirm("Auto-Load Mutation Parameters",
+					"Auto-Load this mutation parameters file each time you load this patch editor?", "Auto-Load", "Don't Auto-Load"))
+					{
+					try
+						{
+						Synth.setLastX(f.getCanonicalPath(), "MutationFile", synth.getSynthClassName(), true);
+						}
+					catch (IOException ex)
+						{
+                		synth.showErrorWithStackTrace(ex, "File Error", "An error occurred while setting up auto-loading of the file\n" + (f == null ? " " : f.getName()));
+						}
+					}
+       		}      
         synth.updateTitle();
         }
         
@@ -217,6 +271,12 @@ public class MutationMap
                     }
 
                 setLastDirectory(fd.getDirectory(), synth);
+                
+                if (synth.showSimpleConfirm("Auto-Load Mutation Parameters",
+                        "Auto-Load this mutation parameters file each time you load this patch editor?", "Auto-Load", "Don't Auto-Load"))
+                        {
+                        Synth.setLastX(f.getCanonicalPath(), "MutationFile", synth.getSynthClassName(), true);
+                        }
                 } 
             catch (IOException e) // fail
                 {

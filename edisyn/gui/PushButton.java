@@ -150,6 +150,7 @@ public class PushButton extends JPanel
             else
                 {
                 JMenuItem menu = new JMenuItem(options[i]);
+            	menu.setFont(Style.SMALL_FONT());
                 if (enabled != null)
                     {
                     menu.setEnabled(enabled[i]);

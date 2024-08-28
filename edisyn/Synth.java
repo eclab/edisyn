@@ -283,7 +283,7 @@ public abstract class Synth extends JComponent implements Updatable
         ccmap = new CCMap(Prefs.getAppPreferences(getSynthClassName(), "CCKey"),
             Prefs.getAppPreferences(getSynthClassName(), "CCType"));
         mutationMap = new MutationMap((java.util.prefs.Preferences)null);  // Prefs.getAppPreferences(getSynthClassName(), "Mutation"));
-
+        
         undo.setWillPush(false);  // instantiate undoes this
         random = new Random(System.currentTimeMillis());
         
@@ -373,6 +373,7 @@ public abstract class Synth extends JComponent implements Updatable
                     {
                     synth.sendAllSoundsOffInternal(); // not doSendAllSoundsOff(false) because we don't want to turn off the test notes
                     }
+				lastActiveWindow = frame;
                 synth.windowBecameFront();                            
                 }
             synth.undo.setWillPush(true);
@@ -1479,27 +1480,10 @@ public abstract class Synth extends JComponent implements Updatable
     boolean sendMIDI = true;  // we can send MIDI 
 
     boolean receiveMIDI = true;     // we can receive MIDI
-    static final boolean bufferNonReceivedMIDI = false;             // are we buffering or ignoring?
-
-    static class StampedMessage { public MidiMessage message; public long timeStamp; }
         
-    ArrayList<StampedMessage> inBuffer = new ArrayList<>();
-    ArrayList<StampedMessage> keyBuffer = new ArrayList<>();
-    ArrayList<StampedMessage> key2Buffer = new ArrayList<>();
+    ArrayList<MidiMessage> inBuffer = new ArrayList<>();
+    ArrayList<MidiMessage> keyBuffer = new ArrayList<>();
         
-    void processBufferedMessages(Receiver receiver, ArrayList<StampedMessage> buffer)
-        {
-        if (receiver != null && !buffer.isEmpty())
-            {
-            ArrayList<StampedMessage> buf2 = new ArrayList<StampedMessage>(buffer);
-            buffer.clear();
-            for(StampedMessage sm : buf2)
-                {
-                receiver.send(sm.message, sm.timeStamp);
-                }
-            }
-        }
-
     long lastTime = 0;
     Object timeLock = new Object[0];
     public void time(String val)
@@ -1510,216 +1494,6 @@ public abstract class Synth extends JComponent implements Updatable
             System.out.println("TIME " + val + " " + time + "(+" + (time - lastTime) + ")");
             lastTime = time;
             }
-        }
-
-    /** Builds a receiver to attach to the current IN transmitter.  The receiver
-        can handle merging and patch reception. */
-    public Receiver buildInReceiver()
-        {
-        return new Receiver()
-            {
-            public void close()
-                {
-                }
-                                
-            public void send(final MidiMessage message, final long timeStamp)
-                {                  
-                if (message instanceof ShortMessage)
-                    {
-                    if (((ShortMessage)message).getStatus() == ShortMessage.TIMING_CLOCK ||
-                        ((ShortMessage)message).getStatus() == ShortMessage.ACTIVE_SENSING) 
-                        return; // ignore
-                    }
-                
-                if (!receiveMIDI)
-                    {
-                    if (bufferNonReceivedMIDI)
-                        {
-                        StampedMessage sm = new StampedMessage();
-                        sm.message = message;
-                        sm.timeStamp = timeStamp;
-                        inBuffer.add(sm);
-                        }
-                    return;
-                    }
-
-                if (tuple != null) processBufferedMessages(tuple.inReceiver, inBuffer);
-
-                // I'm doing this in the Swing event thread because I figure it's multithreaded
-                SwingUtilities.invokeLater(new Runnable()
-                    {
-                    public void run()
-                        {
-                        if (amActiveSynth())
-                            {
-                            if (message instanceof SysexMessage)
-                                {
-                                final byte[] data = midi.gatherInSysexData((SysexMessage)message);
-
-                                if (data == null)
-                                    {
-                                    // sysex not completed yet
-                                    }
-                                else if (recognizeLocal(data))
-                                    {
-                                    if (merging != 0.0)
-                                        {
-                                        if (merge(data, merging) == PARSE_INCOMPLETE)
-                                            {
-                                            }
-                                        else
-                                            {
-                                            setMergeProbability(0.0);
-                                            }
-                                        }
-                                    else
-                                        {
-                                        mergeSynth = null;
-                                        // we turn off MIDI because parse() calls revise() which triggers setParameter() with its changes
-                                        boolean originalMIDI = getSendMIDI();
-                                        setSendMIDI(false);
-                                        undo.setWillPush(false);
-                                        // time("Backing Up for " + message);
-                                        Model backup = (Model)(model.clone());
-                                        int result = PARSE_ERROR;
-                                        try 
-                                            {
-                                            // time("Parsing " + message);
-                                            result = performParse(data, false);
-                                            }
-                                        catch (Exception ex)
-                                            {
-                                            //System.out.println("The exception is " + ex);
-                                            Synth.handleException(ex);
-                                            // result is now PARSE_ERROR
-                                            }
-                                                                    
-                                        // If we're in the librarian, and we're not auto-downloading the patch, and we received a patch,
-                                        // we want to just load it into the librarian. For example, if the synth is engaged in a multi-patch
-                                        // patch dump to us, we want to load it properly.  So we need to handle it here. One item we need to make
-                                        // sure of is to not do a push of the backup, but rather just replace it
-                                        if ((result == PARSE_SUCCEEDED || result == PARSE_SUCCEEDED_UNTITLED) &&
-                                            patchTimer == null && tabs.getSelectedComponent() == librarianPane)              // if we're in the librarian and not doing downloading, handle it specially
-                                            {
-                                            Patch patch = librarian.getLibrary().getPatch(model);
-                                            patch.number = model.get("number", Patch.NUMBER_NOT_SET);
-                                            patch.bank = model.get("bank", 0);
-                                            librarian.getLibrary().receivePatch(patch);
-                                            librarian.updateUndoRedo();             
-                                            backup.copyValuesTo(model);             // restore the old model, but don't push an undo
-                                            undo.setWillPush(true);
-                                            setSendMIDI(originalMIDI);
-                                            }
-                                        else
-                                            {
-                                            undo.setWillPush(true);
-                                            if (!backup.keyEquals(getModel()))   // it's changed, do an undo push
-                                                {
-                                                if (!backupDoneForParse) { undo.push(backup); backupDoneForParse = true; } 
-                                                }
-
-                                            incomingPatch = (incomingPatch || result == PARSE_SUCCEEDED || result == PARSE_SUCCEEDED_UNTITLED);
-                                            if (result == PARSE_CANCELLED)
-                                                {
-                                                incomingPatch = false;
-                                                backupDoneForParse = false;         // reset
-                                                // nothing
-                                                }
-                                            else if (result == PARSE_FAILED)
-                                                {
-                                                incomingPatch = false;
-                                                backupDoneForParse = false;         // reset
-                                                showSimpleError("Receive Error", "Could not read the patch.");
-                                                }
-                                            else if (result == PARSE_ERROR)
-                                                {
-                                                incomingPatch = false;
-                                                backupDoneForParse = false;         // reset
-                                                showSimpleError("Receive Error", "An error occurred on reading the patch.");
-                                                }
-                                            else if (result == PARSE_IGNORE)
-                                                {
-                                                backupDoneForParse = false;         // reset
-                                                // nothing
-                                                }
-                                            else if (incomingPatch)
-                                                {
-                                                backupDoneForParse = false;         // reset
-                                                }
-
-                                            setSendMIDI(originalMIDI);
-                                            if (getSendsParametersAfterNonMergeParse() && !isBatchDownloading() && incomingPatch && !(result != PARSE_IGNORE))
-                                                {
-                                                simplePause(getPauseAfterReceivePatch());
-                                                sendAllParameters();
-                                                }
-                                            file = null;
-                                            // time("Update Blend " + message);
-
-                                            updateBlend();
-                                            }
-                                        // time("Update Title " + message);
-
-                                        updateTitle();
-                                        }
-                                    }
-                                else if (handleDeviceInquiry(data))
-                                    {
-                                    // do nothing
-                                    }
-                                else    // Maybe it's a local Parameter change in sysex?
-                                    {
-                                    // we don't do undo here.  It's not great but PreenFM2 etc. would wreak havoc
-                                    boolean willPush = undo.getWillPush();
-                                    undo.setWillPush(false);
-                                                                                        
-                                    boolean originalMIDI = getSendMIDI();
-                                    setSendMIDI(false);     // so we don't send out parameter updates in response to reading/changing parameters
-                                    parseParameter(data);
-                                    setSendMIDI(originalMIDI);  
-                                    updateTitle();
-                                                                                        
-                                    undo.setWillPush(willPush);
-                                    }
-                                }
-                            else if (message instanceof ShortMessage)
-                                {
-                                midi.resetInSysexData();
-                                ShortMessage sm = (ShortMessage)message;
-                                if (sm.getCommand() == ShortMessage.CONTROL_CHANGE)
-                                    {
-                                    boolean willPush = undo.getWillPush();
-                                    undo.setWillPush(false);
-                                                                                                                
-                                    // we don't do undo here.  It's not great but PreenFM2 etc. would wreak havoc
-                                    boolean originalMIDI = getSendMIDI();
-                                    setSendMIDI(false);     // so we don't send out parameter updates in response to reading/changing parameters
-                                    // let's try parsing it
-                                    handleInRawCC(sm);
-                                    if (!getReceivesPatchesAsDumps()) 
-                                        {
-                                        incomingPatch = true;
-                                        }
-                                    setSendMIDI(originalMIDI);  
-                                    updateTitle();
-                                                                                                                
-                                    undo.setWillPush(willPush);
-                                    }
-                                }
-                            // time("Done " + message);
-                            }
-                        if (testIncomingSynthMIDI) 
-                            {
-                            showSimpleMessage("Incoming MIDI from Synthesizer", "A MIDI message has arrived from the Synthesizer:\n" + Midi.format(message) + "\nTime: " + timeStamp); 
-                            
-                            System.out.println(StringUtility.toHex(message.getMessage()));
-                            testIncomingSynthMIDI = false; 
-                            testIncomingSynth.setText("Report Next Synth MIDI");
-                            } 
-                        }
-                    });
-                }
-            };
         }
         
     byte[] extractData(MidiMessage message)
@@ -1737,12 +1511,441 @@ public abstract class Synth extends JComponent implements Updatable
         else return d;                          
         }
                 
+
                     
+    Object inReceiverLock = new Object[0];
+    boolean inReceiverSetup = false;
+    Thread inReceiverThread = new Thread(new Runnable()
+    	{
+		public void run()
+			{
+			ArrayList<MidiMessage> temp = null;
+			while(true)
+				{
+				synchronized(inReceiverLock)
+					{
+					// Wait until the buffer has something for us maybe
+					if (inBuffer.size() == 0)
+						{
+						try { inReceiverLock.wait(); }  catch (InterruptedException ex) { }
+						}
+					
+					// copy the buffer and get out
+					temp = inBuffer;
+					inBuffer = new ArrayList<MidiMessage>();
+					}
+					
+				// process each message in the buffer
+				for(MidiMessage message : temp)
+					{
+					// I'm doing this in the Swing event thread because I figure it's multithreaded
+					try
+						{
+						// I'm doing this in the Swing event thread because I figure it's multithreaded
+						SwingUtilities.invokeLater(new Runnable()
+							{
+							public void run()
+								{
+								if (amActiveSynth())
+									{
+									if (message instanceof SysexMessage)
+										{
+										final byte[] data = midi.gatherInSysexData((SysexMessage)message);
+
+										if (data == null)
+											{
+											// sysex not completed yet
+											}
+										else if (recognizeLocal(data))
+											{
+											if (merging != 0.0)
+												{
+												if (merge(data, merging) == PARSE_INCOMPLETE)
+													{
+													}
+												else
+													{
+													setMergeProbability(0.0);
+													}
+												}
+											else
+												{
+												mergeSynth = null;
+												// we turn off MIDI because parse() calls revise() which triggers setParameter() with its changes
+												boolean originalMIDI = getSendMIDI();
+												setSendMIDI(false);
+												undo.setWillPush(false);
+												// time("Backing Up for " + message);
+												Model backup = (Model)(model.clone());
+												int result = PARSE_ERROR;
+												try 
+													{
+													// time("Parsing " + message);
+													result = performParse(data, false);
+													}
+												catch (Exception ex)
+													{
+													//System.out.println("The exception is " + ex);
+													Synth.handleException(ex);
+													// result is now PARSE_ERROR
+													}
+																	
+												// If we're in the librarian, and we're not auto-downloading the patch, and we received a patch,
+												// we want to just load it into the librarian. For example, if the synth is engaged in a multi-patch
+												// patch dump to us, we want to load it properly.  So we need to handle it here. One item we need to make
+												// sure of is to not do a push of the backup, but rather just replace it
+												if ((result == PARSE_SUCCEEDED || result == PARSE_SUCCEEDED_UNTITLED) &&
+													patchTimer == null && tabs.getSelectedComponent() == librarianPane)              // if we're in the librarian and not doing downloading, handle it specially
+													{
+													Patch patch = librarian.getLibrary().getPatch(model);
+													patch.number = model.get("number", Patch.NUMBER_NOT_SET);
+													patch.bank = model.get("bank", 0);
+													librarian.getLibrary().receivePatch(patch);
+													librarian.updateUndoRedo();             
+													backup.copyValuesTo(model);             // restore the old model, but don't push an undo
+													undo.setWillPush(true);
+													setSendMIDI(originalMIDI);
+													}
+												else
+													{
+													undo.setWillPush(true);
+													if (!backup.keyEquals(getModel()))   // it's changed, do an undo push
+														{
+														if (!backupDoneForParse) { undo.push(backup); backupDoneForParse = true; } 
+														}
+
+													incomingPatch = (incomingPatch || result == PARSE_SUCCEEDED || result == PARSE_SUCCEEDED_UNTITLED);
+													if (result == PARSE_CANCELLED)
+														{
+														incomingPatch = false;
+														backupDoneForParse = false;         // reset
+														// nothing
+														}
+													else if (result == PARSE_FAILED)
+														{
+														incomingPatch = false;
+														backupDoneForParse = false;         // reset
+														showSimpleError("Receive Error", "Could not read the patch.");
+														}
+													else if (result == PARSE_ERROR)
+														{
+														incomingPatch = false;
+														backupDoneForParse = false;         // reset
+														showSimpleError("Receive Error", "An error occurred on reading the patch.");
+														}
+													else if (result == PARSE_IGNORE)
+														{
+														backupDoneForParse = false;         // reset
+														// nothing
+														}
+													else if (incomingPatch)
+														{
+														backupDoneForParse = false;         // reset
+														}
+
+													setSendMIDI(originalMIDI);
+													if (getSendsParametersAfterNonMergeParse() && !isBatchDownloading() && incomingPatch && !(result != PARSE_IGNORE))
+														{
+														simplePause(getPauseAfterReceivePatch());
+														sendAllParameters();
+														}
+													file = null;
+													// time("Update Blend " + message);
+
+													updateBlend();
+													}
+												// time("Update Title " + message);
+
+												updateTitle();
+												}
+											}
+										else if (handleDeviceInquiry(data))
+											{
+											// do nothing
+											}
+										else    // Maybe it's a local Parameter change in sysex?
+											{
+											// we don't do undo here.  It's not great but PreenFM2 etc. would wreak havoc
+											boolean willPush = undo.getWillPush();
+											undo.setWillPush(false);
+																						
+											boolean originalMIDI = getSendMIDI();
+											setSendMIDI(false);     // so we don't send out parameter updates in response to reading/changing parameters
+											parseParameter(data);
+											setSendMIDI(originalMIDI);  
+											updateTitle();
+																						
+											undo.setWillPush(willPush);
+											}
+										}
+									else if (message instanceof ShortMessage)
+										{
+										midi.resetInSysexData();
+										ShortMessage sm = (ShortMessage)message;
+										if (sm.getCommand() == ShortMessage.CONTROL_CHANGE)
+											{
+											boolean willPush = undo.getWillPush();
+											undo.setWillPush(false);
+																												
+											// we don't do undo here.  It's not great but PreenFM2 etc. would wreak havoc
+											boolean originalMIDI = getSendMIDI();
+											setSendMIDI(false);     // so we don't send out parameter updates in response to reading/changing parameters
+											// let's try parsing it
+											handleInRawCC(sm);
+											if (!getReceivesPatchesAsDumps()) 
+												{
+												incomingPatch = true;
+												}
+											setSendMIDI(originalMIDI);  
+											updateTitle();
+																												
+											undo.setWillPush(willPush);
+											}
+										}
+									// time("Done " + message);
+									}
+								if (testIncomingSynthMIDI) 
+									{
+									showSimpleMessage("Incoming MIDI from Synthesizer", "A MIDI message has arrived from the Synthesizer:\n" + Midi.format(message)); 
+							
+									System.out.println(StringUtility.toHex(message.getMessage()));
+									testIncomingSynthMIDI = false; 
+									testIncomingSynth.setText("Report Next Synth MIDI");
+									} 
+								}
+							});
+						}
+					catch (Exception ex) { Synth.handleException(ex); }
+					}
+				}
+			}
+		});
+              
+    /** Builds a receiver to attach to the current IN transmitter.  The receiver
+        can resend all incoming requests to the OUT receiver. */
+    public Receiver buildInReceiver()
+        {
+        // set up the in-receiver processing thread
+     	if (!inReceiverSetup)
+    		{
+	        inReceiverThread.setDaemon(false);
+	        inReceiverThread.start();
+	        inReceiverSetup = true;
+	        }
+        
+       return new Receiver()
+            {
+            public void close()
+                {
+                }
+                                
+            public void send(final MidiMessage message, final long timeStamp)
+                {
+				// Add to the in-receiver buffer and notify the thread that there's something there
+				synchronized(inReceiverLock)
+					{
+					inBuffer.add(message);
+					if (receiveMIDI) 
+						{
+						inReceiverLock.notifyAll();
+						}
+					}
+                }
+            };
+        }
+        
+    
+    /** The purpose of this function is to eliminate multiple CC messages in a row with the same parameter,
+    	so as to jump to the latest one. */
+    ArrayList<MidiMessage> reduceCC(ArrayList<MidiMessage> list)
+    	{
+    	if (list.size() == 0) return list;
+    	
+    	ArrayList<MidiMessage> newList = new ArrayList<>();
+    	MidiMessage lastMessage = null;
+    	
+    	list = new ArrayList<MidiMessage>(list);		// make a copy
+    	Collections.reverse(list);						// we'll go from last to first.  Annoying that this reverses in place.
+    	for(MidiMessage message : list)
+    		{
+    		if (message instanceof ShortMessage)			// is it a short message?
+    			{
+    			ShortMessage s = (ShortMessage)message;
+    			// We skip the message if it was a control change and 
+    			// the last message was exactly the same
+				if (s.getCommand() == ShortMessage.CONTROL_CHANGE &&
+					lastMessage != null &&
+					lastMessage instanceof ShortMessage &&
+					((ShortMessage)lastMessage).getCommand() == ShortMessage.CONTROL_CHANGE &&
+					((ShortMessage)lastMessage).getData1() == s.getData1())
+					{
+					// skip
+					}
+				else
+					{
+    				newList.add(s);			// add it only if it's not a copy
+					}	
+    			}
+			lastMessage = message;			// this is our last message now
+    		}
+    		
+    	Collections.reverse(newList);			// re-reverse the list and return
+    	return newList;
+    	}
+    
+    Object keyReceiverLock = new Object[0];
+    boolean keyReceiverSetup = false;
+    boolean keyReceiverProcessing = false;
+    Thread keyReceiverThread = new Thread(new Runnable()
+    	{
+		public void run()
+			{
+			ArrayList<MidiMessage> temp = null;
+			while(true)
+				{
+				synchronized(keyReceiverLock)
+					{
+					// Wait until we have something to process
+					if (keyBuffer.size() == 0)
+						{
+						try { keyReceiverLock.wait(); }  catch (InterruptedException ex) { }
+						}
+					
+					// Copy the keyBuffer
+					temp = keyBuffer;
+					keyBuffer = new ArrayList<MidiMessage>();
+					}
+					
+				// If we have more than one item, we should see if we can simplify it
+				if (temp.size() > 1)
+					{
+					temp = reduceCC(temp);
+					}
+
+				// process each message in the buffer
+				for(MidiMessage message : temp)
+					{
+					// I'm doing this in the Swing event thread because I figure it's multithreaded
+					try
+						{
+						SwingUtilities.invokeLater(new Runnable()
+						{   
+						public void run()
+							{
+							synchronized(keyReceiverLock)
+								{
+								keyReceiverProcessing = true;
+								}
+								
+							if (amActiveSynth())
+								{
+								if (message instanceof ShortMessage)
+									{
+									midi.resetKeySysexData();
+									ShortMessage shortMessage = (ShortMessage)message;
+									try
+										{
+										// we intercept a message if:
+										// 1. It's a CC (maybe NRPN)
+										// 2. We're not passing through CC
+										// 3. It's the right channel OR our key channel is OMNI OR we're doing per-channel CCs
+										if (tuple != null &&
+											!getPassThroughCC() && 
+											shortMessage.getCommand() == ShortMessage.CONTROL_CHANGE &&
+											(shortMessage.getChannel() == (tuple.keyChannel - 1) || tuple.keyChannel == tuple.KEYCHANNEL_OMNI || perChannelCCs))
+											{
+											// we intercept this
+											handleKeyRawCC(shortMessage);
+											messageFromController(message, true, false);
+											}
+							
+										// We send the message to the shandleKeyRawCCynth if:
+										// 1. We didn't intercept it
+										// 2. We pass through data to the synth
+										else if (tuple != null && getPassThroughController())
+											{
+											// pass it on!
+											ShortMessage newMessage = null;
+																	
+											// In order to pass on, we have to make a new one.  But 
+											// stupidly, ShortMessage has no way of changing its channel, so we have to rebuild
+											ShortMessage s = (ShortMessage)message;
+											int status = s.getStatus();
+											int channel = s.getChannel();
+											int data1 = s.getData1();
+											int data2 = s.getData2();
+											boolean voiceMessage = ( status < 0xF0 );
+
+											// should we attempt to reroute to the synth?
+											if (channel == (tuple.keyChannel - 1) || tuple.keyChannel == tuple.KEYCHANNEL_OMNI)
+												{
+												channel = getVoiceMessageRoutedChannel(channel, getChannelOut());
+												}
+
+											if (voiceMessage)
+												{
+												newMessage = new ShortMessage(status, channel, data1, data2);
+												}
+											else
+												{
+												newMessage = new ShortMessage(status, data1, data2);
+												}
+													
+											tryToSendMIDI(newMessage);
+											messageFromController(newMessage, false, true);
+											}
+										else
+											{
+											messageFromController(message, false, false);
+											}
+										}
+									catch (InvalidMidiDataException e)
+										{
+										Synth.handleException(e);
+										messageFromController(message, false, false);
+										}
+									}
+								else if (message instanceof SysexMessage && passThroughController)
+									{
+									tryToSendSysex(extractData(message));
+									messageFromController(message, false, true);
+									}
+								}
+							if (testIncomingControllerMIDI) 
+								{ 
+								showSimpleMessage("Incoming MIDI from Controller", "A MIDI message has arrived from the Controller:\n" + Midi.format(message)); 
+								testIncomingControllerMIDI = false; 
+								testIncomingController.setText("Report Next Controller MIDI");
+								} 
+
+							synchronized(keyReceiverLock)
+								{
+								keyReceiverProcessing = false;
+								}
+								
+							System.err.println("All Done " + message);
+							}
+						});
+					}
+				catch (Exception ex) { Synth.handleException(ex); }
+				}
+				}
+			}
+		});
+              
     /** Builds a receiver to attach to the current KEY transmitter.  The receiver
         can resend all incoming requests to the OUT receiver. */
     public Receiver buildKeyReceiver()
         {
-        return new Receiver()
+        // set up the key-receiver processing thread if not already set up
+     	if (!keyReceiverSetup)
+    		{
+	        keyReceiverThread.setDaemon(false);
+	        keyReceiverThread.start();
+	        keyReceiverSetup = true;
+	        }
+        
+       return new Receiver()
             {
             public void close()
                 {
@@ -1750,115 +1953,32 @@ public abstract class Synth extends JComponent implements Updatable
                                 
             public void send(final MidiMessage message, final long timeStamp)
                 {
-                if (!receiveMIDI)
-                    {
-                    if (bufferNonReceivedMIDI)
-                        {
-                        StampedMessage sm = new StampedMessage();
-                        sm.message = message;
-                        sm.timeStamp = timeStamp;
-                        keyBuffer.add(sm);
-                        }
-                    return;
-                    }
-
-                if (tuple != null) processBufferedMessages(tuple.keyReceiver, keyBuffer);
-
-                // I'm doing this in the Swing event thread because I figure it's multithreaded
-                SwingUtilities.invokeLater(new Runnable()
-                    {   
-                    public void run()
-                        {
-                        if (amActiveSynth())
-                            {
-                            if (message instanceof ShortMessage)
-                                {
-                                midi.resetKeySysexData();
-                                ShortMessage shortMessage = (ShortMessage)message;
-                                try
-                                    {
-                                    // we intercept a message if:
-                                    // 1. It's a CC (maybe NRPN)
-                                    // 2. We're not passing through CC
-                                    // 3. It's the right channel OR our key channel is OMNI OR we're doing per-channel CCs
-                                    if (tuple != null &&
-                                        !getPassThroughCC() && 
-                                        shortMessage.getCommand() == ShortMessage.CONTROL_CHANGE &&
-                                        (shortMessage.getChannel() == (tuple.keyChannel - 1) || tuple.keyChannel == tuple.KEYCHANNEL_OMNI || perChannelCCs))
-                                        {
-                                        // we intercept this
-                                        handleKeyRawCC(shortMessage);
-                                        messageFromController(message, true, false);
-                                        }
-                                        
-                                    // We send the message to the synth if:
-                                    // 1. We didn't intercept it
-                                    // 2. We pass through data to the synth
-                                    else if (tuple != null && getPassThroughController())
-                                        {
-                                        // pass it on!
-                                        ShortMessage newMessage = null;
-                                                                                
-                                        // In order to pass on, we have to make a new one.  But 
-                                        // stupidly, ShortMessage has no way of changing its channel, so we have to rebuild
-                                        ShortMessage s = (ShortMessage)message;
-                                        int status = s.getStatus();
-                                        int channel = s.getChannel();
-                                        int data1 = s.getData1();
-                                        int data2 = s.getData2();
-                                        boolean voiceMessage = ( status < 0xF0 );
-
-                                        // should we attempt to reroute to the synth?
-                                        if (channel == (tuple.keyChannel - 1) || tuple.keyChannel == tuple.KEYCHANNEL_OMNI)
-                                            {
-                                            channel = getVoiceMessageRoutedChannel(channel, getChannelOut());
-                                            }
-
-                                        if (voiceMessage)
-                                            {
-                                            newMessage = new ShortMessage(status, channel, data1, data2);
-                                            }
-                                        else
-                                            {
-                                            newMessage = new ShortMessage(status, data1, data2);
-                                            }
-                                                                
-                                        tryToSendMIDI(newMessage);
-                                        messageFromController(newMessage, false, true);
-                                        }
-                                    else
-                                        {
-                                        messageFromController(message, false, false);
-                                        }
-                                    }
-                                catch (InvalidMidiDataException e)
-                                    {
-                                    Synth.handleException(e);
-                                    messageFromController(message, false, false);
-                                    }
-                                }
-                            else if (message instanceof SysexMessage && passThroughController)
-                                {
-                                tryToSendSysex(extractData(message));
-                                messageFromController(message, false, true);
-                                }
-                            }
-                        if (testIncomingControllerMIDI) 
-                            { 
-                            showSimpleMessage("Incoming MIDI from Controller", "A MIDI message has arrived from the Controller:\n" + Midi.format(message) + "\nTime: " + timeStamp); 
-                            testIncomingControllerMIDI = false; 
-                            testIncomingController.setText("Report Next Controller MIDI");
-                            } 
-                        }
-                    });
+				// Add to the key-receiver buffer and notify the thread that there's something there
+				synchronized(keyReceiverLock)
+					{
+					keyBuffer.add(message);
+					if (receiveMIDI) 
+						{
+						keyReceiverLock.notifyAll();
+						}
+					}
                 }
             };
         }
+        
     
-    /** Builds a receiver to attach to the current KEY 2 transmitter.  The receiver
+    /** Builds a receiver to attach to the current KEY transmitter.  The receiver
         can resend all incoming requests to the OUT receiver. */
     public Receiver buildKey2Receiver()
-        {
+        {        	
+        // set up the key-receiver processing thread if not already set up
+    	if (!keyReceiverSetup)
+    		{
+	        keyReceiverThread.setDaemon(false);
+	        keyReceiverThread.start();
+	        keyReceiverSetup = true;
+	        }
+        
         return new Receiver()
             {
             public void close()
@@ -1867,111 +1987,19 @@ public abstract class Synth extends JComponent implements Updatable
                                 
             public void send(final MidiMessage message, final long timeStamp)
                 {
-                // I'm doing this in the Swing event thread because I figure it's multithreaded
-                SwingUtilities.invokeLater(new Runnable()
-                    {
-                    public void run()
-                        {
-                        if (!receiveMIDI)
-                            {
-                            if (bufferNonReceivedMIDI)
-                                {
-                                StampedMessage sm = new StampedMessage();
-                                sm.message = message;
-                                sm.timeStamp = timeStamp;
-                                key2Buffer.add(sm);
-                                }
-                            return;
-                            }
-
-                        if (tuple != null) processBufferedMessages(tuple.key2Receiver, key2Buffer);
-        
-                        if (amActiveSynth())
-                            {
-                            if (message instanceof ShortMessage)
-                                {
-                                midi.resetKey2SysexData();
-                                ShortMessage shortMessage = (ShortMessage)message;
-                                try
-                                    {
-                                    // we intercept a message if:
-                                    // 1. It's a CC (maybe NRPN)
-                                    // 2. We're not passing through CC
-                                    // 3. It's the right channel OR our key 2 channel is OMNI OR we're doing per-channel CCs
-                                    if (tuple != null &&
-                                        !getPassThroughCC() && 
-                                        shortMessage.getCommand() == ShortMessage.CONTROL_CHANGE &&
-                                        (shortMessage.getChannel() == (tuple.key2Channel - 1) || tuple.key2Channel == tuple.KEYCHANNEL_OMNI || perChannelCCs))
-                                        {
-                                        // we intercept this
-                                        handleKeyRawCC(shortMessage);
-                                        messageFromController(message, true, false);
-                                        }
-                                        
-                                    // We send the message to the synth if:
-                                    // 1. We didn't intercept it
-                                    // 2. We pass through data to the synth
-                                    else if (tuple != null && getPassThroughController())
-                                        {
-                                        // pass it on!
-                                        ShortMessage newMessage = null;
-                                                                                
-                                        // In order to pass on, we have to make a new one.  But 
-                                        // stupidly, ShortMessage has no way of changing its channel, so we have to rebuild
-                                        ShortMessage s = (ShortMessage)message;
-                                        int status = s.getStatus();
-                                        int channel = s.getChannel();
-                                        int data1 = s.getData1();
-                                        int data2 = s.getData2();
-                                        boolean voiceMessage = ( status < 0xF0 );
-
-                                        // should we attempt to reroute to the synth?
-                                        if (channel == (tuple.key2Channel - 1) || tuple.key2Channel == tuple.KEYCHANNEL_OMNI)
-                                            {
-                                            channel = getVoiceMessageRoutedChannel(channel, getChannelOut());
-                                            }
-
-                                        if (voiceMessage)
-                                            {
-                                            newMessage = new ShortMessage(status, channel, data1, data2);
-                                            }
-                                        else
-                                            {
-                                            newMessage = new ShortMessage(status, data1, data2);
-                                            }
-                                                                
-                                        tryToSendMIDI(newMessage);
-                                        messageFromController(newMessage, false, true);
-                                        }
-                                    else
-                                        {
-                                        messageFromController(message, false, false);
-                                        }
-                                    }
-                                catch (InvalidMidiDataException e)
-                                    {
-                                    Synth.handleException(e);
-                                    messageFromController(message, false, false);
-                                    }
-                                }
-                            else if (message instanceof SysexMessage && passThroughController)
-                                {
-                                tryToSendSysex(extractData(message));
-                                messageFromController(message, false, true);
-                                }
-                            }
-                        if (testIncomingControllerMIDI) 
-                            { 
-                            showSimpleMessage("Incoming MIDI from Controller", "A MIDI message has arrived from the Controller:\n" + Midi.format(message) + "\nTime: " + timeStamp); 
-                            testIncomingControllerMIDI = false; 
-                            testIncomingController.setText("Report Next Controller MIDI");
-                            } 
-                        }
-                    });
+				// Add to the key-receiver buffer and notify the thread that there's something there
+				synchronized(keyReceiverLock)
+					{
+					keyBuffer.add(message);
+					if (receiveMIDI) 
+						{
+						keyReceiverLock.notifyAll();
+						}
+					}
                 }
             };
-        }    
-    
+        }
+
     public boolean isHighResolutionDisplay() { return highResolutionDisplay; }
     
     public void messageFromController(MidiMessage message, boolean interceptedForInternalUse, boolean routedToSynth) { return; }
@@ -1988,13 +2016,9 @@ public abstract class Synth extends JComponent implements Updatable
     /** Sets whether the synth can receive MIDI from any source. */
     public void setReceiveMIDI(boolean val) 
         { 
-        receiveMIDI = val; 
-        if (val && tuple != null)
-            {
-            processBufferedMessages(tuple.inReceiver, inBuffer);
-            processBufferedMessages(tuple.keyReceiver, keyBuffer);
-            processBufferedMessages(tuple.key2Receiver, key2Buffer);
-            }
+        receiveMIDI = val;
+        synchronized(keyReceiverLock) { keyReceiverLock.notify(); }
+        synchronized(inReceiverLock) { inReceiverLock.notify(); }
         }
 
     /** Returns whether the synth can receive MIDI from any source. */
@@ -3317,6 +3341,15 @@ public abstract class Synth extends JComponent implements Updatable
         enableMenuBar();
         return (ret == 0);
         }
+
+    public boolean showSimpleConfirm(String title, String message, String okOption, String cancelOption)
+        {
+        disableMenuBar();
+        int ret = JOptionPane.showOptionDialog(Synth.this, message, title, JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, null,
+            new String[] { okOption, cancelOption } , okOption);
+        enableMenuBar();
+        return (ret == 0);
+        }
         
     /** Perform a JOptionPane confirm dialog with MUTLIPLE widgets that the user can select.  The widgets are provided
         in the array WIDGETS, and each has an accompanying label in LABELS.   You specify what BUTTONS appear along the bottom
@@ -3498,6 +3531,24 @@ public abstract class Synth extends JComponent implements Updatable
             }
         }  
 
+
+    /** Given a preferences path X for a given synth, removes X. 
+        Also optionally removes global path X to the value.  */
+    public static void removeLastX(String x, String synthName, boolean onlyRemoveInSynth)
+        {
+        if (synthName != null)
+            {
+            java.util.prefs.Preferences app_p = Prefs.getAppPreferences(synthName, "Edisyn");
+            app_p.remove(x);
+            Prefs.save(app_p);
+            }
+        if (!onlyRemoveInSynth)
+            {
+			java.util.prefs.Preferences global_p = Prefs.getGlobalPreferences("Data");
+			global_p.remove(x);
+			Prefs.save(global_p);
+            }
+        }
 
     /** Given a preferences path X for a given synth, sets X to have the given value.. 
         Also sets the global path X to the value.  Typically this method is called by a
@@ -3703,6 +3754,9 @@ public abstract class Synth extends JComponent implements Updatable
     static Window lastActiveWindow = null;
         
     /** Returns true if my synth panel is the frontmost and is active. */
+    
+    
+    //// FIXME DOCUMENT THIS
     public boolean amActiveSynth()
         {
         if (activeSynth) return true;
@@ -3711,7 +3765,7 @@ public abstract class Synth extends JComponent implements Updatable
         if (synthWindow == null) return false;
         
         Window activeWindow = javax.swing.FocusManager.getCurrentManager().getActiveWindow();
-        
+      
         if (activeWindow == null)
             {
             activeWindow = lastActiveWindow;        // use the last window
@@ -3720,13 +3774,30 @@ public abstract class Synth extends JComponent implements Updatable
             {
             lastActiveWindow = activeWindow;        // update the last window for later use
             }
-
+            
         // we want to be either the currently active window, the parent of a dialog box which is the active window, or the last active window if the user is doing something else
         return (synthWindow == activeWindow || (activeWindow != null && synthWindow == activeWindow.getOwner()) ||
             (activeWindow == null && lastActiveWindow == synthWindow));
+
         }
 
-
+/*
+Window getSelectedWindow(Window[] windows) {
+    Window result = null;
+    for (int i = 0; i < windows.length; i++) {
+        Window window = windows[i];
+        if (window.isActive()) {
+            result = window;
+        } else {
+            Window[] ownedWindows = window.getOwnedWindows();
+            if (ownedWindows != null) {
+                result = getSelectedWindow(ownedWindows);
+            }
+        }
+    }
+    return result;
+} 
+*/
 
     public void resetColors()
         {
@@ -6000,6 +6071,7 @@ menubar.add(helpMenu);
                         sendAllSoundsOffInternal(); // not doSendAllSoundsOff(false) because we don't want to turn off the test notes
                         }
                     updateMenu();
+                    lastActiveWindow = frame;
                     windowBecameFront();
                     }
                 }
@@ -6014,6 +6086,10 @@ menubar.add(helpMenu);
         tabChanged();   // so we reset the copy tab etc. menus
        
         frame.pack();
+        
+        /// FIXME: should I do this in the constructor, after instantiate(), or in Sprout?
+		mutationMap.autoLoadParameters(this);
+		
         return frame;
         }
 
@@ -10023,8 +10099,23 @@ menubar.add(helpMenu);
     /** Call this to log exceptions.  By default this method just prints the exception to the
         command line, but it can be modified to open a file and log the exception that way
         so a user can mail the developer a debug file. */
+    static int exceptionNumber = 0;
     public static void handleException(Throwable ex) { if (ex != null) ex.printStackTrace(); }    
-    
+/*
+    	{
+    	if (ex == null) return;
+    	ex.printStackTrace();
+    	try
+    		{
+	    	PrintWriter p = new PrintWriter(new FileWriter("EdisynException." + exceptionNumber + ".txt"));
+	    	ex.printStackTrace(p);
+	    	p.flush();
+	    	p.close();
+	    	}
+	    catch (Exception ex2) { } // do nothing for now :-( 
+    	}
+*/
+    	
     
     public static void printSysex(byte[] data)
         {

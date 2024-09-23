@@ -309,7 +309,7 @@ public class WaldorfPulse2 extends Synth
             hbox.add(comp);
             }
                 
-        comp = new LabelledDial("Semitone", this, "osc" + osc + "semitone", color, 16, 112);
+        comp = new LabelledDial("Semitone", this, "osc" + osc + "semitone", color, 16, 112, 64);
         hbox.add(comp);
 
         comp = new LabelledDial("Detune", this, "osc" + osc + "detune", color, 0, 127, 64);

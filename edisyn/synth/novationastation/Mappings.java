@@ -8,127 +8,141 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
- * Enumeration containing all CC(/NRPN) mappings
- * Basically, 2 categories exist:
+ * Enumeration containing all available parameters and their so-called 'mappings'.
+ * <p>
+ * Each and every entry is defining (mapping between)
+ * <ul>
+ * <li>(edisyn) model key</li>
+ * <li>midi CC</li>
+ * <li>byte-index in (sysex) program dump</li>
+ * </ul>
+ *
+ * <p>
+ * Note we have two kind of mappings:
  * <ol>
- *     <li>the 'straight' mappings: one-to-one relationship between midi CC amd model key</li>
- *     <li>the 'packed' mappings: one-to-many relationship between midi CC and model keys</li>
+ *     <li>the 'straight' mappings: one-to-one relationship between (edisyn) model key and midi CC / byte-index</li>
+ *     <li>the 'packed' mappings: one-to-many relationship between (edisyn) model key and midi CC / byte-index</li>
  * </ol>
+ * </p>
  */
 public enum Mappings {
     // CC0 -> NA
     // CC1 -> modwheel (receive only)
     // CC2 -> breath control (receive only)
-    ARP_PATTERN(                  3, "arppattern"),
+    ARP_PATTERN(                  3,   87, "arppattern"),
     // CC4 -> NA
-    PROGRAM_PORTAMENTO(           5, "portamentotime"),
+    PROGRAM_PORTAMENTO(           5,    3, "portamentotime"),
     // CC6 -> NRPN
     // CC7: Device volume (non-patch related; not stored within patch)
-    DEVICE_VOLUME(                7, "devicevolume"),
+    DEVICE_VOLUME(                7, null, "devicevolume"),
     // CC8, 9, -> TODO
-    PAN_POSITION(                10, "panposition"),
+    PAN_POSITION(                10,  117, "panposition"),
     // CC11 -> NA
-    PANNING_RATE_NON_SYNC(       12, "panningratenonsync"),
-    PANNING_RATE_SYNC(           13, "panningratesync"),
-    VOCODER_STEREO_WIDTH(        14, "vocoderstereowidth"),
-    VOCODER_SIBILANCE_LEVEL(     15, "vocodersibilancelevel"),
-    DISTORTION_MODWHEEL(         16, "distortionmodheel"),
-    DISTORTION_COMPENSATION(     17, "distortioncompensation"),
-    DELAY_SEND_MODWHEEL(         18, "delaysendmodheel"),
-    DELAY_TIME_NON_SYNC(         19, "delaytimenonsync"),
-    DELAY_TIME_SYNC(             20, "delaytimesync"),
-    DELAY_FEEDBACK(              21, "delayfeedback"),
-    DELAY_STEREO_WIDTH(          22, "delaystereowidth"),
-    DELAY_RATIO(                 23, "delayratio"),
-    REVERB_SEND_MODWHEEL(        24, "reverbsendmodheel"),
-    REVERB_DECAY(                25, "reverbdecay"),
-    CHORUS_SEND_MODWHEEL(        26, "chorussendmodheel"),
-    CHORUS_RATE_NON_SYNC(        27, "chorusratenonsync"),
-    CHORUS_RATE_SYNC(            28, "chorusratesync"),
-    CHORUS_FEEDBACK(             29, "chorusfeedback"),
-    CHORUS_MOD_DEPTH(            30, "chorusmoddepth"),
-    CHORUS_MOD_CENTRE_POINT(     31, "chorusmodcentrepoint"),
+    PANNING_RATE_NON_SYNC(       12,  118, "panningratenonsync"),
+    PANNING_RATE_SYNC(           13,  119, "panningratesync"),
+    VOCODER_STEREO_WIDTH(        14,   90, "vocoderstereowidth"),
+    VOCODER_SIBILANCE_LEVEL(     15,   91, "vocodersibilancelevel"),
+    DISTORTION_MODWHEEL(         16,   98, "distortionmodheel"),
+    DISTORTION_COMPENSATION(     17,   99, "distortioncompensation"),
+    DELAY_SEND_MODWHEEL(         18,  101, "delaysendmodheel"),
+    DELAY_TIME_NON_SYNC(         19,  102, "delaytimenonsync"),
+    DELAY_TIME_SYNC(             20,  103, "delaytimesync"),
+    DELAY_FEEDBACK(              21,  104, "delayfeedback"),
+    DELAY_STEREO_WIDTH(          22,  105, "delaystereowidth"),
+    DELAY_RATIO(                 23,  106, "delayratio"),
+    REVERB_SEND_MODWHEEL(        24,  108, "reverbsendmodheel"),
+    REVERB_DECAY(                25,  109, "reverbdecay"),
+    CHORUS_SEND_MODWHEEL(        26,  111, "chorussendmodheel"),
+    CHORUS_RATE_NON_SYNC(        27,  112, "chorusratenonsync"),
+    CHORUS_RATE_SYNC(            28,  113, "chorusratesync"),
+    CHORUS_FEEDBACK(             29,  114, "chorusfeedback"),
+    CHORUS_MOD_DEPTH(            30,  115, "chorusmoddepth"),
+    CHORUS_MOD_CENTRE_POINT(     31,  116, "chorusmodcentrepoint"),
     // CC32 -> TODO bank select
     // CCxx -> TODO equalizer controls
-    OSC1_SEMITONE(               40, "osc1semitone"),
-    OSC1_DETUNE(                 41, "osc1detune"),
-    OSC1_BENDWHEEL_AMOUNT(       42, "osc1bendwheelamount"),
-    OSC1_LFO1_DEPTH(             43, "osc1lfo1depth"),
-    OSC1_MOD_ENV_DEPTH(          44, "osc1modenvdepth"),
-    OSC1_PULSE_WIDTH(            45, "osc1pulsewidth"),
-    OSC2_SEMITONE(               48, "osc2semitone"),
-    OSC2_DETUNE(                 49, "osc2detune"),
-    OSC2_BENDWHEEL_AMOUNT(       50, "osc2bendwheelamount"),
-    OSC2_LFO1_DEPTH(             51, "osc2lfo1depth"),
-    OSC2_MOD_ENV_DEPTH(          52, "osc2modenvdepth"),
-    OSC2_PULSE_WIDTH(            53, "osc2pulsewidth"),
-    OSC3_SEMITONE(               56, "osc3semitone"),
-    OSC3_DETUNE(                 57, "osc3detune"),
-    OSC3_BENDWHEEL_AMOUNT(       58, "osc3bendwheelamount"),
-    OSC3_LFO1_DEPTH(             59, "osc3lfo1depth"),
-    OSC3_MOD_ENV_DEPTH(          60, "osc3modenvdepth"),
-    OSC3_PULSE_WIDTH(            61, "osc3pulsewidth"),
+    OSC1_SEMITONE(               40,    7, "osc1semitone"),
+    OSC1_DETUNE(                 41,    8, "osc1detune"),
+    OSC1_BENDWHEEL_AMOUNT(       42,    9, "osc1bendwheelamount"),
+    OSC1_LFO1_DEPTH(             43,   10, "osc1lfo1depth"),
+    OSC1_MOD_ENV_DEPTH(          44,   11, "osc1modenvdepth"),
+    OSC1_PULSE_WIDTH(            45,   12, "osc1pulsewidth"),
+    // TODO - check
+    OSC2_SEMITONE(               48,   15, "osc2semitone"),
+    OSC2_DETUNE(                 49,   16, "osc2detune"),
+    OSC2_BENDWHEEL_AMOUNT(       50,   17, "osc2bendwheelamount"),
+    OSC2_LFO1_DEPTH(             51,   18, "osc2lfo1depth"),
+    OSC2_MOD_ENV_DEPTH(          52,   19, "osc2modenvdepth"),
+    OSC2_PULSE_WIDTH(            53,   20, "osc2pulsewidth"),
+    // TODO - check
+    OSC3_SEMITONE(               56,   23, "osc3semitone"),
+    OSC3_DETUNE(                 57,   24, "osc3detune"),
+    OSC3_BENDWHEEL_AMOUNT(       58,   25, "osc3bendwheelamount"),
+    OSC3_LFO1_DEPTH(             59,   26, "osc3lfo1depth"),
+    OSC3_MOD_ENV_DEPTH(          60,   27, "osc3modenvdepth"),
+    OSC3_PULSE_WIDTH(            61,   28, "osc3pulsewidth"),
+    // TODO - check
     // TODO
-    PACKED1(                     65, Convertors.PACKED1),
+    PACKED1(                     65,   80, Convertors.PACKED1),
     // CC66 -> NA
-    PACKED2(                     67, Convertors.PACKED2),
-    UNISON_DETUNE(               68, "unisondetune"),
-    OSCILLATORS_RANDOM_DETUNE(   69, "oscillatorrandomdetune"),
-    PACKED3(                     70, Convertors.PACKED3),
-    PACKED4(                     71, Convertors.PACKED4),
-    MIXER_OSC1(                  72, "osc1level"),
-    MIXER_OSC2(                  73, "osc2level"),
-    MIXER_OSC3(                  74, "osc3level"),
-    MIXER_NOISE(                 75, "noiselevel"),
-    MIXER_RING_MOD(              76, "ringmodulatorlevel"),
-    MIXER_EXTERNAL(              77, "externalinputlevel"),
-    PACKED5(                     78, Convertors.PACKED5),
-    PACKED6(                     79, Convertors.PACKED6),
-    LFO1_SPEED_NON_SYNC(         80, "lfo1speednonsync"),
-    LFO1_SPEED_SYNC(             81, "lfo1speedsync"),
-    LFO1_DELAY(                  82, "lfo1delay"),
-    LFO2_SPEED_NON_SYNC(         83, "lfo2speednonsync"),
-    LFO2_SPEED_SYNC(             84, "lfo2speedsync"),
-    LFO2_DELAY(                  85, "lfo2delay"),
+    PACKED2(                     67,    0, Convertors.PACKED2),
+    UNISON_DETUNE(               68,    1, "unisondetune"),
+    OSCILLATORS_RANDOM_DETUNE(   69,    2, "oscillatorrandomdetune"),
+    PACKED3(                     70,    5, Convertors.PACKED3),
+    PACKED4(                     71,    6, Convertors.PACKED4),
+    MIXER_OSC1(                  72,   37, "osc1level"),
+    MIXER_OSC2(                  73,   38, "osc2level"),
+    MIXER_OSC3(                  74,   39, "osc3level"),
+    MIXER_NOISE(                 75,   40, "noiselevel"),
+    MIXER_RING_MOD(              76,   41, "ringmodulatorlevel"),
+    MIXER_EXTERNAL(              77,   42, "externalinputlevel"),
+    PACKED5(                     78,   78, Convertors.PACKED5),
+    PACKED6(                     79,   79, Convertors.PACKED6),
+    LFO1_SPEED_NON_SYNC(         80,   72, "lfo1speednonsync"),
+    LFO1_SPEED_SYNC(             81,   73, "lfo1speedsync"),
+    LFO1_DELAY(                  82,   74, "lfo1delay"),
+    LFO2_SPEED_NON_SYNC(         83,   75, "lfo2speednonsync"),
+    LFO2_SPEED_SYNC(             84,   76, "lfo2speedsync"),
+    LFO2_DELAY(                  85,   77, "lfo2delay"),
     // CC86 -> NA
-    ARP_SYNC(                    87, "arpsync"),
-    ARP_GATE_TIME(               88, "arpgatetime"),
-    PACKED7(                     89, Convertors.PACKED7),
+    ARP_SYNC(                    87,   85, "arpsync"),
+    ARP_GATE_TIME(               88,   86, "arpgatetime"),
+    PACKED7(                     89,   88, Convertors.PACKED7),
     // CC90 -> NA
-    REVERB_SEND_LEVEL(           91, "reverbsendlevel"),
-    DELAY_SEND_LEVEL(            92, "delaysendlevel"),
-    CHORUS_SEND_LEVEL(           93, "chorussendlevel"),
-    PANNING_MOD_DEPTH(           94, "panningmoddepth"),
-    VOCODER_BALANCE(             95, "vocoderbalance"),
+    REVERB_SEND_LEVEL(           91,  107, "reverbsendlevel"),
+    DELAY_SEND_LEVEL(            92,  100, "delaysendlevel"),
+    CHORUS_SEND_LEVEL(           93,  110, "chorussendlevel"),
+    PANNING_MOD_DEPTH(           94,  120, "panningmoddepth"),
+    VOCODER_BALANCE(             95,   89, "vocoderbalance"),
     // CC96, 97-> NA
     // CC98 NRPN number
     // CC99, CC100, CC101-> NA
-    FILTER_LFO2_DEPTH(          102, "filterlfo2depth"),
-    FILTER_Q_NORMALIZE(         103, "filterqnormalize"),
-    FILTER_OVERDRIVE(           104, "filteroverdrive"),
-    FILTER_FREQ(                105, "filterfrequency"),
-    FILTER_RESONANCE(           106, "filterresonance"),
-    FILTER_MOD_ENV_DEPTH(       107, "filtermodenvdepth"),
-    ENVELOPE_AMP_ATTACK(        108, "amplitudeenvelopeattack"),
-    ENVELOPE_AMP_DECAY(         109, "amplitudeenvelopedecay"),
-    ENVELOPE_AMP_SUSTAIN(       110, "amplitudeenvelopesustain"),
-    ENVELOPE_AMP_RELEASE(       111, "amplitudeenveloperelease"),
-    ENVELOPE_AMP_VELOCITY_DEPTH(112, "amplitudeenvelopevelocitydepth"),
+    FILTER_LFO2_DEPTH(          102,   51, "filterlfo2depth"),
+    FILTER_Q_NORMALIZE(         103,   45, "filterqnormalize"),
+    FILTER_OVERDRIVE(           104,   43, "filteroverdrive"),
+    FILTER_FREQ(                105,   46, "filterfrequency"),
+    FILTER_RESONANCE(           106,   44, "filterresonance"),
+    FILTER_MOD_ENV_DEPTH(       107,   52, "filtermodenvdepth"),
+    ENVELOPE_AMP_ATTACK(        108,   62, "amplitudeenvelopeattack"),
+    ENVELOPE_AMP_DECAY(         109,   63, "amplitudeenvelopedecay"),
+    ENVELOPE_AMP_SUSTAIN(       110,   64, "amplitudeenvelopesustain"),
+    ENVELOPE_AMP_RELEASE(       111,   65, "amplitudeenveloperelease"),
+    ENVELOPE_AMP_VELOCITY_DEPTH(112,   61, "amplitudeenvelopevelocitydepth"),
     // CC113 -> NA
-    ENVELOPE_MOD_ATTACK(        114, "modulationenvelopeattack"),
-    ENVELOPE_MOD_DECAY(         115, "modulationenvelopedecay"),
-    ENVELOPE_MOD_SUSTAIN(       116, "modulationenvelopesustain"),
-    ENVELOPE_MOD_RELEASE(       117, "modulationenveloperelease"),
-    ENVELOPE_MOD_VELOCITY_DEPTH(118, "modulationenvelopevelocitydepth"),
+    ENVELOPE_MOD_ATTACK(        114,   67, "modulationenvelopeattack"),
+    ENVELOPE_MOD_DECAY(         115,   68, "modulationenvelopedecay"),
+    ENVELOPE_MOD_SUSTAIN(       116,   69, "modulationenvelopesustain"),
+    ENVELOPE_MOD_RELEASE(       117,   70, "modulationenveloperelease"),
+    ENVELOPE_MOD_VELOCITY_DEPTH(118,   66, "modulationenvelopevelocitydepth"),
     // program volume - stored in patch
-    PROGRAM_VOLUME(             119, "programvolume")
+    PROGRAM_VOLUME(             119,  125, "programvolume")
     // some standard midi msgs next
-
     // TODO - handle NRPNS !
     ;
 
+    private static final Integer NA = null;
     private static final Map<Integer, Mappings> BY_CC = buildCCMap();
     private static final Map<String, Mappings> BY_KEY = buildKeyMap();
+    private static final Map<Integer, Mappings> BY_INDEX = buildIndexMap();
 
     private static Map<Integer, Mappings> buildCCMap() {
         return Stream.of(Mappings.values()).collect(Collectors.toUnmodifiableMap(Mappings::getCC, Function.identity()));
@@ -142,29 +156,42 @@ public enum Mappings {
         return Collections.unmodifiableMap(result);
     }
 
+    private static Map<Integer, Mappings> buildIndexMap() {
+        return Stream.of(Mappings.values())
+                .filter(m -> m.getDumpIndex() != null)
+                .collect(Collectors.toUnmodifiableMap(Mappings::getDumpIndex, Function.identity()));
+    }
+
     // (MIDI) CC number
     private final int cc;
+    private final Integer dumpIndex;
     // key(s) as used in the Synth Model, typically containing single element, will contain multiple elements for packed parameters
     private final Set<String> keys;
     // Convertor
     private final PackedConvertor packedConvertor;
 
-    // cc-to-key is one-to-one
-    Mappings(int cc, String key) {
+    // "straight": cc-to-key is one-to-one
+    Mappings(int cc, Integer dumpIndex, String key) {
         this.cc = cc;
         this.keys = Set.of(key);
         this.packedConvertor = null;
+        this.dumpIndex = dumpIndex;
     };
 
-    // cc-to-key is one-to-many (so-called 'packed' CCs)
-    Mappings(int cc, PackedConvertor packedConvertor) {
+    // "packed": cc-to-key is one-to-many
+    Mappings(int cc, Integer dumpIndex, PackedConvertor packedConvertor) {
         this.cc = cc;
         this.packedConvertor = packedConvertor;
         this.keys = packedConvertor.getKeys();
+        this.dumpIndex = dumpIndex;
     };
 
     public int getCC() {
         return cc;
+    }
+
+    public Integer getDumpIndex() {
+        return dumpIndex;
     }
 
     // update model, for this mapping entry, with a given value
@@ -198,6 +225,11 @@ public enum Mappings {
     // get mapping by (midi) cc, Optional.empty if none
     static Optional<Mappings> getByCC(int cc) {
         return BY_CC.containsKey(cc) ? Optional.of(BY_CC.get(cc)) : Optional.empty();
+    }
+
+    // get mapping by (sysex datadump) index, Optional.empty if none
+    static Optional<Mappings> getByIndex(int cc) {
+        return BY_INDEX.containsKey(cc) ? Optional.of(BY_INDEX.get(cc)) : Optional.empty();
     }
 
     /**

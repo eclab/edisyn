@@ -666,7 +666,13 @@ public class NovationAStation extends Synth {
         //             *** send your message here ***
         //             setSendMIDI(sendMIDI);
         //
-        return PARSE_FAILED; 
+            for (int index = 13; index < 13 + 128; ++index) {
+                Optional<Mappings> mapping = Mappings.getByIndex(index-13);
+                if (mapping.isPresent()) {
+                    mapping.get().toModel(model, data[index]);
+                }
+            }
+        return PARSE_SUCCEEDED;
         }
         
     public static String getSynthName() {
@@ -969,17 +975,11 @@ public class NovationAStation extends Synth {
         // might happen if you always have to change the patch no matter what (see the
         // description of performRequestDump above) in which case you could just have this
         // method call requestCurrentDump().
-        
-        return new byte[0]; 
+            return new byte[0];
+//            return new byte[] { (byte)0xF0, 0x00, 0x20, 0x29, 0x01, 0x40, 0x7F, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00, (byte)0xF7 };
         }
     
-    
-    
-    
-    
-    
-    
-    
+
     ////// YOU PROBABLY WANT TO OVERRIDE *ONE* OF THE FOLLOWING
         
     public void performRequestCurrentDump()
@@ -1002,8 +1002,7 @@ public class NovationAStation extends Synth {
         // (number and bank etc. specified in tempModel).
         //
         // If you can do this with a single patch request, implement this version.
-        
-        return new byte[0];
+        return new byte[] { (byte)0xF0, 0x00, 0x20, 0x29, 0x01, 0x40, 0x7F, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00, (byte)0xF7 };
         }
 
 
@@ -1072,7 +1071,9 @@ public class NovationAStation extends Synth {
         // the recognize() method, it gets sent here.  Typically this is 
         // a sysex message for a single parameter update.  If your synth sends 
         // such things, implement this.  See also handleCCOrNRPNData() below.
-        return; 
+            System.out.println("parseParameter(" + data.length + ")");
+        return;
+
         }
     
     public void handleSynthCCOrNRPN(Midi.CCData data) {

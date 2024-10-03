@@ -26,126 +26,197 @@ import java.util.stream.Stream;
  * </p>
  */
 public enum Mappings {
+    ////
+    // Oscillators - global (= applying to all oscillators)
+    ////
+    PORTAMENTO_TIME("portamentotime",                                5,   3),
+    PREGLIDE_SEMITONES("preglidesemitones",                          8,   4),
+    UNISON_DETUNE("unisondetune",                                   68,   1),
+    OSCS_RANDOM_DETUNE("oscsrandomdetune",                          69,   2),
+    OSCS_MODWHEEL_PITCH_DEPTH("oscsmodwheelpitchdepth",           null,  31),
+    OSCS_AFTERTCH_PITCH_DEPTH("oscsaftertchpitchdepth",           null,  32),
+    OSCS_BREATH_PITCH_DEPTH("oscsbreathpitchdepth",               null,  33),
+    OSCS_MODWHEEL_LFO1_PITCH_DEPTH("oscsmodwheellfo1pitchdepth",  null,  34),
+    OSCS_AFTERTCH_LFO1_PITCH_DEPTH("oscsaftertchlfo1pitchdepth",  null,  35),
+    OSCS_BREATH_LFO1_PITCH_DEPTH("oscsbreathlfo1pitchdepth",      null,  36
+    ),
+    ////
+    // Oscillators - individual
+    ////
+    OSC1_SEMITONE("osc1semitone",                                   40,   7),
+    OSC1_DETUNE("osc1detune",                                       41,   8),
+    OSC1_BENDWHEEL_AMOUNT("osc1bendwheelamount",                    42,   9),
+    OSC1_LFO1_DEPTH("osc1lfo1depth",                                43,  10),
+    OSC1_MOD_ENV_DEPTH("osc1modenvdepth",                           44,  11),
+    OSC1_PULSE_WIDTH("osc1pulsewidth",                              45,  12),
+    OSC1_LFO2_PULSE_WIDTH_MOD("osc1lfo2pulsewidthmod",              46,  13),
+    OSC1_MODENV_PULSE_WIDTH_MOD("osc1modenvpulsewidthmod",          47,  14),
+    OSC2_SEMITONE("osc2semitone",                                   48,  15),
+    OSC2_DETUNE("osc2detune",                                       49,  16),
+    OSC2_BENDWHEEL_AMOUNT("osc2bendwheelamount",                    50,  17),
+    OSC2_LFO1_DEPTH("osc2lfo1depth",                                51,  18),
+    OSC2_MOD_ENV_DEPTH("osc2modenvdepth",                           52,  19),
+    OSC2_PULSE_WIDTH("osc2pulsewidth",                              53,  20),
+    OSC2_LFO2_PULSE_WIDTH_MOD("osc2lfo2pulsewidthmod",              54,  21),
+    OSC2_MODENV_PULSE_WIDTH_MOD("osc2modenvpulsewidthmod",          55,  22),
+    OSC3_SEMITONE("osc3semitone",                                   56,  23),
+    OSC3_DETUNE("osc3detune",                                       57,  24),
+    OSC3_BENDWHEEL_AMOUNT("osc3bendwheelamount",                    58,  25),
+    OSC3_LFO1_DEPTH("osc3lfo1depth",                                59,  26),
+    OSC3_MOD_ENV_DEPTH("osc3modenvdepth",                           60,  27),
+    OSC3_PULSE_WIDTH("osc3pulsewidth",                              61,  28),
+    OSC3_LFO2_PULSE_WIDTH_MOD("osc3lfo2pulsewidthmod",              62,  29),
+    OSC3_MODENV_PULSE_WIDTH_MOD("osc3modenvpulsewidthmod",          63,  30),
+    ////
+    // Envelopes
+    ////
+    ENVELOPE_AMP_ATTACK("amplitudeenvelopeattack",                 108,  62),
+    ENVELOPE_AMP_DECAY("amplitudeenvelopedecay",                   109,  63),
+    ENVELOPE_AMP_SUSTAIN("amplitudeenvelopesustain",               110,  64),
+    ENVELOPE_AMP_RELEASE("amplitudeenveloperelease",               111,  65),
+    ENVELOPE_AMP_VELOCITY_DEPTH("amplitudeenvelopevelocitydepth",  112,  61),
+    ENVELOPE_MOD_ATTACK("modulationenvelopeattack",                114,  67),
+    ENVELOPE_MOD_DECAY("modulationenvelopedecay",                  115,  68),
+    ENVELOPE_MOD_SUSTAIN("modulationenvelopesustain",              116,  69),
+    ENVELOPE_MOD_RELEASE("modulationenveloperelease",              117,  70),
+    ENVELOPE_MOD_VELOCITY_DEPTH("modulationenvelopevelocitydepth", 118,  66),
+    ////
+    // LFOs
+    ////
+    LFO1_SPEED_NON_SYNC("lfo1speednonsync",                         80,  72),
+    LFO1_SPEED_SYNC("lfo1speedsync",                                81,  73),
+    LFO1_DELAY("lfo1delay",                                         82,  74),
+    LFO2_SPEED_NON_SYNC("lfo2speednonsync",                         83,  75),
+    LFO2_SPEED_SYNC("lfo2speedsync",                                84,  76),
+    LFO2_DELAY("lfo2delay",                                         85,  77),
+    ////
+    // Filter
+    ////
+    FILTER_FREQ("filterfrequency",                                 105,  46),
+    FILTER_RESONANCE("filterresonance",                            106,  44),
+    FILTER_OVERDRIVE("filteroverdrive",                            104,  43),
+    // CC6 -> filtertracking (on latest firmware - whilst NRPN according to latest (yet older) spec I could find)
+    FILTER_KEY_TRACK("filterkeytrack",                               6,  47),
+    FILTER_MOD_ENV_DEPTH("filtermodenvdepth",                      107,  52),
+    FILTER_LFO2_DEPTH("filterlfo2depth",                           102,  51),
+    FILTER_Q_NORMALIZE("filterqnormalize",                         103,  45),
+    ////
+    // Mixer
+    ////
+    MIXER_OSC1("osc1level",                                         72,  37),
+    MIXER_OSC2("osc2level",                                         73,  38),
+    MIXER_OSC3("osc3level",                                         74,  39),
+    MIXER_NOISE("noiselevel",                                       75,  40),
+    MIXER_RING_MOD("ringmodulatorlevel",                            76,  41),
+    MIXER_EXTERNAL("externalinputlevel",                            77,  42),
+    ////
+    // ARP
+    ////
+    ARP_SYNC("arpsync",                                             87,  85),
+    ARP_GATE_TIME("arpgatetime",                                    88,  86),
+    ARP_PATTERN("arppattern",                                        3,  87),
+    ARP_RATE("arprate",                                              9,  84),
+    // not sure what this is, different from the one in packed7 ?
+    ARP_LATCH_ON_MOMENTARY("arplatchonmomentary",                   64,null),
+    ////
+    // Effects - equalizer
+    ////
+    EQUALIZER_LEVEL("equalizerlevel",                               33,  92),
+    EQUALIZER_FREQUENCY("equalizerfrequency",                       34,  93),
+    EQUALIZER_RATE_NON_SYNC("equalizerratenonsync",                 35,  94),
+    EQUALIZER_RATE_SYNC("equalizerratesync",                        36,  95),
+    EQUALIZER_MOD_DEPTH("equalizermoddepth",                        37,  96),
+    ////
+    // Effects - delay
+    ////
+    DELAY_SEND_LEVEL("delaysendlevel",                              92, 100),
+    DELAY_SEND_MODWHEEL("delaysendmodheel",                         18, 101),
+    DELAY_TIME_NON_SYNC("delaytimenonsync",                         19, 102),
+    DELAY_TIME_SYNC("delaytimesync",                                20, 103),
+    DELAY_FEEDBACK("delayfeedback",                                 21, 104),
+    DELAY_STEREO_WIDTH("delaystereowidth",                          22, 105),
+    DELAY_RATIO("delayratio",                                       23, 106),
+    ////
+    // Effects - chorus/flanger
+    ////
+    CHORUS_SEND_LEVEL("chorussendlevel",                            93, 110),
+    CHORUS_SEND_MODWHEEL("chorussendmodheel",                       26, 111),
+    CHORUS_RATE_NON_SYNC("chorusratenonsync",                       27, 112),
+    CHORUS_RATE_SYNC("chorusratesync",                              28, 113),
+    CHORUS_FEEDBACK("chorusfeedback",                               29, 114),
+    CHORUS_MOD_DEPTH("chorusmoddepth",                              30, 115),
+    CHORUS_MOD_CENTRE_POINT("chorusmodcentrepoint",                 31, 116),
+    ////
+    // Effects - reverb
+    ////
+    REVERB_SEND_LEVEL("reverbsendlevel",                            91, 107),
+    REVERB_SEND_MODWHEEL("reverbsendmodheel",                       24, 108),
+    REVERB_DECAY("reverbdecay",                                     25, 109),
+    ////
+    // Effects - distortion
+    ////
+    DISTORTION_MODWHEEL("distortionmodheel",                        16,  98),
+    DISTORTION_COMPENSATION("distortioncompensation",               17,  99),
+    ////
+    // Effects - vocoder
+    ////
+    VOCODER_BALANCE("vocoderbalance",                               95,  89),
+    VOCODER_STEREO_WIDTH("vocoderstereowidth",                      14,  90),
+    VOCODER_SIBILANCE_LEVEL("vocodersibilancelevel",                15,  91),
+    ////
+    // Effects - panning
+    ////
+    PAN_POSITION("panposition",                                     10, 117),
+    PANNING_MOD_DEPTH("panningmoddepth",                            94, 120),
+    PANNING_RATE_NON_SYNC("panningratenonsync",                     12, 118),
+    PANNING_RATE_SYNC("panningratesync",                            13, 119),
+    // CC7: Device volume (non-patch related; not stored within patch)
+    DEVICE_VOLUME("devicevolume",                                    7,null),
+    // program volume - stored in patch
+    PROGRAM_VOLUME("programvolume",                                119, 125),
+
+    ////
+    // The packed ones (TODO - rework and integrate into functional sections ?)
+    ////
+    PACKED1(Convertors.PACKED1,                                          65,  80),
+    PACKED2(Convertors.PACKED2,                                          67,   0),
+    PACKED3(Convertors.PACKED3,                                          70,   5),
+    PACKED4(Convertors.PACKED4,                                          71,   6),
+    PACKED5(Convertors.PACKED5,                                          78,  78),
+    PACKED6(Convertors.PACKED6,                                          79,  79),
+    PACKED7(Convertors.PACKED7,                                          89,  88),
+
+    // TODO - handle NRPNS !?
+
+    ////
+    // FYI - CC void
+    ////
     // CC0 -> NA
     // CC1 -> modwheel (receive only)
     // CC2 -> breath control (receive only)
-    ARP_PATTERN(                  3,   87, "arppattern"),
     // CC4 -> NA
-    PROGRAM_PORTAMENTO(           5,    3, "portamentotime"),
-    // CC6 -> NRPN
-    // CC7: Device volume (non-patch related; not stored within patch)
-    DEVICE_VOLUME(                7, null, "devicevolume"),
-    // CC8, 9, -> TODO
-    PAN_POSITION(                10,  117, "panposition"),
     // CC11 -> NA
-    PANNING_RATE_NON_SYNC(       12,  118, "panningratenonsync"),
-    PANNING_RATE_SYNC(           13,  119, "panningratesync"),
-    VOCODER_STEREO_WIDTH(        14,   90, "vocoderstereowidth"),
-    VOCODER_SIBILANCE_LEVEL(     15,   91, "vocodersibilancelevel"),
-    DISTORTION_MODWHEEL(         16,   98, "distortionmodheel"),
-    DISTORTION_COMPENSATION(     17,   99, "distortioncompensation"),
-    DELAY_SEND_MODWHEEL(         18,  101, "delaysendmodheel"),
-    DELAY_TIME_NON_SYNC(         19,  102, "delaytimenonsync"),
-    DELAY_TIME_SYNC(             20,  103, "delaytimesync"),
-    DELAY_FEEDBACK(              21,  104, "delayfeedback"),
-    DELAY_STEREO_WIDTH(          22,  105, "delaystereowidth"),
-    DELAY_RATIO(                 23,  106, "delayratio"),
-    REVERB_SEND_MODWHEEL(        24,  108, "reverbsendmodheel"),
-    REVERB_DECAY(                25,  109, "reverbdecay"),
-    CHORUS_SEND_MODWHEEL(        26,  111, "chorussendmodheel"),
-    CHORUS_RATE_NON_SYNC(        27,  112, "chorusratenonsync"),
-    CHORUS_RATE_SYNC(            28,  113, "chorusratesync"),
-    CHORUS_FEEDBACK(             29,  114, "chorusfeedback"),
-    CHORUS_MOD_DEPTH(            30,  115, "chorusmoddepth"),
-    CHORUS_MOD_CENTRE_POINT(     31,  116, "chorusmodcentrepoint"),
-    // CC32 -> TODO bank select
-    // CCxx -> TODO equalizer controls
-    OSC1_SEMITONE(               40,    7, "osc1semitone"),
-    OSC1_DETUNE(                 41,    8, "osc1detune"),
-    OSC1_BENDWHEEL_AMOUNT(       42,    9, "osc1bendwheelamount"),
-    OSC1_LFO1_DEPTH(             43,   10, "osc1lfo1depth"),
-    OSC1_MOD_ENV_DEPTH(          44,   11, "osc1modenvdepth"),
-    OSC1_PULSE_WIDTH(            45,   12, "osc1pulsewidth"),
-    // TODO - check
-    OSC2_SEMITONE(               48,   15, "osc2semitone"),
-    OSC2_DETUNE(                 49,   16, "osc2detune"),
-    OSC2_BENDWHEEL_AMOUNT(       50,   17, "osc2bendwheelamount"),
-    OSC2_LFO1_DEPTH(             51,   18, "osc2lfo1depth"),
-    OSC2_MOD_ENV_DEPTH(          52,   19, "osc2modenvdepth"),
-    OSC2_PULSE_WIDTH(            53,   20, "osc2pulsewidth"),
-    // TODO - check
-    OSC3_SEMITONE(               56,   23, "osc3semitone"),
-    OSC3_DETUNE(                 57,   24, "osc3detune"),
-    OSC3_BENDWHEEL_AMOUNT(       58,   25, "osc3bendwheelamount"),
-    OSC3_LFO1_DEPTH(             59,   26, "osc3lfo1depth"),
-    OSC3_MOD_ENV_DEPTH(          60,   27, "osc3modenvdepth"),
-    OSC3_PULSE_WIDTH(            61,   28, "osc3pulsewidth"),
-    // TODO - check
-    // TODO
-    PACKED1(                     65,   80, Convertors.PACKED1),
+    // CC32 -> bank select
+    // CC38, 39 -> NA
     // CC66 -> NA
-    PACKED2(                     67,    0, Convertors.PACKED2),
-    UNISON_DETUNE(               68,    1, "unisondetune"),
-    OSCILLATORS_RANDOM_DETUNE(   69,    2, "oscillatorrandomdetune"),
-    PACKED3(                     70,    5, Convertors.PACKED3),
-    PACKED4(                     71,    6, Convertors.PACKED4),
-    MIXER_OSC1(                  72,   37, "osc1level"),
-    MIXER_OSC2(                  73,   38, "osc2level"),
-    MIXER_OSC3(                  74,   39, "osc3level"),
-    MIXER_NOISE(                 75,   40, "noiselevel"),
-    MIXER_RING_MOD(              76,   41, "ringmodulatorlevel"),
-    MIXER_EXTERNAL(              77,   42, "externalinputlevel"),
-    PACKED5(                     78,   78, Convertors.PACKED5),
-    PACKED6(                     79,   79, Convertors.PACKED6),
-    LFO1_SPEED_NON_SYNC(         80,   72, "lfo1speednonsync"),
-    LFO1_SPEED_SYNC(             81,   73, "lfo1speedsync"),
-    LFO1_DELAY(                  82,   74, "lfo1delay"),
-    LFO2_SPEED_NON_SYNC(         83,   75, "lfo2speednonsync"),
-    LFO2_SPEED_SYNC(             84,   76, "lfo2speedsync"),
-    LFO2_DELAY(                  85,   77, "lfo2delay"),
     // CC86 -> NA
-    ARP_SYNC(                    87,   85, "arpsync"),
-    ARP_GATE_TIME(               88,   86, "arpgatetime"),
-    PACKED7(                     89,   88, Convertors.PACKED7),
     // CC90 -> NA
-    REVERB_SEND_LEVEL(           91,  107, "reverbsendlevel"),
-    DELAY_SEND_LEVEL(            92,  100, "delaysendlevel"),
-    CHORUS_SEND_LEVEL(           93,  110, "chorussendlevel"),
-    PANNING_MOD_DEPTH(           94,  120, "panningmoddepth"),
-    VOCODER_BALANCE(             95,   89, "vocoderbalance"),
-    // CC96, 97-> NA
+    // CC96, 97 -> NA
     // CC98 NRPN number
     // CC99, CC100, CC101-> NA
-    FILTER_LFO2_DEPTH(          102,   51, "filterlfo2depth"),
-    FILTER_Q_NORMALIZE(         103,   45, "filterqnormalize"),
-    FILTER_OVERDRIVE(           104,   43, "filteroverdrive"),
-    FILTER_FREQ(                105,   46, "filterfrequency"),
-    FILTER_RESONANCE(           106,   44, "filterresonance"),
-    FILTER_MOD_ENV_DEPTH(       107,   52, "filtermodenvdepth"),
-    ENVELOPE_AMP_ATTACK(        108,   62, "amplitudeenvelopeattack"),
-    ENVELOPE_AMP_DECAY(         109,   63, "amplitudeenvelopedecay"),
-    ENVELOPE_AMP_SUSTAIN(       110,   64, "amplitudeenvelopesustain"),
-    ENVELOPE_AMP_RELEASE(       111,   65, "amplitudeenveloperelease"),
-    ENVELOPE_AMP_VELOCITY_DEPTH(112,   61, "amplitudeenvelopevelocitydepth"),
     // CC113 -> NA
-    ENVELOPE_MOD_ATTACK(        114,   67, "modulationenvelopeattack"),
-    ENVELOPE_MOD_DECAY(         115,   68, "modulationenvelopedecay"),
-    ENVELOPE_MOD_SUSTAIN(       116,   69, "modulationenvelopesustain"),
-    ENVELOPE_MOD_RELEASE(       117,   70, "modulationenveloperelease"),
-    ENVELOPE_MOD_VELOCITY_DEPTH(118,   66, "modulationenvelopevelocitydepth"),
-    // program volume - stored in patch
-    PROGRAM_VOLUME(             119,  125, "programvolume")
-    // some standard midi msgs next
-    // TODO - handle NRPNS !
+
+
     ;
 
-    private static final Integer NA = null;
     private static final Map<Integer, Mappings> BY_CC = buildCCMap();
     private static final Map<String, Mappings> BY_KEY = buildKeyMap();
     private static final Map<Integer, Mappings> BY_INDEX = buildIndexMap();
 
     private static Map<Integer, Mappings> buildCCMap() {
-        return Stream.of(Mappings.values()).collect(Collectors.toUnmodifiableMap(Mappings::getCC, Function.identity()));
+        return Stream.of(Mappings.values())
+                .filter(m -> m.getCC() != null)
+                .collect(Collectors.toUnmodifiableMap(Mappings::getCC, Function.identity()));
     }
 
     private static Map<String, Mappings> buildKeyMap() {
@@ -163,30 +234,30 @@ public enum Mappings {
     }
 
     // (MIDI) CC number
-    private final int cc;
+    private final Integer cc;
     private final Integer dumpIndex;
     // key(s) as used in the Synth Model, typically containing single element, will contain multiple elements for packed parameters
-    private final Set<String> keys;
+    private final List<String> keys;
     // Convertor
     private final PackedConvertor packedConvertor;
 
     // "straight": cc-to-key is one-to-one
-    Mappings(int cc, Integer dumpIndex, String key) {
-        this.cc = cc;
-        this.keys = Set.of(key);
+    Mappings(String key, Integer cc, Integer dumpIndex) {
+        this.keys = List.of(key);
         this.packedConvertor = null;
+        this.cc = cc;
         this.dumpIndex = dumpIndex;
     };
 
     // "packed": cc-to-key is one-to-many
-    Mappings(int cc, Integer dumpIndex, PackedConvertor packedConvertor) {
-        this.cc = cc;
+    Mappings(PackedConvertor packedConvertor, Integer cc, Integer dumpIndex) {
         this.packedConvertor = packedConvertor;
         this.keys = packedConvertor.getKeys();
+        this.cc = cc;
         this.dumpIndex = dumpIndex;
     };
 
-    public int getCC() {
+    public Integer getCC() {
         return cc;
     }
 
@@ -210,8 +281,7 @@ public enum Mappings {
     public int toSynth(Model model) {
         if (packedConvertor == null) {
             // straight conversion, single key assumed
-            String key = keys.iterator().next();
-            return model.get(key);
+            return model.get(getKey());
         } else {
             return packedConvertor.toSynth(model);
         }
@@ -232,6 +302,13 @@ public enum Mappings {
         return BY_INDEX.containsKey(cc) ? Optional.of(BY_INDEX.get(cc)) : Optional.empty();
     }
 
+    public String getKey() {
+        if (keys.size() != 1) {
+            throw new IllegalStateException("Should not get here");
+        }
+        return keys.getFirst();
+    }
+
     /**
      * Definition of available Convertors;
      * Responsible for converting (single/multiple) values from the model from/to single Midi CC
@@ -239,8 +316,8 @@ public enum Mappings {
     private enum Convertors implements PackedConvertor {
         PACKED1 {
             @Override
-            public Set<String> getKeys() {
-                return Set.of("amplitudeenvelopetrigger", "modulationenvelopetrigger", "fmenvelopetrigger", "keysyncphase");
+            public List<String> getKeys() {
+                return List.of("amplitudeenvelopetrigger", "modulationenvelopetrigger", "fmenvelopetrigger", "keysyncphase");
             }
             @Override
             public void toModel(Model model, int value) {
@@ -259,8 +336,8 @@ public enum Mappings {
         },
         PACKED2 {
             @Override
-            public Set<String> getKeys() {
-                return Set.of("unisonvoices", "unisonpolyphonymode", "filtertype");
+            public List<String> getKeys() {
+                return List.of("unisonvoices", "unisonpolyphonymode", "filtertype");
             }
             @Override
             public void toModel(Model model, int value) {
@@ -279,8 +356,8 @@ public enum Mappings {
 
         PACKED3 {
             @Override
-            public Set<String> getKeys() {
-                return Set.of("osc1waveform", "osc2waveform", "osc3waveform", "portamentomode");
+            public List<String> getKeys() {
+                return List.of("osc1waveform", "osc2waveform", "osc3waveform", "portamentomode");
             }
             @Override
             public void toModel(Model model, int value) {
@@ -299,8 +376,8 @@ public enum Mappings {
         },
         PACKED4 {
             @Override
-            public Set<String> getKeys() {
-                return Set.of("osc1octave", "osc2octave", "osc3octave", "osc1to2sync");
+            public List<String> getKeys() {
+                return List.of("osc1octave", "osc2octave", "osc3octave", "osc1to2sync");
             }
             @Override
             public void toModel(Model model, int value) {
@@ -319,8 +396,8 @@ public enum Mappings {
         },
         PACKED5 {
             @Override
-            public Set<String> getKeys() {
-                return Set.of("lfo1delaymulti", "lfo2delaymulti", "lfo1waveform", "lfo2waveform");
+            public List<String> getKeys() {
+                return List.of("lfo1delaymulti", "lfo2delaymulti", "lfo1waveform", "lfo2waveform");
             }
             @Override
             public void toModel(Model model, int value) {
@@ -339,8 +416,8 @@ public enum Mappings {
         },
         PACKED6 {
             @Override
-            public Set<String> getKeys() {
-                return Set.of("lfo1keysyncphaseshift", "lfo1keysync", "lfo1lock",
+            public List<String> getKeys() {
+                return List.of("lfo1keysyncphaseshift", "lfo1keysync", "lfo1lock",
                         "lfo2keysyncphaseshift", "lfo2keysync", "lfo2lock");
             }
             @Override
@@ -364,8 +441,8 @@ public enum Mappings {
         },
         PACKED7 {
             @Override
-            public Set<String> getKeys() {
-                return Set.of("arpoctaves", "arponoff", "arpkeysync", "arplatch", "arpnotedestination");
+            public List<String> getKeys() {
+                return List.of("arpoctaves", "arponoff", "arpkeysync", "arplatch", "arpnotedestination");
             }
             @Override
             public void toModel(Model model, int value) {
@@ -386,8 +463,8 @@ public enum Mappings {
         },
         PACKED8 {
             @Override
-            public Set<String> getKeys() {
-                return Set.of("reverbtype", "chorusphaser");
+            public List<String> getKeys() {
+                return List.of("reverbtype", "chorusphaser");
             }
             @Override
             public void toModel(Model model, int value) {
@@ -404,7 +481,7 @@ public enum Mappings {
 
     private interface PackedConvertor {
         // get the keys this instance is handling
-        Set<String> getKeys();
+        List<String> getKeys();
 
         // update model with a given (CC-param) value
         void toModel(Model model, int value);

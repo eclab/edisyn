@@ -7,7 +7,6 @@ package edisyn.synth.novationastation;
 
 import edisyn.*;
 import edisyn.gui.*;
-import jdk.jfr.Percentage;
 
 import java.awt.*;
 import javax.swing.*;
@@ -260,9 +259,8 @@ public class NovationAStation extends Synth {
         hbox.add(comp);
         comp = new LabelledDial("overdrive", this, "filteroverdrive", color, 0, 127);
         hbox.add(comp);
-        // TODO - handle NRPN
-        // comp = new LabelledDial("key track", this, "filterkeytrack", color, 0, 127);
-        // hbox.add(comp);
+        comp = new LabelledDial("key track", this, "filterkeytrack", color, 0, 127);
+        hbox.add(comp);
         comp = new LabelledDial("mod env depth", this, "filtermodenvdepth", color, 0, 127, 64);
         hbox.add(comp);
         comp = new LabelledDial("lfo2 depth", this, "filterlfo2depth", color, 0, 127, 64);
@@ -1456,7 +1454,7 @@ public class NovationAStation extends Synth {
         return super.setupBatchStartingAndEndingPatches(startPatch, endPatch);
         }
 
-    public int getNumberOfPastes() 
+    public int getNumberOfPastes()
         {  
         // Override this method to force Edisyn to paste multiple times to the same category or tab.
         // The reason you might want to do this is because Edisyn uses the *receiving* category to 

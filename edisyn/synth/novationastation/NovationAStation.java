@@ -7,12 +7,17 @@ package edisyn.synth.novationastation;
 
 import edisyn.*;
 import edisyn.gui.*;
+import jdk.jfr.Percentage;
+
 import java.awt.*;
 import javax.swing.*;
 import java.util.*;
+import java.util.stream.IntStream;
 import javax.sound.midi.*;
 
 public class NovationAStation extends Synth {
+    private static final String[] BANKS = IntStream.rangeClosed(1, 4).boxed().map(String::valueOf).toList().toArray(new String[0]);
+    private static final String[] PATCH_NUMBERS = IntStream.rangeClosed(0, 99).boxed().map(String::valueOf).toList().toArray(new String[0]);
     private static final String[] PORTAMENTO_MODES = {"exponential", "linear"};
     private static final String[] UNISON_VOICES = {"off", "2","3","4","5","6","7", "8"};
     private static final String[] POLYPHONY_MODES = {"mono", "mono autoglide", "poly", "poly with stealing"};
@@ -81,12 +86,14 @@ public class NovationAStation extends Synth {
         vbox = new VBox();
 
         vbox.add(addDeviceGoodies(Style.COLOR_A()));
+        vbox.add(addDeviceDetails(Style.COLOR_B()));
 
         devicePanel.add(vbox, BorderLayout.CENTER);
         addTab("Device goodies", devicePanel);
 
         //
-        model.set("name", "InitName");  // or whatever, to set the initial name of your patch (assuming you use "name" as the key for the patch name)
+//        model.set("name", "Init");
+
         loadDefaults();                 // this tells Edisyn to load the ".init" sysex file you created.  If you haven't set that up, it won't bother
     }
 
@@ -99,24 +106,24 @@ public class NovationAStation extends Synth {
 
         VBox vbox = new VBox();
         HBox hbox2 = new HBox();
-        comp = new PatchDisplay(this, 4, false);
+        comp = new PatchDisplay(this, 4);
         hbox2.add(comp);
         vbox.add(hbox2);
 
-        comp = new StringComponent("Patch Name", this, "name", 14, "Name must be up to 14 ASCII characters.")
-        {
-            public String replace(String val)
-            {
-                return revisePatchName(val);
-            }
-
-            public void update(String key, Model model)
-            {
-                super.update(key, model);
-                updateTitle();
-            }
-        };
-        vbox.addBottom(comp);  // doesn't work right :-(
+//        comp = new StringComponent("Patch Name", this, "name", 14, "Name must be up to 14 ASCII characters.")
+//        {
+//            public String replace(String val)
+//            {
+//                return revisePatchName(val);
+//            }
+//
+//            public void update(String key, Model model)
+//            {
+//                super.update(key, model);
+//                updateTitle();
+//            }
+//        };
+//        vbox.addBottom(comp);  // doesn't work right :-(
         hbox.add(vbox);
 
         globalCategory.add(hbox, BorderLayout.WEST);
@@ -236,7 +243,7 @@ public class NovationAStation extends Synth {
         return category;
     }
 
-    public JComponent addFilter(Color color) {
+    private JComponent addFilter(Color color) {
         Category category = new Category(this, "Filter", color);
 
         JComponent comp;
@@ -268,7 +275,7 @@ public class NovationAStation extends Synth {
         return category;
     }
 
-    public JComponent addEnvelope(final int envelope, Color color)
+    private JComponent addEnvelope(final int envelope, Color color)
     {
         Category category = new Category(this, (envelope == 1 ? "Amp" : "Mod") + " Envelope", color);
         category.makePasteable("env");
@@ -495,6 +502,20 @@ public class NovationAStation extends Synth {
         return category;
     }
 
+    private JComponent addDeviceDetails(Color color) {
+        Category category = new Category(this, "Details", color);
+
+        JComponent comp;
+
+        HBox hbox = new HBox();
+        // TODO - revisit how to present this
+        comp = new ReadOnlyString("sw version", this, "swversion", 1);
+        hbox.add(comp);
+
+        category.add(hbox);
+        return category;
+    }
+
     ////// BELOW ARE DEFAULT IMPLEMENTATIONS OF COMMON HOOK METHODS THAT SYNTH EDITORS IMPLEMENT OR OVERRIDE.
     ////// If you do not need to implement or override a method, you should delete that method entirely.
 
@@ -580,15 +601,8 @@ public class NovationAStation extends Synth {
     /// You could override performRequestCurrentDump or requestCurrentDump, but probably not both.
     /// Similarly, you could override performRequestDump or requestDump, but probably not both
 
-
-
-
-
-
-
-
     ////// YOU MUST OVERRIDE ALL OF THE FOLLOWING
-
+    @Override
     public void changePatch(Model tempModel)
         {
         // Here you do stuff that changes patches on the synth.
@@ -613,27 +627,61 @@ public class NovationAStation extends Synth {
         //         model.set("bank", bank);
         //         setSendMIDI(midi);                           // restore to whatever state it was
         //         }
+            byte bank = (byte) tempModel.get("bank");
+            byte program = (byte) tempModel.get("number");
+            try {
+                ++bank; // 1..4 in synth, while 0..3 in model
+                // Bank change is CC 32
+                tryToSendMIDI(new ShortMessage(ShortMessage.CONTROL_CHANGE, getChannelOut(), 32, bank));
+                // Number change is PC
+                tryToSendMIDI(new ShortMessage(ShortMessage.PROGRAM_CHANGE, getChannelOut(), program, 0));
+            }
+            catch (Exception e) {
+                Synth.handleException(e);
+            }
         }
 
-    public boolean gatherPatchInfo(String title, Model changeThis, boolean writing)     
-        {
-        // Here you want to pop up a window which gathers information about a patch,
-        // such as the patch number and the bank, sufficient to load/read a specific patch
-        // or save/write a specific patch to/from the synthesizer.  If WRITING is true, you
-        // may assume that you are writing out to the synthesizer or saving to disk.  This
-        // allows you to determine whether to permit the user to select certain read-only
-        // banks or refuse to do so.  The title of your dialog window should be TITLE.
-        //
-        // Return TRUE if you successfully gathered information, FALSE if the user cancelled.
-        //
-        // This can be complex to write.  But take a look at implementations in, for example,
-        // WaldorfBlofeld.java and freely copy that.
-        //
-        return false;
+    @Override
+    public boolean gatherPatchInfo(String title, Model changeThis, boolean writing) {
+        JComboBox bank = new JComboBox(BANKS);
+        bank.setEditable(false);
+        bank.setMaximumRowCount(4);
+
+        int currentBank = model.get("bank");     // 0..3
+        if (-1 != currentBank) {
+            bank.setSelectedIndex(currentBank);
         }
 
-    public int parse(byte[] data, boolean fromFile)
-        {
+        int currentPatch = model.get("number");
+        JTextField number = new SelectedTextField(String.valueOf(currentPatch), 3);
+
+        while (true) {
+            boolean result = showMultiOption(this, new String[]{"Bank", "Patch Number"},
+                    new JComponent[]{bank, number}, title, "Enter the Bank and Patch number.");
+
+            if (result == false)
+                return false;
+
+            int n;
+            try {
+                n = Integer.parseInt(number.getText());
+            } catch (NumberFormatException e) {
+                showSimpleError(title, "The Patch Number must be an integer 0 ... 99");
+                continue;
+            }
+            if (n < 0 || n > 99) {
+                showSimpleError(title, "The Patch Number must be an integer 0 ... 99");
+                continue;
+            }
+
+            changeThis.set("bank", bank.getSelectedIndex());
+            changeThis.set("number", n);
+            return true;
+        }
+    }
+
+    @Override
+    public int parse(byte[] data, boolean fromFile) {
         // This patch data will come from a file or transmitted over sysex.
         // FROMFILE indicates that the parse is from a sysex file.
         //
@@ -666,20 +714,41 @@ public class NovationAStation extends Synth {
         //             *** send your message here ***
         //             setSendMIDI(sendMIDI);
         //
-            for (int index = 13; index < 13 + 128; ++index) {
-                Optional<Mappings> mapping = Mappings.getByIndex(index-13);
-                if (mapping.isPresent()) {
-                    mapping.get().toModel(model, data[index]);
-                }
+            byte swVersion = data[9];
+            byte swIncrement = data[10];
+            model.set("swversion", parseVersion(swVersion, swIncrement));
+
+            byte programBank = data[11];    // 1..4
+            byte programNumber = data[12];  // 0..99
+            if (programBank != 0) {
+                programBank--;  // zero-indexed in model
+                model.set("bank", programBank); // 0..3 in model
+                model.set("number", programNumber);
             }
-        return PARSE_SUCCEEDED;
+
+
+        // TODO - to be extended, for now supporting:
+            // 0 : current sound dump
+            // 1 : program sound dump
+            byte messageType = data[7];
+            if (messageType == 0x0 || messageType == 0x01) {
+                for (int index = 13; index < 13 + 128; ++index) {
+                    Optional<Mappings> mapping = Mappings.getByIndex(index-13);
+                    if (mapping.isPresent()) {
+                        mapping.get().toModel(model, data[index]);
+                    }
+                }
+                return PARSE_SUCCEEDED;
+            }
+            return PARSE_IGNORE;
         }
-        
+
     public static String getSynthName() {
         return "Novation A Station";
     }
-    
-    public String getDefaultResourceFileName() 
+
+    @Override
+    public String getDefaultResourceFileName()
         {
         // Ultimately your synth will be initialized by loading a file via parse().  This is usually a
         // sysex file ending in the extension ".init", such as "WaldorfBlofeld.init",
@@ -687,136 +756,112 @@ public class NovationAStation extends Synth {
         // 
         // If you return null here, this initialization step will be bypassed.  But final
         // production code should not do that.
+        // TODO
         return null; 
         }
-        
+
+    @Override
     public String getHTMLResourceFileName() {
         return "NovationAStation.html";
     }
 
-    public String getPatchLocationName(Model model)
-        {
-        // Given the patch information (such as number of bank) stored in the provided model,
-        // return a simple and short string which describes the
-        // patch location.  For example, if your patch is number 72 of bank B, you might say
-        // "B72" or "B072" or whatnot.
-        //
-        // The name should ideally be free of spaces and punctuation (no
-        // parentheses, hyphens, backslashes, periods, commas, etc.)   This is because it'll be
-        // used in filenames, such as "B072.syx"  But it's not a hard-and-fast rule.
-        //
-        // The default implementation of this method returns null.  This tells Edisyn that
-        // you have not implemented this method, nor getNextPatchLocation(...), nor
-        // patchLocationEquals(...), and thus Edisyn should disable the Batch Downloads menu.
-        //
-        // This method is used for doing batch downloads.
-        //
-        // IMPORTANT NOTE.  sprout() calls this method to determine if we should set up batch 
-        // downloading.  But if you have not yet set up an .init file, then you can't access
-        // any parameters at this point because the widgets haven't been created yet.  So you
-        // need to test for this and return null if so.  For example, you might start with
-        // a line like:
-        //
-        // if (!model.exists("number")) return null;
-        //
-        // ... or some key your function would ordinarily need to extract from the model
-        
-        return null;
+    @Override
+    public String getPatchLocationName(Model model) {
+            if (model.exists("bank") && model.exists("number")) {
+                String bankName = BANKS[model.get("bank")];
+                int program = model.get("number");
+                return String.format("%s%02d", bankName, program);
+            }
+            return "...";
         }
     
-    public Model getFirstPatchLocation()
-        {
-        // Returns a model containing a patch location (bank, number, etc.) representing the
-        // "first" patch in the synth.  If your synthesizer does not have the notion of patches
-        // at all, return null.  If your synthesizer only has a single "patch", thus a single
-        // patch location, then this method should return that location.
-        //
-        // In most cases you don't have to override this method.  The default version computes
-        // whether you have a "first" patch by setting a model's number and bank to both 0, then
-        // calling getNextPatchLocation().  If that method returns null, or if it returns a model
-        // with no number, then the default version returns null. Otherwise it checks to see if
-        // a model is returned with a bank.  If there is a bank, then bank=0 number=0 is returned.
-        // If there is no bank, then number=0 is returned.  This strategy will work in most cases,
-        // but if your first number or bank, for some reason, is not 0, then it will not work
-        // properly.  In that case you'll need to override it to return the first location yourself.
-        //
-        // This method is used for doing random patch selection.
-        return super.getFirstPatchLocation();
-        }
+//    public Model getFirstPatchLocation()
+//        {
+//        // Returns a model containing a patch location (bank, number, etc.) representing the
+//        // "first" patch in the synth.  If your synthesizer does not have the notion of patches
+//        // at all, return null.  If your synthesizer only has a single "patch", thus a single
+//        // patch location, then this method should return that location.
+//        //
+//        // In most cases you don't have to override this method.  The default version computes
+//        // whether you have a "first" patch by setting a model's number and bank to both 0, then
+//        // calling getNextPatchLocation().  If that method returns null, or if it returns a model
+//        // with no number, then the default version returns null. Otherwise it checks to see if
+//        // a model is returned with a bank.  If there is a bank, then bank=0 number=0 is returned.
+//        // If there is no bank, then number=0 is returned.  This strategy will work in most cases,
+//        // but if your first number or bank, for some reason, is not 0, then it will not work
+//        // properly.  In that case you'll need to override it to return the first location yourself.
+//        //
+//        // This method is used for doing random patch selection.
+//        return super.getFirstPatchLocation();
+//        }
 
-    public Model getNextPatchLocation(Model model)
-        {
-        // Given the provided model containing a patch location (bank, number, etc.), this should 
-        // return a model containing the NEXT patch location.  For example, if the
-        // model's location is B072, then perhaps the next model might be B073.  And if the model was
-        // B128, maybe the next model should be C001.  This should wrap around as well.  Let's say
-        // that the model is D128, the final location in the synthesizer.  Then the next model should
-        // be something like A001.
-        //
-        // And yes, if you only have one patch on your synthesizer, then it's always the next patch.
-        // Just return it.
-        //
-        // This method is used for doing batch downloads and random patch selection.
-        
-        return null;
-        }
+    @Override
+    public Model getNextPatchLocation(Model model) {
+        int bank = model.get("bank", 0);
+        int program = model.get("number", -1);
+        int programindex = bank * 100 + program;
+        ++programindex;
+        bank = (programindex / 100) % 4;
+        program = programindex % 100;
 
-    public boolean patchLocationEquals(Model patch1, Model patch2)
-        {
-        // This should return true if the patch locations stored in the given two patches are the same.
-        // For example, they're both Bank B, Number 72.
-        //
-        // This method is used for doing batch downloads.
-        return super.patchLocationEquals(patch1, patch2);
-        }
-    
-    
-     
- 
+        Model newModel = buildModel();
+        newModel.set("bank", bank);
+        newModel.set("number", program);
+        return newModel;
+    }
+
+//    public boolean patchLocationEquals(Model patch1, Model patch2)
+//        {
+//        // This should return true if the patch locations stored in the given two patches are the same.
+//        // For example, they're both Bank B, Number 72.
+//        //
+//        // This method is used for doing batch downloads.
+//        return super.patchLocationEquals(patch1, patch2);
+//        }
+
     ////// YOU PROBABLY WANT TO OVERRIDE ALL OF THE FOLLOWING
 
-    public String getPatchName(Model model) 
-        {
-        // Here you'd look up the patch name in the model and return it. 
-        // If there is no patch name, you can just return null.
-        return null; 
-        }
+//    @Override
+//    public String getPatchName(Model model) {
+//        int bank = model.get("bank", -1);
+//        return bank != -1 ? String.valueOf(model.get("number")) : null;
+//    }
 
-    public String revisePatchName(String name)
-        {
-        // Here you tweak the name to make sure it's a valid patch name.
-        // You probably first want to call    name = super.revisePatchName(name)
-        // As this method will remove all trailing whitespace from the name.
-        // At that point you can modify the name as you need to (converting
-        // to all uppercase, say, or removing invalid characters, or truncating
-        // to the proper length, etc.)
-
-        return super.revisePatchName(name);
-        }
+//    public String revisePatchName(String name)
+//        {
+//        // Here you tweak the name to make sure it's a valid patch name.
+//        // You probably first want to call    name = super.revisePatchName(name)
+//        // As this method will remove all trailing whitespace from the name.
+//        // At that point you can modify the name as you need to (converting
+//        // to all uppercase, say, or removing invalid characters, or truncating
+//        // to the proper length, etc.)
+//
+//        return super.revisePatchName(name);
+//        }
         
-    public String reviseID(String id)
-        {
-        // Some synthesizers have an "id" which uniquely identifies them in their
-        // sysex so other synths of the same model ignore that sysex message.  Waldorf's
-        // synths are notable in this respect.  If your synth does this, revise the id
-        // to make sure it's valid, and return a valid String.  If your synth does NOT
-        // do this, then you should always return null.
-        return null;
-        }
+//    public String reviseID(String id)
+//        {
+//        // Some synthesizers have an "id" which uniquely identifies them in their
+//        // sysex so other synths of the same model ignore that sysex message.  Waldorf's
+//        // synths are notable in this respect.  If your synth does this, revise the id
+//        // to make sure it's valid, and return a valid String.  If your synth does NOT
+//        // do this, then you should always return null.
+//        return null;
+//        }
     
-    public void revise()
-        {
-        // In this method you need to verify that all the keys in your model have valid values.
-        // Some synthesizers send invalid values over sysex or NRPN.  For example, the PreenFM2
-        // can send crazy stuff way out of range.
-        //
-        // The default version of this method bounds all the values to between their stated min and
-        // max values.  You might need to do more than this; for example, you might verify that
-        // the name is valid.  In this case, call super.revise() and then do further revision
-        // as you see fit.  For one way to do this, see the Waldorf Blofeld code.
-        
-        super.revise();
-        }
+//    public void revise()
+//        {
+//        // In this method you need to verify that all the keys in your model have valid values.
+//        // Some synthesizers send invalid values over sysex or NRPN.  For example, the PreenFM2
+//        // can send crazy stuff way out of range.
+//        //
+//        // The default version of this method bounds all the values to between their stated min and
+//        // max values.  You might need to do more than this; for example, you might verify that
+//        // the name is valid.  In this case, call super.revise() and then do further revision
+//        // as you see fit.  For one way to do this, see the Waldorf Blofeld code.
+//
+//        super.revise();
+//        }
 
 
 
@@ -827,7 +872,7 @@ public class NovationAStation extends Synth {
 
 
     ////// YOU PROBABLY WANT TO OVERRIDE *ONE* OF THE FOLLOWING
-
+    @Override
     public Object[] emitAll(Model tempModel, boolean toWorkingMemory, boolean toFile)
         {
         // This does a write of your patch to sysex (to dump to the synth or to store
@@ -859,7 +904,8 @@ public class NovationAStation extends Synth {
         return super.emitAll(tempModel, toWorkingMemory, toFile);
         }
 
-    public byte[] emit(Model tempModel, boolean toWorkingMemory, boolean toFile) 
+    @Override
+    public byte[] emit(Model tempModel, boolean toWorkingMemory, boolean toFile)
         { 
         // This does a write of your patch to sysex (to dump to the synth or to store
         // in a file).  TOWORKINGMEMORY indicates whether the dump will go to the synth's
@@ -881,7 +927,7 @@ public class NovationAStation extends Synth {
     
     
     ////// YOU PROBABLY WANT TO OVERRIDE *ONE* OF THE FOLLOWING
-
+    @Override
     public Object[] emitAll(String key)
         {
             Optional<Mappings> mappings = Mappings.getByKey(key);
@@ -922,7 +968,8 @@ public class NovationAStation extends Synth {
             */
         }
 
-    public byte[] emit(String key) 
+    @Override
+    public byte[] emit(String key)
         { 
         // This writes a single parameter out to the synth.
         // If nothing should be emitted for the given key, return a zero-length array.
@@ -942,129 +989,112 @@ public class NovationAStation extends Synth {
 
     ////// YOU PROBABLY WANT TO OVERRIDE *ONE* OF THE FOLLOWING
     
-    public void performRequestDump(Model tempModel, boolean changePatch)
-        {
-        // This asks the synth to dump a specific patch (number and bank etc. specified
-        // in tempModel).  If CHANGEPATCH is true you should first change the patch.
-        //
-        // Normally Edisyn implements this method for you, handling the patch-change, 
-        // and you can just implement requestDump(...) to send the dump request.
-        // If you need to do more than a simple sysex request, reimplement this
-        // method.  The default form looks like this:
-        
-        // if (changePatch)
-        //              changePatch(tempModel); 
-        // tryToSendSysex(requestDump(tempModel));
-        
-        // It is possible that it's impossible to request a dump without changing
-        // the patch regardless.  In this case you can ignore changePatch and just
-        // do a changePatch always.  You'd need to implement this.
-        
-        super.performRequestDump(tempModel, changePatch);
-        }
+//    public void performRequestDump(Model tempModel, boolean changePatch)
+//        {
+//        // This asks the synth to dump a specific patch (number and bank etc. specified
+//        // in tempModel).  If CHANGEPATCH is true you should first change the patch.
+//        //
+//        // Normally Edisyn implements this method for you, handling the patch-change,
+//        // and you can just implement requestDump(...) to send the dump request.
+//        // If you need to do more than a simple sysex request, reimplement this
+//        // method.  The default form looks like this:
+//
+//        // if (changePatch)
+//        //              changePatch(tempModel);
+//        // tryToSendSysex(requestDump(tempModel));
+//
+//        // It is possible that it's impossible to request a dump without changing
+//        // the patch regardless.  In this case you can ignore changePatch and just
+//        // do a changePatch always.  You'd need to implement this.
+//
+//        super.performRequestDump(tempModel, changePatch);
+//        }
 
-    public byte[] requestDump(Model tempModel) 
-        { 
-        // This asks the synth to dump a specific patch (number and bank etc. specified
-        // in tempModel).  If CHANGEPATCH is true you should first change the patch.
-        //
-        // If you can let Edisyn call changePatch(), and then you just emit a single
-        // sysex command as a patch request, implement this version.
-        //
-        // It is possible that requestDump and requestCurrentDump are identical.  This
-        // might happen if you always have to change the patch no matter what (see the
-        // description of performRequestDump above) in which case you could just have this
-        // method call requestCurrentDump().
-            return new byte[0];
-//            return new byte[] { (byte)0xF0, 0x00, 0x20, 0x29, 0x01, 0x40, 0x7F, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00, (byte)0xF7 };
-        }
-    
+    @Override
+    public byte[] requestDump(Model tempModel) {
+        // request specific program dump
+        byte messageType = 0x41;
+        // tempModel supposed to have valid bank+program
+        byte bank = (byte) (1 + tempModel.get("bank")); // 1..4 (while in model: 0..3)
+        byte program = (byte) tempModel.get("number");
+        return new byte[] { (byte)0xF0, 0x00, 0x20, 0x29, 0x01, 0x40, 0x7F, messageType, 0x00, 0x00, 0x00, bank, program, (byte)0xF7 };
+    }
 
     ////// YOU PROBABLY WANT TO OVERRIDE *ONE* OF THE FOLLOWING
         
-    public void performRequestCurrentDump()
-        {
-        // This asks the synth to dump the currently-playing patch 
-        // (number and bank etc. specified in tempModel).
-        //
-        // Normally Edisyn implements this method for you, and you can just emit
-        // a sysex via requestCurrentDump().  But if you need something else,
-        // reimplement this method.  The default looks like this:
-        
-        // tryToSendSysex(requestCurrentDump());
+//    public void performRequestCurrentDump()
+//        {
+//        // This asks the synth to dump the currently-playing patch
+//        // (number and bank etc. specified in tempModel).
+//        //
+//        // Normally Edisyn implements this method for you, and you can just emit
+//        // a sysex via requestCurrentDump().  But if you need something else,
+//        // reimplement this method.  The default looks like this:
+//
+//        // tryToSendSysex(requestCurrentDump());
+//
+//        super.performRequestCurrentDump();
+//        }
 
-        super.performRequestCurrentDump();
-        }
-
-    public byte[] requestCurrentDump()
-        { 
-        // This asks the synth to dump the currently-playing patch 
-        // (number and bank etc. specified in tempModel).
-        //
-        // If you can do this with a single patch request, implement this version.
-        return new byte[] { (byte)0xF0, 0x00, 0x20, 0x29, 0x01, 0x40, 0x7F, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00, (byte)0xF7 };
-        }
-
-
-
-
-
-
-
-
-
+    @Override
+    public byte[] requestCurrentDump() {
+        // request current sound dump
+        byte messageType = 0x40;
+        return new byte[] { (byte)0xF0, 0x00, 0x20, 0x29, 0x01, 0x40, 0x7F, messageType, 0x00, 0x00, 0x00, 0x00, 0x00, (byte)0xF7 };
+    }
 
 
     ////// YOU MAY WANT TO IMPLEMENT SOME OF THE FOLLOWING
 
-    public boolean getAlwaysChangesPatchesOnRequestDump() 
-        { 
-        // This is called by performRequestDump() to determine if it should changePatch() first.
-        // If not, then in some cases performRequestDump() can avoid changing the patch, which 
-        // is good for things like the SHOW button in Multimode patches, or blending, or merging,
-        // where we're just loading a patch temporarily or in an auxiliary fashion.  However
-        // many synths do not have the ability to request a dump and must instead just do
-        // a change patch followed by requestCurrentDump ALWAYS.  In this case, override this
-        // method to return TRUE.
-        return false; 
-        }
+//    public boolean getAlwaysChangesPatchesOnRequestDump()
+//        {
+//        // This is called by performRequestDump() to determine if it should changePatch() first.
+//        // If not, then in some cases performRequestDump() can avoid changing the patch, which
+//        // is good for things like the SHOW button in Multimode patches, or blending, or merging,
+//        // where we're just loading a patch temporarily or in an auxiliary fashion.  However
+//        // many synths do not have the ability to request a dump and must instead just do
+//        // a change patch followed by requestCurrentDump ALWAYS.  In this case, override this
+//        // method to return TRUE.
+//        return false;
+//        }
 
-    public int getTestNotePitch()
-        {
-        // Returns the test note pitch.  This is default whatever the user set,
-        // but you can override this to fix it to something else
-        return super.getTestNotePitch();
-        }
+//    public int getTestNotePitch()
+//        {
+//        // Returns the test note pitch.  This is default whatever the user set,
+//        // but you can override this to fix it to something else
+//        return super.getTestNotePitch();
+//        }
 
-    public boolean getClearsTestNotes()
-        {
-        // Returns whether test notes should be cleared via a NOTE OFF or an 
-        // all sounds / all notes off.  This is normally true, except for drum
-        // patches, where the notes ought to be allowed to naturally decay.             
-        return true;
-        }
+//    public boolean getClearsTestNotes()
+//        {
+//        // Returns whether test notes should be cleared via a NOTE OFF or an
+//        // all sounds / all notes off.  This is normally true, except for drum
+//        // patches, where the notes ought to be allowed to naturally decay.
+//        return true;
+//        }
 
-    public static boolean recognizeBulk(byte[] data)
-        {
-        // This method should return TRUE if the data is correct sysex data for a 
-        // a *bulk* patch (that is, multi-patch) dump to your kind of synthesizer,
-        // and so you can receive it via parse() along with single-patch dumps.
-        //
-        // Notice that this is a STATIC method -- but you need to implement it
-        // anyway.  Edisyn will call the right static version using reflection magic.
-        //
-        // You don't have to implement this method -- it will return false by default --
-        // but you DO have to implement its complement, the recognize(data) method.
-        //
-        // Note that if you implement recognizeBulk(data), then in your parse(...)
-        // method you may need to do something with the data.  A good idea is to
-        // offer to either (1) upload the sysex to the synth (2) save the sysex to a file
-        // or (3) select a patch from the sysex to edit -- or (4) cancel.  This is
-        // the approach taken in the DX7 patch editor and you could implement it that
-        // way, just steal code from there.
-        return false;
-        }
+//    public static boolean recognizeBulk(byte[] data)
+//        {
+//        // This method should return TRUE if the data is correct sysex data for a
+//        // a *bulk* patch (that is, multi-patch) dump to your kind of synthesizer,
+//        // and so you can receive it via parse() along with single-patch dumps.
+//        //
+//        // Notice that this is a STATIC method -- but you need to implement it
+//        // anyway.  Edisyn will call the right static version using reflection magic.
+//        //
+//        // You don't have to implement this method -- it will return false by default --
+//        // but you DO have to implement its complement, the recognize(data) method.
+//        //
+//        // Note that if you implement recognizeBulk(data), then in your parse(...)
+//        // method you may need to do something with the data.  A good idea is to
+//        // offer to either (1) upload the sysex to the synth (2) save the sysex to a file
+//        // or (3) select a patch from the sysex to edit -- or (4) cancel.  This is
+//        // the approach taken in the DX7 patch editor and you could implement it that
+//        // way, just steal code from there.
+//        return false;
+//        }
 
+    @Override
     public void parseParameter(byte[] data)
         {
         // If your synth sent you a sysex message which was not recognized via
@@ -1075,210 +1105,211 @@ public class NovationAStation extends Synth {
         return;
 
         }
-    
+
+    @Override
     public void handleSynthCCOrNRPN(Midi.CCData data) {
         Mappings.getByCC(data.number)
                 .ifPresent(mapping -> mapping.toModel(model, data.value));
     }
             
-    public boolean requestCloseWindow() 
-        { 
-        // When the user clicks on the close box of your synth editor,
-        // this method will be called.  If you return true, the window
-        // will be closed, else it will stay open.  You might use
-        // this method to verify with the user that everything is saved,
-        // but in fact none of the current synth editors do this, they
-        // just return true immediately.  This is a rare need and at 
-        // present no patch editors implement this method at all. 
-        return true; 
-        }
+//    public boolean requestCloseWindow()
+//        {
+//        // When the user clicks on the close box of your synth editor,
+//        // this method will be called.  If you return true, the window
+//        // will be closed, else it will stay open.  You might use
+//        // this method to verify with the user that everything is saved,
+//        // but in fact none of the current synth editors do this, they
+//        // just return true immediately.  This is a rare need and at
+//        // present no patch editors implement this method at all.
+//        return true;
+//        }
         
-    public int getPauseAfterChangePatch()
-        {
-        // Some synths cannot accept MIDI messages for a while after a patch-change.
-        // For example, the Blofeld has to wait for about 200ms.
-        // Here you can specify that Edisyn must pause at least so many
-        // milliseconds before issuing another MIDI message after you have
-        // changed the patch via changePatch().
-        return 0;
-        }
+//    public int getPauseAfterChangePatch()
+//        {
+//        // Some synths cannot accept MIDI messages for a while after a patch-change.
+//        // For example, the Blofeld has to wait for about 200ms.
+//        // Here you can specify that Edisyn must pause at least so many
+//        // milliseconds before issuing another MIDI message after you have
+//        // changed the patch via changePatch().
+//        return 0;
+//        }
 
-    public double getPauseBetweenMIDISends() 
-        {
-        // Some synths cannot accept MIDI messages at full speed.  
-        // For example, the Yamaha TX81Z has problems with sysex messages
-        // faster than 50ms.
-        // Here you can specify that Edisyn must pause at least so many
-        // milliseconds before issuing another MIDI message of *any* kind.
-        // This includes note on / note off etc., so don't expect musicality
-        // if you set this to >0.
-        return 0.0;
-        }
+//    public double getPauseBetweenMIDISends()
+//        {
+//        // Some synths cannot accept MIDI messages at full speed.
+//        // For example, the Yamaha TX81Z has problems with sysex messages
+//        // faster than 50ms.
+//        // Here you can specify that Edisyn must pause at least so many
+//        // milliseconds before issuing another MIDI message of *any* kind.
+//        // This includes note on / note off etc., so don't expect musicality
+//        // if you set this to >0.
+//        return 0.0;
+//        }
     
-    public int getPauseAfterWritePatch()
-        {
-        // Some synths need extra time to process a write-patch before 
-        // a follow-up change-patch request.  
-        // The default is to return getPauseAfterSendAllParameters();
-        return super.getPauseAfterWritePatch();
-        }
+//    public int getPauseAfterWritePatch()
+//        {
+//        // Some synths need extra time to process a write-patch before
+//        // a follow-up change-patch request.
+//        // The default is to return getPauseAfterSendAllParameters();
+//        return super.getPauseAfterWritePatch();
+//        }
         
-    public int getPauseBetweenPatchWrites()
-        {
-        // Some synths need extra time to process a write-patch before 
-        // writing a second patch (with no change patch request).  
-        // The default is to return getPauseAfterWritePatch()
-        // which in turn has a default of getPauseAfterSendAllParameters()
-        return super.getPauseBetweenPatchWrites();
-        }
+//    public int getPauseBetweenPatchWrites()
+//        {
+//        // Some synths need extra time to process a write-patch before
+//        // writing a second patch (with no change patch request).
+//        // The default is to return getPauseAfterWritePatch()
+//        // which in turn has a default of getPauseAfterSendAllParameters()
+//        return super.getPauseBetweenPatchWrites();
+//        }
         
-    public int getPauseAfterSendAllParameters() 
-        {
-        // Some synths need extra time after a parameter dump before
-        // they can do anything else, notably play notes properly.  
-        // For example, the Kawai K4 needs about 100ms after a parameter
-        // dump or else it'll play notes in a strange truncated way.
-        // Here you can specify that Edisyn must pause at least so many
-        // milliseconds before issuing another MIDI message after it has
-        // called sendAllParmeters().
-        return 0;
-        }
+//    public int getPauseAfterSendAllParameters()
+//        {
+//        // Some synths need extra time after a parameter dump before
+//        // they can do anything else, notably play notes properly.
+//        // For example, the Kawai K4 needs about 100ms after a parameter
+//        // dump or else it'll play notes in a strange truncated way.
+//        // Here you can specify that Edisyn must pause at least so many
+//        // milliseconds before issuing another MIDI message after it has
+//        // called sendAllParmeters().
+//        return 0;
+//        }
         
-    public int getPauseAfterSendOneParameter() 
-        {
-        // Some synths need extra time after each parameter send before another
-        // send can be made.  Here you can specify that Edisyn must pause at least so many
-        // milliseconds before issuing another MIDI message after it has
-        // sent a single parameter via emitAll(key, status).
-        return 0;
-        }       
+//    public int getPauseAfterSendOneParameter()
+//        {
+//        // Some synths need extra time after each parameter send before another
+//        // send can be made.  Here you can specify that Edisyn must pause at least so many
+//        // milliseconds before issuing another MIDI message after it has
+//        // sent a single parameter via emitAll(key, status).
+//        return 0;
+//        }
+//
+//    public int getPauseBetweenSysexFragments()
+//        {
+//        // Some synths have small MIDI buffers and are so slow that you
+//        // cannot send large messages (that is, sysex) to them at full
+//        // speed without them dying.  The Kawai K1 is an example of this.
+//        // The methods getPauseBetweenSysexFragments() and
+//        // getSysexFragmentSize() allow you to break large sysex messages
+//        // into multiple fragments, each with a pause between, in order
+//        // to send a message successfully.
+//        //
+//        // You can also manually break up a sysex message into fragments,
+//        // and manually insert whatever time you'd like between them.
+//        // This is done using the DividedSysex class.
+//        //
+//        return 0;
+//        }
         
-    public int getPauseBetweenSysexFragments() 
-        {
-        // Some synths have small MIDI buffers and are so slow that you
-        // cannot send large messages (that is, sysex) to them at full
-        // speed without them dying.  The Kawai K1 is an example of this.
-        // The methods getPauseBetweenSysexFragments() and
-        // getSysexFragmentSize() allow you to break large sysex messages
-        // into multiple fragments, each with a pause between, in order
-        // to send a message successfully.
-        //
-        // You can also manually break up a sysex message into fragments,
-        // and manually insert whatever time you'd like between them.
-        // This is done using the DividedSysex class.
-        //
-        return 0;
-        }
+//    public int getSysexFragmentSize()
+//        {
+//        // Some synths have small MIDI buffers and are so slow that you
+//        // cannot send large messages (that is, sysex) to them at full
+//        // speed without them dying.  The Kawai K1 is an example of this.
+//        // The methods getPauseBetweenSysexFragments() and
+//        // getSysexFragmentSize() allow you to break large sysex messages
+//        // into multiple fragments, each with a pause between, in order
+//        // to send a message successfully.
+//        //
+//        // You can also manually break up a sysex message into fragments,
+//        // and manually insert whatever time you'd like between them.
+//        // This is done using the DividedSysex class.
+//        //
+//        return NO_SYSEX_FRAGMENT_SIZE;
+//        }
         
-    public int getSysexFragmentSize() 
-        {
-        // Some synths have small MIDI buffers and are so slow that you
-        // cannot send large messages (that is, sysex) to them at full
-        // speed without them dying.  The Kawai K1 is an example of this.
-        // The methods getPauseBetweenSysexFragments() and
-        // getSysexFragmentSize() allow you to break large sysex messages
-        // into multiple fragments, each with a pause between, in order
-        // to send a message successfully.
-        //
-        // You can also manually break up a sysex message into fragments,
-        // and manually insert whatever time you'd like between them.
-        // This is done using the DividedSysex class.
-        //
-        return NO_SYSEX_FRAGMENT_SIZE;
-        }
-        
-    public int getPauseBetweenHillClimbPlays()
-        {
-        // Some synths, such as the Korg Wavestation SR, need extra time
-        // to recover from changing patches before they can turn around
-        // and do again immediately.  Here you can specify that pause in milliseconds.
-        return 0;
-        }
+//    public int getPauseBetweenHillClimbPlays()
+//        {
+//        // Some synths, such as the Korg Wavestation SR, need extra time
+//        // to recover from changing patches before they can turn around
+//        // and do again immediately.  Here you can specify that pause in milliseconds.
+//        return 0;
+//        }
 
-    public int getPauseAfterReceivePatch()
-        {
-        // Some synths, such as the Blofeld, need a short break after sending us 
-        // a patch before we can request a second patch (with no change patch command).
-        // This pause is in milliseconds.  By default this function returns 
-        // getPauseAfterChangePatch(), which is a lot but probably adequate.
-        return super.getPauseAfterReceivePatch();
-        }
+//    public int getPauseAfterReceivePatch()
+//        {
+//        // Some synths, such as the Blofeld, need a short break after sending us
+//        // a patch before we can request a second patch (with no change patch command).
+//        // This pause is in milliseconds.  By default this function returns
+//        // getPauseAfterChangePatch(), which is a lot but probably adequate.
+//        return super.getPauseAfterReceivePatch();
+//        }
         
-    public int getBatchDownloadWaitTime()
-        {
-        // Edisyn does bulk downloads by iteratively requesting a patch, then
-        // waiting for it to load, then saving it.  Edisyn will wait for up to
-        // getBatchDownloadWaitTime() milliseconds before it checks to see if the
-        // patch has arrived and try to save it; else it will issue another request.
-        //
-        // The default value is 1000 (one second).  If your synth takes more (or less!)
-        // time to respond and dump a patch to Edisyn, you may wish to change this value.
-        // You'd like it as short as possible without missing dumps. 
-        return 1000; 
-        }
+//    public int getBatchDownloadWaitTime()
+//        {
+//        // Edisyn does bulk downloads by iteratively requesting a patch, then
+//        // waiting for it to load, then saving it.  Edisyn will wait for up to
+//        // getBatchDownloadWaitTime() milliseconds before it checks to see if the
+//        // patch has arrived and try to save it; else it will issue another request.
+//        //
+//        // The default value is 1000 (one second).  If your synth takes more (or less!)
+//        // time to respond and dump a patch to Edisyn, you may wish to change this value.
+//        // You'd like it as short as possible without missing dumps.
+//        return 1000;
+//        }
 
-    public int getBatchDownloadFailureCountdown()
-        {
-        // Each getBatchDownloadWaitTime() Edisyn will count this down until
-        // it reaches -1, at which time it gives up waiting for a bulk download.
-        return 0; 
-        }
+//    public int getBatchDownloadFailureCountdown()
+//        {
+//        // Each getBatchDownloadWaitTime() Edisyn will count this down until
+//        // it reaches -1, at which time it gives up waiting for a bulk download.
+//        return 0;
+//        }
 
-    public void startingBatchDownload(Model firstPatch, Model finalPatch) 
-        {
-        // Called when a batch download is starting.  This might give your editor
-        // a chance to emit something at the beginning of the batch download.  For
-        // example, the ASM Hydrasynth requires that a header sysex command be
-        // sent before a stream of batch downloads.  You can determine if 
-        // a batch download is occurring during parse() by calling isBatchDownloading()
-        super.startingBatchDownload(firstPatch, finalPatch);
-        }
+//    public void startingBatchDownload(Model firstPatch, Model finalPatch)
+//        {
+//        // Called when a batch download is starting.  This might give your editor
+//        // a chance to emit something at the beginning of the batch download.  For
+//        // example, the ASM Hydrasynth requires that a header sysex command be
+//        // sent before a stream of batch downloads.  You can determine if
+//        // a batch download is occurring during parse() by calling isBatchDownloading()
+//        super.startingBatchDownload(firstPatch, finalPatch);
+//        }
 
-    public void stoppingBatchDownload(Model firstPatch, Model finalPatch) 
-        { 
-        // Called when a batch download is stopping.  This might give your editor
-        // a chance to emit something at the end of the batch download.  For
-        // example, the ASM Hydrasynth requires that a header sysex command be
-        // sent before a stream of patch downloads.  You can determine if 
-        // a batch download is occurring during parse() by calling isBatchDownloading()
-        }
+//    public void stoppingBatchDownload(Model firstPatch, Model finalPatch)
+//        {
+//        // Called when a batch download is stopping.  This might give your editor
+//        // a chance to emit something at the end of the batch download.  For
+//        // example, the ASM Hydrasynth requires that a header sysex command be
+//        // sent before a stream of patch downloads.  You can determine if
+//        // a batch download is occurring during parse() by calling isBatchDownloading()
+//        }
 
-    public int getTestNoteChannel()
-        {
-        // It's possible that your synth has a special channel for this patch
-        // (for example, a drum patch).  Override this to provide a custom
-        // channel for the test note to be sent on.  The default is getChannelOut().
-        return getChannelOut();
-        }
+//    public int getTestNoteChannel()
+//        {
+//        // It's possible that your synth has a special channel for this patch
+//        // (for example, a drum patch).  Override this to provide a custom
+//        // channel for the test note to be sent on.  The default is getChannelOut().
+//        return getChannelOut();
+//        }
 
-    public void windowBecameFront() 
-        {
-        // If your editor's window just became the front window, this method will
-        // be called to inform you.  For example, Waldorf Microwave synthesizers
-        // can change from multimode to single mode (or the other way) as appropriate
-        // when their window comes to the fore.
-        return; 
-        }
+//    public void windowBecameFront()
+//        {
+//        // If your editor's window just became the front window, this method will
+//        // be called to inform you.  For example, Waldorf Microwave synthesizers
+//        // can change from multimode to single mode (or the other way) as appropriate
+//        // when their window comes to the fore.
+//        return;
+//        }
         
-    public void windowCreated()
-        {
-        // If your editor's window was just created and the user has selected
-        // MIDI device parameters (or chose not to), this method will
-        // be called to inform you.  For example, you could use this to issue a
-        // Sysex device inquiry message to help further set up the synth.
-        return;
-        }
+//    public void windowCreated()
+//        {
+//        // If your editor's window was just created and the user has selected
+//        // MIDI device parameters (or chose not to), this method will
+//        // be called to inform you.  For example, you could use this to issue a
+//        // Sysex device inquiry message to help further set up the synth.
+//        return;
+//        }
 
-    public boolean getSendsAllParametersAsDump() 
-        {
-        // Normally this method returns TRUE meaning that when the user sends
-        // or writes to the synthesizer, emitAll(model,...) will be called to write
-        // a bulk write, typically a sysex message.  But some synthesizers don't 
-        // use sysex.  For example, the PreenFM2 receives each of its parameters
-        // via individual NRPN messages (which are handled via emitAll(key)).  
-        // If your synthesizer is of this type, you should return FALSE.
-        return true; 
-        }
+//    public boolean getSendsAllParametersAsDump()
+//        {
+//        // Normally this method returns TRUE meaning that when the user sends
+//        // or writes to the synthesizer, emitAll(model,...) will be called to write
+//        // a bulk write, typically a sysex message.  But some synthesizers don't
+//        // use sysex.  For example, the PreenFM2 receives each of its parameters
+//        // via individual NRPN messages (which are handled via emitAll(key)).
+//        // If your synthesizer is of this type, you should return FALSE.
+//        return true;
+//        }
 
     public JFrame sprout()
         {
@@ -1290,28 +1321,28 @@ public class NovationAStation extends Synth {
         return super.sprout();
         }
         
-    public void showedOneTimeWarning(String key)
-        {
-        // If you call doOneTimeWarning(...) to issue a one-time-only warning to the musician,
-        // after the warning is issued, this is called once so you can (for example, see
-        // ASMHydraSynth) switch to the About pane or something.
-        }
+//    public void showedOneTimeWarning(String key)
+//        {
+//        // If you call doOneTimeWarning(...) to issue a one-time-only warning to the musician,
+//        // after the warning is issued, this is called once so you can (for example, see
+//        // ASMHydraSynth) switch to the About pane or something.
+//        }
                 
-    public void tabChanged()
-        {
-        // This method is called whenever the tabs are changed in case you need to do something
-        // like update a menu item in response to it etc.  Be sure to call super.tabChanged();
-        super.tabChanged();
-        }
+//    public void tabChanged()
+//        {
+//        // This method is called whenever the tabs are changed in case you need to do something
+//        // like update a menu item in response to it etc.  Be sure to call super.tabChanged();
+//        super.tabChanged();
+//        }
 
-    public boolean getExpectsRawCCFromSynth() 
-        {
-        // If your synthesizer sends individual parameter data to Edisyn not as sysex,
-        // and not as cooked CC messages (such as NRPN), but rather as raw CC messages,
-        // then you should override this method to return TRUE.  Generally it's kept FALSE,
-        // the default.
-        return false;
-        }
+//    public boolean getExpectsRawCCFromSynth()
+//        {
+//        // If your synthesizer sends individual parameter data to Edisyn not as sysex,
+//        // and not as cooked CC messages (such as NRPN), but rather as raw CC messages,
+//        // then you should override this method to return TRUE.  Generally it's kept FALSE,
+//        // the default.
+//        return false;
+//        }
 
     public boolean getReceivesPatchesAsDumps()
         {
@@ -1436,17 +1467,17 @@ public class NovationAStation extends Synth {
         return DEFAULT_PASTES; 
         }
         
-    public void sendAllSoundsOff()
-        {
-        // By default this method sends All Notes Off and All Sounds Off to every single
-        // channel.  You might want to override this because
-        // this behavior causes problems for your synthesizer (ahem Hydrasynth), or because
-        // your synthesizer has some nonstandard approach to clearing sounds.  Note that if you
-        // are trying to prevent Edisyn from sending all sounds off / all notes off temporarily,
-        // often because it's hard to debug with it, you can instead just set the static final
-        // boolean sendsAllSoundsOff = false; in Synth.java.
-        super.sendAllSoundsOff();
-        }
+//    public void sendAllSoundsOff()
+//        {
+//        // By default this method sends All Notes Off and All Sounds Off to every single
+//        // channel.  You might want to override this because
+//        // this behavior causes problems for your synthesizer (ahem Hydrasynth), or because
+//        // your synthesizer has some nonstandard approach to clearing sounds.  Note that if you
+//        // are trying to prevent Edisyn from sending all sounds off / all notes off temporarily,
+//        // often because it's hard to debug with it, you can instead just set the static final
+//        // boolean sendsAllSoundsOff = false; in Synth.java.
+//        super.sendAllSoundsOff();
+//        }
 
     public boolean getRequiresNRPNMSB() 
         { 
@@ -1509,45 +1540,29 @@ public class NovationAStation extends Synth {
 
     /** Return a list of all patch number names, such as "1", "2", "3", etc.
         Default is null, which indicates that the patch editor does not support librarians.  */
-    public String[] getPatchNumberNames() 
-        {
-        // This should return a list of all the numbers in a bank.  For example if your
-        // bank has patch numbers "1" through "128", then you should return an array of
-        // the form { "1", "2", "3", ..., "128" }.
-        //
-        // Synth.buildIntegerNames(...) is a useful utility method for building this array for
-        // you if you don't want to implement it by hand.
-        //
-        // This method is also used to determine whether the synth should have a librarian
-        // at all.  By default this method returns NULL, which means that the synthesizer
-        // should NOT have a librarian. 
-        return null; 
-        }
+    @Override
+    public String[] getPatchNumberNames() {
+        return PATCH_NUMBERS;
+    }
 
-    public String[] getBankNames() 
-        {
-        // This should return a list of all standard bank names.  For example, your bank names
-        // might be { "A", "B", "C", and "D" }, or they might be { "Internal", "Card" }.
-        //
-        // This method is also used to determine whether the synth has banks.  If your synth
-        // doesn't support banks, return NULL to indicate this.  Technically it still has 
-        // *one* bank, which Edisyn will automatically call "Bank".
-        return null; 
-        }
+    @Override
+    public String[] getBankNames() {
+        return BANKS;
+    }
 
-    public boolean[] getWriteableBanks() 
-        {
-        // This should return a list of booleans, one per bank, indicating if the
-        // bank is writeable.  You may not return null here: if getBankNames() returned null,
-        // then you should return { true } or { false } as appropriate.  The default form
-        // returns an array that is all true.
-        //
-        // Synth.buildBankBooleans(...) is a useful utility method for building this array
-        // for you if you don't want to implement it by hand.
-        return super.getWriteableBanks(); 
-        }
+//    public boolean[] getWriteableBanks()
+//        {
+//        // This should return a list of booleans, one per bank, indicating if the
+//        // bank is writeable.  You may not return null here: if getBankNames() returned null,
+//        // then you should return { true } or { false } as appropriate.  The default form
+//        // returns an array that is all true.
+//        //
+//        // Synth.buildBankBooleans(...) is a useful utility method for building this array
+//        // for you if you don't want to implement it by hand.
+//        return super.getWriteableBanks();
+//        }
 
-    public boolean getSupportsPatchWrites() 
+    public boolean getSupportsPatchWrites()
         {
         // Return true if the synth can receive and store individual patch writes (to actual
         // patch RAM, NOT sends to current working memory).  The default is false.
@@ -1586,21 +1601,20 @@ public class NovationAStation extends Synth {
 
     public int getPatchNameLength() 
         {
-        // Returns the length of a patch name.  By default, this returns 16. 
-        return 16; 
+        return 3;
         }
 
-    public String reviseBankName(String name) 
-        {
-        // Given a name for a bank, revises it to a valid name.  By default, this method
-        // returns null, which indicates that bank names may not be revised.  There is only
-        // one synthesizer supported by Edisyn which permits revised bank names at present:
-        // The Yamaha FB-01.
-        //
-        // Note that this method has an evil twin in your recognizer class.  See
-        // BlankRec.getBankName(...)
-        return null; 
-        }
+//    public String reviseBankName(String name)
+//        {
+//        // Given a name for a bank, revises it to a valid name.  By default, this method
+//        // returns null, which indicates that bank names may not be revised.  There is only
+//        // one synthesizer supported by Edisyn which permits revised bank names at present:
+//        // The Yamaha FB-01.
+//        //
+//        // Note that this method has an evil twin in your recognizer class.  See
+//        // BlankRec.getBankName(...)
+//        return null;
+//        }
     
     public boolean isValidPatchLocation(int bank, int num) 
         {
@@ -1618,49 +1632,49 @@ public class NovationAStation extends Synth {
         // The bank values passed in will always be between 0 and the number of banks (minus 1) inclusive.
         // Similarly the patch numbers passed in will always be between 0 and getPatchNumberNames() - 1
         // inclusive.  By default this method always returns true, which is in most cases correct.
-        return true; 
+        return bank >= 0 && bank <= 3 && num >= 0 && num <= 99;
         }
         
-    public boolean isAppropriatePatchLocation(int bank, int num) 
+    public boolean isAppropriatePatchLocation(int bank, int num)
         {
         // Returns TRUE if the given bank and patch number define an "appropriate" patch location.  An
         // "appropriate" location is one from which the the user is encouraged to upload and download from.
         //
         // For example, the Proteus 2000 has many "banks" corresponding to ROM SIMM Cards -- almost 20 of
         // them -- but only our cards can exist in a machine at a time.  Edisyn allows the user to load
-        // and save those "banks" to/from disk even if he oes not have them installed on his machine -- 
+        // and save those "banks" to/from disk even if he oes not have them installed on his machine --
         // he can even attempt to upload/download from them but it would be stupid to do so.  In this case
         // we merely want to color the patches as warning, not prevent the user from doing what he wants
         // The difference beween "appropriate" locaations and "valid" locations is that whether a location
         // is "appropriate" may depend on the particular configuration of the synth (among many possible
-        // configurations), where as "invalid" locations are *always* invalid.  
+        // configurations), where as "invalid" locations are *always* invalid.
         //
-        /// The bank values passed in will always be between 0 and the number of banks (minus 1) 
-        // inclusive. Similarly the patch numbers passed in will always be between 0 and 
-        // getPatchNumberNames() - 1 inclusive.  By default this method always returns true, which is 
+        /// The bank values passed in will always be between 0 and the number of banks (minus 1)
+        // inclusive. Similarly the patch numbers passed in will always be between 0 and
+        // getPatchNumberNames() - 1 inclusive.  By default this method always returns true, which is
         // in most cases correct.
-        return true;
+            return bank >= 0 && bank <= 3 && num >= 0 && num <= 99;
         }
 
-    public int getValidBankSize(int bank)
-        {
-        // Returns the actual number of valid patches in the bank (see isValidPatchLocation(...)).
-        // By default this is just the "standard" bank size as returned by getPatchNumberNames().length, 
-        // indicated with a -1.
-        return -1;
-        
-        // A simple but stupid O(n) way to compute this would be:
-        //
-        //String[] s = getPatchNumberNames();
-        //if (s == null) return 0;
-        //int valid = 0; 
-        //for(int i = 0; i < s.length; i++)
-        //      {
-        //      if (isValidPatchLocation(bank, i))
-        //              valid++;
-        //      }
-        //return valid;
-        }
+//    public int getValidBankSize(int bank)
+//        {
+//        // Returns the actual number of valid patches in the bank (see isValidPatchLocation(...)).
+//        // By default this is just the "standard" bank size as returned by getPatchNumberNames().length,
+//        // indicated with a -1.
+//        return -1;
+//
+//        // A simple but stupid O(n) way to compute this would be:
+//        //
+//        //String[] s = getPatchNumberNames();
+//        //if (s == null) return 0;
+//        //int valid = 0;
+//        //for(int i = 0; i < s.length; i++)
+//        //      {
+//        //      if (isValidPatchLocation(bank, i))
+//        //              valid++;
+//        //      }
+//        //return valid;
+//        }
     
     public boolean getUpdatesListenersOnDownload() 
         {
@@ -1812,4 +1826,10 @@ public class NovationAStation extends Synth {
         }
 
     //// END BANK SYSEX SUPPORT
+
+    private String parseVersion(byte swVersion, byte swIncrement) {
+        int major = (swVersion >> 3);
+        int minor = swVersion & 0x7;
+        return major + "." + minor + "." + swIncrement;
+    }
 }

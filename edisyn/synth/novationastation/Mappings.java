@@ -99,14 +99,14 @@ enum Mappings {
     ENVELOPE1_DECAY(109, 63),
     ENVELOPE1_SUSTAIN(110, 64),
     ENVELOPE1_RELEASE(111, 65),
-    ENVELOPE1_TRIGGER(Convertors.Packed.PACKED1),
-    ENVELOPE1_VELOCITY_DEPTH(112, 61),
+    ENVELOPE1_TRIGGER(Convertors.Packed.PACKED1, Restrictions.ENV_TRIGGERS),
+    ENVELOPE1_VELOCITY_DEPTH(112, 61, Restrictions.CENTRIC_127),
     ENVELOPE2_ATTACK(114, 67),
     ENVELOPE2_DECAY(115, 68),
     ENVELOPE2_SUSTAIN(116, 69),
     ENVELOPE2_RELEASE(117, 70),
-    ENVELOPE2_TRIGGER(Convertors.Packed.PACKED1),
-    ENVELOPE2_VELOCITY_DEPTH(118, 66),
+    ENVELOPE2_TRIGGER(Convertors.Packed.PACKED1, Restrictions.ENV_TRIGGERS),
+    ENVELOPE2_VELOCITY_DEPTH(118, 66, Restrictions.CENTRIC_127),
     ENVELOPE_FM_ATTACK(Convertors.Packed.PACKED1),  // TODO -- NRPN realtime updates + restrictions
     ENVELOPE_FM_DECAY(Convertors.Packed.PACKED1),   // TODO -- NRPN realtime updates + restrictions
     ENVELOPE_FM_TRIGGER(Convertors.Packed.PACKED1), // TODO -- NRPN realtime updates + restrictions
@@ -114,7 +114,7 @@ enum Mappings {
     // LFOs
     // - 2 identical LFOs are available
     ////
-    LFO1_WAVEFORM(Convertors.Packed.PACKED5),
+    LFO1_WAVEFORM(Convertors.Packed.PACKED5, Restrictions.LFO_WAVE_FORMS),
     LFO1_SPEED_NON_SYNC(80, 72),
     LFO1_SPEED_SYNC(81, 73),
     LFO1_DELAY(82, 74),
@@ -122,7 +122,7 @@ enum Mappings {
     LFO1_KEY_SYNC(Convertors.Packed.PACKED6),
     LFO1_KEY_SYNC_PHASE_SHIFT(Convertors.Packed.PACKED6),
     LFO1_LOCK(Convertors.Packed.PACKED6),
-    LFO2_WAVEFORM(Convertors.Packed.PACKED5),
+    LFO2_WAVEFORM(Convertors.Packed.PACKED5, Restrictions.LFO_WAVE_FORMS),
     LFO2_SPEED_NON_SYNC(83, 75),
     LFO2_SPEED_SYNC(84, 76),
     LFO2_DELAY(85, 77),
@@ -133,15 +133,14 @@ enum Mappings {
     ////
     // Filter (low pass)
     ////
-    FILTER_TYPE(Convertors.Packed.PACKED2),
+    FILTER_TYPE(Convertors.Packed.PACKED2, Restrictions.FILTER_TYPES),
     FILTER_FREQ(105, 46),
     FILTER_RESONANCE(106, 44),
     FILTER_OVERDRIVE(104, 43),
-    // TODO - investigate how to handle (N)RPN
-    // CC6 -> filtertracking (on latest firmware - whilst NRPN according to latest (yet older) spec I could find)
-//    FILTER_KEY_TRACK(6, 47),
-    FILTER_ENV2_DEPTH(107, 52),
-    FILTER_LFO2_DEPTH(102, 51),
+    // TODO - investigate how to handle NRPN
+    // FILTER_KEY_TRACK(6, 47),
+    FILTER_ENV2_DEPTH(107, 52, Restrictions.CENTRIC_127),
+    FILTER_LFO2_DEPTH(102, 51, Restrictions.CENTRIC_127),
     FILTER_Q_NORMALIZE(103, 45),
     // TODO - add extra mappings from sysex dump
     ////
@@ -180,7 +179,7 @@ enum Mappings {
     // Effects - delay
     ////
     DELAY_SEND_LEVEL(92, 100),
-    DELAY_SEND_MODWHEEL(18, 101),
+    DELAY_SEND_MODWHEEL(18, 101, Restrictions.CENTRIC_127),
     DELAY_TIME_NON_SYNC(19, 102),
     DELAY_TIME_SYNC(20, 103),
     DELAY_FEEDBACK(21, 104),
@@ -190,8 +189,8 @@ enum Mappings {
     // Effects - chorus/flanger
     ////
     CHORUS_SEND_LEVEL(93, 110),
-    CHORUS_PHASER(Convertors.Packed.PACKED8),
-    CHORUS_SEND_MODWHEEL(26, 111),
+    CHORUS_TYPE(Convertors.Packed.PACKED8, Restrictions.CHORUS_TYPES),
+    CHORUS_SEND_MODWHEEL(26, 111, Restrictions.CENTRIC_127),
     CHORUS_RATE_NON_SYNC(27, 112),
     CHORUS_RATE_SYNC(28, 113),
     CHORUS_FEEDBACK(29, 114),
@@ -202,25 +201,27 @@ enum Mappings {
     // Effects - reverb
     ////
     REVERB_SEND_LEVEL(91, 107),
-    REVERB_TYPE(Convertors.Packed.PACKED8),
-    REVERB_SEND_MODWHEEL(24, 108),
+    REVERB_TYPE(Convertors.Packed.PACKED8, Restrictions.REVERB_TYPES),
+    REVERB_SEND_MODWHEEL(24, 108, Restrictions.CENTRIC_127),
     REVERB_DECAY(25, 109),
     ////
     // Effects - distortion
     ////
-    DISTORTION_MODWHEEL(16, 98),
+    // TODO - no (documented) realtime control for distortion level ?
+    DISTORTION_LEVEL(null, 97),
+    DISTORTION_MODWHEEL(16, 98, Restrictions.CENTRIC_127),
     DISTORTION_COMPENSATION(17, 99),
     ////
     // Effects - vocoder
     ////
-    VOCODER_BALANCE(95, 89),
+    VOCODER_BALANCE(95, 89, Restrictions.CENTRIC_127),
     VOCODER_STEREO_WIDTH(14, 90),
-    VOCODER_SIBILANCE_TYPE(Convertors.Packed.PACKED10),
+    VOCODER_SIBILANCE_TYPE(Convertors.Packed.PACKED10, Restrictions.SIBILANCE_TYPES),
     VOCODER_SIBILANCE_LEVEL(15, 91),
     ////
     // Effects - panning
     ////
-    PANNING_POSITION(10, 117),
+    PANNING_POSITION(10, 117, Restrictions.CENTRIC_127),
     PANNING_MOD_DEPTH(94, 120),
     PANNING_RATE_NON_SYNC(12, 118),
     PANNING_RATE_SYNC(13, 119),

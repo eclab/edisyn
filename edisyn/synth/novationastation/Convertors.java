@@ -3,7 +3,6 @@ package edisyn.synth.novationastation;
 import edisyn.Model;
 
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -274,12 +273,12 @@ class Convertors {
             @Override
             public void toModel(Model model, int value) {
                 model.set(REVERB_TYPE.getKey(), 0x7 & value);
-                model.set(CHORUS_PHASER.getKey(), 0x1 & (value >> 3));
+                model.set(CHORUS_TYPE.getKey(), 0x1 & (value >> 3));
             }
             @Override
             public int toSynth(Model model) {
                 return (0x7 & model.get(REVERB_TYPE.getKey()))
-                        | ((0x1 & model.get(CHORUS_PHASER.getKey())) << 3);
+                        | ((0x1 & model.get(CHORUS_TYPE.getKey())) << 3);
             }
         },
         PACKED9 {

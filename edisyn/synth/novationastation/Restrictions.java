@@ -13,7 +13,12 @@ public enum Restrictions implements Restriction {
     UNISON_VOICES("off", "2","3","4","5","6","7", "8"),
     OSC_OCTAVES("-1", "0", "1", "2"),
     OSC_WAVEFORMS("sine", "triangle", "saw", "square/pulse"),
-    ;
+    ENV_TRIGGERS("single", "multi"),
+    FILTER_TYPES("12dB/octave", "24dB/octave"),
+    LFO_WAVE_FORMS("triangle", "saw", "square", "S&H"),
+    SIBILANCE_TYPES("high pass", "noise"),
+    REVERB_TYPES("echo chamber", "small room", "small hall", "large room", "large hall", "grand hall"),
+    CHORUS_TYPES("chorus", "phaser");
 
     private final int min;
     private final int max;

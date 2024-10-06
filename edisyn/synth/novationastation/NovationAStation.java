@@ -7,7 +7,6 @@ package edisyn.synth.novationastation;
 
 import edisyn.*;
 import edisyn.gui.*;
-import edisyn.util.StringUtility;
 
 import java.awt.*;
 import javax.swing.*;
@@ -16,13 +15,12 @@ import java.util.stream.IntStream;
 import javax.sound.midi.*;
 
 import static edisyn.synth.novationastation.Mappings.*;
+import static javax.swing.SwingConstants.SOUTH;
 
 public class NovationAStation extends Synth {
     private static final String[] BANKS = IntStream.rangeClosed(1, 4).boxed().map(String::valueOf).toList().toArray(new String[0]);
     private static final String[] PATCH_NUMBERS = IntStream.rangeClosed(0, 99).boxed().map(String::valueOf).toList().toArray(new String[0]);
-    private static final String[] FILTER_TYPES = {"12dB/octave", "24dB/octave"};
-    private static final String[] ENV_TRIGGERS = { "single", "multi"};
-    private static final String[] LFO_WAVE_FORMS = { "triangle", "saw", "square", "S&H"};
+//    private static final String[] ENV_TRIGGERS = { "single", "multi"};
     private static final String[] ARP_CONDITION = { "off", "on: no latch, no keysync", "on: no latch, keysync", "on: latch, no keysync", "on: latch, keysync"};
     private static final String[] SYNC_RATES = { "non-sync", "32T", "32", "16T", "16", "8T", "16.", "8", "4T", "8.", "4", "2T", "4.", "2", "1T", "2.",
             "1", "2T", "1.", "2", "4T", "3", "5T", "4", "4.", "7T", "5", "8T", "6", "7", "7.", "8", "9", "10.", "12"};
@@ -140,17 +138,14 @@ public class NovationAStation extends Synth {
         category.makePasteable("osc");
 
         HBox hbox = new HBox();
-        VBox vbox = new VBox();
 
+        VBox vbox = new VBox();
+        // NOTE - would probably be nicer to have this integrated into the semitone dial [-24, +36]
+        vbox.add(createChooser("octave", Mappings.find("OSC%d_OCTAVE", osc)));
         vbox.add(createChooser("waveform", Mappings.find("OSC%d_WAVEFORM", osc)));
         if (osc == 2) {
             vbox.add(createCheckBox("1->2 sync", OSC2_SYNCED_BY_1));
         }
-        hbox.add(vbox);
-
-        vbox = new VBox();
-        // NOTE - would probably be nicer to have this integrated into the semitone dial [-24, +36]
-        vbox.add(createChooser("octave", Mappings.find("OSC%d_OCTAVE", osc)));
         hbox.add(vbox);
 
         hbox.add(createLabelledDial("semitone", Mappings.find("OSC%d_SEMITONE", osc), color));
@@ -159,7 +154,7 @@ public class NovationAStation extends Synth {
         // TODO - add support for 'pwm source' (and related)
         hbox.add(createLabelledDial("mod env depth", Mappings.find("OSC%d_ENV2_DEPTH", osc), color));
         hbox.add(createLabelledDial("lfo1 depth", Mappings.find("OSC%d_LFO1_DEPTH", osc), color));
-        // TODO - verify restrictions first
+        // TODO - verify restrictions first before adding this one...
 //        hbox.add(createLabelledDial("bendwheel amount", Mappings.find("OSC%d_BENDWHEEL_AMOUNT", osc), color));
 
         // TODO
@@ -195,28 +190,19 @@ public class NovationAStation extends Synth {
 
     private JComponent addFilter(Color color) {
         Category category = new Category(this, "Filter", color);
-
-        JComponent comp;
         HBox hbox = new HBox();
-
         VBox vbox = new VBox();
-        comp = new Chooser("type", this, FILTER_TYPE.getKey(), FILTER_TYPES);
-        vbox.add(comp);
+        vbox.add(createChooser("type", FILTER_TYPE));
         hbox.add(vbox);
 
-        comp = new LabelledDial("frequency", this, FILTER_FREQ.getKey(), color, 0, 127);
-        hbox.add(comp);
-        comp = new LabelledDial("resonance", this, FILTER_RESONANCE.getKey(), color, 0, 127);
-        hbox.add(comp);
-        comp = new LabelledDial("overdrive", this, FILTER_OVERDRIVE.getKey(), color, 0, 127);
-        hbox.add(comp);
+        hbox.add(createLabelledDial("frequency", FILTER_FREQ, color));
+        hbox.add(createLabelledDial("resonance", FILTER_RESONANCE, color));
+        hbox.add(createLabelledDial("overdrive", FILTER_OVERDRIVE, color));
         // TODO - NRPN based
 //        comp = new LabelledDial("key track", this, FILTER_KEY_TRACK.getKey(), color, 0, 127);
 //        hbox.add(comp);
-        comp = new LabelledDial("mod env depth", this, FILTER_ENV2_DEPTH.getKey(), color, 0, 127, 64);
-        hbox.add(comp);
-        comp = new LabelledDial("lfo2 depth", this, "filterlfo2depth", color, 0, 127, 64);
-        hbox.add(comp);
+        hbox.add(createLabelledDial("mod env depth", FILTER_ENV2_DEPTH, color));
+        hbox.add(createLabelledDial("lfo2 depth", FILTER_LFO2_DEPTH, color));
 
         // TODO
         // and others... (check NRPN)
@@ -231,41 +217,25 @@ public class NovationAStation extends Synth {
         // TODO - to be verified
         // category.makePasteable("env");
 
-        String type = envelope == 1 ? "amplitude" : "modulation";
-
-        JComponent comp;
         HBox hbox = new HBox();
         VBox vbox = new VBox();
-        comp = new Chooser("env trigger", this, type + "envelopetrigger", ENV_TRIGGERS);
-        vbox.add(comp);
+        vbox.add(createChooser("env trigger", Mappings.find("ENVELOPE%d_TRIGGER", envelope)));
         hbox.add(vbox);
 
         Mappings mappingsAttack = Mappings.find("ENVELOPE%d_ATTACK", envelope);
-        comp = new LabelledDial("attack", this,
-                mappingsAttack.getKey(),
-                color, 0, 127);
-        hbox.add(comp);
+        hbox.add(createLabelledDial("attack", mappingsAttack, color));
 
         Mappings mappingsDecay = Mappings.find("ENVELOPE%d_DECAY", envelope);
-        comp = new LabelledDial("decay", this,
-                mappingsDecay.getKey(),
-                color, 0, 127);
-        hbox.add(comp);
+        hbox.add(createLabelledDial("decay", mappingsDecay, color));
 
         Mappings mappingsSustain = Mappings.find("ENVELOPE%d_SUSTAIN", envelope);
-        comp = new LabelledDial("sustain", this,
-                mappingsSustain.getKey(),
-                color, 0, 127);
-        hbox.add(comp);
+        hbox.add(createLabelledDial("sustain", mappingsSustain, color));
 
         Mappings mappingsRelease = Mappings.find("ENVELOPE%d_RELEASE", envelope);
-        comp = new LabelledDial("release", this,
-                mappingsRelease.getKey(),
-                color, 0, 127);
-        hbox.add(comp);
+        hbox.add(createLabelledDial("release", mappingsRelease, color));
 
         // ADSR
-        comp = new EnvelopeDisplay(this, Color.red,
+        JComponent comp = new EnvelopeDisplay(this, Color.red,
                 new String[] { null, mappingsAttack.getKey(), mappingsDecay.getKey(), null, mappingsRelease.getKey() },
                 new String[] { null, null, mappingsSustain.getKey(), mappingsSustain.getKey(), null },
                 new double[] { 0, 0.25/127.0, 0.25 / 127.0,  0.25, 0.25/127.0},
@@ -283,30 +253,17 @@ public class NovationAStation extends Synth {
         // TODO - to be verified
         //category.makePasteable("lfo");
 
-        JComponent comp;
         HBox hbox = new HBox();
-
         VBox vbox = new VBox();
-        comp = new Chooser("waveform", this,
-                Mappings.find("LFO%d_WAVEFORM", lfo).getKey(), LFO_WAVE_FORMS);
-        // NOTE - icons here ?
-        vbox.add(comp);
+        vbox.add(createChooser("waveform", Mappings.find("LFO%d_WAVEFORM", lfo)));
         hbox.add(vbox);
-        // TODO - single dial for both sync and non-sync ?
-        comp = new LabelledDial("speed (non-sync)", this,
-                Mappings.find("LFO%d_SPEED_NON_SYNC", lfo).getKey(),
-                color, 0, 127);
-        hbox.add(comp);
-        comp = new LabelledDial("speed (sync)", this,
-                Mappings.find("LFO%d_SPEED_SYNC", lfo).getKey(),
-                color, 0, 127);
-        hbox.add(comp);
-        comp = new LabelledDial("delay", this,
-                Mappings.find("LFO%d_DELAY", lfo).getKey(),
-                color, 0, 127);
-        hbox.add(comp);
 
-        category.add(hbox);
+        // TODO - single/dynamic dial for both sync and non-sync ?
+        hbox.add(createLabelledDial("speed (non-sync)", Mappings.find("LFO%d_SPEED_NON_SYNC", lfo), color));
+        hbox.add(createLabelledDial("speed (sync)", Mappings.find("LFO%d_SPEED_SYNC", lfo), color));
+        hbox.add(createLabelledDial("delay", Mappings.find("LFO%d_DELAY", lfo), color));
+
+        category.add(hbox, BorderLayout.CENTER);
         return category;
    }
 
@@ -332,32 +289,21 @@ public class NovationAStation extends Synth {
 
     private Component addDelay(Color color) {
         Category category = new Category(this, "delay", color);
-
-        JComponent comp;
         HBox hbox = new HBox();
 
-        comp = new LabelledDial("send level", this, DELAY_SEND_LEVEL.getKey(), color, 0, 127);
-        hbox.add(comp);
+        hbox.add(createLabelledDial("send level", DELAY_SEND_LEVEL, color));
+        hbox.add(createLabelledDial("modwheel", DELAY_SEND_MODWHEEL, color));
 
-        comp = new LabelledDial("modwheel", this, DELAY_SEND_MODWHEEL.getKey(), color, 0, 127);
-        hbox.add(comp);
+        // TODO - single/dynamic dial for both sync and non-sync ?
+        hbox.add(createLabelledDial("time (sync)", DELAY_TIME_SYNC, color));
+        hbox.add(createLabelledDial("time (non-sync)", DELAY_TIME_NON_SYNC, color));
 
-        // TODO - dropdown here ? or different dial ?
-        comp = new LabelledDial("time (sync)", this, DELAY_TIME_SYNC.getKey(), color, 0, 127);
-        hbox.add(comp);
-
-        comp = new LabelledDial("time (non-sync)", this, DELAY_TIME_NON_SYNC.getKey(), color, 0, 127);
-        hbox.add(comp);
-
-        comp = new LabelledDial("feedback", this, DELAY_FEEDBACK.getKey(), color, 0, 127);
-        hbox.add(comp);
+        hbox.add(createLabelledDial("feedback", DELAY_FEEDBACK, color));
 
         // TODO - dropdown here ? or different dial ?
-        comp = new LabelledDial("ratio", this, DELAY_RATIO.getKey(), color, 0, 127);
-        hbox.add(comp);
+        hbox.add(createLabelledDial("ratio", DELAY_RATIO, color));
 
-        comp = new LabelledDial("stereo width", this, DELAY_STEREO_WIDTH.getKey(), color, 0, 127);
-        hbox.add(comp);
+        hbox.add(createLabelledDial("stereo width", DELAY_STEREO_WIDTH, color));
 
         category.add(hbox);
         return category;
@@ -365,68 +311,47 @@ public class NovationAStation extends Synth {
 
     private Component addReverb(Color color) {
         Category category = new Category(this, "reverb", color);
+        HBox hbox0 = new HBox();
+        hbox0.add(createChooser("type", REVERB_TYPE));
 
-        JComponent comp;
-        HBox hbox = new HBox();
+        HBox hbox1 = new HBox();
+        hbox1.add(createLabelledDial("send level", REVERB_SEND_LEVEL, color));
+        hbox1.add(createLabelledDial("modwheel", REVERB_SEND_MODWHEEL, color));
+        hbox1.add(createLabelledDial("decay", REVERB_DECAY, color));
 
-        comp = new LabelledDial("send level", this, REVERB_SEND_LEVEL.getKey(), color, 0, 127);
-        hbox.add(comp);
-
-        comp = new LabelledDial("modwheel", this, REVERB_SEND_MODWHEEL.getKey(), color, 0, 127);
-        hbox.add(comp);
-
-        // TODO - add reverb type
-
-        comp = new LabelledDial("decay", this, REVERB_DECAY.getKey(), color, 0, 127);
-        hbox.add(comp);
-
-        category.add(hbox);
+        category.add(hbox0, BorderLayout.NORTH);
+        category.add(hbox1, BorderLayout.SOUTH);
         return category;
     }
 
     private Component addChorus(Color color) {
         Category category = new Category(this, "chorus", color);
+        HBox hbox0 = new HBox();
+        hbox0.add(createChooser("type", CHORUS_TYPE));
 
-        JComponent comp;
-        HBox hbox = new HBox();
+        HBox hbox1 = new HBox();
+        hbox1.add(createLabelledDial("send level", CHORUS_SEND_LEVEL, color));
+        hbox1.add(createLabelledDial("modwheel", CHORUS_SEND_MODWHEEL, color));
 
-        comp = new LabelledDial("send level", this, CHORUS_SEND_LEVEL.getKey(), color, 0, 127);
-        hbox.add(comp);
+        // TODO - single/dynamic dial for both sync and non-sync ?
+        hbox1.add(createLabelledDial("rate (sync)", CHORUS_RATE_SYNC, color));
+        hbox1.add(createLabelledDial("rate (non-sync)", CHORUS_RATE_NON_SYNC, color));
 
-        comp = new LabelledDial("modwheel", this, CHORUS_SEND_MODWHEEL.getKey(), color, 0, 127);
-        hbox.add(comp);
+        hbox1.add(createLabelledDial("feedback", CHORUS_FEEDBACK, color));
+        hbox1.add(createLabelledDial("depth", CHORUS_MOD_DEPTH, color));
+        hbox1.add(createLabelledDial("centre point", CHORUS_MOD_CENTRE_POINT, color));
 
-        // TODO - dropdown here ? or different dial ?
-        comp = new LabelledDial("rate (sync)", this, CHORUS_RATE_SYNC.getKey(), color, 0, 127);
-        hbox.add(comp);
-
-        comp = new LabelledDial("rate (non-sync)", this, CHORUS_RATE_NON_SYNC.getKey(), color, 0, 127);
-        hbox.add(comp);
-
-        comp = new LabelledDial("feedback", this, CHORUS_FEEDBACK.getKey(), color, 0, 127);
-        hbox.add(comp);
-
-        comp = new LabelledDial("depth", this, CHORUS_MOD_DEPTH.getKey(), color, 0, 127);
-        hbox.add(comp);
-
-        comp = new LabelledDial("centre point", this, CHORUS_MOD_CENTRE_POINT.getKey(), color, 0, 127);
-        hbox.add(comp);
-
-        category.add(hbox);
+        category.add(hbox0, BorderLayout.NORTH);
+        category.add(hbox1, BorderLayout.SOUTH);
         return category;
     }
 
     private Component addDistortion(Color color) {
         Category category = new Category(this, "distortion", color);
-
-        JComponent comp;
         HBox hbox = new HBox();
 
-        comp = new LabelledDial("modwheel", this, DISTORTION_MODWHEEL.getKey(), color, 0, 127);
-        hbox.add(comp);
-
-        comp = new LabelledDial("compensation", this, DISTORTION_COMPENSATION.getKey(), color, 0, 127);
-        hbox.add(comp);
+        hbox.add(createLabelledDial("modwheel", DISTORTION_MODWHEEL, color));
+        hbox.add(createLabelledDial("compensation", DISTORTION_COMPENSATION, color));
 
         category.add(hbox);
         return category;
@@ -435,21 +360,16 @@ public class NovationAStation extends Synth {
     private Component addPan(Color color) {
         Category category = new Category(this, "panning", color);
 
-        JComponent comp;
         HBox hbox = new HBox();
 
-        comp = new LabelledDial("position", this, PANNING_POSITION.getKey(), color, 0, 127);
-        hbox.add(comp);
+        hbox.add(createLabelledDial("position", PANNING_POSITION, color));
 
         // TODO - dropdown here ? or different dial ?
-        comp = new LabelledDial("rate (sync)", this, PANNING_RATE_SYNC.getKey(), color, 0, 127);
-        hbox.add(comp);
+        hbox.add(createLabelledDial("rate (sync)", PANNING_RATE_SYNC, color));
 
-        comp = new LabelledDial("rate (non-sync)", this, PANNING_RATE_NON_SYNC.getKey(), color, 0, 127);
-        hbox.add(comp);
-
-        comp = new LabelledDial("depth", this, PANNING_MOD_DEPTH.getKey(), color, 0, 127);
-        hbox.add(comp);
+        // TODO - single/dynamic dial for both sync and non-sync ?
+        hbox.add(createLabelledDial("rate (non-sync)", PANNING_RATE_NON_SYNC, color));
+        hbox.add(createLabelledDial("depth", PANNING_MOD_DEPTH, color));
 
         // TODO - add global sync
 
@@ -460,14 +380,16 @@ public class NovationAStation extends Synth {
     private Component addVocoder(Color color) {
         Category category = new Category(this, "vocoder", color);
 
-        JComponent comp;
-        HBox hbox = new HBox();
+        HBox hbox0 = new HBox();
+        hbox0.add(createChooser("sibilance type", VOCODER_SIBILANCE_TYPE));
 
-        comp = new LabelledDial("balance", this, VOCODER_BALANCE.getKey(), color, 0, 127);
-        hbox.add(comp);
-        // TODO - sibilance params (x2)
+        HBox hbox1 = new HBox();
+        hbox1.add(createLabelledDial("balance", VOCODER_BALANCE, color));
+        hbox1.add(createLabelledDial("stereo width", VOCODER_STEREO_WIDTH, color));
+        hbox1.add(createLabelledDial("sibilance level", VOCODER_SIBILANCE_LEVEL, color));
 
-        category.add(hbox);
+        category.add(hbox0, BorderLayout.NORTH);
+        category.add(hbox1, BorderLayout.SOUTH);
         return category;
     }
 
@@ -910,15 +832,19 @@ public class NovationAStation extends Synth {
     
     ////// YOU PROBABLY WANT TO OVERRIDE *ONE* OF THE FOLLOWING
     @Override
-    public Object[] emitAll(String key)
-        {
+    public Object[] emitAll(String key) {
             Optional<Convertor> convertor = Convertors.getByKey(key);
-            if (convertor.isEmpty())
-                return new Object[0];
-            Convertor mapping = convertor.get();
-            return buildCC(getChannelOut(), mapping.getCC(), mapping.toSynth(model));
-
-            // This writes a single parameter out to the synth.
+            if (convertor.isPresent()) {
+                Convertor mapping = convertor.get();
+                Integer CC = mapping.getCC();
+                if (CC != null) {
+                    return buildCC(getChannelOut(), mapping.getCC(), mapping.toSynth(model));
+                } else {
+                    System.err.println("NRPN values not yet supported");
+                }
+            }
+            return super.emitAll(key);
+        // This writes a single parameter out to the synth.
         // If nothing should be emitted for the given key, return a zero-length array.
         // If your synth does not support emitting for individual keys at all, return null.
         //
@@ -1834,7 +1760,11 @@ public class NovationAStation extends Synth {
         }
         return new Chooser(label, this,
                 mappings.getKey(),
-                mappings.getRestrictions().getValues());
+                mappings.getRestrictions().getValues()) {
+            @Override
+            // a matter of taste, I guess..
+            public boolean isLabelToLeft() { return true; }
+        };
     }
 
     private LabelledDial createLabelledDial(String label, Mappings mappings, Color color) {

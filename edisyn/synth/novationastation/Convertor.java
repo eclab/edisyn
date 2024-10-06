@@ -11,6 +11,8 @@ import java.util.List;
  *     <li>(Midi) CC</li>
  *     <li>(Midi-SysEx) byteIndex</li>
  * </ul>
+ *
+ * dev note: useful to add validation on values in different implementations ? (ref Restrictions set in the model)
  */
 interface Convertor {
     // update model for a given value (coming from CC or byteIndex)

@@ -7,6 +7,7 @@ package edisyn.synth.novationastation;
 
 import edisyn.*;
 import edisyn.gui.*;
+import edisyn.util.StringUtility;
 
 import java.awt.*;
 import javax.swing.*;
@@ -19,11 +20,6 @@ import static edisyn.synth.novationastation.Mappings.*;
 public class NovationAStation extends Synth {
     private static final String[] BANKS = IntStream.rangeClosed(1, 4).boxed().map(String::valueOf).toList().toArray(new String[0]);
     private static final String[] PATCH_NUMBERS = IntStream.rangeClosed(0, 99).boxed().map(String::valueOf).toList().toArray(new String[0]);
-    private static final String[] PORTAMENTO_MODES = {"exponential", "linear"};
-    private static final String[] UNISON_VOICES_COLL = {"off", "2","3","4","5","6","7", "8"};
-    private static final String[] POLYPHONY_MODES = {"mono", "mono autoglide", "poly", "poly with stealing"};
-    private static final String[] OSC_WAVE_FORMS = { "sine", "triangle", "saw", "square/pulse"};
-    private static final String[] OSC_OCTAVES = { "-1", "0", "1", "2"};
     private static final String[] FILTER_TYPES = {"12dB/octave", "24dB/octave"};
     private static final String[] ENV_TRIGGERS = { "single", "multi"};
     private static final String[] LFO_WAVE_FORMS = { "triangle", "saw", "square", "S&H"};
@@ -83,6 +79,8 @@ public class NovationAStation extends Synth {
         addTab("Effects", effectsPanel);
 
         // DEVICE-GOODIES panel (non patch related)
+        // TODO - nice addition for the future, to be completed though...
+        /*
         JComponent devicePanel = new SynthPanel(this);
         vbox = new VBox();
 
@@ -90,41 +88,22 @@ public class NovationAStation extends Synth {
         vbox.add(addDeviceDetails(Style.COLOR_B()));
 
         devicePanel.add(vbox, BorderLayout.CENTER);
-        addTab("Device goodies", devicePanel);
 
-        //
-//        model.set("name", "Init");
+        addTab("Device goodies", devicePanel);
+        */
 
         loadDefaults();                 // this tells Edisyn to load the ".init" sysex file you created.  If you haven't set that up, it won't bother
     }
 
-    private JComponent addNameGlobal(Color color)
-    {
+    private JComponent addNameGlobal(Color color) {
         Category globalCategory = new Category(this, "Novation A Station", color);
 
-        JComponent comp;
         HBox hbox = new HBox();
 
         VBox vbox = new VBox();
         HBox hbox2 = new HBox();
-        comp = new PatchDisplay(this, 4);
-        hbox2.add(comp);
+        hbox2.add(new PatchDisplay(this, 4));
         vbox.add(hbox2);
-
-//        comp = new StringComponent("Patch Name", this, "name", 14, "Name must be up to 14 ASCII characters.")
-//        {
-//            public String replace(String val)
-//            {
-//                return revisePatchName(val);
-//            }
-//
-//            public void update(String key, Model model)
-//            {
-//                super.update(key, model);
-//                updateTitle();
-//            }
-//        };
-//        vbox.addBottom(comp);  // doesn't work right :-(
         hbox.add(vbox);
 
         globalCategory.add(hbox, BorderLayout.WEST);
@@ -134,92 +113,54 @@ public class NovationAStation extends Synth {
     private JComponent addGeneral(Color color) {
         Category categoryGeneral = new Category(this, "General", color);
 
-        JComponent comp;
         HBox hbox = new HBox();
 
         VBox vbox = new VBox();
-        comp = new Chooser("polyphony mode", this, POLYPHONY_MODE.getKey(), POLYPHONY_MODES);
-        vbox.add(comp);
-        comp = new Chooser("unison voices", this, UNISON_VOICES.getKey(), UNISON_VOICES_COLL);
-        vbox.add(comp);
+        vbox.add(createChooser("polyphony mode", POLYPHONY_MODE));
+        vbox.add(createChooser("unison voices", UNISON_VOICES));
         hbox.add(vbox);
-        comp = new LabelledDial("unison detune", this, UNISON_DETUNE.getKey(), color, 0, 127);
-        hbox.add(comp);
+
+        hbox.add(createLabelledDial("unison detune", UNISON_DETUNE, color));
 
         vbox = new VBox();
-        comp = new Chooser("portamento mode", this, PORTAMENTO_MODE.getKey(), PORTAMENTO_MODES);
-        vbox.add(comp);
+        vbox.add(createChooser("portamento mode", PORTAMENTO_MODE));
         hbox.add(vbox);
 
-        comp = new LabelledDial("portamento time", this, PORTAMENTO_TIME.getKey(), color, 0, 127);
-        hbox.add(comp);
+        hbox.add(createLabelledDial("portamento time", PORTAMENTO_TIME, color));
+        hbox.add(createLabelledDial("program output offset", PROGRAM_VOLUME, color));
 
-        comp = new LabelledDial("patch level", this, PROGRAM_VOLUME.getKey(), color, 52, 76, 52);
-        hbox.add(comp);
+        // TODO - add other (NRPN based) program controls here
 
         categoryGeneral.add(hbox, BorderLayout.WEST);
         return categoryGeneral;
     }
 
-    private JComponent addOscillator(final int osc, Color color)
-    {
+    private JComponent addOscillator(final int osc, Color color) {
         Category category = new Category(this, "Oscillator " + osc, color);
         category.makePasteable("osc");
 
-        JComponent comp;
         HBox hbox = new HBox();
-
         VBox vbox = new VBox();
-        comp = new Chooser("waveform", this,
-                Mappings.find("OSC%d_WAVEFORM", osc).getKey(),
-                OSC_WAVE_FORMS);
-        // NOTE - icons here ?
-        vbox.add(comp);
 
+        vbox.add(createChooser("waveform", Mappings.find("OSC%d_WAVEFORM", osc)));
         if (osc == 2) {
-            comp = new CheckBox("1->2 sync", this, OSC2_SYNCED_BY_1.getKey());
-            vbox.add(comp);
+            vbox.add(createCheckBox("1->2 sync", OSC2_SYNCED_BY_1));
         }
         hbox.add(vbox);
 
-        comp = new Chooser("octave", this,
-                Mappings.find("OSC%d_OCTAVE", osc).getKey(),
-                OSC_OCTAVES);
         vbox = new VBox();
-        vbox.add(comp);
-        // TODO - would probably be nicer to have this integrated into the semitone dial [-24, +36]
+        // NOTE - would probably be nicer to have this integrated into the semitone dial [-24, +36]
+        vbox.add(createChooser("octave", Mappings.find("OSC%d_OCTAVE", osc)));
         hbox.add(vbox);
 
-        comp = new LabelledDial("semitone", this,
-                Mappings.find("OSC%d_SEMITONE", osc).getKey(),
-                color, 52, 76, 64);
-        hbox.add(comp);
-
-        comp = new LabelledDial("detune", this,
-                Mappings.find("OSC%d_DETUNE", osc).getKey(),
-                color, 14, 114, 64);
-        hbox.add(comp);
-
+        hbox.add(createLabelledDial("semitone", Mappings.find("OSC%d_SEMITONE", osc), color));
+        hbox.add(createLabelledDial("detune", Mappings.find("OSC%d_DETUNE", osc), color));
+        hbox.add(createLabelledDial("pulse width", Mappings.find("OSC%d_PULSE_WIDTH", osc), color));
         // TODO - add support for 'pwm source' (and related)
-        comp = new LabelledDial("pulse width", this,
-                Mappings.find("OSC%d_PULSE_WIDTH", osc).getKey(),
-                color, 0, 127, 64);
-        hbox.add(comp);
-
-        comp = new LabelledDial("mod env depth", this,
-                Mappings.find("OSC%d_ENV2_DEPTH", osc).getKey(),
-                color, 0, 127, 64);
-        hbox.add(comp);
-
-        comp = new LabelledDial("lfo1 depth", this,
-                Mappings.find("OSC%d_LFO1_DEPTH", osc).getKey(),
-                color, 0, 127, 64);
-        hbox.add(comp);
-
-        comp = new LabelledDial("bendwheel amount", this,
-                Mappings.find("OSC%d_BENDWHEEL_AMOUNT", osc).getKey(),
-                color, 0, 127, 64);
-        hbox.add(comp);
+        hbox.add(createLabelledDial("mod env depth", Mappings.find("OSC%d_ENV2_DEPTH", osc), color));
+        hbox.add(createLabelledDial("lfo1 depth", Mappings.find("OSC%d_LFO1_DEPTH", osc), color));
+        // TODO - verify restrictions first
+//        hbox.add(createLabelledDial("bendwheel amount", Mappings.find("OSC%d_BENDWHEEL_AMOUNT", osc), color));
 
         // TODO
 //        if (osc == 3) {
@@ -240,21 +181,13 @@ public class NovationAStation extends Synth {
     {
         Category category = new Category(this, "Mixer", color);
 
-        JComponent comp;
         HBox hbox = new HBox();
-
-        comp = new LabelledDial("oscillator1", this, MIXER_OSC1.getKey(), color, 0, 127);
-        hbox.add(comp);
-        comp = new LabelledDial("oscillator2", this, MIXER_OSC2.getKey(), color, 0, 127);
-        hbox.add(comp);
-        comp = new LabelledDial("oscillator3", this, MIXER_OSC3.getKey(), color, 0, 127);
-        hbox.add(comp);
-        comp = new LabelledDial("noise", this, MIXER_NOISE.getKey(), color, 0, 127);
-        hbox.add(comp);
-        comp = new LabelledDial("1*2 ring", this, MIXER_RING_MOD.getKey(), color, 0, 127);
-        hbox.add(comp);
-        comp = new LabelledDial("ext", this, MIXER_EXTERNAL.getKey(), color, 0, 127);
-        hbox.add(comp);
+        hbox.add(createLabelledDial("oscillator1", MIXER_OSC1, color));
+        hbox.add(createLabelledDial("oscillator2", MIXER_OSC2, color));
+        hbox.add(createLabelledDial("oscillator3", MIXER_OSC3, color));
+        hbox.add(createLabelledDial("noise", MIXER_NOISE, color));
+        hbox.add(createLabelledDial("1*2 ring", MIXER_RING_MOD, color));
+        hbox.add(createLabelledDial("external input", MIXER_EXTERNAL, color));
 
         category.add(hbox, BorderLayout.CENTER);
         return category;
@@ -277,8 +210,9 @@ public class NovationAStation extends Synth {
         hbox.add(comp);
         comp = new LabelledDial("overdrive", this, FILTER_OVERDRIVE.getKey(), color, 0, 127);
         hbox.add(comp);
-        comp = new LabelledDial("key track", this, FILTER_KEY_TRACK.getKey(), color, 0, 127);
-        hbox.add(comp);
+        // TODO - NRPN based
+//        comp = new LabelledDial("key track", this, FILTER_KEY_TRACK.getKey(), color, 0, 127);
+//        hbox.add(comp);
         comp = new LabelledDial("mod env depth", this, FILTER_ENV2_DEPTH.getKey(), color, 0, 127, 64);
         hbox.add(comp);
         comp = new LabelledDial("lfo2 depth", this, "filterlfo2depth", color, 0, 127, 64);
@@ -294,7 +228,8 @@ public class NovationAStation extends Synth {
     private JComponent addEnvelope(final int envelope, Color color)
     {
         Category category = new Category(this, (envelope == 1 ? "Amp" : "Mod") + " Envelope", color);
-        category.makePasteable("env");
+        // TODO - to be verified
+        // category.makePasteable("env");
 
         String type = envelope == 1 ? "amplitude" : "modulation";
 
@@ -337,7 +272,7 @@ public class NovationAStation extends Synth {
                 new double[] { 0, 1.0, 1.0 / 127.0, 1.0/127.0, 0 });
         hbox.addLast(comp);
 
-        // TODO - FM envelope (AD)
+        // TODO - FM envelope (AD), NRPN based
 
         category.add(hbox, BorderLayout.CENTER);
         return category;
@@ -345,7 +280,8 @@ public class NovationAStation extends Synth {
 
     private JComponent addLFO(final int lfo, Color color) {
         Category category = new Category(this, "LFO " + lfo, color);
-        // category.makePasteable("lfo");
+        // TODO - to be verified
+        //category.makePasteable("lfo");
 
         JComponent comp;
         HBox hbox = new HBox();
@@ -374,7 +310,9 @@ public class NovationAStation extends Synth {
         return category;
    }
 
-    private JComponent addARP(Color color) {
+   // TODO
+   /*
+   private JComponent addARP(Color color) {
         Category category = new Category(this, "ARP", color);
 
         JComponent comp;
@@ -390,6 +328,7 @@ public class NovationAStation extends Synth {
         category.add(hbox);
         return category;
     }
+    */
 
     private Component addDelay(Color color) {
         Category category = new Category(this, "delay", color);
@@ -1151,10 +1090,20 @@ public class NovationAStation extends Synth {
 
     @Override
     public void handleSynthCCOrNRPN(Midi.CCData data) {
-        Convertors.getByCC(data.number)
-                .ifPresent(convertor -> convertor.toModel(model, data.value));
+        Optional<Convertor> convertor = Convertors.getByCC(data.number);
+        if (convertor.isPresent()) {
+            convertor.get().toModel(model, data.value);
+        } else {
+            System.out.println("Unknown cc:" + toString(data));
+        }
     }
-            
+
+    private String toString(Midi.CCData data) {
+        return "CCData {number:" +
+                data.number + ", value:" + data.value + ", type:" + data.type +
+                "}";
+    }
+
 //    public boolean requestCloseWindow()
 //        {
 //        // When the user clicks on the close box of your synth editor,
@@ -1378,14 +1327,14 @@ public class NovationAStation extends Synth {
 //        super.tabChanged();
 //        }
 
-//    public boolean getExpectsRawCCFromSynth()
-//        {
-//        // If your synthesizer sends individual parameter data to Edisyn not as sysex,
-//        // and not as cooked CC messages (such as NRPN), but rather as raw CC messages,
-//        // then you should override this method to return TRUE.  Generally it's kept FALSE,
-//        // the default.
-//        return false;
-//        }
+    public boolean getExpectsRawCCFromSynth()
+        {
+        // If your synthesizer sends individual parameter data to Edisyn not as sysex,
+        // and not as cooked CC messages (such as NRPN), but rather as raw CC messages,
+        // then you should override this method to return TRUE.  Generally it's kept FALSE,
+        // the default.
+        return false;
+        }
 
     public boolean getReceivesPatchesAsDumps()
         {
@@ -1440,7 +1389,6 @@ public class NovationAStation extends Synth {
         // message to send it out, or (much more likely) if the user turned off routing.  It is
         // presently NOT possible for both of these values to be true; though this might be the case
         // in the future.
-        return; 
         }
 
     public boolean getSendsParametersAfterLoad()
@@ -1531,7 +1479,8 @@ public class NovationAStation extends Synth {
         // and only update a second time when the other part arrives.  This in turn can cause a variety of revise() problems.
         // To deal with this, if you know the synth will always produce an MSB in every NRPN message, you can override this to
         // return TRUE (it returns FALSE by default).
-        return false; 
+        // TODO - check
+        return false;
         }
 
     public boolean getRequiresNRPNLSB() 
@@ -1543,7 +1492,8 @@ public class NovationAStation extends Synth {
         // and only update a second time when the other part arrives.  This in turn can cause a variety of revise() problems.
         // To deal with this, if you know the synth will always produce an LSB in every NRPN message, you can override this to
         // return TRUE (it returns FALSE by default).
-        return false; 
+        // TODO - check
+            return false;
         }
 
     public boolean testVerify(Synth synth2, String key, Object obj1, Object obj2)
@@ -1874,5 +1824,27 @@ public class NovationAStation extends Synth {
         int major = (swVersion >> 3);
         int minor = swVersion & 0x7;
         return major + "." + minor + "." + swIncrement;
+    }
+
+    private Chooser createChooser(String label, Mappings mappings) {
+        Restrictions restrictions = mappings.getRestrictions();
+        // sanity
+        if (restrictions.getValues() == null) {
+            throw new IllegalStateException("expecting values for a chooser component !");
+        }
+        return new Chooser(label, this,
+                mappings.getKey(),
+                mappings.getRestrictions().getValues());
+    }
+
+    private LabelledDial createLabelledDial(String label, Mappings mappings, Color color) {
+        Restrictions restrictions = mappings.getRestrictions();
+        return new LabelledDial(label, this,
+                mappings.getKey(),
+                color, restrictions.getMin(), restrictions.getMax(), restrictions.getOffset());
+    }
+
+    private JComponent createCheckBox(String label, Mappings mappings) {
+        return new CheckBox(label, this, mappings.getKey());
     }
 }

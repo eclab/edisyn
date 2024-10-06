@@ -1,43 +1,40 @@
 <html><head></head><body>
-<h1>Put Your Synthesizer Name Here (like Yamaha TX81Z)</h1> 
-<h2>Single [or Multi] Patch Editor</h2>
+<h1>Novation A-Station</h1>
+<h2>Patch Editor - Still under development !</h2>
 
-<p>Here you want to tell the user exactly which kinds of synthesizers your patch will work with,
-and other interesting top-level information.
+<p>This editor will work with the <b>Novation A-Station</b>.<br>
+It is developed and tested with the latest available firmware, being '2.1.2'
 
-<p><b>Communicating with Edisyn</b><br> 
-Here you should provide instructions as to how to set up the synthesizer (to only send sysex, or whatever)
-so it works properly with Edisyn.
+<p><b>Communicating with Edisyn</b><br>
+Set Edisyn's MIDI channel to the same as your synth's MIDI channel
 
 <p><b>Other Interesting Facts</b><br>
-You might add some other sections regarding unusual features of your
-patch editor.  For example, the PreenFM2 has a section called <b>About the Algorithm Diagrams</b>
-which explains how the diagram icons are to be interpreted.  Some synthesizers also have a section
-called <b>Fun Feature</b> which describe some unusual fun feature that the patch editor supports.
-
-<p><b>Gotchas</b><br>
-Most of the synthesizers have a section called <b>Gotchas</b> which describes, in bullet-list form,
-the various missing features, problems, or difficulties you may encounter when dealing with this kind
-of synthesizer: perhaps you can't send to current patch; or perhaps it's not possible to merge; and so
-on.
-
-
+This editor is still under development and not feature complete.<br>
+On the currently-supported-features list we have:
 <ul>
-<li>Here's the first gotcha.
+    <li>request current/given patch, supporting most of the parameters</li>
+    <li>most of the realtime controls (CC-based) are working bidirectional</li>
+    <li>NRPN-based controls are still under development</li>
+</ul>
+Although the UI is still limited, it's already more useful than the UI on the device ;).<br><br>
 
-<p><li>Here's the second gotcha.
-
-<p><li>Here's the third gotcha.  And so on.
-
+On the TODO list we have (in order of importance - IMHO):
+<ul>
+    <li>writing updates to the device</li>
+    <li>supporting NRPN-based controls</li>
+    <li>testing, testing, testing...  (the model + UI, but also interaction with global Edisyn features: merges, librarian, ...)</li>
+    <li>UI extensions (supporting the whole set of parameters)</li>
+    <li>UI improvement (some ideas on usability)</li>
 </ul>
 
+<p><b>Gotchas</b><br>
+<i>To be completed</i>
 
 <p><table border=0 cellpadding=0 cellspacing=5>
 <tr>
 <td align=right>By&nbsp;&nbsp;&nbsp;
-<td><b>Put your Name Here</b>
+<td><b>Guy Rooms</b>
 <tr>
 <td align=right>Date&nbsp;&nbsp;&nbsp;
-<td>Put the Month and Year (like June 2017) Here.
+<td>October 2024.
 </table>
-

@@ -2,7 +2,6 @@ package edisyn.synth.novationastation;
 
 import edisyn.Model;
 
-import java.util.List;
 import java.util.Locale;
 
 /**
@@ -21,17 +20,19 @@ import java.util.Locale;
  *     <li>the 'straight' mappings: one-to-one relationship between (Edisyn) model key and midi CC / byte-index</li>
  *     <li>the 'packed' mappings: one-to-many relationship between (Edisyn) model key and midi CC / byte-index</li>
  * </ol>
+ *
  * </p>
+ * TODO - add missing NRPN based params (and update doc)
  */
 enum Mappings {
     ////
     // program/patch
     ////
-    POLYPHONY_MODE(Convertors.Packed.PACKED2),
-    PORTAMENTO_MODE(Convertors.Packed.PACKED3 /*, Restrictions.values("exponential", "linear"*/),
+    POLYPHONY_MODE(Convertors.Packed.PACKED2, Restrictions.POLYPHONY_MODE),
+    PORTAMENTO_MODE(Convertors.Packed.PACKED3, Restrictions.PORTAMENTO_MODE),
     PORTAMENTO_TIME(5, 3),
     PREGLIDE_SEMITONES(8, 4),
-    UNISON_VOICES(Convertors.Packed.PACKED2),
+    UNISON_VOICES(Convertors.Packed.PACKED2, Restrictions.UNISON_VOICES),
     UNISON_DETUNE(68, 1),
     KEY_SYNC_PHASE(Convertors.Packed.PACKED1),
     ////
@@ -50,43 +51,44 @@ enum Mappings {
     // - osc2 can be synced by osc1
     // - osc3 can be FM'ed by osc2
     ////
-    OSC1_OCTAVE(Convertors.Packed.PACKED4),
-    OSC1_WAVEFORM(Convertors.Packed.PACKED3),
-    OSC1_SEMITONE(40, 7),
-    OSC1_DETUNE(41, 8),
-    OSC1_BENDWHEEL_AMOUNT(42, 9),
-    OSC1_LFO1_DEPTH(43, 10),
-    OSC1_ENV2_DEPTH(44, 11),
-    OSC1_PULSE_WIDTH(45, 12),
-    OSC1_LFO2_PULSE_WIDTH_MOD(46, 13),
-    OSC1_ENV2_PULSE_WIDTH_MOD(47, 14),
-    OSC2_OCTAVE(Convertors.Packed.PACKED4),
-    OSC2_WAVEFORM(Convertors.Packed.PACKED3),
-    OSC2_SEMITONE(48, 15),
-    OSC2_DETUNE(49, 16),
-    OSC2_BENDWHEEL_AMOUNT(50, 17),
-    OSC2_LFO1_DEPTH(51, 18),
-    OSC2_ENV2_DEPTH(52, 19),
-    OSC2_PULSE_WIDTH(53, 20),
-    OSC2_LFO2_PULSE_WIDTH_MOD(54, 21),
-    OSC2_ENV2_PULSE_WIDTH_MOD(55, 22),
+    OSC1_OCTAVE(Convertors.Packed.PACKED4, Restrictions.OSC_OCTAVES),
+    OSC1_WAVEFORM(Convertors.Packed.PACKED3, Restrictions.OSC_WAVEFORMS),
+    OSC1_SEMITONE(40, 7, Restrictions.CENTRIC_24),
+    OSC1_DETUNE(41, 8, Restrictions.CENTRIC_100),
+    // TODO - verify restrictions
+    OSC1_BENDWHEEL_AMOUNT(42, 9, Restrictions.CENTRIC_127),
+    OSC1_LFO1_DEPTH(43, 10, Restrictions.CENTRIC_127),
+    OSC1_ENV2_DEPTH(44, 11, Restrictions.CENTRIC_127),
+    OSC1_PULSE_WIDTH(45, 12, Restrictions.CENTRIC_127),
+    OSC1_LFO2_PULSE_WIDTH_MOD(46, 13, Restrictions.CENTRIC_127),
+    OSC1_ENV2_PULSE_WIDTH_MOD(47, 14, Restrictions.CENTRIC_127),
+    OSC2_OCTAVE(Convertors.Packed.PACKED4, Restrictions.OSC_OCTAVES),
+    OSC2_WAVEFORM(Convertors.Packed.PACKED3, Restrictions.OSC_WAVEFORMS),
+    OSC2_SEMITONE(48, 15, Restrictions.CENTRIC_24),
+    OSC2_DETUNE(49, 16, Restrictions.CENTRIC_100),
+    OSC2_BENDWHEEL_AMOUNT(50, 17, Restrictions.CENTRIC_127),
+    OSC2_LFO1_DEPTH(51, 18, Restrictions.CENTRIC_127),
+    OSC2_ENV2_DEPTH(52, 19, Restrictions.CENTRIC_127),
+    OSC2_PULSE_WIDTH(53, 20, Restrictions.CENTRIC_127),
+    OSC2_LFO2_PULSE_WIDTH_MOD(54, 21, Restrictions.CENTRIC_127),
+    OSC2_ENV2_PULSE_WIDTH_MOD(55, 22, Restrictions.CENTRIC_127),
     OSC2_SYNCED_BY_1(Convertors.Packed.PACKED4),
-    OSC3_OCTAVE(Convertors.Packed.PACKED4),
-    OSC3_WAVEFORM(Convertors.Packed.PACKED3),
-    OSC3_SEMITONE(56, 23),
-    OSC3_DETUNE(57, 24),
-    OSC3_BENDWHEEL_AMOUNT(58, 25),
-    OSC3_LFO1_DEPTH(59, 26),
-    OSC3_ENV2_DEPTH(60, 27),
-    OSC3_PULSE_WIDTH(61, 28),
-    OSC3_LFO2_PULSE_WIDTH_MOD(62, 29),
-    OSC3_ENV2_PULSE_WIDTH_MOD(63, 30),
+    OSC3_OCTAVE(Convertors.Packed.PACKED4, Restrictions.OSC_OCTAVES),
+    OSC3_WAVEFORM(Convertors.Packed.PACKED3, Restrictions.OSC_WAVEFORMS),
+    OSC3_SEMITONE(56, 23, Restrictions.CENTRIC_24),
+    OSC3_DETUNE(57, 24, Restrictions.CENTRIC_100),
+    OSC3_BENDWHEEL_AMOUNT(58, 25, Restrictions.CENTRIC_127),
+    OSC3_LFO1_DEPTH(59, 26, Restrictions.CENTRIC_127),
+    OSC3_ENV2_DEPTH(60, 27, Restrictions.CENTRIC_127),
+    OSC3_PULSE_WIDTH(61, 28, Restrictions.CENTRIC_127),
+    OSC3_LFO2_PULSE_WIDTH_MOD(62, 29, Restrictions.CENTRIC_127),
+    OSC3_ENV2_PULSE_WIDTH_MOD(63, 30, Restrictions.CENTRIC_127),
     ////
     // FM (osc2 to osc3)
     ////
-    FM_FIXED_LEVEL(null, 56),
-    FM_ENVELOPE_DEPTH(null, 57),
-    FM_VELOCITY_DEPTH(null, 58),
+    FM_FIXED_LEVEL(null, 56),       // TODO -- NRPN realtime updates
+    FM_ENVELOPE_DEPTH(null, 57),    // TODO -- NRPN realtime updates + restrictions
+    FM_VELOCITY_DEPTH(null, 58),    // TODO -- NRPN realtime updates + restrictions
     ////
     // Envelopes
     // - envelope1=amplitude envelope (ADSR)
@@ -105,9 +107,9 @@ enum Mappings {
     ENVELOPE2_RELEASE(117, 70),
     ENVELOPE2_TRIGGER(Convertors.Packed.PACKED1),
     ENVELOPE2_VELOCITY_DEPTH(118, 66),
-    ENVELOPE_FM_ATTACK(Convertors.Packed.PACKED1),
-    ENVELOPE_FM_DECAY(Convertors.Packed.PACKED1),
-    ENVELOPE_FM_TRIGGER(Convertors.Packed.PACKED1),
+    ENVELOPE_FM_ATTACK(Convertors.Packed.PACKED1),  // TODO -- NRPN realtime updates + restrictions
+    ENVELOPE_FM_DECAY(Convertors.Packed.PACKED1),   // TODO -- NRPN realtime updates + restrictions
+    ENVELOPE_FM_TRIGGER(Convertors.Packed.PACKED1), // TODO -- NRPN realtime updates + restrictions
     ////
     // LFOs
     // - 2 identical LFOs are available
@@ -135,8 +137,9 @@ enum Mappings {
     FILTER_FREQ(105, 46),
     FILTER_RESONANCE(106, 44),
     FILTER_OVERDRIVE(104, 43),
+    // TODO - investigate how to handle (N)RPN
     // CC6 -> filtertracking (on latest firmware - whilst NRPN according to latest (yet older) spec I could find)
-    FILTER_KEY_TRACK(6, 47),
+//    FILTER_KEY_TRACK(6, 47),
     FILTER_ENV2_DEPTH(107, 52),
     FILTER_LFO2_DEPTH(102, 51),
     FILTER_Q_NORMALIZE(103, 45),
@@ -228,12 +231,13 @@ enum Mappings {
     EXT_AUDIO_TRIGGER(Convertors.Packed.PACKED10),
     EXT_AUDIO_TO_FX(Convertors.Packed.PACKED10),
     // program volume - stored in patch
-    PROGRAM_VOLUME(119, 125),
+    PROGRAM_VOLUME(119, 125, Restrictions.CENTRIC_24),
     // CC7: Device volume (non-patch related; not stored within patch)
     DEVICE_VOLUME(7, null),
     ;
 
-    // TODO - introduce NRPNS !?
+    // TODO - introduce NRPNS real time controls
+    // NOTE: looks like (non-documented) Packed11convertor is coming in via NRPN 26
 
     ////
     // FYI - CC voids/ignores
@@ -257,16 +261,26 @@ enum Mappings {
     private final String key;
     // Convertor
     private final Convertor convertor;
-//    private final Restrictions restrictions;
+    private final Restrictions restrictions;
 
     Mappings(Integer cc, Integer dumpIndex) {
+        this(cc, dumpIndex, Restrictions.NONE);
+    }
+
+    Mappings(Integer cc, Integer dumpIndex, Restrictions restrictions) {
         this.key = extractKey(this);
         this.convertor = createStraight(key, cc, dumpIndex);
+        this.restrictions = restrictions;
     }
 
     Mappings(Convertor convertor) {
+        this(convertor, Restrictions.NONE);
+    }
+
+    Mappings(Convertor convertor, Restrictions restrictions) {
         this.key = extractKey(this);
         this.convertor = convertor;
+        this.restrictions = restrictions;
     }
 
     static Mappings find(String string, int index) {
@@ -279,6 +293,10 @@ enum Mappings {
 
     public Convertor getConvertor() {
         return convertor;
+    }
+
+    public Restrictions getRestrictions() {
+        return restrictions;
     }
 
     // deduce (Edisym model) key from enum name, yet adding some conversion to adhere to the Edisyn naming conventions
@@ -322,17 +340,4 @@ enum Mappings {
             return byteIndex;
         }
     }
-
-//    private static class Restrictions {
-//        private List<String> values;
-//
-//        Restrictions values(List<String> values){
-//            this.values = values;
-//            return this;
-//        }
-//
-//        List<String> getValues() {
-//            return values;
-//        }
-//    }
 }

@@ -21,9 +21,12 @@ interface Convertor {
     // extract value from model (to be used in CC or byteIndex).
     int toSynth(Model model);
 
-    // get (Midi) CC
+    // get (Midi-SysEx) byteIndex
+    int getByteIndex();
+
+    // get (Midi) CC number
     Integer getCC();
 
-    // get (Midi-SysEx) byteIndex
-    Integer getByteIndex();
+    // get (Midi) NRPN number
+    Integer getNRPN();
 }

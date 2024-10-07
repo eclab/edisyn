@@ -20,25 +20,48 @@ class Convertors {
         return BY_KEY.containsKey(key) ? Optional.of(BY_KEY.get(key)) : Optional.empty();
     }
 
-    // get convertor for a given (Midi) cc, Optional.empty if none
-    static Optional<Convertor> getByCC(int cc) {
-        return BY_CC.containsKey(cc) ? Optional.of(BY_CC.get(cc)) : Optional.empty();
-    }
-
     // get convertor for a given (Midi SysEx dataDump) byteIndex, Optional.empty if none
     static Optional<Convertor> getByIndex(int cc) {
         return BY_INDEX.containsKey(cc) ? Optional.of(BY_INDEX.get(cc)) : Optional.empty();
     }
 
+    // get convertor for a given (Midi) cc, Optional.empty if none
+    static Optional<Convertor> getByCC(int cc) {
+        return BY_CC.containsKey(cc) ? Optional.of(BY_CC.get(cc)) : Optional.empty();
+    }
+
+    // get convertor for a given (Midi) cc, Optional.empty if none
+    static Optional<Convertor> getByNRPN(int nrpn) {
+        return BY_NRPN.containsKey(nrpn) ? Optional.of(BY_NRPN.get(nrpn)) : Optional.empty();
+    }
+
+
     private static final Map<String, Convertor> BY_KEY = buildKeyMap();
-    private static final Map<Integer, Convertor> BY_CC = buildCCMap();
     private static final Map<Integer, Convertor> BY_INDEX = buildIndexMap();
+    private static final Map<Integer, Convertor> BY_CC = buildCCMap();
+    private static final Map<Integer, Convertor> BY_NRPN = buildNRPNMap();
 
     private static Map<String, Convertor> buildKeyMap() {
         return Stream.of(Mappings.values())
                 .collect(Collectors.toUnmodifiableMap(
                         Mappings::getKey,
                         Mappings::getConvertor,
+                        (convertor1, convertor2) -> {
+                            if (convertor1 != convertor2) {
+                                throw new IllegalStateException("Cannot assign different convertors to the same key");
+                            }
+                            return convertor1;
+                        }
+                ));
+    }
+
+    private static Map<Integer, Convertor> buildIndexMap() {
+        return Stream.of(Mappings.values())
+                .map(Mappings::getConvertor)
+//                .filter(convertor -> convertor.getByteIndex() != null)
+                .collect(Collectors.toUnmodifiableMap(
+                        Convertor::getByteIndex,
+                        Function.identity(),
                         (convertor1, convertor2) -> {
                             if (convertor1 != convertor2) {
                                 throw new IllegalStateException("Cannot assign different convertors to the same key");
@@ -64,13 +87,12 @@ class Convertors {
                 ));
     }
 
-
-    private static Map<Integer, Convertor> buildIndexMap() {
+    private static Map<Integer, Convertor> buildNRPNMap() {
         return Stream.of(Mappings.values())
                 .map(Mappings::getConvertor)
-                .filter(convertor -> convertor.getByteIndex() != null)
+                .filter(convertor -> convertor.getNRPN() != null)
                 .collect(Collectors.toUnmodifiableMap(
-                        Convertor::getByteIndex,
+                        Convertor::getNRPN,
                         Function.identity(),
                         (convertor1, convertor2) -> {
                             if (convertor1 != convertor2) {
@@ -80,6 +102,7 @@ class Convertors {
                         }
                 ));
     }
+
 
     /**
      * enum defining some predefined (so-called packed) convertors
@@ -91,12 +114,16 @@ class Convertors {
     enum Packed implements Convertor {
         PACKED1 {
             @Override
+            public int getByteIndex() {
+                return 80;
+            }
+            @Override
             public Integer getCC() {
                 return 65;
             }
             @Override
-            public Integer getByteIndex() {
-                return 80;
+            public Integer getNRPN() {
+                return null;
             }
             @Override
             public void toModel(Model model, int value) {
@@ -115,12 +142,16 @@ class Convertors {
         },
         PACKED2 {
             @Override
+            public int getByteIndex() {
+                return 0;
+            }
+            @Override
             public Integer getCC() {
                 return 67;
             }
             @Override
-            public Integer getByteIndex() {
-                return 0;
+            public Integer getNRPN() {
+                return null;
             }
             @Override
             public void toModel(Model model, int value) {
@@ -137,12 +168,16 @@ class Convertors {
         },
         PACKED3 {
             @Override
+            public int getByteIndex() {
+                return 5;
+            }
+            @Override
             public Integer getCC() {
                 return 70;
             }
             @Override
-            public Integer getByteIndex() {
-                return 5;
+            public Integer getNRPN() {
+                return null;
             }
             @Override
             public void toModel(Model model, int value) {
@@ -161,12 +196,16 @@ class Convertors {
         },
         PACKED4 {
             @Override
+            public int getByteIndex() {
+                return 6;
+            }
+            @Override
             public Integer getCC() {
                 return 71;
             }
             @Override
-            public Integer getByteIndex() {
-                return 6;
+            public Integer getNRPN() {
+                return null;
             }
             @Override
             public void toModel(Model model, int value) {
@@ -185,12 +224,16 @@ class Convertors {
         },
         PACKED5 {
             @Override
+            public int getByteIndex() {
+                return 78;
+            }
+            @Override
             public Integer getCC() {
                 return 78;
             }
             @Override
-            public Integer getByteIndex() {
-                return 78;
+            public Integer getNRPN() {
+                return null;
             }
             @Override
             public void toModel(Model model, int value) {
@@ -209,12 +252,16 @@ class Convertors {
         },
         PACKED6 {
             @Override
+            public int getByteIndex() {
+                return 79;
+            }
+            @Override
             public Integer getCC() {
                 return 79;
             }
             @Override
-            public Integer getByteIndex() {
-                return 79;
+            public Integer getNRPN() {
+                return null;
             }
             @Override
             public void toModel(Model model, int value) {
@@ -237,12 +284,16 @@ class Convertors {
         },
         PACKED7 {
             @Override
+            public int getByteIndex() {
+                return 88;
+            }
+            @Override
             public Integer getCC() {
                 return 89;
             }
             @Override
-            public Integer getByteIndex() {
-                return 88;
+            public Integer getNRPN() {
+                return null;
             }
             @Override
             public void toModel(Model model, int value) {
@@ -263,12 +314,16 @@ class Convertors {
         },
         PACKED8 {
             @Override
+            public int getByteIndex() {
+                return 121;
+            }
+            @Override
             public Integer getCC() {
                 return null;
             }
             @Override
-            public Integer getByteIndex() {
-                return 121;
+            public Integer getNRPN() {
+                return 21;
             }
             @Override
             public void toModel(Model model, int value) {
@@ -283,12 +338,16 @@ class Convertors {
         },
         PACKED9 {
             @Override
+            public int getByteIndex() {
+                return 122;
+            }
+            @Override
             public Integer getCC() {
                 return null;
             }
             @Override
-            public Integer getByteIndex() {
-                return 122;
+            public Integer getNRPN() {
+                return 22;
             }
             @Override
             public void toModel(Model model, int value) {
@@ -305,12 +364,16 @@ class Convertors {
         },
         PACKED10 {
             @Override
+            public int getByteIndex() {
+                return 123;
+            }
+            @Override
             public Integer getCC() {
                 return null;
             }
             @Override
-            public Integer getByteIndex() {
-                return 123;
+            public Integer getNRPN() {
+                return 23;
             }
             @Override
             public void toModel(Model model, int value) {

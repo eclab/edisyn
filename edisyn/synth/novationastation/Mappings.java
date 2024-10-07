@@ -30,21 +30,24 @@ enum Mappings {
     ////
     POLYPHONY_MODE(Convertors.Packed.PACKED2, Restrictions.POLYPHONY_MODE),
     PORTAMENTO_MODE(Convertors.Packed.PACKED3, Restrictions.PORTAMENTO_MODE),
-    PORTAMENTO_TIME(5, 3),
-    PREGLIDE_SEMITONES(8, 4),
+    PORTAMENTO_TIME(3, 5, null),
+    PREGLIDE_SEMITONES(4, 8, null),
     UNISON_VOICES(Convertors.Packed.PACKED2, Restrictions.UNISON_VOICES),
-    UNISON_DETUNE(68, 1),
+    UNISON_DETUNE(1, 68, null),
     KEY_SYNC_PHASE(Convertors.Packed.PACKED1),
     ////
     // Oscillators - global (= applying to all oscillators)
     ////
-    OSCS_RANDOM_DETUNE(69, 2),
-    OSCS_MODWHEEL_PITCH_DEPTH(null, 31),
-    OSCS_AFTERTCH_PITCH_DEPTH(null, 32),
-    OSCS_BREATH_PITCH_DEPTH(null, 33),
-    OSCS_MODWHEEL_LFO1_PITCH_DEPTH(null, 34),
-    OSCS_AFTERTCH_LFO1_PITCH_DEPTH(null, 35),
-    OSCS_BREATH_LFO1_PITCH_DEPTH(null, 36),
+    OSCS_RANDOM_DETUNE(2, 69, null),
+    OSCS_MODWHEEL_PITCH_DEPTH(31, null,5, Restrictions.CENTRIC_127),
+    OSCS_AFTERTCH_PITCH_DEPTH(32, null, 6, Restrictions.CENTRIC_127),
+    OSCS_BREATH_PITCH_DEPTH(33, null, 7, Restrictions.CENTRIC_127),
+    OSCS_MODWHEEL_LFO1_PITCH_DEPTH(34, null, 8, Restrictions.CENTRIC_127),
+    OSCS_AFTERTCH_LFO1_PITCH_DEPTH(35, null, 9, Restrictions.CENTRIC_127),
+    OSCS_BREATH_LFO1_PITCH_DEPTH(36, null, 10, Restrictions.CENTRIC_127),
+    OSCS_MODWHEEL_AMPLITUDE_DEPTH(81, null, 18, Restrictions.CENTRIC_127),
+    OSCS_AFTERTCH_AMPLITUDE_DEPTH(82, null, 19, Restrictions.CENTRIC_127),
+    OSCS_BREATH_AMPLITUDE_DEPTH(83, null, 20, Restrictions.CENTRIC_127),
     ////
     // Oscillators - individual
     // - 3 basically identical oscillators are available, yet:
@@ -53,79 +56,79 @@ enum Mappings {
     ////
     OSC1_OCTAVE(Convertors.Packed.PACKED4, Restrictions.OSC_OCTAVES),
     OSC1_WAVEFORM(Convertors.Packed.PACKED3, Restrictions.OSC_WAVEFORMS),
-    OSC1_SEMITONE(40, 7, Restrictions.CENTRIC_24),
-    OSC1_DETUNE(41, 8, Restrictions.CENTRIC_100),
+    OSC1_SEMITONE(7, 40, null, Restrictions.CENTRIC_24),
+    OSC1_DETUNE(8, 41, null, Restrictions.CENTRIC_100),
     // TODO - verify restrictions
-    OSC1_BENDWHEEL_AMOUNT(42, 9, Restrictions.CENTRIC_127),
-    OSC1_LFO1_DEPTH(43, 10, Restrictions.CENTRIC_127),
-    OSC1_ENV2_DEPTH(44, 11, Restrictions.CENTRIC_127),
-    OSC1_PULSE_WIDTH(45, 12, Restrictions.CENTRIC_127),
-    OSC1_LFO2_PULSE_WIDTH_MOD(46, 13, Restrictions.CENTRIC_127),
-    OSC1_ENV2_PULSE_WIDTH_MOD(47, 14, Restrictions.CENTRIC_127),
+    OSC1_BENDWHEEL_AMOUNT(9, 42, null, Restrictions.CENTRIC_127),
+    OSC1_LFO1_DEPTH(10, 43, null, Restrictions.CENTRIC_127),
+    OSC1_ENV2_DEPTH(11, 44, null, Restrictions.CENTRIC_127),
+    OSC1_PULSE_WIDTH(12, 45, null, Restrictions.CENTRIC_127),
+    OSC1_LFO2_PULSE_WIDTH_MOD(13, 46, null, Restrictions.CENTRIC_127),
+    OSC1_ENV2_PULSE_WIDTH_MOD(14, 47, null, Restrictions.CENTRIC_127),
     OSC2_OCTAVE(Convertors.Packed.PACKED4, Restrictions.OSC_OCTAVES),
     OSC2_WAVEFORM(Convertors.Packed.PACKED3, Restrictions.OSC_WAVEFORMS),
-    OSC2_SEMITONE(48, 15, Restrictions.CENTRIC_24),
-    OSC2_DETUNE(49, 16, Restrictions.CENTRIC_100),
-    OSC2_BENDWHEEL_AMOUNT(50, 17, Restrictions.CENTRIC_127),
-    OSC2_LFO1_DEPTH(51, 18, Restrictions.CENTRIC_127),
-    OSC2_ENV2_DEPTH(52, 19, Restrictions.CENTRIC_127),
-    OSC2_PULSE_WIDTH(53, 20, Restrictions.CENTRIC_127),
-    OSC2_LFO2_PULSE_WIDTH_MOD(54, 21, Restrictions.CENTRIC_127),
-    OSC2_ENV2_PULSE_WIDTH_MOD(55, 22, Restrictions.CENTRIC_127),
+    OSC2_SEMITONE(15, 48, null, Restrictions.CENTRIC_24),
+    OSC2_DETUNE(16, 49, null, Restrictions.CENTRIC_100),
+    OSC2_BENDWHEEL_AMOUNT(17, 50, null, Restrictions.CENTRIC_127),
+    OSC2_LFO1_DEPTH(18, 51, null, Restrictions.CENTRIC_127),
+    OSC2_ENV2_DEPTH(19, 52, null, Restrictions.CENTRIC_127),
+    OSC2_PULSE_WIDTH(20, 53, null, Restrictions.CENTRIC_127),
+    OSC2_LFO2_PULSE_WIDTH_MOD(21, 54, null, Restrictions.CENTRIC_127),
+    OSC2_ENV2_PULSE_WIDTH_MOD(22, 55, null, Restrictions.CENTRIC_127),
     OSC2_SYNCED_BY_1(Convertors.Packed.PACKED4),
     OSC3_OCTAVE(Convertors.Packed.PACKED4, Restrictions.OSC_OCTAVES),
     OSC3_WAVEFORM(Convertors.Packed.PACKED3, Restrictions.OSC_WAVEFORMS),
-    OSC3_SEMITONE(56, 23, Restrictions.CENTRIC_24),
-    OSC3_DETUNE(57, 24, Restrictions.CENTRIC_100),
-    OSC3_BENDWHEEL_AMOUNT(58, 25, Restrictions.CENTRIC_127),
-    OSC3_LFO1_DEPTH(59, 26, Restrictions.CENTRIC_127),
-    OSC3_ENV2_DEPTH(60, 27, Restrictions.CENTRIC_127),
-    OSC3_PULSE_WIDTH(61, 28, Restrictions.CENTRIC_127),
-    OSC3_LFO2_PULSE_WIDTH_MOD(62, 29, Restrictions.CENTRIC_127),
-    OSC3_ENV2_PULSE_WIDTH_MOD(63, 30, Restrictions.CENTRIC_127),
+    OSC3_SEMITONE(23, 56, null, Restrictions.CENTRIC_24),
+    OSC3_DETUNE(24, 57, null, Restrictions.CENTRIC_100),
+    OSC3_BENDWHEEL_AMOUNT(25, 58, null, Restrictions.CENTRIC_127),
+    OSC3_LFO1_DEPTH(26, 59, null, Restrictions.CENTRIC_127),
+    OSC3_ENV2_DEPTH(27, 60, null, Restrictions.CENTRIC_127),
+    OSC3_PULSE_WIDTH(28, 61, null, Restrictions.CENTRIC_127),
+    OSC3_LFO2_PULSE_WIDTH_MOD(29, 62, null, Restrictions.CENTRIC_127),
+    OSC3_ENV2_PULSE_WIDTH_MOD(30, 63, null, Restrictions.CENTRIC_127),
     ////
     // FM (osc2 to osc3)
     ////
-    FM_FIXED_LEVEL(null, 56),       // TODO -- NRPN realtime updates
-    FM_ENVELOPE_DEPTH(null, 57),    // TODO -- NRPN realtime updates + restrictions
-    FM_VELOCITY_DEPTH(null, 58),    // TODO -- NRPN realtime updates + restrictions
+    FM_FIXED_LEVEL(56, null, 0),       // TODO -- NRPN realtime updates
+    FM_ENVELOPE_DEPTH(57, null, 1),    // TODO -- NRPN realtime updates + restrictions
+    FM_VELOCITY_DEPTH(58, null, 2),    // TODO -- NRPN realtime updates + restrictions
     ////
     // Envelopes
     // - envelope1=amplitude envelope (ADSR)
     // - envelope2=modulation envelope (ADSR)
     // - envelope3=fm envelope (AD)
     ////
-    ENVELOPE1_ATTACK(108, 62),
-    ENVELOPE1_DECAY(109, 63),
-    ENVELOPE1_SUSTAIN(110, 64),
-    ENVELOPE1_RELEASE(111, 65),
+    ENVELOPE1_ATTACK(62, 108, null),
+    ENVELOPE1_DECAY(63, 109, null),
+    ENVELOPE1_SUSTAIN(64, 110, null),
+    ENVELOPE1_RELEASE(65, 111, null),
     ENVELOPE1_TRIGGER(Convertors.Packed.PACKED1, Restrictions.ENV_TRIGGERS),
-    ENVELOPE1_VELOCITY_DEPTH(112, 61, Restrictions.CENTRIC_127),
-    ENVELOPE2_ATTACK(114, 67),
-    ENVELOPE2_DECAY(115, 68),
-    ENVELOPE2_SUSTAIN(116, 69),
-    ENVELOPE2_RELEASE(117, 70),
+    ENVELOPE1_VELOCITY_DEPTH(61, 112, null, Restrictions.CENTRIC_127),
+    ENVELOPE2_ATTACK(67, 114, null),
+    ENVELOPE2_DECAY(68, 115, null),
+    ENVELOPE2_SUSTAIN(69, 116, null),
+    ENVELOPE2_RELEASE(70, 117, null),
     ENVELOPE2_TRIGGER(Convertors.Packed.PACKED1, Restrictions.ENV_TRIGGERS),
-    ENVELOPE2_VELOCITY_DEPTH(118, 66, Restrictions.CENTRIC_127),
-    ENVELOPE_FM_ATTACK(Convertors.Packed.PACKED1),  // TODO -- NRPN realtime updates + restrictions
-    ENVELOPE_FM_DECAY(Convertors.Packed.PACKED1),   // TODO -- NRPN realtime updates + restrictions
+    ENVELOPE2_VELOCITY_DEPTH(66, 118, null, Restrictions.CENTRIC_127),
+    ENVELOPE_FM_ATTACK(59, null, 3),  // TODO -- NRPN realtime updates + restrictions
+    ENVELOPE_FM_DECAY(60, null, 4),   // TODO -- NRPN realtime updates + restrictions
     ENVELOPE_FM_TRIGGER(Convertors.Packed.PACKED1), // TODO -- NRPN realtime updates + restrictions
     ////
     // LFOs
     // - 2 identical LFOs are available
     ////
     LFO1_WAVEFORM(Convertors.Packed.PACKED5, Restrictions.LFO_WAVE_FORMS),
-    LFO1_SPEED_NON_SYNC(80, 72),
-    LFO1_SPEED_SYNC(81, 73),
-    LFO1_DELAY(82, 74),
+    LFO1_SPEED_NON_SYNC(72, 80, null),
+    LFO1_SPEED_SYNC(73, 81, null),
+    LFO1_DELAY(74, 82, null),
     LFO1_DELAY_MULTI(Convertors.Packed.PACKED5),
     LFO1_KEY_SYNC(Convertors.Packed.PACKED6),
     LFO1_KEY_SYNC_PHASE_SHIFT(Convertors.Packed.PACKED6),
     LFO1_LOCK(Convertors.Packed.PACKED6),
     LFO2_WAVEFORM(Convertors.Packed.PACKED5, Restrictions.LFO_WAVE_FORMS),
-    LFO2_SPEED_NON_SYNC(83, 75),
-    LFO2_SPEED_SYNC(84, 76),
-    LFO2_DELAY(85, 77),
+    LFO2_SPEED_NON_SYNC(75, 83, null),
+    LFO2_SPEED_SYNC(76, 84, null),
+    LFO2_DELAY(77, 85, null),
     LFO2_DELAY_MULTI(Convertors.Packed.PACKED5),
     LFO2_KEY_SYNC(Convertors.Packed.PACKED6),
     LFO2_KEY_SYNC_PHASE_SHIFT(Convertors.Packed.PACKED6),
@@ -134,24 +137,30 @@ enum Mappings {
     // Filter (low pass)
     ////
     FILTER_TYPE(Convertors.Packed.PACKED2, Restrictions.FILTER_TYPES),
-    FILTER_FREQ(105, 46),
-    FILTER_RESONANCE(106, 44),
-    FILTER_OVERDRIVE(104, 43),
+    FILTER_FREQ(46, 105, null),
+    FILTER_RESONANCE(44, 106, null),
+    FILTER_OVERDRIVE(43, 104, null),
     // TODO - investigate how to handle NRPN
-    // FILTER_KEY_TRACK(6, 47),
-    FILTER_ENV2_DEPTH(107, 52, Restrictions.CENTRIC_127),
-    FILTER_LFO2_DEPTH(102, 51, Restrictions.CENTRIC_127),
-    FILTER_Q_NORMALIZE(103, 45),
+    FILTER_KEY_TRACK(47, null, 11),
+    FILTER_ENV2_DEPTH(52, 107, null, Restrictions.CENTRIC_127),
+    FILTER_LFO2_DEPTH(51, 102, null, Restrictions.CENTRIC_127),
+    FILTER_Q_NORMALIZE(45, 103, null),
     // TODO - add extra mappings from sysex dump
+    FILTER_MODWHEEL_FREQUENCY_DEPTH(48, null, 12, Restrictions.CENTRIC_127),
+    FILTER_AFTERTCH_FREQUENCY_DEPTH(49, null, 13, Restrictions.CENTRIC_127),
+    FILTER_BREATH_FREQUENCY_DEPTH(50, null, 14, Restrictions.CENTRIC_127),
+    FILTER_MODWHEEL_LFO2_FREQUENCY_DEPTH(53, null, 15, Restrictions.CENTRIC_127),
+    FILTER_AFTERTCH_LFO2_FREQUENCY_DEPTH(54, null, 16, Restrictions.CENTRIC_127),
+    FILTER_BREATH_LFO2_FREQUENCY_DEPTH(55, null, 17, Restrictions.CENTRIC_127),
     ////
     // Mixer
     ////
-    MIXER_OSC1(72, 37),
-    MIXER_OSC2(73, 38),
-    MIXER_OSC3(74, 39),
-    MIXER_NOISE(75, 40),
-    MIXER_RING_MOD(76, 41),
-    MIXER_EXTERNAL(77, 42),
+    MIXER_OSC1(37, 72, null),
+    MIXER_OSC2(38, 73, null),
+    MIXER_OSC3(39, 74, null),
+    MIXER_NOISE(40, 75, null),
+    MIXER_RING_MOD(41, 76, null),
+    MIXER_EXTERNAL(42, 77, null),
     ////
     // ARP
     ////
@@ -160,71 +169,72 @@ enum Mappings {
     ARP_KEY_SYNC(Convertors.Packed.PACKED7),
     ARP_LATCH(Convertors.Packed.PACKED7),
     ARP_NOTE_DESTINATION(Convertors.Packed.PACKED7),
-    ARP_SYNC(87, 85),
-    ARP_GATE_TIME(88, 86),
-    ARP_PATTERN(3, 87),
-    ARP_RATE(9, 84),
-    // not sure what this is, different from the one in packed7 ?
-    ARP_LATCH_ON_MOMENTARY(64, null),
+    ARP_SYNC(85, 87, null),
+    ARP_GATE_TIME(86, 88, null),
+    ARP_PATTERN(87, 3, null),
+    ARP_RATE(84, 9, null),
+    // TODO not sure what this is, different from the one in packed7 ?
+    // byteindex = null ?
+//    ARP_LATCH_ON_MOMENTARY(null, 64, null),
     ////
     // Effects - equalizer
     ////
-    EQUALIZER_LEVEL(33, 92),
-    EQUALIZER_FREQUENCY(34, 93),
-    EQUALIZER_RATE_NON_SYNC(35, 94),
-    EQUALIZER_RATE_SYNC(36, 95),
-    EQUALIZER_MOD_DEPTH(37, 96),
+    EQUALIZER_LEVEL(92, 33, null),
+    EQUALIZER_FREQUENCY(93, 34, null),
+    EQUALIZER_RATE_NON_SYNC(94, 35, null),
+    EQUALIZER_RATE_SYNC(95, 36, null),
+    EQUALIZER_MOD_DEPTH(96, 37, null),
     EQUALIZER_GLOBAL_SYNC(Convertors.Packed.PACKED9),
     ////
     // Effects - delay
     ////
-    DELAY_SEND_LEVEL(92, 100),
-    DELAY_SEND_MODWHEEL(18, 101, Restrictions.CENTRIC_127),
-    DELAY_TIME_NON_SYNC(19, 102),
-    DELAY_TIME_SYNC(20, 103),
-    DELAY_FEEDBACK(21, 104),
-    DELAY_STEREO_WIDTH(22, 105),
-    DELAY_RATIO(23, 106),
+    DELAY_SEND_LEVEL(100, 92, null),
+    DELAY_SEND_MODWHEEL(101, 18, null, Restrictions.CENTRIC_127),
+    DELAY_TIME_NON_SYNC(102, 19, null),
+    DELAY_TIME_SYNC(103, 20, null),
+    DELAY_FEEDBACK(104, 21, null),
+    DELAY_STEREO_WIDTH(105, 22, null),
+    DELAY_RATIO(106, 23, null),
     ////
     // Effects - chorus/flanger
     ////
-    CHORUS_SEND_LEVEL(93, 110),
+    CHORUS_SEND_LEVEL(110, 93, null),
     CHORUS_TYPE(Convertors.Packed.PACKED8, Restrictions.CHORUS_TYPES),
-    CHORUS_SEND_MODWHEEL(26, 111, Restrictions.CENTRIC_127),
-    CHORUS_RATE_NON_SYNC(27, 112),
-    CHORUS_RATE_SYNC(28, 113),
-    CHORUS_FEEDBACK(29, 114),
-    CHORUS_MOD_DEPTH(30, 115),
-    CHORUS_MOD_CENTRE_POINT(31, 116),
+    CHORUS_SEND_MODWHEEL(111, 26, null, Restrictions.CENTRIC_127),
+    CHORUS_RATE_NON_SYNC(112, 27, null),
+    CHORUS_RATE_SYNC(113, 28, null),
+    CHORUS_FEEDBACK(114, 29, null),
+    CHORUS_MOD_DEPTH(115, 30, null),
+    CHORUS_MOD_CENTRE_POINT(116, 31, null),
     CHORUS_GLOBAL_SYNC(Convertors.Packed.PACKED9),
     ////
     // Effects - reverb
     ////
-    REVERB_SEND_LEVEL(91, 107),
+    REVERB_SEND_LEVEL(107, 91, null),
     REVERB_TYPE(Convertors.Packed.PACKED8, Restrictions.REVERB_TYPES),
-    REVERB_SEND_MODWHEEL(24, 108, Restrictions.CENTRIC_127),
-    REVERB_DECAY(25, 109),
+    REVERB_SEND_MODWHEEL(108, 24, null, Restrictions.CENTRIC_127),
+    REVERB_DECAY(109, 25, null),
     ////
     // Effects - distortion
     ////
     // TODO - no (documented) realtime control for distortion level ?
-    DISTORTION_LEVEL(null, 97),
-    DISTORTION_MODWHEEL(16, 98, Restrictions.CENTRIC_127),
-    DISTORTION_COMPENSATION(17, 99),
+    DISTORTION_LEVEL(97, null, null),
+    DISTORTION_MODWHEEL(98, 16, null, Restrictions.CENTRIC_127),
+    DISTORTION_COMPENSATION(99, 17, null),
     ////
     // Effects - vocoder
     ////
-    VOCODER_BALANCE(95, 89, Restrictions.CENTRIC_127),
-    VOCODER_STEREO_WIDTH(14, 90),
+    VOCODER_BALANCE(89, 95, null, Restrictions.CENTRIC_127),
+    VOCODER_STEREO_WIDTH(90, 14, null),
     VOCODER_SIBILANCE_TYPE(Convertors.Packed.PACKED10, Restrictions.SIBILANCE_TYPES),
-    VOCODER_SIBILANCE_LEVEL(15, 91),
+    VOCODER_SIBILANCE_LEVEL(91, 15, null),
     ////
     // Effects - panning
     ////
-    PANNING_POSITION(10, 117, Restrictions.CENTRIC_127),
-    PANNING_MOD_DEPTH(94, 120),
-    PANNING_RATE_NON_SYNC(12, 118),
-    PANNING_RATE_SYNC(13, 119),
+    PANNING_POSITION(117, 10, null, Restrictions.CENTRIC_127),
+    PANNING_MOD_DEPTH(120, 94, null),
+    PANNING_RATE_NON_SYNC(118, 12, null),
+    PANNING_RATE_SYNC(119, 13, null),
     PANNING_GLOBAL_SYNC(Convertors.Packed.PACKED9),
     ////
     // various
@@ -232,9 +242,10 @@ enum Mappings {
     EXT_AUDIO_TRIGGER(Convertors.Packed.PACKED10),
     EXT_AUDIO_TO_FX(Convertors.Packed.PACKED10),
     // program volume - stored in patch
-    PROGRAM_VOLUME(119, 125, Restrictions.CENTRIC_24),
+    PROGRAM_VOLUME(125, 119, null, Restrictions.CENTRIC_24),
     // CC7: Device volume (non-patch related; not stored within patch)
-    DEVICE_VOLUME(7, null),
+    // let's ignore next, not available in dump, not very usefull either
+    // DEVICE_VOLUME(null, 7),
     ;
 
     // TODO - introduce NRPNS real time controls
@@ -247,6 +258,7 @@ enum Mappings {
     // CC1 -> modwheel (receive only)
     // CC2 -> breath control (receive only)
     // CC4 -> NA
+    // CC6 -> used for NRPN value
     // CC11 -> NA
     // CC32 -> bank select
     // CC38, 39 -> NA
@@ -264,13 +276,13 @@ enum Mappings {
     private final Convertor convertor;
     private final Restrictions restrictions;
 
-    Mappings(Integer cc, Integer dumpIndex) {
-        this(cc, dumpIndex, Restrictions.NONE);
+    Mappings(int byteIndex, Integer cc, Integer nrpn) {
+        this(byteIndex, cc, nrpn, Restrictions.NONE);
     }
 
-    Mappings(Integer cc, Integer dumpIndex, Restrictions restrictions) {
+    Mappings(int byteIndex, Integer cc, Integer nrpn, Restrictions restrictions) {
         this.key = extractKey(this);
-        this.convertor = createStraight(key, cc, dumpIndex);
+        this.convertor = createStraight(key, byteIndex, cc, nrpn);
         this.restrictions = restrictions;
     }
 
@@ -306,19 +318,21 @@ enum Mappings {
     }
 
     // create straight convertor
-    private static Convertor createStraight(String key, Integer cc, Integer dumpIndex) {
-        return new Straight(key, cc, dumpIndex);
+    private static Convertor createStraight(String key, int dumpIndex, Integer cc, Integer nrpn) {
+        return new Straight(key, dumpIndex, cc, nrpn);
     }
 
     private static final class Straight implements Convertor {
         private final String key;
+        private final int byteIndex;
         private final Integer cc;
-        private final Integer byteIndex;
+        private final Integer nrpn;
 
-        private Straight(String key, Integer cc, Integer byteIndex) {
+        private Straight(String key, int byteIndex, Integer cc, Integer nrpn) {
             this.key = key;
             this.cc = cc;
             this.byteIndex = byteIndex;
+            this.nrpn = nrpn;
         }
 
         @Override
@@ -332,13 +346,18 @@ enum Mappings {
         }
 
         @Override
+        public int getByteIndex() {
+            return byteIndex;
+        }
+
+        @Override
         public Integer getCC() {
             return cc;
         }
 
         @Override
-        public Integer getByteIndex() {
-            return byteIndex;
+        public Integer getNRPN() {
+            return nrpn;
         }
     }
 }

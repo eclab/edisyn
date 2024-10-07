@@ -5,22 +5,24 @@
 
 package edisyn.synth.novationastation;
 
-import edisyn.*;
+import edisyn.Librarian;
+import edisyn.Midi;
+import edisyn.Model;
+import edisyn.Synth;
 import edisyn.gui.*;
 
-import java.awt.*;
+import javax.sound.midi.MidiMessage;
+import javax.sound.midi.ShortMessage;
 import javax.swing.*;
-import java.util.*;
+import java.awt.*;
+import java.util.Optional;
 import java.util.stream.IntStream;
-import javax.sound.midi.*;
 
 import static edisyn.synth.novationastation.Mappings.*;
-import static javax.swing.SwingConstants.SOUTH;
 
 public class NovationAStation extends Synth {
     private static final String[] BANKS = IntStream.rangeClosed(1, 4).boxed().map(String::valueOf).toList().toArray(new String[0]);
     private static final String[] PATCH_NUMBERS = IntStream.rangeClosed(0, 99).boxed().map(String::valueOf).toList().toArray(new String[0]);
-//    private static final String[] ENV_TRIGGERS = { "single", "multi"};
     private static final String[] ARP_CONDITION = { "off", "on: no latch, no keysync", "on: no latch, keysync", "on: latch, no keysync", "on: latch, keysync"};
     private static final String[] SYNC_RATES = { "non-sync", "32T", "32", "16T", "16", "8T", "16.", "8", "4T", "8.", "4", "2T", "4.", "2", "1T", "2.",
             "1", "2T", "1.", "2", "4T", "3", "5T", "4", "4.", "7T", "5", "8T", "6", "7", "7.", "8", "9", "10.", "12"};
@@ -198,9 +200,8 @@ public class NovationAStation extends Synth {
         hbox.add(createLabelledDial("frequency", FILTER_FREQ, color));
         hbox.add(createLabelledDial("resonance", FILTER_RESONANCE, color));
         hbox.add(createLabelledDial("overdrive", FILTER_OVERDRIVE, color));
-        // TODO - NRPN based
-//        comp = new LabelledDial("key track", this, FILTER_KEY_TRACK.getKey(), color, 0, 127);
-//        hbox.add(comp);
+        // enable once NRPN is supported
+        hbox.add(createLabelledDial("key track", FILTER_KEY_TRACK, color));
         hbox.add(createLabelledDial("mod env depth", FILTER_ENV2_DEPTH, color));
         hbox.add(createLabelledDial("lfo2 depth", FILTER_LFO2_DEPTH, color));
 
@@ -302,7 +303,6 @@ public class NovationAStation extends Synth {
 
         // TODO - dropdown here ? or different dial ?
         hbox.add(createLabelledDial("ratio", DELAY_RATIO, color));
-
         hbox.add(createLabelledDial("stereo width", DELAY_STEREO_WIDTH, color));
 
         category.add(hbox);
@@ -837,10 +837,16 @@ public class NovationAStation extends Synth {
             if (convertor.isPresent()) {
                 Convertor mapping = convertor.get();
                 Integer CC = mapping.getCC();
+                Integer NRPN = mapping.getNRPN();
                 if (CC != null) {
-                    return buildCC(getChannelOut(), mapping.getCC(), mapping.toSynth(model));
-                } else {
-                    System.err.println("NRPN values not yet supported");
+                    int value = mapping.toSynth(model);
+                    return buildCC(getChannelOut(), mapping.getCC(), value);
+                } else if (NRPN != null){
+                    int value = mapping.toSynth(model) >> 7;
+                    return new Object[] {
+                        buildCC(getChannelOut(), 98, mapping.getNRPN()),
+                        buildCC(getChannelOut(), 6, value)
+                    };
                 }
             }
             return super.emitAll(key);
@@ -1017,8 +1023,9 @@ public class NovationAStation extends Synth {
     @Override
     public void handleSynthCCOrNRPN(Midi.CCData data) {
         Optional<Convertor> convertor = Convertors.getByCC(data.number);
+        int value =  data.type == Midi.CCDATA_TYPE_RAW_CC ? data.value : (data.value >> 7);
         if (convertor.isPresent()) {
-            convertor.get().toModel(model, data.value);
+            convertor.get().toModel(model, value);
         } else {
             System.out.println("Unknown cc:" + toString(data));
         }
@@ -1764,6 +1771,13 @@ public class NovationAStation extends Synth {
             @Override
             // a matter of taste, I guess..
             public boolean isLabelToLeft() { return true; }
+
+            // TODO - worth a separate pull request (in main code)
+            // comes with some complication thought (check code: also internally getting enablesd/disabled)
+            @Override
+            public void setEnabled(boolean enabled) {
+                this.getCombo().setEnabled(enabled);
+            }
         };
     }
 
@@ -1777,4 +1791,13 @@ public class NovationAStation extends Synth {
     private JComponent createCheckBox(String label, Mappings mappings) {
         return new CheckBox(label, this, mappings.getKey());
     }
+
+    /**
+     * disable a component, useful for components where live controls are not (yet) supported
+     * used for (still non-supported) NRPNs
+     */
+//    private Component disable(Component component) {
+//        component.setEnabled(false);
+//        return component;
+//    }
 }

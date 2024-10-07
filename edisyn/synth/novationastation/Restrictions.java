@@ -22,7 +22,7 @@ public enum Restrictions implements Restriction {
 
     private final int min;
     private final int max;
-    // note: hmm, not really belonging here(not model related, instead UI related)
+    // note: hmm, not really belonging here(not really model related, more UI related)
     private final int offset;
     private final String[] values;
 

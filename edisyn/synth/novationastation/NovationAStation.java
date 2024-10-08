@@ -16,6 +16,7 @@ import javax.sound.midi.ShortMessage;
 import javax.swing.*;
 import java.awt.*;
 import java.util.Optional;
+import java.util.OptionalInt;
 import java.util.stream.IntStream;
 
 import static edisyn.synth.novationastation.Mappings.*;
@@ -842,11 +843,8 @@ public class NovationAStation extends Synth {
                     int value = mapping.toSynth(model);
                     return buildCC(getChannelOut(), mapping.getCC(), value);
                 } else if (NRPN != null){
-                    int value = mapping.toSynth(model) >> 7;
-                    return new Object[] {
-                        buildCC(getChannelOut(), 98, mapping.getNRPN()),
-                        buildCC(getChannelOut(), 6, value)
-                    };
+                    int value = mapping.toSynth(model) << 7;
+                    return buildNRPN(getChannelOut(), mapping.getNRPN(), value);
                 }
             }
             return super.emitAll(key);
@@ -1022,12 +1020,20 @@ public class NovationAStation extends Synth {
 
     @Override
     public void handleSynthCCOrNRPN(Midi.CCData data) {
-        Optional<Convertor> convertor = Convertors.getByCC(data.number);
-        int value =  data.type == Midi.CCDATA_TYPE_RAW_CC ? data.value : (data.value >> 7);
-        if (convertor.isPresent()) {
-            convertor.get().toModel(model, value);
+        Optional<Convertor> convertor = Optional.empty();
+        OptionalInt value = OptionalInt.empty();
+        int type = data.type;
+        if (type == Midi.CCDATA_TYPE_RAW_CC) {
+            convertor = Convertors.getByCC(data.number);
+            value = OptionalInt.of(data.value);
+        } else if (type == Midi.CCDATA_TYPE_NRPN) {
+            convertor = Convertors.getByNRPN(data.number);
+            value = OptionalInt.of((data.value >> 7));
+        }
+        if (convertor.isPresent() && value.isPresent()) {
+            convertor.get().toModel(model, value.getAsInt());
         } else {
-            System.out.println("Unknown cc:" + toString(data));
+            System.out.println("Unknown midi msg:" + toString(data));
         }
     }
 

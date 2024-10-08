@@ -18,7 +18,8 @@ public enum Restrictions implements Restriction {
     LFO_WAVE_FORMS("triangle", "saw", "square", "S&H"),
     SIBILANCE_TYPES("high pass", "noise"),
     REVERB_TYPES("echo chamber", "small room", "small hall", "large room", "large hall", "grand hall"),
-    CHORUS_TYPES("chorus", "phaser");
+    CHORUS_TYPES("chorus", "phaser"),
+    KEYSYNC_PHASE("free-running", "0", "24", "48", "72", "96", "120", "144", "168", "192", "216", "240", "264", "288", "312", "336");
 
     private final int min;
     private final int max;

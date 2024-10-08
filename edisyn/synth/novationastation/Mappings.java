@@ -31,10 +31,10 @@ enum Mappings {
     POLYPHONY_MODE(Convertors.Packed.PACKED2, Restrictions.POLYPHONY_MODE),
     PORTAMENTO_MODE(Convertors.Packed.PACKED3, Restrictions.PORTAMENTO_MODE),
     PORTAMENTO_TIME(3, 5, null),
-    PREGLIDE_SEMITONES(4, 8, null),
+    PREGLIDE_SEMITONES(4, 8, null, Restrictions.CENTRIC_24),
     UNISON_VOICES(Convertors.Packed.PACKED2, Restrictions.UNISON_VOICES),
     UNISON_DETUNE(1, 68, null),
-    KEY_SYNC_PHASE(Convertors.Packed.PACKED1),
+    KEY_SYNC_PHASE(Convertors.Packed.PACKED1, Restrictions.KEYSYNC_PHASE),
     ////
     // Oscillators - global (= applying to all oscillators)
     ////

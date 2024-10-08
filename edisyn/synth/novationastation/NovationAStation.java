@@ -32,41 +32,40 @@ public class NovationAStation extends Synth {
     private static final String[] ARP_PATTERNS = { "up", "down", "updown1", "updown2", "order", "rand"};
 
     public NovationAStation() {
-        /// SOUND PANEL
-        JComponent soundPanel = new SynthPanel(this);
+        // General PANEL
+        JComponent generalPanel = new SynthPanel(this);
         VBox vbox = new VBox();
-        HBox hbox = new HBox();
-        hbox.add(addNameGlobal(Style.COLOR_GLOBAL()));
-        hbox.addLast(addGeneral(Style.COLOR_B()));
-        vbox.add(hbox);
+        vbox.add(addNameGlobal(Style.COLOR_GLOBAL()));
+        vbox.add(addGeneral(Style.COLOR_B()));
+        vbox.add(addAdvanced(Style.COLOR_C()));
+        generalPanel.add(vbox, BorderLayout.CENTER);
+        addTab("General", generalPanel);
 
-        soundPanel.add(vbox, BorderLayout.CENTER);
-        addTab("General", soundPanel);
-
+        // OSCx, Mixer, Filter PANEL
+        JComponent OscMixerFilterPanel = new SynthPanel(this);
+        vbox = new VBox();
         vbox.add(addOscillator(1, Style.COLOR_A()));
         vbox.add(addOscillator(2, Style.COLOR_A()));
         vbox.add(addOscillator(3, Style.COLOR_A()));
-
         vbox.add(addMixer(Style.COLOR_B()));
         vbox.add(addFilter(Style.COLOR_C()));
+        OscMixerFilterPanel.add(vbox, BorderLayout.CENTER);
+        addTab("Oscs, Mix, Filter", OscMixerFilterPanel);
 
-        // ENVELOPE, LFO, ARP PANEL
+        // Envelope, LFO, ARP PANEL
         JComponent envelopeLfoArpPanel = new SynthPanel(this);
         vbox = new VBox();
-
         vbox.add(addEnvelope(1, Style.COLOR_B()));
         vbox.add(addEnvelope(2, Style.COLOR_B()));
         vbox.add(addLFO(1, Style.COLOR_C()));
         vbox.add(addLFO(2, Style.COLOR_C()));
         //vbox.add(addArp(Style.COLOR_D()));
-
         envelopeLfoArpPanel.add(vbox, BorderLayout.CENTER);
-        addTab("Envelopes, LFOs, ARP", envelopeLfoArpPanel);
+        addTab("Envs, LFOs, ARP", envelopeLfoArpPanel);
 
         // EFFECTS PANEL
         JComponent effectsPanel = new SynthPanel(this);
         vbox = new VBox();
-
         vbox.add(addDelay(Style.COLOR_A()));
         vbox.add(addReverb(Style.COLOR_B()));
         vbox.add(addChorus(Style.COLOR_C()));
@@ -75,9 +74,8 @@ public class NovationAStation extends Synth {
         vbox.add(addVocoder(Style.COLOR_C()));
 
         // TODO add equalizer controls
-
         effectsPanel.add(vbox, BorderLayout.CENTER);
-        addTab("Effects", effectsPanel);
+        addTab("FXs", effectsPanel);
 
         // DEVICE-GOODIES panel (non patch related)
         // TODO - nice addition for the future, to be completed though...
@@ -114,25 +112,50 @@ public class NovationAStation extends Synth {
     private JComponent addGeneral(Color color) {
         Category categoryGeneral = new Category(this, "General", color);
 
+        VBox mainVBox = new VBox();
         HBox hbox = new HBox();
-
+        //
         VBox vbox = new VBox();
         vbox.add(createChooser("polyphony mode", POLYPHONY_MODE));
         vbox.add(createChooser("unison voices", UNISON_VOICES));
+        vbox.add(createLabelledDial("unison detune", UNISON_DETUNE, color), BorderLayout.EAST);
         hbox.add(vbox);
-
-        hbox.add(createLabelledDial("unison detune", UNISON_DETUNE, color));
 
         vbox = new VBox();
+        vbox.add(createChooser("keysync phase", KEY_SYNC_PHASE));
         vbox.add(createChooser("portamento mode", PORTAMENTO_MODE));
+        vbox.add(createLabelledDial("portamento time", PORTAMENTO_TIME, color), BorderLayout.EAST);
         hbox.add(vbox);
 
-        hbox.add(createLabelledDial("portamento time", PORTAMENTO_TIME, color));
-        hbox.add(createLabelledDial("program output offset", PROGRAM_VOLUME, color));
+        mainVBox.add(hbox);
 
-        // TODO - add other (NRPN based) program controls here
+        categoryGeneral.add(mainVBox, BorderLayout.WEST);
+        return categoryGeneral;
+    }
 
-        categoryGeneral.add(hbox, BorderLayout.WEST);
+    private JComponent addAdvanced(Color color) {
+        Category categoryGeneral = new Category(this, "Advanced", color);
+
+        JPanel panel = new JPanel();
+        panel.setLayout(new GridLayout(4, 3));
+        // row1
+        panel.add(createLabelledDial("random detune", OSCS_RANDOM_DETUNE, color));
+        panel.add(createLabelledDial("preglide semitones", PREGLIDE_SEMITONES, color));
+        panel.add(createLabelledDial("program output offset", PROGRAM_VOLUME, color));
+        // row2
+        panel.add(createLabelledDial("modwheel pitch depth", OSCS_MODWHEEL_PITCH_DEPTH, color));
+        panel.add(createLabelledDial("aftertouch pitch depth", OSCS_MODWHEEL_PITCH_DEPTH, color));
+        panel.add(createLabelledDial("breath pitch depth", OSCS_MODWHEEL_PITCH_DEPTH, color));
+        // row3
+        panel.add(createLabelledDial("modwheel lfo1 pitch depth", OSCS_MODWHEEL_PITCH_DEPTH, color));
+        panel.add(createLabelledDial("aftertouch lfo1 pitch depth", OSCS_MODWHEEL_PITCH_DEPTH, color));
+        panel.add(createLabelledDial("breath lfo1 pitch depth", OSCS_MODWHEEL_PITCH_DEPTH, color));
+        // row4
+        panel.add(createLabelledDial("modwheel amplitude depth", OSCS_MODWHEEL_PITCH_DEPTH, color));
+        panel.add(createLabelledDial("aftertouch amplitude depth", OSCS_MODWHEEL_PITCH_DEPTH, color));
+        panel.add(createLabelledDial("breath amplitude depth", OSCS_MODWHEEL_PITCH_DEPTH, color));
+
+        categoryGeneral.add(panel, BorderLayout.WEST);
         return categoryGeneral;
     }
 

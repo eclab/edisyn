@@ -437,7 +437,7 @@ public class NovationAStation extends Synth {
 
         HBox hbox = new HBox();
         // TODO - revisit how to present this. Plain key/value (same for the other params)
-        comp = new ReadOnlyString("sw version", this, "swversion", 1);
+        comp = new ReadOnlyString("sw version", this, "swversionstring", 1);
         hbox.add(comp);
 
         category.add(hbox);
@@ -643,8 +643,10 @@ public class NovationAStation extends Synth {
         //             setSendMIDI(sendMIDI);
         //
             byte swVersion = data[9];
+            model.set("swversion", swVersion);
             byte swIncrement = data[10];
-            model.set("swversion", parseVersion(swVersion, swIncrement));
+            model.set("swversionincrement", swIncrement);
+            model.set("swversionstring", parseVersion(swVersion, swIncrement));
 
             byte programBank = data[11];    // 1..4
             byte programNumber = data[12];  // 0..99
@@ -678,14 +680,7 @@ public class NovationAStation extends Synth {
     @Override
     public String getDefaultResourceFileName()
         {
-        // Ultimately your synth will be initialized by loading a file via parse().  This is usually a
-        // sysex file ending in the extension ".init", such as "WaldorfBlofeld.init",
-        // and is located right next to the class file (that is, "WaldorfBlofeld.class").
-        // 
-        // If you return null here, this initialization step will be bypassed.  But final
-        // production code should not do that.
-        // TODO
-        return null; 
+            return "NovationAStation.init";
         }
 
     @Override
@@ -843,7 +838,39 @@ public class NovationAStation extends Synth {
         // array should consist entirely of zero or more sysex messages.
         //
         // If you need to send just a simple sysex message, override this one.
-        return new byte[0]; 
+            if (tempModel == null)
+                tempModel = getModel();
+
+            int programBank = toWorkingMemory ? 0 : tempModel.get("bank") + 1;
+            int programNumber = toWorkingMemory ? 0 : tempModel.get("number");
+            // TODO - define some constants here !
+            int messageType = toWorkingMemory ? 0 : 1;
+            byte controlByte = toWorkingMemory ? (byte)0 : (byte)1;
+
+            byte[] data = new byte[142];
+            data[0] = (byte)0xF0;
+            data[1] = (byte)0x00;
+            data[2] = (byte)0x20;
+            data[3] = (byte)0x29;
+            data[4] = (byte)0x01;
+            data[5] = (byte)0x40;
+            data[6] = (byte)0x7F;
+            data[7] = (byte)messageType; // message type: current sound dump
+            data[8] = controlByte; // control byte
+            data[9] = (byte)tempModel.get("swversion"); // SW version
+            data[10] = (byte)tempModel.get("swversionincrement"); // SW version increment
+            data[11] = (byte)programBank; // program bank
+            data[12]= (byte)programNumber; // program number
+            data[141] = (byte)0xF7;
+            int startPosition = 13;
+            for (int i = 0; i < 128; ++i) {
+                Optional<Convertor> convertor = Convertors.getByIndex(i);
+                if (convertor.isPresent()) {
+                    int value = convertor.get().toSynth(tempModel);
+                    data[startPosition + i] = (byte)value;
+                }
+            }
+            return data;
         }
     
     

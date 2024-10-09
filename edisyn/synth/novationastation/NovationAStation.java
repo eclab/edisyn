@@ -10,6 +10,7 @@ import edisyn.Midi;
 import edisyn.Model;
 import edisyn.Synth;
 import edisyn.gui.*;
+import edisyn.util.StringUtility;
 
 import javax.sound.midi.MidiMessage;
 import javax.sound.midi.ShortMessage;
@@ -32,416 +33,10 @@ public class NovationAStation extends Synth {
     private static final String[] ARP_PATTERNS = { "up", "down", "updown1", "updown2", "order", "rand"};
 
     public NovationAStation() {
-        // General PANEL
-        JComponent generalPanel = new SynthPanel(this);
-        VBox vbox = new VBox();
-        vbox.add(addNameGlobal(Style.COLOR_GLOBAL()));
-        vbox.add(addGeneral(Style.COLOR_B()));
-        vbox.add(addAdvanced(Style.COLOR_C()));
-        generalPanel.add(vbox, BorderLayout.CENTER);
-        addTab("General", generalPanel);
-
-        // OSCx, Mixer, Filter PANEL
-        JComponent OscMixerFilterPanel = new SynthPanel(this);
-        vbox = new VBox();
-        vbox.add(addOscillator(1, Style.COLOR_A()));
-        vbox.add(addOscillator(2, Style.COLOR_A()));
-        vbox.add(addOscillator(3, Style.COLOR_A()));
-        vbox.add(addMixer(Style.COLOR_B()));
-        vbox.add(addFilter(Style.COLOR_C()));
-        OscMixerFilterPanel.add(vbox, BorderLayout.CENTER);
-        addTab("Oscs, Mix, Filter", OscMixerFilterPanel);
-
-        // Envelope, LFO, ARP PANEL
-        JComponent envelopeLfoArpPanel = new SynthPanel(this);
-        vbox = new VBox();
-        vbox.add(addEnvelope(1, Style.COLOR_B()));
-        vbox.add(addEnvelope(2, Style.COLOR_B()));
-        vbox.add(addLFO(1, Style.COLOR_C()));
-        vbox.add(addLFO(2, Style.COLOR_C()));
-        //vbox.add(addArp(Style.COLOR_D()));
-        envelopeLfoArpPanel.add(vbox, BorderLayout.CENTER);
-        addTab("Envs, LFOs, ARP", envelopeLfoArpPanel);
-
-        // EFFECTS PANEL
-        JComponent effectsPanel = new SynthPanel(this);
-        vbox = new VBox();
-        vbox.add(addDelay(Style.COLOR_A()));
-        vbox.add(addReverb(Style.COLOR_B()));
-        vbox.add(addChorus(Style.COLOR_C()));
-        vbox.add(addDistortion(Style.COLOR_A()));
-        vbox.add(addPan(Style.COLOR_B()));
-        vbox.add(addVocoder(Style.COLOR_C()));
-
-        // TODO add equalizer controls
-        effectsPanel.add(vbox, BorderLayout.CENTER);
-        addTab("FXs", effectsPanel);
-
-        // DEVICE-GOODIES panel (non patch related)
-        // TODO - nice addition for the future, to be completed though...
-        /*
-        JComponent devicePanel = new SynthPanel(this);
-        vbox = new VBox();
-
-        vbox.add(addDeviceGoodies(Style.COLOR_A()));
-        vbox.add(addDeviceDetails(Style.COLOR_B()));
-
-        devicePanel.add(vbox, BorderLayout.CENTER);
-
-        addTab("Device goodies", devicePanel);
-        */
+        // build UI
+        new UIBuilder(this).build();
 
         loadDefaults();                 // this tells Edisyn to load the ".init" sysex file you created.  If you haven't set that up, it won't bother
-    }
-
-    private JComponent addNameGlobal(Color color) {
-        Category globalCategory = new Category(this, "Novation A Station", color);
-
-        HBox hbox = new HBox();
-
-        VBox vbox = new VBox();
-        HBox hbox2 = new HBox();
-        hbox2.add(new PatchDisplay(this, 4));
-        vbox.add(hbox2);
-        hbox.add(vbox);
-
-        globalCategory.add(hbox, BorderLayout.WEST);
-        return globalCategory;
-    }
-
-    private JComponent addGeneral(Color color) {
-        Category categoryGeneral = new Category(this, "General", color);
-
-        VBox mainVBox = new VBox();
-        HBox hbox = new HBox();
-        //
-        VBox vbox = new VBox();
-        vbox.add(createChooser("polyphony mode", POLYPHONY_MODE));
-        vbox.add(createChooser("unison voices", UNISON_VOICES));
-        vbox.add(createLabelledDial("unison detune", UNISON_DETUNE, color), BorderLayout.EAST);
-        hbox.add(vbox);
-
-        vbox = new VBox();
-        vbox.add(createChooser("keysync phase", KEY_SYNC_PHASE));
-        vbox.add(createChooser("portamento mode", PORTAMENTO_MODE));
-        vbox.add(createLabelledDial("portamento time", PORTAMENTO_TIME, color), BorderLayout.EAST);
-        hbox.add(vbox);
-
-        mainVBox.add(hbox);
-
-        categoryGeneral.add(mainVBox, BorderLayout.WEST);
-        return categoryGeneral;
-    }
-
-    private JComponent addAdvanced(Color color) {
-        Category categoryGeneral = new Category(this, "Advanced", color);
-
-        JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(4, 3));
-        // row1
-        panel.add(createLabelledDial("random detune", OSCS_RANDOM_DETUNE, color));
-        panel.add(createLabelledDial("preglide semitones", PREGLIDE_SEMITONES, color));
-        panel.add(createLabelledDial("program output offset", PROGRAM_VOLUME, color));
-        // row2
-        panel.add(createLabelledDial("modwheel pitch depth", OSCS_MODWHEEL_PITCH_DEPTH, color));
-        panel.add(createLabelledDial("aftertouch pitch depth", OSCS_MODWHEEL_PITCH_DEPTH, color));
-        panel.add(createLabelledDial("breath pitch depth", OSCS_MODWHEEL_PITCH_DEPTH, color));
-        // row3
-        panel.add(createLabelledDial("modwheel lfo1 pitch depth", OSCS_MODWHEEL_PITCH_DEPTH, color));
-        panel.add(createLabelledDial("aftertouch lfo1 pitch depth", OSCS_MODWHEEL_PITCH_DEPTH, color));
-        panel.add(createLabelledDial("breath lfo1 pitch depth", OSCS_MODWHEEL_PITCH_DEPTH, color));
-        // row4
-        panel.add(createLabelledDial("modwheel amplitude depth", OSCS_MODWHEEL_PITCH_DEPTH, color));
-        panel.add(createLabelledDial("aftertouch amplitude depth", OSCS_MODWHEEL_PITCH_DEPTH, color));
-        panel.add(createLabelledDial("breath amplitude depth", OSCS_MODWHEEL_PITCH_DEPTH, color));
-
-        categoryGeneral.add(panel, BorderLayout.WEST);
-        return categoryGeneral;
-    }
-
-    private JComponent addOscillator(final int osc, Color color) {
-        Category category = new Category(this, "Oscillator " + osc, color);
-        category.makePasteable("osc");
-
-        HBox hbox = new HBox();
-
-        VBox vbox = new VBox();
-        // NOTE - would probably be nicer to have this integrated into the semitone dial [-24, +36]
-        vbox.add(createChooser("octave", Mappings.find("OSC%d_OCTAVE", osc)));
-        vbox.add(createChooser("waveform", Mappings.find("OSC%d_WAVEFORM", osc)));
-        if (osc == 2) {
-            vbox.add(createCheckBox("1->2 sync", OSC2_SYNCED_BY_1));
-        }
-        hbox.add(vbox);
-
-        hbox.add(createLabelledDial("semitone", Mappings.find("OSC%d_SEMITONE", osc), color));
-        hbox.add(createLabelledDial("detune", Mappings.find("OSC%d_DETUNE", osc), color));
-        hbox.add(createLabelledDial("pulse width", Mappings.find("OSC%d_PULSE_WIDTH", osc), color));
-        // TODO - add support for 'pwm source' (and related)
-        hbox.add(createLabelledDial("mod env depth", Mappings.find("OSC%d_ENV2_DEPTH", osc), color));
-        hbox.add(createLabelledDial("lfo1 depth", Mappings.find("OSC%d_LFO1_DEPTH", osc), color));
-        // TODO - verify restrictions first before adding this one...
-//        hbox.add(createLabelledDial("bendwheel amount", Mappings.find("OSC%d_BENDWHEEL_AMOUNT", osc), color));
-
-        // TODO
-//        if (osc == 3) {
-//            comp = new LabelledDial("fm level", this, "osc" + osc + "fmlevel", color, 0, 127);
-//            hbox.add(comp);
-//
-//            comp = new LabelledDial("fm env depth", this, "osc" + osc + "fmenvdepth", color, 0, 127);
-//            hbox.add(comp);
-//
-//            and others... (check NRPN)
-//        }
-
-        category.add(hbox, BorderLayout.CENTER);
-        return category;
-    }
-
-    private JComponent addMixer(Color color)
-    {
-        Category category = new Category(this, "Mixer", color);
-
-        HBox hbox = new HBox();
-        hbox.add(createLabelledDial("oscillator1", MIXER_OSC1, color));
-        hbox.add(createLabelledDial("oscillator2", MIXER_OSC2, color));
-        hbox.add(createLabelledDial("oscillator3", MIXER_OSC3, color));
-        hbox.add(createLabelledDial("noise", MIXER_NOISE, color));
-        hbox.add(createLabelledDial("1*2 ring", MIXER_RING_MOD, color));
-        hbox.add(createLabelledDial("external input", MIXER_EXTERNAL, color));
-
-        category.add(hbox, BorderLayout.CENTER);
-        return category;
-    }
-
-    private JComponent addFilter(Color color) {
-        Category category = new Category(this, "Filter", color);
-        HBox hbox = new HBox();
-        VBox vbox = new VBox();
-        vbox.add(createChooser("type", FILTER_TYPE));
-        hbox.add(vbox);
-
-        hbox.add(createLabelledDial("frequency", FILTER_FREQ, color));
-        hbox.add(createLabelledDial("resonance", FILTER_RESONANCE, color));
-        hbox.add(createLabelledDial("overdrive", FILTER_OVERDRIVE, color));
-        // enable once NRPN is supported
-        hbox.add(createLabelledDial("key track", FILTER_KEY_TRACK, color));
-        hbox.add(createLabelledDial("mod env depth", FILTER_ENV2_DEPTH, color));
-        hbox.add(createLabelledDial("lfo2 depth", FILTER_LFO2_DEPTH, color));
-
-        // TODO
-        // and others... (check NRPN)
-
-        category.add(hbox, BorderLayout.CENTER);
-        return category;
-    }
-
-    private JComponent addEnvelope(final int envelope, Color color)
-    {
-        Category category = new Category(this, (envelope == 1 ? "Amp" : "Mod") + " Envelope", color);
-        // TODO - to be verified
-        // category.makePasteable("env");
-
-        HBox hbox = new HBox();
-        VBox vbox = new VBox();
-        vbox.add(createChooser("env trigger", Mappings.find("ENVELOPE%d_TRIGGER", envelope)));
-        hbox.add(vbox);
-
-        Mappings mappingsAttack = Mappings.find("ENVELOPE%d_ATTACK", envelope);
-        hbox.add(createLabelledDial("attack", mappingsAttack, color));
-
-        Mappings mappingsDecay = Mappings.find("ENVELOPE%d_DECAY", envelope);
-        hbox.add(createLabelledDial("decay", mappingsDecay, color));
-
-        Mappings mappingsSustain = Mappings.find("ENVELOPE%d_SUSTAIN", envelope);
-        hbox.add(createLabelledDial("sustain", mappingsSustain, color));
-
-        Mappings mappingsRelease = Mappings.find("ENVELOPE%d_RELEASE", envelope);
-        hbox.add(createLabelledDial("release", mappingsRelease, color));
-
-        // ADSR
-        JComponent comp = new EnvelopeDisplay(this, Color.red,
-                new String[] { null, mappingsAttack.getKey(), mappingsDecay.getKey(), null, mappingsRelease.getKey() },
-                new String[] { null, null, mappingsSustain.getKey(), mappingsSustain.getKey(), null },
-                new double[] { 0, 0.25/127.0, 0.25 / 127.0,  0.25, 0.25/127.0},
-                new double[] { 0, 1.0, 1.0 / 127.0, 1.0/127.0, 0 });
-        hbox.addLast(comp);
-
-        // TODO - FM envelope (AD), NRPN based
-
-        category.add(hbox, BorderLayout.CENTER);
-        return category;
-    }
-
-    private JComponent addLFO(final int lfo, Color color) {
-        Category category = new Category(this, "LFO " + lfo, color);
-        // TODO - to be verified
-        //category.makePasteable("lfo");
-
-        HBox hbox = new HBox();
-        VBox vbox = new VBox();
-        vbox.add(createChooser("waveform", Mappings.find("LFO%d_WAVEFORM", lfo)));
-        hbox.add(vbox);
-
-        // TODO - single/dynamic dial for both sync and non-sync ?
-        hbox.add(createLabelledDial("speed (non-sync)", Mappings.find("LFO%d_SPEED_NON_SYNC", lfo), color));
-        hbox.add(createLabelledDial("speed (sync)", Mappings.find("LFO%d_SPEED_SYNC", lfo), color));
-        hbox.add(createLabelledDial("delay", Mappings.find("LFO%d_DELAY", lfo), color));
-
-        category.add(hbox, BorderLayout.CENTER);
-        return category;
-   }
-
-   // TODO
-   /*
-   private JComponent addARP(Color color) {
-        Category category = new Category(this, "ARP", color);
-
-        JComponent comp;
-        HBox hbox = new HBox();
-
-        VBox vbox = new VBox();
-        comp = new Chooser("pattern", this, ARP_PATTERN.getKey(), ARP_PATTERNS);
-        vbox.add(comp);
-        comp = new Chooser("rate", this, ARP_RATE.getKey(), ARP_RATES);
-        vbox.add(comp);
-        hbox.add(vbox);
-
-        category.add(hbox);
-        return category;
-    }
-    */
-
-    private Component addDelay(Color color) {
-        Category category = new Category(this, "delay", color);
-        HBox hbox = new HBox();
-
-        hbox.add(createLabelledDial("send level", DELAY_SEND_LEVEL, color));
-        hbox.add(createLabelledDial("modwheel", DELAY_SEND_MODWHEEL, color));
-
-        // TODO - single/dynamic dial for both sync and non-sync ?
-        hbox.add(createLabelledDial("time (sync)", DELAY_TIME_SYNC, color));
-        hbox.add(createLabelledDial("time (non-sync)", DELAY_TIME_NON_SYNC, color));
-
-        hbox.add(createLabelledDial("feedback", DELAY_FEEDBACK, color));
-
-        // TODO - dropdown here ? or different dial ?
-        hbox.add(createLabelledDial("ratio", DELAY_RATIO, color));
-        hbox.add(createLabelledDial("stereo width", DELAY_STEREO_WIDTH, color));
-
-        category.add(hbox);
-        return category;
-    }
-
-    private Component addReverb(Color color) {
-        Category category = new Category(this, "reverb", color);
-        HBox hbox0 = new HBox();
-        hbox0.add(createChooser("type", REVERB_TYPE));
-
-        HBox hbox1 = new HBox();
-        hbox1.add(createLabelledDial("send level", REVERB_SEND_LEVEL, color));
-        hbox1.add(createLabelledDial("modwheel", REVERB_SEND_MODWHEEL, color));
-        hbox1.add(createLabelledDial("decay", REVERB_DECAY, color));
-
-        category.add(hbox0, BorderLayout.NORTH);
-        category.add(hbox1, BorderLayout.SOUTH);
-        return category;
-    }
-
-    private Component addChorus(Color color) {
-        Category category = new Category(this, "chorus", color);
-        HBox hbox0 = new HBox();
-        hbox0.add(createChooser("type", CHORUS_TYPE));
-
-        HBox hbox1 = new HBox();
-        hbox1.add(createLabelledDial("send level", CHORUS_SEND_LEVEL, color));
-        hbox1.add(createLabelledDial("modwheel", CHORUS_SEND_MODWHEEL, color));
-
-        // TODO - single/dynamic dial for both sync and non-sync ?
-        hbox1.add(createLabelledDial("rate (sync)", CHORUS_RATE_SYNC, color));
-        hbox1.add(createLabelledDial("rate (non-sync)", CHORUS_RATE_NON_SYNC, color));
-
-        hbox1.add(createLabelledDial("feedback", CHORUS_FEEDBACK, color));
-        hbox1.add(createLabelledDial("depth", CHORUS_MOD_DEPTH, color));
-        hbox1.add(createLabelledDial("centre point", CHORUS_MOD_CENTRE_POINT, color));
-
-        category.add(hbox0, BorderLayout.NORTH);
-        category.add(hbox1, BorderLayout.SOUTH);
-        return category;
-    }
-
-    private Component addDistortion(Color color) {
-        Category category = new Category(this, "distortion", color);
-        HBox hbox = new HBox();
-
-        hbox.add(createLabelledDial("modwheel", DISTORTION_MODWHEEL, color));
-        hbox.add(createLabelledDial("compensation", DISTORTION_COMPENSATION, color));
-
-        category.add(hbox);
-        return category;
-    }
-
-    private Component addPan(Color color) {
-        Category category = new Category(this, "panning", color);
-
-        HBox hbox = new HBox();
-
-        hbox.add(createLabelledDial("position", PANNING_POSITION, color));
-
-        // TODO - dropdown here ? or different dial ?
-        hbox.add(createLabelledDial("rate (sync)", PANNING_RATE_SYNC, color));
-
-        // TODO - single/dynamic dial for both sync and non-sync ?
-        hbox.add(createLabelledDial("rate (non-sync)", PANNING_RATE_NON_SYNC, color));
-        hbox.add(createLabelledDial("depth", PANNING_MOD_DEPTH, color));
-
-        // TODO - add global sync
-
-        category.add(hbox);
-        return category;
-    }
-
-    private Component addVocoder(Color color) {
-        Category category = new Category(this, "vocoder", color);
-
-        HBox hbox0 = new HBox();
-        hbox0.add(createChooser("sibilance type", VOCODER_SIBILANCE_TYPE));
-
-        HBox hbox1 = new HBox();
-        hbox1.add(createLabelledDial("balance", VOCODER_BALANCE, color));
-        hbox1.add(createLabelledDial("stereo width", VOCODER_STEREO_WIDTH, color));
-        hbox1.add(createLabelledDial("sibilance level", VOCODER_SIBILANCE_LEVEL, color));
-
-        category.add(hbox0, BorderLayout.NORTH);
-        category.add(hbox1, BorderLayout.SOUTH);
-        return category;
-    }
-
-    private JComponent addDeviceGoodies(Color color) {
-        Category category = new Category(this, "Goodies", color);
-
-        JComponent comp;
-
-        HBox hbox = new HBox();
-        comp = new LabelledDial("device volume", this, "devicevolume", color, 0, 127);
-        hbox.add(comp);
-
-        category.add(hbox);
-        return category;
-    }
-
-    private JComponent addDeviceDetails(Color color) {
-        Category category = new Category(this, "Details", color);
-
-        JComponent comp;
-
-        HBox hbox = new HBox();
-        // TODO - revisit how to present this. Plain key/value (same for the other params)
-        comp = new ReadOnlyString("sw version", this, "swversionstring", 1);
-        hbox.add(comp);
-
-        category.add(hbox);
-        return category;
     }
 
     ////// BELOW ARE DEFAULT IMPLEMENTATIONS OF COMMON HOOK METHODS THAT SYNTH EDITORS IMPLEMENT OR OVERRIDE.
@@ -533,28 +128,6 @@ public class NovationAStation extends Synth {
     @Override
     public void changePatch(Model tempModel)
         {
-        // Here you do stuff that changes patches on the synth.
-        // You probably want to look at tryToSendSysex() and tryToSendMIDI()
-        //
-        // This method is used primariily to switch to a new patch prior to loading it
-        // from the synthesizer or emitting it to the synthesizer.  Many synthesizers do 
-        // not report their patch location information when emitting a dump to Edisyn.  
-        // If this is the case, you might want add some code at the end of this method which
-        // assumes that the patch change and subsequent parse were successful, so you can
-        // just change the patch information in your model directly here in this method. 
-        // You should NOT do this when changing a patch for the purpose of merging.  
-        // So in this case (and ONLY in this case) you should end this method with something 
-        // along the lines of:
-        //
-        //     // My synth doesn't report patch info in its parsed data, so here assume that we successfully did it
-        //     if (!isMerging())
-        //         {
-        //         boolean midi = getSendMIDI();        // is MIDI turned off right now?
-        //         setSendMIDI(false);                          // you should always turn off MIDI prior to messing with the model so nothing gets emitted, just in case
-        //         model.set("number", number);
-        //         model.set("bank", bank);
-        //         setSendMIDI(midi);                           // restore to whatever state it was
-        //         }
             byte bank = (byte) tempModel.get("bank");
             byte program = (byte) tempModel.get("number");
             try {
@@ -587,7 +160,7 @@ public class NovationAStation extends Synth {
             boolean result = showMultiOption(this, new String[]{"Bank", "Patch Number"},
                     new JComponent[]{bank, number}, title, "Enter the Bank and Patch number.");
 
-            if (result == false)
+            if (!result)
                 return false;
 
             int n;
@@ -673,7 +246,8 @@ public class NovationAStation extends Synth {
             return PARSE_IGNORE;
         }
 
-    public static String getSynthName() {
+    public static String getSynthName()
+    {
         return "Novation A Station";
     }
 
@@ -684,7 +258,8 @@ public class NovationAStation extends Synth {
         }
 
     @Override
-    public String getHTMLResourceFileName() {
+    public String getHTMLResourceFileName()
+    {
         return "NovationAStation.html";
     }
 
@@ -697,26 +272,15 @@ public class NovationAStation extends Synth {
             }
             return "...";
         }
-    
-//    public Model getFirstPatchLocation()
-//        {
-//        // Returns a model containing a patch location (bank, number, etc.) representing the
-//        // "first" patch in the synth.  If your synthesizer does not have the notion of patches
-//        // at all, return null.  If your synthesizer only has a single "patch", thus a single
-//        // patch location, then this method should return that location.
-//        //
-//        // In most cases you don't have to override this method.  The default version computes
-//        // whether you have a "first" patch by setting a model's number and bank to both 0, then
-//        // calling getNextPatchLocation().  If that method returns null, or if it returns a model
-//        // with no number, then the default version returns null. Otherwise it checks to see if
-//        // a model is returned with a bank.  If there is a bank, then bank=0 number=0 is returned.
-//        // If there is no bank, then number=0 is returned.  This strategy will work in most cases,
-//        // but if your first number or bank, for some reason, is not 0, then it will not work
-//        // properly.  In that case you'll need to override it to return the first location yourself.
-//        //
-//        // This method is used for doing random patch selection.
-//        return super.getFirstPatchLocation();
-//        }
+
+    @Override
+    public Model getFirstPatchLocation()
+        {
+            Model newModel = buildModel();
+            newModel.set("bank", 0);
+            newModel.set("number", 0);
+            return newModel;
+        }
 
     @Override
     public Model getNextPatchLocation(Model model) {
@@ -732,100 +296,6 @@ public class NovationAStation extends Synth {
         newModel.set("number", program);
         return newModel;
     }
-
-//    public boolean patchLocationEquals(Model patch1, Model patch2)
-//        {
-//        // This should return true if the patch locations stored in the given two patches are the same.
-//        // For example, they're both Bank B, Number 72.
-//        //
-//        // This method is used for doing batch downloads.
-//        return super.patchLocationEquals(patch1, patch2);
-//        }
-
-    ////// YOU PROBABLY WANT TO OVERRIDE ALL OF THE FOLLOWING
-
-//    @Override
-//    public String getPatchName(Model model) {
-//        int bank = model.get("bank", -1);
-//        return bank != -1 ? String.valueOf(model.get("number")) : null;
-//    }
-
-//    public String revisePatchName(String name)
-//        {
-//        // Here you tweak the name to make sure it's a valid patch name.
-//        // You probably first want to call    name = super.revisePatchName(name)
-//        // As this method will remove all trailing whitespace from the name.
-//        // At that point you can modify the name as you need to (converting
-//        // to all uppercase, say, or removing invalid characters, or truncating
-//        // to the proper length, etc.)
-//
-//        return super.revisePatchName(name);
-//        }
-        
-//    public String reviseID(String id)
-//        {
-//        // Some synthesizers have an "id" which uniquely identifies them in their
-//        // sysex so other synths of the same model ignore that sysex message.  Waldorf's
-//        // synths are notable in this respect.  If your synth does this, revise the id
-//        // to make sure it's valid, and return a valid String.  If your synth does NOT
-//        // do this, then you should always return null.
-//        return null;
-//        }
-    
-//    public void revise()
-//        {
-//        // In this method you need to verify that all the keys in your model have valid values.
-//        // Some synthesizers send invalid values over sysex or NRPN.  For example, the PreenFM2
-//        // can send crazy stuff way out of range.
-//        //
-//        // The default version of this method bounds all the values to between their stated min and
-//        // max values.  You might need to do more than this; for example, you might verify that
-//        // the name is valid.  In this case, call super.revise() and then do further revision
-//        // as you see fit.  For one way to do this, see the Waldorf Blofeld code.
-//
-//        super.revise();
-//        }
-
-
-
-
-
-
-
-
-
-    ////// YOU PROBABLY WANT TO OVERRIDE *ONE* OF THE FOLLOWING
-    @Override
-    public Object[] emitAll(Model tempModel, boolean toWorkingMemory, boolean toFile)
-        {
-        // This does a write of your patch to sysex (to dump to the synth or to store
-        // in a file).  TOWORKINGMEMORY indicates whether the dump will go to the synth's
-        // working memory, or (if false) written to a specific patch store.  TOFILE 
-        // indicates that the write will be written to a sysex file.  TEMPMODEL will hold
-        // data (bank, number) regarding the patch store location.  
-        //
-        // The Object[] array returned can consist any combination of the following:
-        //
-        // 1. A fully constructed and populated javax.sound.midi.ShortMessage or
-        //    javax.sound.midi.SysexMessage
-        // 
-        // 2. A byte[] consisting of the bytes for a sysex message, including the 0xF0
-        //    and 0xF7.
-        //
-        // 3. A java.util.Integer, which will be used to indicate a pause in milliseconds
-        //    before sending the next item in the Object[] array to the synthesizer.
-        //
-        // 4. null, which is a no-op and is ignored.
-        //
-        // If emitAll(..., ..., true) then that is, if writing to a file, then the 
-        // ObjectArray will be flattened after you have returned it.  This means that 
-        // all non-sysex messages (things that aren't javax.sound.midi.SysexMessage 
-        // or a byte[]) will be stripped out, since this is for a sysex file.
-        //
-        // If you need to send more than just a simple sysex message, override this one.
-        
-        return super.emitAll(tempModel, toWorkingMemory, toFile);
-        }
 
     @Override
     public byte[] emit(Model tempModel, boolean toWorkingMemory, boolean toFile)
@@ -881,7 +351,6 @@ public class NovationAStation extends Synth {
     
     
     
-    ////// YOU PROBABLY WANT TO OVERRIDE *ONE* OF THE FOLLOWING
     @Override
     public Object[] emitAll(String key) {
             Optional<Convertor> convertor = Convertors.getByKey(key);
@@ -897,84 +366,14 @@ public class NovationAStation extends Synth {
                     return buildNRPN(getChannelOut(), mapping.getNRPN(), value);
                 }
             }
+            System.err.println("Ignoring model key '" + key + "', since no convertor found");
             return super.emitAll(key);
-        // This writes a single parameter out to the synth.
-        // If nothing should be emitted for the given key, return a zero-length array.
-        // If your synth does not support emitting for individual keys at all, return null.
-        //
-        // If you need to send more than just a simple sysex message, override this one.
-
-            // TODO !!!
-            /*
-            if (!getSendMIDI()) return new Object[0];  // MIDI turned off, don't bother
-            byte DEV = (byte)(getID());
-
-            Integer index = PARAM_TO_CC_MAP.get(key);
-            if (index == null) {
-                // don't bother
-                return null;
-            }
-            byte XX = (byte)model.get(key);
-            // F0: SYSEX start
-            // 00: Novation ID 1
-            // 20: Novation ID 2
-            // 29: Novation ID 3
-            // 01: DeviceType (01 = synth)
-            // 40: A-Station
-            // ...
-            // TBI
-            // ...
-            // F7: END OF EXCLUSIVE
-            byte[] data = new byte[] { (byte)0xF0, 0x00, 0x20, 0x29, 0x01, 0x40, index.byteValue(), XX, (byte)0xF7 };
-            return new Object[] { data };
-            */
         }
-
-    @Override
-    public byte[] emit(String key)
-        { 
-        // This writes a single parameter out to the synth.
-        // If nothing should be emitted for the given key, return a zero-length array.
-        // If your synth does not support emitting for individual keys at all, return null.
-        //
-        // If you need to send just a simple sysex message, override this one.
-        return super.emit(key); 
-        }
-
-
-
-
-
-
-
-
-
-    ////// YOU PROBABLY WANT TO OVERRIDE *ONE* OF THE FOLLOWING
-    
-//    public void performRequestDump(Model tempModel, boolean changePatch)
-//        {
-//        // This asks the synth to dump a specific patch (number and bank etc. specified
-//        // in tempModel).  If CHANGEPATCH is true you should first change the patch.
-//        //
-//        // Normally Edisyn implements this method for you, handling the patch-change,
-//        // and you can just implement requestDump(...) to send the dump request.
-//        // If you need to do more than a simple sysex request, reimplement this
-//        // method.  The default form looks like this:
-//
-//        // if (changePatch)
-//        //              changePatch(tempModel);
-//        // tryToSendSysex(requestDump(tempModel));
-//
-//        // It is possible that it's impossible to request a dump without changing
-//        // the patch regardless.  In this case you can ignore changePatch and just
-//        // do a changePatch always.  You'd need to implement this.
-//
-//        super.performRequestDump(tempModel, changePatch);
-//        }
 
     @Override
     public byte[] requestDump(Model tempModel) {
         // request specific program dump
+        // TODO - constant here
         byte messageType = 0x41;
         // tempModel supposed to have valid bank+program
         byte bank = (byte) (1 + tempModel.get("bank")); // 1..4 (while in model: 0..3)
@@ -982,59 +381,17 @@ public class NovationAStation extends Synth {
         return new byte[] { (byte)0xF0, 0x00, 0x20, 0x29, 0x01, 0x40, 0x7F, messageType, 0x00, 0x00, 0x00, bank, program, (byte)0xF7 };
     }
 
-    ////// YOU PROBABLY WANT TO OVERRIDE *ONE* OF THE FOLLOWING
-        
-//    public void performRequestCurrentDump()
-//        {
-//        // This asks the synth to dump the currently-playing patch
-//        // (number and bank etc. specified in tempModel).
-//        //
-//        // Normally Edisyn implements this method for you, and you can just emit
-//        // a sysex via requestCurrentDump().  But if you need something else,
-//        // reimplement this method.  The default looks like this:
-//
-//        // tryToSendSysex(requestCurrentDump());
-//
-//        super.performRequestCurrentDump();
-//        }
-
     @Override
     public byte[] requestCurrentDump() {
         // request current sound dump
+        // TODO - constant here
         byte messageType = 0x40;
         return new byte[] { (byte)0xF0, 0x00, 0x20, 0x29, 0x01, 0x40, 0x7F, messageType, 0x00, 0x00, 0x00, 0x00, 0x00, (byte)0xF7 };
     }
 
 
     ////// YOU MAY WANT TO IMPLEMENT SOME OF THE FOLLOWING
-
-//    public boolean getAlwaysChangesPatchesOnRequestDump()
-//        {
-//        // This is called by performRequestDump() to determine if it should changePatch() first.
-//        // If not, then in some cases performRequestDump() can avoid changing the patch, which
-//        // is good for things like the SHOW button in Multimode patches, or blending, or merging,
-//        // where we're just loading a patch temporarily or in an auxiliary fashion.  However
-//        // many synths do not have the ability to request a dump and must instead just do
-//        // a change patch followed by requestCurrentDump ALWAYS.  In this case, override this
-//        // method to return TRUE.
-//        return false;
-//        }
-
-//    public int getTestNotePitch()
-//        {
-//        // Returns the test note pitch.  This is default whatever the user set,
-//        // but you can override this to fix it to something else
-//        return super.getTestNotePitch();
-//        }
-
-//    public boolean getClearsTestNotes()
-//        {
-//        // Returns whether test notes should be cleared via a NOTE OFF or an
-//        // all sounds / all notes off.  This is normally true, except for drum
-//        // patches, where the notes ought to be allowed to naturally decay.
-//        return true;
-//        }
-
+    // TODO - TBI
 //    public static boolean recognizeBulk(byte[] data)
 //        {
 //        // This method should return TRUE if the data is correct sysex data for a
@@ -1063,9 +420,7 @@ public class NovationAStation extends Synth {
         // the recognize() method, it gets sent here.  Typically this is 
         // a sysex message for a single parameter update.  If your synth sends 
         // such things, implement this.  See also handleCCOrNRPNData() below.
-            System.out.println("parseParameter(" + data.length + ")");
-        return;
-
+            System.err.println("Unrecognized message received: " + StringUtility.toHex(data));
         }
 
     @Override
@@ -1083,7 +438,7 @@ public class NovationAStation extends Synth {
         if (convertor.isPresent() && value.isPresent()) {
             convertor.get().toModel(model, value.getAsInt());
         } else {
-            System.out.println("Unknown midi msg:" + toString(data));
+            System.out.println("Ignoring CC/NRPN msg:" + toString(data));
         }
     }
 
@@ -1093,204 +448,6 @@ public class NovationAStation extends Synth {
                 "}";
     }
 
-//    public boolean requestCloseWindow()
-//        {
-//        // When the user clicks on the close box of your synth editor,
-//        // this method will be called.  If you return true, the window
-//        // will be closed, else it will stay open.  You might use
-//        // this method to verify with the user that everything is saved,
-//        // but in fact none of the current synth editors do this, they
-//        // just return true immediately.  This is a rare need and at
-//        // present no patch editors implement this method at all.
-//        return true;
-//        }
-        
-//    public int getPauseAfterChangePatch()
-//        {
-//        // Some synths cannot accept MIDI messages for a while after a patch-change.
-//        // For example, the Blofeld has to wait for about 200ms.
-//        // Here you can specify that Edisyn must pause at least so many
-//        // milliseconds before issuing another MIDI message after you have
-//        // changed the patch via changePatch().
-//        return 0;
-//        }
-
-//    public double getPauseBetweenMIDISends()
-//        {
-//        // Some synths cannot accept MIDI messages at full speed.
-//        // For example, the Yamaha TX81Z has problems with sysex messages
-//        // faster than 50ms.
-//        // Here you can specify that Edisyn must pause at least so many
-//        // milliseconds before issuing another MIDI message of *any* kind.
-//        // This includes note on / note off etc., so don't expect musicality
-//        // if you set this to >0.
-//        return 0.0;
-//        }
-    
-//    public int getPauseAfterWritePatch()
-//        {
-//        // Some synths need extra time to process a write-patch before
-//        // a follow-up change-patch request.
-//        // The default is to return getPauseAfterSendAllParameters();
-//        return super.getPauseAfterWritePatch();
-//        }
-        
-//    public int getPauseBetweenPatchWrites()
-//        {
-//        // Some synths need extra time to process a write-patch before
-//        // writing a second patch (with no change patch request).
-//        // The default is to return getPauseAfterWritePatch()
-//        // which in turn has a default of getPauseAfterSendAllParameters()
-//        return super.getPauseBetweenPatchWrites();
-//        }
-        
-//    public int getPauseAfterSendAllParameters()
-//        {
-//        // Some synths need extra time after a parameter dump before
-//        // they can do anything else, notably play notes properly.
-//        // For example, the Kawai K4 needs about 100ms after a parameter
-//        // dump or else it'll play notes in a strange truncated way.
-//        // Here you can specify that Edisyn must pause at least so many
-//        // milliseconds before issuing another MIDI message after it has
-//        // called sendAllParmeters().
-//        return 0;
-//        }
-        
-//    public int getPauseAfterSendOneParameter()
-//        {
-//        // Some synths need extra time after each parameter send before another
-//        // send can be made.  Here you can specify that Edisyn must pause at least so many
-//        // milliseconds before issuing another MIDI message after it has
-//        // sent a single parameter via emitAll(key, status).
-//        return 0;
-//        }
-//
-//    public int getPauseBetweenSysexFragments()
-//        {
-//        // Some synths have small MIDI buffers and are so slow that you
-//        // cannot send large messages (that is, sysex) to them at full
-//        // speed without them dying.  The Kawai K1 is an example of this.
-//        // The methods getPauseBetweenSysexFragments() and
-//        // getSysexFragmentSize() allow you to break large sysex messages
-//        // into multiple fragments, each with a pause between, in order
-//        // to send a message successfully.
-//        //
-//        // You can also manually break up a sysex message into fragments,
-//        // and manually insert whatever time you'd like between them.
-//        // This is done using the DividedSysex class.
-//        //
-//        return 0;
-//        }
-        
-//    public int getSysexFragmentSize()
-//        {
-//        // Some synths have small MIDI buffers and are so slow that you
-//        // cannot send large messages (that is, sysex) to them at full
-//        // speed without them dying.  The Kawai K1 is an example of this.
-//        // The methods getPauseBetweenSysexFragments() and
-//        // getSysexFragmentSize() allow you to break large sysex messages
-//        // into multiple fragments, each with a pause between, in order
-//        // to send a message successfully.
-//        //
-//        // You can also manually break up a sysex message into fragments,
-//        // and manually insert whatever time you'd like between them.
-//        // This is done using the DividedSysex class.
-//        //
-//        return NO_SYSEX_FRAGMENT_SIZE;
-//        }
-        
-//    public int getPauseBetweenHillClimbPlays()
-//        {
-//        // Some synths, such as the Korg Wavestation SR, need extra time
-//        // to recover from changing patches before they can turn around
-//        // and do again immediately.  Here you can specify that pause in milliseconds.
-//        return 0;
-//        }
-
-//    public int getPauseAfterReceivePatch()
-//        {
-//        // Some synths, such as the Blofeld, need a short break after sending us
-//        // a patch before we can request a second patch (with no change patch command).
-//        // This pause is in milliseconds.  By default this function returns
-//        // getPauseAfterChangePatch(), which is a lot but probably adequate.
-//        return super.getPauseAfterReceivePatch();
-//        }
-        
-//    public int getBatchDownloadWaitTime()
-//        {
-//        // Edisyn does bulk downloads by iteratively requesting a patch, then
-//        // waiting for it to load, then saving it.  Edisyn will wait for up to
-//        // getBatchDownloadWaitTime() milliseconds before it checks to see if the
-//        // patch has arrived and try to save it; else it will issue another request.
-//        //
-//        // The default value is 1000 (one second).  If your synth takes more (or less!)
-//        // time to respond and dump a patch to Edisyn, you may wish to change this value.
-//        // You'd like it as short as possible without missing dumps.
-//        return 1000;
-//        }
-
-//    public int getBatchDownloadFailureCountdown()
-//        {
-//        // Each getBatchDownloadWaitTime() Edisyn will count this down until
-//        // it reaches -1, at which time it gives up waiting for a bulk download.
-//        return 0;
-//        }
-
-//    public void startingBatchDownload(Model firstPatch, Model finalPatch)
-//        {
-//        // Called when a batch download is starting.  This might give your editor
-//        // a chance to emit something at the beginning of the batch download.  For
-//        // example, the ASM Hydrasynth requires that a header sysex command be
-//        // sent before a stream of batch downloads.  You can determine if
-//        // a batch download is occurring during parse() by calling isBatchDownloading()
-//        super.startingBatchDownload(firstPatch, finalPatch);
-//        }
-
-//    public void stoppingBatchDownload(Model firstPatch, Model finalPatch)
-//        {
-//        // Called when a batch download is stopping.  This might give your editor
-//        // a chance to emit something at the end of the batch download.  For
-//        // example, the ASM Hydrasynth requires that a header sysex command be
-//        // sent before a stream of patch downloads.  You can determine if
-//        // a batch download is occurring during parse() by calling isBatchDownloading()
-//        }
-
-//    public int getTestNoteChannel()
-//        {
-//        // It's possible that your synth has a special channel for this patch
-//        // (for example, a drum patch).  Override this to provide a custom
-//        // channel for the test note to be sent on.  The default is getChannelOut().
-//        return getChannelOut();
-//        }
-
-//    public void windowBecameFront()
-//        {
-//        // If your editor's window just became the front window, this method will
-//        // be called to inform you.  For example, Waldorf Microwave synthesizers
-//        // can change from multimode to single mode (or the other way) as appropriate
-//        // when their window comes to the fore.
-//        return;
-//        }
-        
-//    public void windowCreated()
-//        {
-//        // If your editor's window was just created and the user has selected
-//        // MIDI device parameters (or chose not to), this method will
-//        // be called to inform you.  For example, you could use this to issue a
-//        // Sysex device inquiry message to help further set up the synth.
-//        return;
-//        }
-
-//    public boolean getSendsAllParametersAsDump()
-//        {
-//        // Normally this method returns TRUE meaning that when the user sends
-//        // or writes to the synthesizer, emitAll(model,...) will be called to write
-//        // a bulk write, typically a sysex message.  But some synthesizers don't
-//        // use sysex.  For example, the PreenFM2 receives each of its parameters
-//        // via individual NRPN messages (which are handled via emitAll(key)).
-//        // If your synthesizer is of this type, you should return FALSE.
-//        return true;
-//        }
 
     public JFrame sprout()
         {
@@ -1299,102 +456,8 @@ public class NovationAStation extends Synth {
         // constructed.   You may need to do some things here, such as turning off certain
         // menu options that your synthesizer cannot do.  Be sure to call super.sprout();
         // first.
+        // TODO - what about doing a global request here ? as in: requesting device (non program) data
         return super.sprout();
-        }
-        
-//    public void showedOneTimeWarning(String key)
-//        {
-//        // If you call doOneTimeWarning(...) to issue a one-time-only warning to the musician,
-//        // after the warning is issued, this is called once so you can (for example, see
-//        // ASMHydraSynth) switch to the About pane or something.
-//        }
-                
-//    public void tabChanged()
-//        {
-//        // This method is called whenever the tabs are changed in case you need to do something
-//        // like update a menu item in response to it etc.  Be sure to call super.tabChanged();
-//        super.tabChanged();
-//        }
-
-    public boolean getExpectsRawCCFromSynth()
-        {
-        // If your synthesizer sends individual parameter data to Edisyn not as sysex,
-        // and not as cooked CC messages (such as NRPN), but rather as raw CC messages,
-        // then you should override this method to return TRUE.  Generally it's kept FALSE,
-        // the default.
-        return false;
-        }
-
-    public boolean getReceivesPatchesAsDumps()
-        {
-        // Most synthesizers send patch dumps to Edisyn via a single sysex message which
-        // is handled using the parse(...) method.  But some synthesizers, such as the
-        // PreenFM2, send patch dumps as multiple separate NRPN or CC messages.  If this
-        // is the case, you should override this method to return FALSE so Edisyn can
-        // detect this during its batch patch-download process.
-        return true;
-        }
-        
-    public boolean getSendsParametersAfterNonMergeParse()
-        {
-        // Some synthesizers cannot change patches via program change when in multi-mode.
-        // So when you issue a patch request, they just give Edisyn the patch, but don't
-        // switch to playing it.  So this command issues a sendAllParameters() on receiving
-        // a (non-merge) parse from the synthesizer to keep it up to date.  Example synths
-        // with this issue: Waldorf Blofeld and Microwave.
-        return false;
-        }
-
-    public boolean getSendsParametersOnlyOnSendCurrentPatch()
-        {
-        // If this returns true, then Edisyn will only sendAllParmameters() when the user
-        // directly selects "Send Current Patch", and in no other situation (such as
-        // undo/redo, or hill-climbing, or on patch load, etc.)
-        return false;
-        }
-
-    public boolean getShouldChangePatchAfterWrite()
-        { 
-        // Some synthesizers, such as the Kyra, write to patch memory but don't appear to
-        // overwrite temporary memory as well.  You can set this to true to send to temporary
-        // memory.
-        return false; 
-        }
-
-    public int getVoiceMessageRoutedChannel(int incomingChannel, int synthChannel)
-        {
-        // Some synthesizers need to reroute voiced messages (messages with channels) from
-        // the controller to the synthesizer along some other channel.  For example, the KawaiK4
-        // needs to route drum notes to a special channel different from the standard K4
-        // input channel.  If you need to customize the channel that the Controller routes
-        // to, override this to return some other channel.
-        return synthChannel;
-        }
-        
-    public void messageFromController(MidiMessage message, boolean interceptedForInternalUse, boolean routedToSynth)
-        { 
-        // Whenever a message from the controller arrives, this message is called.  It is possible
-        // for both of these parameters to be FALSE, if there was an error in reconstructing the
-        // message to send it out, or (much more likely) if the user turned off routing.  It is
-        // presently NOT possible for both of these values to be true; though this might be the case
-        // in the future.
-        }
-
-    public boolean getSendsParametersAfterLoad()
-        {
-        // This is called immediately after a successful load but before sending the parameters.
-        // If your synth shouldn't return parameters after a load, perhaps because sending is
-        // costly, override this to return false, or pop up a dialog asking the user what to do
-        // and return that.
-        return true;
-        }
-                
-    public boolean sendAllSoundsOffWhenWindowChanges()
-        {
-        // When a window becomes the front window, is closed, quits, etc., then
-        // by default Edisyn sends all sounds off.  Override
-        // this method to return FALSE if you don't want this to happen.  [Normally you do]. 
-        return true;
         }
 
     public boolean adjustBulkSysexForWrite(Synth window, byte[][][] data)
@@ -1447,45 +510,7 @@ public class NovationAStation extends Synth {
         return DEFAULT_PASTES; 
         }
         
-//    public void sendAllSoundsOff()
-//        {
-//        // By default this method sends All Notes Off and All Sounds Off to every single
-//        // channel.  You might want to override this because
-//        // this behavior causes problems for your synthesizer (ahem Hydrasynth), or because
-//        // your synthesizer has some nonstandard approach to clearing sounds.  Note that if you
-//        // are trying to prevent Edisyn from sending all sounds off / all notes off temporarily,
-//        // often because it's hard to debug with it, you can instead just set the static final
-//        // boolean sendsAllSoundsOff = false; in Synth.java.
-//        super.sendAllSoundsOff();
-//        }
-
-    public boolean getRequiresNRPNMSB() 
-        { 
-        // Returns true if this synth will always provide the MSB in all NRPN messages.
-        // When an NRPN message comes in, it may come in with just an LSB, just an MSB, or with an LSB and MSB in either order. 
-        // Since normally don't know, the NRPN parser must assume that an incoming LSB may be all there is to the message
-        // and update edisyn with just the LSB and the MSB set to 0 (or correspondingly with just the MSB and the LSB set to 0),
-        // and only update a second time when the other part arrives.  This in turn can cause a variety of revise() problems.
-        // To deal with this, if you know the synth will always produce an MSB in every NRPN message, you can override this to
-        // return TRUE (it returns FALSE by default).
-        // TODO - check
-        return false;
-        }
-
-    public boolean getRequiresNRPNLSB() 
-        { 
-        // Returns true if this synth will always provide the LSB in all NRPN messages.
-        // When an NRPN message comes in, it may come in with just an LSB, just an MSB, or with an LSB and MSB in either order. 
-        // Since normally don't know, the NRPN parser must assume that an incoming LSB may be all there is to the message
-        // and update edisyn with just the LSB and the MSB set to 0 (or correspondingly with just the MSB and the LSB set to 0),
-        // and only update a second time when the other part arrives.  This in turn can cause a variety of revise() problems.
-        // To deal with this, if you know the synth will always produce an LSB in every NRPN message, you can override this to
-        // return TRUE (it returns FALSE by default).
-        // TODO - check
-            return false;
-        }
-
-    public boolean testVerify(Synth synth2, String key, Object obj1, Object obj2)
+        public boolean testVerify(Synth synth2, String key, Object obj1, Object obj2)
         {
         // The edisyn.test.SanityCheck class performs sanity-checks on synthesizer classes
         // by randomizing a synth instance, then writing it out, then reading it back in in a new synth, 
@@ -1814,46 +839,4 @@ public class NovationAStation extends Synth {
         int minor = swVersion & 0x7;
         return major + "." + minor + "." + swIncrement;
     }
-
-    private Chooser createChooser(String label, Mappings mappings) {
-        Restrictions restrictions = mappings.getRestrictions();
-        // sanity
-        if (restrictions.getValues() == null) {
-            throw new IllegalStateException("expecting values for a chooser component !");
-        }
-        return new Chooser(label, this,
-                mappings.getKey(),
-                mappings.getRestrictions().getValues()) {
-            @Override
-            // a matter of taste, I guess..
-            public boolean isLabelToLeft() { return true; }
-
-            // TODO - worth a separate pull request (in main code)
-            // comes with some complication thought (check code: also internally getting enablesd/disabled)
-            @Override
-            public void setEnabled(boolean enabled) {
-                this.getCombo().setEnabled(enabled);
-            }
-        };
-    }
-
-    private LabelledDial createLabelledDial(String label, Mappings mappings, Color color) {
-        Restrictions restrictions = mappings.getRestrictions();
-        return new LabelledDial(label, this,
-                mappings.getKey(),
-                color, restrictions.getMin(), restrictions.getMax(), restrictions.getOffset());
-    }
-
-    private JComponent createCheckBox(String label, Mappings mappings) {
-        return new CheckBox(label, this, mappings.getKey());
-    }
-
-    /**
-     * disable a component, useful for components where live controls are not (yet) supported
-     * used for (still non-supported) NRPNs
-     */
-//    private Component disable(Component component) {
-//        component.setEnabled(false);
-//        return component;
-//    }
 }

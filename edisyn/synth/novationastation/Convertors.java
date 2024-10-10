@@ -48,7 +48,7 @@ class Convertors {
                         Mappings::getConvertor,
                         (convertor1, convertor2) -> {
                             if (convertor1 != convertor2) {
-                                throw new IllegalStateException("Cannot assign different convertors to the same key");
+                                throw new IllegalStateException("Cannot assign different convertors to the same key.");
                             }
                             return convertor1;
                         }
@@ -64,7 +64,7 @@ class Convertors {
                         Function.identity(),
                         (convertor1, convertor2) -> {
                             if (convertor1 != convertor2) {
-                                throw new IllegalStateException("Cannot assign different convertors to the same key");
+                                throw new IllegalStateException("Cannot assign different convertors to the same byteIndex: " + convertor1.getByteIndex());
                             }
                             return convertor1;
                         }
@@ -80,7 +80,7 @@ class Convertors {
                         Function.identity(),
                         (convertor1, convertor2) -> {
                             if (convertor1 != convertor2) {
-                                throw new IllegalStateException("Cannot assign different convertors to the same key");
+                                throw new IllegalStateException("Cannot assign different convertors to the same CC: " + convertor1.getCC());
                             }
                             return convertor1;
                         }
@@ -96,7 +96,7 @@ class Convertors {
                         Function.identity(),
                         (convertor1, convertor2) -> {
                             if (convertor1 != convertor2) {
-                                throw new IllegalStateException("Cannot assign different convertors to the same key");
+                                throw new IllegalStateException("Cannot assign different convertors to the same NRPN: " + convertor1.getNRPN());
                             }
                             return convertor1;
                         }
@@ -129,14 +129,14 @@ class Convertors {
             public void toModel(Model model, int value) {
                 model.set(ENVELOPE1_TRIGGER.getKey(), 0x1 & value);
                 model.set(ENVELOPE2_TRIGGER.getKey(), 0x1 & (value >> 1));
-                model.set(ENVELOPE_FM_TRIGGER.getKey(), 0x1 & (value >> 2));
+                model.set(ENVELOPE3_TRIGGER.getKey(), 0x1 & (value >> 2));
                 model.set(KEY_SYNC_PHASE.getKey(), 0xF & (value >> 3));
             }
             @Override
             public int toSynth(Model model) {
                 return (0x1 & model.get(ENVELOPE1_TRIGGER.getKey()))
                         | ((0x1 & model.get(ENVELOPE2_TRIGGER.getKey())) << 1)
-                        | ((0x1 & model.get(ENVELOPE_FM_TRIGGER.getKey())) << 2)
+                        | ((0x1 & model.get(ENVELOPE3_TRIGGER.getKey())) << 2)
                         | ((0xF & model.get(KEY_SYNC_PHASE.getKey())) << 3);
             }
         },

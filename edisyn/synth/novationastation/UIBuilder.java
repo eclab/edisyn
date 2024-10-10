@@ -5,7 +5,9 @@ import edisyn.gui.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.List;
 
+import static edisyn.gui.Style.COLOR_GLOBAL;
 import static edisyn.synth.novationastation.Mappings.*;
 
 public class UIBuilder {
@@ -19,47 +21,53 @@ public class UIBuilder {
         // General PANEL
         JComponent generalPanel = new SynthPanel(synth);
         VBox vbox = new VBox();
-        vbox.add(addNameGlobal(Style.COLOR_GLOBAL()));
-        vbox.add(addGeneral(Style.COLOR_B()));
-        vbox.add(addAdvanced(Style.COLOR_C()));
+        HBox hbox = new HBox();
+        hbox.add(addNameGlobal(COLOR_GLOBAL()));
+        hbox.addLast(addGeneral(Style.COLOR_A()));
+        vbox.add(hbox);
+        vbox.add(addOscillator(1, Style.COLOR_B()));
+        vbox.add(addOscillator(2, Style.COLOR_B()));
+        vbox.add(addOscillator(3, Style.COLOR_B()));
+        vbox.add(addAmpAndPitchModulation(Style.COLOR_C()));
+        vbox.add(addMixer(Style.COLOR_A()));
+        // TODO - ARP after mixer ?
         generalPanel.add(vbox, BorderLayout.CENTER);
         synth.addTab("General", generalPanel);
 
-        // OSCx, Mixer, Filter PANEL
-        JComponent OscMixerFilterPanel = new SynthPanel(synth);
-        vbox = new VBox();
-        vbox.add(addOscillator(1, Style.COLOR_A()));
-        vbox.add(addOscillator(2, Style.COLOR_A()));
-        vbox.add(addOscillator(3, Style.COLOR_A()));
-        vbox.add(addMixer(Style.COLOR_B()));
-        vbox.add(addFilter(Style.COLOR_C()));
-        OscMixerFilterPanel.add(vbox, BorderLayout.CENTER);
-        synth.addTab("Oscs, Mix, Filter", OscMixerFilterPanel);
-
         // Envelope, LFO, ARP PANEL
-        JComponent envelopeLfoArpPanel = new SynthPanel(synth);
+        JComponent envelopeLfoFilterPanel = new SynthPanel(synth);
         vbox = new VBox();
-        vbox.add(addEnvelope(1, Style.COLOR_B()));
-        vbox.add(addEnvelope(2, Style.COLOR_B()));
-        vbox.add(addLFO(1, Style.COLOR_C()));
-        vbox.add(addLFO(2, Style.COLOR_C()));
+        vbox.add(addEnvelope(1, Style.COLOR_A()));
+        vbox.add(addEnvelope(2, Style.COLOR_A()));
+        vbox.add(addEnvelope(3, Style.COLOR_A()));
+        hbox = new HBox();
+        hbox.add(addLFO(1, Style.COLOR_B()));
+        hbox.addLast(addLFO(2, Style.COLOR_B()));
+        vbox.add(hbox);
+        vbox.add(addFilter(Style.COLOR_C()));
         //vbox.add(addArp(Style.COLOR_D()));
-        envelopeLfoArpPanel.add(vbox, BorderLayout.CENTER);
-        synth.addTab("Envs, LFOs, ARP", envelopeLfoArpPanel);
+        envelopeLfoFilterPanel.add(vbox, BorderLayout.CENTER);
+        synth.addTab("Envs, LFOs, Filter", envelopeLfoFilterPanel);
 
         // EFFECTS PANEL
         JComponent effectsPanel = new SynthPanel(synth);
         vbox = new VBox();
-        vbox.add(addDelay(Style.COLOR_A()));
-        vbox.add(addReverb(Style.COLOR_B()));
-        vbox.add(addChorus(Style.COLOR_C()));
-        vbox.add(addDistortion(Style.COLOR_A()));
-        vbox.add(addPan(Style.COLOR_B()));
-        vbox.add(addVocoder(Style.COLOR_C()));
-
+        hbox = new HBox();
+        hbox.add(addDelay(Style.COLOR_A()));
+        hbox.addLast(addReverb(Style.COLOR_B()));
+        vbox.add(hbox);
+        hbox = new HBox();
+        hbox.add(addDistortion(Style.COLOR_C()));
+        hbox.addLast(addChorus(Style.COLOR_A()));
+        vbox.add(hbox);
+        hbox = new HBox();
+        hbox.add(addPan(Style.COLOR_B()));
+        hbox.addLast(addVocoder(Style.COLOR_C()));
+        vbox.add(hbox);
+        
         // TODO add equalizer controls
         effectsPanel.add(vbox, BorderLayout.CENTER);
-        synth.addTab("FXs", effectsPanel);
+        synth.addTab("Effects", effectsPanel);
 
         // DEVICE-GOODIES panel (non patch related)
         // TODO - nice addition for the future, to be completed though...
@@ -95,50 +103,45 @@ public class UIBuilder {
     private JComponent addGeneral(Color color) {
         Category categoryGeneral = new Category(synth, "General", color);
 
-        VBox mainVBox = new VBox();
         HBox hbox = new HBox();
-        //
         VBox vbox = new VBox();
         vbox.add(createChooser("polyphony mode", POLYPHONY_MODE));
-        vbox.add(createChooser("unison voices", UNISON_VOICES));
-        vbox.add(createLabelledDial("unison detune", UNISON_DETUNE, color), BorderLayout.EAST);
+        vbox.add(createChooser("keysync phase", KEY_SYNC_PHASE));
         hbox.add(vbox);
 
         vbox = new VBox();
-        vbox.add(createChooser("keysync phase", KEY_SYNC_PHASE));
-        vbox.add(createChooser("portamento mode", PORTAMENTO_MODE));
-        vbox.add(createLabelledDial("portamento time", PORTAMENTO_TIME, color), BorderLayout.EAST);
+        vbox.add(createChooser("unison voices", UNISON_VOICES));
         hbox.add(vbox);
+        hbox.add(createLabelledDial(List.of("unison", "detune"), UNISON_DETUNE, color));
 
-        mainVBox.add(hbox);
+        hbox.add(createLabelledDial(List.of("random", "detune"), OSCS_RANDOM_DETUNE, color));
+        hbox.add(createLabelledDial(List.of("preglide", "semitones"), PREGLIDE_SEMITONES, color));
+        hbox.add(createLabelledDial(List.of("program", "volume"), PROGRAM_VOLUME, color));
 
-        categoryGeneral.add(mainVBox, BorderLayout.WEST);
+        categoryGeneral.add(hbox, BorderLayout.CENTER);
         return categoryGeneral;
     }
 
-    private JComponent addAdvanced(Color color) {
-        Category categoryGeneral = new Category(synth, "Advanced", color);
+    private JComponent addAmpAndPitchModulation(Color color) {
+        Category categoryGeneral = new Category(synth, "Portamento, Pitch & AMP modulation", color);
 
-        JPanel panel = new JPanel();
-        panel.setLayout(new GridLayout(4, 3));
-        // row1
-        panel.add(createLabelledDial("random detune", OSCS_RANDOM_DETUNE, color));
-        panel.add(createLabelledDial("preglide semitones", PREGLIDE_SEMITONES, color));
-        panel.add(createLabelledDial("program output offset", PROGRAM_VOLUME, color));
-        // row2
-        panel.add(createLabelledDial("modwheel pitch depth", OSCS_MODWHEEL_PITCH_DEPTH, color));
-        panel.add(createLabelledDial("aftertouch pitch depth", OSCS_MODWHEEL_PITCH_DEPTH, color));
-        panel.add(createLabelledDial("breath pitch depth", OSCS_MODWHEEL_PITCH_DEPTH, color));
-        // row3
-        panel.add(createLabelledDial("modwheel lfo1 pitch depth", OSCS_MODWHEEL_PITCH_DEPTH, color));
-        panel.add(createLabelledDial("aftertouch lfo1 pitch depth", OSCS_MODWHEEL_PITCH_DEPTH, color));
-        panel.add(createLabelledDial("breath lfo1 pitch depth", OSCS_MODWHEEL_PITCH_DEPTH, color));
-        // row4
-        panel.add(createLabelledDial("modwheel amplitude depth", OSCS_MODWHEEL_PITCH_DEPTH, color));
-        panel.add(createLabelledDial("aftertouch amplitude depth", OSCS_MODWHEEL_PITCH_DEPTH, color));
-        panel.add(createLabelledDial("breath amplitude depth", OSCS_MODWHEEL_PITCH_DEPTH, color));
+        HBox hbox = new HBox();
+        VBox vbox = new VBox();
+        vbox.add(createChooser("portamento mode", PORTAMENTO_MODE));
+        hbox.add(vbox);
+        hbox.add(createLabelledDial(List.of("portamento", "time"), PORTAMENTO_TIME, color));
 
-        categoryGeneral.add(panel, BorderLayout.WEST);
+        hbox.add(createLabelledDial(List.of("modwheel", "pitch depth"), OSCS_MODWHEEL_PITCH_DEPTH, color));
+        hbox.add(createLabelledDial(List.of("aftertch", "pitch depth"), OSCS_AFTERTCH_PITCH_DEPTH, color));
+        hbox.add(createLabelledDial(List.of("breath", "pitch depth"), OSCS_BREATH_PITCH_DEPTH, color));
+        hbox.add(createLabelledDial(List.of("modwheel", "lfo1", "pitch depth"), OSCS_MODWHEEL_LFO1_PITCH_DEPTH, color));
+        hbox.add(createLabelledDial(List.of("aftertch", "lfo1", "pitch depth"), OSCS_AFTERTCH_LFO1_PITCH_DEPTH, color));
+        hbox.add(createLabelledDial(List.of("breath", "lfo1", "pitch depth"), OSCS_BREATH_LFO1_PITCH_DEPTH, color));
+        hbox.add(createLabelledDial(List.of("modwheel", "amp depth"), OSCS_MODWHEEL_AMPLITUDE_DEPTH, color));
+        hbox.add(createLabelledDial(List.of("aftertch", "amp depth"), OSCS_AFTERTCH_AMPLITUDE_DEPTH, color));
+        hbox.add(createLabelledDial(List.of("breath", "amp depth"), OSCS_BREATH_AMPLITUDE_DEPTH, color));
+
+        categoryGeneral.add(hbox, BorderLayout.CENTER);
         return categoryGeneral;
     }
 
@@ -159,23 +162,19 @@ public class UIBuilder {
 
         hbox.add(createLabelledDial("semitone", Mappings.find("OSC%d_SEMITONE", osc), color));
         hbox.add(createLabelledDial("detune", Mappings.find("OSC%d_DETUNE", osc), color));
-        hbox.add(createLabelledDial("pulse width", Mappings.find("OSC%d_PULSE_WIDTH", osc), color));
+        // TODO - verify restrictions
+        hbox.add(createLabelledDial(List.of("bendwheel", "depth"), Mappings.find("OSC%d_BENDWHEEL_AMOUNT", osc), color));
+        hbox.add(createLabelledDial(List.of("modenv", "depth"), Mappings.find("OSC%d_ENV2_DEPTH", osc), color));
+        hbox.add(createLabelledDial(List.of("lfo1", "depth"), Mappings.find("OSC%d_LFO1_DEPTH", osc), color));
         // TODO - add support for 'pwm source' (and related)
-        hbox.add(createLabelledDial("mod env depth", Mappings.find("OSC%d_ENV2_DEPTH", osc), color));
-        hbox.add(createLabelledDial("lfo1 depth", Mappings.find("OSC%d_LFO1_DEPTH", osc), color));
-        // TODO - verify restrictions first before adding synth one...
-//        hbox.add(createLabelledDial("bendwheel amount", Mappings.find("OSC%d_BENDWHEEL_AMOUNT", osc), color));
+        hbox.add(createLabelledDial("PW", Mappings.find("OSC%d_PULSE_WIDTH", osc), color));
+        hbox.add(createLabelledDial(List.of("modenv", "PW depth"), Mappings.find("OSC%d_ENV2_PULSE_WIDTH_MOD", osc), color));
+        hbox.add(createLabelledDial(List.of("lfo2", "PW depth"), Mappings.find("OSC%d_LFO2_PULSE_WIDTH_MOD", osc), color));
 
-        // TODO
-//        if (osc == 3) {
-//            comp = new LabelledDial("fm level", synth, "osc" + osc + "fmlevel", color, 0, 127);
-//            hbox.add(comp);
-//
-//            comp = new LabelledDial("fm env depth", synth, "osc" + osc + "fmenvdepth", color, 0, 127);
-//            hbox.add(comp);
-//
-//            and others... (check NRPN)
-//        }
+        if (osc == 3) {
+            hbox.add(createLabelledDial(List.of("FM", "Level"), FM_FIXED_LEVEL, color));
+            hbox.add(createLabelledDial(List.of("FMenv", "depth"), FM_ENVELOPE_DEPTH, color));
+        }
 
         category.add(hbox, BorderLayout.CENTER);
         return category;
@@ -186,12 +185,12 @@ public class UIBuilder {
         Category category = new Category(synth, "Mixer", color);
 
         HBox hbox = new HBox();
-        hbox.add(createLabelledDial("oscillator1", MIXER_OSC1, color));
-        hbox.add(createLabelledDial("oscillator2", MIXER_OSC2, color));
-        hbox.add(createLabelledDial("oscillator3", MIXER_OSC3, color));
+        hbox.add(createLabelledDial("osc1", MIXER_OSC1, color));
+        hbox.add(createLabelledDial("osc2", MIXER_OSC2, color));
+        hbox.add(createLabelledDial("osc3", MIXER_OSC3, color));
         hbox.add(createLabelledDial("noise", MIXER_NOISE, color));
-        hbox.add(createLabelledDial("1*2 ring", MIXER_RING_MOD, color));
-        hbox.add(createLabelledDial("external input", MIXER_EXTERNAL, color));
+        hbox.add(createLabelledDial(List.of("1*2", "ring"), MIXER_RING_MOD, color));
+        hbox.add(createLabelledDial(List.of("external", "input"), MIXER_EXTERNAL, color));
 
         category.add(hbox, BorderLayout.CENTER);
         return category;
@@ -199,29 +198,44 @@ public class UIBuilder {
 
     private JComponent addFilter(Color color) {
         Category category = new Category(synth, "Filter", color);
-        HBox hbox = new HBox();
-        VBox vbox = new VBox();
-        vbox.add(createChooser("type", FILTER_TYPE));
-        hbox.add(vbox);
+        HBox mainhbox = new HBox();
 
+        VBox vbox1 = new VBox();
+        vbox1.add(createChooser("type", FILTER_TYPE));
+        mainhbox.add(vbox1);
+
+        VBox vbox2 = new VBox();
+        HBox hbox = new HBox();
         hbox.add(createLabelledDial("frequency", FILTER_FREQ, color));
         hbox.add(createLabelledDial("resonance", FILTER_RESONANCE, color));
         hbox.add(createLabelledDial("overdrive", FILTER_OVERDRIVE, color));
-        // enable once NRPN is supported
         hbox.add(createLabelledDial("key track", FILTER_KEY_TRACK, color));
-        hbox.add(createLabelledDial("mod env depth", FILTER_ENV2_DEPTH, color));
-        hbox.add(createLabelledDial("lfo2 depth", FILTER_LFO2_DEPTH, color));
+        hbox.add(createLabelledDial(List.of("modwheel", "depth"), FILTER_MODWHEEL_FREQUENCY_DEPTH, color));
+        hbox.add(createLabelledDial(List.of("modenv", "depth"), FILTER_ENV2_DEPTH, color));
+        hbox.add(createLabelledDial(List.of("lfo2", "depth"), FILTER_LFO2_DEPTH, color));
+        vbox2.add(hbox);
+
+        hbox = new HBox();
+        hbox.add(createLabelledDial("Q normalize", FILTER_Q_NORMALIZE, color));
+        hbox.add(createLabelledDial(List.of("aftertch", "depth"), FILTER_AFTERTCH_FREQUENCY_DEPTH, color));
+        hbox.add(createLabelledDial(List.of("breath", "depth"), FILTER_BREATH_FREQUENCY_DEPTH, color));
+        hbox.add(createLabelledDial(List.of("modwheel", "lfo2 depth"), FILTER_MODWHEEL_LFO2_FREQUENCY_DEPTH, color));
+        hbox.add(createLabelledDial(List.of("aftertch", "lfo2 depth"), FILTER_AFTERTCH_LFO2_FREQUENCY_DEPTH, color));
+        hbox.add(createLabelledDial(List.of("breath", "lfo2 depth"), FILTER_BREATH_LFO2_FREQUENCY_DEPTH, color));
+        vbox2.add(hbox);
+        mainhbox.add(vbox2);
 
         // TODO
         // and others... (check NRPN)
 
-        category.add(hbox, BorderLayout.CENTER);
+        category.add(mainhbox, BorderLayout.CENTER);
         return category;
     }
 
     private JComponent addEnvelope(final int envelope, Color color)
     {
-        Category category = new Category(synth, (envelope == 1 ? "Amp" : "Mod") + " Envelope", color);
+        String categoryName = envelope == 1 ? "Amp" : (envelope == 2 ? "Mod" : "FM");
+        Category category = new Category(synth, categoryName + " Envelope", color);
         // TODO - to be verified
         // category.makePasteable("env");
 
@@ -230,27 +244,39 @@ public class UIBuilder {
         vbox.add(createChooser("env trigger", Mappings.find("ENVELOPE%d_TRIGGER", envelope)));
         hbox.add(vbox);
 
+        Mappings velocityDepth = Mappings.find("ENVELOPE%d_VELOCITY_DEPTH", envelope);
+        hbox.add(createLabelledDial("velocity depth", velocityDepth, color));
+
         Mappings mappingsAttack = Mappings.find("ENVELOPE%d_ATTACK", envelope);
         hbox.add(createLabelledDial("attack", mappingsAttack, color));
 
         Mappings mappingsDecay = Mappings.find("ENVELOPE%d_DECAY", envelope);
         hbox.add(createLabelledDial("decay", mappingsDecay, color));
 
-        Mappings mappingsSustain = Mappings.find("ENVELOPE%d_SUSTAIN", envelope);
-        hbox.add(createLabelledDial("sustain", mappingsSustain, color));
+        if (envelope == 3) {
+            // AD: for FM envelope - that's it
+            JComponent comp = new EnvelopeDisplay(synth, Color.red,
+                    new String[] { null, mappingsAttack.getKey(), mappingsDecay.getKey(), null, null },
+                    new String[] { null, null, null, null, null },
+                    new double[] { 0, 0.25/127.0, 0.25 / 127.0,  0.25, 0.25},
+                    new double[] { 0, 1.0, 1.0 / 127.0, 0, 0 });
+            hbox.addLast(comp);
+        } else {
+            // ADSR: for AMP & MOD env - add sustain/release
+            Mappings mappingsSustain = Mappings.find("ENVELOPE%d_SUSTAIN", envelope);
+            hbox.add(createLabelledDial("sustain", mappingsSustain, color));
 
-        Mappings mappingsRelease = Mappings.find("ENVELOPE%d_RELEASE", envelope);
-        hbox.add(createLabelledDial("release", mappingsRelease, color));
+            Mappings mappingsRelease = Mappings.find("ENVELOPE%d_RELEASE", envelope);
+            hbox.add(createLabelledDial("release", mappingsRelease, color));
 
-        // ADSR
-        JComponent comp = new EnvelopeDisplay(synth, Color.red,
-                new String[] { null, mappingsAttack.getKey(), mappingsDecay.getKey(), null, mappingsRelease.getKey() },
-                new String[] { null, null, mappingsSustain.getKey(), mappingsSustain.getKey(), null },
-                new double[] { 0, 0.25/127.0, 0.25 / 127.0,  0.25, 0.25/127.0},
-                new double[] { 0, 1.0, 1.0 / 127.0, 1.0/127.0, 0 });
-        hbox.addLast(comp);
-
-        // TODO - FM envelope (AD), NRPN based
+            // ADSR
+            JComponent comp = new EnvelopeDisplay(synth, Color.red,
+                    new String[] { null, mappingsAttack.getKey(), mappingsDecay.getKey(), null, mappingsRelease.getKey() },
+                    new String[] { null, null, mappingsSustain.getKey(), mappingsSustain.getKey(), null },
+                    new double[] { 0, 0.25/127.0, 0.25 / 127.0,  0.25, 0.25/127.0},
+                    new double[] { 0, 1.0, 1.0 / 127.0, 1.0/127.0, 0 });
+            hbox.addLast(comp);
+        }
 
         category.add(hbox, BorderLayout.CENTER);
         return category;
@@ -264,11 +290,17 @@ public class UIBuilder {
         HBox hbox = new HBox();
         VBox vbox = new VBox();
         vbox.add(createChooser("waveform", Mappings.find("LFO%d_WAVEFORM", lfo)));
+        HBox hboxInner = new HBox();
+        hboxInner.add(createCheckBox("lock", Mappings.find("LFO%d_LOCK", lfo)));
+        hboxInner.add(createCheckBox("delay multi", Mappings.find("LFO%d_DELAY_MULTI", lfo)));
+        vbox.add(hboxInner);
+        vbox.add(createCheckBox("key sync", Mappings.find("LFO%d_KEY_SYNC", lfo)));
+        vbox.add(createCheckBox("key sync - phase shift", Mappings.find("LFO%d_KEY_SYNC_PHASE_SHIFT", lfo)));
         hbox.add(vbox);
 
         // TODO - single/dynamic dial for both sync and non-sync ?
-        hbox.add(createLabelledDial("speed (non-sync)", Mappings.find("LFO%d_SPEED_NON_SYNC", lfo), color));
-        hbox.add(createLabelledDial("speed (sync)", Mappings.find("LFO%d_SPEED_SYNC", lfo), color));
+        hbox.add(createLabelledDial(List.of("speed", "(non-sync)"), Mappings.find("LFO%d_SPEED_NON_SYNC", lfo), color));
+        hbox.add(createLabelledDial(List.of("speed", "(sync)"), Mappings.find("LFO%d_SPEED_SYNC", lfo), color));
         hbox.add(createLabelledDial("delay", Mappings.find("LFO%d_DELAY", lfo), color));
 
         category.add(hbox, BorderLayout.CENTER);
@@ -295,65 +327,64 @@ public class UIBuilder {
     }
     */
 
-    private Component addDelay(Color color) {
+    private JComponent addDelay(Color color) {
         Category category = new Category(synth, "delay", color);
         HBox hbox = new HBox();
 
-        hbox.add(createLabelledDial("send level", DELAY_SEND_LEVEL, color));
+        hbox.add(createLabelledDial(List.of("send", "level"), DELAY_SEND_LEVEL, color));
         hbox.add(createLabelledDial("modwheel", DELAY_SEND_MODWHEEL, color));
 
         // TODO - single/dynamic dial for both sync and non-sync ?
-        hbox.add(createLabelledDial("time (sync)", DELAY_TIME_SYNC, color));
-        hbox.add(createLabelledDial("time (non-sync)", DELAY_TIME_NON_SYNC, color));
+        hbox.add(createLabelledDial(List.of("time", "(sync)"), DELAY_TIME_SYNC, color));
+        hbox.add(createLabelledDial(List.of("time", "(non-sync)"), DELAY_TIME_NON_SYNC, color));
 
         hbox.add(createLabelledDial("feedback", DELAY_FEEDBACK, color));
 
         // TODO - dropdown here ? or different dial ?
         hbox.add(createLabelledDial("ratio", DELAY_RATIO, color));
-        hbox.add(createLabelledDial("stereo width", DELAY_STEREO_WIDTH, color));
+        hbox.add(createLabelledDial(List.of("stereo", "width"), DELAY_STEREO_WIDTH, color));
 
         category.add(hbox);
         return category;
     }
 
-    private Component addReverb(Color color) {
+    private JComponent addReverb(Color color) {
         Category category = new Category(synth, "reverb", color);
-        HBox hbox0 = new HBox();
-        hbox0.add(createChooser("type", REVERB_TYPE));
 
-        HBox hbox1 = new HBox();
-        hbox1.add(createLabelledDial("send level", REVERB_SEND_LEVEL, color));
-        hbox1.add(createLabelledDial("modwheel", REVERB_SEND_MODWHEEL, color));
-        hbox1.add(createLabelledDial("decay", REVERB_DECAY, color));
+        HBox hbox = new HBox();
+        VBox vbox = new VBox();
+        vbox.add(createChooser("type", REVERB_TYPE));
+        hbox.add(vbox);
+        hbox.add(createLabelledDial(List.of("send", "level"), REVERB_SEND_LEVEL, color));
+        hbox.add(createLabelledDial("modwheel", REVERB_SEND_MODWHEEL, color));
+        hbox.add(createLabelledDial("decay", REVERB_DECAY, color));
+        category.add(hbox);
 
-        category.add(hbox0, BorderLayout.NORTH);
-        category.add(hbox1, BorderLayout.SOUTH);
         return category;
     }
 
-    private Component addChorus(Color color) {
+    private JComponent addChorus(Color color) {
         Category category = new Category(synth, "chorus", color);
-        HBox hbox0 = new HBox();
-        hbox0.add(createChooser("type", CHORUS_TYPE));
-
-        HBox hbox1 = new HBox();
-        hbox1.add(createLabelledDial("send level", CHORUS_SEND_LEVEL, color));
-        hbox1.add(createLabelledDial("modwheel", CHORUS_SEND_MODWHEEL, color));
+        HBox hbox = new HBox();
+        VBox vbox = new VBox();
+        vbox.add(createChooser("type", CHORUS_TYPE));
+        hbox.add(vbox);
+        hbox.add(createLabelledDial(List.of("send", "level"), CHORUS_SEND_LEVEL, color));
+        hbox.add(createLabelledDial("modwheel", CHORUS_SEND_MODWHEEL, color));
 
         // TODO - single/dynamic dial for both sync and non-sync ?
-        hbox1.add(createLabelledDial("rate (sync)", CHORUS_RATE_SYNC, color));
-        hbox1.add(createLabelledDial("rate (non-sync)", CHORUS_RATE_NON_SYNC, color));
+        hbox.add(createLabelledDial(List.of("rate", "(sync)"), CHORUS_RATE_SYNC, color));
+        hbox.add(createLabelledDial(List.of("rate", "(non-sync)"), CHORUS_RATE_NON_SYNC, color));
 
-        hbox1.add(createLabelledDial("feedback", CHORUS_FEEDBACK, color));
-        hbox1.add(createLabelledDial("depth", CHORUS_MOD_DEPTH, color));
-        hbox1.add(createLabelledDial("centre point", CHORUS_MOD_CENTRE_POINT, color));
+        hbox.add(createLabelledDial("feedback", CHORUS_FEEDBACK, color));
+        hbox.add(createLabelledDial("depth", CHORUS_MOD_DEPTH, color));
+        hbox.add(createLabelledDial(List.of("centre", "point"), CHORUS_MOD_CENTRE_POINT, color));
 
-        category.add(hbox0, BorderLayout.NORTH);
-        category.add(hbox1, BorderLayout.SOUTH);
+        category.add(hbox);
         return category;
     }
 
-    private Component addDistortion(Color color) {
+    private JComponent addDistortion(Color color) {
         Category category = new Category(synth, "distortion", color);
         HBox hbox = new HBox();
 
@@ -364,7 +395,7 @@ public class UIBuilder {
         return category;
     }
 
-    private Component addPan(Color color) {
+    private JComponent addPan(Color color) {
         Category category = new Category(synth, "panning", color);
 
         HBox hbox = new HBox();
@@ -372,10 +403,10 @@ public class UIBuilder {
         hbox.add(createLabelledDial("position", PANNING_POSITION, color));
 
         // TODO - dropdown here ? or different dial ?
-        hbox.add(createLabelledDial("rate (sync)", PANNING_RATE_SYNC, color));
+        hbox.add(createLabelledDial(List.of("rate", "(sync)"), PANNING_RATE_SYNC, color));
 
         // TODO - single/dynamic dial for both sync and non-sync ?
-        hbox.add(createLabelledDial("rate (non-sync)", PANNING_RATE_NON_SYNC, color));
+        hbox.add(createLabelledDial(List.of("rate", "(non-sync)"), PANNING_RATE_NON_SYNC, color));
         hbox.add(createLabelledDial("depth", PANNING_MOD_DEPTH, color));
 
         // TODO - add global sync
@@ -384,19 +415,18 @@ public class UIBuilder {
         return category;
     }
 
-    private Component addVocoder(Color color) {
+    private JComponent addVocoder(Color color) {
         Category category = new Category(synth, "vocoder", color);
 
-        HBox hbox0 = new HBox();
-        hbox0.add(createChooser("sibilance type", VOCODER_SIBILANCE_TYPE));
+        HBox hbox = new HBox();
+        VBox vbox = new VBox();
+        vbox.add(createChooser("sibilance type", VOCODER_SIBILANCE_TYPE));
+        hbox.add(vbox);
+        hbox.add(createLabelledDial("balance", VOCODER_BALANCE, color));
+        hbox.add(createLabelledDial(List.of("stereo", "width"), VOCODER_STEREO_WIDTH, color));
+        hbox.add(createLabelledDial(List.of("sibilance", "level"), VOCODER_SIBILANCE_LEVEL, color));
 
-        HBox hbox1 = new HBox();
-        hbox1.add(createLabelledDial("balance", VOCODER_BALANCE, color));
-        hbox1.add(createLabelledDial("stereo width", VOCODER_STEREO_WIDTH, color));
-        hbox1.add(createLabelledDial("sibilance level", VOCODER_SIBILANCE_LEVEL, color));
-
-        category.add(hbox0, BorderLayout.NORTH);
-        category.add(hbox1, BorderLayout.SOUTH);
+        category.add(hbox);
         return category;
     }
 
@@ -436,17 +466,25 @@ public class UIBuilder {
         return new Chooser(label, synth,
                 mappings.getKey(),
                 mappings.getRestrictions().getValues()) {
-            @Override
-            // a matter of taste, I guess..
-            public boolean isLabelToLeft() { return true; }
+//            @Override
+//            // a matter of taste, I guess..
+//            public boolean isLabelToLeft() { return true; }
         };
     }
 
     private LabelledDial createLabelledDial(String label, Mappings mappings, Color color) {
+        return createLabelledDial(List.of(label), mappings, color);
+    }
+
+    private LabelledDial createLabelledDial(List<String> labels, Mappings mappings, Color color) {
         Restrictions restrictions = mappings.getRestrictions();
-        return new LabelledDial(label, synth,
+        LabelledDial result = new LabelledDial(labels.get(0), synth,
                 mappings.getKey(),
                 color, restrictions.getMin(), restrictions.getMax(), restrictions.getOffset());
+        for (int index = 1; index < labels.size(); ++index) {
+            result.addAdditionalLabel(labels.get(index));
+        }
+        return result;
     }
 
     private JComponent createCheckBox(String label, Mappings mappings) {

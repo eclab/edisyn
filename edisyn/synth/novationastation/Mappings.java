@@ -89,9 +89,8 @@ enum Mappings {
     ////
     // FM (osc2 to osc3)
     ////
-    FM_FIXED_LEVEL(56, null, 0),       // TODO -- NRPN realtime updates
-    FM_ENVELOPE_DEPTH(57, null, 1),    // TODO -- NRPN realtime updates + restrictions
-    FM_VELOCITY_DEPTH(58, null, 2),    // TODO -- NRPN realtime updates + restrictions
+    FM_FIXED_LEVEL(56, null, 0),
+    FM_ENVELOPE_DEPTH(57, null, 1),
     ////
     // Envelopes
     // - envelope1=amplitude envelope (ADSR)
@@ -110,9 +109,10 @@ enum Mappings {
     ENVELOPE2_RELEASE(70, 117, null),
     ENVELOPE2_TRIGGER(Convertors.Packed.PACKED1, Restrictions.ENV_TRIGGERS),
     ENVELOPE2_VELOCITY_DEPTH(66, 118, null, Restrictions.CENTRIC_127),
-    ENVELOPE_FM_ATTACK(59, null, 3),  // TODO -- NRPN realtime updates + restrictions
-    ENVELOPE_FM_DECAY(60, null, 4),   // TODO -- NRPN realtime updates + restrictions
-    ENVELOPE_FM_TRIGGER(Convertors.Packed.PACKED1), // TODO -- NRPN realtime updates + restrictions
+    ENVELOPE3_ATTACK(59, null, 3),
+    ENVELOPE3_DECAY(60, null, 4),
+    ENVELOPE3_TRIGGER(Convertors.Packed.PACKED1, Restrictions.ENV_TRIGGERS),
+    ENVELOPE3_VELOCITY_DEPTH(58, 0, 2, Restrictions.CENTRIC_127),
     ////
     // LFOs
     // - 2 identical LFOs are available
@@ -140,12 +140,10 @@ enum Mappings {
     FILTER_FREQ(46, 105, null),
     FILTER_RESONANCE(44, 106, null),
     FILTER_OVERDRIVE(43, 104, null),
-    // TODO - investigate how to handle NRPN
+    FILTER_Q_NORMALIZE(45, 103, null),
     FILTER_KEY_TRACK(47, null, 11),
     FILTER_ENV2_DEPTH(52, 107, null, Restrictions.CENTRIC_127),
     FILTER_LFO2_DEPTH(51, 102, null, Restrictions.CENTRIC_127),
-    FILTER_Q_NORMALIZE(45, 103, null),
-    // TODO - add extra mappings from sysex dump
     FILTER_MODWHEEL_FREQUENCY_DEPTH(48, null, 12, Restrictions.CENTRIC_127),
     FILTER_AFTERTCH_FREQUENCY_DEPTH(49, null, 13, Restrictions.CENTRIC_127),
     FILTER_BREATH_FREQUENCY_DEPTH(50, null, 14, Restrictions.CENTRIC_127),

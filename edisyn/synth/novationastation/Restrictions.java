@@ -8,7 +8,7 @@ public enum Restrictions implements Restriction {
     CENTRIC_100(14, 114, 64),
     CENTRIC_127(0, 127, 64),
     // some are specific
-    POLYPHONY_MODE("mono", "mono autoglide", "poly", "poly with stealing"),
+    POLYPHONY_MODE("mono", "mono, autoglide", "poly", "poly, voice stealing"),
     PORTAMENTO_MODE("exponential", "linear"),
     UNISON_VOICES("off", "2","3","4","5","6","7", "8"),
     OSC_OCTAVES("-1", "0", "1", "2"),

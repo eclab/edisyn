@@ -409,8 +409,7 @@ public class UIBuilder {
         hbox.add(vbox);
 
         hbox.add(createLabelledDial("level", EQUALIZER_LEVEL, color));
-        hbox.add(createLabelledDial("level", EQUALIZER_LEVEL, color));
-        hbox.add(createLabelledDial("frequency", EQUALIZER_LEVEL, color));
+        hbox.add(createLabelledDial("frequency", EQUALIZER_FREQUENCY, color));
         // TODO - dropdown here ? or different dial ?
         hbox.add(createLabelledDial(List.of("rate", "(sync)"), EQUALIZER_RATE_SYNC, color));
         // TODO - single/dynamic dial for both sync and non-sync ?

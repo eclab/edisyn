@@ -342,15 +342,7 @@ public class NovationAStation extends Synth {
             }
             return data;
         }
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
     @Override
     public Object[] emitAll(String key) {
             Optional<Convertor> convertor = Convertors.getByKey(key);

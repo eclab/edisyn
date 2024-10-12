@@ -19,7 +19,13 @@ public enum Restrictions implements Restriction {
     SIBILANCE_TYPES("high pass", "noise"),
     REVERB_TYPES("echo chamber", "small room", "small hall", "large room", "large hall", "grand hall"),
     CHORUS_TYPES("chorus", "phaser"),
-    KEYSYNC_PHASE("free-running", "0", "24", "48", "72", "96", "120", "144", "168", "192", "216", "240", "264", "288", "312", "336");
+    KEYSYNC_PHASE("free-running", "0", "24", "48", "72", "96", "120", "144", "168", "192", "216", "240", "264", "288", "312", "336"),
+    ARP_OCTAVES("1", "2", "3", "4"),
+    ARP_NOTE_DESTINATION("internal", "external", "internal+external", "external+played"),
+    ARP_PATTERN("up", "down", "ud1", "ud2", "order", "random"),
+    EQUALIZER_GLOBAL_SYNC("off", "low", "mid", "high"),
+    CHORUS_GLOBAL_SYNC("off", "left", "center", "right"),
+    PANNING_GLOBAL_SYNC(CHORUS_GLOBAL_SYNC);
 
     private final int min;
     private final int max;

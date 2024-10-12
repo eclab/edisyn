@@ -58,7 +58,7 @@ enum Mappings {
     OSC1_WAVEFORM(Convertors.Packed.PACKED3, Restrictions.OSC_WAVEFORMS),
     OSC1_SEMITONE(7, 40, null, Restrictions.CENTRIC_24),
     OSC1_DETUNE(8, 41, null, Restrictions.CENTRIC_100),
-    // TODO - verify restrictions
+    // TODO - verify restrictions (x3)
     OSC1_BENDWHEEL_AMOUNT(9, 42, null, Restrictions.CENTRIC_127),
     OSC1_LFO1_DEPTH(10, 43, null, Restrictions.CENTRIC_127),
     OSC1_ENV2_DEPTH(11, 44, null, Restrictions.CENTRIC_127),
@@ -124,6 +124,7 @@ enum Mappings {
     LFO1_DELAY_MULTI(Convertors.Packed.PACKED5),
     LFO1_KEY_SYNC(Convertors.Packed.PACKED6),
     LFO1_KEY_SYNC_PHASE_SHIFT(Convertors.Packed.PACKED6),
+    // TODO - restrictions (x2)
     LFO1_LOCK(Convertors.Packed.PACKED6),
     LFO2_WAVEFORM(Convertors.Packed.PACKED5, Restrictions.LFO_WAVE_FORMS),
     LFO2_SPEED_NON_SYNC(75, 83, null),
@@ -163,26 +164,29 @@ enum Mappings {
     // ARP
     ////
     ARP_ON_OFF(Convertors.Packed.PACKED7),
-    ARP_OCTAVES(Convertors.Packed.PACKED7),
+    ARP_OCTAVES(Convertors.Packed.PACKED7, Restrictions.ARP_OCTAVES),
     ARP_KEY_SYNC(Convertors.Packed.PACKED7),
     ARP_LATCH(Convertors.Packed.PACKED7),
-    ARP_NOTE_DESTINATION(Convertors.Packed.PACKED7),
+    ARP_NOTE_DESTINATION(Convertors.Packed.PACKED7, Restrictions.ARP_NOTE_DESTINATION),
+    // TODO - restrictions (x2)
+    ARP_RATE(84, 9, null),
     ARP_SYNC(85, 87, null),
     ARP_GATE_TIME(86, 88, null),
-    ARP_PATTERN(87, 3, null),
-    ARP_RATE(84, 9, null),
+    ARP_PATTERN(87, 3, null, Restrictions.ARP_PATTERN),
     // TODO not sure what this is, different from the one in packed7 ?
     // byteindex = null ?
 //    ARP_LATCH_ON_MOMENTARY(null, 64, null),
     ////
     // Effects - equalizer
     ////
+    // TODO - restrictions
     EQUALIZER_LEVEL(92, 33, null),
     EQUALIZER_FREQUENCY(93, 34, null),
     EQUALIZER_RATE_NON_SYNC(94, 35, null),
+    // TODO - restrictions
     EQUALIZER_RATE_SYNC(95, 36, null),
     EQUALIZER_MOD_DEPTH(96, 37, null),
-    EQUALIZER_GLOBAL_SYNC(Convertors.Packed.PACKED9),
+    EQUALIZER_GLOBAL_SYNC(Convertors.Packed.PACKED9, Restrictions.EQUALIZER_GLOBAL_SYNC),
     ////
     // Effects - delay
     ////
@@ -204,7 +208,7 @@ enum Mappings {
     CHORUS_FEEDBACK(114, 29, null),
     CHORUS_MOD_DEPTH(115, 30, null),
     CHORUS_MOD_CENTRE_POINT(116, 31, null),
-    CHORUS_GLOBAL_SYNC(Convertors.Packed.PACKED9),
+    CHORUS_GLOBAL_SYNC(Convertors.Packed.PACKED9, Restrictions.CHORUS_GLOBAL_SYNC),
     ////
     // Effects - reverb
     ////
@@ -233,7 +237,7 @@ enum Mappings {
     PANNING_MOD_DEPTH(120, 94, null),
     PANNING_RATE_NON_SYNC(118, 12, null),
     PANNING_RATE_SYNC(119, 13, null),
-    PANNING_GLOBAL_SYNC(Convertors.Packed.PACKED9),
+    PANNING_GLOBAL_SYNC(Convertors.Packed.PACKED9, Restrictions.PANNING_GLOBAL_SYNC),
     ////
     // various
     ////

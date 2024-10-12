@@ -1,8 +1,8 @@
 <html><head></head><body>
 <h1>Novation A-Station</h1>
-<h2>Patch Editor - Still under development !</h2>
+<h2>Patch Editor - Still under development</h2>
 
-<p>This editor will work with the <b>Novation A-Station</b>.<br>
+<p>This is an editor for the <b>Novation A-Station</b>.<br>
 It is developed and tested with the latest available firmware, being '2.1.2'
 
 <p><b>Communicating with Edisyn</b><br>
@@ -10,21 +10,19 @@ Set Edisyn's MIDI channel to the same as your synth's MIDI channel
 
 <p><b>Other Interesting Facts</b><br>
 This editor is still under development and not feature complete.<br>
-On the currently-supported-features list we have:
-<ul>
-    <li>request current/given patch, supporting most of the parameters</li>
-    <li>most of the realtime controls (CC-based) are working bidirectional</li>
-    <li>NRPN-based controls are still under development</li>
-</ul>
-Although the UI is still limited, it's already more useful than the UI on the device ;).<br><br>
 
-On the TODO list we have (in order of importance - IMHO):
+On the TODO list we still have:
 <ul>
-    <li>writing updates to the device</li>
-    <li>supporting NRPN-based controls</li>
+    <li>Fix: initial patch handling</li>
+    <li>expose patch("-name) in title bar</li>
+    <li>complete "Restrictions" class, ao wrt naming (and defining ranges of) parameters</li>
     <li>testing, testing, testing...  (the model + UI, but also interaction with global Edisyn features: merges, librarian, ...)</li>
-    <li>UI extensions (supporting the whole set of parameters)</li>
-    <li>UI improvement (some ideas on usability)</li>
+</ul>
+
+On the NiceToHave list we have:
+<ul>
+    <li>expose (and allow modification of ?) generic device parameters</li>
+    <li>UI improvement (some ideas to improve clarity/usability)</li>
 </ul>
 
 <p><b>Gotchas</b><br>

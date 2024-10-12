@@ -23,14 +23,8 @@ import java.util.stream.IntStream;
 import static edisyn.synth.novationastation.Mappings.*;
 
 public class NovationAStation extends Synth {
-    private static final String[] BANKS = IntStream.rangeClosed(1, 4).boxed().map(String::valueOf).toList().toArray(new String[0]);
-    private static final String[] PATCH_NUMBERS = IntStream.rangeClosed(0, 99).boxed().map(String::valueOf).toList().toArray(new String[0]);
-    private static final String[] ARP_CONDITION = { "off", "on: no latch, no keysync", "on: no latch, keysync", "on: latch, no keysync", "on: latch, keysync"};
-    private static final String[] SYNC_RATES = { "non-sync", "32T", "32", "16T", "16", "8T", "16.", "8", "4T", "8.", "4", "2T", "4.", "2", "1T", "2.",
-            "1", "2T", "1.", "2", "4T", "3", "5T", "4", "4.", "7T", "5", "8T", "6", "7", "7.", "8", "9", "10.", "12"};
-    private static final String[] ARP_RATES = SYNC_RATES;
-    private static final String[] DELAY_RATIOS = { "1-1", "4-3", "3-4", "3-2", "2-3", "2-1", "1-2", "3-1", "1-3", "4-1", "1-4", "1-0", "0-1"};
-    private static final String[] ARP_PATTERNS = { "up", "down", "updown1", "updown2", "order", "rand"};
+    private static final String[] BANKS = Restrictions.BANKS.getValues();
+    private static final String[] PATCH_NUMBERS = Restrictions.PATCH_NUMBERS.getValues();
 
     public NovationAStation() {
         // build UI

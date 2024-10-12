@@ -139,6 +139,10 @@ class Convertors {
                         | ((0x1 & model.get(ENVELOPE3_TRIGGER.getKey())) << 2)
                         | ((0xF & model.get(KEY_SYNC_PHASE.getKey())) << 3);
             }
+            @Override
+            public Restrictions getRestrictions() {
+                return Restrictions.NONE;
+            }
         },
         PACKED2 {
             @Override
@@ -164,6 +168,10 @@ class Convertors {
                 return (0x7 & model.get(UNISON_VOICES.getKey()))
                         | ((0x3 & model.get(POLYPHONY_MODE.getKey())) << 3)
                         | ((0x1 & model.get(FILTER_TYPE.getKey())) << 5);
+            }
+            @Override
+            public Restrictions getRestrictions() {
+                return Restrictions.NONE;
             }
         },
         PACKED3 {
@@ -193,6 +201,10 @@ class Convertors {
                         | ((0x3 & model.get(OSC3_WAVEFORM.getKey())) << 4)
                         | ((0x1 & model.get(PORTAMENTO_MODE.getKey())) << 6);
             }
+            @Override
+            public Restrictions getRestrictions() {
+                return Restrictions.NONE;
+            }
         },
         PACKED4 {
             @Override
@@ -221,6 +233,10 @@ class Convertors {
                         | ((0x3 & model.get(OSC3_OCTAVE.getKey())) << 4)
                         | ((0x1 & model.get(OSC2_SYNCED_BY_1.getKey())) << 6);
             }
+            @Override
+            public Restrictions getRestrictions() {
+                return Restrictions.NONE;
+            }
         },
         PACKED5 {
             @Override
@@ -248,6 +264,10 @@ class Convertors {
                         | ((0x1 & model.get(LFO2_DELAY_MULTI.getKey())) << 1)
                         | ((0x3 & model.get(LFO1_WAVEFORM.getKey())) << 2)
                         | ((0x3 & model.get(LFO2_WAVEFORM.getKey())) << 4);
+            }
+            @Override
+            public Restrictions getRestrictions() {
+                return Restrictions.NONE;
             }
         },
         PACKED6 {
@@ -281,6 +301,10 @@ class Convertors {
                         | ((0x1 & model.get(LFO2_KEY_SYNC.getKey())) << 4)
                         | ((0x1 & model.get(LFO2_LOCK.getKey())) << 5);
             }
+            @Override
+            public Restrictions getRestrictions() {
+                return Restrictions.NONE;
+            }
         },
         PACKED7 {
             @Override
@@ -311,6 +335,10 @@ class Convertors {
                         | ((0x1 & model.get(ARP_LATCH.getKey())) << 4)
                         | ((0x3 & model.get(ARP_NOTE_DESTINATION.getKey())) << 5);
             }
+            @Override
+            public Restrictions getRestrictions() {
+                return Restrictions.NONE;
+            }
         },
         PACKED8 {
             @Override
@@ -334,6 +362,10 @@ class Convertors {
             public int toSynth(Model model) {
                 return (0x7 & model.get(REVERB_TYPE.getKey()))
                         | ((0x1 & model.get(CHORUS_TYPE.getKey())) << 3);
+            }
+            @Override
+            public Restrictions getRestrictions() {
+                return Restrictions.NONE;
             }
         },
         PACKED9 {
@@ -361,6 +393,10 @@ class Convertors {
                         | ((0x3 & model.get(PANNING_GLOBAL_SYNC.getKey())) << 2)
                         | ((0x3 & model.get(EQUALIZER_GLOBAL_SYNC.getKey())) << 4);
             }
+            @Override
+            public Restrictions getRestrictions() {
+                return Restrictions.NONE;
+            }
         },
         PACKED10 {
             @Override
@@ -386,6 +422,43 @@ class Convertors {
                 return (0x4 & model.get(VOCODER_SIBILANCE_TYPE.getKey()) << 2)
                         | ((0x10 & model.get(EXT_AUDIO_TRIGGER.getKey())) << 4)
                         | ((0x20 & model.get(EXT_AUDIO_TRIGGER.getKey())) << 5);
+            }
+            @Override
+            public Restrictions getRestrictions() {
+                return Restrictions.NONE;
+            }
+        },
+        PACKED11 {
+            @Override
+            public int getByteIndex() {
+                return 127;
+            }
+            @Override
+            public Integer getCC() {
+                return null;
+            }
+            @Override
+            // undocumented !
+            public Integer getNRPN() {
+                return 26;
+            }
+            @Override
+            public void toModel(Model model, int value) {
+                model.set(OSC_SELECT.getKey(), 0x3 & value);
+                model.set(MIXER_SELECT.getKey(), 0x3 & (value >> 2));
+                model.set(PWM_SOURCE.getKey(), 0x3 & (value >> 4));
+                model.set(LFO_SELECT.getKey(), 0x1 & (value >> 6));
+            }
+            @Override
+            public int toSynth(Model model) {
+                return (0x3 & model.get(OSC_SELECT.getKey()))
+                        | ((0x3 & model.get(MIXER_SELECT.getKey())) << 2)
+                        | ((0x3 & model.get(PWM_SOURCE.getKey())) << 4)
+                        | ((0x1 & model.get(LFO_SELECT.getKey())) << 6);
+            }
+            @Override
+            public Restrictions getRestrictions() {
+                return Restrictions.NONE;
             }
         };
     }

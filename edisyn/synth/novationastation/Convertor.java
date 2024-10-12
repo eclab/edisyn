@@ -29,4 +29,7 @@ interface Convertor {
 
     // get (Midi) NRPN number
     Integer getNRPN();
+
+    // get restrictions
+    Restrictions getRestrictions();
 }

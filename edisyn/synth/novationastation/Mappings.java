@@ -10,19 +10,18 @@ import java.util.Locale;
  * Each and every entry is defining (the mapping between)
  * <ul>
  * <li>(edisyn) model key</li>
- * <li>(midi) CC</li>
  * <li>(midi) byte-index in (sysex) program dump</li>
+ * <li>(midi) CC</li>
+ * <li>(midi) NRPN</li>
  * </ul>
  *
  * <p>
  * Note we have two kind of mappings:
  * <ol>
- *     <li>the 'straight' mappings: one-to-one relationship between (Edisyn) model key and midi CC / byte-index</li>
- *     <li>the 'packed' mappings: one-to-many relationship between (Edisyn) model key and midi CC / byte-index</li>
+ *     <li>the 'straight' mappings: one-to-one relationship between (Edisyn) model key and midi parameter</li>
+ *     <li>the 'packed' mappings: one-to-many relationship between (Edisyn) model key and midi parameters</li>
  * </ol>
- *
  * </p>
- * TODO - add missing NRPN based params (and update doc)
  */
 enum Mappings {
     ////
@@ -75,7 +74,7 @@ enum Mappings {
     OSC2_PULSE_WIDTH(20, 53, null, Restrictions.CENTRIC_127),
     OSC2_LFO2_PULSE_WIDTH_MOD(21, 54, null, Restrictions.CENTRIC_127),
     OSC2_ENV2_PULSE_WIDTH_MOD(22, 55, null, Restrictions.CENTRIC_127),
-    OSC2_SYNCED_BY_1(Convertors.Packed.PACKED4),
+    OSC2_SYNCED_BY_1(Convertors.Packed.PACKED4, Restrictions.BOOLEAN),
     OSC3_OCTAVE(Convertors.Packed.PACKED4, Restrictions.OSC_OCTAVES),
     OSC3_WAVEFORM(Convertors.Packed.PACKED3, Restrictions.OSC_WAVEFORMS),
     OSC3_SEMITONE(23, 56, null, Restrictions.CENTRIC_24),
@@ -119,21 +118,20 @@ enum Mappings {
     ////
     LFO1_WAVEFORM(Convertors.Packed.PACKED5, Restrictions.LFO_WAVE_FORMS),
     LFO1_SPEED_NON_SYNC(72, 80, null),
-    LFO1_SPEED_SYNC(73, 81, null),
+    LFO1_SPEED_SYNC(73, 81, null, Restrictions.SYNC_RATES),
     LFO1_DELAY(74, 82, null),
-    LFO1_DELAY_MULTI(Convertors.Packed.PACKED5),
-    LFO1_KEY_SYNC(Convertors.Packed.PACKED6),
-    LFO1_KEY_SYNC_PHASE_SHIFT(Convertors.Packed.PACKED6),
-    // TODO - restrictions (x2)
-    LFO1_LOCK(Convertors.Packed.PACKED6),
+    LFO1_DELAY_MULTI(Convertors.Packed.PACKED5, Restrictions.BOOLEAN),
+    LFO1_KEY_SYNC(Convertors.Packed.PACKED6, Restrictions.BOOLEAN),
+    LFO1_KEY_SYNC_PHASE_SHIFT(Convertors.Packed.PACKED6, Restrictions.BOOLEAN),
+    LFO1_LOCK(Convertors.Packed.PACKED6, Restrictions.BOOLEAN),
     LFO2_WAVEFORM(Convertors.Packed.PACKED5, Restrictions.LFO_WAVE_FORMS),
     LFO2_SPEED_NON_SYNC(75, 83, null),
-    LFO2_SPEED_SYNC(76, 84, null),
+    LFO2_SPEED_SYNC(76, 84, null, Restrictions.SYNC_RATES),
     LFO2_DELAY(77, 85, null),
-    LFO2_DELAY_MULTI(Convertors.Packed.PACKED5),
-    LFO2_KEY_SYNC(Convertors.Packed.PACKED6),
-    LFO2_KEY_SYNC_PHASE_SHIFT(Convertors.Packed.PACKED6),
-    LFO2_LOCK(Convertors.Packed.PACKED6),
+    LFO2_DELAY_MULTI(Convertors.Packed.PACKED5, Restrictions.BOOLEAN),
+    LFO2_KEY_SYNC(Convertors.Packed.PACKED6, Restrictions.BOOLEAN),
+    LFO2_KEY_SYNC_PHASE_SHIFT(Convertors.Packed.PACKED6, Restrictions.BOOLEAN),
+    LFO2_LOCK(Convertors.Packed.PACKED6, Restrictions.BOOLEAN),
     ////
     // Filter (low pass)
     ////
@@ -163,14 +161,13 @@ enum Mappings {
     ////
     // ARP
     ////
-    ARP_ON_OFF(Convertors.Packed.PACKED7),
+    ARP_ON_OFF(Convertors.Packed.PACKED7, Restrictions.BOOLEAN),
     ARP_OCTAVES(Convertors.Packed.PACKED7, Restrictions.ARP_OCTAVES),
-    ARP_KEY_SYNC(Convertors.Packed.PACKED7),
-    ARP_LATCH(Convertors.Packed.PACKED7),
+    ARP_KEY_SYNC(Convertors.Packed.PACKED7, Restrictions.BOOLEAN),
+    ARP_LATCH(Convertors.Packed.PACKED7, Restrictions.BOOLEAN),
     ARP_NOTE_DESTINATION(Convertors.Packed.PACKED7, Restrictions.ARP_NOTE_DESTINATION),
-    // TODO - restrictions (x2)
-    ARP_RATE(84, 9, null),
-    ARP_SYNC(85, 87, null),
+    ARP_RATE_NON_SYNC(84, 9, null),
+    ARP_RATE_SYNC(85, 87, null, Restrictions.ARP_SYNC_RATES),
     ARP_GATE_TIME(86, 88, null),
     ARP_PATTERN(87, 3, null, Restrictions.ARP_PATTERN),
     // TODO not sure what this is, different from the one in packed7 ?
@@ -179,12 +176,10 @@ enum Mappings {
     ////
     // Effects - equalizer
     ////
-    // TODO - restrictions
-    EQUALIZER_LEVEL(92, 33, null),
+    EQUALIZER_LEVEL(92, 33, null, Restrictions.EQUALIZER_LEVEL),
     EQUALIZER_FREQUENCY(93, 34, null),
     EQUALIZER_RATE_NON_SYNC(94, 35, null),
-    // TODO - restrictions
-    EQUALIZER_RATE_SYNC(95, 36, null),
+    EQUALIZER_RATE_SYNC(95, 36, null, Restrictions.SYNC_RATES),
     EQUALIZER_MOD_DEPTH(96, 37, null),
     EQUALIZER_GLOBAL_SYNC(Convertors.Packed.PACKED9, Restrictions.EQUALIZER_GLOBAL_SYNC),
     ////
@@ -193,10 +188,10 @@ enum Mappings {
     DELAY_SEND_LEVEL(100, 92, null),
     DELAY_SEND_MODWHEEL(101, 18, null, Restrictions.CENTRIC_127),
     DELAY_TIME_NON_SYNC(102, 19, null),
-    DELAY_TIME_SYNC(103, 20, null),
+    DELAY_TIME_SYNC(103, 20, null, Restrictions.SYNC_RATES),
     DELAY_FEEDBACK(104, 21, null),
     DELAY_STEREO_WIDTH(105, 22, null),
-    DELAY_RATIO(106, 23, null),
+    DELAY_RATIO(106, 23, null, Restrictions.DELAY_RATIO),
     ////
     // Effects - chorus/flanger
     ////
@@ -204,7 +199,7 @@ enum Mappings {
     CHORUS_TYPE(Convertors.Packed.PACKED8, Restrictions.CHORUS_TYPES),
     CHORUS_SEND_MODWHEEL(111, 26, null, Restrictions.CENTRIC_127),
     CHORUS_RATE_NON_SYNC(112, 27, null),
-    CHORUS_RATE_SYNC(113, 28, null),
+    CHORUS_RATE_SYNC(113, 28, null, Restrictions.SYNC_RATES),
     CHORUS_FEEDBACK(114, 29, null),
     CHORUS_MOD_DEPTH(115, 30, null),
     CHORUS_MOD_CENTRE_POINT(116, 31, null),
@@ -236,7 +231,7 @@ enum Mappings {
     PANNING_POSITION(117, 10, null, Restrictions.CENTRIC_127),
     PANNING_MOD_DEPTH(120, 94, null),
     PANNING_RATE_NON_SYNC(118, 12, null),
-    PANNING_RATE_SYNC(119, 13, null),
+    PANNING_RATE_SYNC(119, 13, null, Restrictions.SYNC_RATES),
     PANNING_GLOBAL_SYNC(Convertors.Packed.PACKED9, Restrictions.PANNING_GLOBAL_SYNC),
     ////
     // various
@@ -246,12 +241,13 @@ enum Mappings {
     // program volume - stored in patch
     PROGRAM_VOLUME(125, 119, null, Restrictions.CENTRIC_24),
     // CC7: Device volume (non-patch related; not stored within patch)
-    // let's ignore next, not available in dump, not very usefull either
+    // for now, let's ignore next, not available in dump, not very useful either
     // DEVICE_VOLUME(null, 7),
+    OSC_SELECT(Convertors.Packed.PACKED11),
+    MIXER_SELECT(Convertors.Packed.PACKED11),
+    PWM_SOURCE(Convertors.Packed.PACKED11),
+    LFO_SELECT(Convertors.Packed.PACKED11)
     ;
-
-    // TODO - introduce NRPNS real time controls
-    // NOTE: looks like (non-documented) Packed11convertor is coming in via NRPN 26
 
     ////
     // FYI - CC voids/ignores
@@ -272,6 +268,8 @@ enum Mappings {
     // CC99, CC100, CC101-> NA
     // CC113 -> NA
 
+    // NOTE: looks like (non-documented) Packed11convertor is coming in via NRPN 26
+
     // key(s) as used in the Synth Model, typically containing single element, will contain multiple elements for packed parameters
     private final String key;
     // Convertor
@@ -289,7 +287,7 @@ enum Mappings {
     }
 
     Mappings(Convertor convertor) {
-        this(convertor, Restrictions.NONE);
+        this(convertor, convertor.getRestrictions());
     }
 
     Mappings(Convertor convertor, Restrictions restrictions) {
@@ -360,6 +358,11 @@ enum Mappings {
         @Override
         public Integer getNRPN() {
             return nrpn;
+        }
+
+        @Override
+        public Restrictions getRestrictions() {
+            return Restrictions.NONE;
         }
     }
 }

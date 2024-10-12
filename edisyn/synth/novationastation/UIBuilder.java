@@ -6,6 +6,7 @@ import edisyn.gui.*;
 import javax.swing.*;
 import java.awt.*;
 import java.util.List;
+import java.util.Objects;
 
 import static edisyn.gui.Style.COLOR_GLOBAL;
 import static edisyn.synth.novationastation.Mappings.*;
@@ -33,7 +34,7 @@ public class UIBuilder {
         generalPanel.add(vbox, BorderLayout.CENTER);
         synth.addTab("General", generalPanel);
 
-        // Envelope, LFO, ARP PANEL
+        // Envelope, LFO, Filter PANEL
         JComponent envelopeLfoFilterPanel = new SynthPanel(synth);
         vbox = new VBox();
         vbox.add(addEnvelope(1, Style.COLOR_A()));
@@ -44,7 +45,6 @@ public class UIBuilder {
         hbox.addLast(addLFO(2, Style.COLOR_B()));
         vbox.add(hbox);
         vbox.add(addFilter(Style.COLOR_C()));
-        //vbox.add(addArp(Style.COLOR_D()));
         envelopeLfoFilterPanel.add(vbox, BorderLayout.CENTER);
         synth.addTab("Envs, LFOs, Filter", envelopeLfoFilterPanel);
 
@@ -53,8 +53,8 @@ public class UIBuilder {
         vbox = new VBox();
         vbox.add(addARP(Style.COLOR_A()));
         hbox = new HBox();
-        hbox.add(addDelay(Style.COLOR_B()));
-        hbox.addLast(addReverb(Style.COLOR_C()));
+        hbox.add(addReverb(Style.COLOR_C()));
+        hbox.addLast(addDelay(Style.COLOR_B()));
         vbox.add(hbox);
         hbox = new HBox();
         hbox.add(addChorus(Style.COLOR_A()));
@@ -165,7 +165,7 @@ public class UIBuilder {
         hbox.add(createLabelledDial(List.of("bendwheel", "depth"), Mappings.find("OSC%d_BENDWHEEL_AMOUNT", osc), color));
         hbox.add(createLabelledDial(List.of("modenv", "depth"), Mappings.find("OSC%d_ENV2_DEPTH", osc), color));
         hbox.add(createLabelledDial(List.of("lfo1", "depth"), Mappings.find("OSC%d_LFO1_DEPTH", osc), color));
-        // TODO - add support for 'pwm source' (and related)
+        // TODO - add support for 'pwm source' (and related) - first find out how exactly that is working
         hbox.add(createLabelledDial("PW", Mappings.find("OSC%d_PULSE_WIDTH", osc), color));
         hbox.add(createLabelledDial(List.of("modenv", "PW depth"), Mappings.find("OSC%d_ENV2_PULSE_WIDTH_MOD", osc), color));
         hbox.add(createLabelledDial(List.of("lfo2", "PW depth"), Mappings.find("OSC%d_LFO2_PULSE_WIDTH_MOD", osc), color));
@@ -320,8 +320,8 @@ public class UIBuilder {
         vbox.add(createChooser("note destination", ARP_NOTE_DESTINATION));
         hbox.add(vbox);
 
-        hbox.add(createLabelledDial("sync", ARP_SYNC, color));
-        hbox.add(createLabelledDial("rate", ARP_RATE, color));
+        hbox.add(createLabelledDial(List.of("rate", "(sync)"), ARP_RATE_SYNC, color));
+        hbox.add(createLabelledDial(List.of("rate", "(non-sync)"), ARP_RATE_NON_SYNC, color));
         hbox.add(createLabelledDial("pattern", ARP_PATTERN, color));
         hbox.add(createLabelledDial("gate time", ARP_GATE_TIME, color));
 
@@ -343,7 +343,7 @@ public class UIBuilder {
         hbox.add(createLabelledDial("feedback", DELAY_FEEDBACK, color));
 
         // TODO - dropdown here ? or different dial ?
-        hbox.add(createLabelledDial("ratio", DELAY_RATIO, color));
+        hbox.add(createLabelledDial(List.of("ratio", "(L-R)"), DELAY_RATIO, color));
         hbox.add(createLabelledDial(List.of("stereo", "width"), DELAY_STEREO_WIDTH, color));
 
         category.add(hbox);
@@ -505,10 +505,26 @@ public class UIBuilder {
     }
 
     private LabelledDial createLabelledDial(List<String> labels, Mappings mappings, Color color) {
+        // sanity
+        if (Objects.requireNonNull(labels).isEmpty()) {
+            throw new IllegalStateException("at least one label required");
+        }
         Restrictions restrictions = mappings.getRestrictions();
         LabelledDial result = new LabelledDial(labels.get(0), synth,
                 mappings.getKey(),
-                color, restrictions.getMin(), restrictions.getMax(), restrictions.getOffset());
+                color, restrictions.getMin(), restrictions.getMax(), restrictions.getOffset()) {
+            public String map(int val) {
+                String[] values = restrictions.getValues();
+                if (values != null && values.length != 0) {
+                    if (val >= restrictions.getMin() && val <= restrictions.getMax()) {
+                        return restrictions.getValues()[val];
+                    } else {
+                        System.err.println("ignoring val " + val + " for " + mappings.name());
+                    }
+                }
+                return String.valueOf(val - restrictions.getOffset());
+            }
+        };
         for (int index = 1; index < labels.size(); ++index) {
             result.addAdditionalLabel(labels.get(index));
         }
@@ -516,6 +532,10 @@ public class UIBuilder {
     }
 
     private JComponent createCheckBox(String label, Mappings mappings) {
+        // sanity
+        if (mappings.getRestrictions() != Restrictions.BOOLEAN) {
+            throw new IllegalStateException("only boolean allowed for checkbox");
+        }
         return new CheckBox(label, synth, mappings.getKey());
     }
 }

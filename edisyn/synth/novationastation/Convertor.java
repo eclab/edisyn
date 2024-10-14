@@ -2,34 +2,33 @@ package edisyn.synth.novationastation;
 
 import edisyn.Model;
 
-import java.util.List;
+import java.util.OptionalInt;
 
 /**
  * interface defining conversion of data between
  * <ul>
  *     <li>(edisyn) model</li>
- *     <li>(Midi) CC</li>
- *     <li>(Midi-SysEx) byteIndex</li>
+ *     <li>(MIDI) CC</li>
+ *     <li>(MIDI) NRPN</li>
+ *     <li>(MIDI-SysEx) byteIndex</li>
  * </ul>
- *
- * dev note: useful to add validation on values in different implementations ? (ref Restrictions set in the model)
  */
 interface Convertor {
-    // update model for a given value (coming from CC or byteIndex)
+    // update model for a given value (coming from CC, NRPN or byteIndex)
     void toModel(Model model, int value);
 
-    // extract value from model (to be used in CC or byteIndex).
+    // extract value from model (to be used in CC, NRPN or byteIndex).
     int toSynth(Model model);
 
-    // get (Midi-SysEx) byteIndex
-    int getByteIndex();
+    // get (MIDI-SysEx) byteIndex
+    OptionalInt getByteIndex();
 
-    // get (Midi) CC number
-    Integer getCC();
+    // get (MIDI) CC number
+    OptionalInt getCC();
 
-    // get (Midi) NRPN number
-    Integer getNRPN();
+    // get (MIDI) NRPN number
+    OptionalInt getNRPN();
 
     // get restrictions
-    Restrictions getRestrictions();
+    Boundaries getRestrictions();
 }

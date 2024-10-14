@@ -937,8 +937,15 @@ public class Midi
 
         // The controllerValueLSB is either a valid LSB or it is  (-1).
         int[] controllerValueLSB = new int[16];
-  
 
+
+        /*
+         * Note:
+         * The midi spec specifies that a receiver should wait until it receives both LSB and MSB for a parameter (to ensure it
+         * is operating on the correct parameter), hence discourages transmitters not to send both. However, it also specifies the receiver
+         * should be able to respond accordingly if the transmitter is only sending LSB of MSB...
+         * Case: The Novation A Station is only sending the LSB for NRPN; that seems to be by design (explicitely documented in the manual)
+         */
         // we presume that the channel never changes
         CCData parseCC(int channel, int number, int value, boolean requireLSB, boolean requireMSB)
             {

@@ -4,6 +4,7 @@ import edisyn.Model;
 
 import java.util.Map;
 import java.util.Optional;
+import java.util.OptionalInt;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -12,7 +13,14 @@ import static edisyn.synth.novationastation.Mappings.*;
 
 /**
  * Registry of all available Convertors.
- * This registry is build from the <code>Mappings</code> enum
+ * This registry is (statically) build from the <code>Mappings</code> enum
+ *
+ * As a side effect of this, it additionally validates the <code>Mappings</code> to ensure there are no double
+ * usages defined for each and every(edisyn) model key and (MIDI) CC, NRPN, (sysex) byte index
+ *
+ * @see Mappings
+ *
+ * TODO room for code improvement/reorg here (refactor code, introducing base class, generalize implementation...)
  */
 class Convertors {
     // get convertor for a given (Edisyn model) key, Optional.empty if none
@@ -20,21 +28,20 @@ class Convertors {
         return BY_KEY.containsKey(key) ? Optional.of(BY_KEY.get(key)) : Optional.empty();
     }
 
-    // get convertor for a given (Midi SysEx dataDump) byteIndex, Optional.empty if none
+    // get convertor for a given (MIDI SysEx dataDump) byteIndex, Optional.empty if none
     static Optional<Convertor> getByIndex(int cc) {
         return BY_INDEX.containsKey(cc) ? Optional.of(BY_INDEX.get(cc)) : Optional.empty();
     }
 
-    // get convertor for a given (Midi) cc, Optional.empty if none
+    // get convertor for a given (MIDI) CC, Optional.empty if none
     static Optional<Convertor> getByCC(int cc) {
         return BY_CC.containsKey(cc) ? Optional.of(BY_CC.get(cc)) : Optional.empty();
     }
 
-    // get convertor for a given (Midi) cc, Optional.empty if none
+    // get convertor for a given (MIDI) NRPN, Optional.empty if none
     static Optional<Convertor> getByNRPN(int nrpn) {
         return BY_NRPN.containsKey(nrpn) ? Optional.of(BY_NRPN.get(nrpn)) : Optional.empty();
     }
-
 
     private static final Map<String, Convertor> BY_KEY = buildKeyMap();
     private static final Map<Integer, Convertor> BY_INDEX = buildIndexMap();
@@ -58,9 +65,9 @@ class Convertors {
     private static Map<Integer, Convertor> buildIndexMap() {
         return Stream.of(Mappings.values())
                 .map(Mappings::getConvertor)
-//                .filter(convertor -> convertor.getByteIndex() != null)
+                .filter(convertor -> convertor.getByteIndex().isPresent())
                 .collect(Collectors.toUnmodifiableMap(
-                        Convertor::getByteIndex,
+                        convertor -> convertor.getByteIndex().getAsInt(),
                         Function.identity(),
                         (convertor1, convertor2) -> {
                             if (convertor1 != convertor2) {
@@ -74,9 +81,9 @@ class Convertors {
     private static Map<Integer, Convertor> buildCCMap() {
         return Stream.of(Mappings.values())
                 .map(Mappings::getConvertor)
-                .filter(convertor -> convertor.getCC() != null)
+                .filter(convertor -> convertor.getCC().isPresent())
                 .collect(Collectors.toUnmodifiableMap(
-                        Convertor::getCC,
+                        convertor -> convertor.getCC().getAsInt(),
                         Function.identity(),
                         (convertor1, convertor2) -> {
                             if (convertor1 != convertor2) {
@@ -90,9 +97,9 @@ class Convertors {
     private static Map<Integer, Convertor> buildNRPNMap() {
         return Stream.of(Mappings.values())
                 .map(Mappings::getConvertor)
-                .filter(convertor -> convertor.getNRPN() != null)
+                .filter(convertor -> convertor.getNRPN().isPresent())
                 .collect(Collectors.toUnmodifiableMap(
-                        Convertor::getNRPN,
+                        convertor -> convertor.getNRPN().getAsInt(),
                         Function.identity(),
                         (convertor1, convertor2) -> {
                             if (convertor1 != convertor2) {
@@ -108,22 +115,20 @@ class Convertors {
      * enum defining some predefined (so-called packed) convertors
      * These convertors are handling data where different parameters are combined (as in: 'packed') in a single value
      * The definition of these convertors are solely driven by the A-Station specification
-     *
-     * TODO room for improvement here (refactor code, base class, ...)
      */
     enum Packed implements Convertor {
         PACKED1 {
             @Override
-            public int getByteIndex() {
-                return 80;
+            public OptionalInt getByteIndex() {
+                return OptionalInt.of(80);
             }
             @Override
-            public Integer getCC() {
-                return 65;
+            public OptionalInt getCC() {
+                return OptionalInt.of(65);
             }
             @Override
-            public Integer getNRPN() {
-                return null;
+            public OptionalInt getNRPN() {
+                return OptionalInt.empty();
             }
             @Override
             public void toModel(Model model, int value) {
@@ -140,22 +145,22 @@ class Convertors {
                         | ((0xF & model.get(KEY_SYNC_PHASE.getKey())) << 3);
             }
             @Override
-            public Restrictions getRestrictions() {
-                return Restrictions.NONE;
+            public Boundaries getRestrictions() {
+                return Boundaries.NONE;
             }
         },
         PACKED2 {
             @Override
-            public int getByteIndex() {
-                return 0;
+            public OptionalInt getByteIndex() {
+                return OptionalInt.of(0);
             }
             @Override
-            public Integer getCC() {
-                return 67;
+            public OptionalInt getCC() {
+                return OptionalInt.of(67);
             }
             @Override
-            public Integer getNRPN() {
-                return null;
+            public OptionalInt getNRPN() {
+                return OptionalInt.empty();
             }
             @Override
             public void toModel(Model model, int value) {
@@ -170,22 +175,22 @@ class Convertors {
                         | ((0x1 & model.get(FILTER_TYPE.getKey())) << 5);
             }
             @Override
-            public Restrictions getRestrictions() {
-                return Restrictions.NONE;
+            public Boundaries getRestrictions() {
+                return Boundaries.NONE;
             }
         },
         PACKED3 {
             @Override
-            public int getByteIndex() {
-                return 5;
+            public OptionalInt getByteIndex() {
+                return OptionalInt.of(5);
             }
             @Override
-            public Integer getCC() {
-                return 70;
+            public OptionalInt getCC() {
+                return OptionalInt.of(70);
             }
             @Override
-            public Integer getNRPN() {
-                return null;
+            public OptionalInt getNRPN() {
+                return OptionalInt.empty();
             }
             @Override
             public void toModel(Model model, int value) {
@@ -202,22 +207,22 @@ class Convertors {
                         | ((0x1 & model.get(PORTAMENTO_MODE.getKey())) << 6);
             }
             @Override
-            public Restrictions getRestrictions() {
-                return Restrictions.NONE;
+            public Boundaries getRestrictions() {
+                return Boundaries.NONE;
             }
         },
         PACKED4 {
             @Override
-            public int getByteIndex() {
-                return 6;
+            public OptionalInt getByteIndex() {
+                return OptionalInt.of(6);
             }
             @Override
-            public Integer getCC() {
-                return 71;
+            public OptionalInt getCC() {
+                return OptionalInt.of(71);
             }
             @Override
-            public Integer getNRPN() {
-                return null;
+            public OptionalInt getNRPN() {
+                return OptionalInt.empty();
             }
             @Override
             public void toModel(Model model, int value) {
@@ -234,22 +239,22 @@ class Convertors {
                         | ((0x1 & model.get(OSC2_SYNCED_BY_1.getKey())) << 6);
             }
             @Override
-            public Restrictions getRestrictions() {
-                return Restrictions.NONE;
+            public Boundaries getRestrictions() {
+                return Boundaries.NONE;
             }
         },
         PACKED5 {
             @Override
-            public int getByteIndex() {
-                return 78;
+            public OptionalInt getByteIndex() {
+                return OptionalInt.of(78);
             }
             @Override
-            public Integer getCC() {
-                return 78;
+            public OptionalInt getCC() {
+                return OptionalInt.of(78);
             }
             @Override
-            public Integer getNRPN() {
-                return null;
+            public OptionalInt getNRPN() {
+                return OptionalInt.empty();
             }
             @Override
             public void toModel(Model model, int value) {
@@ -266,22 +271,22 @@ class Convertors {
                         | ((0x3 & model.get(LFO2_WAVEFORM.getKey())) << 4);
             }
             @Override
-            public Restrictions getRestrictions() {
-                return Restrictions.NONE;
+            public Boundaries getRestrictions() {
+                return Boundaries.NONE;
             }
         },
         PACKED6 {
             @Override
-            public int getByteIndex() {
-                return 79;
+            public OptionalInt getByteIndex() {
+                return OptionalInt.of(79);
             }
             @Override
-            public Integer getCC() {
-                return 79;
+            public OptionalInt getCC() {
+                return OptionalInt.of(79);
             }
             @Override
-            public Integer getNRPN() {
-                return null;
+            public OptionalInt getNRPN() {
+                return OptionalInt.empty();
             }
             @Override
             public void toModel(Model model, int value) {
@@ -302,22 +307,22 @@ class Convertors {
                         | ((0x1 & model.get(LFO2_LOCK.getKey())) << 5);
             }
             @Override
-            public Restrictions getRestrictions() {
-                return Restrictions.NONE;
+            public Boundaries getRestrictions() {
+                return Boundaries.NONE;
             }
         },
         PACKED7 {
             @Override
-            public int getByteIndex() {
-                return 88;
+            public OptionalInt getByteIndex() {
+                return OptionalInt.of(88);
             }
             @Override
-            public Integer getCC() {
-                return 89;
+            public OptionalInt getCC() {
+                return OptionalInt.of(89);
             }
             @Override
-            public Integer getNRPN() {
-                return null;
+            public OptionalInt getNRPN() {
+                return OptionalInt.empty();
             }
             @Override
             public void toModel(Model model, int value) {
@@ -336,22 +341,22 @@ class Convertors {
                         | ((0x3 & model.get(ARP_NOTE_DESTINATION.getKey())) << 5);
             }
             @Override
-            public Restrictions getRestrictions() {
-                return Restrictions.NONE;
+            public Boundaries getRestrictions() {
+                return Boundaries.NONE;
             }
         },
         PACKED8 {
             @Override
-            public int getByteIndex() {
-                return 121;
+            public OptionalInt getByteIndex() {
+                return OptionalInt.of(121);
             }
             @Override
-            public Integer getCC() {
-                return null;
+            public OptionalInt getCC() {
+                return OptionalInt.empty();
             }
             @Override
-            public Integer getNRPN() {
-                return 21;
+            public OptionalInt getNRPN() {
+                return OptionalInt.of(21);
             }
             @Override
             public void toModel(Model model, int value) {
@@ -364,22 +369,22 @@ class Convertors {
                         | ((0x1 & model.get(CHORUS_TYPE.getKey())) << 3);
             }
             @Override
-            public Restrictions getRestrictions() {
-                return Restrictions.NONE;
+            public Boundaries getRestrictions() {
+                return Boundaries.NONE;
             }
         },
         PACKED9 {
             @Override
-            public int getByteIndex() {
-                return 122;
+            public OptionalInt getByteIndex() {
+                return OptionalInt.of(122);
             }
             @Override
-            public Integer getCC() {
-                return null;
+            public OptionalInt getCC() {
+                return OptionalInt.empty();
             }
             @Override
-            public Integer getNRPN() {
-                return 22;
+            public OptionalInt getNRPN() {
+                return OptionalInt.of(22);
             }
             @Override
             public void toModel(Model model, int value) {
@@ -394,22 +399,22 @@ class Convertors {
                         | ((0x3 & model.get(EQUALIZER_GLOBAL_SYNC.getKey())) << 4);
             }
             @Override
-            public Restrictions getRestrictions() {
-                return Restrictions.NONE;
+            public Boundaries getRestrictions() {
+                return Boundaries.NONE;
             }
         },
         PACKED10 {
             @Override
-            public int getByteIndex() {
-                return 123;
+            public OptionalInt getByteIndex() {
+                return OptionalInt.of(123);
             }
             @Override
-            public Integer getCC() {
-                return null;
+            public OptionalInt getCC() {
+                return OptionalInt.empty();
             }
             @Override
-            public Integer getNRPN() {
-                return 23;
+            public OptionalInt getNRPN() {
+                return OptionalInt.of(23);
             }
             @Override
             public void toModel(Model model, int value) {
@@ -426,23 +431,23 @@ class Convertors {
                         | ((0x2 & model.get(EXT_AUDIO_TRIGGER.getKey())) << 5);
             }
             @Override
-            public Restrictions getRestrictions() {
-                return Restrictions.NONE;
+            public Boundaries getRestrictions() {
+                return Boundaries.NONE;
             }
         },
         PACKED11 {
             @Override
-            public int getByteIndex() {
-                return 127;
+            public OptionalInt getByteIndex() {
+                return OptionalInt.of(127);
             }
             @Override
-            public Integer getCC() {
-                return null;
+            public OptionalInt getCC() {
+                return OptionalInt.empty();
             }
             @Override
             // NOTE - (undocumented) NRPN 26 used forPACKED 11 !
-            public Integer getNRPN() {
-                return 26;
+            public OptionalInt getNRPN() {
+                return OptionalInt.of(26);
             }
             @Override
             public void toModel(Model model, int value) {
@@ -459,8 +464,8 @@ class Convertors {
                         | ((0x1 & model.get(LFO_SELECT.getKey())) << 6);
             }
             @Override
-            public Restrictions getRestrictions() {
-                return Restrictions.NONE;
+            public Boundaries getRestrictions() {
+                return Boundaries.NONE;
             }
         };
     }

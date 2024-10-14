@@ -75,6 +75,7 @@ Edisyn presently supports:
 * Korg Wavestation SR (Performance, Patch, and Wave Sequence Modes)
 * Korg Volca Series (Joint editor for Bass, Beats, Drum Single, Drum Split, FM, Keys, Kick, NuBass, Sample/Sample2 Multi, Sample2 Single, /u/pajen firmware)
 * M-Audio Venom (Single, Multi, Arpeggiator, and Global Modes)
+* Novation A Station
 * Novation Drumstation and D Station
 * Novation ReMOTE SL, SL MKII, and SL Compact Series
 * Oberheim Matrix 6, 6R, and 1000 (Single and (for 1000) Global Modes) 

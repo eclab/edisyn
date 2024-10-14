@@ -85,6 +85,7 @@ Edisyn is a no-nonsense synthesizer patch editor and librarian for the editing a
 \item Korg Wavestation SR (Performance, Patch, and Wave Sequence)
 \item JL Cooper MSB Plus and MSB Plus Rev 2
 \item M-Audio Venom (Single, Multimode, Arp, and Global)
+\item Novation A Station
 \item Novation Drumstation and D Station
 \item Novation SL, SL MKii, and SL Compact Series
 \item Oberheim Matrix 6, 6R, and 1000 (Single and (for 1000) Global)
@@ -401,7 +402,7 @@ Mapping a parameter is easy:
 \begin{itemize}
 \item {\bf Absolute CC}\quad  The value of the CC sent is exactly what the parameter will be set to (between 0...127).  To map, choose {\bf Map CC/NRPN} in the {\bf Map} menu.  This style is particularly useful for potentiometers or sliders.  You are not permitted to map CC numbers 6, 38, 98, 99, 100, or 101, or Edisyn will think you're sending NRPN.  So you only have 121 CCs to play with.
 \item {\bf Relative CC}\quad  Here, the CC value you send indicates how much to {\it add to} or {\it subtract from} the existing parameter value.\footnote{Specifically, a value \(x=64\) means 0 (add nothing), a value \(x<64\) means to subtract \(64-x\) from the current value, and a value \(x>64\) means to add \(x - 64\) to the current value.}  This style is supported by a number of controllers and is useful for encoders.\footnote{You could also map a pair of pushbuttons to be up/down cursors using this method: set up the ``down'' pushbutton to send 63 and the ``up'' pushbutton to send 65.}   For example, the Novation controller series calls this ``REL1'' or ``REL2''\footnote{The difference being that in REL2 mode, if you spin the encoder rapidly, the amount added/subtracted is nonlinearly more than expected, whereas in REL1 the speed doesn't matter, all that matters is how far the encoder was turned.  Novation controllers also have a relative CC mode called ``APOT'', which is not supported.}, and the BeatStep calls this ``Relative 1''.\footnote{The Beatstep also has relative CC modes called ``Relative 2'' and ``Relative 3'', which are not supported.}  To map, choose {\bf Map Relative CC} in the {\bf Map} menu.  Again, you're not permitted to map CC numbers 6, 38, 98, 99, 100, or 101.
-%\item {\bf Relative CC ``0''}\quad  Here, the CC value you send again indicates how much to {\it add to} or {\it subtract from} the existing parameter value.   In this form of Relative ŒCC, 0 means 0 (add nothing), a high value \(64<x<128\) means to subtract \(128-x\) from the current value, and a low value \(0>x\geq64\) means to add \(x\) to the current value.   This style is also supported by a number of controllers and is useful for encoders.  To map, choose {\bf Map Relative CC[0]} in the {\bf Map} menu.
+%\item {\bf Relative CC ``0''}\quad  Here, the CC value you send again indicates how much to {\it add to} or {\it subtract from} the existing parameter value.   In this form of Relative ï¿½CC, 0 means 0 (add nothing), a high value \(64<x<128\) means to subtract \(128-x\) from the current value, and a low value \(0>x\geq64\) means to add \(x\) to the current value.   This style is also supported by a number of controllers and is useful for encoders.  To map, choose {\bf Map Relative CC[0]} in the {\bf Map} menu.
 \item {\bf NRPN}\quad You can map any NRPN parameter.  The value of the CC sent is exactly what the parameter will be set to: all 14 bits.  If your controller can only send 7-bit NRPN, then you should configure it to send ``Fine'' or ``LSB-only''.  Edisyn also supports the NRPN Increment and Decrement options, though those are rarely supported by hardware.  To  map, choose {\bf Map CC/NRPN} in the {\bf Map} menu.  
 \end{itemize}
 
@@ -1122,6 +1123,7 @@ Korg SG Rack&&&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}& &{\cm}\\
 Korg Volca Series&{\cm}*&& & & & &  &  &         \\
 Korg Wavestation SR&{\cm}&&{\cm}&{\cm}*&{\cm}*&{\cm}&{\cm}*& &{\cm}\\
 M-Audio Venom&{\cm}&&{\cm}*&{\cm}&{\cm}*&{\cm}*&{\cm}*&{\cm}&{\cm}*\\
+Novation A Station&&&&&{\cm}*&{\cm}*& & &{\cm}          \\
 Novation Drumstation/D Station&&&&&{\cm}*&{\cm}*& & &{\cm}          \\
 Novation SL&&&&&{\cm}&{\cm}&&&{\cm}*	\\
 Oberheim Matrix 1000&{\cm}&{\cm}&{\cm}& &{\cm}*&{\cm}& & &{\cm}          \\

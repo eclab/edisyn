@@ -1,40 +1,35 @@
 <html><head></head><body>
 <h1>Novation A-Station</h1>
-<h2>Patch Editor - Still under development</h2>
+<h2>Patch Editor - Initial version</h2>
 
 <p>This is an editor for the <b>Novation A-Station</b>.<br>
-It is developed and tested with the latest available firmware, being '2.1.2'
+It is developed and tested with the latest available firmware, being '2.1.2
 
 <p><b>Communicating with Edisyn</b><br>
 <ul>
     <li>Set Edisyn's MIDI channel to the same as your synth's MIDI channel.</li>
-    <li>If you want to store patches, ensure the "Global Memory Protect" is OFF on the synth.</li>
+    <li>If you want to store patches, make sure the "Global Memory Protect" is OFF on the synth.</li>
 </ul>
 
 <p><b>Other Interesting Facts</b><br>
-This editor is still under development and not feature complete.<br>
-The current version does support all basic patch + parameter handling:
+The current version supports all basic patch + parameter handling:
 <ul>
-    <li>load current/given/next patch</li>
     <li>supporting all parameters (from both the hardware knobs/switches, but also the menu's)</li>
     <li>supporting realtime control (both directions)</li>
+    <li>load current/given/next patch</li>
     <li>write to current/given path</li>
 </ul>
 
 On the TODO list we still have:
 <ul>
-    <li>test/verify the "category.makePasteable"</li>
-    <li>(implementing +) testing other integrations with Edisyn: merges, librarian, ...)</li>
+    <li>(howto) add edisyn librarian support</li>
 </ul>
 
 On the NiceToHave list we have:
 <ul>
-    <li>expose (and allow modification of ?) generic device parameters</li>
-    <li>UI improvement (some ideas to improve clarity/usability)</li>
+    <li>(convenience) provide tab/controls for device specific settings (non patch related): "master tune", "midi clock source", ...</li>
+    <li>UI improvement (disable controls when not applicable, some ideas to improve clarity/usability, ...</li>
 </ul>
-
-<p><b>Gotchas</b><br>
-<i>To be completed - none so far</i>
 
 <p><table border=0 cellpadding=0 cellspacing=5>
 <tr>

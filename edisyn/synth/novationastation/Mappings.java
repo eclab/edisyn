@@ -59,8 +59,7 @@ enum Mappings {
     OSC1_WAVEFORM(Convertors.Packed.PACKED3, Boundaries.OSC_WAVEFORMS),
     OSC1_SEMITONE(7, 40, null, Boundaries.CENTRIC_24),
     OSC1_DETUNE(8, 41, null, Boundaries.CENTRIC_100),
-    // TODO - verify restrictions (x3)
-    OSC1_BENDWHEEL_AMOUNT(9, 42, null, Boundaries.CENTRIC_127),
+    OSC1_BENDWHEEL_AMOUNT(9, 42, null, Boundaries.CENTRIC_24),
     OSC1_LFO1_DEPTH(10, 43, null, Boundaries.CENTRIC_127),
     OSC1_ENV2_DEPTH(11, 44, null, Boundaries.CENTRIC_127),
     OSC1_PULSE_WIDTH(12, 45, null, Boundaries.CENTRIC_127),
@@ -70,7 +69,7 @@ enum Mappings {
     OSC2_WAVEFORM(Convertors.Packed.PACKED3, Boundaries.OSC_WAVEFORMS),
     OSC2_SEMITONE(15, 48, null, Boundaries.CENTRIC_24),
     OSC2_DETUNE(16, 49, null, Boundaries.CENTRIC_100),
-    OSC2_BENDWHEEL_AMOUNT(17, 50, null, Boundaries.CENTRIC_127),
+    OSC2_BENDWHEEL_AMOUNT(17, 50, null, Boundaries.CENTRIC_24),
     OSC2_LFO1_DEPTH(18, 51, null, Boundaries.CENTRIC_127),
     OSC2_ENV2_DEPTH(19, 52, null, Boundaries.CENTRIC_127),
     OSC2_PULSE_WIDTH(20, 53, null, Boundaries.CENTRIC_127),
@@ -81,7 +80,7 @@ enum Mappings {
     OSC3_WAVEFORM(Convertors.Packed.PACKED3, Boundaries.OSC_WAVEFORMS),
     OSC3_SEMITONE(23, 56, null, Boundaries.CENTRIC_24),
     OSC3_DETUNE(24, 57, null, Boundaries.CENTRIC_100),
-    OSC3_BENDWHEEL_AMOUNT(25, 58, null, Boundaries.CENTRIC_127),
+    OSC3_BENDWHEEL_AMOUNT(25, 58, null, Boundaries.CENTRIC_24),
     OSC3_LFO1_DEPTH(26, 59, null, Boundaries.CENTRIC_127),
     OSC3_ENV2_DEPTH(27, 60, null, Boundaries.CENTRIC_127),
     OSC3_PULSE_WIDTH(28, 61, null, Boundaries.CENTRIC_127),
@@ -172,9 +171,8 @@ enum Mappings {
     ARP_RATE_SYNC(85, 87, null, Boundaries.ARP_SYNC_RATES),
     ARP_GATE_TIME(86, 88, null),
     ARP_PATTERN(87, 3, null, Boundaries.ARP_PATTERN),
-    // TODO not sure what this is, different from the one in packed7 ?
-    // byteindex = null ?
-//    ARP_LATCH_ON_MOMENTARY(null, 64, null),
+    // TODO not sure what this is, ARP latch by sustain pedal perhaps ?
+    // ARP_LATCH_ON_MOMENTARY(null, 64, null),
     ////
     // Effects - equalizer
     ////

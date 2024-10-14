@@ -34,7 +34,10 @@ class UIBuilder {
         vbox.add(createOscillator(2, Style.COLOR_B()));
         vbox.add(createOscillator(3, Style.COLOR_B()));
         vbox.add(createAmpAndPitchModulation(Style.COLOR_C()));
-        vbox.add(createMixer(Style.COLOR_A()));
+        hbox = new HBox();
+        hbox.add(createMixer(Style.COLOR_A()));
+        hbox.addLast(createExtAudio(Style.COLOR_B()));
+        vbox.add(hbox);
         generalPanel.add(vbox, BorderLayout.CENTER);
         synth.addTab("General", generalPanel);
 
@@ -55,20 +58,22 @@ class UIBuilder {
         // ARP, EFFECTS PANEL
         JComponent arpEffectsPanel = new SynthPanel(synth);
         vbox = new VBox();
-        vbox.add(createARP(Style.COLOR_A()));
         hbox = new HBox();
-        hbox.add(createReverb(Style.COLOR_C()));
-        hbox.addLast(createDelay(Style.COLOR_B()));
+        hbox.add(createARP(Style.COLOR_A()));
+        hbox.addLast(createVocoder(Style.COLOR_B()));
         vbox.add(hbox);
         hbox = new HBox();
-        hbox.add(createChorus(Style.COLOR_A()));
-        hbox.addLast(createDistortion(Style.COLOR_B()));
+        hbox.add(createDelay(Style.COLOR_C()));
+        hbox.addLast(createReverb(Style.COLOR_A()));
         vbox.add(hbox);
         hbox = new HBox();
-        hbox.add(createEqualizer(Style.COLOR_C()));
-        hbox.addLast(createPan(Style.COLOR_A()));
+        hbox.add(createChorus(Style.COLOR_B()));
+        hbox.addLast(createDistortion(Style.COLOR_C()));
         vbox.add(hbox);
-        vbox.add(createVocoder(Style.COLOR_B()));
+        hbox = new HBox();
+        hbox.add(createEqualizer(Style.COLOR_A()));
+        hbox.addLast(createPan(Style.COLOR_B()));
+        vbox.add(hbox);
 
         arpEffectsPanel.add(vbox, BorderLayout.CENTER);
         synth.addTab("ARP, Effects", arpEffectsPanel);
@@ -149,8 +154,6 @@ class UIBuilder {
 
     private JComponent createOscillator(final int osc, Color color) {
         Category category = new Category(synth, "Oscillator " + osc, color);
-        // TODO - to be tested/verified
-        // category.makePasteable("osc");
 
         HBox hbox = new HBox();
 
@@ -183,7 +186,7 @@ class UIBuilder {
 
     private JComponent createMixer(Color color)
     {
-        Category category = new Category(synth, "Mixer", color);
+        Category category = new Category(synth, "Mixer (to filter)", color);
 
         HBox hbox = new HBox();
         hbox.add(createLabelledDial("osc1", MIXER_OSC1, color));
@@ -191,8 +194,21 @@ class UIBuilder {
         hbox.add(createLabelledDial("osc3", MIXER_OSC3, color));
         hbox.add(createLabelledDial("noise", MIXER_NOISE, color));
         hbox.add(createLabelledDial(List.of("1*2", "ring"), MIXER_RING_MOD, color));
-        hbox.add(createLabelledDial(List.of("external", "input"), MIXER_EXTERNAL, color));
+        hbox.add(createLabelledDial(List.of("external", "audio"), MIXER_EXTERNAL, color));
 
+        category.add(hbox, BorderLayout.CENTER);
+        return category;
+    }
+
+    private JComponent createExtAudio(Color color)
+    {
+        Category category = new Category(synth, "External Audio", color);
+
+        HBox hbox = new HBox();
+        VBox vbox = new VBox();
+        vbox.add(createCheckBox("external audio trigger", EXT_AUDIO_TRIGGER));
+        vbox.add(createCheckBox("external audio direct to FX", EXT_AUDIO_TO_FX));
+        hbox.add(vbox);
         category.add(hbox, BorderLayout.CENTER);
         return category;
     }
@@ -235,8 +251,6 @@ class UIBuilder {
     {
         String categoryName = envelope == 1 ? "Amp" : (envelope == 2 ? "Mod" : "FM");
         Category category = new Category(synth, categoryName + " Envelope", color);
-        // TODO - to be tested/verified
-        // category.makePasteable("env");
 
         HBox hbox = new HBox();
         VBox vbox = new VBox();
@@ -283,8 +297,6 @@ class UIBuilder {
 
     private JComponent createLFO(final int lfo, Color color) {
         Category category = new Category(synth, "LFO " + lfo, color);
-        // TODO - to be tested/verified
-        //category.makePasteable("lfo");
 
         HBox hbox = new HBox();
         VBox vbox = new VBox();

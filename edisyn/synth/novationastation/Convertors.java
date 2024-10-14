@@ -420,15 +420,19 @@ class Convertors {
             public void toModel(Model model, int value) {
                 // NOTE: unlike documented: bit 4 (iso 3)
                 model.set(VOCODER_SIBILANCE_TYPE.getKey(), 0x1 & value >> 3);
-                model.set(EXT_AUDIO_TRIGGER.getKey(), 0x1 & (value >> 4));
-                model.set(EXT_AUDIO_TO_FX.getKey(), 0x1 & (value >> 5));
+                // NOTE: unlike documented: bit 6 (iso 5)
+                model.set(EXT_AUDIO_TRIGGER.getKey(), 0x1 & (value >> 5));
+                // NOTE: unlike documented: bit 7 (iso 6)
+                model.set(EXT_AUDIO_TO_FX.getKey(), 0x1 & (value >> 6));
             }
             @Override
             public int toSynth(Model model) {
                 // NOTE: unlike documented: bit 4 (iso 3)
                 return ((0x1 & model.get(VOCODER_SIBILANCE_TYPE.getKey())) << 3)
-                        | ((0x1 & model.get(EXT_AUDIO_TRIGGER.getKey())) << 4)
-                        | ((0x2 & model.get(EXT_AUDIO_TRIGGER.getKey())) << 5);
+                        // NOTE: unlike documented: bit 6 (iso 5)
+                        | ((0x1 & model.get(EXT_AUDIO_TRIGGER.getKey())) << 5)
+                        // NOTE: unlike documented: bit 7 (iso 6)
+                        | ((0x1 & model.get(EXT_AUDIO_TRIGGER.getKey())) << 6);
             }
             @Override
             public Boundaries getRestrictions() {

@@ -392,6 +392,7 @@ public class UIBuilder {
         Category category = new Category(synth, "distortion", color);
         HBox hbox = new HBox();
 
+        hbox.add(createLabelledDial(List.of("send", "level"), DISTORTION_LEVEL, color));
         hbox.add(createLabelledDial("modwheel", DISTORTION_MODWHEEL, color));
         hbox.add(createLabelledDial("compensation", DISTORTION_COMPENSATION, color));
 

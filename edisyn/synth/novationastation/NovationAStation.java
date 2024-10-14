@@ -5,32 +5,27 @@
 
 package edisyn.synth.novationastation;
 
-import edisyn.Librarian;
 import edisyn.Midi;
 import edisyn.Model;
 import edisyn.Synth;
-import edisyn.gui.*;
+import edisyn.gui.SelectedTextField;
 import edisyn.util.StringUtility;
 
-import javax.sound.midi.MidiMessage;
 import javax.sound.midi.ShortMessage;
 import javax.swing.*;
-import java.awt.*;
 import java.util.Optional;
 import java.util.OptionalInt;
-import java.util.stream.IntStream;
-
-import static edisyn.synth.novationastation.Mappings.*;
 
 public class NovationAStation extends Synth {
     private static final String[] BANKS = Restrictions.BANKS.getValues();
     private static final String[] PATCH_NUMBERS = Restrictions.PATCH_NUMBERS.getValues();
 
-    public NovationAStation() {
+    public NovationAStation()
+    {
         // build UI
         new UIBuilder(this).build();
 
-        loadDefaults();                 // this tells Edisyn to load the ".init" sysex file you created.  If you haven't set that up, it won't bother
+        loadDefaults();
     }
 
     ////// BELOW ARE DEFAULT IMPLEMENTATIONS OF COMMON HOOK METHODS THAT SYNTH EDITORS IMPLEMENT OR OVERRIDE.
@@ -143,11 +138,14 @@ public class NovationAStation extends Synth {
         bank.setMaximumRowCount(4);
 
         int currentBank = model.get("bank");     // 0..3
-        if (-1 != currentBank) {
+        if (currentBank >= 0 && currentBank <= 3) {
             bank.setSelectedIndex(currentBank);
         }
 
         int currentPatch = model.get("number");
+        currentPatch = Math.min(currentPatch, 99);
+        currentPatch = Math.max(currentPatch, 0);
+
         JTextField number = new SelectedTextField(String.valueOf(currentPatch), 3);
 
         while (true) {
@@ -217,16 +215,18 @@ public class NovationAStation extends Synth {
 
             byte programBank = data[11];    // 1..4
             byte programNumber = data[12];  // 0..99
-            if (programBank != 0) {
+            if (programBank >= 1 && programBank <= 4) {
                 programBank--;  // zero-indexed in model
                 model.set("bank", programBank); // 0..3 in model
                 model.set("number", programNumber);
+            } else {
+                model.set("bank", -1);
+                model.set("number", -1);
             }
 
-
-        // TODO - to be extended, for now supporting:
-            // 0 : current sound dump
-            // 1 : program sound dump
+            // TODO - to be extended, for now supporting:
+            // 0x0 : current sound dump
+            // 0x1 : program sound dump
             byte messageType = data[7];
             if (messageType == 0x0 || messageType == 0x01) {
                 for (int index = 13; index < 13 + 128; ++index) {
@@ -259,27 +259,21 @@ public class NovationAStation extends Synth {
 
     @Override
     public String getPatchLocationName(Model model) {
-            if (model.exists("bank") && model.exists("number")) {
-                String bankName = BANKS[model.get("bank")];
-                int program = model.get("number");
-                return String.format("%s%02d", bankName, program);
-            }
-            return "...";
+        int bank = model.get("bank");
+        int number = model.get("number");
+        if (bank >= 0 && bank <= 3 && number >= 0 && number <= 99) {
+            String bankName = BANKS[bank];
+            return String.format("%s%02d", bankName, number);
         }
-
-    @Override
-    public Model getFirstPatchLocation()
-        {
-            Model newModel = buildModel();
-            newModel.set("bank", 0);
-            newModel.set("number", 0);
-            return newModel;
-        }
+        return null;
+    }
 
     @Override
     public Model getNextPatchLocation(Model model) {
-        int bank = model.get("bank", 0);
-        int program = model.get("number", -1);
+        int bank = model.get("bank");
+        bank = Math.max(bank, 0);
+        bank = Math.min(bank, 3);
+        int program = model.get("number");
         int programindex = bank * 100 + program;
         ++programindex;
         bank = (programindex / 100) % 4;
@@ -357,47 +351,21 @@ public class NovationAStation extends Synth {
         }
 
     @Override
-    public byte[] requestDump(Model tempModel) {
-        // request specific program dump
+    public byte[] requestCurrentDump() {
         // TODO - constant here
-        byte messageType = 0x41;
+        byte messageType = 0x40; // request current sound dump
+        return new byte[] { (byte)0xF0, 0x00, 0x20, 0x29, 0x01, 0x40, 0x7F, messageType, 0x00, 0x00, 0x00, 0x00, 0x00, (byte)0xF7 };
+    }
+
+    @Override
+    public byte[] requestDump(Model tempModel) {
+        // TODO - constant here
+        byte messageType = 0x41; // request specific program dump
         // tempModel supposed to have valid bank+program
         byte bank = (byte) (1 + tempModel.get("bank")); // 1..4 (while in model: 0..3)
         byte program = (byte) tempModel.get("number");
         return new byte[] { (byte)0xF0, 0x00, 0x20, 0x29, 0x01, 0x40, 0x7F, messageType, 0x00, 0x00, 0x00, bank, program, (byte)0xF7 };
     }
-
-    @Override
-    public byte[] requestCurrentDump() {
-        // request current sound dump
-        // TODO - constant here
-        byte messageType = 0x40;
-        return new byte[] { (byte)0xF0, 0x00, 0x20, 0x29, 0x01, 0x40, 0x7F, messageType, 0x00, 0x00, 0x00, 0x00, 0x00, (byte)0xF7 };
-    }
-
-
-    ////// YOU MAY WANT TO IMPLEMENT SOME OF THE FOLLOWING
-    // TODO - TBI
-//    public static boolean recognizeBulk(byte[] data)
-//        {
-//        // This method should return TRUE if the data is correct sysex data for a
-//        // a *bulk* patch (that is, multi-patch) dump to your kind of synthesizer,
-//        // and so you can receive it via parse() along with single-patch dumps.
-//        //
-//        // Notice that this is a STATIC method -- but you need to implement it
-//        // anyway.  Edisyn will call the right static version using reflection magic.
-//        //
-//        // You don't have to implement this method -- it will return false by default --
-//        // but you DO have to implement its complement, the recognize(data) method.
-//        //
-//        // Note that if you implement recognizeBulk(data), then in your parse(...)
-//        // method you may need to do something with the data.  A good idea is to
-//        // offer to either (1) upload the sysex to the synth (2) save the sysex to a file
-//        // or (3) select a patch from the sysex to edit -- or (4) cancel.  This is
-//        // the approach taken in the DX7 patch editor and you could implement it that
-//        // way, just steal code from there.
-//        return false;
-//        }
 
     @Override
     public void parseParameter(byte[] data)
@@ -428,13 +396,6 @@ public class NovationAStation extends Synth {
         }
     }
 
-    private String toString(Midi.CCData data) {
-        return "CCData {number:" +
-                data.number + ", value:" + data.value + ", type:" + data.type +
-                "}";
-    }
-
-
     public JFrame sprout()
         {
         // This is a great big method in Synth.java, and handles building the JFrame and
@@ -446,56 +407,6 @@ public class NovationAStation extends Synth {
         return super.sprout();
         }
 
-    public boolean adjustBulkSysexForWrite(Synth window, byte[][][] data)
-        {
-        // Before a bank sysex file is emitted to a synthesizer, you're given the 
-        // chance to modify the sysex messages, typically to modify the channel or ID.
-        // If you return false, then the write is canceled.  The data arranged as:
-        // byte[patch][sysexmessage][bytes], that is, each patch can have multiple
-        // sysex messages, each of which is some number of bytes.  The provided
-        // synthesizer is *not* the synthesizer for the data (that's you).  Instead, it
-        // allows you to properly pop up a confirm dialog centered at the given window.
-        // That's all it should be used for.
-        return true;
-        }
-                 
-    public Object adjustBankSysexForEmit(byte[] data, Model model)
-        {
-        // Before a bank sysex file is emitted to a synthesizer, you're given the 
-        // chance to adjust the data, typically to modify the channel or ID
-        return data;
-        }
-                 
-    public JComponent getAdditionalBankSysexOptionsComponents(byte[] data, String[] names)
-        {
-        // Before asking the user what he wants to do with a bank sysex file, this method
-        // is called to provide an additional JComponent you can sneak in the dialog.
-        // You might use the results of this JComponent to inform what you modify in
-        // adjustBankSysexForEmit.  It's a rare need though.  By default we return null.
-        return null; 
-        }
- 
-    public boolean setupBatchStartingAndEndingPatches(Model startPatch, Model endPatch)
-        {
-        // This method normally queries the user for start and end patch numbers/banks to
-        // use for batch downloading, then sets those patch numbers/banks in the given models,
-        // and returns true, else false if the user canceled the operation.  In rare cases 
-        // you may need to customize this, such as to hard-code the start and end patch.
-        // Otherwise, don't override it.
-        return super.setupBatchStartingAndEndingPatches(startPatch, endPatch);
-        }
-
-    public int getNumberOfPastes()
-        {  
-        // Override this method to force Edisyn to paste multiple times to the same category or tab.
-        // The reason you might want to do this is because Edisyn uses the *receiving* category to 
-        // determine the parameters to paste to, and if this category contains components which dynamically
-        // appear or disappear, it might require multiple pastes to cause them to appear and eventually
-        // receive parameter changes.  The default returns DEFAULT_PASTES (3), which is fine for all
-        // current editors.
-        return DEFAULT_PASTES; 
-        }
-        
         public boolean testVerify(Synth synth2, String key, Object obj1, Object obj2)
         {
         // The edisyn.test.SanityCheck class performs sanity-checks on synthesizer classes
@@ -519,165 +430,7 @@ public class NovationAStation extends Synth {
         // Return TRUE if the message is acceptable and should be ignored, else false.  
         return false;
         }
-
-
-
-
-    ////// LIBRARIAN SUPPORT
-    //////
-    ////// You will need to override some of these methods in order to support the librarian
-    ////// working properly with your patch editor.  If you do not intend to permit the librarian
-    ////// then you do not need to override any of them except possibly getUpdatesListenersOnDownload(),
-    ////// which also affects batch downloads in general.
-
-
-    /** Return a list of all patch number names, such as "1", "2", "3", etc.
-        Default is null, which indicates that the patch editor does not support librarians.  */
-    @Override
-    public String[] getPatchNumberNames() {
-        return PATCH_NUMBERS;
-    }
-
-    @Override
-    public String[] getBankNames() {
-        return BANKS;
-    }
-
-//    public boolean[] getWriteableBanks()
-//        {
-//        // This should return a list of booleans, one per bank, indicating if the
-//        // bank is writeable.  You may not return null here: if getBankNames() returned null,
-//        // then you should return { true } or { false } as appropriate.  The default form
-//        // returns an array that is all true.
-//        //
-//        // Synth.buildBankBooleans(...) is a useful utility method for building this array
-//        // for you if you don't want to implement it by hand.
-//        return super.getWriteableBanks();
-//        }
-
-    public boolean getSupportsPatchWrites()
-        {
-        // Return true if the synth can receive and store individual patch writes (to actual
-        // patch RAM, NOT sends to current working memory).  The default is false.
-        //
-        // Either this method, or getSupportsBankWrites(), or both, should be true if you are
-        // supporting a librarian.
-        return false; 
-        }
-
-    public boolean getSupportsBankWrites() 
-        { 
-        // Return true if the synth can receive and store bank writes.  The default is false.
-        //
-        // Either this method, or getSupportsPatchWrites(), or both, should be true if you are
-        // supporting a librarian.
-        return false; 
-        }
-
-    public boolean getSupportsBankReads() 
-        { 
-        // Return true if the synth can dump bank messages that your editor can read.  By default
-        // this just returns whatever getSupportsBankWrites() returned.  However it is possible
-        // that your editor can READ banks from the synth even if it cannot WRITE banks to the synth
-        // and must instead write individual patches.  In this case getSupportsBankWrites() might
-        // return false but getSupportsBankReads() would return true.
-        return getSupportsBankWrites(); 
-        }
-
-    public boolean getSupportsDownloads() 
-        {
-        // Return true if the synth can respond to requests to download individual or bank patches.
-        // If you return false, Edisyn won't permit users to attempt a download.  By default,
-        // true is returned.
-        return true; 
-        }
-
-    public int getPatchNameLength() 
-        {
-        return 3;
-        }
-
-//    public String reviseBankName(String name)
-//        {
-//        // Given a name for a bank, revises it to a valid name.  By default, this method
-//        // returns null, which indicates that bank names may not be revised.  There is only
-//        // one synthesizer supported by Edisyn which permits revised bank names at present:
-//        // The Yamaha FB-01.
-//        //
-//        // Note that this method has an evil twin in your recognizer class.  See
-//        // BlankRec.getBankName(...)
-//        return null;
-//        }
-    
-    public boolean isValidPatchLocation(int bank, int num) 
-        {
-        // Returns TRUE if the given bank and patch number define a valid patch location.  A valid
-        // location is one that actually exists.
-        //
-        // The reason for this method is that some synthesizers have banks with different lengths.
-        // For example, the Casio CZ-230s has fewer patches (4) in its final bank than in others (8).
-        // Similarly, the Proteus 2000 has ragged banks -- some have 128 patches, some have 512 patches,
-        // some have 1024 patches, and so on. In other cases, certain kinds of synthsizers permit more 
-        // patches in banks than other synthesizers of the same family, but must share the same sysex 
-        // files.  In these cases, Edisyn permits patches to be placed into "invalid" slots (defined by
-        // this method), and saved to files from them, but not written to synthesizers from those locations.
-        //
-        // The bank values passed in will always be between 0 and the number of banks (minus 1) inclusive.
-        // Similarly the patch numbers passed in will always be between 0 and getPatchNumberNames() - 1
-        // inclusive.  By default this method always returns true, which is in most cases correct.
-        return bank >= 0 && bank <= 3 && num >= 0 && num <= 99;
-        }
-        
-    public boolean isAppropriatePatchLocation(int bank, int num)
-        {
-        // Returns TRUE if the given bank and patch number define an "appropriate" patch location.  An
-        // "appropriate" location is one from which the the user is encouraged to upload and download from.
-        //
-        // For example, the Proteus 2000 has many "banks" corresponding to ROM SIMM Cards -- almost 20 of
-        // them -- but only our cards can exist in a machine at a time.  Edisyn allows the user to load
-        // and save those "banks" to/from disk even if he oes not have them installed on his machine --
-        // he can even attempt to upload/download from them but it would be stupid to do so.  In this case
-        // we merely want to color the patches as warning, not prevent the user from doing what he wants
-        // The difference beween "appropriate" locaations and "valid" locations is that whether a location
-        // is "appropriate" may depend on the particular configuration of the synth (among many possible
-        // configurations), where as "invalid" locations are *always* invalid.
-        //
-        /// The bank values passed in will always be between 0 and the number of banks (minus 1)
-        // inclusive. Similarly the patch numbers passed in will always be between 0 and
-        // getPatchNumberNames() - 1 inclusive.  By default this method always returns true, which is
-        // in most cases correct.
-            return bank >= 0 && bank <= 3 && num >= 0 && num <= 99;
-        }
-
-//    public int getValidBankSize(int bank)
-//        {
-//        // Returns the actual number of valid patches in the bank (see isValidPatchLocation(...)).
-//        // By default this is just the "standard" bank size as returned by getPatchNumberNames().length,
-//        // indicated with a -1.
-//        return -1;
-//
-//        // A simple but stupid O(n) way to compute this would be:
-//        //
-//        //String[] s = getPatchNumberNames();
-//        //if (s == null) return 0;
-//        //int valid = 0;
-//        //for(int i = 0; i < s.length; i++)
-//        //      {
-//        //      if (isValidPatchLocation(bank, i))
-//        //              valid++;
-//        //      }
-//        //return valid;
-//        }
-    
-    public boolean getUpdatesListenersOnDownload() 
-        {
-        // Returns true if we should disable updating listeners on batch downloads.  This is 
-        // normally only done for very large patch editors such as YamahaFS1RFseq, where 
-        // such updating is extremely costly/slow or creates memory leaks.  By default, returns true.
-        return true; 
-        } 
-    
-    public boolean librarianTested() 
+   public boolean librarianTested()
         {
         // Override this method to return true to indicate that the librarian for this
         // editor has been tested reasonably well and no longer requires a warning to the
@@ -685,144 +438,17 @@ public class NovationAStation extends Synth {
         return false; 
         }
 
-    public byte[] requestAllDump() 
-        { 
-        // Returns a sysex message to request all patches from the synthesizer.  If your synthesizer
-        // does not support this kind of request, this method should return null (the default).
-        // This method is meant for synthesizers with multiple banks.  If the synthesizer has a 
-        // single bank, and you support bank sysex messages (see below),
-        // then you instead should override requestBankDump() instead.
-        //
-        // Edisyn can support all-patches dump requests in which the synthesizer responds by dumping
-        // each patch individually.  If the synthesizer responds by dumping banks as bank messages,
-        // this will cause Edisyn to ask the user, each time, where the bank should go, which isn't
-        // great.  So if your synth only provides all-patches dump requests with bank responses
-        // (and I don't know of any that do), get ahold of me first -- Sean.
-        return null; 
-        }
-    
-    public void librarianCreated(Librarian librarian) 
-        {
-        // This is simply a hook to let your Synth know that its Librarian has been created.
-        // The Proteus 2000 editor uses this to rearrange the Librarian's columns. 
-        }
-        
-        
-
-    //// THE NEXT SIX METHODS WOULD ONLY BE IMPLEMENTED WHEN BANK SYSEX MESSAGES ARE SUPPORTED.
-    ////
-    //// YOU WILL ALSO NEED TO IMPLEMENT BANK SYSEX HANDLING IN parseAll(Model, ...) AND ALSO
-    //// RECOGNIZE BANK SYSEX IN YOUR PATCH EDITOR RECOGNIZER CLASS. ALSO YOU CAN THEORETICALLY
-    //// IMPLEMENT requestBankDump() EVEN IF YOU DON'T SUPPORT BANK SYSEX.
-
-    public int parseFromBank(byte[] bankSysex, int number) 
-        {
-        // Given a bank sysex message, and a patch number, parses that patch from the
-        // bank sysex data, and returns PARSE_SUCCEEDED or PARSE_FAILED.  The default is to
-        // return PARSE_FAILED.  This method only needs to be implemented if your patch
-        // editor supports bank reads (see documentation for getSupportsBankReads()
-        // and getSupportsBankWrites())
-        return PARSE_FAILED; 
-        }
-
-    public int getBank(byte[] bankSysex) 
-        { 
-        // Given a bank sysex message, returns the bank number of the given bank, else 
-        // -1 if there is no number indicated.  The default is to return -1.
-        // This method only needs to be implemented if your patch
-        // editor supports bank reads (see documentation for getSupportsBankReads()
-        // and getSupportsBankWrites())
-        return -1; 
-        }
-
-    public int[] getBanks(byte[] bankSysex) 
-        { 
-        // Given a bank sysex message, returns the bank numbers of the banks in the message,
-        // else null if there are no numbers indicated for them.  The default calls
-        // getBank(...) and returns null if it returned -1, else returns an array consisting
-        // of the getBank(...) value.  Normally you wouldn't override this method, it's only
-        // needed for unusual synths which return more than one bank in a single bank message
-        // (such as the Waldorf MicroWave).
-        return super.getBanks(bankSysex); 
-        }
-
-    public Object[] emitBank(Model[] models, int bank, boolean toFile) 
-        { 
-        // Builds a set of models collectively comprising one bank's worth of patches,
-        // and a bank number, emits sysex and MIDI messages meant to write this bank
-        // as a collective bank message.  The objects which may be placed in the Object[]
-        // are the same as those returned by emitAll().   This method only needs to be 
-        // implemented, if your patch editor supports bank reads (see documentation for 
-        // getSupportsBankReads() and getSupportsBankWrites()).  By default an empty
-        // array is returned.
-        return new Object[0]; 
-        }
-    
-    public int getPauseAfterWriteBank() 
-        {
-        // Returns the pause, in milliseconds, after writing a bank sysex message
-        // to the synthesizer.  By default this returns the value of 
-        // getPauseAfterWritePatch();   This method only needs to be implemented 
-        // if your patch editor supports bank reads (see documentation for 
-        // getSupportsBankReads() and getSupportsBankWrites()).
-        return getPauseAfterWritePatch(); 
-        }    
-    
-    public byte[] requestBankDump(int bank) 
-        { 
-        // Returns a sysex message to request a given bank dump.  If your synthesizer
-        // does not permit bank dump requests, return null (the default).   This method 
-        // only needs to be implemented, if at all,
-        // if your patch editor supports bank reads (see documentation for 
-        // getSupportsBankReads() and getSupportsBankWrites()).
-        //
-        // It's reasonsble for the synth to respond to a dump request of this kind by
-        // sending all patches one by one or by sending a bank sysex.
-        return null; 
-        }
-
-    public int getRequestableBank() 
-        {
-        // Some synths (such Yamaha 4-op) can request individual patches from any bank, but
-        // can only request a single bank via a bank sysex message provided in requestBankDump().
-        // This method returns that bank, or -1 if any bank can be requested via requestBankDump().
-        // The default is -1.  This method only needs to be method if your patch editor supports
-        // bank reads (see documentation for getSupportsBankReads() and getSupportsBankWrites()) 
-        // and also bank requests (via requestBankDump()).
-        return -1; 
-        }
-
-    public Object[] startingBatchEmit(int bank, int start, int end, boolean toFile) 
-        { 
-        // Called before a series of patches are being emitted from the librarian 
-        // (as opposed to a single patch from the Editor).  This might give your editor
-        // a chance to add something to the beginning of the data.  For
-        // example, the ASM Hydrasynth requires that a header sysex command be
-        // sent before a stream of batch dumps.  You can determine if 
-        // a series of patches is being emitted during emit() by calling isEmittingBatch(). 
-        // Note that this method is NOT called if a bank is being emitted via a bank sysex message.
-        // See also stoppingBatchDownload() and startingBatchDownload()
-        return new Object[0]; 
-        }
-
-    public Object[] stoppingBatchEmit(int bank, int start, int end, boolean toFile) 
-        { 
-        // Called after a series of patches are being emitted from the librarian 
-        // (as opposed to a single patch from the Editor).  This might give your editor
-        // a chance to add something to the beginning of the data.  For
-        // example, the ASM Hydrasynth requires that a header sysex command be
-        // sent before a stream of batch dumps.  You can determine if 
-        // a series of patches is being emitted during emit() by calling isEmittingBatch(). 
-        // Note that this method is NOT called if a bank is being emitted via a bank sysex message.
-        // See also stoppingBatchDownload() and startingBatchDownload()
-        return new Object[0]; 
-        }
-
-    //// END BANK SYSEX SUPPORT
-
-    private String parseVersion(byte swVersion, byte swIncrement) {
+    private String parseVersion(byte swVersion, byte swIncrement)
+    {
         int major = (swVersion >> 3);
         int minor = swVersion & 0x7;
         return major + "." + minor + "." + swIncrement;
+    }
+
+    private String toString(Midi.CCData data)
+    {
+        return "CCData {number:" +
+                data.number + ", value:" + data.value + ", type:" + data.type +
+                "}";
     }
 }

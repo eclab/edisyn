@@ -6,17 +6,25 @@
 It is developed and tested with the latest available firmware, being '2.1.2'
 
 <p><b>Communicating with Edisyn</b><br>
-Set Edisyn's MIDI channel to the same as your synth's MIDI channel
+<ul>
+    <li>Set Edisyn's MIDI channel to the same as your synth's MIDI channel.</li>
+    <li>If you want to store patches, ensure the "Global Memory Protect" is OFF on the synth.</li>
+</ul>
 
 <p><b>Other Interesting Facts</b><br>
 This editor is still under development and not feature complete.<br>
+The current version does support all basic patch + parameter handling:
+<ul>
+    <li>load current/given/next patch</li>
+    <li>supporting all parameters (from both the hardware knobs/switches, but also the menu's)</li>
+    <li>supporting realtime control (both directions)</li>
+    <li>write to current/given path</li>
+</ul>
 
 On the TODO list we still have:
 <ul>
-    <li>Fix: initial patch handling</li>
-    <li>expose patch("-name) in title bar</li>
-    <li>complete "Restrictions" class, ao wrt naming (and defining ranges of) parameters</li>
-    <li>testing, testing, testing...  (the model + UI, but also interaction with global Edisyn features: merges, librarian, ...)</li>
+    <li>expose patch("-name") in title bar</li>
+    <li>(implementing +) testing other integrations with Edisyn: merges, librarian, ...)</li>
 </ul>
 
 On the NiceToHave list we have:
@@ -26,7 +34,7 @@ On the NiceToHave list we have:
 </ul>
 
 <p><b>Gotchas</b><br>
-<i>To be completed</i>
+<i>To be completed - none so far</i>
 
 <p><table border=0 cellpadding=0 cellspacing=5>
 <tr>

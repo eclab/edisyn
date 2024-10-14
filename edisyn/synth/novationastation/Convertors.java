@@ -413,15 +413,17 @@ class Convertors {
             }
             @Override
             public void toModel(Model model, int value) {
-                model.set(VOCODER_SIBILANCE_TYPE.getKey(), 0x4 & value >> 2);
-                model.set(EXT_AUDIO_TRIGGER.getKey(), 0x10 & (value >> 4));
-                model.set(EXT_AUDIO_TO_FX.getKey(), 0x20 & (value >> 5));
+                // NOTE: unlike documented: bit 4 (iso 3)
+                model.set(VOCODER_SIBILANCE_TYPE.getKey(), 0x1 & value >> 3);
+                model.set(EXT_AUDIO_TRIGGER.getKey(), 0x1 & (value >> 4));
+                model.set(EXT_AUDIO_TO_FX.getKey(), 0x1 & (value >> 5));
             }
             @Override
             public int toSynth(Model model) {
-                return (0x4 & model.get(VOCODER_SIBILANCE_TYPE.getKey()) << 2)
-                        | ((0x10 & model.get(EXT_AUDIO_TRIGGER.getKey())) << 4)
-                        | ((0x20 & model.get(EXT_AUDIO_TRIGGER.getKey())) << 5);
+                // NOTE: unlike documented: bit 4 (iso 3)
+                return ((0x1 & model.get(VOCODER_SIBILANCE_TYPE.getKey())) << 3)
+                        | ((0x1 & model.get(EXT_AUDIO_TRIGGER.getKey())) << 4)
+                        | ((0x2 & model.get(EXT_AUDIO_TRIGGER.getKey())) << 5);
             }
             @Override
             public Restrictions getRestrictions() {
@@ -438,7 +440,7 @@ class Convertors {
                 return null;
             }
             @Override
-            // undocumented !
+            // NOTE - (undocumented) NRPN 26 used forPACKED 11 !
             public Integer getNRPN() {
                 return 26;
             }

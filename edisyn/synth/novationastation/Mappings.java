@@ -214,8 +214,8 @@ enum Mappings {
     ////
     // Effects - distortion
     ////
-    // TODO - no (documented) realtime control for distortion level ?
-    DISTORTION_LEVEL(97, null, null),
+    // NOTE - (undocumented) CC 90: realtime control for distortion level !
+    DISTORTION_LEVEL(97, 90, null),
     DISTORTION_MODWHEEL(98, 16, null, Restrictions.CENTRIC_127),
     DISTORTION_COMPENSATION(99, 17, null),
     ////
@@ -243,6 +243,7 @@ enum Mappings {
     // CC7: Device volume (non-patch related; not stored within patch)
     // for now, let's ignore next, not available in dump, not very useful either
     // DEVICE_VOLUME(null, 7),
+
     OSC_SELECT(Convertors.Packed.PACKED11),
     MIXER_SELECT(Convertors.Packed.PACKED11),
     PWM_SOURCE(Convertors.Packed.PACKED11),
@@ -262,7 +263,7 @@ enum Mappings {
     // CC38, 39 -> NA
     // CC66 -> NA
     // CC86 -> NA
-    // CC90 -> NA
+    // CC90 -> NA (according to doc, however used for distortion level in practice)
     // CC96, 97 -> NA
     // CC98 NRPN number
     // CC99, CC100, CC101-> NA

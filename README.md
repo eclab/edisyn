@@ -51,7 +51,7 @@ Edisyn is a synthesizer patch editor library written in pure Java.   It runs on 
 
 Edisyn is particularly good at exploring the space of patches.  It has to my knowledge the most sophisticated set of general-purpose patch-exploration tools of any patch editor available.
 
-<a name="support"/>
+<a name="support"/></name>
 
 Edisyn presently supports:
 

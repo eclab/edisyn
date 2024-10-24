@@ -21,6 +21,7 @@
 edisyn.synth.alesisd4.AlesisD4	Alesis	Alesis D4 / DM5
 edisyn.synth.asmhydrasynth.ASMHydrasynth	ASM	ASM Hydrasynth
 edisyn.synth.audiothingiesmicromonsta.AudiothingiesMicroMonsta	Audiothingies	Audiothingies MicroMonsta
+edisyn.synth.behringerubxa.BehringerUBXa	Behringer	Behringer UB-Xa
 edisyn.synth.casiocz.CasioCZ	Casio	Casio CZ
 edisyn.synth.dsiprophet08.DSIProphet08	DSI / Sequential	DSI Prophet '08 / Tetra / Mopho
 edisyn.synth.dsiprophet08.DSITetraCombo	DSI / Sequential	DSI Tetra [Combo]

@@ -1,12 +1,13 @@
 package edisyn.synth.novationastation;
 
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public enum Boundaries implements Boundary {
     // non param related
-    BANKS(IntStream.rangeClosed(1, 4).boxed().map(String::valueOf).toList()),
-    PATCH_NUMBERS(IntStream.rangeClosed(0, 99).boxed().map(String::valueOf).toList()),
+    BANKS(IntStream.rangeClosed(1, 4).boxed().map(String::valueOf).collect(Collectors.toList())),
+    PATCH_NUMBERS(IntStream.rangeClosed(0, 99).boxed().map(String::valueOf).collect(Collectors.toList())),
     // param-related: some are generic
     NONE(0, 127),
     CENTRIC_24(52, 76, 64),
@@ -47,7 +48,7 @@ public enum Boundaries implements Boundary {
             return "HP_" + i;
         }
         return "FLAT";
-    }).toList());
+    }).collect(Collectors.toList()));
 
     private final int min;
     private final int max;

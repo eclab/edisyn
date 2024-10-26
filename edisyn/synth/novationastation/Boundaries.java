@@ -37,9 +37,11 @@ public enum Boundaries implements Boundary {
     EQUALIZER_GLOBAL_SYNC("off", "low", "mid", "high"),
     CHORUS_GLOBAL_SYNC("off", "left", "center", "right"),
     PANNING_GLOBAL_SYNC(CHORUS_GLOBAL_SYNC),
-    SYNC_RATES("NA", "32T", "32", "16T", "16", "8T", "16D", "8", "4T", "8D", "4", "2T", "4D", "2", "1T", "2D",
-                       "1", "2T", "1D", "2", "4T", "3", "5T", "4", "4D", "7T", "5", "8T", "6", "7", "7D", "8", "9", "10D", "12"),
-    ARP_SYNC_RATES(List.of(SYNC_RATES.values).subList(0, 17).toArray(new String[0])),
+    SYNC_RATES("NA", "32t", "32", "16t", "16", "8t", "16D", "8", "4t", "8d", "4", "2t", "4d", "2", "1t", "2d",
+                       "1b", "2t", "1d", "2b", "4t", "3b", "5t", "4b", "3d", "7t", "5b", "8t", "6b", "7b", "5d", "8b", "9b", "7d", "12"),
+    DELAY_SYNC_RATES(List.of(SYNC_RATES.values).subList(0, 20).toArray(new String[0])),
+    ARP_SYNC_RATES(List.of(SYNC_RATES.values).subList(1, 17).toArray(new String[0])),
+    ARP_NON_SYNC_RATES(0, 127, -64), // 64 -> 191 BPM
     DELAY_RATIO("1-1", "4-3", "3-4", "3-2", "2-3", "2-1", "1-2", "3-1", "1-3", "4-1", "1-4", "1-0", "0-1"),
     EQUALIZER_LEVEL(IntStream.rangeClosed(0, 127).boxed().map(i -> {
         if (i < 64) {

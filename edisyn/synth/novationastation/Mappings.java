@@ -90,7 +90,7 @@ enum Mappings {
     // FM (osc2 to osc3)
     ////
     FM_FIXED_LEVEL(56, null, 0),
-    FM_ENVELOPE_DEPTH(57, null, 1),
+    FM_ENVELOPE_DEPTH(57, null, 1, Boundaries.CENTRIC_127),
     ////
     // Envelopes
     // - envelope1=amplitude envelope (ADSR)
@@ -167,7 +167,7 @@ enum Mappings {
     ARP_KEY_SYNC(Convertors.Packed.PACKED7, Boundaries.BOOLEAN),
     ARP_LATCH(Convertors.Packed.PACKED7, Boundaries.BOOLEAN),
     ARP_NOTE_DESTINATION(Convertors.Packed.PACKED7, Boundaries.ARP_NOTE_DESTINATION),
-    ARP_RATE_NON_SYNC(84, 9, null),
+    ARP_RATE_NON_SYNC(84, 9, null, Boundaries.ARP_NON_SYNC_RATES),
     ARP_RATE_SYNC(85, 87, null, Boundaries.ARP_SYNC_RATES),
     ARP_GATE_TIME(86, 88, null),
     ARP_PATTERN(87, 3, null, Boundaries.ARP_PATTERN),
@@ -188,7 +188,7 @@ enum Mappings {
     DELAY_SEND_LEVEL(100, 92, null),
     DELAY_SEND_MODWHEEL(101, 18, null, Boundaries.CENTRIC_127),
     DELAY_TIME_NON_SYNC(102, 19, null),
-    DELAY_TIME_SYNC(103, 20, null, Boundaries.SYNC_RATES),
+    DELAY_TIME_SYNC(103, 20, null, Boundaries.DELAY_SYNC_RATES),
     DELAY_FEEDBACK(104, 21, null),
     DELAY_STEREO_WIDTH(105, 22, null),
     DELAY_RATIO(106, 23, null, Boundaries.DELAY_RATIO),
@@ -200,9 +200,9 @@ enum Mappings {
     CHORUS_SEND_MODWHEEL(111, 26, null, Boundaries.CENTRIC_127),
     CHORUS_RATE_NON_SYNC(112, 27, null),
     CHORUS_RATE_SYNC(113, 28, null, Boundaries.SYNC_RATES),
-    CHORUS_FEEDBACK(114, 29, null),
+    CHORUS_FEEDBACK(114, 29, null, Boundaries.CENTRIC_127),
     CHORUS_MOD_DEPTH(115, 30, null),
-    CHORUS_MOD_CENTRE_POINT(116, 31, null),
+    CHORUS_MOD_CENTRE_POINT(116, 31, null, Boundaries.CENTRIC_127),
     CHORUS_GLOBAL_SYNC(Convertors.Packed.PACKED9, Boundaries.CHORUS_GLOBAL_SYNC),
     ////
     // Effects - reverb
@@ -221,7 +221,7 @@ enum Mappings {
     ////
     // Effects - vocoder
     ////
-    VOCODER_BALANCE(89, 95, null, Boundaries.CENTRIC_127),
+    VOCODER_BALANCE(89, 95, null),
     VOCODER_STEREO_WIDTH(90, 14, null),
     VOCODER_SIBILANCE_TYPE(Convertors.Packed.PACKED10, Boundaries.SIBILANCE_TYPES),
     VOCODER_SIBILANCE_LEVEL(91, 15, null),

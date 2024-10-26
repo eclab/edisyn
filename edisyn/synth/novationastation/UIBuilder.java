@@ -335,7 +335,7 @@ class UIBuilder {
         hbox.add(vbox);
 
         hbox.add(createLabelledDial(List.of("rate", "(sync)"), ARP_RATE_SYNC, color));
-        hbox.add(createLabelledDial(List.of("rate", "(non-sync)"), ARP_RATE_NON_SYNC, color));
+        hbox.add(createLabelledDial(List.of("rate", "(BPM)"), ARP_RATE_NON_SYNC, color));
         hbox.add(createLabelledDial("pattern", ARP_PATTERN, color));
         hbox.add(createLabelledDial("gate time", ARP_GATE_TIME, color));
 

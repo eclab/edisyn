@@ -110,7 +110,6 @@ class Convertors {
                 ));
     }
 
-
     /**
      * enum defining some predefined (so-called packed) convertors
      * These convertors are handling data where different parameters are combined (as in: 'packed') in a single value

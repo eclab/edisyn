@@ -288,7 +288,7 @@ enum Mappings {
 
     Mappings(Integer byteIndex, Integer cc, Integer nrpn, Boundaries boundaries) {
         this.key = extractKey(this);
-        this.convertor = createStraight(key, byteIndex, cc, nrpn);
+        this.convertor = Convertor.createStraight(key, byteIndex, cc, nrpn);
         this.boundaries = Objects.requireNonNull(boundaries);
     }
 
@@ -341,57 +341,5 @@ enum Mappings {
     // deduce (Edisym model) key from enum name, yet adding some conversion to adhere to the Edisyn naming conventions
     private String extractKey(Mappings mappings) {
         return mappings.name().replaceAll("[^A-Za-z0-9]", "").toLowerCase(Locale.ROOT);
-    }
-
-    // create straight convertor
-    private static Convertor createStraight(String key, Integer byteIndex, Integer cc, Integer nrpn) {
-        return new Straight(key, byteIndex, cc, nrpn);
-    }
-
-    /**
-     * Most straightforward implementation of a <code>Convertor</code>, based on a simple one-to-one conversion
-     */
-    private static final class Straight implements Convertor {
-        private final String key;
-        private final OptionalInt byteIndex;
-        private final OptionalInt cc;
-        private final OptionalInt nrpn;
-
-        private Straight(String key, Integer byteIndex, Integer cc, Integer nrpn) {
-            this.key = key;
-            this.byteIndex = byteIndex == null ? OptionalInt.empty() : OptionalInt.of(byteIndex);
-            this.cc = cc == null ? OptionalInt.empty() : OptionalInt.of(cc);
-            this.nrpn = nrpn == null ? OptionalInt.empty() : OptionalInt.of(nrpn);
-        }
-
-        @Override
-        public void toModel(Model model, int value) {
-            model.set(key, value);
-        }
-
-        @Override
-        public int toSynth(Model model) {
-            return model.get(key);
-        }
-
-        @Override
-        public OptionalInt getByteIndex() {
-            return byteIndex;
-        }
-
-        @Override
-        public OptionalInt getCC() {
-            return cc;
-        }
-
-        @Override
-        public OptionalInt getNRPN() {
-            return nrpn;
-        }
-
-        @Override
-        public Boundaries getBoundaries() {
-            return Boundaries.NONE;
-        }
     }
 }

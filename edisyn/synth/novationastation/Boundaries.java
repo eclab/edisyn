@@ -17,7 +17,7 @@ public enum Boundaries implements Boundary {
     // param-related: some are specific
     POLYPHONY_MODE("mono", "mono autoglide", "poly", "poly voice stealing"),
     PORTAMENTO_MODE("exponential", "linear"),
-    UNISON_VOICES("off", "2","3","4","5","6","7", "8"),
+    UNISON_VOICES("off", "2", "3", "4", "5", "6", "7", "8"),
     OSC_SELECT("1", "2", "3"),
     OSC_OCTAVES("-1", "0", "1", "2"),
     OSC_WAVEFORMS("sine", "triangle", "saw", "square/pulse"),

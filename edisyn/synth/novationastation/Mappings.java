@@ -241,13 +241,14 @@ enum Mappings {
     EXT_AUDIO_TO_FX(Convertors.Packed.PACKED10, Boundaries.BOOLEAN),
     // program volume - stored in patch
     PROGRAM_VOLUME(125, 119, null, Boundaries.CENTRIC_24),
+    // next 4 are not (yet) used, should/could become used in (future) devicePanel
     OSC_SELECT(Convertors.Packed.PACKED11, Boundaries.OSC_SELECT),
     MIXER_SELECT(Convertors.Packed.PACKED11, Boundaries.MIXER_SELECT),
     PWM_SOURCE(Convertors.Packed.PACKED11, Boundaries.PWM_SOURCE),
     LFO_SELECT(Convertors.Packed.PACKED11, Boundaries.LFO_SELECT),
 
     ////
-    // known, yet non-used: listed here for completenes & to avoid noisy logs
+    // known, yet non-used: listed here for completeness & to avoid noisy logs
     ////
     // CC7: Device volume (non-patch related; not stored within patch, only CC-evented)
     DEVICE_VOLUME(null, 7, null),

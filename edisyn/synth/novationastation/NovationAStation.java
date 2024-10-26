@@ -13,8 +13,7 @@ import edisyn.util.StringUtility;
 
 import javax.sound.midi.ShortMessage;
 import javax.swing.*;
-import java.util.Optional;
-import java.util.OptionalInt;
+import java.util.*;
 
 import static edisyn.synth.novationastation.SysexMessage.Type.*;
 
@@ -27,7 +26,22 @@ public class NovationAStation extends Synth {
     private static final String KEY_PATCH_NUMBER = "number";
     private static final String KEY_SOFTWARE_VERSION = "swversion";
     private static final String KEY_VERSION_INCREMENT = "swversionincrement";
-    private static final String KEY_FULL_VERSION = "swversionstring";
+    // not (yet) used, should become used in (future) devicePanel
+    //private static final String KEY_FULL_VERSION = "swversionstring";
+
+    /*
+     * List of edisyn model keys to be ignored during SanityCheck
+     * These are all parameters which do not yet have a UI control
+     */
+    private static final List<String> UNMAPPED_KEYS = Arrays.asList(
+            KEY_SOFTWARE_VERSION,
+            KEY_VERSION_INCREMENT,
+            //KEY_FULL_VERSION
+            Mappings.OSC_SELECT.getKey(),
+            Mappings.PWM_SOURCE.getKey(),
+            Mappings.LFO_SELECT.getKey(),
+            Mappings.MIXER_SELECT.getKey()
+    );
 
     public NovationAStation()
     {
@@ -35,6 +49,9 @@ public class NovationAStation extends Synth {
         new UIBuilder(this).build();
 
         loadDefaults();
+
+        // next only here actually to circumvent warning logs in SanityCheck
+        initModel();
     }
 
     public static String getSynthName()
@@ -149,7 +166,7 @@ public class NovationAStation extends Synth {
             SysexMessage message = SysexMessage.parse(data);
             model.set(KEY_SOFTWARE_VERSION, message.getSoftwareVersion());
             model.set(KEY_VERSION_INCREMENT, message.getVersionIncrement());
-            model.set(KEY_FULL_VERSION, message.getFullVersion());
+            //model.set(KEY_FULL_VERSION, message.getFullVersion());
             // update bank + program
             byte programBank = message.getProgramBank();    // 1..4
             byte programNumber = message.getProgramNumber();  // 0..99
@@ -289,33 +306,7 @@ public class NovationAStation extends Synth {
     }
 
     @Override
-    public boolean testVerify(Synth synth2, String key, Object obj1, Object obj2)
-    {
-        // The edisyn.test.SanityCheck class performs sanity-checks on synthesizer classes
-        // by randomizing a synth instance, then writing it out, then reading it back in in a new synth, 
-        // and comparing the two.  When parameters are different, this could be because of an emit bug 
-        // or a parse bug, OR it could be entirely legitimate (perhaps you don't emit a certain 
-        // parameter, or use it for a special purpose, etc.)  Before it issues an error in this case,
-        // it calls this method to see if the difference is legitimate.  It calls testVerify(...)
-        // on the first synth, passing in the second one.  The parameter in question is provided as
-        // a key, as are the two values (as Strings or Integers) in question.  Return TRUE if the
-        // difference is legitimate, else false.  By default, all differences are considered illegitimate.
-        return false;
-    }
-
-    @Override
-    public boolean testVerify(byte[] message)
-    {
-        // The edisyn.test.SanityCheck class performs sanity-checks on synthesizer classes
-        // by randomizing a synth instance, then writing it out, then reading it back in in a new synth, 
-        // and comparing the two.  When the receiving synth instance gets a sysex message it doesn't
-        // recognize, this method is called to determine if that's okay and it shoud be ignored.
-        // Return TRUE if the message is acceptable and should be ignored, else false.  
-        return false;
-    }
-
-    @Override
-   public boolean librarianTested()
+    public boolean librarianTested()
     {
         // Override this method to return true to indicate that the librarian for this
         // editor has been tested reasonably well and no longer requires a warning to the
@@ -326,5 +317,21 @@ public class NovationAStation extends Synth {
     private String toString(Midi.CCData data)
     {
         return "CCData {number:" + data.number + ", value:" + data.value + ", type:" + data.type + "}";
+    }
+
+    @Override
+    public boolean testVerify(Synth synth2, String key, Object obj1, Object obj2)
+    {
+        return UNMAPPED_KEYS.contains(key);
+    }
+
+    private void initModel() {
+        model.setMinMax(KEY_SOFTWARE_VERSION, 0, 127);
+        model.setMinMax(KEY_VERSION_INCREMENT, 0, 127);
+        //
+        model.setMinMax(Mappings.OSC_SELECT.getKey(), 0, 2);
+        model.setMinMax(Mappings.PWM_SOURCE.getKey(), 0, 1);
+        model.setMinMax(Mappings.MIXER_SELECT.getKey(), 0, 2);
+        model.setMinMax(Mappings.LFO_SELECT.getKey(), 0, 1);
     }
 }

@@ -437,8 +437,7 @@ class Convertors {
             public Boundaries getBoundaries() {
                 return Boundaries.NONE;
             }
-        },
-        PACKED11 {
+        }, PACKED11 {
             @Override
             public OptionalInt getByteIndex() {
                 return OptionalInt.of(127);

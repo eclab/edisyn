@@ -289,7 +289,7 @@ enum Mappings {
 
     Mappings(Integer byteIndex, Integer cc, Integer nrpn, Boundaries boundaries) {
         this.key = extractKey(this);
-        this.convertor = Convertor.createStraight(key, byteIndex, cc, nrpn);
+        this.convertor = Convertor.createStraight(key, byteIndex, cc, nrpn, boundaries);
         this.boundaries = Objects.requireNonNull(boundaries);
     }
 

@@ -186,8 +186,8 @@ public class NovationAStation extends Synth {
                 Optional<Convertor> convertor = Convertors.getByIndex(i);
                 if (convertor.isPresent()) {
                     int value = payload[i];
-                    Boundaries boundaries = convertor.get().getBoundaries();
-                    if (boundaries.validate(value)) {
+                    Boundary boundary = convertor.get().getBoundary();
+                    if (boundary.validate(value)) {
                         convertor.get().toModel(model, value);
                     } else {
                         System.err.println("Ignoring value '" + value + "' for " + convertor.get());
@@ -273,7 +273,7 @@ public class NovationAStation extends Synth {
             value = OptionalInt.of((data.value >> 7));
         }
         if (convertor.isPresent() && value.isPresent()) {
-            if (convertor.get().getBoundaries().validate(value.getAsInt())) {
+            if (convertor.get().getBoundary().validate(value.getAsInt())) {
                 convertor.get().toModel(model, value.getAsInt());
             } else {
                 System.err.println("Ignoring CC/NRPN value '" + value.getAsInt() + "' for " + convertor.get());

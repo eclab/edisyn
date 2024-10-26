@@ -144,7 +144,7 @@ class Convertors {
                         | ((0xF & model.get(KEY_SYNC_PHASE.getKey())) << 3);
             }
             @Override
-            public Boundaries getBoundaries() {
+            public Boundaries getBoundary() {
                 return Boundaries.NONE;
             }
         },
@@ -174,7 +174,7 @@ class Convertors {
                         | ((0x1 & model.get(FILTER_TYPE.getKey())) << 5);
             }
             @Override
-            public Boundaries getBoundaries() {
+            public Boundaries getBoundary() {
                 return Boundaries.NONE;
             }
         },
@@ -206,7 +206,7 @@ class Convertors {
                         | ((0x1 & model.get(PORTAMENTO_MODE.getKey())) << 6);
             }
             @Override
-            public Boundaries getBoundaries() {
+            public Boundaries getBoundary() {
                 return Boundaries.NONE;
             }
         },
@@ -238,7 +238,7 @@ class Convertors {
                         | ((0x1 & model.get(OSC2_SYNCED_BY_1.getKey())) << 6);
             }
             @Override
-            public Boundaries getBoundaries() {
+            public Boundaries getBoundary() {
                 return Boundaries.NONE;
             }
         },
@@ -270,7 +270,7 @@ class Convertors {
                         | ((0x3 & model.get(LFO2_WAVEFORM.getKey())) << 4);
             }
             @Override
-            public Boundaries getBoundaries() {
+            public Boundaries getBoundary() {
                 return Boundaries.NONE;
             }
         },
@@ -306,7 +306,7 @@ class Convertors {
                         | ((0x1 & model.get(LFO2_LOCK.getKey())) << 5);
             }
             @Override
-            public Boundaries getBoundaries() {
+            public Boundaries getBoundary() {
                 return Boundaries.NONE;
             }
         },
@@ -340,7 +340,7 @@ class Convertors {
                         | ((0x3 & model.get(ARP_NOTE_DESTINATION.getKey())) << 5);
             }
             @Override
-            public Boundaries getBoundaries() {
+            public Boundaries getBoundary() {
                 return Boundaries.NONE;
             }
         },
@@ -368,7 +368,7 @@ class Convertors {
                         | ((0x1 & model.get(CHORUS_TYPE.getKey())) << 3);
             }
             @Override
-            public Boundaries getBoundaries() {
+            public Boundaries getBoundary() {
                 return Boundaries.NONE;
             }
         },
@@ -398,7 +398,7 @@ class Convertors {
                         | ((0x3 & model.get(EQUALIZER_GLOBAL_SYNC.getKey())) << 4);
             }
             @Override
-            public Boundaries getBoundaries() {
+            public Boundaries getBoundary() {
                 return Boundaries.NONE;
             }
         },
@@ -434,7 +434,7 @@ class Convertors {
                         | ((0x1 & model.get(EXT_AUDIO_TRIGGER.getKey())) << 6);
             }
             @Override
-            public Boundaries getBoundaries() {
+            public Boundaries getBoundary() {
                 return Boundaries.NONE;
             }
         },
@@ -467,7 +467,7 @@ class Convertors {
                         | ((0x1 & model.get(LFO_SELECT.getKey())) << 6);
             }
             @Override
-            public Boundaries getBoundaries() {
+            public Boundaries getBoundary() {
                 return Boundaries.NONE;
             }
         };

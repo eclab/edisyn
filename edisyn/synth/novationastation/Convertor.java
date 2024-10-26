@@ -30,11 +30,11 @@ interface Convertor {
     OptionalInt getNRPN();
 
     // get restrictions
-    Boundaries getBoundaries();
+    Boundary getBoundary();
 
     // create straight convertor
-    static Convertor createStraight(String key, Integer byteIndex, Integer cc, Integer nrpn) {
-        return new Straight(key, byteIndex, cc, nrpn);
+    static Convertor createStraight(String key, Integer byteIndex, Integer cc, Integer nrpn, Boundary boundary) {
+        return new Straight(key, byteIndex, cc, nrpn, boundary);
     }
 
     /**
@@ -45,12 +45,14 @@ interface Convertor {
         private final OptionalInt byteIndex;
         private final OptionalInt cc;
         private final OptionalInt nrpn;
+        private final Boundary boundary;
 
-        private Straight(String key, Integer byteIndex, Integer cc, Integer nrpn) {
+        private Straight(String key, Integer byteIndex, Integer cc, Integer nrpn, Boundary boundary) {
             this.key = key;
             this.byteIndex = byteIndex == null ? OptionalInt.empty() : OptionalInt.of(byteIndex);
             this.cc = cc == null ? OptionalInt.empty() : OptionalInt.of(cc);
             this.nrpn = nrpn == null ? OptionalInt.empty() : OptionalInt.of(nrpn);
+            this.boundary = boundary;
         }
 
         @Override
@@ -79,8 +81,8 @@ interface Convertor {
         }
 
         @Override
-        public Boundaries getBoundaries() {
-            return Boundaries.NONE;
+        public Boundary getBoundary() {
+            return boundary;
         }
     }
 }

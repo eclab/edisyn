@@ -518,13 +518,15 @@ class UIBuilder {
         LabelledDial result = new LabelledDial(labels.get(0), synth,
                 mappings.getKey(),
                 color, boundaries.getMin(), boundaries.getMax(), boundaries.getOffset()) {
+            @Override
             public String map(int val) {
                 String[] values = boundaries.getValues();
                 if (values != null && values.length != 0) {
                     if (val >= boundaries.getMin() && val <= boundaries.getMax()) {
                         return boundaries.getValues()[val];
                     } else {
-                        System.err.println("ignoring val " + val + " for " + mappings.name());
+                        System.err.println("Invalid value '" + val + "' received for " + mappings.name());
+                        return "??";
                     }
                 }
                 return String.valueOf(val - boundaries.getOffset());

@@ -168,7 +168,13 @@ public class NovationAStation extends Synth {
             for (int i = 0; i < payload.length; ++i) {
                 Optional<Convertor> convertor = Convertors.getByIndex(i);
                 if (convertor.isPresent()) {
-                    convertor.get().toModel(model, payload[i]);
+                    int value = payload[i];
+                    Boundaries boundaries = convertor.get().getBoundaries();
+                    if (boundaries.validate(value)) {
+                        convertor.get().toModel(model, value);
+                    } else {
+                        System.err.println("Ignoring value '" + value + "' for " + convertor.get());
+                    }
                 }
             }
             return PARSE_SUCCEEDED;
@@ -250,7 +256,11 @@ public class NovationAStation extends Synth {
             value = OptionalInt.of((data.value >> 7));
         }
         if (convertor.isPresent() && value.isPresent()) {
-            convertor.get().toModel(model, value.getAsInt());
+            if (convertor.get().getBoundaries().validate(value.getAsInt())) {
+                convertor.get().toModel(model, value.getAsInt());
+            } else {
+                System.err.println("Ignoring CC/NRPN value '" + value.getAsInt() + "' for " + convertor.get());
+            }
         } else {
             System.out.println("Ignoring CC/NRPN msg:" + toString(data));
         }

@@ -12,20 +12,29 @@ public interface Boundary {
 
     /**
      * get minimum value allowed
-     * @return
+     * @return min value
      */
     int getMin();
 
     /**
      * get maximum value allowed
-     * @return
+     * @return max value
      */
     int getMax();
 
     /**
      * get offset to be applied on a value (before presenting it)
      * if set, this typically defines the "zero" point for a symmetric range (defined by min and max)
-     * @return
+     * @return offset
      */
     int getOffset();
+
+    /**
+     * validate if a given value matches the boundaries
+     * @param value value to validate
+     * @return true if validated fine.
+     */
+    default boolean validate(int value) {
+        return value >= getMin() && value <= getMax();
+    };
 }

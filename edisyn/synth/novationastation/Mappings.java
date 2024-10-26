@@ -4,6 +4,7 @@ import edisyn.Model;
 
 import java.util.Locale;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.OptionalInt;
 
 /**
@@ -240,14 +241,17 @@ enum Mappings {
     EXT_AUDIO_TO_FX(Convertors.Packed.PACKED10, Boundaries.BOOLEAN),
     // program volume - stored in patch
     PROGRAM_VOLUME(125, 119, null, Boundaries.CENTRIC_24),
-    // CC7: Device volume (non-patch related; not stored within patch)
-    // for now, let's ignore next, not available in dump, not very useful either
-    // DEVICE_VOLUME(null, 7),
-
     OSC_SELECT(Convertors.Packed.PACKED11, Boundaries.OSC_SELECT),
     MIXER_SELECT(Convertors.Packed.PACKED11, Boundaries.MIXER_SELECT),
     PWM_SOURCE(Convertors.Packed.PACKED11, Boundaries.PWM_SOURCE),
-    LFO_SELECT(Convertors.Packed.PACKED11, Boundaries.LFO_SELECT)
+    LFO_SELECT(Convertors.Packed.PACKED11, Boundaries.LFO_SELECT),
+
+    ////
+    // known, yet non-used: listed here for completenes & to avoid noisy logs
+    ////
+    // CC7: Device volume (non-patch related; not stored within patch, only CC-evented)
+    DEVICE_VOLUME(null, 7, null),
+    BANK_SELECT(null, 32, null);
     ;
 
     ////
@@ -278,11 +282,11 @@ enum Mappings {
     // Restrictions: defining boundaries on the data in terms of min or max value, or listing possible values (and string representation)
     private final Boundaries boundaries;
 
-    Mappings(int byteIndex, Integer cc, Integer nrpn) {
+    Mappings(Integer byteIndex, Integer cc, Integer nrpn) {
         this(byteIndex, cc, nrpn, Boundaries.NONE);
     }
 
-    Mappings(int byteIndex, Integer cc, Integer nrpn, Boundaries boundaries) {
+    Mappings(Integer byteIndex, Integer cc, Integer nrpn, Boundaries boundaries) {
         this.key = extractKey(this);
         this.convertor = createStraight(key, byteIndex, cc, nrpn);
         this.boundaries = Objects.requireNonNull(boundaries);
@@ -340,8 +344,8 @@ enum Mappings {
     }
 
     // create straight convertor
-    private static Convertor createStraight(String key, int dumpIndex, Integer cc, Integer nrpn) {
-        return new Straight(key, dumpIndex, cc, nrpn);
+    private static Convertor createStraight(String key, Integer byteIndex, Integer cc, Integer nrpn) {
+        return new Straight(key, byteIndex, cc, nrpn);
     }
 
     /**
@@ -353,9 +357,9 @@ enum Mappings {
         private final OptionalInt cc;
         private final OptionalInt nrpn;
 
-        private Straight(String key, int byteIndex, Integer cc, Integer nrpn) {
+        private Straight(String key, Integer byteIndex, Integer cc, Integer nrpn) {
             this.key = key;
-            this.byteIndex = OptionalInt.of(byteIndex);
+            this.byteIndex = byteIndex == null ? OptionalInt.empty() : OptionalInt.of(byteIndex);
             this.cc = cc == null ? OptionalInt.empty() : OptionalInt.of(cc);
             this.nrpn = nrpn == null ? OptionalInt.empty() : OptionalInt.of(nrpn);
         }
@@ -386,7 +390,7 @@ enum Mappings {
         }
 
         @Override
-        public Boundaries getRestrictions() {
+        public Boundaries getBoundaries() {
             return Boundaries.NONE;
         }
     }

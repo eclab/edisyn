@@ -30,5 +30,5 @@ interface Convertor {
     OptionalInt getNRPN();
 
     // get restrictions
-    Boundaries getRestrictions();
+    Boundaries getBoundaries();
 }

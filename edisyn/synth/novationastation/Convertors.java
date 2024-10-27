@@ -418,7 +418,7 @@ class Convertors {
             @Override
             public void toModel(Model model, int value) {
                 // NOTE: unlike documented: bit 4 (iso 3)
-                model.set(VOCODER_SIBILANCE_TYPE.getKey(), 0x1 & value >> 3);
+                model.set(VOCODER_SIBILANCE_TYPE.getKey(), 0x1 & (value >> 3));
                 // NOTE: unlike documented: bit 6 (iso 5)
                 model.set(EXT_AUDIO_TRIGGER.getKey(), 0x1 & (value >> 5));
                 // NOTE: unlike documented: bit 7 (iso 6)
@@ -431,7 +431,7 @@ class Convertors {
                         // NOTE: unlike documented: bit 6 (iso 5)
                         | ((0x1 & model.get(EXT_AUDIO_TRIGGER.getKey())) << 5)
                         // NOTE: unlike documented: bit 7 (iso 6)
-                        | ((0x1 & model.get(EXT_AUDIO_TRIGGER.getKey())) << 6);
+                        | ((0x1 & model.get(EXT_AUDIO_TO_FX.getKey())) << 6);
             }
             @Override
             public Boundaries getBoundary() {

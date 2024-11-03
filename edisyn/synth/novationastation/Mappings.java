@@ -1,11 +1,7 @@
 package edisyn.synth.novationastation;
 
-import edisyn.Model;
-
 import java.util.Locale;
 import java.util.Objects;
-import java.util.Optional;
-import java.util.OptionalInt;
 
 /**
  * Enumeration containing all available synth parameters and their so-called 'mappings'.
@@ -335,7 +331,7 @@ enum Mappings {
      * get restrictions (boundaries imposed on the data)
      * @return restrictions, non null
      */
-    public Boundaries getRestrictions() {
+    public Boundaries getBoundaries() {
         return boundaries;
     }
 

@@ -123,9 +123,9 @@ class UIBuilder
         VBox vbox = new VBox();
         vbox.add(createChooser("Polyphony Mode", POLYPHONY_MODE));
         var keySync = createChooser("Keysync Phase", KEY_SYNC_PHASE);
-        // set ranges for metric values
-        keySync.setMin(Boundaries.KEYSYNC_PHASE.getMin() + 1); // skipping first, being a non metric value ("Free running")
-        keySync.setMax(Boundaries.KEYSYNC_PHASE.getMax());
+        // set ranges for metric values: skipping first item, being a non metric value ("Free running")
+        synth.getModel().setMetricMinMax(KEY_SYNC_PHASE.getKey(),
+                KEY_SYNC_PHASE.getBoundaries().getMin() + 1, KEY_SYNC_PHASE.getBoundaries().getMax());
         vbox.add(keySync);
         hbox.add(vbox);
 
@@ -537,14 +537,14 @@ class UIBuilder
     // convenience method to create chooser
     private Chooser createChooser(String label, Mappings mappings)
     {
-        Boundaries boundaries = mappings.getRestrictions();
+        Boundaries boundaries = mappings.getBoundaries();
         // sanity
         if (boundaries.getValues() == null) {
             throw new IllegalStateException("expecting values for a chooser component !");
         }
         return new Chooser(label, synth,
                 mappings.getKey(),
-                mappings.getRestrictions().getValues()) {
+                mappings.getBoundaries().getValues()) {
         };
     }
 
@@ -561,7 +561,7 @@ class UIBuilder
         if (Objects.requireNonNull(labels).isEmpty()) {
             throw new IllegalStateException("at least one label required");
         }
-        Boundaries boundaries = mappings.getRestrictions();
+        Boundaries boundaries = mappings.getBoundaries();
         LabelledDial result = new LabelledDial(labels.get(0), synth,
                 mappings.getKey(),
                 color, boundaries.getMin(), boundaries.getMax(), boundaries.getOffset()) {
@@ -589,7 +589,7 @@ class UIBuilder
     private JComponent createCheckBox(String label, Mappings mappings)
     {
         // sanity
-        if (mappings.getRestrictions() != Boundaries.BOOLEAN) {
+        if (mappings.getBoundaries() != Boundaries.BOOLEAN) {
             throw new IllegalStateException("only boolean allowed for checkbox");
         }
         return new CheckBox(label, synth, mappings.getKey());

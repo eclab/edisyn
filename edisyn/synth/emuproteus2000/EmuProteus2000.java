@@ -77,7 +77,7 @@ public class EmuProteus2000 extends Synth
                                                       "User 1", "User 2", "User 3", "User 4", "User 5", "User 6", "User 7", "User 8", "User 9", "User 10", "User 11", "User 12" };
 
     public static final String[] PATCHCORD_SOURCES = { "Off", "Pitch Wheel", "Mod Wheel", "Pressure", "Pedal", "MIDI A", "MIDI B", "Foot Switch 1", "Foot Switch 2", "Flip-Flop Foot Switch 1", "Flip-Flop Foot Switch 2", 
-                                                       "Volme Controller (7)", "Pan Controller (10)", "MIDI C", "MIDI D", "MIDI E", "MIDI F", "MIDI G", "MIDI H", "MIDI I", "MIDI J", "MIDI K", "MIDI L", "DC Offset" };
+                                                       "Volume Controller (7)", "Pan Controller (10)", "MIDI C", "MIDI D", "MIDI E", "MIDI F", "MIDI G", "MIDI H", "MIDI I", "MIDI J", "MIDI K", "MIDI L", "DC Offset" };
     public static final int[] PATCHCORD_SOURCE_INDICES = { 0, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 32, 33, 34, 35, 36, 37, 40, 41, 42, 43, 160 };
 
     public static final String[] PATCHCORD_DESTINATIONS = { "Off", "FX A Send 1", "FX A Send 2", "FX A Send 3", "FX A Send 4", "FX B Send 1", "FX B Send 2", "FX B Send 3", "FX B Send 4", "Arpeggiator Rate", "Arpeggiator Extension", "Arpeggiator Velocity", "Arpeggiator Gate", "Arpeggiator Interval", 
@@ -776,7 +776,7 @@ public class EmuProteus2000 extends Synth
                 vbox.add(comp);
 
                 params = PATCHCORD_DESTINATIONS;
-                comp = new Chooser("Tempo Offset " + (j + 1), this, "cord" + j + "dest", params);
+                comp = new Chooser("Destination " + (j + 1), this, "cord" + j + "dest", params);
                 vbox.add(comp);
                 hbox.add(vbox);
                         

@@ -31,6 +31,24 @@ public class BehringerUBXa extends Synth {
     }
 
     public static String[] splitAtCapitalLetter(String input, int k) {
+        java.util.List<String> out = new ArrayList<>();
+        StringBuilder s = new StringBuilder(input.substring(0,1));
+        for (int i=1; i< input.length(); i++) {
+            if (Character.isUpperCase(input.charAt(i))
+                    && i != input.length() - 1
+                    && !Character.isUpperCase(input.charAt(i + 1))
+            && Character.isLetter(input.charAt(i+1))) {
+                out.add(s.toString());
+                s=new StringBuilder(input.substring(i,i+1));
+            } else {
+                s.append(input.charAt(i));
+            }
+        }
+        out.add(s.toString());
+        return  out.toArray(new String[0]);
+    }
+
+    public static String[] splitAtCapitalLetter_(String input, int k) {
         // Check if the input length is greater than k
         if (input.length() <= k) {
             // If not, return the input as a single string in an array
@@ -62,6 +80,7 @@ public class BehringerUBXa extends Synth {
         // If no capital letter is found, return the entire string as a single string in the array
         return new String[]{input};
     }
+
 
     public static String longestCommonWordPrefix(String str1, String str2) {
         String[] words1 = str1.split(" ");
@@ -162,12 +181,12 @@ public class BehringerUBXa extends Synth {
         vbox.add(c);
         HBox modDials = new HBox();
         vbox.add(modDials);
-        addDialByKey(modDials, "ModulationLFOTrigPoint", "LFO Trig Point");
-        addDialByKey(modDials, "ModulationLFORate", "LFO Rate");
-        addDialByKey(modDials, "ModulationLFOPhase", "LFO Phase");
-        addDialByKey(modDials, "ModulationChannel1Amount", "Channel 1 Amount");
-        addDialByKey(modDials, "ModulationChannel2Amount", "Channel 2 Amount");
-        addDialByKey(modDials, "ModulationLFOTrim", "LFO Trim");
+        addDialByKey(modDials, "ModulationLFOTrigPoint", "LFOTrigPoint");
+        addDialByKey(modDials, "ModulationLFORate", "LFORate");
+        addDialByKey(modDials, "ModulationLFOPhase", "LFOPhase");
+        addDialByKey(modDials, "ModulationChannel1Amount", "Channel1Amount");
+        addDialByKey(modDials, "ModulationChannel2Amount", "Channel2Amount");
+        addDialByKey(modDials, "ModulationLFOTrim", "LFOTrim");
         HBox modSelsC1 = new HBox();
         vbox.add(modSelsC1);
         addCheckboxGroupByKey(modSelsC1, "ModulationChannel1Sends");
@@ -286,13 +305,17 @@ public class BehringerUBXa extends Synth {
 
     private void addDial(JComponent container, String key, String lbl, int minVal, int maxVal, boolean symmetric) {
         int sub = symmetric ? maxVal / 2 + 1 : 0;
+        String[] labels = splitAtCapitalLetter(lbl, 10);
 
 
-        LabelledDial comp = new LabelledDial(lbl, this, key, Style.COLOR_A(), minVal, maxVal, sub) {
+        LabelledDial comp = new LabelledDial(labels[0], this, key, Style.COLOR_A(), minVal, maxVal, sub) {
             public boolean isSymmetric() {
                 return symmetric;
             }
         };
+        for (int i=1; i<labels.length; i++) {
+            comp.addAdditionalLabel(labels[i]);
+        }
 
         container.add(comp);
         usedKeys.add(key);

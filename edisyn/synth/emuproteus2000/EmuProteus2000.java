@@ -4643,7 +4643,7 @@ public class EmuProteus2000 extends Synth
    list, but doesn't mention that the parameters appear in the patch format in a **different order** 
    than in the list, nor does it explain what that order is [the order is in fact the order of each 
    of the IDs of the parameters]. It also doesn't explain that the first two parameters do not appear 
-   in the patch format all, and that the name parameters are one byte each while all other parameters 
+   in the patch format at all, and that the name parameters are one byte each while all other parameters 
    are two bytes.  Also the name parameters aren't included in the parameter tally for the so-called
    "Common General" parameters, even though they're listed as Common General parameters.  The only 
    way to discover these unfortunate misfeatures is to reverse engineer the spec by hand.  Oh yeah,
@@ -4662,7 +4662,7 @@ public class EmuProteus2000 extends Synth
    is really critical, and there would be only two possible workarounds: either send each parameter
    independently (very slow) or write to a "scratch" location in patch RAM, which is not advisable
    on the Proteus 2000 because its scratch RAM is in Flash, rather than battery-backed, and so this
-   would burn out the machine in short order  
+   would burn out the machine in short order.
    
 
    SIMMS AND "BANKS".

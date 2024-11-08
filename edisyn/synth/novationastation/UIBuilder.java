@@ -166,8 +166,8 @@ class UIBuilder
         hbox.add(createLabelledDial(List.of("LFO2", "Pulse Width", "Depth"), Mappings.find("OSC%d_LFO2_PULSE_WIDTH_MOD", osc), color));
 
         if (osc == 3) {
-            hbox.add(createLabelledDial(List.of("FM", "Level"), FM_FIXED_LEVEL, color));
-            hbox.add(createLabelledDial(List.of("FM Env", "Depth"), FM_ENVELOPE_DEPTH, color));
+            hbox.add(createLabelledDial(List.of("FM", "Level"), OSC3_FM_FIXED_LEVEL, color));
+            hbox.add(createLabelledDial(List.of("FM Env", "Depth"), OSC3_FM_ENVELOPE_DEPTH, color));
         }
 
         category.add(hbox, BorderLayout.CENTER);

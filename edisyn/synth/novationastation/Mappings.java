@@ -86,8 +86,8 @@ enum Mappings {
     ////
     // FM (osc2 to osc3)
     ////
-    FM_FIXED_LEVEL(56, null, 0),
-    FM_ENVELOPE_DEPTH(57, null, 1, Boundaries.CENTRIC_127),
+    OSC3_FM_FIXED_LEVEL(56, null, 0),
+    OSC3_FM_ENVELOPE_DEPTH(57, null, 1, Boundaries.CENTRIC_127),
     ////
     // Envelopes
     // - envelope1=amplitude envelope (ADSR)

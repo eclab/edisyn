@@ -157,10 +157,10 @@ class SysexMessage {
         if (actualLength != expectedLength) {
             throw new IllegalStateException("Invalid message length for type " + type + ", expected " + expectedLength + ", but was " + actualLength);
         }
-        if (!Arrays.equals(bytes, 0, 6, START_SEQUENCE, 0, 6)) {
+        if (!arrayEquals(bytes, 0, 6, START_SEQUENCE, 0, 6)) {
             throw new IllegalStateException("Invalid start sequence");
         }
-        if (!Arrays.equals(bytes, actualLength - END_SEQUENCE.length, actualLength, END_SEQUENCE, 0, END_SEQUENCE.length)) {
+        if (!arrayEquals(bytes, actualLength - END_SEQUENCE.length, actualLength, END_SEQUENCE, 0, END_SEQUENCE.length)) {
             throw new IllegalStateException("Invalid end sequence");
         }
         return bytes;
@@ -202,5 +202,21 @@ class SysexMessage {
         int major = softwareVersion >> 3;
         int minor = softwareVersion & 0x7;
         return major + "." + minor + "." + getVersionIncrement();
+    }
+
+    private boolean arrayEquals(byte[] bytes1, int from1, int to1, byte[] bytes2, int from2, int to2) {
+        // only from JDK9
+        //return Arrays.equals(bytes1, from1, to1, bytes2, from2, to2);
+        if (to1 - from1 != to2 - from2) {
+            return false;
+        }
+        boolean equal = true;
+        for (int index = 0; index < to1 - from1; ++index) {
+            if (bytes1[from1 + index] != bytes2[from2 + index]) {
+                equal = false;
+                break;
+            }
+        }
+        return equal;
     }
 }

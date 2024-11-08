@@ -5,6 +5,7 @@ import edisyn.gui.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -129,12 +130,12 @@ class UIBuilder
         vbox.add(keySync);
         hbox.add(vbox);
 
-        hbox.add(createLabelledDial(List.of("Unison", "Voices"), UNISON_VOICES, color));
-        hbox.add(createLabelledDial(List.of("Unison", "Detune"), UNISON_DETUNE, color));
+        hbox.add(createLabelledDial(Arrays.asList("Unison", "Voices"), UNISON_VOICES, color));
+        hbox.add(createLabelledDial(Arrays.asList("Unison", "Detune"), UNISON_DETUNE, color));
 
-        hbox.add(createLabelledDial(List.of("Random", "Detune"), OSCS_RANDOM_DETUNE, color));
-        hbox.add(createLabelledDial(List.of("Preglide", "Semitones"), PREGLIDE_SEMITONES, color));
-        hbox.add(createLabelledDial(List.of("Program", "Volume"), PROGRAM_VOLUME, color));
+        hbox.add(createLabelledDial(Arrays.asList("Random", "Detune"), OSCS_RANDOM_DETUNE, color));
+        hbox.add(createLabelledDial(Arrays.asList("Preglide", "Semitones"), PREGLIDE_SEMITONES, color));
+        hbox.add(createLabelledDial(Arrays.asList("Program", "Volume"), PROGRAM_VOLUME, color));
 
         categoryGeneral.add(hbox, BorderLayout.CENTER);
         return categoryGeneral;
@@ -158,16 +159,16 @@ class UIBuilder
         hbox.add(createLabelledDial("Octave", Mappings.find("OSC%d_OCTAVE", osc), color));
         hbox.add(createLabelledDial("Semitone", Mappings.find("OSC%d_SEMITONE", osc), color));
         hbox.add(createLabelledDial("Detune", Mappings.find("OSC%d_DETUNE", osc), color));
-        hbox.add(createLabelledDial(List.of("Bend Wheel", "Depth"), Mappings.find("OSC%d_BENDWHEEL_AMOUNT", osc), color));
-        hbox.add(createLabelledDial(List.of("Mod Env", "Depth"), Mappings.find("OSC%d_ENV2_DEPTH", osc), color));
-        hbox.add(createLabelledDial(List.of("LFO1", "Depth"), Mappings.find("OSC%d_LFO1_DEPTH", osc), color));
+        hbox.add(createLabelledDial(Arrays.asList("Bend Wheel", "Depth"), Mappings.find("OSC%d_BENDWHEEL_AMOUNT", osc), color));
+        hbox.add(createLabelledDial(Arrays.asList("Mod Env", "Depth"), Mappings.find("OSC%d_ENV2_DEPTH", osc), color));
+        hbox.add(createLabelledDial(Arrays.asList("LFO1", "Depth"), Mappings.find("OSC%d_LFO1_DEPTH", osc), color));
         hbox.add(createLabelledDial("Pulse Width", Mappings.find("OSC%d_PULSE_WIDTH", osc), color));
-        hbox.add(createLabelledDial(List.of("Mod Env", "Pulse Width", "Depth"), Mappings.find("OSC%d_ENV2_PULSE_WIDTH_MOD", osc), color));
-        hbox.add(createLabelledDial(List.of("LFO2", "Pulse Width", "Depth"), Mappings.find("OSC%d_LFO2_PULSE_WIDTH_MOD", osc), color));
+        hbox.add(createLabelledDial(Arrays.asList("Mod Env", "Pulse Width", "Depth"), Mappings.find("OSC%d_ENV2_PULSE_WIDTH_MOD", osc), color));
+        hbox.add(createLabelledDial(Arrays.asList("LFO2", "Pulse Width", "Depth"), Mappings.find("OSC%d_LFO2_PULSE_WIDTH_MOD", osc), color));
 
         if (osc == 3) {
-            hbox.add(createLabelledDial(List.of("FM", "Level"), OSC3_FM_FIXED_LEVEL, color));
-            hbox.add(createLabelledDial(List.of("FM Env", "Depth"), OSC3_FM_ENVELOPE_DEPTH, color));
+            hbox.add(createLabelledDial(Arrays.asList("FM", "Level"), OSC3_FM_FIXED_LEVEL, color));
+            hbox.add(createLabelledDial(Arrays.asList("FM Env", "Depth"), OSC3_FM_ENVELOPE_DEPTH, color));
         }
 
         category.add(hbox, BorderLayout.CENTER);
@@ -182,7 +183,7 @@ class UIBuilder
         VBox vbox = new VBox();
         vbox.add(createChooser("Portamento Mode", PORTAMENTO_MODE));
         hbox.add(vbox);
-        hbox.add(createLabelledDial(List.of("Portamento", "Time"), PORTAMENTO_TIME, color));
+        hbox.add(createLabelledDial(Arrays.asList("Portamento", "Time"), PORTAMENTO_TIME, color));
 
         category.add(hbox, BorderLayout.CENTER);
         return category;
@@ -193,12 +194,12 @@ class UIBuilder
         Category category = new Category(synth, "Pitch Mod", color);
 
         HBox hbox = new HBox();
-        hbox.add(createLabelledDial(List.of("Modwheel", "Depth"), OSCS_MODWHEEL_PITCH_DEPTH, color));
-        hbox.add(createLabelledDial(List.of("Aftertouch", "Depth"), OSCS_AFTERTCH_PITCH_DEPTH, color));
-        hbox.add(createLabelledDial(List.of("Breath", "Depth"), OSCS_BREATH_PITCH_DEPTH, color));
-        hbox.add(createLabelledDial(List.of("Mod Wheel", "LFO1 Depth"), OSCS_MODWHEEL_LFO1_PITCH_DEPTH, color));
-        hbox.add(createLabelledDial(List.of("Aftertouch", "LFO1 Depth"), OSCS_AFTERTCH_LFO1_PITCH_DEPTH, color));
-        hbox.add(createLabelledDial(List.of("Breath", "LFO1 Depth"), OSCS_BREATH_LFO1_PITCH_DEPTH, color));
+        hbox.add(createLabelledDial(Arrays.asList("Modwheel", "Depth"), OSCS_MODWHEEL_PITCH_DEPTH, color));
+        hbox.add(createLabelledDial(Arrays.asList("Aftertouch", "Depth"), OSCS_AFTERTCH_PITCH_DEPTH, color));
+        hbox.add(createLabelledDial(Arrays.asList("Breath", "Depth"), OSCS_BREATH_PITCH_DEPTH, color));
+        hbox.add(createLabelledDial(Arrays.asList("Mod Wheel", "LFO1 Depth"), OSCS_MODWHEEL_LFO1_PITCH_DEPTH, color));
+        hbox.add(createLabelledDial(Arrays.asList("Aftertouch", "LFO1 Depth"), OSCS_AFTERTCH_LFO1_PITCH_DEPTH, color));
+        hbox.add(createLabelledDial(Arrays.asList("Breath", "LFO1 Depth"), OSCS_BREATH_LFO1_PITCH_DEPTH, color));
 
         category.add(hbox, BorderLayout.CENTER);
         return category;
@@ -209,9 +210,9 @@ class UIBuilder
         Category category = new Category(synth, "Amp Mod", color);
 
         HBox hbox = new HBox();
-        hbox.add(createLabelledDial(List.of("Mod Wheel", "Depth"), OSCS_MODWHEEL_AMPLITUDE_DEPTH, color));
-        hbox.add(createLabelledDial(List.of("Aftertouch", "Depth"), OSCS_AFTERTCH_AMPLITUDE_DEPTH, color));
-        hbox.add(createLabelledDial(List.of("Breath", "Depth"), OSCS_BREATH_AMPLITUDE_DEPTH, color));
+        hbox.add(createLabelledDial(Arrays.asList("Mod Wheel", "Depth"), OSCS_MODWHEEL_AMPLITUDE_DEPTH, color));
+        hbox.add(createLabelledDial(Arrays.asList("Aftertouch", "Depth"), OSCS_AFTERTCH_AMPLITUDE_DEPTH, color));
+        hbox.add(createLabelledDial(Arrays.asList("Breath", "Depth"), OSCS_BREATH_AMPLITUDE_DEPTH, color));
 
         category.add(hbox, BorderLayout.CENTER);
         return category;
@@ -226,8 +227,8 @@ class UIBuilder
         hbox.add(createLabelledDial("OSC2", MIXER_OSC2, color));
         hbox.add(createLabelledDial("OSC3", MIXER_OSC3, color));
         hbox.add(createLabelledDial("Noise", MIXER_NOISE, color));
-        hbox.add(createLabelledDial(List.of("Ring Mod", "1*2"), MIXER_RING_MOD, color));
-        hbox.add(createLabelledDial(List.of("External", "Audio"), MIXER_EXTERNAL, color));
+        hbox.add(createLabelledDial(Arrays.asList("Ring Mod", "1*2"), MIXER_RING_MOD, color));
+        hbox.add(createLabelledDial(Arrays.asList("External", "Audio"), MIXER_EXTERNAL, color));
 
         category.add(hbox, BorderLayout.CENTER);
         return category;
@@ -261,18 +262,18 @@ class UIBuilder
         hbox.add(createLabelledDial("Resonance", FILTER_RESONANCE, color));
         hbox.add(createLabelledDial("Overdrive", FILTER_OVERDRIVE, color));
         hbox.add(createLabelledDial("Key Track", FILTER_KEY_TRACK, color));
-        hbox.add(createLabelledDial(List.of("Mod Wheel", "Depth"), FILTER_MODWHEEL_FREQUENCY_DEPTH, color));
-        hbox.add(createLabelledDial(List.of("Mod Env", "Depth"), FILTER_ENV2_DEPTH, color));
-        hbox.add(createLabelledDial(List.of("LFO2", "Depth"), FILTER_LFO2_DEPTH, color));
+        hbox.add(createLabelledDial(Arrays.asList("Mod Wheel", "Depth"), FILTER_MODWHEEL_FREQUENCY_DEPTH, color));
+        hbox.add(createLabelledDial(Arrays.asList("Mod Env", "Depth"), FILTER_ENV2_DEPTH, color));
+        hbox.add(createLabelledDial(Arrays.asList("LFO2", "Depth"), FILTER_LFO2_DEPTH, color));
         vbox2.add(hbox);
 
         hbox = new HBox();
         hbox.add(createLabelledDial("Q Normalize", FILTER_Q_NORMALIZE, color));
-        hbox.add(createLabelledDial(List.of("Aftertouch", "Depth"), FILTER_AFTERTCH_FREQUENCY_DEPTH, color));
-        hbox.add(createLabelledDial(List.of("Breath", "Depth"), FILTER_BREATH_FREQUENCY_DEPTH, color));
-        hbox.add(createLabelledDial(List.of("Mod Wheel", "LFO2 depth"), FILTER_MODWHEEL_LFO2_FREQUENCY_DEPTH, color));
-        hbox.add(createLabelledDial(List.of("Aftertouch", "LFO2 depth"), FILTER_AFTERTCH_LFO2_FREQUENCY_DEPTH, color));
-        hbox.add(createLabelledDial(List.of("Breath", "LFO2 depth"), FILTER_BREATH_LFO2_FREQUENCY_DEPTH, color));
+        hbox.add(createLabelledDial(Arrays.asList("Aftertouch", "Depth"), FILTER_AFTERTCH_FREQUENCY_DEPTH, color));
+        hbox.add(createLabelledDial(Arrays.asList("Breath", "Depth"), FILTER_BREATH_FREQUENCY_DEPTH, color));
+        hbox.add(createLabelledDial(Arrays.asList("Mod Wheel", "LFO2 depth"), FILTER_MODWHEEL_LFO2_FREQUENCY_DEPTH, color));
+        hbox.add(createLabelledDial(Arrays.asList("Aftertouch", "LFO2 depth"), FILTER_AFTERTCH_LFO2_FREQUENCY_DEPTH, color));
+        hbox.add(createLabelledDial(Arrays.asList("Breath", "LFO2 depth"), FILTER_BREATH_LFO2_FREQUENCY_DEPTH, color));
         vbox2.add(hbox);
         mainhbox.add(vbox2);
 
@@ -346,8 +347,8 @@ class UIBuilder
         hbox.add(vbox);
 
         // NOTE - improve (interaction between) sync and non-sync controls ?
-        hbox.add(createLabelledDial(List.of("Speed", "(Non-Sync)"), Mappings.find("LFO%d_SPEED_NON_SYNC", lfo), color));
-        hbox.add(createLabelledDial(List.of("Speed", "(Sync)"), Mappings.find("LFO%d_SPEED_SYNC", lfo), color));
+        hbox.add(createLabelledDial(Arrays.asList("Speed", "(Non-Sync)"), Mappings.find("LFO%d_SPEED_NON_SYNC", lfo), color));
+        hbox.add(createLabelledDial(Arrays.asList("Speed", "(Sync)"), Mappings.find("LFO%d_SPEED_SYNC", lfo), color));
         hbox.add(createLabelledDial("Delay", Mappings.find("LFO%d_DELAY", lfo), color));
 
         category.add(hbox, BorderLayout.CENTER);
@@ -371,8 +372,8 @@ class UIBuilder
         vbox.add(createChooser("Note Destination", ARP_NOTE_DESTINATION));
         hbox.add(vbox);
 
-        hbox.add(createLabelledDial(List.of("Rate", "(Sync)"), ARP_RATE_SYNC, color));
-        hbox.add(createLabelledDial(List.of("Rate", "(BPM)"), ARP_RATE_NON_SYNC, color));
+        hbox.add(createLabelledDial(Arrays.asList("Rate", "(Sync)"), ARP_RATE_SYNC, color));
+        hbox.add(createLabelledDial(Arrays.asList("Rate", "(BPM)"), ARP_RATE_NON_SYNC, color));
         hbox.add(createLabelledDial("Octaves", ARP_OCTAVES, color));
         hbox.add(createLabelledDial("Gate Time", ARP_GATE_TIME, color));
 
@@ -385,18 +386,18 @@ class UIBuilder
         Category category = new Category(synth, "Delay", color);
         HBox hbox = new HBox();
 
-        hbox.add(createLabelledDial(List.of("Send", "Level"), DELAY_SEND_LEVEL, color));
+        hbox.add(createLabelledDial(Arrays.asList("Send", "Level"), DELAY_SEND_LEVEL, color));
         hbox.add(createLabelledDial("Modwheel", DELAY_SEND_MODWHEEL, color));
 
         // NOTE - improve (interaction between) sync and non-sync controls ?
-        hbox.add(createLabelledDial(List.of("Time", "(Sync)"), DELAY_TIME_SYNC, color));
-        hbox.add(createLabelledDial(List.of("Time", "(Non-Sync)"), DELAY_TIME_NON_SYNC, color));
+        hbox.add(createLabelledDial(Arrays.asList("Time", "(Sync)"), DELAY_TIME_SYNC, color));
+        hbox.add(createLabelledDial(Arrays.asList("Time", "(Non-Sync)"), DELAY_TIME_NON_SYNC, color));
 
         hbox.add(createLabelledDial("Feedback", DELAY_FEEDBACK, color));
 
         // NOTE - improve (interaction between) sync and non-sync controls ?
-        hbox.add(createLabelledDial(List.of("Ratio", "(L-R)"), DELAY_RATIO, color));
-        hbox.add(createLabelledDial(List.of("Stereo", "Width"), DELAY_STEREO_WIDTH, color));
+        hbox.add(createLabelledDial(Arrays.asList("Ratio", "(L-R)"), DELAY_RATIO, color));
+        hbox.add(createLabelledDial(Arrays.asList("Stereo", "Width"), DELAY_STEREO_WIDTH, color));
 
         category.add(hbox);
         return category;
@@ -410,7 +411,7 @@ class UIBuilder
         VBox vbox = new VBox();
         vbox.add(createChooser("Type", REVERB_TYPE));
         hbox.add(vbox);
-        hbox.add(createLabelledDial(List.of("Send", "Level"), REVERB_SEND_LEVEL, color));
+        hbox.add(createLabelledDial(Arrays.asList("Send", "Level"), REVERB_SEND_LEVEL, color));
         hbox.add(createLabelledDial("Mod Wheel", REVERB_SEND_MODWHEEL, color));
         hbox.add(createLabelledDial("Decay", REVERB_DECAY, color));
         category.add(hbox);
@@ -426,16 +427,16 @@ class UIBuilder
         vbox.add(createChooser("Type", CHORUS_TYPE));
         vbox.add(createChooser("Global Sync", CHORUS_GLOBAL_SYNC));
         hbox.add(vbox);
-        hbox.add(createLabelledDial(List.of("Send", "Level"), CHORUS_SEND_LEVEL, color));
+        hbox.add(createLabelledDial(Arrays.asList("Send", "Level"), CHORUS_SEND_LEVEL, color));
         hbox.add(createLabelledDial("Mod Wheel", CHORUS_SEND_MODWHEEL, color));
 
         // NOTE - improve (interaction between) sync and non-sync controls ?
-        hbox.add(createLabelledDial(List.of("Rate", "(Sync)"), CHORUS_RATE_SYNC, color));
-        hbox.add(createLabelledDial(List.of("Rate", "(Non-Sync)"), CHORUS_RATE_NON_SYNC, color));
+        hbox.add(createLabelledDial(Arrays.asList("Rate", "(Sync)"), CHORUS_RATE_SYNC, color));
+        hbox.add(createLabelledDial(Arrays.asList("Rate", "(Non-Sync)"), CHORUS_RATE_NON_SYNC, color));
 
         hbox.add(createLabelledDial("Feedback", CHORUS_FEEDBACK, color));
         hbox.add(createLabelledDial("Depth", CHORUS_MOD_DEPTH, color));
-        hbox.add(createLabelledDial(List.of("Centre", "Point"), CHORUS_MOD_CENTRE_POINT, color));
+        hbox.add(createLabelledDial(Arrays.asList("Centre", "Point"), CHORUS_MOD_CENTRE_POINT, color));
 
         category.add(hbox);
         return category;
@@ -446,7 +447,7 @@ class UIBuilder
         Category category = new Category(synth, "Distortion", color);
         HBox hbox = new HBox();
 
-        hbox.add(createLabelledDial(List.of("Send", "Level"), DISTORTION_LEVEL, color));
+        hbox.add(createLabelledDial(Arrays.asList("Send", "Level"), DISTORTION_LEVEL, color));
         hbox.add(createLabelledDial("Mod Wheel", DISTORTION_MODWHEEL, color));
         hbox.add(createLabelledDial("Compensation", DISTORTION_COMPENSATION, color));
 
@@ -467,8 +468,8 @@ class UIBuilder
         hbox.add(createLabelledDial("Level", EQUALIZER_LEVEL, color));
         hbox.add(createLabelledDial("Frequency", EQUALIZER_FREQUENCY, color));
         // NOTE - improve (interaction between) sync and non-sync controls ?
-        hbox.add(createLabelledDial(List.of("Rate", "(Sync)"), EQUALIZER_RATE_SYNC, color));
-        hbox.add(createLabelledDial(List.of("Rate", "(Non-Sync)"), EQUALIZER_RATE_NON_SYNC, color));
+        hbox.add(createLabelledDial(Arrays.asList("Rate", "(Sync)"), EQUALIZER_RATE_SYNC, color));
+        hbox.add(createLabelledDial(Arrays.asList("Rate", "(Non-Sync)"), EQUALIZER_RATE_NON_SYNC, color));
         hbox.add(createLabelledDial("Mod Depth", EQUALIZER_MOD_DEPTH, color));
 
         category.add(hbox);
@@ -489,8 +490,8 @@ class UIBuilder
         hbox.add(createLabelledDial("Position", PANNING_POSITION, color));
 
         // NOTE - improve (interaction between) sync and non-sync controls ?
-        hbox.add(createLabelledDial(List.of("Rate", "(Sync)"), PANNING_RATE_SYNC, color));
-        hbox.add(createLabelledDial(List.of("Rate", "(Non-Sync)"), PANNING_RATE_NON_SYNC, color));
+        hbox.add(createLabelledDial(Arrays.asList("Rate", "(Sync)"), PANNING_RATE_SYNC, color));
+        hbox.add(createLabelledDial(Arrays.asList("Rate", "(Non-Sync)"), PANNING_RATE_NON_SYNC, color));
 
         hbox.add(createLabelledDial("Depth", PANNING_MOD_DEPTH, color));
 
@@ -507,8 +508,8 @@ class UIBuilder
         vbox.add(createChooser("Sibilance Type", VOCODER_SIBILANCE_TYPE));
         hbox.add(vbox);
         hbox.add(createLabelledDial("Balance", VOCODER_BALANCE, color));
-        hbox.add(createLabelledDial(List.of("Stereo", "Width"), VOCODER_STEREO_WIDTH, color));
-        hbox.add(createLabelledDial(List.of("Sibilance", "Level"), VOCODER_SIBILANCE_LEVEL, color));
+        hbox.add(createLabelledDial(Arrays.asList("Stereo", "Width"), VOCODER_STEREO_WIDTH, color));
+        hbox.add(createLabelledDial(Arrays.asList("Sibilance", "Level"), VOCODER_SIBILANCE_LEVEL, color));
 
         category.add(hbox);
         return category;
@@ -551,7 +552,7 @@ class UIBuilder
     // convenience method to create labelledDial with single label
     private LabelledDial createLabelledDial(String label, Mappings mappings, Color color)
     {
-        return createLabelledDial(List.of(label), mappings, color);
+        return createLabelledDial(Arrays.asList(label), mappings, color);
     }
 
     // convenience method to create labelledDial with multiple labels

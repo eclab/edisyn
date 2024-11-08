@@ -1,5 +1,6 @@
 package edisyn.synth.novationastation;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -39,8 +40,8 @@ public enum Boundaries implements Boundary {
     PANNING_GLOBAL_SYNC(CHORUS_GLOBAL_SYNC),
     SYNC_RATES("NA", "32t", "32", "16t", "16", "8t", "16D", "8", "4t", "8d", "4", "2t", "4d", "2", "1t", "2d",
                        "1b", "2t", "1d", "2b", "4t", "3b", "5t", "4b", "3d", "7t", "5b", "8t", "6b", "7b", "5d", "8b", "9b", "7d", "12"),
-    DELAY_SYNC_RATES(List.of(SYNC_RATES.values).subList(0, 20)),
-    ARP_SYNC_RATES(List.of(SYNC_RATES.values).subList(1, 17)),
+    DELAY_SYNC_RATES(Arrays.asList(SYNC_RATES.values).subList(0, 20)),
+    ARP_SYNC_RATES(Arrays.asList(SYNC_RATES.values).subList(1, 17)),
     ARP_NON_SYNC_RATES(0, 127, -64), // 64 -> 191 BPM
     DELAY_RATIO("1-1", "4-3", "3-4", "3-2", "2-3", "2-1", "1-2", "3-1", "1-3", "4-1", "1-4", "1-0", "0-1"),
     EQUALIZER_LEVEL(IntStream.rangeClosed(0, 127).boxed().map(i -> {

@@ -122,7 +122,7 @@ class UIBuilder
         HBox hbox = new HBox();
         VBox vbox = new VBox();
         vbox.add(createChooser("Polyphony Mode", POLYPHONY_MODE));
-        var keySync = createChooser("Keysync Phase", KEY_SYNC_PHASE);
+        JComponent keySync = createChooser("Keysync Phase", KEY_SYNC_PHASE);
         // set ranges for metric values: skipping first item, being a non metric value ("Free running")
         synth.getModel().setMetricMinMax(KEY_SYNC_PHASE.getKey(),
                 KEY_SYNC_PHASE.getBoundaries().getMin() + 1, KEY_SYNC_PHASE.getBoundaries().getMax());

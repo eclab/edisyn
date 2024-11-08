@@ -2,9 +2,7 @@ package edisyn.synth.novationastation;
 
 import edisyn.Model;
 
-import java.util.Map;
-import java.util.Optional;
-import java.util.OptionalInt;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -49,8 +47,8 @@ class Convertors {
     private static final Map<Integer, Convertor> BY_NRPN = buildNRPNMap();
 
     private static Map<String, Convertor> buildKeyMap() {
-        return Stream.of(Mappings.values())
-                .collect(Collectors.toUnmodifiableMap(
+        return Collections.unmodifiableMap(Stream.of(Mappings.values())
+                .collect(Collectors.toMap(
                         Mappings::getKey,
                         Mappings::getConvertor,
                         (convertor1, convertor2) -> {
@@ -59,14 +57,14 @@ class Convertors {
                             }
                             return convertor1;
                         }
-                ));
+                )));
     }
 
     private static Map<Integer, Convertor> buildIndexMap() {
-        return Stream.of(Mappings.values())
+        return Collections.unmodifiableMap(Stream.of(Mappings.values())
                 .map(Mappings::getConvertor)
                 .filter(convertor -> convertor.getByteIndex().isPresent())
-                .collect(Collectors.toUnmodifiableMap(
+                .collect(Collectors.toMap(
                         convertor -> convertor.getByteIndex().getAsInt(),
                         Function.identity(),
                         (convertor1, convertor2) -> {
@@ -75,14 +73,14 @@ class Convertors {
                             }
                             return convertor1;
                         }
-                ));
+                )));
     }
 
     private static Map<Integer, Convertor> buildCCMap() {
-        return Stream.of(Mappings.values())
+        return Collections.unmodifiableMap(Stream.of(Mappings.values())
                 .map(Mappings::getConvertor)
                 .filter(convertor -> convertor.getCC().isPresent())
-                .collect(Collectors.toUnmodifiableMap(
+                .collect(Collectors.toMap(
                         convertor -> convertor.getCC().getAsInt(),
                         Function.identity(),
                         (convertor1, convertor2) -> {
@@ -91,14 +89,14 @@ class Convertors {
                             }
                             return convertor1;
                         }
-                ));
+                )));
     }
 
     private static Map<Integer, Convertor> buildNRPNMap() {
-        return Stream.of(Mappings.values())
+        return Collections.unmodifiableMap(Stream.of(Mappings.values())
                 .map(Mappings::getConvertor)
                 .filter(convertor -> convertor.getNRPN().isPresent())
-                .collect(Collectors.toUnmodifiableMap(
+                .collect(Collectors.toMap(
                         convertor -> convertor.getNRPN().getAsInt(),
                         Function.identity(),
                         (convertor1, convertor2) -> {
@@ -107,7 +105,7 @@ class Convertors {
                             }
                             return convertor1;
                         }
-                ));
+                )));
     }
 
     /**

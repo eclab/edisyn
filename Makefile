@@ -1,13 +1,14 @@
 .PHONY: jar install
 
 #JAVAC = javac ${JAVACFLAGS}
-JAVAC = javac
+JAVAC = javac --release 9
+DEBUG = -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
 
 all: 
-	javac -cp libraries/coremidi4j-1.6.jar:edisyn $$(find edisyn -name '*.java') 
+	javac -cp libraries/coremidi4j-1.6.jar:edisyn $$(find edisyn -name '*.java')
 
-run:
-	java -cp libraries/coremidi4j-1.6.jar:. edisyn.Edisyn
+run: all
+	java $(DEBUG) -cp libraries/coremidi4j-1.6.jar:. edisyn.Edisyn
 
 indent:
 	touch ${HOME}/.emacs

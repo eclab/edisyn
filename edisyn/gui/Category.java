@@ -41,17 +41,17 @@ public class Category extends JPanel implements Gatherable
     boolean sendsAllParameters = false;
     Gatherable auxillary = null;
     
-    MenuItem copy = new MenuItem("Copy Category");
-    MenuItem paste = new MenuItem("Paste Category");
-    MenuItem distribute = new MenuItem("Distribute");
-    MenuItem copyFromMutable = new MenuItem("Copy Category (Mutation Parameters Only)");
-    MenuItem pasteToMutable = new MenuItem("Paste Category (Mutation Parameters Only)");
-    MenuItem distributeToMutable = new MenuItem("Distribute (Mutation Parameters Only)");
-    MenuItem reset = new MenuItem("Reset Category");
-    MenuItem rand25 = new MenuItem("Randomize by 25%");
-    MenuItem rand50 = new MenuItem("Randomize by 50%");
-    MenuItem rand75 = new MenuItem("Randomize by 75%");
-    MenuItem rand100 = new MenuItem("Randomize by 100%");
+    JMenuItem copy = new JMenuItem("Copy Category");
+    JMenuItem paste = new JMenuItem("Paste Category");
+    JMenuItem distribute = new JMenuItem("Distribute");
+    JMenuItem copyFromMutable = new JMenuItem("Copy Category (Mutation Parameters Only)");
+    JMenuItem pasteToMutable = new JMenuItem("Paste Category (Mutation Parameters Only)");
+    JMenuItem distributeToMutable = new JMenuItem("Distribute (Mutation Parameters Only)");
+    JMenuItem reset = new JMenuItem("Reset Category");
+    JMenuItem rand25 = new JMenuItem("Randomize by 25%");
+    JMenuItem rand50 = new JMenuItem("Randomize by 50%");
+    JMenuItem rand75 = new JMenuItem("Randomize by 75%");
+    JMenuItem rand100 = new JMenuItem("Randomize by 100%");
         
     public void makePasteable(String preamble) { pasteable = true; this.preamble = preamble; }
     public void makePasteable(String preamble, String preamble2) { pasteable = true; this.preamble = preamble; }
@@ -76,7 +76,7 @@ public class Category extends JPanel implements Gatherable
         we want to gather from the auxillary as well. */
     public void setAuxillary(Gatherable comp) { auxillary = comp; }
     
-    PopupMenu pop = new PopupMenu();
+    JPopupMenu pop = new JPopupMenu();
     int stringWidth;
       
     public boolean isPasteCompatible(String preamble)
@@ -422,9 +422,9 @@ public class Category extends JPanel implements Gatherable
                                                 
                             // we add, then remove the popup because I've discovered (in the Korg Wavestation SR Sequence Editor)
                             // that if the popup is pre-added, then it takes quite a while to dynamically add or remove categories.
-                            Category.this.add(pop);
+                            //Category.this.add(pop);
                             pop.show(e.getComponent(), e.getX(), e.getY());
-                            Category.this.remove(pop);
+                            //Category.this.remove(pop);
                             }
                         }
                     }
@@ -606,7 +606,8 @@ public class Category extends JPanel implements Gatherable
         rand75.setEnabled(true);
         rand100.setEnabled(true);
                 
-        //Category.this.add(pop);
+    	//Category.this.add(pop);
+    	pop.setDefaultLightWeightPopupEnabled(false);
         }
     
     public Insets getInsets() 

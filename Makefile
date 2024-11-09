@@ -27,8 +27,10 @@ jar:
 	rm -rf uk META-INF
 
 install: jar
-	rm -rf install/Edisyn.app install/bundles install/Edisyn.dmg.html install/Edisyn.dmg.jnlp
-	- javapackager -deploy -native dmg -srcfiles install/edisyn.jar -appclass edisyn.Edisyn -name Edisyn -outdir install -outfile Edisyn.dmg -v
+	rm -rf app/Edisyn.app install/Edisyn.app install/bundles install/Edisyn.dmg.html install/Edisyn.dmg.jnlp
+	# See https://alvinalexander.com/java/how-use-jpackage-command-java-14-jdk-sdk/
+	# - javapackager -deploy -native dmg -srcfiles install/edisyn.jar -appclass edisyn.Edisyn -name Edisyn -outdir install -outfile Edisyn.dmg -v
+	- jpackage --type app-image --verbose --input install --dest app --name Edisyn --main-jar edisyn.jar --main-class edisyn.Edisyn
 	- mv install/bundles/Edisyn-1.0.dmg install/Edisyn.dmg
 	rm -rf install/bundles install/Edisyn.dmg.html install/Edisyn.dmg.jnlp 
 

@@ -1,0 +1,512 @@
+LNK:Corcovado  L
+LNK:Etherworm  R
+LNK:FrogBahia  L
+LNK:Panic Room R
+LNK:Burningman L
+LNK:UrAnusVisitR
+LNK:Locust     L
+LNK:Swamp StuffR
+LNK:Dr Benway  L
+LNK:Ritual     R
+LNK:Wasp Queen L
+LNK:Macumba    R
+LNK:Horsemen   L
+LNK:BoilinBird R
+LNK:FiZmO Mot  L
+LNK:CongoHowl  R
+LNK:Iron ForestL
+SCW:Rezovariator
+NOI:BitterFlavor
+DRO:Collider    
+ARP:Caravan     
+NOI:Chernobird  
+NOI:WOW Signal  
+DRO:HellHoarders
+NOI:Chita&Tarzan
+DRO:Hell Armor  
+PAD:Epic Rising 
+PAD:The Pilgrim 
+DRO:Las Animas  
+CHR:BurguerRant 
+DRO:AI Takeover 
+NOI:Telestar    
+DRO:7th Plague
+NOI:OilBlindBird
+DRO:Abraxax 2099
+NOI:Call Cthulhu
+LNK:12LayerDream
+LNK:Slavelnk1
+CHR:Sectum XXIV 
+VOX:Panopticon  
+CHR:TheCovenant 
+PAD:Chosen Ones 
+CHR:SoulinChains
+LNK: Antigona   
+CHR:Epifania    
+CHR:Revelations 
+CHR:Forgiveness 
+CHR:Noir Alma   
+CHR:Placebox    
+CHR:Lemuria     
+LNK:Agartha     
+LNK:Agartha lnk 
+CHR:Miserere    
+DRO:Decay Days  
+CHR:Pentecostes 
+CHR:Sectum XVII 
+CHR:Rayo de Luna
+CHR:Odin Vinil  
+CHR:The 700 Club
+CHR:Ilvminati   
+CHR:SkinnySopran
+CHR:Heresy      
+CHR:Fallen Idol 
+CHR:Violete     
+CHR:Delas Animas
+PAD:Warm Days 02
+PAD:King's Death
+ARP:Tranceline19
+PAD:Carl Sagan  
+PAD:Waldorf Qpad
+PAD:Redemption  
+PAD:Fullmoon    
+DRO:Fizmo Dream 
+PAD:Sopranostrng
+PAD:DawnoReason 
+PAD:Crimsonsky  
+LNK:Serenity   L
+PAD:Epilogue    
+PAD:Xfader C&D  
+CHR:Numbered    
+ARP:PocketPussy 
+PAD:Unisoner  44
+NOI:Epifania HPF
+PAD:Empire I Act
+PAD:Empire 2 Act
+CHR:Lies Dot Com
+PAD:Sweet Salty 
+SCW:Cold War    
+DRO:Razorback   
+CHR:Stigma arp66
+CHR:Forgiveness 
+PAD:Lombardia   
+DRO:Fusionanomal
+CHR:Revelations 
+PAD:BaldMountain
+LNK:Serenity   R
+DRO:Mea Culpa   
+NOI:From Hell   
+SYN:Neon Blues  
+SYN:Blue Keys   
+SYN:Sephia Keys 
+ARP:Puzzyflutes 
+SYN:Dali&Gala   
+SYN:Retro Tremol
+DRO:FIzMo Gore  
+WND:Unholy Dove 
+SYN:Black Sands 
+ARP:PowerRiff 06
+SYN:Sun Apple   
+SYN:Magallanes  
+LNK:Scale MorphL
+LNK:19-Tone    R
+SYN:Violete     
+SYN:Infantilizer
+SYN:Tremo Errati
+SYN:Farewell    
+SYN:Classic Epic
+LED:Sawy Waves  
+SYN:Alien Jelly 
+SYN:Gold Member 
+SYN:Sweet Candy 
+CHR:Afterlife   
+CHR:ScaleNostalg
+NOI:FIies ZZZZZZ
+SYN:Philia 2
+SYN:Pacifica    
+ARP:Trondheim   
+ARP:NymphoPepa  
+CHR:SoulRemoved 
+ARP:DullBoy   24
+ARP:Frog Song 1
+DRO:Deepestaring
+PAD:Elixir Dream
+ARP:JackSparrou 
+ARP:In-One-Life 
+ARP:Cambodia  21
+ARP:MetalMilitia
+ARP:Black Fest  
+HAT:HatsRevers  
+ARP:Cowbasscombo
+ARP:RainMkr 80
+HAT:Subway Fork 
+ARP:TripHopbass 
+ARP:Panbassline 
+ARP:Echo Damn 47
+ARP:PitchTuner73
+HAT:HiHat Arp01
+ARP:Koji KabutoA
+ARP:Koji KabutoB
+ARP:False Idols 
+PRC:Lft->Rgt Pan
+ARP:Greenlanding
+LED:XXL Burrito 
+ARP:Gimme Gimme!
+ARP:PatRobertson
+ARP:TeslaMyth 03
+VOX:Seqvential  
+ARP:KlingonArmy 
+ARP:Anxiety Rlax
+ARP:Flat Frogs  
+ARP:Fujian KIT08
+ARP:Mal de Ojo06
+DRO:SaintGermain
+CHR:Revelations 
+ARP:Vox&Bass  83
+ARP:Bellycozy 78
+HAT:HiHat Arp 02
+HAT:HiHat Arp 03
+HAT:HiHat Arp 04
+ARP:Pirates!  03
+HAT:HiHat Arp 05
+SNR:Snare VelZon
+ARP:Headbanger  
+ARP:Resistance13
+ARP:Lovestick 76
+HAT:HiHat Arp 06
+ARP:Voodology 70
+ARP:RetrigRiff A
+ARP:Brutalism 70
+HAT:Ravin filler
+ARP:Epic Stack52
+ARP:Altamar   02
+GTR:Revolt      
+ARP:Leviathan 38
+ARP:Pulse Arp 07
+ARP:Arrow ofTime
+ARP:Kit Rider 47
+PAD:Uncertainty 
+HAT:Cymbalisti10
+ARP:Odin A      
+SNR:Squash Ball 
+ARP:RainHater   
+ARP:VoxDialer 06
+GTR:Betrayer    
+GTR:Your Sins   
+ARP:Half Life 84
+GTR:BeerSpiller 
+HAT:ShockHats 62
+ARP:Yamaha EX5
+SYN:Ibiza Star  
+GTR:Cinema Gtr  
+GTR:Power Satan 
+PRC:Atomic Ant  
+ARP:Vox B VelZon
+GTR:Munster     
+DRO:Fizmo Meca 1
+LED:Rejoice     
+GTR:Tristan     
+ARP:Liquid Bird 
+ARP:Startpoints 
+ARP:Resiliant 03
+ARP:Knobs-) ARP 
+SNR:Moisture    
+HAT:Hi-Five-Ha11
+ARP:FlameTongues
+DRO:Intruders   
+ARP:Comatose  53
+ARP:Dr Benway 41
+SYN:TXM Semitune
+NOI:Forestsheltr
+SCW:Abramelian  
+SCW:ResonantCave
+SCW:BatRiverCave
+ARP:Nipplerector
+PRC:Meatball    
+DRO:Ivan Terribl
+HAT:HiHat Arp 08
+LED:Zodomizer   
+LED:DramaQueen  
+LED:BerlinGritty
+BAS:Reversor    
+LED:Zeus Zays   
+LED:Transpottin!
+LED:The Whale   
+LED:Nebular Cat 
+ARP:Sacre Blue  
+LED:Basic Lead 1
+LED:The Cabal   
+LNK:24K StackRav
+LNK:24K Stack R
+SCW:SecretWife  
+LED:Tresorisnext
+ARP:DSI Bass  64
+LED:RetrigPaner 
+LED:GlideBigWoof
+LED:Pizzagate   
+LED:Unison Squad
+ARP:DMT Explorer
+SNR:Snar&Boner  
+SNR:SnrBouncer  
+HAT:HiHat LoFi09
+ARP:Acid Riff2Ly
+ARP:Black Fest  
+ARP:RusticBell20
+NOI:TrapUnderIce
+DRO:Naked Lunch 
+VOX:Onion Layers
+VOX:SaintGoatse 
+VOX:Hit Echoer  
+VOX:Negrovision 
+VOX:Feels Good  
+HAT:Reefer King 
+VOX:QAnon Queen 
+ARP:lron Ages   
+VOX:Phrase Mangl
+NOI:UnnaturalSex
+VOX:Odin B      
+SYN:Waldorf Q   
+VOX:Dark Warner 
+VOX:AssportDeny 
+VOX:Corrupted   
+VOX:Gloryhole   
+VOX:Naive Maybe 
+VOX:Cuckold now 
+PAD:Warm Days 02
+SNR:Flycatcher  
+VOX:Lost Tapes  
+VOX:In-Cummin!  
+VOX:Red District
+VOX:GhostStories
+VOX:Soccer Mom  
+VOX:ZeroTheorem 
+NOI:Night Hunt  
+VOX:=( Mangler  
+VOX:ScapeRumania
+VOX:Pleasure    
+LNK:Puppa#Purple
+ARP:LemonIndustr
+VOX:Phonechat $5
+SNR:Firestallion
+VOX:enslavement 
+VOX:Messiah     
+VOX:Street Meat 
+ARP:4Vel Bass 03
+VOX:Sasha Squirt
+VOX:Humanizer 1
+VOX:Voodoo Heal 
+CHR:RidingPriest
+SNR:Feerstallion
+KIT:Little Hope 
+NOI:InsectPalace
+VOX:Demonizer   
+VOX:Messiah     
+VOX:Cryptonomico
+ARP:SubtleTease 
+CHR:Choir Days  
+KIC:PatchFactory
+VOX:Taboo Diary 
+VOX:Doggy Style 
+SNR:NoRightoRulQ
+ARP:DaliSalvador
+HAT:Hats  fill14
+VOX:EatHerFlesh 
+PAD:End Sorrow  
+KIC:Cuckold Klub
+CHR:Fausto      
+BAS:Dumbass     
+NOI:Rain Thunder
+GTR:Krakatoa    
+NOI:WaspStatic  
+WND:Taxi Driver 
+PAD:Pasifae     
+WND:Goethe XVI  
+NOI:Noise Knobby
+WND:Flutens     
+WND:FlemishWrong
+ARP:TranceProg19
+WND:Gloryhole   
+WND:Flutaria    
+PAD:Aqua Whisper
+VOX:La Comarca  
+GTR:RancidDisto 
+ARP:Mal de Ojo06
+LNK:RaindrummerL
+NOI:Echo Wasp   
+HAT:HiHat Arp 11
+ARP:Marebito    
+ARP:ShakaZulu 19
+LED:DSITempesSaw
+HAT:ArrowOf Time
+LNK:RaindrummerR
+ARP:Teenager 47!
+ARP:DMTmeWanna26
+KIC:ButtBlaster 
+ARP:SawGrinder26
+ARP:LoFat trance
+PAD:Pentecostes 
+SNR:Dual Knob   
+DRO:Microtubular
+PRC:Electomer   
+SYN:Bell Taco   
+SYN:FiZmO  Keys 
+SCW:Brown Bell  
+SYN:Sinoidal    
+SYN:BellSexy    
+SCW:DutyCycler  
+SCW:MachineElves
+BAS:Fastbassline
+ARP:Wavexciter  
+SCW:PanningPad  
+NOI:Autolooper! 
+SNR:Sinistar    
+BAS:Bowy Deep   
+ARP:TomSquareBas
+SNR:Whistlesnare
+ARP:Pitch Snares
+SYN:Blue Keys   
+ARP:Cambodia  21
+HAT:HiHat Arp 12
+PRC:Woobler     
+PAD:Super Pad   
+ARP:Shamania  77
+BAS:Viagra Bass 
+SNR:Kit it!     
+KIT:Mollywopphh 
+KIC:Butterbean A
+ARP:Gabba Yabba 
+PRC:Tom Hard-on 
+PRC:Shaman  Card
+PRC:Fastbass 88
+PRC:Sloop Groove
+PRC:Shake Kool  
+NOI:Rezoidal    
+KIT:OontzOontshh
+LNK:KickFactory1
+LNK:8X  Bass2nd
+KIC:Tom Rider A 
+KIC:Chokekick   
+KIC:Butterbean A
+KIC:Thundercat O
+KIC:Zeus'Hard-On
+KIC:4LyrBassDrmC
+KIC:HeadblasterA
+KIC:The Rookie  
+KIC:LoFi Shady  
+KIC:Hard-ON     
+KIC:TempestDave 
+KIC:DSI Tempest1
+ARP:Jim Jones   
+KIC:Knutcracker 
+KIC:Bonesmasher 
+KIC:Super Goatse
+KIC:RazoBlades  
+PAD:DesertPlane 
+KIC:Demolition  
+KIC:Bassdrum    
+LNK:Big Dumper  
+KIC:Dirtbass    
+KIC:Red Baron   
+KIC:HeadblasterB
+KIC:Jaw BreakerD
+KIC:Burnin Klub 
+KIC:Sub Quake   
+KIC:Giant Jack  
+LNK:Macho's Kick
+KIC:Jaw BreakerF
+KIC:Nazcadelick 
+BAS:Dick Rogers 
+BAS:Mango&Salt  
+KIT:All About SX
+DRO:AyahuascaDMT
+BAS:PulseeCombo 
+BAS:Acid Short A
+ARP:Pineal Fruit
+BAS:OldSkool    
+GTR:Monstercock 
+ARP:FunkaPercz  
+ARP:F|ock&Lamb52
+ARP:100 Sunsets
+BAS:Low Matters 
+BAS:Acid Quartet
+ARP:Leviathan 38
+ARP:Under a Rock
+SNR:Anger Shot  
+KIC:FkDaShitOut!
+KIC:Moby!s Kick 
+HAT:Evil Within!
+SNR:Zumo Panties
+ARP:Shock4freeLF
+DRO:FiZmOlEcUlar
+ARP:Telestar    
+CHR:Aaron Swartz
+ARP:Hausmania 52
+ARP:Shockline 83
+SYN:Simpledetune
+KIC:Dirtbass    
+NOI:El Cadejos  
+SNR:BDSM Gear   
+SNR:Falljng   83
+LNK:Touchstrip B
+LNK:NULLTouchstr
+ARP:Orange Bass 
+PRC:GammaRay    
+ARP:PinkMoist 90
+NOI:Evil!s Nest 
+HAT:PitchCurve  
+CHR:SleepCrawler
+SNR:Boomerang   
+ARP:Micro Riff C
+ARP:RetrigRiff B
+SNR:Hey Sexdoll 
+HAT:Seq Rezo HHt
+PRC:Seq Rezo SN 
+LED:Farewell    
+ARP:HypnoTrance 
+ARP:Clavis  k 90
+PAD:Spark Seed  
+NOI:Demoncircus 
+ARP:EasyDrums 85
+NOI:Drop my Beer
+ARP:Leviathan 38
+VOX:Grey Skin   
+CHR:Forgiveness!
+DRO:Drone Meca  
+LED:Lemoncello  
+BAS:Caton catnip
+PRC:LemonIndustr
+WND:Flutiloops B
+VOX:Zhaka Zulu  
+PAD:HealPreacher
+DRO:MotMotchat  
+SNR:Morph Knob a
+ARP:Mal de Ojo00
+ARP:Cat & Pussy 
+SNR:Spank(",")/ 
+KIT:Mud Flaps   
+PAD:Solar Candy 
+KIT:Potholes hh 
+KIT:Rosebvtt    
+KIT:NdWhlTranceA
+KIT:2Velo Layer
+KIT:Tom Perv    
+KIT:Cromagnon   
+KIT:SplitZone x4
+KIT:Hard 1
+KIT:Fat Juno    
+KIT:Randomix Kit
+ARP:Wavexciter  
+KIT:Orange Death
+PRC:02m Bigfoot
+KIT:Folladora   
+HAT:TriangleHat 
+LED:Korean Riot 
+VOX:FaithHealer 
+PAD:Mason Silaba
+ARP:TranceProg19
+BAS:Bowbasser X4
+PAD:Artifacts   
+ARP:CreepyPasta 
+VOX:Diesel Slut 
+NOI:DeepSpace   
+   :M.Balma 2024

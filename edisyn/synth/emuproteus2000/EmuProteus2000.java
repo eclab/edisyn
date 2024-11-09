@@ -63,8 +63,8 @@ public class EmuProteus2000 extends Synth
                                                          "Phatt", "XLead-2", "Phatt-2", "Ensoniq",
                                                          "Pop", "Vintage", "Drums", "Piano",
                                                          "Techno", "Siedlaczek", "Beat", "Shock"  };
-    public static final int[] ROM_AND_USER_IDS = { 0, 3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 14, 15, 16, 17, 18, 19, 64, 65, 66, 67 };
-    public static final int[] NUM_BANKS = { 4, 5, 8, 4, 3, 4, 5, 4, 3, 2, 4, 4, 4, 4, 4, 4, 4, 1, 4, 2, 4 };
+    public static final int[] ROM_AND_USER_IDS = { 0, 3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 14, 15, 16, 17, 18, 19, 64, 65, 66, 67, 54 };
+    public static final int[] NUM_BANKS = { 4, 5, 8, 4, 3, 4, 5, 4, 3, 2, 4, 4, 4, 4, 4, 4, 4, 1, 4, 2, 4, 4 };
     public static final String[] ROMS_AND_EMPTY = { "Empty", 
                                                     "Audity (A2000)", "Composer (P2000/P1000)", "Protozoa", "Definitive B3", "Extreme Lead V1 (XL1/Turbo)",
                                                     "Sounds of the ZR", "World Expedition (Earth)", "Orchestral V1 (V2000)", "Orchestral V2 (V2000)",
@@ -4533,7 +4533,7 @@ public class EmuProteus2000 extends Synth
 
     public String[] getBankNames() { return ROMS_AND_USER_SHORT; }
 
-    public boolean[] getWriteableBanks() { return new boolean[] { true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false }; }
+    public boolean[] getWriteableBanks() { return new boolean[] { true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false }; }
 
     public boolean getSupportsPatchWrites() { return true; }
 

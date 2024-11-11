@@ -1,0 +1,635 @@
+   :None
+bas:The Deepest
+bas:AcidShrt1_M
+bas:AcidShrt2_M
+bas:AcidShrt3_M
+bas:AcidShrt4_M
+bas:AcidShrt5_M
+bas:AcidShrt6_M
+bas:AcidShrt7_M
+bas:AcidShrt8_M
+bas:AcidShrt9_M
+bas:EX7FM05_M
+bas:EX7VAOsc_M
+bas:Mdrum01_M
+bas:Picked01_M
+bas:Picked02_M
+bas:PitchDown1_M
+bas:PitchDown2_M
+bas:PitchUp!_M
+bas:Scratchbas_M
+bas:Short03_M
+bas:Short04_M
+bas:Short05_M
+bas:Slidebass_M
+bas:TekyHIGH_M
+bas:TekyMID_M
+bas:UglyDetune1_
+bas:UnisPitchUp2
+bas:WaoShrt_M
+bas:Wobble1_M
+bas:Wobble2_M
+bas:Wobble3_M
+bas:Wobble4_M
+bas:YamahaEX701_
+bas:YamahaEX702_
+gli:ChordFIz_M
+gli:ChrdStab02_M
+gli:Computing1_M
+gli:Computing2_M
+gli:Computing3_M
+gli:Decay_M
+gli:Distoslide3_
+gli:ElectribeSX1
+gli:FakeSlide1_M
+gli:FakeSlide2_M
+gli:FallinStar1_
+gli:High-Clammy1
+gli:IceBreaker_M
+gli:Kiss2notes_M
+gli:Scratch3_M
+gli:SlowMoStar_M
+gli:StabHouse1_M
+gli:Stereoscrap_
+gli:VoxScratch_M
+gli:Wrongbut_M
+gtr:AcousticChrd
+gtr:GtrShort1_M
+gtr:GtrShort2_M
+gtr:GtrShort3_M
+gtr:LongMetalGtr
+gtr:PowerC01_M
+gtr:PowerD02_M
+gtr:PowerD03_M
+gtr:PowerD04_M
+gtr:WahPowerF_M
+hat:BrokenHH_M
+hat:Close03_M
+hat:Close04_M
+hat:Close05_M
+hat:Close06_M
+hat:Close07_M
+hat:Close08_M
+hat:Close09_M
+hat:CokeSnort_M
+hat:Cymb01_M
+hat:Cymb02_M
+hat:ElectroHH_M
+hat:HardHH_M
+hat:HybridHH_M
+hat:LongestHH_M
+hat:LowPitchHH_M
+hat:MchineDrmHH_
+hat:Microshake_M
+hat:Noise01_M
+hat:Noise02_M
+hat:Noise03_M
+hat:Open01_M
+hat:Open02_M
+hat:Open03_M
+hat:Open04_M
+hat:Open05_M
+hat:Open06_M
+hat:Open07_M
+hat:Open08_M
+hat:ReverbHH_M
+hat:SemiOpen1_M
+hat:Shake_M
+hat:Skool25_M
+hat:Temp33_M
+hat:ToothBrush_M
+kck:+hihat01_M
+kck:+hihat02_M
+kck:Bassykick_M
+kck:Beast22_M
+kck:Clubby_M
+kck:Clubby2_M
+kck:Comprss_M
+kck:Discrete1_M
+kck:Discrete2_M
+kck:DSIBassdrum_
+kck:Electrib1_M
+kck:FuzzyKick_M
+kck:Hulk22_M
+kck:LowTom_M
+kck:Muddy_M
+kck:NoAtack1_M
+kck:PitchDecay_M
+kck:Rancid_M
+kck:Reversed_M
+kck:RiseUpTail_M
+kck:ShrtPop_M
+kck:Sub03A_M
+kck:Subby_M
+kck:Tmp02A_M
+kck:Tmp02B_M
+kck:Tmpst01A_M
+kck:WildBoy_M
+prc:Bleep01TMa_M
+prc:Bleep02TM_M
+prc:Bleep03Drop_
+prc:Bleep04D_M
+prc:Bleep10TM_M
+prc:Bleep12TM_M
+prc:Bleep13kit_M
+prc:BleepBusyTon
+prc:BleepButt_M
+prc:Bodran1_M
+prc:Bodran2_M
+prc:BongLong_M
+prc:Bongo01B_M
+prc:Bongo02A_M
+prc:Bongo02b_M
+prc:BongoMDpoor_
+prc:Bonguito_M
+prc:Bonguito2_M
+prc:Cave_M
+prc:Clang_M
+prc:Clavi08_M
+prc:Clavi10_M
+prc:Computer_M
+prc:Cong01MD_M
+prc:Cow1MD_M
+prc:Cow2MD_M
+prc:CowShort_M
+prc:CrashCar_M
+prc:Diana01_M
+prc:Electom01_M
+prc:Electom02_M
+prc:Electom03_M
+prc:Guiro_M
+prc:JawHit1_M
+prc:MetalHt01_M
+prc:Rvrse28_M
+prc:SeqBongo01_M
+prc:SeqUdubas_M
+prc:Speechy_M
+prc:SynthKiss1_M
+prc:Timbal_M
+prc:TinkerrBell_
+prc:TmpNoiClp_M
+prc:Triangle01_M
+prc:Triangle03_M
+prc:Triangle4_M
+prc:Triangle05_M
+prc:Whistle_M
+sfx:EcoCRWao_M
+sfx:RadioNse_M
+sfx:SubRadar_M
+snr:12A_M
+snr:AAA01_M
+snr:Acoustic1_M
+snr:AirryWIME_M
+snr:BouncingSnar
+snr:Bruce Lee_M
+snr:Circuit_M
+snr:Clanky01_M
+snr:Classi08A_M
+snr:Clp09A_M
+snr:DirtyBasy_M
+snr:Electrib01_M
+snr:FireDistHPF_
+snr:FireDistLPF_
+snr:HardSn11A_M
+snr:Hrd11A_M
+snr:Hrd12A_M
+snr:Indust8bit_M
+snr:IndustRept_M
+snr:Kit02A_M
+snr:Kit04A_M
+snr:Kit06A_M
+snr:Kit07A_M
+snr:Kit08A_M
+snr:Kit14A_M
+snr:Lowptcclap_M
+snr:MachDrum_M
+snr:Met10A_M
+snr:Microsnare01
+snr:Microsnare02
+snr:Microsnare03
+snr:Microsnare04
+snr:Microsnare05
+snr:Muddy01_M
+snr:Noisnare_M
+snr:Rock01_M
+snr:Rollsnare1_M
+snr:ScratchDist_
+snr:TM13A_M
+snr:TM14A_M
+tom:RawLongTom_M
+tom:TempestTom01
+tom:TempestTom02
+tom:TempestTom03
+tom:TempestTom04
+tom:TempestTom05
+tom:TempestTom06
+snr:Acoustic1_M
+snr:AirryWIME_M
+snr:BouncingSnar
+snr:Bruce Lee_M
+snr:Circuit_M
+snr:Clanky01_M
+snr:Classi08A_M
+snr:Clp09A_M
+snr:DirtyBasy_M
+snr:Electrib01_M
+snr:FireDistHPF_
+snr:FireDistLPF_
+snr:HardSn11A_M
+snr:Hrd11A_M
+snr:Hrd12A_M
+snr:Indust8bit_M
+snr:IndustRept_M
+snr:Kit02A_M
+snr:Kit04A_M
+snr:Kit06A_M
+snr:Kit07A_M
+snr:Kit08A_M
+snr:Kit14A_M
+snr:Lowptcclap_M
+snr:MachDrum_M
+snr:Met10A_M
+snr:Microsnare01
+snr:Microsnare02
+snr:Microsnare03
+snr:Microsnare04
+snr:Microsnare05
+snr:Muddy01_M
+snr:Noisnare_M
+snr:Rock01_M
+snr:Rollsnare1_M
+snr:ScratchDist_
+snr:TM13A_M
+snr:TM14A_M
+tom:RawLongTom_M
+tom:TempestTom01
+tom:TempestTom02
+tom:TempestTom03
+tom:TempestTom04
+tom:TempestTom05
+tom:TempestTom06
+gli:XFade3_S
+hat:Close09_S
+hat:Close10ST_S
+hat:SterepClose1
+kck:AnagramKick_
+kck:Beastie_S
+kck:Cong+KickST_
+kck:Dual13A_S
+kck:Jumper_S
+kck:NazcaHrd_S
+kck:ReverbKc_S
+kck:Sub_S
+kck:Susudio_S
+kck:TmpLow01A_S
+kck:TmpLow02A_S
+kck:TmpLow02B_S
+prc:Bongosine_S
+prc:CanShort_S
+prc:Conguito_S
+snr:BOceanA_S
+snr:DetunedSnr_S
+snr:DualClp_S
+snr:Guitarsnare_
+snr:HPFPolvx_S
+snr:Kit01A_S
+snr:Kit03A_S
+snr:Kit10A_S
+snr:LitePansnare
+snr:L-to-R-Pansn
+snr:RattleSnarek
+snr:Short15_S
+snr:Space01_S
+snr:Susudi2_S
+snr:Susudio_S
+snr:TechSnare_S
+tom:ElectroTomLR
+tom:ElectroTomL_
+tom:LowDualTom01
+tom:LowDualTom02
+tom:SacredGong_S
+vox:QVoco01_S
+vox:QVoco02_S
+vox:SnarFem01_S
+chr:AAAFem1_ML
+chr:AAFemAngel1_
+chr:AAFemAngel2_
+chr:AAFemMid_ML
+chr:AAFemNose_ML
+chr:AAMaleEpic1_
+chr:AAMaleEpic2_
+chr:EX7YamaWS_ML
+chr:FemHighPitch
+chr:FemIII_ML
+chr:FemLaLaLop_M
+chr:Heaven_ML
+chr:Holy01_ML
+chr:Holy2_ML
+chr:IIMalePeaker
+chr:MaleA01C_ML
+chr:MaleD01B_ML
+chr:Mdsiiii_ML
+chr:MMC01A_ML
+chr:MMFemOsc_ML
+chr:OOHigh_ML
+chr:OOMid_ML
+chr:TribalMale_M
+chr:Vatican1_ML
+chr:Vatican2_ML
+chr:Vatican3_ML
+fiz:Fiz01VoxPhas
+fiz:Fiz02Chat1.5
+fiz:Fiz04Sweep_M
+gli:03A_ML
+gli:Compooter_ML
+gtr:FizGuitar01_
+gtr:GtrRiff135_M
+gtr:Metal02_ML
+pad:BaldMLFT_ML
+pad:BaldMRGT_ML
+pad:BigWoofHI_ML
+pad:BigWoofLO_ML
+pad:ChrdString1_
+pad:ChrdString2_
+pad:ChrdString3_
+pad:Dream1_ML
+pad:Dream2_ML
+pad:ErraticCycle
+pad:Fizmellow_ML
+pad:Goldie1_ML
+pad:Goldie2_ML
+pad:HighGummy_ML
+pad:Isbel1_ML
+pad:MaxWaldQ_ML
+pad:SopranoStr1_
+pad:WaldorQ01_ML
+pad:WaldorQ02_ML
+pad:WaldorQ03_ML
+prc:2stepPrc01_M
+prc:DrumRock01_M
+prc:Grinder_ML
+prc:Seq126groove
+prc:SeqBodranLP_
+prc:SeqBongo_ML
+prc:SeqPop80ies_
+prc:SeqRept_ML
+prc:SeqUduGrve_M
+prc:SeqWobbly_ML
+prc:Tinker02_ML
+prc:Tinker120_ML
+scw:DUTYCYCLE_02
+scw:DUTYCYCLE_23
+scw:DUTYCYCLE_39
+scw:DUTYCYCLE_42
+scw:DUTYCYCLE_45
+scw:RESPULS02
+scw:RESSINE02
+scw:RESSINE15
+scw:RESSINE20
+scw:RESSINE30
+scw:ZP001
+scw:ZP010
+scw:ZP020
+scw:ZP030
+scw:ZP040
+scw:ZP050
+scw:ZP060
+scw:ZP070
+scw:ZP080
+scw:ZP090
+scw:ZP100
+scw:ZP110
+scw:ZP121
+sfx:BeesNois_ML
+sfx:Bird11Mz_ML
+sfx:Bird16Mh2_ML
+sfx:Bird8000_ML
+sfx:Bird8000B_ML
+sfx:Bird22050_ML
+sfx:Birdperc1_ML
+sfx:Birds16Mhz_M
+sfx:bowyBss_ML16
+sfx:BumblebeeHum
+sfx:Cigarra_ML
+sfx:Crickets2_ML
+sfx:EcoCR04_ML
+sfx:FieldPtrn1_M
+sfx:FizLocust121
+sfx:FrogSng1_ML
+sfx:FrogSng2_ML
+sfx:FrogSng3_ML
+sfx:FrogSng4_ML
+sfx:FrogSng5_ML
+sfx:LFOrchesta_M
+sfx:Mekanic_ML
+sfx:Mystic01_ML
+sfx:RadioTwk_ML
+sfx:Rainforest_M
+sfx:Urbanbrd_ML
+sfx:Watery_ML
+sfx:WhNoise1_ML
+vox:Chatter1_ML
+vox:Chatter3_ML
+vox:Don'ttell_ML
+vox:GotIT2_ML
+vox:Heal1_ML
+vox:ILSEX_ML
+vox:JstNaive_ML
+vox:Lamb01_ML
+vox:Moan01_ML
+vox:Welc2YCk_ML
+wav:BassTemp1_ML
+wav:BassTemp2_ML
+wav:Bell02_ML
+wav:Bell03_ML
+wav:Chaotic_ML
+wav:Classy01_ML
+wav:ClassyLead1_
+wav:ClassyLead3_
+wav:ClassyLead4_
+wav:ClassyLead5_
+wav:ClassyLead6_
+wav:ClassyLead7_
+wav:ClassyLead8_
+wav:ClassyLead9_
+wav:ClassyLead10
+wav:GrittySaw1_M
+wav:GrittySaw2_M
+wav:LFO13_ML
+wav:longCycle_ML
+wav:Mono8bt08_ML
+wav:PuC311_ML
+wav:PuC312_ML
+wav:Pulsebass2_M
+wav:RandomSync_M
+wav:Raw1_ML
+wav:Raw2_ML
+wav:RESPULS01_ML
+wav:Saw04_ML
+wav:Saw-12_ML
+wav:SawLOW_ML
+wav:SineHighPtch
+wav:SineHighPtc_
+wav:SineLowPitch
+wav:SineMidPitch
+wav:TempSaw1_ML
+wav:TremolOsc1_M
+wav:TremolOsc2_M
+wav:TremolOsc3_M
+wav:WQC4-Low_ML
+wav:WQC5-Mid_ML
+wav:ZP111_ML
+wnd:BrkenFlu_ML
+wnd:Chilll_ML
+wnd:FluteLoop1_M
+wnd:FluteLoop2_M
+wnd:Wn127bpm_ML
+chr:FemSTDual_SL
+fiz:Fiz03ChatA_S
+fiz:Fiz05Traswav
+fiz:Fiz06ChatB_S
+fiz:Fiz07NewWave
+fiz:Fiz08LFOCity
+fiz:Fiz09NeonWav
+fiz:Fiz10WaveWal
+fiz:Fiz11Creep1A
+fiz:Fiz12Sorrow1
+fiz:Fiz13EerieST
+fiz:Fiz14CreepB_
+fiz:Fiz15Sorrow2
+fiz:Fiz16CrawlRG
+gli:Pillspill_SL
+gtr:STMetalLP_SL
+pad:Ensmb2_SL
+pad:Guit01_SL
+pad:QMeloLow_SL
+pad:WallMel1_SL
+pad:WallMello2_S
+prc:Seq128ST_SL
+prc:SeqVelo2X!!_
+sfx:Ahh8000Hz_SL
+sfx:EcoCR01_SL
+sfx:EcoCR02_SL
+sfx:EcoCR03_SL
+sfx:EcoCR05_SL
+sfx:Spcelzer_SL
+sfx:Stomper_SL
+sfx:WhtNoise_SL
+vox:bipolar_SL
+vox:Darkest_SL
+vox:Dialing_SL
+vox:DremThik_SL
+vox:LillyGetsIt!
+vox:Mouth_SL
+vox:Ohyeah_SL
+vox:Sh_SL
+vox:Sugardad_SL
+wav:BassSine_SL
+wav:GrittyWall1_
+wav:GT14_SL
+wav:Stereo8bt08_
+wav:StereoNoise1
+wav:StereoNoise2
+bas:Wobble12_M
+bas:Wobble34_M
+bas:Wobble14_M
+kit:Rand Kit 000
+kit:Rand Kit 001
+kit:Rand Kit 002
+kit:Rand Kit 003
+kit:Rand Kit 004
+kit:Rand Kit 005
+kit:Rand Kit 006
+kit:Rand Kit 007
+kit:Rand Kit 008
+kit:Rand Kit 009
+kit:Rand Kit 010
+kit:Rand Kit 011
+kit:Rand Kit 012
+kit:Rand Kit 013
+kit:Rand Kit 014
+kit:Rand Kit 015
+kit:Rand Kit 016
+kit:Rand Kit 017
+kit:Rand Kit 018
+kit:Rand Kit 019
+kit:Rand Kit 020
+kit:Rand Kit 021
+kit:Rand Kit 022
+kit:Rand Kit 023
+kit:Rand Kit 024
+kit:Rand Kit 025
+kit:Rand Kit 026
+kit:Rand Kit 027
+kit:Rand Kit 028
+kit:Rand Kit 029
+kit:Rand Kit 030
+kit:Rand Kit 031
+kit:Rand Kit 032
+kit:Rand Kit 033
+kit:Rand Kit 034
+kit:Rand Kit 035
+kit:Rand Kit 036
+kit:Rand Kit 037
+kit:Rand Kit 038
+kit:Rand Kit 039
+kit:Rand Kit 040
+kit:Rand Kit 041
+kit:Rand Kit 042
+kit:Rand Kit 043
+kit:Rand Kit 044
+kit:Rand Kit 045
+kit:Rand Kit 046
+kit:Rand Kit 047
+kit:Rand Kit 048
+kit:Rand Kit 049
+kit:Rand Kit 050
+kit:Rand Kit 051
+kit:Rand Kit 052
+kit:Rand Kit 053
+kit:Rand Kit 054
+kit:Rand Kit 055
+kit:Rand Kit 056
+kit:Rand Kit 057
+kit:Rand Kit 058
+kit:Rand Kit 059
+kit:Rand Kit 060
+kit:Rand Kit 061
+kit:Rand Kit 062
+kit:Rand Kit 063
+kit:Rand Kit 064
+kit:Rand Kit 065
+kit:Rand Kit 066
+kit:Rand Kit 067
+kit:Rand Kit 068
+kit:Rand Kit 069
+kit:Rand Kit 070
+kit:Rand Kit 071
+kit:Rand Kit 072
+kit:Rand Kit 073
+kit:Rand Kit 074
+kit:Rand Kit 075
+kit:Rand Kit 076
+kit:Rand Kit 077
+kit:Rand Kit 078
+kit:Rand Kit 079
+kit:Rand Kit 080
+kit:Rand Kit 081
+kit:Rand Kit 082
+kit:Rand Kit 083
+kit:Rand Kit 084
+kit:Rand Kit 085
+kit:Rand Kit 086
+kit:Rand Kit 087
+kit:Rand Kit 088
+kit:Rand Kit 089
+kit:Rand Kit 090
+kit:Rand Kit 091
+kit:Rand Kit 092
+kit:Rand Kit 093
+kit:Rand Kit 094
+kit:Rand Kit 095
+kit:Rand Kit 096
+kit:Rand Kit 097
+kit:Rand Kit 098
+kit:Rand Kit 099

@@ -49,36 +49,36 @@ public class EmuProteus2000 extends Synth
                                           "Sounds of the ZR", "World Expedition (Earth)", "Orchestral V1 (V2000)", "Orchestral V2 (V2000)",
                                           "Pure Phatt (Mo'Phatt/Turbo)", "Extreme Lead (XL7)", "Pure Phatt 2 (MP7)", "Ensoniq Project",
                                           "Proteus Pop (P2500/PK6)", "Vintage Collection (Pro, Keys)", "Protean Drums (PX7)", "Holy Grail Piano",
-                                          "Techno Synth Cons. Yard (Orbit3)", "Siedlaczek", "Beat Garden (Orbit3)" };
-    public static final int[] ROM_IDS = { 3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 14, 15, 16, 17, 18, 19, 64, 65, 66, 67 };
+                                          "Techno Synth Cons. Yard (Orbit3)", "Siedlaczek", "Beat Garden (Orbit3)", "Shock Treatment" };
+    public static final int[] ROM_IDS = { 3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 14, 15, 16, 17, 18, 19, 64, 65, 66, 67, 54 };
     public static final String[] ROMS_AND_USER = { "User", 
                                                    "Audity (A2000)", "Composer (P2000/P1000)", "Protozoa", "Definitive B3", "Extreme Lead V1 (XL1/Turbo)",
                                                    "Sounds of the ZR", "World Expedition (Earth)", "Orchestral V1 (V2000)", "Orchestral V2 (V2000)",
                                                    "Pure Phatt (Mo'Phatt/Turbo)", "Extreme Lead (XL7)", "Pure Phatt 2 (MP7)", "Ensoniq Project",
                                                    "Proteus Pop (P2500/PK6)", "Vintage Collection (Pro, Keys)", "Protean Drums (PX7)", "Holy Grail Piano",
-                                                   "Techno Synth Cons. Yard (Orbit3)", "Siedlaczek", "Beat Garden (Orbit3)"  };  // pretty dumb that we have to do this
+                                                   "Techno Synth Cons. Yard (Orbit3)", "Siedlaczek", "Beat Garden (Orbit3)", "Shock Treatment"  };  // pretty dumb that we have to do this
     public static final String[] ROMS_AND_USER_SHORT = { "User", 
                                                          "Audity", "Composer", "Protozoa", "B3", "XLead",
                                                          "ZR", "World", "Orchestral-1", "Orchestral-2",
                                                          "Phatt", "XLead-2", "Phatt-2", "Ensoniq",
                                                          "Pop", "Vintage", "Drums", "Piano",
-                                                         "Techno", "Siedlaczek", "Beat"  };
-    public static final int[] ROM_AND_USER_IDS = { 0, 3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 14, 15, 16, 17, 18, 19, 64, 65, 66, 67 };
-    public static final int[] NUM_BANKS = { 4, 5, 8, 4, 3, 4, 5, 4, 3, 2, 4, 4, 4, 4, 4, 4, 4, 1, 4, 2, 4 };
+                                                         "Techno", "Siedlaczek", "Beat", "Shock"  };
+    public static final int[] ROM_AND_USER_IDS = { 0, 3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 14, 15, 16, 17, 18, 19, 64, 65, 66, 67, 54 };
+    public static final int[] NUM_BANKS = { 4, 5, 8, 4, 3, 4, 5, 4, 3, 2, 4, 4, 4, 4, 4, 4, 4, 1, 4, 2, 4, 4 };
     public static final String[] ROMS_AND_EMPTY = { "Empty", 
                                                     "Audity (A2000)", "Composer (P2000/P1000)", "Protozoa", "Definitive B3", "Extreme Lead V1 (XL1/Turbo)",
                                                     "Sounds of the ZR", "World Expedition (Earth)", "Orchestral V1 (V2000)", "Orchestral V2 (V2000)",
                                                     "Pure Phatt (Mo'Phatt/Turbo)", "Extreme Lead (XL7)", "Pure Phatt 2 (MP7)", "Ensoniq Project",
                                                     "Proteus Pop (P2500/PK6)", "Vintage Collection (Pro, Keys)", "Protean Drums (PX7)", "Holy Grail Piano",
-                                                    "Techno Synth Cons. Yard (Orbit3)", "Siedlaczek", "Beat Garden (Orbit3)"  };  // even dumber that we have to do this AGAIN
+                                                    "Techno Synth Cons. Yard (Orbit3)", "Siedlaczek", "Beat Garden (Orbit3)", "Shock Treatment"  };  // even dumber that we have to do this AGAIN
     // This is totally different than the documentation
     public static final String[] TEMPO_OFFSETS = { "Current / 2", "Current", "Current x 2" };   
     public static final String[] KEYBOARD_TUNINGS = { "Equal Temperament", "Just C", "Just C2", "Just C minor", "Just C 3", "Valotti", "19 Tone", "Gamelan", "Werkmeister III", "Kirnberger", "Scarlatti", "Repeating Octave",
                                                       "User 1", "User 2", "User 3", "User 4", "User 5", "User 6", "User 7", "User 8", "User 9", "User 10", "User 11", "User 12" };
 
     public static final String[] PATCHCORD_SOURCES = { "Off", "Pitch Wheel", "Mod Wheel", "Pressure", "Pedal", "MIDI A", "MIDI B", "Foot Switch 1", "Foot Switch 2", "Flip-Flop Foot Switch 1", "Flip-Flop Foot Switch 2", 
-                                                       "Volme Controller (7)", "Pan Controller (10)", "MIDI C", "MIDI D", "MIDI E", "MIDI F", "MIDI G", "MIDI H", "MIDI I", "MIDI J", "MIDI K", "MIDI L", "DC Offset" };
-    public static final int[] PATCHCORD_SOURCE_INDICES = { 0, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 32, 33, 34, 35, 36, 37, 40, 41, 42, 43, 160 };
+                                                       "Volume Controller (7)", "Pan Controller (10)", "MIDI C", "MIDI D", "MIDI E", "MIDI F", "MIDI G", "MIDI H", "MIDI I", "MIDI J", "MIDI K", "MIDI L", "MIDI M [2500]", "MIDI N [2500]", "MIDI O [2500]", "MIDI P [2500]", "DC Offset"};
+    public static final int[] PATCHCORD_SOURCE_INDICES = { 0, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 32, 33, 34, 35, 36, 37, 40, 41, 42, 43, 44, 45, 45, 47, 160 };
 
     public static final String[] PATCHCORD_DESTINATIONS = { "Off", "FX A Send 1", "FX A Send 2", "FX A Send 3", "FX A Send 4", "FX B Send 1", "FX B Send 2", "FX B Send 3", "FX B Send 4", "Arpeggiator Rate", "Arpeggiator Extension", "Arpeggiator Velocity", "Arpeggiator Gate", "Arpeggiator Interval", 
                                                             "Beats Velocity Group 1", "Beats Velocity Group 2", "Beats Velocity Group 3", "Beats Velocity Group 4", "Beats Transpose Group 1", "Beats Transpose Group 2", "Beats Transpose Group 3", "Beats Transpose Group 4", 
@@ -142,10 +142,11 @@ public class EmuProteus2000 extends Synth
     public static final int[] ENV_INDICES = { 1, 2 };           // This is only for ENV_MODES, not VOL_ENV_MODES
 
     public static final String[] LAYER_PATCHCORD_SOURCES = { "Off", "Crossfade Random", "Key +", "Key +/-", "Velocity +", "Velocity +/-", "Velocity <", "Release Velocity", "Gate", "Pitch Wheel", "Mod Wheel", "Pressure", "Pedal", "MIDI A", "MIDI B", "Foot Switch 1", "Foot Switch 2", "Flip-Flop Foot Switch 1", "Flip-Flop Foot Switch 2", "MIDI Volume Controller (7)", 
-                                                             "MIDI Pan Controller (10)", "MIDI C", "MIDI D", "MIDI E", "MIDI F", "MIDI G", "MIDI H", "Foot Switch 3", "Flip-Flop Foot Switch 3", "MIDI I", "MIDI J", "MIDI K", "MIDI L", "Key Glide", "Volume Envelope +", "Volume Envelope +/-", "Volume Envelope <", "Filter Envelope +", "Filter Envelope +/-", "Filter Envelope <", "Auxiliary Envelope +", 
+                                                             "MIDI Pan Controller (10)", "MIDI C", "MIDI D", "MIDI E", "MIDI F", "MIDI G", "MIDI H", "Foot Switch 3", "Flip-Flop Foot Switch 3", "MIDI I", "MIDI J", "MIDI K", "MIDI L", 
+                                                             "MIDI M [2500]", "MIDI N [2500]", "MIDI O [2500]", "MIDI P [2500]", "Key Glide", "Volume Envelope +", "Volume Envelope +/-", "Volume Envelope <", "Filter Envelope +", "Filter Envelope +/-", "Filter Envelope <", "Auxiliary Envelope +", 
                                                              "Auxiliary Envelope +/-", "Auxiliary Envelope <", "LFO 1 +/-", "LFO 1 +", "White Noise", "Pink Noise", "Key Random 1", "Key Random 2", "LFO 2 +/-", "LFO 2 +", "Lag 0 Summing Amp", "Lag 0", "Lag 1 Summing Amp", "Lag 1", "Preset Lag Out", "Preset Ramp Out", "Clock Double Whole Note", "Clock Whole Note", "Clock Half Note", "Clock Quarter Note", 
                                                              "Clock Eighth Note", "Clock Sixteenth Note", "Clock Octal Whole Note", "Clock Quad Whole Note", "DC Offset", "Summing Amp", "Switch", "Absolute Value", "Diode", "Flip Flop", "Quantizer", "Gain 4X" };
-    public static final int[] LAYER_PATCHCORD_SOURCE_INDICES = { 0, 4, 8, 9, 10, 11, 12, 13, 14, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 48, 72, 73, 74, 80, 81, 82, 88, 89, 90, 96, 97, 98, 99, 100, 101, 104, 105, 106, 107, 108, 109, 128, 129, 144, 145, 146, 147, 148, 149, 150, 151, 160, 161, 162, 163, 164, 165, 166, 167 };
+    public static final int[] LAYER_PATCHCORD_SOURCE_INDICES = { 0, 4, 8, 9, 10, 11, 12, 13, 14, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 72, 73, 74, 80, 81, 82, 88, 89, 90, 96, 97, 98, 99, 100, 101, 104, 105, 106, 107, 108, 109, 128, 129, 144, 145, 146, 147, 148, 149, 150, 151, 160, 161, 162, 163, 164, 165, 166, 167 };
 
         
     // The documentation is wrong in several places here: it's missing envelope sustains, has retriggers for envelopes other than volume, and has "chorus position ITD" which doesn't exist.
@@ -649,7 +650,7 @@ public class EmuProteus2000 extends Synth
 
     public JComponent addCommonControl(Color color)
         {
-        Category category = new Category(this, "Initial Controller Amounts", color);
+        Category category = new Category(this, "Initial MIDI Controller Amounts", color);
         category.makeDistributable("ctrl");
 
         JComponent comp;
@@ -657,7 +658,7 @@ public class EmuProteus2000 extends Synth
         HBox hbox = new HBox();
         VBox vbox = new VBox();
         
-        for(int i = 1; i <= 12; i++)    // yes, <=      There are actually 16 CTRL parameters (A...P) but only A...L (12) are exposed
+        for(int i = 1; i <= 16; i++)    // yes, <=      There are actually 16 CTRL parameters (A...P) but only A...L (12) are exposed in the 2000, 4 more for the 2500
             {
             comp = new LabelledDial("" + (char)('A' + i - 1), this, "ctrl" + i , color, -1, 127)  
                 {
@@ -667,10 +668,17 @@ public class EmuProteus2000 extends Synth
                     else return "" + val;
                     }
                 };
+            if (i > 12) ((LabelledDial)comp).addAdditionalLabel("[2500]");		// 2500 only
             hbox.add(comp);
+            if (i == 12)
+            	{
+            	vbox.add(hbox);
+            	hbox = new HBox();
+            	}
             }
+        vbox.add(hbox);
 
-        category.add(hbox, BorderLayout.CENTER);
+        category.add(vbox, BorderLayout.CENTER);
         return category;
         }
 
@@ -776,7 +784,7 @@ public class EmuProteus2000 extends Synth
                 vbox.add(comp);
 
                 params = PATCHCORD_DESTINATIONS;
-                comp = new Chooser("Tempo Offset " + (j + 1), this, "cord" + j + "dest", params);
+                comp = new Chooser("Destination " + (j + 1), this, "cord" + j + "dest", params);
                 vbox.add(comp);
                 hbox.add(vbox);
                         
@@ -4525,7 +4533,7 @@ public class EmuProteus2000 extends Synth
 
     public String[] getBankNames() { return ROMS_AND_USER_SHORT; }
 
-    public boolean[] getWriteableBanks() { return new boolean[] { true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false }; }
+    public boolean[] getWriteableBanks() { return new boolean[] { true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false }; }
 
     public boolean getSupportsPatchWrites() { return true; }
 
@@ -4643,7 +4651,7 @@ public class EmuProteus2000 extends Synth
    list, but doesn't mention that the parameters appear in the patch format in a **different order** 
    than in the list, nor does it explain what that order is [the order is in fact the order of each 
    of the IDs of the parameters]. It also doesn't explain that the first two parameters do not appear 
-   in the patch format all, and that the name parameters are one byte each while all other parameters 
+   in the patch format at all, and that the name parameters are one byte each while all other parameters 
    are two bytes.  Also the name parameters aren't included in the parameter tally for the so-called
    "Common General" parameters, even though they're listed as Common General parameters.  The only 
    way to discover these unfortunate misfeatures is to reverse engineer the spec by hand.  Oh yeah,
@@ -4662,7 +4670,7 @@ public class EmuProteus2000 extends Synth
    is really critical, and there would be only two possible workarounds: either send each parameter
    independently (very slow) or write to a "scratch" location in patch RAM, which is not advisable
    on the Proteus 2000 because its scratch RAM is in Flash, rather than battery-backed, and so this
-   would burn out the machine in short order  
+   would burn out the machine in short order.
    
 
    SIMMS AND "BANKS".

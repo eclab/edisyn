@@ -64,11 +64,13 @@ public class Library extends AbstractTableModel
         synth.setSendMIDI(false);
         synth.undo.setWillPush(false);
         Model backup = (Model)(synth.model.clone());
+        synth.model.setUpdateListeners(false);
         synth.loadDefaults();
         byte[][] data = synth.cutUpSysex(synth.flatten(synth.emitAll(synth.getModel(), false, true)));          // we're pretending we're writing to a file here
         initPatch = new Patch(synthNum, data, false);
         initPatch.empty = true;
         synth.setModel(backup);                                 // restore
+        synth.model.setUpdateListeners(true);		// it'll be true anyway
         synth.undo.setWillPush(true);
         synth.setSendMIDI(originalMIDI);
 

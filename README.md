@@ -51,7 +51,7 @@ Edisyn is a synthesizer patch editor library written in pure Java.   It runs on 
 
 Edisyn is particularly good at exploring the space of patches.  It has to my knowledge the most sophisticated set of general-purpose patch-exploration tools of any patch editor available.
 
-<a name="support"/>
+<a name="support"/></name>
 
 Edisyn presently supports:
 
@@ -120,7 +120,7 @@ Sure!  But building a patch editor is a long-term commitment of debugging and ma
 I have a special interest in hard-to-program synths, either because they have very poor interfaces (or no interface at all), or because their synthesis architecture is difficult to program (FM, Additive).  You'll note the high number of 1U rackmounts.  :-)  Certain other synths (Blofeld, Prophet '08, etc.) are there because I own them and like making stuff for them.
 
 
-<a name="manual"/>
+<a name="manual"/></a>
 
 ## Manual
 
@@ -130,7 +130,7 @@ Edisyn has an [extensive manual](https://cs.gmu.edu/~eclab/projects/edisyn/Edisy
 
 Edisyn is cross-platform and will run on a variety of platforms (Windows, Linux) but I am personally developing on and for MacOS.  I'd appreciate feedback and screenshots of it running on Windows and Linux so I can tweak things.
 
-<a name="mac"/>
+<a name="mac"/></a>
 
 ### Installation and Running on MacOS
 
@@ -166,7 +166,7 @@ At present Edisyn only runs under Rosetta on the M1, because its package contain
 You may have installed the MMJ (MIDI Java) library in the past, which is now obsolete.  This library was required by old applications but no longer works properly and should be removed.  Look in /Library/Java/Extensions/ or in \[Your Home Directory\]/Library/Java/Extensions for the files **mmj.jar** or **libmmj.jnilib**.  If you find them, remove them from the directory and try again.
 
 
-<a name="windows"/>
+<a name="windows"/></a>
 
 ### Installation and Running on Windows
 
@@ -214,7 +214,7 @@ Edisyn makes heavy use of Java preferences to store persistant information: what
 
 When you double-click on a jar file, Windows may not launch Java properly because it has jar files associated with the wrong Java instance.  It's easy to fix this using [JarFix](https://johann.loefflmann.net/en/software/jarfix/index.html)
 
-<a name="linux"/>
+<a name="linux"/></a>
 
 ### Installation and Running on Linux
 

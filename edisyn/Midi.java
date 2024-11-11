@@ -915,12 +915,8 @@ public class Midi
 
         // Parser status values
         public static final int  INVALID = 0;
-        public static final int  NRPN_LSB_START = 1;
-        public static final int  NRPN_MSB_START = 2;
-        public static final int  NRPN_END = 3;
-        public static final int  RPN_LSB_START = 4;
-        public static final int  RPN_MSB_START = 5;
-        public static final int  RPN_END = 6;
+        public static final int  NRPN_END = 1;
+        public static final int  RPN_END = 2;
 
         int[] status = new int[16];  //  = INVALID;
                 
@@ -937,80 +933,75 @@ public class Midi
 
         // The controllerValueLSB is either a valid LSB or it is  (-1).
         int[] controllerValueLSB = new int[16];
+  
 
-
-        /*
-         * Note:
-         * The midi spec specifies that a receiver should wait until it receives both LSB and MSB for a parameter (to ensure it
-         * is operating on the correct parameter), hence discourages transmitters not to send both. However, it also specifies the receiver
-         * should be able to respond accordingly if the transmitter is only sending LSB of MSB...
-         * Case: The Novation A Station is only sending the LSB for NRPN; that seems to be by design (explicitely documented in the manual)
-         */
         // we presume that the channel never changes
         CCData parseCC(int channel, int number, int value, boolean requireLSB, boolean requireMSB)
             {
             // BEGIN PARSER
 
-            // Start of NRPN
-                if (number == 99)           // NRPN MSB
+            if (number == 99)		// NRPN MSB
                 {
-                    if (status[channel] != NRPN_END)
-                    {
-                        controllerNumberLSB[channel] = 0;
-                        status[channel] = NRPN_END;
-                    }
+                if (status[channel] != NRPN_END)
+                	{
+					controllerNumberLSB[channel] = 0;
+                	status[channel] = NRPN_END;
+                	}
 
-                    controllerValueLSB[channel]  = -1;
-                    controllerValueMSB[channel]  = -1;
-                    controllerNumberMSB[channel] = value;
-                    return null;
+				controllerValueLSB[channel]  = -1;
+				controllerValueMSB[channel]  = -1;
+				controllerNumberMSB[channel] = value;
+				return null;
                 }
 
-                else if (number == 98)      // NRPN LSB
+            else if (number == 98)	// NRPN LSB
                 {
-                    if (status[channel] != NRPN_END)
-                    {
-                        controllerNumberMSB[channel] = 0;
-                        status[channel] = NRPN_END;
-                    }
+                if (status[channel] != NRPN_END)
+                	{
+					controllerNumberMSB[channel] = 0;
+                	status[channel] = NRPN_END;
+                	}
 
-                    controllerValueLSB[channel]  = -1;
-                    controllerValueMSB[channel]  = -1;
-                    controllerNumberLSB[channel] = value;
-                    return null;
+				controllerValueLSB[channel]  = -1;
+				controllerValueMSB[channel]  = -1;
+				controllerNumberLSB[channel] = value;
+				return null;
+                }
+                
+            else if (number == 101)		// RPN MSB
+                {
+                if (value == 127)  // this is the NULL termination tradition, see for example http://www.philrees.co.uk/nrpnq.htm
+                    {
+                    status[channel] = INVALID;
+                    }
+                else if (status[channel] != RPN_END)
+                	{
+					controllerNumberMSB[channel] = 0;
+                	status[channel] = RPN_END;
+                	}
+
+				controllerValueLSB[channel]  = -1;
+				controllerValueMSB[channel]  = -1;
+				controllerNumberMSB[channel] = value;
+                return null;
                 }
 
-                else if (number == 101)             // RPN MSB
+            else if (number == 100)		// RPN LSB
                 {
-                    if (value == 127)  // this is the NULL termination tradition, see for example http://www.philrees.co.uk/nrpnq.htm
+                if (value == 127)  // this is the NULL termination tradition, see for example http://www.philrees.co.uk/nrpnq.htm
                     {
-                        status[channel] = INVALID;
+                    status[channel] = INVALID;
                     }
-                    else if (status[channel] != RPN_END)
-                    {
-                        controllerNumberMSB[channel] = 0;
-                        status[channel] = RPN_END;
-                    }
+                else if (status[channel] != RPN_END)
+                	{
+					controllerNumberLSB[channel] = 0;
+                	status[channel] = RPN_END;
+                	}
 
-                    controllerValueLSB[channel]  = -1;
-                    controllerValueMSB[channel]  = -1;
-                    controllerNumberMSB[channel] = value;
-                    return null;
-                }
-
-                else if (number == 100)             // RPN LSB
-                {
-                    if (value == 127)  // this is the NULL termination tradition, see for example http://www.philrees.co.uk/nrpnq.htm
-                    {
-                        status[channel] = INVALID;
-                    } else if (status[channel] != RPN_END) {
-                        controllerNumberLSB[channel] = 0;
-                        status[channel] = RPN_END;
-                        controllerValueLSB[channel] = -1;
-                        controllerValueMSB[channel] = -1;
-                        controllerNumberLSB[channel] = value;
-                    }
-                    return null;
+				controllerValueLSB[channel]  = -1;
+				controllerValueMSB[channel]  = -1;
+				controllerNumberLSB[channel] = value;
+				return null;
                 }
 
             else if ((number == 6 || number == 38 || number == 96 || number == 97) && (status[channel] == NRPN_END || status[channel] == RPN_END))  // we're currently parsing NRPN or RPN

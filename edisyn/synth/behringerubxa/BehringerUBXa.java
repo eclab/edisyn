@@ -123,7 +123,11 @@ public class BehringerUBXa extends Synth {
     }
 
     private JComponent makeEnv(String a, String d, String s, String r, String mods) {
-        VBox container = new VBox();
+        HBox container = new HBox();
+        VBox h = new VBox();
+        addCheckboxGroupByKey(h, mods);
+        container.add(h);
+
         HBox envDials = new HBox();
         addDialByKey(envDials, a, "Attack");
         addDialByKey(envDials, d, "Decay");
@@ -140,16 +144,17 @@ public class BehringerUBXa extends Synth {
         );
         envDials.add(ed);
         container.add(envDials);
-        HBox h = new HBox();
-        addCheckboxGroupByKey(h, mods);
-        container.add(h);
 
         return container;
     }
 
-    private JComponent categoryContainer(JComponent parent, String title, Color color) {
+    private JComponent categoryContainer(HBox parent, String title, Color color, boolean addLast) {
         VBox v = new VBox();
-        parent.add(v);
+        if (addLast) {
+            parent.addLast(v);
+        } else {
+            parent.add(v);
+        }
         Category c = new Category(this, title, color);
         v.add(c);
 
@@ -170,13 +175,13 @@ public class BehringerUBXa extends Synth {
         {
             HBox row1 = new HBox();
             mainVbox.add(row1);
-            JComponent controlCat = categoryContainer(row1, "Behringer UB-Xa", Color.WHITE);
+            JComponent controlCat = categoryContainer(row1, "Behringer UB-Xa", Color.WHITE, false);
 
             addDialByKey(controlCat, "ControlPortamentoAmount", "Portamento Amount");
             addDialByKey(controlCat, "ControlUnison", "Unison"); // would be nice with a button
             addDialByKey(controlCat, "ControlDetune", "Detune");
 
-            JComponent arpCat = categoryContainer(row1, "Arpeggiator", Style.COLOR_C());
+            JComponent arpCat = categoryContainer(row1, "Arpeggiator", Style.COLOR_C(), true);
             VBox arpChoosers = new VBox();
             addChooserByKey(arpChoosers, "ArpeggiatorMode", "Mode");
             addChooserByKey(arpChoosers, "ArpeggiatorTime", "Time");
@@ -196,7 +201,7 @@ public class BehringerUBXa extends Synth {
         {
             HBox row2 = new HBox();
             mainVbox.add(row2);
-            JComponent oscCat = categoryContainer(row2, "Oscillators", Style.COLOR_A());
+            JComponent oscCat = categoryContainer(row2, "Oscillators", Style.COLOR_A(), false);
 
             VBox osc1v = new VBox();
             oscCat.add(osc1v);
@@ -211,14 +216,16 @@ public class BehringerUBXa extends Synth {
             addCheckboxGroupByKey(osc2v, "OscillatorsMode");
 
 
-            HBox oscDials = new HBox();
-            addDialByKey(oscDials, "OscillatorsOSC1Transpose", "OSC1 Transpose");
-            addDialByKey(oscDials, "OscillatorsOSC1PWAmount", "OSC1 PW Amount");
-            addDialByKey(oscDials, "OscillatorsOSC2Transpose", "OSC2 Transpose");
-            addDialByKey(oscDials, "OscillatorsOSC2PWAmount", "OSC2 PW Amount");
-            oscCat.add(oscDials);
+            VBox osc1Dials = new VBox();
+            addDialByKey(osc1Dials, "OscillatorsOSC1Transpose", "OSC1 Transpose");
+            addDialByKey(osc1Dials, "OscillatorsOSC1PWAmount", "OSC1 PW Amount");
+            VBox osc2Dials = new VBox();
+            addDialByKey(osc2Dials, "OscillatorsOSC2Transpose", "OSC2 Transpose");
+            addDialByKey(osc2Dials, "OscillatorsOSC2PWAmount", "OSC2 PW Amount");
+            oscCat.add(osc1Dials);
+            oscCat.add(osc2Dials);
 
-            JComponent filterCat = categoryContainer(row2, "Filter", Style.COLOR_B());
+            JComponent filterCat = categoryContainer(row2, "Filter", Style.COLOR_B(), true);
             VBox filterV = new VBox();
             filterCat.add(filterV);
             addCheckboxGroupByKey(filterV, "FilterModes");
@@ -227,51 +234,56 @@ public class BehringerUBXa extends Synth {
             addDialByKey(filterDials, "FilterResonance", "Resonance");
             addDialByKey(filterDials, "FilterModulation", "Modulation");
             addDialByKey(filterDials, "FilterNoise", "Noise");
-            filterV.add(filterDials);
+            filterCat.add(filterDials);
         }
 
         {
             HBox row3 = new HBox();
             mainVbox.add(row3);
-            JComponent loudnessEnvCat = categoryContainer(row3, "Loudness Envelope", Style.COLOR_A());
+            JComponent loudnessEnvCat = categoryContainer(row3, "Loudness Envelope", Style.COLOR_A(), false);
             JComponent loudnessEnv = makeEnv("EnvelopesLoudnessA", "EnvelopesLoudnessD", "EnvelopesLoudnessS", "EnvelopesLoudnessR", "EnvelopesLoudnessMods");
             loudnessEnvCat.add(loudnessEnv);
 
-            JComponent filterEnvCat = categoryContainer(row3, "Filter Envelope", Style.COLOR_B());
+            JComponent filterEnvCat = categoryContainer(row3, "Filter Envelope", Style.COLOR_B(), true);
             JComponent filterEnv = makeEnv("EnvelopesFilterA", "EnvelopesFilterD", "EnvelopesFilterS", "EnvelopesFilterR", "EnvelopesFilterMods");
             filterEnvCat.add(filterEnv);
-
+        }
 // ModulationLFOMods
-
+        {
             HBox row4 = new HBox();
             mainVbox.add(row4);
-            JComponent modCat = categoryContainer(row4, "Modulation", Style.COLOR_C());
-            HBox h = new HBox();
+            JComponent modCat = categoryContainer(row4, "Modulation", Style.COLOR_C(), false);
 
             VBox modMisc = new VBox();
-            h.add(modMisc);
+            addChooserByKey(modMisc, "ModulationLFOShapes", "Shapes");
             addCheckboxGroupByKey(modMisc, "ModulationLFOMods");
             addCheckboxGroupByKey(modMisc, "ModulationQuirks");
-
-
-            VBox modSelsC1 = new VBox();
-            h.add(modSelsC1);
-            addCheckboxGroupByKey(modSelsC1, "ModulationChannel1Sends");
-            addCheckboxGroupByKey(modSelsC1, "ModulationChannel1Mods");
-            VBox modSelsC2 = new VBox();
-            h.add(modSelsC2);
-            addCheckboxGroupByKey(modSelsC2, "ModulationChannel2Sends");
-            addCheckboxGroupByKey(modSelsC2, "ModulationChannel2Mods");
-            modCat.add(h);
-
+            modCat.add(modMisc);
             HBox modDials = new HBox();
             modCat.add(modDials);
             addDialByKey(modDials, "ModulationLFOTrigPoint", "LFOTrigPoint");
             addDialByKey(modDials, "ModulationLFORate", "LFORate");
             addDialByKey(modDials, "ModulationLFOPhase", "LFOPhase");
-            addDialByKey(modDials, "ModulationChannel1Amount", "Channel1Amount");
-            addDialByKey(modDials, "ModulationChannel2Amount", "Channel2Amount");
             addDialByKey(modDials, "ModulationLFOTrim", "LFOTrim");
+
+            JComponent modC1Cat = categoryContainer(row4, "Mod Channel 1", Style.COLOR_C(), false);
+            VBox modSelsC1 = new VBox();
+            modC1Cat.add(modSelsC1);
+            addCheckboxGroupByKey(modSelsC1, "ModulationChannel1Sends");
+            addCheckboxGroupByKey(modSelsC1, "ModulationChannel1Mods");
+            addDialByKey(modC1Cat, "ModulationChannel1Amount", "Amount");
+            addDialByKey(modC1Cat, "EnvelopesModChannel1A", "Attack");
+            addDialByKey(modC1Cat, "EnvelopesModChannel1Delay", "Delay");
+
+            JComponent modC2Cat = categoryContainer(row4, "Mod Channel 2", Style.COLOR_C(), true);
+            VBox modSelsC2 = new VBox();
+            modC2Cat.add(modSelsC2);
+            addCheckboxGroupByKey(modSelsC2, "ModulationChannel2Sends");
+            addCheckboxGroupByKey(modSelsC2, "ModulationChannel2Mods");
+            addDialByKey(modC2Cat, "ModulationChannel2Amount", "Amount");
+            addDialByKey(modC2Cat, "EnvelopesModChannel2A", "Attack");
+            addDialByKey(modC2Cat, "EnvelopesModChannel2Delay", "Delay");
+
 
         }
         addTab("Main", main);
@@ -314,13 +326,18 @@ public class BehringerUBXa extends Synth {
     }
 
     private void addCheckboxGroupByKey(JComponent container, String key) {
+        addCheckboxGroupByKey(container, key, true);
+    }
+
+    private void addCheckboxGroupByKey(JComponent container, String key, boolean preferCheckbox) {
         for (int i = 0; i < checkboxGroups.length; i += NUM_PARAMS_CHECKBOXES) {
             if (key.equals(checkboxGroups[i])) {
                 String[] labels = (String[]) checkboxGroups[i + 3];
-                addCheckboxGroup(container, key, labels);
+                addCheckboxGroup(container, key, labels, preferCheckbox);
                 break;
             }
         }
+        assert false;
     }
 
     private void addChooser(JComponent container, String key, String label, String[] opts) {
@@ -406,7 +423,7 @@ public class BehringerUBXa extends Synth {
             String subCatTitle = key.substring(ctrlGrp.length());
             Category cat = new Category(this, subCatTitle, Color.WHITE);
             String[] labels = (String[]) checkboxGroups[i + 3];
-            addCheckboxGroup(hbox2, key, labels);
+            addCheckboxGroup(hbox2, key, labels, false);
             vbox.add(cat);
             vbox.add(hbox2);
         }
@@ -415,24 +432,21 @@ public class BehringerUBXa extends Synth {
 
     }
 
-    private void addCheckboxGroup(JComponent container, String key, String[] lbls) {
-        addCheckboxGroup(container, key, lbls, false);
-    }
-
-    private void addCheckboxGroup(JComponent container, String key, String[] lbls, boolean useChoosers) {
+    private void addCheckboxGroup(JComponent container, String key, String[] lbls, boolean preferCheckbox) {
         for (String lbl : lbls) {
             JComponent comp;
             if (lbl.contains("~")) {
                 String[] strs = lbl.split("~");
                 String prefix = longestCommonWordPrefix(strs[0], strs[1]);
-                String[] opts = new String[]{strs[1], strs[0]}; // order is "switched"
-                comp = new Chooser(prefix, this, key + BITMASK_SEP + lbl, opts, new int[]{0, 1});
-            } else {
-                if (useChoosers) {
-                    comp = new Chooser(lbl, this, key + BITMASK_SEP + lbl, new String[]{lbl + " On", lbl + " Off"}, new int[]{0, 1});
+                if (preferCheckbox && strs[0].equals(prefix + " on")
+                        && strs[1].equals(prefix + " off")) {
+                    comp = new CheckBox(prefix, this, key + BITMASK_SEP + lbl);
                 } else {
-                    comp = new CheckBox(lbl, this, key + BITMASK_SEP + lbl);
+                    String[] opts = new String[]{strs[1], strs[0]}; // order is "switched"
+                    comp = new Chooser(prefix, this, key + BITMASK_SEP + lbl, opts, new int[]{0, 1});
                 }
+            } else {
+                comp = new CheckBox(lbl, this, key + BITMASK_SEP + lbl);
             }
             container.add(comp);
         }

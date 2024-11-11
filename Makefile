@@ -5,7 +5,7 @@ JAVAC = javac ${JAVACFLAGS}
 all: 
 	${JAVAC} -cp libraries/coremidi4j-1.6.jar:edisyn $$(find edisyn -name '*.java')
 
-run: all
+run:
 	java -cp libraries/coremidi4j-1.6.jar:. edisyn.Edisyn
 
 indent:

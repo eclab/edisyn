@@ -888,7 +888,7 @@ public class Librarian extends JPanel
                     }
                 else                            // "Only a specific Bank" -- must let the user know
                     {
-                    if (synth.showSimpleConfirm("Bank Request", "Request Bank " + synth.librarian.getLibrary().getBankName(requestableBank) + "?\nOnly this bank can be requested.", "Request"))
+                    if (synth.showSimpleConfirm("Bank Request", "The Only Bank that Can Be Requested Is:\n\n" + synth.librarian.getLibrary().getBankName(requestableBank), "Request"))
                         {
                         byte[] data = synth.requestBankDump(requestableBank);
                         if (data != null)
@@ -900,7 +900,8 @@ public class Librarian extends JPanel
                 }
             });
         
-        if (synth.requestBankDump(0) != null)   // we have bank dump requests
+        if ((synth.getRequestableBank() != -1 && synth.requestBankDump(synth.getRequestableBank()) != null) || 	// Only one bank is requestable, and we can request it
+        	(synth.getRequestableBank() == -1 && synth.requestBankDump(0) != null))   							// We can request any bank, and bank 0 seems to work
             {
             menu.add(item);
             item.setEnabled(false);

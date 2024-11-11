@@ -3264,13 +3264,13 @@ public class Yamaha4Op extends Synth
     
     public byte[] requestBankDump(int bank) 
         {
-        if (getSynthType() == TYPE_TQ5_YS100_YS200_B200 && getSynthType() == TYPE_V50) return null;
+        if (getSynthType() == TYPE_TQ5_YS100_YS200_B200 || getSynthType() == TYPE_V50) return null;
         else return new byte[] { (byte)0xF0, 0x43, (byte)(0x20 + getChannelOut()), 0x04, (byte)0xF7 }; 
         }
 
     public int getRequestableBank() 
         { 
-        return 0;               // can only request internal bank
+        return 0;               // can only request internal bank on the TX81Z etc.
         }
 
     public boolean librarianTested() { return true; }

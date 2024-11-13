@@ -84,5 +84,10 @@ interface Convertor {
         public Boundary getBoundary() {
             return boundary;
         }
+
+        @Override
+        public String toString() {
+            return "Convertor.Straight{key='" + key + "'}";
+        }
     }
 }

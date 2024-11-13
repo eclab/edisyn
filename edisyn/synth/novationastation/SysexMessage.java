@@ -122,8 +122,10 @@ class SysexMessage {
     private final int INDEX_TYPE = 7;
 
     private final byte[] bytes;
+    private final Type type;
 
     SysexMessage(Builder builder) {
+        this.type = builder.type;
         bytes = new byte[START_SEQUENCE.length + builder.payload.length + END_SEQUENCE.length];
         int index = 0;
         for (byte b : START_SEQUENCE) {
@@ -146,28 +148,16 @@ class SysexMessage {
 
     SysexMessage(byte[] bytes) {
         this.bytes = validate(bytes);
-    }
-
-    private byte[] validate(byte[] bytes)
-    {
-        SysexMessage.Type type = Type.typemap.get(bytes[INDEX_TYPE]);
-        // validate length
-        int expectedLength = START_SEQUENCE.length + type.payloadSize + END_SEQUENCE.length;
-        int actualLength = bytes.length;
-        if (actualLength != expectedLength) {
-            throw new IllegalStateException("Invalid message length for type " + type + ", expected " + expectedLength + ", but was " + actualLength);
-        }
-        if (!arrayEquals(bytes, 0, 6, START_SEQUENCE, 0, 6)) {
-            throw new IllegalStateException("Invalid start sequence");
-        }
-        if (!arrayEquals(bytes, actualLength - END_SEQUENCE.length, actualLength, END_SEQUENCE, 0, END_SEQUENCE.length)) {
-            throw new IllegalStateException("Invalid end sequence");
-        }
-        return bytes;
+        this.type = Type.typemap.get(bytes[INDEX_TYPE]);
     }
 
     static SysexMessage parse(byte[] bytes) {
         return new SysexMessage(bytes);
+    }
+
+    // get type
+    Type getType() {
+        return type;
     }
 
     // get FULL Sysex message as byte array
@@ -202,6 +192,24 @@ class SysexMessage {
         int major = softwareVersion >> 3;
         int minor = softwareVersion & 0x7;
         return major + "." + minor + "." + getVersionIncrement();
+    }
+
+    private byte[] validate(byte[] bytes)
+    {
+        SysexMessage.Type type = Type.typemap.get(bytes[INDEX_TYPE]);
+        // validate length
+        int expectedLength = START_SEQUENCE.length + type.payloadSize + END_SEQUENCE.length;
+        int actualLength = bytes.length;
+        if (actualLength != expectedLength) {
+            throw new IllegalStateException("Invalid message length for type " + type + ", expected " + expectedLength + ", but was " + actualLength);
+        }
+        if (!arrayEquals(bytes, 0, 6, START_SEQUENCE, 0, 6)) {
+            throw new IllegalStateException("Invalid start sequence");
+        }
+        if (!arrayEquals(bytes, actualLength - END_SEQUENCE.length, actualLength, END_SEQUENCE, 0, END_SEQUENCE.length)) {
+            throw new IllegalStateException("Invalid end sequence");
+        }
+        return bytes;
     }
 
     private boolean arrayEquals(byte[] bytes1, int from1, int to1, byte[] bytes2, int from2, int to2) {

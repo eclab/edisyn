@@ -236,6 +236,7 @@ enum Mappings {
     EXT_AUDIO_TRIGGER(Convertors.Packed.PACKED10, Boundaries.BOOLEAN),
     EXT_AUDIO_TO_FX(Convertors.Packed.PACKED10, Boundaries.BOOLEAN),
     // program volume - stored in patch
+    // NOTE: some ROM patches seem to contain invalid value (= 0)
     PROGRAM_VOLUME(125, 119, null, Boundaries.CENTRIC_24),
     // next 4 are not (yet) used, should/could become used in (future) devicePanel
     OSC_SELECT(Convertors.Packed.PACKED11, Boundaries.OSC_SELECT),

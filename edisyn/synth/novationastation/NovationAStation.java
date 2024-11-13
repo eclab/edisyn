@@ -5,6 +5,7 @@
 
 package edisyn.synth.novationastation;
 
+import edisyn.Librarian;
 import edisyn.Midi;
 import edisyn.Model;
 import edisyn.Synth;
@@ -14,6 +15,8 @@ import edisyn.util.StringUtility;
 import javax.sound.midi.ShortMessage;
 import javax.swing.*;
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static edisyn.synth.novationastation.SysexMessage.Type.*;
 
@@ -22,6 +25,7 @@ import static edisyn.synth.novationastation.SysexMessage.Type.*;
  */
 public class NovationAStation extends Synth {
     private static final String[] BANKS = Boundaries.BANKS.getValues();
+    private static final String[] PATCHES = Boundaries.PATCH_NUMBERS.getValues();
     private static final String KEY_BANK = "bank";
     private static final String KEY_PATCH_NUMBER = "number";
     private static final String KEY_SOFTWARE_VERSION = "swversion";
@@ -160,70 +164,55 @@ public class NovationAStation extends Synth {
     }
 
     @Override
-    public int parse(byte[] data, boolean fromFile)
-    {
+    public int parse(byte[] data, boolean fromFile) {
         try {
             SysexMessage message = SysexMessage.parse(data);
             model.set(KEY_SOFTWARE_VERSION, message.getSoftwareVersion());
             model.set(KEY_VERSION_INCREMENT, message.getVersionIncrement());
             //model.set(KEY_FULL_VERSION, message.getFullVersion());
             // update bank + program
-            byte programBank = message.getProgramBank();    // 1..4
-            byte programNumber = message.getProgramNumber();  // 0..99
-            if (programBank >= 1 && programBank <= 4) {
-                programBank--;  // zero-indexed in model
-                model.set(KEY_BANK, programBank); // 0..3 in model
-                model.set(KEY_PATCH_NUMBER, programNumber);
-            } else {
-                // explicitly reset bank/number
-                // this way we make sure the UI does not show any patch number when there is none exposed by the synth
-                model.set(KEY_BANK, -1);
-                model.set(KEY_PATCH_NUMBER, -1);
+            SysexMessage.Type type = message.getType();
+            switch (type) {
+                case CURRENT_PROGRAM_DUMP:
+                case PROGRAM_DUMP:
+                    return handleProgramDump(message);
+                default:
+                    System.err.println("Unsupported message received, type: " + type);
+                    return PARSE_IGNORE;
             }
-            // update sound parameter values
-            byte[] payload = message.getPayload();
-            for (int i = 0; i < payload.length; ++i) {
-                Optional<Convertor> convertor = Convertors.getByIndex(i);
-                if (convertor.isPresent()) {
-                    int value = payload[i];
-                    Boundary boundary = convertor.get().getBoundary();
-                    if (boundary.validate(value)) {
-                        convertor.get().toModel(model, value);
-                    } else {
-                        System.err.println("Ignoring value '" + value + "' for " + convertor.get());
-                    }
-                }
-            }
-            return PARSE_SUCCEEDED;
         } catch (Throwable t) {
             return PARSE_IGNORE;
         }
-    }
+    };
 
     @Override
     public byte[] emit(Model tempModel, boolean toWorkingMemory, boolean toFile)
     {
         if (tempModel == null)
-            tempModel = getModel();
-
+            tempModel = model;
+        // only use tempModel for retrieval of bank & patchnumber !
         SysexMessage.Type type = toWorkingMemory ? CURRENT_PROGRAM_DUMP : PROGRAM_DUMP;
         byte controlByte = (byte) (toWorkingMemory ? 0 : 1);
         byte programBank = (byte) (toWorkingMemory ? 0 : tempModel.get(KEY_BANK) + 1);
         byte programNumber = (byte) (toWorkingMemory ? 0 : tempModel.get(KEY_PATCH_NUMBER));
-
+        // .. and use the "synth-model" for all real patch data !
+        Model synthModel = model;
         SysexMessage.Builder builder = new SysexMessage.Builder(type)
                 .withControlByte(controlByte)
                 .withProgramBank(programBank)
                 .withProgramNumber(programNumber)
-                .withSoftwareVersion((byte) tempModel.get(KEY_SOFTWARE_VERSION))
-                .withVersionIncrement((byte) tempModel.get(KEY_VERSION_INCREMENT));
+                .withSoftwareVersion((byte) synthModel.get(KEY_SOFTWARE_VERSION))
+                .withVersionIncrement((byte) synthModel.get(KEY_VERSION_INCREMENT));
         for (int byteIndex = 0; byteIndex < type.getPayloadSize(); ++byteIndex) {
             Optional<Convertor> convertor = Convertors.getByIndex(byteIndex);
             if (convertor.isPresent()) {
-                builder.withPayload(byteIndex, (byte) convertor.get().toSynth(tempModel));
+                int value = convertor.get().toSynth(synthModel);
+                builder.withPayload(byteIndex, (byte) value);
             }
         }
-        return builder.build().getBytes();
+        byte[] bytes = builder.build().getBytes();
+        //System.out.println(StringUtility.toHex(bytes));
+        return bytes;
     }
 
     @Override
@@ -306,23 +295,73 @@ public class NovationAStation extends Synth {
     }
 
     @Override
-    public boolean librarianTested()
+    public boolean testVerify(Synth synth2, String key, Object obj1, Object obj2)
     {
-        // Override this method to return true to indicate that the librarian for this
-        // editor has been tested reasonably well and no longer requires a warning to the
-        // musician when he attempts to use it. By default this method returns false.
-        return false; 
+        return UNMAPPED_KEYS.contains(key);
     }
 
+    ////
+    // librarian support
+    ////
+    @Override
+    public String[] getBankNames()
+    {
+        return BANKS;
+    }
+
+    @Override
+    public String[] getPatchNumberNames()
+    {
+        return PATCHES;
+    }
+
+    @Override
+    public boolean getSupportsPatchWrites()
+    {
+        return true;
+    }
+
+    @Override
+    public boolean librarianTested()
+    {
+        return true;
+    }
+
+    ////
+    // some private aider methods
+    ////
     private String toString(Midi.CCData data)
     {
         return "CCData {number:" + data.number + ", value:" + data.value + ", type:" + data.type + "}";
     }
 
-    @Override
-    public boolean testVerify(Synth synth2, String key, Object obj1, Object obj2)
-    {
-        return UNMAPPED_KEYS.contains(key);
+    private int handleProgramDump(SysexMessage message) {
+        byte programBank = message.getProgramBank();    // 1..4
+        byte programNumber = message.getProgramNumber();  // 0..99
+        if (programBank >= 1 && programBank <= 4) {
+            model.set(KEY_BANK, --programBank); // 0..3 in model
+            model.set(KEY_PATCH_NUMBER, programNumber);
+        } else {
+            // explicitly reset bank/number
+            // this way we make sure the UI does not show any patch number when there is none exposed by the synth
+            model.set(KEY_BANK, -1);
+            model.set(KEY_PATCH_NUMBER, -1);
+        }
+        // update sound parameter values
+        byte[] payload = message.getPayload();
+        for (int i = 0; i < payload.length; ++i) {
+            Optional<Convertor> convertor = Convertors.getByIndex(i);
+            if (convertor.isPresent()) {
+                int value = payload[i];
+                Boundary boundary = convertor.get().getBoundary();
+                if (boundary.validate(value)) {
+                    convertor.get().toModel(model, value);
+                } else {
+                    System.err.println("Ignoring value '" + value + "' for " + convertor.get());
+                }
+            }
+        }
+        return PARSE_SUCCEEDED;
     }
 
     private void initModel() {

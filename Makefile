@@ -1,10 +1,9 @@
 .PHONY: jar install
 
-#JAVAC = javac ${JAVACFLAGS}
-JAVAC = javac
+JAVAC = javac ${JAVACFLAGS}
 
 all: 
-	javac -cp libraries/coremidi4j-1.6.jar:edisyn $$(find edisyn -name '*.java') 
+	${JAVAC} -cp libraries/coremidi4j-1.6.jar:edisyn $$(find edisyn -name '*.java')
 
 run:
 	java -cp libraries/coremidi4j-1.6.jar:. edisyn.Edisyn

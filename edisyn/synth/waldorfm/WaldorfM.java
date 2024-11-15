@@ -670,7 +670,7 @@ public class WaldorfM extends Synth
         params = new String[WAVETABLES.length];
         for(int i = 0; i < params.length; i++)
             {
-            params[i] = (i < 10 ? "0" : "") + i + " " + WAVETABLES[i];
+            params[i] = (i < 10 ? "0" : "") + (i + 1) + " " + WAVETABLES[i];
             }
         comp = new Chooser("Wavetable", this, "wave" + osc + "wavetable", params);
         vbox.add(comp);

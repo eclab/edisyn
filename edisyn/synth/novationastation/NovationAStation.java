@@ -5,7 +5,6 @@
 
 package edisyn.synth.novationastation;
 
-import edisyn.Librarian;
 import edisyn.Midi;
 import edisyn.Model;
 import edisyn.Synth;
@@ -15,8 +14,6 @@ import edisyn.util.StringUtility;
 import javax.sound.midi.ShortMessage;
 import javax.swing.*;
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static edisyn.synth.novationastation.SysexMessage.Type.*;
 
@@ -55,7 +52,7 @@ public class NovationAStation extends Synth {
         loadDefaults();
 
         // next only here actually to circumvent warning logs in SanityCheck
-        initModel();
+        initUnusedModelItems();
     }
 
     public static String getSynthName()
@@ -191,12 +188,12 @@ public class NovationAStation extends Synth {
         if (tempModel == null)
             tempModel = model;
         // only use tempModel for retrieval of bank & patchnumber !
-        SysexMessage.Type type = toWorkingMemory ? CURRENT_PROGRAM_DUMP : PROGRAM_DUMP;
-        byte controlByte = (byte) (toWorkingMemory ? 0 : 1);
         byte programBank = (byte) (toWorkingMemory ? 0 : tempModel.get(KEY_BANK) + 1);
         byte programNumber = (byte) (toWorkingMemory ? 0 : tempModel.get(KEY_PATCH_NUMBER));
+        byte controlByte = (byte) (toWorkingMemory ? 0 : 1);
         // .. and use the "synth-model" for all real patch data !
         Model synthModel = model;
+        SysexMessage.Type type = toWorkingMemory ? CURRENT_PROGRAM_DUMP : PROGRAM_DUMP;
         SysexMessage.Builder builder = new SysexMessage.Builder(type)
                 .withControlByte(controlByte)
                 .withProgramBank(programBank)
@@ -211,7 +208,7 @@ public class NovationAStation extends Synth {
             }
         }
         byte[] bytes = builder.build().getBytes();
-        //System.out.println(StringUtility.toHex(bytes));
+        System.out.println(StringUtility.toHex(bytes));
         return bytes;
     }
 
@@ -280,6 +277,16 @@ public class NovationAStation extends Synth {
         // a sysex message for a single parameter update.  If your synth sends
         // such things, implement this.  See also handleCCOrNRPNData() below.
         System.err.println("Unrecognized message received: " + StringUtility.toHex(data));
+    }
+
+    /**
+     * Hack alert: Avoid race condition in Edisyn on linux.
+     * Introducing a decent amount of delay after patch write make the diff here.
+     * without this, the progress window (showing progress of the writes) never closes
+     */
+    @Override
+    public int getPauseAfterWritePatch() {
+        return 100;
     }
 
     @Override
@@ -364,7 +371,7 @@ public class NovationAStation extends Synth {
         return PARSE_SUCCEEDED;
     }
 
-    private void initModel() {
+    private void initUnusedModelItems() {
         model.setMinMax(KEY_SOFTWARE_VERSION, 0, 127);
         model.setMinMax(KEY_VERSION_INCREMENT, 0, 127);
         //

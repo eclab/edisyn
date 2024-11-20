@@ -173,7 +173,7 @@ public class ParameterList {
             "EnvelopesFilterMods", 397, 5, new String[]{"Flip", "Repeat", "Retrig", "Loop", "Legato"},
             "EnvelopesLoudnessMods", 398, 5, new String[]{"Flip", "Repeat", "Retrig", "Loop", "Legato"},
             "OscillatorsMode", 516, 2, new String[]{"Osc 2 Sync on~Osc 2 Sync off", "Osc 2 Filter Envelope on~Osc 2 Filter Envelope off"},
-            "OscillatorsOSC1State", 517, 3, new String[]{"Osc 1 Full~Osc 1 Off", "Osc 1 VCO LFO 180°~Osc 1 VCO LFO 0°", "Osc 1 PWM LFO 180°~Osc 1 PWM LFO 0°"},
+            "OscillatorsOSC1State", 517, 3, new String[]{"Osc 1 Full~Osc 1 Off", "Osc 1 VCO LFO 180°~Osc 1 VCO LFO 0°", "180°~Osc 1 PWM LFO 0°"},
             "FilterModes", 644, 2, new String[]{"Filter Tracking on~Filter Tracking off", "4 Pole~2 Pole"},
             "UILastPatch", 910, 4, new String[]{"Upper", "Lower", "Combo", "Split"},
             "UIDisable", 911, 3, new String[]{"Assign Preset", "LED Segues", "Pulse revert"},

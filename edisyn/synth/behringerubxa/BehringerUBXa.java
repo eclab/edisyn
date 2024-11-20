@@ -209,7 +209,7 @@ public class BehringerUBXa extends Synth {
             oscCat.add(osc1v);
 
             addChooserByKey(osc1v, "OscillatorsOSC1Shapes", "Osc 1 Shapes");
-            addCheckboxGroupByKey(osc1v, "OscillatorsOSC1State");
+            addCheckboxGroupByKey(osc1v, "OscillatorsOSC1State",new String[]{"Osc 1 State","Osc 1 VCO LFO Phase","Osc 1 VCO PWM Phase"},false);
 
             VBox osc2v = new VBox();
             oscCat.add(osc2v);
@@ -338,14 +338,14 @@ public class BehringerUBXa extends Synth {
     }
 
     private void addCheckboxGroupByKey(JComponent container, String key) {
-        addCheckboxGroupByKey(container, key, true);
+        addCheckboxGroupByKey(container, key, null,true);
     }
 
-    private void addCheckboxGroupByKey(JComponent container, String key, boolean preferCheckbox) {
+    private void addCheckboxGroupByKey(JComponent container, String key, String[] chooserLabels,boolean preferCheckbox ) {
         for (int i = 0; i < checkboxGroups.length; i += NUM_PARAMS_CHECKBOXES) {
             if (key.equals(checkboxGroups[i])) {
                 String[] labels = (String[]) checkboxGroups[i + 3];
-                addCheckboxGroup(container, key, labels, preferCheckbox);
+                addCheckboxGroup(container, key, labels, chooserLabels, preferCheckbox);
                 return;
             }
         }
@@ -439,7 +439,7 @@ public class BehringerUBXa extends Synth {
             String subCatTitle = key.substring(ctrlGrp.length());
             Category cat = new Category(this, subCatTitle, Color.WHITE);
             String[] labels = (String[]) checkboxGroups[i + 3];
-            addCheckboxGroup(hbox2, key, labels, false);
+            addCheckboxGroup(hbox2, key, labels, null,false);
             vbox.add(cat);
             vbox.add(hbox2);
         }
@@ -448,23 +448,27 @@ public class BehringerUBXa extends Synth {
 
     }
 
-    private void addCheckboxGroup(JComponent container, String key, String[] lbls, boolean preferCheckbox) {
+    private void addCheckboxGroup(JComponent container, String key, String[] lbls, String[] chooserLabels,boolean preferCheckbox) {
+        assert chooserLabels == null || chooserLabels.length == lbls.length;
+        int i = 0;
         for (String lbl : lbls) {
             JComponent comp;
             if (lbl.contains("~")) {
                 String[] strs = lbl.split("~");
                 String prefix = longestCommonWordPrefix(strs[0], strs[1]);
+                String chooserLabel = chooserLabels!=null ? chooserLabels[i]:prefix;
                 if (preferCheckbox && strs[0].equals(prefix + " on")
                         && strs[1].equals(prefix + " off")) {
-                    comp = new CheckBox(prefix, this, key + BITMASK_SEP + lbl);
+                    comp = new CheckBox(chooserLabel, this, key + BITMASK_SEP + lbl);
                 } else {
                     String[] opts = new String[]{strs[1], strs[0]}; // order is "switched"
-                    comp = new Chooser(prefix, this, key + BITMASK_SEP + lbl, opts, new int[]{0, 1});
+                    comp = new Chooser(chooserLabel, this, key + BITMASK_SEP + lbl, opts, new int[]{0, 1});
                 }
             } else {
                 comp = new CheckBox(lbl, this, key + BITMASK_SEP + lbl);
             }
             container.add(comp);
+            i++;
         }
         usedKeys.add(key);
 

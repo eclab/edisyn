@@ -30,6 +30,10 @@ public class BehringerUBXa extends Synth {
         return "Behringer UB-Xa";
     }
 
+    public static String spaceAtCapitalLetter(String input) {
+        return String.join(" ",splitAtCapitalLetter(input, 10));
+    }
+
     public static String[] splitAtCapitalLetter(String input, int k) {
         java.util.List<String> out = new ArrayList<>();
         StringBuilder s = new StringBuilder(input.substring(0, 1));
@@ -291,11 +295,19 @@ public class BehringerUBXa extends Synth {
         }
         addTab("Main", main);
 
-        for (String ctrlGrp : ctrlGroups) {
+        for (Object ctrlSuperGroup: ctrlGroups) {
             JComponent p = new SynthPanel(this);
-            JComponent box = makeGroupedControls(ctrlGrp);
-            p.add(box, BorderLayout.CENTER);
-            addTab(ctrlGrp, p);
+            VBox vbox = new VBox();
+            p.add(vbox, BorderLayout.CENTER);
+            for(String ctrlGroup: (String[]) ctrlSuperGroup) {
+                String tabTitle = String.join(" ", splitAtCapitalLetter(ctrlGroup, 10));
+                Category c = new Category(this, tabTitle, Style.COLOR_C());
+                vbox.add(c);
+                JComponent box = makeGroupedControls(ctrlGroup);
+                vbox.add(box);
+            }
+            String tabTitle = String.join("/",(String[]) ctrlSuperGroup);
+            addTab(tabTitle, p);
         }
 
         // Check that we've added all controls at this point
@@ -426,7 +438,7 @@ public class BehringerUBXa extends Synth {
             }
             j += 1;
             String[] opts = (String[]) selectors[i + 2];
-            String label = key.substring(ctrlGrp.length());
+            String label = spaceAtCapitalLetter(key.substring(ctrlGrp.length()));
             addChooser(hbox, key, label, opts);
 
         }
@@ -436,7 +448,7 @@ public class BehringerUBXa extends Synth {
             if (key.indexOf(ctrlGrp) != 0) continue;
             if (usedKeys.contains(key)) continue;
             JComponent hbox2 = new HBox();
-            String subCatTitle = key.substring(ctrlGrp.length());
+            String subCatTitle = spaceAtCapitalLetter(key.substring(ctrlGrp.length()));
             Category cat = new Category(this, subCatTitle, Color.WHITE);
             String[] labels = (String[]) checkboxGroups[i + 3];
             addCheckboxGroup(hbox2, key, labels, null,false);

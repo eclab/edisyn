@@ -3,8 +3,15 @@ package edisyn.synth.behringerubxa;
 public class ParameterList {
 
 
-    public static final String[] ctrlGroups = {"Control", "Performance", "Envelopes", "Oscillators",
-            "Filter", "ModMatrix", "Amplifier", "Panning", "Atrophy", "Sequencer", "Midi", "Keyboard", "Pedal", "Sysex", "Voice", "Surface", "Program", "UI", "Background"};
+    public static final Object[] ctrlGroups = {
+            new String []{"Control", "Performance","Envelopes"},
+            new String[]{"Oscillators","Filter"},
+            new String[]{"ModMatrix", "Amplifier", "Panning"},
+            new String[]{"Atrophy", "Sequencer"},
+            new String[]{"Midi", "Keyboard"},
+            new String[]{"Pedal", "Sysex"},
+            new String[]{"Voice", "Surface"},
+            new String[]{"Program", "UI", "Background"}};
 
     public static final int NUM_PARAMS_DIALS = 5;
     public static final Object[] dials = {

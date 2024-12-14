@@ -121,7 +121,7 @@ public class ParameterList {
             "ArpeggiatorOctave", 1030, 1, 6, false,
             "ArpeggiatorSwing", 1031, 0, 10, false,
             "ArpeggiatorRepeat", 1032, 0, 10, false,
-            "MidiTranspose", 1152, 0, 127, false,
+            "MidiTranspose", 1152, 0, 127, true,
             "MidiPatchTempo", 1153, 40, 240, false,
             "MidiTempo", 1154, 40, 240, false,
             "MidiGlobalTranspose", 1166, 0, 127, false,

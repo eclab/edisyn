@@ -1,0 +1,1100 @@
+   :None
+bas:The Deepest
+bas:Hummertime
+bas:WoofaWrekka
+bas:Hella Boom
+bas:Decision'99
+bas:Acid 1
+bas:Acid 2
+bas:Crandle
+bas:Frog Factory
+bas:Talk2MeBaby
+bas:Soulified
+bas:Speakeasy
+bas:Warm Welcome
+bas:Belly-Button
+bas:KeyONate
+bas:TheOtherMarc
+bas:Closer To It
+bas:Fish Fry
+bas:Prophet
+bas:In Theory
+bas:Persistence
+bas:Funk Pop 1
+bas:Funk Pop2
+bas:Funk Slap
+bas:SlapPopSwtch
+bas:Funk Finger
+bas:Funk Hollow
+bas:Funk Pick
+bas:Funk Wave 1
+bas:Funk Wave 2
+bas:Accidental
+bas:Finger Bass
+bas:Bagg
+bas:Destroyer
+bas:Blipp
+bas:Echo Hitter
+bas:DubbyDoRite
+bas:Dub 2
+bas:GrittyStanda
+bas:Gritty Pulla
+bas:Krafty 1
+bas:Krafty 2
+bas:Swing Hitter
+bas:Technoid
+bas:Bender Hit
+bas:Synth Boom
+bas:PluckySynth
+bas:HarpOneShot1
+bas:HarpOneShot2
+bas:HarpOneShot3
+bas:Upright One
+bas:SP Stand-Up
+bas:Bass Slide
+bas:FX F#0-B0
+gtr:All Wahs
+gtr:Crybaby Wah1
+gtr:Crybaby Wah2
+gtr:5strkchuck83
+gtr:Wow Wacka 83
+gtr:WackaGruv283
+gtr:Wah Jan 83
+gtr:Wacka 96bpm
+gtr:Wah 96 2
+gtr:Wah 96 3
+gtr:CoolWaRif113
+gtr:WACKA Do 113
+gtr:113 Wackaloo
+gtr:Wah Coming
+gtr:Chickenpickr
+gtr:Chickjacked
+gtr:Chucka Run
+gtr:ExcitableWah
+gtr:Hendrix Wah
+gtr:LikethisLik
+gtr:Lil' Chopper
+gtr:Lil' Chukka
+gtr:Lil Wah Run
+gtr:Oddlilhitter
+gtr:Oh YEahWah
+gtr:Versa Wa
+gtr:Wah LikDis
+gtr:Wah Not?
+gtr:Wah Scale 1
+gtr:Wah Scale 2
+gtr:Wah Scale 3
+gtr:Wah Scale 4
+gtr:Wah Scale 5
+gtr:Wah Scale 6
+gtr:Wah Scale 7
+gtr:Wah Scaler
+gtr:Wah Scaler 2
+gtr:WahSurprised
+gtr:Wah Upper
+gtr:Walk On Waka
+gtr:Walker Wah
+gtr:Wuckit
+gtr:Funky Likka
+gtr:Squawk Hit
+gtr:Vinyl Mood
+gtr:1 Note Mute
+gtr:RapNylonWave
+gtr:R&B NylonWav
+gtr:EffectsD0-B0
+gtr:Happy Strum
+gtr:Sexy Slide 1
+gtr:Sexy Slide 2
+gtr:2StrokeStrum
+gtr:Fast Slider
+gtr:Fine Slider
+gtr:Nln Strum Dn
+gtr:Gritty Slide
+gtr:Knock 1
+gtr:Knock 2
+gtr:Squeak 1
+gtr:Squeak 2
+gtr:General Elec
+gtr:Strat 1 Shot
+gtr:NotherElWave
+gtr:Dis One Notr
+gtr:Funk Pop
+gtr:Pop 2
+gtr:Chord Bed
+gtr:Krackly Kord
+gtr:Amp Noise
+gtr:Amp Ped
+gtr:All Burners
+gtr:Hardcore
+gtr:Psycho Noise
+gtr:Fuzz Tone
+gtr:Slicer
+gtr:Dissed Hit
+gtr:Doooom
+pad:Drone 1
+pad:Drone 2
+pad:Drone 3
+pad:Sirens
+hit:Guit n Hat
+hit:Wah Kicker
+hit:Satisfying
+hit:SP12OrgChord
+hit:Weird Gtr
+led:DeepThoughts
+led:Fantastic70s
+led:Guitlet Wave
+syn:Synthomatic
+led:Transformed
+brs:Caliente!
+hit:Tpt Solo
+led:Hoodwormed
+led:Yearning 2 B
+led:ReedOPlenty
+led:AmberVioleta
+led:Stevie Rockz
+pad:Mr - Clean
+sfx:Shield
+sfx:Deadly Cycle
+sfx:Reaper
+vox:Atseeyeah
+pad:Pulsar
+gtr:1ShotElectra
+brs:CarnavalHits
+brs:Carnaval 1
+brs:Carnaval 2
+brs:Carnaval 3
+brs:Carnaval 4
+brs:Carnaval 5
+hit:Spicy Brass
+sfx:Worry Pad
+str:Orcha Chord
+hit:DeathStrike
+hit:Sweetness 1
+hit:Sweetness 2
+hit:QuirkyDrmBed
+hit:Intro Beat
+hit:Knock U Out!
+hit:Blip
+hit:Caprice
+hit:Sax Line
+gtr:Owp Hit
+hit:Bottom 1
+hit:Bottom 2
+hit:Nice Under
+hit:Nice Under 2
+hit:Righteous
+sfx:Cop Tone 1
+sfx:Cop Tone 2
+sfx:Beep Tone 1
+sfx:Beep Tone 2
+sfx:ComputerBeep
+sfx:Ping Beep
+hit:Key Kord min
+hit:X
+hit:Honk
+sfx:Dial 8
+sfx:Dial 6
+sfx:Dial 5
+sfx:Dial 4
+sfx:Dial 3
+sfx:Dial 2
+sfx:Dial 1
+hit:Annoy
+hit:Orchit
+brs:Waver Stab
+brs:40's Horn
+sfx:Bat
+hit:Bass Note
+hit:Hatthang
+sfx:AmusemntCrwd
+hit:SynChord
+hit:Synthetic
+hit:Padlove
+hit:8 Bit Fright
+hit:Synth Ditty
+hit:House Chrd ?
+hit:HornStabber
+brs:Stabber
+sfx:JungleWiggly
+sfx:Wet Tripper
+hit:Dum Dum 1
+hit:Dum Dum 2
+hit:Jungle
+hit:Bongo Fury
+hit:Drop Off
+syn:2 Step
+hit:the Snap
+sfx:HookReverse
+brs:Tasty Lick
+brs:Next Tasty 1
+brs:NotherTasty
+brs:Next Tasty 2
+syn:Flutey
+hit:Brass Attack
+gtr:Single Next
+brs:Falling
+brs:Sfz
+syn:Grinder
+hit:HardSynStab1
+hit:HardSynStab2
+brs:Quirky Hit
+hit:StressRelief
+hit:Korn
+syn:Wheeeeper
+hit:It's A...
+hit:It's A nothr
+hit:Rap Zapper
+hit:Uplifter
+hit:Good'Nuff
+hit:Laser Strike
+hit:Wild Horns
+hit:Cluster
+hit:To the Point
+hit:Tentative
+hit:Mood Swing
+syn:Sea Story
+str:Fade Hit
+hit:Sentimental
+hit:DeD RINGER
+hit:Chord Ends
+hit:Monster
+hit:SP Super
+hit:With 2 Tts
+hit:Splashy
+str:SP Suspense
+hit:Weird Nylon
+hit:Sp Reversal
+gtr:Mood Riff
+syn:BrassProphet
+pad:Plucked Gold
+syn:Winny
+syn:P5 Sync
+wav:Sinusoid
+wav:Sine /\ 2
+wav:SineInvrt/\2
+wav:Sine /\ 3
+wav:SineInvrt/\3
+wav:Sawtooth
+wav:Square
+wav:Triangle
+key:010 El Tine
+key:1 Note Mello
+key:Nother1Noter
+key:010 FuzzTine
+key:Res 1 Shot
+key:Chords/Hits
+key:KoolOrgKord1
+key:Kool Kord 2
+key:Rhodes FX 1
+key:WindownLetGo
+key:Loop da Loop
+key:Growl Drop
+key:Org Roll 1
+key:Harpsinote
+hit:DanceKey1
+hit:DanceKey2
+hit:DanceKey3
+hit:DanceKey4
+hit:DanceKey5
+hit:Organ
+hit:Maj Org
+hit:DirtyTine
+hit:Piano Lick
+hit:In Concert
+key:Kool Kord
+key:Nother 'No
+key:Perc Organ
+str:Interrupted
+str:Section Pizz
+str:Orch Harp
+str:Hybrid Synth
+str:Sctn Legato
+str:Synthetic
+str:MoodChrdStab
+str:Mood Stab 2
+str:Harp Gliss
+str:Screenplay
+str:Sp Loooopy
+hit:Brass Balls
+str:Hip Hop Pizz
+str:Big PluckHit
+str:Rap OrchRiff
+str:Heartbreaker
+vox:TB Ooh! 1
+vox:TB Ooh! 2
+vox:Talk Box Ooh
+vox:Talk Box Aha
+vox:Freak!
+vox:TBLet'sDance
+vox:Booms!
+vox:Doit!
+vox:Oh Yeahs!
+vox:Dan Cher 1
+vox:Dan Cher 2
+vox:Funky 1
+vox:Funky 2
+vox:All Vowels
+vox:AllNTPVowels
+vox:VowelEachOct
+vox:Vowel Train
+vox:Vowel Train2
+vox:Vocoder
+vox:All Men
+vox:All Femmes
+vox:Owwwwwwww
+vox:Screamer
+vox:YahWailer
+vox:Wassup???
+vox:Techno Yeah
+vox:Scratch Talk
+hit:Scratch Box
+vox:Podge
+syn:Vox Pad
+vox:TB Pad 1
+vox:TB Pad 2
+vox:Talk Brush
+gtr:DistantCry
+gtr:Heavy
+syn:Vox Roller
+vox:TB Boom 1
+vox:TB Boom 2
+vox:TB Boom 3
+vox:TB Boom 4
+vox:TB Boom 5
+vox:TB Boom 6
+vox:TB Do It 1
+vox:TB Do It 2
+vox:TB Do It 3
+vox:TB Do It 4
+vox:TB Do It 5
+vox:TB Oh Yeah 1
+vox:TB Oh Yeah 2
+vox:TB Oh Yeah 3
+vox:TB Oh Yeah 4
+vox:TB Oh Yeah 5
+vox:TB Oh Yeah 6
+vox:TB Oh Yeah 7
+vox:TB Vowel A
+vox:TB Vowel E
+vox:TB Vowel I
+vox:TB Vowel O
+vox:TB Vowel U
+vox:TB Vowel Ah
+vox:TB Vowel Eh
+vox:TB Vowel Uh
+vox:TB Vowel Oo
+vox:Gina Ew 1
+vox:Gina Ew 2
+vox:Earth Lisa
+vox:Male 1
+vox:Male 2
+vox:Male 3
+vox:Male 4
+vox:Male 5
+vox:Male 6
+vox:Male 7
+vox:Male 8
+vox:Male 9
+vox:Male 10
+vox:Femme 1
+vox:Femme 2
+vox:Femme 3
+vox:Femme 4
+vox:Femme 5
+vox:Femme 6
+vox:Femme 7
+vox:Femme 8
+vox:Femme 9
+vox:Femme 10
+vox:Femme 11
+vox:Femme 12
+vox:Femme 13
+key:Farfisa Low
+key:Farfisa
+key:Vox Organ
+key:Organ 1
+key:Organ 2
+key:Org Day
+key:Org Nod
+key:Org Lite
+key:Disco Organ
+key:DX Organ
+key:JX Organ
+led:Full Force
+syn:Brite Brass
+syn:Muted Brass
+syn:Classic 1
+syn:Classic 2
+syn:EdgyVeryEdgy
+syn:Tone Wall
+syn:Jungle Lead
+led:Wormy 1
+led:Wormy 2
+led:Wormy 3
+led:H20
+syn:Wave Cutter
+syn:Rail to Rail
+key:Klavin It
+key:Klav Love
+key:Klav Love b
+syn:Buzz Wave
+prc:All Kicks 1
+prc:All Kicks 2
+prc:Kicks2 Tuned
+prc:All Snares 1
+prc:All Snares 2
+prc:All Snares 3
+prc:KikSnarePlc1
+prc:All Hats 1
+prc:All Hats 2
+prc:All Cymbals
+prc:Rainstick
+prc:Whirlybird
+prc:All Stix
+prc:All Bongos
+prc:AllClaps&Snp
+prc:All Claves
+prc:All Toms
+prc:All Bells
+prc:All Fills
+prc:All Shakers
+scr:AllScratches
+prc:All Misc
+sfx:ScaryBastard
+prc:Sci Fi Toy 1
+prc:Sci Fi Toy 2
+prc:Thumpiano
+scr:Scratch Map
+scr:Scratch Talk
+scr:Rodeo Roper
+scr:ChipmunkRap
+scr:StuttrSteppr
+scr:Whale Backer
+scr:Nother Drop
+scr:Hiccup
+scr:Rotator
+scr:Hard Drop
+prc:Shaker Loop
+prc:St Flexi 1
+prc:Flexi 2
+prc:Flexi 3
+prc:Flexi 4
+prc:Flexi 5
+kit:Lily GM1
+kit:Lily GM2
+kit:Lily GM3
+kit:Lily GM4
+kit:Lily GM5
+kit:Funky GM One
+kit:Funky GM 2
+kit:Funky GM 3
+kit:Funky 4
+kit:Funky 5
+kit:Funky 6
+prc:Kick 1
+prc:Kick 2
+prc:Kick 3
+prc:Kick 4
+prc:Kick 5
+prc:Kick 6
+prc:Kick 7
+prc:Kick 8
+prc:Kick 9
+prc:Kick 10
+prc:Kick 11
+prc:Kick 12
+prc:Kick 13
+prc:Kick 14
+prc:Kick 15
+prc:Kick 16
+prc:Kick 17
+prc:Kick 18
+prc:Kick 19
+prc:Kick 20
+prc:Kick 21
+prc:Kick 22
+prc:Kick 23
+prc:Kick 24
+prc:Kick 25
+prc:Kick 26
+prc:Kick 27
+prc:Kick 28
+prc:Kick 29
+prc:Kick 30
+prc:Kick 31
+prc:Kick 32
+prc:Kick 33
+prc:Kick 34
+prc:Kick 35
+prc:Kick 36
+prc:Kick 37
+prc:Kick 38
+prc:Kick 39
+prc:Kick 40
+prc:Kick 41
+prc:Kick 42
+prc:Kick 43
+prc:Kick 44
+prc:Kick 45
+prc:Kick 46
+prc:Kick 47
+prc:Kick 48
+prc:Kick 49
+prc:Kick 50
+prc:Kick 51
+prc:Kick 52
+prc:Kick 53
+prc:Kick 54
+prc:Kick 55
+prc:Kick 56
+prc:Kick 57
+prc:Kick 58
+prc:Kick 59
+prc:Kick 60
+prc:Kick 61
+prc:Kick 62
+prc:Kick 63
+prc:Kick 64
+prc:Kick 65
+prc:Kick 66
+prc:Kick 67
+prc:Kick 68
+prc:Kick 69
+prc:Kick 70
+prc:Kick 71
+prc:Kick 72
+prc:Kick 73
+prc:Kick 74
+key:Tine Chord 1
+key:Tine Chord 2
+key:Tine Chord 3
+key:Tine Chord 4
+key:Tine Chord 5
+key:Tine Chord 6
+key:Tine Chord 7
+key:Tine Hit 1
+key:Tine Hit 2
+key:Tine Hit 3
+key:Tine Hit 4
+key:Tine Hit 5
+key:Tine Hit 6
+key:Tine Hit 7
+prc:Snare 1
+prc:Snare 2
+prc:Snare 3
+prc:Snare 4
+prc:Snare 5
+prc:Snare 6
+prc:Snare 7
+prc:Snare 8
+prc:Snare 9
+prc:Snare 10
+prc:Snare 11
+prc:Snare 12
+prc:Snare 13
+prc:Snare 14
+prc:Snare 15
+prc:Snare 16
+prc:Snare 17
+prc:Snare 18
+prc:Snare 19
+prc:Snare 20
+prc:Snare 21
+prc:Snare 22
+prc:Snare 23
+prc:Snare 24
+prc:Snare 25
+prc:Snare 26
+prc:Snare 27
+prc:Snare 28
+prc:Snare 29
+prc:Snare 30
+prc:Snare 31
+prc:Snare 32
+prc:Snare 33
+prc:Snare 34
+prc:Snare 35
+prc:Snare 36
+prc:Snare 37
+prc:Snare 38
+prc:Snare 39
+prc:Snare 40
+prc:Snare 41
+prc:Snare 42
+prc:Snare 43
+prc:Snare 44
+prc:Snare 45
+prc:Snare 46
+prc:Snare 47
+prc:Snare 48
+prc:Snare 49
+prc:Snare 50
+prc:Snare 51
+prc:Snare 52
+prc:Snare 53
+prc:Snare 54
+prc:Snare 55
+prc:Snare 56
+prc:Snare 57
+prc:Snare 58
+prc:Snare 59
+prc:Snare 60
+prc:Snare 61
+prc:Snare 62
+prc:Snare 63
+prc:Snare 64
+prc:Snare 65
+prc:Snare 66
+prc:Snare 67
+prc:Snare 68
+prc:Snare 69
+prc:Snare 70
+prc:Snare 71
+prc:Snare 72
+prc:Snare 73
+prc:Snare 74
+prc:Snare 75
+prc:Snare 76
+prc:Snare 77
+prc:Snare 78
+prc:Snare 79
+prc:Snare 80
+prc:Snare 81
+prc:Snare 82
+prc:Snare 83
+prc:Snare 84
+prc:Snare 85
+prc:Snare 86
+prc:Snare 87
+prc:Snare 88
+prc:Snare 89
+prc:Snare 90
+prc:Snare 91
+prc:Snare 92
+prc:Snare 93
+prc:Snare 94
+prc:Snare 95
+prc:Snare 96
+prc:Snare 97
+prc:Snare 98
+prc:Snare 99
+prc:Snare 100
+prc:Snare 101
+prc:Snare 102
+prc:Snare 103
+prc:Snare 104
+prc:Snare 105
+prc:Snare 106
+prc:Snare 107
+prc:Snare 108
+prc:Snare 109
+prc:Snare 110
+prc:Snare 111
+prc:Snare 112
+prc:Snare 113
+prc:Snare 114
+prc:Snare 115
+prc:Snare 116
+prc:Snare 117
+prc:Snare 118
+prc:Snare 119
+prc:Snare 120
+prc:Snare 121
+prc:Snare 122
+prc:Snare 123
+prc:Snare 124
+prc:Snare 125
+prc:Snare 126
+prc:Snare 127
+prc:Snare 128
+prc:Snare 129
+prc:Snare 130
+prc:Snare 131
+prc:Snare 132
+prc:Snare 133
+prc:Snare 134
+prc:Snare 135
+prc:Snare 136
+prc:Snare 137
+prc:Snare 138
+prc:Snare 139
+prc:Snare 140
+prc:Snare 141
+prc:Snare 142
+prc:Snare 143
+prc:Snare 144
+prc:Snare 145
+prc:Snare 146
+prc:Snare 147
+prc:Snare 148
+prc:Snare 149
+prc:Snare 150
+prc:Snare 151
+prc:Snare 152
+prc:Snare 153
+prc:Snare 154
+prc:Snare 155
+prc:Snare 156
+prc:Snare 157
+prc:Snare 158
+prc:Snare 159
+prc:Snare 160
+prc:Snare 161
+prc:Snare 162
+prc:Snare 163
+prc:Snare 164
+prc:Snare 165
+prc:Snare 166
+prc:Snare 167
+prc:Snare 168
+kit:Nu Soul
+kit:80s+Drm&Bass
+kit:Electronica1
+kit:Dub Reggae
+kit:DarkBeats
+kit:DarkBeats2
+kit:LoFi Kit
+kit:Nu Metal
+hit:All Hits 1
+rom:Thru Memory
+rom:Vowels
+hit:All Hits 2
+kit:1NoHats
+kit:1NoKickSnare
+kit:2NoHats
+kit:2NoKickSnare
+kit:3NoHats
+kit:3NoKickSnare
+kit:4NoHats
+kit:4NoKickSnare
+kit:5NoHats
+kit:5NoKickSnare
+kit:6NoHats
+kit:6NoKickSnare
+kit:7NoHats
+kit:7NoKickSnare
+kit:8NoHats
+kit:8NoKickSnare
+kit:9NoHats
+kit:9NoKickSnare
+kit:10NoHats
+kit:10NoKikSnare
+kit:11NoHats
+kit:11NoKikSnare
+kit:12NoHats
+kit:12NoKikSnare
+kit:13NoHats
+kit:13NoKikSnare
+kit:14NoHats
+kit:14NoKikSnare
+kit:15NoHats
+kit:15NoKikSnare
+kit:16NoHats
+kit:16NoKikSnare
+kit:17NoHats
+kit:17NoKikSnare
+kit:18NoHats
+kit:18NoKikSnare
+kit:19NoHats
+kit:19NoKikSnare
+gtr:Scrape 1
+gtr:Strum Up
+gtr:Strum Down
+gtr:Bonk
+gtr:Chop
+gtr:Pick Noise
+vox:All Talkbox
+str:StackedLegs
+prc:Hat 1
+prc:Hat 2
+prc:Hat 3
+prc:Hat 4
+prc:Hat 5
+prc:Hat 6
+prc:Hat 7
+prc:Hat 8
+prc:Hat 9
+prc:Hat 10
+prc:Hat 11
+prc:Hat 12
+prc:Hat 13
+prc:Hat 14
+prc:Hat 15
+prc:Hat 16
+prc:Hat 17
+prc:Hat 18
+prc:Hat 19
+prc:Hat 20
+prc:Hat 21
+prc:Hat 22
+prc:Hat 23
+prc:Hat 24
+prc:Hat 25
+prc:Hat 26
+prc:Hat 27
+prc:Hat 28
+prc:Hat 29
+prc:Hat 30
+prc:Hat 31
+prc:Hat 32
+prc:Hat 33
+prc:Hat 34
+prc:Hat 35
+prc:Hat 36
+prc:Hat 37
+prc:Hat 38
+prc:Hat 39
+prc:Hat 40
+prc:Hat 41
+prc:Hat 42
+prc:Hat 43
+prc:Hat 44
+prc:Hat 45
+prc:Hat 46
+prc:Hat 47
+prc:Hat 48
+prc:Hat 49
+prc:Hat 50
+prc:Hat 51
+prc:Hat 52
+prc:Hat 53
+prc:Hat 54
+prc:Hat 55
+prc:Hat 56
+prc:Hat 57
+prc:Hat 58
+prc:Hat 59
+prc:Hat 60
+prc:Hat 61
+prc:Hat 62
+prc:Hat 63
+prc:Hat 64
+prc:Hat 65
+prc:Hat 66
+prc:Hat 67
+prc:Hat 68
+prc:Hat 69
+prc:Hat 70
+prc:Hat 71
+prc:Hat 72
+prc:Hat 73
+prc:Hat 74
+prc:Hat 75
+prc:Hat 76
+prc:Hat 77
+prc:Cymbal 1
+prc:Cymbal 2
+prc:Cymbal 3
+prc:Cymbal 4
+prc:Cymbal 5
+prc:Cymbal 6
+prc:Cymbal 7
+prc:Cymbal 8
+prc:Cymbal 9
+prc:Cymbal 10
+prc:Cymbal 11
+prc:Cymbal 12
+prc:Cymbal 13
+prc:Cymbal 14
+prc:Cymbal 15
+prc:Cymbal 16
+prc:Cymbal 17
+prc:Cymbal 18
+prc:Cymbal 19
+prc:Cymbal 20
+prc:Bongo 1
+prc:Bongo 2
+prc:Bongo 3
+prc:Bongo 4
+prc:Bongo 5
+prc:Bongo 6
+prc:Bongo 7
+prc:Bongo 8
+prc:Bongo 9
+prc:Bongo 10
+prc:Bongo 11
+prc:Bongo 12
+prc:Bongo 13
+prc:Bongo 14
+prc:Bongo 15
+prc:Bongo 16
+prc:Bongo 17
+prc:Claps&Snp 1
+prc:Claps&Snp 2
+prc:Claps&Snp 3
+prc:Claps&Snp 4
+prc:Claps&Snp 5
+prc:Claps&Snp 6
+prc:Claps&Snp 7
+prc:Claps&Snp 8
+prc:Claps&Snp 9
+prc:Claps&Snp 10
+prc:Claps&Snp 11
+prc:Claps&Snp 12
+prc:Claps&Snp 13
+prc:Claps&Snp 14
+prc:Clave 1
+prc:Clave 2
+prc:Clave 3
+prc:Clave 4
+prc:Clave 5
+prc:Clave 6
+prc:Clave 7
+prc:Clave 8
+prc:Clave 9
+prc:Clave 10
+prc:Clave 11
+prc:Clave 12
+prc:Clave 13
+prc:Clave 14
+prc:Clave 15
+prc:Clave 16
+prc:Clave 17
+prc:Tom 1
+prc:Tom 2
+prc:Tom 3
+prc:Tom 4
+prc:Tom 5
+prc:Tom 6
+prc:Tom 7
+prc:Tom 8
+prc:Tom 9
+prc:Tom 10
+prc:Tom 11
+prc:Tom 12
+prc:Tom 13
+prc:Tom 14
+prc:Tom 15
+prc:Tom 16
+prc:Tom 17
+prc:Tom 18
+prc:Tom 19
+prc:Tom 20
+prc:Tom 21
+prc:Tom 22
+prc:Bell 1
+prc:Bell 2
+prc:Bell 3
+prc:Bell 4
+prc:Bell 5
+prc:Bell 6
+prc:Bell 7
+prc:Bell 8
+prc:Bell 9
+prc:Bell 10
+prc:Bell 11
+prc:Bell 12
+prc:Bell 13
+prc:Bell 14
+prc:Bell 15
+prc:Bell 16
+prc:Fill Etc 1
+prc:Fill Etc 2
+prc:Fill Etc 3
+prc:Fill Etc 4
+prc:Fill Etc 5
+prc:Fill Etc 6
+prc:Fill Etc 7
+prc:Fill Etc 8
+prc:Fill Etc 9
+prc:Fill Etc 10
+prc:Fill Etc 11
+prc:Shaker 1
+prc:Shaker 2
+prc:Shaker 3
+prc:Shaker 4
+prc:Shaker 5
+prc:Shaker 6
+prc:Shaker 7
+prc:Shaker 8
+prc:Shaker 9
+prc:Shaker 10
+prc:Shaker 11
+prc:Shaker 12
+prc:Shaker 13
+prc:Shaker 14
+prc:Shaker 15
+prc:Shaker 16
+prc:Shaker 17
+prc:Shaker 18
+prc:Shaker 19
+prc:Shaker 20
+prc:Shaker 21
+prc:Shaker 22
+prc:Shaker 23
+prc:Shaker 24
+prc:Shaker 25
+prc:Shaker 26
+prc:Shaker 27
+prc:Shaker 28
+prc:Shaker 29
+prc:Misc 1
+prc:Misc 2
+prc:Misc 3
+prc:Misc 4
+prc:Misc 5
+prc:Misc 6
+prc:Misc 7
+prc:Misc 8
+prc:Misc 9
+prc:Misc 10
+prc:Misc 11
+prc:Misc 12
+prc:Misc 13
+prc:Misc 14
+prc:Misc 15
+prc:Misc 16
+prc:Misc 17
+prc:Misc 18
+prc:Misc 19
+prc:Misc 20
+prc:Misc 21
+prc:Misc 22
+prc:Misc 23
+prc:Misc 24
+prc:Misc 25
+prc:Misc 26
+prc:Misc 27
+prc:Misc 28
+prc:Misc 29
+prc:Misc 30
+prc:Misc 31
+prc:Misc 32
+prc:Misc 33
+prc:Misc 34
+prc:Misc 35
+prc:Misc 36
+prc:Misc 37
+prc:Misc 38
+prc:Misc 39
+prc:Misc 40
+prc:Misc 41
+prc:Misc 42
+prc:Misc 43
+prc:Misc 44
+prc:Misc 45
+prc:Misc 46
+prc:Misc 47
+prc:Misc 48
+prc:Misc 49
+prc:Misc 50
+prc:Misc 51
+prc:Misc 52
+prc:Misc 53
+prc:Misc 54
+prc:Misc 55
+prc:Misc 56
+prc:Misc 57
+prc:Misc 58
+prc:Misc 59
+prc:Misc 60
+prc:Misc 61
+prc:Misc 62
+prc:Misc 63
+prc:Misc 64
+prc:Misc 65
+prc:Misc 66
+prc:Misc 67
+prc:Misc 68
+prc:Misc 69
+prc:Misc 70

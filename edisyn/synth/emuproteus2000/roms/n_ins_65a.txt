@@ -1,0 +1,610 @@
+   :None        
+hit:C minor #1  
+hit:C Major #1  
+hit:C minor #2  
+hit:C minor #3  
+hit:C minor#3Rev
+hit:C Major #2  
+hit:C Major #3  
+hit:C Major 7th 
+hit:C minor #4  
+hit:C minor #5  
+hit:C minor 11th
+wnd:Panflute 1  
+wnd:Panflute 2  
+wnd:Panflute 3  
+org:CX3-01      
+org:CX3-02      
+org:CX3-03      
+org:CX3-04      
+org:CX3-05      
+org:CX3-06      
+org:CX3-07      
+org:CX3-08      
+org:CX3-09      
+org:CX3-10      
+org:CX3-11      
+org:CX3-12      
+org:Dance CX-3  
+org:Krafty Org  
+wav:Mini Saw    
+wav:Mini SawTri 
+wav:Mini Pulse 1
+wav:Mini Pulse 2
+wav:Mini Pulse 3
+wav:Mini Sinus  
+syn:Saw Strings 
+wav:PWM-3       
+vox:Vox du Aah  
+vox:Vox du Ooooh
+syn:Rogue Saws  
+vox:Vox du Aah#2
+vox:Spacy Ladies
+syn:My Bellos   
+vox:Vox du Aah#3
+syn:La Bellos   
+syn:Rogue Saws#2
+syn:Rogue Saws#3
+wav:PWM-3    #2 
+wav:PWM-3    #3 
+wav:PWM-3    #4 
+wav:PWM-3    #5 
+wav:PWM-3    #6 
+syn:Dominate    
+syn:Dominate #2 
+syn:Dominate #3 
+wav:PWM-1+2     
+wav:PWM-1       
+wav:PWM-1     #2
+wav:PWM-1     #3
+wav:PWM-1     #4
+wav:PWM-1     #5
+wav:PWM-1     #6
+wav:PWM-2       
+wav:PWM-2     #2
+wav:PWM-2     #3
+wav:PWM-2     #4
+wav:PWM-2     #5
+wav:PWM-2     #6
+kit:Tec.01-3 CL+
+wav:PWM-1+2 #2  
+sub:P600 Bass   
+sub:P600 Bass #2
+sub:P600 Bass #3
+sub:P600 Bass #4
+sub:P600 Bass #5
+syn:Rogue Ya    
+syn:Rogue Ya  #2
+syn:Rogue Ya  #3
+syn:Rogue Ya  #4
+syn:Rogue Ya  #5
+syn:Rogue Ya  #6
+syn:Rogue Ya  #7
+syn:Rogue Ya  #8
+syn:Rogue Ya  #9
+syn:Rogue Ya #10
+syn:Rogue Ya #11
+syn:Rogue Ya #12
+bas:Digital Bass
+sub:FENBass     
+sub:FENBass #2  
+sub:FENBass #3  
+sub:FENBass #4  
+sub:FENBass #5  
+bas:Mini Fen #1 
+bas:Mini Fen #2 
+bas:Mini Fen #3 
+bas:Mini Fen #4 
+bas:Mini Fen #5 
+bas:Mini Fen #6 
+bas:Mini Fen #7 
+wav:Saw         
+wav:Saw    #2   
+wav:Saw    #3   
+wav:Saw    #4   
+wav:Saw    #5   
+wav:Saw    #6   
+wav:Be Square   
+wav:Be Square #2
+wav:Be Square #3
+wav:Be Square #4
+wav:Be Square #5
+wav:Be Square #6
+wav:Pulse 2     
+wav:Pulse 2   #2
+wav:Pulse 2   #3
+wav:Pulse 2   #4
+wav:Pulse 2   #5
+wav:Pulse 2   #6
+bas:Swing Bass  
+syn:Sync-P600   
+syn:Sync-P600 #2
+syn:Sync-P600 #3
+syn:Sync-P600 #4
+sfx:White Noise 
+sfx:Pink Noise  
+wnd:Taki Bottle 
+wnd:Dream Bottle
+wnd:Att Bottle  
+bas:Bottle Bass 
+syn:Saw Str.  #2
+syn:La Bella    
+syn:Una Bella   
+wav:Brian Wave  
+wav:Cognac Wave 
+wav:WaveBell    
+syn:Deep Rate   
+syn:Micro Dream 
+syn:Ambient Cry 
+sfx:Prophet Swap
+syn:Mini-XX     
+syn:Mini-XX #2  
+syn:Mini-XX #3  
+syn:Mini-XX #4  
+syn:Mini-XX #5  
+str:Pizzicato   
+str:Pizzica C3  
+str:Pizzica E3  
+str:Pizzica F3  
+str:Pizzica B3  
+str:Pizzica D4  
+str:Pizzica F#4 
+str:Pizzica A4  
+str:Pizzica B4  
+str:Pizzica C5  
+str:Pizzica F5  
+syn:Saw Str.  #3
+syn:B@SS        
+syn:B@SS #2     
+syn:B@SS #3     
+syn:B@SS #4     
+syn:B@SS #5     
+wav:Wave 1 Vocal
+wav:Wave 2 Vocal
+wav:Wave 3 Vocal
+wav:Wave 4 Vocal
+wav:Wave 5 Vibe 
+wav:Wave 6 EP   
+wav:Wave 6 EP#2 
+wav:Wave 5 Vib#2
+wav:Wave 7 Vocal
+wav:Wave 8 Soft 
+wav:Wave 9 Bell 
+wav:Wave 10 Hard
+wav:Wave 10Hard2
+wav:Wave 11 MW  
+wav:Wave 11 MW 2
+wav:Wave 8 Soft2
+wav:Wave 12 Clav
+vox:EMU Vocode  
+vox:Proteus 2000
+vox:EMU Techno  
+syn:Sawy Moogy  
+syn:Sawy Moogy#2
+kit:Techno 01-1 
+kit:Tec.01-1 BD 
+kit:Tec.01-1 SN 
+kit:Tec.01-1 CL+
+kit:Tec.01-1 HH 
+kit:Techno 01-2 
+kit:Tec.01-2 BD 
+kit:Tec.01-2 SN 
+kit:Tec.01-2 CL+
+kit:Techno 02-1 
+kit:Tec.02-1 BD 
+kit:Tec.02-1 SN 
+prc:Tec. Tabla 1
+kit:909 Kit 01  
+kit:Tec.02-1 CL+
+kit:Techno 02-2 
+kit:Tec.02-2 BD 
+kit:Tec.02-2 SN 
+prc:Noise Tjow  
+kit:909 Kit 02  
+kit:Techno 03-1 
+kit:Tec.03-1 SN 
+kit:Techno 03-2 
+kit:Tec.03-2 SN 
+kit:Techno 04-1 
+kit:Tec.04-1 SN 
+kit:Techno 05-1 
+kit:Tec.05-1 SN 
+kit:Techno 06-1 
+kit:Tec.06-1 SN 
+kit:Techno 06-2 
+kit:Tec.06-2 SN 
+kit:Techno Prc 1
+kit:Tec.Prc  HH 
+kit:Tec.Prc Rest
+kit:Tec.Prc  BD 
+prc:Tune Wood   
+prc:Tune Cowbell
+syn:Saw Str.  #4
+sfx:Low  Tabla  
+sfx:TuneEffectos
+sfx:Hollow Noise
+syn:Saw Str.  #5
+sfx:EffectaDutch
+prc:Tech Snare  
+kit:Noise Hits  
+prc:Noise Hit 01
+prc:Noise Hit 02
+prc:Noise Hit 03
+prc:Noise Hit 04
+prc:Noise Hit 05
+prc:Noise Hit 06
+prc:Noise Hit 07
+prc:Noise Hit 08
+prc:Noise Hit 09
+kit:Techno BD 01
+kit:Techno BD 02
+prc:Techno BD 01
+prc:Techno BD 02
+prc:Techno BD 03
+prc:Techno BD 04
+prc:Techno BD 05
+prc:Techno BD 06
+prc:Techno BD 07
+prc:Techno BD 08
+prc:Techno BD 09
+prc:Techno BD 10
+prc:Techno BD 11
+prc:Techno BD 12
+prc:Techno BD 13
+prc:Techno BD 14
+kit:Tec.02-1 C+1
+kit:Tec.02-1 C+2
+kit:Tec.02-1 C+3
+kit:Tec.02-1 C+4
+prc:808 BD loop 
+prc:Tec.Snare 01
+prc:Tec.Snare 02
+prc:Tec.Snare 03
+prc:Tec.Snare 04
+prc:Tec.Snare 05
+prc:Tec.Snare 06
+prc:Tec.Snare 07
+prc:Tec.Snare 08
+prc:Tec.Snare 09
+prc:Tec.Snare 10
+prc:Tec.Snare 11
+prc:Tec.Snare 12
+prc:Tec.Snare 13
+prc:Tec.Snare 14
+prc:Tec.Snare 15
+prc:Tec.Snare 16
+prc:Tec.Snare 17
+prc:Tec.Snare 18
+prc:Tec.Snare 19
+prc:Tec.Snare 20
+prc:Tec.Snare 21
+prc:Tec.Snare 22
+prc:Tec.Snare 23
+prc:Tec.Snare 24
+prc:Tec.Snare 25
+prc:Tec.Snare 26
+prc:Tec.Snare 27
+prc:Tec.Snare 28
+prc:Tec.Snare 29
+prc:Tec.Snare 30
+prc:Tec.Snare 31
+prc:Tec.Snare 32
+prc:Tec.Snare 33
+prc:Tec.Snare 34
+prc:Tec.Snare 35
+prc:Tec.Snare 36
+prc:Tec.Snare 37
+prc:Tec.Snare 38
+prc:Tec.Snare 39
+prc:Tec.Snare 40
+prc:Tec.Snare 41
+prc:Tec.Snare 42
+prc:Tec.Snare 43
+prc:Tec.Snare 44
+prc:Tec.Snare 45
+prc:Tec.Snare 46
+prc:Tec.Snare 47
+prc:Tec.Snare 48
+prc:Tec.Snare 49
+prc:Tec.Snare 50
+prc:Tec.Snare 51
+prc:Tec.Snare 52
+prc:Tec.Snare 53
+prc:Tec.Snare 54
+prc:Tec.Snare 55
+prc:Tec.Snare 56
+prc:Tec.Snare 57
+prc:Tec.Snare 58
+prc:Tec.Snare 59
+prc:Tec.Snare 60
+prc:Tec.Snare 61
+prc:Tec.Snare 62
+prc:Tec.Snare 63
+prc:Tec.Snare 64
+prc:Tec.Snare 65
+prc:Tec.Snare 66
+prc:Tec.Snare 67
+prc:Tec.Snare 68
+prc:Tec.Snare 69
+prc:Hip Snare 1 
+prc:808 Room SN 
+vox:Tute        
+prc:Techno Claps
+prc:Tec.Room CLP
+prc:Tec.Rev.CLP 
+prc:Tec.Fat Clap
+prc:Clap Reverse
+prc:Squeek 1    
+prc:Squeek 2    
+prc:Noise Tja   
+prc:Hip Snare 2 
+prc:Tec. Open HH
+prc:Tec. Tabla 2
+prc:Hip Snare 3 
+prc:Hip Snare 4 
+kit:Tec.01GM HH 
+prc:Tec. Cabasa 
+prc:Tec. Bongo  
+prc:Tec. Conga  
+prc:Tec. Cricket
+prc:Tec. Shycus 
+prc:Tec. Tabla 1
+prc:Hip Snare 5 
+prc:Tec. Cl.HH  
+prc:Tec. Op.HH  
+kit:909 Kit 03  
+kit:909 Kit 04  
+kit:909 Kit 05  
+kit:909 Kit 06  
+kit:909 Kit 07  
+prc:CR-78 BD    
+prc:CR-78 Snare 
+prc:CR-78 Pok   
+prc:CR-78 Cowb. 
+prc:CR-78 Conga 
+prc:CR-78 Metal 
+prc:CR-78 Claves
+prc:CR-78 Guiro1
+prc:CR-78 Guiro2
+prc:CR-78 Crick 
+prc:CR-78 Cl.HH 
+prc:CR-78 Op.HH 
+bas:V-Bass      
+syn:Mini Q      
+syn:Mini Q #2   
+syn:Mini Q #3   
+syn:Mini Q #4   
+syn:Mini Q #5   
+syn:Mini Q #6   
+prc:Squeek 3 Tnd
+prc:Squeek 3 C5 
+prc:Squeek 3 C4 
+prc:Squeek 3 B2 
+prc:Squeek 4    
+prc:Squeek 5    
+prc:Hip Snare 6 
+syn:SyncScream  
+syn:SyncScream#2
+syn:SyncScream#3
+syn:SyncScream#4
+vox:Thin Voxa   
+sfx:Noise Metalo
+sfx:Noise Metal2
+sfx:Noise Metal3
+sfx:Spectrum Xyz
+vox:Wow but How?
+vox:Aah Yee     
+vox:Oh lee Moi  
+prc:Tec.Clap St.
+prc:Old.Clap St.
+prc:Old.Disco CL
+prc:Old.New CLP1
+prc:Old.New CLP2
+prc:Old.New CLP3
+vox:Oie         
+prc:Syn.Bongos  
+prc:Syn.Bongo #2
+kit:GM BongoBass
+kit:Tec.02-1 C+5
+sfx:DJ Me Loop  
+vox:Techno Vocod
+wav:Pulse 0     
+wav:Pulse 0   #2
+wav:Pulse 0   #3
+wav:Pulse 0   #4
+wav:Pulse 0   #5
+wav:Pulse 0   #6
+wav:Pulse 1     
+wav:Pulse 1   #2
+wav:Pulse 1   #3
+wav:Pulse 1   #4
+wav:Pulse 1   #5
+wav:Pulse 1   #6
+wav:Pulse 3     
+wav:Pulse 3   #2
+wav:Pulse 3   #3
+wav:Pulse 3   #4
+wav:Pulse 3   #5
+wav:Pulse 3   #6
+wav:Pulse 4     
+wav:Pulse 4   #2
+wav:Pulse 4   #3
+wav:Pulse 4   #4
+wav:Pulse 4   #5
+wav:Pulse 4   #6
+wav:Pulse 5     
+wav:Pulse 5   #2
+wav:Pulse 5   #3
+wav:Pulse 5   #4
+wav:Pulse 5   #5
+wav:Pulse 5   #6
+kit:909 Kit 08  
+sfx:Weirdo Cymb2
+kit:909 GM 01   
+prc:Talky       
+prc:St.Claps Spl
+sfx:Weirdo Cymb1
+sfx:Sha Dive    
+prc:Stereo Rim  
+kit:909 BD Proc1
+prc:909RevSnare1
+kit:909 BD Clean
+prc:909RevSnare2
+kit:909 Snares 1
+prc:Tech Fat BD 
+kit:909-8noSnClH
+sfx:Rattle Loop 
+prc:909BD Short1
+prc:909BD Short2
+sfx:Shaky Loop  
+prc:909BD Short3
+prc:909BD Short4
+prc:909BD Short5
+prc:909BD Short6
+prc:909BD Short7
+prc:909BD Long01
+prc:909BD Long02
+prc:909BD Long03
+prc:909BD Long04
+prc:909BD Long05
+prc:909BD Long06
+prc:909BD Long07
+prc:909BD Long08
+prc:909BD Long09
+prc:909BD Long10
+prc:909BD Long11
+prc:909BD Proc. 
+prc:909BD Clean1
+prc:909BD Clean2
+prc:Finger Snap 
+prc:909BD Clean4
+prc:909BD Clean5
+prc:909BD Clean6
+prc:909BD Clean7
+prc:909BD Clean8
+prc:909BD Clean9
+prc:909BDClean10
+prc:909BDClean11
+prc:909BDClean12
+prc:909BDClean13
+prc:909BDClean14
+prc:909BDClean15
+prc:909BDClean16
+prc:909BDClean17
+prc:909BDClean18
+prc:909BDClean19
+prc:909 Snare 01
+prc:909 Snare 02
+prc:909 Snare 03
+prc:909 Snare 04
+prc:909 Snare 05
+prc:909 Snare 06
+prc:909 Snare 07
+prc:909 Snare 08
+prc:909 Snare 09
+prc:909 Snare 10
+prc:909 Snare 11
+prc:909 Tom   01
+prc:909 Tom   02
+prc:909 Tom   03
+prc:909 Tom   04
+prc:909BD Looped
+prc:Tambourine  
+kit:909-8 noSNCL
+kit:909-8  Claps
+kit:909-8 Snares
+kit:909-8 HiHats
+kit:909-8  BDs  
+kit:909-8 CymRid
+kit:909-8 Specia
+kit:909-8 Sides 
+kit:CR-78GM1noHH
+kit:CR-78GM1nHHS
+kit:CR-78GM1nHSB
+kit:909-noK+S+HH
+kit:909 Kit01 BD
+kit:909 Kit01 SN
+kit:909 Kit01 HH
+kit:909 Kit01 ++
+kit:909 Kit02 BD
+kit:909 Kit02 SN
+kit:909 Kit03 BD
+kit:909 Kit03 SN
+kit:909 Kit04 BD
+kit:909 Kit04 SN
+kit:909 Kit05 BD
+kit:909 Kit05 SN
+kit:909 Kit06 ++
+kit:909 Kit08 ++
+kit:909 Kit08 SN
+kit:909 Kit08++2
+kit:909 Kit08 CL
+kit:909GM01noSNH
+kit:909GM01nSNHB
+kit:909GM HHset1
+kit:909GM HHset2
+kit:808 GM 1 nHH
+kit:808GM HiHats
+kit:808 GM 1    
+kit:808 GM 2    
+kit:808 GM 2 nHH
+kit:808GM1nSNHHB
+kit:808GM1noHHSN
+kit:808GM2nHHSNB
+kit:808GM2noHHSN
+prc:808 BD-1    
+prc:808 BD-2    
+prc:808 Snare 1 
+prc:808 Snare 2 
+prc:808 Claps   
+prc:808 Side    
+prc:808 Cowbell 
+prc:808 Claves  
+prc:808 Cymbal  
+prc:808 Bongo   
+prc:808 Conga   
+prc:808 Tom     
+prc:808 ReverbSN
+prc:808 Cabasa  
+prc:808 Cl.HH   
+prc:808 Op.HH-1 
+prc:808 Op.HH-2 
+kit:CR-78 GM 1  
+kit:CR-78 HiHats
+kit:909-01noKSNH
+prc:808 Claps St
+vox:Ie by Brian 
+zzz:by Rob Papen
+syn:Da Bass+upp 
+syn:Da Bass+up#2
+syn:Da Bass+up#3
+syn:Da Bass+up#4
+syn:Da Bass+upF1
+syn:Da Bass+upC2
+syn:Mini Dow-1  
+syn:Mini Dow-1#2
+sfx:Thin Spectr.
+sfx:Thin Spectr2
+syn:Mini Dow-1#3
+syn:Mini Dow-1#4
+syn:Mini Dow-2  
+syn:Mini Dow-2#2
+syn:Mini Dow-2#3
+syn:Mini Dow-2#4
+org:Jorgan 1    
+org:Jorgan 2    
+wav:Triangle Two
+vox:Music 101101
+sfx:Breath      
+sfx:Reso Saw1Mod
+sfx:Reso Saw2mod
+sfx:Reso Tri Mod
+sfx:Reso PulsMod
+sfx:Reso Mod Spl
+sfx:Reso Saw3Mod
+syn:Moving Waves
+syn:MovingWaves2
+prc:New Claps St
+prc:New Claps   
+prc:Super Kick  
+sfx:VocodaSpectr

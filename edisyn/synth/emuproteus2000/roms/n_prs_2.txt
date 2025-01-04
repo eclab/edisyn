@@ -1,0 +1,256 @@
+arp:Gutter Punk
+arp:MooGie-D
+wal:Heavy Metals
+bas:SuB DuH
+arp:No Lo
+pad:NotAsCheezY
+kit:BoomBoxx
+hit:StickyFinger
+vox:SheTernity
+syn:Bubbler
+wnd:Piper
+bas:Go Long
+wal:NeURoSIS
+syn:CaLM
+prc:KickFader
+bas:ArpMeDeep
+wav:Bellistik
+arp:Trip Hard
+pad:Glory
+sfx:REaCtor
+kit:Compressed
+arp:WettBlipper
+brs:Brass Pack
+nse:LeaveMeAlone
+key:Clavonate
+bas:^Mess^Me^Up^
+key:Vox Organ
+bas:Saws Normal
+key:Orgy Hitts
+vox:Soul Mates
+pad:www.fun.com
+lfo:Frank
+kit:Sanctuary
+lfo:2600 TeqNo
+syn:Krane
+arp:DZ Move
+arp:LITTLE Guy
+syn:HoverCraft
+lfo:The Hive
+wal:THE THING
+arp:Kosy
+scr:Dub N scrape
+lo:End
+kit:Dirty Kit
+arp:Bazz Fugu
+led:E R
+sfx:CosmicCompny
+syn:Quadralike
+led:Wormsine
+syn:Wicked Low
+arp:Bust In
+syn:Arrival
+kit:Play Spaces
+bas:Welcher
+arp:Uroboros
+led:Gleemin’
+key:Tin Cupid
+wal:ReptileJAWs
+led:RadioDaze
+bas:RePeTeR
+vox:SUrFaCinG
+bas:Hupper
+wal:Rumbler
+kit:Hide & Seek
+cmp:TwistedMetal
+pad:Panhandel
+bas:Just Sub
+arp:Q Bass
+syn:Mighty Pulse
+key:Farfeeeza
+wav:Flaps
+edg:DirtyHertz
+syn:70-64
+key:JazZ-Z
+bas:AnaloW HiT
+vox:Ethereal
+bas:FATSO
+arp:JUNOsis
+bas:H20 solo
+bas:RipinOid
+bas:Guitar-O
+key:Warmth
+key:Spoooky
+key:DeepOrg
+key:JudgementDay
+key:Dirty Organ
+wal:Typhooon
+pad:Classy Girl
+bas:REZvsSINE
+arp:KookBlocK
+wav:Encounters
+wav:C Z O
+bas:Love Bee
+vox:Orchid
+wav:Interfernce
+wav:Space Coast
+arp:Dragon’sTail
+syn:Z-String
+wav:TeeTH
+syn:OBX
+syn:Prophet
+bas:Sven Analog
+syn:SinEnsemble
+edg:MEATHEAD
+syn:Reptoa
+pad:EURO Swoon
+bas:Taproot
+syn:Prophetess
+pad:BIG Khorus
+pad:Keyngdom?
+syn:CZ BIG
+brs:BrassyAssy
+brs:Froggy
+brs:Saxist
+vox:Heaven Sent
+led:Dreamlead
+vox:Breathless
+bas:Fingersss
+vox:NIGHTMARE
+scr:DeepStall
+pad:More Cheez
+nse:Radon Shield
+scr:Scratchin
+scr:Scratchin 2
+prc:Mixed Bag
+kit:G Club
+kit:FlanKit
+kit:Filteroid
+vox:Say Not?
+hit:Belly
+pad:Essance
+prc:Bells 1 & 2
+prc:Blox 1&2
+sfx:REZA’S LaB
+wal:Within
+nse:Approaching!
+hit:STILL Ravin?
+hit:PLATINUM
+pad:Spelunkers
+kit:RTX Space
+hit:Lag Time
+vox:Xena’s Theme
+hit:Blo’N sMoKe
+hit:Guitaro
+scr:Metabulate
+brs:OUCH!
+bas:Eff Emmed
+bas:Jakarta
+bas:Attitude
+bas:Ki’HomEy
+edg:DemonDescent
+edg:Cairns Song
+vox:Choir Ooze
+pad:aRt DeKo
+pad:Shaku High
+sfx:TerrorZoNE
+syn:Sparkle
+arp:RiziNSoN
+prc:Iron Lung
+syn:TotalControl
+bas:RezRougeBass
+bas:LayDownLow
+bas:Yah Baze
+hit:Guit Hits
+bas:Bass Acer
+vox:Suffocating
+bas:Henpecker
+bas:Pinhead
+pad:Paddy Flange
+bas:SlappyFlange
+bas:Conglomeran
+brs:Brass Monkey
+vox:Hellfire
+pad:Symphonix
+bas:FinGruzzer
+bas:SlipClip
+bas:DynaMoeHumm
+cmp:Mutations
+led:Tunnelituar
+led:Crunchette
+key:Smarm Organ
+led:Synth Hax
+key:HoreGaine
+wal:Maryland
+key:DxJx Organ
+key:SynhissOrgan
+key:Disca Queen
+key:Far Feezah
+key:CheezeDream
+kit:Room Mover
+syn:Wide Load
+prc:C2-Play me
+key:Whirly Bird
+hit:EP Rolls
+prc:C2-Play me2
+bel:Encapsulate
+arp:HitCTekStep
+led:Slippery
+syn:Digibells
+pad:Cousin It
+syn:CZoid
+syn:Weezeled
+bas:Goin’Low
+pad:Softaflange
+syn:Pipeal
+led:Klassik Arp
+led:Blizzer
+syn:Junosquare
+syn:Post Modern
+syn:Multisync
+syn:Enrezzle
+bas:6amWarehouse
+syn:SlogritStrng
+syn:JourneyMan
+led:WiggleWorm
+syn:Skouls
+pad:Dreemy Wet
+nse:Diffuser
+pad:Lowy Techno
+pad:Lifedream
+pad:Dreamer Tags
+bas:Thick
+pad:Slow Dance
+syn:FoonZoom
+pad:Kyng Doam
+pad:Ghost Organ
+key:Byg Stryngs
+syn:Geaxoils
+bel:FMdream
+cmp:MuteMadMiles
+edg:Zionate
+sfx:Alien Trumps
+sfx:LupeDeKool
+hit:Peidmont
+lfo:Dr.What?
+syn:Profit Braz
+sfx:Brazzy Hits
+key:Organik
+led:FluteState
+syn:Oinkbow
+led:MuffleNap
+vox:Space Voxxal
+sfx:Suck Wind
+hit:Dance Crazed
+led:Levitation
+bas:Moogoid
+pad:Classician
+nse:Interfear
+pad:HarmonicLift
+kit:Velo Space
+syn:Square Rise
+syn:DesertTrance
+sfx:CyberSience
+kit:Electro Kit
+vox:Upper Bottom
+wal:ByzantineNze

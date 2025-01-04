@@ -1,0 +1,444 @@
+   :None
+pno:PerfectPno 1
+pno:PerfectPno 2
+pno:PerfectPno 3
+pno:PerfectPno 4
+pno:PerfectPno 5
+pno:PerfectPno 6
+pno:PerfectPno 7
+pno:PerfectPno 8
+pno:PerfectPno 9
+pno:Grand Piano1
+pno:Grand Piano2
+pno:Grand Piano3
+pno:Pno HammerUp
+pno:PnoHarpNoise
+pno:Piano Thud
+pno:Celeste
+pno:Harpsichord
+epo:FM EPno A
+epo:FM EPno B
+epo:FM EPno C
+epo:Wurli Lo Vel
+epo:Wurli Hi Vel
+epo:Tine EPno A
+epo:Tine EPno B
+epo:Tine EPno C
+epo:Tine EPno D
+epo:Digi Piano
+org:Church Organ
+org:Perc Organ 1
+org:Perc Organ 2
+org:Org Keyclick
+org:Pipe Organ
+org:Org775305004
+org:Org845351402
+org:Org875434578
+org:Org875645332
+org:Org888000000
+org:Org888808008
+org:Org888856444
+org:Org888880880
+org:Organ Wave 1
+org:Organ Wave 2
+org:Rotary Organ
+org:Reed Organ
+bas:Pick Bass 1
+bas:Pick Bass 2
+bas:Muted Bass
+bas:Slap Bass
+bas:Bs Pop Noise
+bas:Bs Harmonics
+bas:El Bass Tap
+bas:Fretless Bs
+bas:Finger Bs 1
+bas:Finger Bs 2
+bas:Tube Bass
+bas:FM Bass 1
+bas:FM Bass 2
+bas:Analog Bs 1
+bas:Analog Bs 2
+bas:Analog Bs 3
+bas:Standup Bass
+gtr:Elec Gtr 1
+gtr:Elec Gtr 2
+gtr:Fret Noise
+gtr:Goto
+gtr:Dist Guitar
+gtr:Banjo
+gtr:Gtr Harmonix
+gtr:Guitarron
+gtr:Jazz Guitar
+gtr:Muted Guitar
+gtr:Nylon Guitar
+gtr:Shamisen
+gtr:Sitar
+gtr:Steel Guitar
+gtr:FeedbackHarm
+str:Cello
+str:Pizz Strings
+str:String Sect
+str:Violin
+str:Harp
+brs:Trumpet
+brs:Mute Trumpet
+brs:Trombone
+brs:PopBrassSect
+brs:Flugelhorn
+brs:Fr Horn Sect
+brs:Solo Fr Horn
+wnd:Accordion 1
+wnd:Accordion 2
+wnd:Accordion 3
+wnd:Clarinet
+wnd:Alto Sax
+wnd:Bassoon
+wnd:Chiff
+wnd:Chiff Flute
+wnd:Conch Shell
+wnd:English Horn
+wnd:Double Reed
+wnd:Flute
+wnd:Harmonica
+wnd:Ocarina
+wnd:Pan Flute
+wnd:Recorder
+wnd:Sax Air
+wnd:Oboe
+wnd:Soprano Sax
+wnd:Tenor Sax
+vox:Breathy Ooh
+vox:Vocal Oohs
+vox:Vocal Aahs
+vox:SynthVoxAahs
+vox:Vocal Air
+vox:Doo Attack
+vox:Countoffs
+vox:Monsters
+wav:Analog WV 1
+wav:Analog WV 2
+wav:Analog WV 3
+wav:Analog WV 4
+wav:Analog WV 5
+wav:Analog WV 6
+wav:Analog WV 7
+wav:Analog WV 8
+wav:Big Bell
+wav:Big Bell WF
+wav:Doorbell
+wav:E Bass WF 1
+wav:E Bass WF 2
+wav:Sine Wave
+wav:Bell Wave 1
+wav:Bell Wave 2
+wav:Bell Wave 3
+wav:Bell Wave 4
+wav:Bell Wave 5
+wav:Bell Wave 6
+wav:Bell Wave 7
+wav:Digi Wave 1
+wav:Digi Wave 2
+wav:Sawtooth 1
+wav:Sawtooth 2
+wav:Reed WF
+wav:Single Reed
+wav:Wind Chime
+wav:Piano Bs WF
+wav:Piano WF
+wav:Vocal WF 1
+wav:Vocal WF 2
+wav:Vocal WF 3
+wav:Vocal WF 4
+wav:Vocal WF 5
+wav:Vocal WF 6
+wav:TriangleWave
+wav:Square Wave
+wav:Aah Ooh XW
+wav:MoogX XW
+wav:Resonance
+wav:Techno Bs XW
+wav:PulseX XW
+wav:Phase SyncXW
+wav:Rap Bass XW
+wav:Rezz Bs XW
+wav:SoftAnalogXW
+wav:Analog PadXW
+wav:Bell XW 1
+wav:Bell XW 2
+wav:Bell XW 3
+wav:Bell XW 4
+wav:MultiBell XW
+wav:Osc Sync XW1
+wav:Osc Sync XW2
+wav:Tine X
+wav:Tri Sweep XW
+wav:TranswaveZ
+wav:Transwave AA
+wav:Transwave AH
+wav:Transwave EE
+wav:Transwave OH
+wav:Rez Sweep XW
+wav:Organ XW
+wav:MoogX
+wav:Drawbar XW
+wav:Crystal
+syn:FM Clav
+syn:Pad Synth
+syn:Synth Bell
+syn:Synkey Wave
+syn:Synth Brass
+syn:Clavinet
+syn:Moog Lead
+hit:Dance Hit
+hit:Orch Hit
+sfx:Air Loop
+sfx:Applause
+sfx:Bird Song
+sfx:Helicopter
+sfx:Spectrum
+sfx:SurfaceNoise
+sfx:Telephone
+sfx:Synth Kiss
+sfx:Texture
+sfx:Tape Loop
+nse:Noise
+nse:Scratch
+nse:Wakka XW 1
+nse:Wakka XW 2
+prc:Marimba
+prc:Kalimba
+prc:Log Drum
+prc:Handbells
+prc:Glockenspiel
+prc:Gamelan Bell
+prc:Steel Drum
+prc:Vibraphone
+prc:Xylophone
+prc:Tubular Bell
+prc:Sm TunedGong
+prc:Kick Drums 1
+prc:Kick Drums 2
+prc:Kick Drums 3
+prc:Snare Drums1
+prc:Snare Drums2
+prc:Cymbals 1
+prc:Cymbals 2
+prc:Percussion 1
+prc:Percussion 2
+prc:Toy Percs
+prc:Toy Percs Lo
+prc:Toms 1
+prc:Big Toms
+prc:Dry Tom High
+prc:Live Toms
+prc:Pure Toms
+prc:Rock Toms
+prc:Brushes
+prc:Snaps
+prc:Claps
+prc:Congas
+prc:Cowbells
+prc:Timbales
+prc:Shakers 1
+prc:Shakers 2
+prc:Tambourines
+prc:Windchimes
+prc:Rainstick
+prc:RainstickHit
+prc:Sleighbell
+prc:Cactus Loop
+prc:NutRattleHit
+prc:Nut RattleLP
+kit:Kit 1
+kit:Kit 2
+kit:Kit 3
+kit:Kit 4
+kit:Kit 5
+kit:Kit 6
+kit:Kit 7
+kit:Kit 8
+kit:Kit 9
+kit:Kit 10
+kit:Kit 11
+kit:Kit 12
+kit:Kit 13
+kit:Kit 14
+kit:Kit 15
+kit:Kit 16
+kit:Kit 17
+kit:Kit 18
+kit:Kit 19
+kit:Kit 20
+kit:Kit 21
+kit:Kit 22
+kit:Kit 23 E
+kit:Kit 24 E
+kit:Kit 25 E
+kit:Kit 26 E
+kit:Kit 27 E
+kit:Kit 28 E
+kit:Kit 29 E
+prc:Kick 1
+prc:Kick 2
+prc:Kick 3
+prc:Kick 4
+prc:Kick 5
+prc:Kick 6
+prc:Kick 7
+prc:Kick 8
+prc:Kick 9
+prc:Kick 10
+prc:Kick 11
+prc:Kick 12
+prc:Kick 13
+prc:Kick 14
+prc:Kick 15
+prc:Kick 16
+prc:Kick 17
+prc:Kick 18
+prc:Kick 19
+prc:Kick 20
+prc:Kick 21
+prc:Kick 22
+prc:Kick 23
+prc:Orch Bs Drum
+prc:Snare 1
+prc:Snare 2
+prc:Snare 3
+prc:Snare 4
+prc:Snare 5
+prc:Snare 6
+prc:Snare 7
+prc:Snare 8
+prc:Snare 9
+prc:Snare 10
+prc:Snare 11
+prc:Snare 12
+prc:Snare 13
+prc:Snare 14
+prc:Snare 15
+prc:Snare 16
+prc:Snare 17
+prc:Snare 18
+prc:Snare 19
+prc:Snare 20
+prc:Snare 21
+prc:Snare 22
+prc:Snare 23
+prc:Snare 24
+prc:Snare 25
+prc:Snare 26
+prc:Snare 27
+prc:Snare 28
+prc:Snare 29
+prc:Snare 30
+prc:Snare 31
+prc:Snare 32
+prc:Snare 33
+prc:Snare 34
+prc:Snare 35
+prc:Brush 1
+prc:Brush 2
+prc:Brush 3
+prc:Brush 4
+prc:Brush 5
+prc:Brush 5
+prc:Tom 1
+prc:Tom 2
+prc:Tom 3
+prc:Tom 4
+prc:Tom 5
+prc:Tom 6
+prc:Tom 7
+prc:Tom 8
+prc:Tom 9
+prc:Tom 10
+prc:Tom 11
+prc:Tom 12
+prc:Tom 13
+prc:Tom 14
+prc:Tom 15
+prc:Tom 16
+prc:Cymbal 1
+prc:Cymbal 2
+prc:Cymbal 3
+prc:Cymbal 4
+prc:Cymbal 5
+prc:Cymbal 6
+prc:Cymbal 7
+prc:Cymbal 8
+prc:Crash Cym 1
+prc:Crash Cym 2
+prc:Crash Cym 3
+prc:China Cym 1
+prc:China Cym 2
+prc:China Cym 3
+prc:Hat 1
+prc:Hat 2
+prc:Hat 3
+prc:Hat 4
+prc:Hat 5
+prc:Hat 6
+prc:Hat 7
+prc:Hat 8
+prc:Hat 9
+prc:Hat 10
+prc:Hat 11
+prc:Hat 12
+prc:Hat 13
+prc:Hat 14
+prc:Hat 15
+prc:Hat 16
+prc:Hat 17
+prc:Hat 18
+prc:Hat 19
+prc:Conga 1
+prc:Conga 2
+prc:Conga 3
+prc:Conga 4
+prc:Sm TunedGong
+prc:Tambo 1
+prc:Tambo 2
+prc:Tambo 3
+prc:Tambo Up-Dwn
+prc:Shaker 1
+prc:Shaker 2
+prc:Shaker 3
+prc:Shake Up-Dwn
+prc:Cabasa 1
+prc:Cabasa 2
+prc:Cabasa 3
+prc:CabasaUp-Dwn
+prc:Maraca 1
+prc:Maraca 2
+prc:Maraca 3
+prc:Cowbell 1
+prc:Cowbell 2
+prc:Cowbell 3
+prc:Clap 1
+prc:Clap 2
+prc:Clave 1
+prc:Clave 2
+prc:Tuned Clave
+prc:Synth Drum
+prc:Snaps
+prc:Spoons
+prc:Jawharp
+prc:Syn Rim
+prc:Bongo
+prc:Gun
+prc:Taiko
+prc:Timpani 1
+prc:Timpani 2
+prc:Timbale 1
+prc:Timbale 2
+prc:Timbale 3
+prc:Whistle 1
+prc:Whistle 2
+prc:Agogo
+prc:Guiro
+prc:Cuica
+prc:Clink
+prc:Woodblock
+prc:Triangle
+prc:Vibraslap

@@ -1,0 +1,512 @@
+hit:Intruder    
+bpm:Voxa Move   
+syn:ScreamSync 1
+kit:909 Audition
+pad:Rise to Fall
+tec:Vel Swing   
+bas:T-Be Sawy 1
+pad:Thin Strings
+kit:GM Groove 1
+org:Dancy 1
+sfx:Phee Two Kay
+wnd:Panflute Sof
+kit:GM 808-1 BD1
+kit:Noise Hits  
+amb:Aioon Pad   
+syn:Romancer    
+led:Proteo Moogy
+tec:Dutch Stab 1
+tec:Kraft Kord  
+amb:Seam to Pad 
+syn:80s Brass
+syn:Modulair Seq
+bas:Warm Groovy 
+kit:GM 808-2 BD2
+kit:909-1 Dance
+prc:Voca Snare  
+sub:Prophet     
+bpm:Pad Winder  
+tec:Velo VoX 1
+bas:SH-101 Choru
+kit:TeCnO 4
+bas:T-Be Distort
+kit:TeC Percus  
+bpm:SemiLife    
+led:Modern Fifth
+bas:Krafta Bass 
+tec:Pizzi Chord 
+hit:Ito 11th  1
+bpm:Vox Sequence
+syn:Juno Dance 1
+bas:Swing       
+pad:Soft 2000
+tec:Velo PWM 1
+tec:Snaro Lead  
+hit:Happy Major3
+pad:Floating    
+tec:Da Chord me 
+hit:Sweet 7 Pizz
+bpm:Mystical    
+tec:Rogue Chord 
+pad:Tron Analog 
+bas:Deep mover  
+bas:Deep Steady 
+pad:Soft Oooh   
+bas:Talky Voxa  
+kit:GM Groove 2
+kit:GM Groove 3
+kit:GM TeCnO 6
+kit:GM TeCnO 7
+kit:GM TeCnO 8
+tec:Z-PlaneChord
+hit:Expensive   
+hit:Sweet Maj7 1
+bpm:Pad Sequence
+syn:Micro Dream 
+amb:Soft to Lead
+kit:GM 909-2 HH2
+sfx:Emu TeCnO   
+sfx:Proteus 2000
+tec:Velo Sync   
+bas:T-Be Pulsy 1
+tec:Super Juno 1
+hit:TeCnO Major2
+syn:Tune Wood   
+tec:Velo PWM 2
+bas:Digital Wave
+vox:Ya How Split
+sfx:Time Travel 
+sfx:Spectr Waves
+syn:Prophet Sync
+pad:Soft Rise   
+bas:Bottle Octav
+pad:Z-Plane 2000
+hit:TeCnO Major5
+hit:BE Minor 1
+bas:Square it   
+sub:Fend Mini   
+bas:Fend Reso   
+bpm:Z-Plane Trip
+prc:VintageMetal
+amb:Sea Flutes  
+sub:Rogua Deep  
+sfx:Reso Dive 1
+bas:Rogue Da    
+hit:Big Minor 3
+hit:Soft Major 2
+wnd:Bottle Me   
+hit:Prophecies  
+sfx:Sha Dive    
+hit:Amb Minor 1
+hit:Amb Minor Re
+pad:Water Lake  
+kit:GM 909-1 HH1
+kit:GM CR-78  1
+kit:GM Dance 1
+kit:GM Dance 2
+kit:GM TeCnO 1
+kit:GM TeCnO 2
+kit:GM 808 Hip 1
+kit:GM 808 Hip 2
+kit:GM Dance 3
+kit:GM Dance 4
+kit:GM Dance 5
+kit:GM TeCnO 3
+kit:GM TeCnO 4
+kit:GM TeCnO 5
+amb:Human Dive  
+bas:To B@SS     
+bas:Mini Dow    
+bas:T-Be Sawy 2
+tec:Swap Lead   
+syn:Waves Rising
+bas:TeC B@SS Oct
+bas:TeC Layer   
+bas:TeC Attack  
+sub:Low B@SS    
+bas:To Puls     
+bpm:Org Sequence
+bas:To B@SS 2
+bas:To B@SS 3
+bas:To B@SS 4
+bas:Dofty       
+org:Dancy 2
+org:Dancy 3
+org:Dancy 4
+org:Dancy 5
+org:Dancy 6
+org:Dancy 7
+org:Dancy 8
+org:Dancy 9
+org:Dancy 10
+org:Dancy 11
+org:Dancy 12
+org:The Dance   
+org:Filtrosa    
+org:Syntha      
+org:Deep Fi-Bass
+org:Bliss Filter
+org:Major Chord 
+org:Minor Chord 
+org:Major Chord2
+org:Minor Chord2
+org:Drop Dance  
+org:Kraft Work  
+prc:Disco BD    
+bas:SH-101 1
+sfx:Music by ...
+bpm:Compute Me  
+bas:Fend Reso 2
+bas:Mini XX     
+tec:Dutch Filtro
+syn:Hall Synth  
+tec:Inspector   
+bas:To-Mo Bass  
+orc:Pizzicato   
+bas:To Low Bass 
+sub:Digital Deep
+syn:Juno Dance 2
+bpm:Octave Movy 
+hit:Big Minor 1
+bpm:WoWoW Me    
+hit:Amb Minor 2
+tec:Spiriment   
+sfx:Reso Dive 4
+orc:Pizzicato Oc
+orc:TeC Pizzi 1
+orc:TeC Pizzi 2
+orc:TeC Pizzi 3
+orc:TeC Pizzi 4
+sub:Prophet Deep
+bas:T-Be Sawy 3
+pad:Soft Proteus
+bas:Mini Q      
+vox:Aa Ie Deep  
+tec:Watch Out   
+bas:T-Be Sawy 4
+vox:Ten Sea Sea 
+sfx:Prophet Swap
+tec:Phase Thin  
+vox:Oie The Moi 
+vox:Oie         
+vox:Moi         
+hit:Big Minor 4
+hit:Happy Major1
+hit:Happy Major2
+kit:TeCnO 4 #4
+kit:TeCnO 5 #3
+kit:TeCnO 6 #3
+kit:TeCnO 6 #4
+hit:Happy Major4
+hit:TuT Minor 2
+hit:TuT Minor 3
+wnd:Bottle Two  
+hit:TeC Maj Pizz
+tec:Dominate    
+sfx:Tune Tectos 
+sfx:Hollow Noise
+sfx:The Dutch   
+sfx:DJ re Loop  
+sfx:Weirdo Cymb 
+syn:PPG my Bell 
+hit:Big Minor 2
+hit:Soft Major 1
+hit:TeCnO Major1
+hit:TeCnO Major3
+hit:TeCnO Major4
+hit:Sweet Maj7 2
+hit:Sweet Maj7 3
+hit:Sweet Maj7 4
+hit:BE Minor 2
+hit:Soft Major 3
+sfx:Reso Dive 2
+tec:Watch Two   
+syn:Pizzi Ahay  
+org:Silly       
+org:Silly Two   
+org:Hybride     
+sfx:Reso Dive 3
+hit:The end..   
+kit:909-2 Dance
+kit:909-3 Dance
+kit:909-4 Dance
+kit:909-5 Dance
+kit:909-6 Dance
+kit:909-7 Dance
+kit:909-8 Dance
+kit:909-9 Dance
+kit:909-10 Dance
+kit:909-11 Dance
+kit:909 BD proce
+kit:909 BD clean
+wnd:Bottle Veloc
+kit:GM 909-1 HH2
+kit:GM 909-2 HH1
+kit:GM 909-3 HH1
+kit:GM 909-3 HH2
+sfx:Breath      
+bas:Da Moogy    
+bas:Da Moogy Tec
+sub:Low Da Moogy
+bas:Da Attack   
+syn:Flangy Da   
+bas:Bottle      
+wnd:Panflute Vel
+kit:TeCnO 1
+kit:TeCnO 1 #2
+kit:TeCnO 2
+kit:TeCnO 2 #2
+kit:TeCnO 3
+kit:TeCnO 3 #2
+kit:TeCnO 4 #2
+kit:TeCnO 5
+kit:TeCnO 5 #2
+kit:TeCnO 6
+kit:TeCnO 6 #2
+kit:TeC Percus 2
+kit:TeCnO BD 1
+kit:TeCnO BD 2
+kit:TeCnO BD 3
+kit:TeCnO BD 4
+kit:TeCnO BD 5
+kit:TeCnO BD 6
+kit:TeC BD 1mono
+kit:TeC BD 2mono
+kit:TeC BD 3mono
+kit:TeC BD 4mono
+kit:TeC BD 5mono
+kit:TeC BD 6mono
+kit:Noise Hits 2
+kit:Noise Hits 3
+kit:NoiseH.velo1
+kit:NoiseH.velo2
+kit:NoiseH.velo3
+prc:Noise Hit 1
+prc:Noise Hit 1b
+prc:Noise Hit 1c
+prc:Noise Hit 1d
+prc:Noise Hit 1e
+prc:Noise Hit 1f
+prc:Noise Hit 2
+prc:Noise Hit 2b
+prc:Noise Hit 2c
+prc:Noise Hit 2d
+prc:Noise Hit 2e
+prc:Noise Hit 2f
+prc:Noise Hit 3
+prc:Noise Hit 3b
+prc:Noise Hit 3c
+prc:Noise Hit 3d
+prc:Noise Hit 3e
+prc:Noise Hit 3f
+prc:Noise Hit 4
+prc:Noise Hit 4b
+prc:Noise Hit 4c
+prc:Noise Hit 4d
+prc:Noise Hit 4e
+prc:Noise Hit 4f
+prc:Noise Hit 5
+prc:Noise Hit 5b
+prc:Noise Hit 5c
+prc:Noise Hit 5d
+prc:Noise Hit 5e
+prc:Noise Hit 5f
+prc:Noise Hit 6
+prc:Noise Hit 6b
+prc:Noise Hit 6c
+prc:Noise Hit 6d
+prc:Noise Hit 6e
+prc:Noise Hit 6f
+prc:Noise Hit 7
+prc:Noise Hit 7b
+prc:Noise Hit 7c
+prc:Noise Hit 7d
+prc:Noise Hit 7e
+prc:Noise Hit 7f
+prc:Noise Hit 8
+prc:Noise Hit 8b
+prc:Noise Hit 8c
+prc:Noise Hit 8d
+prc:Noise Hit 8e
+prc:Noise Hit 8f
+prc:Noise Hit 9
+prc:Noise Hit 9b
+prc:Noise Hit 9c
+prc:Noise Hit 9d
+prc:Noise Hit 9e
+prc:Noise Hit 9f
+prc:TeCnO BD 1
+prc:TeCnO BD 1b
+prc:TeCnO BD 1c
+prc:TeCnO BD 2
+prc:TeCnO BD 2b
+prc:TeCnO BD 2c
+prc:TeCnO BD 3
+prc:TeCnO BD 3b
+prc:TeCnO BD 3c
+prc:TeCnO BD 4
+prc:TeCnO BD 4b
+prc:TeCnO BD 4c
+prc:TeCnO BD 5
+prc:TeCnO BD 5b
+prc:TeCnO BD 5c
+prc:TeCnO BD 6
+prc:TeCnO BD 6b
+prc:TeCnO BD 6c
+prc:TeCnO BD 7
+prc:TeCnO BD 7b
+prc:TeCnO BD 7c
+prc:TeCnO BD 8
+prc:TeCnO BD 8b
+prc:TeCnO BD 8c
+prc:TeCnO BD 9
+prc:TeCnO BD 9b
+prc:TeCnO BD 9c
+prc:TeCnO BD 10
+prc:TeCnO BD 10b
+prc:TeCnO BD 10c
+prc:TeCnO BD 11
+prc:TeCnO BD 11b
+prc:TeCnO BD 11c
+prc:TeCnO BD 12
+prc:TeCnO BD 12b
+prc:TeCnO BD 12c
+prc:TeCnO BD 13
+prc:TeCnO BD 13b
+prc:TeCnO BD 13c
+prc:TeCnO BD 14
+prc:TeCnO BD 14b
+prc:TeCnO BD 14c
+prc:Finger snap 
+prc:Tambourine  
+prc:Short Shake 
+prc:Shaky LoopC4
+prc:Super BD    
+prc:Thinny BD   
+prc:New Real BD 
+prc:TeCnO BD 15
+prc:TeCnO BD 15b
+prc:TeC Clap 1st
+prc:TeC Clap 1
+prc:TeC Clap 2st
+prc:TeC Clap 2
+prc:TeC Clap 3
+prc:TeC Clap 4st
+prc:Reverse CLP1
+prc:Reverse CLP2
+prc:80s Clap 1st
+prc:80s Clap 1
+prc:TeC Clap 5
+prc:TeC Clap 6
+prc:TeC Clap 7
+prc:808 Clap 1st
+prc:808 Clap 1
+prc:909 CLP+Revs
+prc:Reso Squeek1
+prc:Reso Squeek2
+prc:Reso Squeek3
+prc:Reso Squeek4
+prc:Reso Squeek5
+sfx:Reso Dive Me
+sfx:Vintage Perc
+prc:MS20 Bongos1
+prc:MS20 Bongos2
+prc:TeC Snare 1
+prc:TeC Snare 2
+prc:TeC Snare 3
+prc:TeC Snare 4
+prc:TeC Snare 5
+prc:TeC Snare 6
+prc:TeC Snare 7
+prc:TeC Snare 8
+prc:TeC Snare 9
+prc:TeC Snare 10
+prc:TeC Snare 11
+prc:TeC Snare 12
+prc:TeC Snare 13
+prc:TeC Snare 14
+prc:TeC Snare 15
+prc:TeC Snare 16
+prc:TeC Snare 17
+prc:TeC Snare 18
+prc:TeC Snare 19
+prc:TeC Snare 20
+prc:TeC Snare 21
+prc:TeC Snare 22
+prc:TeC Snare 23
+prc:TeC Snare 24
+prc:TeC Snare 25
+prc:TeC Snare 26
+prc:TeC Snare 27
+prc:TeC Snare 28
+prc:TeC Snare 29
+prc:TeC Snare 30
+prc:TeC Snare 31
+prc:TeC Snare 32
+prc:TeC Snare 33
+prc:TeC Snare 34
+prc:TeC Snare 35
+prc:TeC Snare 36
+prc:TeC Snare 37
+prc:TeC Snare 38
+prc:TeC Snare 39
+prc:TeC Snare 40
+prc:TeC Snare 41
+prc:TeC Snare 42
+prc:TeC Snare 43
+prc:TeC Snare 44
+prc:TeC Snare 45
+prc:TeC Snare 46
+prc:TeC Snare 47
+prc:TeC Snare 48
+prc:TeC Snare 49
+prc:TeC Snare 50
+prc:TeC Snare 51
+prc:TeC Snare 52
+prc:TeC Snare 53
+prc:TeC Snare 54
+prc:TeC Snare 55
+prc:TeC Snare 56
+prc:TeC Snare 57
+prc:TeC Snare 58
+prc:TeC Snare 59
+prc:TeC Snare 60
+prc:TeC Snare 61
+prc:TeC Snare 62
+prc:TeC Snare 63
+prc:TeC Snare 64
+prc:TeC Snare 65
+prc:TeC Snare 66
+prc:TeC Snare 67
+prc:TeC Snare 68
+prc:TeC Snare 69
+prc:Hip Snare 1
+prc:Hip Snare 2
+prc:Hip Snare 3
+prc:Hip Snare 4
+prc:Hip Snare 5
+prc:Hip Snare 6
+prc:Noise Tja   
+prc:Tech Snare  
+prc:Noise Tjow  
+sfx:Spectrumize 
+syn:After Flutes
+syn:Known Fifth 
+led:Soft Aahs   
+led:Carnival    
+hit:TuT Minor 1
+bas:The X Seven 
+bpm:Beam me Up  
+pad:Blue Sky    
+hit:BE MinorPizz
+bpm:Pad to fase 
+led:Terra Luna  
+bpm:Time Vox    
+sfx:Orwell      
+bpm:Rocket Ship 
+bpm:Weird Song  
+led:Dance Diva  
+led:Rodin's Knee
+sfx:Freak Out   
+snd:by Rob Papen
+   :Template    

@@ -813,7 +813,7 @@ public class Library extends AbstractTableModel
         String failures = "";
         
         emittingBatch = true;
-        data.add(synth.startingBatchEmit(bank, start, start + len - 1, toFile));
+        if (!toFile) data.add(synth.startingBatchEmit(bank, start, start + len - 1, toFile));
         for(int i = start; i < start + len; i++)
             {
             int b = (bank == ALL_PATCHES ? i / getBankSize() : bank);
@@ -867,7 +867,7 @@ public class Library extends AbstractTableModel
                 data.add(objs);                    
                 }
             }
-        data.add(synth.stoppingBatchEmit(bank, start, start + len - 1, toFile));
+        if (!toFile) data.add(synth.stoppingBatchEmit(bank, start, start + len - 1, toFile));
         emittingBatch = false;
 
         // restore
@@ -1179,6 +1179,7 @@ public class Library extends AbstractTableModel
                     getPatchNumberNames()[start] + "." + 
                     (patch.name == null ? "Untitled" : patch.name.trim()));
                 filename = StringUtility.makeValidFilename(filename);
+                System.err.println("--> " + d[0].length);
                 saveOne(bank, start, d[0], filename);
                 }
             else
@@ -1254,7 +1255,9 @@ public class Library extends AbstractTableModel
                             try
                                 {
                                 os = new FileOutputStream(f);
-                                os.write(Synth.flatten(d[offset++]));
+                                System.err.println(offset);
+                                os.write(Synth.flatten(d[offset]));
+                                offset++;
                                 os.close();
                                 }
                             catch (IOException e) // fail

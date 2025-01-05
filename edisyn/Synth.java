@@ -2412,7 +2412,8 @@ public abstract class Synth extends JComponent implements Updatable
                     bar.setValue((i * 100) / data.length);
                     }
                 setReceiveMIDI(receive);
-                SwingUtilities.invokeLater(new Runnable() { public void run() { dialog.setVisible(false); }  });
+//                SwingUtilities.invokeLater(new Runnable() { public void run() { dialog.setVisible(false); }  });
+                SwingUtilities.invokeLater(new Runnable() { public void run() { dialog.dispose(); }  });
                 }
             });
                 
@@ -7332,14 +7333,18 @@ menubar.add(helpMenu);
         int pos = 0;
         ArrayList patches = new ArrayList();
                 
+        System.err.println("Start");
         while(pos < sysex.length)
             {
+            System.err.println("Pos " + pos);
             // First, do we have a synth for this thing?
             int rec = recognizeSynthForSysex(sysex[pos]);
+            System.err.println(rec);
             if (rec >= 0)
                 {
                 // How many sysex messages per patch?
                 int next = getNextSysexPatchGroup(getClassNames()[rec], sysex, pos);
+            System.err.println(next);
 
                 // Roland really screws things up: the U-220 can have multiple patches PER SYSEX MESSAGE.  No, really.
                 if (next < 0)
@@ -7354,22 +7359,26 @@ menubar.add(helpMenu);
                     }
                 else if (next > pos)
                     {
+                    System.err.println("next > pos");
                     byte[][] groups = new byte[next - pos][];
                     for(int i = 0; i < groups.length; i++)
                         {
                         groups[i] = sysex[i + pos];
                         }
+                    System.err.println("Add Patch");
                     patches.add(new Patch(rec, groups, recognizeBank(getClassNames()[rec], sysex[pos])));
                     pos = next;
                     }
                 else
                     {
+                    System.err.println("Bad");
                     // Skip the message -- it's bad?
                     pos++;          // I *think* this should work?
                     }
                 }
             else
                 {
+                    System.err.println("Skip");
                 pos++;  // skip this sysex message
                 }
             }
@@ -10100,21 +10109,20 @@ menubar.add(helpMenu);
         command line, but it can be modified to open a file and log the exception that way
         so a user can mail the developer a debug file. */
     static int exceptionNumber = 0;
-    public static void handleException(Throwable ex) { if (ex != null) ex.printStackTrace(); }    
-/*
+    public static void handleException(Throwable ex) //{ if (ex != null) ex.printStackTrace(); }    
     	{
     	if (ex == null) return;
     	ex.printStackTrace();
     	try
     		{
 	    	PrintWriter p = new PrintWriter(new FileWriter("EdisynException." + exceptionNumber + ".txt"));
+	    	exceptionNumber++;
 	    	ex.printStackTrace(p);
 	    	p.flush();
 	    	p.close();
 	    	}
 	    catch (Exception ex2) { } // do nothing for now :-( 
     	}
-*/
     	
     
     public static void printSysex(byte[] data)

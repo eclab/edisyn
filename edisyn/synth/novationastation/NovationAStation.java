@@ -208,7 +208,7 @@ public class NovationAStation extends Synth {
             }
         }
         byte[] bytes = builder.build().getBytes();
-        System.out.println(StringUtility.toHex(bytes));
+        // System.out.println(StringUtility.toHex(bytes));
         return bytes;
     }
 

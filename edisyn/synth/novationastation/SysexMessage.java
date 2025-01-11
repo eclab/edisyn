@@ -105,7 +105,7 @@ class SysexMessage {
             (byte) 0x20,    // Novation ID2
             (byte) 0x29,    // Novation ID3
             (byte) 0x01,    // DeviceType
-            (byte) 0x40,    // A-Station
+            (byte) 0x40,    // A Station
             (byte) 0x7F,    // Sysex channel (7F or current receive channel)
             (byte) 0x00,    // message type
             (byte) 0x00,    // control byte

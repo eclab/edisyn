@@ -221,13 +221,14 @@ class UIBuilder
     private JComponent createMixer(Color color)
     {
         Category category = new Category(synth, "Mixer (to Filter)", color);
+        category.makeDistributable("mixer");
 
         HBox hbox = new HBox();
         hbox.add(createLabelledDial("OSC1", MIXER_OSC1, color));
         hbox.add(createLabelledDial("OSC2", MIXER_OSC2, color));
         hbox.add(createLabelledDial("OSC3", MIXER_OSC3, color));
         hbox.add(createLabelledDial("Noise", MIXER_NOISE, color));
-        hbox.add(createLabelledDial(Arrays.asList("Ring Mod", "1*2"), MIXER_RING_MOD, color));
+        hbox.add(createLabelledDial(Arrays.asList("Ring Mod", "1x2"), MIXER_RING_MOD, color));
         hbox.add(createLabelledDial(Arrays.asList("External", "Audio"), MIXER_EXTERNAL, color));
 
         category.add(hbox, BorderLayout.CENTER);
@@ -347,8 +348,8 @@ class UIBuilder
         hbox.add(vbox);
 
         // NOTE - improve (interaction between) sync and non-sync controls ?
-        hbox.add(createLabelledDial(Arrays.asList("Speed", "(Non-Sync)"), Mappings.find("LFO%d_SPEED_NON_SYNC", lfo), color));
         hbox.add(createLabelledDial(Arrays.asList("Speed", "(Sync)"), Mappings.find("LFO%d_SPEED_SYNC", lfo), color));
+        hbox.add(createLabelledDial(Arrays.asList("Speed", "(Non-Sync)"), Mappings.find("LFO%d_SPEED_NON_SYNC", lfo), color));
         hbox.add(createLabelledDial("Delay", Mappings.find("LFO%d_DELAY", lfo), color));
 
         category.add(hbox, BorderLayout.CENTER);
@@ -357,7 +358,7 @@ class UIBuilder
 
     private JComponent createARP(Color color)
     {
-        Category category = new Category(synth, "ARP", color);
+        Category category = new Category(synth, "Arpeggiator", color);
 
         HBox hbox = new HBox();
 
@@ -389,13 +390,13 @@ class UIBuilder
         hbox.add(createLabelledDial(Arrays.asList("Send", "Level"), DELAY_SEND_LEVEL, color));
         hbox.add(createLabelledDial("Modwheel", DELAY_SEND_MODWHEEL, color));
 
-        // NOTE - improve (interaction between) sync and non-sync controls ?
+        // TODO - improve (interaction between) sync and non-sync controls ?
         hbox.add(createLabelledDial(Arrays.asList("Time", "(Sync)"), DELAY_TIME_SYNC, color));
         hbox.add(createLabelledDial(Arrays.asList("Time", "(Non-Sync)"), DELAY_TIME_NON_SYNC, color));
 
         hbox.add(createLabelledDial("Feedback", DELAY_FEEDBACK, color));
 
-        // NOTE - improve (interaction between) sync and non-sync controls ?
+        // TODO - improve (interaction between) sync and non-sync controls ?
         hbox.add(createLabelledDial(Arrays.asList("Ratio", "(L-R)"), DELAY_RATIO, color));
         hbox.add(createLabelledDial(Arrays.asList("Stereo", "Width"), DELAY_STEREO_WIDTH, color));
 
@@ -430,7 +431,7 @@ class UIBuilder
         hbox.add(createLabelledDial(Arrays.asList("Send", "Level"), CHORUS_SEND_LEVEL, color));
         hbox.add(createLabelledDial("Mod Wheel", CHORUS_SEND_MODWHEEL, color));
 
-        // NOTE - improve (interaction between) sync and non-sync controls ?
+        // TODO - improve (interaction between) sync and non-sync controls ?
         hbox.add(createLabelledDial(Arrays.asList("Rate", "(Sync)"), CHORUS_RATE_SYNC, color));
         hbox.add(createLabelledDial(Arrays.asList("Rate", "(Non-Sync)"), CHORUS_RATE_NON_SYNC, color));
 
@@ -467,7 +468,7 @@ class UIBuilder
 
         hbox.add(createLabelledDial("Level", EQUALIZER_LEVEL, color));
         hbox.add(createLabelledDial("Frequency", EQUALIZER_FREQUENCY, color));
-        // NOTE - improve (interaction between) sync and non-sync controls ?
+        // TODO - improve (interaction between) sync and non-sync controls ?
         hbox.add(createLabelledDial(Arrays.asList("Rate", "(Sync)"), EQUALIZER_RATE_SYNC, color));
         hbox.add(createLabelledDial(Arrays.asList("Rate", "(Non-Sync)"), EQUALIZER_RATE_NON_SYNC, color));
         hbox.add(createLabelledDial("Mod Depth", EQUALIZER_MOD_DEPTH, color));
@@ -489,7 +490,7 @@ class UIBuilder
 
         hbox.add(createLabelledDial("Position", PANNING_POSITION, color));
 
-        // NOTE - improve (interaction between) sync and non-sync controls ?
+        // TODO - improve (interaction between) sync and non-sync controls ?
         hbox.add(createLabelledDial(Arrays.asList("Rate", "(Sync)"), PANNING_RATE_SYNC, color));
         hbox.add(createLabelledDial(Arrays.asList("Rate", "(Non-Sync)"), PANNING_RATE_NON_SYNC, color));
 
@@ -514,26 +515,6 @@ class UIBuilder
         category.add(hbox);
         return category;
     }
-
-    // TODO - this would be a nice to have / to be completed though (read: has some impact)
-    /*
-    private JComponent createDeviceDetails(Color color) {
-        Category category = new Category(synth, "Device Details", color);
-
-        JComponent comp;
-
-        HBox hbox = new HBox();
-        // overall device volume, patch independent, non-stored, only evented
-        // hbox.add(createLabelledDial("Device Volume", Mappings.DEVICE_VOLUME, color, 0, 127);
-
-        // revisit how to present synth. Plain key/value (same for the other params) ?
-        comp = new ReadOnlyString("SW Version", synth, "swversionstring", 1);
-        hbox.add(comp);
-
-        category.add(hbox);
-        return category;
-    }
-    */
 
     // convenience method to create chooser
     private Chooser createChooser(String label, Mappings mappings)

@@ -34,24 +34,24 @@ public enum Boundaries implements Boundary {
     KEYSYNC_PHASE("Free Running", "0", "24", "48", "72", "96", "120", "144", "168", "192", "216", "240", "264", "288", "312", "336"),
     ARP_OCTAVES("1", "2", "3", "4"),
     ARP_NOTE_DESTINATION("Internal", "External", "Internal+External", "External+Played"),
-    ARP_PATTERN("Up", "Down", "UD1", "UD2", "Order", "Random"),
+    ARP_PATTERN("Up", "Down", "Up-Down 1", "Up-Down 2", "Order", "Random"),
     EQUALIZER_GLOBAL_SYNC("Off", "Low", "Mid", "High"),
     CHORUS_GLOBAL_SYNC("Off", "Left", "Center", "Right"),
     PANNING_GLOBAL_SYNC(CHORUS_GLOBAL_SYNC),
-    SYNC_RATES("NA", "32t", "32", "16t", "16", "8t", "16D", "8", "4t", "8d", "4", "2t", "4d", "2", "1t", "2d",
+    SYNC_RATES("N/A", "32t", "32", "16t", "16", "8t", "16d", "8", "4t", "8d", "4", "2t", "4d", "2", "1t", "2d",
                        "1b", "2t", "1d", "2b", "4t", "3b", "5t", "4b", "3d", "7t", "5b", "8t", "6b", "7b", "5d", "8b", "9b", "7d", "12"),
     DELAY_SYNC_RATES(Arrays.asList(SYNC_RATES.values).subList(0, 20)),
-    ARP_SYNC_RATES(Arrays.asList(SYNC_RATES.values).subList(1, 17)),
+    ARP_SYNC_RATES(Arrays.asList(SYNC_RATES.values).subList(0, 17)),
     ARP_NON_SYNC_RATES(0, 127, -64), // 64 -> 191 BPM
     DELAY_RATIO("1-1", "4-3", "3-4", "3-2", "2-3", "2-1", "1-2", "3-1", "1-3", "4-1", "1-4", "1-0", "0-1"),
     EQUALIZER_LEVEL(IntStream.rangeClosed(0, 127).boxed().map(i -> {
         if (i < 64) {
-            return "LP_" + i;
+            return "LP " + i;
         } else if (i > 64) {
-            return "HP_" + i;
+            return "HP " + i;
         }
-        return "FLAT";
-    }).collect(Collectors.toList()));
+        return "--";
+    }).collect(Collectors.toList()), 64);
 
     private final int min;
     private final int max;
@@ -59,11 +59,19 @@ public enum Boundaries implements Boundary {
     private final String[] values;
 
     Boundaries(List<String> values) {
-        this(values.toArray(new String[0]));
+        this(values, 0);
+    }
+
+    Boundaries(List<String> values, int offset) {
+        this(offset, values.toArray(new String[0]));
     }
 
     Boundaries(String... values) {
-        this(0, values.length - 1, 0, values);
+        this(0, values);
+    }
+
+    Boundaries(int offset, String... values) {
+        this(0, values.length - 1, offset, values);
     }
 
     Boundaries(int min, int max) {

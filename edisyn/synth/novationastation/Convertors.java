@@ -111,7 +111,7 @@ class Convertors {
     /**
      * enum defining some predefined (so-called packed) convertors
      * These convertors are handling data where different parameters are combined (as in: 'packed') in a single value
-     * The definition of these convertors are solely driven by the A-Station specification
+     * The definition of these convertors are solely driven by the A Station specification
      */
     enum Packed implements Convertor {
         PACKED1 {

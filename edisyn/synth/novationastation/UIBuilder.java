@@ -297,18 +297,21 @@ class UIBuilder
         hbox.add(createLabelledDial("Velocity Depth", velocityDepth, color));
 
         Mappings mappingsAttack = Mappings.find("ENVELOPE%d_ATTACK", envelope);
-        hbox.add(createLabelledDial("Attack", mappingsAttack, color));
+        Component attackDial = hbox.add(createLabelledDial("Attack", mappingsAttack, color));
 
         Mappings mappingsDecay = Mappings.find("ENVELOPE%d_DECAY", envelope);
         hbox.add(createLabelledDial("Decay", mappingsDecay, color));
 
         if (envelope == 3) {
+            // wrt improved layouting, (ab)use attackDial for compensating missing control for Sustain/Releases
+            hbox.add(Strut.makeStrut(attackDial));
+            hbox.add(Strut.makeStrut(attackDial));
             // AD: for FM envelope - that's it
             JComponent comp = new EnvelopeDisplay(synth, Color.red,
-                    new String[] { null, mappingsAttack.getKey(), mappingsDecay.getKey(), null, null },
-                    new String[] { null, null, null, null, null },
-                    new double[] { 0, 0.25/127.0, 0.25 / 127.0,  0.25, 0.25},
-                    new double[] { 0, 1.0, 1.0 / 127.0, 0, 0 });
+                    new String[] { null, mappingsAttack.getKey(), mappingsDecay.getKey()},
+                    new String[] { null, null, null },
+                    new double[] { 0, 0.50 / 127.0, 0.50 / 127.0},
+                    new double[] { 0, 1.0, 0});
             hbox.addLast(comp);
         } else {
             // ADSR: for AMP & MOD env - add sustain/release
@@ -322,7 +325,7 @@ class UIBuilder
             JComponent comp = new EnvelopeDisplay(synth, Color.red,
                     new String[] { null, mappingsAttack.getKey(), mappingsDecay.getKey(), null, mappingsRelease.getKey() },
                     new String[] { null, null, mappingsSustain.getKey(), mappingsSustain.getKey(), null },
-                    new double[] { 0, 0.25/127.0, 0.25 / 127.0,  0.25, 0.25/127.0},
+                    new double[] { 0, 0.25 / 127.0, 0.25 / 127.0,  0.25, 0.25 / 127.0},
                     new double[] { 0, 1.0, 1.0 / 127.0, 1.0/127.0, 0 });
             hbox.addLast(comp);
         }

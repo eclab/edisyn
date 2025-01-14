@@ -1,10 +1,14 @@
 package edisyn.synth.novationastation;
 
+import edisyn.Model;
 import edisyn.Synth;
+import edisyn.Updatable;
 import edisyn.gui.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -85,19 +89,6 @@ class UIBuilder
 
         arpEffectsPanel.add(vbox, BorderLayout.CENTER);
         synth.addTab("ARP, Effects", arpEffectsPanel);
-
-        // TODO - nice addition for the future, to be completed though...
-        // DEVICE panel (non patch related)
-        /*
-        JComponent devicePanel = new SynthPanel(synth);
-        vbox = new VBox();
-
-        vbox.add(createDeviceDetails(Style.COLOR_B()));
-
-        devicePanel.add(vbox, BorderLayout.CENTER);
-
-        addTab("Device details", devicePanel);
-        */
     }
 
     private JComponent createGlobal(Color color)
@@ -124,7 +115,7 @@ class UIBuilder
         VBox vbox = new VBox();
         vbox.add(createChooser("Polyphony Mode", POLYPHONY_MODE));
         JComponent keySync = createChooser("Keysync Phase", KEY_SYNC_PHASE);
-        // set ranges for metric values: skipping first item, being a non metric value ("Free running")
+        // set ranges for metric values: skipping first item, being a non metric value ("N/A - Free running")
         synth.getModel().setMetricMinMax(KEY_SYNC_PHASE.getKey(),
                 KEY_SYNC_PHASE.getBoundaries().getMin() + 1, KEY_SYNC_PHASE.getBoundaries().getMax());
         vbox.add(keySync);
@@ -350,9 +341,12 @@ class UIBuilder
         vbox.add(createCheckBox("Key Sync - Phase Shift", Mappings.find("LFO%d_KEY_SYNC_PHASE_SHIFT", lfo)));
         hbox.add(vbox);
 
-        // NOTE - improve (interaction between) sync and non-sync controls ?
-        hbox.add(createLabelledDial(Arrays.asList("Speed", "(Sync)"), Mappings.find("LFO%d_SPEED_SYNC", lfo), color));
-        hbox.add(createLabelledDial(Arrays.asList("Speed", "(Non-Sync)"), Mappings.find("LFO%d_SPEED_NON_SYNC", lfo), color));
+        Mappings mappingSync = find("LFO%d_SPEED_SYNC", lfo);
+        hbox.add(createLabelledDial(Arrays.asList("Speed", "(Sync)"), mappingSync, color));
+        Component compNonSync = hbox.add(createLabelledDial(Arrays.asList("Speed", "(Non-Sync)"), Mappings.find("LFO%d_SPEED_NON_SYNC", lfo), color));
+        // disable non-sync component when sync is in control: value != 0 (N/A)
+        synth.getModel().register(mappingSync.getKey(), (key, model) -> compNonSync.setEnabled(model.get(key) == 0));
+
         hbox.add(createLabelledDial("Delay", Mappings.find("LFO%d_DELAY", lfo), color));
 
         category.add(hbox, BorderLayout.CENTER);
@@ -393,13 +387,13 @@ class UIBuilder
         hbox.add(createLabelledDial(Arrays.asList("Send", "Level"), DELAY_SEND_LEVEL, color));
         hbox.add(createLabelledDial("Modwheel", DELAY_SEND_MODWHEEL, color));
 
-        // TODO - improve (interaction between) sync and non-sync controls ?
         hbox.add(createLabelledDial(Arrays.asList("Time", "(Sync)"), DELAY_TIME_SYNC, color));
-        hbox.add(createLabelledDial(Arrays.asList("Time", "(Non-Sync)"), DELAY_TIME_NON_SYNC, color));
+        Component compNonSync = hbox.add(createLabelledDial(Arrays.asList("Time", "(Non-Sync)"), DELAY_TIME_NON_SYNC, color));
+        // disable non-sync component when sync is in control: value != 0 (N/A)
+        synth.getModel().register(DELAY_TIME_SYNC.getKey(), (key, model) -> compNonSync.setEnabled(model.get(key) == 0));
 
         hbox.add(createLabelledDial("Feedback", DELAY_FEEDBACK, color));
 
-        // TODO - improve (interaction between) sync and non-sync controls ?
         hbox.add(createLabelledDial(Arrays.asList("Ratio", "(L-R)"), DELAY_RATIO, color));
         hbox.add(createLabelledDial(Arrays.asList("Stereo", "Width"), DELAY_STEREO_WIDTH, color));
 
@@ -434,9 +428,10 @@ class UIBuilder
         hbox.add(createLabelledDial(Arrays.asList("Send", "Level"), CHORUS_SEND_LEVEL, color));
         hbox.add(createLabelledDial("Mod Wheel", CHORUS_SEND_MODWHEEL, color));
 
-        // TODO - improve (interaction between) sync and non-sync controls ?
         hbox.add(createLabelledDial(Arrays.asList("Rate", "(Sync)"), CHORUS_RATE_SYNC, color));
-        hbox.add(createLabelledDial(Arrays.asList("Rate", "(Non-Sync)"), CHORUS_RATE_NON_SYNC, color));
+        Component compNonSync = hbox.add(createLabelledDial(Arrays.asList("Rate", "(Non-Sync)"), CHORUS_RATE_NON_SYNC, color));
+        // disable non-sync component when sync is in control: value != 0 (N/A)
+        synth.getModel().register(CHORUS_RATE_SYNC.getKey(), (key, model) -> compNonSync.setEnabled(model.get(key) == 0));
 
         hbox.add(createLabelledDial("Feedback", CHORUS_FEEDBACK, color));
         hbox.add(createLabelledDial("Depth", CHORUS_MOD_DEPTH, color));
@@ -471,9 +466,11 @@ class UIBuilder
 
         hbox.add(createLabelledDial("Level", EQUALIZER_LEVEL, color));
         hbox.add(createLabelledDial("Frequency", EQUALIZER_FREQUENCY, color));
-        // TODO - improve (interaction between) sync and non-sync controls ?
         hbox.add(createLabelledDial(Arrays.asList("Rate", "(Sync)"), EQUALIZER_RATE_SYNC, color));
-        hbox.add(createLabelledDial(Arrays.asList("Rate", "(Non-Sync)"), EQUALIZER_RATE_NON_SYNC, color));
+        Component compNonSync = hbox.add(createLabelledDial(Arrays.asList("Rate", "(Non-Sync)"), EQUALIZER_RATE_NON_SYNC, color));
+        // disable non-sync component when sync is in control: value != 0 (N/A)
+        synth.getModel().register(EQUALIZER_RATE_SYNC.getKey(), (key, model) -> compNonSync.setEnabled(model.get(key) == 0));
+
         hbox.add(createLabelledDial("Mod Depth", EQUALIZER_MOD_DEPTH, color));
 
         category.add(hbox);
@@ -493,9 +490,10 @@ class UIBuilder
 
         hbox.add(createLabelledDial("Position", PANNING_POSITION, color));
 
-        // TODO - improve (interaction between) sync and non-sync controls ?
         hbox.add(createLabelledDial(Arrays.asList("Rate", "(Sync)"), PANNING_RATE_SYNC, color));
-        hbox.add(createLabelledDial(Arrays.asList("Rate", "(Non-Sync)"), PANNING_RATE_NON_SYNC, color));
+        Component compNonSync = hbox.add(createLabelledDial(Arrays.asList("Rate", "(Non-Sync)"), PANNING_RATE_NON_SYNC, color));
+        // disable non-sync component when sync is in control: value != 0 (N/A)
+        synth.getModel().register(PANNING_RATE_SYNC.getKey(), (key, model) -> compNonSync.setEnabled(model.get(key) == 0));
 
         hbox.add(createLabelledDial("Depth", PANNING_MOD_DEPTH, color));
 

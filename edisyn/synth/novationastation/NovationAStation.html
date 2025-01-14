@@ -24,6 +24,10 @@ The A Station editor supports all basic patch + parameter handling:
 <p><b>Gotchas</b><br>
 <ul>
     <li>If you load the current patch, the A Station does not tell Edisyn what bank or number the patch is.</li>
+    <li>Some parameters (LFO, delay, ...) have both a Dial for sync and non-sync speed.
+        On the unit, the sync speed has precedence, so only if its value is "N/A" the non-sync speed is being applied
+        To make that explicit in the editor the non-sync speed dial is disabled when the sync speed dial is NOT "N/A"
+    </li>
 </ul>
 
 <p><table border=0 cellpadding=0 cellspacing=5>

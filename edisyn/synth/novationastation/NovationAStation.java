@@ -1,7 +1,7 @@
 /***
-    Copyright 2017 by Sean Luke
-    Licensed under the Apache License version 2.0
-*/
+ Copyright 2024 by Sean Luke
+ Licensed under the Apache License version 2.0
+ */
 
 package edisyn.synth.novationastation;
 
@@ -44,8 +44,7 @@ public class NovationAStation extends Synth {
             Mappings.MIXER_SELECT.getKey()
     );
 
-    public NovationAStation()
-    {
+    public NovationAStation() {
         // build UI
         new UIBuilder(this).build();
 
@@ -55,26 +54,22 @@ public class NovationAStation extends Synth {
         initUnusedModelItems();
     }
 
-    public static String getSynthName()
-    {
+    public static String getSynthName() {
         return "Novation A Station";
     }
 
     @Override
-    public String getDefaultResourceFileName()
-    {
+    public String getDefaultResourceFileName() {
         return "NovationAStation.init";
     }
 
     @Override
-    public String getHTMLResourceFileName()
-    {
+    public String getHTMLResourceFileName() {
         return "NovationAStation.html";
     }
 
     @Override
-    public String getPatchLocationName(Model model)
-    {
+    public String getPatchLocationName(Model model) {
         int bank = model.get(KEY_BANK);
         int number = model.get(KEY_PATCH_NUMBER);
         if (bank >= 0 && bank <= 3 && number >= 0 && number <= 99) {
@@ -85,8 +80,7 @@ public class NovationAStation extends Synth {
     }
 
     @Override
-    public Model getNextPatchLocation(Model model)
-    {
+    public Model getNextPatchLocation(Model model) {
         int bank = model.get(KEY_BANK);
         bank = Math.max(bank, 0);
         bank = Math.min(bank, 3);
@@ -101,8 +95,7 @@ public class NovationAStation extends Synth {
     }
 
     @Override
-    public boolean gatherPatchInfo(String title, Model changeThis, boolean writing)
-    {
+    public boolean gatherPatchInfo(String title, Model changeThis, boolean writing) {
         JComboBox<String> bank = new JComboBox<>(BANKS);
         bank.setEditable(false);
         bank.setMaximumRowCount(4);
@@ -144,8 +137,7 @@ public class NovationAStation extends Synth {
     }
 
     @Override
-    public void changePatch(Model tempModel)
-    {
+    public void changePatch(Model tempModel) {
         byte bank = (byte) tempModel.get(KEY_BANK);
         byte program = (byte) tempModel.get(KEY_PATCH_NUMBER);
         try {
@@ -154,8 +146,7 @@ public class NovationAStation extends Synth {
             tryToSendMIDI(new ShortMessage(ShortMessage.CONTROL_CHANGE, getChannelOut(), 32, bank));
             // Number change is PC
             tryToSendMIDI(new ShortMessage(ShortMessage.PROGRAM_CHANGE, getChannelOut(), program, 0));
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             Synth.handleException(e);
         }
     }
@@ -180,11 +171,12 @@ public class NovationAStation extends Synth {
         } catch (Throwable t) {
             return PARSE_IGNORE;
         }
-    };
+    }
+
+    ;
 
     @Override
-    public byte[] emit(Model tempModel, boolean toWorkingMemory, boolean toFile)
-    {
+    public byte[] emit(Model tempModel, boolean toWorkingMemory, boolean toFile) {
         if (tempModel == null)
             tempModel = model;
         // only use tempModel for retrieval of bank & patchnumber !
@@ -213,15 +205,14 @@ public class NovationAStation extends Synth {
     }
 
     @Override
-    public Object[] emitAll(String key)
-    {
+    public Object[] emitAll(String key) {
         Optional<Convertor> convertor = Convertors.getByKey(key);
         if (convertor.isPresent()) {
             Convertor mapping = convertor.get();
             if (mapping.getCC().isPresent()) {
                 int value = mapping.toSynth(model);
                 return buildCC(getChannelOut(), mapping.getCC().getAsInt(), value);
-            } else if (mapping.getNRPN().isPresent()){
+            } else if (mapping.getNRPN().isPresent()) {
                 int value = mapping.toSynth(model) << 7;
                 return buildNRPN(getChannelOut(), mapping.getNRPN().getAsInt(), value);
             }
@@ -231,15 +222,13 @@ public class NovationAStation extends Synth {
     }
 
     @Override
-    public byte[] requestCurrentDump()
-    {
+    public byte[] requestCurrentDump() {
         return new SysexMessage.Builder(CURRENT_PROGRAM_DUMP_REQUEST)
                 .build().getBytes();
     }
 
     @Override
-    public byte[] requestDump(Model tempModel)
-    {
+    public byte[] requestDump(Model tempModel) {
         return new SysexMessage.Builder(PROGRAM_DUMP_REQUEST)
                 .withProgramBank((byte) (1 + tempModel.get(KEY_BANK))) // 1..4 (while in model: 0..3))
                 .withProgramNumber((byte) (tempModel.get(KEY_PATCH_NUMBER)))
@@ -247,8 +236,7 @@ public class NovationAStation extends Synth {
     }
 
     @Override
-    public void handleSynthCCOrNRPN(Midi.CCData data)
-    {
+    public void handleSynthCCOrNRPN(Midi.CCData data) {
         Optional<Convertor> convertor = Optional.empty();
         OptionalInt value = OptionalInt.empty();
         if (data.type == Midi.CCDATA_TYPE_RAW_CC) {
@@ -270,8 +258,7 @@ public class NovationAStation extends Synth {
     }
 
     @Override
-    public void parseParameter(byte[] data)
-    {
+    public void parseParameter(byte[] data) {
         // If your synth sent you a sysex message which was not recognized via
         // the recognize() method, it gets sent here.  Typically this is
         // a sysex message for a single parameter update.  If your synth sends
@@ -290,8 +277,7 @@ public class NovationAStation extends Synth {
     }
 
     @Override
-    public JFrame sprout()
-    {
+    public JFrame sprout() {
         // This is a great big method in Synth.java, and handles building the JFrame and
         // constructing all of the menus.  It's called when the editor is having its GUI
         // constructed.   You may need to do some things here, such as turning off certain
@@ -302,8 +288,7 @@ public class NovationAStation extends Synth {
     }
 
     @Override
-    public boolean testVerify(Synth synth2, String key, Object obj1, Object obj2)
-    {
+    public boolean testVerify(Synth synth2, String key, Object obj1, Object obj2) {
         return UNMAPPED_KEYS.contains(key);
     }
 
@@ -311,34 +296,29 @@ public class NovationAStation extends Synth {
     // librarian support
     ////
     @Override
-    public String[] getBankNames()
-    {
+    public String[] getBankNames() {
         return BANKS;
     }
 
     @Override
-    public String[] getPatchNumberNames()
-    {
+    public String[] getPatchNumberNames() {
         return PATCHES;
     }
 
     @Override
-    public boolean getSupportsPatchWrites()
-    {
+    public boolean getSupportsPatchWrites() {
         return true;
     }
 
     @Override
-    public boolean librarianTested()
-    {
+    public boolean librarianTested() {
         return true;
     }
 
     ////
     // some private aider methods
     ////
-    private String toString(Midi.CCData data)
-    {
+    private String toString(Midi.CCData data) {
         return "CCData {number:" + data.number + ", value:" + data.value + ", type:" + data.type + "}";
     }
 

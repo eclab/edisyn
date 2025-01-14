@@ -12,12 +12,12 @@ import static edisyn.synth.novationastation.Mappings.*;
 /**
  * Registry of all available Convertors.
  * This registry is (statically) build from the <code>Mappings</code> enum
- *
+ * <p>
  * As a side effect of this, it additionally validates the <code>Mappings</code> to ensure there are no double
  * usages defined for each and every(edisyn) model key and (MIDI) CC, NRPN, (sysex) byte index
  *
  * @see Mappings
- *
+ * <p>
  * TODO room for code improvement/reorg here (refactor code, introducing base class, generalize implementation...)
  */
 class Convertors {
@@ -119,14 +119,17 @@ class Convertors {
             public OptionalInt getByteIndex() {
                 return OptionalInt.of(80);
             }
+
             @Override
             public OptionalInt getCC() {
                 return OptionalInt.of(65);
             }
+
             @Override
             public OptionalInt getNRPN() {
                 return OptionalInt.empty();
             }
+
             @Override
             public void toModel(Model model, int value) {
                 model.set(ENVELOPE1_TRIGGER.getKey(), 0x1 & value);
@@ -134,6 +137,7 @@ class Convertors {
                 model.set(ENVELOPE3_TRIGGER.getKey(), 0x1 & (value >> 2));
                 model.set(KEY_SYNC_PHASE.getKey(), 0xF & (value >> 3));
             }
+
             @Override
             public int toSynth(Model model) {
                 return (0x1 & model.get(ENVELOPE1_TRIGGER.getKey()))
@@ -141,6 +145,7 @@ class Convertors {
                         | ((0x1 & model.get(ENVELOPE3_TRIGGER.getKey())) << 2)
                         | ((0xF & model.get(KEY_SYNC_PHASE.getKey())) << 3);
             }
+
             @Override
             public Boundaries getBoundary() {
                 return Boundaries.NONE;
@@ -151,26 +156,31 @@ class Convertors {
             public OptionalInt getByteIndex() {
                 return OptionalInt.of(0);
             }
+
             @Override
             public OptionalInt getCC() {
                 return OptionalInt.of(67);
             }
+
             @Override
             public OptionalInt getNRPN() {
                 return OptionalInt.empty();
             }
+
             @Override
             public void toModel(Model model, int value) {
                 model.set(UNISON_VOICES.getKey(), 0x7 & value);
                 model.set(POLYPHONY_MODE.getKey(), 0x3 & (value >> 3));
                 model.set(FILTER_TYPE.getKey(), 0x1 & (value >> 5));
             }
+
             @Override
             public int toSynth(Model model) {
                 return (0x7 & model.get(UNISON_VOICES.getKey()))
                         | ((0x3 & model.get(POLYPHONY_MODE.getKey())) << 3)
                         | ((0x1 & model.get(FILTER_TYPE.getKey())) << 5);
             }
+
             @Override
             public Boundaries getBoundary() {
                 return Boundaries.NONE;
@@ -181,14 +191,17 @@ class Convertors {
             public OptionalInt getByteIndex() {
                 return OptionalInt.of(5);
             }
+
             @Override
             public OptionalInt getCC() {
                 return OptionalInt.of(70);
             }
+
             @Override
             public OptionalInt getNRPN() {
                 return OptionalInt.empty();
             }
+
             @Override
             public void toModel(Model model, int value) {
                 model.set(OSC1_WAVEFORM.getKey(), 0x3 & value);
@@ -196,6 +209,7 @@ class Convertors {
                 model.set(OSC3_WAVEFORM.getKey(), 0x3 & (value >> 4));
                 model.set(PORTAMENTO_MODE.getKey(), 0x1 & (value >> 6));
             }
+
             @Override
             public int toSynth(Model model) {
                 return (0x3 & model.get(OSC1_WAVEFORM.getKey()))
@@ -203,6 +217,7 @@ class Convertors {
                         | ((0x3 & model.get(OSC3_WAVEFORM.getKey())) << 4)
                         | ((0x1 & model.get(PORTAMENTO_MODE.getKey())) << 6);
             }
+
             @Override
             public Boundaries getBoundary() {
                 return Boundaries.NONE;
@@ -213,14 +228,17 @@ class Convertors {
             public OptionalInt getByteIndex() {
                 return OptionalInt.of(6);
             }
+
             @Override
             public OptionalInt getCC() {
                 return OptionalInt.of(71);
             }
+
             @Override
             public OptionalInt getNRPN() {
                 return OptionalInt.empty();
             }
+
             @Override
             public void toModel(Model model, int value) {
                 model.set(OSC1_OCTAVE.getKey(), 0x3 & value);
@@ -228,6 +246,7 @@ class Convertors {
                 model.set(OSC3_OCTAVE.getKey(), 0x3 & (value >> 4));
                 model.set(OSC2_SYNCED_BY_1.getKey(), 0x1 & (value >> 6));
             }
+
             @Override
             public int toSynth(Model model) {
                 return (0x3 & model.get(OSC1_OCTAVE.getKey()))
@@ -235,6 +254,7 @@ class Convertors {
                         | ((0x3 & model.get(OSC3_OCTAVE.getKey())) << 4)
                         | ((0x1 & model.get(OSC2_SYNCED_BY_1.getKey())) << 6);
             }
+
             @Override
             public Boundaries getBoundary() {
                 return Boundaries.NONE;
@@ -245,14 +265,17 @@ class Convertors {
             public OptionalInt getByteIndex() {
                 return OptionalInt.of(78);
             }
+
             @Override
             public OptionalInt getCC() {
                 return OptionalInt.of(78);
             }
+
             @Override
             public OptionalInt getNRPN() {
                 return OptionalInt.empty();
             }
+
             @Override
             public void toModel(Model model, int value) {
                 model.set(LFO1_DELAY_MULTI.getKey(), 0x1 & value);
@@ -260,6 +283,7 @@ class Convertors {
                 model.set(LFO1_WAVEFORM.getKey(), 0x3 & (value >> 2));
                 model.set(LFO2_WAVEFORM.getKey(), 0x3 & (value >> 4));
             }
+
             @Override
             public int toSynth(Model model) {
                 return (0x1 & model.get(LFO1_DELAY_MULTI.getKey()))
@@ -267,6 +291,7 @@ class Convertors {
                         | ((0x3 & model.get(LFO1_WAVEFORM.getKey())) << 2)
                         | ((0x3 & model.get(LFO2_WAVEFORM.getKey())) << 4);
             }
+
             @Override
             public Boundaries getBoundary() {
                 return Boundaries.NONE;
@@ -277,14 +302,17 @@ class Convertors {
             public OptionalInt getByteIndex() {
                 return OptionalInt.of(79);
             }
+
             @Override
             public OptionalInt getCC() {
                 return OptionalInt.of(79);
             }
+
             @Override
             public OptionalInt getNRPN() {
                 return OptionalInt.empty();
             }
+
             @Override
             public void toModel(Model model, int value) {
                 model.set(LFO1_KEY_SYNC_PHASE_SHIFT.getKey(), 0x1 & value);
@@ -294,6 +322,7 @@ class Convertors {
                 model.set(LFO2_KEY_SYNC.getKey(), 0x1 & (value >> 4));
                 model.set(LFO2_LOCK.getKey(), 0x1 & (value >> 5));
             }
+
             @Override
             public int toSynth(Model model) {
                 return (0x1 & model.get(LFO1_KEY_SYNC_PHASE_SHIFT.getKey()))
@@ -303,6 +332,7 @@ class Convertors {
                         | ((0x1 & model.get(LFO2_KEY_SYNC.getKey())) << 4)
                         | ((0x1 & model.get(LFO2_LOCK.getKey())) << 5);
             }
+
             @Override
             public Boundaries getBoundary() {
                 return Boundaries.NONE;
@@ -313,14 +343,17 @@ class Convertors {
             public OptionalInt getByteIndex() {
                 return OptionalInt.of(88);
             }
+
             @Override
             public OptionalInt getCC() {
                 return OptionalInt.of(89);
             }
+
             @Override
             public OptionalInt getNRPN() {
                 return OptionalInt.empty();
             }
+
             @Override
             public void toModel(Model model, int value) {
                 model.set(ARP_OCTAVES.getKey(), 0x3 & value);
@@ -329,6 +362,7 @@ class Convertors {
                 model.set(ARP_LATCH.getKey(), 0x1 & (value >> 4));
                 model.set(ARP_NOTE_DESTINATION.getKey(), 0x3 & (value >> 5));
             }
+
             @Override
             public int toSynth(Model model) {
                 return (0x3 & model.get(ARP_OCTAVES.getKey()))
@@ -337,6 +371,7 @@ class Convertors {
                         | ((0x1 & model.get(ARP_LATCH.getKey())) << 4)
                         | ((0x3 & model.get(ARP_NOTE_DESTINATION.getKey())) << 5);
             }
+
             @Override
             public Boundaries getBoundary() {
                 return Boundaries.NONE;
@@ -347,24 +382,29 @@ class Convertors {
             public OptionalInt getByteIndex() {
                 return OptionalInt.of(121);
             }
+
             @Override
             public OptionalInt getCC() {
                 return OptionalInt.empty();
             }
+
             @Override
             public OptionalInt getNRPN() {
                 return OptionalInt.of(21);
             }
+
             @Override
             public void toModel(Model model, int value) {
                 model.set(REVERB_TYPE.getKey(), 0x7 & value);
                 model.set(CHORUS_TYPE.getKey(), 0x1 & (value >> 3));
             }
+
             @Override
             public int toSynth(Model model) {
                 return (0x7 & model.get(REVERB_TYPE.getKey()))
                         | ((0x1 & model.get(CHORUS_TYPE.getKey())) << 3);
             }
+
             @Override
             public Boundaries getBoundary() {
                 return Boundaries.NONE;
@@ -375,26 +415,31 @@ class Convertors {
             public OptionalInt getByteIndex() {
                 return OptionalInt.of(122);
             }
+
             @Override
             public OptionalInt getCC() {
                 return OptionalInt.empty();
             }
+
             @Override
             public OptionalInt getNRPN() {
                 return OptionalInt.of(22);
             }
+
             @Override
             public void toModel(Model model, int value) {
                 model.set(CHORUS_GLOBAL_SYNC.getKey(), 0x3 & value);
                 model.set(PANNING_GLOBAL_SYNC.getKey(), 0x3 & (value >> 2));
                 model.set(EQUALIZER_GLOBAL_SYNC.getKey(), 0x3 & (value >> 4));
             }
+
             @Override
             public int toSynth(Model model) {
                 return (0x3 & model.get(CHORUS_GLOBAL_SYNC.getKey()))
                         | ((0x3 & model.get(PANNING_GLOBAL_SYNC.getKey())) << 2)
                         | ((0x3 & model.get(EQUALIZER_GLOBAL_SYNC.getKey())) << 4);
             }
+
             @Override
             public Boundaries getBoundary() {
                 return Boundaries.NONE;
@@ -405,14 +450,17 @@ class Convertors {
             public OptionalInt getByteIndex() {
                 return OptionalInt.of(123);
             }
+
             @Override
             public OptionalInt getCC() {
                 return OptionalInt.empty();
             }
+
             @Override
             public OptionalInt getNRPN() {
                 return OptionalInt.of(23);
             }
+
             @Override
             public void toModel(Model model, int value) {
                 // NOTE: unlike documented: bit 4 (iso 3)
@@ -422,6 +470,7 @@ class Convertors {
                 // NOTE: unlike documented: bit 7 (iso 6)
                 model.set(EXT_AUDIO_TO_FX.getKey(), 0x1 & (value >> 6));
             }
+
             @Override
             public int toSynth(Model model) {
                 // NOTE: unlike documented: bit 4 (iso 3)
@@ -431,6 +480,7 @@ class Convertors {
                         // NOTE: unlike documented: bit 7 (iso 6)
                         | ((0x1 & model.get(EXT_AUDIO_TO_FX.getKey())) << 6);
             }
+
             @Override
             public Boundaries getBoundary() {
                 return Boundaries.NONE;
@@ -441,15 +491,18 @@ class Convertors {
             public OptionalInt getByteIndex() {
                 return OptionalInt.of(127);
             }
+
             @Override
             public OptionalInt getCC() {
                 return OptionalInt.empty();
             }
+
             @Override
             // NOTE - (undocumented) NRPN 26 used forPACKED 11 !
             public OptionalInt getNRPN() {
                 return OptionalInt.of(26);
             }
+
             @Override
             public void toModel(Model model, int value) {
                 model.set(OSC_SELECT.getKey(), 0x3 & value);
@@ -457,6 +510,7 @@ class Convertors {
                 model.set(PWM_SOURCE.getKey(), 0x3 & (value >> 4));
                 model.set(LFO_SELECT.getKey(), 0x1 & (value >> 6));
             }
+
             @Override
             public int toSynth(Model model) {
                 return (0x3 & model.get(OSC_SELECT.getKey()))
@@ -464,6 +518,7 @@ class Convertors {
                         | ((0x3 & model.get(PWM_SOURCE.getKey())) << 4)
                         | ((0x1 & model.get(LFO_SELECT.getKey())) << 6);
             }
+
             @Override
             public Boundaries getBoundary() {
                 return Boundaries.NONE;

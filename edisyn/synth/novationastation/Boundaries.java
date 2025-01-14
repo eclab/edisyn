@@ -39,7 +39,7 @@ public enum Boundaries implements Boundary {
     CHORUS_GLOBAL_SYNC("Off", "Left", "Center", "Right"),
     PANNING_GLOBAL_SYNC(CHORUS_GLOBAL_SYNC),
     SYNC_RATES("N/A", "32t", "32", "16t", "16", "8t", "16d", "8", "4t", "8d", "4", "2t", "4d", "2", "1t", "2d",
-                       "1b", "2t", "1d", "2b", "4t", "3b", "5t", "4b", "3d", "7t", "5b", "8t", "6b", "7b", "5d", "8b", "9b", "7d", "12"),
+            "1b", "2t", "1d", "2b", "4t", "3b", "5t", "4b", "3d", "7t", "5b", "8t", "6b", "7b", "5d", "8b", "9b", "7d", "12"),
     DELAY_SYNC_RATES(Arrays.asList(SYNC_RATES.values).subList(0, 20)),
     ARP_SYNC_RATES(Arrays.asList(SYNC_RATES.values).subList(0, 17)),
     ARP_NON_SYNC_RATES(0, 127, -64), // 64 -> 191 BPM

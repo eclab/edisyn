@@ -159,7 +159,7 @@ public class NovationAStation extends Synth {
         } catch (Throwable t) {
             return PARSE_IGNORE;
         }
-    };
+    }
 
     @Override
     public byte[] emit(Model tempModel, boolean toWorkingMemory, boolean toFile) {
@@ -256,11 +256,12 @@ public class NovationAStation extends Synth {
      * Hack alert: Avoid race condition in Edisyn on linux.
      * Introducing a decent amount of delay after patch write make the diff here.
      * without this, the progress window (showing progress of the writes) is sometimes not closing
-     *
+     * <p>
      * Meanwhile, the issue got fixed in Edisyn Core,
      * yet keep this peace of code still here (commented)
      * and let's wait and see if the fix in Edisyn Core survives
      * (since that piece of code seemingly did cause some issues in the past)
+     * </p>
      */
 //    @Override
 //    public int getPauseAfterWritePatch() {

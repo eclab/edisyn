@@ -159,9 +159,7 @@ public class NovationAStation extends Synth {
         } catch (Throwable t) {
             return PARSE_IGNORE;
         }
-    }
-
-    ;
+    };
 
     @Override
     public byte[] emit(Model tempModel, boolean toWorkingMemory, boolean toFile) {
@@ -257,13 +255,17 @@ public class NovationAStation extends Synth {
     /**
      * Hack alert: Avoid race condition in Edisyn on linux.
      * Introducing a decent amount of delay after patch write make the diff here.
-     * without this, the progress window (showing progress of the writes) never closes
+     * without this, the progress window (showing progress of the writes) is sometimes not closing
+     *
+     * Meanwhile, the issue got fixed in Edisyn Core,
+     * yet keep this peace of code still here (commented)
+     * and let's wait and see if the fix in Edisyn Core survives
+     * (since that piece of code seemingly did cause some issues in the past)
      */
-    @Override
-    // TODO - reevaluate
-    public int getPauseAfterWritePatch() {
-        return 100;
-    }
+//    @Override
+//    public int getPauseAfterWritePatch() {
+//        return 100;
+//    }
 
     ////
     // librarian support
@@ -346,7 +348,8 @@ public class NovationAStation extends Synth {
     // note: in unit, valid bank numbers are: 1..4 !
     private int validateModelBank(int bank) {
         if (bank < -1 || bank > 3) {
-            throw new IllegalStateException("Unsupported bank " + bank);
+            // definitely a programming mistake
+            throw new IllegalStateException("Invalid bank " + bank);
         }
         return bank;
     }
@@ -354,7 +357,8 @@ public class NovationAStation extends Synth {
     // validate patch numbers (in model): 0..99 (and -1 used as sentinel)
     private int validateModelPatch(int patch) {
         if (patch < -1 || patch > 99) {
-            throw new IllegalStateException("Unsupported patch " + patch);
+            // definitely a programming mistake
+            throw new IllegalStateException("Invalid patch " + patch);
         }
         return patch;
     }

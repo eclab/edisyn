@@ -15,13 +15,13 @@ class SysexMessage {
         // (write) requests to A Station - with payload
         CURRENT_PROGRAM_DUMP((byte) 0x00, 128),
         PROGRAM_DUMP((byte) 0x01, 128),
-        // not yet supported
+        // not (yet) used/supported
         //PROGRAM_PAIR_DUMP((byte) 0x02, 256),
         //GLOBAL_DATA_DUMP((byte) 0x03, 256),
         // (read) requests to A Station - no payload
         CURRENT_PROGRAM_DUMP_REQUEST((byte) 0x40),
         PROGRAM_DUMP_REQUEST((byte) 0x41),
-        // not yet supported
+        // not (yet) used/supported
         //PROGRAM_PAIR_DUMP_REQUEST((byte) 0x42),
         //GLOBAL_DATA_DUMP_REQUEST((byte) 0x43)
         ;

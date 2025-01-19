@@ -23,26 +23,14 @@ import static edisyn.synth.novationastation.SysexMessage.Type.*;
 public class NovationAStation extends Synth {
     private static final String[] BANKS = Boundaries.BANKS.getValues();
     private static final String[] PATCHES = Boundaries.PATCH_NUMBERS.getValues();
+    private static final String PATCH_NAME_UNDEFINED = "Untitled";
+    private static final String KEY_PATCH_NAME = "name";
     private static final String KEY_BANK = "bank";
     private static final String KEY_PATCH_NUMBER = "number";
     private static final String KEY_SOFTWARE_VERSION = "swversion";
     private static final String KEY_VERSION_INCREMENT = "swversionincrement";
     // not (yet) used, should become used in (future) devicePanel
     //private static final String KEY_FULL_VERSION = "swversionstring";
-
-    /*
-     * List of edisyn model keys to be ignored during SanityCheck
-     * These are all parameters which do not yet have a UI control
-     */
-    private static final List<String> UNMAPPED_KEYS = Arrays.asList(
-            KEY_SOFTWARE_VERSION,
-            KEY_VERSION_INCREMENT,
-            //KEY_FULL_VERSION
-            Mappings.OSC_SELECT.getKey(),
-            Mappings.PWM_SOURCE.getKey(),
-            Mappings.LFO_SELECT.getKey(),
-            Mappings.MIXER_SELECT.getKey()
-    );
 
     public NovationAStation() {
         // build UI
@@ -69,14 +57,17 @@ public class NovationAStation extends Synth {
     }
 
     @Override
+    public String getPatchName(Model model) {
+        int bank = model.get(KEY_BANK);
+        int patch = model.get(KEY_PATCH_NUMBER);
+        return createPatchName(bank, patch).orElse(PATCH_NAME_UNDEFINED);
+    }
+
+    @Override
     public String getPatchLocationName(Model model) {
         int bank = model.get(KEY_BANK);
-        int number = model.get(KEY_PATCH_NUMBER);
-        if (bank >= 0 && bank <= 3 && number >= 0 && number <= 99) {
-            String bankName = BANKS[bank];
-            return String.format("%s%02d", bankName, number);
-        }
-        return null;
+        int patch = model.get(KEY_PATCH_NUMBER);
+        return createPatchName(bank, patch).orElse(null);
     }
 
     @Override
@@ -84,14 +75,13 @@ public class NovationAStation extends Synth {
         int bank = model.get(KEY_BANK);
         bank = Math.max(bank, 0);
         bank = Math.min(bank, 3);
-        int program = model.get(KEY_PATCH_NUMBER);
-        int programindex = bank * 100 + program;
-        ++programindex;
+        int patch = model.get(KEY_PATCH_NUMBER);
+        int patchIndex = bank * 100 + patch;
+        ++patchIndex;
 
-        Model newModel = buildModel();
-        newModel.set(KEY_BANK, (programindex / 100) % 4);
-        newModel.set(KEY_PATCH_NUMBER, programindex % 100);
-        return newModel;
+        int newBank = (patchIndex / 100) % 4;
+        int newPatch = patchIndex % 100;
+        return updateModel(buildModel(), newBank, newPatch);
     }
 
     @Override
@@ -129,9 +119,7 @@ public class NovationAStation extends Synth {
                 showSimpleError(title, "The Patch Number must be an integer 0 ... 99");
                 continue;
             }
-
-            changeThis.set(KEY_BANK, bank.getSelectedIndex());
-            changeThis.set(KEY_PATCH_NUMBER, n);
+            updateModel(changeThis, bank.getSelectedIndex(), n);
             return true;
         }
     }
@@ -260,8 +248,8 @@ public class NovationAStation extends Synth {
     @Override
     public void parseParameter(byte[] data) {
         // If your synth sent you a sysex message which was not recognized via
-        // the recognize() method, it gets sent here.  Typically this is
-        // a sysex message for a single parameter update.  If your synth sends
+        // the recognize() method, it gets sent here. Typically, this is
+        // a sysex message for a single parameter update. If your synth sends
         // such things, implement this.  See also handleCCOrNRPNData() below.
         System.err.println("Unrecognized message received: " + StringUtility.toHex(data));
     }
@@ -272,24 +260,9 @@ public class NovationAStation extends Synth {
      * without this, the progress window (showing progress of the writes) never closes
      */
     @Override
+    // TODO - reevaluate
     public int getPauseAfterWritePatch() {
         return 100;
-    }
-
-    @Override
-    public JFrame sprout() {
-        // This is a great big method in Synth.java, and handles building the JFrame and
-        // constructing all of the menus.  It's called when the editor is having its GUI
-        // constructed.   You may need to do some things here, such as turning off certain
-        // menu options that your synthesizer cannot do.  Be sure to call super.sprout();
-        // first.
-        // TODO - what about doing a global request here ? as in: requesting device (non program) data
-        return super.sprout();
-    }
-
-    @Override
-    public boolean testVerify(Synth synth2, String key, Object obj1, Object obj2) {
-        return UNMAPPED_KEYS.contains(key);
     }
 
     ////
@@ -326,13 +299,11 @@ public class NovationAStation extends Synth {
         byte programBank = message.getProgramBank();    // 1..4
         byte programNumber = message.getProgramNumber();  // 0..99
         if (programBank >= 1 && programBank <= 4) {
-            model.set(KEY_BANK, --programBank); // 0..3 in model
-            model.set(KEY_PATCH_NUMBER, programNumber);
+            updateModel(model, programBank - 1 /* 0..3 in model */, programNumber);
         } else {
             // explicitly reset bank/number
             // this way we make sure the UI does not show any patch number when there is none exposed by the synth
-            model.set(KEY_BANK, -1);
-            model.set(KEY_PATCH_NUMBER, -1);
+            updateModel(model, -1, -1);
         }
         // update sound parameter values
         byte[] payload = message.getPayload();
@@ -351,6 +322,47 @@ public class NovationAStation extends Synth {
         return PARSE_SUCCEEDED;
     }
 
+    private Model updateModel(Model modelToUpdate, int modelBank, int modelPatch) {
+        modelBank = validateModelBank(modelBank);
+        modelPatch = validateModelPatch(modelPatch);
+        modelToUpdate.set(KEY_BANK, modelBank); // 0..3 in model
+        modelToUpdate.set(KEY_PATCH_NUMBER, modelPatch);
+        // also update patch_name in the model, wrt consistency
+        modelToUpdate.set(KEY_PATCH_NAME, createPatchName(modelBank, modelPatch).orElse(PATCH_NAME_UNDEFINED));
+        return modelToUpdate;
+    }
+
+    private Optional<String> createPatchName(int modelBank, int modelPatch) {
+        modelBank = validateModelBank(modelBank);
+        modelPatch = validateModelPatch(modelPatch);
+        if ((modelBank == -1) || (modelPatch == -1)) {
+            return Optional.empty();
+        }
+        String bankName = BANKS[modelBank];
+        return Optional.of(String.format("%s%02d", bankName, modelPatch));
+    }
+
+    // validate bank number (in model !): 0..3 (and -1 used as sentinel)
+    // note: in unit, valid bank numbers are: 1..4 !
+    private int validateModelBank(int bank) {
+        if (bank < -1 || bank > 3) {
+            throw new IllegalStateException("Unsupported bank " + bank);
+        }
+        return bank;
+    }
+
+    // validate patch numbers (in model): 0..99 (and -1 used as sentinel)
+    private int validateModelPatch(int patch) {
+        if (patch < -1 || patch > 99) {
+            throw new IllegalStateException("Unsupported patch " + patch);
+        }
+        return patch;
+    }
+
+    /*
+     * Initialize some Edisyn model keys which do not yet have a UI control
+     * Only here to satisfy the SanityCheck
+     */
     private void initUnusedModelItems() {
         model.setMinMax(KEY_SOFTWARE_VERSION, 0, 127);
         model.setMinMax(KEY_VERSION_INCREMENT, 0, 127);

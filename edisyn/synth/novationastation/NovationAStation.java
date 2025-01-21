@@ -254,19 +254,31 @@ public class NovationAStation extends Synth {
 
     /**
      * Hack alert: Avoid race condition in Edisyn on linux.
-     * Introducing a decent amount of delay after patch write make the diff here.
+     * Introducing a decent amount of delay (100) after patch write makes the diff here.
      * without this, the progress window (showing progress of the writes) is sometimes not closing
      * <p>
      * Meanwhile, the issue got fixed in Edisyn Core,
-     * yet keep this peace of code still here (commented)
-     * and let's wait and see if the fix in Edisyn Core survives
-     * (since that piece of code seemingly did cause some issues in the past)
+     * yet, let's keep this peace of code still here and wait and see if the fix in Edisyn Core survives
+     * (since that part of the code has been igiving headaches in the past; seemingly far from obvious to get that
+     * working on all different platforms, OSes, JREs, ...
+     * </p>
+     *
+     * <p>
+     * For now using it, not to avoid the race condition, yet to provide a more smooth/safe experience when writing
+     * a lot of patches in batch. Without a delay, the unit does need some extra time to process this batch.
+     * So, let's introduce a small delay, won't really worsen the  User Experience, but avoids potential choking on
+     * the unit.
+     * I never ran into issues while testing, yet my development machine is a pretty old beast & not exactly
+     * the best reference wrt performance
      * </p>
      */
-//    @Override
-//    public int getPauseAfterWritePatch() {
-//        return 100;
-//    }
+    @Override
+    public int getPauseAfterWritePatch() {
+        // the value used as a hack
+        // return 100;
+        // the value for smooth processing
+        return 50;
+    }
 
     ////
     // librarian support

@@ -15,13 +15,13 @@ class SysexMessage {
         // (write) requests to A Station - with payload
         CURRENT_PROGRAM_DUMP((byte) 0x00, 128),
         PROGRAM_DUMP((byte) 0x01, 128),
-        // not yet supported
+        // not (yet) used/supported
         //PROGRAM_PAIR_DUMP((byte) 0x02, 256),
         //GLOBAL_DATA_DUMP((byte) 0x03, 256),
         // (read) requests to A Station - no payload
         CURRENT_PROGRAM_DUMP_REQUEST((byte) 0x40),
         PROGRAM_DUMP_REQUEST((byte) 0x41),
-        // not yet supported
+        // not (yet) used/supported
         //PROGRAM_PAIR_DUMP_REQUEST((byte) 0x42),
         //GLOBAL_DATA_DUMP_REQUEST((byte) 0x43)
         ;
@@ -64,27 +64,27 @@ class SysexMessage {
         Builder withControlByte(byte value) {
             controlByte = value;
             return this;
-        };
+        }
 
         Builder withSoftwareVersion(byte value) {
             softwareVersion = value;
             return this;
-        };
+        }
 
         Builder withVersionIncrement(byte value) {
             versionIncrement = value;
             return this;
-        };
+        }
 
         Builder withProgramBank(byte value) {
             programBank = value;
             return this;
-        };
+        }
 
         Builder withProgramNumber(byte value) {
             programNumber = value;
             return this;
-        };
+        }
 
         Builder withPayload(int index, byte value) {
             if (index >= payload.length) {
@@ -92,20 +92,20 @@ class SysexMessage {
             }
             payload[index] = value;
             return this;
-        };
+        }
 
         SysexMessage build() {
             return new SysexMessage(this);
         }
     }
 
-    private static final byte[] START_SEQUENCE = new byte[] {
+    private static final byte[] START_SEQUENCE = new byte[]{
             (byte) 0xF0,    // Sysex start
             (byte) 0x00,    // Novation ID1
             (byte) 0x20,    // Novation ID2
             (byte) 0x29,    // Novation ID3
             (byte) 0x01,    // DeviceType
-            (byte) 0x40,    // A-Station
+            (byte) 0x40,    // A Station
             (byte) 0x7F,    // Sysex channel (7F or current receive channel)
             (byte) 0x00,    // message type
             (byte) 0x00,    // control byte
@@ -115,7 +115,7 @@ class SysexMessage {
             (byte) 0x00     // program number
     };
 
-    private static final byte[] END_SEQUENCE = new byte[] {
+    private static final byte[] END_SEQUENCE = new byte[]{
             (byte) 0xF7    // Sysex end
     };
 
@@ -131,7 +131,7 @@ class SysexMessage {
         for (byte b : START_SEQUENCE) {
             bytes[index++] = b;
         }
-        for (byte b: builder.payload) {
+        for (byte b : builder.payload) {
             bytes[index++] = b;
         }
         for (byte b : END_SEQUENCE) {
@@ -172,30 +172,28 @@ class SysexMessage {
 
     byte getSoftwareVersion() {
         return bytes[9];
-    };
+    }
 
     byte getVersionIncrement() {
         return bytes[10];
-    };
+    }
 
     byte getProgramBank() {
         return bytes[11];
-    };
+    }
 
     byte getProgramNumber() {
         return bytes[12];
-    };
+    }
 
-    String getFullVersion()
-    {
+    String getFullVersion() {
         byte softwareVersion = getSoftwareVersion();
         int major = softwareVersion >> 3;
         int minor = softwareVersion & 0x7;
         return major + "." + minor + "." + getVersionIncrement();
     }
 
-    private byte[] validate(byte[] bytes)
-    {
+    private byte[] validate(byte[] bytes) {
         SysexMessage.Type type = Type.typemap.get(bytes[INDEX_TYPE]);
         // validate length
         int expectedLength = START_SEQUENCE.length + type.payloadSize + END_SEQUENCE.length;

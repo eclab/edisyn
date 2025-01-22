@@ -1,10 +1,14 @@
 package edisyn.synth.novationastation;
 
+import edisyn.Model;
 import edisyn.Synth;
+import edisyn.Updatable;
 import edisyn.gui.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -16,17 +20,14 @@ import static edisyn.synth.novationastation.Mappings.*;
  * This class has the responsibility to build up the UI.
  * This also implies linking the different UI-components to the Edisyn synth model
  */
-class UIBuilder
-{
+class UIBuilder {
     private final Synth synth;
 
-    UIBuilder(Synth synth)
-    {
+    UIBuilder(Synth synth) {
         this.synth = Objects.requireNonNull(synth);
     }
 
-    void build()
-    {
+    void build() {
         // General PANEL
         JComponent generalPanel = new SynthPanel(synth);
         VBox vbox = new VBox();
@@ -85,23 +86,9 @@ class UIBuilder
 
         arpEffectsPanel.add(vbox, BorderLayout.CENTER);
         synth.addTab("ARP, Effects", arpEffectsPanel);
-
-        // TODO - nice addition for the future, to be completed though...
-        // DEVICE panel (non patch related)
-        /*
-        JComponent devicePanel = new SynthPanel(synth);
-        vbox = new VBox();
-
-        vbox.add(createDeviceDetails(Style.COLOR_B()));
-
-        devicePanel.add(vbox, BorderLayout.CENTER);
-
-        addTab("Device details", devicePanel);
-        */
     }
 
-    private JComponent createGlobal(Color color)
-    {
+    private JComponent createGlobal(Color color) {
         Category globalCategory = new Category(synth, "Novation A Station", color);
 
         HBox hbox = new HBox();
@@ -116,15 +103,14 @@ class UIBuilder
         return globalCategory;
     }
 
-    private JComponent createGeneral(Color color)
-    {
+    private JComponent createGeneral(Color color) {
         Category categoryGeneral = new Category(synth, "General", color);
 
         HBox hbox = new HBox();
         VBox vbox = new VBox();
         vbox.add(createChooser("Polyphony Mode", POLYPHONY_MODE));
         JComponent keySync = createChooser("Keysync Phase", KEY_SYNC_PHASE);
-        // set ranges for metric values: skipping first item, being a non metric value ("Free running")
+        // set ranges for metric values: skipping first item, being a non metric value ("N/A - Free running")
         synth.getModel().setMetricMinMax(KEY_SYNC_PHASE.getKey(),
                 KEY_SYNC_PHASE.getBoundaries().getMin() + 1, KEY_SYNC_PHASE.getBoundaries().getMax());
         vbox.add(keySync);
@@ -141,8 +127,7 @@ class UIBuilder
         return categoryGeneral;
     }
 
-    private JComponent createOscillator(final int osc, Color color)
-    {
+    private JComponent createOscillator(final int osc, Color color) {
         Category category = new Category(synth, "Oscillator " + osc, color);
         category.makePasteable("osc");
 
@@ -175,8 +160,7 @@ class UIBuilder
         return category;
     }
 
-    private JComponent createPortamento(Color color)
-    {
+    private JComponent createPortamento(Color color) {
         Category category = new Category(synth, "Portamento", color);
 
         HBox hbox = new HBox();
@@ -189,8 +173,7 @@ class UIBuilder
         return category;
     }
 
-    private JComponent createPitchModulation(Color color)
-    {
+    private JComponent createPitchModulation(Color color) {
         Category category = new Category(synth, "Pitch Mod", color);
 
         HBox hbox = new HBox();
@@ -205,8 +188,7 @@ class UIBuilder
         return category;
     }
 
-    private JComponent createAmpModulation(Color color)
-    {
+    private JComponent createAmpModulation(Color color) {
         Category category = new Category(synth, "Amp Mod", color);
 
         HBox hbox = new HBox();
@@ -218,24 +200,23 @@ class UIBuilder
         return category;
     }
 
-    private JComponent createMixer(Color color)
-    {
+    private JComponent createMixer(Color color) {
         Category category = new Category(synth, "Mixer (to Filter)", color);
+        category.makeDistributable("mixer");
 
         HBox hbox = new HBox();
         hbox.add(createLabelledDial("OSC1", MIXER_OSC1, color));
         hbox.add(createLabelledDial("OSC2", MIXER_OSC2, color));
         hbox.add(createLabelledDial("OSC3", MIXER_OSC3, color));
         hbox.add(createLabelledDial("Noise", MIXER_NOISE, color));
-        hbox.add(createLabelledDial(Arrays.asList("Ring Mod", "1*2"), MIXER_RING_MOD, color));
+        hbox.add(createLabelledDial(Arrays.asList("Ring Mod", "1x2"), MIXER_RING_MOD, color));
         hbox.add(createLabelledDial(Arrays.asList("External", "Audio"), MIXER_EXTERNAL, color));
 
         category.add(hbox, BorderLayout.CENTER);
         return category;
     }
 
-    private JComponent createExtAudio(Color color)
-    {
+    private JComponent createExtAudio(Color color) {
         Category category = new Category(synth, "External Audio", color);
 
         HBox hbox = new HBox();
@@ -247,8 +228,7 @@ class UIBuilder
         return category;
     }
 
-    private JComponent createFilter(Color color)
-    {
+    private JComponent createFilter(Color color) {
         Category category = new Category(synth, "Filter", color);
         HBox mainhbox = new HBox();
 
@@ -281,8 +261,7 @@ class UIBuilder
         return category;
     }
 
-    private JComponent createEnvelope(final int envelope, Color color)
-    {
+    private JComponent createEnvelope(final int envelope, Color color) {
         String categoryName = envelope == 1 ? "Amp" : (envelope == 2 ? "Mod" : "FM");
         Category category = new Category(synth, categoryName + " Envelope", color);
         category.makePasteable("env");
@@ -296,18 +275,21 @@ class UIBuilder
         hbox.add(createLabelledDial("Velocity Depth", velocityDepth, color));
 
         Mappings mappingsAttack = Mappings.find("ENVELOPE%d_ATTACK", envelope);
-        hbox.add(createLabelledDial("Attack", mappingsAttack, color));
+        Component attackDial = hbox.add(createLabelledDial("Attack", mappingsAttack, color));
 
         Mappings mappingsDecay = Mappings.find("ENVELOPE%d_DECAY", envelope);
         hbox.add(createLabelledDial("Decay", mappingsDecay, color));
 
         if (envelope == 3) {
+            // wrt improved layouting, (ab)use attackDial for compensating missing control for Sustain/Releases
+            hbox.add(Strut.makeStrut(attackDial));
+            hbox.add(Strut.makeStrut(attackDial));
             // AD: for FM envelope - that's it
             JComponent comp = new EnvelopeDisplay(synth, Color.red,
-                    new String[] { null, mappingsAttack.getKey(), mappingsDecay.getKey(), null, null },
-                    new String[] { null, null, null, null, null },
-                    new double[] { 0, 0.25/127.0, 0.25 / 127.0,  0.25, 0.25},
-                    new double[] { 0, 1.0, 1.0 / 127.0, 0, 0 });
+                    new String[]{null, mappingsAttack.getKey(), mappingsDecay.getKey()},
+                    new String[]{null, null, null},
+                    new double[]{0, 0.50 / 127.0, 0.50 / 127.0},
+                    new double[]{0, 1.0, 0});
             hbox.addLast(comp);
         } else {
             // ADSR: for AMP & MOD env - add sustain/release
@@ -319,10 +301,10 @@ class UIBuilder
 
             // ADSR
             JComponent comp = new EnvelopeDisplay(synth, Color.red,
-                    new String[] { null, mappingsAttack.getKey(), mappingsDecay.getKey(), null, mappingsRelease.getKey() },
-                    new String[] { null, null, mappingsSustain.getKey(), mappingsSustain.getKey(), null },
-                    new double[] { 0, 0.25/127.0, 0.25 / 127.0,  0.25, 0.25/127.0},
-                    new double[] { 0, 1.0, 1.0 / 127.0, 1.0/127.0, 0 });
+                    new String[]{null, mappingsAttack.getKey(), mappingsDecay.getKey(), null, mappingsRelease.getKey()},
+                    new String[]{null, null, mappingsSustain.getKey(), mappingsSustain.getKey(), null},
+                    new double[]{0, 0.25 / 127.0, 0.25 / 127.0, 0.25, 0.25 / 127.0},
+                    new double[]{0, 1.0, 1.0 / 127.0, 1.0 / 127.0, 0});
             hbox.addLast(comp);
         }
 
@@ -330,8 +312,7 @@ class UIBuilder
         return category;
     }
 
-    private JComponent createLFO(final int lfo, Color color)
-    {
+    private JComponent createLFO(final int lfo, Color color) {
         Category category = new Category(synth, "LFO " + lfo, color);
         category.makePasteable("lfo");
 
@@ -346,18 +327,20 @@ class UIBuilder
         vbox.add(createCheckBox("Key Sync - Phase Shift", Mappings.find("LFO%d_KEY_SYNC_PHASE_SHIFT", lfo)));
         hbox.add(vbox);
 
-        // NOTE - improve (interaction between) sync and non-sync controls ?
-        hbox.add(createLabelledDial(Arrays.asList("Speed", "(Non-Sync)"), Mappings.find("LFO%d_SPEED_NON_SYNC", lfo), color));
-        hbox.add(createLabelledDial(Arrays.asList("Speed", "(Sync)"), Mappings.find("LFO%d_SPEED_SYNC", lfo), color));
+        Mappings mappingSync = find("LFO%d_SPEED_SYNC", lfo);
+        hbox.add(createLabelledDial(Arrays.asList("Speed", "(Sync)"), mappingSync, color));
+        Component compNonSync = hbox.add(createLabelledDial(Arrays.asList("Speed", "(Non-Sync)"), Mappings.find("LFO%d_SPEED_NON_SYNC", lfo), color));
+        // disable non-sync component when sync is in control: value != 0 (N/A)
+        synth.getModel().register(mappingSync.getKey(), (key, model) -> compNonSync.setEnabled(model.get(key) == 0));
+
         hbox.add(createLabelledDial("Delay", Mappings.find("LFO%d_DELAY", lfo), color));
 
         category.add(hbox, BorderLayout.CENTER);
         return category;
     }
 
-    private JComponent createARP(Color color)
-    {
-        Category category = new Category(synth, "ARP", color);
+    private JComponent createARP(Color color) {
+        Category category = new Category(synth, "Arpeggiator", color);
 
         HBox hbox = new HBox();
 
@@ -381,21 +364,20 @@ class UIBuilder
         return category;
     }
 
-    private JComponent createDelay(Color color)
-    {
+    private JComponent createDelay(Color color) {
         Category category = new Category(synth, "Delay", color);
         HBox hbox = new HBox();
 
         hbox.add(createLabelledDial(Arrays.asList("Send", "Level"), DELAY_SEND_LEVEL, color));
         hbox.add(createLabelledDial("Modwheel", DELAY_SEND_MODWHEEL, color));
 
-        // NOTE - improve (interaction between) sync and non-sync controls ?
         hbox.add(createLabelledDial(Arrays.asList("Time", "(Sync)"), DELAY_TIME_SYNC, color));
-        hbox.add(createLabelledDial(Arrays.asList("Time", "(Non-Sync)"), DELAY_TIME_NON_SYNC, color));
+        Component compNonSync = hbox.add(createLabelledDial(Arrays.asList("Time", "(Non-Sync)"), DELAY_TIME_NON_SYNC, color));
+        // disable non-sync component when sync is in control: value != 0 (N/A)
+        synth.getModel().register(DELAY_TIME_SYNC.getKey(), (key, model) -> compNonSync.setEnabled(model.get(key) == 0));
 
         hbox.add(createLabelledDial("Feedback", DELAY_FEEDBACK, color));
 
-        // NOTE - improve (interaction between) sync and non-sync controls ?
         hbox.add(createLabelledDial(Arrays.asList("Ratio", "(L-R)"), DELAY_RATIO, color));
         hbox.add(createLabelledDial(Arrays.asList("Stereo", "Width"), DELAY_STEREO_WIDTH, color));
 
@@ -403,8 +385,7 @@ class UIBuilder
         return category;
     }
 
-    private JComponent createReverb(Color color)
-    {
+    private JComponent createReverb(Color color) {
         Category category = new Category(synth, "Reverb", color);
 
         HBox hbox = new HBox();
@@ -419,8 +400,7 @@ class UIBuilder
         return category;
     }
 
-    private JComponent createChorus(Color color)
-    {
+    private JComponent createChorus(Color color) {
         Category category = new Category(synth, "Chorus", color);
         HBox hbox = new HBox();
         VBox vbox = new VBox();
@@ -430,9 +410,10 @@ class UIBuilder
         hbox.add(createLabelledDial(Arrays.asList("Send", "Level"), CHORUS_SEND_LEVEL, color));
         hbox.add(createLabelledDial("Mod Wheel", CHORUS_SEND_MODWHEEL, color));
 
-        // NOTE - improve (interaction between) sync and non-sync controls ?
         hbox.add(createLabelledDial(Arrays.asList("Rate", "(Sync)"), CHORUS_RATE_SYNC, color));
-        hbox.add(createLabelledDial(Arrays.asList("Rate", "(Non-Sync)"), CHORUS_RATE_NON_SYNC, color));
+        Component compNonSync = hbox.add(createLabelledDial(Arrays.asList("Rate", "(Non-Sync)"), CHORUS_RATE_NON_SYNC, color));
+        // disable non-sync component when sync is in control: value != 0 (N/A)
+        synth.getModel().register(CHORUS_RATE_SYNC.getKey(), (key, model) -> compNonSync.setEnabled(model.get(key) == 0));
 
         hbox.add(createLabelledDial("Feedback", CHORUS_FEEDBACK, color));
         hbox.add(createLabelledDial("Depth", CHORUS_MOD_DEPTH, color));
@@ -442,8 +423,7 @@ class UIBuilder
         return category;
     }
 
-    private JComponent createDistortion(Color color)
-    {
+    private JComponent createDistortion(Color color) {
         Category category = new Category(synth, "Distortion", color);
         HBox hbox = new HBox();
 
@@ -455,8 +435,7 @@ class UIBuilder
         return category;
     }
 
-    private JComponent createEqualizer(Color color)
-    {
+    private JComponent createEqualizer(Color color) {
         Category category = new Category(synth, "Equalizer", color);
 
         HBox hbox = new HBox();
@@ -467,9 +446,11 @@ class UIBuilder
 
         hbox.add(createLabelledDial("Level", EQUALIZER_LEVEL, color));
         hbox.add(createLabelledDial("Frequency", EQUALIZER_FREQUENCY, color));
-        // NOTE - improve (interaction between) sync and non-sync controls ?
         hbox.add(createLabelledDial(Arrays.asList("Rate", "(Sync)"), EQUALIZER_RATE_SYNC, color));
-        hbox.add(createLabelledDial(Arrays.asList("Rate", "(Non-Sync)"), EQUALIZER_RATE_NON_SYNC, color));
+        Component compNonSync = hbox.add(createLabelledDial(Arrays.asList("Rate", "(Non-Sync)"), EQUALIZER_RATE_NON_SYNC, color));
+        // disable non-sync component when sync is in control: value != 0 (N/A)
+        synth.getModel().register(EQUALIZER_RATE_SYNC.getKey(), (key, model) -> compNonSync.setEnabled(model.get(key) == 0));
+
         hbox.add(createLabelledDial("Mod Depth", EQUALIZER_MOD_DEPTH, color));
 
         category.add(hbox);
@@ -477,8 +458,7 @@ class UIBuilder
     }
 
 
-    private JComponent createPan(Color color)
-    {
+    private JComponent createPan(Color color) {
         Category category = new Category(synth, "Panning", color);
 
         HBox hbox = new HBox();
@@ -489,9 +469,10 @@ class UIBuilder
 
         hbox.add(createLabelledDial("Position", PANNING_POSITION, color));
 
-        // NOTE - improve (interaction between) sync and non-sync controls ?
         hbox.add(createLabelledDial(Arrays.asList("Rate", "(Sync)"), PANNING_RATE_SYNC, color));
-        hbox.add(createLabelledDial(Arrays.asList("Rate", "(Non-Sync)"), PANNING_RATE_NON_SYNC, color));
+        Component compNonSync = hbox.add(createLabelledDial(Arrays.asList("Rate", "(Non-Sync)"), PANNING_RATE_NON_SYNC, color));
+        // disable non-sync component when sync is in control: value != 0 (N/A)
+        synth.getModel().register(PANNING_RATE_SYNC.getKey(), (key, model) -> compNonSync.setEnabled(model.get(key) == 0));
 
         hbox.add(createLabelledDial("Depth", PANNING_MOD_DEPTH, color));
 
@@ -499,8 +480,7 @@ class UIBuilder
         return category;
     }
 
-    private JComponent createVocoder(Color color)
-    {
+    private JComponent createVocoder(Color color) {
         Category category = new Category(synth, "Vocoder", color);
 
         HBox hbox = new HBox();
@@ -515,29 +495,8 @@ class UIBuilder
         return category;
     }
 
-    // TODO - this would be a nice to have / to be completed though (read: has some impact)
-    /*
-    private JComponent createDeviceDetails(Color color) {
-        Category category = new Category(synth, "Device Details", color);
-
-        JComponent comp;
-
-        HBox hbox = new HBox();
-        // overall device volume, patch independent, non-stored, only evented
-        // hbox.add(createLabelledDial("Device Volume", Mappings.DEVICE_VOLUME, color, 0, 127);
-
-        // revisit how to present synth. Plain key/value (same for the other params) ?
-        comp = new ReadOnlyString("SW Version", synth, "swversionstring", 1);
-        hbox.add(comp);
-
-        category.add(hbox);
-        return category;
-    }
-    */
-
     // convenience method to create chooser
-    private Chooser createChooser(String label, Mappings mappings)
-    {
+    private Chooser createChooser(String label, Mappings mappings) {
         Boundaries boundaries = mappings.getBoundaries();
         // sanity
         if (boundaries.getValues() == null) {
@@ -550,14 +509,12 @@ class UIBuilder
     }
 
     // convenience method to create labelledDial with single label
-    private LabelledDial createLabelledDial(String label, Mappings mappings, Color color)
-    {
+    private LabelledDial createLabelledDial(String label, Mappings mappings, Color color) {
         return createLabelledDial(Arrays.asList(label), mappings, color);
     }
 
     // convenience method to create labelledDial with multiple labels
-    private LabelledDial createLabelledDial(List<String> labels, Mappings mappings, Color color)
-    {
+    private LabelledDial createLabelledDial(List<String> labels, Mappings mappings, Color color) {
         // sanity
         if (Objects.requireNonNull(labels).isEmpty()) {
             throw new IllegalStateException("at least one label required");
@@ -587,8 +544,7 @@ class UIBuilder
     }
 
     // convenience method to create checkbox
-    private JComponent createCheckBox(String label, Mappings mappings)
-    {
+    private JComponent createCheckBox(String label, Mappings mappings) {
         // sanity
         if (mappings.getBoundaries() != Boundaries.BOOLEAN) {
             throw new IllegalStateException("only boolean allowed for checkbox");

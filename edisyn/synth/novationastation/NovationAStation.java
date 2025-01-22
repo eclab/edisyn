@@ -1,7 +1,7 @@
 /***
-    Copyright 2017 by Sean Luke
-    Licensed under the Apache License version 2.0
-*/
+ Copyright 2024 by Sean Luke
+ Licensed under the Apache License version 2.0
+ */
 
 package edisyn.synth.novationastation;
 
@@ -23,6 +23,8 @@ import static edisyn.synth.novationastation.SysexMessage.Type.*;
 public class NovationAStation extends Synth {
     private static final String[] BANKS = Boundaries.BANKS.getValues();
     private static final String[] PATCHES = Boundaries.PATCH_NUMBERS.getValues();
+    private static final String PATCH_NAME_UNDEFINED = "Untitled";
+    private static final String KEY_PATCH_NAME = "name";
     private static final String KEY_BANK = "bank";
     private static final String KEY_PATCH_NUMBER = "number";
     private static final String KEY_SOFTWARE_VERSION = "swversion";
@@ -30,22 +32,7 @@ public class NovationAStation extends Synth {
     // not (yet) used, should become used in (future) devicePanel
     //private static final String KEY_FULL_VERSION = "swversionstring";
 
-    /*
-     * List of edisyn model keys to be ignored during SanityCheck
-     * These are all parameters which do not yet have a UI control
-     */
-    private static final List<String> UNMAPPED_KEYS = Arrays.asList(
-            KEY_SOFTWARE_VERSION,
-            KEY_VERSION_INCREMENT,
-            //KEY_FULL_VERSION
-            Mappings.OSC_SELECT.getKey(),
-            Mappings.PWM_SOURCE.getKey(),
-            Mappings.LFO_SELECT.getKey(),
-            Mappings.MIXER_SELECT.getKey()
-    );
-
-    public NovationAStation()
-    {
+    public NovationAStation() {
         // build UI
         new UIBuilder(this).build();
 
@@ -55,54 +42,50 @@ public class NovationAStation extends Synth {
         initUnusedModelItems();
     }
 
-    public static String getSynthName()
-    {
+    public static String getSynthName() {
         return "Novation A Station";
     }
 
     @Override
-    public String getDefaultResourceFileName()
-    {
+    public String getDefaultResourceFileName() {
         return "NovationAStation.init";
     }
 
     @Override
-    public String getHTMLResourceFileName()
-    {
+    public String getHTMLResourceFileName() {
         return "NovationAStation.html";
     }
 
     @Override
-    public String getPatchLocationName(Model model)
-    {
+    public String getPatchName(Model model) {
         int bank = model.get(KEY_BANK);
-        int number = model.get(KEY_PATCH_NUMBER);
-        if (bank >= 0 && bank <= 3 && number >= 0 && number <= 99) {
-            String bankName = BANKS[bank];
-            return String.format("%s%02d", bankName, number);
-        }
-        return null;
+        int patch = model.get(KEY_PATCH_NUMBER);
+        return createPatchName(bank, patch).orElse(PATCH_NAME_UNDEFINED);
     }
 
     @Override
-    public Model getNextPatchLocation(Model model)
-    {
+    public String getPatchLocationName(Model model) {
+        int bank = model.get(KEY_BANK);
+        int patch = model.get(KEY_PATCH_NUMBER);
+        return createPatchName(bank, patch).orElse(null);
+    }
+
+    @Override
+    public Model getNextPatchLocation(Model model) {
         int bank = model.get(KEY_BANK);
         bank = Math.max(bank, 0);
         bank = Math.min(bank, 3);
-        int program = model.get(KEY_PATCH_NUMBER);
-        int programindex = bank * 100 + program;
-        ++programindex;
+        int patch = model.get(KEY_PATCH_NUMBER);
+        int patchIndex = bank * 100 + patch;
+        ++patchIndex;
 
-        Model newModel = buildModel();
-        newModel.set(KEY_BANK, (programindex / 100) % 4);
-        newModel.set(KEY_PATCH_NUMBER, programindex % 100);
-        return newModel;
+        int newBank = (patchIndex / 100) % 4;
+        int newPatch = patchIndex % 100;
+        return updateModel(buildModel(), newBank, newPatch);
     }
 
     @Override
-    public boolean gatherPatchInfo(String title, Model changeThis, boolean writing)
-    {
+    public boolean gatherPatchInfo(String title, Model changeThis, boolean writing) {
         JComboBox<String> bank = new JComboBox<>(BANKS);
         bank.setEditable(false);
         bank.setMaximumRowCount(4);
@@ -136,16 +119,13 @@ public class NovationAStation extends Synth {
                 showSimpleError(title, "The Patch Number must be an integer 0 ... 99");
                 continue;
             }
-
-            changeThis.set(KEY_BANK, bank.getSelectedIndex());
-            changeThis.set(KEY_PATCH_NUMBER, n);
+            updateModel(changeThis, bank.getSelectedIndex(), n);
             return true;
         }
     }
 
     @Override
-    public void changePatch(Model tempModel)
-    {
+    public void changePatch(Model tempModel) {
         byte bank = (byte) tempModel.get(KEY_BANK);
         byte program = (byte) tempModel.get(KEY_PATCH_NUMBER);
         try {
@@ -154,8 +134,7 @@ public class NovationAStation extends Synth {
             tryToSendMIDI(new ShortMessage(ShortMessage.CONTROL_CHANGE, getChannelOut(), 32, bank));
             // Number change is PC
             tryToSendMIDI(new ShortMessage(ShortMessage.PROGRAM_CHANGE, getChannelOut(), program, 0));
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             Synth.handleException(e);
         }
     }
@@ -180,11 +159,10 @@ public class NovationAStation extends Synth {
         } catch (Throwable t) {
             return PARSE_IGNORE;
         }
-    };
+    }
 
     @Override
-    public byte[] emit(Model tempModel, boolean toWorkingMemory, boolean toFile)
-    {
+    public byte[] emit(Model tempModel, boolean toWorkingMemory, boolean toFile) {
         if (tempModel == null)
             tempModel = model;
         // only use tempModel for retrieval of bank & patchnumber !
@@ -208,20 +186,19 @@ public class NovationAStation extends Synth {
             }
         }
         byte[] bytes = builder.build().getBytes();
-        System.out.println(StringUtility.toHex(bytes));
+        // System.out.println(StringUtility.toHex(bytes));
         return bytes;
     }
 
     @Override
-    public Object[] emitAll(String key)
-    {
+    public Object[] emitAll(String key) {
         Optional<Convertor> convertor = Convertors.getByKey(key);
         if (convertor.isPresent()) {
             Convertor mapping = convertor.get();
             if (mapping.getCC().isPresent()) {
                 int value = mapping.toSynth(model);
                 return buildCC(getChannelOut(), mapping.getCC().getAsInt(), value);
-            } else if (mapping.getNRPN().isPresent()){
+            } else if (mapping.getNRPN().isPresent()) {
                 int value = mapping.toSynth(model) << 7;
                 return buildNRPN(getChannelOut(), mapping.getNRPN().getAsInt(), value);
             }
@@ -231,15 +208,13 @@ public class NovationAStation extends Synth {
     }
 
     @Override
-    public byte[] requestCurrentDump()
-    {
+    public byte[] requestCurrentDump() {
         return new SysexMessage.Builder(CURRENT_PROGRAM_DUMP_REQUEST)
                 .build().getBytes();
     }
 
     @Override
-    public byte[] requestDump(Model tempModel)
-    {
+    public byte[] requestDump(Model tempModel) {
         return new SysexMessage.Builder(PROGRAM_DUMP_REQUEST)
                 .withProgramBank((byte) (1 + tempModel.get(KEY_BANK))) // 1..4 (while in model: 0..3))
                 .withProgramNumber((byte) (tempModel.get(KEY_PATCH_NUMBER)))
@@ -247,8 +222,7 @@ public class NovationAStation extends Synth {
     }
 
     @Override
-    public void handleSynthCCOrNRPN(Midi.CCData data)
-    {
+    public void handleSynthCCOrNRPN(Midi.CCData data) {
         Optional<Convertor> convertor = Optional.empty();
         OptionalInt value = OptionalInt.empty();
         if (data.type == Midi.CCDATA_TYPE_RAW_CC) {
@@ -270,75 +244,69 @@ public class NovationAStation extends Synth {
     }
 
     @Override
-    public void parseParameter(byte[] data)
-    {
+    public void parseParameter(byte[] data) {
         // If your synth sent you a sysex message which was not recognized via
-        // the recognize() method, it gets sent here.  Typically this is
-        // a sysex message for a single parameter update.  If your synth sends
+        // the recognize() method, it gets sent here. Typically, this is
+        // a sysex message for a single parameter update. If your synth sends
         // such things, implement this.  See also handleCCOrNRPNData() below.
         System.err.println("Unrecognized message received: " + StringUtility.toHex(data));
     }
 
     /**
      * Hack alert: Avoid race condition in Edisyn on linux.
-     * Introducing a decent amount of delay after patch write make the diff here.
-     * without this, the progress window (showing progress of the writes) never closes
+     * Introducing a decent amount of delay (100) after patch write makes the diff here.
+     * without this, the progress window (showing progress of the writes) is sometimes not closing
+     * <p>
+     * Meanwhile, the issue got fixed in Edisyn Core,
+     * yet, let's keep this peace of code still here and wait and see if the fix in Edisyn Core survives
+     * (since that part of the code has been igiving headaches in the past; seemingly far from obvious to get that
+     * working on all different platforms, OSes, JREs, ...
+     * </p>
+     *
+     * <p>
+     * For now using it, not to avoid the race condition, yet to provide a more smooth/safe experience when writing
+     * a lot of patches in batch. Without a delay, the unit does need some extra time to process this batch.
+     * So, let's introduce a small delay, won't really worsen the  User Experience, but avoids potential choking on
+     * the unit.
+     * I never ran into issues while testing, yet my development machine is a pretty old beast & not exactly
+     * the best reference wrt performance
+     * </p>
      */
     @Override
     public int getPauseAfterWritePatch() {
-        return 100;
-    }
-
-    @Override
-    public JFrame sprout()
-    {
-        // This is a great big method in Synth.java, and handles building the JFrame and
-        // constructing all of the menus.  It's called when the editor is having its GUI
-        // constructed.   You may need to do some things here, such as turning off certain
-        // menu options that your synthesizer cannot do.  Be sure to call super.sprout();
-        // first.
-        // TODO - what about doing a global request here ? as in: requesting device (non program) data
-        return super.sprout();
-    }
-
-    @Override
-    public boolean testVerify(Synth synth2, String key, Object obj1, Object obj2)
-    {
-        return UNMAPPED_KEYS.contains(key);
+        // the value used as a hack
+        // return 100;
+        // the value for smooth processing
+        return 50;
     }
 
     ////
     // librarian support
     ////
     @Override
-    public String[] getBankNames()
-    {
+    public String[] getBankNames() {
         return BANKS;
     }
 
     @Override
-    public String[] getPatchNumberNames()
-    {
+    public String[] getPatchNumberNames() {
         return PATCHES;
     }
 
     @Override
-    public boolean getSupportsPatchWrites()
-    {
+    public boolean getSupportsPatchWrites() {
         return true;
     }
 
     @Override
-    public boolean librarianTested()
-    {
+    public boolean librarianTested() {
         return true;
     }
 
     ////
     // some private aider methods
     ////
-    private String toString(Midi.CCData data)
-    {
+    private String toString(Midi.CCData data) {
         return "CCData {number:" + data.number + ", value:" + data.value + ", type:" + data.type + "}";
     }
 
@@ -346,13 +314,11 @@ public class NovationAStation extends Synth {
         byte programBank = message.getProgramBank();    // 1..4
         byte programNumber = message.getProgramNumber();  // 0..99
         if (programBank >= 1 && programBank <= 4) {
-            model.set(KEY_BANK, --programBank); // 0..3 in model
-            model.set(KEY_PATCH_NUMBER, programNumber);
+            updateModel(model, programBank - 1 /* 0..3 in model */, programNumber);
         } else {
             // explicitly reset bank/number
             // this way we make sure the UI does not show any patch number when there is none exposed by the synth
-            model.set(KEY_BANK, -1);
-            model.set(KEY_PATCH_NUMBER, -1);
+            updateModel(model, -1, -1);
         }
         // update sound parameter values
         byte[] payload = message.getPayload();
@@ -371,6 +337,49 @@ public class NovationAStation extends Synth {
         return PARSE_SUCCEEDED;
     }
 
+    private Model updateModel(Model modelToUpdate, int modelBank, int modelPatch) {
+        modelBank = validateModelBank(modelBank);
+        modelPatch = validateModelPatch(modelPatch);
+        modelToUpdate.set(KEY_BANK, modelBank); // 0..3 in model
+        modelToUpdate.set(KEY_PATCH_NUMBER, modelPatch);
+        // also update patch_name in the model, wrt consistency
+        modelToUpdate.set(KEY_PATCH_NAME, createPatchName(modelBank, modelPatch).orElse(PATCH_NAME_UNDEFINED));
+        return modelToUpdate;
+    }
+
+    private Optional<String> createPatchName(int modelBank, int modelPatch) {
+        modelBank = validateModelBank(modelBank);
+        modelPatch = validateModelPatch(modelPatch);
+        if ((modelBank == -1) || (modelPatch == -1)) {
+            return Optional.empty();
+        }
+        String bankName = BANKS[modelBank];
+        return Optional.of(String.format("%s%02d", bankName, modelPatch));
+    }
+
+    // validate bank number (in model !): 0..3 (and -1 used as sentinel)
+    // note: in unit, valid bank numbers are: 1..4 !
+    private int validateModelBank(int bank) {
+        if (bank < -1 || bank > 3) {
+            // definitely a programming mistake
+            throw new IllegalStateException("Invalid bank " + bank);
+        }
+        return bank;
+    }
+
+    // validate patch numbers (in model): 0..99 (and -1 used as sentinel)
+    private int validateModelPatch(int patch) {
+        if (patch < -1 || patch > 99) {
+            // definitely a programming mistake
+            throw new IllegalStateException("Invalid patch " + patch);
+        }
+        return patch;
+    }
+
+    /*
+     * Initialize some Edisyn model keys which do not yet have a UI control
+     * Only here to satisfy the SanityCheck
+     */
     private void initUnusedModelItems() {
         model.setMinMax(KEY_SOFTWARE_VERSION, 0, 127);
         model.setMinMax(KEY_VERSION_INCREMENT, 0, 127);

@@ -37,7 +37,7 @@ enum Mappings {
     // Oscillators - global (= applying to all oscillators)
     ////
     OSCS_RANDOM_DETUNE(2, 69, null),
-    OSCS_MODWHEEL_PITCH_DEPTH(31, null,5, Boundaries.CENTRIC_127),
+    OSCS_MODWHEEL_PITCH_DEPTH(31, null, 5, Boundaries.CENTRIC_127),
     OSCS_AFTERTCH_PITCH_DEPTH(32, null, 6, Boundaries.CENTRIC_127),
     OSCS_BREATH_PITCH_DEPTH(33, null, 7, Boundaries.CENTRIC_127),
     OSCS_MODWHEEL_LFO1_PITCH_DEPTH(34, null, 8, Boundaries.CENTRIC_127),
@@ -250,26 +250,25 @@ enum Mappings {
     // CC7: Device volume (non-patch related; not stored within patch, only CC-evented)
     DEVICE_VOLUME(null, 7, null),
     BANK_SELECT(null, 32, null);
-    ;
 
     ////
     // FYI - CC voids/ignores
     ////
-    // CC0 -> NA
+    // CC0 -> (Bank) Ignored / not transmitted
     // CC1 -> modwheel (receive only)
     // CC2 -> breath control (receive only)
-    // CC4 -> NA
+    // CC4 -> Not Applicable
     // CC6 -> used for NRPN value
-    // CC11 -> NA
+    // CC11 -> Not Applicable
     // CC32 -> bank select
-    // CC38, 39 -> NA
-    // CC66 -> NA
-    // CC86 -> NA
-    // CC90 -> NA according to doc, however used for distortion level in practice
-    // CC96, 97 -> NA
+    // CC38, 39 -> Not Applicable
+    // CC66 -> Not Applicable
+    // CC86 -> Not Applicable
+    // CC90 -> Not Applicable according to doc, however used for distortion level in practice
+    // CC96, 97 -> Not Applicable
     // CC98 NRPN number
-    // CC99, CC100, CC101-> NA
-    // CC113 -> NA
+    // CC99, CC100, CC101-> Not Applicable
+    // CC113 -> Not Applicable
 
     // NOTE: looks like (non-documented) Packed11convertor is coming in via NRPN 26
 
@@ -298,14 +297,13 @@ enum Mappings {
 
     /**
      * Find a mapping object by name & index
+     *
      * @param name, referring to name of enum, optionally containing a placeholder for an integer when we have multiple
      *              Mapping objects only differentiated by some sort of index. In that case, this name parameter should
      *              contain an integer placeholder (ref: the format used in <code>String.format</code>)
      * @param index used as argument in the (formatted string) name parameter
      * @return Mapping object
-     *
      * @throws IllegalArgumentException when none is found
-     *
      * @see java.lang.String#format(String, Object...)
      */
     static Mappings find(String name, int index) {
@@ -314,6 +312,7 @@ enum Mappings {
 
     /**
      * get (Edisyn) model key
+     *
      * @return key, non null
      */
     public String getKey() {
@@ -322,6 +321,7 @@ enum Mappings {
 
     /**
      * get convertor object (Edisyn data VS MIDI data)
+     *
      * @return convertor, non null
      */
     public Convertor getConvertor() {
@@ -330,6 +330,7 @@ enum Mappings {
 
     /**
      * get restrictions (boundaries imposed on the data)
+     *
      * @return restrictions, non null
      */
     public Boundaries getBoundaries() {

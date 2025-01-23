@@ -62,7 +62,7 @@ class UIBuilder {
         vbox.add(hbox);
         vbox.add(createFilter(Style.COLOR_C()));
         envelopeLfoFilterPanel.add(vbox, BorderLayout.CENTER);
-        synth.addTab("Envs, LFOs, Filter", envelopeLfoFilterPanel);
+        synth.addTab("Env LFO Filter", envelopeLfoFilterPanel);
 
         // ARP, EFFECTS PANEL
         JComponent arpEffectsPanel = new SynthPanel(synth);
@@ -85,7 +85,7 @@ class UIBuilder {
         vbox.add(hbox);
 
         arpEffectsPanel.add(vbox, BorderLayout.CENTER);
-        synth.addTab("ARP, Effects", arpEffectsPanel);
+        synth.addTab("Arp Effects", arpEffectsPanel);
     }
 
     private JComponent createGlobal(Color color) {

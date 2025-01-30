@@ -586,6 +586,11 @@ public class Library extends AbstractTableModel
                         }
                     patches[bank + 1][i] = new Patch(initPatch);
                     }
+                else if (result == Synth.PARSE_IGNORE)
+                    {
+                    // Just load a blank patch
+                    patches[bank + 1][i] = new Patch(initPatch);
+                    }
                 else
                     {
                     // force the location to be correct

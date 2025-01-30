@@ -91,6 +91,7 @@ public class Yamaha4Op extends Synth
     {
     /// Various collections of parameter names for pop-up menus
         
+    public static final int TYPE_UNSET = -1;
     public static final int TYPE_DX21 = 0;
     public static final int TYPE_DX27_DX100 = 1;
     public static final int TYPE_TX81Z = 2;
@@ -202,7 +203,7 @@ public class Yamaha4Op extends Synth
         {
         if (save)
             {
-            setLastX("" + val, TYPE_KEY, getSynthClassName(), true);
+           	setLastX("" + val, TYPE_KEY, getSynthClassName(), true);
             }
         synthType = val;
         synthTypeCombo.setSelectedIndex(val);  // hopefully this isn't recursive
@@ -210,20 +211,32 @@ public class Yamaha4Op extends Synth
         }
 
     public Yamaha4Op()
+		{
+		this(TYPE_UNSET);
+		}
+		
+    public Yamaha4Op(int type)
         {
-        String m = getLastX(TYPE_KEY, getSynthClassName());
-        try
-            {
-            synthType = (m == null ? TYPE_TX81Z : Integer.parseInt(m));
-            if (synthType < TYPE_DX21 || synthType > TYPE_V50)
-                {
-                synthType = TYPE_TX81Z;
-                }
-            }
-        catch (NumberFormatException ex)
-            {
-            synthType = TYPE_TX81Z;
-            }
+        if (type == TYPE_UNSET)
+        	{
+			String m = getLastX(TYPE_KEY, getSynthClassName(), true);
+			try
+				{
+				synthType = (m == null ? TYPE_TX81Z : Integer.parseInt(m));
+				if (synthType < TYPE_DX21 || synthType > TYPE_V50)
+					{
+					synthType = TYPE_TX81Z;
+					}
+				}
+			catch (NumberFormatException ex)
+				{
+				synthType = TYPE_TX81Z;
+				}
+			}
+		else 
+			{
+			synthType = type;
+			}
         
         model.set("bank", 0);
         model.set("number", 0);
@@ -1732,6 +1745,18 @@ public class Yamaha4Op extends Synth
             	}
             return PARSE_INCOMPLETE;
             }
+        /*
+        else if (data.length == 4111)	// block header + VMEM
+        	{
+            int ret = parseVMEM25(data, fromFile);
+            return ret;
+        	}
+        */
+        else if (data.length == 16444)	// block header + VMEM  * 4
+        	{
+            int ret = parseVMEM100(data, fromFile);
+            return ret;
+        	}
         else if (data.length == 4104)  // VMEM
             {
             int ret = parseVMEM(data, fromFile);
@@ -2005,10 +2030,25 @@ public class Yamaha4Op extends Synth
         PARSE_SUCCEEDED or PARSE_SUCCEEDED_UNTITLED if successful, else PARSE_FAILED (the default). */
     public int parseFromBank(byte[] data, int number)
         {
+        // This will be terribly inefficient but whatever
+        if (data.length == 16444)
+        	{
+        	byte[][] d = cutUpSysex(data);
+        	int region = number / 25;
+        	int num = number % 25;
+        	return parseFromBank(d[region * 2 + 1], num);
+        	}
+        	
         // okay, we're loading and editing patch number.  Here we go.
         int patch = number * 128;
         int pos = 0;
-                                                                                
+
+		// It may be that the bank is too short -- 32 rather than 100
+		if (patch >= data.length - 8)
+			{
+			return PARSE_IGNORE;
+        	}
+        	
         // extract name
         char[] name = new char[10];
         for (int j = 0; j < 10; j++)
@@ -2218,12 +2258,84 @@ public class Yamaha4Op extends Synth
         // 1. Save the bank data [handled automatically]
         // 2. Upload the bank data [handled automatically] 
         // 3. Load and edit a certain patch number
+         System.err.println("Bank Sysex Regular");
+       int patchNum = showBankSysexOptions(data, n);
+        if (patchNum < 0) 
+            return PARSE_CANCELLED;
+
+        return parseFromBank(data, patchNum);
+        }
+
+
+/*
+    public int parseVMEM25(byte[] data, boolean fromFile)
+        {
+        byte[][] mesgs = cutUpSysex(data);
+        // extract names
+        char[][] names = new char[25][10];
+		for(int i = 0; i < 25; i++)
+			{
+			for (int j = 0; j < 10; j++)
+				{
+				names[i][j] = (char)(mesgs[1][i * 128 + 57 + j + 6] & 127);
+				}
+			}
+					
+        String[] n = new String[25];
+        for(int i = 0; i < 25; i++)
+            {
+            n[i] = "" + (i + 1) + "   " + new String(names[i]);
+            }
+            
+        // Now that we have an array of names, one per patch, we present the user with options;
+        // 0. Cancel [handled automatically]
+        // 1. Save the bank data [handled automatically]
+        // 2. Upload the bank data [handled automatically] 
+        // 3. Load and edit a certain patch number
         int patchNum = showBankSysexOptions(data, n);
         if (patchNum < 0) 
             return PARSE_CANCELLED;
 
         return parseFromBank(data, patchNum);
         }
+*/
+
+    public int parseVMEM100(byte[] data, boolean fromFile)
+        {
+        byte[][] mesgs = cutUpSysex(data);
+        // extract names
+        char[][] names = new char[100][10];
+        for(int m = 0; m < 4; m++)
+        	{
+			for(int i = 0; i < 25; i++)
+				{
+				for (int j = 0; j < 10; j++)
+					{
+					names[m * 25 + i][j] = (char)(mesgs[m * 2 + 1][i * 128 + 57 + j + 6] & 127);
+					}
+				}
+			}
+					
+        String[] n = new String[100];
+        for(int i = 0; i < 100; i++)
+            {
+            n[i] = "" + i + "   " + new String(names[i]);
+            }
+            
+        // Now that we have an array of names, one per patch, we present the user with options;
+        // 0. Cancel [handled automatically]
+        // 1. Save the bank data [handled automatically]
+        // 2. Upload the bank data [handled automatically] 
+        // 3. Load and edit a certain patch number
+
+        int patchNum = showBankSysexOptions(data, n);
+        if (patchNum < 0) 
+            return PARSE_CANCELLED;
+
+        return parseFromBank(data, patchNum);
+        }
+
+
 
  	public static final int NO_BLOCK = 0;
  
@@ -2237,6 +2349,75 @@ public class Yamaha4Op extends Synth
  		return m;
  		}
  		
+ 	public JMenuItem getCustomLibrarianMenuItem()
+ 		{
+		JMenu emitRegion = new JMenu("Write Patch Region to Synth");
+		JMenuItem emitRegion1 = new JMenuItem("Write Patches 0-24");
+		emitRegion1.addActionListener(new ActionListener()
+					{
+					public void actionPerformed( ActionEvent e)
+						{
+						writeBankRegion(0);
+						}
+					});
+		emitRegion.add(emitRegion1);
+		JMenuItem emitRegion2 = new JMenuItem("Write Patches 25-49");
+		emitRegion2.addActionListener(new ActionListener()
+					{
+					public void actionPerformed( ActionEvent e)
+						{
+						writeBankRegion(1);
+						}
+					});
+		emitRegion.add(emitRegion2);
+		JMenuItem emitRegion3 = new JMenuItem("Write Patches 50-74");
+		emitRegion3.addActionListener(new ActionListener()
+					{
+					public void actionPerformed( ActionEvent e)
+						{
+						writeBankRegion(2);
+						}
+					});
+		emitRegion.add(emitRegion3);
+		JMenuItem emitRegion4 = new JMenuItem("Write Patches 75-99");
+		emitRegion4.addActionListener(new ActionListener()
+					{
+					public void actionPerformed( ActionEvent e)
+						{
+						writeBankRegion(3);
+						}
+					});
+		emitRegion.add(emitRegion4);
+		return emitRegion;
+		}
+ 	 
+ 	int writeRegion = -1;
+ 	public void writeBankRegion(int region)
+ 		{ 		
+ 		writeRegion = -1;
+        int bank = getLibrarian().getSelectedBank();
+        if (bank < 0) return;
+
+ 		if (getLibrarian().getLibrary().getBankSize() == 32) 
+ 			{
+ 			showSimpleError("Cannot Write Patches", "There are only 32 patches in this bank.  Use Write Bank instead.");
+ 			}
+        else if (getSynthType() == TYPE_TQ5_YS100_YS200_B200 ||
+        		getSynthType() == TYPE_V50)
+        	{
+			if (showSimpleConfirm("Write Bank Region", "Write Bank Region to Synthesizer?", "Write"))
+				{
+ 				writeRegion = region;
+				getLibrarian().getLibrary().writeBank(bank);
+				writeRegion = -1;
+				}
+        	}
+        else
+        	{
+ 			showSimpleError("Cannot Write Patches", "This synth type cannot write regions.  Use Write Bank instead.");
+        	}
+ 		}
+ 		
     public Object[] emitBank(Model[] models, int bank, boolean toFile)
     	{
         if (getSynthType() == TYPE_TQ5_YS100_YS200_B200)
@@ -2244,20 +2425,24 @@ public class Yamaha4Op extends Synth
         	Object[] data = new Object[12];
         	for(int b = 0; b < 4; b++)
         		{
-        		Object[] d = emitBank(getModelSubset(models, b));
-				byte[] header = { 
-	    			(byte)0xF0, 
-	    			0x43, 
-	    			(byte)(0x10 + (byte)getChannelOut()),
-	    			0x24,
-	    			0x07,
-	    			(byte)(b + 1),
-	    			(byte)0xF7
-	    			};
+        		if (writeRegion == -1 || writeRegion == b)
+        			{
+					Object[] d = emitBank(getModelSubset(models, b));
+					byte[] header = { 
+						(byte)0xF0, 
+						0x43, 
+						(byte)(0x10 + (byte)getChannelOut()),
+						0x24,
+						0x07,
+						(byte)(b + 1),
+						(byte)0xF7
+						};
 
-        		data[b * 3] = d[0];
-        		data[b * 3 + 1] = header;
-        		data[b * 3 + 2] = Integer.valueOf(getPauseAfterSendAllParameters());
+					data[b * 3] = header;
+					data[b * 3 + 1] = d[0];
+					data[b * 3 + 2] = Integer.valueOf(getPauseAfterSendAllParameters());
+					if (models.length == 32) break;		// don't go through with all of it if the bank is only 32 long!
+					}
         		}
         	return data;
         	}
@@ -2266,20 +2451,24 @@ public class Yamaha4Op extends Synth
         	Object[] data = new Object[12];
         	for(int b = 0; b < 4; b++)
         		{
-        		Object[] d = emitBank(getModelSubset(models, b));
-				byte[] header = { 
-	    			(byte)0xF0, 
-	    			0x43, 
-	    			(byte)(0x10 + (byte)getChannelOut()),
-	    			0x24,
-	    			0x07,
-	    			(byte)(b + 1),
-	    			(byte)0xF7
-	    			};
+        		if (writeRegion == -1 || writeRegion == b)
+        			{
+					Object[] d = emitBank(getModelSubset(models, b));
+					byte[] header = { 
+						(byte)0xF0, 
+						0x43, 
+						(byte)(0x10 + (byte)getChannelOut()),
+						0x24,
+						0x07,
+						(byte)(b + 1),
+						(byte)0xF7
+						};
 
-        		data[b * 3] = d[0];
-        		data[b * 3 + 1] = header;
-        		data[b * 3 + 2] = Integer.valueOf(getPauseAfterSendAllParameters());
+					data[b * 3] = header;
+					data[b * 3 + 1] = d[0];
+					data[b * 3 + 2] = Integer.valueOf(getPauseAfterSendAllParameters());
+					if (models.length == 32) break;		// don't go through with all of it if the bank is only 32 long!
+					}
         		}
         	return data;
         	}

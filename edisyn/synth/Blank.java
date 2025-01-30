@@ -1352,6 +1352,13 @@ public class Blank extends Synth
         return new Object[0]; 
         }
 
+    public JMenuItem getCustomLibrarianMenuItem() 
+    	{ 
+    	// This is called to get a single custom menu item or submenu that can be added 
+    	// to the Librarian menu. By default null is returned. See Yamaha4Op.java for an example.
+    	return null;
+    	}
+    
     //// END BANK SYSEX SUPPORT
         
 

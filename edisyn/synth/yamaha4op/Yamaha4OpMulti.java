@@ -58,6 +58,20 @@ public class Yamaha4OpMulti extends Synth
         {
         model.set("number", 0);
 
+        String m = getLastX(TYPE_KEY, getSynthClassName(), true);
+        try
+            {
+            synthType = (m == null ? TYPE_TX81Z : Integer.parseInt(m));
+            if (synthType != TYPE_DX11 && synthType != TYPE_TX81Z)
+                {
+                synthType = TYPE_TX81Z;
+                }
+            }
+        catch (NumberFormatException ex)
+            {
+            synthType = TYPE_TX81Z;
+            }
+        
         if (allParametersToIndex == null)
             {
             allParametersToIndex = new HashMap();
@@ -290,7 +304,7 @@ public class Yamaha4OpMulti extends Synth
             {
             public void perform()
                 {
-                final Yamaha4Op synth = new Yamaha4Op();
+                final Yamaha4Op synth = new Yamaha4Op(synthType == TYPE_TX81Z ? Yamaha4Op.TYPE_TX81Z : Yamaha4Op.TYPE_DX11);
                 if (tuple != null)
                     synth.tuple = new Midi.Tuple(tuple, synth.buildInReceiver(), synth.buildKeyReceiver(), synth.buildKey2Receiver());
                 if (synth.tuple != null)

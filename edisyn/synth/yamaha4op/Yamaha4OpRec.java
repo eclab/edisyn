@@ -12,12 +12,17 @@ public class Yamaha4OpRec extends Recognize
         {
         if (recognizeBlockHeader(sysex[start]))
 			{
+			// Do we have all four blocks?  If so, it's an entire "bank"
+			if (start == 0 && sysex.length == 8)
+				return 8;
+			
+			// Otherwise we'll grab them 2 at a time
 			if (start + 1 >= sysex.length)	// failed
 				return start;
 			else return getNextSysexPatchGroup(sysex, start + 1);
 			}
         
-        if (recognizeBank(sysex[start]))
+        if (recognizeVMEM(sysex[start]))
             return start + 1;
                 
         for(int i = start; i < sysex.length; i++)
@@ -49,7 +54,8 @@ public class Yamaha4OpRec extends Recognize
         return b;
         }
 
-   public static boolean recognizeBank(byte[] data)
+
+   public static boolean recognizeVMEM(byte[] data)
         {
         // VMEM
         boolean b = (data.length == 4104 &&
@@ -60,6 +66,11 @@ public class Yamaha4OpRec extends Recognize
             data[4] == (byte)0x20 &&        // manual says 10 but this is wrong
             data[5] == (byte)0x00);
         return b;
+        }
+
+     public static boolean recognizeBank(byte[] data)
+        {
+        return recognizeBlockHeader(data) || recognizeVMEM(data);
         }
 
     // returns a guess as to the number of sysex commands this file is trying to load per patch.
@@ -93,7 +104,7 @@ public class Yamaha4OpRec extends Recognize
             data[13] == '3' &&
             data[14] == 'A' &&
             data[15] == 'E')
-            return 5;                           // VCED + ACED + ACED2 + ACED3
+            return RECOGNIZE_BASIC_ACED3;                           // VCED + ACED + ACED2 + ACED3
 
         // EFEDS
         if (data.length >= 21 &&
@@ -114,7 +125,7 @@ public class Yamaha4OpRec extends Recognize
             data[13] == '6' &&
             data[14] == 'E' &&
             data[15] == 'F')
-            return 4;                                   // VCED + ACED + ACED2 + EFEDS
+            return RECOGNIZE_BASIC_EFEDS;                                   // VCED + ACED + ACED2 + EFEDS
 
         // ACED2
         if (data.length >= 28 &&
@@ -135,7 +146,7 @@ public class Yamaha4OpRec extends Recognize
             data[13] == '3' &&
             data[14] == 'A' &&
             data[15] == 'E')
-            return 3;                                   // VCED + ACED + ACED2
+            return RECOGNIZE_BASIC_ACED2;                                   // VCED + ACED + ACED2
 
         // ACED
         if (data.length >= 41 &&
@@ -156,7 +167,7 @@ public class Yamaha4OpRec extends Recognize
             data[13] == '6' &&
             data[14] == 'A' &&
             data[15] == 'E')
-            return 2;                                   // VCED + ACED
+            return RECOGNIZE_BASIC_ACED;                                   // VCED + ACED
         
         // VCED
         if (data.length == 101 &&
@@ -166,13 +177,13 @@ public class Yamaha4OpRec extends Recognize
             data[3] == (byte)0x03 &&
             data[4] == (byte)0x00 &&
             data[5] == (byte)0x5D)
-            return 1;                                   // VCED alone
+            return RECOGNIZE_BASIC_VCED;                                   // VCED alone
 
-        else return 0;
+        else return RECOGNIZE_BASIC_NONE;
         }
         
     public static boolean recognize(byte[] data)
         {
-        return (recognizeBasic(data) != RECOGNIZE_BASIC_NONE) || recognizeBank(data) || recognizeBlockHeader(data);
+        return (recognizeBasic(data) != RECOGNIZE_BASIC_NONE) || recognizeBank(data);
         }
     }

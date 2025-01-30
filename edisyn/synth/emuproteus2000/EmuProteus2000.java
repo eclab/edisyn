@@ -45,32 +45,75 @@ import javax.swing.table.*;
 
 public class EmuProteus2000 extends Synth
     {
-    public static final String[] ROMS = { "Audity (A2000)", "Composer (P2000/P1000)", "Protozoa", "Definitive B3", "Extreme Lead V1 (XL1/Turbo)",
-                                          "Sounds of the ZR", "World Expedition (Earth)", "Orchestral V1 (V2000)", "Orchestral V2 (V2000)",
-                                          "Pure Phatt (Mo'Phatt/Turbo)", "Extreme Lead (XL7)", "Pure Phatt 2 (MP7)", "Ensoniq Project",
-                                          "Proteus Pop (P2500/PK6)", "Vintage Collection (Pro, Keys)", "Protean Drums (PX7)", "Holy Grail Piano",
-                                          "Techno Synth Cons. Yard (Orbit3)", "Siedlaczek", "Beat Garden (Orbit3)", "Shock Treatment" };
-    public static final int[] ROM_IDS = { 3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 14, 15, 16, 17, 18, 19, 64, 65, 66, 67, 54 };
+    public static final String[] ROMS = { "Audity Xtreme", "Audity (A2000)", "Composer (P2000/P1000)", "Protozoa", 
+    									  "Definitive B3", "Extreme Lead (XL1/Turbo)", "Sounds of the ZR", "Sounds of the ZR v2 (Halo)", 
+    									  "World Expedition (Earth)", "Orchestral V1 (V2000)", "Orchestral V2 (V2000)", "Pure Phatt (Mo'Phatt/Turbo)", 
+    									  "Extreme Lead V2 (XL7)", "Extreme Lead V3 (XK6)", "Pure Phatt 2 (MP7)", "Pure Phatt 3 (MK6)",
+    									  "Ensoniq Project", "Composer V2 (P2500 CS)", "Proteus Pop (P2500/PK6)", "Vintage Collection (Pro/Keys)", 
+    									  "Protean Drums (PX7)", "Holy Grail Piano", "Techno Synth Cons. Yard (Orbit3)", "Techno Synth Cons. Yard V2",
+    									  "Siedlaczek", "Beat Garden (Orbit3)", "Shock Treatment" };
+    public static final String[] EFFECTIVE_ROM_IDS =   { "2", "3", "4", "5",
+    										"6", "7", "8", "8a",
+    										"9", "10", "11", "13",
+    										"14", "14a", "15", "15a",
+    										"16", "17", "17a", "18",
+    										"19", "64", "65", "65a",
+    										"66", "67", "54" };
+    public static final int[] ROM_IDS =   { 2, 3, 4, 5,
+    										6, 7, 8, 8,
+    										9, 10, 11, 13,
+    										14, 14, 15, 15,
+    										16, 17, 17, 18,
+    										19, 64, 65, 65,
+    										66, 67, 54 };
     public static final String[] ROMS_AND_USER = { "User", 
-                                                   "Audity (A2000)", "Composer (P2000/P1000)", "Protozoa", "Definitive B3", "Extreme Lead V1 (XL1/Turbo)",
-                                                   "Sounds of the ZR", "World Expedition (Earth)", "Orchestral V1 (V2000)", "Orchestral V2 (V2000)",
-                                                   "Pure Phatt (Mo'Phatt/Turbo)", "Extreme Lead (XL7)", "Pure Phatt 2 (MP7)", "Ensoniq Project",
-                                                   "Proteus Pop (P2500/PK6)", "Vintage Collection (Pro, Keys)", "Protean Drums (PX7)", "Holy Grail Piano",
-                                                   "Techno Synth Cons. Yard (Orbit3)", "Siedlaczek", "Beat Garden (Orbit3)", "Shock Treatment"  };  // pretty dumb that we have to do this
+                                                   "Audity Xtreme", "Audity (A2000)", "Composer (P2000/P1000)", "Protozoa", 
+    									  "Definitive B3", "Extreme Lead (XL1/Turbo)", "Sounds of the ZR", "Sounds of the ZR v2 (Halo)", 
+    									  "World Expedition (Earth)", "Orchestral V1 (V2000)", "Orchestral V2 (V2000)", "Pure Phatt (Mo'Phatt/Turbo)", 
+    									  "Extreme Lead V2 (XL7)", "Extreme Lead V3 (XK6)", "Pure Phatt 2 (MP7)", "Pure Phatt 3 (MK6)",
+    									  "Ensoniq Project", "Composer V2 (P2500 CS)", "Proteus Pop (P2500/PK6)", "Vintage Collection (Pro/Keys)", 
+    									  "Protean Drums (PX7)", "Holy Grail Piano", "Techno Synth Cons. Yard (Orbit3)", "Techno Synth Cons. Yard V2",
+    									  "Siedlaczek", "Beat Garden (Orbit3)", "Shock Treatment" };  // pretty dumb that we have to do this
     public static final String[] ROMS_AND_USER_SHORT = { "User", 
-                                                         "Audity", "Composer", "Protozoa", "B3", "XLead",
-                                                         "ZR", "World", "Orchestral-1", "Orchestral-2",
-                                                         "Phatt", "XLead-2", "Phatt-2", "Ensoniq",
-                                                         "Pop", "Vintage", "Drums", "Piano",
-                                                         "Techno", "Siedlaczek", "Beat", "Shock"  };
-    public static final int[] ROM_AND_USER_IDS = { 0, 3, 4, 5, 6, 7, 8, 9, 10, 11, 13, 14, 15, 16, 17, 18, 19, 64, 65, 66, 67, 54 };
-    public static final int[] NUM_BANKS = { 4, 5, 8, 4, 3, 4, 5, 4, 3, 2, 4, 4, 4, 4, 4, 4, 4, 1, 4, 2, 4, 4 };
+                                                         "Audity X", "Audity", "Composer", "Protozoa", 
+                                                         "B3", "XLead", "ZR", "ZR V2", 
+                                                         "World", "Orchestral-1", "Orchestral-2", "Phatt", 
+                                                         "XLead V2", "XLead V3", "Phatt V2", "Phatt V3", 
+                                                         "Ensoniq", "Composer V2", "Pop", "Vintage", 
+                                                         "Drums", "Piano", "Techno", "Techno V2",
+                                                         "Siedlaczek", "Beat", "Shock"  };
+     public static final String[] EFFECTIVE_ROM_AND_USER_IDS =   { "0", "2", "3", "4", "5",
+    										"6", "7", "8", "8a",
+    										"9", "10", "11", "13",
+    										"14", "14a", "15", "15a",
+    										"16", "17", "17a", "18",
+    										"19", "64", "65", "65a",
+    										"66", "67", "54" };
+   public static final int[] ROM_AND_USER_IDS = { 0,
+    												2, 3, 4, 5,
+    												6, 7, 8, 8,
+    												9, 10, 11, 13,
+    												14, 14, 15, 15,
+    												16, 17, 17, 18,
+    												19, 64, 65, 65,
+    												66, 67, 54 };
+    public static final int[] NUM_BANKS =        { 4,   
+    												2, 5, 8, 4,
+    												3, 4, 4, 5,
+    												4, 3, 2, 4,   
+    												4, 5, 4, 5,   
+    												4, 4, 5, 4,      
+    												4, 1, 4, 4,      
+    												2, 4, 4 };
     public static final String[] ROMS_AND_EMPTY = { "Empty", 
-                                                    "Audity (A2000)", "Composer (P2000/P1000)", "Protozoa", "Definitive B3", "Extreme Lead V1 (XL1/Turbo)",
-                                                    "Sounds of the ZR", "World Expedition (Earth)", "Orchestral V1 (V2000)", "Orchestral V2 (V2000)",
-                                                    "Pure Phatt (Mo'Phatt/Turbo)", "Extreme Lead (XL7)", "Pure Phatt 2 (MP7)", "Ensoniq Project",
-                                                    "Proteus Pop (P2500/PK6)", "Vintage Collection (Pro, Keys)", "Protean Drums (PX7)", "Holy Grail Piano",
-                                                    "Techno Synth Cons. Yard (Orbit3)", "Siedlaczek", "Beat Garden (Orbit3)", "Shock Treatment"  };  // even dumber that we have to do this AGAIN
+                                                    "Audity Xtreme", "Audity (A2000)", "Composer (P2000/P1000)", "Protozoa", 
+    									  "Definitive B3", "Extreme Lead (XL1/Turbo)", "Sounds of the ZR", "Sounds of the ZR v2 (Halo)", 
+    									  "World Expedition (Earth)", "Orchestral V1 (V2000)", "Orchestral V2 (V2000)", "Pure Phatt (Mo'Phatt/Turbo)", 
+    									  "Extreme Lead V2 (XL7)", "Extreme Lead V3 (XK6)", "Pure Phatt 2 (MP7)", "Pure Phatt 3 (MK6)",
+    									  "Ensoniq Project", "Composer V2 (P2500 CS)", "Proteus Pop (P2500/PK6)", "Vintage Collection (Pro/Keys)", 
+    									  "Protean Drums (PX7)", "Holy Grail Piano", "Techno Synth Cons. Yard (Orbit3)", "Techno Synth Cons. Yard V2",
+    									  "Siedlaczek", "Beat Garden (Orbit3)", "Shock Treatment" };  // even dumber that we have to do this AGAIN
+    									  
     // This is totally different than the documentation
     public static final String[] TEMPO_OFFSETS = { "Current / 2", "Current", "Current x 2" };   
     public static final String[] KEYBOARD_TUNINGS = { "Equal Temperament", "Just C", "Just C2", "Just C minor", "Just C 3", "Valotti", "19 Tone", "Gamelan", "Werkmeister III", "Kirnberger", "Scarlatti", "Repeating Octave",
@@ -330,7 +373,7 @@ public class EmuProteus2000 extends Synth
     //// is in turn called by updateArps(rom), updatePresets(rom), updateInstruments(rom), and updateRiffs(rom).  
                 
     // These are loaded on request.  Note that PRESET_NAMES includes the USER preset
-    public static final String[][] ARP_NAMES = new String[ROMS.length][];
+    public static final String[][] ARP_NAMES = new String[ROMS_AND_USER.length][];
     public static final String[][] INSTRUMENT_NAMES = new String[ROMS.length][];
     public static final String[][] PRESET_NAMES = new String[ROMS_AND_USER.length][];           // Notice that this has to be ROMS_AND_USER, as presets include user presets
     public static final String[][] RIFF_NAMES = new String[ROMS.length][];
@@ -382,22 +425,22 @@ public class EmuProteus2000 extends Synth
 
     void updateArps(int rom)
         {
-        updateFromFile(rom, ARP_NAMES, "roms/n_arp_" + ROM_IDS[rom] + ".txt");
+        updateFromFile(rom, ARP_NAMES, "roms/n_arp_" + EFFECTIVE_ROM_AND_USER_IDS[rom] + ".txt");
         }
 
     void updateInstruments(int rom)
         {
-        updateFromFile(rom, INSTRUMENT_NAMES, "roms/n_ins_" + ROM_IDS[rom] + ".txt");
+        updateFromFile(rom, INSTRUMENT_NAMES, "roms/n_ins_" + EFFECTIVE_ROM_IDS[rom] + ".txt");
         }
 
     void updatePresets(int romOrUser)
         {
-        updateFromFile(romOrUser, PRESET_NAMES, "roms/n_prs_" + ROM_AND_USER_IDS[romOrUser] + ".txt");
+        updateFromFile(romOrUser, PRESET_NAMES, "roms/n_prs_" + EFFECTIVE_ROM_AND_USER_IDS[romOrUser] + ".txt");
         }
 
     void updateRiffs(int rom)
         {
-        updateFromFile(rom, RIFF_NAMES, "roms/n_rff_" + ROM_IDS[rom] + ".txt");
+        updateFromFile(rom, RIFF_NAMES, "roms/n_rff_" + EFFECTIVE_ROM_IDS[rom] + ".txt");
         }
 
 
@@ -670,7 +713,7 @@ public class EmuProteus2000 extends Synth
                 };
             if (i > 12) ((LabelledDial)comp).addAdditionalLabel("[2500]");		// 2500 only
             hbox.add(comp);
-            if (i == 12)
+            if (i == 4 || i == 8 || i == 12)
             	{
             	vbox.add(hbox);
             	hbox = new HBox();
@@ -1061,7 +1104,7 @@ public class EmuProteus2000 extends Synth
         hbox.add(vbox);
         vbox = new VBox();
 
-        params = ROMS;
+        params = ROMS_AND_USER;
         comp = new Chooser("Pattern ROM ID", this, "arppatternromid", params)
             {
             public void update(String key, Model model)
@@ -1908,23 +1951,36 @@ public class EmuProteus2000 extends Synth
                 }
                                 
             // verify SIMMs
-            for(int i = 0; i < numSimms; i++)
+            for(int i = 0; i < 4; i++)
                 {
                 boolean found = false;
-                for(int j = 0; j < ROM_AND_USER_IDS.length; j++)
-                    {
-                    if (ROM_AND_USER_IDS[j] == simmID[i])
-                        {
-                        simmName[i] = ROMS_AND_EMPTY[j];
-                        simms[i] = j;
-                        setLastX("" + simmID[i], "SIMM" + i, getSynthClassName(), true);        // only set in synth
-                        simmMenu[i].setText("SIMM " + i + ": " + simmName[i]);
-                        // Will this call setLastX again?
-                        ((JRadioButtonMenuItem)(simmMenu[i].getItem(j))).setSelected(true);
-                        found = true;
-                        break;
-                        }
-                    }
+                if (simmID[i] == 0)						// Empty
+                	{
+					simmName[i] = ROMS_AND_EMPTY[0];	// ID 0 is empty
+					simms[i] = 0;						// ID 0 is empty
+					setLastX("" + simmID[i], "SIMM" + i, getSynthClassName(), true);        // only set in synth
+					simmMenu[i].setText("SIMM " + i + ": " + simmName[i]);
+					// Will this call setLastX again?
+					((JRadioButtonMenuItem)(simmMenu[i].getItem(0))).setSelected(true);		// ID 0 is empty
+					found = true;
+                	}
+                else
+                	{
+					for(int j = 0; j < ROM_AND_USER_IDS.length; j++)
+						{
+						if (ROM_AND_USER_IDS[j] == simmID[i])
+							{
+							simmName[i] = ROMS_AND_EMPTY[j];
+							simms[i] = j;
+							setLastX("" + simmID[i], "SIMM" + i, getSynthClassName(), true);        // only set in synth
+							simmMenu[i].setText("SIMM " + i + ": " + simmName[i]);
+							// Will this call setLastX again?
+							((JRadioButtonMenuItem)(simmMenu[i].getItem(j))).setSelected(true);
+							found = true;
+							break;
+							}
+						}
+					}
                 if (!found)
                     {
                     showSimpleMessage("Unknown SIMM", "Unknown SIMM ID " + simmID[i] + " in SIMM Socket " + i);
@@ -2020,7 +2076,7 @@ public class EmuProteus2000 extends Synth
             return result;
             }
         /// We only accept OPEN LOOP preset dumps
-        else if (data[6] == 0x03)       // Is this the header?
+        else if (data[6] == 0x03 || data[6] == 0x01)       // Is this the header?
             {
             header = data;
             bytes = 0;
@@ -2028,7 +2084,7 @@ public class EmuProteus2000 extends Synth
             loadedData = new ByteBag();
             return PARSE_INCOMPLETE;
             }
-        else if (data[6] == 0x04)       // is this a data message
+        else if (data[6] == 0x04 || data[6] == 0x02)       // is this a data message
             {
             if (loadedData == null) return PARSE_FAILED;                // no header
             byte[] d = new byte[data.length - 11];                              // our data bytes
@@ -4533,7 +4589,18 @@ public class EmuProteus2000 extends Synth
 
     public String[] getBankNames() { return ROMS_AND_USER_SHORT; }
 
-    public boolean[] getWriteableBanks() { return new boolean[] { true, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false, false }; }
+    public boolean[] getWriteableBanks() 
+    	{ 
+    	return new boolean[] 
+    		{ 
+    			true, 
+    			false, false, false, false, 
+    			false, false, false, false, 
+    			false, false, false, false, 
+    			false, false, false, false, 
+    			false, false, false, false, 
+    			false, false, false, false, 
+    			false, false, false }; }
 
     public boolean getSupportsPatchWrites() { return true; }
 

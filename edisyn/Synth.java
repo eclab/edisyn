@@ -7333,18 +7333,14 @@ menubar.add(helpMenu);
         int pos = 0;
         ArrayList patches = new ArrayList();
                 
-        System.err.println("Start");
         while(pos < sysex.length)
             {
-            System.err.println("Pos " + pos);
             // First, do we have a synth for this thing?
             int rec = recognizeSynthForSysex(sysex[pos]);
-            System.err.println(rec);
             if (rec >= 0)
                 {
                 // How many sysex messages per patch?
                 int next = getNextSysexPatchGroup(getClassNames()[rec], sysex, pos);
-            System.err.println(next);
 
                 // Roland really screws things up: the U-220 can have multiple patches PER SYSEX MESSAGE.  No, really.
                 if (next < 0)
@@ -7359,26 +7355,22 @@ menubar.add(helpMenu);
                     }
                 else if (next > pos)
                     {
-                    System.err.println("next > pos");
                     byte[][] groups = new byte[next - pos][];
                     for(int i = 0; i < groups.length; i++)
                         {
                         groups[i] = sysex[i + pos];
                         }
-                    System.err.println("Add Patch");
                     patches.add(new Patch(rec, groups, recognizeBank(getClassNames()[rec], sysex[pos])));
                     pos = next;
                     }
                 else
                     {
-                    System.err.println("Bad");
                     // Skip the message -- it's bad?
                     pos++;          // I *think* this should work?
                     }
                 }
             else
                 {
-                    System.err.println("Skip");
                 pos++;  // skip this sysex message
                 }
             }
@@ -10251,7 +10243,10 @@ menubar.add(helpMenu);
     public boolean getSupportsDownloads() { return true; }
 
     /** Parses a given patch from the provided bank sysex, and returns 
-        PARSE_SUCCEEDED or PARSE_SUCCEEDED_UNTITLED if successful, else PARSE_FAILED (the default). */
+        PARSE_SUCCEEDED or PARSE_SUCCEEDED_UNTITLED if successful, else PARSE_FAILED (the default). 
+        It can also return PARSE_IGNORE, which is indicates that there is no such patch number
+        in the bank; this will cause Edisyn to simply load a blank patch (as it will do
+        with PARSE_FAILED), but unlike PARSE_FAILED, it won't issue an error to the user. */
     public int parseFromBank(byte[] bankSysex, int number) { return PARSE_FAILED; }
 
     /** Parses the bank number from the provided bank sysex and returns it.  
@@ -10339,6 +10334,9 @@ menubar.add(helpMenu);
         as in the MicroMonsta where we receive single patches with no context from the synth and cannot
         request patches (so we can't preset the patch number). */
     public void updateNumberAndBank(Patch patch) { }
+    
+    /** This is called to get a single custom menu item or submenu that can be added to the Librarian menu. */
+    public JMenuItem getCustomLibrarianMenuItem() { return null; }
     
     /** Notifies the Synth that its librarian has been created. */
     public void librarianCreated(Librarian librarian) { }

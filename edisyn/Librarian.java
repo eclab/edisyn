@@ -1162,6 +1162,12 @@ public class Librarian extends JPanel
         item.setEnabled(true);
         item.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_M, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.SHIFT_MASK));
 
+		JMenuItem custom = synth.getCustomLibrarianMenuItem();
+		if (custom != null)
+			{
+			menu.add(custom);
+			}
+
         menu.addSeparator();      
         
         item = new JMenuItem("Hide Librarian");
@@ -1630,6 +1636,36 @@ public class Librarian extends JPanel
             getLibrary().writeRange(Library.ALL_PATCHES, 0, 0);
             }
         }
+
+	public int getSelectedBank()
+		{
+        Synth synth = getLibrary().getSynth();
+        
+        int column = col(table, table.getSelectedColumn());
+        int row = table.getSelectedRow();
+        int len = table.getSelectedRowCount();
+                        
+        if (column < 0 || row < 0 || len == 0) // nope
+            {
+            if (getLibrary().getNumBanks() == 1)
+                {
+                column = 1;             // assume it's "the" bank
+                }
+            else
+                {
+                synth.showSimpleError("Cannot Write", "Please select a patch in the bank to write first.");
+                return -1;
+                }
+            }
+            
+        if (column == 0)
+            {
+            synth.showSimpleError("Cannot Write", "Edisyn cannot write patches from the scratch bank.\nSelect another bank.");
+            return -1;
+            }
+        
+        return column - 1;           
+		}
 
     /** Writes all locations in bank. */
     public void writeBank()

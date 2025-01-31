@@ -176,7 +176,7 @@ Most synthesizer manufacturers sensibly refer to their single patches as single 
 Other synthesizers (such as the Yamaha FS1R and the Roland D-110) try to hide the fact that they have different kinds of patches by pretending their single-mode and multimode patches are all one blob, presenting them to the user in a single convoluted unified interface, even if they're different patches over MIDI. This also confuses users, who wonder why Edisyn has multiple editors for a given synth.  But from Edisyn's perspective, they're separate patch types.  Edisyn will try to make it easy to navigate from one patch type to another through custom buttons or menu options as appropriate.
 
 \begin{wrapfigure}{r}{3in}
-\vspace{-2em}\includegraphics[scale=0.3]{2.png}
+\vspace{-1em}\includegraphics[scale=0.3]{2.png}
 \vspace{-3em}\caption{Typical Patch Editor Panel (TX81Z)}\label{typicalpatcheditorpanel}
 \vspace{-2em}
 \end{wrapfigure}
@@ -560,6 +560,8 @@ A very few parameters, such as the patch name, can't be mutated no matter what: 
 \subsection{Morphing}
 \label{morph}
 
+The {\it Morpher} allows you to try out patches, in real time, that combine up to four different patches. Shown in Figure~\ref{morphpanel}, the Morpher largely consists of a big rectangle with a different patch at each corner.  Once you have set up these patches, drag a joystick cursor (the blue circle) within this rectangle, and it will change the synthesizer's patch to reflect a combination of the four patches.  The closer the cursor is to a patch the more it will resemble it.
+
 \begin{wrapfigure}{r}{3.6in}
 \vspace{-2em}\includegraphics[scale=0.27]{Morph.png}
 \vspace{-3em}
@@ -567,8 +569,6 @@ A very few parameters, such as the patch name, can't be mutated no matter what: 
 \vspace{-1em}
 \label{morphpanel}
 \end{wrapfigure}
-
-The {\it Morpher} allows you to try out patches, in real time, that combine up to four different patches. Shown in Figure~\ref{morphpanel}, the Morpher largely consists of a big rectangle with a different patch at each corner.  Once you have set up these patches, drag a joystick cursor (the blue circle) within this rectangle, and it will change the synthesizer's patch to reflect a combination of the four patches.  The closer the cursor is to a patch the more it will resemble it.
 
 Patches are updated on your synthesizer in real time as you change the joystick cursor position.  To do this, Edisyn normally sends the entire patch to the synthesizer on the fly in the same way that ``Send to Current Patch'' is done.  Keep in mind that some synthesizers can take a bit of time to update themselves to a new patch, so depending on the synthesizer this can be either smooth or a bit jumpy.  There are other options as well.
 
@@ -669,17 +669,17 @@ All the patches can be played by pressing their associated letter.  But addition
 \subsection{Constricting}
 \label{constrict}
 
+\begin{wrapfigure}{r}{3.6in}
+\vspace{-2em}\includegraphics[scale=0.27]{ConstrictorPanel.png}
+\vspace{-3em}
+\caption{The Hill-Climber Panel converted for Constricting.}
+\vspace{-1em}
+\label{constrictorpanel}
+\end{wrapfigure}
+
 The {\it Constrictor} is similar to the Hill-Climber in many ways, yet its dynamics and behavior are quite different.   You choose the Constrictor in the same way as the Hill-Climber: by choosing {\bf Hill-Climb} in the {\bf Edit} menu.  But then in the Hill-Climb tab, change the ``Method'' combobox to {\it Constrictor}.    
 
 The Constrictor auditions patches to you in exactly the same way was the Hill-Climber.  But you're not given the option of choosing your top three choices.  Instead, you're asked to choose which patches you {\it don't like}.  This is done by deselecting their checkboxes.  Afterwards, you click on the {\bf Constrict} button and those patches will be replaced with recombined and mutated versions of the remaining patches.  The newly recombined replacements will be moved to the front of the Candidates so you hear them first.
-
-\begin{wrapfigure}{r}{3.6in}
-\vspace{-1em}\includegraphics[scale=0.27]{ConstrictorPanel.png}
-\vspace{-3em}
-\caption{The Hill-Climber Panel converted for Constricting.}
-\vspace{-2em}
-\label{constrictorpanel}
-\end{wrapfigure}
 
 The idea behind the Constrictor is to start with a set of varied but high-quality patches\,---\,taken from well-vetted factory patches for example.  Think of these patches as the outer boundaries of a large region of the space.  As you delete patch sounds you don't like, this region slowly begins to collapse, until ultimately it converges to a single patch.
 

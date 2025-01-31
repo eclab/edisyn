@@ -21,7 +21,6 @@ public class Mac
             {
             try
                 {
-                /*
                   java.awt.Desktop.getDesktop().setAboutHandler(new java.awt.desktop.AboutHandler()
                   {
                   public void handleAbout(java.awt.desktop.AboutEvent e)
@@ -29,7 +28,6 @@ public class Mac
                   synth.doAbout();
                   }
                   });
-                */
                 }
             catch (Exception e)
                 {

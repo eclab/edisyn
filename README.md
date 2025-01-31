@@ -163,6 +163,9 @@ You can also run Edisyn from its jar file from the command line: see "Running fr
 
 You may have installed the MMJ (MIDI Java) library in the past, which is now obsolete.  This library was required by old applications but no longer works properly and should be removed.  Look in /Library/Java/Extensions/ or in \[Your Home Directory\]/Library/Java/Extensions for the files **mmj.jar** or **libmmj.jnilib**.  If you find them, remove them from the directory and try again.
 
+#### Rosetta and the M1
+
+At present Edisyn only runs under Rosetta on the M1.  It'll work fine; there are challenges with fat binaries in Java on MacOS.  If you have installed Java yourself, you can run Edisyn from the command line (see later below) and it'll probably run natively.
 
 <a name="windows"/></a>
 

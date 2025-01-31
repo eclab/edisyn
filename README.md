@@ -136,7 +136,7 @@ Edisyn is cross-platform and will run on a variety of platforms (Windows, Linux)
 
 ### Installation and Running on MacOS
 
-First install Edisyn from the [Edisyn.app.zip](https://cs.gmu.edu/~eclab/projects/edisyn/Edisyn.app.zip) file.  Sadly, it's a whopping 70MB because it includes the Java VM.  :-(
+First install Edisyn from the [Edisyn.dmg](https://cs.gmu.edu/~eclab/projects/edisyn/Edisyn.dmg) file.  Sadly, it's a whopping 70MB because it includes the Java VM.  :-(
 
 MacOS has lately locked down the ability to run an application that's not from a commercial, paying Apple Developer.  And I'm not one.  So you will have to instruct MacOS to permit Edisyn to run.  
 
@@ -150,7 +150,7 @@ Apple has made this much more annoying now, to everyone's consternation.  You'll
 
 1. Run the Terminal Program (in /Applications/Utilities/)
 2. Type the following command and hit RETURN: `   sudo xattr -cr /Applications/Edisyn.app`
-4. Enter your password and hit RETURN.
+4. Enter your password and hit RETURN
 5. Quit the Terminal Program
 
 Now you should be able to run Edisyn.  You only have to do this once.  This should work with earlier versions of OS X too. 

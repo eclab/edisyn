@@ -967,22 +967,22 @@ public class YamahaDX7 extends Synth implements ProvidesNN
         }
 
 
-	public int parseOne(byte[] data)
-		{
-		// extract parameter
-		int param = ((data[3] & 0x1) << 7) | data[4];
-		int val = data[5];
-		model.set(allParameters[param], val);
-		revise();
-		return PARSE_SUCCEEDED;
-		}
+    public int parseOne(byte[] data)
+        {
+        // extract parameter
+        int param = ((data[3] & 0x1) << 7) | data[4];
+        int val = data[5];
+        model.set(allParameters[param], val);
+        revise();
+        return PARSE_SUCCEEDED;
+        }
 
     public int parse(byte[] data, boolean fromFile)
         {
         if (data.length == 7)  // it's a single parameter
-        	{
-        	return parseOne(data);
-        	}
+            {
+            return parseOne(data);
+            }
         
         for(int i = 1; i < data.length - 1; i++)
             data[i] = (byte)(data[i] & 127);  // strip out the hi bit -- looks like some files are corrupted with hi bits

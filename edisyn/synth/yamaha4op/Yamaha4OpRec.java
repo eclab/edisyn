@@ -11,16 +11,16 @@ public class Yamaha4OpRec extends Recognize
     public static int getNextSysexPatchGroup(byte[][] sysex, int start)
         {
         if (recognizeBlockHeader(sysex[start]))
-			{
-			// Do we have all four blocks?  If so, it's an entire "bank"
-			if (start == 0 && sysex.length == 8)
-				return 8;
-			
-			// Otherwise we'll grab them 2 at a time
-			if (start + 1 >= sysex.length)	// failed
-				return start;
-			else return getNextSysexPatchGroup(sysex, start + 1);
-			}
+            {
+            // Do we have all four blocks?  If so, it's an entire "bank"
+            if (start == 0 && sysex.length == 8)
+                return 8;
+                        
+            // Otherwise we'll grab them 2 at a time
+            if (start + 1 >= sysex.length)  // failed
+                return start;
+            else return getNextSysexPatchGroup(sysex, start + 1);
+            }
         
         if (recognizeVMEM(sysex[start]))
             return start + 1;
@@ -43,7 +43,7 @@ public class Yamaha4OpRec extends Recognize
         }
 
 
-     public static boolean recognizeBlockHeader(byte[] data)
+    public static boolean recognizeBlockHeader(byte[] data)
         {
         boolean b = (data.length == 7 &&
             data[0] == (byte)0xF0 &&
@@ -55,7 +55,7 @@ public class Yamaha4OpRec extends Recognize
         }
 
 
-   public static boolean recognizeVMEM(byte[] data)
+    public static boolean recognizeVMEM(byte[] data)
         {
         // VMEM
         boolean b = (data.length == 4104 &&
@@ -68,7 +68,7 @@ public class Yamaha4OpRec extends Recognize
         return b;
         }
 
-     public static boolean recognizeBank(byte[] data)
+    public static boolean recognizeBank(byte[] data)
         {
         return recognizeBlockHeader(data) || recognizeVMEM(data);
         }

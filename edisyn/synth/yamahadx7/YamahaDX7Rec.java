@@ -25,16 +25,16 @@ public class YamahaDX7Rec extends Recognize
             
         }
 
-	public static boolean recognizeParam(byte[] data)
-		{
-		boolean val =  (
-			data.length == 7 &&
-			data[0] == (byte)0xF0 &&
-			data[1] == (byte)0x43 &&
-			(data[2] & (16 + 32 + 64)) == 16);
-		return val;
-		}
-		
+    public static boolean recognizeParam(byte[] data)
+        {
+        boolean val =  (
+            data.length == 7 &&
+            data[0] == (byte)0xF0 &&
+            data[1] == (byte)0x43 &&
+            (data[2] & (16 + 32 + 64)) == 16);
+        return val;
+        }
+                
     public static boolean recognizeBank(byte[] data)
         {
         return  (

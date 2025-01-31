@@ -12,9 +12,9 @@ public class NovationAStationRec extends Recognize {
         try {
             SysexMessage.parse(data);
             return true;
-        } catch (Throwable t) {
+            } catch (Throwable t) {
             return false;
+            }
         }
     }
-}
         

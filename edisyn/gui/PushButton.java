@@ -92,8 +92,8 @@ public class PushButton extends JPanel
         
         // Java 20 screws up when we do this :-(
         /*
-        if (Style.isMacOSMonterey() || Style.isMacOSVentura()) 
-            button.addMouseListener(buildUnderliningMouseAdapter(button));
+          if (Style.isMacOSMonterey() || Style.isMacOSVentura()) 
+          button.addMouseListener(buildUnderliningMouseAdapter(button));
         */
                                 
         button.addActionListener(new ActionListener()
@@ -150,7 +150,7 @@ public class PushButton extends JPanel
             else
                 {
                 JMenuItem menu = new JMenuItem(options[i]);
-            	menu.setFont(Style.SMALL_FONT());
+                menu.setFont(Style.SMALL_FONT());
                 if (enabled != null)
                     {
                     menu.setEnabled(enabled[i]);

@@ -1,7 +1,7 @@
 ![Edisyn Splash Banner](https://raw.githubusercontent.com/eclab/edisyn/master/resources/pics/Banner.png)
 
 # Edisyn
-Synthesizer Patch Editor and Librarian (Version 34)
+Synthesizer Patch Editor and Librarian (Version 35)
 
 By Sean Luke (sean@cs.gmu.edu)
 
@@ -29,7 +29,7 @@ Donations are welcome via Paypal to my email address (sean@cs.gmu.edu).
 
 ## What's New
 
-Version 34 has patch editors for the Waldorf M and Dave Smith Instruments Prophet 12, improvements for the Yamaha DX7 and 4-Op FM families, and improvements for accessibility for the blind.
+Version 35 has a new editor for the Novation A Station, more ROMs for the Prophet 2000 family, support for 100-patch bank for the Yamaha 4-Op family, and a wide range of bug fixes and tweaks.
 
 ## Publications on Edisyn
 
@@ -43,6 +43,7 @@ Version 34 has patch editors for the Waldorf M and Dave Smith Instruments Prophe
 
 * V. Hoyle collaborated on the Red Sound DarkStar and Microtuning editors, and cooked the deep-learned variational autoencoder for the DX7
 * Wim Verheyen wrote the Prophet Rev2 editor
+* Guy Rooms wrote the Novation A Station editor
 * Special thanks to Derek Cook's [CoreMidi4J](https://github.com/DerekCook/CoreMidi4J), which Edisyn uses to fix critical bugs in MacOS's sysex handling.
 * Thanks to the many beta testers and bug report submitters for various editors.  Many of these people are thanked in the individual About panels for different synth editors.
 
@@ -76,6 +77,7 @@ Edisyn presently supports:
 * Korg Wavestation SR (Performance, Patch, and Wave Sequence Modes)
 * Korg Volca Series (Joint editor for Bass, Beats, Drum Single, Drum Split, FM, Keys, Kick, NuBass, Sample/Sample2 Multi, Sample2 Single, /u/pajen firmware)
 * M-Audio Venom (Single, Multi, Arpeggiator, and Global Modes)
+* Novation A Station
 * Novation Drumstation and D Station
 * Novation ReMOTE SL, SL MKII, and SL Compact Series
 * Oberheim Matrix 6, 6R, and 1000 (Single and (for 1000) Global Modes) 
@@ -136,30 +138,26 @@ Edisyn is cross-platform and will run on a variety of platforms (Windows, Linux)
 
 First install Edisyn from the [Edisyn.app.zip](https://cs.gmu.edu/~eclab/projects/edisyn/Edisyn.app.zip) file.  Sadly, it's a whopping 70MB because it includes the Java VM.  :-(
 
-MacOS has lately locked down the ability to run an application that's not from a commercial, paying Apple Developer.  And I'm not one.  So you will have to instruct MacOS to permit Edisyn to run.  Let's try the easy approach first:
+MacOS has lately locked down the ability to run an application that's not from a commercial, paying Apple Developer.  And I'm not one.  So you will have to instruct MacOS to permit Edisyn to run.  
 
-#### Easy Way to Permit Edisyn to Run
+#### Installing under MacOS X Prior to Sequoia
 
-On some versions of MacOS, you can CONTROL-Click on Edisyn's App Icon, and while holding Control down, select "Open".  Now instead of telling you that Edisyn cannot be opened because it's from an unidentified developer, you'll be given the option to do so. You probably will only have to do this once.
+This is pretty easy. CONTROL-Click on Edisyn's App Icon, and while holding Control down, select "Open".  Now instead of telling you that Edisyn cannot be opened because it's from an unidentified developer, you'll be given the option to do so. You probably will only have to do this once.
 
-#### Slightly Harder Way to Permit Edisyn to Run
+#### Installing under MacOS X Sequoia and Later
 
-If this isn't working, try the following.  Let's assume you stuck Edisyn in the /Applications directory as usual.  Now we have to tell Gatekeeper to allow Edisyn to run on your machine:
+Apple has made this much more annoying now, to everyone's consternation.  You'll have to use the Terminal program.  Let's assume you stuck Edisyn in the /Applications directory as usual.  Now we have to tell Gatekeeper to allow Edisyn to run on your machine:
 
 1. Run the Terminal Program (in /Applications/Utilities/)
-2. Type the following command and hit RETURN: `   sudo spctl --add /Applications/Edisyn.app`
+2. Type the following command and hit RETURN: `   sudo xattr -cr /Applications/Edisyn.app`
 4. Enter your password and hit RETURN.
 5. Quit the Terminal Program
 
-Now you should be able to run Edisyn.  Let me know if this all works.
+Now you should be able to run Edisyn.  You only have to do this once.  This should work with earlier versions of OS X too. 
 
 If you want to use Edisyn in combination with a DAW, see the manual's section on building a MIDI Loopback.
 
 You can also run Edisyn from its jar file from the command line: see "Running from the command line" at end of these instructions. 
-
-#### Rosetta and the M1
-
-At present Edisyn only runs under Rosetta on the M1, because its package contains an Intel-only Java VM (because I only own an Intel Mac and am not running Big Sur).  It'll work fine.  Don't expect things to change until I get an M1.  If you have installed Java yourself, you can run Edisyn from the command line (see later below) and it'll probably run natively.
 
 #### If Edisyn bombs in MacOS on selecting a patch editor...
 

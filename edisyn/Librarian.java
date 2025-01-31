@@ -900,8 +900,8 @@ public class Librarian extends JPanel
                 }
             });
         
-        if ((synth.getRequestableBank() != -1 && synth.requestBankDump(synth.getRequestableBank()) != null) || 	// Only one bank is requestable, and we can request it
-        	(synth.getRequestableBank() == -1 && synth.requestBankDump(0) != null))   							// We can request any bank, and bank 0 seems to work
+        if ((synth.getRequestableBank() != -1 && synth.requestBankDump(synth.getRequestableBank()) != null) ||  // Only one bank is requestable, and we can request it
+            (synth.getRequestableBank() == -1 && synth.requestBankDump(0) != null))                                                         // We can request any bank, and bank 0 seems to work
             {
             menu.add(item);
             item.setEnabled(false);
@@ -1162,11 +1162,11 @@ public class Librarian extends JPanel
         item.setEnabled(true);
         item.setAccelerator(KeyStroke.getKeyStroke(KeyEvent.VK_M, Toolkit.getDefaultToolkit().getMenuShortcutKeyMask() | InputEvent.SHIFT_MASK));
 
-		JMenuItem custom = synth.getCustomLibrarianMenuItem();
-		if (custom != null)
-			{
-			menu.add(custom);
-			}
+        JMenuItem custom = synth.getCustomLibrarianMenuItem();
+        if (custom != null)
+            {
+            menu.add(custom);
+            }
 
         menu.addSeparator();      
         
@@ -1637,8 +1637,8 @@ public class Librarian extends JPanel
             }
         }
 
-	public int getSelectedBank()
-		{
+    public int getSelectedBank()
+        {
         Synth synth = getLibrary().getSynth();
         
         int column = col(table, table.getSelectedColumn());
@@ -1665,7 +1665,7 @@ public class Librarian extends JPanel
             }
         
         return column - 1;           
-		}
+        }
 
     /** Writes all locations in bank. */
     public void writeBank()

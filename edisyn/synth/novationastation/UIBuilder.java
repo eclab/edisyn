@@ -25,7 +25,7 @@ class UIBuilder {
 
     UIBuilder(Synth synth) {
         this.synth = Objects.requireNonNull(synth);
-    }
+        }
 
     void build() {
         // General PANEL
@@ -86,7 +86,7 @@ class UIBuilder {
 
         arpEffectsPanel.add(vbox, BorderLayout.CENTER);
         synth.addTab("Arp Effects", arpEffectsPanel);
-    }
+        }
 
     private JComponent createGlobal(Color color) {
         Category globalCategory = new Category(synth, "Novation A Station", color);
@@ -101,7 +101,7 @@ class UIBuilder {
 
         globalCategory.add(hbox, BorderLayout.WEST);
         return globalCategory;
-    }
+        }
 
     private JComponent createGeneral(Color color) {
         Category categoryGeneral = new Category(synth, "General", color);
@@ -112,7 +112,7 @@ class UIBuilder {
         JComponent keySync = createChooser("Keysync Phase", KEY_SYNC_PHASE);
         // set ranges for metric values: skipping first item, being a non metric value ("N/A - Free running")
         synth.getModel().setMetricMinMax(KEY_SYNC_PHASE.getKey(),
-                KEY_SYNC_PHASE.getBoundaries().getMin() + 1, KEY_SYNC_PHASE.getBoundaries().getMax());
+            KEY_SYNC_PHASE.getBoundaries().getMin() + 1, KEY_SYNC_PHASE.getBoundaries().getMax());
         vbox.add(keySync);
         hbox.add(vbox);
 
@@ -125,7 +125,7 @@ class UIBuilder {
 
         categoryGeneral.add(hbox, BorderLayout.CENTER);
         return categoryGeneral;
-    }
+        }
 
     private JComponent createOscillator(final int osc, Color color) {
         Category category = new Category(synth, "Oscillator " + osc, color);
@@ -137,7 +137,7 @@ class UIBuilder {
         vbox.add(createChooser("Waveform", Mappings.find("OSC%d_WAVEFORM", osc)));
         if (osc == 2) {
             vbox.add(createCheckBox("1->2 Sync", OSC2_SYNCED_BY_1));
-        }
+            }
         hbox.add(vbox);
 
         // NOTE - would probably be nicer to have next 2 combined into a single dial [-24, +36]
@@ -154,11 +154,11 @@ class UIBuilder {
         if (osc == 3) {
             hbox.add(createLabelledDial(Arrays.asList("FM", "Level"), OSC3_FM_FIXED_LEVEL, color));
             hbox.add(createLabelledDial(Arrays.asList("FM Env", "Depth"), OSC3_FM_ENVELOPE_DEPTH, color));
-        }
+            }
 
         category.add(hbox, BorderLayout.CENTER);
         return category;
-    }
+        }
 
     private JComponent createPortamento(Color color) {
         Category category = new Category(synth, "Portamento", color);
@@ -171,7 +171,7 @@ class UIBuilder {
 
         category.add(hbox, BorderLayout.CENTER);
         return category;
-    }
+        }
 
     private JComponent createPitchModulation(Color color) {
         Category category = new Category(synth, "Pitch Mod", color);
@@ -186,7 +186,7 @@ class UIBuilder {
 
         category.add(hbox, BorderLayout.CENTER);
         return category;
-    }
+        }
 
     private JComponent createAmpModulation(Color color) {
         Category category = new Category(synth, "Amp Mod", color);
@@ -198,7 +198,7 @@ class UIBuilder {
 
         category.add(hbox, BorderLayout.CENTER);
         return category;
-    }
+        }
 
     private JComponent createMixer(Color color) {
         Category category = new Category(synth, "Mixer (to Filter)", color);
@@ -214,7 +214,7 @@ class UIBuilder {
 
         category.add(hbox, BorderLayout.CENTER);
         return category;
-    }
+        }
 
     private JComponent createExtAudio(Color color) {
         Category category = new Category(synth, "External Audio", color);
@@ -226,7 +226,7 @@ class UIBuilder {
         hbox.add(vbox);
         category.add(hbox, BorderLayout.CENTER);
         return category;
-    }
+        }
 
     private JComponent createFilter(Color color) {
         Category category = new Category(synth, "Filter", color);
@@ -259,7 +259,7 @@ class UIBuilder {
 
         category.add(mainhbox, BorderLayout.CENTER);
         return category;
-    }
+        }
 
     private JComponent createEnvelope(final int envelope, Color color) {
         String categoryName = envelope == 1 ? "Amp" : (envelope == 2 ? "Mod" : "FM");
@@ -286,12 +286,12 @@ class UIBuilder {
             hbox.add(Strut.makeStrut(attackDial));
             // AD: for FM envelope - that's it
             JComponent comp = new EnvelopeDisplay(synth, Color.red,
-                    new String[]{null, mappingsAttack.getKey(), mappingsDecay.getKey()},
-                    new String[]{null, null, null},
-                    new double[]{0, 0.50 / 127.0, 0.50 / 127.0},
-                    new double[]{0, 1.0, 0});
+                new String[]{null, mappingsAttack.getKey(), mappingsDecay.getKey()},
+                new String[]{null, null, null},
+                new double[]{0, 0.50 / 127.0, 0.50 / 127.0},
+                new double[]{0, 1.0, 0});
             hbox.addLast(comp);
-        } else {
+            } else {
             // ADSR: for AMP & MOD env - add sustain/release
             Mappings mappingsSustain = Mappings.find("ENVELOPE%d_SUSTAIN", envelope);
             hbox.add(createLabelledDial("Sustain", mappingsSustain, color));
@@ -301,16 +301,16 @@ class UIBuilder {
 
             // ADSR
             JComponent comp = new EnvelopeDisplay(synth, Color.red,
-                    new String[]{null, mappingsAttack.getKey(), mappingsDecay.getKey(), null, mappingsRelease.getKey()},
-                    new String[]{null, null, mappingsSustain.getKey(), mappingsSustain.getKey(), null},
-                    new double[]{0, 0.25 / 127.0, 0.25 / 127.0, 0.25, 0.25 / 127.0},
-                    new double[]{0, 1.0, 1.0 / 127.0, 1.0 / 127.0, 0});
+                new String[]{null, mappingsAttack.getKey(), mappingsDecay.getKey(), null, mappingsRelease.getKey()},
+                new String[]{null, null, mappingsSustain.getKey(), mappingsSustain.getKey(), null},
+                new double[]{0, 0.25 / 127.0, 0.25 / 127.0, 0.25, 0.25 / 127.0},
+                new double[]{0, 1.0, 1.0 / 127.0, 1.0 / 127.0, 0});
             hbox.addLast(comp);
-        }
+            }
 
         category.add(hbox, BorderLayout.CENTER);
         return category;
-    }
+        }
 
     private JComponent createLFO(final int lfo, Color color) {
         Category category = new Category(synth, "LFO " + lfo, color);
@@ -337,7 +337,7 @@ class UIBuilder {
 
         category.add(hbox, BorderLayout.CENTER);
         return category;
-    }
+        }
 
     private JComponent createARP(Color color) {
         Category category = new Category(synth, "Arpeggiator", color);
@@ -362,7 +362,7 @@ class UIBuilder {
 
         category.add(hbox);
         return category;
-    }
+        }
 
     private JComponent createDelay(Color color) {
         Category category = new Category(synth, "Delay", color);
@@ -383,7 +383,7 @@ class UIBuilder {
 
         category.add(hbox);
         return category;
-    }
+        }
 
     private JComponent createReverb(Color color) {
         Category category = new Category(synth, "Reverb", color);
@@ -398,7 +398,7 @@ class UIBuilder {
         category.add(hbox);
 
         return category;
-    }
+        }
 
     private JComponent createChorus(Color color) {
         Category category = new Category(synth, "Chorus", color);
@@ -421,7 +421,7 @@ class UIBuilder {
 
         category.add(hbox);
         return category;
-    }
+        }
 
     private JComponent createDistortion(Color color) {
         Category category = new Category(synth, "Distortion", color);
@@ -433,7 +433,7 @@ class UIBuilder {
 
         category.add(hbox);
         return category;
-    }
+        }
 
     private JComponent createEqualizer(Color color) {
         Category category = new Category(synth, "Equalizer", color);
@@ -455,7 +455,7 @@ class UIBuilder {
 
         category.add(hbox);
         return category;
-    }
+        }
 
 
     private JComponent createPan(Color color) {
@@ -478,7 +478,7 @@ class UIBuilder {
 
         category.add(hbox);
         return category;
-    }
+        }
 
     private JComponent createVocoder(Color color) {
         Category category = new Category(synth, "Vocoder", color);
@@ -493,7 +493,7 @@ class UIBuilder {
 
         category.add(hbox);
         return category;
-    }
+        }
 
     // convenience method to create chooser
     private Chooser createChooser(String label, Mappings mappings) {
@@ -501,54 +501,54 @@ class UIBuilder {
         // sanity
         if (boundaries.getValues() == null) {
             throw new IllegalStateException("expecting values for a chooser component !");
-        }
+            }
         return new Chooser(label, synth,
-                mappings.getKey(),
-                mappings.getBoundaries().getValues()) {
-        };
-    }
+            mappings.getKey(),
+            mappings.getBoundaries().getValues()) {
+            };
+        }
 
     // convenience method to create labelledDial with single label
     private LabelledDial createLabelledDial(String label, Mappings mappings, Color color) {
         return createLabelledDial(Arrays.asList(label), mappings, color);
-    }
+        }
 
     // convenience method to create labelledDial with multiple labels
     private LabelledDial createLabelledDial(List<String> labels, Mappings mappings, Color color) {
         // sanity
         if (Objects.requireNonNull(labels).isEmpty()) {
             throw new IllegalStateException("at least one label required");
-        }
+            }
         Boundaries boundaries = mappings.getBoundaries();
         LabelledDial result = new LabelledDial(labels.get(0), synth,
-                mappings.getKey(),
-                color, boundaries.getMin(), boundaries.getMax(), boundaries.getOffset()) {
+            mappings.getKey(),
+            color, boundaries.getMin(), boundaries.getMax(), boundaries.getOffset()) {
             @Override
             public String map(int val) {
                 String[] values = boundaries.getValues();
                 if (values != null && values.length != 0) {
                     if (val >= boundaries.getMin() && val <= boundaries.getMax()) {
                         return boundaries.getValues()[val];
-                    } else {
+                        } else {
                         System.err.println("Invalid value '" + val + "' received for " + mappings.name());
                         return "??";
+                        }
                     }
-                }
                 return String.valueOf(val - boundaries.getOffset());
-            }
-        };
+                }
+            };
         for (int index = 1; index < labels.size(); ++index) {
             result.addAdditionalLabel(labels.get(index));
-        }
+            }
         return result;
-    }
+        }
 
     // convenience method to create checkbox
     private JComponent createCheckBox(String label, Mappings mappings) {
         // sanity
         if (mappings.getBoundaries() != Boundaries.BOOLEAN) {
             throw new IllegalStateException("only boolean allowed for checkbox");
-        }
+            }
         return new CheckBox(label, synth, mappings.getKey());
+        }
     }
-}

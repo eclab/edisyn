@@ -606,8 +606,8 @@ public class Category extends JPanel implements Gatherable
         rand75.setEnabled(true);
         rand100.setEnabled(true);
                 
-    	//Category.this.add(pop);
-    	pop.setDefaultLightWeightPopupEnabled(false);
+        //Category.this.add(pop);
+        pop.setDefaultLightWeightPopupEnabled(false);
         }
     
     public Insets getInsets() 

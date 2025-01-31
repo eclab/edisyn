@@ -725,19 +725,19 @@ public class NovationSL extends Synth
         hbox.add(comp);
 
         comp = new LabelledDial("Program Channel", this, "progchannel", color, 0, 16)
-        	{
-        	public String map(int value)
-        		{
-        		if (value == 16)
-        			{
-        			return "Comm";
-        			}
-        		else
-        			{
-        			return "" + (value + 1);
-        			}
-        		}
-        	};
+            {
+            public String map(int value)
+                {
+                if (value == 16)
+                    {
+                    return "Comm";
+                    }
+                else
+                    {
+                    return "" + (value + 1);
+                    }
+                }
+            };
         hbox.add(comp);
 
         category.add(hbox, BorderLayout.CENTER);
@@ -2852,11 +2852,11 @@ public class NovationSL extends Synth
         return 0;
         }
 
-	// This function handles the special case for ports having special spurious data < 0x40
+    // This function handles the special case for ports having special spurious data < 0x40
     int portAt(int pos, byte[] stuff, byte val)
         {
-        if (val < 0x20) return 0;		// 0x0
-        else if (val < 0x40) return 1;	// 0x20
+        if (val < 0x20) return 0;               // 0x0
+        else if (val < 0x40) return 1;  // 0x20
         else return at(pos, stuff, val);
         }
 
@@ -3683,7 +3683,7 @@ public class NovationSL extends Synth
         showOneTimeWarning("Warned", "Windows USB", "The SL series does not play nicely with Windows Java\nwhen connecting over its USB port.\n\nWindows users should use a good USB MIDI interface.");
         }
 
-	public boolean librarianTested() { return true; }
+    public boolean librarianTested() { return true; }
     }
 
 
@@ -3780,10 +3780,10 @@ public class NovationSL extends Synth
       48   30   Manufacturer          13 Bytes, ASCII, padded with 0x20
       *** NOTE: Name + Manufacturer essentially comprise one string 48 bytes long
       
-      61   3D   (0x00)		;; Probably zero-termination for Name+Manufacturer string
-      62   3E   (0x00)		;; "Template  Number"
-      63   3F   (0x00)		;; "RemoteSL Version"
-      64   40   (0x00)		;; I think this is the template type.  0x00 Normal 0x01 Reason3 0x02 Logic
+      61   3D   (0x00)          ;; Probably zero-termination for Name+Manufacturer string
+      62   3E   (0x00)          ;; "Template  Number"
+      63   3F   (0x00)          ;; "RemoteSL Version"
+      64   40   (0x00)          ;; I think this is the template type.  0x00 Normal 0x01 Reason3 0x02 Logic
       65   41   Template Size         0: 1, 2-40: 2-40
       *** NOTE: The software permits values up to 40, but the Zero (and probably
       *** other units?) only permits values up to 32 because there are only 32
@@ -3798,38 +3798,38 @@ public class NovationSL extends Synth
       *** Yes, that's weird
 
       UNKNOWN      *** I do not know the meaning of these constants
-      67   43   (0x00)		;; "Number of Controls" ??
-      68   44   (0x5a)		;; "Number of Controls" ??
-      69   45   (0x29)		;; "Control Size"
-      70   46   (0x00)		;; "Sysex Length"
-      71   47   (0x00)		;; "Sysex Message(10)"
-      72   48   (0x00)		;; "Sysex Message(10)"
-      73   49   (0x00)		;; "Sysex Message(10)"
-      74   4A   (0x00)		;; "Sysex Message(10)"
-      75   4B   (0x00)		;; "Sysex Message(10)"
-      76   4C   (0x00)		;; "Sysex Message(10)"
-      77   4D   (0x00)		;; "Sysex Message(10)"
-      78   4E   (0x00)		;; "Sysex Message(10)"
-      79   4F   (0x00)		;; "Sysex Message(10)"
-      80   50   (0x00)		;; "Sysex Message(10)"
-      81   51   (0x00)		;; "RS1-2"
-      82   52   (0x19)		;; "RS1-2"
-      83   53   (0x00)		;; "RS1-2"
-      84   54   (0x01)		;; "RS1-2"
-      85   55   (0x00)		;; "RS3-4"
-      86   56   (0x21)		;; "RS3-4"
-      87   57   (0x00)		;; "RS3-4"
-      88   58   (0x09)		;; "RS3-4"
-      89   59   (0x00)		;; "RS5"
-      90   5A   (0x39)		;; "RS5"
-      91   5B   (0x00)		;; "RS6-7"
-      92   5C   (0x11)		;; "RS6-7"
-      93   5D   (0x00)		;; "RS6-7"
-      94   5E   (0x29)		;; "RS6-7"
-      95   5F   (0x00)		;; "RS8"
-      96   60   (0x31)		;; "RS8"
-      97   61   (0x03)		;; "Last Left Row Select"
-      98   62   (0x05)		;; "Last Right Row Select"
+      67   43   (0x00)          ;; "Number of Controls" ??
+      68   44   (0x5a)          ;; "Number of Controls" ??
+      69   45   (0x29)          ;; "Control Size"
+      70   46   (0x00)          ;; "Sysex Length"
+      71   47   (0x00)          ;; "Sysex Message(10)"
+      72   48   (0x00)          ;; "Sysex Message(10)"
+      73   49   (0x00)          ;; "Sysex Message(10)"
+      74   4A   (0x00)          ;; "Sysex Message(10)"
+      75   4B   (0x00)          ;; "Sysex Message(10)"
+      76   4C   (0x00)          ;; "Sysex Message(10)"
+      77   4D   (0x00)          ;; "Sysex Message(10)"
+      78   4E   (0x00)          ;; "Sysex Message(10)"
+      79   4F   (0x00)          ;; "Sysex Message(10)"
+      80   50   (0x00)          ;; "Sysex Message(10)"
+      81   51   (0x00)          ;; "RS1-2"
+      82   52   (0x19)          ;; "RS1-2"
+      83   53   (0x00)          ;; "RS1-2"
+      84   54   (0x01)          ;; "RS1-2"
+      85   55   (0x00)          ;; "RS3-4"
+      86   56   (0x21)          ;; "RS3-4"
+      87   57   (0x00)          ;; "RS3-4"
+      88   58   (0x09)          ;; "RS3-4"
+      89   59   (0x00)          ;; "RS5"
+      90   5A   (0x39)          ;; "RS5"
+      91   5B   (0x00)          ;; "RS6-7"
+      92   5C   (0x11)          ;; "RS6-7"
+      93   5D   (0x00)          ;; "RS6-7"
+      94   5E   (0x29)          ;; "RS6-7"
+      95   5F   (0x00)          ;; "RS8"
+      96   60   (0x31)          ;; "RS8"
+      97   61   (0x03)          ;; "Last Left Row Select"
+      98   62   (0x05)          ;; "Last Right Row Select"
 
       MIDI PORT GROUPS KEYBOARD
       99   63   Channel                       0-16                            [1-16, "As Common"]
@@ -3843,8 +3843,8 @@ public class NovationSL extends Synth
       *** NOTE: On the SL Compact Editor, MIDI 2 is not supported
 
       UNKNOWN      *** I do not know the meaning of these constants
-      103  67   (0x00)			;; "MIDI Bank Number"
-      104  68   (0x00)			;; "MIDI Program Number"
+      103  67   (0x00)                  ;; "MIDI Bank Number"
+      104  68   (0x00)                  ;; "MIDI Program Number"
 
       105  69   Velocity Curve                0-126   [representing 1-127]
       106  6A   Octave Setting                0-9     [representing -4 ... 5]
@@ -3853,8 +3853,8 @@ public class NovationSL extends Synth
       *** NOTE: the original SL and SL Compact do not have pot pickup
 
       UNKNOWN      *** I do not know the meaning of these constants
-      108  6C   (0x00)			;; "Template Attribute 2"
-      109  6D   (0x07)			;; "Template Upgrade Bits"
+      108  6C   (0x00)                  ;; "Template Attribute 2"
+      109  6D   (0x07)                  ;; "Template Upgrade Bits"
 
       KEYBOARD ZONES
       110  6E   Enable Keyboard Zones           0-1
@@ -3918,8 +3918,8 @@ public class NovationSL extends Synth
       152  98   Touchpad Y Type               0-3             { "No Spring/Hold" = 00, "Spring Up" = 03, "Spring Centre" = 02, "Spring Down" = 01 }
 
       UNKNOWN      *** I do not know the meaning of these constants
-      153  99   (0x00)			;; "Touchpad Attribute X2"
-      154  9A   (0x00)			;; "Touchpad Attribute Y2"
+      153  99   (0x00)                  ;; "Touchpad Attribute X2"
+      154  9A   (0x00)                  ;; "Touchpad Attribute Y2"
 
       DRUM NOTE DATA FOR THE EIGHT DRUM PADS -- I guess this couldn't fit in the standard slots
       155  9B   (0x00)

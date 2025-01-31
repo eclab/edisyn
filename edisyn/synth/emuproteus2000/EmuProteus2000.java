@@ -46,86 +46,86 @@ import javax.swing.table.*;
 public class EmuProteus2000 extends Synth
     {
     public static final String[] ROMS = { "Audity Xtreme", "Audity (A2000)", "Composer (P2000/P1000)", "Protozoa", 
-    									  "Definitive B3", "Extreme Lead (XL1/Turbo)", "Sounds of the ZR", "Sounds of the ZR v2 (Halo)", 
-    									  "World Expedition (Earth)", "Orchestral V1 (V2000)", "Orchestral V2 (V2000)", "Pure Phatt (Mo'Phatt/Turbo)", 
-    									  "Extreme Lead V2 (XL7)", "Extreme Lead V3 (XK6)", "Pure Phatt 2 (MP7)", "Pure Phatt 3 (MK6)",
-    									  "Ensoniq Project", "Composer V2 (P2500 CS)", "Proteus Pop (P2500/PK6)", "Vintage Collection (Pro/Keys)", 
-    									  "Protean Drums (PX7)", "Holy Grail Piano", "Techno Synth Cons. Yard (Orbit3)", "Techno Synth Cons. Yard V2",
-    									  "Siedlaczek", "Beat Garden (Orbit3)", "Shock Treatment" };
+        "Definitive B3", "Extreme Lead (XL1/Turbo)", "Sounds of the ZR", "Sounds of the ZR v2 (Halo)", 
+        "World Expedition (Earth)", "Orchestral V1 (V2000)", "Orchestral V2 (V2000)", "Pure Phatt (Mo'Phatt/Turbo)", 
+        "Extreme Lead V2 (XL7)", "Extreme Lead V3 (XK6)", "Pure Phatt 2 (MP7)", "Pure Phatt 3 (MK6)",
+        "Ensoniq Project", "Composer V2 (P2500 CS)", "Proteus Pop (P2500/PK6)", "Vintage Collection (Pro/Keys)", 
+        "Protean Drums (PX7)", "Holy Grail Piano", "Techno Synth Cons. Yard (Orbit3)", "Techno Synth Cons. Yard V2",
+        "Siedlaczek", "Beat Garden (Orbit3)", "Shock Treatment" };
     public static final String[] EFFECTIVE_ROM_IDS =   { "2", "3", "4", "5",
-    										"6", "7", "8", "8a",
-    										"9", "10", "11", "13",
-    										"14", "14a", "15", "15a",
-    										"16", "17", "17a", "18",
-    										"19", "64", "65", "65a",
-    										"66", "67", "54" };
+        "6", "7", "8", "8a",
+        "9", "10", "11", "13",
+        "14", "14a", "15", "15a",
+        "16", "17", "17a", "18",
+        "19", "64", "65", "65a",
+        "66", "67", "54" };
     public static final int[] ROM_IDS =   { 2, 3, 4, 5,
-    										6, 7, 8, 8,
-    										9, 10, 11, 13,
-    										14, 14, 15, 15,
-    										16, 17, 17, 18,
-    										19, 64, 65, 65,
-    										66, 67, 54 };
+        6, 7, 8, 8,
+        9, 10, 11, 13,
+        14, 14, 15, 15,
+        16, 17, 17, 18,
+        19, 64, 65, 65,
+        66, 67, 54 };
     public static final String[] ROMS_AND_USER = { "User", 
-                                                   "Audity Xtreme", "Audity (A2000)", "Composer (P2000/P1000)", "Protozoa", 
-    									  "Definitive B3", "Extreme Lead (XL1/Turbo)", "Sounds of the ZR", "Sounds of the ZR v2 (Halo)", 
-    									  "World Expedition (Earth)", "Orchestral V1 (V2000)", "Orchestral V2 (V2000)", "Pure Phatt (Mo'Phatt/Turbo)", 
-    									  "Extreme Lead V2 (XL7)", "Extreme Lead V3 (XK6)", "Pure Phatt 2 (MP7)", "Pure Phatt 3 (MK6)",
-    									  "Ensoniq Project", "Composer V2 (P2500 CS)", "Proteus Pop (P2500/PK6)", "Vintage Collection (Pro/Keys)", 
-    									  "Protean Drums (PX7)", "Holy Grail Piano", "Techno Synth Cons. Yard (Orbit3)", "Techno Synth Cons. Yard V2",
-    									  "Siedlaczek", "Beat Garden (Orbit3)", "Shock Treatment" };  // pretty dumb that we have to do this
+        "Audity Xtreme", "Audity (A2000)", "Composer (P2000/P1000)", "Protozoa", 
+        "Definitive B3", "Extreme Lead (XL1/Turbo)", "Sounds of the ZR", "Sounds of the ZR v2 (Halo)", 
+        "World Expedition (Earth)", "Orchestral V1 (V2000)", "Orchestral V2 (V2000)", "Pure Phatt (Mo'Phatt/Turbo)", 
+        "Extreme Lead V2 (XL7)", "Extreme Lead V3 (XK6)", "Pure Phatt 2 (MP7)", "Pure Phatt 3 (MK6)",
+        "Ensoniq Project", "Composer V2 (P2500 CS)", "Proteus Pop (P2500/PK6)", "Vintage Collection (Pro/Keys)", 
+        "Protean Drums (PX7)", "Holy Grail Piano", "Techno Synth Cons. Yard (Orbit3)", "Techno Synth Cons. Yard V2",
+        "Siedlaczek", "Beat Garden (Orbit3)", "Shock Treatment" };  // pretty dumb that we have to do this
     public static final String[] ROMS_AND_USER_SHORT = { "User", 
-                                                         "Audity X", "Audity", "Composer", "Protozoa", 
-                                                         "B3", "XLead", "ZR", "ZR V2", 
-                                                         "World", "Orchestral-1", "Orchestral-2", "Phatt", 
-                                                         "XLead V2", "XLead V3", "Phatt V2", "Phatt V3", 
-                                                         "Ensoniq", "Composer V2", "Pop", "Vintage", 
-                                                         "Drums", "Piano", "Techno", "Techno V2",
-                                                         "Siedlaczek", "Beat", "Shock"  };
-     public static final String[] EFFECTIVE_ROM_AND_USER_IDS =   { "0", "2", "3", "4", "5",
-    										"6", "7", "8", "8a",
-    										"9", "10", "11", "13",
-    										"14", "14a", "15", "15a",
-    										"16", "17", "17a", "18",
-    										"19", "64", "65", "65a",
-    										"66", "67", "54" };
-   public static final int[] ROM_AND_USER_IDS = { 0,
-    												2, 3, 4, 5,
-    												6, 7, 8, 8,
-    												9, 10, 11, 13,
-    												14, 14, 15, 15,
-    												16, 17, 17, 18,
-    												19, 64, 65, 65,
-    												66, 67, 54 };
+        "Audity X", "Audity", "Composer", "Protozoa", 
+        "B3", "XLead", "ZR", "ZR V2", 
+        "World", "Orchestral-1", "Orchestral-2", "Phatt", 
+        "XLead V2", "XLead V3", "Phatt V2", "Phatt V3", 
+        "Ensoniq", "Composer V2", "Pop", "Vintage", 
+        "Drums", "Piano", "Techno", "Techno V2",
+        "Siedlaczek", "Beat", "Shock"  };
+    public static final String[] EFFECTIVE_ROM_AND_USER_IDS =   { "0", "2", "3", "4", "5",
+        "6", "7", "8", "8a",
+        "9", "10", "11", "13",
+        "14", "14a", "15", "15a",
+        "16", "17", "17a", "18",
+        "19", "64", "65", "65a",
+        "66", "67", "54" };
+    public static final int[] ROM_AND_USER_IDS = { 0,
+        2, 3, 4, 5,
+        6, 7, 8, 8,
+        9, 10, 11, 13,
+        14, 14, 15, 15,
+        16, 17, 17, 18,
+        19, 64, 65, 65,
+        66, 67, 54 };
     public static final int[] NUM_BANKS =        { 4,   
-    												2, 5, 8, 4,
-    												3, 4, 4, 5,
-    												4, 3, 2, 4,   
-    												4, 5, 4, 5,   
-    												4, 4, 5, 4,      
-    												4, 1, 4, 4,      
-    												2, 4, 4 };
+        2, 5, 8, 4,
+        3, 4, 4, 5,
+        4, 3, 2, 4,   
+        4, 5, 4, 5,   
+        4, 4, 5, 4,      
+        4, 1, 4, 4,      
+        2, 4, 4 };
     public static final String[] ROMS_AND_EMPTY = { "Empty", 
-                                                    "Audity Xtreme", "Audity (A2000)", "Composer (P2000/P1000)", "Protozoa", 
-    									  "Definitive B3", "Extreme Lead (XL1/Turbo)", "Sounds of the ZR", "Sounds of the ZR v2 (Halo)", 
-    									  "World Expedition (Earth)", "Orchestral V1 (V2000)", "Orchestral V2 (V2000)", "Pure Phatt (Mo'Phatt/Turbo)", 
-    									  "Extreme Lead V2 (XL7)", "Extreme Lead V3 (XK6)", "Pure Phatt 2 (MP7)", "Pure Phatt 3 (MK6)",
-    									  "Ensoniq Project", "Composer V2 (P2500 CS)", "Proteus Pop (P2500/PK6)", "Vintage Collection (Pro/Keys)", 
-    									  "Protean Drums (PX7)", "Holy Grail Piano", "Techno Synth Cons. Yard (Orbit3)", "Techno Synth Cons. Yard V2",
-    									  "Siedlaczek", "Beat Garden (Orbit3)", "Shock Treatment" };  // even dumber that we have to do this AGAIN
-    									  
+        "Audity Xtreme", "Audity (A2000)", "Composer (P2000/P1000)", "Protozoa", 
+        "Definitive B3", "Extreme Lead (XL1/Turbo)", "Sounds of the ZR", "Sounds of the ZR v2 (Halo)", 
+        "World Expedition (Earth)", "Orchestral V1 (V2000)", "Orchestral V2 (V2000)", "Pure Phatt (Mo'Phatt/Turbo)", 
+        "Extreme Lead V2 (XL7)", "Extreme Lead V3 (XK6)", "Pure Phatt 2 (MP7)", "Pure Phatt 3 (MK6)",
+        "Ensoniq Project", "Composer V2 (P2500 CS)", "Proteus Pop (P2500/PK6)", "Vintage Collection (Pro/Keys)", 
+        "Protean Drums (PX7)", "Holy Grail Piano", "Techno Synth Cons. Yard (Orbit3)", "Techno Synth Cons. Yard V2",
+        "Siedlaczek", "Beat Garden (Orbit3)", "Shock Treatment" };  // even dumber that we have to do this AGAIN
+                                                                          
     // This is totally different than the documentation
     public static final String[] TEMPO_OFFSETS = { "Current / 2", "Current", "Current x 2" };   
     public static final String[] KEYBOARD_TUNINGS = { "Equal Temperament", "Just C", "Just C2", "Just C minor", "Just C 3", "Valotti", "19 Tone", "Gamelan", "Werkmeister III", "Kirnberger", "Scarlatti", "Repeating Octave",
-                                                      "User 1", "User 2", "User 3", "User 4", "User 5", "User 6", "User 7", "User 8", "User 9", "User 10", "User 11", "User 12" };
+        "User 1", "User 2", "User 3", "User 4", "User 5", "User 6", "User 7", "User 8", "User 9", "User 10", "User 11", "User 12" };
 
     public static final String[] PATCHCORD_SOURCES = { "Off", "Pitch Wheel", "Mod Wheel", "Pressure", "Pedal", "MIDI A", "MIDI B", "Foot Switch 1", "Foot Switch 2", "Flip-Flop Foot Switch 1", "Flip-Flop Foot Switch 2", 
-                                                       "Volume Controller (7)", "Pan Controller (10)", "MIDI C", "MIDI D", "MIDI E", "MIDI F", "MIDI G", "MIDI H", "MIDI I", "MIDI J", "MIDI K", "MIDI L", "MIDI M [2500]", "MIDI N [2500]", "MIDI O [2500]", "MIDI P [2500]", "DC Offset"};
+        "Volume Controller (7)", "Pan Controller (10)", "MIDI C", "MIDI D", "MIDI E", "MIDI F", "MIDI G", "MIDI H", "MIDI I", "MIDI J", "MIDI K", "MIDI L", "MIDI M [2500]", "MIDI N [2500]", "MIDI O [2500]", "MIDI P [2500]", "DC Offset"};
     public static final int[] PATCHCORD_SOURCE_INDICES = { 0, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 32, 33, 34, 35, 36, 37, 40, 41, 42, 43, 44, 45, 45, 47, 160 };
 
     public static final String[] PATCHCORD_DESTINATIONS = { "Off", "FX A Send 1", "FX A Send 2", "FX A Send 3", "FX A Send 4", "FX B Send 1", "FX B Send 2", "FX B Send 3", "FX B Send 4", "Arpeggiator Rate", "Arpeggiator Extension", "Arpeggiator Velocity", "Arpeggiator Gate", "Arpeggiator Interval", 
-                                                            "Beats Velocity Group 1", "Beats Velocity Group 2", "Beats Velocity Group 3", "Beats Velocity Group 4", "Beats Transpose Group 1", "Beats Transpose Group 2", "Beats Transpose Group 3", "Beats Transpose Group 4", 
-                                                            "Beats Busy", "Beats Variation", "Preset Lag In", "Preset Lag Amount", "Preset Ramp Rate" };
+        "Beats Velocity Group 1", "Beats Velocity Group 2", "Beats Velocity Group 3", "Beats Velocity Group 4", "Beats Transpose Group 1", "Beats Transpose Group 2", "Beats Transpose Group 3", "Beats Transpose Group 4", 
+        "Beats Busy", "Beats Variation", "Preset Lag In", "Preset Lag Amount", "Preset Ramp Rate" };
     public static final int[] PATCHCORD_DESTINATION_INDICES = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 96, 97, 98, 99, 100, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 128, 129, 131 };
 
     public static final String[] ARP_MODES = { "Up", "Down", "Up/Down", "Forward Assign", "Backward Assign", "Fwd/Bkwd Assign", "Random", "Pattern" };
@@ -148,17 +148,17 @@ public class EmuProteus2000 extends Synth
     public static final String[] GROUPS = { "Poly All", "Poly 16 A", "Poly 16 B", "Poly 8 A", "Poly 8 B", "Poly 8 C", "Poly 8 D", "Poly 4 A", "Poly 4 B", "Poly 4 C", "Poly 4 D", "Poly 2 A", "Poly 2 B", "Poly 2 C", "Poly 2 D", "Mono A", "Mono B", "Mono C", "Mono D", "Mono E", "Mono F", "Mono G", "Mono H", "Mono I" };
     
     public static final String[] FILTER_TYPES = { "Off", "4 LPF Classic", "2 LPF Smooth", "6 LPF Steeper", "2 HPF Shallow", "4 HPF Deeper", "2 BPF Band-Pass 1", "4 BPF Band-Pass 2", "6 BPF ContraBand", 
-                                                  "6 EQ+ Swept 1 Oct", "6 EQ+ Swept 2>1 Oct", "6 EQ+ Swept 3>1 Oct", "6 PHA PhazeShift1", "6 PHA PhaseShift2", "6 PHA BlissBatz", "6 FLG FlangerLite", "6 VOW Aah-Ay-Eeh", "6 VOW Ooh-To-Aah",
-                                                  "12 EQ+ AceOfBass", "12 LPF MegaSweepz", "12 LPF EarlyRizer", "12 LPF Millennium", "12 REZ MeatyGizmo", "12 LPF KlubKassi", "12 LPF BassBox-303", "12 DST FuzziFace", 
-                                                  "12 REZ DeadRinger", "12 EQ+ TB-OrNot-TB", "12 VOW Ooh-To-Eee", "12 EQ+ Bolanass", "12 VOW MultiQVox", "12 VOW TalkingHedz", "12 REZ ZoomPeaks",
-                                                  "12 EQ+ DJAlkaline", "12 EQ+ BassTracer", "12 EQ+ RogueHertz", "12 EQ- RazorBlades", "12 EQ- RadioCraze", "12 VOW Eeh-To-Aah", "12 VOW UbuOrator", "12 VOW DeepBouche",
-                                                  "12 PHA FreakShifta", "12 PHA CruzPusher", "12 FLG AngelHairz", "12 FLG DreamWeava", "12 REZ AcidRavage", "12 REZ BassOMatic", "12 REZ LucifersQ", "12 REZ ToothComb", "12 WAH EarBender", "12 SFX KlangKling" };
+        "6 EQ+ Swept 1 Oct", "6 EQ+ Swept 2>1 Oct", "6 EQ+ Swept 3>1 Oct", "6 PHA PhazeShift1", "6 PHA PhaseShift2", "6 PHA BlissBatz", "6 FLG FlangerLite", "6 VOW Aah-Ay-Eeh", "6 VOW Ooh-To-Aah",
+        "12 EQ+ AceOfBass", "12 LPF MegaSweepz", "12 LPF EarlyRizer", "12 LPF Millennium", "12 REZ MeatyGizmo", "12 LPF KlubKassi", "12 LPF BassBox-303", "12 DST FuzziFace", 
+        "12 REZ DeadRinger", "12 EQ+ TB-OrNot-TB", "12 VOW Ooh-To-Eee", "12 EQ+ Bolanass", "12 VOW MultiQVox", "12 VOW TalkingHedz", "12 REZ ZoomPeaks",
+        "12 EQ+ DJAlkaline", "12 EQ+ BassTracer", "12 EQ+ RogueHertz", "12 EQ- RazorBlades", "12 EQ- RadioCraze", "12 VOW Eeh-To-Aah", "12 VOW UbuOrator", "12 VOW DeepBouche",
+        "12 PHA FreakShifta", "12 PHA CruzPusher", "12 FLG AngelHairz", "12 FLG DreamWeava", "12 REZ AcidRavage", "12 REZ BassOMatic", "12 REZ LucifersQ", "12 REZ ToothComb", "12 WAH EarBender", "12 SFX KlangKling" };
     public static final int[] FILTER_INDICES = { 0x7F, 0x00, 0x01, 0x02, 0x08, 0x09, 0x10, 0x11, 0x12, 0x20, 0x21, 0x22, 0x40, 0x41, 0x42, 0x48, 0x50, 0x51, 
-                                                 0x083, 0x084, 0x085, 0x086, 0x087, 0x088, 0x089, 0x08A, 0x08B, 0x08C, 0x08D, 0x08E, 0x08F, 
-                                                 0x090, 0x091, 0x092, 0x093, 0x094, 0x095, 0x096, 0x097, 0x098, 0x099, 0x09A, 0x09B, 0x09C, 0x09D, 0x09E, 0x09F, 
-                                                 0x0A0, 0x0A1, 0x0A2, 0x0A3 };
+        0x083, 0x084, 0x085, 0x086, 0x087, 0x088, 0x089, 0x08A, 0x08B, 0x08C, 0x08D, 0x08E, 0x08F, 
+        0x090, 0x091, 0x092, 0x093, 0x094, 0x095, 0x096, 0x097, 0x098, 0x099, 0x09A, 0x09B, 0x09C, 0x09D, 0x09E, 0x09F, 
+        0x0A0, 0x0A1, 0x0A2, 0x0A3 };
     public static final int[] FILTER_CATEGORIES = { -1, 0, 0, 0, 1, 1, 2, 2, 2, 3, 3, 3, 4, 4, 4, 4, 5, 5,
-                                                    6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6 };
+        6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6 };
     
     public static final String[] LFO_SYNCS = { "Key Sync", "Free Run" };
 
@@ -167,13 +167,13 @@ public class EmuProteus2000 extends Synth
 
     // Also negative rates are the same as the LFO_DELAYS
     public static final String[] LFO_RATES = { "0.08", "0.11", "0.15", "0.18", "0.21", "0.25", "0.28", "0.32", "0.35", "0.39", "0.42", "0.46", "0.50", "0.54", "0.58", "0.63", 
-                                               "0.67", "0.71", "0.76", "0.80", "0.85", "0.90", "0.94", "0.99", "1.04", "1.10", "1.15", "1.20", "1.25", "1.31", "1.37", "1.42", 
-                                               "1.48", "1.54", "1.60", "1.67", "1.73", "1.79", "1.86", "1.93", "2.00", "2.07", "2.14", "2.21", "2.29", "2.36", "2.44", "2.52", 
-                                               "2.60", "2.68", "2.77", "2.85", "2.94", "3.03", "3.12", "3.21", "3.31", "3.40", "3.50", "3.60", "3.70", "3.81", "3.91", "4.02", 
-                                               "4.13", "4.25", "4.36", "4.48", "4.60", "4.72", "4.84", "4.97", "5.10", "5.23", "5.37", "5.51", "5.65", "5.79", "5.94", "6.08", 
-                                               "6.24", "6.39", "6.55", "6.71", "6.88", "7.04", "7.21", "7.39", "7.57", "7.75", "7.93", "8.12", "8.32", "8.51", "8.71", "8.92", 
-                                               "9.13", "9.34", "9.56", "9.78", "10.00", "10.23", "10.47", "10.71", "10.95", "11.20", "11.46", "11.71", "11.98", "12.25", "12.52", "12.80", 
-                                               "13.09", "13.38", "13.68", "13.99", "14.30", "14.61", "14.93", "15.26", "15.60", "15.94", "16.29", "16.65", "17.01", "17.38", "17.76", "18.14" };
+        "0.67", "0.71", "0.76", "0.80", "0.85", "0.90", "0.94", "0.99", "1.04", "1.10", "1.15", "1.20", "1.25", "1.31", "1.37", "1.42", 
+        "1.48", "1.54", "1.60", "1.67", "1.73", "1.79", "1.86", "1.93", "2.00", "2.07", "2.14", "2.21", "2.29", "2.36", "2.44", "2.52", 
+        "2.60", "2.68", "2.77", "2.85", "2.94", "3.03", "3.12", "3.21", "3.31", "3.40", "3.50", "3.60", "3.70", "3.81", "3.91", "4.02", 
+        "4.13", "4.25", "4.36", "4.48", "4.60", "4.72", "4.84", "4.97", "5.10", "5.23", "5.37", "5.51", "5.65", "5.79", "5.94", "6.08", 
+        "6.24", "6.39", "6.55", "6.71", "6.88", "7.04", "7.21", "7.39", "7.57", "7.75", "7.93", "8.12", "8.32", "8.51", "8.71", "8.92", 
+        "9.13", "9.34", "9.56", "9.78", "10.00", "10.23", "10.47", "10.71", "10.95", "11.20", "11.46", "11.71", "11.98", "12.25", "12.52", "12.80", 
+        "13.09", "13.38", "13.68", "13.99", "14.30", "14.61", "14.93", "15.26", "15.60", "15.94", "16.29", "16.65", "17.01", "17.38", "17.76", "18.14" };
     
     
     /// Documentation is mistaken here
@@ -185,19 +185,19 @@ public class EmuProteus2000 extends Synth
     public static final int[] ENV_INDICES = { 1, 2 };           // This is only for ENV_MODES, not VOL_ENV_MODES
 
     public static final String[] LAYER_PATCHCORD_SOURCES = { "Off", "Crossfade Random", "Key +", "Key +/-", "Velocity +", "Velocity +/-", "Velocity <", "Release Velocity", "Gate", "Pitch Wheel", "Mod Wheel", "Pressure", "Pedal", "MIDI A", "MIDI B", "Foot Switch 1", "Foot Switch 2", "Flip-Flop Foot Switch 1", "Flip-Flop Foot Switch 2", "MIDI Volume Controller (7)", 
-                                                             "MIDI Pan Controller (10)", "MIDI C", "MIDI D", "MIDI E", "MIDI F", "MIDI G", "MIDI H", "Foot Switch 3", "Flip-Flop Foot Switch 3", "MIDI I", "MIDI J", "MIDI K", "MIDI L", 
-                                                             "MIDI M [2500]", "MIDI N [2500]", "MIDI O [2500]", "MIDI P [2500]", "Key Glide", "Volume Envelope +", "Volume Envelope +/-", "Volume Envelope <", "Filter Envelope +", "Filter Envelope +/-", "Filter Envelope <", "Auxiliary Envelope +", 
-                                                             "Auxiliary Envelope +/-", "Auxiliary Envelope <", "LFO 1 +/-", "LFO 1 +", "White Noise", "Pink Noise", "Key Random 1", "Key Random 2", "LFO 2 +/-", "LFO 2 +", "Lag 0 Summing Amp", "Lag 0", "Lag 1 Summing Amp", "Lag 1", "Preset Lag Out", "Preset Ramp Out", "Clock Double Whole Note", "Clock Whole Note", "Clock Half Note", "Clock Quarter Note", 
-                                                             "Clock Eighth Note", "Clock Sixteenth Note", "Clock Octal Whole Note", "Clock Quad Whole Note", "DC Offset", "Summing Amp", "Switch", "Absolute Value", "Diode", "Flip Flop", "Quantizer", "Gain 4X" };
+        "MIDI Pan Controller (10)", "MIDI C", "MIDI D", "MIDI E", "MIDI F", "MIDI G", "MIDI H", "Foot Switch 3", "Flip-Flop Foot Switch 3", "MIDI I", "MIDI J", "MIDI K", "MIDI L", 
+        "MIDI M [2500]", "MIDI N [2500]", "MIDI O [2500]", "MIDI P [2500]", "Key Glide", "Volume Envelope +", "Volume Envelope +/-", "Volume Envelope <", "Filter Envelope +", "Filter Envelope +/-", "Filter Envelope <", "Auxiliary Envelope +", 
+        "Auxiliary Envelope +/-", "Auxiliary Envelope <", "LFO 1 +/-", "LFO 1 +", "White Noise", "Pink Noise", "Key Random 1", "Key Random 2", "LFO 2 +/-", "LFO 2 +", "Lag 0 Summing Amp", "Lag 0", "Lag 1 Summing Amp", "Lag 1", "Preset Lag Out", "Preset Ramp Out", "Clock Double Whole Note", "Clock Whole Note", "Clock Half Note", "Clock Quarter Note", 
+        "Clock Eighth Note", "Clock Sixteenth Note", "Clock Octal Whole Note", "Clock Quad Whole Note", "DC Offset", "Summing Amp", "Switch", "Absolute Value", "Diode", "Flip Flop", "Quantizer", "Gain 4X" };
     public static final int[] LAYER_PATCHCORD_SOURCE_INDICES = { 0, 4, 8, 9, 10, 11, 12, 13, 14, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 72, 73, 74, 80, 81, 82, 88, 89, 90, 96, 97, 98, 99, 100, 101, 104, 105, 106, 107, 108, 109, 128, 129, 144, 145, 146, 147, 148, 149, 150, 151, 160, 161, 162, 163, 164, 165, 166, 167 };
 
         
     // The documentation is wrong in several places here: it's missing envelope sustains, has retriggers for envelopes other than volume, and has "chorus position ITD" which doesn't exist.
     // I think Amplifier Crossfade is RTXFade (for "Real Time XFade")
     public static final String[] LAYER_PATCHCORD_DESTINATIONS = { "Off", "Key Sustain", "Fine Pitch", "Pitch", "Glide", "Chorus Amount", "Sample Start", "Sample Loop", "Sample Retrigger", "Filter Frequency", "Filter Resonance", "Amplifier Volume", "Amplifier Pan", "Real-Time Crossfade", "Volume Envelope Rates", "Volume Envelope Attack", 
-                                                                  "Volume Envelope Decay", "Volume Envelope Sustain", "Volume Envelope Release", "Filter Envelope Rates", "Filter Envelope Attack", "Filter Envelope Decay", "Filter Envelope Sustain", "Filter Envelope Release", "Auxiliary Envelope Rates", "Auxiliary Envelope Attack", "Auxiliary Envelope Decay", "Auxiliary Envelope Sustain", "Auxiliary Envelope Release", 
-                                                                  "Auxiliary Envelope Trigger", "LFO 1 Rate", "LFO 1 Trigger", "LFO 2 Rate", "LFO 2 Trigger", "Lag 0 In", "Lag 1 In", "Summing Amp", "Switch", "Absolute Value", "Diode", "Flip Flop", "Quantize", "Gain 4X", "Cord 1 Amount", "Cord 2 Amount", "Cord 3 Amount", "Cord 4 Amount", "Cord 5 Amount", 
-                                                                  "Cord 6 Amount", "Cord 7 Amount", "Cord 8 Amount", "Cord 9 Amount", "Cord 10 Amount", "Cord 11 Amount", "Cord 12 Amount", "Cord 13 Amount", "Cord 14 Amount", "Cord 15 Amount", "Cord 16 Amount", "Cord 17 Amount", "Cord 18 Amount", "Cord 19 Amount", "Cord 20 Amount", "Cord 21 Amount", "Cord 22 Amount", "Cord 23 Amount", "Cord 24 Amount",  };
+        "Volume Envelope Decay", "Volume Envelope Sustain", "Volume Envelope Release", "Filter Envelope Rates", "Filter Envelope Attack", "Filter Envelope Decay", "Filter Envelope Sustain", "Filter Envelope Release", "Auxiliary Envelope Rates", "Auxiliary Envelope Attack", "Auxiliary Envelope Decay", "Auxiliary Envelope Sustain", "Auxiliary Envelope Release", 
+        "Auxiliary Envelope Trigger", "LFO 1 Rate", "LFO 1 Trigger", "LFO 2 Rate", "LFO 2 Trigger", "Lag 0 In", "Lag 1 In", "Summing Amp", "Switch", "Absolute Value", "Diode", "Flip Flop", "Quantize", "Gain 4X", "Cord 1 Amount", "Cord 2 Amount", "Cord 3 Amount", "Cord 4 Amount", "Cord 5 Amount", 
+        "Cord 6 Amount", "Cord 7 Amount", "Cord 8 Amount", "Cord 9 Amount", "Cord 10 Amount", "Cord 11 Amount", "Cord 12 Amount", "Cord 13 Amount", "Cord 14 Amount", "Cord 15 Amount", "Cord 16 Amount", "Cord 17 Amount", "Cord 18 Amount", "Cord 19 Amount", "Cord 20 Amount", "Cord 21 Amount", "Cord 22 Amount", "Cord 23 Amount", "Cord 24 Amount",  };
     public static final int[] LAYER_PATCHCORD_DESTINATION_INDICES = { 0, 8, 47, 48, 49, 50, 52, 53, 54, 56, 57, 64, 65, 66, 72, 73, 74, 76, 75, 80, 81, 82, 84, 83, 88, 89, 90, 92, 91, 94, 96, 97, 104, 105, 106, 108, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175, 176, 177, 178, 179, 180, 181, 182, 183, 184, 185, 186, 187, 188, 189 , 190, 191 };
 
     public static final String[] TEMPO_BASED_ENV_RATES = {
@@ -711,13 +711,13 @@ public class EmuProteus2000 extends Synth
                     else return "" + val;
                     }
                 };
-            if (i > 12) ((LabelledDial)comp).addAdditionalLabel("[2500]");		// 2500 only
+            if (i > 12) ((LabelledDial)comp).addAdditionalLabel("[2500]");              // 2500 only
             hbox.add(comp);
             if (i == 4 || i == 8 || i == 12)
-            	{
-            	vbox.add(hbox);
-            	hbox = new HBox();
-            	}
+                {
+                vbox.add(hbox);
+                hbox = new HBox();
+                }
             }
         vbox.add(hbox);
 
@@ -1954,33 +1954,33 @@ public class EmuProteus2000 extends Synth
             for(int i = 0; i < 4; i++)
                 {
                 boolean found = false;
-                if (simmID[i] == 0)						// Empty
-                	{
-					simmName[i] = ROMS_AND_EMPTY[0];	// ID 0 is empty
-					simms[i] = 0;						// ID 0 is empty
-					setLastX("" + simmID[i], "SIMM" + i, getSynthClassName(), true);        // only set in synth
-					simmMenu[i].setText("SIMM " + i + ": " + simmName[i]);
-					// Will this call setLastX again?
-					((JRadioButtonMenuItem)(simmMenu[i].getItem(0))).setSelected(true);		// ID 0 is empty
-					found = true;
-                	}
+                if (simmID[i] == 0)                                             // Empty
+                    {
+                    simmName[i] = ROMS_AND_EMPTY[0];        // ID 0 is empty
+                    simms[i] = 0;                                           // ID 0 is empty
+                    setLastX("" + simmID[i], "SIMM" + i, getSynthClassName(), true);        // only set in synth
+                    simmMenu[i].setText("SIMM " + i + ": " + simmName[i]);
+                    // Will this call setLastX again?
+                    ((JRadioButtonMenuItem)(simmMenu[i].getItem(0))).setSelected(true);             // ID 0 is empty
+                    found = true;
+                    }
                 else
-                	{
-					for(int j = 0; j < ROM_AND_USER_IDS.length; j++)
-						{
-						if (ROM_AND_USER_IDS[j] == simmID[i])
-							{
-							simmName[i] = ROMS_AND_EMPTY[j];
-							simms[i] = j;
-							setLastX("" + simmID[i], "SIMM" + i, getSynthClassName(), true);        // only set in synth
-							simmMenu[i].setText("SIMM " + i + ": " + simmName[i]);
-							// Will this call setLastX again?
-							((JRadioButtonMenuItem)(simmMenu[i].getItem(j))).setSelected(true);
-							found = true;
-							break;
-							}
-						}
-					}
+                    {
+                    for(int j = 0; j < ROM_AND_USER_IDS.length; j++)
+                        {
+                        if (ROM_AND_USER_IDS[j] == simmID[i])
+                            {
+                            simmName[i] = ROMS_AND_EMPTY[j];
+                            simms[i] = j;
+                            setLastX("" + simmID[i], "SIMM" + i, getSynthClassName(), true);        // only set in synth
+                            simmMenu[i].setText("SIMM " + i + ": " + simmName[i]);
+                            // Will this call setLastX again?
+                            ((JRadioButtonMenuItem)(simmMenu[i].getItem(j))).setSelected(true);
+                            found = true;
+                            break;
+                            }
+                        }
+                    }
                 if (!found)
                     {
                     showSimpleMessage("Unknown SIMM", "Unknown SIMM ID " + simmID[i] + " in SIMM Socket " + i);
@@ -2051,13 +2051,13 @@ public class EmuProteus2000 extends Synth
                     }
                 catch (IOException ex) { try { scribble.close(); } catch (IOException ex2) { } scribble = null;}
                 number++;
-            boolean sendMIDI = getSendMIDI();
-            setSendMIDI(true);
+                boolean sendMIDI = getSendMIDI();
+                setSendMIDI(true);
                 tryToSendSysex(new byte[] 
                     { (byte)0xF0, 0x18, 0x0F, getID(), 0x55, 0x0C, (byte) type, 
                     (byte)(number & 127), (byte)(number >>> 7), 
                     (byte)(romid & 127), (byte)(romid >>> 7), (byte)0xF7 });
-            setSendMIDI(sendMIDI);
+                setSendMIDI(sendMIDI);
                 }
             return PARSE_FAILED;            // I guess?
             }
@@ -4590,17 +4590,17 @@ public class EmuProteus2000 extends Synth
     public String[] getBankNames() { return ROMS_AND_USER_SHORT; }
 
     public boolean[] getWriteableBanks() 
-    	{ 
-    	return new boolean[] 
-    		{ 
-    			true, 
-    			false, false, false, false, 
-    			false, false, false, false, 
-    			false, false, false, false, 
-    			false, false, false, false, 
-    			false, false, false, false, 
-    			false, false, false, false, 
-    			false, false, false }; }
+        { 
+        return new boolean[] 
+            { 
+            true, 
+            false, false, false, false, 
+            false, false, false, false, 
+            false, false, false, false, 
+            false, false, false, false, 
+            false, false, false, false, 
+            false, false, false, false, 
+            false, false, false }; }
 
     public boolean getSupportsPatchWrites() { return true; }
 

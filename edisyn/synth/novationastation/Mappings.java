@@ -281,19 +281,19 @@ enum Mappings {
 
     Mappings(Integer byteIndex, Integer cc, Integer nrpn) {
         this(byteIndex, cc, nrpn, Boundaries.NONE);
-    }
+        }
 
     Mappings(Integer byteIndex, Integer cc, Integer nrpn, Boundaries boundaries) {
         this.key = extractKey(this);
         this.convertor = Convertor.createStraight(key, byteIndex, cc, nrpn, boundaries);
         this.boundaries = Objects.requireNonNull(boundaries);
-    }
+        }
 
     Mappings(Convertor convertor, Boundaries boundaries) {
         this.key = extractKey(this);
         this.convertor = Objects.requireNonNull(convertor);
         this.boundaries = Objects.requireNonNull(boundaries);
-    }
+        }
 
     /**
      * Find a mapping object by name & index
@@ -308,7 +308,7 @@ enum Mappings {
      */
     static Mappings find(String name, int index) {
         return Mappings.valueOf(String.format(name, index));
-    }
+        }
 
     /**
      * get (Edisyn) model key
@@ -317,7 +317,7 @@ enum Mappings {
      */
     public String getKey() {
         return key;
-    }
+        }
 
     /**
      * get convertor object (Edisyn data VS MIDI data)
@@ -326,7 +326,7 @@ enum Mappings {
      */
     public Convertor getConvertor() {
         return convertor;
-    }
+        }
 
     /**
      * get restrictions (boundaries imposed on the data)
@@ -335,10 +335,10 @@ enum Mappings {
      */
     public Boundaries getBoundaries() {
         return boundaries;
-    }
+        }
 
     // deduce (Edisym model) key from enum name, yet adding some conversion to adhere to the Edisyn naming conventions
     private String extractKey(Mappings mappings) {
         return mappings.name().replaceAll("[^A-Za-z0-9]", "").toLowerCase(Locale.ROOT);
+        }
     }
-}

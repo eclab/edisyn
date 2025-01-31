@@ -41,7 +41,7 @@ public interface Boundary {
      */
     default boolean validate(int value) {
         return value >= getMin() && value <= getMax();
-    }
+        }
 
     ;
-}
+    }

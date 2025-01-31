@@ -39,19 +39,19 @@ public enum Boundaries implements Boundary {
     CHORUS_GLOBAL_SYNC("Off", "Left", "Center", "Right"),
     PANNING_GLOBAL_SYNC(CHORUS_GLOBAL_SYNC),
     SYNC_RATES("N/A", "32t", "32", "16t", "16", "8t", "16d", "8", "4t", "8d", "4", "2t", "4d", "2", "1t", "2d",
-            "1b", "2t", "1d", "2b", "4t", "3b", "5t", "4b", "3d", "7t", "5b", "8t", "6b", "7b", "5d", "8b", "9b", "7d", "12"),
+        "1b", "2t", "1d", "2b", "4t", "3b", "5t", "4b", "3d", "7t", "5b", "8t", "6b", "7b", "5d", "8b", "9b", "7d", "12"),
     DELAY_SYNC_RATES(Arrays.asList(SYNC_RATES.values).subList(0, 20)),
     ARP_SYNC_RATES(Arrays.asList(SYNC_RATES.values).subList(0, 17)),
     ARP_NON_SYNC_RATES(0, 127, -64), // 64 -> 191 BPM
     DELAY_RATIO("1-1", "4-3", "3-4", "3-2", "2-3", "2-1", "1-2", "3-1", "1-3", "4-1", "1-4", "1-0", "0-1"),
     EQUALIZER_LEVEL(IntStream.rangeClosed(0, 127).boxed().map(i -> {
-        if (i < 64) {
-            return "LP " + i;
-        } else if (i > 64) {
-            return "HP " + i;
-        }
-        return "--";
-    }).collect(Collectors.toList()), 64);
+                if (i < 64) {
+                    return "LP " + i;
+                    } else if (i > 64) {
+                    return "HP " + i;
+                    }
+                return "--";
+                }).collect(Collectors.toList()), 64);
 
     private final int min;
     private final int max;
@@ -60,56 +60,56 @@ public enum Boundaries implements Boundary {
 
     Boundaries(List<String> values) {
         this(values, 0);
-    }
+        }
 
     Boundaries(List<String> values, int offset) {
         this(offset, values.toArray(new String[0]));
-    }
+        }
 
     Boundaries(String... values) {
         this(0, values);
-    }
+        }
 
     Boundaries(int offset, String... values) {
         this(0, values.length - 1, offset, values);
-    }
+        }
 
     Boundaries(int min, int max) {
         this(min, max, 0);
-    }
+        }
 
     Boundaries(int min, int max, int offset) {
         this(min, max, offset, (String[]) null);
-    }
+        }
 
     Boundaries(int min, int max, int offset, String... values) {
         this.min = min;
         this.max = max;
         this.offset = offset;
         this.values = values;
-    }
+        }
 
     Boundaries(Boundaries other) {
         this(other.min, other.max, other.offset, other.values);
-    }
+        }
 
     @Override
     public int getMin() {
         return min;
-    }
+        }
 
     @Override
     public int getMax() {
         return max;
-    }
+        }
 
     @Override
     public int getOffset() {
         return offset;
-    }
+        }
 
     @Override
     public String[] getValues() {
         return values;
+        }
     }
-}

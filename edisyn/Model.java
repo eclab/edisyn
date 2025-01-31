@@ -1899,7 +1899,7 @@ public class Model implements Cloneable
                     out.println(keys[i] + ": " + str);
                 else
                     out.println(keys[i] + ": " + 
-                    	(convertHTML && StringUtility.testHTML(str) ? StringUtility.removeHTML(str) : str) + " (" + str2 + ")");
+                        (convertHTML && StringUtility.testHTML(str) ? StringUtility.removeHTML(str) : str) + " (" + str2 + ")");
                 }
             else
                 out.println(keys[i] + ": UNKNOWN OBJECT " + get(keys[i]));

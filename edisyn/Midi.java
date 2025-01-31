@@ -940,68 +940,68 @@ public class Midi
             {
             // BEGIN PARSER
 
-            if (number == 99)		// NRPN MSB
+            if (number == 99)           // NRPN MSB
                 {
                 if (status[channel] != NRPN_END)
-                	{
-					controllerNumberLSB[channel] = 0;
-                	status[channel] = NRPN_END;
-                	}
-
-				controllerValueLSB[channel]  = -1;
-				controllerValueMSB[channel]  = -1;
-				controllerNumberMSB[channel] = value;
-				return null;
-                }
-
-            else if (number == 98)	// NRPN LSB
-                {
-                if (status[channel] != NRPN_END)
-                	{
-					controllerNumberMSB[channel] = 0;
-                	status[channel] = NRPN_END;
-                	}
-
-				controllerValueLSB[channel]  = -1;
-				controllerValueMSB[channel]  = -1;
-				controllerNumberLSB[channel] = value;
-				return null;
-                }
-                
-            else if (number == 101)		// RPN MSB
-                {
-                if (value == 127)  // this is the NULL termination tradition, see for example http://www.philrees.co.uk/nrpnq.htm
                     {
-                    status[channel] = INVALID;
+                    controllerNumberLSB[channel] = 0;
+                    status[channel] = NRPN_END;
                     }
-                else if (status[channel] != RPN_END)
-                	{
-					controllerNumberMSB[channel] = 0;
-                	status[channel] = RPN_END;
-                	}
 
-				controllerValueLSB[channel]  = -1;
-				controllerValueMSB[channel]  = -1;
-				controllerNumberMSB[channel] = value;
+                controllerValueLSB[channel]  = -1;
+                controllerValueMSB[channel]  = -1;
+                controllerNumberMSB[channel] = value;
                 return null;
                 }
 
-            else if (number == 100)		// RPN LSB
+            else if (number == 98)      // NRPN LSB
+                {
+                if (status[channel] != NRPN_END)
+                    {
+                    controllerNumberMSB[channel] = 0;
+                    status[channel] = NRPN_END;
+                    }
+
+                controllerValueLSB[channel]  = -1;
+                controllerValueMSB[channel]  = -1;
+                controllerNumberLSB[channel] = value;
+                return null;
+                }
+                
+            else if (number == 101)             // RPN MSB
                 {
                 if (value == 127)  // this is the NULL termination tradition, see for example http://www.philrees.co.uk/nrpnq.htm
                     {
                     status[channel] = INVALID;
                     }
                 else if (status[channel] != RPN_END)
-                	{
-					controllerNumberLSB[channel] = 0;
-                	status[channel] = RPN_END;
-                	}
+                    {
+                    controllerNumberMSB[channel] = 0;
+                    status[channel] = RPN_END;
+                    }
 
-				controllerValueLSB[channel]  = -1;
-				controllerValueMSB[channel]  = -1;
-				controllerNumberLSB[channel] = value;
-				return null;
+                controllerValueLSB[channel]  = -1;
+                controllerValueMSB[channel]  = -1;
+                controllerNumberMSB[channel] = value;
+                return null;
+                }
+
+            else if (number == 100)             // RPN LSB
+                {
+                if (value == 127)  // this is the NULL termination tradition, see for example http://www.philrees.co.uk/nrpnq.htm
+                    {
+                    status[channel] = INVALID;
+                    }
+                else if (status[channel] != RPN_END)
+                    {
+                    controllerNumberLSB[channel] = 0;
+                    status[channel] = RPN_END;
+                    }
+
+                controllerValueLSB[channel]  = -1;
+                controllerValueMSB[channel]  = -1;
+                controllerNumberLSB[channel] = value;
+                return null;
                 }
 
             else if ((number == 6 || number == 38 || number == 96 || number == 97) && (status[channel] == NRPN_END || status[channel] == RPN_END))  // we're currently parsing NRPN or RPN

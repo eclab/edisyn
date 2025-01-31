@@ -70,7 +70,7 @@ public class Library extends AbstractTableModel
         initPatch = new Patch(synthNum, data, false);
         initPatch.empty = true;
         synth.setModel(backup);                                 // restore
-        synth.model.setUpdateListeners(true);		// it'll be true anyway
+        synth.model.setUpdateListeners(true);           // it'll be true anyway
         synth.undo.setWillPush(true);
         synth.setSendMIDI(originalMIDI);
 

@@ -390,54 +390,54 @@ public class StringUtility
         
     /** Tests for HTML in text. */
     public static boolean testHTML(String val)
-    	{
-    	return val.trim().toLowerCase().startsWith("<html>");
-    	}
-    	
+        {
+        return val.trim().toLowerCase().startsWith("<html>");
+        }
+        
     /** Strips HTML from text. */
     public static String removeHTML(String val)
-    	{
-    	try
-    		{
-    	StringBuffer s = new StringBuffer();
-    	new ParserDelegator().parse(new StringReader(val), 
-    		new HTMLEditorKit.ParserCallback()
-    			{
-    			public void handleText(char[] text, int pos) { s.append(text); }
-    			public void handleSimpleTag(HTML.Tag t, MutableAttributeSet a, int pos) 
-    				{
-    				if (t.equals(HTML.Tag.BR) || 
-    					t.equals(HTML.Tag.CENTER) || 
-    					t.equals(HTML.Tag.LI) || 
-    					t.equals(HTML.Tag.DD) || 
-    					t.equals(HTML.Tag.DT) || 
-    					t.equals(HTML.Tag.H1) || 
-    					t.equals(HTML.Tag.H2) || 
-    					t.equals(HTML.Tag.H3) || 
-    					t.equals(HTML.Tag.H4) || 
-    					t.equals(HTML.Tag.H5) || 
-    					t.equals(HTML.Tag.H6) || 
-    					t.equals(HTML.Tag.P) || 
-    					t.equals(HTML.Tag.TH) || 
-    					t.equals(HTML.Tag.TD)) s.append(" ");
-    				}
-    			public void handleStartTag(HTML.Tag t, MutableAttributeSet a, int pos) 
-    				{
-    				if (t.equals(HTML.Tag.CENTER) || 
-    					t.equals(HTML.Tag.H1) || 
-    					t.equals(HTML.Tag.H2) || 
-    					t.equals(HTML.Tag.H3) || 
-    					t.equals(HTML.Tag.H4) || 
-    					t.equals(HTML.Tag.H5) || 
-    					t.equals(HTML.Tag.H6) || 
-    					t.equals(HTML.Tag.P) || 
-    					t.equals(HTML.Tag.TH) || 
-    					t.equals(HTML.Tag.TD)) s.append(" ");
-    				}
-    			}, Boolean.TRUE);
-    	return s.toString();
-    	}
-    	catch (IOException ex) { return val; }		// should never happenx
-    	}
+        {
+        try
+            {
+            StringBuffer s = new StringBuffer();
+            new ParserDelegator().parse(new StringReader(val), 
+                new HTMLEditorKit.ParserCallback()
+                    {
+                    public void handleText(char[] text, int pos) { s.append(text); }
+                    public void handleSimpleTag(HTML.Tag t, MutableAttributeSet a, int pos) 
+                        {
+                        if (t.equals(HTML.Tag.BR) || 
+                            t.equals(HTML.Tag.CENTER) || 
+                            t.equals(HTML.Tag.LI) || 
+                            t.equals(HTML.Tag.DD) || 
+                            t.equals(HTML.Tag.DT) || 
+                            t.equals(HTML.Tag.H1) || 
+                            t.equals(HTML.Tag.H2) || 
+                            t.equals(HTML.Tag.H3) || 
+                            t.equals(HTML.Tag.H4) || 
+                            t.equals(HTML.Tag.H5) || 
+                            t.equals(HTML.Tag.H6) || 
+                            t.equals(HTML.Tag.P) || 
+                            t.equals(HTML.Tag.TH) || 
+                            t.equals(HTML.Tag.TD)) s.append(" ");
+                        }
+                    public void handleStartTag(HTML.Tag t, MutableAttributeSet a, int pos) 
+                        {
+                        if (t.equals(HTML.Tag.CENTER) || 
+                            t.equals(HTML.Tag.H1) || 
+                            t.equals(HTML.Tag.H2) || 
+                            t.equals(HTML.Tag.H3) || 
+                            t.equals(HTML.Tag.H4) || 
+                            t.equals(HTML.Tag.H5) || 
+                            t.equals(HTML.Tag.H6) || 
+                            t.equals(HTML.Tag.P) || 
+                            t.equals(HTML.Tag.TH) || 
+                            t.equals(HTML.Tag.TD)) s.append(" ");
+                        }
+                }, Boolean.TRUE);
+            return s.toString();
+            }
+        catch (IOException ex) { return val; }          // should never happenx
+        }
     }
 

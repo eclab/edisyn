@@ -35,7 +35,7 @@ interface Convertor {
     // create straight convertor
     static Convertor createStraight(String key, Integer byteIndex, Integer cc, Integer nrpn, Boundary boundary) {
         return new Straight(key, byteIndex, cc, nrpn, boundary);
-    }
+        }
 
     /**
      * Most straightforward implementation of a <code>Convertor</code>, based on a simple one-to-one conversion
@@ -53,41 +53,41 @@ interface Convertor {
             this.cc = cc == null ? OptionalInt.empty() : OptionalInt.of(cc);
             this.nrpn = nrpn == null ? OptionalInt.empty() : OptionalInt.of(nrpn);
             this.boundary = boundary;
-        }
+            }
 
         @Override
         public void toModel(Model model, int value) {
             model.set(key, value);
-        }
+            }
 
         @Override
         public int toSynth(Model model) {
             return model.get(key);
-        }
+            }
 
         @Override
         public OptionalInt getByteIndex() {
             return byteIndex;
-        }
+            }
 
         @Override
         public OptionalInt getCC() {
             return cc;
-        }
+            }
 
         @Override
         public OptionalInt getNRPN() {
             return nrpn;
-        }
+            }
 
         @Override
         public Boundary getBoundary() {
             return boundary;
-        }
+            }
 
         @Override
         public String toString() {
             return "Convertor.Straight{key='" + key + "'}";
+            }
         }
     }
-}

@@ -53,7 +53,7 @@ Edisyn is a synthesizer patch editor library written in pure Java.   It runs on 
 
 Edisyn is particularly good at exploring the space of patches.  It has to my knowledge the most sophisticated set of general-purpose patch-exploration tools of any patch editor available.
 
-<a name="support"/></name>
+<a name="support"/></a>
 
 Edisyn presently supports:
 
@@ -138,6 +138,8 @@ Edisyn is cross-platform and will run on a variety of platforms (Windows, Linux)
 
 First install Edisyn from the [Edisyn.dmg](https://cs.gmu.edu/~eclab/projects/edisyn/Edisyn.dmg) file.  Sadly, it's a whopping 70MB because it includes the Java VM.  :-(
 
+If you have an old Mac that only has Java 8, you can try installing the Java 8 version: [Edisyn.app.zip](https://cs.gmu.edu/~eclab/projects/edisyn/java8/Edisyn.app.zip) 
+
 MacOS has lately locked down the ability to run an application that's not from a commercial, paying Apple Developer.  And I'm not one.  So you will have to instruct MacOS to permit Edisyn to run.  
 
 #### Installing under MacOS X Prior to Sequoia
@@ -173,9 +175,11 @@ At present Edisyn only runs under Rosetta on the M1.  It'll work fine; there are
 
 I believe that the following should work:
 
-1. Download and install at least Java 11.  There are two options.  I suggest OpenJDK: [Microsoft's OpenJDK installation](https://www.microsoft.com/openjdk) is the easiest route.  An alternative is to install [Oracle's JDK](http://www.oracle.com/technetwork/java/javase/downloads/index.html), but it has more onerous license restrictions.  
+1. Download and install at least Java 20.  There are two options.  I suggest OpenJDK: [Microsoft's OpenJDK installation](https://www.microsoft.com/openjdk) is the easiest route.  An alternative is to install [Oracle's JDK](http://www.oracle.com/technetwork/java/javase/downloads/index.html), but it has more onerous license restrictions.  
 2. Download Edisyn's jar file, called [edisyn.jar](https://cs.gmu.edu/~eclab/projects/edisyn/edisyn.jar).
 3. Double-click on edisyn.jar to launch Edisyn.
+
+If you have an Windows box that only has Java 11 (you have to have at least Java 11 -- don't install anything earlier, there are bad bugs), you can try installing the Java 11 version of the jar file: [edisyn.jar](https://cs.gmu.edu/~eclab/projects/edisyn/java8/edisyn.jar) 
 
 If you want to use Edisyn in combination with a DAW, see the manual's section on building a MIDI Loopback.
 
@@ -194,11 +198,9 @@ I have reports of Java crashing on Windows if you set Edisyn's "Receive From" or
 
 I have occasionally seen hard crashing/hanging on Windows if the USB MIDI device is disconnected while Edisyn is attempting to communicate over MIDI.  It appears to be a Windows driver issue.  So don't do that.
 
-I have had at least one report that Java 8 on Windows has serious problems with some Edisyn patch editors (probably memory).  Install something newer.
-
 #### Dealing with High-Resolution Displays in Windows
 
-Java doesn't handle high-resolution displays properly in Windows, especially Windows 10.  Be sure to have installed at least Java 11 (otherwise you'll have teeny tiny Edisyn windows).  You'll still have font issues on 4K monitors.  I am told this can help dealing with it:
+Java doesn't handle high-resolution displays properly in Windows, especially Windows 10.  Be sure to have installed Java 20 (or Java 11 if you're using the old Java version of the jar file, see above).  Otherwise you'll have teeny tiny Edisyn windows.  You'll still have font issues on 4K monitors.  I am told this can help dealing with it:
 
 1. Find the java.exe file you installed.
 2. Right-click and select "Properties"
@@ -219,11 +221,12 @@ When you double-click on a jar file, Windows may not launch Java properly becaus
 
 ### Installation and Running on Linux
 
-I'm told that Edisyn works if you have installed at least Java 8.  After this:
-
+1. Install Java 20 or higher.
 1. Download [Edisyn's jar file](https://cs.gmu.edu/~eclab/projects/edisyn/edisyn.jar).
-2. You'll need to figure out how to make it so that double-clicking on the jar file launches it in java.  In Ubuntu, here's what you do: right-click on the jar file icon and choose "Properties".  Then select the "Open With" tab, and select your Java VM (for example "Open JDK Java 8 Runtime").  The press "Set as Default".  This makes the Java VM the default application to launch jar files.
+2. You'll need to figure out how to make it so that double-clicking on the jar file launches it in java.  In Ubuntu, here's what you do: right-click on the jar file icon and choose "Properties".  Then select the "Open With" tab, and select your Java VM (for example "Open JDK Java 20 Runtime").  The press "Set as Default".  This makes the Java VM the default application to launch jar files.
 3. Thereafter you should be able to just double-click on the file to launch Edisyn.
+
+If you have an Linux box that only has at least Java 11 (you have to have at least Java 11 -- don't install anything earlier, there are bad bugs), you can try installing the Java 11 version of the jar file: [edisyn.jar](https://cs.gmu.edu/~eclab/projects/edisyn/java8/edisyn.jar) 
 
 If you want to use Edisyn in combination with a DAW, see the manual's section on building a MIDI Loopback.
 
@@ -251,7 +254,7 @@ Java has compatibility problems with Jack; disabling Jack will often allow Edisy
 
 ### Running from the command line (OS X, Windows, Linux)
 
-1. Make sure Java is installed.
-2. Download [Edisyn's jar file](https://cs.gmu.edu/~eclab/projects/edisyn/edisyn.jar).
+1. Make sure Java 20 is installed.
+2. Download [Edisyn's jar file](https://cs.gmu.edu/~eclab/projects/edisyn/edisyn.jar).  Or if you can only install Java 11 or higher (must be at least 11), download the Java 11 version of the [jar file](https://cs.gmu.edu/~eclab/projects/edisyn/java8/edisyn.jar).
 3. Run Edisyn as:   `java -jar edisyn.jar`
 

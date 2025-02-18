@@ -140,6 +140,7 @@ public class YamahaDX7 extends Synth implements ProvidesNN
         {
         JFrame frame = super.sprout();
         writeTo.setEnabled(false);
+        addYamahaDX7Menu();
         return frame;
         }         
 
@@ -233,6 +234,7 @@ public class YamahaDX7 extends Synth implements ProvidesNN
         boolean v = isVolca();
         loadDefaults();        
         setVolca(v, false);
+
         
         /*
         // Dump Parameters
@@ -281,7 +283,31 @@ public class YamahaDX7 extends Synth implements ProvidesNN
         }
         */
         }
-                
+        
+    public void addYamahaDX7Menu()
+    	{
+    	JMenu menu = new JMenu("DX7");
+    	menubar.add(menu);
+    	
+		JMenuItem parseFromLine = new JMenuItem("Read Text Line...");
+		parseFromLine.addActionListener(new ActionListener()
+			{
+			public void actionPerformed(ActionEvent e)
+				{
+				JTextField field = new JTextField(50);
+				int result = showMultiOption(YamahaDX7.this, new String[] { "Text" }, new JComponent[] { field }, 
+					new String[] { "Read", "Cancel" }, 0, "Read Text Line", 
+					"Paste in a single line from the \"dx7/dx7.patchparams\" file.\nSee Edisyn's \"resources\" directory.");
+				if (result == 0)
+					{
+					readString(field.getText());
+					}
+				}
+			});
+		menu.add(parseFromLine);
+		}
+
+
     public String getDefaultResourceFileName() { return "YamahaDX7.init"; }
     public String getHTMLResourceFileName() { return "YamahaDX7.html"; }
 
@@ -965,7 +991,45 @@ public class YamahaDX7 extends Synth implements ProvidesNN
             return new Object[0];
             }
         }
-
+        
+        
+	public void readString(String str)
+		{
+		if (str == null) return;
+		str = str.trim();
+     	String[] result = str.split("\"");
+     	if (result.length != 3) return;
+     	if (result[0].length() != 0) return;
+     	if (result[1].length() > 10) return;
+     	String name = result[1];
+     	result = result[2].split(",");
+     	if (result.length < 146) return;
+     	if (result[0].trim().length() != 0) return;
+     	int[] vals = new int[145];
+     	try
+     		{
+     		for(int i = 0; i < 145; i++)
+     			{
+     			vals[i] = Math.max(0, Integer.parseInt(result[i + 1].trim()));
+     			}
+     		}
+     	catch (NumberFormatException ex)
+     		{
+     		return;
+     		}
+     	setSendMIDI(false);
+     	undo.push(getModel());
+        undo.setWillPush(false);
+        for(int i = 0; i < 145; i++)  	
+        	{
+			model.set(allParameters[i], vals[i]);
+			}
+		model.set("name", name);
+		revise();
+		undo.setWillPush(true);
+		setSendMIDI(true);
+		sendAllParameters();
+		}
 
     public int parseOne(byte[] data)
         {

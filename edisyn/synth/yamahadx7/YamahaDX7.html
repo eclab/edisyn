@@ -15,8 +15,8 @@ The DX9 is patch-compatible with the DX7 but it is missing a few features.  Most
 <br><br><h3>About the DX200</h3>
 The DX200 is roughly compatible with the DX7, but has certain additional patch parameters lacking in the DX7 (the so-called ACED/AMEM parameters), and Edisyn does not emit or parse these parameters.  These include: per-operator amplitude modulation sensitivity; pitch envelope generator range, scaling depth, and velocity switch; LFO key trigger; poly/mono/unison switch; pitch bend range and step; random pitch fluctuation; portamento mode, step, and time; and unison detune depth.
 
-<br><br><h3>Bank Sysex</h3>
-This patch editor knows about bank sysex messages (which group together multiple patches) as well as single-patch sysex messages.  If Edisyn loads or receives a bank sysex message, you will be given the option to edit a patch from it, to save the whole bank sysex, or to upload the whole bank sysex.
+<br><br><h3>The DX7 Menu</h3>
+The DX7 Menu has a single menu item, <b>Read Text Line...</b>.  This pops up a dialog box which lets you paste in a single text line, which is then read and interpreted as a patch.  Where do you get these lines?  From the <b>dx7.patchparams</b> file, located in the <b>dx7.zip</b> archive in Edisyn's <b>resources</b> directory.  This file has over 30,000 lines, each one representing a unique patch found on the internet!  Try copying a line from this file and pasting it into the dialog box.
 
 <br><br><h3>Communicating with Edisyn</h3>
 The precise instructions here vary depending on the DX7 family synth you own.  But in general: Set your synthesizer to receive and transmit on the same channel (perhaps Channel 1), and turn off memory protection.  Turn on reception of sysex (on the DX7, "SYS INFO AVAIL"), and program change (PC) messages.  Turn on transmission of sysex messages if your model has this option.

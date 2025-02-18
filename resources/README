@@ -15,8 +15,8 @@ VenomPatches.zip
 These are a collection of M-Audio Venom patches, originally in proprietary
 Vyzex format, converted to sysex for use in Edisyn.
 
-DX7.patchparams.zip
-These aren't patches, but rather a collection of the *parameters*, in text, from almost 30,000 unique DX7 patches from the internet, stripped of their names.  We developed this collection to build the neural network for the DX7 hill-climber; it might be useful to other researchers.  The patches are one to a line, comma-separated, and there are some headers indicating parameter names and ranges.
+DX7.zip
+This contains two files, dx7.patchparams and dx7.header.  The file dx7.patchparams is a textual list of over 30,000 unique DX7 patches culled from the internet.  dx7.header is a text file which gives information about this list.  We developed this collection to build the neural network for the DX7 hill-climber; it might be useful to other researchers.  Additionally, Edisyn's DX7 patch editor is capable of reading individual lines cut and pasted from the dx7.patchparams file.
 
 EmuInstruments.zip
 Various E-Mu synthesizers require a custom mapping from the instrument number to an offset in RAM in order to be properly referenced in sysex.  You can get this information via a special instrument sysex dump request.  This zip file contains instrument offset dumps for the Planet Phatt, Orbit V2, Carnaval, and Vintage Keys Plus synthesizers. 

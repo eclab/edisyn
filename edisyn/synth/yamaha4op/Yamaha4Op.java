@@ -2237,9 +2237,11 @@ public class Yamaha4Op extends Synth
 
     public int parseVMEM(byte[] data, boolean fromFile)
         {
+        int banksize = getValidBankSize(0);
+        
         // extract names
         char[][] names = new char[32][10];
-        for(int i = 0; i < 32; i++)
+        for(int i = 0; i < banksize; i++)
             {
             for (int j = 0; j < 10; j++)
                 {
@@ -2247,8 +2249,8 @@ public class Yamaha4Op extends Synth
                 }
             }
                         
-        String[] n = new String[32];
-        for(int i = 0; i < 32; i++)
+        String[] n = new String[banksize];
+        for(int i = 0; i < banksize; i++)
             {
             n[i] = "" + (i + 1) + "   " + new String(names[i]);
             }
@@ -2398,7 +2400,12 @@ public class Yamaha4Op extends Synth
         int bank = getLibrarian().getSelectedBank();
         if (bank < 0) return;
 
-        if (getLibrarian().getLibrary().getBankSize() == 32) 
+
+        if (getLibrarian().getLibrary().getBankSize() == 24) 
+            {
+            showSimpleError("Cannot Write Patches", "There are only 24 patches in this bank.  Use Write Bank instead.");
+            }
+        else if (getLibrarian().getLibrary().getBankSize() == 32) 
             {
             showSimpleError("Cannot Write Patches", "There are only 32 patches in this bank.  Use Write Bank instead.");
             }
@@ -2480,6 +2487,8 @@ public class Yamaha4Op extends Synth
  
     public Object[] emitBank(Model[] models)
         {
+        int banksize = getValidBankSize(0);
+        
         byte[] data = new byte[4104];
         data[0] = (byte)0xF0;
         data[1] = (byte)0x43;
@@ -2488,8 +2497,12 @@ public class Yamaha4Op extends Synth
         data[4] = (byte)0x20;                           // manual says 10 but this is wrong
         data[5] = (byte)0x00;
         
-        for(int number = 0; number < 32; number++)
+        for(int n = 0; n < 32; n++)
             {
+            // handle banks of size 24
+            int number = n;
+            if (n >= banksize) number = 0;
+            
             // okay, we're loading and editing patch number.  Here we go.
             int patch = number * 128;
             int pos = 0;
@@ -3383,8 +3396,11 @@ public class Yamaha4Op extends Synth
                 }
             return names;
             }
+        else if (getSynthType() == TYPE_DX27_DX100)
+        	{
+            return buildIntegerNames(24, 1); 
+        	}
         else if (getSynthType() == TYPE_DX21 || 
-            getSynthType() == TYPE_DX27_DX100 || 
             getSynthType() == TYPE_TX81Z || 
             getSynthType() == TYPE_DX11 )
             {

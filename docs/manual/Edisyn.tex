@@ -1065,6 +1065,17 @@ To save a bank of patches to a single file, select the a patch in the bank and c
 
 To save all patches in the Librarian  to a single file or collection of files, choose {\bf Save All Patches...} from the {\bf Librarian} menu.  Many synthesizers can save out banks either with a single bank sysex message or as individual patch sysex messages.  Edisyn will give you the option if it can.  Note that saving out patches first involves building their sysex, and for some synthesizers this may take several seconds if you're saving {\it all} the patches.  Be patient: Edisyn isn't hung.
 
+\paragraph{Sending a Patch to your Synthesizer's Current Patch}
+
+There are three ways to do this, depending on whether you want to copy the patch to the patch editor and/or display the patch editor.  Or just send the patch.
+
+First, you can select the patch, and then choose {\bf Send Patch to Current Patch} from the {\bf Librarian} menu.  This will send the patch directly to the synthesizer as its current patch.  If the patch is blank, an Init Patch will be sent to the synthesizer.
+
+Second, you select a patch, then drag it to the slot labelled {\bf Current Patch} near the bottom of the window.  This will copy the patch to your patch editor and, in so doing, send the patch to the synthesizer as its current patch.
+
+Third, double-click a patch.  This will copy the patch to your patch editor, send the patch to the synthesizer as its current patch, and switch to the patch editor tab.  To go back to the library, select {\bf Show Librarian} from the {\bf File} menu.
+
+
 \paragraph{Writing Patches to your Synthesizer}
 
 To write a patch or a range of selected patches to your synthesizer, select the patch or range and choose {\bf Write Selected Patches to Synth} from the {\bf Librarian} menu.  This writes the patches as if you had loaded each one in the editor and chosen {\bf Write to Patch...}.  

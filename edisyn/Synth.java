@@ -139,7 +139,7 @@ public abstract class Synth extends JComponent implements Updatable
     JMenuItem downloadBankMenu;
     JMenuItem downloadAllMenu;
     JMenuItem writeMenu;
-    
+    JMenuItem sendMenu;
 
         
     // The four nudge models 

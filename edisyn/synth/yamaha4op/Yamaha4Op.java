@@ -3463,7 +3463,7 @@ public class Yamaha4Op extends Synth
             }
         else 
             {
-            return super.getValidBankSize(bank); 
+            return 32; 
             }
         }
     

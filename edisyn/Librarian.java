@@ -682,6 +682,58 @@ public class Librarian extends JPanel
             synth.setPrintRevised(printRevised);
             }
         }
+        
+    public void sendToCurrentPatch()
+    	{
+        int column = col(table, table.getSelectedColumn());
+        int row = table.getSelectedRow();
+        if (column >= 0 && row >= 0)
+            {
+            Synth synth = getLibrary().getSynth();
+            synth.setSendMIDI(false);
+            synth.undo.setWillPush(false);
+            Model model = synth.getModel();
+	        Model backup = (Model)(model.clone());  
+			model.setUpdateListeners(false);
+			
+            Patch p = getLibrary().getPatch(column - 1, row);
+            if (p == null) p = getLibrary().getInitPatch();
+                        
+            try
+                {
+                synth.performParse(synth.flatten(p.sysex), true);
+                                
+                int bank = (column - 1);
+                int number = row;
+                if (bank != -1)                 // don't revise the patch location if it's the scratch bank
+                    {
+                    // revise the patch location to where it came from in the librarian
+                    synth.getModel().set("number", number);
+                    int b = synth.getModel().get("bank", -1);
+                    if (b != -1)
+                        synth.getModel().set("bank", bank);
+                    }
+                
+                boolean sendsMIDI = synth.getSendMIDI();	// not sure why but by default this is false?
+                synth.setSendMIDI(true);
+                synth.sendAllParametersInternal();
+                synth.setSendMIDI(sendsMIDI);
+                }
+            catch (Exception ex)
+                {
+                Synth.handleException(ex);
+                }
+			
+			synth.setModel(backup);
+			synth.setSendMIDI(true);
+			synth.undo.setWillPush(true);
+            }
+        else
+        	{
+			getLibrary().synth.showSimpleError("Cannot Send", "Please select a patch to send first.");
+			return;
+        	}
+    	}
          
     public void loadOneInternal()
         {
@@ -936,6 +988,16 @@ public class Librarian extends JPanel
             menu.addSeparator();
             }
                         
+
+        item = new JMenuItem("Send Patch to Current Patch");
+        synth.sendMenu = item;
+        item.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent evt) { synth.librarian.sendToCurrentPatch(); }
+            });
+        menu.add(item);
+        item.setEnabled(synth.transmitCurrent.isEnabled());
+                
 
         item = new JMenuItem("Write Selected Patches to Synth");
         synth.writeMenu = item;

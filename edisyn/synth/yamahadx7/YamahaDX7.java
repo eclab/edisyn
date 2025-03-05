@@ -300,7 +300,10 @@ public class YamahaDX7 extends Synth implements ProvidesNN
 					"Paste in a single line from the \"dx7/dx7.patchparams\" file.\nSee Edisyn's \"resources\" directory.");
 				if (result == 0)
 					{
-					readString(field.getText());
+					if (!readString(field.getText()))
+						{
+						showSimpleMessage("Read Failed", "Edisyn was unable to read this line into the DX7 patch editor.");
+						}
 					}
 				}
 			});
@@ -993,18 +996,18 @@ public class YamahaDX7 extends Synth implements ProvidesNN
         }
         
         
-	public void readString(String str)
+	public boolean readString(String str)
 		{
-		if (str == null) return;
+		if (str == null) return false;
 		str = str.trim();
      	String[] result = str.split("\"");
-     	if (result.length != 3) return;
-     	if (result[0].length() != 0) return;
-     	if (result[1].length() > 10) return;
+     	if (result.length != 3) return false;
+     	if (result[0].length() != 0) return false;
+     	if (result[1].length() > 10) return false;
      	String name = result[1];
      	result = result[2].split(",");
-     	if (result.length < 146) return;
-     	if (result[0].trim().length() != 0) return;
+     	if (result.length < 146) return false;
+     	if (result[0].trim().length() != 0) return false;
      	int[] vals = new int[145];
      	try
      		{
@@ -1015,7 +1018,7 @@ public class YamahaDX7 extends Synth implements ProvidesNN
      		}
      	catch (NumberFormatException ex)
      		{
-     		return;
+     		return false;
      		}
      	setSendMIDI(false);
      	undo.push(getModel());
@@ -1029,6 +1032,7 @@ public class YamahaDX7 extends Synth implements ProvidesNN
 		undo.setWillPush(true);
 		setSendMIDI(true);
 		sendAllParameters();
+		return true;
 		}
 
     public int parseOne(byte[] data)

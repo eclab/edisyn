@@ -1169,7 +1169,7 @@ public class YamahaFB01 extends Synth
         int number = model.get("number");
         
         number++;
-        if (number >= 24)
+        if (number >= 48)
             {
             bank++;
             number = 0;

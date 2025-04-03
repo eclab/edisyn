@@ -1798,8 +1798,7 @@ Note: I have not determined the five actual NRPN values for each preset, just th
 
 | Name 	|  	| NRPN 	| Notes 	| 
 | --- | --- | --- | --- |	
-| allosccent 	|  	| 0x41 0x04 	| "[-50,+50] 2-byte 2's Complement.  Thus it goes  	| 
-| 0=0, 1=1, 2=2, ..., 50=50, then 8142 = -50, 8143 =-49, ..., 8191 = -1 " 	| 
+| allosccent 	|  	| 0x41 0x04 	| "[-50,+50] 2-byte 2's Complement.  Thus it goes  0=0, 1=1, 2=2, ..., 50=50, then 8142 = -50, 8143 =-49, ..., 8191 = -1 " 	| 
 | osc1solowavescan1 	|  	| 0x3F 0x1b 	| "MSB = Wavescan [0,7]   LSB = [0,1]     	| 
 | NOTE: In fact it's not clear what these do if anything." 	| 
 | osc1solowavescan2 	|  	| 0x3F 0x1b 	|  	| 

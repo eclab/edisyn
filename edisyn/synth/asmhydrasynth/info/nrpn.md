@@ -401,7 +401,7 @@ Next come certain patterns.
  	 	    multiple of 30: 	
  	 	    x0 x3 x8 (x+1)0 (x+1)5 (x+1)9 (x+2)2 (x+2)6 	
  	 	    (for example 700 703 708 710 715 719 722 726) 	
-744-1024 	SOME_MORE_DELAY_TIMES.  See [https://github.com/eclab/edisyn/blob/master/edisyn/synth/asmhydrasynth/info/nrpn.tables.txt](https://github.com/eclab/edisyn/blob/master/edisyn/synth/asmhydrasynth/info/nrpn.tables.txt) 	
+744-1024 	SOME_MORE_DELAY_TIMES.  See https://github.com/eclab/edisyn/blob/master/edisyn/synth/asmhydrasynth/info/nrpn.tables.txt 	
 ```
 | Parameter | CC | NRPN | Range and NRPN Display Instructions | 
 | --- | --- | --- | --- |

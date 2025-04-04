@@ -27,7 +27,7 @@ at [https://github.com/eclab/edisyn/blob/master/edisyn/synth/asmhydrasynth/info/
 * [CC Parameters](#cc)
 * [Basic Patch NRPN Parameters](#nrpn)
 * [Macro NRPN Parameters](#macro)
-* [FX NRPN Parameters](#fx)
+* [FX Types and Custom Parameters](#fx)
 * [Patch Parameters without NRPN](#nonrpn)
 * [Parameters new to 2.0.0](#2.0.0)
 * [Undocumented NRPN Parameters](#undocumented)
@@ -37,6 +37,8 @@ at [https://github.com/eclab/edisyn/blob/master/edisyn/synth/asmhydrasynth/info/
 
 
 ## Parameters with CC Values
+
+Remember: if a Range cell is blank, look for the first numbered version of that parameter.  For example, mutator3wet is blank: instead you should see mutator1wet. 
 <a name="cc"/></a>
 
 | Name 	| CC 	| Range 	| Notes 	| 
@@ -157,8 +159,7 @@ at [https://github.com/eclab/edisyn/blob/master/edisyn/synth/asmhydrasynth/info/
 ## Patch Parameters with NRPN Values
 <a name="nrpn"/></a>
 
-If a line is blank, look for the first numbered version of that parameter.  For example, lfo5step14 is blank: instead you should see lfo1step1. 
-
+Remember: if a Range/Display cell is blank, look for the first numbered version of that parameter.  For example, lfo5step14 is blank: instead you should see lfo1step1. 
 
 
 | Parameter | CC | NRPN | Range and NRPN Display Instructions | 
@@ -285,7 +286,7 @@ But this is close.
 | mutator4warp6 	|  	| 0x40 0x7D 	|  	| 
 | mutator4warp7 	|  	| 0x40 0x7E 	|  	| 
 | mutator4warp8 	|  	| 0x40 0x7F 	|  	| 
-| noisetype 	|  	| 0x3F 0x27 	| [0,6] White Pink Brown Red Blue Violet Grey  	| 
+| noisetype 	|  	| 0x3F 0x27 	| [0,6] White, Pink, Brown, Red, Blue, Violet, Grey  	| 
 | ringmoddepth 	| 0x2B 	| 0x40 0x03 	| [0,8192] seemingly only output in increments of 8, and displayed as [0.0,128.0] in increments of 0.1. To display: if 8192, display 128.0.  Else divide by 6.4 (cutting into 1280 even pieces).  Then ROUND to nearest integer 0...1280.  Then divide by 10.  The Hydrasynth seems to round 0.5 towards even. 	| 
 | ringmodsource1 	|  	| 0x3F 0x26 	| MSB = Source Num [0, 1]    LSB = [0,9] RING\_MOD\_SOURCES.  See [https://github.com/eclab/edisyn/blob/master/edisyn/synth/asmhydrasynth/info/nrpn.tables.txt](https://github.com/eclab/edisyn/blob/master/edisyn/synth/asmhydrasynth/info/nrpn.tables.txt) 	| 
 | ringmodsource2 	|  	| 0x3F 0x26 	|  	| 
@@ -316,7 +317,7 @@ But this is close.
 | filter1type 	|  	| 0x3F 0x28 	| [0-15]  FILTER\_1\_TYPES.  See [https://github.com/eclab/edisyn/blob/master/edisyn/synth/asmhydrasynth/info/nrpn.tables.txt](https://github.com/eclab/edisyn/blob/master/edisyn/synth/asmhydrasynth/info/nrpn.tables.txt)  **Note that "vowel" is in the wrong place.  It is in the middle of the range at position 10, but appears last in the Hydrasynth's menu.  This is likely because in an earlier incarnation, there were only 11 filter types (see ASM's NRPN comments), and then 4 more filter types were added afterwards.** 	| 
 | filter1velenv 	| 0x35 	| 0x41 0x69 	| [0,8192] seemingly only output in increments of 8, and displayed as [-64.0,64.0] in increments of 0.1. To display: if 8192, display 64.0.  Else divide by 6.4 (cutting into 1280 even pieces). Then ROUND to nearest integer 0...1280.  Then divide by 10.  Then subtract 64. The Hydrasynth seems to round 0.5 towards even. 	| 
 | filter1env1amount 	| 0x36 	| 0x41 0x61 	| [0,8192] seemingly only output in increments of 8, and displayed as [-64.0,64.0] in increments of 0.1. To display: if 8192, display 64.0.  Else divide by 6.4 (cutting into 1280 even pieces). Then ROUND to nearest integer 0...1280.  Then divide by 10.  Then subtract 64. The Hydrasynth seems to round 0.5 towards even. 	| 
-| filter2positionofdrive 	|  	| 0x3F 0x2B 	| [0,1]?  THIS PARAMETER DOES NOT EXIST.  Perhaps was removed? 	| 
+| filter2positionofdrive 	|  	| 0x3F 0x2B 	| [0,1]?  **NOTE: This parameter was documented by ASM but does not exist.  Perhaps was removed?** 	| 
 | filter2cutoff 	| 0x37 	| 0x40 0x2C 	|  	| 
 | filter2resonance 	| 0x38 	| 0x40 0x2D 	|  	| 
 | filter2morph 	| 0x39 	| 0x40 0x2E 	| [0,8192] seemingly only output in increments of 8, and displayed as [0.0,128.0] in increments of 0.1. To display: if 8192, display 128.0.  Else divide by 6.4 (cutting into 1280 even pieces).  Then ROUND to nearest integer 0...1280.  Then divide by 10.  The Hydrasynth seems to round 0.5 towards even. 	| 
@@ -329,14 +330,14 @@ But this is close.
 | ampvelenv 	|  	| 0x41 0x6B 	| [0,8192] seemingly only output in increments of 8, and displayed as [-64.0,64.0] in increments of 0.1. To display: if 8192, display 64.0.  Else divide by 6.4 (cutting into 1280 even pieces). Then ROUND to nearest integer 0...1280.  Then divide by 10.  Then subtract 64. The Hydrasynth seems to round 0.5 towards even. 	| 
 | amplfo2amount 	| 0x3E 	| 0x41 0x64 	| [0,8192] seemingly only output in increments of 8, and displayed as [-64.0,64.0] in increments of 0.1. To display: if 8192, display 64.0.  Else divide by 6.4 (cutting into 1280 even pieces). Then ROUND to nearest integer 0...1280.  Then divide by 10.  Then subtract 64. The Hydrasynth seems to round 0.5 towards even. 	| 
 | prefxtype 	|  	| 0x3B 0x7F 	| [0,9] output as 0, 8, 16, 24, ...  representing "Bypass", "Chorus", "Flanger", "Rotary", "Phaser", "Lo-Fi", "Tremolo", "EQ", "Compressor", "Distortion" 	| 
-| prefxpreset 	|  	| 0x3B 0x00 	| See "FX Types and Custom Parameters" below depending on prefxtype 	| 
+| prefxpreset 	|  	| 0x3B 0x00 	| See [#fx]("FX Types and Custom Parameters") below depending on prefxtype 	| 
 | prefxwet 	| 0x5D 	| 0x41 0x6E 	| [0,8192] seemingly only output in increments of 8, and displayed as [0.0%,100.0%] in various increments. To display: if 8192, display 100.0.  Else divide by 8.192 (cutting into 1000 even pieces). Then FLOOR to nearest integer 0...100.  Then divide by 10. 	| 
-| prefxparam1 	| 0x0C 	| 0x41 0x6F 	| See "FX Types and Custom Parameters" below depending on prefxtype 	| 
+| prefxparam1 	| 0x0C 	| 0x41 0x6F 	| See [#fx]("FX Types and Custom Parameters") below depending on prefxtype 	| 
 | prefxparam2 	| 0x0D 	| 0x41 0x70 	|  	| 
 | prefxparam3 	|  	| 0x3B 0x30 	|  	| 
 | prefxparam4 	|  	| 0x3B 0x40 	|  	| 
 | prefxparam5 	|  	| 0x3B 0x50 	|  	| 
-| prefxsidechain 	|  	| 0x3B 0x73 	| See "FX Types and Custom Parameters" below depending on prefxtype 	| 
+| prefxsidechain 	|  	| 0x3B 0x73 	| See [#fx]("FX Types and Custom Parameters") below depending on prefxtype 	| 
 | delaybpmsync 	|  	| 0x3B 0x70 	| [0,1] in steps of 8 (0, 8) 	| 
 | delaywet 	| 0x5C 	| 0x41 0x78 	| [0,8192] seemingly only output in increments of 8, and displayed as [0.0%,100.0%] in various increments. To display: if 8192, display 100.0.  Else divide by 8.192 (cutting into 1000 even pieces). Then FLOOR to nearest integer 0...100.  Then divide by 10. 	| 
 | delayfeedback 	| 0x0E 	| 0x41 0x75 	| [0,8192] seemingly only output in increments of 8, and displayed as [0.0,128.0] in increments of 0.1. To display: if 8192, display 128.0.  Else divide by 6.4 (cutting into 1280 even pieces).  Then ROUND to nearest integer 0...1280.  Then divide by 10.  The Hydrasynth seems to round 0.5 towards even. 	| 
@@ -416,14 +417,14 @@ Next come certain patterns.
 | reverbtone 	| 0x43 	| 0x41 0x7A 	| [0,8192] seemingly only output in increments of 8, and displayed as [-64.0,64.0] in increments of 0.1. To display: if 8192, display 64.0.  Else divide by 6.4 (cutting into 1280 even pieces). Then ROUND to nearest integer 0...1280.  Then divide by 10.  Then subtract 64. The Hydrasynth seems to round 0.5 towards even. 	| 
 | reverbtype 	|  	| 0x3C 0x72 	| [0,4] in steps of 8 (0, 8, 16, 24, 32)  "Hall", "Room", "Plate", "Cloud" 	| 
 | postfxtype 	|  	| 0x3C 0x7F 	| [0,9] output as 0, 8, 16, 24, ...  representing "Bypass", "Chorus", "Flanger", "Rotary", "Phaser", "Lo-Fi", "Tremolo", "EQ", "Compressor", "Distortion" 	| 
-| postfxpreset 	|  	| 0x3C 0x00 	| See "FX Types and Custom Parameters" below depending on postfxtype 	| 
+| postfxpreset 	|  	| 0x3C 0x00 	| See [#fx]("FX Types and Custom Parameters") below depending on postfxtype 	| 
 | postfxwet 	| 0x5E 	| 0x41 0x71 	| [0,8192] seemingly only output in increments of 8, and displayed as [0.0%,100.0%] in various increments. To display: if 8192, display 100.0.  Else divide by 8.192 (cutting into 1000 even pieces). Then FLOOR to nearest integer 0...100.  Then divide by 10. 	| 
-| postfxparam1 	| 0x44 	| 0x41 0x72 	| See "FX Types and Custom Parameters" below depending on postfxtype 	| 
+| postfxparam1 	| 0x44 	| 0x41 0x72 	| See [#fx]("FX Types and Custom Parameters") below depending on postfxtype 	| 
 | postfxparam2 	| 0x45 	| 0x41 0x73 	|  	| 
 | postfxparam3 	|  	| 0x3C 0x30 	|  	| 
 | postfxparam4 	|  	| 0x3C 0x40 	|  	| 
 | postfxparam5 	|  	| 0x3C 0x50 	|  	| 
-| postfxsidechain 	|  	| 0x3C 0x73 	| See "FX Types and Custom Parameters" below depending on postfxtype 	| 
+| postfxsidechain 	|  	| 0x3C 0x73 	| See [#fx]("FX Types and Custom Parameters") below depending on postfxtype 	| 
 | lfo1level 	| 0x46 	| 0x41 0x0B 	| [0,8192] seemingly only output in increments of 8, and displayed as [0.0,128.0] in increments of 0.1. To display: if 8192, display 128.0.  Else divide by 6.4 (cutting into 1280 even pieces). Then ROUND to nearest integer 0...1280.  Then divide by 10.  The Hydrasynth seems to round 0.5 towards even.  Note that every 5 away from 0 (center) is one semitone. 	| 
 | lfo1wave 	|  	| 0x3F 0x04 	| MSB = 0x00   LSB = [0,10] LFO\_WAVES.  See [https://github.com/eclab/edisyn/blob/master/edisyn/synth/asmhydrasynth/info/nrpn.tables.txt](https://github.com/eclab/edisyn/blob/master/edisyn/synth/asmhydrasynth/info/nrpn.tables.txt) 	| 
 | lfo1bpmsync 	|  	| 0x3F 0x04 	| MSB = 0x01   LSB = [0,1] 	| 
@@ -1407,6 +1408,8 @@ TOTAL: 128 VALS
 ## Macro Panel Button NRPN Parameters
 <a name="macro"/></a>
 
+Remember: if a Range/Display cell is blank, look for the first numbered version of that parameter.  For example, macro2trigger4 is blank: instead you should see macro1trigger1. 
+
 **Note that when Macro Button X is lit or unlit for whatever reason, all eight macroXpanel... NRPN are sent at the same time!**
 
 | Parameter | CC | NRPN | Range and NRPN Display Instructions | 
@@ -1477,14 +1480,17 @@ TOTAL: 128 VALS
 | macro8trigger8 	|  	| 0x3E 0x6F 	|  	| 
 
 
-## FX Types and Custom NRPN Parameters
+## FX Types and Custom Parameters
 <a name="fx"/></a>
+
+The Hydrasynth has two FX parameter slots: Pre-FX and Post-FX.  Various parameters can fill those slots, and so they share NRPN and CC values but interpret them differently.
+This is a list of all FX parameters and their NRPN parameters and descriptions, and how they interpret their FX parameters.
 
 **Note: this Excludes BYPASS which has no parameters, though it does have Dry/Wet 	**
 
-| Parameter | CC | NRPN | Range and NRPN Display Instructions | 
-| --- | --- | --- | --- |
-| fx1preset  (Chorus Preset) 	|  	| 0x3B 0x00 	| Described Below. |
+| Parameter | CC (Pre-FX) | CC (Post-FX) | NRPN (Pre-FX) | NRPN (Post-FX) | Range and NRPN Display Instructions | 
+| --- | --- | --- |  --- | --- | --- |
+| fx1preset  (Chorus Preset) 	|  	|  	| 0x3B 0x00 | 0x3C 0x00 	| Described Below. |
 ```
 [0,2] in increments of 8 (0, 8, 16), displayed as Chorus 1, Chorus 2, Chorus 3.  Presets are: 	
  	
@@ -1494,9 +1500,9 @@ TOTAL: 128 VALS
  	
 Note: I have not determined the five actual NRPN values for each preset, just their display values. 	
 ```
-| Parameter | CC | NRPN | Range and NRPN Display Instructions | 
-| --- | --- | --- | --- |
-| fx1param1 (Chorus Rate) 	| 0x0C 	| 0x41 0x6F 	| Described Below. |
+| Parameter | CC (Pre-FX) | CC (Post-FX) | NRPN (Pre-FX) | NRPN (Post-FX) | Range and NRPN Display Instructions | 
+| --- | --- | --- |  --- | --- | --- |
+| fx1param1 (Chorus Rate) 	| 0x0C |  0x44 | 	| 0x41 0x6F | 0x41 0x72 	| Described Below. |
 ```
 [0,8192] seemingly only output in increments of 8, and displayed as [0.02,10.00].  All told there are 129 unique display values.   To display: if 8192, display 10.00.  Else divide by 64 (cutting into 128 even pieces).  Then display as follows: 	| 
 
@@ -1509,13 +1515,13 @@ Note: I have not determined the five actual NRPN values for each preset, just th
 7     7.00 - 10.00     by 0.50          122-128 	
 129 TOTAL
 ```
-| Parameter | CC | NRPN | Range and NRPN Display Instructions | 
-| --- | --- | --- | --- |
-| fx1param2 (Chorus Depth) 	| 0x0D 	| 0x41 0x70 	| [0,8192] seemingly only output in increments of 8, and displayed as [0.0,128.0] in increments of 0.1. To display: if 8192, display 128.0.  Else divide by 6.4 (cutting into 1280 even pieces).  Then ROUND to nearest integer 0...1280.  Then divide by 10.  The Hydrasynth seems to round 0.5 towards even. 	| 
-| fx1param3 (Offset) 	|  	| 0x3B 0x30 	| [0,360] output in increments of 8 (0, 8, ..., 2880) and displayed as [-180,180] 	| 
-| fx1param4  (Chorus Feedback) 	|  	| 0x3B 0x40 	| [1,127] output as 8, 16, 24, 32, ...,  and displayed as [-63,63] 	| 
-| fx1param5 (Chorus Mono/Stereo) 	|  	| 0x3B 0x50 	| [0,1] output as 0 and 8 respectively for "Mono", "Stereo" 	| 
-| fx2preset  (Flanger Preset) 	|  	| 0x3B 0x00 	| Described Below.  |
+| Parameter | CC (Pre-FX) | CC (Post-FX) | NRPN (Pre-FX) | NRPN (Post-FX) | Range and NRPN Display Instructions | 
+| --- | --- | --- |  --- | --- | --- |
+| fx1param2 (Chorus Depth) 	| 0x0D |  0x45 | 	| 0x41 0x70 | 0x41 0x73	| [0,8192] seemingly only output in increments of 8, and displayed as [0.0,128.0] in increments of 0.1. To display: if 8192, display 128.0.  Else divide by 6.4 (cutting into 1280 even pieces).  Then ROUND to nearest integer 0...1280.  Then divide by 10.  The Hydrasynth seems to round 0.5 towards even. 	| 
+| fx1param3 (Offset) 	|  	|  	| 0x3B 0x30 | 0x3C 0x30 	| [0,360] output in increments of 8 (0, 8, ..., 2880) and displayed as [-180,180] 	| 
+| fx1param4  (Chorus Feedback) 	|  	|  	| 0x3B 0x40 | 0x3C 0x40 	| [1,127] output as 8, 16, 24, 32, ...,  and displayed as [-63,63] 	| 
+| fx1param5 (Chorus Mono/Stereo) 	|  	|  	| 0x3B 0x50 | 0x3B 0x50 	| [0,1] output as 0 and 8 respectively for "Mono", "Stereo" 	| 
+| fx2preset  (Flanger Preset) 	|  	|  	| 0x3B 0x00 | 0x3C 0x00 	| Described Below.  |
 ```
 [0,2] in increments of 8 (0, 8, 16), displayed as Flanger 1, Flanger 2, Flanger 3.  Presets are: 	
  	
@@ -1525,9 +1531,9 @@ Note: I have not determined the five actual NRPN values for each preset, just th
  	
 Note: I have not determined the five actual NRPN values for each preset, just their display values.
 ```
-| Parameter | CC | NRPN | Range and NRPN Display Instructions | 
-| --- | --- | --- | --- |
-| fx2param1 (Flanger Rate) 	| 0x0C 	| 0x41 0x6F 	| Described Below.  |
+| Parameter | CC (Pre-FX) | CC (Post-FX) | NRPN (Pre-FX) | NRPN (Post-FX) | Range and NRPN Display Instructions | 
+| --- | --- | --- |  --- | --- | --- |
+| fx2param1 (Flanger Rate) 	| 0x0C |  0x44 | 	| 0x41 0x6F | 0x41 0x72 	| Described Below.  |
 ```
 [0,8192] seemingly only output in increments of 8, and displayed as [0.02,10.00].  All told there are 129 unique display values.   To display: if 8192, display 10.00.  Else divide by 64 (cutting into 128 even pieces).  Then display as follows: 	    
      	    
@@ -1540,13 +1546,13 @@ Note: I have not determined the five actual NRPN values for each preset, just th
  7         7.00 - 10.00        by 0.50           122-128     
 129 TOTAL	
 ```
-| Parameter | CC | NRPN | Range and NRPN Display Instructions | 
-| --- | --- | --- | --- |
-| fx2param2 (Flanger Depth) 	| 0x0D 	| 0x41 0x70 	| [0,8192] seemingly only output in increments of 8, and displayed as [0.0,128.0] in increments of 0.1. To display: if 8192, display 128.0.  Else divide by 6.4 (cutting into 1280 even pieces).  Then ROUND to nearest integer 0...1280.  Then divide by 10.  The Hydrasynth seems to round 0.5 towards even. 	| 
-| fx2param3 (Offset) 	|  	| 0x3B 0x30 	| [0,360] output in increments of 8 (0, 8, ..., 2880) and displayed as [-180,180] 	| 
-| fx2param4  (Flanger Feedback) 	|  	| 0x3B 0x40 	| [1,127] output as 8, 16, 24, 32, ...,  and displayed as [-63,63] 	| 
-| fx2param5  (Flanger Mono/Stereo) 	|  	| 0x3B 0x50 	| [0,1] output as 0 and 8 respectively for "Mono", "Stereo" 	| 
-| fx3preset  (Rotary Preset) 	|  	| 0x3B 0x00 	| Described Below.  |
+| Parameter | CC (Pre-FX) | CC (Post-FX) | NRPN (Pre-FX) | NRPN (Post-FX) | Range and NRPN Display Instructions | 
+| --- | --- | --- |  --- | --- | --- |
+| fx2param2 (Flanger Depth) 	| 0x0D |  0x45 | 	| 0x41 0x70 | 0x41 0x73	| [0,8192] seemingly only output in increments of 8, and displayed as [0.0,128.0] in increments of 0.1. To display: if 8192, display 128.0.  Else divide by 6.4 (cutting into 1280 even pieces).  Then ROUND to nearest integer 0...1280.  Then divide by 10.  The Hydrasynth seems to round 0.5 towards even. 	| 
+| fx2param3 (Offset) 	|  	|  	| 0x3B 0x30 | 0x3C 0x30 	| [0,360] output in increments of 8 (0, 8, ..., 2880) and displayed as [-180,180] 	| 
+| fx2param4  (Flanger Feedback) 	|  	|  	| 0x3B 0x40 | 0x3C 0x40 	| [1,127] output as 8, 16, 24, 32, ...,  and displayed as [-63,63] 	| 
+| fx2param5  (Flanger Mono/Stereo) 	|  	|  	| 0x3B 0x50 | 0x3B 0x50 	| [0,1] output as 0 and 8 respectively for "Mono", "Stereo" 	| 
+| fx3preset  (Rotary Preset) 	|  	|  	| 0x3B 0x00 | 0x3C 0x00 	| Described Below.  |
 ```
 [0,2] in increments of 8 (0, 8, 16), displayed as Rotary 1, Rotary 2, Rotary 3.  Presets are: 	
  	
@@ -1556,9 +1562,9 @@ Note: I have not determined the five actual NRPN values for each preset, just th
  	
 Note: I have not determined the five actual NRPN values for each preset, just their display values. 	
 ```
-| Parameter | CC | NRPN | Range and NRPN Display Instructions | 
-| --- | --- | --- | --- |
-| fx3param1 (Rotary Lo-Speed) 	| 0x0C 	| 0x41 0x6F 	| Described Below.  |
+| Parameter | CC (Pre-FX) | CC (Post-FX) | NRPN (Pre-FX) | NRPN (Post-FX) | Range and NRPN Display Instructions | 
+| --- | --- | --- |  --- | --- | --- |
+| fx3param1 (Rotary Lo-Speed) 	| 0x0C |  0x44 | 	| 0x41 0x6F | 0x41 0x72 	| Described Below.  |
 ```
 [0,8192] seemingly only output in increments of 8, and displayed as [0.02,10.00].  All told there are 129 unique display values.   To display: if 8192, display 10.00.  Else divide by 64 (cutting into 128 even pieces).  Then display as follows: 	
  	
@@ -1571,9 +1577,9 @@ Note: I have not determined the five actual NRPN values for each preset, just th
  7     7.00 - 10.00  by 0.50      122-128   
 129 TOTAL
 ``` 
-| Parameter | CC | NRPN | Range and NRPN Display Instructions | 
-| --- | --- | --- | --- |
-| fx3param2 (Rotary Hi-Speed) 	| 0x0D 	| 0x41 0x70 	| Described Below. |
+| Parameter | CC (Pre-FX) | CC (Post-FX) | NRPN (Pre-FX) | NRPN (Post-FX) | Range and NRPN Display Instructions | 
+| --- | --- | --- |  --- | --- | --- |
+| fx3param2 (Rotary Hi-Speed) 	| 0x0D |  0x45 | 	| 0x41 0x70 | 0x41 0x73	| Described Below. |
 ```
 [0,8192] seemingly only output in increments of 8, and displayed as [0.02,10.00].  All told there are 129 unique display values.   To display: if 8192, display 10.00.  Else divide by 64 (cutting into 128 even pieces).  Then display as follows: 	| 
 
@@ -1586,12 +1592,12 @@ Note: I have not determined the five actual NRPN values for each preset, just th
  7     7.00 - 10.00  by 0.50      122-128   
 129 TOTAL
 ```	
-| Parameter | CC | NRPN | Range and NRPN Display Instructions | 
-| --- | --- | --- | --- |
-| fx3param3  (Rotary Lo-Depth) 	|  	| 0x3B 0x30 	| [0,127] output as 0, 8, 16, 24, 32, ... 	| 
-| fx3param4  (Rotary Hi-Depth) 	|  	| 0x3B 0x40 	| [0,127] output as 0, 8, 16, 24, 32, ... 	| 
-| fx3param5 (Rotary Low/High) 	|  	| 0x3B 0x50 	| [1,127] output as 8, 16, 24, 32, ...,  and displayed as [-63,63] 	| 
-| fx4preset  (Phaser Preset) 	|  	| 0x3B 0x00 	| Described Below. |
+| Parameter | CC (Pre-FX) | CC (Post-FX) | NRPN (Pre-FX) | NRPN (Post-FX) | Range and NRPN Display Instructions | 
+| --- | --- | --- |  --- | --- | --- |
+| fx3param3  (Rotary Lo-Depth) 	|  	|  	| 0x3B 0x30 | 0x3C 0x30 	| [0,127] output as 0, 8, 16, 24, 32, ... 	| 
+| fx3param4  (Rotary Hi-Depth) 	|  	|  	| 0x3B 0x40 | 0x3C 0x40 	| [0,127] output as 0, 8, 16, 24, 32, ... 	| 
+| fx3param5 (Rotary Low/High) 	|  	|  	| 0x3B 0x50 | 0x3B 0x50 	| [1,127] output as 8, 16, 24, 32, ...,  and displayed as [-63,63] 	| 
+| fx4preset  (Phaser Preset) 	|  	|  	| 0x3B 0x00 | 0x3C 0x00 	| Described Below. |
 ```
 [0,2] in increments of 8 (0, 8, 16), displayed as Phaser 1, Phaser 2, Phaser 3.  Presets are: 	  
    	  
@@ -1601,9 +1607,9 @@ Note: I have not determined the five actual NRPN values for each preset, just th
    	  
 Note: I have not determined the five actual NRPN values for each preset, just their display values.
 ```
-| Parameter | CC | NRPN | Range and NRPN Display Instructions | 
-| --- | --- | --- | --- |
-| fx4param1 (Phaser Rate) 	| 0x0C 	| 0x41 0x6F 	| Described below. |
+| Parameter | CC (Pre-FX) | CC (Post-FX) | NRPN (Pre-FX) | NRPN (Post-FX) | Range and NRPN Display Instructions | 
+| --- | --- | --- |  --- | --- | --- |
+| fx4param1 (Phaser Rate) 	| 0x0C |  0x44 | 	| 0x41 0x6F | 0x41 0x72 	| Described below. |
 ```	
 [0,8192] seemingly only output in increments of 8, and displayed as [0.02,10.00].  All told there are 129 unique display values.   To display: if 8192, display 10.00.  Else divide by 64 (cutting into 128 even pieces).  Then display as follows: 	| 
 
@@ -1616,13 +1622,13 @@ Note: I have not determined the five actual NRPN values for each preset, just th
  7     7.00 - 10.00  by 0.50      122-128   
 129 TOTAL
 ```
-| Parameter | CC | NRPN | Range and NRPN Display Instructions | 
-| --- | --- | --- | --- |
-| fx4param2 (Phaser Feedback) 	| 0x0D 	| 0x41 0x70 	| [0,8192] seemingly only output in increments of 8, and displayed as [-64.0, 64.0] in increments of 0.1. To display: if 8192, display 64.0.  Else divide by 6.4 (cutting into 1280 even pieces).  Then ROUND to nearest integer 0...1280.  Then divide by 10.  Then subtract 64.0. The Hydrasynth seems to round 0.5 towards even. 	| 
-| fx4param3  (Phaser Depth) 	|  	| 0x3B 0x30 	| [0,127] output as 0, 8, 16, 24, 32, ... 	| 
-| fx4param4  (Phaser Phase) 	|  	| 0x3B 0x40 	| [0,127] output as 0, 8, 16, 24, 32, ... 	| 
-| fx4param5  (Phaser Offset) 	|  	| 0x3B 0x50 	| [0,360] output in increments of 8 (0, 8, ..., 2880) and displayed as [-180,180] 	| 
-| fx5preset  (Lo-Fi Preset) 	|  	| 0x3B 0x00 	| Described Below. |
+| Parameter | CC (Pre-FX) | CC (Post-FX) | NRPN (Pre-FX) | NRPN (Post-FX) | Range and NRPN Display Instructions | 
+| --- | --- | --- |  --- | --- | --- |
+| fx4param2 (Phaser Feedback) 	| 0x0D |  0x45 | 	| 0x41 0x70 | 0x41 0x73	| [0,8192] seemingly only output in increments of 8, and displayed as [-64.0, 64.0] in increments of 0.1. To display: if 8192, display 64.0.  Else divide by 6.4 (cutting into 1280 even pieces).  Then ROUND to nearest integer 0...1280.  Then divide by 10.  Then subtract 64.0. The Hydrasynth seems to round 0.5 towards even. 	| 
+| fx4param3  (Phaser Depth) 	|  	|  	| 0x3B 0x30 | 0x3C 0x30 	| [0,127] output as 0, 8, 16, 24, 32, ... 	| 
+| fx4param4  (Phaser Phase) 	|  	|  	| 0x3B 0x40 | 0x3C 0x40 	| [0,127] output as 0, 8, 16, 24, 32, ... 	| 
+| fx4param5  (Phaser Offset) 	|  	|  	| 0x3B 0x50 | 0x3B 0x50 	| [0,360] output in increments of 8 (0, 8, ..., 2880) and displayed as [-180,180] 	| 
+| fx5preset  (Lo-Fi Preset) 	|  	|  	| 0x3B 0x00 | 0x3C 0x00 	| Described Below. |
 ```
 [0,1] in increments of 8 (0, 8), displayed as Lo-Fi 1, Lo-Fi 2.  Presets are:  
  	
@@ -1631,9 +1637,9 @@ Note: I have not determined the five actual NRPN values for each preset, just th
  	
 Note: I have not determined the five actual NRPN values for each preset, just their display values.
 ```	
-| Parameter | CC | NRPN | Range and NRPN Display Instructions | 
-| --- | --- | --- | --- |
-| fx5param1 (Lo-Fi Cutoff) 	| 0x0C 	| 0x41 0x6F 	| Described Below. |
+| Parameter | CC (Pre-FX) | CC (Post-FX) | NRPN (Pre-FX) | NRPN (Post-FX) | Range and NRPN Display Instructions | 
+| --- | --- | --- |  --- | --- | --- |
+| fx5param1 (Lo-Fi Cutoff) 	| 0x0C |  0x44 | 	| 0x41 0x6F | 0x41 0x72 	| Described Below. |
 ```
 [0,8192] seemingly only output in increments of 8, and displayed as [160Hz,20000Hz].  All told there are 128 unique display values.   To display: if 8192, display 20000Hz.  Else divide by 64 (cutting into 128 even pieces).  Then ROUND to nearest integer 0...130. The Hydrasynth seems to round 0.5 towards even.  Then display as follows: 	| 
 
@@ -1647,13 +1653,13 @@ Note: I have not determined the five actual NRPN values for each preset, just th
 20     10000 - 20000 by 500   
 128 TOTAL
 ```	
-| Parameter | CC | NRPN | Range and NRPN Display Instructions | 
-| --- | --- | --- | --- |
-| fx5param2 (Lo-Fi Resonance) 	| 0x0D 	| 0x41 0x70 	| [0,8184] seemingly only output in increments of 8, and displayed as [1.0,12.0] in increments of 0.1. To display: if 8184, display 12.0.  Else divide by 74.4 (cutting into 110 even pieces).  Then ROUND to nearest integer 0...110.  Then divide by 10.  Then add 1.0.  The Hydrasynth seems to round 0.5 towards even. 	| 
-| fx5param3 (Lo-Fi Filter Type) 	|  	| 0x3B 0x30 	| [0,5] output as 0, 8, 16, 24, ... representing "Thru", "PWBass", "Radio", "Tele", "Clean", "Low" 	| 
-| fx5param4  (Lo-Fi Output) 	|  	| 0x3B 0x40 	| [-6, 36] output in multiples of 8 as 464, 472, ..., 792, 800 	| 
-| fx5param5 (Lo-Fi Sampling) 	|  	| 0x3B 0x50 	| [1, 16] output as 8, 16, 24, ... representing "44100", "22050", "14700", "11025", "8820", "7350", "6300", "5513", "4900", "4410", "4009", "3675", "3392", "3150", "2940", "2756".   Yes, the values go DOWN. 	| 
-| fx6preset  (Tremolo Preset) 	|  	| 0x3B 0x00 	| Described Below. |
+| Parameter | CC (Pre-FX) | CC (Post-FX) | NRPN (Pre-FX) | NRPN (Post-FX) | Range and NRPN Display Instructions | 
+| --- | --- | --- |  --- | --- | --- |
+| fx5param2 (Lo-Fi Resonance) 	| 0x0D |  0x45 | 	| 0x41 0x70 | 0x41 0x73	| [0,8184] seemingly only output in increments of 8, and displayed as [1.0,12.0] in increments of 0.1. To display: if 8184, display 12.0.  Else divide by 74.4 (cutting into 110 even pieces).  Then ROUND to nearest integer 0...110.  Then divide by 10.  Then add 1.0.  The Hydrasynth seems to round 0.5 towards even. 	| 
+| fx5param3 (Lo-Fi Filter Type) 	|  	|  	| 0x3B 0x30 | 0x3C 0x30 	| [0,5] output as 0, 8, 16, 24, ... representing "Thru", "PWBass", "Radio", "Tele", "Clean", "Low" 	| 
+| fx5param4  (Lo-Fi Output) 	|  	|  	| 0x3B 0x40 | 0x3C 0x40 	| [-6, 36] output in multiples of 8 as 464, 472, ..., 792, 800 	| 
+| fx5param5 (Lo-Fi Sampling) 	|  	|  	| 0x3B 0x50 | 0x3B 0x50 	| [1, 16] output as 8, 16, 24, ... representing "44100", "22050", "14700", "11025", "8820", "7350", "6300", "5513", "4900", "4410", "4009", "3675", "3392", "3150", "2940", "2756".   Yes, the values go DOWN. 	| 
+| fx6preset  (Tremolo Preset) 	|  	|  	| 0x3B 0x00 | 0x3C 0x00 	| Described Below. |
 ```
 [0,2] in increments of 8 (0, 8, 16), displayed as Tremolo 1, Tremolo 2, Tremolo 3.  Presets are: 	
  	
@@ -1663,9 +1669,9 @@ Note: I have not determined the five actual NRPN values for each preset, just th
  	
 Note: I have not determined the five actual NRPN values for each preset, just their display values.
 ```
-| Parameter | CC | NRPN | Range and NRPN Display Instructions | 
-| --- | --- | --- | --- |
-| fx6param1 (Tremolo Rate) 	| 0x0C 	| 0x41 0x6F 	| Described Below.  | 
+| Parameter | CC (Pre-FX) | CC (Post-FX) | NRPN (Pre-FX) | NRPN (Post-FX) | Range and NRPN Display Instructions | 
+| --- | --- | --- |  --- | --- | --- |
+| fx6param1 (Tremolo Rate) 	| 0x0C |  0x44 | 	| 0x41 0x6F | 0x41 0x72 	| Described Below.  | 
 ```
 [0,8192] seemingly only output in increments of 8, and displayed as [0.02,10.00].  All told there are 129 unique display values.   To display: if 8192, display 10.00.  Else divide by 64 (cutting into 128 even pieces).  Then display as follows: 	| 
 
@@ -1678,13 +1684,13 @@ Note: I have not determined the five actual NRPN values for each preset, just th
  7      7.00 - 10.00 by 0.50      122-128   
 129 TOTAL
 ```
-| Parameter | CC | NRPN | Range and NRPN Display Instructions | 
-| --- | --- | --- | --- |
-| fx6param2 (Tremolo Depth) 	| 0x0D 	| 0x41 0x70 	| [0,8192] seemingly only output in increments of 8, and displayed as [0.0,128.0] in increments of 0.1. To display: if 8192, display 128.0.  Else divide by 6.4 (cutting into 1280 even pieces).  Then ROUND to nearest integer 0...1280.  Then divide by 10.  The Hydrasynth seems to round 0.5 towards even. 	| 
-| fx6param3 (Tremolo LFO Shape) 	|  	| 0x3B 0x30 	| [0,1] output as 0 and 8 respectively for "Sine", "Square" 	| 
-| fx6param4 (Tremolo Phase) 	|  	| 0x3B 0x40 	| [0,360] output in increments of 8 (0, 8, ..., 2880) and displayed as [-180,180] 	| 
-| fx6param5 (Tremolo Pitch Mod) 	|  	| 0x3B 0x50 	| [0,127] output as 0, 8, 16, 24, 32, ... 	| 
-| fx7preset  (EQ Preset) 	|  	| 0x3B 0x00 	| Described Below. |
+| Parameter | CC (Pre-FX) | CC (Post-FX) | NRPN (Pre-FX) | NRPN (Post-FX) | Range and NRPN Display Instructions | 
+| --- | --- | --- |  --- | --- | --- |
+| fx6param2 (Tremolo Depth) 	| 0x0D |  0x45 | 	| 0x41 0x70 | 0x41 0x73	| [0,8192] seemingly only output in increments of 8, and displayed as [0.0,128.0] in increments of 0.1. To display: if 8192, display 128.0.  Else divide by 6.4 (cutting into 1280 even pieces).  Then ROUND to nearest integer 0...1280.  Then divide by 10.  The Hydrasynth seems to round 0.5 towards even. 	| 
+| fx6param3 (Tremolo LFO Shape) 	|  	|  	| 0x3B 0x30 | 0x3C 0x30 	| [0,1] output as 0 and 8 respectively for "Sine", "Square" 	| 
+| fx6param4 (Tremolo Phase) 	|  	|  	| 0x3B 0x40 | 0x3C 0x40 	| [0,360] output in increments of 8 (0, 8, ..., 2880) and displayed as [-180,180] 	| 
+| fx6param5 (Tremolo Pitch Mod) 	|  	|  	| 0x3B 0x50 | 0x3B 0x50 	| [0,127] output as 0, 8, 16, 24, 32, ... 	| 
+| fx7preset  (EQ Preset) 	|  	|  	| 0x3B 0x00 | 0x3C 0x00 	| Described Below. |
 ```
 [0,6] in increments of 8 (0, 8, 16, 24, 32, 40, 48), displayed as Flat, Low Boost, Bass Cut, High Cut, Smile, Lo-Fi, Warm.  Presets are: 	
 
@@ -1698,20 +1704,20 @@ Note: I have not determined the five actual NRPN values for each preset, just th
 
 Note: I have not determined the five actual NRPN values for each preset, just their display values.
 ```
-| Parameter | CC | NRPN | Range and NRPN Display Instructions | 
-| --- | --- | --- | --- |
-| fx7param1 (EQ Low Gain) 	| 0x0C 	| 0x41 0x6F 	| [0,1020] output in multiples of 8 as 0, 8, 16, ..., 8152, 8160.   Displayed as [-36.0,24.0 in increments of 0.1] as follows.  If 1020, display 24.0. Else divide by 1.7.  Then ROUND to nearest integer.  Then subtract 360.  Then divide by 10.0.  The Hydrasynth seems to round 0.5 towards even. 	| 
-| fx7param2 (EQ High Gain) 	| 0x0D 	| 0x41 0x70 	| [0,1020] output in multiples of 8 as 0, 8, 16, ..., 8152, 8160.   Displayed as [-36.0,24.0] in increments of 0.1 as follows.  If 1020, display 24.0. Else divide by 1.7.  Then ROUND to nearest integer.  Then subtract 360.  Then divide by 10.0.  The Hydrasynth seems to round 0.5 towards even. 	| 
-| fx7param3  (EQ Mid Gain) 	|  	| 0x3B 0x30 	| [0, 600] output in multiples of 8 as 0, 8, 16, ..., 4792, 4800.   Displayed as [-36.0,24.0] in increments of 0.1 as follows.  Subtract 360.  Then divide by 10.0. 	**BUG: While High and Low Gain go 0..1020, Mid Gain goes 0..600 but displays the same values.  This reeks of a likely bug.** 	| 
-| fx7param4 (EQ Xover Low) 	|  	| 0x3B 0x40 	| [16,1000] in increments of 1 output as multiples of 8 as 128, 136, ..., 8000 and displayed as multiples of 2 as 32, 34, ..., 2000. 	| 
-| fx7param5 (EQ Xover High) 	|  	| 0x3B 0x50 	| [32,1000] in increments of 1 output as multiples of 8 as 256, 264, ..., 8000 and displayed as multiples of 16 as 512, 544, ..., 16000. 	| 
-| fxsidechain  (Compressor Preset) 	|  	| 0x3B 0x73 	| [0,4] in steps of 8 (0, 8, 16, 24, 32) "Off", "BPM Duck", "Tap", "Mod In 1", "Mod In 2" 	| 
-| fx8param1 	| 0x0C 	| 0x41 0x6F 	|  	| 
-| fx8param2  (Compressor Ratio) 	| 0x0D 	| 0x41 0x70 	| [408,8160] seemingly only output in increments of 8, and displayed as [1.0:1,20.0:1] in increments of 0.1. To display: if 8160, display 20.0:1.  Else subtract 408, divide by 40.8 (cutting into 190 even pieces).  Then ROUND to nearest integer 0...190.  Then divide by 10.   Then add 1.0.  The Hydrasynth seems to round 0.5 towards even. 	| 
-| fx8param3  (Compressor Attack) 	|  	| 0x3B 0x30 	| [1, 400] ms in steps of 8 (8, 16, 24, ...)  	| 
-| fx8param4 (Compressor Release) 	|  	| 0x3B 0x40 	| [5, 560] ms in steps of 8 (40, 48, 56, ...) 	| 
-| fx8param5 (Compressor Output) 	|  	| 0x3B 0x50 	| [0,512] in steps of 8 (0, 8, 16, 24, ...) 	| 
-| fx9preset  (Distortion Preset) 	|  	| 0x3B 0x00 	| Described Below.  |
+| Parameter | CC (Pre-FX) | CC (Post-FX) | NRPN (Pre-FX) | NRPN (Post-FX) | Range and NRPN Display Instructions | 
+| --- | --- | --- |  --- | --- | --- |
+| fx7param1 (EQ Low Gain) 	| 0x0C |  0x44 | 	| 0x41 0x6F | 0x41 0x72 	| [0,1020] output in multiples of 8 as 0, 8, 16, ..., 8152, 8160.   Displayed as [-36.0,24.0 in increments of 0.1] as follows.  If 1020, display 24.0. Else divide by 1.7.  Then ROUND to nearest integer.  Then subtract 360.  Then divide by 10.0.  The Hydrasynth seems to round 0.5 towards even. 	| 
+| fx7param2 (EQ High Gain) 	| 0x0D |  0x45 | 	| 0x41 0x70 | 0x41 0x73	| [0,1020] output in multiples of 8 as 0, 8, 16, ..., 8152, 8160.   Displayed as [-36.0,24.0] in increments of 0.1 as follows.  If 1020, display 24.0. Else divide by 1.7.  Then ROUND to nearest integer.  Then subtract 360.  Then divide by 10.0.  The Hydrasynth seems to round 0.5 towards even. 	| 
+| fx7param3  (EQ Mid Gain) 	|  	|  	| 0x3B 0x30 | 0x3C 0x30 	| [0, 600] output in multiples of 8 as 0, 8, 16, ..., 4792, 4800.   Displayed as [-36.0,24.0] in increments of 0.1 as follows.  Subtract 360.  Then divide by 10.0. 	**BUG: While High and Low Gain go 0..1020, Mid Gain goes 0..600 but displays the same values.  This reeks of a likely bug.** 	| 
+| fx7param4 (EQ Xover Low) 	|  	|  	| 0x3B 0x40 | 0x3C 0x40 	| [16,1000] in increments of 1 output as multiples of 8 as 128, 136, ..., 8000 and displayed as multiples of 2 as 32, 34, ..., 2000. 	| 
+| fx7param5 (EQ Xover High) 	|  	|  	| 0x3B 0x50 | 0x3B 0x50 	| [32,1000] in increments of 1 output as multiples of 8 as 256, 264, ..., 8000 and displayed as multiples of 16 as 512, 544, ..., 16000. 	| 
+| fxsidechain  (Compressor Preset) 	|  	|  	| 0x3B 0x73 | 0x3C 0x73 	| [0,4] in steps of 8 (0, 8, 16, 24, 32) "Off", "BPM Duck", "Tap", "Mod In 1", "Mod In 2" 	| 
+| fx8param1 	| 0x0C |  0x44 | 	| 0x41 0x6F | 0x41 0x72 	|  	|  	| 
+| fx8param2  (Compressor Ratio) 	| 0x0D |  0x45 | 	| 0x41 0x70 | 0x41 0x73	| [408,8160] seemingly only output in increments of 8, and displayed as [1.0:1,20.0:1] in increments of 0.1. To display: if 8160, display 20.0:1.  Else subtract 408, divide by 40.8 (cutting into 190 even pieces).  Then ROUND to nearest integer 0...190.  Then divide by 10.   Then add 1.0.  The Hydrasynth seems to round 0.5 towards even. 	| 
+| fx8param3  (Compressor Attack) 	|  	|  	| 0x3B 0x30 | 0x3C 0x30 	| [1, 400] ms in steps of 8 (8, 16, 24, ...)  	| 
+| fx8param4 (Compressor Release) 	|  	|  	| 0x3B 0x40 | 0x3C 0x40 	| [5, 560] ms in steps of 8 (40, 48, 56, ...) 	| 
+| fx8param5 (Compressor Output) 	|  	|  	| 0x3B 0x50 | 0x3B 0x50 	| [0,512] in steps of 8 (0, 8, 16, 24, ...) 	| 
+| fx9preset  (Distortion Preset) 	|  	|  	| 0x3B 0x00 | 0x3C 0x00 	| Described Below.  |
 ```
 [0,2] in increments of 8 (0, 8, 16), displayed as Drive 1, Drive 2, Drive 3.   Note, not called "Distortion 1...3".  Presets are:
 
@@ -1721,16 +1727,19 @@ Note: I have not determined the five actual NRPN values for each preset, just th
  	
 Note: I have not determined the five actual NRPN values for each preset, just their display values.
 ```
-| Parameter | CC | NRPN | Range and NRPN Display Instructions | 
+| Parameter | CC (Pre-FX) | CC (Post-FX) | NRPN (Pre-FX) | NRPN (Post-FX) | Range and NRPN Display Instructions | 
 | --- | --- | --- | --- |	
-| fx9param1 (Distortion Drive) 	| 0x0C 	| 0x41 0x6F 	| [0,8192] seemingly only output in increments of 8, and displayed as [0.0,128.0] in increments of 0.1. To display: if 8192, display 128.0.  Else divide by 6.4 (cutting into 1280 even pieces).  Then ROUND to nearest integer 0...1280.  Then divide by 10.  The Hydrasynth seems to round 0.5 towards even. 	| 
-| fx9param2  (Distortion Tone) 	| 0x0D 	| 0x41 0x70 	| [0,8192] seemingly only output in increments of 8, and displayed as [-64.0, 64.0] in increments of 0.1. To display: if 8192, display 64.0.  Else divide by 6.4 (cutting into 1280 even pieces).  Then ROUND to nearest integer 0...1280.  Then divide by 10.  Then subtract 64.0. The Hydrasynth seems to round 0.5 towards even. 	| 
-| fx9param3 (Distortion Asym) 	|  	| 0x3B 0x30 	| [0,128] in steps of 8 (0, 8, 16, 24, ...) 	| 
-| fx9param4 	|  	| 0x3B 0x40 	| [0,128] in steps of 8 (0, 8, 16, 24, ...) 	| 
-| fx9param5 (Distortion Output) 	|  	| 0x3B 0x50 	| [-36.0,24.0] dB in increments of 0.1 output as in multiples of 8 as 0, 8, 16, ..., 4800 	| 
+| fx9param1 (Distortion Drive) 	| 0x0C |  0x44 | 	| 0x41 0x6F | 0x41 0x72 	| [0,8192] seemingly only output in increments of 8, and displayed as [0.0,128.0] in increments of 0.1. To display: if 8192, display 128.0.  Else divide by 6.4 (cutting into 1280 even pieces).  Then ROUND to nearest integer 0...1280.  Then divide by 10.  The Hydrasynth seems to round 0.5 towards even. 	| 
+| fx9param2  (Distortion Tone) 	| 0x0D |  0x45 | 	| 0x41 0x70 | 0x41 0x73	| [0,8192] seemingly only output in increments of 8, and displayed as [-64.0, 64.0] in increments of 0.1. To display: if 8192, display 64.0.  Else divide by 6.4 (cutting into 1280 even pieces).  Then ROUND to nearest integer 0...1280.  Then divide by 10.  Then subtract 64.0. The Hydrasynth seems to round 0.5 towards even. 	| 
+| fx9param3 (Distortion Asym) 	|  	|  	| 0x3B 0x30 | 0x3C 0x30 	| [0,128] in steps of 8 (0, 8, 16, 24, ...) 	| 
+| fx9param4 	|  	|  	| 0x3B 0x40 | 0x3C 0x40 	| [0,128] in steps of 8 (0, 8, 16, 24, ...) 	| 
+| fx9param5 (Distortion Output) 	|  	|  	| 0x3B 0x50 | 0x3B 0x50 	| [-36.0,24.0] dB in increments of 0.1 output as in multiples of 8 as 0, 8, 16, ..., 4800 	| 
+
 
 
 ## Patch Parameters without NRPN/CC Values
+Remember: if a Description cell is blank, look for the first numbered version of that parameter.  For example, macro5name is blank: instead you should see macro1name. 
+
 <a name="nonrpn"/></a>
 
 | Parameter |  |  | Description | 
@@ -1755,7 +1764,7 @@ Note: I have not determined the five actual NRPN values for each preset, just th
 
 **Note: there are some existing parameters with new 2.0.0 features, as noted earlier**
 
-| Name 	| CC 	| Range 	| Notes 	| 
+| Name 	| CC 	| Range 	| Range and NRPN Display Instructions 	| 
 | --- | --- | --- | --- |
 | voicesustain 	|  	| 0x71 0x00 	| [0, 2] emitted as [0, 8, 16] representing Sustain, Sostenuto, and Mod Only.  **BUG: The Hydrasynth emits in multiples of 8, but expects inputs in multiples of 1** 	| 
 | osc1bitreduction 	|  	| 0x3F 0x40 	| [0,11] emitted as MSB=0 LSB=val, representing OFF, 16, 12, 10, 9, 8, 7, 6, 5, 4, 3, 2 	| 
@@ -1784,7 +1793,7 @@ Note: I have not determined the five actual NRPN values for each preset, just th
 ## Some Undocumented NRPN Messages
 <a name="undocumented"/></a>
 
-| Event 	|  	| NRPN 	| Notes 	| 
+| Event 	|  	| NRPN 	| Range and NRPN Display Instructions 	| 
 | --- | --- | --- | --- |	
 | Arpeggiator Tempo 	|  	| 0x3F 0x38 	| [300, 2400], displayed as 30.0...240.0.  Emitted irregularly, though probably any value is permitted.  **Bug: this is only emitted. The Hydrasynth ignores incoming values.** 	| 
 | Chord Button Pressed 	|  	| 0x3F 0x16 	| MSB = 0x00 LSB = 0x00 	| 
@@ -1795,7 +1804,9 @@ Note: I have not determined the five actual NRPN values for each preset, just th
 ## Non-Patch NRPN Messages
 <a name="nonpatch"/></a>
 
-| Name 	|  	| NRPN 	| Notes 	| 
+Remember: if a Range/Display cell is blank, look for the first numbered version of that parameter.  For example, macro5name is blank: instead you should see macro1name. 
+
+| Name 	|  	| NRPN 	| Range and NRPN Display Instructions 	| 
 | --- | --- | --- | --- |	
 | allosccent 	|  	| 0x41 0x04 	| [-50,+50] 2-byte 2's Complement.  Thus it goes  0=0, 1=1, 2=2, ..., 50=50, then 8142 = -50, 8143 =-49, ..., 8191 = -1 	| 
 | osc1solowavescan1 	|  	| 0x3F 0x1b 	| MSB = Wavescan [0,7]   LSB = [0,1]  **NOTE: In fact it's not clear what these do if anything.** 	| 

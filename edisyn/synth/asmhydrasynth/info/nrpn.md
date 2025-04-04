@@ -25,9 +25,9 @@ at [https://github.com/eclab/edisyn/blob/master/edisyn/synth/asmhydrasynth/info/
 ### Jump to...
 
 * [CC Parameters](#cc)
-* [Basic Patch NRPN Parameters](#nrpn)
-* [Macro NRPN Parameters](#macro)
-* [FX Types and Custom Parameters](#fx)
+* [Patch NRPN Parameters](#nrpn)
+* [Macro Panel Button NRPN Parameters](#macro)
+* [FX Types and Custom Parameters](#fx) for both Pre-FX and Post-FX
 * [Patch Parameters without NRPN](#nonrpn)
 * [Parameters new to 2.0.0](#2.0.0)
 * [Undocumented NRPN Parameters](#undocumented)

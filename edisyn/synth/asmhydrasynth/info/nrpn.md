@@ -1520,7 +1520,7 @@ Note: I have not determined the five actual NRPN values for each preset, just th
 | fx1param2 (Chorus Depth) 	| 0x0D |  0x45 | 	| 0x41 0x70 | 0x41 0x73	| [0,8192] seemingly only output in increments of 8, and displayed as [0.0,128.0] in increments of 0.1. To display: if 8192, display 128.0.  Else divide by 6.4 (cutting into 1280 even pieces).  Then ROUND to nearest integer 0...1280.  Then divide by 10.  The Hydrasynth seems to round 0.5 towards even. 	| 
 | fx1param3 (Offset) 	|  	|  	| 0x3B 0x30 | 0x3C 0x30 	| [0,360] output in increments of 8 (0, 8, ..., 2880) and displayed as [-180,180] 	| 
 | fx1param4  (Chorus Feedback) 	|  	|  	| 0x3B 0x40 | 0x3C 0x40 	| [1,127] output as 8, 16, 24, 32, ...,  and displayed as [-63,63] 	| 
-| fx1param5 (Chorus Mono/Stereo) 	|  	|  	| 0x3B 0x50 | 0x3B 0x50 	| [0,1] output as 0 and 8 respectively for "Mono", "Stereo" 	| 
+| fx1param5 (Chorus Mono/Stereo) 	|  	|  	| 0x3B 0x50 | 0x3C 0x50 	| [0,1] output as 0 and 8 respectively for "Mono", "Stereo" 	| 
 | fx2preset  (Flanger Preset) 	|  	|  	| 0x3B 0x00 | 0x3C 0x00 	| Described Below.  |
 ```
 [0,2] in increments of 8 (0, 8, 16), displayed as Flanger 1, Flanger 2, Flanger 3.  Presets are: 	
@@ -1551,7 +1551,7 @@ Note: I have not determined the five actual NRPN values for each preset, just th
 | fx2param2 (Flanger Depth) 	| 0x0D |  0x45 | 	| 0x41 0x70 | 0x41 0x73	| [0,8192] seemingly only output in increments of 8, and displayed as [0.0,128.0] in increments of 0.1. To display: if 8192, display 128.0.  Else divide by 6.4 (cutting into 1280 even pieces).  Then ROUND to nearest integer 0...1280.  Then divide by 10.  The Hydrasynth seems to round 0.5 towards even. 	| 
 | fx2param3 (Offset) 	|  	|  	| 0x3B 0x30 | 0x3C 0x30 	| [0,360] output in increments of 8 (0, 8, ..., 2880) and displayed as [-180,180] 	| 
 | fx2param4  (Flanger Feedback) 	|  	|  	| 0x3B 0x40 | 0x3C 0x40 	| [1,127] output as 8, 16, 24, 32, ...,  and displayed as [-63,63] 	| 
-| fx2param5  (Flanger Mono/Stereo) 	|  	|  	| 0x3B 0x50 | 0x3B 0x50 	| [0,1] output as 0 and 8 respectively for "Mono", "Stereo" 	| 
+| fx2param5  (Flanger Mono/Stereo) 	|  	|  	| 0x3B 0x50 | 0x3C 0x50 	| [0,1] output as 0 and 8 respectively for "Mono", "Stereo" 	| 
 | fx3preset  (Rotary Preset) 	|  	|  	| 0x3B 0x00 | 0x3C 0x00 	| Described Below.  |
 ```
 [0,2] in increments of 8 (0, 8, 16), displayed as Rotary 1, Rotary 2, Rotary 3.  Presets are: 	
@@ -1596,7 +1596,7 @@ Note: I have not determined the five actual NRPN values for each preset, just th
 | --- | --- | --- |  --- | --- | --- |
 | fx3param3  (Rotary Lo-Depth) 	|  	|  	| 0x3B 0x30 | 0x3C 0x30 	| [0,127] output as 0, 8, 16, 24, 32, ... 	| 
 | fx3param4  (Rotary Hi-Depth) 	|  	|  	| 0x3B 0x40 | 0x3C 0x40 	| [0,127] output as 0, 8, 16, 24, 32, ... 	| 
-| fx3param5 (Rotary Low/High) 	|  	|  	| 0x3B 0x50 | 0x3B 0x50 	| [1,127] output as 8, 16, 24, 32, ...,  and displayed as [-63,63] 	| 
+| fx3param5 (Rotary Low/High) 	|  	|  	| 0x3B 0x50 | 0x3C 0x50 	| [1,127] output as 8, 16, 24, 32, ...,  and displayed as [-63,63] 	| 
 | fx4preset  (Phaser Preset) 	|  	|  	| 0x3B 0x00 | 0x3C 0x00 	| Described Below. |
 ```
 [0,2] in increments of 8 (0, 8, 16), displayed as Phaser 1, Phaser 2, Phaser 3.  Presets are: 	  
@@ -1627,7 +1627,7 @@ Note: I have not determined the five actual NRPN values for each preset, just th
 | fx4param2 (Phaser Feedback) 	| 0x0D |  0x45 | 	| 0x41 0x70 | 0x41 0x73	| [0,8192] seemingly only output in increments of 8, and displayed as [-64.0, 64.0] in increments of 0.1. To display: if 8192, display 64.0.  Else divide by 6.4 (cutting into 1280 even pieces).  Then ROUND to nearest integer 0...1280.  Then divide by 10.  Then subtract 64.0. The Hydrasynth seems to round 0.5 towards even. 	| 
 | fx4param3  (Phaser Depth) 	|  	|  	| 0x3B 0x30 | 0x3C 0x30 	| [0,127] output as 0, 8, 16, 24, 32, ... 	| 
 | fx4param4  (Phaser Phase) 	|  	|  	| 0x3B 0x40 | 0x3C 0x40 	| [0,127] output as 0, 8, 16, 24, 32, ... 	| 
-| fx4param5  (Phaser Offset) 	|  	|  	| 0x3B 0x50 | 0x3B 0x50 	| [0,360] output in increments of 8 (0, 8, ..., 2880) and displayed as [-180,180] 	| 
+| fx4param5  (Phaser Offset) 	|  	|  	| 0x3B 0x50 | 0x3C 0x50 	| [0,360] output in increments of 8 (0, 8, ..., 2880) and displayed as [-180,180] 	| 
 | fx5preset  (Lo-Fi Preset) 	|  	|  	| 0x3B 0x00 | 0x3C 0x00 	| Described Below. |
 ```
 [0,1] in increments of 8 (0, 8), displayed as Lo-Fi 1, Lo-Fi 2.  Presets are:  
@@ -1658,7 +1658,7 @@ Note: I have not determined the five actual NRPN values for each preset, just th
 | fx5param2 (Lo-Fi Resonance) 	| 0x0D |  0x45 | 	| 0x41 0x70 | 0x41 0x73	| [0,8184] seemingly only output in increments of 8, and displayed as [1.0,12.0] in increments of 0.1. To display: if 8184, display 12.0.  Else divide by 74.4 (cutting into 110 even pieces).  Then ROUND to nearest integer 0...110.  Then divide by 10.  Then add 1.0.  The Hydrasynth seems to round 0.5 towards even. 	| 
 | fx5param3 (Lo-Fi Filter Type) 	|  	|  	| 0x3B 0x30 | 0x3C 0x30 	| [0,5] output as 0, 8, 16, 24, ... representing "Thru", "PWBass", "Radio", "Tele", "Clean", "Low" 	| 
 | fx5param4  (Lo-Fi Output) 	|  	|  	| 0x3B 0x40 | 0x3C 0x40 	| [-6, 36] output in multiples of 8 as 464, 472, ..., 792, 800 	| 
-| fx5param5 (Lo-Fi Sampling) 	|  	|  	| 0x3B 0x50 | 0x3B 0x50 	| [1, 16] output as 8, 16, 24, ... representing "44100", "22050", "14700", "11025", "8820", "7350", "6300", "5513", "4900", "4410", "4009", "3675", "3392", "3150", "2940", "2756".   Yes, the values go DOWN. 	| 
+| fx5param5 (Lo-Fi Sampling) 	|  	|  	| 0x3B 0x50 | 0x3C 0x50 	| [1, 16] output as 8, 16, 24, ... representing "44100", "22050", "14700", "11025", "8820", "7350", "6300", "5513", "4900", "4410", "4009", "3675", "3392", "3150", "2940", "2756".   Yes, the values go DOWN. 	| 
 | fx6preset  (Tremolo Preset) 	|  	|  	| 0x3B 0x00 | 0x3C 0x00 	| Described Below. |
 ```
 [0,2] in increments of 8 (0, 8, 16), displayed as Tremolo 1, Tremolo 2, Tremolo 3.  Presets are: 	
@@ -1689,7 +1689,7 @@ Note: I have not determined the five actual NRPN values for each preset, just th
 | fx6param2 (Tremolo Depth) 	| 0x0D |  0x45 | 	| 0x41 0x70 | 0x41 0x73	| [0,8192] seemingly only output in increments of 8, and displayed as [0.0,128.0] in increments of 0.1. To display: if 8192, display 128.0.  Else divide by 6.4 (cutting into 1280 even pieces).  Then ROUND to nearest integer 0...1280.  Then divide by 10.  The Hydrasynth seems to round 0.5 towards even. 	| 
 | fx6param3 (Tremolo LFO Shape) 	|  	|  	| 0x3B 0x30 | 0x3C 0x30 	| [0,1] output as 0 and 8 respectively for "Sine", "Square" 	| 
 | fx6param4 (Tremolo Phase) 	|  	|  	| 0x3B 0x40 | 0x3C 0x40 	| [0,360] output in increments of 8 (0, 8, ..., 2880) and displayed as [-180,180] 	| 
-| fx6param5 (Tremolo Pitch Mod) 	|  	|  	| 0x3B 0x50 | 0x3B 0x50 	| [0,127] output as 0, 8, 16, 24, 32, ... 	| 
+| fx6param5 (Tremolo Pitch Mod) 	|  	|  	| 0x3B 0x50 | 0x3C 0x50 	| [0,127] output as 0, 8, 16, 24, 32, ... 	| 
 | fx7preset  (EQ Preset) 	|  	|  	| 0x3B 0x00 | 0x3C 0x00 	| Described Below. |
 ```
 [0,6] in increments of 8 (0, 8, 16, 24, 32, 40, 48), displayed as Flat, Low Boost, Bass Cut, High Cut, Smile, Lo-Fi, Warm.  Presets are: 	
@@ -1710,13 +1710,13 @@ Note: I have not determined the five actual NRPN values for each preset, just th
 | fx7param2 (EQ High Gain) 	| 0x0D |  0x45 | 	| 0x41 0x70 | 0x41 0x73	| [0,1020] output in multiples of 8 as 0, 8, 16, ..., 8152, 8160.   Displayed as [-36.0,24.0] in increments of 0.1 as follows.  If 1020, display 24.0. Else divide by 1.7.  Then ROUND to nearest integer.  Then subtract 360.  Then divide by 10.0.  The Hydrasynth seems to round 0.5 towards even. 	| 
 | fx7param3  (EQ Mid Gain) 	|  	|  	| 0x3B 0x30 | 0x3C 0x30 	| [0, 600] output in multiples of 8 as 0, 8, 16, ..., 4792, 4800.   Displayed as [-36.0,24.0] in increments of 0.1 as follows.  Subtract 360.  Then divide by 10.0. 	**BUG: While High and Low Gain go 0..1020, Mid Gain goes 0..600 but displays the same values.  This reeks of a likely bug.** 	| 
 | fx7param4 (EQ Xover Low) 	|  	|  	| 0x3B 0x40 | 0x3C 0x40 	| [16,1000] in increments of 1 output as multiples of 8 as 128, 136, ..., 8000 and displayed as multiples of 2 as 32, 34, ..., 2000. 	| 
-| fx7param5 (EQ Xover High) 	|  	|  	| 0x3B 0x50 | 0x3B 0x50 	| [32,1000] in increments of 1 output as multiples of 8 as 256, 264, ..., 8000 and displayed as multiples of 16 as 512, 544, ..., 16000. 	| 
+| fx7param5 (EQ Xover High) 	|  	|  	| 0x3B 0x50 | 0x3C 0x50 	| [32,1000] in increments of 1 output as multiples of 8 as 256, 264, ..., 8000 and displayed as multiples of 16 as 512, 544, ..., 16000. 	| 
 | fxsidechain  (Compressor Preset) 	|  	|  	| 0x3B 0x73 | 0x3C 0x73 	| [0,4] in steps of 8 (0, 8, 16, 24, 32) "Off", "BPM Duck", "Tap", "Mod In 1", "Mod In 2" 	| 
-| fx8param1 	| 0x0C |  0x44 | 	| 0x41 0x6F | 0x41 0x72 	|  	|  	| 
+| fx8param1   (Compressor Threshold)	| 0x0C |  0x44 | 	| 0x41 0x6F | 0x41 0x72 	| [0,1024] output in multiples of 8 as 0, 8, 16, ..., 8192.  Dispplayed as [-64.0dB,0.0dB  in increments of 0.1] as follows.  If 1024, display 0.0dB.  Else Divide by 16.0.  Then ROUND to nearest integer.  The divide by 10.0.  The Hydrasynth seems to round 0.5 towards even. 	Then subtract 64.	| 
 | fx8param2  (Compressor Ratio) 	| 0x0D |  0x45 | 	| 0x41 0x70 | 0x41 0x73	| [408,8160] seemingly only output in increments of 8, and displayed as [1.0:1,20.0:1] in increments of 0.1. To display: if 8160, display 20.0:1.  Else subtract 408, divide by 40.8 (cutting into 190 even pieces).  Then ROUND to nearest integer 0...190.  Then divide by 10.   Then add 1.0.  The Hydrasynth seems to round 0.5 towards even. 	| 
 | fx8param3  (Compressor Attack) 	|  	|  	| 0x3B 0x30 | 0x3C 0x30 	| [1, 400] ms in steps of 8 (8, 16, 24, ...)  	| 
 | fx8param4 (Compressor Release) 	|  	|  	| 0x3B 0x40 | 0x3C 0x40 	| [5, 560] ms in steps of 8 (40, 48, 56, ...) 	| 
-| fx8param5 (Compressor Output) 	|  	|  	| 0x3B 0x50 | 0x3B 0x50 	| [0,512] in steps of 8 (0, 8, 16, 24, ...) 	| 
+| fx8param5 (Compressor Output) 	|  	|  	| 0x3B 0x50 | 0x3C 0x50 	| [0,512] in steps of 8 (0, 8, 16, 24, ...) 	| 
 | fx9preset  (Distortion Preset) 	|  	|  	| 0x3B 0x00 | 0x3C 0x00 	| Described Below.  |
 ```
 [0,2] in increments of 8 (0, 8, 16), displayed as Drive 1, Drive 2, Drive 3.   Note, not called "Distortion 1...3".  Presets are:
@@ -1732,8 +1732,8 @@ Note: I have not determined the five actual NRPN values for each preset, just th
 | fx9param1 (Distortion Drive) 	| 0x0C |  0x44 | 	| 0x41 0x6F | 0x41 0x72 	| [0,8192] seemingly only output in increments of 8, and displayed as [0.0,128.0] in increments of 0.1. To display: if 8192, display 128.0.  Else divide by 6.4 (cutting into 1280 even pieces).  Then ROUND to nearest integer 0...1280.  Then divide by 10.  The Hydrasynth seems to round 0.5 towards even. 	| 
 | fx9param2  (Distortion Tone) 	| 0x0D |  0x45 | 	| 0x41 0x70 | 0x41 0x73	| [0,8192] seemingly only output in increments of 8, and displayed as [-64.0, 64.0] in increments of 0.1. To display: if 8192, display 64.0.  Else divide by 6.4 (cutting into 1280 even pieces).  Then ROUND to nearest integer 0...1280.  Then divide by 10.  Then subtract 64.0. The Hydrasynth seems to round 0.5 towards even. 	| 
 | fx9param3 (Distortion Asym) 	|  	|  	| 0x3B 0x30 | 0x3C 0x30 	| [0,128] in steps of 8 (0, 8, 16, 24, ...) 	| 
-| fx9param4 	|  	|  	| 0x3B 0x40 | 0x3C 0x40 	| [0,128] in steps of 8 (0, 8, 16, 24, ...) 	| 
-| fx9param5 (Distortion Output) 	|  	|  	| 0x3B 0x50 | 0x3B 0x50 	| [-36.0,24.0] dB in increments of 0.1 output as in multiples of 8 as 0, 8, 16, ..., 4800 	| 
+| fx9param4 (Distortion Curve)	|  	|  	| 0x3B 0x40 | 0x3C 0x40 	| [0,128] in steps of 8 (0, 8, 16, 24, ...) 	| 
+| fx9param5 (Distortion Output) 	|  	|  	| 0x3B 0x50 | 0x3C 0x50 	| [-36.0,24.0] dB in increments of 0.1 output as in multiples of 8 as 0, 8, 16, ..., 4800 	| 
 
 
 

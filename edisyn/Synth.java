@@ -1171,6 +1171,11 @@ public abstract class Synth extends JComponent implements Updatable
         to permanent memory but doesn't change working memory.  This isn't very common (the Kyra and Pulse 2 seem to need it). */ 
     public boolean getSendsParametersAfterWrite() { return false; }
 
+    /** Override this to send special MIDI to the synthesizer after writeAllParameters().  This will NOT be called in other
+    	situations where emitAll(...) or emit(...) is called.   This exists to deal with a bug in the Blofeld which doesn't remove its
+    	"receiving sysex" screen after receiving a patch write.  */ 
+    public void afterWriteHook() { return; }
+
     /** Return the filename of your default sysex file (for example "MySynth.init"). Should be located right next to the synth's class file ("MySynth.class") */
     public String getDefaultResourceFileName() { return null; }
         
@@ -6272,7 +6277,13 @@ menubar.add(helpMenu);
         performChangePatch(model);
         if (getSendsParametersAfterWrite())
             sendAllParameters();
+        afterWriteAllParametersHook();
         }
+
+	public void afterWriteAllParametersHook()
+		{
+		return;
+		}
                 
     void doChangeMIDI()
         {

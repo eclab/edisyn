@@ -1171,7 +1171,7 @@ public class Midi
                 case ShortMessage.TIMING_CLOCK: type = "Timing Clock"; c = -1; break;
                 case ShortMessage.TUNE_REQUEST: type = "Tune Request"; c = -1; break;
                 }
-            return type + (c == -1 ? "" : (" (Channel " + c + ")" + 
+            return type + (c == -1 ? "" : (" (Channel " + (c + 1) + ")" + 
                     "\t" + (s.getData1() & 0xFF) + " " + (s.getData2() & 0xFF)));
             }
         }

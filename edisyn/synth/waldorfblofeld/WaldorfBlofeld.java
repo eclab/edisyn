@@ -2431,7 +2431,20 @@ public class WaldorfBlofeld extends Synth
         return new byte[] { (byte)0xF0, 0x3E, 0x13, DEV, 0x00, 0x7F, 0x00, 0x00, (byte)0xF7 };
         }
     
+    // The following hook is used to fix a Blofeld bug
+    //
+    // If you do the following:
+    // Write a patch
+    // Change Patch (Bank, PC)
+    // ... then the Blofeld will put up its "Receiving SysEx" screen and forget to take it down.
+    // You can make it take it down by doing a few things, but one easy one is to request the
+    // current patch again.  So that's what we're doing.
+    //
+    // Note that (1) this is only the case for single patches, not multi patches, and
+    // (2) if you JUST write the patch, but don't change the patch after, the screen goes away.
     
+    public void afterWriteAllParametersHook() { performRequestCurrentDump(); }
+
     public static final int EXPECTED_SYSEX_LENGTH = 392;
     
     

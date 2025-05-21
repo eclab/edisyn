@@ -28,7 +28,8 @@ public class Yamaha4OpMulti extends Synth
         
     public static final int TYPE_TX81Z = 0;
     public static final int TYPE_DX11 = 1;
-    public static final String[] TYPES = { "TX81Z", "DX11" };
+    public static final int TYPE_V50 = 2;
+    public static final String[] TYPES = { "TX81Z", "DX11", "V50" };
     public static final String[] KEYS = new String[] { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" };
     public static final String[] CHANNELS = {"1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16" };
     public static final String[] BANKS = { "I", "A", "B", "C", "D" };
@@ -1144,6 +1145,37 @@ public class Yamaha4OpMulti extends Synth
         return newModel;
         }
 
+        
+    public boolean isValidPatchLocation(int bank, int num) 
+        { 
+        if (getSynthType() == TYPE_V50)
+            {
+            return num < 100;
+            }
+        else 
+            {
+            return num < 24; 
+            }
+        }
+
+    public int getValidBankSize(int bank)
+        {
+        if (getSynthType() == TYPE_V50)
+            {
+            return 100;
+            }
+        else 
+            {
+            return 24; 
+            }
+        }
+
+    public Object adjustBankSysexForEmit(byte[] data, Model model, int bank)
+        { 
+        data[2] = (byte) getChannelOut();
+        return data; 
+        }
+  
     public String getPatchLocationName(Model model)
         {
         // getPatchLocationName() is called from sprout() as a test to see if we should enable
@@ -1153,18 +1185,31 @@ public class Yamaha4OpMulti extends Synth
         if (!model.exists("bank")) return null;
         
         int number = model.get("number") + 1;
-        return "PF" + (number > 9 ? "" : "0") + number;
-        }
         
+        int type = getSynthType();
+        if (type == TYPE_V50)
+        	{
+            number -= 1;    // we start at 00
+            return "PF" + (number > 9 ? "" : "0") + number;
+        	}
+        else
+        	{
+            return "PF" + (number > 9 ? "" : "0") + number;
+            }
+        }       
 
-    public Object adjustBankSysexForEmit(byte[] data, Model model, int bank)
-        { 
-        data[2] = (byte) getChannelOut();
-        return data; 
-        }
-  
     /** Return a list of all patch number names.  Default is { "Main" } */
-    public String[] getPatchNumberNames() { return buildIntegerNames(24, 1); }
+    public String[] getPatchNumberNames() 
+    	{ 
+        if (getSynthType() == TYPE_V50)
+            {
+    		return buildIntegerNames(100, 1); 
+            }
+        else 
+            {
+    		return buildIntegerNames(24, 1); 
+            }
+    	}
                 
     /** Return a list whether patches in banks are writeable.  Default is { false } */
     public boolean[] getWriteableBanks() { return new boolean[] { true }; }

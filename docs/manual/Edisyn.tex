@@ -167,7 +167,7 @@ If you are not connected to MIDI, or if you cancel, Edisyn will put you in {\bf 
 
 \section{Edisyn Patch Editors}
 
-\paragraph{What exactly is a Patch?}  You probably think you know, but you might not.  From Edisyn's perspective, a {\bf patch} is something that Edisyn can store and retrieve on your synthesizer through MIDI commands; and usually there is a collection of patches each of which can be called up individually.  Some synthesizers (like the Yamaha DX7) are simple: they have 32 patches that you can upload and download and that's it.  Others are more complex: they may have {\it different kinds of patches}.  For example, many synthesizers have a set of patches which represent {\bf single sounds} and also a different set of {\bf multimode} patches which represent {\it multitimbral collections} of sounds defined by the single patches.  The multimode patches do not hold the single patches: they point to them.  Thus if you change a single patch, it's changed for every multimode patch which references it.  Some synthesizers might also have separate {\bf drum patches}, or {\bf effects patches}, etc.
+\paragraph{What exactly is a Patch?}  You probably think you know, but in fact you might not, not exactly.  From Edisyn's perspective, a {\bf patch} is something that Edisyn can store and retrieve on your synthesizer through MIDI commands; and usually there is a collection of patches each of which can be called up individually.  Some synthesizers (like the Yamaha DX7) are simple: they have 32 patches that you can upload and download and that's it.  Others are more complex: they may have {\it different kinds of patches}.  For example, many synthesizers have a set of patches which represent {\bf single sounds} and also a different set of {\bf multimode} patches which represent {\it multitimbral collections} of sounds defined by the single patches.  The multimode patches do not hold the single patches: they point to them.  Thus if you change a single patch, it's changed for every multimode patch which references it.  Some synthesizers might also have separate {\bf drum patches}, or {\bf effects patches}, etc.
 
 Edisyn generally has one patch editor for each kind of patch in a synthesizer.\footnote{In some cases Edisyn doesn't implement an editor for a certain patch type.  Sometimes this is for patch types that are too arcane.  In other cases, certain patch types may not have adequate facilities to access easily via sysex: for example Korg Wavestation SR's multimode patches stupidly must {\it all} be uploaded and downloaded as a blob, rather than individually.  Edisyn also usually doesn't make editors for global parameters, except in certain rare cases.}
 
@@ -242,7 +242,7 @@ If you are connected to a synthesizer over MIDI, then changing a widget will mod
 
 \section{Creating and Setting Up Additional Patch Editors}
 
-A patch editor is created by selecting one of the various {\bf New...} menu options in the {\bf File} menu.\footnote{The {\bf New Synth} menu presents you with several options.  First there are the patch editors you have {\it recently selected}, if any.  Next come {\it all available} patch editors, organized by manufacturer.  Finally, you have menu choices to {\it remove} patch editors from the recent list.}   You have to create a new a patch editor before you can start loading a patch from a file or from the synthesizer.  You can also {\bf Duplicate} an existing patch editor (in the {\bf File} menu).  This will exactly duplicate the existing patch as well.  
+A patch editor is created by selecting one of the {\bf New...} menu options in the {\bf File} menu.\footnote{The {\bf New Synth} menu presents you with several options.  First there are the patch editors you have {\it recently selected}, if any.  Next come {\it all available} patch editors, organized by manufacturer.  Finally, you have menu choices to {\it remove} patch editors from the recent list.}   You have to create a new a patch editor before you can start loading a patch from a file or from the synthesizer.  You can also {\bf Duplicate} an existing patch editor (in the {\bf File} menu).  This will exactly duplicate the existing patch as well.  
 
 Whenever you create a new patch editor or duplicate one, you will once again be asked to set up MIDI as discussed in Section \ref{startingedisyn}, or to run in Disconnected Mode.
 
@@ -620,6 +620,7 @@ You can turn off automatic test notes by turning off {\bf Send Test Notes} or by
 
 
 
+\bump
 
 \begin{wrapfigure}{r}{3.6in}
 \vspace{-2em}\includegraphics[scale=0.27]{HillClimbPanel.png}
@@ -962,9 +963,9 @@ The Librarian presents itself as a table with columns and rows.  Each column is 
 Patch slots come in different colors depending on the situation:
 
 \begin{itemize}
-\item {\it Pale Green: the \textbf{Scratch Bank}}\quad The first column is special.  This isn't a bank in your synthesizer: it's just some extra room for you to temporarily stash stuff as you move things around via drag-and-drop.  It's not written to the synthesizer nor saved to disk.
+\item {\it Pale Green: the \textbf{Scratch Bank}}\quad The first column is special.  This isn't a bank in your synthesizer: it's just some extra room for you to temporarily stash stuff in Edisyn as you move things around via drag-and-drop.  It's not written to the synthesizer nor saved to disk.
 \item {\it White}\quad Patches in locations which can be written to your synthesizer.
-\item {\it Pale Magenta}\quad Patches in locations which cannot be written to your synthesizer because they're {\bf read-only} on your machine.  However you can save them to disk, and can load them from the disk or from your synth.
+\item {\it Pale Magenta}\quad Patches in locations which cannot be written to your synthesizer because they're {\bf read-only} on your synthesizer.  However you can save them to disk, and can load them from the disk or from your synth.
 \item {\it Light Gray with Red Lettering}\quad Patches in locations which cannot be written to nor read from your synthesizer because they're {\bf invalid patch locations.}  Why does Edisyn provide them then?  Because some synths have banks with varying lengths or present other unusual situations which violate the rectangular table structure used by Edisyn.  You can treat them as scratch locations.
 \item {\it Light Gray with Black Lettering}\quad Patches in locations which ought not be written to nor read from your synthesizer because they're {\bf ``inappropriate'' patch locations.}  You can still read/write the patches to disk while they are in these locations, but the synthesizer likely will not respond if you try to request or write them.  For example, the Proteus 2000 has four card slots which can be populated with any of 20 different read-only cards of patches.  If a card is in a slot, its ``bank'' is displayed in Pale Magenta as usual.  If a card is not in a slot, its ``bank'' is still shown, but is displayed as {\it inappropriate}: it's a real card type with legitimate patch locations, and it {\it could} be installed on a synth, so reading/writing its patches to the disk is reasonable, but accessing them on your synthesizer presently won't do anything (because it's not installed on your machine).  You can treat these spots as scratch locations if you like.
 \item {\it Dark Gray}\quad Patches you have selected.

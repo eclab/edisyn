@@ -595,7 +595,7 @@ public class YamahaFB01 extends Synth
                 param = 0x51;
                 // get zeroth bit of velocitysensitivityforlevel, put at top
                 val = (((model.get("op" + op + "keyboardlevelscalingtype") >>> 0) & 1) << 7) | 
-                    model.get("op" + op + "velocitysensitivityforlevel");
+                    (model.get("op" + op + "velocitysensitivityforlevel") << 4);
                 }
             else if (k.equals("keyboardlevelscalingdepth") || k.equals("adjustforlevel"))
                 {

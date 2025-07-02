@@ -24,6 +24,9 @@ import javax.sound.midi.*;
 
 public class KorgMicroKorg extends Synth
     {
+    // Debug flag - set to false to disable debug output
+    private static final boolean DEBUG = false;
+    
     public static final String[] BANKS = new String[] { "A", "B" };
     public static final String[] TIMBRE_ASSIGN_MODES = new String[] { "Mono", "Poly", "Unison" };
     // public static final String[] VOICE_MODES = new String[] { "Single (Timbre 1)", "Layer (Timbres 1 + 2)", "Vocoder" };
@@ -170,9 +173,11 @@ public class KorgMicroKorg extends Synth
                                 
             public void update(String key, Model model)
                 {
-                System.out.println("DEBUG: StringComponent update called with key: '" + key + "'");
-                System.out.println("DEBUG: Model name value: '" + model.get("name", "NO_NAME") + "'");
-                System.out.println("DEBUG: getText() returns: '" + getText() + "'");
+                if (DEBUG) {
+                    System.out.println("DEBUG: StringComponent update called with key: '" + key + "'");
+                    System.out.println("DEBUG: Model name value: '" + model.get("name", "NO_NAME") + "'");
+                    System.out.println("DEBUG: getText() returns: '" + getText() + "'");
+                }
                 
                 super.update(key, model);
                 updateTitle();
@@ -189,7 +194,9 @@ public class KorgMicroKorg extends Synth
         
     public String revisePatchName(String name)
         {
-        System.out.println("DEBUG: revisePatchName called with: '" + name + "'");
+        if (DEBUG) {
+            System.out.println("DEBUG: revisePatchName called with: '" + name + "'");
+        }
         
         if (name == null) name = "";
         name = (name + "            ").substring(0, 12);
@@ -200,7 +207,9 @@ public class KorgMicroKorg extends Synth
                 chars[i] = ' ';
             }
         String result = new String(chars);
-        System.out.println("DEBUG: revisePatchName returns: '" + result + "'");
+        if (DEBUG) {
+            System.out.println("DEBUG: revisePatchName returns: '" + result + "'");
+        }
         return result;
         }
 
@@ -1054,13 +1063,15 @@ public class KorgMicroKorg extends Synth
         name = new String(namec);
         
         // Debug output
-        System.out.println("DEBUG: Raw name bytes: ");
-        for(int i = 0; i < 12; i++)
-            {
-            System.out.print(" " + (data[i] & 0xFF));
-            }
-        System.out.println();
-        System.out.println("DEBUG: Extracted name: '" + name + "'");
+        if (DEBUG) {
+            System.out.println("DEBUG: Raw name bytes: ");
+            for(int i = 0; i < 12; i++)
+                {
+                System.out.print(" " + (data[i] & 0xFF));
+                }
+            System.out.println();
+            System.out.println("DEBUG: Extracted name: '" + name + "'");
+        }
         
         model.set("name", name);
         

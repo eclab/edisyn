@@ -170,6 +170,10 @@ public class KorgMicroKorg extends Synth
                                 
             public void update(String key, Model model)
                 {
+                System.out.println("DEBUG: StringComponent update called with key: '" + key + "'");
+                System.out.println("DEBUG: Model name value: '" + model.get("name", "NO_NAME") + "'");
+                System.out.println("DEBUG: getText() returns: '" + getText() + "'");
+                
                 super.update(key, model);
                 updateTitle();
                 }
@@ -185,15 +189,19 @@ public class KorgMicroKorg extends Synth
         
     public String revisePatchName(String name)
         {
+        System.out.println("DEBUG: revisePatchName called with: '" + name + "'");
+        
         if (name == null) name = "";
-        name = (name + "            ").substring(12);
+        name = (name + "            ").substring(0, 12);
         char[] chars = name.toCharArray();
         for(int i = 0; i < chars.length; i++)
             {
             if (chars[i] < 32 || chars[i] > 127)
                 chars[i] = ' ';
             }
-        return new String(chars);
+        String result = new String(chars);
+        System.out.println("DEBUG: revisePatchName returns: '" + result + "'");
+        return result;
         }
 
  
@@ -1044,10 +1052,20 @@ public class KorgMicroKorg extends Synth
             namec[i] = (char)data[i];
             }
         name = new String(namec);
+        
+        // Debug output
+        System.out.println("DEBUG: Raw name bytes: ");
+        for(int i = 0; i < 12; i++)
+            {
+            System.out.print(" " + (data[i] & 0xFF));
+            }
+        System.out.println();
+        System.out.println("DEBUG: Extracted name: '" + name + "'");
+        
         model.set("name", name);
         
         // this will have to be set entirely custom.  :-(  Stupid Korg.  Really bad sysex.
-        
+
         model.set("arptriggerlength", data[14] & 7);
         for(int i = 0; i < 8; i++)
             {

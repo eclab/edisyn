@@ -35,11 +35,9 @@ public class KorgMicroKorgRec extends Recognize
     
     public static boolean recognize(byte[] data)
         {
-        System.out.println("DEBUG: recognize() called. Length: " + data.length);
         // If this is a large message, it's a bank dump - return true so parse() handles it
         if (data.length >= 37150 && data.length <= 37400) {
             boolean bank = recognizeBank(data);
-            System.out.println("DEBUG: recognize() detected bank dump, returning true for parse() handling");
             return true;  // Return true so parse() method handles bank dumps
         }
         boolean v = (
@@ -48,12 +46,10 @@ public class KorgMicroKorgRec extends Recognize
             data[1] == (byte)0x42 &&
             data[3] == (byte)0x58 &&
             data[4] == (byte)0x40);
-        System.out.println("DEBUG: recognize() result: " + v);
         if (v == false) return false;
         data = convertTo8Bit(data, 5);
         int voicemode = (data[16] >>> 4) & 3;
         boolean modeOK = (voicemode == 0 || voicemode == 2);
-        System.out.println("DEBUG: recognize() voicemode: " + voicemode + ", modeOK: " + modeOK);
         return modeOK;
         }
         
@@ -67,12 +63,6 @@ public class KorgMicroKorgRec extends Recognize
             data[3] == (byte)0x58 &&
             data[4] == (byte)0x50);
         boolean v = lengthOK && headerOK;
-        System.out.println("DEBUG: recognizeBank called. Length: " + data.length + ", lengthOK: " + lengthOK + ", headerOK: " + headerOK + ", result: " + v);
-        if (data.length >= 5) {
-            System.out.println("DEBUG: Bank sysex header: F0 " + String.format("%02X", data[1]) + " " +
-                String.format("%02X", data[2]) + " " + String.format("%02X", data[3]) + " " +
-                String.format("%02X", data[4]));
-        }
         return v;
         }
     }

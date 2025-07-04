@@ -25,7 +25,7 @@ import javax.sound.midi.*;
 public class KorgMicroKorg extends Synth
     {
     // Debug flag - set to false to disable debug output
-    private static final boolean DEBUG = true;
+    private static final boolean DEBUG = false;
     
     public static final String[] BANKS = new String[] { "A", "B" };
     public static final String[] TIMBRE_ASSIGN_MODES = new String[] { "Mono", "Poly", "Unison" };

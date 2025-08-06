@@ -24,12 +24,44 @@ This menu has two additional options for you.  <b>Send Patch as Pseudo-MPE</b> w
   
 <p><li>The TG33, SY22, and SY35 are odd machines: they have many more parameters than are available from the front panel.  Notably, all of them allow you to program both the carrier and modulator parameters of the FM tones, as well as the FM algorithm in question.  So you will find rather more options here than expected.
 
-<p><li>Only the TG33 can receive real-time parameter changes; and nearly all Modulator parameters and a few others cannot be sent.  Furthermore, the TG33 is very slow in responding to real-time parameter changes.
-
 <p><li>A number of parameters range from 0...99 on-screen, but in reality they range from 0...127 or 0...64 and are just mapped to 0...99.  Edisyn uses the true mapping values; this means that when you change a number, it may not be the same on Edisyn as it says on the synth.
 
 <p><li>The TG33 may occasionally get caught in a strange "Cannot Edit" warning message on-screen when receiving real-time parameter changes.  You can get it out of this by selecting the voice and edit buttons again, or some similar combination.
 
+<p><li>Only the TG33 can receive real-time parameter changes, and is very slow in responding to them.  Furthermore, the TG33 does NOT respond to real-time changes to a large number of parameters, specifically it does NOT respond to:
+<br>
+<br>&nbsp;&nbsp;&nbsp;&nbsp;Tone A Amplitude (on/off)
+<br>&nbsp;&nbsp;&nbsp;&nbsp;Tone A Pitch (on/off)
+<br>&nbsp;&nbsp;&nbsp;&nbsp;Tone A Temperment
+<br>&nbsp;&nbsp;&nbsp;&nbsp;Tone A Detune
+<br>&nbsp;&nbsp;&nbsp;&nbsp;  
+<br>&nbsp;&nbsp;&nbsp;&nbsp;Tone B Algorithm
+<br>&nbsp;&nbsp;&nbsp;&nbsp;Carrier B Wave
+<br>&nbsp;&nbsp;&nbsp;&nbsp;Carrier B Fixed Frequency (on/off)
+<br>&nbsp;&nbsp;&nbsp;&nbsp;Carrier B Amplitude (on/off)
+<br>&nbsp;&nbsp;&nbsp;&nbsp;Carrier B Pitch (on/off)
+<br>&nbsp;&nbsp;&nbsp;&nbsp;Carrier B Temperment
+<br>&nbsp;&nbsp;&nbsp;&nbsp;Carrier B Detune
+<br>&nbsp;&nbsp;&nbsp;&nbsp;Carrier B Frequency Ratio
+<br>&nbsp;&nbsp;&nbsp;&nbsp;Carrier B Envelope Type
+<br>&nbsp;&nbsp;&nbsp;&nbsp;ALL MODULATOR B AND MODULATOR B ENVELOPE PARAMETERS
+<br>&nbsp;&nbsp;&nbsp;&nbsp;  
+<br>&nbsp;&nbsp;&nbsp;&nbsp;Tone C Amplitude (on/off)
+<br>&nbsp;&nbsp;&nbsp;&nbsp;Tone C Pitch (on/off)
+<br>&nbsp;&nbsp;&nbsp;&nbsp;Tone C Temperment
+<br>&nbsp;&nbsp;&nbsp;&nbsp;Tone C Detune
+<br>&nbsp;&nbsp;&nbsp;&nbsp;  
+<br>&nbsp;&nbsp;&nbsp;&nbsp;Tone D Algorithm
+<br>&nbsp;&nbsp;&nbsp;&nbsp;Carrier D Wave
+<br>&nbsp;&nbsp;&nbsp;&nbsp;Carrier D Fixed Frequency (on/off)
+<br>&nbsp;&nbsp;&nbsp;&nbsp;Carrier D Amplitude (on/off)
+<br>&nbsp;&nbsp;&nbsp;&nbsp;Carrier D Pitch (on/off)
+<br>&nbsp;&nbsp;&nbsp;&nbsp;Carrier D Tempersment
+<br>&nbsp;&nbsp;&nbsp;&nbsp;Carrier D Detune
+<br>&nbsp;&nbsp;&nbsp;&nbsp;Carrier D Frequency Ratio
+<br>&nbsp;&nbsp;&nbsp;&nbsp;Carrier D Envelope Type
+<br>&nbsp;&nbsp;&nbsp;&nbsp;ALL MODULATOR D AND MODULATOR D ENVELOPE PARAMETERS
+</pre>
 </ul>
 
 <br><br><h3>Thanks</h3>

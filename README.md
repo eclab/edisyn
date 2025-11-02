@@ -268,7 +268,7 @@ On the Mac, running with recent versions of Java, you may see a warning that beg
 
 Don't worry about it.  Java is now, for no good reason, starting to issue warnings about use of native JNI libraries.  Edisyn uses CoreMIDI4J to fix MIDI bugs on the Mac.  Ultimately you'll be required to run Java like this:
 
-        java --enable-native-access=ALL-UNNAMED -jar seq.jar
+        java --enable-native-access=ALL-UNNAMED -jar edisyn.jar
 
 ... but not now.
 

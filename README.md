@@ -258,3 +258,17 @@ Java has compatibility problems with Jack; disabling Jack will often allow Edisy
 2. Download [Edisyn's jar file](https://cs.gmu.edu/~eclab/projects/edisyn/edisyn.jar).  Or if you can only install Java 11 or higher (must be at least 11), download the Java 11 version of the [jar file](https://cs.gmu.edu/~eclab/projects/edisyn/java8/edisyn.jar).
 3. Run Edisyn as:   `java -jar edisyn.jar`
 
+On the Mac, running with recent versions of Java, you may see a warning that begins like this:
+
+    WARNING: A restricted method in java.lang.System has been called
+    WARNING: java.lang.System::load has been called by uk.co.xfactorylibrarians.coremidi4j.Loader 
+             in an unnamed module ....
+    WARNING: Use --enable-native-access=ALL-UNNAMED to avoid a warning for callers in this module
+    WARNING: Restricted methods will be blocked in a future release unless native access is enabled
+
+Don't worry about it.  Java is now, for no good reason, starting to issue warnings about use of native JNI libraries.  Edisyn uses CoreMIDI4J to fix MIDI bugs on the Mac.  Ultimately you'll be required to run Java like this:
+
+        java --enable-native-access=ALL-UNNAMED -jar seq.jar
+
+... but not now.
+

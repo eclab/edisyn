@@ -19,7 +19,7 @@ import javax.sound.midi.*;
 
 
 /**
-   A patch editor for the ASM Hydrasynth.  It can read 1.5.5 and 2.0.0 and can write 2.0.0.
+   A patch editor for the ASM Hydrasynth.  It can read 1.5.5 and 2.2.0 and can write 2.0.0.
    
    <p>The Hydrasynth is a big and complex machine with over 1000 patch parameters and very little guidance as to
    how they are implemented.  As such it has four major problems which are expressed in this editor.
@@ -61,8 +61,11 @@ import javax.sound.midi.*;
 
 public class ASMHydrasynth extends Synth
     {
-    public static final int VERSION_1_5_5 = 0x9B;
-    public static final int VERSION_2_0_0 = 0xC8;
+    public static final int VERSION_0_8_2 = 0x52;		// 82 in hex	-- reports are that these exist, no idea what this is
+    public static final int VERSION_1_5_5 = 0x9B;		// 155 in hex
+    public static final int VERSION_2_0_0 = 0xC8;		// 200 in hex
+    public static final int VERSION_2_0_5 = 0xCB;		// 205 in hex	-- etc.  There's also 2_0_1 ... 2_0_4 in the wild
+    public static final int VERSION_2_2_0 = 0xDC;		// 220 in hex
     
     public static final String[] BANKS = { "A", "B", "C", "D", "E", "F", "G", "H" };
     public static final String[] OSC_MODES = { "Single", "WaveScan" };
@@ -5809,7 +5812,7 @@ public class ASMHydrasynth extends Synth
             data[3] = (byte) tempModel.get("number");
             }
                 
-        data[4] = (byte) VERSION_2_0_0;         // 1.5.5.  Change to 0xC8 for 2.0.0
+        data[4] = (byte) VERSION_2_0_0;
         data[5] = (byte) 0x00;
         data[6] = (byte) 0x00;
         data[7] = (byte) 0x00;
@@ -6663,8 +6666,10 @@ public class ASMHydrasynth extends Synth
         {
         // VERIFY VERSION
         int version = data[4] & 0xFF;
-        if (version != VERSION_1_5_5 && version != VERSION_2_0_0)
+        /*
+        if (version != VERSION_1_5_5 && version != VERSION_2_0_0 && version != VERSION_2_2_0)
             return PARSE_FAILED;
+        */
                 
         // PATCH BANK AND NAME
         set1("bank", data, 2);
@@ -6706,7 +6711,7 @@ public class ASMHydrasynth extends Synth
         /// CUSTOM VIBRATO AMOUNT
         if (version == VERSION_1_5_5)
             model.set("voicevibratoamount", data[46]);
-        else if (version == VERSION_2_0_0)
+        else																// (version == VERSION_2_0_0 || version == VERSION_2_2_0)
             model.set("voicevibratoamount", data[46] * 10 + data[2462]);
         
         // SCALES

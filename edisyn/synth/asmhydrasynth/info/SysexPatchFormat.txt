@@ -1,14 +1,16 @@
 HYDRASYNTH PATCH FORMAT
 Sean Luke 
 sean@cs.gmu.edu
-May 3, 2023
+Created May 3, 2023
+Last Updated Dec 12, 2025
 
 
 Below is a little spreadsheet of sorts to be used as a record for
 reverse engineering the locations of parameters in a Hydrasynth
 patch sysex dump.  This patch format is entirely reverse engineered
 (ASM has not been forthcoming) and may have errors, though it appears
-to be fairly complete for versions 1.5.5 and 2.0.0.
+to be fairly complete for versions 1.5.5 and 2.0.0.  I believe it also
+should work properly for 2.2.0.
 
 The patch sysex data is exposed by decoding a series of patch dump
 sysex messages.  This procedure is described here:
@@ -84,13 +86,39 @@ them to 69, 84, 67, 68.
 5. Bytes 2390 through 2399 are always -100, -1, ..., -100, -1.
 
 
+NOTE ON VERSION NUMBERS
+
+Patches contain the version number of the firmware on which they were developed.
+This version number is stored as a single byte.  The most common are:
+
+	1.5.5: (0x9B = 155)
+	2.0.0: (0xC8 = 200)
+	2.2.0: (0xDC = 220)
+
+However there are other version numbers which have appeared, mostly from patches
+developed in-house at ASM.  These include, but are hardly limited to, 
+0.8.2 (0x52 = 82) and 2.0.1 through 2.0.5 (for example 2.0.5 is 0xCB=205).
+
+To my knowledge the only differences in the patch format are between 1.5.5 and
+all others [I don't know about 0.8.2].  1.5.5 has a simpler vibrato amount, as
+explained elsewhere in this document, fewer banks, and different mod sources.
+In general, I would read all versions but write out as 2.0.0.  I do not believe
+that 2.2.0 has a different patch format from 2.0.0.  Thanks to Christophe Berthele'
+for assistance in identifying unusual patch version numbers in the wild.
+
+
+
+
+
+PATCH FORMAT TABLE
+
 
 BYTE    HEX     INFO
 0       0       06 = "Save to RAM"  05 = "Receive from RAM" maybe
 1       1       00
 2       2       Bank
 3       3       Patch Number
-4       4       9B Hydrasynth Version Number 	1.5.5: (0x9B = 155),  2.0.0: (0xC8 = 200)
+4       4       Version Number 	1.5.5: (0x9B = 155),  2.0.0: (0xC8 = 200),  2.2.0: (0xDC = 220).  There are other versions in the wild as well.
 5       5       00?
 6       6       Also Patch Number?  Not clear
 7       7       00?  02?  03?

@@ -24,6 +24,9 @@ import javax.sound.midi.*;
 
 public class KorgMicroKorg extends Synth
     {
+    // Debug flag - set to false to disable debug output
+    public static final boolean DEBUG = false;
+    
     public static final String[] BANKS = new String[] { "A", "B" };
     public static final String[] TIMBRE_ASSIGN_MODES = new String[] { "Mono", "Poly", "Unison" };
     // public static final String[] VOICE_MODES = new String[] { "Single (Timbre 1)", "Layer (Timbres 1 + 2)", "Vocoder" };
@@ -170,6 +173,12 @@ public class KorgMicroKorg extends Synth
                                 
             public void update(String key, Model model)
                 {
+                if (DEBUG) {
+                    System.out.println("DEBUG: StringComponent update called with key: '" + key + "'");
+                    System.out.println("DEBUG: Model name value: '" + model.get("name", "NO_NAME") + "'");
+                    System.out.println("DEBUG: getText() returns: '" + getText() + "'");
+                }
+                
                 super.update(key, model);
                 updateTitle();
                 }
@@ -185,15 +194,23 @@ public class KorgMicroKorg extends Synth
         
     public String revisePatchName(String name)
         {
+        if (DEBUG) {
+            System.out.println("DEBUG: revisePatchName called with: '" + name + "'");
+        }
+        
         if (name == null) name = "";
-        name = (name + "            ").substring(12);
+        name = (name + "            ").substring(0, 12);
         char[] chars = name.toCharArray();
         for(int i = 0; i < chars.length; i++)
             {
             if (chars[i] < 32 || chars[i] > 127)
                 chars[i] = ' ';
             }
-        return new String(chars);
+        String result = new String(chars);
+        if (DEBUG) {
+            System.out.println("DEBUG: revisePatchName returns: '" + result + "'");
+        }
+        return result;
         }
 
  
@@ -1035,6 +1052,35 @@ public class KorgMicroKorg extends Synth
     
     public int parse(byte[] data, boolean fromFile)
         {
+        // Check if this is a bank dump
+        if (KorgMicroKorgRec.recognizeBank(data)) {
+            if (DEBUG) {
+                System.out.println("DEBUG: parse() detected bank dump, calling showBankSysexOptions");
+            }
+            
+            // Extract patch names from the bank dump
+            String[] names = new String[128];
+            byte[] unpackedData = KorgMicroKorgRec.convertTo8Bit(data, 5);
+            for (int i = 0; i < 128; i++) {
+                int offset = i * 254;
+                if (offset + 12 <= unpackedData.length) {
+                    char[] namec = new char[12];
+                    for (int j = 0; j < 12; j++) {
+                        namec[j] = (char)unpackedData[offset + j];
+                    }
+                    names[i] = new String(namec).trim();
+                } else {
+                    names[i] = "Patch " + (i + 1);
+                }
+            }
+            
+            // Show bank sysex options dialog
+            int patchNum = showBankSysexOptions(data, names);
+            if (patchNum < 0) return PARSE_CANCELLED;
+            else return parseFromBank(data, patchNum);
+        }
+        
+        // Handle single patch dump
         data = convertTo8Bit(data, 5);
 
         char[] namec = new char[12];
@@ -1044,10 +1090,22 @@ public class KorgMicroKorg extends Synth
             namec[i] = (char)data[i];
             }
         name = new String(namec);
+        
+        // Debug output
+        if (DEBUG) {
+            System.out.println("DEBUG: Raw name bytes: ");
+            for(int i = 0; i < 12; i++)
+                {
+                System.out.print(" " + (data[i] & 0xFF));
+                }
+            System.out.println();
+            System.out.println("DEBUG: Extracted name: '" + name + "'");
+        }
+        
         model.set("name", name);
         
         // this will have to be set entirely custom.  :-(  Stupid Korg.  Really bad sysex.
-        
+
         model.set("arptriggerlength", data[14] & 7);
         for(int i = 0; i < 8; i++)
             {
@@ -1353,7 +1411,7 @@ public class KorgMicroKorg extends Synth
 
 
 
-    public int getPauseAfterChangePatch() { return 200; }
+
 
     public void changePatch(Model tempModel)
         {
@@ -1498,15 +1556,33 @@ public class KorgMicroKorg extends Synth
     public String[] getPatchNumberNames()  
         {
         String[] names = new String[64];
-                
         int pos = 0;
-        for(int i = 1; i < 9; i++)
-            {
-            for(int j = 1; j < 9; j++)
-                {
-                names[pos++] = "" + i + "" + j;
+        for (int i = 1; i <= 8; i++) {
+            for (int j = 1; j <= 8; j++) {
+                names[pos++] = String.valueOf(i) + String.valueOf(j);
+            }
+        }
+        if (DEBUG) {
+            System.out.println("DEBUG: getPatchNumberNames() returns " + names.length + " entries (11-88)");
+        }
+        return names;
+        }
+
+    // For full bank dump context
+    public String[] getAllPatchNumberNames()  
+        {
+        String[] names = new String[128];
+        int pos = 0;
+        for (char bank = 'A'; bank <= 'B'; bank++) {
+            for (int i = 1; i <= 8; i++) {
+                for (int j = 1; j <= 8; j++) {
+                    names[pos++] = bank + String.valueOf(i) + String.valueOf(j);
                 }
             }
+        }
+        if (DEBUG) {
+            System.out.println("DEBUG: getAllPatchNumberNames() returns " + names.length + " entries");
+        }
         return names;
         }
 
@@ -1517,5 +1593,272 @@ public class KorgMicroKorg extends Synth
     public boolean getSupportsPatchWrites() { return true; }
 
     public int getPatchNameLength() { return 12; }
+
+    // Bank dump support methods
+    public byte[] requestAllDump()
+        {
+        if (DEBUG) {
+            System.out.println("DEBUG: KorgMicroKorg.requestAllDump() called");
+        }
+        // MicroKorg all-data dump request: F0 42 3n 58 0F F7
+        // where n is the device ID (0-7)
+        byte deviceID = (byte)(getChannelOut());
+        byte[] sysex = new byte[] { (byte)0xF0, 0x42, (byte)(0x30 + deviceID), 0x58, 0x0F, (byte)0xF7 };
+        if (DEBUG) {
+            System.out.println("DEBUG: Generated sysex: F0 42 " + String.format("%02X", 0x30 + deviceID) + " 58 0F F7");
+        }
+        return sysex;
+        }
+
+    public byte[] requestBankDump(int bank)
+        {
+        if (DEBUG) {
+            System.out.println("DEBUG: KorgMicroKorg.requestBankDump(" + bank + ") called");
+        }
+        // Only return the sysex, do not show dialog or send
+        return requestAllDump();
+        }
+
+    public int getRequestableBank()
+        {
+        if (DEBUG) {
+            System.out.println("DEBUG: KorgMicroKorg.getRequestableBank() called, returning -1");
+        }
+        // MicroKorg only supports full bank dumps, so we return -1 to indicate any bank can be requested
+        return -1;
+        }
+
+    public void doGetPatchesForLibrarian(int startbank, int startnum, int endbank, int endnum)
+        {
+        if (DEBUG) {
+            System.out.println("DEBUG: doGetPatchesForLibrarian called (user-initiated bank download)");
+        }
+        boolean proceed = showSimpleConfirm("Bank Request", "Ready to request all patches? This takes about half a minute..", "Request");
+        if (!proceed) return;
+        // Show 'please wait' dialog
+        if (DEBUG) {
+            System.out.println("DEBUG: About to show 'please wait' dialog for full bank download");
+        }
+        showSimpleMessage("Downloading Bank", "Please wait while downloading all 128 patches from the MicroKorg...");
+        if (DEBUG) {
+            System.out.println("DEBUG: 'please wait' dialog should now be visible");
+        }
+        // Always send the all-data dump request for MicroKorg
+        byte[] sysex = requestAllDump();
+        if (DEBUG) {
+            System.out.println("DEBUG: About to send sysex via tryToSendSysex() for full bank download");
+        }
+        tryToSendSysex(sysex);
+        if (DEBUG) {
+            System.out.println("DEBUG: tryToSendSysex() completed for full bank download");
+        }
+        }
+
+    public int parseFromBank(byte[] bankSysex, int number)
+        {
+        if (DEBUG) {
+            System.out.println("DEBUG: KorgMicroKorg.parseFromBank() called for patch index " + number);
+        }
+        if (!KorgMicroKorgRec.recognizeBank(bankSysex)) {
+            if (DEBUG) {
+                System.out.println("DEBUG: Not a MicroKorg bank dump");
+            }
+            return PARSE_FAILED;
+        }
+        byte[] unpackedData = KorgMicroKorgRec.convertTo8Bit(bankSysex, 5);
+        if (DEBUG) {
+            System.out.println("DEBUG: Unpacked data length: " + unpackedData.length);
+        }
+        int patchSize = 254;
+        int offset = number * patchSize;
+        if (DEBUG) {
+            System.out.println("DEBUG: Patch index " + number + " offset: " + offset);
+        }
+        if (offset + patchSize > unpackedData.length) {
+            if (DEBUG) {
+                System.out.println("DEBUG: Patch index " + number + " would be out of bounds");
+            }
+            return PARSE_IGNORE;
+        }
+        byte[] patchData = new byte[patchSize];
+        System.arraycopy(unpackedData, offset, patchData, 0, patchSize);
+        // Calculate bank and patch number
+        int bank = (number < 64) ? 0 : 1;
+        int patchNumber = number % 64;
+        int row = patchNumber / 8 + 1;
+        int col = patchNumber % 8 + 1;
+        String patchName = ((bank == 0) ? "A" : "B") + row + col;
+        if (DEBUG) {
+            StringBuilder sb = new StringBuilder();
+            for (int i = 0; i < 12; i++) sb.append((char)patchData[i]);
+            System.out.println("DEBUG: Raw name bytes:");
+            for (int i = 0; i < 12; i++) {
+                System.out.print(" " + String.format("%02X", patchData[i]));
+            }
+            System.out.println();
+            System.out.println("DEBUG: Extracted name: '" + sb.toString() + "'");
+        }
+        model.set("bank", bank);
+        model.set("number", patchNumber);
+        if (DEBUG) {
+            System.out.println("DEBUG: Patch index " + number + " assigned to bank " + bank + ", patch number " + patchNumber + " (" + patchName + ")");
+        }
+        byte[] singlePatchSysex = new byte[297];
+        singlePatchSysex[0] = (byte)0xF0;
+        singlePatchSysex[1] = 0x42;
+        singlePatchSysex[2] = (byte)(0x30 + getChannelOut());
+        singlePatchSysex[3] = 0x58;
+        singlePatchSysex[4] = 0x40;
+        int packedIndex = 5;
+        for (int i = 0; i < patchData.length; i += 7) {
+            if (i + 7 <= patchData.length) {
+                singlePatchSysex[packedIndex] = 0;
+                for (int j = 0; j < 7; j++) {
+                    singlePatchSysex[packedIndex + 1 + j] = (byte)(patchData[i + j] & 0x7F);
+                    singlePatchSysex[packedIndex] |= ((patchData[i + j] >> 7) & 1) << j;
+                }
+                packedIndex += 8;
+            } else {
+                int remaining = patchData.length - i;
+                singlePatchSysex[packedIndex] = 0;
+                for (int j = 0; j < remaining; j++) {
+                    singlePatchSysex[packedIndex + 1 + j] = (byte)(patchData[i + j] & 0x7F);
+                    singlePatchSysex[packedIndex] |= ((patchData[i + j] >> 7) & 1) << j;
+                }
+                packedIndex += remaining + 1;
+            }
+        }
+        singlePatchSysex[packedIndex] = (byte)0xF7;
+        if (DEBUG) {
+            System.out.println("DEBUG: Reconstructed single patch sysex for patch index " + number);
+        }
+        
+        // Parse the patch data directly instead of calling parse() to avoid recursion
+        byte[] patchData8Bit = convertTo8Bit(singlePatchSysex, 5);
+        
+        char[] namec = new char[12];
+        String name;
+        for(int i = 0; i < 12; i++)
+            {
+            namec[i] = (char)patchData8Bit[i];
+            }
+        name = new String(namec);
+        
+        if (DEBUG) {
+            System.out.println("DEBUG: parseFromBank() extracted name: '" + name + "'");
+        }
+        
+        model.set("name", name);
+        
+        // Parse the rest of the patch data
+        model.set("arptriggerlength", patchData8Bit[14] & 7);
+        for(int i = 0; i < 8; i++)
+            {
+            model.set("arptriggerpattern" + i, (patchData8Bit[15] >>> i) & 1);
+            }
+            
+        int voicemode = (patchData8Bit[16] >>> 4) & 3;
+        if (voicemode >= 2) voicemode = 1;
+        model.set("voicemode", voicemode);
+        
+        model.set("delaysync", (patchData8Bit[19] >>> 7) & 1);
+        model.set("delaytimebase", patchData8Bit[19] & 15);
+        model.set("delaytime", patchData8Bit[20]);
+        model.set("delaydepth", patchData8Bit[21]);
+        model.set("delaytype", patchData8Bit[22]);
+        model.set("modlfospeed", patchData8Bit[23]);
+        model.set("moddepth", patchData8Bit[24]);
+        model.set("modtype", patchData8Bit[25]);
+        model.set("eqhifreq", patchData8Bit[26]);
+        model.set("eqhigain", patchData8Bit[27]);
+        model.set("eqlowfreq", patchData8Bit[28]);
+        model.set("eqlowgain", patchData8Bit[29]);
+        int arptempo = (patchData8Bit[30] << 8) | patchData8Bit[31];
+        if (arptempo < 0) arptempo += 256;
+        model.set("arptempo", arptempo);
+        model.set("arpon", (patchData8Bit[32] >>> 7) & 1);
+        model.set("arplatch", (patchData8Bit[32] >>> 6) & 1);
+        model.set("arptarget", (patchData8Bit[32] >>> 4) & 3);
+        model.set("arpkeysync", patchData8Bit[32] & 1);
+        model.set("arptype", patchData8Bit[33] & 7);
+        model.set("arprange", (patchData8Bit[33] >>> 4) & 3);
+        model.set("arpgate", patchData8Bit[34]);
+        model.set("arpresolution", patchData8Bit[35]);
+        int swing = patchData8Bit[36];
+        if (swing >= 128) swing -= 256;
+        model.set("arpswing", swing);
+        model.set("octave", patchData8Bit[37]);
+        
+        subparse(patchData8Bit);
+        
+        if (DEBUG) {
+            System.out.println("DEBUG: parseFromBank() for index " + number + " completed successfully");
+        }
+        return PARSE_SUCCEEDED;
+        }
+
+    public int getBank(byte[] bankSysex) 
+        {
+        if (DEBUG) {
+            System.out.println("DEBUG: KorgMicroKorg.getBank() called");
+        }
+        // MicroKorg bank dump contains all patches from both banks
+        // We'll return bank 0 as the primary bank, but getBanks() will return both
+        return 0;
+        }
+
+    public int[] getBanks(byte[] bankSysex) 
+        {
+        if (DEBUG) {
+            System.out.println("DEBUG: KorgMicroKorg.getBanks() called");
+        }
+        // MicroKorg bank dump contains all 128 patches from both banks A and B
+        // Return both banks so the librarian knows to populate both columns
+        return new int[] { 0, 1 };
+        }
+
+    public boolean getSupportsDownloads() { 
+        if (DEBUG) {
+            System.out.println("DEBUG: KorgMicroKorg.getSupportsDownloads() called, returning true");
+        }
+        return true; 
+    }
+    
+    public boolean getSupportsBankReads() { 
+        if (DEBUG) {
+            System.out.println("DEBUG: KorgMicroKorg.getSupportsBankReads() called, returning true");
+        }
+        return true; 
+    }
+    
+
+    
+    public boolean librarianTested() { 
+        if (DEBUG) {
+            System.out.println("DEBUG: KorgMicroKorg.librarianTested() called, returning true");
+        }
+        return true; 
+    }
+
+    public void downloadBankFromSynthLibrarian()
+        {
+        if (DEBUG) {
+            System.out.println("DEBUG: downloadBankFromSynthLibrarian() called. Forcing full bank download.");
+        }
+        doGetPatchesForLibrarian(0, 0, 0, 127);
+        }
+        
+    // Timing controls for reliable MicroKorg communication
+    public int getPauseAfterChangePatch() { return 300; }  // Increased from 200ms for better reliability
+    
+    public int getPauseAfterWritePatch() { return 500; }   // Pause after writing a patch
+    
+    public int getPauseAfterSendAllParameters() { return 300; }  // Pause after sending all parameters
+    
+    public double getPauseBetweenMIDISends() { return 0.05; }  // 50ms between MIDI messages
+    
+    public int getPauseAfterReceivePatch() { return 400; }  // Pause after receiving a patch
+    
+    public int getBatchDownloadWaitTime() { return 1000; }  // Wait time between batch downloads
     }
     

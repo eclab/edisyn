@@ -9,7 +9,7 @@ package edisyn.util;
 /**
    This class contains a single method used to resample one array of samples to another array of samples at a different sampling rate,
    using Windowed Sinc Interpolation, a common resampling technique.  See Section 10.7 of "Computational Music Synthesis" (Sean Luke),
-   https://cs.gmu.edu/~sean/book/synthesis/
+   https://people.cs.gmu.edu/~sean/book/synthesis/
         
    @author Sean Luke
 **/

@@ -8,10 +8,10 @@ By Sean Luke (sean@cs.gmu.edu)
 Related projects:  
 
 * [Flow](https://github.com/eclab/flow), a fully-modular, polyphonic, additive software synthesizer.
-* [Gizmo](https://cs.gmu.edu/~sean/projects/gizmo/), an Arduino-based MIDI Swiss Army knife.
+* [Gizmo](https://people.cs.gmu.edu/~sean/projects/gizmo/), an Arduino-based MIDI Swiss Army knife.
 * [Seq](https://github.com/eclab/seq), a very unusual hierarchical and modular music sequencer.
 * [Arduino Firmware](https://github.com/eclab/grains) (oscillators, modulators, etc.) for the AE Modular Grains module.  Includes an ultralight but full-featured [MIDI library for small microcontrollers](https://github.com/eclab/grains/tree/main/midi).
-* [Computational Music Synthesis](https://cs.gmu.edu/~sean/book/synthesis/), an open-content book on building software synthesizers.
+* [Computational Music Synthesis](https://people.cs.gmu.edu/~sean/book/synthesis/), an open-content book on building software synthesizers.
 
 
 ## Jump to...
@@ -33,11 +33,11 @@ Version 35 has a new editor for the Novation A Station, more ROMs for the Prophe
 
 ## Publications on Edisyn
 
-[Stochastic Synthesizer Patch Exploration in Edisyn](https://cs.gmu.edu/~sean/papers/evomusart19.pdf).  Presented at EvoMUSART 2019.
+[Stochastic Synthesizer Patch Exploration in Edisyn](https://people.cs.gmu.edu/~sean/papers/evomusart19.pdf).  Presented at EvoMUSART 2019.
 
-[Co-creative Music Synthesizer Patch Exploration](https://cs.gmu.edu/~sean/papers/iccc23patch.pdf). With V. Hoyle.  Presented at ICCC 2023.
+[Co-creative Music Synthesizer Patch Exploration](https://people.cs.gmu.edu/~sean/papers/iccc23patch.pdf). With V. Hoyle.  Presented at ICCC 2023.
 
-[So You Want to Write a Patch Editor](https://cs.gmu.edu/~sean/papers/GMU-CS-TR-2023-1.pdf).  George Mason University Department of Computer Science Technical Report GMU-CS-TR-2023-1.
+[So You Want to Write a Patch Editor](https://people.cs.gmu.edu/~sean/papers/GMU-CS-TR-2023-1.pdf).  George Mason University Department of Computer Science Technical Report GMU-CS-TR-2023-1.
 
 ## Contributors
 
@@ -126,7 +126,7 @@ I have a special interest in hard-to-program synths, either because they have ve
 
 ## Manual
 
-Edisyn has an [extensive manual](https://cs.gmu.edu/~eclab/projects/edisyn/Edisyn.pdf) which describes how to run it, and (if you are so inclined) how to make new patch editors.
+Edisyn has an [extensive manual](https://people.cs.gmu.edu/~eclab/projects/edisyn/Edisyn.pdf) which describes how to run it, and (if you are so inclined) how to make new patch editors.
 
 ## Install and Run Edisyn
 
@@ -136,9 +136,9 @@ Edisyn is cross-platform and will run on a variety of platforms (Windows, Linux)
 
 ### Installation and Running on MacOS
 
-First install Edisyn from the [Edisyn.dmg](https://cs.gmu.edu/~eclab/projects/edisyn/Edisyn.dmg) file.  Sadly, it's a whopping 70MB because it includes the Java VM.  :-(
+First install Edisyn from the [Edisyn.dmg](https://people.cs.gmu.edu/~eclab/projects/edisyn/Edisyn.dmg) file.  Sadly, it's a whopping 70MB because it includes the Java VM.  :-(
 
-If you have an old Mac that only has Java 8, you can try installing the Java 8 version: [Edisyn.app.zip](https://cs.gmu.edu/~eclab/projects/edisyn/java8/Edisyn.app.zip) 
+If you have an old Mac that only has Java 8, you can try installing the Java 8 version: [Edisyn.app.zip](https://people.cs.gmu.edu/~eclab/projects/edisyn/java8/Edisyn.app.zip) 
 
 MacOS has lately locked down the ability to run an application that's not from a commercial, paying Apple Developer.  And I'm not one.  So you will have to instruct MacOS to permit Edisyn to run.  
 
@@ -176,10 +176,10 @@ At present Edisyn only runs under Rosetta on the M1.  It'll work fine; there are
 I believe that the following should work:
 
 1. Download and install at least Java 20.  There are two options.  I suggest OpenJDK: [Microsoft's OpenJDK installation](https://www.microsoft.com/openjdk) is the easiest route.  An alternative is to install [Oracle's JDK](http://www.oracle.com/technetwork/java/javase/downloads/index.html), but it has more onerous license restrictions.  
-2. Download Edisyn's jar file, called [edisyn.jar](https://cs.gmu.edu/~eclab/projects/edisyn/edisyn.jar).
+2. Download Edisyn's jar file, called [edisyn.jar](https://people.cs.gmu.edu/~eclab/projects/edisyn/edisyn.jar).
 3. Double-click on edisyn.jar to launch Edisyn.
 
-If you have an Windows box that only has Java 11 (you have to have at least Java 11 -- don't install anything earlier, there are bad bugs), you can try installing the Java 11 version of the jar file: [edisyn.jar](https://cs.gmu.edu/~eclab/projects/edisyn/java8/edisyn.jar) 
+If you have an Windows box that only has Java 11 (you have to have at least Java 11 -- don't install anything earlier, there are bad bugs), you can try installing the Java 11 version of the jar file: [edisyn.jar](https://people.cs.gmu.edu/~eclab/projects/edisyn/java8/edisyn.jar) 
 
 If you want to use Edisyn in combination with a DAW, see the manual's section on building a MIDI Loopback.
 
@@ -222,11 +222,11 @@ When you double-click on a jar file, Windows may not launch Java properly becaus
 ### Installation and Running on Linux
 
 1. Install Java 20 or higher.
-1. Download [Edisyn's jar file](https://cs.gmu.edu/~eclab/projects/edisyn/edisyn.jar).
+1. Download [Edisyn's jar file](https://people.cs.gmu.edu/~eclab/projects/edisyn/edisyn.jar).
 2. You'll need to figure out how to make it so that double-clicking on the jar file launches it in java.  In Ubuntu, here's what you do: right-click on the jar file icon and choose "Properties".  Then select the "Open With" tab, and select your Java VM (for example "Open JDK Java 20 Runtime").  The press "Set as Default".  This makes the Java VM the default application to launch jar files.
 3. Thereafter you should be able to just double-click on the file to launch Edisyn.
 
-If you have an Linux box that only has at least Java 11 (you have to have at least Java 11 -- don't install anything earlier, there are bad bugs), you can try installing the Java 11 version of the jar file: [edisyn.jar](https://cs.gmu.edu/~eclab/projects/edisyn/java8/edisyn.jar) 
+If you have an Linux box that only has at least Java 11 (you have to have at least Java 11 -- don't install anything earlier, there are bad bugs), you can try installing the Java 11 version of the jar file: [edisyn.jar](https://people.cs.gmu.edu/~eclab/projects/edisyn/java8/edisyn.jar) 
 
 If you want to use Edisyn in combination with a DAW, see the manual's section on building a MIDI Loopback.
 
@@ -255,7 +255,7 @@ Java has compatibility problems with Jack; disabling Jack will often allow Edisy
 ### Running from the command line (OS X, Windows, Linux)
 
 1. Make sure Java 20 is installed.
-2. Download [Edisyn's jar file](https://cs.gmu.edu/~eclab/projects/edisyn/edisyn.jar).  Or if you can only install Java 11 or higher (must be at least 11), download the Java 11 version of the [jar file](https://cs.gmu.edu/~eclab/projects/edisyn/java8/edisyn.jar).
+2. Download [Edisyn's jar file](https://people.cs.gmu.edu/~eclab/projects/edisyn/edisyn.jar).  Or if you can only install Java 11 or higher (must be at least 11), download the Java 11 version of the [jar file](https://people.cs.gmu.edu/~eclab/projects/edisyn/java8/edisyn.jar).
 3. Run Edisyn as:   `java -jar edisyn.jar`
 
 On the Mac, running with recent versions of Java, you may see a warning that begins like this:

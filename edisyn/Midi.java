@@ -1150,29 +1150,108 @@ public class Midi
             ShortMessage s = (ShortMessage) message;
             int c = s.getChannel();
             String type = "Unknown";
-            switch(s.getStatus())
-                {
-                case ShortMessage.ACTIVE_SENSING: type = "Active Sensing"; c = -1; break;
-                case ShortMessage.CHANNEL_PRESSURE: type = "Channel Pressure"; break;
-                case ShortMessage.CONTINUE: type = "Continue"; c = -1; break;
-                case ShortMessage.CONTROL_CHANGE: type = "Control Change"; break;
-                case ShortMessage.END_OF_EXCLUSIVE: type = "End of Sysex Marker"; c = -1; break;
-                case ShortMessage.MIDI_TIME_CODE: type = "Midi Time Code"; c = -1; break;
-                case ShortMessage.NOTE_OFF: type = "Note Off"; break;
-                case ShortMessage.NOTE_ON: type = "Note On"; break;
-                case ShortMessage.PITCH_BEND: type = "Pitch Bend"; break;
-                case ShortMessage.POLY_PRESSURE: type = "Poly Pressure"; break;
-                case ShortMessage.PROGRAM_CHANGE: type = "Program Change"; break;
-                case ShortMessage.SONG_POSITION_POINTER: type = "Song Position Pointer"; c = -1; break;
-                case ShortMessage.SONG_SELECT: type = "Song Select"; c = -1; break;
-                case ShortMessage.START: type = "Start"; c = -1; break;
-                case ShortMessage.STOP: type = "Stop"; c = -1; break;
-                case ShortMessage.SYSTEM_RESET: type = "System Reset"; c = -1; break;
-                case ShortMessage.TIMING_CLOCK: type = "Timing Clock"; c = -1; break;
-                case ShortMessage.TUNE_REQUEST: type = "Tune Request"; c = -1; break;
-                }
-            return type + (c == -1 ? "" : (" (Channel " + (c + 1) + ")" + 
-                    "\t" + (s.getData1() & 0xFF) + " " + (s.getData2() & 0xFF)));
+            
+            if (s.getStatus() < 0xF0)	// Voice Data
+            	{
+            	int status = (s.getStatus() & 0xF0);
+            	int channel = ((s.getStatus() & 0x0F) + 1);
+            	switch(status)
+            		{
+					case ShortMessage.CHANNEL_PRESSURE: 
+						{
+						return "Channel Pressure (Aftertouch)" + "\n" +
+								"Channel = " + channel + "\n" + 
+								"Amount = " + s.getData1();
+						}
+					case ShortMessage.POLY_PRESSURE: 
+						{
+						return "Polyphonic Key Pressure (Aftertouch)" + "\n" +
+								"Channel = " + channel + "\n" + 
+								"Key = " + s.getData1() + "\n" + 
+								"Amount = " + s.getData2();
+						}
+					case ShortMessage.NOTE_ON: 
+						{
+						if (s.getData2() == 0)
+							{
+							return "Note Off (sent as a Note On message)" + "\n" +
+									"Channel = " + channel + "\n" + 
+									"Key = " + s.getData1() + "\n" + 
+									"Velocity = 64";
+							}
+						else
+							{
+							return "Note On" + "\n" +
+									"Channel = " + channel + "\n" + 
+									"Key = " + s.getData1() + "\n" + 
+									"Velocity = " + s.getData2();
+							}
+						}
+					case ShortMessage.NOTE_OFF: 
+						{
+						return "Note Off" + "\n" +
+								"Channel = " + channel + "\n" + 
+								"Key = " + s.getData1() + "\n" + 
+								"Release Velocity = " + s.getData2();
+						}
+					case ShortMessage.PITCH_BEND: 
+						{
+						return "Pitch Bend" + "\n" +
+								"Channel = " + channel + "\n" + 
+								"Value = " + (s.getData1() * 128 + s.getData2() - 8192);
+						}
+					case ShortMessage.PROGRAM_CHANGE: 
+						{
+						return "Program Change" + "\n" +
+								"Channel = " + channel + "\n" + 
+								"Program = " + s.getData1();
+						}
+					case ShortMessage.CONTROL_CHANGE: 
+						{
+						return "Control Change" + "\n" +
+								"Channel = " + channel + "\n" + 
+								"Parameter = " + s.getData1() + "\n" + 
+								"Value = " + s.getData2();
+						}
+					default:
+						{
+						return "Unknown Voice Command (Internal Error) " + s.getStatus();
+						}
+            		}
+            	}
+            else
+            	{
+				switch(s.getStatus())
+					{
+					case ShortMessage.ACTIVE_SENSING: return "Active Sensing";
+					case ShortMessage.CONTINUE: return "Clock Continue";
+					case ShortMessage.END_OF_EXCLUSIVE: return "End of System Exclusive (F7)";
+					case ShortMessage.SONG_POSITION_POINTER: 
+						{
+						return "Song Position Pointer" + "\n" +
+								"Value = " + (s.getData1() * 128 + s.getData2());
+						}
+					case ShortMessage.SONG_SELECT:
+						{
+						return "Control Change" + "\n" +
+								"Song = " + s.getData1();
+						}
+					case ShortMessage.MIDI_TIME_CODE:
+						{
+						return "MIDI Time Code Quarter Frame" + "\n" +
+								"Value = " + s.getData1();
+						}
+					case ShortMessage.START: return "Clock Start";
+					case ShortMessage.STOP: return "Clock Stop";
+					case ShortMessage.SYSTEM_RESET: return "System Reset";
+					case ShortMessage.TIMING_CLOCK: return "Clock Pulse";
+					case ShortMessage.TUNE_REQUEST: return "Tune Request";
+					default:
+						{
+						return "Unknown Unvoiced Command (Internal Error) " + s.getStatus();
+						}
+					}
+				}
             }
         }
 

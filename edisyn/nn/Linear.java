@@ -54,14 +54,15 @@ public class Linear implements Layer
         // Sanity check
         if(vec.length != columns)
             {
-            System.err.println("Bad input to feed: vec.length != columns");
+            System.err.println("Bad input to feed: vec.length != columns.  vec.length = " + vec.length + " and columns = " + columns);
             return null;
             }
+            
         // Initialize the output vector
         double[] out = new double[rows];
         for(int r = 0; r < rows; r++)
             {
-            for(int c = 0; c < columns; c++)
+            for(int c = 0; c < columns ; c++)
                 {
                 // row major order for cache coherency
                 out[r] += data[r * columns + c] * vec[c];

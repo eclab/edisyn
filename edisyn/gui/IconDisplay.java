@@ -8,11 +8,6 @@ package edisyn.gui;
 import edisyn.*;
 import java.awt.*;
 import java.awt.geom.*;
-/***
-    Copyright 2017 by Sean Luke
-    Licensed under the Apache License version 2.0
-*/
-
 import javax.swing.border.*;
 import javax.swing.*;
 import java.awt.event.*;

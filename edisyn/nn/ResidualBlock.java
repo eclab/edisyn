@@ -61,6 +61,7 @@ public class ResidualBlock implements Layer
         SELU selu = (SELU)SELU.readFromString(_selu);
         Linear output = (Linear)Linear.readFromString(_out);
         Linear skip = (Linear)Linear.readFromString(_skip);
+        SELU selu2 = (SELU)SELU.readFromString(_selu2);
         // do nothing with _selu2
         
         return new ResidualBlock(input, selu, output, skip);

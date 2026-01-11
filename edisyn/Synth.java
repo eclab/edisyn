@@ -1486,7 +1486,8 @@ public abstract class Synth extends JComponent implements Updatable
 
     boolean receiveMIDI = true;     // we can receive MIDI
         
-        
+	// The only purpose of this class is to contain both a message and the controller (0 is controller 1, 1 is controller 2)
+	// so we can display the controller as part of the "Receive next controller MIDI" command.        
 	class MidiInfo
 		{
 		MidiMessage message;

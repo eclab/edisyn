@@ -21,13 +21,13 @@ public class Mac
             {
             try
                 {
-                  java.awt.Desktop.getDesktop().setAboutHandler(new java.awt.desktop.AboutHandler()
-                  {
-                  public void handleAbout(java.awt.desktop.AboutEvent e)
-                  {
-                  synth.doAbout();
-                  }
-                  });
+                java.awt.Desktop.getDesktop().setAboutHandler(new java.awt.desktop.AboutHandler()
+                    {
+                    public void handleAbout(java.awt.desktop.AboutEvent e)
+                        {
+                        synth.doAbout();
+                        }
+                    });
                 }
             catch (Exception e)
                 {

@@ -1837,7 +1837,7 @@ public class WaldorfM extends Synth
             data[7] = (byte)((param >>> 7) & 127);
             data[8] = (byte)(val & 127);
             data[9] = (byte)((val >>> 7) & 127);
-            data[10] = (byte)(updateScreen ? 1 : 0);		// Must always be true, not available any more
+            data[10] = (byte)(updateScreen ? 1 : 0);            // Must always be true, not available any more
             data[11] = (byte)0xF7;
             return new Object[] { data };
             }

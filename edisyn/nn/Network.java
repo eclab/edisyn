@@ -99,14 +99,14 @@ public class Network implements Layer
                     network.addLayer(Normalization.readFromString(line));
                     }
                 else if (line.startsWith("Residual"))
-                	{
-                	String input = reader.readLine();		// input
-                	String selu1 = reader.readLine();		// selu	
-                	String output = reader.readLine();		// output
-                	String skip = reader.readLine();		// skip
-                	String selu2 = reader.readLine();		// selu
-                	network.addLayer(ResidualBlock.readFromString(line, input, selu1, output, skip, selu2));
-                	}
+                    {
+                    String input = reader.readLine();               // input
+                    String selu1 = reader.readLine();               // selu 
+                    String output = reader.readLine();              // output
+                    String skip = reader.readLine();                // skip
+                    String selu2 = reader.readLine();               // selu
+                    network.addLayer(ResidualBlock.readFromString(line, input, selu1, output, skip, selu2));
+                    }
                 else 
                     {
                     System.err.println("Unknown Line:\n" + line);

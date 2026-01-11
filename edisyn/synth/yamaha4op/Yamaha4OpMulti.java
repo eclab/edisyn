@@ -1188,28 +1188,28 @@ public class Yamaha4OpMulti extends Synth
         
         int type = getSynthType();
         if (type == TYPE_V50)
-        	{
+            {
             number -= 1;    // we start at 00
             return "PF" + (number > 9 ? "" : "0") + number;
-        	}
+            }
         else
-        	{
+            {
             return "PF" + (number > 9 ? "" : "0") + number;
             }
         }       
 
     /** Return a list of all patch number names.  Default is { "Main" } */
     public String[] getPatchNumberNames() 
-    	{ 
+        { 
         if (getSynthType() == TYPE_V50)
             {
-    		return buildIntegerNames(100, 1); 
+            return buildIntegerNames(100, 1); 
             }
         else 
             {
-    		return buildIntegerNames(24, 1); 
+            return buildIntegerNames(24, 1); 
             }
-    	}
+        }
                 
     /** Return a list whether patches in banks are writeable.  Default is { false } */
     public boolean[] getWriteableBanks() { return new boolean[] { true }; }

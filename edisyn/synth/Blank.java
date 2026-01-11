@@ -920,14 +920,14 @@ public class Blank extends Synth
         }
                 
     public void afterWriteAllParametersHook() 
-    	{ 
-    	// This is called by writeAllParameters() after writing a patch to the synthesizer.
-    	// Overriding it gives you the opportunity send extra MIDI, a rare need.  At present
-    	// it only exists to deal with a Blofeld bug where the synthesizer throws up a
-    	// "Receiving Sysex" message and forgets to take it down after the sysex has been
-    	// received. 
-    	return; 
-    	}
+        { 
+        // This is called by writeAllParameters() after writing a patch to the synthesizer.
+        // Overriding it gives you the opportunity send extra MIDI, a rare need.  At present
+        // it only exists to deal with a Blofeld bug where the synthesizer throws up a
+        // "Receiving Sysex" message and forgets to take it down after the sysex has been
+        // received. 
+        return; 
+        }
 
     public boolean sendAllSoundsOffWhenWindowChanges()
         {

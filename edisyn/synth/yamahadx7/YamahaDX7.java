@@ -285,30 +285,30 @@ public class YamahaDX7 extends Synth implements ProvidesNN
         }
         
     public void addYamahaDX7Menu()
-    	{
-    	JMenu menu = new JMenu("DX7");
-    	menubar.add(menu);
-    	
-		JMenuItem parseFromLine = new JMenuItem("Read Text Line...");
-		parseFromLine.addActionListener(new ActionListener()
-			{
-			public void actionPerformed(ActionEvent e)
-				{
-				JTextField field = new JTextField(50);
-				int result = showMultiOption(YamahaDX7.this, new String[] { "Text" }, new JComponent[] { field }, 
-					new String[] { "Read", "Cancel" }, 0, "Read Text Line", 
-					"Paste in a single line from the \"dx7/dx7.patchparams\" file.\nSee Edisyn's \"resources\" directory.");
-				if (result == 0)
-					{
-					if (!readString(field.getText()))
-						{
-						showSimpleMessage("Read Failed", "Edisyn was unable to read this line into the DX7 patch editor.");
-						}
-					}
-				}
-			});
-		menu.add(parseFromLine);
-		}
+        {
+        JMenu menu = new JMenu("DX7");
+        menubar.add(menu);
+        
+        JMenuItem parseFromLine = new JMenuItem("Read Text Line...");
+        parseFromLine.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                JTextField field = new JTextField(50);
+                int result = showMultiOption(YamahaDX7.this, new String[] { "Text" }, new JComponent[] { field }, 
+                    new String[] { "Read", "Cancel" }, 0, "Read Text Line", 
+                    "Paste in a single line from the \"dx7/dx7.patchparams\" file.\nSee Edisyn's \"resources\" directory.");
+                if (result == 0)
+                    {
+                    if (!readString(field.getText()))
+                        {
+                        showSimpleMessage("Read Failed", "Edisyn was unable to read this line into the DX7 patch editor.");
+                        }
+                    }
+                }
+            });
+        menu.add(parseFromLine);
+        }
 
 
     public String getDefaultResourceFileName() { return "YamahaDX7.init"; }
@@ -996,44 +996,44 @@ public class YamahaDX7 extends Synth implements ProvidesNN
         }
         
         
-	public boolean readString(String str)
-		{
-		if (str == null) return false;
-		str = str.trim();
-     	String[] result = str.split("\"");
-     	if (result.length != 3) return false;
-     	if (result[0].length() != 0) return false;
-     	if (result[1].length() > 10) return false;
-     	String name = result[1];
-     	result = result[2].split(",");
-     	if (result.length < 146) return false;
-     	if (result[0].trim().length() != 0) return false;
-     	int[] vals = new int[145];
-     	try
-     		{
-     		for(int i = 0; i < 145; i++)
-     			{
-     			vals[i] = Math.max(0, Integer.parseInt(result[i + 1].trim()));
-     			}
-     		}
-     	catch (NumberFormatException ex)
-     		{
-     		return false;
-     		}
-     	setSendMIDI(false);
-     	undo.push(getModel());
+    public boolean readString(String str)
+        {
+        if (str == null) return false;
+        str = str.trim();
+        String[] result = str.split("\"");
+        if (result.length != 3) return false;
+        if (result[0].length() != 0) return false;
+        if (result[1].length() > 10) return false;
+        String name = result[1];
+        result = result[2].split(",");
+        if (result.length < 146) return false;
+        if (result[0].trim().length() != 0) return false;
+        int[] vals = new int[145];
+        try
+            {
+            for(int i = 0; i < 145; i++)
+                {
+                vals[i] = Math.max(0, Integer.parseInt(result[i + 1].trim()));
+                }
+            }
+        catch (NumberFormatException ex)
+            {
+            return false;
+            }
+        setSendMIDI(false);
+        undo.push(getModel());
         undo.setWillPush(false);
-        for(int i = 0; i < 145; i++)  	
-        	{
-			model.set(allParameters[i], vals[i]);
-			}
-		model.set("name", name);
-		revise();
-		undo.setWillPush(true);
-		setSendMIDI(true);
-		sendAllParameters();
-		return true;
-		}
+        for(int i = 0; i < 145; i++)    
+            {
+            model.set(allParameters[i], vals[i]);
+            }
+        model.set("name", name);
+        revise();
+        undo.setWillPush(true);
+        setSendMIDI(true);
+        sendAllParameters();
+        return true;
+        }
 
     public int parseOne(byte[] data)
         {

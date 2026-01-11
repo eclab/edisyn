@@ -1309,111 +1309,111 @@ public class HillClimb extends SynthPanel
             case OPERATION_SEED_FROM_PATCH:
                 // Fall Thru
             case OPERATION_SEED_FROM_MORPH:
-                {
-                Model newSeed = seed.copy();                
-                double weight = blank.getModel().get("hillclimbrate", 0) / 100.0;
-                weight = weight * weight * weight;  // make more sensitive at low end
-                int numMutations = 1;
+            {
+            Model newSeed = seed.copy();                
+            double weight = blank.getModel().get("hillclimbrate", 0) / 100.0;
+            weight = weight * weight * weight;  // make more sensitive at low end
+            int numMutations = 1;
                 
-                for(int i = 0; i < NUM_CANDIDATES; i++)
-                    {
-                    currentModels[i] = newSeed.copy();
-                    for(int j = 0; j < numMutations; j++)
-                        currentModels[i] = currentModels[i].mutate(random, keys, weight);
-                    if (i % 4 == 3) numMutations++;
-                    }
-
-                for(int i = 0; i < selected.length; i++)
-                    selected[i].setSelected(true);
+            for(int i = 0; i < NUM_CANDIDATES; i++)
+                {
+                currentModels[i] = newSeed.copy();
+                for(int j = 0; j < numMutations; j++)
+                    currentModels[i] = currentModels[i].mutate(random, keys, weight);
+                if (i % 4 == 3) numMutations++;
                 }
+
+            for(int i = 0; i < selected.length; i++)
+                selected[i].setSelected(true);
+            }
             break;
             case OPERATION_SEED_FROM_NUDGE:
-                {
-                double weight = blank.getModel().get("constrictrate", 0) / 100.0;
-                for(int i = 0; i < 4; i++)
-                    currentModels[i] = (Model)(synth.nudge[i].clone());
-                int m = 4;
-                for(int i = 0; i < 4; i++)
-                    for(int j = 0; j < 4; j++)
-                        {
-                        if (j == i) continue;
-                        currentModels[m++] = currentModels[i].copy().crossover(random, currentModels[j], keys, weight);
-                        }
-                // fill the next 16
-                for(int i = 16; i < 32; i++)
+            {
+            double weight = blank.getModel().get("constrictrate", 0) / 100.0;
+            for(int i = 0; i < 4; i++)
+                currentModels[i] = (Model)(synth.nudge[i].clone());
+            int m = 4;
+            for(int i = 0; i < 4; i++)
+                for(int j = 0; j < 4; j++)
                     {
-                    // pick two parents, try to make them different from one another
-                    int p1 = random.nextInt(16);
-                    int p2 = 0;
-                    for(int j = 0; j < 100; j++)
-                        {
-                        p2 = random.nextInt(16);
-                        if (p2 != p1) break;
-                        }
-                    currentModels[i] = currentModels[p1].copy().crossover(random, currentModels[p1], keys, weight);
+                    if (j == i) continue;
+                    currentModels[m++] = currentModels[i].copy().crossover(random, currentModels[j], keys, weight);
                     }
+            // fill the next 16
+            for(int i = 16; i < 32; i++)
+                {
+                // pick two parents, try to make them different from one another
+                int p1 = random.nextInt(16);
+                int p2 = 0;
+                for(int j = 0; j < 100; j++)
+                    {
+                    p2 = random.nextInt(16);
+                    if (p2 != p1) break;
+                    }
+                currentModels[i] = currentModels[p1].copy().crossover(random, currentModels[p1], keys, weight);
                 }
+            }
             break;
             case OPERATION_SEED_FROM_FOUR:
-                {
-                double weight = blank.getModel().get("constrictrate", 0) / 100.0;
-                int m = 4;
-                for(int i = 0; i < 4; i++)
-                    for(int j = 0; j < 4; j++)
-                        {
-                        if (j == i) continue;
-                        currentModels[m++] = currentModels[i].copy().crossover(random, currentModels[j], keys, weight);
-                        }
-                // fill the next 16
-                for(int i = 16; i < 32; i++)
+            {
+            double weight = blank.getModel().get("constrictrate", 0) / 100.0;
+            int m = 4;
+            for(int i = 0; i < 4; i++)
+                for(int j = 0; j < 4; j++)
                     {
-                    // pick two parents, try to make them different from one another
-                    int p1 = random.nextInt(16);
-                    int p2 = 0;
-                    for(int j = 0; j < 100; j++)
-                        {
-                        p2 = random.nextInt(16);
-                        if (p2 != p1) break;
-                        }
-                    currentModels[i] = currentModels[p1].copy().crossover(random, currentModels[p1], keys, weight);
+                    if (j == i) continue;
+                    currentModels[m++] = currentModels[i].copy().crossover(random, currentModels[j], keys, weight);
                     }
+            // fill the next 16
+            for(int i = 16; i < 32; i++)
+                {
+                // pick two parents, try to make them different from one another
+                int p1 = random.nextInt(16);
+                int p2 = 0;
+                for(int j = 0; j < 100; j++)
+                    {
+                    p2 = random.nextInt(16);
+                    if (p2 != p1) break;
+                    }
+                currentModels[i] = currentModels[p1].copy().crossover(random, currentModels[p1], keys, weight);
                 }
+            }
             break;
             case OPERATION_SEED_FROM_SIX:
-                {
-                double weight = blank.getModel().get("constrictrate", 0) / 100.0;
-                int m = 6;
-                for(int i = 0; i < 6; i++)
-                    for(int j = 0; j < 6; j++)
-                        {
-                        if (j == i) continue;
-                        if (m >= 32) break;
-                        currentModels[m++] = currentModels[i].copy().crossover(random, currentModels[j], keys, weight);
-                        }
-                }
+            {
+            double weight = blank.getModel().get("constrictrate", 0) / 100.0;
+            int m = 6;
+            for(int i = 0; i < 6; i++)
+                for(int j = 0; j < 6; j++)
+                    {
+                    if (j == i) continue;
+                    if (m >= 32) break;
+                    currentModels[m++] = currentModels[i].copy().crossover(random, currentModels[j], keys, weight);
+                    }
+            }
             break;
             case OPERATION_SEED_FROM_LIBRARIAN:
-                {
-                double weight = blank.getModel().get("constrictrate", 0) / 100.0;
-                int column = synth.librarian.getCurrentColumn();
-                int row = synth.librarian.getCurrentRow();
-                int len = synth.librarian.getCurrentLength();
-                if (len == 0) return;
+            {
+            double weight = blank.getModel().get("constrictrate", 0) / 100.0;
+            int column = synth.librarian.getCurrentColumn();
+            int row = synth.librarian.getCurrentRow();
+            int len = synth.librarian.getCurrentLength();
+            if (len == 0) return;
                 
-                for(int i = 0; i < Math.min(len, 32); i++)
-                    {
-                    currentModels[i] = (Model)(synth.librarian.getLibrary().getModel(column - 1, row + i).clone());
-                    }
-                    
-                int m = len;
-                for(int i = 0; i < 6; i++)
-                    for(int j = 0; j < 6; j++)
-                        {
-                        if (j == i) continue;
-                        if (m >= 32) break;
-                        currentModels[m++] = currentModels[i].copy().crossover(random, currentModels[j], keys, weight);
-                        }
+            for(int i = 0; i < Math.min(len, 32); i++)
+                {
+                currentModels[i] = (Model)(synth.librarian.getLibrary().getModel(column - 1, row + i).clone());
                 }
+                    
+            int m = len;
+            for(int i = 0; i < 6; i++)
+                for(int j = 0; j < 6; j++)
+                    {
+                    if (j == i) continue;
+                    if (m >= 32) break;
+                    currentModels[m++] = currentModels[i].copy().crossover(random, currentModels[j], keys, weight);
+                    }
+            }
             break;
             }
                                 

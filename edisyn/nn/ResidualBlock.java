@@ -14,7 +14,7 @@ public class ResidualBlock implements Layer
     Linear skip;
     
     public ResidualBlock(int rows, int columns, int hidden, double[] inputData, double[] inputBias, 
-    					 double[] outputData, double[] outputBias, double[] skipData, double[] skipBias)
+        double[] outputData, double[] outputBias, double[] skipData, double[] skipBias)
         {
         input = new Linear(rows, hidden, inputData, inputBias);
         output = new Linear(hidden, columns, outputData, outputBias);
@@ -23,11 +23,11 @@ public class ResidualBlock implements Layer
         }
 
     public ResidualBlock(Linear input, SELU selu, Linear output, Linear skip)
-    	{
-    	this.input = input;
-    	this.selu = selu;
-    	this.output = output;
-    	this.skip = skip;
+        {
+        this.input = input;
+        this.selu = selu;
+        this.output = output;
+        this.skip = skip;
         }
 
 
@@ -47,10 +47,10 @@ public class ResidualBlock implements Layer
             
         // Sum
         for(int i = 0; i < out.length; i++)
-        	{
-        	out[i] += full[i];
-        	}
-        	
+            {
+            out[i] += full[i];
+            }
+                
         return selu.feed(out);
         }
 

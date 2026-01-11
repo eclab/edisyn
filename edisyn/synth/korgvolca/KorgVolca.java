@@ -224,13 +224,13 @@ public class KorgVolca extends Synth
         switch(type)
             {
             case TYPE_VOLCA_BEATS:
-                {
-                return BEATS_NOTES[beatsCombo.getSelectedIndex()];
-                }
+            {
+            return BEATS_NOTES[beatsCombo.getSelectedIndex()];
+            }
             case TYPE_VOLCA_DRUM_SINGLE:
-                {
-                return DRUM_SINGLE_NOTES[drumSingleCombo.getSelectedIndex()];
-                }
+            {
+            return DRUM_SINGLE_NOTES[drumSingleCombo.getSelectedIndex()];
+            }
             default: return super.getTestNotePitch();
             }
         }
@@ -243,13 +243,13 @@ public class KorgVolca extends Synth
         switch(type)
             {
             case TYPE_VOLCA_DRUM_SPLIT:
-                {
-                return drumCombo.getSelectedIndex();
-                }
+            {
+            return drumCombo.getSelectedIndex();
+            }
             case TYPE_VOLCA_SAMPLE:
-                {
-                return sampleCombo.getSelectedIndex();
-                }
+            {
+            return sampleCombo.getSelectedIndex();
+            }
             default: return super.getTestNoteChannel();
             }
         }

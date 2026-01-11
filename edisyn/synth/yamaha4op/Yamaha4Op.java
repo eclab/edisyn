@@ -2969,37 +2969,37 @@ public class Yamaha4Op extends Synth
             {
             case TYPE_DX21: 
             case TYPE_DX27_DX100:
-                {
-                return new byte[] { (byte)0xF0, 0x43, (byte)(32 + channel), 0x03, (byte)0xF7 }; 
-                }
+            {
+            return new byte[] { (byte)0xF0, 0x43, (byte)(32 + channel), 0x03, (byte)0xF7 }; 
+            }
             case TYPE_DX11:
-                {
-                return new byte[] { (byte)0xF0, 0x43, (byte)(32 + channel), 0x7E, 
-                    (byte)'L', (byte)'M', (byte)' ', (byte)' ',
-                    (byte)'8', (byte)'0', (byte)'2', (byte)'3',
-                    (byte)'A', (byte)'E', (byte)0xF7 }; 
-                }
+            {
+            return new byte[] { (byte)0xF0, 0x43, (byte)(32 + channel), 0x7E, 
+                (byte)'L', (byte)'M', (byte)' ', (byte)' ',
+                (byte)'8', (byte)'0', (byte)'2', (byte)'3',
+                (byte)'A', (byte)'E', (byte)0xF7 }; 
+            }
             case TYPE_TX81Z:
-                {
-                return new byte[] { (byte)0xF0, 0x43, (byte)(32 + channel), 0x7E, 
-                    (byte)'L', (byte)'M', (byte)' ', (byte)' ',
-                    (byte)'8', (byte)'9', (byte)'7', (byte)'6',
-                    (byte)'A', (byte)'E', (byte)0xF7 }; 
-                }
+            {
+            return new byte[] { (byte)0xF0, 0x43, (byte)(32 + channel), 0x7E, 
+                (byte)'L', (byte)'M', (byte)' ', (byte)' ',
+                (byte)'8', (byte)'9', (byte)'7', (byte)'6',
+                (byte)'A', (byte)'E', (byte)0xF7 }; 
+            }
             case TYPE_TQ5_YS100_YS200_B200:
-                {
-                return new byte[] { (byte)0xF0, 0x43, (byte)(32 + channel), 0x7E, 
-                    (byte)'L', (byte)'M', (byte)' ', (byte)' ',
-                    (byte)'8', (byte)'0', (byte)'3', (byte)'6',
-                    (byte)'E', (byte)'F', (byte)0xF7 }; 
-                }
+            {
+            return new byte[] { (byte)0xF0, 0x43, (byte)(32 + channel), 0x7E, 
+                (byte)'L', (byte)'M', (byte)' ', (byte)' ',
+                (byte)'8', (byte)'0', (byte)'3', (byte)'6',
+                (byte)'E', (byte)'F', (byte)0xF7 }; 
+            }
             case TYPE_V50:
-                {
-                return new byte[] { (byte)0xF0, 0x43, (byte)(32 + channel), 0x7E, 
-                    (byte)'L', (byte)'M', (byte)' ', (byte)' ',
-                    (byte)'8', (byte)'0', (byte)'7', (byte)'3',
-                    (byte)'A', (byte)'E', (byte)0xF7 }; 
-                }
+            {
+            return new byte[] { (byte)0xF0, 0x43, (byte)(32 + channel), 0x7E, 
+                (byte)'L', (byte)'M', (byte)' ', (byte)' ',
+                (byte)'8', (byte)'0', (byte)'7', (byte)'3',
+                (byte)'A', (byte)'E', (byte)0xF7 }; 
+            }
             }
         System.err.println("Warning (Yamaha4Op): Invalid synth type in requestCurrentDump(): " + getSynthType());
         return new byte[] { }; // just in case
@@ -3122,117 +3122,117 @@ public class Yamaha4Op extends Synth
         switch (getSynthType())
             {
             case TYPE_DX21:
+            {
+            if (number >= 32)
                 {
-                if (number >= 32)
-                    {
-                    System.err.println("Warning (Yamaha4Op): Patch number is invalid (" + number + ", changing to " + (number % 32));
-                    number = number % 32;
-                    }
-                tryToSendMIDI(buildPC(getChannelOut(), number));
+                System.err.println("Warning (Yamaha4Op): Patch number is invalid (" + number + ", changing to " + (number % 32));
+                number = number % 32;
                 }
+            tryToSendMIDI(buildPC(getChannelOut(), number));
+            }
             case TYPE_DX27_DX100:
+            {
+            if (number >= 24)
                 {
-                if (number >= 24)
-                    {
-                    System.err.println("Warning (Yamaha4Op): Patch number is invalid (" + number + ", changing to " + (number % 24));
-                    number = number % 24;
-                    }
-                number = number + bank * 24;
-                tryToSendMIDI(buildPC(getChannelOut(), number));
+                System.err.println("Warning (Yamaha4Op): Patch number is invalid (" + number + ", changing to " + (number % 24));
+                number = number % 24;
                 }
+            number = number + bank * 24;
+            tryToSendMIDI(buildPC(getChannelOut(), number));
+            }
             break;
             case TYPE_DX11:
             case TYPE_TX81Z:
-                {
-                // [Note: I don't know if this will work for the DX11, but I'm taking a shot here.]
-                // 
-                // A program change in the TX81Z is a complicated affair.  We need to do three things:
-                //
-                // 1. Modify a slot in the program change table to the patch we want.  We'll modify slot 127.
-                //
-                // 2. At this point the TX81Z is in a strange "I got edited via MIDI" mode.  We need to get
-                //    out of that and into standard program mode.  We do this by using sysex commands to virtually press
-                //    the PLAY/PERFORM switch.
-                //
-                // 3. Now we're either in PLAY mode or we're in PERFORM mode.  At this point we send a PC 127, which
-                //    causes the system to look up slot 127 in its table, discover it's a performance patch,
-                //    and switch to that, while also changing to PERFORM mode. 
+            {
+            // [Note: I don't know if this will work for the DX11, but I'm taking a shot here.]
+            // 
+            // A program change in the TX81Z is a complicated affair.  We need to do three things:
+            //
+            // 1. Modify a slot in the program change table to the patch we want.  We'll modify slot 127.
+            //
+            // 2. At this point the TX81Z is in a strange "I got edited via MIDI" mode.  We need to get
+            //    out of that and into standard program mode.  We do this by using sysex commands to virtually press
+            //    the PLAY/PERFORM switch.
+            //
+            // 3. Now we're either in PLAY mode or we're in PERFORM mode.  At this point we send a PC 127, which
+            //    causes the system to look up slot 127 in its table, discover it's a performance patch,
+            //    and switch to that, while also changing to PERFORM mode. 
 
-                // Change program change table position 127 to our desired patch
-                int val = bank * 32 + number;
-                byte lo = (byte)(val & 127);
-                byte hi = (byte)(val >>> 7);
-                byte[] table = new byte[9];
-                table[0] = (byte)0xF0;
-                table[1] = (byte)0x43;
-                table[2] = (byte)(16 + getChannelOut());
-                table[3] = (byte)0x10;
-                table[4] = (byte)127;  // really!
-                table[5] = (byte)127;  // we're changing table position 127
-                table[6] = hi;
-                table[7] = lo;
-                table[8] = (byte)0xF7;
-                tryToSendSysex(table);
+            // Change program change table position 127 to our desired patch
+            int val = bank * 32 + number;
+            byte lo = (byte)(val & 127);
+            byte hi = (byte)(val >>> 7);
+            byte[] table = new byte[9];
+            table[0] = (byte)0xF0;
+            table[1] = (byte)0x43;
+            table[2] = (byte)(16 + getChannelOut());
+            table[3] = (byte)0x10;
+            table[4] = (byte)127;  // really!
+            table[5] = (byte)127;  // we're changing table position 127
+            table[6] = hi;
+            table[7] = lo;
+            table[8] = (byte)0xF7;
+            tryToSendSysex(table);
 
-                // Instruct the TX81Z to press its "PLAY/PERFORM" button.  Or "SINGLE" on the DX11
-                byte PP = getSynthType() == TYPE_TX81Z ? (byte) 68 : (byte) 118;                // 119 is "PERFORM", 118 is "SINGLE"
-                byte VV = (byte) 0;
-                byte[] data = new byte[] { (byte)0xF0, (byte)0x43, (byte)(16 + getChannelOut()), REMOTE_SWITCH_GROUP, PP, (byte)0x7F, (byte)0xF7 };
-                tryToSendSysex(data);
+            // Instruct the TX81Z to press its "PLAY/PERFORM" button.  Or "SINGLE" on the DX11
+            byte PP = getSynthType() == TYPE_TX81Z ? (byte) 68 : (byte) 118;                // 119 is "PERFORM", 118 is "SINGLE"
+            byte VV = (byte) 0;
+            byte[] data = new byte[] { (byte)0xF0, (byte)0x43, (byte)(16 + getChannelOut()), REMOTE_SWITCH_GROUP, PP, (byte)0x7F, (byte)0xF7 };
+            tryToSendSysex(data);
 
-                // Do the program change to program 127
-                tryToSendMIDI(buildPC(getChannelOut(), 127));
-                }
+            // Do the program change to program 127
+            tryToSendMIDI(buildPC(getChannelOut(), 127));
+            }
             break;
             case TYPE_TQ5_YS100_YS200_B200:
+            {
+            if (bank > 3) 
                 {
-                if (bank > 3) 
-                    {
-                    System.err.println("Warning (Yamaha4Op): bank is invalid (" + bank + "), changing to 0");
-                    bank = 0;
-                    }
-                                
-                if (number >= 100)
-                    {
-                    System.err.println("Warning (Yamaha4Op): Patch number is invalid (" + number + ", changing to " + (number % 100));
-                    number = number % 100;
-                    }
-                        
-                // First we'll attempt to switch to the right bank by pressing magic butons
-                byte[] data = new byte[] { (byte)0xF0, (byte)0x43, (byte)(16 + getChannelOut()), TQ5_REMOTE_SWITCH_GROUP,
-                                
-                    // documentation is wrong here.  The manual says 116 = card 117 = user 118 = preset
-                    // but in fact it's 116 = preset 117 = user 118 = card
-                    (byte)(bank == 0 ? 116 :                // user
-                            (bank == 1 ? 117 :      // preset
-                            118)),                  // card
-                    (byte)127, (byte)0xF7 };
-                tryToSendSysex(data);
-                                
-                // Do the program change
-                tryToSendMIDI(buildPC(getChannelOut(), number));
+                System.err.println("Warning (Yamaha4Op): bank is invalid (" + bank + "), changing to 0");
+                bank = 0;
                 }
+                                
+            if (number >= 100)
+                {
+                System.err.println("Warning (Yamaha4Op): Patch number is invalid (" + number + ", changing to " + (number % 100));
+                number = number % 100;
+                }
+                        
+            // First we'll attempt to switch to the right bank by pressing magic butons
+            byte[] data = new byte[] { (byte)0xF0, (byte)0x43, (byte)(16 + getChannelOut()), TQ5_REMOTE_SWITCH_GROUP,
+                                
+                // documentation is wrong here.  The manual says 116 = card 117 = user 118 = preset
+                // but in fact it's 116 = preset 117 = user 118 = card
+                (byte)(bank == 0 ? 116 :                // user
+                        (bank == 1 ? 117 :      // preset
+                        118)),                  // card
+                (byte)127, (byte)0xF7 };
+            tryToSendSysex(data);
+                                
+            // Do the program change
+            tryToSendMIDI(buildPC(getChannelOut(), number));
+            }
             break;                  
             case TYPE_V50:
+            {
+            if (bank > 3) 
                 {
-                if (bank > 3) 
-                    {
-                    System.err.println("Warning (Yamaha4Op): bank is invalid (" + bank + "), changing to 0");
-                    bank = 0;
-                    }
-                                
-                if (number >= 100)
-                    {
-                    System.err.println("Warning (Yamaha4Op): Patch number is invalid (" + number + ", changing to " + (number % 100));
-                    number = number % 100;
-                    }
-                
-                // We do two PCs
-                // First to change banks, this is a weird way to do it.
-                tryToSendMIDI(buildPC(getChannelOut(), bank + 122));
-                // Next to select the patcb                
-                tryToSendMIDI(buildPC(getChannelOut(), number));
+                System.err.println("Warning (Yamaha4Op): bank is invalid (" + bank + "), changing to 0");
+                bank = 0;
                 }
+                                
+            if (number >= 100)
+                {
+                System.err.println("Warning (Yamaha4Op): Patch number is invalid (" + number + ", changing to " + (number % 100));
+                number = number % 100;
+                }
+                
+            // We do two PCs
+            // First to change banks, this is a weird way to do it.
+            tryToSendMIDI(buildPC(getChannelOut(), bank + 122));
+            // Next to select the patcb                
+            tryToSendMIDI(buildPC(getChannelOut(), number));
+            }
             break;                  
             }
                 
@@ -3397,9 +3397,9 @@ public class Yamaha4Op extends Synth
             return names;
             }
         else if (getSynthType() == TYPE_DX27_DX100)
-        	{
+            {
             return buildIntegerNames(24, 1); 
-        	}
+            }
         else if (getSynthType() == TYPE_DX21 || 
             getSynthType() == TYPE_TX81Z || 
             getSynthType() == TYPE_DX11 )

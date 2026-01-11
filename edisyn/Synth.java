@@ -1172,8 +1172,8 @@ public abstract class Synth extends JComponent implements Updatable
     public boolean getSendsParametersAfterWrite() { return false; }
 
     /** Override this to send special MIDI to the synthesizer after writeAllParameters().  This will NOT be called in other
-    	situations where emitAll(...) or emit(...) is called.   This exists to deal with a bug in the Blofeld which doesn't remove its
-    	"receiving sysex" screen after receiving a patch write.  */ 
+        situations where emitAll(...) or emit(...) is called.   This exists to deal with a bug in the Blofeld which doesn't remove its
+        "receiving sysex" screen after receiving a patch write.  */ 
     public void afterWriteHook() { return; }
 
     /** Return the filename of your default sysex file (for example "MySynth.init"). Should be located right next to the synth's class file ("MySynth.class") */
@@ -1486,15 +1486,15 @@ public abstract class Synth extends JComponent implements Updatable
 
     boolean receiveMIDI = true;     // we can receive MIDI
         
-	// The only purpose of this class is to contain both a message and the controller (0 is controller 1, 1 is controller 2)
-	// so we can display the controller as part of the "Receive next controller MIDI" command.        
-	class MidiInfo
-		{
-		MidiMessage message;
-		int controller;
-		public MidiInfo(MidiMessage m, int c) { message = m; controller = c; }
-		}
-		
+    // The only purpose of this class is to contain both a message and the controller (0 is controller 1, 1 is controller 2)
+    // so we can display the controller as part of the "Receive next controller MIDI" command.        
+    class MidiInfo
+        {
+        MidiMessage message;
+        int controller;
+        public MidiInfo(MidiMessage m, int c) { message = m; controller = c; }
+        }
+                
     ArrayList<MidiMessage> inBuffer = new ArrayList<>();
     ArrayList<MidiInfo> keyBuffer = new ArrayList<>();
         
@@ -6291,10 +6291,10 @@ menubar.add(helpMenu);
         afterWriteAllParametersHook();
         }
 
-	public void afterWriteAllParametersHook()
-		{
-		return;
-		}
+    public void afterWriteAllParametersHook()
+        {
+        return;
+        }
                 
     void doChangeMIDI()
         {
@@ -6752,7 +6752,7 @@ menubar.add(helpMenu);
         if (updateAndSend) sendAllParameters();
         }
                 
-   public void doRedo()
+    public void doRedo()
         {
         setSendMIDI(false);
         model = (Model)(undo.redo(getModel()));

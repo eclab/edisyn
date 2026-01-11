@@ -684,7 +684,7 @@ public class Librarian extends JPanel
         }
         
     public void sendToCurrentPatch()
-    	{
+        {
         int column = col(table, table.getSelectedColumn());
         int row = table.getSelectedRow();
         if (column >= 0 && row >= 0)
@@ -693,9 +693,9 @@ public class Librarian extends JPanel
             synth.setSendMIDI(false);
             synth.undo.setWillPush(false);
             Model model = synth.getModel();
-	        Model backup = (Model)(model.clone());  
-			model.setUpdateListeners(false);
-			
+            Model backup = (Model)(model.clone());  
+            model.setUpdateListeners(false);
+                        
             Patch p = getLibrary().getPatch(column - 1, row);
             if (p == null) p = getLibrary().getInitPatch();
                         
@@ -714,7 +714,7 @@ public class Librarian extends JPanel
                         synth.getModel().set("bank", bank);
                     }
                 
-                boolean sendsMIDI = synth.getSendMIDI();	// not sure why but by default this is false?
+                boolean sendsMIDI = synth.getSendMIDI();        // not sure why but by default this is false?
                 synth.setSendMIDI(true);
                 synth.sendAllParametersInternal();
                 synth.setSendMIDI(sendsMIDI);
@@ -723,17 +723,17 @@ public class Librarian extends JPanel
                 {
                 Synth.handleException(ex);
                 }
-			
-			synth.setModel(backup);
-			synth.setSendMIDI(true);
-			synth.undo.setWillPush(true);
+                        
+            synth.setModel(backup);
+            synth.setSendMIDI(true);
+            synth.undo.setWillPush(true);
             }
         else
-        	{
-			getLibrary().synth.showSimpleError("Cannot Send", "Please select a patch to send first.");
-			return;
-        	}
-    	}
+            {
+            getLibrary().synth.showSimpleError("Cannot Send", "Please select a patch to send first.");
+            return;
+            }
+        }
          
     public void loadOneInternal()
         {

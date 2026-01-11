@@ -1,7 +1,7 @@
 ![Edisyn Splash Banner](https://raw.githubusercontent.com/eclab/edisyn/master/resources/pics/Banner.png)
 
 # Edisyn
-Synthesizer Patch Editor and Librarian (Version 35)
+Synthesizer Patch Editor and Librarian (Version 36)
 
 By Sean Luke (sean@cs.gmu.edu)
 
@@ -29,7 +29,8 @@ Donations are welcome via Paypal to my email address (sean@cs.gmu.edu).
 
 ## What's New
 
-Version 35 has a new editor for the Novation A Station, more ROMs for the Prophet 2000 family, support for 100-patch bank for the Yamaha 4-Op family, and a wide range of bug fixes and tweaks.
+Version 36 is a maintenance release of mostly bugfixes, including a big one for the Blofeld.
+
 
 ## Publications on Edisyn
 
@@ -258,7 +259,7 @@ Java has compatibility problems with Jack; disabling Jack will often allow Edisy
 2. Download [Edisyn's jar file](https://people.cs.gmu.edu/~eclab/projects/edisyn/edisyn.jar).  Or if you can only install Java 11 or higher (must be at least 11), download the Java 11 version of the [jar file](https://people.cs.gmu.edu/~eclab/projects/edisyn/java8/edisyn.jar).
 3. Run Edisyn as:   `java -jar edisyn.jar`
 
-On the Mac, running with recent versions of Java, you may see a warning that begins like this:
+On the Mac, running under recent versions of Java, you may see a warning that begins like this:
 
     WARNING: A restricted method in java.lang.System has been called
     WARNING: java.lang.System::load has been called by uk.co.xfactorylibrarians.coremidi4j.Loader 

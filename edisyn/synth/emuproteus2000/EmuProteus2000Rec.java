@@ -38,7 +38,6 @@ public class EmuProteus2000Rec extends Recognize
 
     public static boolean recognize(byte[] data)
         {
-        System.err.println("Testing");
         // Generic Name Info
         if  (data[0] == (byte)0xF0 &&
             data[1] == 0x18 &&

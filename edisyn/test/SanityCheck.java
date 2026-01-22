@@ -55,7 +55,12 @@ public class SanityCheck
                 {
                 Synth synth = Synth.instantiate(c[j], true, false, null);
                 Synth synth2 = Synth.instantiate(c[j], true, false, null);
-                if (synth instanceof edisyn.synth.casiocz.CasioCZ)
+                if (synth instanceof edisyn.synth.emuproteus2000.EmuProteus2000)
+                	{
+                	System.err.println("\t[NOTE] RomIDs may fail because of duplicates.  Not sure if this is necessarily a bug.");
+                	test(synth, synth2);
+                	}
+                else if (synth instanceof edisyn.synth.casiocz.CasioCZ)
                     {
                     ((edisyn.synth.casiocz.CasioCZ)synth).setSynthType(edisyn.synth.casiocz.CasioCZ.TYPE_CZ101_1000, false);
                     ((edisyn.synth.casiocz.CasioCZ)synth2).setSynthType(edisyn.synth.casiocz.CasioCZ.TYPE_CZ101_1000, false);

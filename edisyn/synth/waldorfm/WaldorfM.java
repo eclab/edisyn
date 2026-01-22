@@ -39,10 +39,12 @@ public class WaldorfM extends Synth
     public static final String[] LFO_SHAPES = { "Sine", "Triangle", "Pulse", "Random", "S&H" };
     public static final String[] LFO_MIDI_SYNC_VALUES = { "1024 Bars", "512 Bars", "256 Bars", "192 Bars", "128 Bars", "96 Bars", "64 Bars", "48 Bars", "32 Bars", "24 Bars", "16 Bars", "12 Bars", "8 Bars", "6 Bars", "4 Bars", "3 Bars", "2 Bars", "6/4", "4/4", "3/4", "1/2", "3/8", "1/4", "3/16", "1/8", "3/32", "1/16", "3/64", "1/32" };
     public static final String[] MOD_SOURCES = { "Off", "Mod Wheel", "Pitch Bend", "LFO 1", "LFO 2", "Amp Env", "Filter Env", "Wave Env", "Free Env", "LFO1 AD Env", "Sustain Pedal", "Volume Ctrl", "Pan Ctrl", "Breath Ctrl", "Foot Ctrl", "Expression Ctrl", "Ctrl A", "Ctrl B", "Ctrl C", "Ctrl D", "Ctrl W", "Ctrl X", "Ctrl Y", "Ctrl Z", "Key Tracking", "Velocity", "Release Vel", "Aftertouch", "Poly Pressure", "Global LFO", "min", "MAX", "Inverse", "Coin Flip", "Random", "Gate", "Noise" };
-    public static final String[] OSC_MODES = { "Microwave 1 (Classic)", "Microwave 2 (Modern)" };
-    public static final String[] TRANSITION_LOOP_TYPES = { "Off", "Forward", "Backward", "Start+Fwd", "Start+Bkwd" };
+    public static final String[] OSC_MODES = { "Microwave 1 (Classic)", "Microwave 2 (Modern)", "Algorithm" };
+    public static final String[] ALGORITHMS = { "Varywave", "CS-80 Saw", "Waveshapr", "Triple Saw", "S/T Fold", "FM 2 Ops", "FM Fback", "Duonoise" };
+    public static final String[] TRANSIENT_LOOP_TYPES = { "Off", "Forward", "Backward", "Start+Fwd", "Start+Bkwd" };
     public static final String[] TIME_LEVEL_MOD_MODES = { "M", "Microwave" };
     public static final String[] GLIDE_MODE_TYPES = { "Linear", "Exponential" };
+    public static final String[] GLIDE_OPTIONS = { "Off", "On", "Auto" };
     public static final String[] WAVE_TRAVEL_MODES = { "Analog On", "Analog Off", "Analog Only", "Circular" };
     public static final String[] WAVETABLES = {  "Resonant", "Resonant2 LP", "Mallet Synth", "Square Sweep", "Bell", "Pulse Sweep", "Saw Sweep", "Mellow Saw",
         "Feedback", "Add Harm", "Resonant3 HP", "Wind Synth", "High Harm", "Clipper", "Organ Synth", "Square Saw",
@@ -144,26 +146,36 @@ public class WaldorfM extends Synth
         hbox.addLast(addGlide(Style.COLOR_C()));
         vbox.add(hbox);
 
+        JComponent osc2 = addOscillator(2, Style.COLOR_A());		// this must be created first so we can stretch properly
+
         JComponent comp = addOscillator(1, Style.COLOR_A());
-        JComponent oscillatorStrut1 = Strut.makeStrut(comp, false);
-        JComponent oscillatorStrut2 = Strut.makeStrut(comp, false);
+        JComponent oscillatorStrut0 = Strut.makeStrut(osc2, false);
+        JComponent oscillatorStrut1 = Strut.makeStrut(osc2, false);
+        JComponent oscillatorStrut2 = Strut.makeStrut(osc2, false);
+        JComponent oscillatorStrut3 = Strut.makeStrut(osc2, false);
+        JComponent oscillatorStrut4 = Strut.makeStrut(osc2, false);
 
         hbox = new HBox();
-        hbox.add(comp);
+        VBox strutBox = new VBox();
+        strutBox.add(oscillatorStrut0);
+        strutBox.add(comp);
+        hbox.add(strutBox);
         hbox.addLast(addOscillatorMod(1, Style.COLOR_B()));
         vbox.add(hbox);
         
         hbox = new HBox();
-        hbox.add(addOscillator(2, Style.COLOR_A()));
+        hbox.add(osc2);
         hbox.addLast(addOscillatorMod(2, Style.COLOR_B()));
         vbox.add(hbox);
         
         hbox = new HBox();
-        VBox strutBox = new VBox();
+        strutBox = new VBox();
         strutBox.add(oscillatorStrut1);
         strutBox.add(addWavetable(1, Style.COLOR_A()));
+        wavetable1cat = strutBox;
+        wavebox1 = hbox;
         hbox.add(strutBox);
-        hbox.addLast(addWavetableMod(1, Style.COLOR_B()));
+        hbox.addLast(waveMod1 = addWaveMod(1, Style.COLOR_B()));
         vbox.add(hbox);
 
         wavetable2Box = new HBox();
@@ -172,14 +184,26 @@ public class WaldorfM extends Synth
         strutBox = new VBox();
         strutBox.add(oscillatorStrut2);
         strutBox.add(addWavetable(2, Style.COLOR_A()));
+        wavetable2cat = strutBox;
+        wavebox2 = hbox;
         hbox.add(strutBox);
-        hbox.addLast(addWavetableMod(2, Style.COLOR_B()));
+        hbox.addLast(waveMod2 = addWaveMod(2, Style.COLOR_B()));
         wavetable2Box.addLast(hbox);
         vbox.add(wavetable2Box);
+        
+        strutBox = new VBox();
+        strutBox.add(oscillatorStrut3);
+        strutBox.add(addAlgorithm(1, Style.COLOR_C()));
+		algorithm1cat = strutBox;
 
-        transitionBox = new HBox();
-        transitionBox.addLast(transition = addTransition(Style.COLOR_C()));
-        vbox.add(transitionBox);
+        strutBox = new VBox();
+        strutBox.add(oscillatorStrut4);
+        strutBox.add(addAlgorithm(2, Style.COLOR_C()));
+		algorithm2cat = strutBox;
+
+        transientBox = new HBox();
+        transientBox.addLast(_transient = addTransient(Style.COLOR_C()));
+        vbox.add(transientBox);
 
         soundPanel.add(vbox, BorderLayout.CENTER);
         addTab("Oscillators", soundPanel);
@@ -193,7 +217,8 @@ public class WaldorfM extends Synth
         Category cat = (Category)(addMixerMod(Style.COLOR_B()));
         right.add(cat);
         right.add(addAmplifierMod(Style.COLOR_B()));
-        right.add(addAnalogFilterMod(Style.COLOR_B()));
+        JComponent analogFilterMod = addAnalogFilterMod(Style.COLOR_B());
+        right.add(analogFilterMod);
         right.add(addDigitalFilterMod(Style.COLOR_B()));
 
         // Next build the main column, with struts
@@ -208,6 +233,7 @@ public class WaldorfM extends Synth
         left.add(row);
         row = new HBox();
         row.add(Strut.makeStrut(cat, true, false));
+        row.add(Strut.makeVerticalStrut(analogFilterMod));
         row.addLast(addAnalogFilter(Style.COLOR_A()));
         left.add(row);
         row = new HBox();
@@ -292,12 +318,12 @@ public class WaldorfM extends Synth
                 
     HBox wavetable2Box = new HBox();
     JComponent wavetable2;
-    HBox transitionBox = new HBox();
-    JComponent transition;
+    HBox transientBox = new HBox();
+    JComponent _transient;
     HBox asicBugBox = new HBox();
     JComponent asicBug;
-    HBox enableTransitionBox = new HBox();
-    JComponent enableTransition;
+    HBox enableTransientBox = new HBox();
+    JComponent enableTransient;
     HBox ringModBox = new HBox();
     JComponent ringMod;
     HBox ringModSourceBox = new HBox();
@@ -311,10 +337,21 @@ public class WaldorfM extends Synth
     HBox digitalFilterModBox3 = new HBox();
     JComponent digitalFilterMod3;
     HBox osc1SyncBox = new HBox();
-    JComponent osc1Sync;
+    VBox osc1Sync;
+    HBox fmBox = new HBox();
+    JComponent fm;
     HBox smoothScanBox = new HBox();
     JComponent smoothScan;
     boolean readyForRevision = false;
+    
+    JComponent wavetable1cat;
+    JComponent wavetable2cat;
+    JComponent algorithm1cat;
+    JComponent algorithm2cat;
+    HBox wavebox1 = new HBox();
+    HBox wavebox2 = new HBox();
+    JComponent waveMod1;
+    JComponent waveMod2;
         
     public void reviseUI()
         {
@@ -322,9 +359,9 @@ public class WaldorfM extends Synth
                 
         // remove everything
         wavetable2Box.removeAll();
-        transitionBox.removeAll();
+        transientBox.removeAll();
         asicBugBox.removeAll();
-        enableTransitionBox.removeAll();
+        enableTransientBox.removeAll();
         ringModBox.removeAll();
         ringModSourceBox.removeAll();
         ringModAmountBox.removeAll();
@@ -333,10 +370,36 @@ public class WaldorfM extends Synth
         digitalFilterModBox3.removeAll();
         osc1SyncBox.removeAll();
         smoothScanBox.removeAll();
+        fmBox.removeAll();
+        wavebox1.removeAll();
+        wavebox2.removeAll();
 
         // selectively put back
-        if (model.get("mmwmode") == 1)          // Modern = 1
-            {
+        int mmwmode = model.get("mmwmode");
+        
+        // This is getting quite complicated
+        
+        if (mmwmode == 0)				// Classic = 0
+        	{
+            enableTransientBox.addLast(enableTransient);
+            asicBugBox.addLast(asicBug);                    
+
+            if (model.get("transientenable") == 1)
+                {
+                transientBox.addLast(_transient);
+                }
+            else
+                {
+                wavetable2Box.addLast(wavetable2);
+                }
+            fmBox.addLast(Strut.makeHorizontalStrut(fm));
+			wavebox1.add(wavetable1cat);
+			wavebox1.addLast(waveMod1);
+			wavebox2.add(wavetable2cat);
+			wavebox2.addLast(waveMod2);
+        	}
+        else 
+        	{
             ringModBox.addLast(ringMod);
             ringModSourceBox.addLast(ringModSource);
             ringModAmountBox.addLast(ringModAmount);
@@ -346,27 +409,29 @@ public class WaldorfM extends Synth
             osc1SyncBox.addLast(osc1Sync);
             smoothScanBox.addLast(smoothScan);
             wavetable2Box.addLast(wavetable2);
-            }
-        else                    // Classic = 0
-            {
-            enableTransitionBox.addLast(enableTransition);
-            asicBugBox.addLast(asicBug);                    
+            fmBox.addLast(fm);
 
-            if (model.get("transitionenable") == 1)
-                {
-                transitionBox.addLast(transition);
-                }
-            else
-                {
-                wavetable2Box.addLast(wavetable2);
-                }
+        	if (mmwmode == 1)          // Modern = 1
+				{
+			wavebox1.add(wavetable1cat);
+			wavebox1.addLast(waveMod1);
+			wavebox2.add(wavetable2cat);
+			wavebox2.addLast(waveMod2);
+				}
+			else                    		// Algorithm = 2
+				{
+				wavebox1.add(algorithm1cat);
+			wavebox1.addLast(waveMod1);
+				wavebox2.add(algorithm2cat);
+			wavebox2.addLast(waveMod2);
+				}
             }
-                        
+                                    
         // revalidate
         wavetable2Box.revalidate();
-        transitionBox.revalidate();
+        transientBox.revalidate();
         asicBugBox.revalidate();
-        enableTransitionBox.revalidate();
+        enableTransientBox.revalidate();
         ringModBox.revalidate();
         ringModSourceBox.revalidate();
         ringModAmountBox.revalidate();
@@ -375,12 +440,15 @@ public class WaldorfM extends Synth
         digitalFilterModBox2.revalidate();
         osc1SyncBox.revalidate();
         smoothScanBox.revalidate();
+        fmBox.revalidate();
+        wavebox1.revalidate();
+        wavebox2.revalidate();
                 
         // repaint
         wavetable2Box.repaint();
-        transitionBox.repaint();
+        transientBox.repaint();
         asicBugBox.repaint();
-        enableTransitionBox.repaint();
+        enableTransientBox.repaint();
         ringModBox.repaint();
         ringModSourceBox.repaint();
         ringModAmountBox.repaint();
@@ -389,6 +457,9 @@ public class WaldorfM extends Synth
         digitalFilterModBox3.repaint();
         osc1SyncBox.repaint();
         smoothScanBox.repaint();
+        fmBox.repaint();
+        wavebox1.repaint();
+        wavebox2.repaint();
         }
 
 
@@ -447,6 +518,7 @@ public class WaldorfM extends Synth
         hbox.add(inner);
                 
         inner = new VBox();        
+        /*
         comp = new CheckBox("Modern (MWII/XT) Mode", this, "mmwmode")
             {
             public void update(String key, Model model)
@@ -455,10 +527,20 @@ public class WaldorfM extends Synth
                 reviseUI();
                 }
             };
+        */
+        params = OSC_MODES;
+    	comp = new Chooser("Oscillator Mode", this, "mmwmode", params)
+    		{
+            public void update(String key, Model model)
+                {
+                super.update(key, model);
+                reviseUI();
+                }
+    		};
         inner.add(comp);
         
         HBox strutBox = new HBox();
-        comp = new CheckBox("Enable Transition", this, "transitionenable")
+        comp = new CheckBox("Enable Transient", this, "transientenable")
             {
             public void update(String key, Model model)
                 {
@@ -466,9 +548,9 @@ public class WaldorfM extends Synth
                 reviseUI();
                 }
             };
-        enableTransition = comp;
-        enableTransitionBox.addLast(comp);
-        strutBox.addLast(enableTransitionBox);
+        enableTransient = comp;
+        enableTransientBox.addLast(comp);
+        strutBox.addLast(enableTransientBox);
         strutBox.add(Strut.makeStrut(comp, true)); // so it doesn't collapse
         
         inner.add(strutBox);
@@ -550,21 +632,18 @@ public class WaldorfM extends Synth
         vbox.add(comp);
         hbox.add(vbox);
 
+        comp = new CheckBox("ASIC Bug", this, "oscasicbug");
+        asicBug = comp;
+        asicBugBox.addLast(asicBug);
+        vbox.add(asicBugBox);
+
+
         vbox = new VBox();
 
         params = TIME_LEVEL_MOD_MODES;
         comp = new Chooser("Time/Level Mod Mode", this, "timelevelmodmode", params);
         vbox.add(comp);
 
-        comp = new CheckBox("ASIC Bug", this, "oscasicbug");
-        asicBug = comp;
-        asicBugBox.addLast(asicBug);
-        vbox.add(asicBugBox);
-
-        hbox.add(vbox);
-
-
-        vbox = new VBox();
         params = ENV_RATES;
         // we add some spaces at the end so Smooth Wavetable Scan doesn't change the width
         comp = new Chooser("Envelope Timer Resolution      ", this, "envtimeresolution", params);
@@ -574,9 +653,9 @@ public class WaldorfM extends Synth
         smoothScan = comp;
         smoothScanBox.addLast(smoothScan);
         vbox.add(smoothScanBox);
- 
+
         hbox.add(vbox);
-        
+
         comp = new LabelledDial("Oscillator", this, "oscsderez", color, 0, 14);
         ((LabelledDial)comp).addAdditionalLabel("De-Rez");
         hbox.add(comp);
@@ -594,17 +673,31 @@ public class WaldorfM extends Synth
         HBox hbox = new HBox();
 
         VBox vbox = new VBox();
+
+        params = GLIDE_OPTIONS;
+        comp = new Chooser("Enable", this, "glide", params);
+        vbox.add(comp);
+        hbox.add(vbox);
+        
+        vbox = new VBox();
+
         params = GLIDE_MODE_TYPES;
         comp = new Chooser("Mode", this, "glidemode", params);
         vbox.add(comp);
- 
-        comp = new CheckBox("Enable", this, "glide");
+
+        params = MOD_SOURCES;
+        comp = new Chooser("Mod Source", this, "glidemodsource", params);
         vbox.add(comp);
+ 
         hbox.add(vbox);
 
         comp = new LabelledDial("Rate", this, "gliderate", color, 0, 127);
         hbox.add(comp);
 
+        comp = new LabelledDial("Mod", this, "glidemodamount", color, -64, 63);
+        ((LabelledDial)comp).addAdditionalLabel("Amount");
+        hbox.add(comp);
+        
         category.add(hbox, BorderLayout.CENTER);
         return category;
         }
@@ -643,6 +736,37 @@ public class WaldorfM extends Synth
         return category;
         }
 
+    public JComponent addAlgorithm(int osc, Color color)
+        {
+        Category category = new Category(this, "Algorithm " + osc, color);
+
+        JComponent comp;
+        String[] params;
+        HBox hbox = new HBox();
+        
+        VBox vbox = new VBox();
+        params = ALGORITHMS;
+        comp = new Chooser("Algorithm", this, "wave" + osc + "algorithm", params);
+        vbox.add(comp);
+ 
+        params = MOD_SOURCES;
+        comp = new Chooser("Metaparam Mod Source", this, "wave" + osc + "metaparammodsource", params);
+        vbox.add(comp);
+        hbox.add(vbox);
+
+        comp = new LabelledDial("Wave", this, "wave" + osc + "startwave", color, 0, 63);
+        hbox.add(comp);
+
+        comp = new LabelledDial("Metaparam", this, "wave" + osc + "metaparam", color, 0, 127);
+        hbox.add(comp);
+
+        comp = new LabelledDial("Metaparam", this, "wave" + osc + "metaparammodamount", color, -64, 63);
+        ((LabelledDial)comp).addAdditionalLabel("Mod Amount");
+        hbox.add(comp);
+
+        category.add(hbox, BorderLayout.CENTER);
+        return category;
+        }
 
     public JComponent addOscillator(int osc, Color color)
         {
@@ -653,14 +777,16 @@ public class WaldorfM extends Synth
         HBox hbox = new HBox();
         
         VBox vbox = new VBox();
-        comp = new CheckBox("Fixed Pitch", this, "osc" + osc + "pitchmode");
+        comp = new CheckBox("Fixed Pitch    ", this, "osc" + osc + "pitchmode");		// extra to cover Osc 1->2 FM
         vbox.add(comp);
 
         if (osc == 2)
             {
+            osc1Sync = new VBox();
             comp = new CheckBox("Osc 1 Sync", this, "osc" + osc + "synctoosc1");
-            ((CheckBox)comp).addToWidth(2);
-            osc1Sync = comp;
+    		osc1Sync.add(comp);
+            comp = new CheckBox("Osc 1->2 FM", this, "fmenablemm");
+    		osc1Sync.addLast(comp);
             osc1SyncBox.addLast(osc1Sync);
             vbox.add(osc1SyncBox);
             }
@@ -689,10 +815,20 @@ public class WaldorfM extends Synth
             };
         ((LabelledDial)comp).addAdditionalLabel("Base");
         hbox.add(comp);
+        
+    	if (osc == 2)
+    		{
+        	comp = new LabelledDial("Osc 1->2", this, "fmdepthmm", color, 0, 127);
+        	((LabelledDial)comp).addAdditionalLabel("FM Depth");
+        	fm = comp;
+        	fmBox.add(Strut.makeHorizontalStrut(fm));
+        	hbox.addLast(fmBox);
+    		}
 
         category.add(hbox, BorderLayout.CENTER);
         return category;
         }
+        
 
     public JComponent addOscillatorMod(int osc, Color color)
         {
@@ -744,9 +880,9 @@ public class WaldorfM extends Synth
         }
 
 
-    public JComponent addWavetableMod(int osc, Color color)
+    public JComponent addWaveMod(int osc, Color color)
         {
-        Category category = new Category(this, "Wavetable " + osc + " Modulation", color);
+        Category category = new Category(this, "Wave " + osc + " Modulation", color);
 
         JComponent comp;
         String[] params;
@@ -956,19 +1092,27 @@ public class WaldorfM extends Synth
         vbox.add(comp);
 
         params = MOD_SOURCES;
+        comp = new Chooser("Extra Mod Source", this, "digivcfextramodsource", params);
+        vbox.add(comp);
+
+        params = MOD_SOURCES;
         comp = new Chooser("Resonance Mod Source", this, "digivcfresmodsource", params);
         digitalFilterMod2 = comp;
         digitalFilterModBox2.add(digitalFilterMod2);
         vbox.add(digitalFilterModBox2);
-        hbox.add(vbox);
+         hbox.add(vbox);
 
         comp = new LabelledDial("Mod 2", this, "digivcfmod2amount", color, -64, 63);
         ((LabelledDial)comp).addAdditionalLabel("Amount");
         hbox.add(comp);
 
-        digitalFilterMod3 = new HBox();
-        comp = new LabelledDial("Resonance Mod", this, "digivcfresmodamount", color, -64, 63);
+        comp = new LabelledDial("Extra Mod", this, "digivcfextramodamount", color, -64, 63);
         ((LabelledDial)comp).addAdditionalLabel("Amount");
+        hbox.add(comp);
+
+        digitalFilterMod3 = new HBox();
+        comp = new LabelledDial("Resonance", this, "digivcfresmodamount", color, -64, 63);
+        ((LabelledDial)comp).addAdditionalLabel("Mod Amount");
         digitalFilterMod3.add(comp);
 
         comp = new LabelledDial("VCF Env", this, "digivcfenvamount", color, -64, 63);
@@ -1005,6 +1149,9 @@ public class WaldorfM extends Synth
         params = MOD_SOURCES;
         comp = new Chooser("Mod 1 Control", this, "vcfmod1control", params);
         vbox.add(comp);
+
+        comp = new CheckBox("Track MPE Bend", this, "analogvcfmpepbtrackenable");
+        vbox.add(comp);
         hbox.add(vbox);
 
         comp = new LabelledDial("Mod 1", this, "vcfmod1amount", color, -64, 63);
@@ -1039,6 +1186,11 @@ public class WaldorfM extends Synth
         comp = new LabelledDial("Keytrack", this, "vcfkeytrack", color, -64, 63);
         hbox.add(comp);
 
+        comp = new LabelledDial("MPE Bend", this, "analogvcfmpepbtrackamount", color, 0, 127);
+        ((LabelledDial)comp).addAdditionalLabel("Tracking");
+        ((LabelledDial)comp).addAdditionalLabel("Amount");
+        hbox.add(comp);
+        
         category.add(hbox, BorderLayout.CENTER);
         return category;
         }
@@ -1461,26 +1613,26 @@ public class WaldorfM extends Synth
         }
 
 
-    public JComponent addTransition(Color color)
+    public JComponent addTransient(Color color)
         {
-        Category category = new Category(this, "Transition", color);
+        Category category = new Category(this, "Transient", color);
 
         JComponent comp;
         String[] params;
         HBox hbox = new HBox();
         
         VBox vbox = new VBox();
-        params = TRANSITION_LOOP_TYPES;
-        comp = new Chooser("Loop Type", this, "transitionlooptype", params);
+        params = TRANSIENT_LOOP_TYPES;
+        comp = new Chooser("Loop Type", this, "transientlooptype", params);
         vbox.add(comp);
         
         hbox.add(vbox);
 
-        comp = new LabelledDial("Number", this, "transitionnumber", color, 0, 63);
+        comp = new LabelledDial("Number", this, "transientnumber", color, 0, 63);
         hbox.add(comp);
 
         // default is 24, representing Middle C
-        comp = new LabelledDial("Pitch Base", this, "transitionbase", color, 0, 60)
+        comp = new LabelledDial("Pitch Base", this, "transientbase", color, 0, 60)
             {
             public String map(int val)
                 {
@@ -1489,10 +1641,10 @@ public class WaldorfM extends Synth
             };
         hbox.add(comp);
         
-        comp = new LabelledDial("Start Sample", this, "transitionstartsample", color, 0, 32767);
+        comp = new LabelledDial("Start Sample", this, "transientstartsample", color, 0, 32767);
         hbox.add(comp);
 
-        comp = new LabelledDial("End Sample", this, "transitionendsample", color, 0, 32767);
+        comp = new LabelledDial("End Sample", this, "transientendsample", color, 0, 32767);
         hbox.add(comp);
 
         category.add(hbox, BorderLayout.CENTER);
@@ -1817,8 +1969,8 @@ public class WaldorfM extends Synth
             int param = ((Integer)parametersToIndex.get(key)).intValue() + 8192;
             int val = model.get(key, 0) + 8192;
 
-            if (key.equals("transitionstartsample") ||
-                key.equals("transitionendsample"))
+            if (key.equals("transientstartsample") ||
+                key.equals("transientendsample"))
                 {
                 param = ((Integer)parametersToIndex.get(key)).intValue();
                 int topBit = (param >>> 14) & 0x01;     // extract top bit
@@ -2029,9 +2181,9 @@ public class WaldorfM extends Synth
 
         // Handle special parameters
         int smoothscanwt = (model.get("smoothscanwt") & 0x01);
-        int transitionstartsample = ((model.get("transitionstartsample") >>> 14) & 0x01);
-        int transitionendsample = ((model.get("transitionendsample") >>> 14) & 0x01);
-        data[35] = (byte)(smoothscanwt | (transitionstartsample << 1) | (transitionendsample << 2));
+        int transientstartsample = ((model.get("transientstartsample") >>> 14) & 0x01);
+        int transientendsample = ((model.get("transientendsample") >>> 14) & 0x01);
+        data[35] = (byte)(smoothscanwt | (transientstartsample << 1) | (transientendsample << 2));
                 
         data[data.length - 2] = 0x7F;
         data[data.length - 1] = (byte)0xF7;
@@ -2070,6 +2222,7 @@ public class WaldorfM extends Synth
             {
             if (!parameters[i].equals("--"))
                 {
+                System.err.println("" + i + " " + parameters[i] + " " + data[pos] + " " + data[pos + 1]);
                 int lsb = data[pos];
                 int msb = data[pos + 1];
                 if (i == 233 || i == 234)
@@ -2086,10 +2239,10 @@ public class WaldorfM extends Synth
             
         // Handle special parameters
         model.set("smoothscanwt", data[35] & 0x01);
-        model.set("transitionstartsample", 
-            model.get("transitionstartsample") | (((data[35] >>> 1) & 0x01) << 14));
-        model.set("transitionendsample", 
-            model.get("transitionendsample") | (((data[35] >>> 2) & 0x01) << 14));
+        model.set("transientstartsample", 
+            model.get("transientstartsample") | (((data[35] >>> 1) & 0x01) << 14));
+        model.set("transientendsample", 
+            model.get("transientendsample") | (((data[35] >>> 2) & 0x01) << 14));
         
         revise();
         return PARSE_SUCCEEDED;     
@@ -2306,22 +2459,22 @@ public class WaldorfM extends Synth
     "playmode",
     "voicestealmode",
     "globallfoshape",
-    "--",           // reserved 0
-    "--",           // reserved 1
-    "--",           // reserved 2
-    "--",           // reserved 3
-    "--",           // reserved 4
-    "--",           // reserved 5
-    "--",           // reserved 6
-    "--",           // reserved 7
-    "--",           // reserved 8
-    "--",           // reserved 9
-    "--",           // reserved 10
-    "--",           // reserved 11
-    "--",           // reserved 12
-    "--",           // reserved 13
-    "--",           // reserved 14
-    "--",           // reserved 15
+    "digivcfextramodsource",			// reserved 0		Digital VCF Extra Mod Source
+    "digivcfextramodamount",			// reserved 1		Digital VCF Extra Mod Amount
+    "wave1algorithm",           		// reserved 2		Wave1 Metaparam Algo
+    "wave1metaparam",					// reserved 3		Wave1 Metaparam
+    "wave1metaparammodsource",			// reserved 4		Wave1 Metaparam Mod Source
+    "wave1metaparammodamount",			// reserved 5		Wave1 Metaparam mod amount
+    "wave2algorithm",					// reserved 6		Wave2 Metaparam Algo
+    "wave2metaparam",					// reserved 7		Wave2 Metaparam
+    "wave2metaparammodsource",			// reserved 8		Wave2 metaparam mod source
+    "wave2metaparammodamount",			// reserved 9		Wave2 Metaparam mod amount
+    "analogvcfmpepbtrackenable",		// reserved 10		Analog VCF MPE PB Track Enable
+    "analogvcfmpepbtrackamount",		// reserved 11		Analog VCF MPE PB Track Amount
+    "fmenablemm",						// reserved 12		FM Enable MM
+    "fmdepthmm",						// reserved 13		FM Depth MM
+    "glidemodsource",					// reserved 14		Glide Mod Source
+    "glidemodamount",					// reserved 15		Glide Mod Amount
     "digivcfenvamount",
     "digivcfenvvelocity",
     "digivcfkeytrack",
@@ -2331,12 +2484,12 @@ public class WaldorfM extends Synth
     "digivcfresmodsource",
     "digivcfresmodamount",
     "digivcfextraparam",
-    "transitionenable",
-    "transitionnumber",
-    "transitionbase",
-    "transitionlooptype",
-    "transitionstartsample",
-    "transitionendsample",
+    "transientenable",
+    "transientnumber",
+    "transientbase",
+    "transientlooptype",
+    "transientstartsample",
+    "transientendsample",
     "globallfosymmetry",
     "oscsderez",
     "smoothscanwt",
@@ -2576,12 +2729,12 @@ public class WaldorfM extends Synth
     -1,     // digivcfresmodsource
     -1,     // digivcfresmodamount
     -1,     // digivcfextraparam
-    -1,     // transitionenable
-    -1,     // transitionnumber
-    -1,     // transitionbase
-    -1,     // transitionlooptype
-    -1,     // transitionstartsample
-    -1,     // transitionendsample
+    -1,     // transientenable
+    -1,     // transientnumber
+    -1,     // transientbase
+    -1,     // transientlooptype
+    -1,     // transientstartsample
+    -1,     // transientendsample
     -1,     // globallfosymmetry
     -1,     // oscsderez
     -1,     // smoothscanwt

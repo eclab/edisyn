@@ -2,15 +2,26 @@
 <h1>Waldorf M</h1> 
 <h2>Single Patch Editor</h2>
 
-<p>This editor is designed to work with at least Firmware 1.09.
+<p>This editor is designed to work with at least Firmware 1.11.
 
 <p><b>Communicating with Edisyn</b><br> 
 Put your M in Single Mode.  Set Edisyn's MIDI channel to the same as the M's MIDI Channel.  At present the M does not use its ID in its messages, though that may change.  You may want Edisyn to update in real time to changes you make to knobs on the M.  To do this, if you are connected over USB, set the M's "CControls Send" to USB or DIN+USB.  If you are connected over DIN, set it to DIN or DIN+USB.  Make sure that Global Bank Change and Program Change are turned on.
 
+<p><b>The Three, no Four, Modes</b><br>
 
-<br><br><h3>About the Menu: Updating the Screen</h3>
+The Waldorf M can play in several different modes, and Edisyn changes what it displays depending on the mode chosen:
 
-By default the M doesn't update its screen when it receives changes to individual patches from Edisyn (it's slow to do so).  If you want it to update its screen, set <b>Update Screen When Changing Parameters</b>.
+<ul>
+<li>Classic Mode (similar to the Microwave 1)
+<li>Classic Mode with a Transient replacing the second Wavetable oscillator
+<li>Modern Mode (similar to the Microwave 2 / XT)
+<li>Algorithm Mode (both Wavetables are replaced with a variety of digital oscillator models)
+</ul>
+
+These modes, and their respective options, are turned on by selecting the appropriate mode in the <b>Oscillator Mode</b> popup menu.  If you select "Microwave 1 (Classic), you can then turn on the Transient option with the <b>Enable Transient</b> checkbox.
+
+<p><b>Transients and Transitions</b><br>
+In the past, the M called the PPG's Transient options "Transitions", and so did Edisyn.  We've since switched back to calling them Transients.
 
 <br><br><h3>About the Menu: Current Parts</h3>
 
@@ -22,15 +33,21 @@ When you update a parameter, if the M is in Multi Mode, it can update the parame
 
 <ul>
 
-<li>You cannot load Transitions in Edisyn, and Edisyn cannot display the filename of the Transition for a given number.
+<li>You cannot load Transients in Edisyn, and Edisyn cannot display the filename of the Transient for a given number.
 
 <p><li>If you change a parameter in Edisyn, it will update the same parameter on the M.  However when changing a parameter on the M, it will only update Edisyn if the parameter is a knob (that is, if it is mapped to a CC.  See Page 84 of the manual).  Other parameters are not emitted by the M.
+
+<p><li>For a very short while, the M had an additional Play Mode called "Mono Portamento".  That has been rescinded, and Edisyn does not support it.  Mono Portamento will be changed to some other Play Mode arbitrarily (probably "Polyphonic").
 
 </ul>
 
 <p><b>Hints</b><br>
 
 When you switch to a Waldorf M Editor window, it will automatically try to get the M to switch to Single Mode.
+
+<p><b>Microtuning Options</b><br>
+
+The Waldorf M supports microtonal tuning in Firmware 1.11.  However it does not support the entire MTS tuning standard because it doesn't have enough firmware space.  The M only responds to individual note tuning changes.  That's okay!  To dump all notes to the M, use Edisyn's <b>Tuning</b> patch editor, and check the checkbox labelled <b>Send As Individual Parameters</b>.  This will cause Edisyn to send its dumps by sending each note separately to the M.
 
 
 <br><br><h3>Thanks</h3>
@@ -42,6 +59,6 @@ Thanks to Vladimir Salnikov and Waldorf Music GmbH for their extraordinary help,
 <td><b>Sean Luke</b>
 <tr>
 <td align=right>Date&nbsp;&nbsp;&nbsp;
-<td>December 20, 2022
+<td>January 21, 2026
 </table>
 

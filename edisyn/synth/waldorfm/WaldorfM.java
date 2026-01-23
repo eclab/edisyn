@@ -1312,12 +1312,25 @@ public class WaldorfM extends Synth
         comp = new LabelledDial("Release", this, "env" + env + "release", color, 0, 127);
         hbox.add(comp);
 
-        comp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
-            new String[] { null, "env" + env +  "attack", "env" + env +  "decay", null, "env" + env +  "release" },
-            new String[] { null, null, "env" + env +  "sustain", "env" + env +  "sustain", null },
-            new double[] { 0, 0.25/127.0, 0.25 / 127.0,  0.25, 0.25/127.0},
-            new double[] { 0, 1.0, 1.0 / 127.0, 1.0/127.0, 0 });
-        hbox.addLast(comp);
+        if (env == 2)
+            {
+			comp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
+				new String[] { null, "env" + env + "delay", "env" + env + "attack", "env" + env + "decay", null, "env" + env + "release" },
+				new String[] { null, null, null, "env" + env + "sustain", "env" + env + "sustain", null },
+				new double[] { 0, 0.2/127.0, 0.2/127.0, 0.2/127.0,  0.2, 0.2/127.0},
+				new double[] { 0, 0, 1.0, 1.0 / 127.0, 1.0/127.0, 0 });
+            }
+        else
+            {
+			comp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
+				new String[] { null, "env" + env +  "attack", "env" + env +  "decay", null, "env" + env +  "release" },
+				new String[] { null, null, "env" + env +  "sustain", "env" + env +  "sustain", null },
+				new double[] { 0, 0.25/127.0, 0.25 / 127.0,  0.25, 0.25/127.0},
+				new double[] { 0, 1.0, 1.0 / 127.0, 1.0/127.0, 0 });
+            }
+        VBox vbox = new VBox();
+        vbox.add(comp);
+        hbox.addLast(vbox);
 
         category.add(hbox, BorderLayout.CENTER);
         return category;

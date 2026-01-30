@@ -145,11 +145,6 @@ class Convertors {
                     | ((0x1 & model.get(ENVELOPE3_TRIGGER.getKey())) << 2)
                     | ((0xF & model.get(KEY_SYNC_PHASE.getKey())) << 3);
                 }
-
-            @Override
-                public Boundaries getBoundary() {
-                return Boundaries.NONE;
-                }
             },
         PACKED2 {
             @Override
@@ -179,11 +174,6 @@ class Convertors {
                 return (0x7 & model.get(UNISON_VOICES.getKey()))
                     | ((0x3 & model.get(POLYPHONY_MODE.getKey())) << 3)
                     | ((0x1 & model.get(FILTER_TYPE.getKey())) << 5);
-                }
-
-            @Override
-                public Boundaries getBoundary() {
-                return Boundaries.NONE;
                 }
             },
         PACKED3 {
@@ -217,11 +207,6 @@ class Convertors {
                     | ((0x3 & model.get(OSC3_WAVEFORM.getKey())) << 4)
                     | ((0x1 & model.get(PORTAMENTO_MODE.getKey())) << 6);
                 }
-
-            @Override
-                public Boundaries getBoundary() {
-                return Boundaries.NONE;
-                }
             },
         PACKED4 {
             @Override
@@ -254,11 +239,6 @@ class Convertors {
                     | ((0x3 & model.get(OSC3_OCTAVE.getKey())) << 4)
                     | ((0x1 & model.get(OSC2_SYNCED_BY_1.getKey())) << 6);
                 }
-
-            @Override
-                public Boundaries getBoundary() {
-                return Boundaries.NONE;
-                }
             },
         PACKED5 {
             @Override
@@ -290,11 +270,6 @@ class Convertors {
                     | ((0x1 & model.get(LFO2_DELAY_MULTI.getKey())) << 1)
                     | ((0x3 & model.get(LFO1_WAVEFORM.getKey())) << 2)
                     | ((0x3 & model.get(LFO2_WAVEFORM.getKey())) << 4);
-                }
-
-            @Override
-                public Boundaries getBoundary() {
-                return Boundaries.NONE;
                 }
             },
         PACKED6 {
@@ -332,11 +307,6 @@ class Convertors {
                     | ((0x1 & model.get(LFO2_KEY_SYNC.getKey())) << 4)
                     | ((0x1 & model.get(LFO2_LOCK.getKey())) << 5);
                 }
-
-            @Override
-                public Boundaries getBoundary() {
-                return Boundaries.NONE;
-                }
             },
         PACKED7 {
             @Override
@@ -371,11 +341,6 @@ class Convertors {
                     | ((0x1 & model.get(ARP_LATCH.getKey())) << 4)
                     | ((0x3 & model.get(ARP_NOTE_DESTINATION.getKey())) << 5);
                 }
-
-            @Override
-                public Boundaries getBoundary() {
-                return Boundaries.NONE;
-                }
             },
         PACKED8 {
             @Override
@@ -403,11 +368,6 @@ class Convertors {
                 public int toSynth(Model model) {
                 return (0x7 & model.get(REVERB_TYPE.getKey()))
                     | ((0x1 & model.get(CHORUS_TYPE.getKey())) << 3);
-                }
-
-            @Override
-                public Boundaries getBoundary() {
-                return Boundaries.NONE;
                 }
             },
         PACKED9 {
@@ -438,11 +398,6 @@ class Convertors {
                 return (0x3 & model.get(CHORUS_GLOBAL_SYNC.getKey()))
                     | ((0x3 & model.get(PANNING_GLOBAL_SYNC.getKey())) << 2)
                     | ((0x3 & model.get(EQUALIZER_GLOBAL_SYNC.getKey())) << 4);
-                }
-
-            @Override
-                public Boundaries getBoundary() {
-                return Boundaries.NONE;
                 }
             },
         PACKED10 {
@@ -480,11 +435,6 @@ class Convertors {
                     // NOTE: unlike documented: bit 7 (iso 6)
                     | ((0x1 & model.get(EXT_AUDIO_TO_FX.getKey())) << 6);
                 }
-
-            @Override
-                public Boundaries getBoundary() {
-                return Boundaries.NONE;
-                }
             },
         PACKED11 {
             @Override
@@ -518,11 +468,6 @@ class Convertors {
                     | ((0x3 & model.get(PWM_SOURCE.getKey())) << 4)
                     | ((0x1 & model.get(LFO_SELECT.getKey())) << 6);
                 }
-
-            @Override
-                public Boundaries getBoundary() {
-                return Boundaries.NONE;
-                }
-            };
+            }
         }
     }

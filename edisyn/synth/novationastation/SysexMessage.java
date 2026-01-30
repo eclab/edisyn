@@ -211,18 +211,6 @@ class SysexMessage {
         }
 
     private boolean arrayEquals(byte[] bytes1, int from1, int to1, byte[] bytes2, int from2, int to2) {
-        // only from JDK9
-        //return Arrays.equals(bytes1, from1, to1, bytes2, from2, to2);
-        if (to1 - from1 != to2 - from2) {
-            return false;
-            }
-        boolean equal = true;
-        for (int index = 0; index < to1 - from1; ++index) {
-            if (bytes1[from1 + index] != bytes2[from2 + index]) {
-                equal = false;
-                break;
-                }
-            }
-        return equal;
+        return Arrays.equals(bytes1, from1, to1, bytes2, from2, to2);
         }
     }

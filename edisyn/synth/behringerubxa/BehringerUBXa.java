@@ -759,6 +759,9 @@ public class BehringerUBXa extends Synth {
             String key = (String)KeyToSysExPos[i];
             int[] pos = (int[])KeyToSysExPos[i+1];
             int val = parsePosData(data[pos[0]], pos.length>1?data[pos[1]]:-1, pos.length>2?data[pos[2]]:-1, pos.length>3?data[pos[3]]:-1);
+            for (int po : pos) {
+                System.out.println(po + "=" + data[po]);
+            }
             System.out.println(key+": "+val);
             getModel().set(key, val);
 
@@ -793,34 +796,25 @@ public class BehringerUBXa extends Synth {
         }
     }
 
-    static byte[] convertGrp(byte[] in) {
-        assert in.length == 8; // todo - support remainder
-        int l = in.length - 1;
-        byte[] out = new byte[l];
-        out[0] = (byte) ((0b01000000 & in[0]) + (0b01111111 & in[1]));
-        out[1] = (byte) ((0b00100000 & in[0]) + (0b01111111 & in[2]));
-        out[2] = (byte) ((0b00010000 & in[0]) + (0b01111111 & in[3]));
-        out[3] = (byte) ((0b00001000 & in[0]) + (0b01111111 & in[4]));
-        out[4] = (byte) ((0b00000100 & in[0]) + (0b01111111 & in[5]));
-        out[5] = (byte) ((0b00000010 & in[0]) + (0b01111111 & in[6]));
-        out[6] = (byte) ((0b00000001 & in[0]) + (0b01111111 & in[7]));
-        return out;
+    static byte[] unpack7b(byte[] data) {
+        java.io.ByteArrayOutputStream out = new java.io.ByteArrayOutputStream();
+        int offset = 0;
+        while (offset < data.length) {
+            int header = data[offset] & 0xFF;
+            int remaining = data.length - offset - 1;
+            if (remaining <= 0) break;
+            int chunkLen = Math.min(7, remaining);
+            for (int i = 0; i < chunkLen; i++) {
+                int msb = (header >> (6 - i)) & 0x01;
+                int payload = data[offset + 1 + i] & 0x7F; // ensure 7-bit payload
+                int value = payload | (msb << 7);
+                out.write(value);
+            }
+            offset += 8; // advance by full block (header + up to 7 bytes)
+        }
+        return out.toByteArray();
     }
 
-    static byte[] unpack7b(byte[] in) {
-        int groups = in.length / 8;
-        int remainder = in.length % 8;
-        assert remainder == 0 : "Remainder not yet supported";
-        int add = remainder == 0 ? 0 : remainder - 1;
-        byte[] out = new byte[groups * 7 + add];
-        for (int g = 0; g < groups; g++) {
-            byte[] grp = new byte[8];
-            System.arraycopy(in, g * 8, grp, 0, 8);
-            byte[] res = convertGrp(grp);
-            System.arraycopy(res, 0, out, g * 7, 7);
-        }
-        return out;
-    }
 
     @Override
     public void updateNumberAndBank(Patch patch){

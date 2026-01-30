@@ -1895,180 +1895,180 @@ public class MAudioVenom extends Synth
                 {
                 // TOP ROW
                 case 3:         // Filter cutoff Coarse
-                    {
-                    model.set("cutoff", (model.get("cutoff") % 128) + (data.value * 128));
-                    break;
-                    }
+                {
+                model.set("cutoff", (model.get("cutoff") % 128) + (data.value * 128));
+                break;
+                }
                 case 35:        // Filter cutoff fine
-                    {
-                    model.set("cutoff", ((model.get("cutoff") / 128) * 128) + data.value);
-                    break;
-                    }
+                {
+                model.set("cutoff", ((model.get("cutoff") / 128) * 128) + data.value);
+                break;
+                }
                 case 71:        // Filter Resonance
-                    {
-                    model.set("resonance", data.value);
-                    break;
-                    }
+                {
+                model.set("resonance", data.value);
+                break;
+                }
                 case 103:       // Modulation Depth Node 1      [by default, this is Env2 -> Filter Cutoff]
-                    {
-                    model.set("mod1scaling", data.value);
-                    break;
-                    }
+                {
+                model.set("mod1scaling", data.value);
+                break;
+                }
                 case 104:       // Modulation Depth Node 2      [by default, this is Keytrack -> Filter Cutoff]
-                    {
-                    model.set("mod2scaling", data.value);
-                    break;
-                    }
+                {
+                model.set("mod2scaling", data.value);
+                break;
+                }
                 case 70:        // VCF Type
-                    {
-                    // 0 = Off
-                    // 1 = 12db LP
-                    // 2 = 12db BP
-                    // 3 = 12db HP
-                    // 4 = 24db LP
-                    // 5 = 24db BP
-                    // 6 = 24db HP
-                    if (data.value <= 6)
-                        model.set("filtertype", data.value);
-                    break;
-                    }
+                {
+                // 0 = Off
+                // 1 = 12db LP
+                // 2 = 12db BP
+                // 3 = 12db HP
+                // 4 = 24db LP
+                // 5 = 24db BP
+                // 6 = 24db HP
+                if (data.value <= 6)
+                    model.set("filtertype", data.value);
+                break;
+                }
                         
                 // SECOND ROW
                 case 50:                // OSC3 -> OSC 1 FM
-                    {
-                    model.set("fmlevel", data.value);
-                    break;
-                    }
+                {
+                model.set("fmlevel", data.value);
+                break;
+                }
                 case 51:                // OSC1 * OSC2 Ring Mod Mix Level
-                    {
-                    model.set("ringmod", data.value);
-                    break;
-                    }
+                {
+                model.set("ringmod", data.value);
+                break;
+                }
                 case 30:                // OSC2 Coarse Tune?    52 = 16' 64 = 8' 72 = 4' 84 = 2'
-                    {
-                    model.set("osc2coarsetune", data.value);
-                    break;
-                    }
+                {
+                model.set("osc2coarsetune", data.value);
+                break;
+                }
                 case 62:                // OSC2 Fine Tune?    0 = -0.5 semitones ... 64 = none  127 = +0.5 semitones
-                    {
-                    model.set("osc2finetune", data.value);
-                    break;
-                    }
+                {
+                model.set("osc2finetune", data.value);
+                break;
+                }
                 case 31:                // OSC3 Coarse Tune?    52 = 16' 64 = 8' 72 = 4' 84 = 2'
-                    {
-                    model.set("osc3coarsetune", data.value);
-                    break;
-                    }
+                {
+                model.set("osc3coarsetune", data.value);
+                break;
+                }
                 case 63:                // OSC3 Fine Tune?    0 = -0.5 semitones ... 64 = none  127 = +0.5 semitones
-                    {
-                    model.set("osc3finetune", data.value);
-                    break;
-                    }
+                {
+                model.set("osc3finetune", data.value);
+                break;
+                }
 
                 // THIRD ROW
                 case 20:                // EG2 Attack?
-                    {
-                    model.set("env2attack", data.value);
-                    break;
-                    }
+                {
+                model.set("env2attack", data.value);
+                break;
+                }
                 case 22:                // EG2 Decay?
-                    {
-                    model.set("env2decay", data.value);
-                    break;
-                    }
+                {
+                model.set("env2decay", data.value);
+                break;
+                }
                 case 23:                // EG2 Sustain?
-                    {
-                    model.set("env2sustain", data.value);
-                    break;
-                    }
+                {
+                model.set("env2sustain", data.value);
+                break;
+                }
                 case 24:                // EG2 Release?  127 = release hold
-                    {
-                    model.set("env2release", data.value);
-                    break;
-                    }
+                {
+                model.set("env2release", data.value);
+                break;
+                }
 
                 // FOURTH ROW
                 case 73:                // EG1 Attack
-                    {
-                    model.set("env1attack", data.value);
-                    break;
-                    }
+                {
+                model.set("env1attack", data.value);
+                break;
+                }
                 case 75:                // EG1 Decay
-                    {
-                    model.set("env1decay", data.value);
-                    break;
-                    }
+                {
+                model.set("env1decay", data.value);
+                break;
+                }
                 case 79:                // EG1 Sustain
-                    {
-                    model.set("env1sustain", data.value);
-                    break;
-                    }
+                {
+                model.set("env1sustain", data.value);
+                break;
+                }
                 case 72:                // EG1 Release? 127 = release hold
-                    {
-                    model.set("env1release", data.value);
-                    break;
-                    }
+                {
+                model.set("env1release", data.value);
+                break;
+                }
                 case 126:               // Mono ON (poly off)
-                    {
-                    model.set("voicemode", 0);
-                    break;
-                    }
+                {
+                model.set("voicemode", 0);
+                break;
+                }
                 case 127:               // Poly ON (mono off)
-                    {
-                    model.set("voicemode", 1);
-                    break;
-                    }
+                {
+                model.set("voicemode", 1);
+                break;
+                }
 
 
                 // FIFTH ROW
                 case 86:                // LFO1 Rate 0..110, plus others
-                    {
-                    model.set("lfo1rate", data.value);
-                    break;
-                    }
+                {
+                model.set("lfo1rate", data.value);
+                break;
+                }
                 case 14:                // LFO2 Rate
-                    {
-                    model.set("lfo2rate", data.value);
-                    break;
-                    }
+                {
+                model.set("lfo2rate", data.value);
+                break;
+                }
                 case 15:                // LFO2 Wave            FIXME: (May have "Exponential Square", "Logarithmic Square" backwards?)
-                    {
-                    model.set("lfo2waveform", data.value);
-                    break;
-                    }
+                {
+                model.set("lfo2waveform", data.value);
+                break;
+                }
                 case 5:                 // Portamento (Glide) time
-                    {
-                    model.set("glidetime", data.value);
-                    break;
-                    }
+                {
+                model.set("glidetime", data.value);
+                break;
+                }
                 case 65:                // Portamento (Glide) <= 63 off >= 64 on
-                    {
-                    model.set("glidemode", (data.value < 64 ? 0 : 1));
-                    break;
-                    }
+                {
+                model.set("glidemode", (data.value < 64 ? 0 : 1));
+                break;
+                }
 
 
                 // SIXTH ROW
                 case 7:                 // "Synth Track Volume" (Channel volume)
-                    {
-                    model.set("channelvolume", data.value);
-                    break;
-                    }
+                {
+                model.set("channelvolume", data.value);
+                break;
+                }
                 case 10:                // Pan
-                    {
-                    model.set("channelpan", data.value);
-                    break;
-                    }
+                {
+                model.set("channelpan", data.value);
+                break;
+                }
                 case 91:                // "Reverb Send Level"  (AuxFX1 Send)
-                    {
-                    model.set("channelaux1send", data.value);
-                    break;
-                    }
+                {
+                model.set("channelaux1send", data.value);
+                break;
+                }
                 case 93:                // "Delay Send Level"   (AuxFX2 Send)
-                    {
-                    model.set("channelaux2send", data.value);
-                    break;
-                    }
+                {
+                model.set("channelaux2send", data.value);
+                break;
+                }
                 }
             }
         else if (data.type == Midi.CCDATA_TYPE_NRPN)
@@ -2078,34 +2078,34 @@ public class MAudioVenom extends Synth
                 // SECOND ROW
                 /// FIXME TEST THIS
                 case (2 * 128 + 125):   // 17D  OSC2 Sync <=63 OFF >= 64 ON             COARSE ONLY
-                    {
-                    model.set("osc2sync", (data.value / 128 < 64 ? 0 : 1));
-                    break;
-                    }
+                {
+                model.set("osc2sync", (data.value / 128 < 64 ? 0 : 1));
+                break;
+                }
                 /// FIXME TEST THIS
                 case (2 * 128 + 126):   // 17E  OSC3 Sync <=63 OFF >= 63 ON             COARSE ONLY
-                    {
-                    model.set("osc3sync", (data.value / 128 < 64 ? 0 : 1));
-                    break;
-                    }
+                {
+                model.set("osc3sync", (data.value / 128 < 64 ? 0 : 1));
+                break;
+                }
                                 
                 // THIRD ROW
                 /// FIXME TEST THIS
                 case (2 * 128 + 106):   // Unison Switch <=63 OFF >= 63 ON              COARSE ONLY
-                    {
-                    model.set("unisonmode", (data.value / 128 < 64 ? 0 : 1));
-                    break;
-                    }
+                {
+                model.set("unisonmode", (data.value / 128 < 64 ? 0 : 1));
+                break;
+                }
                         
                 // SIXTH ROW
                 /// FIXME TEST THIS
                 case (2 * 128 + 32):    // Insert Select  0 = OFF 1 = EQ  2 = compressor 3 = wah 4 = distortion 5 = "destructive" (reducer)    COARSE ONLY
-                    {
-                    int val = data.value / 128;
-                    if (val <= 5)
-                        model.set("channelfxtype", val);
-                    break;
-                    }
+                {
+                int val = data.value / 128;
+                if (val <= 5)
+                    model.set("channelfxtype", val);
+                break;
+                }
                 }
             }
 

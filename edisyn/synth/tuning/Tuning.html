@@ -11,6 +11,10 @@
 
 Synthesizers which adhere to MTS all have a <b>device number</b>.  You must set the <b>Synth ID</b> in Edisyn's MIDI Devices window (see the "Change MIDI" menu) to be the same as your synth's MTS device number.
 
+<br><br><h3>The Send As Individual Parameters button</h3>
+
+Some synthesizers, such as the Waldorf M, can only receive individual tuning note messages, not bulk dumps.  If you check this box, then Edisyn will send to current patch by sending each of the notes individually; otherwise (by default) it sends as a standard MTS bulk dump.
+
 <br><br><h3>About the Tuning Dials 0 ... 127</h3>
 
 MTS assigns a pitch to every MIDI note value from 0...127. Each of these knob pairs represents the frequency to assign to that value.

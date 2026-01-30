@@ -776,43 +776,43 @@ public class KawaiK5 extends Synth
                 switch (i)
                     {
                     case SAWTOOTH:
+                    {
+                    for(int h = start; h < end; h++)
                         {
-                        for(int h = start; h < end; h++)
-                            {
-                            setHarmonic(h, 1.0 / (initial + 1));
-                            initial++;
-                            }
+                        setHarmonic(h, 1.0 / (initial + 1));
+                        initial++;
                         }
+                    }
                     break;
                     case SQUARE:
+                    {
+                    for(int h = start + 1; h < end; h += 2)
                         {
-                        for(int h = start + 1; h < end; h += 2)
-                            {
-                            setHarmonic(h, 0);
-                            }
-
-                        for(int h = start; h < end; h += 2)
-                            {
-                            setHarmonic(h, 1.0 / (initial + 1));
-                            initial++;
-                            }
+                        setHarmonic(h, 0);
                         }
+
+                    for(int h = start; h < end; h += 2)
+                        {
+                        setHarmonic(h, 1.0 / (initial + 1));
+                        initial++;
+                        }
+                    }
                     break;
                     // This assumes all positive harmonics of course, which 
                     // is wrong but since humans can't hear phase differences...
                     case TRIANGLE:
+                    {
+                    for(int h = start + 1; h < end; h += 2)
                         {
-                        for(int h = start + 1; h < end; h += 2)
-                            {
-                            setHarmonic(h, 0);
-                            }
-
-                        for(int h = start; h < end; h += 2)
-                            {
-                            setHarmonic(h, 1.0 / ((initial + 1) * (initial + 1)));
-                            initial++;
-                            }
+                        setHarmonic(h, 0);
                         }
+
+                    for(int h = start; h < end; h += 2)
+                        {
+                        setHarmonic(h, 1.0 / ((initial + 1) * (initial + 1)));
+                        initial++;
+                        }
+                    }
                     break;
                     /*
                       case PSEUDO_TRIANGLE:
@@ -831,20 +831,20 @@ public class KawaiK5 extends Synth
                       break;
                     */
                     case ALL_OFF:
+                    {
+                    for(int h = start; h < end; h++)
                         {
-                        for(int h = start; h < end; h++)
-                            {
-                            setHarmonic(h, 0.0);
-                            }
+                        setHarmonic(h, 0.0);
                         }
+                    }
                     break;
                     case ALL_ON:
+                    {
+                    for(int h = start; h < end; h++)
                         {
-                        for(int h = start; h < end; h++)
-                            {
-                            setHarmonic(h, 1.0);
-                            }
+                        setHarmonic(h, 1.0);
                         }
+                    }
                     break;
                     }
                     
@@ -1174,83 +1174,83 @@ public class KawaiK5 extends Synth
         switch(constraints)
             {
             case ALL:
-                {
-                return true;
-                }
+            {
+            return true;
+            }
             case ODD:
-                {
-                return ((index & 0x1) == 0x0);  // yes, it looks backwards but it isn't
-                }
+            {
+            return ((index & 0x1) == 0x0);  // yes, it looks backwards but it isn't
+            }
             case EVEN:
-                {
-                return ((index & 0x1) == 0x1);  // yes, it looks backwards but it isn't
-                }
+            {
+            return ((index & 0x1) == 0x1);  // yes, it looks backwards but it isn't
+            }
             case FIRST_THIRD:
-                {
-                return (index % 3) == 0;
-                }
+            {
+            return (index % 3) == 0;
+            }
             case SECOND_THIRD:
-                {
-                return (index % 3) == 1;
-                }
+            {
+            return (index % 3) == 1;
+            }
             case THIRD_THIRD:
-                {
-                return (index % 3) == 2;
-                }
+            {
+            return (index % 3) == 2;
+            }
             case OCTAVE:
-                {
-                for(int i = 0; i < OCTAVE_HARMONICS.length; i++)
-                    if (OCTAVE_HARMONICS[i] == (index + 1)) return true;
-                return false; 
-                }
+            {
+            for(int i = 0; i < OCTAVE_HARMONICS.length; i++)
+                if (OCTAVE_HARMONICS[i] == (index + 1)) return true;
+            return false; 
+            }
             case FIFTH:
-                {
-                for(int i = 0; i < FIFTH_HARMONICS.length; i++)
-                    if (FIFTH_HARMONICS[i] == (index + 1)) return true;
-                return false; 
-                }
+            {
+            for(int i = 0; i < FIFTH_HARMONICS.length; i++)
+                if (FIFTH_HARMONICS[i] == (index + 1)) return true;
+            return false; 
+            }
             case MAJOR_THIRD:
-                {
-                for(int i = 0; i < MAJOR_THIRD_HARMONICS.length; i++)
-                    if (MAJOR_THIRD_HARMONICS[i] == (index + 1)) return true;
-                return false;                                           
-                }
+            {
+            for(int i = 0; i < MAJOR_THIRD_HARMONICS.length; i++)
+                if (MAJOR_THIRD_HARMONICS[i] == (index + 1)) return true;
+            return false;                                           
+            }
             case MINOR_SEVENTH:
-                {
-                for(int i = 0; i < MINOR_SEVENTH_HARMONICS.length; i++)
-                    if (MINOR_SEVENTH_HARMONICS[i] == (index + 1)) return true;
-                return false;                                           
-                }
+            {
+            for(int i = 0; i < MINOR_SEVENTH_HARMONICS.length; i++)
+                if (MINOR_SEVENTH_HARMONICS[i] == (index + 1)) return true;
+            return false;                                           
+            }
             case MAJOR_SECOND:
-                {
-                for(int i = 0; i < MAJOR_SECOND_HARMONICS.length; i++)
-                    if (MAJOR_SECOND_HARMONICS[i] == (index + 1)) return true;
-                return false;                                           
-                }
+            {
+            for(int i = 0; i < MAJOR_SECOND_HARMONICS.length; i++)
+                if (MAJOR_SECOND_HARMONICS[i] == (index + 1)) return true;
+            return false;                                           
+            }
             case MAJOR_SEVENTH:
-                {
-                for(int i = 0; i < MAJOR_SEVENTH_HARMONICS.length; i++)
-                    if (MAJOR_SEVENTH_HARMONICS[i] == (index + 1)) return true;
-                return false;                                           
-                }
+            {
+            for(int i = 0; i < MAJOR_SEVENTH_HARMONICS.length; i++)
+                if (MAJOR_SEVENTH_HARMONICS[i] == (index + 1)) return true;
+            return false;                                           
+            }
             case MINOR_SECOND:
-                {
-                for(int i = 0; i < MINOR_SECOND_HARMONICS.length; i++)
-                    if (MINOR_SECOND_HARMONICS[i] == (index + 1)) return true;
-                return false;                                           
-                }
+            {
+            for(int i = 0; i < MINOR_SECOND_HARMONICS.length; i++)
+                if (MINOR_SECOND_HARMONICS[i] == (index + 1)) return true;
+            return false;                                           
+            }
             case MINOR_THIRD:
-                {
-                for(int i = 0; i < MINOR_THIRD_HARMONICS.length; i++)
-                    if (MINOR_THIRD_HARMONICS[i] == (index + 1)) return true;
-                return false;                                           
-                }
+            {
+            for(int i = 0; i < MINOR_THIRD_HARMONICS.length; i++)
+                if (MINOR_THIRD_HARMONICS[i] == (index + 1)) return true;
+            return false;                                           
+            }
             case MAJOR_SIXTH:
-                {
-                for(int i = 0; i < MAJOR_SIXTH_HARMONICS.length; i++)
-                    if (MAJOR_SIXTH_HARMONICS[i] == (index + 1)) return true;
-                return false;                                           
-                }
+            {
+            for(int i = 0; i < MAJOR_SIXTH_HARMONICS.length; i++)
+                if (MAJOR_SIXTH_HARMONICS[i] == (index + 1)) return true;
+            return false;                                           
+            }
 
             }
         return false;

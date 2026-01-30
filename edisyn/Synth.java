@@ -1172,8 +1172,8 @@ public abstract class Synth extends JComponent implements Updatable
     public boolean getSendsParametersAfterWrite() { return false; }
 
     /** Override this to send special MIDI to the synthesizer after writeAllParameters().  This will NOT be called in other
-    	situations where emitAll(...) or emit(...) is called.   This exists to deal with a bug in the Blofeld which doesn't remove its
-    	"receiving sysex" screen after receiving a patch write.  */ 
+        situations where emitAll(...) or emit(...) is called.   This exists to deal with a bug in the Blofeld which doesn't remove its
+        "receiving sysex" screen after receiving a patch write.  */ 
     public void afterWriteHook() { return; }
 
     /** Return the filename of your default sysex file (for example "MySynth.init"). Should be located right next to the synth's class file ("MySynth.class") */
@@ -1486,8 +1486,17 @@ public abstract class Synth extends JComponent implements Updatable
 
     boolean receiveMIDI = true;     // we can receive MIDI
         
+    // The only purpose of this class is to contain both a message and the controller (0 is controller 1, 1 is controller 2)
+    // so we can display the controller as part of the "Receive next controller MIDI" command.        
+    class MidiInfo
+        {
+        MidiMessage message;
+        int controller;
+        public MidiInfo(MidiMessage m, int c) { message = m; controller = c; }
+        }
+                
     ArrayList<MidiMessage> inBuffer = new ArrayList<>();
-    ArrayList<MidiMessage> keyBuffer = new ArrayList<>();
+    ArrayList<MidiInfo> keyBuffer = new ArrayList<>();
         
     long lastTime = 0;
     Object timeLock = new Object[0];
@@ -1762,17 +1771,18 @@ public abstract class Synth extends JComponent implements Updatable
     
     /** The purpose of this function is to eliminate multiple CC messages in a row with the same parameter,
         so as to jump to the latest one. */
-    ArrayList<MidiMessage> reduceCC(ArrayList<MidiMessage> list)
+    ArrayList<MidiInfo> reduceCC(ArrayList<MidiInfo> list)
         {
         if (list.size() == 0) return list;
         
-        ArrayList<MidiMessage> newList = new ArrayList<>();
+        ArrayList<MidiInfo> newList = new ArrayList<>();
         MidiMessage lastMessage = null;
         
-        list = new ArrayList<MidiMessage>(list);                // make a copy
+        list = new ArrayList<MidiInfo>(list);                // make a copy
         Collections.reverse(list);                                              // we'll go from last to first.  Annoying that this reverses in place.
-        for(MidiMessage message : list)
+        for(MidiInfo info : list)
             {
+            MidiMessage message = info.message;
             if (message instanceof ShortMessage)                    // is it a short message?
                 {
                 ShortMessage s = (ShortMessage)message;
@@ -1788,7 +1798,7 @@ public abstract class Synth extends JComponent implements Updatable
                     }
                 else
                     {
-                    newList.add(s);                 // add it only if it's not a copy
+                    newList.add(info);                 // add it only if it's not a copy
                     }       
                 }
             lastMessage = message;                  // this is our last message now
@@ -1805,7 +1815,7 @@ public abstract class Synth extends JComponent implements Updatable
         {
         public void run()
             {
-            ArrayList<MidiMessage> temp = null;
+            ArrayList<MidiInfo> temp = null;
             while(true)
                 {
                 synchronized(keyReceiverLock)
@@ -1818,7 +1828,7 @@ public abstract class Synth extends JComponent implements Updatable
                                         
                     // Copy the keyBuffer
                     temp = keyBuffer;
-                    keyBuffer = new ArrayList<MidiMessage>();
+                    keyBuffer = new ArrayList<MidiInfo>();
                     }
                                         
                 // If we have more than one item, we should see if we can simplify it
@@ -1828,8 +1838,9 @@ public abstract class Synth extends JComponent implements Updatable
                     }
 
                 // process each message in the buffer
-                for(MidiMessage message : temp)
+                for(MidiInfo info : temp)
                     {
+                    MidiMessage message = info.message;
                     // I'm doing this in the Swing event thread because I figure it's multithreaded
                     try
                         {
@@ -1918,7 +1929,7 @@ public abstract class Synth extends JComponent implements Updatable
                                     }
                                 if (testIncomingControllerMIDI) 
                                     { 
-                                    showSimpleMessage("Incoming MIDI from Controller", "A MIDI message has arrived from the Controller:\n" + Midi.format(message)); 
+                                    showSimpleMessage("Incoming MIDI from Controller", "A MIDI message has arrived from Controller " + (info.controller + 1) + ":\n\n" + Midi.format(message)); 
                                     testIncomingControllerMIDI = false; 
                                     testIncomingController.setText("Report Next Controller MIDI");
                                     } 
@@ -1961,7 +1972,7 @@ public abstract class Synth extends JComponent implements Updatable
                 // Add to the key-receiver buffer and notify the thread that there's something there
                 synchronized(keyReceiverLock)
                     {
-                    keyBuffer.add(message);
+                    keyBuffer.add(new MidiInfo(message, 0));
                     if (receiveMIDI) 
                         {
                         keyReceiverLock.notifyAll();
@@ -1995,7 +2006,7 @@ public abstract class Synth extends JComponent implements Updatable
                 // Add to the key-receiver buffer and notify the thread that there's something there
                 synchronized(keyReceiverLock)
                     {
-                    keyBuffer.add(message);
+                    keyBuffer.add(new MidiInfo(message, 1));
                     if (receiveMIDI) 
                         {
                         keyReceiverLock.notifyAll();
@@ -6280,10 +6291,10 @@ menubar.add(helpMenu);
         afterWriteAllParametersHook();
         }
 
-	public void afterWriteAllParametersHook()
-		{
-		return;
-		}
+    public void afterWriteAllParametersHook()
+        {
+        return;
+        }
                 
     void doChangeMIDI()
         {
@@ -6725,8 +6736,8 @@ menubar.add(helpMenu);
         return newSynth;
         }
                 
-    void doUndo() { doUndo(true); }
-    void doUndo(boolean updateAndSend)
+    public void doUndo() { doUndo(true); }
+    public void doUndo(boolean updateAndSend)
         {
         setSendMIDI(false);
         if (model.equals(undo.top()))
@@ -6741,7 +6752,7 @@ menubar.add(helpMenu);
         if (updateAndSend) sendAllParameters();
         }
                 
-    void doRedo()
+    public void doRedo()
         {
         setSendMIDI(false);
         model = (Model)(undo.redo(getModel()));

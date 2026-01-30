@@ -918,6 +918,7 @@ public class Generic extends Synth
             model.set("cust-cc-value-" + i, ((data[pos++] << 7) | data[pos++]) );
             model.set("cust-cc-value-alt-" + i, ((data[pos++] << 7) | data[pos++]) );
             model.set("cust-cc-lsb-" + i, (data[pos++]));
+            model.set("cust-cc-realtime-" + i, (data[pos++]));
                         
             char[] name = new char[12];
             for(int j = 0; j < 12; j++)
@@ -933,6 +934,7 @@ public class Generic extends Synth
             model.set("cust-nrpn-value-" + i, ((data[pos++] << 7) | data[pos++]) );
             model.set("cust-nrpn-value-alt-" + i, ((data[pos++] << 7) | data[pos++]) );
             model.set("cust-nrpn-lsb-" + i, (data[pos++]));
+            model.set("cust-nrpn-realtime-" + i, (data[pos++]));
                         
             char[] name = new char[12];
             for(int j = 0; j < 12; j++)
@@ -948,6 +950,7 @@ public class Generic extends Synth
             model.set("cust-rpn-value-" + i, ((data[pos++] << 7) | data[pos++]) );
             model.set("cust-rpn-value-alt-" + i, ((data[pos++] << 7) | data[pos++]) );
             model.set("cust-rpn-lsb-" + i, (data[pos++]));
+            model.set("cust-rpn-realtime-" + i, (data[pos++]));
                         
             char[] name = new char[12];
             for(int j = 0; j < 12; j++)
@@ -960,6 +963,7 @@ public class Generic extends Synth
         for(int i = 0; i < 128; i++)
             {
             model.set("cc-" + i, (data[pos++]));
+            model.set("cc-realtime-" + i, (data[pos++]));
             char[] name = new char[20];
             for(int j = 0; j < 20; j++)
                 {
@@ -985,7 +989,7 @@ public class Generic extends Synth
 
         if (!toFile) return new byte[0];
         
-        byte[] sysex = new byte[HEADER + 1 + (18 * 19 * 3 + 128 * 21) + 7];
+        byte[] sysex = new byte[HEADER + 1 + (18 * 20 * 3 + 128 * 21) + 7];
         sysex[0] = (byte)0xF0;
         sysex[1] = (byte)0x7D;
         sysex[2] = (byte)'E';
@@ -1029,6 +1033,11 @@ public class Generic extends Synth
                 int val = model.get("cust-cc-lsb-" + i);
                 sysex[pos++] = (byte)val;
                 }
+                {
+                int val = model.get("cust-cc-realtime-" + i);
+                sysex[pos++] = (byte)val;
+                }
+                        
                         
             String s = model.get("cust-cc-value-name-" + i,"") + "                ";
             for(int j = 0; j < 12; j++)
@@ -1065,6 +1074,10 @@ public class Generic extends Synth
                 int val = model.get("cust-nrpn-lsb-" + i);
                 sysex[pos++] = (byte) val;
                 }
+                {
+                int val = model.get("cust-nrpn-realtime-" + i);
+                sysex[pos++] = (byte)val;
+                }
             String s = model.get("cust-nrpn-value-name-" + i,"") + "                ";
             for(int j = 0; j < 12; j++)
                 {
@@ -1100,6 +1113,10 @@ public class Generic extends Synth
                 int val = model.get("cust-rpn-lsb-" + i);
                 sysex[pos++] = (byte) val;
                 }
+                {
+                int val = model.get("cust-rpn-realtime-" + i);
+                sysex[pos++] = (byte)val;
+                }
             String s = model.get("cust-rpn-value-name-" + i,"") + "                ";
             for(int j = 0; j < 12; j++)
                 {
@@ -1113,6 +1130,10 @@ public class Generic extends Synth
                 {
                 int val = model.get("cc-" + i);
                 sysex[pos++] = (byte) val;
+                }
+                {
+                int val = model.get("cc-realtime-" + i);
+                sysex[pos++] = (byte)val;
                 }
                 {
                 String s = model.get("cc-name-" + i,"") + "                    ";

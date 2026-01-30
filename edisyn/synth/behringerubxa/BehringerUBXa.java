@@ -1,6 +1,7 @@
 package edisyn.synth.behringerubxa;
 
 import edisyn.Midi;
+import edisyn.Patch;
 import edisyn.Synth;
 import edisyn.gui.*;
 
@@ -12,6 +13,7 @@ import java.util.Arrays;
 import static edisyn.synth.behringerubxa.BehringerUBXaRec.EOF;
 import static edisyn.synth.behringerubxa.BehringerUBXaRec.SysExHeader;
 import static edisyn.synth.behringerubxa.ParameterList.*;
+
 
 public class BehringerUBXa extends Synth {
 
@@ -25,6 +27,7 @@ public class BehringerUBXa extends Synth {
 
     private final java.util.List<String> usedKeys = new ArrayList<>();
 
+    private byte[] lastDump;
 
     public static String getSynthName() {
         return "Behringer UB-Xa";
@@ -667,16 +670,108 @@ public class BehringerUBXa extends Synth {
         return hexString.toString().trim();
     }
 
+    public static int parsePosData(int main1, int main2, int aux1, int aux2) {
+        int b0;
+        int b1;
+        int b2;
+        int b3;
+        int b4;
+        if (main2 == -1) {
+            b0 = (main1 >> 0) & 1;
+            b1 = (main1 >> 1) & 1;
+            b2 = 0;
+            b3 = 0;
+            b4 = 0;
+        } else {
+            b0 = (main1 >> 2) & 1;
+            b1 = (main1 >> 3) & 1;
+            b2 = (main1 >> 4) & 1;
+            b3 = (main1 >> 5) & 1;
+            b4 = (main1 >> 6) & 1;
+        }
+
+        int b5;
+        if (aux2 !=-1) {
+            b5 = (aux2 >> 7) & 1;
+        } else if(aux1 != -1) {
+            b5 = (aux1 >> 7) & 1;
+        } else {
+            b5 = 0;
+        }
+
+        int b6;
+        int b7;
+        int b8;
+        int b9;
+        int b10;
+        int b11;
+        int b12;
+        if (main2 != -1) {
+            b6 = (main2 >> 0) & 1;
+            b7 = (main2 >> 1) & 1;
+            b8 = (main2 >> 2) & 1;
+            b9 = (main2 >> 3) & 1;
+            b10 = (main2 >> 4) & 1;
+            b11 = (main2 >> 5) & 1;
+            b12 = (main2 >> 6) & 1;
+        } else {
+            b6 = 0;
+            b7 = 0;
+            b8 = 0;
+            b9 = 0;
+            b10 = 0;
+            b11 = 0;
+            b12 = 0;
+        }
+
+        int b13;
+
+        if(aux2 != -1) {
+            b13 = (aux1 >> 7) & 1;
+        } else if (main2 != -1){
+            b13 = (aux1 >> 7) & 1;
+        } else {
+            b13 = 0;
+        }
+
+        // Reconstruct the 14-bit value from the scattered bits
+        int value = b0 | (b1 << 1) | (b2 << 2) | (b3 << 3) | (b4 << 4) | (b5 << 5) |
+                        (b6 << 6) | (b7 << 7) | (b8 << 8) | (b9 << 9) | (b10 << 10) |
+        (b11 << 11) | (b12 << 12) | (b13 << 13);
+
+        return value;
+    }
+
     public boolean parsePatch() {
         int length = 0;
         for (byte[] b : this.patchDump) {
             length += b.length;
         }
         byte[] data = new byte[length];
+
         int dstPos = 0;
         for (byte[] b : this.patchDump) {
             System.arraycopy(b, 0, data, dstPos, b.length);
+            dstPos += b.length;
         }
+
+        for(int i=0; i<KeyToSysExPos.length; i+=2){
+            String key = (String)KeyToSysExPos[i];
+            int[] pos = (int[])KeyToSysExPos[i+1];
+            int val = parsePosData(data[pos[0]], pos.length>1?data[pos[1]]:-1, pos.length>2?data[pos[2]]:-1, pos.length>3?data[pos[3]]:-1);
+            System.out.println(key+": "+val);
+            getModel().set(key, val);
+
+        }
+
+        if(lastDump != null){
+            for  (int i = 0; i < lastDump.length; i++) {
+                if(data[i] != lastDump[i]) {
+                    System.out.println("diff " + i+": "+lastDump[i] + " != " + data[i]);
+                }
+            }
+        }
+        this.lastDump = data;
         for (int i = 0; i < SysExPosToKeyAndSize.length; i += 3) {
             int pos = (int) SysExPosToKeyAndSize[i];
             String key = (String) SysExPosToKeyAndSize[i + 1];
@@ -702,13 +797,13 @@ public class BehringerUBXa extends Synth {
         assert in.length == 8; // todo - support remainder
         int l = in.length - 1;
         byte[] out = new byte[l];
-        out[0] = (byte) ((0b0100000 & in[0]) + (0b01111111 & in[1]));
-        out[1] = (byte) ((0b0010000 & in[0]) + (0b01111111 & in[2]));
-        out[2] = (byte) ((0b0010000 & in[0]) + (0b01111111 & in[3]));
-        out[3] = (byte) ((0b0001000 & in[0]) + (0b01111111 & in[4]));
-        out[4] = (byte) ((0b0000100 & in[0]) + (0b01111111 & in[5]));
-        out[5] = (byte) ((0b0000010 & in[0]) + (0b01111111 & in[6]));
-        out[6] = (byte) ((0b0000001 & in[0]) + (0b01111111 & in[7]));
+        out[0] = (byte) ((0b01000000 & in[0]) + (0b01111111 & in[1]));
+        out[1] = (byte) ((0b00100000 & in[0]) + (0b01111111 & in[2]));
+        out[2] = (byte) ((0b00010000 & in[0]) + (0b01111111 & in[3]));
+        out[3] = (byte) ((0b00001000 & in[0]) + (0b01111111 & in[4]));
+        out[4] = (byte) ((0b00000100 & in[0]) + (0b01111111 & in[5]));
+        out[5] = (byte) ((0b00000010 & in[0]) + (0b01111111 & in[6]));
+        out[6] = (byte) ((0b00000001 & in[0]) + (0b01111111 & in[7]));
         return out;
     }
 
@@ -728,7 +823,13 @@ public class BehringerUBXa extends Synth {
     }
 
     @Override
+    public void updateNumberAndBank(Patch patch){
+        int i = 42;
+    }
+
+    @Override
     public int parse(byte[] data, boolean fromFile) {
+
         if (data.length == EOF.length &&
                 BehringerUBXaRec.msgStartsWith(data, BehringerUBXaRec.EOF)
         ) return parsePatch() ? PARSE_SUCCEEDED : PARSE_FAILED;
@@ -745,17 +846,17 @@ public class BehringerUBXa extends Synth {
 
             int packageLength = data[12] + 1;
             int offset = 13; // the extra
-            if (packetNum == 0) {
+//            if (packetNum == 0) {
 
 
                 byte[] encodedData = Arrays.copyOfRange(data, offset, offset + packageLength);
                 verify7bitizedData(encodedData);
                 byte[] decodedData = unpack7b(encodedData);
-
                 // TODO - how to interpret the decoded data
 
-            }
-            patchDump.add(Arrays.copyOfRange(data, offset, packageLength + offset));
+//            }
+//            patchDump.add(Arrays.copyOfRange(data, offset, packageLength + offset));
+            patchDump.add(decodedData);
         }
         return PARSE_INCOMPLETE;
     }

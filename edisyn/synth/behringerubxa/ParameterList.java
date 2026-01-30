@@ -276,4 +276,7 @@ public class ParameterList {
             34, "EnvelopesLoudnessR",2,
     };
 
+    public static final Object[] KeyToSysExPos = {
+            "FilterFrequency", new int[]{54, 55, 49, 50},
+    };
 }

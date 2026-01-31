@@ -41,7 +41,7 @@ public enum Boundaries implements Boundary {
     DELAY_SYNC_RATES(Stream.of(SYNC_RATES.values).limit(20)),
     ARP_SYNC_RATES(Stream.of(SYNC_RATES.values)
             // we skip the "N/A" here, since it can also not be selected on the device
-            // (unlike what is mentioned in the spec/manual
+            // (unlike what is mentioned in the spec/manual)
             .skip(1)
             .limit(16)),
     ARP_NON_SYNC_RATES(0, 127, -64), // 64 -> 191 BPM

@@ -1,14 +1,10 @@
 package edisyn.synth.novationastation;
 
-import edisyn.Model;
 import edisyn.Synth;
-import edisyn.Updatable;
 import edisyn.gui.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;

@@ -30,7 +30,9 @@ interface Convertor {
     OptionalInt getNRPN();
 
     // get restrictions
-    Boundary getBoundary();
+    default Boundary getBoundary() {
+        return Boundaries.NONE;
+    }
 
     // create straight convertor
     static Convertor createStraight(String key, Integer byteIndex, Integer cc, Integer nrpn, Boundary boundary) {

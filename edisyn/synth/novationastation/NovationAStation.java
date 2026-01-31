@@ -145,6 +145,7 @@ public class NovationAStation extends Synth {
             SysexMessage message = SysexMessage.parse(data);
             model.set(KEY_SOFTWARE_VERSION, message.getSoftwareVersion());
             model.set(KEY_VERSION_INCREMENT, message.getVersionIncrement());
+            //System.out.println("version:" + message.getFullVersion());
             //model.set(KEY_FULL_VERSION, message.getFullVersion());
             // update bank + program
             SysexMessage.Type type = message.getType();

@@ -190,7 +190,7 @@ class SysexMessage {
         byte softwareVersion = getSoftwareVersion();
         int major = softwareVersion >> 3;
         int minor = softwareVersion & 0x7;
-        return major + "." + minor + "." + getVersionIncrement();
+        return major + "." + minor + "." + String.format("%02d", getVersionIncrement());
         }
 
     private byte[] validate(byte[] bytes) {

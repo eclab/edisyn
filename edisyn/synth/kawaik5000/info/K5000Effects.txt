@@ -1,0 +1,372 @@
+/// K5000 EFFECTS
+///
+/// Sean Luke sean@cs.gmu.edu 2026
+///
+/// The following table describes every parameter of every effect,
+/// including its name, position, default value, range, and when appropriate,
+/// units of measure. It is largely derived from page 123 of the K5000 manual,
+/// plus analysis from the unit itself.  The structure is as follows:
+///
+/// EFFECT NAME
+///		PARAM#	[NAME			DEFAULT_VAL	RANGE... [, UNITS]]
+///		...[five times]...
+///
+/// The table is tab-delimited to make it easier to parse into code if need be
+/// with judicious use of grep, awk, etc.
+///
+/// There are three effects categories:  REVERB, EFFECTS, and EQ
+
+
+/// REVERB
+
+Hall 1 (Standard)
+	1	Dry/Wet 1				85	0-100
+	2	Dry/Wet 2				85	0-100
+	3	Reverb Time				1.5	0.3-5.0, sec
+	4	Predelay Time			30	0-100, ms
+	5	High Frequency Damping	25	1-100
+	
+Hall 2 (Small)
+	1	Dry/Wet 1				40	0-100
+	2	Dry/Wet 2				40	0-100
+	3	Reverb time				1.5	0.3-5.0, sec
+	4	Predelay Time			50	0-100, ms
+	5	High Frequency Damping	5	1-100
+
+Hall 3 (Bright)
+	1	Dry/Wet 1				70	0-100
+	2	Dry/Wet 2				70	0-100
+	3	Reverb time				3.0	0.3-5.0, sec
+	4	Predelay Time			60	0-100, ms
+	5	High Frequency Damping	25	1-100
+
+Room 1 (Standard)
+	1	Dry/Wet 1				85	0-100
+	2	Dry/Wet 2				85	0-100
+	3	Reverb Time				0.6	0.3-5.0, sec
+	4	Predelay Time			5	0-100, ms
+	5	High Frequency Damping	15	1-100
+
+Room 2 (Large)
+	1	Dry/Wet 1				80	0-100
+	2	Dry/Wet 2				80	0-100
+	3	Reverb Time				1.0	0.3-5.0, sec
+	4	Predelay Time			30	0-100, ms
+	5	High Frequency Damping	5	1-100
+
+Room 3 (Bright)
+	1	Dry/Wet 1				65	0-100
+	2	Dry/Wet 2				65	0-100
+	3	Reverb Time				1.5	0.3-5.0, sec
+	4	Predelay Time			40	0-100, ms
+	5	High Frequency Damping	40	1-100
+
+Plate 1 (Large)
+	1	Dry/Wet 1				70	0-100
+	2	Dry/Wet 2				70	0-100
+	3	Reverb Time				1.0	0.3-5.0, sec
+	4	Predelay Time			5	0-100, ms
+	5	High Frequency Damping	5	1-100
+
+Plate 2 (Small)
+	1	Dry/Wet 1				80	0-100
+	2	Dry/Wet 2				80	0-100
+	3	Reverb Time				2.0	0.3-5.0, sec
+	4	Predelay Time			30	0-100, ms
+	5	High Frequency Damping	20	1-100
+
+Plate 3 (Mellow)
+	1	Dry/Wet 1				70	0-100
+	2	Dry/Wet 2				70	0-100
+	3	Reverb Time				3.0	0.3-5.0, sec
+	4	Predelay Time			40	0-100, ms
+	5	High Frequency Damping	40	1-100
+
+Reverse
+	1	Dry/Wet 1				0	0-100
+	2	Dry/Wet 2				0	0-100
+	3	Feedback				10	1-100
+	4	Predelay Time			0	0-100, ms
+	5	High Frequency Damping	20	1-100
+
+Long Delay
+	1	Dry/Wet 1				40	0-100
+	2	Dry/Wet 2				40	0-100
+	3	Feedback				100	1-100
+	4	Delay Time				500	200-1470 by 10, ms
+	5	High Frequency Damping	20	1-100
+
+
+//// EFFECTS
+
+Early Reflections 1
+	1	Dry/Wet					30	0-100
+	2	Slope					1	0-100
+	3	
+	4	Predelay Time			5	0-100, sec
+	5	Feedback				10	1-100
+
+Early Reflections 2
+	1	Dry/Wet					60	0-100
+	2	Slope					19	0-100
+	3	
+	4	Predelay Time			35	0-100, sec
+	5	Feedback				50	1-100
+
+Tap Delay 1
+	1	Delay Level				100	1-100
+	2	Delay Time 1			150	0-100 by 2, 100-250 by 5, 250-720 by 10, ms
+	3	Tap Level				90	1-100
+	4	Delay Time 2			175	0-100 by 2, 100-250 by 5, 250-720 by 10, ms
+	5	Feedback				50	1-100
+
+Tap Delay 2
+	1	Delay Level				100	1-100
+	2	Delay Time 1			150	0-100 by 2, 100-250 by 5, 250-720 by 10, ms
+	3	Tap Level				80	1-100
+	4	Delay Time 2			250	0-100 by 2, 100-250 by 5, 250-720 by 10, ms
+	5	Feedback				55	1-100
+
+Single Delay
+	1	Delay Level				25	1-100
+	2	
+	3	Delay Fine				0	0-9, ms
+	4	Delay Coarse			500	0-1270 by 10, ms
+	5	Feedback				50	1-100
+
+Dual Delay
+	1	Delay Level				35	1-100
+	2	Delay Time L			150	0-100 by 2, 100-250 by 5, 250-720 by 10, ms
+	3	Feedback L				60	1-100
+	4	Delay Time R			230	0-100 by 2, 100-250 by 5, 250-720 by 10, ms
+	5	Feedback R				33	1-100
+/// NOTE: L is "1" on the chart and R is "2", but they're L and R on the unit
+
+Stereo Delay
+	1	Delay Level				40	1-100
+	2	
+	3	
+	4	Delay Time				250	0-100 by 2, 100-250 by 5, 250-720 by 10, ms
+	5	Feedback				55	1-100
+
+Cross Delay
+	1	Delay Level				50	1-100
+	2	
+	3	
+	4	Delay Time				200	0-100 by 2, 100-250 by 5, 250-720 by 10, ms
+	5	Feedback				60	1-100
+
+Auto Pan
+	1	Dry/Wet					24	0-100
+	2	Speed					14	1-100
+	3	Depth					91	1-100
+	4	Predelay Time			32	0-100, ms
+	5	Wave					"Sin"	"Sin", "Tri"
+
+Auto Pan and Delay
+	1	Dry/Wet					24	0-100
+	2	Speed					14	1-100
+	3	Depth					91	1-100
+	4	Delay Time				150	0-200 by 2, ms
+	5	Wave					"Sin"	"Sin", "Tri"
+
+Chorus 1
+	1	Dry/Wet					50	0-100
+	2	Speed					6	1-100
+	3	Depth					75	1-100
+	4	Predelay Time			28	0-100, ms
+	5	Wave					"Sin"	"Sin", "Tri"
+
+Chorus 2
+	1	Dry/Wet					50	0-100
+	2	Speed					6	1-100
+	3	Depth					75	1-100
+	4	Predelay Time			28	0-100, ms
+	5	Wave					"Sin"	"Sin", "Tri"
+
+Chorus 1 and Delay
+	1	Dry/Wet					6	0-100
+	2	Speed					6	1-100
+	3	Depth					75	1-100
+	4	Delay Time				150	0-200 by 2, ms
+	5	Wave					"Sin"	"Sin", "Tri"
+
+Chorus 2 and Delay
+	1	Dry/Wet					0	0-100
+	2	Speed					6	1-100
+	3	Depth					75	1-100
+	4	Delay Time				150	0-200 by 2, ms
+	5	Wave					"Sin"	"Sin", "Tri"
+
+Flanger 1
+	1	Dry/Wet					52	0-100
+	2	Speed					9	1-100
+	3	Depth					54	1-100
+	4	Predelay Time			0	0-100, ms
+	5	Feedback				46	1-100
+
+Flanger 2
+	1	Dry/Wet					50	0-100
+	2	Speed					6	1-100
+	3	Depth					75	1-100
+	4	Predelay Time			0	0-100, ms
+	5	Feedback				50	1-100
+
+Flanger 1 and Delay				
+	1	Dry/Wet					52	0-100
+	2	Speed					9	1-100
+	3	Depth					54	1-100
+	4	Delay Time				100	0-200 by 2, ms
+	5	Feedback				46	1-100
+
+Flanger 2 and Delay
+	1	Dry/Wet					50	0-100
+	2	Speed					6	1-100
+	3	Depth					75	1-100
+	4	Delay Time				60	0-200 by 2, ms
+	5	Feedback				50	1-100
+
+Ensemble
+	1	Dry/Wet					35	0-100
+	2	
+	3	Depth					75	1-100
+	4	Predelay Time			40	0-100, ms
+	5	
+
+Ensemble and Delay
+	1	Dry/Wet					35	0-100
+	2	
+	3	Depth					75	1-100
+	4	Delay Time				200	0-200 by 2, ms
+	5	
+
+Celeste
+	1	Dry/Wet					50	0-100
+	2	Speed					6	1-100
+	3	Depth					75	1-100
+	4	Predelay Time			80	0-100, ms
+	5	
+
+Celeste and Delay
+	1	Dry/Wet					50	0-100
+	2	Speed					6	1-100
+	3	Depth					75	1-100
+	4	Delay Time				200	0-200 by 2, ms
+	5	
+
+Tremelo
+	1	Dry/Wet					30	0-100
+	2	Speed					53	1-100
+	3	Depth					49	1-100
+	4	Predelay Time			0	0-100, ms
+	5	Wave					"Sin"	"Sin", "Tri"
+
+Tremelo and Delay
+	1	Dry/Wet					30	0-100
+	2	Speed					53	1-100
+	3	Depth					49	1-100
+	4	Delay Time				170	0-200 by 2, ms
+	5	Wave					"Sin"	"Sin", "Tri"
+
+Phaser 1
+	1	Dry/Wet					10	0-100
+	2	Speed					5	1-100
+	3	Depth					93	1-100
+	4	Predelay Time			0	0-100, ms
+	5	Feedback				80	1-100
+
+Phaser 2
+	1	Dry/Wet					60	0-100
+	2	Speed					4	1-100
+	3	Depth					75	1-100
+	4	Predelay Time			80	0-100, ms
+	5	Feedback				80	1-100
+
+Phaser 1 and Delay
+	1	Dry/Wet					30	0-100
+	2	Speed					6	1-100
+	3	Depth					75	1-100
+	4	Delay Time				200	0-200 by 2, ms
+	5	Feedback				80	1-100
+
+Phaser 2 and Delay
+	1	Dry/Wet					80	0-100
+	2	Speed					7	1-100
+	3	Depth					100	1-100
+	4	Delay Time				200	0-200 by 2, ms
+	5	Feedback				50	1-100
+
+Rotary
+	1	Dry/Wet					15	0-100
+	2	Slow Speed				8	1-20
+	3	Fast Speed				71	20-100
+	4	Acceleration			5	1-10
+	5	Slow/Fast				"Fast"	"Slow", "Fast"
+
+Auto Wah
+	1	Dry/Wet					0	0-100
+	2	Sense					60	1-100
+	3	Frequency Bottom		30	1-100
+	4	Frequency Top			80	1-100
+	5	Resonance				50	1-100
+
+Bandpass Filter
+	1	Dry/Wet					0	0-100
+	2	Center Frequency		50	1-100
+	3	Bandwidth				50	1-100
+	4	
+	5	
+
+Exciter
+	1	Dry/Wet					0	0-100
+	2	EQ Low					0	-12-+12, dB
+	3	EQ High					0	-12-+12, dB
+	4	
+	5	Intensity				50	1-100
+
+Enhancer
+	1	Dry/Wet					0	0-100
+	2	EQ Low					0	-12-+12, dB
+	3	EQ High					0	-12-+12, dB
+	4	
+	5	Intensity				50	1-100
+
+Overdrive
+	1	Dry/Wet					0	0-100
+	2	EQ Low					0	-12-+12, dB
+	3	EQ High					0	-12-+12, dB
+	4	Output Level			50	1-100
+	5	Drive					50	1-100
+
+Distortion
+	1	Dry/Wet					0	0-100
+	2	EQ Low					0	-12-+12, dB
+	3	EQ High					0	-12-+12, dB
+	4	Output Level			50	1-100
+	5	Drive					50	1-100
+
+Overdrive and Delay
+	1	Dry/Wet					0	0-100
+	2	EQ Low					0	-12-+12, dB
+	3	EQ High					0	-12-+12, dB
+	4	Delay Time				150	0-200 by 2, ms
+	5	Drive					50	1-100
+
+Distortion and Delay
+	1	Dry/Wet					0	0-100
+	2	EQ Low					0	-12-+12, dB
+	3	EQ High					0	-12-+12, dB
+	4	Delay Time				150	0-200 by 2, ms
+	5	Drive					50	1-100
+
+
+/// EQ
+
+EQ
+	1	100						0	-6-+6, dB
+	2	200						0	-6-+6, dB
+	3	450						0	-6-+6, dB
+	4	1K						0	-6-+6, dB
+	5	2K						0	-6-+6, dB
+	6	4K						0	-6-+6, dB
+	7	8K						0	-6-+6, dB

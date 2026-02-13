@@ -55,6 +55,9 @@ import java.util.*;
 
 public class EnvelopeDisplay extends JComponent implements Updatable
     {
+    public static final int STYLE_ENVELOPE = 0;
+    public static final int STYLE_LINES = 1;
+
     ArrayList verticalDividers = new ArrayList();
     
     double xConstants[];
@@ -73,6 +76,10 @@ public class EnvelopeDisplay extends JComponent implements Updatable
     double yOffset = 0.0;
     boolean signed = false;
     boolean filled = true;
+    int style = STYLE_ENVELOPE;
+    
+    public int getStyle() { return style; }
+    public void setStyle(int val) { style = val; }
     
     EnvelopeDisplay[] children = null;
     
@@ -227,15 +234,16 @@ public class EnvelopeDisplay extends JComponent implements Updatable
             {
             public void mouseDragged(MouseEvent e)
                 {
-                highlightIndex = highlightIndex(mouseToX(e.getX()), mouseToY(e.getY()), true);
-                updateFromMouse(mouseToX(e.getX()), mouseToY(e.getY()), true);
+                highlightIndex = highlightIndex(mouseToX(e.getX()), mouseToY(e.getY()), true, e);
+                updateFromMouse(mouseToX(e.getX()), mouseToY(e.getY()), true, e);
                 updateHighlightIndex(highlightIndex);
                 repaint();
                 }
                                 
+/*
             public void mouseEntered(MouseEvent e)
                 {
-                highlightIndex = highlightIndex(mouseToX(e.getX()), mouseToY(e.getY()), false);
+                highlightIndex = highlightIndex(mouseToX(e.getX()), mouseToY(e.getY()), false, e);
                 updateHighlightIndex(highlightIndex);
                 repaint();
                 }
@@ -246,10 +254,10 @@ public class EnvelopeDisplay extends JComponent implements Updatable
                 updateHighlightIndex(highlightIndex);
                 repaint();
                 }
-                                
+*/                                
             public void mouseMoved(MouseEvent e)
                 {
-                highlightIndex = highlightIndex(mouseToX(e.getX()), mouseToY(e.getY()), false);
+                highlightIndex = highlightIndex(mouseToX(e.getX()), mouseToY(e.getY()), false, e);
                 updateHighlightIndex(highlightIndex);
                 repaint();
                 }
@@ -257,8 +265,8 @@ public class EnvelopeDisplay extends JComponent implements Updatable
             public void mousePressed(MouseEvent e)
                 {
                 mouseDown();
-                highlightIndex = highlightIndex(mouseToX(e.getX()), mouseToY(e.getY()), false);
-                updateFromMouse(mouseToX(e.getX()), mouseToY(e.getY()), false);
+                highlightIndex = highlightIndex(mouseToX(e.getX()), mouseToY(e.getY()), false, e);
+                updateFromMouse(mouseToX(e.getX()), mouseToY(e.getY()), false, e);
                 updateHighlightIndex(highlightIndex);
                 repaint();
                 if (releaseListener != null)
@@ -281,7 +289,7 @@ public class EnvelopeDisplay extends JComponent implements Updatable
                             if (releaseListener != null)
                                 {
                                 mouseUp();
-                                highlightIndex = highlightIndex(mouseToX(e.getX()), mouseToY(e.getY()), true);
+                                highlightIndex = highlightIndex(mouseToX(e.getX()), mouseToY(e.getY()), true, e);
                                 updateHighlightIndex(highlightIndex);
                                 Toolkit.getDefaultToolkit().removeAWTEventListener( releaseListener );
                                 repaint();
@@ -297,7 +305,7 @@ public class EnvelopeDisplay extends JComponent implements Updatable
                 if (releaseListener == null)
                     {
                     mouseUp();
-                    highlightIndex = highlightIndex(mouseToX(e.getX()), mouseToY(e.getY()), true);
+                    highlightIndex = highlightIndex(mouseToX(e.getX()), mouseToY(e.getY()), true, e);
                     updateHighlightIndex(highlightIndex);
                     repaint();
                     }
@@ -317,11 +325,18 @@ public class EnvelopeDisplay extends JComponent implements Updatable
     int highlightIndex = NO_HIGHLIGHT;
 
     public static final int NO_HIGHLIGHT = -1;
+    public int highlightIndex(double x, double y, boolean continuation, MouseEvent evt)
+        {
+        return highlightIndex(x, y, continuation);
+        }
     public int highlightIndex(double x, double y, boolean continuation)
         {
         return NO_HIGHLIGHT;
         }
-                
+        
+    public void setHighlightIndex(int index) { highlightIndex = index; updateHighlightIndex(highlightIndex); }
+    public int getHighlightIndex() { return highlightIndex; }
+    
     public void updateHighlightIndex(int index) { }
         
     double mouseToX(double x)
@@ -339,6 +354,11 @@ public class EnvelopeDisplay extends JComponent implements Updatable
         }
 
         
+    public void updateFromMouse(double x, double y, boolean continuation, MouseEvent evt)
+        {
+        updateFromMouse(x, y, continuation);
+        }
+
     public void updateFromMouse(double x, double y, boolean continuation)
         {
         }
@@ -553,7 +573,26 @@ public class EnvelopeDisplay extends JComponent implements Updatable
         Path2D.Double p = new Path2D.Double();
         Ellipse2D.Double marker[] = new Ellipse2D.Double[xs.length];
 
-        if (stepping)
+		if (style == STYLE_LINES)
+			{
+            double centering = rect.width / xs.length / 2.0;
+			Color unset = Style.ENVELOPE_UNSET_COLOR();
+
+            for(int i = 0; i < xs.length; i++)
+                {
+	        if (!constrainTo(i)) graphics.setColor(unset);
+			else graphics.setColor(color);
+
+                line = new Line2D.Double(rect.x + xs[i] + centering, rect.y + rect.height, rect.x + xs[i] + centering, rect.y + rect.height - ys[i]);
+                graphics.draw(line);
+                marker[i] = new Ellipse2D.Double((rect.x + xs[i]  + centering - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0),
+                    (rect.y + rect.height - ys[i] - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0),
+                    Style.ENVELOPE_DISPLAY_MARKER_WIDTH(), Style.ENVELOPE_DISPLAY_MARKER_WIDTH());
+                } 
+			}
+        else 
+        	{
+        	if (stepping)
             {
             double centering = rect.width / xs.length / 2.0;
                 
@@ -632,6 +671,7 @@ public class EnvelopeDisplay extends JComponent implements Updatable
         if (asLink)
             graphics.setColor(Style.ENVELOPE_UNSET_COLOR());                
         graphics.draw(p);
+        }
         
         // draw dividers
         if (verticalDividers.size() > 0)
@@ -660,7 +700,9 @@ public class EnvelopeDisplay extends JComponent implements Updatable
             else
                 graphics.setColor(getMarkerColor(i, color));
             if (!asLink)
+            	{
                 graphics.fill(marker[i]);
+                }
             }
         
         // draw axis

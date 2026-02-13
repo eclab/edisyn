@@ -940,7 +940,7 @@ public static final int ALL_ON = 4;
         vbox.add(comp);
         comp = new Chooser("Switch 2", this, "sw2parameter", params);
         vbox.add(comp);
-        comp = new Chooser("Foot Switch 1", this, "fsw2parameter", params);
+        comp = new Chooser("Foot Switch 1", this, "fsw1parameter", params);
         vbox.add(comp);
         comp = new Chooser("Foot Switch 2", this, "fsw2parameter", params);
         vbox.add(comp);
@@ -1732,7 +1732,7 @@ public static final int ALL_ON = 4;
         vbox.add(comp);
 
         params = DESTINATIONS;
-        comp = new Chooser("Expression Destination 1", this, "source" + source + "wheeldestination1", params);
+        comp = new Chooser("Expression Destination 1", this, "source" + source + "expressdestination1", params);
         vbox.add(comp);
 
         params = DESTINATIONS;
@@ -1755,7 +1755,7 @@ public static final int ALL_ON = 4;
         vbox.add(comp);
 
         params = DESTINATIONS;
-        comp = new Chooser("Expression Destination 2", this, "source" + source + "wheeldestination2", params);
+        comp = new Chooser("Expression Destination 2", this, "source" + source + "expressdestination2", params);
         vbox.add(comp);
 
         params = SOURCES;

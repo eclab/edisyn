@@ -884,7 +884,7 @@ public abstract class Synth extends JComponent implements Updatable
         <p>If TOFILE is true, then we are emitting to a file, not to the synthesizer proper. 
         
         <p>It is assumed that the NON byte-array elements may be stripped out if this
-        emit is done to a file.
+        emit is written to a file.
         
         <p>The default version of this method simply calls emit() and returns its
         value as the first subarray.  If you have a synthesizer (like the TX81Z) which
@@ -10127,6 +10127,7 @@ menubar.add(helpMenu);
         {
         if (ex == null) return;
         ex.printStackTrace();
+        /*
         try
             {
             PrintWriter p = new PrintWriter(new FileWriter("EdisynException." + exceptionNumber + ".txt"));
@@ -10136,6 +10137,7 @@ menubar.add(helpMenu);
             p.close();
             }
         catch (Exception ex2) { } // do nothing for now :-( 
+    	*/
         }
         
     

@@ -783,6 +783,7 @@ public class NovationDStation extends Synth
 
     static HashMap ccParametersToIndex = null;
 
+	// CCs start at 20 (that's 808BDfrontcut)s
     public static final String[] ccParameters = new String[] 
     {
     "808BDfrontcut",

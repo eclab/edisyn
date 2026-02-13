@@ -14,7 +14,7 @@ import java.awt.event.*;
 
 
 /**
-   A container which splits widgets horizontally with even space.
+   A container which splits widgets horizontally with even space between them.
         
    @author Sean Luke
 */

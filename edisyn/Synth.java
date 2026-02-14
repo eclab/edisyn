@@ -1105,26 +1105,33 @@ public abstract class Synth extends JComponent implements Updatable
                 int val = model.get(key);
                 if (val < model.getMin(key) || val > model.getMax(key))
                     {
-                    int min = model.getMin(key);                                // 1
-                    int max = model.getMax(key);                                // 63
-                    int top = max + 1;                                                  // 64
-                    // shift everything so that min = 0;
-                    int newTop = top - min;                                             // 63
-                    int newVal = val - min;                                             // -1
-                    // Now our range is [0...newTop)
-                    // and newVal is a value that NEEDS to be in that range.
-                    // We do a double mod
-                    newVal = newVal % newTop;                                   // -1
-                    if (newVal < 0) newVal = newVal + newTop;   // 63
-                    // Now newVal is within the range [0...newTop)
-                    // So we now shift back to [min...top), that is, [min...max]
-                    newVal += min;
-                    model.set(key, newVal);
-                    if (getPrintRevised()) System.out.println("Warning (Synth): Revised " + key + " from " + val + " to " + newVal);             
+					int min = model.getMin(key);                                // 1
+					int max = model.getMax(key);                                // 63
+                    fix(model, key, val, min, max);
                     }
                 }
             }
         }
+    
+    /** This is called by the default implementation of revise() when a key has an out of range value.
+    	Override it to fix the value in a custom way; otherwise call super.fix(model, key, val) */
+    public void fix(Model model, String key, int val, int min, int max)
+    	{
+		int top = max + 1;                                                  // 64
+		// shift everything so that min = 0;
+		int newTop = top - min;                                             // 63
+		int newVal = val - min;                                             // -1
+		// Now our range is [0...newTop)
+		// and newVal is a value that NEEDS to be in that range.
+		// We do a double mod
+		newVal = newVal % newTop;                                   // -1
+		if (newVal < 0) newVal = newVal + newTop;   // 63
+		// Now newVal is within the range [0...newTop)
+		// So we now shift back to [min...top), that is, [min...max]
+		newVal += min;
+		model.set(key, newVal);
+		if (getPrintRevised()) System.out.println("Warning (Synth): Revised " + key + " from " + val + " to " + newVal + " (range " + min + " ... " + max + ")");             
+    	}
 
     /** Override this to make sure that at *least* the given time (in Milliseconds) has transpired between MIDI sends. */
     public double getPauseBetweenMIDISends() { return 0; }

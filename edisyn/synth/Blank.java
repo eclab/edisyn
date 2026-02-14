@@ -381,6 +381,16 @@ public class Blank extends Synth
         super.revise();
         }
 
+    public void fix(Model model, String key, int val, int min, int max)
+        {
+        // This method is called when the default version of revise() has determined that the 
+        // given key has a value that is outside the legal [min, max] range.  You can fix it
+        // yourself, or you can call super.fix(...), and Edisyn will mod it to within the proper
+        // range.  
+        
+        super.fix(model, key, val, min, max);
+        }
+
 
 
 

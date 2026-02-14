@@ -1,0 +1,71 @@
+<html><head></head>
+<body>
+
+
+<h1>Kawai K5000</h1> 
+<h2>Single Patch Editor</h2>
+
+<p>This editor will work with the <b>Kawai K5000S, KawaiK5000R,</b> and <b>Kawai K5000W</b>, including the E and F expansion banks.  However it does not support Bank B on the K5000W.
+
+<br><br><h3>Communicating with Edisyn</h3>
+
+Turn OFF Protect.  Make sure that Receive Program and Receive Exclusive are both turned on.  Set Program Receive to NORMAL.  Set the Unit Channel (System Channel) of your K5000 to the same channel as you've set up Edisyn (perhaps channel 1?).
+
+<br><br><h3>About Sending to Current Patch</h3>
+
+The Kawai K5000 stupidly cannot receive a patch and store it in its current temporary memory (nor transmit the same).  This is a huge failing as Edisyn needs to do this for many things, everything from undo/redo to randomize to hill-climbing.  There are two ways around this, neither of which is good.  First, Edisyn could write to a "scratch patch slot" (such as D128), then load this patch slot into current memory.  This would be fine except that the K5000 uses Flash RAM for its storage, so repeatedly writing to a patch slot is not a good idea: it'll burn your Flash out.  So that's out: I won't damage people's synthesizers.  Second, Edisyn could transmit every single parameter to the K5000 in sequence.  However to transmit a single parameter takes 14 bytes, and there are upwards of 5000 parameters.  This can take as much as 25 seconds to transmit!
+
+<p>So this is a problem.  At present our only real option is to NOT send to current memory unless you manually select "send to current memory".  This will make the hill-climber and morpher worthless, as well as nudging and morphing, and mixing multiple patches in the librarian.  But it's the only reasonable option.
+
+<br><br><h3>About the Tabs</h3>
+
+The K5000 has <i>many</i> parameters.  These parameters are organized as follows.  First there are the <b>General</b> parameters for the entire patch.   Then there are up to six <b>Sources</b>, each of which produces its own sound.  You specify the number of Sources in the Sources category in the General Tab.  This will change the tabs in the editor.  You can also specify which sources are playing and which are muted. 
+
+<p>Each Source can be an <b>Additive</b> or <b>PCM</b> (digital sample) source.  A digital sample source consists of a single tab called "S" (as in S1, S2, and so on).  An additive sample source also has the "S" tab, but it also has two more tabs called "H" (for "Harmonics") and "E" (for "Envelopes").  These are the so-called Additive Wave Kit, and only appear when the <b>Source Type</b> is set to "Additive".  You set the Source Type in the DCO category under the "S" tab.
+
+<p>If you set the Source Type to "PCM", you will also be able to set the PCM Wave in question.
+
+<br><br><h3>About the Dials</h3>
+
+The General tab has a Category called "Dials".  These aren't part of the patch: they're just a convenience for you.  Changing these dials changes any of the 16 Macro Controller Dial settings on your K5000.
+
+<br><br><h3>About Morphing</h3>
+
+The MORF checkbox in the Harmonics Category of the "H" (Harmonics) Tab is special. If you turn it on, the Harmonics Category changes to settings for morphing (interpolating) between four sources on four patches. You perform the morphing by pressing the "Execute" button: you'll be prompted to specify which source should receive the morphed results.
+
+<p>Unfortunately, after you have performed morphing, the results are only stored on the synthesier, not in Edisyn.  To load the results into Edisyn, you'll need save the patch manually on your synthesizer, then have Edisyn request the patch.  This is the only option: the K5000 has no way to request the current patch memory.
+
+<br><br><h3>About the Harmonics Display</h3>
+
+The "H" (Harmonics) tab and "E" (Envelopes) tab for each source contain a number of displays for harmonics, formants, and envelope settings.  You can set these by Number, then Value, or you can directly modify the sliders in the display itself.  If you change a slider, only that slider can be set.  But you can "scrub" across sliders by changing the slider with the right mouse button, or by holding down SHIFT and dragging.
+
+<p>The "Loop" display sliders each have three settings: OFF (the lowest setting), LP1 (the middle setting), and LP2 (the highest setting).
+
+<br><br><h3>About the Menu</h3>
+
+The Kawai K5000 menu has the following options:
+
+<ul>
+<li><b>Constrain Harmonics</b>&nbsp;&nbsp;This locks the harmonics you can edit with the sliders to a certain subset of harmonics, to make it easier to find and edit them.  The other harmonics will be displayed in gray.  You can still set any harmonics with the Number dial.
+</ul>
+
+<h3>Gotchas</h3>
+
+<ul>
+<li>See the discussion <b>About Sending to Current Patch</b> above: it is a massive and problematic gotcha.
+
+<p><li>The Kawai K5000 has variable-length patches but fixed-length memory banks. This means that it can run out of space in banks; and banks can hold both patches and <b>null patches</b> (my term).  These aren't empty patches: they're literally zero-length placeholders in lieu of a patch in a certain location.  When you instruct Edisyn to load a patch slot that holds a null patch, the K5000 will respond by ... doing nothing.  So Edisyn can't tell that it's a null patch -- it's given no information.  This is particularly annoying when selecting <b>Request Next Patch</b> in the MIDI menu.  If the next patch is a null patch, Request Next Patch will do nothing, but you'll not be able to jump to the next real patch.
+</ul>
+
+<h3>Thanks</h3>
+Thanks to Eyal Malinger (eyalmalinger@gmail.com) for providing test patches and trying out sysex results with old Sound Diver implementations. Thanks to Oscilllator (oscillatorsds@gmail.com) for providing sysex files for test patches.  Thanks to Jere Kapyaho (author of the <a href="https://github.com/coniferprod/k5ktools">python k5ktools</a>) for tweaking software for me.  And thanks to Markus Schlosser (author of the <a href="https://github.com/christofmuc/KnobKraft-orm">KnobKraft-orm librarian</a>) for considerable help in understanding various oddities in the machine.
+
+<p><table border=0 cellpadding=0 cellspacing=5>
+<tr>
+<td align=right>By&nbsp;&nbsp;&nbsp;
+<td><b>Sean Luke</b>
+<tr>
+<td align=right>Date&nbsp;&nbsp;&nbsp;
+<td>February 2026
+</table>
+

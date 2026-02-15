@@ -530,6 +530,18 @@ public class NovationDStation extends Synth
         return category;
         }
 
+        @Override
+        public void handleSynthCCOrNRPN(Midi.CCData data) {
+            System.out.println(data.number + "|" + data.value);
+            {
+                if (data.number - 20 >= ccParameters.length) {
+                    System.out.println("Out of bounds !");
+                    return;
+                }
+                model.set(ccParameters[data.number - 20], data.value);
+            }
+        }
+
 
     public int emitDrum(byte[] data, int pos, String drum, int bytes)
         {

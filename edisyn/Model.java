@@ -28,7 +28,7 @@ import edisyn.util.*;
 
 public class Model implements Cloneable
     {
-    public static boolean debug = false;
+    public static boolean debug = true;
 
     public static final int STATUS_UNSET = 0;                           // I haven't set a status for this yet.  For Strings this will result in IMMUTABLE and for ints, FREE
     public static final int STATUS_FREE = 1;                            // The parameter can be mutated

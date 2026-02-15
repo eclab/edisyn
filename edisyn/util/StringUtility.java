@@ -67,6 +67,14 @@ public class StringUtility
         return new Scanner(string).useDelimiter("\\D+").nextInt();
         }
 
+    public static boolean hasSecondInt(String string)
+        {
+        Scanner scan = new Scanner(string);
+        scan.useDelimiter("\\D+");
+        scan.nextInt();
+        return scan.hasNextInt();
+        }
+
     public static int getSecondInt(String string)
         {
         Scanner scan = new Scanner(string);

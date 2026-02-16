@@ -1,0 +1,36 @@
+<html><head></head>
+<body>
+
+
+<h1>Kawai K5000</h1> 
+<h2>Multimode Patch Editor</h2>
+
+<p>This editor will work with the <b>Kawai K5000S, KawaiK5000R</b>, and <Kawai K5000W</b>, but it does not support banks B or G on the K5000W.
+
+<br><br><h3>Communicating with Edisyn</h3>
+
+Turn OFF Protect.  Make sure that Receive Program and Receive Exclusive are both turned on.  Set Program Receive to NORMAL.  Set the Unit Channel (System Channel) of your K5000 to the same channel as you've set up Edisyn (perhaps channel 1?).
+
+<br><br><h3>About Sending to Current Patch</h3>
+
+The Kawai K5000 stupidly cannot receive a patch and store it in its current temporary memory (nor transmit the same).  This is a huge failing as Edisyn needs to do this for many things, everything from undo/redo to randomize to hill-climbing.  There are two ways around this, neither of which is good.  First, Edisyn could write to a "scratch patch slot" (such as D128), then load this patch slot into current memory.  This is what the Kawai K5 editor does.  This would be fine except that the K5000 uses Flash RAM for its storage, so repeatedly writing to a patch slot is not a good idea: it'll burn your Flash out.  So that's out: I won't damage people's synthesizers.  Second, Edisyn could transmit every single parameter to the K5000 in sequence.  However to transmit a single parameter takes 14 bytes, and there are upwards of 5000 parameters.  This can take as much as 25 seconds to transmit!
+
+<p>So this is a problem.  At present our only real option is to NOT send to current memory unless you manually select "send to current memory".  This will make the hill-climber and morpher worthless, as well as nudging and morphing, and mixing multiple patches in the librarian.  But it's the only reasonable option.
+
+<h3>Gotchas</h3>
+
+<ul>
+<li>See the discussion <b>About Sending to Current Patch</b> above: it is a massive and problematic gotcha.
+
+<p><li>If you press the <b>Show</b> button on a Section, it will switch to that patch and display it.  However there is no way to go <i>back</i> to the multimode patch.  You will need to manually change to Multi mode and navigate to the patch.
+</ul>
+
+<p><table border=0 cellpadding=0 cellspacing=5>
+<tr>
+<td align=right>By&nbsp;&nbsp;&nbsp;
+<td><b>Sean Luke</b>
+<tr>
+<td align=right>Date&nbsp;&nbsp;&nbsp;
+<td>February 2026
+</table>
+

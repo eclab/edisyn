@@ -215,7 +215,10 @@ public class SanityCheck
             synth2.setSendMIDI(false);
             synth2.getUndo().setWillPush(false);
                 
+            boolean midi = synth.getSendMIDI();
+            synth.setSendMIDI(false);
             synth.doMutate(1.0);
+        	synth.setSendMIDI(midi);
             data = synth.flatten(synth.emitAll((Model)null, false, true));
             
             byte[][] d = Synth.cutUpSysex(data);

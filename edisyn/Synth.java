@@ -1112,11 +1112,58 @@ public abstract class Synth extends JComponent implements Updatable
                 }
             }
         }
+        
+        
+    // FIXING UTILITY METHODS
+    
+    /** Bounds VAL to be between MIN and MAX inclusive and returns the result. */
+    public int bound(int val, int min, int max)
+    	{
+    	if (val < min) val = min;
+    	if (val > max) val = max;
+    	return val;
+    	}
+    
+    /** Bounds VAL to be between the MIN and MAX of the given key inclusive and returns the result. */
+    public int bound(Model model, String key, int val)
+    	{
+    	return bound(val, model.getMin(key), model.getMax(key));
+    	}
+    	
+    /** Bounds the key's VALUE to be between the MIN and MAX of the given key inclusive and returns the result. */
+    public int bound(Model model, String key)
+    	{
+    	return bound(model.get(key, 0), model.getMin(key), model.getMax(key));
+    	}
+    	
+    /** Mods VAL to be between MIN and MAX INCLUSIVE and returns the result. */
+    public int mod(int val, int min, int max)
+    	{
+    	int newVal = val - min;
+    	int newTop = max + 1 - min;
+    	newVal = val % newTop;
+    	if (newVal < 0) newVal = newVal + newTop;
+    	return newVal;
+    	}
+    
+    /** Mods VAL to be between the MIN and MAX of the given key INCLUSIVE and returns the result. */
+    public int mod(Model model, String key, int val)
+    	{
+    	return mod(val, model.getMin(key), model.getMax(key));
+    	}
+    	
+    /** Mods the key's VALUE to be between the MIN and MAX of the given key INCLUSIVE and returns the result. */
+    public int mod(Model model, String key)
+    	{
+    	return mod(model.get(key, 0), model.getMin(key), model.getMax(key));
+    	}
+    	
     
     /** This is called by the default implementation of revise() when a key has an out of range value.
     	Override it to fix the value in a custom way; otherwise call super.fix(model, key, val) */
     public void fix(Model model, String key, int val, int min, int max)
     	{
+    	/*
 		int top = max + 1;                                                  // 64
 		// shift everything so that min = 0;
 		int newTop = top - min;                                             // 63
@@ -1129,6 +1176,9 @@ public abstract class Synth extends JComponent implements Updatable
 		// Now newVal is within the range [0...newTop)
 		// So we now shift back to [min...top), that is, [min...max]
 		newVal += min;
+		model.set(key, newVal);
+		*/
+		int newVal = mod(val, min, max);
 		model.set(key, newVal);
 		if (getPrintRevised()) System.out.println("Warning (Synth): Revised " + key + " from " + val + " to " + newVal + " (range " + min + " ... " + max + ")");             
     	}

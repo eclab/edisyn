@@ -76,6 +76,8 @@ public class KawaiK5000 extends Synth
     // Names of the 16 dials on the K5000s
     public static final String[] DIALS = { 
         "Hrm Lo", "FF Bias", "Cutoff", "Attack", "Hrm Hi", "FF Speed", "Reso", "Decay", "Even/Odd", "FF Depth", "Velocity", "Release", "User 1", "User 2", "User 3", "User 4" };
+    // Numbers corresponding to banks A, D, E, and F
+    public static final int[] BANK_VALS = { 0, 2, 3, 4 };
         
     // CCs that the 16 dials on the K5000s
     public static final int[] DIAL_CCS = { 0x10, 0x12, 0x4A, 0x49, 0x11, 0x13, 0x4D, 0x4E, 0x47, 0x4B, 0x4C, 0x48, 0x50, 0x51, 0x52, 0x53 };
@@ -923,7 +925,9 @@ public static final int ALL_ON = 4;
                             {
                             tabs.remove(1);
                             }
+                        else break;
                         }
+                    
                     // Add in selected tabs
                     for(int i = model.get("srctype") - 1; i >= 0; i--)
                         {
@@ -3348,52 +3352,11 @@ public static final int ALL_ON = 4;
         }
 
 
-    final int[] BANK_VALS = { 0, 2, 3, 4 };
-    public Object[] emitAll(Model tempModel, boolean toWorkingMemory, boolean toFile)
-        {
-        if (toWorkingMemory) return new Object[0];                      // For the time being
-        
-        if (tempModel == null)
-            tempModel = getModel();
-    
-        int sources = model.get("srctype");
-
-        int bank = model.get("bank");
-        // bank     Name    data[8]
-        // 0        A               0
-        // 1        D               2
-        // 2        E               3
-        // 3        F               4
-    
-    	// compute data length
-    	int datalen = 10 + 81 + 1;
-    	for(int i = 0; i < sources; i++)
-    		{
-    		datalen += 86;
-    		if (model.get("source" + (i + 1) + "additive") == 1) 
-    			{
-    			datalen += 806;
-    			}
-    		}
-    
-        byte[] data = new byte[datalen];
-        // Format is
-        // F0 40 CHANNEL 20 00 0a 00 BANK PATCHNUM SINGLE_CHECKSUM EFFECT/COMMON SOURCE* WAVEKIT* F7
-        // The only wavekits provided are those for which the source is NOT additive.
-    
-        data[0] = (byte)0xF0;
-        data[1] = (byte)0x40;                                               // Kawai
-        data[2] = (byte)getChannelOut();                    // Channel
-        data[3] = (byte)0x20;
-        data[4] = (byte)0x00;
-        data[5] = (byte)0x0A;
-        data[6] = (byte)0x00;
-        data[7] = (byte)BANK_VALS[bank];                    // bank
-        data[8] = (byte)tempModel.get("number");            // patch
-    
-        int pos = 9;
+	// Given a tempModel (which will never be null), writes out the full Single Tone of a patch, including all sources and wavekits, and all checksums,
+	// starting at the given position in data
+	public int emitTone(Model tempModel, byte[] data, int pos, int sources )
+		{
         pos++;                      // skip checksum space
-    
         int start = pos;
 
         // LOAD EFFECTS
@@ -3507,7 +3470,7 @@ public static final int ALL_ON = 4;
 
         // COMMON AND SOURCE DATA CHECKSUM
     
-        data[9] = checksum(data, 10, pos);
+        data[start - 1] = checksum(data, start, pos);
 
         start = pos;
 
@@ -3580,12 +3543,130 @@ public static final int ALL_ON = 4;
 
             start = pos;
             }
+        return pos;
+		}
 
+    public Object[] emitAll(Model tempModel, boolean toWorkingMemory, boolean toFile)
+        {
+        if (toWorkingMemory) return new Object[0];                      // For the time being
+        
+        if (tempModel == null)
+            tempModel = getModel();
+    
+        int sources = model.get("srctype");
+
+        int bank = model.get("bank");
+        // bank     Name    data[8]
+        // 0        A               0
+        // 1        D               2
+        // 2        E               3
+        // 3        F               4
+    
+    	// compute data length
+    	int datalen = 10 + 81 + 1;
+    	for(int i = 0; i < sources; i++)
+    		{
+    		datalen += 86;
+    		if (model.get("source" + (i + 1) + "additive") == 1) 
+    			{
+    			datalen += 806;
+    			}
+    		}
+    
+        byte[] data = new byte[datalen];
+        // Format is
+        // F0 40 CHANNEL 20 00 0a 00 BANK PATCHNUM SINGLE_CHECKSUM EFFECT/COMMON SOURCE* WAVEKIT* F7
+        // The only wavekits provided are those for which the source is NOT additive.
+    
+        data[0] = (byte)0xF0;
+        data[1] = (byte)0x40;                                               // Kawai
+        data[2] = (byte)getChannelOut();                    // Channel
+        data[3] = (byte)0x20;
+        data[4] = (byte)0x00;
+        data[5] = (byte)0x0A;
+        data[6] = (byte)0x00;
+        data[7] = (byte)BANK_VALS[bank];                    // bank
+        data[8] = (byte)tempModel.get("number");            // patch
+    
+        int pos = 9;
+
+		pos = emitTone(tempModel, data, pos, sources);
 
         data[data.length - 1] = (byte)0xF7;
         return new Object[] { data };
         }
 
+
+    public Object[] emitBank(Model[] models, int bank, boolean toFile) 
+        {
+        boolean[] tonemap = new boolean[128];
+        
+		int datalen = 8 + 19 + 1;
+        for(int i = 0; i < 128; i++)
+        	{
+        	// build tone map
+        	Model m = models[i];
+        	
+        	tonemap[i] = (m != null);
+
+			// compute data length
+			datalen += 81 + 1;		// add in the checksum
+			int sources = m.get("srctype");
+			for(int s = 0; s < sources; s++)
+				{
+				datalen += 86;
+				if (m.get("source" + (s + 1) + "additive") == 1) 
+					{
+					datalen += 806;
+					}
+				}
+			}
+
+			// bank     Name    data[8]
+			// 0        A               0
+			// 1        D               2
+			// 2        E               3
+			// 3        F               4
+	
+			byte[] data = new byte[datalen];
+	
+			data[0] = (byte)0xF0;
+			data[1] = (byte)0x40;                                               // Kawai
+			data[2] = (byte)getChannelOut();                    // Channel
+			data[3] = (byte)0x21;
+			data[4] = (byte)0x00;
+			data[5] = (byte)0x0A;
+			data[6] = (byte)0x00;
+			data[7] = (byte)BANK_VALS[bank];                    // bank
+			int pos = 8;
+			
+			// Load the tone map
+			int patch = 0;
+			for(int j = 0; j < 18; j++)
+				{
+				data[pos++] = (byte)
+					((tonemap[patch + 0] ? 1 : 0) +
+					(tonemap[patch + 1] ? 2 : 0) +
+					(tonemap[patch + 2] ? 4 : 0) +
+					(tonemap[patch + 3] ? 8 : 0) +
+					(tonemap[patch + 4] ? 16 : 0) +
+					(tonemap[patch + 5] ? 32 : 0) +
+					(tonemap[patch + 6] ? 64 : 0));
+				patch += 7;
+				}
+			data[pos++] = (byte)
+					((tonemap[126] ? 1 : 0) +
+					(tonemap[127] ? 2 : 0));
+					
+			// Load the patches
+
+        for(Model m : models)
+        	{
+			pos = emitTone(m, data, pos, m.get("srctype"));
+			}
+        data[data.length - 1] = (byte)0xF7;
+        return new Object[] { data };
+        }
 
 
     public int parse(byte[] result, boolean fromFile)
@@ -3740,7 +3821,7 @@ public static final int ALL_ON = 4;
                     {
                     // do nothing
                     }
-                else
+                else if (!key.equals("--"))
                     {
                     model.set("source" + i + key, result[pos++]);
                     }
@@ -3771,24 +3852,28 @@ public static final int ALL_ON = 4;
             for(int j = 1; j < addWaveKitParams.length; j++)                // skip "--", checksum
                 {
                 String key = addWaveKitParams[j];
-                model.set("source" + i + key, result[pos++]);
+                if (!key.equals("--"))
+                	model.set("source" + i + key, result[pos++]);
                 }
 
             for(int j = 0; j < addWaveHCSoftParams.length; j++)
                 {
                 String key = addWaveHCSoftParams[j];
+                if (!key.equals("--"))
                 model.set("source" + i + key, result[pos++]);
                 }
 
             for(int j = 0; j < addWaveHCLoudParams.length; j++)
                 {
                 String key = addWaveHCLoudParams[j];
+                if (!key.equals("--"))
                 model.set("source" + i + key, result[pos++]);
                 }
 
             for(int j = 0; j < addWaveFormantFilterParams.length; j++)
                 {
                 String key = addWaveFormantFilterParams[j];
+                if (!key.equals("--"))
                 model.set("source" + i + key, result[pos++]);
                 }
 
@@ -3810,7 +3895,7 @@ public static final int ALL_ON = 4;
                     int val1 = result[pos++];           // level 2
                     model.set("source" + i + key, val1 & 63);
                     }
-                else
+                else if (!key.equals("--"))
                     {
                     model.set("source" + i + key, result[pos++]);
                     }
@@ -4113,59 +4198,6 @@ public static final int ALL_ON = 4;
             return new Object[] { payload };
             }
         }
-        
-
-
-        
-    public void addK5000Menu()
-        {
-        /*
-          JMenu menu = new JMenu("Kawai K5000");
-          menubar.add(menu);
-          JMenuItem harmonicsMenu = new JMenuItem("Load Wave into Harmonics 1");
-          harmonicsMenu.addActionListener(new ActionListener()
-          {
-          public void actionPerformed(ActionEvent e)
-          {
-          loadWaveAsHarmonics(HARMONICS_1);
-          }
-          });
-          menu.add(harmonicsMenu);
-          harmonicsMenu = new JMenuItem("Load Wave into Harmonics 2");
-          harmonicsMenu.addActionListener(new ActionListener()
-          {
-          public void actionPerformed(ActionEvent e)
-          {
-          loadWaveAsHarmonics(HARMONICS_2);
-          }
-          });
-          menu.add(harmonicsMenu);
-          harmonicsMenu = new JMenuItem("Load Wave into Harmonics 1 + 2");
-          harmonicsMenu.addActionListener(new ActionListener()
-          {
-          public void actionPerformed(ActionEvent e)
-          {
-          loadWaveAsHarmonics(HARMONICS_BOTH);
-          }
-          });
-          menu.add(harmonicsMenu);
-        */
-        }
-
-    public String[] getBankNames() { return BANKS; }
-
-/*
-// Return a list of all patch number names.  Default is { "Main" }
-public String[] getPatchNumberNames() { return buildIntegerNames(12, 0); }
-
-// Return a list whether patches in banks are writeable.  Default is { false }
-public boolean[] getWriteableBanks() { return new boolean[] { true, true, true, true, true, true, true, true }; }
-
-// Return a list whether individual patches can be written.  Default is FALSE.
-public boolean getSupportsPatchWrites() { return true; }
-
-public int getPatchNameLength() { return 8; }
-*/
 
     public byte[] requestDump(Model tempModel)
         {
@@ -4186,6 +4218,82 @@ public int getPatchNameLength() { return 8; }
             (byte)0xF7
             };
         }
+        
+        /*      
+public String[] getBankNames() { return BANKS; }
+
+// Return a list of all patch number names.  
+public String[] getPatchNumberNames() { return buildIntegerNames(128, 1); }
+
+// Return a list whether patches in banks are writeable.
+public boolean[] getWriteableBanks() { return new boolean[] { true, true, true, true, }; }
+
+// Return a list whether individual patches can be written.
+public boolean getSupportsPatchWrites() { return true; }
+
+// Return a list whether individual patches can be written.
+public boolean getSuportsBankReads() { return true; }
+
+public boolean getSupportsDownloads() { return true; }
+
+public int getPatchNameLength() { return 8; }
+
+public byte[] requestBankDump(int bank) 
+	{
+        return new byte[] 
+            { 
+            (byte)0xF0, 
+            (byte)0x40, 
+            (byte)getChannelOut(), 
+            (byte)0x01, 
+            (byte)0x00, 
+            (byte)0x0A,
+            (byte)0x00,
+            (byte)BANK_VALS[bank],
+            (byte)0x00,
+            (byte)0xF7
+            };
+	}
+
+    public int parseFromBank(byte[] bankSysex, int number) 
+        {
+        // Given a bank sysex message, and a patch number, parses that patch from the
+        // bank sysex data, and returns PARSE_SUCCEEDED or PARSE_FAILED.  The default is to
+        // return PARSE_FAILED.  This method only needs to be implemented if your patch
+        // editor supports bank reads (see documentation for getSupportsBankReads()
+        // and getSupportsBankWrites())
+        return PARSE_FAILED; 
+        }
+
+    public int getBank(byte[] bankSysex) 
+        { 
+        int bank = bankSysex[7];
+        if (bank > 0) bank--;
+        return bank; 
+        }
+
+    public Object[] emitBank(Model[] models, int bank, boolean toFile) 
+        { 
+        // Builds a set of models collectively comprising one bank's worth of patches,
+        // and a bank number, emits sysex and MIDI messages meant to write this bank
+        // as a collective bank message.  The objects which may be placed in the Object[]
+        // are the same as those returned by emitAll().   This method only needs to be 
+        // implemented, if your patch editor supports bank reads (see documentation for 
+        // getSupportsBankReads() and getSupportsBankWrites()).  By default an empty
+        // array is returned.
+        return new Object[0]; 
+        }
+    
+    public int getPauseAfterWriteBank() 
+        {
+        // Returns the pause, in milliseconds, after writing a bank sysex message
+        // to the synthesizer.  By default this returns the value of 
+        // getPauseAfterWritePatch();   This method only needs to be implemented 
+        // if your patch editor supports bank reads (see documentation for 
+        // getSupportsBankReads() and getSupportsBankWrites()).
+        return getPauseAfterWritePatch(); 
+        }    
+    */
 
 
     // General (non-source) parameter names

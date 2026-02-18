@@ -29,6 +29,8 @@ Donations are welcome via Paypal to my email address (sean@cs.gmu.edu).
 
 ## What's New
 
+**Edisyn was featured on Bad Gear!** The second [M-Audio Venom](https://www.youtube.com/watch?v=Nzg030Cx5Vc) video featured Edisyn extensively and warmly as Edisyn is presently the only editor available for the unit on the Mac (and the best one overall).
+
 Version 36 is a maintenance release of mostly bugfixes, including a big one for the Blofeld.
 
 

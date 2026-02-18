@@ -43,6 +43,7 @@ edisyn.synth.kawaik4.KawaiK4Effect	Kawai	Kawai K4 / K4r [Effect]
 edisyn.synth.kawaik5.KawaiK5	Kawai	Kawai K5 / K5m
 edisyn.synth.kawaik5.KawaiK5Multi	Kawai	Kawai K5 / K5m [Multi]
 edisyn.synth.kawaik5000.KawaiK5000	Kawai	Kawai K5000S / K5000R
+edisyn.synth.kawaik5000.KawaiK5000Multi	Kawai	Kawai K5000S / K5000R [Multi]
 edisyn.synth.korgmicrokorg.KorgMicroKorg	Korg	Korg MicroKorg
 edisyn.synth.korgmicrokorg.KorgMicroKorgVocoder	Korg	Korg MicroKorg [Vocoder]
 edisyn.synth.korgmicrosampler.KorgMicrosampler	Korg	Korg Microsampler

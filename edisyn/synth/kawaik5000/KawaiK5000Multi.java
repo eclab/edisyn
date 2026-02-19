@@ -18,7 +18,7 @@ import javax.sound.midi.*;
 import edisyn.util.*;
 
 /**
-   A patch editor for the Kawai K5000S and K5000R, compatible with the K5000W (Bank B not supported).
+   A multimode patch editor for the Kawai K5000S and K5000R, compatible with the K5000W (Bank B not supported).
    
    The K5000, like the K5, does not support Send-To-Current-Patch.  Ordinarily that would not be a 
    problem, but it is for the K5000.  A huge problem.  We could use a scratch patch like we do in the K5, 
@@ -28,10 +28,7 @@ import edisyn.util.*;
    seconds worth of sysex messages.  I have no solution to this: we have to turn off many Edisyn features
    and the user has to decide whether or not to send a patch manually via a scratch patch or individual
    parameters.
-   
-   The K5000 has bank sysex messages as well (why?!? given their massive size).  We do not suppor them
-   yet but they should be easy to set up.
-   
+      
    The K5000 has special files called FOO.KA1 (for individual patches) and FOO.KAA (for bank patches).
    We do not support them at this time but may later if we can figure out how they work.
         
@@ -891,7 +888,7 @@ public class KawaiK5000Multi extends Synth
                             public void run() 
                                 { 
                                 Model tempModel = buildModel();
-                                int instrument = KawaiK5000Multi.this.model.get("section" + section + "inst");
+                                int instrument = KawaiK5000Multi.this.model.get("section" + section + "inst") - 256;
                                 int bank = instrument / 128;
                                 int number = instrument % 128;
                                 tempModel.set("number", number);
@@ -965,6 +962,10 @@ public class KawaiK5000Multi extends Synth
         comp = new LabelledDial("Zone Hi", this, "section" + section + "zonehi", color, 0, 127);
         hbox.add(comp);
 
+        comp = new LabelledDial("Velo Switch", this, "section" + section + "veloswvalue", color, 1, 127);
+        ((LabelledDial)comp).addAdditionalLabel("Value");
+        hbox.add(comp);
+
         comp = new LabelledDial("Channel", this, "section" + section + "rcvch", color, 0, 15, -1);
         hbox.add(comp);
                 
@@ -983,8 +984,7 @@ public class KawaiK5000Multi extends Synth
 
     public String getPatchName(Model model) { return model.get("name", "INIT    "); }
 
-    public static final int SINGLE_MODE = 0x01;
-    public static final int BANK_M_MSB = 65;                // only has 64 PC values
+    public static final int BANK_M_MSB = 0x65;                // only has 64 PC values
 
     public void changePatch(Model tempModel)
         {
@@ -996,8 +996,8 @@ public class KawaiK5000Multi extends Synth
         try 
             {
             // Bank Change
-            tryToSendMIDI(new ShortMessage(ShortMessage.CONTROL_CHANGE, getChannelOut(), 32, bankMSB));
-            tryToSendMIDI(new ShortMessage(ShortMessage.CONTROL_CHANGE, getChannelOut(), 0, bankLSB));
+            tryToSendMIDI(new ShortMessage(ShortMessage.CONTROL_CHANGE, getChannelOut(), 0, bankMSB));
+            tryToSendMIDI(new ShortMessage(ShortMessage.CONTROL_CHANGE, getChannelOut(), 32, bankLSB));
                 
             // PC
             tryToSendMIDI(new ShortMessage(ShortMessage.PROGRAM_CHANGE, getChannelOut(), NN, 0));
@@ -1197,80 +1197,31 @@ public class KawaiK5000Multi extends Synth
 		}
 
 
-/*
     public Object[] emitBank(Model[] models, int bank, boolean toFile) 
         {
-        boolean[] tonemap = new boolean[128];
-        
-		int datalen = 8 + 19 + 1;
-        for(int i = 0; i < 128; i++)
-        	{
-        	// build tone map
-        	Model m = models[i];
-        	
-        	tonemap[i] = (m != null);
+    	byte[] data = new byte[7 + 64 * (1 + 54 + 4 * 12) + 1];
+    	
+    	data[0] = (byte)0xF0;
+        data[1] = (byte)0x40;                                               // Kawai
+        data[2] = (byte)getChannelOut();                    // Channel
+        data[3] = (byte)0x21;
+        data[4] = (byte)0x00;
+        data[5] = (byte)0x0A;
+        data[6] = (byte)0x20;
+    
+        int pos = 7;
 
-			// compute data length
-			datalen += 81 + 1;		// add in the checksum
-			int sources = m.get("srctype");
-			for(int s = 0; s < sources; s++)
-				{
-				datalen += 86;
-				if (m.get("source" + (s + 1) + "additive") == 1) 
-					{
-					datalen += 806;
-					}
-				}
+		for(int i = 0; i < models.length; i++)
+			{
+			pos = emitMulti(models[i], data, pos);
 			}
 
-			// bank     Name    data[8]
-			// 0        A               0
-			// 1        D               2
-			// 2        E               3
-			// 3        F               4
-	
-			byte[] data = new byte[datalen];
-	
-			data[0] = (byte)0xF0;
-			data[1] = (byte)0x40;                                               // Kawai
-			data[2] = (byte)getChannelOut();                    // Channel
-			data[3] = (byte)0x21;
-			data[4] = (byte)0x00;
-			data[5] = (byte)0x0A;
-			data[6] = (byte)0x00;
-			data[7] = (byte)BANK_VALS[bank];                    // bank
-			int pos = 8;
-			
-			// Load the tone map
-			int patch = 0;
-			for(int j = 0; j < 18; j++)
-				{
-				data[pos++] = (byte)
-					((tonemap[patch + 0] ? 1 : 0) +
-					(tonemap[patch + 1] ? 2 : 0) +
-					(tonemap[patch + 2] ? 4 : 0) +
-					(tonemap[patch + 3] ? 8 : 0) +
-					(tonemap[patch + 4] ? 16 : 0) +
-					(tonemap[patch + 5] ? 32 : 0) +
-					(tonemap[patch + 6] ? 64 : 0));
-				patch += 7;
-				}
-			data[pos++] = (byte)
-					((tonemap[126] ? 1 : 0) +
-					(tonemap[127] ? 2 : 0));
-					
-			// Load the patches
-
-        for(Model m : models)
-        	{
-			pos = emitTone(m, data, pos, m.get("srctype"));
-			}
         data[data.length - 1] = (byte)0xF7;
         return new Object[] { data };
-        }
-*/
+		}
 
-	public int parsemulti(Model model, byte[] result, int pos)
+
+	public int parseMulti(Model model, byte[] result, int pos)
 		{   
 		pos++;						// skip checksum space
 		
@@ -1370,11 +1321,21 @@ public class KawaiK5000Multi extends Synth
         model.set("number", result[7]);
                 
         int pos = 8;
-		parsemulti(model, result, pos);
+		parseMulti(model, result, pos);
 
         revise();
         return PARSE_SUCCEEDED;
         }
+        
+    public int parseFromBank(byte[] bankSysex, int number) 
+        {
+        int pos = 7 + number * (1 + 54 + 4 * 12);
+        
+		pos = parseMulti(model, bankSysex, pos);
+		revise();
+		return PARSE_SUCCEEDED;
+        }
+
         
         
     // Computes the checksum on data[start] ... data[end - 1]
@@ -1552,7 +1513,7 @@ public class KawaiK5000Multi extends Synth
                 
         
         /// At this point we either have data or we have data8
-        
+                
         if (data8 != null)
             {
             Object[] retval = new Object[data8.length];
@@ -1608,11 +1569,10 @@ public String[] getPatchNumberNames() { return buildIntegerNames(64, 1); }
 // Return a list whether patches in banks are writeable.
 public boolean[] getWriteableBanks() { return new boolean[] { true }; }
 
-// Return a list whether individual patches can be written.
+// Return whether individual patches can be written.
 public boolean getSupportsPatchWrites() { return true; }
 
-// Return a list whether individual patches can be written.
-public boolean getSuportsBankReads() { return true; }
+public boolean getSupportsBankWrites() { return true; }
 
 public boolean getSupportsDownloads() { return true; }
 
@@ -1635,35 +1595,11 @@ public byte[] requestBankDump(int bank)
             };
 	}
 
-    public int parseFromBank(byte[] bankSysex, int number) 
-        {
-        // Given a bank sysex message, and a patch number, parses that patch from the
-        // bank sysex data, and returns PARSE_SUCCEEDED or PARSE_FAILED.  The default is to
-        // return PARSE_FAILED.  This method only needs to be implemented if your patch
-        // editor supports bank reads (see documentation for getSupportsBankReads()
-        // and getSupportsBankWrites())
-        return PARSE_FAILED; 
-        }
-
     public int getBank(byte[] bankSysex) 
         { 
-        int bank = bankSysex[7];
-        if (bank > 0) bank--;
-        return bank; 
+        return 0;		// there's only one bank
         }
 
-    public Object[] emitBank(Model[] models, int bank, boolean toFile) 
-        { 
-        // Builds a set of models collectively comprising one bank's worth of patches,
-        // and a bank number, emits sysex and MIDI messages meant to write this bank
-        // as a collective bank message.  The objects which may be placed in the Object[]
-        // are the same as those returned by emitAll().   This method only needs to be 
-        // implemented, if your patch editor supports bank reads (see documentation for 
-        // getSupportsBankReads() and getSupportsBankWrites()).  By default an empty
-        // array is returned.
-        return new Object[0]; 
-        }
-    
     public int getPauseAfterWriteBank() 
         {
         // Returns the pause, in milliseconds, after writing a bank sysex message

@@ -3217,17 +3217,17 @@ public static final int ALL_ON = 4;
     public String getPatchName(Model model) { return model.get("name", "INIT    "); }
 
     public static final int SINGLE_MODE = 0x01;
-    public static final int BANK_A_MSB = 64;
-    public static final int BANK_D_MSB = 66;
-    public static final int BANK_E_MSB = 67;
-    public static final int BANK_F_MSB = 68;
-    public static final int BANK_M_MSB = 65;                // only has 64 PC values
+    public static final int BANK_A_MSB = 0x64;
+    public static final int BANK_D_MSB = 0x66;
+    public static final int BANK_E_MSB = 0x67;
+    public static final int BANK_F_MSB = 0x68;
+    public static final int BANK_M_MSB = 0x65;                // only has 64 PC values
 
     public void changePatch(Model tempModel)
         {
         byte BB = (byte)tempModel.get("bank");
         byte NN = (byte)tempModel.get("number");
-                
+                        
         int bankMSB = (BB == 0 ? BANK_A_MSB : (BB == 1 ? BANK_D_MSB : (BB == 2 ? BANK_E_MSB : BANK_F_MSB)));
         int bankLSB = 0;
         
@@ -3235,11 +3235,11 @@ public static final int ALL_ON = 4;
             {
             // Change to Single Mode.  See p. 36  NOTE there is no "Change to Multi / Combo Mode" I think, ugh.
             // FIXME: I don't know if this is necessary
-            tryToSendSysex(new byte[] { (byte)(0xF0), 0x40, (byte)getChannelOut(), 0x31, 0x00, 0x0a, SINGLE_MODE, (byte)0xF7 });
+            //tryToSendSysex(new byte[] { (byte)(0xF0), 0x40, (byte)getChannelOut(), 0x31, 0x00, 0x0a, SINGLE_MODE, (byte)0xF7 });
                 
             // Bank Change
-            tryToSendMIDI(new ShortMessage(ShortMessage.CONTROL_CHANGE, getChannelOut(), 32, bankMSB));
-            tryToSendMIDI(new ShortMessage(ShortMessage.CONTROL_CHANGE, getChannelOut(), 0, bankLSB));
+            tryToSendMIDI(new ShortMessage(ShortMessage.CONTROL_CHANGE, getChannelOut(), 0, bankMSB));
+            tryToSendMIDI(new ShortMessage(ShortMessage.CONTROL_CHANGE, getChannelOut(), 32, bankLSB));
                 
             // PC
             tryToSendMIDI(new ShortMessage(ShortMessage.PROGRAM_CHANGE, getChannelOut(), NN, 0));
@@ -3369,16 +3369,29 @@ public static final int ALL_ON = 4;
         data[pos++] = (byte)tempModel.get("reverb" + (reverbtype + 1) + "para2");
         data[pos++] = (byte)tempModel.get("reverb" + (reverbtype + 1) + "para3");
         data[pos++] = (byte)tempModel.get("reverb" + (reverbtype + 1) + "para4");
-    
+
+
         for(int effect = 1; effect <= 4; effect++)                                  // NOTE <=
             {
-            int effecttype = tempModel.get("effect" + effect + "type");
-            data[pos++] = (byte)(effecttype + 11);							// effects start at 11
-            data[pos++] = (byte)tempModel.get("effect" + effect + "type" + (effecttype + 1) + "depth");
-            data[pos++] = (byte)tempModel.get("effect" + effect + "type" + (effecttype + 1) + "para1");
-            data[pos++] = (byte)tempModel.get("effect" + effect + "type" + (effecttype + 1) + "para2");
-            data[pos++] = (byte)tempModel.get("effect" + effect + "type" + (effecttype + 1) + "para3");
-            data[pos++] = (byte)tempModel.get("effect" + effect + "type" + (effecttype + 1) + "para4");
+            int missingEffectParams = 0;
+            int effectType = tempModel.get("effect" + effect + "type");
+            data[pos++] = (byte)(effectType + 11);							// effects start at 11
+            if (EFFECT_PARAMETER_MINS[0][effectType] == NONE)
+            	{ missingEffectParams++; }
+            else { data[pos++] = (byte)tempModel.get("effect" + effect + "type" + (effectType + 1) + "depth"); }
+            if (EFFECT_PARAMETER_MINS[1][effectType] == NONE)
+            	{  missingEffectParams++; }
+            else { data[pos++] = (byte)tempModel.get("effect" + effect + "type" + (effectType + 1) + "para1"); }
+            if (EFFECT_PARAMETER_MINS[2][effectType] == NONE)
+            	{ missingEffectParams++; }
+            else { data[pos++] = (byte)tempModel.get("effect" + effect + "type" + (effectType + 1) + "para2"); }
+            if (EFFECT_PARAMETER_MINS[3][effectType] == NONE)
+            	{ missingEffectParams++; }
+            else { data[pos++] = (byte)tempModel.get("effect" + effect + "type" + (effectType + 1) + "para3"); }
+            if (EFFECT_PARAMETER_MINS[4][effectType] == NONE)
+            	{ missingEffectParams++; }
+            else { data[pos++] = (byte)tempModel.get("effect" + effect + "type" + (effectType + 1) + "para4"); }
+            pos += missingEffectParams;
             }
                 
         for(int freq = 1; freq <= 7; freq++)                                            // NOTE <=
@@ -3434,8 +3447,6 @@ public static final int ALL_ON = 4;
         data[pos++] = (byte)tempModel.get("fsw1parameter");
         data[pos++] = (byte)tempModel.get("fsw2parameter");
 
-        start = pos;
-
         // LOAD SOURCE DATA
     
         for(int i = 1; i <= sources; i++)                                           // note <=
@@ -3443,7 +3454,7 @@ public static final int ALL_ON = 4;
             for(int j = 0; j < sourceParams.length; j++)
                 {
                 String key = sourceParams[j];
-
+				
                 if (j == 2)             // velo sw and velo
                     {
                     data[pos++] = (byte)((tempModel.get("source" + i + "velosw") << 5) | 
@@ -3471,9 +3482,6 @@ public static final int ALL_ON = 4;
         // COMMON AND SOURCE DATA CHECKSUM
     
         data[start - 1] = checksum(data, start, pos);
-
-        start = pos;
-
     
 
         // LOAD WAVE KIT DATA
@@ -3484,6 +3492,8 @@ public static final int ALL_ON = 4;
             
             int checksumpos = pos;
             pos++;
+            
+            start = pos;
         
             for(int j = 1; j < addWaveKitParams.length; j++)                // skip "--", checksum
                 {
@@ -3491,15 +3501,11 @@ public static final int ALL_ON = 4;
                 data[pos++] = (byte)(tempModel.get("source" + i + key));
                 }
 
-            start = pos;
-
             for(int j = 0; j < addWaveHCSoftParams.length; j++)
                 {
                 String key = addWaveHCSoftParams[j];
                 data[pos++] = (byte)(tempModel.get("source" + i + key));
                 }
-
-            start = pos;
 
             for(int j = 0; j < addWaveHCLoudParams.length; j++)
                 {
@@ -3507,24 +3513,23 @@ public static final int ALL_ON = 4;
                 data[pos++] = (byte)(tempModel.get("source" + i + key));
                 }
 
-            start = pos;
-
             for(int j = 0; j < addWaveFormantFilterParams.length; j++)
                 {
                 String key = addWaveFormantFilterParams[j];
                 data[pos++] = (byte)(tempModel.get("source" + i + key));
                 }
 
-            start = pos;
-
             for(int j = 0; j < addWaveHarmonicEnvelopeParams.length; j++)
                 {
                 String key = addWaveHarmonicEnvelopeParams[j];
                 if (key.endsWith("level1"))
                     {
+                    ///// NOTE: documentation is wrong. It says that val1 & 64 = 0 is "LP1" and val1 & 64 = 1 is "Loop/LP2".
+                    ///// It's actually the other way around.
+                    
                     int num = StringUtility.getFirstInt(key);
                     data[pos++] = (byte)(tempModel.get("source" + i + key) |
-                        (tempModel.get("source" + i + "hcenv" + num + "loop") == 1 ? 0 : 64)); // lp1
+                        (tempModel.get("source" + i + "hcenv" + num + "loop") == 1 ? 64 : 0)); // lp1
                     }
                 else if (key.endsWith("level2"))
                     {
@@ -3532,16 +3537,17 @@ public static final int ALL_ON = 4;
                     data[pos++] = (byte)(tempModel.get("source" + i + key) |
                         (tempModel.get("source" + i + "hcenv" + num + "loop") == 0 ? 0 : 64)); // off
                     }
+                else if (key.equals("--"))
+                	{
+                	pos++;
+                	}
                 else
                     {
                     data[pos++] = (byte)(tempModel.get("source" + i + key));
                     }
                 }
-            start = pos;
-                        
-            data[checksumpos] = checksum(data, checksumpos + 1, pos);
 
-            start = pos;
+            data[checksumpos] = checksum(data, start, pos);
             }
         return pos;
 		}
@@ -3608,6 +3614,7 @@ public static final int ALL_ON = 4;
         	Model m = models[i];
         	
         	tonemap[i] = (m != null);
+        	if (!tonemap[i]) continue;		// we don't have this data, it's a null patch
 
 			// compute data length
 			datalen += 81 + 1;		// add in the checksum
@@ -3662,7 +3669,10 @@ public static final int ALL_ON = 4;
 
         for(Model m : models)
         	{
-			pos = emitTone(m, data, pos, m.get("srctype"));
+        	if (m != null)
+        		{
+				pos = emitTone(m, data, pos, m.get("srctype"));
+				}
 			}
         data[data.length - 1] = (byte)0xF7;
         return new Object[] { data };
@@ -3685,12 +3695,20 @@ public static final int ALL_ON = 4;
         model.set("number", result[8]);
                 
         int pos = 10;
-
-        int numSources = result[pos + 50];
-        if (numSources < 2 || numSources > 6) return PARSE_FAILED;              
                         
         // okay, here we go
-                        
+		pos = parseSingle(result, pos);
+        revise();
+        if (pos < 0) return PARSE_FAILED;
+        else return PARSE_SUCCEEDED;
+		}
+    
+    // return -1 is FAILED, else return resulting pos
+    public int parseSingle(byte[] result, int pos)
+    	{             
+        int numSources = result[pos + 50];
+        if (numSources < 2 || numSources > 6) return -1;              
+
         model.set("algorithm", result[pos++]);
         int reverbtype = result[pos++];
         model.set("reverbtype", reverbtype);
@@ -3748,7 +3766,6 @@ public static final int ALL_ON = 4;
         model.set("poly", result[pos++]);
         pos++;                                                                 // "no use", see page 14 of sysex spec, line 50
         int srctype = result[pos++];
-        //System.err.println("num sources " + srctype);
         model.set("srctype", srctype);
 
         int srcmute = result[pos++];                                            // ugh, bitpacking
@@ -3830,7 +3847,6 @@ public static final int ALL_ON = 4;
     
         // COMMON AND SOURCE DATA CHECKSUM
         
-		//System.err.println("Checksum should be " + checksum(result, 10, pos));
         // skip
 
         // LOAD WAVE KIT DATA
@@ -3845,7 +3861,6 @@ public static final int ALL_ON = 4;
             	return PARSE_FAILED;		// I think this should be a failure
             	}
             
-    		//System.err.println("Wave Kit " + i + " Checksum " + result[pos]);
             pos++;     
             int start = pos;                                                                                         // checksum
         
@@ -3884,28 +3899,32 @@ public static final int ALL_ON = 4;
                     {
                     int num = StringUtility.getFirstInt(key);
                     int val1 = result[pos];                     // level 1
-                    int val2 = result[pos + 2];         // level 2 (skip rate1)
+                    int val2 = result[pos + 2];         		// level 2 (skip rate1)
+                    
+                    ///// NOTE: documentation is wrong. It says that val1 & 64 = 0 is "LP1" and val1 & 64 = 1 is "Loop/LP2".
+                    ///// It's actually the other way around.
+                    
                     pos++;
                     model.set("source" + i + key, val1 & 63);
                     model.set("source" + i + "hcenv" + num + "loop", 
-                        (val2 & 64) == 0 ? 0 : ((val1 & 64) == 0 ? 1 : 2));
+                    	((val1 & 64) == 0 ? ((val2 & 64) == 0 ? 0 : 2) : 1));
                     }
                 else if (key.endsWith("level2"))
                     {
                     int val1 = result[pos++];           // level 2
                     model.set("source" + i + key, val1 & 63);
                     }
-                else if (!key.equals("--"))
+                else if (key.equals("--"))
+                	{
+                	pos++;
+                	}
+                else
                     {
                     model.set("source" + i + key, result[pos++]);
                     }
                 }
-			//System.err.println("Wavekit checksum should be " + checksum(result, start, pos));
             }
-        
-            
-        revise();
-        return PARSE_SUCCEEDED;
+        return pos;
         }
         
     // Computes the checksum on data[start] ... data[end - 1]
@@ -4219,7 +4238,6 @@ public static final int ALL_ON = 4;
             };
         }
         
-        /*      
 public String[] getBankNames() { return BANKS; }
 
 // Return a list of all patch number names.  
@@ -4249,41 +4267,157 @@ public byte[] requestBankDump(int bank)
             (byte)0x00, 
             (byte)0x0A,
             (byte)0x00,
-            (byte)BANK_VALS[bank],
             (byte)0x00,
             (byte)0xF7
             };
 	}
 
+
+/*
+	// return -1 if there is no such position -- the patch is null
+	public int getPatchPosition(byte[] bank, int num)
+		{
+		// This will be quite costly: O(size(bank)^2) overall.  We may need to call this up-front
+		// and then consult it as we parse from the bank sysex, if it proves to be too slow.
+		
+        boolean[] tonemap = new boolean[128];
+		int datalen = 8 + 19 + 1;
+		int pos = 8;
+		int count = 0;
+		for (int i = 0; i < 126; i++)
+			{
+			// parse tone map
+			tonemap[i] = (((bank[pos] >>> count++) & 0x1) == 0x1);
+			if (count > 6) { count = 0; pos++; }
+			}
+		tonemap[126] = (((bank[pos] >>> 0) & 0x1) == 0x1);
+		tonemap[127] = (((bank[pos] >>> 1) & 0x1) == 0x1);
+		if (!tonemap[num]) return -1;
+		
+		// Now we have to go searching for the position :=(
+		
+		// reset pos
+		pos = 8 + 19 + 1;
+        for(int i = 0; i < num; i++)
+        	{
+        	if (!tonemap[i]) continue;		// it's a null patch, skip it
+
+			// find the number of sources
+			int sources = bank[pos + 50];
+
+			pos += 81 + 1;		// add in the checksum
+			for(int s = 0; s < sources; s++)
+				{
+				int msb = bank[pos + 28];
+				int lsb = bank[pos + 29];
+				boolean additive = (msb * 128 + lsb == 512);
+				pos += 86;
+				if (additive) 
+					{
+					pos += 806;
+					}
+				}
+			}
+			
+		// At this point we're at the start of patch #num
+		return pos;
+		}
+*/
+
+	// When we don't get a response while doing a batch download, it is likely not because
+	// the synth was slow to respond, but rather because the patch is a NULL patch, and the
+	// K5000 doesn't respond at all for NULL patches -- in this case we must skip to the next patch.
+	public boolean skipBatchPatchDownload() { return true; }
+	
+	int[] patchBankPositions = null;
+
+	public int getPatchPosition(byte[] bank, int num)
+		{
+		if (patchBankPositions == null) // uh oh, should not happen
+			{
+			System.err.println("KawaiK5000.getPatchPosition() ERROR: bankPatchPositions was null");
+			preprocessParseFromBank(bank);
+			}
+		return patchBankPositions[num];
+		}
+
+	// set to -1 if there is no such position -- the patch is null
+	public void preprocessParseFromBank(byte[] bank)
+		{
+		patchBankPositions = new int[128];
+        boolean[] tonemap = new boolean[128];
+		int datalen = 8 + 19 + 1;
+		int pos = 8;
+		int count = 0;
+		for (int i = 0; i < 126; i++)
+			{
+			// parse tone map
+			tonemap[i] = (((bank[pos] >>> count++) & 0x1) == 0x1);
+			if (count > 6) { count = 0; pos++; }
+			}
+		tonemap[126] = (((bank[pos] >>> 0) & 0x1) == 0x1);
+		tonemap[127] = (((bank[pos] >>> 1) & 0x1) == 0x1);
+		
+		// Now we have to go searching for the position :=(
+		
+		// reset pos
+		pos = 8 + 19 + 1;
+        for(int i = 0; i < 128; i++)
+        	{
+        	if (!tonemap[i]) 
+        		{
+        		patchBankPositions[i] = -1;
+        		}
+        	else
+        		{
+				// find the number of sources
+				int sources = bank[pos + 50];
+
+				pos += 81 + 1;		// add in the checksum
+				for(int s = 0; s < sources; s++)
+					{
+					int msb = bank[pos + 28];
+					int lsb = bank[pos + 29];
+					boolean additive = (msb * 128 + lsb == 512);
+					pos += 86;
+					if (additive) 
+						{
+						pos += 806;
+						}
+					}
+				patchBankPositions[i] = pos;
+				}
+			}
+		}
+
+
+
     public int parseFromBank(byte[] bankSysex, int number) 
         {
-        // Given a bank sysex message, and a patch number, parses that patch from the
-        // bank sysex data, and returns PARSE_SUCCEEDED or PARSE_FAILED.  The default is to
-        // return PARSE_FAILED.  This method only needs to be implemented if your patch
-        // editor supports bank reads (see documentation for getSupportsBankReads()
-        // and getSupportsBankWrites())
-        return PARSE_FAILED; 
+        // Because this calls getPatchPosition each time, we're looking at an O(size(banksysex)^2)
+        // total operation.  It's costly.  We need to preprocess all the bank positions once
+        // and then access them from successive parseFromBank calls.  But first we'll see if
+        // this is expensive enough that we need to consider doing it. 
+        
+        int pos = getPatchPosition(bankSysex, number);
+        if (pos == -1)
+        	{
+        	return PARSE_IGNORE;			// should produce an init patch (blank)
+        	}
+        else
+        	{
+        	return parseSingle(bankSysex, pos);
+        	}
         }
+
 
     public int getBank(byte[] bankSysex) 
         { 
         int bank = bankSysex[7];
-        if (bank > 0) bank--;
+        if (bank > 0) bank--;	// A (0) == 0, D (2) == 1, E (3) == 2, F (4) == 3
         return bank; 
         }
 
-    public Object[] emitBank(Model[] models, int bank, boolean toFile) 
-        { 
-        // Builds a set of models collectively comprising one bank's worth of patches,
-        // and a bank number, emits sysex and MIDI messages meant to write this bank
-        // as a collective bank message.  The objects which may be placed in the Object[]
-        // are the same as those returned by emitAll().   This method only needs to be 
-        // implemented, if your patch editor supports bank reads (see documentation for 
-        // getSupportsBankReads() and getSupportsBankWrites()).  By default an empty
-        // array is returned.
-        return new Object[0]; 
-        }
-    
     public int getPauseAfterWriteBank() 
         {
         // Returns the pause, in milliseconds, after writing a bank sysex message
@@ -4293,7 +4427,6 @@ public byte[] requestBankDump(int bank)
         // getSupportsBankReads() and getSupportsBankWrites()).
         return getPauseAfterWritePatch(); 
         }    
-    */
 
 
     // General (non-source) parameter names

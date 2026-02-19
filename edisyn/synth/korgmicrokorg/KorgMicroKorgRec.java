@@ -39,7 +39,7 @@ public class KorgMicroKorgRec extends Recognize
         if (data.length >= 37150 && data.length <= 37400) {
             boolean bank = recognizeBank(data);
             return true;  // Return true so parse() method handles bank dumps
-        }
+            }
         boolean v = (
             data.length == EXPECTED_SYSEX_LENGTH &&
             data[0] == (byte)0xF0 &&

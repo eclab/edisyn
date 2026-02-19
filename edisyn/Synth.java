@@ -1105,8 +1105,8 @@ public abstract class Synth extends JComponent implements Updatable
                 int val = model.get(key);
                 if (val < model.getMin(key) || val > model.getMax(key))
                     {
-					int min = model.getMin(key);                                // 1
-					int max = model.getMax(key);                                // 63
+                    int min = model.getMin(key);                                // 1
+                    int max = model.getMax(key);                                // 63
                     fix(model, key, val, min, max);
                     }
                 }
@@ -1118,70 +1118,70 @@ public abstract class Synth extends JComponent implements Updatable
     
     /** Bounds VAL to be between MIN and MAX inclusive and returns the result. */
     public int bound(int val, int min, int max)
-    	{
-    	if (val < min) val = min;
-    	if (val > max) val = max;
-    	return val;
-    	}
+        {
+        if (val < min) val = min;
+        if (val > max) val = max;
+        return val;
+        }
     
     /** Bounds VAL to be between the MIN and MAX of the given key inclusive and returns the result. */
     public int bound(Model model, String key, int val)
-    	{
-    	return bound(val, model.getMin(key), model.getMax(key));
-    	}
-    	
+        {
+        return bound(val, model.getMin(key), model.getMax(key));
+        }
+        
     /** Bounds the key's VALUE to be between the MIN and MAX of the given key inclusive and returns the result. */
     public int bound(Model model, String key)
-    	{
-    	return bound(model.get(key, 0), model.getMin(key), model.getMax(key));
-    	}
-    	
+        {
+        return bound(model.get(key, 0), model.getMin(key), model.getMax(key));
+        }
+        
     /** Mods VAL to be between MIN and MAX INCLUSIVE and returns the result. */
     public int mod(int val, int min, int max)
-    	{
-    	int newVal = val - min;
-    	int newTop = max + 1 - min;
-    	newVal = val % newTop;
-    	if (newVal < 0) newVal = newVal + newTop;
-    	return newVal;
-    	}
+        {
+        int newVal = val - min;
+        int newTop = max + 1 - min;
+        newVal = val % newTop;
+        if (newVal < 0) newVal = newVal + newTop;
+        return newVal;
+        }
     
     /** Mods VAL to be between the MIN and MAX of the given key INCLUSIVE and returns the result. */
     public int mod(Model model, String key, int val)
-    	{
-    	return mod(val, model.getMin(key), model.getMax(key));
-    	}
-    	
+        {
+        return mod(val, model.getMin(key), model.getMax(key));
+        }
+        
     /** Mods the key's VALUE to be between the MIN and MAX of the given key INCLUSIVE and returns the result. */
     public int mod(Model model, String key)
-    	{
-    	return mod(model.get(key, 0), model.getMin(key), model.getMax(key));
-    	}
-    	
+        {
+        return mod(model.get(key, 0), model.getMin(key), model.getMax(key));
+        }
+        
     
     /** This is called by the default implementation of revise() when a key has an out of range value.
-    	Override it to fix the value in a custom way; otherwise call super.fix(model, key, val) */
+        Override it to fix the value in a custom way; otherwise call super.fix(model, key, val) */
     public void fix(Model model, String key, int val, int min, int max)
-    	{
-    	/*
-		int top = max + 1;                                                  // 64
-		// shift everything so that min = 0;
-		int newTop = top - min;                                             // 63
-		int newVal = val - min;                                             // -1
-		// Now our range is [0...newTop)
-		// and newVal is a value that NEEDS to be in that range.
-		// We do a double mod
-		newVal = newVal % newTop;                                   // -1
-		if (newVal < 0) newVal = newVal + newTop;   // 63
-		// Now newVal is within the range [0...newTop)
-		// So we now shift back to [min...top), that is, [min...max]
-		newVal += min;
-		model.set(key, newVal);
-		*/
-		int newVal = mod(val, min, max);
-		model.set(key, newVal);
-		if (getPrintRevised()) System.out.println("Warning (Synth): Revised " + key + " from " + val + " to " + newVal + " (range " + min + " ... " + max + ")");             
-    	}
+        {
+        /*
+          int top = max + 1;                                                  // 64
+          // shift everything so that min = 0;
+          int newTop = top - min;                                             // 63
+          int newVal = val - min;                                             // -1
+          // Now our range is [0...newTop)
+          // and newVal is a value that NEEDS to be in that range.
+          // We do a double mod
+          newVal = newVal % newTop;                                   // -1
+          if (newVal < 0) newVal = newVal + newTop;   // 63
+          // Now newVal is within the range [0...newTop)
+          // So we now shift back to [min...top), that is, [min...max]
+          newVal += min;
+          model.set(key, newVal);
+        */
+        int newVal = mod(val, min, max);
+        model.set(key, newVal);
+        if (getPrintRevised()) System.out.println("Warning (Synth): Revised " + key + " from " + val + " to " + newVal + " (range " + min + " ... " + max + ")");             
+        }
 
     /** Override this to make sure that at *least* the given time (in Milliseconds) has transpired between MIDI sends. */
     public double getPauseBetweenMIDISends() { return 0; }
@@ -9435,23 +9435,23 @@ menubar.add(helpMenu);
                         if ((batchDownloadFailureCountdown--) <= 0)
                             {
                             if (skipBatchPatchDownload())
-                            	{
-                            	requestNextPatch();
-								showSimpleError("Batch Download Failed", "Stopping batch download after failing " + BATCH_DOWNLOAD_FAILURE_GLOBAL_COUNTDOWN + " times to download patch\n" + getPatchLocationName(currentPatch) + "\nNo response from the synthesizer." );
-                            	}
+                                {
+                                requestNextPatch();
+                                showSimpleError("Batch Download Failed", "Stopping batch download after failing " + BATCH_DOWNLOAD_FAILURE_GLOBAL_COUNTDOWN + " times to download patch\n" + getPatchLocationName(currentPatch) + "\nNo response from the synthesizer." );
+                                }
                             else
-                            	{
-								batchDownloadFailureCountdown = getBatchDownloadFailureCountdown();
-								if (batchDownloadFailureGlobalCountdown-- <= 0)
-									{
-									stopBatchDownload();
-									showSimpleError("Batch Download Failed", "Stopping batch download after failing " + BATCH_DOWNLOAD_FAILURE_GLOBAL_COUNTDOWN + " times to download patch\n" + getPatchLocationName(currentPatch) + "\nNo response from the synthesizer." );
-									}
-								System.out.println("Warning (Synth): Download of " + getPatchLocationName(currentPatch) + " failed.  Requesting again.");
-								resetBlend();
-								setMergeProbability(0.0);
-								performRequestDump(currentPatch, false);
-								}
+                                {
+                                batchDownloadFailureCountdown = getBatchDownloadFailureCountdown();
+                                if (batchDownloadFailureGlobalCountdown-- <= 0)
+                                    {
+                                    stopBatchDownload();
+                                    showSimpleError("Batch Download Failed", "Stopping batch download after failing " + BATCH_DOWNLOAD_FAILURE_GLOBAL_COUNTDOWN + " times to download patch\n" + getPatchLocationName(currentPatch) + "\nNo response from the synthesizer." );
+                                    }
+                                System.out.println("Warning (Synth): Download of " + getPatchLocationName(currentPatch) + " failed.  Requesting again.");
+                                resetBlend();
+                                setMergeProbability(0.0);
+                                performRequestDump(currentPatch, false);
+                                }
                             }
                         else
                             {
@@ -9465,7 +9465,7 @@ menubar.add(helpMenu);
         updateTitle();                      // has to be after we build the timer
         }
 
-	public boolean skipBatchPatchDownload() { return false; }
+    public boolean skipBatchPatchDownload() { return false; }
     public int getBatchDownloadFailureCountdown() { return 0; }                 // default, can be overridden such as in the FS1R or Wavestation SR
     int batchDownloadFailureCountdown;
     static final int BATCH_DOWNLOAD_FAILURE_GLOBAL_COUNTDOWN = 50;
@@ -10161,9 +10161,9 @@ menubar.add(helpMenu);
     
     
     /** Override this method to return TRUE if, when assembling the models[] array for emitBank(...),
-    	"empty" (init) patches should be provided as null so we can distinguish them from regular models.
-    	By default this method returns false.  An example of a patch editor which needs this method is
-    	KawaiK5000, which has "null" (empty, nonexistent) patches in some of its patch slots. */
+        "empty" (init) patches should be provided as null so we can distinguish them from regular models.
+        By default this method returns false.  An example of a patch editor which needs this method is
+        KawaiK5000, which has "null" (empty, nonexistent) patches in some of its patch slots. */
     public boolean markEmptyBankPatchModelsAsNull() { return false; }
     
     
@@ -10198,16 +10198,16 @@ menubar.add(helpMenu);
         if (ex == null) return;
         ex.printStackTrace();
         /*
-        try
-            {
-            PrintWriter p = new PrintWriter(new FileWriter("EdisynException." + exceptionNumber + ".txt"));
-            exceptionNumber++;
-            ex.printStackTrace(p);
-            p.flush();
-            p.close();
-            }
-        catch (Exception ex2) { } // do nothing for now :-( 
-    	*/
+          try
+          {
+          PrintWriter p = new PrintWriter(new FileWriter("EdisynException." + exceptionNumber + ".txt"));
+          exceptionNumber++;
+          ex.printStackTrace(p);
+          p.flush();
+          p.close();
+          }
+          catch (Exception ex2) { } // do nothing for now :-( 
+        */
         }
         
     
@@ -10344,9 +10344,9 @@ menubar.add(helpMenu);
     public int parseFromBank(byte[] bankSysex, int number) { return PARSE_FAILED; }
 
     /** Performs preprocessing prior to multiple calls to pareFromBank(...).  This gives
-    	a synthesizer, such as the Kawai K5000 which have variable-sized patches, to precompute
-    	the loctions of all the patches in O(n) time rather than having to recompute them every
-    	time parseFromBank is called, thus being O(n^2). */
+        a synthesizer, such as the Kawai K5000 which have variable-sized patches, to precompute
+        the loctions of all the patches in O(n) time rather than having to recompute them every
+        time parseFromBank is called, thus being O(n^2). */
     public void preprocessParseFromBank(byte[] bankSysex) { return; }
 
     /** Parses the bank number from the provided bank sysex and returns it.  

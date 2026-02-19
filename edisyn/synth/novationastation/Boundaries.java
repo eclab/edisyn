@@ -40,10 +40,10 @@ public enum Boundaries implements Boundary {
         "1b", "2t", "1d", "2b", "4t", "3b", "5t", "4b", "3d", "7t", "5b", "8t", "6b", "7b", "5d", "8b", "9b", "7d", "12"),
     DELAY_SYNC_RATES(Stream.of(SYNC_RATES.values).limit(20)),
     ARP_SYNC_RATES(Stream.of(SYNC_RATES.values)
-            // we skip the "N/A" here, since it can also not be selected on the device
-            // (unlike what is mentioned in the spec/manual)
-            .skip(1)
-            .limit(16)),
+        // we skip the "N/A" here, since it can also not be selected on the device
+        // (unlike what is mentioned in the spec/manual)
+        .skip(1)
+        .limit(16)),
     ARP_NON_SYNC_RATES(0, 127, -64), // 64 -> 191 BPM
     DELAY_RATIO("1-1", "4-3", "3-4", "3-2", "2-3", "2-1", "1-2", "3-1", "1-3", "4-1", "1-4", "1-0", "0-1"),
     EQUALIZER_LEVEL(IntStream.rangeClosed(0, 127).boxed().map(i -> {
@@ -62,11 +62,11 @@ public enum Boundaries implements Boundary {
 
     Boundaries(Stream<String> values) {
         this(0, values.toArray(String[]::new));
-    }
+        }
 
     Boundaries(Stream<String> values, int offset) {
         this(offset, values.toArray(String[]::new));
-    }
+        }
 
     Boundaries(String... values) {
         this(0, values);
@@ -90,10 +90,10 @@ public enum Boundaries implements Boundary {
         this.offset = offset;
         this.values = values;
         /*
-        System.out.println(this.name() + ":"
-                + min + "|" + max + "|" + offset + "|"
-                + Arrays.toString(values));
-         */
+          System.out.println(this.name() + ":"
+          + min + "|" + max + "|" + offset + "|"
+          + Arrays.toString(values));
+        */
         }
 
     Boundaries(Boundaries other) {

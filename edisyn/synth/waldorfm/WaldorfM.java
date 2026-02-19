@@ -146,7 +146,7 @@ public class WaldorfM extends Synth
         hbox.addLast(addGlide(Style.COLOR_C()));
         vbox.add(hbox);
 
-        JComponent osc2 = addOscillator(2, Style.COLOR_A());		// this must be created first so we can stretch properly
+        JComponent osc2 = addOscillator(2, Style.COLOR_A());            // this must be created first so we can stretch properly
 
         JComponent comp = addOscillator(1, Style.COLOR_A());
         JComponent oscillatorStrut0 = Strut.makeStrut(osc2, false);
@@ -194,12 +194,12 @@ public class WaldorfM extends Synth
         strutBox = new VBox();
         strutBox.add(oscillatorStrut3);
         strutBox.add(addAlgorithm(1, Style.COLOR_C()));
-		algorithm1cat = strutBox;
+        algorithm1cat = strutBox;
 
         strutBox = new VBox();
         strutBox.add(oscillatorStrut4);
         strutBox.add(addAlgorithm(2, Style.COLOR_C()));
-		algorithm2cat = strutBox;
+        algorithm2cat = strutBox;
 
         transientBox = new HBox();
         transientBox.addLast(_transient = addTransient(Style.COLOR_C()));
@@ -379,8 +379,8 @@ public class WaldorfM extends Synth
         
         // This is getting quite complicated
         
-        if (mmwmode == 0)				// Classic = 0
-        	{
+        if (mmwmode == 0)                               // Classic = 0
+            {
             enableTransientBox.addLast(enableTransient);
             asicBugBox.addLast(asicBug);                    
 
@@ -393,13 +393,13 @@ public class WaldorfM extends Synth
                 wavetable2Box.addLast(wavetable2);
                 }
             fmBox.addLast(Strut.makeHorizontalStrut(fm));
-			wavebox1.add(wavetable1cat);
-			wavebox1.addLast(waveMod1);
-			wavebox2.add(wavetable2cat);
-			wavebox2.addLast(waveMod2);
-        	}
+            wavebox1.add(wavetable1cat);
+            wavebox1.addLast(waveMod1);
+            wavebox2.add(wavetable2cat);
+            wavebox2.addLast(waveMod2);
+            }
         else 
-        	{
+            {
             ringModBox.addLast(ringMod);
             ringModSourceBox.addLast(ringModSource);
             ringModAmountBox.addLast(ringModAmount);
@@ -411,20 +411,20 @@ public class WaldorfM extends Synth
             wavetable2Box.addLast(wavetable2);
             fmBox.addLast(fm);
 
-        	if (mmwmode == 1)          // Modern = 1
-				{
-			wavebox1.add(wavetable1cat);
-			wavebox1.addLast(waveMod1);
-			wavebox2.add(wavetable2cat);
-			wavebox2.addLast(waveMod2);
-				}
-			else                    		// Algorithm = 2
-				{
-				wavebox1.add(algorithm1cat);
-			wavebox1.addLast(waveMod1);
-				wavebox2.add(algorithm2cat);
-			wavebox2.addLast(waveMod2);
-				}
+            if (mmwmode == 1)          // Modern = 1
+                {
+                wavebox1.add(wavetable1cat);
+                wavebox1.addLast(waveMod1);
+                wavebox2.add(wavetable2cat);
+                wavebox2.addLast(waveMod2);
+                }
+            else                                    // Algorithm = 2
+                {
+                wavebox1.add(algorithm1cat);
+                wavebox1.addLast(waveMod1);
+                wavebox2.add(algorithm2cat);
+                wavebox2.addLast(waveMod2);
+                }
             }
                                     
         // revalidate
@@ -519,7 +519,17 @@ public class WaldorfM extends Synth
                 
         inner = new VBox();        
         /*
-        comp = new CheckBox("Modern (MWII/XT) Mode", this, "mmwmode")
+          comp = new CheckBox("Modern (MWII/XT) Mode", this, "mmwmode")
+          {
+          public void update(String key, Model model)
+          {
+          super.update(key, model);
+          reviseUI();
+          }
+          };
+        */
+        params = OSC_MODES;
+        comp = new Chooser("Oscillator Mode", this, "mmwmode", params)
             {
             public void update(String key, Model model)
                 {
@@ -527,16 +537,6 @@ public class WaldorfM extends Synth
                 reviseUI();
                 }
             };
-        */
-        params = OSC_MODES;
-    	comp = new Chooser("Oscillator Mode", this, "mmwmode", params)
-    		{
-            public void update(String key, Model model)
-                {
-                super.update(key, model);
-                reviseUI();
-                }
-    		};
         inner.add(comp);
         
         HBox strutBox = new HBox();
@@ -777,16 +777,16 @@ public class WaldorfM extends Synth
         HBox hbox = new HBox();
         
         VBox vbox = new VBox();
-        comp = new CheckBox("Fixed Pitch    ", this, "osc" + osc + "pitchmode");		// extra to cover Osc 1->2 FM
+        comp = new CheckBox("Fixed Pitch    ", this, "osc" + osc + "pitchmode");                // extra to cover Osc 1->2 FM
         vbox.add(comp);
 
         if (osc == 2)
             {
             osc1Sync = new VBox();
             comp = new CheckBox("Osc 1 Sync", this, "osc" + osc + "synctoosc1");
-    		osc1Sync.add(comp);
+            osc1Sync.add(comp);
             comp = new CheckBox("Osc 1->2 FM", this, "fmenablemm");
-    		osc1Sync.addLast(comp);
+            osc1Sync.addLast(comp);
             osc1SyncBox.addLast(osc1Sync);
             vbox.add(osc1SyncBox);
             }
@@ -816,14 +816,14 @@ public class WaldorfM extends Synth
         ((LabelledDial)comp).addAdditionalLabel("Base");
         hbox.add(comp);
         
-    	if (osc == 2)
-    		{
-        	comp = new LabelledDial("Osc 1->2", this, "fmdepthmm", color, 0, 127);
-        	((LabelledDial)comp).addAdditionalLabel("FM Depth");
-        	fm = comp;
-        	fmBox.add(Strut.makeHorizontalStrut(fm));
-        	hbox.addLast(fmBox);
-    		}
+        if (osc == 2)
+            {
+            comp = new LabelledDial("Osc 1->2", this, "fmdepthmm", color, 0, 127);
+            ((LabelledDial)comp).addAdditionalLabel("FM Depth");
+            fm = comp;
+            fmBox.add(Strut.makeHorizontalStrut(fm));
+            hbox.addLast(fmBox);
+            }
 
         category.add(hbox, BorderLayout.CENTER);
         return category;
@@ -1100,7 +1100,7 @@ public class WaldorfM extends Synth
         digitalFilterMod2 = comp;
         digitalFilterModBox2.add(digitalFilterMod2);
         vbox.add(digitalFilterModBox2);
-         hbox.add(vbox);
+        hbox.add(vbox);
 
         comp = new LabelledDial("Mod 2", this, "digivcfmod2amount", color, -64, 63);
         ((LabelledDial)comp).addAdditionalLabel("Amount");
@@ -1314,19 +1314,19 @@ public class WaldorfM extends Synth
 
         if (env == 2)
             {
-			comp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
-				new String[] { null, "env" + env + "delay", "env" + env + "attack", "env" + env + "decay", null, "env" + env + "release" },
-				new String[] { null, null, null, "env" + env + "sustain", "env" + env + "sustain", null },
-				new double[] { 0, 0.2/127.0, 0.2/127.0, 0.2/127.0,  0.2, 0.2/127.0},
-				new double[] { 0, 0, 1.0, 1.0 / 127.0, 1.0/127.0, 0 });
+            comp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
+                new String[] { null, "env" + env + "delay", "env" + env + "attack", "env" + env + "decay", null, "env" + env + "release" },
+                new String[] { null, null, null, "env" + env + "sustain", "env" + env + "sustain", null },
+                new double[] { 0, 0.2/127.0, 0.2/127.0, 0.2/127.0,  0.2, 0.2/127.0},
+                new double[] { 0, 0, 1.0, 1.0 / 127.0, 1.0/127.0, 0 });
             }
         else
             {
-			comp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
-				new String[] { null, "env" + env +  "attack", "env" + env +  "decay", null, "env" + env +  "release" },
-				new String[] { null, null, "env" + env +  "sustain", "env" + env +  "sustain", null },
-				new double[] { 0, 0.25/127.0, 0.25 / 127.0,  0.25, 0.25/127.0},
-				new double[] { 0, 1.0, 1.0 / 127.0, 1.0/127.0, 0 });
+            comp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
+                new String[] { null, "env" + env +  "attack", "env" + env +  "decay", null, "env" + env +  "release" },
+                new String[] { null, null, "env" + env +  "sustain", "env" + env +  "sustain", null },
+                new double[] { 0, 0.25/127.0, 0.25 / 127.0,  0.25, 0.25/127.0},
+                new double[] { 0, 1.0, 1.0 / 127.0, 1.0/127.0, 0 });
             }
         VBox vbox = new VBox();
         vbox.add(comp);
@@ -2472,22 +2472,22 @@ public class WaldorfM extends Synth
     "playmode",
     "voicestealmode",
     "globallfoshape",
-    "digivcfextramodsource",			// reserved 0		Digital VCF Extra Mod Source
-    "digivcfextramodamount",			// reserved 1		Digital VCF Extra Mod Amount
-    "wave1algorithm",           		// reserved 2		Wave1 Metaparam Algo
-    "wave1metaparam",					// reserved 3		Wave1 Metaparam
-    "wave1metaparammodsource",			// reserved 4		Wave1 Metaparam Mod Source
-    "wave1metaparammodamount",			// reserved 5		Wave1 Metaparam mod amount
-    "wave2algorithm",					// reserved 6		Wave2 Metaparam Algo
-    "wave2metaparam",					// reserved 7		Wave2 Metaparam
-    "wave2metaparammodsource",			// reserved 8		Wave2 metaparam mod source
-    "wave2metaparammodamount",			// reserved 9		Wave2 Metaparam mod amount
-    "analogvcfmpepbtrackenable",		// reserved 10		Analog VCF MPE PB Track Enable
-    "analogvcfmpepbtrackamount",		// reserved 11		Analog VCF MPE PB Track Amount
-    "fmenablemm",						// reserved 12		FM Enable MM
-    "fmdepthmm",						// reserved 13		FM Depth MM
-    "glidemodsource",					// reserved 14		Glide Mod Source
-    "glidemodamount",					// reserved 15		Glide Mod Amount
+    "digivcfextramodsource",                    // reserved 0           Digital VCF Extra Mod Source
+    "digivcfextramodamount",                    // reserved 1           Digital VCF Extra Mod Amount
+    "wave1algorithm",                           // reserved 2           Wave1 Metaparam Algo
+    "wave1metaparam",                                   // reserved 3           Wave1 Metaparam
+    "wave1metaparammodsource",                  // reserved 4           Wave1 Metaparam Mod Source
+    "wave1metaparammodamount",                  // reserved 5           Wave1 Metaparam mod amount
+    "wave2algorithm",                                   // reserved 6           Wave2 Metaparam Algo
+    "wave2metaparam",                                   // reserved 7           Wave2 Metaparam
+    "wave2metaparammodsource",                  // reserved 8           Wave2 metaparam mod source
+    "wave2metaparammodamount",                  // reserved 9           Wave2 Metaparam mod amount
+    "analogvcfmpepbtrackenable",                // reserved 10          Analog VCF MPE PB Track Enable
+    "analogvcfmpepbtrackamount",                // reserved 11          Analog VCF MPE PB Track Amount
+    "fmenablemm",                                               // reserved 12          FM Enable MM
+    "fmdepthmm",                                                // reserved 13          FM Depth MM
+    "glidemodsource",                                   // reserved 14          Glide Mod Source
+    "glidemodamount",                                   // reserved 15          Glide Mod Amount
     "digivcfenvamount",
     "digivcfenvvelocity",
     "digivcfkeytrack",

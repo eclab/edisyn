@@ -590,16 +590,16 @@ public class Librarian extends JPanel
         box.add(stopAction.getButton());
 
         /*
-        skipAction = new PushButton("Skip Patch")
-            {
-            public void perform()
-                {
-                getLibrary().getSynth().skipBatchPatchDownload();
-                }
-            };
-        skipAction.getButton().setEnabled(false);
-        setupButton(skipAction.getButton());
-        box.add(skipAction.getButton());
+          skipAction = new PushButton("Skip Patch")
+          {
+          public void perform()
+          {
+          getLibrary().getSynth().skipBatchPatchDownload();
+          }
+          };
+          skipAction.getButton().setEnabled(false);
+          setupButton(skipAction.getButton());
+          box.add(skipAction.getButton());
         */
                         
         box.add(patchWellLabel);

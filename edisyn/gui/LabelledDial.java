@@ -242,16 +242,16 @@ public class LabelledDial extends NumericalComponent
         }
 
 
-	int maxExtent = MAX_EXTENT;
+    int maxExtent = MAX_EXTENT;
 
-	// The largest vertical range that a dial ought to go.
-	public static final int MAX_EXTENT = 256;
-	// The typical vertical range that the dial goes.  128 is reasonable
-	public static final int MIN_EXTENT = 128;
+    // The largest vertical range that a dial ought to go.
+    public static final int MAX_EXTENT = 256;
+    // The typical vertical range that the dial goes.  128 is reasonable
+    public static final int MIN_EXTENT = 128;
         
-	public int getMaxExtent() { return maxExtent; }
-	public void setMaxExtent(int val) { if (val < MAX_EXTENT) val = MAX_EXTENT; maxExtent = val; }
-	
+    public int getMaxExtent() { return maxExtent; }
+    public void setMaxExtent(int val) { if (val < MAX_EXTENT) val = MAX_EXTENT; maxExtent = val; }
+        
     class Dial extends JPanel
         {
         // What's going on?  Is the user changing the dial?

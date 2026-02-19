@@ -72,7 +72,7 @@ public class KawaiK5000 extends Synth
     public static final String[] DCF_MODES = { "Low Pass", "High Pass" }; 
     public static final String[] SOURCE_LFO_WAVES = { "Triangle", "Square", "Sawtooth", "Sine", "Random" };
     public static final String[] SOURCE_TYPES = { "PCM", "Additive                                   " };                   // these extra spaces prevent movement when changing from PCM to Additive
-	public static final String[] SOURCE_NAMES = { "Source 1", "Source 2", "Source 3", "Source 4", "Source 5", "Source 6" };
+    public static final String[] SOURCE_NAMES = { "Source 1", "Source 2", "Source 3", "Source 4", "Source 5", "Source 6" };
     // Names of the 16 dials on the K5000s
     public static final String[] DIALS = { 
         "Hrm Lo", "FF Bias", "Cutoff", "Attack", "Hrm Hi", "FF Speed", "Reso", "Decay", "Even/Odd", "FF Depth", "Velocity", "Release", "User 1", "User 2", "User 3", "User 4" };
@@ -120,26 +120,26 @@ public class KawaiK5000 extends Synth
     // Min values for the effect parameters
     public static final int[][] EFFECT_PARAMETER_MINS = 
         {
-		// The manual says that TAP DELAY 1 ... CROSS DELAY have min values of 0 for Delay Level (dry/wet), but they do not.  They are 0.
-		// Though we go -12db .. +12db, the value are actually just 0...25
-		{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  },
-		{ 0, 0, 0, 0, NONE, 0, NONE, NONE, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, NONE, NONE, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0,  },
-		{ NONE, NONE, 0, 0, 0, 0, NONE, NONE, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 20, 0, 0, 0, 0, 0, 0, 0, 0,  },
-		{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NONE, NONE, NONE, 0, 0, 0, 0,  },
-		{ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NONE, NONE, NONE, NONE, 0, 0, 0, 0, 0, 0, 0, 0, NONE, 0, 0, 0, 0, 0, 0,  },
+        // The manual says that TAP DELAY 1 ... CROSS DELAY have min values of 0 for Delay Level (dry/wet), but they do not.  They are 0.
+        // Though we go -12db .. +12db, the value are actually just 0...25
+        { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  },
+        { 0, 0, 0, 0, NONE, 0, NONE, NONE, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, NONE, NONE, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0,  },
+        { NONE, NONE, 0, 0, 0, 0, NONE, NONE, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 20, 0, 0, 0, 0, 0, 0, 0, 0,  },
+        { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NONE, NONE, NONE, 0, 0, 0, 0,  },
+        { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, NONE, NONE, NONE, NONE, 0, 0, 0, 0, 0, 0, 0, 0, NONE, 0, 0, 0, 0, 0, 0,  },
         };
 
     // Max values for the effect parameters
     public static final int[][] EFFECT_PARAMETER_MAXES = 
         {
         // 0...99 is actually displayed as 1..100
-		// 25 is actually +12db
-		{ 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100,  },
-		{ 100, 100, 720, 720, NONE, 720, NONE, NONE, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, NONE, NONE, 100, 100, 100, 100, 100, 100, 100, 100, 20, 99, 99, 25, 25, 25, 25, 25, 25,  },
-		{ NONE, NONE, 99, 99, 9, 99, NONE, NONE, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 100, 99, 99, 25, 25, 25, 25, 25, 25,  },
-		// The 9 below is actually displayed as (1...10).  it is Rotary Acceleration
-		{ 100, 100, 720, 720, 1270, 720, 720, 720, 100, 200, 100, 200, 200, 200, 100, 100, 200, 200, 100, 200, 100, 200, 100, 200, 100, 100, 200, 200, 9, 99, NONE, NONE, NONE, 99, 99, 200, 200,  },
-		{ 99, 99, 99, 99, 99, 99, 99, 99, 1, 1, 1, 1, 1, 100, 99, 99, 99, 99, NONE, NONE, NONE, NONE, 1, 1, 99, 99, 99, 99, 1, 99, NONE, 99, 99, 99, 99, 99, 99,  },
+        // 25 is actually +12db
+        { 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100,  },
+        { 100, 100, 720, 720, NONE, 720, NONE, NONE, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, NONE, NONE, 100, 100, 100, 100, 100, 100, 100, 100, 20, 99, 99, 25, 25, 25, 25, 25, 25,  },
+        { NONE, NONE, 99, 99, 9, 99, NONE, NONE, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 100, 99, 99, 25, 25, 25, 25, 25, 25,  },
+        // The 9 below is actually displayed as (1...10).  it is Rotary Acceleration
+        { 100, 100, 720, 720, 1270, 720, 720, 720, 100, 200, 100, 200, 200, 200, 100, 100, 200, 200, 100, 200, 100, 200, 100, 200, 100, 100, 200, 200, 9, 99, NONE, NONE, NONE, 99, 99, 200, 200,  },
+        { 99, 99, 99, 99, 99, 99, 99, 99, 1, 1, 1, 1, 1, 100, 99, 99, 99, 99, NONE, NONE, NONE, NONE, 1, 1, 99, 99, 99, 99, 1, 99, NONE, 99, 99, 99, 99, 99, 99,  },
         };
 
     // Types of reverbs
@@ -633,8 +633,8 @@ public static final int ALL_ON = 4;
             
             hbox = new HBox();
             hbox.add(addGeneral(source, Style.COLOR_A()));
-			hbox.addLast(addControl(source, Style.COLOR_C()));
-			vbox.add(hbox);
+            hbox.addLast(addControl(source, Style.COLOR_C()));
+            vbox.add(hbox);
 
             soundPanel.add(vbox, BorderLayout.CENTER);
             addTab("S " + source, sourceTabs[source - 1] = (SynthPanel)soundPanel);
@@ -709,10 +709,10 @@ public static final int ALL_ON = 4;
         loadDefaults();     
         
         // reset all the Dials
-        for(int j = 1; j <= 16; j++)		// note <=
-        	{
-        	model.set("dial" + j, 64);
-  			}
+        for(int j = 1; j <= 16; j++)            // note <=
+            {
+            model.set("dial" + j, 64);
+            }
         }
                 
                 
@@ -838,17 +838,17 @@ public static final int ALL_ON = 4;
             for(int j = i; j < i + 4; j++)
                 {
                 comp = new LabelledDial(DIALS[j], this, "dial" + (j + 1), color, 0, 127)
-                	{
-                	public String map(int val) 
-                		{ 
-                		if (val == 0) return "-63";
-                		else if (val == 64) return "0";
-                		else if (val > 64) return "+" + (val - 64);
-                		else return "" + (val - 64);
-                		}
+                    {
+                    public String map(int val) 
+                        { 
+                        if (val == 0) return "-63";
+                        else if (val == 64) return "0";
+                        else if (val > 64) return "+" + (val - 64);
+                        else return "" + (val - 64);
+                        }
 
                     public boolean isSymmetric() { return true; }
-                	};
+                    };
                 model.setStatus("dial" + (j + 1), Model.STATUS_RESTRICTED);
                 hbox.add(comp);
                 }
@@ -909,52 +909,52 @@ public static final int ALL_ON = 4;
         }
         
     public void updateTabs()
-    	{
-    	// Get the title of the current tab
-    	int index = getSelectedTabIndex();
-    	String tabTitle = (index >= 0 ? tabs.getTitleAt(index) : null);
-    	
-    	// Remove tabs and add in proper ones
-                if (sourceTabs[0] != null)
+        {
+        // Get the title of the current tab
+        int index = getSelectedTabIndex();
+        String tabTitle = (index >= 0 ? tabs.getTitleAt(index) : null);
+        
+        // Remove tabs and add in proper ones
+        if (sourceTabs[0] != null)
+            {
+            // remove all the tabs
+            while(getNumTabs() > 1)
+                {
+                String s = tabs.getTitleAt(1);
+                if (s.startsWith("S ") || s.startsWith("H ") || s.startsWith("E "))
                     {
-                    // remove all the tabs
-                    while(getNumTabs() > 1)
-                        {
-                        String s = tabs.getTitleAt(1);
-                        if (s.startsWith("S ") || s.startsWith("H ") || s.startsWith("E "))
-                            {
-                            tabs.remove(1);
-                            }
-                        else break;
-                        }
-                    
-                    // Add in selected tabs
-                    for(int i = model.get("srctype") - 1; i >= 0; i--)
-                        {
-                        if (model.get("source" + (i + 1) + "additive") == 1 && envelopeTabs[i] != null)
-                        	{
-                        	tabs.add(envelopeTabs[i], 1);
-                        	tabs.setTitleAt(1, "E " + (i + 1));
-	                        tabs.add(harmonicsTabs[i], 1);
-                        	tabs.setTitleAt(1, "H " + (i + 1));
-                        	}
-                        if (sourceTabs[i] != null)
-                        	{
-                        	tabs.add(sourceTabs[i], 1);
-                        	tabs.setTitleAt(1, "S " + (i + 1));
-                        	}
-                        }
+                    tabs.remove(1);
                     }
+                else break;
+                }
+                    
+            // Add in selected tabs
+            for(int i = model.get("srctype") - 1; i >= 0; i--)
+                {
+                if (model.get("source" + (i + 1) + "additive") == 1 && envelopeTabs[i] != null)
+                    {
+                    tabs.add(envelopeTabs[i], 1);
+                    tabs.setTitleAt(1, "E " + (i + 1));
+                    tabs.add(harmonicsTabs[i], 1);
+                    tabs.setTitleAt(1, "H " + (i + 1));
+                    }
+                if (sourceTabs[i] != null)
+                    {
+                    tabs.add(sourceTabs[i], 1);
+                    tabs.setTitleAt(1, "S " + (i + 1));
+                    }
+                }
+            }
         // re-select the tab we used to be in
         if (tabTitle != null)
-        	{
-        	index = getIndexOfTabTitle(tabTitle);
-        	if (index >= 0)
-        		{
-        		setSelectedTabIndex(index);
-        		}
-        	}
-    	}
+            {
+            index = getIndexOfTabTitle(tabTitle);
+            if (index >= 0)
+                {
+                setSelectedTabIndex(index);
+                }
+            }
+        }
 
     public JComponent addControllers(Color color)
         {
@@ -1288,16 +1288,16 @@ public static final int ALL_ON = 4;
                 model.setMinMax("effect" + (effect + 1) + "type" + (type + 1) + (i == 0 ? "depth" : "para" + i), _min, _max);
                 model.setMetricMinMax("effect" + (effect + 1) + "type" + (type + 1) + (i == 0 ? "depth" : "para" + i), _min, _max);
                 }
-			}
+            }
         }
  
-     public HBox buildEffect(int effect, int type, Color color)
+    public HBox buildEffect(int effect, int type, Color color)
         {
         /*
-        if (allEffects[effect][type] != null)
-        	{
-        	return allEffects[effect][type];
-        	}
+          if (allEffects[effect][type] != null)
+          {
+          return allEffects[effect][type];
+          }
         */
         
         JComponent comp;
@@ -1350,7 +1350,7 @@ public static final int ALL_ON = 4;
                 count++;
                 String key = "effect" + (effect + 1) + "type" + (type + 1) + (i == 0 ? "depth" : "para" + i);
                 boolean addOne = (max == 99 || // all the 0...99 are displayed as 1-100
-                					EFFECT_PARAMETER_NAMES[i][type].equals("Acceleration"));		// Rotary Acceleration is 0...9 but displayed 1...10		
+                    EFFECT_PARAMETER_NAMES[i][type].equals("Acceleration"));                // Rotary Acceleration is 0...9 but displayed 1...10            
                 comp = lastDial = new LabelledDial(s[0], this, key, color, EFFECT_PARAMETER_MINS[i][type], trueMax, addOne ? -1 : 0)
                     {
                     public boolean isSymmetric()
@@ -1584,23 +1584,23 @@ public static final int ALL_ON = 4;
         comp = new LabelledDial("Time 4", this, "source" + source + "hetime4", color, 0, 127);
         morfh.add(comp);
         
-    	PushButton doMorph = new PushButton("Execute", SOURCE_NAMES)
-    		{
-    		public void perform(int source)
-    			{
-            	byte[] exec = new byte[] { (byte)0xF0, 0x40, (byte)getChannelOut(), 0x10, 0x00, 0x0a, 0x20, 0x46, (byte)source, 0x00, 0x00, 0x00, 0x01, (byte)0xF7 };
+        PushButton doMorph = new PushButton("Execute", SOURCE_NAMES)
+            {
+            public void perform(int source)
+                {
+                byte[] exec = new byte[] { (byte)0xF0, 0x40, (byte)getChannelOut(), 0x10, 0x00, 0x0a, 0x20, 0x46, (byte)source, 0x00, 0x00, 0x00, 0x01, (byte)0xF7 };
 
-				try 
-					{
-					tryToSendSysex(exec);
-					}
-				catch (Exception e) { Synth.handleException(e); }
-            	}
-    		};
-    		
-    	VBox doMorfBox = new VBox();
-    	doMorfBox.add(doMorph);
-    	morfh.add(doMorfBox);
+                try 
+                    {
+                    tryToSendSysex(exec);
+                    }
+                catch (Exception e) { Synth.handleException(e); }
+                }
+            };
+                
+        VBox doMorfBox = new VBox();
+        doMorfBox.add(doMorph);
+        morfh.add(doMorfBox);
                 
         vbox.add(normv);
         hbox.add(normh);
@@ -1794,9 +1794,9 @@ public static final int ALL_ON = 4;
         comp = new LabelledDial("Effect", this, "source" + source + "effectpath", color, 0, 3, -1);
         hbox.add(comp);
 
-		vbox.add(hbox);
-		hbox = new HBox();
-		
+        vbox.add(hbox);
+        hbox = new HBox();
+                
         comp = new LabelledDial("Zone Low", this, "source" + source + "zonelo", color, 0, 127);
         hbox.add(comp);
 
@@ -1882,15 +1882,15 @@ public static final int ALL_ON = 4;
         hbox1.add(comp);
                 
         comp = new LabelledDial("Mod Wheel", this, "source" + source + "wheeldepth1", color, 33, 95, 64);
-             ((LabelledDial)comp).addAdditionalLabel("Depth 1");
+        ((LabelledDial)comp).addAdditionalLabel("Depth 1");
         hbox1.add(comp);
                 
         comp = new LabelledDial("Expression", this, "source" + source + "expressdepth1", color, 33, 95, 64);
-               ((LabelledDial)comp).addAdditionalLabel("Depth 1");
+        ((LabelledDial)comp).addAdditionalLabel("Depth 1");
         hbox1.add(comp);
                 
         comp = new LabelledDial("Assignable", this, "source" + source + "assignablecontrol1depth", color, 33, 95, 64);
-              ((LabelledDial)comp).addAdditionalLabel("Depth 1");
+        ((LabelledDial)comp).addAdditionalLabel("Depth 1");
         hbox1.add(comp);
 
         vbox1.add(hbox1);
@@ -1901,15 +1901,15 @@ public static final int ALL_ON = 4;
         hbox1.add(comp);
 
         comp = new LabelledDial("Pressure", this, "source" + source + "pressdepth2", color, 33, 95, 64);
-           ((LabelledDial)comp).addAdditionalLabel("Depth 2");
+        ((LabelledDial)comp).addAdditionalLabel("Depth 2");
         hbox1.add(comp);
 
         comp = new LabelledDial("Mod Wheel", this, "source" + source + "wheeldepth2", color, 33, 95, 64);
-             ((LabelledDial)comp).addAdditionalLabel("Depth 2");
+        ((LabelledDial)comp).addAdditionalLabel("Depth 2");
         hbox1.add(comp);
                 
         comp = new LabelledDial("Expression", this, "source" + source + "expressdepth2", color, 33, 95, 64);
-               ((LabelledDial)comp).addAdditionalLabel("Depth 2");
+        ((LabelledDial)comp).addAdditionalLabel("Depth 2");
         hbox1.add(comp);
                 
         comp = new LabelledDial("Assignable", this, "source" + source + "assignablecontrol2depth", color, 33, 95, 64);
@@ -2157,7 +2157,7 @@ public static final int ALL_ON = 4;
 
 // I need space
         comp = new LabelledDial("KS->Env Level", this, "source" + source + "dcakstoenvlevel", color, 1, 127, 64);
- //       ((LabelledDial)comp).addAdditionalLabel("Level");
+        //       ((LabelledDial)comp).addAdditionalLabel("Level");
         hbox.add(comp);
 
         comp = new LabelledDial("Velo->Env Level", this, "source" + source + "dcavelotoenvlevel", color, 0, 63);
@@ -2231,7 +2231,7 @@ public static final int ALL_ON = 4;
             new String[] { null, null,                                                                   "source" + source + "dcaenvdecay1level", "source" + source + "dcaenvdecay2level", "source" + source + "dcaenvdecay2level", null },
             new double[] { 0, 1.0 / 5 / 127.0, 1.0 / 5 / 127.0, 1.0 / 5 / 127.0, 1.0 / 5, 1.0 / 5 / 127.0 },
             new double[] { 0.0, 1.0, 1.0 / 127, 1.0 / 127, 1.0 / 127, 1.0 / 127 });
-            // new double[] { 0.5, 1.0, 1.0 / 126, 1.0 / 126, 1.0 / 126, 1.0 / 126 });
+        // new double[] { 0.5, 1.0, 1.0 / 126, 1.0 / 126, 1.0 / 126, 1.0 / 126 });
 //disp.setAxis(63 / 127.0);               // dunno if this will work, I may be off by a pixel
         hbox.addLast(disp);
 
@@ -3297,42 +3297,42 @@ public static final int ALL_ON = 4;
         }
     
     public void fix(Model model, String key, int val, int min, int max)
-    	{
-    	// Bugs in Kawai's patches result in 0 provided when it should be 33 for signed parameters (like -31 ... +31,
-		// where 0 == 33).  For now we will assume that it meant 33
-		if ((key.startsWith("effectcontrol") || key.startsWith("macrocontroller")) && 
-			(key.contains("depth")) && val == 0)		// effectcontrol1depth, macrocontroller4depth2, etc.
-				{
-				model.set(key, 33);
-				}
-		/*
-		else if ((key.startsWith("effect1") || key.startsWith("effect2") || key.startsWith("effect3") || key.startsWith("effect4")) &&
-				!(key.endsWith("depth")))
-			{
-			// It's effectXtypeYparaZ
-			//int effect = StringUtility.getFirstInt(key);
-			key = StringUtility.removePreambleAndFirstDigits(key, "effect");
-			int type = StringUtility.getFirstInt(key);
-			key = StringUtility.removePreambleAndFirstDigits(key, "type");
-			int param = StringUtility.getFirstInt(key);
-			if (EFFECT_PARAMETER_NAMES[param][type - 1].equals("Depth"))
-				{
-				if (val < 0) val = 1;
-				if (val > 100) val = 100;
-				}
-			}
-		*/
-		else 		// we also have one patch with source1formantlfodepth = 85, ugh
-			{
-			// bound
-			int newVal = val;
-			if (newVal < min) newVal = min;
-			if (newVal > max) newVal = max;
-			model.set(key, newVal);
-			if (getPrintRevised()) System.out.println("Warning (Synth): Revised " + key + " from " + val + " to " + newVal + " (range " + min + " ... " + max + ")");             
-			}
-		// else super.fix(model, key, val, min, max);
-    	}
+        {
+        // Bugs in Kawai's patches result in 0 provided when it should be 33 for signed parameters (like -31 ... +31,
+        // where 0 == 33).  For now we will assume that it meant 33
+        if ((key.startsWith("effectcontrol") || key.startsWith("macrocontroller")) && 
+            (key.contains("depth")) && val == 0)            // effectcontrol1depth, macrocontroller4depth2, etc.
+            {
+            model.set(key, 33);
+            }
+        /*
+          else if ((key.startsWith("effect1") || key.startsWith("effect2") || key.startsWith("effect3") || key.startsWith("effect4")) &&
+          !(key.endsWith("depth")))
+          {
+          // It's effectXtypeYparaZ
+          //int effect = StringUtility.getFirstInt(key);
+          key = StringUtility.removePreambleAndFirstDigits(key, "effect");
+          int type = StringUtility.getFirstInt(key);
+          key = StringUtility.removePreambleAndFirstDigits(key, "type");
+          int param = StringUtility.getFirstInt(key);
+          if (EFFECT_PARAMETER_NAMES[param][type - 1].equals("Depth"))
+          {
+          if (val < 0) val = 1;
+          if (val > 100) val = 100;
+          }
+          }
+        */
+        else            // we also have one patch with source1formantlfodepth = 85, ugh
+            {
+            // bound
+            int newVal = val;
+            if (newVal < min) newVal = min;
+            if (newVal > max) newVal = max;
+            model.set(key, newVal);
+            if (getPrintRevised()) System.out.println("Warning (Synth): Revised " + key + " from " + val + " to " + newVal + " (range " + min + " ... " + max + ")");             
+            }
+        // else super.fix(model, key, val, min, max);
+        }
 
     public static String getSynthName() { return "Kawai K5000S/K5000R"; }
     
@@ -3352,10 +3352,10 @@ public static final int ALL_ON = 4;
         }
 
 
-	// Given a tempModel (which will never be null), writes out the full Single Tone of a patch, including all sources and wavekits, and all checksums,
-	// starting at the given position in data
-	public int emitTone(Model tempModel, byte[] data, int pos, int sources )
-		{
+    // Given a tempModel (which will never be null), writes out the full Single Tone of a patch, including all sources and wavekits, and all checksums,
+    // starting at the given position in data
+    public int emitTone(Model tempModel, byte[] data, int pos, int sources )
+        {
         pos++;                      // skip checksum space
         int start = pos;
 
@@ -3375,21 +3375,21 @@ public static final int ALL_ON = 4;
             {
             int missingEffectParams = 0;
             int effectType = tempModel.get("effect" + effect + "type");
-            data[pos++] = (byte)(effectType + 11);							// effects start at 11
+            data[pos++] = (byte)(effectType + 11);                                                      // effects start at 11
             if (EFFECT_PARAMETER_MINS[0][effectType] == NONE)
-            	{ missingEffectParams++; }
+                { missingEffectParams++; }
             else { data[pos++] = (byte)tempModel.get("effect" + effect + "type" + (effectType + 1) + "depth"); }
             if (EFFECT_PARAMETER_MINS[1][effectType] == NONE)
-            	{  missingEffectParams++; }
+                {  missingEffectParams++; }
             else { data[pos++] = (byte)tempModel.get("effect" + effect + "type" + (effectType + 1) + "para1"); }
             if (EFFECT_PARAMETER_MINS[2][effectType] == NONE)
-            	{ missingEffectParams++; }
+                { missingEffectParams++; }
             else { data[pos++] = (byte)tempModel.get("effect" + effect + "type" + (effectType + 1) + "para2"); }
             if (EFFECT_PARAMETER_MINS[3][effectType] == NONE)
-            	{ missingEffectParams++; }
+                { missingEffectParams++; }
             else { data[pos++] = (byte)tempModel.get("effect" + effect + "type" + (effectType + 1) + "para3"); }
             if (EFFECT_PARAMETER_MINS[4][effectType] == NONE)
-            	{ missingEffectParams++; }
+                { missingEffectParams++; }
             else { data[pos++] = (byte)tempModel.get("effect" + effect + "type" + (effectType + 1) + "para4"); }
             pos += missingEffectParams;
             }
@@ -3454,7 +3454,7 @@ public static final int ALL_ON = 4;
             for(int j = 0; j < sourceParams.length; j++)
                 {
                 String key = sourceParams[j];
-				
+                                
                 if (j == 2)             // velo sw and velo
                     {
                     data[pos++] = (byte)((tempModel.get("source" + i + "velosw") << 5) | 
@@ -3538,9 +3538,9 @@ public static final int ALL_ON = 4;
                         (tempModel.get("source" + i + "hcenv" + num + "loop") == 0 ? 0 : 64)); // off
                     }
                 else if (key.equals("--"))
-                	{
-                	pos++;
-                	}
+                    {
+                    pos++;
+                    }
                 else
                     {
                     data[pos++] = (byte)(tempModel.get("source" + i + key));
@@ -3550,7 +3550,7 @@ public static final int ALL_ON = 4;
             data[checksumpos] = checksum(data, start, pos);
             }
         return pos;
-		}
+        }
 
     public Object[] emitAll(Model tempModel, boolean toWorkingMemory, boolean toFile)
         {
@@ -3568,16 +3568,16 @@ public static final int ALL_ON = 4;
         // 2        E               3
         // 3        F               4
     
-    	// compute data length
-    	int datalen = 10 + 81 + 1;
-    	for(int i = 0; i < sources; i++)
-    		{
-    		datalen += 86;
-    		if (model.get("source" + (i + 1) + "additive") == 1) 
-    			{
-    			datalen += 806;
-    			}
-    		}
+        // compute data length
+        int datalen = 10 + 81 + 1;
+        for(int i = 0; i < sources; i++)
+            {
+            datalen += 86;
+            if (model.get("source" + (i + 1) + "additive") == 1) 
+                {
+                datalen += 806;
+                }
+            }
     
         byte[] data = new byte[datalen];
         // Format is
@@ -3596,7 +3596,7 @@ public static final int ALL_ON = 4;
     
         int pos = 9;
 
-		pos = emitTone(tempModel, data, pos, sources);
+        pos = emitTone(tempModel, data, pos, sources);
 
         data[data.length - 1] = (byte)0xF7;
         return new Object[] { data };
@@ -3607,73 +3607,73 @@ public static final int ALL_ON = 4;
         {
         boolean[] tonemap = new boolean[128];
         
-		int datalen = 8 + 19 + 1;
+        int datalen = 8 + 19 + 1;
         for(int i = 0; i < 128; i++)
-        	{
-        	// build tone map
-        	Model m = models[i];
-        	
-        	tonemap[i] = (m != null);
-        	if (!tonemap[i]) continue;		// we don't have this data, it's a null patch
+            {
+            // build tone map
+            Model m = models[i];
+                
+            tonemap[i] = (m != null);
+            if (!tonemap[i]) continue;              // we don't have this data, it's a null patch
 
-			// compute data length
-			datalen += 81 + 1;		// add in the checksum
-			int sources = m.get("srctype");
-			for(int s = 0; s < sources; s++)
-				{
-				datalen += 86;
-				if (m.get("source" + (s + 1) + "additive") == 1) 
-					{
-					datalen += 806;
-					}
-				}
-			}
+            // compute data length
+            datalen += 81 + 1;              // add in the checksum
+            int sources = m.get("srctype");
+            for(int s = 0; s < sources; s++)
+                {
+                datalen += 86;
+                if (m.get("source" + (s + 1) + "additive") == 1) 
+                    {
+                    datalen += 806;
+                    }
+                }
+            }
 
-			// bank     Name    data[8]
-			// 0        A               0
-			// 1        D               2
-			// 2        E               3
-			// 3        F               4
-	
-			byte[] data = new byte[datalen];
-	
-			data[0] = (byte)0xF0;
-			data[1] = (byte)0x40;                                               // Kawai
-			data[2] = (byte)getChannelOut();                    // Channel
-			data[3] = (byte)0x21;
-			data[4] = (byte)0x00;
-			data[5] = (byte)0x0A;
-			data[6] = (byte)0x00;
-			data[7] = (byte)BANK_VALS[bank];                    // bank
-			int pos = 8;
-			
-			// Load the tone map
-			int patch = 0;
-			for(int j = 0; j < 18; j++)
-				{
-				data[pos++] = (byte)
-					((tonemap[patch + 0] ? 1 : 0) +
-					(tonemap[patch + 1] ? 2 : 0) +
-					(tonemap[patch + 2] ? 4 : 0) +
-					(tonemap[patch + 3] ? 8 : 0) +
-					(tonemap[patch + 4] ? 16 : 0) +
-					(tonemap[patch + 5] ? 32 : 0) +
-					(tonemap[patch + 6] ? 64 : 0));
-				patch += 7;
-				}
-			data[pos++] = (byte)
-					((tonemap[126] ? 1 : 0) +
-					(tonemap[127] ? 2 : 0));
-					
-			// Load the patches
+        // bank     Name    data[8]
+        // 0        A               0
+        // 1        D               2
+        // 2        E               3
+        // 3        F               4
+        
+        byte[] data = new byte[datalen];
+        
+        data[0] = (byte)0xF0;
+        data[1] = (byte)0x40;                                               // Kawai
+        data[2] = (byte)getChannelOut();                    // Channel
+        data[3] = (byte)0x21;
+        data[4] = (byte)0x00;
+        data[5] = (byte)0x0A;
+        data[6] = (byte)0x00;
+        data[7] = (byte)BANK_VALS[bank];                    // bank
+        int pos = 8;
+                        
+        // Load the tone map
+        int patch = 0;
+        for(int j = 0; j < 18; j++)
+            {
+            data[pos++] = (byte)
+                ((tonemap[patch + 0] ? 1 : 0) +
+                (tonemap[patch + 1] ? 2 : 0) +
+                (tonemap[patch + 2] ? 4 : 0) +
+                (tonemap[patch + 3] ? 8 : 0) +
+                (tonemap[patch + 4] ? 16 : 0) +
+                (tonemap[patch + 5] ? 32 : 0) +
+                (tonemap[patch + 6] ? 64 : 0));
+            patch += 7;
+            }
+        data[pos++] = (byte)
+            ((tonemap[126] ? 1 : 0) +
+            (tonemap[127] ? 2 : 0));
+                                        
+        // Load the patches
 
         for(Model m : models)
-        	{
-        	if (m != null)
-        		{
-				pos = emitTone(m, data, pos, m.get("srctype"));
-				}
-			}
+            {
+            if (m != null)
+                {
+                pos = emitTone(m, data, pos, m.get("srctype"));
+                }
+            }
         data[data.length - 1] = (byte)0xF7;
         return new Object[] { data };
         }
@@ -3697,15 +3697,15 @@ public static final int ALL_ON = 4;
         int pos = 10;
                         
         // okay, here we go
-		pos = parseSingle(result, pos);
+        pos = parseSingle(result, pos);
         revise();
         if (pos < 0) return PARSE_FAILED;
         else return PARSE_SUCCEEDED;
-		}
+        }
     
     // return -1 is FAILED, else return resulting pos
     public int parseSingle(byte[] result, int pos)
-    	{             
+        {             
         int numSources = result[pos + 50];
         if (numSources < 2 || numSources > 6) return -1;              
 
@@ -3718,32 +3718,32 @@ public static final int ALL_ON = 4;
         model.set("reverb" + (reverbtype + 1) + "para3", result[pos++]);
         model.set("reverb" + (reverbtype + 1) + "para4", result[pos++]);
 
-		int missingEffectParams = 0;
+        int missingEffectParams = 0;
         for(int effect = 1; effect <= 4; effect++)                                  // NOTE <=
             {
-			// EFFECTS are PACKED.  So if an effect doesn't have a particular parameter, the NEXT PARAMETER fits in its slot.  
-			// This is of course NOT documented
+            // EFFECTS are PACKED.  So if an effect doesn't have a particular parameter, the NEXT PARAMETER fits in its slot.  
+            // This is of course NOT documented
 
-            int effectType = result[pos++] - 11;					// effects go 11...47
-            if (effectType < 0 || effectType >= EFFECT_PARAMETER_MINS[0].length) effectType = 0;			// this happens for Patch 71, which has a value of 0 for one of its effect types 
+            int effectType = result[pos++] - 11;                                        // effects go 11...47
+            if (effectType < 0 || effectType >= EFFECT_PARAMETER_MINS[0].length) effectType = 0;                        // this happens for Patch 71, which has a value of 0 for one of its effect types 
             
             model.set("effect" + effect + "type", effectType);
             if (EFFECT_PARAMETER_MINS[0][effectType] == NONE)
-            	{ missingEffectParams++; }
+                { missingEffectParams++; }
             else { model.set("effect" + effect + "type" + (effectType + 1) + "depth", result[pos++]); }
             if (EFFECT_PARAMETER_MINS[1][effectType] == NONE)
-            	{  missingEffectParams++; }
+                {  missingEffectParams++; }
             else { model.set("effect" + effect + "type" + (effectType + 1) + "para1", result[pos++]); }
             if (EFFECT_PARAMETER_MINS[2][effectType] == NONE)
-            	{ missingEffectParams++; }
+                { missingEffectParams++; }
             else { model.set("effect" + effect + "type" + (effectType + 1) + "para2", result[pos++]); }
             if (EFFECT_PARAMETER_MINS[3][effectType] == NONE)
-            	{ missingEffectParams++; }
+                { missingEffectParams++; }
             else { model.set("effect" + effect + "type" + (effectType + 1) + "para3", result[pos++]); }
             if (EFFECT_PARAMETER_MINS[4][effectType] == NONE)
-            	{ missingEffectParams++; }
+                { missingEffectParams++; }
             else { model.set("effect" + effect + "type" + (effectType + 1) + "para4", result[pos++]); }
-            pos += missingEffectParams;					// fill in the missing spaces
+            pos += missingEffectParams;                                 // fill in the missing spaces
             missingEffectParams = 0;
             }
                 
@@ -3855,11 +3855,11 @@ public static final int ALL_ON = 4;
             {
             if (!additiveSource[i - 1]) continue;
             
-            if ((result[pos] & 0xFF) == 0xF7)	// we ran out!!!!
-            	{
-            	System.err.println("ERROR (KawaiK5000.parse()): early truncation of wavekits!");
-            	return PARSE_FAILED;		// I think this should be a failure
-            	}
+            if ((result[pos] & 0xFF) == 0xF7)   // we ran out!!!!
+                {
+                System.err.println("ERROR (KawaiK5000.parse()): early truncation of wavekits!");
+                return PARSE_FAILED;            // I think this should be a failure
+                }
             
             pos++;     
             int start = pos;                                                                                         // checksum
@@ -3868,28 +3868,28 @@ public static final int ALL_ON = 4;
                 {
                 String key = addWaveKitParams[j];
                 if (!key.equals("--"))
-                	model.set("source" + i + key, result[pos++]);
+                    model.set("source" + i + key, result[pos++]);
                 }
 
             for(int j = 0; j < addWaveHCSoftParams.length; j++)
                 {
                 String key = addWaveHCSoftParams[j];
                 if (!key.equals("--"))
-                model.set("source" + i + key, result[pos++]);
+                    model.set("source" + i + key, result[pos++]);
                 }
 
             for(int j = 0; j < addWaveHCLoudParams.length; j++)
                 {
                 String key = addWaveHCLoudParams[j];
                 if (!key.equals("--"))
-                model.set("source" + i + key, result[pos++]);
+                    model.set("source" + i + key, result[pos++]);
                 }
 
             for(int j = 0; j < addWaveFormantFilterParams.length; j++)
                 {
                 String key = addWaveFormantFilterParams[j];
                 if (!key.equals("--"))
-                model.set("source" + i + key, result[pos++]);
+                    model.set("source" + i + key, result[pos++]);
                 }
 
             for(int j = 0; j < addWaveHarmonicEnvelopeParams.length; j++)
@@ -3899,7 +3899,7 @@ public static final int ALL_ON = 4;
                     {
                     int num = StringUtility.getFirstInt(key);
                     int val1 = result[pos];                     // level 1
-                    int val2 = result[pos + 2];         		// level 2 (skip rate1)
+                    int val2 = result[pos + 2];                         // level 2 (skip rate1)
                     
                     ///// NOTE: documentation is wrong. It says that val1 & 64 = 0 is "LP1" and val1 & 64 = 1 is "Loop/LP2".
                     ///// It's actually the other way around.
@@ -3907,7 +3907,7 @@ public static final int ALL_ON = 4;
                     pos++;
                     model.set("source" + i + key, val1 & 63);
                     model.set("source" + i + "hcenv" + num + "loop", 
-                    	((val1 & 64) == 0 ? ((val2 & 64) == 0 ? 0 : 2) : 1));
+                        ((val1 & 64) == 0 ? ((val2 & 64) == 0 ? 0 : 2) : 1));
                     }
                 else if (key.endsWith("level2"))
                     {
@@ -3915,9 +3915,9 @@ public static final int ALL_ON = 4;
                     model.set("source" + i + key, val1 & 63);
                     }
                 else if (key.equals("--"))
-                	{
-                	pos++;
-                	}
+                    {
+                    pos++;
+                    }
                 else
                     {
                     model.set("source" + i + key, result[pos++]);
@@ -4071,37 +4071,37 @@ public static final int ALL_ON = 4;
             int type = model.get("reverbtype");
             if (key.endsWith("type"))
                 {
-            	data = new int[] { 0x03, 0x00, 0x01, 0x00, 0x00, 0x00, model.get(key) + 11 };		// effects start at 11
+                data = new int[] { 0x03, 0x00, 0x01, 0x00, 0x00, 0x00, model.get(key) + 11 };           // effects start at 11
                 }
             else 
-            	{
-            	if (key.endsWith("drywet1"))
                 {
-                if (type + 1 != StringUtility.getSecondInt(key))  return new Object[0]; // we're the wrong type
-                sub5 = 1;
+                if (key.endsWith("drywet1"))
+                    {
+                    if (type + 1 != StringUtility.getSecondInt(key))  return new Object[0]; // we're the wrong type
+                    sub5 = 1;
+                    }
+                else if (key.endsWith("para1"))
+                    {
+                    if (type + 1 != StringUtility.getSecondInt(key))  return new Object[0]; // we're the wrong type
+                    sub5 = 2;
+                    }
+                else if (key.endsWith("para2"))
+                    {
+                    if (type + 1 != StringUtility.getSecondInt(key))  return new Object[0]; // we're the wrong type
+                    sub5 = 3;
+                    }
+                else if (key.endsWith("para3"))
+                    {
+                    if (type + 1 != StringUtility.getSecondInt(key))  return new Object[0]; // we're the wrong type
+                    sub5 = 4;
+                    }
+                else if (key.endsWith("para4"))
+                    {
+                    if (type + 1 != StringUtility.getSecondInt(key))  return new Object[0]; // we're the wrong type
+                    sub5 = 5;
+                    }
+                data = new int[] { 0x03, 0x00, 0x01, 0x00, sub5, 0x00, model.get(key) };
                 }
-            else if (key.endsWith("para1"))
-                {
-                if (type + 1 != StringUtility.getSecondInt(key))  return new Object[0]; // we're the wrong type
-                sub5 = 2;
-                }
-            else if (key.endsWith("para2"))
-                {
-                if (type + 1 != StringUtility.getSecondInt(key))  return new Object[0]; // we're the wrong type
-                sub5 = 3;
-                }
-            else if (key.endsWith("para3"))
-                {
-                if (type + 1 != StringUtility.getSecondInt(key))  return new Object[0]; // we're the wrong type
-                sub5 = 4;
-                }
-            else if (key.endsWith("para4"))
-                {
-                if (type + 1 != StringUtility.getSecondInt(key))  return new Object[0]; // we're the wrong type
-                sub5 = 5;
-                }
-            data = new int[] { 0x03, 0x00, 0x01, 0x00, sub5, 0x00, model.get(key) };
-            }
             }
         else if (key.startsWith("effectcontrol"))
             {
@@ -4238,26 +4238,26 @@ public static final int ALL_ON = 4;
             };
         }
         
-public String[] getBankNames() { return BANKS; }
+    public String[] getBankNames() { return BANKS; }
 
 // Return a list of all patch number names.  
-public String[] getPatchNumberNames() { return buildIntegerNames(128, 1); }
+    public String[] getPatchNumberNames() { return buildIntegerNames(128, 1); }
 
 // Return a list whether patches in banks are writeable.
-public boolean[] getWriteableBanks() { return new boolean[] { true, true, true, true, }; }
+    public boolean[] getWriteableBanks() { return new boolean[] { true, true, true, true, }; }
 
 // Return a list whether individual patches can be written.
-public boolean getSupportsPatchWrites() { return true; }
+    public boolean getSupportsPatchWrites() { return true; }
 
 // Return a list whether individual patches can be written.
-public boolean getSuportsBankReads() { return true; }
+    public boolean getSuportsBankReads() { return true; }
 
-public boolean getSupportsDownloads() { return true; }
+    public boolean getSupportsDownloads() { return true; }
 
-public int getPatchNameLength() { return 8; }
+    public int getPatchNameLength() { return 8; }
 
-public byte[] requestBankDump(int bank) 
-	{
+    public byte[] requestBankDump(int bank) 
+        {
         return new byte[] 
             { 
             (byte)0xF0, 
@@ -4270,125 +4270,125 @@ public byte[] requestBankDump(int bank)
             (byte)0x00,
             (byte)0xF7
             };
-	}
+        }
 
 
 /*
-	// return -1 if there is no such position -- the patch is null
-	public int getPatchPosition(byte[] bank, int num)
-		{
-		// This will be quite costly: O(size(bank)^2) overall.  We may need to call this up-front
-		// and then consult it as we parse from the bank sysex, if it proves to be too slow.
-		
-        boolean[] tonemap = new boolean[128];
-		int datalen = 8 + 19 + 1;
-		int pos = 8;
-		int count = 0;
-		for (int i = 0; i < 126; i++)
-			{
-			// parse tone map
-			tonemap[i] = (((bank[pos] >>> count++) & 0x1) == 0x1);
-			if (count > 6) { count = 0; pos++; }
-			}
-		tonemap[126] = (((bank[pos] >>> 0) & 0x1) == 0x1);
-		tonemap[127] = (((bank[pos] >>> 1) & 0x1) == 0x1);
-		if (!tonemap[num]) return -1;
-		
-		// Now we have to go searching for the position :=(
-		
-		// reset pos
-		pos = 8 + 19 + 1;
-        for(int i = 0; i < num; i++)
-        	{
-        	if (!tonemap[i]) continue;		// it's a null patch, skip it
+// return -1 if there is no such position -- the patch is null
+public int getPatchPosition(byte[] bank, int num)
+{
+// This will be quite costly: O(size(bank)^2) overall.  We may need to call this up-front
+// and then consult it as we parse from the bank sysex, if it proves to be too slow.
+                
+boolean[] tonemap = new boolean[128];
+int datalen = 8 + 19 + 1;
+int pos = 8;
+int count = 0;
+for (int i = 0; i < 126; i++)
+{
+// parse tone map
+tonemap[i] = (((bank[pos] >>> count++) & 0x1) == 0x1);
+if (count > 6) { count = 0; pos++; }
+}
+tonemap[126] = (((bank[pos] >>> 0) & 0x1) == 0x1);
+tonemap[127] = (((bank[pos] >>> 1) & 0x1) == 0x1);
+if (!tonemap[num]) return -1;
+                
+// Now we have to go searching for the position :=(
+                
+// reset pos
+pos = 8 + 19 + 1;
+for(int i = 0; i < num; i++)
+{
+if (!tonemap[i]) continue;              // it's a null patch, skip it
 
-			// find the number of sources
-			int sources = bank[pos + 50];
+// find the number of sources
+int sources = bank[pos + 50];
 
-			pos += 81 + 1;		// add in the checksum
-			for(int s = 0; s < sources; s++)
-				{
-				int msb = bank[pos + 28];
-				int lsb = bank[pos + 29];
-				boolean additive = (msb * 128 + lsb == 512);
-				pos += 86;
-				if (additive) 
-					{
-					pos += 806;
-					}
-				}
-			}
-			
-		// At this point we're at the start of patch #num
-		return pos;
-		}
+pos += 81 + 1;          // add in the checksum
+for(int s = 0; s < sources; s++)
+{
+int msb = bank[pos + 28];
+int lsb = bank[pos + 29];
+boolean additive = (msb * 128 + lsb == 512);
+pos += 86;
+if (additive) 
+{
+pos += 806;
+}
+}
+}
+                        
+// At this point we're at the start of patch #num
+return pos;
+}
 */
 
-	// When we don't get a response while doing a batch download, it is likely not because
-	// the synth was slow to respond, but rather because the patch is a NULL patch, and the
-	// K5000 doesn't respond at all for NULL patches -- in this case we must skip to the next patch.
-	public boolean skipBatchPatchDownload() { return true; }
-	
-	int[] patchBankPositions = null;
+    // When we don't get a response while doing a batch download, it is likely not because
+    // the synth was slow to respond, but rather because the patch is a NULL patch, and the
+    // K5000 doesn't respond at all for NULL patches -- in this case we must skip to the next patch.
+    public boolean skipBatchPatchDownload() { return true; }
+        
+    int[] patchBankPositions = null;
 
-	public int getPatchPosition(byte[] bank, int num)
-		{
-		if (patchBankPositions == null) // uh oh, should not happen
-			{
-			System.err.println("KawaiK5000.getPatchPosition() ERROR: bankPatchPositions was null");
-			preprocessParseFromBank(bank);
-			}
-		return patchBankPositions[num];
-		}
+    public int getPatchPosition(byte[] bank, int num)
+        {
+        if (patchBankPositions == null) // uh oh, should not happen
+            {
+            System.err.println("KawaiK5000.getPatchPosition() ERROR: bankPatchPositions was null");
+            preprocessParseFromBank(bank);
+            }
+        return patchBankPositions[num];
+        }
 
-	// set to -1 if there is no such position -- the patch is null
-	public void preprocessParseFromBank(byte[] bank)
-		{
-		patchBankPositions = new int[128];
+    // set to -1 if there is no such position -- the patch is null
+    public void preprocessParseFromBank(byte[] bank)
+        {
+        patchBankPositions = new int[128];
         boolean[] tonemap = new boolean[128];
-		int datalen = 8 + 19 + 1;
-		int pos = 8;
-		int count = 0;
-		for (int i = 0; i < 126; i++)
-			{
-			// parse tone map
-			tonemap[i] = (((bank[pos] >>> count++) & 0x1) == 0x1);
-			if (count > 6) { count = 0; pos++; }
-			}
-		tonemap[126] = (((bank[pos] >>> 0) & 0x1) == 0x1);
-		tonemap[127] = (((bank[pos] >>> 1) & 0x1) == 0x1);
-		
-		// Now we have to go searching for the position :=(
-		
-		// reset pos
-		pos = 8 + 19 + 1;
+        int datalen = 8 + 19 + 1;
+        int pos = 8;
+        int count = 0;
+        for (int i = 0; i < 126; i++)
+            {
+            // parse tone map
+            tonemap[i] = (((bank[pos] >>> count++) & 0x1) == 0x1);
+            if (count > 6) { count = 0; pos++; }
+            }
+        tonemap[126] = (((bank[pos] >>> 0) & 0x1) == 0x1);
+        tonemap[127] = (((bank[pos] >>> 1) & 0x1) == 0x1);
+                
+        // Now we have to go searching for the position :=(
+                
+        // reset pos
+        pos = 8 + 19 + 1;
         for(int i = 0; i < 128; i++)
-        	{
-        	if (!tonemap[i]) 
-        		{
-        		patchBankPositions[i] = -1;
-        		}
-        	else
-        		{
-				// find the number of sources
-				int sources = bank[pos + 50];
+            {
+            if (!tonemap[i]) 
+                {
+                patchBankPositions[i] = -1;
+                }
+            else
+                {
+                // find the number of sources
+                int sources = bank[pos + 50];
 
-				pos += 81 + 1;		// add in the checksum
-				for(int s = 0; s < sources; s++)
-					{
-					int msb = bank[pos + 28];
-					int lsb = bank[pos + 29];
-					boolean additive = (msb * 128 + lsb == 512);
-					pos += 86;
-					if (additive) 
-						{
-						pos += 806;
-						}
-					}
-				patchBankPositions[i] = pos;
-				}
-			}
-		}
+                pos += 81 + 1;          // add in the checksum
+                for(int s = 0; s < sources; s++)
+                    {
+                    int msb = bank[pos + 28];
+                    int lsb = bank[pos + 29];
+                    boolean additive = (msb * 128 + lsb == 512);
+                    pos += 86;
+                    if (additive) 
+                        {
+                        pos += 806;
+                        }
+                    }
+                patchBankPositions[i] = pos;
+                }
+            }
+        }
 
 
 
@@ -4401,20 +4401,20 @@ public byte[] requestBankDump(int bank)
         
         int pos = getPatchPosition(bankSysex, number);
         if (pos == -1)
-        	{
-        	return PARSE_IGNORE;			// should produce an init patch (blank)
-        	}
+            {
+            return PARSE_IGNORE;                    // should produce an init patch (blank)
+            }
         else
-        	{
-        	return parseSingle(bankSysex, pos);
-        	}
+            {
+            return parseSingle(bankSysex, pos);
+            }
         }
 
 
     public int getBank(byte[] bankSysex) 
         { 
         int bank = bankSysex[7];
-        if (bank > 0) bank--;	// A (0) == 0, D (2) == 1, E (3) == 2, F (4) == 3
+        if (bank > 0) bank--;   // A (0) == 0, D (2) == 1, E (3) == 2, F (4) == 3
         return bank; 
         }
 
@@ -5876,15 +5876,15 @@ public byte[] requestBankDump(int bank)
             
             String removed = StringUtility.removePreambleAndFirstDigits(key, "source");
             if ((addWaveKitParamsToIndex.containsKey(removed) ||
-            	addWaveHCSoftParamsToIndex.containsKey(removed) ||
-            	addWaveHCLoudParamsToIndex.containsKey(removed) ||
-            	addWaveFormantFilterParamsToIndex.containsKey(removed) ||
-            	addWaveHarmonicEnvelopeParamsToIndex.containsKey(removed) ||
-            	addWaveHarmonicLoopParamsToIndex.containsKey(removed)) &&		// it's a wavekit parameter
-            		model.get("source" + source + "additive") == 0)	// it's not an additive source, so shouldn't be there any more
-            	{
-            	return true;
-            	}
+                    addWaveHCSoftParamsToIndex.containsKey(removed) ||
+                    addWaveHCLoudParamsToIndex.containsKey(removed) ||
+                    addWaveFormantFilterParamsToIndex.containsKey(removed) ||
+                    addWaveHarmonicEnvelopeParamsToIndex.containsKey(removed) ||
+                    addWaveHarmonicLoopParamsToIndex.containsKey(removed)) &&               // it's a wavekit parameter
+                model.get("source" + source + "additive") == 0) // it's not an additive source, so shouldn't be there any more
+                {
+                return true;
+                }
             }
                 
         return false; 

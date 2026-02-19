@@ -305,33 +305,33 @@ class Convertors {
                 }
             };
 
-            private final OptionalInt byteIndex;
-            private final OptionalInt cc;
-            private final OptionalInt nrpn;
+        private final OptionalInt byteIndex;
+        private final OptionalInt cc;
+        private final OptionalInt nrpn;
 
-            Packed(Integer byteIndex, Integer cc, Integer nrpn) {
-                this.byteIndex = toOptional(byteIndex);
-                this.cc = toOptional(cc);
-                this.nrpn = toOptional(nrpn);
+        Packed(Integer byteIndex, Integer cc, Integer nrpn) {
+            this.byteIndex = toOptional(byteIndex);
+            this.cc = toOptional(cc);
+            this.nrpn = toOptional(nrpn);
             }
 
-            @Override
-            public OptionalInt getByteIndex() {
-                return byteIndex;
+        @Override
+        public OptionalInt getByteIndex() {
+            return byteIndex;
             }
 
-            @Override
-            public OptionalInt getCC() {
-                return cc;
+        @Override
+        public OptionalInt getCC() {
+            return cc;
             }
 
-            @Override
-            public OptionalInt getNRPN() {
-                return nrpn;
+        @Override
+        public OptionalInt getNRPN() {
+            return nrpn;
             }
 
-            private OptionalInt toOptional(Integer i) {
-                return i == null ? OptionalInt.empty() : OptionalInt.of(i);
+        private OptionalInt toOptional(Integer i) {
+            return i == null ? OptionalInt.empty() : OptionalInt.of(i);
             }
+        }
     }
-}

@@ -720,34 +720,34 @@ public class Library extends AbstractTableModel
                 Patch p = getPatch(bank, i);
                 if (p == null) p = initPatch;
                 if (p.empty == true && synth.markEmptyBankPatchModelsAsNull())
-                	{
-                	continue;
-                	}
+                    {
+                    continue;
+                    }
                 else
-                	{
-					for(int j = 0; j < p.sysex.length; j++)
-						{
-						int result = synth.parse(p.sysex[j], true);                     //dunno, from file or not?
-						if (result == Synth.PARSE_CANCELLED ||
-							result == Synth.PARSE_FAILED ||
-							(result == Synth.PARSE_INCOMPLETE && j == p.sysex.length - 1))  // last one
-							{
-							failed = true;
-							localFailed = true;
-							break;
-							}
+                    {
+                    for(int j = 0; j < p.sysex.length; j++)
+                        {
+                        int result = synth.parse(p.sysex[j], true);                     //dunno, from file or not?
+                        if (result == Synth.PARSE_CANCELLED ||
+                            result == Synth.PARSE_FAILED ||
+                            (result == Synth.PARSE_INCOMPLETE && j == p.sysex.length - 1))  // last one
+                            {
+                            failed = true;
+                            localFailed = true;
+                            break;
+                            }
 
-						if (hasBanks)
-							{
-							synth.getModel().set("bank", bank);
-							}
-						synth.getModel().set("number", i);
-						}
-										
-					if (localFailed) continue;
-										
-					patches[i] = synth.getModel();
-					}
+                        if (hasBanks)
+                            {
+                            synth.getModel().set("bank", bank);
+                            }
+                        synth.getModel().set("number", i);
+                        }
+                                                                                
+                    if (localFailed) continue;
+                                                                                
+                    patches[i] = synth.getModel();
+                    }
                 }
                     
             // At this point we've gathered all the patches to form the bank.                                                                

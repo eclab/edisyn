@@ -776,12 +776,12 @@ public class Blank extends Synth
         }
         
     public boolean skipBatchPatchDownload()
-    	{
-    	// If we have exceeded the Batch Download Failure Countdown in trying to 
-    	// download a patch, then if skipBatchPatchDownload() is TRUE, we will simply
-    	// skip this patch.  Otherwise we will issue an error and stop the download
-    	return false;
-    	}
+        {
+        // If we have exceeded the Batch Download Failure Countdown in trying to 
+        // download a patch, then if skipBatchPatchDownload() is TRUE, we will simply
+        // skip this patch.  Otherwise we will issue an error and stop the download
+        return false;
+        }
 
     public void startingBatchDownload(Model firstPatch, Model finalPatch) 
         {
@@ -976,17 +976,17 @@ public class Blank extends Synth
         }
 
     public boolean markEmptyBankPatchModelsAsNull() 
-    	{ 
-    	// Synthesizers such as the Kawai K5000 are rare in that they have N slots for a bank,
-    	// but may only be able to fit some M < N patches in those slots before they run out of
-    	// memory due to patches being variable in size.  The remaining slots are filled with
-    	// "blank" stub patches.  Edisyn fills these extra slots with the INIT PATCH, which is
-    	// labelled as "empty".  If this method returns TRUE (it returns FALSE by default), then
-    	// the models[] array should not provide a Model for the init patch in its patch
-    	// slots, but instread should provide NULL to make it clear that it's an empty patch
-    	// slot.  
-    	return false; 
-    	}
+        { 
+        // Synthesizers such as the Kawai K5000 are rare in that they have N slots for a bank,
+        // but may only be able to fit some M < N patches in those slots before they run out of
+        // memory due to patches being variable in size.  The remaining slots are filled with
+        // "blank" stub patches.  Edisyn fills these extra slots with the INIT PATCH, which is
+        // labelled as "empty".  If this method returns TRUE (it returns FALSE by default), then
+        // the models[] array should not provide a Model for the init patch in its patch
+        // slots, but instread should provide NULL to make it clear that it's an empty patch
+        // slot.  
+        return false; 
+        }
                  
     public JComponent getAdditionalBankSysexOptionsComponents(byte[] data, String[] names)
         {
@@ -1357,13 +1357,13 @@ public class Blank extends Synth
 
 
     public void preprocessParseFromBank(byte[] bankSysex) 
-    	{ 
-  		// Some synthesizers have variable-sized patches.  When parseFromBank(...) is called, they
-  		// have to figure out the location of the patch in question, which is O(n) in the bank
-  		// sysex, and that's called many times.  To avoid this, you could precompute the patch
-  		// sizes in this method, which is called immediately prior to a large number of parseFromBank(...)
-  		// calls.
-    	}
+        { 
+        // Some synthesizers have variable-sized patches.  When parseFromBank(...) is called, they
+        // have to figure out the location of the patch in question, which is O(n) in the bank
+        // sysex, and that's called many times.  To avoid this, you could precompute the patch
+        // sizes in this method, which is called immediately prior to a large number of parseFromBank(...)
+        // calls.
+        }
 
     public int getRequestableBank() 
         {

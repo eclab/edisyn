@@ -177,7 +177,7 @@ public class KorgMicroKorg extends Synth
                     System.out.println("DEBUG: StringComponent update called with key: '" + key + "'");
                     System.out.println("DEBUG: Model name value: '" + model.get("name", "NO_NAME") + "'");
                     System.out.println("DEBUG: getText() returns: '" + getText() + "'");
-                }
+                    }
                 
                 super.update(key, model);
                 updateTitle();
@@ -196,7 +196,7 @@ public class KorgMicroKorg extends Synth
         {
         if (DEBUG) {
             System.out.println("DEBUG: revisePatchName called with: '" + name + "'");
-        }
+            }
         
         if (name == null) name = "";
         name = (name + "            ").substring(0, 12);
@@ -209,7 +209,7 @@ public class KorgMicroKorg extends Synth
         String result = new String(chars);
         if (DEBUG) {
             System.out.println("DEBUG: revisePatchName returns: '" + result + "'");
-        }
+            }
         return result;
         }
 
@@ -1056,7 +1056,7 @@ public class KorgMicroKorg extends Synth
         if (KorgMicroKorgRec.recognizeBank(data)) {
             if (DEBUG) {
                 System.out.println("DEBUG: parse() detected bank dump, calling showBankSysexOptions");
-            }
+                }
             
             // Extract patch names from the bank dump
             String[] names = new String[128];
@@ -1067,18 +1067,18 @@ public class KorgMicroKorg extends Synth
                     char[] namec = new char[12];
                     for (int j = 0; j < 12; j++) {
                         namec[j] = (char)unpackedData[offset + j];
-                    }
+                        }
                     names[i] = new String(namec).trim();
-                } else {
+                    } else {
                     names[i] = "Patch " + (i + 1);
+                    }
                 }
-            }
             
             // Show bank sysex options dialog
             int patchNum = showBankSysexOptions(data, names);
             if (patchNum < 0) return PARSE_CANCELLED;
             else return parseFromBank(data, patchNum);
-        }
+            }
         
         // Handle single patch dump
         data = convertTo8Bit(data, 5);
@@ -1100,7 +1100,7 @@ public class KorgMicroKorg extends Synth
                 }
             System.out.println();
             System.out.println("DEBUG: Extracted name: '" + name + "'");
-        }
+            }
         
         model.set("name", name);
         
@@ -1560,11 +1560,11 @@ public class KorgMicroKorg extends Synth
         for (int i = 1; i <= 8; i++) {
             for (int j = 1; j <= 8; j++) {
                 names[pos++] = String.valueOf(i) + String.valueOf(j);
+                }
             }
-        }
         if (DEBUG) {
             System.out.println("DEBUG: getPatchNumberNames() returns " + names.length + " entries (11-88)");
-        }
+            }
         return names;
         }
 
@@ -1577,12 +1577,12 @@ public class KorgMicroKorg extends Synth
             for (int i = 1; i <= 8; i++) {
                 for (int j = 1; j <= 8; j++) {
                     names[pos++] = bank + String.valueOf(i) + String.valueOf(j);
+                    }
                 }
             }
-        }
         if (DEBUG) {
             System.out.println("DEBUG: getAllPatchNumberNames() returns " + names.length + " entries");
-        }
+            }
         return names;
         }
 
@@ -1599,14 +1599,14 @@ public class KorgMicroKorg extends Synth
         {
         if (DEBUG) {
             System.out.println("DEBUG: KorgMicroKorg.requestAllDump() called");
-        }
+            }
         // MicroKorg all-data dump request: F0 42 3n 58 0F F7
         // where n is the device ID (0-7)
         byte deviceID = (byte)(getChannelOut());
         byte[] sysex = new byte[] { (byte)0xF0, 0x42, (byte)(0x30 + deviceID), 0x58, 0x0F, (byte)0xF7 };
         if (DEBUG) {
             System.out.println("DEBUG: Generated sysex: F0 42 " + String.format("%02X", 0x30 + deviceID) + " 58 0F F7");
-        }
+            }
         return sysex;
         }
 
@@ -1614,7 +1614,7 @@ public class KorgMicroKorg extends Synth
         {
         if (DEBUG) {
             System.out.println("DEBUG: KorgMicroKorg.requestBankDump(" + bank + ") called");
-        }
+            }
         // Only return the sysex, do not show dialog or send
         return requestAllDump();
         }
@@ -1623,7 +1623,7 @@ public class KorgMicroKorg extends Synth
         {
         if (DEBUG) {
             System.out.println("DEBUG: KorgMicroKorg.getRequestableBank() called, returning -1");
-        }
+            }
         // MicroKorg only supports full bank dumps, so we return -1 to indicate any bank can be requested
         return -1;
         }
@@ -1632,54 +1632,54 @@ public class KorgMicroKorg extends Synth
         {
         if (DEBUG) {
             System.out.println("DEBUG: doGetPatchesForLibrarian called (user-initiated bank download)");
-        }
+            }
         boolean proceed = showSimpleConfirm("Bank Request", "Ready to request all patches? This takes about half a minute..", "Request");
         if (!proceed) return;
         // Show 'please wait' dialog
         if (DEBUG) {
             System.out.println("DEBUG: About to show 'please wait' dialog for full bank download");
-        }
+            }
         showSimpleMessage("Downloading Bank", "Please wait while downloading all 128 patches from the MicroKorg...");
         if (DEBUG) {
             System.out.println("DEBUG: 'please wait' dialog should now be visible");
-        }
+            }
         // Always send the all-data dump request for MicroKorg
         byte[] sysex = requestAllDump();
         if (DEBUG) {
             System.out.println("DEBUG: About to send sysex via tryToSendSysex() for full bank download");
-        }
+            }
         tryToSendSysex(sysex);
         if (DEBUG) {
             System.out.println("DEBUG: tryToSendSysex() completed for full bank download");
-        }
+            }
         }
 
     public int parseFromBank(byte[] bankSysex, int number)
         {
         if (DEBUG) {
             System.out.println("DEBUG: KorgMicroKorg.parseFromBank() called for patch index " + number);
-        }
+            }
         if (!KorgMicroKorgRec.recognizeBank(bankSysex)) {
             if (DEBUG) {
                 System.out.println("DEBUG: Not a MicroKorg bank dump");
-            }
+                }
             return PARSE_FAILED;
-        }
+            }
         byte[] unpackedData = KorgMicroKorgRec.convertTo8Bit(bankSysex, 5);
         if (DEBUG) {
             System.out.println("DEBUG: Unpacked data length: " + unpackedData.length);
-        }
+            }
         int patchSize = 254;
         int offset = number * patchSize;
         if (DEBUG) {
             System.out.println("DEBUG: Patch index " + number + " offset: " + offset);
-        }
+            }
         if (offset + patchSize > unpackedData.length) {
             if (DEBUG) {
                 System.out.println("DEBUG: Patch index " + number + " would be out of bounds");
-            }
+                }
             return PARSE_IGNORE;
-        }
+            }
         byte[] patchData = new byte[patchSize];
         System.arraycopy(unpackedData, offset, patchData, 0, patchSize);
         // Calculate bank and patch number
@@ -1694,15 +1694,15 @@ public class KorgMicroKorg extends Synth
             System.out.println("DEBUG: Raw name bytes:");
             for (int i = 0; i < 12; i++) {
                 System.out.print(" " + String.format("%02X", patchData[i]));
-            }
+                }
             System.out.println();
             System.out.println("DEBUG: Extracted name: '" + sb.toString() + "'");
-        }
+            }
         model.set("bank", bank);
         model.set("number", patchNumber);
         if (DEBUG) {
             System.out.println("DEBUG: Patch index " + number + " assigned to bank " + bank + ", patch number " + patchNumber + " (" + patchName + ")");
-        }
+            }
         byte[] singlePatchSysex = new byte[297];
         singlePatchSysex[0] = (byte)0xF0;
         singlePatchSysex[1] = 0x42;
@@ -1716,22 +1716,22 @@ public class KorgMicroKorg extends Synth
                 for (int j = 0; j < 7; j++) {
                     singlePatchSysex[packedIndex + 1 + j] = (byte)(patchData[i + j] & 0x7F);
                     singlePatchSysex[packedIndex] |= ((patchData[i + j] >> 7) & 1) << j;
-                }
+                    }
                 packedIndex += 8;
-            } else {
+                } else {
                 int remaining = patchData.length - i;
                 singlePatchSysex[packedIndex] = 0;
                 for (int j = 0; j < remaining; j++) {
                     singlePatchSysex[packedIndex + 1 + j] = (byte)(patchData[i + j] & 0x7F);
                     singlePatchSysex[packedIndex] |= ((patchData[i + j] >> 7) & 1) << j;
-                }
+                    }
                 packedIndex += remaining + 1;
+                }
             }
-        }
         singlePatchSysex[packedIndex] = (byte)0xF7;
         if (DEBUG) {
             System.out.println("DEBUG: Reconstructed single patch sysex for patch index " + number);
-        }
+            }
         
         // Parse the patch data directly instead of calling parse() to avoid recursion
         byte[] patchData8Bit = convertTo8Bit(singlePatchSysex, 5);
@@ -1746,7 +1746,7 @@ public class KorgMicroKorg extends Synth
         
         if (DEBUG) {
             System.out.println("DEBUG: parseFromBank() extracted name: '" + name + "'");
-        }
+            }
         
         model.set("name", name);
         
@@ -1793,7 +1793,7 @@ public class KorgMicroKorg extends Synth
         
         if (DEBUG) {
             System.out.println("DEBUG: parseFromBank() for index " + number + " completed successfully");
-        }
+            }
         return PARSE_SUCCEEDED;
         }
 
@@ -1801,7 +1801,7 @@ public class KorgMicroKorg extends Synth
         {
         if (DEBUG) {
             System.out.println("DEBUG: KorgMicroKorg.getBank() called");
-        }
+            }
         // MicroKorg bank dump contains all patches from both banks
         // We'll return bank 0 as the primary bank, but getBanks() will return both
         return 0;
@@ -1811,7 +1811,7 @@ public class KorgMicroKorg extends Synth
         {
         if (DEBUG) {
             System.out.println("DEBUG: KorgMicroKorg.getBanks() called");
-        }
+            }
         // MicroKorg bank dump contains all 128 patches from both banks A and B
         // Return both banks so the librarian knows to populate both columns
         return new int[] { 0, 1 };
@@ -1820,31 +1820,31 @@ public class KorgMicroKorg extends Synth
     public boolean getSupportsDownloads() { 
         if (DEBUG) {
             System.out.println("DEBUG: KorgMicroKorg.getSupportsDownloads() called, returning true");
-        }
+            }
         return true; 
-    }
+        }
     
     public boolean getSupportsBankReads() { 
         if (DEBUG) {
             System.out.println("DEBUG: KorgMicroKorg.getSupportsBankReads() called, returning true");
-        }
+            }
         return true; 
-    }
+        }
     
 
     
     public boolean librarianTested() { 
         if (DEBUG) {
             System.out.println("DEBUG: KorgMicroKorg.librarianTested() called, returning true");
-        }
+            }
         return true; 
-    }
+        }
 
     public void downloadBankFromSynthLibrarian()
         {
         if (DEBUG) {
             System.out.println("DEBUG: downloadBankFromSynthLibrarian() called. Forcing full bank download.");
-        }
+            }
         doGetPatchesForLibrarian(0, 0, 0, 127);
         }
         

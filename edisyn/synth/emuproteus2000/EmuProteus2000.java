@@ -2364,8 +2364,8 @@ public class EmuProteus2000 extends Synth
                         if (p.equals("link1presetromid") || p.equals("link2presetromid"))
                             v = findValue(v, ROM_AND_USER_IDS, p);
                         else
-                        	{
-                        	//int vv = v;
+                            {
+                            //int vv = v;
                             v = findValue(v, ROM_IDS, p);
                             //if (vv != v) System.err.println("FOR " + p + " " + vv + " -> " + v);
                             }
@@ -2807,8 +2807,8 @@ public class EmuProteus2000 extends Synth
                 if (p.equals("link1presetromid") || p.equals("link2presetromid"))
                     v = ROM_AND_USER_IDS[v];
                 else
-                	{
-                	//int vv = v;
+                    {
+                    //int vv = v;
                     v = ROM_IDS[v];
                     //if (vv != v) System.err.println("NOW " + p + " " + vv + " -> " + v);
                     }

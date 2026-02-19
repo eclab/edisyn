@@ -61,7 +61,7 @@ public class Tuning extends Synth
         }
 
 
-	boolean sendIndividualParameters = false;
+    boolean sendIndividualParameters = false;
 
     public boolean getSendsAllParametersAsDump() { return !sendIndividualParameters; }
 
@@ -79,22 +79,22 @@ public class Tuning extends Synth
         comp = new PatchDisplay(this, 3, false);
         hbox.add(comp);
        
-       	JCheckBox sendIndividualParametersButton = new JCheckBox("Send As Individual Parameters");
+        JCheckBox sendIndividualParametersButton = new JCheckBox("Send As Individual Parameters");
         sendIndividualParametersButton.putClientProperty("JComponent.sizeVariant", "small");
         sendIndividualParametersButton.setFont(Style.SMALL_FONT());
         sendIndividualParametersButton.setOpaque(false);
         sendIndividualParametersButton.setForeground(Style.TEXT_COLOR());
-       	
-       	sendIndividualParametersButton.setSelected(getLastXAsBoolean("SendIndividualParameters", getSynthClassName(), false, true));
-       	
-       	sendIndividualParametersButton.addActionListener(new ActionListener()
-       		{
+        
+        sendIndividualParametersButton.setSelected(getLastXAsBoolean("SendIndividualParameters", getSynthClassName(), false, true));
+        
+        sendIndividualParametersButton.addActionListener(new ActionListener()
+            {
             public void actionPerformed(ActionEvent e) 
                 {
                 sendIndividualParameters = sendIndividualParametersButton.isSelected();
                 }
-       		});
-       	hbox.add(sendIndividualParametersButton);
+            });
+        hbox.add(sendIndividualParametersButton);
        
         vbox.add(hbox);
 

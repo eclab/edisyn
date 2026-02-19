@@ -56,10 +56,10 @@ public class SanityCheck
                 Synth synth = Synth.instantiate(c[j], true, false, null);
                 Synth synth2 = Synth.instantiate(c[j], true, false, null);
                 if (synth instanceof edisyn.synth.emuproteus2000.EmuProteus2000)
-                	{
-                	System.err.println("\t[NOTE] RomIDs may fail because of duplicates.  Not sure if this is necessarily a bug.");
-                	test(synth, synth2);
-                	}
+                    {
+                    System.err.println("\t[NOTE] RomIDs may fail because of duplicates.  Not sure if this is necessarily a bug.");
+                    test(synth, synth2);
+                    }
                 else if (synth instanceof edisyn.synth.casiocz.CasioCZ)
                     {
                     ((edisyn.synth.casiocz.CasioCZ)synth).setSynthType(edisyn.synth.casiocz.CasioCZ.TYPE_CZ101_1000, false);
@@ -218,7 +218,7 @@ public class SanityCheck
             boolean midi = synth.getSendMIDI();
             synth.setSendMIDI(false);
             synth.doMutate(1.0);
-        	synth.setSendMIDI(midi);
+            synth.setSendMIDI(midi);
             data = synth.flatten(synth.emitAll((Model)null, false, true));
             
             byte[][] d = Synth.cutUpSysex(data);

@@ -3716,14 +3716,14 @@ public class NovationSL extends Synth
       +->       This is used to denote multiple bits which are ORed together to form a single byte
       
       ++Foo++   This indicates an unknown tag regarding this data in Novation's (extremely limited)
-      			original documentation.  Note that Novation lost its documentation and was kind enough
-      			to give me what they had left with the request that I do not distribute it (which I 
-      			will not -- don't ask) but that documentation is very close to useless.  :-(
-      			
-      "Items in quotes"		These are Novation documentation for certain sysex positions, much of which
-                            makes little sense and which have no other useful information, but which I 
-                            include it here in the hope that archaeologists of the future will one day 
-                            decipher it.
+      original documentation.  Note that Novation lost its documentation and was kind enough
+      to give me what they had left with the request that I do not distribute it (which I 
+      will not -- don't ask) but that documentation is very close to useless.  :-(
+                        
+      "Items in quotes"         These are Novation documentation for certain sysex positions, much of which
+      makes little sense and which have no other useful information, but which I 
+      include it here in the hope that archaeologists of the future will one day 
+      decipher it.
        
       
       -------------------------

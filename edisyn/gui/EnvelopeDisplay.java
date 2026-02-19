@@ -241,19 +241,19 @@ public class EnvelopeDisplay extends JComponent implements Updatable
                 }
                                 
 /*
-            public void mouseEntered(MouseEvent e)
-                {
-                highlightIndex = highlightIndex(mouseToX(e.getX()), mouseToY(e.getY()), false, e);
-                updateHighlightIndex(highlightIndex);
-                repaint();
-                }
+  public void mouseEntered(MouseEvent e)
+  {
+  highlightIndex = highlightIndex(mouseToX(e.getX()), mouseToY(e.getY()), false, e);
+  updateHighlightIndex(highlightIndex);
+  repaint();
+  }
                                 
-            public void mouseExited(MouseEvent e)
-                {
-                highlightIndex = NO_HIGHLIGHT;
-                updateHighlightIndex(highlightIndex);
-                repaint();
-                }
+  public void mouseExited(MouseEvent e)
+  {
+  highlightIndex = NO_HIGHLIGHT;
+  updateHighlightIndex(highlightIndex);
+  repaint();
+  }
 */                                
             public void mouseMoved(MouseEvent e)
                 {
@@ -573,15 +573,15 @@ public class EnvelopeDisplay extends JComponent implements Updatable
         Path2D.Double p = new Path2D.Double();
         Ellipse2D.Double marker[] = new Ellipse2D.Double[xs.length];
 
-		if (style == STYLE_LINES)
-			{
+        if (style == STYLE_LINES)
+            {
             double centering = rect.width / xs.length / 2.0;
-			Color unset = Style.ENVELOPE_UNSET_COLOR();
+            Color unset = Style.ENVELOPE_UNSET_COLOR();
 
             for(int i = 0; i < xs.length; i++)
                 {
-	        if (!constrainTo(i)) graphics.setColor(unset);
-			else graphics.setColor(color);
+                if (!constrainTo(i)) graphics.setColor(unset);
+                else graphics.setColor(color);
 
                 line = new Line2D.Double(rect.x + xs[i] + centering, rect.y + rect.height, rect.x + xs[i] + centering, rect.y + rect.height - ys[i]);
                 graphics.draw(line);
@@ -589,89 +589,89 @@ public class EnvelopeDisplay extends JComponent implements Updatable
                     (rect.y + rect.height - ys[i] - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0),
                     Style.ENVELOPE_DISPLAY_MARKER_WIDTH(), Style.ENVELOPE_DISPLAY_MARKER_WIDTH());
                 } 
-			}
+            }
         else 
-        	{
-        	if (stepping)
             {
-            double centering = rect.width / xs.length / 2.0;
+            if (stepping)
+                {
+                double centering = rect.width / xs.length / 2.0;
                 
-            fillp.moveTo(rect.x + xs[0], rect.y + startHeight); 
+                fillp.moveTo(rect.x + xs[0], rect.y + startHeight); 
         
-            p.moveTo(rect.x + xs[0], rect.y + rect.height - ys[0]);
-            fillp.lineTo(rect.x + xs[0], rect.y + rect.height - ys[0]);
-            marker[0] = new Ellipse2D.Double((rect.x + xs[0] + centering - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0),
-                (rect.y + rect.height - ys[0] - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0),
-                Style.ENVELOPE_DISPLAY_MARKER_WIDTH(), Style.ENVELOPE_DISPLAY_MARKER_WIDTH());
-        
-            for(int i = 1; i < xs.length; i++)
-                {
-                p.lineTo(rect.x + xs[i], rect.y + rect.height - ys[i-1]);
-                fillp.lineTo(rect.x + xs[i], rect.y + rect.height - ys[i-1]);
-                p.moveTo(rect.x + xs[i], rect.y + rect.height - ys[i]);
-                fillp.lineTo(rect.x + xs[i], rect.y + rect.height - ys[i]);
-                marker[i] = new Ellipse2D.Double((rect.x + xs[i]  + centering - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0),
-                    (rect.y + rect.height - ys[i] - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0),
+                p.moveTo(rect.x + xs[0], rect.y + rect.height - ys[0]);
+                fillp.lineTo(rect.x + xs[0], rect.y + rect.height - ys[0]);
+                marker[0] = new Ellipse2D.Double((rect.x + xs[0] + centering - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0),
+                    (rect.y + rect.height - ys[0] - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0),
                     Style.ENVELOPE_DISPLAY_MARKER_WIDTH(), Style.ENVELOPE_DISPLAY_MARKER_WIDTH());
-                } 
         
-            int end = xs.length - 1;
-
-            p.lineTo(rect.x + rect.width, rect.y + rect.height - ys[end]);
-            fillp.lineTo(rect.x + rect.width, rect.y + rect.height - ys[end]);
-            p.moveTo(rect.x + rect.width, rect.y + startHeight);
-            fillp.lineTo(rect.x + rect.width, rect.y + startHeight);
-        
-            fillp.lineTo(rect.x + xs[0], rect.y + startHeight); 
-            fillp.closePath();
-            }
-        else
-            {
-            fillp.moveTo(rect.x + xs[0], rect.y + startHeight); 
-            p.moveTo(rect.x + xs[0], rect.y + rect.height - ys[0]);
-            fillp.lineTo(rect.x + xs[0], rect.y + rect.height - ys[0]);
-
-            marker[0] = new Ellipse2D.Double((rect.x + xs[0] - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0),
-                (rect.y + rect.height - ys[0] - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0),
-                Style.ENVELOPE_DISPLAY_MARKER_WIDTH(), Style.ENVELOPE_DISPLAY_MARKER_WIDTH());
-        
-            for(int i = 1; i < xs.length; i++)
-                {
-                if (curves == null || curves[i] == null)
+                for(int i = 1; i < xs.length; i++)
                     {
-                    p.lineTo(rect.x + xs[i], rect.y + rect.height - ys[i]);
+                    p.lineTo(rect.x + xs[i], rect.y + rect.height - ys[i-1]);
+                    fillp.lineTo(rect.x + xs[i], rect.y + rect.height - ys[i-1]);
+                    p.moveTo(rect.x + xs[i], rect.y + rect.height - ys[i]);
                     fillp.lineTo(rect.x + xs[i], rect.y + rect.height - ys[i]);
-                    }
-                else
-                    {
-                    double xx1 = getCurveControlPointX1(rect.x + xs[i-1], rect.x + xs[i], rect.y + rect.height - ys[i-1], rect.y + rect.height - ys[i], curves[i], synth.getModel().get(curves[i]));
-                    double yy1 = getCurveControlPointY1(rect.x + xs[i-1], rect.x + xs[i], rect.y + rect.height - ys[i-1], rect.y + rect.height - ys[i], curves[i], synth.getModel().get(curves[i]));
-                    double xx2 = getCurveControlPointX2(rect.x + xs[i-1], rect.x + xs[i], rect.y + rect.height - ys[i-1], rect.y + rect.height - ys[i], curves[i], synth.getModel().get(curves[i]));
-                    double yy2 = getCurveControlPointY2(rect.x + xs[i-1], rect.x + xs[i], rect.y + rect.height - ys[i-1], rect.y + rect.height - ys[i], curves[i], synth.getModel().get(curves[i]));
-                    p.curveTo(xx1, yy1, xx2, yy2, rect.x + xs[i], rect.y + rect.height - ys[i]);
-                    fillp.curveTo(xx1, yy1, xx2, yy2, rect.x + xs[i], rect.y + rect.height - ys[i]);
-                    }
-                marker[i] = new Ellipse2D.Double((rect.x + xs[i] - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0),
-                    (rect.y + rect.height - ys[i] - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0),
-                    Style.ENVELOPE_DISPLAY_MARKER_WIDTH(), Style.ENVELOPE_DISPLAY_MARKER_WIDTH());
-                } 
+                    marker[i] = new Ellipse2D.Double((rect.x + xs[i]  + centering - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0),
+                        (rect.y + rect.height - ys[i] - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0),
+                        Style.ENVELOPE_DISPLAY_MARKER_WIDTH(), Style.ENVELOPE_DISPLAY_MARKER_WIDTH());
+                    } 
         
-            int end = xs.length - 1;
-        
-            fillp.lineTo(rect.x + xs[end], rect.y + startHeight);
-            fillp.lineTo(rect.x + xs[0], rect.y + startHeight); 
-            fillp.closePath();
-            }
+                int end = xs.length - 1;
 
-        graphics.setColor(semiTransparent);
-        if (!asLink && filled)
-            graphics.fill(fillp);
+                p.lineTo(rect.x + rect.width, rect.y + rect.height - ys[end]);
+                fillp.lineTo(rect.x + rect.width, rect.y + rect.height - ys[end]);
+                p.moveTo(rect.x + rect.width, rect.y + startHeight);
+                fillp.lineTo(rect.x + rect.width, rect.y + startHeight);
         
-        graphics.setColor(color);
-        if (asLink)
-            graphics.setColor(Style.ENVELOPE_UNSET_COLOR());                
-        graphics.draw(p);
-        }
+                fillp.lineTo(rect.x + xs[0], rect.y + startHeight); 
+                fillp.closePath();
+                }
+            else
+                {
+                fillp.moveTo(rect.x + xs[0], rect.y + startHeight); 
+                p.moveTo(rect.x + xs[0], rect.y + rect.height - ys[0]);
+                fillp.lineTo(rect.x + xs[0], rect.y + rect.height - ys[0]);
+
+                marker[0] = new Ellipse2D.Double((rect.x + xs[0] - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0),
+                    (rect.y + rect.height - ys[0] - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0),
+                    Style.ENVELOPE_DISPLAY_MARKER_WIDTH(), Style.ENVELOPE_DISPLAY_MARKER_WIDTH());
+        
+                for(int i = 1; i < xs.length; i++)
+                    {
+                    if (curves == null || curves[i] == null)
+                        {
+                        p.lineTo(rect.x + xs[i], rect.y + rect.height - ys[i]);
+                        fillp.lineTo(rect.x + xs[i], rect.y + rect.height - ys[i]);
+                        }
+                    else
+                        {
+                        double xx1 = getCurveControlPointX1(rect.x + xs[i-1], rect.x + xs[i], rect.y + rect.height - ys[i-1], rect.y + rect.height - ys[i], curves[i], synth.getModel().get(curves[i]));
+                        double yy1 = getCurveControlPointY1(rect.x + xs[i-1], rect.x + xs[i], rect.y + rect.height - ys[i-1], rect.y + rect.height - ys[i], curves[i], synth.getModel().get(curves[i]));
+                        double xx2 = getCurveControlPointX2(rect.x + xs[i-1], rect.x + xs[i], rect.y + rect.height - ys[i-1], rect.y + rect.height - ys[i], curves[i], synth.getModel().get(curves[i]));
+                        double yy2 = getCurveControlPointY2(rect.x + xs[i-1], rect.x + xs[i], rect.y + rect.height - ys[i-1], rect.y + rect.height - ys[i], curves[i], synth.getModel().get(curves[i]));
+                        p.curveTo(xx1, yy1, xx2, yy2, rect.x + xs[i], rect.y + rect.height - ys[i]);
+                        fillp.curveTo(xx1, yy1, xx2, yy2, rect.x + xs[i], rect.y + rect.height - ys[i]);
+                        }
+                    marker[i] = new Ellipse2D.Double((rect.x + xs[i] - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0),
+                        (rect.y + rect.height - ys[i] - Style.ENVELOPE_DISPLAY_MARKER_WIDTH()/2.0),
+                        Style.ENVELOPE_DISPLAY_MARKER_WIDTH(), Style.ENVELOPE_DISPLAY_MARKER_WIDTH());
+                    } 
+        
+                int end = xs.length - 1;
+        
+                fillp.lineTo(rect.x + xs[end], rect.y + startHeight);
+                fillp.lineTo(rect.x + xs[0], rect.y + startHeight); 
+                fillp.closePath();
+                }
+
+            graphics.setColor(semiTransparent);
+            if (!asLink && filled)
+                graphics.fill(fillp);
+        
+            graphics.setColor(color);
+            if (asLink)
+                graphics.setColor(Style.ENVELOPE_UNSET_COLOR());                
+            graphics.draw(p);
+            }
         
         // draw dividers
         if (verticalDividers.size() > 0)
@@ -700,7 +700,7 @@ public class EnvelopeDisplay extends JComponent implements Updatable
             else
                 graphics.setColor(getMarkerColor(i, color));
             if (!asLink)
-            	{
+                {
                 graphics.fill(marker[i]);
                 }
             }

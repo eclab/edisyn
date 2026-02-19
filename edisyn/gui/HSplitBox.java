@@ -29,15 +29,15 @@ public class HSplitBox extends JComponent implements Gatherable
     public HSplitBox(JComponent leftComponent, JComponent rightComponent)
         {
         setLayout(new GridBagLayout());
-		GridBagConstraints constraints = new GridBagConstraints();
-		constraints.fill = GridBagConstraints.BOTH;
-		constraints.weightx = 1.0;
-		constraints.weighty = 1.0;
-		constraints.gridx = 0;
-		constraints.gridy = 0;
-		add(leftComponent, constraints);
-		constraints.gridx = 1;
-		add(rightComponent, constraints);
+        GridBagConstraints constraints = new GridBagConstraints();
+        constraints.fill = GridBagConstraints.BOTH;
+        constraints.weightx = 1.0;
+        constraints.weighty = 1.0;
+        constraints.gridx = 0;
+        constraints.gridy = 0;
+        add(leftComponent, constraints);
+        constraints.gridx = 1;
+        add(rightComponent, constraints);
         setBackground(Style.BACKGROUND_COLOR());
         }
     

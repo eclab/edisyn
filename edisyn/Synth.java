@@ -1188,7 +1188,7 @@ public abstract class Synth extends JComponent implements Updatable
     long getNanoPauseBetweenMIDISends() { return (long)(getPauseBetweenMIDISends() * 1000000.0); }
 
     /** Override this to make sure that the given additional time (in ms) has transpired between MIDI patch changes. */
-    public int getPauseAfterChangePatch() { return 0; }
+    public int getPauseAfterChangePatch() { return 1000; }
     
     /** Override this to make sure that the given additional time (in ms) has transpired between sending all parameters and anything else (such as playing a note) */
     public int getPauseAfterSendAllParameters() { return 0; }
@@ -9434,16 +9434,24 @@ menubar.add(helpMenu);
                         {
                         if ((batchDownloadFailureCountdown--) <= 0)
                             {
-                            batchDownloadFailureCountdown = getBatchDownloadFailureCountdown();
-                            if (batchDownloadFailureGlobalCountdown-- <= 0)
-                                {
-                                stopBatchDownload();
-                                showSimpleError("Batch Download Failed", "Stopping batch download after failing " + BATCH_DOWNLOAD_FAILURE_GLOBAL_COUNTDOWN + " times to download patch\n" + getPatchLocationName(currentPatch) + "\nNo response from the synthesizer." );
-                                }
-                            System.out.println("Warning (Synth): Download of " + getPatchLocationName(currentPatch) + " failed.  Requesting again.");
-                            resetBlend();
-                            setMergeProbability(0.0);
-                            performRequestDump(currentPatch, false);
+                            if (skipBatchPatchDownload())
+                            	{
+                            	requestNextPatch();
+								showSimpleError("Batch Download Failed", "Stopping batch download after failing " + BATCH_DOWNLOAD_FAILURE_GLOBAL_COUNTDOWN + " times to download patch\n" + getPatchLocationName(currentPatch) + "\nNo response from the synthesizer." );
+                            	}
+                            else
+                            	{
+								batchDownloadFailureCountdown = getBatchDownloadFailureCountdown();
+								if (batchDownloadFailureGlobalCountdown-- <= 0)
+									{
+									stopBatchDownload();
+									showSimpleError("Batch Download Failed", "Stopping batch download after failing " + BATCH_DOWNLOAD_FAILURE_GLOBAL_COUNTDOWN + " times to download patch\n" + getPatchLocationName(currentPatch) + "\nNo response from the synthesizer." );
+									}
+								System.out.println("Warning (Synth): Download of " + getPatchLocationName(currentPatch) + " failed.  Requesting again.");
+								resetBlend();
+								setMergeProbability(0.0);
+								performRequestDump(currentPatch, false);
+								}
                             }
                         else
                             {
@@ -9457,7 +9465,7 @@ menubar.add(helpMenu);
         updateTitle();                      // has to be after we build the timer
         }
 
-        
+	public boolean skipBatchPatchDownload() { return false; }
     public int getBatchDownloadFailureCountdown() { return 0; }                 // default, can be overridden such as in the FS1R or Wavestation SR
     int batchDownloadFailureCountdown;
     static final int BATCH_DOWNLOAD_FAILURE_GLOBAL_COUNTDOWN = 50;
@@ -10152,6 +10160,11 @@ menubar.add(helpMenu);
     public JComponent getAdditionalBankSysexOptionsComponents(byte[] data, String[] names) { return null; }
     
     
+    /** Override this method to return TRUE if, when assembling the models[] array for emitBank(...),
+    	"empty" (init) patches should be provided as null so we can distinguish them from regular models.
+    	By default this method returns false.  An example of a patch editor which needs this method is
+    	KawaiK5000, which has "null" (empty, nonexistent) patches in some of its patch slots. */
+    public boolean markEmptyBankPatchModelsAsNull() { return false; }
     
     
     public static final int DEFAULT_PASTES = 3;
@@ -10329,6 +10342,12 @@ menubar.add(helpMenu);
         in the bank; this will cause Edisyn to simply load a blank patch (as it will do
         with PARSE_FAILED), but unlike PARSE_FAILED, it won't issue an error to the user. */
     public int parseFromBank(byte[] bankSysex, int number) { return PARSE_FAILED; }
+
+    /** Performs preprocessing prior to multiple calls to pareFromBank(...).  This gives
+    	a synthesizer, such as the Kawai K5000 which have variable-sized patches, to precompute
+    	the loctions of all the patches in O(n) time rather than having to recompute them every
+    	time parseFromBank is called, thus being O(n^2). */
+    public void preprocessParseFromBank(byte[] bankSysex) { return; }
 
     /** Parses the bank number from the provided bank sysex and returns it.  
         If the bank is unknown, returns -1.  By default returns -1. 

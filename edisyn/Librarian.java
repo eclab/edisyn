@@ -28,6 +28,8 @@ public class Librarian extends JPanel
     JScrollPane scrollPane;
     // The "Stop Download" button
     PushButton stopAction;
+    // The "Skip Download" button
+    //PushButton skipAction;
     JPanel bottomPanel;
     
     String findString = null;
@@ -586,6 +588,19 @@ public class Librarian extends JPanel
         stopAction.getButton().setEnabled(false);
         setupButton(stopAction.getButton());
         box.add(stopAction.getButton());
+
+        /*
+        skipAction = new PushButton("Skip Patch")
+            {
+            public void perform()
+                {
+                getLibrary().getSynth().skipBatchPatchDownload();
+                }
+            };
+        skipAction.getButton().setEnabled(false);
+        setupButton(skipAction.getButton());
+        box.add(skipAction.getButton());
+        */
                         
         box.add(patchWellLabel);
     
@@ -2442,8 +2457,8 @@ public class Librarian extends JPanel
         if (!synth.getLastXAsBoolean("LibrarianWarned", synth.getSynthClassName(), false, true))
             {
             synth.showSimpleMessage("Librarian Untested", 
-                "The Librarian for the " + synth.getSynthNameLocal() + " has not yet been tested because\n" +
-                "I no longer have a unit.  It may not work. If you have this synth, help me test it.\n" + 
+                "The Librarian for the " + synth.getSynthNameLocal() + " has not yet been tested.\n" +
+                "It may not work. If you have this synth, help me test it.\n" + 
                 "Send mail to sean@cs.gmu.edu");
             synth.setLastX("" + true, "LibrarianWarned", synth.getSynthClassName(), true);
             }

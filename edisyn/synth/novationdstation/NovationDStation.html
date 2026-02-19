@@ -17,9 +17,8 @@ The Drumstation has very, very limited sysex.  Edisyn can send a single patch du
 <br><br><h3>Receiving a Patch from the Drumstation</h3>
 You have to send the patch manually from your unit.  To do this, go to MODE 5 ("Save").  You should see an "SS" on-screen.  This is for saving a single program.  Then press the "+" (plus) button once.  The Drumstation will send the patch to Edisyn, which should update itself in response.
 
-<br><br><h3>Sending Individual Parameters</h3>
-Edisyn can update a limited number of individual parameters via CC.  See the "Controller Map" in your manual for a list of the parameters and their CC values: Edisyn will update them in real time.  Other parameters can only be updated via patch dump.
-
+<br><br><h3>Sending & Receiving Individual Parameters</h3>
+A limited set of individual parameters can be sent via CC between the Drumstation and Edisyn. This works in both directions and allows you to exchange modified settings in real time. See the "Controller Map" in your manual for a list of the parameters and their CC values. Other parameters can only be updated via patch dump.
 
 <br><br><h3>Bank Sysex</h3>
 The Drumstation can also send and receive Bank sysex messages: these are messages which contain all 15 writable patches (25...39).  You can send this kind of message from the Drumstation to Edisyn by going to MODE 5 ("Save"), then selecting "SA", then pressing the "+" button once.  Edisyn can save these messages, upload them to the Drumstation, or edit any one patch in them.
@@ -28,8 +27,8 @@ The Drumstation can also send and receive Bank sysex messages: these are message
 <br><br><h3>Gotchas</h3>
 
 <ul>
-<li>While it would be possible to program Edisyn to change the patch and then do a patch send, because we don't know if you've set the switch to PROTECT or to ENABLE, it seems foolish to do this.  For this reason, Edisyn doesn't even display a patch number for the patch. 
-
+<li>While it would be possible to program Edisyn to change the patch and then do a patch send, because we don't know if you've set the switch to PROTECT or to ENABLE, it seems foolish to do this.  For this reason, Edisyn doesn't even display a patch number for the patch.
+<p><li>Realtime changes for "Pan/Out", are limited to the "Pan" values("L4", .., "R4") only, the "Out" values are simply ignored. For those values to be exchanged correctly, you need to use patch dump.
 <p><li>There are many myths surrounding the differences between the V1 Drumstation, the V2 Drumstation, and the D&nbsp;Station.  But the truth is, if you have updated your Drumstation to firmware v1.3, then it is identical in all respects to the D&nbsp;Station, including polyphony and MIDI features.
 </ul>
 

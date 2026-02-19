@@ -530,6 +530,42 @@ public class NovationDStation extends Synth
         return category;
         }
 
+        @Override
+        public boolean getExpectsRawCCFromSynth()
+        {
+            return true;
+        }
+
+        @Override
+        public void handleSynthCCOrNRPN(Midi.CCData data)
+        {
+            //System.out.println("handleSynthCCOrNRPN:" + data.number + "|" + data.value);
+            {
+                if (data.number - 20 >= ccParameters.length) {
+                    System.err.println("Out of bounds: " + data.number );
+                    return;
+                }
+                int modValue = data.value;
+                switch (data.number) {
+                // panning (NOT including individual outputs as the device would imply)
+                case 21, 27, 33, 38, 43, 47, 49, 51, 54,
+                     57, 60, 63, 66, 69, 72, 74, 83, 88,
+                     93, 97, 99, 106, 109, 111, 112, 114, 117:
+                    // sent (bitshifted) as 0, 16, 32, 48, 63 (!), .., 127, hence extra rounding required
+                    modValue = roundToNearest(modValue, 16) >> 4;
+                    break;
+                // distortion
+                case 22, 28, 34, 39, 44, 52, 64, 67,
+                     70, 84, 89, 94, 101, 107, 110:
+                    // sent (bitshifted) as 0, 8, 16, .., 127, hence extra rounding required
+                    modValue = roundToNearest(modValue, 8) >> 3;
+                    break;
+                default:
+                    break;
+                }
+                model.set(ccParameters[data.number - 20], modValue);
+            }
+        }
 
     public int emitDrum(byte[] data, int pos, String drum, int bytes)
         {
@@ -902,6 +938,11 @@ public class NovationDStation extends Synth
         }
 
     public static String getSynthName() { return "Novation Drumstation / D Station"; }
+
+    private int roundToNearest(int value, int base) {
+        return base * Math.round((float)value / base);
+    }
+
     }
     
     

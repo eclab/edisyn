@@ -276,14 +276,11 @@ public class KawaiK5000Multi extends Synth
 
         soundPanel.add(vbox, BorderLayout.CENTER);
         addTab("Sections", (SynthPanel)soundPanel);
-                
+        
         model.set("name", "INIT");  // has to be 10 long
-
         model.set("number", 0);
-
-        // loadDefaults();     
+		loadDefaults();     
         }
-                
                 
     public String getDefaultResourceFileName() { return "KawaiK5000Multi.init"; }
     public String getHTMLResourceFileName() { return "KawaiK5000Multi.html"; }
@@ -978,6 +975,7 @@ public class KawaiK5000Multi extends Synth
     public JFrame sprout()     
         {
         JFrame frame = super.sprout();
+        receiveCurrent.setEnabled(false);			// The K5000 can't do this
         //addKawaiK5000Menu();
         return frame;
         }
@@ -1073,7 +1071,7 @@ public class KawaiK5000Multi extends Synth
     // The K5000 can't send to temporary memory.  Presently we are only sending as individual parameters.
     public boolean getSendsAllParametersAsDump() { return false; }
 
-    public int[] getNameAsBytes()
+    public int[] getNameAsBytes(Model model)
         {
         String name = model.get("name", "        ") + "        ";
         int[] bytes = new int[8];
@@ -1104,68 +1102,68 @@ public class KawaiK5000Multi extends Synth
     
         int pos = 8;
 
-        pos = emitMulti(tempModel, data, pos);
+        pos = emitMulti(model, data, pos);
 
         data[data.length - 1] = (byte)0xF7;
         return new Object[] { data };
         }
 
 
-    // Given a tempModel (which will never be null), writes out the full Single Tone of a patch, including all sources and wavekits, and all checksums,
+    // Given a model (which will never be null), writes out the full Single Tone of a patch, including all sources and wavekits, and all checksums,
     // starting at the given position in data
-    public int emitMulti(Model tempModel, byte[] data, int pos)
+    public int emitMulti(Model model, byte[] data, int pos)
         {
         pos++;                      // skip checksum space
         int start = pos;
 
         // LOAD EFFECTS
     
-        data[pos++] = (byte)tempModel.get("algorithm");
-        int reverbtype = tempModel.get("reverbtype");
+        data[pos++] = (byte)model.get("algorithm");
+        int reverbtype = model.get("reverbtype");
         data[pos++] = (byte)reverbtype;
-        data[pos++] = (byte)tempModel.get("reverb" + (reverbtype + 1) + "drywet1");
-        data[pos++] = (byte)tempModel.get("reverb" + (reverbtype + 1) + "para1");
-        data[pos++] = (byte)tempModel.get("reverb" + (reverbtype + 1) + "para2");
-        data[pos++] = (byte)tempModel.get("reverb" + (reverbtype + 1) + "para3");
-        data[pos++] = (byte)tempModel.get("reverb" + (reverbtype + 1) + "para4");
+        data[pos++] = (byte)model.get("reverb" + (reverbtype + 1) + "drywet1");
+        data[pos++] = (byte)model.get("reverb" + (reverbtype + 1) + "para1");
+        data[pos++] = (byte)model.get("reverb" + (reverbtype + 1) + "para2");
+        data[pos++] = (byte)model.get("reverb" + (reverbtype + 1) + "para3");
+        data[pos++] = (byte)model.get("reverb" + (reverbtype + 1) + "para4");
     
         for(int effect = 1; effect <= 4; effect++)                                  // NOTE <=
             {
-            int effecttype = tempModel.get("effect" + effect + "type");
+            int effecttype = model.get("effect" + effect + "type");
             data[pos++] = (byte)(effecttype + 11);                                                      // effects start at 11
-            data[pos++] = (byte)tempModel.get("effect" + effect + "type" + (effecttype + 1) + "depth");
-            data[pos++] = (byte)tempModel.get("effect" + effect + "type" + (effecttype + 1) + "para1");
-            data[pos++] = (byte)tempModel.get("effect" + effect + "type" + (effecttype + 1) + "para2");
-            data[pos++] = (byte)tempModel.get("effect" + effect + "type" + (effecttype + 1) + "para3");
-            data[pos++] = (byte)tempModel.get("effect" + effect + "type" + (effecttype + 1) + "para4");
+            data[pos++] = (byte)model.get("effect" + effect + "type" + (effecttype + 1) + "depth");
+            data[pos++] = (byte)model.get("effect" + effect + "type" + (effecttype + 1) + "para1");
+            data[pos++] = (byte)model.get("effect" + effect + "type" + (effecttype + 1) + "para2");
+            data[pos++] = (byte)model.get("effect" + effect + "type" + (effecttype + 1) + "para3");
+            data[pos++] = (byte)model.get("effect" + effect + "type" + (effecttype + 1) + "para4");
             }
                 
         for(int freq = 1; freq <= 7; freq++)                                            // NOTE <=
             {
-            data[pos++] = (byte)tempModel.get("geqfreq" + freq);
+            data[pos++] = (byte)model.get("geqfreq" + freq);
             }
                 
         // LOAD COMMON
         
-        int[] name = getNameAsBytes();
+        int[] name = getNameAsBytes(model);
         for(int i = 0; i < 8; i++)
             {
             data[pos++] = (byte)name[i];
             }
-        data[pos++] = (byte)tempModel.get("volume");
+        data[pos++] = (byte)model.get("volume");
 
-        int secmute = (byte)((1 - (tempModel.get("secmute1")) << 0) |
-            (1 - (tempModel.get("secmute2")) << 1) |
-            (1 - (tempModel.get("secmute3")) << 2) |
-            (1 - (tempModel.get("secmute4")) << 3));
+        int secmute = (byte)((1 - (model.get("secmute1")) << 0) |
+            (1 - (model.get("secmute2")) << 1) |
+            (1 - (model.get("secmute3")) << 2) |
+            (1 - (model.get("secmute4")) << 3));
         data[pos++] = (byte)secmute;                                                    // bitpacking
 
-        data[pos++] = (byte)tempModel.get("effectcontrol1source");
-        data[pos++] = (byte)tempModel.get("effectcontrol1destination");
-        data[pos++] = (byte)tempModel.get("effectcontrol1depth");
-        data[pos++] = (byte)tempModel.get("effectcontrol2source");
-        data[pos++] = (byte)tempModel.get("effectcontrol2destination");
-        data[pos++] = (byte)tempModel.get("effectcontrol2depth");
+        data[pos++] = (byte)model.get("effectcontrol1source");
+        data[pos++] = (byte)model.get("effectcontrol1destination");
+        data[pos++] = (byte)model.get("effectcontrol1depth");
+        data[pos++] = (byte)model.get("effectcontrol2source");
+        data[pos++] = (byte)model.get("effectcontrol2destination");
+        data[pos++] = (byte)model.get("effectcontrol2depth");
 
         // LOAD SECTION DATA
     
@@ -1185,7 +1183,7 @@ public class KawaiK5000Multi extends Synth
                     }
                 else
                     {
-                    data[pos++] = (byte)(tempModel.get("section" + i + key));
+                    data[pos++] = (byte)(model.get("section" + i + key));
                     }
                 }
             }
@@ -1217,6 +1215,7 @@ public class KawaiK5000Multi extends Synth
             }
 
         data[data.length - 1] = (byte)0xF7;
+        
         return new Object[] { data };
         }
 
@@ -1318,25 +1317,57 @@ public class KawaiK5000Multi extends Synth
         
     public int parse(byte[] result, boolean fromFile)
         {
-        model.set("number", result[7]);
-                
-        int pos = 8;
-        parseMulti(model, result, pos);
+		if (result[3] == 0x20)		// single
+        	{
+			model.set("number", result[7]);
+				
+			int pos = 8;
+			parseMulti(model, result, pos);
 
-        revise();
-        return PARSE_SUCCEEDED;
+			revise();
+			return PARSE_SUCCEEDED;
+			}
+		else
+		    {
+            // gather bank names
+            String[] patchBankNames = new String[64];
+            for(int i = 0; i < 64; i++)
+            	{
+            	int pos = 7 + i * (1 + 54 + 4 * 12) + 1 + 38;		// 38 is offset to name
+				byte[] name = new byte[8];
+				for(int j = 0; j < 8; j++)
+					{
+					name[j] = result[pos++];
+					}
+				patchBankNames[i] = new String(name);
+            	}
+
+            // Now that we have an array of names, one per patch, we present the user with options;
+            // 0. Cancel [handled automatically]
+            // 1. Save the bank data [handled automatically]
+            // 2. Upload the bank data [handled automatically] 
+            // 3. Load and edit a certain patch number
+            int patchNum = showBankSysexOptions(result, patchBankNames);
+            if (patchNum < 0) return PARSE_CANCELLED;
+            
+            model.set("number", patchNum);
+
+    		return parseFromBank(result, patchNum);
+            }
         }
         
     public int parseFromBank(byte[] bankSysex, int number) 
         {
         int pos = 7 + number * (1 + 54 + 4 * 12);
         
-        pos = parseMulti(model, bankSysex, pos);
+       	parseMulti(model, bankSysex, pos);
         revise();
         return PARSE_SUCCEEDED;
         }
 
         
+	public int getBatchDownloadFailureCountdown() { return 5; }
+	
         
     // Computes the checksum on data[start] ... data[end - 1]
     public byte checksum(byte[] data, int start, int end)
@@ -1386,7 +1417,7 @@ public class KawaiK5000Multi extends Synth
         else if (key.equals("name"))
             {
             data8 = new int[8][];
-            int[] name = getNameAsBytes();
+            int[] name = getNameAsBytes(model);
             for(int i = 0; i < data8.length; i++)
                 {
                 data8[i] = new int[] { 0x04, 0x00, 0x00, 0x00, i, 0x00, name[i] };
@@ -1588,7 +1619,7 @@ public class KawaiK5000Multi extends Synth
             (byte)0x01, 
             (byte)0x00, 
             (byte)0x0A,
-            (byte)0x00,
+            (byte)0x20,
             (byte)0x00,
             (byte)0x00,
             (byte)0xF7

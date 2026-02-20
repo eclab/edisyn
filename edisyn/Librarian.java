@@ -1375,7 +1375,7 @@ public class Librarian extends JPanel
                 }
             else
                 {
-                getLibrary().synth.showSimpleError("Cannot Download", "Please select a patch in the bank to download first.");
+                getLibrary().synth.showSimpleError("Cannot Download", "Indicate the bank you want to download by selecting a patch in it first.");
                 return;
                 }
             }

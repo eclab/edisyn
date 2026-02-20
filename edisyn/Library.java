@@ -436,12 +436,10 @@ public class Library extends AbstractTableModel
                 (!isEmptyOrInit(incoming[i].bank, incoming[i].number) && !overwrite) || // There is a patch already in the library at that location and we're not overwriting it
                 known[incoming[i].bank][incoming[i].number] != null)                    // Another incoming patch has already taken that spot
                 {
-//                System.err.println("Unknown " + incoming[i]);
                 unknown.add(incoming[i]);
                 }
             else
                 {
-//                System.err.println("Known " + incoming[i] + " " + incoming[i].bank + " " + incoming[i].number);
                 known[incoming[i].bank][incoming[i].number] = incoming[i];
                 }
             }
@@ -719,7 +717,7 @@ public class Library extends AbstractTableModel
                 boolean localFailed = false;
                 Patch p = getPatch(bank, i);
                 if (p == null) p = initPatch;
-                if (p.empty == true && synth.markEmptyBankPatchModelsAsNull())
+                if (p.empty && synth.markEmptyBankPatchModelsAsNull())
                     {
                     continue;
                     }
@@ -736,16 +734,16 @@ public class Library extends AbstractTableModel
                             localFailed = true;
                             break;
                             }
-
-                        if (hasBanks)
-                            {
-                            synth.getModel().set("bank", bank);
-                            }
-                        synth.getModel().set("number", i);
                         }
-                                                                                
+
                     if (localFailed) continue;
-                                                                                
+
+					if (hasBanks)
+						{
+						synth.getModel().set("bank", bank);
+						}
+					synth.getModel().set("number", i);
+					                                                                                                                                                                
                     patches[i] = synth.getModel();
                     }
                 }
@@ -1192,7 +1190,6 @@ public class Library extends AbstractTableModel
                     getPatchNumberNames()[start] + "." + 
                     (patch.name == null ? "Untitled" : patch.name.trim()));
                 filename = StringUtility.makeValidFilename(filename);
-                System.err.println("--> " + d[0].length);
                 saveOne(bank, start, d[0], filename);
                 }
             else
@@ -1268,7 +1265,6 @@ public class Library extends AbstractTableModel
                             try
                                 {
                                 os = new FileOutputStream(f);
-                                System.err.println(offset);
                                 os.write(Synth.flatten(d[offset]));
                                 offset++;
                                 os.close();

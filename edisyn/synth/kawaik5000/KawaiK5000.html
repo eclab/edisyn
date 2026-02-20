@@ -13,9 +13,10 @@ Turn OFF Protect.  Make sure that Receive Program and Receive Exclusive are both
 
 <br><br><h3>About Sending to Current Patch</h3>
 
-The Kawai K5000 stupidly cannot receive a patch and store it in its current temporary memory (nor transmit the same).  This is a huge failing as Edisyn needs to do this for many things, everything from undo/redo to randomize to hill-climbing.  There are two ways around this, neither of which is good.  First, Edisyn could write to a "scratch patch slot" (such as D128), then load this patch slot into current memory.  This is what the Kawai K5 editor does.  This would be fine except that the K5000 uses Flash RAM for its storage, so repeatedly writing to a patch slot is not a good idea: it'll burn your Flash out.  So that's out: I won't damage people's synthesizers.  Second, Edisyn could transmit every single parameter to the K5000 in sequence.  However to transmit a single parameter takes 14 bytes, and there are upwards of 5000 parameters.  This can take as much as 25 seconds to transmit!
+Sending to current patch will take upwards of 25 seconds to complete.  Furthermore, it can only be initiated by selecting the menu option <b>Send to Current Patch</b>.  All other situations (undo, redo, randomize, merging, hill-climbing, nudging, morphing, and so on) will never send to current patch: you have to select the menu manually.  This will make the hill-climber and morpher worthless.
 
-<p>So this is a problem.  At present our only real option is to NOT send to current memory unless you manually select "send to current memory".  This will make the hill-climber and morpher worthless, as well as nudging and morphing, and mixing multiple patches in the librarian.  But it's the only reasonable option.
+Why do this? The Kawai K5000 stupidly cannot receive a patch and store it in its current temporary memory (nor transmit the same).  This is a huge failing as Edisyn needs to do this for many things, everything from undo/redo to randomize to hill-climbing.  There are two ways around this, neither of which is good.  First, Edisyn could write to a "scratch patch slot" (such as D128), then load this patch slot into current memory.  This is what the Kawai K5 editor does.  This would be fine except that the K5000 uses Flash RAM for its storage, so repeatedly writing to a patch slot is not a good idea: it'll burn your Flash out.  So that's out: I won't damage people's synthesizers.  Second, Edisyn could transmit every single parameter to the K5000 in sequence.  However to transmit a single parameter takes 14 bytes, and there are upwards of 5000 parameters.  This can take as much as 25 seconds to transmit!  But it's our only real option.
+
 
 <br><br><h3>About the Tabs</h3>
 
@@ -54,8 +55,14 @@ The Kawai K5000 menu has the following options:
 <ul>
 <li>See the discussion <b>About Sending to Current Patch</b> above: it is a massive and problematic gotcha.
 
+<li>It is not possible to request the current patch.
+
 <p><li>The Kawai K5000 has variable-length patches but fixed-length memory banks. This means that it can run out of space in banks; and banks can hold both patches and <b>null patches</b> (my term).  These aren't empty patches: they're literally zero-length placeholders in lieu of a patch in a certain location.  When you instruct Edisyn to load a patch slot that holds a null patch, the K5000 will respond by ... doing nothing.  So Edisyn can't tell that it's a null patch -- it's given no information.  This is particularly annoying when selecting <b>Request Next Patch</b> in the MIDI menu.  If the next patch is a null patch, Request Next Patch will do nothing, but you'll not be able to jump to the next real patch.
 </ul>
+
+<h3>About The Librarian</h3>
+
+Kawai K5000 bank downloads are gigantic, because Kawai K5000 patches are giantic.  It could take as much as a minute or more to download a bank using the fastest method, which is via "Request Bank from Synth".  However you will get NO feedback until the bank finally arrives.  Using "Download Bank from Synth" or "Download Selected Patches from Synth" is slower, but you'll see the patches as they arrive.
 
 <h3>Thanks</h3>
 Thanks to Eyal Malinger (eyalmalinger@gmail.com) for providing test patches and trying out sysex results with old Sound Diver implementations. Thanks to Oscilllator (oscillatorsds@gmail.com) for providing sysex files for test patches.  Thanks to Jere Kapyaho (author of the <a href="https://github.com/coniferprod/k5ktools">python k5ktools</a>) for tweaking software for me.  And thanks to Markus Schlosser (author of the <a href="https://github.com/christofmuc/KnobKraft-orm">KnobKraft-orm librarian</a>) for considerable help in understanding various oddities in the machine.

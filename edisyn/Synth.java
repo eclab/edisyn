@@ -1995,8 +1995,6 @@ public abstract class Synth extends JComponent implements Updatable
                                     {
                                     keyReceiverProcessing = false;
                                     }
-                                                                
-                                System.err.println("All Done " + message);
                                 }
                             });
                         }
@@ -9437,7 +9435,7 @@ menubar.add(helpMenu);
                             if (skipBatchPatchDownload())
                                 {
                                 requestNextPatch();
-                                showSimpleError("Batch Download Failed", "Stopping batch download after failing " + BATCH_DOWNLOAD_FAILURE_GLOBAL_COUNTDOWN + " times to download patch\n" + getPatchLocationName(currentPatch) + "\nNo response from the synthesizer." );
+                                //showSimpleError("Batch Download Failed", "Stopping batch download after failing " + BATCH_DOWNLOAD_FAILURE_GLOBAL_COUNTDOWN + " times to download patch\n" + getPatchLocationName(currentPatch) + "\nNo response from the synthesizer." );
                                 }
                             else
                                 {

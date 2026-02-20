@@ -738,12 +738,12 @@ public class Library extends AbstractTableModel
 
                     if (localFailed) continue;
 
-					if (hasBanks)
-						{
-						synth.getModel().set("bank", bank);
-						}
-					synth.getModel().set("number", i);
-					                                                                                                                                                                
+                    if (hasBanks)
+                        {
+                        synth.getModel().set("bank", bank);
+                        }
+                    synth.getModel().set("number", i);
+                                                                                                                                                                                                        
                     patches[i] = synth.getModel();
                     }
                 }

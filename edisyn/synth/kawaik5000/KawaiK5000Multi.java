@@ -279,7 +279,7 @@ public class KawaiK5000Multi extends Synth
         
         model.set("name", "INIT");  // has to be 10 long
         model.set("number", 0);
-		loadDefaults();     
+        loadDefaults();     
         }
                 
     public String getDefaultResourceFileName() { return "KawaiK5000Multi.init"; }
@@ -975,7 +975,7 @@ public class KawaiK5000Multi extends Synth
     public JFrame sprout()     
         {
         JFrame frame = super.sprout();
-        receiveCurrent.setEnabled(false);			// The K5000 can't do this
+        receiveCurrent.setEnabled(false);                       // The K5000 can't do this
         //addKawaiK5000Menu();
         return frame;
         }
@@ -1317,30 +1317,30 @@ public class KawaiK5000Multi extends Synth
         
     public int parse(byte[] result, boolean fromFile)
         {
-		if (result[3] == 0x20)		// single
-        	{
-			model.set("number", result[7]);
-				
-			int pos = 8;
-			parseMulti(model, result, pos);
+        if (result[3] == 0x20)          // single
+            {
+            model.set("number", result[7]);
+                                
+            int pos = 8;
+            parseMulti(model, result, pos);
 
-			revise();
-			return PARSE_SUCCEEDED;
-			}
-		else
-		    {
+            revise();
+            return PARSE_SUCCEEDED;
+            }
+        else
+            {
             // gather bank names
             String[] patchBankNames = new String[64];
             for(int i = 0; i < 64; i++)
-            	{
-            	int pos = 7 + i * (1 + 54 + 4 * 12) + 1 + 38;		// 38 is offset to name
-				byte[] name = new byte[8];
-				for(int j = 0; j < 8; j++)
-					{
-					name[j] = result[pos++];
-					}
-				patchBankNames[i] = new String(name);
-            	}
+                {
+                int pos = 7 + i * (1 + 54 + 4 * 12) + 1 + 38;           // 38 is offset to name
+                byte[] name = new byte[8];
+                for(int j = 0; j < 8; j++)
+                    {
+                    name[j] = result[pos++];
+                    }
+                patchBankNames[i] = new String(name);
+                }
 
             // Now that we have an array of names, one per patch, we present the user with options;
             // 0. Cancel [handled automatically]
@@ -1352,7 +1352,7 @@ public class KawaiK5000Multi extends Synth
             
             model.set("number", patchNum);
 
-    		return parseFromBank(result, patchNum);
+            return parseFromBank(result, patchNum);
             }
         }
         
@@ -1360,14 +1360,14 @@ public class KawaiK5000Multi extends Synth
         {
         int pos = 7 + number * (1 + 54 + 4 * 12);
         
-       	parseMulti(model, bankSysex, pos);
+        parseMulti(model, bankSysex, pos);
         revise();
         return PARSE_SUCCEEDED;
         }
 
         
-	public int getBatchDownloadFailureCountdown() { return 5; }
-	
+    public int getBatchDownloadFailureCountdown() { return 5; }
+        
         
     // Computes the checksum on data[start] ... data[end - 1]
     public byte checksum(byte[] data, int start, int end)

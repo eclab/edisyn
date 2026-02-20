@@ -701,7 +701,7 @@ public static final int ALL_ON = 4;
             addTab("E " + source, envelopeTabs[source - 1] = (SynthPanel)soundPanel);
             }
                 
-		model.set("name", "INIT");  // has to be 10 long
+        model.set("name", "INIT");  // has to be 10 long
         model.set("bank", 0);
         model.set("number", 0);
 
@@ -3107,7 +3107,7 @@ public static final int ALL_ON = 4;
     public JFrame sprout()     
         {
         JFrame frame = super.sprout();
-        receiveCurrent.setEnabled(false);			// The K5000 can't do this
+        receiveCurrent.setEnabled(false);                       // The K5000 can't do this
         addKawaiK5000Menu();
         return frame;
         }
@@ -3339,8 +3339,8 @@ public static final int ALL_ON = 4;
     // The K5000 can't send to temporary memory.  Presently we are only sending as individual parameters.
     public boolean getSendsAllParametersAsDump() { return false; }
 
-	// The only way to send all parameters is via Send To Current Patch -- all others will fail
-	public boolean getSendsParametersOnlyOnSendCurrentPatch() { return true; }
+    // The only way to send all parameters is via Send To Current Patch -- all others will fail
+    public boolean getSendsParametersOnlyOnSendCurrentPatch() { return true; }
 
     public int[] getNameAsBytes(Model model)
         {
@@ -3568,9 +3568,9 @@ public static final int ALL_ON = 4;
         // 2        E               3
         // 3        F               4
     
-         int sources = model.get("srctype");
+        int sources = model.get("srctype");
 
-       // compute data length
+        // compute data length
         int datalen = 10 + 81 + 1;
         for(int i = 0; i < sources; i++)
             {
@@ -3604,9 +3604,9 @@ public static final int ALL_ON = 4;
         return new Object[] { data };
         }
 
-	// We want empty patches to be marked as null, not as INIT banks, so we can save them out properly
-	// in emitBank
-	public boolean markEmptyBankPatchModelsAsNull() { return true; }
+    // We want empty patches to be marked as null, not as INIT banks, so we can save them out properly
+    // in emitBank
+    public boolean markEmptyBankPatchModelsAsNull() { return true; }
 
     public Object[] emitBank(Model[] models, int bank, boolean toFile) 
         {
@@ -3686,32 +3686,32 @@ public static final int ALL_ON = 4;
 
     public int parse(byte[] result, boolean fromFile)
         {
-        if (result[3] == 0x20)	// single
+        if (result[3] == 0x20)  // single
             {
-			int bank = result[7];
-			if (bank == 1)  // Bank B, we don't do that.  
-				return PARSE_FAILED;
-			if (bank > 0) bank -= 1;                        // bank = 1 is invalid.  Shift all others down one.
-			// bank     Name    result[8]
-			// 0        A               0
-			// 1        D               2
-			// 2        E               3
-			// 3        F               4
+            int bank = result[7];
+            if (bank == 1)  // Bank B, we don't do that.  
+                return PARSE_FAILED;
+            if (bank > 0) bank -= 1;                        // bank = 1 is invalid.  Shift all others down one.
+            // bank     Name    result[8]
+            // 0        A               0
+            // 1        D               2
+            // 2        E               3
+            // 3        F               4
 
-			model.set("bank", bank);
-			model.set("number", result[8]);
-				
-			int pos = 10;
-						
-			// okay, here we go
-			pos = parseSingle(result, pos);
-			revise();
-			if (pos < 0) return PARSE_FAILED;
-			else return PARSE_SUCCEEDED;
+            model.set("bank", bank);
+            model.set("number", result[8]);
+                                
+            int pos = 10;
+                                                
+            // okay, here we go
+            pos = parseSingle(result, pos);
+            revise();
+            if (pos < 0) return PARSE_FAILED;
+            else return PARSE_SUCCEEDED;
             }
-        else	//	bank sysex
-        	{
-			preprocessParseFromBank(result);
+        else    //      bank sysex
+            {
+            preprocessParseFromBank(result);
 
             // Now that we have an array of names, one per patch, we present the user with options;
             // 0. Cancel [handled automatically]
@@ -3722,15 +3722,15 @@ public static final int ALL_ON = 4;
             if (patchNum < 0) return PARSE_CANCELLED;
             
             int bank = result[7];
-            if (bank > 0) bank--;		// A = 0, D = 1, E = 2, F = 3
+            if (bank > 0) bank--;               // A = 0, D = 1, E = 2, F = 3
             model.set("bank", bank);
             model.set("number", patchNum);
 
-    		return parseFromBank(result, patchNum);
+            return parseFromBank(result, patchNum);
             }
 
         
-               }
+        }
     
     // return -1 if FAILED, else return resulting pos
     // This starts BEYOND the checksum
@@ -4285,7 +4285,7 @@ public static final int ALL_ON = 4;
 
     public byte[] requestBankDump(int bank) 
         {
-        bank = BANK_VALS[bank];		// A = 0, D = 1, E = 2
+        bank = BANK_VALS[bank];         // A = 0, D = 1, E = 2
         
         return new byte[] 
             { 
@@ -4355,15 +4355,15 @@ return pos;
 */
 
 
-	public int getBatchDownloadFailureCountdown() { return 10; }
-	
+    public int getBatchDownloadFailureCountdown() { return 10; }
+        
     // When we don't get a response while doing a batch download, it is likely not because
     // the synth was slow to respond, but rather because the patch is a NULL patch, and the
     // K5000 doesn't respond at all for NULL patches -- in this case we must skip to the next patch.
     public boolean skipBatchPatchDownload() { return true; }
         
     int[] patchBankPositions = null;
-	String[] patchBankNames = null;
+    String[] patchBankNames = null;
 
     public int getPatchPosition(byte[] bank, int num)
         {
@@ -4377,34 +4377,34 @@ return pos;
         }
 
 
-	public static final String EMPTY_PATCH = "[EMPTY PATCH]";
+    public static final String EMPTY_PATCH = "[EMPTY PATCH]";
     // set to -1 if there is no such position -- the patch is null
     public void preprocessParseFromBank(byte[] bank)
         {
         // A Block Single Dump consists of:
-        // A HEADER	F0 40 CHANNEL 21 00 0A 00 00		[8 Bytes]
-        // A TONE MAP 									[19 Bytes]
+        // A HEADER     F0 40 CHANNEL 21 00 0A 00 00            [8 Bytes]
+        // A TONE MAP                                                                   [19 Bytes]
         // Some number (1-128) of TONE DATA:
-        //		A CHECKSUM								[1 Byte]
-        //		EFFECT DATA 							[38 Bytes]
-        //		COMMON DATA								[43 Bytes]
-		//		Some number (2-6) of SOURCE DATA:		[86 Bytes]
-		//			SOURCE DATA							
-		//		Some number (2-6) of ADD WAVE KIT DATA:	[806 Bytes]
-		//			CHECKSUM
-		//			HC KIT DATA
-		//			HC CODE 1 DATA
-		//			HC CODE 2 DATA
-		//			FORMANT FILTER DATA
-		//			HARMONIC ENVELOPE DATA
-		//			LOUDNESS SENSE SELECT [DUMMY]		
-        // A FOOTER F7									[1 Byte]
+        //              A CHECKSUM                                                              [1 Byte]
+        //              EFFECT DATA                                                     [38 Bytes]
+        //              COMMON DATA                                                             [43 Bytes]
+        //              Some number (2-6) of SOURCE DATA:               [86 Bytes]
+        //                      SOURCE DATA                                                     
+        //              Some number (2-6) of ADD WAVE KIT DATA: [806 Bytes]
+        //                      CHECKSUM
+        //                      HC KIT DATA
+        //                      HC CODE 1 DATA
+        //                      HC CODE 2 DATA
+        //                      FORMANT FILTER DATA
+        //                      HARMONIC ENVELOPE DATA
+        //                      LOUDNESS SENSE SELECT [DUMMY]           
+        // A FOOTER F7                                                                  [1 Byte]
         
         patchBankNames = new String[128];
         patchBankPositions = new int[128];
         boolean[] tonemap = new boolean[128];
         int datalen = 8 + 19 + 1;
-        int pos = 8;							// start of tone map
+        int pos = 8;                                                    // start of tone map
         int count = 0;
         for (int i = 0; i < 126; i++)
             {
@@ -4418,7 +4418,7 @@ return pos;
         // Now we have to go searching for the position :=(
                 
         // reset pos
-        pos = 8 + 19;									// start of first tone data
+        pos = 8 + 19;                                                                   // start of first tone data
         for(int i = 0; i < 128; i++)
             {
             if (!tonemap[i]) 
@@ -4430,33 +4430,33 @@ return pos;
                 {
                 patchBankPositions[i] = pos;
 
-	            pos++;										// skip checksum
+                pos++;                                                                              // skip checksum
                 // extract name
                 byte[] name = new byte[8];
                 for(int j = 0; j < 8; j++)
-                	{
-                	name[j] = bank[pos + 39 + j];
-                	}
-        		patchBankNames[i] = new String(name);
+                    {
+                    name[j] = bank[pos + 39 + j];
+                    }
+                patchBankNames[i] = new String(name);
                 
                 // find the number of sources
                 int sources = bank[pos + 50];
 
-                pos += 81;          					// start of source data
+                pos += 81;                                              // start of source data
                 boolean additive[] = new boolean[sources];
                 for(int s = 0; s < sources; s++)
                     {
                     int msb = bank[pos + 28];
                     int lsb = bank[pos + 29];
                     additive[s] = (msb * 128 + lsb == 512);
-                    pos += 86;							// include source data
+                    pos += 86;                                                  // include source data
                     }
                 
                 for(int s = 0; s < sources; s++)
-                	{
+                    {
                     if (additive[s]) 
                         {
-                        pos += 806;						// include checksum and optional wave kit data, though it's out of place here
+                        pos += 806;                                             // include checksum and optional wave kit data, though it's out of place here
                         }
                     }
                 }
@@ -4479,7 +4479,7 @@ return pos;
             }
         else
             {
-            pos++;		// skip checksum, parseSingle() starts beyond it
+            pos++;              // skip checksum, parseSingle() starts beyond it
             return parseSingle(bankSysex, pos);
             }
         }
@@ -4504,9 +4504,9 @@ return pos;
     
     // We read bank patches
     public boolean getSupportsBankWrites() 
-    	{
-    	return true;
-    	}
+        {
+        return true;
+        }
 
 
     // General (non-source) parameter names

@@ -35,8 +35,11 @@ public abstract class NumericalComponent extends JPanel implements Updatable, Ha
     /** Sets the component's key.  Does not update. */
     public void setKey(String key) { this.key = key; }
     
-    /** Sets the component's key.  Does not update. */
+    /** Returns the component's key.  */
     public String getKey() { return key; }
+    
+    /** Returns the component's key as an array. */
+    public String[] getKeys() { return new String[] { getKey() }; }
     
     /** Returns the min value for the key in the model. */
     public int getMin() { return (int) synth.getModel().getMin(key); }

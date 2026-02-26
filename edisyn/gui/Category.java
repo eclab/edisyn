@@ -102,9 +102,13 @@ public class Category extends JPanel implements Gatherable
             if (components.get(i) instanceof HasKey)
                 {
                 HasKey nc = (HasKey)(components.get(i));
-                String key = nc.getKey();
-                if (key.equals(lastKey))
-                    return true;
+                for(String key : nc.getKeys())
+                	{
+					if (key != null && key.equals(lastKey))
+						{
+						return true;
+						}
+					}
                 }
             }
         return false;
@@ -123,20 +127,22 @@ public class Category extends JPanel implements Gatherable
             if (components.get(i) instanceof HasKey)
                 {
                 HasKey nc = (HasKey)(components.get(i));
-                String key = nc.getKey();
-                if (synth.getModel().exists(key) && other.getModel().exists(key))
-                    {
-                    if (synth.getModel().isString(key))
-                        {
-                        synth.getModel().set(key, other.getModel().get(key, ""));
-                        }
-                    else
-                        {
-                        synth.getModel().set(key, other.getModel().get(key, 0));
-                        }
-                    }
-                else
-                    System.err.println("Key missing in model : " + key);
+                for (String key : nc.getKeys())
+                	{
+					if (synth.getModel().exists(key) && other.getModel().exists(key))
+						{
+						if (synth.getModel().isString(key))
+							{
+							synth.getModel().set(key, other.getModel().get(key, ""));
+							}
+						else
+							{
+							synth.getModel().set(key, other.getModel().get(key, 0));
+							}
+						}
+	                else
+    	                System.err.println("Key missing in model : " + key);
+					}
                 }
             }               
 
@@ -165,20 +171,22 @@ public class Category extends JPanel implements Gatherable
             if (components.get(i) instanceof HasKey)
                 {
                 HasKey nc = (HasKey)(components.get(i));
-                String key = nc.getKey();
-                if (synth.getModel().exists(key))
-                    {
-                    if (synth.getModel().isString(key))
-                        {
-                        // do nothing
-                        }
-                    else
-                        {
-                        keys.add(key);
-                        }
-                    }
-                else
-                    System.err.println("Key missing in model : " + key);
+                for (String key : nc.getKeys())
+                	{
+					if (synth.getModel().exists(key))
+						{
+						if (synth.getModel().isString(key))
+							{
+							// do nothing
+							}
+						else
+							{
+							keys.add(key);
+							}
+						}
+	                else
+    	                System.err.println("Key missing in model : " + key);
+					}
                 }
             }               
 
@@ -211,9 +219,11 @@ public class Category extends JPanel implements Gatherable
             if (components.get(i) instanceof HasKey)
                 {
                 HasKey nc = (HasKey)(components.get(i));
-                String key = nc.getKey();
-                if (mutationSet.contains(key) || includeImmutable)
-                    keys.add(key);
+                for (String key : nc.getKeys())
+                	{
+					if (mutationSet.contains(key) || includeImmutable)
+						keys.add(key);
+					}
                 }
             } 
         synth.setCopyKeys(keys);   
@@ -246,10 +256,12 @@ public class Category extends JPanel implements Gatherable
             {
             if (components.get(i) instanceof HasKey)
                 {
-                String key = (String)(((HasKey)(components.get(i))).getKey());
-                String reduced = StringUtility.reduceFirstDigitsAfterPreamble(key, myPreamble);
-                reduced = StringUtility.reduceDigitsInPreamble(reduced, myPreamble);
-                keys.put(reduced, key);
+				for (String key : ((HasKey)(components.get(i))).getKeys())
+					{
+					String reduced = StringUtility.reduceFirstDigitsAfterPreamble(key, myPreamble);
+					reduced = StringUtility.reduceDigitsInPreamble(reduced, myPreamble);
+					keys.put(reduced, key);
+					}
                 }    
             }               
 
@@ -316,7 +328,7 @@ public class Category extends JPanel implements Gatherable
                 }
                 
             String lastReduced = StringUtility.reduceAllDigitsAfterPreamble(lastKey, distributePreamble);
-
+            
             String[] mutationKeys = synth.getMutationKeys();
             if (mutationKeys == null) mutationKeys = new String[0];
             HashSet mutationSet = new HashSet(Arrays.asList(mutationKeys));
@@ -329,28 +341,30 @@ public class Category extends JPanel implements Gatherable
                 if (components.get(i) instanceof HasKey)
                     {
                     HasKey nc = (HasKey)(components.get(i));
-                    String key = nc.getKey();
-                    String reduced = StringUtility.reduceAllDigitsAfterPreamble(key, distributePreamble);
-                               
-                    if (reduced.equals(lastReduced))
-                        {
-                        if (model.exists(key) && (mutationSet.contains(key) || includeImmutable))
-                            {
-                            if (model.isString(key))
-                                {
-                                model.set(key, model.get(lastKey, model.get(key, "")));
-                                }
-                            else
-                                {
-                                model.set(key, model.get(lastKey, model.get(key, 0)));
-                                }
-                            }
-                        else
-                            System.err.println("Warning (Category): Key didn't exist " + key);
-                        }
-                    else
-                        System.err.println("Warning (Category): Null mapping for " + key + " (reduced to " + reduced + ")");                                        
-                    }
+                    for(String key : nc.getKeys())
+                    	{
+						String reduced = StringUtility.reduceAllDigitsAfterPreamble(key, distributePreamble);
+							   
+						if (reduced.equals(lastReduced))
+							{
+							if (model.exists(key) && (mutationSet.contains(key) || includeImmutable))
+								{
+								if (model.isString(key))
+									{
+									model.set(key, model.get(lastKey, model.get(key, "")));
+									}
+								else
+									{
+									model.set(key, model.get(lastKey, model.get(key, 0)));
+									}
+								}
+							else
+								System.err.println("Warning (Category): Key didn't exist " + key);
+							}
+						else
+							System.err.println("Warning (Category): Null mapping for " + key + " (reduced to " + reduced + ")");                                        
+						}
+					}
                 }
         
             synth.revise();
@@ -443,9 +457,12 @@ public class Category extends JPanel implements Gatherable
                                 if (comps.get(i) instanceof NumericalComponent)
                                     {
                                     NumericalComponent nc = (NumericalComponent)(comps.get(i));
-                                    String key = nc.getKey();
-                                    if (synth.mutationMap.isFree(key) && synth.getModel().getStatus(key) != Model.STATUS_IMMUTABLE)
-                                        { turnOn = false; break; }
+                                    for(String key : nc.getKeys())
+                                    	{
+										if (synth.mutationMap.isFree(key) && synth.getModel().getStatus(key) != Model.STATUS_IMMUTABLE)
+											{ turnOn = false; break; }
+										}
+									if (turnOn == false) break;
                                     }
                                 }
                                                                         
@@ -454,9 +471,11 @@ public class Category extends JPanel implements Gatherable
                                 if (comps.get(i) instanceof NumericalComponent)
                                     {
                                     NumericalComponent nc = (NumericalComponent)(comps.get(i));
-                                    String key = nc.getKey();
-                                    if (synth.getModel().getStatus(key) != Model.STATUS_IMMUTABLE)
-                                        synth.mutationMap.setFree(key, turnOn);
+                                    for(String key : nc.getKeys())
+                                    	{
+										if (synth.getModel().getStatus(key) != Model.STATUS_IMMUTABLE)
+											synth.mutationMap.setFree(key, turnOn);
+										}
                                     }
                                 }
                             repaint();

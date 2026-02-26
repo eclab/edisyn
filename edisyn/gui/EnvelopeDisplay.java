@@ -53,7 +53,7 @@ import java.util.*;
    @author Sean Luke
 */
 
-public class EnvelopeDisplay extends JComponent implements Updatable
+public class EnvelopeDisplay extends JComponent implements Updatable, HasKey
     {
     public static final int STYLE_ENVELOPE = 0;
     public static final int STYLE_LINES = 1;
@@ -82,6 +82,28 @@ public class EnvelopeDisplay extends JComponent implements Updatable
     public void setStyle(int val) { style = val; }
     
     EnvelopeDisplay[] children = null;
+    
+    boolean readOnlyKeys = true;
+    public void setReadOnlyKeys(boolean val) { readOnlyKeys = val; }
+    public boolean getReadOnlyKeys() { return readOnlyKeys; }
+    
+    public String getKey() { return null; } // dunno if this is wise
+    public String[] getKeys()
+    	{
+    	if (!getReadOnlyKeys()) return new String[0];
+    	ArrayList keys = new ArrayList();
+    	for(int i = 0; i < xKeys.length; i++)
+    		{
+    		if (xKeys[i] != null) keys.add(xKeys[i]);
+    		}
+    	for(int i = 0; i < yKeys.length; i++)
+    		{
+    		if (yKeys[i] != null) keys.add(yKeys[i]);
+    		}
+    	if (finalStageKey != null) keys.add(finalStageKey);
+    	if (sustainStageKey != null) keys.add(sustainStageKey);
+    	return (String[])(keys.toArray(new String[keys.size()]));
+    	}
     
     public void link(EnvelopeDisplay display)
         {

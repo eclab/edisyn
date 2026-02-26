@@ -94,22 +94,23 @@ public class SynthPanel extends JPanel implements Gatherable
             if (components.get(i) instanceof HasKey)
                 {
                 HasKey nc = (HasKey)(components.get(i));
-                String key = nc.getKey();
-
-                if (synth.getModel().exists(key) && other.getModel().exists(key))
-                    {
-                    if (synth.getModel().isString(key))
-                        {
-                        synth.getModel().set(key, other.getModel().get(key, ""));
-                        }
-                    else
-                        {
-                        synth.getModel().set(key, other.getModel().get(key, 0));
-                        }
-                    }
-                else
-                    System.err.println("Warning (SynthPanel): Key missing in model : " + key);
-                }
+                for (String key : nc.getKeys())
+                	{
+					if (synth.getModel().exists(key) && other.getModel().exists(key))
+						{
+						if (synth.getModel().isString(key))
+							{
+							synth.getModel().set(key, other.getModel().get(key, ""));
+							}
+						else
+							{
+							synth.getModel().set(key, other.getModel().get(key, 0));
+							}
+						}
+					else
+						System.err.println("Warning (SynthPanel): Key missing in model : " + key);
+					}
+				}
             }               
 
         if (sendsAllParameters)
@@ -135,9 +136,11 @@ public class SynthPanel extends JPanel implements Gatherable
             if (components.get(i) instanceof HasKey)
                 {
                 HasKey nc = (HasKey)(components.get(i));
-                String key = nc.getKey();
-                if (mutationSet.contains(key) || includeImmutable)
-                    keys.add(key);
+                for (String key : nc.getKeys())
+                	{
+                	if (mutationSet.contains(key) || includeImmutable)
+                   	 keys.add(key);
+                   	}
                 }
             } 
         synth.setCopyKeys(keys);   
@@ -170,10 +173,12 @@ public class SynthPanel extends JPanel implements Gatherable
             {
             if (components.get(i) instanceof HasKey)
                 {
-                String key = (String)(((HasKey)(components.get(i))).getKey());
-                String reduced = StringUtility.reduceFirstDigitsAfterPreamble(key, myPreamble);
-                reduced = StringUtility.reduceDigitsInPreamble(reduced, myPreamble);
-                keys.put(reduced, key);
+				for (String key : ((HasKey)(components.get(i))).getKeys())
+					{
+					String reduced = StringUtility.reduceFirstDigitsAfterPreamble(key, myPreamble);
+					reduced = StringUtility.reduceDigitsInPreamble(reduced, myPreamble);
+					keys.put(reduced, key);
+					}
                 }    
             }               
         

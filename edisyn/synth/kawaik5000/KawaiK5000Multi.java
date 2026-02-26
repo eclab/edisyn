@@ -591,7 +591,7 @@ public class KawaiK5000Multi extends Synth
     public JComponent addEQ(Color color)
         {
         Category category = new Category(this, "EQ", color);
-
+	category.makeDistributable("geqfreq");
         JComponent comp;
         String[] params;
         HBox hbox = new HBox();
@@ -800,6 +800,7 @@ public class KawaiK5000Multi extends Synth
     public JComponent addEffect(final int effect, Color color)
         {
         Category category = new Category(this, "Effect " + (effect + 1), color);
+category.makePasteable("effect");
 
         JComponent comp;
         String[] params;
@@ -850,6 +851,8 @@ public class KawaiK5000Multi extends Synth
     public JComponent addSection(int section, Color color)
         {
         Category category = new Category(this, "Section " + section, color);
+category.makePasteable("section");
+
         JComponent comp;
         String[] params;
         HBox hbox = new HBox();
@@ -1405,7 +1408,7 @@ public class KawaiK5000Multi extends Synth
                 int val = model.get(key);
                 if ((index = (Integer)(sectionParamsToIndex.get(remainder))) != null)
                     {
-                    data = new int[] { 0x04, 0x01, (section - 1), 0x00, index.intValue(), 0x00, val };
+                    data = new int[] { 0x04, 0x01, (section - 1), 0x00, index.intValue() - 1, 0x00, val };
                     }
                 else
                     {
@@ -1471,15 +1474,15 @@ public class KawaiK5000Multi extends Synth
             boolean depth = key.endsWith("depth");
             if (source)
                 {
-                data = new int[] { 0x04, 0x00, 0x00, 0x00, effect == 1 ? 0x0E : 0x11, 0x00, model.get(key) };
+                data = new int[] { 0x04, 0x00, 0x00, 0x00, effect == 1 ? 0x0B : 0x0E, 0x00, model.get(key) };
                 }
             else if (depth)
                 {
-                data = new int[] { 0x04, 0x00, 0x00, 0x00, effect == 1 ? 0x10 : 0x13, 0x00, model.get(key) };
+                data = new int[] { 0x04, 0x00, 0x00, 0x00, effect == 1 ? 0x0D : 0x10, 0x00, model.get(key) };
                 }
             else
                 {
-                data = new int[] { 0x04, 0x00, 0x00, 0x00, effect == 1 ? 0x0F : 0x12, 0x00, model.get(key) };
+                data = new int[] { 0x04, 0x00, 0x00, 0x00, effect == 1 ? 0x0C : 0x0F, 0x00, model.get(key) };
                 }
             }
         else if (key.startsWith("effect"))
@@ -1526,7 +1529,7 @@ public class KawaiK5000Multi extends Synth
         else if (key.startsWith("secmute"))
             {
             // send all the secmutes as one blob
-            data = new int[] { 0x04, 0x00, 0x00, 0x00, 0x0C, 0x00, 
+            data = new int[] { 0x04, 0x00, 0x00, 0x00, 0x0A, 0x00, 
                 ((1 - model.get("secmute1")) << 0) |
                 ((1 - model.get("secmute2")) << 1) |
                 ((1 - model.get("secmute3")) << 2) |
@@ -1643,7 +1646,7 @@ public class KawaiK5000Multi extends Synth
 
 
     // General (non-source) parameter names
-    public static final int COMMON_START = 39;
+    public static final int COMMON_START = 38;
     public static final String[] multiDataParams = new String[] 
     {
     "algorithm",

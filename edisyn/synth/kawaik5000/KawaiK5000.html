@@ -32,9 +32,13 @@ The General tab has a Category called "Dials".  These aren't part of the patch: 
 
 <br><br><h3>About Morphing</h3>
 
-The MORF checkbox in the Harmonics Category of the "H" (Harmonics) Tab is special. If you turn it on, the Harmonics Category changes to settings for morphing (interpolating) between four sources on four patches. You perform the morphing by pressing the "Execute" button: you'll be prompted to specify which source should receive the morphed results.
+The K5000 has a special morphing facility called "Morf".  In this facility, you set various interpolation options, then tell the synthesizer to morph the harmonics of up to four different patches, creating an interpolated harmonics envelope set.
 
-<p>Unfortunately, after you have performed morphing, the results are only stored on the synthesier, not in Edisyn.  To load the results into Edisyn, you'll need save the patch manually on your synthesizer, then have Edisyn request the patch.  This is the only option: the K5000 has no way to request the current patch memory.
+You can set these parameters in Edisyn as well, in the "Morf" category, and you can instruct your synthesizer to perform the morphing by pressing the "Execute" button in Edisyn.  However, after you have performed morphing, the results are only stored on the synthesier, and are unfortunately not given to Edisyn.  To load the results into Edisyn, you'll need save the patch manually on your synthesizer, then have Edisyn request the patch.  This is the only option: the K5000 has no way to request the current patch memory.
+
+Your most recent settings of morphing parameters are stored with your patch, presumably to make it easy to execute a morph a second time.
+
+There is also a "Show Morf" checkbox in Edisyn, because this is a parameter in your patch.  All it does is instruct your synthesizer to display the Morf screen instead of the regular harmonics screen.  It's not very useful.
 
 <br><br><h3>About the Harmonics Display</h3>
 
@@ -48,6 +52,7 @@ The Kawai K5000 menu has the following options:
 
 <ul>
 <li><b>Constrain Harmonics</b>&nbsp;&nbsp;This locks the harmonics you can edit with the sliders to a certain subset of harmonics, to make it easier to find and edit them.  The other harmonics will be displayed in gray.  You can still set any harmonics with the Number dial.
+<p><li><b>Allow Envelope Display Mouse-Over</b>&nbsp;&nbsp;This prevents mouse-over on the harmonics envelope displays to update which harmonics envelope you're editing. If you're fed up with accidentally mousing over an envelope display when you're changing a dial and changing the envelope number, this menu item is for you.
 </ul>
 
 <h3>Gotchas</h3>
@@ -60,9 +65,21 @@ The Kawai K5000 menu has the following options:
 <p><li>The Kawai K5000 has variable-length patches but fixed-length memory banks. This means that it can run out of space in banks; and banks can hold both patches and <b>null patches</b> (my term).  These aren't empty patches: they're literally zero-length placeholders in lieu of a patch in a certain location.  When you instruct Edisyn to load a patch slot that holds a null patch, the K5000 will respond by ... doing nothing.  So Edisyn can't tell that it's a null patch -- it's given no information.  This is particularly annoying when selecting <b>Request Next Patch</b> in the MIDI menu.  If the next patch is a null patch, Request Next Patch will do nothing, but you'll not be able to jump to the next real patch.
 </ul>
 
+<h3>How to Bulk-Set Envelope Displays</h3>
+
+<ul>
+<li>You can copy and paste envelope displays (for harmonics, formants, or harmonic envelopes) to appropriate tabs in the same tab or on other tabs.  To do this, just click on the Category name above the envelope display and choose "Copy Category" or "Paste Category" as appropriate.
+<p><li>You can set all the parameters in an envelope display (for harmonics, formants, or harmonic envelopes)  to the same value.  To do this, first set one parameter to the value you want, then click on the Category name above the envelope display and choose "Distribute".
+<p><li>You can copy all the parameters of from one tab to another.  For example, you can copy the "E1" tab to the "E4" tab.  To do this, go to the first tab, then select "Copy Tab" under the Edit menu, then go to the second tab, and select "Paste Tab" under the Edit menu.
+<p><li>you can randomize the parameters in an envelope display by clicking on the Category name above the display and selecting one of the "Randomize" options.
+</ul>
+
+I'll be working on additional bulk moves: loading harmonics or formants or harmonic envelopes on a per-source basis from another patch; or setting harmonics to resemble certain waves (like Sawtooth or Square; or copying or swapping sources...
+
+
 <h3>About The Librarian</h3>
 
-Kawai K5000 bank downloads are gigantic, because Kawai K5000 patches are giantic.  It could take as much as a minute or more to download a bank using the fastest method, which is via "Request Bank from Synth".  However you will get NO feedback until the bank finally arrives.  Using "Download Bank from Synth" or "Download Selected Patches from Synth" is slower, but you'll see the patches as they arrive.
+Kawai K5000 bank downloads are gigantic, because Kawai K5000 patches are gigantic.  It could take as much as a minute or more to download a bank using the fastest method, which is via "Request Bank from Synth".  However you will get NO feedback until the bank finally arrives.  Using "Download Bank from Synth" or "Download Selected Patches from Synth" is slower, but you'll see the patches as they arrive.
 
 <h3>Thanks</h3>
 Thanks to Eyal Malinger (eyalmalinger@gmail.com) for providing test patches and trying out sysex results with old Sound Diver implementations. Thanks to Oscilllator (oscillatorsds@gmail.com) for providing sysex files for test patches.  Thanks to Jere Kapyaho (author of the <a href="https://github.com/coniferprod/k5ktools">python k5ktools</a>) for tweaking software for me.  And thanks to Markus Schlosser (author of the <a href="https://github.com/christofmuc/KnobKraft-orm">KnobKraft-orm librarian</a>) for considerable help in understanding various oddities in the machine.

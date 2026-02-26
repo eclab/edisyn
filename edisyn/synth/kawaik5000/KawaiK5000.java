@@ -59,7 +59,7 @@ public class KawaiK5000 extends Synth
     public static final int PCM_START = 341;
         
     // Basic parameter struings
-    public static final String[] KEYS = { "A", "Bb", "B", "C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab" };
+    public static final String[] KEYS = { "C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B" };
     public static final String[] CENTS = { "0 cent", "25 cent", "33 cent", "50 cent" };
     public static final String[] BANKS = { "A", "D", "E", "F" };
     public static final String[] POLY_MODES = { "Polyphonic", "Solo 1", "Solo 2" };
@@ -67,8 +67,8 @@ public class KawaiK5000 extends Synth
     public static final String[] FORMANT_MODULATIONS = { "Env", "LFO" };
     public static final String[] HARMONIC_LFO_WAVES = { "Triangle", "Sawtooth", "Random" };
     public static final String[] ENV_LOOPS = { "Off", "LP1", "LP2" };
-    public static final String[] VELO_SW = { "Off", "Low", "High" };
-    public static final String[] PAN_TYPES = { "Normal", "KS", "-KS", "Random" };
+    public static final String[] VELO_SW = { "Off", "Loud", "Soft" };
+    public static final String[] PAN_TYPES = { "Normal", "+KS", "-KS", "Random" };
     public static final String[] DCF_MODES = { "Low Pass", "High Pass" }; 
     public static final String[] SOURCE_LFO_WAVES = { "Triangle", "Square", "Sawtooth", "Sine", "Random" };
     public static final String[] SOURCE_TYPES = { "PCM", "Additive                                   " };                   // these extra spaces prevent movement when changing from PCM to Additive
@@ -135,10 +135,10 @@ public class KawaiK5000 extends Synth
         // 0...99 is actually displayed as 1..100
         // 25 is actually +12db
         { 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100,  },
-        { 100, 100, 720, 720, NONE, 720, NONE, NONE, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, NONE, NONE, 100, 100, 100, 100, 100, 100, 100, 100, 20, 99, 99, 25, 25, 25, 25, 25, 25,  },
-        { NONE, NONE, 99, 99, 9, 99, NONE, NONE, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 100, 99, 99, 25, 25, 25, 25, 25, 25,  },
+        { 100, 100, 720, 720, NONE, 720, NONE, NONE, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, NONE, NONE, 100, 100, 100, 100, 100, 100, 100, 100, 20, 99, 99, 24, 24, 24, 24, 24, 24,  },
+        { NONE, NONE, 99, 99, 9, 99, NONE, NONE, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 100, 99, 99, 24, 24, 24, 24, 24, 24,  },
         // The 9 below is actually displayed as (1...10).  it is Rotary Acceleration
-        { 100, 100, 720, 720, 1270, 720, 720, 720, 100, 200, 100, 200, 200, 200, 100, 100, 200, 200, 100, 200, 100, 200, 100, 200, 100, 100, 200, 200, 9, 99, NONE, NONE, NONE, 99, 99, 200, 200,  },
+        { 100, 100, 720, 720, 1270, 720, 720, 720, 100, 200, 100, 100, 200, 200, 100, 100, 200, 200, 100, 200, 100, 200, 100, 200, 100, 100, 200, 200, 9, 99, NONE, NONE, NONE, 99, 99, 200, 200,  },
         { 99, 99, 99, 99, 99, 99, 99, 99, 1, 1, 1, 1, 1, 100, 99, 99, 99, 99, NONE, NONE, NONE, NONE, 1, 1, 99, 99, 99, 99, 1, 99, NONE, 99, 99, 99, 99, 99, 99,  },
         };
 
@@ -311,129 +311,129 @@ public class KawaiK5000 extends Synth
     // Names of PCM waves to include in additive patches
     public static final String[] SR_WAVES = new String[]
     {
-    "Piano Noise Attack",
-    "EP Noise Attack",
-    "Percus Noise Attack",
-    "Dist Gtr Noise Attack",
-    "Orch Noise Attack",
-    "Flanged Noise Attack",
-    "Saw Noise Attack",
-    "Zipper Noise Attack",
-    "Organ Noise Looped",
-    "Violin Noise Looped",
-    "Crystal Noise Looped",
-    "Sax Breath Looped",
-    "Panflute Noise Looped",
-    "Pipe Noise Looped",
-    "Saw Noise Looped",
-    "Gorgo Noise Looped",
-    "Enhancer Noise Looped",
-    "Tabla Spectrum Noise Looped",
-    "Cave Spectrum Noise Looped",
-    "White Noise Looped",
-    "Clavi Attack",
-    "Digi EP Attack",
-    "Glocken Attack",
-    "Vibe Attack",
-    "Marimba Attack",
-    "Org Key Click",
-    "Slap Bass Attack",
-    "Folk Gtr Attack",
-    "Gut Gtr Attack",
-    "Dist Gtr Attack",
-    "Clean Gtr Attack",
-    "Muted Gtr Attack",
-    "Cello & Violin Attack",
-    "Pizz Violin Attack",
-    "Pizz Double Bass Attack",
-    "Doo Attack",
-    "Trombone Attack",
-    "Brass Attack",
-    "F.Horn1 Attack",
-    "F.Horn2 Attack",
-    "Flute Attack",
-    "T.Sax Attack",
-    "Shamisen Attack",
-    "Voltage Attack",
-    "BBDigi Attack",
-    "BBDX Attack",
-    "BBBlip Attack",
-    "Techno Hit Attack",
-    "Techno Attack",
-    "X-Piano Attack",
-    "Noisy Voise Looped",
-    "Noisy Human Looped",
-    "Ravoid Looped",
-    "Hyper Looped",
-    "Beef Looped",
-    "Texture Looped",
-    "MMBass Looped",
-    "Syn PWM Cya",
-    "Harpshichord Cyc",
-    "Digi EP Cyc",
-    "Soft EP Cyc",
-    "Ep Bell Cyc",
-    "Bandneon Cyc",
-    "Chees Org Cyc",
-    "Organ Cyc",
-    "Oboe Cyc",
-    "Crystal Cyc",
-    "Syn Bass1 Cyc",
-    "Syn Bass2 Cyc",
-    "Syn Saw1 Cyc",
-    "Svn Saw2 Cvq",
-    "Syn Saw3 Cyc",
-    "Syn Square1 Cyc",
-    "Syn Square2 Cyc",
-    "Syn Pulse1 Cyc",
-    "Syn Pulse2 Cyc",
-    "Pulse20 Cyc",
-    "Pulse40 Cyc",
-    "Nasty Cyc",
-    "Mini Max Cyc",
-    "Bottom Cyc",
-    "> 64th Harmonics Cyc", //"Over 64th Harmonics Only Cyc",
-    "> 64th Harmonics Cyc", //"Over 64th Harmonics Only Cyc",                           // FIXME Is this right?
-    "BD Attack",
-    "Ana Kick",
-    "SD Attack",
-    "Tiny SD Attack",
-    "Ana SD Attack",
-    "Ana HHO Attack",
-    "Simonzu Tom Attack",
-    "Ride Cup Attack",
-    "Cowbell Attack",
-    "Conga Attack",
-    "Conga Muted Attack",
-    "Agogo Attack",
-    "Castanet Attack",
-    "Claves Attack",
-    "Tambourine Attack",
-    "JingleBell Attack",
-    "BellTree Attack",
-    "WindowChime Attack",
-    "AtariGame Attack",
-    "Rama Attack",
-    "Udo Attack",
-    "TablaNa Attack",
-    "Voice Ou Attack",
-    "HighQ Attack",
-    "Super Q Attack",
-    "Glass Attack",
-    "Metal Attack",
-    "Noise Attack",
-    "Pop Attack",
-    "Crash Looped",
-    "Burner Looped",
-    "Jet Engine Looped",
-    "Omnibus Loop 1",
-    "Omnibus Loop 2",
-    "Omnibus Loop 3",
-    "Omnibus Loop 4",
-    "Omnibus Loop 5",
-    "Omnibus Loop 6",
-    "Omnibus Loop 7",
-    "Omnibus Loop 8"
+"342 Piano Noise Attack",
+"343 EP Noise Attack",
+"344 Percus Noise Attack",
+"345 Dist Gtr Noise Attack",
+"346 Orch Noise Attack",
+"347 Flanged Noise Attack",
+"348 Saw Noise Attack",
+"349 Zipper Noise Attack",
+"350 Organ Noise Loop",
+"351 Violin Noise Loop",
+"352 Crystal Noise Loop",
+"353 Sax Breath Loop",
+"354 Panflute Noise Loop",
+"355 Pipe Noise Loop",
+"356 Saw Noise Loop",
+"357 Gorgo Noise Loop",
+"358 Enhancer Noise Loop",
+"359 Tabla Spect. Noise Loop",
+"360 Cave Spect. Noise Loop",
+"361 White Noise Loop",
+"362 Clavi Attack",
+"363 Digi EP Attack",
+"364 Glocken Attack",
+"365 Vibe Attack",
+"366 Marimba Attack",
+"367 Org Key Click",
+"368 Slap Bass Attack",
+"369 Folk Gtr Attack",
+"370 Gut Gtr Attack",
+"371 Dist Gtr Attack",
+"372 Clean Gtr Attack",
+"373 Muted Gtr Attack",
+"374 Cello & Violin Attack",
+"375 Pizz Violin Attack",
+"376 Pizz Dbl. Bass Attack",
+"377 Doo Attack",
+"378 Trombone Attack",
+"379 Brass Attack",
+"380 F.Horn1 Attack",
+"381 F.Horn2 Attack",
+"382 Flute Attack",
+"383 T.Sax Attack",
+"384 Shamisen Attack",
+"385 Voltage Attack",
+"386 BBDigi Attack",
+"387 BBDX Attack",
+"388 BBBlip Attack",
+"389 Techno Hit Attack",
+"390 Techno Attack",
+"391 X-Piano Attack",
+"392 Noisy Voise Loop",
+"393 Noisy Human Loop",
+"394 Ravoid Loop",
+"395 Hyper Loop",
+"396 Beef Loop",
+"397 Texture Loop",
+"398 MMBass Loop",
+"399 Syn PWM Cya",
+"400 Harpshichord Cyc",
+"401 Digi EP Cyc",
+"402 Soft EP Cyc",
+"403 Ep Bell Cyc",
+"404 Bandneon Cyc",
+"405 Chees Org Cyc",
+"406 Organ Cyc",
+"407 Oboe Cyc",
+"408 Crystal Cyc",
+"409 Syn Bass1 Cyc",
+"410 Syn Bass2 Cyc",
+"411 Syn Saw1 Cyc",
+"412 Svn Saw2 Cvq",
+"413 Syn Saw3 Cyc",
+"414 Syn Square1 Cyc",
+"415 Syn Square2 Cyc",
+"416 Syn Pulse1 Cyc",
+"417 Syn Pulse2 Cyc",
+"418 Pulse20 Cyc",
+"419 Pulse40 Cyc",
+"420 Nasty Cyc",
+"421 Mini Max Cyc",
+"422 Bottom Cyc",
+"423 > 64th Harmonics Cyc",
+"424 > 64th Harmonics Cyc",			// Is this a duplicate?
+"425 BD Attack",
+"426 Ana Kick",
+"427 SD Attack",
+"428 Tiny SD Attack",
+"429 Ana SD Attack",
+"430 Ana HHO Attack",
+"431 Simonzu Tom Attack",
+"432 Ride Cup Attack",
+"433 Cowbell Attack",
+"434 Conga Attack",
+"435 Conga Muted Attack",
+"436 Agogo Attack",
+"437 Castanet Attack",
+"438 Claves Attack",
+"439 Tambourine Attack",
+"440 JingleBell Attack",
+"441 BellTree Attack",
+"442 WindowChime Attack",
+"443 AtariGame Attack",
+"444 Rama Attack",
+"445 Udo Attack",
+"446 TablaNa Attack",
+"447 Voice Ou Attack",
+"448 HighQ Attack",
+"449 Super Q Attack",
+"450 Glass Attack",
+"451 Metal Attack",
+"452 Noise Attack",
+"453 Pop Attack",
+"454 Crash Loop",
+"455 Burner Loop",
+"456 Jet Engine Loop",
+"457 Omnibus Loop 1",
+"458 Omnibus Loop 2",
+"459 Omnibus Loop 3",
+"460 Omnibus Loop 4",
+"461 Omnibus Loop 5",
+"462 Omnibus Loop 6",
+"463 Omnibus Loop 7",
+"464 Omnibus Loop 8",
     };
 
 // Harmonic Constraints Edisyn provides
@@ -473,8 +473,8 @@ public static final int ALL_ON = 4;
     static HashMap singleToneDataParamsToIndex = null;
     static HashMap sourceParamsToIndex = null;
     static HashMap addWaveKitParamsToIndex = null;
-    static HashMap addWaveHCSoftParamsToIndex = null;
-    static HashMap addWaveHCLoudParamsToIndex = null;
+    static HashMap addWaveSoftHCParamsToIndex = null;
+    static HashMap addWaveLoudHCParamsToIndex = null;
     static HashMap addWaveFormantFilterParamsToIndex = null;
     static HashMap addWaveHarmonicEnvelopeParamsToIndex = null;
     static HashMap addWaveHarmonicLoopParamsToIndex = null;
@@ -516,21 +516,21 @@ public static final int ALL_ON = 4;
                 }
             }
 
-        if (addWaveHCSoftParamsToIndex == null)
+        if (addWaveSoftHCParamsToIndex == null)
             {
-            addWaveHCSoftParamsToIndex = new HashMap();
-            for(int i = 0; i < addWaveHCSoftParams.length; i++)
+            addWaveSoftHCParamsToIndex = new HashMap();
+            for(int i = 0; i < addWaveSoftHCParams.length; i++)
                 {
-                addWaveHCSoftParamsToIndex.put(addWaveHCSoftParams[i], i);
+                addWaveSoftHCParamsToIndex.put(addWaveSoftHCParams[i], i);
                 }
             }
 
-        if (addWaveHCLoudParamsToIndex == null)
+        if (addWaveLoudHCParamsToIndex == null)
             {
-            addWaveHCLoudParamsToIndex = new HashMap();
-            for(int i = 0; i < addWaveHCLoudParams.length; i++)
+            addWaveLoudHCParamsToIndex = new HashMap();
+            for(int i = 0; i < addWaveLoudHCParams.length; i++)
                 {
-                addWaveHCLoudParamsToIndex.put(addWaveHCLoudParams[i], i);
+                addWaveLoudHCParamsToIndex.put(addWaveLoudHCParams[i], i);
                 }
             }
 
@@ -637,6 +637,7 @@ public static final int ALL_ON = 4;
             vbox.add(hbox);
 
             soundPanel.add(vbox, BorderLayout.CENTER);
+            ((SynthPanel)soundPanel).makePasteable("source");
             addTab("S " + source, sourceTabs[source - 1] = (SynthPanel)soundPanel);
                                 
                                 
@@ -654,9 +655,11 @@ public static final int ALL_ON = 4;
 
             vbox.add(addFormant(source, Style.COLOR_B()));
             vbox.add(addFormantDisplay(source, Style.COLOR_B()));
+            vbox.add(addMorf(source, Style.COLOR_C()));
                 
 
             soundPanel.add(vbox, BorderLayout.CENTER);
+            ((SynthPanel)soundPanel).makePasteable("source");
             addTab("H " + source, harmonicsTabs[source - 1] = (SynthPanel)soundPanel);
                 
 
@@ -698,9 +701,10 @@ public static final int ALL_ON = 4;
             vbox.add(hbox);
 
             soundPanel.add(vbox, BorderLayout.CENTER);
+            ((SynthPanel)soundPanel).makePasteable("source");
             addTab("E " + source, envelopeTabs[source - 1] = (SynthPanel)soundPanel);
             }
-                
+            
         model.set("name", "INIT");  // has to be 10 long
         model.set("bank", 0);
         model.set("number", 0);
@@ -713,7 +717,7 @@ public static final int ALL_ON = 4;
             model.set("dial" + j, 64);
             }
         }
-                
+                        
                 
     public String getDefaultResourceFileName() { return "KawaiK5000.init"; }
     public String getHTMLResourceFileName() { return "KawaiK5000.html"; }
@@ -826,6 +830,7 @@ public static final int ALL_ON = 4;
     public JComponent addDials(Color color)
         {
         Category category = new Category(this, "Dials", color);
+        category.makeDistributable("dial");
 
         JComponent comp;
         String[] params;
@@ -899,7 +904,7 @@ public static final int ALL_ON = 4;
 
         comp = new LabelledDial("AM Source", this, "am", color, 0, 5)
             {
-            public String map(int val) { if (val == 0) return "Off"; else return "" + (val + 1); }
+            public String map(int val) { if (val == 0) return "Off"; else return "" + val + "->" + (val + 1); }
             };
         hbox.add(comp);
 
@@ -930,17 +935,20 @@ public static final int ALL_ON = 4;
             // Add in selected tabs
             for(int i = model.get("srctype") - 1; i >= 0; i--)
                 {
-                if (model.get("source" + (i + 1) + "additive") == 1 && envelopeTabs[i] != null)
+                if (model.get("source" + (i + 1) + "dcoadditive") == 1 && envelopeTabs[i] != null)
                     {
-                    tabs.add(envelopeTabs[i], 1);
-                    tabs.setTitleAt(1, "E " + (i + 1));
-                    tabs.add(harmonicsTabs[i], 1);
-                    tabs.setTitleAt(1, "H " + (i + 1));
+                    //tabs.add(envelopeTabs[i], 1);
+                    //tabs.setTitleAt(1, "E " + (i + 1));
+                    insertTab("E " + (i + 1), envelopeTabs[i], 1);
+                    //tabs.add(harmonicsTabs[i], 1);
+                    //tabs.setTitleAt(1, "H " + (i + 1));
+                    insertTab("H " + (i + 1), harmonicsTabs[i], 1);
                     }
                 if (sourceTabs[i] != null)
                     {
-                    tabs.add(sourceTabs[i], 1);
-                    tabs.setTitleAt(1, "S " + (i + 1));
+                    //tabs.add(sourceTabs[i], 1);
+                    //tabs.setTitleAt(1, "S " + (i + 1));
+                    insertTab("S " + (i + 1), sourceTabs[i], 1);
                     }
                 }
             }
@@ -993,23 +1001,17 @@ public static final int ALL_ON = 4;
             }
         hbox.add(vbox);        
         
-        vbox = new VBox();
-        HBox hbox2 = new HBox();
         for(int i = 1; i <= 4; i++)
             {
+            vbox = new VBox();
             comp = new LabelledDial("Macro " + i, this, "macrocontroller" + i + "depth1", color, 33, 95, 64);
             ((LabelledDial)comp).addAdditionalLabel("Depth 1");
-            hbox2.add(comp);
+            vbox.add(comp);
             comp = new LabelledDial("Macro " + i, this, "macrocontroller" + i + "depth2", color, 33, 95, 64);
             ((LabelledDial)comp).addAdditionalLabel("Depth 2");
-            hbox2.add(comp);
-            if (i == 2 || i == 4) 
-                {
-                vbox.add(hbox2);
-                hbox2 = new HBox();
-                }
+            vbox.add(comp);
+            hbox.add(vbox);
             }
-        hbox.add(vbox);
 
         category.add(hbox, BorderLayout.CENTER);
         return category;
@@ -1206,6 +1208,7 @@ public static final int ALL_ON = 4;
     public JComponent addEQ(Color color)
         {
         Category category = new Category(this, "EQ", color);
+category.makeDistributable("geqfreq");
 
         JComponent comp;
         String[] params;
@@ -1290,6 +1293,17 @@ public static final int ALL_ON = 4;
             }
         }
  
+ 
+ 	// EFFECT COMPACTING.
+ 	// My code follows the effects table on Page 123 of the K5000 manual.  Certain effects in this table
+ 	// have holes in their parameters.  My code also has holes.  However it turns out that in both the
+ 	// patch format and in the individual parameter sysex, these holes are compacted; thus if there is a
+ 	// missing parameter 3, then parameter 4 takes its place, and parameter 5 takes 4's place; and there
+ 	// is nothing for parameter 5.  Had I known these holes were compacted I would have shifted everything,
+ 	// but it's too late for that.  So I have to compensate for it in three places:  (1) in the display in
+ 	// the GUI (I compact the parameters to look better) (2) in the parameter sysex, and (3) in emitting
+ 	// and parsing patches.
+ 
     public HBox buildEffect(int effect, int type, Color color)
         {
         /*
@@ -1349,12 +1363,12 @@ public static final int ALL_ON = 4;
                 count++;
                 String key = "effect" + (effect + 1) + "type" + (type + 1) + (i == 0 ? "depth" : "para" + i);
                 boolean addOne = (max == 99 || // all the 0...99 are displayed as 1-100
-                    EFFECT_PARAMETER_NAMES[i][type].equals("Acceleration"));                // Rotary Acceleration is 0...9 but displayed 1...10            
-                comp = lastDial = new LabelledDial(s[0], this, key, color, EFFECT_PARAMETER_MINS[i][type], trueMax, addOne ? -1 : 0)
+                    EFFECT_PARAMETER_NAMES[i][type].equals("Accel"));                // Rotary Acceleration is 0...9 but displayed 1...10  
+                comp = lastDial = new LabelledDial(s[0], this, key, color, EFFECT_PARAMETER_MINS[i][type], trueMax)
                     {
                     public boolean isSymmetric()
                         {
-                        return (max == 76);             // -12dB ... +12dB
+                        return (max == 76 || max == 24);             // -12dB ... +12dB
                         }
                                         
                     public String map(int val)
@@ -1364,15 +1378,26 @@ public static final int ALL_ON = 4;
                         // The others are fairly easy.
                         if (max == 1)
                             {
-                            return (val == 0 ? "Sin" : "Tri");
+                            if (type == 28)	// rotary
+                            	{
+	                            return (val == 0 ? "Slow" : "Fast");
+                            	}
+                            else				// all else
+                            	{
+	                            return (val == 0 ? "Sin" : "Tri");
+	                            }
                             }
+                        else if (max == 24)
+                        	{
+                        	return "" + (max - 12) + "dB";
+                        	}
                         else if (max == 76)
                             {
                             return "" + (val - 64) + EFFECT_PARAMETER_UNITS[_i][type];
                             }
                         else if (max <= 100)
                             {
-                            return String.valueOf(val) + EFFECT_PARAMETER_UNITS[_i][type];
+                            return String.valueOf(val + (addOne ? 1 : 0) + EFFECT_PARAMETER_UNITS[_i][type]);
                             }
                         else if (max == 1270)
                             {
@@ -1415,6 +1440,7 @@ public static final int ALL_ON = 4;
     public JComponent addEffect(final int effect, Color color)
         {
         Category category = new Category(this, "Effect " + (effect + 1), color);
+category.makePasteable("effect");
 
         JComponent comp;
         String[] params;
@@ -1450,7 +1476,191 @@ public static final int ALL_ON = 4;
         return category;
         }
         
-    public JComponent addHarmonics(int source, Color color)
+    void touch(String key)
+    	{
+    	getModel().set(key, getModel().get(key));
+    	}
+    	
+    	
+    public JComponent addMorf(int source, Color color)
+        {
+        Category category = new Category(this, "Morf", color);
+category.makePasteable("source");
+        JComponent comp;
+        String[] params;
+        HBox hbox = new HBox();
+        VBox vbox = new VBox();
+        
+        /// MORF
+        
+    	// We no longer have a checkbox for this, but it's still a sysex parameter for some
+    	// reason.  So we have to include it as a parameter here so it can be randomized
+    	// arbitrarily. 
+      // model.set("source" + source + "morfflag", 0);
+       //model.setMinMax("source" + source + "morfflag", 0, 1);
+
+        PushButton doMorph = new PushButton("Execute")
+            {
+            public void perform()
+                {
+                byte[] exec = new byte[] { (byte)0xF0, 0x40, (byte)getChannelOut(), 0x10, 0x00, 0x0a, 0x02, 0x46, (byte)(source - 1), 0x00, 0x00, 0x00, 0x01, (byte)0xF7 };
+
+				// Send all the parameters for Morf to make sure the synth has the latest
+				touch("source" + source + "morfloop");
+				touch("source" + source + "morfhc1patch");
+				touch("source" + source + "morfhc2patch");
+				touch("source" + source + "morfhc3patch");
+				touch("source" + source + "morfhc4patch");
+				touch("source" + source + "morfhc1source");
+				touch("source" + source + "morfhc2source");
+				touch("source" + source + "morfhc3source");
+				touch("source" + source + "morfhc4source");
+				touch("source" + source + "morfhetime1");
+				touch("source" + source + "morfhetime2");
+				touch("source" + source + "morfhetime3");
+				touch("source" + source + "morfhetime4");
+				touch("source" + source + "morfflag");		// just in case
+				
+				// The K5000 has some non-morf harmonics parameters on its Morf screen for some reason.
+				// So just in case I am also sending all the non-morf harmonics parameters as well in case
+				// they are important to properly performing a morf
+				touch("source" + source + "harmgroup");
+				touch("source" + source + "harmtotalgain");
+				touch("source" + source + "harmkstogain");
+				touch("source" + source + "harmbalancevelocurve");
+				touch("source" + source + "harmbalancevelodepth");
+
+				// execute
+                try 
+                    {
+                    tryToSendSysex(exec);
+                    }
+                catch (Exception e) { Synth.handleException(e); }
+                }
+            };
+        vbox.add(doMorph);
+
+		/// FIXME: The Docs and the machine disagree on this....                
+        params = ENV_LOOPS;
+        comp = new Chooser("P3->P2 Loop", this, "source" + source + "morfloop", params);
+
+//        comp = new CheckBox("P3->P2 Loop", this, "source" + source + "morfloop");
+ 
+        vbox.add(comp);
+        hbox.add(vbox);
+
+        comp = new LabelledDial("HC1 Patch", this, "source" + source + "morfhc1patch", color, 0, 127, -1);
+        hbox.add(comp);
+                
+        comp = new LabelledDial("HC2 Patch", this, "source" + source + "morfhc2patch", color, 0, 127, -1);
+        hbox.add(comp);
+                
+        comp = new LabelledDial("HC3 Patch", this, "source" + source + "morfhc3patch", color, 0, 127, -1);
+        hbox.add(comp);
+                
+        comp = new LabelledDial("HC4 Patch", this, "source" + source + "morfhc4patch", color, 0, 127, -1);
+        hbox.add(comp);
+                
+        comp = new LabelledDial("HC1 Source", this, "source" + source + "morfhc1source", color, 0, 11)
+            {
+            public String map(int val)
+                {
+                if (val < 6) return "<html><font size=\"-1\">Soft&nbsp;" + (val + 1);
+                else return "<html><font size=\"-1\">Loud&nbsp;" + (val - 5) + "</font></html>";
+                }
+            };
+        hbox.add(comp);
+                
+        comp = new LabelledDial("HC2 Source", this, "source" + source + "morfhc2source", color, 0, 11)
+            {
+            public String map(int val)
+                {
+                if (val < 6) return "<html><font size=\"-1\">Soft&nbsp;" + (val + 1) + "</font></html>";
+                else return "<html><font size=\"-1\">Loud&nbsp;" + (val - 5) + "</font></html>";
+                }
+            };
+        hbox.add(comp);
+                
+        comp = new LabelledDial("HC3 Source", this, "source" + source + "morfhc3source", color, 0, 11)
+            {
+            public String map(int val)
+                {
+                if (val < 6) return "<html><font size=\"-1\">Soft&nbsp;" + (val + 1) + "</font></html>";
+                else return "<html><font size=\"-1\">Loud&nbsp;" + (val - 5) + "</font></html>";
+                }
+            };
+        hbox.add(comp);
+                
+        comp = new LabelledDial("HC4 Source", this, "source" + source + "morfhc4source", color, 0, 11)
+            {
+            public String map(int val)
+                {
+                if (val < 6) return "<html><font size=\"-1\">Soft&nbsp;" + (val + 1) + "</font></html>";
+                else return "<html><font size=\"-1\">Loud&nbsp;" + (val - 5) + "</font></html>";
+                }
+            };
+        hbox.add(comp);
+
+        comp = new LabelledDial("Time 1", this, "source" + source + "morfhetime1", color, 0, 127);
+        hbox.add(comp);
+
+        comp = new LabelledDial("Time 2", this, "source" + source + "morfhetime2", color, 0, 127);
+        hbox.add(comp);
+
+        comp = new LabelledDial("Time 3", this, "source" + source + "morfhetime3", color, 0, 127);
+        hbox.add(comp);
+
+        comp = new LabelledDial("Time 4", this, "source" + source + "morfhetime4", color, 0, 127);
+        hbox.add(comp);
+        
+        vbox = new VBox();
+        comp = new CheckBox("Show Morf", this, "source" + source + "morfflag");
+		vbox.add(comp);
+		hbox.add(vbox);
+                
+        category.add(hbox, BorderLayout.CENTER);
+        return category;
+        }
+ 
+     public JComponent addHarmonics(int source, Color color)
+        {
+        Category category = new Category(this, "Harmonics", color);
+category.makePasteable("source" + source);
+
+        JComponent comp;
+        String[] params;
+        HBox hbox = new HBox();
+        VBox vbox = new VBox();
+        
+        /// NON-MORF
+
+        params = HARMONIC_GROUPS;
+        comp = new Chooser("Harmonic Group", this, "source" + source + "harmgroup", params);
+        vbox.add(comp);
+        hbox.add(vbox);
+
+        hbox.add(Strut.makeHorizontalStrut(8));
+
+        comp = new LabelledDial("Gain", this, "source" + source + "harmtotalgain", color, 1, 63);
+        hbox.add(comp);
+
+        comp = new LabelledDial("KS to Gain", this, "source" + source + "harmkstogain", color, 1, 127, 64);
+        hbox.add(comp);
+
+        comp = new LabelledDial("Balance", this, "source" + source + "harmbalancevelocurve", color, 0, 11);
+        ((LabelledDial)comp).addAdditionalLabel("Vel. Curve");               // this makes the height the same between LFO and ENV
+        hbox.add(comp);
+
+        comp = new LabelledDial("Balance", this, "source" + source + "harmbalancevelodepth", color, 0, 127);
+        ((LabelledDial)comp).addAdditionalLabel("Vel. Depth");               // this makes the height the same between LFO and ENV
+        hbox.add(comp);
+
+        category.add(hbox, BorderLayout.CENTER);
+        return category;
+        }       
+  
+        
+/*    public JComponent addHarmonics(int source, Color color)
         {
         Category category = new Category(this, "Harmonics", color);
 
@@ -1500,38 +1710,41 @@ public static final int ALL_ON = 4;
 
         normh.add(Strut.makeHorizontalStrut(8));
 
-        comp = new LabelledDial("Gain", this, "source" + source + "totalgain", color, 1, 63);
+        comp = new LabelledDial("Gain", this, "source" + source + "harmtotalgain", color, 1, 63);
         normh.add(comp);
 
-        comp = new LabelledDial("KS to Gain", this, "source" + source + "kstogain", color, 1, 127, 64);
+        comp = new LabelledDial("KS to Gain", this, "source" + source + "harmkstogain", color, 1, 127, 64);
         normh.add(comp);
 
-        comp = new LabelledDial("Balance Vel. Curve", this, "source" + source + "balancevelocurve", color, 0, 11);
+        comp = new LabelledDial("Balance Vel. Curve", this, "source" + source + "harmbalancevelocurve", color, 0, 11);
         normh.add(comp);
 
-        comp = new LabelledDial("Balance Vel. Depth", this, "source" + source + "balancevelodepth", color, 0, 127);
+        comp = new LabelledDial("Balance Vel. Depth", this, "source" + source + "harmbalancevelodepth", color, 0, 127);
         normh.add(comp);
 
 
         /// MORF
-                
+
+		/// FIXME: The Docs and the machine disagree on this....                
         params = ENV_LOOPS;
-        comp = new Chooser("Loop", this, "source" + source + "loop", params);
+        comp = new Chooser("P3->P2 Loop", this, "source" + source + "morfloop", params);
+
+//        comp = new CheckBox("P3->P2 Loop", this, "source" + source + "morfloop");
         morfv.add(comp);
 
-        comp = new LabelledDial("HC1 Patch", this, "source" + source + "hc1patch", color, 0, 127);
+        comp = new LabelledDial("HC1 Patch", this, "source" + source + "morfhc1patch", color, 0, 127, -1);
         morfh.add(comp);
                 
-        comp = new LabelledDial("HC2 Patch", this, "source" + source + "hc2patch", color, 0, 127);
+        comp = new LabelledDial("HC2 Patch", this, "source" + source + "morfhc2patch", color, 0, 127, -1);
         morfh.add(comp);
                 
-        comp = new LabelledDial("HC3 Patch", this, "source" + source + "hc3patch", color, 0, 127);
+        comp = new LabelledDial("HC3 Patch", this, "source" + source + "morfhc3patch", color, 0, 127, -1);
         morfh.add(comp);
                 
-        comp = new LabelledDial("HC4 Patch", this, "source" + source + "hc4patch", color, 0, 127);
+        comp = new LabelledDial("HC4 Patch", this, "source" + source + "morfhc4patch", color, 0, 127, -1);
         morfh.add(comp);
                 
-        comp = new LabelledDial("HC1 Source", this, "source" + source + "hc1source", color, 0, 11)
+        comp = new LabelledDial("HC1 Source", this, "source" + source + "morfhc1source", color, 0, 11)
             {
             public String map(int val)
                 {
@@ -1541,7 +1754,7 @@ public static final int ALL_ON = 4;
             };
         morfh.add(comp);
                 
-        comp = new LabelledDial("HC2 Source", this, "source" + source + "hc2source", color, 0, 127)
+        comp = new LabelledDial("HC2 Source", this, "source" + source + "morfhc2source", color, 0, 11)
             {
             public String map(int val)
                 {
@@ -1551,7 +1764,7 @@ public static final int ALL_ON = 4;
             };
         morfh.add(comp);
                 
-        comp = new LabelledDial("HC3 Source", this, "source" + source + "hc3source", color, 0, 127)
+        comp = new LabelledDial("HC3 Source", this, "source" + source + "morfhc3source", color, 0, 11)
             {
             public String map(int val)
                 {
@@ -1561,7 +1774,7 @@ public static final int ALL_ON = 4;
             };
         morfh.add(comp);
                 
-        comp = new LabelledDial("HC4 Source", this, "source" + source + "hc4source", color, 0, 127)
+        comp = new LabelledDial("HC4 Source", this, "source" + source + "morfhc4source", color, 0, 11)
             {
             public String map(int val)
                 {
@@ -1571,23 +1784,23 @@ public static final int ALL_ON = 4;
             };
         morfh.add(comp);
 
-        comp = new LabelledDial("Time 1", this, "source" + source + "hetime1", color, 0, 127);
+        comp = new LabelledDial("Time 1", this, "source" + source + "morfhetime1", color, 0, 127);
         morfh.add(comp);
 
-        comp = new LabelledDial("Time 2", this, "source" + source + "hetime2", color, 0, 127);
+        comp = new LabelledDial("Time 2", this, "source" + source + "morfhetime2", color, 0, 127);
         morfh.add(comp);
 
-        comp = new LabelledDial("Time 3", this, "source" + source + "hetime3", color, 0, 127);
+        comp = new LabelledDial("Time 3", this, "source" + source + "morfhetime3", color, 0, 127);
         morfh.add(comp);
 
-        comp = new LabelledDial("Time 4", this, "source" + source + "hetime4", color, 0, 127);
+        comp = new LabelledDial("Time 4", this, "source" + source + "morfhetime4", color, 0, 127);
         morfh.add(comp);
         
-        PushButton doMorph = new PushButton("Execute", SOURCE_NAMES)
+        PushButton doMorph = new PushButton("Execute")
             {
-            public void perform(int source)
+            public void perform()
                 {
-                byte[] exec = new byte[] { (byte)0xF0, 0x40, (byte)getChannelOut(), 0x10, 0x00, 0x0a, 0x20, 0x46, (byte)source, 0x00, 0x00, 0x00, 0x01, (byte)0xF7 };
+                byte[] exec = new byte[] { (byte)0xF0, 0x40, (byte)getChannelOut(), 0x10, 0x00, 0x0a, 0x02, 0x46, (byte)(source - 1), 0x00, 0x00, 0x00, 0x01, (byte)0xF7 };
 
                 try 
                     {
@@ -1610,11 +1823,12 @@ public static final int ALL_ON = 4;
         category.add(hbox, BorderLayout.CENTER);
         return category;
         }
-        
+        */
         
     public JComponent addFormant(int source, Color color)
         {
         Category category = new Category(this, "Formant", color);
+category.makePasteable("source");
 
         JComponent comp;
         String[] params;
@@ -1736,7 +1950,14 @@ public static final int ALL_ON = 4;
             new String[] { null, "source" + source + "formantattackrate",  "source" + source + "formantdecay1rate",  "source" + source + "formantdecay2rate",  null,                                                                     "source" + source + "formantreleaserate" },
             new String[] { null, "source" + source + "formantattacklevel", "source" + source + "formantdecay1level", "source" + source + "formantdecay2level", "source" + source + "formantdecay2level", "source" + source + "formantreleaselevel"},
             new double[] { 0, 1.0 / 5 / 127.0, 1.0 / 5 / 127.0, 1.0 / 5 / 127.0, 1.0 / 5, 1.0 / 5 / 127.0 },
-            new double[] { 1.0 / 126, 1.0 / 126, 1.0 / 126, 1.0 / 126, 1.0 / 126, 1.0 / 126 });
+            new double[] { 1.0 / 126, 1.0 / 126, 1.0 / 126, 1.0 / 126, 1.0 / 126, 1.0 / 126 })
+            	{
+            	public double preprocessXKey(int index, String key, double value)
+            		{
+            		if (index == 6) return value;		// it's the sustain
+            		else return 127.0 - value;		// rates are flipped from other envelopes, grrr
+            		}
+            	};
         disp.setAxis(63 / 127.0);               // dunno if this will work, I may be off by a pixel
         envh.addLast(disp);
 
@@ -1751,6 +1972,7 @@ public static final int ALL_ON = 4;
     public JComponent addGeneral(int source, Color color)
         {
         Category category = new Category(this, "General", color);
+category.makePasteable("source");
         JComponent comp;
         String[] params;
         HBox hbox = new HBox();
@@ -1758,25 +1980,25 @@ public static final int ALL_ON = 4;
 
                 
         params = VELO_SW;
-        comp = new Chooser("Velo Switch", this, "source" + source + "velosw", params);
+        comp = new Chooser("Velo Switch", this, "source" + source + "generalvelosw", params);
         hbox.add(comp);
 
         params = PAN_TYPES;
-        comp = new Chooser("Pan Type", this, "source" + source + "pantype", params);
+        comp = new Chooser("Pan Type", this, "source" + source + "generalpantype", params);
         hbox.add(comp);
         
         vbox.add(hbox);
         
         hbox = new HBox();
             
-        comp = new LabelledDial("Velocity", this, "source" + source + "velo", color, 0, 31)
+        comp = new LabelledDial("Velo Value", this, "source" + source + "generalvelo", color, 0, 31)
             {
             /// FIXME: These values need to be tested
             public String map(int val) { if (val == 0) return "4"; else return "" + (val * 4 + 3); }
             };
         hbox.add(comp);
 
-        comp = new LabelledDial("Pan", this, "source" + source + "pannormalvalue", color, 1, 127, 64)
+        comp = new LabelledDial("Pan", this, "source" + source + "generalpannormalvalue", color, 1, 127, 64)
             {
             public String map(int val) 
                 { 
@@ -1787,34 +2009,50 @@ public static final int ALL_ON = 4;
             };
         hbox.add(comp);
 
-        comp = new LabelledDial("Volume", this, "source" + source + "volume", color, 0, 127);
-        hbox.add(comp);
-                
-        comp = new LabelledDial("Effect", this, "source" + source + "effectpath", color, 0, 3, -1);
+        comp = new LabelledDial("Effect Path", this, "source" + source + "generalzonepath", color, 0, 3, -1);
         hbox.add(comp);
 
+        comp = new LabelledDial("Pitch Bend", this, "source" + source + "generalbenderpitch", color, 0, 24);
+//        ((LabelledDial)comp).addAdditionalLabel("Bend");
+        hbox.add(comp);
+
+        comp = new LabelledDial("Key On Delay", this, "source" + source + "generalkeyondelay", color, 0, 127);
+        //((LabelledDial)comp).addAdditionalLabel("Delay");
+        hbox.add(comp);
         vbox.add(hbox);
         hbox = new HBox();
                 
-        comp = new LabelledDial("Zone Low", this, "source" + source + "zonelo", color, 0, 127);
+        comp = new LabelledDial("Volume", this, "source" + source + "generalvolume", color, 0, 127);
+        hbox.add(comp);
+                
+        comp = new LabelledDial("Zone Low", this, "source" + source + "generalzonelo", color, 0, 127)
+            {
+// Zone Low/Hi starts at 0 = C -2
+            public String map(int val) { return KEYS[val % 12] + ((val / 12) - 2); }
+            };
         hbox.add(comp);
 
-        comp = new LabelledDial("Zone Hi", this, "source" + source + "zonehi", color, 0, 127);
+        comp = new LabelledDial("Zone Hi", this, "source" + source + "generalzonehi", color, 0, 127)
+            {
+// Zone Low/Hi starts at 0 = C -2
+            public String map(int val) { return KEYS[val % 12] + ((val / 12) - 2); }
+            };
         hbox.add(comp);
 
-
-        comp = new LabelledDial("Key On Delay", this, "source" + source + "keyondelay", color, 0, 127);
-        //((LabelledDial)comp).addAdditionalLabel("Delay");
+        comp = new LabelledDial("PB Cutoff", this, "source" + source + "generalbendercutoff", color, 0, 31);
         hbox.add(comp);
+
         vbox.add(hbox);
                 
         category.add(vbox, BorderLayout.CENTER);
         return category;
         }
-                
+    
+    	
     public JComponent addControl(int source, Color color)
         {
         Category category = new Category(this, "Control", color);
+category.makePasteable("source");
 
         JComponent comp;
         String[] params;
@@ -1825,46 +2063,46 @@ public static final int ALL_ON = 4;
         vbox = new VBox();
 
         params = DESTINATIONS;
-        comp = new Chooser("Mod Wheel Destination 1", this, "source" + source + "wheeldestination1", params);
+        comp = new Chooser("Pressure Destination 1", this, "source" + source + "controlpressdestination1", params);
         vbox.add(comp);
 
         params = DESTINATIONS;
-        comp = new Chooser("Expression Destination 1", this, "source" + source + "expressdestination1", params);
+        comp = new Chooser("Mod Wheel Destination 1", this, "source" + source + "controlwheeldestination1", params);
         vbox.add(comp);
 
         params = DESTINATIONS;
-        comp = new Chooser("Pressure Destination 1", this, "source" + source + "pressdestination1", params);
+        comp = new Chooser("Expression Destination 1", this, "source" + source + "controlexpressdestination1", params);
         vbox.add(comp);
 
         params = SOURCES;
-        comp = new Chooser("Assignable Source 1", this, "source" + source + "assignablecontrol1source", params);
+        comp = new Chooser("Assignable Source 1", this, "source" + source + "controlassignable1source", params);
         vbox.add(comp);
 
         params = DESTINATIONS;
-        comp = new Chooser("Assignable Destination 1", this, "source" + source + "assignablecontrol1destination", params);
+        comp = new Chooser("Assignable Destination 1", this, "source" + source + "controlassignable1destination", params);
         vbox.add(comp);
 
         hbox.add(vbox);
         vbox = new VBox();
 
         params = DESTINATIONS;
-        comp = new Chooser("Mod Wheel Destination 2", this, "source" + source + "wheeldestination2", params);
+        comp = new Chooser("Pressure Destination 2", this, "source" + source + "controlpressdestination2", params);
         vbox.add(comp);
 
         params = DESTINATIONS;
-        comp = new Chooser("Expression Destination 2", this, "source" + source + "expressdestination2", params);
+        comp = new Chooser("Mod Wheel Destination 2", this, "source" + source + "controlwheeldestination2", params);
+        vbox.add(comp);
+
+        params = DESTINATIONS;
+        comp = new Chooser("Expression Destination 2", this, "source" + source + "controlexpressdestination2", params);
         vbox.add(comp);
 
         params = SOURCES;
-        comp = new Chooser("Assignable Source 2", this, "source" + source + "assignablecontrol2source", params);
+        comp = new Chooser("Assignable Source 2", this, "source" + source + "controlassignable2source", params);
         vbox.add(comp);
 
         params = DESTINATIONS;
-        comp = new Chooser("Pressure Destination 2", this, "source" + source + "pressdestination2", params);
-        vbox.add(comp);
-
-        params = DESTINATIONS;
-        comp = new Chooser("Assignable Destination 2", this, "source" + source + "assignablecontrol2destination", params);
+        comp = new Chooser("Assignable Destination 2", this, "source" + source + "controlassignable2destination", params);
         vbox.add(comp);
                 
         hbox.add(vbox);
@@ -1872,46 +2110,38 @@ public static final int ALL_ON = 4;
         VBox vbox1 = new VBox();
         HBox hbox1 = new HBox();
                 
-        comp = new LabelledDial("Pitch Bend", this, "source" + source + "benderpitch", color, 0, 24);
-//        ((LabelledDial)comp).addAdditionalLabel("Bend");
-        hbox1.add(comp);
-
-        comp = new LabelledDial("Pressure", this, "source" + source + "pressdepth1", color, 33, 95, 64);
+        comp = new LabelledDial("Pressure", this, "source" + source + "controlpressdepth1", color, 33, 95, 64);
         ((LabelledDial)comp).addAdditionalLabel("Depth 1");
         hbox1.add(comp);
                 
-        comp = new LabelledDial("Mod Wheel", this, "source" + source + "wheeldepth1", color, 33, 95, 64);
+        comp = new LabelledDial("Mod Wheel", this, "source" + source + "controlwheeldepth1", color, 33, 95, 64);
         ((LabelledDial)comp).addAdditionalLabel("Depth 1");
         hbox1.add(comp);
                 
-        comp = new LabelledDial("Expression", this, "source" + source + "expressdepth1", color, 33, 95, 64);
+        comp = new LabelledDial("Expression", this, "source" + source + "controlexpressdepth1", color, 33, 95, 64);
         ((LabelledDial)comp).addAdditionalLabel("Depth 1");
         hbox1.add(comp);
                 
-        comp = new LabelledDial("Assignable", this, "source" + source + "assignablecontrol1depth", color, 33, 95, 64);
+        comp = new LabelledDial("Assignable", this, "source" + source + "controlassignable1depth", color, 33, 95, 64);
         ((LabelledDial)comp).addAdditionalLabel("Depth 1");
         hbox1.add(comp);
 
         vbox1.add(hbox1);
         hbox1 = new HBox();
 
-        comp = new LabelledDial("PB Cutoff", this, "source" + source + "bendercutoff", color, 0, 31);
-        // ((LabelledDial)comp).addAdditionalLabel("Cutoff");
-        hbox1.add(comp);
-
-        comp = new LabelledDial("Pressure", this, "source" + source + "pressdepth2", color, 33, 95, 64);
+        comp = new LabelledDial("Pressure", this, "source" + source + "controlpressdepth2", color, 33, 95, 64);
         ((LabelledDial)comp).addAdditionalLabel("Depth 2");
         hbox1.add(comp);
 
-        comp = new LabelledDial("Mod Wheel", this, "source" + source + "wheeldepth2", color, 33, 95, 64);
+        comp = new LabelledDial("Mod Wheel", this, "source" + source + "controlwheeldepth2", color, 33, 95, 64);
         ((LabelledDial)comp).addAdditionalLabel("Depth 2");
         hbox1.add(comp);
                 
-        comp = new LabelledDial("Expression", this, "source" + source + "expressdepth2", color, 33, 95, 64);
+        comp = new LabelledDial("Expression", this, "source" + source + "controlexpressdepth2", color, 33, 95, 64);
         ((LabelledDial)comp).addAdditionalLabel("Depth 2");
         hbox1.add(comp);
                 
-        comp = new LabelledDial("Assignable", this, "source" + source + "assignablecontrol2depth", color, 33, 95, 64);
+        comp = new LabelledDial("Assignable", this, "source" + source + "controlassignable2depth", color, 33, 95, 64);
         ((LabelledDial)comp).addAdditionalLabel("Depth 2");
         hbox1.add(comp);
 
@@ -1925,6 +2155,7 @@ public static final int ALL_ON = 4;
     public JComponent addDCO(int source, Color color)
         {
         Category category = new Category(this, "DCO", color);
+category.makePasteable("source");
 
         JComponent comp;
         String[] params;
@@ -1932,18 +2163,18 @@ public static final int ALL_ON = 4;
         VBox vbox = new VBox();
                 
         params = SR_WAVES;
-        JComponent pcmwave = new Chooser("PCM Wave", this, "source" + source + "wavekit", params);
+        JComponent pcmwave = new Chooser("PCM Wave", this, "source" + source + "dcowavekit", params);
 
         VBox wavebox = vbox;
                 
         params = SOURCE_TYPES;
-        comp = new Chooser("Source Type", this, "source" + source + "additive", params)
+        comp = new Chooser("Source Type", this, "source" + source + "dcoadditive", params)
             {
             public void update(String key, Model model)
                 {
                 super.update(key, model);
                 wavebox.remove(pcmwave);
-                if (model.get("source" + source + "additive") == 0)
+                if (model.get("source" + source + "dcoadditive") == 0)
                     {
                     wavebox.add(pcmwave);
                     }
@@ -1952,25 +2183,35 @@ public static final int ALL_ON = 4;
                 updateTabs();
                 }
             };
-        model.set("source" + source + "additive", 1);
+        model.set("source" + source + "dcoadditive", 1);
         vbox.add(comp);
         //vbox.add(pcmwave);
         hbox.add(vbox);
 
-        comp = new LabelledDial("Coarse", this, "source" + source + "coarse", color, 40, 88, 64);
+        comp = new LabelledDial("Coarse", this, "source" + source + "dcocoarse", color, 40, 88, 64);
         hbox.add(comp);
 
-        comp = new LabelledDial("Fine", this, "source" + source + "fine", color, 1, 127, 64);
+        comp = new LabelledDial("Fine", this, "source" + source + "dcofine", color, 1, 127, 64);
         hbox.add(comp);
 
-        comp = new LabelledDial("Fixed", this, "source" + source + "fixedkey", color, 0, 108 - 20)
+        comp = new LabelledDial("Fixed", this, "source" + source + "dcofixedkey", color, 0, 108 - 20)
             {
-            public String map(int val) { return (val == 0 ? "Off" : "" + KEYS[(val - 1) % 12] + ((val - 1) / 12 - 1)); }
+            public String map(int val) 
+            	{ 
+            	// A very curious keymap  -- the range actually goes 0 = off, 21 = A-1, ..., 108 = C7
+            	// I am condensing it here to a consistent range of 0 = off, 1 = A-1, 108 - 20 = C7
+            	// But we have to deal with it in emitting and parsing
+            	if (val == 0) return "Off";
+            	if (val == 1) return "A-1";
+            	if (val == 2) return "Bb-1";
+            	if (val == 3) return "B-1";
+            	return KEYS[(val - 4) % 12] + (val - 4) / 12;
+            	}
             };
         ((LabelledDial)comp).addAdditionalLabel("Key");
         hbox.add(comp);
 
-        comp = new LabelledDial("KS Pitch", this, "source" + source + "kspitch", color, 0, 3)
+        comp = new LabelledDial("KS Pitch", this, "source" + source + "dcokspitch", color, 0, 3)
             {
             public String map(int val) { return CENTS[val]; }
             };
@@ -1983,39 +2224,40 @@ public static final int ALL_ON = 4;
     public JComponent addPitchEnv(int source, Color color)
         {
         Category category = new Category(this, "Pitch Env", color);
+category.makePasteable("source");
 
         JComponent comp;
         String[] params;
         HBox hbox = new HBox();
         VBox vbox = new VBox();
                 
-        comp = new LabelledDial("Start", this, "source" + source + "pitchenvstartlevel", color, 1, 127, 64);
+        comp = new LabelledDial("Start", this, "source" + source + "envdcostartlevel", color, 1, 127, 64);
         ((LabelledDial)comp).addAdditionalLabel("Level");
         hbox.add(comp);
 
-        comp = new LabelledDial("Attack", this, "source" + source + "pitchenvattacktime", color, 0, 127);
+        comp = new LabelledDial("Attack", this, "source" + source + "envdcoattacktime", color, 0, 127);
         ((LabelledDial)comp).addAdditionalLabel("Time");
         hbox.add(comp);
 
-        comp = new LabelledDial("Attack", this, "source" + source + "pitchenvattacklevel", color, 1, 127, 64);
+        comp = new LabelledDial("Attack", this, "source" + source + "envdcoattacklevel", color, 1, 127, 64);
         ((LabelledDial)comp).addAdditionalLabel("Level");
         hbox.add(comp);
 
-        comp = new LabelledDial("Decay", this, "source" + source + "pitchenvdecaytime", color, 0, 127);
+        comp = new LabelledDial("Decay", this, "source" + source + "envdcodecaytime", color, 0, 127);
         ((LabelledDial)comp).addAdditionalLabel("Time");
         hbox.add(comp);
 
-        comp = new LabelledDial("Time Velo", this, "source" + source + "pitchenvtimevelosense", color, 1, 127, 64);
+        comp = new LabelledDial("Level Velo", this, "source" + source + "envdcolevelvelosense", color, 1, 127, 64);
         ((LabelledDial)comp).addAdditionalLabel("Sense");
         hbox.add(comp);
 
-        comp = new LabelledDial("Level Velo", this, "source" + source + "pitchenvlevelvelosense", color, 1, 127, 64);
+        comp = new LabelledDial("Time Velo", this, "source" + source + "envdcotimevelosense", color, 1, 127, 64);
         ((LabelledDial)comp).addAdditionalLabel("Sense");
         hbox.add(comp);
 
         EnvelopeDisplay disp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
-            new String[] { null, "source" + source + "pitchenvattacktime", "source" + source + "pitchenvdecaytime"  },
-            new String[] { "source" + source + "pitchenvstartlevel", "source" + source + "pitchenvattacklevel", null },
+            new String[] { null, "source" + source + "envdcoattacktime", "source" + source + "envdcodecaytime"  },
+            new String[] { "source" + source + "envdcostartlevel", "source" + source + "envdcoattacklevel", null },
             new double[] { 0, 1.0 / 2 / 127.0, 1.0 / 2 / 127.0 },
             new double[] { 1.0 / 126, 1.0 / 126, 1.0 / 126 });
         disp.setAxis(63 / 127.0);               // dunno if this will work, I may be off by a pixel
@@ -2028,14 +2270,15 @@ public static final int ALL_ON = 4;
     public JComponent addDCF(int source, Color color)
         {
         Category category = new Category(this, "DCF", color);
+category.makePasteable("source");
 
         JComponent comp;
         String[] params;
         HBox hbox = new HBox();
-        VBox vbox = new VBox();
+        VBox vbox = new VBox(); 
                 
-        comp = new CheckBox("Enable", this, "source" + source + "dcf");
-        model.set("source" + source + "dcf", 1);
+        comp = new CheckBox("Active", this, "source" + source + "dcfenable", true);
+        model.set("source" + source + "dcfenable", 1);
         vbox.add(comp);
 
         params = DCF_MODES;
@@ -2067,7 +2310,7 @@ public static final int ALL_ON = 4;
         //((LabelledDial)comp).addAdditionalLabel("Velo Depth");
         hbox.add(comp);
 
-        comp = new LabelledDial("Velo->Env Level", this, "source" + source + "dcfvelotoenvlevel", color, 1, 127, 64);
+        comp = new LabelledDial("Velo->Env Level", this, "source" + source + "envdcfvelolevel", color, 1, 127, 64);
         //((LabelledDial)comp).addAdditionalLabel("Level");
         hbox.add(comp);
 
@@ -2078,59 +2321,60 @@ public static final int ALL_ON = 4;
     public JComponent addDCFEnv(int source, Color color)
         {
         Category category = new Category(this, "DCF Env", color);
+category.makePasteable("source");
 
         JComponent comp;
         String[] params;
         HBox hbox = new HBox();
         VBox vbox = new VBox();
                 
-        comp = new LabelledDial("Attack", this, "source" + source + "dcfenvattacktime", color, 0, 127);
+        comp = new LabelledDial("Attack", this, "source" + source + "envdcfattacktime", color, 0, 127);
         ((LabelledDial)comp).addAdditionalLabel("Time");
         hbox.add(comp);
 
-        comp = new LabelledDial("Decay 1", this, "source" + source + "dcfenvdecay1time", color, 0, 127);
+        comp = new LabelledDial("Decay 1", this, "source" + source + "envdcfdecay1time", color, 0, 127);
         ((LabelledDial)comp).addAdditionalLabel("Time");
         hbox.add(comp);
 
-        comp = new LabelledDial("Decay 1", this, "source" + source + "dcfenvdecay1level", color, 1, 127, 64);
+        comp = new LabelledDial("Decay 1", this, "source" + source + "envdcfdecay1level", color, 1, 127, 64);
         ((LabelledDial)comp).addAdditionalLabel("Level");
         hbox.add(comp);
 
-        comp = new LabelledDial("Decay 2", this, "source" + source + "dcfenvdecay2time", color, 0, 127);
+        comp = new LabelledDial("Decay 2", this, "source" + source + "envdcfdecay2time", color, 0, 127);
         ((LabelledDial)comp).addAdditionalLabel("Time");
         hbox.add(comp);
 
-        comp = new LabelledDial("Decay 2", this, "source" + source + "dcfenvdecay2level", color, 1, 127, 64);
+        comp = new LabelledDial("Decay 2", this, "source" + source + "envdcfdecay2level", color, 1, 127, 64);
         ((LabelledDial)comp).addAdditionalLabel("Level");
         hbox.add(comp);
 
-        comp = new LabelledDial("Release", this, "source" + source + "dcfenvreleasetime", color, 0, 127);
+        comp = new LabelledDial("Release", this, "source" + source + "envdcfreleasetime", color, 0, 127);
         ((LabelledDial)comp).addAdditionalLabel("Time");
         hbox.add(comp);
 
-        comp = new LabelledDial("KS->Env", this, "source" + source + "dcfkstoenvattacktime", color, 1, 127, 64);
+        comp = new LabelledDial("KS->Env", this, "source" + source + "envdcfksattacktime", color, 1, 127, 64);
         ((LabelledDial)comp).addAdditionalLabel("Attack Time");
         hbox.add(comp);
 
-        comp = new LabelledDial("KS->Env", this, "source" + source + "dcfkstoenvdecay1time", color, 1, 127, 64);
+        comp = new LabelledDial("KS->Env", this, "source" + source + "envdcfksdecay1time", color, 1, 127, 64);
         ((LabelledDial)comp).addAdditionalLabel("Decay 1 Time");
         hbox.add(comp);
 
-        comp = new LabelledDial("Velo->Env", this, "source" + source + "dcfvelotoenvattacktime", color, 1, 127, 64);
+        comp = new LabelledDial("Velo->Env", this, "source" + source + "envdcfveloattacktime", color, 1, 127, 64);
         ((LabelledDial)comp).addAdditionalLabel("Attack Time");
         hbox.add(comp);
 
-        comp = new LabelledDial("Velo->Env", this, "source" + source + "dcfvelotoenvdecay1time", color, 1, 127, 64);
+        comp = new LabelledDial("Velo->Env", this, "source" + source + "envdcfvelodecay1time", color, 1, 127, 64);
         ((LabelledDial)comp).addAdditionalLabel("Decay1 Time");
         hbox.add(comp);
 
-        comp = new LabelledDial("Env Depth", this, "source" + source + "dcfenvdepth", color, 1, 127, 64);
+        comp = new LabelledDial("Env Depth", this, "source" + source + "envdcfdepth", color, 1, 127, 64);
         hbox.add(comp);
 
 
         EnvelopeDisplay disp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
-            new String[] { null, "source" + source + "dcfenvattacktime", "source" + source + "dcfenvdecay1time",  "source" + source + "dcfenvdecay2time",  null,                                                                        "source" + source + "dcfenvreleasetime" },
-            new String[] { null, null,                                                                   "source" + source + "dcfenvdecay1level", "source" + source + "dcfenvdecay2level", "source" + source + "dcfenvdecay2level", null },
+            new String[] { null, "source" + source + "envdcfattacktime", "source" + source + "envdcfdecay1time",  "source" + source + "envdcfdecay2time",  null,                                                                        "source" + source + "envdcfreleasetime" },
+            new String[] { null, null,                                                                   "source" + source + "envdcfdecay1level", "source" + source + "envdcfdecay2level", "source" + source + "envdcfdecay2level", null },
             new double[] { 0, 1.0 / 5 / 127.0, 1.0 / 5 / 127.0, 1.0 / 5 / 127.0, 1.0 / 5, 1.0 / 5 / 127.0 },
             new double[] { 0.5, 1.0, 1.0 / 126, 1.0 / 126, 1.0 / 126, 1.0 / 126 });
         disp.setAxis(63 / 127.0);               // dunno if this will work, I may be off by a pixel
@@ -2144,6 +2388,7 @@ public static final int ALL_ON = 4;
     public JComponent addDCA(int source, Color color)
         {
         Category category = new Category(this, "DCA", color);
+category.makePasteable("source");
 
         JComponent comp;
         String[] params;
@@ -2154,14 +2399,15 @@ public static final int ALL_ON = 4;
         comp = new LabelledDial("Velo Curve", this, "source" + source + "dcavelocurve", color, 0, 11, -1);
         hbox.add(comp);
 
-// I need space
-        comp = new LabelledDial("KS->Env Level", this, "source" + source + "dcakstoenvlevel", color, 1, 127, 64);
-        //       ((LabelledDial)comp).addAdditionalLabel("Level");
-        hbox.add(comp);
+        EnvelopeDisplay disp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
+            new String[] { null, "source" + source + "envdcaattacktime", "source" + source + "envdcadecay1time",  "source" + source + "envdcadecay2time",  null,                                                                        "source" + source + "envdcareleasetime" },
+            new String[] { null, null,                                                                   "source" + source + "envdcadecay1level", "source" + source + "envdcadecay2level", "source" + source + "envdcadecay2level", null },
+            new double[] { 0, 1.0 / 5 / 127.0, 1.0 / 5 / 127.0, 1.0 / 5 / 127.0, 1.0 / 5, 1.0 / 5 / 127.0 },
+            new double[] { 0.0, 1.0, 1.0 / 127, 1.0 / 127, 1.0 / 127, 1.0 / 127 });
+        // new double[] { 0.5, 1.0, 1.0 / 126, 1.0 / 126, 1.0 / 126, 1.0 / 126 });
+//disp.setAxis(63 / 127.0);               // dunno if this will work, I may be off by a pixel
+        hbox.addLast(disp);
 
-        comp = new LabelledDial("Velo->Env Level", this, "source" + source + "dcavelotoenvlevel", color, 0, 63);
-//        ((LabelledDial)comp).addAdditionalLabel("Level");
-        hbox.add(comp);
 
         category.add(hbox, BorderLayout.CENTER);
         return category;
@@ -2171,68 +2417,68 @@ public static final int ALL_ON = 4;
     public JComponent addDCAEnv(int source, Color color)
         {
         Category category = new Category(this, "DCA Env", color);
+category.makePasteable("source");
 
         JComponent comp;
         String[] params;
         HBox hbox = new HBox();
         VBox vbox = new VBox();
                 
-        comp = new LabelledDial("Attack", this, "source" + source + "dcaenvattacktime", color, 0, 127);
+        comp = new LabelledDial("Attack", this, "source" + source + "envdcaattacktime", color, 0, 127);
         ((LabelledDial)comp).addAdditionalLabel("Time");
         hbox.add(comp);
 
-        comp = new LabelledDial("Decay 1", this, "source" + source + "dcaenvdecay1time", color, 0, 127);
+        comp = new LabelledDial("Decay 1", this, "source" + source + "envdcadecay1time", color, 0, 127);
         ((LabelledDial)comp).addAdditionalLabel("Time");
         hbox.add(comp);
 
-        comp = new LabelledDial("Decay 1", this, "source" + source + "dcaenvdecay1level", color, 0, 127);
+        comp = new LabelledDial("Decay 1", this, "source" + source + "envdcadecay1level", color, 0, 127);
         ((LabelledDial)comp).addAdditionalLabel("Level");
         hbox.add(comp);
 
-        comp = new LabelledDial("Decay 2", this, "source" + source + "dcaenvdecay2time", color, 0, 127);
+        comp = new LabelledDial("Decay 2", this, "source" + source + "envdcadecay2time", color, 0, 127);
         ((LabelledDial)comp).addAdditionalLabel("Time");
         hbox.add(comp);
 
-        comp = new LabelledDial("Decay 2", this, "source" + source + "dcaenvdecay2level", color, 0, 127);
+        comp = new LabelledDial("Decay 2", this, "source" + source + "envdcadecay2level", color, 0, 127);
         ((LabelledDial)comp).addAdditionalLabel("Level");
         hbox.add(comp);
 
-        comp = new LabelledDial("Release", this, "source" + source + "dcaenvreleasetime", color, 0, 127);
+        comp = new LabelledDial("Release", this, "source" + source + "envdcareleasetime", color, 0, 127);
         ((LabelledDial)comp).addAdditionalLabel("Time");
         hbox.add(comp);
 
-        comp = new LabelledDial("KS->Env", this, "source" + source + "dcakstoenvattacktime", color, 1, 127, 64);
+        comp = new LabelledDial("KS->Env", this, "source" + source + "envdcaksattacktime", color, 1, 127, 64);
         ((LabelledDial)comp).addAdditionalLabel("Attack Time");
         hbox.add(comp);
 
-        comp = new LabelledDial("KS->Env", this, "source" + source + "dcakstoenvdecay1time", color, 1, 127, 64);
+        comp = new LabelledDial("KS->Env", this, "source" + source + "envdcaksdecay1time", color, 1, 127, 64);
         ((LabelledDial)comp).addAdditionalLabel("Decay 1 Time");
         hbox.add(comp);
 
-        comp = new LabelledDial("KS->Env", this, "source" + source + "dcakstoenvreleasetime", color, 1, 127, 64);
+        comp = new LabelledDial("KS->Env", this, "source" + source + "envdcaksreleasetime", color, 1, 127, 64);
         ((LabelledDial)comp).addAdditionalLabel("Release Time");
         hbox.add(comp);
 
-        comp = new LabelledDial("Velo->Env", this, "source" + source + "dcavelotoenvattacktime", color, 1, 127, 64);
+        comp = new LabelledDial("Velo->Env", this, "source" + source + "envdcaveloattacktime", color, 1, 127, 64);
         ((LabelledDial)comp).addAdditionalLabel("Attack Time");
         hbox.add(comp);
 
-        comp = new LabelledDial("Velo->Env", this, "source" + source + "dcavelotoenvdecay1time", color, 1, 127, 64);
+        comp = new LabelledDial("Velo->Env", this, "source" + source + "envdcavelodecay1time", color, 1, 127, 64);
         ((LabelledDial)comp).addAdditionalLabel("Decay1 Time");
         hbox.add(comp);
 
-        comp = new LabelledDial("Velo->Env", this, "source" + source + "dcavelotoenvreleasetime", color, 1, 127, 64);
+        comp = new LabelledDial("Velo->Env", this, "source" + source + "envdcaveloreleasetime", color, 1, 127, 64);
         ((LabelledDial)comp).addAdditionalLabel("Release Time");
         hbox.add(comp);
 
-        EnvelopeDisplay disp = new EnvelopeDisplay(this, Style.ENVELOPE_COLOR(), 
-            new String[] { null, "source" + source + "dcaenvattacktime", "source" + source + "dcaenvdecay1time",  "source" + source + "dcaenvdecay2time",  null,                                                                        "source" + source + "dcaenvreleasetime" },
-            new String[] { null, null,                                                                   "source" + source + "dcaenvdecay1level", "source" + source + "dcaenvdecay2level", "source" + source + "dcaenvdecay2level", null },
-            new double[] { 0, 1.0 / 5 / 127.0, 1.0 / 5 / 127.0, 1.0 / 5 / 127.0, 1.0 / 5, 1.0 / 5 / 127.0 },
-            new double[] { 0.0, 1.0, 1.0 / 127, 1.0 / 127, 1.0 / 127, 1.0 / 127 });
-        // new double[] { 0.5, 1.0, 1.0 / 126, 1.0 / 126, 1.0 / 126, 1.0 / 126 });
-//disp.setAxis(63 / 127.0);               // dunno if this will work, I may be off by a pixel
-        hbox.addLast(disp);
+        comp = new LabelledDial("KS->Env", this, "source" + source + "envdcakslevel", color, 1, 127, 64);
+               ((LabelledDial)comp).addAdditionalLabel("Level");
+        hbox.add(comp);
+
+        comp = new LabelledDial("Velo->Env", this, "source" + source + "envdcavelolevel", color, 0, 63);
+		((LabelledDial)comp).addAdditionalLabel("Level");
+        hbox.add(comp);
 
         category.add(hbox, BorderLayout.CENTER);
         return category;
@@ -2241,6 +2487,7 @@ public static final int ALL_ON = 4;
     public JComponent addLFO(int source, Color color)
         {
         Category category = new Category(this, "LFO", color);
+category.makePasteable("source");
 
         JComponent comp;
         String[] params;
@@ -2266,27 +2513,27 @@ public static final int ALL_ON = 4;
 //        ((LabelledDial)comp).addAdditionalLabel("To Speed");
         hbox.add(comp);
 
-        comp = new LabelledDial("Pitch Depth", this, "source" + source + "lfopitchdepth", color, 0, 63);
+        comp = new LabelledDial("Pitch Vibrato", this, "source" + source + "lfopitchdepth", color, 0, 63);
 //        ((LabelledDial)comp).addAdditionalLabel("Depth");
         hbox.add(comp);
 
-        comp = new LabelledDial("Pitch KS", this, "source" + source + "lfopitchks", color, 1, 127, 64);
+        comp = new LabelledDial("KS->Vibrato", this, "source" + source + "lfopitchks", color, 1, 127, 64);
 //        ((LabelledDial)comp).addAdditionalLabel("KS");
         hbox.add(comp);
 
-        comp = new LabelledDial("DCF Depth", this, "source" + source + "lfodcfdepth", color, 0, 63);
+        comp = new LabelledDial("DCF Growl", this, "source" + source + "lfodcfdepth", color, 0, 63);
 //        ((LabelledDial)comp).addAdditionalLabel("Depth");
         hbox.add(comp);
 
-        comp = new LabelledDial("DCF KS", this, "source" + source + "lfodcfks", color, 1, 127, 64);
+        comp = new LabelledDial("KS->Growl", this, "source" + source + "lfodcfks", color, 1, 127, 64);
 //        ((LabelledDial)comp).addAdditionalLabel("KS");
         hbox.add(comp);
 
-        comp = new LabelledDial("DCA Depth", this, "source" + source + "lfodcadepth", color, 0, 63);
+        comp = new LabelledDial("DCA Tremelo", this, "source" + source + "lfodcadepth", color, 0, 63);
 //        ((LabelledDial)comp).addAdditionalLabel("Depth");
         hbox.add(comp);
 
-        comp = new LabelledDial("DCA KS", this, "source" + source + "lfodcaks", color, 1, 127, 64);
+        comp = new LabelledDial("KS->Tremelo", this, "source" + source + "lfodcaks", color, 1, 127, 64);
 //        ((LabelledDial)comp).addAdditionalLabel("KS");
         hbox.add(comp);
 
@@ -2316,7 +2563,7 @@ public static final int ALL_ON = 4;
             {
             for(int j = 0; j < FORMANT_STRINGS[i].length; j++)
                 {
-                FORMANT_STRINGS[i][j] = "source" + (i + 1) + "formant" + (j + 1);
+                FORMANT_STRINGS[i][j] = "source" + (i + 1) + "formantband" + (j + 1);
                 }
             }
 
@@ -2330,22 +2577,24 @@ public static final int ALL_ON = 4;
             {
             for(int j = 0; j < HC_SOFT_STRINGS[i].length; j++)
                 {
-                HC_SOFT_STRINGS[i][j] = "source" + (i + 1) + "hcsoft" + (j + 1);
+                HC_SOFT_STRINGS[i][j] = "source" + (i + 1) + "hc0s" + (j + 1);
                 }
             }
         for(int i = 0; i < HC_LOUD_STRINGS.length; i++)
             {
             for(int j = 0; j < HC_LOUD_STRINGS[i].length; j++)
                 {
-                HC_LOUD_STRINGS[i][j] = "source" + (i + 1) + "hcloud" + (j + 1);
+                HC_LOUD_STRINGS[i][j] = "source" + (i + 1) + "hc1s" + (j + 1);
                 }
             }
         }
                         
-                
+    
     public JComponent addFormantDisplay(int source, Color color)
         {
         Category category = new Category(this, "Formant Bands", color);
+category.makeDistributable("source");
+category.makePasteable("source");
 
         JComponent comp;
         String[] params;
@@ -2355,7 +2604,7 @@ public static final int ALL_ON = 4;
         
         for(int i = 0; i < 128; i++)
             {
-            String key = "source" + source + "formant" + (i + 1);
+            String key = "source" + source + "formantband" + (i + 1);
             model.set(key, 0);
             model.setMinMaxMetricMinMax(key, 0, 127, 0, 127);
             }
@@ -2405,12 +2654,13 @@ public static final int ALL_ON = 4;
                 lastFormant = formant;
                                                         
                 setting[0] = true;
-                model.set("source" + source + "formant" + (formant + 1), (int)(y * 127));
                 boolean push = undo.getWillPush();
                 undo.setWillPush(false);
-                model.set("source" + source + "formantnumber", formant);
-                model.set("source" + source + "formantvalue", (int) y * 127);
+                model.set("source" + source + "formantbandnumber", formant);
+                model.set("source" + source + "formantbandvalue", (int) y * 127);
                 undo.setWillPush(push);
+                // We set this AFTER setting the number and value so it can be the last set parameter, which allows us to do distribution
+                model.set("source" + source + "formantband" + (formant + 1), (int)(y * 127));
                 setting[0] = false;
                 }
 
@@ -2419,8 +2669,11 @@ public static final int ALL_ON = 4;
                 setting[0] = true;
                 boolean push = undo.getWillPush();
                 undo.setWillPush(false);
-                model.set("source" + source + "formantnumber", index);
-                model.set("source" + source + "formantvalue", model.get("source" + source + "formant" + (index + 1)));
+                // We grab, then restore the last key so we can retain the last set parameter, which allows us to do distribution
+                String last = model.getLastKey();
+                model.set("source" + source + "formantbandnumber", index);
+                model.set("source" + source + "formantbandvalue", model.get("source" + source + "formantband" + (index + 1)));
+                model.setLastKey(last);
                 undo.setWillPush(push);
                 setting[0] = false;
                 }
@@ -2461,7 +2714,7 @@ public static final int ALL_ON = 4;
         ((EnvelopeDisplay)display).setStyle(EnvelopeDisplay.STYLE_LINES);
                         
 
-        comp = new LabelledDial("Number", this, "source" + source + "formantnumber", color, 0, 127, -1) 
+        comp = new LabelledDial("Number", this, "source" + source + "formantbandnumber", color, 0, 127, -1) 
             {
             public void setState(int val)
                 {
@@ -2481,10 +2734,10 @@ public static final int ALL_ON = 4;
                     }
                 }
             };
-        model.setStatus("source" + source + "formantnumber", Model.STATUS_RESTRICTED);
+        model.setStatus("source" + source + "formantbandnumber", Model.STATUS_RESTRICTED);
         vbox.add(comp);
 
-        comp = new LabelledDial("Value", this, "source" + source + "formantvalue", color, 0, 127)
+        comp = new LabelledDial("Value", this, "source" + source + "formantbandvalue", color, 0, 127)
             {
             public void update(String key, Model model)
                 {
@@ -2494,13 +2747,13 @@ public static final int ALL_ON = 4;
                     int val = display.getHighlightIndex();
                     if (val != EnvelopeDisplay.NO_HIGHLIGHT)
                         {
-                        model.set("source" + source + "formant" + (val + 1), model.get(key));
+                        model.set("source" + source + "formantband" + (val + 1), model.get(key));
                         display.repaint();
                         }
                     }
                 }
             };
-        model.setStatus("source" + source + "formantvalue", Model.STATUS_RESTRICTED);
+        model.setStatus("source" + source + "formantbandvalue", Model.STATUS_RESTRICTED);
         vbox.add(comp);
                 
         hbox.add(vbox);
@@ -2514,6 +2767,8 @@ public static final int ALL_ON = 4;
     public JComponent addHarmonicDisplay(int source, boolean soft, Color color)
         {
         Category category = new Category(this, (soft ? "Soft " : "Loud ") + "Harmonics", color);
+category.makeDistributable("source" + source);
+category.makePasteable("source" + source);
 
         JComponent comp;
         String[] params;
@@ -2523,7 +2778,7 @@ public static final int ALL_ON = 4;
         
         for(int i = 0; i < 64; i++)
             {
-            String key = "source" + source + "hc" + (soft ? "soft" : "loud") + (i + 1);
+            String key = "source" + source + "hc" + (soft ? "0" : "1") + "s" + (i + 1);
             model.set(key, 0);
             model.setMinMaxMetricMinMax(key, 0, 127, 0, 127);
             }
@@ -2576,12 +2831,13 @@ public static final int ALL_ON = 4;
                     return;
 
                 setting[0] = true;
-                model.set("source" + source + "hc" + (soft ? "soft" : "loud") + (hc + 1), (int)(y * 127));
                 boolean push = undo.getWillPush();
                 undo.setWillPush(false);
-                model.set("source" + source + "hc" + (soft ? "soft" : "loud") + "number", hc);
-                model.set("source" + source + "hc" + (soft ? "soft" : "loud") + "value", (int) y * 127);
+                model.set("source" + source + "hc" + (soft ? "0" : "1") + "number", hc);
+                model.set("source" + source + "hc" + (soft ? "0" : "1") + "value", (int) y * 127);
                 undo.setWillPush(push);
+                // We set this AFTER setting the number and value so it can be the last set parameter, which allows us to do distribution
+                model.set("source" + source + "hc" + (soft ? "0" : "1") + "s" + (hc + 1), (int)(y * 127));
                 setting[0] = false;
                 }
 
@@ -2590,8 +2846,11 @@ public static final int ALL_ON = 4;
                 setting[0] = true;
                 boolean push = undo.getWillPush();
                 undo.setWillPush(false);
-                model.set("source" + source + "hc" + (soft ? "soft" : "loud") + "number", index);
-                model.set("source" + source + "hc" + (soft ? "soft" : "loud") + "value", model.get("source" + source + "hc" + (soft ? "soft" : "loud") + (index + 1)));
+                // We grab, then restore the last key so we can retain the last set parameter, which allows us to do distribution
+                String last = model.getLastKey();
+                model.set("source" + source + "hc" + (soft ? "0" : "1") + "number", index);
+                model.set("source" + source + "hc" + (soft ? "0" : "1") + "value", model.get("source" + source + "hc" + (soft ? "0" : "1") + "s" + (index + 1)));
+                model.setLastKey(last);
                 undo.setWillPush(push);
                 setting[0] = false;
                 }
@@ -2632,7 +2891,7 @@ public static final int ALL_ON = 4;
         ((EnvelopeDisplay)display).setStyle(EnvelopeDisplay.STYLE_LINES);
                         
 
-        comp = new LabelledDial("Number", this, "source" + source + "hc" + (soft ? "soft" : "loud") + "number", color, 0, 63, -1)       
+        comp = new LabelledDial("Number", this, "source" + source + "hc" + (soft ? "0" : "1") + "number", color, 0, 63, -1)       
             {
             public void setState(int val)
                 {
@@ -2652,10 +2911,10 @@ public static final int ALL_ON = 4;
                     }
                 }
             };
-        model.setStatus("source" + source + "hc" + (soft ? "soft" : "loud") + "number", Model.STATUS_RESTRICTED);
+        model.setStatus("source" + source + "hc" + (soft ? "0" : "1") + "number", Model.STATUS_RESTRICTED);
         vbox.add(comp);
 
-        comp = new LabelledDial("Value", this, "source" + source + "hc" + (soft ? "soft" : "loud") + "value", color, 0, 127)
+        comp = new LabelledDial("Value", this, "source" + source + "hc" + (soft ? "0" : "1") + "value", color, 0, 127)
             {
             public void update(String key, Model model)
                 {
@@ -2665,13 +2924,13 @@ public static final int ALL_ON = 4;
                     int val = display.getHighlightIndex();
                     if (val != EnvelopeDisplay.NO_HIGHLIGHT)
                         {
-                        model.set("source" + source +  "hc" + (soft ? "soft" : "loud")  + (val + 1), model.get(key));
+                        model.set("source" + source +  "hc" + (soft ? "0" : "1") + "s"  + (val + 1), model.get(key));
                         display.repaint();
                         }
                     }
                 }
             };
-        model.setStatus("source" + source + "hc" + (soft ? "soft" : "loud") + "value", Model.STATUS_RESTRICTED);
+        model.setStatus("source" + source + "hc" + (soft ? "0" : "1") + "value", Model.STATUS_RESTRICTED);
         vbox.add(comp);
                 
         hbox.add(vbox);
@@ -2685,6 +2944,7 @@ public static final int ALL_ON = 4;
 
     boolean envelopeSetting;
     boolean highlightSetting;
+    boolean allowUpdateFromMouse = false;
         
     EnvelopeDisplay envelopeDisplays[][] = new EnvelopeDisplay[6][9];
     static final String[] PARTS = { "rate0", "level0", "rate1", "level1", "rate2", "level2", "rate3", "level3", "loop" };
@@ -2693,6 +2953,8 @@ public static final int ALL_ON = 4;
     public JComponent addHarmonicEnvelopeDisplay(int source, int partVal, String part, String title, Color color)
         {
         Category category = new Category(this, title, color);
+category.makeDistributable("source" + source);
+category.makePasteable("source" + source);
 
         final String[] keys = new String[64];
         JComponent comp;
@@ -2704,7 +2966,7 @@ public static final int ALL_ON = 4;
         
         for(int i = 0; i < 64; i++)
             {
-            keys[i] = "source" + source + "hcenv" + (i + 1) + part;
+            keys[i] = "source" + source + "hcenv" + part + "s" + (i + 1);
             model.set(keys[i], 0);
             if (partVal == DISPLAY_LOOP) model.setMinMax(keys[i], 0, 2);
             else model.setMinMaxMetricMinMax(keys[i], 0, max, 0, max);
@@ -2733,6 +2995,8 @@ public static final int ALL_ON = 4;
                         
             public void updateFromMouse(double x, double y, boolean continuation, MouseEvent evt)
                 {
+            	if (!mouseDown && !allowUpdateFromMouse) return;
+
                 if (x < 0) x = 0;
                 else if (x > 1) x = 1.0;
 
@@ -2753,30 +3017,35 @@ public static final int ALL_ON = 4;
                     hc = lastHc;
                     }
                                         
-                lastHc = hc;
+				lastHc = hc;
                                         
                 if (!constrainTo(hc))
                     return;
 
                 envelopeSetting = true;
-                if (partVal == DISPLAY_LOOP) model.set("source" + source + "hcenv" + (hc + 1) + part, (int)(y * 2));
-                else model.set("source" + source + "hcenv" + (hc + 1) + part, (int)(y * max));
                 boolean push = undo.getWillPush();
                 undo.setWillPush(false);
                 model.set("source" + source + "hcenv" + "number", hc);
                 if (partVal == DISPLAY_LOOP) model.set("source" + source + "hcenv" + part + "value", (int) y * 2);
                 else model.set("source" + source + "hcenv" + part + "value", (int) y * max);
                 undo.setWillPush(push);
+                // We set this AFTER setting the number and value so it can be the last set parameter, which allows us to do distribution
+                if (partVal == DISPLAY_LOOP) model.set("source" + source + "hcenv" + part + "s" + (hc + 1), (int)(y * 2));
+                else model.set("source" + source + "hcenv" + part + "s" + (hc + 1), (int)(y * max));
                 envelopeSetting = false;
                 }
 
             public void updateHighlightIndex(int index)
                 {
+                 if (!mouseDown && !allowUpdateFromMouse) return;
+               
                 envelopeSetting = true;
                 boolean push = undo.getWillPush();
                 undo.setWillPush(false);
+                // We grab, then restore the last key so we can retain the last set parameter, which allows us to do distribution
+                String last = model.getLastKey();
                 model.set("source" + source + "hcenv" + "number", index);
-                model.set("source" + source + "hcenv" + part + "value", model.get("source" + source + "hcenv" + (index + 1) + part));
+                model.set("source" + source + "hcenv" + part + "value", model.get("source" + source + "hcenv" + part + "s" + (index + 1)));
                 if (!highlightSetting)
                     {
                     for(int i = 0; i < PARTS.length; i++)
@@ -2789,6 +3058,7 @@ public static final int ALL_ON = 4;
                             }
                         }
                     }
+                model.setLastKey(last);
                 undo.setWillPush(push);
                 envelopeSetting = false;
                 }
@@ -2796,6 +3066,8 @@ public static final int ALL_ON = 4;
              
             public int highlightIndex(double x, double y, boolean continuation, MouseEvent evt)
                 {
+                if (!mouseDown && !allowUpdateFromMouse) return getHighlightIndex();
+                
                 if (x < 0) x = 0;
                 if (x > 1.0) x = 1.0;
                 int returnval = (int)(x * 64);
@@ -2878,8 +3150,14 @@ public static final int ALL_ON = 4;
         VBox vbox = new VBox();
 
 
-        comp = new LabelledDial("Number", this, "source" + source + "hcenv" + "number", color, 0, 63, -1)       
+        comp = new LabelledDial("Number", this, "source" + source + "hcenv" + "number", color, 0, 63)       
             {
+            public String map(int val)
+            	{
+            	if (model.get("source" + source + "harmgroup") == 0) return "" + (val + 1);
+            	else return "" + (64 + val + 1);
+            	}
+            	
             public void setState(int val)
                 {
                 boolean push = undo.getWillPush();
@@ -2895,15 +3173,15 @@ public static final int ALL_ON = 4;
                     {
                     updateEnvelopeDisplays(source, model.get(key), -1);
                     envelopeSetting = true;
-                    model.set("source" + source + "hcenv" + "rate0value", model.get("source" + source + "hcenv" + (model.get(key) + 1) + "rate0"));
-                    model.set("source" + source + "hcenv" + "level0value", model.get("source" + source + "hcenv" + (model.get(key) + 1) + "level0"));
-                    model.set("source" + source + "hcenv" + "rate1value", model.get("source" + source + "hcenv" + (model.get(key) + 1) + "rate1"));
-                    model.set("source" + source + "hcenv" + "level1value", model.get("source" + source + "hcenv" + (model.get(key) + 1) + "level1"));
-                    model.set("source" + source + "hcenv" + "rate2value", model.get("source" + source + "hcenv" + (model.get(key) + 1) + "rate2"));
-                    model.set("source" + source + "hcenv" + "level2value", model.get("source" + source + "hcenv" + (model.get(key) + 1) + "level2"));
-                    model.set("source" + source + "hcenv" + "rate3value", model.get("source" + source + "hcenv" + (model.get(key) + 1) + "rate3"));
-                    model.set("source" + source + "hcenv" + "level3value", model.get("source" + source + "hcenv" + (model.get(key) + 1) + "level3"));
-                    model.set("source" + source + "hcenv" + "loopvalue", model.get("source" + source + "hcenv" + (model.get(key) + 1) + "loop"));
+                    model.set("source" + source + "hcenv" + "rate0value", model.get("source" + source + "hcenv" + "rate0"  + "s" + (model.get(key) + 1)));
+                    model.set("source" + source + "hcenv" + "level0value", model.get("source" + source + "hcenv" + "level0" + "s" + (model.get(key) + 1)));
+                    model.set("source" + source + "hcenv" + "rate1value", model.get("source" + source + "hcenv" + "rate1" + "s" + (model.get(key) + 1)));
+                    model.set("source" + source + "hcenv" + "level1value", model.get("source" + source + "hcenv" + "level1" + "s" + (model.get(key) + 1)));
+                    model.set("source" + source + "hcenv" + "rate2value", model.get("source" + source + "hcenv" + "rate2" + "s" + (model.get(key) + 1)));
+                    model.set("source" + source + "hcenv" + "level2value", model.get("source" + source + "hcenv" + "level2" + "s" + (model.get(key) + 1)));
+                    model.set("source" + source + "hcenv" + "rate3value", model.get("source" + source + "hcenv" + "rate3" + "s" + (model.get(key) + 1)));
+                    model.set("source" + source + "hcenv" + "level3value", model.get("source" + source + "hcenv" + "level3" + "s" + (model.get(key) + 1)));
+                    model.set("source" + source + "hcenv" + "loopvalue", model.get("source" + source + "hcenv" + "loop" + "s" + (model.get(key) + 1)));
                     envelopeSetting = false;
                     }
                 }
@@ -2922,7 +3200,7 @@ public static final int ALL_ON = 4;
                     int val = getHighlightIndex(source, DISPLAY_RATE_0);
                     if (val != EnvelopeDisplay.NO_HIGHLIGHT)
                         {
-                        model.set("source" + source +  "hcenv" + (val + 1) + "loop", model.get(key));
+                        model.set("source" + source +  "hcenv" + "loop" + "s" + (val + 1), model.get(key));
                         envelopeDisplays[source-1][DISPLAY_RATE_0].repaint();
                         }
                     }
@@ -2932,7 +3210,7 @@ public static final int ALL_ON = 4;
         vbox.add(comp);
         hbox.add(vbox);
 
-        comp = new LabelledDial("Rate 0", this, "source" + source + "hcenv" + "rate0value", color, 0, 127)
+        comp = new LabelledDial("Rate 0", this, "source" + source + "hcenvrate0value", color, 0, 127)
             {
             public void update(String key, Model model)
                 {
@@ -2942,16 +3220,16 @@ public static final int ALL_ON = 4;
                     int val = getHighlightIndex(source, DISPLAY_RATE_0);
                     if (val != EnvelopeDisplay.NO_HIGHLIGHT)
                         {
-                        model.set("source" + source +  "hcenv" + (val + 1) + "rate0", model.get(key));
+                        model.set("source" + source +  "hcenvrate0s" + (val + 1), model.get(key));
                         envelopeDisplays[source-1][DISPLAY_RATE_0].repaint();
                         }
                     }
                 }
             };
-        model.setStatus("source" + source + "hcenv" + "rate0value", Model.STATUS_RESTRICTED);
+        model.setStatus("source" + source + "hcenvrate0value", Model.STATUS_RESTRICTED);
         hbox.add(comp);
                 
-        comp = new LabelledDial("Level 0", this, "source" + source + "hcenv" + "level0value", color, 0, 63)
+        comp = new LabelledDial("Level 0", this, "source" + source + "hcenvlevel0value", color, 0, 63)
             {
             public void update(String key, Model model)
                 {
@@ -2961,17 +3239,17 @@ public static final int ALL_ON = 4;
                     int val = getHighlightIndex(source, DISPLAY_LEVEL_0);
                     if (val != EnvelopeDisplay.NO_HIGHLIGHT)
                         {
-                        model.set("source" + source +  "hcenv" + (val + 1) + "level0", model.get(key));
+                        model.set("source" + source +  "hcenvlevel0s" + (val + 1), model.get(key));
                         envelopeDisplays[source-1][DISPLAY_LEVEL_0].repaint();
                         }
                     }
                 }
             };
-        model.setStatus("source" + source + "hcenv" + "level0value", Model.STATUS_RESTRICTED);
+        model.setStatus("source" + source + "hcenvlevel0value", Model.STATUS_RESTRICTED);
         hbox.add(comp);
 
 
-        comp = new LabelledDial("Rate 1", this, "source" + source + "hcenv" + "rate1value", color, 0, 127)
+        comp = new LabelledDial("Rate 1", this, "source" + source + "hcenvrate1value", color, 0, 127)
             {
             public void update(String key, Model model)
                 {
@@ -2981,16 +3259,16 @@ public static final int ALL_ON = 4;
                     int val = getHighlightIndex(source, DISPLAY_RATE_1);
                     if (val != EnvelopeDisplay.NO_HIGHLIGHT)
                         {
-                        model.set("source" + source +  "hcenv" + (val + 1) + "rate1", model.get(key));
+                        model.set("source" + source +  "hcenvrate1s" + (val + 1), model.get(key));
                         envelopeDisplays[source-1][DISPLAY_RATE_1].repaint();
                         }
                     }
                 }
             };
-        model.setStatus("source" + source + "hcenv" + "rate1value", Model.STATUS_RESTRICTED);
+        model.setStatus("source" + source + "hcenvrate1value", Model.STATUS_RESTRICTED);
         hbox.add(comp);
                 
-        comp = new LabelledDial("Level 1", this, "source" + source + "hcenv" + "level1value", color, 0, 63)
+        comp = new LabelledDial("Level 1", this, "source" + source + "hcenvlevel1value", color, 0, 63)
             {
             public void update(String key, Model model)
                 {
@@ -3000,17 +3278,17 @@ public static final int ALL_ON = 4;
                     int val = getHighlightIndex(source, DISPLAY_LEVEL_1);
                     if (val != EnvelopeDisplay.NO_HIGHLIGHT)
                         {
-                        model.set("source" + source +  "hcenv" + (val + 1) + "level1", model.get(key));
+                        model.set("source" + source +  "hcenvlevel1s" + (val + 1), model.get(key));
                         envelopeDisplays[source-1][DISPLAY_LEVEL_1].repaint();
                         }
                     }
                 }
             };
-        model.setStatus("source" + source + "hcenv" + "level1value", Model.STATUS_RESTRICTED);
+        model.setStatus("source" + source + "hcenvlevel1value", Model.STATUS_RESTRICTED);
         hbox.add(comp);
                 
 
-        comp = new LabelledDial("Rate 2", this, "source" + source + "hcenv" + "rate2value", color, 0, 127)
+        comp = new LabelledDial("Rate 2", this, "source" + source + "hcenvrate2value", color, 0, 127)
             {
             public void update(String key, Model model)
                 {
@@ -3020,16 +3298,16 @@ public static final int ALL_ON = 4;
                     int val = getHighlightIndex(source, DISPLAY_RATE_2);
                     if (val != EnvelopeDisplay.NO_HIGHLIGHT)
                         {
-                        model.set("source" + source +  "hcenv" + (val + 1) + "rate2", model.get(key));
+                        model.set("source" + source +  "hcenvrate2s" + (val + 1) + "", model.get(key));
                         envelopeDisplays[source-1][DISPLAY_RATE_2].repaint();
                         }
                     }
                 }
             };
-        model.setStatus("source" + source + "hcenv" + "rate2value", Model.STATUS_RESTRICTED);
+        model.setStatus("source" + source + "hcenvrate2value", Model.STATUS_RESTRICTED);
         hbox.add(comp);
                 
-        comp = new LabelledDial("Level 2", this, "source" + source + "hcenv" + "level2value", color, 0, 63)
+        comp = new LabelledDial("Level 2", this, "source" + source + "hcenvlevel2value", color, 0, 63)
             {
             public void update(String key, Model model)
                 {
@@ -3039,17 +3317,17 @@ public static final int ALL_ON = 4;
                     int val = getHighlightIndex(source, DISPLAY_LEVEL_2);
                     if (val != EnvelopeDisplay.NO_HIGHLIGHT)
                         {
-                        model.set("source" + source +  "hcenv" + (val + 1) + "level2", model.get(key));
+                        model.set("source" + source +  "hcenvlevel2s" + (val + 1) , model.get(key));
                         envelopeDisplays[source-1][DISPLAY_LEVEL_2].repaint();
                         }
                     }
                 }
             };
-        model.setStatus("source" + source + "hcenv" + "level2value", Model.STATUS_RESTRICTED);
+        model.setStatus("source" + source + "hcenvlevel2value", Model.STATUS_RESTRICTED);
         hbox.add(comp);
                 
 
-        comp = new LabelledDial("Rate 3", this, "source" + source + "hcenv" + "rate3value", color, 0, 127)
+        comp = new LabelledDial("Rate 3", this, "source" + source + "hcenvrate3value", color, 0, 127)
             {
             public void update(String key, Model model)
                 {
@@ -3059,16 +3337,16 @@ public static final int ALL_ON = 4;
                     int val = getHighlightIndex(source, DISPLAY_RATE_3);
                     if (val != EnvelopeDisplay.NO_HIGHLIGHT)
                         {
-                        model.set("source" + source +  "hcenv" + (val + 1) + "rate3", model.get(key));
+                        model.set("source" + source +  "hcenvrate3s" + (val + 1) + "", model.get(key));
                         envelopeDisplays[source-1][DISPLAY_RATE_3].repaint();
                         }
                     }
                 }
             };
-        model.setStatus("source" + source + "hcenv" + "rate3value", Model.STATUS_RESTRICTED);
+        model.setStatus("source" + source + "hcenvrate3value", Model.STATUS_RESTRICTED);
         hbox.add(comp);
                 
-        comp = new LabelledDial("Level 3", this, "source" + source + "hcenv" + "level3value", color, 0, 63)
+        comp = new LabelledDial("Level 3", this, "source" + source + "hcenvlevel3value", color, 0, 63)
             {
             public void update(String key, Model model)
                 {
@@ -3078,13 +3356,13 @@ public static final int ALL_ON = 4;
                     int val = getHighlightIndex(source, DISPLAY_LEVEL_3);
                     if (val != EnvelopeDisplay.NO_HIGHLIGHT)
                         {
-                        model.set("source" + source +  "hcenv" + (val + 1) + "level3", model.get(key));
+                        model.set("source" + source +  "hcenvlevel3s" + (val + 1) + "", model.get(key));
                         envelopeDisplays[source-1][DISPLAY_LEVEL_3].repaint();
                         }
                     }
                 }
             };
-        model.setStatus("source" + source + "hcenv" + "level3value", Model.STATUS_RESTRICTED);
+        model.setStatus("source" + source + "hcenvlevel3value", Model.STATUS_RESTRICTED);
         hbox.add(comp);
            
         vbox = new VBox();     
@@ -3095,6 +3373,11 @@ public static final int ALL_ON = 4;
             new double[] { 0, 1.0 / 63, 1.0 / 63, 1.0 / 63, 1.0 / 63 })
             {
             public int verticalBorderThickness() { return 4; }
+
+			public double preprocessXKey(int index, String key, double value)
+				{
+				return 127.0 - value;		// rates are flipped from other envelopes, grrr
+				}
             };
         disp.setPreferredHeight(70);
         vbox.add(disp);
@@ -3139,6 +3422,19 @@ public static final int ALL_ON = 4;
             constrainMenu.add(menuItem);
             }
         menu.add(constrainMenu);
+        
+        JCheckBoxMenuItem unlock = new JCheckBoxMenuItem("Allow Harmonics Envelope Display Mouse-Over");
+        allowUpdateFromMouse = getLastXAsBoolean("Mouseover", getSynthName(), true, true);
+        unlock.setSelected(allowUpdateFromMouse);
+        unlock.addActionListener(new ActionListener()
+        	{
+			public void actionPerformed(ActionEvent e)
+				{
+				allowUpdateFromMouse = unlock.isSelected();
+				setLastX("" + allowUpdateFromMouse, "Mouseover", getSynthName(), true);
+				}
+        	});
+        menu.add(unlock);
         }
 
 
@@ -3303,7 +3599,9 @@ public static final int ALL_ON = 4;
         if ((key.startsWith("effectcontrol") || key.startsWith("macrocontroller")) && 
             (key.contains("depth")) && val == 0)            // effectcontrol1depth, macrocontroller4depth2, etc.
             {
+            int newVal = 33;
             model.set(key, 33);
+	        if (getPrintRevised()) System.out.println("Warning (Synth): Revised " + key + " from " + val + " to " + newVal + " (range " + min + " ... " + max + ")");             
             }
         /*
           else if ((key.startsWith("effect1") || key.startsWith("effect2") || key.startsWith("effect3") || key.startsWith("effect4")) &&
@@ -3354,23 +3652,34 @@ public static final int ALL_ON = 4;
         }
 
 
+	int p(byte[] data, int pos, String key)
+		{
+		System.err.println(StringUtility.toHexShort(pos) + "\t" + key);
+		data[pos] = (byte)model.get(key);
+		return pos + 1;
+		}
+	
     // Given a model (which will never be null), writes out the full Single Tone of a patch, including all sources and wavekits, and all checksums,
     // starting at the given position in data
     public int emitTone(Model model, byte[] data, int pos, int sources )
         {
+    	System.err.println("" + pos + "\tCHECKSUM");
         pos++;                      // skip checksum space
         int start = pos;
 
         // LOAD EFFECTS
     
-        data[pos++] = (byte)model.get("algorithm");
+
+
+
+        pos = p(data, pos, "algorithm");
         int reverbtype = model.get("reverbtype");
         data[pos++] = (byte)reverbtype;
-        data[pos++] = (byte)model.get("reverb" + (reverbtype + 1) + "drywet1");
-        data[pos++] = (byte)model.get("reverb" + (reverbtype + 1) + "para1");
-        data[pos++] = (byte)model.get("reverb" + (reverbtype + 1) + "para2");
-        data[pos++] = (byte)model.get("reverb" + (reverbtype + 1) + "para3");
-        data[pos++] = (byte)model.get("reverb" + (reverbtype + 1) + "para4");
+        pos = p(data, pos, "reverb" + (reverbtype + 1) + "drywet1");
+        pos = p(data, pos, "reverb" + (reverbtype + 1) + "para1");
+        pos = p(data, pos, "reverb" + (reverbtype + 1) + "para2");
+        pos = p(data, pos, "reverb" + (reverbtype + 1) + "para3");
+        pos = p(data, pos, "reverb" + (reverbtype + 1) + "para4");
 
 
         for(int effect = 1; effect <= 4; effect++)                                  // NOTE <=
@@ -3380,25 +3689,25 @@ public static final int ALL_ON = 4;
             data[pos++] = (byte)(effectType + 11);                                                      // effects start at 11
             if (EFFECT_PARAMETER_MINS[0][effectType] == NONE)
                 { missingEffectParams++; }
-            else { data[pos++] = (byte)model.get("effect" + effect + "type" + (effectType + 1) + "depth"); }
+            else { pos = p(data, pos, "effect" + effect + "type" + (effectType + 1) + "depth"); }
             if (EFFECT_PARAMETER_MINS[1][effectType] == NONE)
                 {  missingEffectParams++; }
-            else { data[pos++] = (byte)model.get("effect" + effect + "type" + (effectType + 1) + "para1"); }
+            else { pos = p(data, pos, "effect" + effect + "type" + (effectType + 1) + "para1"); }
             if (EFFECT_PARAMETER_MINS[2][effectType] == NONE)
                 { missingEffectParams++; }
-            else { data[pos++] = (byte)model.get("effect" + effect + "type" + (effectType + 1) + "para2"); }
+            else { pos = p(data, pos, "effect" + effect + "type" + (effectType + 1) + "para2"); }
             if (EFFECT_PARAMETER_MINS[3][effectType] == NONE)
                 { missingEffectParams++; }
-            else { data[pos++] = (byte)model.get("effect" + effect + "type" + (effectType + 1) + "para3"); }
+            else { pos = p(data, pos, "effect" + effect + "type" + (effectType + 1) + "para3"); }
             if (EFFECT_PARAMETER_MINS[4][effectType] == NONE)
                 { missingEffectParams++; }
-            else { data[pos++] = (byte)model.get("effect" + effect + "type" + (effectType + 1) + "para4"); }
+            else { pos = p(data, pos, "effect" + effect + "type" + (effectType + 1) + "para4"); }
             pos += missingEffectParams;
             }
                 
         for(int freq = 1; freq <= 7; freq++)                                            // NOTE <=
             {
-            data[pos++] = (byte)model.get("geqfreq" + freq);
+            pos = p(data, pos, "geqfreq" + freq);
             }
                 
         // LOAD COMMON
@@ -3410,8 +3719,8 @@ public static final int ALL_ON = 4;
             {
             data[pos++] = (byte)name[i];
             }
-        data[pos++] = (byte)model.get("volume");
-        data[pos++] = (byte)model.get("poly");
+        pos = p(data, pos, "volume");
+        pos = p(data, pos, "poly");
         data[pos++] = 0;                                                                // "no use", see page 14 of sysex spec, line 50
         
         data[pos++] = (byte)sources;
@@ -3424,30 +3733,30 @@ public static final int ALL_ON = 4;
             (1 - (model.get("srcmute6")) << 5));
         data[pos++] = (byte)srcmute;                                                    // bitpacking
 
-        data[pos++] = (byte)model.get("am");
-        data[pos++] = (byte)model.get("effectcontrol1source");
-        data[pos++] = (byte)model.get("effectcontrol1destination");
-        data[pos++] = (byte)model.get("effectcontrol1depth");
-        data[pos++] = (byte)model.get("effectcontrol2source");
-        data[pos++] = (byte)model.get("effectcontrol2destination");
-        data[pos++] = (byte)model.get("effectcontrol2depth");
-        data[pos++] = (byte)model.get("portamento");
-        data[pos++] = (byte)model.get("portamentospeed");
+        pos = p(data, pos, "am");
+        pos = p(data, pos, "effectcontrol1source");
+        pos = p(data, pos, "effectcontrol1destination");
+        pos = p(data, pos, "effectcontrol1depth");
+        pos = p(data, pos, "effectcontrol2source");
+        pos = p(data, pos, "effectcontrol2destination");
+        pos = p(data, pos, "effectcontrol2depth");
+        pos = p(data, pos, "portamento");
+        pos = p(data, pos, "portamentospeed");
         for(int c = 1; c <= 4; c++)
             {
-            data[pos++] = (byte)model.get("macrocontroller" + c + "parameter1");
-            data[pos++] = (byte)model.get("macrocontroller" + c + "parameter2");
+            pos = p(data, pos, "macrocontroller" + c + "parameter1");
+            pos = p(data, pos, "macrocontroller" + c + "parameter2");
             }
         for(int c = 1; c <= 4; c++)
             {
-            data[pos++] = (byte)model.get("macrocontroller" + c + "depth1");
-            data[pos++] = (byte)model.get("macrocontroller" + c + "depth2");
+            pos = p(data, pos, "macrocontroller" + c + "depth1");
+            pos = p(data, pos, "macrocontroller" + c + "depth2");
             }
                 
-        data[pos++] = (byte)model.get("sw1parameter");
-        data[pos++] = (byte)model.get("sw2parameter");
-        data[pos++] = (byte)model.get("fsw1parameter");
-        data[pos++] = (byte)model.get("fsw2parameter");
+        pos = p(data, pos, "sw1parameter");
+        pos = p(data, pos, "sw2parameter");
+        pos = p(data, pos, "fsw1parameter");
+        pos = p(data, pos, "fsw2parameter");
 
         // LOAD SOURCE DATA
     
@@ -3459,24 +3768,27 @@ public static final int ALL_ON = 4;
                                 
                 if (j == 2)             // velo sw and velo
                     {
-                    data[pos++] = (byte)((model.get("source" + i + "velosw") << 5) | 
-                        (model.get("source" + i + "velo")));
+                    System.err.println("velosw");
+                    data[pos++] = (byte)((model.get("source" + i + "generalvelosw") << 5) | 
+                        (model.get("source" + i + "generalvelo")));
                     }
                 else if (j == 28) // wavekitmsb
                     {
-                    int wavekit = model.get("source" + i + "wavekit") + PCM_START;
-                    boolean additive = (model.get("source" + i + "additive") == 1);
+                    System.err.println("dcawavekitmsb");
+                    int wavekit = model.get("source" + i + "dcowavekit") + PCM_START;
+                    boolean additive = (model.get("source" + i + "dcoadditive") == 1);
                     data[pos++] = (byte)(additive ? 4 : (wavekit >>> 7));                           // additive is 512
                     }
                 else if (j == 29) // wavekitlsb
                     {
-                    int wavekit = model.get("source" + i + "wavekit") + PCM_START;
-                    boolean additive = (model.get("source" + i + "additive") == 1);
+                    System.err.println("dcawavekitlsb");
+                    int wavekit = model.get("source" + i + "dcowavekit") + PCM_START;
+                    boolean additive = (model.get("source" + i + "dcoadditive") == 1);
                     data[pos++] = (byte)(additive ? 0 : (wavekit & 127));                           // additive is 512
                     }
                 else
                     {
-                    data[pos++] = (byte)(model.get("source" + i + key));
+                    pos = p(data, pos, "source" + i + key);
                     }
                 }
             }
@@ -3490,7 +3802,7 @@ public static final int ALL_ON = 4;
             
         for(int i = 1; i <= sources; i++)                                           // note <=
             {
-            if (model.get("source" + i + "additive") == 0) continue;
+            if (model.get("source" + i + "dcoadditive") == 0) continue;
             
             int checksumpos = pos;
             pos++;
@@ -3500,44 +3812,51 @@ public static final int ALL_ON = 4;
             for(int j = 1; j < addWaveKitParams.length; j++)                // skip "--", checksum
                 {
                 String key = addWaveKitParams[j];
-                data[pos++] = (byte)(model.get("source" + i + key));
+                pos = p(data, pos, "source" + i + key);
                 }
 
-            for(int j = 0; j < addWaveHCSoftParams.length; j++)
+            for(int j = 0; j < addWaveSoftHCParams.length; j++)
                 {
-                String key = addWaveHCSoftParams[j];
-                data[pos++] = (byte)(model.get("source" + i + key));
+                String key = addWaveSoftHCParams[j];
+                pos = p(data, pos, "source" + i + key);
                 }
 
-            for(int j = 0; j < addWaveHCLoudParams.length; j++)
+            for(int j = 0; j < addWaveLoudHCParams.length; j++)
                 {
-                String key = addWaveHCLoudParams[j];
-                data[pos++] = (byte)(model.get("source" + i + key));
+                String key = addWaveLoudHCParams[j];
+                pos = p(data, pos, "source" + i + key);
                 }
 
             for(int j = 0; j < addWaveFormantFilterParams.length; j++)
                 {
                 String key = addWaveFormantFilterParams[j];
-                data[pos++] = (byte)(model.get("source" + i + key));
+                pos = p(data, pos, "source" + i + key);
                 }
 
             for(int j = 0; j < addWaveHarmonicEnvelopeParams.length; j++)
                 {
                 String key = addWaveHarmonicEnvelopeParams[j];
-                if (key.endsWith("level1"))
+                if (key.contains("level1"))
                     {
-                    ///// NOTE: documentation is wrong. It says that val1 & 64 = 0 is "LP1" and val1 & 64 = 1 is "Loop/LP2".
+                    ///// NOTE: documentation is wrong. It says that val1 & 64 = 0 is "LP1" and val1 & 64 = 64 is "Loop/LP2".
                     ///// It's actually the other way around.
                     
-                    int num = StringUtility.getFirstInt(key);
+                    ////					CORRECT					DOCUMENTATION
+                    ////	TYPE		LEVEL 1		LEVEL 2		LEVEL 1		LEVEL 2
+                    ////	(0) Off		0			0			64			0	
+                    ////	(1) LP1		64			64			0			64
+                    ////	(2) LP2		0			64			64			64
+                    ////	(3) ---?	64			0			0			0			We assume this is "Off"
+                    
+                    int num = StringUtility.getSecondInt(key);
                     data[pos++] = (byte)(model.get("source" + i + key) |
-                        (model.get("source" + i + "hcenv" + num + "loop") == 1 ? 64 : 0)); // lp1
+                        (model.get("source" + i + "hcenv" + "loop" + "s" + num) == 1 ? 64 : 0)); // lp1
                     }
-                else if (key.endsWith("level2"))
+                else if (key.contains("level2"))
                     {
-                    int num = StringUtility.getFirstInt(key);
+                    int num = StringUtility.getSecondInt(key);
                     data[pos++] = (byte)(model.get("source" + i + key) |
-                        (model.get("source" + i + "hcenv" + num + "loop") == 0 ? 0 : 64)); // off
+                        (model.get("source" + i + "hcenv" + "loop" + "s" + num) == 0 ? 0 : 64)); // off
                     }
                 else if (key.equals("--"))
                     {
@@ -3545,7 +3864,7 @@ public static final int ALL_ON = 4;
                     }
                 else
                     {
-                    data[pos++] = (byte)(model.get("source" + i + key));
+                    pos = p(data, pos, "source" + i + key);
                     }
                 }
 
@@ -3575,7 +3894,7 @@ public static final int ALL_ON = 4;
         for(int i = 0; i < sources; i++)
             {
             datalen += 86;
-            if (model.get("source" + (i + 1) + "additive") == 1) 
+            if (model.get("source" + (i + 1) + "dcoadditive") == 1) 
                 {
                 datalen += 806;
                 }
@@ -3585,6 +3904,17 @@ public static final int ALL_ON = 4;
         // Format is
         // F0 40 CHANNEL 20 00 0a 00 BANK PATCHNUM SINGLE_CHECKSUM EFFECT/COMMON SOURCE* WAVEKIT* F7
         // The only wavekits provided are those for which the source is NOT additive.
+    
+    	System.err.println("0\tF0");
+    	System.err.println("1\t40");
+    	System.err.println("2\tchannel");
+    	System.err.println("3\t20");
+    	System.err.println("4\t00");
+    	System.err.println("5\t0A");
+    	System.err.println("6\t00");
+    	System.err.println("7\tBANK");
+    	System.err.println("8\tNUMBER");
+
     
         data[0] = (byte)0xF0;
         data[1] = (byte)0x40;                                               // Kawai
@@ -3627,7 +3957,7 @@ public static final int ALL_ON = 4;
             for(int s = 0; s < sources; s++)
                 {
                 datalen += 86;
-                if (m.get("source" + (s + 1) + "additive") == 1) 
+                if (m.get("source" + (s + 1) + "dcoadditive") == 1) 
                     {
                     datalen += 806;
                     }
@@ -3844,8 +4174,8 @@ public static final int ALL_ON = 4;
                 if (j == 2)             // velo sw and velo
                     {
                     int val = result[pos++];
-                    model.set("source" + i + "velosw", (val >>> 5) & 3);
-                    model.set("source" + i + "velo", val & 31);
+                    model.set("source" + i + "generalvelosw", (val >>> 5) & 3);
+                    model.set("source" + i + "generalvelo", val & 31);
                     }
                 else if (j == 28) // wavekitmsb
                     {
@@ -3854,14 +4184,14 @@ public static final int ALL_ON = 4;
                     int val = (msb << 7) | lsb;
                     if (val == 512)
                         {
-                        model.set("source" + i + "additive", 1);
-                        model.set("source" + i + "wavekit", 0);
+                        model.set("source" + i + "dcoadditive", 1);
+                        model.set("source" + i + "dcowavekit", 0);
                         additiveSource[i - 1] = true;
                         }
                     else
                         {
-                        model.set("source" + i + "additive", 0);
-                        model.set("source" + i + "wavekit", val - PCM_START);
+                        model.set("source" + i + "dcoadditive", 0);
+                        model.set("source" + i + "dcowavekit", val - PCM_START);
                         }
                     }
                 else if (j == 29) // wavekitlsb
@@ -3901,16 +4231,16 @@ public static final int ALL_ON = 4;
                     model.set("source" + i + key, result[pos++]);
                 }
 
-            for(int j = 0; j < addWaveHCSoftParams.length; j++)
+            for(int j = 0; j < addWaveSoftHCParams.length; j++)
                 {
-                String key = addWaveHCSoftParams[j];
+                String key = addWaveSoftHCParams[j];
                 if (!key.equals("--"))
                     model.set("source" + i + key, result[pos++]);
                 }
 
-            for(int j = 0; j < addWaveHCLoudParams.length; j++)
+            for(int j = 0; j < addWaveLoudHCParams.length; j++)
                 {
-                String key = addWaveHCLoudParams[j];
+                String key = addWaveLoudHCParams[j];
                 if (!key.equals("--"))
                     model.set("source" + i + key, result[pos++]);
                 }
@@ -3925,21 +4255,30 @@ public static final int ALL_ON = 4;
             for(int j = 0; j < addWaveHarmonicEnvelopeParams.length; j++)
                 {
                 String key = addWaveHarmonicEnvelopeParams[j];
-                if (key.endsWith("level1"))
+                if (key.contains("level1"))
                     {
-                    int num = StringUtility.getFirstInt(key);
+                    int num = StringUtility.getSecondInt(key);
                     int val1 = result[pos];                     // level 1
                     int val2 = result[pos + 2];                         // level 2 (skip rate1)
                     
-                    ///// NOTE: documentation is wrong. It says that val1 & 64 = 0 is "LP1" and val1 & 64 = 1 is "Loop/LP2".
+                    ///// NOTE: documentation is wrong. It says that val1 & 64 = 0 is "LP1" and val1 & 64 = 64 is "Loop/LP2".
                     ///// It's actually the other way around.
+                    
+                    ////					CORRECT					DOCUMENTATION
+                    ////	TYPE		LEVEL 1		LEVEL 2		LEVEL 1		LEVEL 2
+                    ////	(0) Off		0			0			64			0	
+                    ////	(1) LP1		64			64			0			64
+                    ////	(2) LP2		0			64			64			64
+                    ////	(3) ---?	64			0			0			0			We assume this is "Off"
                     
                     pos++;
                     model.set("source" + i + key, val1 & 63);
-                    model.set("source" + i + "hcenv" + num + "loop", 
-                        ((val1 & 64) == 0 ? ((val2 & 64) == 0 ? 0 : 2) : 1));
+                    model.set("source" + i + "hcenv" + "loop" + "s" + num, 
+                        ((val1 & 64) == 0 ? 
+                        	((val2 & 64) == 0 ? 0 : 2) : 		// Level 1 = 0, Level 2 = 0 -> OFF,   Level 1 = 0, Level 2 = 64 -> LP2
+                        	((val2 & 64) == 0 ? 0 : 1)));		// Level 1 = 64, Level 2 = 0 -> OFF DEFAULT,   Level 1 = 64, Level 2 = 64 -> LP1
                     }
-                else if (key.endsWith("level2"))
+                else if (key.contains("level2"))
                     {
                     int val1 = result[pos++];           // level 2
                     model.set("source" + i + key, val1 & 63);
@@ -3991,21 +4330,21 @@ public static final int ALL_ON = 4;
                 {
                 return new Object[0];                   // not gonna do it
                 }
-            // This is for velo and velosw, which must be bitpacked together
-            else if (key.startsWith("source1velo") || key.startsWith("source2velo") || key.startsWith("source3velo") || key.startsWith("source4velo") || key.startsWith("source5velo") || key.startsWith("source6velo"))
+            // This is for velo and generalvelosw, which must be bitpacked together
+            else if (key.startsWith("source1generalvelo") || key.startsWith("source2generalvelo") || key.startsWith("source3generalvelo") || key.startsWith("source4generalvelo") || key.startsWith("source5generalvelo") || key.startsWith("source6generalvelo"))
                 {
                 int source = StringUtility.getFirstInt(key);
                 data = new int[] { 0x01, 0x01, (source - 1), 0x00, 0x02, 0x00, 
-                    (model.get("source" + source + "velosw") << 5) | 
-                    model.get("source" + source + "velo") };
+                    (model.get("source" + source + "generalvelosw") << 5) | 
+                    model.get("source" + source + "generalvelo") };
                 }
             // This must be sent 14-bit
             else if (key.startsWith("source1wavekit") || key.startsWith("source2wavekit") || key.startsWith("source3wavekit") || key.startsWith("source4wavekit") || key.startsWith("source5wavekit") || key.startsWith("source6wavekit") ||
                 key.startsWith("source1additive") || key.startsWith("source2additive") || key.startsWith("source3additive") || key.startsWith("source4additive") || key.startsWith("source5additive") || key.startsWith("source6additive"))
                 {
                 int source = StringUtility.getFirstInt(key);
-                boolean additive = (model.get("source" + source + "additive") == 1);
-                int val = model.get("source" + source + "wavekit") + PCM_START;
+                boolean additive = (model.get("source" + source + "dcoadditive") == 1);
+                int val = model.get("source" + source + "dcowavekit") + PCM_START;
                 data = new int[] { 0x01, 0x01, (source - 1), 0x00, 0x1c, additive ? 4 : (val >>> 7), additive ? 0 : (val & 127)};               // additive is 512
                 }
             // This is for fixedkey, which has a hole its range that we must deal wtih
@@ -4022,6 +4361,7 @@ public static final int ALL_ON = 4;
                 String remainder = StringUtility.removePreambleAndFirstDigits(key, "source");
                 
                 if (remainder.equals("hcenvnumber") ||
+                    remainder.equals("hcenvvalue") ||
                     remainder.equals("hcenvlevel0value") || 
                     remainder.equals("hcenvlevel1value") || 
                     remainder.equals("hcenvlevel2value") || 
@@ -4031,12 +4371,12 @@ public static final int ALL_ON = 4;
                     remainder.equals("hcenvrate2value") || 
                     remainder.equals("hcenvrate3value") || 
                     remainder.equals("hcenvloopvalue") ||
-                    remainder.equals("formantnumber") ||
-                    remainder.equals("formantvalue") ||
-                    remainder.equals("hcsoftnumber") ||
-                    remainder.equals("hcsoftvalue") ||
-                    remainder.equals("hcloudnumber") ||
-                    remainder.equals("hcloudvalue"))
+                    remainder.equals("formantbandnumber") ||
+                    remainder.equals("formantbandvalue") ||
+                    remainder.equals("hc0number") ||
+                    remainder.equals("hc0value") ||
+                    remainder.equals("hc1number") ||
+                    remainder.equals("hc1value"))
                     return new Object[0];
                 
                 int val = model.get(key);
@@ -4046,16 +4386,16 @@ public static final int ALL_ON = 4;
                     }
                 else if ((index = (Integer)(addWaveKitParamsToIndex.get(remainder))) != null)
                     {
-                    data = new int[] { 0x02, 0x40, (source - 1), 0x00, index.intValue(), 0x00, val };
+                    data = new int[] { 0x02, 0x40, (source - 1), 0x00, index.intValue() - 1, 0x00, val };		// we subtract 1 to make up for checksum marked as "--"
                     }
-                else if ((index = (Integer)(addWaveHCSoftParamsToIndex.get(remainder))) != null)
+                else if ((index = (Integer)(addWaveSoftHCParamsToIndex.get(remainder))) != null)
                     {
-                    int harmonic = StringUtility.getFirstInt(remainder);
+                    int harmonic = StringUtility.getSecondInt(remainder);	// after the "0"
                     data = new int[] { 0x02, 0x41, (source - 1), (harmonic - 1), 0x00, 0x00, val };
                     }
-                else if ((index = (Integer)(addWaveHCLoudParamsToIndex.get(remainder))) != null)
+                else if ((index = (Integer)(addWaveLoudHCParamsToIndex.get(remainder))) != null)
                     {
-                    int harmonic = StringUtility.getFirstInt(remainder);
+                    int harmonic = StringUtility.getSecondInt(remainder);	// after the "1"
                     data = new int[] { 0x02, 0x42, (source - 1), (harmonic - 1), 0x00, 0x00, val };
                     }
                 else if ((index = (Integer)(addWaveFormantFilterParamsToIndex.get(remainder))) != null)
@@ -4065,8 +4405,8 @@ public static final int ALL_ON = 4;
                     }
                 else if ((index = (Integer)(addWaveHarmonicEnvelopeParamsToIndex.get(remainder))) != null)
                     {
-                    int harmonic = StringUtility.getFirstInt(remainder);
-                    int stage = StringUtility.getSecondInt(remainder);
+                    int stage = StringUtility.getFirstInt(remainder);
+                    int harmonic = StringUtility.getSecondInt(remainder);
                     boolean rate = remainder.contains("rate");
                     // each stage is two elements, first the rate and then the level
                     data = new int[] { 0x02, 0x44, (source - 1), (harmonic - 1), stage * 2 + (rate ? 0 : 1), 0x00, val };
@@ -4101,33 +4441,33 @@ public static final int ALL_ON = 4;
             int type = model.get("reverbtype");
             if (key.endsWith("type"))
                 {
-                data = new int[] { 0x03, 0x00, 0x01, 0x00, 0x00, 0x00, model.get(key) + 11 };           // effects start at 11
+                data = new int[] { 0x03, 0x00, 0x01, 0x00, 0x00, 0x00, model.get(key) };
                 }
             else 
                 {
                 if (key.endsWith("drywet1"))
                     {
-                    if (type + 1 != StringUtility.getSecondInt(key))  return new Object[0]; // we're the wrong type
+                    if (type + 1 != StringUtility.getFirstInt(key))  return new Object[0]; // we're the wrong type
                     sub5 = 1;
                     }
                 else if (key.endsWith("para1"))
                     {
-                    if (type + 1 != StringUtility.getSecondInt(key))  return new Object[0]; // we're the wrong type
+                    if (type + 1 != StringUtility.getFirstInt(key))  return new Object[0]; // we're the wrong type
                     sub5 = 2;
                     }
                 else if (key.endsWith("para2"))
                     {
-                    if (type + 1 != StringUtility.getSecondInt(key))  return new Object[0]; // we're the wrong type
+                    if (type + 1 != StringUtility.getFirstInt(key))  return new Object[0]; // we're the wrong type
                     sub5 = 3;
                     }
                 else if (key.endsWith("para3"))
                     {
-                    if (type + 1 != StringUtility.getSecondInt(key))  return new Object[0]; // we're the wrong type
+                    if (type + 1 != StringUtility.getFirstInt(key))  return new Object[0]; // we're the wrong type
                     sub5 = 4;
                     }
                 else if (key.endsWith("para4"))
                     {
-                    if (type + 1 != StringUtility.getSecondInt(key))  return new Object[0]; // we're the wrong type
+                    if (type + 1 != StringUtility.getFirstInt(key))  return new Object[0]; // we're the wrong type
                     sub5 = 5;
                     }
                 data = new int[] { 0x03, 0x00, 0x01, 0x00, sub5, 0x00, model.get(key) };
@@ -4156,9 +4496,11 @@ public static final int ALL_ON = 4;
             int effect = StringUtility.getFirstInt(key);
             int type = model.get("effect" + effect + "type");
             String reduced = StringUtility.removePreambleAndFirstDigits(key, "effect");
+            int extra = 0;
             if (key.endsWith("type"))
                 {
                 sub5 = 0;
+                extra = 11;								// effects start with 11
                 }
             else if (key.endsWith("depth"))
                 {
@@ -4185,11 +4527,13 @@ public static final int ALL_ON = 4;
                 if (type + 1 != StringUtility.getSecondInt(key))  return new Object[0]; // we're the wrong type
                 sub5 = 5;
                 }
-            data = new int[] { 0x03, 0x00, effect + 1, 0x00, sub5, 0x00, model.get(key) };
+            
+            sub5 = effectShift(type, sub5 + 1) - 1;  // compress to fill in gaps
+            data = new int[] { 0x03, 0x00, effect + 1, 0x00, sub5, 0x00, model.get(key) + extra };
             }
         else if (key.startsWith("geq"))
             {
-            int eq = StringUtility.getFirstInt(key);
+            int eq = StringUtility.getFirstInt(key) - 1;
             data = new int[] { 0x03, 0x01, 0x00, 0x00, eq, 0x00, model.get(key) };
             }
         else if (key.startsWith("srcmute"))
@@ -4203,12 +4547,14 @@ public static final int ALL_ON = 4;
                 ((1 - model.get("srcmute5")) << 4) |
                 ((1 - model.get("srcmute6")) << 5) };
             }
+            /*
         else if (key.startsWith("macrocontroller"))
             {
             int pos = ((Integer)singleToneDataParamsToIndex.get(key)).intValue() - 
                 ((Integer)singleToneDataParamsToIndex.get("macrocontroller1parameter1")).intValue();
             data = new int[] { 0x01, 0x00, 0x00, 0x00, pos, 0x00, model.get(key) };
             }
+            */
         else if ((index = (Integer)(singleToneDataParamsToIndex.get(key))) != null)
             {
             data = new int[] { 0x01, 0x00, 0x00, 0x00, index.intValue() - COMMON_START, 0x00, model.get(key) };
@@ -4268,6 +4614,51 @@ public static final int ALL_ON = 4;
             };
         }
         
+    // This function is used to compact the effects that have holes in their parameters.
+    // See the discussion above, labelled EFFECT COMPACTING.
+    // type starts at 0
+    // para starts at 1
+    public int effectShift(int type, int para)
+    	{
+    	if (type + 12 == 12)	// Early Reflections 1
+    		{
+    		if (para >= 4) return para - 1;
+    		}
+    	if (type + 12 == 13)	// Early Reflections 2
+    		{
+    		if (para >= 4) return para - 1;
+    		}
+    	if (type + 12 == 16)	// Single Delay
+    		{
+    		if (para >= 3) return para - 1;
+    		}
+    	if (type + 12 == 18)	// Stereo Delay
+    		{
+    		if (para >= 4) return para - 2;
+    		}
+    	if (type + 12 == 19)	// Cross Delay
+    		{
+    		if (para >= 4) return para - 2;
+    		}
+    	if (type + 12 == 30)	// Ensemble
+    		{
+    		if (para >= 3) return para - 1;
+    		}
+    	if (type + 12 == 31)	// Ensemble and Delay
+    		{
+    		if (para >= 3) return para - 1;
+    		}
+    	if (type + 12 == 43)	// Exciter
+    		{
+    		if (para >= 5) return para - 1;
+    		}
+    	if (type + 12 == 44)	// Enhancer
+    		{
+    		if (para >= 5) return para - 1;
+    		}
+    	return para;
+    	}
+        
     public String[] getBankNames() { return BANKS; }
 
 // Return a list of all patch number names.  
@@ -4303,58 +4694,7 @@ public static final int ALL_ON = 4;
         }
 
 
-/*
-// return -1 if there is no such position -- the patch is null
-public int getPatchPosition(byte[] bank, int num)
-{
-// This will be quite costly: O(size(bank)^2) overall.  We may need to call this up-front
-// and then consult it as we parse from the bank sysex, if it proves to be too slow.
-                
-boolean[] tonemap = new boolean[128];
-int datalen = 8 + 19 + 1;
-int pos = 8;
-int count = 0;
-for (int i = 0; i < 126; i++)
-{
-// parse tone map
-tonemap[i] = (((bank[pos] >>> count++) & 0x1) == 0x1);
-if (count > 6) { count = 0; pos++; }
-}
-tonemap[126] = (((bank[pos] >>> 0) & 0x1) == 0x1);
-tonemap[127] = (((bank[pos] >>> 1) & 0x1) == 0x1);
-if (!tonemap[num]) return -1;
-                
-// Now we have to go searching for the position :=(
-                
-// reset pos
-pos = 8 + 19 + 1;
-for(int i = 0; i < num; i++)
-{
-if (!tonemap[i]) continue;              // it's a null patch, skip it
-
-// find the number of sources
-int sources = bank[pos + 50];
-
-pos += 81 + 1;          // add in the checksum
-for(int s = 0; s < sources; s++)
-{
-int msb = bank[pos + 28];
-int lsb = bank[pos + 29];
-boolean additive = (msb * 128 + lsb == 512);
-pos += 86;
-if (additive) 
-{
-pos += 806;
-}
-}
-}
-                        
-// At this point we're at the start of patch #num
-return pos;
-}
-*/
-
-
+	// Patches are big.  We need a bigger countdown to wait for them to arrive during bulk downloading
     public int getBatchDownloadFailureCountdown() { return 10; }
         
     // When we don't get a response while doing a batch download, it is likely not because
@@ -4480,7 +4820,9 @@ return pos;
         else
             {
             pos++;              // skip checksum, parseSingle() starts beyond it
-            return parseSingle(bankSysex, pos);
+            int retval = parseSingle(bankSysex, pos);
+			revise();
+			return retval;
             }
         }
 
@@ -4600,47 +4942,47 @@ return pos;
     // The full name is "sourceNPARAM" where N is a number 1...6, and PARAM a string below.
     public static final String[] sourceParams = new String[] 
     {
-    "zonelo",
-    "zonehi",
-    "--",                                               // "velo sw" and "velo"
-    "effectpath",
-    "volume",
-    "benderpitch",
-    "bendercutoff",
-    "pressdestination1",
-    "pressdepth1",
-    "pressdestination2",
-    "pressdepth2",
-    "wheeldestination1",
-    "wheeldepth1",
-    "wheeldestination2",
-    "wheeldepth2",
-    "expressdestination1",
-    "expressdepth1",
-    "expressdestination2",
-    "expressdepth2",
-    "assignablecontrol1source",
-    "assignablecontrol1destination",
-    "assignablecontrol1depth",
-    "assignablecontrol2source",
-    "assignablecontrol2destination",
-    "assignablecontrol2depth",
-    "keyondelay",
-    "pantype",
-    "pannormalvalue",
+    "generalzonelo",
+    "generalzonehi",
+    "--",                                               // "velo sw" and "generalvelo"
+    "generalzonepath",
+    "generalvolume",
+    "generalbenderpitch",
+    "generalbendercutoff",
+    "controlpressdestination1",
+    "controlpressdepth1",
+    "controlpressdestination2",
+    "controlpressdepth2",
+    "controlwheeldestination1",
+    "controlwheeldepth1",
+    "controlwheeldestination2",
+    "controlwheeldepth2",
+    "controlexpressdestination1",
+    "controlexpressdepth1",
+    "controlexpressdestination2",
+    "controlexpressdepth2",
+    "controlassignable1source",
+    "controlassignable1destination",
+    "controlassignable1depth",
+    "controlassignable2source",
+    "controlassignable2destination",
+    "controlassignable2depth",
+    "generalkeyondelay",
+    "generalpantype",
+    "generalpannormalvalue",
     "--",                       // wavekitmsb                           // we make:  wavekit  and       additive
     "--",                       // wavekitlsb
-    "coarse",
-    "fine",
-    "fixedkey",                                                                 // This is stored in Edisyn as 0 ... 108-21, but must be emitted as 0 vs 21...108
-    "kspitch",
-    "pitchenvstartlevel",
-    "pitchenvattacktime",
-    "pitchenvattacklevel",
-    "pitchenvdecaytime",
-    "pitchenvtimevelosense",
-    "pitchenvlevelvelosense",
-    "dcf",
+    "dcocoarse",
+    "dcofine",
+    "dcofixedkey",                                                                 // This is stored in Edisyn as 0 ... 108-21, but must be emitted as 0 vs 21...108
+    "dcokspitch",
+    "envdcostartlevel",
+    "envdcoattacktime",
+    "envdcoattacklevel",
+    "envdcodecaytime",
+    "envdcotimevelosense",
+    "envdcolevelvelosense",
+    "dcfenable",
     "dcfmode",
     "dcfvelocurve",
     "dcfresonance",
@@ -4648,33 +4990,33 @@ return pos;
     "dcfcutoff",
     "dcfcutoffksdepth",
     "dcfcutoffvelodepth",
-    "dcfenvdepth",
-    "dcfenvattacktime",
-    "dcfenvdecay1time",
-    "dcfenvdecay1level",
-    "dcfenvdecay2time",
-    "dcfenvdecay2level",
-    "dcfenvreleasetime",
-    "dcfkstoenvattacktime",
-    "dcfkstoenvdecay1time",
-    "dcfvelotoenvlevel",
-    "dcfvelotoenvattacktime",
-    "dcfvelotoenvdecay1time",
+    "envdcfdepth",
+    "envdcfattacktime",
+    "envdcfdecay1time",
+    "envdcfdecay1level",
+    "envdcfdecay2time",
+    "envdcfdecay2level",
+    "envdcfreleasetime",
+    "envdcfksattacktime",
+    "envdcfksdecay1time",
+    "envdcfvelolevel",
+    "envdcfveloattacktime",
+    "envdcfvelodecay1time",
     "dcavelocurve",
-    "dcaenvattacktime",
-    "dcaenvdecay1time",
-    "dcaenvdecay1level",
-    "dcaenvdecay2time",
-    "dcaenvdecay2level",
-    "dcaenvreleasetime",
-    "dcakstoenvlevel",
-    "dcakstoenvattacktime",
-    "dcakstoenvdecay1time",
-    "dcakstoenvreleasetime",
-    "dcavelotoenvlevel",
-    "dcavelotoenvattacktime",
-    "dcavelotoenvdecay1time",
-    "dcavelotoenvreleasetime",
+    "envdcaattacktime",
+    "envdcadecay1time",
+    "envdcadecay1level",
+    "envdcadecay2time",
+    "envdcadecay2level",
+    "envdcareleasetime",
+    "envdcakslevel",
+    "envdcaksattacktime",
+    "envdcaksdecay1time",
+    "envdcaksreleasetime",
+    "envdcavelolevel",
+    "envdcaveloattacktime",
+    "envdcavelodecay1time",
+    "envdcaveloreleasetime",
     "lfowaveform",
     "lfospeed",
     "lfodelayonset",
@@ -4693,25 +5035,25 @@ return pos;
     public static final String[] addWaveKitParams = new String[] 
     {
     "--",                       // checksum
-    "morfflag",
-    "totalgain",
+    "morfflag",					// this has no real function I believe
+    "harmtotalgain",
     "harmgroup",
-    "kstogain",
-    "balancevelocurve",
-    "balancevelodepth",
-    "hc1patch",
-    "hc1source",
-    "hc2patch",
-    "hc2source",
-    "hc3patch",
-    "hc3source",
-    "hc4patch",
-    "hc4source",
-    "hetime1",
-    "hetime2",
-    "hetime3",
-    "hetime4",
-    "loop",
+    "harmkstogain",
+    "harmbalancevelocurve",
+    "harmbalancevelodepth",
+    "morfhc1patch",
+    "morfhc1source",
+    "morfhc2patch",
+    "morfhc2source",
+    "morfhc3patch",
+    "morfhc3source",
+    "morfhc4patch",
+    "morfhc4source",
+    "morfhetime1",
+    "morfhetime2",
+    "morfhetime3",
+    "morfhetime4",
+    "morfloop",
     "formantbias",
     "formantenvlfosel",
     "formantenvdepth",
@@ -4733,863 +5075,869 @@ return pos;
     
     // Names of the soft harmonics parameters
     // The full name is "sourceNPARAM" where N is a number 1...6, and PARAM a string below.
-    public static final String[] addWaveHCSoftParams = new String[]
+    // These are structured as soft/loud (soft=0) FIRST and harmonic ("s") SECOND.
+    // This makes it possible to copy the envelope displays to one another.
+    public static final String[] addWaveSoftHCParams = new String[]
     {
-    "hcsoft1",
-    "hcsoft2",
-    "hcsoft3",
-    "hcsoft4",
-    "hcsoft5",
-    "hcsoft6",
-    "hcsoft7",
-    "hcsoft8",
-    "hcsoft9",
-    "hcsoft10",
-    "hcsoft11",
-    "hcsoft12",
-    "hcsoft13",
-    "hcsoft14",
-    "hcsoft15",
-    "hcsoft16",
-    "hcsoft17",
-    "hcsoft18",
-    "hcsoft19",
-    "hcsoft20",
-    "hcsoft21",
-    "hcsoft22",
-    "hcsoft23",
-    "hcsoft24",
-    "hcsoft25",
-    "hcsoft26",
-    "hcsoft27",
-    "hcsoft28",
-    "hcsoft29",
-    "hcsoft30",
-    "hcsoft31",
-    "hcsoft32",
-    "hcsoft33",
-    "hcsoft34",
-    "hcsoft35",
-    "hcsoft36",
-    "hcsoft37",
-    "hcsoft38",
-    "hcsoft39",
-    "hcsoft40",
-    "hcsoft41",
-    "hcsoft42",
-    "hcsoft43",
-    "hcsoft44",
-    "hcsoft45",
-    "hcsoft46",
-    "hcsoft47",
-    "hcsoft48",
-    "hcsoft49",
-    "hcsoft50",
-    "hcsoft51",
-    "hcsoft52",
-    "hcsoft53",
-    "hcsoft54",
-    "hcsoft55",
-    "hcsoft56",
-    "hcsoft57",
-    "hcsoft58",
-    "hcsoft59",
-    "hcsoft60",
-    "hcsoft61",
-    "hcsoft62",
-    "hcsoft63",
-    "hcsoft64"
+    "hc0s1",
+    "hc0s2",
+    "hc0s3",
+    "hc0s4",
+    "hc0s5",
+    "hc0s6",
+    "hc0s7",
+    "hc0s8",
+    "hc0s9",
+    "hc0s10",
+    "hc0s11",
+    "hc0s12",
+    "hc0s13",
+    "hc0s14",
+    "hc0s15",
+    "hc0s16",
+    "hc0s17",
+    "hc0s18",
+    "hc0s19",
+    "hc0s20",
+    "hc0s21",
+    "hc0s22",
+    "hc0s23",
+    "hc0s24",
+    "hc0s25",
+    "hc0s26",
+    "hc0s27",
+    "hc0s28",
+    "hc0s29",
+    "hc0s30",
+    "hc0s31",
+    "hc0s32",
+    "hc0s33",
+    "hc0s34",
+    "hc0s35",
+    "hc0s36",
+    "hc0s37",
+    "hc0s38",
+    "hc0s39",
+    "hc0s40",
+    "hc0s41",
+    "hc0s42",
+    "hc0s43",
+    "hc0s44",
+    "hc0s45",
+    "hc0s46",
+    "hc0s47",
+    "hc0s48",
+    "hc0s49",
+    "hc0s50",
+    "hc0s51",
+    "hc0s52",
+    "hc0s53",
+    "hc0s54",
+    "hc0s55",
+    "hc0s56",
+    "hc0s57",
+    "hc0s58",
+    "hc0s59",
+    "hc0s60",
+    "hc0s61",
+    "hc0s62",
+    "hc0s63",
+    "hc0s64"
     };
     
     // Names of the loud harmonics parameters
     // The full name is "sourceNPARAM" where N is a number 1...6, and PARAM a string below.
-    public static final String[] addWaveHCLoudParams = new String[]
+    // These are structured as soft/loud (loud=1) FIRST and harmonic ("s") SECOND.
+    // This makes it possible to copy the envelope displays to one another.
+    public static final String[] addWaveLoudHCParams = new String[]
     {
-    "hcloud1",
-    "hcloud2",
-    "hcloud3",
-    "hcloud4",
-    "hcloud5",
-    "hcloud6",
-    "hcloud7",
-    "hcloud8",
-    "hcloud9",
-    "hcloud10",
-    "hcloud11",
-    "hcloud12",
-    "hcloud13",
-    "hcloud14",
-    "hcloud15",
-    "hcloud16",
-    "hcloud17",
-    "hcloud18",
-    "hcloud19",
-    "hcloud20",
-    "hcloud21",
-    "hcloud22",
-    "hcloud23",
-    "hcloud24",
-    "hcloud25",
-    "hcloud26",
-    "hcloud27",
-    "hcloud28",
-    "hcloud29",
-    "hcloud30",
-    "hcloud31",
-    "hcloud32",
-    "hcloud33",
-    "hcloud34",
-    "hcloud35",
-    "hcloud36",
-    "hcloud37",
-    "hcloud38",
-    "hcloud39",
-    "hcloud40",
-    "hcloud41",
-    "hcloud42",
-    "hcloud43",
-    "hcloud44",
-    "hcloud45",
-    "hcloud46",
-    "hcloud47",
-    "hcloud48",
-    "hcloud49",
-    "hcloud50",
-    "hcloud51",
-    "hcloud52",
-    "hcloud53",
-    "hcloud54",
-    "hcloud55",
-    "hcloud56",
-    "hcloud57",
-    "hcloud58",
-    "hcloud59",
-    "hcloud60",
-    "hcloud61",
-    "hcloud62",
-    "hcloud63",
-    "hcloud64"
+    "hc1s1",
+    "hc1s2",
+    "hc1s3",
+    "hc1s4",
+    "hc1s5",
+    "hc1s6",
+    "hc1s7",
+    "hc1s8",
+    "hc1s9",
+    "hc1s10",
+    "hc1s11",
+    "hc1s12",
+    "hc1s13",
+    "hc1s14",
+    "hc1s15",
+    "hc1s16",
+    "hc1s17",
+    "hc1s18",
+    "hc1s19",
+    "hc1s20",
+    "hc1s21",
+    "hc1s22",
+    "hc1s23",
+    "hc1s24",
+    "hc1s25",
+    "hc1s26",
+    "hc1s27",
+    "hc1s28",
+    "hc1s29",
+    "hc1s30",
+    "hc1s31",
+    "hc1s32",
+    "hc1s33",
+    "hc1s34",
+    "hc1s35",
+    "hc1s36",
+    "hc1s37",
+    "hc1s38",
+    "hc1s39",
+    "hc1s40",
+    "hc1s41",
+    "hc1s42",
+    "hc1s43",
+    "hc1s44",
+    "hc1s45",
+    "hc1s46",
+    "hc1s47",
+    "hc1s48",
+    "hc1s49",
+    "hc1s50",
+    "hc1s51",
+    "hc1s52",
+    "hc1s53",
+    "hc1s54",
+    "hc1s55",
+    "hc1s56",
+    "hc1s57",
+    "hc1s58",
+    "hc1s59",
+    "hc1s60",
+    "hc1s61",
+    "hc1s62",
+    "hc1s63",
+    "hc1s64"
     };
 
     // Names of the 64 formant frequencies.
     // The full name is "sourceNPARAM" where N is a number 1...6, and PARAM a string below.
     public static final String[] addWaveFormantFilterParams = new String[]
     {
-    "formant1",
-    "formant2",
-    "formant3",
-    "formant4",
-    "formant5",
-    "formant6",
-    "formant7",
-    "formant8",
-    "formant9",
-    "formant10",
-    "formant11",
-    "formant12",
-    "formant13",
-    "formant14",
-    "formant15",
-    "formant16",
-    "formant17",
-    "formant18",
-    "formant19",
-    "formant20",
-    "formant21",
-    "formant22",
-    "formant23",
-    "formant24",
-    "formant25",
-    "formant26",
-    "formant27",
-    "formant28",
-    "formant29",
-    "formant30",
-    "formant31",
-    "formant32",
-    "formant33",
-    "formant34",
-    "formant35",
-    "formant36",
-    "formant37",
-    "formant38",
-    "formant39",
-    "formant40",
-    "formant41",
-    "formant42",
-    "formant43",
-    "formant44",
-    "formant45",
-    "formant46",
-    "formant47",
-    "formant48",
-    "formant49",
-    "formant50",
-    "formant51",
-    "formant52",
-    "formant53",
-    "formant54",
-    "formant55",
-    "formant56",
-    "formant57",
-    "formant58",
-    "formant59",
-    "formant60",
-    "formant61",
-    "formant62",
-    "formant63",
-    "formant64",
-    "formant65",
-    "formant66",
-    "formant67",
-    "formant68",
-    "formant69",
-    "formant70",
-    "formant71",
-    "formant72",
-    "formant73",
-    "formant74",
-    "formant75",
-    "formant76",
-    "formant77",
-    "formant78",
-    "formant79",
-    "formant80",
-    "formant81",
-    "formant82",
-    "formant83",
-    "formant84",
-    "formant85",
-    "formant86",
-    "formant87",
-    "formant88",
-    "formant89",
-    "formant90",
-    "formant91",
-    "formant92",
-    "formant93",
-    "formant94",
-    "formant95",
-    "formant96",
-    "formant97",
-    "formant98",
-    "formant99",
-    "formant100",
-    "formant101",
-    "formant102",
-    "formant103",
-    "formant104",
-    "formant105",
-    "formant106",
-    "formant107",
-    "formant108",
-    "formant109",
-    "formant110",
-    "formant111",
-    "formant112",
-    "formant113",
-    "formant114",
-    "formant115",
-    "formant116",
-    "formant117",
-    "formant118",
-    "formant119",
-    "formant120",
-    "formant121",
-    "formant122",
-    "formant123",
-    "formant124",
-    "formant125",
-    "formant126",
-    "formant127",
-    "formant128"
+    "formantband1",
+    "formantband2",
+    "formantband3",
+    "formantband4",
+    "formantband5",
+    "formantband6",
+    "formantband7",
+    "formantband8",
+    "formantband9",
+    "formantband10",
+    "formantband11",
+    "formantband12",
+    "formantband13",
+    "formantband14",
+    "formantband15",
+    "formantband16",
+    "formantband17",
+    "formantband18",
+    "formantband19",
+    "formantband20",
+    "formantband21",
+    "formantband22",
+    "formantband23",
+    "formantband24",
+    "formantband25",
+    "formantband26",
+    "formantband27",
+    "formantband28",
+    "formantband29",
+    "formantband30",
+    "formantband31",
+    "formantband32",
+    "formantband33",
+    "formantband34",
+    "formantband35",
+    "formantband36",
+    "formantband37",
+    "formantband38",
+    "formantband39",
+    "formantband40",
+    "formantband41",
+    "formantband42",
+    "formantband43",
+    "formantband44",
+    "formantband45",
+    "formantband46",
+    "formantband47",
+    "formantband48",
+    "formantband49",
+    "formantband50",
+    "formantband51",
+    "formantband52",
+    "formantband53",
+    "formantband54",
+    "formantband55",
+    "formantband56",
+    "formantband57",
+    "formantband58",
+    "formantband59",
+    "formantband60",
+    "formantband61",
+    "formantband62",
+    "formantband63",
+    "formantband64",
+    "formantband65",
+    "formantband66",
+    "formantband67",
+    "formantband68",
+    "formantband69",
+    "formantband70",
+    "formantband71",
+    "formantband72",
+    "formantband73",
+    "formantband74",
+    "formantband75",
+    "formantband76",
+    "formantband77",
+    "formantband78",
+    "formantband79",
+    "formantband80",
+    "formantband81",
+    "formantband82",
+    "formantband83",
+    "formantband84",
+    "formantband85",
+    "formantband86",
+    "formantband87",
+    "formantband88",
+    "formantband89",
+    "formantband90",
+    "formantband91",
+    "formantband92",
+    "formantband93",
+    "formantband94",
+    "formantband95",
+    "formantband96",
+    "formantband97",
+    "formantband98",
+    "formantband99",
+    "formantband100",
+    "formantband101",
+    "formantband102",
+    "formantband103",
+    "formantband104",
+    "formantband105",
+    "formantband106",
+    "formantband107",
+    "formantband108",
+    "formantband109",
+    "formantband110",
+    "formantband111",
+    "formantband112",
+    "formantband113",
+    "formantband114",
+    "formantband115",
+    "formantband116",
+    "formantband117",
+    "formantband118",
+    "formantband119",
+    "formantband120",
+    "formantband121",
+    "formantband122",
+    "formantband123",
+    "formantband124",
+    "formantband125",
+    "formantband126",
+    "formantband127",
+    "formantband128"
     };
     
     // Names of the parameters for additive wave harmonic envelopes. 
     // The full name is "sourceNPARAM" where N is a number 1...6, and PARAM a string below.
+    // These are structured as rate/level FIRST and harmonic ("s") SECOND.
+    // This makes it possible to copy the envelope displays to one another.
     public static final String[] addWaveHarmonicEnvelopeParams = new String[]
     {
-    "hcenv1rate0",
-    "hcenv1level0",
-    "hcenv1rate1",
-    "hcenv1level1",
-    "hcenv1rate2",
-    "hcenv1level2",
-    "hcenv1rate3",
-    "hcenv1level3",
-    "hcenv2rate0",
-    "hcenv2level0",
-    "hcenv2rate1",
-    "hcenv2level1",
-    "hcenv2rate2",
-    "hcenv2level2",
-    "hcenv2rate3",
-    "hcenv2level3",
-    "hcenv3rate0",
-    "hcenv3level0",
-    "hcenv3rate1",
-    "hcenv3level1",
-    "hcenv3rate2",
-    "hcenv3level2",
-    "hcenv3rate3",
-    "hcenv3level3",
-    "hcenv4rate0",
-    "hcenv4level0",
-    "hcenv4rate1",
-    "hcenv4level1",
-    "hcenv4rate2",
-    "hcenv4level2",
-    "hcenv4rate3",
-    "hcenv4level3",
-    "hcenv5rate0",
-    "hcenv5level0",
-    "hcenv5rate1",
-    "hcenv5level1",
-    "hcenv5rate2",
-    "hcenv5level2",
-    "hcenv5rate3",
-    "hcenv5level3",
-    "hcenv6rate0",
-    "hcenv6level0",
-    "hcenv6rate1",
-    "hcenv6level1",
-    "hcenv6rate2",
-    "hcenv6level2",
-    "hcenv6rate3",
-    "hcenv6level3",
-    "hcenv7rate0",
-    "hcenv7level0",
-    "hcenv7rate1",
-    "hcenv7level1",
-    "hcenv7rate2",
-    "hcenv7level2",
-    "hcenv7rate3",
-    "hcenv7level3",
-    "hcenv8rate0",
-    "hcenv8level0",
-    "hcenv8rate1",
-    "hcenv8level1",
-    "hcenv8rate2",
-    "hcenv8level2",
-    "hcenv8rate3",
-    "hcenv8level3",
-    "hcenv9rate0",
-    "hcenv9level0",
-    "hcenv9rate1",
-    "hcenv9level1",
-    "hcenv9rate2",
-    "hcenv9level2",
-    "hcenv9rate3",
-    "hcenv9level3",
-    "hcenv10rate0",
-    "hcenv10level0",
-    "hcenv10rate1",
-    "hcenv10level1",
-    "hcenv10rate2",
-    "hcenv10level2",
-    "hcenv10rate3",
-    "hcenv10level3",
-    "hcenv11rate0",
-    "hcenv11level0",
-    "hcenv11rate1",
-    "hcenv11level1",
-    "hcenv11rate2",
-    "hcenv11level2",
-    "hcenv11rate3",
-    "hcenv11level3",
-    "hcenv12rate0",
-    "hcenv12level0",
-    "hcenv12rate1",
-    "hcenv12level1",
-    "hcenv12rate2",
-    "hcenv12level2",
-    "hcenv12rate3",
-    "hcenv12level3",
-    "hcenv13rate0",
-    "hcenv13level0",
-    "hcenv13rate1",
-    "hcenv13level1",
-    "hcenv13rate2",
-    "hcenv13level2",
-    "hcenv13rate3",
-    "hcenv13level3",
-    "hcenv14rate0",
-    "hcenv14level0",
-    "hcenv14rate1",
-    "hcenv14level1",
-    "hcenv14rate2",
-    "hcenv14level2",
-    "hcenv14rate3",
-    "hcenv14level3",
-    "hcenv15rate0",
-    "hcenv15level0",
-    "hcenv15rate1",
-    "hcenv15level1",
-    "hcenv15rate2",
-    "hcenv15level2",
-    "hcenv15rate3",
-    "hcenv15level3",
-    "hcenv16rate0",
-    "hcenv16level0",
-    "hcenv16rate1",
-    "hcenv16level1",
-    "hcenv16rate2",
-    "hcenv16level2",
-    "hcenv16rate3",
-    "hcenv16level3",
-    "hcenv17rate0",
-    "hcenv17level0",
-    "hcenv17rate1",
-    "hcenv17level1",
-    "hcenv17rate2",
-    "hcenv17level2",
-    "hcenv17rate3",
-    "hcenv17level3",
-    "hcenv18rate0",
-    "hcenv18level0",
-    "hcenv18rate1",
-    "hcenv18level1",
-    "hcenv18rate2",
-    "hcenv18level2",
-    "hcenv18rate3",
-    "hcenv18level3",
-    "hcenv19rate0",
-    "hcenv19level0",
-    "hcenv19rate1",
-    "hcenv19level1",
-    "hcenv19rate2",
-    "hcenv19level2",
-    "hcenv19rate3",
-    "hcenv19level3",
-    "hcenv20rate0",
-    "hcenv20level0",
-    "hcenv20rate1",
-    "hcenv20level1",
-    "hcenv20rate2",
-    "hcenv20level2",
-    "hcenv20rate3",
-    "hcenv20level3",
-    "hcenv21rate0",
-    "hcenv21level0",
-    "hcenv21rate1",
-    "hcenv21level1",
-    "hcenv21rate2",
-    "hcenv21level2",
-    "hcenv21rate3",
-    "hcenv21level3",
-    "hcenv22rate0",
-    "hcenv22level0",
-    "hcenv22rate1",
-    "hcenv22level1",
-    "hcenv22rate2",
-    "hcenv22level2",
-    "hcenv22rate3",
-    "hcenv22level3",
-    "hcenv23rate0",
-    "hcenv23level0",
-    "hcenv23rate1",
-    "hcenv23level1",
-    "hcenv23rate2",
-    "hcenv23level2",
-    "hcenv23rate3",
-    "hcenv23level3",
-    "hcenv24rate0",
-    "hcenv24level0",
-    "hcenv24rate1",
-    "hcenv24level1",
-    "hcenv24rate2",
-    "hcenv24level2",
-    "hcenv24rate3",
-    "hcenv24level3",
-    "hcenv25rate0",
-    "hcenv25level0",
-    "hcenv25rate1",
-    "hcenv25level1",
-    "hcenv25rate2",
-    "hcenv25level2",
-    "hcenv25rate3",
-    "hcenv25level3",
-    "hcenv26rate0",
-    "hcenv26level0",
-    "hcenv26rate1",
-    "hcenv26level1",
-    "hcenv26rate2",
-    "hcenv26level2",
-    "hcenv26rate3",
-    "hcenv26level3",
-    "hcenv27rate0",
-    "hcenv27level0",
-    "hcenv27rate1",
-    "hcenv27level1",
-    "hcenv27rate2",
-    "hcenv27level2",
-    "hcenv27rate3",
-    "hcenv27level3",
-    "hcenv28rate0",
-    "hcenv28level0",
-    "hcenv28rate1",
-    "hcenv28level1",
-    "hcenv28rate2",
-    "hcenv28level2",
-    "hcenv28rate3",
-    "hcenv28level3",
-    "hcenv29rate0",
-    "hcenv29level0",
-    "hcenv29rate1",
-    "hcenv29level1",
-    "hcenv29rate2",
-    "hcenv29level2",
-    "hcenv29rate3",
-    "hcenv29level3",
-    "hcenv30rate0",
-    "hcenv30level0",
-    "hcenv30rate1",
-    "hcenv30level1",
-    "hcenv30rate2",
-    "hcenv30level2",
-    "hcenv30rate3",
-    "hcenv30level3",
-    "hcenv31rate0",
-    "hcenv31level0",
-    "hcenv31rate1",
-    "hcenv31level1",
-    "hcenv31rate2",
-    "hcenv31level2",
-    "hcenv31rate3",
-    "hcenv31level3",
-    "hcenv32rate0",
-    "hcenv32level0",
-    "hcenv32rate1",
-    "hcenv32level1",
-    "hcenv32rate2",
-    "hcenv32level2",
-    "hcenv32rate3",
-    "hcenv32level3",
-    "hcenv33rate0",
-    "hcenv33level0",
-    "hcenv33rate1",
-    "hcenv33level1",
-    "hcenv33rate2",
-    "hcenv33level2",
-    "hcenv33rate3",
-    "hcenv33level3",
-    "hcenv34rate0",
-    "hcenv34level0",
-    "hcenv34rate1",
-    "hcenv34level1",
-    "hcenv34rate2",
-    "hcenv34level2",
-    "hcenv34rate3",
-    "hcenv34level3",
-    "hcenv35rate0",
-    "hcenv35level0",
-    "hcenv35rate1",
-    "hcenv35level1",
-    "hcenv35rate2",
-    "hcenv35level2",
-    "hcenv35rate3",
-    "hcenv35level3",
-    "hcenv36rate0",
-    "hcenv36level0",
-    "hcenv36rate1",
-    "hcenv36level1",
-    "hcenv36rate2",
-    "hcenv36level2",
-    "hcenv36rate3",
-    "hcenv36level3",
-    "hcenv37rate0",
-    "hcenv37level0",
-    "hcenv37rate1",
-    "hcenv37level1",
-    "hcenv37rate2",
-    "hcenv37level2",
-    "hcenv37rate3",
-    "hcenv37level3",
-    "hcenv38rate0",
-    "hcenv38level0",
-    "hcenv38rate1",
-    "hcenv38level1",
-    "hcenv38rate2",
-    "hcenv38level2",
-    "hcenv38rate3",
-    "hcenv38level3",
-    "hcenv39rate0",
-    "hcenv39level0",
-    "hcenv39rate1",
-    "hcenv39level1",
-    "hcenv39rate2",
-    "hcenv39level2",
-    "hcenv39rate3",
-    "hcenv39level3",
-    "hcenv40rate0",
-    "hcenv40level0",
-    "hcenv40rate1",
-    "hcenv40level1",
-    "hcenv40rate2",
-    "hcenv40level2",
-    "hcenv40rate3",
-    "hcenv40level3",
-    "hcenv41rate0",
-    "hcenv41level0",
-    "hcenv41rate1",
-    "hcenv41level1",
-    "hcenv41rate2",
-    "hcenv41level2",
-    "hcenv41rate3",
-    "hcenv41level3",
-    "hcenv42rate0",
-    "hcenv42level0",
-    "hcenv42rate1",
-    "hcenv42level1",
-    "hcenv42rate2",
-    "hcenv42level2",
-    "hcenv42rate3",
-    "hcenv42level3",
-    "hcenv43rate0",
-    "hcenv43level0",
-    "hcenv43rate1",
-    "hcenv43level1",
-    "hcenv43rate2",
-    "hcenv43level2",
-    "hcenv43rate3",
-    "hcenv43level3",
-    "hcenv44rate0",
-    "hcenv44level0",
-    "hcenv44rate1",
-    "hcenv44level1",
-    "hcenv44rate2",
-    "hcenv44level2",
-    "hcenv44rate3",
-    "hcenv44level3",
-    "hcenv45rate0",
-    "hcenv45level0",
-    "hcenv45rate1",
-    "hcenv45level1",
-    "hcenv45rate2",
-    "hcenv45level2",
-    "hcenv45rate3",
-    "hcenv45level3",
-    "hcenv46rate0",
-    "hcenv46level0",
-    "hcenv46rate1",
-    "hcenv46level1",
-    "hcenv46rate2",
-    "hcenv46level2",
-    "hcenv46rate3",
-    "hcenv46level3",
-    "hcenv47rate0",
-    "hcenv47level0",
-    "hcenv47rate1",
-    "hcenv47level1",
-    "hcenv47rate2",
-    "hcenv47level2",
-    "hcenv47rate3",
-    "hcenv47level3",
-    "hcenv48rate0",
-    "hcenv48level0",
-    "hcenv48rate1",
-    "hcenv48level1",
-    "hcenv48rate2",
-    "hcenv48level2",
-    "hcenv48rate3",
-    "hcenv48level3",
-    "hcenv49rate0",
-    "hcenv49level0",
-    "hcenv49rate1",
-    "hcenv49level1",
-    "hcenv49rate2",
-    "hcenv49level2",
-    "hcenv49rate3",
-    "hcenv49level3",
-    "hcenv50rate0",
-    "hcenv50level0",
-    "hcenv50rate1",
-    "hcenv50level1",
-    "hcenv50rate2",
-    "hcenv50level2",
-    "hcenv50rate3",
-    "hcenv50level3",
-    "hcenv51rate0",
-    "hcenv51level0",
-    "hcenv51rate1",
-    "hcenv51level1",
-    "hcenv51rate2",
-    "hcenv51level2",
-    "hcenv51rate3",
-    "hcenv51level3",
-    "hcenv52rate0",
-    "hcenv52level0",
-    "hcenv52rate1",
-    "hcenv52level1",
-    "hcenv52rate2",
-    "hcenv52level2",
-    "hcenv52rate3",
-    "hcenv52level3",
-    "hcenv53rate0",
-    "hcenv53level0",
-    "hcenv53rate1",
-    "hcenv53level1",
-    "hcenv53rate2",
-    "hcenv53level2",
-    "hcenv53rate3",
-    "hcenv53level3",
-    "hcenv54rate0",
-    "hcenv54level0",
-    "hcenv54rate1",
-    "hcenv54level1",
-    "hcenv54rate2",
-    "hcenv54level2",
-    "hcenv54rate3",
-    "hcenv54level3",
-    "hcenv55rate0",
-    "hcenv55level0",
-    "hcenv55rate1",
-    "hcenv55level1",
-    "hcenv55rate2",
-    "hcenv55level2",
-    "hcenv55rate3",
-    "hcenv55level3",
-    "hcenv56rate0",
-    "hcenv56level0",
-    "hcenv56rate1",
-    "hcenv56level1",
-    "hcenv56rate2",
-    "hcenv56level2",
-    "hcenv56rate3",
-    "hcenv56level3",
-    "hcenv57rate0",
-    "hcenv57level0",
-    "hcenv57rate1",
-    "hcenv57level1",
-    "hcenv57rate2",
-    "hcenv57level2",
-    "hcenv57rate3",
-    "hcenv57level3",
-    "hcenv58rate0",
-    "hcenv58level0",
-    "hcenv58rate1",
-    "hcenv58level1",
-    "hcenv58rate2",
-    "hcenv58level2",
-    "hcenv58rate3",
-    "hcenv58level3",
-    "hcenv59rate0",
-    "hcenv59level0",
-    "hcenv59rate1",
-    "hcenv59level1",
-    "hcenv59rate2",
-    "hcenv59level2",
-    "hcenv59rate3",
-    "hcenv59level3",
-    "hcenv60rate0",
-    "hcenv60level0",
-    "hcenv60rate1",
-    "hcenv60level1",
-    "hcenv60rate2",
-    "hcenv60level2",
-    "hcenv60rate3",
-    "hcenv60level3",
-    "hcenv61rate0",
-    "hcenv61level0",
-    "hcenv61rate1",
-    "hcenv61level1",
-    "hcenv61rate2",
-    "hcenv61level2",
-    "hcenv61rate3",
-    "hcenv61level3",
-    "hcenv62rate0",
-    "hcenv62level0",
-    "hcenv62rate1",
-    "hcenv62level1",
-    "hcenv62rate2",
-    "hcenv62level2",
-    "hcenv62rate3",
-    "hcenv62level3",
-    "hcenv63rate0",
-    "hcenv63level0",
-    "hcenv63rate1",
-    "hcenv63level1",
-    "hcenv63rate2",
-    "hcenv63level2",
-    "hcenv63rate3",
-    "hcenv63level3",
-    "hcenv64rate0",
-    "hcenv64level0",
-    "hcenv64rate1",
-    "hcenv64level1",
-    "hcenv64rate2",
-    "hcenv64level2",
-    "hcenv64rate3",
-    "hcenv64level3",
+    "hcenvrate0s1",
+    "hcenvlevel0s1",
+    "hcenvrate1s1",
+    "hcenvlevel1s1",
+    "hcenvrate2s1",
+    "hcenvlevel2s1",
+    "hcenvrate3s1",
+    "hcenvlevel3s1",
+    "hcenvrate0s2",
+    "hcenvlevel0s2",
+    "hcenvrate1s2",
+    "hcenvlevel1s2",
+    "hcenvrate2s2",
+    "hcenvlevel2s2",
+    "hcenvrate3s2",
+    "hcenvlevel3s2",
+    "hcenvrate0s3",
+    "hcenvlevel0s3",
+    "hcenvrate1s3",
+    "hcenvlevel1s3",
+    "hcenvrate2s3",
+    "hcenvlevel2s3",
+    "hcenvrate3s3",
+    "hcenvlevel3s3",
+    "hcenvrate0s4",
+    "hcenvlevel0s4",
+    "hcenvrate1s4",
+    "hcenvlevel1s4",
+    "hcenvrate2s4",
+    "hcenvlevel2s4",
+    "hcenvrate3s4",
+    "hcenvlevel3s4",
+    "hcenvrate0s5",
+    "hcenvlevel0s5",
+    "hcenvrate1s5",
+    "hcenvlevel1s5",
+    "hcenvrate2s5",
+    "hcenvlevel2s5",
+    "hcenvrate3s5",
+    "hcenvlevel3s5",
+    "hcenvrate0s6",
+    "hcenvlevel0s6",
+    "hcenvrate1s6",
+    "hcenvlevel1s6",
+    "hcenvrate2s6",
+    "hcenvlevel2s6",
+    "hcenvrate3s6",
+    "hcenvlevel3s6",
+    "hcenvrate0s7",
+    "hcenvlevel0s7",
+    "hcenvrate1s7",
+    "hcenvlevel1s7",
+    "hcenvrate2s7",
+    "hcenvlevel2s7",
+    "hcenvrate3s7",
+    "hcenvlevel3s7",
+    "hcenvrate0s8",
+    "hcenvlevel0s8",
+    "hcenvrate1s8",
+    "hcenvlevel1s8",
+    "hcenvrate2s8",
+    "hcenvlevel2s8",
+    "hcenvrate3s8",
+    "hcenvlevel3s8",
+    "hcenvrate0s9",
+    "hcenvlevel0s9",
+    "hcenvrate1s9",
+    "hcenvlevel1s9",
+    "hcenvrate2s9",
+    "hcenvlevel2s9",
+    "hcenvrate3s9",
+    "hcenvlevel3s9",
+    "hcenvrate0s10",
+    "hcenvlevel0s10",
+    "hcenvrate1s10",
+    "hcenvlevel1s10",
+    "hcenvrate2s10",
+    "hcenvlevel2s10",
+    "hcenvrate3s10",
+    "hcenvlevel3s10",
+    "hcenvrate0s11",
+    "hcenvlevel0s11",
+    "hcenvrate1s11",
+    "hcenvlevel1s11",
+    "hcenvrate2s11",
+    "hcenvlevel2s11",
+    "hcenvrate3s11",
+    "hcenvlevel3s11",
+    "hcenvrate0s12",
+    "hcenvlevel0s12",
+    "hcenvrate1s12",
+    "hcenvlevel1s12",
+    "hcenvrate2s12",
+    "hcenvlevel2s12",
+    "hcenvrate3s12",
+    "hcenvlevel3s12",
+    "hcenvrate0s13",
+    "hcenvlevel0s13",
+    "hcenvrate1s13",
+    "hcenvlevel1s13",
+    "hcenvrate2s13",
+    "hcenvlevel2s13",
+    "hcenvrate3s13",
+    "hcenvlevel3s13",
+    "hcenvrate0s14",
+    "hcenvlevel0s14",
+    "hcenvrate1s14",
+    "hcenvlevel1s14",
+    "hcenvrate2s14",
+    "hcenvlevel2s14",
+    "hcenvrate3s14",
+    "hcenvlevel3s14",
+    "hcenvrate0s15",
+    "hcenvlevel0s15",
+    "hcenvrate1s15",
+    "hcenvlevel1s15",
+    "hcenvrate2s15",
+    "hcenvlevel2s15",
+    "hcenvrate3s15",
+    "hcenvlevel3s15",
+    "hcenvrate0s16",
+    "hcenvlevel0s16",
+    "hcenvrate1s16",
+    "hcenvlevel1s16",
+    "hcenvrate2s16",
+    "hcenvlevel2s16",
+    "hcenvrate3s16",
+    "hcenvlevel3s16",
+    "hcenvrate0s17",
+    "hcenvlevel0s17",
+    "hcenvrate1s17",
+    "hcenvlevel1s17",
+    "hcenvrate2s17",
+    "hcenvlevel2s17",
+    "hcenvrate3s17",
+    "hcenvlevel3s17",
+    "hcenvrate0s18",
+    "hcenvlevel0s18",
+    "hcenvrate1s18",
+    "hcenvlevel1s18",
+    "hcenvrate2s18",
+    "hcenvlevel2s18",
+    "hcenvrate3s18",
+    "hcenvlevel3s18",
+    "hcenvrate0s19",
+    "hcenvlevel0s19",
+    "hcenvrate1s19",
+    "hcenvlevel1s19",
+    "hcenvrate2s19",
+    "hcenvlevel2s19",
+    "hcenvrate3s19",
+    "hcenvlevel3s19",
+    "hcenvrate0s20",
+    "hcenvlevel0s20",
+    "hcenvrate1s20",
+    "hcenvlevel1s20",
+    "hcenvrate2s20",
+    "hcenvlevel2s20",
+    "hcenvrate3s20",
+    "hcenvlevel3s20",
+    "hcenvrate0s21",
+    "hcenvlevel0s21",
+    "hcenvrate1s21",
+    "hcenvlevel1s21",
+    "hcenvrate2s21",
+    "hcenvlevel2s21",
+    "hcenvrate3s21",
+    "hcenvlevel3s21",
+    "hcenvrate0s22",
+    "hcenvlevel0s22",
+    "hcenvrate1s22",
+    "hcenvlevel1s22",
+    "hcenvrate2s22",
+    "hcenvlevel2s22",
+    "hcenvrate3s22",
+    "hcenvlevel3s22",
+    "hcenvrate0s23",
+    "hcenvlevel0s23",
+    "hcenvrate1s23",
+    "hcenvlevel1s23",
+    "hcenvrate2s23",
+    "hcenvlevel2s23",
+    "hcenvrate3s23",
+    "hcenvlevel3s23",
+    "hcenvrate0s24",
+    "hcenvlevel0s24",
+    "hcenvrate1s24",
+    "hcenvlevel1s24",
+    "hcenvrate2s24",
+    "hcenvlevel2s24",
+    "hcenvrate3s24",
+    "hcenvlevel3s24",
+    "hcenvrate0s25",
+    "hcenvlevel0s25",
+    "hcenvrate1s25",
+    "hcenvlevel1s25",
+    "hcenvrate2s25",
+    "hcenvlevel2s25",
+    "hcenvrate3s25",
+    "hcenvlevel3s25",
+    "hcenvrate0s26",
+    "hcenvlevel0s26",
+    "hcenvrate1s26",
+    "hcenvlevel1s26",
+    "hcenvrate2s26",
+    "hcenvlevel2s26",
+    "hcenvrate3s26",
+    "hcenvlevel3s26",
+    "hcenvrate0s27",
+    "hcenvlevel0s27",
+    "hcenvrate1s27",
+    "hcenvlevel1s27",
+    "hcenvrate2s27",
+    "hcenvlevel2s27",
+    "hcenvrate3s27",
+    "hcenvlevel3s27",
+    "hcenvrate0s28",
+    "hcenvlevel0s28",
+    "hcenvrate1s28",
+    "hcenvlevel1s28",
+    "hcenvrate2s28",
+    "hcenvlevel2s28",
+    "hcenvrate3s28",
+    "hcenvlevel3s28",
+    "hcenvrate0s29",
+    "hcenvlevel0s29",
+    "hcenvrate1s29",
+    "hcenvlevel1s29",
+    "hcenvrate2s29",
+    "hcenvlevel2s29",
+    "hcenvrate3s29",
+    "hcenvlevel3s29",
+    "hcenvrate0s30",
+    "hcenvlevel0s30",
+    "hcenvrate1s30",
+    "hcenvlevel1s30",
+    "hcenvrate2s30",
+    "hcenvlevel2s30",
+    "hcenvrate3s30",
+    "hcenvlevel3s30",
+    "hcenvrate0s31",
+    "hcenvlevel0s31",
+    "hcenvrate1s31",
+    "hcenvlevel1s31",
+    "hcenvrate2s31",
+    "hcenvlevel2s31",
+    "hcenvrate3s31",
+    "hcenvlevel3s31",
+    "hcenvrate0s32",
+    "hcenvlevel0s32",
+    "hcenvrate1s32",
+    "hcenvlevel1s32",
+    "hcenvrate2s32",
+    "hcenvlevel2s32",
+    "hcenvrate3s32",
+    "hcenvlevel3s32",
+    "hcenvrate0s33",
+    "hcenvlevel0s33",
+    "hcenvrate1s33",
+    "hcenvlevel1s33",
+    "hcenvrate2s33",
+    "hcenvlevel2s33",
+    "hcenvrate3s33",
+    "hcenvlevel3s33",
+    "hcenvrate0s34",
+    "hcenvlevel0s34",
+    "hcenvrate1s34",
+    "hcenvlevel1s34",
+    "hcenvrate2s34",
+    "hcenvlevel2s34",
+    "hcenvrate3s34",
+    "hcenvlevel3s34",
+    "hcenvrate0s35",
+    "hcenvlevel0s35",
+    "hcenvrate1s35",
+    "hcenvlevel1s35",
+    "hcenvrate2s35",
+    "hcenvlevel2s35",
+    "hcenvrate3s35",
+    "hcenvlevel3s35",
+    "hcenvrate0s36",
+    "hcenvlevel0s36",
+    "hcenvrate1s36",
+    "hcenvlevel1s36",
+    "hcenvrate2s36",
+    "hcenvlevel2s36",
+    "hcenvrate3s36",
+    "hcenvlevel3s36",
+    "hcenvrate0s37",
+    "hcenvlevel0s37",
+    "hcenvrate1s37",
+    "hcenvlevel1s37",
+    "hcenvrate2s37",
+    "hcenvlevel2s37",
+    "hcenvrate3s37",
+    "hcenvlevel3s37",
+    "hcenvrate0s38",
+    "hcenvlevel0s38",
+    "hcenvrate1s38",
+    "hcenvlevel1s38",
+    "hcenvrate2s38",
+    "hcenvlevel2s38",
+    "hcenvrate3s38",
+    "hcenvlevel3s38",
+    "hcenvrate0s39",
+    "hcenvlevel0s39",
+    "hcenvrate1s39",
+    "hcenvlevel1s39",
+    "hcenvrate2s39",
+    "hcenvlevel2s39",
+    "hcenvrate3s39",
+    "hcenvlevel3s39",
+    "hcenvrate0s40",
+    "hcenvlevel0s40",
+    "hcenvrate1s40",
+    "hcenvlevel1s40",
+    "hcenvrate2s40",
+    "hcenvlevel2s40",
+    "hcenvrate3s40",
+    "hcenvlevel3s40",
+    "hcenvrate0s41",
+    "hcenvlevel0s41",
+    "hcenvrate1s41",
+    "hcenvlevel1s41",
+    "hcenvrate2s41",
+    "hcenvlevel2s41",
+    "hcenvrate3s41",
+    "hcenvlevel3s41",
+    "hcenvrate0s42",
+    "hcenvlevel0s42",
+    "hcenvrate1s42",
+    "hcenvlevel1s42",
+    "hcenvrate2s42",
+    "hcenvlevel2s42",
+    "hcenvrate3s42",
+    "hcenvlevel3s42",
+    "hcenvrate0s43",
+    "hcenvlevel0s43",
+    "hcenvrate1s43",
+    "hcenvlevel1s43",
+    "hcenvrate2s43",
+    "hcenvlevel2s43",
+    "hcenvrate3s43",
+    "hcenvlevel3s43",
+    "hcenvrate0s44",
+    "hcenvlevel0s44",
+    "hcenvrate1s44",
+    "hcenvlevel1s44",
+    "hcenvrate2s44",
+    "hcenvlevel2s44",
+    "hcenvrate3s44",
+    "hcenvlevel3s44",
+    "hcenvrate0s45",
+    "hcenvlevel0s45",
+    "hcenvrate1s45",
+    "hcenvlevel1s45",
+    "hcenvrate2s45",
+    "hcenvlevel2s45",
+    "hcenvrate3s45",
+    "hcenvlevel3s45",
+    "hcenvrate0s46",
+    "hcenvlevel0s46",
+    "hcenvrate1s46",
+    "hcenvlevel1s46",
+    "hcenvrate2s46",
+    "hcenvlevel2s46",
+    "hcenvrate3s46",
+    "hcenvlevel3s46",
+    "hcenvrate0s47",
+    "hcenvlevel0s47",
+    "hcenvrate1s47",
+    "hcenvlevel1s47",
+    "hcenvrate2s47",
+    "hcenvlevel2s47",
+    "hcenvrate3s47",
+    "hcenvlevel3s47",
+    "hcenvrate0s48",
+    "hcenvlevel0s48",
+    "hcenvrate1s48",
+    "hcenvlevel1s48",
+    "hcenvrate2s48",
+    "hcenvlevel2s48",
+    "hcenvrate3s48",
+    "hcenvlevel3s48",
+    "hcenvrate0s49",
+    "hcenvlevel0s49",
+    "hcenvrate1s49",
+    "hcenvlevel1s49",
+    "hcenvrate2s49",
+    "hcenvlevel2s49",
+    "hcenvrate3s49",
+    "hcenvlevel3s49",
+    "hcenvrate0s50",
+    "hcenvlevel0s50",
+    "hcenvrate1s50",
+    "hcenvlevel1s50",
+    "hcenvrate2s50",
+    "hcenvlevel2s50",
+    "hcenvrate3s50",
+    "hcenvlevel3s50",
+    "hcenvrate0s51",
+    "hcenvlevel0s51",
+    "hcenvrate1s51",
+    "hcenvlevel1s51",
+    "hcenvrate2s51",
+    "hcenvlevel2s51",
+    "hcenvrate3s51",
+    "hcenvlevel3s51",
+    "hcenvrate0s52",
+    "hcenvlevel0s52",
+    "hcenvrate1s52",
+    "hcenvlevel1s52",
+    "hcenvrate2s52",
+    "hcenvlevel2s52",
+    "hcenvrate3s52",
+    "hcenvlevel3s52",
+    "hcenvrate0s53",
+    "hcenvlevel0s53",
+    "hcenvrate1s53",
+    "hcenvlevel1s53",
+    "hcenvrate2s53",
+    "hcenvlevel2s53",
+    "hcenvrate3s53",
+    "hcenvlevel3s53",
+    "hcenvrate0s54",
+    "hcenvlevel0s54",
+    "hcenvrate1s54",
+    "hcenvlevel1s54",
+    "hcenvrate2s54",
+    "hcenvlevel2s54",
+    "hcenvrate3s54",
+    "hcenvlevel3s54",
+    "hcenvrate0s55",
+    "hcenvlevel0s55",
+    "hcenvrate1s55",
+    "hcenvlevel1s55",
+    "hcenvrate2s55",
+    "hcenvlevel2s55",
+    "hcenvrate3s55",
+    "hcenvlevel3s55",
+    "hcenvrate0s56",
+    "hcenvlevel0s56",
+    "hcenvrate1s56",
+    "hcenvlevel1s56",
+    "hcenvrate2s56",
+    "hcenvlevel2s56",
+    "hcenvrate3s56",
+    "hcenvlevel3s56",
+    "hcenvrate0s57",
+    "hcenvlevel0s57",
+    "hcenvrate1s57",
+    "hcenvlevel1s57",
+    "hcenvrate2s57",
+    "hcenvlevel2s57",
+    "hcenvrate3s57",
+    "hcenvlevel3s57",
+    "hcenvrate0s58",
+    "hcenvlevel0s58",
+    "hcenvrate1s58",
+    "hcenvlevel1s58",
+    "hcenvrate2s58",
+    "hcenvlevel2s58",
+    "hcenvrate3s58",
+    "hcenvlevel3s58",
+    "hcenvrate0s59",
+    "hcenvlevel0s59",
+    "hcenvrate1s59",
+    "hcenvlevel1s59",
+    "hcenvrate2s59",
+    "hcenvlevel2s59",
+    "hcenvrate3s59",
+    "hcenvlevel3s59",
+    "hcenvrate0s60",
+    "hcenvlevel0s60",
+    "hcenvrate1s60",
+    "hcenvlevel1s60",
+    "hcenvrate2s60",
+    "hcenvlevel2s60",
+    "hcenvrate3s60",
+    "hcenvlevel3s60",
+    "hcenvrate0s61",
+    "hcenvlevel0s61",
+    "hcenvrate1s61",
+    "hcenvlevel1s61",
+    "hcenvrate2s61",
+    "hcenvlevel2s61",
+    "hcenvrate3s61",
+    "hcenvlevel3s61",
+    "hcenvrate0s62",
+    "hcenvlevel0s62",
+    "hcenvrate1s62",
+    "hcenvlevel1s62",
+    "hcenvrate2s62",
+    "hcenvlevel2s62",
+    "hcenvrate3s62",
+    "hcenvlevel3s62",
+    "hcenvrate0s63",
+    "hcenvlevel0s63",
+    "hcenvrate1s63",
+    "hcenvlevel1s63",
+    "hcenvrate2s63",
+    "hcenvlevel2s63",
+    "hcenvrate3s63",
+    "hcenvlevel3s63",
+    "hcenvrate0s64",
+    "hcenvlevel0s64",
+    "hcenvrate1s64",
+    "hcenvlevel1s64",
+    "hcenvrate2s64",
+    "hcenvlevel2s64",
+    "hcenvrate3s64",
+    "hcenvlevel3s64",
     "--",                           // dummy -- is this "loudness sense select?"
     };
         
     public static final String[] addWaveHarmonicLoopParams = new String[]
     {
-    "hcenv1loop",
-    "hcenv2loop",
-    "hcenv3loop",
-    "hcenv4loop",
-    "hcenv5loop",
-    "hcenv6loop",
-    "hcenv7loop",
-    "hcenv8loop",
-    "hcenv9loop",
-    "hcenv10loop",
-    "hcenv11loop",
-    "hcenv12loop",
-    "hcenv13loop",
-    "hcenv14loop",
-    "hcenv15loop",
-    "hcenv16loop",
-    "hcenv17loop",
-    "hcenv18loop",
-    "hcenv19loop",
-    "hcenv20loop",
-    "hcenv21loop",
-    "hcenv22loop",
-    "hcenv23loop",
-    "hcenv24loop",
-    "hcenv25loop",
-    "hcenv26loop",
-    "hcenv27loop",
-    "hcenv28loop",
-    "hcenv29loop",
-    "hcenv30loop",
-    "hcenv31loop",
-    "hcenv32loop",
-    "hcenv33loop",
-    "hcenv34loop",
-    "hcenv35loop",
-    "hcenv36loop",
-    "hcenv37loop",
-    "hcenv38loop",
-    "hcenv39loop",
-    "hcenv40loop",
-    "hcenv41loop",
-    "hcenv42loop",
-    "hcenv43loop",
-    "hcenv44loop",
-    "hcenv45loop",
-    "hcenv46loop",
-    "hcenv47loop",
-    "hcenv48loop",
-    "hcenv49loop",
-    "hcenv50loop",
-    "hcenv51loop",
-    "hcenv52loop",
-    "hcenv53loop",
-    "hcenv54loop",
-    "hcenv55loop",
-    "hcenv56loop",
-    "hcenv57loop",
-    "hcenv58loop",
-    "hcenv59loop",
-    "hcenv60loop",
-    "hcenv61loop",
-    "hcenv62loop",
-    "hcenv63loop",
-    "hcenv64loop",
+    "hcenvloops1",
+    "hcenvloops2",
+    "hcenvloops3",
+    "hcenvloops4",
+    "hcenvloops5",
+    "hcenvloops6",
+    "hcenvloops7",
+    "hcenvloops8",
+    "hcenvloops9",
+    "hcenvloops10",
+    "hcenvloops11",
+    "hcenvloops12",
+    "hcenvloops13",
+    "hcenvloops14",
+    "hcenvloops15",
+    "hcenvloops16",
+    "hcenvloops17",
+    "hcenvloops18",
+    "hcenvloops19",
+    "hcenvloops20",
+    "hcenvloops21",
+    "hcenvloops22",
+    "hcenvloops23",
+    "hcenvloops24",
+    "hcenvloops25",
+    "hcenvloops26",
+    "hcenvloops27",
+    "hcenvloops28",
+    "hcenvloops29",
+    "hcenvloops30",
+    "hcenvloops31",
+    "hcenvloops32",
+    "hcenvloops33",
+    "hcenvloops34",
+    "hcenvloops35",
+    "hcenvloops36",
+    "hcenvloops37",
+    "hcenvloops38",
+    "hcenvloops39",
+    "hcenvloops40",
+    "hcenvloops41",
+    "hcenvloops42",
+    "hcenvloops43",
+    "hcenvloops44",
+    "hcenvloops45",
+    "hcenvloops46",
+    "hcenvloops47",
+    "hcenvloops48",
+    "hcenvloops49",
+    "hcenvloops50",
+    "hcenvloops51",
+    "hcenvloops52",
+    "hcenvloops53",
+    "hcenvloops54",
+    "hcenvloops55",
+    "hcenvloops56",
+    "hcenvloops57",
+    "hcenvloops58",
+    "hcenvloops59",
+    "hcenvloops60",
+    "hcenvloops61",
+    "hcenvloops62",
+    "hcenvloops63",
+    "hcenvloops64",
     };
         
         
@@ -5947,7 +6295,7 @@ return pos;
         if (key.startsWith("reverb")) return true;
         
         // wavekit is spit up into msb and lsb and will give incorrect values
-        if (key.contains("wavekit")) return true;
+        if (key.contains("dcowavekit")) return true;
         
         if (key.startsWith("source"))
             {
@@ -5956,12 +6304,12 @@ return pos;
             
             String removed = StringUtility.removePreambleAndFirstDigits(key, "source");
             if ((addWaveKitParamsToIndex.containsKey(removed) ||
-                    addWaveHCSoftParamsToIndex.containsKey(removed) ||
-                    addWaveHCLoudParamsToIndex.containsKey(removed) ||
+                    addWaveSoftHCParamsToIndex.containsKey(removed) ||
+                    addWaveLoudHCParamsToIndex.containsKey(removed) ||
                     addWaveFormantFilterParamsToIndex.containsKey(removed) ||
                     addWaveHarmonicEnvelopeParamsToIndex.containsKey(removed) ||
                     addWaveHarmonicLoopParamsToIndex.containsKey(removed)) &&               // it's a wavekit parameter
-                model.get("source" + source + "additive") == 0) // it's not an additive source, so shouldn't be there any more
+                model.get("source" + source + "dcoadditive") == 0) // it's not an additive source, so shouldn't be there any more
                 {
                 return true;
                 }

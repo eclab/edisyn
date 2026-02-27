@@ -89,21 +89,21 @@ public class EnvelopeDisplay extends JComponent implements Updatable, HasKey
     
     public String getKey() { return null; } // dunno if this is wise
     public String[] getKeys()
-    	{
-    	if (!getReadOnlyKeys()) return new String[0];
-    	ArrayList keys = new ArrayList();
-    	for(int i = 0; i < xKeys.length; i++)
-    		{
-    		if (xKeys[i] != null) keys.add(xKeys[i]);
-    		}
-    	for(int i = 0; i < yKeys.length; i++)
-    		{
-    		if (yKeys[i] != null) keys.add(yKeys[i]);
-    		}
-    	if (finalStageKey != null) keys.add(finalStageKey);
-    	if (sustainStageKey != null) keys.add(sustainStageKey);
-    	return (String[])(keys.toArray(new String[keys.size()]));
-    	}
+        {
+        if (!getReadOnlyKeys()) return new String[0];
+        ArrayList keys = new ArrayList();
+        for(int i = 0; i < xKeys.length; i++)
+            {
+            if (xKeys[i] != null) keys.add(xKeys[i]);
+            }
+        for(int i = 0; i < yKeys.length; i++)
+            {
+            if (yKeys[i] != null) keys.add(yKeys[i]);
+            }
+        if (finalStageKey != null) keys.add(finalStageKey);
+        if (sustainStageKey != null) keys.add(sustainStageKey);
+        return (String[])(keys.toArray(new String[keys.size()]));
+        }
     
     public void link(EnvelopeDisplay display)
         {

@@ -1309,6 +1309,7 @@ public class Library extends AbstractTableModel
                 Object[] data = null;
                 saveAll = (bank == ALL_PATCHES);
                 data = emitBank(bank, false);
+                System.err.println("LIBRARY SIZE " + ((byte[])data[0]).length);
                 if (data != null)
                     {
                     if (synth.tuple == null || synth.tuple.outReceiver == null)

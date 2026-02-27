@@ -2283,6 +2283,7 @@ public abstract class Synth extends JComponent implements Updatable
         valid (4) an error occurred when the receiver tried to send the data.  */
     public boolean tryToSendSysex(byte[] data)
         {
+        System.err.println("WRITE MIDI TO SYNTH: " + data.length);
         if (data == null || data.length == 0)
             return false;
         else if (!amActiveSynth())
@@ -2329,6 +2330,7 @@ public abstract class Synth extends JComponent implements Updatable
             try 
                 { 
                 SysexMessage message = new SysexMessage(data, data.length);
+                System.err.println("MESSAGE: " + message.getLength());
                 synchronized(midiSendLock)
                     {
                     int fragmentSize = getSysexFragmentSize();
@@ -2340,6 +2342,7 @@ public abstract class Synth extends JComponent implements Updatable
                         }
                     else
                         {
+                        System.err.println("DIVIDING? " + message.getLength());
                         MidiMessage[] messages = DividedSysex.create(message, fragmentSize);
                         for(int i = 0; i < messages.length; i++)
                             {

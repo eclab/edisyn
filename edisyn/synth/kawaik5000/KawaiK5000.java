@@ -311,129 +311,129 @@ public class KawaiK5000 extends Synth
     // Names of PCM waves to include in additive patches
     public static final String[] SR_WAVES = new String[]
     {
-"342 Piano Noise Attack",
-"343 EP Noise Attack",
-"344 Percus Noise Attack",
-"345 Dist Gtr Noise Attack",
-"346 Orch Noise Attack",
-"347 Flanged Noise Attack",
-"348 Saw Noise Attack",
-"349 Zipper Noise Attack",
-"350 Organ Noise Loop",
-"351 Violin Noise Loop",
-"352 Crystal Noise Loop",
-"353 Sax Breath Loop",
-"354 Panflute Noise Loop",
-"355 Pipe Noise Loop",
-"356 Saw Noise Loop",
-"357 Gorgo Noise Loop",
-"358 Enhancer Noise Loop",
-"359 Tabla Spect. Noise Loop",
-"360 Cave Spect. Noise Loop",
-"361 White Noise Loop",
-"362 Clavi Attack",
-"363 Digi EP Attack",
-"364 Glocken Attack",
-"365 Vibe Attack",
-"366 Marimba Attack",
-"367 Org Key Click",
-"368 Slap Bass Attack",
-"369 Folk Gtr Attack",
-"370 Gut Gtr Attack",
-"371 Dist Gtr Attack",
-"372 Clean Gtr Attack",
-"373 Muted Gtr Attack",
-"374 Cello & Violin Attack",
-"375 Pizz Violin Attack",
-"376 Pizz Dbl. Bass Attack",
-"377 Doo Attack",
-"378 Trombone Attack",
-"379 Brass Attack",
-"380 F.Horn1 Attack",
-"381 F.Horn2 Attack",
-"382 Flute Attack",
-"383 T.Sax Attack",
-"384 Shamisen Attack",
-"385 Voltage Attack",
-"386 BBDigi Attack",
-"387 BBDX Attack",
-"388 BBBlip Attack",
-"389 Techno Hit Attack",
-"390 Techno Attack",
-"391 X-Piano Attack",
-"392 Noisy Voise Loop",
-"393 Noisy Human Loop",
-"394 Ravoid Loop",
-"395 Hyper Loop",
-"396 Beef Loop",
-"397 Texture Loop",
-"398 MMBass Loop",
-"399 Syn PWM Cya",
-"400 Harpshichord Cyc",
-"401 Digi EP Cyc",
-"402 Soft EP Cyc",
-"403 Ep Bell Cyc",
-"404 Bandneon Cyc",
-"405 Chees Org Cyc",
-"406 Organ Cyc",
-"407 Oboe Cyc",
-"408 Crystal Cyc",
-"409 Syn Bass1 Cyc",
-"410 Syn Bass2 Cyc",
-"411 Syn Saw1 Cyc",
-"412 Svn Saw2 Cvq",
-"413 Syn Saw3 Cyc",
-"414 Syn Square1 Cyc",
-"415 Syn Square2 Cyc",
-"416 Syn Pulse1 Cyc",
-"417 Syn Pulse2 Cyc",
-"418 Pulse20 Cyc",
-"419 Pulse40 Cyc",
-"420 Nasty Cyc",
-"421 Mini Max Cyc",
-"422 Bottom Cyc",
-"423 > 64th Harmonics Cyc",
-"424 > 64th Harmonics Cyc",			// Is this a duplicate?
-"425 BD Attack",
-"426 Ana Kick",
-"427 SD Attack",
-"428 Tiny SD Attack",
-"429 Ana SD Attack",
-"430 Ana HHO Attack",
-"431 Simonzu Tom Attack",
-"432 Ride Cup Attack",
-"433 Cowbell Attack",
-"434 Conga Attack",
-"435 Conga Muted Attack",
-"436 Agogo Attack",
-"437 Castanet Attack",
-"438 Claves Attack",
-"439 Tambourine Attack",
-"440 JingleBell Attack",
-"441 BellTree Attack",
-"442 WindowChime Attack",
-"443 AtariGame Attack",
-"444 Rama Attack",
-"445 Udo Attack",
-"446 TablaNa Attack",
-"447 Voice Ou Attack",
-"448 HighQ Attack",
-"449 Super Q Attack",
-"450 Glass Attack",
-"451 Metal Attack",
-"452 Noise Attack",
-"453 Pop Attack",
-"454 Crash Loop",
-"455 Burner Loop",
-"456 Jet Engine Loop",
-"457 Omnibus Loop 1",
-"458 Omnibus Loop 2",
-"459 Omnibus Loop 3",
-"460 Omnibus Loop 4",
-"461 Omnibus Loop 5",
-"462 Omnibus Loop 6",
-"463 Omnibus Loop 7",
-"464 Omnibus Loop 8",
+    "342 Piano Noise Attack",
+    "343 EP Noise Attack",
+    "344 Percus Noise Attack",
+    "345 Dist Gtr Noise Attack",
+    "346 Orch Noise Attack",
+    "347 Flanged Noise Attack",
+    "348 Saw Noise Attack",
+    "349 Zipper Noise Attack",
+    "350 Organ Noise Loop",
+    "351 Violin Noise Loop",
+    "352 Crystal Noise Loop",
+    "353 Sax Breath Loop",
+    "354 Panflute Noise Loop",
+    "355 Pipe Noise Loop",
+    "356 Saw Noise Loop",
+    "357 Gorgo Noise Loop",
+    "358 Enhancer Noise Loop",
+    "359 Tabla Spect. Noise Loop",
+    "360 Cave Spect. Noise Loop",
+    "361 White Noise Loop",
+    "362 Clavi Attack",
+    "363 Digi EP Attack",
+    "364 Glocken Attack",
+    "365 Vibe Attack",
+    "366 Marimba Attack",
+    "367 Org Key Click",
+    "368 Slap Bass Attack",
+    "369 Folk Gtr Attack",
+    "370 Gut Gtr Attack",
+    "371 Dist Gtr Attack",
+    "372 Clean Gtr Attack",
+    "373 Muted Gtr Attack",
+    "374 Cello & Violin Attack",
+    "375 Pizz Violin Attack",
+    "376 Pizz Dbl. Bass Attack",
+    "377 Doo Attack",
+    "378 Trombone Attack",
+    "379 Brass Attack",
+    "380 F.Horn1 Attack",
+    "381 F.Horn2 Attack",
+    "382 Flute Attack",
+    "383 T.Sax Attack",
+    "384 Shamisen Attack",
+    "385 Voltage Attack",
+    "386 BBDigi Attack",
+    "387 BBDX Attack",
+    "388 BBBlip Attack",
+    "389 Techno Hit Attack",
+    "390 Techno Attack",
+    "391 X-Piano Attack",
+    "392 Noisy Voise Loop",
+    "393 Noisy Human Loop",
+    "394 Ravoid Loop",
+    "395 Hyper Loop",
+    "396 Beef Loop",
+    "397 Texture Loop",
+    "398 MMBass Loop",
+    "399 Syn PWM Cya",
+    "400 Harpshichord Cyc",
+    "401 Digi EP Cyc",
+    "402 Soft EP Cyc",
+    "403 Ep Bell Cyc",
+    "404 Bandneon Cyc",
+    "405 Chees Org Cyc",
+    "406 Organ Cyc",
+    "407 Oboe Cyc",
+    "408 Crystal Cyc",
+    "409 Syn Bass1 Cyc",
+    "410 Syn Bass2 Cyc",
+    "411 Syn Saw1 Cyc",
+    "412 Svn Saw2 Cvq",
+    "413 Syn Saw3 Cyc",
+    "414 Syn Square1 Cyc",
+    "415 Syn Square2 Cyc",
+    "416 Syn Pulse1 Cyc",
+    "417 Syn Pulse2 Cyc",
+    "418 Pulse20 Cyc",
+    "419 Pulse40 Cyc",
+    "420 Nasty Cyc",
+    "421 Mini Max Cyc",
+    "422 Bottom Cyc",
+    "423 > 64th Harmonics Cyc",
+    "424 > 64th Harmonics Cyc",                     // Is this a duplicate?
+    "425 BD Attack",
+    "426 Ana Kick",
+    "427 SD Attack",
+    "428 Tiny SD Attack",
+    "429 Ana SD Attack",
+    "430 Ana HHO Attack",
+    "431 Simonzu Tom Attack",
+    "432 Ride Cup Attack",
+    "433 Cowbell Attack",
+    "434 Conga Attack",
+    "435 Conga Muted Attack",
+    "436 Agogo Attack",
+    "437 Castanet Attack",
+    "438 Claves Attack",
+    "439 Tambourine Attack",
+    "440 JingleBell Attack",
+    "441 BellTree Attack",
+    "442 WindowChime Attack",
+    "443 AtariGame Attack",
+    "444 Rama Attack",
+    "445 Udo Attack",
+    "446 TablaNa Attack",
+    "447 Voice Ou Attack",
+    "448 HighQ Attack",
+    "449 Super Q Attack",
+    "450 Glass Attack",
+    "451 Metal Attack",
+    "452 Noise Attack",
+    "453 Pop Attack",
+    "454 Crash Loop",
+    "455 Burner Loop",
+    "456 Jet Engine Loop",
+    "457 Omnibus Loop 1",
+    "458 Omnibus Loop 2",
+    "459 Omnibus Loop 3",
+    "460 Omnibus Loop 4",
+    "461 Omnibus Loop 5",
+    "462 Omnibus Loop 6",
+    "463 Omnibus Loop 7",
+    "464 Omnibus Loop 8",
     };
 
 // Harmonic Constraints Edisyn provides
@@ -451,7 +451,7 @@ public class KawaiK5000 extends Synth
     public static final int MAJOR_SEVENTH = 11; 
     
 /*
-// Harmonic Mod Constraints
+// Harmonic Mod Constraints  -- maybe later
 public static final int SAWTOOTH = 0;
 public static final int SQUARE = 1;
 public static final int TRIANGLE = 2;
@@ -581,7 +581,6 @@ public static final int ALL_ON = 4;
         vbox.add(hbox);
         hbox = new HBox();
         makeAllEffectParameters();
-        //new Color[] { Style.COLOR_B(), Style.COLOR_A(), Style.COLOR_B(), Style.COLOR_A() });
         hbox.add(addEffect(0, Style.COLOR_B()));
         hbox.addLast(addEffect(1, Style.COLOR_A()));
         vbox.add(hbox);
@@ -718,10 +717,14 @@ public static final int ALL_ON = 4;
             }
         }
                         
-                
+    
+    
+    /// Associated files
     public String getDefaultResourceFileName() { return "KawaiK5000.init"; }
     public String getHTMLResourceFileName() { return "KawaiK5000.html"; }
 
+
+    // Asks the user for the bank and patch number 
     public boolean gatherPatchInfo(String title, Model change, boolean writing)
         {
         JComboBox bank = new JComboBox(BANKS);
@@ -761,6 +764,8 @@ public static final int ALL_ON = 4;
             }
         }
         
+
+    // Makes sure the patch name is valid 
     public String revisePatchName(String name)
         {
         name = super.revisePatchName(name);  // trim first time
@@ -827,6 +832,8 @@ public static final int ALL_ON = 4;
         return globalCategory;
         }
         
+        
+    /** Adds the Dials category */
     public JComponent addDials(Color color)
         {
         Category category = new Category(this, "Dials", color);
@@ -864,6 +871,7 @@ public static final int ALL_ON = 4;
         return category;
         }
 
+    /** Adds the sources category */
     public JComponent addSources(Color color)
         {
         Category category = new Category(this, "Sources", color);
@@ -911,7 +919,9 @@ public static final int ALL_ON = 4;
         category.add(hbox, BorderLayout.CENTER);
         return category;
         }
-        
+    
+    
+    /** Revises the tabs to reflect the current source types and number */
     public void updateTabs()
         {
         // Get the title of the current tab
@@ -963,6 +973,7 @@ public static final int ALL_ON = 4;
             }
         }
 
+    /** Adds the controllers category */
     public JComponent addControllers(Color color)
         {
         Category category = new Category(this, "Controllers", color);
@@ -1017,6 +1028,7 @@ public static final int ALL_ON = 4;
         return category;
         }
         
+    /** Makes the Effects category */
     public JComponent addEffectsGeneral(Color color)
         {
         Category category = new Category(this, "Effects", color);
@@ -1071,8 +1083,10 @@ public static final int ALL_ON = 4;
       public static final int[] REVERB_DEFAULT_5 = { 25, 5, 25, 15, 5, 40, 5, 20, 40, 20, 20 };
     */
         
+    // Box which holds the reverb dials, so we can rebuild them quickly
     HBox reverbBox = new HBox();
 
+    /** Builds the current reverb dials and puts them into reverbBox */
     public void rebuildReverb(Color color)
         {
         // This updates a lot of stuff, which sends out parameters that we don't want.
@@ -1135,6 +1149,7 @@ public static final int ALL_ON = 4;
         setSendMIDI(midi);
         }
  
+    /** Adds the Reverb category */
     public JComponent addReverb(Color color)
         {
         Category category = new Category(this, "Reverb", color);
@@ -1205,10 +1220,11 @@ public static final int ALL_ON = 4;
         return category;
         }
 
+    /** Adds the EQ category */
     public JComponent addEQ(Color color)
         {
         Category category = new Category(this, "EQ", color);
-category.makeDistributable("geqfreq");
+        category.makeDistributable("geqfreq");
 
         JComponent comp;
         String[] params;
@@ -1234,17 +1250,18 @@ category.makeDistributable("geqfreq");
         }
        
         
-        
+    
+    // All four effect boxes, so we can swap in new effects rapidly
     HBox effectBox[] = { new HBox(), new HBox(), new HBox(), new HBox() };
 
+    // The last dial created for effects -- we use this to compute the size of a
+    // horizontal strut or two if there aren't enough dials to fill out the effects category
     LabelledDial lastDial = null;           // will always be filled in by the time we need it
-        
-    //HBox allEffects[][] = new HBox[NUM_EFFECTS][EFFECT_PARAMETER_MINS[0].length];
-        
-    public void makeAllEffectParameters()              // ugh this is expensive
+    
+    /** Prebuilds all the effect parameters */
+    public void makeAllEffectParameters()
         {
         int numEffectTypes = EFFECT_PARAMETER_MINS[0].length;
-        //allEffects = new HBox[NUM_EFFECTS][numEffectTypes];
         for(int i = 0; i < NUM_EFFECTS; i++)
             {
             for(int j = 0; j < numEffectTypes; j++)
@@ -1254,6 +1271,8 @@ category.makeDistributable("geqfreq");
             }
         }
         
+    /** Prebuilds the effect parameter for the given effect number (1-4) and type.
+        This does not create any widgets, so it's pretty fast.  */
     public void makeEffectParameters(int effect, int type)
         {
         for(int i = 0; i < 5; i++)
@@ -1294,24 +1313,19 @@ category.makeDistributable("geqfreq");
         }
  
  
- 	// EFFECT COMPACTING.
- 	// My code follows the effects table on Page 123 of the K5000 manual.  Certain effects in this table
- 	// have holes in their parameters.  My code also has holes.  However it turns out that in both the
- 	// patch format and in the individual parameter sysex, these holes are compacted; thus if there is a
- 	// missing parameter 3, then parameter 4 takes its place, and parameter 5 takes 4's place; and there
- 	// is nothing for parameter 5.  Had I known these holes were compacted I would have shifted everything,
- 	// but it's too late for that.  So I have to compensate for it in three places:  (1) in the display in
- 	// the GUI (I compact the parameters to look better) (2) in the parameter sysex, and (3) in emitting
- 	// and parsing patches.
+    // EFFECT COMPACTING.
+    // My code follows the effects table on Page 123 of the K5000 manual.  Certain effects in this table
+    // have holes in their parameters.  My code also has holes.  However it turns out that in both the
+    // patch format and in the individual parameter sysex, these holes are compacted; thus if there is a
+    // missing parameter 3, then parameter 4 takes its place, and parameter 5 takes 4's place; and there
+    // is nothing for parameter 5.  Had I known these holes were compacted I would have shifted everything,
+    // but it's too late for that.  So I have to compensate for it in three places:  (1) in the display in
+    // the GUI (I compact the parameters to look better) (2) in the parameter sysex, and (3) in emitting
+    // and parsing patches.
  
+    /** Builds effect #effect for the given type */
     public HBox buildEffect(int effect, int type, Color color)
         {
-        /*
-          if (allEffects[effect][type] != null)
-          {
-          return allEffects[effect][type];
-          }
-        */
         
         JComponent comp;
         String[] params;
@@ -1378,19 +1392,19 @@ category.makeDistributable("geqfreq");
                         // The others are fairly easy.
                         if (max == 1)
                             {
-                            if (type == 28)	// rotary
-                            	{
-	                            return (val == 0 ? "Slow" : "Fast");
-                            	}
-                            else				// all else
-                            	{
-	                            return (val == 0 ? "Sin" : "Tri");
-	                            }
+                            if (type == 28)     // rotary
+                                {
+                                return (val == 0 ? "Slow" : "Fast");
+                                }
+                            else                                // all else
+                                {
+                                return (val == 0 ? "Sin" : "Tri");
+                                }
                             }
                         else if (max == 24)
-                        	{
-                        	return "" + (max - 12) + "dB";
-                        	}
+                            {
+                            return "" + (max - 12) + "dB";
+                            }
                         else if (max == 76)
                             {
                             return "" + (val - 64) + EFFECT_PARAMETER_UNITS[_i][type];
@@ -1433,14 +1447,14 @@ category.makeDistributable("geqfreq");
             hbox.add(Strut.makeStrut(lastDial));
             }
 
-        //allEffects[effect][type] = hbox;        
         return hbox;
         }
  
+    /** Adds an effect category.  */
     public JComponent addEffect(final int effect, Color color)
         {
         Category category = new Category(this, "Effect " + (effect + 1), color);
-category.makePasteable("effect");
+        category.makePasteable("effect");
 
         JComponent comp;
         String[] params;
@@ -1476,16 +1490,17 @@ category.makePasteable("effect");
         return category;
         }
         
+    // Triggers the listeners on the given key without changing it.  We need this in the Execute button in the Morf category
     void touch(String key)
-    	{
-    	getModel().set(key, getModel().get(key));
-    	}
-    	
-    	
+        {
+        getModel().set(key, getModel().get(key));
+        }
+        
+    /** Adds the Morf category */
     public JComponent addMorf(int source, Color color)
         {
         Category category = new Category(this, "Morf", color);
-category.makePasteable("source");
+        category.makePasteable("source");
         JComponent comp;
         String[] params;
         HBox hbox = new HBox();
@@ -1493,11 +1508,11 @@ category.makePasteable("source");
         
         /// MORF
         
-    	// We no longer have a checkbox for this, but it's still a sysex parameter for some
-    	// reason.  So we have to include it as a parameter here so it can be randomized
-    	// arbitrarily. 
-      // model.set("source" + source + "morfflag", 0);
-       //model.setMinMax("source" + source + "morfflag", 0, 1);
+        // We no longer have a checkbox for this, but it's still a sysex parameter for some
+        // reason.  So we have to include it as a parameter here so it can be randomized
+        // arbitrarily. 
+        // model.set("source" + source + "morfflag", 0);
+        //model.setMinMax("source" + source + "morfflag", 0, 1);
 
         PushButton doMorph = new PushButton("Execute")
             {
@@ -1505,32 +1520,32 @@ category.makePasteable("source");
                 {
                 byte[] exec = new byte[] { (byte)0xF0, 0x40, (byte)getChannelOut(), 0x10, 0x00, 0x0a, 0x02, 0x46, (byte)(source - 1), 0x00, 0x00, 0x00, 0x01, (byte)0xF7 };
 
-				// Send all the parameters for Morf to make sure the synth has the latest
-				touch("source" + source + "morfloop");
-				touch("source" + source + "morfhc1patch");
-				touch("source" + source + "morfhc2patch");
-				touch("source" + source + "morfhc3patch");
-				touch("source" + source + "morfhc4patch");
-				touch("source" + source + "morfhc1source");
-				touch("source" + source + "morfhc2source");
-				touch("source" + source + "morfhc3source");
-				touch("source" + source + "morfhc4source");
-				touch("source" + source + "morfhetime1");
-				touch("source" + source + "morfhetime2");
-				touch("source" + source + "morfhetime3");
-				touch("source" + source + "morfhetime4");
-				touch("source" + source + "morfflag");		// just in case
-				
-				// The K5000 has some non-morf harmonics parameters on its Morf screen for some reason.
-				// So just in case I am also sending all the non-morf harmonics parameters as well in case
-				// they are important to properly performing a morf
-				touch("source" + source + "harmgroup");
-				touch("source" + source + "harmtotalgain");
-				touch("source" + source + "harmkstogain");
-				touch("source" + source + "harmbalancevelocurve");
-				touch("source" + source + "harmbalancevelodepth");
+                // Send all the parameters for Morf to make sure the synth has the latest
+                touch("source" + source + "morfloop");
+                touch("source" + source + "morfhc1patch");
+                touch("source" + source + "morfhc2patch");
+                touch("source" + source + "morfhc3patch");
+                touch("source" + source + "morfhc4patch");
+                touch("source" + source + "morfhc1source");
+                touch("source" + source + "morfhc2source");
+                touch("source" + source + "morfhc3source");
+                touch("source" + source + "morfhc4source");
+                touch("source" + source + "morfhetime1");
+                touch("source" + source + "morfhetime2");
+                touch("source" + source + "morfhetime3");
+                touch("source" + source + "morfhetime4");
+                touch("source" + source + "morfflag");          // just in case
+                                
+                // The K5000 has some non-morf harmonics parameters on its Morf screen for some reason.
+                // So just in case I am also sending all the non-morf harmonics parameters as well in case
+                // they are important to properly performing a morf
+                touch("source" + source + "harmgroup");
+                touch("source" + source + "harmtotalgain");
+                touch("source" + source + "harmkstogain");
+                touch("source" + source + "harmbalancevelocurve");
+                touch("source" + source + "harmbalancevelodepth");
 
-				// execute
+                // execute
                 try 
                     {
                     tryToSendSysex(exec);
@@ -1540,7 +1555,7 @@ category.makePasteable("source");
             };
         vbox.add(doMorph);
 
-		/// FIXME: The Docs and the machine disagree on this....                
+        /// FIXME: The Docs and the machine disagree on this....                
         params = ENV_LOOPS;
         comp = new Chooser("P3->P2 Loop", this, "source" + source + "morfloop", params);
 
@@ -1615,17 +1630,19 @@ category.makePasteable("source");
         
         vbox = new VBox();
         comp = new CheckBox("Show Morf", this, "source" + source + "morfflag");
-		vbox.add(comp);
-		hbox.add(vbox);
+        vbox.add(comp);
+        hbox.add(vbox);
                 
         category.add(hbox, BorderLayout.CENTER);
         return category;
         }
  
-     public JComponent addHarmonics(int source, Color color)
+ 
+    /** Adds the Harmonics category */
+    public JComponent addHarmonics(int source, Color color)
         {
         Category category = new Category(this, "Harmonics", color);
-category.makePasteable("source" + source);
+        category.makePasteable("source" + source);
 
         JComponent comp;
         String[] params;
@@ -1659,176 +1676,12 @@ category.makePasteable("source" + source);
         return category;
         }       
   
-        
-/*    public JComponent addHarmonics(int source, Color color)
-        {
-        Category category = new Category(this, "Harmonics", color);
-
-        JComponent comp;
-        String[] params;
-        HBox hbox = new HBox();
-        VBox vbox = new VBox();
-        
-        VBox morfv = new VBox();
-        VBox normv = new VBox();
-        HBox morfh = new HBox();
-        HBox normh = new HBox();
-
-        comp = new CheckBox("MORF", this, "source" + source + "morfflag")
-            {
-            public void update(String key, Model model)
-                {
-                super.update(key, model);
-                vbox.remove(normv);
-                vbox.remove(morfv);
-                hbox.remove(normh);
-                hbox.remove(morfh);
-                if (model.get(key) == 0)
-                    {
-                    vbox.add(normv);
-                    hbox.add(normh);
-                    }
-                else
-                    {
-                    vbox.add(morfv);
-                    hbox.add(morfh);
-                    }
-                vbox.revalidate();
-                hbox.revalidate();
-                hbox.repaint();
-                }
-            };
-        vbox.add(comp);
-        hbox.add(vbox);
-            
-            
-        /// NON-MORF
-
-        params = HARMONIC_GROUPS;
-        comp = new Chooser("Harmonic Group", this, "source" + source + "harmgroup", params);
-        normv.add(comp);
-
-        normh.add(Strut.makeHorizontalStrut(8));
-
-        comp = new LabelledDial("Gain", this, "source" + source + "harmtotalgain", color, 1, 63);
-        normh.add(comp);
-
-        comp = new LabelledDial("KS to Gain", this, "source" + source + "harmkstogain", color, 1, 127, 64);
-        normh.add(comp);
-
-        comp = new LabelledDial("Balance Vel. Curve", this, "source" + source + "harmbalancevelocurve", color, 0, 11);
-        normh.add(comp);
-
-        comp = new LabelledDial("Balance Vel. Depth", this, "source" + source + "harmbalancevelodepth", color, 0, 127);
-        normh.add(comp);
-
-
-        /// MORF
-
-		/// FIXME: The Docs and the machine disagree on this....                
-        params = ENV_LOOPS;
-        comp = new Chooser("P3->P2 Loop", this, "source" + source + "morfloop", params);
-
-//        comp = new CheckBox("P3->P2 Loop", this, "source" + source + "morfloop");
-        morfv.add(comp);
-
-        comp = new LabelledDial("HC1 Patch", this, "source" + source + "morfhc1patch", color, 0, 127, -1);
-        morfh.add(comp);
-                
-        comp = new LabelledDial("HC2 Patch", this, "source" + source + "morfhc2patch", color, 0, 127, -1);
-        morfh.add(comp);
-                
-        comp = new LabelledDial("HC3 Patch", this, "source" + source + "morfhc3patch", color, 0, 127, -1);
-        morfh.add(comp);
-                
-        comp = new LabelledDial("HC4 Patch", this, "source" + source + "morfhc4patch", color, 0, 127, -1);
-        morfh.add(comp);
-                
-        comp = new LabelledDial("HC1 Source", this, "source" + source + "morfhc1source", color, 0, 11)
-            {
-            public String map(int val)
-                {
-                if (val < 6) return "<html><font size=\"-1\">Soft&nbsp;" + (val + 1);
-                else return "<html><font size=\"-1\">Loud&nbsp;" + (val - 5) + "</font></html>";
-                }
-            };
-        morfh.add(comp);
-                
-        comp = new LabelledDial("HC2 Source", this, "source" + source + "morfhc2source", color, 0, 11)
-            {
-            public String map(int val)
-                {
-                if (val < 6) return "<html><font size=\"-1\">Soft&nbsp;" + (val + 1) + "</font></html>";
-                else return "<html><font size=\"-1\">Loud&nbsp;" + (val - 5) + "</font></html>";
-                }
-            };
-        morfh.add(comp);
-                
-        comp = new LabelledDial("HC3 Source", this, "source" + source + "morfhc3source", color, 0, 11)
-            {
-            public String map(int val)
-                {
-                if (val < 6) return "<html><font size=\"-1\">Soft&nbsp;" + (val + 1) + "</font></html>";
-                else return "<html><font size=\"-1\">Loud&nbsp;" + (val - 5) + "</font></html>";
-                }
-            };
-        morfh.add(comp);
-                
-        comp = new LabelledDial("HC4 Source", this, "source" + source + "morfhc4source", color, 0, 11)
-            {
-            public String map(int val)
-                {
-                if (val < 6) return "<html><font size=\"-1\">Soft&nbsp;" + (val + 1) + "</font></html>";
-                else return "<html><font size=\"-1\">Loud&nbsp;" + (val - 5) + "</font></html>";
-                }
-            };
-        morfh.add(comp);
-
-        comp = new LabelledDial("Time 1", this, "source" + source + "morfhetime1", color, 0, 127);
-        morfh.add(comp);
-
-        comp = new LabelledDial("Time 2", this, "source" + source + "morfhetime2", color, 0, 127);
-        morfh.add(comp);
-
-        comp = new LabelledDial("Time 3", this, "source" + source + "morfhetime3", color, 0, 127);
-        morfh.add(comp);
-
-        comp = new LabelledDial("Time 4", this, "source" + source + "morfhetime4", color, 0, 127);
-        morfh.add(comp);
-        
-        PushButton doMorph = new PushButton("Execute")
-            {
-            public void perform()
-                {
-                byte[] exec = new byte[] { (byte)0xF0, 0x40, (byte)getChannelOut(), 0x10, 0x00, 0x0a, 0x02, 0x46, (byte)(source - 1), 0x00, 0x00, 0x00, 0x01, (byte)0xF7 };
-
-                try 
-                    {
-                    tryToSendSysex(exec);
-                    }
-                catch (Exception e) { Synth.handleException(e); }
-                }
-            };
-                
-        VBox doMorfBox = new VBox();
-        doMorfBox.add(doMorph);
-        morfh.add(doMorfBox);
-                
-        vbox.add(normv);
-        hbox.add(normh);
-                
-        hbox.revalidate();
-        hbox.repaint(); 
-
-        category.add(hbox, BorderLayout.CENTER);
-        return category;
-        }
-        */
-        
+    
+    /** Adds the Formant category -- not the formants themselves. */    
     public JComponent addFormant(int source, Color color)
         {
         Category category = new Category(this, "Formant", color);
-category.makePasteable("source");
+        category.makePasteable("source");
 
         JComponent comp;
         String[] params;
@@ -1951,13 +1804,13 @@ category.makePasteable("source");
             new String[] { null, "source" + source + "formantattacklevel", "source" + source + "formantdecay1level", "source" + source + "formantdecay2level", "source" + source + "formantdecay2level", "source" + source + "formantreleaselevel"},
             new double[] { 0, 1.0 / 5 / 127.0, 1.0 / 5 / 127.0, 1.0 / 5 / 127.0, 1.0 / 5, 1.0 / 5 / 127.0 },
             new double[] { 1.0 / 126, 1.0 / 126, 1.0 / 126, 1.0 / 126, 1.0 / 126, 1.0 / 126 })
-            	{
-            	public double preprocessXKey(int index, String key, double value)
-            		{
-            		if (index == 6) return value;		// it's the sustain
-            		else return 127.0 - value;		// rates are flipped from other envelopes, grrr
-            		}
-            	};
+            {
+            public double preprocessXKey(int index, String key, double value)
+                {
+                if (index == 6) return value;           // it's the sustain
+                else return 127.0 - value;              // rates are flipped from other envelopes, grrr
+                }
+            };
         disp.setAxis(63 / 127.0);               // dunno if this will work, I may be off by a pixel
         envh.addLast(disp);
 
@@ -1969,10 +1822,11 @@ category.makePasteable("source");
         }
                 
                         
+    /** Adds the per-source "General" category. */    
     public JComponent addGeneral(int source, Color color)
         {
         Category category = new Category(this, "General", color);
-category.makePasteable("source");
+        category.makePasteable("source");
         JComponent comp;
         String[] params;
         HBox hbox = new HBox();
@@ -2013,7 +1867,6 @@ category.makePasteable("source");
         hbox.add(comp);
 
         comp = new LabelledDial("Pitch Bend", this, "source" + source + "generalbenderpitch", color, 0, 24);
-//        ((LabelledDial)comp).addAdditionalLabel("Bend");
         hbox.add(comp);
 
         comp = new LabelledDial("Key On Delay", this, "source" + source + "generalkeyondelay", color, 0, 127);
@@ -2048,11 +1901,12 @@ category.makePasteable("source");
         return category;
         }
     
-    	
+        
+    /** Adds the per-source "Control" category. */    
     public JComponent addControl(int source, Color color)
         {
         Category category = new Category(this, "Control", color);
-category.makePasteable("source");
+        category.makePasteable("source");
 
         JComponent comp;
         String[] params;
@@ -2152,10 +2006,11 @@ category.makePasteable("source");
         return category;
         }
 
+    /** Adds the per-source "DCO" category. */    
     public JComponent addDCO(int source, Color color)
         {
         Category category = new Category(this, "DCO", color);
-category.makePasteable("source");
+        category.makePasteable("source");
 
         JComponent comp;
         String[] params;
@@ -2197,16 +2052,16 @@ category.makePasteable("source");
         comp = new LabelledDial("Fixed", this, "source" + source + "dcofixedkey", color, 0, 108 - 20)
             {
             public String map(int val) 
-            	{ 
-            	// A very curious keymap  -- the range actually goes 0 = off, 21 = A-1, ..., 108 = C7
-            	// I am condensing it here to a consistent range of 0 = off, 1 = A-1, 108 - 20 = C7
-            	// But we have to deal with it in emitting and parsing
-            	if (val == 0) return "Off";
-            	if (val == 1) return "A-1";
-            	if (val == 2) return "Bb-1";
-            	if (val == 3) return "B-1";
-            	return KEYS[(val - 4) % 12] + (val - 4) / 12;
-            	}
+                { 
+                // A very curious keymap  -- the range actually goes 0 = off, 21 = A-1, ..., 108 = C7
+                // I am condensing it here to a consistent range of 0 = off, 1 = A-1, 108 - 20 = C7
+                // But we have to deal with it in emitting and parsing
+                if (val == 0) return "Off";
+                if (val == 1) return "A-1";
+                if (val == 2) return "Bb-1";
+                if (val == 3) return "B-1";
+                return KEYS[(val - 4) % 12] + (val - 4) / 12;
+                }
             };
         ((LabelledDial)comp).addAdditionalLabel("Key");
         hbox.add(comp);
@@ -2221,10 +2076,12 @@ category.makePasteable("source");
         return category;
         }
 
+
+    /** Adds the per-source "PitchEnv" category. */    
     public JComponent addPitchEnv(int source, Color color)
         {
-        Category category = new Category(this, "Pitch Env", color);
-category.makePasteable("source");
+        Category category = new Category(this, "Pitch Envelope", color);
+        category.makePasteable("source");
 
         JComponent comp;
         String[] params;
@@ -2267,10 +2124,12 @@ category.makePasteable("source");
         return category;
         }
 
+
+    /** Adds the per-source "DCF" category. */    
     public JComponent addDCF(int source, Color color)
         {
         Category category = new Category(this, "DCF", color);
-category.makePasteable("source");
+        category.makePasteable("source");
 
         JComponent comp;
         String[] params;
@@ -2318,10 +2177,11 @@ category.makePasteable("source");
         return category;
         }
 
+    /** Adds the per-source "DCF Env" category. */    
     public JComponent addDCFEnv(int source, Color color)
         {
-        Category category = new Category(this, "DCF Env", color);
-category.makePasteable("source");
+        Category category = new Category(this, "DCF Envelope", color);
+        category.makePasteable("source");
 
         JComponent comp;
         String[] params;
@@ -2385,10 +2245,12 @@ category.makePasteable("source");
         }
 
 
+
+    /** Adds the per-source "DCA" category. */    
     public JComponent addDCA(int source, Color color)
         {
         Category category = new Category(this, "DCA", color);
-category.makePasteable("source");
+        category.makePasteable("source");
 
         JComponent comp;
         String[] params;
@@ -2414,10 +2276,11 @@ category.makePasteable("source");
         }
 
 
+    /** Adds the per-source "DCA Envelope" category. */    
     public JComponent addDCAEnv(int source, Color color)
         {
-        Category category = new Category(this, "DCA Env", color);
-category.makePasteable("source");
+        Category category = new Category(this, "DCA Envelope", color);
+        category.makePasteable("source");
 
         JComponent comp;
         String[] params;
@@ -2473,21 +2336,23 @@ category.makePasteable("source");
         hbox.add(comp);
 
         comp = new LabelledDial("KS->Env", this, "source" + source + "envdcakslevel", color, 1, 127, 64);
-               ((LabelledDial)comp).addAdditionalLabel("Level");
+        ((LabelledDial)comp).addAdditionalLabel("Level");
         hbox.add(comp);
 
         comp = new LabelledDial("Velo->Env", this, "source" + source + "envdcavelolevel", color, 0, 63);
-		((LabelledDial)comp).addAdditionalLabel("Level");
+        ((LabelledDial)comp).addAdditionalLabel("Level");
         hbox.add(comp);
 
         category.add(hbox, BorderLayout.CENTER);
         return category;
         }
 
+
+    /** Adds the per-source "LFO" category. */    
     public JComponent addLFO(int source, Color color)
         {
         Category category = new Category(this, "LFO", color);
-category.makePasteable("source");
+        category.makePasteable("source");
 
         JComponent comp;
         String[] params;
@@ -2506,35 +2371,27 @@ category.makePasteable("source");
         hbox.add(comp);
 
         comp = new LabelledDial("Fade In Time", this, "source" + source + "lfofadeintime", color, 0, 127);
-//        ((LabelledDial)comp).addAdditionalLabel("Time");
         hbox.add(comp);
 
         comp = new LabelledDial("Fade In to Speed", this, "source" + source + "lfofadeintospeed", color, 0, 63);
-//        ((LabelledDial)comp).addAdditionalLabel("To Speed");
         hbox.add(comp);
 
         comp = new LabelledDial("Pitch Vibrato", this, "source" + source + "lfopitchdepth", color, 0, 63);
-//        ((LabelledDial)comp).addAdditionalLabel("Depth");
         hbox.add(comp);
 
         comp = new LabelledDial("KS->Vibrato", this, "source" + source + "lfopitchks", color, 1, 127, 64);
-//        ((LabelledDial)comp).addAdditionalLabel("KS");
         hbox.add(comp);
 
         comp = new LabelledDial("DCF Growl", this, "source" + source + "lfodcfdepth", color, 0, 63);
-//        ((LabelledDial)comp).addAdditionalLabel("Depth");
         hbox.add(comp);
 
         comp = new LabelledDial("KS->Growl", this, "source" + source + "lfodcfks", color, 1, 127, 64);
-//        ((LabelledDial)comp).addAdditionalLabel("KS");
         hbox.add(comp);
 
         comp = new LabelledDial("DCA Tremelo", this, "source" + source + "lfodcadepth", color, 0, 63);
-//        ((LabelledDial)comp).addAdditionalLabel("Depth");
         hbox.add(comp);
 
         comp = new LabelledDial("KS->Tremelo", this, "source" + source + "lfodcaks", color, 1, 127, 64);
-//        ((LabelledDial)comp).addAdditionalLabel("KS");
         hbox.add(comp);
 
         category.add(hbox, BorderLayout.CENTER);
@@ -2542,18 +2399,24 @@ category.makePasteable("source");
         }
 
 
+
+    // Formant widths, heights, and associated parameters
     static final double[] FORMANT_WIDTHS = new double[128];
     static final double[] FORMANT_HEIGHTS = new double[128];
     static final String[][] FORMANT_STRINGS = new String[6][128];
 
+    // Harmonic and harmonic envelopes widths, heights, envelope level heights and loop heights
     static final double[] HC_WIDTHS = new double[64];
     static final double[] HC_HEIGHTS = new double[64];
     static final double[] LEVEL_HEIGHTS = new double[64];
     static final double[] LOOP_HEIGHTS = new double[64];
 
+    // Associated harmonic parameters
     static final String[][] HC_SOFT_STRINGS = new String[6][64];
     static final String[][] HC_LOUD_STRINGS = new String[6][64];
-                
+          
+    // Prebuild all the heights, widths, and parameters for various envelopes so they can 
+    // be reused many times.     
     static
         {
         for(int i = 0; i < FORMANT_HEIGHTS.length; i++) FORMANT_HEIGHTS[i] = 1.0 / 127.0;
@@ -2589,12 +2452,12 @@ category.makePasteable("source");
             }
         }
                         
-    
+    /** Add the per-source Formant Bands category */
     public JComponent addFormantDisplay(int source, Color color)
         {
         Category category = new Category(this, "Formant Bands", color);
-category.makeDistributable("source");
-category.makePasteable("source");
+        category.makeDistributable("source");
+        category.makePasteable("source");
 
         JComponent comp;
         String[] params;
@@ -2764,11 +2627,12 @@ category.makePasteable("source");
         }
 
 
+    /** Add the per-source Harmonics category, both Soft and Loud */
     public JComponent addHarmonicDisplay(int source, boolean soft, Color color)
         {
         Category category = new Category(this, (soft ? "Soft " : "Loud ") + "Harmonics", color);
-category.makeDistributable("source" + source);
-category.makePasteable("source" + source);
+        category.makeDistributable("source" + source);
+        category.makePasteable("source" + source);
 
         JComponent comp;
         String[] params;
@@ -2942,19 +2806,26 @@ category.makePasteable("source" + source);
 
 
 
+    // Are we currently changing the parameters from within an envelope display?
     boolean envelopeSetting;
+    // Are we currently changing the highlight number parameter?
     boolean highlightSetting;
+    // Do we permit the user to change parameters from within an envelope display?  This is set using a menu option.
     boolean allowUpdateFromMouse = false;
-        
-    EnvelopeDisplay envelopeDisplays[][] = new EnvelopeDisplay[6][9];
+
+    // The 9 parts to a harmonics envelope        
     static final String[] PARTS = { "rate0", "level0", "rate1", "level1", "rate2", "level2", "rate3", "level3", "loop" };
-        
+    // All envelope displays by SOURCE, then PART 
+    EnvelopeDisplay envelopeDisplays[][] = new EnvelopeDisplay[6][9];
+    // The reduced border around a harmonics envelope, so we can cram 'em on the screen    
     public static final int BORDER = 8;
+    
+    /** Builds a harmonic envelope display, given a source and part, plus a parameter for the part */ 
     public JComponent addHarmonicEnvelopeDisplay(int source, int partVal, String part, String title, Color color)
         {
         Category category = new Category(this, title, color);
-category.makeDistributable("source" + source);
-category.makePasteable("source" + source);
+        category.makeDistributable("source" + source);
+        category.makePasteable("source" + source);
 
         final String[] keys = new String[64];
         JComponent comp;
@@ -2995,7 +2866,7 @@ category.makePasteable("source" + source);
                         
             public void updateFromMouse(double x, double y, boolean continuation, MouseEvent evt)
                 {
-            	if (!mouseDown && !allowUpdateFromMouse) return;
+                if (!mouseDown && !allowUpdateFromMouse) return;
 
                 if (x < 0) x = 0;
                 else if (x > 1) x = 1.0;
@@ -3017,7 +2888,7 @@ category.makePasteable("source" + source);
                     hc = lastHc;
                     }
                                         
-				lastHc = hc;
+                lastHc = hc;
                                         
                 if (!constrainTo(hc))
                     return;
@@ -3037,7 +2908,7 @@ category.makePasteable("source" + source);
 
             public void updateHighlightIndex(int index)
                 {
-                 if (!mouseDown && !allowUpdateFromMouse) return;
+                if (!mouseDown && !allowUpdateFromMouse) return;
                
                 envelopeSetting = true;
                 boolean push = undo.getWillPush();
@@ -3105,6 +2976,7 @@ category.makePasteable("source" + source);
         return category;
         }
     
+    // Unique constants for each harmonic display 
     public static final int DISPLAY_RATE_0 = 0;
     public static final int DISPLAY_LEVEL_0 = 1;
     public static final int DISPLAY_RATE_1 = 2;
@@ -3115,6 +2987,7 @@ category.makePasteable("source" + source);
     public static final int DISPLAY_LEVEL_3 = 7;
     public static final int DISPLAY_LOOP = 8;
     
+    // Update the harmonic displays, except possibly one of them, in response to changing a parameter
     void updateEnvelopeDisplays(int source, int index, int except)
         {
         source--;
@@ -3130,6 +3003,7 @@ category.makePasteable("source" + source);
             }
         }
         
+    // Return the current highlight index for a given envelope display for a given source and part
     int getHighlightIndex(int source, int part)
         {
         source--;
@@ -3141,6 +3015,7 @@ category.makePasteable("source" + source);
         else return EnvelopeDisplay.NO_HIGHLIGHT;
         }
     
+    /** Adds the per-source harmonics envelope header */
     public JComponent addHarmonicsEnvelopeHeader(int source, Color color)
         {
         Category category = new Category(this, "Harmonics Envelope", color);
@@ -3153,11 +3028,11 @@ category.makePasteable("source" + source);
         comp = new LabelledDial("Number", this, "source" + source + "hcenv" + "number", color, 0, 63)       
             {
             public String map(int val)
-            	{
-            	if (model.get("source" + source + "harmgroup") == 0) return "" + (val + 1);
-            	else return "" + (64 + val + 1);
-            	}
-            	
+                {
+                if (model.get("source" + source + "harmgroup") == 0) return "" + (val + 1);
+                else return "" + (64 + val + 1);
+                }
+                
             public void setState(int val)
                 {
                 boolean push = undo.getWillPush();
@@ -3374,10 +3249,10 @@ category.makePasteable("source" + source);
             {
             public int verticalBorderThickness() { return 4; }
 
-			public double preprocessXKey(int index, String key, double value)
-				{
-				return 127.0 - value;		// rates are flipped from other envelopes, grrr
-				}
+            public double preprocessXKey(int index, String key, double value)
+                {
+                return 127.0 - value;           // rates are flipped from other envelopes, grrr
+                }
             };
         disp.setPreferredHeight(70);
         vbox.add(disp);
@@ -3386,7 +3261,8 @@ category.makePasteable("source" + source);
         category.add(hbox, BorderLayout.CENTER);
         return category;
         }
-                    
+
+    /** Build the window.  This is our opportunity to turn off menu options and add new menus */    
     public JFrame sprout()     
         {
         JFrame frame = super.sprout();
@@ -3394,10 +3270,15 @@ category.makePasteable("source" + source);
         addKawaiK5000Menu();
         return frame;
         }
-        
+    
+    // Constraint strings for the Constrain Harmonics menu
     public static final String[] MENU_CONSTRAINTS = { "All", "Odd", "Even", "First Third", "Second Third", "Third Third", 
         "Octaves", "Fifths", "Major Thirds", "Minor Sevenths", "Major Seconds", "Major Sevenths" };
-        
+    
+    // The constraints chosen by the Constrain Harmonics menu.  Used by _constrainTo(...)
+    int constraints;
+
+    /** Add the Kawai K5000 Menu and submenus */
     public void addKawaiK5000Menu()
         {
         JMenu menu = new JMenu("K5000");
@@ -3427,20 +3308,17 @@ category.makePasteable("source" + source);
         allowUpdateFromMouse = getLastXAsBoolean("Mouseover", getSynthName(), true, true);
         unlock.setSelected(allowUpdateFromMouse);
         unlock.addActionListener(new ActionListener()
-        	{
-			public void actionPerformed(ActionEvent e)
-				{
-				allowUpdateFromMouse = unlock.isSelected();
-				setLastX("" + allowUpdateFromMouse, "Mouseover", getSynthName(), true);
-				}
-        	});
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                allowUpdateFromMouse = unlock.isSelected();
+                setLastX("" + allowUpdateFromMouse, "Mouseover", getSynthName(), true);
+                }
+            });
         menu.add(unlock);
         }
-
-
-
-    int constraints;
         
+    // Given the current constraints, returns whether the given index should be constrained 
     boolean _constrainTo(int index)
         {
         switch(constraints)
@@ -3509,16 +3387,19 @@ category.makePasteable("source" + source);
         return false;
         }
 
-
+    /** Returns the patch name in the model */
     public String getPatchName(Model model) { return model.get("name", "INIT    "); }
 
+    // Sysex constant for switching to single mode
     public static final int SINGLE_MODE = 0x01;
+    // Sysex constant for switching to various banks
     public static final int BANK_A_MSB = 0x64;
     public static final int BANK_D_MSB = 0x66;
     public static final int BANK_E_MSB = 0x67;
     public static final int BANK_F_MSB = 0x68;
     public static final int BANK_M_MSB = 0x65;                // only has 64 PC values
 
+    /** Changes the patch to the bank and number provided */
     public void changePatch(Model tempModel)
         {
         byte BB = (byte)tempModel.get("bank");
@@ -3544,6 +3425,7 @@ category.makePasteable("source" + source);
         }
 
     
+    /** Provides the bank and number of the NEXT patch, given the current one provided. */
     public Model getNextPatchLocation(Model model)
         {
         int bank = model.get("bank");
@@ -3564,6 +3446,7 @@ category.makePasteable("source" + source);
         return newModel;
         }
 
+    /** Provides a String version of the patch location provided. */
     public String getPatchLocationName(Model model)
         {
         // getPatchLocationName() is called from sprout() as a test to see if we should enable
@@ -3592,6 +3475,7 @@ category.makePasteable("source" + source);
             model.set("name", newnm);
         }
     
+    // Custom-repair out-of-range parameter values
     public void fix(Model model, String key, int val, int min, int max)
         {
         // Bugs in Kawai's patches result in 0 provided when it should be 33 for signed parameters (like -31 ... +31,
@@ -3601,7 +3485,7 @@ category.makePasteable("source" + source);
             {
             int newVal = 33;
             model.set(key, 33);
-	        if (getPrintRevised()) System.out.println("Warning (Synth): Revised " + key + " from " + val + " to " + newVal + " (range " + min + " ... " + max + ")");             
+            if (getPrintRevised()) System.out.println("Warning (Synth): Revised " + key + " from " + val + " to " + newVal + " (range " + min + " ... " + max + ")");             
             }
         /*
           else if ((key.startsWith("effect1") || key.startsWith("effect2") || key.startsWith("effect3") || key.startsWith("effect4")) &&
@@ -3632,6 +3516,7 @@ category.makePasteable("source" + source);
         // else super.fix(model, key, val, min, max);
         }
 
+    /** Returns the synthesizer name */
     public static String getSynthName() { return "Kawai K5000S/K5000R"; }
     
     // The K5000 can't send to temporary memory.  Presently we are only sending as individual parameters.
@@ -3640,6 +3525,7 @@ category.makePasteable("source" + source);
     // The only way to send all parameters is via Send To Current Patch -- all others will fail
     public boolean getSendsParametersOnlyOnSendCurrentPatch() { return true; }
 
+    /** Returns the patch name as a byte array, but returned as an int[] */
     public int[] getNameAsBytes(Model model)
         {
         String name = model.get("name", "        ") + "        ";
@@ -3651,35 +3537,32 @@ category.makePasteable("source" + source);
         return bytes;
         }
 
-
-	int p(byte[] data, int pos, String key)
-		{
-		System.err.println(StringUtility.toHexShort(pos) + "\t" + key);
-		data[pos] = (byte)model.get(key);
-		return pos + 1;
-		}
-	
+    /** Encodes the given key at the given position in the data */
+    int p(byte[] data, int pos, String key, Model model)
+        {
+        //System.err.println(StringUtility.toHexShort(pos) + "\t" + key + "\t" + model.get(key));
+        data[pos] = (byte)model.get(key);
+        return pos + 1;
+        }
+        
     // Given a model (which will never be null), writes out the full Single Tone of a patch, including all sources and wavekits, and all checksums,
     // starting at the given position in data
     public int emitTone(Model model, byte[] data, int pos, int sources )
         {
-    	System.err.println("" + pos + "\tCHECKSUM");
+        System.err.println("" + pos + "\tCHECKSUM");
         pos++;                      // skip checksum space
         int start = pos;
 
         // LOAD EFFECTS
     
-
-
-
-        pos = p(data, pos, "algorithm");
+        pos = p(data, pos, "algorithm", model);
         int reverbtype = model.get("reverbtype");
         data[pos++] = (byte)reverbtype;
-        pos = p(data, pos, "reverb" + (reverbtype + 1) + "drywet1");
-        pos = p(data, pos, "reverb" + (reverbtype + 1) + "para1");
-        pos = p(data, pos, "reverb" + (reverbtype + 1) + "para2");
-        pos = p(data, pos, "reverb" + (reverbtype + 1) + "para3");
-        pos = p(data, pos, "reverb" + (reverbtype + 1) + "para4");
+        pos = p(data, pos, "reverb" + (reverbtype + 1) + "drywet1", model);
+        pos = p(data, pos, "reverb" + (reverbtype + 1) + "para1", model);
+        pos = p(data, pos, "reverb" + (reverbtype + 1) + "para2", model);
+        pos = p(data, pos, "reverb" + (reverbtype + 1) + "para3", model);
+        pos = p(data, pos, "reverb" + (reverbtype + 1) + "para4", model);
 
 
         for(int effect = 1; effect <= 4; effect++)                                  // NOTE <=
@@ -3689,25 +3572,25 @@ category.makePasteable("source" + source);
             data[pos++] = (byte)(effectType + 11);                                                      // effects start at 11
             if (EFFECT_PARAMETER_MINS[0][effectType] == NONE)
                 { missingEffectParams++; }
-            else { pos = p(data, pos, "effect" + effect + "type" + (effectType + 1) + "depth"); }
+            else { pos = p(data, pos, "effect" + effect + "type" + (effectType + 1) + "depth", model); }
             if (EFFECT_PARAMETER_MINS[1][effectType] == NONE)
                 {  missingEffectParams++; }
-            else { pos = p(data, pos, "effect" + effect + "type" + (effectType + 1) + "para1"); }
+            else { pos = p(data, pos, "effect" + effect + "type" + (effectType + 1) + "para1", model); }
             if (EFFECT_PARAMETER_MINS[2][effectType] == NONE)
                 { missingEffectParams++; }
-            else { pos = p(data, pos, "effect" + effect + "type" + (effectType + 1) + "para2"); }
+            else { pos = p(data, pos, "effect" + effect + "type" + (effectType + 1) + "para2", model); }
             if (EFFECT_PARAMETER_MINS[3][effectType] == NONE)
                 { missingEffectParams++; }
-            else { pos = p(data, pos, "effect" + effect + "type" + (effectType + 1) + "para3"); }
+            else { pos = p(data, pos, "effect" + effect + "type" + (effectType + 1) + "para3", model); }
             if (EFFECT_PARAMETER_MINS[4][effectType] == NONE)
                 { missingEffectParams++; }
-            else { pos = p(data, pos, "effect" + effect + "type" + (effectType + 1) + "para4"); }
+            else { pos = p(data, pos, "effect" + effect + "type" + (effectType + 1) + "para4", model); }
             pos += missingEffectParams;
             }
                 
         for(int freq = 1; freq <= 7; freq++)                                            // NOTE <=
             {
-            pos = p(data, pos, "geqfreq" + freq);
+            pos = p(data, pos, "geqfreq" + freq, model);
             }
                 
         // LOAD COMMON
@@ -3719,8 +3602,8 @@ category.makePasteable("source" + source);
             {
             data[pos++] = (byte)name[i];
             }
-        pos = p(data, pos, "volume");
-        pos = p(data, pos, "poly");
+        pos = p(data, pos, "volume", model);
+        pos = p(data, pos, "poly", model);
         data[pos++] = 0;                                                                // "no use", see page 14 of sysex spec, line 50
         
         data[pos++] = (byte)sources;
@@ -3733,30 +3616,30 @@ category.makePasteable("source" + source);
             (1 - (model.get("srcmute6")) << 5));
         data[pos++] = (byte)srcmute;                                                    // bitpacking
 
-        pos = p(data, pos, "am");
-        pos = p(data, pos, "effectcontrol1source");
-        pos = p(data, pos, "effectcontrol1destination");
-        pos = p(data, pos, "effectcontrol1depth");
-        pos = p(data, pos, "effectcontrol2source");
-        pos = p(data, pos, "effectcontrol2destination");
-        pos = p(data, pos, "effectcontrol2depth");
-        pos = p(data, pos, "portamento");
-        pos = p(data, pos, "portamentospeed");
+        pos = p(data, pos, "am", model);
+        pos = p(data, pos, "effectcontrol1source", model);
+        pos = p(data, pos, "effectcontrol1destination", model);
+        pos = p(data, pos, "effectcontrol1depth", model);
+        pos = p(data, pos, "effectcontrol2source", model);
+        pos = p(data, pos, "effectcontrol2destination", model);
+        pos = p(data, pos, "effectcontrol2depth", model);
+        pos = p(data, pos, "portamento", model);
+        pos = p(data, pos, "portamentospeed", model);
         for(int c = 1; c <= 4; c++)
             {
-            pos = p(data, pos, "macrocontroller" + c + "parameter1");
-            pos = p(data, pos, "macrocontroller" + c + "parameter2");
+            pos = p(data, pos, "macrocontroller" + c + "parameter1", model);
+            pos = p(data, pos, "macrocontroller" + c + "parameter2", model);
             }
         for(int c = 1; c <= 4; c++)
             {
-            pos = p(data, pos, "macrocontroller" + c + "depth1");
-            pos = p(data, pos, "macrocontroller" + c + "depth2");
+            pos = p(data, pos, "macrocontroller" + c + "depth1", model);
+            pos = p(data, pos, "macrocontroller" + c + "depth2", model);
             }
                 
-        pos = p(data, pos, "sw1parameter");
-        pos = p(data, pos, "sw2parameter");
-        pos = p(data, pos, "fsw1parameter");
-        pos = p(data, pos, "fsw2parameter");
+        pos = p(data, pos, "sw1parameter", model);
+        pos = p(data, pos, "sw2parameter", model);
+        pos = p(data, pos, "fsw1parameter", model);
+        pos = p(data, pos, "fsw2parameter", model);
 
         // LOAD SOURCE DATA
     
@@ -3788,7 +3671,7 @@ category.makePasteable("source" + source);
                     }
                 else
                     {
-                    pos = p(data, pos, "source" + i + key);
+                    pos = p(data, pos, "source" + i + key, model);
                     }
                 }
             }
@@ -3812,25 +3695,25 @@ category.makePasteable("source" + source);
             for(int j = 1; j < addWaveKitParams.length; j++)                // skip "--", checksum
                 {
                 String key = addWaveKitParams[j];
-                pos = p(data, pos, "source" + i + key);
+                pos = p(data, pos, "source" + i + key, model);
                 }
 
             for(int j = 0; j < addWaveSoftHCParams.length; j++)
                 {
                 String key = addWaveSoftHCParams[j];
-                pos = p(data, pos, "source" + i + key);
+                pos = p(data, pos, "source" + i + key, model);
                 }
 
             for(int j = 0; j < addWaveLoudHCParams.length; j++)
                 {
                 String key = addWaveLoudHCParams[j];
-                pos = p(data, pos, "source" + i + key);
+                pos = p(data, pos, "source" + i + key, model);
                 }
 
             for(int j = 0; j < addWaveFormantFilterParams.length; j++)
                 {
                 String key = addWaveFormantFilterParams[j];
-                pos = p(data, pos, "source" + i + key);
+                pos = p(data, pos, "source" + i + key, model);
                 }
 
             for(int j = 0; j < addWaveHarmonicEnvelopeParams.length; j++)
@@ -3841,12 +3724,12 @@ category.makePasteable("source" + source);
                     ///// NOTE: documentation is wrong. It says that val1 & 64 = 0 is "LP1" and val1 & 64 = 64 is "Loop/LP2".
                     ///// It's actually the other way around.
                     
-                    ////					CORRECT					DOCUMENTATION
-                    ////	TYPE		LEVEL 1		LEVEL 2		LEVEL 1		LEVEL 2
-                    ////	(0) Off		0			0			64			0	
-                    ////	(1) LP1		64			64			0			64
-                    ////	(2) LP2		0			64			64			64
-                    ////	(3) ---?	64			0			0			0			We assume this is "Off"
+                    ////                                        CORRECT                                 DOCUMENTATION
+                    ////        TYPE            LEVEL 1         LEVEL 2         LEVEL 1         LEVEL 2
+                    ////        (0) Off         0                       0                       64                      0       
+                    ////        (1) LP1         64                      64                      0                       64
+                    ////        (2) LP2         0                       64                      64                      64
+                    ////        (3) ---?        64                      0                       0                       0                       We assume this is "Off"
                     
                     int num = StringUtility.getSecondInt(key);
                     data[pos++] = (byte)(model.get("source" + i + key) |
@@ -3864,7 +3747,7 @@ category.makePasteable("source" + source);
                     }
                 else
                     {
-                    pos = p(data, pos, "source" + i + key);
+                    pos = p(data, pos, "source" + i + key, model);
                     }
                 }
 
@@ -3873,6 +3756,7 @@ category.makePasteable("source" + source);
         return pos;
         }
 
+    /** Emit a patch */
     public Object[] emitAll(Model tempModel, boolean toWorkingMemory, boolean toFile)
         {
         if (toWorkingMemory) return new Object[0];                      // For the time being
@@ -3905,15 +3789,15 @@ category.makePasteable("source" + source);
         // F0 40 CHANNEL 20 00 0a 00 BANK PATCHNUM SINGLE_CHECKSUM EFFECT/COMMON SOURCE* WAVEKIT* F7
         // The only wavekits provided are those for which the source is NOT additive.
     
-    	System.err.println("0\tF0");
-    	System.err.println("1\t40");
-    	System.err.println("2\tchannel");
-    	System.err.println("3\t20");
-    	System.err.println("4\t00");
-    	System.err.println("5\t0A");
-    	System.err.println("6\t00");
-    	System.err.println("7\tBANK");
-    	System.err.println("8\tNUMBER");
+        System.err.println("0\tF0");
+        System.err.println("1\t40");
+        System.err.println("2\tchannel");
+        System.err.println("3\t20");
+        System.err.println("4\t00");
+        System.err.println("5\t0A");
+        System.err.println("6\t00");
+        System.err.println("7\tBANK");
+        System.err.println("8\tNUMBER");
 
     
         data[0] = (byte)0xF0;
@@ -3940,6 +3824,7 @@ category.makePasteable("source" + source);
 
     public Object[] emitBank(Model[] models, int bank, boolean toFile) 
         {
+        System.err.println("EMIT BANK");
         boolean[] tonemap = new boolean[128];
         
         int datalen = 8 + 19 + 1;
@@ -3970,6 +3855,7 @@ category.makePasteable("source" + source);
         // 2        E               3
         // 3        F               4
         
+        System.err.println("HEADER");
         byte[] data = new byte[datalen];
         
         data[0] = (byte)0xF0;
@@ -3982,6 +3868,7 @@ category.makePasteable("source" + source);
         data[7] = (byte)BANK_VALS[bank];                    // bank
         int pos = 8;
                         
+        System.err.println("TONE MAP");
         // Load the tone map
         int patch = 0;
         for(int j = 0; j < 18; j++)
@@ -3999,13 +3886,18 @@ category.makePasteable("source" + source);
         data[pos++] = (byte)
             ((tonemap[126] ? 1 : 0) +
             (tonemap[127] ? 2 : 0));
+
+        System.err.println("POSITION IS " + pos);
+            
                                         
         // Load the patches
 
         for(Model m : models)
             {
+            System.err.println("Model " + m);
             if (m != null)
                 {
+                System.err.println("\t\t\t\t---> " + m.get("name", ""));
                 pos = emitTone(m, data, pos, m.get("srctype"));
                 }
             }
@@ -4014,6 +3906,7 @@ category.makePasteable("source" + source);
         }
 
 
+    /** Parse a patch from data */
     public int parse(byte[] result, boolean fromFile)
         {
         if (result[3] == 0x20)  // single
@@ -4062,6 +3955,7 @@ category.makePasteable("source" + source);
         
         }
     
+    /** Parse a Single Tone section */
     // return -1 if FAILED, else return resulting pos
     // This starts BEYOND the checksum
     public int parseSingle(byte[] result, int pos)
@@ -4078,9 +3972,10 @@ category.makePasteable("source" + source);
         model.set("reverb" + (reverbtype + 1) + "para3", result[pos++]);
         model.set("reverb" + (reverbtype + 1) + "para4", result[pos++]);
         
-        int missingEffectParams = 0;
         for(int effect = 1; effect <= 4; effect++)                                  // NOTE <=
             {
+            int missingEffectParams = 0;
+
             // EFFECTS are PACKED.  So if an effect doesn't have a particular parameter, the NEXT PARAMETER fits in its slot.  
             // This is of course NOT documented
 
@@ -4104,7 +3999,6 @@ category.makePasteable("source" + source);
                 { missingEffectParams++; }
             else { model.set("effect" + effect + "type" + (effectType + 1) + "para4", result[pos++]); }
             pos += missingEffectParams;                                 // fill in the missing spaces
-            missingEffectParams = 0;
             }
                 
         for(int freq = 1; freq <= 7; freq++)                                            // NOTE <=
@@ -4264,19 +4158,19 @@ category.makePasteable("source" + source);
                     ///// NOTE: documentation is wrong. It says that val1 & 64 = 0 is "LP1" and val1 & 64 = 64 is "Loop/LP2".
                     ///// It's actually the other way around.
                     
-                    ////					CORRECT					DOCUMENTATION
-                    ////	TYPE		LEVEL 1		LEVEL 2		LEVEL 1		LEVEL 2
-                    ////	(0) Off		0			0			64			0	
-                    ////	(1) LP1		64			64			0			64
-                    ////	(2) LP2		0			64			64			64
-                    ////	(3) ---?	64			0			0			0			We assume this is "Off"
+                    ////                                        CORRECT                                 DOCUMENTATION
+                    ////        TYPE            LEVEL 1         LEVEL 2         LEVEL 1         LEVEL 2
+                    ////        (0) Off         0                       0                       64                      0       
+                    ////        (1) LP1         64                      64                      0                       64
+                    ////        (2) LP2         0                       64                      64                      64
+                    ////        (3) ---?        64                      0                       0                       0                       We assume this is "Off"
                     
                     pos++;
                     model.set("source" + i + key, val1 & 63);
                     model.set("source" + i + "hcenv" + "loop" + "s" + num, 
-                        ((val1 & 64) == 0 ? 
-                        	((val2 & 64) == 0 ? 0 : 2) : 		// Level 1 = 0, Level 2 = 0 -> OFF,   Level 1 = 0, Level 2 = 64 -> LP2
-                        	((val2 & 64) == 0 ? 0 : 1)));		// Level 1 = 64, Level 2 = 0 -> OFF DEFAULT,   Level 1 = 64, Level 2 = 64 -> LP1
+                            ((val1 & 64) == 0 ? 
+                            ((val2 & 64) == 0 ? 0 : 2) :            // Level 1 = 0, Level 2 = 0 -> OFF,   Level 1 = 0, Level 2 = 64 -> LP2
+                            ((val2 & 64) == 0 ? 0 : 1)));           // Level 1 = 64, Level 2 = 0 -> OFF DEFAULT,   Level 1 = 64, Level 2 = 64 -> LP1
                     }
                 else if (key.contains("level2"))
                     {
@@ -4308,8 +4202,15 @@ category.makePasteable("source" + source);
         return (byte)(sum & 127);
         }
 
+
+    // Offset for the common (non-effects) parameter data 
+    public static final int COMMON_START = 39;
+
+    /** Emit a parameter as MIDI */
     public Object[] emitAll(String key)
         {
+        // There's a lot of custom stuff here.  :-(
+        
         int[] data = null;              // { sub1, sub2, sub3, sub4, sub5, datahi, datalo };
         int[][] data8 = null;
         int sub5 = 0;
@@ -4386,16 +4287,16 @@ category.makePasteable("source" + source);
                     }
                 else if ((index = (Integer)(addWaveKitParamsToIndex.get(remainder))) != null)
                     {
-                    data = new int[] { 0x02, 0x40, (source - 1), 0x00, index.intValue() - 1, 0x00, val };		// we subtract 1 to make up for checksum marked as "--"
+                    data = new int[] { 0x02, 0x40, (source - 1), 0x00, index.intValue() - 1, 0x00, val };               // we subtract 1 to make up for checksum marked as "--"
                     }
                 else if ((index = (Integer)(addWaveSoftHCParamsToIndex.get(remainder))) != null)
                     {
-                    int harmonic = StringUtility.getSecondInt(remainder);	// after the "0"
+                    int harmonic = StringUtility.getSecondInt(remainder);       // after the "0"
                     data = new int[] { 0x02, 0x41, (source - 1), (harmonic - 1), 0x00, 0x00, val };
                     }
                 else if ((index = (Integer)(addWaveLoudHCParamsToIndex.get(remainder))) != null)
                     {
-                    int harmonic = StringUtility.getSecondInt(remainder);	// after the "1"
+                    int harmonic = StringUtility.getSecondInt(remainder);       // after the "1"
                     data = new int[] { 0x02, 0x42, (source - 1), (harmonic - 1), 0x00, 0x00, val };
                     }
                 else if ((index = (Integer)(addWaveFormantFilterParamsToIndex.get(remainder))) != null)
@@ -4500,7 +4401,7 @@ category.makePasteable("source" + source);
             if (key.endsWith("type"))
                 {
                 sub5 = 0;
-                extra = 11;								// effects start with 11
+                extra = 11;                                                             // effects start with 11
                 }
             else if (key.endsWith("depth"))
                 {
@@ -4547,14 +4448,14 @@ category.makePasteable("source" + source);
                 ((1 - model.get("srcmute5")) << 4) |
                 ((1 - model.get("srcmute6")) << 5) };
             }
-            /*
-        else if (key.startsWith("macrocontroller"))
-            {
-            int pos = ((Integer)singleToneDataParamsToIndex.get(key)).intValue() - 
-                ((Integer)singleToneDataParamsToIndex.get("macrocontroller1parameter1")).intValue();
-            data = new int[] { 0x01, 0x00, 0x00, 0x00, pos, 0x00, model.get(key) };
-            }
-            */
+        /*
+          else if (key.startsWith("macrocontroller"))
+          {
+          int pos = ((Integer)singleToneDataParamsToIndex.get(key)).intValue() - 
+          ((Integer)singleToneDataParamsToIndex.get("macrocontroller1parameter1")).intValue();
+          data = new int[] { 0x01, 0x00, 0x00, 0x00, pos, 0x00, model.get(key) };
+          }
+        */
         else if ((index = (Integer)(singleToneDataParamsToIndex.get(key))) != null)
             {
             data = new int[] { 0x01, 0x00, 0x00, 0x00, index.intValue() - COMMON_START, 0x00, model.get(key) };
@@ -4594,6 +4495,8 @@ category.makePasteable("source" + source);
             }
         }
 
+
+    /** Request that the K5000 give us a patch */
     public byte[] requestDump(Model tempModel)
         {
         if (tempModel == null)
@@ -4619,46 +4522,47 @@ category.makePasteable("source" + source);
     // type starts at 0
     // para starts at 1
     public int effectShift(int type, int para)
-    	{
-    	if (type + 12 == 12)	// Early Reflections 1
-    		{
-    		if (para >= 4) return para - 1;
-    		}
-    	if (type + 12 == 13)	// Early Reflections 2
-    		{
-    		if (para >= 4) return para - 1;
-    		}
-    	if (type + 12 == 16)	// Single Delay
-    		{
-    		if (para >= 3) return para - 1;
-    		}
-    	if (type + 12 == 18)	// Stereo Delay
-    		{
-    		if (para >= 4) return para - 2;
-    		}
-    	if (type + 12 == 19)	// Cross Delay
-    		{
-    		if (para >= 4) return para - 2;
-    		}
-    	if (type + 12 == 30)	// Ensemble
-    		{
-    		if (para >= 3) return para - 1;
-    		}
-    	if (type + 12 == 31)	// Ensemble and Delay
-    		{
-    		if (para >= 3) return para - 1;
-    		}
-    	if (type + 12 == 43)	// Exciter
-    		{
-    		if (para >= 5) return para - 1;
-    		}
-    	if (type + 12 == 44)	// Enhancer
-    		{
-    		if (para >= 5) return para - 1;
-    		}
-    	return para;
-    	}
+        {
+        if (type + 12 == 12)    // Early Reflections 1
+            {
+            if (para >= 4) return para - 1;
+            }
+        if (type + 12 == 13)    // Early Reflections 2
+            {
+            if (para >= 4) return para - 1;
+            }
+        if (type + 12 == 16)    // Single Delay
+            {
+            if (para >= 3) return para - 1;
+            }
+        if (type + 12 == 18)    // Stereo Delay
+            {
+            if (para >= 4) return para - 2;
+            }
+        if (type + 12 == 19)    // Cross Delay
+            {
+            if (para >= 4) return para - 2;
+            }
+        if (type + 12 == 30)    // Ensemble
+            {
+            if (para >= 3) return para - 1;
+            }
+        if (type + 12 == 31)    // Ensemble and Delay
+            {
+            if (para >= 3) return para - 1;
+            }
+        if (type + 12 == 43)    // Exciter
+            {
+            if (para >= 5) return para - 1;
+            }
+        if (type + 12 == 44)    // Enhancer
+            {
+            if (para >= 5) return para - 1;
+            }
+        return para;
+        }
         
+    /** Return all bank names */
     public String[] getBankNames() { return BANKS; }
 
 // Return a list of all patch number names.  
@@ -4670,10 +4574,14 @@ category.makePasteable("source" + source);
 // Return a list whether individual patches can be written.
     public boolean getSupportsPatchWrites() { return true; }
 
+// Return whether we allow downloads
     public boolean getSupportsDownloads() { return true; }
 
+// Return the maximum length of a patch name
     public int getPatchNameLength() { return 8; }
 
+
+    /** Request that the K5000 give us a bank */
     public byte[] requestBankDump(int bank) 
         {
         bank = BANK_VALS[bank];         // A = 0, D = 1, E = 2
@@ -4694,17 +4602,20 @@ category.makePasteable("source" + source);
         }
 
 
-	// Patches are big.  We need a bigger countdown to wait for them to arrive during bulk downloading
+    // Patches are big.  We need a bigger countdown to wait for them to arrive during bulk downloading
     public int getBatchDownloadFailureCountdown() { return 10; }
         
     // When we don't get a response while doing a batch download, it is likely not because
     // the synth was slow to respond, but rather because the patch is a NULL patch, and the
     // K5000 doesn't respond at all for NULL patches -- in this case we must skip to the next patch.
     public boolean skipBatchPatchDownload() { return true; }
-        
+    
+    // A list of positions in the sysex for real patches in the bank, as opposed to stubs (-1)
     int[] patchBankPositions = null;
+    // A list of names of valid patches in the bank
     String[] patchBankNames = null;
 
+    // Returns the position in bank sysex for a given patch number
     public int getPatchPosition(byte[] bank, int num)
         {
         if (patchBankPositions == null) // uh oh, should not happen
@@ -4717,7 +4628,10 @@ category.makePasteable("source" + source);
         }
 
 
+    // A name for stub patches, though we only use this in popup menus, not in bank lists
     public static final String EMPTY_PATCH = "[EMPTY PATCH]";
+    
+    /** Computer the locations of patches in the bank sysex, as well as patch names for each of them */
     // set to -1 if there is no such position -- the patch is null
     public void preprocessParseFromBank(byte[] bank)
         {
@@ -4805,6 +4719,7 @@ category.makePasteable("source" + source);
 
 
 
+    /** Extracts and parses a patch from bank sysex */
     public int parseFromBank(byte[] bankSysex, int number) 
         {
         // Because this calls getPatchPosition each time, we're looking at an O(size(banksysex)^2)
@@ -4821,12 +4736,13 @@ category.makePasteable("source" + source);
             {
             pos++;              // skip checksum, parseSingle() starts beyond it
             int retval = parseSingle(bankSysex, pos);
-			revise();
-			return retval;
+            revise();
+            return retval;
             }
         }
 
 
+    /** Returns which bank the bank sysex refers to */
     public int getBank(byte[] bankSysex) 
         { 
         int bank = bankSysex[7];
@@ -4834,6 +4750,8 @@ category.makePasteable("source" + source);
         return bank; 
         }
 
+    /** Returns the standard pause after writing a bank -- this is set to the pause after writing
+        a patch, but it may be moot if we can't write a whole bank anyway.  */
     public int getPauseAfterWriteBank() 
         {
         // Returns the pause, in milliseconds, after writing a bank sysex message
@@ -4844,15 +4762,22 @@ category.makePasteable("source" + source);
         return getPauseAfterWritePatch(); 
         }  
     
-    // We read bank patches
+    // We do NOT write bank patches on the Mac, because Java, or CoreMidi4Java, at present cannot write sysex messages larger than 39844 on the Mac
     public boolean getSupportsBankWrites() 
+        {
+        return true;
+        //if (Style.isMac()) return false;
+        //else return true;
+        }
+        
+    // We read bank patches
+    public boolean getSupportsBankReads()
         {
         return true;
         }
 
 
     // General (non-source) parameter names
-    public static final int COMMON_START = 39;
     public static final String[] singleToneDataParams = new String[] 
     {
     "algorithm",
@@ -5035,7 +4960,7 @@ category.makePasteable("source" + source);
     public static final String[] addWaveKitParams = new String[] 
     {
     "--",                       // checksum
-    "morfflag",					// this has no real function I believe
+    "morfflag",                                 // this has no real function I believe
     "harmtotalgain",
     "harmgroup",
     "harmkstogain",

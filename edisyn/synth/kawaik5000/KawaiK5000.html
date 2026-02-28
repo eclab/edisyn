@@ -13,7 +13,7 @@ Turn OFF Protect.  Make sure that Receive Program and Receive Exclusive are both
 
 <br><br><h3>About Sending to Current Patch</h3>
 
-Sending to current patch will take upwards of 25 seconds to complete.  Furthermore, it can only be initiated by selecting the menu option <b>Send to Current Patch</b>.  All other situations (undo, redo, randomize, merging, hill-climbing, nudging, morphing, and so on) will never send to current patch: you have to select the menu manually.  This will make the hill-climber and morpher worthless.
+Sending to current patch will take upwards of 25 seconds to complete.  Furthermore, it can only be initiated by selecting the menu option <b>Send to Current Patch</b>.  All other situations (undo, redo, randomize, merging, hill-climbing, nudging, morphing, and so on) will never send to current patch: you have to select the menu manually.  This will make the hill-climber and morpher worthless (so they have been disabled).
 
 Why do this? The Kawai K5000 stupidly cannot receive a patch and store it in its current temporary memory (nor transmit the same).  This is a huge failing as Edisyn needs to do this for many things, everything from undo/redo to randomize to hill-climbing.  There are two ways around this, neither of which is good.  First, Edisyn could write to a "scratch patch slot" (such as D128), then load this patch slot into current memory.  This is what the Kawai K5 editor does.  This would be fine except that the K5000 uses Flash RAM for its storage, so repeatedly writing to a patch slot is not a good idea: it'll burn your Flash out.  So that's out: I won't damage people's synthesizers.  Second, Edisyn could transmit every single parameter to the K5000 in sequence.  However to transmit a single parameter takes 14 bytes, and there are upwards of 5000 parameters.  This can take as much as 25 seconds to transmit!  But it's our only real option.
 
@@ -52,8 +52,13 @@ The Kawai K5000 menu has the following options:
 
 <ul>
 <li><b>Constrain Harmonics</b>&nbsp;&nbsp;This locks the harmonics you can edit with the sliders to a certain subset of harmonics, to make it easier to find and edit them.  The other harmonics will be displayed in gray.  You can still set any harmonics with the Number dial.
+<p><li><b>Load Wave Into...</b>&nbsp;&nbsp;You can load a WAV file as harmonics into the soft or loud harmonics of any source. The WAV file should store a single-cycle wave.  Single-cycle waves must be stored as 16-bit WAV files no longer than 2048 samples.  A good source of single-cycle waves is the AdventureKid Waveforms collection (<a href="https://www.adventurekid.se/akrt/waveforms/adventure-kid-waveforms/">https://www.adventurekid.se/akrt/waveforms/adventure-kid-waveforms/</a>), which has thousands of waveforms, all free.
 <p><li><b>Allow Envelope Display Mouse-Over</b>&nbsp;&nbsp;This prevents mouse-over on the harmonics envelope displays to update which harmonics envelope you're editing. If you're fed up with accidentally mousing over an envelope display when you're changing a dial and changing the envelope number, this menu item is for you.
 </ul>
+
+<br><br><h3>About the "K5 Harmonics" Category</h3>
+
+The K5 Harmonics category (on the "H" tab of any additive source) has two dials, each of which hold 484 harmonics gathered from patches in the Kawai K5 synthesier.  You can use them to load harmonics into the soft or loud harmonics displays.  
 
 <h3>Gotchas</h3>
 
@@ -70,19 +75,27 @@ The Kawai K5000 menu has the following options:
 <ul>
 <li>You can copy and paste envelope displays (for harmonics, formants, or harmonic envelopes) to appropriate tabs in the same tab or on other tabs.  To do this, just click on the Category name above the envelope display and choose "Copy Category" or "Paste Category" as appropriate.
 <p><li>You can set all the parameters in an envelope display (for harmonics, formants, or harmonic envelopes)  to the same value.  To do this, first set one parameter to the value you want, then click on the Category name above the envelope display and choose "Distribute".
+<p><li>You can make all the parameters in an envelope display mutable, or immutable, by clicking on the Category name and choosing "Make Category Paramters Mutable" or "Make Category Parameters immutable".  This is important because normally you can't an envelope mutable or immutable via "Edit->Edit Mutable Parameters".
 <p><li>You can copy all the parameters of from one tab to another.  For example, you can copy the "E1" tab to the "E4" tab.  To do this, go to the first tab, then select "Copy Tab" under the Edit menu, then go to the second tab, and select "Paste Tab" under the Edit menu.
-<p><li>you can randomize the parameters in an envelope display by clicking on the Category name above the display and selecting one of the "Randomize" options.
+<p><li>You can randomize the parameters in an envelope display by clicking on the Category name above the display and selecting one of the "Randomize" options.
+<p><li>You can set the parameters in an envelope display to zero by clicking on the Category name above the display and selecting "Reset Category".
+<p><li>You can set a Soft/Loud Harmonics Display, or a Harmonics Envelope Level (but not Rate) Display, to a preset such as Sawtooth, or increase or decrease its volume, by clicking on the Category name above the display and selecting the appropriate menu option.  You can set constraints on these as well.
 </ul>
 
-I'll be working on additional bulk moves: loading harmonics or formants or harmonic envelopes on a per-source basis from another patch; or setting harmonics to resemble certain waves (like Sawtooth or Square; or copying or swapping sources...
+I'll be working on additional bulk moves: loading harmonics or formants or harmonic envelopes on a per-source basis from another patch; or copying or swapping sources...
 
 
 <h3>About The Librarian</h3>
 
 Kawai K5000 bank downloads are gigantic, because Kawai K5000 patches are gigantic.  It could take as much as a minute or more to download a bank using the fastest method, which is via "Request Bank from Synth".  However you will get NO feedback until the bank finally arrives.  Using "Download Bank from Synth" or "Download Selected Patches from Synth" is slower, but you'll see the patches as they arrive.
 
+<p>If you download using "Download Bank from Synth" or "Download Selected Patches from Synth", when Edisyn reaches the null patches at the end of the bank, the K5000 never tells Edisyn this: instead it just sits there, and Edisyn will sit there as well until it times out. At that point, you might want to manually press the "Stop Download" button in the Librarian.
+
+<p>Because of bugs in Java's MIDI library, Edisyn cannot send bank upload messages: it can only upload each patch in turn.  This means that bank uploads will be somewhat slower.  It handles bank <i>download</i> messages fine.
+
+
 <h3>Thanks</h3>
-Thanks to Eyal Malinger (eyalmalinger@gmail.com) for providing test patches and trying out sysex results with old Sound Diver implementations. Thanks to Oscilllator (oscillatorsds@gmail.com) for providing sysex files for test patches.  Thanks to Jere Kapyaho (author of the <a href="https://github.com/coniferprod/k5ktools">python k5ktools</a>) for tweaking software for me.  And thanks to Markus Schlosser (author of the <a href="https://github.com/christofmuc/KnobKraft-orm">KnobKraft-orm librarian</a>) for considerable help in understanding various oddities in the machine.
+Thanks to Eyal Malinger (eyalmalinger@gmail.com) for providing test patches and trying out sysex results on Windows and with old Sound Diver implementations. Thanks to Oscillator (oscillatorsds@gmail.com) for providing sysex files for test patches.  Thanks to John Sepulveda (matrix12x@gmail.com) for bug reports.  Thanks to Jere Kapyaho (author of the <a href="https://github.com/coniferprod/k5ktools">python k5ktools</a>) for tweaking software for me.  And thanks to Markus Schlosser (author of the <a href="https://github.com/christofmuc/KnobKraft-orm">KnobKraft-orm librarian</a>) for considerable help in understanding various oddities in the machine.
 
 <p><table border=0 cellpadding=0 cellspacing=5>
 <tr>

@@ -47,11 +47,14 @@ public class Category extends JPanel implements Gatherable
     JMenuItem copyFromMutable = new JMenuItem("Copy Category (Mutation Parameters Only)");
     JMenuItem pasteToMutable = new JMenuItem("Paste Category (Mutation Parameters Only)");
     JMenuItem distributeToMutable = new JMenuItem("Distribute (Mutation Parameters Only)");
+    JMenuItem makeMutable = new JMenuItem("Make Category Parameters Mutable");
+    JMenuItem makeImmutable = new JMenuItem("Make Category Parameters Immutable");
     JMenuItem reset = new JMenuItem("Reset Category");
     JMenuItem rand25 = new JMenuItem("Randomize by 25%");
     JMenuItem rand50 = new JMenuItem("Randomize by 50%");
     JMenuItem rand75 = new JMenuItem("Randomize by 75%");
     JMenuItem rand100 = new JMenuItem("Randomize by 100%");
+    JMenuItem[] otherItems = null;
         
     public void makePasteable(String preamble) { pasteable = true; this.preamble = preamble; }
     public void makePasteable(String preamble, String preamble2) { pasteable = true; this.preamble = preamble; }
@@ -205,6 +208,24 @@ public class Category extends JPanel implements Gatherable
         }
         
         
+    void makeMutable(boolean val)
+        {
+        ArrayList components = new ArrayList();
+        gatherAllComponents(components);
+        for(int i = 0; i < components.size(); i++)
+            {
+            if (components.get(i) instanceof HasKey)
+                {
+                HasKey nc = (HasKey)(components.get(i));
+                for (String key : nc.getKeys())
+                    {
+                    synth.mutationMap.setFree(key, val, false);
+                    }
+                }
+            } 
+        }
+    
+
     void copyCategory(boolean includeImmutable)
         {
         String[] mutationKeys = synth.getMutationKeys();
@@ -408,6 +429,12 @@ public class Category extends JPanel implements Gatherable
         components inside it for mutation purposes. */
     public Category(final Synth synth, String label, Color color)
         {
+        this(synth, label, color, null);
+        }
+
+    public Category(final Synth synth, String label, Color color, JMenuItem[] otherItems)
+        {
+        this.otherItems = otherItems;
         this.synth = synth;
         setLayout(new BorderLayout());
         this.color = color;     
@@ -613,6 +640,43 @@ public class Category extends JPanel implements Gatherable
                 }
             });
                 
+        pop.addSeparator();
+
+        pop.add(makeMutable);
+        makeMutable.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                synth.getUndo().push(synth.getModel());
+                synth.getUndo().setWillPush(false);
+                makeMutable(true);
+                synth.getUndo().setWillPush(true);
+                }
+            });
+
+        pop.add(makeImmutable);
+        makeMutable.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                synth.getUndo().push(synth.getModel());
+                synth.getUndo().setWillPush(false);
+                makeMutable(false);
+                synth.getUndo().setWillPush(true);
+                }
+            });
+            
+        if (otherItems != null)
+            {
+            pop.addSeparator();
+            for(int i = 0; i < otherItems.length; i++)
+                {
+                if (otherItems[i] == null)
+                    pop.addSeparator();
+                else pop.add(otherItems[i]);
+                }
+            }
+
         copy.setEnabled(false);
         copyFromMutable.setEnabled(false);
         paste.setEnabled(false);
@@ -624,6 +688,8 @@ public class Category extends JPanel implements Gatherable
         rand50.setEnabled(true);
         rand75.setEnabled(true);
         rand100.setEnabled(true);
+        makeMutable.setEnabled(true);
+        makeImmutable.setEnabled(true);
                 
         //Category.this.add(pop);
         pop.setDefaultLightWeightPopupEnabled(false);

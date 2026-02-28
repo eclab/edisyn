@@ -368,7 +368,7 @@ public class KawaiK5000 extends Synth
     "396 Beef Loop",
     "397 Texture Loop",
     "398 MMBass Loop",
-    "399 Syn PWM Cya",
+    "399 Syn PWM Cyc",
     "400 Harpshichord Cyc",
     "401 Digi EP Cyc",
     "402 Soft EP Cyc",
@@ -381,7 +381,7 @@ public class KawaiK5000 extends Synth
     "409 Syn Bass1 Cyc",
     "410 Syn Bass2 Cyc",
     "411 Syn Saw1 Cyc",
-    "412 Svn Saw2 Cvq",
+    "412 Svn Saw2 Cyc",
     "413 Syn Saw3 Cyc",
     "414 Syn Square1 Cyc",
     "415 Syn Square2 Cyc",
@@ -643,7 +643,10 @@ public static final int ALL_ON = 4;
             soundPanel = new SynthPanel(this);
             vbox = new VBox();
 
-            vbox.add(addHarmonics(source, Style.COLOR_A()));
+            hbox = new HBox();
+            hbox.add(addHarmonics(source, Style.COLOR_A()));
+            hbox.addLast(addK5Harmonics(source, Style.COLOR_B()));
+            vbox.add(hbox);
                 
             JComponent c1 = (JComponent)add(addHarmonicDisplay(source, true, Style.COLOR_A()));
             JComponent c2 = (JComponent)add(addHarmonicDisplay(source, false, Style.COLOR_A()));
@@ -2626,11 +2629,345 @@ public static final int ALL_ON = 4;
         return category;
         }
 
+    public JMenuItem[] buildHarmonicMenu(int source, boolean soft)
+        {
+        JMenuItem[] menu = new JMenuItem[11];
+        menu[0] = new JMenuItem("Set to Sawtooth");
+        menu[0].addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                boolean push = undo.getWillPush();
+                undo.setWillPush(false);
+                for(int i = 1; i <= 64; i++)                        // Note <=
+                    {
+                    if (_constrainTo(i - 1)) model.set("source" + source + "hc" + (soft ? "0" : "1") + "s" + i, 127 / i);
+                    }
+                undo.setWillPush(push);
+                }
+            });
+        menu[1] = new JMenuItem("Set to Square");
+        menu[1].addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                boolean push = undo.getWillPush();
+                undo.setWillPush(false);
+                for(int i = 1; i <= 64; i++)                        // Note <=
+                    {
+                    if (_constrainTo(i - 1)) model.set("source" + source + "hc" + (soft ? "0" : "1") + "s" + i, (i % 2 == 0 ? 0 : 127 / i));
+                    }
+                undo.setWillPush(push);
+                }
+            });
+        menu[2] = new JMenuItem("Set to Triangle");
+        menu[2].addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                boolean push = undo.getWillPush();
+                undo.setWillPush(false);
+                for(int i = 1; i <= 64; i++)                        // Note <=
+                    {
+                    if (_constrainTo(i - 1)) model.set("source" + source + "hc" + (soft ? "0" : "1") + "s" + i, (i % 2 == 0 ? 0 : 127 / (i * i)));
+                    }
+                undo.setWillPush(push);
+                }
+            });
+        menu[3] = new JMenuItem("Set to Max");
+        menu[3].addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                boolean push = undo.getWillPush();
+                undo.setWillPush(false);
+                for(int i = 1; i <= 64; i++)                        // Note <=
+                    {
+                    if (_constrainTo(i - 1)) model.set("source" + source + "hc" + (soft ? "0" : "1") + "s" + i, 127);
+                    }
+                undo.setWillPush(push);
+                }
+            });
+        menu[4] = null;         // separator
+                
+        menu[5] = new JMenuItem("Make Slightly Louder");
+        menu[5].addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                boolean push = undo.getWillPush();
+                undo.setWillPush(false);
+                for(int i = 1; i <= 64; i++)                        // Note <=
+                    {
+                    int val = model.get("source" + source + "hc" + (soft ? "0" : "1") + "s" + i);
+                    val++;
+                    if (val > 127) val = 127;
+                    if (_constrainTo(i - 1)) model.set("source" + source + "hc" + (soft ? "0" : "1") + "s" + i, val);
+                    }
+                undo.setWillPush(push);
+                }
+            });
+        menu[6] = new JMenuItem("Make Louder");
+        menu[6].addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                boolean push = undo.getWillPush();
+                undo.setWillPush(false);
+                for(int i = 1; i <= 64; i++)                        // Note <=
+                    {
+                    int val = model.get("source" + source + "hc" + (soft ? "0" : "1") + "s" + i);
+                    val += 8;
+                    if (val > 127) val = 127;
+                    if (_constrainTo(i - 1)) model.set("source" + source + "hc" + (soft ? "0" : "1") + "s" + i, val);
+                    }
+                undo.setWillPush(push);
+                }
+            });
+        menu[7] = new JMenuItem("Make Much Louder");
+        menu[7].addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                boolean push = undo.getWillPush();
+                undo.setWillPush(false);
+                for(int i = 1; i <= 64; i++)                        // Note <=
+                    {
+                    int val = model.get("source" + source + "hc" + (soft ? "0" : "1") + "s" + i);
+                    val += 32;
+                    if (val > 127) val = 127;
+                    if (_constrainTo(i - 1)) model.set("source" + source + "hc" + (soft ? "0" : "1") + "s" + i, val);
+                    }
+                undo.setWillPush(push);
+                }
+            });
+        menu[8] = new JMenuItem("Make Slightly Softer");
+        menu[8].addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                boolean push = undo.getWillPush();
+                undo.setWillPush(false);
+                for(int i = 1; i <= 64; i++)                        // Note <=
+                    {
+                    int val = model.get("source" + source + "hc" + (soft ? "0" : "1") + "s" + i);
+                    val--;
+                    if (val < 0) val = 0;
+                    if (_constrainTo(i - 1)) model.set("source" + source + "hc" + (soft ? "0" : "1") + "s" + i, val);
+                    }
+                undo.setWillPush(push);
+                }
+            });
+        menu[9] = new JMenuItem("Make Softer");
+        menu[9].addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                boolean push = undo.getWillPush();
+                undo.setWillPush(false);
+                for(int i = 1; i <= 64; i++)                        // Note <=
+                    {
+                    int val = model.get("source" + source + "hc" + (soft ? "0" : "1") + "s" + i);
+                    val -= 8;
+                    if (val < 0) val = 0;
+                    if (_constrainTo(i - 1)) model.set("source" + source + "hc" + (soft ? "0" : "1") + "s" + i, val);
+                    }
+                undo.setWillPush(push);
+                }
+            });
+        menu[10] = new JMenuItem("Make Much Softer");
+        menu[10].addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                boolean push = undo.getWillPush();
+                undo.setWillPush(false);
+                for(int i = 1; i <= 64; i++)                        // Note <=
+                    {
+                    int val = model.get("source" + source + "hc" + (soft ? "0" : "1") + "s" + i);
+                    val -= 32;
+                    if (val < 0) val = 0;
+                    if (_constrainTo(i - 1)) model.set("source" + source + "hc" + (soft ? "0" : "1") + "s" + i, val);
+                    }
+                undo.setWillPush(push);
+                }
+            });
+        return menu;
+        }
+
+    public JMenuItem[] buildLevelMenu(int source, int part)
+        {
+        int level = part / 2;
+        JMenuItem[] menu = new JMenuItem[11];
+        menu[0] = new JMenuItem("Set to Sawtooth");
+        menu[0].addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                boolean push = undo.getWillPush();
+                undo.setWillPush(false);
+                for(int i = 1; i <= 64; i++)                        // Note <=
+                    {
+                    if (_constrainTo(i - 1)) model.set("source" + source + "hcenvlevel" + level + "s" + i, 63 / i);
+                    }
+                undo.setWillPush(push);
+                }
+            });
+        menu[1] = new JMenuItem("Set to Square");
+        menu[1].addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                boolean push = undo.getWillPush();
+                undo.setWillPush(false);
+                for(int i = 1; i <= 64; i++)                        // Note <=
+                    {
+                    if (_constrainTo(i - 1)) model.set("source" + source + "hcenvlevel" + level + "s" + i, (i % 2 == 0 ? 0 : 63 / i));
+                    }
+                undo.setWillPush(push);
+                }
+            });
+        menu[2] = new JMenuItem("Set to Triangle");
+        menu[2].addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                boolean push = undo.getWillPush();
+                undo.setWillPush(false);
+                for(int i = 1; i <= 64; i++)                        // Note <=
+                    {
+                    if (_constrainTo(i - 1)) model.set("source" + source + "hcenvlevel" + level + "s" + i, (i % 2 == 0 ? 0 : 63 / (i * i)));
+                    }
+                undo.setWillPush(push);
+                }
+            });
+        menu[3] = new JMenuItem("Set to Max");
+        menu[3].addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                boolean push = undo.getWillPush();
+                undo.setWillPush(false);
+                for(int i = 1; i <= 64; i++)                        // Note <=
+                    {
+                    if (_constrainTo(i - 1)) model.set("source" + source + "hcenvlevel" + level + "s" + i, 63);
+                    }
+                undo.setWillPush(push);
+                }
+            });
+        menu[4] = null;         // separator
+                
+        menu[5] = new JMenuItem("Make Slightly Louder");
+        menu[5].addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                boolean push = undo.getWillPush();
+                undo.setWillPush(false);
+                for(int i = 1; i <= 64; i++)                        // Note <=
+                    {
+                    int val = model.get("source" + source + "hcenvlevel" + level + "s" + i);
+                    val++;
+                    if (val > 127) val = 63;
+                    if (_constrainTo(i - 1)) model.set("source" + source + "hcenvlevel" + level + "s" + i, val);
+                    }
+                undo.setWillPush(push);
+                }
+            });
+        menu[6] = new JMenuItem("Make Louder");
+        menu[6].addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                boolean push = undo.getWillPush();
+                undo.setWillPush(false);
+                for(int i = 1; i <= 64; i++)                        // Note <=
+                    {
+                    int val = model.get("source" + source + "hcenvlevel" + level + "s" + i);
+                    val += 4;
+                    if (val > 127) val = 63;
+                    if (_constrainTo(i - 1)) model.set("source" + source + "hcenvlevel" + level + "s" + i, val);
+                    }
+                undo.setWillPush(push);
+                }
+            });
+        menu[7] = new JMenuItem("Make Much Louder");
+        menu[7].addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                boolean push = undo.getWillPush();
+                undo.setWillPush(false);
+                for(int i = 1; i <= 64; i++)                        // Note <=
+                    {
+                    int val = model.get("source" + source + "hcenvlevel" + level + "s" + i);
+                    val += 16;
+                    if (val > 127) val = 63;
+                    if (_constrainTo(i - 1)) model.set("source" + source + "hcenvlevel" + level + "s" + i, val);
+                    }
+                undo.setWillPush(push);
+                }
+            });
+        menu[8] = new JMenuItem("Make Slightly Softer");
+        menu[8].addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                boolean push = undo.getWillPush();
+                undo.setWillPush(false);
+                for(int i = 1; i <= 64; i++)                        // Note <=
+                    {
+                    int val = model.get("source" + source + "hcenvlevel" + level + "s" + i);
+                    val--;
+                    if (val < 0) val = 0;
+                    if (_constrainTo(i - 1)) model.set("source" + source + "hcenvlevel" + level + "s" + i, val);
+                    }
+                undo.setWillPush(push);
+                }
+            });
+        menu[9] = new JMenuItem("Make Softer");
+        menu[9].addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                boolean push = undo.getWillPush();
+                undo.setWillPush(false);
+                for(int i = 1; i <= 64; i++)                        // Note <=
+                    {
+                    int val = model.get("source" + source + "hcenvlevel" + level + "s" + i);
+                    val -= 4;
+                    if (val < 0) val = 0;
+                    if (_constrainTo(i - 1)) model.set("source" + source + "hcenvlevel" + level + "s" + i, val);
+                    }
+                undo.setWillPush(push);
+                }
+            });
+        menu[10] = new JMenuItem("Make Much Softer");
+        menu[10].addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                boolean push = undo.getWillPush();
+                undo.setWillPush(false);
+                for(int i = 1; i <= 64; i++)                        // Note <=
+                    {
+                    int val = model.get("source" + source + "hcenvlevel" + level + "s" + i);
+                    val -= 16;
+                    if (val < 0) val = 0;
+                    if (_constrainTo(i - 1)) model.set("source" + source + "hcenvlevel" + level + "s" + i, val);
+                    }
+                undo.setWillPush(push);
+                }
+            });
+        return menu;
+        }
+
+
 
     /** Add the per-source Harmonics category, both Soft and Loud */
     public JComponent addHarmonicDisplay(int source, boolean soft, Color color)
         {
-        Category category = new Category(this, (soft ? "Soft " : "Loud ") + "Harmonics", color);
+        Category category = new Category(this, (soft ? "Soft " : "Loud ") + "Harmonics", color, buildHarmonicMenu(source, soft));
         category.makeDistributable("source" + source);
         category.makePasteable("source" + source);
 
@@ -2823,7 +3160,11 @@ public static final int ALL_ON = 4;
     /** Builds a harmonic envelope display, given a source and part, plus a parameter for the part */ 
     public JComponent addHarmonicEnvelopeDisplay(int source, int partVal, String part, String title, Color color)
         {
-        Category category = new Category(this, title, color);
+        Category category = null;
+        if (partVal % 2 == 1)  // it's a level
+            category = new Category(this, title, color, buildLevelMenu(source, partVal));
+        else
+            category = new Category(this, title, color);
         category.makeDistributable("source" + source);
         category.makePasteable("source" + source);
 
@@ -3267,6 +3608,8 @@ public static final int ALL_ON = 4;
         {
         JFrame frame = super.sprout();
         receiveCurrent.setEnabled(false);                       // The K5000 can't do this
+        morphMenu.setEnabled(false);                                    // The K5000 can't do this
+        hillClimbMenu.setEnabled(false);                       // The K5000 can't do this
         addKawaiK5000Menu();
         return frame;
         }
@@ -3304,6 +3647,31 @@ public static final int ALL_ON = 4;
             }
         menu.add(constrainMenu);
         
+        JMenu loadWaveMenu = new JMenu("Load Wave into...");
+        menu.add(loadWaveMenu);
+        for(int i = 1; i <= 6; i++)                     // note <=
+            {
+            final int _i = i;
+            JMenuItem harmonicsMenu = new JMenuItem("Source " + _i + " Soft Harmonics");
+            harmonicsMenu.addActionListener(new ActionListener()
+                {
+                public void actionPerformed(ActionEvent e)
+                    {
+                    loadWaveAsHarmonics(_i, true);
+                    }
+                });
+            loadWaveMenu.add(harmonicsMenu);
+            harmonicsMenu = new JMenuItem("Source " + _i + " Loud Harmonics");
+            harmonicsMenu.addActionListener(new ActionListener()
+                {
+                public void actionPerformed(ActionEvent e)
+                    {
+                    loadWaveAsHarmonics(_i, false);
+                    }
+                });
+            loadWaveMenu.add(harmonicsMenu);
+            }
+                        
         JCheckBoxMenuItem unlock = new JCheckBoxMenuItem("Allow Harmonics Envelope Display Mouse-Over");
         allowUpdateFromMouse = getLastXAsBoolean("Mouseover", getSynthName(), true, true);
         unlock.setSelected(allowUpdateFromMouse);
@@ -3483,8 +3851,8 @@ public static final int ALL_ON = 4;
         if ((key.startsWith("effectcontrol") || key.startsWith("macrocontroller")) && 
             (key.contains("depth")) && val == 0)            // effectcontrol1depth, macrocontroller4depth2, etc.
             {
-            int newVal = 33;
-            model.set(key, 33);
+            int newVal = 64;
+            model.set(key, newVal);
             if (getPrintRevised()) System.out.println("Warning (Synth): Revised " + key + " from " + val + " to " + newVal + " (range " + min + " ... " + max + ")");             
             }
         /*
@@ -3549,7 +3917,7 @@ public static final int ALL_ON = 4;
     // starting at the given position in data
     public int emitTone(Model model, byte[] data, int pos, int sources )
         {
-        System.err.println("" + pos + "\tCHECKSUM");
+        //System.err.println("" + pos + "\tCHECKSUM");
         pos++;                      // skip checksum space
         int start = pos;
 
@@ -3651,20 +4019,20 @@ public static final int ALL_ON = 4;
                                 
                 if (j == 2)             // velo sw and velo
                     {
-                    System.err.println("velosw");
+                    //System.err.println("velosw");
                     data[pos++] = (byte)((model.get("source" + i + "generalvelosw") << 5) | 
                         (model.get("source" + i + "generalvelo")));
                     }
                 else if (j == 28) // wavekitmsb
                     {
-                    System.err.println("dcawavekitmsb");
+                    //System.err.println("dcawavekitmsb");
                     int wavekit = model.get("source" + i + "dcowavekit") + PCM_START;
                     boolean additive = (model.get("source" + i + "dcoadditive") == 1);
                     data[pos++] = (byte)(additive ? 4 : (wavekit >>> 7));                           // additive is 512
                     }
                 else if (j == 29) // wavekitlsb
                     {
-                    System.err.println("dcawavekitlsb");
+                    //System.err.println("dcawavekitlsb");
                     int wavekit = model.get("source" + i + "dcowavekit") + PCM_START;
                     boolean additive = (model.get("source" + i + "dcoadditive") == 1);
                     data[pos++] = (byte)(additive ? 0 : (wavekit & 127));                           // additive is 512
@@ -3789,15 +4157,17 @@ public static final int ALL_ON = 4;
         // F0 40 CHANNEL 20 00 0a 00 BANK PATCHNUM SINGLE_CHECKSUM EFFECT/COMMON SOURCE* WAVEKIT* F7
         // The only wavekits provided are those for which the source is NOT additive.
     
-        System.err.println("0\tF0");
-        System.err.println("1\t40");
-        System.err.println("2\tchannel");
-        System.err.println("3\t20");
-        System.err.println("4\t00");
-        System.err.println("5\t0A");
-        System.err.println("6\t00");
-        System.err.println("7\tBANK");
-        System.err.println("8\tNUMBER");
+        /*
+          System.err.println("0\tF0");
+          System.err.println("1\t40");
+          System.err.println("2\tchannel");
+          System.err.println("3\t20");
+          System.err.println("4\t00");
+          System.err.println("5\t0A");
+          System.err.println("6\t00");
+          System.err.println("7\tBANK");
+          System.err.println("8\tNUMBER");
+        */
 
     
         data[0] = (byte)0xF0;
@@ -3824,7 +4194,7 @@ public static final int ALL_ON = 4;
 
     public Object[] emitBank(Model[] models, int bank, boolean toFile) 
         {
-        System.err.println("EMIT BANK");
+        //System.err.println("EMIT BANK");
         boolean[] tonemap = new boolean[128];
         
         int datalen = 8 + 19 + 1;
@@ -3855,7 +4225,7 @@ public static final int ALL_ON = 4;
         // 2        E               3
         // 3        F               4
         
-        System.err.println("HEADER");
+        //System.err.println("HEADER");
         byte[] data = new byte[datalen];
         
         data[0] = (byte)0xF0;
@@ -3868,7 +4238,7 @@ public static final int ALL_ON = 4;
         data[7] = (byte)BANK_VALS[bank];                    // bank
         int pos = 8;
                         
-        System.err.println("TONE MAP");
+        //System.err.println("TONE MAP");
         // Load the tone map
         int patch = 0;
         for(int j = 0; j < 18; j++)
@@ -3887,17 +4257,17 @@ public static final int ALL_ON = 4;
             ((tonemap[126] ? 1 : 0) +
             (tonemap[127] ? 2 : 0));
 
-        System.err.println("POSITION IS " + pos);
+        //System.err.println("POSITION IS " + pos);
             
                                         
         // Load the patches
 
         for(Model m : models)
             {
-            System.err.println("Model " + m);
+            //System.err.println("Model " + m);
             if (m != null)
                 {
-                System.err.println("\t\t\t\t---> " + m.get("name", ""));
+                //System.err.println("\t\t\t\t---> " + m.get("name", ""));
                 pos = emitTone(m, data, pos, m.get("srctype"));
                 }
             }
@@ -4317,6 +4687,10 @@ public static final int ALL_ON = 4;
                     int harmonic = StringUtility.getFirstInt(remainder);
                     data = new int[] { 0x02, 0x44, (source - 1), (harmonic - 1), 0x08, 0x00, val };
                     }
+                else if (key.endsWith("ksoftharmonics") || key.endsWith("kloudharmonics"))
+                	{
+                	return new Object[0];	// harmonics dials
+                	}
                 else
                     {
                     System.err.println("Unknown Parameter " + key);
@@ -4603,7 +4977,7 @@ public static final int ALL_ON = 4;
 
 
     // Patches are big.  We need a bigger countdown to wait for them to arrive during bulk downloading
-    public int getBatchDownloadFailureCountdown() { return 10; }
+    public int getBatchDownloadFailureCountdown() { return 50; }
         
     // When we don't get a response while doing a batch download, it is likely not because
     // the synth was slow to respond, but rather because the patch is a NULL patch, and the
@@ -4751,7 +5125,7 @@ public static final int ALL_ON = 4;
         }
 
     /** Returns the standard pause after writing a bank -- this is set to the pause after writing
-        a patch, but it may be moot if we can't write a whole bank anyway.  */
+        a patch (or pause after sending all parameters), but it may be moot if we can't write a whole bank anyway.  */
     public int getPauseAfterWriteBank() 
         {
         // Returns the pause, in milliseconds, after writing a bank sysex message
@@ -4761,11 +5135,11 @@ public static final int ALL_ON = 4;
         // getSupportsBankReads() and getSupportsBankWrites()).
         return getPauseAfterWritePatch(); 
         }  
-    
+        
     // We do NOT write bank patches on the Mac, because Java, or CoreMidi4Java, at present cannot write sysex messages larger than 39844 on the Mac
     public boolean getSupportsBankWrites() 
         {
-        return true;
+        return false;
         //if (Style.isMac()) return false;
         //else return true;
         }
@@ -6212,6 +6586,291 @@ public static final int ALL_ON = 4;
     "Bag Pipe2",
     "Shanai2"
     };
+    
+    
+    //// UTILITIES
+    
+    public static String[] kHarmonicsNames = null;
+    public static int[][] kHarmonics = null;
+    
+    void loadKHarmonics()
+        {
+        if (kHarmonics == null)
+            {
+            try
+                {
+                ArrayList names = new ArrayList();
+                ArrayList harmonics = new ArrayList();
+        
+                LineNumberReader reader = new LineNumberReader(new InputStreamReader(new BufferedInputStream(getClass().getResourceAsStream("kHarmonics.out"))));
+                while(true)
+                    {
+                    String n = reader.readLine();
+                    if (n == null) break;
+                    names.add(n);
+                    String h = reader.readLine();
+                    Scanner scan = new Scanner(h);
+                    int[] harm = new int[128];
+                    for(int i = 0; i < 128; i++)
+                        harm[i] = scan.nextInt();
+                    harmonics.add(harm);
+                    }
+                kHarmonicsNames = (String[])(names.toArray(new String[0]));
+                kHarmonics = (int[][])(harmonics.toArray(new int[0][0]));
+                }
+            catch (IOException ex)
+                {
+                ex.printStackTrace();
+                }
+            }
+        }
+    
+    public void setKHarmonics(int source, int harmonics, boolean soft)
+        {
+        boolean midi = getSendMIDI();
+        setSendMIDI(false);
+        for(int i = 1; i <= 128; i++)                   // note <=
+            {
+            model.set("source" + source + "hc" + (soft ? "0" : "1") + "s" + i, kHarmonics[harmonics - 1][i - 1]);
+            }
+        setSendMIDI(midi);
+        } 
+        
+    /** Adds the per-source "K5Harmonics" category. */    
+    public JComponent addK5Harmonics(int source, Color color)
+        {
+        Category category = new Category(this, "K5 Harmonics", color);
+        JComponent comp;
+        String[] params;
+        HBox hbox = new HBox();
+        VBox vbox = new VBox();
+
+        comp = new LabelledDial("Soft", this, "source" + source + "ksoftharmonics", color, 1, 484)
+            {
+            boolean mouseDown;
+            public String map(int val) 
+                { 
+                loadKHarmonics();
+                return "<html><center>" + val + "<br><font size=-3>" + kHarmonicsNames[val-1] + "</font></center></html>";
+                }
+            public void didMouseDown()
+                {
+                getUndo().push(getModel());
+                getUndo().setWillPush(false);
+                mouseDown = true;
+                }
+            public void didMouseUp()
+                {
+                getUndo().setWillPush(true);
+                mouseDown = false;              
+                }
+            public void update(String key, Model model)
+                {
+                super.update(key, model);
+                if (mouseDown)
+                    {
+                    loadKHarmonics();
+                    setKHarmonics(source, model.get(key, 1), true);
+                    }
+                }
+            };
+        model.setStatus("source" + source + "ksoftharmonics", Model.STATUS_RESTRICTED);
+                
+        hbox.add(comp);
+        
+        comp = new LabelledDial("Loud", this, "source" + source + "kloudharmonics", color, 1, 484)
+            {
+            boolean mouseDown;
+            public String map(int val) 
+                { 
+                loadKHarmonics();
+                return "<html><center>" + val + "<br><font size=-3>" + kHarmonicsNames[val-1] + "</font></center></html>";
+                }
+            public void didMouseDown()
+                {
+                getUndo().push(getModel());
+                getUndo().setWillPush(false);
+                mouseDown = true;
+                }
+            public void didMouseUp()
+                {
+                getUndo().setWillPush(true);
+                mouseDown = false;              
+                }
+            public void update(String key, Model model)
+                {
+                super.update(key, model);
+                if (mouseDown)
+                    {
+                    loadKHarmonics();
+                    setKHarmonics(source, model.get(key, 1), false);
+                    }
+                }
+            };
+        model.setStatus("source" + source + "kloudharmonics", Model.STATUS_RESTRICTED);
+
+        hbox.add(comp);
+
+        category.add(hbox, BorderLayout.CENTER);
+        return category;
+        }
+    
+ 
+    /** A convenience method for loading a WAV file. */
+    public File doLoad(String title, final String[] filenameExtensions)
+        {
+        FileDialog fd = new FileDialog((JFrame)(SwingUtilities.getRoot(this)), title, FileDialog.LOAD);
+        fd.setFilenameFilter(new FilenameFilter()
+            {
+            public boolean accept(File dir, String name)
+                {
+                for(int i = 0; i < filenameExtensions.length; i++)
+                    if (StringUtility.ensureFileEndsWith(name, filenameExtensions[i]).equals(name))
+                        return true;
+                return false;
+                }
+            });
+
+        fd.setDirectory(getLastX("WavDirectory", getSynthClassName(), true));
+
+        disableMenuBar();
+        fd.setVisible(true);
+        enableMenuBar();
+        File f = null; // make compiler happy
+                
+        if (fd.getFile() != null)
+            {
+            try
+                {
+                f = new File(fd.getDirectory(), fd.getFile());
+                setLastX(f.getCanonicalPath(), "WavDirectory", getSynthClassName(), true);
+                }                       
+            catch (Exception ex)
+                {
+                Synth.handleException(ex); 
+                }
+            }
+            
+        return f;
+        }
+
+    public static final int MAXIMUM_SAMPLES = 2048;
+    public static final int WINDOW_SIZE = 65;
+    public static final double MINIMUM_AMPLITUDE = 0.001;
+
+    public double[] doLoadWave()
+        {
+        File file = doLoad("Load Wave...", new String[] { "wav", "WAV" });
+        if (file == null) return null;
+        
+        double[] waves = null;
+        double[] buffer = new double[256];
+        int count = 0;
+        
+        WavFile wavFile = null;
+        try 
+            {
+            double[] _waves = new double[MAXIMUM_SAMPLES];
+            wavFile = WavFile.openWavFile(file);
+                        
+            while(true)
+                {
+                // Read frames into buffer
+                int framesRead = wavFile.readFrames(buffer, buffer.length);
+                if (count + framesRead > MAXIMUM_SAMPLES)
+                    {
+                    showSimpleError("File Too Large", "This file may contain no more than " + MAXIMUM_SAMPLES + " samples.");
+                    return null;
+                    }
+                System.arraycopy(buffer, 0, _waves, count, framesRead);
+                count += framesRead;
+                if (framesRead < buffer.length) 
+                    break;
+                }
+            waves = new double[count];
+            System.arraycopy(_waves, 0, waves, 0, count);
+            }
+        catch (IOException ex)
+            {
+            showSimpleError("File Error", "An error occurred on reading the file.");
+            return null;
+            }
+        catch (WavFileException ex)
+            {
+            showSimpleError("Not a proper WAV file", "WAV files must be mono 16-bit.");
+            return null;
+            }
+
+        try
+            {
+            wavFile.close();
+            }
+        catch (Exception ex) { }
+        
+        int desiredSampleSize = 128 * 2;                          // because we have up to 128 partials
+        int currentSampleSize = waves.length;
+                                                                        
+        /// Resample to our sampling rate
+        double[] newvals = WindowedSinc.interpolate(
+            waves,
+            currentSampleSize,
+            desiredSampleSize,              // notice desired and current are swapped -- because these are SIZES, not RATES
+            WINDOW_SIZE,
+            true);           
+                        
+        // Note no window.  Should still be okay (I think?)
+        double[] harmonics = FFT.getHarmonics(newvals);
+        double[] finished = new double[harmonics.length / 2];
+        for (int s=1 ; s < harmonics.length / 2; s++)                   // we skip the DC offset (0) and set the Nyquist frequency bin (harmonics.length / 2) to 0
+            {
+            finished[s - 1] = (harmonics[s] >= MINIMUM_AMPLITUDE ? harmonics[s]  : 0 );
+            }
+
+        double max = 0;
+        for(int i = 0; i < finished.length; i++)
+            {
+            if (max < finished[i])
+                max = finished[i];
+            }
+                                        
+        if (max > 0)
+            {
+            for(int i = 0; i < finished.length; i++)
+                {
+                finished[i] /= max;
+                }
+            }
+                        
+        return finished;
+        }
+
+    public static final int HARMONICS_BOTH = 0;
+    public static final int HARMONICS_1 = 1;
+    public static final int HARMONICS_2 = 2;
+    
+    public void loadWaveAsHarmonics(int source, boolean soft)
+        {
+        boolean currentMIDI = getSendMIDI();
+        setSendMIDI(false);
+        double[] harm = doLoadWave();
+        if (harm == null) 
+            {
+            setSendMIDI(currentMIDI);
+            return;
+            }
+                
+        for(int i = 1; i <= 128; i++)                   // note <=
+            {
+            int h = (int)(harm[i - 1] * 128);
+            if (h == 128) h = 127;
+            model.set("source" + source + "hc" + (soft ? "0" : "1") + "s" + i, h);
+            }
+        setSendMIDI(currentMIDI);
+        repaint();
+        }
+       
+    
+    //// TESTING
 
     public boolean testVerify(Synth synth2, String key, Object obj1, Object obj2) 
         {
@@ -6244,4 +6903,64 @@ public static final int ALL_ON = 4;
         }
 
     }
-                                        
+      
+      
+/*
+  KAWAI K5000 ECCENTRICITIES
+        
+  The is a small documentation of some of the Kawai K5000's misfeatures and documentation errors.
+        
+  BANKS GO A, D, E, F, M.  Bank B is a modified general MIDI bank for the Kawai K5000W and Bank C is a fixed
+  general MIDI bank for the K5000W.
+        
+  MISSING SEND-TO-CURRENT-PATCH SYSEX MESSAGE.  This is the biggest one.  The Kawai K5000, like the K5 and K1,
+  does not have a send-to-current-patch message, which makes auditioning, syncing, resetting, randomizing, and
+  lots of other tasks very difficult.  Edisyn has two alternatives, neither of which are viable.  The first
+  alternative is to write to a "scratch patch", and then do a program change to that patch.  This cannot be
+  done because the K5000 has flash memory, and repeatedly writing to a scratch patch would burn it out.  The
+  second alternative is to send every parameter separately.  For a 6 source patch, this would take about 25
+  seconds.  So it's not in the cards.
+        
+  EXCESSIVELY LONG BANK SYSEX MESSAGE.  The K5000's bank sysex dump mesages can be 100K or longer.  This is
+  absurd: it takes forever, provides no feedback as to its current status, and worst of all, Java can't send
+  messages that long.
+        
+  UNDOCUMENTED KAA AND KA1 FILES.  People have reverse-engineered these but Edisyn presently cannot support them.
+        
+  HARMONIC ENVELOPE RATES ARE OPPOSITE OTHER ENVELOPE RATES.  Most envelopes have "times" which go 0...127.
+  But harmonic envelope rates are "rates" and go 127...0.
+        
+  SYSEX VALUES THAT SERVE NO PURPOSE.
+        
+  - MORF FLAG only serves to determine which screen is displayed
+  - DRUM MARK is unknown
+  - NO USE is some how different from DUMMY
+                
+  HARMONIC ENVELOPE LOOP PARAMETER DOCUMENTATION IS WRONG.   The documentation says that OFF is Level1=64, 
+  Level2 =0; LP1 is Level1=0, Level2=64; LP2 is Level1=64, Level2=64, UNKNOWN is Level1=0, Level2=0.  This is
+  WRONG.  The correct values are: OFF is Level1=0, Level2=0; LP1 is Level1=64, Level2=64, LP2 is Level1=0,
+  Level2=64, UNKNOWN is Level1=64, Level2=0.
+        
+  DCA VELO CURVE is shown with just three bits.  But it has values 0...11.
+        
+  CHANGE TO SINGLE MODE (p. 36) does not do anything.
+        
+  EFFECTS START AT 11.  Effects are separate from Reverb methods in the documentation and in the sysex messages.
+  But they still start at 11 for no reason (there are 11 reverb methods, 0...10).
+        
+  PATCHES ARE VARIABLE IN SIZE.  However banks are fixed to 128 patches and have a fixed amount of memory.  This
+  means that (1) you typically can't put 128 patches in a bank, so (2) you have to have dummy patches filling the
+  remaining slots.
+        
+  SR WAVE 424 DUPLICATES SR WAVE 425.  At least in the documentation, where they're both called
+  "423 > 64th Harmonics Cyclic".
+        
+  NUMEROUS INCONSISTENCIES IN EFFECTS PARAMETERS.   Don't get me started.
+        
+  MORF LOOP.  The Morf Loop parameter in sysex appears to have off, lp1, and lp2 as options.  But on the unit
+  the only options are off and "loop".
+        
+  MORF EXECUTION.  You can execute a Morf from sysex.  But you cannot download the resulting Morf because the
+  K5000 is lacking a Request Current Patch sysex message.
+        
+*/                                  

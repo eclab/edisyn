@@ -6607,12 +6607,14 @@ public static final int ALL_ON = 4;
                     {
                     String n = reader.readLine();
                     if (n == null) break;
-                    names.add(n);
+                    names.add(n.trim());
                     String h = reader.readLine();
                     Scanner scan = new Scanner(h);
                     int[] harm = new int[128];
                     for(int i = 0; i < 128; i++)
-                        harm[i] = scan.nextInt();
+                        {
+                        harm[i] = (int)Math.round((127.0 * scan.nextInt()) / 99.0);
+                        }
                     harmonics.add(harm);
                     }
                 kHarmonicsNames = (String[])(names.toArray(new String[0]));
@@ -6645,13 +6647,13 @@ public static final int ALL_ON = 4;
         HBox hbox = new HBox();
         VBox vbox = new VBox();
 
-        comp = new LabelledDial("Soft", this, "source" + source + "ksoftharmonics", color, 1, 484)
+        comp = new LabelledDial("Soft", this, "source" + source + "ksoftharmonics", color, 1, 496)
             {
             boolean mouseDown;
             public String map(int val) 
                 { 
                 loadKHarmonics();
-                return "<html><center>" + val + "<br><font size=-3>" + kHarmonicsNames[val-1] + "</font></center></html>";
+                return "<html><center>&nbsp;&nbsp;&nbsp;" + val + "&nbsp;&nbsp;&nbsp;<br><font size=-3>" + kHarmonicsNames[val-1] + "</font></center></html>";
                 }
             public void didMouseDown()
                 {
@@ -6674,17 +6676,18 @@ public static final int ALL_ON = 4;
                     }
                 }
             };
+        ((LabelledDial)comp).setMaxExtent(512);
         model.setStatus("source" + source + "ksoftharmonics", Model.STATUS_RESTRICTED);
                 
         hbox.add(comp);
         
-        comp = new LabelledDial("Loud", this, "source" + source + "kloudharmonics", color, 1, 484)
+        comp = new LabelledDial("Loud", this, "source" + source + "kloudharmonics", color, 1, 496)
             {
             boolean mouseDown;
             public String map(int val) 
                 { 
                 loadKHarmonics();
-                return "<html><center>" + val + "<br><font size=-3>" + kHarmonicsNames[val-1] + "</font></center></html>";
+                return "<html><center>&nbsp;&nbsp;&nbsp;" + val + "&nbsp;&nbsp;&nbsp;<br><font size=-3>" + kHarmonicsNames[val-1] + "</font></center></html>";
                 }
             public void didMouseDown()
                 {
@@ -6707,6 +6710,7 @@ public static final int ALL_ON = 4;
                     }
                 }
             };
+        ((LabelledDial)comp).setMaxExtent(512);
         model.setStatus("source" + source + "kloudharmonics", Model.STATUS_RESTRICTED);
 
         hbox.add(comp);

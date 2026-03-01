@@ -82,6 +82,22 @@ public class KawaiK5000 extends Synth
     // CCs that the 16 dials on the K5000s
     public static final int[] DIAL_CCS = { 0x10, 0x12, 0x4A, 0x49, 0x11, 0x13, 0x4D, 0x4E, 0x47, 0x4B, 0x4C, 0x48, 0x50, 0x51, 0x52, 0x53 };
         
+	public static final int ACTION_UP = 0;
+	public static final int ACTION_UP_HIGH = 1;
+	public static final int ACTION_DOWN = 2;
+	public static final int ACTION_DOWN_HIGH = 3;
+	public static final int ACTION_DOUBLE = 4;
+	public static final int ACTION_HALVE = 5;
+	public static final int ACTION_RANDOM = 6;
+	public static final int ACTION_JITTER = 7;
+	public static final int ACTION_BOOST_BASS = 8;
+	public static final int ACTION_DAMPEN_BASS = 9;
+	public static final int ACTION_BOOST_TREBLE = 10;
+	public static final int ACTION_DAMPEN_TREBLE = 11;
+	public static final double BOOST = 0.4;  // 1.0000620039; /// 1.0002480158;		// 1 + 1.0 / 63 / 64.0
+	public static final String[] ACTIONS = 
+		{ "Up\u2191", "Up\u2191\u2191\u2191", "Down\u2193", "Down\u2193\u2193\u2193", "Double", "Halve", "Random", "Jitter", "Bass\u2191", "Bass\u2193", "Treble\u2191", "Treble\u2193" };
+
     // Number of effects
     public static final int NUM_EFFECTS = 4;
     // Number of parameters per effect
@@ -645,7 +661,7 @@ public static final int ALL_ON = 4;
 
             hbox = new HBox();
             hbox.add(addHarmonics(source, Style.COLOR_A()));
-            hbox.addLast(addK5Harmonics(source, Style.COLOR_B()));
+            hbox.addLast(addK5Harmonics(source, Style.COLOR_C()));
             vbox.add(hbox);
                 
             JComponent c1 = (JComponent)add(addHarmonicDisplay(source, true, Style.COLOR_A()));
@@ -699,7 +715,11 @@ public static final int ALL_ON = 4;
             vbox.add(hbox);
             
             hbox = new HBox();
-            hbox.addLast(addHarmonicEnvelopeDisplay(source, 8, "loop", "Loop", Style.COLOR_B()));
+            c1 = (JComponent)addHarmonicEnvelopeDisplay(source, 8, "loop", "Loop", Style.COLOR_B());
+            //c2 = (JComponent)addHarmonicEnvelopeDisplay(source, 8, "loop", "Loop", Style.COLOR_B());
+ 			c2 = (JComponent)addK5LevelHarmonics(source, Style.COLOR_C());
+            split = new HSplitBox(c1, c2);
+            hbox.addLast(split);
             vbox.add(hbox);
 
             soundPanel.add(vbox, BorderLayout.CENTER);
@@ -2629,6 +2649,7 @@ public static final int ALL_ON = 4;
         return category;
         }
 
+/*
     public JMenuItem[] buildHarmonicMenu(int source, boolean soft)
         {
         JMenuItem[] menu = new JMenuItem[11];
@@ -2961,13 +2982,13 @@ public static final int ALL_ON = 4;
             });
         return menu;
         }
-
+*/
 
 
     /** Add the per-source Harmonics category, both Soft and Loud */
     public JComponent addHarmonicDisplay(int source, boolean soft, Color color)
         {
-        Category category = new Category(this, (soft ? "Soft " : "Loud ") + "Harmonics", color, buildHarmonicMenu(source, soft));
+        Category category = new Category(this, (soft ? "Soft " : "Loud ") + "Harmonics", color); // , buildHarmonicMenu(source, soft));
         category.makeDistributable("source" + source);
         category.makePasteable("source" + source);
 
@@ -3161,9 +3182,11 @@ public static final int ALL_ON = 4;
     public JComponent addHarmonicEnvelopeDisplay(int source, int partVal, String part, String title, Color color)
         {
         Category category = null;
+        /*
         if (partVal % 2 == 1)  // it's a level
             category = new Category(this, title, color, buildLevelMenu(source, partVal));
         else
+        */
             category = new Category(this, title, color);
         category.makeDistributable("source" + source);
         category.makePasteable("source" + source);
@@ -4687,7 +4710,8 @@ public static final int ALL_ON = 4;
                     int harmonic = StringUtility.getFirstInt(remainder);
                     data = new int[] { 0x02, 0x44, (source - 1), (harmonic - 1), 0x08, 0x00, val };
                     }
-                else if (key.endsWith("ksoftharmonics") || key.endsWith("kloudharmonics"))
+                else if (key.endsWith("ksoftharmonics") || key.endsWith("kloudharmonics") ||
+                	key.contains("klevelharmonics"))
                 	{
                 	return new Object[0];	// harmonics dials
                 	}
@@ -6633,7 +6657,164 @@ public static final int ALL_ON = 4;
         setSendMIDI(false);
         for(int i = 1; i <= 128; i++)                   // note <=
             {
-            model.set("source" + source + "hc" + (soft ? "0" : "1") + "s" + i, kHarmonics[harmonics - 1][i - 1]);
+            if (_constrainTo(i - 1)) model.set("source" + source + "hc" + (soft ? "0" : "1") + "s" + i, kHarmonics[harmonics - 1][i - 1]);
+            }
+        setSendMIDI(midi);
+        } 
+
+	public void actionKHarmonics(int source, int action, boolean soft)
+		{
+		getUndo().push(getModel());
+		getUndo().setWillPush(false);
+        boolean midi = getSendMIDI();
+        setSendMIDI(false);
+        for(int i = 1; i <= 64; i++)                   // note <=
+            {
+            if (_constrainTo(i - 1)) 
+            	{
+            	int val = model.get("source" + source + "hc" + (soft ? "0" : "1") + "s" + i);
+            	switch (action)
+            		{
+            		case ACTION_UP:
+            		val = val + 1;
+            		if (val > 127) val = 127;
+            		break;
+            		case ACTION_UP_HIGH:
+            		val = val + 8;
+            		if (val > 127) val = 127;
+            		break;
+            		case ACTION_DOWN:
+            		val = val - 1;
+            		if (val < 0) val = 0;
+            		break;
+            		case ACTION_DOWN_HIGH:
+            		val = val - 8;
+            		if (val < 0) val = 0;
+            		break;
+            		case ACTION_DOUBLE:
+            		if (val == 0) val = 1;
+            		else val = val * 2;
+            		if (val > 127) val = 127;
+            		break;
+            		case ACTION_HALVE:
+            		val = val / 2;
+            		break;
+            		case ACTION_RANDOM:
+            		val = random.nextInt(128);
+            		break;
+            		case ACTION_JITTER:
+					int noise = 0;
+            		while (true)
+            			{
+            			noise = random.nextInt(33) - 16;
+            			if (noise + val <= 127 && noise + val >= 0) break;
+            			}
+            		val = noise + val;
+            		break;
+            		case ACTION_BOOST_BASS:
+            		val = (int)Math.ceil(val + BOOST * (63 - (i - 1)));
+            		if (val > 127) val = 127;
+            		break;
+            		case ACTION_DAMPEN_BASS:
+            		val = (int)Math.floor(val - BOOST * (63 - (i - 1)));
+            		if (val < 0) val = 0; 
+            		break;
+            		case ACTION_BOOST_TREBLE:
+            		val = (int)Math.ceil(val + BOOST * (i - 1) );
+            		if (val > 127) val = 127;
+            		break;
+            		case ACTION_DAMPEN_TREBLE:
+            		val = (int)Math.floor(val - BOOST * (i - 1));
+            		if (val < 0) val = 0; 
+            		break;
+            		}
+            	model.set("source" + source + "hc" + (soft ? "0" : "1") + "s" + i, val);
+            	}
+            }
+        setSendMIDI(midi);
+        getUndo().setWillPush(true);
+		}
+
+	public void actionKLevelHarmonics(int source, int action, int level)
+		{
+		getUndo().push(getModel());
+		getUndo().setWillPush(false);
+        boolean midi = getSendMIDI();
+        setSendMIDI(false);
+        for(int i = 1; i <= 64; i++)                   // note <=
+            {
+            if (_constrainTo(i - 1)) 
+            	{
+            	int val = model.get("source" + source + "hcenvlevel" + level + "s" + i);
+            	switch (action)
+            		{
+            		case ACTION_UP:
+            		val = val + 1;
+            		if (val > 63) val = 63;
+            		break;
+            		case ACTION_UP_HIGH:
+            		val = val + 4;
+            		if (val > 63) val = 63;
+            		break;
+            		case ACTION_DOWN:
+            		val = val - 1;
+            		if (val < 0) val = 0;
+            		break;
+            		case ACTION_DOWN_HIGH:
+            		val = val - 4;
+            		if (val < 0) val = 0;
+            		break;
+            		case ACTION_DOUBLE:
+            		if (val == 0) val = 1;
+            		else val = val * 2;
+            		if (val > 63) val = 63;
+            		break;
+            		case ACTION_HALVE:
+            		val = val / 2;
+            		break;
+            		case ACTION_RANDOM:
+            		val = random.nextInt(64);
+            		break;
+            		case ACTION_JITTER:
+					int noise = 0;
+            		while (true)
+            			{
+            			noise = random.nextInt(17) - 8;
+            			if (noise + val <= 63 && noise + val >= 0) break;
+            			}
+            		val = noise + val;
+            		break;
+            		case ACTION_BOOST_BASS:
+            		val = (int)Math.ceil(val + BOOST / 2.0 * (63 - (i - 1)));
+            		if (val > 63) val = 63;
+            		break;
+            		case ACTION_DAMPEN_BASS:
+            		val = (int)Math.floor(val - BOOST / 2.0 * (63 - (i - 1)));
+            		if (val < 0) val = 0; 
+            		break;
+            		case ACTION_BOOST_TREBLE:
+            		val = (int)Math.ceil(val + BOOST / 2.0 * (i - 1) );
+            		if (val > 63) val = 63;
+            		break;
+            		case ACTION_DAMPEN_TREBLE:
+            		val = (int)Math.floor(val - BOOST / 2.0 * (i - 1));
+            		if (val < 0) val = 0; 
+            		break;
+            		}
+            	model.set("source" + source + "hcenvlevel" + level + "s" + i, val);
+            	}
+            }
+        setSendMIDI(midi);
+        getUndo().setWillPush(true);
+		}
+        
+    public void setKLevelHarmonics(int source, int harmonics, int level)
+        {
+        boolean midi = getSendMIDI();
+        setSendMIDI(false);
+        for(int i = 1; i <= 128; i++)                   // note <=
+            {
+            if (_constrainTo(i - 1)) model.set("source" + source + "hcenvlevel" + level + "s" + i, kHarmonics[harmonics - 1][i - 1] / 2);	// only goes to 64
             }
         setSendMIDI(midi);
         } 
@@ -6715,10 +6896,122 @@ public static final int ALL_ON = 4;
 
         hbox.add(comp);
 
+        PushButton doSoft = new PushButton("Soft Action", ACTIONS)
+            {
+            public void perform(int action)
+                {
+				actionKHarmonics(source, action, true);
+                }
+            };
+
+        PushButton doLoud = new PushButton("Loud Action", ACTIONS)
+            {
+            public void perform(int action)
+                {
+				actionKHarmonics(source, action, false);
+                }
+            };
+        
+        vbox.add(doSoft);
+        vbox.add(doLoud);
+        hbox.add(vbox);
+            
         category.add(hbox, BorderLayout.CENTER);
         return category;
         }
     
+
+    /** Adds the per-source "K5 Level Harmonics" category. */    
+    public JComponent addK5LevelHarmonics(int source, Color color)
+        {
+        Category category = new Category(this, "K5 Level Harmonics", color);
+        JComponent comp;
+        String[] params;
+        HBox hbox = new HBox();
+        VBox vbox = new VBox();
+        
+        for(int i = 0; i < 4; i++)
+        	{
+        	final int _i = i;
+			comp = new LabelledDial("Level " + i, this, "source" + source + "klevelharmonics" + i, color, 1, 496)
+				{
+				boolean mouseDown;
+				public String map(int val) 
+					{ 
+					loadKHarmonics();
+					return "<html><center>&nbsp;&nbsp;&nbsp;" + val + "&nbsp;&nbsp;&nbsp;<br><font size=-3>" + kHarmonicsNames[val-1] + "</font></center></html>";
+					}
+				public void didMouseDown()
+					{
+					getUndo().push(getModel());
+					getUndo().setWillPush(false);
+					mouseDown = true;
+					}
+				public void didMouseUp()
+					{
+					getUndo().setWillPush(true);
+					mouseDown = false;              
+					}
+				public void update(String key, Model model)
+					{
+					super.update(key, model);
+					if (mouseDown)
+						{
+						loadKHarmonics();
+						setKLevelHarmonics(source, model.get(key, 1), _i);
+						}
+					}
+				};
+			((LabelledDial)comp).setMaxExtent(512);
+			model.setStatus("source" + source + "klevelharmonics" + i, Model.STATUS_RESTRICTED);
+				
+			hbox.add(comp);
+			}
+
+        PushButton doLevel0 = new PushButton("Level 0 Action", ACTIONS)
+            {
+            public void perform(int action)
+                {
+				actionKLevelHarmonics(source, action, 0);
+                }
+            };
+
+        PushButton doLevel1 = new PushButton("Level 1 Action", ACTIONS)
+            {
+            public void perform(int action)
+                {
+				actionKLevelHarmonics(source, action, 1);
+                }
+            };
+        
+        PushButton doLevel2 = new PushButton("Level 2 Action", ACTIONS)
+            {
+            public void perform(int action)
+                {
+				actionKLevelHarmonics(source, action, 2);
+                }
+            };
+        
+        PushButton doLevel3 = new PushButton("Level 3 Action", ACTIONS)
+            {
+            public void perform(int action)
+                {
+				actionKLevelHarmonics(source, action, 3);
+                }
+            };
+        
+        vbox.add(doLevel0);
+        vbox.add(doLevel1);
+        hbox.add(vbox);
+        
+        vbox = new VBox();
+        vbox.add(doLevel2);
+        vbox.add(doLevel3);
+        hbox.add(vbox);
+
+        category.add(hbox, BorderLayout.CENTER);
+        return category;
+        }
  
     /** A convenience method for loading a WAV file. */
     public File doLoad(String title, final String[] filenameExtensions)

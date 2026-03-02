@@ -10328,6 +10328,9 @@ menubar.add(helpMenu);
     /** Return a list whether entire banks can be written.  Default is FALSE. */
     public boolean getSupportsBankWrites() { return false; }
 
+    /** Return a list whether entire banks can be saved.  Default is getSupportsBankWrites(). */
+    public boolean getSupportsBankSaves() { return getSupportsBankWrites(); }
+
     /** Return a list whether entire banks can be read or downloaded.  Default is getSupportsBankWrites(). */
     public boolean getSupportsBankReads() { return getSupportsBankWrites(); }
 
@@ -10363,7 +10366,10 @@ menubar.add(helpMenu);
         if (val == -1) return null;
         else return new int[] { val };
         }
-
+        
+    /** Called before writing a bank via individual patch writes, to allow the Synthesizer to write something first. */
+    public void writeBankAsRangePreamble(int bank) { return; }
+   
     /** Emits the models as a bank.  The bank number is provided if necessary. By default does nothing. */
     public Object[] emitBank(Model[] models, int bank, boolean toFile) { return new Object[0]; }
     

@@ -1148,6 +1148,16 @@ public class Blank extends Synth
         return false; 
         }
 
+    /** Return a list whether entire banks can be saved.  Default is getSupportsBankWrites(). */
+    public boolean getSupportsBankSaves()
+        { 
+        // Return true if the synth can save banks to disk as bank messages.  
+        // The default is getSupportsBankWrites().  You would override this message only in
+        // very rare cases, such as the Kawai K5000
+        return getSupportsBankWrites(); 
+        }
+
+
     public boolean getSupportsBankReads() 
         { 
         // Return true if the synth can dump bank messages that your editor can read.  By default
@@ -1318,6 +1328,15 @@ public class Blank extends Synth
         // needed for unusual synths which return more than one bank in a single bank message
         // (such as the Waldorf MicroWave).
         return super.getBanks(bankSysex); 
+        }
+        
+    public void writeBankAsRangePreamble(int bank) 
+        {
+        // This is called immediately before Edisyn writes an entire bank via a series of
+        // individual patch write messages (not a bank write message).  This gives you a
+        // chance to write something before the messages, as is needed by the Kawai K5000. 
+        // Normally you wouldn't override this message, it's only needed in rare cases.
+        return; 
         }
 
     public Object[] emitBank(Model[] models, int bank, boolean toFile) 

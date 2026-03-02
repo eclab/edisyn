@@ -1188,7 +1188,7 @@ public abstract class Synth extends JComponent implements Updatable
     long getNanoPauseBetweenMIDISends() { return (long)(getPauseBetweenMIDISends() * 1000000.0); }
 
     /** Override this to make sure that the given additional time (in ms) has transpired between MIDI patch changes. */
-    public int getPauseAfterChangePatch() { return 1000; }
+    public int getPauseAfterChangePatch() { return 0; }
     
     /** Override this to make sure that the given additional time (in ms) has transpired between sending all parameters and anything else (such as playing a note) */
     public int getPauseAfterSendAllParameters() { return 0; }
@@ -1445,7 +1445,7 @@ public abstract class Synth extends JComponent implements Updatable
                 model.setUpdateListeners(previous);
                 boolean send = getSendMIDI();
                 setSendMIDI(false);
-                model.updateAllListeners();
+                if (!isBatchDownloading()) model.updateAllListeners();
                 setSendMIDI(send);
 
                 // this last statement fixes a mystery.  When I call Randomize or Reset on
@@ -10328,6 +10328,9 @@ menubar.add(helpMenu);
     /** Return a list whether entire banks can be written.  Default is FALSE. */
     public boolean getSupportsBankWrites() { return false; }
 
+    /** Return a list whether entire banks can be saved.  Default is getSupportsBankWrites(). */
+    public boolean getSupportsBankSaves() { return getSupportsBankWrites(); }
+
     /** Return a list whether entire banks can be read or downloaded.  Default is getSupportsBankWrites(). */
     public boolean getSupportsBankReads() { return getSupportsBankWrites(); }
 
@@ -10363,7 +10366,10 @@ menubar.add(helpMenu);
         if (val == -1) return null;
         else return new int[] { val };
         }
-
+        
+    /** Called before writing a bank via individual patch writes, to allow the Synthesizer to write something first. */
+    public void writeBankAsRangePreamble(int bank) { return; }
+   
     /** Emits the models as a bank.  The bank number is provided if necessary. By default does nothing. */
     public Object[] emitBank(Model[] models, int bank, boolean toFile) { return new Object[0]; }
     

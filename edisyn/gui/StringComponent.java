@@ -40,6 +40,10 @@ public class StringComponent extends JPanel implements Updatable, HasKey
     
     public String getKey() { return key; }
 
+    
+    /** Returns the component's key as an array. */
+    public String[] getKeys() { return new String[] { getKey() }; }
+
     /** Returns the current value for the key in the model. */
     public String getText() { return synth.getModel().get(key, ""); }
         

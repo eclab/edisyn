@@ -22,24 +22,32 @@ import java.awt.event.*;
 public class HSplitBox extends JComponent implements Gatherable
     {
     JPanel panel = new JPanel();
-    JComponent lastComponent;
-        
     public Insets getInsets() { return Style.HBOX_INSETS(); }
 
     public HSplitBox(JComponent leftComponent, JComponent rightComponent)
         {
-        setLayout(new GridBagLayout());
-        GridBagConstraints constraints = new GridBagConstraints();
-        constraints.fill = GridBagConstraints.BOTH;
-        constraints.weightx = 1.0;
-        constraints.weighty = 1.0;
-        constraints.gridx = 0;
-        constraints.gridy = 0;
-        add(leftComponent, constraints);
-        constraints.gridx = 1;
-        add(rightComponent, constraints);
+        setLayout(new GridLayout());
+        add(leftComponent);
+        add(rightComponent);
         setBackground(Style.BACKGROUND_COLOR());
         }
+
+/*        
+          public HSplitBox(JComponent leftComponent, JComponent rightComponent)
+          {
+          setLayout(new GridBagLayout());
+          GridBagConstraints constraints = new GridBagConstraints();
+          constraints.fill = GridBagConstraints.BOTH;
+          constraints.weightx = 1.0;
+          constraints.weighty = 1.0;
+          constraints.gridx = 0;
+          constraints.gridy = 0;
+          add(leftComponent, constraints);
+          constraints.gridx = 1;
+          add(rightComponent, constraints);
+          setBackground(Style.BACKGROUND_COLOR());
+          }
+*/
     
     void gatherAllComponents(Container cont, java.util.ArrayList list)
         {

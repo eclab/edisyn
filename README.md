@@ -1,7 +1,7 @@
 ![Edisyn Splash Banner](https://raw.githubusercontent.com/eclab/edisyn/master/resources/pics/Banner.png)
 
 # Edisyn
-Synthesizer Patch Editor and Librarian (Version 36)
+Synthesizer Patch Editor and Librarian (Version 37)
 
 By Sean Luke (sean@cs.gmu.edu)
 
@@ -31,7 +31,9 @@ Donations are welcome via Paypal to my email address (sean@cs.gmu.edu).
 
 **Edisyn was featured on Bad Gear!** The second [M-Audio Venom](https://www.youtube.com/watch?v=Nzg030Cx5Vc) video featured Edisyn extensively and warmly as Edisyn is presently the only editor available for the unit on the Mac (and the best one overall).
 
-Version 36 is a maintenance release of mostly bugfixes, including a big one for the Blofeld.
+* New patch editors for the Kawai K5000 family!  This was a big, and difficult, one.
+* Bug fixes the CC reception and output for the D Station and Drumstation.  Thanks to Guy Rooms.
+* Assorted bug fixes
 
 
 ## Publications on Edisyn
@@ -74,6 +76,7 @@ Edisyn presently supports:
 * Kawai K1, Kawai K1m, and Kawai K1r (Single and Multi Modes)
 * Kawai K4 and Kawai K4r (Single, Multi, Drum, and Effect Modes)
 * Kawai K5 and K5m (Single and Multi Modes, plus single-cycle wave uploading)
+* Kawai K5000S, K5000R, and K5000W (Single and Multi Modes, plus single-cycle wave uploading)
 * Korg SG Rack and SG Pro X (Single (for SG Rack) and Multi Modes)
 * Korg MicroKorg (Single and Vocoder Modes)
 * Korg Microsampler

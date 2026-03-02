@@ -210,7 +210,20 @@ class SysexMessage {
         return bytes;
         }
 
-    private boolean arrayEquals(byte[] bytes1, int from1, int to1, byte[] bytes2, int from2, int to2) {
-        return Arrays.equals(bytes1, from1, to1, bytes2, from2, to2);
+    private boolean arrayEquals(byte[] bytes1, int from1, int to1, byte[] bytes2, int from2, int to2) 
+        {
+        if (to1 >= from1 &&
+            to2 >= from2 &&
+            to1 - from1 == to2 - from2)
+            {
+            for(int i = 0; i < (to1 - from1); i++)
+                {
+                if (bytes1[i + from1] != bytes2[i + from2]) return false;
+                }
+            return true;
+            }
+        else return false;
+                        
+        //return Arrays.equals(bytes1, from1, to1, bytes2, from2, to2);
         }
     }

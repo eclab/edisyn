@@ -1309,6 +1309,7 @@ public class Library extends AbstractTableModel
                 Object[] data = null;
                 saveAll = (bank == ALL_PATCHES);
                 data = emitBank(bank, false);
+                System.err.println("LIBRARY SIZE " + ((byte[])data[0]).length);
                 if (data != null)
                     {
                     if (synth.tuple == null || synth.tuple.outReceiver == null)
@@ -1332,6 +1333,8 @@ public class Library extends AbstractTableModel
                 saveAll = (bank == ALL_PATCHES);
                 int bankSize = synth.getValidBankSize(bank);
                 if (bankSize == -1) bankSize = getBankSize();
+
+                writeBankAsRangePreamble(bank);
                 writeRange(bank, 0, bankSize);
                 }
             else
@@ -1342,6 +1345,17 @@ public class Library extends AbstractTableModel
             }
         finally { saveAll = false; }
         }
+        
+        
+    void writeBankAsRangePreamble(int bank)
+        {
+        if (synth.tuple == null || synth.tuple.outReceiver == null)
+            {
+            if (!synth.setupMIDI())
+                return;
+            }
+        else synth.writeBankAsRangePreamble(bank);
+        }
 
 
     /** Saves to disk all the patches in the given bank,
@@ -1349,7 +1363,7 @@ public class Library extends AbstractTableModel
         If bank == ALL_PATCHES, then writes the entire library. */
     public void saveBank(int bank)
         {
-        if (synth.getSupportsBankWrites())
+        if (synth.getSupportsBankSaves())
             {
             Object[] d = emitBank(bank, true);
 

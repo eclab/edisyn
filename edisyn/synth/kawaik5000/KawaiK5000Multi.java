@@ -53,14 +53,15 @@ public class KawaiK5000Multi extends Synth
     public static final int NONE = -1;                                      // indicates "nothing" in effects lists
         
     public static final String[] BANKS = { "Bank" };
-    // Number of effects
-    public static final int NUM_EFFECTS = 4;
-    // Number of parameters per effect
-    public static final int NUM_EFFECT_PARAMETERS = 5;
     
     /// FIXME: Multi has this as Off/Loud/Soft, but Single has this as Off/Low/High
     
     public static final String[] VELO_SWITCH_TYPES = { "Off", "Loud", "Soft" };         
+    
+    // Number of effects
+    public static final int NUM_EFFECTS = 4;
+    // Number of parameters per effect
+    public static final int NUM_EFFECT_PARAMETERS = 5;
 
     // Names of effect parameters.  An underscore _ indicates a suggested non-breaking space
     public static final String[][] EFFECT_PARAMETER_NAMES = 
@@ -110,15 +111,12 @@ public class KawaiK5000Multi extends Synth
         // 0...99 is actually displayed as 1..100
         // 25 is actually +12db
         { 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100,  },
-        { 100, 100, 720, 720, NONE, 720, NONE, NONE, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, NONE, NONE, 100, 100, 100, 100, 100, 100, 100, 100, 20, 99, 99, 25, 25, 25, 25, 25, 25,  },
-        { NONE, NONE, 99, 99, 9, 99, NONE, NONE, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 100, 99, 99, 25, 25, 25, 25, 25, 25,  },
+        { 100, 100, 720, 720, NONE, 720, NONE, NONE, 100, 100, 100, 100, 100, 100, 100, 100, 100, 100, NONE, NONE, 100, 100, 100, 100, 100, 100, 100, 100, 20, 99, 99, 24, 24, 24, 24, 24, 24,  },
+        { NONE, NONE, 99, 99, 9, 99, NONE, NONE, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 99, 100, 99, 99, 24, 24, 24, 24, 24, 24,  },
         // The 9 below is actually displayed as (1...10).  it is Rotary Acceleration
-        { 100, 100, 720, 720, 1270, 720, 720, 720, 100, 200, 100, 200, 200, 200, 100, 100, 200, 200, 100, 200, 100, 200, 100, 200, 100, 100, 200, 200, 9, 99, NONE, NONE, NONE, 99, 99, 200, 200,  },
+        { 100, 100, 720, 720, 1270, 720, 720, 720, 100, 200, 100, 100, 200, 200, 100, 100, 200, 200, 100, 200, 100, 200, 100, 200, 100, 100, 200, 200, 9, 99, NONE, NONE, NONE, 99, 99, 200, 200,  },
         { 99, 99, 99, 99, 99, 99, 99, 99, 1, 1, 1, 1, 1, 100, 99, 99, 99, 99, NONE, NONE, NONE, NONE, 1, 1, 99, 99, 99, 99, 1, 99, NONE, 99, 99, 99, 99, 99, 99,  },
         };
-        
-    static HashMap multiDataParamsToIndex = null;
-    static HashMap sectionParamsToIndex = null;
 
     // Types of reverbs
     public static final String[] REVERB_TYPES = new String[]
@@ -178,6 +176,7 @@ public class KawaiK5000Multi extends Synth
     "Distortion and Delay"
     };
         
+        
     // Effect Controller and Assignable Controller Sources
     public static final String[] SOURCES = new String[]     
     {
@@ -213,6 +212,14 @@ public class KawaiK5000Multi extends Synth
     "Reverb Dry/Wet 2",
     };
 
+
+    // Do we change patch after doing a send?  This could get annoying if you're trying to edit the patch
+    // on the synthesizer directly while also using Edisyn.
+    boolean changePatchAfterSend = true;
+
+
+    HashMap multiDataParamsToIndex = null;
+    HashMap sectionParamsToIndex = null;
 
     public KawaiK5000Multi()
         {
@@ -269,10 +276,10 @@ public class KawaiK5000Multi extends Synth
         soundPanel = new SynthPanel(this);
         vbox = new VBox();
 
-        for(int section = 1; section <= 4; section++)
-            {
-            vbox.add(addSection(section, Style.COLOR_A()));
-            }
+        vbox.add(addSection(1, Style.COLOR_A()));
+        vbox.add(addSection(2, Style.COLOR_B()));
+        vbox.add(addSection(3, Style.COLOR_A()));
+        vbox.add(addSection(4, Style.COLOR_B()));
 
         soundPanel.add(vbox, BorderLayout.CENTER);
         addTab("Sections", (SynthPanel)soundPanel);
@@ -591,6 +598,7 @@ public class KawaiK5000Multi extends Synth
     public JComponent addEQ(Color color)
         {
         Category category = new Category(this, "EQ", color);
+        category.makeDistributable("geqfreq");
 
         JComponent comp;
         String[] params;
@@ -675,6 +683,17 @@ public class KawaiK5000Multi extends Synth
             }
         }
  
+ 
+    // EFFECT COMPACTING.
+    // My code follows the effects table on Page 123 of the K5000 manual.  Certain effects in this table
+    // have holes in their parameters.  My code also has holes.  However it turns out that in both the
+    // patch format and in the individual parameter sysex, these holes are compacted; thus if there is a
+    // missing parameter 3, then parameter 4 takes its place, and parameter 5 takes 4's place; and there
+    // is nothing for parameter 5.  Had I known these holes were compacted I would have shifted everything,
+    // but it's too late for that.  So I have to compensate for it in three places:  (1) in the display in
+    // the GUI (I compact the parameters to look better) (2) in the parameter sysex, and (3) in emitting
+    // and parsing patches.
+ 
     public HBox buildEffect(int effect, int type, Color color)
         {
         /*
@@ -734,12 +753,12 @@ public class KawaiK5000Multi extends Synth
                 count++;
                 String key = "effect" + (effect + 1) + "type" + (type + 1) + (i == 0 ? "depth" : "para" + i);
                 boolean addOne = (max == 99 || // all the 0...99 are displayed as 1-100
-                    EFFECT_PARAMETER_NAMES[i][type].equals("Acceleration"));                // Rotary Acceleration is 0...9 but displayed 1...10            
-                comp = lastDial = new LabelledDial(s[0], this, key, color, EFFECT_PARAMETER_MINS[i][type], trueMax, addOne ? -1 : 0)
+                    EFFECT_PARAMETER_NAMES[i][type].equals("Accel"));                // Rotary Acceleration is 0...9 but displayed 1...10  
+                comp = lastDial = new LabelledDial(s[0], this, key, color, EFFECT_PARAMETER_MINS[i][type], trueMax)
                     {
                     public boolean isSymmetric()
                         {
-                        return (max == 76);             // -12dB ... +12dB
+                        return (max == 76 || max == 24);             // -12dB ... +12dB
                         }
                                         
                     public String map(int val)
@@ -749,7 +768,18 @@ public class KawaiK5000Multi extends Synth
                         // The others are fairly easy.
                         if (max == 1)
                             {
-                            return (val == 0 ? "Sin" : "Tri");
+                            if (type == 28)     // rotary
+                                {
+                                return (val == 0 ? "Slow" : "Fast");
+                                }
+                            else                                // all else
+                                {
+                                return (val == 0 ? "Sin" : "Tri");
+                                }
+                            }
+                        else if (max == 24)
+                            {
+                            return "" + (max - 12) + "dB";
                             }
                         else if (max == 76)
                             {
@@ -757,7 +787,7 @@ public class KawaiK5000Multi extends Synth
                             }
                         else if (max <= 100)
                             {
-                            return String.valueOf(val) + EFFECT_PARAMETER_UNITS[_i][type];
+                            return String.valueOf(val + (addOne ? 1 : 0) + EFFECT_PARAMETER_UNITS[_i][type]);
                             }
                         else if (max == 1270)
                             {
@@ -800,6 +830,7 @@ public class KawaiK5000Multi extends Synth
     public JComponent addEffect(final int effect, Color color)
         {
         Category category = new Category(this, "Effect " + (effect + 1), color);
+        category.makePasteable("effect");
 
         JComponent comp;
         String[] params;
@@ -833,8 +864,7 @@ public class KawaiK5000Multi extends Synth
 
         category.add(hbox, BorderLayout.CENTER);
         return category;
-        }
-        
+        }    
 
 
     /// INSTRUMENTS GO:
@@ -850,6 +880,8 @@ public class KawaiK5000Multi extends Synth
     public JComponent addSection(int section, Color color)
         {
         Category category = new Category(this, "Section " + section, color);
+        category.makePasteable("section");
+
         JComponent comp;
         String[] params;
         HBox hbox = new HBox();
@@ -976,10 +1008,78 @@ public class KawaiK5000Multi extends Synth
         {
         JFrame frame = super.sprout();
         receiveCurrent.setEnabled(false);                       // The K5000 can't do this
-        //addKawaiK5000Menu();
+        addKawaiK5000Menu();
         return frame;
         }
 
+    /** Add the Kawai K5000 Menu and submenus */
+    public void addKawaiK5000Menu()
+        {
+        JMenu menu = new JMenu("K5000");
+        menubar.add(menu);
+                    
+        JMenuItem resetMenuItem = new JMenuItem("Reset (Reload from Flash)");
+        resetMenuItem.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                sendK5000Reset();
+                }
+            });
+        menu.add(resetMenuItem);
+
+        JMenuItem backupMenuItem = new JMenuItem("Backup (Write to Flash)");
+        backupMenuItem.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                sendK5000Backup();
+                }
+            });
+        menu.add(backupMenuItem);
+                
+        menu.addSeparator();
+
+        JCheckBoxMenuItem changePatchAfterSendItem = new JCheckBoxMenuItem("Change Patch after Send to Current Patch");
+        changePatchAfterSend = getLastXAsBoolean("ChangePatchAfterSend", getSynthName(), true, true);
+        changePatchAfterSendItem.setSelected(changePatchAfterSend);
+        changePatchAfterSendItem.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                changePatchAfterSend = changePatchAfterSendItem.isSelected();
+                setLastX("" + changePatchAfterSend, "changePatchAfterSend", getSynthName(), true);
+                }
+            });
+        menu.add(changePatchAfterSendItem);
+
+        }
+        
+        
+    public void sendK5000Reset()
+        {
+        if (showSimpleConfirm("Reset the K5000?", "Reload all current working memory from the stored Flash RAM?\nThis includes all Multi and Single patches.\nThis operation cannot be undone."))
+            {
+            try 
+                {
+                tryToSendSysex(new byte[] { (byte)0xF0, 0x40, (byte)getChannelOut(), 0x32, 0x00, 0x0a, 0x02, (byte)0xF7 });
+                }
+            catch (Exception e) { Synth.handleException(e); }
+            }
+        }
+        
+    public void sendK5000Backup()
+        {
+        if (showSimpleConfirm("Backup the K5000?", "Save all current working memory to the stored Flash RAM?\nThis includes all Multi and Single patches.\nThis operation cannot be undone."))
+            {
+            try 
+                {
+                tryToSendSysex(new byte[] { (byte)0xF0, 0x40, (byte)getChannelOut(), 0x32, 0x00, 0x0a, 0x01, (byte)0xF7 });
+                }
+            catch (Exception e) { Synth.handleException(e); }
+            }
+        }
+    
     public String getPatchName(Model model) { return model.get("name", "INIT    "); }
 
     public static final int BANK_M_MSB = 0x65;                // only has 64 PC values
@@ -1068,9 +1168,6 @@ public class KawaiK5000Multi extends Synth
 
     public static String getSynthName() { return "Kawai K5000S/K5000R [Multi]"; }
     
-    // The K5000 can't send to temporary memory.  Presently we are only sending as individual parameters.
-    public boolean getSendsAllParametersAsDump() { return false; }
-
     public int[] getNameAsBytes(Model model)
         {
         String name = model.get("name", "        ") + "        ";
@@ -1105,7 +1202,41 @@ public class KawaiK5000Multi extends Synth
         pos = emitMulti(model, data, pos);
 
         data[data.length - 1] = (byte)0xF7;
-        return new Object[] { data };
+
+
+        if (toWorkingMemory && changePatchAfterSend)
+            {
+            // On the K5000, Send to Current Patch is identical to Write Current Patch, but we
+            // have to do a write to the patch in question because ALL patches are in temporary memory,
+            // and there's no way to write to temporary memory, grrr.
+            //
+            // So we write to bank/number, or to A001 if there is none.
+            // Then we have to do a change patch to bank/number to display the result
+
+            byte NN = (byte)tempModel.get("number");
+                                
+            int bankMSB = BANK_M_MSB;
+            int bankLSB = 0;
+                
+            try
+                {
+                return new Object[]
+                    {
+                    data,
+                    new ShortMessage(ShortMessage.CONTROL_CHANGE, getChannelOut(), 0, bankMSB),
+                    new ShortMessage(ShortMessage.CONTROL_CHANGE, getChannelOut(), 32, bankLSB),
+                    new ShortMessage(ShortMessage.PROGRAM_CHANGE, getChannelOut(), NN, 0)
+                    };
+                }
+            catch (InvalidMidiDataException ex)
+                {
+                return new Object[] { data };                   // I guess...
+                }
+            }
+        else                    // writing
+            {
+            return new Object[] { data };
+            }
         }
 
 
@@ -1232,10 +1363,11 @@ public class KawaiK5000Multi extends Synth
         model.set("reverb" + (reverbtype + 1) + "para2", result[pos++]);
         model.set("reverb" + (reverbtype + 1) + "para3", result[pos++]);
         model.set("reverb" + (reverbtype + 1) + "para4", result[pos++]);
-
-        int missingEffectParams = 0;
+        
         for(int effect = 1; effect <= 4; effect++)                                  // NOTE <=
             {
+            int missingEffectParams = 0;
+
             // EFFECTS are PACKED.  So if an effect doesn't have a particular parameter, the NEXT PARAMETER fits in its slot.  
             // This is of course NOT documented
 
@@ -1259,14 +1391,13 @@ public class KawaiK5000Multi extends Synth
                 { missingEffectParams++; }
             else { model.set("effect" + effect + "type" + (effectType + 1) + "para4", result[pos++]); }
             pos += missingEffectParams;                                 // fill in the missing spaces
-            missingEffectParams = 0;
             }
                 
         for(int freq = 1; freq <= 7; freq++)                                            // NOTE <=
             {
             model.set("geqfreq" + freq, result[pos++]);
             }
-        
+                        
         byte[] name = new byte[8];
         for(int i = 0; i < 8; i++)
             {
@@ -1405,7 +1536,7 @@ public class KawaiK5000Multi extends Synth
                 int val = model.get(key);
                 if ((index = (Integer)(sectionParamsToIndex.get(remainder))) != null)
                     {
-                    data = new int[] { 0x04, 0x01, (section - 1), 0x00, index.intValue(), 0x00, val };
+                    data = new int[] { 0x04, 0x01, (section - 1), 0x00, index.intValue() - 1, 0x00, val };
                     }
                 else
                     {
@@ -1432,33 +1563,33 @@ public class KawaiK5000Multi extends Synth
             int type = model.get("reverbtype");
             if (key.endsWith("type"))
                 {
-                data = new int[] { 0x03, 0x00, 0x01, 0x00, 0x00, 0x00, model.get(key) + 11 };           // effects start at 11
+                data = new int[] { 0x03, 0x00, 0x01, 0x00, 0x00, 0x00, model.get(key) };
                 }
             else 
                 {
                 if (key.endsWith("drywet1"))
                     {
-                    if (type + 1 != StringUtility.getSecondInt(key))  return new Object[0]; // we're the wrong type
+                    if (type + 1 != StringUtility.getFirstInt(key))  return new Object[0]; // we're the wrong type
                     sub5 = 1;
                     }
                 else if (key.endsWith("para1"))
                     {
-                    if (type + 1 != StringUtility.getSecondInt(key))  return new Object[0]; // we're the wrong type
+                    if (type + 1 != StringUtility.getFirstInt(key))  return new Object[0]; // we're the wrong type
                     sub5 = 2;
                     }
                 else if (key.endsWith("para2"))
                     {
-                    if (type + 1 != StringUtility.getSecondInt(key))  return new Object[0]; // we're the wrong type
+                    if (type + 1 != StringUtility.getFirstInt(key))  return new Object[0]; // we're the wrong type
                     sub5 = 3;
                     }
                 else if (key.endsWith("para3"))
                     {
-                    if (type + 1 != StringUtility.getSecondInt(key))  return new Object[0]; // we're the wrong type
+                    if (type + 1 != StringUtility.getFirstInt(key))  return new Object[0]; // we're the wrong type
                     sub5 = 4;
                     }
                 else if (key.endsWith("para4"))
                     {
-                    if (type + 1 != StringUtility.getSecondInt(key))  return new Object[0]; // we're the wrong type
+                    if (type + 1 != StringUtility.getFirstInt(key))  return new Object[0]; // we're the wrong type
                     sub5 = 5;
                     }
                 data = new int[] { 0x03, 0x00, 0x01, 0x00, sub5, 0x00, model.get(key) };
@@ -1471,15 +1602,15 @@ public class KawaiK5000Multi extends Synth
             boolean depth = key.endsWith("depth");
             if (source)
                 {
-                data = new int[] { 0x04, 0x00, 0x00, 0x00, effect == 1 ? 0x0E : 0x11, 0x00, model.get(key) };
+                data = new int[] { 0x01, 0x00, 0x00, 0x00, effect == 1 ? 0x0E : 0x11, 0x00, model.get(key) };
                 }
             else if (depth)
                 {
-                data = new int[] { 0x04, 0x00, 0x00, 0x00, effect == 1 ? 0x10 : 0x13, 0x00, model.get(key) };
+                data = new int[] { 0x01, 0x00, 0x00, 0x00, effect == 1 ? 0x10 : 0x13, 0x00, model.get(key) };
                 }
             else
                 {
-                data = new int[] { 0x04, 0x00, 0x00, 0x00, effect == 1 ? 0x0F : 0x12, 0x00, model.get(key) };
+                data = new int[] { 0x01, 0x00, 0x00, 0x00, effect == 1 ? 0x0F : 0x12, 0x00, model.get(key) };
                 }
             }
         else if (key.startsWith("effect"))
@@ -1487,9 +1618,11 @@ public class KawaiK5000Multi extends Synth
             int effect = StringUtility.getFirstInt(key);
             int type = model.get("effect" + effect + "type");
             String reduced = StringUtility.removePreambleAndFirstDigits(key, "effect");
+            int extra = 0;
             if (key.endsWith("type"))
                 {
                 sub5 = 0;
+                extra = 11;                                                             // effects start with 11
                 }
             else if (key.endsWith("depth"))
                 {
@@ -1516,17 +1649,19 @@ public class KawaiK5000Multi extends Synth
                 if (type + 1 != StringUtility.getSecondInt(key))  return new Object[0]; // we're the wrong type
                 sub5 = 5;
                 }
-            data = new int[] { 0x03, 0x00, effect + 1, 0x00, sub5, 0x00, model.get(key) };
+            
+            sub5 = effectShift(type, sub5 + 1) - 1;  // compress to fill in gaps
+            data = new int[] { 0x03, 0x00, effect + 1, 0x00, sub5, 0x00, model.get(key) + extra };
             }
         else if (key.startsWith("geq"))
             {
-            int eq = StringUtility.getFirstInt(key);
+            int eq = StringUtility.getFirstInt(key) - 1;
             data = new int[] { 0x03, 0x01, 0x00, 0x00, eq, 0x00, model.get(key) };
             }
         else if (key.startsWith("secmute"))
             {
             // send all the secmutes as one blob
-            data = new int[] { 0x04, 0x00, 0x00, 0x00, 0x0C, 0x00, 
+            data = new int[] { 0x04, 0x00, 0x00, 0x00, 0x0A, 0x00, 
                 ((1 - model.get("secmute1")) << 0) |
                 ((1 - model.get("secmute2")) << 1) |
                 ((1 - model.get("secmute3")) << 2) |
@@ -1571,6 +1706,51 @@ public class KawaiK5000Multi extends Synth
             }
         }
 
+    // This function is used to compact the effects that have holes in their parameters.
+    // See the discussion above, labelled EFFECT COMPACTING.
+    // type starts at 0
+    // para starts at 1
+    public int effectShift(int type, int para)
+        {
+        if (type + 12 == 12)    // Early Reflections 1
+            {
+            if (para >= 4) return para - 1;
+            }
+        if (type + 12 == 13)    // Early Reflections 2
+            {
+            if (para >= 4) return para - 1;
+            }
+        if (type + 12 == 16)    // Single Delay
+            {
+            if (para >= 3) return para - 1;
+            }
+        if (type + 12 == 18)    // Stereo Delay
+            {
+            if (para >= 4) return para - 2;
+            }
+        if (type + 12 == 19)    // Cross Delay
+            {
+            if (para >= 4) return para - 2;
+            }
+        if (type + 12 == 30)    // Ensemble
+            {
+            if (para >= 3) return para - 1;
+            }
+        if (type + 12 == 31)    // Ensemble and Delay
+            {
+            if (para >= 3) return para - 1;
+            }
+        if (type + 12 == 43)    // Exciter
+            {
+            if (para >= 5) return para - 1;
+            }
+        if (type + 12 == 44)    // Enhancer
+            {
+            if (para >= 5) return para - 1;
+            }
+        return para;
+        }
+        
 
     public byte[] requestDump(Model tempModel)
         {
@@ -1631,19 +1811,8 @@ public class KawaiK5000Multi extends Synth
         return 0;               // there's only one bank
         }
 
-    public int getPauseAfterWriteBank() 
-        {
-        // Returns the pause, in milliseconds, after writing a bank sysex message
-        // to the synthesizer.  By default this returns the value of 
-        // getPauseAfterWritePatch();   This method only needs to be implemented 
-        // if your patch editor supports bank reads (see documentation for 
-        // getSupportsBankReads() and getSupportsBankWrites()).
-        return getPauseAfterWritePatch(); 
-        }    
-
-
     // General (non-source) parameter names
-    public static final int COMMON_START = 39;
+    public static final int COMMON_START = 38;
     public static final String[] multiDataParams = new String[] 
     {
     "algorithm",

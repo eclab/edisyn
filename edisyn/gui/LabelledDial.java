@@ -34,6 +34,9 @@ public class LabelledDial extends NumericalComponent
     Component glue;
     boolean updatesDynamically = true;
     boolean updatingDynamically = false;
+    
+    public void didMouseDown() { }
+    public void didMouseUp() { }
         
     public void repaintDial() { dial.repaint(); }
     
@@ -300,6 +303,7 @@ public class LabelledDial extends NumericalComponent
                 mouseDown = false;
                 if (releaseListener != null)
                     Toolkit.getDefaultToolkit().removeAWTEventListener(releaseListener);
+                didMouseUp();
                 }
             }
  
@@ -434,6 +438,7 @@ public class LabelledDial extends NumericalComponent
                 public void mousePressed(MouseEvent e)
                     {
                     if (!enabled) return;
+                    didMouseDown();
                     mouseDown = true;
                     startX = e.getX();
                     startY = e.getY();
@@ -468,6 +473,7 @@ public class LabelledDial extends NumericalComponent
                     if (e == lastRelease) // we just had this event because we're in the AWT Event Listener.  So we ignore it
                         return;
                     
+                    didMouseUp();
                     if (!updatesDynamically)
                         {
                         int proposedState = getProposedState(e);

@@ -548,15 +548,52 @@ public class NovationDStation extends Synth
             switch (data.number) 
                 {
                 // panning (NOT including individual outputs as the device would imply)
-                case 21, 27, 33, 38, 43, 47, 49, 51, 54,
-                    57, 60, 63, 66, 69, 72, 74, 83, 88,
-                    93, 97, 99, 106, 109, 111, 112, 114, 117:
+                case 21:
+case  27:
+case  33:
+case  38:
+case  43:
+case  47:
+case  49:
+case  51:
+case  54:
+case  57:
+case  60:
+case  63:
+case  66:
+case  69:
+case  72:
+case  74:
+case  83:
+case  88:
+case  93:
+case  97:
+case  99:
+case  106:
+case  109:
+case  111:
+case  112:
+case  114:
+case  117:
                     // sent (bitshifted) as 0, 16, 32, 48, 63 (!), .., 127, hence extra rounding required
                     modValue = roundToNearest(modValue, 16) >>> 4;
                     break;
                     // distortion
-                case 22, 28, 34, 39, 44, 52, 64, 67,
-                    70, 84, 89, 94, 101, 107, 110:
+                case 22:
+case  28:
+case  34:
+case  39:
+case  44:
+case  52:
+case  64:
+case  67:
+case  70:
+case  84:
+case  89:
+case  94:
+case  101:
+case  107:
+case  110:
                     // sent (bitshifted) as 0, 8, 16, .., 127, hence extra rounding required
                     modValue = roundToNearest(modValue, 8) >>> 3;
                     break;

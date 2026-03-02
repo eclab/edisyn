@@ -82,21 +82,21 @@ public class KawaiK5000 extends Synth
     // CCs that the 16 dials on the K5000s
     public static final int[] DIAL_CCS = { 0x10, 0x12, 0x4A, 0x49, 0x11, 0x13, 0x4D, 0x4E, 0x47, 0x4B, 0x4C, 0x48, 0x50, 0x51, 0x52, 0x53 };
         
-	public static final int ACTION_UP = 0;
-	public static final int ACTION_UP_HIGH = 1;
-	public static final int ACTION_DOWN = 2;
-	public static final int ACTION_DOWN_HIGH = 3;
-	public static final int ACTION_DOUBLE = 4;
-	public static final int ACTION_HALVE = 5;
-	public static final int ACTION_RANDOM = 6;
-	public static final int ACTION_JITTER = 7;
-	public static final int ACTION_BOOST_BASS = 8;
-	public static final int ACTION_DAMPEN_BASS = 9;
-	public static final int ACTION_BOOST_TREBLE = 10;
-	public static final int ACTION_DAMPEN_TREBLE = 11;
-	public static final double BOOST = 0.4;  // 1.0000620039; /// 1.0002480158;		// 1 + 1.0 / 63 / 64.0
-	public static final String[] ACTIONS = 
-		{ "Up\u2191", "Up\u2191\u2191\u2191", "Down\u2193", "Down\u2193\u2193\u2193", "Double", "Halve", "Random", "Jitter", "Bass\u2191", "Bass\u2193", "Treble\u2191", "Treble\u2193" };
+    public static final int ACTION_UP = 0;
+    public static final int ACTION_UP_HIGH = 1;
+    public static final int ACTION_DOWN = 2;
+    public static final int ACTION_DOWN_HIGH = 3;
+    public static final int ACTION_DOUBLE = 4;
+    public static final int ACTION_HALVE = 5;
+    public static final int ACTION_RANDOM = 6;
+    public static final int ACTION_JITTER = 7;
+    public static final int ACTION_BOOST_BASS = 8;
+    public static final int ACTION_DAMPEN_BASS = 9;
+    public static final int ACTION_BOOST_TREBLE = 10;
+    public static final int ACTION_DAMPEN_TREBLE = 11;
+    public static final double BOOST = 0.4;  // 1.0000620039; /// 1.0002480158;             // 1 + 1.0 / 63 / 64.0
+    public static final String[] ACTIONS = 
+        { "Up\u2191", "Up\u2191\u2191\u2191", "Down\u2193", "Down\u2193\u2193\u2193", "Double", "Halve", "Random", "Jitter", "Bass\u2191", "Bass\u2193", "Treble\u2191", "Treble\u2193" };
 
     // Number of effects
     public static final int NUM_EFFECTS = 4;
@@ -717,7 +717,7 @@ public static final int ALL_ON = 4;
             hbox = new HBox();
             c1 = (JComponent)addHarmonicEnvelopeDisplay(source, 8, "loop", "Loop", Style.COLOR_B());
             //c2 = (JComponent)addHarmonicEnvelopeDisplay(source, 8, "loop", "Loop", Style.COLOR_B());
- 			c2 = (JComponent)addK5LevelHarmonics(source, Style.COLOR_C());
+            c2 = (JComponent)addK5LevelHarmonics(source, Style.COLOR_C());
             split = new HSplitBox(c1, c2);
             hbox.addLast(split);
             vbox.add(hbox);
@@ -2650,338 +2650,338 @@ public static final int ALL_ON = 4;
         }
 
 /*
-    public JMenuItem[] buildHarmonicMenu(int source, boolean soft)
-        {
-        JMenuItem[] menu = new JMenuItem[11];
-        menu[0] = new JMenuItem("Set to Sawtooth");
-        menu[0].addActionListener(new ActionListener()
-            {
-            public void actionPerformed(ActionEvent e)
-                {
-                boolean push = undo.getWillPush();
-                undo.setWillPush(false);
-                for(int i = 1; i <= 64; i++)                        // Note <=
-                    {
-                    if (_constrainTo(i - 1)) model.set("source" + source + "hc" + (soft ? "0" : "1") + "s" + i, 127 / i);
-                    }
-                undo.setWillPush(push);
-                }
-            });
-        menu[1] = new JMenuItem("Set to Square");
-        menu[1].addActionListener(new ActionListener()
-            {
-            public void actionPerformed(ActionEvent e)
-                {
-                boolean push = undo.getWillPush();
-                undo.setWillPush(false);
-                for(int i = 1; i <= 64; i++)                        // Note <=
-                    {
-                    if (_constrainTo(i - 1)) model.set("source" + source + "hc" + (soft ? "0" : "1") + "s" + i, (i % 2 == 0 ? 0 : 127 / i));
-                    }
-                undo.setWillPush(push);
-                }
-            });
-        menu[2] = new JMenuItem("Set to Triangle");
-        menu[2].addActionListener(new ActionListener()
-            {
-            public void actionPerformed(ActionEvent e)
-                {
-                boolean push = undo.getWillPush();
-                undo.setWillPush(false);
-                for(int i = 1; i <= 64; i++)                        // Note <=
-                    {
-                    if (_constrainTo(i - 1)) model.set("source" + source + "hc" + (soft ? "0" : "1") + "s" + i, (i % 2 == 0 ? 0 : 127 / (i * i)));
-                    }
-                undo.setWillPush(push);
-                }
-            });
-        menu[3] = new JMenuItem("Set to Max");
-        menu[3].addActionListener(new ActionListener()
-            {
-            public void actionPerformed(ActionEvent e)
-                {
-                boolean push = undo.getWillPush();
-                undo.setWillPush(false);
-                for(int i = 1; i <= 64; i++)                        // Note <=
-                    {
-                    if (_constrainTo(i - 1)) model.set("source" + source + "hc" + (soft ? "0" : "1") + "s" + i, 127);
-                    }
-                undo.setWillPush(push);
-                }
-            });
-        menu[4] = null;         // separator
+  public JMenuItem[] buildHarmonicMenu(int source, boolean soft)
+  {
+  JMenuItem[] menu = new JMenuItem[11];
+  menu[0] = new JMenuItem("Set to Sawtooth");
+  menu[0].addActionListener(new ActionListener()
+  {
+  public void actionPerformed(ActionEvent e)
+  {
+  boolean push = undo.getWillPush();
+  undo.setWillPush(false);
+  for(int i = 1; i <= 64; i++)                        // Note <=
+  {
+  if (_constrainTo(i - 1)) model.set("source" + source + "hc" + (soft ? "0" : "1") + "s" + i, 127 / i);
+  }
+  undo.setWillPush(push);
+  }
+  });
+  menu[1] = new JMenuItem("Set to Square");
+  menu[1].addActionListener(new ActionListener()
+  {
+  public void actionPerformed(ActionEvent e)
+  {
+  boolean push = undo.getWillPush();
+  undo.setWillPush(false);
+  for(int i = 1; i <= 64; i++)                        // Note <=
+  {
+  if (_constrainTo(i - 1)) model.set("source" + source + "hc" + (soft ? "0" : "1") + "s" + i, (i % 2 == 0 ? 0 : 127 / i));
+  }
+  undo.setWillPush(push);
+  }
+  });
+  menu[2] = new JMenuItem("Set to Triangle");
+  menu[2].addActionListener(new ActionListener()
+  {
+  public void actionPerformed(ActionEvent e)
+  {
+  boolean push = undo.getWillPush();
+  undo.setWillPush(false);
+  for(int i = 1; i <= 64; i++)                        // Note <=
+  {
+  if (_constrainTo(i - 1)) model.set("source" + source + "hc" + (soft ? "0" : "1") + "s" + i, (i % 2 == 0 ? 0 : 127 / (i * i)));
+  }
+  undo.setWillPush(push);
+  }
+  });
+  menu[3] = new JMenuItem("Set to Max");
+  menu[3].addActionListener(new ActionListener()
+  {
+  public void actionPerformed(ActionEvent e)
+  {
+  boolean push = undo.getWillPush();
+  undo.setWillPush(false);
+  for(int i = 1; i <= 64; i++)                        // Note <=
+  {
+  if (_constrainTo(i - 1)) model.set("source" + source + "hc" + (soft ? "0" : "1") + "s" + i, 127);
+  }
+  undo.setWillPush(push);
+  }
+  });
+  menu[4] = null;         // separator
                 
-        menu[5] = new JMenuItem("Make Slightly Louder");
-        menu[5].addActionListener(new ActionListener()
-            {
-            public void actionPerformed(ActionEvent e)
-                {
-                boolean push = undo.getWillPush();
-                undo.setWillPush(false);
-                for(int i = 1; i <= 64; i++)                        // Note <=
-                    {
-                    int val = model.get("source" + source + "hc" + (soft ? "0" : "1") + "s" + i);
-                    val++;
-                    if (val > 127) val = 127;
-                    if (_constrainTo(i - 1)) model.set("source" + source + "hc" + (soft ? "0" : "1") + "s" + i, val);
-                    }
-                undo.setWillPush(push);
-                }
-            });
-        menu[6] = new JMenuItem("Make Louder");
-        menu[6].addActionListener(new ActionListener()
-            {
-            public void actionPerformed(ActionEvent e)
-                {
-                boolean push = undo.getWillPush();
-                undo.setWillPush(false);
-                for(int i = 1; i <= 64; i++)                        // Note <=
-                    {
-                    int val = model.get("source" + source + "hc" + (soft ? "0" : "1") + "s" + i);
-                    val += 8;
-                    if (val > 127) val = 127;
-                    if (_constrainTo(i - 1)) model.set("source" + source + "hc" + (soft ? "0" : "1") + "s" + i, val);
-                    }
-                undo.setWillPush(push);
-                }
-            });
-        menu[7] = new JMenuItem("Make Much Louder");
-        menu[7].addActionListener(new ActionListener()
-            {
-            public void actionPerformed(ActionEvent e)
-                {
-                boolean push = undo.getWillPush();
-                undo.setWillPush(false);
-                for(int i = 1; i <= 64; i++)                        // Note <=
-                    {
-                    int val = model.get("source" + source + "hc" + (soft ? "0" : "1") + "s" + i);
-                    val += 32;
-                    if (val > 127) val = 127;
-                    if (_constrainTo(i - 1)) model.set("source" + source + "hc" + (soft ? "0" : "1") + "s" + i, val);
-                    }
-                undo.setWillPush(push);
-                }
-            });
-        menu[8] = new JMenuItem("Make Slightly Softer");
-        menu[8].addActionListener(new ActionListener()
-            {
-            public void actionPerformed(ActionEvent e)
-                {
-                boolean push = undo.getWillPush();
-                undo.setWillPush(false);
-                for(int i = 1; i <= 64; i++)                        // Note <=
-                    {
-                    int val = model.get("source" + source + "hc" + (soft ? "0" : "1") + "s" + i);
-                    val--;
-                    if (val < 0) val = 0;
-                    if (_constrainTo(i - 1)) model.set("source" + source + "hc" + (soft ? "0" : "1") + "s" + i, val);
-                    }
-                undo.setWillPush(push);
-                }
-            });
-        menu[9] = new JMenuItem("Make Softer");
-        menu[9].addActionListener(new ActionListener()
-            {
-            public void actionPerformed(ActionEvent e)
-                {
-                boolean push = undo.getWillPush();
-                undo.setWillPush(false);
-                for(int i = 1; i <= 64; i++)                        // Note <=
-                    {
-                    int val = model.get("source" + source + "hc" + (soft ? "0" : "1") + "s" + i);
-                    val -= 8;
-                    if (val < 0) val = 0;
-                    if (_constrainTo(i - 1)) model.set("source" + source + "hc" + (soft ? "0" : "1") + "s" + i, val);
-                    }
-                undo.setWillPush(push);
-                }
-            });
-        menu[10] = new JMenuItem("Make Much Softer");
-        menu[10].addActionListener(new ActionListener()
-            {
-            public void actionPerformed(ActionEvent e)
-                {
-                boolean push = undo.getWillPush();
-                undo.setWillPush(false);
-                for(int i = 1; i <= 64; i++)                        // Note <=
-                    {
-                    int val = model.get("source" + source + "hc" + (soft ? "0" : "1") + "s" + i);
-                    val -= 32;
-                    if (val < 0) val = 0;
-                    if (_constrainTo(i - 1)) model.set("source" + source + "hc" + (soft ? "0" : "1") + "s" + i, val);
-                    }
-                undo.setWillPush(push);
-                }
-            });
-        return menu;
-        }
+  menu[5] = new JMenuItem("Make Slightly Louder");
+  menu[5].addActionListener(new ActionListener()
+  {
+  public void actionPerformed(ActionEvent e)
+  {
+  boolean push = undo.getWillPush();
+  undo.setWillPush(false);
+  for(int i = 1; i <= 64; i++)                        // Note <=
+  {
+  int val = model.get("source" + source + "hc" + (soft ? "0" : "1") + "s" + i);
+  val++;
+  if (val > 127) val = 127;
+  if (_constrainTo(i - 1)) model.set("source" + source + "hc" + (soft ? "0" : "1") + "s" + i, val);
+  }
+  undo.setWillPush(push);
+  }
+  });
+  menu[6] = new JMenuItem("Make Louder");
+  menu[6].addActionListener(new ActionListener()
+  {
+  public void actionPerformed(ActionEvent e)
+  {
+  boolean push = undo.getWillPush();
+  undo.setWillPush(false);
+  for(int i = 1; i <= 64; i++)                        // Note <=
+  {
+  int val = model.get("source" + source + "hc" + (soft ? "0" : "1") + "s" + i);
+  val += 8;
+  if (val > 127) val = 127;
+  if (_constrainTo(i - 1)) model.set("source" + source + "hc" + (soft ? "0" : "1") + "s" + i, val);
+  }
+  undo.setWillPush(push);
+  }
+  });
+  menu[7] = new JMenuItem("Make Much Louder");
+  menu[7].addActionListener(new ActionListener()
+  {
+  public void actionPerformed(ActionEvent e)
+  {
+  boolean push = undo.getWillPush();
+  undo.setWillPush(false);
+  for(int i = 1; i <= 64; i++)                        // Note <=
+  {
+  int val = model.get("source" + source + "hc" + (soft ? "0" : "1") + "s" + i);
+  val += 32;
+  if (val > 127) val = 127;
+  if (_constrainTo(i - 1)) model.set("source" + source + "hc" + (soft ? "0" : "1") + "s" + i, val);
+  }
+  undo.setWillPush(push);
+  }
+  });
+  menu[8] = new JMenuItem("Make Slightly Softer");
+  menu[8].addActionListener(new ActionListener()
+  {
+  public void actionPerformed(ActionEvent e)
+  {
+  boolean push = undo.getWillPush();
+  undo.setWillPush(false);
+  for(int i = 1; i <= 64; i++)                        // Note <=
+  {
+  int val = model.get("source" + source + "hc" + (soft ? "0" : "1") + "s" + i);
+  val--;
+  if (val < 0) val = 0;
+  if (_constrainTo(i - 1)) model.set("source" + source + "hc" + (soft ? "0" : "1") + "s" + i, val);
+  }
+  undo.setWillPush(push);
+  }
+  });
+  menu[9] = new JMenuItem("Make Softer");
+  menu[9].addActionListener(new ActionListener()
+  {
+  public void actionPerformed(ActionEvent e)
+  {
+  boolean push = undo.getWillPush();
+  undo.setWillPush(false);
+  for(int i = 1; i <= 64; i++)                        // Note <=
+  {
+  int val = model.get("source" + source + "hc" + (soft ? "0" : "1") + "s" + i);
+  val -= 8;
+  if (val < 0) val = 0;
+  if (_constrainTo(i - 1)) model.set("source" + source + "hc" + (soft ? "0" : "1") + "s" + i, val);
+  }
+  undo.setWillPush(push);
+  }
+  });
+  menu[10] = new JMenuItem("Make Much Softer");
+  menu[10].addActionListener(new ActionListener()
+  {
+  public void actionPerformed(ActionEvent e)
+  {
+  boolean push = undo.getWillPush();
+  undo.setWillPush(false);
+  for(int i = 1; i <= 64; i++)                        // Note <=
+  {
+  int val = model.get("source" + source + "hc" + (soft ? "0" : "1") + "s" + i);
+  val -= 32;
+  if (val < 0) val = 0;
+  if (_constrainTo(i - 1)) model.set("source" + source + "hc" + (soft ? "0" : "1") + "s" + i, val);
+  }
+  undo.setWillPush(push);
+  }
+  });
+  return menu;
+  }
 
-    public JMenuItem[] buildLevelMenu(int source, int part)
-        {
-        int level = part / 2;
-        JMenuItem[] menu = new JMenuItem[11];
-        menu[0] = new JMenuItem("Set to Sawtooth");
-        menu[0].addActionListener(new ActionListener()
-            {
-            public void actionPerformed(ActionEvent e)
-                {
-                boolean push = undo.getWillPush();
-                undo.setWillPush(false);
-                for(int i = 1; i <= 64; i++)                        // Note <=
-                    {
-                    if (_constrainTo(i - 1)) model.set("source" + source + "hcenvlevel" + level + "s" + i, 63 / i);
-                    }
-                undo.setWillPush(push);
-                }
-            });
-        menu[1] = new JMenuItem("Set to Square");
-        menu[1].addActionListener(new ActionListener()
-            {
-            public void actionPerformed(ActionEvent e)
-                {
-                boolean push = undo.getWillPush();
-                undo.setWillPush(false);
-                for(int i = 1; i <= 64; i++)                        // Note <=
-                    {
-                    if (_constrainTo(i - 1)) model.set("source" + source + "hcenvlevel" + level + "s" + i, (i % 2 == 0 ? 0 : 63 / i));
-                    }
-                undo.setWillPush(push);
-                }
-            });
-        menu[2] = new JMenuItem("Set to Triangle");
-        menu[2].addActionListener(new ActionListener()
-            {
-            public void actionPerformed(ActionEvent e)
-                {
-                boolean push = undo.getWillPush();
-                undo.setWillPush(false);
-                for(int i = 1; i <= 64; i++)                        // Note <=
-                    {
-                    if (_constrainTo(i - 1)) model.set("source" + source + "hcenvlevel" + level + "s" + i, (i % 2 == 0 ? 0 : 63 / (i * i)));
-                    }
-                undo.setWillPush(push);
-                }
-            });
-        menu[3] = new JMenuItem("Set to Max");
-        menu[3].addActionListener(new ActionListener()
-            {
-            public void actionPerformed(ActionEvent e)
-                {
-                boolean push = undo.getWillPush();
-                undo.setWillPush(false);
-                for(int i = 1; i <= 64; i++)                        // Note <=
-                    {
-                    if (_constrainTo(i - 1)) model.set("source" + source + "hcenvlevel" + level + "s" + i, 63);
-                    }
-                undo.setWillPush(push);
-                }
-            });
-        menu[4] = null;         // separator
+  public JMenuItem[] buildLevelMenu(int source, int part)
+  {
+  int level = part / 2;
+  JMenuItem[] menu = new JMenuItem[11];
+  menu[0] = new JMenuItem("Set to Sawtooth");
+  menu[0].addActionListener(new ActionListener()
+  {
+  public void actionPerformed(ActionEvent e)
+  {
+  boolean push = undo.getWillPush();
+  undo.setWillPush(false);
+  for(int i = 1; i <= 64; i++)                        // Note <=
+  {
+  if (_constrainTo(i - 1)) model.set("source" + source + "hcenvlevel" + level + "s" + i, 63 / i);
+  }
+  undo.setWillPush(push);
+  }
+  });
+  menu[1] = new JMenuItem("Set to Square");
+  menu[1].addActionListener(new ActionListener()
+  {
+  public void actionPerformed(ActionEvent e)
+  {
+  boolean push = undo.getWillPush();
+  undo.setWillPush(false);
+  for(int i = 1; i <= 64; i++)                        // Note <=
+  {
+  if (_constrainTo(i - 1)) model.set("source" + source + "hcenvlevel" + level + "s" + i, (i % 2 == 0 ? 0 : 63 / i));
+  }
+  undo.setWillPush(push);
+  }
+  });
+  menu[2] = new JMenuItem("Set to Triangle");
+  menu[2].addActionListener(new ActionListener()
+  {
+  public void actionPerformed(ActionEvent e)
+  {
+  boolean push = undo.getWillPush();
+  undo.setWillPush(false);
+  for(int i = 1; i <= 64; i++)                        // Note <=
+  {
+  if (_constrainTo(i - 1)) model.set("source" + source + "hcenvlevel" + level + "s" + i, (i % 2 == 0 ? 0 : 63 / (i * i)));
+  }
+  undo.setWillPush(push);
+  }
+  });
+  menu[3] = new JMenuItem("Set to Max");
+  menu[3].addActionListener(new ActionListener()
+  {
+  public void actionPerformed(ActionEvent e)
+  {
+  boolean push = undo.getWillPush();
+  undo.setWillPush(false);
+  for(int i = 1; i <= 64; i++)                        // Note <=
+  {
+  if (_constrainTo(i - 1)) model.set("source" + source + "hcenvlevel" + level + "s" + i, 63);
+  }
+  undo.setWillPush(push);
+  }
+  });
+  menu[4] = null;         // separator
                 
-        menu[5] = new JMenuItem("Make Slightly Louder");
-        menu[5].addActionListener(new ActionListener()
-            {
-            public void actionPerformed(ActionEvent e)
-                {
-                boolean push = undo.getWillPush();
-                undo.setWillPush(false);
-                for(int i = 1; i <= 64; i++)                        // Note <=
-                    {
-                    int val = model.get("source" + source + "hcenvlevel" + level + "s" + i);
-                    val++;
-                    if (val > 127) val = 63;
-                    if (_constrainTo(i - 1)) model.set("source" + source + "hcenvlevel" + level + "s" + i, val);
-                    }
-                undo.setWillPush(push);
-                }
-            });
-        menu[6] = new JMenuItem("Make Louder");
-        menu[6].addActionListener(new ActionListener()
-            {
-            public void actionPerformed(ActionEvent e)
-                {
-                boolean push = undo.getWillPush();
-                undo.setWillPush(false);
-                for(int i = 1; i <= 64; i++)                        // Note <=
-                    {
-                    int val = model.get("source" + source + "hcenvlevel" + level + "s" + i);
-                    val += 4;
-                    if (val > 127) val = 63;
-                    if (_constrainTo(i - 1)) model.set("source" + source + "hcenvlevel" + level + "s" + i, val);
-                    }
-                undo.setWillPush(push);
-                }
-            });
-        menu[7] = new JMenuItem("Make Much Louder");
-        menu[7].addActionListener(new ActionListener()
-            {
-            public void actionPerformed(ActionEvent e)
-                {
-                boolean push = undo.getWillPush();
-                undo.setWillPush(false);
-                for(int i = 1; i <= 64; i++)                        // Note <=
-                    {
-                    int val = model.get("source" + source + "hcenvlevel" + level + "s" + i);
-                    val += 16;
-                    if (val > 127) val = 63;
-                    if (_constrainTo(i - 1)) model.set("source" + source + "hcenvlevel" + level + "s" + i, val);
-                    }
-                undo.setWillPush(push);
-                }
-            });
-        menu[8] = new JMenuItem("Make Slightly Softer");
-        menu[8].addActionListener(new ActionListener()
-            {
-            public void actionPerformed(ActionEvent e)
-                {
-                boolean push = undo.getWillPush();
-                undo.setWillPush(false);
-                for(int i = 1; i <= 64; i++)                        // Note <=
-                    {
-                    int val = model.get("source" + source + "hcenvlevel" + level + "s" + i);
-                    val--;
-                    if (val < 0) val = 0;
-                    if (_constrainTo(i - 1)) model.set("source" + source + "hcenvlevel" + level + "s" + i, val);
-                    }
-                undo.setWillPush(push);
-                }
-            });
-        menu[9] = new JMenuItem("Make Softer");
-        menu[9].addActionListener(new ActionListener()
-            {
-            public void actionPerformed(ActionEvent e)
-                {
-                boolean push = undo.getWillPush();
-                undo.setWillPush(false);
-                for(int i = 1; i <= 64; i++)                        // Note <=
-                    {
-                    int val = model.get("source" + source + "hcenvlevel" + level + "s" + i);
-                    val -= 4;
-                    if (val < 0) val = 0;
-                    if (_constrainTo(i - 1)) model.set("source" + source + "hcenvlevel" + level + "s" + i, val);
-                    }
-                undo.setWillPush(push);
-                }
-            });
-        menu[10] = new JMenuItem("Make Much Softer");
-        menu[10].addActionListener(new ActionListener()
-            {
-            public void actionPerformed(ActionEvent e)
-                {
-                boolean push = undo.getWillPush();
-                undo.setWillPush(false);
-                for(int i = 1; i <= 64; i++)                        // Note <=
-                    {
-                    int val = model.get("source" + source + "hcenvlevel" + level + "s" + i);
-                    val -= 16;
-                    if (val < 0) val = 0;
-                    if (_constrainTo(i - 1)) model.set("source" + source + "hcenvlevel" + level + "s" + i, val);
-                    }
-                undo.setWillPush(push);
-                }
-            });
-        return menu;
-        }
+  menu[5] = new JMenuItem("Make Slightly Louder");
+  menu[5].addActionListener(new ActionListener()
+  {
+  public void actionPerformed(ActionEvent e)
+  {
+  boolean push = undo.getWillPush();
+  undo.setWillPush(false);
+  for(int i = 1; i <= 64; i++)                        // Note <=
+  {
+  int val = model.get("source" + source + "hcenvlevel" + level + "s" + i);
+  val++;
+  if (val > 127) val = 63;
+  if (_constrainTo(i - 1)) model.set("source" + source + "hcenvlevel" + level + "s" + i, val);
+  }
+  undo.setWillPush(push);
+  }
+  });
+  menu[6] = new JMenuItem("Make Louder");
+  menu[6].addActionListener(new ActionListener()
+  {
+  public void actionPerformed(ActionEvent e)
+  {
+  boolean push = undo.getWillPush();
+  undo.setWillPush(false);
+  for(int i = 1; i <= 64; i++)                        // Note <=
+  {
+  int val = model.get("source" + source + "hcenvlevel" + level + "s" + i);
+  val += 4;
+  if (val > 127) val = 63;
+  if (_constrainTo(i - 1)) model.set("source" + source + "hcenvlevel" + level + "s" + i, val);
+  }
+  undo.setWillPush(push);
+  }
+  });
+  menu[7] = new JMenuItem("Make Much Louder");
+  menu[7].addActionListener(new ActionListener()
+  {
+  public void actionPerformed(ActionEvent e)
+  {
+  boolean push = undo.getWillPush();
+  undo.setWillPush(false);
+  for(int i = 1; i <= 64; i++)                        // Note <=
+  {
+  int val = model.get("source" + source + "hcenvlevel" + level + "s" + i);
+  val += 16;
+  if (val > 127) val = 63;
+  if (_constrainTo(i - 1)) model.set("source" + source + "hcenvlevel" + level + "s" + i, val);
+  }
+  undo.setWillPush(push);
+  }
+  });
+  menu[8] = new JMenuItem("Make Slightly Softer");
+  menu[8].addActionListener(new ActionListener()
+  {
+  public void actionPerformed(ActionEvent e)
+  {
+  boolean push = undo.getWillPush();
+  undo.setWillPush(false);
+  for(int i = 1; i <= 64; i++)                        // Note <=
+  {
+  int val = model.get("source" + source + "hcenvlevel" + level + "s" + i);
+  val--;
+  if (val < 0) val = 0;
+  if (_constrainTo(i - 1)) model.set("source" + source + "hcenvlevel" + level + "s" + i, val);
+  }
+  undo.setWillPush(push);
+  }
+  });
+  menu[9] = new JMenuItem("Make Softer");
+  menu[9].addActionListener(new ActionListener()
+  {
+  public void actionPerformed(ActionEvent e)
+  {
+  boolean push = undo.getWillPush();
+  undo.setWillPush(false);
+  for(int i = 1; i <= 64; i++)                        // Note <=
+  {
+  int val = model.get("source" + source + "hcenvlevel" + level + "s" + i);
+  val -= 4;
+  if (val < 0) val = 0;
+  if (_constrainTo(i - 1)) model.set("source" + source + "hcenvlevel" + level + "s" + i, val);
+  }
+  undo.setWillPush(push);
+  }
+  });
+  menu[10] = new JMenuItem("Make Much Softer");
+  menu[10].addActionListener(new ActionListener()
+  {
+  public void actionPerformed(ActionEvent e)
+  {
+  boolean push = undo.getWillPush();
+  undo.setWillPush(false);
+  for(int i = 1; i <= 64; i++)                        // Note <=
+  {
+  int val = model.get("source" + source + "hcenvlevel" + level + "s" + i);
+  val -= 16;
+  if (val < 0) val = 0;
+  if (_constrainTo(i - 1)) model.set("source" + source + "hcenvlevel" + level + "s" + i, val);
+  }
+  undo.setWillPush(push);
+  }
+  });
+  return menu;
+  }
 */
 
 
@@ -3169,7 +3169,10 @@ public static final int ALL_ON = 4;
     // Are we currently changing the highlight number parameter?
     boolean highlightSetting;
     // Do we permit the user to change parameters from within an envelope display?  This is set using a menu option.
-    boolean allowUpdateFromMouse = false;
+    boolean allowUpdateFromMouse = true;
+    // Do we change patch after doing a send?  This could get annoying if you're trying to edit the patch
+    // on the synthesizer directly while also using Edisyn.
+    boolean changePatchAfterSend = true;
 
     // The 9 parts to a harmonics envelope        
     static final String[] PARTS = { "rate0", "level0", "rate1", "level1", "rate2", "level2", "rate3", "level3", "loop" };
@@ -3183,11 +3186,11 @@ public static final int ALL_ON = 4;
         {
         Category category = null;
         /*
-        if (partVal % 2 == 1)  // it's a level
-            category = new Category(this, title, color, buildLevelMenu(source, partVal));
-        else
+          if (partVal % 2 == 1)  // it's a level
+          category = new Category(this, title, color, buildLevelMenu(source, partVal));
+          else
         */
-            category = new Category(this, title, color);
+        category = new Category(this, title, color);
         category.makeDistributable("source" + source);
         category.makePasteable("source" + source);
 
@@ -3670,7 +3673,7 @@ public static final int ALL_ON = 4;
             }
         menu.add(constrainMenu);
         
-        JMenu loadWaveMenu = new JMenu("Load Wave into...");
+        JMenu loadWaveMenu = new JMenu("Load WAV file into...");
         menu.add(loadWaveMenu);
         for(int i = 1; i <= 6; i++)                     // note <=
             {
@@ -3694,7 +3697,47 @@ public static final int ALL_ON = 4;
                 });
             loadWaveMenu.add(harmonicsMenu);
             }
-                        
+    
+        menu.addSeparator();
+    
+        JMenu clearBankMenu = new JMenu("Clear Bank on Synthesizer...");
+        menu.add(clearBankMenu);
+        for(int i = 0; i < 4; i++)
+            {
+            final int _i = i;
+            JMenuItem bankMenu = new JMenuItem("Bank " + BANKS[i]);
+            bankMenu.addActionListener(new ActionListener()
+                {
+                public void actionPerformed(ActionEvent e)
+                    {
+                    writeEmptyK5000Bank(_i);
+                    }
+                });
+            clearBankMenu.add(bankMenu);
+            }
+    
+        JMenuItem resetMenuItem = new JMenuItem("Reset (Reload from Flash)");
+        resetMenuItem.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                sendK5000Reset();
+                }
+            });
+        menu.add(resetMenuItem);
+
+        JMenuItem backupMenuItem = new JMenuItem("Backup (Write to Flash)");
+        backupMenuItem.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                sendK5000Backup();
+                }
+            });
+        menu.add(backupMenuItem);
+
+        menu.addSeparator();
+
         JCheckBoxMenuItem unlock = new JCheckBoxMenuItem("Allow Harmonics Envelope Display Mouse-Over");
         allowUpdateFromMouse = getLastXAsBoolean("Mouseover", getSynthName(), true, true);
         unlock.setSelected(allowUpdateFromMouse);
@@ -3707,6 +3750,19 @@ public static final int ALL_ON = 4;
                 }
             });
         menu.add(unlock);
+
+        JCheckBoxMenuItem changePatchAfterSendItem = new JCheckBoxMenuItem("Change Patch after Send to Current Patch");
+        changePatchAfterSend = getLastXAsBoolean("ChangePatchAfterSend", getSynthName(), true, true);
+        changePatchAfterSendItem.setSelected(changePatchAfterSend);
+        changePatchAfterSendItem.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                changePatchAfterSend = changePatchAfterSendItem.isSelected();
+                setLastX("" + changePatchAfterSend, "changePatchAfterSend", getSynthName(), true);
+                }
+            });
+        menu.add(changePatchAfterSendItem);
         }
         
     // Given the current constraints, returns whether the given index should be constrained 
@@ -3790,6 +3846,30 @@ public static final int ALL_ON = 4;
     public static final int BANK_F_MSB = 0x68;
     public static final int BANK_M_MSB = 0x65;                // only has 64 PC values
 
+    public void sendK5000Reset()
+        {
+        if (showSimpleConfirm("Reset the K5000?", "Reload all current working memory from the stored Flash RAM?\nThis includes all Multi and Single patches.\nThis operation cannot be undone."))
+            {
+            try 
+                {
+                tryToSendSysex(new byte[] { (byte)0xF0, 0x40, (byte)getChannelOut(), 0x32, 0x00, 0x0a, 0x02, (byte)0xF7 });
+                }
+            catch (Exception e) { Synth.handleException(e); }
+            }
+        }
+        
+    public void sendK5000Backup()
+        {
+        if (showSimpleConfirm("Backup the K5000?", "Save all current working memory to the stored Flash RAM?\nThis includes all Multi and Single patches.\nThis operation cannot be undone."))
+            {
+            try 
+                {
+                tryToSendSysex(new byte[] { (byte)0xF0, 0x40, (byte)getChannelOut(), 0x32, 0x00, 0x0a, 0x01, (byte)0xF7 });
+                }
+            catch (Exception e) { Synth.handleException(e); }
+            }
+        }
+
     /** Changes the patch to the bank and number provided */
     public void changePatch(Model tempModel)
         {
@@ -3801,8 +3881,8 @@ public static final int ALL_ON = 4;
         
         try 
             {
-            // Change to Single Mode.  See p. 36  NOTE there is no "Change to Multi / Combo Mode" I think, ugh.
-            // FIXME: I don't know if this is necessary
+            // Change to Single Mode.  See p. 35  NOTE there is no "Change to Multi / Combo Mode" I think, ugh.
+            // FIXME: I don't know if this is necessary or even if it works
             //tryToSendSysex(new byte[] { (byte)(0xF0), 0x40, (byte)getChannelOut(), 0x31, 0x00, 0x0a, SINGLE_MODE, (byte)0xF7 });
                 
             // Bank Change
@@ -3911,10 +3991,10 @@ public static final int ALL_ON = 4;
     public static String getSynthName() { return "Kawai K5000S/K5000R"; }
     
     // The K5000 can't send to temporary memory.  Presently we are only sending as individual parameters.
-    public boolean getSendsAllParametersAsDump() { return false; }
+    //public boolean getSendsAllParametersAsDump() { return false; }
 
     // The only way to send all parameters is via Send To Current Patch -- all others will fail
-    public boolean getSendsParametersOnlyOnSendCurrentPatch() { return true; }
+    //public boolean getSendsParametersOnlyOnSendCurrentPatch() { return true; }
 
     /** Returns the patch name as a byte array, but returned as an int[] */
     public int[] getNameAsBytes(Model model)
@@ -4150,7 +4230,7 @@ public static final int ALL_ON = 4;
     /** Emit a patch */
     public Object[] emitAll(Model tempModel, boolean toWorkingMemory, boolean toFile)
         {
-        if (toWorkingMemory) return new Object[0];                      // For the time being
+//        if (toWorkingMemory) return new Object[0];                      // For the time being
         
         if (tempModel == null)
             tempModel = getModel();
@@ -4208,16 +4288,111 @@ public static final int ALL_ON = 4;
         pos = emitTone(model, data, pos, sources);
 
         data[data.length - 1] = (byte)0xF7;
-        return new Object[] { data };
+        if (toWorkingMemory && changePatchAfterSend)
+            {
+            // On the K5000, Send to Current Patch is identical to Write Current Patch, but we
+            // have to do a write to the patch in question because ALL patches are in temporary memory,
+            // and there's no way to write to temporary memory, grrr.
+            //
+            // So we write to bank/number, or to A001 if there is none.
+            // Then we have to do a change patch to bank/number to display the result
+            byte BB = (byte)tempModel.get("bank");
+            byte NN = (byte)tempModel.get("number");
+            if (BB < 0 || BB > 3) BB = 0;
+            if (NN < 0 || NN > 127) NN = 0;
+                                                
+            int bankMSB = (BB == 0 ? BANK_A_MSB : (BB == 1 ? BANK_D_MSB : (BB == 2 ? BANK_E_MSB : BANK_F_MSB)));
+            int bankLSB = 0;
+                
+            try
+                {
+                return new Object[]
+                    {
+                    data,
+                    new ShortMessage(ShortMessage.CONTROL_CHANGE, getChannelOut(), 0, bankMSB),
+                    new ShortMessage(ShortMessage.CONTROL_CHANGE, getChannelOut(), 32, bankLSB),
+                    new ShortMessage(ShortMessage.PROGRAM_CHANGE, getChannelOut(), NN, 0)
+                    };
+                }
+            catch (InvalidMidiDataException ex)
+                {
+                return new Object[] { data };                   // I guess...
+                }
+            }
+        else                    // writing
+            {
+            return new Object[] { data };
+            }
         }
 
     // We want empty patches to be marked as null, not as INIT banks, so we can save them out properly
     // in emitBank
     public boolean markEmptyBankPatchModelsAsNull() { return true; }
 
+    public boolean getSupportsBankSaves()
+        {
+        return true;            // we can save a bank but not write it
+        }
+
+    public void writeEmptyK5000Bank(int bank)
+        {
+        if (showSimpleConfirm("Clear Bank?", "Erase bank " + BANKS[bank] + " on the synthesizer?\nThis operation cannot be undone."))
+            {
+            writeBankAsRangePreamble(bank);
+            }
+        }
+
+    public void writeBankAsRangePreamble(int bank)
+        {
+        try 
+            {
+            byte[] preamble = new byte[]
+                {
+                (byte)0xF0,
+                0x40,
+                (byte)getChannelOut(),
+                0x21,
+                0x00,
+                0x0A,
+                0x00,
+                0x00,
+                // Empty tone except first patch.  Will this work?
+                0x01, 0x00, 0x00, 0x00,
+                0x00, 0x00, 0x00, 0x00,
+                0x00, 0x00, 0x00, 0x00,
+                0x00, 0x00, 0x00, 0x00,
+                0x00, 0x00, 0x00,
+
+                // First patch -- this is a small one.  We can't have ZERO patches apparently...
+                0x06, 0x01, 0x0A, 0x3C, 0x3C,
+                0x63, 0x1E, 0x63, 0x27, 0x55, 0x14, 0x64, 0x04, 0x01, 0x12, 0x64, 0x46, 0x3B, 0x00,
+                0x00, 0x0F, 0x64, 0x00, 0x32, 0x31, 0x00, 0x0B, 0x46, 0x63, 0x05, 0x09, 0x00, 0x40,
+                0x40, 0x40, 0x40, 0x40, 0x40, 0x40, 0x00, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D, 0x2D,
+                0x2D, 0x7F, 0x00, 0x00, 0x02, 0x00, 0x00, 0x02, 0x00, 0x40, 0x02, 0x00, 0x40, 0x00,
+                0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x40, 0x40, 0x40, 0x40, 0x40,
+                0x40, 0x40, 0x40, 0x00, 0x00, 0x00, 0x00, 0x00, 0x7F, 0x10, 0x00, 0x7E, 0x02, 0x00,
+                0x00, 0x40, 0x00, 0x40, 0x03, 0x59, 0x00, 0x40, 0x02, 0x5F, 0x00, 0x40, 0x00, 0x00,
+                0x40, 0x00, 0x00, 0x40, 0x00, 0x01, 0x40, 0x03, 0x0F, 0x40, 0x40, 0x00, 0x00, 0x40,
+                0x04, 0x40, 0x40, 0x40, 0x40, 0x00, 0x00, 0x05, 0x00, 0x00, 0x2F, 0x40, 0x40, 0x71,
+                0x00, 0x3E, 0x60, 0x65, 0x40, 0x65, 0x40, 0x40, 0x78, 0x40, 0x40, 0x01, 0x00, 0x5F,
+                0x72, 0x6E, 0x00, 0x2C, 0x40, 0x40, 0x40, 0x40, 0x37, 0x40, 0x40, 0x40, 0x00, 0x5B,
+                0x01, 0x0E, 0x0A, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40, 0x00, 0x7F, 0x10, 0x00, 0x79,
+                0x02, 0x00, 0x00, 0x40, 0x00, 0x40, 0x03, 0x59, 0x00, 0x40, 0x02, 0x5F, 0x00, 0x40,
+                0x00, 0x00, 0x40, 0x00, 0x00, 0x40, 0x00, 0x01, 0x40, 0x03, 0x0F, 0x40, 0x40, 0x00,
+                0x00, 0x40, 0x04, 0x40, 0x40, 0x40, 0x40, 0x00, 0x00, 0x05, 0x00, 0x00, 0x31, 0x40,
+                0x40, 0x71, 0x00, 0x3E, 0x60, 0x65, 0x40, 0x65, 0x40, 0x40, 0x78, 0x40, 0x40, 0x01,
+                0x00, 0x5B, 0x72, 0x73, 0x41, 0x34, 0x40, 0x40, 0x40, 0x40, 0x37, 0x40, 0x40, 0x40,
+                0x00, 0x5B, 0x01, 0x0E, 0x0A, 0x00, 0x40, 0x00, 0x40, 0x00, 0x40,
+                (byte)0xF7
+                };
+            tryToSendSysex(preamble);
+            }
+        catch (Exception e) { Synth.handleException(e); }
+        }
+                
+
     public Object[] emitBank(Model[] models, int bank, boolean toFile) 
         {
-        //System.err.println("EMIT BANK");
         boolean[] tonemap = new boolean[128];
         
         int datalen = 8 + 19 + 1;
@@ -4711,10 +4886,10 @@ public static final int ALL_ON = 4;
                     data = new int[] { 0x02, 0x44, (source - 1), (harmonic - 1), 0x08, 0x00, val };
                     }
                 else if (key.endsWith("ksoftharmonics") || key.endsWith("kloudharmonics") ||
-                	key.contains("klevelharmonics"))
-                	{
-                	return new Object[0];	// harmonics dials
-                	}
+                    key.contains("klevelharmonics"))
+                    {
+                    return new Object[0];   // harmonics dials
+                    }
                 else
                     {
                     System.err.println("Unknown Parameter " + key);
@@ -5062,11 +5237,11 @@ public static final int ALL_ON = 4;
             {
             // parse tone map
             tonemap[i] = (((bank[pos] >>> count++) & 0x1) == 0x1);
-            if (count > 6) { count = 0; pos++; }
+            if (count >= 7) { count = 0; pos++; }
             }
         tonemap[126] = (((bank[pos] >>> 0) & 0x1) == 0x1);
         tonemap[127] = (((bank[pos] >>> 1) & 0x1) == 0x1);
-                
+            
         // Now we have to go searching for the position :=(
                 
         // reset pos
@@ -6662,151 +6837,151 @@ public static final int ALL_ON = 4;
         setSendMIDI(midi);
         } 
 
-	public void actionKHarmonics(int source, int action, boolean soft)
-		{
-		getUndo().push(getModel());
-		getUndo().setWillPush(false);
+    public void actionKHarmonics(int source, int action, boolean soft)
+        {
+        getUndo().push(getModel());
+        getUndo().setWillPush(false);
         boolean midi = getSendMIDI();
         setSendMIDI(false);
         for(int i = 1; i <= 64; i++)                   // note <=
             {
             if (_constrainTo(i - 1)) 
-            	{
-            	int val = model.get("source" + source + "hc" + (soft ? "0" : "1") + "s" + i);
-            	switch (action)
-            		{
-            		case ACTION_UP:
-            		val = val + 1;
-            		if (val > 127) val = 127;
-            		break;
-            		case ACTION_UP_HIGH:
-            		val = val + 8;
-            		if (val > 127) val = 127;
-            		break;
-            		case ACTION_DOWN:
-            		val = val - 1;
-            		if (val < 0) val = 0;
-            		break;
-            		case ACTION_DOWN_HIGH:
-            		val = val - 8;
-            		if (val < 0) val = 0;
-            		break;
-            		case ACTION_DOUBLE:
-            		if (val == 0) val = 1;
-            		else val = val * 2;
-            		if (val > 127) val = 127;
-            		break;
-            		case ACTION_HALVE:
-            		val = val / 2;
-            		break;
-            		case ACTION_RANDOM:
-            		val = random.nextInt(128);
-            		break;
-            		case ACTION_JITTER:
-					int noise = 0;
-            		while (true)
-            			{
-            			noise = random.nextInt(33) - 16;
-            			if (noise + val <= 127 && noise + val >= 0) break;
-            			}
-            		val = noise + val;
-            		break;
-            		case ACTION_BOOST_BASS:
-            		val = (int)Math.ceil(val + BOOST * (63 - (i - 1)));
-            		if (val > 127) val = 127;
-            		break;
-            		case ACTION_DAMPEN_BASS:
-            		val = (int)Math.floor(val - BOOST * (63 - (i - 1)));
-            		if (val < 0) val = 0; 
-            		break;
-            		case ACTION_BOOST_TREBLE:
-            		val = (int)Math.ceil(val + BOOST * (i - 1) );
-            		if (val > 127) val = 127;
-            		break;
-            		case ACTION_DAMPEN_TREBLE:
-            		val = (int)Math.floor(val - BOOST * (i - 1));
-            		if (val < 0) val = 0; 
-            		break;
-            		}
-            	model.set("source" + source + "hc" + (soft ? "0" : "1") + "s" + i, val);
-            	}
+                {
+                int val = model.get("source" + source + "hc" + (soft ? "0" : "1") + "s" + i);
+                switch (action)
+                    {
+                    case ACTION_UP:
+                        val = val + 1;
+                        if (val > 127) val = 127;
+                        break;
+                    case ACTION_UP_HIGH:
+                        val = val + 8;
+                        if (val > 127) val = 127;
+                        break;
+                    case ACTION_DOWN:
+                        val = val - 1;
+                        if (val < 0) val = 0;
+                        break;
+                    case ACTION_DOWN_HIGH:
+                        val = val - 8;
+                        if (val < 0) val = 0;
+                        break;
+                    case ACTION_DOUBLE:
+                        if (val == 0) val = 1;
+                        else val = val * 2;
+                        if (val > 127) val = 127;
+                        break;
+                    case ACTION_HALVE:
+                        val = val / 2;
+                        break;
+                    case ACTION_RANDOM:
+                        val = random.nextInt(128);
+                        break;
+                    case ACTION_JITTER:
+                        int noise = 0;
+                        while (true)
+                            {
+                            noise = random.nextInt(33) - 16;
+                            if (noise + val <= 127 && noise + val >= 0) break;
+                            }
+                        val = noise + val;
+                        break;
+                    case ACTION_BOOST_BASS:
+                        val = (int)Math.ceil(val + BOOST * (63 - (i - 1)));
+                        if (val > 127) val = 127;
+                        break;
+                    case ACTION_DAMPEN_BASS:
+                        val = (int)Math.floor(val - BOOST * (63 - (i - 1)));
+                        if (val < 0) val = 0; 
+                        break;
+                    case ACTION_BOOST_TREBLE:
+                        val = (int)Math.ceil(val + BOOST * (i - 1) );
+                        if (val > 127) val = 127;
+                        break;
+                    case ACTION_DAMPEN_TREBLE:
+                        val = (int)Math.floor(val - BOOST * (i - 1));
+                        if (val < 0) val = 0; 
+                        break;
+                    }
+                model.set("source" + source + "hc" + (soft ? "0" : "1") + "s" + i, val);
+                }
             }
         setSendMIDI(midi);
         getUndo().setWillPush(true);
-		}
+        }
 
-	public void actionKLevelHarmonics(int source, int action, int level)
-		{
-		getUndo().push(getModel());
-		getUndo().setWillPush(false);
+    public void actionKLevelHarmonics(int source, int action, int level)
+        {
+        getUndo().push(getModel());
+        getUndo().setWillPush(false);
         boolean midi = getSendMIDI();
         setSendMIDI(false);
         for(int i = 1; i <= 64; i++)                   // note <=
             {
             if (_constrainTo(i - 1)) 
-            	{
-            	int val = model.get("source" + source + "hcenvlevel" + level + "s" + i);
-            	switch (action)
-            		{
-            		case ACTION_UP:
-            		val = val + 1;
-            		if (val > 63) val = 63;
-            		break;
-            		case ACTION_UP_HIGH:
-            		val = val + 4;
-            		if (val > 63) val = 63;
-            		break;
-            		case ACTION_DOWN:
-            		val = val - 1;
-            		if (val < 0) val = 0;
-            		break;
-            		case ACTION_DOWN_HIGH:
-            		val = val - 4;
-            		if (val < 0) val = 0;
-            		break;
-            		case ACTION_DOUBLE:
-            		if (val == 0) val = 1;
-            		else val = val * 2;
-            		if (val > 63) val = 63;
-            		break;
-            		case ACTION_HALVE:
-            		val = val / 2;
-            		break;
-            		case ACTION_RANDOM:
-            		val = random.nextInt(64);
-            		break;
-            		case ACTION_JITTER:
-					int noise = 0;
-            		while (true)
-            			{
-            			noise = random.nextInt(17) - 8;
-            			if (noise + val <= 63 && noise + val >= 0) break;
-            			}
-            		val = noise + val;
-            		break;
-            		case ACTION_BOOST_BASS:
-            		val = (int)Math.ceil(val + BOOST / 2.0 * (63 - (i - 1)));
-            		if (val > 63) val = 63;
-            		break;
-            		case ACTION_DAMPEN_BASS:
-            		val = (int)Math.floor(val - BOOST / 2.0 * (63 - (i - 1)));
-            		if (val < 0) val = 0; 
-            		break;
-            		case ACTION_BOOST_TREBLE:
-            		val = (int)Math.ceil(val + BOOST / 2.0 * (i - 1) );
-            		if (val > 63) val = 63;
-            		break;
-            		case ACTION_DAMPEN_TREBLE:
-            		val = (int)Math.floor(val - BOOST / 2.0 * (i - 1));
-            		if (val < 0) val = 0; 
-            		break;
-            		}
-            	model.set("source" + source + "hcenvlevel" + level + "s" + i, val);
-            	}
+                {
+                int val = model.get("source" + source + "hcenvlevel" + level + "s" + i);
+                switch (action)
+                    {
+                    case ACTION_UP:
+                        val = val + 1;
+                        if (val > 63) val = 63;
+                        break;
+                    case ACTION_UP_HIGH:
+                        val = val + 4;
+                        if (val > 63) val = 63;
+                        break;
+                    case ACTION_DOWN:
+                        val = val - 1;
+                        if (val < 0) val = 0;
+                        break;
+                    case ACTION_DOWN_HIGH:
+                        val = val - 4;
+                        if (val < 0) val = 0;
+                        break;
+                    case ACTION_DOUBLE:
+                        if (val == 0) val = 1;
+                        else val = val * 2;
+                        if (val > 63) val = 63;
+                        break;
+                    case ACTION_HALVE:
+                        val = val / 2;
+                        break;
+                    case ACTION_RANDOM:
+                        val = random.nextInt(64);
+                        break;
+                    case ACTION_JITTER:
+                        int noise = 0;
+                        while (true)
+                            {
+                            noise = random.nextInt(17) - 8;
+                            if (noise + val <= 63 && noise + val >= 0) break;
+                            }
+                        val = noise + val;
+                        break;
+                    case ACTION_BOOST_BASS:
+                        val = (int)Math.ceil(val + BOOST / 2.0 * (63 - (i - 1)));
+                        if (val > 63) val = 63;
+                        break;
+                    case ACTION_DAMPEN_BASS:
+                        val = (int)Math.floor(val - BOOST / 2.0 * (63 - (i - 1)));
+                        if (val < 0) val = 0; 
+                        break;
+                    case ACTION_BOOST_TREBLE:
+                        val = (int)Math.ceil(val + BOOST / 2.0 * (i - 1) );
+                        if (val > 63) val = 63;
+                        break;
+                    case ACTION_DAMPEN_TREBLE:
+                        val = (int)Math.floor(val - BOOST / 2.0 * (i - 1));
+                        if (val < 0) val = 0; 
+                        break;
+                    }
+                model.set("source" + source + "hcenvlevel" + level + "s" + i, val);
+                }
             }
         setSendMIDI(midi);
         getUndo().setWillPush(true);
-		}
+        }
         
     public void setKLevelHarmonics(int source, int harmonics, int level)
         {
@@ -6814,7 +6989,7 @@ public static final int ALL_ON = 4;
         setSendMIDI(false);
         for(int i = 1; i <= 128; i++)                   // note <=
             {
-            if (_constrainTo(i - 1)) model.set("source" + source + "hcenvlevel" + level + "s" + i, kHarmonics[harmonics - 1][i - 1] / 2);	// only goes to 64
+            if (_constrainTo(i - 1)) model.set("source" + source + "hcenvlevel" + level + "s" + i, kHarmonics[harmonics - 1][i - 1] / 2);       // only goes to 64
             }
         setSendMIDI(midi);
         } 
@@ -6822,7 +6997,7 @@ public static final int ALL_ON = 4;
     /** Adds the per-source "K5Harmonics" category. */    
     public JComponent addK5Harmonics(int source, Color color)
         {
-        Category category = new Category(this, "K5 Harmonics", color);
+        Category category = new Category(this, "Harmonics Edit", color);
         JComponent comp;
         String[] params;
         HBox hbox = new HBox();
@@ -6900,7 +7075,7 @@ public static final int ALL_ON = 4;
             {
             public void perform(int action)
                 {
-				actionKHarmonics(source, action, true);
+                actionKHarmonics(source, action, true);
                 }
             };
 
@@ -6908,7 +7083,7 @@ public static final int ALL_ON = 4;
             {
             public void perform(int action)
                 {
-				actionKHarmonics(source, action, false);
+                actionKHarmonics(source, action, false);
                 }
             };
         
@@ -6924,55 +7099,55 @@ public static final int ALL_ON = 4;
     /** Adds the per-source "K5 Level Harmonics" category. */    
     public JComponent addK5LevelHarmonics(int source, Color color)
         {
-        Category category = new Category(this, "K5 Level Harmonics", color);
+        Category category = new Category(this, "Level Harmonics Edit", color);
         JComponent comp;
         String[] params;
         HBox hbox = new HBox();
         VBox vbox = new VBox();
         
         for(int i = 0; i < 4; i++)
-        	{
-        	final int _i = i;
-			comp = new LabelledDial("Level " + i, this, "source" + source + "klevelharmonics" + i, color, 1, 496)
-				{
-				boolean mouseDown;
-				public String map(int val) 
-					{ 
-					loadKHarmonics();
-					return "<html><center>&nbsp;&nbsp;&nbsp;" + val + "&nbsp;&nbsp;&nbsp;<br><font size=-3>" + kHarmonicsNames[val-1] + "</font></center></html>";
-					}
-				public void didMouseDown()
-					{
-					getUndo().push(getModel());
-					getUndo().setWillPush(false);
-					mouseDown = true;
-					}
-				public void didMouseUp()
-					{
-					getUndo().setWillPush(true);
-					mouseDown = false;              
-					}
-				public void update(String key, Model model)
-					{
-					super.update(key, model);
-					if (mouseDown)
-						{
-						loadKHarmonics();
-						setKLevelHarmonics(source, model.get(key, 1), _i);
-						}
-					}
-				};
-			((LabelledDial)comp).setMaxExtent(512);
-			model.setStatus("source" + source + "klevelharmonics" + i, Model.STATUS_RESTRICTED);
-				
-			hbox.add(comp);
-			}
+            {
+            final int _i = i;
+            comp = new LabelledDial("Level " + i, this, "source" + source + "klevelharmonics" + i, color, 1, 496)
+                {
+                boolean mouseDown;
+                public String map(int val) 
+                    { 
+                    loadKHarmonics();
+                    return "<html><center>&nbsp;&nbsp;&nbsp;" + val + "&nbsp;&nbsp;&nbsp;<br><font size=-3>" + kHarmonicsNames[val-1] + "</font></center></html>";
+                    }
+                public void didMouseDown()
+                    {
+                    getUndo().push(getModel());
+                    getUndo().setWillPush(false);
+                    mouseDown = true;
+                    }
+                public void didMouseUp()
+                    {
+                    getUndo().setWillPush(true);
+                    mouseDown = false;              
+                    }
+                public void update(String key, Model model)
+                    {
+                    super.update(key, model);
+                    if (mouseDown)
+                        {
+                        loadKHarmonics();
+                        setKLevelHarmonics(source, model.get(key, 1), _i);
+                        }
+                    }
+                };
+            ((LabelledDial)comp).setMaxExtent(512);
+            model.setStatus("source" + source + "klevelharmonics" + i, Model.STATUS_RESTRICTED);
+                                
+            hbox.add(comp);
+            }
 
         PushButton doLevel0 = new PushButton("Level 0 Action", ACTIONS)
             {
             public void perform(int action)
                 {
-				actionKLevelHarmonics(source, action, 0);
+                actionKLevelHarmonics(source, action, 0);
                 }
             };
 
@@ -6980,7 +7155,7 @@ public static final int ALL_ON = 4;
             {
             public void perform(int action)
                 {
-				actionKLevelHarmonics(source, action, 1);
+                actionKLevelHarmonics(source, action, 1);
                 }
             };
         
@@ -6988,7 +7163,7 @@ public static final int ALL_ON = 4;
             {
             public void perform(int action)
                 {
-				actionKLevelHarmonics(source, action, 2);
+                actionKLevelHarmonics(source, action, 2);
                 }
             };
         
@@ -6996,7 +7171,7 @@ public static final int ALL_ON = 4;
             {
             public void perform(int action)
                 {
-				actionKLevelHarmonics(source, action, 3);
+                actionKLevelHarmonics(source, action, 3);
                 }
             };
         

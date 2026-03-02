@@ -11,19 +11,32 @@
 
 Turn OFF Protect.  Make sure that Receive Program and Receive Exclusive are both turned on.  Set Program Receive to NORMAL.  Set the Unit Channel (System Channel) of your K5000 to the same channel as you've set up Edisyn (perhaps channel 1?).
 
-<br><br><h3>About Sending to Current Patch</h3>
 
-The Kawai K5000 stupidly cannot receive a patch and store it in its current temporary memory (nor transmit the same).  This is a huge failing as Edisyn needs to do this for many things, everything from undo/redo to randomize to hill-climbing.  There are two ways around this, neither of which is good.  First, Edisyn could write to a "scratch patch slot" (such as D128), then load this patch slot into current memory.  This is what the Kawai K5 editor does.  This would be fine except that the K5000 uses Flash RAM for its storage, so repeatedly writing to a patch slot is not a good idea: it'll burn your Flash out.  So that's out: I won't damage people's synthesizers.  Second, Edisyn could transmit every single parameter to the K5000 in sequence.  However to transmit a single parameter takes 14 bytes, and there are upwards of 5000 parameters.  This can take as much as 25 seconds to transmit!
+<br><br><br>How K5000 Memory Works: and Sending to Current Patch</h3>
 
-<p>So this is a problem.  At present our only real option is to NOT send to current memory unless you manually select "send to current memory".  This will make the hill-climber and morpher worthless, as well as nudging and morphing, and mixing multiple patches in the librarian.  But it's the only reasonable option.
+The K5000 memory structure is weird.  Normally in a synthesizer, you have a permanent storage of patches, from which you call forth a single patch to play and/or edit.  To do this, the patch is copied to current temporary memory; and it may be written back to the permanent storage later.
+
+<p>In the K5000 you also have a permanent storage of patches, but when you boot up the machine, it copies <b><i>every patch in every bank</i><b> from the permanent storage to the current temporary memory.  From there you can edit and modify any of the patches, and change which patch you're currently playing.  Eventually you can either "<b><i>reset</i><b>" (reload the permanent storage, overwriting the current temporary memory) or "<b><i>backup</i></b>" (save the entire current memory to the permanent storage, overwriting the previous storage).  If you have modified patches and forgot to "bck up" before turning the unit off, you will lose them.
+
+<p>This arrangement is so weird that it has serious implications for Edisyn.  Edisyn normally writes a patch to permanent storage.  But with the K5000, Edisyn can't write a patch to permanent storage.  Instead, it writes to a slot in current memory.  It's up to you later to backup the <i>all</i> the patches in current memory to permanent storage.
+
+<p>So what does Edisyn's "send to current patch" mean in this context?  Understand that Edisyn has to update the current playing patch in many situations -- when you undo, or redo, or randomize, or hill-climb, or morph, or nudge, or all sorts of other things, including selecting the menu item "Send to Current Patch".  But there is no "replace the current playing patch with this one" command on the K5000 that Edisyn can use.  So all Edisyn can do is upload the patch to its bank and number slot, then switch the playing patch (do a program change) to that slot.  If Edisyn doesn't know the patch's current bank and number, it'll just assume it's A0001.
+
+<p>This can be annoying.  For example, if you're manually editing patch A013 on the unit, and while you're doing so, Edisyn updates the patch A001 and switches to it, you'll be dumped out of editing A013.  Even if you were editing A001, you'd get dumped out of that too. You can uncheck <b>K5000 -> Change Path after Send to Current Patch</b> to prevent Edisyn from doing a change patch after it has updated it.  
+
+<p>For the same basic reason, the K5000 doesn't have a command Edisyn can use to <i>request</i> the current patch.  So Edisyn has that disabled.  You can always request a specific patch slot.
+
+<p>You can reset from Flash memory, or backup to Flash memory, under the K5000 menu instead of doing it manually on the machine.  You can also erase an entire bank: this doesn't erase the bank in Flash memory, just in the current working memory.
 
 <h3>Gotchas</h3>
 
 <ul>
-<li>See the discussion <b>About Sending to Current Patch</b> above: it is a massive and problematic gotcha.
-
-<p><li>If you press the <b>Show</b> button on a Section, it will switch to that patch and display it.  However there is no way to go <i>back</i> to the multimode patch.  You will need to manually change to Multi mode and navigate to the patch.
+<li>If you press the <b>Show</b> button on a Section, it will switch to that patch and display it.  However there is no way to go <i>back</i> to the multimode patch.  You will need to manually change to Multi mode and navigate to the patch.
 </ul>
+
+<h3>About the Librarian</h3>
+
+Unlike the Single-mode K5000 editor, the Multimode editor can do bank write messages.  This means that there's no need to ever erase a whole bank.  If you'd like to do that, just write an empty bank from the Librarian.
 
 <p><table border=0 cellpadding=0 cellspacing=5>
 <tr>

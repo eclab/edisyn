@@ -213,6 +213,11 @@ public class KawaiK5000Multi extends Synth
     };
 
 
+    // Do we change patch after doing a send?  This could get annoying if you're trying to edit the patch
+    // on the synthesizer directly while also using Edisyn.
+    boolean changePatchAfterSend = true;
+
+
     HashMap multiDataParamsToIndex = null;
     HashMap sectionParamsToIndex = null;
 
@@ -1003,10 +1008,78 @@ public class KawaiK5000Multi extends Synth
         {
         JFrame frame = super.sprout();
         receiveCurrent.setEnabled(false);                       // The K5000 can't do this
-        //addKawaiK5000Menu();
+        addKawaiK5000Menu();
         return frame;
         }
 
+    /** Add the Kawai K5000 Menu and submenus */
+    public void addKawaiK5000Menu()
+        {
+        JMenu menu = new JMenu("K5000");
+        menubar.add(menu);
+                    
+        JMenuItem resetMenuItem = new JMenuItem("Reset (Reload from Flash)");
+        resetMenuItem.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                sendK5000Reset();
+                }
+            });
+        menu.add(resetMenuItem);
+
+        JMenuItem backupMenuItem = new JMenuItem("Backup (Write to Flash)");
+        backupMenuItem.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                sendK5000Backup();
+                }
+            });
+        menu.add(backupMenuItem);
+                
+        menu.addSeparator();
+
+        JCheckBoxMenuItem changePatchAfterSendItem = new JCheckBoxMenuItem("Change Patch after Send to Current Patch");
+        changePatchAfterSend = getLastXAsBoolean("ChangePatchAfterSend", getSynthName(), true, true);
+        changePatchAfterSendItem.setSelected(changePatchAfterSend);
+        changePatchAfterSendItem.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                changePatchAfterSend = changePatchAfterSendItem.isSelected();
+                setLastX("" + changePatchAfterSend, "changePatchAfterSend", getSynthName(), true);
+                }
+            });
+        menu.add(changePatchAfterSendItem);
+
+        }
+        
+        
+    public void sendK5000Reset()
+        {
+        if (showSimpleConfirm("Reset the K5000?", "Reload all current working memory from the stored Flash RAM?\nThis includes all Multi and Single patches.\nThis operation cannot be undone."))
+            {
+            try 
+                {
+                tryToSendSysex(new byte[] { (byte)0xF0, 0x40, (byte)getChannelOut(), 0x32, 0x00, 0x0a, 0x02, (byte)0xF7 });
+                }
+            catch (Exception e) { Synth.handleException(e); }
+            }
+        }
+        
+    public void sendK5000Backup()
+        {
+        if (showSimpleConfirm("Backup the K5000?", "Save all current working memory to the stored Flash RAM?\nThis includes all Multi and Single patches.\nThis operation cannot be undone."))
+            {
+            try 
+                {
+                tryToSendSysex(new byte[] { (byte)0xF0, 0x40, (byte)getChannelOut(), 0x32, 0x00, 0x0a, 0x01, (byte)0xF7 });
+                }
+            catch (Exception e) { Synth.handleException(e); }
+            }
+        }
+    
     public String getPatchName(Model model) { return model.get("name", "INIT    "); }
 
     public static final int BANK_M_MSB = 0x65;                // only has 64 PC values
@@ -1095,9 +1168,6 @@ public class KawaiK5000Multi extends Synth
 
     public static String getSynthName() { return "Kawai K5000S/K5000R [Multi]"; }
     
-    // The K5000 can't send to temporary memory.  Presently we are only sending as individual parameters.
-    public boolean getSendsAllParametersAsDump() { return false; }
-
     public int[] getNameAsBytes(Model model)
         {
         String name = model.get("name", "        ") + "        ";
@@ -1132,7 +1202,41 @@ public class KawaiK5000Multi extends Synth
         pos = emitMulti(model, data, pos);
 
         data[data.length - 1] = (byte)0xF7;
-        return new Object[] { data };
+
+
+        if (toWorkingMemory && changePatchAfterSend)
+            {
+            // On the K5000, Send to Current Patch is identical to Write Current Patch, but we
+            // have to do a write to the patch in question because ALL patches are in temporary memory,
+            // and there's no way to write to temporary memory, grrr.
+            //
+            // So we write to bank/number, or to A001 if there is none.
+            // Then we have to do a change patch to bank/number to display the result
+
+            byte NN = (byte)tempModel.get("number");
+                                
+            int bankMSB = BANK_M_MSB;
+            int bankLSB = 0;
+                
+            try
+                {
+                return new Object[]
+                    {
+                    data,
+                    new ShortMessage(ShortMessage.CONTROL_CHANGE, getChannelOut(), 0, bankMSB),
+                    new ShortMessage(ShortMessage.CONTROL_CHANGE, getChannelOut(), 32, bankLSB),
+                    new ShortMessage(ShortMessage.PROGRAM_CHANGE, getChannelOut(), NN, 0)
+                    };
+                }
+            catch (InvalidMidiDataException ex)
+                {
+                return new Object[] { data };                   // I guess...
+                }
+            }
+        else                    // writing
+            {
+            return new Object[] { data };
+            }
         }
 
 
@@ -1706,17 +1810,6 @@ public class KawaiK5000Multi extends Synth
         { 
         return 0;               // there's only one bank
         }
-
-    public int getPauseAfterWriteBank() 
-        {
-        // Returns the pause, in milliseconds, after writing a bank sysex message
-        // to the synthesizer.  By default this returns the value of 
-        // getPauseAfterWritePatch();   This method only needs to be implemented 
-        // if your patch editor supports bank reads (see documentation for 
-        // getSupportsBankReads() and getSupportsBankWrites()).
-        return getPauseAfterWritePatch(); 
-        }    
-
 
     // General (non-source) parameter names
     public static final int COMMON_START = 38;

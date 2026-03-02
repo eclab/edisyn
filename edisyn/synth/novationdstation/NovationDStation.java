@@ -30,10 +30,10 @@ public class NovationDStation extends Synth
     public static final String[] DRUMS = { "909 Bass Drum", "909 Snare Drum", "909 Low Tom", "909 Mid Tom", "909 High Tom", "909 Rim Shot", "909 Hand Clap", "909 Closed High Hat", "909 Open High Hat", "909 Crash Cymbal", "909 Ride Cymbal", "808 Bass Drum", "808 Snare Drum", "808 Low Tom", "808 Mid Tom", "808 High Tom", "808 Rim Shot", "808 Hand Clap", "808 Cowbell", "808 Closed High Hat", "808 Open High Hat", "808 Crash Cymbal", "808 Low Conga", "808 Mid Conga", "808 High Conga", "808 Maracas", "808 Claves" };
     public static final String[] SETS = { "808", "909" };
 
-    private static final List<Integer> DISTORTION_CCS = List.of(
+    private static final List<Integer> DISTORTION_CCS = Arrays.asList(
         22, 28, 34, 39, 44, 52, 64, 67, 70, 84, 89, 94, 101, 107, 110
     );
-    private static final List<Integer> PAN_CCS = List.of(
+    private static final List<Integer> PAN_CCS = Arrays.asList(
         21, 27, 33, 38, 43, 47, 49, 51, 54, 57, 60, 63, 66, 69, 72, 74, 83, 88, 93, 97, 99, 106, 109, 111, 112, 114, 117
     );
 

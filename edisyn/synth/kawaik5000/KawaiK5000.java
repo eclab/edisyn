@@ -3634,8 +3634,8 @@ public static final int ALL_ON = 4;
         {
         JFrame frame = super.sprout();
         receiveCurrent.setEnabled(false);                       // The K5000 can't do this
-        morphMenu.setEnabled(false);                                    // The K5000 can't do this
-        hillClimbMenu.setEnabled(false);                       // The K5000 can't do this
+        //morphMenu.setEnabled(false);                                    // The K5000 can't do this
+        //hillClimbMenu.setEnabled(false);                       // The K5000 can't do this
         addKawaiK5000Menu();
         return frame;
         }

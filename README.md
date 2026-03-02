@@ -32,7 +32,7 @@ Donations are welcome via Paypal to my email address (sean@cs.gmu.edu).
 **Edisyn was featured on Bad Gear!** The second [M-Audio Venom](https://www.youtube.com/watch?v=Nzg030Cx5Vc) video featured Edisyn extensively and warmly as Edisyn is presently the only editor available for the unit on the Mac (and the best one overall).
 
 * New patch editors for the Kawai K5000 family!  This was a big, and difficult, one.
-* Bug fixes the CC reception and output for the D Station and Drumstation
+* Bug fixes the CC reception and output for the D Station and Drumstation.  Thanks to Guy Rooms.
 * Assorted bug fixes
 
 

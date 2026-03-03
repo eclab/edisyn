@@ -29,6 +29,13 @@ public class NovationDStation extends Synth
     public static final String[] DRUMS = { "909 Bass Drum", "909 Snare Drum", "909 Low Tom", "909 Mid Tom", "909 High Tom", "909 Rim Shot", "909 Hand Clap", "909 Closed High Hat", "909 Open High Hat", "909 Crash Cymbal", "909 Ride Cymbal", "808 Bass Drum", "808 Snare Drum", "808 Low Tom", "808 Mid Tom", "808 High Tom", "808 Rim Shot", "808 Hand Clap", "808 Cowbell", "808 Closed High Hat", "808 Open High Hat", "808 Crash Cymbal", "808 Low Conga", "808 Mid Conga", "808 High Conga", "808 Maracas", "808 Claves" };
     public static final String[] SETS = { "808", "909" };
 
+    private static final List<Integer> DISTORTION_CCS = Arrays.asList(
+        22, 28, 34, 39, 44, 52, 64, 67, 70, 84, 89, 94, 101, 107, 110
+    );
+    private static final List<Integer> PAN_CCS = Arrays.asList(
+        21, 27, 33, 38, 43, 47, 49, 51, 54, 57, 60, 63, 66, 69, 72, 74, 83, 88, 93, 97, 99, 106, 109, 111, 112, 114, 117
+    );
+
     /*
       public static final String[] PROGRAMS = 
       {
@@ -545,60 +552,14 @@ public class NovationDStation extends Synth
                 return;
                 }
             int modValue = data.value;
-            switch (data.number) 
+            if (isPanParam(data.number))
                 {
-                // panning (NOT including individual outputs as the device would imply)
-                case 21:
-case  27:
-case  33:
-case  38:
-case  43:
-case  47:
-case  49:
-case  51:
-case  54:
-case  57:
-case  60:
-case  63:
-case  66:
-case  69:
-case  72:
-case  74:
-case  83:
-case  88:
-case  93:
-case  97:
-case  99:
-case  106:
-case  109:
-case  111:
-case  112:
-case  114:
-case  117:
-                    // sent (bitshifted) as 0, 16, 32, 48, 63 (!), .., 127, hence extra rounding required
-                    modValue = roundToNearest(modValue, 16) >>> 4;
-                    break;
-                    // distortion
-                case 22:
-case  28:
-case  34:
-case  39:
-case  44:
-case  52:
-case  64:
-case  67:
-case  70:
-case  84:
-case  89:
-case  94:
-case  101:
-case  107:
-case  110:
-                    // sent (bitshifted) as 0, 8, 16, .., 127, hence extra rounding required
-                    modValue = roundToNearest(modValue, 8) >>> 3;
-                    break;
-                default:
-                    break;
+                // sent (bitshifted) as 0, 16, 32, 48, 63 (!), .., 127, hence extra rounding required
+                modValue = roundToNearest(modValue, 16) >>> 4;
+                } else if (isDistortionParam(data.number))
+                {
+                // sent (bitshifted) as 0, 8, 16, .., 120
+                modValue = modValue >>> 3;
                 }
             model.set(ccParameters[data.number - 20], modValue);
             }
@@ -968,10 +929,24 @@ case  110:
         {
         Integer param = (Integer)(ccParametersToIndex.get(key));
         if (param == null) return new Object[0];
-        
+
         int p = param.intValue();
-        
-        return buildCC(getChannelOut(), p, model.get(key));
+        int modelValue = model.get(key);
+        if (isDistortionParam(p))
+            {
+            // to be sent (bit-shifted) as 0, 8, 16, .., 120
+            modelValue <<= 3;
+            } else if (isPanParam(p))
+            {
+            // only pan (0..8) is supported over CC, NOT the outputs (9..15)
+            // (these values are combined in the model, since that is how the device & patch dump is handling it)
+            if (modelValue > 8)
+                return new Object[0];
+            // to be sent (bit-shifted) as 0, 16, 32, 48, 63 (!), .., 127, hence extra manipulation required
+            modelValue <<= 4;
+            modelValue = (modelValue <= 48) ? modelValue : modelValue - 1;
+            }
+        return buildCC(getChannelOut(), p, modelValue);
         }
 
     public static String getSynthName() { return "Novation Drumstation / D Station"; }
@@ -980,9 +955,15 @@ case  110:
         return base * Math.round((float)value / base);
         }
 
+    private boolean isDistortionParam(int cc) {
+        return DISTORTION_CCS.contains(cc);
+        }
+
+    private boolean isPanParam(int cc) {
+        return PAN_CCS.contains(cc);
+        }
     }
-    
-    
+
 /**** 
       NOVATION DRUMSTATION / D STATION MIDI FORMAT
 

@@ -19,21 +19,22 @@ public class Mac
         {
         if (System.getProperty("os.name").contains("Mac")) 
             {
-            try
-                {
-                java.awt.Desktop.getDesktop().setAboutHandler(new java.awt.desktop.AboutHandler()
-                    {
-                    public void handleAbout(java.awt.desktop.AboutEvent e)
-                        {
-                        synth.doAbout();
-                        }
-                    });
-                }
-            catch (Exception e)
-                {
-                //fail quietly
-                }
-
+            /*
+              try
+              {
+              java.awt.Desktop.getDesktop().setAboutHandler(new java.awt.desktop.AboutHandler()
+              {
+              public void handleAbout(java.awt.desktop.AboutEvent e)
+              {
+              synth.doAbout();
+              }
+              });
+              }
+              catch (Exception e)
+              {
+              //fail quietly
+              }
+            */
             try 
                 {
                 Object app = Class.forName("com.apple.eawt.Application").getMethod("getApplication").invoke(null);

@@ -3172,7 +3172,7 @@ public static final int ALL_ON = 4;
     boolean allowUpdateFromMouse = true;
     // Do we change patch after doing a send?  This could get annoying if you're trying to edit the patch
     // on the synthesizer directly while also using Edisyn.
-    boolean changePatchAfterSend = true;
+    //boolean changePatchAfterSend = true;
 
     // The 9 parts to a harmonics envelope        
     static final String[] PARTS = { "rate0", "level0", "rate1", "level1", "rate2", "level2", "rate3", "level3", "loop" };
@@ -3751,6 +3751,7 @@ public static final int ALL_ON = 4;
             });
         menu.add(unlock);
 
+        /*
         JCheckBoxMenuItem changePatchAfterSendItem = new JCheckBoxMenuItem("Change Patch after Send to Current Patch");
         changePatchAfterSend = getLastXAsBoolean("ChangePatchAfterSend", getSynthName(), true, true);
         changePatchAfterSendItem.setSelected(changePatchAfterSend);
@@ -3763,6 +3764,7 @@ public static final int ALL_ON = 4;
                 }
             });
         menu.add(changePatchAfterSendItem);
+        */
         }
         
     // Given the current constraints, returns whether the given index should be constrained 
@@ -4288,7 +4290,7 @@ public static final int ALL_ON = 4;
         pos = emitTone(model, data, pos, sources);
 
         data[data.length - 1] = (byte)0xF7;
-        if (toWorkingMemory && changePatchAfterSend)
+        if (toWorkingMemory)	// && changePatchAfterSend)
             {
             // On the K5000, Send to Current Patch is identical to Write Current Patch, but we
             // have to do a write to the patch in question because ALL patches are in temporary memory,
@@ -4344,6 +4346,8 @@ public static final int ALL_ON = 4;
 
     public void writeBankAsRangePreamble(int bank)
         {
+        if (bank > 0) bank++;               // A = 0, D = 2, E = 3, F = 4
+
         try 
             {
             byte[] preamble = new byte[]
@@ -4355,7 +4359,7 @@ public static final int ALL_ON = 4;
                 0x00,
                 0x0A,
                 0x00,
-                0x00,
+                (byte)bank,
                 // Empty tone except first patch.  Will this work?
                 0x01, 0x00, 0x00, 0x00,
                 0x00, 0x00, 0x00, 0x00,
@@ -4482,7 +4486,7 @@ public static final int ALL_ON = 4;
             int bank = result[7];
             if (bank == 1)  // Bank B, we don't do that.  
                 return PARSE_FAILED;
-            if (bank > 0) bank -= 1;                        // bank = 1 is invalid.  Shift all others down one.
+            if (bank > 0) bank--;                        // bank = 1 is invalid.  Shift all others down one.
             // bank     Name    result[8]
             // 0        A               0
             // 1        D               2

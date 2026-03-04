@@ -937,6 +937,13 @@ public class Blank extends Synth
         return true;
         }
                 
+    public void beforeWriteAllParametersHook() 
+        { 
+        // This is called by writeAllParameters() immediately before writing a patch to the synthesizer.
+        // Overriding it gives you the opportunity send extra MIDI, a rare need. 
+        return; 
+        }
+
     public void afterWriteAllParametersHook() 
         { 
         // This is called by writeAllParameters() after writing a patch to the synthesizer.
@@ -1420,6 +1427,23 @@ public class Blank extends Synth
         // See also stoppingBatchDownload() and startingBatchDownload()
         return new Object[0]; 
         }
+
+    public void beforeLibrarianWriteHook() 
+        { 
+        // This is called before the Librarian has written a patch, a patch range, a bank,
+        // or all the patches. 
+        // Overriding it gives you the opportunity send extra MIDI, a rare need. 
+        return; 
+        }
+
+    public void afterLibrarianWriteHook() 
+        { 
+        // This is called after the Librarian has written a patch, a patch range, a bank,
+        // or all the patches. 
+        // Overriding it gives you the opportunity send extra MIDI, a rare need. 
+        return; 
+        }
+
 
     public JMenuItem getCustomLibrarianMenuItem() 
         { 

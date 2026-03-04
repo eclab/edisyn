@@ -3173,6 +3173,12 @@ public static final int ALL_ON = 4;
     // Do we change patch after doing a send?  This could get annoying if you're trying to edit the patch
     // on the synthesizer directly while also using Edisyn.
     //boolean changePatchAfterSend = true;
+    // Do we always do a backup after a Librarian Write Patch operation of some sort?
+//	boolean backupAfterLibrarianWrite = false;
+	// Do we always do a backup after a Write to Patch operation?
+	// boolean backupAfterWriteToPatch = false;
+	// Do we always send parameters, or just on send current patch?
+	// boolean sendsParametersOnlyOnSendCurrentPatch = false;
 
     // The 9 parts to a harmonics envelope        
     static final String[] PARTS = { "rate0", "level0", "rate1", "level1", "rate2", "level2", "rate3", "level3", "loop" };
@@ -3736,6 +3742,55 @@ public static final int ALL_ON = 4;
             });
         menu.add(backupMenuItem);
 
+/*
+        JCheckBoxMenuItem backupAfterWriteToPatchItem = new JCheckBoxMenuItem("Always Backup After Write to Patch");
+        backupAfterWriteToPatch = getLastXAsBoolean("BackupAfterWriteToPatch", getSynthName(), true, true);
+        backupAfterWriteToPatchItem.setSelected(backupAfterWriteToPatch);
+        backupAfterWriteToPatchItem.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                backupAfterWriteToPatch = backupAfterWriteToPatchItem.isSelected();
+                if (backupAfterWriteToPatch)
+                	{
+                	showSimpleMessage("Backup After Write to Patch", "Be sure you have read the ABOUT panel to learn about how\nthe Kawai K5000 memory works." );
+                	}
+                setLastX("" + backupAfterWriteToPatch, "BackupAfterWriteToPatch", getSynthName(), true);
+                }
+            });
+        menu.add(backupAfterWriteToPatchItem);
+
+        JCheckBoxMenuItem sendParametersItem = new JCheckBoxMenuItem("Only Update Synth on Send to Current Patch");
+        sendsParametersOnlyOnSendCurrentPatch = getLastXAsBoolean("SendParametersOnlyOnSendCurrentPatch", getSynthName(), false, true);
+        sendParametersItem.setSelected(sendsParametersOnlyOnSendCurrentPatch);
+        sendParametersItem.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                sendsParametersOnlyOnSendCurrentPatch = sendParametersItem.isSelected();
+                setLastX("" + sendsParametersOnlyOnSendCurrentPatch, "SendParametersOnlyOnSendCurrentPatch", getSynthName(), true);
+                }
+            });
+        menu.add(sendParametersItem);
+
+        JCheckBoxMenuItem backupAfterLibrarianWriteItem = new JCheckBoxMenuItem("Always Backup After Librarian Write");
+        backupAfterLibrarianWrite = getLastXAsBoolean("BackupAfterLibrarianWrite", getSynthName(), false, true);
+        backupAfterLibrarianWriteItem.setSelected(backupAfterLibrarianWrite);
+        backupAfterLibrarianWriteItem.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                backupAfterLibrarianWrite = backupAfterLibrarianWriteItem.isSelected();
+                if (backupAfterLibrarianWrite)
+                	{
+                	showSimpleMessage("Backup After Write to Patch", "Be sure you have read the ABOUT panel to learn about how\nthe Kawai K5000 memory works." );
+                	}
+                setLastX("" + backupAfterLibrarianWrite, "BackupAfterLibrarianWrite", getSynthName(), true);
+                }
+            });
+        menu.add(backupAfterLibrarianWriteItem);
+*/
+
         menu.addSeparator();
 
         JCheckBoxMenuItem unlock = new JCheckBoxMenuItem("Allow Harmonics Envelope Display Mouse-Over");
@@ -3752,21 +3807,55 @@ public static final int ALL_ON = 4;
         menu.add(unlock);
 
         /*
-        JCheckBoxMenuItem changePatchAfterSendItem = new JCheckBoxMenuItem("Change Patch after Send to Current Patch");
-        changePatchAfterSend = getLastXAsBoolean("ChangePatchAfterSend", getSynthName(), true, true);
-        changePatchAfterSendItem.setSelected(changePatchAfterSend);
-        changePatchAfterSendItem.addActionListener(new ActionListener()
-            {
-            public void actionPerformed(ActionEvent e)
-                {
-                changePatchAfterSend = changePatchAfterSendItem.isSelected();
-                setLastX("" + changePatchAfterSend, "changePatchAfterSend", getSynthName(), true);
-                }
-            });
-        menu.add(changePatchAfterSendItem);
+          JCheckBoxMenuItem changePatchAfterSendItem = new JCheckBoxMenuItem("Change Patch after Send to Current Patch");
+          changePatchAfterSend = getLastXAsBoolean("ChangePatchAfterSend", getSynthName(), true, true);
+          changePatchAfterSendItem.setSelected(changePatchAfterSend);
+          changePatchAfterSendItem.addActionListener(new ActionListener()
+          {
+          public void actionPerformed(ActionEvent e)
+          {
+          changePatchAfterSend = changePatchAfterSendItem.isSelected();
+          setLastX("" + changePatchAfterSend, "changePatchAfterSend", getSynthName(), true);
+          }
+          });
+          menu.add(changePatchAfterSendItem);
         */
         }
         
+    public void beforeWriteAllParametersHook() 
+        { 
+    	if (true)		//(backupAfterWriteToPatch)
+    		{
+    		performK5000Reset();
+    		}
+        }
+
+    public void afterWriteAllParametersHook()
+    	{
+    	if (true)		//if (backupAfterWriteToPatch)
+    		{
+    		performK5000Backup();
+    		}
+    	}
+        
+     public void afterLibrarianWriteHook()
+    	{
+    	if (true)		//if (backupAfterWriteToPatch)
+//    	if (backupAfterLibrarianWrite)
+    		{
+    		performK5000Backup();
+    		}
+    	}
+
+     public void beforeLibrarianWriteHook()
+    	{
+    	if (true)		//if (backupAfterWriteToPatch)
+//    	if (backupAfterLibrarianWrite)
+    		{
+    		performK5000Reset();
+    		}
+    	}
+
     // Given the current constraints, returns whether the given index should be constrained 
     boolean _constrainTo(int index)
         {
@@ -3852,31 +3941,51 @@ public static final int ALL_ON = 4;
         {
         if (showSimpleConfirm("Reset the K5000?", "Reload all current working memory from the stored Flash RAM?\nThis includes all Multi and Single patches.\nThis operation cannot be undone."))
             {
+            performK5000Reset();
+            }
+        }
+        
+    void performK5000Reset()
+    	{
             try 
                 {
                 tryToSendSysex(new byte[] { (byte)0xF0, 0x40, (byte)getChannelOut(), 0x32, 0x00, 0x0a, 0x02, (byte)0xF7 });
                 }
             catch (Exception e) { Synth.handleException(e); }
-            }
-        }
+	   	}
+        
+    void performK5000Backup()
+    	{
+             try 
+                {
+                tryToSendSysex(new byte[] { (byte)0xF0, 0x40, (byte)getChannelOut(), 0x32, 0x00, 0x0a, 0x01, (byte)0xF7 });
+                }
+            catch (Exception e) { Synth.handleException(e); }
+	   	}
         
     public void sendK5000Backup()
         {
         if (showSimpleConfirm("Backup the K5000?", "Save all current working memory to the stored Flash RAM?\nThis includes all Multi and Single patches.\nThis operation cannot be undone."))
             {
-            try 
-                {
-                tryToSendSysex(new byte[] { (byte)0xF0, 0x40, (byte)getChannelOut(), 0x32, 0x00, 0x0a, 0x01, (byte)0xF7 });
-                }
-            catch (Exception e) { Synth.handleException(e); }
+            performK5000Backup();
             }
         }
+
+	// We override this method to deselect the write all patches and save all patches menus.
+    public void librarianCreated(Librarian librarian) 
+    	{ 
+    	writeAllPatchesMenu.setSelected(false); 
+    	saveAllPatchesMenu.setSelected(false); 
+    	}
+
 
     /** Changes the patch to the bank and number provided */
     public void changePatch(Model tempModel)
         {
         byte BB = (byte)tempModel.get("bank");
         byte NN = (byte)tempModel.get("number");
+        int away = NN + 1;
+        if (away > 127) away = 0;
                         
         int bankMSB = (BB == 0 ? BANK_A_MSB : (BB == 1 ? BANK_D_MSB : (BB == 2 ? BANK_E_MSB : BANK_F_MSB)));
         int bankLSB = 0;
@@ -3891,6 +4000,8 @@ public static final int ALL_ON = 4;
             tryToSendMIDI(new ShortMessage(ShortMessage.CONTROL_CHANGE, getChannelOut(), 0, bankMSB));
             tryToSendMIDI(new ShortMessage(ShortMessage.CONTROL_CHANGE, getChannelOut(), 32, bankLSB));
                 
+            // PC Away, so we can always see the name change
+            tryToSendMIDI(new ShortMessage(ShortMessage.PROGRAM_CHANGE, getChannelOut(), away, 0));
             // PC
             tryToSendMIDI(new ShortMessage(ShortMessage.PROGRAM_CHANGE, getChannelOut(), NN, 0));
             }
@@ -3996,7 +4107,7 @@ public static final int ALL_ON = 4;
     //public boolean getSendsAllParametersAsDump() { return false; }
 
     // The only way to send all parameters is via Send To Current Patch -- all others will fail
-    //public boolean getSendsParametersOnlyOnSendCurrentPatch() { return true; }
+    // public boolean getSendsParametersOnlyOnSendCurrentPatch() { return sendsParametersOnlyOnSendCurrentPatch; }
 
     /** Returns the patch name as a byte array, but returned as an int[] */
     public int[] getNameAsBytes(Model model)
@@ -4013,7 +4124,6 @@ public static final int ALL_ON = 4;
     /** Encodes the given key at the given position in the data */
     int p(byte[] data, int pos, String key, Model model)
         {
-        //System.err.println(StringUtility.toHexShort(pos) + "\t" + key + "\t" + model.get(key));
         data[pos] = (byte)model.get(key);
         return pos + 1;
         }
@@ -4022,7 +4132,6 @@ public static final int ALL_ON = 4;
     // starting at the given position in data
     public int emitTone(Model model, byte[] data, int pos, int sources )
         {
-        //System.err.println("" + pos + "\tCHECKSUM");
         pos++;                      // skip checksum space
         int start = pos;
 
@@ -4124,20 +4233,17 @@ public static final int ALL_ON = 4;
                                 
                 if (j == 2)             // velo sw and velo
                     {
-                    //System.err.println("velosw");
                     data[pos++] = (byte)((model.get("source" + i + "generalvelosw") << 5) | 
                         (model.get("source" + i + "generalvelo")));
                     }
                 else if (j == 28) // wavekitmsb
                     {
-                    //System.err.println("dcawavekitmsb");
                     int wavekit = model.get("source" + i + "dcowavekit") + PCM_START;
                     boolean additive = (model.get("source" + i + "dcoadditive") == 1);
                     data[pos++] = (byte)(additive ? 4 : (wavekit >>> 7));                           // additive is 512
                     }
                 else if (j == 29) // wavekitlsb
                     {
-                    //System.err.println("dcawavekitlsb");
                     int wavekit = model.get("source" + i + "dcowavekit") + PCM_START;
                     boolean additive = (model.get("source" + i + "dcoadditive") == 1);
                     data[pos++] = (byte)(additive ? 0 : (wavekit & 127));                           // additive is 512
@@ -4262,19 +4368,6 @@ public static final int ALL_ON = 4;
         // F0 40 CHANNEL 20 00 0a 00 BANK PATCHNUM SINGLE_CHECKSUM EFFECT/COMMON SOURCE* WAVEKIT* F7
         // The only wavekits provided are those for which the source is NOT additive.
     
-        /*
-          System.err.println("0\tF0");
-          System.err.println("1\t40");
-          System.err.println("2\tchannel");
-          System.err.println("3\t20");
-          System.err.println("4\t00");
-          System.err.println("5\t0A");
-          System.err.println("6\t00");
-          System.err.println("7\tBANK");
-          System.err.println("8\tNUMBER");
-        */
-
-    
         data[0] = (byte)0xF0;
         data[1] = (byte)0x40;                                               // Kawai
         data[2] = (byte)getChannelOut();                    // Channel
@@ -4290,7 +4383,7 @@ public static final int ALL_ON = 4;
         pos = emitTone(model, data, pos, sources);
 
         data[data.length - 1] = (byte)0xF7;
-        if (toWorkingMemory)	// && changePatchAfterSend)
+        if (toWorkingMemory)    // && changePatchAfterSend)
             {
             // On the K5000, Send to Current Patch is identical to Write Current Patch, but we
             // have to do a write to the patch in question because ALL patches are in temporary memory,
@@ -4302,6 +4395,8 @@ public static final int ALL_ON = 4;
             byte NN = (byte)tempModel.get("number");
             if (BB < 0 || BB > 3) BB = 0;
             if (NN < 0 || NN > 127) NN = 0;
+            int away = NN + 1;
+            if (away > 127) away = 0;
                                                 
             int bankMSB = (BB == 0 ? BANK_A_MSB : (BB == 1 ? BANK_D_MSB : (BB == 2 ? BANK_E_MSB : BANK_F_MSB)));
             int bankLSB = 0;
@@ -4310,10 +4405,13 @@ public static final int ALL_ON = 4;
                 {
                 return new Object[]
                     {
+                    // PC away, so we can see the name change
+                    new ShortMessage(ShortMessage.PROGRAM_CHANGE, getChannelOut(), away, 0),
                     data,
+                    // PC Back to our patch
                     new ShortMessage(ShortMessage.CONTROL_CHANGE, getChannelOut(), 0, bankMSB),
                     new ShortMessage(ShortMessage.CONTROL_CHANGE, getChannelOut(), 32, bankLSB),
-                    new ShortMessage(ShortMessage.PROGRAM_CHANGE, getChannelOut(), NN, 0)
+                    new ShortMessage(ShortMessage.PROGRAM_CHANGE, getChannelOut(), NN, 0),
                     };
                 }
             catch (InvalidMidiDataException ex)
@@ -4427,7 +4525,6 @@ public static final int ALL_ON = 4;
         // 2        E               3
         // 3        F               4
         
-        //System.err.println("HEADER");
         byte[] data = new byte[datalen];
         
         data[0] = (byte)0xF0;
@@ -4440,7 +4537,6 @@ public static final int ALL_ON = 4;
         data[7] = (byte)BANK_VALS[bank];                    // bank
         int pos = 8;
                         
-        //System.err.println("TONE MAP");
         // Load the tone map
         int patch = 0;
         for(int j = 0; j < 18; j++)
@@ -4459,17 +4555,14 @@ public static final int ALL_ON = 4;
             ((tonemap[126] ? 1 : 0) +
             (tonemap[127] ? 2 : 0));
 
-        //System.err.println("POSITION IS " + pos);
             
                                         
         // Load the patches
 
         for(Model m : models)
             {
-            //System.err.println("Model " + m);
             if (m != null)
                 {
-                //System.err.println("\t\t\t\t---> " + m.get("name", ""));
                 pos = emitTone(m, data, pos, m.get("srctype"));
                 }
             }
@@ -5072,13 +5165,24 @@ public static final int ALL_ON = 4;
             }
         }
 
+	// We override this to guarantee that a reset is done before any change patch and also before the request is issued
+    public void performRequestDump(Model tempModel, boolean changePatch)
+        {
+        // First, reload from Flash		-- we don't do this in ChangePatch because ChangePatch is also used when we write a patch, and it would undo everything
+		performK5000Reset();    
+		
+		super.performRequestDump(tempModel, changePatch);
+        }
+    
+
 
     /** Request that the K5000 give us a patch */
     public byte[] requestDump(Model tempModel)
         {
         if (tempModel == null)
             tempModel = getModel();
-
+	
+		// Now return the sysex to send to request
         return new byte[] 
             { 
             (byte)0xF0, 

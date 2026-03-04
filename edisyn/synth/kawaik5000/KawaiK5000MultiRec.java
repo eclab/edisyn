@@ -21,7 +21,7 @@ public class KawaiK5000MultiRec extends Recognize
         
     public static boolean recognize(byte[] data)
         {
-        if (recognizeBank(data)) { System.err.println("It's a bank!"); return true; }
+        if (recognizeBank(data)) { return true; }
 
         return (data.length == 9 + 54 + 4 * 12 + 1 &&
             (data[0] & 0xFF) == 0xF0 &&

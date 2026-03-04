@@ -215,8 +215,12 @@ public class KawaiK5000Multi extends Synth
 
     // Do we change patch after doing a send?  This could get annoying if you're trying to edit the patch
     // on the synthesizer directly while also using Edisyn.
-    boolean changePatchAfterSend = true;
+   // boolean changePatchAfterSend = true;
 
+	// Do we always do a backup after a Write to Patch operation?
+	//boolean backupAfterWriteToPatch = false;
+	// Do we always send parameters, or just on send current patch?
+	//boolean sendsParametersOnlyOnSendCurrentPatch = false;
 
     HashMap multiDataParamsToIndex = null;
     HashMap sectionParamsToIndex = null;
@@ -1038,8 +1042,7 @@ public class KawaiK5000Multi extends Synth
             });
         menu.add(backupMenuItem);
                 
-        menu.addSeparator();
-
+/*
         JCheckBoxMenuItem changePatchAfterSendItem = new JCheckBoxMenuItem("Change Patch after Send to Current Patch");
         changePatchAfterSend = getLastXAsBoolean("ChangePatchAfterSend", getSynthName(), true, true);
         changePatchAfterSendItem.setSelected(changePatchAfterSend);
@@ -1052,41 +1055,148 @@ public class KawaiK5000Multi extends Synth
                 }
             });
         menu.add(changePatchAfterSendItem);
+*/
+
+/*
+        JCheckBoxMenuItem backupAfterWriteToPatchItem = new JCheckBoxMenuItem("Always Backup After Write to Patch");
+        backupAfterWriteToPatch = getLastXAsBoolean("BackupAfterWriteToPatch", getSynthName(), true, true);
+        backupAfterWriteToPatchItem.setSelected(backupAfterWriteToPatch);
+        backupAfterWriteToPatchItem.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                backupAfterWriteToPatch = backupAfterWriteToPatchItem.isSelected();
+                if (backupAfterWriteToPatch)
+                	{
+                	showSimpleMessage("Backup After Write to Patch", "Be sure you have read the ABOUT panel to learn about how\nthe Kawai K5000 memory works." );
+                	}
+                setLastX("" + backupAfterWriteToPatch, "BackupAfterWriteToPatch", getSynthName(), true);
+                }
+            });
+        menu.add(backupAfterWriteToPatchItem);
+
+        JCheckBoxMenuItem sendParametersItem = new JCheckBoxMenuItem("Only Update Synth on Send to Current Patch");
+        sendsParametersOnlyOnSendCurrentPatch = getLastXAsBoolean("SendParametersOnlyOnSendCurrentPatch", getSynthName(), false, true);
+        sendParametersItem.setSelected(sendsParametersOnlyOnSendCurrentPatch);
+        sendParametersItem.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                sendsParametersOnlyOnSendCurrentPatch = backupAfterWriteToPatchItem.isSelected();
+                setLastX("" + sendsParametersOnlyOnSendCurrentPatch, "SendParametersOnlyOnSendCurrentPatch", getSynthName(), true);
+                }
+            });
+        menu.add(sendParametersItem);
+*/
+
+/*
+        JCheckBoxMenuItem backupAfterLibrarianWriteItem = new JCheckBoxMenuItem("Always Backup After Librarian Write");
+        backupAfterLibrarianWrite = getLastXAsBoolean("BackupAfterLibrarianWrite", getSynthName(), false, true);
+        backupAfterLibrarianWriteItem.setSelected(backupAfterLibrarianWrite);
+        backupAfterLibrarianWriteItem.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                backupAfterLibrarianWrite = backupAfterLibrarianWriteItem.isSelected();
+                if (backupAfterLibrarianWrite)
+                	{
+                	showSimpleMessage("Backup After Write to Patch", "Be sure you have read the ABOUT panel to learn about how\nthe Kawai K5000 memory works." );
+                	}
+                setLastX("" + backupAfterLibrarianWrite, "BackupAfterLibrarianWrite", getSynthName(), true);
+                }
+            });
+        menu.add(backupAfterLibrarianWriteItem);
+*/
 
         }
         
         
+    public void beforeWriteAllParametersHook() 
+        { 
+    	if (true)		//(backupAfterWriteToPatch)
+    		{
+    		performK5000Reset();
+    		}
+        }
+
+    public void afterWriteAllParametersHook()
+    	{
+    	if (true)		//if (backupAfterWriteToPatch)
+    		{
+    		performK5000Backup();
+    		}
+    	}
+        
+     public void afterLibrarianWriteHook()
+    	{
+    	if (true)		//if (backupAfterWriteToPatch)
+//    	if (backupAfterLibrarianWrite)
+    		{
+    		performK5000Backup();
+    		}
+    	}
+
+     public void beforeLibrarianWriteHook()
+    	{
+    	if (true)		//if (backupAfterWriteToPatch)
+//    	if (backupAfterLibrarianWrite)
+    		{
+    		performK5000Reset();
+    		}
+    	}
+
     public void sendK5000Reset()
         {
         if (showSimpleConfirm("Reset the K5000?", "Reload all current working memory from the stored Flash RAM?\nThis includes all Multi and Single patches.\nThis operation cannot be undone."))
             {
+            performK5000Reset();
+            }
+        }
+        
+    void performK5000Reset()
+    	{
             try 
                 {
                 tryToSendSysex(new byte[] { (byte)0xF0, 0x40, (byte)getChannelOut(), 0x32, 0x00, 0x0a, 0x02, (byte)0xF7 });
                 }
             catch (Exception e) { Synth.handleException(e); }
-            }
-        }
+	   	}
+        
+    void performK5000Backup()
+    	{
+             try 
+                {
+                tryToSendSysex(new byte[] { (byte)0xF0, 0x40, (byte)getChannelOut(), 0x32, 0x00, 0x0a, 0x01, (byte)0xF7 });
+                }
+            catch (Exception e) { Synth.handleException(e); }
+	   	}
         
     public void sendK5000Backup()
         {
         if (showSimpleConfirm("Backup the K5000?", "Save all current working memory to the stored Flash RAM?\nThis includes all Multi and Single patches.\nThis operation cannot be undone."))
             {
-            try 
-                {
-                tryToSendSysex(new byte[] { (byte)0xF0, 0x40, (byte)getChannelOut(), 0x32, 0x00, 0x0a, 0x01, (byte)0xF7 });
-                }
-            catch (Exception e) { Synth.handleException(e); }
+            performK5000Backup();
             }
         }
-    
+            
     public String getPatchName(Model model) { return model.get("name", "INIT    "); }
+
+	// We override this method to deselect the write all patches and save all patches menus.
+    public void librarianCreated(Librarian librarian) 
+    	{ 
+    	writeAllPatchesMenu.setSelected(false); 
+    	saveAllPatchesMenu.setSelected(false); 
+    	}
+
+
 
     public static final int BANK_M_MSB = 0x65;                // only has 64 PC values
 
     public void changePatch(Model tempModel)
         {
         byte NN = (byte)tempModel.get("number");
+        int away = NN + 1;
+        if (away > 63) away = 0;
                 
         int bankMSB = BANK_M_MSB;
         int bankLSB = 0;
@@ -1097,6 +1207,8 @@ public class KawaiK5000Multi extends Synth
             tryToSendMIDI(new ShortMessage(ShortMessage.CONTROL_CHANGE, getChannelOut(), 0, bankMSB));
             tryToSendMIDI(new ShortMessage(ShortMessage.CONTROL_CHANGE, getChannelOut(), 32, bankLSB));
                 
+            // PC Away, so we can always see the name change
+            tryToSendMIDI(new ShortMessage(ShortMessage.PROGRAM_CHANGE, getChannelOut(), away, 0));
             // PC
             tryToSendMIDI(new ShortMessage(ShortMessage.PROGRAM_CHANGE, getChannelOut(), NN, 0));
             }
@@ -1181,7 +1293,7 @@ public class KawaiK5000Multi extends Synth
 
     public Object[] emitAll(Model tempModel, boolean toWorkingMemory, boolean toFile)
         {
-        if (toWorkingMemory) return new Object[0];                      // For the time being
+        //if (toWorkingMemory) return new Object[0];                      // For the time being
         
         if (tempModel == null)
             tempModel = getModel();
@@ -1204,7 +1316,7 @@ public class KawaiK5000Multi extends Synth
         data[data.length - 1] = (byte)0xF7;
 
 
-        if (toWorkingMemory && changePatchAfterSend)
+        if (toWorkingMemory)		// && changePatchAfterSend)
             {
             // On the K5000, Send to Current Patch is identical to Write Current Patch, but we
             // have to do a write to the patch in question because ALL patches are in temporary memory,
@@ -1214,6 +1326,8 @@ public class KawaiK5000Multi extends Synth
             // Then we have to do a change patch to bank/number to display the result
 
             byte NN = (byte)tempModel.get("number");
+            int away = NN + 1;
+            if (away > 63) away = 0;
                                 
             int bankMSB = BANK_M_MSB;
             int bankLSB = 0;
@@ -1222,6 +1336,8 @@ public class KawaiK5000Multi extends Synth
                 {
                 return new Object[]
                     {
+                    // PC away, so we can see the name change
+                    new ShortMessage(ShortMessage.PROGRAM_CHANGE, getChannelOut(), away, 0),
                     data,
                     new ShortMessage(ShortMessage.CONTROL_CHANGE, getChannelOut(), 0, bankMSB),
                     new ShortMessage(ShortMessage.CONTROL_CHANGE, getChannelOut(), 32, bankLSB),
@@ -1752,6 +1868,15 @@ public class KawaiK5000Multi extends Synth
         }
         
 
+	// We override this to guarantee that a reset is done before any change patch and also before the request is issued
+    public void performRequestDump(Model tempModel, boolean changePatch)
+        {
+        // First, reload from Flash		-- we don't do this in ChangePatch because ChangePatch is also used when we write a patch, and it would undo everything
+		performK5000Reset();    
+		
+		super.performRequestDump(tempModel, changePatch);
+        }
+    
     public byte[] requestDump(Model tempModel)
         {
         if (tempModel == null)

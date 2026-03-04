@@ -14,22 +14,91 @@ Turn OFF Protect.  Make sure that Receive Program and Receive Exclusive are both
 
 <br><br><br><h3>How K5000 Memory Works and its Implications</h3>
 
-The K5000 memory structure is weird, and it's very important to understand how it works with an editor.
+The K5000 memory structure is weird, and how it presents itself to you on the K5000 screen is quite different from how it presents itself to you using an editor.  So it's very important to understand how it works with an editor.
 
-<p>In a traditional synthesizer, you have a permanent storage of patches, from which you call forth a single patch to play and/or edit.  To do this, the patch is copied to current temporary memory; and it may be written back to the permanent storage later.
+<p>In a traditional synthesizer, you have a permanent storage of patches, from which you call forth a single patch to play and/or edit.  To do this, the patch is copied to current working memory; and it may be written back to the permanent storage later.
 
-<p>In the K5000 you also have a permanent storage of patches, but when you boot up the machine, it copies <b><i>every single patch in every bank</i></b> from the permanent storage to the current temporary memory.  However if you edit a patch manually on the synthesizer, then before you exit and switch to a new patch you are required to either <i><b>write</b></i> the patch back to permanent storage, or to <i><b>reload</b></i> from permanent storage, erasing your changes.  
+<p>In the K5000 you also have a permanent storage of patches, but when you boot up the machine, it copies <b><i>every single patch in every bank</i></b> from the permanent storage to the current working memory.  If you edit a patch manually on the synthesizer, then before you exit and switch to a new patch you are required to either <i><b>write</b></i> the patch back to permanent storage, or to <i><b>reload</b></i> from permanent storage, erasing your changes.  Thus either of these operations (in different ways) bring the current working memory in sync with the permanent storage.
 
-<p>But if you edit a patch over Sysex from an editor like Edisyn, the Kawai K5000 behaves differently.  You can modify any patch you like in current temporary memory, and you're not required to write any of them to permanent storage until you feel like it, if at all.  If instead you reboot the K5000, they're erased.  Edisyn cannot issue a <i><b>write</b></i> command to write a single patch back to permanent storage, nor can it <i><b>reload</b></i> a single patch: there's no sysex command for these.  Instead to  store a single patch modified by Edisyn, you have to manually edit the patch, make some small parameter change (and maybe change the parameter back), then exit the patch, where you'll be prompted to write it to permanent memory.  And there is no way <i>reload a single patch edited by Edisyn</i>.
+<p>But if you edit a patch over Sysex from an editor like Edisyn, the Kawai K5000 behaves very differently.  You can modify any patch you like in current working memory, or multiple ones, and you're not required to write any of them to permanent storage until you feel like it, if at all.  If you reboot the K5000 without writing them, your changes are gone.  
 
-<p>What Edisyn <i>can do</i> is to <i>write every single patch, of every bank</i> to permanent storage. This is done by issuing a <b>Backup</b> from the K5000 menu in Edisyn, or from the unit itself.  And Edisyn can also <i>reload every single patch, of every bank</i> from permament storage, overwriting all changes you've made to any of them in current temporary memory.  This is done by issuing a <b>Reset</b> from Edisyn or on the machine.
+<p>This poses some major opportunities for confusion.  Edisyn deals with this by doing some things to maintain consistency:
 
-<p>Critically note that <b><i>permanent storage is FLASH RAM</i></b>, and FLASH will eventually burn out, perhaps after 10,000 writes, so we don't want to tax it that much.  You can read FLASH RAM forever.  Since a BACKUP is spread out over the full Flash RAM, it's not much more taxing than a single WRITE, so don't worry too much about using a BACKUP in lieu of a WRITE.  But if you wanted to be ultra conservative, you could always manually WRITE a single patch you edited in Edisyn, using the method described earlier.  At any rate, if you used Edisyn to upload an entire new Bank, you should BACKUP that Bank to save it to permanent storage.
+<ul>
+<li>Edisyn always resets (reloads from FLASH) whenever you request a new patch.
+<li>When you select "Write to Patch...", Edisyn resets (reloads from FLASH), then writes the patch to current working memory, then backs up (writes all patches to FLASH).  This is a slow process, and the machine will hang for perhaps 15 seconds!
+<li>When you write one or more patches in the Librarian, or write a whole bank, Edisyn will likewise reset (load from FLASH), write all the patches (slow), and then back up (write all patches to FLASH, again taking 15 more seconds).
+<li>When Edisyn updates the current patch (such as after undo, redo, randomization, etc., or when you select "Send to Current Patch", in some situations it doesn't know what the patch number and bank are, so it will switch to and temporarily use A001 as a "scratch patch slot" to send the data to.  Don't pay that any mind.
+</ul>
 
-<p>All this means that Edisyn's "Write to Patch..." menu option <i>doesn't write the patch to permanent memory</i>.  It just writes it to <i>current temporary memory</i>.  You will have to issue a WRITE from there, or a BACKUP.  This also means that the "Send to Current Patch" menu option (or any other procedure which updates the current patch, such as when you undo, or redo, or randomize, or hill-climb, or morph, or nudge, etc.) is just doing the same thing as "Write to Patch..." for the current patch!  Furthermore, if Edisyn needs to update the current patch and it <i>doesn't know the current bank and number</i>, it has to do something, so it'll just assume it's A001, overwriting what's there. You can fix that by first issuing a "Write to Patch..." menu, which sets the bank and patch number later used by patch updates; or reading the patch in with "Request Patch...".  Also the K5000 has no option to request the current patch, so Edisyn has that disabled.
+<!--
+, Edisyn resets (reloads from FLASH), then writes the patch to current working memory, then backs up (writes all patches to FLASH).  This is a slow process, and the machine will hang for perhaps 10 seconds.
 
-<p>What a mess.  Why they did this I have no idea.
+Manually edit the patch on the K5000.  Make a small parameter change, and change it back, so as to make the patch "dirty".  Then exit the patch, where you'll be prompted to write it to permanent memory.  This will write just this patch.
+<p><li><b><i>Backup</i></b> the the K5000.  This writes <i>all the patches</i>: note that it will write the patch you're interested in, but will also write any other patches you happened to edit.
+<p><li>Select the <b><i>Backup</i></b> menu option in the K5000 menu in Edisyn's editor.  This does the same thing as the "Backup" command the K5000, with the same consequences.
 
+
+
+But Edisyn cannot <i><b>write</b></i> a patch as described earlier, nor can it <i><b>reload</b></i> a single patch: there's no sysex command for these.  Instead once you have edited a patch with Edisyn, or uploaded a new patch replacing it in current working memory, to store it in permanent storage you can do any one of these things:
+
+<ul>
+<li>Manually edit the patch on the K5000.  Make a small parameter change, and change it back, so as to make the patch "dirty".  Then exit the patch, where you'll be prompted to write it to permanent memory.  This will write just this patch.
+<p><li><b><i>Backup</i></b> the the K5000.  This writes <i>all the patches</i>: note that it will write the patch you're interested in, but will also write any other patches you happened to edit.
+<p><li>Select the <b><i>Backup</i></b> menu option in the K5000 menu in Edisyn's editor.  This does the same thing as the "Backup" command the K5000, with the same consequences.
+</ul>
+
+<P>Additionally, there is no way <i>reload a single patch edited by Edisyn</i>.  Selecting a different patch directly on the unit, or doing a MIDI program change, just moves to the new patch in current working memory.  It doesn't reload it from permanent storage.  You can reload <i>all the patches</i> by issuing a <b><i>reset</i></b> command on the K5000, or selecting the Reset menu option in the K5000 menu in Edisyn.
+
+<br><br><h4>Implication for Automatic Backups</h4>
+
+<p>By default, Edisyn is set up to <b><i>automatically write your patch to Flash RAM when you select Edisyn's "Write to Patch..." menu option</i></b>.  To do this, it does these three things:
+
+<ol>
+<li>Instruct the K5000 to <b>reset</b> (reload) all its patches.
+<p><li>Update the patch or patches in question with your changes.
+<p><li>Instruct the K5000 to <b>backup</b> (save) all its patches.
+</ol>
+
+<p>This is, however quite slow: your unit will hang for perhaps 15 seconds.  If you prefer to make changes to several patches before issuing a backup on all of them manually, you should deselect the menu option <b><i>Always Backup After Write to Patch</i></b> in the K5000 menu. Remember that if this is deselected, then Edisyn's various write-to-patch operations will just write to current working memory, not permanent memory.  You'll have to manually reset on your own.  
+
+<br><br><h4>Implication for Requesting a Patch</h4>
+
+In order to prevent inconsistencies with Send to Current Patch (below), when you load a new patch, Edisyn will <b><i>reset</i></b> the K5000 (reload all patches from Flash).
+
+<br><br><h4>Issues with Send to Current Patch</h4>
+
+<p>Edisyn very often needs to update the patch in current working memory. This operation is very important: it's done whenever you undo, or redo, or randomize, or hill-climb, or morph, or nudge, etc.  It's also what happens when you pick the menu option "Send to Current Memory".  To do this, Edisyn will try to send to update the current patch by identifying the patch's number and bank, then writing to that slot in current working memory.  But often it doesn't know this: so it will overwrite slot A001 and use that temporarily.
+
+<p>This means that if you switch to work on patch A001, you may find that it's some other temporary patch, and not the patch stored in Flash for A001.  You may need to manually <b>reset</b> 
+
+ on the K5000, which has <i>all patches</i> in working memory, Edisyn may not know which one is the one being played!  Thus when you send to current patch, Edisyn will write to the bank and number (in current working memory) currently in its patch editor, and then it will tell the K5000 to switch to that patch and play it.  If Edisyn doesn't know the bank and number it's likely by default going to send it to A001.  
+
+
+<p>If you deselect "Always Backup After Write to Patch", be aware of two other things that will happen:
+
+<ul>
+<li>Edisyn must often overwrite patch A001 in current memory (not on Flash).  
+
+Edisyn must <b><i>also</i></b> stop updating current memory in response to bulk revisions such as, undo, redo, randomization, nudging, blending, resetting, hill-climbing, and morphing will no longer send the current patch to the unit to update it.  Hill-climbing and Morphing will become useless.  The "Send to Current Memory" menu option will still update current memory.  
+
+<p>The reason for this behavior is that to the K5000 doesn't have a send to current memory MIDI command, so it must be faked in some situations by writing the patch to a specific location often A001, which could accidentally be  
+
+ all Edisyn can do is a Write to Patch (so to speak), only going to current memory.  This goes to a specific patch: but in some situations Edisyn doesn't know what patch your unit is working on.
+
+<p>Edisyn very often needs to update the patch in current working memory. This operation is very important: it's done whenever you undo, or redo, or randomize, or hill-climb, or morph, or nudge, etc.  It's also what happens when you pick the menu option "Send to Current Memory".   But on the K5000, which has <i>all patches</i> in working memory, Edisyn may not know which one is the one being played!  Thus when you send to current patch, Edisyn will write to the bank and number (in current working memory) currently in its patch editor, and then it will tell the K5000 to switch to that patch and play it.  If Edisyn doesn't know the bank and number it's likely by default going to send it to A001.  
+
+<p>If you have deselected "Always Backup After Write to Patch", this could be a problem.  Let's say you have created a new patch editor, and start editing it, including undo/redo.  This will modify patch A001 (because it doesn't have a real bank or patch number yet).  Then you write it to patch A002.  This stores it in A002 in current working memory -- but remember A001 is still modified too.  Then you manually call "Backup".  This writes <i><b>both</b></i> A001 and A002 to Flash.  You probably didn't want to overwrite A001.  Oops.
+
+<p>If you have deselected "Always Backup After Write to Patch", you can prevent this problem by selecting <b><i>Only Update Synth on Send to Current Patch</i></b> in the K5000 menu.  This prevents undo, redo, randomization, nudging, etc. from sending the current working memory at all.  And Hill-Climbing and Morphing are largely rendered useless.  The only way to send to current memory is to manually call "Send to Current Patch".  I would only set this if you have intentionally unchecked "Always Backup After Write to Patch".
+
+<br><br><h4>Remember that the Permanent Store is FLASH RAM</h4>
+
+<p>Remember that <b><i>permanent storage is FLASH RAM</i></b>, and FLASH will eventually burn out, perhaps after 10,000 writes, so only do "Write to Patch" or librarian writes when it is appropriate.  Still, 10,000 is a reasonably big number: it's 3 writes a day for 10 years.  So don't fret over it.
+
+<!--
+  You can read FLASH RAM forever.  Since a BACKUP is spread out over the full Flash RAM, it's not much more taxing than a single WRITE, so don't worry too much about using a BACKUP in lieu of a WRITE.  But if you wanted to be ultra conservative, you could always turn off "Always Backup After Write to Patch", turn ON "Only Update Synth on Send to Current Patch", and manually WRITE the patches you edited in Edisyn, using the patch-writing method (slightly editing the patch) as described earlier. But in truth, I wouldn't worry about it.
+-->
 
 <br><br><h3>Display Updates</h3>
 
@@ -95,10 +164,10 @@ Kawai K5000 bank downloads are gigantic, because Kawai K5000 patches are giganti
 
 <p>If you download using "Download Bank from Synth" or "Download Selected Patches from Synth", when Edisyn reaches the null patches at the end of the bank, the K5000 never tells Edisyn this: instead it just sits there, and Edisyn will sit there as well until it times out. At that point, you might want to manually press the "Stop Download" button in the Librarian.
 
-<p>If you upload a <i>range</i> of patches, it'll probably work fine, but if it exceeds the avaiable bank memory, it might fail.  The K5000 provides Edisyn with no way to <i>erase</i> one patch or a range of patches.  I'll try to improve things here. 
+<p>If you upload a <i>range</i> of patches, it'll probably work fine, but if it exceeds the available bank memory, it might fail.  The K5000 provides Edisyn with no way to <i>erase</i> one patch or a range of patches.  I'll try to improve things here. 
 
 <h3>Thanks</h3>
-Thanks to Eyal Malinger (eyalmalinger@gmail.com) for providing test patches and trying out sysex results on Windows and with old Sound Diver implementations. Thanks to Oscillator (oscillatorsds@gmail.com) for providing sysex files for test patches.  Thanks to John Sepulveda (matrix12x@gmail.com) for bug reports.  Thanks to Jere Kapyaho (author of the <a href="https://github.com/coniferprod/k5ktools">python k5ktools</a>) for tweaking software for me.  And thanks to Markus Schlosser (author of the <a href="https://github.com/christofmuc/KnobKraft-orm">KnobKraft-orm librarian</a>) for considerable help in understanding various oddities in the machine.
+Thanks to Eyal Malinger (eyalmalinger@gmail.com) for providing test patches and trying out sysex results on Windows and with old Sound Diver implementations. Thanks to Oscillator (oscillatorsds@gmail.com) for providing sysex files for test patches.  Thanks to John Sepulveda (matrix12x@gmail.com) for bug reports.  Thanks to Jere Kapyaho (author of the <a href="https://github.com/coniferprod/k5ktools">python k5ktools</a>) for tweaking software for me.  And thanks to Markus Schlosser (author of the K5000 librarian in the KnobKraft-orm collection) for considerable help in understanding various oddities in the machine.
 
 <p><table border=0 cellpadding=0 cellspacing=5>
 <tr>

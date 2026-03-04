@@ -19,7 +19,9 @@ public class Mac
         {
         if (System.getProperty("os.name").contains("Mac")) 
             {
-            /*
+
+/// COMMENT THIS OUT FOR JAVA 8
+/*
               try
               {
               java.awt.Desktop.getDesktop().setAboutHandler(new java.awt.desktop.AboutHandler()
@@ -34,7 +36,9 @@ public class Mac
               {
               //fail quietly
               }
-            */
+*/
+/// END COMMENT THIS OUT FOR JAVA 8
+
             try 
                 {
                 Object app = Class.forName("com.apple.eawt.Application").getMethod("getApplication").invoke(null);

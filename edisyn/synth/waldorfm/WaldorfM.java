@@ -2235,7 +2235,6 @@ public class WaldorfM extends Synth
             {
             if (!parameters[i].equals("--"))
                 {
-                System.err.println("" + i + " " + parameters[i] + " " + data[pos] + " " + data[pos + 1]);
                 int lsb = data[pos];
                 int msb = data[pos + 1];
                 if (i == 233 || i == 234)

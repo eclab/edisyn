@@ -33,6 +33,7 @@ Donations are welcome via Paypal to my email address (sean@cs.gmu.edu).
 
 * New patch editors for the Kawai K5000 family!  This was a big, and difficult, one.
 * Bug fixes the CC reception and output for the D Station and Drumstation.  Thanks to Guy Rooms.
+* New version of the Waldorf M editor with revision to match the M's current firmware.
 * Assorted bug fixes
 
 

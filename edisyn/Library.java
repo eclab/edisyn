@@ -922,7 +922,7 @@ public class Library extends AbstractTableModel
                 synth.showSimpleError("Not Supported", "This bank cannot be written to the synthesizer.\nIt is read-only.");
                 return;
                 }
-                                                                        
+            
             Object[][] data = emitRange(bank, start, len, false, false);
             if (data != null)
                 {
@@ -933,6 +933,9 @@ public class Library extends AbstractTableModel
                         return;
                         }                               
                     }
+
+            	if (writeHookCount == 0) synth.beforeLibrarianWriteHook();
+            	writeHookCount++;
                 if (bank == ALL_PATCHES)
                     {
                     synth.tryToSendMIDI(concatenate(data), "Writing", "Writing All Patches to Synth");
@@ -946,7 +949,9 @@ public class Library extends AbstractTableModel
                     synth.tryToSendMIDI(concatenate(data), "Writing", "Writing Patches to Synth");
                     }
                 //synth.sendAllParameters();            // this will mess up synths that use a scratch patch.  Instead we're writing when we leave the librarian
-                }
+                writeHookCount--;
+                if (writeHookCount == 0) synth.afterLibrarianWriteHook();
+               }
             }           
         else
             {
@@ -1309,7 +1314,6 @@ public class Library extends AbstractTableModel
                 Object[] data = null;
                 saveAll = (bank == ALL_PATCHES);
                 data = emitBank(bank, false);
-                System.err.println("LIBRARY SIZE " + ((byte[])data[0]).length);
                 if (data != null)
                     {
                     if (synth.tuple == null || synth.tuple.outReceiver == null)
@@ -1317,6 +1321,7 @@ public class Library extends AbstractTableModel
                         if (!synth.setupMIDI())
                             return;
                         }
+                    synth.beforeLibrarianWriteHook();
                     if (bank == ALL_PATCHES)
                         {
                         synth.tryToSendMIDI(data, "Writing", "Writing All Patches to Synth");
@@ -1325,6 +1330,7 @@ public class Library extends AbstractTableModel
                         {
                         synth.tryToSendMIDI(data, "Writing", "Writing Bank to Synth");
                         }
+                    synth.afterLibrarianWriteHook();
                     synth.sendAllParameters();
                     }
                 }
@@ -1334,8 +1340,12 @@ public class Library extends AbstractTableModel
                 int bankSize = synth.getValidBankSize(bank);
                 if (bankSize == -1) bankSize = getBankSize();
 
+                if (writeHookCount == 0) synth.beforeLibrarianWriteHook();
+                writeHookCount++;
                 writeBankAsRangePreamble(bank);
                 writeRange(bank, 0, bankSize);
+                writeHookCount--;
+                if (writeHookCount == 0) synth.afterLibrarianWriteHook();
                 }
             else
                 {
@@ -1345,6 +1355,8 @@ public class Library extends AbstractTableModel
             }
         finally { saveAll = false; }
         }
+        
+    int writeHookCount = 0;
         
         
     void writeBankAsRangePreamble(int bank)

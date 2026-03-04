@@ -31,7 +31,7 @@ public class Librarian extends JPanel
     // The "Skip Download" button
     //PushButton skipAction;
     JPanel bottomPanel;
-    
+	
     String findString = null;
     
     /** Returns the current library (which is the table's model) */    
@@ -827,6 +827,10 @@ public class Librarian extends JPanel
                     continue;
                 if ((m[i] == synth.writeMenu) && !synth.getSupportsPatchWrites())
                     continue;
+                if (m[i] == synth.writeAllPatchesMenu && !synth.writeAllPatchesMenu.isEnabled())
+                	continue;
+                if (m[i] == synth.saveAllPatchesMenu && !synth.saveAllPatchesMenu.isEnabled())
+                	continue;
                                         
                 if (((JMenuItem)m[i]) != synth.mixAgainMenu &&
                     ((JMenuItem)m[i]) != synth.hideLibrarianMenu)
@@ -1031,13 +1035,13 @@ public class Librarian extends JPanel
         menu.add(item);
         item.setEnabled(false);
                 
-        item = new JMenuItem("Write All Patches to Synth");
-        item.addActionListener(new ActionListener()
+    	synth.writeAllPatchesMenu = new JMenuItem("Write All Patches to Synth");
+        synth.writeAllPatchesMenu.addActionListener(new ActionListener()
             {
             public void actionPerformed(ActionEvent evt) { synth.librarian.writeAll(); }
             });
-        menu.add(item);
-        item.setEnabled(false);
+        menu.add(synth.writeAllPatchesMenu);
+        synth.writeAllPatchesMenu.setEnabled(false);
                 
         menu.addSeparator();
         
@@ -1057,13 +1061,13 @@ public class Librarian extends JPanel
         menu.add(item);
         item.setEnabled(false);
                 
-        item = new JMenuItem("Save All Patches...");
-        item.addActionListener(new ActionListener()
+        synth.saveAllPatchesMenu = new JMenuItem("Save All Patches...");
+        synth.saveAllPatchesMenu.addActionListener(new ActionListener()
             {
             public void actionPerformed(ActionEvent evt) { synth.librarian.saveAll(); }
             });
-        menu.add(item);
-        item.setEnabled(false);
+        menu.add(synth.saveAllPatchesMenu);
+        synth.saveAllPatchesMenu.setEnabled(false);
                 
         item = new JMenuItem("Export Names to Text...");
         item.addActionListener(new ActionListener()

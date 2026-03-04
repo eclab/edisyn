@@ -140,6 +140,10 @@ public abstract class Synth extends JComponent implements Updatable
     JMenuItem downloadAllMenu;
     JMenuItem writeMenu;
     JMenuItem sendMenu;
+    
+    // Librarian menu that may be selectively turned off
+    public JMenuItem writeAllPatchesMenu;
+    public JMenuItem saveAllPatchesMenu;
 
         
     // The four nudge models 
@@ -1227,11 +1231,6 @@ public abstract class Synth extends JComponent implements Updatable
     /** Override this to return TRUE if you want Edisyn to sendAllParmameters() immediately after a patch write, because the patch write writes
         to permanent memory but doesn't change working memory.  This isn't very common (the Kyra and Pulse 2 seem to need it). */ 
     public boolean getSendsParametersAfterWrite() { return false; }
-
-    /** Override this to send special MIDI to the synthesizer after writeAllParameters().  This will NOT be called in other
-        situations where emitAll(...) or emit(...) is called.   This exists to deal with a bug in the Blofeld which doesn't remove its
-        "receiving sysex" screen after receiving a patch write.  */ 
-    public void afterWriteHook() { return; }
 
     /** Return the filename of your default sysex file (for example "MySynth.init"). Should be located right next to the synth's class file ("MySynth.class") */
     public String getDefaultResourceFileName() { return null; }
@@ -6338,6 +6337,7 @@ menubar.add(helpMenu);
         
     public void writeAllParameters(Model model)
         {
+        beforeWriteAllParametersHook();
         tryToSendMIDI(emitAll(model, false, false));
         simplePause(getPauseAfterWritePatch());
         performChangePatch(model);
@@ -6346,7 +6346,22 @@ menubar.add(helpMenu);
         afterWriteAllParametersHook();
         }
 
+    public void beforeWriteAllParametersHook() 
+        { 
+        return; 
+        }
+
     public void afterWriteAllParametersHook()
+        {
+        return;
+        }
+                
+    public void beforeLibrarianWriteHook()
+        {
+        return;
+        }
+                
+    public void afterLibrarianWriteHook()
         {
         return;
         }

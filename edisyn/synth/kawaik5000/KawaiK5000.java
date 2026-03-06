@@ -3321,6 +3321,7 @@ public static final int ALL_ON = 4;
 
         JMenu loadWaveMenu = new JMenu("Load WAV file into...");
         menu.add(loadWaveMenu);
+        
         for(int i = 1; i <= 6; i++)                     // note <=
             {
             final int _i = i;
@@ -3341,8 +3342,8 @@ public static final int ALL_ON = 4;
                     loadWaveAsHarmonics(_i, false);
                     }
                 });
-            if (i != 6) harmonicsMenu.addSeperator();
             loadWaveMenu.add(harmonicsMenu);
+            if (i != 6) loadWaveMenu.addSeparator();
             }
     
 

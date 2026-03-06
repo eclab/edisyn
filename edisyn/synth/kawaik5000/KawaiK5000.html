@@ -26,9 +26,9 @@ The K5000 memory structure is weird, and how it presents itself to you on the K5
 
 <ul>
 <li>Edisyn always resets (reloads from FLASH) whenever you request a new patch.
-<li>When you select "Write to Patch...", Edisyn resets (reloads from FLASH), then writes the patch to current working memory, then backs up (writes all patches to FLASH).  This is a slow process, and the machine will hang for perhaps 15 seconds!
-<li>When you write one or more patches in the Librarian, or write a whole bank, Edisyn will likewise reset (load from FLASH), write all the patches (slow), and then back up (write all patches to FLASH, again taking 15 more seconds).
-<li>When Edisyn updates the current patch (such as after undo, redo, randomization, etc., or when you select "Send to Current Patch", in some situations it doesn't know what the patch number and bank are, so it will switch to and temporarily use A001 as a "scratch patch slot" to send the data to.  Don't pay that any mind.
+<p><li>When you select "Write to Patch...", Edisyn resets (reloads from FLASH), then writes the patch to current working memory, then backs up (writes all patches to FLASH).  This is a slow process, and the machine will hang for perhaps 15 seconds!
+<p><li>When you write one or more patches in the Librarian, or write a whole bank, Edisyn will likewise reset (load from FLASH), write all the patches (slow), and then back up (write all patches to FLASH, again taking 15 more seconds).
+<p><li>When Edisyn updates the current patch (such as after undo, redo, randomization, etc., or when you select "Send to Current Patch", in some situations it doesn't know what the patch number and bank are, so it will switch to and temporarily use A001 as a "scratch patch slot" to send the data to.  Don't pay that any mind.
 </ul>
 
 <!--
@@ -68,7 +68,7 @@ In order to prevent inconsistencies with Send to Current Patch (below), when you
 
 <br><br><h4>Issues with Send to Current Patch</h4>
 
-<p>Edisyn very often needs to update the patch in current working memory. This operation is very important: it's done whenever you undo, or redo, or randomize, or hill-climb, or morph, or nudge, etc.  It's also what happens when you pick the menu option "Send to Current Memory".  To do this, Edisyn will try to send to update the current patch by identifying the patch's number and bank, then writing to that slot in current working memory.  But often it doesn't know this: so it will overwrite slot A001 and use that temporarily.
+<p>Edisyn very often needs to update the patch in current working memory. This operation is very important: it's done whenever you undo, or redo, or randomize, or hill-climb, or morph, or nudge, etc.  It's also what happens when you pick the menu option "Send to current working memory".  To do this, Edisyn will try to send to update the current patch by identifying the patch's number and bank, then writing to that slot in current working memory.  But often it doesn't know this: so it will overwrite slot A001 and use that temporarily.
 
 <p>This means that if you switch to work on patch A001, you may find that it's some other temporary patch, and not the patch stored in Flash for A001.  You may need to manually <b>reset</b> 
 
@@ -78,19 +78,19 @@ In order to prevent inconsistencies with Send to Current Patch (below), when you
 <p>If you deselect "Always Backup After Write to Patch", be aware of two other things that will happen:
 
 <ul>
-<li>Edisyn must often overwrite patch A001 in current memory (not on Flash).  
+<li>Edisyn must often overwrite patch A001 in current working memory (not on Flash).  
 
-Edisyn must <b><i>also</i></b> stop updating current memory in response to bulk revisions such as, undo, redo, randomization, nudging, blending, resetting, hill-climbing, and morphing will no longer send the current patch to the unit to update it.  Hill-climbing and Morphing will become useless.  The "Send to Current Memory" menu option will still update current memory.  
+Edisyn must <b><i>also</i></b> stop updating current working memory in response to bulk revisions such as, undo, redo, randomization, nudging, blending, resetting, hill-climbing, and morphing will no longer send the current patch to the unit to update it.  Hill-climbing and Morphing will become useless.  The "Send to current working memory" menu option will still update current working memory.  
 
-<p>The reason for this behavior is that to the K5000 doesn't have a send to current memory MIDI command, so it must be faked in some situations by writing the patch to a specific location often A001, which could accidentally be  
+<p>The reason for this behavior is that to the K5000 doesn't have a send to current working memory MIDI command, so it must be faked in some situations by writing the patch to a specific location often A001, which could accidentally be  
 
- all Edisyn can do is a Write to Patch (so to speak), only going to current memory.  This goes to a specific patch: but in some situations Edisyn doesn't know what patch your unit is working on.
+ all Edisyn can do is a Write to Patch (so to speak), only going to current working memory.  This goes to a specific patch: but in some situations Edisyn doesn't know what patch your unit is working on.
 
-<p>Edisyn very often needs to update the patch in current working memory. This operation is very important: it's done whenever you undo, or redo, or randomize, or hill-climb, or morph, or nudge, etc.  It's also what happens when you pick the menu option "Send to Current Memory".   But on the K5000, which has <i>all patches</i> in working memory, Edisyn may not know which one is the one being played!  Thus when you send to current patch, Edisyn will write to the bank and number (in current working memory) currently in its patch editor, and then it will tell the K5000 to switch to that patch and play it.  If Edisyn doesn't know the bank and number it's likely by default going to send it to A001.  
+<p>Edisyn very often needs to update the patch in current working memory. This operation is very important: it's done whenever you undo, or redo, or randomize, or hill-climb, or morph, or nudge, etc.  It's also what happens when you pick the menu option "Send to current working memory".   But on the K5000, which has <i>all patches</i> in working memory, Edisyn may not know which one is the one being played!  Thus when you send to current patch, Edisyn will write to the bank and number (in current working memory) currently in its patch editor, and then it will tell the K5000 to switch to that patch and play it.  If Edisyn doesn't know the bank and number it's likely by default going to send it to A001.  
 
 <p>If you have deselected "Always Backup After Write to Patch", this could be a problem.  Let's say you have created a new patch editor, and start editing it, including undo/redo.  This will modify patch A001 (because it doesn't have a real bank or patch number yet).  Then you write it to patch A002.  This stores it in A002 in current working memory -- but remember A001 is still modified too.  Then you manually call "Backup".  This writes <i><b>both</b></i> A001 and A002 to Flash.  You probably didn't want to overwrite A001.  Oops.
 
-<p>If you have deselected "Always Backup After Write to Patch", you can prevent this problem by selecting <b><i>Only Update Synth on Send to Current Patch</i></b> in the K5000 menu.  This prevents undo, redo, randomization, nudging, etc. from sending the current working memory at all.  And Hill-Climbing and Morphing are largely rendered useless.  The only way to send to current memory is to manually call "Send to Current Patch".  I would only set this if you have intentionally unchecked "Always Backup After Write to Patch".
+<p>If you have deselected "Always Backup After Write to Patch", you can prevent this problem by selecting <b><i>Only Update Synth on Send to Current Patch</i></b> in the K5000 menu.  This prevents undo, redo, randomization, nudging, etc. from sending the current working memory at all.  And Hill-Climbing and Morphing are largely rendered useless.  The only way to send to current working memory is to manually call "Send to Current Patch".  I would only set this if you have intentionally unchecked "Always Backup After Write to Patch".
 
 <br><br><h4>Remember that the Permanent Store is FLASH RAM</h4>
 
@@ -99,6 +99,29 @@ Edisyn must <b><i>also</i></b> stop updating current memory in response to bulk 
 <!--
   You can read FLASH RAM forever.  Since a BACKUP is spread out over the full Flash RAM, it's not much more taxing than a single WRITE, so don't worry too much about using a BACKUP in lieu of a WRITE.  But if you wanted to be ultra conservative, you could always turn off "Always Backup After Write to Patch", turn ON "Only Update Synth on Send to Current Patch", and manually WRITE the patches you edited in Edisyn, using the patch-writing method (slightly editing the patch) as described earlier. But in truth, I wouldn't worry about it.
 -->
+
+<p>Which leads us to...
+
+<br><br><h3>About the Menu</h3>
+
+The Kawai K5000 menu has the following options:
+
+<ul>
+<li><b>Constrain Harmonics</b>&nbsp;&nbsp;This locks the harmonics you can edit with the sliders to a certain subset of harmonics, to make it easier to find and edit them.  The other harmonics will be displayed in gray.  You can still set any harmonics with the Number dial.
+<p><li><b>Load Wave Into...</b>&nbsp;&nbsp;You can load a WAV file as harmonics into the soft or loud harmonics of any source. The WAV file should store a single-cycle wave.  Single-cycle waves must be stored as 16-bit WAV files no longer than 2048 samples.  A good source of single-cycle waves is the AdventureKid Waveforms collection (<a href="https://www.adventurekid.se/akrt/waveforms/adventure-kid-waveforms/">https://www.adventurekid.se/akrt/waveforms/adventure-kid-waveforms/</a>), which has thousands of waveforms, all free.
+<p><li><b>Allow Envelope Display Mouse-Over</b>&nbsp;&nbsp;This prevents mouse-over on the harmonics envelope displays to update which harmonics envelope you're editing. If you're fed up with accidentally mousing over an envelope display when you're changing a dial and changing the envelope number, this menu item is for you.
+<p><li><b>Clear Bank on Synthesizer...</b> will the patches in a given bank <b><i>in current working memory only</i></b>.  If you want to clear the bank in the permanent store, you should clear them in current working memory and then perform a BACKUP.  Note that this technically does not clear the first patch, but rather the first patch will be a small, silent patch: roughly the equivalent.  This is because the K5000 doesn't allow you to have zero patches in a bank.
+<p><li><b>Reset (Reload from Flash)</b> will replace all patches in current working memory with fresh copies from the permanent store.  Any edits you have made will be lost.
+<p><li><b>Backup (Write to Flash)</b> will copy all patches in current working memory to the permanent store.  You might do this after clearing the bank (see above), or in certain situations if you have unchecked <b><i>Always Backup after Write to Patch/Bank</i></b> (see below).
+<p><li><b>Always Perform Backup and/or Reset after Writes and Requests</b> is checked by default.  When checked, then when Edisyn writes a patch (via Write to Patch... or the various Librarian's Write Selected Patches to Synth or Write Bank to Synth) it first does a RESET, then writes the patch(es) or Bank, then does a BACKUP.  Additionally, when you request a patch, a RESET is done first.  This all guarantees that Edisyn's "write" behavior actually writes to FLASH.  However there are situations when you don't want this.  
+
+<br><br><p>For example, imagine you want to load a bank from disk, then use Edisyn to write a patch or two to select slots, replacing them, then save back out to disk. What would happen is: you load the bank from disk into current working memory.  Then in the process of writing one or two patches, Edisyn replaces the current working memory with the permanent (Flash) store, then writes those patches out the permanent store.  If you saved back out to disk, you'd have erased your bank: and the new would have been written to permanent memory where you didn't want them!  Instead, temporarily uncheck this menu, then load from disk, perform a write with Edisyn (which now will just put the patches in permanent store), write to disk, and check the menu again.  You could perform a RESET for good measure to restore the patches from permanent store if you cared.
+
+<br><br><p>Another situation is if you want to load a few patches from your hard drive to write to permanent store without using the Librarian, but you don't want to burn Flash RAM too much.  Uncheck the menu, then load each patch into the slot you want, update each patch separately into current working memory with "Write to Patch...", then at the end, perform a BACKUP to write everything to permanent store.  Then recheck the menu again.
+
+<br><br><p>If you uncheck this menu, Edisyn will do three things.  First, Edisyn's "Write to Patch..." and various Librarian "Write" menu options will just write the patch to current working memory.  It won't RESET first, and it won't BACKUP afterwards.  Second, Edisyn's "Request Patch" commands will not perform a RESET first.  Third, all operations which send to current memory will be disabled: this includes the Send to Current Patch menu option, as well as updating current memory whenever you perform an undo/redo/randomize/hill-climb/morph/etc.  Unchecking this menu isn't for performing edits, it's for writing to the disk from Edisyn.  So you probably shouldn't change parameters -- they'll still modify the current patch.
+</ul>
+
 
 <br><br><h3>Display Updates</h3>
 
@@ -131,16 +154,6 @@ There is also a "Show Morf" checkbox in Edisyn, because this is a parameter in y
 The "H" (Harmonics) tab and "E" (Envelopes) tab for each source contain a number of displays for harmonics, formants, and envelope settings.  You can set these by Number, then Value, or you can directly modify the sliders in the display itself.  If you change a slider, only that slider can be set.  But you can "scrub" across sliders by changing the slider with the right mouse button, or by holding down SHIFT and dragging.
 
 <p>The "Loop" display sliders each have three settings: OFF (the lowest setting), LP1 (the middle setting), and LP2 (the highest setting).
-
-<br><br><h3>About the Menu</h3>
-
-The Kawai K5000 menu has the following options:
-
-<ul>
-<li><b>Constrain Harmonics</b>&nbsp;&nbsp;This locks the harmonics you can edit with the sliders to a certain subset of harmonics, to make it easier to find and edit them.  The other harmonics will be displayed in gray.  You can still set any harmonics with the Number dial.
-<p><li><b>Load Wave Into...</b>&nbsp;&nbsp;You can load a WAV file as harmonics into the soft or loud harmonics of any source. The WAV file should store a single-cycle wave.  Single-cycle waves must be stored as 16-bit WAV files no longer than 2048 samples.  A good source of single-cycle waves is the AdventureKid Waveforms collection (<a href="https://www.adventurekid.se/akrt/waveforms/adventure-kid-waveforms/">https://www.adventurekid.se/akrt/waveforms/adventure-kid-waveforms/</a>), which has thousands of waveforms, all free.
-<p><li><b>Allow Envelope Display Mouse-Over</b>&nbsp;&nbsp;This prevents mouse-over on the harmonics envelope displays to update which harmonics envelope you're editing. If you're fed up with accidentally mousing over an envelope display when you're changing a dial and changing the envelope number, this menu item is for you.
-</ul>
 
 <br><h3>About the "Shaping" Categories</h3>
 

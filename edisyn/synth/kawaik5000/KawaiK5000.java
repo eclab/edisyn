@@ -20,16 +20,10 @@ import edisyn.util.*;
 /**
    A patch editor for the Kawai K5000S and K5000R, compatible with the K5000W (Bank B not supported).
    
-   The K5000, like the K5, does not support Send-To-Current-Patch.  Ordinarily that would not be a 
-   problem, but it is for the K5000.  A huge problem.  We could use a scratch patch like we do in the K5, 
-   except that the K5000 has Flash RAM rather than battery-backed RAM, so if we did that we'd burn out
-   the Flash.  Alternatively we could send each parameter separately in its own send-parameter sysex
-   message (which the K5000 does support).  But there are upwards of 6000 parameters!  That's about 25
-   seconds worth of sysex messages.  I have no solution to this: we have to turn off many Edisyn features
-   and the user has to decide whether or not to send a patch manually via a scratch patch or individual
-   parameters.
+   The K5000, like the K5, does not support Send-To-Current-Patch.  Additionally it has an unusual
+   memory structure. See the end of this file for details about how we handle this.
    
-   The K5000 has bank sysex messages as well (why?!? given their massive size).  We do not suppor them
+   The K5000 has bank sysex messages as well (why?!? given their massive size).  We do not support  them
    yet but they should be easy to set up.
    
    The K5000 has special files called FOO.KA1 (for individual patches) and FOO.KAA (for bank patches).
@@ -2649,341 +2643,6 @@ public static final int ALL_ON = 4;
         return category;
         }
 
-/*
-  public JMenuItem[] buildHarmonicMenu(int source, boolean soft)
-  {
-  JMenuItem[] menu = new JMenuItem[11];
-  menu[0] = new JMenuItem("Set to Sawtooth");
-  menu[0].addActionListener(new ActionListener()
-  {
-  public void actionPerformed(ActionEvent e)
-  {
-  boolean push = undo.getWillPush();
-  undo.setWillPush(false);
-  for(int i = 1; i <= 64; i++)                        // Note <=
-  {
-  if (_constrainTo(i - 1)) model.set("source" + source + "hc" + (soft ? "0" : "1") + "s" + i, 127 / i);
-  }
-  undo.setWillPush(push);
-  }
-  });
-  menu[1] = new JMenuItem("Set to Square");
-  menu[1].addActionListener(new ActionListener()
-  {
-  public void actionPerformed(ActionEvent e)
-  {
-  boolean push = undo.getWillPush();
-  undo.setWillPush(false);
-  for(int i = 1; i <= 64; i++)                        // Note <=
-  {
-  if (_constrainTo(i - 1)) model.set("source" + source + "hc" + (soft ? "0" : "1") + "s" + i, (i % 2 == 0 ? 0 : 127 / i));
-  }
-  undo.setWillPush(push);
-  }
-  });
-  menu[2] = new JMenuItem("Set to Triangle");
-  menu[2].addActionListener(new ActionListener()
-  {
-  public void actionPerformed(ActionEvent e)
-  {
-  boolean push = undo.getWillPush();
-  undo.setWillPush(false);
-  for(int i = 1; i <= 64; i++)                        // Note <=
-  {
-  if (_constrainTo(i - 1)) model.set("source" + source + "hc" + (soft ? "0" : "1") + "s" + i, (i % 2 == 0 ? 0 : 127 / (i * i)));
-  }
-  undo.setWillPush(push);
-  }
-  });
-  menu[3] = new JMenuItem("Set to Max");
-  menu[3].addActionListener(new ActionListener()
-  {
-  public void actionPerformed(ActionEvent e)
-  {
-  boolean push = undo.getWillPush();
-  undo.setWillPush(false);
-  for(int i = 1; i <= 64; i++)                        // Note <=
-  {
-  if (_constrainTo(i - 1)) model.set("source" + source + "hc" + (soft ? "0" : "1") + "s" + i, 127);
-  }
-  undo.setWillPush(push);
-  }
-  });
-  menu[4] = null;         // separator
-                
-  menu[5] = new JMenuItem("Make Slightly Louder");
-  menu[5].addActionListener(new ActionListener()
-  {
-  public void actionPerformed(ActionEvent e)
-  {
-  boolean push = undo.getWillPush();
-  undo.setWillPush(false);
-  for(int i = 1; i <= 64; i++)                        // Note <=
-  {
-  int val = model.get("source" + source + "hc" + (soft ? "0" : "1") + "s" + i);
-  val++;
-  if (val > 127) val = 127;
-  if (_constrainTo(i - 1)) model.set("source" + source + "hc" + (soft ? "0" : "1") + "s" + i, val);
-  }
-  undo.setWillPush(push);
-  }
-  });
-  menu[6] = new JMenuItem("Make Louder");
-  menu[6].addActionListener(new ActionListener()
-  {
-  public void actionPerformed(ActionEvent e)
-  {
-  boolean push = undo.getWillPush();
-  undo.setWillPush(false);
-  for(int i = 1; i <= 64; i++)                        // Note <=
-  {
-  int val = model.get("source" + source + "hc" + (soft ? "0" : "1") + "s" + i);
-  val += 8;
-  if (val > 127) val = 127;
-  if (_constrainTo(i - 1)) model.set("source" + source + "hc" + (soft ? "0" : "1") + "s" + i, val);
-  }
-  undo.setWillPush(push);
-  }
-  });
-  menu[7] = new JMenuItem("Make Much Louder");
-  menu[7].addActionListener(new ActionListener()
-  {
-  public void actionPerformed(ActionEvent e)
-  {
-  boolean push = undo.getWillPush();
-  undo.setWillPush(false);
-  for(int i = 1; i <= 64; i++)                        // Note <=
-  {
-  int val = model.get("source" + source + "hc" + (soft ? "0" : "1") + "s" + i);
-  val += 32;
-  if (val > 127) val = 127;
-  if (_constrainTo(i - 1)) model.set("source" + source + "hc" + (soft ? "0" : "1") + "s" + i, val);
-  }
-  undo.setWillPush(push);
-  }
-  });
-  menu[8] = new JMenuItem("Make Slightly Softer");
-  menu[8].addActionListener(new ActionListener()
-  {
-  public void actionPerformed(ActionEvent e)
-  {
-  boolean push = undo.getWillPush();
-  undo.setWillPush(false);
-  for(int i = 1; i <= 64; i++)                        // Note <=
-  {
-  int val = model.get("source" + source + "hc" + (soft ? "0" : "1") + "s" + i);
-  val--;
-  if (val < 0) val = 0;
-  if (_constrainTo(i - 1)) model.set("source" + source + "hc" + (soft ? "0" : "1") + "s" + i, val);
-  }
-  undo.setWillPush(push);
-  }
-  });
-  menu[9] = new JMenuItem("Make Softer");
-  menu[9].addActionListener(new ActionListener()
-  {
-  public void actionPerformed(ActionEvent e)
-  {
-  boolean push = undo.getWillPush();
-  undo.setWillPush(false);
-  for(int i = 1; i <= 64; i++)                        // Note <=
-  {
-  int val = model.get("source" + source + "hc" + (soft ? "0" : "1") + "s" + i);
-  val -= 8;
-  if (val < 0) val = 0;
-  if (_constrainTo(i - 1)) model.set("source" + source + "hc" + (soft ? "0" : "1") + "s" + i, val);
-  }
-  undo.setWillPush(push);
-  }
-  });
-  menu[10] = new JMenuItem("Make Much Softer");
-  menu[10].addActionListener(new ActionListener()
-  {
-  public void actionPerformed(ActionEvent e)
-  {
-  boolean push = undo.getWillPush();
-  undo.setWillPush(false);
-  for(int i = 1; i <= 64; i++)                        // Note <=
-  {
-  int val = model.get("source" + source + "hc" + (soft ? "0" : "1") + "s" + i);
-  val -= 32;
-  if (val < 0) val = 0;
-  if (_constrainTo(i - 1)) model.set("source" + source + "hc" + (soft ? "0" : "1") + "s" + i, val);
-  }
-  undo.setWillPush(push);
-  }
-  });
-  return menu;
-  }
-
-  public JMenuItem[] buildLevelMenu(int source, int part)
-  {
-  int level = part / 2;
-  JMenuItem[] menu = new JMenuItem[11];
-  menu[0] = new JMenuItem("Set to Sawtooth");
-  menu[0].addActionListener(new ActionListener()
-  {
-  public void actionPerformed(ActionEvent e)
-  {
-  boolean push = undo.getWillPush();
-  undo.setWillPush(false);
-  for(int i = 1; i <= 64; i++)                        // Note <=
-  {
-  if (_constrainTo(i - 1)) model.set("source" + source + "hcenvlevel" + level + "s" + i, 63 / i);
-  }
-  undo.setWillPush(push);
-  }
-  });
-  menu[1] = new JMenuItem("Set to Square");
-  menu[1].addActionListener(new ActionListener()
-  {
-  public void actionPerformed(ActionEvent e)
-  {
-  boolean push = undo.getWillPush();
-  undo.setWillPush(false);
-  for(int i = 1; i <= 64; i++)                        // Note <=
-  {
-  if (_constrainTo(i - 1)) model.set("source" + source + "hcenvlevel" + level + "s" + i, (i % 2 == 0 ? 0 : 63 / i));
-  }
-  undo.setWillPush(push);
-  }
-  });
-  menu[2] = new JMenuItem("Set to Triangle");
-  menu[2].addActionListener(new ActionListener()
-  {
-  public void actionPerformed(ActionEvent e)
-  {
-  boolean push = undo.getWillPush();
-  undo.setWillPush(false);
-  for(int i = 1; i <= 64; i++)                        // Note <=
-  {
-  if (_constrainTo(i - 1)) model.set("source" + source + "hcenvlevel" + level + "s" + i, (i % 2 == 0 ? 0 : 63 / (i * i)));
-  }
-  undo.setWillPush(push);
-  }
-  });
-  menu[3] = new JMenuItem("Set to Max");
-  menu[3].addActionListener(new ActionListener()
-  {
-  public void actionPerformed(ActionEvent e)
-  {
-  boolean push = undo.getWillPush();
-  undo.setWillPush(false);
-  for(int i = 1; i <= 64; i++)                        // Note <=
-  {
-  if (_constrainTo(i - 1)) model.set("source" + source + "hcenvlevel" + level + "s" + i, 63);
-  }
-  undo.setWillPush(push);
-  }
-  });
-  menu[4] = null;         // separator
-                
-  menu[5] = new JMenuItem("Make Slightly Louder");
-  menu[5].addActionListener(new ActionListener()
-  {
-  public void actionPerformed(ActionEvent e)
-  {
-  boolean push = undo.getWillPush();
-  undo.setWillPush(false);
-  for(int i = 1; i <= 64; i++)                        // Note <=
-  {
-  int val = model.get("source" + source + "hcenvlevel" + level + "s" + i);
-  val++;
-  if (val > 127) val = 63;
-  if (_constrainTo(i - 1)) model.set("source" + source + "hcenvlevel" + level + "s" + i, val);
-  }
-  undo.setWillPush(push);
-  }
-  });
-  menu[6] = new JMenuItem("Make Louder");
-  menu[6].addActionListener(new ActionListener()
-  {
-  public void actionPerformed(ActionEvent e)
-  {
-  boolean push = undo.getWillPush();
-  undo.setWillPush(false);
-  for(int i = 1; i <= 64; i++)                        // Note <=
-  {
-  int val = model.get("source" + source + "hcenvlevel" + level + "s" + i);
-  val += 4;
-  if (val > 127) val = 63;
-  if (_constrainTo(i - 1)) model.set("source" + source + "hcenvlevel" + level + "s" + i, val);
-  }
-  undo.setWillPush(push);
-  }
-  });
-  menu[7] = new JMenuItem("Make Much Louder");
-  menu[7].addActionListener(new ActionListener()
-  {
-  public void actionPerformed(ActionEvent e)
-  {
-  boolean push = undo.getWillPush();
-  undo.setWillPush(false);
-  for(int i = 1; i <= 64; i++)                        // Note <=
-  {
-  int val = model.get("source" + source + "hcenvlevel" + level + "s" + i);
-  val += 16;
-  if (val > 127) val = 63;
-  if (_constrainTo(i - 1)) model.set("source" + source + "hcenvlevel" + level + "s" + i, val);
-  }
-  undo.setWillPush(push);
-  }
-  });
-  menu[8] = new JMenuItem("Make Slightly Softer");
-  menu[8].addActionListener(new ActionListener()
-  {
-  public void actionPerformed(ActionEvent e)
-  {
-  boolean push = undo.getWillPush();
-  undo.setWillPush(false);
-  for(int i = 1; i <= 64; i++)                        // Note <=
-  {
-  int val = model.get("source" + source + "hcenvlevel" + level + "s" + i);
-  val--;
-  if (val < 0) val = 0;
-  if (_constrainTo(i - 1)) model.set("source" + source + "hcenvlevel" + level + "s" + i, val);
-  }
-  undo.setWillPush(push);
-  }
-  });
-  menu[9] = new JMenuItem("Make Softer");
-  menu[9].addActionListener(new ActionListener()
-  {
-  public void actionPerformed(ActionEvent e)
-  {
-  boolean push = undo.getWillPush();
-  undo.setWillPush(false);
-  for(int i = 1; i <= 64; i++)                        // Note <=
-  {
-  int val = model.get("source" + source + "hcenvlevel" + level + "s" + i);
-  val -= 4;
-  if (val < 0) val = 0;
-  if (_constrainTo(i - 1)) model.set("source" + source + "hcenvlevel" + level + "s" + i, val);
-  }
-  undo.setWillPush(push);
-  }
-  });
-  menu[10] = new JMenuItem("Make Much Softer");
-  menu[10].addActionListener(new ActionListener()
-  {
-  public void actionPerformed(ActionEvent e)
-  {
-  boolean push = undo.getWillPush();
-  undo.setWillPush(false);
-  for(int i = 1; i <= 64; i++)                        // Note <=
-  {
-  int val = model.get("source" + source + "hcenvlevel" + level + "s" + i);
-  val -= 16;
-  if (val < 0) val = 0;
-  if (_constrainTo(i - 1)) model.set("source" + source + "hcenvlevel" + level + "s" + i, val);
-  }
-  undo.setWillPush(push);
-  }
-  });
-  return menu;
-  }
-*/
-
 
     /** Add the per-source Harmonics category, both Soft and Loud */
     public JComponent addHarmonicDisplay(int source, boolean soft, Color color)
@@ -3174,12 +2833,12 @@ public static final int ALL_ON = 4;
     // on the synthesizer directly while also using Edisyn.
     //boolean changePatchAfterSend = true;
     // Do we always do a backup after a Librarian Write Patch operation of some sort?
-//	boolean backupAfterLibrarianWrite = false;
-	// Do we always do a backup after a Write to Patch operation?
-	// boolean backupAfterWriteToPatch = false;
-	// Do we always send parameters, or just on send current patch?
-	// boolean sendsParametersOnlyOnSendCurrentPatch = false;
-
+//      boolean backupAfterLibrarianWrite = false;
+    // Do we always do a backup after a Write to Patch operation?
+    boolean backupAfterWriteToPatch = false;
+    // Do we always send parameters, or just on send current patch?
+    // boolean sendsParametersOnlyOnSendCurrentPatch = false;
+        
     // The 9 parts to a harmonics envelope        
     static final String[] PARTS = { "rate0", "level0", "rate1", "level1", "rate2", "level2", "rate3", "level3", "loop" };
     // All envelope displays by SOURCE, then PART 
@@ -3639,6 +3298,7 @@ public static final int ALL_ON = 4;
     public JFrame sprout()     
         {
         JFrame frame = super.sprout();
+        //transmitCurrent.setEnabled(true);
         receiveCurrent.setEnabled(false);                       // The K5000 can't do this
         //morphMenu.setEnabled(false);                                    // The K5000 can't do this
         //hillClimbMenu.setEnabled(false);                       // The K5000 can't do this
@@ -3658,27 +3318,7 @@ public static final int ALL_ON = 4;
         {
         JMenu menu = new JMenu("K5000");
         menubar.add(menu);
-        JMenu constrainMenu = new JMenu("Constrain Harmonics...");
-                
-        ButtonGroup group = new ButtonGroup();
-        for(int i = 0; i <= MAJOR_SEVENTH; i++)
-            {
-            final int _i = i;
-            JRadioButtonMenuItem menuItem = new JRadioButtonMenuItem(MENU_CONSTRAINTS[i]);
-            if (i == 0) menuItem.setSelected(true);
-            group.add(menuItem);
-            menuItem.addActionListener(new ActionListener()
-                {
-                public void actionPerformed(ActionEvent e)
-                    {
-                    constraints = _i;
-                    repaint();
-                    }
-                });
-            constrainMenu.add(menuItem);
-            }
-        menu.add(constrainMenu);
-        
+
         JMenu loadWaveMenu = new JMenu("Load WAV file into...");
         menu.add(loadWaveMenu);
         for(int i = 1; i <= 6; i++)                     // note <=
@@ -3701,11 +3341,45 @@ public static final int ALL_ON = 4;
                     loadWaveAsHarmonics(_i, false);
                     }
                 });
+            if (i != 6) harmonicsMenu.addSeperator();
             loadWaveMenu.add(harmonicsMenu);
             }
     
-        menu.addSeparator();
-    
+
+        JMenu constrainMenu = new JMenu("Constrain Harmonics...");
+                
+        ButtonGroup group = new ButtonGroup();
+        for(int i = 0; i <= MAJOR_SEVENTH; i++)
+            {
+            final int _i = i;
+            JRadioButtonMenuItem menuItem = new JRadioButtonMenuItem(MENU_CONSTRAINTS[i]);
+            if (i == 0) menuItem.setSelected(true);
+            group.add(menuItem);
+            menuItem.addActionListener(new ActionListener()
+                {
+                public void actionPerformed(ActionEvent e)
+                    {
+                    constraints = _i;
+                    repaint();
+                    }
+                });
+            constrainMenu.add(menuItem);
+            }
+        menu.add(constrainMenu);
+        
+        JCheckBoxMenuItem unlock = new JCheckBoxMenuItem("Allow Harmonics Envelope Display Mouse-Over");
+        allowUpdateFromMouse = getLastXAsBoolean("Mouseover", getSynthName(), true, true);
+        unlock.setSelected(allowUpdateFromMouse);
+        unlock.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                allowUpdateFromMouse = unlock.isSelected();
+                setLastX("" + allowUpdateFromMouse, "Mouseover", getSynthName(), true);
+                }
+            });
+        menu.add(unlock);
+
         JMenu clearBankMenu = new JMenu("Clear Bank on Synthesizer...");
         menu.add(clearBankMenu);
         for(int i = 0; i < 4; i++)
@@ -3721,6 +3395,8 @@ public static final int ALL_ON = 4;
                 });
             clearBankMenu.add(bankMenu);
             }
+    
+        menu.addSeparator();
     
         JMenuItem resetMenuItem = new JMenuItem("Reset (Reload from Flash)");
         resetMenuItem.addActionListener(new ActionListener()
@@ -3741,70 +3417,58 @@ public static final int ALL_ON = 4;
                 }
             });
         menu.add(backupMenuItem);
+        menu.addSeparator();
 
-/*
-        JCheckBoxMenuItem backupAfterWriteToPatchItem = new JCheckBoxMenuItem("Always Backup After Write to Patch");
+        JCheckBoxMenuItem backupAfterWriteToPatchItem = new JCheckBoxMenuItem("Perform Backup and/or Reset after Writes and Requests");
         backupAfterWriteToPatch = getLastXAsBoolean("BackupAfterWriteToPatch", getSynthName(), true, true);
         backupAfterWriteToPatchItem.setSelected(backupAfterWriteToPatch);
+        transmitCurrent.setEnabled(backupAfterWriteToPatch);
         backupAfterWriteToPatchItem.addActionListener(new ActionListener()
             {
             public void actionPerformed(ActionEvent e)
                 {
                 backupAfterWriteToPatch = backupAfterWriteToPatchItem.isSelected();
+                transmitCurrent.setEnabled(backupAfterWriteToPatch);
                 if (backupAfterWriteToPatch)
-                	{
-                	showSimpleMessage("Backup After Write to Patch", "Be sure you have read the ABOUT panel to learn about how\nthe Kawai K5000 memory works." );
-                	}
+                    {
+                    showSimpleMessage("Perform Backup and/or Reset after Writes and Requests", "Be sure you have read the ABOUT panel to learn about how\nthe Kawai K5000 memory works." );
+                    }
                 setLastX("" + backupAfterWriteToPatch, "BackupAfterWriteToPatch", getSynthName(), true);
                 }
             });
         menu.add(backupAfterWriteToPatchItem);
 
-        JCheckBoxMenuItem sendParametersItem = new JCheckBoxMenuItem("Only Update Synth on Send to Current Patch");
-        sendsParametersOnlyOnSendCurrentPatch = getLastXAsBoolean("SendParametersOnlyOnSendCurrentPatch", getSynthName(), false, true);
-        sendParametersItem.setSelected(sendsParametersOnlyOnSendCurrentPatch);
-        sendParametersItem.addActionListener(new ActionListener()
-            {
-            public void actionPerformed(ActionEvent e)
-                {
-                sendsParametersOnlyOnSendCurrentPatch = sendParametersItem.isSelected();
-                setLastX("" + sendsParametersOnlyOnSendCurrentPatch, "SendParametersOnlyOnSendCurrentPatch", getSynthName(), true);
-                }
-            });
-        menu.add(sendParametersItem);
+/*
+  JCheckBoxMenuItem sendParametersItem = new JCheckBoxMenuItem("Only Update Synth on Send to Current Patch");
+  sendsParametersOnlyOnSendCurrentPatch = getLastXAsBoolean("SendParametersOnlyOnSendCurrentPatch", getSynthName(), false, true);
+  sendParametersItem.setSelected(sendsParametersOnlyOnSendCurrentPatch);
+  sendParametersItem.addActionListener(new ActionListener()
+  {
+  public void actionPerformed(ActionEvent e)
+  {
+  sendsParametersOnlyOnSendCurrentPatch = sendParametersItem.isSelected();
+  setLastX("" + sendsParametersOnlyOnSendCurrentPatch, "SendParametersOnlyOnSendCurrentPatch", getSynthName(), true);
+  }
+  });
+  menu.add(sendParametersItem);
 
-        JCheckBoxMenuItem backupAfterLibrarianWriteItem = new JCheckBoxMenuItem("Always Backup After Librarian Write");
-        backupAfterLibrarianWrite = getLastXAsBoolean("BackupAfterLibrarianWrite", getSynthName(), false, true);
-        backupAfterLibrarianWriteItem.setSelected(backupAfterLibrarianWrite);
-        backupAfterLibrarianWriteItem.addActionListener(new ActionListener()
-            {
-            public void actionPerformed(ActionEvent e)
-                {
-                backupAfterLibrarianWrite = backupAfterLibrarianWriteItem.isSelected();
-                if (backupAfterLibrarianWrite)
-                	{
-                	showSimpleMessage("Backup After Write to Patch", "Be sure you have read the ABOUT panel to learn about how\nthe Kawai K5000 memory works." );
-                	}
-                setLastX("" + backupAfterLibrarianWrite, "BackupAfterLibrarianWrite", getSynthName(), true);
-                }
-            });
-        menu.add(backupAfterLibrarianWriteItem);
+  JCheckBoxMenuItem backupAfterLibrarianWriteItem = new JCheckBoxMenuItem("Always Backup After Librarian Write");
+  backupAfterLibrarianWrite = getLastXAsBoolean("BackupAfterLibrarianWrite", getSynthName(), false, true);
+  backupAfterLibrarianWriteItem.setSelected(backupAfterLibrarianWrite);
+  backupAfterLibrarianWriteItem.addActionListener(new ActionListener()
+  {
+  public void actionPerformed(ActionEvent e)
+  {
+  backupAfterLibrarianWrite = backupAfterLibrarianWriteItem.isSelected();
+  if (backupAfterLibrarianWrite)
+  {
+  showSimpleMessage("Backup After Write to Patch", "Be sure you have read the ABOUT panel to learn about how\nthe Kawai K5000 memory works." );
+  }
+  setLastX("" + backupAfterLibrarianWrite, "BackupAfterLibrarianWrite", getSynthName(), true);
+  }
+  });
+  menu.add(backupAfterLibrarianWriteItem);
 */
-
-        menu.addSeparator();
-
-        JCheckBoxMenuItem unlock = new JCheckBoxMenuItem("Allow Harmonics Envelope Display Mouse-Over");
-        allowUpdateFromMouse = getLastXAsBoolean("Mouseover", getSynthName(), true, true);
-        unlock.setSelected(allowUpdateFromMouse);
-        unlock.addActionListener(new ActionListener()
-            {
-            public void actionPerformed(ActionEvent e)
-                {
-                allowUpdateFromMouse = unlock.isSelected();
-                setLastX("" + allowUpdateFromMouse, "Mouseover", getSynthName(), true);
-                }
-            });
-        menu.add(unlock);
 
         /*
           JCheckBoxMenuItem changePatchAfterSendItem = new JCheckBoxMenuItem("Change Patch after Send to Current Patch");
@@ -3824,37 +3488,37 @@ public static final int ALL_ON = 4;
         
     public void beforeWriteAllParametersHook() 
         { 
-    	if (true)		//(backupAfterWriteToPatch)
-    		{
-    		performK5000Reset();
-    		}
+        if (backupAfterWriteToPatch)
+            {
+            performK5000Reset();
+            }
         }
 
     public void afterWriteAllParametersHook()
-    	{
-    	if (true)		//if (backupAfterWriteToPatch)
-    		{
-    		performK5000Backup();
-    		}
-    	}
+        {
+        if (backupAfterWriteToPatch)
+            {
+            performK5000Backup();
+            }
+        }
         
-     public void afterLibrarianWriteHook()
-    	{
-    	if (true)		//if (backupAfterWriteToPatch)
-//    	if (backupAfterLibrarianWrite)
-    		{
-    		performK5000Backup();
-    		}
-    	}
+    public void afterLibrarianWriteHook()
+        {
+        if (backupAfterWriteToPatch)
+//      if (backupAfterLibrarianWrite)
+            {
+            performK5000Backup();
+            }
+        }
 
-     public void beforeLibrarianWriteHook()
-    	{
-    	if (true)		//if (backupAfterWriteToPatch)
-//    	if (backupAfterLibrarianWrite)
-    		{
-    		performK5000Reset();
-    		}
-    	}
+    public void beforeLibrarianWriteHook()
+        {
+        if (backupAfterWriteToPatch)
+//      if (backupAfterLibrarianWrite)
+            {
+            performK5000Reset();
+            }
+        }
 
     // Given the current constraints, returns whether the given index should be constrained 
     boolean _constrainTo(int index)
@@ -3946,22 +3610,22 @@ public static final int ALL_ON = 4;
         }
         
     void performK5000Reset()
-    	{
-            try 
-                {
-                tryToSendSysex(new byte[] { (byte)0xF0, 0x40, (byte)getChannelOut(), 0x32, 0x00, 0x0a, 0x02, (byte)0xF7 });
-                }
-            catch (Exception e) { Synth.handleException(e); }
-	   	}
+        {
+        try 
+            {
+            tryToSendSysex(new byte[] { (byte)0xF0, 0x40, (byte)getChannelOut(), 0x32, 0x00, 0x0a, 0x02, (byte)0xF7 });
+            }
+        catch (Exception e) { Synth.handleException(e); }
+        }
         
     void performK5000Backup()
-    	{
-             try 
-                {
-                tryToSendSysex(new byte[] { (byte)0xF0, 0x40, (byte)getChannelOut(), 0x32, 0x00, 0x0a, 0x01, (byte)0xF7 });
-                }
-            catch (Exception e) { Synth.handleException(e); }
-	   	}
+        {
+        try 
+            {
+            tryToSendSysex(new byte[] { (byte)0xF0, 0x40, (byte)getChannelOut(), 0x32, 0x00, 0x0a, 0x01, (byte)0xF7 });
+            }
+        catch (Exception e) { Synth.handleException(e); }
+        }
         
     public void sendK5000Backup()
         {
@@ -3971,12 +3635,12 @@ public static final int ALL_ON = 4;
             }
         }
 
-	// We override this method to deselect the write all patches and save all patches menus.
+    // We override this method to deselect the write all patches and save all patches menus.
     public void librarianCreated(Librarian librarian) 
-    	{ 
-    	writeAllPatchesMenu.setSelected(false); 
-    	saveAllPatchesMenu.setSelected(false); 
-    	}
+        { 
+        writeAllPatchesMenu.setSelected(false); 
+        saveAllPatchesMenu.setSelected(false); 
+        }
 
 
     /** Changes the patch to the bank and number provided */
@@ -4107,7 +3771,7 @@ public static final int ALL_ON = 4;
     //public boolean getSendsAllParametersAsDump() { return false; }
 
     // The only way to send all parameters is via Send To Current Patch -- all others will fail
-    // public boolean getSendsParametersOnlyOnSendCurrentPatch() { return sendsParametersOnlyOnSendCurrentPatch; }
+    public boolean getSendsParametersOnlyOnSendCurrentPatch() { return !backupAfterWriteToPatch; }
 
     /** Returns the patch name as a byte array, but returned as an int[] */
     public int[] getNameAsBytes(Model model)
@@ -5165,13 +4829,16 @@ public static final int ALL_ON = 4;
             }
         }
 
-	// We override this to guarantee that a reset is done before any change patch and also before the request is issued
+    // We override this to guarantee that a reset is done before any change patch and also before the request is issued
     public void performRequestDump(Model tempModel, boolean changePatch)
         {
-        // First, reload from Flash		-- we don't do this in ChangePatch because ChangePatch is also used when we write a patch, and it would undo everything
-		performK5000Reset();    
-		
-		super.performRequestDump(tempModel, changePatch);
+        // First, reload from Flash             -- we don't do this in ChangePatch because ChangePatch is also used when we write a patch, and it would undo everything
+        if (backupAfterWriteToPatch)
+            {
+            performK5000Reset();  
+            }  
+                
+        super.performRequestDump(tempModel, changePatch);
         }
     
 
@@ -5181,8 +4848,8 @@ public static final int ALL_ON = 4;
         {
         if (tempModel == null)
             tempModel = getModel();
-	
-		// Now return the sysex to send to request
+        
+        // Now return the sysex to send to request
         return new byte[] 
             { 
             (byte)0xF0, 
@@ -7483,64 +7150,126 @@ public static final int ALL_ON = 4;
         }
 
     }
-      
-      
-/*
-  KAWAI K5000 ECCENTRICITIES
+     
+/* 
+   ABOUT K5000 MEMORY
+
+   I suppose in order to support loading from the disk drive, the K5000 has an unusual memory structure.
+   It has a CURRENT WORKING MEMORY consisting of ALL BANKS OF ALL PATCHES.  It also has a PERMANENT STORE
+   consisting of ALL BANKS OF ALL PATCHES.  The current working memory also has a pointer to a single patch
+   which is the current patch being played.
         
-  The is a small documentation of some of the Kawai K5000's misfeatures and documentation errors.
+   On the machine, you can:
         
-  BANKS GO A, D, E, F, M.  Bank B is a modified general MIDI bank for the Kawai K5000W and Bank C is a fixed
-  general MIDI bank for the K5000W.
-        
-  MISSING SEND-TO-CURRENT-PATCH SYSEX MESSAGE.  This is the biggest one.  The Kawai K5000, like the K5 and K1,
-  does not have a send-to-current-patch message, which makes auditioning, syncing, resetting, randomizing, and
-  lots of other tasks very difficult.  Edisyn has two alternatives, neither of which are viable.  The first
-  alternative is to write to a "scratch patch", and then do a program change to that patch.  This cannot be
-  done because the K5000 has flash memory, and repeatedly writing to a scratch patch would burn it out.  The
-  second alternative is to send every parameter separately.  For a 6 source patch, this would take about 25
-  seconds.  So it's not in the cards.
-        
-  EXCESSIVELY LONG BANK SYSEX MESSAGE.  The K5000's bank sysex dump mesages can be 100K or longer.  This is
-  absurd: it takes forever, provides no feedback as to its current status, and worst of all, Java can't send
-  messages that long.
-        
-  UNDOCUMENTED KAA AND KA1 FILES.  People have reverse-engineered these but Edisyn presently cannot support them.
-        
-  HARMONIC ENVELOPE RATES ARE OPPOSITE OTHER ENVELOPE RATES.  Most envelopes have "times" which go 0...127.
-  But harmonic envelope rates are "rates" and go 127...0.
-        
-  SYSEX VALUES THAT SERVE NO PURPOSE.
-        
-  - MORF FLAG only serves to determine which screen is displayed
-  - DRUM MARK is unknown
-  - NO USE is some how different from DUMMY
+   - Load a patch from disk to a slot in the current working memory
+   - Load a patch from permanent store to a slot in the current working memory
+   - Load a bank from the disk to the current working memory
+   - Write a patch from the current working memory to the disk
+   - Write a bank from the current working memory to the disk
+   - Edit a the patch being played in current working memory.  However when you have finished 
+   editing it, you must either (1) write the changes for that patch to the permanent store or 
+   (2) undo your changes.
+   - Change individual parameters in the patch being played in current working memory.
                 
-  HARMONIC ENVELOPE LOOP PARAMETER DOCUMENTATION IS WRONG.   The documentation says that OFF is Level1=64, 
-  Level2 =0; LP1 is Level1=0, Level2=64; LP2 is Level1=64, Level2=64, UNKNOWN is Level1=0, Level2=0.  This is
-  WRONG.  The correct values are: OFF is Level1=0, Level2=0; LP1 is Level1=64, Level2=64, LP2 is Level1=0,
-  Level2=64, UNKNOWN is Level1=64, Level2=0.
+   You can also (but it's not useful unless you're working with an editor):
+   - Write all patches in all banks from the permanent store to current working memory ("RESET")
+   - Write all patches in all banks from current working memory to the permanent store ("BACKUP")
+
+   But this isn't how it works from sysex.  In sysex you can read and modify any numbered patch in current  
+   working memory independently without writing any of them to the permanent store.  However, you can't query
+   what the currently-played patch is, nor request it, nor ask to modify it. You also cannot write a single 
+   patch to the permanent store.  You *can* perform a reset or a backup.  You can request a whole bank
+   from current working memory and update a whole bank, but you cannot clear a bank.  And you can change 
+   individual parameters.  You cannot access the disk at all.
         
-  DCA VELO CURVE is shown with just three bits.  But it has values 0...11.
+   Also, single-mode patches are wildly varying size, but each bank is fixed in number of patches and also
+   in byte length, so you will wind up with banks that are smaller in number than the full bank length but
+   have filled up its entire memory.  If you attempt to load another patch, it will fail *silently*.
+   There is also no way to clear patches or clear the bank.
         
-  CHANGE TO SINGLE MODE (p. 36) does not do anything.
+   Also a bank must have at least one patch in it.
         
-  EFFECTS START AT 11.  Effects are separate from Reverb methods in the documentation and in the sysex messages.
-  But they still start at 11 for no reason (there are 11 reverb methods, 0...10).
+   Furthermore, the permanent store is in Flash RAM.  This poses a challenge.
         
-  PATCHES ARE VARIABLE IN SIZE.  However banks are fixed to 128 patches and have a fixed amount of memory.  This
-  means that (1) you typically can't put 128 patches in a bank, so (2) you have to have dummy patches filling the
-  remaining slots.
+   At present Edisyn works like this:
         
-  SR WAVE 424 DUPLICATES SR WAVE 425.  At least in the documentation, where they're both called
-  "423 > 64th Harmonics Cyclic".
+   - WRITE TO PATCH                Does a RESET, then updates the patch in current working memory, then a BACKUP,
+   and also does a PC away from the patch (to guarantee the name is updated on 
+   display), then back to the patch 
+   - LIBRARY WRITE REGION  Does a RESET, then updates the patches in current working memory, then a BACKUP
+   - LIBRARY WRITE BANK    Does a RESET, then updates the patches in current working memory, then a BACKUP
+   - LIBRARY WRITE ALL             IS DISABLED                     [so is Library SAVE ALL]
+   - K5000 CLEAR BANK              Writes a bank message of one small blank patch, plus 126 stubs, 
+   to current working memory.
+   - K5000 RESET                   Does a RESET
+   - K5000 BACKUP                  Does a BACKUP
+   - SEND TO CURRENT PATCH Updates the patch in current working memory: if the patch number is unknown,
+   then assumes it is Patch A001. also does a PC away from the patch (to guarantee 
+   the name is updated on display), then back to the patch
+                
+   If you have unchecked the menu option "Perform Backup and/or Reset after Writes and Requests", then
+   these behave differently:
+
+   - WRITE TO PATCH                Updates the patch in current working memory, and also does a PC away from the 
+   patch (to guarantee the name is updated on display), then back to the patch 
+   - SEND TO CURRENT PATCH IS DISABLED     [In all cases, including Send to Current, undo/hillclimbing/etc.]
+                
+   The purpose of this unchecked option is primarily to allow a user to negotiate with the disk.  For example,
+   he can load a bank from the disk, write some patches into it, and then save the bank to the disk (or do a
+   BACKUP to save the bank to the permanent store).  It should normally be kept checked.
+
+/*
+KAWAI K5000 ECCENTRICITIES
         
-  NUMEROUS INCONSISTENCIES IN EFFECTS PARAMETERS.   Don't get me started.
+The is a small documentation of some of the Kawai K5000's misfeatures and documentation errors.
         
-  MORF LOOP.  The Morf Loop parameter in sysex appears to have off, lp1, and lp2 as options.  But on the unit
-  the only options are off and "loop".
+BANKS GO A, D, E, F, M.  Bank B is a modified general MIDI bank for the Kawai K5000W and Bank C is a fixed
+general MIDI bank for the K5000W.
         
-  MORF EXECUTION.  You can execute a Morf from sysex.  But you cannot download the resulting Morf because the
-  K5000 is lacking a Request Current Patch sysex message.
+MISSING SEND-TO-CURRENT-PATCH SYSEX MESSAGE.  This is the biggest one.  The Kawai K5000, like the K5 and K1,
+does not have a send-to-current-patch message, which makes auditioning, syncing, resetting, randomizing, and
+lots of other tasks very difficult.
+        
+EXCESSIVELY LONG BANK SYSEX MESSAGE.  The K5000's bank sysex dump mesages can be 100K or longer.  This is
+absurd: it takes forever, provides no feedback as to its current status, and worst of all, Java can't send
+messages that long.
+        
+UNDOCUMENTED KAA AND KA1 FILES.  People have reverse-engineered these but Edisyn presently cannot support them.
+        
+HARMONIC ENVELOPE RATES ARE OPPOSITE OTHER ENVELOPE RATES.  Most envelopes have "times" which go 0...127.
+But harmonic envelope rates are "rates" and go 127...0.
+        
+SYSEX VALUES THAT SERVE NO PURPOSE.
+        
+- MORF FLAG only serves to determine which screen is displayed
+- DRUM MARK is unknown
+- NO USE is some how different from DUMMY
+                
+HARMONIC ENVELOPE LOOP PARAMETER DOCUMENTATION IS WRONG.   The documentation says that OFF is Level1=64, 
+Level2 =0; LP1 is Level1=0, Level2=64; LP2 is Level1=64, Level2=64, UNKNOWN is Level1=0, Level2=0.  This is
+WRONG.  The correct values are: OFF is Level1=0, Level2=0; LP1 is Level1=64, Level2=64, LP2 is Level1=0,
+Level2=64, UNKNOWN is Level1=64, Level2=0.
+        
+DCA VELO CURVE is shown with just three bits.  But it has values 0...11.
+        
+CHANGE TO SINGLE MODE (p. 36) does not do anything.
+        
+EFFECTS START AT 11.  Effects are separate from Reverb methods in the documentation and in the sysex messages.
+But they still start at 11 for no reason (there are 11 reverb methods, 0...10).
+        
+PATCHES ARE VARIABLE IN SIZE.  However banks are fixed to 128 patches and have a fixed amount of memory.  This
+means that (1) you typically can't put 128 patches in a bank, so (2) you have to have dummy patches filling the
+remaining slots.
+        
+SR WAVE 424 DUPLICATES SR WAVE 425.  At least in the documentation, where they're both called
+"423 > 64th Harmonics Cyclic".
+        
+NUMEROUS INCONSISTENCIES IN EFFECTS PARAMETERS.   Don't get me started.
+        
+MORF LOOP.  The Morf Loop parameter in sysex appears to have off, lp1, and lp2 as options.  But on the unit
+the only options are off and "loop".
+        
+MORF EXECUTION.  You can execute a Morf from sysex.  But you cannot download the resulting Morf because the
+K5000 is lacking a Request Current Patch sysex message.
         
 */                                  

@@ -934,8 +934,8 @@ public class Library extends AbstractTableModel
                         }                               
                     }
 
-            	if (writeHookCount == 0) synth.beforeLibrarianWriteHook();
-            	writeHookCount++;
+                if (writeHookCount == 0) synth.beforeLibrarianWriteHook();
+                writeHookCount++;
                 if (bank == ALL_PATCHES)
                     {
                     synth.tryToSendMIDI(concatenate(data), "Writing", "Writing All Patches to Synth");
@@ -951,7 +951,7 @@ public class Library extends AbstractTableModel
                 //synth.sendAllParameters();            // this will mess up synths that use a scratch patch.  Instead we're writing when we leave the librarian
                 writeHookCount--;
                 if (writeHookCount == 0) synth.afterLibrarianWriteHook();
-               }
+                }
             }           
         else
             {

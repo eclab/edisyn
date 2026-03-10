@@ -6577,7 +6577,7 @@ public static final int ALL_ON = 4;
                 ArrayList names = new ArrayList();
                 ArrayList harmonics = new ArrayList();
         
-                LineNumberReader reader = new LineNumberReader(new InputStreamReader(new BufferedInputStream(getClass().getResourceAsStream("kHarmonics.out"))));
+                LineNumberReader reader = new LineNumberReader(new InputStreamReader(new BufferedInputStream(getClass().getResourceAsStream("kharmonics.out"))));
                 while(true)
                     {
                     String n = reader.readLine();

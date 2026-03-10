@@ -12,9 +12,9 @@
 Turn OFF Protect.  Make sure that Receive Program and Receive Exclusive are both turned on.  Set Program Receive to NORMAL.  Set the Unit Channel (System Channel) of your K5000 to the same channel as you've set up Edisyn (perhaps channel 1?).
 
 
-<br><br><br><h3>How K5000 Memory Works and its Implications</h3>
+<br><br><h3>How K5000 Memory Works and its Implications</h3>
 
-The K5000 memory structure is weird, and how it presents itself to you on the K5000 screen is quite different from how it presents itself to you using an editor.  So it's very important to understand how it works with an editor.
+<p>The K5000 memory structure is weird, and how it presents itself to you on the K5000 screen is quite different from how it presents itself to you using an editor.  So it's very important to understand how it works with an editor.
 
 <p>In a traditional synthesizer, you have a permanent storage of patches, from which you call forth a single patch to play and/or edit.  To do this, the patch is copied to current working memory; and it may be written back to the permanent storage later.
 
@@ -104,15 +104,21 @@ Edisyn must <b><i>also</i></b> stop updating current working memory in response 
 
 <br><br><h3>About the Menu</h3>
 
-The Kawai K5000 menu has the following options:
+<p>The Kawai K5000 menu has the following options:
 
 <ul>
 <li><b>Constrain Harmonics</b>&nbsp;&nbsp;This locks the harmonics you can edit with the sliders to a certain subset of harmonics, to make it easier to find and edit them.  The other harmonics will be displayed in gray.  You can still set any harmonics with the Number dial.
+
 <p><li><b>Load Wave Into...</b>&nbsp;&nbsp;You can load a WAV file as harmonics into the soft or loud harmonics of any source. The WAV file should store a single-cycle wave.  Single-cycle waves must be stored as 16-bit WAV files no longer than 2048 samples.  A good source of single-cycle waves is the AdventureKid Waveforms collection (<a href="https://www.adventurekid.se/akrt/waveforms/adventure-kid-waveforms/">https://www.adventurekid.se/akrt/waveforms/adventure-kid-waveforms/</a>), which has thousands of waveforms, all free.
+
 <p><li><b>Allow Envelope Display Mouse-Over</b>&nbsp;&nbsp;This prevents mouse-over on the harmonics envelope displays to update which harmonics envelope you're editing. If you're fed up with accidentally mousing over an envelope display when you're changing a dial and changing the envelope number, this menu item is for you.
+
 <p><li><b>Clear Bank on Synthesizer...</b> will the patches in a given bank <b><i>in current working memory only</i></b>.  If you want to clear the bank in the permanent store, you should clear them in current working memory and then perform a BACKUP.  Note that this technically does not clear the first patch, but rather the first patch will be a small, silent patch: roughly the equivalent.  This is because the K5000 doesn't allow you to have zero patches in a bank.
+
 <p><li><b>Reset (Reload from Flash)</b> will replace all patches in current working memory with fresh copies from the permanent store.  Any edits you have made will be lost.
+
 <p><li><b>Backup (Write to Flash)</b> will copy all patches in current working memory to the permanent store.  You might do this after clearing the bank (see above), or in certain situations if you have unchecked <b><i>Always Backup after Write to Patch/Bank</i></b> (see below).
+
 <p><li><b>Always Perform Backup and/or Reset after Writes and Requests</b> is checked by default.  When checked, then when Edisyn writes a patch (via Write to Patch... or the various Librarian's Write Selected Patches to Synth or Write Bank to Synth) it first does a RESET, then writes the patch(es) or Bank, then does a BACKUP.  Additionally, when you request a patch, a RESET is done first.  This all guarantees that Edisyn's "write" behavior actually writes to FLASH.  However there are situations when you don't want this.  
 
 <br><br><p>For example, imagine you want to load a bank from disk, then use Edisyn to write a patch or two to select slots, replacing them, then save back out to disk. What would happen is: you load the bank from disk into current working memory.  Then in the process of writing one or two patches, Edisyn replaces the current working memory with the permanent (Flash) store, then writes those patches out the permanent store.  If you saved back out to disk, you'd have erased your bank: and the new would have been written to permanent memory where you didn't want them!  Instead, temporarily uncheck this menu, then load from disk, perform a write with Edisyn (which now will just put the patches in permanent store), write to disk, and check the menu again.  You could perform a RESET for good measure to restore the patches from permanent store if you cared.
@@ -123,13 +129,13 @@ The Kawai K5000 menu has the following options:
 </ul>
 
 
-<br><br><h3>Display Updates</h3>
+<h3>Display Updates</h3>
 
-Some parameter changes will update the display on the K5000 so you'll see them change.  Others will not.  It's fairly arbitrary.  If you update a patch (send to current patch, undo/redo, randomize, etc.), it the result will be displayed until you manually edit.  Notably, the patch name won't change on the screen: you can see the change by switching to a different patch, then going back.
+<p>Some parameter changes will update the display on the K5000 so you'll see them change.  Others will not.  It's fairly arbitrary.  If you update a patch (send to current patch, undo/redo, randomize, etc.), it the result will be displayed until you manually edit.  Notably, the patch name won't change on the screen: you can see the change by switching to a different patch, then going back.
 
 <br><br><h3>About the Tabs</h3>
 
-The K5000 has <i>many</i> parameters.  These parameters are organized as follows.  First there are the <b>General</b> parameters for the entire patch.   Then there are up to six <b>Sources</b>, each of which produces its own sound.  You specify the number of Sources in the Sources category in the General Tab.  This will change the tabs in the editor.  You can also specify which sources are playing and which are muted. 
+<p>The K5000 has <i>many</i> parameters.  These parameters are organized as follows.  First there are the <b>General</b> parameters for the entire patch.   Then there are up to six <b>Sources</b>, each of which produces its own sound.  You specify the number of Sources in the Sources category in the General Tab.  This will change the tabs in the editor.  You can also specify which sources are playing and which are muted. 
 
 <p>Each Source can be an <b>Additive</b> or <b>PCM</b> (digital sample) source.  A digital sample source consists of a single tab called "S" (as in S1, S2, and so on).  An additive sample source also has the "S" tab, but it also has two more tabs called "H" (for "Harmonics") and "E" (for "Envelopes").  These are the so-called Additive Wave Kit, and only appear when the <b>Source Type</b> is set to "Additive".  You set the Source Type in the DCO category under the "S" tab.
 
@@ -137,41 +143,44 @@ The K5000 has <i>many</i> parameters.  These parameters are organized as follows
 
 <br><br><h3>About the Dials</h3>
 
-The General tab has a Category called "Dials".  These aren't part of the patch: they're just a convenience for you.  Changing these dials changes any of the 16 Macro Controller Dial settings on your K5000.
+<p>The General tab has a Category called "Dials".  These aren't part of the patch: they're just a convenience for you.  Changing these dials changes any of the 16 Macro Controller Dial settings on your K5000.
 
 <br><br><h3>About Morphing</h3>
 
-The K5000 has a special morphing facility called "Morf".  In this facility, you set various interpolation options, then tell the synthesizer to morph the harmonics of up to four different patches, creating an interpolated harmonics envelope set.
+<p>The K5000 has a special morphing facility called "Morf".  In this facility, you set various interpolation options, then tell the synthesizer to morph the harmonics of up to four different patches, creating an interpolated harmonics envelope set.
 
-You can set these parameters in Edisyn as well, in the "Morf" category, and you can instruct your synthesizer to perform the morphing by pressing the "Execute" button in Edisyn.  However, after you have performed morphing, the results are only stored on the synthesier, and are unfortunately not given to Edisyn.  To load the results into Edisyn, you'll need save the patch manually on your synthesizer, then have Edisyn request the patch.  This is the only option: the K5000 has no way to request the current patch memory.
+<p>You can set these parameters in Edisyn as well, in the "Morf" category, and you can instruct your synthesizer to perform the morphing by pressing the "Execute" button in Edisyn.  However, after you have performed morphing, the results are only stored on the synthesier, and are unfortunately not given to Edisyn.  To load the results into Edisyn, you'll need save the patch manually on your synthesizer, then have Edisyn request the patch.  This is the only option: the K5000 has no way to request the current patch memory.
 
-Your most recent settings of morphing parameters are stored with your patch, presumably to make it easy to execute a morph a second time.
+<P>Your most recent settings of morphing parameters are stored with your patch, presumably to make it easy to execute a morph a second time.
 
-There is also a "Show Morf" checkbox in Edisyn, because this is a parameter in your patch.  All it does is instruct your synthesizer to display the Morf screen instead of the regular harmonics screen.  It's not very useful.
+<P>There is also a "Show Morf" checkbox in Edisyn, because this is a parameter in your patch.  All it does is instruct your synthesizer to display the Morf screen instead of the regular harmonics screen.  It's not very useful.
 
 <br><br><h3>About the Harmonics Display</h3>
 
-The "H" (Harmonics) tab and "E" (Envelopes) tab for each source contain a number of displays for harmonics, formants, and envelope settings.  You can set these by Number, then Value, or you can directly modify the sliders in the display itself.  If you change a slider, only that slider can be set.  But you can "scrub" across sliders by changing the slider with the right mouse button, or by holding down SHIFT and dragging.
+<p>The "H" (Harmonics) tab and "E" (Envelopes) tab for each source contain a number of displays for harmonics, formants, and envelope settings.  You can set these by Number, then Value, or you can directly modify the sliders in the display itself.  If you change a slider, only that slider can be set.  But you can "scrub" across sliders by changing the slider with the right mouse button, or by holding down SHIFT and dragging.
 
 <p>The "Loop" display sliders each have three settings: OFF (the lowest setting), LP1 (the middle setting), and LP2 (the highest setting).
 
-<br><h3>About the "Shaping" Categories</h3>
+<br><br><h3>About the "Shaping" Categories</h3>
 
-These categories contain various utilities to shape the Harmonics and Harmonics Envelope Levels.  The Dials hold common harmonics (sawtooth, triangle, square, various pulse) plus a large number of harmonics drawn from patches on the original Kawai K5 synthesizer.  If you select a value on the Dial, it will set the appropriate Harmonics.  The Dials are not part of the patch: they're just utility devices and their value is only meaningful as you're dialing them.  Similarly, the associated Buttons allow you to perform various editing operations.  Note that both the Dials and the Buttons are constrained by your selection of harmonic Constraints (see the Menu).
+<p>These categories contain various utilities to shape the Harmonics and Harmonics Envelope Levels.  The Dials hold common harmonics (sawtooth, triangle, square, various pulse) plus a large number of harmonics drawn from patches on the original Kawai K5 synthesizer.  If you select a value on the Dial, it will set the appropriate Harmonics.  The Dials are not part of the patch: they're just utility devices and their value is only meaningful as you're dialing them.  Similarly, the associated Buttons allow you to perform various editing operations.  Note that both the Dials and the Buttons are constrained by your selection of harmonic Constraints (see the Menu).
 
-<h3>How to Bulk-Set Envelope Displays</h3>
+<br><br><h3>How to Bulk-Set Envelope Displays</h3>
 
 <ul>
 <li>You can copy and paste envelope displays (for harmonics, formants, or harmonic envelopes) to appropriate tabs in the same tab or on other tabs.  To do this, just click on the Category name above the envelope display and choose "Copy Category" or "Paste Category" as appropriate.
+
 <p><li>You can set all the parameters in an envelope display (for harmonics, formants, or harmonic envelopes)  to the same value.  To do this, first set one parameter to the value you want, then click on the Category name above the envelope display and choose "Distribute".
+
 <p><li>You can make all the parameters in an envelope display mutable, or immutable, by clicking on the Category name and choosing "Make Category Parameters Mutable" or "Make Category Parameters immutable".  This is important because normally you can't an envelope mutable or immutable via "Edit->Edit Mutable Parameters".
+
 <p><li>You can copy all the parameters of from one tab to another.  For example, you can copy the "E1" tab to the "E4" tab.  To do this, go to the first tab, then select "Copy Tab" under the Edit menu, then go to the second tab, and select "Paste Tab" under the Edit menu.
 </ul>
 
 
 <h3>About The Librarian</h3>
 
-Kawai K5000 bank downloads are gigantic, because Kawai K5000 patches are gigantic.  They are so large that Edisyn cannot use Kawai's bank upload sysex message to upload a bank, because it exceeds Java's MIDI message maximum size.  Instead, to upload a bank, Edisyn will attempt to erase the bank, then upload each patch in turn.  This isn't too slow, but it's suboptimal.  It will take a while for the unit to respond to all of them however: be patient.  It'll feel sluggish or hang until it's done.
+<p>Kawai K5000 bank downloads are gigantic, because Kawai K5000 patches are gigantic.  They are so large that Edisyn cannot use Kawai's bank upload sysex message to upload a bank, because it exceeds Java's MIDI message maximum size.  Instead, to upload a bank, Edisyn will attempt to erase the bank, then upload each patch in turn.  This isn't too slow, but it's suboptimal.  It will take a while for the unit to respond to all of them however: be patient.  It'll feel sluggish or hang until it's done.
 
 <p>Edisyn can <i>receive</i> the gigantic bank messages from the K5000.  It could take as much as a minute or more to download a bank using the fastest method, which is via "Request Bank from Synth".  However you will get NO feedback until the bank finally arrives.  Using "Download Bank from Synth" or "Download Selected Patches from Synth" is slower, but you'll see the patches as they arrive.
 
@@ -179,8 +188,9 @@ Kawai K5000 bank downloads are gigantic, because Kawai K5000 patches are giganti
 
 <p>If you upload a <i>range</i> of patches, it'll probably work fine, but if it exceeds the available bank memory, it might fail.  The K5000 provides Edisyn with no way to <i>erase</i> one patch or a range of patches.  I'll try to improve things here. 
 
-<h3>Thanks</h3>
-Thanks to Eyal Malinger (eyalmalinger@gmail.com) for providing test patches and trying out sysex results on Windows and with old Sound Diver implementations. Thanks to Oscillator (oscillatorsds@gmail.com) for providing sysex files for test patches.  Thanks to John Sepulveda (matrix12x@gmail.com) for bug reports.  Thanks to Jere Kapyaho (author of the <a href="https://github.com/coniferprod/k5ktools">python k5ktools</a>) for tweaking software for me.  And thanks to Markus Schlosser (author of the K5000 librarian in the KnobKraft-orm collection) for considerable help in understanding various oddities in the machine.
+<br><br><h3>Thanks</h3>
+
+<p>Thanks to Eyal Malinger (eyalmalinger@gmail.com) for providing test patches and trying out sysex results on Windows and with old Sound Diver implementations. Thanks to Oscillator (oscillatorsds@gmail.com) for providing sysex files for test patches.  Thanks to John Sepulveda (matrix12x@gmail.com) and Konstantinos Kampanis for bug reports.  Thanks to Jere Kapyaho (author of the <a href="https://github.com/coniferprod/k5ktools">python k5ktools</a>) for tweaking software for me.  And thanks to Markus Schlosser (author of the K5000 librarian in the KnobKraft-orm collection) for considerable help in understanding various oddities in the machine.
 
 <p><table border=0 cellpadding=0 cellspacing=5>
 <tr>

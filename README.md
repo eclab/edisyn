@@ -72,7 +72,7 @@ Edisyn presently supports:
 * E-Mu Morpheus and Ultraproteus (Single, Hyperpreset, and MidiMap modes)
 * E-Mu Planet Phatt, Orbit and Orbit v2, Carnaval, Vintage Keys, and Vintage Keys Plus
 * E-Mu Proteus 1, 1XR, 2, 2XR, 3, 3XR, and 1+Orchestral
-* E-Mu Proteus 2000 series (Proteus 1000/2000/2500, Virtuoso 2000, Xtreme Lead-1, Mo'Phatt, B-3, Planet Earth, Orbit-3, Proteus Custom, XL-1 Turbo, Turbo Phatt, Vintage Pro, XL-7, MP-7, PX-7, PK-6, XK-6, MK-6, Halo, Vintage Keys Keyboard, and (v2.0) Auditiy 2000.
+* E-Mu Proteus 2000 series (Proteus 1000/2000/2500, Virtuoso 2000, Xtreme Lead-1, Mo'Phatt, B-3, Planet Earth, Orbit-3, Proteus Custom, XL-1 Turbo, Turbo Phatt, Vintage Pro, XL-7, MP-7, PX-7, PK-6, XK-6, MK-6, Halo, Vintage Keys Keyboard, and (v2.0) Audity 2000.
 * JL Cooper MSB+ Rev2
 * Kawai K1, Kawai K1m, and Kawai K1r (Single and Multi Modes)
 * Kawai K4 and Kawai K4r (Single, Multi, Drum, and Effect Modes)
@@ -127,6 +127,10 @@ Sure!  But building a patch editor is a long-term commitment of debugging and ma
 #### Why These Synths in Particular?
 
 I have a special interest in hard-to-program synths, either because they have very poor interfaces (or no interface at all), or because their synthesis architecture is difficult to program (FM, Additive).  You'll note the high number of 1U rackmounts.  :-)  Certain other synths (Blofeld, Prophet '08, etc.) are there because I own them and like making stuff for them.
+
+#### "It's not connecting correctly"
+
+See the Windows, MacOS, and Linux sections below for possible solutions.  But the **#1 reason why Edisyn can't connect to a synthesizer is if you are using a cheap Chinese MIDI-to-USB interface adapter cable.**  These cables typically use a broken MIDI chip, commonly the Nanjing Qinheng Microelectronics CH345, which has enormous, gaping MIDI bugs.  Very few of these cables can handle the MIDI System Exclusive protocol at all.  If you want an inexpensive MIDI-to-USB cable style interface, I suggest the Roland UM-ONE. Note to Mac Users: the UM-ONE's website does not properly point to its older Mac drivers.  Google for "Roland UM-ONE drivers" and you'll get the right page.
 
 
 <a name="manual"/></a>

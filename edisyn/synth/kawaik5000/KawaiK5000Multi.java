@@ -43,6 +43,7 @@ public class KawaiK5000Multi extends Synth
 
     // The Patch Name can be no longer than 8
     public static final int MAXIMUM_NAME_LENGTH = 8;
+    public static final String EMPTY_PATCH_NAME = "--------";
     // Various tables below have a "none" slot
     public static final int NONE = -1;                                      // indicates "nothing" in effects lists
         
@@ -282,7 +283,7 @@ public class KawaiK5000Multi extends Synth
         soundPanel.add(vbox, BorderLayout.CENTER);
         addTab("Sections", (SynthPanel)soundPanel);
         
-        model.set("name", "INIT");  // has to be 10 long
+        model.set("name", EMPTY_PATCH_NAME);
         model.set("number", 0);
         loadDefaults();     
         }
@@ -1176,7 +1177,7 @@ public class KawaiK5000Multi extends Synth
             }
         }
             
-    public String getPatchName(Model model) { return model.get("name", "INIT    "); }
+    public String getPatchName(Model model) { return model.get("name", EMPTY_PATCH_NAME); }
 
     // We override this method to deselect the write all patches and save all patches menus.
     public void librarianCreated(Librarian librarian) 
@@ -1249,7 +1250,7 @@ public class KawaiK5000Multi extends Synth
         // check the easy stuff -- out of range parameters
         super.revise();
 
-        String nm = model.get("name", "INIT    ");
+        String nm = model.get("name", EMPTY_PATCH_NAME);
         String newnm = revisePatchName(nm);
         if (!nm.equals(newnm))
             model.set("name", newnm);

@@ -52,7 +52,8 @@ public class KawaiK5000 extends Synth
     // PCM Waves for Bank B run 0-340
     public static final int PCM_START = 341;
         
-    // Basic parameter struings
+    // Basic parameter strings
+    public static final String EMPTY_PATCH_NAME = "--------";
     public static final String[] KEYS = { "C", "Db", "D", "Eb", "E", "F", "Gb", "G", "Ab", "A", "Bb", "B" };
     public static final String[] CENTS = { "0 cent", "25 cent", "33 cent", "50 cent" };
     public static final String[] BANKS = { "A", "D", "E", "F" };
@@ -721,7 +722,7 @@ public static final int ALL_ON = 4;
             addTab("E " + source, envelopeTabs[source - 1] = (SynthPanel)soundPanel);
             }
             
-        model.set("name", "INIT");  // has to be 10 long
+        model.set("name", EMPTY_PATCH_NAME);
         model.set("bank", 0);
         model.set("number", 0);
 
@@ -3591,7 +3592,7 @@ public static final int ALL_ON = 4;
         }
 
     /** Returns the patch name in the model */
-    public String getPatchName(Model model) { return model.get("name", "INIT    "); }
+    public String getPatchName(Model model) { return model.get("name", EMPTY_PATCH_NAME); }
 
     // Sysex constant for switching to single mode
     public static final int SINGLE_MODE = 0x01;
@@ -3718,7 +3719,7 @@ public static final int ALL_ON = 4;
         // check the easy stuff -- out of range parameters
         super.revise();
 
-        String nm = model.get("name", "INIT    ");
+        String nm = model.get("name", EMPTY_PATCH_NAME);
         String newnm = revisePatchName(nm);
         if (!nm.equals(newnm))
             model.set("name", newnm);

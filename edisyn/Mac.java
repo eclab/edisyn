@@ -19,7 +19,6 @@ public class Mac
         {
         if (System.getProperty("os.name").contains("Mac")) 
             {
-			/*
 /// COMMENT THIS OUT FOR JAVA 8
             try
                 {
@@ -33,10 +32,9 @@ public class Mac
                 }
             catch (Exception e)
                 {
-                //fail quietly
+//fail quietly
                 }
 /// END COMMENT THIS OUT FOR JAVA 8
-			*/
             try 
                 {
                 Object app = Class.forName("com.apple.eawt.Application").getMethod("getApplication").invoke(null);

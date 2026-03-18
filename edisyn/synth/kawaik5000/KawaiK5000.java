@@ -6771,6 +6771,41 @@ public static final int ALL_ON = 4;
         setSendMIDI(midi);
         } 
         
+        
+    String buildKHarmonics(int val)
+    	{
+                loadKHarmonics();
+                String str = kHarmonicsNames[val-1];
+                String name = null;
+                String type = null;
+                if (str.startsWith("BASIC"))
+                	{
+                	name = str.substring(6);
+                	type = "&nbsp;";
+                	}
+                else if (str.startsWith("K5"))
+                	{
+                	name = str.substring(3);
+                	type = "K5";
+                	}
+                else if (str.startsWith("VS"))
+                	{
+                	name = str.substring(3);
+                	type = "VS";
+                	}
+                else if (str.startsWith("SQ"))
+                	{
+                	name = str.substring(3);
+                	type = "SQ-80";
+                	}
+                else if (str.startsWith("K3"))
+                	{
+                	name = str.substring(3);
+                	type = "K3";
+                	}
+                return "<html><center>&nbsp;&nbsp;&nbsp;" + val + "&nbsp;&nbsp;&nbsp;<br><font size=-3>" + name + "<br>" + type + "</font></center></html>";
+    	}
+        
     /** Adds the per-source "K5Harmonics" category. */    
     public JComponent addK5Harmonics(int source, Color color)
         {
@@ -6780,13 +6815,12 @@ public static final int ALL_ON = 4;
         HBox hbox = new HBox();
         VBox vbox = new VBox();
 
-        comp = new LabelledDial("Soft", this, "source" + source + "ksoftharmonics", color, 1, 496)
+        comp = new LabelledDial("Soft", this, "source" + source + "ksoftharmonics", color, 1, 657)
             {
             boolean mouseDown;
             public String map(int val) 
                 { 
-                loadKHarmonics();
-                return "<html><center>&nbsp;&nbsp;&nbsp;" + val + "&nbsp;&nbsp;&nbsp;<br><font size=-3>" + kHarmonicsNames[val-1] + "</font></center></html>";
+                return buildKHarmonics(val);
                 }
             public void didMouseDown()
                 {
@@ -6809,18 +6843,17 @@ public static final int ALL_ON = 4;
                     }
                 }
             };
-        ((LabelledDial)comp).setMaxExtent(512);
+        ((LabelledDial)comp).setMaxExtent(658);
         model.setStatus("source" + source + "ksoftharmonics", Model.STATUS_RESTRICTED);
                 
         hbox.add(comp);
         
-        comp = new LabelledDial("Loud", this, "source" + source + "kloudharmonics", color, 1, 496)
+        comp = new LabelledDial("Loud", this, "source" + source + "kloudharmonics", color, 1, 657)
             {
             boolean mouseDown;
             public String map(int val) 
                 { 
-                loadKHarmonics();
-                return "<html><center>&nbsp;&nbsp;&nbsp;" + val + "&nbsp;&nbsp;&nbsp;<br><font size=-3>" + kHarmonicsNames[val-1] + "</font></center></html>";
+                return buildKHarmonics(val);
                 }
             public void didMouseDown()
                 {
@@ -6843,7 +6876,7 @@ public static final int ALL_ON = 4;
                     }
                 }
             };
-        ((LabelledDial)comp).setMaxExtent(512);
+        ((LabelledDial)comp).setMaxExtent(658);
         model.setStatus("source" + source + "kloudharmonics", Model.STATUS_RESTRICTED);
 
         hbox.add(comp);
@@ -6885,13 +6918,12 @@ public static final int ALL_ON = 4;
         for(int i = 0; i < 4; i++)
             {
             final int _i = i;
-            comp = new LabelledDial("Level " + i, this, "source" + source + "klevelharmonics" + i, color, 1, 496)
+            comp = new LabelledDial("Level " + i, this, "source" + source + "klevelharmonics" + i, color, 1, 657)
                 {
                 boolean mouseDown;
                 public String map(int val) 
                     { 
-                    loadKHarmonics();
-                    return "<html><center>&nbsp;&nbsp;&nbsp;" + val + "&nbsp;&nbsp;&nbsp;<br><font size=-3>" + kHarmonicsNames[val-1] + "</font></center></html>";
+                	return buildKHarmonics(val);
                     }
                 public void didMouseDown()
                     {
@@ -6914,7 +6946,7 @@ public static final int ALL_ON = 4;
                         }
                     }
                 };
-            ((LabelledDial)comp).setMaxExtent(512);
+            ((LabelledDial)comp).setMaxExtent(658);
             model.setStatus("source" + source + "klevelharmonics" + i, Model.STATUS_RESTRICTED);
                                 
             hbox.add(comp);

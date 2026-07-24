@@ -1,6 +1,7 @@
 INSTALLATION
 
-Edisyn uses coremidi4j.  You don't need to install it, it's part of Edisyn's jar file and executable.
+Edisyn uses coremidi4j and jack-midi-spi.  You don't need to install them, they're
+part of Edisyn's jar file and executable.
 
 
 
@@ -13,5 +14,23 @@ file itself, in a subdirectory called "source".
 
 The CoreMidi4J distribution is maintained here:
 	https://github.com/DerekCook/CoreMidi4J
+
+I'd go there for the most recent copies.
+
+
+
+jack-midi-spi-1.0.0.jar, jnajack-1.5.1.jar, and jna-5.13.0.jar together add a
+javax.sound.midi Service Provider that exposes JACK/PipeWire MIDI ports as regular
+MIDI devices on Linux (see https://github.com/eclab/edisyn/issues/116). Edisyn does
+not modify these jars, it just links against them. All three are LGPL/Apache 2.0
+licensed. Note jack-midi-spi's own published pom.xml depends on org.jaudiolibs's
+official jnajack; that version is missing a ByteBuffer overload of
+JackMidi.eventWrite() that jack-midi-spi actually calls, causing a NoSuchMethodError
+and no MIDI data flowing. You must use the casa.squid fork of jnajack (1.5.1 or
+later) instead, which is what's vendored here.
+
+	https://github.com/squidcasa/jack-midi-spi
+	https://github.com/squidcasa/jnajack
+	https://github.com/java-native-access/jna
 
 I'd go there for the most recent copies.

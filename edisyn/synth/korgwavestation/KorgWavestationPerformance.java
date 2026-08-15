@@ -2257,7 +2257,7 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
         {
         JFrame frame = super.sprout();
         receiveCurrent.setEnabled(false);  // we can't request the "current" performance
-        writeTo.setEnabled(false);  		// we're supposed to be able to write patches with a workaround (see Developer FAQ), but EXECUTE_WRITE does not work
+        //writeTo.setEnabled(false);  		// we're supposed to be able to write patches with a workaround (see Developer FAQ), but EXECUTE_WRITE does not work
         return frame;
         }
 
@@ -5106,8 +5106,19 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
 
     public void afterWriteAllParametersHook()
     	{
-    	// This command is supposedly supposed to write current memory to its patch num
-		byte[] midi_mesg = paramBytes(EXECUTE_WRITE, 1);					// FIXME -- this does NOT WORK.  The Developer FAQ says it should, but it does nothing.  :-(
+    	// This command is supposed to write current memory to its patch num without requiring 
+		// byte[] midi_mesg = paramBytes(EXECUTE_WRITE, 1);					// FIXME -- this does NOT WORK.  The Developer FAQ says it should, but it does nothing.  :-(
+		byte[] midi_mesg = 
+			{ 
+			(byte)0xF0, 
+			0x42, 
+			(byte)(0x30 + getChannelOut()), 
+			0x28, 
+			0x1A, 												// 1A is the Performance Write command
+			(byte)edisynToWSBank[getModel().get("bank", 0)], 
+			(byte)getModel().get("number", 0), 
+			(byte)0xF7 
+			};
 		tryToSendSysex(midi_mesg);
     	}
 

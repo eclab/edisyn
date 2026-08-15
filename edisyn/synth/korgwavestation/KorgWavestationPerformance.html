@@ -13,9 +13,15 @@ This patch editor knows about bank sysex messages (which group together multiple
 
 Set your SR to receive sysex parameters, and also to receive program change and bank select commands, as well as All Notes Off.  Make sure that the MIDI channel set for the SR matches the one you're using in Edisyn.  You'll also want to make sure that you're at the Performance top-level menu, that is, both the "Perf" and "Edit" lights are lit, or else Edisyn may have trouble changing patches on request.
 
+<br><br><h3>About the Part Names</h3>
+
+There has been some confusion as to the names that appear next to the parts when you change the Patch Bank and Patch Number.  These names are the patch names (if the bank is a ROM bank) or the factory patch name (if the bank is in RAM).  Edisyn can't fetch and display the actual current patch names in RAM.
+
 <br><br><h3>Gotchas</h3>
 
 <ul>
+<p><li>Due to an unfortunate SR bug, the Wavestation SR cannot write patches in reponse to a MIDI command from Edisyn.  Instead, you will have to write the patch yourself.  To do this, first <b>Send to Current Patch</b>. Then press the <b>Write/Compare</b> button (which should be lit).  Specify where you want to write the patch to.  When it asks you if you want to write to the patch, press the <b>Write Compare</b> button again. [Supposedly there is a workaround for these bugs, but unfortunately it doesn't work].
+
 <li>Changing patches is grotesquely expensive, requiring six sysex messages to be reliable, and so is really, really slow.  As a result, downloading patches one by one is also extremely slow.  In the libary, I'd strongly suggest <b>Request Bank from Synth</b>.
 
 <p><li>The Wavestation doesn't have an option to allow Edisyn to send parameters in bulk to its current working memory, but this is an important Edisyn feature.  Edisyn instead sends bulk parameters by writing them to the first performance in the current bank, overwriting any existing performance there.  

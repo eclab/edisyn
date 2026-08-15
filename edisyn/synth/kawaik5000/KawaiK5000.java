@@ -2243,7 +2243,7 @@ public static final int ALL_ON = 4;
         hbox.add(comp);
 
         comp = new LabelledDial("Velo->Env", this, "source" + source + "envdcfvelodecay1time", color, 1, 127, 64);
-        ((LabelledDial)comp).addAdditionalLabel("Decay1 Time");
+        ((LabelledDial)comp).addAdditionalLabel("Decay 1 Time");
         hbox.add(comp);
 
         comp = new LabelledDial("Env Depth", this, "source" + source + "envdcfdepth", color, 1, 127, 64);
@@ -2346,7 +2346,7 @@ public static final int ALL_ON = 4;
         hbox.add(comp);
 
         comp = new LabelledDial("Velo->Env", this, "source" + source + "envdcavelodecay1time", color, 1, 127, 64);
-        ((LabelledDial)comp).addAdditionalLabel("Decay1 Time");
+        ((LabelledDial)comp).addAdditionalLabel("Decay 1 Time");
         hbox.add(comp);
 
         comp = new LabelledDial("Velo->Env", this, "source" + source + "envdcaveloreleasetime", color, 1, 127, 64);
@@ -2645,10 +2645,39 @@ public static final int ALL_ON = 4;
         }
 
 
+    public JMenuItem[] buildHarmonicMenu(int source, boolean soft)
+        {
+        JMenuItem waveMenu = new JMenuItem("Load Wave from WAV File...");
+        waveMenu.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                loadWaveAsHarmonics(source, soft);
+                }
+            });
+        JMenuItem harmonicsMenu = new JMenuItem("Load Harmonics from TXT File...");
+        harmonicsMenu.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                loadTextAsHarmonics(source, soft);
+                }
+            });
+        JMenuItem saveMenu = new JMenuItem("Save Harmonics to TXT File...");
+        saveMenu.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                saveHarmonicsToText(source, soft);
+                }
+            });
+        return new JMenuItem[] { waveMenu, harmonicsMenu, saveMenu };
+        }
+        
     /** Add the per-source Harmonics category, both Soft and Loud */
     public JComponent addHarmonicDisplay(int source, boolean soft, Color color)
         {
-        Category category = new Category(this, (soft ? "Soft " : "Loud ") + "Harmonics", color); // , buildHarmonicMenu(source, soft));
+        Category category = new Category(this, (soft ? "Soft " : "Loud ") + "Harmonics", color, buildHarmonicMenu(source, soft));
         category.makeDistributable("source" + source);
         category.makePasteable("source" + source);
 
@@ -2824,6 +2853,36 @@ public static final int ALL_ON = 4;
 
 
 
+    public JMenuItem[] buildHarmonicEnvelopeLevelMenu(int source, String part)
+        {
+        JMenuItem waveMenu = new JMenuItem("Load Wave from WAV File...");
+        waveMenu.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                loadWaveAsHarmonics(source, part);
+                }
+            });
+        JMenuItem harmonicsMenu = new JMenuItem("Load Harmonics from TXT File...");
+        harmonicsMenu.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                loadTextAsHarmonics(source, part);
+                }
+            });
+        JMenuItem saveMenu = new JMenuItem("Save Harmonics to TXT File...");
+        saveMenu.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                saveHarmonicsToText(source, part);
+                }
+            });
+        return new JMenuItem[] { waveMenu, harmonicsMenu, saveMenu };
+        }
+        
+
     // Are we currently changing the parameters from within an envelope display?
     boolean envelopeSetting;
     // Are we currently changing the highlight number parameter?
@@ -2856,7 +2915,11 @@ public static final int ALL_ON = 4;
           category = new Category(this, title, color, buildLevelMenu(source, partVal));
           else
         */
-        category = new Category(this, title, color);
+        if (partVal % 2 == 1)  // it's a level
+            category = new Category(this, title, color, buildHarmonicEnvelopeLevelMenu(source, part));
+        else
+            category = new Category(this, title, color);
+
         category.makeDistributable("source" + source);
         category.makePasteable("source" + source);
 
@@ -3320,33 +3383,35 @@ public static final int ALL_ON = 4;
         JMenu menu = new JMenu("K5000");
         menubar.add(menu);
 
-        JMenu loadWaveMenu = new JMenu("Load WAV file into...");
-        menu.add(loadWaveMenu);
+/*
+  JMenu loadWaveMenu = new JMenu("Load WAV file into...");
+  menu.add(loadWaveMenu);
         
-        for(int i = 1; i <= 6; i++)                     // note <=
-            {
-            final int _i = i;
-            JMenuItem harmonicsMenu = new JMenuItem("Source " + _i + " Soft Harmonics");
-            harmonicsMenu.addActionListener(new ActionListener()
-                {
-                public void actionPerformed(ActionEvent e)
-                    {
-                    loadWaveAsHarmonics(_i, true);
-                    }
-                });
-            loadWaveMenu.add(harmonicsMenu);
-            harmonicsMenu = new JMenuItem("Source " + _i + " Loud Harmonics");
-            harmonicsMenu.addActionListener(new ActionListener()
-                {
-                public void actionPerformed(ActionEvent e)
-                    {
-                    loadWaveAsHarmonics(_i, false);
-                    }
-                });
-            loadWaveMenu.add(harmonicsMenu);
-            if (i != 6) loadWaveMenu.addSeparator();
-            }
-    
+  for(int i = 1; i <= 6; i++)                     // note <=
+  {
+  final int _i = i;
+  JMenuItem harmonicsMenu = new JMenuItem("Source " + _i + " Soft Harmonics");
+  harmonicsMenu.addActionListener(new ActionListener()
+  {
+  public void actionPerformed(ActionEvent e)
+  {
+  loadWaveAsHarmonics(_i, true);
+  }
+  });
+  loadWaveMenu.add(harmonicsMenu);
+  harmonicsMenu = new JMenuItem("Source " + _i + " Loud Harmonics");
+  harmonicsMenu.addActionListener(new ActionListener()
+  {
+  public void actionPerformed(ActionEvent e)
+  {
+  loadWaveAsHarmonics(_i, false);
+  }
+  });
+  loadWaveMenu.add(harmonicsMenu);
+  if (i != 6) loadWaveMenu.addSeparator();
+  }
+*/
+        
 
         JMenu constrainMenu = new JMenu("Constrain Harmonics...");
                 
@@ -4094,6 +4159,11 @@ public static final int ALL_ON = 4;
     // We want empty patches to be marked as null, not as INIT banks, so we can save them out properly
     // in emitBank
     public boolean markEmptyBankPatchModelsAsNull() { return true; }
+
+    public boolean getSupportsNonSaveBankWrites()
+        {
+        return false;            // we can save a bank but not write it
+        }
 
     public boolean getSupportsBankSaves()
         {
@@ -5113,11 +5183,9 @@ public static final int ALL_ON = 4;
         }  
         
     // We do NOT write bank patches on the Mac, because Java, or CoreMidi4Java, at present cannot write sysex messages larger than 39844 on the Mac
-    public boolean getSupportsBankWrites() 
+    public boolean getSupportsBankWrites()   // see getSupportsNonSaveBankWrites
         {
-        return false;
-        //if (Style.isMac()) return false;
-        //else return true;
+        return true;
         }
         
     // We read bank patches
@@ -7035,6 +7103,117 @@ public static final int ALL_ON = 4;
         return f;
         }
 
+    /** A convenience method for saving a file. */
+    public File doSave(String title, final String[] filenameExtensions)
+        {
+        FileDialog fd = new FileDialog((JFrame)(SwingUtilities.getRoot(this)), title, FileDialog.SAVE);
+        fd.setFilenameFilter(new FilenameFilter()
+            {
+            public boolean accept(File dir, String name)
+                {
+                for(int i = 0; i < filenameExtensions.length; i++)
+                    if (StringUtility.ensureFileEndsWith(name, filenameExtensions[i]).equals(name))
+                        return true;
+                return false;
+                }
+            });
+
+        fd.setDirectory(getLastX("WavDirectory", getSynthClassName(), true));
+
+        disableMenuBar();
+        fd.setVisible(true);
+        enableMenuBar();
+        File f = null; // make compiler happy
+                
+        if (fd.getFile() != null)
+            {
+            try
+                {
+                String filename = StringUtility.ensureFileEndsWith(StringUtility.makeValidFilename(fd.getFile()), ".txt");
+                f = new File(fd.getDirectory(), filename);
+                setLastX(f.getCanonicalPath(), "WavDirectory", getSynthClassName(), true);
+                }                       
+            catch (Exception ex)
+                {
+                Synth.handleException(ex); 
+                }
+            }
+            
+        return f;
+        }
+
+    public void doSaveHarmonics(int[] harmonics)
+        {
+        File file = doSave("Save Harmonics...", new String[] { "txt" });
+        if (file == null) return;
+        
+        PrintWriter writer = null;
+        try 
+            {
+            writer = new PrintWriter(new FileWriter(file));
+            for(int i = 0; i < 64; i++)
+                {
+                writer.print("" + harmonics[i] + " ");
+                }
+            writer.println();
+            }
+        catch (IOException ex)
+            {
+            showSimpleError("File Error", "An error occurred on writing the file.");
+            return;
+            }
+        try
+            {
+            if (writer != null) writer.close();
+            }
+        catch (Exception ex) { }
+        }
+        
+    public int[] doLoadHarmonics()
+        {
+        File file = doLoad("Load Harmonics...", new String[] { "txt" });
+        if (file == null) return null;
+        
+        Scanner scan = null;
+        int[] harmonics = new int[128];
+        try 
+            {
+            scan = new Scanner(file);
+            for(int i = 0; i < 64; i++)
+                {
+                if (scan.hasNextInt())
+                    {
+                    harmonics[i] = scan.nextInt();
+                    if (harmonics[i] < 0 || harmonics[i] >= 128)
+                        {
+                        System.err.println(harmonics[i]);
+                        showSimpleError("Invalid Harmonics", "This file does not contain 128 integers, each between 0 and 127.");
+                        return null;
+                        }
+                    }
+                else
+                    {
+                    System.err.println("???" + i);
+                    showSimpleError("Invalid Harmonics", "This file does not contain 128 integers, each between 0 and 127.");
+                    return null;
+                    }
+                }
+            }
+        catch (IOException ex)
+            {
+            showSimpleError("File Error", "An error occurred on reading the file.");
+            return null;
+            }
+        try
+            {
+            if (scan != null) scan.close();
+            }
+        catch (Exception ex) { }
+
+        return harmonics;
+        }
+
+
     public static final int MAXIMUM_SAMPLES = 2048;
     public static final int WINDOW_SIZE = 65;
     public static final double MINIMUM_AMPLITUDE = 0.001;
@@ -7088,7 +7267,7 @@ public static final int ALL_ON = 4;
             }
         catch (Exception ex) { }
         
-        int desiredSampleSize = 128 * 2;                          // because we have up to 128 partials
+        int desiredSampleSize = 64 * 2;                          // because we have up to 64 partials
         int currentSampleSize = waves.length;
                                                                         
         /// Resample to our sampling rate
@@ -7125,10 +7304,72 @@ public static final int ALL_ON = 4;
         return finished;
         }
 
-    public static final int HARMONICS_BOTH = 0;
-    public static final int HARMONICS_1 = 1;
-    public static final int HARMONICS_2 = 2;
-    
+    public void saveHarmonicsToText(int source, boolean soft)
+        {
+        boolean currentMIDI = getSendMIDI();
+        setSendMIDI(false);
+        int[] harm = new int[64];
+        for(int i = 1; i <= 64; i++)                   // note <=
+            {
+            harm[i - 1] = model.get("source" + source + "hc" + (soft ? "0" : "1") + "s" + i);
+            }
+        doSaveHarmonics(harm);
+        setSendMIDI(currentMIDI);
+        repaint();
+        }
+
+    public void saveHarmonicsToText(int source, String part)
+        {
+        boolean currentMIDI = getSendMIDI();
+        setSendMIDI(false);
+        int[] harm = new int[64];
+        for(int i = 1; i <= 64; i++)                   // note <=
+            {
+            harm[i - 1] = 2 * model.get("source" + source + "hcenv" + part + "s" + i);
+            }
+        doSaveHarmonics(harm);
+        setSendMIDI(currentMIDI);
+        repaint();
+        }
+
+    public void loadTextAsHarmonics(int source, boolean soft)
+        {
+        boolean currentMIDI = getSendMIDI();
+        setSendMIDI(false);
+        int[] harm = doLoadHarmonics();
+        if (harm == null) 
+            {
+            setSendMIDI(currentMIDI);
+            return;
+            }
+                
+        for(int i = 1; i <= 64; i++)                   // note <=
+            {
+            model.set("source" + source + "hc" + (soft ? "0" : "1") + "s" + i, harm[i - 1]);
+            }
+        setSendMIDI(currentMIDI);
+        repaint();
+        }
+
+    public void loadTextAsHarmonics(int source, String part)
+        {
+        boolean currentMIDI = getSendMIDI();
+        setSendMIDI(false);
+        int[] harm = doLoadHarmonics();
+        if (harm == null) 
+            {
+            setSendMIDI(currentMIDI);
+            return;
+            }
+                        
+        for(int i = 1; i <= 64; i++)                   // note <=
+            {
+            model.set("source" + source + "hcenv" + part + "s" + i, harm[i - 1] / 2);
+            }
+        setSendMIDI(currentMIDI);
+        repaint();
+        }
+
     public void loadWaveAsHarmonics(int source, boolean soft)
         {
         boolean currentMIDI = getSendMIDI();
@@ -7140,11 +7381,32 @@ public static final int ALL_ON = 4;
             return;
             }
                 
-        for(int i = 1; i <= 128; i++)                   // note <=
+        for(int i = 1; i <= 64; i++)                   // note <=
             {
             int h = (int)(harm[i - 1] * 128);
             if (h == 128) h = 127;
             model.set("source" + source + "hc" + (soft ? "0" : "1") + "s" + i, h);
+            }
+        setSendMIDI(currentMIDI);
+        repaint();
+        }
+
+    public void loadWaveAsHarmonics(int source, String part)
+        {
+        boolean currentMIDI = getSendMIDI();
+        setSendMIDI(false);
+        double[] harm = doLoadWave();
+        if (harm == null) 
+            {
+            setSendMIDI(currentMIDI);
+            return;
+            }
+                
+        for(int i = 1; i <= 64; i++)                   // note <=
+            {
+            int h = (int)(harm[i - 1] * 64);
+            if (h == 64) h = 63;
+            model.set("source" + source + "hcenv" + part + "s" + i, h);
             }
         setSendMIDI(currentMIDI);
         repaint();
@@ -7251,59 +7513,61 @@ public static final int ALL_ON = 4;
    The purpose of this unchecked option is primarily to allow a user to negotiate with the disk.  For example,
    he can load a bank from the disk, write some patches into it, and then save the bank to the disk (or do a
    BACKUP to save the bank to the permanent store).  It should normally be kept checked.
+*/
+
 
 /*
-KAWAI K5000 ECCENTRICITIES
+  KAWAI K5000 ECCENTRICITIES
         
-The is a small documentation of some of the Kawai K5000's misfeatures and documentation errors.
+  The is a small documentation of some of the Kawai K5000's misfeatures and documentation errors.
         
-BANKS GO A, D, E, F, M.  Bank B is a modified general MIDI bank for the Kawai K5000W and Bank C is a fixed
-general MIDI bank for the K5000W.
+  BANKS GO A, D, E, F, M.  Bank B is a modified general MIDI bank for the Kawai K5000W and Bank C is a fixed
+  general MIDI bank for the K5000W.
         
-MISSING SEND-TO-CURRENT-PATCH SYSEX MESSAGE.  This is the biggest one.  The Kawai K5000, like the K5 and K1,
-does not have a send-to-current-patch message, which makes auditioning, syncing, resetting, randomizing, and
-lots of other tasks very difficult.
+  MISSING SEND-TO-CURRENT-PATCH SYSEX MESSAGE.  This is the biggest one.  The Kawai K5000, like the K5 and K1,
+  does not have a send-to-current-patch message, which makes auditioning, syncing, resetting, randomizing, and
+  lots of other tasks very difficult.
         
-EXCESSIVELY LONG BANK SYSEX MESSAGE.  The K5000's bank sysex dump mesages can be 100K or longer.  This is
-absurd: it takes forever, provides no feedback as to its current status, and worst of all, Java can't send
-messages that long.
+  EXCESSIVELY LONG BANK SYSEX MESSAGE.  The K5000's bank sysex dump mesages can be 100K or longer.  This is
+  absurd: it takes forever, provides no feedback as to its current status, and worst of all, Java can't send
+  messages that long.
         
-UNDOCUMENTED KAA AND KA1 FILES.  People have reverse-engineered these but Edisyn presently cannot support them.
+  UNDOCUMENTED KAA AND KA1 FILES.  People have reverse-engineered these but Edisyn presently cannot support them.
         
-HARMONIC ENVELOPE RATES ARE OPPOSITE OTHER ENVELOPE RATES.  Most envelopes have "times" which go 0...127.
-But harmonic envelope rates are "rates" and go 127...0.
+  HARMONIC ENVELOPE RATES ARE OPPOSITE OTHER ENVELOPE RATES.  Most envelopes have "times" which go 0...127.
+  But harmonic envelope rates are "rates" and go 127...0.
         
-SYSEX VALUES THAT SERVE NO PURPOSE.
+  SYSEX VALUES THAT SERVE NO PURPOSE.
         
-- MORF FLAG only serves to determine which screen is displayed
-- DRUM MARK is unknown
-- NO USE is some how different from DUMMY
+  - MORF FLAG only serves to determine which screen is displayed
+  - DRUM MARK is unknown
+  - NO USE is some how different from DUMMY
                 
-HARMONIC ENVELOPE LOOP PARAMETER DOCUMENTATION IS WRONG.   The documentation says that OFF is Level1=64, 
-Level2 =0; LP1 is Level1=0, Level2=64; LP2 is Level1=64, Level2=64, UNKNOWN is Level1=0, Level2=0.  This is
-WRONG.  The correct values are: OFF is Level1=0, Level2=0; LP1 is Level1=64, Level2=64, LP2 is Level1=0,
-Level2=64, UNKNOWN is Level1=64, Level2=0.
+  HARMONIC ENVELOPE LOOP PARAMETER DOCUMENTATION IS WRONG.   The documentation says that OFF is Level1=64, 
+  Level2 =0; LP1 is Level1=0, Level2=64; LP2 is Level1=64, Level2=64, UNKNOWN is Level1=0, Level2=0.  This is
+  WRONG.  The correct values are: OFF is Level1=0, Level2=0; LP1 is Level1=64, Level2=64, LP2 is Level1=0,
+  Level2=64, UNKNOWN is Level1=64, Level2=0.
         
-DCA VELO CURVE is shown with just three bits.  But it has values 0...11.
+  DCA VELO CURVE is shown with just three bits.  But it has values 0...11.
         
-CHANGE TO SINGLE MODE (p. 36) does not do anything.
+  CHANGE TO SINGLE MODE (p. 36) does not do anything.
         
-EFFECTS START AT 11.  Effects are separate from Reverb methods in the documentation and in the sysex messages.
-But they still start at 11 for no reason (there are 11 reverb methods, 0...10).
+  EFFECTS START AT 11.  Effects are separate from Reverb methods in the documentation and in the sysex messages.
+  But they still start at 11 for no reason (there are 11 reverb methods, 0...10).
         
-PATCHES ARE VARIABLE IN SIZE.  However banks are fixed to 128 patches and have a fixed amount of memory.  This
-means that (1) you typically can't put 128 patches in a bank, so (2) you have to have dummy patches filling the
-remaining slots.
+  PATCHES ARE VARIABLE IN SIZE.  However banks are fixed to 128 patches and have a fixed amount of memory.  This
+  means that (1) you typically can't put 128 patches in a bank, so (2) you have to have dummy patches filling the
+  remaining slots.
         
-SR WAVE 424 DUPLICATES SR WAVE 425.  At least in the documentation, where they're both called
-"423 > 64th Harmonics Cyclic".
+  SR WAVE 424 DUPLICATES SR WAVE 425.  At least in the documentation, where they're both called
+  "423 > 64th Harmonics Cyclic".
         
-NUMEROUS INCONSISTENCIES IN EFFECTS PARAMETERS.   Don't get me started.
+  NUMEROUS INCONSISTENCIES IN EFFECTS PARAMETERS.   Don't get me started.
         
-MORF LOOP.  The Morf Loop parameter in sysex appears to have off, lp1, and lp2 as options.  But on the unit
-the only options are off and "loop".
+  MORF LOOP.  The Morf Loop parameter in sysex appears to have off, lp1, and lp2 as options.  But on the unit
+  the only options are off and "loop".
         
-MORF EXECUTION.  You can execute a Morf from sysex.  But you cannot download the resulting Morf because the
-K5000 is lacking a Request Current Patch sysex message.
+  MORF EXECUTION.  You can execute a Morf from sysex.  But you cannot download the resulting Morf because the
+  K5000 is lacking a Request Current Patch sysex message.
         
 */                                  

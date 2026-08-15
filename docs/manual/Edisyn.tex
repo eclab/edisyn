@@ -145,7 +145,7 @@ Once you've picked a synthesizer, if you click {\it Open}, Edisyn will attempt t
 Edisyn will now build a patch editor for you and display it.  But unless you chose {\bf Disconnected Mode}, it'll first ask you to set up MIDI for this editor.  The dialog at right presents you with up to 6 fields (5 are shown here):
 
 \begin{itemize}
-\item The USB MIDI Device from which you will {\bf Receive} MIDI data sent by the synthesizer.  Here we are sending to a Tascam US-2x2 interface, which presents itself as a generic, nameless device. (BTW, if you're on a Mac and you don't like a generic name for your device, go to the Audio MIDI Setup application in the Utilities folder, double-click on the device, and change its name.)
+\item The USB MIDI Device from which you will {\bf Receive} MIDI data sent by the synthesizer.  Here we are receiving from the Tascam US-2x2 interface, which presents itself as a generic, nameless device. (BTW, if you're on a Mac and you don't want a generic name, go to the Audio MIDI Setup application in the Utilities folder, double-click on the device, and change its name.)
 \item The USB MIDI Device to which you will {\bf Send} MIDI to ultimately be sent to the synthesizer.  Here again we are sending to the Tascam US-2x2 device.
 \item The {\bf Channel} on which the synthesizer is listening.  (Here, 1).
 \end{itemize}
@@ -620,9 +620,6 @@ You can turn off automatic test notes by turning off {\bf Send Test Notes} or by
 \paragraph{\color{red}Hint} Often different patches vary in pitch: for example one patch may be pitched down an octave from another.  If yo morph between these two patches, the pitch will get interpolated between them well, and it's likely you don't want a G\# when you're playing a C.  To fix this, you should turn {\it off} the parameters related to pitch: see Section~\ref{restriction} (Restricting Exploration to Only Certain Parameters) to understand how to do that.
 
 
-
-\bump
-
 \begin{wrapfigure}{r}{3.6in}
 \vspace{-2em}\includegraphics[scale=0.27]{HillClimbPanel.png}
 \vspace{-3em}
@@ -667,6 +664,8 @@ The amount of mutation noise used when generating new patches is specified by th
 All the patches can be played by pressing their associated letter.  But additionally you can (at present) {\bf Climb} by pressing the Space Bar, {\bf Retry} by pressing the Return/Enter key, and {\bf Back Up} by pressing Backspace.
 
 \paragraph{\color{red}Hint} Some parameters dominate how a patch sounds, and not in a good way.  On the Yamaha DX7, mutating the Pitch Envelope, per-operator Fixed Frequency, and per-operator Detune will have bad effects on a sound.  On the Oberheim Matrix 6/6R/1000, it makes no sense to allow mutation to change the overall VCA1 Volume of the sound.   Pruning certain parameters so that they cannot be mutated by the Hill-Climber will reduce the amount of junk you have to listen to, and greatly improve your hill-climbing experience. See Section~\ref{restriction} (Restricting Exploration to Only Certain Parameters) to understand how to do this.
+
+\bump
 
 \subsection{Constricting}
 \label{constrict}
@@ -968,7 +967,7 @@ Patch slots come in different colors depending on the situation:
 \item {\it White}\quad Patches in locations which can be written to your synthesizer.
 \item {\it Pale Magenta}\quad Patches in locations which cannot be written to your synthesizer because they're {\bf read-only} on your synthesizer.  However you can save them to disk, and can load them from the disk or from your synth.
 \item {\it Light Gray with Red Lettering}\quad Patches in locations which cannot be written to nor read from your synthesizer because they're {\bf invalid patch locations.}  Why does Edisyn provide them then?  Because some synths have banks with varying lengths or present other unusual situations which violate the rectangular table structure used by Edisyn.  You can treat them as scratch locations.
-\item {\it Light Gray with Black Lettering}\quad Patches in locations which ought not be written to nor read from your synthesizer because they're {\bf ``inappropriate'' patch locations.}  You can still read/write the patches to disk while they are in these locations, but the synthesizer likely will not respond if you try to request or write them.  For example, the Proteus 2000 has four card slots which can be populated with any of 20 different read-only cards of patches.  If a card is in a slot, its ``bank'' is displayed in Pale Magenta as usual.  If a card is not in a slot, its ``bank'' is still shown, but is displayed as {\it inappropriate}: it's a real card type with legitimate patch locations, and it {\it could} be installed on a synth, so reading/writing its patches to the disk is reasonable, but accessing them on your synthesizer presently won't do anything (because it's not installed on your machine).  You can treat these spots as scratch locations if you like.
+\item {\it Light Gray with Black Lettering}\quad Patches in locations which ought not be written to nor read from your synthesizer because they're {\bf ``inappropriate'' patch locations.}  You can still read/write the patches to disk while they are in these locations, but the synthesizer likely will not respond if you try to request or upload them.  For example, the Proteus 2000 has four card slots which can be populated with any of 20 different read-only cards of patches.  If a card is in a slot, its ``bank'' is displayed in Pale Magenta as usual.  If a card is not in a slot, its ``bank'' is still shown, but is displayed as {\it inappropriate}: it's a real card type with legitimate patch locations, and it {\it could} be installed on a synth, so reading/writing its patches to the disk is reasonable, but accessing them on your synthesizer presently won't do anything (because it's not installed on your machine).  You can treat these spots as scratch locations if you like.
 \item {\it Dark Gray}\quad Patches you have selected.
 \item {\it Violet}\quad The drop location for drag-and-drop.
 \end{itemize}

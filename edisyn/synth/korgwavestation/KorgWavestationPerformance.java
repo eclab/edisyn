@@ -910,6 +910,19 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
     public static final int PA_BIT = 4;             // Parameter bit offset
 
 
+
+
+	/// BUGS IN DOCUMENTATION
+	///
+	/// Korg's Effects.txt says that STEREO PITCH SHIFT's dry/wet mix mod amount
+	/// should NOT be signed, tht is, its length is "8".  But in fact it is signed
+	/// and the length should be "-8".
+	///
+	/// Korg's Effects.txt says that STEREO FLANGER - EQ 1/2 and CROSSOVER FLANGER - EQ's low and high EQ (sign)
+	/// should be at position 5 in the parameter, but this makes no sense as the non-sign portion is only 4 long, 
+	/// so it must be at position 4.
+
+
     public static final int[][][] FX_PCL_LIST = new int[][][] {
             {
             //// HEADER INFORMATION [STORED HERE AS PCL 0]
@@ -1074,8 +1087,8 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             { 5, 0, -8, 8, 0 }, // p8 = resonance
             { 6, 0, 4, 9, 0 }, // p9 = low EQ
             { 6, 4, 4, 10, 0 }, // p10 = high EQ
-            { 3, 4, -1, 9, 5 }, // p9 = low EQ (sign)
-            { 3, 5, -1, 10, 5 }, // p10 = high EQ (sign)
+            { 3, 4, -1, 9, 4 }, // p9 = low EQ (sign)					 // BUG IN EFFECTS.TXT, which says that the parameter bit is 5 (it should be 4)
+            { 3, 5, -1, 10, 4 }, // p10 = high EQ (sign)				 // BUG IN EFFECTS.TXT, which says that the parameter bit is 5 (it should be 4)
             },
 
         // ENHANCER / EXCITER
@@ -1287,7 +1300,7 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             {
             { 0, 0, 8, 0, 0 }, // p0 = dry/wet mix
             { 1, 0, 8, 1, 0 }, // p1 = dry/wet mix mod source
-            { 2, 0, 8, 2, 0 }, // p2 = dry/wet mix mod amount
+            { 2, 0, -8, 2, 0 }, // p2 = dry/wet mix mod amount			// BUG IN EFFECTS.TXT, which says that the parameter length is 8, should be -8 as the mod amount is signed
             { 3, 0, 8, 3, 0 }, // p3 = pitch shift
             { 4, 0, 8, 4, 0 }, // p4 = delay left
             { 6, 0, 1, 4, 8 }, // p4 = delay left (high bit)
@@ -2232,6 +2245,7 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
         model.set("bank", 0);
 
         loadDefaults();
+
         }
                 
     
@@ -2243,6 +2257,7 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
         {
         JFrame frame = super.sprout();
         receiveCurrent.setEnabled(false);  // we can't request the "current" performance
+        writeTo.setEnabled(false);  		// we're supposed to be able to write patches with a workaround (see Developer FAQ), but EXECUTE_WRITE does not work
         return frame;
         }
 
@@ -3896,8 +3911,14 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
                 main.addLast(fx[fxnum - 1][FX_GROUP[type]]);
                 main.revalidate();
                 main.repaint();
-                resetFX(fxnum);
+                //resetFX(fxnum);
                 }
+                
+            public void userSelected(String key, Model model)
+            	{
+            	// The user hand-selected this, so I need to reset
+            	resetFX(fxnum);
+            	}
             };
         vbox = new VBox();
         vbox.add(comp);
@@ -3906,6 +3927,7 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
         main.addLast(fx[fxnum - 1][FX_GROUP[0]]);
                         
         category.add(main, BorderLayout.CENTER);
+
         return category;
         }
 
@@ -4623,6 +4645,9 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
 
     public int subparse(byte[] data, int pos)
         {
+        resetFX(1);
+        resetFX(2);
+
         data = denybblize(data, pos);
 
         // The Wavestation effects documentation is woefully incomplete.  It is missing
@@ -4744,7 +4769,7 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
                 {
                 int paramnum = FX_PCL_LIST[FX_GROUP[fxtype]][pcl][PA_NUM];
                 int index = -1;
-                for(int i = 1; i < FX_INDICES[FX_GROUP[fxtype]].length; i++)
+                for(int i = 0; i < FX_INDICES[FX_GROUP[fxtype]].length; i++)
                     {
                     if (FX_INDICES[FX_GROUP[fxtype]][i] == paramnum)
                         {
@@ -4760,8 +4785,15 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
                     {
                     String key = "fx" + fx + "class" + FX_GROUP[fxtype] + "param" + index;
                     model.set(key, 0);
+                    //System.err.println("Zeroing " + key);
                     }
                 }
+
+			// We are clipping out a chunk abs('bitlen') long out of the encoded byte, starting at 'bit'.  The encoded byte position is 'bytenum',
+			// optionally plus 8 if we're in the second FX, plus 5 to move beyond the global data.
+			// Then we are pasting it into the parameter number 'paramnum', starting at bit 'parambit'.  If 'bitlen' is negative,
+			// then we have to sign-fill the byte, otherwise it's zero-filled.
+
 
             // Now we load
             for(int pcl = 0; pcl < FX_PCL_LIST[FX_GROUP[fxtype]].length; pcl++)
@@ -4769,6 +4801,7 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
                 int bytenum = FX_PCL_LIST[FX_GROUP[fxtype]][pcl][ST_BYTE];
                 int bit = FX_PCL_LIST[FX_GROUP[fxtype]][pcl][ST_BIT];
                 int bitlen = FX_PCL_LIST[FX_GROUP[fxtype]][pcl][PA_LEN];
+                int abitlen = Math.abs(bitlen);
                 int paramnum = FX_PCL_LIST[FX_GROUP[fxtype]][pcl][PA_NUM];
                 int parambit = FX_PCL_LIST[FX_GROUP[fxtype]][pcl][PA_BIT];
 
@@ -4792,24 +4825,43 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
                     }
                 else
                     {
-                    // push to the bottom of the byte
+                    // push to the bottom of the int
+//System.err.println("-> Top was: " + (performance.fxPerfBlock[bytenum + 8 * (fx - 1) + 5] & 0xFF));
+//System.err.println("-> bit " + bit);                                                                                                                                
                     int top = ((performance.fxPerfBlock[bytenum + 8 * (fx - 1) + 5] & 0xFF) >>> bit);
-                    // now push to the top of the byte
-                    top = ((top << (8 - Math.abs(bitlen))) & 0xFF);
-                    // now push back to the bottom of the byte.  This dance fills everything above with zeros or sign extends
+//System.err.println("-> Down: " + top + "(" + (top & 0xFF) + ")");
+
+                    // now push to the top of the INT
+                    top = (top << (32 - abitlen));
+                    // now push back to the bottom of the int.  This dance fills everything above with zeros or sign extends
                     if (bitlen < 0)
-                        top = (((byte)top) >> (8 - Math.abs(bitlen)));          // notice the >> and +.  The (byte) forces sign extension of the byte.
+                        top = (top >> (32 - abitlen));			// Force sign extension of the int
                     else
-                        top = (top >>> (8 - bitlen));         // here we don't WANT a (byte), since we want zero extension
-                                
-                    // Now we're ready to position the data
+                        top = (top >>> (32 - bitlen));         // Force zero extension of the int
+                        
+//System.err.println("-> Down Top is: " + top);
+
+
+                    // Now we're ready to position the data (the model has already been zeroed)
                     String key = "fx" + fx + "class" + FX_GROUP[fxtype] + "param" + index;
 
-                    int fxVal = model.get(key);
-                    fxVal = fxVal | (top << parambit);
+                    //System.err.println("Setting " + key);
 
+                    // position top to the parambit position.  Note that the documentation says:
+                    // "Note that all parameters split into multiple bit fields (Mix 3&4 mod amount, for example) 
+					// must be packed in increasing bit order to ensure low order data is not overwritten by the 
+					// sign/zero extension process."   -- It appears that if there are multiple parts to write to
+					// form a SIGNED parameter, the earlier parts are all zero-extension, and only the top item
+					// is sign-extended (I hope).
+					top = (top << parambit);
+//System.err.println("-> Shifted Top is: " + top);
+//System.err.println("-> Model was: " + model.get(key) );
+                    int fxVal = (model.get(key) | top);
+                    
                     // Now set the data again
                     model.set(key, fxVal);
+//System.err.println("-> Model is: " + model.get(key) );
+//System.err.println();
                     }
                 }
 
@@ -4924,7 +4976,7 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
                     int parambit = FX_PCL_LIST[FX_GROUP[fxtype]][pcl][PA_BIT];
 
                     int index = -1;  
-                    for(int i = 1; i < FX_INDICES[FX_GROUP[fxtype]].length; i++)
+                    for(int i = 0; i < FX_INDICES[FX_GROUP[fxtype]].length; i++)
                         {
                         if (FX_INDICES[FX_GROUP[fxtype]][i] == paramnum)
                             {
@@ -4938,21 +4990,35 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
                         // System.err.println("Warning (KorgWavestationPerformance): PCL List entry not found: " + fxtype + ":" + FX_GROUP[fxtype] + ":" + paramnum + " (probably 'reserved').");
                         }
                     else
-                        {                     
+                        {
+                        // We are clipping out a chunk abs('bitlen') long out of parameter number 'paramnum', starting at bit 'parambit'.
+                        // Then we are pasting it into the encoded byte, starting at 'bit'.  The encoded byte position is 'bytenum',
+                        // optionally plus 8 if we're in the second FX, plus 5 to move beyond the global data.
+                        //
+                        // There's more complexity in rebuilding the number (involving sign extension etc.) but that's handled at parse time.
+                        
                         String key = "fx" + fx + "class" + FX_GROUP[fxtype] + "param" + index;
 
                         int top = model.get(key);
-                                                                                                                                
-                        // push to the bottom of the *int*, not byte
+//System.err.println("<- Top was: " + top + "(" + (top & 0xFF) + ")");
+//System.err.println("<- parambit " + parambit);                                                                                                                                
+                        // push to the bottom
                         top = (top >>> parambit);
-                        // now push to the top of the byte
+//System.err.println("<- Down: " + top + "(" + (top & 0xFF) + ")");
+                        // now push to the top of the byte, to add zeros to the bottom
                         top = ((top << (8 - Math.abs(bitlen))) & 0xFF);
-                        // Now push back to the bottom of the byte
-                        top = (top >>> (8 - Math.abs(bitlen)));
-                                                                                                
+//System.err.println("<- Up: " + top + "(" + (top & 0xFF) + ")");
+                    	// Now push back to the bottom of the byte, filling with zeros
+                        top = ((top & 0xFF) >>> (8 - Math.abs(bitlen)));
+//System.err.println("<- Top is: " + top + "(" + (top & 0xFF) + ")");
+//System.err.println("<- Shifted to: " + (top << bit) + "(" + ((top << bit) & 0xFF) + ")");
+
+//System.err.println("<- Previous: " + bytenum + " " + fx + " " + (performance.fxPerfBlock[bytenum + 8 * (fx - 1) + 5] & 0xFF));
                         // Now we're ready to position the data
                         performance.fxPerfBlock[bytenum + 8 * (fx - 1) + 5] = 
-                            (byte)(performance.fxPerfBlock[bytenum + 8 * (fx - 1) + 5] | ((top << bit) & 0xFF));
+                            (byte)((performance.fxPerfBlock[bytenum + 8 * (fx - 1) + 5] & 0xFF) | ((top << bit) & 0xFF));
+//System.err.println("<- Result: " + bytenum + " " + fx + " " + (performance.fxPerfBlock[bytenum + 8 * (fx - 1) + 5] & 0xFF));
+//System.err.println();
                         }
                     }
                 }
@@ -5025,10 +5091,25 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             return new Object[] { d };
         else
             {
-            // we'll attempt a write.  Assuming we did a PC first, then we might be okay because it does a switch to mulltiset and back to performance, see the developer FAQ about writing performances
-            return new Object[] { d, paramBytes(EXECUTE_WRITE, 1) };
+            // we'll attempt a write.  This will fail.
+            return new Object[] { d };
             }
         }
+
+	public boolean getShouldChangePatchAfterWrite() { return false; }
+	public boolean getSendsParametersAfterWrite() { return false; }
+	
+    public void beforeWriteAllParametersHook()
+    	{
+        changePatch(getModel());
+    	}
+
+    public void afterWriteAllParametersHook()
+    	{
+    	// This command is supposedly supposed to write current memory to its patch num
+		byte[] midi_mesg = paramBytes(EXECUTE_WRITE, 1);					// FIXME -- this does NOT WORK.  The Developer FAQ says it should, but it does nothing.  :-(
+		tryToSendSysex(midi_mesg);
+    	}
 
         
     public int getPauseAfterChangePatch() { return 300; }  // looks like 300 is about the minimum, else we get a sysex checksum error on the next sysex dump, probably because bytes were dropped
@@ -5037,15 +5118,18 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
         {
         // we need to do this in order to be able to write.  See Developer FAQ
         byte[] midi_mesg = paramBytes(MIDI_MODE, MULTISET_MIDI_MODE);
+        //byte[] midi_mesg = paramBytes(MULTI_MIDI_MODE, 1);
         tryToSendSysex(midi_mesg);
         
         // this too.
-        byte[] midi_mesg_2 = paramBytes(MIDI_MODE, PERFORMANCE_MIDI_MODE);
+		byte[] midi_mesg_2 = paramBytes(MIDI_MODE, PERFORMANCE_MIDI_MODE);
+        //byte[] midi_mesg_2 = paramBytes(PERF_MIDI_MODE, 1);
         tryToSendSysex(midi_mesg_2);
 
         // change the bank
         try {
-            tryToSendMIDI(new ShortMessage(ShortMessage.CONTROL_CHANGE, getChannelOut(), 0,  MIDI_BANKS[tempModel.get("bank", 0)]));
+            tryToSendMIDI(new ShortMessage(ShortMessage.CONTROL_CHANGE, getChannelOut(), 0,  0));
+            tryToSendMIDI(new ShortMessage(ShortMessage.CONTROL_CHANGE, getChannelOut(), 32,  MIDI_BANKS[tempModel.get("bank", 0)]));
             }
         catch (Exception e) { Synth.handleException(e); }
 

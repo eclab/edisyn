@@ -649,7 +649,7 @@ public class Library extends AbstractTableModel
         if (!synth.getSupportsBankWrites())
             {
             System.err.println("Library.emitAllAsBankSysex Error: emitBank() called on synthesizer " + synth.getSynthClassName() + ", which does not support bank sysex writes.");
-            return new Object[0][0];
+            return null;
             }
 
         Object[][] data = new Object[getNumBanks()][];
@@ -673,7 +673,7 @@ public class Library extends AbstractTableModel
         if (!synth.getSupportsBankWrites())
             {
             System.err.println("Library.emitBank Error: emitBank() called on synthesizer " + synth.getSynthClassName() + ", which does not support bank sysex writes.");
-            return new Object[0];
+            return null;
             }
 
         // If we want to emit the entire synth, we need to gather it.  We do this by calling
@@ -1303,7 +1303,7 @@ public class Library extends AbstractTableModel
         {
         try
             {
-            if (synth.getSupportsBankWrites())
+            if (synth.getSupportsNonSaveBankWrites())
                 {
                 if (bank != ALL_PATCHES && !isWriteableBank(bank))
                     {

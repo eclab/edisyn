@@ -2004,7 +2004,7 @@ public class RolandU110 extends Synth
       69      Distortion Guitar FB 12
       70      Picking Harmonics
 
-      SN-U110-08 - Synthesizer                [NOTE -- already available on the U-110 internal]
+      SN-U110-08 - Synthesizer                [NOTE -- available on the U-220 internal]
       0       Fantasia
       1       Bell Pad
       2       Syn Choir
@@ -2034,7 +2034,7 @@ public class RolandU110 extends Synth
       26      Spectrum 2
       27      N. Dance
 
-      SN-U110-09 - Guitar & Keyboards [NOTE -- already available on the U-110 internal]
+      SN-U110-09 - Guitar & Keyboards        [NOTE -- available on the U-220 internal]
       0       Bright EP 1
       1       Bright EP 2
       2       Syn. Vox 1

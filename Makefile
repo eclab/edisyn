@@ -26,7 +26,11 @@ jar:
 	cd _jarstage/jnajack ; jar -xf ../../libraries/jnajack-1.5.1.jar
 	cd _jarstage/jna ; jar -xf ../../libraries/jna-5.13.0.jar
 	cp -r _jarstage/coremidi4j/uk _jarstage/jackspi/casa _jarstage/jnajack/org _jarstage/jna/com _jarstage/merged/
-	cat _jarstage/coremidi4j/META-INF/services/javax.sound.midi.spi.MidiDeviceProvider _jarstage/jackspi/META-INF/services/javax.sound.midi.spi.MidiDeviceProvider > _jarstage/merged/META-INF/services/javax.sound.midi.spi.MidiDeviceProvider
+	# We deliberately do NOT register jack-midi-spi's provider as a standard javax.sound.midi
+	# SPI: merely loading casa.squid.jack.midi.JackMidiDeviceProvider attempts to contact a
+	# JACK server, which would then happen automatically for every user on every platform.
+	# Instead its classes are bundled (below) but only loaded by hand, opt-in, from Midi.java.
+	cp _jarstage/coremidi4j/META-INF/services/javax.sound.midi.spi.MidiDeviceProvider _jarstage/merged/META-INF/services/javax.sound.midi.spi.MidiDeviceProvider
 	mv _jarstage/merged/uk _jarstage/merged/org _jarstage/merged/com _jarstage/merged/casa _jarstage/merged/META-INF .
 	jar -cvfm install/edisyn.jar /tmp/manifest.add edisyn/synth/synths.txt edisyn/gui/wordlist.txt edisyn/Manufacturers.txt `find edisyn -name "*.class"` `find edisyn -name "*.init"` `find edisyn -name "*.html"` `find edisyn -name "*.png"` `find edisyn -name "*.jpg"` `find edisyn/synth/ -name "*.txt.gz"` `find edisyn/synth/ -name "n_*.txt"` edisyn/synth/kawaik5000/kharmonics.out uk/ org/ com/ casa/ META-INF/
 	echo jar -cvfm install/edisyn.jar /tmp/manifest.add edisyn/synth/synths.txt edisyn/gui/wordlist.txt edisyn/Manufacturers.txt `find edisyn -name "*.class"` `find edisyn -name "*.init"` `find edisyn -name "*.html"` `find edisyn -name "*.png"` `find edisyn -name "*.jpg"` `find edisyn/synth/ -name "*.txt.gz"` `find edisyn/synth/ -name "n_*.txt"` edisyn/synth/kawaik5000/kharmonics.out uk/ org/ com/ casa/ META-INF/

@@ -18,6 +18,14 @@ public class StringUtility
         }
 
 
+    /** Converts the filename and returns a new version as follows:
+        
+        - All path separator characters ('/' or '\') are changed to '-'
+        - If we're in Windows, '\\', ':', "*", "?", '"', '<', ">', and "|" are changed to '-'
+        - If we're on MacOS or Linux, '\\' is changed to "-"
+        - Control characters are changed to ' '
+    */
+        
     public static String makeValidFilename(String filename)
         {
         char[] f = filename.toCharArray();
@@ -61,12 +69,20 @@ public class StringUtility
             }
         return String.valueOf(f);
         }
-    
+        
+    /** Returns whether there is an integer in the String. */
+    public static boolean getHasFirstInt(String string)
+        {
+        return new Scanner(string).useDelimiter("\\D+").hasNextInt();
+        }
+
+    /** Returns the first integer in the String.  There can be non-integer characters before it. */
     public static int getFirstInt(String string)
         {
         return new Scanner(string).useDelimiter("\\D+").nextInt();
         }
 
+    /** Returns whether there is a second integer in the String.  There can be non-integer characters before the first integer. */
     public static boolean hasSecondInt(String string)
         {
         Scanner scan = new Scanner(string);
@@ -75,6 +91,7 @@ public class StringUtility
         return scan.hasNextInt();
         }
 
+    /** Returns the second integer in the String.  There can be non-integer characters before the first integer. */
     public static int getSecondInt(String string)
         {
         Scanner scan = new Scanner(string);
@@ -107,7 +124,9 @@ public class StringUtility
     final static int STATE_FIRST_STRING = 1;
     final static int STATE_NUMBER = 2;
     final static int STATE_FINISHED = 3;
-        
+    
+    /** Given a String that starts with a given preamble, remove from the preamble portion of
+        the String all the digit characters that appear in the preamble." */
     public static String reduceDigitsInPreamble(String name, String preamble)
         {
         if (!name.startsWith(preamble)) 
@@ -131,6 +150,8 @@ public class StringUtility
         return sb.toString();
         }
 
+    /** Given a String that starts with a given preamble, remove from the NON-preamble portion of
+        the String all digit characters." */
     public static String reduceAllDigitsAfterPreamble(String name, String preamble)
         {
         if (!name.startsWith(preamble)) 

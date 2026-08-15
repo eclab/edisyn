@@ -1214,8 +1214,8 @@ public abstract class Synth extends JComponent implements Updatable
         The default is to be the same as getPauseAfterChangePatch(); */
     public int getPauseAfterReceivePatch() { return getPauseAfterChangePatch(); }
 
-    /** Override this to return TRUE if, after a patch write, we need to change to the patch *again* so as to load it into memory. */
-    public boolean getShouldChangePatchAfterWrite() { return false; }
+    /** Override this to return FALSE if, after a patch write, we should NOT change the patch. */
+    public boolean getShouldChangePatchAfterWrite() { return true; }
     
     /** Override this to return TRUE if, after recieving a NON-MERGE patch from the synthesizer, and a NON-BATCH-DOWNLOAD patch,
         we should turn around and sendAllParameters() to it.
@@ -6340,7 +6340,8 @@ menubar.add(helpMenu);
         beforeWriteAllParametersHook();
         tryToSendMIDI(emitAll(model, false, false));
         simplePause(getPauseAfterWritePatch());
-        performChangePatch(model);
+        if (getShouldChangePatchAfterWrite())
+        	performChangePatch(model);
         if (getSendsParametersAfterWrite())
             sendAllParameters();
         afterWriteAllParametersHook();
@@ -9908,6 +9909,7 @@ menubar.add(helpMenu);
     // 2. BANK_CANCELLED    [cancelled]
     // 3. BANK_SAVED        [saved]
     // 4. BANK_UPLOADED     [uploaded to synth]
+    // 5. BANK_LIBRARIAN        [rerouted to the librarian]
         
     // If the value is #1, then you have to edit or merge the patch, and return whatever is appropriate.
     // If the value is BANK_CANCELLED, BANK_SAVED, BANK_UPLOADED, or BANK_LIBRARIAN (all < 0), then you should return PARSE_FAILED
@@ -9922,7 +9924,12 @@ menubar.add(helpMenu);
         this method simply returns BANK_CANCELLED.  If the user presses "Save Bank", then the
         method saves the bank to a file specified by the user, then returns BANK_SAVED.  If the
         user presses "Write Bank", then the method writes the bank to the synthesizer and returns
-        BANK_UPLOADED.  If the user selects a patch and then presses "Edit Patch" (the default),
+        BANK_UPLOADED.  If this method is called because we are loading a bank from disk, but
+        we are doing so because the librarian is trying to load the bank and so we shouldn't
+        show bank sysex options but instead should just let the librarian do its job, then this
+        method returns BANK_LIBRARIAN.
+        
+        <p>Otherwise, if the user selects a patch and then presses "Edit Patch" (the default),
         then this method returns the patch number (0....) in the bank.
     */
     
@@ -10340,13 +10347,22 @@ menubar.add(helpMenu);
     /** Return whether individual patches can be written.  Default is FALSE. */
     public boolean getSupportsPatchWrites() { return false; }
 
-    /** Return a list whether entire banks can be written.  Default is FALSE. */
+    /** Return whether entire banks can be written.  Default is getSupportsBankWrites(). 
+        This version is called by Library.writeBank() and is meant for rare situations
+        where emitting banks (for saving etc.) is possible but not writing to synths.  It
+        is meant solely to work around the K5000, which cannot write banks because the
+        written sysex exceeds some internal Java or Mac buffer and breaks.  However we
+        can SAVE a bank to disk.  But saving also uses the bank write machinery, so if
+        we set getSupportsBankWrites to FALSE, this also turns off bank saves.  */
+    public boolean getSupportsNonSaveBankWrites() { return getSupportsBankWrites(); }
+
+    /** Return whether entire banks can be written or saved.  Default is FALSE. */
     public boolean getSupportsBankWrites() { return false; }
 
-    /** Return a list whether entire banks can be saved.  Default is getSupportsBankWrites(). */
+    /** Return whether entire banks can be saved.  Default is getSupportsBankWrites(). */
     public boolean getSupportsBankSaves() { return getSupportsBankWrites(); }
 
-    /** Return a list whether entire banks can be read or downloaded.  Default is getSupportsBankWrites(). */
+    /** Return whether entire banks can be read or downloaded.  Default is getSupportsBankWrites(). */
     public boolean getSupportsBankReads() { return getSupportsBankWrites(); }
 
     /** Return whether individual patches can be written.  Default is TRUE. */

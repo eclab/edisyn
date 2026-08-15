@@ -902,10 +902,10 @@ public class Blank extends Synth
 
     public boolean getShouldChangePatchAfterWrite()
         { 
-        // Some synthesizers, such as the Kyra, write to patch memory but don't appear to
-        // overwrite temporary memory as well.  You can set this to true to send to temporary
-        // memory.
-        return false; 
+        // Some synthesizers, such as the Wavestation SR, need to go through an elaborate 
+        // dance in order to write patches, and changing the patch after the write ruins it,
+        // so they handle it specially.  Normally you'd always change the patch after a write by default.
+        return true; 
         }
 
     public int getVoiceMessageRoutedChannel(int incomingChannel, int synthChannel)

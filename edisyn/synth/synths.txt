@@ -75,6 +75,7 @@ edisyn.synth.rolandu110.RolandU110	Roland	Roland U-110
 edisyn.synth.rolandu220.RolandU220Timbre	Roland	Roland U-20 / 220 [Timbre]
 edisyn.synth.rolandu220.RolandU220Multi	Roland	Roland U-20 / 220 [Multi]
 edisyn.synth.rolandu220.RolandU220Drum	Roland	Roland U-20 / 220 [Drum]
+edisyn.synth.sequentialfourm.SequentialFourm	DSI / Sequential	Sequential Fourm
 edisyn.synth.sequentialprophetrev2.SequentialProphetRev2	DSI / Sequential	Sequential Prophet Rev2
 edisyn.synth.waldorfblofeld.WaldorfBlofeld	Waldorf	Waldorf Blofeld
 edisyn.synth.waldorfblofeld.WaldorfBlofeldMulti	Waldorf	Waldorf Blofeld [Multi]

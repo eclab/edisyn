@@ -6,6 +6,9 @@
 
 <p>This patch editor ought to work properly with the DX7-compatible family (DX7, TX816/TX216, TX7, Korg Volca FM, Dexed, much of the DX200, and likely synths such as the DX7 II).  It is likely to also work on the DX9 (see below).  The FS1R will also likely load patches from it. However it has only been tested on the Yamaha TX216, TX7, and Dexed.  Please let me know of any discrepancies you discover.
 
+<br><br><h3>About Dexed</h3>
+At present Mac Dexed implementations have a very serious bug (a race condition) which causes it to produce buzzes and harsh noise after receiving sysex messages about 35% of the time.  It's not Edisyn.  The easiest way to get around this is to use version 0.9.4 or earlier of Dexed: the bug appears as of 0.9.6.
+
 <br><br><h3>About the Korg Volca FM</h3>
 The Volca FM's patch load facility is <i>almost</i> compatible with the DX7: but for unfathomable reasons Korg repurposed the checksum byte in the DX7 single (not bank) patch sysex to instead refer to which operators are "turned on", a terrible idea. This means that single-patch uploads to the Volca, which have proper checksums, will "turn off" some of the Volca's operators, making sounds muddy and quiet.  To prevent this, check the "Korg Volca FM" box and Edisyn will send what the Volca wants in the checksum byte.  Be sure to keep that box unchecked <i>for any other DX7 compatible synthesizer</i> or they won't upload properly.  Note also that /u/pajen's <a href="https://www.reddit.com/r/volcas/comments/ezuzbt/volca_fm_firmware_109_unofficial_bugfix_and/">alternative Volca Firmware 1.09</a> has an option to turn off this misfeature, so you wouldn't check the box with that.  See <a href="https://www.reddit.com/r/volcas/comments/dj7f7v/volca_fm_firmware_108_unofficial_velocity_on_note/">here</a> for a discussion of it (in the 1.08 documentation).
 

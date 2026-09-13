@@ -10,7 +10,12 @@
 
 Set the MIDI ID to the same you'll be setting in Edisyn (typically 0).  Select a MIDI Channel to use on your synthesizer (perhaps channel 1) and set Edisyn's MIDI channel to that value.  Set the MIDI Mode to Omni or to Poly.  
 
-<br><br><h3>Uploading Pseudo-MPE</h3>
+<br><br><h3>Setting the Synthesizer</h3>
+
+This editor is designed to work with six different synthesizer types, including two types of the Orbit (V1 and V2) and both the Vintage Keys and Vintage Keys Plus.  You need to set the <b>Synthesizer Type</b>, which will change certain sysex elements, including (for example) the Instrument and Filter Type lists.  Also note that the three <b>Preset Links</b> (Link 1, 2, and 3) vary in their range depending on the synthesizer.  Normally the links range from Off to 639: but for the Vintage Keys, Vintage Keys Plus, and Orbit V1, the valid link settings only go to 511.
+
+
+ <br><br><h3>Uploading Pseudo-MPE</h3>
 
 These machines don't support MPE.  But we can fake it by pointing every single channel to the same patch and with the same settings: this can be taken advantage of by instruments such as the Linnstrument.   You need to make sure that your <b>MIDI Mode is set to "Multi"</b> to play them.
 

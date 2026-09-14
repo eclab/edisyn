@@ -1143,11 +1143,21 @@ public abstract class Synth extends JComponent implements Updatable
     /** Mods VAL to be between MIN and MAX INCLUSIVE and returns the result. */
     public int mod(int val, int min, int max)
         {
+        /// 3 ... 12
+        /// -1
+        /// newVal = -4
+        /// newTop = 10
+        /// 
+        
         int newVal = val - min;
         int newTop = max + 1 - min;
         newVal = val % newTop;
-        if (newVal < 0) newVal = newVal + newTop;
-        return newVal;
+        if (newVal < 0) 
+        	{
+        	newVal = newVal + newTop;
+        	newVal = val % newTop;
+        	}
+        return newVal + min;
         }
     
     /** Mods VAL to be between the MIN and MAX of the given key INCLUSIVE and returns the result. */
@@ -1733,6 +1743,10 @@ public abstract class Synth extends JComponent implements Updatable
                                             {
                                             // do nothing
                                             }
+                                        else if (handleUnknownSysex(data))
+                                        	{
+                                        	// do nothing
+                                        	}
                                         else    // Maybe it's a local Parameter change in sysex?
                                             {
                                             // we don't do undo here.  It's not great but PreenFM2 etc. would wreak havoc
@@ -8626,7 +8640,14 @@ menubar.add(helpMenu);
             showSimpleMessage("Device Inquiry Response", "A Synthesizer Responded to a Device Inquiry.\n\n" + response);
             return true;
             }
-        }               
+        }
+    
+    /** Called on the top-level synth panel if an unknown sysex message has arrived, to give it a chance to handle it,
+    	or return FALSE if it cannot.  The default is FALSE. */
+    public boolean handleUnknownSysex(byte[] data)   
+    	{
+    	return false;
+    	}      
                         
     // Private function used by doOpen(...) to issue an error when Edisyn doesn't know how to parse
     // the provided sysex data.

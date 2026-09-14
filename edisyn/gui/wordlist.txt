@@ -2767,7 +2767,6 @@ equivalent
 eric
 ericsson
 erik
-erotica
 error
 errors
 escape
@@ -7088,9 +7087,6 @@ seventh
 several
 severe
 sewing
-sexual
-sexuality
-sexually
 shade
 shades
 shadow
@@ -8111,8 +8107,6 @@ transactions
 transcript
 transcription
 transcripts
-transexual
-transexuales
 transfer
 transferred
 transfers
@@ -8132,7 +8126,6 @@ transparency
 transparent
 transport
 transportation
-transsexual
 trap
 trash
 trauma

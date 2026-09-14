@@ -623,6 +623,16 @@ public class Blank extends Synth
         // such things, implement this.  See also handleCCOrNRPNData() below.
         return; 
         }
+
+    public boolean handleUnknownSysex(byte[] data)   
+    	{
+    	// If an unknown sysex message arrives, and you are the top-level synth panel,
+    	// this method will be called to give you a chance to recognize and handle it
+    	// specially and return TRUE.  If you don't know what this message is, or 
+    	// cannot otherwise handle it, return FALSE (the default).  This method is NOT
+    	// called when unpacking sysex from the librarian or loading from file.
+    	return false;
+    	}      
     
     public void handleSynthCCOrNRPN(Midi.CCData data)
         {

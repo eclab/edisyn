@@ -45,21 +45,24 @@ import javax.swing.table.*;
 
 public class EmuProteus2000 extends Synth
     {
-    public static final String[] ROMS = { "Audity Xtreme", "Audity (A2000)", "Composer (P2000/P1000)", "Protozoa", 
+    public static final String[] ROMS = { 
+    	"Audity Xtreme", "Audity (A2000)", "Composer (P2000/P1000)", "Protozoa", 
         "Definitive B3", "Extreme Lead (XL1/Turbo)", "Sounds of the ZR", "Sounds of the ZR v2 (Halo)", 
         "World Expedition (Earth)", "Orchestral V1 (V2000)", "Orchestral V2 (V2000)", "Pure Phatt (Mo'Phatt/Turbo)", 
         "Extreme Lead V2 (XL7)", "Extreme Lead V3 (XK6)", "Pure Phatt 2 (MP7)", "Pure Phatt 3 (MK6)",
         "Ensoniq Project", "Composer V2 (P2500 CS)", "Proteus Pop (P2500/PK6)", "Vintage Collection (Pro/Keys)", 
         "Protean Drums (PX7)", "Holy Grail Piano", "Techno Synth Cons. Yard (Orbit3)", "Techno Synth Cons. Yard V2",
         "Siedlaczek", "Beat Garden (Orbit3)", "Shock Treatment" };
-    public static final String[] EFFECTIVE_ROM_IDS =   { "2", "3", "4", "5",
+    public static final String[] EFFECTIVE_ROM_IDS =   { 
+    	"2", "3", "4", "5",
         "6", "7", "8", "8a",
         "9", "10", "11", "13",
         "14", "14a", "15", "15a",
         "16", "17", "17a", "18",
         "19", "64", "65", "65a",
         "66", "67", "54" };
-    public static final int[] ROM_IDS =   { 2, 3, 4, 5,
+    public static final int[] ROM_IDS =   { 
+    	2, 3, 4, 5,
         6, 7, 8, 8,
         9, 10, 11, 13,
         14, 14, 15, 15,
@@ -82,7 +85,8 @@ public class EmuProteus2000 extends Synth
         "Ensoniq", "Composer V2", "Pop", "Vintage", 
         "Drums", "Piano", "Techno", "Techno V2",
         "Siedlaczek", "Beat", "Shock"  };
-    public static final String[] EFFECTIVE_ROM_AND_USER_IDS =   { "0", "2", "3", "4", "5",
+    public static final String[] EFFECTIVE_ROM_AND_USER_IDS =   { 
+    	"0", "2", "3", "4", "5",
         "6", "7", "8", "8a",
         "9", "10", "11", "13",
         "14", "14a", "15", "15a",
@@ -2042,6 +2046,14 @@ public class EmuProteus2000 extends Synth
         {
         if (data[5] == 0x0B)    // Generic Name Response
             {
+            if (data[6] == 0x07 || data[6] == 0x08)	// patterns and songs
+            	{
+            	if (!fromFile) // uh....
+            		{
+            		parsePatternOrSong(data);
+            		}
+            	return PARSE_SUCCEEDED;
+            	} 
             if (scribble != null)
                 {
                 try
@@ -2198,7 +2210,7 @@ public class EmuProteus2000 extends Synth
             // I have found that numPresetLayerEnvelope is reported to be one more than it actually is
             // -- but there's no mystery parameter.  It looks to be an error.  So we need to double-check
             // and bound these to be certain
-            int _numPresetCommonGeneral = 52;               // This does not include the name chars, so we subtract 16.  We'll leave 4 for CTRL13...16 just in case
+            int _numPresetCommonGeneral = 56;               // This does not include the name chars, so we subtract 16.  We'll leave 4 for CTRL13...16 just in case, totalling 56
             int _numReserved = 19;                      // I don't know if these are arpeggio or not: there are exactly 20 arp params...
             int _numPresetCommonEffects = 16;
             int _numPresetCommonLink = 20;
@@ -2696,7 +2708,7 @@ public class EmuProteus2000 extends Synth
 
         // Let's define some parameters
         int numNameBytes = 16;
-        int numPresetCommonGeneral = 52;                // This does not include the name chars, so we subtract 16.  We ALSO remove 4 params for CTRL13...16, which are not included in the dump
+        int numPresetCommonGeneral = 56;                // This does not include the name chars, so we subtract 16.       /////   We ALSO remove 4 params for CTRL13...16, which are not included in the dump
         int numReserved = 19;                   // I don't know if these are arpeggio or not: there are exactly 20 arp params...
         int numPresetCommonEffects = 16;
         int numPresetCommonLink = 20;
@@ -2775,8 +2787,10 @@ public class EmuProteus2000 extends Synth
             if (p.equals("---"))  // skip
                 continue;
                 
+            /*
             if (p.equals("ctrl13") || p.equals("ctrl14") || p.equals("ctrl15") || p.equals("ctrl16"))
                 continue;       // these are not included in the final dump
+            */
                                 
             // we're going to just upload ctrl12 ... ctrl15 as they are, since they're not used
             int v = model.get(p, 0);                            // "---" will be 0        -- this includes layer1fakeparam, layer2fakeparam, layer3fakeparam, layer4fakeparam
@@ -2997,7 +3011,6 @@ public class EmuProteus2000 extends Synth
     public void addProteusMenu()
         {
         JMenu menu = new JMenu("Proteus 2000");
-        menubar.add(menu);
 
         JMenuItem requestMenu = new JMenuItem("Request SIMM Configuration");
         requestMenu.addActionListener(new ActionListener()
@@ -3197,8 +3210,79 @@ public class EmuProteus2000 extends Synth
           }
           });
         */
-                
+        
+        menu.addSeparator();
+        
+        JMenuItem sequenceMenu = new JMenuItem("Upload Sequence...");
+        sequenceMenu.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+//                writeSequence();
+                }
+            });
+        menu.add(sequenceMenu);
+
+        menu.addSeparator();
+        
+		buildSongAndPatternMenus(menu);
+
+        menubar.add(menu);
         }
+
+    static final String[] MID_EXTENSIONS = { "mid", "MID", "midi", "MIDI" };
+
+/*
+
+      public void writeSequence()
+      {
+      FileDialog fd = new FileDialog((JFrame)(SwingUtilities.getRoot(this)), "Upload Sequence", FileDialog.LOAD);
+      fd.setFilenameFilter(new FilenameFilter()
+      {
+      public boolean accept(File dir, String name)
+      {
+      for(int i = 0; i < MID_EXTENSIONS.length; i++)
+      if (StringUtility.ensureFileEndsWith(name, MID_EXTENSIONS[i]).equals(name))
+      return true;
+      return false;
+      }
+      });
+
+      fd.setDirectory(getLastX("SequenceDirectory", getSynthClassName(), true));
+
+      disableMenuBar();
+      fd.setVisible(true);
+      enableMenuBar();
+      File f = null; // make compiler happy
+                
+      if (fd.getFile() != null)
+      {
+      try
+      {
+      f = new File(fd.getDirectory(), fd.getFile());
+      setLastX(f.getCanonicalPath(), "SequenceDirectory", getSynthClassName(), true);
+      }                       
+      catch (Exception ex)
+      {
+      Synth.handleException(ex); 
+      }
+      }
+            
+      if (f != null)
+      {
+      int len = (int)f.length();
+      if (len == 0) return;                   // uhm... file did not exist
+                
+      byte[] data = new byte[len];
+      new ObjectInputStream(new BufferedInputStream(new FileInputStream(f))).readFully(data);
+                
+                
+    	// we now send out the data
+    	
+    	
+		}
+	}
+*/
 
     int number;
     int romid;
@@ -4703,10 +4787,555 @@ public class EmuProteus2000 extends Synth
             table.addColumn(columns.remove(0));
             }
         }
+        
+    public static final int ID_SYNTH_UPLOAD = 0;
+    public static final int ID_ME_UPLOAD = 1;
+    public static final int ID_SYNTH_DOWNLOAD = 0;
+    public static final int ID_ME_DOWNLOAD = 1;
+    
+	boolean fileUploadWait = false;
+	boolean fileUploadCancel = false;
+	
+    boolean fileDownloading = false;
+    ArrayList<byte[]> fileDownload = new ArrayList<>();
+    
+	void doUploadFile()
+		{
+          FileDialog fd = new FileDialog((JFrame)(SwingUtilities.getRoot(this)), "Upload Song or Pattern", FileDialog.LOAD);
+		  fd.setFilenameFilter(new FilenameFilter()
+		  	{
+		  	public boolean accept(File dir, String name)
+		  		{
+		  		for(int i = 0; i < MID_EXTENSIONS.length; i++)
+		  			{
+		  			if (StringUtility.ensureFileEndsWith(name, MID_EXTENSIONS[i]).equals(name))
+		  				{
+		  				return true;
+		  				}
+		  			}
+				return false;
+				}
+			});
+
+		  fd.setDirectory(getLastX("SequenceDirectory", getSynthClassName(), true));
+
+		  disableMenuBar();
+		  fd.setVisible(true);
+		  enableMenuBar();
+		  File f = null; // make compiler happy
+			
+		  if (fd.getFile() != null)
+			  {
+			  try
+				  {
+				  f = new File(fd.getDirectory(), fd.getFile());
+				  setLastX(f.getCanonicalPath(), "SequenceDirectory", getSynthClassName(), true);
+				  }                       
+			catch (Exception ex)
+				  {
+				  Synth.handleException(ex); 
+				  }
+				}
+		
+		  if (f != null)
+		  	{
+		  	int len = (int)f.length();
+		  	if (len == 0) return;                   // uhm... file did not exist
+			
+		  	byte[] data = new byte[len];
+		  	
+		  	try
+		  		{
+			  	new ObjectInputStream(new BufferedInputStream(new FileInputStream(f))).readFully(data);
+			  	}
+			catch (IOException ex)
+				{
+			  	showSimpleError("File Error", "There was a problem reading the file.  This shouldn't happen, contact sean@cs.gmu.edu.");
+			  	return;
+				}
+		  	
+		  	JComboBox typeCombo = new JComboBox(new String[] { "Pattern", "Song" });
+		  	JTextField nameText = new JTextField("Untitled", 16);
+		  	JComboBox bankCombo = new JComboBox(new String[] { "0", "1", "2", "3", "4", "5", "6", "7" });
+		  	JTextField numberText = new JTextField("0");
+		  	
+		  	while(true)
+		  		{
+			  	int result = showMultiOption(this, new String[] { "Type", "Name", "Bank", "Number" },
+			  		new JComponent[] { typeCombo, nameText, bankCombo, numberText },
+			  		new String[] { "Upload", "Cancel" }, 0, "Upload MIDI File", "Where should the file go?");
+			  	if (result == 1) break;
+			  	else // upload
+			  		{
+			  		int number = -1;
+			  		try
+			  			{
+			  			number = Integer.parseInt(numberText.getText());
+			  			}
+			  		catch (NumberFormatException ex)
+			  			{
+			  			}
+			  		if (number < 0 || number > 127) 
+			  			{
+			  			showSimpleError("Invalid Number", "The slot number must be a value from 0 to 127");
+			  			continue;
+			  			}
+			  			
+					int bank = bankCombo.getSelectedIndex();
+			  		String name = nameText.getText() + "                ".substring(16);
+			  		name = (typeCombo.getSelectedIndex() == 0 ? "PAT" : "SNG") + "." + bank + "." + number + ":" + name;
+			  		byte[][] upload = MidiFileDump.dump(ID_ME_UPLOAD, ID_SYNTH_UPLOAD, MidiFileDump.FILE_TYPE_EMU_2500_MIDI, name, data);
+
+					ProgressMonitor monitor = new ProgressMonitor(this, "Upload Progress...", "", 0, upload.length - 1);
+
+    				if (fileUploadWait)
+    					{
+    					// We're stuck, try to cancel
+    					tryToSendSysex(MidiFileDump.handshake(ID_SYNTH_UPLOAD, MidiFileDump.MESSAGE_TYPE_HANDSHAKE_CANCEL, 0));
+    					}
+			  		
+			  		// initially let's just dump.  Would prefer not to pop up a task bar....
+			  		for(byte[] syx : upload)
+			  			{
+			  			while(true)
+			  				{
+							if (fileUploadWait)
+								{
+								monitor.setNote("The synth has asked us to wait.");
+								try { Thread.currentThread().sleep(100); }
+								catch (InterruptedException ex) { }
+								}
+							else if (fileUploadCancel)
+								{
+								monitor.setProgress(syx.length - 1);		// all done, should close the monitor
+								showSimpleError("File Upload Error", "The Proteus cancelled the upload.");
+								requestSongAndPatternNames(bank, number);
+								return;
+								}
+							else
+								{
+								monitor.setNote("");
+			  					tryToSendSysex(syx);
+			  					break;					// break out of the while, not the for
+								}
+							}
+			  			}
+					monitor.setProgress(upload.length - 1);		// all done, should close the monitor
+					requestSongAndPatternNames(bank, number);
+					return;
+			  		}
+				}
+			}
+		}
+
+
+	 JMenuItem[][] songs = new JMenuItem[8][128];
+	 JMenuItem[][] patterns = new JMenuItem[8][128];
+	 JMenu[] songsAndPatterns = new JMenu[16];
+	public static final String UNLOADED_SONG = "[Unloaded]";
+
+	void buildSongAndPatternMenus(JMenu proteusMenu)
+		{
+		JMenuItem refreshMenu = new JMenuItem("Load Pattern and Song Names");
+		refreshMenu.addActionListener(new ActionListener()
+			{
+            public void actionPerformed(ActionEvent e)
+                {
+                requestAllSongsAndPatternNames();
+                }
+			});	
+		proteusMenu.add(refreshMenu);
+		
+		for(int i = 0; i < 8; i++)
+			{
+			songsAndPatterns[i] = new JMenu("Request Pattern Bank " + i);
+			songsAndPatterns[i + 8] = new JMenu("Request Song Bank " + i);
+			for(int j = 0; j < 4; j++)
+				{
+				JMenu patternGroup = new JMenu("" + (j * 32) + "-" + (j * 32 + 31));
+				JMenu songGroup = new JMenu("" + (j * 32) + "-" + (j * 32 + 31));
+				songsAndPatterns[i].add(patternGroup);
+				songsAndPatterns[i + 8].add(songGroup);
+				for(int k = 0; k < 32; k++)
+					{
+					final int bank = i;
+					final int num = j * 32 + k;
+					
+					final JMenuItem patternItem = new JMenuItem(UNLOADED_SONG);
+					patterns[i][j * 32 + k] = patternItem;
+					patternGroup.add(patternItem);
+					patternItem.addActionListener(new ActionListener()
+						{
+						public void actionPerformed(ActionEvent e)
+							{
+							requestPatternOrSong(bank, num, patternItem.getText(), true);
+							}
+						});
+
+					final JMenuItem songItem = new JMenuItem(UNLOADED_SONG);
+					songs[i][j * 32 + k] = songItem;
+					songGroup.add(songItem);
+					songItem.addActionListener(new ActionListener()
+						{
+						public void actionPerformed(ActionEvent e)
+							{
+							requestPatternOrSong(bank, num, songItem.getText(), false);
+							}
+						});
+					}
+				}
+			}
+			
+		for(int i = 0; i < songsAndPatterns.length; i++)
+			{
+			proteusMenu.add(songsAndPatterns[i]);
+			}
+		}
+		
+	static final int MINIMUM_VALID_PAUSE_FOR_NAME_REQUEST = 7;
+	void requestSongAndPatternNames(int bank, int number)
+		{
+		byte id = (byte)(getID());
+		int index = bank * 128 + number;
+		byte lsb = (byte)(index & 127);
+		byte msb = (byte)(index >>> 7);
+		tryToSendSysex(new byte[] { (byte)0xF0, 0x18, 0x0F, id, 0x55, 0x0C, 0x07, lsb, msb, 0, 0, (byte)0xF7 });
+		simplePause(MINIMUM_VALID_PAUSE_FOR_NAME_REQUEST);
+		tryToSendSysex(new byte[] { (byte)0xF0, 0x18, 0x0F, id, 0x55, 0x0C, 0x08, lsb, msb, 0, 0, (byte)0xF7 });
+		simplePause(MINIMUM_VALID_PAUSE_FOR_NAME_REQUEST);
+		}
+
+	void requestAllSongsAndPatternNames()
+		{
+		for(int i = 0; i < 8; i++)
+			{
+			for(int j = 0; j < 128; j++)
+				{
+				requestSongAndPatternNames(i, j);
+				}
+			}
+		}
+		
+	void requestPatternOrSong(int bank, int number, String name, boolean isPattern)
+		{
+		String filename = (isPattern ? "PAT." : "SNG.") + bank + "." + number + ":" + (name + "                ".substring(16));
+    	tryToSendSysex(MidiFileDump.handshake(ID_SYNTH_DOWNLOAD, MidiFileDump.MESSAGE_TYPE_HANDSHAKE_CANCEL, 0));
+		tryToSendSysex(MidiFileDump.request(ID_ME_DOWNLOAD, ID_SYNTH_DOWNLOAD, MidiFileDump.FILE_TYPE_EMU_2500_MIDI, filename));
+    		// QUESTION: Can we load with just the number, bank, and if it's a pattern?
+    		// Do we actually need the filename?
+		fileDownload.clear();
+		fileDownloading = true;
+		}
+
+	void parsePatternOrSong(byte[] data)
+		{
+		int index = (data[7] | (data[8] << 7));
+		int bank = (index / 128);
+		int number = (index % 128);
+		
+		byte[] nameData = new byte[16];
+		System.arraycopy(data, 11, nameData, 0, 16);
+		String name = null;
+		
+		try
+			{
+			name = new String(nameData, "UTF-8");
+			}
+		catch (UnsupportedEncodingException ex)
+			{
+			return;		// this won't happen
+			}
+		
+		// hope this is in the Swing event thread...
+		if (data[6] == 0x07)	// pattern
+			{
+			patterns[bank][number].setText(name);
+			}
+		else					// song
+			{
+			songs[bank][number].setText(name);
+			}
+		}
+    
+    public boolean handleUnknownSysex(byte[] data)
+    	{
+    	int fileDumpMessageType = MidiFileDump.recognize(data, MidiFileDump.ANY_ID);
+    	
+    	if (fileDumpMessageType == MidiFileDump.MESSAGE_TYPE_NOT_FILE_DUMP)
+    		{
+    		return false;		// not a file dump message -- someone else needs to handle it
+    		}
+    	else if (!fileDownloading)
+    		{
+    		return true;		// I'm not receiving, dunno why I'm getting this stuff, but we indicate we understand it
+    		}
+    	else if (fileDumpMessageType == MidiFileDump.MESSAGE_TYPE_REQUEST)
+    		{
+    		return true;		// we understand it but don't handle it
+    		}
+    	else if (fileDumpMessageType == MidiFileDump.MESSAGE_TYPE_HEADER)
+    		{
+    		fileDownload.add(data);
+    		return true;
+    		}
+    	else if (fileDumpMessageType == MidiFileDump.MESSAGE_TYPE_HANDSHAKE_EOF)
+    		{
+			processDownloadedFile();
+			return true;
+    		}    	
+    	else if (fileDumpMessageType == MidiFileDump.MESSAGE_TYPE_HANDSHAKE_WAIT)
+    		{
+    		int receiver = MidiFileDump.getHandshakeReceiverID(data);
+    		if (receiver == ID_ME_UPLOAD)
+    			{
+    			// raise upload wait flag	-- do we need a lock on this?  It's a race condition
+    			fileUploadWait = true;
+				}
+    		return true;
+    		}
+    	else if (fileDumpMessageType == MidiFileDump.MESSAGE_TYPE_HANDSHAKE_CANCEL)
+    		{
+    		int receiver = MidiFileDump.getHandshakeReceiverID(data);
+    		if (receiver == ID_ME_UPLOAD)
+    			{
+    			// raise upload cancel flag	-- do we need a lock on this?  It's a race condition
+    			fileUploadWait = false;
+    			fileUploadCancel = true;
+    			}
+    		else
+    			{
+	    		// Cancel download
+    	        fileDownloadError("File Download Cancelled", "The Proteus 2500 cancelled file transfer.");
+    			}
+    		return true;
+    		}
+    	else if (fileDumpMessageType == MidiFileDump.MESSAGE_TYPE_HANDSHAKE_NAK)
+    		{
+    		return true;		// we understand it but don't handle it
+    		}
+    	else if (fileDumpMessageType == MidiFileDump.MESSAGE_TYPE_HANDSHAKE_ACK)
+    		{
+    		int receiver = MidiFileDump.getHandshakeReceiverID(data);
+    		if (receiver == ID_ME_UPLOAD)
+    			{
+    			// lower upload wait flag	-- do we need a lock on this?  It's a race condition
+    			fileUploadWait = false;
+				}
+    		return true;
+    		}
+    	else 		// it's a packet
+    		{
+    		fileDownload.add(data);
+    		return true;
+    		}
+    	}
+    	
+    void fileDownloadError(String title, String body)
+    	{
+				showSimpleError(title, body);
+				fileDownload.clear();
+    	}
+    
+    
+    void processDownloadedFile()
+    	{
+    		// Process Download!
+    		// 0. Is it empty?
+    		if (fileDownload.size() == 0)
+    			{
+				fileDownloadError("No File Sent", "The Proteus 2500 did not send a file.");
+				return;
+    			}
+    			
+    		// 1. Is there exactly one header, at the beginning?
+			if (MidiFileDump.recognize(fileDownload.get(0), MidiFileDump.ANY_ID) == MidiFileDump.MESSAGE_TYPE_HEADER)
+				{
+				for(int i = 1; i < fileDownload.size(); i++)
+					{
+					if (MidiFileDump.recognize(fileDownload.get(0), MidiFileDump.ANY_ID) == MidiFileDump.MESSAGE_TYPE_HEADER)
+						{
+						fileDownloadError("Bad File Sent", "The Proteus 2500 sent a corrupted file.");
+						return;
+						}
+					}
+				}
+			else
+				{
+				fileDownloadError("Bad File Sent", "The Proteus 2500 sent a corrupted file.");
+				return;
+				}
+				
+			// 2. Is there at least one packet?
+    		if (fileDownload.size() == 1)
+    			{
+				fileDownloadError("Bad File Sent", "The Proteus 2500 did not send any file packets.");
+				return;
+    			}
+    			
+    		// 3. Did we get consecutive packets?
+    		int nextNumber = 0;
+    		for(int i = 1; i < fileDownload.size(); i++)
+    			{
+    			if (nextNumber == MidiFileDump.getPacketNumber(fileDownload.get(i)))
+    				{
+    				nextNumber++;
+    				}
+    			else
+    				{
+					fileDownloadError("Bad File Sent", "The Proteus 2500 did not send all the file packets.");
+					return;
+    				}
+    			}
+    		
+    		// 4. Build the file.  Is it the right size and type?
+    		byte[] header = fileDownload.remove(0);
+			ArrayList<byte[]> payload = new ArrayList<>();
+			for(byte[] packet : fileDownload)
+				{
+				payload.add(MidiFileDump.getPacketData(packet));
+				}
+			byte[] file = MidiFileDump.concatenate(payload);
+			if (file.length != MidiFileDump.getHeaderLength(header))
+				{
+				fileDownloadError("Bad File Sent", "The Proteus 2500 did not send a file of the right length.");
+				return;
+				}
+			if (!MidiFileDump.FILE_TYPE_EMU_2500_MIDI.equals(MidiFileDump.getHeaderLength(header)))
+				{
+				fileDownloadError("Bad File Sent", "The Proteus 2500 did not send a file of the right type.");
+				return;
+				}
+		
+			// 5. Okay, I guess we're good...
+          	FileDialog fd = new FileDialog((Frame)(SwingUtilities.getRoot(EmuProteus2000.this)), "Save Song or Pattern...", FileDialog.SAVE);
+          	fd.setFile(MidiFileDump.getHeaderName(header) + ".mid");
+          	disableMenuBar();
+          	fd.setVisible(true);
+          	enableMenuBar();
+          	OutputStream out = null;
+          	if (fd.getFile() != null)
+          		{
+          		try
+          			{
+	          		out = new BufferedOutputStream(new FileOutputStream(new File(fd.getDirectory(), StringUtility.ensureFileEndsWith(fd.getFile(), ".mid"))));
+    	      		out.write(file);
+        	  		out.close();
+        	  		}
+        	  	catch (IOException ex)
+        	  		{
+        	  		try { if (out != null) out.close(); } catch (IOException ex2) { }
+        	  		}
+          		}
+          	
+          	// 6. Clean up
+			fileDownload.clear();
+			fileDownloading = false;
+		}
                 
     public boolean librarianTested() { return true; }
     }
 
+/*
+	HOW 2500 PATTERNS AND SONGS ARE UPLOADED AND DOWNLOADED
+	
+	The Emu documentation says nothing about how songs and patterns are uploaded and downloaded,
+	except that it's possible to download the somehow and the result is a MIDI file.  Much of 
+	this information was reverse engineered by Ray Bellis, whose Emu tools website 
+	(https://www.emu.tools) has a much better song/pattern loader than I could possibly do here!  
+	And many other goodies as well.
+	
+	Songs and Patterns are both transferred as MIDI files.  Songs must be MIDI Type 0 (SMF 0)
+	and Patterns must be MIDI Type 1 (SMF 1).  I have absolutely no idea why, it seems backward
+	to me.  The MIDI files are uploaded and downloaded using the MIDI File Dump standard.  I have
+	an implementation of it in Java in the "util" directory.
+	
+	In order to download a song or pattern, you have to do so by its name.  You can't just
+	request it by bank and number.  I don't know why: it's quite irritating.  This means you have
+	to first get the name stored in that bank and number.
+	
+	1. To request the name of a pattern or song, you use the E-Mu "Generic Name Request" (page 9
+	of the E-mu proteus 2000 specification), and you will get a "Generic Name" response.  Patterns
+	are type 7 and Songs are type 8 (this is not documented).  So for example to request Pattern 7
+	in the USER space (ROM ID 0) from a Proteus 2500 whose device ID is 0, you'd say
+	
+		F0 18 0F DeviceID=00 55 0C Type=07 PatternLSB=05 PatternMSB=00 ROMLSB=00 ROMMSB=00 F7
+		
+	The response you'd get back is something like
+	
+		F0 18 0F 00 55 0B 07 05 00 00 00 [ASCII STRING OF 16 CHARS] F7
+		
+	The name is NOT terminated with \0.  Normally it is padded at the end with spaces (0x20).
+	
+	There are 8 banks of 128 patterns, so I believe the Pattern number goes from 0 ... 128*8-1.
+	Same thing for the songs.
+	
+	2. To request a pattern or song, we use the MIDI File Dump Standard.  We start by making a request:
+	
+		F0 7E [SENDER ID] 07 03 [MY ID] [THE FOUR CHARACTERS "SMF "] [NAME] F7
+		
+		The SENDER ID is a number from 0 to 7E inclusive which will represent the 2500.  I suggest
+		using 00.  It has nothing to do with the 2500's Device ID.  It's just a temporary
+		designation you have made up here.  MY ID is a different number from 0 to 7E which
+		will represent YOU.  The four characters "SMF " are the hex values 53 4D 46 20.
+		The NAME is the name of the file as stored inside the 2500, formatted in a special way.
+		
+		This name will take the following form:
+		
+			PAT.bnk.num:FilenameWithPadding
+
+		or
+			
+			SEQ.bnk.num:FilenameWithPadding
+			
+				"bnk" will be a number 0 through 7
+		
+				"num" will be a number 0 through 127, with NO padded zeroes (it's not 004, it's 4).
+		
+				"FilenameWithPadding" will be the 16-character pattern or sequence name as displayed
+				in the machine, padded with spaces at the end if necessary.
+		
+		The 2500 will then respond with a series of sysex messages, including any of these six:
+		
+			- ACK:		F0 7E [MY ID] 7F pp F7			(ignore the pp, it means nothing)
+			- WAIT:		F0 7E [MY ID] 7C pp F7			(ignore the pp, it means nothing)
+			- CANCEL:	F0 7E [MY ID] 7D pp F7			(ignore the pp, it means nothing)
+			- EOF:		F0 7E [MY ID] 7B pp F7			(ignore the pp, it means nothing)
+			- HEADER:
+			
+		F0 7E [MY ID] 07 01 [SENDER ID] [THE FOUR CHARACTERS "SMF "] [LENGTHLSB] [LENGTHMSB] [NAME AS 16 CHARS] F7
+		
+		The name is NOT terminated with \0.  Normally it is padded at the end with spaces (0x20).
+		The LENGTH is the actual unencoded file length of the file.
+		
+			- DATA PACKET:
+			
+		F0 7E [MY ID] 07 02 [PACKETNUM] [DATALENGTH - 1] [DATA] [CHECKSUM] F7
+		
+		The packet number is, well, the packet number.  The "DATALENGTH - 1" is the data length
+		minus one for this packet.  For example, if the data is 128 long, then this will be 127.
+		Obviously this means you can't have a data length of 0.  The CHECKSUM is the XOR of all
+		the bytes after the F0 but before the CHECKSUM byte.
+		
+		Unfortunately you're not told how many packets are coming, nor even the encoded total
+		data length (the sum of all the packet data).  Just the UNENCODED length.
+		
+		The data in each packet is encoded in the classic high-bit-then-seven-low-bytes structure.
+		See the MIDI File Dump standard for information.  The file is just the concatenation of
+		all the package data payloads.  The result is a MIDI file.  It's not clear why the type
+		is "SMF " instead of "MIDI" (the standard type for MIDI files in the File Dump Standard)
+		but there you go.
+		
+	3. To send a pattern or song, you first send a HEADER, then a series of PACKETS, as described
+	   before, using the file NAME format ("PAT.bnk.num:FilenameAndPadding" or "SEQ.bnk.num:FilenameAndPadding").
+	   You must then encode the file into high-bit-then-seven-low-bytes chunks and then send them
+	   as a series of DATA PACKET messages. Note that the largest possible data packet data is 137,
+	   but this doesn't make much sense.  Instead send each chunk as 119 bytes of file data, encoded 
+	   into *136* bytes of packet data.  The last chunk can (and likely will be) shorter than 119 bytes.
+	   Then send an EOF as described before.
+	   
+	   If you are sending too fast, the 2500 may send you a WAIT.  You have to wait until it then
+	   responds with an ACK, a NAK (for some reason), or a CANCEL.
+*/
 
 
 

@@ -1,0 +1,29 @@
+<html><head></head>
+<body>
+
+<h1>Novation Bass Station II</h1> 
+<h2>Single Patch Editor</h2>
+
+<p>This patch editor should work with any Bass Station II with at least v4.14 firmware, though it might work with earlier versions.
+
+<br><br><h3>Sending and Receiving Individual Parameters</h3>
+At present Edisyn does not send nor receive individual parameters: the Bass Station II can only receive a subset of the parameters, and it does so through a tangle of CC and NRPN messages with arbitrary ranges.  You can set Edisyn to automatically send the entire patch to current memory after a bit after you have changed a parameter.  To do this, check both "Sends Real Time Changes" and "Auto-Sends Patches" under the "MIDI" menu. 
+
+<p>Perhaps later  Edisyn will support at least receiving real-time parameter changes.
+
+<br><br><h3>Bass Station Sysex Protocol</h3>
+
+Novation did not open their protocol, so it had to be reverse engineered.  Furthermore, the protocol is a mess, with highly inconsistent parameter ranges and settings throughout.  This made reverse engineering fun.  My reverse engineered spec is at the end of the NovationBassStation2.java in Edisyn's code repository.  It is based in part on work by Francois Georgy (francois.georgy@gmail.com) but has extensive revisions, bug fixes, and extensions.  You should use it rather than his version (presently available at https://github.com/francoisgeorgy/BS2-SysEx).
+
+<br><br><h3>Thanks</h3>
+Thanks to John Walter Howell-Sayers (jwhs26@gmail.com) for loaning me his unit.
+
+<p><table border=0 cellpadding=0 cellspacing=5>
+<tr>
+<td align=right>By&nbsp;&nbsp;&nbsp;
+<td><b>Sean Luke</b>
+<tr>
+<td align=right>Date&nbsp;&nbsp;&nbsp;
+<td>September 2026
+</table>
+

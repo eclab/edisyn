@@ -59,6 +59,7 @@ edisyn.synth.maudiovenom.MAudioVenomArp	M-Audio	M-Audio Venom [Arp]
 edisyn.synth.maudiovenom.MAudioVenomGlobal	M-Audio	M-Audio Venom [Global]
 edisyn.synth.maudiovenom.MAudioVenomMulti	M-Audio	M-Audio Venom [Multi]
 edisyn.synth.novationastation.NovationAStation	Novation	Novation A Station
+edisyn.synth.novationbassstation2.NovationBassStation2	Novation	Novation Bass Station II
 edisyn.synth.novationdstation.NovationDStation	Novation	Novation Drumstation / D Station
 edisyn.synth.novationsl.NovationSL	Novation	Novation ReMOTE SL
 edisyn.synth.oberheimmatrix1000.OberheimMatrix1000	Oberheim	Oberheim Matrix 6 / 6R / 1000
@@ -75,6 +76,7 @@ edisyn.synth.rolandu110.RolandU110	Roland	Roland U-110
 edisyn.synth.rolandu220.RolandU220Timbre	Roland	Roland U-20 / 220 [Timbre]
 edisyn.synth.rolandu220.RolandU220Multi	Roland	Roland U-20 / 220 [Multi]
 edisyn.synth.rolandu220.RolandU220Drum	Roland	Roland U-20 / 220 [Drum]
+edisyn.synth.sequentialfourm.SequentialFourm	DSI / Sequential	Sequential Fourm
 edisyn.synth.sequentialprophetrev2.SequentialProphetRev2	DSI / Sequential	Sequential Prophet Rev2
 edisyn.synth.waldorfblofeld.WaldorfBlofeld	Waldorf	Waldorf Blofeld
 edisyn.synth.waldorfblofeld.WaldorfBlofeldMulti	Waldorf	Waldorf Blofeld [Multi]

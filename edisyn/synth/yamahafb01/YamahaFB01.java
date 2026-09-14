@@ -1033,7 +1033,7 @@ public class YamahaFB01 extends Synth
             
             byte[] data2 = new byte[] {(byte)0xF0, 0x43, 0x75, (byte)(getID() - 1), (byte)(40 + EMIT_LOCATION),
                 0x40, (byte)(tempModel.get("number") + tempModel.get("bank") * 48), (byte)0xF7 };
-            return new Object[] { data, data2 };
+            return new Object[] { data, Integer.valueOf(1000), data2 };
             }
         }
 
@@ -1158,6 +1158,9 @@ public class YamahaFB01 extends Synth
         tryToSendMIDI(new Object[] { bankData, Integer.valueOf(getPauseAfterChangePatch()), numberData });
         }
     
+    /// TEST BY SEAN
+    public int getPauseAfterWritePatch() { return 1000; }
+
     /// FIXME -- don't know what this should be, let's say 150
     public int getPauseAfterChangePatch() { return 150; }
     
@@ -1343,14 +1346,16 @@ public class YamahaFB01 extends Synth
                 }
             }
 
-        Object[] div = DividedSysex.create(d);             // build the divided sysex
+        Object[] div = DividedSysex.create(d);                          // build the divided sysex
                 
         Object[] obj = new Object[49 * 2 - 1];                  // insert 120ms (100ms is the minimum) in-between the 49 divided packets
         for(int i = 0; i < d.length; i++)
             {
             obj[i * 2] = div[i];
             if (i < d.length - 1)           // we're not the last one
-                obj[i * 2 + 1] = Integer.valueOf(120);
+                {
+                obj[i * 2 + 1] = Integer.valueOf(1200);
+                }
             }
 
         return obj; 

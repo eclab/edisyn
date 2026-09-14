@@ -75,10 +75,10 @@ These operations are done through the pop-up menu by clicking directly on the ca
 <p><li><b>Save Harmonics to TXT File...</b>&nbsp;&nbsp;This saves harmonics to a ".txt" file suitable for loading later.
 </ul>
 
-<p>Edisyn's cut/past mechanism for categories only works within a single editor window.  So if you're trying to transfer certain harmonics from one editor window to another (from one patch to another), this is a way to do this: save the harmonics out and then load them in the other window.
+<p>Edisyn's cut/paste mechanism for categories only works within a single editor window.  So if you're trying to transfer certain harmonics from one editor window to another (from one patch to another), this is a way to do this: save the harmonics out and then load them in the other window.
 
 
-<h3>Display Updates</h3>
+<br><br><h3>Display Updates</h3>
 
 <p>Some parameter changes will update the display on the K5000 so you'll see them change.  Others will not.  It's fairly arbitrary.  If you update a patch (send to current patch, undo/redo, randomize, etc.), it the result will be displayed until you manually edit.  Notably, the patch name won't change on the screen: you can see the change by switching to a different patch, then going back.
 
@@ -104,7 +104,7 @@ These operations are done through the pop-up menu by clicking directly on the ca
 
 <P>There is also a "Show Morf" checkbox in Edisyn, because this is a parameter in your patch.  All it does is instruct your synthesizer to display the Morf screen instead of the regular harmonics screen.  It's not very useful.
 
-<br><br><h3>About the Harmonics Display</h3>
+<br><br><h3>About the Harmonics Displays</h3>
 
 <p>The "H" (Harmonics) tab and "E" (Envelopes) tab for each source contain a number of displays for harmonics, formants, and envelope settings.  You can set these by Number, then Value, or you can directly modify the sliders in the display itself.  If you change a slider, only that slider can be set.  But you can "scrub" across sliders by changing the slider with the right mouse button, or by holding down SHIFT and dragging.
 
@@ -131,9 +131,9 @@ These operations are done through the pop-up menu by clicking directly on the ca
 
 <p>Kawai K5000 bank downloads are gigantic, because Kawai K5000 patches are gigantic.  They are so large that Edisyn cannot use Kawai's bank upload sysex message to upload a bank, because it exceeds Java's MIDI message maximum size.  Instead, to upload a bank, Edisyn will attempt to erase the bank, then upload each patch in turn.  This isn't too slow, but it's suboptimal.  It will take a while for the unit to respond to all of them however: be patient.  It'll feel sluggish or hang until it's done.
 
-<p>Edisyn can <i>receive</i> the gigantic bank messages from the K5000.  It could take as much as a minute or more to download a bank using the fastest method, which is via "Request Bank from Synth".  However you will get NO feedback until the bank finally arrives.  Using "Download Bank from Synth" or "Download Selected Patches from Synth" is slower, but you'll see the patches as they arrive.
+<p>Edisyn can <i>receive</i> the gigantic bank messages from the K5000.  It could take as much as a minute or more to download a bank using the fastest method, which is via "Request Bank from Synth".  However you will get NO feedback until the bank finally arrives.  Using "Download Bank from Synth" or "Download Selected Patches from Synth" is slower, but you'll see the patches as they arrive, and you'll also have the opportunity to cancel early.
 
-<p>If you download using "Download Bank from Synth" or "Download Selected Patches from Synth", when Edisyn reaches the null patches at the end of the bank, the K5000 never tells Edisyn this: instead it just sits there, and Edisyn will sit there as well until it times out. At that point, you might want to manually press the "Stop Download" button in the Librarian.
+<p>HOWEVER, if you download using "Download Bank from Synth" or "Download Selected Patches from Synth", when Edisyn reaches the null patches at the end of the bank, the K5000 never tells Edisyn this: instead Edisyn will sit there as well until it times out. At that point, you might want to manually press the "Stop Download" button in the Librarian.
 
 <p>If you upload a <i>range</i> of patches, it'll probably work fine, but if it exceeds the available bank memory, it might fail.  The K5000 provides Edisyn with no way to <i>erase</i> one patch or a range of patches.  I'll try to improve things here. 
 

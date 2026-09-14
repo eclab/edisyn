@@ -42,6 +42,9 @@ public class MidiFileDump
     public static final String FILE_TYPE_BIN = "BIN ";
 /** MacOS 9.0 files stored as MacBinary */
     public static final String FILE_TYPE_MAC = "MAC ";
+/** The file format used by the E-Mu Proteus 2500 to indicate MIDI files */
+    public static final String FILE_TYPE_EMU_2500_MIDI = "SMF ";
+    
 
     public static final int MESSAGE_TYPE_NOT_FILE_DUMP = -1;
     public static final int MESSAGE_TYPE_REQUEST = -2;
@@ -51,6 +54,11 @@ public class MidiFileDump
     public static final int MESSAGE_TYPE_HANDSHAKE_CANCEL = -6;
     public static final int MESSAGE_TYPE_HANDSHAKE_NAK = -7;
     public static final int MESSAGE_TYPE_HANDSHAKE_ACK = -8;
+    public static final int MESSAGE_TYPE_NOT_FOR_YOU = -9;
+
+// Indicates you don't care about message IDs.
+  
+    public static final int ANY_ID = 0x7F;
 
 // These are the actual protocol command numbers
 
@@ -108,7 +116,9 @@ public class MidiFileDump
         
 /** Sends a handshake message to the SENDER with regard to (or following) a given data packet.    Returns the resulting sysex message to send.
     The message can be any of 
-    MESSAGE_TYPE_HANDSHAKE_EOF, MESSAGE_TYPE_HANDSHAKE_WAIT, MESSAGE_TYPE_HANDSHAKE_CANCEL, MESSAGE_TYPE_HANDSHAKE_NAK, or MESSAGE_TYPE_HANDSHAKE_ACK
+    MESSAGE_TYPE_HANDSHAKE_EOF, MESSAGE_TYPE_HANDSHAKE_WAIT, MESSAGE_TYPE_HANDSHAKE_CANCEL, MESSAGE_TYPE_HANDSHAKE_NAK, or MESSAGE_TYPE_HANDSHAKE_ACK.
+    Note that the packetNumber does not matter for MESSAGE_TYPE_HANDSHAKE_EOF, MESSAGE_TYPE_HANDSHAKE_CANCEL, and MESSAGE_TYPE_HANDSHAKE_WAIT,
+    so you can pass in any value from 0...127.
 */
     public static byte[] handshake(int senderID, int handshakeMessage, int packetNumber)
         {
@@ -116,7 +126,7 @@ public class MidiFileDump
         if (handshake < HANDSHAKE_EOF || handshake > HANDSHAKE_ACK) throw new RuntimeException("Invalid handshake message number " + handshakeMessage);
         if (senderID < 0 || senderID > 127) throw new RuntimeException("Invalid sender id " + senderID);
         if (packetNumber < 0 || packetNumber > 127) throw new RuntimeException("Invalid packet number " + packetNumber);
-        return new byte[] { (byte)0xF0, 0x7E, (byte)senderID, (byte)handshake, (byte)packetNumber, (byte)0xF7 };
+        return new byte[] { (byte)0xF0, 0x7E, (byte)senderID, (byte)handshake, (byte)(packetNumber & 0x7F), (byte)0xF7 };
         }
 
 /** Dumps a file from a sender (you) to a receiver. Returns an array of sysex message to send, one at a time.
@@ -236,20 +246,27 @@ public class MidiFileDump
 
 /** Returns the MIDI File Dump type corresponding to the provided midiMessage,
     or if the message represents a MIDI File Dump packet, returns the packet number
-    (a positive integer from 0 to 127 inclusive).
+    (a positive integer from 0 to 127 inclusive).  Pass in ANY_ID to myID to indicate that you will accept any
+    valid message even if it does not match your ID.
     The types are any of: MESSAGE_TYPE_HEADER, MESSAGE_TYPE_REQUEST, MESSAGE_TYPE_HANDSHAKE_EOF, MESSAGE_TYPE_HANDSHAKE_WAIT, 
     MESSAGE_TYPE_HANDSHAKE_CANCEL, MESSAGE_TYPE_HANDSHAKE_NAK, MESSAGE_TYPE_HANDSHAKE_ACK, or MESSAGE_TYPE_NOT_FILE_DUMP (if
-    the message is not recognized as a MIDI File Dump message)
+    the message is not recognized as a MIDI File Dump message).  Or MESSAGE_TYPE_NOT_FOR_YOU if the message receiver ID does
+    not match myID, the message receiver is not 0x7F ("any receiver"), and you did not pass in ANY_ID for myID.
 
     <p>Note that this code does not validate the proper length or format of the midiMessage, nor does it check for null. 
 */
-    public static int recognize(byte[] midiMessage)
+    public static int recognize(byte[] midiMessage, int myID)
         {
         if (midiMessage.length >= 6 &&
             midiMessage[0] == (byte)0xF0 &&
             midiMessage[1] == 0x7E &&
             midiMessage[3] == FILE_DUMP)
             {
+	        if (myID != ANY_ID && midiMessage[2] != myID && midiMessage[2] != 0x7F)
+				{
+				return MESSAGE_TYPE_NOT_FOR_YOU;
+				}
+
             switch (midiMessage[4])
                 {
                 case HEADER: return MESSAGE_TYPE_HEADER;
@@ -264,6 +281,20 @@ public class MidiFileDump
             }
         return MESSAGE_TYPE_NOT_FILE_DUMP;
         }
+        
+/** Assuming that the message provided is a MIDI File Dump Handshake message, returns the receiver ID. */
+	public static int getHandshakeReceiverID(byte[] handshakeMessage)
+		{
+		return handshakeMessage[2];
+		}
+		
+/** Assuming that the message provided is a MIDI File Dump Handshake message, returns the packet number. 
+	Note that the value of the packet number does not matter for EOF, WAIT, and CANCEL messages, and
+	can be any arbitrary value. */
+	public static int getHandshakePacketNumber(byte[] handshakeMessage)
+		{
+		return handshakeMessage[4];
+		}
 
 /** Assuming that the message provided is a MIDI File Dump Request message, returns the sender ID. */
     public static int getRequestSenderID(byte[] requestMessage)
@@ -359,7 +390,7 @@ public class MidiFileDump
             {
             checksum = checksum ^ (packetMessage[i] & 0xF7);
             }
-        return (checksum == (packetMessage[packetMessage.length - 2] & 0xF7));
+        return ((checksum & 0xF7) == (packetMessage[packetMessage.length - 2] & 0xF7));
         }
         
 /** Assuming that the message provided is a MIDI File Dump Packet message, returns the decoded packet data. */
@@ -426,9 +457,9 @@ public class MidiFileDump
         ArrayList<byte[]> data = new ArrayList();
         
         // test header
-        if (recognize(messages[0]) != MESSAGE_TYPE_HEADER) { System.err.println("Header not recognized, was: " + recognize(messages[0])); return; }
         if (senderID != getHeaderSenderID(messages[0])) { System.err.println("Header SenderID wrong, was: " + getHeaderSenderID(messages[0])); return; }
         if (receiverID != getHeaderReceiverID(messages[0])) { System.err.println("Header ReceiverID wrong, was: " + getHeaderReceiverID(messages[0])); return; }
+        if (recognize(messages[0], ANY_ID) != MESSAGE_TYPE_HEADER) { System.err.println("Header not recognized, was: " + recognize(messages[0], ANY_ID)); return; }
         if (!type.equals(getHeaderType(messages[0]))) { System.err.println("Header Type wrong, was: " + getHeaderType(messages[0])); return; }
         if (!name.equals(getHeaderName(messages[0]))) { System.err.println("Header Name wrong, was: " + getHeaderName(messages[0])); return; }
         if (payload.length != getHeaderLength(messages[0])) { System.err.println("Header Length wrong, was: " + getHeaderLength(messages[0])); return; }
@@ -436,7 +467,7 @@ public class MidiFileDump
         // test packet metadata
         for(int i = 1; i < messages.length; i++)
             {
-            if (recognize(messages[i]) != (i - 1) % 128) { System.err.println("Packet " + (i - 1) + " has wrong ID, was: " + recognize(messages[i])); return; }
+            if (recognize(messages[i], ANY_ID) != (i - 1) % 128) { System.err.println("Packet " + (i - 1) + " has wrong ID, was: " + recognize(messages[i], ANY_ID)); return; }
             if (receiverID != getPacketReceiverID(messages[i])) { System.err.println("Packet " + (i - 1) + " ReceiverID wrong, was: " + getPacketReceiverID(messages[i])); return; }
             if (!verifyPacketChecksum(messages[i])) { System.err.println("Packet " + (i - 1) + " Checksum invalid."); return; }
             data.add(getPacketData(messages[i]));

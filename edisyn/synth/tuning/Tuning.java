@@ -561,7 +561,7 @@ public class Tuning extends Synth
         int lsb = (detune & 127);
 
         return new byte[] { 
-            (byte) 0xF0, 0x7E, getID(), 0x08, 0x02, (byte) model.get("number"), 0x01, (byte) k,
+            (byte) 0xF0, 0x7F, getID(), 0x08, 0x02, (byte) model.get("number"), 0x01, (byte) k,
             (byte) base, (byte) msb, (byte) lsb, (byte) 0xF7 };
         }
 

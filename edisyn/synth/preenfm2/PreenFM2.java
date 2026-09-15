@@ -1520,45 +1520,45 @@ public class PreenFM2 extends Synth
     public void handleSynthCCOrNRPN(Midi.CCData data)
         {
         if (data.channel == getChannelOut())
-        	{
-			if (data.type == Midi.CCDATA_TYPE_NRPN)
-				{
-				if (isMerging())
-					{
-					// build a model if we haven't yet
-					if (mergeModel == null)
-						mergeModel = buildModel();
-						
-					// Load the key, they come in one at a time
-					String key = (String)(indexToParameter.get(Integer.valueOf(data.number)));
-					setSendMIDI(false);
-					handleNRPNParse(mergeModel, key, data.value, true);
-					setSendMIDI(true);
+            {
+            if (data.type == Midi.CCDATA_TYPE_NRPN)
+                {
+                if (isMerging())
+                    {
+                    // build a model if we haven't yet
+                    if (mergeModel == null)
+                        mergeModel = buildModel();
+                                                
+                    // Load the key, they come in one at a time
+                    String key = (String)(indexToParameter.get(Integer.valueOf(data.number)));
+                    setSendMIDI(false);
+                    handleNRPNParse(mergeModel, key, data.value, true);
+                    setSendMIDI(true);
 
-					// if it's the last key, do the merge
-					if (data.number == LAST_MERGE_NUMBER)
-						{
-						setSendMIDI(false);
-						Model backup = (Model)(model.clone());
-						model.recombine(random, mergeModel, getMutationKeys(), getMergeProbability());
-						if (!backup.keyEquals(getModel()))
-							undo.push(backup);
-						setSendMIDI(true);
-						sendAllParameters();
-						setMergeProbability(0.0);
-						mergeModel = null;
-						}
-					}
-				else
-					{
-					setSendMIDI(false);
-					mergeModel = null;
-					String key = (String)(indexToParameter.get(Integer.valueOf(data.number)));
-					handleNRPNParse(key, data.value, true);
-					setSendMIDI(true);
-					}
-				}
-			}
+                    // if it's the last key, do the merge
+                    if (data.number == LAST_MERGE_NUMBER)
+                        {
+                        setSendMIDI(false);
+                        Model backup = (Model)(model.clone());
+                        model.recombine(random, mergeModel, getMutationKeys(), getMergeProbability());
+                        if (!backup.keyEquals(getModel()))
+                            undo.push(backup);
+                        setSendMIDI(true);
+                        sendAllParameters();
+                        setMergeProbability(0.0);
+                        mergeModel = null;
+                        }
+                    }
+                else
+                    {
+                    setSendMIDI(false);
+                    mergeModel = null;
+                    String key = (String)(indexToParameter.get(Integer.valueOf(data.number)));
+                    handleNRPNParse(key, data.value, true);
+                    setSendMIDI(true);
+                    }
+                }
+            }
         }
         
     public static String getSynthName() { return "PreenFM2"; }

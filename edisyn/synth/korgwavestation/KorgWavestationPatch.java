@@ -2557,32 +2557,32 @@ public class KorgWavestationPatch extends KorgWavestationAbstract
         return patch;
         }
 
- 	public boolean getShouldChangePatchAfterWrite() { return false; }
-	public boolean getSendsParametersAfterWrite() { return false; }
-	
+    public boolean getShouldChangePatchAfterWrite() { return false; }
+    public boolean getSendsParametersAfterWrite() { return false; }
+        
     public void beforeWriteAllParametersHook()
-    	{
+        {
         changePatch(getModel());
-    	}
+        }
 
     public void afterWriteAllParametersHook()
-    	{
-    	byte[] midi_mesg = 
-			{ 
-			(byte)0xF0, 
-			0x42, 
-			(byte)(0x30 + getChannelOut()), 
-			0x28, 
-			0x11, 												// 11 is the Patch Write command
-			(byte)edisynToWSBank[getModel().get("bank", 0)], 
-			(byte)getModel().get("number", 0), 
-			(byte)0xF7 
-			};
-		tryToSendSysex(midi_mesg);
-    	}
+        {
+        byte[] midi_mesg = 
+            { 
+            (byte)0xF0, 
+            0x42, 
+            (byte)(0x30 + getChannelOut()), 
+            0x28, 
+            0x11,                                                                                           // 11 is the Patch Write command
+            (byte)edisynToWSBank[getModel().get("bank", 0)], 
+            (byte)getModel().get("number", 0), 
+            (byte)0xF7 
+            };
+        tryToSendSysex(midi_mesg);
+        }
 
 
-   public int getPauseAfterChangePatch() { return 300; }  // looks like 300 is about the minimum for a standard PC (see Performance.java); may be too much here.
+    public int getPauseAfterChangePatch() { return 300; }  // looks like 300 is about the minimum for a standard PC (see Performance.java); may be too much here.
 
     /// WAVE_MUTE seems to be based on bits:
     /// Bits DCBA (that is, values 0...15)

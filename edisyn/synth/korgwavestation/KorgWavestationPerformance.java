@@ -912,15 +912,15 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
 
 
 
-	/// BUGS IN DOCUMENTATION
-	///
-	/// Korg's Effects.txt says that STEREO PITCH SHIFT's dry/wet mix mod amount
-	/// should NOT be signed, tht is, its length is "8".  But in fact it is signed
-	/// and the length should be "-8".
-	///
-	/// Korg's Effects.txt says that STEREO FLANGER - EQ 1/2 and CROSSOVER FLANGER - EQ's low and high EQ (sign)
-	/// should be at position 5 in the parameter, but this makes no sense as the non-sign portion is only 4 long, 
-	/// so it must be at position 4.
+    /// BUGS IN DOCUMENTATION
+    ///
+    /// Korg's Effects.txt says that STEREO PITCH SHIFT's dry/wet mix mod amount
+    /// should NOT be signed, tht is, its length is "8".  But in fact it is signed
+    /// and the length should be "-8".
+    ///
+    /// Korg's Effects.txt says that STEREO FLANGER - EQ 1/2 and CROSSOVER FLANGER - EQ's low and high EQ (sign)
+    /// should be at position 5 in the parameter, but this makes no sense as the non-sign portion is only 4 long, 
+    /// so it must be at position 4.
 
 
     public static final int[][][] FX_PCL_LIST = new int[][][] {
@@ -1087,8 +1087,8 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             { 5, 0, -8, 8, 0 }, // p8 = resonance
             { 6, 0, 4, 9, 0 }, // p9 = low EQ
             { 6, 4, 4, 10, 0 }, // p10 = high EQ
-            { 3, 4, -1, 9, 4 }, // p9 = low EQ (sign)					 // BUG IN EFFECTS.TXT, which says that the parameter bit is 5 (it should be 4)
-            { 3, 5, -1, 10, 4 }, // p10 = high EQ (sign)				 // BUG IN EFFECTS.TXT, which says that the parameter bit is 5 (it should be 4)
+            { 3, 4, -1, 9, 4 }, // p9 = low EQ (sign)                                    // BUG IN EFFECTS.TXT, which says that the parameter bit is 5 (it should be 4)
+            { 3, 5, -1, 10, 4 }, // p10 = high EQ (sign)                                 // BUG IN EFFECTS.TXT, which says that the parameter bit is 5 (it should be 4)
             },
 
         // ENHANCER / EXCITER
@@ -1300,7 +1300,7 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             {
             { 0, 0, 8, 0, 0 }, // p0 = dry/wet mix
             { 1, 0, 8, 1, 0 }, // p1 = dry/wet mix mod source
-            { 2, 0, -8, 2, 0 }, // p2 = dry/wet mix mod amount			// BUG IN EFFECTS.TXT, which says that the parameter length is 8, should be -8 as the mod amount is signed
+            { 2, 0, -8, 2, 0 }, // p2 = dry/wet mix mod amount                  // BUG IN EFFECTS.TXT, which says that the parameter length is 8, should be -8 as the mod amount is signed
             { 3, 0, 8, 3, 0 }, // p3 = pitch shift
             { 4, 0, 8, 4, 0 }, // p4 = delay left
             { 6, 0, 1, 4, 8 }, // p4 = delay left (high bit)
@@ -2257,7 +2257,7 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
         {
         JFrame frame = super.sprout();
         receiveCurrent.setEnabled(false);  // we can't request the "current" performance
-        //writeTo.setEnabled(false);  		// we're supposed to be able to write patches with a workaround (see Developer FAQ), but EXECUTE_WRITE does not work
+        //writeTo.setEnabled(false);            // we're supposed to be able to write patches with a workaround (see Developer FAQ), but EXECUTE_WRITE does not work
         return frame;
         }
 
@@ -3915,10 +3915,10 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
                 }
                 
             public void userSelected(String key, Model model)
-            	{
-            	// The user hand-selected this, so I need to reset
-            	resetFX(fxnum);
-            	}
+                {
+                // The user hand-selected this, so I need to reset
+                resetFX(fxnum);
+                }
             };
         vbox = new VBox();
         vbox.add(comp);
@@ -4789,10 +4789,10 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
                     }
                 }
 
-			// We are clipping out a chunk abs('bitlen') long out of the encoded byte, starting at 'bit'.  The encoded byte position is 'bytenum',
-			// optionally plus 8 if we're in the second FX, plus 5 to move beyond the global data.
-			// Then we are pasting it into the parameter number 'paramnum', starting at bit 'parambit'.  If 'bitlen' is negative,
-			// then we have to sign-fill the byte, otherwise it's zero-filled.
+            // We are clipping out a chunk abs('bitlen') long out of the encoded byte, starting at 'bit'.  The encoded byte position is 'bytenum',
+            // optionally plus 8 if we're in the second FX, plus 5 to move beyond the global data.
+            // Then we are pasting it into the parameter number 'paramnum', starting at bit 'parambit'.  If 'bitlen' is negative,
+            // then we have to sign-fill the byte, otherwise it's zero-filled.
 
 
             // Now we load
@@ -4835,7 +4835,7 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
                     top = (top << (32 - abitlen));
                     // now push back to the bottom of the int.  This dance fills everything above with zeros or sign extends
                     if (bitlen < 0)
-                        top = (top >> (32 - abitlen));			// Force sign extension of the int
+                        top = (top >> (32 - abitlen));                  // Force sign extension of the int
                     else
                         top = (top >>> (32 - bitlen));         // Force zero extension of the int
                         
@@ -4849,11 +4849,11 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
 
                     // position top to the parambit position.  Note that the documentation says:
                     // "Note that all parameters split into multiple bit fields (Mix 3&4 mod amount, for example) 
-					// must be packed in increasing bit order to ensure low order data is not overwritten by the 
-					// sign/zero extension process."   -- It appears that if there are multiple parts to write to
-					// form a SIGNED parameter, the earlier parts are all zero-extension, and only the top item
-					// is sign-extended (I hope).
-					top = (top << parambit);
+                    // must be packed in increasing bit order to ensure low order data is not overwritten by the 
+                    // sign/zero extension process."   -- It appears that if there are multiple parts to write to
+                    // form a SIGNED parameter, the earlier parts are all zero-extension, and only the top item
+                    // is sign-extended (I hope).
+                    top = (top << parambit);
 //System.err.println("-> Shifted Top is: " + top);
 //System.err.println("-> Model was: " + model.get(key) );
                     int fxVal = (model.get(key) | top);
@@ -5008,7 +5008,7 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
                         // now push to the top of the byte, to add zeros to the bottom
                         top = ((top << (8 - Math.abs(bitlen))) & 0xFF);
 //System.err.println("<- Up: " + top + "(" + (top & 0xFF) + ")");
-                    	// Now push back to the bottom of the byte, filling with zeros
+                        // Now push back to the bottom of the byte, filling with zeros
                         top = ((top & 0xFF) >>> (8 - Math.abs(bitlen)));
 //System.err.println("<- Top is: " + top + "(" + (top & 0xFF) + ")");
 //System.err.println("<- Shifted to: " + (top << bit) + "(" + ((top << bit) & 0xFF) + ")");
@@ -5096,31 +5096,31 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
             }
         }
 
-	public boolean getShouldChangePatchAfterWrite() { return false; }
-	public boolean getSendsParametersAfterWrite() { return false; }
-	
+    public boolean getShouldChangePatchAfterWrite() { return false; }
+    public boolean getSendsParametersAfterWrite() { return false; }
+        
     public void beforeWriteAllParametersHook()
-    	{
+        {
         changePatch(getModel());
-    	}
+        }
 
     public void afterWriteAllParametersHook()
-    	{
-    	// This command is supposed to write current memory to its patch num without requiring 
-		// byte[] midi_mesg = paramBytes(EXECUTE_WRITE, 1);					// FIXME -- this does NOT WORK.  The Developer FAQ says it should, but it does nothing.  :-(
-		byte[] midi_mesg = 
-			{ 
-			(byte)0xF0, 
-			0x42, 
-			(byte)(0x30 + getChannelOut()), 
-			0x28, 
-			0x1A, 												// 1A is the Performance Write command
-			(byte)edisynToWSBank[getModel().get("bank", 0)], 
-			(byte)getModel().get("number", 0), 
-			(byte)0xF7 
-			};
-		tryToSendSysex(midi_mesg);
-    	}
+        {
+        // This command is supposed to write current memory to its patch num without requiring 
+        // byte[] midi_mesg = paramBytes(EXECUTE_WRITE, 1);                                     // FIXME -- this does NOT WORK.  The Developer FAQ says it should, but it does nothing.  :-(
+        byte[] midi_mesg = 
+            { 
+            (byte)0xF0, 
+            0x42, 
+            (byte)(0x30 + getChannelOut()), 
+            0x28, 
+            0x1A,                                                                                           // 1A is the Performance Write command
+            (byte)edisynToWSBank[getModel().get("bank", 0)], 
+            (byte)getModel().get("number", 0), 
+            (byte)0xF7 
+            };
+        tryToSendSysex(midi_mesg);
+        }
 
         
     public int getPauseAfterChangePatch() { return 300; }  // looks like 300 is about the minimum, else we get a sysex checksum error on the next sysex dump, probably because bytes were dropped
@@ -5133,7 +5133,7 @@ public class KorgWavestationPerformance extends KorgWavestationAbstract
         tryToSendSysex(midi_mesg);
         
         // this too.
-		byte[] midi_mesg_2 = paramBytes(MIDI_MODE, PERFORMANCE_MIDI_MODE);
+        byte[] midi_mesg_2 = paramBytes(MIDI_MODE, PERFORMANCE_MIDI_MODE);
         //byte[] midi_mesg_2 = paramBytes(PERF_MIDI_MODE, 1);
         tryToSendSysex(midi_mesg_2);
 

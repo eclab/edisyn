@@ -2393,7 +2393,7 @@ public class NovationSL extends Synth
             int lowval = model.get(prefix + "lowval");
             data[pos+10] = (byte)(lowval & 127);
             int highval = model.get(prefix + "highval");
-            // highval = (highval < lowval ? lowval : highval);			// not for buttons
+            // highval = (highval < lowval ? lowval : highval);                 // not for buttons
             data[pos+12] = (byte)(highval & 127);
             //int defaultval = model.get(prefix + "defaultval");
             int defaultval = model.get(prefix + "defaultval");
@@ -2698,7 +2698,7 @@ public class NovationSL extends Synth
         // Following this are 231 zeros
         }
 
-	// We need to send to current patch after writing a patch
+    // We need to send to current patch after writing a patch
     public boolean getSendsParametersAfterWrite() { return true; }
 
     public byte[] emit(Model tempModel, boolean toWorkingMemory, boolean toFile)

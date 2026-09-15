@@ -262,10 +262,10 @@ public class MidiFileDump
             midiMessage[1] == 0x7E &&
             midiMessage[3] == FILE_DUMP)
             {
-	        if (myID != ANY_ID && midiMessage[2] != myID && midiMessage[2] != 0x7F)
-				{
-				return MESSAGE_TYPE_NOT_FOR_YOU;
-				}
+            if (myID != ANY_ID && midiMessage[2] != myID && midiMessage[2] != 0x7F)
+                {
+                return MESSAGE_TYPE_NOT_FOR_YOU;
+                }
 
             switch (midiMessage[4])
                 {
@@ -283,18 +283,18 @@ public class MidiFileDump
         }
         
 /** Assuming that the message provided is a MIDI File Dump Handshake message, returns the receiver ID. */
-	public static int getHandshakeReceiverID(byte[] handshakeMessage)
-		{
-		return handshakeMessage[2];
-		}
-		
+    public static int getHandshakeReceiverID(byte[] handshakeMessage)
+        {
+        return handshakeMessage[2];
+        }
+                
 /** Assuming that the message provided is a MIDI File Dump Handshake message, returns the packet number. 
-	Note that the value of the packet number does not matter for EOF, WAIT, and CANCEL messages, and
-	can be any arbitrary value. */
-	public static int getHandshakePacketNumber(byte[] handshakeMessage)
-		{
-		return handshakeMessage[4];
-		}
+    Note that the value of the packet number does not matter for EOF, WAIT, and CANCEL messages, and
+    can be any arbitrary value. */
+    public static int getHandshakePacketNumber(byte[] handshakeMessage)
+        {
+        return handshakeMessage[4];
+        }
 
 /** Assuming that the message provided is a MIDI File Dump Request message, returns the sender ID. */
     public static int getRequestSenderID(byte[] requestMessage)
@@ -449,8 +449,8 @@ public class MidiFileDump
         for(int i = 0; i < payload.length; i++) payload[i] = (byte)(i % 256);
         String name = "Hello, World!";
         String type = FILE_TYPE_BIN;
-        int senderID = 92;		// random number
-        int receiverID = 41;	// random number
+        int senderID = 92;              // random number
+        int receiverID = 41;    // random number
 
         byte[][] messages = dump(senderID, receiverID, type, name, payload);
         

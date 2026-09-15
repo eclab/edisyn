@@ -105,7 +105,7 @@ public class OberheimMatrix1000 extends Synth
         vbox.add(addOscillator(2, Style.COLOR_A()));
         
         hbox = new HBox();
-        hbox.add(addFilter(Style.COLOR_C()));
+        hbox.add(addFilter(Style.COLOR_B()));
         hbox.addLast(addAmplifier(Style.COLOR_C()));
         vbox.add(hbox);
         

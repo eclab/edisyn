@@ -90,7 +90,7 @@ public class NovationBassStation2 extends Synth
         -30, -28, -26, -25, -24, -23, -22,  
         -20, -19, -17, -16, -15, -14, -12,  
         -10,  -9,  -7,  -5,  -4,  -3,  -2, -1,
-         0,   1,   2,   3,   4,   5,   7,  9,  
+        0,   1,   2,   3,   4,   5,   7,  9,  
         10,  12,  14,  15,  16,  17,  19,  
         20,  22,  23,  24,  25,  26,  28,  
         30,  32,  34,  35,  36,  38,  39,  
@@ -136,7 +136,6 @@ public class NovationBassStation2 extends Synth
     public static final int[] OCTAVE_ENCODINGS = { 0x78, 0x7A, 0x7C, 0x7E, 0x80, 0x82, 0x84, 0x86, 0x88, 0x8A };
         
     public static final int[] RANGE_ENCODINGS = { 0x3F, 0x40, 0x41, 0x42 };
-        
 
     public static final String[] COARSE_VALUES = 
         {
@@ -1164,24 +1163,24 @@ public class NovationBassStation2 extends Synth
         }
         
     public String[] getPatchNumberNames() 
-		{
-		return buildIntegerNames(128, 0);
-		}
+        {
+        return buildIntegerNames(128, 0);
+        }
 
     public String[] getBankNames() 
-		{
-		return null;
-		}
+        {
+        return null;
+        }
 
     public boolean getSupportsPatchWrites() 
-		{
-		return true;
-		}
+        {
+        return true;
+        }
 
     public int getPatchNameLength() 
-		{
-		return 16;
-		}
+        {
+        return 16;
+        }
 
     public int parse(byte[] data, boolean fromFile)
         {
@@ -1838,7 +1837,8 @@ return emit(null, true, false);
 
   Note that the Bass Station II manual states that Select Noise/Ring/Ext, Key Transpose,
   Mod Wheel, Midi Channel, Local, and Input Gain are part of the initial settings of a
-  patch, implying that they're stored with the patch.  But they are not.
+  patch, implying that they're stored with the patch.  But they are not.  Volume is also
+  not part of the patch.
 
 
 
@@ -1861,7 +1861,7 @@ return emit(null, true, false);
   10      183       18 + 2/3          3 cycles per 14 bars                            448     
   11      18b       18 beats          1 cycle per 18 beats (2 cycles per 9 bars)      432     
   12      16b       16 beats          1 cycle per 4 bars                              384     
-  13      133       13 + 1/3          3 cycles per 10 bars                            320            // Manual incorrectly says 3 cycles per 10 bars 
+  13      133       13 + 1/3          3 cycles per 10 bars                            320            // Manual incorrectly says 3 cycles per 4 bars 
   14      12b       12 beats          1 cycle per 12 beats (1 cycle per 3 bars)       288     
   15      102       10 + 2/3          3 cycles per 8 bars                             256     
   16      8b        8 beats           1 cycle per 2 bars                              192     
@@ -2286,31 +2286,6 @@ return emit(null, true, false);
   255     12.0
 
 
-
-*/
-
-
-/*** JUNK Note for TABLE 2:
-
-     -90                     0000000         0!
-     -88                                             0000001         1!
-     -9                                              0111000
-     -7                                              0111001
-     -5                                              0111010
-     -4                                              0111011         0111011
-     -3                                              0111100         0111100
-     -2                                              0111101         0111101
-     -1      0179            0111110         63
-     0       017D            1000000         64
-     1       0205            1000001         65
-     88      0379            1111110         126!
-     90      037D            1111111         127!
-
-
-     Data table
-     ^\S*\s*\S*\s*((\S*\ \S*\ )||(\S*\ \ ))\s*(([01]*\ [01]*\ )||([01]*\ \ ))\s*(\S*)\s*.*$
-
-     \4\t\7
 
 */
  

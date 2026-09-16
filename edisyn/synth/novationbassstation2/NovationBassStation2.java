@@ -574,6 +574,7 @@ public class NovationBassStation2 extends Synth
         comp = new LabelledDial("Fine", this, "osc" + osc + "fine", color, 27, 228, 127)
             {
             public boolean isSymmetric() { return true; }
+            public int getDefaultValue() { return 126; }
             };
         hbox.add(comp);
 
@@ -639,6 +640,22 @@ public class NovationBassStation2 extends Synth
 
         hbox.add(vbox);
 
+        comp = new LabelledDial("Sub Osc", this, "subosccoarse", color, 0, 255)
+            {
+            public boolean isSymmetric() { return true; }
+            public String map(int val) { return COARSE_VALUES[val]; }
+            };
+        ((LabelledDial)comp).addAdditionalLabel("Coarse");
+        hbox.add(comp);
+
+        comp = new LabelledDial("Sub Osc", this, "suboscfine", color, 27, 228, 127)
+            {
+            public boolean isSymmetric() { return true; }
+            public int getDefaultValue() { return 126; }
+            };
+        ((LabelledDial)comp).addAdditionalLabel("Fine");
+        hbox.add(comp);
+        
         comp = new LabelledDial("Osc Error", this, "oscerror", color, 0, 7);
         hbox.add(comp);
 
@@ -791,6 +808,8 @@ public class NovationBassStation2 extends Synth
         new double[] { 0, 0.333/127.0, 0.333/127.0, 0.333/127.0},
         new double[] { 0, 1.0 / 127.0, 1.0 / 127.0, 0 });
                         
+    HBox ampRetrigBox = new HBox();
+    JComponent ampRetrig;
                         
     public JComponent addAmpEnvelope(Color color)
         {
@@ -806,7 +825,20 @@ public class NovationBassStation2 extends Synth
         comp = new Chooser("Trigger", this, "ampenvtrigger", params);
         vbox.add(comp);
 
-        comp = new CheckBox("Retrigger", this, "ampenvretrigger");
+        comp = new CheckBox("Retrigger", this, "ampenvretrigger")
+        	{
+            public void update(String key, Model model)
+                {
+                super.update(key, model);
+                ampRetrigBox.removeAll();
+                if (model.get(key) == 1)
+                	{
+                	ampRetrigBox.add(ampRetrig);
+                	}
+                ampRetrigBox.revalidate();
+                ampRetrigBox.repaint();
+                }
+        	};
         vbox.add(comp);
 
         comp = new CheckBox("Fixed Sustain", this, "ampfixedsustain")
@@ -847,6 +879,18 @@ public class NovationBassStation2 extends Synth
         ((LabelledDial)comp).addAdditionalLabel("Env");
         hbox.add(comp);
 
+        ampRetrig = new LabelledDial("Retrigger", this, "ampenvretriggercount", color, 0, 16)
+        	{
+        	public String map(int val)
+        		{
+        		if (val == 0) return "Inf";
+        		else return "" + val;
+        		}
+        	};
+        ((LabelledDial)ampRetrig).addAdditionalLabel("Count");
+        ampRetrigBox.add(ampRetrig);
+        hbox.add(ampRetrigBox);
+
         ampOuter.addLast(ampNormal);
         hbox.addLast(ampOuter);
                 
@@ -867,6 +911,9 @@ public class NovationBassStation2 extends Synth
         new String[] { null, "modenvsustain", "modenvsustain", null },
         new double[] { 0, 0.333/127.0, 0.333/127.0, 0.333/127.0},
         new double[] { 0, 1.0 / 127.0, 1.0 / 127.0, 0 });
+        
+    HBox modRetrigBox = new HBox();
+    JComponent modRetrig;
          
     public JComponent addModEnvelope(Color color)
         {
@@ -882,7 +929,20 @@ public class NovationBassStation2 extends Synth
         comp = new Chooser("Trigger", this, "modenvtrigger", params);
         vbox.add(comp);
 
-        comp = new CheckBox("Retrigger", this, "modenvretrigger");
+        comp = new CheckBox("Retrigger", this, "modenvretrigger")
+        	{
+            public void update(String key, Model model)
+                {
+                super.update(key, model);
+                modRetrigBox.removeAll();
+                if (model.get(key) == 1)
+                	{
+                	modRetrigBox.add(modRetrig);
+                	}
+                modRetrigBox.revalidate();
+                modRetrigBox.repaint();
+                }
+        	};
         vbox.add(comp);
 
         comp = new CheckBox("Fixed Sustain", this, "modfixedsustain")
@@ -923,6 +983,18 @@ public class NovationBassStation2 extends Synth
         ((LabelledDial)comp).addAdditionalLabel("Env");
         hbox.add(comp);
         
+        modRetrig = new LabelledDial("Retrigger", this, "modenvretriggercount", color, 0, 16)
+        	{
+        	public String map(int val)
+        		{
+        		if (val == 0) return "Inf";
+        		else return "" + val;
+        		}
+        	};
+        ((LabelledDial)modRetrig).addAdditionalLabel("Count");
+        modRetrigBox.add(modRetrig);
+        hbox.add(modRetrigBox);
+
         modOuter.addLast(modNormal);
         hbox.addLast(modOuter);
 
@@ -1184,7 +1256,7 @@ public class NovationBassStation2 extends Synth
 
     public int parse(byte[] data, boolean fromFile)
         {
-        if (data[7] == 0x01)                                    // it's a numbered patch
+        if (data[7] == 0x01)                        // it's a numbered patch
             {
             model.set("number", data[8]);           // should we change the patch number when it's NOT numbered?
             }
@@ -1219,6 +1291,7 @@ public class NovationBassStation2 extends Synth
                 }
             else if (PARAMETERS[i].equals("osc1fine") ||
                 PARAMETERS[i].equals("osc2fine") ||
+                PARAMETERS[i].equals("suboscfine") ||
                 PARAMETERS[i].equals("osc1lfo1depth") ||
                 PARAMETERS[i].equals("osc2lfo1depth") ||
                 PARAMETERS[i].equals("filterlfo2depth"))
@@ -1289,8 +1362,6 @@ public class NovationBassStation2 extends Synth
         data[30] = 0x01;
         data[31] = 0x00;
         data[32] = 0x43;
-        data[33] = 0x40;
-        data[34] = 0x20;
         data[35] = 0x00;
         data[96] = 0x40;
         data[104] = 0x40;
@@ -1319,6 +1390,7 @@ public class NovationBassStation2 extends Synth
                 }
             else if (PARAMETERS[i].equals("osc1fine") ||
                 PARAMETERS[i].equals("osc2fine") ||
+                PARAMETERS[i].equals("suboscfine") ||
                 PARAMETERS[i].equals("osc1lfo1depth") ||
                 PARAMETERS[i].equals("osc2lfo1depth") ||
                 PARAMETERS[i].equals("filterlfo2depth"))
@@ -1528,7 +1600,7 @@ return emit(null, true, false);
         85, 86, 88, 89, 90, 91, 93, 94, 
         97, 98, 99, 101, 102, 105, 106, 107, 
         108, 111, 112, 114, 115, 115, 117, 118, 
-        119, 120, 
+        119, 120, 121, 122, 33, 34
         };
 
 
@@ -1543,13 +1615,13 @@ return emit(null, true, false);
         {2, 6}, {1, 6}, {0, 6}, {6, 6}, {5, 6}, {4, 6}, {3, 6}, {1, 6},                 //16
         {0, 6}, {-1, 3}, {-1, 2}, {-1, 1}, {5, 6}, {4, 6}, {3, 6}, {2, 6},              //24
         {1, 6}, {-1, 2}, {-1, 6}, {5, 6}, {4, 6}, {3, 6}, {2, 6}, {-1, 3},              //32
-        {-1, 2}, {-1, 6}, {5, 6}, {5, 6}, {2, 6}, {-1, 3}, {-1, 4}, {-1, 3},    //40
-        {0, 6}, {-1, 6}, {6, 6}, {3, 6}, {-1, 4}, {-1, 5}, {-1, 3}, {-1, 4},    //48
-        {-1, 5}, {-1, 4}, {-1, 3}, {-1, 4}, {5, 6}, {4, 6}, {3, 6}, {2, 6},     //56
+        {-1, 2}, {-1, 6}, {5, 6}, {5, 6}, {2, 6}, {-1, 3}, {-1, 4}, {-1, 3},            //40
+        {0, 6}, {-1, 6}, {6, 6}, {3, 6}, {-1, 4}, {-1, 5}, {-1, 3}, {-1, 4},            //48
+        {-1, 5}, {-1, 4}, {-1, 3}, {-1, 4}, {5, 6}, {4, 6}, {3, 6}, {2, 6},             //56
         {1, 6}, {0, 6}, {-1, 6}, {5, 6}, {5, 6}, {4, 6}, {1, 6}, {0, 6},                //64
         {6, 6}, {4, 6}, {3, 6}, {1, 6}, {0, 6}, {5, 6}, {4, 6}, {3, 6},                 //72
-        {2, 6}, {-1, 1}, {-1, 2}, {-1, 6}, {-1, 5}, {0, 6}, {-1, 5}, {-1, 5},   //80
-        {-1, 1}, {-1, 0}                                                                                                                //88
+        {2, 6}, {-1, 1}, {-1, 2}, {-1, 6}, {-1, 5}, {0, 6}, {-1, 5}, {-1, 5},           //80
+        {-1, 1}, {-1, 0}, {3, 6}, {2, 6}, {6, 6}, {5, 6}                                //88
         };
         
 // Total bitlengths for the packed bit ranges
@@ -1566,7 +1638,7 @@ return emit(null, true, false);
         7, 7, 7, 7, 8, 8, 7, 7,         // 64
         8, 7, 7, 7, 7, 7, 7, 7,         // 72
         7, 1, 3, 1, 1, 4, 3, 4,         // 80
-        1, 1,                                           // 88
+        1, 1, 5, 5, 8, 8                // 88
         }; 
         
 // Parameter Names
@@ -1671,7 +1743,11 @@ return emit(null, true, false);
         "portamentodivergence",
         
         "ampfixedsustain",                      //88
-        "modfixedsustain"
+        "modfixedsustain",
+        "ampenvretriggercount",
+        "modenvretriggercount",
+        "subosccoarse",							// these are out of order but I don't want to rejigger everything to insert them...
+        "suboscfine"
         };
 
     }
@@ -1685,17 +1761,20 @@ return emit(null, true, false);
 /*
   NOVATION BASS STATION II SYSEX PROTOCOL
 
-  The Bass Station II sysex is not documented, and its data encoding is a complete mess,
-  inconsistent in bizarre ways and filled with bit packing.
-  Below is a reverse engineering of the protocol.  This is based in part on earlier work 
+  This text describes the reverse-engineered sysex protocol for the Novation
+  Bass Station II as of Firmware v4.15.  The Bass Station II sysex is not documented
+  by Novation, and its data encoding is a complete mess, inconsistent in bizarre ways 
+  and filled with bit packing.  This description is based in part on earlier work 
   by Francois Gregory (francois.georgy@gmail.com).  See https://github.com/francoisgeorgy/BS2-SysEx
   To this I have fixed many errors and added missing items.
+  
+  This text does not yet describe the AFX protocol, as it has not yet been reverse engineered.
 
 
 
   COMMANDS
 
-  I believe that the Bass Station II responds to these four sysex commands
+  The Bass Station II responds to at least these four sysex commands
   (and also transmits the two Dump commnds below):
 
   Request Current Patch
@@ -1707,11 +1786,12 @@ return emit(null, true, false);
   Request Patch
   F0 00 20 29 00 33 00 41 PATCHNUMBER F7
 
-  Dump Patch      [website below is wrong, offset for PATCHNUMBER is 8]
+  Dump Patch
   F0 00 20 29 00 33 00 01 PATCHNUMBER 00 00 00 00 DATA... F7
 
-  Patch numbers are 0...7F.
-
+  Change Patch
+  Use Program Change. There is a single bank, and patch numbers are 00...7F.
+  
 
 
 
@@ -1719,8 +1799,7 @@ return emit(null, true, false);
   (in Dump Patch and Dump Current Patch commands)
 
   DATA... is as follows.  Note that the SYSEX OFFSET is from the start of the
-  message (0xF0 is sysex offset 0).  The following text is cribbed from 
-  https://studiocode.dev/resources/bs2-sysex/
+  message (0xF0 is sysex offset 0).
 
  
 
@@ -1745,8 +1824,8 @@ return emit(null, true, false);
   30     [Always 0x01]
   31     [Always 0x00]
   32     [Always 0x43]
-  33     [Always 0x40]
-  34     [Always 0x20]
+  33     2     7F 40    01111111 01000000    8    Sub Osc Coarse                   0-255         [SEE TABLE 4]
+  34     2     3F 60    00111111 01100000    8    Sub Osc Fine                     27 = -100 ... 126 = -1, 127 = 0, 128 = 0, 129 = 1 ... 288 = 100
   35     [Always 0x00]
   36     1     30       00110000             2    Sub Osc Wave                     0-3            Sine/Tri/Saw/Square
   37     1     08       00001000             1    Sub Osc Oct                      0/1            One/two octaves
@@ -1828,11 +1907,13 @@ return emit(null, true, false);
   112    1     07       00000111             3    Filter tracking                  0-7
   114    1     40       01000000             1    Amp Env Retrigger                0/1
   115    1     20       00100000             1    Mod Env Retrigger                0/1
-  115    2     01 70    00000001 01110000    4    Tuning table                     0-8            Documentation says 0-9, which appears to be wrong
+  115    2     01 70    00000001 01110000    4    Tuning table                     0-8            Novation's documentation says 0-9, which appears to be wrong
   117    1     38       00111000             3    Osc Error                        0-7
   118    1     3C       00111100             4    Glide Divergence                 0-15
   119    1     02       00000010             1    Fixed Amp Sustain Envelope       0-1
   120    1     01       00000001             1    Fixed Mod Sustain Envelope       0-1
+  121    2     0F 40    00001111 01000000    5    Amp Env Retrigger Count          0-16           0=Infinite, 1...16
+  122    2     07 60    00000111 01100000    5    Mod Env Retrigger Count          0-16           0=Infinite, 1...16
   137    16    16x 7F   16x 01111111     16x 8    Patch name                       16 ASCII chars      Not displayed on unit!
 
   Note that the Bass Station II manual states that Select Noise/Ring/Ext, Key Transpose,
@@ -2024,7 +2105,9 @@ return emit(null, true, false);
   Coarse Tuning Values
   This is a total mess, and Novation should be absolutely ashamed.  In short, there are
   tuning values missing for no good reason, and there are duplicates in strange places,
-  and places where duplicates ought to be but aren't.  It's like it was generated by a monkey.
+  and places where duplicates ought to be (for consistency) but aren't.  It's like it 
+  was generated by a monkey.
+  
 
   Sysex   Display Value
   ---------------------

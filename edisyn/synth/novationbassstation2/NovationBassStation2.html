@@ -15,6 +15,15 @@ At present Edisyn does not send nor receive individual parameters: the Bass Stat
 
 Novation did not open their protocol, so it had to be reverse engineered.  Furthermore, the protocol is a mess, with highly inconsistent parameter ranges and settings throughout.  This made reverse engineering fun.  My reverse engineered spec is at the end of the NovationBassStation2.java in Edisyn's code repository.  It is based in part on work by Francois Georgy (francois.georgy@gmail.com) but has extensive revisions, bug fixes, and extensions.  You should use it rather than his version (presently available at https://github.com/francoisgeorgy/BS2-SysEx).
 
+<br><br><h3>Display Notes</h3>
+
+<ul>
+<li> Retrigger Count only appears when you turn on Retrigger.  Its lowest value, marked "0" on the synth, actually is "Infinity" and Edisyn displays it as such.
+<p><li>Changing Filter Type will change the number of filter options displayed.
+<p><li>When the Sub Osc Coarse and Fine are both set to <b>zero</b>, the synth will instead lock the Suboscillator to the tuning of Oscillator 1. 
+<p><li>The patch name is not displayed on the synth.
+</ul>
+
 <br><br><h3>Thanks</h3>
 Thanks to John Walter Howell-Sayers (jwhs26@gmail.com) for loaning me his unit.
 

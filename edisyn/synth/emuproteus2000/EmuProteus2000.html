@@ -6,6 +6,11 @@
 
 <p>This editor should work with many E-Mu Proteus 1000, 2000, and 2500 series machines, though I have only tested on the latest firmware (2.26, or 2.00 for the 2500).  You ought to update the firmware on your unit if possible: an easy way to do this is to use Ray Bellis's <a href="https://www.emu.tools/#/e-loader/">emu.tools firmware updater</a>. 
 
+<br><br><h3>About the Audity 2000</h3>
+Most Audity 2000 models have a firmware (version 1.00) with broken sysex and which cannot be updated to later versions.  Updating originally required sending the unit back to E-Mu.  But now if you own an Audity 2000 you can update it to version 2.0.1 by <a href="https://www.emu.tools/#/audity">burning and inserting an update ROM</a> created by Ray Bellis. You can also buy one from him, it's well worth it.  Edisyn works with these updated models, but not with the original 1.00 units.
+
+<p>Note that the Audity 2000 is missing one parameter: Arpeggiator Post-Delay.
+
 <br><br><h3>Communicating with Edisyn</h3>
 
 Set the MIDI ID to the same you'll be setting in Edisyn (typically 0).  Select a MIDI Channel to use on your synthesizer (perhaps channel 1) and set Edisyn's MIDI channel to that value.  Set the MIDI Mode to Omni or to Poly.  Make certain that Receive Program Change is ON for your MIDI channel: you might as well turn them all on (if your MIDI Mode is omni or Poly, I believe Receive Program Change should be on by default).
@@ -55,10 +60,6 @@ Set the MIDI ID to the same you'll be setting in Edisyn (typically 0).  Select a
 
 <p>Additionally, there are two versions each of TeCnO, XLEAD, ORCH2, and ZR, each with identical IDs.
 
-<br><br><h3>Proteus 2500 Features</h3>
-
-The Proteus 2500 series has four more MIDI Controllers: M through P.  They're labelled "[2500]".  You can select them as soures and set their Initial Controller Amounts.
-
 <br><br><h3>About the Menu</h3>
 
 The menu lets you set the configuration of ROMs in your machine's SIMM sockets; or you can request that configuration from the synthesizer itself.  This is largely to make things more convenient for you.  This configuration is used in four places at present:
@@ -72,6 +73,22 @@ The menu lets you set the configuration of ROMs in your machine's SIMM sockets; 
 
 <p><li>When you do Save All Patches in the Librarian, the only patches actually saved out will be the User patches and your SIMMs.
 </ul>
+
+Other menu options pertain to Proteus 2500 features, see next.
+
+<br><br><h3>Proteus 2500 Features</h3>
+
+The Proteus 2500 series has four more MIDI Controllers: M through P.  They're labelled "[2500]".  You can select them as soures and set their Initial Controller Amounts.
+
+<p>The Proteus 2500 also has <b>Patterns</b> and <b>Songs</b>.  Edisyn is capable of uploading and downloading both and storing them as MIDI (.mid) files.
+
+<ul>
+<li>To <b>Download</b> a Pattern or Song, you should first request all the existing names of Patterns or Songs on the unit.  There are quite a lot of banks, so this will take about 30 seconds, mostly because Java is slow at updating menus.  You do this by selecting the <b>Download Pattern and Song Names...</b> menu option under the <b>Proteus 2000</b> menu.  After the names have been loaded, you can request one of them by the various <b>Request...</b> menu options in the <b>Proteus 2000</b> menu.
+
+<p><li>To <b>Upload</b> a Pattern or Song, select the <b>Upload Pattern or Song...</b> option in the Proteus 2000 menu.  Select the MIDI file to upload, then give it a name, a bank and number and a type (Pattern or Song), and it'll get uploaded.
+</ul>
+
+
 
 <br><br><h3>About Multisetups (Multimode)</h3>
 
@@ -119,7 +136,7 @@ Edisyn doesn't support multisetups at present.  The reason for this is simple: t
 
 <br><br><h3>Thanks</h3>
 
-<p>Thanks to Jan Mann (rdxesy@yahoo.de), the author of Prodatum, who kindly let me steal his ROM database.  Thanks also to Overviolence (overviolence@gmail.com) for debugging assistance and to Noel Van Damme (novel_vd@mac.com) for bug reports.  Thanks to Ray Bellis (ray@bellis.me.uk) for help on song and pattern transfer for the 2500.
+<p>Thanks to Jan Mann (rdxesy@yahoo.de), the author of Prodatum, who kindly let me steal his ROM database.  Thanks also to Overviolence (overviolence@gmail.com) for debugging assistance and to Noel Van Damme (novel_vd@mac.com) for bug reports.  Thanks to Ray Bellis (ray@bellis.me.uk) for help on song and pattern transfer for the 2500, and for making the Audity 2000 update ROM.
 
 <p><table border=0 cellpadding=0 cellspacing=5>
 <tr>

@@ -72,11 +72,10 @@ public class MidiFileDump
     static final int HANDSHAKE_NAK = 0x7E;
     static final int HANDSHAKE_ACK = 0x7F;
  
-// The max packet length is 137.  But we're going to assume we're packing
-// no more than 119 data bytes into the packet, for a total of 136 encoded bytes
+// We can pack no more than 112 bytes into the packet, for a total of 128 encoded bytes
 
-    static final int MAX_ENCODED_PACKET_LENGTH = 136;
-    static final int MAX_DATA_PACKET_LENGTH = 119;
+    static final int MAX_ENCODED_PACKET_LENGTH = 128;
+    static final int MAX_DATA_PACKET_LENGTH = 112;
 
 
 /** Requests a file dump from a SENDER to a RECEIVER (you).  Returns the resulting sysex message to send.
@@ -106,11 +105,10 @@ public class MidiFileDump
         data[9] = (byte)type.charAt(3);
         data[data.length - 1] = (byte)0xF7;
         
-        for(int i = 0; i < type.length(); i++)
+        for(int i = 0; i < name.length(); i++)
             {
-            data[i] = (byte)type.charAt(i);
+            data[i + 10] = (byte)name.charAt(i);
             }
-        
         return data;
         }
         
@@ -180,14 +178,15 @@ public class MidiFileDump
         // For each packet....  
         int packetCount = 0;                    // wraps at 127
         for(int i = 0; i < data.length; i += MAX_DATA_PACKET_LENGTH)
-            {               
-            byte[] encoded = new byte[9 + 
+            {        
+            int encodedSize = 0;       
+            byte[] encoded = new byte[9 + (encodedSize =
                 // If we have enough data for a full packet, then our encoded version is just the full packet
                     (data.length - i > MAX_DATA_PACKET_LENGTH ? MAX_DATA_PACKET_LENGTH / 7 * 8 :
                     // Else it's the integer 7th divisor, plus ... 
                     (data.length - i) / 7 * 8 + 
                     /// ... if there's anything left, take the remainder and add 1
-                    ((data.length - i) % 7 > 0 ? ((data.length - i) % 7 + 1) : 0))];
+                    ((data.length - i) % 7 > 0 ? ((data.length - i) % 7 + 1) : 0)))];
                 
             encoded[0] = (byte)0xF0;
             encoded[1] = 0x7E;
@@ -225,20 +224,23 @@ public class MidiFileDump
                     encodedCount++;
                     }
                 }
-                        
-            encoded[6] = (byte)(decodedSize - 1);
+            
+            encoded[6] = (byte)(encodedSize - 1);   // (byte)(decodedSize - 1);
                 
             // compute checksum
-            int checksum = (encoded[1] & 0xF7);
+            int checksum = (encoded[1] & 0x7F);
             for(int j = 2; j < encoded.length - 2; j++)             // Everything AFTER the F0 but BEFORE the checksum byte
                 {
-                checksum = checksum ^ (encoded[j] & 0xF7);
+                checksum = checksum ^ (encoded[j] & 0x7F);
                 }
-            encoded[encoded.length - 2] = (byte)(checksum & 0xF7);
+            encoded[encoded.length - 2] = (byte)(checksum & 0x7F);
             encoded[encoded.length - 1] = (byte)0xF7;
                 
             messages.add(encoded);
             }
+        
+        // Add EOF
+        messages.add(new byte[] { (byte)0xF0, 0x7E, (byte)receiverID, HANDSHAKE_EOF, 0x00, (byte)0xF7 });
         
         return messages.toArray(new byte[0][0]);
         }
@@ -257,21 +259,27 @@ public class MidiFileDump
 */
     public static int recognize(byte[] midiMessage, int myID)
         {
+        // We assume it's PROBABLY a valid Midi File Dump message if it's 6 bytes or over, is sysex, and has an 0x7E message type 
         if (midiMessage.length >= 6 &&
             midiMessage[0] == (byte)0xF0 &&
-            midiMessage[1] == 0x7E &&
-            midiMessage[3] == FILE_DUMP)
+            midiMessage[1] == 0x7E)
             {
-            if (myID != ANY_ID && midiMessage[2] != myID && midiMessage[2] != 0x7F)
+            if (midiMessage[3] == FILE_DUMP)
+            	{
+            	// It appears to be for someone with a different ID than yours
+            	if (myID != ANY_ID && midiMessage[2] != myID && midiMessage[2] != 0x7F)
+					{
+					return MESSAGE_TYPE_NOT_FOR_YOU;
+					}
+				else switch (midiMessage[4])
+					{
+					case HEADER: return MESSAGE_TYPE_HEADER;
+        			case PACKET: return midiMessage[5];				// packet IDs are unique numbers 0...127
+                	case REQUEST: return MESSAGE_TYPE_REQUEST;
+                	}
+        		}
+            else switch (midiMessage[3])
                 {
-                return MESSAGE_TYPE_NOT_FOR_YOU;
-                }
-
-            switch (midiMessage[4])
-                {
-                case HEADER: return MESSAGE_TYPE_HEADER;
-                case PACKET: return midiMessage[5];
-                case REQUEST: return MESSAGE_TYPE_REQUEST;
                 case HANDSHAKE_EOF: return MESSAGE_TYPE_HANDSHAKE_EOF;
                 case HANDSHAKE_WAIT: return MESSAGE_TYPE_HANDSHAKE_WAIT;
                 case HANDSHAKE_CANCEL: return MESSAGE_TYPE_HANDSHAKE_CANCEL;
@@ -385,12 +393,12 @@ public class MidiFileDump
 /** Assuming that the message provided is a MIDI File Dump Packet message, returns whether the checksum is valid. */
     public static boolean verifyPacketChecksum(byte[] packetMessage)
         {
-        int checksum = (packetMessage[1] & 0xF7);
+        int checksum = (packetMessage[1] & 0x7F);
         for(int i = 2; i < packetMessage.length - 2; i++)
             {
-            checksum = checksum ^ (packetMessage[i] & 0xF7);
+            checksum = checksum ^ (packetMessage[i] & 0x7F);
             }
-        return ((checksum & 0xF7) == (packetMessage[packetMessage.length - 2] & 0xF7));
+        return ((checksum & 0x7F) == (packetMessage[packetMessage.length - 2] & 0x7F));
         }
         
 /** Assuming that the message provided is a MIDI File Dump Packet message, returns the decoded packet data. */
@@ -441,6 +449,131 @@ public class MidiFileDump
                 
         return concat;
         }
+    
+    
+    public static final String ERROR_NOT_FOR_YOU = "The Midi File Dump file data contains messages not intended for the recipient";
+    public static final String ERROR_NO_HEADER = "The Midi File Dump messages did not start with a Header message";
+    public static final String ERROR_MULTIPLE_HEADERS = "The Midi File Dump messages have more than one Header message";
+    public static final String ERROR_INVALID_MESSAGES = "The Midi File Dump messages has messages other than Headers and Packets";
+    public static final String ERROR_OUT_OF_ORDER = "The Midi File Dump messages has Packet messages out of consecutive order";
+    public static final String ERROR_INCORRECT_LENGTH = "The Midi File Dump file data is not the length specified in the Header";
+    public static final String ERROR_INCORRECT_TYPE = "The Midi File Dump file data is not of the type specified in the Header";
+    
+	/** Returns the file provided by an ArrayList of MESSAGES.  The array must begin with a HEADER
+		and the remaining messages must be PACKETS in increasing and consecutive packet order (wrapping around from 127 to 0).
+		The array must not contain other messages, including EOF, WAIT, ACK, etc.  All messages must have <b>myID</b> as
+		their receiver ID (or <b>myID</b> maybe ANY_ID, indicating that it should be ignored).  The final file
+		must be of the type <b>expectedType</b> (a four-character String).  If you pass null for <b>expectedType</b>,
+		then the type can be anything and will be ignored.
+		
+		<p>If any rules are violated, a RuntimeException will be thrown with one of the following Strings:
+	
+		<ul>
+		<li><tt>ERROR_NOT_FOR_YOU</tt>: A packet was included whose receiverf ID was not myID and was not 0x7F (and myID was not 0x7F)
+		<li><tt>ERROR_NO_HEADER</tt>: The messages did not start with a header
+		<li><tt>ERROR_MULTIPLE_HEADERS</tt>: The messages had multiple headers
+		<li><tt>ERROR_INVALID_MESSAGES</tt>: There were messages other than a header and packets
+		<li><tt>ERROR_OUT_OF_ORDER</tt>: The packets were out of consecutive order
+		<li><tt>ERROR_INCORRECT_LENGTH</tt>: The file was not the length specified in the header
+		<li><tt>ERROR_INCORRECT_TYPE</tt>: The file was not the expectedType
+		</ul>
+	*/
+    public static byte[] getFile(ArrayList<byte[]> messages, int myID, String expectedType)
+    	{
+    	// we have to do this because we can't have toArray() return a byte[][] due to
+    	// Java restrictions
+    	byte[][] mess = new byte[messages.size()][];
+    	for(int i = 0; i < messages.size(); i++)
+    		{
+    		mess[i] = (byte[])(messages.get(i));
+    		}
+    	return getFile(mess, myID, expectedType);
+    	}
+
+	/** Returns the file provided by an array of MESSAGES.  The array must begin with a HEADER
+		and the remaining messages must be PACKETS in increasing and consecutive packet order (wrapping around from 127 to 0).
+		The array must not contain other messages, including EOF, WAIT, ACK, etc.  All messages must have <b>myID</b> as
+		their receiver ID (or <b>myID</b> maybe ANY_ID, indicating that it should be ignored).  The final file
+		must be of the type <b>expectedType</b> (a four-character String).  If you pass null for <b>expectedType</b>,
+		then the type can be anything and will be ignored.
+		
+		<p>If any rules are violated, a RuntimeException will be thrown with one of the following Strings:
+	
+		<ul>
+		<li><tt>ERROR_NOT_FOR_YOU</tt>: A packet was included whose receiverf ID was not myID and was not 0x7F (and myID was not 0x7F)
+		<li><tt>ERROR_NO_HEADER</tt>: The messages did not start with a header
+		<li><tt>ERROR_MULTIPLE_HEADERS</tt>: The messages had multiple headers
+		<li><tt>ERROR_INVALID_MESSAGES</tt>: There were messages other than a header and packets
+		<li><tt>ERROR_OUT_OF_ORDER</tt>: The packets were out of consecutive order
+		<li><tt>ERROR_INCORRECT_LENGTH</tt>: The file was not the length specified in the header
+		<li><tt>ERROR_INCORRECT_TYPE</tt>: The file was not the expectedType
+		</ul>
+	*/
+	public static byte[] getFile(byte[][] messages, int myID, String expectedType)
+    	{
+    	// Verify header
+        byte[] header = messages[0];
+    	int val = recognize(header, myID);
+    	if (val == MESSAGE_TYPE_NOT_FOR_YOU)
+    		{
+    		throw new RuntimeException(ERROR_NOT_FOR_YOU);
+    		}
+		else if (val < 0 && val != MidiFileDump.MESSAGE_TYPE_HEADER)
+			{
+			throw new RuntimeException(ERROR_INVALID_MESSAGES);
+			}
+        else if (val != MidiFileDump.MESSAGE_TYPE_HEADER)
+        	{
+        	throw new RuntimeException(ERROR_NO_HEADER);
+        	}
+        else if (expectedType != null && !expectedType.equals(MidiFileDump.getHeaderType(header)))
+        	{
+        	throw new RuntimeException(ERROR_INCORRECT_TYPE);
+        	}
+        	
+        // Verify packet order and proper messages
+        int packet = 0;
+		for(int i = 1; i < messages.length; i++)
+			{
+			val = MidiFileDump.recognize(messages[i], myID);
+			if (val == MESSAGE_TYPE_NOT_FOR_YOU)
+				{
+				throw new RuntimeException(ERROR_NOT_FOR_YOU);
+				}
+			else if (val == MidiFileDump.MESSAGE_TYPE_HEADER)
+				{
+        		throw new RuntimeException(ERROR_MULTIPLE_HEADERS);
+				}
+			else if (val < 0)
+				{
+        		throw new RuntimeException(ERROR_INVALID_MESSAGES);
+				}
+			else if (val != packet)
+				{
+				throw new RuntimeException(ERROR_OUT_OF_ORDER);
+				}
+			packet++;
+			if (packet > 127) packet = 0;
+			}
+                
+        // Build the file
+        ArrayList<byte[]> payload = new ArrayList<>();
+        for(int i = 1; i < messages.length; i++)
+        	{
+        	payload.add(MidiFileDump.getPacketData(messages[i]));
+        	}
+        	
+        byte[] file = MidiFileDump.concatenate(payload);
+
+        if (file.length != MidiFileDump.getHeaderLength(header))
+            {
+            System.err.println("" + file.length + " vs " + MidiFileDump.getHeaderLength(header));
+            throw new RuntimeException(ERROR_INCORRECT_LENGTH);
+            }
+        
+        return file;
+    	}
+    	
 
 /** Sanity Test: Generate a MIDI File Dump, read it back in, compare the two. */
     public static void main(String[] args)
@@ -490,7 +623,21 @@ public class MidiFileDump
                 return;
                 }
             }
-                
+
+		// Test File-building
+		
+		byte[] file = null;
+		try
+			{
+			file = getFile(messages, receiverID, FILE_TYPE_BIN);
+			}
+		catch (RuntimeException ex)
+			{
+			System.err.println(ex.getMessage());
+			ex.printStackTrace();
+			return;
+			}
+		                
         System.err.println("Test passed!");
         }
         

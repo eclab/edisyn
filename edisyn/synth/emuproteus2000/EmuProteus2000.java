@@ -2210,8 +2210,10 @@ public class EmuProteus2000 extends Synth
             // I have found that numPresetLayerEnvelope is reported to be one more than it actually is
             // -- but there's no mystery parameter.  It looks to be an error.  So we need to double-check
             // and bound these to be certain
-            int _numPresetCommonGeneral = 56;               // This does not include the name chars, so we subtract 16.  We'll leave 4 for CTRL13...16 just in case, totalling 56
+            int _numPresetCommonGeneral = 52;               // This does not include the name chars, so we subtract 16.  We'll leave 4 for CTRL13...16 just in case, totalling 56
+            int _numPresetCommonGeneral2500 = 56;               // This does not include the name chars, so we subtract 16.  We'll leave 4 for CTRL13...16 just in case, totalling 56
             int _numReserved = 19;                      // I don't know if these are arpeggio or not: there are exactly 20 arp params...
+            int _numReservedAudity = 18;                      // I don't know if these are arpeggio or not: there are exactly 20 arp params...
             int _numPresetCommonEffects = 16;
             int _numPresetCommonLink = 20;
             int _numLayers = 4;
@@ -2222,10 +2224,10 @@ public class EmuProteus2000 extends Synth
             int _numPresetLayerPatchCords = 72;
 
             // Let's check:
-            if (numPresetCommonGeneral != _numPresetCommonGeneral) 
-                { System.err.println("processParse(): numPresetCommonGeneral params reported by synth is not standard: " + numPresetCommonGeneral + " vs " + _numPresetCommonGeneral); }
-            if (numReserved != _numReserved) 
-                { System.err.println("processParse(): numReserved params reported by synth is not standard: " + numReserved + " vs " + _numReserved); }
+            if (numPresetCommonGeneral != _numPresetCommonGeneral && numPresetCommonGeneral != _numPresetCommonGeneral2500) 
+                { System.err.println("processParse(): numPresetCommonGeneral params reported by synth is not standard: " + numPresetCommonGeneral + " vs " + _numPresetCommonGeneral + " (or " + _numPresetCommonGeneral2500 + " for the 2500)"); }
+            if (numReserved != _numReserved && numReserved != _numReservedAudity) 
+                { System.err.println("processParse(): numReserved params reported by synth is not standard: " + numReserved + " vs " + _numReserved + " (or " + _numReservedAudity + " for the Audity 2000)"); }
             if (numPresetCommonEffects != _numPresetCommonEffects) 
                 { System.err.println("processParse(): numPresetCommonEffects params reported by synth is not standard: " + numPresetCommonEffects + " vs " + _numPresetCommonEffects); }
             if (numPresetCommonLink != _numPresetCommonLink) 
@@ -2616,7 +2618,7 @@ public class EmuProteus2000 extends Synth
                 }
             else if (p.endsWith("romid"))        
                 {
-                if (p.equals("link1presetromid") || p.equals("link2presetromid"))
+                if (p.equals("link1presetromid") || p.equals("link2presetromid") || p.equals("arppatternromid"))
                     v = ROM_AND_USER_IDS[v];
                 else
                     v = ROM_IDS[v];
@@ -3213,12 +3215,12 @@ public class EmuProteus2000 extends Synth
         
         menu.addSeparator();
         
-        JMenuItem sequenceMenu = new JMenuItem("Upload Sequence...");
+        JMenuItem sequenceMenu = new JMenuItem("Upload Pattern or Song...");
         sequenceMenu.addActionListener(new ActionListener()
             {
             public void actionPerformed(ActionEvent e)
                 {
-//                writeSequence();
+				doUploadFile();
                 }
             });
         menu.add(sequenceMenu);
@@ -4799,6 +4801,15 @@ public class EmuProteus2000 extends Synth
     boolean fileDownloading = false;
     ArrayList<byte[]> fileDownload = new ArrayList<>();
     
+    
+	public static String getFileExtension(String fileName) 
+		{
+		if (fileName == null) { return null; }
+		int idx = fileName.lastIndexOf('.');
+		if (idx < 0) { return null; }
+		return fileName.substring(idx);
+	}    
+    
     void doUploadFile()
         {
         FileDialog fd = new FileDialog((JFrame)(SwingUtilities.getRoot(this)), "Upload Song or Pattern", FileDialog.LOAD);
@@ -4843,19 +4854,40 @@ public class EmuProteus2000 extends Synth
             if (len == 0) return;                   // uhm... file did not exist
                         
             byte[] data = new byte[len];
-                        
+            int pos = 0;
+            int b;
+            
+            BufferedInputStream inputStream = null;
             try
                 {
-                new ObjectInputStream(new BufferedInputStream(new FileInputStream(f))).readFully(data);
-                }
+                inputStream = new BufferedInputStream(new FileInputStream(f));
+                while(true)
+                	{
+					b = inputStream.read(data, pos, data.length - pos);
+					if (b > 0) pos += b;
+					else break;
+					}
+				inputStream.close();
+				}
             catch (IOException ex)
                 {
+                try { if (inputStream != null) inputStream.close(); } catch (IOException ex2) { }
+                ex.printStackTrace();
                 showSimpleError("File Error", "There was a problem reading the file.  This shouldn't happen, contact sean@cs.gmu.edu.");
                 return;
                 }
-                        
+            
+            // Guess the file name
+            String filename = f.getName();
+            String extension = getFileExtension(filename);
+            if (extension != null)
+            	{
+            	filename = filename.substring(0, filename.length() - extension.length());
+            	}
+            filename = filename + "                ".substring(16).trim();
+
             JComboBox typeCombo = new JComboBox(new String[] { "Pattern", "Song" });
-            JTextField nameText = new JTextField("Untitled", 16);
+            JTextField nameText = new JTextField(filename, 16);
             JComboBox bankCombo = new JComboBox(new String[] { "0", "1", "2", "3", "4", "5", "6", "7" });
             JTextField numberText = new JTextField("0");
                         
@@ -4882,8 +4914,9 @@ public class EmuProteus2000 extends Synth
                         }
                                                 
                     int bank = bankCombo.getSelectedIndex();
+                    String displayName = nameText.getText().trim();
                     String name = nameText.getText() + "                ".substring(16);
-                    name = (typeCombo.getSelectedIndex() == 0 ? "PAT" : "SNG") + "." + bank + "." + number + ":" + name;
+                    name = (typeCombo.getSelectedIndex() == 0 ? "PAT" : "SNG") + ":" + bank + "." + number + ":" + name;
                     byte[][] upload = MidiFileDump.dump(ID_ME_UPLOAD, ID_SYNTH_UPLOAD, MidiFileDump.FILE_TYPE_EMU_2500_MIDI, name, data);
 
                     ProgressMonitor monitor = new ProgressMonitor(this, "Upload Progress...", "", 0, upload.length - 1);
@@ -4909,6 +4942,7 @@ public class EmuProteus2000 extends Synth
                                 {
                                 monitor.setProgress(syx.length - 1);            // all done, should close the monitor
                                 showSimpleError("File Upload Error", "The Proteus cancelled the upload.");
+                                simplePause(50);
                                 requestSongAndPatternNames(bank, number);
                                 return;
                                 }
@@ -4916,12 +4950,14 @@ public class EmuProteus2000 extends Synth
                                 {
                                 monitor.setNote("");
                                 tryToSendSysex(syx);
+                                //simplePause(10);
                                 break;                                  // break out of the while, not the for
                                 }
                             }
                         }
                     monitor.setProgress(upload.length - 1);         // all done, should close the monitor
-                    requestSongAndPatternNames(bank, number);
+					requestSongAndPatternNames(bank, number);
+                    showSimpleMessage("File Uploaded", "The file " + displayName + " was uploaded to bank " + bank + ", number " + number);
                     return;
                     }
                 }
@@ -4932,16 +4968,22 @@ public class EmuProteus2000 extends Synth
     JMenuItem[][] songs = new JMenuItem[8][128];
     JMenuItem[][] patterns = new JMenuItem[8][128];
     JMenu[] songsAndPatterns = new JMenu[16];
+    boolean songsAndPatternsLoaded = false;
     public static final String UNLOADED_SONG = "[Unloaded]";
 
     void buildSongAndPatternMenus(JMenu proteusMenu)
         {
-        JMenuItem refreshMenu = new JMenuItem("Load Pattern and Song Names");
+        JMenuItem refreshMenu = new JMenuItem("Download Pattern and Song Names...");
         refreshMenu.addActionListener(new ActionListener()
             {
             public void actionPerformed(ActionEvent e)
                 {
-                requestAllSongsAndPatternNames();
+                if (showSimpleConfirm("Download Pattern and Song Names?", 
+                	"Downloading pattern and song names will take approximately 30 seconds,\nduring which Edisyn will be non-responsive.",
+                	"Download"))
+                	{
+                	requestAllSongsAndPatternNames();
+                	}
                 }
             });     
         proteusMenu.add(refreshMenu);
@@ -4992,7 +5034,7 @@ public class EmuProteus2000 extends Synth
             }
         }
                 
-    static final int MINIMUM_VALID_PAUSE_FOR_NAME_REQUEST = 7;
+    static final int MINIMUM_VALID_PAUSE_FOR_NAME_REQUEST = 8;
     void requestSongAndPatternNames(int bank, int number)
         {
         byte id = (byte)(getID());
@@ -5016,19 +5058,57 @@ public class EmuProteus2000 extends Synth
             }
         }
                 
+    static final int PAUSE_AFTER_CANCEL = 250;
+    ProgressMonitor songMonitor = null;
+    int songSoFar = 0;
+        
     void requestPatternOrSong(int bank, int number, String name, boolean isPattern)
         {
-        String filename = (isPattern ? "PAT." : "SNG.") + bank + "." + number + ":" + (name + "                ".substring(16));
-        tryToSendSysex(MidiFileDump.handshake(ID_SYNTH_DOWNLOAD, MidiFileDump.MESSAGE_TYPE_HANDSHAKE_CANCEL, 0));
-        tryToSendSysex(MidiFileDump.request(ID_ME_DOWNLOAD, ID_SYNTH_DOWNLOAD, MidiFileDump.FILE_TYPE_EMU_2500_MIDI, filename));
-        // QUESTION: Can we load with just the number, bank, and if it's a pattern?
-        // Do we actually need the filename?
-        fileDownload.clear();
-        fileDownloading = true;
+        if (!songsAndPatternsLoaded)
+        	{
+			if (showSimpleConfirm("Cannot Request Pattern or Song", 
+				"\nPattern and song names have not yet been downloaded.  Download them now?\nYou will need to request the pattern/song again afterwards.\n\n" +
+				"Downloading pattern and song names will take approximately 30 seconds,\nduring which Edisyn will be non-responsive.",
+                "Download"))
+                	{
+                	requestAllSongsAndPatternNames();
+                	}
+        	}
+        else
+        	{
+			String filename = (isPattern ? "PAT:" : "SNG:") + bank + "." + number + ":" + (name + "                ".substring(16));
+			tryToSendSysex(MidiFileDump.handshake(ID_SYNTH_DOWNLOAD, MidiFileDump.MESSAGE_TYPE_HANDSHAKE_CANCEL, 0));
+			tryToSendSysex(MidiFileDump.request(ID_ME_DOWNLOAD, ID_SYNTH_DOWNLOAD, MidiFileDump.FILE_TYPE_EMU_2500_MIDI, filename));
+			// QUESTION: Can we load with just the number, bank, and if it's a pattern?
+			// Do we actually need the filename?
+			fileDownload.clear();
+			fileDownloading = true;
+			
+        	if (songMonitor != null)
+				{
+				songSoFar = 0;
+				songMonitor = new ProgressMonitor(this, "Downloading " + name, null, 0, 1);		// we don't know the length yet
+    	        songMonitor.setProgress(songSoFar);
+            	tryToSendSysex(MidiFileDump.handshake(ID_SYNTH_DOWNLOAD, MidiFileDump.MESSAGE_TYPE_HANDSHAKE_CANCEL, 0));
+        		simplePause(PAUSE_AFTER_CANCEL);
+				}
+			else
+				{
+				songMonitor = new ProgressMonitor(this, "Downloading " + name, null, 0, 1);		// we don't know the length yet
+    	        songMonitor.setProgress(songSoFar);
+				}
+			}
         }
 
     void parsePatternOrSong(byte[] data)
         {
+        // If a unit doesn't have a song or pattern, it'll come back as gibberish.
+        // For example, on the upgraded Audity 2000 it comes back as the string 03 00 00 05 20 02
+    	// so we check for this.
+    	
+    	if (data.length < 16) return;
+        
+        
         int index = (data[7] | (data[8] << 7));
         int bank = (index / 128);
         int number = (index % 128);
@@ -5055,6 +5135,7 @@ public class EmuProteus2000 extends Synth
             {
             songs[bank][number].setText(name);
             }
+		songsAndPatternsLoaded = true;
         }
     
     public boolean handleUnknownSysex(byte[] data)
@@ -5064,54 +5145,6 @@ public class EmuProteus2000 extends Synth
         if (fileDumpMessageType == MidiFileDump.MESSAGE_TYPE_NOT_FILE_DUMP)
             {
             return false;           // not a file dump message -- someone else needs to handle it
-            }
-        else if (!fileDownloading)
-            {
-            return true;            // I'm not receiving, dunno why I'm getting this stuff, but we indicate we understand it
-            }
-        else if (fileDumpMessageType == MidiFileDump.MESSAGE_TYPE_REQUEST)
-            {
-            return true;            // we understand it but don't handle it
-            }
-        else if (fileDumpMessageType == MidiFileDump.MESSAGE_TYPE_HEADER)
-            {
-            fileDownload.add(data);
-            return true;
-            }
-        else if (fileDumpMessageType == MidiFileDump.MESSAGE_TYPE_HANDSHAKE_EOF)
-            {
-            processDownloadedFile();
-            return true;
-            }       
-        else if (fileDumpMessageType == MidiFileDump.MESSAGE_TYPE_HANDSHAKE_WAIT)
-            {
-            int receiver = MidiFileDump.getHandshakeReceiverID(data);
-            if (receiver == ID_ME_UPLOAD)
-                {
-                // raise upload wait flag       -- do we need a lock on this?  It's a race condition
-                fileUploadWait = true;
-                }
-            return true;
-            }
-        else if (fileDumpMessageType == MidiFileDump.MESSAGE_TYPE_HANDSHAKE_CANCEL)
-            {
-            int receiver = MidiFileDump.getHandshakeReceiverID(data);
-            if (receiver == ID_ME_UPLOAD)
-                {
-                // raise upload cancel flag     -- do we need a lock on this?  It's a race condition
-                fileUploadWait = false;
-                fileUploadCancel = true;
-                }
-            else
-                {
-                // Cancel download
-                fileDownloadError("File Download Cancelled", "The Proteus 2500 cancelled file transfer.");
-                }
-            return true;
-            }
-        else if (fileDumpMessageType == MidiFileDump.MESSAGE_TYPE_HANDSHAKE_NAK)
-            {
-            return true;            // we understand it but don't handle it
             }
         else if (fileDumpMessageType == MidiFileDump.MESSAGE_TYPE_HANDSHAKE_ACK)
             {
@@ -5123,9 +5156,81 @@ public class EmuProteus2000 extends Synth
                 }
             return true;
             }
+        else if (fileDumpMessageType == MidiFileDump.MESSAGE_TYPE_HANDSHAKE_WAIT)
+            {
+            int receiver = MidiFileDump.getHandshakeReceiverID(data);
+            if (receiver == ID_ME_UPLOAD)
+                {
+                // raise upload wait flag       -- do we need a lock on this?  It's a race condition
+                fileUploadWait = true;
+                }
+            return true;
+            }
+        // This must be AFTER the ACK and WAIT, because we'll get lots of them during upload
+        else if (songMonitor == null || songMonitor.isCanceled())
+        	{
+        	if (songMonitor != null) { songMonitor.close(); songMonitor = null; songSoFar = 0; }
+            tryToSendSysex(MidiFileDump.handshake(ID_SYNTH_DOWNLOAD, MidiFileDump.MESSAGE_TYPE_HANDSHAKE_CANCEL, 0));
+            return true;
+        	}
+        else if (!fileDownloading)
+            {
+            songSoFar = 0;
+            songMonitor.close();
+            songMonitor = null;
+            tryToSendSysex(MidiFileDump.handshake(ID_SYNTH_DOWNLOAD, MidiFileDump.MESSAGE_TYPE_HANDSHAKE_CANCEL, 0));
+            return true;            // I'm not receiving, dunno why I'm getting this stuff, but we indicate we understand it
+            }
+        else if (fileDumpMessageType == MidiFileDump.MESSAGE_TYPE_REQUEST)
+            {
+            return true;            // we understand it but don't handle it
+            }
+        else if (fileDumpMessageType == MidiFileDump.MESSAGE_TYPE_HEADER)
+            {
+            fileDownload.add(data);
+            tryToSendSysex(MidiFileDump.handshake(ID_SYNTH_DOWNLOAD, MidiFileDump.MESSAGE_TYPE_HANDSHAKE_ACK, 0));
+            songMonitor.setMaximum(MidiFileDump.getHeaderLength(data));
+            songSoFar = 0;
+            songMonitor.setProgress(songSoFar);
+            return true;
+            }
+        else if (fileDumpMessageType == MidiFileDump.MESSAGE_TYPE_HANDSHAKE_EOF)
+            {
+            songSoFar = 0;
+            songMonitor.close();
+            songMonitor = null;
+            processDownloadedFile();
+            return true;
+            }       
+        else if (fileDumpMessageType == MidiFileDump.MESSAGE_TYPE_HANDSHAKE_CANCEL)
+            {
+            int receiver = MidiFileDump.getHandshakeReceiverID(data);
+            if (receiver == ID_ME_UPLOAD)
+                {
+                // raise upload cancel flag     -- do we need a lock on this?  It's a race condition
+                fileUploadWait = false;
+                fileUploadCancel = true;
+                }
+            else
+                {
+				songSoFar = 0;
+				songMonitor.close();
+				songMonitor = null;
+                // Cancel download
+                fileDownloadError("File Download Cancelled", "The Proteus 2500 cancelled file transfer.");
+                }
+            return true;
+            }
+        else if (fileDumpMessageType == MidiFileDump.MESSAGE_TYPE_HANDSHAKE_NAK)
+            {
+            return true;            // we understand it but don't handle it
+            }
         else            // it's a packet
             {
             fileDownload.add(data);
+            tryToSendSysex(MidiFileDump.handshake(ID_SYNTH_DOWNLOAD, MidiFileDump.MESSAGE_TYPE_HANDSHAKE_ACK, MidiFileDump.getPacketNumber(data)));
+            songSoFar += MidiFileDump.getPacketData(data).length;
+            songMonitor.setProgress(songSoFar);
             return true;
             }
         }
@@ -5147,21 +5252,22 @@ public class EmuProteus2000 extends Synth
             return;
             }
                         
+        /*
         // 1. Is there exactly one header, at the beginning?
         if (MidiFileDump.recognize(fileDownload.get(0), MidiFileDump.ANY_ID) == MidiFileDump.MESSAGE_TYPE_HEADER)
             {
             for(int i = 1; i < fileDownload.size(); i++)
                 {
-                if (MidiFileDump.recognize(fileDownload.get(0), MidiFileDump.ANY_ID) == MidiFileDump.MESSAGE_TYPE_HEADER)
+                if (MidiFileDump.recognize(fileDownload.get(i), MidiFileDump.ANY_ID) == MidiFileDump.MESSAGE_TYPE_HEADER)
                     {
-                    fileDownloadError("Bad File Sent", "The Proteus 2500 sent a corrupted file.");
+                    fileDownloadError("Bad File Sent", "The Proteus 2500 sent a corrupted file (with more than one header).");
                     return;
                     }
                 }
             }
         else
             {
-            fileDownloadError("Bad File Sent", "The Proteus 2500 sent a corrupted file.");
+            fileDownloadError("Bad File Sent", "The Proteus 2500 sent a corrupted file (without a header).");
             return;
             }
                                 
@@ -5179,6 +5285,7 @@ public class EmuProteus2000 extends Synth
             if (nextNumber == MidiFileDump.getPacketNumber(fileDownload.get(i)))
                 {
                 nextNumber++;
+                if (nextNumber >= 128) nextNumber = 0;
                 }
             else
                 {
@@ -5200,15 +5307,32 @@ public class EmuProteus2000 extends Synth
             fileDownloadError("Bad File Sent", "The Proteus 2500 did not send a file of the right length.");
             return;
             }
-        if (!MidiFileDump.FILE_TYPE_EMU_2500_MIDI.equals(MidiFileDump.getHeaderLength(header)))
+            
+        if (!MidiFileDump.FILE_TYPE_EMU_2500_MIDI.equals(MidiFileDump.getHeaderType(header)))
             {
             fileDownloadError("Bad File Sent", "The Proteus 2500 did not send a file of the right type.");
             return;
             }
+        */
+        
+		byte[] file = null;
+		try
+			{
+			file = MidiFileDump.getFile(fileDownload, MidiFileDump.ANY_ID, MidiFileDump.FILE_TYPE_EMU_2500_MIDI);
+			}
+		catch (RuntimeException ex)
+			{
+			fileDownloadError("File Assembly Error", ex.getMessage() + ".");
+			return;
+			}        
                 
-        // 5. Okay, I guess we're good...
+		// Build the filename to use
+        byte[] header = fileDownload.get(0);
+        String n = MidiFileDump.getHeaderName(header);
+        String filename = n.substring(n.length() - 16).trim() + ".mid";
+        
         FileDialog fd = new FileDialog((Frame)(SwingUtilities.getRoot(EmuProteus2000.this)), "Save Song or Pattern...", FileDialog.SAVE);
-        fd.setFile(MidiFileDump.getHeaderName(header) + ".mid");
+        fd.setFile(filename);
         disableMenuBar();
         fd.setVisible(true);
         enableMenuBar();
@@ -5348,7 +5472,7 @@ public class EmuProteus2000 extends Synth
    The Proteus 2000 has awful, just awful sysex.  Compared to its predecessors, it has an ENORMOUS
    sysex specification, and yet this specification is missing an extraordinary amount of critical
    information.  For example, the Proteus 2000 has an arpeggiator, and it has a bunch of sysex
-   commands for updating the arpeggiator by itself.  But the spec writers kinda forgot to indicate
+   commands for updating the arpeggiator by itself.  But the spec writers forgot to indicate
    where the arpeggiator parameters appear in the standard patch format.  In reality, it secretly 
    shows up in a shadowy and undocumented area called "Reserved", with no hints to that effect.  
    Also, the specification contains a million parameters, and provides them in a nicely convenient 

@@ -1814,7 +1814,6 @@ return emit(null, true, false);
   19     2     0F 70    00001111 01110000    7    Osc 1 Manual PW                   0-127         [SEE TABLE 3]
   20     2     07 78    00000111 01111000    7    Osc 1 Range                       3F, 40, 41, 42, which encode 16'/8'/4'/2'       
   21     2     07 7C    00000111 01111100    8    Osc 1 Coarse                      0-255         [SEE TABLE 4]
-
   22     2     03 7E    00000011 01111110    8    Osc 1 Fine                        27 = -100 ... 126 = -1, 127 = 0, 128 = 0, 129 = 1 ... 288 = 100
   24     1     03       00000011             2    Osc 2 Waveform                    0-3           Sine/Triangle/Saw/Square
   25     2     3F 40    00111111 01000000    7    Osc 2 Manual PW                   0-127         [SEE TABLE 3]
@@ -1829,17 +1828,15 @@ return emit(null, true, false);
   35     [Always 0x00]
   36     1     30       00110000             2    Sub Osc Wave                     0-3            Sine/Tri/Saw/Square
   37     1     08       00001000             1    Sub Osc Oct                      0/1            One/two octaves
-
-  37     2     07 7C    00000111 01111100    8    Mixer Osc 1 Level                0-255          Level
-  38     2     03 7E    00000011 01111110    8    Mixer Osc 2 Level                0-255          Level
-  39     2     01 7F    00000001 01111111    8    Mixer Sub Osc Level              0-255          Level
-  41     2     7F 40    01111111 01000000    8    Mixer Noise Level                0-255          Level
-  42     2     3F 60    00111111 01100000    8    Mixer Ring Mod Level             0-255          Level
-  43     2     1F 70    00011111 01110000    8    Mixer External Signal Level      0-255          Level
-  44     2     0F 78    00001111 01111000    8    Filter Frequency                 0-255          Frequency
-  45     2     03 7C    00000011 01111100    7    Filter Resonance                 0-127          Resonance
-
-  46     2     01 7E    00000001 01111110    7    Filter Overdrive                 0-127          Level
+  37     2     07 7C    00000111 01111100    8    Mixer Osc 1 Level                0-255
+  38     2     03 7E    00000011 01111110    8    Mixer Osc 2 Level                0-255
+  39     2     01 7F    00000001 01111111    8    Mixer Sub Osc Level              0-255
+  41     2     7F 40    01111111 01000000    8    Mixer Noise Level                0-255
+  42     2     3F 60    00111111 01100000    8    Mixer Ring Mod Level             0-255
+  43     2     1F 70    00011111 01110000    8    Mixer External Signal Level      0-255
+  44     2     0F 78    00001111 01111000    8    Filter Frequency                 0-255
+  45     2     03 7C    00000011 01111100    7    Filter Resonance                 0-127
+  46     2     01 7E    00000001 01111110    7    Filter Overdrive                 0-127
   48     1     08       00001000             1    Filter Slope                     0/1            12/24dB
   48     1     04       00000100             1    Filter Type                      0/1            Classic/Acid
   48     1     03       00000011             2    Filter Shape                     0-2            LP/BP/HP        
@@ -1847,7 +1844,6 @@ return emit(null, true, false);
   50     2     1F 60    00011111 01100000    7    Amp Env Attack                   0-127
   51     2     0F 70    00001111 01110000    7    Amp Env Decay                    0-127
   52     2     07 78    00000111 01111000    7    Amp Env Sustain                  0-127
-
   53     2     03 7C    00000011 01111100    7    Amp Env Release                  0-127
   55     1     06       00000110             2    Amp Env Trigger                  0-2            Single/Multi/Autoglide
   56     1     7F       01111111             7    Velocity Mod Env                 1-127          -63 ... +63
@@ -1856,25 +1852,22 @@ return emit(null, true, false);
   59     2     0F 70    00001111 01110000    7    Mod Env Sustain                  0-127
   60     2     07 78    00000111 01111000    7    Mod Env Release                  0-127
   62     1     0C       00001100             2    Mod Env Trigger                  0-2            Single/Multi/Autoglide
-
   63     1     06       00000110             2    LFO1 Wave                        0-3            Triangle/Sawtooth/Square/Sample and Hold
   64     1     7F       01111111             7    LFO1 Delay                       0-127
   65     2     3F 40    00111111 01000000    7    LFO1 Slew                        0-127
-  66     2     3F 60    00111111 01100000    8    LFO1 Speed                       0-255          0 ... 190 Hz but not displayed as such
+  66     2     3F 60    00111111 01100000    8    LFO1 Speed                       0-255          0 ... 190 Hz but not displayed as such, nor documented
   67     2     07 70    00000111 01110000    6    LFO1 Sync Value                  0-34           [SEE TABLE 1]
   69     1     08       00001000             1    LFO1 Speed/Sync                  0/1            Speed/Sync
   69     1     10       00010000             1    LFO1 Key Sync                    0/1
   70     1     0C       00001100             2    LFO2 Wave                        0-3            Triangle/Sawtooth/Square/Sample and Hold
-
   70     2     01 7E    00000001 01111110    7    LFO2 Delay                       0-127
   72     1     7F       01111111             7    LFO2 Slew                        0-127
-  73     2     7F 40    01111111 01000000    8    LFO2 Speed                       0-255          0 ... 190 Hz but not displayed as such
+  73     2     7F 40    01111111 01000000    8    LFO2 Speed                       0-255          0 ... 190 Hz but not displayed as such, nor documented
   74     2     0F 60    00001111 01100000    6    LFO2 Sync Value                  0-34           [SEE TABLE 1]
   76     1     10       00010000             1    LFO2 Speed/Sync                  0/1            Speed/Sync
   76     1     20       00100000             1    LFO2 Key Sync                    0/1
   77     1     08       00001000             1    Arp On                           0/1
   77     1     1C       00010000             1    Arp Latch                        0/1
-
   77     1     20       00100000             1    Arp Seq Retrig                   0/1
   78     1     1C       00011100             3    Arp Octaves / Sequence           1...4
   79     1     0E       00001110             3    Arp Mode                         0-7            Up/Down/Up-Down/Up-Down2/Played/Random/Record/Play
@@ -1883,7 +1876,6 @@ return emit(null, true, false);
   82     2     1F 60    00011111 01100000    7    Mod Wheel Filter Freq            0-127          -64...+63
   83     2     0F 70    00001111 01110000    7    Mod Wheel LFO1 to Osc Pitch      0-127          -64...+63
   84     2     07 78    00000111 01111000    7    Mod Wheel LFO2 to Filter Freq    0-127          -64...+63
-
   85     2     03 7C    00000011 01111100    7    Mod Wheel Osc2 Pitch             0-127          -64...+63
   86     2     01 7E    00000001 01111110    7    Aftertouch Filter Freq           0-127          -64...+63
   88     1     7F       01111111             7    Aftertouch LFO1 to Osc 1+2 Pitch 0-127          -64...+63

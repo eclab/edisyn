@@ -3009,10 +3009,11 @@ public class EmuProteus2000 extends Synth
         
         
     JMenu[] simmMenu = new JMenu[4];
-        
+    JMenu menu = null;
+
     public void addProteusMenu()
         {
-        JMenu menu = new JMenu("Proteus 2000");
+        menu = new JMenu("Proteus 2000");
 
         JMenuItem requestMenu = new JMenuItem("Request SIMM Configuration");
         requestMenu.addActionListener(new ActionListener()
@@ -3224,10 +3225,23 @@ public class EmuProteus2000 extends Synth
                 }
             });
         menu.add(sequenceMenu);
-
-        menu.addSeparator();
         
-        buildSongAndPatternMenus(menu);
+        JMenuItem refreshMenu = new JMenuItem("Download Pattern and Song Names...");
+        refreshMenu.addActionListener(new ActionListener()
+            {
+            public void actionPerformed(ActionEvent e)
+                {
+                if (showSimpleConfirm("Download Pattern and Song Names?", 
+                	"Downloading pattern and song names will take approximately 30 seconds,\nduring which Edisyn will be non-responsive.",
+                	"Download"))
+                	{
+                	requestAllSongAndPatternNames();
+                	}
+                }
+            });     
+        menu.add(refreshMenu);
+                
+        menu.addSeparator();
 
         menubar.add(menu);
         }
@@ -4809,7 +4823,12 @@ public class EmuProteus2000 extends Synth
 		if (idx < 0) { return null; }
 		return fileName.substring(idx);
 	}    
-    
+	
+	
+	
+	/// This method was supposed to incorporate a ProgressMonitor, and you'll see one in the code, but it doesn't
+	/// presently work.  So the method just silently does its upload and is finished with it.
+
     void doUploadFile()
         {
         FileDialog fd = new FileDialog((JFrame)(SwingUtilities.getRoot(this)), "Upload Song or Pattern", FileDialog.LOAD);
@@ -4971,23 +4990,10 @@ public class EmuProteus2000 extends Synth
     boolean songsAndPatternsLoaded = false;
     public static final String UNLOADED_SONG = "[Unloaded]";
 
-    void buildSongAndPatternMenus(JMenu proteusMenu)
+    void buildSongAndPatternMenus()
         {
-        JMenuItem refreshMenu = new JMenuItem("Download Pattern and Song Names...");
-        refreshMenu.addActionListener(new ActionListener()
-            {
-            public void actionPerformed(ActionEvent e)
-                {
-                if (showSimpleConfirm("Download Pattern and Song Names?", 
-                	"Downloading pattern and song names will take approximately 30 seconds,\nduring which Edisyn will be non-responsive.",
-                	"Download"))
-                	{
-                	requestAllSongsAndPatternNames();
-                	}
-                }
-            });     
-        proteusMenu.add(refreshMenu);
-                
+        if (songsAndPatterns[0] != null) return;		// already done
+        
         for(int i = 0; i < 8; i++)
             {
             songsAndPatterns[i] = new JMenu("Request Pattern Bank " + i);
@@ -5030,7 +5036,7 @@ public class EmuProteus2000 extends Synth
                         
         for(int i = 0; i < songsAndPatterns.length; i++)
             {
-            proteusMenu.add(songsAndPatterns[i]);
+            menu.add(songsAndPatterns[i]);
             }
         }
                 
@@ -5047,8 +5053,11 @@ public class EmuProteus2000 extends Synth
         simplePause(MINIMUM_VALID_PAUSE_FOR_NAME_REQUEST);
         }
 
-    void requestAllSongsAndPatternNames()
+    void requestAllSongAndPatternNames()
         {
+        // First let's make sure we've got the menus
+        buildSongAndPatternMenus();
+        
         for(int i = 0; i < 8; i++)
             {
             for(int j = 0; j < 128; j++)
@@ -5071,7 +5080,7 @@ public class EmuProteus2000 extends Synth
 				"Downloading pattern and song names will take approximately 30 seconds,\nduring which Edisyn will be non-responsive.",
                 "Download"))
                 	{
-                	requestAllSongsAndPatternNames();
+                	requestAllSongAndPatternNames();
                 	}
         	}
         else

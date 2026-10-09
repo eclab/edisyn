@@ -1,0 +1,50 @@
+<html><body>
+<h2>Sequential Fourm</h2>
+<p>Patch editor and librarian for the Sequential Fourm synthesizer.</p>
+
+<h3>Banks</h3>
+<p>The Fourm has 4 banks of 128 patches each:</p>
+<ul>
+  <li><b>U1</b> – User Bank 1 (writable)</li>
+  <li><b>U2</b> – User Bank 2 (writable)</li>
+  <li><b>F1</b> – Factory Bank 1 (read-only)</li>
+  <li><b>F2</b> – Factory Bank 2 (read-only)</li>
+</ul>
+
+<h3>Tabs</h3>
+<ul>
+  <li><b>Global</b> – Patch name, category, scale, transpose, clock, pitch bend</li>
+  <li><b>Oscillators</b> – Osc 1 and 2 waveforms, mix, feedback, noise, glide</li>
+  <li><b>Filter</b> – Cutoff, resonance, key tracking, filter envelope</li>
+  <li><b>Envelope + LFO</b> – Amp envelope and LFO parameters</li>
+  <li><b>Modulation</b> – Mod source routing and destination assignments</li>
+  <li><b>Arp / Voice</b> – Arpeggiator, sequencer controls, unison, key mode</li>
+  <li><b>Seq 1 – Seq 4</b> – Step editor for each sequencer track (64 steps each)</li>
+</ul>
+
+<h3>Sequencer</h3>
+<p>Each of the four sequencer tracks has its own tab. Scroll vertically to access all 64 steps.
+Per step: note (displayed as note name), velocity, and Rest/Tie/Glide checkboxes.</p>
+
+<h3>Notes on Display Values</h3>
+<p>Most parameter names and ranges have been verified against a 512-patch hardware dump and
+the official Fourm User Guide. A few are still unconfirmed and may show an inaccurate label
+or an "Off"-mapped value if your patch uses them:</p>
+<ul>
+  <li><b>Key Mode</b> – this parameter's meaning and option names aren't documented anywhere
+  we could find; the current label guesses may be wrong</li>
+  <li><b>Noise Type</b> – a 4th value exists beyond the three documented types (White/Pink/Violet)</li>
+  <li><b>Clock Div</b> – some patches use values beyond the 11 divisions either Sequential
+  document lists, possibly added in a firmware update</li>
+</ul>
+
+<h3>SysEx</h3>
+<ul>
+  <li>Manufacturer ID: 0x01 (Sequential)</li>
+  <li>Device ID: 0x3B (Fourm)</li>
+  <li>Program Dump: F0 01 3B 02 &lt;bank&gt; &lt;prog&gt; &lt;4690 packed bytes&gt; F7</li>
+  <li>Edit Buffer: F0 01 3B 03 &lt;4690 packed bytes&gt; F7</li>
+</ul>
+
+<p><b>MIDI SysEx</b> must be enabled in the Fourm's globals (SysX = On, SysX Port = USB or MIDI).</p>
+</body></html>

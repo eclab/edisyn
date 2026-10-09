@@ -125,6 +125,10 @@ public abstract class Synth extends JComponent implements Updatable
     public JCheckBoxMenuItem morphTestNotesMenu;
     /** The "High Resolution Display" menu */
     public JCheckBoxMenuItem highResolutionDisplayMenu;
+    /** The "Enable JACK MIDI" menu, only appears on Unix */
+    public JCheckBoxMenuItem enableJackMidiMenu;
+    /** The "Switch to Editor when Loading from the Librarian" menu */
+    public JCheckBoxMenuItem switchToEditorOnLoadMenu;
     /** The "Blend" menu */
     public JMenu blend;
     /** NN randomization checkbox, only appears if the Synth providesNN (such as a DX7) */
@@ -5937,6 +5941,31 @@ super.paint(g);
                 {
                 highResolutionDisplay = highResolutionDisplayMenu.isSelected();
                 setLastX("" + highResolutionDisplay, "HighResolutionDisplay", null);
+                }
+            });
+
+        if (Style.isUnix())
+            {
+            enableJackMidiMenu = new JCheckBoxMenuItem("Enable JACK MIDI (Experimental)");
+            menu.add(enableJackMidiMenu);
+            enableJackMidiMenu.setSelected(getLastXAsBoolean("EnableJackMidi", null, false, false));
+            enableJackMidiMenu.addActionListener(new ActionListener()
+                {
+                public void actionPerformed( ActionEvent e)
+                    {
+                    setLastX("" + enableJackMidiMenu.isSelected(), "EnableJackMidi", null);
+                    }
+                });
+            }
+
+        switchToEditorOnLoadMenu = new JCheckBoxMenuItem("Switch to Editor when Loading from the Librarian");
+        menu.add(switchToEditorOnLoadMenu);
+        switchToEditorOnLoadMenu.setSelected(getLastXAsBoolean("SwitchToEditorOnLoad", null, false, false));
+        switchToEditorOnLoadMenu.addActionListener(new ActionListener()
+            {
+            public void actionPerformed( ActionEvent e)
+                {
+                setLastX("" + switchToEditorOnLoadMenu.isSelected(), "SwitchToEditorOnLoad", null);
                 }
             });
 

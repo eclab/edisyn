@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=Edisyn
+Comment=Synthesizer Patch Editor and Librarian
+Exec=%EDISYN_COMMAND%
+StartupNotify=true
+Icon=io.github.eclab.edisyn
+Categories=AudioVideo

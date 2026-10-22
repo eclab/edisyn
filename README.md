@@ -1,7 +1,7 @@
 ![Edisyn Splash Banner](https://raw.githubusercontent.com/eclab/edisyn/master/resources/pics/Banner.png)
 
 # Edisyn
-Synthesizer Patch Editor and Librarian (Version 37)
+Synthesizer Patch Editor and Librarian (Version 38˙)
 
 By Sean Luke (sean@cs.gmu.edu)
 
@@ -31,9 +31,9 @@ Donations are welcome via Paypal to my email address (sean@cs.gmu.edu).
 
 **Edisyn was featured on Bad Gear!** The second [M-Audio Venom](https://www.youtube.com/watch?v=Nzg030Cx5Vc) video featured Edisyn extensively and warmly as Edisyn is presently the only editor available for the unit on the Mac (and the best one overall).
 
-* New patch editors for the Kawai K5000 family!  This was a big, and difficult, one.
-* Bug fixes the CC reception and output for the D Station and Drumstation.  Thanks to Guy Rooms.
-* New version of the Waldorf M editor with revision to match the M's current firmware.
+* New patch editor for the Novation Bass Station II.
+* E-Mu Proteus 2000 family support extended for the Audity 2000, plus bug fixes.  Thanks to Ray Bellis.
+* E-Mu Proteus 2500 Pattern / Song upload and download support.
 * Assorted bug fixes
 
 
@@ -85,6 +85,7 @@ Edisyn presently supports:
 * Korg Volca Series (Joint editor for Bass, Beats, Drum Single, Drum Split, FM, Keys, Kick, NuBass, Sample/Sample2 Multi, Sample2 Single, /u/pajen firmware)
 * M-Audio Venom (Single, Multi, Arpeggiator, and Global Modes)
 * Novation A Station
+* Novation Bass Station II
 * Novation Drumstation and D Station
 * Novation ReMOTE SL, SL MKII, and SL Compact Series
 * Oberheim Matrix 6, 6R, and 1000 (Single and (for 1000) Global Modes) 

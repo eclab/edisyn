@@ -40,7 +40,7 @@
 \begin{document}
 
 \noindent {\Huge\bf Edisyn}\\[0.5em]
-{\large \bf A Java-based Synthesizer Patch Editor and Librarian, Version 37\\[0.2em]
+{\large \bf A Java-based Synthesizer Patch Editor and Librarian, Version 38\\[0.2em]
 By Sean Luke\qquad sean@cs.gmu.edu}\\[0.2em]
 
 \vspace{-1em}
@@ -65,26 +65,27 @@ Edisyn is a no-nonsense synthesizer patch editor and librarian for the editing a
 \begin{itemize}
 %\item Futuresonus Parva
 \item Alesis D4 and DM5 (Single)
+\item ASM Hydrasynth Family (Single)
 \item Audiothingies MicroMonsta (Single)
-\item Ashun Sound Machines Hydrasynth Family (Single)
 \item Casio CZ-1, CZ-101, CZ-1000, CZ-3000, CZ-5000, and CZ-230S (Single)
 \item Dave Smith Instruments Prophet '08 and '08 Desktop, Tetra, Mopho, Mopho Keyboard, Mopho SE, and Mopho X4 (Single and (for Tetra) Combo)
 \item Dave Smith Instruments Prophet 12
 \item E-Mu Morpheus and Ultraproteus (Single, Hyperpreset, and MidiMap)
-\item E-Mu Proteus 1, 1 XR, 2, 2 XR, 3, 3 XR, and 1+Orchestral (Single)
 \item E-Mu Planet Phatt, Orbit and Orbit V2, Carnaval, Vintage Keys, and Vintage Keys Plus (Single)
-\item E-Mu Proteus 1000/2000/2500, Audity 2000 v2.x, Virtuoso 2000, Xtreme Lead-1, Mo'Phatt, B-3, Planet Earth, Orbit-3, Proteus Custom, XL-1 Turbo, Turbo Phatt, Vintage Pro, XL-7, MP-7, PX-7, PK-6, XK-6, MK-6, Halo, and Vintage Keys Keyboard (Single)
+\item E-Mu Proteus 1, 1 XR, 2, 2 XR, 3, 3 XR, and 1+Orchestral (Single)
+\item E-Mu Proteus 1000/2000/2500, Audity 2000 v2.x, Virtuoso 2000, Xtreme Lead-1, Mo'Phatt, B-3, Planet Earth, Orbit-3, Proteus Custom, XL-1 Turbo, Turbo Phatt, Vintage Pro, XL-7, MP-7, PX-7, PK-6, XK-6, MK-6, Halo, and Vintage Keys Keyboard (Single, and 2500 Pattern/Song Uploading)
+\item JL Cooper MSB Plus and MSB Plus Rev 2
 \item Kawai K1, K1m, and K1r (Single and Multimode)
 \item Kawai K4 and K4r (Single, Multimode, Drum, Effects)
 \item Kawai K5 and K5m (Single and Multimode)
 \item Kawai K5000S, K5000R, and K5000W (Single and Multimode)
-\item Korg SG Rack and SG Pro X (Single and (for SG Rack) Multimode)
 \item Korg Microkorg (Single)
 \item Korg Microsampler
+\item Korg SG Rack and SG Pro X (Single and (for SG Rack) Multimode)
 \item Korg Volca Series: Bass, Beats, Drum, FM, Keys, Kick, NuBass, and Sample2 (Single); Drum (Split); Sample/Sample2 (Multimode), /u/pajen FM
 \item Korg Wavestation SR (Performance, Patch, and Wave Sequence)
-\item JL Cooper MSB Plus and MSB Plus Rev 2
 \item M-Audio Venom (Single, Multimode, Arp, and Global)
+\item Novation Bass Station II
 \item Novation A Station
 \item Novation Drumstation and D Station
 \item Novation SL, SL MKii, and SL Compact Series
@@ -102,8 +103,8 @@ Edisyn is a no-nonsense synthesizer patch editor and librarian for the editing a
 \item Waldorf Microwave II, Microwave XT, and Microwave XTk (Single and Multimode)
 \item Waldorf Pulse 2
 \item Waldorf Rocket
-\item Yamaha DX7 Family: DX7, TX7, TX216/TX816, Korg Volca FM, Dexed, DX200, DX9, etc. (Single)
 \item Yamaha 4-Op FM Family: DX21, DX27, DX100, TX81Z, DX11, TQ5, YS100, YS200, B200, V50, etc. (Single and  (for TX81Z and DX11) Multimode)
+\item Yamaha DX7 Family: DX7, TX7, TX216/TX816, Korg Volca FM, Dexed, DX200, DX9, etc. (Single)
 \item Yamaha FB-01 (Single and Multimode)
 \item Yamaha FS1R (Voice, Performance, and Fseq)
 \item Yamaha TG33, SY22, and SY35 (Single and (for TG33) Multimode)
@@ -134,7 +135,7 @@ If you're on a Mac, Edisyn will look like a standard application, just double-cl
 
 The first time you launch Edisyn, you'll be presented with the dialog at right, asking you to choose a synthesizer patch editor.  You can either select from {\it all} synthesizers available, or from those you have {\it recently} edited with Edisyn (the very most recent one is auto-selected for you). If you can't figure out why the {\it ``All Synths''} option is disabled, try first choosing ``{\it Select another synthesizer...}'' from the ``{\it Recent}'' popup.  
 
-Once you've picked a synthesizer, if you click {\it Open}, Edisyn will attempt to connect to it via MIDI directly; you can also run in {\bf Disconnected Mode}, where you're not attached to MIDI.  And of course you can {\it Quit}.
+Once you've picked a synthesizer, click {\it Open}, and Edisyn will try to connect to it via MIDI directly; you can also Cancel to run  {\bf Disconnected}, where you're not attached to MIDI.  And of course you can {\it Quit}.
 
 \begin{wrapfigure}{r}{2.7in}
 \includegraphics[scale=0.3]{1.png}
@@ -142,7 +143,7 @@ Once you've picked a synthesizer, if you click {\it Open}, Edisyn will attempt t
 \vspace{-3em}
 \end{wrapfigure}
 
-Edisyn will now build a patch editor for you and display it.  But unless you chose {\bf Disconnected Mode}, it'll first ask you to set up MIDI for this editor.  The dialog at right presents you with up to 6 fields (5 are shown here):
+Edisyn will now build a patch editor for you and display it.  But unless you are {\bf Disconnected}, it'll first ask you to set up MIDI for this editor.  The dialog at right presents you with up to 6 fields (5 are shown here):
 
 \begin{itemize}
 \item The USB MIDI Device from which you will {\bf Receive} MIDI data sent by the synthesizer.  Here we are receiving from the Tascam US-2x2 interface, which presents itself as a generic, nameless device. (BTW, if you're on a Mac and you don't want a generic name, go to the Audio MIDI Setup application in the Utilities folder, double-click on the device, and change its name.)
@@ -153,13 +154,13 @@ Edisyn will now build a patch editor for you and display it.  But unless you cho
 \vspace{-1em}
 \vbox{
 \begin{itemize}
-\item (Not visible here) The optional {\bf ID} of the synthesizer.  Some synthesizers require a special ID embedded in their sysex so they can tell that the message is for them rather than another copy of the same synthesizer.  (The Yamaha TX81Z doesn't have an ID, so it's not displayed in this example).
+\item (Not visible in the figure) The optional {\bf ID} of the synthesizer.  Some synthesizers require a special ID embedded in their sysex so they can tell that the message is for them rather than another copy of the same synthesizer.  (The Yamaha TX81Z doesn't have an ID, so it's not displayed in this example).
 \item The USB MIDI Device from which you will receive MIDI data sent by a {\bf controller}.  This may be a controller keyboard to play test notes on the synthesizer, or it may be a control surface to send CC data to the synthesizer or to Edisyn itself.  Here we are receiving from an Arturia Beatstep.
 \item The {\bf Channel} over which you will receive MIDI data sent by a {\bf controller}.  This can be any specific MIDI channel, or (in this example) ``Any'', meaning any channel or OMNI.
 \item The USB MIDI Device and MIDI Channel for a {\bf second controller}.  You can use this just like the first controller: you can drive the synthesizer or control Edisyn  from two different controllers at once.
 \end{itemize}
 
-If you are not connected to MIDI, or if you cancel, Edisyn will put you in {\bf Disconnected Mode}.  Also, in {\bf Linux or Windows}, Edisyn can only see USB MIDI Devices that were attached before Edisyn was run.
+If you are not connected to MIDI, or if you cancel, Edisyn will {\bf Disconnect} you.  Also, in {\bf Linux or Windows}, Edisyn can only see USB MIDI Devices that were attached before Edisyn was run.
 
 \paragraph{Future Launches}  The next time you start up Edisyn, it won't show you the Initial Synthesizer Dialog.  Instead, it'll just pop up the last synthesizer editor type you had created.  If you'd prefer to see the Initial Synthesizer Dialog when launching, uncheck {\bf Launch with Last Editor} in the {\bf Options} menu.
 
@@ -168,9 +169,9 @@ If you are not connected to MIDI, or if you cancel, Edisyn will put you in {\bf 
 
 \section{Edisyn Patch Editors}
 
-\paragraph{What exactly is a Patch?}  You probably think you know, but in fact you might not, not exactly.  From Edisyn's perspective, a {\bf patch} is something that Edisyn can store and retrieve on your synthesizer through MIDI commands; and usually there is a collection of patches each of which can be called up individually.  Some synthesizers (like the Yamaha DX7) are simple: they have 32 patches that you can upload and download and that's it.  Others are more complex: they may have {\it different kinds of patches}.  For example, many synthesizers have a set of patches which represent {\bf single sounds} and also a different set of {\bf multimode} patches which represent {\it multitimbral collections} of sounds defined by the single patches.  The multimode patches do not hold the single patches: they point to them.  Thus if you change a single patch, it's changed for every multimode patch which references it.  Some synthesizers might also have separate {\bf drum patches}, or {\bf effects patches}, etc.
+\paragraph{What exactly is a Patch?}  You probably think you know, but in fact you might not, not exactly.  From Edisyn's perspective, a {\bf patch} is something that Edisyn can store and retrieve on your synthesizer through MIDI commands; and usually there is a collection of patches each of which can be called up individually.  Some synthesizers (like the Yamaha DX7) are simple: they have 32 patches that you can upload and download and that's it.  Others are more complex: they may have {\it different kinds of patches}.  For example, many synthesizers have a set of patches which represent {\bf single sounds} and also a different set of {\bf multimode} patches which represent {\it multitimbral collections} of sounds defined by the single patches.  The multimode patches do not hold the single patches: they refer to them.  Thus if you change a single patch, it's changed for every multimode patch which references it.  Some synthesizers might also have separate {\bf drum patches}, or {\bf effects patches}, etc.
 
-Edisyn generally has one patch editor for each kind of patch in a synthesizer.\footnote{In some cases Edisyn doesn't implement an editor for a certain patch type.  Sometimes this is for patch types that are too arcane.  In other cases, certain patch types may not have adequate facilities to access easily via sysex: for example Korg Wavestation SR's multimode patches stupidly must {\it all} be uploaded and downloaded as a blob, rather than individually.  Edisyn also usually doesn't make editors for global parameters, except in certain rare cases.}
+Edisyn generally has one patch editor for each kind of patch in a synthesizer.\footnote{In some cases Edisyn doesn't implement an editor for a certain patch type.  Sometimes this is for patch types that are too arcane.  In other cases, certain patch types may not have adequate facilities to access easily via sysex: for example, the Korg Wavestation SR's multimode patches stupidly must {\it all} be uploaded and downloaded as a group, rather than individually.  Edisyn also usually doesn't make editors for global parameters, except in certain rare cases.}
 
 Most synthesizer manufacturers sensibly refer to their single patches as single patches and their multitimbral patches as multitimbral (or multimode) patches.  But other manufacturers\,---\,notably Roland\,---\,insist on a bizarre vocabulary for their different patch types.  For example, single patches on the Roland U-220 are called {\it timbres}, while the multimode patches are called {\it patches}, of all things.  This causes many Edisyn users to get confused, with questions such as ``Why does Edisyn say `upload patch' when it should say `upload timbre'?''  The answer is: Edisyn must be consistent in the face of some manufacturers' stupid naming decisions: every different patch type is always referred to as a {\bf patch}.
 
@@ -1116,15 +1117,15 @@ Maybe you want to list your library in your blog?  Select {\bf Export Names to T
 \hline\\[-0.5em]
 %Futuresonus Parva&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}&&&\\
 Alesis D4/DM5&{\cm}*&&{\cm}&&{\cm}&{\cm}& & &{\cm}            \\
-Audiothingies Micromonsta&{\cm}&{\cm}&&&&{\cm}*& & &{\cm}            \\
 ASM Hydrasynth&{\cm}&{\cm}*&\cm&&{\cm}*&{\cm}*& & &{\cm}            \\
+Audiothingies Micromonsta&{\cm}&{\cm}&&&&{\cm}*& & &{\cm}            \\
 Casio CZ&&&{\cm}&{\cm}&{\cm}&{\cm}& & &{\cm}*            \\
 DSI Prophet '08/Mopho/Tetra&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}& & &{\cm}            \\
 DSI Prophet 12&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}& & &{\cm}            \\
 E-Mu Morpheus/UltraProteus&{\cm}& &{\cm}& & &{\cm}& & &{\cm}            \\
+E-Mu Planet Phatt/Orbit/Carnaval/Vintage Keys&{\cm}& &{\cm}& & &{\cm}& & &{\cm}            \\
 E-Mu Proteus&{\cm}& &{\cm}& & &{\cm}& & &{\cm}            \\
 E-Mu Proteus 2000 Family&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}& &{\cm}&{\cm}            \\
-E-Mu Planet Phatt/Orbit/Carnaval/Vintage Keys&{\cm}& &{\cm}& & &{\cm}& & &{\cm}            \\
 JL Cooper MSB Plus/Plus Rev2& & &{\cm}&{\cm}& &{\cm}& &&{\cm}            \\
 Kawai K1/K1r/K1m&{\cm}*& &{\cm}& & &{\cm}& &{\cm}&{\cm}            \\
 Kawai K4/K4r&{\cm}*& &{\cm}& &{\cm}&{\cm}& &{\cm}&{\cm}            \\
@@ -1136,6 +1137,7 @@ Korg Volca Series&{\cm}*&& & & & &  &  &         \\
 Korg Wavestation SR&{\cm}&&{\cm}&{\cm}*&{\cm}*&{\cm}&{\cm}*& &{\cm}\\
 M-Audio Venom&{\cm}&&{\cm}*&{\cm}&{\cm}*&{\cm}*&{\cm}*&{\cm}&{\cm}*\\
 Novation A Station&{\cm}&{\cm}&{\cm}&{\cm}*&{\cm}&{\cm}& & &{\cm}          \\
+Novation Bass Station II&{\cm}*&{\cm}*&{\cm}&{\cm}&{\cm}&{\cm}& & &{\cm}          \\
 Novation Drumstation/D Station&&&&&{\cm}*&{\cm}*& & &{\cm}          \\
 Novation SL&&&&&{\cm}&{\cm}&&&{\cm}*	\\
 Oberheim Matrix 1000&{\cm}&{\cm}&{\cm}& &{\cm}*&{\cm}& & &{\cm}          \\
@@ -1152,8 +1154,8 @@ Waldorf Blofeld&{\cm}*&{\cm}*&{\cm}&{\cm}*&{\cm}&{\cm}& & & {\cm}            \\
 Waldorf Kyra&{\cm}&{\cm}&{\cm}*&{\cm}*&{\cm}*&{\cm*}& & & {\cm}*            \\
 Waldorf Pulse 2&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}&{\cm}& & &{\cm}\\
 Waldorf Rocket&{\cm}&{\cm}& &{\cm}*&{\cm}*& & & &           \\
-Yamaha DX7 Family&{\cm}&{\cm}&{\cm}*&{\cm} & & &  & &{\cm}            \\
 Yamaha 4-Op Family&{\cm}*& &{\cm}&{\cm}&{\cm} & &  & &{\cm}*            \\
+Yamaha DX7 Family&{\cm}&{\cm}&{\cm}*&{\cm} & & &  & &{\cm}            \\
 Yamaha FB-01&{\cm}*& &{\cm}&{\cm}&{\cm}&{\cm}*&  & {\cm}&{\cm}*            \\
 Yamaha FS1R&{\cm}&{\cm}&{\cm}&{\cm}& &{\cm}& & &{\cm}            \\
 Yamaha TG33/SY22/SY35&{\cm}*& &{\cm}&{\cm}&{\cm}& &  & &{\cm}            \\
@@ -1178,10 +1180,9 @@ Understand that Edisyn can only go so far to help you in writing a patch editor:
 
 For example, the Waldorf Blofeld's multimode sysex is undocumented and must be reverse engineered.  The PreenFM2 bombs when it receives out-of-range values over NRPN, but happily sends them to you.  The PreenFM2 has sysex files for its patches, but they are undocumented and are basically unusable memory dumps  of IEEE 754 floating-point arrays.  The Yamaha 4-Op family (such as the TX81Z) requires not one but up to {\it four} separate sysex patch dumps in a row, in order to be backward compatible with an earlier synth family nobody cares about: they are also incapable of writing a patch (likewise the PreenFM2).    The Kawai K4's sysex documentation is riddled with incredible numbers of errors.    The Matrix 1000 accepts patch names but doesn't store or emit them: it just ignores them.  The Red Sound DarkStar has extremely, {\it extremely} limited sysex.  The  AudioThingies Micromonsta can only read or write patches when rebooted into a special mode.  The Korg Wavestation SR incredibly sends parameters as {\it text strings} embedded in sysex.  Synths often pack multiple parameters into the same byte, making it impossible to update just a single parameter: you have to update five at a time.  There are multiple different strategies for packing data of size 8 bits and up.  Some synths, like the Futuresonus Parva, DSI Prophet '08, and Yamaha DX7, are highly regular in their format, while others, like the infamous Korg Microsampler, require custom tables for nearly every parameter.
 
-Figure~\ref{patcheditorcapabilities} is a little table of the current patch editors for Edisyn, and various Edisyn capabilities that they can or cannot take advantage of.  I particularly love how the Korg Microsampler and the Korg SG are disjoint in their abilities; yet they're from the same company.   Long story short, you'll probably have to do a lot of customization.  I've tried to provide many customization options in Edisyn.  If you need something Edisyn doesn't provide, contact me.
+Figure~\ref{patcheditorcapabilities} is a little table of the current patch editors for Edisyn, and various Edisyn capabilities that they can or cannot take advantage of.  I particularly love how the Korg Microsampler and the Korg SG are entirely disjoint in their abilities; yet they're from the same company.   Long story short, you'll probably have to do a lot of customization.  I've tried to provide many customization options in Edisyn.  If you need something Edisyn doesn't provide, contact me.
 
-First off, read my technical report {\it So You Want to Write a Patch Editor} (George Mason University Technical Report GMU-CS-TR-2023-1, available at https:/\!/people.cs.gmu.edu/media/techreports/patcheditor.pdf~).  It's got lots of useful information about the ins and outs, and irritations, of writing a patch editor.
-
+First off, read my technical report {\it So You Want to Write a Patch Editor} (George Mason University Technical Report GMU-CS-TR-2023-1, available at https:/\!/people.cs.gmu.edu/\(\sim\)tr-admin/techreports/GMU-CS-TR-2023-1~).  It's got lots of useful information about the ins and outs, and irritations, of writing a patch editor.
 
 \subsection{Setting Up the Development Environment}
 
@@ -2005,12 +2006,12 @@ There are many more methods available in {\tt Synth.java} which customize how lo
 {
 \paragraph{Some Testing Resources}
 \begin{itemize}
-\item Make sure you have tools for examining files and watching the MIDI device. I develop on the Mac, so make extensive use of {\tt hexdump} to examine sysex files, as well as the enormously valuable {\tt MIDI Monitor} to spy on sysex and other messages as they come and go.
+\item Make sure you have tools for examining files and watching the MIDI device. I develop on the Mac, so make extensive use of {\tt hexdump} or {\tt xxd} to examine sysex files, as well as the enormously valuable {\tt MIDI Monitor} to spy on sysex and other messages as they come and go.
 \item You can sanity-check your patch editor with {\tt java edisyn.test.SanityCheck -h} which will build an instance of your synth, randomize it, write it to a stream, read it in from the same stream again, and compare the two models to see if they're the same.  In some cases the models {\it cannot} be the same and that's okay: in this case it will call {\tt testVerify(...)} on your synth class with the problematic keys in question, and if you return true, it'll ignore those keys.  Otherwise it'll report an error.
 \item There is a static final variable called {\tt Model.debug}.  If you set it to true, then all reads and writes to the model are logged so you can watch them happening.
 \item There is a static final variable called {\tt Style.showRaw}.  If you set it to true, then both the Choosers and LabelledDials will show the actual integer values of their underlying model parameters rather than (or in addition to) their mapped Strings.
 \item {\tt StringUtility.toHex(...)} is useful for printing things out, as is {\tt Synth.printSysex(...)}.
-\item The method {\tt edisyn.util.SyxSplit.main(...)} can be run run with a sysex file as its sole argument. It will split the file into separate files, one per sysex message in the original file.
+\item The method {\tt edisyn.util.SyxSplit.main(...)} can be run from the command line with a sysex file as its sole argument. It will split the file into separate files, one per sysex message in the original file.
 \end{itemize}
 }
 

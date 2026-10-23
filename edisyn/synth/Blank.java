@@ -1071,6 +1071,19 @@ public class Blank extends Synth
         return false; 
         }
 
+    public void handleInRawCC(ShortMessage message)
+        { 
+		// Processes raw CC messages arriving in the Input device.  By default this works as follows.  
+		// If getExpectsRawCCFromSynth(), then we call midi.synthParser.handleRawCC() with the message
+		// information, and produce a CCData object, which then is handed to handleSyunthCCOrNRPN().
+		// Otherwise, we call midi.synthParser.processCC() with the message information to parse it 
+		// in a cooked form, producing a CCData object which, if non-null, is again passed to 
+		// handleSynthCCOrNRPN().  In extremely rare cases you may need to handle cooking CC messages
+		// in a different manner -- for example, cooking CC messages for NRPN but NOT for RPN, as is 
+		// the case for the Novation Nova.  Otherwise you should probably not touch this. 
+    	super.handleInRawCC(message); 
+        }
+
     public boolean testVerify(Synth synth2, String key, Object obj1, Object obj2)
         {
         // The edisyn.test.SanityCheck class performs sanity-checks on synthesizer classes

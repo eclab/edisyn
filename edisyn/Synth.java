@@ -2546,7 +2546,13 @@ public abstract class Synth extends JComponent implements Updatable
         return TRUE (it returns FALSE by default). */
     public boolean getRequiresNRPNLSB() { return false; }
 
-    void handleInRawCC(ShortMessage message)
+    /** Processes raw CC messages arriving in the Input device.  By default this works as follows.  If getExpectsRawCCFromSynth(),
+    	then we call midi.synthParser.handleRawCC() with the message information, and produce a CCData object, which then is handed
+    	to handleSyunthCCOrNRPN().  Otherwise, we call midi.synthParser.processCC() with the message information to parse it in a
+    	cooked form, producing a CCData object which, if non-null, is again passed to  handleSynthCCOrNRPN().  In extremely rare
+    	cases you may need to handle cooking CC messages in a different manner -- for example, cooking CC messages for NRPN but NOT
+    	for RPN, as is the case for the Novation Nova.  Otherwise you should probably not touch this. */
+    public void handleInRawCC(ShortMessage message)
         {
         if (getExpectsRawCCFromSynth())
             {

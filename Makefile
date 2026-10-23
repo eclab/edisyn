@@ -8,6 +8,9 @@ all:
 run:
 	java -cp libraries/coremidi4j-1.6.jar:. edisyn.Edisyn
 
+run-debug:
+	java -cp libraries/coremidi4j-1.6.jar:. -agentlib:jdwp=transport=dt_socket,address=8080,server=y,suspend=n edisyn.Edisyn
+
 indent:
 	touch ${HOME}/.emacs
 	find . -name "*.java" -print -exec emacs --batch --load ~/.emacs --eval='(progn (find-file "{}") (mark-whole-buffer) (setq indent-tabs-mode nil) (untabify (point-min) (point-max)) (indent-region (point-min) (point-max) nil) (save-buffer))' \;

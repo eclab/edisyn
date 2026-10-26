@@ -118,7 +118,7 @@ public class Midi
                 String[] names = name.split(" ");
                 String d = (descs.length > 1 ? descs[0] : desc);
                 String n = (names.length > 1 ? names[1] : "(" + names + ")");
-                name = d + " " + n;
+                name = d;
                 }
                 
             // All CoreMIDI4J names begin with "CoreMIDI4J - "
@@ -313,12 +313,51 @@ public class Midi
             midiDevices = MidiSystem.getMidiDeviceInfo();
             }
 
+        // Optional, opt-in JACK MIDI support (see jack-midi-spi, casa.squid.jack.midi).
+        // We do NOT register this provider as a standard javax.sound.midi SPI (see Makefile)
+        // because merely loading the class attempts to contact a JACK server -- something
+        // we don't want happening automatically to users who never asked for it, and which
+        // Sean has noted can cause trouble with Java MIDI on the Mac.  So instead we load
+        // and query it by hand, only on Unix, and only if the user turned it on in the
+        // Preferences menu.  Any failure (JACK not installed, not running, or an
+        // incompatible version) is silently ignored and we fall back to no JACK devices.
+        Object jackProvider = null;
+        Method jackGetDevice = null;
+        MidiDevice.Info[] jackDevices = new MidiDevice.Info[0];
+        if (Style.isUnix() && Synth.getLastXAsBoolean("EnableJackMidi", null, false, false))
+            {
+            try
+                {
+                Class c = Class.forName("casa.squid.jack.midi.JackMidiDeviceProvider");
+                jackProvider = c.getConstructor().newInstance();
+                jackDevices = (MidiDevice.Info[])(c.getMethod("getDeviceInfo", new Class[0]).invoke(jackProvider));
+                jackGetDevice = c.getMethod("getDevice", MidiDevice.Info.class);
+                }
+            catch (Throwable ex)
+                {
+                jackProvider = null;
+                jackGetDevice = null;
+                jackDevices = new MidiDevice.Info[0];
+                }
+            }
+
+        if (jackDevices.length > 0)
+            {
+            MidiDevice.Info[] combined = new MidiDevice.Info[midiDevices.length + jackDevices.length];
+            System.arraycopy(midiDevices, 0, combined, 0, midiDevices.length);
+            System.arraycopy(jackDevices, 0, combined, midiDevices.length, jackDevices.length);
+            midiDevices = combined;
+            }
+        Set jackInfos = new HashSet(Arrays.asList(jackDevices));
+
         ArrayList allDevices = new ArrayList();
         for(int i = 0; i < midiDevices.length; i++)
             {
             try
                 {
-                MidiDevice d = MidiSystem.getMidiDevice(midiDevices[i]);
+                MidiDevice d = (jackInfos.contains(midiDevices[i]) && jackGetDevice != null) ?
+                    (MidiDevice)(jackGetDevice.invoke(jackProvider, midiDevices[i])) :
+                    MidiSystem.getMidiDevice(midiDevices[i]);
                 // get rid of java devices
                 if (d instanceof javax.sound.midi.Sequencer ||
                     d instanceof javax.sound.midi.Synthesizer)

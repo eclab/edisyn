@@ -757,7 +757,10 @@ public class Librarian extends JPanel
         if (column >= 0 && row >= 0)
             {
             copy(Librarian.this, table, column, row, 1, Librarian.this, patchWell, 0, 0, true);
-            getLibrary().getSynth().setCurrentTab(0);
+            if (Synth.getLastXAsBoolean("SwitchToEditorOnLoad", null, false, false))
+                {
+                getLibrary().getSynth().setCurrentTab(0);
+                }
             }
         }
 

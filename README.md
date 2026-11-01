@@ -187,7 +187,7 @@ At present Edisyn only runs under Rosetta on the M1.  It'll work fine; there are
 
 I believe that the following should work:
 
-1. Download and install at least Java 20.  There are two options.  I suggest OpenJDK: [Microsoft's OpenJDK installation](https://www.microsoft.com/openjdk) is the easiest route.  An alternative is to install [Oracle's JDK](http://www.oracle.com/technetwork/java/javase/downloads/index.html), but it has more onerous license restrictions.  
+1. Download and install a recent version of Java (such as Java 25).  There are two options.  I suggest OpenJDK: [Microsoft's OpenJDK installation](https://www.microsoft.com/openjdk) is the easiest route.  An alternative is to install [Oracle's JDK](http://www.oracle.com/technetwork/java/javase/downloads/index.html), but it has more onerous license restrictions.  
 2. Download Edisyn's jar file, called [edisyn.jar](https://people.cs.gmu.edu/~eclab/projects/edisyn/edisyn.jar).
 3. Double-click on edisyn.jar to launch Edisyn.
 

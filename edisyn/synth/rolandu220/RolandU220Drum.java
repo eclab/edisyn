@@ -102,7 +102,7 @@ public class RolandU220Drum extends Synth
             // SN-U110-04 - Electric Grand and Clavi
             "Electric Grand 1", "Electric Grand 2", "Electric Grand 3", "Electric Grand 4", 
             "Electric Grand 5", "Electric Grand 6", "Electric Grand 7", "Electric Grand 8", 
-            "Clavichord 1", "Clavichord 2", "Clavichord 3", "Clavichord 4", 
+            "Clavinet 1", "Clavinet 2", "Clavinet 3", "Clavinet 4", 
             },
             {
             // SN-U110-05 - Orchestral Strings

@@ -99,7 +99,7 @@ public class RolandU110 extends Synth
             // SN-U110-04 - Electric Grand and Clavi
             "Electric Grand 1", "Electric Grand 2", "Electric Grand 3", "Electric Grand 4", 
             "Electric Grand 5", "Electric Grand 6", "Electric Grand 7", "Electric Grand 8", 
-            "Clavichord 1", "Clavichord 2", "Clavichord 3", "Clavichord 4", 
+            "Clavinet 1", "Clavinet 2", "Clavinet 3", "Clavinet 4", 
             },
             {
             // SN-U110-05 - Orchestral Strings
@@ -1875,10 +1875,10 @@ public class RolandU110 extends Synth
       5       Electric Grand 6
       6       Electric Grand 7
       7       Electric Grand 8
-      8       Clavichord 1
-      9       Clavichord 2
-      10      Clavichord 3
-      11      Clavichord 4             
+      8       Clavinet 1
+      9       Clavinet 2
+      10      Clavinet 3
+      11      Clavinet 4             
 
       SN-U110-05 - Orchestral Strings
       0       Violin 1

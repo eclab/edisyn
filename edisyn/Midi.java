@@ -866,8 +866,8 @@ public class Midi
         /////
         ///// RPN Messages:
         ///// All RPN Messages start with:
-        ///// 1. number == 99, with MSB of RPN parameter
-        ///// 2. number == 98, with LSB of RPN parameter
+        ///// 1. number == 101, with MSB of RPN parameter
+        ///// 2. number == 100, with LSB of RPN parameter
         /////           At this point RPN MSB is set to 0
         /////
         ///// RPN Messages then may have any sequence of:

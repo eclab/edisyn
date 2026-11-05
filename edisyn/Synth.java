@@ -1766,7 +1766,8 @@ public abstract class Synth extends JComponent implements Updatable
                                         {
                                         midi.resetInSysexData();
                                         ShortMessage sm = (ShortMessage)message;
-                                        if (sm.getCommand() == ShortMessage.CONTROL_CHANGE)
+                                        if (sm.getCommand() == ShortMessage.CONTROL_CHANGE &&
+                                            (sm.getChannel() == getChannelOut() || getReceivesCCOnAllChannels()))
                                             {
                                             boolean willPush = undo.getWillPush();
                                             undo.setWillPush(false);
@@ -2545,6 +2546,13 @@ public abstract class Synth extends JComponent implements Updatable
         To deal with this, if you know the synth will always produce an LSB in every NRPN message, you can override this to
         return TRUE (it returns FALSE by default). */
     public boolean getRequiresNRPNLSB() { return false; }
+
+    /** Returns true if this synth editor wants to receive CC/NRPN messages from the synth on ALL MIDI channels,
+        rather than only on the Send/Receive channel (getChannelOut()).  By default this returns FALSE, so
+        CC messages arriving from the synth on other channels are ignored.  Override this to return TRUE
+        if your editor handles multiple channels itself, for example multitimbral setups where each layer
+        or part is on its own channel. */
+    public boolean getReceivesCCOnAllChannels() { return false; }
 
     /** Processes raw CC messages arriving in the Input device.  By default this works as follows.  If getExpectsRawCCFromSynth(),
     	then we call midi.synthParser.handleRawCC() with the message information, and produce a CCData object, which then is handed

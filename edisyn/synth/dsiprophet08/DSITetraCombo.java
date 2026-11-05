@@ -2178,6 +2178,9 @@ public class DSITetraCombo extends Synth
             model.set(key, val);
         }
 
+    // Layers 2-4 arrive on channels above getChannelOut(), see handleSynthCCOrNRPN
+    public boolean getReceivesCCOnAllChannels() { return true; }
+
     public void handleSynthCCOrNRPN(Midi.CCData data)
         {
         if (data.type == Midi.CCDATA_TYPE_NRPN && data.number <= 1719)
